@@ -46,7 +46,8 @@ For Cygwin or Mingw32 compilation, make sure WXWIN contains only
 forward slashes.
 
 If installing from the CVS server, copy include/wx/msw/setup0.h to
-include/wx/msw/setup.h.
+include/wx/msw/setup.h and edit the resulting file to choose the featrues you
+would like to compile wxWindows with[out].
 
 Compilation
 -----------
