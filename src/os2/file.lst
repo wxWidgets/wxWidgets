@@ -67,7 +67,6 @@ List of files yet to be implemented.  As you finish a file, delete it from the l
   ..\os2\$D\taskbar.obj \
   ..\os2\$D\textctrl.obj \
   ..\os2\$D\thread.obj \
-  ..\os2\$D\timer.obj \
   ..\os2\$D\toolbar.obj \
   ..\os2\$D\tooltip.obj \
   ..\os2\$D\treectrl.obj \

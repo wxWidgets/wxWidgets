@@ -39,12 +39,12 @@
 #if wxUSE_THREADS
     #include "wx/thread.h"
 
-    // define the array of MSG strutures
-// TODO:    WX_DECLARE_OBJARRAY(MSG, wxMsgArray);
+    // define the array of QMSG strutures
+    WX_DECLARE_OBJARRAY(QMSG, wxMsgArray);
 
     #include "wx/arrimpl.cpp"
 
-// TODO:    WX_DEFINE_OBJARRAY(wxMsgArray);
+    WX_DEFINE_OBJARRAY(wxMsgArray);
 #endif // wxUSE_THREADS
 
 #if wxUSE_WX_RESOURCES
@@ -58,41 +58,37 @@
 // global variables
 // ---------------------------------------------------------------------------
 
-extern wxChar *wxBuffer;
-extern wxChar *wxOsVersion;
-extern wxList *wxWinHandleList;
-extern wxList WXDLLEXPORT wxPendingDelete;
-#if wxUSE_THREADS
-extern wxList *wxPendingEvents;
-extern wxCriticalSection *wxPendingEventsLocker;
-#endif
+extern wxChar*                      wxBuffer;
+extern wxChar*                      wxOsVersion;
+extern wxList*                      wxWinHandleList;
+extern wxList WXDLLEXPORT           wxPendingDelete;
 extern void wxSetKeyboardHook(bool doIt);
-extern wxCursor *g_globalCursor;
+extern wxCursor*                    g_globalCursor;
 
-HINSTANCE wxhInstance = 0;
-// TODO: MSG s_currentMsg;
-wxApp *wxTheApp = NULL;
+HINSTANCE                           wxhInstance = 0;
+QMSG                                svCurrentMsg;
+wxApp*                              wxTheApp = NULL;
 
 // FIXME why not const? and not static?
 
 // NB: all "NoRedraw" classes must have the same names as the "normal" classes
 //     with NR suffix - wxWindow::OS2Create() supposes this
-wxChar wxFrameClassName[]         = wxT("wxFrameClass");
-wxChar wxFrameClassNameNoRedraw[] = wxT("wxFrameClassNR");
-wxChar wxMDIFrameClassName[]      = wxT("wxMDIFrameClass");
-wxChar wxMDIFrameClassNameNoRedraw[] = wxT("wxMDIFrameClassNR");
-wxChar wxMDIChildFrameClassName[] = wxT("wxMDIChildFrameClass");
+wxChar wxFrameClassName[]                 = wxT("wxFrameClass");
+wxChar wxFrameClassNameNoRedraw[]         = wxT("wxFrameClassNR");
+wxChar wxMDIFrameClassName[]              = wxT("wxMDIFrameClass");
+wxChar wxMDIFrameClassNameNoRedraw[]      = wxT("wxMDIFrameClassNR");
+wxChar wxMDIChildFrameClassName[]         = wxT("wxMDIChildFrameClass");
 wxChar wxMDIChildFrameClassNameNoRedraw[] = wxT("wxMDIChildFrameClassNR");
-wxChar wxPanelClassName[]         = wxT("wxPanelClass");
-wxChar wxCanvasClassName[]        = wxT("wxCanvasClass");
+wxChar wxPanelClassName[]                 = wxT("wxPanelClass");
+wxChar wxCanvasClassName[]                = wxT("wxCanvasClass");
 
-HICON wxSTD_FRAME_ICON = (HICON) NULL;
-HICON wxSTD_MDICHILDFRAME_ICON = (HICON) NULL;
+HICON wxSTD_FRAME_ICON          = (HICON) NULL;
+HICON wxSTD_MDICHILDFRAME_ICON  = (HICON) NULL;
 HICON wxSTD_MDIPARENTFRAME_ICON = (HICON) NULL;
 
-HICON wxDEFAULT_FRAME_ICON = (HICON) NULL;
-HICON wxDEFAULT_MDICHILDFRAME_ICON = (HICON) NULL;
-HICON wxDEFAULT_MDIPARENTFRAME_ICON = (HICON) NULL;
+HICON wxDEFAULT_FRAME_ICON           = (HICON) NULL;
+HICON wxDEFAULT_MDICHILDFRAME_ICON   = (HICON) NULL;
+HICON wxDEFAULT_MDIPARENTFRAME_ICON  = (HICON) NULL;
 
 HBRUSH wxDisableButtonBrush = (HBRUSH) 0;
 
@@ -117,7 +113,9 @@ MRESULT wxWndProc(HWND, UINT, MPARAM, MPARAM);
 #endif
 
 //// Initialize
-bool wxApp::Initialize()
+bool wxApp::Initialize(
+  HAB                               vHab
+)
 {
     // Some people may wish to use this, but
     // probably it shouldn't be here by default.
@@ -135,11 +133,6 @@ bool wxApp::Initialize()
 
     // I'm annoyed ... I don't know where to put this and I don't want to
     // create a module for that as it's part of the core.
-#if wxUSE_THREADS
-    wxPendingEvents = new wxList();
-    wxPendingEventsLocker = new wxCriticalSection();
-#endif
-
     wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
     wxTheColourDatabase->Initialize();
 
@@ -154,32 +147,16 @@ bool wxApp::Initialize()
 
     g_globalCursor = new wxCursor;
 
-// TODO:
-/*
-    wxSTD_FRAME_ICON = LoadIcon(wxhInstance, wxT("wxSTD_FRAME"));
-    wxSTD_MDIPARENTFRAME_ICON = LoadIcon(wxhInstance, wxT("wxSTD_MDIPARENTFRAME"));
-    wxSTD_MDICHILDFRAME_ICON = LoadIcon(wxhInstance, wxT("wxSTD_MDICHILDFRAME"));
+#if 0
+    wxSTD_FRAME_ICON = ::WinLoadFileIcon(wxT("wxSTD_FRAME"), TRUE);
+    wxSTD_MDIPARENTFRAME_ICON = ::WinLoadFileIcon(wxT("wxSTD_MDIPARENTFRAME"), TRUE);
+    wxSTD_MDICHILDFRAME_ICON = ::WinLoadFileIcon(wxT("wxSTD_MDICHILDFRAME"), TRUE);
 
-    wxDEFAULT_FRAME_ICON = LoadIcon(wxhInstance, wxT("wxDEFAULT_FRAME"));
-    wxDEFAULT_MDIPARENTFRAME_ICON = LoadIcon(wxhInstance, wxT("wxDEFAULT_MDIPARENTFRAME"));
-    wxDEFAULT_MDICHILDFRAME_ICON = LoadIcon(wxhInstance, wxT("wxDEFAULT_MDICHILDFRAME"));
-*/
-    RegisterWindowClasses();
-
-    // Create the brush for disabling bitmap buttons
-// TODO:
-/*
-    LOGBRUSH lb;
-    lb.lbStyle = BS_PATTERN;
-    lb.lbHatch = (int)LoadBitmap( wxhInstance, wxT("wxDISABLE_BUTTON_BITMAP") );
-    if ( lb.lbHatch )
-    {
-        wxDisableButtonBrush = ::CreateBrushIndirect( & lb );
-        ::DeleteObject( (HGDIOBJ)lb.lbHatch );
-    }
- */
-    //else: wxWindows resources are probably not linked in
-
+    wxDEFAULT_FRAME_ICON = ::WinLoadFileIcon(wxT("wxDEFAULT_FRAME"), TRUE);
+    wxDEFAULT_MDIPARENTFRAME_ICON = ::WinLoadFileIcon(wxT("wxDEFAULT_MDIPARENTFRAME"), TRUE);
+    wxDEFAULT_MDICHILDFRAME_ICON = ::WinLoadFileIcon(wxT("wxDEFAULT_MDICHILDFRAME"), TRUE);
+#endif
+    RegisterWindowClasses(vHab);
     wxWinHandleList = new wxList(wxKEY_INTEGER);
 
     // This is to foil optimizations in Visual C++ that throw out dummy.obj.
@@ -204,192 +181,107 @@ bool wxApp::Initialize()
 // TODO we should only register classes really used by the app. For this it
 //      would be enough to just delay the class registration until an attempt
 //      to create a window of this class is made.
-bool wxApp::RegisterWindowClasses()
+bool wxApp::RegisterWindowClasses(
+  HAB                               vHab
+)
 {
-// TODO:
-/*
-    WNDCLASS wndclass;
 
-    // for each class we register one with CS_(V|H)REDRAW style and one
-    // without for windows created with wxNO_FULL_REDRAW_ON_REPAINT flag
-    static const long styleNormal = 0; // TODO: CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
-    static const long styleNoRedraw = 0; // TODO: CS_DBLCLKS;
-
-    // the fields which are common to all classes
-    wndclass.lpfnWndProc   = (WNDPROC)wxWndProc;
-    wndclass.cbClsExtra    = 0;
-    wndclass.cbWndExtra    = sizeof( DWORD ); // VZ: what is this DWORD used for?
-    wndclass.hInstance     = wxhInstance;
-    wndclass.hIcon         = (HICON) NULL;
-    wndclass.hCursor       = 0; // TODO: ::LoadCursor((HINSTANCE)NULL, IDC_ARROW);
-    wndclass.lpszMenuName  = NULL;
-
-    // Register the frame window class.
-    wndclass.hbrBackground = (HBRUSH)(COLOR_APPWORKSPACE + 1);
-    wndclass.lpszClassName = wxFrameClassName;
-    wndclass.style         = styleNormal;
-
-    if ( !RegisterClass(&wndclass) )
+    if (!::WinRegisterClass( vHab
+                            ,wxFrameClassName
+                            ,(PFNWP)wxWndProc
+                            ,CS_SIZEREDRAW | CS_SYNCPAINT | CS_HITTEST | CS_CLIPCHILDREN | CS_FRAME
+                            ,0
+                           ))
     {
         wxLogLastError("RegisterClass(frame)");
 
         return FALSE;
     }
 
-    // "no redraw" frame
-    wndclass.lpszClassName = wxFrameClassNameNoRedraw;
-    wndclass.style         = styleNoRedraw;
-
-    if ( !RegisterClass(&wndclass) )
+    if (!::WinRegisterClass( vHab
+                            ,wxFrameClassNameNoRedraw
+                            ,(PFNWP)wxWndProc
+                            ,CS_HITTEST | CS_CLIPCHILDREN | CS_FRAME
+                            ,0
+                           ))
     {
         wxLogLastError("RegisterClass(no redraw frame)");
 
         return FALSE;
     }
 
-    // Register the MDI frame window class.
-    wndclass.hbrBackground = (HBRUSH)NULL; // paint MDI frame ourselves
-    wndclass.lpszClassName = wxMDIFrameClassName;
-    wndclass.style         = styleNormal;
-
-    if ( !RegisterClass(&wndclass) )
+    if (!::WinRegisterClass( vHab
+                            ,wxMDIFrameClassName
+                            ,(PFNWP)wxWndProc
+                            ,CS_SIZEREDRAW | CS_SYNCPAINT | CS_HITTEST | CS_CLIPCHILDREN | CS_FRAME
+                            ,0
+                           ))
     {
         wxLogLastError("RegisterClass(MDI parent)");
 
         return FALSE;
     }
 
-    // "no redraw" MDI frame
-    wndclass.lpszClassName = wxMDIFrameClassNameNoRedraw;
-    wndclass.style         = styleNoRedraw;
-
-    if ( !RegisterClass(&wndclass) )
+    if (!::WinRegisterClass( vHab
+                            ,wxMDIFrameClassNameNoRedraw
+                            ,(PFNWP)wxWndProc
+                            ,CS_HITTEST | CS_CLIPCHILDREN | CS_FRAME
+                            ,0
+                           ))
     {
-        wxLogLastError("RegisterClass(no redraw MDI parent frame)");
+        wxLogLastError("RegisterClass(no redraw MDI parent)");
 
         return FALSE;
     }
 
-    // Register the MDI child frame window class.
-    wndclass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-    wndclass.lpszClassName = wxMDIChildFrameClassName;
-    wndclass.style         = styleNormal;
-
-    if ( !RegisterClass(&wndclass) )
+    if (!::WinRegisterClass( vHab
+                            ,wxMDIChildFrameClassName
+                            ,(PFNWP)wxWndProc
+                            ,CS_MOVENOTIFY | CS_SIZEREDRAW | CS_SYNCPAINT | CS_HITTEST | CS_CLIPSIBLINGS | CS_FRAME
+                            ,0
+                           ))
     {
         wxLogLastError("RegisterClass(MDI child)");
 
         return FALSE;
     }
 
-    // "no redraw" MDI child frame
-    wndclass.lpszClassName = wxMDIChildFrameClassNameNoRedraw;
-    wndclass.style         = styleNoRedraw;
-
-    if ( !RegisterClass(&wndclass) )
+    if (!::WinRegisterClass( vHab
+                            ,wxMDIChildFrameClassNameNoRedraw
+                            ,(PFNWP)wxWndProc
+                            ,CS_HITTEST | CS_CLIPSIBLINGS | CS_FRAME
+                            ,0
+                           ))
     {
         wxLogLastError("RegisterClass(no redraw MDI child)");
 
         return FALSE;
     }
 
-    // Register the panel window class.
-    wndclass.hbrBackground = (HBRUSH) GetStockObject( LTGRAY_BRUSH );
-    wndclass.lpszClassName = wxPanelClassName;
-    wndclass.style         = styleNormal;
-
-    if ( !RegisterClass(&wndclass) )
+    if (!::WinRegisterClass( vHab
+                            ,wxPanelClassName
+                            ,(PFNWP)wxWndProc
+                            ,CS_MOVENOTIFY | CS_SIZEREDRAW | CS_HITTEST | CS_CLIPSIBLINGS | CS_SAVEBITS | CS_SYNCPAINT
+                            ,0
+                           ))
     {
-        wxLogLastError("RegisterClass(panel)");
+        wxLogLastError("RegisterClass(Panel)");
 
         return FALSE;
     }
 
-    // Register the canvas and textsubwindow class name
-    wndclass.hbrBackground = (HBRUSH)NULL;
-    wndclass.lpszClassName = wxCanvasClassName;
-
-    if ( !RegisterClass(&wndclass) )
+    if (!::WinRegisterClass( vHab
+                            ,wxCanvasClassName
+                            ,(PFNWP)wxWndProc
+                            ,CS_MOVENOTIFY | CS_SIZEREDRAW | CS_HITTEST | CS_CLIPSIBLINGS | CS_SAVEBITS | CS_SYNCPAINT
+                            ,0
+                           ))
     {
-        wxLogLastError("RegisterClass(canvas)");
+        wxLogLastError("RegisterClass(Canvas)");
 
         return FALSE;
     }
-*/
     return TRUE;
-}
-
-// ---------------------------------------------------------------------------
-// Convert Windows to argc, argv style
-// ---------------------------------------------------------------------------
-
-void wxApp::ConvertToStandardCommandArgs(char* lpCmdLine)
-{
-    wxStringList args;
-
-    wxString cmdLine(lpCmdLine);
-    int count = 0;
-
-    // Get application name
-    wxChar name[260]; // 260 is MAX_PATH value from windef.h
-// TODO:     ::GetModuleFileName(wxhInstance, name, WXSIZEOF(name));
-
-    args.Add(name);
-    count++;
-
-    wxStrcpy(name, wxFileNameFromPath(name));
-    wxStripExtension(name);
-    wxTheApp->SetAppName(name);
-
-    // Break up string
-    // Treat strings enclosed in double-quotes as single arguments
-    int i = 0;
-    int len = cmdLine.Length();
-    while (i < len)
-    {
-        // Skip whitespace
-        while ((i < len) && wxIsspace(cmdLine.GetChar(i)))
-            i ++;
-
-        if (i < len)
-        {
-            if (cmdLine.GetChar(i) == wxT('"')) // We found the start of a string
-            {
-                i ++;
-                int first = i;
-                while ((i < len) && (cmdLine.GetChar(i) != wxT('"')))
-                    i ++;
-
-                wxString arg(cmdLine.Mid(first, (i - first)));
-
-                args.Add(arg);
-                count ++;
-
-                if (i < len)
-                    i ++; // Skip past 2nd quote
-            }
-            else // Unquoted argument
-            {
-                int first = i;
-                while ((i < len) && !wxIsspace(cmdLine.GetChar(i)))
-                    i ++;
-
-                wxString arg(cmdLine.Mid(first, (i - first)));
-
-                args.Add(arg);
-                count ++;
-            }
-        }
-    }
-
-    wxTheApp->argv = new wxChar*[count + 1];
-    for (i = 0; i < count; i++)
-    {
-        wxString arg(args[i]);
-        wxTheApp->argv[i] = copystring((const wxChar*)arg);
-    }
-    wxTheApp->argv[count] = NULL; // argv[] is a NULL-terminated list
-    wxTheApp->argc = count;
 }
 
 //// Cleans up any wxWindows internal structures left lying around
@@ -443,22 +335,21 @@ void wxApp::CleanUp()
     //// WINDOWS-SPECIFIC CLEANUP
 
     wxSetKeyboardHook(FALSE);
-// TODO:
-/*
+
     if (wxSTD_FRAME_ICON)
-        DestroyIcon(wxSTD_FRAME_ICON);
+        ::WinFreeFileIcon(wxSTD_FRAME_ICON);
     if (wxSTD_MDICHILDFRAME_ICON)
-        DestroyIcon(wxSTD_MDICHILDFRAME_ICON);
+        ::WinFreeFileIcon(wxSTD_MDICHILDFRAME_ICON);
     if (wxSTD_MDIPARENTFRAME_ICON)
-        DestroyIcon(wxSTD_MDIPARENTFRAME_ICON);
+        ::WinFreeFileIcon(wxSTD_MDIPARENTFRAME_ICON);
 
     if (wxDEFAULT_FRAME_ICON)
-        DestroyIcon(wxDEFAULT_FRAME_ICON);
+        ::WinFreeFileIcon(wxDEFAULT_FRAME_ICON);
     if (wxDEFAULT_MDICHILDFRAME_ICON)
-        DestroyIcon(wxDEFAULT_MDICHILDFRAME_ICON);
+        ::WinFreeFileIcon(wxDEFAULT_MDICHILDFRAME_ICON);
     if (wxDEFAULT_MDIPARENTFRAME_ICON)
-        DestroyIcon(wxDEFAULT_MDIPARENTFRAME_ICON);
-*/
+        ::WinFreeFileIcon(wxDEFAULT_MDIPARENTFRAME_ICON);
+
     if ( wxDisableButtonBrush )
     {
 // TODO:        ::DeleteObject( wxDisableButtonBrush );
@@ -501,131 +392,103 @@ void wxApp::CleanUp()
 #endif // wxUSE_LOG
 }
 
-#if !defined(_WINDLL) || (defined(_WINDLL) && defined(WXMAKINGDLL))
-
-//// Main wxWindows entry point
-int wxEntry(WXHINSTANCE hInstance,
-            WXHINSTANCE WXUNUSED(hPrevInstance),
-            char *lpCmdLine,
-            int nCmdShow,
-            bool enterLoop)
+int wxEntry(
+  int                               argc
+, char*                             argv[]
+)
 {
-    // do check for memory leaks on program exit
-    // (another useful flag is _CRTDBG_DELAY_FREE_MEM_DF which doesn't free
-    //  deallocated memory which may be used to simulate low-memory condition)
-// TODO:    wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
+    HAB                             vHab;
 
-    // take everything into a try-except block in release build
-    // FIXME other compilers must support Win32 SEH (structured exception
-    //       handling) too, just find the appropriate keyword in their docs!
-    //       Please note that it's _not_ the same as C++ exceptions!
+    if (!wxApp::Initialize(vHab))
+        return 0;
 
-        wxhInstance = (HINSTANCE) hInstance;
+    //
+    // create the application object or ensure that one already exists
+    //
+    if (!wxTheApp)
+    {
+        wxCHECK_MSG( wxApp::GetInitializerFunction()
+                    ,-1
+                    ,wxT("wxWindows error: No initializer - use IMPLEMENT_APP macro.\n")
+                   );
 
-        if (!wxApp::Initialize())
-            return 0;
+        wxAppInitializerFunction    fnAppIni = wxApp::GetInitializerFunction();
+        wxObject*                   pTest_app = fnAppIni();
 
-        // create the application object or ensure that one already exists
-        if (!wxTheApp)
+        wxTheApp = (wxApp*)pTest_app;
+    }
+    wxCHECK_MSG( wxTheApp, -1, wxT("wxWindows error: no application object") );
+    wxTheApp->argc = argc;
+
+#if wxUSE_UNICODE
+    wxTheApp->argv = new wxChar*[argc+1];
+
+    int                             nArgc = 0;
+
+    while (nArgc < argc)
+    {
+          wxTheApp->argv[nArgc] = wxStrdup(wxConvLibc.cMB2WX(argv[nArgc]));
+          nArgc++;
+    }
+    wxTheApp->argv[nArgc] = (wxChar *)NULL;
+#else
+    wxTheApp->argv = argv;
+#endif
+
+    wxString                        sName(wxFileNameFromPath(argv[0]));
+
+    wxStripExtension(sName);
+    wxTheApp->SetAppName(sName);
+
+    int                             nRetValue = 0;
+
+    if (!wxTheApp->OnInitGui())
+        nRetValue = -1;
+
+    if (nRetValue == 0)
+    {
+        if (wxTheApp->OnInit())
         {
-            // The app may have declared a global application object, but we recommend
-            // the IMPLEMENT_APP macro is used instead, which sets an initializer
-            // function for delayed, dynamic app object construction.
-            wxCHECK_MSG( wxApp::GetInitializerFunction(), 0,
-                         wxT("No initializer - use IMPLEMENT_APP macro.") );
-
-            wxTheApp = (wxApp*)(*wxApp::GetInitializerFunction()) ();
+            nRetValue = -1;
         }
+    }
 
-        wxCHECK_MSG( wxTheApp, 0, wxT("You have to define an instance of wxApp!") );
+    if (nRetValue == 0)
+    {
+        wxWindow*                   pTopWindow = wxTheApp->GetTopWindow();
 
-        // save the WinMain() parameters
-        wxTheApp->ConvertToStandardCommandArgs(lpCmdLine);
-        wxTheApp->m_nCmdShow = nCmdShow;
-
-        // GUI-specific initialisation. In fact on Windows we don't have any,
-        // but this call is provided for compatibility across platforms.
-        wxTheApp->OnInitGui();
-
-        int retValue = 0;
-
-        if ( wxTheApp->OnInit() )
-        {
-            if ( enterLoop )
-            {
-                retValue = wxTheApp->OnRun();
-            }
-            else
-                // We want to initialize, but not run or exit immediately.
-                return 1;
-        }
-        //else: app initialization failed, so we skipped OnRun()
-
-        wxWindow *topWindow = wxTheApp->GetTopWindow();
-        if ( topWindow )
+        if (pTopWindow)
         {
             // Forcibly delete the window.
-            if ( topWindow->IsKindOf(CLASSINFO(wxFrame)) ||
-                    topWindow->IsKindOf(CLASSINFO(wxDialog)) )
+            if (pTopWindow->IsKindOf(CLASSINFO(wxFrame)) ||
+                pTopWindow->IsKindOf(CLASSINFO(wxDialog)) )
             {
-                topWindow->Close(TRUE);
+                pTopWindow->Close(TRUE);
                 wxTheApp->DeletePendingObjects();
             }
             else
             {
-                delete topWindow;
+                delete pTopWindow;
                 wxTheApp->SetTopWindow(NULL);
             }
         }
-
-        wxTheApp->OnExit();
-
-        wxApp::CleanUp();
-
-        return retValue;
+    }
+    wxTheApp->OnExit();
+    wxApp::CleanUp();
+    return(nRetValue);
 }
 
-#else /*  _WINDLL  */
-
-//// Entry point for DLLs
-
-int wxEntry(WXHINSTANCE hInstance)
+bool wxApp::OnInitGui()
 {
-    wxhInstance = (HINSTANCE) hInstance;
-    wxApp::Initialize();
+    m_vHab = WinInitialize(0);
+    m_hMq  = WinCreateMsgQueue(m_vHab, 0);
 
-    // The app may have declared a global application object, but we recommend
-    // the IMPLEMENT_APP macro is used instead, which sets an initializer function
-    // for delayed, dynamic app object construction.
-    if (!wxTheApp)
-    {
-        wxCHECK_MSG( wxApp::GetInitializerFunction(), 0,
-                     "No initializer - use IMPLEMENT_APP macro." );
-
-        wxTheApp = (* wxApp::GetInitializerFunction()) ();
-    }
-
-    wxCHECK_MSG( wxTheApp, 0, "You have to define an instance of wxApp!" );
-
-    wxTheApp->argc = 0;
-    wxTheApp->argv = NULL;
-
-    wxTheApp->OnInitGui();
-
-    wxTheApp->OnInit();
-
-    wxWindow *topWindow = wxTheApp->GetTopWindow();
-    if ( topWindow && topWindow->GetHWND())
-    {
-        topWindow->Show(TRUE);
-    }
-
-    return 1;
+    return TRUE;
 }
-#endif // _WINDLL
 
-//// Static member initialization
-
+//
+// Static member initialization
+//
 wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NULL;
 
 wxApp::wxApp()
@@ -636,9 +499,9 @@ wxApp::wxApp()
 
     argc = 0;
     argv = NULL;
-    m_printMode = wxPRINT_WINDOWS;
+    m_nPrintMode = wxPRINT_WINDOWS;
     m_exitOnFrameDelete = TRUE;
-    m_auto3D = TRUE;
+    m_bAuto3D = TRUE;
 }
 
 wxApp::~wxApp()
@@ -654,33 +517,27 @@ wxApp::~wxApp()
 
 bool wxApp::Initialized()
 {
-#ifndef _WINDLL
     if (GetTopWindow())
         return TRUE;
     else
         return FALSE;
-#endif
-#ifdef _WINDLL // Assume initialized if DLL (no way of telling)
-    return TRUE;
-#endif
 }
 
-/*
- * Get and process a message, returning FALSE if WM_QUIT
- * received (and also set the flag telling the app to exit the main loop)
- *
- */
+//
+// Get and process a message, returning FALSE if WM_QUIT
+// received (and also set the flag telling the app to exit the main loop)
+//
 bool wxApp::DoMessage()
 {
-    BOOL rc = FALSE; // TODO: ::GetMessage(&s_currentMsg, (HWND) NULL, 0, 0);
-    if ( rc == 0 )
+    BOOL                            bRc = ::WinGetMsg(m_vHab, &m_vMsg, HWND(NULL), 0, 0);
+
+    if (bRc == 0)
     {
         // got WM_QUIT
-        m_keepGoing = FALSE;
-
+        m_bKeepGoing = FALSE;
         return FALSE;
     }
-    else if ( rc == -1 )
+    else if (bRc == -1)
     {
         // should never happen, but let's test for it nevertheless
         wxLogLastError("GetMessage");
@@ -688,149 +545,139 @@ bool wxApp::DoMessage()
     else
     {
 #if wxUSE_THREADS
-        wxASSERT_MSG( wxThread::IsMain(),
-                      wxT("only the main thread can process Windows messages") );
+        wxASSERT_MSG( wxThread::IsMain()
+                     ,wxT("only the main thread can process Windows messages")
+                    );
 
-        static bool s_hadGuiLock = TRUE;
-// TODO:
-/*
-        static wxMsgArray s_aSavedMessages;
+        static bool                 sbHadGuiLock = TRUE;
+        static wxMsgArray           svSavedMessages;
 
+        //
         // if a secondary thread owns is doing GUI calls, save all messages for
         // later processing - we can't process them right now because it will
         // lead to recursive library calls (and we're not reentrant)
-        if ( !wxGuiOwnedByMainThread() )
+        //
+        if (!wxGuiOwnedByMainThread())
         {
-            s_hadGuiLock = FALSE;
+            sbHadGuiLock = FALSE;
 
             // leave out WM_COMMAND messages: too dangerous, sometimes
             // the message will be processed twice
             if ( !wxIsWaitingForThread() ||
-                    s_currentMsg.message != WM_COMMAND )
+                    svCurrentMsg.msg != WM_COMMAND )
             {
-                s_aSavedMessages.Add(s_currentMsg);
+                svSavedMessages.Add(svCurrentMsg);
             }
-
             return TRUE;
         }
         else
         {
+            //
             // have we just regained the GUI lock? if so, post all of the saved
             // messages
             //
             // FIXME of course, it's not _exactly_ the same as processing the
             //       messages normally - expect some things to break...
-            if ( !s_hadGuiLock )
+            //
+            if (!sbHadGuiLock )
             {
-                s_hadGuiLock = TRUE;
+                sbHadGuiLock = TRUE;
 
-                size_t count = s_aSavedMessages.Count();
-                for ( size_t n = 0; n < count; n++ )
+                size_t             nCount = svSavedMessages.Count();
+
+                for (size_t n = 0; n < nCount; n++)
                 {
-                    MSG& msg = s_aSavedMessages[n];
+                    QMSG            vMsg = svSavedMessages[n];
 
-                    if ( !ProcessMessage((WXMSG *)&msg) )
+                    if ( !ProcessMessage((WXMSG *)&vMsg) )
                     {
-                        ::TranslateMessage(&msg);
-                        ::DispatchMessage(&msg);
+                        ::WinDispatchMsg(m_vHab, &vMsg);
                     }
                 }
-                s_aSavedMessages.Empty();
+                svSavedMessages.Empty();
             }
         }
-*/
 #endif // wxUSE_THREADS
 
         // Process the message
-// TODO:
-/*
-        if ( !ProcessMessage((WXMSG *)&s_currentMsg) )
+        if (!ProcessMessage((WXMSG *)&svCurrentMsg) )
         {
-            ::TranslateMessage(&s_currentMsg);
-            ::DispatchMessage(&s_currentMsg);
+            ::WinDispatchMsg(m_vHab, (PQMSG)&svCurrentMsg);
         }
-*/
     }
-
     return TRUE;
 }
 
-/*
- * Keep trying to process messages until WM_QUIT
- * received.
- *
- * If there are messages to be processed, they will all be
- * processed and OnIdle will not be called.
- * When there are no more messages, OnIdle is called.
- * If OnIdle requests more time,
- * it will be repeatedly called so long as there are no pending messages.
- * A 'feature' of this is that once OnIdle has decided that no more processing
- * is required, then it won't get processing time until further messages
- * are processed (it'll sit in DoMessage).
- */
-
+//////////////////////////////////////////////////////////////////////////////
+//
+// Keep trying to process messages until WM_QUIT
+// received.
+//
+// If there are messages to be processed, they will all be
+// processed and OnIdle will not be called.
+// When there are no more messages, OnIdle is called.
+// If OnIdle requests more time,
+// it will be repeatedly called so long as there are no pending messages.
+// A 'feature' of this is that once OnIdle has decided that no more processing
+// is required, then it won't get processing time until further messages
+// are processed (it'll sit in DoMessage).
+//
+//////////////////////////////////////////////////////////////////////////////
 int wxApp::MainLoop()
 {
-    m_keepGoing = TRUE;
+    m_bKeepGoing = TRUE;
 
-    while ( m_keepGoing )
+    while (m_bKeepGoing)
     {
 #if wxUSE_THREADS
         wxMutexGuiLeaveOrEnter();
 #endif // wxUSE_THREADS
-// TODO:
-/*
-        while ( !::PeekMessage(&s_currentMsg, 0, 0, 0, PM_NOREMOVE) &&
+        while (!::WinPeekMsg(m_vHab, &svCurrentMsg, (HWND)NULL, 0, 0, PM_NOREMOVE) &&
                 ProcessIdle() )
         {
         }
-*/
-
         DoMessage();
     }
-
-// TODO:    return s_currentMsg.wParam;
-    return FALSE;
+    return (int)svCurrentMsg.mp1;
 }
 
+//
 // Returns TRUE if more time is needed.
+//
 bool wxApp::ProcessIdle()
 {
-    wxIdleEvent event;
-    event.SetEventObject(this);
-    ProcessEvent(event);
+    wxIdleEvent                     vEvent;
 
-    return event.MoreRequested();
+    vEvent.SetEventObject(this);
+    ProcessEvent(vEvent);
+    return vEvent.MoreRequested();
 }
 
 #if wxUSE_THREADS
 void wxApp::ProcessPendingEvents()
 {
-    wxNode *node = wxPendingEvents->First();
-    wxCriticalSectionLocker locker(*wxPendingEventsLocker);
+    wxNode*                         pNode = wxPendingEvents->First();
+    wxCriticalSectionLocker         vLocker(*wxPendingEventsLocker);
 
-    while (node)
+    while (pNode)
     {
-        wxEvtHandler *handler = (wxEvtHandler *)node->Data();
+        wxEvtHandler*               pHandler = (wxEvtHandler *)pNode->Data();
+        pHandler->ProcessPendingEvents();
 
-        handler->ProcessPendingEvents();
-
-        delete node;
-        node = wxPendingEvents->First();
+        delete pNode;
+        pNode = wxPendingEvents->First();
     }
 }
 #endif
 
-
 void wxApp::ExitMainLoop()
 {
-    m_keepGoing = FALSE;
+    m_bKeepGoing = FALSE;
 }
 
 bool wxApp::Pending()
 {
-// TODO:    return (::PeekMessage(&s_currentMsg, 0, 0, 0, PM_NOREMOVE) != 0);
-    return FALSE;
+    return (::WinPeekMsg(m_vHab, (PQMSG)&svCurrentMsg, (HWND)NULL, 0, 0, PM_NOREMOVE) != 0);
 }
 
 void wxApp::Dispatch()
@@ -838,203 +685,175 @@ void wxApp::Dispatch()
     DoMessage();
 }
 
-/*
- * Give all windows a chance to preprocess
- * the message. Some may have accelerator tables, or have
- * MDI complications.
- */
-
-bool wxApp::ProcessMessage(WXMSG *wxmsg)
+//////////////////////////////////////////////////////////////////////////////
+//
+// Give all windows a chance to preprocess
+// the message. Some may have accelerator tables, or have
+// MDI complications.
+//
+//////////////////////////////////////////////////////////////////////////////
+bool wxApp::ProcessMessage(
+  WXMSG*                            pWxmsg
+)
 {
-// TODO:
-/*
-    MSG *msg = (MSG *)wxmsg;
-    HWND hWnd = msg->hwnd;
-    wxWindow *wndThis = wxFindWinFromHandle((WXHWND)hWnd), *wnd;
+    QMSG*                           vMsg = (PQMSG)pWxmsg;
+    HWND                            hWnd = vMsg->hwnd;
+    wxWindow*                       pWndThis = wxFindWinFromHandle((WXHWND)hWnd);
+    wxWindow*                       pWnd;
 
+    //
     // for some composite controls (like a combobox), wndThis might be NULL
     // because the subcontrol is not a wxWindow, but only the control itself
     // is - try to catch this case
-    while ( hWnd && !wndThis )
+    //
+    while (hWnd && !pWndThis)
     {
-        hWnd = 0; // TODO: ::GetParent(hWnd);
-        wndThis = wxFindWinFromHandle((WXHWND)hWnd);
-    }
-
-    // Try translations first; find the youngest window with
-    // a translation table.
-    for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
-    {
-        if ( wnd->OS2TranslateMessage(wxmsg) )
-            return TRUE;
+        hWnd = ::WinQueryWindow(hWnd, QW_PARENT);
+        pWndThis = wxFindWinFromHandle((WXHWND)hWnd);
     }
 
     // Anyone for a non-translation message? Try youngest descendants first.
-    for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
+    for (pWnd = pWndThis; pWnd; pWnd = pWnd->GetParent())
     {
-        if ( wnd->OS2ProcessMessage(wxmsg) )
+        if (pWnd->OS2ProcessMessage(pWxmsg))
             return TRUE;
     }
-*/
     return FALSE;
 }
 
-void wxApp::OnIdle(wxIdleEvent& event)
+void wxApp::OnIdle(
+  wxIdleEvent&                      rEvent
+)
 {
-    static bool s_inOnIdle = FALSE;
+    static bool                     sbInOnIdle = FALSE;
 
+    //
     // Avoid recursion (via ProcessEvent default case)
-    if ( s_inOnIdle )
+    //
+    if (sbInOnIdle )
         return;
 
-    s_inOnIdle = TRUE;
+    sbInOnIdle = TRUE;
 
+    //
     // 'Garbage' collection of windows deleted with Close().
+    //
     DeletePendingObjects();
 
 #if wxUSE_LOG
     // flush the logged messages if any
-    wxLog *pLog = wxLog::GetActiveTarget();
-    if ( pLog != NULL && pLog->HasPendingMessages() )
+    wxLog*                          pLog = wxLog::GetActiveTarget();
+
+    if (pLog != NULL && pLog->HasPendingMessages())
         pLog->Flush();
 #endif // wxUSE_LOG
 
     // Send OnIdle events to all windows
-    if ( SendIdleEvents() )
+    if (SendIdleEvents())
     {
+        //
         // SendIdleEvents() returns TRUE if at least one window requested more
         // idle events
-        event.RequestMore(TRUE);
+        //
+        rEvent.RequestMore(TRUE);
     }
 
+    //
     // If they are pending events, we must process them.
+    //
 #if wxUSE_THREADS
     ProcessPendingEvents();
 #endif
-    s_inOnIdle = FALSE;
+    sbInOnIdle = FALSE;
 }
 
 // Send idle event to all top-level windows
 bool wxApp::SendIdleEvents()
 {
-    bool needMore = FALSE;
+    bool                            bNeedMore = FALSE;
+    wxWindowList::Node*             pNode = wxTopLevelWindows.GetFirst();
 
-    wxWindowList::Node* node = wxTopLevelWindows.GetFirst();
-    while (node)
+    while (pNode)
     {
-        wxWindow* win = node->GetData();
-        if (SendIdleEvents(win))
-            needMore = TRUE;
-        node = node->GetNext();
-    }
+        wxWindow*                   pWin = pNode->GetData();
 
-    return needMore;
+        if (SendIdleEvents(pWin))
+            bNeedMore = TRUE;
+        pNode = pNode->GetNext();
+    }
+    return bNeedMore;
 }
 
+//
 // Send idle event to window and all subwindows
-bool wxApp::SendIdleEvents(wxWindow* win)
+//
+bool wxApp::SendIdleEvents(
+  wxWindow*                         pWin
+)
 {
-    bool needMore = FALSE;
+    bool                            bNeedMore = FALSE;
+    wxIdleEvent                     vEvent;
 
-    wxIdleEvent event;
-    event.SetEventObject(win);
-    win->GetEventHandler()->ProcessEvent(event);
+    vEvent.SetEventObject(pWin);
+    pWin->GetEventHandler()->ProcessEvent(vEvent);
 
-    if (event.MoreRequested())
-        needMore = TRUE;
+    if (vEvent.MoreRequested())
+        bNeedMore = TRUE;
 
-    wxNode* node = win->GetChildren().First();
-    while (node)
+    wxNode*                         pNode = pWin->GetChildren().First();
+
+    while (pNode)
     {
-        wxWindow* win = (wxWindow*) node->Data();
-        if (SendIdleEvents(win))
-            needMore = TRUE;
+        wxWindow*                   pWin = (wxWindow*) pNode->Data();
 
-        node = node->Next();
+        if (SendIdleEvents(pWin))
+            bNeedMore = TRUE;
+        pNode = pNode->Next();
     }
-    return needMore;
+    return bNeedMore;
 }
 
 void wxApp::DeletePendingObjects()
 {
-    wxNode *node = wxPendingDelete.First();
-    while (node)
+    wxNode*                         pNode = wxPendingDelete.First();
+
+    while (pNode)
     {
-        wxObject *obj = (wxObject *)node->Data();
+        wxObject*                   pObj = (wxObject *)pNode->Data();
 
-        delete obj;
+        delete pObj;
 
-        if (wxPendingDelete.Member(obj))
-            delete node;
+        if (wxPendingDelete.Member(pObj))
+            delete pNode;
 
+        //
         // Deleting one object may have deleted other pending
         // objects, so start from beginning of list again.
-        node = wxPendingDelete.First();
+        //
+        pNode = wxPendingDelete.First();
     }
 }
 
-void wxApp::OnEndSession(wxCloseEvent& WXUNUSED(event))
+void wxApp::OnEndSession(
+  wxCloseEvent&                     WXUNUSED(rEvent))
 {
     if (GetTopWindow())
         GetTopWindow()->Close(TRUE);
 }
 
+//
 // Default behaviour: close the application with prompts. The
 // user can veto the close, and therefore the end session.
-void wxApp::OnQueryEndSession(wxCloseEvent& event)
+//
+void wxApp::OnQueryEndSession(
+  wxCloseEvent&                     rEvent
+)
 {
     if (GetTopWindow())
     {
-        if (!GetTopWindow()->Close(!event.CanVeto()))
-            event.Veto(TRUE);
+        if (!GetTopWindow()->Close(!rEvent.CanVeto()))
+            rEvent.Veto(TRUE);
     }
-}
-
-int wxApp::GetComCtl32Version() const
-{
-   // TODO:  Does OS/2 even need this method?
-   /*
-    // have we loaded COMCTL32 yet?
-    HMODULE theModule = ::GetModuleHandle(wxT("COMCTL32"));
-    int version = 0;
-
-    // if so, then we can check for the version
-    if (theModule)
-    {
-        // InitCommonControlsEx is unique to 4.7 and later
-        FARPROC theProc = ::GetProcAddress(theModule, "InitCommonControlsEx");
-
-        if (! theProc)
-        {                    // not found, must be 4.00
-            version = 400;
-        }
-        else
-        {
-            // The following symbol are unique to 4.71
-            //   DllInstall
-            //   FlatSB_EnableScrollBar FlatSB_GetScrollInfo FlatSB_GetScrollPos
-            //   FlatSB_GetScrollProp FlatSB_GetScrollRange FlatSB_SetScrollInfo
-            //   FlatSB_SetScrollPos FlatSB_SetScrollProp FlatSB_SetScrollRange
-            //   FlatSB_ShowScrollBar
-            //   _DrawIndirectImageList _DuplicateImageList
-            //   InitializeFlatSB
-            //   UninitializeFlatSB
-            // we could check for any of these - I chose DllInstall
-            FARPROC theProc = ::GetProcAddress(theModule, "DllInstall");
-            if (! theProc)
-            {
-                // not found, must be 4.70
-                version = 470;
-            }
-            else
-            {                         // found, must be 4.71
-                version = 471;
-            }
-        }
-    }
-    return version;
-*/
-    return 0;
 }
 
 void wxExit()
@@ -1063,11 +882,11 @@ bool wxYield()
     return TRUE;
 }
 
-wxIcon wxApp::GetStdIcon(int which) const
+wxIcon wxApp::GetStdIcon(
+  int                               nWhich
+) const
 {
-    // TODO:
-    /*
-    switch(which)
+    switch(nWhich)
     {
         case wxICON_INFORMATION:
             return wxIcon("wxICON_INFO");
@@ -1085,10 +904,8 @@ wxIcon wxApp::GetStdIcon(int which) const
         case wxICON_HAND:
             return wxIcon("wxICON_ERROR");
     }
-*/
     return wxIcon("wxICON_ERROR");
 }
-
 
 HINSTANCE wxGetInstance()
 {

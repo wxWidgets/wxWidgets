@@ -114,6 +114,8 @@ private:
   { return(wxConfigBase::Write(key, value));};
   virtual bool Write(const wxString& key, bool value)
   { return(wxConfigBase::Write(key, value));};
+  virtual bool Write(const wxString& key, const char* value)
+  { return(wxConfigBase::Write(key, value));};
 };
 
 #endif  //_INICONF_H
