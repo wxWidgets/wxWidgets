@@ -68,6 +68,8 @@ public:
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/datectrl.h"
+
+    #define wxHAS_NATIVE_DATEPICKCTRL
 #else
     #include "wx/generic/datectrl.h"
 

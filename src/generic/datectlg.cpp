@@ -25,13 +25,11 @@
 
 #if wxUSE_DATEPICKCTRL
 
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
-    #define HAS_NATIVE_VERSION
-#endif
+#include "wx/datectrl.h"
 
 // use this version if we're explicitly requested to do it or if it's the only
 // one we have
-#if wxUSE_DATEPICKCTRL_GENERIC || !defined(HAS_NATIVE_VERSION)
+#if wxUSE_DATEPICKCTRL_GENERIC || !defined(wxHAS_NATIVE_DATEPICKCTRL)
 
 #ifndef WX_PRECOMP
     #include "wx/bmpbuttn.h"
@@ -43,13 +41,12 @@
 #endif
 
 // otherwise it's defined in the native version implementation
-#ifndef HAS_NATIVE_VERSION
+#ifndef wxHAS_NATIVE_DATEPICKCTRL
     #define _WX_DEFINE_DATE_EVENTS_
 #endif
 
 #include "wx/dateevt.h"
 
-#include "wx/datectrl.h"
 #include "wx/calctrl.h"
 #include "wx/popupwin.h"
 
