@@ -18,7 +18,7 @@
 
 #include "wx/object.h"
 
-class wxWave : public wxObject
+class DLLEXPORT wxWave : public wxObject
 {
 public:
   wxWave();
