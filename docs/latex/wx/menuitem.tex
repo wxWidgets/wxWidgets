@@ -195,6 +195,13 @@ Returns TRUE if the item is a separator.
 
 Sets the background colour associated with the menu item (Windows only).
 
+\membersection{wxMenuItem::SetBitmap}\label{wxmenuitemsetbitmap}
+
+\constfunc{void}{SetBitmap}{\param{const wxBitmap\& }{bmp}}
+
+Sets the bitmap for the menu item (Windows and GTK+ only). It is
+equivalent to \helpref{SetBitmaps}{wxmenuitemsetbitmaps}(bmp, wxNullBitmap).
+
 \membersection{wxMenuItem::SetBitmaps}\label{wxmenuitemsetbitmaps}
 
 \constfunc{void}{SetBitmaps}{\param{const wxBitmap\& }{checked},
