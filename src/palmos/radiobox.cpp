@@ -38,8 +38,6 @@
     #include "wx/log.h"
 #endif
 
-#include "wx/palmos/private.h"
-
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
@@ -101,19 +99,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
         dimension
         item
 */
-
-#define RADIOBTN_PARENT_IS_RADIOBOX 0
-
-// ---------------------------------------------------------------------------
-// private functions
-// ---------------------------------------------------------------------------
-
-// ---------------------------------------------------------------------------
-// global vars
-// ---------------------------------------------------------------------------
-
-// the pointer to standard radio button wnd proc
-static WXFARPROC s_wndprocRadioBtn = (WXFARPROC)NULL;
 
 // ===========================================================================
 // implementation
@@ -234,14 +219,6 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
 }
 
-void wxRadioBox::GetSize(int *width, int *height) const
-{
-}
-
-void wxRadioBox::GetPosition(int *x, int *y) const
-{
-}
-
 void wxRadioBox::SetFocus()
 {
 }
@@ -267,16 +244,7 @@ void wxRadioBox::Show(int item, bool show)
 {
 }
 
-bool wxRadioBox::ContainsHWND(WXHWND hWnd) const
-{
-    return false;
-}
-
 void wxRadioBox::Command(wxCommandEvent & event)
-{
-}
-
-void wxRadioBox::SubclassRadioButton(WXHWND hWndBtn)
 {
 }
 
@@ -287,19 +255,6 @@ void wxRadioBox::SendNotificationEvent()
 bool wxRadioBox::SetFont(const wxFont& font)
 {
     return false;
-}
-
-// ----------------------------------------------------------------------------
-// our window proc
-// ----------------------------------------------------------------------------
-
-WXHBRUSH wxRadioBox::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
-                               WXUINT WXUNUSED(message),
-                               WXWPARAM WXUNUSED(wParam),
-                               WXLPARAM WXUNUSED(lParam)
-    )
-{
-    return (WXHBRUSH)0;
 }
 
 #endif // wxUSE_RADIOBOX

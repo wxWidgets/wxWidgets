@@ -72,6 +72,7 @@ void wxControl::Init()
 
 wxControl::~wxControl()
 {
+    SetLabel(wxEmptyString);
     m_isBeingDeleted = true;
 }
 
@@ -107,13 +108,11 @@ bool wxControl::PalmCreateControl(ControlStyleType style,
     if(form==NULL)
         return false;
 
-    m_label = label;
-
     ControlType *control = CtlNewControl(
                                (void **)&form,
                                GetId(),
                                style,
-                               m_label.c_str(),
+                               wxEmptyString,
                                ( pos.x == wxDefaultCoord ) ? winUndefConstraint : pos.x,
                                ( pos.y == wxDefaultCoord ) ? winUndefConstraint : pos.y,
                                ( size.x == wxDefaultCoord ) ? winUndefConstraint : size.x,
@@ -128,6 +127,7 @@ bool wxControl::PalmCreateControl(ControlStyleType style,
 
     m_palmControl = true;
 
+    SetLabel(label);
     Show();
     return true;
 }
@@ -350,6 +350,13 @@ void wxControl::SetFieldLabel(const wxString& label)
 
 void wxControl::SetControlLabel(const wxString& label)
 {
+    ControlType* control = (ControlType*)GetObjectPtr();
+    if(control==NULL)
+        return;
+    CtlSetLabel(control,wxEmptyString);
+    m_label = label;
+    if(!m_label.empty())
+        CtlSetLabel(control,m_label.c_str());
 }
 
 void wxControl::SetLabel(const wxString& label)

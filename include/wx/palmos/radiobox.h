@@ -68,6 +68,7 @@ public:
                 long style = wxRA_HORIZONTAL,
                 const wxValidator& val = wxDefaultValidator,
                 const wxString& name = wxRadioBoxNameStr);
+
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString& title,
@@ -104,17 +105,8 @@ public:
     // implementation only from now on
     // -------------------------------
 
-    // FIXME: are they used? missing "Do" prefix?
-    void GetSize(int *x, int *y) const;
-    void GetPosition(int *x, int *y) const;
-
     virtual bool SetFont(const wxFont& font);
 
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                                WXUINT message,
-                                WXWPARAM wParam, WXLPARAM lParam);
-    WXHWND *GetRadioButtons() const { return m_radioButtons; }
-    bool ContainsHWND(WXHWND hWnd) const;
     void SendNotificationEvent();
 
     // get the number of buttons per column/row
@@ -128,16 +120,12 @@ protected:
     // we can't compute our best size before the items are added to the control
     virtual void SetInitialBestSize(const wxSize& WXUNUSED(size)) { }
 
-    // subclass one radio button
-    void SubclassRadioButton(WXHWND hWndBtn);
-
     // get the max size of radio buttons
     wxSize GetMaxButtonSize() const;
 
     // get the total size occupied by the radio box buttons
     wxSize GetTotalButtonSize(const wxSize& sizeBtn) const;
 
-    WXHWND *          m_radioButtons;
     int               m_majorDim;
     int *             m_radioWidth;  // for bitmaps
     int *             m_radioHeight;

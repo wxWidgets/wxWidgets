@@ -70,6 +70,9 @@ public:
     // implementation
     void Command(wxCommandEvent& event);
 
+    // send a notification event, return true if processed
+    bool SendUpdatedEvent();
+
 protected:
     virtual wxSize DoGetBestSize() const;
 

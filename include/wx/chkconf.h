@@ -1546,13 +1546,19 @@
 #endif
 
 #if wxUSE_RADIOBOX
-#   if !wxUSE_RADIOBTN || !wxUSE_STATBOX
+#   if !wxUSE_RADIOBTN
 #        ifdef wxABORT_ON_CONFIG_ERROR
-#            error "wxUSE_RADIOBOX requires wxUSE_RADIOBTN and wxUSE_STATBOX"
+#            error "wxUSE_RADIOBOX requires wxUSE_RADIOBTN"
 #        else
 #            undef wxUSE_RADIOBTN
-#            undef wxUSE_STATBOX
 #            define wxUSE_RADIOBTN 1
+#        endif
+#   endif
+#   if !wxUSE_STATBOX && !defined(__WXPALMOS__)
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_RADIOBOX requires wxUSE_STATBOX"
+#        else
+#            undef wxUSE_STATBOX
 #            define wxUSE_STATBOX 1
 #        endif
 #   endif

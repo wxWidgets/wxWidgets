@@ -47,6 +47,7 @@
 #include "wx/checkbox.h"
 #include "wx/radiobut.h"
 #include "wx/tglbtn.h"
+#include "wx/slider.h"
 
 // ----------------------------------------------------------------------------
 // globals
@@ -267,6 +268,10 @@ bool wxTopLevelWindowPalm::HandleControlSelect(EventType* event)
     wxRadioButton* radio = wxDynamicCast(win,wxRadioButton);
     if(radio)
         return radio->SendClickEvent();
+
+    wxSlider* slider = wxDynamicCast(win,wxSlider);
+    if(slider)
+        return slider->SendUpdatedEvent();
 
     return false;
 }

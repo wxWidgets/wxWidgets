@@ -251,6 +251,18 @@ void wxSlider::SetTick(int tickPos)
 {
 }
 
+// ----------------------------------------------------------------------------
+// helpers
+// ----------------------------------------------------------------------------
+
+bool wxSlider::SendUpdatedEvent()
+{
+    wxCommandEvent event(wxEVT_COMMAND_SLIDER_UPDATED, GetId());
+    event.SetEventObject(this);
+    event.SetInt(GetValue());
+    return ProcessCommand(event);
+}
+
 void wxSlider::Command (wxCommandEvent & event)
 {
 }
