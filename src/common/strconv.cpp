@@ -166,6 +166,11 @@ static size_t decode_utf16(const wxUint16* input, wxUint32& output)
 // wxMBConv
 // ----------------------------------------------------------------------------
 
+wxMBConv::~wxMBConv()
+{
+    // nothing to do here (necessary for Darwin linking probably)
+}
+
 const wxWCharBuffer wxMBConv::cMB2WC(const char *psz) const
 {
     if ( psz )
