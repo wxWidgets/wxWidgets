@@ -380,11 +380,11 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 2.5;
 				DYLIB_CURRENT_VERSION = 2.5.0;
-				HEADER_SEARCH_PATHS = "../include mac/morefilex jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
+				HEADER_SEARCH_PATHS = "\"${DERIVED_SOURCES_DIR}/include\" ../include mac/morefilex jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/3.1;
 				LIBRARY_STYLE = DYNAMIC;
 				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = "-D__WXDEBUG__ -DWXMAKINGDLL -D__WXMAC__ -fno-rtti -fno-exceptions";
+				OTHER_CFLAGS = "-DNO_GCC_PRAGMA -D__WXDEBUG__ -DWXMAKINGDLL -D__WXMAC__ -DwxUSE_BASE=1 -fno-rtti -fno-exceptions -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES";
 				OTHER_LDFLAGS = "\U0001-flat_namespace";
 				OTHER_LIBTOOL_FLAGS = "\U0001";
 				OTHER_REZFLAGS = "-d __UNIX__";
@@ -412,7 +412,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Create wx include directory if necessary\nif [ ! -d \"$SYMROOT/include/wx\" ]; then\n    mkdir -p \"$SYMROOT/include/wx\" || exit 1\nfi\n# Copy setup0.h to setup.h\nif [ ! -f \"$SYMROOT/include/wx/setup.h\" ]; then\n    cp \"$SRCROOT/../include/wx/mac/setup0.h\" \"$SYMROOT/include/wx/setup.h\" || exit 1\nfi\n# Generate lexer\nif [ ! -f \"$SYMROOT/lexer.c\" -o \"$SYMROOT/lexer.c\" -ot \"$SRCROOT/common/lexer.l\" ]; then\n    flex \"$SRCROOT/common/lexer.l\" || exit 1\n    sed -e \"s;$SRCROOT/common/lex.yy.c;lexer.l;g\" < lex.yy.c | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/lexer.c\" || exit 1\n    rm -f lex.yy.c\nfi\n# Generate parser\nif [ ! -f \"$SYMROOT/parser.c\" -o \"$SYMROOT/parser.c\" -ot \"$SRCROOT/common/parser.y\" ]; then\n    bison -y \"$SRCROOT/common/parser.y\" || exit 1\n    sed -e \"s;$SRCROOT/common/y.tab.c;parser.y;g\" < y.tab.c | \\\n    sed -e \"s/BUFSIZ/5000/g\"            | \\\n    sed -e \"s/YYLMAX 200/YYLMAX 5000/g\" | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/parser.c\" || exit 1\n    rm -f y.tab.c\nfi";
+			shellScript = "# Create wx include directory if necessary\nif [ ! -d \"${DERIVED_SOURCES_DIR}/include/wx\" ]; then\n    mkdir -p \"${DERIVED_SOURCES_DIR}/include/wx\" || exit 1\nfi\n# Copy setup0.h to setup.h\ncp \"$SRCROOT/../include/wx/mac/setup0.h\" \"${DERIVED_SOURCES_DIR}/include/wx/setup.h\" || exit 1\n# Generate lexer\nif [ ! -f \"$SYMROOT/lexer.c\" -o \"$SYMROOT/lexer.c\" -ot \"$SRCROOT/common/lexer.l\" ]; then\n    flex \"$SRCROOT/common/lexer.l\" || exit 1\n    sed -e \"s;$SRCROOT/common/lex.yy.c;lexer.l;g\" < lex.yy.c | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/lexer.c\" || exit 1\n    rm -f lex.yy.c\nfi\n# Generate parser\nif [ ! -f \"$SYMROOT/parser.c\" -o \"$SYMROOT/parser.c\" -ot \"$SRCROOT/common/parser.y\" ]; then\n    bison -y \"$SRCROOT/common/parser.y\" || exit 1\n    sed -e \"s;$SRCROOT/common/y.tab.c;parser.y;g\" < y.tab.c | \\\n    sed -e \"s/BUFSIZ/5000/g\"            | \\\n    sed -e \"s/YYLMAX 200/YYLMAX 5000/g\" | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/parser.c\" || exit 1\n    rm -f y.tab.c\nfi";
 		};
 		CA89560204D6EE8C00000080 = {
 			buildActionMask = 2147483647;
@@ -579,7 +579,6 @@
 				CA89569604D6EE8C00000080,
 				CA89569704D6EE8C00000080,
 				CA89569804D6EE8C00000080,
-				CA89569904D6EE8C00000080,
 				CA89569A04D6EE8C00000080,
 				CA89569B04D6EE8C00000080,
 				CA89569C04D6EE8C00000080,
@@ -807,6 +806,10 @@
 				CA89577A04D6EE8D00000080,
 				CA89578804D7052700000080,
 				CA89578C04D705D700000080,
+				CA8CC82C050E6CD800000080,
+				CA8CC82D050E6CD800000080,
+				CA8CC82E050E6CD800000080,
+				CA8CC835050EE2BD00000080,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1695,12 +1698,6 @@
 		};
 		CA89569804D6EE8C00000080 = {
 			fileRef = F5A8609D01FA022C0175ACA7;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		CA89569904D6EE8C00000080 = {
-			fileRef = F5A8609C01FA022C0175ACA7;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -3176,10 +3173,10 @@
 				DEBUGGING_SYMBOLS = NO;
 				DYLIB_COMPATIBILITY_VERSION = 2.5;
 				DYLIB_CURRENT_VERSION = 2.5.0;
-				HEADER_SEARCH_PATHS = "../include mac/morefile jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
+				HEADER_SEARCH_PATHS = "\"${DERIVED_SOURCES_DIR}/include\" ../include mac/morefile jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
 				LIBRARY_STYLE = DYNAMIC;
 				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "-DWXMAKINGDLL -D__WXMAC__ -fno-rtti -fno-exceptions";
+				OTHER_CFLAGS = "-DNO_GCC_PRAGMA -DWXMAKINGDLL -D__WXMAC__ -DwxUSE_BASE=1 -fno-rtti -fno-exceptions -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES";
 				OTHER_LDFLAGS = "-flat_namespace";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "-d __UNIX__";
@@ -3208,7 +3205,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Create wx include directory if necessary\nif [ ! -d \"$SYMROOT/include/wx\" ]; then\n    mkdir -p \"$SYMROOT/include/wx\" || exit 1\nfi\n# Copy setup0.h to setup.h\nif [ ! -f \"$SYMROOT/include/wx/setup.h\" ]; then\n    cp \"$SRCROOT/../include/wx/mac/setup0.h\" \"$SYMROOT/include/wx/setup.h\" || exit 1\nfi\n# Generate lexer\nif [ ! -f \"$SYMROOT/lexer.c\" -o \"$SYMROOT/lexer.c\" -ot \"$SRCROOT/common/lexer.l\" ]; then\n    flex \"$SRCROOT/common/lexer.l\" || exit 1\n    sed -e \"s;$SRCROOT/common/lex.yy.c;lexer.l;g\" < lex.yy.c | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/lexer.c\" || exit 1\n    rm -f lex.yy.c\nfi\n# Generate parser\nif [ ! -f \"$SYMROOT/parser.c\" -o \"$SYMROOT/parser.c\" -ot \"$SRCROOT/common/parser.y\" ]; then\n    bison -y \"$SRCROOT/common/parser.y\" || exit 1\n    sed -e \"s;$SRCROOT/common/y.tab.c;parser.y;g\" < y.tab.c | \\\n    sed -e \"s/BUFSIZ/5000/g\"            | \\\n    sed -e \"s/YYLMAX 200/YYLMAX 5000/g\" | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/parser.c\" || exit 1\n    rm -f y.tab.c\nfi";
+			shellScript = "# Create wx include directory if necessary\nif [ ! -d \"${DERIVED_SOURCES_DIR}/include/wx\" ]; then\n    mkdir -p \"${DERIVED_SOURCES_DIR}/include/wx\" || exit 1\nfi\n# Copy setup0.h to setup.h\ncp \"$SRCROOT/../include/wx/mac/setup0.h\" \"${DERIVED_SOURCES_DIR}/include/wx/setup.h\" || exit 1\n# Generate lexer\nif [ ! -f \"$SYMROOT/lexer.c\" -o \"$SYMROOT/lexer.c\" -ot \"$SRCROOT/common/lexer.l\" ]; then\n    flex \"$SRCROOT/common/lexer.l\" || exit 1\n    sed -e \"s;$SRCROOT/common/lex.yy.c;lexer.l;g\" < lex.yy.c | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/lexer.c\" || exit 1\n    rm -f lex.yy.c\nfi\n# Generate parser\nif [ ! -f \"$SYMROOT/parser.c\" -o \"$SYMROOT/parser.c\" -ot \"$SRCROOT/common/parser.y\" ]; then\n    bison -y \"$SRCROOT/common/parser.y\" || exit 1\n    sed -e \"s;$SRCROOT/common/y.tab.c;parser.y;g\" < y.tab.c | \\\n    sed -e \"s/BUFSIZ/5000/g\"            | \\\n    sed -e \"s/YYLMAX 200/YYLMAX 5000/g\" | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/parser.c\" || exit 1\n    rm -f y.tab.c\nfi";
 		};
 		CA8957A704D707E000000080 = {
 			buildActionMask = 2147483647;
@@ -3441,7 +3438,6 @@
 				CA89588D04D707E000000080,
 				CA89588E04D707E000000080,
 				CA89588F04D707E000000080,
-				CA89589004D707E000000080,
 				CA89589104D707E000000080,
 				CA89589204D707E000000080,
 				CA89589304D707E000000080,
@@ -3596,6 +3592,10 @@
 				CA89592804D707E000000080,
 				CA89592904D707E000000080,
 				CA89592A04D707E000000080,
+				CA8CC82F050E6CD800000080,
+				CA8CC830050E6CD800000080,
+				CA8CC831050E6CD800000080,
+				CA8CC836050EE2BD00000080,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4926,12 +4926,6 @@
 			settings = {
 			};
 		};
-		CA89589004D707E000000080 = {
-			fileRef = F5A8609C01FA022C0175ACA7;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		CA89589104D707E000000080 = {
 			fileRef = F5A8609B01FA022C0175ACA7;
 			isa = PBXBuildFile;
@@ -5917,6 +5911,126 @@
 			settings = {
 			};
 		};
+		CA8CC823050E6CD800000080 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = xti.cpp;
+			refType = 4;
+		};
+		CA8CC824050E6CD800000080 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = xtistrm.cpp;
+			refType = 4;
+		};
+		CA8CC825050E6CD800000080 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = xtixml.cpp;
+			refType = 4;
+		};
+		CA8CC826050E6CD800000080 = {
+			fileRef = CA8CC823050E6CD800000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA8CC827050E6CD800000080 = {
+			fileRef = CA8CC824050E6CD800000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA8CC828050E6CD800000080 = {
+			fileRef = CA8CC825050E6CD800000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA8CC829050E6CD800000080 = {
+			fileRef = CA8CC823050E6CD800000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA8CC82A050E6CD800000080 = {
+			fileRef = CA8CC824050E6CD800000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA8CC82B050E6CD800000080 = {
+			fileRef = CA8CC825050E6CD800000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA8CC82C050E6CD800000080 = {
+			fileRef = CA8CC823050E6CD800000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA8CC82D050E6CD800000080 = {
+			fileRef = CA8CC824050E6CD800000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA8CC82E050E6CD800000080 = {
+			fileRef = CA8CC825050E6CD800000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA8CC82F050E6CD800000080 = {
+			fileRef = CA8CC823050E6CD800000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA8CC830050E6CD800000080 = {
+			fileRef = CA8CC824050E6CD800000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA8CC831050E6CD800000080 = {
+			fileRef = CA8CC825050E6CD800000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA8CC832050EE2BD00000080 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = bookctrl.cpp;
+			refType = 4;
+		};
+		CA8CC833050EE2BD00000080 = {
+			fileRef = CA8CC832050EE2BD00000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA8CC834050EE2BD00000080 = {
+			fileRef = CA8CC832050EE2BD00000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA8CC835050EE2BD00000080 = {
+			fileRef = CA8CC832050EE2BD00000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA8CC836050EE2BD00000080 = {
+			fileRef = CA8CC832050EE2BD00000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		CADEF54103C8C0A800000133 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -6022,7 +6136,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Create wx include directory if necessary\nif [ ! -d \"$SYMROOT/include/wx\" ]; then\n    mkdir -p \"$SYMROOT/include/wx\" || exit 1\nfi\n# Copy setup0.h to setup.h\nif [ ! -f \"$SYMROOT/include/wx/setup.h\" ]; then\n    cp \"$SRCROOT/../include/wx/mac/setup0.h\" \"$SYMROOT/include/wx/setup.h\" || exit 1\nfi\n# Generate lexer\nif [ ! -f \"$SYMROOT/lexer.c\" -o \"$SYMROOT/lexer.c\" -ot \"$SRCROOT/common/lexer.l\" ]; then\n    flex \"$SRCROOT/common/lexer.l\" || exit 1\n    sed -e \"s;$SRCROOT/common/lex.yy.c;lexer.l;g\" < lex.yy.c | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/lexer.c\" || exit 1\n    rm -f lex.yy.c\nfi\n# Generate parser\nif [ ! -f \"$SYMROOT/parser.c\" -o \"$SYMROOT/parser.c\" -ot \"$SRCROOT/common/parser.y\" ]; then\n    bison -y \"$SRCROOT/common/parser.y\" || exit 1\n    sed -e \"s;$SRCROOT/common/y.tab.c;parser.y;g\" < y.tab.c | \\\n    sed -e \"s/BUFSIZ/5000/g\"            | \\\n    sed -e \"s/YYLMAX 200/YYLMAX 5000/g\" | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/parser.c\" || exit 1\n    rm -f y.tab.c\nfi";
+			shellScript = "# Create wx include directory if necessary\nif [ ! -d \"${DERIVED_SOURCES_DIR}/include/wx\" ]; then\n    mkdir -p \"${DERIVED_SOURCES_DIR}/include/wx\" || exit 1\nfi\n# Copy setup0.h to setup.h\ncp \"$SRCROOT/../include/wx/mac/setup0.h\" \"${DERIVED_SOURCES_DIR}/include/wx/setup.h\" || exit 1\n# Generate lexer\nif [ ! -f \"$SYMROOT/lexer.c\" -o \"$SYMROOT/lexer.c\" -ot \"$SRCROOT/common/lexer.l\" ]; then\n    flex \"$SRCROOT/common/lexer.l\" || exit 1\n    sed -e \"s;$SRCROOT/common/lex.yy.c;lexer.l;g\" < lex.yy.c | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/lexer.c\" || exit 1\n    rm -f lex.yy.c\nfi\n# Generate parser\nif [ ! -f \"$SYMROOT/parser.c\" -o \"$SYMROOT/parser.c\" -ot \"$SRCROOT/common/parser.y\" ]; then\n    bison -y \"$SRCROOT/common/parser.y\" || exit 1\n    sed -e \"s;$SRCROOT/common/y.tab.c;parser.y;g\" < y.tab.c | \\\n    sed -e \"s/BUFSIZ/5000/g\"            | \\\n    sed -e \"s/YYLMAX 200/YYLMAX 5000/g\" | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/parser.c\" || exit 1\n    rm -f y.tab.c\nfi";
 		};
 		F5955E9D02CBA8B501000133 = {
 			fileRef = F5A8619E01FA022C0175ACA7;
@@ -6926,12 +7040,6 @@
 		};
 		F5955F4102CBAB1601000133 = {
 			fileRef = F5A8609D01FA022C0175ACA7;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5955F4202CBAB1601000133 = {
-			fileRef = F5A8609C01FA022C0175ACA7;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -9452,12 +9560,6 @@
 		};
 		F5A0C61702CF70FC01000133 = {
 			fileRef = F5A8609D01FA022C0175ACA7;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5A0C61802CF70FC01000133 = {
-			fileRef = F5A8609C01FA022C0175ACA7;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -12902,6 +13004,7 @@
 				F5F5A6A102CDB6CA01000133,
 				F5F5A6A202CDB6CA01000133,
 				F5A85FE101FA022B0175ACA7,
+				CA8CC832050EE2BD00000080,
 				F5A85FE201FA022B0175ACA7,
 				F5A85FE301FA022B0175ACA7,
 				F5A85FE401FA022B0175ACA7,
@@ -13033,6 +13136,9 @@
 				F5A8606301FA022C0175ACA7,
 				F5A8606401FA022C0175ACA7,
 				F5A8606501FA022C0175ACA7,
+				CA8CC823050E6CD800000080,
+				CA8CC824050E6CD800000080,
+				CA8CC825050E6CD800000080,
 				F5A8606701FA022C0175ACA7,
 				F5A8606801FA022C0175ACA7,
 				F5A8606901FA022C0175ACA7,
@@ -13894,7 +14000,6 @@
 				F5A8609801FA022C0175ACA7,
 				F5A8609A01FA022C0175ACA7,
 				F5A8609B01FA022C0175ACA7,
-				F5A8609C01FA022C0175ACA7,
 				F5A8609D01FA022C0175ACA7,
 				F5A8609E01FA022C0175ACA7,
 				F5A8609F01FA022C0175ACA7,
@@ -14095,12 +14200,6 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = tabg.cpp;
-			refType = 4;
-		};
-		F5A8609C01FA022C0175ACA7 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = tbarsmpl.cpp;
 			refType = 4;
 		};
 		F5A8609D01FA022C0175ACA7 = {
@@ -15694,10 +15793,10 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 2.5;
 				DYLIB_CURRENT_VERSION = 2.5.0;
-				HEADER_SEARCH_PATHS = "../include mac/morefilex jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
+				HEADER_SEARCH_PATHS = "\"${DERIVED_SOURCES_DIR}/include\" ../include mac/morefilex jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
 				LIBRARY_STYLE = STATIC;
 				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = "-D__WXDEBUG__ -D__WXMAC__ -fno-rtti -fno-exceptions";
+				OTHER_CFLAGS = "-DNO_GCC_PRAGMA -D__WXDEBUG__ -D__WXMAC__ -DwxUSE_BASE=1 -fno-rtti -fno-exceptions -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES";
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "-d __UNIX__";
@@ -15873,7 +15972,6 @@
 				F5955F3F02CBAB1501000133,
 				F5955F4002CBAB1601000133,
 				F5955F4102CBAB1601000133,
-				F5955F4202CBAB1601000133,
 				F5955F4302CBAB1701000133,
 				F5955F4402CBAB1701000133,
 				F5955F4502CBAB1801000133,
@@ -16101,6 +16199,10 @@
 				CA60177304D43D2300000080,
 				CA89578604D7052700000080,
 				CA89578A04D705D700000080,
+				CA8CC826050E6CD800000080,
+				CA8CC827050E6CD800000080,
+				CA8CC828050E6CD800000080,
+				CA8CC833050EE2BD00000080,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -16133,7 +16235,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Create wx include directory if necessary\nif [ ! -d \"$SYMROOT/include/wx\" ]; then\n    mkdir -p \"$SYMROOT/include/wx\" || exit 1\nfi\n# Copy setup0.h to setup.h\nif [ ! -f \"$SYMROOT/include/wx/setup.h\" ]; then\n    cp \"$SRCROOT/../include/wx/mac/setup0.h\" \"$SYMROOT/include/wx/setup.h\" || exit 1\nfi\n# Generate lexer\nif [ ! -f \"$SYMROOT/lexer.c\" -o \"$SYMROOT/lexer.c\" -ot \"$SRCROOT/common/lexer.l\" ]; then\n    flex \"$SRCROOT/common/lexer.l\" || exit 1\n    sed -e \"s;$SRCROOT/common/lex.yy.c;lexer.l;g\" < lex.yy.c | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/lexer.c\" || exit 1\n    rm -f lex.yy.c\nfi\n# Generate parser\nif [ ! -f \"$SYMROOT/parser.c\" -o \"$SYMROOT/parser.c\" -ot \"$SRCROOT/common/parser.y\" ]; then\n    bison -y \"$SRCROOT/common/parser.y\" || exit 1\n    sed -e \"s;$SRCROOT/common/y.tab.c;parser.y;g\" < y.tab.c | \\\n    sed -e \"s/BUFSIZ/5000/g\"            | \\\n    sed -e \"s/YYLMAX 200/YYLMAX 5000/g\" | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/parser.c\" || exit 1\n    rm -f y.tab.c\nfi";
+			shellScript = "# Create wx include directory if necessary\nif [ ! -d \"${DERIVED_SOURCES_DIR}/include/wx\" ]; then\n    mkdir -p \"${DERIVED_SOURCES_DIR}/include/wx\" || exit 1\nfi\n# Copy setup0.h to setup.h\ncp \"$SRCROOT/../include/wx/mac/setup0.h\" \"${DERIVED_SOURCES_DIR}/include/wx/setup.h\" || exit 1\n# Generate lexer\nif [ ! -f \"$SYMROOT/lexer.c\" -o \"$SYMROOT/lexer.c\" -ot \"$SRCROOT/common/lexer.l\" ]; then\n    flex \"$SRCROOT/common/lexer.l\" || exit 1\n    sed -e \"s;$SRCROOT/common/lex.yy.c;lexer.l;g\" < lex.yy.c | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/lexer.c\" || exit 1\n    rm -f lex.yy.c\nfi\n# Generate parser\nif [ ! -f \"$SYMROOT/parser.c\" -o \"$SYMROOT/parser.c\" -ot \"$SRCROOT/common/parser.y\" ]; then\n    bison -y \"$SRCROOT/common/parser.y\" || exit 1\n    sed -e \"s;$SRCROOT/common/y.tab.c;parser.y;g\" < y.tab.c | \\\n    sed -e \"s/BUFSIZ/5000/g\"            | \\\n    sed -e \"s/YYLMAX 200/YYLMAX 5000/g\" | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/parser.c\" || exit 1\n    rm -f y.tab.c\nfi";
 		};
 		F5CC83D90379C17C01000133 = {
 			fileEncoding = 30;
@@ -16549,7 +16651,6 @@
 				F5A0C61502CF70FB01000133,
 				F5A0C61602CF70FC01000133,
 				F5A0C61702CF70FC01000133,
-				F5A0C61802CF70FC01000133,
 				F5A0C61902CF70FD01000133,
 				F5A0C61A02CF70FD01000133,
 				F5A0C61B02CF70FD01000133,
@@ -16704,6 +16805,10 @@
 				CA60177404D43D2300000080,
 				CA89578704D7052700000080,
 				CA89578B04D705D700000080,
+				CA8CC829050E6CD800000080,
+				CA8CC82A050E6CD800000080,
+				CA8CC82B050E6CD800000080,
+				CA8CC834050EE2BD00000080,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -16737,10 +16842,10 @@
 				DEBUGGING_SYMBOLS = NO;
 				DYLIB_COMPATIBILITY_VERSION = 2.5;
 				DYLIB_CURRENT_VERSION = 2.5.0;
-				HEADER_SEARCH_PATHS = "../include mac/morefile jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
+				HEADER_SEARCH_PATHS = "\"${DERIVED_SOURCES_DIR}/include\" ../include mac/morefile jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
 				LIBRARY_STYLE = STATIC;
 				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "-D__WXMAC__ -fno-rtti -fno-exceptions";
+				OTHER_CFLAGS = "-DNO_GCC_PRAGMA -D__WXMAC__ -DwxUSE_BASE=1 -fno-rtti -fno-exceptions -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES";
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "-d __UNIX__";
