@@ -1164,10 +1164,16 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
                 break;
         }
 
+        // to make the dialog navigation work with the nested panels we must
+        // use this style but, unfortunately, it hangs NT4 in some situations
+        // so we shouldn't use it -- even though it means that keyboard accels
+        // in, e.g. wxWizard, don't work
+#if 0
         if ( flags & wxTAB_TRAVERSAL )
         {
             *exstyle |= WS_EX_CONTROLPARENT;
         }
+#endif // 0
     }
 
     return style;
