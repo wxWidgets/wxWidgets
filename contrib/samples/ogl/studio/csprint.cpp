@@ -178,8 +178,8 @@ bool wxDiagramClipboard::CopyToClipboard(double scale)
     // Draw on metafile DC
     Redraw(mfDC);
 
-    /* int printWidth = */ mfDC.MaxX() - mfDC.MinX();
-    /* int printHeight = */ mfDC.MaxY() - mfDC.MinY();
+    // int printWidth = mfDC.MaxX() - mfDC.MinX();
+    // int printHeight = mfDC.MaxY() - mfDC.MinY();
     int maxX = (int)mfDC.MaxX();
     int maxY = (int)mfDC.MaxY();
     wxMetaFile *mf = mfDC.Close();

@@ -359,12 +359,9 @@ dospinsetup()
     #cp $APPDIR/bin/dialoged.hlp bin
     #cp $APPDIR/bin/dialoged.chm bin
     cp $APPDIR/bin/tex2rtf.exe bin
-    cp $APPDIR/bin/tex2rtf.hlp bin
-    cp $APPDIR/bin/tex2rtf.cnt bin
+    cp $APPDIR/bin/tex2rtf.chm bin
     cp $APPDIR/bin/widgets.exe bin
-    cp $APPDIR/bin/widgets.exe.manifest bin
     cp $APPDIR/bin/life.exe bin
-    cp $APPDIR/bin/life.exe.manifest bin
     cp $APPDIR/demos/life/breeder.lif bin
     #cp $APPDIR/docs/htmlhelp/dialoged.chm bin
     cp $APPDIR/docs/htmlhelp/tex2rtf.chm bin
@@ -626,6 +623,7 @@ usage()
     echo "    --wxos2           Build wxOS2 distribution"
     echo "    --docs            Build docs archives"
     echo "    --all             Build all distributions (the default)"
+    echo "    --verbose         Verbose zip operation"
     echo.
     echo Note that options only override settings in $SCRIPTDIR/setup.var.
     exit 1

@@ -165,7 +165,6 @@ contrib/samples/fl/bitmaps/*.xpm
 contrib/samples/fl/*.cpp
 contrib/samples/fl/*.h
 contrib/samples/fl/*.def
-contrib/samples/fl/makefile*
 contrib/samples/fl/*.xbm
 contrib/samples/fl/*.xpm
 contrib/samples/fl/*.txt
