@@ -112,8 +112,8 @@ private:
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxWizardGeneric, wxDialog)
-    EVT_BUTTON(wxID_CANCEL, OnCancel)
-    EVT_BUTTON(-1, OnBackOrNext)
+    EVT_BUTTON(wxID_CANCEL, wxWizardGeneric::OnCancel)
+    EVT_BUTTON(-1, wxWizardGeneric::OnBackOrNext)
 END_EVENT_TABLE()
 
 IMPLEMENT_ABSTRACT_CLASS(wxWizard, wxDialog)
