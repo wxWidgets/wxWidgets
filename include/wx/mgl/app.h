@@ -61,6 +61,8 @@ public:
     bool ProcessIdle();
     void DeletePendingObjects();
 
+    virtual bool Yield(bool onlyIfNeeded = FALSE);
+
 private:
     DECLARE_DYNAMIC_CLASS(wxApp)
     DECLARE_EVENT_TABLE()

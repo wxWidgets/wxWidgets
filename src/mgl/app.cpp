@@ -65,8 +65,18 @@ void wxExit()
 
 static bool gs_inYield = FALSE;
 
-bool wxYield()
+bool wxApp::Yield(bool onlyIfNeeded)
 {
+    if ( gs_inYield )
+    {
+        if ( !onlyIfNeeded )
+        {
+            wxFAIL_MSG( wxT("wxYield called recursively" ) );
+        }
+
+        return FALSE;
+    }
+
 #if wxUSE_THREADS
     if ( !wxThread::IsMain() )
     {
@@ -95,14 +105,6 @@ bool wxYield()
     gs_inYield = FALSE;
 
     return TRUE;
-}
-
-bool wxYieldIfNeeded()
-{
-    if (gs_inYield)
-        return FALSE;
-
-    return wxYield();
 }
 
 
