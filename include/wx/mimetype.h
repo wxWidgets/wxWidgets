@@ -12,6 +12,11 @@
 #ifndef _MIMETYPE_H
 #define _MIMETYPE_H
 
+#ifdef __GNUG__
+#pragma interface "mimetypebase.h"
+#endif
+
+
 // fwd decls
 class wxIcon;
 class wxFileTypeImpl;
@@ -23,6 +28,7 @@ class wxMimeTypesManagerImpl;
 
 // the things we really need
 #include "wx/string.h"
+#include "wx/dynarray.h"
 
 // This class holds information about a given "file type". File type is the
 // same as MIME type under Unix, but under Windows it corresponds more to an
@@ -148,6 +154,9 @@ private:
     wxArrayString m_exts;   // the extensions which are mapped on this filetype
 };
 
+WX_DECLARE_EXPORTED_OBJARRAY(wxFileTypeInfo, wxArrayFileTypeInfo);
+
+
 // This class accesses the information about all known MIME types and allows
 // the application to retrieve information (including how to handle data of
 // given type) about them.
@@ -215,7 +224,18 @@ private:
     wxMimeTypesManager& operator=(const wxMimeTypesManager&);
 
     wxMimeTypesManagerImpl *m_impl;
+    
+    // if m_impl is NULL, create one
+    void EnsureImpl();
 };
+
+
+// ----------------------------------------------------------------------------
+// global variables
+// ----------------------------------------------------------------------------
+
+// the default mime manager for wxWindows programs
+WXDLLEXPORT_DATA(extern wxMimeTypesManager *) wxTheMimeTypesManager;
 
 #endif
   // wxUSE_FILE

@@ -320,7 +320,7 @@ SOURCE=.\common\menucmn.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\mimetype.cpp
+SOURCE=.\common\mimecmn.cpp
 # End Source File
 # Begin Source File
 
@@ -899,6 +899,10 @@ SOURCE=.\msw\menuitem.cpp
 # Begin Source File
 
 SOURCE=.\msw\metafile.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\mimetype.cpp
 # End Source File
 # Begin Source File
 
