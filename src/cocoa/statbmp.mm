@@ -12,6 +12,8 @@
 #include "wx/app.h"
 #include "wx/statbmp.h"
 
+#import <AppKit/NSView.h>
+
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
 BEGIN_EVENT_TABLE(wxStaticBitmap, wxControl)
 END_EVENT_TABLE()
@@ -27,6 +29,8 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID winid,
     if(!CreateControl(parent,winid,pos,size,style,wxDefaultValidator,name))
         return false;
     m_cocoaNSView = NULL;
+    SetNSView([[NSView alloc] initWithFrame: NSMakeRect(10,10,20,20)]);
+    [m_cocoaNSView release];
     if(m_parent)
         m_parent->CocoaAddChild(this);
     return true;
@@ -35,6 +39,7 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID winid,
 wxStaticBitmap::~wxStaticBitmap()
 {
     CocoaRemoveFromParent();
+    SetNSView(NULL);
 }
 
 void wxStaticBitmap::SetIcon(const wxIcon& icon)
