@@ -1148,10 +1148,6 @@ private:
         #define wxWindowNative wxWindowMSW
     #else // !wxUniv
         #define wxWindowMSW wxWindow
-        #define sm_classwxWindowMSW sm_classwxWindow
-        #define sm_constructorPropertiesCountwxWindowMSW sm_constructorPropertiesCountwxWindow
-        #define sm_constructorPropertieswxWindowMSW sm_constructorPropertieswxWindow
-        #define sm_constructorwxWindowMSW sm_constructorwxWindow
     #endif // wxUniv/!wxUniv
     #include "wx/msw/window.h"
 #elif defined(__WXMOTIF__)
@@ -1161,7 +1157,6 @@ private:
         #define wxWindowNative wxWindowGTK
     #else // !wxUniv
         #define wxWindowGTK wxWindow
-        #define sm_classwxWindowGTK sm_classwxWindow
     #endif // wxUniv
     #include "wx/gtk/window.h"
 #elif defined(__WXX11__)
@@ -1169,7 +1164,6 @@ private:
         #define wxWindowNative wxWindowX11
     #else // !wxUniv
         #define wxWindowX11 wxWindow
-        #define sm_classwxWindowX11 sm_classwxWindow
     #endif // wxUniv
     #include "wx/x11/window.h"
 #elif defined(__WXMGL__)
@@ -1177,7 +1171,6 @@ private:
         #define wxWindowNative wxWindowMGL
     #else // !wxUniv
         #define wxWindowMGL wxWindow
-        #define sm_classwxWindowMGL sm_classwxWindow
     #endif // wxUniv
     #include "wx/mgl/window.h"
 #elif defined(__WXMAC__)
@@ -1185,7 +1178,6 @@ private:
         #define wxWindowNative wxWindowMac
     #else // !wxUniv
         #define wxWindowMac wxWindow
-        #define sm_classwxWindowMac sm_classwxWindow
     #endif // wxUniv
     #include "wx/mac/window.h"
 #elif defined(__WXCOCOA__)
@@ -1193,7 +1185,6 @@ private:
         #define wxWindowNative wxWindowCocoa
     #else // !wxUniv
         #define wxWindowCocoa wxWindow
-        #define sm_classwxWindowCocoa sm_classwxWindow
     #endif // wxUniv
     #include "wx/cocoa/window.h"
 #elif defined(__WXPM__)
@@ -1201,7 +1192,6 @@ private:
         #define wxWindowNative wxWindowOS2
     #else // !wxUniv
         #define wxWindowOS2 wxWindow
-        #define sm_classwxWindowOS2 sm_classwxWindow
     #endif // wxUniv/!wxUniv
     #include "wx/os2/window.h"
 #endif

@@ -30,7 +30,6 @@
 /*
 #if !defined(__WXMSW__)
 #define wxTreeCtrl wxGenericTreeCtrl
-#define sm_classwxTreeCtrl sm_classwxGenericTreeCtrl
 #endif
 */
 

@@ -93,7 +93,6 @@ private:
 #elif defined(__WXMSW__)
     #include "wx/msw/slider95.h"
     #define wxSlider wxSlider95
-    #define sm_classwxSlider sm_classwxSlider95
 #elif defined(__WXMOTIF__)
     #include "wx/motif/slider.h"
 #elif defined(__WXGTK__)

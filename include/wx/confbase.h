@@ -323,14 +323,11 @@ private:
 #if defined(__WXMSW__) && wxUSE_CONFIG_NATIVE
   #ifdef __WIN32__
     #define wxConfig  wxRegConfig
-    #define sm_classwxConfig sm_classwxRegConfig
   #else  //WIN16
     #define wxConfig  wxIniConfig
-    #define sm_classwxConfig sm_classwxIniConfig
   #endif
 #else // either we're under Unix or wish to use files even under Windows
   #define wxConfig  wxFileConfig
-  #define sm_classwxConfig sm_classwxFileConfig
 #endif
 
 #endif // wxUSE_CONFIG

@@ -95,7 +95,6 @@ protected:
     #ifdef __WIN95__
         #include "wx/msw/gauge95.h"
         #define wxGauge wxGauge95
-        #define sm_classwxGauge sm_classwxGauge95
     #else // !__WIN95__
         // Gauge no longer supported on 16-bit Windows
     #endif

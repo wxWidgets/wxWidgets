@@ -21,13 +21,10 @@
 
 #if (defined(__WXUNIVERSAL__) && (!defined(__WXMSW__) || wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW) ) || (!defined(__WXMSW__) && !defined(__WXMAC__))
 #define wxPrintDialog wxGenericPrintDialog
-#define sm_classwxPrintDialog sm_classwxGenericPrintDialog
 
 #define wxPrintSetupDialog wxGenericPrintSetupDialog
-#define sm_classwxPrintSetupDialog sm_classwxGenericPrintSetupDialog
 
 #define wxPageSetupDialog wxGenericPageSetupDialog
-#define sm_classwxPageSetupDialog sm_classwxGenericPageSetupDialog
 #endif
 
 #endif

@@ -69,7 +69,6 @@ protected:
     || defined(__WXWINCE__)
     #include "wx/generic/fontdlgg.h"
     #define wxFontDialog wxGenericFontDialog
-    #define sm_classwxFontDialog sm_classwxGenericFontDialog
 #elif defined(__WXMSW__)
     #include "wx/msw/fontdlg.h"
 #elif defined(__WXGTK__)

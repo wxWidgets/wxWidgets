@@ -133,7 +133,6 @@ protected:
     #include "wx/msw/fdrepdlg.h"
 #else
     #define wxGenericFindReplaceDialog wxFindReplaceDialog
-    #define sm_classwxGenericFindReplaceDialog sm_classwxFindReplaceDialog
 
     #include "wx/generic/fdrepdlg.h"
 #endif
