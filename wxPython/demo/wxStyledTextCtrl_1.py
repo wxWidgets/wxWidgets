@@ -16,7 +16,7 @@ the name suggests, you can define styles that can be applied to
 sections of text.  This will typically be used for things like
 syntax highlighting code editors, but I'm sure that there are other
 applications as well.  A style is a combination of font, point size,
-forground and background colours.  The editor can handle
+foreground and background colours.  The editor can handle
 proportional fonts just as easily as monospaced fonts, and various
 styles can use different sized fonts.
 
@@ -86,7 +86,7 @@ class MySTC(wxStyledTextCtrl):
                        % (evt.GetX(), evt.GetY(), evt.GetPosition(), evt.GetDragResult()))
 
         if debug and evt.GetPosition() < 250:
-            evt.SetDragResult(wxDragNone)   # prevent dropping at the begining of the buffer
+            evt.SetDragResult(wxDragNone)   # prevent dropping at the beginning of the buffer
 
 
     def OnDoDrop(self, evt):

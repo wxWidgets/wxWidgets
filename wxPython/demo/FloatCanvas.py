@@ -359,7 +359,7 @@ else:
         
         I'd like the cursor to change as you change tools, but the stock
         wxCursors didn't include anything I liked, so I stuck with the
-        pointer. Pleae let me know if you have any nice cursor images for me to
+        pointer. Please let me know if you have any nice cursor images for me to
         use.
         
         
@@ -399,7 +399,7 @@ else:
         segment = []
         for line in data:
             if line:
-                if line == "# -b": #New segment begining
+                if line == "# -b": #New segment beginning
                     if segment: Shorelines.append(array(segment))
                     segment = []
                 else:

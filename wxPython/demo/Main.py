@@ -98,7 +98,7 @@ _treeList = [
         'wxValidator',
         ]),
 
-    # controls coming from other librairies
+    # controls coming from other libraries
     ('More Windows/Controls', [
         #'wxFloatBar',          deprecated
         #'wxMVCTree',           deprecated
@@ -806,7 +806,7 @@ platform GUI library, which is written in C++.
 <p> Like Python and wxWindows, wxPython is <b>Open Source</b> which
 means that it is free for anyone to use and the source code is
 available for anyone to look at and modify.  Or anyone can contribute
-fixes or enhnacments to the project.
+fixes or enhancements to the project.
 
 <p> wxPython is a <b>cross-platform</b> toolkit.  This means that the
 same program will run on multiple platforms without modification.

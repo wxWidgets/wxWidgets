@@ -1,4 +1,4 @@
-"""Basic regular expression demostration facility (Perl style syntax)."""
+"""Basic regular expression demonstration facility (Perl style syntax)."""
 
 from wxPython.wx import *
 import re

@@ -223,7 +223,7 @@ so any cross platform GUI Toolkit and applications written with it
 need to take that into account.
 
 The solution is to only allow interaction with the GUI from a single
-thread, but this often severly limits what can be done in an
+thread, but this often severely limits what can be done in an
 application and makes it difficult to use additional threads at all.
 
 Since wxPython already makes extensive use of event handlers, it is a

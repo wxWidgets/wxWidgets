@@ -194,7 +194,7 @@ class DragCanvas(wxScrolledWindow):
         if not self.dragShape or not evt.Dragging() or not evt.LeftIsDown():
             return
 
-        # if we have a shape, but havn't started dragging yet
+        # if we have a shape, but haven't started dragging yet
         if self.dragShape and not self.dragImage:
 
             # only start the drag after having moved a couple pixels

@@ -16,7 +16,7 @@ def runTest(frame, nb, log):
                 "This is a simple text editor, the class name is",
                 "wxEditor.  Type a few lines and try it out.",
                 "",
-                "It uses Windows-style key commands that can be overriden by subclassing.",
+                "It uses Windows-style key commands that can be overridden by subclassing.",
                 "Mouse select works. Here are the key commands:",
                 "",
                 "Cursor movement:     Arrow keys or mouse",

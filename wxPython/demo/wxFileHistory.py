@@ -8,7 +8,7 @@ text = """\
 Right-click on the panel to get a menu.  This menu will be managed by
 a wxFileHistory object and so the files you select will automatically
 be added to the end of the menu and will be selectable the next time
-the menu is viewed.  The filename selcted, either via the Open menu
+the menu is viewed.  The filename selected, either via the Open menu
 item, or from the history, will be displayed in the log window below.
 """
 
