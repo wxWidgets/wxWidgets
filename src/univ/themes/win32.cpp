@@ -255,6 +255,7 @@ public:
                                    const wxMenuGeometryInfo& geomInfo);
 #endif
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
+                                 wxBitmap *bmpFocus,
                                  wxBitmap *bmpPressed,
                                  wxBitmap *bmpDisabled);
 
@@ -2759,6 +2760,7 @@ wxWin32Renderer::GetMenuGeometry(wxWindow *WXUNUSED(win),
 // ----------------------------------------------------------------------------
 
 void wxWin32Renderer::GetComboBitmaps(wxBitmap *bmpNormal,
+                                      wxBitmap *bmpFocus,
                                       wxBitmap *bmpPressed,
                                       wxBitmap *bmpDisabled)
 {
@@ -3008,19 +3010,17 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
 #if wxUSE_BUTTON
     if ( wxDynamicCast(window, wxButton) )
     {
-        // TODO
-        size->x += 3*window->GetCharWidth();
-#if 0 // do allow creating small buttons if wanted
-        wxSize sizeDef = wxButton::GetDefaultSize();
-        if ( size->x < sizeDef.x )
-            size->x = sizeDef.x;
-#endif // 0
+        if ( !(window->GetWindowStyle() & wxBU_EXACTFIT) )
+        {
+            // TODO: don't harcode all this
+            size->x += 3*window->GetCharWidth();
 
-        wxCoord heightBtn = (11*(window->GetCharHeight() + 8))/10;
-        if ( size->y < heightBtn - 8 )
-            size->y = heightBtn;
-        else
-            size->y += 9;
+            wxCoord heightBtn = (11*(window->GetCharHeight() + 8))/10;
+            if ( size->y < heightBtn - 8 )
+                size->y = heightBtn;
+            else
+                size->y += 9;
+        }
 
         // no border width adjustments for buttons
         return;

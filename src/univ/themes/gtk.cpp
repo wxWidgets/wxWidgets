@@ -2282,14 +2282,17 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
 {
     if ( wxDynamicCast(window, wxButton) )
     {
-        // TODO: this is ad hoc...
-        size->x += 3*window->GetCharWidth();
-        wxCoord minBtnHeight = 18;
-        if ( size->y < minBtnHeight )
-            size->y = minBtnHeight;
+        if ( !(window->GetWindowStyle() & wxBU_EXACTFIT) )
+        {
+            // TODO: this is ad hoc...
+            size->x += 3*window->GetCharWidth();
+            wxCoord minBtnHeight = 18;
+            if ( size->y < minBtnHeight )
+                size->y = minBtnHeight;
 
-        // button border width
-        size->y += 4;
+            // button border width
+            size->y += 4;
+        }
     }
     else if ( wxDynamicCast(window, wxScrollBar) )
     {
