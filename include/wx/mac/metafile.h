@@ -48,31 +48,35 @@ public:
 
 class WXDLLEXPORT wxMetafile: public wxGDIObject
 {
-  DECLARE_DYNAMIC_CLASS(wxMetafile)
- public:
-  // Copy constructor
-  wxMetafile(const wxMetafile& metafile)
+    DECLARE_DYNAMIC_CLASS(wxMetafile)
+public:
+    // Copy constructor
+    wxMetafile(const wxMetafile& metafile)
       : wxGDIObject()
-  { Ref(metafile); }
+    { Ref(metafile); }
 
-  wxMetafile(const wxString& file = wxEmptyString);
-  ~wxMetafile(void);
+    wxMetafile(const wxString& file = wxEmptyString);
+    ~wxMetafile(void);
 
-  // After this is called, the metafile cannot be used for anything
-  // since it is now owned by the clipboard.
-  virtual bool SetClipboard(int width = 0, int height = 0);
+    // After this is called, the metafile cannot be used for anything
+    // since it is now owned by the clipboard.
+    virtual bool SetClipboard(int width = 0, int height = 0);
 
-  virtual bool Play(wxDC *dc);
-  inline bool Ok(void) const { return (M_METAFILEDATA && (M_METAFILEDATA->m_metafile != 0)); };
+    virtual bool Play(wxDC *dc);
+    inline bool Ok(void) const { return (M_METAFILEDATA && (M_METAFILEDATA->m_metafile != 0)); };
 
-  // Implementation
-  inline WXHMETAFILE GetHMETAFILE(void) { return M_METAFILEDATA->m_metafile; }
-  void SetHMETAFILE(WXHMETAFILE mf) ;
+    wxSize GetSize() const;
+    int GetWidth() const { return GetSize().x; }
+    int GetHeight() const { return GetSize().y; }
 
-  // Operators
-  inline wxMetafile& operator = (const wxMetafile& metafile) { if (*this == metafile) return (*this); Ref(metafile); return *this; }
-  inline bool operator == (const wxMetafile& metafile) { return m_refData == metafile.m_refData; }
-  inline bool operator != (const wxMetafile& metafile) { return m_refData != metafile.m_refData; }
+    // Implementation
+    inline WXHMETAFILE GetHMETAFILE() const { return M_METAFILEDATA->m_metafile; }
+    void SetHMETAFILE(WXHMETAFILE mf) ;
+
+    // Operators
+    inline wxMetafile& operator = (const wxMetafile& metafile) { if (*this == metafile) return (*this); Ref(metafile); return *this; }
+    inline bool operator == (const wxMetafile& metafile) { return m_refData == metafile.m_refData; }
+    inline bool operator != (const wxMetafile& metafile) { return m_refData != metafile.m_refData; }
 
 protected:
 };
@@ -82,18 +86,17 @@ class WXDLLEXPORT wxMetafileDC: public wxDC
   DECLARE_DYNAMIC_CLASS(wxMetafileDC)
 
  public:
-  // Don't supply origin and extent
-  // Supply them to wxMakeMetaFilePlaceable instead.
-  wxMetafileDC(const wxString& file = wxEmptyString);
-
-  // Supply origin and extent (recommended).
-  // Then don't need to supply them to wxMakeMetaFilePlaceable.
-  wxMetafileDC(const wxString& file, int xext, int yext, int xorg, int yorg);
+    // the ctor parameters specify the filename (empty for memory metafiles),
+    // the metafile picture size and the optional description/comment
+    wxMetafileDC(const wxString& filename = wxEmptyString,
+                    int width = 0, int height = 0,
+                    const wxString& description = wxEmptyString);
 
   ~wxMetafileDC(void);
 
   // Should be called at end of drawing
   virtual wxMetafile *Close(void);
+  virtual void DoGetSize(int *width, int *height) const ;
 
   // Implementation
   inline wxMetafile *GetMetaFile(void) const { return m_metaFile; }
@@ -143,6 +146,14 @@ public:
     virtual bool GetDataHere(void *buf) const;
     virtual bool SetData(size_t len, const void *buf);
 
+    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const
+        { return GetDataSize(); }
+    virtual bool GetDataHere(const wxDataFormat& WXUNUSED(format),
+                             void *buf) const
+        { return GetDataHere(buf); }
+    virtual bool SetData(const wxDataFormat& WXUNUSED(format),
+                         size_t len, const void *buf)
+        { return SetData(len, buf); }
 protected:
   wxMetafile   m_metafile;
 };
