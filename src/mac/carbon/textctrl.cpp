@@ -784,10 +784,31 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     {
 #if wxMAC_USE_MLTE_HIVIEW
         HIRect hr = { bounds.left , bounds.top , bounds.right - bounds.left , bounds.bottom- bounds.top } ;
-        HITextViewCreate( &hr , 0, FrameOptionsFromWXStyle( m_windowStyle ) , (ControlRef*) &m_macControl ) ;
-        m_macTXN = HITextViewGetTXNObject((ControlRef) m_macControl) ;
-        AdjustAttributesFromWXStyle( (TXNObject) m_macTXN , m_windowStyle , true ) ;
-        HIViewSetVisible( (ControlRef) m_macControl , true ) ;
+        HIViewRef scrollView = NULL ;
+        TXNFrameOptions frameOptions = FrameOptionsFromWXStyle( style ) ;
+
+        if ( frameOptions & (kTXNWantVScrollBarMask|kTXNWantHScrollBarMask) )
+        {
+            HIScrollViewCreate(( frameOptions & kTXNWantHScrollBarMask ? kHIScrollViewOptionsHorizScroll : 0) | 
+                ( frameOptions & kTXNWantVScrollBarMask ? kHIScrollViewOptionsVertScroll: 0 ) , &scrollView ) ;
+           
+        	HIViewSetFrame( scrollView, &hr );
+        	HIViewSetVisible( scrollView, true );
+        }
+        HIViewRef textView ;
+        HITextViewCreate( NULL , 0, frameOptions , (ControlRef*) &textView ) ;
+        m_macTXN = HITextViewGetTXNObject( textView) ;
+        AdjustAttributesFromWXStyle( (TXNObject) m_macTXN , style , true ) ;
+        HIViewSetVisible( (ControlRef) textView , true ) ;
+        if ( scrollView )
+        {
+            HIViewAddSubview( scrollView , textView ) ;
+            m_macControl = scrollView ;
+        }
+        else
+        {
+            m_macControl = textView ;
+        }
 #else
         short featurSet;
 
