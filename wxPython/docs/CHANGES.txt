@@ -5,7 +5,41 @@ Recent Changes for wxPython
 2.5.2.8
 -------
 
-A bug-fix only release.
+Predominantly a bug-fix release.
+
+  * Fixed fatal error due to improper wrapping of wx.FSFile.
+
+  * Fixed return type of EditableListBox.GetListCtrl
+
+  * Give generic tree and list controls a DoGetBestSize so they play
+    nicer with sizers when there is no minimal size.
+
+  * Some tweaks in the demo and samples to correct layout, some
+    flicker problems, and namespace use.
+
+  * Add wx.Image.ConvertAlphaToMask
+
+  * Minor corrections in wx.lib.dialogs
+
+  * wx.FileHistory constructor now accepts the documented 2nd
+    parameter.
+
+  * Corrections for exceptions in the new ogl
+
+  * Fixed XRCed to not use reparenting of windows to implement caching
+    of property panels, since Reparent on wxMac is not implemented.
+
+  * Add support for wxTAB_TRAVERSAL to the XRC handler for
+    wxScrolledWindow. 
+
+  * Add support for all wxListBox styles to the XRC handler for
+    wxCheckListBox. 
+
+  * Fix for wx.Listbook.DeleteAllPages to really delete everything.
+
+  * wxGTK2 now supports alpha blended bitmap drawing
+
+  * etc.
 
 
 
