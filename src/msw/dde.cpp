@@ -191,6 +191,16 @@ extern void wxDDEInitialize()
 
 void wxDDECleanUp()
 {
+    wxDDEClientObjects.DeleteContents(TRUE);
+    wxDDEClientObjects.Clear();
+    wxDDEClientObjects.DeleteContents(FALSE);
+
+    wxDDEServerObjects.DeleteContents(TRUE);
+    wxDDEServerObjects.Clear();
+    wxDDEServerObjects.DeleteContents(FALSE);
+
+    wxAtomTable.Clear();
+
     if ( DDEIdInst != 0 )
     {
         DdeUninitialize(DDEIdInst);
