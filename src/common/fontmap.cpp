@@ -95,11 +95,11 @@ static wxFontEncoding gs_encodings[] =
 // the descriptions for them
 static const wxChar* gs_encodingDescs[] =
 {
-    wxTRANSLATE( "Western European (ISO-8859-1/Latin 1)" ),
-    wxTRANSLATE( "Central European (ISO-8859-2/Latin 2)" ),
+    wxTRANSLATE( "Western European (ISO-8859-1)" ),
+    wxTRANSLATE( "Central European (ISO-8859-2)" ),
     wxTRANSLATE( "Esperanto (ISO-8859-3)" ),
     wxTRANSLATE( "Baltic (old) (ISO-8859-4)" ),
-    wxTRANSLATE( "Cyrillic (Latin 5)" ),
+    wxTRANSLATE( "Cyrillic (ISO-8859-5)" ),
     wxTRANSLATE( "Arabic (ISO-8859-6)" ),
     wxTRANSLATE( "Greek (ISO-8859-7)" ),
     wxTRANSLATE( "Hebrew (ISO-8859-8)" ),
@@ -109,7 +109,7 @@ static const wxChar* gs_encodingDescs[] =
     wxTRANSLATE( "Indian (ISO-8859-12)" ),
     wxTRANSLATE( "Baltic (ISO-8859-13)" ),
     wxTRANSLATE( "Celtic (ISO-8859-14)" ),
-    wxTRANSLATE( "Western European with Euro (ISO-8859-15/Latin 0)" ),
+    wxTRANSLATE( "Western European with Euro (ISO-8859-15)" ),
     wxTRANSLATE( "KOI8-R" ),
     wxTRANSLATE( "Windows Central European (CP 1250)" ),
     wxTRANSLATE( "Windows Cyrillic (CP 1251)" ),

@@ -391,15 +391,15 @@ void MyFrame::OnEnumerateFamiliesForEncoding(wxCommandEvent& WXUNUSED(event))
 
     static const wxString encodingNames[] =
     {
-        "West European (Latin 1)",
-        "Central European (Latin 2)",
-        "Cyrillic (Latin 5)",
-        "Greek (Latin 7)",
-        "West European new (Latin 0)",
+        "Western European (ISO-8859-1)",
+        "Central European (ISO-8859-2)",
+        "Cyrillic (ISO-8859-5)",
+        "Greek (ISO-8859-7)",
+        "Western European with Euro (ISO-8859-15)",
         "KOI8-R",
-        "Windows Latin 2",
-        "Windows Cyrillic",
-        "Windows Latin 1",
+        "Windows Central European (CP 1250)",
+        "Windows Cyrillic (CP 1251)",
+        "Windows Western European (CP 1252)",
     };
 
     int n = wxGetSingleChoiceIndex("Choose an encoding", "Font demo",
