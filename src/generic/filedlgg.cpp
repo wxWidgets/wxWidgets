@@ -1229,7 +1229,9 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     SetSizer( mainsizer );
 
     mainsizer->Fit( this );
-    mainsizer->SetSizeHints( this );
+    
+    if (!is_pda)
+        mainsizer->SetSizeHints( this );
 
     Centre( wxBOTH );
 
