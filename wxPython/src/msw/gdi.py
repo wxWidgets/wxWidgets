@@ -821,26 +821,115 @@ class wxDCPtr(wxObjectPtr):
     def _DrawLineList(self, *_args, **_kwargs):
         val = apply(gdic.wxDC__DrawLineList,(self,) + _args, _kwargs)
         return val
+    def _DrawRectangleList(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC__DrawRectangleList,(self,) + _args, _kwargs)
+        return val
+    def _DrawEllipseList(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC__DrawEllipseList,(self,) + _args, _kwargs)
+        return val
+    def _DrawPolygonList(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC__DrawPolygonList,(self,) + _args, _kwargs)
+        return val
+    def _DrawTextList(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC__DrawTextList,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxDC instance at %s>" % (self.this,)
     
     def DrawPointList(self, points, pens=None):
         if pens is None:
            pens = []
-        elif wx.wxPy_isinstance(pens, (wxPen, wxPenPtr)):
+        elif isinstance(pens, wxPenPtr):
            pens = [pens]
         elif len(pens) != len(points):
            raise ValueError('points and pens must have same length')
-        return self._DrawPointList(points, pens)
+        return self._DrawPointList(points, pens, [])
+
 
     def DrawLineList(self, lines, pens=None):
         if pens is None:
            pens = []
-        elif wx.wxPy_isinstance(pens, (wxPen, wxPenPtr)):
+        elif isinstance(pens, wxPenPtr):
            pens = [pens]
         elif len(pens) != len(lines):
            raise ValueError('lines and pens must have same length')
-        return self._DrawLineList(lines, pens)
+        return self._DrawLineList(lines, pens, [])
+
+
+    def DrawRectangleList(self, rectangles, pens=None, brushes=None):
+        if pens is None:
+           pens = []
+        elif isinstance(pens, wxPenPtr):
+           pens = [pens]
+        elif len(pens) != len(rectangles):
+           raise ValueError('rectangles and pens must have same length')
+        if brushes is None:
+           brushes = []
+        elif isinstance(brushes, wxBrushPtr):
+           brushes = [brushes]
+        elif len(brushes) != len(rectangles):
+           raise ValueError('rectangles and brushes must have same length')
+        return self._DrawRectangleList(rectangles, pens, brushes)
+
+
+    def DrawEllipseList(self, ellipses, pens=None, brushes=None):
+        if pens is None:
+           pens = []
+        elif isinstance(pens, wxPenPtr):
+           pens = [pens]
+        elif len(pens) != len(ellipses):
+           raise ValueError('ellipses and pens must have same length')
+        if brushes is None:
+           brushes = []
+        elif isinstance(brushes, wxBrushPtr):
+           brushes = [brushes]
+        elif len(brushes) != len(ellipses):
+           raise ValueError('ellipses and brushes must have same length')
+        return self._DrawEllipseList(ellipses, pens, brushes)
+
+
+    def DrawPolygonList(self, polygons, pens=None, brushes=None):
+        ## Note: This does not currently support fill style or offset
+        ## you can always use the non-List version if need be.
+        ## I really would like to support fill-style, however,
+        ## but wxODDEVEN_RULE does not appear to be defined at the Python level
+        ## [It's in wx.py... --Robin]
+        if pens is None:
+           pens = []
+        elif isinstance(pens, wxPenPtr):
+           pens = [pens]
+        elif len(pens) != len(polygons):
+           raise ValueError('polygons and pens must have same length')
+        if brushes is None:
+           brushes = []
+        elif isinstance(brushes, wxBrushPtr):
+           brushes = [brushes]
+        elif len(brushes) != len(polygons):
+           raise ValueError('polygons and brushes must have same length')
+        return self._DrawPolygonList(polygons, pens, brushes)
+
+
+    def DrawTextList(self, textList, coords, foregrounds = None, backgrounds = None, fonts = None):
+        ## NOTE: this does not currently support changing the font
+        ##       Make sure you set Background mode to wxSolid (DC.SetBackgroundMode)
+        ##       If you want backgounds to do anything.
+        if type(textList) == type(''):
+           textList = [textList]
+        elif len(textList) != len(coords):
+           raise ValueError('textlist and coords must have same length')
+        if foregrounds is None:
+           foregrounds = []
+        elif isinstance(foregrounds, wxColourPtr):
+           foregrounds = [foregrounds]
+        elif len(foregrounds) != len(coords):
+           raise ValueError('foregrounds and coords must have same length')
+        if backgrounds is None:
+           backgrounds = []
+        elif isinstance(backgrounds, wxColourPtr):
+           backgrounds = [backgrounds]
+        elif len(backgrounds) != len(coords):
+           raise ValueError('backgrounds and coords must have same length')
+        return  self._DrawTextList(textList, coords, foregrounds, backgrounds)
 
 class wxDC(wxDCPtr):
     def __init__(self,this):

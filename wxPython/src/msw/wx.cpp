@@ -1836,7 +1836,264 @@ static PyObject *_wrap_wxPyApp_SetAssertMode(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+static PyObject *_wrap_wxPyApp_GetMacDefaultEncodingIsPC(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxPyApp_GetMacDefaultEncodingIsPC",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPyApp::GetMacDefaultEncodingIsPC();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_GetMacSupportPCMenuShortcuts(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxPyApp_GetMacSupportPCMenuShortcuts",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPyApp::GetMacSupportPCMenuShortcuts();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_GetMacAboutMenuItemId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxPyApp_GetMacAboutMenuItemId",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (long )wxPyApp::GetMacAboutMenuItemId();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_GetMacPreferencesMenuItemId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxPyApp_GetMacPreferencesMenuItemId",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (long )wxPyApp::GetMacPreferencesMenuItemId();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_GetMacExitMenuItemId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxPyApp_GetMacExitMenuItemId",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (long )wxPyApp::GetMacExitMenuItemId();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_GetMacHelpMenuTitleName(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxPyApp_GetMacHelpMenuTitleName",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxString (wxPyApp::GetMacHelpMenuTitleName());
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_SetMacDefaultEncodingIsPC(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _arg0;
+    int tempbool0;
+    char *_kwnames[] = { "val", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxPyApp_SetMacDefaultEncodingIsPC",_kwnames,&tempbool0)) 
+        return NULL;
+    _arg0 = (bool ) tempbool0;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyApp::SetMacDefaultEncodingIsPC(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_SetMacSupportPCMenuShortcuts(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _arg0;
+    int tempbool0;
+    char *_kwnames[] = { "val", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxPyApp_SetMacSupportPCMenuShortcuts",_kwnames,&tempbool0)) 
+        return NULL;
+    _arg0 = (bool ) tempbool0;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyApp::SetMacSupportPCMenuShortcuts(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_SetMacAboutMenuItemId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _arg0;
+    char *_kwnames[] = { "val", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"l:wxPyApp_SetMacAboutMenuItemId",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyApp::SetMacAboutMenuItemId(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_SetMacPreferencesMenuItemId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _arg0;
+    char *_kwnames[] = { "val", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"l:wxPyApp_SetMacPreferencesMenuItemId",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyApp::SetMacPreferencesMenuItemId(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_SetMacExitMenuItemId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _arg0;
+    char *_kwnames[] = { "val", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"l:wxPyApp_SetMacExitMenuItemId",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyApp::SetMacExitMenuItemId(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_SetMacHelpMenuTitleName(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _arg0;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "val", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyApp_SetMacHelpMenuTitleName",_kwnames,&_obj0)) 
+        return NULL;
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyApp::SetMacHelpMenuTitleName(*_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj0)
+        delete _arg0;
+}
+    return _resultobj;
+}
+
 static PyMethodDef wxcMethods[] = {
+	 { "wxPyApp_SetMacHelpMenuTitleName", (PyCFunction) _wrap_wxPyApp_SetMacHelpMenuTitleName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_SetMacExitMenuItemId", (PyCFunction) _wrap_wxPyApp_SetMacExitMenuItemId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_SetMacPreferencesMenuItemId", (PyCFunction) _wrap_wxPyApp_SetMacPreferencesMenuItemId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_SetMacAboutMenuItemId", (PyCFunction) _wrap_wxPyApp_SetMacAboutMenuItemId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_SetMacSupportPCMenuShortcuts", (PyCFunction) _wrap_wxPyApp_SetMacSupportPCMenuShortcuts, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_SetMacDefaultEncodingIsPC", (PyCFunction) _wrap_wxPyApp_SetMacDefaultEncodingIsPC, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_GetMacHelpMenuTitleName", (PyCFunction) _wrap_wxPyApp_GetMacHelpMenuTitleName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_GetMacExitMenuItemId", (PyCFunction) _wrap_wxPyApp_GetMacExitMenuItemId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_GetMacPreferencesMenuItemId", (PyCFunction) _wrap_wxPyApp_GetMacPreferencesMenuItemId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_GetMacAboutMenuItemId", (PyCFunction) _wrap_wxPyApp_GetMacAboutMenuItemId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_GetMacSupportPCMenuShortcuts", (PyCFunction) _wrap_wxPyApp_GetMacSupportPCMenuShortcuts, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_GetMacDefaultEncodingIsPC", (PyCFunction) _wrap_wxPyApp_GetMacDefaultEncodingIsPC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_SetAssertMode", (PyCFunction) _wrap_wxPyApp_SetAssertMode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_GetAssertMode", (PyCFunction) _wrap_wxPyApp_GetAssertMode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_SetUseBestVisual", (PyCFunction) _wrap_wxPyApp_SetUseBestVisual, METH_VARARGS | METH_KEYWORDS },
