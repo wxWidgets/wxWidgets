@@ -480,9 +480,9 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>{2@</VALUE></SETTING>
-                    <SETTING><VALUE>%#H</VALUE></SETTING>
-                    <SETTING><VALUE>%8*</VALUE></SETTING>
+                    <SETTING><VALUE>品@</VALUE></SETTING>
+                    <SETTING><VALUE>	=ﾃH</VALUE></SETTING>
+                    <SETTING><VALUE>	=ﾘ:</VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
@@ -1540,9 +1540,9 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>{2@</VALUE></SETTING>
-                    <SETTING><VALUE>%#H</VALUE></SETTING>
-                    <SETTING><VALUE>%8*</VALUE></SETTING>
+                    <SETTING><VALUE>品@</VALUE></SETTING>
+                    <SETTING><VALUE>	=ﾃH</VALUE></SETTING>
+                    <SETTING><VALUE>	=ﾘ:</VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
@@ -2592,9 +2592,9 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>{2@</VALUE></SETTING>
-                    <SETTING><VALUE>%#H</VALUE></SETTING>
-                    <SETTING><VALUE>%8*</VALUE></SETTING>
+                    <SETTING><VALUE>品@</VALUE></SETTING>
+                    <SETTING><VALUE>	=ﾃH</VALUE></SETTING>
+                    <SETTING><VALUE>	=ﾘ:</VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
@@ -2837,6 +2837,13 @@
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonFrameworkLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -2932,6 +2939,11 @@
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>zlibd.lib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonFrameworkLib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -3368,9 +3380,9 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>{2@</VALUE></SETTING>
-                    <SETTING><VALUE>%#H</VALUE></SETTING>
-                    <SETTING><VALUE>%8*</VALUE></SETTING>
+                    <SETTING><VALUE>品@</VALUE></SETTING>
+                    <SETTING><VALUE>	=ﾃH</VALUE></SETTING>
+                    <SETTING><VALUE>	=ﾘ:</VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
@@ -3613,6 +3625,13 @@
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS></FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonFrameworkLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -3708,6 +3727,11 @@
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>png.lib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonFrameworkLib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -3894,6 +3918,12 @@
                     <TARGETNAME>Carbon Debug</TARGETNAME>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>CarbonLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Carbon Debug</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonFrameworkLib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
             </GROUP>

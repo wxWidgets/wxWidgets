@@ -480,9 +480,9 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>z¸0</VALUE></SETTING>
-                    <SETTING><VALUE>%#H</VALUE></SETTING>
-                    <SETTING><VALUE>%8*</VALUE></SETTING>
+                    <SETTING><VALUE>”™ </VALUE></SETTING>
+                    <SETTING><VALUE>	=ÃH</VALUE></SETTING>
+                    <SETTING><VALUE>	=Ø:</VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
@@ -844,6 +844,48 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS></FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>ATSUnicodeLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonAccessors.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>DragLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>TextEncodingConverter</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>Textension</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>UnicodeConverter</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -1024,6 +1066,36 @@
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>tabpgwin.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>ATSUnicodeLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonAccessors.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>DragLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>TextEncodingConverter</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>Textension</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>UnicodeConverter</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -1468,9 +1540,9 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>z¸0</VALUE></SETTING>
-                    <SETTING><VALUE>%#H</VALUE></SETTING>
-                    <SETTING><VALUE>%8*</VALUE></SETTING>
+                    <SETTING><VALUE>”™ </VALUE></SETTING>
+                    <SETTING><VALUE>	=ÃH</VALUE></SETTING>
+                    <SETTING><VALUE>	=Ø:</VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
@@ -1832,6 +1904,48 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>ATSUnicodeLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonAccessors.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>DragLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>TextEncodingConverter</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>Textension</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>UnicodeConverter</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -2012,6 +2126,36 @@
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>tabpgwin.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>ATSUnicodeLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonAccessors.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>DragLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>TextEncodingConverter</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>Textension</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>UnicodeConverter</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -2448,9 +2592,9 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>z¸0</VALUE></SETTING>
-                    <SETTING><VALUE>%#H</VALUE></SETTING>
-                    <SETTING><VALUE>%8*</VALUE></SETTING>
+                    <SETTING><VALUE>”™ </VALUE></SETTING>
+                    <SETTING><VALUE>	=ÃH</VALUE></SETTING>
+                    <SETTING><VALUE>	=Ø:</VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
@@ -2693,6 +2837,13 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonFrameworkLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -2788,6 +2939,11 @@
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>tabpgwin.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonFrameworkLib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -3224,9 +3380,9 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>z¸0</VALUE></SETTING>
-                    <SETTING><VALUE>%#H</VALUE></SETTING>
-                    <SETTING><VALUE>%8*</VALUE></SETTING>
+                    <SETTING><VALUE>”™ </VALUE></SETTING>
+                    <SETTING><VALUE>	=ÃH</VALUE></SETTING>
+                    <SETTING><VALUE>	=Ø:</VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
@@ -3469,6 +3625,13 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS></FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonFrameworkLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -3564,6 +3727,11 @@
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>tabpgwin.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonFrameworkLib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -3729,11 +3897,49 @@
         <GROUP><NAME>Win32 SDK</NAME>
         </GROUP>
         <GROUP><NAME>MacOS</NAME>
-            <GROUP><NAME>Weak Linked OS</NAME>
+            <GROUP><NAME>Carbon</NAME>
+                <FILEREF>
+                    <TARGETNAME>Carbon Debug</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Carbon Debug</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonFrameworkLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+            </GROUP>
+            <GROUP><NAME>Classic</NAME>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>AppearanceLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>ATSUnicodeLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonAccessors.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
                 <FILEREF>
                     <TARGETNAME>Classic Release</TARGETNAME>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>ControlsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CursorDevicesGlue.o</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -3745,7 +3951,31 @@
                 <FILEREF>
                     <TARGETNAME>Classic Release</TARGETNAME>
                     <PATHTYPE>Name</PATHTYPE>
+                    <PATH>DragLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>InterfaceLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>InternetConfigLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>WindowsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>MathLib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -3760,91 +3990,73 @@
                     <PATH>NavigationLib</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptAppleTalkLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptATalkPPC.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptInetPPC.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTptInternetLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTransportLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>OpenTransportAppPPC.o</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>PLStringFuncsPPC.lib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>TextEncodingConverter</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>Textension</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>ThreadsLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>UnicodeConverter</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
             </GROUP>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>InterfaceLib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Carbon Debug</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>CarbonLib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>MathLib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>AppearanceLib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>InternetConfigLib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>ThreadsLib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>OpenTransportLib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>OpenTptAppleTalkLib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>OpenTptInternetLib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>CursorDevicesGlue.o</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>OpenTptATalkPPC.o</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>OpenTransportAppPPC.o</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>PLStringFuncsPPC.lib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>OpenTptInetPPC.o</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
         </GROUP>
     </GROUPLIST>
 
