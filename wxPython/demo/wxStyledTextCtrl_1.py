@@ -36,7 +36,7 @@ if wxPlatform == '__WXMSW__':
     face1 = 'Arial'
     face2 = 'Times New Roman'
     face3 = 'Courier New'
-    pb = 6
+    pb = 10
 else:
     face1 = 'Helvetica'
     face2 = 'Times'
@@ -113,11 +113,11 @@ def runTest(frame, nb, log):
     ed.EmptyUndoBuffer()
 
     # make some styles
-    ed.StyleSetSpec(wxSTC_STYLE_DEFAULT, "size:%d,face:%s" % (pb+2, face3))
-    ed.StyleSetSpec(1, "size:%d,bold,face:%s,fore:#0000FF" % (pb+3, face1))
-    ed.StyleSetSpec(2, "face:%s,italic,fore:#FF0000,size:%d" % (face2, pb+2))
-    ed.StyleSetSpec(3, "face:%s,bold,size:%d" % (face2, pb+3))
-    ed.StyleSetSpec(4, "face:%s,size:%d" % (face1, pb))
+    ed.StyleSetSpec(wxSTC_STYLE_DEFAULT, "size:%d,face:%s" % (pb, face3))
+    ed.StyleSetSpec(1, "size:%d,bold,face:%s,fore:#0000FF" % (pb+2, face1))
+    ed.StyleSetSpec(2, "face:%s,italic,fore:#FF0000,size:%d" % (face2, pb))
+    ed.StyleSetSpec(3, "face:%s,bold,size:%d" % (face2, pb+2))
+    ed.StyleSetSpec(4, "face:%s,size:%d" % (face1, pb-1))
 
 
     # now set some text to those styles...  Normally this would be

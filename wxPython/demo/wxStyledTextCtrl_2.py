@@ -21,8 +21,8 @@ if wxPlatform == '__WXMSW__':
               'mono' : 'Courier New',
               'helv' : 'Arial',
               'other': 'Comic Sans MS',
-              'size' : 8,
-              'size2': 6,
+              'size' : 10,
+              'size2': 8,
              }
 else:
     faces = { 'times': 'Times',

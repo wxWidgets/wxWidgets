@@ -198,7 +198,7 @@ int Surface::LogPixelsY() {
 
 
 int Surface::DeviceHeightFont(int points) {
-    return points * LogPixelsY() / 72;
+    return points;
 }
 
 
