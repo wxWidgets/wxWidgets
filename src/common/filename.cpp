@@ -1261,102 +1261,99 @@ wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
         fullpath += wxGetVolumeString(GetVolume(), format);
     }
 
-    const size_t dirCount = m_dirs.GetCount();
-    if ( dirCount )
+    // the leading character
+    switch ( format )
     {
-        // the leading character
-        switch ( format )
+        case wxPATH_MAC:
+            if ( m_relative )
+                fullpath += wxFILE_SEP_PATH_MAC;
+            break;
+
+        case wxPATH_DOS:
+            if ( !m_relative )
+                fullpath += wxFILE_SEP_PATH_DOS;
+            break;
+
+        default:
+            wxFAIL_MSG( wxT("Unknown path format") );
+            // fall through
+
+        case wxPATH_UNIX:
+            if ( !m_relative )
+            {
+                // normally the absolute file names start with a slash
+                // with one exception: the ones like "~/foo.bar" don't
+                // have it
+                if ( m_dirs[0u] != _T('~') )
+                {
+                    fullpath += wxFILE_SEP_PATH_UNIX;
+                }
+            }
+            break;
+
+        case wxPATH_VMS:
+            // no leading character here but use this place to unset
+            // wxPATH_GET_SEPARATOR flag: under VMS it doesn't make sense
+            // as, if I understand correctly, there should never be a dot
+            // before the closing bracket
+            flags &= ~wxPATH_GET_SEPARATOR;
+    }
+
+    if ( m_dirs.empty() )
+    {
+        // there is nothing more
+        return fullpath;
+    }
+
+    // then concatenate all the path components using the path separator
+    if ( format == wxPATH_VMS )
+    {
+        fullpath += wxT('[');
+    }
+
+    const size_t dirCount = m_dirs.GetCount();
+    for ( size_t i = 0; i < dirCount; i++ )
+    {
+        switch (format)
         {
             case wxPATH_MAC:
-                if ( m_relative )
-                    fullpath += wxFILE_SEP_PATH_MAC;
-                break;
+                if ( m_dirs[i] == wxT(".") )
+                {
+                    // skip appending ':', this shouldn't be done in this
+                    // case as "::" is interpreted as ".." under Unix
+                    continue;
+                }
 
-            case wxPATH_DOS:
-                if ( !m_relative )
-                    fullpath += wxFILE_SEP_PATH_DOS;
+                // convert back from ".." to nothing
+                if ( m_dirs[i] != wxT("..") )
+                     fullpath += m_dirs[i];
                 break;
 
             default:
-                wxFAIL_MSG( wxT("Unknown path format") );
-                // fall through
+                wxFAIL_MSG( wxT("Unexpected path format") );
+                // still fall through
 
+            case wxPATH_DOS:
             case wxPATH_UNIX:
-                if ( !m_relative )
-                {
-                    // normally the absolute file names start with a slash
-                    // with one exception: the ones like "~/foo.bar" don't
-                    // have it
-                    if ( m_dirs[0u] != _T('~') )
-                    {
-                        fullpath += wxFILE_SEP_PATH_UNIX;
-                    }
-                }
+                fullpath += m_dirs[i];
                 break;
 
             case wxPATH_VMS:
-                // no leading character here but use this place to unset
-                // wxPATH_GET_SEPARATOR flag: under VMS it doesn't make sense
-                // as, if I understand correctly, there should never be a dot
-                // before the closing bracket
-                flags &= ~wxPATH_GET_SEPARATOR;
-        }
+                // TODO: What to do with ".." under VMS
 
-        // then concatenate all the path components using the path separator
-        if ( format == wxPATH_VMS )
-        {
-            fullpath += wxT('[');
-        }
-
-        for ( size_t i = 0; i < dirCount; i++ )
-        {
-            switch (format)
-            {
-                case wxPATH_MAC:
-                    if ( m_dirs[i] == wxT(".") )
-                    {
-                        // skip appending ':', this shouldn't be done in this
-                        // case as "::" is interpreted as ".." under Unix
-                        continue;
-                    }
-
-                    // convert back from ".." to nothing
-                    if ( m_dirs[i] != wxT("..") )
-                         fullpath += m_dirs[i];
-                    break;
-
-                default:
-                    wxFAIL_MSG( wxT("Unexpected path format") );
-                    // still fall through
-
-                case wxPATH_DOS:
-                case wxPATH_UNIX:
+                // convert back from ".." to nothing
+                if ( m_dirs[i] != wxT("..") )
                     fullpath += m_dirs[i];
-                    break;
-
-                case wxPATH_VMS:
-                    // TODO: What to do with ".." under VMS
-
-                    // convert back from ".." to nothing
-                    if ( m_dirs[i] != wxT("..") )
-                        fullpath += m_dirs[i];
-                    break;
-            }
-
-            if ( (flags & wxPATH_GET_SEPARATOR) || (i != dirCount - 1) )
-                fullpath += GetPathSeparator(format);
+                break;
         }
 
-        if ( format == wxPATH_VMS )
-        {
-            fullpath += wxT(']');
-        }
-    }
-    else // no directories
-    {
-        // still append path separator if requested
-        if ( flags & wxPATH_GET_SEPARATOR )
+        if ( (flags & wxPATH_GET_SEPARATOR) || (i != dirCount - 1) )
             fullpath += GetPathSeparator(format);
+    }
+
+    if ( format == wxPATH_VMS )
+    {
+        fullpath += wxT(']');
     }
 
     return fullpath;
