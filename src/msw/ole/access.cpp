@@ -1081,7 +1081,7 @@ STDMETHODIMP wxIAccessible::get_accKeyboardShortcut ( VARIANT varID, BSTR* pszKe
     }
     
     wxString keyboardShortcut;
-    wxAccStatus status = m_pAccessible->GetHelpText(varID.lVal, & keyboardShortcut);
+    wxAccStatus status = m_pAccessible->GetKeyboardShortcut(varID.lVal, & keyboardShortcut);
     if (status == wxACC_FAIL)
         return E_FAIL;
     

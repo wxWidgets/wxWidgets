@@ -1231,7 +1231,7 @@ public:
     virtual wxAccStatus GetName(int childId, wxString* name);
 
         // Gets the number of children.
-    virtual wxAccStatus GetChildCount(int* childId);
+    virtual wxAccStatus GetChildCount(int* childCount);
 
         // Gets the specified child (starting from 1).
         // If *child is NULL and return value is wxACC_OK,

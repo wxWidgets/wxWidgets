@@ -32,6 +32,7 @@
 
 #include "wx/access.h"
 #include "wx/splitter.h"
+#include "wx/cshelp.h"
 
 #ifdef __WXMSW__
 #include "windows.h"
@@ -152,6 +153,13 @@ IMPLEMENT_APP(MyApp)
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
+    // Note: JAWS for Windows will only speak the context-sensitive
+    // help if you use this help provider:
+    // wxHelpProvider::Set(new wxHelpControllerHelpProvider(m_helpController)).
+    // JAWS does not seem to be getting the help text from
+    // the wxAccessible object.
+    wxHelpProvider::Set(new wxSimpleHelpProvider());
+
     // create the main application window
     MyFrame *frame = new MyFrame(_T("AccessTest wxWindows App"),
                                  wxPoint(50, 50), wxSize(450, 340));
@@ -174,14 +182,12 @@ public:
             // Gets the name of the specified object.
     virtual wxAccStatus GetName(int childId, wxString* name)
     {
-#if 1
         if (childId == wxACC_SELF)
         {
             * name = wxT("Julian's Frame");
             return wxACC_OK;
         }
         else
-#endif
             return wxACC_NOT_IMPLEMENTED;
     }
 };
@@ -210,52 +216,36 @@ public:
     SplitterWindowAccessible(wxWindow* win): wxWindowAccessible(win) {}
 
             // Gets the name of the specified object.
-    virtual wxAccStatus GetName(int childId, wxString* name)
-    {
-        if (childId == wxACC_SELF)
-        {
-            * name = wxT("Splitter window");
-            return wxACC_OK;
-        }
-        else
-            return wxACC_NOT_IMPLEMENTED;
-    }
+    virtual wxAccStatus GetName(int childId, wxString* name);
 
         // Can return either a child object, or an integer
         // representing the child element, starting from 1.
-    virtual wxAccStatus HitTest(const wxPoint& pt, int* childId, wxAccessible** childObject)
-         { return wxACC_NOT_IMPLEMENTED; }
+    virtual wxAccStatus HitTest(const wxPoint& pt, int* childId, wxAccessible** childObject);
 
         // Returns the rectangle for this object (id = 0) or a child element (id > 0).
-    virtual wxAccStatus GetLocation(wxRect& WXUNUSED(rect), int WXUNUSED(elementId))
-         { return wxACC_NOT_IMPLEMENTED; }
+    virtual wxAccStatus GetLocation(wxRect& rect, int elementId);
 
         // Navigates from fromId to toId/toObject.
-    virtual wxAccStatus Navigate(wxNavDir WXUNUSED(navDir), int WXUNUSED(fromId),
-                int* WXUNUSED(toId), wxAccessible** WXUNUSED(toObject))
-         { return wxACC_NOT_IMPLEMENTED; }
+    virtual wxAccStatus Navigate(wxNavDir navDir, int fromId,
+                int* toId, wxAccessible** toObject);
 
         // Gets the number of children.
-    virtual wxAccStatus GetChildCount(int* WXUNUSED(childId))
-         { return wxACC_NOT_IMPLEMENTED; }
+    virtual wxAccStatus GetChildCount(int* childCount);
 
         // Gets the specified child (starting from 1).
         // If *child is NULL and return value is wxACC_OK,
         // this means that the child is a simple element and
         // not an accessible object.
-    virtual wxAccStatus GetChild(int WXUNUSED(childId), wxAccessible** WXUNUSED(child))
-         { return wxACC_NOT_IMPLEMENTED; }
+    virtual wxAccStatus GetChild(int childId, wxAccessible** child);
 
         // Gets the parent, or NULL.
-    virtual wxAccStatus GetParent(wxAccessible** WXUNUSED(parent))
-         { return wxACC_NOT_IMPLEMENTED; }
+    virtual wxAccStatus GetParent(wxAccessible** parent);
 
         // Performs the default action. childId is 0 (the action for this object)
         // or > 0 (the action for a child).
         // Return wxACC_NOT_SUPPORTED if there is no default action for this
         // window (e.g. an edit control).
-    virtual wxAccStatus DoDefaultAction(int WXUNUSED(childId))
-         { return wxACC_NOT_IMPLEMENTED; }
+    virtual wxAccStatus DoDefaultAction(int childId);
 
         // Gets the default action for this object (0) or > 0 (the action for a child).
         // Return wxACC_OK even if there is no action. actionName is the action, or the empty
@@ -263,45 +253,36 @@ public:
         // The retrieved string describes the action that is performed on an object,
         // not what the object does as a result. For example, a toolbar button that prints
         // a document has a default action of "Press" rather than "Prints the current document."
-    virtual wxAccStatus GetDefaultAction(int WXUNUSED(childId), wxString* WXUNUSED(actionName))
-         { return wxACC_NOT_IMPLEMENTED; }
+    virtual wxAccStatus GetDefaultAction(int childId, wxString* actionName);
 
         // Returns the description for this object or a child.
-    virtual wxAccStatus GetDescription(int WXUNUSED(childId), wxString* WXUNUSED(description))
-         { return wxACC_NOT_IMPLEMENTED; }
+    virtual wxAccStatus GetDescription(int childId, wxString* description);
 
         // Returns help text for this object or a child, similar to tooltip text.
-    virtual wxAccStatus GetHelpText(int WXUNUSED(childId), wxString* WXUNUSED(helpText))
-         { return wxACC_NOT_IMPLEMENTED; }
+    virtual wxAccStatus GetHelpText(int childId, wxString* helpText);
 
         // Returns the keyboard shortcut for this object or child.
         // Return e.g. ALT+K
-    virtual wxAccStatus GetKeyboardShortcut(int WXUNUSED(childId), wxString* WXUNUSED(shortcut))
-         { return wxACC_NOT_IMPLEMENTED; }
+    virtual wxAccStatus GetKeyboardShortcut(int childId, wxString* shortcut);
 
         // Returns a role constant.
-    virtual wxAccStatus GetRole(int WXUNUSED(childId), wxAccRole* WXUNUSED(role))
-         { return wxACC_NOT_IMPLEMENTED; }
+    virtual wxAccStatus GetRole(int childId, wxAccRole* role);
 
         // Returns a state constant.
-    virtual wxAccStatus GetState(int WXUNUSED(childId), long* WXUNUSED(state))
-         { return wxACC_NOT_IMPLEMENTED; }
+    virtual wxAccStatus GetState(int childId, long* state);
 
         // Returns a localized string representing the value for the object
         // or child.
-    virtual wxAccStatus GetValue(int WXUNUSED(childId), wxString* WXUNUSED(strValue))
-         { return wxACC_NOT_IMPLEMENTED; }
+    virtual wxAccStatus GetValue(int childId, wxString* strValue);
 
         // Selects the object or child.
-    virtual wxAccStatus Select(int WXUNUSED(childId), wxAccSelectionFlags WXUNUSED(selectFlags))
-         { return wxACC_NOT_IMPLEMENTED; }
+    virtual wxAccStatus Select(int childId, wxAccSelectionFlags selectFlags);
 
         // Gets the window with the keyboard focus.
         // If childId is 0 and child is NULL, no object in
         // this subhierarchy has the focus.
         // If this object has the focus, child should be 'this'.
-    virtual wxAccStatus GetFocus(int* WXUNUSED(childId), wxAccessible** WXUNUSED(child))
-         { return wxACC_NOT_IMPLEMENTED; }
+    virtual wxAccStatus GetFocus(int* childId, wxAccessible** child);
 
         // Gets a variant representing the selected children
         // of this object.
@@ -311,8 +292,7 @@ public:
         // - an integer representing the selected child element,
         //   or 0 if this object is selected (GetType() == wxT("long"))
         // - a "void*" pointer to a wxAccessible child object
-    virtual wxAccStatus GetSelections(wxVariant* WXUNUSED(selections))
-         { return wxACC_NOT_IMPLEMENTED; }
+    virtual wxAccStatus GetSelections(wxVariant* selections);
 
 };
 
@@ -326,7 +306,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 {
     m_textCtrl = NULL;
 
-//    SetAccessible(new FrameAccessible(this));
+    SetAccessible(new FrameAccessible(this));
 
     // set the frame icon
     SetIcon(wxICON(mondrian));
@@ -337,7 +317,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(AccessTest_About, _T("&About...\tF1"), _T("Show about dialog"));
+    helpMenu->Append(AccessTest_About, _T("&About..."), _T("Show about dialog"));
 
     menuFile->Append(AccessTest_Query, _T("Query"), _T("Query the window hierarchy"));
     menuFile->AppendSeparator();
@@ -358,28 +338,28 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     SetStatusText(_T("Welcome to wxWindows!"));
 #endif // wxUSE_STATUSBAR
 
-#if 1
+
     wxSplitterWindow* splitter = new wxSplitterWindow(this, -1);
-    splitter->CreateAccessible();
+    splitter->SetAccessible(new SplitterWindowAccessible(splitter));
 
     wxListBox* listBox = new wxListBox(splitter, -1);
+    listBox->Append(wxT("Cabbages"));
+    listBox->Append(wxT("Kings"));
+    listBox->Append(wxT("Sealing wax"));
+    listBox->Append(wxT("Strings"));
     listBox->CreateAccessible();
+    listBox->SetHelpText(wxT("This is a sample wxWindows listbox, with a number of items in it."));
 
     m_textCtrl = new wxTextCtrl(splitter, -1, wxT(""), wxDefaultPosition,
         wxDefaultSize, wxTE_MULTILINE);
     m_textCtrl->CreateAccessible();
+    m_textCtrl->SetHelpText(wxT("This is a sample wxWindows multiline text control."));
 
     splitter->SplitHorizontally(listBox, m_textCtrl, 150);
-#endif
 
 #if 0
-#if 1
-    wxListBox* listBox = new wxListBox(this, -1);
-    //listBox->SetAccessible(new wxAccessible(listBox));
-#else
     wxScrolledWindow* scrolledWindow = new wxScrolledWindow(this, -1);
     scrolledWindow->SetAccessible(new ScrolledWindowAccessible(scrolledWindow));
-#endif
 #endif
 }
 
@@ -596,3 +576,527 @@ void MyFrame::GetInfo(IAccessible* accessible, int id, wxString& name, wxString&
         role = wxT("NO ROLE");
     }    
 }
+
+/*
+ * SplitterWindowAccessible implementation
+ */
+
+// Gets the name of the specified object.
+wxAccStatus SplitterWindowAccessible::GetName(int childId, wxString* name)
+{
+    if (childId == wxACC_SELF)
+    {
+        * name = wxT("Splitter window");
+        return wxACC_OK;
+    }
+    wxSplitterWindow* splitter = wxDynamicCast(GetWindow(), wxSplitterWindow);
+    if (splitter)
+    {
+        if (splitter->IsSplit())
+        {
+            // Two windows, and the sash.
+            if (childId == 1 || childId == 3)
+                return wxACC_NOT_IMPLEMENTED;
+            else if (childId == 2)
+            {
+                *name = wxT("Sash");
+                return wxACC_OK;
+            }
+        }
+    }
+    // Let the framework handle the other cases.
+    return wxACC_NOT_IMPLEMENTED;
+}
+
+// Can return either a child object, or an integer
+// representing the child element, starting from 1.
+wxAccStatus SplitterWindowAccessible::HitTest(const wxPoint& pt, int* childId, wxAccessible** childObject)
+{
+    wxSplitterWindow* splitter = wxDynamicCast(GetWindow(), wxSplitterWindow);
+    if (splitter)
+    {
+        if (splitter->IsSplit())
+        {
+            wxPoint clientPt = splitter->ScreenToClient(pt);
+            if (splitter->SashHitTest(clientPt.x, clientPt.y, 1))
+            {
+                // We're over the sash
+                *childId = 2;
+                return wxACC_OK;
+            }
+        }
+    }
+    // Let the framework handle the other cases.
+    return wxACC_NOT_IMPLEMENTED;
+}
+
+// Returns the rectangle for this object (id = 0) or a child element (id > 0).
+wxAccStatus SplitterWindowAccessible::GetLocation(wxRect& rect, int elementId)
+{
+    wxSplitterWindow* splitter = wxDynamicCast(GetWindow(), wxSplitterWindow);
+    if (splitter && elementId == 2 && splitter->IsSplit())
+    {
+        wxSize clientSize = splitter->GetClientSize();
+        if (splitter->GetSplitMode() == wxSPLIT_VERTICAL)
+        {
+            rect.x = splitter->GetSashPosition();
+            rect.y = 0;
+            rect.SetPosition(splitter->ClientToScreen(rect.GetPosition()));
+            rect.width = splitter->GetSashSize();
+            rect.height = clientSize.y;
+        }
+        else
+        {
+            rect.x = 0;
+            rect.y = splitter->GetSashPosition();
+            rect.SetPosition(splitter->ClientToScreen(rect.GetPosition()));
+            rect.width = clientSize.x;
+            rect.height = splitter->GetSashSize();
+        }
+        return wxACC_OK;
+    }
+    // Let the framework handle the other cases.
+    return wxACC_NOT_IMPLEMENTED;
+}
+
+// Navigates from fromId to toId/toObject.
+wxAccStatus SplitterWindowAccessible::Navigate(wxNavDir navDir, int fromId,
+                int* toId, wxAccessible** toObject)
+{
+    wxSplitterWindow* splitter = wxDynamicCast(GetWindow(), wxSplitterWindow);
+    if (splitter && splitter->IsSplit())
+    {
+        switch (navDir)
+        {
+        case wxNAVDIR_DOWN:
+            {
+                if (splitter->GetSplitMode() == wxSPLIT_VERTICAL)
+                {
+                    // Can't go down spatially if split vertically.
+                    return wxACC_FALSE;           
+                }
+                else
+                {
+                    if (fromId == 1)
+                    {
+                        *toId = 2;
+                        *toObject = NULL;
+                        return wxACC_OK;
+                    }
+                    else if (fromId == 2)
+                    {
+                        *toId = 3;
+                        *toObject = splitter->GetWindow2()->GetAccessible();
+                        return wxACC_OK;
+                    }
+                    else
+                        return wxACC_FALSE;
+                }
+
+                break;
+            }
+        case wxNAVDIR_FIRSTCHILD:
+            {
+                if (fromId == 2)
+                    return wxACC_FALSE;
+            }
+            break;
+            
+        case wxNAVDIR_LASTCHILD:
+            {
+                if (fromId == 2)
+                    return wxACC_FALSE;
+            }
+            break;
+            
+        case wxNAVDIR_LEFT:
+            {
+                if (splitter->GetSplitMode() == wxSPLIT_HORIZONTAL)
+                {
+                    // Can't go left spatially if split horizontally.
+                    return wxACC_FALSE;           
+                }
+                else
+                {
+                    if (fromId == 3)
+                    {
+                        *toId = 2;
+                        *toObject = NULL;
+                        return wxACC_OK;
+                    }
+                    else if (fromId == 2)
+                    {
+                        *toId = 1;
+                        *toObject = splitter->GetWindow1()->GetAccessible();
+                        return wxACC_OK;
+                    }
+                    else
+                        return wxACC_FALSE;
+                }
+            }
+            break;
+            
+        case wxNAVDIR_NEXT:
+            {
+                if (fromId == 1)
+                {
+                    *toId = 2;
+                    *toObject = NULL;
+                    return wxACC_OK;
+                }
+                else if (fromId == 2)
+                {
+                    *toId = 3;
+                    *toObject = splitter->GetWindow2()->GetAccessible();
+                    return wxACC_OK;
+                }
+                else
+                    return wxACC_FALSE;
+            }
+            break;
+            
+        case wxNAVDIR_PREVIOUS:
+            {
+                if (fromId == 3)
+                {
+                    *toId = 2;
+                    *toObject = NULL;
+                    return wxACC_OK;
+                }
+                else if (fromId == 2)
+                {
+                    *toId = 1;
+                    *toObject = splitter->GetWindow1()->GetAccessible();
+                    return wxACC_OK;
+                }
+                else
+                    return wxACC_FALSE;
+            }
+            break;
+            
+        case wxNAVDIR_RIGHT:
+            {
+                if (splitter->GetSplitMode() == wxSPLIT_HORIZONTAL)
+                {
+                    // Can't go right spatially if split horizontally.
+                    return wxACC_FALSE;           
+                }
+                else
+                {
+                    if (fromId == 1)
+                    {
+                        *toId = 2;
+                        *toObject = NULL;
+                        return wxACC_OK;
+                    }
+                    else if (fromId == 2)
+                    {
+                        *toId = 3;
+                        *toObject = splitter->GetWindow2()->GetAccessible();
+                        return wxACC_OK;
+                    }
+                    else
+                        return wxACC_FALSE;
+                }
+            }
+            break;
+            
+        case wxNAVDIR_UP:
+            {
+                if (splitter->GetSplitMode() == wxSPLIT_VERTICAL)
+                {
+                    // Can't go up spatially if split vertically.
+                    return wxACC_FALSE;           
+                }
+                else
+                {
+                    if (fromId == 3)
+                    {
+                        *toId = 2;
+                        return wxACC_OK;
+                    }
+                    else if (fromId == 2)
+                    {
+                        *toId = 1;
+                        *toObject = splitter->GetWindow1()->GetAccessible();
+                        return wxACC_OK;
+                    }
+                    else
+                        return wxACC_FALSE;
+                }
+
+                break;
+            }
+        }
+        
+    }
+    // Let the framework handle the other cases.
+    return wxACC_NOT_IMPLEMENTED;
+}
+
+// Gets the number of children.
+wxAccStatus SplitterWindowAccessible::GetChildCount(int* childCount)
+{
+    wxSplitterWindow* splitter = wxDynamicCast(GetWindow(), wxSplitterWindow);
+    if (splitter)
+    {
+        if (splitter->IsSplit())
+        {
+            // Two windows, and the sash.
+            *childCount = 3;
+            return wxACC_OK;
+        }
+        else
+        {
+            // No sash -- 1 or 0 windows.
+            if (splitter->GetWindow1() || splitter->GetWindow2())
+            {
+                *childCount = 1;
+                return wxACC_OK;
+            }
+            else
+            {
+                *childCount = 0;
+                return wxACC_OK;
+            }
+        }
+    }
+    // Let the framework handle the other cases.
+    return wxACC_NOT_IMPLEMENTED;
+}
+
+// Gets the specified child (starting from 1).
+// If *child is NULL and return value is wxACC_OK,
+// this means that the child is a simple element and
+// not an accessible object.
+wxAccStatus SplitterWindowAccessible::GetChild(int childId, wxAccessible** child)
+{
+    if (childId == wxACC_SELF)
+    {
+        *child = this;
+        return wxACC_OK;
+    }
+
+    wxSplitterWindow* splitter = wxDynamicCast(GetWindow(), wxSplitterWindow);
+    if (splitter)
+    {
+        if (splitter->IsSplit())
+        {
+            // Two windows, and the sash.
+            if (childId == 1)
+            {
+                *child = splitter->GetWindow1()->GetAccessible();
+            }
+            else if (childId == 2)
+            {
+                *child = NULL; // Sash
+            }
+            else if (childId == 3)
+            {
+                *child = splitter->GetWindow2()->GetAccessible();
+            }
+            else
+            {
+                return wxACC_FAIL;
+            }
+            return wxACC_OK;
+        }
+        else
+        {
+            // No sash -- 1 or 0 windows.
+            if (childId == 1)
+            {
+                if (splitter->GetWindow1())
+                {
+                    *child = splitter->GetWindow1()->GetAccessible();
+                    return wxACC_OK;
+                }
+                else if (splitter->GetWindow2())
+                {
+                    *child = splitter->GetWindow2()->GetAccessible();
+                    return wxACC_OK;
+                }
+                else
+                {
+                    return wxACC_FAIL;
+                }
+            }
+            else
+                return wxACC_FAIL;
+        }
+    }
+    // Let the framework handle the other cases.
+    return wxACC_NOT_IMPLEMENTED;
+}
+
+// Gets the parent, or NULL.
+wxAccStatus SplitterWindowAccessible::GetParent(wxAccessible** parent)
+{
+    return wxACC_NOT_IMPLEMENTED;
+}
+
+// Performs the default action. childId is 0 (the action for this object)
+// or > 0 (the action for a child).
+// Return wxACC_NOT_SUPPORTED if there is no default action for this
+// window (e.g. an edit control).
+wxAccStatus SplitterWindowAccessible::DoDefaultAction(int childId)
+{
+    return wxACC_NOT_IMPLEMENTED;
+}
+
+// Gets the default action for this object (0) or > 0 (the action for a child).
+// Return wxACC_OK even if there is no action. actionName is the action, or the empty
+// string if there is no action.
+// The retrieved string describes the action that is performed on an object,
+// not what the object does as a result. For example, a toolbar button that prints
+// a document has a default action of "Press" rather than "Prints the current document."
+wxAccStatus SplitterWindowAccessible::GetDefaultAction(int childId, wxString* actionName)
+{
+    wxSplitterWindow* splitter = wxDynamicCast(GetWindow(), wxSplitterWindow);
+    if (splitter && splitter->IsSplit() && childId == 2)
+    {
+        // No default action for the splitter.
+        return wxACC_FALSE;
+    }
+    // Let the framework handle the other cases.
+    return wxACC_NOT_IMPLEMENTED;
+}
+
+// Returns the description for this object or a child.
+wxAccStatus SplitterWindowAccessible::GetDescription(int childId, wxString* description)
+{
+    wxSplitterWindow* splitter = wxDynamicCast(GetWindow(), wxSplitterWindow);
+    if (splitter)
+    {
+        if (splitter->IsSplit())
+        {
+            if (childId == 2)
+            {
+                * description = _("The splitter window sash.");
+                return wxACC_OK;
+            }
+        }
+    }
+    // Let the framework handle the other cases.
+    return wxACC_NOT_IMPLEMENTED;
+}
+
+// Returns help text for this object or a child, similar to tooltip text.
+wxAccStatus SplitterWindowAccessible::GetHelpText(int childId, wxString* helpText)
+{
+    wxSplitterWindow* splitter = wxDynamicCast(GetWindow(), wxSplitterWindow);
+    if (splitter)
+    {
+        if (splitter->IsSplit())
+        {
+            if (childId == 2)
+            {
+                * helpText = _("The splitter window sash.");
+                return wxACC_OK;
+            }
+        }
+    }
+    // Let the framework handle the other cases.
+    return wxACC_NOT_IMPLEMENTED;
+}
+
+// Returns the keyboard shortcut for this object or child.
+// Return e.g. ALT+K
+wxAccStatus SplitterWindowAccessible::GetKeyboardShortcut(int childId, wxString* shortcut)
+{
+    wxSplitterWindow* splitter = wxDynamicCast(GetWindow(), wxSplitterWindow);
+    if (splitter && splitter->IsSplit() && childId == 2)
+    {
+        // No keyboard shortcut for the splitter.
+        return wxACC_FALSE;
+    }
+    // Let the framework handle the other cases.
+    return wxACC_NOT_IMPLEMENTED;
+}
+
+// Returns a role constant.
+wxAccStatus SplitterWindowAccessible::GetRole(int childId, wxAccRole* role)
+{
+    wxSplitterWindow* splitter = wxDynamicCast(GetWindow(), wxSplitterWindow);
+    if (splitter)
+    {
+        if (splitter->IsSplit())
+        {
+            if (childId == 2)
+            {
+                * role = wxROLE_SYSTEM_GRIP;
+                return wxACC_OK;
+            }
+        }
+    }
+    // Let the framework handle the other cases.
+    return wxACC_NOT_IMPLEMENTED;
+}
+
+// Returns a state constant.
+wxAccStatus SplitterWindowAccessible::GetState(int childId, long* state)
+{
+    wxSplitterWindow* splitter = wxDynamicCast(GetWindow(), wxSplitterWindow);
+    if (splitter && splitter->IsSplit() && childId == 2)
+    {
+        // No particular state. Not sure what would be appropriate here.
+        *state = wxACC_STATE_SYSTEM_UNAVAILABLE;
+        return wxACC_OK;
+    }
+    // Let the framework handle the other cases.
+    return wxACC_NOT_IMPLEMENTED;
+}
+
+// Returns a localized string representing the value for the object
+// or child.
+wxAccStatus SplitterWindowAccessible::GetValue(int childId, wxString* strValue)
+{
+    wxSplitterWindow* splitter = wxDynamicCast(GetWindow(), wxSplitterWindow);
+    if (splitter && splitter->IsSplit() && childId == 2)
+    {
+        // The sash position is the value.
+        wxString pos;
+        pos << splitter->GetSashPosition();
+        *strValue = pos;
+
+        return wxACC_OK;
+    }
+    // Let the framework handle the other cases.
+    return wxACC_NOT_IMPLEMENTED;
+}
+
+// Selects the object or child.
+wxAccStatus SplitterWindowAccessible::Select(int childId, wxAccSelectionFlags selectFlags)
+{
+    wxSplitterWindow* splitter = wxDynamicCast(GetWindow(), wxSplitterWindow);
+    if (splitter && splitter->IsSplit() && childId == 2)
+    {
+        // Can't select the sash.
+        return wxACC_FALSE;
+    }
+    // Let the framework handle the other cases.
+    return wxACC_NOT_IMPLEMENTED;
+}
+
+// Gets the window with the keyboard focus.
+// If childId is 0 and child is NULL, no object in
+// this subhierarchy has the focus.
+// If this object has the focus, child should be 'this'.
+wxAccStatus SplitterWindowAccessible::GetFocus(int* childId, wxAccessible** child)
+{
+    return wxACC_NOT_IMPLEMENTED;
+}
+
+// Gets a variant representing the selected children
+// of this object.
+// Acceptable values:
+// - a null variant (IsNull() returns TRUE)
+// - a list variant (GetType() == wxT("list"))
+// - an integer representing the selected child element,
+//   or 0 if this object is selected (GetType() == wxT("long"))
+// - a "void*" pointer to a wxAccessible child object
+wxAccStatus SplitterWindowAccessible::GetSelections(wxVariant* selections)
+{
+    return wxACC_NOT_IMPLEMENTED;
+}
+

@@ -237,10 +237,12 @@ public:
 
         // Can return either a child object, or an integer
         // representing the child element, starting from 1.
+        // pt is in screen coordinates.
     virtual wxAccStatus HitTest(const wxPoint& WXUNUSED(pt), int* WXUNUSED(childId), wxAccessible** WXUNUSED(childObject))
          { return wxACC_NOT_IMPLEMENTED; }
 
         // Returns the rectangle for this object (id = 0) or a child element (id > 0).
+        // rect is in screen coordinates.
     virtual wxAccStatus GetLocation(wxRect& WXUNUSED(rect), int WXUNUSED(elementId))
          { return wxACC_NOT_IMPLEMENTED; }
 
@@ -254,7 +256,7 @@ public:
          { return wxACC_NOT_IMPLEMENTED; }
 
         // Gets the number of children.
-    virtual wxAccStatus GetChildCount(int* WXUNUSED(childId))
+    virtual wxAccStatus GetChildCount(int* WXUNUSED(childCount))
          { return wxACC_NOT_IMPLEMENTED; }
 
         // Gets the specified child (starting from 1).

@@ -291,9 +291,9 @@ this means that the child is a simple element and not an accessible object.
 
 \membersection{wxAccessible::GetChildCount}\label{wxaccessiblegetchildcount}
 
-\func{virtual wxAccStatus}{GetChildCount}{\param{int* }{childId}}
+\func{virtual wxAccStatus}{GetChildCount}{\param{int* }{childCount}}
 
-Returns the number of children in {\it childId}.
+Returns the number of children in {\it childCount}.
 
 \membersection{wxAccessible::GetDefaultAction}\label{wxaccessiblegetdefaultaction}
 
@@ -336,6 +336,7 @@ Return e.g. ALT+K.
 \func{virtual wxAccStatus}{GetLocation}{\param{wxRect\& }{rect}, \param{int }{elementId}}
 
 Returns the rectangle for this object (id is 0) or a child element (id is greater than 0).
+{\it rect} is in screen coordinates.
 
 \membersection{wxAccessible::GetName}\label{wxaccessiblegetname}
 
@@ -400,6 +401,8 @@ Returns the window associated with this object.
 Returns a status value and object id to indicate whether the given point was on this or
 a child object. Can return either a child object, or an integer
 representing the child element, starting from 1.
+
+{\it pt} is in screen coordinates.
 
 \membersection{wxAccessible::Navigate}\label{wxaccessiblenavigate}
 
