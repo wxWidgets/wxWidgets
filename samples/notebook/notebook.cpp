@@ -244,16 +244,18 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
                   wxT("Forgot to update something") );
 
     m_radioOrient = new wxRadioBox
-        (
-            m_panel, ID_RADIO_ORIENT,
-            wxT("&Tab orientation"),
-            wxDefaultPosition, wxDefaultSize,
-            WXSIZEOF(strOrientations), strOrientations,
-            1, wxRA_SPECIFY_COLS
-        );
+                    (
+                        m_panel, ID_RADIO_ORIENT,
+                        wxT("&Tab orientation"),
+                        wxDefaultPosition, wxDefaultSize,
+                        WXSIZEOF(strOrientations), strOrientations,
+                        1, wxRA_SPECIFY_COLS
+                    );
 
     m_chkShowImages = new wxCheckBox( m_panel, ID_CHK_SHOWIMAGES,
         wxT("&Show images") );
+    m_chkMultiLine = new wxCheckBox( m_panel, ID_CHK_MULTILINE,
+        wxT("&Multiple lines") );
 
     m_btnAddPage = new wxButton( m_panel, ID_BTN_ADD_PAGE, wxT("&Add page") );
 
@@ -283,22 +285,21 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
     m_sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     wxBoxSizer *sizerLeft = new wxBoxSizer(wxVERTICAL);
-    {
-        sizerLeft->Add(m_radioOrient, 0, wxEXPAND);
-        sizerLeft->Add(m_chkShowImages, 0, wxEXPAND | wxTOP, 4);
+    sizerLeft->Add(m_radioOrient, 0, wxEXPAND);
+    sizerLeft->Add(m_chkShowImages, 0, wxEXPAND | wxTOP, 4);
+    sizerLeft->Add(m_chkMultiLine, 0, wxEXPAND | wxTOP, 4);
 
-        sizerLeft->Add(0, 0, 1); // Spacer
+    sizerLeft->Add(0, 0, 1); // Spacer
 
-        sizerLeft->Add(m_btnAddPage, 0, wxEXPAND | (wxTOP | wxBOTTOM), 4);
-        sizerLeft->Add(m_btnInsertPage, 0, wxEXPAND | (wxTOP | wxBOTTOM), 4);
-        sizerLeft->Add(m_btnDeleteCurPage, 0, wxEXPAND | (wxTOP | wxBOTTOM), 4);
-        sizerLeft->Add(m_btnDeleteLastPage, 0, wxEXPAND | (wxTOP | wxBOTTOM), 4);
-        sizerLeft->Add(m_btnNextPage, 0, wxEXPAND | (wxTOP | wxBOTTOM), 4);
+    sizerLeft->Add(m_btnAddPage, 0, wxEXPAND | (wxTOP | wxBOTTOM), 4);
+    sizerLeft->Add(m_btnInsertPage, 0, wxEXPAND | (wxTOP | wxBOTTOM), 4);
+    sizerLeft->Add(m_btnDeleteCurPage, 0, wxEXPAND | (wxTOP | wxBOTTOM), 4);
+    sizerLeft->Add(m_btnDeleteLastPage, 0, wxEXPAND | (wxTOP | wxBOTTOM), 4);
+    sizerLeft->Add(m_btnNextPage, 0, wxEXPAND | (wxTOP | wxBOTTOM), 4);
 
-        sizerLeft->Add(0, 0, 1); // Spacer
+    sizerLeft->Add(0, 0, 1); // Spacer
 
-        sizerLeft->Add(m_btnExit, 0, wxEXPAND);
-    }
+    sizerLeft->Add(m_btnExit, 0, wxEXPAND);
 
     m_sizerTop->Add(sizerLeft, 0, wxEXPAND | wxALL, 4);
 
@@ -358,11 +359,14 @@ void MyFrame::ReInitNotebook()
             break;
     }
 
+    if ( m_chkMultiLine->IsChecked() )
+        flags |= wxNB_MULTILINE;
+
     MyNotebook *notebook = m_notebook;
 
     m_notebook = new MyNotebook(m_panel, ID_NOTEBOOK,
                                 wxDefaultPosition, wxDefaultSize,
-                                flags|wxCLIP_CHILDREN|wxNO_FULL_REPAINT_ON_RESIZE);
+                                flags);
 
     if ( m_chkShowImages->IsChecked() )
     {
@@ -406,6 +410,7 @@ void MyFrame::ReInitNotebook()
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_RADIOBOX(ID_RADIO_ORIENT, MyFrame::OnCheckOrRadioBox)
     EVT_CHECKBOX(ID_CHK_SHOWIMAGES, MyFrame::OnCheckOrRadioBox)
+    EVT_CHECKBOX(ID_CHK_MULTILINE, MyFrame::OnCheckOrRadioBox)
 
     EVT_BUTTON(ID_BTN_ADD_PAGE, MyFrame::OnButtonAddPage)
     EVT_BUTTON(ID_BTN_INSERT_PAGE, MyFrame::OnButtonInsertPage)
@@ -425,7 +430,7 @@ END_EVENT_TABLE()
 
 void MyFrame::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 {
-        ReInitNotebook();
+    ReInitNotebook();
 }
 
 void MyFrame::OnButtonAddPage( wxCommandEvent& WXUNUSED(event) )

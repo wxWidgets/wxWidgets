@@ -105,7 +105,8 @@ private:
     wxPanel *m_panel; // Panel containing notebook and other controls
 
     wxRadioBox *m_radioOrient;
-    wxCheckBox *m_chkShowImages;
+    wxCheckBox *m_chkShowImages,
+               *m_chkMultiLine;
 
     wxButton *m_btnAddPage;
     wxButton *m_btnInsertPage;
@@ -141,6 +142,7 @@ enum ID_CONTROLS
 {
     ID_RADIO_ORIENT = wxID_HIGHEST,
     ID_CHK_SHOWIMAGES,
+    ID_CHK_MULTILINE,
     ID_BTN_ADD_PAGE,
     ID_BTN_INSERT_PAGE,
     ID_BTN_DELETE_CUR_PAGE,
