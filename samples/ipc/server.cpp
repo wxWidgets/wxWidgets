@@ -70,7 +70,7 @@ MyConnection *the_connection = NULL;
 bool MyApp::OnInit()
 {
     // Create the main frame window
-    (new MyFrame(NULL, "Server"))->Show();
+    (new MyFrame(NULL, "Server"))->Show(TRUE);
 
     // create the server object
     wxString server_name = "4242";
