@@ -248,12 +248,12 @@ void WriteWinHelpContentsFileLine(wxChar *topicName, wxChar *xitle, int level)
       wxChar ch2=xitle[s+2]&0xff;
       wxChar ch3=xitle[s+3]&0xff;
       s+=4; // next character  
-      if ((ch1==0x27)&&(ch2==0x66)&&(ch3==0x36)) { title[d++]='ö';  }
-      if ((ch1==0x27)&&(ch2==0x65)&&(ch3==0x34)) { title[d++]='ä';  }
-      if ((ch1==0x27)&&(ch2==0x66)&&(ch3==0x63)) { title[d++]='ü';  }
-      if ((ch1==0x27)&&(ch2==0x64)&&(ch3==0x36)) { title[d++]='Ö';  }
-      if ((ch1==0x27)&&(ch2==0x63)&&(ch3==0x34)) { title[d++]='Ä';  }
-      if ((ch1==0x27)&&(ch2==0x64)&&(ch3==0x63)) { title[d++]='Ü';  }
+      if ((ch1==0x27)&&(ch2==0x66)&&(ch3==0x36)) { title[d++]=_T('ö');  }
+      if ((ch1==0x27)&&(ch2==0x65)&&(ch3==0x34)) { title[d++]=_T('ä');  }
+      if ((ch1==0x27)&&(ch2==0x66)&&(ch3==0x63)) { title[d++]=_T('ü');  }
+      if ((ch1==0x27)&&(ch2==0x64)&&(ch3==0x36)) { title[d++]=_T('Ö');  }
+      if ((ch1==0x27)&&(ch2==0x63)&&(ch3==0x34)) { title[d++]=_T('Ä');  }
+      if ((ch1==0x27)&&(ch2==0x64)&&(ch3==0x63)) { title[d++]=_T('Ü');  }
     } else {
       title[d++]=ch;
       s++;

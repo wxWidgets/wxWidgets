@@ -122,7 +122,7 @@ bool ParseTableArgument(wxChar *value)
 
       while ((i < len) && (isdigit(ch) || ch == '.'))
       {
-        numberBuf[j] = ch;
+        numberBuf[j] = (wxChar)ch;
         j ++;
         i ++;
         ch = value[i];

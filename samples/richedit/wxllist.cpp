@@ -631,36 +631,36 @@ wxLayoutObjectCmd::Read(wxString &istr)
 
     if(obj->m_StyleInfo->m_fg_valid)
     {
-        int red, green, blue;
+        unsigned char red, green, blue;
         ReadString(tmp, istr);
         tmp.ToLong(&l);
-        red = (int) l;
+        red = (unsigned char) l;
 
         ReadString(tmp, istr);
         tmp.ToLong(&l);
-        green = (int) l;
+        green = (unsigned char) l;
 
         ReadString(tmp, istr);
         tmp.ToLong(&l);
-        blue = (int) l;
+        blue = (unsigned char) l;
 
         obj->m_StyleInfo->m_fg = wxColour(red, green, blue);
     }
 
     if(obj->m_StyleInfo->m_bg_valid)
     {
-        int red, green, blue;
+        unsigned char red, green, blue;
         ReadString(tmp, istr);
         tmp.ToLong(&l);
-        red = (int) l;
+        red = (unsigned char) l;
 
         ReadString(tmp, istr);
         tmp.ToLong(&l);
-        green = (int) l;
+        green = (unsigned char) l;
 
         ReadString(tmp, istr);
         tmp.ToLong(&l);
-        blue = (int) l;
+        blue = (unsigned char) l;
 
         obj->m_StyleInfo->m_bg = wxColour(red, green, blue);
     }

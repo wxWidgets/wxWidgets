@@ -117,7 +117,7 @@ void OutputChunkToString(TexChunk *chunk, wxChar *buf)
       buf[i] = 0;
     else
     {
-      buf[i] = ch;
+      buf[i] = (wxChar)ch;
       i ++;
     }
   }
@@ -494,7 +494,7 @@ void ReadTexReferences(wxChar *filename)
 
 void BibEatWhiteSpace(wxSTD istream& str)
 {
-  char ch = str.peek();
+  char ch = (char)str.peek();
   
   while (!str.eof() && (ch == ' ' || ch == '\t' || ch == 13 || ch == 10 || ch == EOF))
   {
@@ -502,18 +502,18 @@ void BibEatWhiteSpace(wxSTD istream& str)
       BibLine ++;
     str.get(ch);
     if ((ch == EOF) || str.eof()) return;
-    ch = str.peek();
+    ch = (char)str.peek();
   }
 
   // Ignore end-of-line comments
   if (ch == '%' || ch == ';' || ch == '#')
   {
     str.get(ch);
-    ch = str.peek();
+    ch = (char)str.peek();
     while (ch != 10 && ch != 13 && !str.eof())
     {
       str.get(ch);
-      ch = str.peek();
+      ch = (char)str.peek();
     }
     BibEatWhiteSpace(str);
   }
@@ -524,14 +524,14 @@ void BibReadWord(wxSTD istream& istr, wxChar *buffer)
 {
   int i = 0;
   buffer[i] = 0;
-  char ch = istr.peek();
+  char ch = (char)istr.peek();
   while (!istr.eof() && ch != ' ' && ch != '{' && ch != '(' && ch != 13 && ch != 10 && ch != '\t' &&
          ch != ',' && ch != '=')
   {
     istr.get(ch);
     buffer[i] = ch;
     i ++;
-    ch = istr.peek();
+    ch = (char)istr.peek();
   }
   buffer[i] = 0;
 }
@@ -541,12 +541,12 @@ void BibReadToEOL(wxSTD istream& istr, wxChar *buffer)
 {
   int i = 0;
   buffer[i] = 0;
-  char ch = istr.peek();
+  char ch = (char)istr.peek();
   bool inQuotes = false;
   if (ch == '"')
   {
     istr.get(ch);
-    ch = istr.peek();
+    ch = (char)istr.peek();
     inQuotes = true;
   }
   // If in quotes, read white space too. If not,
@@ -558,7 +558,7 @@ void BibReadToEOL(wxSTD istream& istr, wxChar *buffer)
     istr.get(ch);
     buffer[i] = ch;
     i ++;
-    ch = istr.peek();
+    ch = (char)istr.peek();
   }
   if (ch == '"')
     istr.get(ch);
@@ -572,7 +572,7 @@ void BibReadValue(wxSTD istream& istr, wxChar *buffer, bool ignoreBraces = true,
   int braceCount = 1;
   int i = 0;
   buffer[i] = 0;
-  char ch = istr.peek();
+  char ch = (char)istr.peek();
   bool stopping = false;
   while (!istr.eof() && !stopping)
   {
