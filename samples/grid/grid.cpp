@@ -1,6 +1,10 @@
 /*
  * File:    grid.cpp
  * Purpose: wxGrid test
+
+   PLEASE NOTE: this sample is deprecated. See
+   newgrid for a sample based on the newer wxGrid API.
+
  * Author:  Julian Smart
  * Created: 1995
  * Updated:
@@ -152,6 +156,8 @@ bool MyApp::OnInit(void)
     // Show the frame
     frame->Show(TRUE);
 
+    wxMessageBox(wxT("Please note: this is an obsolete sample using the old wxGrid API.\nPlease compile newgrid instead."), wxT("wxGrid"), wxICON_INFORMATION|wxOK, frame);
+
     SetTopWindow(frame);
     return TRUE;
 }
@@ -240,7 +246,7 @@ void MyFrame::ToggleDividers(wxCommandEvent& WXUNUSED(event))
     else
         grid->SetDividerPen(wxNullPen);
 
-grid->Refresh();
+    grid->Refresh();
 }
 
 void MyFrame::LeftCell(wxCommandEvent& WXUNUSED(event))
