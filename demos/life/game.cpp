@@ -75,9 +75,9 @@ public:
 bool LifeCellBox::IsAlive(int dx, int dy) const
 {
     if (dy > 3)
-        return (bool)(m_live2 & 1 << ((dy - 4) * 8 + dx));
+        return (m_live2 & 1 << ((dy - 4) * 8 + dx)) ? true : false ;
     else
-        return (bool)(m_live1 & 1 << ((dy) * 8 + dx));
+        return (m_live1 & 1 << ((dy) * 8 + dx)) ? true : false ;
 }
 
 // SetCell:
