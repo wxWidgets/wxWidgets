@@ -1160,16 +1160,23 @@ bool wxDirExists(const wxString& dir)
 // does the path exists? (may have or not '/' or '\\' at the end)
 bool wxPathExists(const wxChar *pszPathName)
 {
-  /* Windows API returns -1 from stat for "c:\dir\" if "c:\dir" exists
-   * OTOH, we should change "d:" to "d:\" and leave "\" as is. */
-  wxString strPath(pszPathName);
-  if ( wxEndsWithPathSeparator(pszPathName) && pszPathName[1] != wxT('\0') && pszPathName[1] != wxT(':') )
-    strPath.Last() = wxT('\0');
+    // Windows fails to find directory named "c:\dir\" even if "c:\dir" exists,
+    // so remove all trailing backslashes from the path - but don't do this for
+    // the pathes "d:\" (which are different from "d:") nor for just "\"
+    wxString strPath(pszPathName);
+    while ( wxEndsWithPathSeparator(strPath) )
+    {
+        size_t len = strPath.length();
+        if ( len == 1 || strPath[len - 1] == _T(':') )
+            break;
 
-  wxStructStat st;
+        strPath.Truncate(len - 1);
+    }
 
-  return wxStat(wxFNSTRINGCAST strPath.fn_str(), &st) == 0 &&
-         ((st.st_mode & S_IFMT) == S_IFDIR);
+    wxStructStat st;
+
+    return wxStat(wxFNSTRINGCAST strPath.fn_str(), &st) == 0 &&
+        ((st.st_mode & S_IFMT) == S_IFDIR);
 }
 
 // Get a temporary filename, opening and closing the file.
