@@ -158,22 +158,22 @@ cleanall:   clean
 
 zlib:   .SYMBOLIC
     cd $(WXDIR)\src\zlib
-    wmake -f makefile.wat all
+    wmake $(__MAKEOPTS__) -f makefile.wat all
     cd $(WXDIR)\src\msw
 
 clean_zlib:   .SYMBOLIC
     cd $(WXDIR)\src\zlib
-    wmake -f makefile.wat clean
+    wmake $(__MAKEOPTS__) -f makefile.wat clean
     cd $(WXDIR)\src\msw
 
 regex:    .SYMBOLIC
     cd $(WXDIR)\src\regex
-    wmake -f makefile.wat all
+    wmake $(__MAKEOPTS__) -f makefile.wat all
     cd $(WXDIR)\src\msw
 
 clean_regex:   .SYMBOLIC
     cd $(WXDIR)\src\regex
-    wmake -f makefile.wat clean
+    wmake $(__MAKEOPTS__) -f makefile.wat clean
     cd $(WXDIR)\src\msw
 
 MFTYPE=watbase

@@ -228,52 +228,52 @@ $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
 
 png:   .SYMBOLIC
     cd $(WXDIR)\src\png
-    wmake -f makefile.wat all
+    wmake $(__MAKEOPTS__) -f makefile.wat all
     cd $(WXDIR)\src\msw
 
 clean_png:   .SYMBOLIC
     cd $(WXDIR)\src\png
-    wmake -f makefile.wat clean
+    wmake $(__MAKEOPTS__) -f makefile.wat clean
     cd $(WXDIR)\src\msw
 
 zlib:   .SYMBOLIC
     cd $(WXDIR)\src\zlib
-    wmake -f makefile.wat all
+    wmake $(__MAKEOPTS__) -f makefile.wat all
     cd $(WXDIR)\src\msw
 
 clean_zlib:   .SYMBOLIC
     cd $(WXDIR)\src\zlib
-    wmake -f makefile.wat clean
+    wmake $(__MAKEOPTS__) -f makefile.wat clean
     cd $(WXDIR)\src\msw
 
 jpeg:    .SYMBOLIC
     cd $(WXDIR)\src\jpeg
-    wmake -f makefile.wat all
+    wmake $(__MAKEOPTS__) -f makefile.wat all
     cd $(WXDIR)\src\msw
 
 clean_jpeg:   .SYMBOLIC
     cd $(WXDIR)\src\jpeg
-    wmake -f makefile.wat clean
+    wmake $(__MAKEOPTS__) -f makefile.wat clean
     cd $(WXDIR)\src\msw
 
 tiff:    .SYMBOLIC
     cd $(WXDIR)\src\tiff
-    wmake -f makefile.wat all
+    wmake $(__MAKEOPTS__) -f makefile.wat all
     cd $(WXDIR)\src\msw
 
 clean_tiff:   .SYMBOLIC
     cd $(WXDIR)\src\tiff
-    wmake -f makefile.wat clean
+    wmake $(__MAKEOPTS__) -f makefile.wat clean
     cd $(WXDIR)\src\msw
 
 regex:    .SYMBOLIC
     cd $(WXDIR)\src\regex
-    wmake -f makefile.wat all
+    wmake $(__MAKEOPTS__) -f makefile.wat all
     cd $(WXDIR)\src\msw
 
 clean_regex:   .SYMBOLIC
     cd $(WXDIR)\src\regex
-    wmake -f makefile.wat clean
+    wmake $(__MAKEOPTS__) -f makefile.wat clean
     cd $(WXDIR)\src\msw
 
 MFTYPE=wat
