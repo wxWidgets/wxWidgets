@@ -2,6 +2,8 @@
 
 This class is used for drop files events, that is, when files have been dropped
 onto the window. This functionality is currently only available under Windows.
+The window must have previously been enabled for dropping by calling 
+\helpref{wxWindow::DragAcceptFiles}{wxwindowdragacceptfiles}.
 
 Important note: this is a separate implementation to the more general
 drag and drop implementation documented \helpref{here}{wxdndoverview}. It uses the
@@ -28,7 +30,8 @@ function that takes a wxDropFilesEvent argument.
 
 \wxheading{See also}
 
-\helpref{wxWindow::OnDropFiles}{wxwindowondropfiles}, \helpref{Event handling overview}{eventhandlingoverview}
+%\helpref{wxWindow::OnDropFiles}{wxwindowondropfiles},
+\helpref{Event handling overview}{eventhandlingoverview}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 

@@ -79,7 +79,7 @@ When defining your own scrollbar behaviour, you will always need to recalculate
 the scrollbar settings when the window size changes. You could therefore put your
 scrollbar calculations and SetScrollbar
 call into a function named AdjustScrollbars, which can be called initially and also
-from your \helpref{wxWindow::OnSize}{wxwindowonsize} event handler function.
+from your \helpref{wxSizeEvent}{wxsizeevent} handler function.
 
 %\normalbox{{\bf For Windows programmers:} note that scrollbar range in wxWindows has a different meaning
 %from that in Windows. In native Windows scrollbar calls, range is the number of positions that the scrollbar

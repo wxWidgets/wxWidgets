@@ -37,7 +37,7 @@ the corresponding topic.
 \helpref{wxCHECK\_VERSION}{wxcheckversion}\\
 \helpref{wxCHECK}{wxcheck}\\
 \helpref{wxClientDisplayRect}{wxclientdisplayrect}\\
-\helpref{wxClipboardOpen}{wxclipboardopen}\\
+\helpref{wxClipboardOpen}{functionwxclipboardopen}\\
 \helpref{wxCloseClipboard}{wxcloseclipboard}\\
 \helpref{wxColourDisplay}{wxcolourdisplay}\\
 \helpref{wxCOMPILE\_TIME\_ASSERT}{wxcompiletimeassert}\\
@@ -51,12 +51,11 @@ the corresponding topic.
 \helpref{wxDDEInitialize}{wxddeinitialize}\\
 \helpref{wxDROP\_ICON}{wxdropicon}\\
 \helpref{wxDebugMsg}{wxdebugmsg}\\
-\helpref{wxDirExists}{wxdirexists}\\
+\helpref{wxDirExists}{functionwxdirexists}\\
 \helpref{wxDirSelector}{wxdirselector}\\
 \helpref{wxDisplayDepth}{wxdisplaydepth}\\
+\helpref{wxDisplaySize}{wxdisplaysize}\\
 \helpref{wxDisplaySizeMM}{wxdisplaysizemm}\\
-\helpref{wxDisplaySize}{wxdisplaysize}\\
-\helpref{wxDisplaySize}{wxdisplaysize}\\
 \helpref{wxDos2UnixFilename}{wxdos2unixfilename}\\
 \helpref{wxDynamicCastThis}{wxdynamiccastthis}\\
 \helpref{wxDynamicCast}{wxdynamiccast}\\
@@ -71,7 +70,7 @@ the corresponding topic.
 \helpref{wxFAIL\_MSG}{wxfailmsg}\\
 \helpref{wxFAIL}{wxfail}\\
 \helpref{wxFatalError}{wxfatalerror}\\
-\helpref{wxFileExists}{wxfileexists}\\
+\helpref{wxFileExists}{functionwxfileexists}\\
 \helpref{wxFileModificationTime}{wxfilemodificationtime}\\
 \helpref{wxFileNameFromPath}{wxfilenamefrompath}\\
 \helpref{wxFileSelector}{wxfileselector}\\
@@ -519,7 +518,7 @@ terminated with a NULL pointer.}
 Exits application after calling \helpref{wxApp::OnExit}{wxapponexit}.
 Should only be used in an emergency: normally the top-level frame
 should be deleted (after deleting all other frames) to terminate the
-application. See \helpref{wxWindow::OnCloseWindow}{wxwindowonclosewindow} and \helpref{wxApp}{wxapp}.
+application. See \helpref{wxCloseEvent}{wxcloseevent} and \helpref{wxApp}{wxapp}.
 
 \wxheading{Include files}
 
@@ -661,7 +660,7 @@ threads.
 \helpref{wxFile}{wxfile}\\
 \helpref{wxFileName}{wxfilename}
 
-\membersection{::wxDirExists}\label{wxdirexists}
+\membersection{::wxDirExists}\label{functionwxdirexists}
 
 \func{bool}{wxDirExists}{\param{const wxString\& }{dirname}}
 
@@ -674,7 +673,7 @@ Returns TRUE if the directory exists.
 Converts a DOS to a Unix filename by replacing backslashes with forward
 slashes.
 
-\membersection{::wxFileExists}\label{wxfileexists}
+\membersection{::wxFileExists}\label{functionwxfileexists}
 
 \func{bool}{wxFileExists}{\param{const wxString\& }{filename}}
 
@@ -1960,7 +1959,7 @@ class instead.
 
 <wx/clipbrd.h>
 
-\membersection{::wxClipboardOpen}\label{wxclipboardopen}
+\membersection{::wxClipboardOpen}\label{functionwxclipboardopen}
 
 \func{bool}{wxClipboardOpen}{\void}
 
@@ -2106,16 +2105,6 @@ See also \helpref{wxDDEServer}{wxddeserver}, \helpref{wxDDEClient}{wxddeclient},
 \wxheading{Include files}
 
 <wx/dde.h>
-
-\membersection{::wxDisplaySize}\label{wxdisplaysize}
-
-\func{void}{wxDisplaySize}{\param{int *}{width}, \param{int *}{height}}
-
-Gets the physical size of the display in pixels.
-
-\wxheading{Include files}
-
-<wx/gdicmn.h>
 
 \membersection{::wxEnableTopLevelWindows}\label{wxenabletoplevelwindows}
 
@@ -2363,7 +2352,7 @@ See also \helpref{wxGetResource}{wxgetresource}, \helpref{wxConfigBase}{wxconfig
 
 <wx/utils.h>
 
-\section{Byte order macros}\label{macros}
+\section{Byte order macros}\label{byeordermacros}
 
 The endian-ness issues (that is the difference between big-endian and
 little-endian architectures) are important for the portable programs working
@@ -2421,7 +2410,7 @@ been compiled on a big-endian architecture, the value will be unchanged.
 Use these macros to read data from and write data to a file that stores
 data in big-endian format.
 
-\section{RTTI functions}\label{macros}
+\section{RTTI functions}\label{rttimacros}
 
 wxWindows uses its own RTTI ("run-time type identification") system which
 predates the current standard C++ RTTI and so is kept for backwards

@@ -101,12 +101,12 @@ The default button is the one activated by pressing the Enter key.
 
 \func{void}{InitDialog}{\void}
 
-Sends an \helpref{wxWindow::OnInitDialog}{wxwindowoninitdialog} event, which
+Sends a \helpref{wxInitDialogEvent}{wxinitdialogevent}, which
 in turn transfers data to the dialog via validators.
 
 \wxheading{See also}
 
-\helpref{wxWindow::OnInitDialog}{wxwindowoninitdialog}
+\helpref{wxInitDialogEvent}{wxinitdialogevent}
 
 \membersection{wxPanel::OnSysColourChanged}\label{wxpanelonsyscolourchanged}
 
@@ -123,7 +123,7 @@ The default handler for wxEVT\_SYS\_COLOUR\_CHANGED.
 Changes the panel's colour to conform to the current settings (Windows only).
 Add an event table entry for your panel class if you wish the behaviour
 to be different (such as keeping a user-defined
-background colour). If you do override this function, call \helpref{wxWindow::OnSysColourChanged}{wxwindowonsyscolourchanged} to
+background colour). If you do override this function, call wxEvent::Skip to
 propagate the notification to child windows and controls.
 
 \wxheading{See also}

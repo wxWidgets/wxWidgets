@@ -18,7 +18,7 @@ An application closes by destroying all windows. Because all frames must
 be destroyed for the application to exit, it is advisable to use parent
 frames wherever possible when creating new frames, so that deleting the
 top level frame will automatically delete child frames. The alternative
-is to explicitly delete child frames in the top-level frame's \helpref{wxWindow::OnCloseWindow}{wxwindowonclosewindow}\rtfsp
+is to explicitly delete child frames in the top-level frame's \helpref{wxCloseEvent}{wxcloseevent}\rtfsp
 handler.
 
 In emergencies the \helpref{wxExit}{wxexit} function can be called to kill the

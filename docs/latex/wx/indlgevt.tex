@@ -2,6 +2,7 @@
 
 A wxInitDialogEvent is sent as a dialog or panel is being initialised.
 Handlers for this event can transfer data to the window.
+The default handler calls \helpref{wxWindow::TransferDataToWindow}{wxwindowtransferdatatowindow}.
 
 \wxheading{Derived from}
 
@@ -24,7 +25,6 @@ function that takes a wxInitDialogEvent argument.
 
 \wxheading{See also}
 
-\helpref{wxWindow::OnInitDialog}{wxwindowoninitdialog},\rtfsp
 \helpref{Event handling overview}{eventhandlingoverview}
 
 \latexignore{\rtfignore{\wxheading{Members}}}

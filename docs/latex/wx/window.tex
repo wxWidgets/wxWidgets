@@ -876,7 +876,7 @@ Gets the window's title. Applicable only to frames and dialogs.
 \constfunc{virtual wxRegion}{GetUpdateRegion}{\void}
 
 Returns the region specifying which parts of the window have been damaged. Should
-only be called within an \helpref{OnPaint}{wxwindowonpaint} event handler.
+only be called within an \helpref{wxPaintEvent}{wxpaintevent} handler.
 
 \wxheading{See also}
 
@@ -1196,95 +1196,6 @@ implements the following methods:\par
 %% \helpref{wxWindow::OnCloseWindow}{wxwindowonclosewindow},\rtfsp
 %% \helpref{wxCloseEvent}{wxcloseevent}
 %%
-%% \membersection{wxWindow::OnCloseWindow}\label{wxwindowonclosewindow}
-%%
-%% \func{void}{OnCloseWindow}{\param{wxCloseEvent\& }{event}}
-%%
-%% This is an event handler function called when the user has tried to close a a frame
-%% or dialog box using the window manager (X) or system menu (Windows). It is
-%% called via the \helpref{wxWindow::Close}{wxwindowclose} function, so
-%% that the application can also invoke the handler programmatically.
-%%
-%% Use the EVT\_CLOSE event table macro to handle close events.
-%%
-%% You should check whether the application is forcing the deletion of the window
-%% using \helpref{wxCloseEvent::GetForce}{wxcloseeventgetforce}. If this is {\tt TRUE},
-%% destroy the window using \helpref{wxWindow::Destroy}{wxwindowdestroy}.
-%% If not, it is up to you whether you respond by destroying the window.
-%%
-%% (Note: GetForce is now superceded by CanVeto. So to test whether forced destruction of
-%% the window is required, test for the negative of CanVeto. If CanVeto returns {\tt FALSE},
-%% it is not possible to skip window deletion.)
-%%
-%% If you don't destroy the window, you should call \helpref{wxCloseEvent::Veto}{wxcloseeventveto} to
-%% let the calling code know that you did not destroy the window. This allows the \helpref{wxWindow::Close}{wxwindowclose} function
-%% to return {\tt TRUE} or {\tt FALSE} depending on whether the close instruction was honoured or not.
-%%
-%% \wxheading{Remarks}
-%%
-%% The \helpref{wxWindow::OnClose}{wxwindowonclose} virtual function remains
-%% for backward compatibility with earlier versions of wxWindows. The
-%% default {\bf OnCloseWindow} handler for wxFrame and wxDialog will call {\bf OnClose},
-%% destroying the window if it returns {\tt TRUE} or if the close is being forced.
-%%
-%% \wxheading{See also}
-%%
-%% \helpref{Window deletion overview}{windowdeletionoverview},\rtfsp
-%% \helpref{wxWindow::Close}{wxwindowclose},\rtfsp
-%% \helpref{wxWindow::OnClose}{wxwindowonclose},\rtfsp
-%% \helpref{wxWindow::Destroy}{wxwindowdestroy},\rtfsp
-%% \helpref{wxCloseEvent}{wxcloseevent},\rtfsp
-%% \helpref{wxApp::OnQueryEndSession}{wxapponqueryendsession}
-%% %% GD: OnXXX functions are not documented
-%% %%\helpref{wxApp::OnEndSession}{wxapponendsession}
-%%
-%% \membersection{wxWindow::OnDropFiles}\label{wxwindowondropfiles}
-%%
-%% \func{void}{OnDropFiles}{\param{wxDropFilesEvent\&}{ event}}
-%%
-%% Called when files have been dragged from the file manager to the window.
-%%
-%% \wxheading{Parameters}
-%%
-%% \docparam{event}{Drop files event. For more information, see \helpref{wxDropFilesEvent}{wxdropfilesevent}.}
-%%
-%% \wxheading{Remarks}
-%%
-%% The window must have previously been enabled for dropping by calling
-%% \rtfsp\helpref{wxWindow::DragAcceptFiles}{wxwindowdragacceptfiles}.
-%%
-%% This event is only generated under Windows.
-%%
-%% To intercept this event, use the EVT\_DROP\_FILES macro in an event table definition.
-%%
-%% \wxheading{See also}
-%%
-%% \helpref{wxDropFilesEvent}{wxdropfilesevent}, \helpref{wxWindow::DragAcceptFiles}{wxwindowdragacceptfiles},\rtfsp
-%% \helpref{Event handling overview}{eventhandlingoverview}
-%%
-%% \membersection{wxWindow::OnEraseBackground}\label{wxwindowonerasebackground}
-%%
-%% \func{void}{OnEraseBackground}{\param{wxEraseEvent\&}{ event}}
-%%
-%% Called when the background of the window needs to be erased.
-%%
-%% \wxheading{Parameters}
-%%
-%% \docparam{event}{Erase background event. For more information, see \helpref{wxEraseEvent}{wxeraseevent}.}
-%%
-%% \wxheading{Remarks}
-%%
-%% Under non-Windows platforms, this event is simulated (simply generated just before the
-%% paint event) and may cause flicker. It is therefore recommended that
-%% you set the text background colour explicitly in order to prevent flicker.
-%% The default background colour under GTK is grey.
-%%
-%% To intercept this event, use the EVT\_ERASE\_BACKGROUND macro in an event table definition.
-%%
-%% \wxheading{See also}
-%%
-%% \helpref{wxEraseEvent}{wxeraseevent}, \helpref{Event handling overview}{eventhandlingoverview}
-%%
 %% \membersection{wxWindow::OnKeyDown}\label{wxwindowonkeydown}
 %%
 %% \func{void}{OnKeyDown}{\param{wxKeyEvent\&}{ event}}
@@ -1346,40 +1257,6 @@ implements the following methods:\par
 %% \helpref{wxWindow::OnChar}{wxwindowonchar}, \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown},\rtfsp
 %% \helpref{wxKeyEvent}{wxkeyevent}, \helpref{wxWindow::OnCharHook}{wxwindowoncharhook},\rtfsp
 %% \helpref{Event handling overview}{eventhandlingoverview}
-%%
-%% \membersection{wxWindow::OnKillFocus}\label{wxwindowonkillfocus}
-%%
-%% \func{void}{OnKillFocus}{\param{wxFocusEvent\& }{event}}
-%%
-%% Called when a window's focus is being killed.
-%%
-%% \wxheading{Parameters}
-%%
-%% \docparam{event}{The focus event. For more information, see \helpref{wxFocusEvent}{wxfocusevent}.}
-%%
-%% \wxheading{Remarks}
-%%
-%% To intercept this event, use the macro EVT\_KILL\_FOCUS in an event table definition.
-%%
-%% Most, but not all, windows respond to this event.
-%%
-%% \wxheading{See also}
-%%
-%% \helpref{wxFocusEvent}{wxfocusevent}, \helpref{wxWindow::OnSetFocus}{wxwindowonsetfocus},\rtfsp
-%% \helpref{Event handling overview}{eventhandlingoverview}
-%%
-%% \membersection{wxWindow::OnIdle}\label{wxwindowonidle}
-%%
-%% \func{void}{OnIdle}{\param{wxIdleEvent\& }{event}}
-%%
-%% Provide this member function for any processing which needs to be done
-%% when the application is idle.
-%%
-%% \wxheading{See also}
-%%
-%% %% GD: OnXXX functions are not documented
-%% %%\helpref{wxApp::OnIdle}{wxapponidle}
-%% \helpref{wxIdleEvent}{wxidleevent}
 %%
 %% \membersection{wxWindow::OnInitDialog}\label{wxwindowoninitdialog}
 %%
@@ -1963,7 +1840,7 @@ Sets the background colour of the window.
 \wxheading{Remarks}
 
 The background colour is usually painted by the default\rtfsp
-\helpref{wxWindow::OnEraseBackground}{wxwindowonerasebackground} event handler function
+\helpref{wxEraseEvent}{wxeraseevent} event handler function
 under Windows and automatically under GTK.
 
 Note that setting the background colour does not cause an immediate refresh, so you
@@ -1981,7 +1858,7 @@ look as the user wishes with run-time loadable modules.
 \helpref{wxWindow::GetForegroundColour}{wxwindowgetforegroundcolour},\rtfsp
 \helpref{wxWindow::Clear}{wxwindowclear},\rtfsp
 \helpref{wxWindow::Refresh}{wxwindowrefresh},\rtfsp
-\helpref{wxWindow::OnEraseBackground}{wxwindowonerasebackground}
+\helpref{wxEraseEvent}{wxeraseevent}
 
 \membersection{wxWindow::SetCaret}\label{wxwindowsetcaret}
 
@@ -2279,7 +2156,7 @@ When defining your own scrollbar behaviour, you will always need to recalculate
 the scrollbar settings when the window size changes. You could therefore put your
 scrollbar calculations and SetScrollbar
 call into a function named AdjustScrollbars, which can be called initially and also
-from your \helpref{wxWindow::OnSize}{wxwindowonsize} event handler function.
+from your \helpref{wxSizeEvent}{wxsizeevent} handler function.
 
 \wxheading{See also}
 

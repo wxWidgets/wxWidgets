@@ -50,6 +50,9 @@ similar to but slightly different from Windows {\tt WM\_KEYDOWN} and
 {\tt WM\_CHAR} events. In particular, Alt-x combination will generate a char
 event in wxWindows (unless it is used as an acclerator).
 
+{\bf Tip:} be sure to call {\tt event.Skip()} for events that you don't process in
+key event function, otherwise menu shortcuts may cease to work under Windows.
+
 \wxheading{Derived from}
 
 \helpref{wxEvent}{wxevent}
@@ -204,5 +207,4 @@ be still processed normally).
 \constfunc{bool}{ShiftDown}{\void}
 
 Returns TRUE if the shift key was down at the time of the key event.
-
 

@@ -17,9 +17,9 @@ these device contexts and when you should use them.
 \begin{itemize}\itemsep=0pt
 \item {\bf wxScreenDC.} Use this to paint on the screen, as opposed to an individual window.
 \item {\bf wxClientDC.} Use this to paint on the client area of window (the part without
-borders and other decorations), but do not use it from within an \helpref{wxWindow::OnPaint}{wxwindowonpaint} event.
+borders and other decorations), but do not use it from within an \helpref{wxPaintEvent}{wxpaintevent}.
 \item {\bf wxPaintDC.} Use this to paint on the client area of a window, but {\it only} from
-within an \helpref{wxWindow::OnPaint}{wxwindowonpaint} event.
+within a \helpref{wxPaintEvent}{wxpaintevent}.
 \item {\bf wxWindowDC.} Use this to paint on the whole area of a window, including decorations.
 This may not be available on non-Windows platforms.
 \end{itemize}

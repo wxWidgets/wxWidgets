@@ -2,6 +2,16 @@
 
 An erase event is sent when a window's background needs to be repainted.
 
+On some platforms, such as GTK+, this event is simulated (simply generated just before the
+paint event) and may cause flicker. It is therefore recommended that
+you set the text background colour explicitly in order to prevent flicker.
+The default background colour under GTK+ is grey.
+
+To intercept this event, use the EVT\_ERASE\_BACKGROUND macro in an event table definition.
+
+You must call wxEraseEvent::GetDC and use the returned device context if it is non-NULL.
+If it is NULL, create your own temporary wxClientDC object. 
+
 \wxheading{Derived from}
 
 \helpref{wxEvent}{wxevent}\\
@@ -28,7 +38,8 @@ the event handler.
 
 \wxheading{See also}
 
-\helpref{wxWindow::OnEraseBackground}{wxwindowonerasebackground}, \helpref{Event handling overview}{eventhandlingoverview}
+%\helpref{wxWindow::OnEraseBackground}{wxwindowonerasebackground},
+\helpref{Event handling overview}{eventhandlingoverview}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 

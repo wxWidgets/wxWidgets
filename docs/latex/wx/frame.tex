@@ -63,7 +63,7 @@ See also \helpref{window styles overview}{windowstyles}.
 
 \wxheading{Remarks}
 
-An application should normally define an \helpref{OnCloseWindow}{wxwindowonclosewindow} handler for the
+An application should normally define an \helpref{wxCloseEvent}{wxcloseevent} handler for the
 frame to respond to system close events, for example so that related data and subwindows can be cleaned up.
 
 \wxheading{See also}
@@ -400,28 +400,25 @@ implementation returns an instance of \helpref{wxToolBar}{wxtoolbar}.
 
 \helpref{wxFrame::CreateToolBar}{wxframecreatetoolbar}, \helpref{wxToolBar}{wxtoolbar}.
 
-\membersection{wxFrame::OnMenuCommand}\label{wxframeonmenucommand}
-
-\func{void}{OnMenuCommand}{\param{wxCommandEvent\&}{ event}}
-
-See \helpref{wxWindow::OnMenuCommand}{wxwindowonmenucommand}.
-
 \membersection{wxFrame::OnMenuHighlight}\label{wxframeonmenuhighlight}
 
 \func{void}{OnMenuHighlight}{\param{wxMenuEvent\&}{ event}}
 
-See \helpref{wxWindow::OnMenuHighlight}{wxwindowonmenuhighlight}.
+The default implementation displays an appropriate help string
+in the status bar, if there is one.
+
+See \helpref{wxMenuEvent}{wxmenuevent}.
 
 \membersection{wxFrame::OnSize}\label{wxframeonsize}
 
 \func{void}{OnSize}{\param{wxSizeEvent\& }{event}}
 
-See \helpref{wxWindow::OnSize}{wxwindowonsize}.
-
 The default {\bf wxFrame::OnSize} implementation looks for a single subwindow,
 and if one is found, resizes it to fit
 inside the frame. Override this member if more complex behaviour
 is required (for example, if there are several subwindows).
+
+See \helpref{wxSizeEvent}{wxsizeevent}.
 
 \membersection{wxFrame::SetIcon}\label{wxframeseticon}
 
