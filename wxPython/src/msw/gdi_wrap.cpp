@@ -3542,6 +3542,7 @@ static PyObject *_wrap_new_IconLocation(PyObject *self, PyObject *args, PyObject
     wxString *arg1 = (wxString *) &wxPyEmptyString ;
     int arg2 = (int) 0 ;
     wxIconLocation *result;
+    bool temp1 = False ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "filename",(char *) "num", NULL 
@@ -3549,7 +3550,11 @@ static PyObject *_wrap_new_IconLocation(PyObject *self, PyObject *args, PyObject
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|Oi:new_IconLocation",kwnames,&obj0,&arg2)) goto fail;
     if (obj0) {
-        if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        {
+            arg1 = wxString_in_helper(obj0);
+            if (arg1 == NULL) SWIG_fail;
+            temp1 = True;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3559,8 +3564,16 @@ static PyObject *_wrap_new_IconLocation(PyObject *self, PyObject *args, PyObject
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxIconLocation, 1);
+    {
+        if (temp1)
+        delete arg1;
+    }
     return resultobj;
     fail:
+    {
+        if (temp1)
+        delete arg1;
+    }
     return NULL;
 }
 
@@ -3978,13 +3991,18 @@ static PyObject *_wrap_new_Cursor(PyObject *self, PyObject *args, PyObject *kwar
     int arg3 = (int) 0 ;
     int arg4 = (int) 0 ;
     wxCursor *result;
+    bool temp1 = False ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "cursorName",(char *) "flags",(char *) "hotSpotX",(char *) "hotSpotY", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Ol|ii:new_Cursor",kwnames,&obj0,&arg2,&arg3,&arg4)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg1 = wxString_in_helper(obj0);
+        if (arg1 == NULL) SWIG_fail;
+        temp1 = True;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxCursor *)new_wxCursor((wxString const *)arg1,arg2,arg3,arg4);
@@ -3993,8 +4011,16 @@ static PyObject *_wrap_new_Cursor(PyObject *self, PyObject *args, PyObject *kwar
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxCursor, 1);
+    {
+        if (temp1)
+        delete arg1;
+    }
     return resultobj;
     fail:
+    {
+        if (temp1)
+        delete arg1;
+    }
     return NULL;
 }
 
@@ -6155,6 +6181,7 @@ static PyObject *_wrap_NativeEncodingInfo_facename_set(PyObject *self, PyObject 
     PyObject *resultobj;
     wxNativeEncodingInfo *arg1 = (wxNativeEncodingInfo *) 0 ;
     wxString *arg2 = (wxString *) 0 ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -6163,12 +6190,24 @@ static PyObject *_wrap_NativeEncodingInfo_facename_set(PyObject *self, PyObject 
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:NativeEncodingInfo_facename_set",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxNativeEncodingInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = True;
+    }
     if (arg1) (arg1)->facename = *arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (temp2)
+        delete arg2;
+    }
     return resultobj;
     fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
     return NULL;
 }
 
@@ -8252,6 +8291,7 @@ static PyObject *_wrap_LanguageInfo_CanonicalName_set(PyObject *self, PyObject *
     PyObject *resultobj;
     wxLanguageInfo *arg1 = (wxLanguageInfo *) 0 ;
     wxString *arg2 = (wxString *) 0 ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -8260,12 +8300,24 @@ static PyObject *_wrap_LanguageInfo_CanonicalName_set(PyObject *self, PyObject *
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:LanguageInfo_CanonicalName_set",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxLanguageInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = True;
+    }
     if (arg1) (arg1)->CanonicalName = *arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (temp2)
+        delete arg2;
+    }
     return resultobj;
     fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
     return NULL;
 }
 
@@ -8300,6 +8352,7 @@ static PyObject *_wrap_LanguageInfo_Description_set(PyObject *self, PyObject *ar
     PyObject *resultobj;
     wxLanguageInfo *arg1 = (wxLanguageInfo *) 0 ;
     wxString *arg2 = (wxString *) 0 ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -8308,12 +8361,24 @@ static PyObject *_wrap_LanguageInfo_Description_set(PyObject *self, PyObject *ar
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:LanguageInfo_Description_set",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxLanguageInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = True;
+    }
     if (arg1) (arg1)->Description = *arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (temp2)
+        delete arg2;
+    }
     return resultobj;
     fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
     return NULL;
 }
 
