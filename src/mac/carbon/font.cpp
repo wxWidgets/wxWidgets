@@ -120,7 +120,10 @@ void wxFontRefData::MacFindFont()
     //TODO:if we supply the style as an additional parameter we must make a testing
     //sequence in order to degrade gracefully while trying to maintain most of the style
     //information, meanwhile we just take the normal font and apply the features after
-    OSStatus status = ::ATSUFONDtoFontID(m_macFontNum, normal /*qdStyle*/, (UInt32*)&m_macATSUFontID); 
+#ifdef __WXDEBUG__
+    OSStatus status =
+#endif // __WXDEBUG__
+        ::ATSUFONDtoFontID(m_macFontNum, normal /*qdStyle*/, (UInt32*)&m_macATSUFontID); 
     /*
     status = ATSUFindFontFromName ( (Ptr) m_faceName , strlen( m_faceName ) ,
         kFontFullName,    kFontMacintoshPlatform, kFontRomanScript , kFontNoLanguage  ,  (UInt32*)&m_macATSUFontID ) ;

@@ -931,8 +931,10 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
 
         if ( attrCounter > 0 )
         {
-            OSStatus status = TXNSetTypeAttributes ((TXNObject)m_macTXN, attrCounter , typeAttr,
-                start,end);
+#ifdef __WXDEBUG__
+            OSStatus status =
+#endif // __WXDEBUG__
+                TXNSetTypeAttributes ((TXNObject)m_macTXN, attrCounter , typeAttr, start,end);
             wxASSERT_MSG( status == noErr , wxT("Couldn't set text attributes") ) ;
         }
         if ( !formerEditable )
