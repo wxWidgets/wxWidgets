@@ -20,6 +20,15 @@
 %}
 
 //---------------------------------------------------------------------------
+
+enum {
+    wxIMAGE_ALPHA_TRANSPARENT,
+    wxIMAGE_ALPHA_THRESHOLD,
+    wxIMAGE_ALPHA_OPAQUE
+};
+
+
+//---------------------------------------------------------------------------
 %newgroup
 
 
@@ -257,6 +266,13 @@ length of the data must be width*height*3.", "",
 the image already has alpha data. If it doesn't, alpha data will be by
 default initialized to all pixels being fully opaque. But if the image
 has a a mask colour, all mask pixels will be completely transparent.", "");
+
+
+    DocDeclStr(
+        bool , IsTransparent(int x, int y,
+                             unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD) const,
+        "Returns True if this pixel is masked or has an alpha value less than
+the spcified threshold.", "");
     
     
     // find first colour that is not used in the image and has higher
@@ -271,7 +287,7 @@ success flag and rgb values.", "");
 
     
     DocDeclStr(
-        bool , ConvertAlphaToMask(byte threshold = 128),
+        bool , ConvertAlphaToMask(byte threshold = wxIMAGE_ALPHA_THRESHOLD),
         "If the image has alpha channel, this method converts it to mask. All pixels
 with alpha value less than ``threshold`` are replaced with mask colour and the
 alpha channel is removed. Mask colour is chosen automatically using
