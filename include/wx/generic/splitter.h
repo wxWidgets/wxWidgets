@@ -83,12 +83,12 @@ public:
     // A sashPosition of 0 means choose a default sash position,
     // negative sashPosition specifies the size of right/lower pane as it's
     // absolute value rather than the size of left/upper pane.
-    bool SplitVertically(wxWindow *window1,
-                         wxWindow *window2,
-                         int sashPosition = 0);
-    bool SplitHorizontally(wxWindow *window1,
-                           wxWindow *window2,
-                           int sashPosition = 0);
+    virtual bool SplitVertically(wxWindow *window1,
+                                 wxWindow *window2,
+                                 int sashPosition = 0);
+    virtual bool SplitHorizontally(wxWindow *window1,
+                                   wxWindow *window2,
+                                   int sashPosition = 0);
 
     // Removes the specified (or second) window from the view
     // Doesn't actually delete the window.
