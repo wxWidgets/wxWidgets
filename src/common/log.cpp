@@ -845,6 +845,8 @@ bool            wxLog::ms_doLog        = TRUE;
 bool            wxLog::ms_bAutoCreate  = TRUE;
 bool            wxLog::ms_bVerbose     = FALSE;
 
+wxLogLevel      wxLog::ms_logLevel     = wxLOG_Max;  // log everything by default
+
 size_t          wxLog::ms_suspendCount = 0;
 
 #if wxUSE_GUI

@@ -46,6 +46,14 @@ typedef unsigned long wxLogLevel;
 
 #include "wx/dynarray.h"
 
+#ifndef wxUSE_LOG_DEBUG
+#  ifdef __WXDEBUG__
+#    define wxUSE_LOG_DEBUG 1
+#  else // !__WXDEBUG__
+#    define wxUSE_LOG_DEBUG 0
+#  endif
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -57,12 +65,13 @@ enum
     wxLOG_Error,      // a serious error, user must be informed about it
     wxLOG_Warning,    // user is normally informed about it but may be ignored
     wxLOG_Message,    // normal message (i.e. normal output of a non GUI app)
-    wxLOG_Info,       // informational message (a.k.a. 'Verbose')
     wxLOG_Status,     // informational: might go to the status line of GUI app
+    wxLOG_Info,       // informational message (a.k.a. 'Verbose')
     wxLOG_Debug,      // never shown to the user, disabled in release mode
     wxLOG_Trace,      // trace messages are also only enabled in debug mode
     wxLOG_Progress,   // used for progress indicator (not yet)
-    wxLOG_User = 100  // user defined levels start here
+    wxLOG_User = 100, // user defined levels start here
+    wxLOG_Max = UINT_MAX
 };
 
 // symbolic trace masks - wxLogTrace("foo", "some trace message...") will be
@@ -122,7 +131,7 @@ public:
     // derived classes
     static void OnLog(wxLogLevel level, const wxChar *szString, time_t t)
     {
-        if ( IsEnabled() ) {
+        if ( IsEnabled() && ms_logLevel >= level ) {
             wxLog *pLogger = GetActiveTarget();
             if ( pLogger )
                 pLogger->DoLog(level, szString, t);
@@ -167,6 +176,10 @@ public:
         // verbose mode is activated by standard command-line '-verbose'
         // option
     static void SetVerbose(bool bVerbose = TRUE) { ms_bVerbose = bVerbose; }
+
+        // Set log level.  Log messages with level > logLevel will not be logged.
+    static void SetLogLevel(wxLogLevel logLevel) { ms_logLevel = logLevel; }
+
         // should GetActiveTarget() try to create a new log object if the
         // current is NULL?
     static void DontCreateOnDemand();
@@ -187,6 +200,7 @@ public:
         // to NULL to disable time stamping completely.
     static void SetTimestamp(const wxChar *ts) { ms_timestamp = ts; }
 
+
     // accessors
         // gets the verbose status
     static bool GetVerbose() { return ms_bVerbose; }
@@ -195,9 +209,12 @@ public:
         // is this trace mask in the list?
     static bool IsAllowedTraceMask(const wxChar *mask)
         { return ms_aTraceMasks.Index(mask) != wxNOT_FOUND; }
+        // return the current loglevel limit
+    static wxLogLevel GetLogLevel() { return ms_logLevel; }
 
         // get the current timestamp format string (may be NULL)
     static const wxChar *GetTimestamp() { return ms_timestamp; }
+
 
     // helpers
         // put the time stamp into the string if ms_timestamp != NULL (don't
@@ -226,6 +243,8 @@ private:
     static bool        ms_doLog;        // FALSE => all logging disabled
     static bool        ms_bAutoCreate;  // create new log targets on demand?
     static bool        ms_bVerbose;     // FALSE => ignore LogInfo messages
+
+    static wxLogLevel  ms_logLevel;     // limit logging to levels <= ms_logLevel
 
     static size_t      ms_suspendCount; // if positive, logs are not flushed
 
@@ -541,7 +560,7 @@ DECLARE_LOG_FUNCTION(SysError);
 DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
 
 // debug functions do nothing in release mode
-#ifdef  __WXDEBUG__
+#if wxUSE_LOG_DEBUG
     DECLARE_LOG_FUNCTION(Debug);
 
     // first kind of LogTrace is unconditional: it doesn't check the level,
