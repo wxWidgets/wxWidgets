@@ -76,6 +76,7 @@ typedef int wxEventType;
 #define DECLARE_EVENT_TYPE(name, value) name = wxEVT_FIRST + value,
 #define DECLARE_LOCAL_EVENT_TYPE(name, value) name = wxEVT_FIRST + value,
 #define DEFINE_EVENT_TYPE(name)
+#define DEFINE_LOCAL_EVENT_TYPE(name)
 
 
 #else // !WXWIN_COMPATIBILITY_EVENT_TYPES
@@ -89,6 +90,7 @@ typedef int wxEventType;
     extern const wxEventType WXDLLEXPORT name;
 #define DECLARE_LOCAL_EVENT_TYPE(name, value) extern const wxEventType name;
 #define DEFINE_EVENT_TYPE(name) const wxEventType name = wxNewEventType();
+#define DEFINE_LOCAL_EVENT_TYPE(name) const wxEventType name = wxNewEventType();
 
 // generate a new unique event type
 extern WXDLLEXPORT wxEventType wxNewEventType();
