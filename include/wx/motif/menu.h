@@ -47,14 +47,6 @@ public:
     
     bool ProcessCommand(wxCommandEvent& event);
     
-    wxMenu(const wxString& title, const wxFunction func)
-        : wxMenuBase(title)
-    {
-        Init();
-        
-        Callback(func);
-    }
-    
     //// Motif-specific
     WXWidget GetButtonWidget() const { return m_buttonWidget; }
     void SetButtonWidget(WXWidget buttonWidget) { m_buttonWidget = buttonWidget; }

@@ -183,22 +183,6 @@ bool wxRadioBox::MSWCommand(WXUINT cmd, WXWORD id)
         return FALSE;
 }
 
-#if WXWIN_COMPATIBILITY
-wxRadioBox::wxRadioBox(wxWindow *parent, wxFunction func, const char *title,
-        int x, int y, int width, int height,
-        int n, char **choices,
-        int majorDim, long style, const char *name)
-{
-    wxString *choices2 = new wxString[n];
-    for ( int i = 0; i < n; i ++) choices2[i] = choices[i];
-    Create(parent, -1, title, wxPoint(x, y), wxSize(width, height), n, choices2, majorDim, style,
-            wxDefaultValidator, name);
-    Callback(func);
-    delete choices2;
-}
-
-#endif // WXWIN_COMPATIBILITY
-
 // Radio box item
 wxRadioBox::wxRadioBox()
 {

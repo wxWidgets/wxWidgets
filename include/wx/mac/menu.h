@@ -46,14 +46,6 @@ public:
     // MSW-specific
     bool ProcessCommand(wxCommandEvent& event);
 
-#if WXWIN_COMPATIBILITY
-    wxMenu(const wxString& title, const wxFunction func)
-        : wxMenuBase(title)
-    {
-        Callback(func);
-    }
-#endif // WXWIN_COMPATIBILITY
-
     // implementation only from now on
     // -------------------------------
 

@@ -63,17 +63,6 @@ public:
     virtual void        Break(void);
     virtual void        SetTitle(const wxString& rTitle);
 
-#if wxUSE_MENU_CALLBACK
-    wxMenu( const wxString&  rTitle
-           ,const wxFunction fnFunc
-          )
-          : wxMenuBase(rTitle)
-    {
-        Init();
-        Callback(fnFunc);
-    }
-#endif // wxUSE_MENU_CALLBACK
-
     //
     // Implementation only from now on
     // -------------------------------

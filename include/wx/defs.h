@@ -365,18 +365,6 @@ typedef int wxWindowID;
     #define WXDLLEXPORT_CTORFN
 #endif
 
-// For ostream, istream ofstream
-#if defined(__BORLANDC__) && defined( _RTLDLL )
-#  define WXDLLIMPORT __import
-#else
-#  define WXDLLIMPORT
-#endif
-
-#ifdef __cplusplus
-class WXDLLEXPORT wxObject;
-class WXDLLEXPORT wxEvent;
-#endif
-
 // symbolic constant used by all Find()-like functions returning positive
 // integer on success as failure indicator
 #define wxNOT_FOUND       (-1)
@@ -485,11 +473,6 @@ class WXDLLEXPORT wxEvent;
 #    define wxUSE_DEBUG_NEW_ALWAYS 0
 #    endif
 #  endif
-#endif
-
-// Callback function type definition
-#ifdef __cplusplus
-typedef void (*wxFunction) (wxObject&, wxEvent&);
 #endif
 
 // ----------------------------------------------------------------------------

@@ -80,17 +80,6 @@ public:
 
     // TODO: virtual void SetTitle(const wxString& title);
 
-    // compatibility only
-#if wxUSE_MENU_CALLBACK
-    wxMenu(const wxString& title, const wxFunction func)
-        : wxMenuBase(title)
-    {
-        Init();
-
-        Callback(func);
-    }
-#endif // WXWIN_COMPATIBILITY_2
-
     // implementation
     int FindMenuIdByMenuItem( GtkWidget *menuItem ) const;
 

@@ -285,10 +285,6 @@ void wxMenuBase::Init(long style)
     m_style = style;
     m_clientData = (void *)NULL;
     m_eventHandler = this;
-
-#if wxUSE_MENU_CALLBACK
-    m_callback = (wxFunction) NULL;
-#endif // wxUSE_MENU_CALLBACK
 }
 
 wxMenuBase::~wxMenuBase()
@@ -583,15 +579,6 @@ bool wxMenuBase::SendEvent(int id, int checked)
     event.SetInt(checked);
 
     bool processed = FALSE;
-
-#if wxUSE_MENU_CALLBACK
-    // Try a callback
-    if (m_callback)
-    {
-        (void)(*(m_callback))(*this, event);
-        processed = TRUE;
-    }
-#endif // wxUSE_MENU_CALLBACK
 
     // Try the menu's event handler
     if ( !processed )

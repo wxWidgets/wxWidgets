@@ -92,14 +92,6 @@ public:
    inline virtual void SetButtonFont(const wxFont& font);
    inline wxFont& GetLabelFont() const;
    inline wxFont& GetButtonFont() const;
-
-   // Adds callback
-   inline void Callback(const wxFunction function);
-
-   wxFunction GetCallback() { return m_callback; }
-
-protected:
-   wxFunction       m_callback;     // Callback associated with the window
 #endif // WXWIN_COMPATIBILITY
 
 protected:
@@ -119,7 +111,6 @@ private:
 
 
 #if WXWIN_COMPATIBILITY
-    inline void wxControl::Callback(const wxFunction f) { m_callback = f; };
     inline wxFont& wxControl::GetLabelFont() const { return GetFont(); }
     inline wxFont& wxControl::GetButtonFont() const { return GetFont(); }
     inline void wxControl::SetLabelFont(const wxFont& font) { SetFont(font); }

@@ -14,7 +14,7 @@ WXDIR = ..\..
 
 include ..\makesc.env
 
-DEBUG=0
+DEBUG=1
 
 LIBTARGET = $(LIBDIR)\wx$(SC_SUFFIX).lib
 

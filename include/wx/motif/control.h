@@ -54,12 +54,6 @@ public:
     virtual void SetLabel(const wxString& label);
     virtual wxString GetLabel() const ;
     
-#if WXWIN_COMPATIBILITY
-    void Callback(const wxFunction function) { m_callback = function; }; // Adds callback
-    
-    wxFunction GetCallback() { return m_callback; }
-#endif // WXWIN_COMPATIBILITY
-    
     bool InSetValue() const { return m_inSetValue; }
     
 protected:
@@ -73,15 +67,11 @@ protected:
                        const wxValidator& validator,
                        const wxString& name);
 
-#if WXWIN_COMPATIBILITY
-    wxFunction          m_callback;     // Callback associated with the window
-#endif // WXWIN_COMPATIBILITY
-    
-    bool                m_inSetValue;   // Motif: prevent callbacks being called while
-    // in SetValue
+    // Motif: prevent callbacks being called while in SetValue
+    bool m_inSetValue;
     
     DECLARE_EVENT_TABLE()
 };
 
-#endif
-// _WX_CONTROL_H_
+#endif // _WX_CONTROL_H_
+
