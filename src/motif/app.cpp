@@ -68,6 +68,18 @@ BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
     EVT_IDLE(wxApp::OnIdle)
 END_EVENT_TABLE()
 
+#ifdef __WXDEBUG__
+    typedef int (*XErrorHandlerFunc)(Display *, XErrorEvent *);
+
+    XErrorHandlerFunc gs_pfnXErrorHandler = 0;
+
+    static int wxXErrorHandler(Display *dpy, XErrorEvent *xevent)
+    {
+        // just forward to the default handler for now
+        return gs_pfnXErrorHandler(dpy, xevent);
+    }
+#endif // __WXDEBUG__
+
 long wxApp::sm_lastMessageTime = 0;
 
 bool wxApp::Initialize()
@@ -574,6 +586,11 @@ bool wxApp::OnInitGui()
         exit(-1);
     }
     m_initialDisplay = (WXDisplay*) dpy;
+
+#ifdef __WXDEBUG__
+    // install the X error handler
+    gs_pfnXErrorHandler = XSetErrorHandler(wxXErrorHandler);
+#endif // __WXDEBUG__
 
     wxTheApp->m_topLevelWidget = (WXWidget) XtAppCreateShell((String)NULL, (const char*) wxTheApp->GetClassName(),
         applicationShellWidgetClass,dpy,

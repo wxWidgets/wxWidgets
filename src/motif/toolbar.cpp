@@ -282,7 +282,12 @@ bool wxToolBar::Realize()
                     button = XtVaCreateWidget("toggleButton",
                             xmToggleButtonWidgetClass, (Widget) m_mainWidget,
                             XmNx, currentX, XmNy, currentY,
-                            //                   XmNpushButtonEnabled, True,
+                            XmNindicatorOn, False,
+                            XmNshadowThickness, 2,
+                            XmNborderWidth, 0,
+                            XmNspacing, 0,
+                            XmNmarginWidth, 0,
+                            XmNmarginHeight, 0,
                             XmNmultiClick, XmMULTICLICK_KEEP,
                             XmNlabelType, XmPIXMAP,
                             NULL);
@@ -325,9 +330,9 @@ bool wxToolBar::Realize()
                     wxColour col;
                     col.SetPixel(backgroundPixel);
 
-                    wxBitmap newBitmap = wxCreateMaskedBitmap(bmp, col);
+                    bmp = wxCreateMaskedBitmap(bmp, col);
 
-                    tool->SetBitmap1(newBitmap);
+                    tool->SetBitmap1(bmp);
                 }
 
                 // Create a selected/toggled bitmap. If there isn't a 2nd
@@ -388,12 +393,6 @@ bool wxToolBar::Realize()
                     tool->SetPixmap(pixmap2);
 
                     XtVaSetValues (button,
-                            XmNindicatorOn, False,
-                            XmNshadowThickness, 2,
-                            //                    XmNborderWidth, 0,
-                            //                    XmNspacing, 0,
-                            XmNmarginWidth, 0,
-                            XmNmarginHeight, 0,
                             XmNfillOnSelect, True,
                             XmNlabelPixmap, pixmap,
                             XmNselectPixmap, pixmap2,

@@ -217,13 +217,6 @@ void MyFrame::RecreateToolbar()
     wxBitmap toolBarBitmaps[8];
 
     toolBarBitmaps[0] = wxBITMAP(new);
-#if 0
-    toolBar->AddTool(wxID_NEW, toolBarBitmaps[0], wxNullBitmap, FALSE, -1, -1,
-                     (wxObject *) NULL, "New file");
-    toolBar->Realize();
-    return;
-#endif
-
     toolBarBitmaps[1] = wxBITMAP(open);
     if ( !m_smallToolbar )
     {

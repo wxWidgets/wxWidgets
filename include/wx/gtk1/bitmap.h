@@ -64,8 +64,8 @@ public:
     wxBitmap();
     wxBitmap( int width, int height, int depth = -1 );
     wxBitmap( const char bits[], int width, int height, int depth = 1 );
-    wxBitmap( const char **bits );
-    wxBitmap( char **bits );
+    wxBitmap( const char **bits ) { (void)CreateFromXpm(bits); }
+    wxBitmap( char **bits ) { (void)CreateFromXpm((const char **)bits); }
     wxBitmap( const wxBitmap& bmp );
     wxBitmap( const wxString &filename, int type = wxBITMAP_TYPE_XPM );
     ~wxBitmap();
@@ -99,6 +99,9 @@ public:
     GdkPixmap *GetPixmap() const;
     GdkBitmap *GetBitmap() const;
     
+protected:
+    bool CreateFromXpm(const char **bits);
+
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmap)
 };

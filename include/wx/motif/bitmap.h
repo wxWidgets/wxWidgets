@@ -140,8 +140,12 @@ public:
   // Initialize with raw XBM data
   wxBitmap(const char bits[], int width, int height, int depth = 1);
 
-  // Initialize with XPM data
-  wxBitmap(char **data, wxControl* control = NULL);
+  // from XPM
+  wxBitmap(const char **data) { (void)CreateFromXpm(data); }
+  wxBitmap(char **data) { (void)CreateFromXpm((const char **)data); }
+
+  // Initialize with XPM data -- deprecated
+  wxBitmap(char **data, wxControl* control);
 
   // Load a file or resource
   wxBitmap(const wxString& name, long type = wxBITMAP_TYPE_XPM);
@@ -201,6 +205,9 @@ public:
 
 protected:
   static wxList sm_handlers;
+
+protected:
+    bool CreateFromXpm(const char **bits);
 };
 
 // Creates a bitmap with transparent areas drawn in
