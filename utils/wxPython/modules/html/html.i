@@ -360,7 +360,6 @@ public:
     void SetWidthFloat(int w, int units);
     %name(SetWidthFloatFromTag)void SetWidthFloat(const wxHtmlTag& tag);
     void SetMinHeight(int h, int align = wxHTML_ALIGN_TOP);
-    int GetMaxLineWidth();
     void SetBackgroundColour(const wxColour& clr);
     void SetBorder(const wxColour& clr1, const wxColour& clr2);
     wxHtmlCell* GetFirstCell();

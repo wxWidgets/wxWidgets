@@ -425,9 +425,6 @@ class wxHtmlContainerCellPtr(wxHtmlCellPtr):
     def SetMinHeight(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlContainerCell_SetMinHeight,(self,) + _args, _kwargs)
         return val
-    def GetMaxLineWidth(self, *_args, **_kwargs):
-        val = apply(htmlc.wxHtmlContainerCell_GetMaxLineWidth,(self,) + _args, _kwargs)
-        return val
     def SetBackgroundColour(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlContainerCell_SetBackgroundColour,(self,) + _args, _kwargs)
         return val
