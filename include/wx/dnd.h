@@ -12,6 +12,10 @@
 #ifndef _WX_DND_H_BASE_
 #define _WX_DND_H_BASE_
 
+#ifdef __GNUG__
+    #pragma interface "dndbase.h"
+#endif
+
 #include "wx/defs.h"
 
 #if wxUSE_DRAG_AND_DROP

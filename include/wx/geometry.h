@@ -16,6 +16,11 @@
 #pragma interface "geometry.h"
 #endif
 
+#include "wx/defs.h"
+#include "wx/utils.h"
+#include "wx/gdicmn.h"
+#include <math.h>
+
 #ifdef __WXMSW__
 	#define wxMulDivInt32( a , b , c ) ::MulDiv( a , b , c )
 #elif defined( __WXMAC__ )
@@ -411,8 +416,8 @@ wxPoint2DInt operator/(const wxPoint2DInt& pt , wxInt32 n) ;
 
 inline wxPoint2DInt::wxPoint2DInt() 
 { 
-	m_x = 0.0 ; 
-	m_y = 0.0 ; 
+	m_x = 0 ; 
+	m_y = 0 ; 
 }
 
 inline wxPoint2DInt::wxPoint2DInt( wxInt32 x , wxInt32 y ) 
@@ -453,8 +458,8 @@ inline wxDouble wxPoint2DInt::GetVectorLength()
 inline void wxPoint2DInt::SetVectorLength( wxDouble length ) 
 {
 	wxDouble before = GetVectorLength() ;
-	m_x *= length / before ;
-	m_y *= length / before ;
+	m_x = (wxInt32)(m_x * length / before) ;
+	m_y = (wxInt32)(m_y * length / before) ;
 }
 
 inline void wxPoint2DInt::SetPolarCoordinates( wxInt32 angle , wxInt32 length ) ;

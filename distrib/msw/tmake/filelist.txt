@@ -115,6 +115,7 @@ dbtable.cpp	C
 dcbase.cpp	C
 dlgcmn.cpp	C
 dobjcmn.cpp	C
+dndcmn.cpp	C
 docmdi.cpp	C
 docview.cpp	C
 dynarray.cpp	C	B
@@ -134,6 +135,7 @@ fs_inet.cpp	C
 fs_zip.cpp	C
 ftp.cpp	C	S
 gdicmn.cpp	C
+geometry.cpp	C
 gifdecod.cpp	C
 hash.cpp	C	B
 helpbase.cpp	C

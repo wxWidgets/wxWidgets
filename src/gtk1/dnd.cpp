@@ -8,7 +8,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "dnd.h"
+    #pragma implementation "dnd.h"
 #endif
 
 #include "wx/dnd.h"

@@ -274,6 +274,7 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
             }
             //else: the child manages its focus itself
 
+            event.Skip( FALSE );
             return;
         }
 

@@ -151,7 +151,7 @@ START-UP! Just always use egcs and be happy.
 
 Please send comments and question about the OS/2 installation
 to Andrea Venturoli <a.ventu@flashnet.it> and patches to
-make to me (Robert Roebling) or the wxWindows mailing list.
+the wxWindows mailing list.
 
 You'll need OS/2 Warp (4.00FP#6), X-Free86/2 (3.3.3 or newer), 
 GTK+ (1.2.1 or newer), emx (0.9d fix 1), flex (2.5.4), yacc (1.8), 
@@ -238,7 +238,7 @@ you download wxGTK, it will default to --with-gtk etc. But
 if you use all of our CVS repository you have to choose a 
 toolkit. You must do this by running configure with either of:
 
-        --without-gtk            Don't use the GIMP ToolKit (GTK)
+    --without-gtk            Don't use the GIMP ToolKit (GTK)
 	
 	--with-motif             Use either Motif or Lesstif
 	                         Configure will look for both. 
@@ -251,14 +251,14 @@ The following options handle the kind of library you want to build.
 
 	--enable-static         Create static libraries.
 
-	--disable-optimise	Do not optimise the code. Can
+	--disable-optimise	    Do not optimise the code. Can
 	                        sometimes be useful for debugging
 				and is required on some architectures
 				such as Sun with gcc 2.8.X which
 				would otherwise produce segvs.
 
 	--enable-profile        Add profiling info to the object 
-				files. Currently broken, I think.
+				            files. Currently broken, I think.
 				
 	--enable-no_rtti        Enable compilation without creation of
 	                        C++ RTTI information in object files. 
@@ -283,11 +283,11 @@ The following options handle the kind of library you want to build.
 	--enable-dmalloc        Use the dmalloc memory debugger.
 	                        Read more at www.letters.com/dmalloc/
 				
-	--enable-debug_info	Add debug info to object files and
+	--enable-debug_info	    Add debug info to object files and
 	                        executables for use with debuggers
 				such as gdb (or its many frontends).
 
-	--enable-debug_flag	Define __DEBUG__ and __WXDEBUG__ when
+	--enable-debug_flag	    Define __DEBUG__ and __WXDEBUG__ when
 	                        compiling. This enable wxWindows' very
 				useful internal debugging tricks (such
 				as automatically reporting illegal calls)
@@ -307,19 +307,19 @@ drastically reduced by removing features from wxWindows that
 are not used in your program. The most relevant such features
 are
 
-	--without-libpng	Disables PNG image format code.
+	--without-libpng	    Disables PNG image format code.
 	
-	--without-libjpeg	Disables JPEG image format code.
+	--without-libjpeg	    Disables JPEG image format code.
 	
-	--disable-pnm		Disables PNM image format code.
+	--disable-pnm		    Disables PNM image format code.
 	
-	--disable-gif		Disables GIF image format code.
+	--disable-gif		    Disables GIF image format code.
 	
-	--disable-pcx		Disables PCX image format code.
+	--disable-pcx		    Disables PCX image format code.
 	
 	--without-odbc          Disables ODBC code.
 	
-        --disable-resources     Disables the use of *.wxr type
+    --disable-resources     Disables the use of *.wxr type
 	                        resources.
 		
 	--disable-threads       Disables threads. Will also
@@ -381,7 +381,7 @@ You can remove any traces of wxWindows by typing
 If you want to save disk space by removing unnecessary
 object-files:
 
-	 make clean
+	    make clean
 
 in the various directories will do the work for you.
 
@@ -420,6 +420,5 @@ and configure before you can type make.
 
 In the hope that it will be useful,
 
-        Robert Roebling <roebling@sun2.ruf.uni-freiburg.de>
-	
-	
+        Robert Roebling
+

@@ -12,6 +12,10 @@
 #ifndef _WX_LISTCTRL_H_BASE_
 #define _WX_LISTCTRL_H_BASE_
 
+#ifdef __GNUG__
+    #pragma interface "listctrlbase.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // types
 // ----------------------------------------------------------------------------

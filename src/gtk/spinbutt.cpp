@@ -9,7 +9,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "spinbutt.h"
+    #pragma implementation "spinbutt.h"
+    #pragma implementation "spinbutbase.h"
 #endif
 
 #include "wx/spinbutt.h"

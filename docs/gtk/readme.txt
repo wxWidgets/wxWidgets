@@ -1,22 +1,19 @@
 
    Welcome to wxWindows/Gtk 2.1.13
 
-you have downloaded version 2.1 of the GTK+ 1.2 port of 
+you have downloaded a beta version of the GTK+ 1.2 port of 
 the wxWindows GUI library. Although this is not yet the
 final stable release wxGTK 2.2, the current version has
 been tested carefully on many systems and has been found
 to work better than any other previous version.
 
-Nonetheless, beware that major changes can happen before 
+Nonetheless, beware that minor changes can happen before 
 a final release.
 
 wxWindows no longer supports GTK 1.0 (as did some early
 snapshots) so that you will need GTK 1.2 when using it.
-
-Beginning with snapshot 9, wxWindows uses a completely
-new make file system on Unix which no longer uses the
-various GNU tools and I hope that I'll never again have
-to write any more makefiles.
+GTK 1.2.6 is recommended although many programs will work
+with GTK 1.2.3 onwards.
 
 More information is available from my homepage at:
 
@@ -55,6 +52,8 @@ problems.
 Please send problems concerning installation, feature requests, 
 bug reports or comments to the wxWindows users list. Information 
 on how to subscribe is available from my homepage.
+
+Do NOT send any comments directly to me.
 
 wxWindows/Gtk doesn't come with any guarantee whatsoever. It 
 might crash your harddisk or destroy your monitor. It doesn't 
