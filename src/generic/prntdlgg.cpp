@@ -235,7 +235,7 @@ bool wxGenericPrintDialog::TransferDataToWindow(void)
          
          sprintf(buf, "%d", printData.GetFromPage());
          fromText->SetValue(buf);
-         sprintf(buf, "%d", printData.GetFromPage());
+         sprintf(buf, "%d", printData.GetToPage());
          toText->SetValue(buf);
          
          if (printData.GetAllPages())
