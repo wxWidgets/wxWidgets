@@ -3,8 +3,8 @@ from wxPython.wx import *
 
 #---------------------------------------------------------------------------
 class MyMiniFrame(wxMiniFrame):
-    def __init__(self, parent, ID, title, pos, size, style):
-        wxMiniFrame.__init__(self, parent, ID, title, pos, size, style)
+    def __init__(self, parent, title, style):
+        wxMiniFrame.__init__(self, parent, -1, title, style=style)
         panel = wxPanel(self, -1)
 
         button = wxButton(panel, 1003, "Close Me")
@@ -21,9 +21,10 @@ class MyMiniFrame(wxMiniFrame):
 #---------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    win = MyMiniFrame(frame, -1, "This is a wxMiniFrame",
-                      (250, 250), (200, 200),
+    win = MyMiniFrame(frame, "This is a wxMiniFrame",
                       wxDEFAULT_FRAME_STYLE | wxTINY_CAPTION_HORIZ)
+    win.SetSize((200, 200))
+    win.CenterOnParent(wxBOTH)
     frame.otherWin = win
     win.Show(true)
 

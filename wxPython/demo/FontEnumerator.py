@@ -35,7 +35,6 @@ class TestPanel(wxPanel):
 
 
 
-
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
