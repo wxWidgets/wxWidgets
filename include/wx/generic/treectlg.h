@@ -148,6 +148,9 @@ public:
         // set the items font (should be of the same height for all items)
     void SetItemFont(const wxTreeItemId& item, const wxFont& font);
 
+        // set the window font
+    virtual bool SetFont( const wxFont &font );
+
     // item status inquiries
     // ---------------------
 

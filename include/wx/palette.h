@@ -6,7 +6,7 @@
 #elif defined(__WXMOTIF__)
 #include "wx/motif/palette.h"
 #elif defined(__WXGTK__)
-#include "wx/gtk/palette.h"
+#include "wx/generic/paletteg.h"
 #elif defined(__WXQT__)
 #include "wx/qt/palette.h"
 #elif defined(__WXMAC__)

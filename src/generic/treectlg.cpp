@@ -818,6 +818,21 @@ void wxGenericTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font
     RefreshLine(pItem);
 }
 
+bool wxGenericTreeCtrl::SetFont( const wxFont &font )
+{
+    wxScrolledWindow::SetFont(font);
+
+    m_normalFont = font ;
+    m_boldFont = wxFont( m_normalFont.GetPointSize(),
+                            m_normalFont.GetFamily(),
+                            m_normalFont.GetStyle(),
+                            wxBOLD,
+                            m_normalFont.GetUnderlined());
+
+    return TRUE;
+}
+
+
 // -----------------------------------------------------------------------------
 // item status inquiries
 // -----------------------------------------------------------------------------
