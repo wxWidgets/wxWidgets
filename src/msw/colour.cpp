@@ -55,7 +55,7 @@ template<> void wxStringWriteValue(wxString &s , const wxColour &data )
 
 wxTO_STRING_IMP( wxColour )
 wxFROM_STRING_IMP( wxColour )
-  
+
 IMPLEMENT_DYNAMIC_CLASS_WITH_COPY_AND_STREAMERS_XTI( wxColour , wxObject , "wx/colour.h" ,  &wxTO_STRING( wxColour ) , &wxFROM_STRING( wxColour ))
 
 wxBEGIN_PROPERTIES_TABLE(wxColour)

@@ -102,7 +102,7 @@ public:
     {
         gs_globalCursor = new wxCursor;
 
-        return TRUE;
+        return true;
     }
 
     virtual void OnExit()

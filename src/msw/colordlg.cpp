@@ -117,7 +117,7 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
     if (data)
         m_colourData = *data;
 
-    return TRUE;
+    return true;
 }
 
 int wxColourDialog::ShowModal()
@@ -201,10 +201,10 @@ void wxColourDialog::DoSetSize(int x, int y,
                                int WXUNUSED(width), int WXUNUSED(height),
                                int WXUNUSED(sizeFlags))
 {
-    if ( x != -1 )
+    if ( x != wxDefaultCoord )
         m_pos.x = x;
 
-    if ( y != -1 )
+    if ( y != wxDefaultCoord )
         m_pos.y = y;
 
     // ignore the size params - we can't change the size of a standard dialog

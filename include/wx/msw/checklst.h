@@ -66,7 +66,7 @@ public:
 
   // items may be checked
   virtual bool IsChecked(size_t uiIndex) const;
-  virtual void Check(size_t uiIndex, bool bCheck = TRUE);
+  virtual void Check(size_t uiIndex, bool bCheck = true);
 
   // return the index of the item at this position or wxNOT_FOUND
   int HitTest(const wxPoint& pt) const { return DoHitTestItem(pt.x, pt.y); }

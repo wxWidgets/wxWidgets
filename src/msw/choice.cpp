@@ -138,11 +138,11 @@ bool wxChoice::CreateAndInit(wxWindow *parent,
 {
     // initialize wxControl
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
-        return FALSE;
+        return false;
 
     // now create the real HWND
     if ( !MSWCreateControl(wxT("COMBOBOX"), _T(""), pos, size) )
-        return FALSE;
+        return false;
 
 
     // choice/combobox normally has "white" (depends on colour scheme, of
@@ -158,7 +158,7 @@ bool wxChoice::CreateAndInit(wxWindow *parent,
     // and now we may finally size the control properly (if needed)
     SetBestSize(size);
 
-    return TRUE;
+    return true;
 }
 
 bool wxChoice::Create(wxWindow *parent,
@@ -327,7 +327,7 @@ int wxChoice::FindString(const wxString& s) const
     for ( int i = 0; i < count; i++ )
     {
         // as CB_FINDSTRINGEXACT is case insensitive, be case insensitive too
-        if ( GetString(i).IsSameAs(s, FALSE) )
+        if ( GetString(i).IsSameAs(s, false) )
             return i;
     }
 
@@ -435,7 +435,7 @@ wxClientData* wxChoice::DoGetItemClientObject( int n ) const
 void wxChoice::UpdateVisibleHeight()
 {
     // be careful to not change the width here
-    DoSetSize(-1, -1, -1, GetSize().y, wxSIZE_USE_EXISTING);
+    DoSetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, GetSize().y, wxSIZE_USE_EXISTING);
 }
 
 void wxChoice::DoMoveWindow(int x, int y, int width, int height)
@@ -462,7 +462,7 @@ void wxChoice::DoGetSize(int *w, int *h) const
     // total height of the control including the drop down list -- but only
     // sometimes, and normally it isn't... I have no idea about what to do with
     // this
-    wxControl::DoGetSize(w, h);    
+    wxControl::DoGetSize(w, h);
 }
 
 void wxChoice::DoSetSize(int x, int y,
@@ -474,7 +474,7 @@ void wxChoice::DoSetSize(int x, int y,
     // the height which we must pass to Windows should be the total height of
     // the control including the drop down list while the height given to us
     // is, of course, just the height of the permanently visible part of it
-    if ( height != -1 )
+    if ( height != wxDefaultCoord )
     {
         // don't make the drop down list too tall, arbitrarily limit it to 40
         // items max and also don't leave it empty
@@ -499,7 +499,7 @@ void wxChoice::DoSetSize(int x, int y,
     // if the height specified for the visible part of the control is
     // different from the current one, we need to change it separately
     // as it is not affected by normal WM_SETSIZE
-    if ( height != -1 )
+    if ( height != wxDefaultCoord )
     {
         const int delta = heightOrig - GetSize().y;
         if ( delta )
@@ -561,7 +561,7 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     if ( param != CBN_SELCHANGE)
     {
         // "selection changed" is the only event we're after
-        return FALSE;
+        return false;
     }
 
     int n = GetSelection();
@@ -578,7 +578,7 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         ProcessCommand(event);
     }
 
-    return TRUE;
+    return true;
 }
 
 WXHBRUSH wxChoice::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),

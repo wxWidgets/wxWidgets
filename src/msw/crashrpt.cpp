@@ -1188,7 +1188,7 @@ bool wxCrashReportImpl::Generate(
             SymSetOptions(SYMOPT_DEFERRED_LOADS | SYMOPT_UNDNAME);
 
             // Initialize DbgHelp
-            if ( SymInitialize(GetCurrentProcess(), NULL, TRUE /* invade */) )
+            if ( ::SymInitialize(GetCurrentProcess(), NULL, TRUE /* invade */) )
             {
                 OutputStack(pCtx, flags);
 

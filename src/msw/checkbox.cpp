@@ -67,7 +67,7 @@ wxBEGIN_FLAGS( wxCheckBoxStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -102,7 +102,7 @@ wxEND_PROPERTIES_TABLE()
 wxBEGIN_HANDLERS_TABLE(wxCheckBox)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_6( wxCheckBox , wxWindow* , Parent , wxWindowID , Id , wxString , Label , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+wxCONSTRUCTOR_6( wxCheckBox , wxWindow* , Parent , wxWindowID , Id , wxString , Label , wxPoint , Position , wxSize , Size , long , WindowStyle )
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
 #endif
@@ -129,7 +129,7 @@ bool wxCheckBox::MSWCommand(WXUINT WXUNUSED(param), WXWORD WXUNUSED(id))
     event.SetEventObject(this);
     ProcessCommand(event);
 
-    return TRUE;
+    return true;
 }
 
 bool wxCheckBox::Create(wxWindow *parent,
@@ -141,7 +141,7 @@ bool wxCheckBox::Create(wxWindow *parent,
                         const wxString& name)
 {
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
-        return FALSE;
+        return false;
 
     long msStyle = WS_TABSTOP;
 

@@ -87,7 +87,7 @@ bool wxCaret::MSWCreateCaret()
         CALL_CARET_API(CreateCaret, (GetWinHwnd(GetWindow()), 0,
                                      m_width, m_height));
 
-        m_hasCaret = TRUE;
+        m_hasCaret = true;
     }
 
     return m_hasCaret;
@@ -113,7 +113,7 @@ void wxCaret::OnKillFocus()
 {
     if ( m_hasCaret )
     {
-        m_hasCaret = FALSE;
+        m_hasCaret = false;
 
         CALL_CARET_API(DestroyCaret, ());
     }
@@ -182,7 +182,7 @@ void wxCaret::DoSize()
 {
     if ( m_hasCaret )
     {
-        m_hasCaret = FALSE;
+        m_hasCaret = false;
         CALL_CARET_API(DestroyCaret, ());
         MSWCreateCaret();
         OnSetFocus();

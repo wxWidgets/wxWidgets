@@ -45,7 +45,7 @@ protected:
     {
         wxCaretBase::Init();
 
-        m_hasCaret = FALSE;
+        m_hasCaret = false;
     }
 
     // override base class virtuals

@@ -87,11 +87,11 @@
 // old-style clipboard functions using Windows API
 // ---------------------------------------------------------------------------
 
-static bool gs_wxClipboardIsOpen = FALSE;
+static bool gs_wxClipboardIsOpen = false;
 
 bool wxOpenClipboard()
 {
-    wxCHECK_MSG( !gs_wxClipboardIsOpen, TRUE, wxT("clipboard already opened.") );
+    wxCHECK_MSG( !gs_wxClipboardIsOpen, true, wxT("clipboard already opened.") );
 
     wxWindow *win = wxTheApp->GetTopWindow();
     if ( win )
@@ -107,24 +107,24 @@ bool wxOpenClipboard()
     {
         wxLogDebug(wxT("Can not open clipboard without a main window."));
 
-        return FALSE;
+        return false;
     }
 }
 
 bool wxCloseClipboard()
 {
-    wxCHECK_MSG( gs_wxClipboardIsOpen, FALSE, wxT("clipboard is not opened") );
+    wxCHECK_MSG( gs_wxClipboardIsOpen, false, wxT("clipboard is not opened") );
 
-    gs_wxClipboardIsOpen = FALSE;
+    gs_wxClipboardIsOpen = false;
 
     if ( ::CloseClipboard() == 0 )
     {
         wxLogSysError(_("Failed to close the clipboard."));
 
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxEmptyClipboard()
@@ -133,10 +133,10 @@ bool wxEmptyClipboard()
     {
         wxLogSysError(_("Failed to empty the clipboard."));
 
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxIsClipboardOpened()
@@ -151,7 +151,7 @@ bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
     if ( ::IsClipboardFormatAvailable(cf) )
     {
         // ok from the first try
-        return TRUE;
+        return true;
     }
 
     // for several standard formats, we can convert from some other ones too
@@ -167,7 +167,7 @@ bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
 #endif // wxUSE_ENH_METAFILE
 
         default:
-            return FALSE;
+            return false;
     }
 }
 
@@ -196,7 +196,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                     SelectObject(hdcSrc, old);
                     DeleteDC(hdcMem);
                     DeleteDC(hdcSrc);
-                    return FALSE;
+                    return false;
                 }
 
                 HBITMAP old1 = (HBITMAP) SelectObject(hdcMem, hBitmap);
@@ -274,7 +274,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
         default:
             {
                 wxLogError(_("Unsupported clipboard format."));
-                return FALSE;
+                return false;
             }
 
         case wxDF_OEMTEXT:
@@ -306,15 +306,15 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
         case wxDF_HTML:
             {
                 char* html = (char *)data;
-                
+
                 // Create temporary buffer for HTML header...
                 char *buf = new char [400 + strlen(html)];
-                if(!buf) return FALSE;
-                
+                if(!buf) return false;
+
                 // Get clipboard id for HTML format...
                 static int cfid = 0;
                 if(!cfid) cfid = RegisterClipboardFormat(wxT("HTML Format"));
-                
+
                 // Create a template string for the HTML header...
                 strcpy(buf,
                     "Version:0.9\r\n"
@@ -324,7 +324,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                     "EndFragment:00000000\r\n"
                     "<html><body>\r\n"
                     "<!--StartFragment -->\r\n");
-                
+
                 // Append the HTML...
                 strcat(buf, html);
                 strcat(buf, "\r\n");
@@ -333,7 +333,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                     "<!--EndFragment-->\r\n"
                     "</body>\r\n"
                     "</html>");
-                
+
                 // Now go back, calculate all the lengths, and write out the
                 // necessary header information. Note, wsprintf() truncates the
                 // string when you overwrite it so you follow up with code to replace
@@ -341,35 +341,35 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                 char *ptr = strstr(buf, "StartHTML");
                 wsprintf(ptr+10, "%08u", strstr(buf, "<html>") - buf);
                 *(ptr+10+8) = '\r';
-                
+
                 ptr = strstr(buf, "EndHTML");
                 wsprintf(ptr+8, "%08u", strlen(buf));
                 *(ptr+8+8) = '\r';
-                
+
                 ptr = strstr(buf, "StartFragment");
                 wsprintf(ptr+14, "%08u", strstr(buf, "<!--StartFrag") - buf);
                 *(ptr+14+8) = '\r';
-                
+
                 ptr = strstr(buf, "EndFragment");
                 wsprintf(ptr+12, "%08u", strstr(buf, "<!--EndFrag") - buf);
                 *(ptr+12+8) = '\r';
-                
+
                 // Now you have everything in place ready to put on the
                 // clipboard.
-                
+
                 // Allocate global memory for transfer...
                 HGLOBAL hText = GlobalAlloc(GMEM_MOVEABLE |GMEM_DDESHARE, strlen(buf)+4);
-                
+
                 // Put your string in the global memory...
                 ptr = (char *)GlobalLock(hText);
                 strcpy(ptr, buf);
                 GlobalUnlock(hText);
-                
+
                 handle = ::SetClipboardData(cfid, hText);
-                
+
                 // Free memory...
                 GlobalFree(hText);
-                
+
                 // Clean up...
                 delete [] buf;
                 break;
@@ -381,10 +381,10 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
     {
         wxLogSysError(_("Failed to set clipboard data."));
 
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
@@ -534,8 +534,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxClipboard, wxObject)
 
 wxClipboard::wxClipboard()
 {
-    m_clearOnExit = FALSE;
-    m_isOpened = FALSE;
+    m_clearOnExit = false;
+    m_isOpened = false;
 }
 
 wxClipboard::~wxClipboard()
@@ -563,25 +563,25 @@ bool wxClipboard::Flush()
     {
         wxLogLastError(wxT("OleFlushClipboard"));
 
-        return FALSE;
+        return false;
     }
     else
     {
-        m_clearOnExit = FALSE;
+        m_clearOnExit = false;
 
-        return TRUE;
+        return true;
     }
 #else // !wxUSE_OLE_CLIPBOARD
-    return FALSE;
+    return false;
 #endif // wxUSE_OLE_CLIPBOARD/!wxUSE_OLE_CLIPBOARD
 }
 
 bool wxClipboard::Open()
 {
     // OLE opens clipboard for us
-    m_isOpened = TRUE;
+    m_isOpened = true;
 #if wxUSE_OLE_CLIPBOARD
-    return TRUE;
+    return true;
 #else
     return wxOpenClipboard();
 #endif
@@ -605,12 +605,12 @@ bool wxClipboard::SetData( wxDataObject *data )
     if ( data )
         return AddData(data);
     else
-        return TRUE;
+        return true;
 }
 
 bool wxClipboard::AddData( wxDataObject *data )
 {
-    wxCHECK_MSG( data, FALSE, wxT("data is invalid") );
+    wxCHECK_MSG( data, false, wxT("data is invalid") );
 
 #if wxUSE_OLE_CLIPBOARD
     HRESULT hr = OleSetClipboard(data->GetInterface());
@@ -620,7 +620,7 @@ bool wxClipboard::AddData( wxDataObject *data )
 
         // don't free anything in this case
 
-        return FALSE;
+        return false;
     }
 
     // we have a problem here because we should delete wxDataObject, but we
@@ -634,11 +634,11 @@ bool wxClipboard::AddData( wxDataObject *data )
     // using OLE clipboard when the app terminates - by default, we call
     // OleSetClipboard(NULL) which won't waste RAM, but the app can call
     // wxClipboard::Flush() to chaneg this
-    m_clearOnExit = TRUE;
+    m_clearOnExit = true;
 
-    return TRUE;
+    return true;
 #elif wxUSE_DATAOBJ
-    wxCHECK_MSG( wxIsClipboardOpened(), FALSE, wxT("clipboard not open") );
+    wxCHECK_MSG( wxIsClipboardOpened(), false, wxT("clipboard not open") );
 
     wxDataFormat format = data->GetPreferredFormat();
 
@@ -666,7 +666,7 @@ bool wxClipboard::AddData( wxDataObject *data )
 #if 1
             // TODO
             wxLogError(wxT("Not implemented because wxMetafileDataObject does not contain width and height values."));
-            return FALSE;
+            return false;
 #else
             wxMetafileDataObject* metaFileDataObject =
                 (wxMetafileDataObject*) data;
@@ -684,17 +684,17 @@ bool wxClipboard::AddData( wxDataObject *data )
 //            return wxSetClipboardData(data);
             // TODO
             wxLogError(wxT("Not implemented."));
-            return FALSE;
+            return false;
         }
     }
 #else // !wxUSE_DATAOBJ
-    return FALSE;
+    return false;
 #endif // wxUSE_DATAOBJ/!wxUSE_DATAOBJ
 }
 
 void wxClipboard::Close()
 {
-    m_isOpened = FALSE;
+    m_isOpened = false;
     // OLE closes clipboard for us
 #if !wxUSE_OLE_CLIPBOARD
     wxCloseClipboard();
@@ -715,7 +715,7 @@ bool wxClipboard::GetData( wxDataObject& data )
     {
         wxLogSysError(hr, _("Failed to get data from the clipboard"));
 
-        return FALSE;
+        return false;
     }
 
     // build the list of supported formats
@@ -738,7 +738,7 @@ bool wxClipboard::GetData( wxDataObject& data )
     // get the data for the given formats
     FORMATETC formatEtc;
     CLIPFORMAT cf;
-    bool result = FALSE;
+    bool result = false;
 
     // enumerate all explicit formats on the clipboard.
     // note that this does not include implicit / synthetic (automatically
@@ -784,12 +784,12 @@ bool wxClipboard::GetData( wxDataObject& data )
     {
         // convert to NativeFormat Id
         cf = formats[n].GetFormatId();
-        
+
         // if the format is not available, try the next one
         // this test includes implicit / sythetic formats
         if ( !::IsClipboardFormatAvailable(cf) )
             continue;
-            
+
         formatEtc.cfFormat = cf;
         formatEtc.ptd      = NULL;
         formatEtc.dwAspect = DVASPECT_CONTENT;
@@ -831,7 +831,7 @@ bool wxClipboard::GetData( wxDataObject& data )
         if ( SUCCEEDED(hr) )
         {
             // pass the data to the data object
-            hr = data.GetInterface()->SetData(&formatEtc, &medium, TRUE);
+            hr = data.GetInterface()->SetData(&formatEtc, &medium, true);
             if ( FAILED(hr) )
             {
                 wxLogDebug(wxT("Failed to set data in wxIDataObject"));
@@ -842,7 +842,7 @@ bool wxClipboard::GetData( wxDataObject& data )
             }
             else
             {
-                result = TRUE;
+                result = true;
             }
         }
         //else: unsupported tymed?
@@ -859,7 +859,7 @@ bool wxClipboard::GetData( wxDataObject& data )
 
     return result;
 #elif wxUSE_DATAOBJ
-    wxCHECK_MSG( wxIsClipboardOpened(), FALSE, wxT("clipboard not open") );
+    wxCHECK_MSG( wxIsClipboardOpened(), false, wxT("clipboard not open") );
 
     wxDataFormat format = data.GetPreferredFormat();
     switch ( format )
@@ -870,12 +870,12 @@ bool wxClipboard::GetData( wxDataObject& data )
             wxTextDataObject& textDataObject = (wxTextDataObject &)data;
             char* s = (char*)wxGetClipboardData(format);
             if ( !s )
-                return FALSE;
+                return false;
 
             textDataObject.SetText(wxString::FromAscii(s));
             delete [] s;
 
-            return TRUE;
+            return true;
         }
 
         case wxDF_BITMAP:
@@ -884,12 +884,12 @@ bool wxClipboard::GetData( wxDataObject& data )
             wxBitmapDataObject& bitmapDataObject = (wxBitmapDataObject &)data;
             wxBitmap* bitmap = (wxBitmap *)wxGetClipboardData(data.GetPreferredFormat());
             if ( !bitmap )
-                return FALSE;
+                return false;
 
             bitmapDataObject.SetBitmap(*bitmap);
             delete bitmap;
 
-            return TRUE;
+            return true;
         }
 #if wxUSE_METAFILE
         case wxDF_METAFILE:
@@ -897,19 +897,19 @@ bool wxClipboard::GetData( wxDataObject& data )
             wxMetafileDataObject& metaFileDataObject = (wxMetafileDataObject &)data;
             wxMetafile* metaFile = (wxMetafile *)wxGetClipboardData(wxDF_METAFILE);
             if ( !metaFile )
-                return FALSE;
+                return false;
 
             metaFileDataObject.SetMetafile(*metaFile);
             delete metaFile;
 
-            return TRUE;
+            return true;
         }
 #endif // wxUSE_METAFILE
     }
-    return FALSE;
+    return false;
 #else // !wxUSE_DATAOBJ
     wxFAIL_MSG( wxT("no clipboard implementation") );
-    return FALSE;
+    return false;
 #endif // wxUSE_OLE_CLIPBOARD/wxUSE_DATAOBJ
 }
 
