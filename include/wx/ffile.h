@@ -67,7 +67,7 @@ public:
     // returns true on success
   bool Write(const wxString& s, wxMBConv& conv = wxConvLibc)
   {
-      wxWX2MBbuf buf = s.mb_str();
+      wxCharBuffer buf = s.mb_str(conv);
       size_t size = strlen(buf);
       return Write((const char *) buf, size) == size;
   }

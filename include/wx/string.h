@@ -452,7 +452,7 @@ public:
         { return m_pchData; }
     const wxWX2MBbuf mbc_str() const { return mb_str(*wxConvCurrent); }
 #else // !mmultibyte
-    const wxChar* mb_str() const { return m_pchData; }
+    const wxChar* mb_str(wxMBConv& WXUNUSED(con) = wxConvLibc) const { return m_pchData; }
     const wxWX2MBbuf mbc_str() const { return mb_str(); }
 #endif // multibyte/!multibyte
 #if wxUSE_WCHAR_T
