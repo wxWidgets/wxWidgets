@@ -19,7 +19,10 @@
 #include "wx/log.h"
 #include "wx/frame.h"
 
-#ifdef __WXGTK20__
+#include <gdk/gdkx.h>
+#include <gtk/gtkversion.h>
+
+#if defined(__WXGTK20__) && GTK_CHECK_VERSION(2, 1, 0)
 
 #include "wx/gtk/taskbarpriv.h"
 #include "eggtrayicon.h"

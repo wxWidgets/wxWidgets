@@ -106,10 +106,12 @@ Anders
 
 #include "wx/platform.h"
 
-#ifdef __WXGTK20__
+#include <gdk/gdkx.h>
+#include <gtk/gtkversion.h>
+
+#if defined(__WXGTK20__) && GTK_CHECK_VERSION(2, 1, 0)
 
 #include <string.h>
-#include <gdk/gdkx.h>
 #include "eggtrayicon.h"
 
 #define SYSTEM_TRAY_REQUEST_DOCK    0
