@@ -475,14 +475,6 @@
 #   endif
 #endif /* !defined(wxUSE_MSGDLG) */
 
-#ifndef wxUSE_NEW_GRID
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_NEW_GRID must be defined."
-#   else
-#       define wxUSE_NEW_GRID 0
-#   endif
-#endif /* !defined(wxUSE_NEW_GRID) */
-
 #ifndef wxUSE_NOTEBOOK
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_NOTEBOOK must be defined."
@@ -834,7 +826,6 @@
     wxUSE_CHOICE || \
     wxUSE_GAUGE || \
     wxUSE_GRID || \
-    wxUSE_NEW_GRID || \
     wxUSE_LISTBOX || \
     wxUSE_LISTCTRL || \
     wxUSE_NOTEBOOK || \

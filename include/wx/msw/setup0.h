@@ -545,20 +545,13 @@
 // Recommended setting: 0 (use wxNotebook)
 #define wxUSE_TAB_DIALOG    0
 
-// wxGrid class comes in two flavours: the original (pre wxWin 2.2) one and
-// the new, much imporved and enhanced version. The new version is backwards
-// compatible with the old one and should be used whenever possible, i.e. if
-// you set wxUSE_GRID to 1, set wxUSE_NEW_GRID to 1 too.
+// wxGrid class
 //
 // Default is 1 for both options.
 //
-// Recommended setting: 1 for wxUSE_NEW_GRID, 0 if you have an old code using
-// wxGrid and 100% backwards compatibality (with all old wxGrid quirks) is
-// essential.
+// Recommended setting: 1
 //
-// WIN16/BC++ resets wxUSE_NEW_GRID to 0 because it exceeds the data limit.
 #define wxUSE_GRID         1
-#define wxUSE_NEW_GRID     1
 
 // ----------------------------------------------------------------------------
 // Miscellaneous GUI stuff
@@ -1150,10 +1143,6 @@
 
 #undef wxUSE_ODBC
 #define wxUSE_ODBC                0
-
-#undef wxUSE_NEW_GRID
-#define wxUSE_NEW_GRID            0
-#endif
 
 #if defined(__BORLANDC__) && (__BORLANDC__ < 0x500)
 // BC++ 4.0 can't compile JPEG library

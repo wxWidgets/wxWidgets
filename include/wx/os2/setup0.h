@@ -338,9 +338,6 @@
 #define wxUSE_OWNER_DRAWN             1
                                     // Owner-drawn menus and listboxes
 
-#define wxUSE_NEW_GRID 1
-                                // Define 1 to use the new drid classes
-
 /*
  * Any platform
  *

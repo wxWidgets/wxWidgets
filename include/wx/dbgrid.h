@@ -19,7 +19,7 @@
 #endif
 
 #if wxUSE_ODBC
-#if wxUSE_NEW_GRID
+#if wxUSE_GRID
 
 #include "wx/log.h"
 #include "wx/dbtable.h"
@@ -175,7 +175,7 @@ private:
     bool         m_rowmodified;
 };
 
-#endif  // #if wxUSE_NEW_GRID
+#endif  // #if wxUSE_GRID
 #endif  // #if wxUSE_ODBC
 
 #endif  // _WX_GENERIC_DBGRID_H_
