@@ -18,10 +18,10 @@ HEADERS=cdbase.h cdunix.h cdwin.h sndaiff.h sndbase.h sndcodec.h \
 	sndpcm.h sndulaw.h sndwav.h sndwin.h vidbase.h vidwin.h \
 	vidxanm.h
 
-OBJECTS=cdbase.o cdwin.o g711.o g721.o g723_24.o \
+OBJECTS=cdbase.o cdunix.o cdwin.o g711.o g721.o g723_24.o \
   g723_40.o g72x.o sndaiff.o sndbase.o sndcodec.o \
-  sndcpcm.o sndfile.o sndg72x.o sndpcm.o sndulaw.o \
-  sndwav.o sndwin.o vidbase.o vidwin.o vidxanm.o sndoss.o sndesd.o
+  sndcpcm.o sndesd.o sndfile.o sndg72x.o sndmsad.o sndoss.o \
+  sndpcm.o sndulaw.o sndwav.o sndwin.o vidbase.o vidwin.o vidxanm.o
 DEPFILES=$(OBJECTS:.o=.d)
 
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
