@@ -194,12 +194,33 @@ void wxDropdownButton::DoMoveWindow(int x, int y, int w, int h)
 
         wxRect r(0,0,bw, bh);
         wxRendererNative& renderer = wxRendererNative::Get();
+        
+#ifdef __WXGTK__
+        wxColour magic(255,0,255);
+        dc.SetBrush( wxBrush( magic ) );
+        dc.SetPen( *wxTRANSPARENT_PEN );
+        dc.DrawRectangle(0,0,bw,bh);
         renderer.DrawComboBoxDropButton(this, dc, r);
+        wxMask *mask = new wxMask( bmp, magic );
+        bmp.SetMask( mask );
+#else
+        renderer.DrawComboBoxDropButton(this, dc, r);
+#endif
         SetBitmapLabel(bmp);
 
         wxBitmap bmpSel(bw, bh);
         dc.SelectObject(bmpSel);
+        
+#ifdef __WXGTK__
+        dc.SetBrush( wxBrush( magic ) );
+        dc.SetPen( *wxTRANSPARENT_PEN );
+        dc.DrawRectangle(0,0,bw,bh);
         renderer.DrawComboBoxDropButton(this, dc, r, wxCONTROL_PRESSED);
+        mask = new wxMask( bmpSel, magic );
+        bmpSel.SetMask( mask );
+#else
+        renderer.DrawComboBoxDropButton(this, dc, r, wxCONTROL_PRESSED);
+#endif        
         SetBitmapSelected(bmpSel);
     }
 

@@ -396,19 +396,6 @@ void wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
     else
         state = GTK_STATE_NORMAL;
 
-    // erase background first
-    gtk_paint_box
-    (
-        button->style,
-        wdc.m_window,
-        state,
-        GTK_SHADOW_NONE,
-        NULL,
-        button,
-        "button",
-        rect.x, rect.y, rect.width, rect.height
-    );
-
     // draw arrow on button
     gtk_paint_arrow
     (
