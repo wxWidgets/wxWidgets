@@ -207,7 +207,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\fl_demo1.exe $(OBJS)\fl_demo2.exe $(OBJS)\fl_sample1.exe $(OBJS)\fl_sample2.exe $(OBJS)\fl_sample3.exe
+all : .SYMBOLIC $(OBJS)\fl_demo1.exe $(OBJS)\fl_demo2.exe $(OBJS)\fl_sample1.exe $(OBJS)\fl_sample2.exe $(OBJS)\fl_sample3.exe data_files
 
 $(OBJS)\fl_demo1_fl_demo1.obj :  .AUTODEPEND .\fl_demo1.cpp
 	$(CXX) -zq -fo=$^@ $(FL_DEMO1_CXXFLAGS) $<
@@ -249,6 +249,10 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\fl_sample1.exe del $(OBJS)\fl_sample1.exe
 	-if exist $(OBJS)\fl_sample2.exe del $(OBJS)\fl_sample2.exe
 	-if exist $(OBJS)\fl_sample3.exe del $(OBJS)\fl_sample3.exe
+
+data_files : .SYMBOLIC 
+	if not exist $(OBJS)\bitmaps mkdir $(OBJS)\bitmaps
+	for %f in (bookmarks.bmp class_icon.bmp class_icon1.bmp copy.bmp cut.bmp file_icon.bmp folder_icon.bmp help_icon.bmp new.bmp nextmark.bmp open.bmp paste.bmp prevmark.bmp res_icon.bmp save.bmp saveall.bmp search.bmp start95_dp.bmp start95_pr.bmp tile.bmp) do if not exist $(OBJS)\bitmaps\%f copy .\bitmaps\%f $(OBJS)\bitmaps
 
 $(OBJS)\fl_demo1.exe :  $(FL_DEMO1_OBJECTS) $(OBJS)\fl_demo1_fl_demo1.res
 	@%create $(OBJS)\fl_demo1.lbc

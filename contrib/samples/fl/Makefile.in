@@ -171,7 +171,7 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 
 ### Targets: ###
 
-all: fl_demo1$(EXEEXT) $(__fl_demo1_bundle___depname) fl_demo2$(EXEEXT) $(__fl_demo2_bundle___depname) fl_sample1$(EXEEXT) $(__fl_sample1_bundle___depname) fl_sample2$(EXEEXT) $(__fl_sample2_bundle___depname) fl_sample3$(EXEEXT) $(__fl_sample3_bundle___depname)
+all: fl_demo1$(EXEEXT) $(__fl_demo1_bundle___depname) fl_demo2$(EXEEXT) $(__fl_demo2_bundle___depname) fl_sample1$(EXEEXT) $(__fl_sample1_bundle___depname) fl_sample2$(EXEEXT) $(__fl_sample2_bundle___depname) fl_sample3$(EXEEXT) $(__fl_sample3_bundle___depname) data_files
 
 clean: 
 	rm -rf ./.deps ./.pch
@@ -186,6 +186,14 @@ clean:
 	rm -rf fl_sample2.app
 	rm -f fl_sample3$(EXEEXT)
 	rm -rf fl_sample3.app
+
+data_files: 
+	@mkdir -p ./bitmaps
+	@for f in bookmarks.bmp class_icon.bmp class_icon1.bmp copy.bmp cut.bmp file_icon.bmp folder_icon.bmp help_icon.bmp new.bmp nextmark.bmp open.bmp paste.bmp prevmark.bmp res_icon.bmp save.bmp saveall.bmp search.bmp start95_dp.bmp start95_pr.bmp tile.bmp; do \
+	if test \( ! -s ./bitmaps/$$f \) -o \( $(srcdir)/bitmaps/$$f -nt ./bitmaps/$$f  \) ; then \
+	cp -pRf $(srcdir)/bitmaps/$$f ./bitmaps ; \
+	fi; \
+	done
 
 distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
@@ -375,4 +383,4 @@ uninstall:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all clean distclean fl_demo1_bundle fl_demo2_bundle fl_sample1_bundle fl_sample2_bundle fl_sample3_bundle install uninstall
+.PHONY: all clean data_files distclean fl_demo1_bundle fl_demo2_bundle fl_sample1_bundle fl_sample2_bundle fl_sample3_bundle install uninstall
