@@ -213,9 +213,13 @@ public:
                    const wxString& name = "htmlWindow")
         : wxHtmlWindow(parent, id, pos, size, style, name)  {};
 
-
+#ifdef POST_2_1_12
     void OnLinkClicked(const wxHtmlLinkInfo& link);
     void base_OnLinkClicked(const wxHtmlLinkInfo& link);
+#else
+    void OnLinkClicked(wxHtmlLinkInfo* link);
+    void base_OnLinkClicked(wxHtmlLinkInfo* link);
+#endif
 
     DEC_PYCALLBACK__STRING(OnSetTitle);
     PYPRIVATE;
@@ -224,17 +228,29 @@ public:
 
 IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnSetTitle);
 
-void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
+#ifdef POST_2_1_12
+ void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
+#else
+ void wxPyHtmlWindow::OnLinkClicked(wxHtmlLinkInfo* link) {
+#endif
     bool doSave = wxPyRestoreThread();
     if (m_myInst.findCallback("OnLinkClicked")) {
+#ifdef POST_2_1_12
         PyObject* obj = wxPyConstructObject((void*)&link, "wxHtmlLinkInfo");
+#else
+        PyObject* obj = wxPyConstructObject(link, "wxHtmlLinkInfo");
+#endif
         m_myInst.callCallback(Py_BuildValue("(O)", obj));
     }
     else
         wxHtmlWindow::OnLinkClicked(link);
     wxPySaveThread(doSave);
 }
+#ifdef POST_2_1_12
 void wxPyHtmlWindow::base_OnLinkClicked(const wxHtmlLinkInfo& link) {
+#else
+void wxPyHtmlWindow::base_OnLinkClicked(wxHtmlLinkInfo* link) {
+#endif
     wxHtmlWindow::OnLinkClicked(link);
 }
 
@@ -407,74 +423,6 @@ static PyObject *_wrap_wxHtmlLinkInfo_GetTarget(PyObject *self, PyObject *args, 
 {
     delete _result;
 }
-    return _resultobj;
-}
-
-#define wxHtmlLinkInfo_GetEvent(_swigobj)  (_swigobj->GetEvent())
-static PyObject *_wrap_wxHtmlLinkInfo_GetEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxMouseEvent * _result;
-    wxHtmlLinkInfo * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlLinkInfo_GetEvent",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlLinkInfo_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlLinkInfo_GetEvent. Expected _wxHtmlLinkInfo_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxMouseEvent *)wxHtmlLinkInfo_GetEvent(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxMouseEvent_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
-#define wxHtmlLinkInfo_GetHtmlCell(_swigobj)  (_swigobj->GetHtmlCell())
-static PyObject *_wrap_wxHtmlLinkInfo_GetHtmlCell(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxHtmlCell * _result;
-    wxHtmlLinkInfo * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlLinkInfo_GetHtmlCell",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlLinkInfo_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlLinkInfo_GetHtmlCell. Expected _wxHtmlLinkInfo_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxHtmlCell *)wxHtmlLinkInfo_GetHtmlCell(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxHtmlCell_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
     return _resultobj;
 }
 
@@ -4476,7 +4424,7 @@ static PyObject *_wrap_wxHtmlWindow_base_OnLinkClicked(PyObject *self, PyObject 
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxHtmlWindow_base_OnLinkClicked(_arg0,*_arg1);
+        wxHtmlWindow_base_OnLinkClicked(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -5619,8 +5567,6 @@ static PyMethodDef htmlcMethods[] = {
 	 { "wxHtmlTag_GetParam", (PyCFunction) _wrap_wxHtmlTag_GetParam, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlTag_HasParam", (PyCFunction) _wrap_wxHtmlTag_HasParam, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlTag_GetName", (PyCFunction) _wrap_wxHtmlTag_GetName, METH_VARARGS | METH_KEYWORDS },
-	 { "wxHtmlLinkInfo_GetHtmlCell", (PyCFunction) _wrap_wxHtmlLinkInfo_GetHtmlCell, METH_VARARGS | METH_KEYWORDS },
-	 { "wxHtmlLinkInfo_GetEvent", (PyCFunction) _wrap_wxHtmlLinkInfo_GetEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlLinkInfo_GetTarget", (PyCFunction) _wrap_wxHtmlLinkInfo_GetTarget, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlLinkInfo_GetHref", (PyCFunction) _wrap_wxHtmlLinkInfo_GetHref, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlLinkInfo", (PyCFunction) _wrap_new_wxHtmlLinkInfo, METH_VARARGS | METH_KEYWORDS },

@@ -272,7 +272,7 @@ public:
               const wxPoint& pos = wxPyDefaultPosition,
               const wxSize& size = wxPyDefaultSize,
               long style = wxNO_BORDER | wxTB_HORIZONTAL,
-              const wxString& name = wxToolBarNameStr);
+              const char* name = wxToolBarNameStr);
 
     %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
@@ -289,7 +289,7 @@ public:
                     const wxPoint& pos = wxPyDefaultPosition,
                     const wxSize& size = wxPyDefaultSize,
                     long style = wxNO_BORDER | wxTB_HORIZONTAL,
-                    const wxString& name = wxToolBarNameStr);
+                    const char* name = wxToolBarNameStr);
 
     %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 

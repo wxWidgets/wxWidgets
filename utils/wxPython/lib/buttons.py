@@ -142,7 +142,8 @@ class wxGenButton(wxControl):
         highlightClr = wxSystemSettings_GetSystemColour(wxSYS_COLOUR_BTNHIGHLIGHT)
         self.shadowPen    = wxPen(shadowClr, 1, wxSOLID)
         self.highlightPen = wxPen(highlightClr, 1, wxSOLID)
-        self.focusIndPen  = wxPen(textClr, 1, wxUSER_DASH)
+        ##self.focusIndPen  = wxPen(textClr, 1, wxUSER_DASH)
+        self.focusIndPen = wxPen(textClr, 1, wxDOT)
 
 
     def SetBackgroundColour(self, colour):
@@ -209,7 +210,7 @@ class wxGenButton(wxControl):
         bw = self.bezelWidth
         dc.SetLogicalFunction(wxINVERT)
         self.focusIndPen.SetColour(self.GetForegroundColour())
-        self.focusIndPen.SetDashes([1,2,1,2])  # This isn't quite working the way I expected...
+        ##self.focusIndPen.SetDashes([1,2,1,2])  # This isn't quite working the way I expected...
         dc.SetPen(self.focusIndPen)
         dc.SetBrush(wxTRANSPARENT_BRUSH)
         dc.DrawRectangle(bw+2,bw+2, w-bw*2-4, h-bw*2-4)

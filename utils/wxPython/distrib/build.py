@@ -322,11 +322,15 @@ class BuildConfig:
         # so we can do some sanity checking...
         if sys.platform != 'win32':
 	    if not self.CCC:
-		print "Warning: C++ compiler not specified (CCC). Assuming c++"
-		self.CCC = 'c++'
-	    if not self.CC:
-		print "Warning: C compiler not specified (CC). Assuming cc"
-		self.CC = 'cc'
+                self.CCC = os.popen('wx-config --cxx', 'r').read()[:-1]
+                if not self.CCC:
+                    print "Warning: C++ compiler not specified (CCC). Assuming c++"
+                    self.CCC = 'c++'
+            if not self.CC:
+                self.CCC = os.popen('wx-config --cc', 'r').read()[:-1]
+                if not self.CC:
+                    print "Warning: C compiler not specified (CC). Assuming cc"
+                    self.CC = 'cc'
 
     #------------------------------------------------------------
     def findMFValue(self, mfText, st):

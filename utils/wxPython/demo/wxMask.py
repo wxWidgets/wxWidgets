@@ -3,27 +3,28 @@ from wxPython.wx import *
 
 #----------------------------------------------------------------------
 
-logic = ['']*16
-def rlf(x):
-    logic[eval(x)]=x
+logicList = [
+    ('wxAND', wxAND),
+    ('wxAND_INVERT', wxAND_INVERT),
+    ('wxAND_REVERSE', wxAND_REVERSE),
+    ('wxCLEAR', wxCLEAR),
+    ('wxCOPY', wxCOPY),
+    ('wxEQUIV', wxEQUIV),
+    ('wxINVERT', wxINVERT),
+    ('wxNAND', wxNAND),
 
+    # this one causes an assert on wxGTK, and doesn't seem to
+    # do much on MSW anyway, so I'll just take it out....
+    #('wxNOR', wxNOR),
 
-rlf('wxAND')
-rlf('wxAND_INVERT')
-rlf('wxAND_REVERSE')
-rlf('wxCLEAR')
-rlf('wxCOPY')
-rlf('wxEQUIV')
-rlf('wxINVERT')
-rlf('wxNAND')
-rlf('wxNOR')
-rlf('wxNO_OP')
-rlf('wxOR')
-rlf('wxOR_INVERT')
-rlf('wxOR_REVERSE')
-rlf('wxSET')
-rlf('wxSRC_INVERT')
-rlf('wxXOR')
+    ('wxNO_OP', wxNO_OP),
+    ('wxOR', wxOR),
+    ('wxOR_INVERT', wxOR_INVERT),
+    ('wxOR_REVERSE', wxOR_REVERSE),
+    ('wxSET', wxSET),
+    ('wxSRC_INVERT', wxSRC_INVERT),
+    ('wxXOR', wxXOR),
+]
 
 class TestMaskWindow(wxScrolledWindow):
     def __init__(self, parent):
@@ -78,13 +79,13 @@ class TestMaskWindow(wxScrolledWindow):
 
         # draw array of assorted blit operations
         mdc = wxMemoryDC()
-        for i in range(16):
-            text = logic[i]
+        i = 0
+        for text, code in logicList:
             x,y = 120+100*(i%4), 20+100*(i/4)
             dc.DrawText(text, x,y-20)
             mdc.SelectObject(self.bmp_withcolourmask)
-            dc.Blit(x,y, cx,cy, mdc, 0,0, i,1)
-
+            dc.Blit(x,y, cx,cy, mdc, 0,0, code, true)
+            i = i + 1
 
 
 

@@ -45,8 +45,8 @@ def runTest(frame, nb, log):
 
 
     else:
-        wxMessageBox("Unable to import VTK, which is a required component "
-                     "of this demo.  You need to download and install the "
+        wxMessageBox("Unable to import VTK, which is a required component\n"
+                     "of this demo.  You need to download and install the\n"
                      "Python extension module for VTK from http://www.kitware.com/",
                      "Import Error")
         return None

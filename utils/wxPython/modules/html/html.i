@@ -90,8 +90,10 @@ public:
     wxHtmlLinkInfo(const wxString& href, const wxString& target = wxEmptyString);
     wxString GetHref();
     wxString GetTarget();
+#ifdef POST_2_1_12
     wxMouseEvent* GetEvent();
     wxHtmlCell* GetHtmlCell();
+#endif
 };
 
 //---------------------------------------------------------------------------
@@ -410,9 +412,13 @@ public:
                    const wxString& name = "htmlWindow")
         : wxHtmlWindow(parent, id, pos, size, style, name)  {};
 
-
+#ifdef POST_2_1_12
     void OnLinkClicked(const wxHtmlLinkInfo& link);
     void base_OnLinkClicked(const wxHtmlLinkInfo& link);
+#else
+    void OnLinkClicked(wxHtmlLinkInfo* link);
+    void base_OnLinkClicked(wxHtmlLinkInfo* link);
+#endif
 
     DEC_PYCALLBACK__STRING(OnSetTitle);
     PYPRIVATE;
@@ -421,17 +427,29 @@ public:
 
 IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnSetTitle);
 
-void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
+#ifdef POST_2_1_12
+ void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
+#else
+ void wxPyHtmlWindow::OnLinkClicked(wxHtmlLinkInfo* link) {
+#endif
     bool doSave = wxPyRestoreThread();
     if (m_myInst.findCallback("OnLinkClicked")) {
+#ifdef POST_2_1_12
         PyObject* obj = wxPyConstructObject((void*)&link, "wxHtmlLinkInfo");
+#else
+        PyObject* obj = wxPyConstructObject(link, "wxHtmlLinkInfo");
+#endif
         m_myInst.callCallback(Py_BuildValue("(O)", obj));
     }
     else
         wxHtmlWindow::OnLinkClicked(link);
     wxPySaveThread(doSave);
 }
+#ifdef POST_2_1_12
 void wxPyHtmlWindow::base_OnLinkClicked(const wxHtmlLinkInfo& link) {
+#else
+void wxPyHtmlWindow::base_OnLinkClicked(wxHtmlLinkInfo* link) {
+#endif
     wxHtmlWindow::OnLinkClicked(link);
 }
 %}
@@ -469,8 +487,11 @@ public:
     wxHtmlContainerCell* GetInternalRepresentation();
     wxHtmlWinParser* GetParser();
 
-
+#ifdef POST_2_1_12
     void base_OnLinkClicked(const wxHtmlLinkInfo& link);
+#else
+    void base_OnLinkClicked(wxHtmlLinkInfo* link);
+#endif
     void base_OnSetTitle(const char* title);
 };
 

@@ -8,6 +8,12 @@
 #----------------------------------------------------------------------------
 from wxPython.wx import *
 
+if wxPlatform == '__WXGTK__':
+    msg = "Due to a bug in wxGTK this class is not available on that "\
+          "platform for this release.  Sorry."
+    raise ImportError, msg
+
+
 _DOCKTHRESHOLD = 25
 
 class wxFloatBar(wxToolBar):

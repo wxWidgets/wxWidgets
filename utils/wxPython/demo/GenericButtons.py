@@ -14,17 +14,17 @@ class TestPanel(wxPanel):
         b = wxButton(self, -1, "A real button", (10,10))
         b.SetDefault()
         EVT_BUTTON(self, b.GetId(), self.OnButton)
-        b = wxButton(self, -1, "non-default", (100, 10))
+        b = wxButton(self, -1, "non-default", (140, 10))
         EVT_BUTTON(self, b.GetId(), self.OnButton)
         #wxTextCtrl(self, -1, "", (10,40))
 
         b = wxGenButton(self, -1, 'Hello', (10,65))
         EVT_BUTTON(self, b.GetId(), self.OnButton)
-        b = wxGenButton(self, -1, 'disabled', (100,65))
+        b = wxGenButton(self, -1, 'disabled', (140,65))
         EVT_BUTTON(self, b.GetId(), self.OnButton)
         b.Enable(false)
 
-        b = wxGenButton(self, -1, 'bigger', (195,50))
+        b = wxGenButton(self, -1, 'bigger', (250,50))
         EVT_BUTTON(self, b.GetId(), self.OnButton)
         b.SetFont(wxFont(20, wxSWISS, wxNORMAL, wxBOLD, false))
         b.SetBezelWidth(5)
@@ -38,7 +38,7 @@ class TestPanel(wxPanel):
         EVT_BUTTON(self, b.GetId(), self.OnButton)
 
 
-        b = wxGenBitmapButton(self, -1, None, (100, 130))
+        b = wxGenBitmapButton(self, -1, None, (140, 130))
         EVT_BUTTON(self, b.GetId(), self.OnButton)
         bmp = wxBitmap('bitmaps/lb1.bmp', wxBITMAP_TYPE_BMP)
         mask = wxMaskColour(bmp, wxBLUE)
@@ -54,7 +54,7 @@ class TestPanel(wxPanel):
         EVT_BUTTON(self, b.GetId(), self.OnToggleButton)
 
 
-        b = wxGenBitmapToggleButton(self, -1, None, (100, 230))
+        b = wxGenBitmapToggleButton(self, -1, None, (140, 230))
         EVT_BUTTON(self, b.GetId(), self.OnToggleButton)
         bmp = wxBitmap('bitmaps/lb1.bmp', wxBITMAP_TYPE_BMP)
         mask = wxMaskColour(bmp, wxBLUE)

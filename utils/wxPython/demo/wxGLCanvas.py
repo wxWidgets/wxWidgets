@@ -66,7 +66,6 @@ else:
 
         def OnSize(self, event):
             size = self.GetClientSize()
-            print size
             if self.GetContext():
                 self.SetCurrent()
                 glViewport(0, 0, size.width, size.height)
@@ -76,7 +75,6 @@ else:
             dc = wxPaintDC(self)
 
             self.SetCurrent()
-            print self.init
 
             if not self.init:
                 self.InitGL()

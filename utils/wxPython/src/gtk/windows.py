@@ -326,6 +326,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def ReleaseMouse(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_ReleaseMouse,(self,) + _args, _kwargs)
         return val
+    def RemoveChild(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_RemoveChild,(self,) + _args, _kwargs)
+        return val
     def Reparent(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Reparent,(self,) + _args, _kwargs)
         return val
@@ -479,8 +482,22 @@ class wxWindowPtr(wxEvtHandlerPtr):
         val = apply(windowsc.wxWindow_GetBestSize,(self,) + _args, _kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
+    def SetCaret(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetCaret,(self,) + _args, _kwargs)
+        return val
+    def GetCaret(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetCaret,(self,) + _args, _kwargs)
+        if val: val = wxCaretPtr(val) 
+        return val
     def __repr__(self):
         return "<C wxWindow instance at %s>" % (self.this,)
+    # replaces broken shadow method
+    def GetCaret(self, *_args, **_kwargs):
+        from misc2 import wxCaretPtr
+        val = apply(windowsc.wxWindow_GetCaret,(self,) + _args, _kwargs)
+        if val: val = wxCaretPtr(val)
+        return val
+
 class wxWindow(wxWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxWindow,_args,_kwargs)
@@ -580,8 +597,15 @@ class wxScrolledWindowPtr(wxPanelPtr):
     def EnableScrolling(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_EnableScrolling,(self,) + _args, _kwargs)
         return val
+    def GetScrollPageSize(self, *_args, **_kwargs):
+        val = apply(windowsc.wxScrolledWindow_GetScrollPageSize,(self,) + _args, _kwargs)
+        return val
     def GetScrollPixelsPerUnit(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_GetScrollPixelsPerUnit,(self,) + _args, _kwargs)
+        return val
+    def GetTargetWindow(self, *_args, **_kwargs):
+        val = apply(windowsc.wxScrolledWindow_GetTargetWindow,(self,) + _args, _kwargs)
+        if val: val = wxWindowPtr(val) 
         return val
     def GetVirtualSize(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_GetVirtualSize,(self,) + _args, _kwargs)
@@ -597,6 +621,9 @@ class wxScrolledWindowPtr(wxPanelPtr):
         return val
     def SetScrollbars(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_SetScrollbars,(self,) + _args, _kwargs)
+        return val
+    def SetScrollPageSize(self, *_args, **_kwargs):
+        val = apply(windowsc.wxScrolledWindow_SetScrollPageSize,(self,) + _args, _kwargs)
         return val
     def SetTargetWindow(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_SetTargetWindow,(self,) + _args, _kwargs)
@@ -912,6 +939,12 @@ class wxMenuItem(wxMenuItemPtr):
 wxValidator_IsSilent = windowsc.wxValidator_IsSilent
 
 wxValidator_SetBellOnError = windowsc.wxValidator_SetBellOnError
+
+wxWindow_NewControlId = windowsc.wxWindow_NewControlId
+
+wxWindow_NextControlId = windowsc.wxWindow_NextControlId
+
+wxWindow_PrevControlId = windowsc.wxWindow_PrevControlId
 
 
 
