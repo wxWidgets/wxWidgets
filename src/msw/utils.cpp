@@ -1028,6 +1028,10 @@ int wxAppTraits::GetOSVersion(int *verMaj, int *verMin)
                 case VER_PLATFORM_WIN32_NT:
                     s_ver = wxWINDOWS_NT;
                     break;
+
+                case VER_PLATFORM_WIN32_CE:
+                    s_ver = wxWINDOWS_CE;
+                    break;
             }
         }
     }

@@ -270,7 +270,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     // program under Win9x w/o MSLU emulation layer - if so, abort right now
     // as it has no chance to work
 #if wxUSE_UNICODE && !wxUSE_UNICODE_MSLU
-    if ( wxGetOsVersion() != wxWINDOWS_NT )
+    if ( wxGetOsVersion() != wxWINDOWS_NT && wxGetOsVersion() != wxWINDOWS_CE )
     {
         // note that we can use MessageBoxW() as it's implemented even under
         // Win9x - OTOH, we can't use wxGetTranslation() because the file APIs
@@ -278,7 +278,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         ::MessageBox
         (
          NULL,
-         _T("This program uses Unicode and requires Windows NT/2000/XP.\nProgram aborted."),
+         _T("This program uses Unicode and requires Windows NT/2000/XP/CE.\nProgram aborted."),
          _T("wxWindows Fatal Error"),
          MB_ICONERROR | MB_OK
         );
@@ -302,8 +302,13 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
 #if wxUSE_OLE
     // we need to initialize OLE library
+#ifdef __WXWINCE__
+    if ( FAILED(::CoInitializeEx(NULL, COINIT_MULTITHREADED)) )
+        wxLogError(_("Cannot initialize OLE"));
+#else
     if ( FAILED(::OleInitialize(NULL)) )
         wxLogError(_("Cannot initialize OLE"));
+#endif
 #endif
 
 #endif // wxUSE_OLE
@@ -510,7 +515,11 @@ void wxApp::CleanUp()
         ::DeleteObject( wxDisableButtonBrush );
 
 #if wxUSE_OLE
+#ifdef __WXWINCE__
+    ::CoUninitialize();
+#else
     ::OleUninitialize();
+#endif
 #endif
 
     // for an EXE the classes are unregistered when it terminates but DLL may

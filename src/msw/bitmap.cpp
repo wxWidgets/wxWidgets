@@ -506,6 +506,7 @@ bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)
 
     HBITMAP hbmp;
 
+#if wxUSE_WXDIB
     if ( wxShouldCreateDIB(w, h, d, hdc) )
     {
         if ( d == -1 )
@@ -525,6 +526,7 @@ bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)
         GetBitmapData()->m_depth = d;
     }
     else // create a DDB
+#endif
     {
         if ( d == -1 )
             d = wxDisplayDepth();
@@ -776,6 +778,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, const wxDC& dc)
 
 bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc )
 {
+#if wxUSE_WXDIB
     wxCHECK_MSG( image.Ok(), FALSE, wxT("invalid image") );
 
     UnRef();
@@ -835,6 +838,10 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc )
     }
 
     return TRUE;
+#else
+    // FIXME: wxWinCE doesn't support wxDIB yet
+    return FALSE;
+#endif
 }
 
 wxImage wxBitmap::ConvertToImage() const

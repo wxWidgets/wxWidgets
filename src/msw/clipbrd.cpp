@@ -68,7 +68,7 @@
     #include "wx/dataobj.h"
 #endif
 
-#if wxUSE_OLE
+#if wxUSE_OLE && !defined(__WXWINCE__)
     // use OLE clipboard
     #define wxUSE_OLE_CLIPBOARD 1
 #else // !wxUSE_DATAOBJ
@@ -79,10 +79,6 @@
 #if wxUSE_OLE_CLIPBOARD
     #include <ole2.h>
 #endif // wxUSE_OLE_CLIPBOARD
-
-#ifdef __WIN16__
-    #define memcpy hmemcpy
-#endif
 
 // ===========================================================================
 // implementation
@@ -686,7 +682,7 @@ bool wxClipboard::AddData( wxDataObject *data )
 // This didn't compile, of course
 //            return wxSetClipboardData(data);
             // TODO
-            wxLogError("Not implemented.");
+            wxLogError(wxT("Not implemented."));
             return FALSE;
         }
     }
@@ -878,7 +874,7 @@ bool wxClipboard::GetData( wxDataObject& data )
             if ( !s )
                 return FALSE;
 
-            textDataObject.SetText(s);
+            textDataObject.SetText(wxString::FromAscii(s));
             delete [] s;
 
             return TRUE;

@@ -643,7 +643,7 @@
 #define wxUSE_DIB_FOR_BITMAP 0
 
 // Set this to 1 to enable wxDIB
-#define wxUSE_WXDIB 1
+#define wxUSE_WXDIB 0
 
 // ----------------------------------------------------------------------------
 // common dialogs
