@@ -166,15 +166,20 @@ HTMLOBJS = #$ ExpandList("WXHTMLOBJS");
 # Add $(HTMLOBJS) if wanting wxHTML classes
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
 
+ARCHINCDIR=$(WXDIR)\lib\msw$(INCEXT)
+SETUP_H=$(ARCHINCDIR)\wx\setup.h 
+
 # Normal, static library
-all:    setuph dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib jpeg tiff regex $(LIBTARGET)
+all:    dirs $(SETUP_H) $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib jpeg tiff regex $(LIBTARGET)
 
-setuph:
-    cd $(WXDIR)\include\wx\msw
-    if not exist setup.h copy setup0.h setup.h
-    cd $(WXDIR)\src\msw
+$(ARCHINCDIR)\wx:
+    mkdir $(ARCHINCDIR)
+    mkdir $(ARCHINCDIR)\wx
 
-dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(OLEDIR)\$D $(HTMLDIR)\$D $(JPEGDIR)\$D $(TIFFDIR)\$D $(REGEXDIR)\$D
+$(SETUP_H):
+    copy $(WXDIR)\include\wx\msw\setup.h $@
+
+dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(OLEDIR)\$D $(HTMLDIR)\$D $(JPEGDIR)\$D $(TIFFDIR)\$D $(REGEXDIR)\$D $(ARCHINCDIR)\wx
 
 $D:
     mkdir $D
@@ -205,18 +210,18 @@ $(REGEXDIR)\$D:
 
 # wxWindows library as DLL
 dll:
-        nmake -f makefile.vc all FINAL=$(FINAL) DLL=1 WXMAKINGDLL=1 NEW_WXLIBNAME=$(NEW_WXLIBNAME)
+        nmake -f makefile.vc all FINAL=$(FINAL) DLL=1 WXMAKINGDLL=1 NEW_WXLIBNAME=$(NEW_WXLIBNAME) UNICODE=$(UNICODE)
 
 cleandll:
-        nmake -f makefile.vc clean FINAL=$(FINAL) DLL=1 WXMAKINGDLL=1 NEW_WXLIBNAME=$(NEW_WXLIBNAME)
+        nmake -f makefile.vc clean FINAL=$(FINAL) DLL=1 WXMAKINGDLL=1 NEW_WXLIBNAME=$(NEW_WXLIBNAME) UNICODE=$(UNICODE)
 
 # wxWindows + app as DLL. Only affects main.cpp.
 dllapp:
-        nmake -f makefile.vc all FINAL=$(FINAL) DLL=1
+        nmake -f makefile.vc all FINAL=$(FINAL) DLL=1 UNICODE=$(UNICODE)
 
 # wxWindows + app as DLL, for Netscape plugin - remove DllMain.
 dllnp:
-        nmake -f makefile.vc all NOMAIN=1 FINAL=$(FINAL) DLL=1
+        nmake -f makefile.vc all NOMAIN=1 FINAL=$(FINAL) DLL=1 UNICODE=$(UNICODE)
 
 # Use this to make dummy.obj and generate a PCH.
 # You might use the dll target, then the pch target, in order to
@@ -292,10 +297,10 @@ $(WXDIR)\lib\$(WXLIBNAME).dll: $(DUMMYOBJ) $(OBJECTS)
 ########################################################
 # Windows-specific objects
 
-$D\dummy.obj: dummy.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(WXDIR)\include\wx\msw\setup.h
+$D\dummy.obj: dummy.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(SETUP_H)
         cl $(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummy.obj /c /Tp dummy.cpp
 
-$D\dummydll.obj: dummydll.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(WXDIR)\include\wx\msw\setup.h
+$D\dummydll.obj: dummydll.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(SETUP_H)
         cl @<<
 $(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummydll.obj /c /Tp dummydll.cpp
 <<
@@ -376,7 +381,7 @@ $(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
 $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
     copy "$(COMMDIR)"\doslex.c "$(COMMDIR)"\lex_yy.c
 
-$(OBJECTS):	$(WXDIR)/include/wx/setup.h
+$(OBJECTS):	$(SETUP_H)
 
 $(COMMDIR)\$D\unzip.obj:     $(COMMDIR)\unzip.c
         cl @<<

@@ -91,11 +91,11 @@ include $(WXDIR)/src/makeg95.env
 
 # DLL Name, if building wxWindows as a DLL.
 ifdef WXMAKINGDLL
-WXDLL = $(WXDIR)/lib/wx$(WXVERSION).dll
-WXDEF = wx$(WXVERSION).def
+WXDLL = $(WXDIR)/lib/wxmsw$(WXVERSION)$(UNIEXT).dll
+WXDEF = wxmsw$(WXVERSION)$(UNIEXT).def
 DLL_EXTRA_LIBS = $(WXDIR)/lib/libzlib.a \
                  $(WXDIR)/lib/libpng.a $(WXDIR)/lib/libjpeg.a \
-	             $(WXDIR)/lib/libtiff.a
+	             $(WXDIR)/lib/libtiff.a $(WXDIR)/lib/libregex.a
 DLL_LDFLAGS = -L$(WXDIR)/lib
 DLL_LDLIBS = -mwindows -lcomctl32 -lctl3d32 -lole32 -loleaut32 \
              -luuid -lrpcrt4 -lodbc32 -lwinmm -lopengl32 \
@@ -116,11 +116,13 @@ JPEGDIR = $(WXDIR)/src/jpeg
 TIFFDIR = $(WXDIR)/src/tiff
 OLEDIR  = $(WXDIR)/src/msw/ole
 MSWDIR  = $(WXDIR)/src/msw
+REGEXDIR= $(WXDIR)/src/regex
 
 ZLIBLIB = $(WXDIR)/lib/libzlib.a
 PNGLIB  = $(WXDIR)/lib/libpng.a
 JPEGLIB = $(WXDIR)/lib/libjpeg.a
 TIFFLIB = $(WXDIR)/lib/libtiff.a
+REGEXLIB= $(WXDIR)/lib/libregex.a
 
 DOCDIR = $(WXDIR)/docs
 
@@ -278,11 +280,22 @@ else
   OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(DIRDLGOBJ)
 endif
 
+ARCHINCDIR=$(subst /,\,$(WXDIR))\lib\msw$(INCEXT)
+
+SETUP_H=$(ARCHINCDIR)\wx\setup.h
+
 ifndef WXMAKINGDLL
-all:    $(OBJECTS) $(WXLIB) $(ZLIBLIB) $(PNGLIB) $(JPEGLIB) $(TIFFLIB)
+all:    $(SETUP_H) $(OBJECTS) $(WXLIB) $(ZLIBLIB) $(PNGLIB) $(JPEGLIB) $(TIFFLIB) $(REGEXLIB)
 else
-all:    $(OBJECTS) $(ZLIBLIB) $(PNGLIB) $(JPEGLIB) $(TIFFLIB) $(WXDLL)
+all:    $(SETUP_H) $(OBJECTS) $(ZLIBLIB) $(PNGLIB) $(JPEGLIB) $(TIFFLIB) $(REGEXLIB) $(WXDLL)
 endif
+
+$(ARCHINCDIR)\wx:
+	mkdir $(ARCHINCDIR)
+	mkdir $(ARCHINCDIR)\wx
+
+$(SETUP_H): $(ARCHINCDIR)\wx
+	$(COPY) $(WXDIR)\include\wx\msw\setup.h $@
 
 ifndef WXMAKINGDLL
 
@@ -351,8 +364,10 @@ $(TIFFLIB): $(TIFFOBJS)
 	$(AR) $(AROPTIONS) $@ $(TIFFOBJS)
 	$(RANLIB) $@
 
+$(REGEXLIB):
+	$(MAKE) -C $(REGEXDIR) -f makefile.g95 WXDIR=$(WXDIR)
 
-$(OBJECTS):	$(WXINC)/wx/defs.h $(WXINC)/wx/object.h $(WXINC)/wx/setup.h
+$(OBJECTS):	$(WXINC)/wx/defs.h $(WXINC)/wx/object.h $(ARCHINCDIR)/wx/setup.h
 
 $(COMMDIR)/y_tab.$(OBJSUFF):    $(COMMDIR)/y_tab.c $(COMMDIR)/lex_yy.c
 	$(CCLEX) -c $(CPPFLAGS) -DUSE_DEFINE -DYY_USE_PROTOS -o $@ $(COMMDIR)/y_tab.c
@@ -413,6 +428,8 @@ clean:
 	-$(RM) ../jpeg/*.bak
 	-$(RM) ../tiff/*.o
 	-$(RM) ../tiff/*.bak
+	-$(RM) ../regex/*.o
+	-$(RM) ../regex/*.bak
 
 cleanall: clean
 	-$(RM) $(WXLIB)
@@ -420,6 +437,7 @@ cleanall: clean
 	-$(RM) $(PNGLIB)
 	-$(RM) $(JPEGLIB)
 	-$(RM) $(TIFFLIB)
+	-$(RM) $(REGEXLIB)
 
 ifdef WXMAKINGDLL
 	-$(RM) $(WXDLL)
