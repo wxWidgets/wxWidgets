@@ -2,7 +2,7 @@
 // Name:        treelay.cpp
 // Purpose:     wxTreeLayout sample
 // Author:      Julian Smart
-// Modified by: 
+// Modified by:
 // Created:     7/4/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
@@ -109,7 +109,7 @@ int MyApp::OnExit()
 void MyApp::TreeTest(wxTreeLayoutStored& tree, wxDC& dc)
 {
   tree.Initialize(200);
-  
+
   tree.AddChild(_T("animal"));
   tree.AddChild(_T("mammal"), _T("animal"));
   tree.AddChild(_T("insect"), _T("animal"));

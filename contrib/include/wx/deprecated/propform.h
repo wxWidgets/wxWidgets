@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PROPFORM_H_
@@ -129,7 +129,7 @@ class WXDLLIMPEXP_DEPRECATED wxPropertyFormValidator: public wxPropertyValidator
   ~wxPropertyFormValidator(void) {}
 
    // Called to check value is OK (e.g. when OK is pressed)
-   // Return FALSE if value didn't check out; signal to restore old value.
+   // Return false if value didn't check out; signal to restore old value.
    virtual bool OnCheckValue( wxProperty *WXUNUSED(property), wxPropertyFormView *WXUNUSED(view),
      wxWindow *WXUNUSED(parentWindow) ) { return true; }
 

@@ -84,7 +84,7 @@ protected:
     long          m_topMargin;
     long          m_leftMargin;
     bool          m_orientation; // true for top-to-bottom, false for left-to-right
-    
+
 private:
     DECLARE_ABSTRACT_CLASS(wxTreeLayout)
 };
@@ -138,7 +138,7 @@ private:
     wxStoredNode*     m_nodes;
     int               m_num;
     int               m_maxNodes;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxTreeLayoutStored)
     DECLARE_NO_COPY_CLASS(wxTreeLayoutStored)

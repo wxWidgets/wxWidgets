@@ -146,7 +146,7 @@ wxExpr::wxExpr(wxExprType the_type, const wxString& word_or_string)
     break;
    case wxExprReal:
    case wxExprInteger:
-   case wxExprNull: 
+   case wxExprNull:
     break;
   }
   client_data = NULL;
@@ -171,7 +171,7 @@ wxExpr::wxExpr(wxExprType the_type, wxChar *word_or_string, bool allocate)
     break;
    case wxExprReal:
    case wxExprInteger:
-   case wxExprNull: 
+   case wxExprNull:
     break;
   }
   client_data = NULL;
@@ -304,7 +304,7 @@ wxExpr *wxExpr::Copy(void) const
       }
       return new_list;
     }
-   case wxExprNull: 
+   case wxExprNull:
     break;
   }
   return NULL;
@@ -327,7 +327,7 @@ wxExpr *wxExpr::GetAttributeValueNode(const wxString& word) const // Use only fo
       if ((firstNode->type == wxExprWord) && (firstNode->value.word[0] == '='))
       {
         wxExpr *secondNode = firstNode->next;
-        if ((secondNode->type == wxExprWord) && 
+        if ((secondNode->type == wxExprWord) &&
             (wxStrcmp((const wxChar *)word, secondNode->value.word) == 0))
         {
           return expr;
@@ -366,9 +366,9 @@ wxString wxExpr::Functor(void) const // Use only for a clause
 bool wxExpr::IsFunctor(const wxString& f) const  // Use only for a clause
 {
   if ((type != wxExprList) || !value.first)
-    return FALSE;
+    return false;
 
-  return (value.first->type == wxExprWord && 
+  return (value.first->type == wxExprWord &&
           (wxStrcmp((const wxChar *)f, value.first->value.word) == 0));
 }
 
@@ -437,7 +437,7 @@ void wxExpr::DeleteAttributeValue(const wxString& attribute)
       if ((firstNode->type == wxExprWord) && (firstNode->value.word[0] == '='))
       {
         wxExpr *secondNode = firstNode->next;
-        if ((secondNode->type == wxExprWord) && 
+        if ((secondNode->type == wxExprWord) &&
             (wxStrcmp((const wxChar *)attribute, secondNode->value.word) == 0))
         {
           wxExpr *nextExpr = expr->next;
@@ -641,10 +641,10 @@ bool wxExpr::GetAttributeValue(const wxString& att, int& var) const
   if (expr && (expr->Type() == wxExprInteger || expr->Type() == wxExprReal))
   {
     var = (int)(expr->IntegerValue());
-    return TRUE;
+    return true;
   }
   else
-    return FALSE;
+    return false;
 }
 
 bool wxExpr::GetAttributeValue(const wxString& att, long& var) const
@@ -654,10 +654,10 @@ bool wxExpr::GetAttributeValue(const wxString& att, long& var) const
   if (expr && (expr->Type() == wxExprInteger || expr->Type() == wxExprReal))
   {
     var = expr->IntegerValue();
-    return TRUE;
+    return true;
   }
   else
-    return FALSE;
+    return false;
 }
 
 bool wxExpr::GetAttributeValue(const wxString& att, float& var) const
@@ -666,10 +666,10 @@ bool wxExpr::GetAttributeValue(const wxString& att, float& var) const
   if (expr && (expr->Type() == wxExprInteger || expr->Type() == wxExprReal))
   {
     var = (float) expr->RealValue();
-    return TRUE;
+    return true;
   }
   else
-    return FALSE;
+    return false;
 }
 
 bool wxExpr::GetAttributeValue(const wxString& att, double& var) const
@@ -678,10 +678,10 @@ bool wxExpr::GetAttributeValue(const wxString& att, double& var) const
   if (expr && (expr->Type() == wxExprInteger || expr->Type() == wxExprReal))
   {
     var = expr->RealValue();
-    return TRUE;
+    return true;
   }
   else
-    return FALSE;
+    return false;
 }
 
 bool wxExpr::GetAttributeValue(const wxString& att, wxString& var)  const // Word OR string -> string
@@ -690,15 +690,15 @@ bool wxExpr::GetAttributeValue(const wxString& att, wxString& var)  const // Wor
   if (expr && expr->Type() == wxExprWord)
   {
     var = expr->WordValue();
-    return TRUE;
+    return true;
   }
   else if (expr && expr->Type() == wxExprString)
   {
     var = expr->StringValue();
-    return TRUE;
+    return true;
   }
   else
-    return FALSE;
+    return false;
 }
 
 bool wxExpr::GetAttributeValue(const wxString& att, wxExpr **var) const
@@ -707,10 +707,10 @@ bool wxExpr::GetAttributeValue(const wxString& att, wxExpr **var) const
   if (expr)
   {
     *var = expr;
-    return TRUE;
+    return true;
   }
   else
-    return FALSE;
+    return false;
 }
 
 bool wxExpr::GetAttributeValueStringList(const wxString& att, wxList *var) const
@@ -726,10 +726,10 @@ bool wxExpr::GetAttributeValueStringList(const wxString& att, wxList *var) const
 
       string_expr = string_expr->next;
     }
-	return TRUE;
+    return true;
   }
   else
-    return FALSE;
+    return false;
 }
 
 // Compatibility
@@ -755,16 +755,16 @@ void wxExpr::WriteClause(FILE* stream)  // Write this expression as a top-level 
     node->WriteExpr(stream);
     fprintf( stream, "(" );
     node = node->next;
-    bool first = TRUE;
+    bool first = true;
     while (node)
     {
       if (!first)
         fprintf( stream, "  " );
       node->WriteExpr(stream);
       node = node->next;
-      if (node) 
+      if (node)
         fprintf( stream, ",\n" );
-      first = FALSE;
+      first = false;
     }
     fprintf( stream, ").\n\n" );
   }
@@ -817,18 +817,18 @@ void wxExpr::WriteExpr(FILE* stream)    // Write as any other subexpression
     }
     case wxExprWord:
     {
-      bool quote_it = FALSE;
+      bool quote_it = false;
       const wxWX2MBbuf val = wxConvLibc.cWX2MB(value.word);
       size_t len = strlen(val);
       if ((len == 0) || (len > 0 && (val[(size_t) 0] > 64 && val[(size_t) 0] < 91)))
-        quote_it = TRUE;
+        quote_it = true;
       else
       {
         size_t i;
         for (i = 0; i < len; i++)
           if ((!isalpha(val[i])) && (!isdigit(val[i])) &&
               (val[i] != '_'))
-            { quote_it = TRUE; i = len; }
+            { quote_it = true; i = len; }
       }
 
       if (quote_it)
@@ -864,8 +864,8 @@ void wxExpr::WriteExpr(FILE* stream)    // Write as any other subexpression
           {
             expr->WriteExpr(stream);
             expr = expr->next;
-            if (expr) 
-	        fprintf( stream, ", " );
+            if (expr)
+              fprintf( stream, ", " );
           }
           fprintf( stream, "]" );
         }
@@ -879,7 +879,7 @@ void wxExpr::WriteExpr(FILE* stream)    // Write as any other subexpression
 /*
  * wxExpr 'database' (list of expressions)
  */
- 
+
 IMPLEMENT_DYNAMIC_CLASS(wxExprDatabase, wxList)
 
 wxExprDatabase::wxExprDatabase(wxExprErrorHandler handler)
@@ -924,7 +924,7 @@ wxExpr *wxExprDatabase::FindClause(long id)  // Find a term based on an integer 
   while (position && !found)
   {
     wxExpr *term = (wxExpr *)position->GetData();
-    
+
     if (term->Type() == wxExprList)
     {
       wxExpr *value = term->AttributeValue(wxT("id"));
@@ -943,7 +943,7 @@ wxExpr *wxExprDatabase::FindClause(const wxString& word, const wxString& val)
   while (position && !found)
   {
     wxExpr *term = (wxExpr *)position->GetData();
-    
+
     if (term->Type() == wxExprList)
     {
       wxExpr *value = term->AttributeValue(word);
@@ -962,7 +962,7 @@ wxExpr *wxExprDatabase::FindClause(const wxString& word, long val)
   while (position && !found)
   {
     wxExpr *term = (wxExpr *)position->GetData();
-    
+
     if (term->Type() == wxExprList)
     {
       wxExpr *value = term->AttributeValue(word);
@@ -980,7 +980,7 @@ wxExpr *wxExprDatabase::FindClause(const wxString& word, double val)
   while (position && !found)
   {
     wxExpr *term = (wxExpr *)position->GetData();
-    
+
     if (term->Type() == wxExprList)
     {
       wxExpr *value = term->AttributeValue(word);
@@ -998,7 +998,7 @@ wxExpr *wxExprDatabase::FindClauseByFunctor(const wxString& functor)
   while (position && !found)
   {
     wxExpr *term = (wxExpr *)position->GetData();
-    
+
     if (term->Type() == wxExprList)
     {
       if (term->Functor() == functor)
@@ -1086,7 +1086,7 @@ bool wxExprDatabase::Read(const wxString& filename)
   }
   else
   {
-    return FALSE;
+    return false;
   }
 }
 
@@ -1105,10 +1105,10 @@ bool wxExprDatabase::ReadFromString(const wxString& buffer)
 bool wxExprDatabase::Write(const wxString& fileName)
 {
   FILE *stream = wxFopen( fileName, _T("w+"));
-  
+
   if (!stream)
-    return FALSE;
-    
+    return false;
+
   bool success = Write(stream);
   fclose(stream);
   return success;
@@ -1141,12 +1141,12 @@ bool wxExprIsFunctor(wxExpr *expr, const wxString& functor)
 
     if (first_expr && (first_expr->Type() == wxExprWord) &&
        (first_expr->WordValue() == functor))
-      return TRUE;
-    else 
-      return FALSE;
-  } 
-  else 
-    return FALSE;
+      return true;
+    else
+      return false;
+  }
+  else
+    return false;
 }
 
 /*
@@ -1213,11 +1213,11 @@ char *wxmake_string(char *str)
   size_t len, i;
   const wxMB2WXbuf sbuf = wxConvLibc.cMB2WX(str);
 
-//  str++;			/* skip leading quote */
-  len = wxStrlen(sbuf) - 1;	/* ignore trailing quote */
-    
+//  str++;                    /* skip leading quote */
+  len = wxStrlen(sbuf) - 1;   /* ignore trailing quote */
+
   s = new wxChar[len + 1];
-    
+
   t = s;
   for(i=1; i<len; i++) // 1 since we want to skip leading quote
   {
@@ -1237,7 +1237,7 @@ char *wxmake_string(char *str)
 
   *t = wxT('\0');
 
-  wxExpr *x = new wxExpr(wxExprString, s, FALSE);
+  wxExpr *x = new wxExpr(wxExprString, s, false);
   return (char *)x;
 }
 

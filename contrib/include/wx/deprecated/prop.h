@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PROP_H_
@@ -52,7 +52,7 @@ public:
     // Set the name of the sheet
     inline virtual void SetName(const wxString& name) { m_name=name; }
     inline virtual wxString GetName() const { return m_name; }
-    
+
     // Does this sheet contain a property with this name
     virtual bool HasProperty(const wxString& name) const;
 
@@ -74,16 +74,16 @@ public:
 
     virtual void UpdateAllViews(wxPropertyView *thisView = NULL);
     inline virtual wxList& GetProperties() const { return (wxList&) m_properties; }
-  
+
     // Sets/clears the modified flag for each property value
-    virtual void SetAllModified(bool flag = TRUE);
+    virtual void SetAllModified(bool flag = true);
 
 protected:
     wxObject*         m_viewedObject;
     wxList            m_properties;
     wxPropertyView*   m_propertyView;
-    wxString			m_name;
-  
+    wxString          m_name;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxPropertySheet)
 };
@@ -102,7 +102,7 @@ public:
 
     // Update this view of the viewed object, called e.g. by
     // the object itself.
-    virtual bool OnUpdateView() {return FALSE;};
+    virtual bool OnUpdateView() {return false;};
 
     // Override this to do something as soon as the property changed,
     // if the view and validators support it.
@@ -116,7 +116,7 @@ public:
     inline virtual void SetPropertySheet(wxPropertySheet *sheet) { m_propertySheet = sheet; }
     inline virtual wxPropertySheet *GetPropertySheet() const { return m_propertySheet; }
 
-    inline virtual bool OnClose() { return FALSE; }
+    inline virtual bool OnClose() { return false; }
     inline long GetFlags(void) { return m_buttonFlags; }
 
 protected:
@@ -125,7 +125,7 @@ protected:
     wxProperty*           m_currentProperty;
     wxList                m_validatorRegistryList;
     wxPropertyValidator*  m_currentValidator;
-  
+
 private:
     DECLARE_DYNAMIC_CLASS(wxPropertyView)
 };
@@ -153,7 +153,7 @@ public:
 protected:
     long          m_validatorFlags;
     wxProperty*   m_validatorProperty;
-  
+
 private:
     DECLARE_DYNAMIC_CLASS(wxPropertyValidator)
 };
@@ -170,7 +170,7 @@ public:
     virtual void RegisterValidator(const wxString& roleName, wxPropertyValidator *validator);
     virtual wxPropertyValidator *GetValidator(const wxString& roleName);
     void ClearRegistry();
-  
+
 private:
     DECLARE_DYNAMIC_CLASS(wxPropertyValidatorRegistry)
 };
@@ -255,7 +255,7 @@ class WXDLLIMPEXP_DEPRECATED wxPropertyValue: public wxObject
   // Get last expr in list
   virtual inline wxPropertyValue *GetLast(void) const
     { return ((m_type == wxPropertyValueList) ? m_last : (wxPropertyValue*)NULL); }
-  
+
   // Delete this node from the list
   virtual void Delete(wxPropertyValue *node);
 
@@ -266,8 +266,8 @@ class WXDLLIMPEXP_DEPRECATED wxPropertyValue: public wxObject
   virtual inline wxObject *GetClientData(void) { return m_clientData; }
 
   virtual wxString GetStringRepresentation(void);
-  
-  inline void SetModified(bool flag = TRUE) { m_modifiedFlag = flag; }
+
+  inline void SetModified(bool flag = true) { m_modifiedFlag = flag; }
   inline bool GetModified(void) { return m_modifiedFlag; }
 
   // Operators
@@ -336,7 +336,7 @@ class WXDLLIMPEXP_DEPRECATED wxProperty: public wxObject
   void operator=(const wxPropertyValue& val);
   virtual inline void SetWindow(wxWindow *win) { m_propertyWindow = win; }
   virtual inline wxWindow *GetWindow(void) const { return m_propertyWindow; }
-  
+
   inline void Enable(bool en) { m_enabled = en; }
   inline bool IsEnabled(void) const { return m_enabled; }
 };

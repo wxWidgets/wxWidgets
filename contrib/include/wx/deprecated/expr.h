@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 ////////////////////////////////////////////////////////////////////////// */
 
 #ifndef _WX_EXPRH__
@@ -65,4 +65,4 @@ void syntax_error();
 #endif
 
 #endif
-	/* _WX_EXPRH__ */
+    /* _WX_EXPRH__ */

@@ -50,12 +50,12 @@ wxTreeLayout::wxTreeLayout()
 
 void wxTreeLayout::DoLayout(wxDC& dc, long topId)
 {
-    if (topId != -1)
+    if (topId != wxID_ANY)
         SetTopNode(topId);
 
     long actualTopId = GetTopNode();
     long id = actualTopId;
-    while (id != -1)
+    while (id != wxID_ANY)
     {
         SetNodeX(id, 0);
         SetNodeY(id, 0);
@@ -77,7 +77,7 @@ void wxTreeLayout::Draw(wxDC& dc)
 void wxTreeLayout::DrawNodes(wxDC& dc)
 {
     long id = GetTopNode();
-    while (id != -1)
+    while (id != wxID_ANY)
     {
         if (NodeActive(id))
             DrawNode(id, dc);
@@ -88,9 +88,9 @@ void wxTreeLayout::DrawNodes(wxDC& dc)
 void wxTreeLayout::DrawBranches(wxDC& dc)
 {
     long id = GetTopNode();
-    while (id != -1)
+    while (id != wxID_ANY)
     {
-        if (GetNodeParent(id) > -1)
+        if (GetNodeParent(id) != wxID_ANY)
         {
             long parent = GetNodeParent(id);
             if (NodeActive(parent))
@@ -155,7 +155,7 @@ void wxTreeLayout::CalcLayout(long nodeId, int level, wxDC& dc)
             long x = 0;
             long y = 0;
             long parentId = GetNodeParent(nodeId);
-            if (parentId != -1)
+            if (parentId != wxID_ANY)
                 GetNodeSize(parentId, &x, &y, dc);
             SetNodeX(nodeId, (long)(GetNodeX(parentId) + m_xSpacing + x));
         }
@@ -204,7 +204,7 @@ void wxTreeLayout::CalcLayout(long nodeId, int level, wxDC& dc)
             long x = 0;
             long y = 0;
             long parentId = GetNodeParent(nodeId);
-            if (parentId != -1)
+            if (parentId != wxID_ANY)
                 GetNodeSize(parentId, &x, &y, dc);
             SetNodeY(nodeId, (long)(GetNodeY(parentId) + m_ySpacing + y));
         }
@@ -274,7 +274,7 @@ void wxTreeLayoutStored::Initialize(int n)
     {
         m_nodes[i].m_name = wxT("");
         m_nodes[i].m_active = false;
-        m_nodes[i].m_parentId = -1;
+        m_nodes[i].m_parentId = wxID_ANY;
         m_nodes[i].m_x = 0;
         m_nodes[i].m_y = 0;
     }
@@ -311,17 +311,17 @@ long wxTreeLayoutStored::AddChild(const wxString& name, long parent)
         {
           i = parent;
         }
-        else 
+        else
         {
           m_parentNode = m_num;
         }
-        
+
         m_nodes[m_num].m_parentId = i;
         m_nodes[m_num].m_name = name;
         m_nodes[m_num].m_x = m_nodes[m_num].m_y = 0;
         m_nodes[m_num].m_clientData = 0;
         m_num ++;
-        
+
         return (m_num - 1);
     }
     else
@@ -340,7 +340,7 @@ long wxTreeLayoutStored::NameToId(const wxString& name)
 void wxTreeLayoutStored::GetChildren(long id, wxList& list)
 {
     long currentId = GetTopNode();
-    while (currentId != -1)
+    while (currentId != wxID_ANY)
     {
         if (id == GetNodeParent(currentId))
             list.Append((wxObject *)currentId);
@@ -399,24 +399,24 @@ wxString wxTreeLayoutStored::GetNodeName(long id)
 
 long wxTreeLayoutStored::GetNodeParent(long id)
 {
-    if (id != -1)
+    if (id != wxID_ANY)
     {
         wxASSERT(id < m_num);
 
         return m_nodes[id].m_parentId;
     }
     else
-        return -1;
+        return wxNOT_FOUND;
 }
 
 long wxTreeLayoutStored::GetNextNode(long id)
 {
     wxASSERT(id < m_num);
 
-    if ((id != -1) && (id < (m_num - 1)))
+    if ((id != wxID_ANY) && (id < (m_num - 1)))
         return id + 1;
     else
-        return -1;
+        return wxNOT_FOUND;
 }
 
 void wxTreeLayoutStored::SetClientData(long id, long clientData)

@@ -30,7 +30,7 @@ public:
     MyPanel(wxWindow *parent, wxWindowID id, const wxPoint& pos,
             const wxSize& size, int style, const wxString &name);
     void OnClick(wxMouseEvent &event);
-    
+
 private:
     DECLARE_EVENT_TABLE()
 };
@@ -43,7 +43,7 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnTestDialog(wxCommandEvent& event);
-    
+
     wxWindow *panel;
 
 private:
@@ -55,7 +55,7 @@ class MyDialog : public wxDialog
 public:
     void OnOk(wxCommandEvent& event);
     void OnCancel(wxCommandEvent& event);
-    
+
 private:
     DECLARE_EVENT_TABLE()
 };

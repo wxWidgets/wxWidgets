@@ -108,7 +108,7 @@ class WXDLLIMPEXP_DEPRECATED wxItemResource: public wxObject
   inline void SetBackgroundColour(const wxColour& col) { m_backgroundColour = col; }
   inline void SetLabelColour(const wxColour& col) { m_labelColour = col; }
   inline void SetButtonColour(const wxColour& col) { m_buttonColour = col; }
-  
+
   inline wxColour& GetBackgroundColour() const { return (wxColour&) m_backgroundColour; }
   inline wxColour& GetLabelColour() const { return (wxColour&) m_labelColour; }
   inline wxColour& GetButtonColour() const { return (wxColour&) m_buttonColour; }
@@ -138,16 +138,16 @@ class WXDLLIMPEXP_DEPRECATED wxItemResource: public wxObject
 /*
  * Resource table (normally only one of these)
  */
- 
+
 class WXDLLIMPEXP_DEPRECATED wxResourceTable: public wxHashTable
 {
   DECLARE_DYNAMIC_CLASS(wxResourceTable)
 
   protected:
-    
+
   public:
     wxHashTable identifiers;
-    
+
     wxResourceTable();
     ~wxResourceTable();
 

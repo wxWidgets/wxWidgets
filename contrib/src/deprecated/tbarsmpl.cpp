@@ -145,7 +145,7 @@ void wxToolBarSimple::Init()
     m_currentTool = -1;
 
     m_xPos =
-    m_yPos = -1;
+    m_yPos = wxDefaultCoord;
 
     m_toolPacking = 1;
     m_toolSeparation = 5;
@@ -194,11 +194,11 @@ bool wxToolBarSimple::DoInsertTool(size_t WXUNUSED(pos),
                  _T("generic wxToolBarSimple doesn't support controls") );
 
     tool->m_x = m_xPos;
-    if ( tool->m_x == -1 )
+    if ( tool->m_x == wxDefaultCoord )
         tool->m_x = m_xMargin;
 
     tool->m_y = m_yPos;
-    if ( tool->m_y == -1 )
+    if ( tool->m_y == wxDefaultCoord )
         tool->m_y = m_yMargin;
 
     tool->SetSize(GetToolSize());
@@ -851,7 +851,7 @@ int wxToolBarSimple::CalcScrollInc(wxScrollEvent& event)
             else
                 nScrollInc = pos - m_yScrollPosition;
     }
-    
+
     if (orient == wxHORIZONTAL)
     {
         int w, h;
@@ -968,15 +968,15 @@ void wxToolBarSimple::Scroll (int x_pos, int y_pos)
 {
     int old_x, old_y;
     ViewStart (&old_x, &old_y);
-    if (((x_pos == -1) || (x_pos == old_x)) && ((y_pos == -1) || (y_pos == old_y)))
+    if (((x_pos == wxDefaultCoord) || (x_pos == old_x)) && ((y_pos == wxDefaultCoord) || (y_pos == old_y)))
         return;
 
-    if (x_pos > -1)
+    if (x_pos != wxDefaultCoord)
     {
         m_xScrollPosition = x_pos;
         SetScrollPos (wxHORIZONTAL, x_pos, true);
     }
-    if (y_pos > -1)
+    if (y_pos != wxDefaultCoord)
     {
         m_yScrollPosition = y_pos;
         SetScrollPos (wxVERTICAL, y_pos, true);

@@ -2,7 +2,7 @@
 // Name:        treelay.h
 // Purpose:     wxTreeLayout sample
 // Author:      Julian Smart
-// Modified by: 
+// Modified by:
 // Created:     7/4/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart

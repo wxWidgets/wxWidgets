@@ -48,7 +48,7 @@
 #define WXEXPR_ERROR_GENERAL 1
 #define WXEXPR_ERROR_SYNTAX  2
 
-// Error handler function definition. If app returns TRUE,
+// Error handler function definition. If app returns true,
 // carry on processing.
 typedef bool (*wxExprErrorHandler) (int errorType, char *msg);
 

@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
  /*
@@ -190,7 +190,7 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS(wxPropertyListView)
     DECLARE_EVENT_TABLE()
-    
+
     virtual void ShowView(wxPropertySheet *propertySheet, wxWindow *window)
         { wxPropertyView::ShowView(propertySheet, window); };
 };
@@ -265,7 +265,7 @@ public:
    virtual void OnEdit(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
    // Called when TICK is pressed or focus is lost.
-   // Return FALSE if value didn't check out; signal to restore old value.
+   // Return false if value didn't check out; signal to restore old value.
    inline virtual bool OnCheckValue(
      wxProperty *WXUNUSED(property), wxPropertyListView *WXUNUSED(view), wxWindow *WXUNUSED(parentWindow) )
      { return true; }
@@ -276,7 +276,7 @@ public:
    virtual bool OnRetrieveValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
    virtual bool OnDisplayValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
-   
+
 private:
     DECLARE_DYNAMIC_CLASS(wxPropertyListValidator)
 };
@@ -399,7 +399,7 @@ public:
     bool OnPrepareControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
     // Called when TICK is pressed or focus is lost.
-    // Return FALSE if value didn't check out; signal to restore old value.
+    // Return false if value didn't check out; signal to restore old value.
     bool OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
     // Called when TICK is pressed or focus is lost or view wants to update
@@ -410,7 +410,7 @@ public:
 protected:
     float     m_realMin;
     float     m_realMax;
-  
+
 private:
     DECLARE_DYNAMIC_CLASS(wxRealListValidator)
 };
@@ -428,7 +428,7 @@ public:
    bool OnPrepareControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
    // Called when TICK is pressed or focus is lost.
-   // Return FALSE if value didn't check out; signal to restore old value.
+   // Return false if value didn't check out; signal to restore old value.
    bool OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
    // Called when TICK is pressed or focus is lost or view wants to update
@@ -439,7 +439,7 @@ public:
 protected:
     long m_integerMin;
     long m_integerMax;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxIntegerListValidator)
 };
@@ -455,7 +455,7 @@ public:
     bool OnClearDetailControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
     // Called when TICK is pressed or focus is lost.
-    // Return FALSE if value didn't check out; signal to restore old value.
+    // Return false if value didn't check out; signal to restore old value.
     bool OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
     // Called when TICK is pressed or focus is lost or view wants to update
@@ -467,7 +467,7 @@ public:
     // Called when the property is double clicked. Extra functionality can be provided,
     // cycling through possible values.
     virtual bool OnDoubleClick(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
-   
+
 private:
     DECLARE_DYNAMIC_CLASS(wxBoolListValidator)
 };
@@ -488,7 +488,7 @@ public:
     bool OnClearDetailControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
     // Called when TICK is pressed or focus is lost.
-    // Return FALSE if value didn't check out; signal to restore old value.
+    // Return false if value didn't check out; signal to restore old value.
     bool OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
     // Called when TICK is pressed or focus is lost or view wants to update
@@ -503,7 +503,7 @@ public:
 
 protected:
     wxStringList*     m_strings;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxStringListValidator)
 };
@@ -515,7 +515,7 @@ public:
     ~wxFilenameListValidator();
 
     // Called when TICK is pressed or focus is lost.
-    // Return FALSE if value didn't check out; signal to restore old value.
+    // Return false if value didn't check out; signal to restore old value.
     bool OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
     // Called when TICK is pressed or focus is lost or view wants to update
@@ -555,7 +555,7 @@ public:
 
     // Called when the edit (...) button is pressed.
     void OnEdit(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
-   
+
 private:
     DECLARE_DYNAMIC_CLASS(wxColourListValidator)
 };
@@ -569,7 +569,7 @@ public:
     bool OnPrepareControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
     // Called when TICK is pressed or focus is lost.
-    // Return FALSE if value didn't check out; signal to restore old value.
+    // Return false if value didn't check out; signal to restore old value.
     bool OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
     // Called when TICK is pressed or focus is lost or view wants to update
@@ -585,7 +585,7 @@ public:
 
     // Called when the edit (...) button is pressed.
     void OnEdit(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
-   
+
 private:
     DECLARE_DYNAMIC_CLASS(wxListOfStringsListValidator)
 };

@@ -680,7 +680,7 @@ bool wxStringFormValidator::OnRetrieveValue(wxProperty *property, wxPropertyForm
     else if (m_propertyWindow->IsKindOf(CLASSINFO(wxListBox)))
     {
         wxListBox *lbox = (wxListBox *)m_propertyWindow;
-        if (lbox->GetSelection() > -1)
+        if (lbox->GetSelection() != wxNOT_FOUND)
             property->GetValue() = lbox->GetStringSelection();
     }
     /*
@@ -688,14 +688,14 @@ bool wxStringFormValidator::OnRetrieveValue(wxProperty *property, wxPropertyForm
     {
     wxRadioBox *rbox = (wxRadioBox *)m_propertyWindow;
     int n = 0;
-    if ((n = rbox->GetSelection()) > -1)
+    if ((n = rbox->GetSelection()) != wxNOT_FOUND)
     property->GetValue() = rbox->GetString(n);
     }
     */
     else if (m_propertyWindow->IsKindOf(CLASSINFO(wxChoice)))
     {
         wxChoice *choice = (wxChoice *)m_propertyWindow;
-        if (choice->GetSelection() > -1)
+        if (choice->GetSelection() != wxNOT_FOUND)
             property->GetValue() = choice->GetStringSelection();
     }
     else

@@ -96,7 +96,7 @@ static inline wxChar* copystring(const wxChar* s)
 
 // Forward (private) declarations
 bool wxResourceInterpretResources(wxResourceTable& table, wxExprDatabase& db);
-wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, wxExpr *expr, bool isPanel = FALSE);
+wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, wxExpr *expr, bool isPanel = false);
 wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr);
 wxItemResource *wxResourceInterpretMenu(wxResourceTable& table, wxExpr *expr);
 wxItemResource *wxResourceInterpretMenuBar(wxResourceTable& table, wxExpr *expr);
@@ -137,7 +137,7 @@ class wxResourceModule: public wxModule
 {
 public:
     wxResourceModule() : wxModule() {}
-    virtual bool OnInit() { wxInitializeResourceSystem(); return TRUE; }
+    virtual bool OnInit() { wxInitializeResourceSystem(); return true; }
     virtual void OnExit() { wxCleanUpResourceSystem();  }
 
     DECLARE_DYNAMIC_CLASS(wxResourceModule)
@@ -228,10 +228,10 @@ bool wxResourceTable::DeleteResource(const wxString& name)
         }
 
         delete item;
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 bool wxResourceTable::ParseResourceFile( wxInputStream *is )
@@ -239,7 +239,7 @@ bool wxResourceTable::ParseResourceFile( wxInputStream *is )
     wxExprDatabase db;
     int len = is->GetSize() ;
 
-    bool eof = FALSE;
+    bool eof = false;
     while ( is->TellI() + 10 < len) // it's a hack because the streams dont support EOF
     {
         wxResourceReadOneResource(is, db, &eof, this) ;
@@ -253,8 +253,8 @@ bool wxResourceTable::ParseResourceFile(const wxString& filename)
 
     FILE *fd = wxFopen(filename, wxT("r"));
     if (!fd)
-        return FALSE;
-    bool eof = FALSE;
+        return false;
+    bool eof = false;
     while (wxResourceReadOneResource(fd, db, &eof, this) && !eof)
     {
         // Loop
@@ -269,7 +269,7 @@ bool wxResourceTable::ParseResourceData(const wxString& data)
     if (!db.ReadFromString(data))
     {
         wxLogWarning(_("Ill-formed resource file syntax."));
-        return FALSE;
+        return false;
     }
 
     return wxResourceInterpretResources(*this, db);
@@ -286,7 +286,7 @@ bool wxResourceTable::RegisterResourceBitmapData(const wxString& name, char bits
     item->SetValue2((long)width);
     item->SetValue3((long)height);
     AddResource(item);
-    return TRUE;
+    return true;
 }
 
 bool wxResourceTable::RegisterResourceBitmapData(const wxString& name, char **data)
@@ -298,12 +298,12 @@ bool wxResourceTable::RegisterResourceBitmapData(const wxString& name, char **da
     item->SetName(name);
     item->SetValue1((long)data);
     AddResource(item);
-    return TRUE;
+    return true;
 }
 
 bool wxResourceTable::SaveResource(const wxString& WXUNUSED(filename))
 {
-    return FALSE;
+    return false;
 }
 
 void wxResourceTable::ClearTable()
@@ -443,7 +443,7 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, const wxItemResource* c
             ((wxScrollBar *)control)->SetViewLength((int)(long)childResource->GetValue5());
         */
         ((wxScrollBar *)control)->SetScrollbar((int)childResource->GetValue1(),(int)childResource->GetValue2(),
-            (int)childResource->GetValue3(),(int)(long)childResource->GetValue5(),FALSE);
+            (int)childResource->GetValue3(),(int)(long)childResource->GetValue5(),false);
 
     }
 #endif
@@ -572,7 +572,7 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, const wxItemResource* c
             // Force the layout algorithm since the size changes the layout
             if (control->IsKindOf(CLASSINFO(wxRadioBox)))
             {
-                control->SetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH|wxSIZE_AUTO_HEIGHT);
+                control->SetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, wxSIZE_AUTO_WIDTH|wxSIZE_AUTO_HEIGHT);
             }
 #endif
         }
@@ -596,7 +596,7 @@ bool wxResourceInterpretResources(wxResourceTable& table, wxExprDatabase& db)
         if (functor == wxT("dialog"))
             item = wxResourceInterpretDialog(table, clause);
         else if (functor == wxT("panel"))
-            item = wxResourceInterpretDialog(table, clause, TRUE);
+            item = wxResourceInterpretDialog(table, clause, true);
         else if (functor == wxT("menubar"))
             item = wxResourceInterpretMenuBar(table, clause);
         else if (functor == wxT("menu"))
@@ -617,7 +617,7 @@ bool wxResourceInterpretResources(wxResourceTable& table, wxExprDatabase& db)
         }
         node = node->GetNext();
     }
-    return TRUE;
+    return true;
 }
 
 static const wxChar *g_ValidControlClasses[] =
@@ -649,9 +649,9 @@ static bool wxIsValidControlClass(const wxString& c)
     for ( size_t i = 0; i < WXSIZEOF(g_ValidControlClasses); i++ )
     {
         if ( c == g_ValidControlClasses[i] )
-            return TRUE;
+            return true;
     }
-    return FALSE;
+    return false;
 }
 
 wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, wxExpr *expr, bool isPanel)
@@ -672,7 +672,7 @@ wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, wxExpr *expr, 
     if (isPanel)
         windowStyle = 0;
 
-    int x = 0; int y = 0; int width = -1; int height = -1;
+    int x = 0; int y = 0; int width = wxDefaultCoord; int height = wxDefaultCoord;
     int isModal = 0;
     wxExpr *labelFontExpr = (wxExpr *) NULL;
     wxExpr *buttonFontExpr = (wxExpr *) NULL;
@@ -716,7 +716,7 @@ wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, wxExpr *expr, 
 #pragma message disable CODCAUUNR
 #endif
    if (windowStyle & wxDIALOG_MODAL) // Uses style in wxWin 2
-        dialogItem->SetValue1(TRUE);
+        dialogItem->SetValue1(true);
 #ifdef __VMS
 #pragma message enable CODCAUUNR
 #endif
@@ -726,9 +726,9 @@ wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, wxExpr *expr, 
     dialogItem->SetSize(x, y, width, height);
 
     // Check for wxWin 1.68-style specifications
-    if (style.Find(wxT("VERTICAL_LABEL")) != -1)
+    if (style.Find(wxT("VERTICAL_LABEL")) != wxNOT_FOUND)
         dialogItem->SetResourceStyle(dialogItem->GetResourceStyle() | wxRESOURCE_VERTICAL_LABEL);
-    else if (style.Find(wxT("HORIZONTAL_LABEL")) != -1)
+    else if (style.Find(wxT("HORIZONTAL_LABEL")) != wxNOT_FOUND)
         dialogItem->SetResourceStyle(dialogItem->GetResourceStyle() | wxRESOURCE_HORIZONTAL_LABEL);
 
     if (backColourHex != wxT(""))
@@ -808,7 +808,7 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
     wxString name;
     int id = 0;
     long windowStyle = 0;
-    int x = 0; int y = 0; int width = -1; int height = -1;
+    int x = 0; int y = 0; int width = wxDefaultCoord; int height = wxDefaultCoord;
     int count = 0;
 
     wxExpr *expr1 = expr->Nth(0);
@@ -893,9 +893,9 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
     controlItem->SetId(id);
 
     // Check for wxWin 1.68-style specifications
-    if (style.Find(wxT("VERTICAL_LABEL")) != -1)
+    if (style.Find(wxT("VERTICAL_LABEL")) != wxNOT_FOUND)
         controlItem->SetResourceStyle(controlItem->GetResourceStyle() | wxRESOURCE_VERTICAL_LABEL);
-    else if (style.Find(wxT("HORIZONTAL_LABEL")) != -1)
+    else if (style.Find(wxT("HORIZONTAL_LABEL")) != wxNOT_FOUND)
         controlItem->SetResourceStyle(controlItem->GetResourceStyle() | wxRESOURCE_HORIZONTAL_LABEL);
 
     if (controlType == wxT("wxButton"))
@@ -1532,7 +1532,7 @@ bool wxReallocateResourceBuffer()
     {
         wxResourceBufferSize = 1000;
         wxResourceBuffer = new char[wxResourceBufferSize];
-        return TRUE;
+        return true;
     }
     if (wxResourceBuffer)
     {
@@ -1543,7 +1543,7 @@ bool wxReallocateResourceBuffer()
         wxResourceBuffer = tmp;
         wxResourceBufferSize = newSize;
     }
-    return TRUE;
+    return true;
 }
 
 static bool wxEatWhiteSpace(FILE *fd)
@@ -1566,7 +1566,7 @@ static bool wxEatWhiteSpace(FILE *fd)
                 if (ch == EOF)
                 {
                     ungetc(prev_ch, fd);
-                    return TRUE;
+                    return true;
                 }
 
                 if (ch == '*')
@@ -1590,17 +1590,17 @@ static bool wxEatWhiteSpace(FILE *fd)
                 {
                     ungetc(prev_ch, fd);
                     ungetc(ch, fd);
-                    return TRUE;
+                    return true;
                 }
             }
             break;
         default:
             ungetc(ch, fd);
-            return TRUE;
+            return true;
 
         }
     }
-    return FALSE;
+    return false;
 }
 static bool wxEatWhiteSpace(wxInputStream *is)
 {
@@ -1608,7 +1608,7 @@ static bool wxEatWhiteSpace(wxInputStream *is)
     if ((ch != ' ') && (ch != '/') && (ch != ' ') && (ch != 10) && (ch != 13) && (ch != 9))
     {
         is->Ungetch(ch);
-        return TRUE;
+        return true;
     }
 
     // Eat whitespace
@@ -1620,17 +1620,17 @@ static bool wxEatWhiteSpace(wxInputStream *is)
         ch = is->GetC();
         if (ch == '*')
         {
-            bool finished = FALSE;
+            bool finished = false;
             while (!finished)
             {
                 ch = is->GetC();
                 if (ch == EOF)
-                    return FALSE;
+                    return false;
                 if (ch == '*')
                 {
                     int newCh = is->GetC();
                     if (newCh == '/')
-                        finished = TRUE;
+                        finished = true;
                     else
                     {
                         is->Ungetch(ch);
@@ -1639,7 +1639,7 @@ static bool wxEatWhiteSpace(wxInputStream *is)
             }
         }
         else // False alarm
-            return FALSE;
+            return false;
     }
     else
         is->Ungetch(ch);
@@ -1665,7 +1665,7 @@ bool wxGetResourceToken(FILE *fd)
             if (ch == EOF)
             {
                 wxResourceBuffer[wxResourceBufferCount] = 0;
-                return FALSE;
+                return false;
             }
             // Escaped characters
             else if (ch == '\\')
@@ -1704,9 +1704,9 @@ bool wxGetResourceToken(FILE *fd)
         }
         wxResourceBuffer[wxResourceBufferCount] = 0;
         if (ch == EOF)
-            return FALSE;
+            return false;
     }
-    return TRUE;
+    return true;
 }
 
 bool wxGetResourceToken(wxInputStream *is)
@@ -1728,7 +1728,7 @@ bool wxGetResourceToken(wxInputStream *is)
             if (ch == EOF)
             {
                 wxResourceBuffer[wxResourceBufferCount] = 0;
-                return FALSE;
+                return false;
             }
             // Escaped characters
             else if (ch == '\\')
@@ -1769,9 +1769,9 @@ bool wxGetResourceToken(wxInputStream *is)
         }
         wxResourceBuffer[wxResourceBufferCount] = 0;
         if (ch == EOF)
-            return FALSE;
+            return false;
     }
-    return TRUE;
+    return true;
 }
 
 /*
@@ -1788,8 +1788,8 @@ bool wxResourceReadOneResource(FILE *fd, wxExprDatabase& db, bool *eof, wxResour
     // static or #define
     if (!wxGetResourceToken(fd))
     {
-        *eof = TRUE;
-        return FALSE;
+        *eof = true;
+        return false;
     }
 
     if (strcmp(wxResourceBuffer, "#define") == 0)
@@ -1808,12 +1808,12 @@ bool wxResourceReadOneResource(FILE *fd, wxExprDatabase& db, bool *eof, wxResour
             wxLogWarning(_("#define %s must be an integer."), name);
             delete[] name;
             delete[] value;
-            return FALSE;
+            return false;
         }
         delete[] name;
         delete[] value;
 
-        return TRUE;
+        return true;
     }
     else if (strcmp(wxResourceBuffer, "#include") == 0)
     {
@@ -1830,7 +1830,7 @@ bool wxResourceReadOneResource(FILE *fd, wxExprDatabase& db, bool *eof, wxResour
             wxLogWarning(_("Could not find resource include file %s."), actualName);
         }
         delete[] name;
-        return TRUE;
+        return true;
     }
     else if (strcmp(wxResourceBuffer, "static") != 0)
     {
@@ -1839,35 +1839,35 @@ bool wxResourceReadOneResource(FILE *fd, wxExprDatabase& db, bool *eof, wxResour
         wxStrncat(buf, wxConvCurrent->cMB2WX(wxResourceBuffer), 30);
         wxStrcat(buf, _(", expected static, #include or #define\nwhilst parsing resource."));
         wxLogWarning(buf);
-        return FALSE;
+        return false;
     }
 
     // char
     if (!wxGetResourceToken(fd))
     {
         wxLogWarning(_("Unexpected end of file whilst parsing resource."));
-        *eof = TRUE;
-        return FALSE;
+        *eof = true;
+        return false;
     }
 
     if (strcmp(wxResourceBuffer, "char") != 0)
     {
         wxLogWarning(_("Expected 'char' whilst parsing resource."));
-        return FALSE;
+        return false;
     }
 
     // *name
     if (!wxGetResourceToken(fd))
     {
         wxLogWarning(_("Unexpected end of file whilst parsing resource."));
-        *eof = TRUE;
-        return FALSE;
+        *eof = true;
+        return false;
     }
 
     if (wxResourceBuffer[0] != '*')
     {
         wxLogWarning(_("Expected '*' whilst parsing resource."));
-        return FALSE;
+        return false;
     }
     wxChar nameBuf[100];
     wxMB2WX(nameBuf, wxResourceBuffer+1, 99);
@@ -1877,37 +1877,37 @@ bool wxResourceReadOneResource(FILE *fd, wxExprDatabase& db, bool *eof, wxResour
     if (!wxGetResourceToken(fd))
     {
         wxLogWarning(_("Unexpected end of file whilst parsing resource."));
-        *eof = TRUE;
-        return FALSE;
+        *eof = true;
+        return false;
     }
 
     if (strcmp(wxResourceBuffer, "=") != 0)
     {
         wxLogWarning(_("Expected '=' whilst parsing resource."));
-        return FALSE;
+        return false;
     }
 
     // String
     if (!wxGetResourceToken(fd))
     {
         wxLogWarning(_("Unexpected end of file whilst parsing resource."));
-        *eof = TRUE;
-        return FALSE;
+        *eof = true;
+        return false;
     }
     else
     {
         if (!db.ReadPrologFromString(wxResourceBuffer))
         {
             wxLogWarning(_("%s: ill-formed resource file syntax."), nameBuf);
-            return FALSE;
+            return false;
         }
     }
     // Semicolon
     if (!wxGetResourceToken(fd))
     {
-        *eof = TRUE;
+        *eof = true;
     }
-    return TRUE;
+    return true;
 }
 
 bool wxResourceReadOneResource(wxInputStream *fd, wxExprDatabase& db, bool *eof, wxResourceTable *table)
@@ -1918,8 +1918,8 @@ bool wxResourceReadOneResource(wxInputStream *fd, wxExprDatabase& db, bool *eof,
     // static or #define
     if (!wxGetResourceToken(fd))
     {
-        *eof = TRUE;
-        return FALSE;
+        *eof = true;
+        return false;
     }
 
     if (strcmp(wxResourceBuffer, "#define") == 0)
@@ -1938,12 +1938,12 @@ bool wxResourceReadOneResource(wxInputStream *fd, wxExprDatabase& db, bool *eof,
             wxLogWarning(_("#define %s must be an integer."), name);
             delete[] name;
             delete[] value;
-            return FALSE;
+            return false;
         }
         delete[] name;
         delete[] value;
 
-        return TRUE;
+        return true;
     }
     else if (strcmp(wxResourceBuffer, "#include") == 0)
     {
@@ -1960,7 +1960,7 @@ bool wxResourceReadOneResource(wxInputStream *fd, wxExprDatabase& db, bool *eof,
             wxLogWarning(_("Could not find resource include file %s."), actualName);
         }
         delete[] name;
-        return TRUE;
+        return true;
     }
     else if (strcmp(wxResourceBuffer, "static") != 0)
     {
@@ -1969,35 +1969,35 @@ bool wxResourceReadOneResource(wxInputStream *fd, wxExprDatabase& db, bool *eof,
         wxStrncat(buf, wxConvLibc.cMB2WX(wxResourceBuffer), 30);
         wxStrcat(buf, _(", expected static, #include or #define\nwhilst parsing resource."));
         wxLogWarning(buf);
-        return FALSE;
+        return false;
     }
 
     // char
     if (!wxGetResourceToken(fd))
     {
         wxLogWarning(_("Unexpected end of file whilst parsing resource."));
-        *eof = TRUE;
-        return FALSE;
+        *eof = true;
+        return false;
     }
 
     if (strcmp(wxResourceBuffer, "char") != 0)
     {
         wxLogWarning(_("Expected 'char' whilst parsing resource."));
-        return FALSE;
+        return false;
     }
 
     // *name
     if (!wxGetResourceToken(fd))
     {
         wxLogWarning(_("Unexpected end of file whilst parsing resource."));
-        *eof = TRUE;
-        return FALSE;
+        *eof = true;
+        return false;
     }
 
     if (wxResourceBuffer[0] != '*')
     {
         wxLogWarning(_("Expected '*' whilst parsing resource."));
-        return FALSE;
+        return false;
     }
     char nameBuf[100];
     strncpy(nameBuf, wxResourceBuffer+1, 99);
@@ -2006,37 +2006,37 @@ bool wxResourceReadOneResource(wxInputStream *fd, wxExprDatabase& db, bool *eof,
     if (!wxGetResourceToken(fd))
     {
         wxLogWarning(_("Unexpected end of file whilst parsing resource."));
-        *eof = TRUE;
-        return FALSE;
+        *eof = true;
+        return false;
     }
 
     if (strcmp(wxResourceBuffer, "=") != 0)
     {
         wxLogWarning(_("Expected '=' whilst parsing resource."));
-        return FALSE;
+        return false;
     }
 
     // String
     if (!wxGetResourceToken(fd))
     {
         wxLogWarning(_("Unexpected end of file whilst parsing resource."));
-        *eof = TRUE;
-        return FALSE;
+        *eof = true;
+        return false;
     }
     else
     {
         if (!db.ReadPrologFromString(wxResourceBuffer))
         {
             wxLogWarning(_("%s: ill-formed resource file syntax."), nameBuf);
-            return FALSE;
+            return false;
         }
     }
     // Semicolon
     if (!wxGetResourceToken(fd))
     {
-        *eof = TRUE;
+        *eof = true;
     }
-    return TRUE;
+    return true;
 }
 
 /*
@@ -2353,13 +2353,13 @@ long wxParseWindowStyle(const wxString& bitListString)
     word = wxResourceParseWord(WXSTRINGCAST bitListString, &i);
     while (word != NULL)
     {
-        bool found = FALSE;
+        bool found = false;
         int j;
         for (j = 0; j < wxResourceBitListCount; j++)
             if (wxStrcmp(wxResourceBitListTable[j].word, word) == 0)
             {
                 bitList |= wxResourceBitListTable[j].bits;
-                found = TRUE;
+                found = true;
                 break;
             }
             if (!found)
@@ -2811,7 +2811,7 @@ bool wxResourceAddIdentifier(const wxString& name, int value, wxResourceTable *t
         table = wxDefaultResourceTable;
 
     table->identifiers.Put(name, (wxObject *)(long)value);
-    return TRUE;
+    return true;
 }
 
 int wxResourceGetIdentifier(const wxString& name, wxResourceTable *table)
@@ -2834,7 +2834,7 @@ bool wxResourceParseIncludeFile(const wxString& f, wxResourceTable *table)
     FILE *fd = wxFopen(f, wxT("r"));
     if (!fd)
     {
-        return FALSE;
+        return false;
     }
     while (wxGetResourceToken(fd))
     {
@@ -2854,7 +2854,7 @@ bool wxResourceParseIncludeFile(const wxString& f, wxResourceTable *table)
         }
     }
     fclose(fd);
-    return TRUE;
+    return true;
 }
 
 /*
@@ -2898,7 +2898,7 @@ bool wxEatWhiteSpaceString(char *s)
                 if (ch == EOF)
                 {
                     ungetc_string();
-                    return TRUE;
+                    return true;
                 }
 
                 if (ch == '*')
@@ -2916,17 +2916,17 @@ bool wxEatWhiteSpaceString(char *s)
                 {
                     ungetc_string();
                     ungetc_string();
-                    return TRUE;
+                    return true;
                 }
             }
             break;
         default:
             ungetc_string();
-            return TRUE;
+            return true;
 
         }
     }
-    return FALSE;
+    return false;
 }
 
 bool wxGetResourceTokenString(char *s)
@@ -2948,7 +2948,7 @@ bool wxGetResourceTokenString(char *s)
             if (ch == EOF)
             {
                 wxResourceBuffer[wxResourceBufferCount] = 0;
-                return FALSE;
+                return false;
             }
             // Escaped characters
             else if (ch == '\\')
@@ -2987,9 +2987,9 @@ bool wxGetResourceTokenString(char *s)
         }
         wxResourceBuffer[wxResourceBufferCount] = 0;
         if (ch == EOF)
-            return FALSE;
+            return false;
     }
-    return TRUE;
+    return true;
 }
 
 /*
@@ -3006,8 +3006,8 @@ bool wxResourceReadOneResourceString(char *s, wxExprDatabase& db, bool *eof, wxR
     // static or #define
     if (!wxGetResourceTokenString(s))
     {
-        *eof = TRUE;
-        return FALSE;
+        *eof = true;
+        return false;
     }
 
     if (strcmp(wxResourceBuffer, "#define") == 0)
@@ -3026,12 +3026,12 @@ bool wxResourceReadOneResourceString(char *s, wxExprDatabase& db, bool *eof, wxR
             wxLogWarning(_("#define %s must be an integer."), name);
             delete[] name;
             delete[] value;
-            return FALSE;
+            return false;
         }
         delete[] name;
         delete[] value;
 
-        return TRUE;
+        return true;
     }
     /*
     else if (strcmp(wxResourceBuffer, "#include") == 0)
@@ -3051,7 +3051,7 @@ bool wxResourceReadOneResourceString(char *s, wxExprDatabase& db, bool *eof, wxR
     wxLogWarning(buf);
     }
     delete[] name;
-    return TRUE;
+    return true;
     }
     */
     else if (strcmp(wxResourceBuffer, "static") != 0)
@@ -3061,35 +3061,35 @@ bool wxResourceReadOneResourceString(char *s, wxExprDatabase& db, bool *eof, wxR
         wxStrncat(buf, wxConvCurrent->cMB2WX(wxResourceBuffer), 30);
         wxStrcat(buf, _(", expected static, #include or #define\nwhilst parsing resource."));
         wxLogWarning(buf);
-        return FALSE;
+        return false;
     }
 
     // char
     if (!wxGetResourceTokenString(s))
     {
         wxLogWarning(_("Unexpected end of file whilst parsing resource."));
-        *eof = TRUE;
-        return FALSE;
+        *eof = true;
+        return false;
     }
 
     if (strcmp(wxResourceBuffer, "char") != 0)
     {
         wxLogWarning(_("Expected 'char' whilst parsing resource."));
-        return FALSE;
+        return false;
     }
 
     // *name
     if (!wxGetResourceTokenString(s))
     {
         wxLogWarning(_("Unexpected end of file whilst parsing resource."));
-        *eof = TRUE;
-        return FALSE;
+        *eof = true;
+        return false;
     }
 
     if (wxResourceBuffer[0] != '*')
     {
         wxLogWarning(_("Expected '*' whilst parsing resource."));
-        return FALSE;
+        return false;
     }
     wxChar nameBuf[100];
     wxMB2WX(nameBuf, wxResourceBuffer+1, 99);
@@ -3099,37 +3099,37 @@ bool wxResourceReadOneResourceString(char *s, wxExprDatabase& db, bool *eof, wxR
     if (!wxGetResourceTokenString(s))
     {
         wxLogWarning(_("Unexpected end of file whilst parsing resource."));
-        *eof = TRUE;
-        return FALSE;
+        *eof = true;
+        return false;
     }
 
     if (strcmp(wxResourceBuffer, "=") != 0)
     {
         wxLogWarning(_("Expected '=' whilst parsing resource."));
-        return FALSE;
+        return false;
     }
 
     // String
     if (!wxGetResourceTokenString(s))
     {
         wxLogWarning(_("Unexpected end of file whilst parsing resource."));
-        *eof = TRUE;
-        return FALSE;
+        *eof = true;
+        return false;
     }
     else
     {
         if (!db.ReadPrologFromString(wxResourceBuffer))
         {
             wxLogWarning(_("%s: ill-formed resource file syntax."), nameBuf);
-            return FALSE;
+            return false;
         }
     }
     // Semicolon
     if (!wxGetResourceTokenString(s))
     {
-        *eof = TRUE;
+        *eof = true;
     }
-    return TRUE;
+    return true;
 }
 
 bool wxResourceParseString(const wxString& s, wxResourceTable *WXUNUSED(table))
@@ -3147,7 +3147,7 @@ bool wxResourceParseString(char *s, wxResourceTable *table)
         table = wxDefaultResourceTable;
 
     if (!s)
-        return FALSE;
+        return false;
 
     // Turn backslashes into spaces
     if (s)
@@ -3165,7 +3165,7 @@ bool wxResourceParseString(char *s, wxResourceTable *table)
     wxExprDatabase db;
     wxResourceStringPtr = 0;
 
-    bool eof = FALSE;
+    bool eof = false;
     while (wxResourceReadOneResourceString(s, db, &eof, table) && !eof)
     {
         // Loop
@@ -3186,7 +3186,7 @@ bool wxLoadFromResource(wxWindow* thisWindow, wxWindow *parent, const wxString& 
     //  if (!resource || (resource->GetType() != wxTYPE_DIALOG_BOX))
     if (!resource || (resource->GetType() == wxT("")) ||
         ! ((resource->GetType() == wxT("wxDialog")) || (resource->GetType() == wxT("wxPanel"))))
-        return FALSE;
+        return false;
 
     wxString title(resource->GetTitle());
     long theWindowStyle = resource->GetStyle();
@@ -3204,8 +3204,8 @@ bool wxLoadFromResource(wxWindow* thisWindow, wxWindow *parent, const wxString& 
         {
             wxDialog *dialogBox = (wxDialog *)thisWindow;
             long modalStyle = isModal ? wxDIALOG_MODAL : 0;
-            if (!dialogBox->Create(parent, -1, title, wxPoint(x, y), wxSize(width, height), theWindowStyle|modalStyle, name))
-                return FALSE;
+            if (!dialogBox->Create(parent, wxID_ANY, title, wxPoint(x, y), wxSize(width, height), theWindowStyle|modalStyle, name))
+                return false;
 
             // Only reset the client size if we know we're not going to do it again below.
             if ((resource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS) == 0)
@@ -3214,13 +3214,13 @@ bool wxLoadFromResource(wxWindow* thisWindow, wxWindow *parent, const wxString& 
         else if (thisWindow->IsKindOf(CLASSINFO(wxPanel)))
         {
             wxPanel* panel = (wxPanel *)thisWindow;
-            if (!panel->Create(parent, -1, wxPoint(x, y), wxSize(width, height), theWindowStyle | wxTAB_TRAVERSAL, name))
-                return FALSE;
+            if (!panel->Create(parent, wxID_ANY, wxPoint(x, y), wxSize(width, height), theWindowStyle | wxTAB_TRAVERSAL, name))
+                return false;
         }
         else
         {
-            if (!((wxWindow *)thisWindow)->Create(parent, -1, wxPoint(x, y), wxSize(width, height), theWindowStyle, name))
-                return FALSE;
+            if (!((wxWindow *)thisWindow)->Create(parent, wxID_ANY, wxPoint(x, y), wxSize(width, height), theWindowStyle, name))
+                return false;
         }
     }
 
@@ -3264,7 +3264,7 @@ bool wxLoadFromResource(wxWindow* thisWindow, wxWindow *parent, const wxString& 
 
         node = node->GetNext();
     }
-    return TRUE;
+    return true;
 }
 
 wxControl *wxCreateItem(wxWindow* thisWindow, const wxItemResource *resource, const wxItemResource* parentResource, const wxResourceTable *table)

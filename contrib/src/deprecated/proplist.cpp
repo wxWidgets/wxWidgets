@@ -215,7 +215,7 @@ int wxPropertyListView::FindListIndexForProperty(wxProperty *property)
     if (property == (wxProperty *)m_propertyScrollingList->wxListBox::GetClientData(i))
       return i;
   }
-  return -1;
+  return wxNOT_FOUND;
 }
 
 wxString wxPropertyListView::MakeNameValueString(wxString name, wxString value)
@@ -258,7 +258,7 @@ bool wxPropertyListView::ShowProperty(wxProperty *property, bool select)
   if (select)
   {
     int sel = FindListIndexForProperty(property);
-    if (sel > -1)
+    if (sel != wxNOT_FOUND)
       m_propertyScrollingList->SetSelection(sel);
   }
   return true;
@@ -400,7 +400,7 @@ bool wxPropertyListView::EditProperty(wxProperty *WXUNUSED(property))
 void wxPropertyListView::OnPropertySelect(wxCommandEvent& WXUNUSED(event))
 {
   int sel = m_propertyScrollingList->GetSelection();
-  if (sel > -1)
+  if (sel != wxNOT_FOUND)
   {
     wxProperty *newSel = (wxProperty *)m_propertyScrollingList->wxListBox::GetClientData(sel);
     if (newSel && newSel != m_currentProperty)
@@ -1711,7 +1711,7 @@ bool wxListOfStringsListValidator::EditStringList(wxWindow *parent, wxStringList
 void wxPropertyStringListEditorDialog::OnStrings(wxCommandEvent& WXUNUSED(event))
 {
   int sel = m_listBox->GetSelection();
-  if (sel > -1)
+  if (sel != wxNOT_FOUND)
   {
     m_currentSelection = sel;
 
@@ -1722,7 +1722,7 @@ void wxPropertyStringListEditorDialog::OnStrings(wxCommandEvent& WXUNUSED(event)
 void wxPropertyStringListEditorDialog::OnDelete(wxCommandEvent& WXUNUSED(event))
 {
   int sel = m_listBox->GetSelection();
-  if (sel == -1)
+  if (sel == wxNOT_FOUND)
     return;
 
   wxNode *node = (wxNode *)m_listBox->wxListBox::GetClientData(sel);

@@ -118,8 +118,8 @@ protected:
                                    const wxString& shortHelp = wxEmptyString,
                                    const wxString& longHelp = wxEmptyString,
                                    wxObject *clientData = NULL,
-                                   wxCoord xPos = -1,
-                                   wxCoord yPos = -1
+                                   wxCoord xPos = wxDefaultCoord,
+                                   wxCoord yPos = wxDefaultCoord
                                );
 
     virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
