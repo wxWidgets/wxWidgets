@@ -133,6 +133,12 @@ Returns descent value of the cell (m\_Descent member).
 
 Returns height of the cell (m\_Height member).
 
+\membersection{wxHtmlCell::GetId}\label{wxhtmlcellgetid}
+
+\constfunc{virtual wxString}{GetId}{\void}
+
+Returns unique cell identifier if there is any, empty string otherwise.
+
 \membersection{wxHtmlCell::GetLink}\label{wxhtmlcellgetlink}
 
 \constfunc{virtual wxHtmlLinkInfo*}{GetLink}{\param{int }{x = 0}, \param{int }{y = 0}}
@@ -220,6 +226,12 @@ you should use wxHtmlBinderCell instead.
 
 \docparam{left, middle, right}{boolean flags for mouse buttons. TRUE if the left/middle/right
 button is pressed, FALSE otherwise}
+
+\membersection{wxHtmlCell::SetId}\label{wxhtmlcellsetid}
+
+\func{void}{SetId}{\param{const wxString\& }{id}}
+
+Sets unique cell identifier. Default value is no identifier, i.e. empty string.
 
 \membersection{wxHtmlCell::SetLink}\label{wxhtmlcellsetlink}
 
