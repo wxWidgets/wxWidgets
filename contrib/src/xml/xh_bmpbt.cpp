@@ -38,14 +38,20 @@ wxObject *wxBitmapButtonXmlHandler::DoCreateResource()
 { 
     wxBitmapButton *button = new wxBitmapButton(m_ParentAsWindow,
                                     GetID(),
-                                    GetBitmap(_T("bitmap"), GetSize()),
-                                    //GetBitmap(_T("bitmap")),
+                                    GetBitmap(_T("bitmap")),
                                     GetPosition(), GetSize(),
                                     GetStyle(_T("style"), wxBU_AUTODRAW),
                                     wxDefaultValidator,
                                     GetName());
     if (GetBool(_T("default"), 0) == 1) button->SetDefault();
     SetupWindow(button);
+    
+    if (!GetParamValue(_T("selected")).IsEmpty())
+        button->SetBitmapSelected(GetBitmap(_T("selected")));
+    if (!GetParamValue(_T("focus")).IsEmpty())
+        button->SetBitmapFocus(GetBitmap(_T("focus")));
+    if (!GetParamValue(_T("disabled")).IsEmpty())
+        button->SetBitmapDisabled(GetBitmap(_T("disabled")));
     
     return button;
 }
