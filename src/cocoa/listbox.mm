@@ -52,6 +52,28 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID winid,
             const wxValidator& validator,
             const wxString& name)
 {
+/*
+wxLB_SINGLE 
+Single-selection list. 
+
+wxLB_MULTIPLE 
+Multiple-selection list: the user can toggle multiple items on and off. 
+
+wxLB_EXTENDED 
+Extended-selection list: the user can select multiple items using the SHIFT key and the mouse or special key combinations. 
+
+wxLB_HSCROLL 
+Create horizontal scrollbar if contents are too wide (Windows only). 
+
+wxLB_ALWAYS_SB 
+Always show a vertical scrollbar. 
+
+wxLB_NEEDED_SB 
+Only create a vertical scrollbar if needed. 
+
+wxLB_SORT 
+The listbox contents are sorted in alphabetical order. 
+*/
     wxAutoNSAutoreleasePool pool;
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
@@ -88,6 +110,13 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID winid,
     // NSScrollView seems to be the only reasonable solution.
     CocoaCreateNSScrollView();
     SetInitialFrameRect(pos,size);
+    
+    // Set up extended/multiple selection flags
+    if ((style & wxLB_EXTENDED) || (style & wxLB_MULTIPLE)) 
+        //diff is that mult requires shift down for multi selection
+        [GetNSTableView() setAllowsMultipleSelection:true];
+
+    [GetNSTableView() setAllowsColumnSelection:false];
 
     return true;
 }
@@ -138,6 +167,8 @@ int wxListBox::GetSelections(wxArrayInt& aSelections) const
 
 void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
 {
+    wxAutoNSAutoreleasePool pool;
+
     for(int i=int(items.GetCount())-1; i >= 0; i--)
     {
         [m_cocoaItems insertObject: wxNSStringWithWxString(items[i])
@@ -149,6 +180,8 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
 
 void wxListBox::DoSetItems(const wxArrayString& items, void **clientData)
 {
+    wxAutoNSAutoreleasePool pool;
+    
     // Remove everything
     [m_cocoaItems removeAllObjects];
     m_itemClientData.Clear();
@@ -163,6 +196,11 @@ void wxListBox::DoSetItems(const wxArrayString& items, void **clientData)
 
 void wxListBox::DoSetFirstItem(int n)
 {
+    [m_cocoaItems exchangeObjectAtIndex:0 withObjectAtIndex:n];
+    void* pOld = m_itemClientData[n];
+    m_itemClientData[n] = m_itemClientData[0];
+    m_itemClientData[0] = pOld;
+    [GetNSTableView() reloadData];
 }
 
 
@@ -170,58 +208,75 @@ void wxListBox::DoSetFirstItem(int n)
     // deleting items
 void wxListBox::Clear()
 {
+    [m_cocoaItems removeAllObjects];
+    m_itemClientData.Clear();
+    [GetNSTableView() reloadData];
 }
 
 void wxListBox::Delete(int n)
 {
+    [m_cocoaItems removeObjectAtIndex:n];
+    m_itemClientData.RemoveAt(n);
+    [GetNSTableView() reloadData];    
 }
 
     // accessing strings
 int wxListBox::GetCount() const
 {
-    return 0;
+    return [m_cocoaItems count];
 }
 
 wxString wxListBox::GetString(int n) const
 {
-    return wxEmptyString;
+    return wxStringWithNSString([m_cocoaItems objectAtIndex:n]);
 }
 
 void wxListBox::SetString(int n, const wxString& s)
 {
+    wxAutoNSAutoreleasePool pool;
+    [m_cocoaItems removeObjectAtIndex:n];
+    [m_cocoaItems insertObject: wxNSStringWithWxString(s) atIndex: n];
+    [GetNSTableView() reloadData];    
 }
 
 int wxListBox::FindString(const wxString& s) const
 {
-    return 0;
+    wxAutoNSAutoreleasePool pool;
+    return [m_cocoaItems indexOfObject:wxNSStringWithWxString(s)];
 }
 
     // selection
 int wxListBox::GetSelection() const
 {
-    return 0;
+    return [GetNSTableView() selectedRow];
 }
 
 int wxListBox::DoAppend(const wxString& item)
 {
-    return 0;
+    wxAutoNSAutoreleasePool pool;
+    [m_cocoaItems addObject:wxNSStringWithWxString(item)];    
+    [GetNSTableView() reloadData];    
+    m_itemClientData.Add(NULL);
+    return [m_cocoaItems count];
 }
 
 void wxListBox::DoSetItemClientData(int n, void* clientData)
 {
+    m_itemClientData[n] = clientData;
 }
 
 void* wxListBox::DoGetItemClientData(int n) const
 {
-    return NULL;
+    return m_itemClientData[n];
 }
 
 void wxListBox::DoSetItemClientObject(int n, wxClientData* clientData)
 {
+    m_itemClientData[n] = (void*) clientData;
 }
 
 wxClientData* wxListBox::DoGetItemClientObject(int n) const
 {
-    return NULL;
+    return (wxClientData*) m_itemClientData[n];
 }
 
