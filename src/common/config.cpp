@@ -384,7 +384,8 @@ wxString wxExpandEnvVars(const wxString& str)
 
       case '\\':
         // backslash can be used to suppress special meaning of % and $
-        if ( n != str.Len() && (str[n + 1] == wxT('%') || str[n + 1] == wxT('$')) ) {
+        if ( n != str.Len() - 1 &&
+                (str[n + 1] == wxT('%') || str[n + 1] == wxT('$')) ) {
           strResult += str[++n];
 
           break;
