@@ -1,8 +1,6 @@
 @echo off
 setlocal
 
-set WXWIN=c:\projects\wx2.2
-
 set FLAGS=USE_SWIG=1 IN_CVS_TREE=1
 
 

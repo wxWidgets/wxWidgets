@@ -17,7 +17,7 @@ item: Global
   Patch Flags=0000000000001001
   Patch Threshold=85
   Patch Memory=4000
-  EXE Filename=wxPython-2.2.2.exe
+  EXE Filename=wxPython-2.2.5-PyXX.exe
   FTP Cluster Size=20
   Per-User Version ID=1
   Dialogs Version=6
@@ -72,20 +72,16 @@ item: Set Variable
   Value=wxPython
   Flags=10000000
 end
-item: Check Configuration
-  Flags=10111011
-end
 item: Remark
 end
 item: Set Variable
   Variable=PYTHONVER
-  Value=2.0
-end
-item: Set Variable
-  Variable=SAMEDIR
-  Value=1
+  Value=1.5
 end
 item: Remark
+end
+item: Check Configuration
+  Flags=10111011
 end
 item: Get Registry Key Value
   Variable=PYTHONDIR
@@ -817,23 +813,10 @@ item: Install File
   Destination=%SYS%\Msvcrt.dll
   Flags=0000001010000011
 end
-item: If/While Statement
-  Variable=SAMEDIR
-  Value=0
-end
 item: Install File
-  Source=c:\projects\wx\lib\wx22_2.dll
-  Destination=%SYS%\wx22_2.dll
-  Flags=0000001010010010
-end
-item: Else Statement
-end
-item: Install File
-  Source=c:\projects\wx\lib\wx22_2.dll
-  Destination=%MAINDIR%\wxPython\wx22_2.dll
+  Source=c:\projects\wx\lib\wx22_5.dll
+  Destination=%MAINDIR%\wxPython\wx22_5.dll
   Flags=0000000010010010
-end
-item: End Block
 end
 item: Install File
   Source=c:\Projects\wx\wxPython\wxPython\*.py
@@ -926,7 +909,7 @@ item: Install File
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\Projects\wx\wxPython\demo\data\*.htm
+  Source=c:\Projects\wx\wxPython\demo\data\*.html
   Destination=%MAINDIR%\wxPython\demo\data
   Description=Demos
   Flags=0000000010000010
@@ -982,7 +965,7 @@ item: Install File
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\PROJECTS\wx\docs\html\ogl\ogl.chm
+  Source=c:\PROJECTS\wx\docs\htmlhelp\ogl.chm
   Destination=%MAINDIR%\wxPython\docs\ogl.chm
   Description=wxPython documentation
   Flags=0000000010000010
