@@ -1513,7 +1513,12 @@ if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
     INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS msw"
     dnl --- Quick & Dirty ; link against most/all libraries
     dnl --- This will bloat the executable, but it'll work for now...
-    LIBS="$LIBS  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -lcrtdll -ladvapi32 -lwsock32"
+    LIBS="$LIBS -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -lcrtdll -ladvapi32 -lwsock32"
+
+    dnl -mwindows is needed to avoid that spawning of a console window
+    if test "$wxUSE_MINGW" = 1; then
+        LDFLAGS="$LDFLAGS -mwindows"
+    fi
 
     TOOLKIT=MSW
 
