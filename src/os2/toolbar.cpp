@@ -187,6 +187,7 @@ bool wxToolBar::Create(
                        ,rPos
                        ,rSize
                        ,lStyle
+		       , wxDefaultValidator
                        ,rName
                       ))
         return(FALSE);
