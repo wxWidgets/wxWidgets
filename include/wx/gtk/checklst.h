@@ -41,11 +41,7 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             int nStrings = 0,
-#if defined(__SUNCC__)
-            const wxString choices[] = NULL,
-#else
-            const wxString choices[] = (const wxString *) NULL,
-#endif
+            const wxString *choices = (const wxString *)NULL,
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxListBoxNameStr);

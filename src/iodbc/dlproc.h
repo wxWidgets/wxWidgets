@@ -40,7 +40,7 @@ typedef void *HDLL;
 typedef shl_t HDLL;
 #endif
 
-#ifdef	DLDAPI_AIX_LOAD
+#if defined(DLDAPI_AIX_LOAD) || defined(__DECCXX)
 typedef void *HDLL;
 #endif
 

@@ -116,6 +116,8 @@ extern const char WXDLLEXPORT *g_szNul = &g_strEmpty.dummy;
  	// No warning
 #elif defined(__SUNCC__)
     // nothing -- I don't know about "#warning" for Sun's CC
+#elif defined(__DECCXX)
+   // nothing
 #else
     // change this to some analogue of '#warning' for your compiler
     #error "Using sprintf() because no snprintf()-like function defined"
@@ -1483,8 +1485,9 @@ static int wxStringCompareFunction(const void *first, const void *second)
   wxString *strFirst = (wxString *)first;
   wxString *strSecond = (wxString *)second;
 
-  if ( gs_compareFunction )
+  if ( gs_compareFunction ) {
     return gs_compareFunction(*strFirst, *strSecond);
+  }
   else {
     int result = strcmp(strFirst->c_str(), strSecond->c_str());
 
