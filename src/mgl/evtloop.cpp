@@ -76,22 +76,21 @@ void wxEventLoopImpl::Dispatch()
 {
     event_t evt;
 
-    MGL_wmUpdateDC(g_winMng);
-    
     // VS: The code bellow is equal to MGL's EVT_halt implementation, with
     //     two things added: sleeping (busy waiting is stupid, lets make CPU's
     //     life a bit easier) and timers updating
 
     // EVT_halt(&evt, EVT_EVERYEVT);
-    do 
+    for (;;)
     {
-        EVT_pollJoystick();
-        EVT_getNext(&evt, EVT_EVERYEVT);
 #if wxUSE_TIMER
         wxTimer::NotifyTimers();
+        MGL_wmUpdateDC(g_winMng);
 #endif
+        EVT_pollJoystick();
+        if ( EVT_getNext(&evt, EVT_EVERYEVT) ) break;
         PM_sleep(10);
-    } while (!(evt.what & EVT_EVERYEVT));
+    }
     // end of EVT_halt
     
     MGL_wmProcessEvent(g_winMng, &evt);

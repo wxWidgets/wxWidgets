@@ -929,11 +929,15 @@ void wxWindowMGL::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         }
     }
 
-    DoMoveWindow(x, y, width, height);
+    if ( m_wnd->x != x || m_wnd->y != y || 
+         (int)m_wnd->width != width || (int)m_wnd->height != height )
+    {
+        DoMoveWindow(x, y, width, height);
 
-    wxSizeEvent event(wxSize(width, height), GetId());
-    event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
+        wxSizeEvent event(wxSize(width, height), GetId());
+        event.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(event);
+    }
 }
 
 void wxWindowMGL::DoSetClientSize(int width, int height)

@@ -337,7 +337,7 @@ bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
     wxCHECK_MSG( col, FALSE, _T("NULL colour parameter in wxDC::GetPixel"));
 
     uchar r, g, b;
-    m_MGLDC->unpackColorFast(m_MGLDC->getPixel(XLOG2DEV(x), XLOG2DEV(y)), 
+    m_MGLDC->unpackColorFast(m_MGLDC->getPixel(XLOG2DEV(x), YLOG2DEV(y)), 
                              r, g, b);
     col->Set(r, g, b);
     return TRUE;
@@ -373,8 +373,8 @@ void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
         m_MGLDC->makeCurrent(); // will go away with MGL6.0
         if ( !m_penSelected ) 
             SelectPen();
-        m_MGLDC->lineExt(XLOG2DEV(x1) + m_penOfsX, XLOG2DEV(y1) + m_penOfsY, 
-                      XLOG2DEV(x2) + m_penOfsX, XLOG2DEV(y2) + m_penOfsY,FALSE);
+        m_MGLDC->lineExt(XLOG2DEV(x1) + m_penOfsX, YLOG2DEV(y1) + m_penOfsY, 
+                      XLOG2DEV(x2) + m_penOfsX, YLOG2DEV(y2) + m_penOfsY,FALSE);
         CalcBoundingBox(x1, y1);
         CalcBoundingBox(x2, y2);
     }
