@@ -93,7 +93,7 @@
     IMPLEMENT_DYNAMIC_CLASS(wxSysColourChangedEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxDisplayChangedEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxUpdateUIEvent, wxCommandEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxNavigationKeyEvent, wxCommandEvent)
+    IMPLEMENT_DYNAMIC_CLASS(wxNavigationKeyEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxPaletteChangedEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxQueryNewPaletteEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxWindowCreateEvent, wxEvent)
