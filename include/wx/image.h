@@ -101,6 +101,9 @@ public:
     wxImage( const wxBitmap &bitmap );
     operator wxBitmap() const { return ConvertToBitmap(); }
     wxBitmap ConvertToBitmap() const;
+#ifdef __WXGTK__
+    wxBitmap ConvertToMonoBitmap( unsigned char red, unsigned char green, unsigned char blue );
+#endif
 
     void Create( int width, int height );
     void Destroy();

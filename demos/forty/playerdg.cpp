@@ -123,6 +123,8 @@ PlayerSelectionDialog::PlayerSelectionDialog(
 	}
 
 	Layout();
+    
+    CentreOnParent();
 }
 
 PlayerSelectionDialog::~PlayerSelectionDialog()

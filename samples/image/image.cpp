@@ -252,17 +252,45 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     if (my_smile_xbm && my_smile_xbm->Ok()) 
     {
         dc.DrawText( "XBM bitmap", 30, 1745 );
-        dc.SetPen( *wxRED_PEN );
+        dc.SetTextForeground( "RED" );
+        dc.SetTextBackground( "GREEN" );
         dc.DrawBitmap( *my_smile_xbm, 30, 1760 );
 	
         dc.DrawText( "After wxImage conversion", 150, 1745 );
         wxImage i( *my_smile_xbm );
-	i.SetMaskColour( 0,0,0 );
-	i.Replace( 255,255,255, 
+	    i.SetMaskColour( 0,0,0 );
+	    i.Replace( 255,255,255, 
                wxRED_PEN->GetColour().Red(),
                wxRED_PEN->GetColour().Green(),
                wxRED_PEN->GetColour().Blue() );
         dc.DrawBitmap( i.ConvertToBitmap(), 150, 1760, TRUE );
+    }
+    dc.SetTextForeground( "BLACK" );
+    
+    wxBitmap mono( 30,30,1 );
+    wxMemoryDC memdc;
+    memdc.SelectObject( mono );
+    memdc.SetPen( *wxTRANSPARENT_PEN );
+    memdc.SetBrush( *wxBLACK_BRUSH );
+    memdc.DrawRectangle( 0,0,30,30 );
+    memdc.SetBrush( *wxWHITE_BRUSH );
+    memdc.DrawRectangle( 5,5,20,20 );
+    memdc.SelectObject( wxNullBitmap );
+    if (mono.Ok()) 
+    {
+        dc.DrawText( "Mono bitmap", 30, 1845 );
+        dc.SetTextForeground( "RED" );
+        dc.SetTextBackground( "GREEN" );
+        dc.DrawBitmap( mono, 30, 1860 );
+	
+        dc.DrawText( "After wxImage conversion", 150, 1845 );
+        wxImage i( mono );
+	    i.SetMaskColour( 0,0,0 );
+	    i.Replace( 255,255,255, 
+               wxRED_PEN->GetColour().Red(),
+               wxRED_PEN->GetColour().Green(),
+               wxRED_PEN->GetColour().Blue() );
+        dc.DrawBitmap( i.ConvertToBitmap(), 150, 1860, TRUE );
     }
 }
 
@@ -347,7 +375,7 @@ MyFrame::MyFrame()
   m_canvas = new MyCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
 
   // 500 width * 1900 height
-  m_canvas->SetScrollbars( 10, 10, 50, 190 );
+  m_canvas->SetScrollbars( 10, 10, 50, 200 );
 }
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )

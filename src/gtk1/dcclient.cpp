@@ -500,6 +500,8 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
 
     wxCHECK_RET( bitmap.Ok(), wxT("invalid bitmap") );
 
+    bool is_mono = (bitmap.GetBitmap());
+
     /* scale/translate size and position */
 
     int xx = XLOG2DEV(x);
@@ -523,9 +525,11 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     if ((w != ww) || (h != hh))
     {
         wxImage image( bitmap );
-        image = image.Scale( ww, hh );
-
-        use_bitmap = image.ConvertToBitmap();
+        image.Rescale( ww, hh );
+        if (is_mono)
+            use_bitmap = image.ConvertToMonoBitmap(255,255,255);
+        else
+            use_bitmap = image.ConvertToBitmap();
     }
     else
     {
@@ -539,32 +543,39 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
 
     if (useMask && mask)
     {
-        gdk_gc_set_clip_mask( m_penGC, mask );
-        gdk_gc_set_clip_origin( m_penGC, xx, yy );
-    }
-
-    /* draw XPixmap or XBitmap, depending on what the wxBitmap contains */
-
-    GdkPixmap *pm = use_bitmap.GetPixmap();
-    if (pm)
-    {
-        gdk_draw_pixmap( m_window, m_penGC, pm, 0, 0, xx, yy, -1, -1 );
-    }
-    else
-    {
-        GdkBitmap *bm = use_bitmap.GetBitmap();
-        if (bm)
+        if (is_mono)
         {
-            gdk_draw_bitmap( m_window, m_penGC, bm, 0, 0, xx, yy, -1, -1 );
+            gdk_gc_set_clip_mask( m_textGC, mask );
+            gdk_gc_set_clip_origin( m_textGC, xx, yy );
+        }
+        else
+        {
+            gdk_gc_set_clip_mask( m_penGC, mask );
+            gdk_gc_set_clip_origin( m_penGC, xx, yy );
         }
     }
 
+    /* Draw XPixmap or XBitmap, depending on what the wxBitmap contains. For
+       drawing a mono-bitmap (XBitmap) we use the current text GC */
+    if (is_mono)
+        gdk_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), 0, 0, xx, yy, -1, -1 );
+    else
+        gdk_draw_pixmap( m_window, m_penGC, use_bitmap.GetPixmap(), 0, 0, xx, yy, -1, -1 );
+        
     /* remove mask again if any */
 
     if (useMask && mask)
     {
-        gdk_gc_set_clip_mask( m_penGC, (GdkBitmap *) NULL );
-        gdk_gc_set_clip_origin( m_penGC, 0, 0 );
+        if (is_mono)
+        {
+            gdk_gc_set_clip_mask( m_textGC, (GdkBitmap *) NULL );
+            gdk_gc_set_clip_origin( m_textGC, 0, 0 );
+        }
+        else
+        {
+            gdk_gc_set_clip_mask( m_penGC, (GdkBitmap *) NULL );
+            gdk_gc_set_clip_origin( m_penGC, 0, 0 );
+        }
     }
 }
 
@@ -587,6 +598,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
     wxMemoryDC *memDC = (wxMemoryDC*)source;
 
     bool use_bitmap_method = FALSE;
+    bool is_mono = FALSE;
 
     if (srcDC->m_isMemDC)
     {
@@ -610,6 +622,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
            /* we HAVE TO use the direct way for memory dcs
               that are bitmaps because XCopyArea doesn't cope
               with different bit depths */
+            is_mono = TRUE;
             use_bitmap_method = TRUE;
         }
         else if ((xsrc == 0) && (ysrc == 0) &&
@@ -653,7 +666,10 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
             wxImage image( memDC->m_selected );
             image = image.Scale( bm_ww, bm_hh );
 
-            use_bitmap = image.ConvertToBitmap();
+            if (is_mono)
+                use_bitmap = image.ConvertToMonoBitmap(255,255,255);
+            else
+                use_bitmap = image.ConvertToBitmap();
         }
         else
         {
@@ -675,34 +691,39 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
 
         if (useMask && mask)
         {
-            gdk_gc_set_clip_mask( m_penGC, mask );
-            gdk_gc_set_clip_origin( m_penGC, xx, yy );
-        }
-
-        /* draw XPixmap or XBitmap, depending on what the wxBitmap contains */
-
-        GdkPixmap *pm = use_bitmap.GetPixmap();
-        if (pm)
-        {
-            gdk_draw_pixmap( m_window, m_penGC, pm, xsrc, ysrc, xx, yy, ww, hh );
-        }
-        else
-        {
-            GdkBitmap *bm = use_bitmap.GetBitmap();
-            if (bm)
+            if (is_mono)
             {
-                /* we use the textGC here because blitting a bitmap is done
-                   using the current text colour */
-                gdk_draw_bitmap( m_window, m_textGC, bm, xsrc, ysrc, xx, yy, ww, hh );
+                gdk_gc_set_clip_mask( m_textGC, mask );
+                gdk_gc_set_clip_origin( m_textGC, xx, yy );
+            }
+            else
+            {
+                gdk_gc_set_clip_mask( m_penGC, mask );
+                gdk_gc_set_clip_origin( m_penGC, xx, yy );
             }
         }
+
+        /* Draw XPixmap or XBitmap, depending on what the wxBitmap contains. For
+           drawing a mono-bitmap (XBitmap) we use the current text GC */
+        if (is_mono)
+            gdk_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), xsrc, ysrc, xx, yy, ww, hh );
+        else
+            gdk_draw_pixmap( m_window, m_penGC, use_bitmap.GetPixmap(), xsrc, ysrc, xx, yy, ww, hh );
 
         /* remove mask again if any */
 
         if (useMask && mask)
         {
-            gdk_gc_set_clip_mask( m_penGC, (GdkBitmap *) NULL );
-            gdk_gc_set_clip_origin( m_penGC, 0, 0 );
+            if (is_mono)
+            {
+                gdk_gc_set_clip_mask( m_textGC, (GdkBitmap *) NULL );
+                gdk_gc_set_clip_origin( m_textGC, 0, 0 );
+            }
+            else
+            {
+                gdk_gc_set_clip_mask( m_penGC, (GdkBitmap *) NULL );
+                gdk_gc_set_clip_origin( m_penGC, 0, 0 );
+            }
         }
     }
     else /* use_bitmap_method */

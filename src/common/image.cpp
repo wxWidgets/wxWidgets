@@ -1311,6 +1311,104 @@ wxImage::wxImage( const wxBitmap &bitmap )
 #include <gdk/gdkrgb.h>
 #endif
 
+wxBitmap wxImage::ConvertToMonoBitmap( unsigned char red, unsigned char green, unsigned char blue )
+{
+    wxBitmap bitmap;
+
+    wxCHECK_MSG( Ok(), bitmap, wxT("invalid image") );
+
+    int width = GetWidth();
+    int height = GetHeight();
+
+    bitmap.SetHeight( height );
+    bitmap.SetWidth( width );
+
+    bitmap.SetBitmap( gdk_pixmap_new( (GdkWindow*)&gdk_root_parent, width, height, 1 ) );
+    
+    bitmap.SetDepth( 1 );
+
+    // Create picture image
+
+    unsigned char *data_data = (unsigned char*)malloc( ((width >> 3)+8) * height );
+    
+    GdkImage *data_image =
+        gdk_image_new_bitmap( gdk_visual_get_system(), data_data, width, height );
+
+    // Create mask image
+
+    GdkImage *mask_image = (GdkImage*) NULL;
+
+    if (HasMask())
+    {
+        unsigned char *mask_data = (unsigned char*)malloc( ((width >> 3)+8) * height );
+
+        mask_image =  gdk_image_new_bitmap( gdk_visual_get_system(), mask_data, width, height );
+
+        wxMask *mask = new wxMask();
+        mask->m_bitmap = gdk_pixmap_new( (GdkWindow*)&gdk_root_parent, width, height, 1 );
+
+        bitmap.SetMask( mask );
+    }
+
+    int r_mask = GetMaskRed();
+    int g_mask = GetMaskGreen();
+    int b_mask = GetMaskBlue();
+
+    unsigned char* data = GetData();
+
+    int index = 0;
+    for (int y = 0; y < height; y++)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            int r = data[index];
+            index++;
+            int g = data[index];
+            index++;
+            int b = data[index];
+            index++;
+
+            if (HasMask())
+            {
+                if ((r == r_mask) && (b == b_mask) && (g == g_mask))
+                    gdk_image_put_pixel( mask_image, x, y, 1 );
+                else
+                    gdk_image_put_pixel( mask_image, x, y, 0 );
+            }
+            
+            if ((r == red) && (b == blue) && (g == green))
+                gdk_image_put_pixel( data_image, x, y, 1 );
+            else   
+                gdk_image_put_pixel( data_image, x, y, 0 );
+
+        } // for
+    }  // for
+
+    // Blit picture
+
+    GdkGC *data_gc = gdk_gc_new( bitmap.GetBitmap() );
+
+    gdk_draw_image( bitmap.GetBitmap(), data_gc, data_image, 0, 0, 0, 0, width, height );
+
+    gdk_image_destroy( data_image );
+    gdk_gc_unref( data_gc );
+
+    // Blit mask
+
+    if (HasMask())
+    {
+        GdkGC *mask_gc = gdk_gc_new( bitmap.GetMask()->GetBitmap() );
+
+        gdk_draw_image( bitmap.GetMask()->GetBitmap(), mask_gc, mask_image, 0, 0, 0, 0, width, height );
+
+        gdk_image_destroy( mask_image );
+        gdk_gc_unref( mask_gc );
+    }
+
+    return bitmap;
+}
+
+
 wxBitmap wxImage::ConvertToBitmap() const
 {
     wxBitmap bitmap;
@@ -1419,14 +1517,6 @@ wxBitmap wxImage::ConvertToBitmap() const
             index++;
             int b = data[index];
             index++;
-
-            if (HasMask())
-            {
-                if ((r == r_mask) && (b == b_mask) && (g == g_mask))
-                    gdk_image_put_pixel( mask_image, x, y, 1 );
-                else
-                    gdk_image_put_pixel( mask_image, x, y, 0 );
-            }
 
             if (HasMask())
             {

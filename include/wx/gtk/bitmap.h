@@ -97,6 +97,7 @@ public:
     void SetWidth( int width );
     void SetDepth( int depth );
     void SetPixmap( GdkPixmap *pixmap );
+    void SetBitmap( GdkBitmap *bitmap );
 
     GdkPixmap *GetPixmap() const;
     GdkBitmap *GetBitmap() const;

@@ -513,6 +513,13 @@ void wxBitmap::SetPixmap( GdkPixmap *pixmap )
     M_BMPDATA->m_pixmap = pixmap;
 }
 
+void wxBitmap::SetBitmap( GdkPixmap *bitmap )
+{
+    if (!m_refData) m_refData = new wxBitmapRefData();
+
+    M_BMPDATA->m_bitmap = bitmap;
+}
+
 GdkPixmap *wxBitmap::GetPixmap() const
 {
     wxCHECK_MSG( Ok(), (GdkPixmap *) NULL, wxT("invalid bitmap") );

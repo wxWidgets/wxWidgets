@@ -289,6 +289,7 @@ void Game::Redraw(wxDC& dc)
 		// Initialise the card bitmap to the background colour
 		wxMemoryDC memoryDC;
 		memoryDC.SelectObject(*m_bmapCard);
+        memoryDC.SetPen( *wxTRANSPARENT_PEN );
 		memoryDC.SetBrush(FortyApp::BackgroundBrush());
 		memoryDC.DrawRectangle(0, 0, CardWidth, CardHeight);
 		memoryDC.SelectObject(*m_bmap);
@@ -713,14 +714,14 @@ void Pack::Shuffle()
     }
     for (i = 0; i <= m_topCard; i++)
     {
-	int pos = rand() % (m_topCard + 1);
-	while (temp[pos])
-	{
-	    pos--;
-	    if (pos < 0) pos = m_topCard;
-	}
-	m_cards[i]->TurnCard(facedown);
-	temp[pos] = m_cards[i];
+	    int pos = rand() % (m_topCard + 1);
+	    while (temp[pos])
+	    {
+	        pos--;
+	        if (pos < 0) pos = m_topCard;
+	    }
+	    m_cards[i]->TurnCard(facedown);
+	    temp[pos] = m_cards[i];
         m_cards[i] = 0;
     }
 
@@ -729,12 +730,12 @@ void Pack::Shuffle()
         // unoccupied position after the random position.
     for (i = 0; i <= m_topCard; i++)
     {
-	int pos = rand() % (m_topCard + 1);
-	while (m_cards[pos])
-	{
-	    pos++;
+	    int pos = rand() % (m_topCard + 1);
+	    while (m_cards[pos])
+	    {
+	        pos++;
             if (pos > m_topCard) pos = 0;
-	}
+	    }
         m_cards[pos] = temp[i];
     }
 }
@@ -746,6 +747,7 @@ void Pack::Redraw(wxDC& dc)
     char str[10];
     sprintf(str, "%d  ", m_topCard + 1);
 
+    dc.SetBackgroundMode( wxSOLID );
 	dc.SetTextBackground(FortyApp::BackgroundColour());
 	dc.SetTextForeground(FortyApp::TextColour());
     dc.DrawText(str, m_x + CardWidth + 5, m_y + CardHeight / 2);
@@ -771,7 +773,7 @@ Pack::~Pack()
 {
     for (m_topCard = 0; m_topCard < NumCards; m_topCard++)
     {
-	delete m_cards[m_topCard];
+	    delete m_cards[m_topCard];
     }
 };
 
@@ -791,9 +793,9 @@ bool Base::AcceptCard(Card* card)
 
     if (m_topCard >= 0)
     {
-	if (m_cards[m_topCard]->GetSuit() == card->GetSuit() &&
-	    m_cards[m_topCard]->GetPipValue() - 1 == card->GetPipValue())
-	{
+	    if (m_cards[m_topCard]->GetSuit() == card->GetSuit() &&
+	        m_cards[m_topCard]->GetPipValue() - 1 == card->GetPipValue())
+	    {
             retval = TRUE;
         }
     }
@@ -825,15 +827,15 @@ bool Foundation::AcceptCard(Card* card)
 
     if (m_topCard >= 0)
     {
-	if (m_cards[m_topCard]->GetSuit() == card->GetSuit() &&
-	    m_cards[m_topCard]->GetPipValue() + 1 == card->GetPipValue())
-	{
+	    if (m_cards[m_topCard]->GetSuit() == card->GetSuit() &&
+	        m_cards[m_topCard]->GetPipValue() + 1 == card->GetPipValue())
+	    {
             retval = TRUE;
         }
     }
     else if (card->GetPipValue() == 1)
     {
-	// It's an ace and the pile is empty - ACCEPT
+	    // It's an ace and the pile is empty - ACCEPT
         retval = TRUE;
     }
     return retval;
@@ -857,22 +859,22 @@ void Discard::Redraw(wxDC& dc)
 {
     if (m_topCard >= 0)
     {
-	if (m_dx == 0 && m_dy == 0)
-	{
-            m_cards[m_topCard]->Draw(dc, m_x, m_y);
-	}
-	else
-	{
-	    int x = m_x;
-	    int y = m_y;
-	    for (int i = 0; i <= m_topCard; i++)
+	    if (m_dx == 0 && m_dy == 0)
 	    {
-		m_cards[i]->Draw(dc, x, y);
-		x += m_dx;
-		y += m_dy;
-		if (i == 31)
-		{
-		    x = m_x;
+            m_cards[m_topCard]->Draw(dc, m_x, m_y);
+	    }
+	    else
+	    {
+	        int x = m_x;
+	        int y = m_y;
+	        for (int i = 0; i <= m_topCard; i++)
+	        {
+		        m_cards[i]->Draw(dc, x, y);
+		        x += m_dx;
+		        y += m_dy;
+		        if (i == 31)
+		        {
+		            x = m_x;
                     y = m_y + CardHeight / 3;
                 }
             }
@@ -889,18 +891,18 @@ void Discard::GetTopCardPos(int& x, int& y)
 {
     if (m_topCard < 0)
     {
-	x = m_x;
-	y = m_y;
+	    x = m_x;
+	    y = m_y;
     }
     else if (m_topCard > 31)
     {
-	x = m_x + m_dx * (m_topCard - 32);
-	y = m_y + CardHeight / 3;
+	    x = m_x + m_dx * (m_topCard - 32);
+	    y = m_y + CardHeight / 3;
     }
     else
     {
-	x = m_x + m_dx * m_topCard;
-	y = m_y;
+	    x = m_x + m_dx * m_topCard;
+	    y = m_y;
     }
 }
 
