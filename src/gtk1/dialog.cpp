@@ -147,19 +147,16 @@ gtk_dialog_map_callback( GtkWidget *widget, wxDialog *win )
     {
 	func |= GDK_FUNC_MINIMIZE;
 	decor |= GDK_DECOR_MINIMIZE;
-        decor |= GDK_DECOR_BORDER;
     }
     if ((win->m_windowStyle & wxMAXIMIZE_BOX) != 0)
     {
 	decor |= GDK_DECOR_MAXIMIZE;
 	func |= GDK_FUNC_MAXIMIZE;           
-        decor |= GDK_DECOR_BORDER;
     }
     if ((win->m_windowStyle & wxRESIZE_BORDER) != 0)
     {
        func |= GDK_FUNC_RESIZE;
        decor |= GDK_DECOR_RESIZEH;
-       decor |= GDK_DECOR_BORDER;
     }
     gdk_window_set_decorations( win->m_widget->window, (GdkWMDecoration)decor);
     gdk_window_set_functions( win->m_widget->window, (GdkWMFunction)func);
