@@ -95,6 +95,7 @@ class PullDownMenu:
     ID_EXPAND = wxNewId()
     ID_COLLAPSE = wxNewId()
     ID_PASTE_SIBLING = wxNewId()
+    ID_SUBCLASS = wxNewId()
 
     def __init__(self, parent):
         self.ID_DELETE = parent.ID_DELETE
@@ -103,6 +104,7 @@ class PullDownMenu:
         EVT_MENU(parent, self.ID_COLLAPSE, parent.OnCollapse)
         EVT_MENU(parent, self.ID_EXPAND, parent.OnExpand)
         EVT_MENU(parent, self.ID_PASTE_SIBLING, parent.OnPaste)
+        EVT_MENU(parent, self.ID_SUBCLASS, parent.OnSubclass)
         # We connect to tree, but process in frame
         EVT_MENU_HIGHLIGHT_ALL(g.tree, parent.OnPullDownHighlight)
 
@@ -903,6 +905,8 @@ class XML_Tree(wxTreeCtrl):
                 id = wxNewId()
                 menu.AppendMenu(id, 'Replace With', m)
                 if not m.GetMenuItemCount(): menu.Enable(id, False)
+                menu.Append(pullDownMenu.ID_SUBCLASS, 'Subclass...',
+                            'Set subclass property')
             menu.AppendSeparator()
             # Not using standart IDs because we don't want to show shortcuts
             menu.Append(wxID_CUT, 'Cut', 'Cut to the clipboard')

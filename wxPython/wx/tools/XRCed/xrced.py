@@ -473,6 +473,25 @@ class Frame(wxFrame):
         self.modified = True
         self.SetStatusText(status)
 
+    def OnSubclass(self, evt):
+        selected = tree.selection
+        xxx = tree.GetPyData(selected).treeObject()
+        elem = xxx.element
+        subclass = xxx.subclass
+        dlg = wxTextEntryDialog(self, 'Subclass:', defaultValue=subclass)
+        if dlg.ShowModal() == wxID_OK:
+            subclass = dlg.GetValue()
+            if subclass:
+                elem.setAttribute('subclass', subclass)
+                self.modified = True
+            elif elem.hasAttribute('subclass'):
+                elem.removeAttribute('subclass')
+                self.modified = True
+            xxx.subclass = elem.getAttribute('subclass')
+            tree.SetItemText(selected, xxx.treeName())
+            panel.pages[0].box.SetLabel(xxx.panelName())
+        dlg.Destroy()
+
     def OnSelect(self, evt):
         print >> sys.stderr, 'Xperimental function!'
         wxYield()

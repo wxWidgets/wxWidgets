@@ -207,6 +207,7 @@ class xxxObject:
         self.undo = None
         # Get attributes
         self.className = element.getAttribute('class')
+        self.subclass = element.getAttribute('subclass')
         if self.hasName: self.name = element.getAttribute('name')
         # Set parameters (text element children)
         self.params = {}
@@ -277,8 +278,14 @@ class xxxObject:
     # Class name plus wx name
     def treeName(self):
         if self.hasChild: return self.child.treeName()
-        if self.hasName and self.name: return self.className + ' "' + self.name + '"'
-        return self.className
+        if self.subclass: className = self.subclass
+        else: className = self.className
+        if self.hasName and self.name: return className + ' "' + self.name + '"'
+        return className
+    # Class name or subclass
+    def panelName(self):
+        if self.subclass: return self.subclass + '(' + self.className + ')'
+        else: return self.className
 
 ################################################################################
 

@@ -89,9 +89,10 @@ class Panel(wxNotebook):
             g.currentXXX = xxx.treeObject()
             try:
                 page = self.pageCache[xxx.__class__]
+                page.box.SetLabel(xxx.panelName())
                 page.Reparent(self.page1)
             except KeyError:
-                page = PropPage(self.page1, xxx.className, xxx)
+                page = PropPage(self.page1, xxx.panelName(), xxx)
                 self.pageCache[xxx.__class__] = page
             page.SetValues(xxx)
             self.pages.append(page)
@@ -101,9 +102,10 @@ class Panel(wxNotebook):
                 cacheID = (xxx.child.__class__, xxx.__class__)
                 try:
                     page = self.pageCache[cacheID]
+                    page.box.SetLabel(xxx.child.panelName())
                     page.Reparent(self.page1)
                 except KeyError:
-                    page = PropPage(self.page1, xxx.child.className, xxx.child)
+                    page = PropPage(self.page1, xxx.child.panelName(), xxx.child)
                     self.pageCache[cacheID] = page
                 page.SetValues(xxx.child)
                 self.pages.append(page)
@@ -253,9 +255,9 @@ class ParamPage(wxPanel):
 class PropPage(ParamPage):
     def __init__(self, parent, label, xxx):
         ParamPage.__init__(self, parent, xxx)
-        box = wxStaticBox(self, -1, label)
-        box.SetFont(labelFont)
-        topSizer = wxStaticBoxSizer(box, wxVERTICAL)
+        self.box = wxStaticBox(self, -1, label)
+        self.box.SetFont(labelFont)
+        topSizer = wxStaticBoxSizer(self.box, wxVERTICAL)
         sizer = wxFlexGridSizer(len(xxx.allParams), 2, 1, 1)
         sizer.AddGrowableCol(1)
         if xxx.hasName:
