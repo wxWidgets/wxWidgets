@@ -176,17 +176,15 @@ OTHER CHANGES
 All:
 
 - fixed wxLANGUAGE_CHINESE_TAIWAN to use zh_TW catalogs
+- added missing wx/quantize.h to install
+
+Unix (GUI):
+
+- fixed the "close" button of dialogs under KDE 3.1
 
 wxBase
 
 - compilation with wxUSE_ODBC=1 fixed (dbkeyg.h file was missing in the archive)
-
-2.4.0.2
--------
-
-All:
-
-- added missing wx/quantize.h to install
 
 wxGTK:
 
@@ -228,10 +226,12 @@ Unix (Base/GUI):
 - shared library symbols are now versioned on platforms that support it (Linux)
 
 wxGTK:
+
 - Further work for GTK 2.0 and Unicode support.
 - Addition of native frame site grip.
 
 wxX11:
+
 - Unicode support through Pango library.
 
 wxMSW:
