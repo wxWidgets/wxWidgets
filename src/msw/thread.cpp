@@ -211,44 +211,78 @@ class wxConditionInternal
 public:
     wxConditionInternal()
     {
-        event = ::CreateEvent(
-                              NULL,   // default secutiry
-                              FALSE,  // not manual reset
-                              FALSE,  // nonsignaled initially
-                              NULL    // nameless event
-                             );
-        if ( !event )
+        m_hEvent = ::CreateEvent(
+                                 NULL,   // default secutiry
+                                 FALSE,  // not manual reset
+                                 FALSE,  // nonsignaled initially
+                                 NULL    // nameless event
+                                );
+        if ( !m_hEvent )
         {
             wxLogSysError(_("Can not create event object."));
         }
-        waiters = 0;
+
+        // nobody waits for us yet
+        m_nWaiters = 0;
     }
 
     bool Wait(DWORD timeout)
     {
-        waiters++;
+        // as m_nWaiters variable is accessed from multiple waiting threads
+        // (and possibly from the broadcasting thread), we need to change its
+        // value atomically
+        ::InterlockedIncrement(&m_nWaiters);
 
-        // FIXME this should be MsgWaitForMultipleObjects() as well probably
-        DWORD rc = ::WaitForSingleObject(event, timeout);
+        // FIXME this should be MsgWaitForMultipleObjects() as we want to keep
+        //       processing Windows messages while waiting (or don't we?)
+        DWORD rc = ::WaitForSingleObject(m_hEvent, timeout);
 
-        waiters--;
+        ::InterlockedDecrement(&m_nWaiters);
 
         return rc != WAIT_TIMEOUT;
     }
 
+    void Signal()
+    {
+        // set the event to signaled: if a thread is already waiting on it, it
+        // will be woken up, otherwise the event will remain in the signaled
+        // state until someone waits on it. In any case, the system will return
+        // it to a non signalled state afterwards. If multiple threads are
+        // waiting, only one will be woken up.
+        if ( !::SetEvent(m_hEvent) )
+        {
+            wxLogLastError(wxT("SetEvent"));
+        }
+    }
+
+    void Broadcast()
+    {
+        // this works because all these threads are already waiting and so each
+        // SetEvent() inside Signal() is really a PulseEvent() because the
+        // event state is immediately returned to non-signaled
+        for ( LONG n = 0; n < m_nWaiters; n++ )
+        {
+            Signal();
+        }
+    }
+
     ~wxConditionInternal()
     {
-        if ( event )
+        if ( m_hEvent )
         {
-            if ( !::CloseHandle(event) )
+            if ( !::CloseHandle(m_hEvent) )
             {
                 wxLogLastError(wxT("CloseHandle(event)"));
             }
         }
     }
 
-    HANDLE event;
-    int waiters;
+private:
+    // the Win32 synchronization object corresponding to this event
+    HANDLE m_hEvent;
+
+    // number of threads waiting for this condition
+    LONG m_nWaiters;
 };
 
 wxCondition::wxCondition()
@@ -274,26 +308,12 @@ bool wxCondition::Wait(unsigned long sec,
 
 void wxCondition::Signal()
 {
-    // set the event to signaled: if a thread is already waiting on it, it will
-    // be woken up, otherwise the event will remain in the signaled state until
-    // someone waits on it. In any case, the system will return it to a non
-    // signalled state afterwards. If multiple threads are waiting, only one
-    // will be woken up.
-    if ( !::SetEvent(m_internal->event) )
-    {
-        wxLogLastError(wxT("SetEvent"));
-    }
+    m_internal->Signal();
 }
 
 void wxCondition::Broadcast()
 {
-    // this works because all these threads are already waiting and so each
-    // SetEvent() inside Signal() is really a PulseEvent() because the event
-    // state is immediately returned to non-signaled
-    for ( int i = 0; i < m_internal->waiters; i++ )
-    {
-        Signal();
-    }
+    m_internal->Broadcast();
 }
 
 // ----------------------------------------------------------------------------
@@ -1126,7 +1146,7 @@ void WXDLLEXPORT wxMutexGuiLeave()
     }
     else
     {
-        // decrement the number of waiters now
+        // decrement the number of threads waiting for GUI access now
         wxASSERT_MSG( gs_nWaitingForGui > 0,
                       wxT("calling wxMutexGuiLeave() without entering it first?") );
 
