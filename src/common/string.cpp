@@ -1937,27 +1937,25 @@ static void wxLoadCharacterSets(void)
 
   if (already_loaded) return;
 
-#if defined(__UNIX__) && wxUSE_UNICODE
+#if defined(__UNIX__)
   // search through files in /usr/share/i18n/charmaps
   wxString fname;
-  printf("Commencing load\n");
   for (fname = ::wxFindFirstFile(_T("/usr/share/i18n/charmaps/*"));
        !fname.IsEmpty();
        fname = ::wxFindNextFile()) {
-    wxPrintf(_("Loading: %s\n"), fname.c_str());
     wxTextFile cmap(fname);
     if (cmap.Open()) {
       wxCharacterSet *cset = new wxCharacterSet;
       wxString comchar,escchar;
       bool in_charset = FALSE;
 
-      wxPrintf(_T("yup, loaded %s\n"),fname.c_str());
+      // wxFprintf(stderr,_T("Loaded: %s\n"),fname.c_str());
 
       wxString line;
       for (line = cmap.GetFirstLine();
 	   !cmap.Eof();
 	   line = cmap.GetNextLine()) {
-	wxPrintf(_T("line contents: %s\n"),line.c_str());
+	// wxFprintf(stderr,_T("line contents: %s\n"),line.c_str());
 	wxStringTokenizer token(line);
 	wxString cmd = token.GetNextToken();
 	if (cmd == comchar) {
@@ -1974,12 +1972,13 @@ static void wxLoadCharacterSets(void)
 	  comchar = token.GetNextToken();
 	else if (cmd == _T("<escape_char>"))
 	  escchar = token.GetNextToken();
-	else if (cmd == _T("<mb_cur_min")) {
+	else if (cmd == _T("<mb_cur_min>")) {
 	  delete cset;
-	  goto forget_it; // we don't support multibyte charsets ourselves (yet)
+	  cset = (wxCharacterSet *) NULL;
+	  break; // we don't support multibyte charsets ourselves (yet)
 	}
 	else if (cmd == _T("CHARMAP")) {
-	  cset->data = (wchar_t *)calloc(256, sizeof(wxChar));
+	  cset->data = (wchar_t *)calloc(256, sizeof(wchar_t));
 	  in_charset = TRUE;
 	}
 	else if (cmd == _T("END")) {
@@ -1988,19 +1987,31 @@ static void wxLoadCharacterSets(void)
 	}
 	else if (in_charset) {
 	  // format: <NUL> /x00 <U0000> NULL (NUL)
+	  //         <A>   /x41 <U0041> LATIN CAPITAL LETTER A
 	  wxString hex = token.GetNextToken();
+	  // skip whitespace (why doesn't wxStringTokenizer do this?)
+	  while (wxIsEmpty(hex) && token.HasMoreTokens()) hex = token.GetNextToken();
 	  wxString uni = token.GetNextToken();
-	  // just assume that we've got the right format
-	  int pos = ::wxHexToDec(hex.Mid(2,2));
-	  unsigned long uni1 = ::wxHexToDec(uni.Mid(2,2));
-	  unsigned long uni2 = ::wxHexToDec(uni.Mid(4,2));
-	  cset->data[pos] = (uni1 << 16) | uni2;
+	  // skip whitespace again
+	  while (wxIsEmpty(uni) && token.HasMoreTokens()) uni = token.GetNextToken();
+
+	  if ((hex.GetChar(0) == escchar) && (hex.GetChar(1) == _T('x')) &&
+	      (uni.Left(2) == _T("<U"))) {
+	    hex.MakeUpper(); uni.MakeUpper();
+	    int pos = ::wxHexToDec(hex.Mid(2,2));
+	    if (pos>=0) {
+	      unsigned long uni1 = ::wxHexToDec(uni.Mid(2,2));
+	      unsigned long uni2 = ::wxHexToDec(uni.Mid(4,2));
+	      cset->data[pos] = (uni1 << 16) | uni2;
+	      // wxFprintf(stderr,_T("char %02x mapped to %04x (%c)\n"),pos,cset->data[pos],cset->data[pos]);
+	    }
+	  }
 	}
       }
-      cset->names.Shrink();
-      wxCharsets.Add(cset);
-    forget_it:
-      continue;
+      if (cset) {
+	cset->names.Shrink();
+	wxCharsets.Add(cset);
+      }
     }
   }
 #endif
