@@ -42,22 +42,29 @@ Copy constructor.
 
 \func{}{wxBitmap}{\param{void*}{ data}, \param{int}{ type}, \param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
 
-Creates a bitmap from the given data, which can be of arbitrary type.
-Windows only, I think.
+Creates a bitmap from the given data which is interpreted in platform-dependent
+manner.
 
 \func{}{wxBitmap}{\param{const char}{ bits[]}, \param{int}{ width}, \param{int}{ height}\\
   \param{int}{ depth = 1}}
 
 Creates a bitmap from an array of bits.
 
-Note that the bit depth is ignored on GTK+ and Motif. If you want to create a bitmap
-from something else than a 1-bit data array, use the \helpref{wxImage}{wximage} class.
+You should only use this function for monochrome bitmaps ({\it depth} 1) in
+portable programs: in this case the {\it bits} parameter should contain an XBM
+image.
+
+For other bit depths, the behaviour is platform dependent: under Windows, the
+data is passed withotu any changes to the underlying {\tt CreateBitmap()} API.
+Under other platforms, only monochrome bitmaps may be created using this
+constructor and \helpref{wxImage}{wximage} should be used for creating colour
+bitmaps from static data.
 
 \func{}{wxBitmap}{\param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
 
-Creates a new bitmap. A depth of -1 indicates the depth of the current screen or
-visual. Some platforms only support 1 for monochrome and -1 for the current colour
-setting.
+Creates a new bitmap. A depth of -1 indicates the depth of the current screen
+or visual. Some platforms only support 1 for monochrome and -1 for the current
+colour setting.
 
 \func{}{wxBitmap}{\param{const char**}{ bits}}
 

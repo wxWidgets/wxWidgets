@@ -255,16 +255,22 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
 
         for ( int rows = 0; rows < height; rows++ )
         {
-            // note that offset cannot be size_t due to >= 0 test!
-            for ( int offset = bytesPerLine - 1; offset >= 0; offset-- )
+            for ( size_t cols = 0; cols < bytesPerLine; cols++ )
             {
-                *dst++ = *(src + offset);
+                unsigned char val = *src++;
+                unsigned char reversed = 0;
+
+                for ( int bits = 0; bits < 8; bits++)
+                {
+                    reversed <<= 1;
+                    reversed |= (val & 0x01);
+                    val >>= 1;
+                }
+                *dst++ = reversed;
             }
 
             if ( padding )
                 *dst++ = 0;
-
-            src += bytesPerLine;
         }
     }
     else
