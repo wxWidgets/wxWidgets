@@ -23,8 +23,8 @@
 class WXDLLEXPORT wxWinceHelpController : public wxHelpControllerBase
 {
 public:
-    wxWinceHelpController() { }
-    virtual ~wxWinceHelpController();
+    wxWinceHelpController() {}
+    virtual ~wxWinceHelpController() {}
 
     // Must call this to set the filename
     virtual bool Initialize(const wxString& file);
