@@ -118,7 +118,8 @@ enum wxFontEncoding
     wxFONTENCODING_ISO8859_MAX,
 
     // Cyrillic charset soup (see http://czyborra.com/charsets/cyrillic.html)
-    wxFONTENCODING_KOI8,            // we don't support any of KOI8 variants
+    wxFONTENCODING_KOI8,            // KOI8 Russian
+    wxFONTENCODING_KOI8_U,          // KOI8 Ukrainian
     wxFONTENCODING_ALTERNATIVE,     // same as MS-DOS CP866
     wxFONTENCODING_BULGARIAN,       // used under Linux in Bulgaria
 
@@ -373,6 +374,12 @@ public:
     // NB: hard-coded now, but might change later (read it from config?)
     static wxString GetEncodingDescription(wxFontEncoding encoding);
 
+    // find the encoding corresponding to the given name, inverse of
+    // GetEncodingName() and less general than CharsetToEncoding()
+    //
+    // returns wxFONTENCODING_MAX if the name is not a supported encoding
+    static wxFontEncoding GetEncodingFromName(const wxString& name);
+
 
     // set the config object to use (may be NULL to use default)
     void SetConfig(wxConfigBase *config);
@@ -404,7 +411,8 @@ public:
 
 
     // checks whether given encoding is available in given face or not.
-    // If no facename is given,
+    // If no facename is given (default), return true if it's available in any
+    // facename at all.
     bool IsEncodingAvailable(wxFontEncoding encoding,
                              const wxString& facename = wxPyEmptyString);
 
