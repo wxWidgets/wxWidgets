@@ -49,8 +49,12 @@ TAG_HANDLER_BEGIN(FONT, "FONT")
 
         if (tag.HasParam(wxT("SIZE"))) {
 	    long tmp = 0;
+            wxChar c = tag.GetParam(wxT("SIZE"))[0];
             if (tag.ScanParam(wxT("SIZE"), wxT("%li"), &tmp) == 1) {
-                m_WParser -> SetFontSize(oldsize+tmp);
+                if (c == '+' || c == '-')
+                    m_WParser -> SetFontSize(oldsize+tmp);
+                else
+                    m_WParser -> SetFontSize(tmp);
                 m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
 	    }
         }
@@ -176,20 +180,20 @@ TAG_HANDLER_BEGIN(Hx, "H1,H2,H3,H4,H5,H6")
         m_WParser -> SetFontFixed(FALSE);
 
              if (tag.GetName() == "H1")
-                m_WParser -> SetFontSize(+4);
+                m_WParser -> SetFontSize(7);
         else if (tag.GetName() == "H2")
-                m_WParser -> SetFontSize(+3);
+                m_WParser -> SetFontSize(6);
         else if (tag.GetName() == "H3")
-                m_WParser -> SetFontSize(+2);
+                m_WParser -> SetFontSize(5);
         else if (tag.GetName() == "H4") {
-                m_WParser -> SetFontSize(+2);
+                m_WParser -> SetFontSize(5);
                 m_WParser -> SetFontItalic(TRUE);
                 m_WParser -> SetFontBold(FALSE);
         }
         else if (tag.GetName() == "H5")
-                m_WParser -> SetFontSize(+1);
+                m_WParser -> SetFontSize(4);
         else if (tag.GetName() == "H6") {
-                m_WParser -> SetFontSize(+1);
+                m_WParser -> SetFontSize(4);
                 m_WParser -> SetFontItalic(TRUE);
                 m_WParser -> SetFontBold(FALSE);
         }
