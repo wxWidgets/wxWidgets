@@ -253,7 +253,7 @@ public:
 
   wxInputFTPStream(wxFTP *ftp_clt, wxSocketBase *sock)
     : wxSocketInputStream(*sock), m_ftp(ftp_clt) {}
-  size_t StreamSize() { return m_ftpsize; }
+  size_t StreamSize() const { return m_ftpsize; }
   virtual ~wxInputFTPStream(void)
   { 
      if (LastError() != wxStream_NOERROR)
@@ -351,7 +351,7 @@ wxInputStream *wxFTP::GetInputStream(const wxString& path)
 
   pos_size = m_lastResult.Index('(');
   if (pos_size != wxNOT_FOUND) {
-    wxString str_size = m_lastResult(pos_size, m_lastResult.Index(')'));
+    wxString str_size = m_lastResult(pos_size+1, m_lastResult.Index(')')-1);
 
     in_stream->m_ftpsize = atoi(WXSTRINGCAST str_size);
   }
@@ -400,6 +400,10 @@ wxList *wxFTP::GetList(const wxString& wildcard)
     delete file_list;
     return NULL;
   }
+
+  sock->SetEventHandler(*GetNextHandler(), m_id);
+  sock->Notify(m_notifyme);
+  sock->SetNotify(m_neededreq);
 
   return file_list;
 }

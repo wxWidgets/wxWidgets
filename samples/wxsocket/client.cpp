@@ -235,7 +235,7 @@ void MyFrame::OnExecTest1(wxCommandEvent& WXUNUSED(evt))
   wxYield();
   
   /* Init */
-  buf = copystring("Salut ! Salut ! Salut ! Salut Toto\n");
+  buf = copystring("Hi ! Hi ! Hi !\n");
   buf2 = new char[strlen(buf)+1];
   char c = 0xbe;
   sock->WriteMsg(&c, 1);

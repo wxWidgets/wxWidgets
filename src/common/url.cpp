@@ -160,10 +160,9 @@ bool wxURL::PrepHost(wxString& url)
   // Retrieve service number
   pos2 = temp_url.Find(':', TRUE);
   if (pos2 != -1 && pos2 < pos) {
-    m_servname = url(pos2, pos);
+    m_servname = temp_url(pos2+1, pos);
     if (!m_servname.IsNumber())
       return FALSE;
-    pos2 = pos;
     temp_url = temp_url(0, pos2);
   }
 

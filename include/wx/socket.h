@@ -81,7 +81,10 @@ class WXDLLEXPORT wxSocketBase : public wxEvtHandler
 {
   DECLARE_CLASS(wxSocketBase)
 #ifdef __WXMAC__
-friend void wxMacSocketOnRequestProc(void *refcon , short event) ;
+  friend void wxMacSocketOnRequestProc(void *refcon , short event) ;
+#endif
+#if defined(__WXGTK__) && defined(WXSOCK_INTERNAL)
+  friend void wxPrereadSocket(wxSocketBase *sock);
 #endif
 public:
 

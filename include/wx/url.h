@@ -62,6 +62,7 @@ public:
         { return m_protoinfo->m_protoname; }
   inline wxProtocol& GetProtocol() { return *m_protocol; }
   inline wxURLError GetError() const { return m_error; }
+  inline wxString GetPath() const { return m_path; }
 
   wxInputStream *GetInputStream();
 

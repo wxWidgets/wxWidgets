@@ -363,8 +363,10 @@ wxSocketBase& wxSocketBase::Read(char* buffer, size_t nbytes)
 
   // If we have got the whole needed buffer or if we don't want to
   // wait then it returns immediately.
-  if (!nbytes || (m_lcount && !(m_flags & WAITALL)) )
+  if (!nbytes || (count && !(m_flags & WAITALL)) ) {
+    m_lcount = count;
     return *this;
+  }
 
   m_lcount = 0;
   WantBuffer(buffer, nbytes, EVT_READ);
@@ -681,6 +683,20 @@ bool wxSocketBase::WaitForLost(long seconds, long microseconds)
 // --------- wxSocketBase callback management -------------------
 // --------------------------------------------------------------
 
+#ifdef __WXGTK__
+void wxPrereadSocket(wxSocketBase *sock)
+{
+  char tmp_buf[1024];
+  int got = 0;
+
+  do {
+    got = recv(sock->m_fd, tmp_buf, 1024, 0);
+    if (got > 0)
+      sock->CreatePushbackAfter(tmp_buf, got);
+  } while (got > 0);
+}
+#endif
+
 #if defined(__WXMOTIF__) || defined(__WXXT__) || defined(__WXGTK__)
 #if defined(__WXMOTIF__) || defined(__WXXT__)
 static void wx_socket_read(XtPointer client, int *fid,
@@ -708,6 +724,15 @@ static void wx_socket_read(gpointer client, gint fd,
   {
     if (!(sock->NeededReq() & wxSocketBase::REQ_READ))
     {
+#ifdef __WXGTK__
+      // We can't exit from the GDK main loop because it doesn't accept
+      // destroying input event while we are in a event dispatch.
+      // So we will preread socket and we put the data in the pushback.
+      wxPrereadSocket(sock);
+      // Then we set the socket as BLOCKING
+      int flag = 0;
+      ioctl(fd, FIONBIO, &flag);
+#endif
       return;
     }
 
@@ -1119,7 +1144,10 @@ void wxSocketBase::CreatePushbackAfter(const char *buffer, size_t size)
 {
   char *curr_pos;
 
-  m_unread = (char *) realloc(m_unread, m_unrd_size+size);
+  if (m_unread != NULL)
+    m_unread = (char *) realloc(m_unread, m_unrd_size+size);
+  else
+    m_unread = (char *) malloc(size);
   curr_pos = m_unread + m_unrd_size;
 
   memcpy(curr_pos, buffer, size);
