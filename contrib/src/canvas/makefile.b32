@@ -1,0 +1,17 @@
+#
+# File:		makefile.b32
+# Author:	Julian Smart
+# Created:	1999
+# Updated:	
+# Copyright:
+#
+# Makefile : Builds Canvas library for 32-bit BC++
+
+WXDIR = $(WXWIN)
+
+LIBTARGET=$(WXDIR)\lib\canvas.lib
+
+OBJECTS = bbox.obj canvas.obj liner.obj polygon.obj
+
+!include $(WXDIR)\src\makelib.b32
+

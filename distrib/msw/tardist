@@ -64,6 +64,7 @@ rm -f $2/stc-*.tgz
 rm -f $2/canvas-*.tgz
 rm -f $2/contrib-*.tgz
 rm -f $2/applet-*.tgz
+rm -f $2/wxxrc-*.tgz
 
 echo Tarring...
 

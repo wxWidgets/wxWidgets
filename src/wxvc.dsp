@@ -253,11 +253,11 @@ SOURCE=.\common\gdicmn.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\gifdecod.cpp
+SOURCE=.\common\geometry.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\xpmdecod.cpp
+SOURCE=.\common\gifdecod.cpp
 # End Source File
 # Begin Source File
 
@@ -515,6 +515,10 @@ SOURCE=.\common\wxchar.cpp
 # Begin Source File
 
 SOURCE=.\common\wxexpr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\xpmdecod.cpp
 # End Source File
 # Begin Source File
 

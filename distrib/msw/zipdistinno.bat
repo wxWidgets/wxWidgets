@@ -122,7 +122,7 @@ zip32 -@ %dest\jpeg-%version%.zip < %src\distrib\msw\jpeg.rsp
 rem TIFF source
 zip32 -@ %dest\tiff-%version%.zip < %src\distrib\msw\tiff.rsp
 
-zip32 -@ %dest\wxxml-%version%.zip < %src\distrib\msw\xml.rsp
+zip32 -@ %dest\wxxrc-%version%.zip < %src\distrib\msw\xml.rsp
 
 zip32 -@ %dest\contrib-%version%.zip < %src\distrib\msw\contrib.rsp
 
@@ -182,7 +182,7 @@ unzip32 -o ..\wxWindows-%version%-Word.zip
 unzip32 -o ..\ogl3-%version%.zip
 unzip32 -o ..\jpeg-%version%.zip
 unzip32 -o ..\tiff-%version%.zip
-unzip32 -o ..\wxxml-%version%.zip
+unzip32 -o ..\wxxrc-%version%.zip
 unzip32 -o ..\contrib-%version%.zip
 unzip32 -o ..\tex2rtf2-%version%.zip
 

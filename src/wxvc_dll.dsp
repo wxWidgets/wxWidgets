@@ -260,6 +260,10 @@ SOURCE=.\common\gdicmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\geometry.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\gifdecod.cpp
 # End Source File
 # Begin Source File

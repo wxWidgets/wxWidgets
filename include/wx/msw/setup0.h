@@ -317,6 +317,9 @@
 // Joystick support class
 #define wxUSE_JOYSTICK            1
 
+// Miscellaneous geometry code: needed for Canvas library
+#define wxUSE_GEOMETRY            1
+
 
 // ----------------------------------------------------------------------------
 // Optional controls

@@ -271,11 +271,11 @@ contrib/samples/ogl/ogledit/OgleditVC.dsw
 contrib/samples/ogl/studio/StudioVC.dsp
 contrib/samples/ogl/studio/StudioVC.dsw
 
-contrib/src/xml/wxXMLVC.dsp
-contrib/src/xml/wxXMLVC.dsw
+contrib/src/xrc/wxXrcVC.dsp
+contrib/src/xrc/wxXrcVC.dsw
 
-contrib/samples/xml/XmlDemoVC.dsp
-contrib/samples/xml/XmlDemoVC.dsw
+contrib/samples/xrc/XrcDemoVC.dsp
+contrib/samples/xrc/XrcDemoVC.dsw
 
 contrib/src/mmedia/MmediaVC.dsp
 contrib/src/mmedia/MMediaVC.dsw
@@ -295,8 +295,8 @@ contrib/utils/wxrc/wxrcVC.dsw
 contrib/utils/convertrc/ConvertVC.dsp
 contrib/utils/convertrc/ConvertVC.dsw
 
-contrib/utils/wxrcedit/wxrceditVC.dsp
-contrib/utils/wxrcedit/wxrceditVC.dsw
+contrib/utils/wxrcedit/wxRcEditVC.dsp
+contrib/utils/wxrcedit/wxRcEditVC.dsw
 
 contrib/src/canvas/CanvasVC.dsp
 contrib/src/canvas/CanvasVC.dsw

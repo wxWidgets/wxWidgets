@@ -11,6 +11,19 @@ contrib/samples/canvas/simple/*.rc
 contrib/samples/canvas/simple/SimpleVC.dsp
 contrib/samples/canvas/simple/SimpleVC.dsw
 
+contrib/samples/canvas/test/*.cpp
+contrib/samples/canvas/test/*.h
+contrib/samples/canvas/test/*.def
+contrib/samples/canvas/test/makefile*
+contrib/samples/canvas/test/*.xbm
+contrib/samples/canvas/test/*.xpm
+contrib/samples/canvas/test/*.txt
+contrib/samples/canvas/test/*.ico
+contrib/samples/canvas/test/*.bmp
+contrib/samples/canvas/test/*.rc
+contrib/samples/canvas/test/TestVC.dsp
+contrib/samples/canvas/test/TestVC.dsw
+
 contrib/samples/plot/*.cpp
 contrib/samples/plot/*.h
 contrib/samples/plot/*.def

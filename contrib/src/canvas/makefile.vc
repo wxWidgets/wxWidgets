@@ -1,0 +1,159 @@
+
+# File:		makefile.vc
+# Author:	Julian Smart
+# Created:	2001
+# Updated:
+# Copyright:	(c) 2001, Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile : Builds Plot class library (MS VC++).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+GIZMOSDIR = $(WXDIR)\contrib\src\canvas
+GIZMOSINC = $(WXDIR)\contrib\include\wx\canvas
+THISDIR = $(WXDIR)\contrib\src\canvas
+DOCDIR=$(WXDIR)\contrib\docs
+LOCALDOCDIR=$(WXDIR)\contrib\docs\latex\canvas
+
+!include $(WXDIR)\src\makevc.env
+
+OBJECTS = $(D)\bbox.obj $(D)\canvas.obj $(D)\liner.obj $(D)\polygon.obj
+
+LIBTARGET=$(WXDIR)\lib\canvas$(LIBEXT).lib
+
+all:    $(D) $(LIBTARGET)
+
+$(D) :
+	mkdir $(D)
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.vc clean
+        cd $(THISDIR)
+
+$(LIBTARGET): $(OBJECTS)
+	-erase $(LIBTARGET)
+	$(implib) @<<
+-out:$(LIBTARGET)
+-machine:$(CPU)
+$(OBJECTS)
+<<
+
+$(D)\bbox.obj:      bbox.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Fo$@ /Tp $(*B).$(SRCSUFF)
+<<
+
+$(D)\canvas.obj:      canvas.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Fo$@ /Tp $(*B).$(SRCSUFF)
+<<
+
+$(D)\liner.obj:      liner.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Fo$@ /Tp $(*B).$(SRCSUFF)
+<<
+
+$(D)\polygon.obj:      polygon.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Fo$@ /Tp $(*B).$(SRCSUFF)
+<<
+
+clean:
+        -erase $(D)\*.obj
+        -erase *.sbr
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.pdb
+        -erase $(LIBTARGET)
+
+DOCSOURCES=$(LOCALDOCDIR)\canvas.tex \
+ $(LOCALDOCDIR)\bugs.tex $(LOCALDOCDIR)\changes.tex\
+ $(LOCALDOCDIR)\classes.tex $(LOCALDOCDIR)\intro.tex\
+ $(LOCALDOCDIR)\topics.tex $(LOCALDOCDIR)\sample.tex
+
+html: $(DOCDIR)\html\canvas\canvas.htm
+htmlhelp: $(DOCDIR)\htmlhelp\canvas.chm
+htb:	$(DOCDIR)\htb\canvas.htb
+hlp: $(DOCDIR)\winhelp\canvas.hlp
+pdfrtf: $(DOCDIR)\pdf\canvas.rtf
+ps: $(DOCDIR)\ps\canvas.ps
+
+touchmanual:
+	touch $(LOCALDOCDIR)\canvas.tex
+
+
+$(DOCDIR)\winhelp\canvas.hlp:         $(LOCALDOCDIR)\canvas.rtf $(LOCALDOCDIR)\canvas.hpj
+        cd $(LOCALDOCDIR)
+        -erase canvas.ph
+        hc canvas
+        move canvas.hlp $(DOCDIR)\winhelp\canvas.hlp
+        move canvas.cnt $(DOCDIR)\winhelp\canvas.cnt
+        cd $(THISDIR)
+
+$(LOCALDOCDIR)\canvas.rtf: $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\canvas.tex $(LOCALDOCDIR)\canvas.rtf -twice -winhelp
+        cd $(THISDIR)
+
+$(DOCDIR)\pdf\canvas.rtf: $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -copy *.bmp $(DOCDIR)\pdf
+        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\canvas.tex $(DOCDIR)\pdf\canvas.rtf -twice -rtf
+        cd $(THISDIR)
+
+$(DOCDIR)\html\canvas\canvas.htm:         $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -mkdir $(DOCDIR)\html\canvas
+        copy *.gif $(DOCDIR)\html\canvas
+        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\canvas.tex $(DOCDIR)\html\canvas\canvas.htm -twice -html
+        -erase $(DOCDIR)\html\canvas\*.con
+        -erase *.con
+        -erase $(DOCDIR)\html\canvas\*.ref
+        cd $(THISDIR)
+
+$(DOCDIR)\htmlhelp\canvas.chm: $(DOCDIR)\html\canvas\canvas.htm $(DOCDIR)\html\canvas\canvas.hhp
+	cd $(DOCDIR)\html\canvas
+	-hhc canvas.hhp
+    move canvas.chm $(DOCDIR)\htmlhelp\canvas.chm
+	cd $(THISDIR)
+
+# An htb file is a zip file containing the .htm, .gif, .hhp, .hhc and .hhk
+# files, renamed to htb.
+# This can then be used with e.g. helpview.
+# Optionally, a cached version of the .hhp file can be generated with hhp2cached.
+$(DOCDIR)\htb\canvas.htb: $(DOCDIR)\html\canvas\canvas.htm
+	cd $(DOCDIR)\html\canvas
+    -erase canvas.zip canvas.htb
+    zip canvas.zip *.htm *.gif *.hhp *.hhc *.hhk
+    -mkdir $(DOCDIR)\htb
+    move canvas.zip $(DOCDIR)\htb\canvas.htb
+    cd $(THISDIR)
+
+$(LOCALDOCDIR)\canvas.dvi:	$(DOCSOURCES)
+	cd $(LOCALDOCDIR)
+        -latex canvas
+        -latex canvas
+        -makeindx canvas
+        -bibtex canvas
+        -latex canvas
+        -latex canvas
+        cd $(THISDIR)
+
+$(WXDIR)\docs\ps\canvas.ps:	$(LOCALDOCDIR)\canvas.dvi
+	cd $(LOCALDOCDIR)
+        -dvips32 -o canvas.ps canvas
+        move canvas.ps $(WXDIR)\docs\ps\canvas.ps
+        cd $(THISDIR)
+

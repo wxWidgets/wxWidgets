@@ -1,0 +1,144 @@
+
+# File:		makefile.vc
+# Author:	Julian Smart
+# Created:	2001
+# Updated:
+# Copyright:	(c) 2001, Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile : Builds Plot class library (MS VC++).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+GIZMOSDIR = $(WXDIR)\contrib\src\plot
+GIZMOSINC = $(WXDIR)\contrib\include\wx\plot
+THISDIR = $(WXDIR)\contrib\src\plot
+DOCDIR=$(WXDIR)\contrib\docs
+LOCALDOCDIR=$(WXDIR)\contrib\docs\latex\plot
+
+!include $(WXDIR)\src\makevc.env
+
+OBJECTS = $(D)\plot.obj
+
+LIBTARGET=$(WXDIR)\lib\plot$(LIBEXT).lib
+
+all:    $(D) $(LIBTARGET)
+
+$(D) :
+	mkdir $(D)
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.vc clean
+        cd $(THISDIR)
+
+$(LIBTARGET): $(OBJECTS)
+	-erase $(LIBTARGET)
+	$(implib) @<<
+-out:$(LIBTARGET)
+-machine:$(CPU)
+$(OBJECTS)
+<<
+
+$(D)\plot.obj:      plot.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Fo$@ /Tp $(*B).$(SRCSUFF)
+<<
+
+clean:
+        -erase $(D)\*.obj
+        -erase *.sbr
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.pdb
+        -erase $(LIBTARGET)
+
+DOCSOURCES=$(LOCALDOCDIR)\plot.tex \
+ $(LOCALDOCDIR)\bugs.tex $(LOCALDOCDIR)\changes.tex\
+ $(LOCALDOCDIR)\classes.tex $(LOCALDOCDIR)\intro.tex\
+ $(LOCALDOCDIR)\topics.tex $(LOCALDOCDIR)\sample.tex
+
+html: $(DOCDIR)\html\plot\plot.htm
+htmlhelp: $(DOCDIR)\htmlhelp\plot.chm
+htb:	$(DOCDIR)\htb\plot.htb
+hlp: $(DOCDIR)\winhelp\plot.hlp
+pdfrtf: $(DOCDIR)\pdf\plot.rtf
+ps: $(DOCDIR)\ps\plot.ps
+
+touchmanual:
+	touch $(LOCALDOCDIR)\plot.tex
+
+
+$(DOCDIR)\winhelp\plot.hlp:         $(LOCALDOCDIR)\plot.rtf $(LOCALDOCDIR)\plot.hpj
+        cd $(LOCALDOCDIR)
+        -erase plot.ph
+        hc plot
+        move plot.hlp $(DOCDIR)\winhelp\plot.hlp
+        move plot.cnt $(DOCDIR)\winhelp\plot.cnt
+        cd $(THISDIR)
+
+$(LOCALDOCDIR)\plot.rtf: $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\plot.tex $(LOCALDOCDIR)\plot.rtf -twice -winhelp
+        cd $(THISDIR)
+
+$(DOCDIR)\pdf\plot.rtf: $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -copy *.bmp $(DOCDIR)\pdf
+        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\plot.tex $(DOCDIR)\pdf\plot.rtf -twice -rtf
+        cd $(THISDIR)
+
+$(DOCDIR)\html\plot\plot.htm:         $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -mkdir $(DOCDIR)\html\plot
+        copy *.gif $(DOCDIR)\html\plot
+        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\plot.tex $(DOCDIR)\html\plot\plot.htm -twice -html
+        -erase $(DOCDIR)\html\plot\*.con
+        -erase *.con
+        -erase $(DOCDIR)\html\plot\*.ref
+        cd $(THISDIR)
+
+$(DOCDIR)\htmlhelp\plot.chm: $(DOCDIR)\html\plot\plot.htm $(DOCDIR)\html\plot\plot.hhp
+	cd $(DOCDIR)\html\plot
+	-hhc plot.hhp
+    move plot.chm $(DOCDIR)\htmlhelp\plot.chm
+	cd $(THISDIR)
+
+# An htb file is a zip file containing the .htm, .gif, .hhp, .hhc and .hhk
+# files, renamed to htb.
+# This can then be used with e.g. helpview.
+# Optionally, a cached version of the .hhp file can be generated with hhp2cached.
+$(DOCDIR)\htb\plot.htb: $(DOCDIR)\html\plot\plot.htm
+	cd $(DOCDIR)\html\plot
+    -erase plot.zip plot.htb
+    zip plot.zip *.htm *.gif *.hhp *.hhc *.hhk
+    -mkdir $(DOCDIR)\htb
+    move plot.zip $(DOCDIR)\htb\plot.htb
+    cd $(THISDIR)
+
+$(LOCALDOCDIR)\plot.dvi:	$(DOCSOURCES)
+	cd $(LOCALDOCDIR)
+        -latex plot
+        -latex plot
+        -makeindx plot
+        -bibtex plot
+        -latex plot
+        -latex plot
+        cd $(THISDIR)
+
+$(WXDIR)\docs\ps\plot.ps:	$(LOCALDOCDIR)\plot.dvi
+	cd $(LOCALDOCDIR)
+        -dvips32 -o plot.ps plot
+        move plot.ps $(WXDIR)\docs\ps\plot.ps
+        cd $(THISDIR)
+
