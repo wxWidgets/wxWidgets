@@ -55,24 +55,24 @@ Flags for regex compilation to be used with \helpref{Compile()}{wxregexcompile}:
 enum
 {
     // use extended regex syntax (default)
-    wxRE\_EXTENDED = 0,
+    wxRE_EXTENDED = 0,
 
     // use basic RE syntax
-    wxRE\_BASIC    = 2,
+    wxRE_BASIC    = 2,
 
     // ignore case in match
-    wxRE\_ICASE    = 4,
+    wxRE_ICASE    = 4,
 
     // only check match, don't set back references
-    wxRE\_NOSUB    = 8,
+    wxRE_NOSUB    = 8,
 
     // if not set, treat '\n' as an ordinary character, otherwise it is
     // special: it is not matched by '.' and '^' and '$' always match
-    // after/before it regardless of the setting of wxRE\_NOT[BE]OL
-    wxRE\_NEWLINE  = 16,
+    // after/before it regardless of the setting of wxRE_NOT[BE]OL
+    wxRE_NEWLINE  = 16,
 
     // default flags
-    wxRE\_DEFAULT  = wxRE\_EXTENDED
+    wxRE_DEFAULT  = wxRE_EXTENDED
 }
 \end{verbatim}
 
@@ -84,10 +84,10 @@ to prevent erroneous matches for {\tt '\^'} and {\tt '\$'}
 enum
 {
     // '^' doesn't match at the start of line
-    wxRE\_NOTBOL = 32,
+    wxRE_NOTBOL = 32,
 
     // '$' doesn't match at the end of line
-    wxRE\_NOTEOL = 64
+    wxRE_NOTEOL = 64
 }
 \end{verbatim}
 
