@@ -152,7 +152,16 @@ public:
     int GetCharHeight();
     int GetCharWidth();
     wxWindow* GetWindow();
-    void SetFonts(wxString normal_face, wxString fixed_face, int *LIST);
+    //void SetFonts(wxString normal_face, wxString fixed_face, int *LIST);
+    %addmethods {
+        void SetFonts(wxString normal_face, wxString fixed_face, PyObject* sizes) {
+            int* temp = int_LIST_helper(sizes);
+            if (temp) {
+                self->SetFonts(normal_face, fixed_face, temp);
+                delete [] temp;
+            }
+        }
+    }
 
     wxHtmlContainerCell* GetContainer();
     wxHtmlContainerCell* OpenContainer();
@@ -457,7 +466,18 @@ public:
     void SetRelatedFrame(wxFrame* frame, const char* format);
     wxFrame* GetRelatedFrame();
     void SetRelatedStatusBar(int bar);
-    void SetFonts(wxString normal_face, wxString fixed_face, int *LIST);
+
+    //void SetFonts(wxString normal_face, wxString fixed_face, int *LIST);
+    %addmethods {
+        void SetFonts(wxString normal_face, wxString fixed_face, PyObject* sizes) {
+            int* temp = int_LIST_helper(sizes);
+            if (temp) {
+                self->SetFonts(normal_face, fixed_face, temp);
+                delete [] temp;
+            }
+        }
+    }
+
     void SetTitle(const char* title);
     void SetBorders(int b);
     void ReadCustomization(wxConfigBase *cfg, char* path = "");
