@@ -114,11 +114,14 @@ static const int NUM_ITEMS = 30;
 // number of items in icon/small icon view
 static const int NUM_ICONS = 9;
 
-int wxCALLBACK MyCompareFunction(long item1, long item2, long sortData)
+int wxCALLBACK MyCompareFunction(long item1, long item2, long WXUNUSED(sortData))
 {
     // inverse the order
-    if (item1 < item2) return -1;
-    if (item1 > item2) return 1;
+    if (item1 < item2)
+        return -1;
+    if (item1 > item2)
+        return 1;
+
     return 0;
 }
 
@@ -271,14 +274,14 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     dialog.ShowModal();
 }
 
-void MyFrame::OnFreeze(wxCommandEvent& event)
+void MyFrame::OnFreeze(wxCommandEvent& WXUNUSED(event))
 {
     wxLogMessage(_T("Freezing the control"));
 
     m_listCtrl->Freeze();
 }
 
-void MyFrame::OnThaw(wxCommandEvent& event)
+void MyFrame::OnThaw(wxCommandEvent& WXUNUSED(event))
 {
     wxLogMessage(_T("Thawing the control"));
 
@@ -512,7 +515,7 @@ void MyFrame::OnSort(wxCommandEvent& WXUNUSED(event))
                                             sw.Time()));
 }
 
-void MyFrame::OnShowSelInfo(wxCommandEvent& event)
+void MyFrame::OnShowSelInfo(wxCommandEvent& WXUNUSED(event))
 {
     int selCount = m_listCtrl->GetSelectedItemCount();
     wxLogMessage(_T("%d items selected:"), selCount);
@@ -538,7 +541,7 @@ void MyFrame::OnShowSelInfo(wxCommandEvent& event)
     }
 }
 
-void MyFrame::OnShowColInfo(wxCommandEvent& event)
+void MyFrame::OnShowColInfo(wxCommandEvent& WXUNUSED(event))
 {
     int count = m_listCtrl->GetColumnCount();
     wxLogMessage(wxT("%d columns:"), count);
@@ -906,7 +909,7 @@ wxString MyListCtrl::OnGetItemText(long item, long column) const
     return wxString::Format(_T("Column %ld of item %ld"), column, item);
 }
 
-int MyListCtrl::OnGetItemImage(long item) const
+int MyListCtrl::OnGetItemImage(long WXUNUSED(item)) const
 {
     return 0;
 }
