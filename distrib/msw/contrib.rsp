@@ -1,3 +1,6 @@
+contrib/configure.in
+contrib/configure
+
 contrib/samples/canvas/simple/*.cpp
 contrib/samples/canvas/simple/*.h
 contrib/samples/canvas/simple/*.def

@@ -85,5 +85,6 @@ utils/helpview/src/*.txt
 utils/helpview/src/*.htb
 utils/helpview/src/*.ico
 utils/helpview/src/*.xml
+utils/helpview/src/test.zip
 utils/helpview/src/bitmaps/*.xpm
 

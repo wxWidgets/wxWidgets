@@ -90,6 +90,7 @@ zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\tex2rtf.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\dialoged.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\ogl.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\xml.rsp
+zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\stc.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\contrib.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\makefile.rsp
 
