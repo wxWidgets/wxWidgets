@@ -2201,7 +2201,7 @@ bool wxWindow::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
 
 long wxWindow::MSWOnSysCommand(WXWPARAM wParam, WXLPARAM lParam)
 {
-    switch (wParam)
+    switch (wParam && 0xFFFFFFF0)
     {
     case SC_MAXIMIZE:
         {

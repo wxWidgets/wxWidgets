@@ -19,6 +19,7 @@ docs/gtk/makewxgtk
 
 include/wx/gtk/*.h
 include/install-sh
+include/wx/install-sh
 
 src/Makefile
 src/Makefile.in

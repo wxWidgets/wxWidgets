@@ -298,7 +298,7 @@ void wxMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
     }
 }
 
-wxMenuBar *wxMDIChildFrame::GetMenuBar()
+wxMenuBar *wxMDIChildFrame::GetMenuBar() const
 {
     return m_menuBar;
 }

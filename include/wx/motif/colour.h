@@ -62,9 +62,9 @@ public:
   int GetPixel() const { return m_pixel; };
   void SetPixel(int pixel) { m_pixel = pixel; m_isInit = TRUE; };
 
-  inline bool operator == (const wxColour& colour) { return (m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue); }
+  inline bool operator == (const wxColour& colour) const { return (m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue); }
 
-  inline bool operator != (const wxColour& colour) { return (!(m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue)); }
+  inline bool operator != (const wxColour& colour) const { return (!(m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue)); }
 
   // Allocate a colour, or nearest colour, using the given display.
   // If realloc is TRUE, ignore the existing pixel, otherwise just return

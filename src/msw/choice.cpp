@@ -59,7 +59,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
   if (parent) parent->AddChild(this);
   SetBackgroundColour(parent->GetBackgroundColour()) ;
   SetForegroundColour(parent->GetForegroundColour()) ;
-  m_noStrings = n;
+  m_noStrings = 0;
 
   m_windowStyle = style;
 

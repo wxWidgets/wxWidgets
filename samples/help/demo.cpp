@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        minimal.cpp
-// Purpose:     Minimal wxWindows sample
-// Author:      Julian Smart
+// Name:        demo.cpp
+// Purpose:     wxHelpController demo
+// Author:      Karsten Ballueder
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:     wxWindows license
+// Copyright:   (c) Karsten Ballueder, Julian Smart
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -17,8 +17,8 @@
 // headers
 // ----------------------------------------------------------------------------
 #ifdef __GNUG__
-    #pragma implementation "minimal.cpp"
-    #pragma interface "minimal.cpp"
+    #pragma implementation "demo.cpp"
+    #pragma interface "demo.cpp"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -87,17 +87,17 @@ private:
 enum
 {
     // menu items
-    Minimal_Quit = 1,
-    Minimal_Help_Index,
-    Minimal_Help_Classes,
-    Minimal_Help_Functions,
-    Minimal_Help_Help,
-    Minimal_Help_KDE,
-    Minimal_Help_GNOME,
-    Minimal_Help_Netscape,
-    Minimal_Help_Search,
+    HelpDemo_Quit = 1,
+    HelpDemo_Help_Index,
+    HelpDemo_Help_Classes,
+    HelpDemo_Help_Functions,
+    HelpDemo_Help_Help,
+    HelpDemo_Help_KDE,
+    HelpDemo_Help_GNOME,
+    HelpDemo_Help_Netscape,
+    HelpDemo_Help_Search,
     // controls start here (the numbers are, of course, arbitrary)
-    Minimal_Text = 1000,
+    HelpDemo_Text = 1000,
 };
 
 // ----------------------------------------------------------------------------
@@ -108,15 +108,15 @@ enum
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
-    EVT_MENU(Minimal_Help_Index, MyFrame::OnHelp)
-    EVT_MENU(Minimal_Help_Classes, MyFrame::OnHelp)
-    EVT_MENU(Minimal_Help_Functions, MyFrame::OnHelp)
-    EVT_MENU(Minimal_Help_Help, MyFrame::OnHelp)
-    EVT_MENU(Minimal_Help_KDE, MyFrame::OnHelp)
-    EVT_MENU(Minimal_Help_GNOME, MyFrame::OnHelp)
-    EVT_MENU(Minimal_Help_Netscape, MyFrame::OnHelp)
-    EVT_MENU(Minimal_Help_Search, MyFrame::OnHelp)
+    EVT_MENU(HelpDemo_Quit,  MyFrame::OnQuit)
+    EVT_MENU(HelpDemo_Help_Index, MyFrame::OnHelp)
+    EVT_MENU(HelpDemo_Help_Classes, MyFrame::OnHelp)
+    EVT_MENU(HelpDemo_Help_Functions, MyFrame::OnHelp)
+    EVT_MENU(HelpDemo_Help_Help, MyFrame::OnHelp)
+    EVT_MENU(HelpDemo_Help_KDE, MyFrame::OnHelp)
+    EVT_MENU(HelpDemo_Help_GNOME, MyFrame::OnHelp)
+    EVT_MENU(HelpDemo_Help_Netscape, MyFrame::OnHelp)
+    EVT_MENU(HelpDemo_Help_Search, MyFrame::OnHelp)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -138,11 +138,9 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // Create the main application window
-    MyFrame *frame = new MyFrame("Minimal wxWindows App",
+    MyFrame *frame = new MyFrame("HelpDemo wxWindows App",
                                  wxPoint(50, 50), wxSize(450, 340));
 
-    // Show it and tell the application that it's our main window
-    // @@@ what does it do exactly, in fact? is it necessary here?
     frame->Show(TRUE);
     SetTopWindow(frame);
 
@@ -166,21 +164,20 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
-    menuFile->Append(Minimal_Help_Index, "&Help Index...");
-    menuFile->Append(Minimal_Help_Classes, "&Help on Classes...");
-    menuFile->Append(Minimal_Help_Functions, "&Help on Functions...");
-    menuFile->Append(Minimal_Help_Help, "&About wxExtHelpController...");
+    menuFile->Append(HelpDemo_Help_Index, "&Help Index...");
+    menuFile->Append(HelpDemo_Help_Classes, "&Help on Classes...");
+    menuFile->Append(HelpDemo_Help_Functions, "&Help on Functions...");
+    menuFile->Append(HelpDemo_Help_Help, "&About Help Demo...");
     menuFile->AppendSeparator();
-    menuFile->Append(Minimal_Help_Search, "&Search help...");
-    if(help.IsKindOf(CLASSINFO(wxExtHelpController)))
-       {
-          menuFile->AppendSeparator();
-          menuFile->Append(Minimal_Help_KDE, "Use &KDE");
-          menuFile->Append(Minimal_Help_GNOME, "Use &GNOME");
-          menuFile->Append(Minimal_Help_Netscape, "Use &Netscape");
-       }
+    menuFile->Append(HelpDemo_Help_Search, "&Search help...");
+#ifdef __WXGTK__
     menuFile->AppendSeparator();
-    menuFile->Append(Minimal_Quit, "E&xit");
+    menuFile->Append(HelpDemo_Help_KDE, "Use &KDE");
+    menuFile->Append(HelpDemo_Help_GNOME, "Use &GNOME");
+    menuFile->Append(HelpDemo_Help_Netscape, "Use &Netscape");
+#endif
+    menuFile->AppendSeparator();
+    menuFile->Append(HelpDemo_Quit, "E&xit");
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
@@ -220,28 +217,33 @@ void MyFrame::OnHelp(wxCommandEvent& event)
 {
    switch(event.GetId())
    {
-   case Minimal_Help_Classes:
+
+   // Note: these DisplaySection calls use ids that are specific to wxExtHelpController
+   // (on Unix). For WinHelp, we'd need to use different context ids.
+
+   case HelpDemo_Help_Classes:
       help.DisplaySection(1);
       break;
-   case Minimal_Help_Functions:
+   case HelpDemo_Help_Functions:
       help.DisplaySection(2);
       break;
-   case Minimal_Help_Help:
+   case HelpDemo_Help_Help:
       help.DisplaySection(5);
       break;
-   case Minimal_Help_KDE:
-      if(help.IsKindOf(CLASSINFO(wxExtHelpController)))
-         ((wxExtHelpController *)&help)->SetBrowser("kdehelp");
+
+   // These three calls are only used by wxExtHelpController
+
+   case HelpDemo_Help_KDE:
+      help.SetViewer("kdehelp");
       break;
-   case Minimal_Help_GNOME:
-      if(help.IsKindOf(CLASSINFO(wxExtHelpController)))
-         ((wxExtHelpController *)&help)->SetBrowser("gnome-help-browser");
+   case HelpDemo_Help_GNOME:
+      help.SetViewer("gnome-help-browser");
       break;
-   case Minimal_Help_Netscape:
-      if(help.IsKindOf(CLASSINFO(wxExtHelpController)))
-         ((wxExtHelpController *)&help)->SetBrowser("netscape",TRUE);
+   case HelpDemo_Help_Netscape:
+      help.SetViewer("netscape", wxHELP_NETSCAPE);
       break;
-   case Minimal_Help_Search:
+
+   case HelpDemo_Help_Search:
    {
       wxString key = wxGetTextFromUser("Search for?",
                                        "Search help for keyword",
@@ -251,9 +253,10 @@ void MyFrame::OnHelp(wxCommandEvent& event)
          help.KeywordSearch(key);
    }
    break;
-   case Minimal_Help_Index:
+   case HelpDemo_Help_Index:
    default:
       help.DisplayContents();
       break;
    }
 }
+

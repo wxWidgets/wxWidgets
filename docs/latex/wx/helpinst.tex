@@ -23,6 +23,7 @@ There are currently the following help controller classes defined:
 \item wxWinHelpController, for controlling Windows Help.
 \item wxExtHelpController, for controlling external browsers under Unix.
 The default browser is Netscape Navigator.
+\item wxXLPHelpController, for controlling wxHelp (from wxWindows 1).
 \end{itemize}
 
 \wxheading{Derived from}
@@ -35,7 +36,8 @@ wxHelpControllerBase\\
 <wx/help.h> (wxWindows chooses the appropriate help controller class)\\
 <wx/helpbase.h> (wxHelpControllerBase class)\\
 <wx/helpwin.h> (Windows Help controller)\\
-<wx/generic/helpext.h> (external browser controller)
+<wx/generic/helpext.h> (external HTML browser controller)
+<wx/generic/helpxlp.h> (wxHelp controller)
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -58,7 +60,7 @@ Destroys the help instance, closing down the viewer if it is running.
 \func{virtual void}{Initialize}{\param{const wxString\& }{file}, \param{int}{ server}}
 
 Initializes the help instance with a help filename, and optionally a server (socket)
-number. Does not invoke the help viewer.
+number if using wxHelp. Does not invoke the help viewer.
 This must be called directly after the help instance object is created and before
 any attempts to communicate with the viewer.
 
@@ -69,8 +71,12 @@ You may omit the file extension and a suitable one will be chosen.
 \func{virtual bool}{DisplayBlock}{\param{long}{ blockNo}}
 
 If the help viewer is not running, runs it and displays the file at the given block number.
-The interpretation of {\it blockNo} differs between help viewers. If using Windows Help, this
-refers to the context number. If wxHelp, this is the wxHelp block number.
+
+{\it wxHelp:} this is the wxHelp block number.
+
+{\it WinHelp:} Refers to the context number.
+
+{\it External HTML help:} the same as for \helpref{wxHelpController::DisplaySection}{wxhelpcontrollerdisplaysection}.
 
 \membersection{wxHelpController::DisplayContents}\label{wxhelpcontrollerdisplaycontents}
 
@@ -84,24 +90,38 @@ contents.
 \func{virtual bool}{DisplaySection}{\param{int}{ sectionNo}}
 
 If the help viewer is not running, runs it and displays the given section.
-Sections are numbered starting from 1.
 
-For wxHelp, section numbers may be viewed by running wxHelp in edit mode.
+{\it wxHelp:} Sections are numbered starting from 1. Section numbers may be viewed by running wxHelp in edit mode.
 
-DisplaySection does not apply to WinHelp.
+{\it WinHelp:} {\it sectionNo} is a context id.
+
+{\it External HTML help:} wxExtHelpController implements {\it sectionNo} as an id in a map file, which is of the form:
+
+\begin{verbatim}
+0  wx.html             ; Index
+1  wx34.html#classref  ; Class reference
+2  wx204.html          ; Function reference
+\end{verbatim}
 
 \membersection{wxHelpController::KeywordSearch}\label{wxhelpcontrollerkeywordsearch}
 
 \func{virtual bool}{KeywordSearch}{\param{const wxString\& }{keyWord}}
 
 If the help viewer is not running, runs it, and searches for sections matching the given keyword. If one
-match is found, the file is displayed at this section. If more than one
-match is found, the Search dialog is displayed with the matches (wxHelp)
-or the first topic is displayed (Windows Help).
+match is found, the file is displayed at this section.
+
+{\it wxHelp:} If more than one
+match is found, the Search dialog is displayed with the matches.
+
+{\it WinHelp:} If more than one match is found, 
+the first topic is displayed.
+
+{\it External HTML help:} If more than one match is found, 
+a choice of topics is displayed.
 
 \membersection{wxHelpController::LoadFile}\label{wxhelpcontrollerloadfile}
 
-\func{virtual bool}{LoadFile}{\param{const wxString\& }{file = NULL}}
+\func{virtual bool}{LoadFile}{\param{const wxString\& }{file = ""}}
 
 If the help viewer is not running, runs it and loads the given file.
 If the filename is not supplied or is
@@ -109,6 +129,19 @@ NULL, the file specified in {\bf Initialize} is used. If the viewer is
 already displaying the specified file, it will not be reloaded. This
 member function may be used before each display call in case the user
 has opened another file.
+
+\membersection{wxHelpController::SetViewer}\label{wxhelpcontrollersetviewer}
+
+\func{virtual void}{SetViewer}{\param{const wxString\& }{viewer}, \param{long}{ flags}}
+
+Sets detailed viewer information. So far this is only relevant to wxExtHelpController.
+
+\wxheading{Parameters}
+
+\docparam{viewer}{This defaults to "netscape" for wxExtHelpController.}
+
+\docparam{flags}{This defaults to wxHELP\_NETSCAPE for wxExtHelpController, indicating
+that the viewer is a variant of Netscape Navigator.}
 
 \membersection{wxHelpController::OnQuit}\label{wxhelpcontrolleronquit}
 

@@ -1,4 +1,4 @@
-wxWindows 2 beta 4
+wxWindows 2 beta 5
 ------------------
 
 Welcome to wxWindows 2, a sophisticated cross-platform C++
@@ -46,8 +46,9 @@ wx200doc.zip            Documentation source code (not required)
 wx200hlp.zip            WinHelp documentation
 wx200pdf.zip            Acrobat PDF documentation
 wx200htm.zip            HTML documentation
-wx200vc.zip             MS VC++ 5.0 project files
-wx200cw.zip             Metrowerks CodeWarrior project files
+wx200vc.zip             MS VC++ 5/6 project files
+wx200bc.zip             Borland C++ 5 project files
+wx200cw.zip             Metrowerks CodeWarrior 4.1 project files
 
 Installation
 ------------

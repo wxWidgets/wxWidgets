@@ -116,7 +116,7 @@ class wxMDIChildFrame: public wxFrame
       long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxFrameNameStr );
       
   virtual void SetMenuBar( wxMenuBar *menu_bar );
-  virtual wxMenuBar *GetMenuBar();
+  virtual wxMenuBar *GetMenuBar() const;
 
   virtual void GetClientSize( int *width, int *height ) const;
   virtual void AddChild( wxWindow *child );

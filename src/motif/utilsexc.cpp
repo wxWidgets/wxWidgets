@@ -165,6 +165,8 @@ long wxExecute(char **argv, bool sync, wxProcess *handler)
             printf ("wxWindows: could not execute '%s'\n", *argv);
             _exit (-1);
     }
+    if (!sync)
+      return pid;
     
     wxLocalProcessData *process_data = new wxLocalProcessData;
     
@@ -178,15 +180,13 @@ long wxExecute(char **argv, bool sync, wxProcess *handler)
         (XtInputCallbackProc) xt_notify_end_process,
         (XtPointer) process_data);
     
-    if (sync) {
-        while (!process_data->end_process)
-            XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMAll);
+    while (!process_data->end_process)
+        XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMAll);
         
-        if (WIFEXITED(process_data->end_process) != 0)
-        {
-            delete process_data;
-            return WEXITSTATUS(process_data->end_process);
-        }
+    if (WIFEXITED(process_data->end_process) != 0)
+    {
+        delete process_data;
+        return WEXITSTATUS(process_data->end_process);
     }
     
     delete process_data;

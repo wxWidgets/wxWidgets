@@ -116,12 +116,12 @@ wxColour& wxColour::operator = ( const wxColour& col )
     return *this;
 }
 
-bool wxColour::operator == ( const wxColour& col )
+bool wxColour::operator == ( const wxColour& col ) const
 {
     return m_refData == col.m_refData;
 }
 
-bool wxColour::operator != ( const wxColour& col)
+bool wxColour::operator != ( const wxColour& col) const
 {
     return m_refData != col.m_refData;
 }

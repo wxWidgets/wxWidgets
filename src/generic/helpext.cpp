@@ -50,6 +50,12 @@ wxExtHelpController::SetBrowser(wxString const & browsername, bool isNetscape)
    m_BrowserIsNetscape = isNetscape;
 }
 
+// Set viewer: new, generic name for SetBrowser
+void wxExtHelpController::SetViewer(const wxString& viewer, long flags)
+{
+    SetBrowser(viewer, ((flags & wxHELP_NETSCAPE) == wxHELP_NETSCAPE));
+}
+
 bool
 wxExtHelpController::DisplayHelp(wxString const &relativeURL)
 {

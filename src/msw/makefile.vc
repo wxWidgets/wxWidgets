@@ -358,7 +358,7 @@ $(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummydll.obj /c /Tp dummydll.cpp
 # If taking wxWindows from CVS, setup.h doesn't exist yet.
 $(WXDIR)\include\wx\msw\setup.h: $(WXDIR)\include\wx\msw\setup0.h
     -copy "$(WXDIR)"\include\wx\msw\setup.h "$(WXDIR)"\include\wx\msw\setup.bak
-    copy "$(WXDIR)"\include\wx\msw\setup0.h "$(WXDIR)"\include\wx\msw\setup.h 
+    if not exist "$(WXDIR)"\include\wx\msw\setup.h copy "$(WXDIR)"\include\wx\msw\setup0.h "$(WXDIR)"\include\wx\msw\setup.h 
 
 ..\common\$D\extended.obj:     ..\common\extended.c
         cl @<<

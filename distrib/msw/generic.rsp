@@ -1,5 +1,7 @@
 distrib/msw/*.rsp
 distrib/msw/*.bat
+distrib/msw/tardist
+distrib/gtk/*
 
 docs/readme.txt
 docs/install.txt

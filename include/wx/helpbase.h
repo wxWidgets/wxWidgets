@@ -20,6 +20,9 @@
 
 #if wxUSE_HELP
 
+// Flags for SetViewer
+#define wxHELP_NETSCAPE     1
+
 // Defines the API for help controllers
 class WXDLLEXPORT wxHelpControllerBase: public wxObject
 {
@@ -34,6 +37,9 @@ class WXDLLEXPORT wxHelpControllerBase: public wxObject
   // help controllers.
   virtual bool Initialize(const wxString& WXUNUSED(file), int WXUNUSED(server) ) { return FALSE; };
   virtual bool Initialize(const wxString& file) = 0;
+
+  // Set viewer: only relevant to some kinds of controller
+  virtual void SetViewer(const wxString& WXUNUSED(viewer), long WXUNUSED(flags) = 0) {}
 
   // If file is "", reloads file given  in Initialize
   virtual bool LoadFile(const wxString& file = "") = 0;

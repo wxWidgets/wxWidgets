@@ -64,13 +64,13 @@ public:
   unsigned char Blue() const { return m_blue; }
 
   // comparison
-  bool operator == (const wxColour& colour)
+  bool operator == (const wxColour& colour) const
   {
     return (m_red == colour.m_red && 
             m_green == colour.m_green && 
             m_blue == colour.m_blue);
   }
-  bool operator != (const wxColour& colour) { return !(*this == colour); }
+  bool operator != (const wxColour& colour) const { return !(*this == colour); }
 
   void InitFromName(const wxString& col);
 

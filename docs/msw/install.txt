@@ -26,6 +26,7 @@ wx200pdf.zip            Acrobat PDF documentation
 wx200htm.zip            HTML documentation
 wx200vc.zip             MS VC++ 5.0 project files
 wx200cw.zip             Metrowerks CodeWarrior project files
+wx200bc.zip             BC++ 5 project files
 
 Unarchive the required files plus any optional documentation
 files into a suitable directory such as c:\wx.
@@ -175,14 +176,21 @@ off in this mode. See issues.txt for details.
 
 Compiling using the IDE files:
 
-1. Load src\wxwin32_lib.ide.
+1. Load src\bc32.ide (or src\bc32d.ide for a debugging version).
 2. Go to Options|Project... and specify the correct BC++ include and lib path for
    your file structure.
 3. Press F9 to compile the wxWindows library.
-4. Load samples\samples.ide.
+4. Load samples\bc32.ide.
 5. Go to Options|Project... and specify the correct BC++ include and lib path for
    your file structure.
 6. Press F9 to compile the samples.
+
+Note that to make the png, xpm and zlib libraries (needed for
+some samples) you need to compile with bc32.ide. bc32d.ide only
+makes the wxWindows library (lib\wx32d.lib).
+
+The debug version of the wxWindows library is about 37 MB, and the
+release version is around 3 MB.
 
 See also the file bc_ide.txt for further instructions and details
 of how to create your own project files.
@@ -216,10 +224,8 @@ Metrowerks CodeWarrior compilation
 
 NOTES:
 
-(a) Unfortunately CodeWarrior support is broken in this
-    release. Stefan Csomor (csomor@advancedconcepts.ch) will rectify this shortly.
-(b) You need CodeWarrior Pro 4 plus the patches to 4.1 from the
-    Metrowerks Web site.
+You need CodeWarrior Pro 4 plus the patches to 4.1 from the
+Metrowerks Web site.
 
 Symantec C++ compilation
 ------------------------

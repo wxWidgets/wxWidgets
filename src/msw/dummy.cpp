@@ -44,35 +44,3 @@
     char wxDummyChar = 0;
 #endif
 
-// if wxWindows is in the DLL link our entry point with the application
-// N.B. see include/wx/app.h, we're now putting this in IMPLEMENT_APP so we
-// don't have to link our apps with dummy.obj.
-
-#if 0 // defined(WXUSINGDLL)
-
-// NT defines APIENTRY, 3.x not
-#if !defined(APIENTRY)
-    #define APIENTRY FAR PASCAL
-#endif
-
-int
-#ifdef __WATCOMC__
-    PASCAL
-#else
-    APIENTRY
-#endif
-WinMain(HINSTANCE hInstance,
-        HINSTANCE hPrevInstance,
-        LPSTR m_lpCmdLine,
-        int nCmdShow )
-{
-#if !WXUSINGDLL
-    wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
-#endif
-
-    return wxEntry((WXHINSTANCE) hInstance, (WXHINSTANCE) hPrevInstance,
-                   m_lpCmdLine, nCmdShow);
-}
-#endif
-
-

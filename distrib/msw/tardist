@@ -1,0 +1,100 @@
+#!/bin/sh
+# tardist: make up a tar.gz distribution of wxWindows 2
+# Supply a source (e.g. ~/wx2) and destination (e.g. ~/wx2/deliver)
+
+init=""
+if [ $1 = "" ]
+then
+  exit
+fi
+
+if [ $2 = "" ]
+then
+  exit
+fi
+
+echo About to archive wxWindows:
+echo   From   $1
+echo   To     $2
+echo CTRL-C if this is not correct.
+read dummy
+
+cd $1
+
+echo Removing backup files...
+rm *~ */*~ */*/*~ */*/*/*~ */*/*/*/*~
+
+rm -f $2/wxgtk.tar.gz
+rm -f $2/wxmotif.tar.gz
+rm -f $2/wxdocsrc.tar.gz
+rm -f $2/wxhtml.tar.gz
+rm -f $2/wxpdf.tar.gz
+rm -f $2/wxstubs.tar.gz
+rm -f $2/tex2rtf.tar.gz
+rm -f $2/ogl.tar.gz
+rm -f $2/wxtree.tar.gz
+rm -f $2/glcanvas.tar.gz
+
+echo Tarring...
+
+### wxGTK
+ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/gtk.rsp` > /tmp/wxgtk.txt
+tar cvf $2/wxgtk.tar -T /tmp/wxgtk.txt
+gzip $2/wxgtk.tar
+mv $2/wxgtk.tar.gz $2/wxgtk.tgz
+
+### wxMotif
+ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp` > /tmp/wxmotif.txt
+tar cvf $2/wxmotif.tar -T /tmp/wxmotif.txt
+gzip $2/wxmotif.tar
+mv $2/wxmotif.tar.gz $2/wxmotif.tgz
+
+### Doc sources
+ls `cat $1/distrib/msw/docsrc.rsp` > /tmp/docsrc.txt
+tar cvf $2/wxdocsrc.tar -T /tmp/docsrc.txt
+gzip $2/wxdocsrc.tar
+mv $2/wxdocsrc.tar.gz $2/wxdocsrc.tgz
+
+### HTML docs
+ls `cat $1/distrib/msw/wx_html.rsp` > /tmp/html.txt
+tar cvf $2/wxhtml.tar -T /tmp/html.txt
+gzip $2/wxhtml.tar
+mv $2/wxhtml.tar.gz $2/wxhtml.tgz
+
+### PDF docs
+ls `cat $1/distrib/msw/wx_pdf.rsp` > /tmp/pdf.txt
+tar cvf $2/wxpdf.tar -T /tmp/pdf.txt
+gzip $2/wxpdf.tar
+mv $2/wxpdf.tar.gz $2/wxpdf.tgz
+
+### Stubs files
+ls `cat $1/distrib/msw/stubs.rsp` > /tmp/stubs.txt
+tar cvf $2/wxstubs.tar -T /tmp/stubs.txt
+gzip $2/wxstubs.tar
+mv $2/wxstubs.tar.gz $2/wxstubs.tgz
+
+### Tex2RTF
+ls `cat $1/distrib/msw/tex2rtf.rsp` > /tmp/tex2rtf.txt
+tar cvf $2/tex2rtf.tar -T /tmp/tex2rtf.txt
+gzip $2/tex2rtf.tar
+mv $2/tex2rtf.tar.gz $2/tex2rtf.tgz
+
+### OGL
+ls `cat $1/distrib/msw/ogl.rsp` > /tmp/ogl.txt
+tar cvf $2/ogl.tar -T /tmp/ogl.txt
+gzip $2/ogl.tar
+mv $2/ogl.tar.gz $2/ogl.tgz
+
+### wxGLCanvas
+ls `cat $1/distrib/msw/glcanvas.rsp` > /tmp/glcanvas.txt
+tar cvf $2/glcanvas.tar -T /tmp/glcanvas.txt
+gzip $2/glcanvas.tar
+mv $2/glcanvas.tar.gz $2/glcanvas.tgz
+
+### wxTreeLayout
+ls `cat $1/distrib/msw/wxtree.rsp` > /tmp/wxtree.txt
+tar cvf $2/wxtree.tar -T /tmp/wxtree.txt
+gzip $2/wxtree.tar
+mv $2/wxtree.tar.gz $2/wxtree.tgz
+
+echo Done!

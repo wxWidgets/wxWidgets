@@ -112,9 +112,11 @@ class WXDLLEXPORT wxPropertyView: public wxEvtHandler
   inline virtual void SetPropertySheet(wxPropertySheet *sheet) { m_propertySheet = sheet; }
   inline virtual wxPropertySheet *GetPropertySheet(void) const { return m_propertySheet; }
 
+/*
   virtual void OnOk(void) {};
   virtual void OnCancel(void) {};
   virtual void OnHelp(void) {};
+*/
 
   inline virtual bool OnClose(void) { return FALSE; }
   inline long GetFlags(void) { return m_buttonFlags; }

@@ -27,7 +27,6 @@
 /// Is browser a netscape browser?
 #define   WXEXTHELP_ENVVAR_BROWSERISNETSCAPE "WX_HELPBROWSER_NS"
 
-
 /**
    This class implements help via an external browser.
    It requires the name of a directory containing the documentation
@@ -61,8 +60,13 @@ DECLARE_CLASS(wxExtHelpController)
        @param browsername The command to call a browser/html viewer.
        @param isNetscape Set this to TRUE if the browser is some variant of Netscape.
    */
+   // Obsolete form
    void SetBrowser(wxString const & browsername = WXEXTHELP_DEFAULTBROWSER,
                    bool isNetscape = WXEXTHELP_DEFAULTBROWSER_IS_NETSCAPE);
+
+  // Set viewer: new name for SetBrowser
+  virtual void SetViewer(const wxString& viewer = WXEXTHELP_DEFAULTBROWSER, long flags = wxHELP_NETSCAPE);
+
  private:
    /// How to call the html viewer.
    wxString         m_BrowserName;

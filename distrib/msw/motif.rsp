@@ -44,6 +44,7 @@ src/iodbc/postgres/*.h
 
 include/wx/motif/*.h
 include/install-sh
+include/wx/install-sh
 
 docs/motif/*.txt
 docs/motif/makewxmotif

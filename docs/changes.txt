@@ -1,11 +1,12 @@
 wxWindows 2 Change Log
 ----------------------
 
-Beta 5, February ??  1999
+Beta 5, February 18  1999
 -------------------------
 
 wxGTK:
 
+- wxExecute improved.
 
 wxMSW:
 
@@ -14,12 +15,20 @@ wxMSW:
 - Changed VC++ makefiles (.vc) so that it's possible to have
   debug/release/DLL versions of the library available simultaneously,
   with names wx.lib, wx_d.lib, wx200.lib(dll), wx200_d.lib(dll).
+- Added BC++ 5 IDE files and instructions.
+- Fixed wxChoice, wxComboBox constructor bugs (m_noStrings initialisation).
 
 wxMotif:
 
+- Cured asynchronous wxExecute crash.
 
 General:
 
+- wxLocale documented.
+- Added include filenames to class reference.
+- wxHelpController API changed: SetBrowser becomes SetViewer,
+  DisplaySection works for WinHelp, help sample compiles under Windows
+  (though doesn't display help yet).
 
 Beta 4, February 12th 1999
 --------------------------

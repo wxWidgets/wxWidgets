@@ -58,8 +58,8 @@ public:
   ~wxColour();
 
   // comparison
-  bool operator == ( const wxColour& col );
-  bool operator != ( const wxColour& col );
+  bool operator == ( const wxColour& col ) const;
+  bool operator != ( const wxColour& col ) const;
 
   // accessors
   void Set( unsigned char red, unsigned char green, unsigned char blue );
