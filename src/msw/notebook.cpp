@@ -668,9 +668,9 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
         // OnSetFocus() because we don't know which direction the focus came
         // from in this case and so can't choose between setting the focus to
         // first or last panel child
-
         wxWindow *parent = GetParent();
-        if ( event.GetEventObject() == parent )
+        // the cast is here to fic a GCC ICE
+        if ( ((wxWindow*)event.GetEventObject()) == parent )
         {
             // no, it doesn't come from child, case (b): forward to a page
             if ( m_nSelection != -1 )
@@ -822,7 +822,7 @@ void wxNotebook::ApplyThemeBackground(wxWindow* window, const wxColour& colour)
         window->SetBackgroundColour(colour);
     }
 
-    for ( wxWindowList::Node *node = window->GetChildren().GetFirst(); node; node = node->GetNext() )
+    for ( wxWindowList::compatibility_iterator node = window->GetChildren().GetFirst(); node; node = node->GetNext() )
     {
         wxWindow *child = node->GetData();
         ApplyThemeBackground(child, colour);

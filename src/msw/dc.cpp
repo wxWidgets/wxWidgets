@@ -2139,7 +2139,7 @@ wxDCCacheEntry::~wxDCCacheEntry()
 wxDCCacheEntry* wxDC::FindBitmapInCache(WXHDC dc, int w, int h)
 {
     int depth = ::GetDeviceCaps((HDC) dc, PLANES) * ::GetDeviceCaps((HDC) dc, BITSPIXEL);
-    wxNode* node = sm_bitmapCache.GetFirst();
+    wxList::compatibility_iterator node = sm_bitmapCache.GetFirst();
     while (node)
     {
         wxDCCacheEntry* entry = (wxDCCacheEntry*) node->GetData();
@@ -2175,7 +2175,7 @@ wxDCCacheEntry* wxDC::FindBitmapInCache(WXHDC dc, int w, int h)
 wxDCCacheEntry* wxDC::FindDCInCache(wxDCCacheEntry* notThis, WXHDC dc)
 {
     int depth = ::GetDeviceCaps((HDC) dc, PLANES) * ::GetDeviceCaps((HDC) dc, BITSPIXEL);
-    wxNode* node = sm_dcCache.GetFirst();
+    wxList::compatibility_iterator node = sm_dcCache.GetFirst();
     while (node)
     {
         wxDCCacheEntry* entry = (wxDCCacheEntry*) node->GetData();
@@ -2213,12 +2213,8 @@ void wxDC::AddToDCCache(wxDCCacheEntry* entry)
 
 void wxDC::ClearCache()
 {
-    sm_dcCache.DeleteContents(TRUE);
-    sm_dcCache.Clear();
-    sm_dcCache.DeleteContents(FALSE);
-    sm_bitmapCache.DeleteContents(TRUE);
-    sm_bitmapCache.Clear();
-    sm_bitmapCache.DeleteContents(FALSE);
+    WX_CLEAR_LIST(wxList, sm_dcCache);
+    WX_CLEAR_LIST(wxList, sm_bitmapCache);
 }
 
 // Clean up cache at app exit
