@@ -10,7 +10,7 @@ if [ ! -d wxPython -o ! -e ${spectemplate} ]; then
     exit 1
 fi
 
-if [ ! "$UID" = "0" ]; then
+if [ "$UID" != "0" ]; then
     echo "-------------------------------------------------------"
     echo " WARNING:  will be unable to change ownership of files"
     echo " unless this script is run as root or via sudo"
@@ -29,6 +29,8 @@ function usage {
     echo ""
     echo "optional command flags:"
     echo "   skiptar        Don't unpack the tarball"
+    echo "   inplace        Don't use the tarball, build from the CVS tree instead"
+    echo "                  (The Docs and Demo tarballs are still required for a full build.)"
     echo "   skipconfig     Don't run configure"
     echo "   skipbuild      Don't build wxWidgets or wxPython"
     echo "   skipinstall    Don't do the installation step"
@@ -52,15 +54,23 @@ esac
 PYTHONW=${PYTHON}w
 shift
 
+skiptar=no
+skipconfig=no
+skipbuild=no
+skipinstall=no
+skipdmg=no
+skipclean=no
+inplace=no
 
 for flag in $*; do
     case ${flag} in
-	skiptar)     skiptar=1                   ;;
-	skipconfig)  skipconfig=1; skiptar=1     ;;
-	skipbuild)   skipbuild=1; skipconfig=1; skiptar=1 ;;
-	skipinstall) skipinstall=1               ;;
-        skipdmg)     skipdmg=1                   ;;
-	skipclean)   skipclean=1                 ;;
+	skiptar)     skiptar=yes                                ;;
+	skipconfig)  skipconfig=yes; skiptar=yes                ;;
+	skipbuild)   skipbuild=yes; skipconfig=yes; skiptar=yes ;;
+	skipinstall) skipinstall=yes                            ;;
+        skipdmg)     skipdmg=yes                                ;;
+	skipclean)   skipclean=yes                              ;;
+	inplace)     inplace=yes; skiptar=yes                   ;;
 
 	*)  echo "Unknown flag \"${flag}\""
 	    usage
@@ -75,14 +85,34 @@ PYPREFIX=`$PYTHON -c "import sys; print sys.exec_prefix"`
 PYLIB=$PYPREFIX/lib/python$PYVER
 SITEPACKAGES=$PYLIB/site-packages
 
+
+
 if [ -z "$TARBALLDIR" ]; then
-    
-    # this is a spot on my fileserver where the tarballs go, adjust 
-    # as needed for where you put the wxPython tarball...
+    # this is a spot on my fileserver where the tarballs go, adjust
+    # as needed for where you put the wxPython tarball, or set
+    # TARBALLDIR before invoking this script...
     TARBALLDIR=/stuff/Development/wxPython/dist/$VERSION
 fi
-
 TARBALL=$TARBALLDIR/wxPythonSrc-$VERSION.tar.gz
+
+if [ ! -e $TARBALLDIR/wxPythonDemo-$VERSION.tar.gz ]; then 
+    echo "-------------------------------------------------------"
+    echo " WARNING:  Demo tarball not found, will skip building "
+    echo "           the Demo app bundle and etc."
+    echo " $TARBALLDIR/wxPythonDemo-$VERSION.tar.gz"
+    echo "-------------------------------------------------------"
+fi
+
+if [ ! -e $TARBALLDIR/wxPythonDocs-$VERSION.tar.gz ]; then
+    echo "-------------------------------------------------------"
+    echo " WARNING:  Docs tarball not found, will skip building "
+    echo "           the the wxDocsViewer app bundle and etc."
+    echo " $TARBALLDIR/wxPythonDocs-$VERSION.tar.gz"
+    echo "-------------------------------------------------------"
+fi
+
+
+
 
 PREFIX=/usr/local/lib/wxPython-$VERSION
 BINPREFIX=/usr/local/bin
@@ -118,22 +148,35 @@ pushd $BUILDROOT
 #----------------------------------------------------------------------
 # Unpack the tarball
 
-if [ -z "$skiptar" ]; then
+if [ $skiptar != yes ]; then
     echo Unarchiving tarball...
     tar xzf $TARBALL
 fi
 
-cd wxPythonSrc-$VERSION
-WXDIR=`pwd`
-mkdir -p $WXDIR/bld
-cd $WXDIR/bld
+if [ $inplace = no ]; then
+    # make a build dir and cd to it.
+    cd wxPythonSrc-$VERSION
+    WXDIR=`pwd`
+    mkdir -p $WXDIR/bld
+    cd $WXDIR/bld
+    WXBLD=$WXDIR/bld
+else
+    # If building "inplace" then our build dir will be BUILDROOT,
+    # adjust the variables to find things that way.
+    WXDIR=$WXROOT
+    SRCROOT=$WXROOT
+    WXBLD=$BUILDROOT
+fi
+
+echo "Using source tree: $WXDIR"
+echo "Using build dir:   $WXBLD" 
 
 #----------------------------------------------------------------------
 
 
 # Configure wxWidgets
-if [ -z "$skipconfig" ]; then
-    ../configure \
+if [ $skipconfig != yes ]; then
+    $WXDIR/configure \
 	--prefix=$PREFIX \
 	--with-mac \
 	--disable-monolithic \
@@ -153,42 +196,36 @@ if [ -z "$skipconfig" ]; then
 fi
 
 # Build wxWidgets and wxPython
-if [ -z "$skipbuild" ]; then
+if [ $skipbuild != yes ]; then
 
     # Make wxWidgets and some contribs
-    make 
-    make -C contrib/src/gizmos 
+    make
+    make -C contrib/src/gizmos
     make -C contrib/src/ogl CXXFLAGS="-DwxUSE_DEPRECATED=0"
     make -C contrib/src/stc
     make -C contrib/src/xrc
-
-#     if [ ! -e $WXDIR/include/wx/gizmos ]; then
-# 	# Make some links so the wxPython build can find all the headers it needs
-# 	pushd $WXDIR/include/wx
-# 	ln -s ../../contrib/include/wx/* .
-# 	popd
-#     fi
 
     # Build wxPython
     cd $WXDIR/wxPython
     $PYTHON setup.py \
 	NO_SCRIPTS=1 \
-	WX_CONFIG="$WXDIR/bld/wx-config --inplace" \
+	WX_CONFIG="$WXBLD/wx-config --inplace" \
+	BUILD_BASE=$WXBLD/wxPython \
 	build
 
 
-    # Build wxrc (XRC resource tool) 
-    cd $WXDIR/bld/contrib/utils/wxrc
-    make 
+    # Build wxrc (XRC resource tool)
+    cd $WXBLD/contrib/utils/wxrc
+    make
     strip wxrc
 
 fi
 
 #----------------------------------------------------------------------
 
-if [ -z "$skipinstall" ]; then
+if [ $skipinstall != yes ]; then
     # Install wxWidgets
-    cd $WXDIR/bld
+    cd $WXBLD
     make prefix=$INSTALLROOT$PREFIX install
     make -C contrib/src/gizmos prefix=$INSTALLROOT$PREFIX install
     make -C contrib/src/ogl CXXFLAGS="-DwxUSE_DEPRECATED=0" prefix=$INSTALLROOT/$PREFIX install
@@ -201,6 +238,7 @@ if [ -z "$skipinstall" ]; then
     $PYTHON setup.py \
 	NO_SCRIPTS=1 \
 	WX_CONFIG="$INSTALLROOT/$PREFIX/bin/wx-config --prefix=$INSTALLROOT/$PREFIX" \
+	BUILD_BASE=$WXBLD/wxPython \
 	install \
 	--root=$INSTALLROOT
 
@@ -209,6 +247,9 @@ if [ -z "$skipinstall" ]; then
     # /Library/Python/$PYVER so we need to move the files so they are
     # installed in the physical location, not the virtual one.
     if [ "$KIND" = "panther" ]; then
+	if [ -e $INSTALLROOT/Library/Python/$PYVER ]; then
+	    rm -r $INSTALLROOT/Library/Python/$PYVER
+	fi	    
 	mkdir -p $INSTALLROOT/Library/Python/$PYVER
 	mv $INSTALLROOT/$SITEPACKAGES/* $INSTALLROOT/Library/Python/$PYVER
 	rm -r $INSTALLROOT/System
@@ -223,10 +264,10 @@ if [ -z "$skipinstall" ]; then
 
 
     # Install wxrc
-    cp $WXDIR/bld/contrib/utils/wxrc/wxrc $INSTALLROOT$BINPREFIX
+    cp $WXBLD/contrib/utils/wxrc/wxrc $INSTALLROOT$BINPREFIX
 
 
-    # Set premissions for files in $INSTALLROOT 
+    # Set premissions for files in $INSTALLROOT
     if [ "$UID" = "0" ]; then
 	chown -R root:admin $INSTALLROOT
 	chmod -R g+w        $INSTALLROOT
@@ -238,11 +279,11 @@ popd
 #----------------------------------------------------------------------
 
 # Make the Installer packages and disk image
-if [ -z "$skipdmg" ]; then
+if [ $skipdmg != yes ]; then
 
     # Remove the .pyc/.pyo files they just take up space and can be recreated
     # during the install.
-    $PYTHON $PROGDIR/../zappycfiles.py $INSTALLROOT
+    $PYTHON $PROGDIR/../zappycfiles.py $INSTALLROOT > /dev/null
 
 
     # Make the welcome message
@@ -312,15 +353,15 @@ EOF
     cat > "$DMGDIR/root/README 1st.txt" <<EOF
 Welcome to wxPython!
 
-On this disk image you will find the installer for wxPython $VERSION for $W_MSG MacPython-OSX $PYVER.  MacPython-OSX is not included.  
+On this disk image you will find the installer for wxPython $VERSION for $W_MSG MacPython-OSX $PYVER.  MacPython-OSX is not included.
 
-   wxPython-$KIND.pkg   The installer package.  It contains the wxPython 
+   wxPython-$KIND.pkg   The installer package.  It contains the wxPython
                         extension modules, wxMac dynamic libraries and
-                        headers, and some scripts for the command-line 
-                        tools.  
+                        headers, and some scripts for the command-line
+                        tools.
 
-Everything else here is optional and you can drag them out of the disk 
-image and drop them whereever you want.  You do need to install the above
+Everything else here is optional and you can drag them out of the disk
+image and drop them wherever you want.  You do need to install the above
 package before you can use any of the items below.
 
 
@@ -331,54 +372,64 @@ package before you can use any of the items below.
    Apps/XRCed           An application for editing wxPython resource
                         files  (XRC files.)
 
-   Apps/PyCrust         An application that provides an interactive 
+   Apps/PyCrust         An application that provides an interactive
                         Python shell and also namespace inspectors.
 
 
 
-   Docs/wxDocsViewer    An application that allows you to view the 
+   Docs/wxDocsViewer    An application that allows you to view the
                         wxWidgets documentation.
 
    Docs/licence         License files.
 
-   Docs/other           A few readmes, change log, etc.  
+   Docs/other           A few readmes, change log, etc.
 
 
-   Samples/samples      Several small sample applications that 
+   Samples/samples      Several small sample applications that
                         demonstrate how to use wxPython.
 
-   Samples/demo         A copy of the wxPython demo source code, 
+   Samples/demo         A copy of the wxPython demo source code,
                         just open the folder and run demo.pyw.
 
 Happy Hacking!
 EOF
 
-#   PyAlaMode            An extension of PyCrust that includes source 
+#   PyAlaMode            An extension of PyCrust that includes source
 #                        file editing capabilities.
 
 
     # wxDocs
-    pushd $BUILDROOT
-    tar xzvf $TARBALLDIR/wxPythonDocs-$VERSION.tar.gz
-    popd
+    if [ ! -e $TARBALLDIR/wxPythonDocs-$VERSION.tar.gz ]; then
+	cat > "$DMGDIR/root/Docs/Build ERROR.txt" <<EOF
 
-    # Make an app to launch viewdocs.py
-    $PYTHONW $PROGDIR/../buildapp.py \
- 	--builddir=$DMGDIR/root/Docs \
- 	--name=wxDocsViewer \
- 	--mainprogram=$BUILDROOT/wxPython-$VERSION/docs/viewdocs.py \
- 	--iconfile=$PROGDIR/Info.icns \
- 	build
+The wxPythonDocs tarball was not found when building this disk image!
 
-    cp $BUILDROOT/wxPython-$VERSION/docs/*.zip $DMGDIR/root/Docs/wxDocsViewer.app/Contents/Resources
+EOF
 
-    cat > "$DMGDIR/root/Docs/README 1st.txt" <<EOF
+    else
+	pushd $BUILDROOT
+	tar xzvf $TARBALLDIR/wxPythonDocs-$VERSION.tar.gz
+	popd
+
+        # Make an app to launch viewdocs.py
+	$PYTHONW $PROGDIR/../buildapp.py \
+	    --builddir=$DMGDIR/root/Docs \
+	    --name=wxDocsViewer \
+	    --mainprogram=$BUILDROOT/wxPython-$VERSION/docs/viewdocs.py \
+	    --iconfile=$PROGDIR/Info.icns \
+	    build
+
+	cp $BUILDROOT/wxPython-$VERSION/docs/*.zip $DMGDIR/root/Docs/wxDocsViewer.app/Contents/Resources
+
+	cat > "$DMGDIR/root/Docs/README 1st.txt" <<EOF
 
 The wxDocsViewer application needs to be copied to your Desktop (or
 someplace else you have write access to) before you can run it, so it
 can cache some indexes within its bundle.
 
 EOF
+
+    fi
 
     # license files, docs, etc.
     pushd $DMGDIR/root/Docs
@@ -388,16 +439,37 @@ EOF
     rm -rf docs/xml-raw
     mv docs other
     popd
-    
-    # Copy the demo and samples to the disk image from the tarball
-    pushd $DMGDIR/root/Samples
-    tar xzvf $TARBALLDIR/wxPythonDemo-$VERSION.tar.gz
-    mv wxPython-$VERSION/* .
-    rm -rf wxPython-$VERSION
-    rm demo/b demo/.setup.sh
-    mv demo/demo.py demo/demo.pyw
-    popd
-    
+
+
+    if [ ! -e $TARBALLDIR/wxPythonDemo-$VERSION.tar.gz ]; then
+	cat > "$DMGDIR/root/Samples/Build ERROR.txt" <<EOF
+
+The wxPythonDemo tarball was not found when building this disk image!
+
+EOF
+	cp "$DMGDIR/root/Samples/Build ERROR.txt" $DMGDIR/root/Apps
+
+    else
+
+        # Copy the demo and samples to the disk image from the tarball
+	pushd $DMGDIR/root/Samples
+	tar xzvf $TARBALLDIR/wxPythonDemo-$VERSION.tar.gz
+	mv wxPython-$VERSION/* .
+	rm -rf wxPython-$VERSION
+	rm demo/b demo/.setup.sh
+	mv demo/demo.py demo/demo.pyw
+	popd
+
+        # Make an app bundle to run the demo
+	$PYTHONW $PROGDIR/../buildapp.py \
+	    --builddir=$DMGDIR/root/Apps \
+	    --name="wxPython Demo" \
+	    --mainprogram=$DMGDIR/root/Samples/demo/demo.pyw \
+	    --iconfile=$PROGDIR/RunDemo.icns \
+	    build
+	cp -pR $DMGDIR/root/Samples/demo/* "$DMGDIR/root/Apps/wxPython Demo.app/Contents/Resources"
+    fi
+
 
     # Make an app bundle to launch PyCrust
     $PYTHONW $PROGDIR/../buildapp.py \
@@ -423,15 +495,7 @@ EOF
  	--iconfile=$PROGDIR/XRCed.icns \
  	build
 
-    # Make an app bundle to run the demo
-    $PYTHONW $PROGDIR/../buildapp.py \
- 	--builddir=$DMGDIR/root/Apps \
- 	--name="wxPython Demo" \
- 	--mainprogram=$DMGDIR/root/Samples/demo/demo.pyw \
- 	--iconfile=$PROGDIR/RunDemo.icns \
- 	build
-    cp -pR $DMGDIR/root/Samples/demo/* "$DMGDIR/root/Apps/wxPython Demo.app/Contents/Resources"
-    
+
 
     # and then finally make a disk image containing the packages and etc.
     $PROGDIR/../makedmg $DMGDIR/root $DMGDIR wxPythonOSX-$VERSION-$KIND-Py$PYVER
@@ -442,7 +506,7 @@ fi
 
 
 # Cleanup build/install dirs
-if [ -z "$skipclean" ]; then
+if [ $skipclean != yes ]; then
     echo "Cleaning up..."
     rm -rf $TMPDIR
 else
