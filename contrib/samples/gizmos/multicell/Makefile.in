@@ -7,18 +7,18 @@
 #
 # "%W% %G%"
 #
-# Makefile for the splittree example (UNIX).
+# Makefile for the multicell example (UNIX).
 
 top_srcdir = @top_srcdir@/..
 top_builddir = ../../../..
-program_dir = contrib/samples/gizmos/splittree
+program_dir = contrib/samples/gizmos/multicell
 
-PROGRAM=splittree
-OBJECTS=tree.o
+PROGRAM=multicell
+
+OBJECTS=$(PROGRAM).o
 
 #APPEXTRALIBS=$(top_builddir)/lib/libgizmos.@WX_TARGET_LIBRARY_TYPE@
 APPEXTRALIBS=$(top_builddir)/lib/libgizmos.a
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 include $(top_builddir)/src/makeprog.env
-

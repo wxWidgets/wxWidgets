@@ -34,6 +34,63 @@
     #include "wx/wx.h"
 #endif
 
+#if !defined(__WXMSW__) || wxUSE_XPM_IN_MSW
+/* Closed folder */
+static char * icon1_xpm[] = {
+/* width height ncolors chars_per_pixel */
+"16 16 6 1",
+/* colors */
+"   s None  c None",
+".  c #000000",
+"+  c #c0c0c0",
+"@  c #808080",
+"#  c #ffff00",
+"$  c #ffffff",
+/* pixels */
+"                ",
+"   @@@@@        ",
+"  @#+#+#@       ",
+" @#+#+#+#@@@@@@ ",
+" @$$$$$$$$$$$$@.",
+" @$#+#+#+#+#+#@.",
+" @$+#+#+#+#+#+@.",
+" @$#+#+#+#+#+#@.",
+" @$+#+#+#+#+#+@.",
+" @$#+#+#+#+#+#@.",
+" @$+#+#+#+#+#+@.",
+" @$#+#+#+#+#+#@.",
+" @@@@@@@@@@@@@@.",
+"  ..............",
+"                ",
+"                "};
+
+/* File */
+static char * icon2_xpm[] = {
+/* width height ncolors chars_per_pixel */
+"16 16 3 1",
+/* colors */
+"     s None    c None",
+".    c #000000",
+"+    c #ffffff",
+/* pixels */
+"                ",
+"  ........      ",
+"  .++++++..     ",
+"  .+.+.++.+.    ",
+"  .++++++....   ",
+"  .+.+.+++++.   ",
+"  .+++++++++.   ",
+"  .+.+.+.+.+.   ",
+"  .+++++++++.   ",
+"  .+.+.+.+.+.   ",
+"  .+++++++++.   ",
+"  .+.+.+.+.+.   ",
+"  .+++++++++.   ",
+"  ...........   ",
+"                ",
+"                "};
+#endif
+
 #include "wx/imaglist.h"
 #include "tree.h"
 
@@ -184,21 +241,9 @@ TestTree::TestTree(wxWindow* parent, wxWindowID id, const wxPoint& pt,
 #if !defined(__WXMSW__) // || wxUSE_XPM_IN_MSW
     m_imageList->Add(wxIcon(icon1_xpm));
     m_imageList->Add(wxIcon(icon2_xpm));
-    m_imageList->Add(wxIcon(icon3_xpm));
-    m_imageList->Add(wxIcon(icon4_xpm));
-    m_imageList->Add(wxIcon(icon5_xpm));
-    m_imageList->Add(wxIcon(icon6_xpm));
-    m_imageList->Add(wxIcon(icon7_xpm));
-    m_imageList->Add(wxIcon(icon8_xpm));
 #elif defined(__WXMSW__)
     m_imageList->Add(wxIcon(wxT("wxICON_SMALL_CLOSED_FOLDER"), wxBITMAP_TYPE_ICO_RESOURCE));
-    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_OPEN_FOLDER"), wxBITMAP_TYPE_ICO_RESOURCE));
     m_imageList->Add(wxIcon(wxT("wxICON_SMALL_FILE"), wxBITMAP_TYPE_ICO_RESOURCE));
-    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_COMPUTER"), wxBITMAP_TYPE_ICO_RESOURCE));
-    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_DRIVE"), wxBITMAP_TYPE_ICO_RESOURCE));
-    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_CDROM"), wxBITMAP_TYPE_ICO_RESOURCE));
-    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_FLOPPY"), wxBITMAP_TYPE_ICO_RESOURCE));
-    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_REMOVEABLE"), wxBITMAP_TYPE_ICO_RESOURCE));
 #else
 #error "Sorry, we don't have icons available for this platforms."
 #endif
@@ -206,18 +251,18 @@ TestTree::TestTree(wxWindow* parent, wxWindowID id, const wxPoint& pt,
 
 		
 	// Add some dummy items
-	wxTreeItemId rootId = AddRoot(_("Root"), 3, -1);
+	wxTreeItemId rootId = AddRoot(_("Root"), -1, -1);
 	int i;
 	for (i = 1; i <= 20; i++)
 	{
 		wxString label;
 		label.Printf(wxT("Item %d"), i);
 		wxTreeItemId id = AppendItem(rootId, label, 0);
-		SetItemImage( id, 1, wxTreeItemIcon_Expanded );
+		//SetItemImage( id, 1, wxTreeItemIcon_Expanded );
 
 		int j;
 		for (j = 0; j < 10; j++)
-			AppendItem(id, _("Child"), 2);
+			AppendItem(id, _("Child"), 1);
 	}
 	Expand(rootId);
 }
