@@ -1930,8 +1930,8 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
     bool alt  = evt.AltDown();
     bool skip = ((ctrl || alt) && ! (ctrl && alt));
 
-    printf("OnChar key:%d  consumed:%d  ctrl:%d  alt:%d  skip:%d\n",
-           key, m_lastKeyDownConsumed, ctrl, alt, skip);
+//     printf("OnChar key:%d  consumed:%d  ctrl:%d  alt:%d  skip:%d\n",
+//            key, m_lastKeyDownConsumed, ctrl, alt, skip);
 
     if (key <= WXK_START && /*key >= 32 &&*/ !m_lastKeyDownConsumed && !skip) {
         m_swx->DoAddChar(key);
@@ -1949,8 +1949,8 @@ void wxStyledTextCtrl::OnKeyDown(wxKeyEvent& evt) {
 
     int processed = m_swx->DoKeyDown(key, shift, ctrl, alt, &m_lastKeyDownConsumed);
 
-    printf("KeyDn  key:%d  shift:%d  ctrl:%d  alt:%d  processed:%d  consumed:%d\n",
-           key, shift, ctrl, alt, processed, m_lastKeyDownConsumed);
+//     printf("KeyDn  key:%d  shift:%d  ctrl:%d  alt:%d  processed:%d  consumed:%d\n",
+//            key, shift, ctrl, alt, processed, m_lastKeyDownConsumed);
 
     if (!processed && !m_lastKeyDownConsumed)
         evt.Skip();
