@@ -2184,7 +2184,9 @@ wxRegion wxWindowMac::MacGetVisibleRegion( bool includeOuterStructures )
             {
                 int x , y ;
                 wxSize size ;
-                if ( parent->IsTopLevel() && child->IsKindOf( CLASSINFO( wxToolBar ) ) )
+                // we have to find a better clipping algorithm here, in order not to clip things
+                // positioned like status and toolbar
+                if ( 1 /* parent->IsTopLevel() && child->IsKindOf( CLASSINFO( wxToolBar ) ) */ )
                 {
                     size = parent->GetSize() ;
                     x = y = 0 ;
