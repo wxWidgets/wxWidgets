@@ -222,7 +222,7 @@ public:
 
 protected:
   static bool IsImmutable(const wxString& key)
-    { return key[0] == wxCONFIG_IMMUTABLE_PREFIX; }
+    { return key[0u] == wxCONFIG_IMMUTABLE_PREFIX; }
 
 private:
   // are we doing automatic environment variable expansion?
