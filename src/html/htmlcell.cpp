@@ -1237,7 +1237,8 @@ void wxHtmlContainerCell::RemoveExtraSpacing(bool top, bool bottom)
                     cont = (wxHtmlContainerCell*)c;
                     if ( IsEmptyContainer(cont) )
                     {
-                        cont->SetIndent(0, wxHTML_INDENT_VERTICAL);                                 }
+                        cont->SetIndent(0, wxHTML_INDENT_VERTICAL);
+                    }
                     else
                     {
                         cont->RemoveExtraSpacing(false, true);
