@@ -293,7 +293,7 @@ bool wxDocument::OnSaveDocument(const wxString& file)
     if (store.fail() || store.bad())
 #else
     wxFileOutputStream store(wxString(file.fn_str()));
-    if (store.LastError() != 0)
+    if (store.LastError() != wxSTREAM_NOERROR)
 #endif
     {
         (void)wxMessageBox(_("Sorry, could not open this file for saving."), msgTitle, wxOK | wxICON_EXCLAMATION,
@@ -329,14 +329,20 @@ bool wxDocument::OnOpenDocument(const wxString& file)
     if (store.fail() || store.bad())
 #else
     wxFileInputStream store(wxString(file.fn_str()));
-    if (store.LastError() != 0)
+    if (store.LastError() != wxSTREAM_NOERROR)
 #endif
     {
         (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK|wxICON_EXCLAMATION,
                            GetDocumentWindow());
         return FALSE;
     }
+#if wxUSE_STD_IOSTREAM
     if (!LoadObject(store))
+#else
+    int res = LoadObject(store).LastError();
+    if ((res != wxSTREAM_NOERROR) &&
+        (res != wxSTREAM_EOF))
+#endif
     {
         (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK|wxICON_EXCLAMATION,
                            GetDocumentWindow());

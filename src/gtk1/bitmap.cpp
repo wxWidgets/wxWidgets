@@ -55,17 +55,72 @@ wxMask::~wxMask()
         gdk_bitmap_unref( m_bitmap );
 }
 
-bool wxMask::Create( const wxBitmap& WXUNUSED(bitmap),
-                     const wxColour& WXUNUSED(colour) )
+bool wxMask::Create( const wxBitmap& bitmap,
+                     const wxColour& colour )
 {
     if (m_bitmap)
     {
         gdk_bitmap_unref( m_bitmap );
         m_bitmap = (GdkBitmap*) NULL;
     }
+    
+    wxImage image( bitmap );
+    if (!image.Ok()) return FALSE;
+    
+    GdkVisual *visual = gdk_visual_get_system();
+    
+    GdkImage *mask_image = gdk_image_new( GDK_IMAGE_FASTEST, visual, image.GetWidth(), image.GetHeight() );
+    if (!mask_image) return FALSE;
 
-    wxFAIL_MSG( wxT("TODO") );
+    GdkWindow *parent = (GdkWindow*) &gdk_root_parent;
+    m_bitmap = gdk_pixmap_new( parent, image.GetWidth(), image.GetHeight(), 1 );
+    
+    
+    unsigned char *data = image.GetData();
+    int index = 0;
+    
+    unsigned char red = colour.Red();
+    unsigned char green = colour.Green();
+    unsigned char blue = colour.Blue();
+    
+    int bpp = visual->depth;
+    if ((bpp == 16) && (visual->red_mask != 0xf800)) bpp = 15;
+    if (bpp == 15)
+    {
+        red = red & 0xf8;
+        blue = blue & 0xf8;
+        green = green & 0xf8;
+    }
+    if (bpp == 16)
+    {
+        red = red & 0xf8;
+        blue = blue & 0xfc;
+        green = green & 0xf8;
+    }
+    
+    for (int j = 0; j < image.GetHeight(); j++)
+      for (int i = 0; i < image.GetWidth(); i++)
+        {
+	    if ((data[index] == red) &&
+	        (data[index+1] == green) &&
+	        (data[index+2] == blue))
+	    {
+	        gdk_image_put_pixel( mask_image, i, j, 1 );
+	    }
+	    else
+	    {
+	        gdk_image_put_pixel( mask_image, i, j, 1 );
+	    }
+	    index += 3;
+	}
 
+    GdkGC *mask_gc = gdk_gc_new( m_bitmap );
+
+    gdk_draw_image( m_bitmap, mask_gc, mask_image, 0, 0, 0, 0, image.GetWidth(), image.GetHeight() );
+
+    gdk_gc_unref( mask_gc );
+    gdk_image_destroy( mask_image );
+    
     return FALSE;
 }
 
