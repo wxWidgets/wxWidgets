@@ -37,7 +37,7 @@ protected:
 #define M_BRUSHDATA ((wxBrushRefData *)m_refData)
 
 // Brush
-class WXDLLEXPORT wxBrush: public wxGDIObject
+class WXDLLEXPORT wxBrush: public wxBrushBase
 {
     DECLARE_DYNAMIC_CLASS(wxBrush)
 
@@ -64,12 +64,9 @@ public:
     virtual void SetStipple(const wxBitmap& rStipple);
 
     inline wxColour& GetColour(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_vColour : wxNullColour); };
-    inline int       GetStyle(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_nStyle : 0); };
+    virtual int      GetStyle(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_nStyle : 0); };
     inline wxBitmap* GetStipple(void) const { return (M_BRUSHDATA ? & M_BRUSHDATA->m_vStipple : 0); };
     inline int       GetPS(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_hBrush : 0); };
-
-    bool IsHatch() const
-        { return (GetStyle()>=wxBDIAGONAL_HATCH) && (GetStyle()<=wxVERTICAL_HATCH); }
 
     inline virtual bool Ok(void) const { return (m_refData != NULL) ; }
 

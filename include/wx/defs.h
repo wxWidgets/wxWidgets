@@ -1813,8 +1813,10 @@ enum
     wxCROSSDIAG_HATCH,     /* to verify these wx*_HATCH are in style */
     wxFDIAGONAL_HATCH,     /* of wxBrush. In wxWidgets >= 2.6 use    */
     wxCROSS_HATCH,         /* wxBrush::IsHatch() instead.            */
-    wxHORIZONTAL_HATCH,    /* Adding new hatch styles remember to    */
-    wxVERTICAL_HATCH,      /* adjust style check accordingly.        */
+    wxHORIZONTAL_HATCH,
+    wxVERTICAL_HATCH,
+    wxFIRST_HATCH = wxBDIAGONAL_HATCH,
+    wxLAST_HATCH = wxVERTICAL_HATCH,
 
     wxJOIN_BEVEL =     120,
     wxJOIN_MITER,
@@ -1826,7 +1828,7 @@ enum
 };
 
 #if WXWIN_COMPATIBILITY_2_4
-    #define IS_HATCH(s)    ((s)>=wxBDIAGONAL_HATCH && (s)<=wxVERTICAL_HATCH)
+    #define IS_HATCH(s)    ((s)>=wxFIRST_HATCH && (s)<=wxLAST_HATCH)
 #else
     /* use wxBrush::IsHatch() instead thought wxMotif still uses it in src/motif/dcclient.cpp */
 #endif

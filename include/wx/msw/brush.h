@@ -26,13 +26,13 @@ class WXDLLEXPORT wxBrush;
 // wxBrush
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBrush : public wxGDIObject
+class WXDLLEXPORT wxBrush : public wxBrushBase
 {
 public:
     wxBrush();
     wxBrush(const wxColour& col, int style = wxSOLID);
     wxBrush(const wxBitmap& stipple);
-    wxBrush(const wxBrush& brush) : wxGDIObject(brush) { Ref(brush); }
+    wxBrush(const wxBrush& brush) : wxBrushBase(brush) { Ref(brush); }
     virtual ~wxBrush();
 
     virtual void SetColour(const wxColour& col);
@@ -45,11 +45,8 @@ public:
     bool operator!=(const wxBrush& brush) const { return !(*this == brush); }
 
     wxColour GetColour() const;
-    int GetStyle() const;
+    virtual int GetStyle() const;
     wxBitmap *GetStipple() const;
-
-    bool IsHatch() const
-        { return (GetStyle()>=wxBDIAGONAL_HATCH) && (GetStyle()<=wxVERTICAL_HATCH); }
 
     bool Ok() const { return m_refData != NULL; }
 

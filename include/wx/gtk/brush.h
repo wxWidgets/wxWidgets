@@ -31,7 +31,7 @@ class wxBrush;
 // wxBrush
 //-----------------------------------------------------------------------------
 
-class wxBrush: public wxGDIObject
+class wxBrush: public wxBrushBase
 {
 public:
     wxBrush() { }
@@ -41,7 +41,7 @@ public:
     ~wxBrush();
 
     wxBrush( const wxBrush &brush )
-        : wxGDIObject()
+        : wxBrushBase()
         { Ref(brush); }
     wxBrush& operator = ( const wxBrush& brush ) { Ref(brush); return *this; }
 
@@ -50,12 +50,9 @@ public:
     bool operator == ( const wxBrush& brush ) const;
     bool operator != (const wxBrush& brush) const { return !(*this == brush); }
 
-    int GetStyle() const;
+    virtual int GetStyle() const;
     wxColour &GetColour() const;
     wxBitmap *GetStipple() const;
-
-    bool IsHatch() const
-        { return (GetStyle()>=wxBDIAGONAL_HATCH) && (GetStyle()<=wxVERTICAL_HATCH); }
 
     void SetColour( const wxColour& col );
     void SetColour( unsigned char r, unsigned char g, unsigned char b );

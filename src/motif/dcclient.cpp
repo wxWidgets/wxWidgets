@@ -93,7 +93,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
 #ifndef IS_HATCH
     // IS_HATCH exists for WXWIN_COMPATIBILITY_2_4 only
     // but wxMotif needs it for its internals here
-    #define IS_HATCH(s)    ((s)>=wxBDIAGONAL_HATCH && (s)<=wxVERTICAL_HATCH)
+    #define IS_HATCH(s)    ((s)>=wxFIRST_HATCH && (s)<=wxLAST_HATCH)
 #endif
 
 // ----------------------------------------------------------------------------

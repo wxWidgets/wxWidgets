@@ -21,7 +21,7 @@ class WXDLLEXPORT wxBrush;
 // ========================================================================
 // wxBrush
 // ========================================================================
-class WXDLLEXPORT wxBrush: public wxGDIObject
+class WXDLLEXPORT wxBrush: public wxBrushBase
 {
     DECLARE_DYNAMIC_CLASS(wxBrush)
 // ------------------------------------------------------------------------
@@ -32,7 +32,7 @@ public:
     wxBrush(const wxColour& col, int style = wxSOLID);
     wxBrush(const wxBitmap& stipple);
     wxBrush(const wxBrush& brush)
-    :   wxGDIObject()
+    :   wxBrushBase()
     {   Ref(brush); }
     ~wxBrush();
 
@@ -56,11 +56,8 @@ public:
 
     // accessors
     wxColour GetColour() const;
-    int GetStyle() const;
+    virtual int GetStyle() const;
     wxBitmap *GetStipple() const;
-
-    bool IsHatch() const
-        { return (GetStyle()>=wxBDIAGONAL_HATCH) && (GetStyle()<=wxVERTICAL_HATCH); }
 
     virtual bool Ok() const
     {   return (m_refData != NULL); }
