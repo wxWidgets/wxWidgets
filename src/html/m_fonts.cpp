@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mod_fonts.cpp
+// Name:        m_fonts.cpp
 // Purpose:     wxHtml module for fonts & colors of fonts
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
@@ -27,7 +27,7 @@
 #include "wx/html/forcelnk.h"
 #include "wx/html/m_templ.h"
 
-FORCE_LINK_ME(mod_fonts)
+FORCE_LINK_ME(m_fonts)
 
 
 TAG_HANDLER_BEGIN(FONT, "FONT")
@@ -71,36 +71,86 @@ TAG_HANDLER_BEGIN(FONT, "FONT")
 TAG_HANDLER_END(FONT)
 
 
-TAG_HANDLER_BEGIN(FACES, "U,I,B,TT")
+TAG_HANDLER_BEGIN(FACES_U, "U")
 
     TAG_HANDLER_PROC(tag)
     {
-        int fixed = m_WParser -> GetFontFixed(),
-            italic = m_WParser -> GetFontItalic(),
-            underlined = m_WParser -> GetFontUnderlined(),
-            bold = m_WParser -> GetFontBold();
+        int underlined = m_WParser -> GetFontUnderlined();
 
-        if (tag.GetName() == "U")
-            m_WParser -> SetFontUnderlined(TRUE);
-        else if (tag.GetName() == "B")
-            m_WParser -> SetFontBold(TRUE);
-        else if (tag.GetName() == "I")
-            m_WParser -> SetFontItalic(TRUE);
-        else
-            m_WParser -> SetFontFixed(TRUE);
+        m_WParser -> SetFontUnderlined(TRUE);
         m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
 
         ParseInner(tag);
 
         m_WParser -> SetFontUnderlined(underlined);
+        m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
+        return TRUE;
+    }
+
+TAG_HANDLER_END(FACES_U)
+
+
+
+
+TAG_HANDLER_BEGIN(FACES_B, "B,STRONG")
+
+    TAG_HANDLER_PROC(tag)
+    {
+        int bold = m_WParser -> GetFontBold();
+
+        m_WParser -> SetFontBold(TRUE);
+        m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
+
+        ParseInner(tag);
+
         m_WParser -> SetFontBold(bold);
+        m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
+        return TRUE;
+    }
+
+TAG_HANDLER_END(FACES_B)
+
+
+
+
+TAG_HANDLER_BEGIN(FACES_I, "I,EM,CITE")
+
+    TAG_HANDLER_PROC(tag)
+    {
+        int italic = m_WParser -> GetFontItalic();
+
+        m_WParser -> SetFontItalic(TRUE);
+        m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
+
+        ParseInner(tag);
+
         m_WParser -> SetFontItalic(italic);
+        m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
+        return TRUE;
+    }
+
+TAG_HANDLER_END(FACES_I)
+
+
+
+
+TAG_HANDLER_BEGIN(FACES_TT, "TT")
+
+    TAG_HANDLER_PROC(tag)
+    {
+        int fixed = m_WParser -> GetFontFixed();
+
+        m_WParser -> SetFontFixed(TRUE);
+        m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
+
+        ParseInner(tag);
+
         m_WParser -> SetFontFixed(fixed);
         m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
         return TRUE;
     }
 
-TAG_HANDLER_END(FACES)
+TAG_HANDLER_END(FACES_TT)
 
 
 
@@ -183,7 +233,10 @@ TAG_HANDLER_END(Hx)
 TAGS_MODULE_BEGIN(Fonts)
 
     TAGS_MODULE_ADD(FONT)
-    TAGS_MODULE_ADD(FACES)
+    TAGS_MODULE_ADD(FACES_U)
+    TAGS_MODULE_ADD(FACES_I)
+    TAGS_MODULE_ADD(FACES_B)
+    TAGS_MODULE_ADD(FACES_TT)
     TAGS_MODULE_ADD(Hx)
 
 TAGS_MODULE_END(Fonts)
