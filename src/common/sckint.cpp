@@ -28,6 +28,11 @@
 #include <wx/thread.h>
 #include <wx/sckint.h>
 
+// IRIX requires bstring.h be included to use select()
+#ifdef sgi
+    #include <bstring.h>
+#endif // IRIX
+
 #ifndef __WXSTUBS__
 
 #include <stdlib.h>
