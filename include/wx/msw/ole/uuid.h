@@ -53,8 +53,8 @@ class WXDLLEXPORT Uuid
 {
 private:
   UUID  m_uuid;
-  uchar *m_pszUuid;   // this string is alloc'd and freed by RPC 
-  char  *m_pszCForm;  // this string is allocated in Set/Create
+  wxUChar *m_pszUuid;   // this string is alloc'd and freed by RPC 
+  wxChar  *m_pszCForm;  // this string is allocated in Set/Create
 
   void  UuidToCForm();
 
@@ -64,7 +64,7 @@ private:
 public:
   // ctors & dtor
   Uuid()                 { Init();            }
-  Uuid(const char *pc)   { Init(); Set(pc);   }
+  Uuid(const wxChar *pc) { Init(); Set(pc);   }
   Uuid(const UUID &uuid) { Init(); Set(uuid); }
  ~Uuid();
 
@@ -76,16 +76,16 @@ public:
   void Create();
 
   // set value of UUID 
-  bool Set(const char *pc);   // from a string, returns true if ok
+  bool Set(const wxChar *pc); // from a string, returns true if ok
   void Set(const UUID& uuid); // from another UUID (never fails)
 
   // accessors
-  operator const UUID*() const { return &m_uuid;             }
-  operator const char*() const { return (char *)(m_pszUuid); }
+  operator const UUID*()   const { return &m_uuid;               }
+  operator const wxChar*() const { return (wxChar *)(m_pszUuid); }
 
   // return string representation of the UUID in the C form
   // (as in DEFINE_GUID macro)
-  const char *CForm() const    { return m_pszCForm;          }
+  const wxChar *CForm() const    { return m_pszCForm;            }
 };
 
 #endif //_WX_OLEUUID_H

@@ -83,7 +83,7 @@ class WXDLLEXPORT wxTextDropTarget : public wxDropTarget
 {
 public:
   virtual bool OnDrop(long x, long y, const void *pData);
-  virtual bool OnDropText(long x, long y, const char *psz) = 0;
+  virtual bool OnDropText(long x, long y, const wxChar *psz) = 0;
 
 protected:
   virtual size_t GetFormatCount() const;
@@ -100,7 +100,7 @@ public:
 
   // params: the number of files and the array of file names
   virtual bool OnDropFiles(long x, long y, 
-                           size_t nFiles, const char * const aszFiles[]) = 0;
+                           size_t nFiles, const wxChar * const aszFiles[]) = 0;
 
 protected:
   virtual size_t GetFormatCount() const;
