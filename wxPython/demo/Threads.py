@@ -1,5 +1,6 @@
 
 from wxPython.wx import *
+from wxPython.lib import newevent
 
 import thread
 import time
@@ -7,18 +8,8 @@ from   whrandom import random
 
 #----------------------------------------------------------------------
 
-wxEVT_UPDATE_BARGRAPH = wxNewEventType()
-
-def EVT_UPDATE_BARGRAPH(win, func):
-    win.Connect(-1, -1, wxEVT_UPDATE_BARGRAPH, func)
-
-
-class UpdateBarEvent(wxPyEvent):
-    def __init__(self, barNum, value):
-        wxPyEvent.__init__(self)
-        self.SetEventType(wxEVT_UPDATE_BARGRAPH)
-        self.barNum = barNum
-        self.value = value
+# This creates a new Event class and a EVT binder function
+UpdateBarEvent, EVT_UPDATE_BARGRAPH = newevent.NewEvent()
 
 
 #----------------------------------------------------------------------
@@ -41,7 +32,7 @@ class CalcBarThread:
 
     def Run(self):
         while self.keepGoing:
-            evt = UpdateBarEvent(self.barNum, int(self.val))
+            evt = UpdateBarEvent(barNum = self.barNum, value = int(self.val))
             wxPostEvent(self.win, evt)
             #del evt
 
