@@ -182,15 +182,15 @@ inline wxPoint2DDouble& wxPoint2DDouble::operator-=(const wxPoint2DDouble& pt)
 
 inline wxPoint2DDouble& wxPoint2DDouble::operator*=(const wxPoint2DDouble& pt) 
 { 
-    m_x = m_x + pt.m_x ; 
-    m_y = m_y + pt.m_y; 
+    m_x = m_x * pt.m_x ; 
+    m_y = m_y * pt.m_y; 
     return *this ;
 }
 
 inline wxPoint2DDouble& wxPoint2DDouble::operator/=(const wxPoint2DDouble& pt) 
 { 
-    m_x = m_x - pt.m_x ; 
-    m_y = m_y - pt.m_y;
+    m_x = m_x / pt.m_x ; 
+    m_y = m_y / pt.m_y;
     return *this ;
 }
 
