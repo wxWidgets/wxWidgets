@@ -988,6 +988,12 @@ int STRINGCLASS::compare(size_t nStart, size_t nLen,
 // common conversion routines
 // ---------------------------------------------------------------------------
 
+size_t wxString::WorstEncodingCase(size_t len, wxMBConv& WXUNUSED(conv))
+{
+    //Worst case for UTF7
+    return len * 5;
+}
+
 #if wxUSE_WCHAR_T
 
 //Convert a wide character string of a specified length
@@ -1018,11 +1024,11 @@ inline size_t wxMbstr(char* szBuffer, const wchar_t* szString,
             return 0;
         }
 
-//        wxASSERT(nLen != (size_t)-1); //should not be true!  If it is system wctomb could be bad
-
+        //Increase the actual length (+1 for current null character)
         nActualLength += nLen + 1;
 
-        wxASSERT( nActualLength <= (nStringLen<<2) + 1 ); //If this is true it means buffer overflow
+        //If this is true it means buffer overflow
+        wxASSERT( nActualLength <= wxString::WorstEncodingCase(nStringLen, conv) + 1 ); 
 
         //Convert the current (sub)string
         if(conv.WC2MB(&szBuffer[szPos - szStart], szPos, nLen + 1) == (size_t)-1 )
@@ -1071,11 +1077,11 @@ inline size_t wxWcstr( wchar_t* szBuffer, const char* szString,
             return 0;
         }
 
-//        wxASSERT(nLen != (size_t)-1); //If true, conversion was invalid, or system mbtowc could be bad
-
+        //Increase the actual length (+1 for current null character)
         nActualLength += nLen + 1;
 
-        wxASSERT(nActualLength <= nStringLen + 1); //If this is true it means buffer overflow
+        //If this is true it means buffer overflow
+        wxASSERT(nActualLength <= nStringLen + 1); 
 
         //Convert the current (sub)string
         if ( conv.MB2WC(&szBuffer[szPos - szStart], szPos, nLen + 1) == (size_t)-1 )
@@ -1147,31 +1153,14 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
         internalBuffer.SetLength(
                wxWcstr(internalBuffer, psz, nLen, conv)
                                 );
-/*
-wxWCharBuffer buffer(nLen + 1);
-    
-         //Convert the string           
-         size_t nActualLength = wxWcstr(buffer.data(), psz, nLen, conv);          
-         if ( !Alloc(nActualLength + 1) )                                  
-         {   
-             wxFAIL_MSG(wxT("Out of memory in wxString"));   
-         }   
-         else   
-         {   
-             //Copy the data   
-             assign(buffer.data(), nActualLength);   
-         } 
-*/                                
     }
 }
 
 //Convert wxString in Unicode mode to a multi-byte string
 const wxCharBuffer wxString::mb_str(wxMBConv& conv) const
 {
-    //FIXME:  This may be invalid for UTF7 and other charsets
-
-    //*4 is the worst case - for UTF8
-    wxCharBuffer buffer((length() << 2) + 1);
+    //Create the buffer
+    wxCharBuffer buffer( wxString::WorstEncodingCase(length(), conv) + 1);
 
     //Do the actual conversion (will return a blank string on error)
     wxMbstr(buffer.data(), (*this).c_str(), length(), conv);
@@ -1218,10 +1207,9 @@ wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
     // anything to do?
     if ( (nLen != 0) && (nLen != (size_t)-1) )
     {
-        //FIXME:  This may be invalid for UTF7 and other charsets
-
-        //*4 is the worst case - for UTF8
-        wxStringBufferLength internalBuffer(*this, (nLen << 2) + 1);
+        //Create a wxStringBufferLength which will access the internal
+        //C char pointer in non-stl mode
+        wxStringBufferLength internalBuffer(*this, wxString::WorstEncodingCase(nLen, conv) + 1);
 
         //Do the actual conversion & Set the length of the buffer
         internalBuffer.SetLength(

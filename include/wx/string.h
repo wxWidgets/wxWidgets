@@ -1077,6 +1077,9 @@ public:
     // the same as above, but takes a va_list
   static wxString FormatV(const wxChar *pszFormat, va_list argptr);
 
+    // returns the highest possible memory allocation for encoding
+  static size_t WorstEncodingCase(size_t len, wxMBConv& conv);
+
   // raw access to string memory
     // ensure that string has space for at least nLen characters
     // only works if the data of this string is not shared

@@ -1902,7 +1902,7 @@ public:
         if (szOut == NULL)
         {
             // worst case
-            nRealOutSize = ((nBufSize - 1) << 2)+1 ;
+            nRealOutSize = wxString::WorstEncodingCase(nBufSize - 1, *this)+1 ;
             szBuffer = new char[ nRealOutSize ] ;
         }
         else
@@ -2079,7 +2079,7 @@ public:
         if (buf == NULL)
         {
             // worst case
-            n = byteInLen << 1 ;
+            n = wxString::WorstEncodingCase(byteInLen / SIZEOF_WCHAR_T, *this) + SIZEOF_WCHAR_T;
             tbuf = (char*) malloc( n ) ;
         }
 
