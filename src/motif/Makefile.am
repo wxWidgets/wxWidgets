@@ -12,7 +12,7 @@ SUFFIXES = .cpp .c
 DEFS = $(TOOLKIT_DEF) $(WXDEBUG_DEFINE)
 LIBS = $(GUILIBS)
 
-VPATH = .:${srcdir}:${srcdir}/../common:${srcdir}/../generic:${EXTRA_VPATH}
+VPATH = .:${srcdir}:${srcdir}/xmcombo:${srcdir}/../common:${srcdir}/../generic:${EXTRA_VPATH}
 
 EXTRA_DIST = "${srcdir}/../common ${srcdir}/../generic ${srcdir}"
 
@@ -30,6 +30,7 @@ libwx_motif_la_SOURCES = \
 \
  extended.c \
  parser.c \
+ xmcombo.c \
 \
  cmndata.cpp \
  dynarray.cpp \
@@ -165,6 +166,7 @@ libwx_motif_la_SOURCES = \
  main.cpp \
  mdi.cpp \
  menu.cpp \
+ menuitem.cpp \
  minifram.cpp \
  notebook.cpp \
  palette.cpp \

@@ -149,13 +149,17 @@ void wxDC::SetMapMode( int mode )
 
 void wxDC::SetUserScale( double x, double y )
 {
-    wxDCBase::SetUserScale(x, y);
+    // allow negative ? -> no
+    m_userScaleX = x;
+    m_userScaleY = y;
     ComputeScaleAndOrigin();
 }
 
 void wxDC::SetLogicalScale( double x, double y )
 {
-    wxDCBase::SetLogicalScale(x, y);
+    // allow negative ?
+    m_logicalScaleX = x;
+    m_logicalScaleY = y;
     ComputeScaleAndOrigin();
 }
 

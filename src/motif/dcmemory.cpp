@@ -131,7 +131,7 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
     };
 };
 
-void wxMemoryDC::GetSize( int *width, int *height ) const
+void wxMemoryDC::DoGetSize( int *width, int *height ) const
 {
     if (m_bitmap.Ok())
     {

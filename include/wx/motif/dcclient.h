@@ -122,9 +122,6 @@ protected:
     virtual void DoSetClippingRegion(long x, long y,
             long width, long height);
 
-    virtual void DoGetSize(int *width, int *height) const;
-    virtual void DoGetSizeMM(int* width, int* height) const;
-
     virtual void DoDrawLines(int n, wxPoint points[],
             long xoffset, long yoffset);
     virtual void DoDrawPolygon(int n, wxPoint points[],

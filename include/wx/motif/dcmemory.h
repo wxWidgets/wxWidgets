@@ -29,7 +29,7 @@ public:
 
     virtual void SelectObject( const wxBitmap& bitmap );
 
-    void GetSize( int *width, int *height ) const;
+    void DoGetSize( int *width, int *height ) const;
 
     wxBitmap& GetBitmap() const { return (wxBitmap&) m_bitmap; }
 

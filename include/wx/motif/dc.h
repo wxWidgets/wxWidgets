@@ -58,12 +58,10 @@ public:
 
     virtual void SetMapMode(int mode);
     virtual void SetUserScale(double x, double y);
-    virtual void SetSystemScale(double x, double y);
     virtual void SetLogicalScale(double x, double y);
     virtual void SetLogicalOrigin(long x, long y);
     virtual void SetDeviceOrigin(long x, long y);
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
-    virtual void SetLogicalFunction(int function);
 
 protected:
     virtual void DoDrawIcon(const wxIcon& icon, long x, long y);
