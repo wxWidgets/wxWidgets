@@ -2997,6 +2997,17 @@ bool wxWindow::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 
     if ( win )
         return win->MSWCommand(cmd, id);
+    else
+    {
+        // If no child window, it may be an accelerator, e.g. for
+        // a popup menu command.
+
+        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED);
+        event.SetEventObject(this);
+        event.SetId(id);
+        event.SetInt(id);
+        return ProcessEvent(event);
+    }
 
     return FALSE;
 }
