@@ -63,10 +63,20 @@ const wxString punct = " ,.-;:!?";
 
 void wxStaticText::DrawParagraph(wxDC &dc, wxString paragraph, int &y)
 {
+    long width, height ;
+  
+    if (paragraph.Length() == 0)
+    {
+        // empty line
+        dc.GetTextExtent( "H", &width, &height );
+        y += height;
+        
+        return;
+    }
+
   int x = 0 ;
 
   int i = 0 ;
-  long width, height ;
   bool linedrawn = true;
   while( paragraph.Length() > 0 )
   {
@@ -153,19 +163,19 @@ void wxStaticText::OnDraw( wxDC &dc )
   while (i < text.Length())
   {
 
-  	if (text[i] == 13 || text[i] == 10)
-  	{
-	    DrawParagraph(dc, paragraph,y);
-	    paragraph = "" ;
-	}
-	else
-	{
+    if (text[i] == 13 || text[i] == 10)
+    {
+        DrawParagraph(dc, paragraph,y);
+        paragraph = "" ;
+    }
+    else
+    {
         paragraph += text[i];
     }
     ++i;
   }
   if (paragraph.Length() > 0)
-	  DrawParagraph(dc, paragraph,y);
+      DrawParagraph(dc, paragraph,y);
 }
 
 void wxStaticText::OnPaint( wxPaintEvent &event )
