@@ -531,3 +531,15 @@ wxWindow *wxGetActiveWindow()
     return NULL;
 }
 
+wxPoint wxGetMousePosition()
+{
+    // TODO
+    return wxDefaultPosition;
+}
+
+wxWindow* wxFindWindowAtPointer(wxPoint& pt)
+{
+    pt = wxGetMousePosition();
+    return NULL;
+}
+
