@@ -51,6 +51,11 @@ class WXDLLEXPORT wxList;
 
 typedef int wxEventType;
 
+// this macro is for upwards compatibility with 2.4, use it when defining your
+// event table macros
+#define DECLARE_EVENT_TABLE_ENTRY(type, id, idLast, fn, obj) \
+    { type, id, idLast, fn, obj }
+
 // the standard event types
 enum
 {
