@@ -1,22 +1,18 @@
 wxWindows 2 Change Log
 ----------------------
 
-next release (2.1.12 or 2.2?)
------------------------------
+2.1.14
+------
 
 wxBase:
 
 - wxDateTime replaces and extends old wxDate and wxTime classes (still
   available but strongly deprecated) with many new features
-
 - wxLongLong class provides support for (signed) 64 bit integers
-
 - wxCmdLineParser class for parsing the command line (supporting short and
   long options, switches and parameters of different types)
-
 - it is now possible to build wxBase under Win32 (using VC++ only so far)
   and BeOS (without thread support yet)
-
 - wxThread class modified to support both detached and joinable threads, also
   added new GetCPUCount() and SetConcurrency() functions (useful under Solaris
   only so far)
@@ -27,37 +23,34 @@ wxBase:
 - wxString::ToLong, ToULong, ToDouble methods and Format() static one added
 - buffer overflows in wxString and wxLog classes fixed (if snprintf() function
   is available)
-- wxArray::RemoveAt() replaces deprectaed wxArray::Remove(index)
+- wxArray::RemoveAt() replaces deprecated wxArray::Remove(index)
 
 all (GUI):
 
+- Added wxImage::Rotate.
 - new wxCalendarCtrl class for picking a date interactively
-
 - wxMenu(Bar)::Insert() and Remove() functions for dynamic menu menagament
 - wxToolBar supports arbitrary controls (not only buttons) and can be
   dynamically changed (Delete/Insert functions)
 - vertical toolbars supported by MSW and GTK native wxToolBar classes
-
 - wxTreeCtrl and wxListCtrl allow setting colour/fonts for individual items
 - "file open" dialog allows selecting multiple files at once (contributed by
   John Norris)
 - wxMimeTypesManager uses GNOME/KDE MIME database to get the icons for the
   MIME types if available (Unix only)
 - wxDC::DrawRotatedText() (based on contribution by Hans-Joachim Baader)
-
 - TIFF support added (libtiff required and included in the distribution)
 - PCX files can now be written (24 bit only so far)
-
 - validators may work recursively if wxWS_EX_VALIDATE_RECURSIVELY is set
 - wxScrolledWindow now has keyboard interface
 - wxTextEntryDialog may be used for entering passwords (supports wxTE_PASSWORD)
-
 - added wxEncodingConverter and improved wxFontMapper
   for dealing with convertions between different encodings,
   charsets support in wxLocale and wxHTML
 
 wxMSW:
 
+- wxFrame::MakeFullScreen added.
 - support for enhanced metafiles added, support for copying/pasting metafiles
   (WMF and enhanced ones) fixed/added.
 - implemented setting colours for push buttons
@@ -98,8 +91,6 @@ wxHTML:
 
 NOTE: for changes after wxWindows 2.1.0 b4, please see the CVS
 change log.
-
-Major improvements are listed in readme.txt.
 
 2.1.0, b4, May 9th 1999
 -----------------------

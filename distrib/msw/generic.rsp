@@ -332,15 +332,6 @@ samples/help/doc/*.tex
 samples/help/doc/*.gif
 samples/help/doc/*.map
 
-samples/ipc/*.cpp
-samples/ipc/*.h
-samples/ipc/*.def
-samples/ipc/makefile*
-samples/ipc/*.xbm
-samples/ipc/*.xpm
-samples/ipc/*.ico
-samples/ipc/*.rc
-
 samples/typetest/*.cpp
 samples/typetest/*.h
 samples/typetest/*.def
@@ -425,6 +416,16 @@ samples/proplist/*.xpm
 samples/proplist/*.ico
 samples/proplist/*.bmp
 samples/proplist/*.rc
+
+samples/propsize/*.cpp
+samples/propsize/*.h
+samples/propsize/*.def
+samples/propsize/makefile*
+samples/propsize/*.xbm
+samples/propsize/*.xpm
+samples/propsize/*.ico
+samples/propsize/*.bmp
+samples/propsize/*.rc
 
 samples/layout/*.cpp
 samples/layout/*.h
@@ -1007,9 +1008,19 @@ samples/exec/*.ico
 samples/exec/*.xpm
 samples/exec/*.txt
 
-samples/makefile*
-samples/configure
-samples/configure.in
+samples/rotate/*.cpp
+samples/rotate/*.h
+samples/rotate/makefile*
+samples/rotate/*.rc
+samples/rotate/*.def
+samples/rotate/*.ico
+samples/rotate/*.xpm
+samples/rotate/*.txt
+samples/rotate/*.bmp
+
+demos/makefile*
+demos/configure
+demos/configure.in
 
 demos/bombs/*.cpp
 demos/bombs/*.h

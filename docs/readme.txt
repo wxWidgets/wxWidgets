@@ -1,4 +1,4 @@
-wxWindows 2.1.12
+wxWindows 2.1.13
 ----------------
 
 Welcome to wxWindows 2, a sophisticated cross-platform C++
@@ -21,46 +21,7 @@ important documents and samples.
 Changes in this release
 -----------------------
 
-These are some of the major improvements:
-
-wxWindows 2.1.12
-================
-
-- New wxDateTime class to replace millenium-uncompliant wxTime
-  and wxDate classes.
-- New wxCalendarCtrl class and sample.
-- New wxCmdLineParser class.
-- Further bug fixes.
-- TIFF support added to wxImage.
-
-wxWindows 2.1.11
-================
-
-- Numerous bug fixes and consistency improvements.
-- Further samples.
-- Factoring out of some code into base classes, for easier
-  maintenance.
-- Ability to compile library in console (non-GUI) mode.
-- Integration of wxHTML widget and help controller into
-  wxWindows. wxHTML allows HTML viewing and printing (wxGTK
-  and wxMSW, partial support in wxMotif).
-- New classes wxChrono, wxDialUpManager, wxFontEnumerator,
-  wxWizard, wxStaticLine, etc.
-- wxShowTip for showing 'startup tips' to the user.
-- wxSocket and wxThread classes rewritten.
-- New, consistent drag and drop API (not wxMotif).
-- Better-looking dialogs in wxGTK; native message box used
-  in wxMotif.
-- wxSizers reimplemented and used to specify window layout
-  for some generic dialogs.
-- New, more sophisticated wxGrid class (in beta). The old grid
-  class can still be used.
-- Text alignment options in wxStaticText.
-- wxImage class extended to read PCX and GIF files.
-- Documentation improvements.
-- Revised configure system for wxGTK and wxMotif; tmake-based
-  system for generating wxMSW makefiles.
-- Installer for Windows as alternative to zip archives.
+Please see changes.txt for details.
 
 Platforms supported
 -------------------
@@ -73,8 +34,8 @@ wxWindows 2 currently supports the following platforms:
 - Mac (not covered here: please see the wxWindows web site
   for details)
 
-Most popular C++ compilers are supported; see the release notes
-(available via docs/html/index.htm) for details.
+Most popular C++ compilers are supported; see the install.txt
+file for each platform (available via docs/html/index.htm) for details.
 
 Files
 -----
@@ -189,11 +150,8 @@ already present in user's system - like glibc usually is).
 If compiled with --enable-odbc (Unix only), wxWindows library will 
 contain iODBC library which is covered by LGPL.
 
-
 Documentation
 -------------
-
-See docs/release.txt for some notes about the current release.
 
 See docs/bugs.txt for a bug list: this file is new and will initially
   be edited by hand, later generated from a web-based bug database.
@@ -229,5 +187,5 @@ web site) or contact Julian Smart <julian.smart@ukonline.co.uk>.
 
 Good luck!
 
-The wxWindows Team, Janurary 2000
+The wxWindows Team, February 2000
 

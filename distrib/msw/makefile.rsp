@@ -2,9 +2,11 @@ Makefile.in
 src/Makefile
 locale/Makefile
 samples/Makefile.in
+samples/calendar/Makefile.in
 samples/caret/Makefile.in
 samples/checklst/Makefile.in
 samples/config/Makefile.in
+samples/console/Makefile.in
 samples/controls/Makefile.in
 samples/db/Makefile.in
 samples/dialogs/Makefile.in
@@ -13,6 +15,7 @@ samples/docview/Makefile.in
 samples/docvwmdi/Makefile.in
 samples/drawing/Makefile.in
 samples/dynamic/Makefile.in
+samples/exec/Makefile.in
 samples/genvalid/Makefile.in
 samples/html/Makefile.in
 samples/html/about/Makefile.in
@@ -31,6 +34,8 @@ samples/minimal/Makefile.in
 samples/notebook/Makefile.in
 samples/printing/Makefile.in
 samples/proplist/Makefile.in
+samples/propsize/Makefile.in
+samples/rotate/Makefile.in
 samples/sashtest/Makefile.in
 samples/scroll/Makefile.in
 samples/scrollsub/Makefile.in
@@ -46,9 +51,6 @@ samples/socket/Makefile.in
 samples/dialup/Makefile.in
 samples/font/Makefile.in
 samples/menu/Makefile.in
-samples/console/Makefile.in
-samples/calendar/Makefile.in
-samples/exec/Makefile.in
 demos/bombs/Makefile.in
 demos/forty/Makefile.in
 demos/fractal/Makefile.in

@@ -4,7 +4,7 @@ wxWindows Release Notes
 2.1.13
 ======
 
-- New wxEncodingConverter class
+- New wxEncodingConverter class.
 
 
 2.1.12

@@ -567,7 +567,7 @@ void wxDialog::DoShowModal()
     }
 
     // and restore focus
-    if ( winFocus )
+    if ( winFocus && (winFocus != this) )
     {
         winFocus->SetFocus();
     }

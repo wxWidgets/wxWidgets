@@ -5,7 +5,7 @@ set dest=%src\deliver
 set wise=0
 
 Rem Set this to the required version
-set version=2_1_12
+set version=2_1_13
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
@@ -42,7 +42,7 @@ zip32 -@ -u %dest\wx%version%_gtk.zip < %src\distrib\msw\makefile.rsp
 zip32 -@ %dest\wx%version%_stubs.zip < %src\distrib\msw\stubs.rsp
 zip32 -@ %dest\wx%version%_mot.zip < %src\distrib\msw\motif.rsp
 zip32 -@ -u %dest\wx%version%_mot.zip < %src\distrib\msw\makefile.rsp
-zip32 -@ %dest\wx%version%_user.zip < %src\distrib\msw\user.rsp
+Rem (Obsolete) zip32 -@ %dest\wx%version%_user.zip < %src\distrib\msw\user.rsp
 
 zip32 -@ %dest\wx%version%_doc.zip < %src\distrib\msw\docsrc.rsp
 zip32 -@ %dest\wx%version%_hlp.zip < %src\distrib\msw\wx_hlp.rsp

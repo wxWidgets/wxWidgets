@@ -158,6 +158,8 @@ bool MyApp::OnInit()
     MyDialog* dialog = new MyDialog("VC++ MakeProject");
     dialog->ShowModal();
 
+    delete dialog;
+
     return FALSE;
 }
 
@@ -1031,7 +1033,7 @@ MyDialog::MyDialog(const wxString& title, const wxPoint& pos, const wxSize& size
 
 void MyDialog::OnQuit(wxCommandEvent& event)
 {
-    this->Destroy();
+    this->EndModal(wxID_OK);
 }
 
 void MyDialog::OnAbout(wxCommandEvent& event)
