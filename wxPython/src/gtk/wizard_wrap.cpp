@@ -3146,6 +3146,11 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     SWIG_InstallConstants(d,swig_const_table);
     
+    PyDict_SetItemString(d, "wxEVT_WIZARD_PAGE_CHANGED", PyInt_FromLong(wxEVT_WIZARD_PAGE_CHANGED));
+    PyDict_SetItemString(d, "wxEVT_WIZARD_PAGE_CHANGING", PyInt_FromLong(wxEVT_WIZARD_PAGE_CHANGING));
+    PyDict_SetItemString(d, "wxEVT_WIZARD_CANCEL", PyInt_FromLong(wxEVT_WIZARD_CANCEL));
+    PyDict_SetItemString(d, "wxEVT_WIZARD_HELP", PyInt_FromLong(wxEVT_WIZARD_HELP));
+    PyDict_SetItemString(d, "wxEVT_WIZARD_FINISHED", PyInt_FromLong(wxEVT_WIZARD_FINISHED));
     
     
 }
