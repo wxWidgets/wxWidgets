@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PRIVATE_H_
-#define _WX_PRIVATE_H_
+#ifndef _WX_PRIVX_H_
+#define _WX_PRIVX_H_
 
 #include "wx/defs.h"
 #include "wx/utils.h"
@@ -70,4 +70,4 @@ void wxAllocNearestColor(Display *display,Colormap colormap,XColor *xcolor);
 void wxAllocColor(Display *display,Colormap colormap,XColor *xcolor);
 
 #endif
-// _WX_PRIVATE_H_
+// _WX_PRIVX_H_

@@ -19,7 +19,7 @@
 #include "X11/Xutil.h"
 
 // Include common declarations
-#include "x11/privx.h"
+#include "wx/x11/privx.h"
 
 class wxMouseEvent;
 class wxKeyEvent;
