@@ -211,7 +211,11 @@ public:
     virtual wxSize GetTabIndent() const { return wxSize(2, 2); }
     virtual wxSize GetTabPadding() const { return wxSize(6, 6); }
 
-    virtual wxSize GetSliderThumbSize() const { return m_sizeScrollbarArrow; }
+    virtual wxCoord GetSliderDim() const { return 15; }
+    virtual wxRect GetSliderShaftRect(const wxRect& rect,
+                                      wxOrientation orient) const;
+    virtual wxSize GetSliderThumbSize(const wxRect& rect,
+                                      wxOrientation orient) const;
 
     // helpers for "wxBitmap wxColourScheme::Get()"
     void DrawCheckBitmap(wxDC& dc, const wxRect& rect);
@@ -275,6 +279,11 @@ protected:
 
     // draw the normal 3D border
     void DrawRaisedBorder(wxDC& dc, wxRect *rect);
+
+    // just as DrawRaisedBorder() except that the bottom left and up right
+    // pixels of the interior rect are drawn in another colour (i.e. the inner
+    // rect is drawn with DrawAntiShadedRect() and not DrawShadedRect())
+    void DrawAntiRaisedBorder(wxDC& dc, wxRect *rect);
 
     // returns the size of the arrow for the scrollbar (depends on
     // orientation)
@@ -542,6 +551,10 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
         else if ( control == wxINP_HANDLER_TEXTCTRL )
             handler = new wxGTKTextCtrlInputHandler(GetDefaultInputHandler());
 #endif // wxUSE_TEXTCTRL
+#if wxUSE_SLIDER
+        else if ( control == wxINP_HANDLER_SLIDER )
+            handler = new wxStdSliderButtonInputHandler(GetDefaultInputHandler());
+#endif // wxUSE_SLIDER
 #if wxUSE_SPINBTN
         else if ( control == wxINP_HANDLER_SPINBTN )
             handler = new wxStdSpinButtonInputHandler(GetDefaultInputHandler());
@@ -769,6 +782,12 @@ void wxGTKRenderer::DrawRaisedBorder(wxDC& dc, wxRect *rect)
 {
     DrawShadedRect(dc, rect, m_penHighlight, m_penBlack);
     DrawShadedRect(dc, rect, m_penLightGrey, m_penDarkGrey);
+}
+
+void wxGTKRenderer::DrawAntiRaisedBorder(wxDC& dc, wxRect *rect)
+{
+    DrawShadedRect(dc, rect, m_penHighlight, m_penBlack);
+    DrawAntiShadedRect(dc, rect, m_penLightGrey, m_penDarkGrey);
 }
 
 void wxGTKRenderer::DrawBorder(wxDC& dc,
@@ -1119,8 +1138,7 @@ void wxGTKRenderer::DrawUncheckBitmap(wxDC& dc,
                                       bool isPressed)
 {
     wxRect rect = rectTotal;
-    DrawShadedRect(dc, &rect, m_penHighlight, m_penBlack);
-    DrawAntiShadedRect(dc, &rect, m_penLightGrey, m_penDarkGrey);
+    DrawAntiRaisedBorder(dc, &rect);
 
     wxColour col = wxSCHEME_COLOUR(m_scheme, SHADOW_IN);
     dc.SetPen(wxPen(col, 0, wxSOLID));
@@ -1610,21 +1628,71 @@ void wxGTKRenderer::DrawTab(wxDC& dc,
 // slider
 // ----------------------------------------------------------------------------
 
+wxSize wxGTKRenderer::GetSliderThumbSize(const wxRect& rect,
+                                         wxOrientation orient) const
+{
+    static const wxCoord SLIDER_THUMB_LENGTH = 30;
+
+    wxSize size;
+
+    wxRect rectShaft = GetSliderShaftRect(rect, orient);
+    if ( orient == wxHORIZONTAL )
+    {
+        size.x = wxMin(SLIDER_THUMB_LENGTH, rectShaft.width);
+        size.y = rectShaft.height;
+    }
+    else // vertical
+    {
+        size.y = wxMin(SLIDER_THUMB_LENGTH, rectShaft.height);
+        size.x = rectShaft.width;
+    }
+
+    return size;
+}
+
+wxRect wxGTKRenderer::GetSliderShaftRect(const wxRect& rect,
+                                         wxOrientation WXUNUSED(orient)) const
+{
+    return rect.Deflate(2*BORDER_THICKNESS, 2*BORDER_THICKNESS);
+}
+
 void wxGTKRenderer::DrawSliderShaft(wxDC& dc,
-                                    const wxRect& rect,
+                                    const wxRect& rectOrig,
                                     wxOrientation orient,
                                     int flags,
                                     wxRect *rectShaft)
 {
+    wxRect rect = rectOrig;
+
+    DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
+    DrawAntiShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
+
     if ( rectShaft )
         *rectShaft = rect;
 }
 
 void wxGTKRenderer::DrawSliderThumb(wxDC& dc,
-                                    const wxRect& rect,
+                                    const wxRect& rectOrig,
                                     wxOrientation orient,
                                     int flags)
 {
+    // draw the thumb border
+    wxRect rect = rectOrig;
+    DrawAntiRaisedBorder(dc, &rect);
+
+    // draw the handle in the middle
+    if ( orient == wxVERTICAL )
+    {
+        rect.height = 2*BORDER_THICKNESS;
+        rect.y = rectOrig.y + (rectOrig.height - rect.height) / 2;
+    }
+    else // horz
+    {
+        rect.width = 2*BORDER_THICKNESS;
+        rect.x = rectOrig.x + (rectOrig.width - rect.width) / 2;
+    }
+
+    DrawShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
 }
 
 // ----------------------------------------------------------------------------

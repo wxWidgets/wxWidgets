@@ -89,6 +89,10 @@ public:
     // is this a vertical slider?
     bool IsVertical() const { return (GetWindowStyle() & wxSL_VERTICAL) != 0; }
 
+    // get the slider orientation
+    wxOrientation GetOrientation() const
+        { return IsVertical() ? wxVERTICAL : wxHORIZONTAL; }
+
     // do we have labels?
     bool HasLabels() const { return (GetWindowStyle() & wxSL_LABELS) != 0; }
 
@@ -129,7 +133,25 @@ protected:
     // calculate m_rectLabel/Slider
     void CalcGeometry();
 
+    // get the thumb size
+    wxSize GetThumbSize() const;
+
+    // calc the current thumb position using the shaft rect (if the pointer is
+    // NULL, we calculate it here too)
+    void CalcThumbRect(const wxRect *rectShaft,
+                       wxRect *rectThumbOut,
+                       wxRect *rectLabelOut) const;
+
+    // return the slider rect calculating it if needed
+    const wxRect& GetSliderRect() const;
+
+    // refresh the current thumb position
+    void RefreshThumb();
+
 private:
+    // get the default thumb size (without using m_thumbSize)
+    wxSize GetDefaultThumbSize() const;
+
     // the slider range and value
     int m_min,
         m_max,
@@ -149,6 +171,29 @@ private:
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxSlider)
+};
+
+// ----------------------------------------------------------------------------
+// wxStdSliderButtonInputHandler: default slider input handling
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdSliderButtonInputHandler : public wxStdInputHandler
+{
+public:
+    wxStdSliderButtonInputHandler(wxInputHandler *inphand)
+        : wxStdInputHandler(inphand)
+    {
+    }
+
+    virtual bool HandleKey(wxControl *control,
+                           const wxKeyEvent& event,
+                           bool pressed);
+    virtual bool HandleMouse(wxControl *control,
+                             const wxMouseEvent& event);
+    virtual bool HandleMouseMove(wxControl *control,
+                                 const wxMouseEvent& event);
+
+    virtual bool HandleFocus(wxControl *control, const wxFocusEvent& event);
 };
 
 #endif // _WX_UNIV_SLIDER_H_

@@ -277,9 +277,17 @@ public:
     // get the padding around the text in a tab
     virtual wxSize GetTabPadding() const = 0;
 
-    // get the size of the horizontal slider thumb (vertical slider is supposed
-    // to have the same size with width and height exchanged)
-    virtual wxSize GetSliderThumbSize() const = 0;
+    // get the default size of the slider in lesser dimension (i.e. height of a
+    // horizontal slider or width of a vertical one)
+    virtual wxCoord GetSliderDim() const = 0;
+
+    // get the slider shaft rect from the total slider rect
+    virtual wxRect GetSliderShaftRect(const wxRect& rect,
+                                      wxOrientation orient) const = 0;
+
+    // get the size of the slider thumb for the given total slider rect
+    virtual wxSize GetSliderThumbSize(const wxRect& rect,
+                                      wxOrientation orient) const = 0;
 
     // virtual dtor for any base class
     virtual ~wxRenderer();
@@ -521,8 +529,14 @@ public:
     virtual wxSize GetTabIndent() const { return m_renderer->GetTabIndent(); }
     virtual wxSize GetTabPadding() const { return m_renderer->GetTabPadding(); }
 
-    virtual wxSize GetSliderThumbSize() const
-        { return m_renderer->GetSliderThumbSize(); }
+    virtual wxCoord GetSliderDim() const
+        { return m_renderer->GetSliderDim(); }
+    virtual wxRect GetSliderShaftRect(const wxRect& rect,
+                                      wxOrientation orient) const
+        { return GetSliderShaftRect(rect, orient); }
+    virtual wxSize GetSliderThumbSize(const wxRect& rect,
+                                      wxOrientation orient) const
+        { return m_renderer->GetSliderThumbSize(rect, orient); }
 
 protected:
     wxRenderer *m_renderer;

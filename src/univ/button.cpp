@@ -361,7 +361,7 @@ bool wxStdButtonInputHandler::HandleActivation(wxControl *control,
 {
     // the default button changes appearance when the app is [de]activated, so
     // return TRUE to refresh
-    return TRUE;
+    return wxStaticCast(control, wxButton)->IsDefault();
 }
 
 #endif // wxUSE_BUTTON

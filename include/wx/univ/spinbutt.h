@@ -98,8 +98,8 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// wxStdSpinButtonInputHandler: manages clicks on them ouse arrow like
-// wxStdScrollBarInputHandler and processes keyboard events too
+// wxStdSpinButtonInputHandler: manages clicks on them (use arrows like
+// wxStdScrollBarInputHandler) and processes keyboard events too
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxStdSpinButtonInputHandler : public wxStdInputHandler
@@ -115,7 +115,6 @@ public:
     virtual bool HandleMouseMove(wxControl *control,
                                  const wxMouseEvent& event);
 };
-
 
 #endif // _WX_UNIV_SPINBUTT_H_
 

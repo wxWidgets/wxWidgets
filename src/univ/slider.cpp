@@ -65,9 +65,6 @@
 // constants
 // ----------------------------------------------------------------------------
 
-// the margin around the slider (FIXME: not configurable)
-static const wxCoord SLIDER_THUMB_MARGIN = 3;
-
 // the margin between the slider and the label (FIXME: hardcoded)
 static const wxCoord SLIDER_LABEL_MARGIN = 2;
 
@@ -156,9 +153,13 @@ bool wxSlider::ChangeValueTo(int value)
     if ( value == m_value )
         return FALSE;
 
+    // refresh the old thumb position
+    RefreshThumb();
+
     m_value = value;
 
-    Refresh(); // FIXME: shouldn't refresh everything!
+    // and the new one
+    RefreshThumb();
 
     // generate the event
     wxCommandEvent event(wxEVT_COMMAND_SLIDER_UPDATED, GetId());
@@ -279,8 +280,8 @@ int wxSlider::GetThumbLength() const
 {
     if ( !m_thumbSize )
     {
-        wxSize sz = GetRenderer()->GetSliderThumbSize();
-        wxConstCast(this, wxSlider)->m_thumbSize = IsVertical() ? sz.y : sz.x;
+        wxSize sz = GetDefaultThumbSize();
+        return IsVertical() ? sz.y : sz.x;
     }
 
     return m_thumbSize;
@@ -315,9 +316,7 @@ wxSize wxSlider::DoGetBestClientSize() const
 
     // first calculate the size of the slider itself: i.e. the shaft and the
     // thumb
-    wxCoord height = GetRenderer()->GetSliderThumbSize().y;
-
-    height += 2*SLIDER_THUMB_MARGIN;
+    wxCoord height = GetRenderer()->GetSliderDim();
 
     wxSize size;
     if ( IsVertical() )
@@ -352,6 +351,16 @@ void wxSlider::OnSize(wxSizeEvent& event)
     CalcGeometry();
 
     event.Skip();
+}
+
+const wxRect& wxSlider::GetSliderRect() const
+{
+    if ( m_rectSlider.width < 0 )
+    {
+        wxConstCast(this, wxSlider)->CalcGeometry();
+    }
+
+    return m_rectSlider;
 }
 
 void wxSlider::CalcGeometry()
@@ -438,6 +447,25 @@ void wxSlider::CalcGeometry()
     }
 }
 
+wxSize wxSlider::GetDefaultThumbSize() const
+{
+    return GetRenderer()->GetSliderThumbSize(GetSliderRect(), GetOrientation());
+}
+
+wxSize wxSlider::GetThumbSize() const
+{
+    wxSize sizeThumb = GetDefaultThumbSize();
+
+    // if we have our own thumb length (set by the user), use it instead of the
+    // default value
+    if ( m_thumbSize )
+    {
+        sizeThumb.x = m_thumbSize;
+    }
+
+    return sizeThumb;
+}
+
 // ----------------------------------------------------------------------------
 // wxSlider drawing
 // ----------------------------------------------------------------------------
@@ -447,35 +475,35 @@ wxString wxSlider::FormatValue(int value) const
     return wxString::Format(_T("%d"), value);
 }
 
-void wxSlider::DoDraw(wxControlRenderer *renderer)
+void wxSlider::CalcThumbRect(const wxRect *rectShaftIn,
+                             wxRect *rectThumbOut,
+                             wxRect *rectLabelOut) const
 {
-    wxRenderer *rend = GetRenderer();
-    wxDC& dc = renderer->GetDC();
     bool isVertical = IsVertical();
-    wxOrientation orient = isVertical ? wxVERTICAL : wxHORIZONTAL;
-    int flags = GetStateFlags();
 
-    // first draw the shaft
     wxRect rectShaft;
-    rend->DrawSliderShaft(dc, m_rectSlider, orient, flags, &rectShaft);
-
-    // calculate the thumb position in pixels and draw it
-    wxSize sizeThumb = rend->GetSliderThumbSize();
-    wxCoord lenThumb = sizeThumb.x;
-    if ( IsVertical() )
+    if ( rectShaftIn )
     {
-        wxCoord tmp = sizeThumb.x;
-        sizeThumb.x = sizeThumb.y;
-        sizeThumb.y = tmp;
+        rectShaft = *rectShaftIn;
+    }
+    else // no shaft rect provided, calc it
+    {
+        rectShaft = GetRenderer()->GetSliderShaftRect
+                                   (
+                                    m_rectSlider,
+                                    GetOrientation()
+                                   );
     }
 
     wxCoord lenShaft,
+            lenThumb,
            *p;
-    wxRect rectThumb(rectShaft.GetPosition(), sizeThumb);
+    wxRect rectThumb(rectShaft.GetPosition(), GetThumbSize());
     if ( isVertical )
     {
         rectThumb.x += (rectShaft.width - rectThumb.width) / 2;
 
+        lenThumb = rectThumb.height;
         lenShaft = rectShaft.height;
         p = &rectThumb.y;
     }
@@ -483,6 +511,7 @@ void wxSlider::DoDraw(wxControlRenderer *renderer)
     {
         rectThumb.y += (rectShaft.height - rectThumb.height) / 2;
 
+        lenThumb = rectThumb.width;
         lenShaft = rectShaft.width;
         p = &rectThumb.x;
     }
@@ -491,31 +520,63 @@ void wxSlider::DoDraw(wxControlRenderer *renderer)
     // position is not at lenShaft but at lenShaft - thumbSize - account for it
     *p += ((lenShaft - lenThumb)*(m_value - m_min))/(m_max - m_min);
 
-    rend->DrawSliderThumb(dc, rectThumb, orient, flags);
-
     // draw the label near the thumb
     if ( HasLabels() )
     {
         wxRect rectLabel = m_rectLabel;
 
-        // centre the label relatively to the thumb position and align it to be
-        // close to the shaft
-        int align;
-        if ( IsVertical() )
+        // centre the label relatively to the thumb position
+        if ( isVertical )
         {
-            align = wxALIGN_CENTRE_VERTICAL |
-                    (GetWindowStyle() & wxSL_RIGHT ? wxALIGN_LEFT
-                                                   : wxALIGN_RIGHT);
-
             rectLabel.y =
                 rectThumb.y + (rectThumb.height - m_rectLabel.height)/2;
         }
         else // horz
         {
-            align = wxALIGN_CENTRE;
-
             rectLabel.x =
                 rectThumb.x + (rectThumb.width - m_rectLabel.width)/2;
+        }
+
+        if ( rectLabelOut )
+            *rectLabelOut = rectLabel;
+    }
+
+    if ( rectThumbOut )
+        *rectThumbOut = rectThumb;
+}
+
+void wxSlider::DoDraw(wxControlRenderer *renderer)
+{
+    wxRenderer *rend = GetRenderer();
+    wxDC& dc = renderer->GetDC();
+    bool isVertical = IsVertical();
+    wxOrientation orient = GetOrientation();
+    int flags = GetStateFlags();
+
+    // first draw the shaft
+    wxRect rectShaft;
+    rend->DrawSliderShaft(dc, m_rectSlider, orient, flags, &rectShaft);
+
+    // calculate the thumb position in pixels and draw it
+    wxRect rectThumb, rectLabel;
+    CalcThumbRect(&rectShaft, &rectThumb, &rectLabel);
+
+    rend->DrawSliderThumb(dc, rectThumb, orient, flags);
+
+    // draw the label near the thumb
+    if ( HasLabels() )
+    {
+        // align it to be close to the shaft
+        int align;
+        if ( isVertical )
+        {
+            align = wxALIGN_CENTRE_VERTICAL |
+                    (GetWindowStyle() & wxSL_RIGHT ? wxALIGN_LEFT
+                                                   : wxALIGN_RIGHT);
+        }
+        else // horz
+        {
+            align = wxALIGN_CENTRE;
         }
 
         dc.SetFont(GetFont());
@@ -527,6 +588,18 @@ void wxSlider::DoDraw(wxControlRenderer *renderer)
     }
 
     // TODO TICKS: draw them
+}
+
+void wxSlider::RefreshThumb()
+{
+    wxRect rectThumb, rectLabel;
+    CalcThumbRect(NULL, &rectThumb, &rectLabel);
+
+    Refresh(TRUE /* erase background */, &rectThumb);
+    if ( HasLabels() )
+    {
+        Refresh(TRUE, &rectLabel);
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -547,19 +620,19 @@ bool wxSlider::PerformAction(const wxControlAction& action,
     }
     else if ( action == wxACTION_SLIDER_LINE_UP )
     {
-        ChangeValueBy(-m_lineSize);
+        ChangeValueBy(-GetLineSize());
     }
     else if ( action == wxACTION_SLIDER_PAGE_UP )
     {
-        ChangeValueBy(-m_pageSize);
+        ChangeValueBy(-GetPageSize());
     }
     else if ( action == wxACTION_SLIDER_LINE_DOWN )
     {
-        ChangeValueBy(m_lineSize);
+        ChangeValueBy(GetLineSize());
     }
     else if ( action == wxACTION_SLIDER_PAGE_DOWN )
     {
-        ChangeValueBy(m_pageSize);
+        ChangeValueBy(GetPageSize());
     }
     else if ( action == wxACTION_SLIDER_THUMB_DRAG )
     {
@@ -576,6 +649,78 @@ bool wxSlider::PerformAction(const wxControlAction& action,
         return wxControl::PerformAction(action, numArg, strArg);
     }
 
+    return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+// wxStdSliderButtonInputHandler
+// ----------------------------------------------------------------------------
+
+bool wxStdSliderButtonInputHandler::HandleKey(wxControl *control,
+                                              const wxKeyEvent& event,
+                                              bool pressed)
+{
+    if ( pressed )
+    {
+        int keycode = event.GetKeyCode();
+
+        wxControlAction action;
+        switch ( keycode )
+        {
+            case WXK_HOME:
+                action = wxACTION_SLIDER_START;
+                break;
+
+            case WXK_END:
+                action = wxACTION_SLIDER_END;
+                break;
+
+            case WXK_LEFT:
+            case WXK_UP:
+                action = wxACTION_SLIDER_LINE_UP;
+                break;
+
+            case WXK_RIGHT:
+            case WXK_DOWN:
+                action = wxACTION_SLIDER_LINE_DOWN;
+                break;
+
+            case WXK_PRIOR:
+                action = wxACTION_SLIDER_PAGE_UP;
+                break;
+
+            case WXK_NEXT:
+                action = wxACTION_SLIDER_PAGE_DOWN;
+                break;
+        }
+
+        if ( !!action )
+        {
+            control->PerformAction(action);
+
+            return TRUE;
+        }
+    }
+
+    return wxStdInputHandler::HandleKey(control, event, pressed);
+}
+
+bool wxStdSliderButtonInputHandler::HandleMouse(wxControl *control,
+                                                const wxMouseEvent& event)
+{
+    return wxStdInputHandler::HandleMouse(control, event);
+}
+
+bool wxStdSliderButtonInputHandler::HandleMouseMove(wxControl *control,
+                                                    const wxMouseEvent& event)
+{
+    return wxStdInputHandler::HandleMouseMove(control, event);
+}
+
+bool wxStdSliderButtonInputHandler::HandleFocus(wxControl *control,
+                                                const wxFocusEvent& event)
+{
+    // slider's appearance changes when it gets/loses focus
     return TRUE;
 }
 

@@ -251,7 +251,11 @@ public:
     virtual wxSize GetTabIndent() const { return wxSize(2, 2); }
     virtual wxSize GetTabPadding() const { return wxSize(6, 5); }
 
-    virtual wxSize GetSliderThumbSize() const { return m_sizeSliderThumb; }
+    virtual wxCoord GetSliderDim() const { return 20; }
+    virtual wxRect GetSliderShaftRect(const wxRect& rect,
+                                      wxOrientation orient) const;
+    virtual wxSize GetSliderThumbSize(const wxRect& rect,
+                                      wxOrientation orient) const;
 
 protected:
     // common part of DrawLabel() and DrawItem()
@@ -334,8 +338,7 @@ private:
     const wxColourScheme *m_scheme;
 
     // the sizing parameters (TODO make them changeable)
-    wxSize m_sizeScrollbarArrow,
-           m_sizeSliderThumb;
+    wxSize m_sizeScrollbarArrow;
 
     // GDI objects we use for drawing
     wxColour m_colDarkGrey,
@@ -866,6 +869,10 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
         else if ( control == wxINP_HANDLER_TEXTCTRL )
             handler = new wxWin32TextCtrlInputHandler(GetDefaultInputHandler());
 #endif // wxUSE_TEXTCTRL
+#if wxUSE_SLIDER
+        else if ( control == wxINP_HANDLER_SLIDER )
+            handler = new wxStdSliderButtonInputHandler(GetDefaultInputHandler());
+#endif // wxUSE_SLIDER
 #if wxUSE_SPINBTN
         else if ( control == wxINP_HANDLER_SPINBTN )
             handler = new wxStdSpinButtonInputHandler(GetDefaultInputHandler());
@@ -989,7 +996,6 @@ wxWin32Renderer::wxWin32Renderer(const wxColourScheme *scheme)
     // init data
     m_scheme = scheme;
     m_sizeScrollbarArrow = wxSize(16, 16);
-    m_sizeSliderThumb = wxSize(7, 14);
 
     // init colours and pens
     m_penBlack = wxPen(wxSCHEME_COLOUR(scheme, SHADOW_DARK), 0, wxSOLID);
@@ -1938,20 +1944,32 @@ void wxWin32Renderer::DrawTab(wxDC& dc,
 // slider
 // ----------------------------------------------------------------------------
 
-void wxWin32Renderer::DrawSliderShaft(wxDC& dc,
-                                      const wxRect& rectOrig,
-                                      wxOrientation orient,
-                                      int flags,
-                                      wxRect *rectShaft)
+wxSize wxWin32Renderer::GetSliderThumbSize(const wxRect& rect,
+                                           wxOrientation orient) const
+{
+    wxSize size;
+
+    wxRect rectShaft = GetSliderShaftRect(rect, orient);
+    if ( orient == wxHORIZONTAL )
+    {
+        size.y = rect.height - 6;
+        size.x = wxMin(size.y / 2, rectShaft.width);
+    }
+    else // vertical
+    {
+        size.x = rect.width - 6;
+        size.y = wxMin(size.x / 2, rectShaft.height);
+    }
+
+    return size;
+}
+
+wxRect wxWin32Renderer::GetSliderShaftRect(const wxRect& rectOrig,
+                                           wxOrientation orient) const
 {
     static const wxCoord SLIDER_MARGIN = 6;
 
     wxRect rect = rectOrig;
-
-    if ( flags & wxCONTROL_FOCUSED )
-    {
-        DrawFocusRect(dc, rect);
-    }
 
     if ( orient == wxHORIZONTAL )
     {
@@ -1970,6 +1988,22 @@ void wxWin32Renderer::DrawSliderShaft(wxDC& dc,
 
         rect.Deflate(0, SLIDER_MARGIN);
     }
+
+    return rect;
+}
+
+void wxWin32Renderer::DrawSliderShaft(wxDC& dc,
+                                      const wxRect& rectOrig,
+                                      wxOrientation orient,
+                                      int flags,
+                                      wxRect *rectShaft)
+{
+    if ( flags & wxCONTROL_FOCUSED )
+    {
+        DrawFocusRect(dc, rectOrig);
+    }
+
+    wxRect rect = GetSliderShaftRect(rectOrig, orient);
 
     if ( rectShaft )
         *rectShaft = rect;
