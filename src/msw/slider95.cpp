@@ -527,7 +527,8 @@ void wxSlider::SetRange(int minValue, int maxValue)
     m_rangeMin = minValue;
     m_rangeMax = maxValue;
 
-    ::SendMessage(GetHwnd(), TBM_SETRANGE, TRUE, MAKELONG(minValue, maxValue));
+    ::SendMessage(GetHwnd(), TBM_SETRANGEMIN, TRUE, m_rangeMin);
+    ::SendMessage(GetHwnd(), TBM_SETRANGEMAX, TRUE, m_rangeMax);
 
     if ( m_labels )
     {
