@@ -18,6 +18,7 @@ Unix:
 wxGTK:
 
 - fixed wxMenu::Remove (John Skiff and Benjamin Williams)
+- made wxTextCtrl::EmulateKeyPress() work for Delete and Backspace
 
 wxMSW:
 
@@ -27,8 +28,7 @@ wxMSW:
 
 All:
 
-- Implemented GetEditControl for wxGenericTreeCtrl (Peter
-  Stieber)
+- Implemented GetEditControl for wxGenericTreeCtrl (Peter Stieber)
 - Improved contrib/utils/convertrc parsing (David J. Cooke)
 - Fixed handling of URLs and filenames in wxFileSystem
 - Implemented alignment for wxGrid bool editor and renderer

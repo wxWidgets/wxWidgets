@@ -433,6 +433,9 @@ inserted if the given key event had occured in the text control. The
 {\it event} object should be the same as the one passed to {\tt EVT\_KEY\_DOWN}
 handler previously by wxWindows.
 
+Please note that this function doesn't currently work correctly for all keys
+under any platform but MSW.
+
 \wxheading{Return value}
 
 {\tt TRUE} if the event resulted in a change to the control, {\tt FALSE}

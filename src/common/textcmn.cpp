@@ -327,6 +327,26 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
             ch = _T('/');
             break;
 
+        case WXK_DELETE:
+        case WXK_NUMPAD_DELETE:
+            // delete the character at cursor
+            {
+                const long pos = GetInsertionPoint(),
+                           last = GetLastPosition();
+                if ( pos < last )
+                    Remove(pos, pos + 1);
+            }
+            break;
+
+        case WXK_BACK:
+            // delete the character before the cursor
+            {
+                const long pos = GetInsertionPoint();
+                if ( pos > 0 )
+                    Remove(pos - 1, pos);
+            }
+            break;
+
         default:
             if ( keycode < 256 && keycode >= 0 && wxIsprint(keycode) )
             {
