@@ -205,6 +205,9 @@ private:
   // DeleteSubgroupByName helper
   bool DeleteSubgroup(wxFileConfigGroup *pGroup);
 
+  // used by Rename()
+  void UpdateGroupAndSubgroupsLines();
+
 public:
   // ctor
   wxFileConfigGroup(wxFileConfigGroup *pParent, const wxString& strName, wxFileConfig *);
@@ -1028,6 +1031,9 @@ bool wxFileConfig::Save(wxOutputStream& os, wxMBConv& conv)
 bool wxFileConfig::RenameEntry(const wxString& oldName,
                                const wxString& newName)
 {
+    wxASSERT_MSG( !wxStrchr(oldName, wxCONFIG_PATH_SEPARATOR),
+                   _T("RenameEntry(): paths are not supported") );
+
     // check that the entry exists
     wxFileConfigEntry *oldEntry = m_pCurrentGroup->FindEntry(oldName);
     if ( !oldEntry )
@@ -1442,28 +1448,41 @@ void wxFileConfigGroup::SetLastEntry(wxFileConfigEntry *pEntry)
 // group name
 // ----------------------------------------------------------------------------
 
+void wxFileConfigGroup::UpdateGroupAndSubgroupsLines()
+{
+    // update the line of this group
+    wxFileConfigLineList *line = GetGroupLine();
+    wxCHECK_RET( line, _T("a non root group must have a corresponding line!") );
+
+    // +1: skip the leading '/'
+    line->SetText(wxString::Format(_T("[%s]"), GetFullName().c_str() + 1));
+
+
+    // also update all subgroups as they have this groups name in their lines
+    const size_t nCount = m_aSubgroups.Count();
+    for ( size_t n = 0; n < nCount; n++ )
+    {
+        m_aSubgroups[n]->UpdateGroupAndSubgroupsLines();
+    }
+}
+
 void wxFileConfigGroup::Rename(const wxString& newName)
 {
     wxCHECK_RET( m_pParent, _T("the root group can't be renamed") );
 
     m_strName = newName;
 
-    // +1: no leading '/'
-    wxString strFullName;
-    strFullName << wxT("[") << (GetFullName().c_str() + 1) << wxT("]");
-
-    wxFileConfigLineList *line = GetGroupLine();
-    wxCHECK_RET( line, _T("a non root group must have a corresponding line!") );
-
-    line->SetText(strFullName);
+    // update the group lines recursively
+    UpdateGroupAndSubgroupsLines();
 }
 
 wxString wxFileConfigGroup::GetFullName() const
 {
-  if ( Parent() )
-    return Parent()->GetFullName() + wxCONFIG_PATH_SEPARATOR + Name();
-  else
-    return wxT("");
+    wxString fullname;
+    if ( Parent() )
+        fullname = Parent()->GetFullName() + wxCONFIG_PATH_SEPARATOR + Name();
+
+    return fullname;
 }
 
 // ----------------------------------------------------------------------------
