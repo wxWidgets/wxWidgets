@@ -3,6 +3,7 @@
  ** Lexer for Pascal.
  ** Written by Laurent le Tynevez
  ** Updated by Simon Steele <s.steele@pnotepad.org> September 2002
+ ** Updated by Mathias Rauen <scite@madshi.net> May 2003 (Delphi adjustments)
  **/
 
 #include <stdlib.h>
@@ -40,12 +41,15 @@ static bool IsStreamCommentStyle(int style) {
 		style == SCE_C_COMMENTDOCKEYWORDERROR;
 }
 
-static inline bool IsAWordChar(const int ch) {
-	return (ch < 0x80) && (isalnum(ch) || ch == '.' || ch == '_');
+static void ColourTo(Accessor &styler, unsigned int end, unsigned int attr, bool bInAsm) {
+	if ((bInAsm) && (attr == SCE_C_OPERATOR || attr == SCE_C_NUMBER || attr == SCE_C_DEFAULT || attr == SCE_C_WORD || attr == SCE_C_IDENTIFIER)) {
+		styler.ColourTo(end, SCE_C_REGEX);
+	} else
+		styler.ColourTo(end, attr);
 }
 
-// returns 1 if the item starts a class definition, and -1 if the word is "end".
-static int classifyWordPascal(unsigned int start, unsigned int end, /*WordList &keywords*/WordList *keywordlists[], Accessor &styler, bool bInClass) {
+// returns 1 if the item starts a class definition, and -1 if the word is "end", and 2 if the word is "asm"
+static int classifyWordPascal(unsigned int start, unsigned int end, /*WordList &keywords*/WordList *keywordlists[], Accessor &styler, bool bInClass, bool bInAsm) {
 	int ret = 0;
 
 	WordList& keywords = *keywordlists[0];
@@ -55,24 +59,34 @@ static int classifyWordPascal(unsigned int start, unsigned int end, /*WordList &
 	getRange(start, end, styler, s, sizeof(s));
 
 	char chAttr = SCE_C_IDENTIFIER;
-	if (isdigit(s[0]) || (s[0] == '.')) {
+	if (isdigit(s[0]) || (s[0] == '.') ||(s[0] == '$')) {
 		chAttr = SCE_C_NUMBER;
 	}
 	else {
-		if (keywords.InList(s)) {
-			chAttr = SCE_C_WORD;
-
-			if(strcmp(s, "class") == 0)
-				ret = 1;
-			else if(strcmp(s, "end") == 0)
-				ret = -1;
-		} else if (bInClass) {
-			if (classwords.InList(s)) {
+		if (s[0] == '#') {
+			chAttr = SCE_C_CHARACTER;
+		}
+		else {
+			if (keywords.InList(s)) {
 				chAttr = SCE_C_WORD;
+
+				if(strcmp(s, "class") == 0) {
+					ret = 1;
+				}
+				else if (strcmp(s, "asm") == 0) {
+					ret = 2;
+				}
+				else if (strcmp(s, "end") == 0) {
+					ret = -1;
+				}
+			} else if (bInClass) {
+				if (classwords.InList(s)) {
+					chAttr = SCE_C_WORD;
+				}
 			}
 		}
 	}
-	styler.ColourTo(end, chAttr);
+	ColourTo(styler, end, chAttr, (bInAsm && ret != -1));
 	return ret;
 }
 
@@ -99,14 +113,14 @@ static void ColourisePascalDoc(unsigned int startPos, int length, int initStyle,
 	styler.StartAt(startPos);
 
 	int state = initStyle;
-	if (state == SCE_C_STRINGEOL)	// Does not leak onto next line
+	if (state == SCE_C_CHARACTER)	// Does not leak onto next line
 		state = SCE_C_DEFAULT;
 	char chPrev = ' ';
 	char chNext = styler[startPos];
 	unsigned int lengthDoc = startPos + length;
-	int visibleChars = 0;
 
 	bool bInClassDefinition;
+
 	int currentLine = styler.GetLine(startPos);
 	if (currentLine > 0) {
 		styler.SetLineState(currentLine, styler.GetLineState(currentLine-1));
@@ -115,6 +129,10 @@ static void ColourisePascalDoc(unsigned int startPos, int length, int initStyle,
 		styler.SetLineState(currentLine, 0);
 		bInClassDefinition = false;
 	}
+
+	bool bInAsm = (state == SCE_C_REGEX);
+	if (bInAsm)
+		state = SCE_C_DEFAULT;
 
 	styler.StartSegment(startPos);
 	for (unsigned int i = startPos; i < lengthDoc; i++) {
@@ -126,16 +144,13 @@ static void ColourisePascalDoc(unsigned int startPos, int length, int initStyle,
 			// Trigger on CR only (Mac style) or either on LF from CR+LF (Dos/Win) or on LF alone (Unix)
 			// Avoid triggering two times on Dos/Win
 			// End of line
-			if (state == SCE_C_STRINGEOL) {
-				styler.ColourTo(i, state);
+			if (state == SCE_C_CHARACTER) {
+				ColourTo(styler, i, state, bInAsm);
 				state = SCE_C_DEFAULT;
 			}
-			visibleChars = 0;
 			currentLine++;
 			styler.SetLineState(currentLine, (bInClassDefinition ? 1 : 0));
 		}
-		if (!isspacechar(ch))
-			visibleChars++;
 
 		if (styler.IsLeadByte(ch)) {
 			chNext = styler.SafeGetCharAt(i + 2);
@@ -145,41 +160,50 @@ static void ColourisePascalDoc(unsigned int startPos, int length, int initStyle,
 		}
 
 		if (state == SCE_C_DEFAULT) {
-			if (iswordstart(ch) || (ch == '@')) {
-				styler.ColourTo(i-1, state);
+			if (iswordstart(ch) || ch == '#' || ch == '$' || (ch == '@' && bInAsm)) {
+				ColourTo(styler, i-1, state, bInAsm);
 				state = SCE_C_IDENTIFIER;
 			} else if (ch == '{' && chNext != '$' && chNext != '&') {
-				styler.ColourTo(i-1, state);
+				ColourTo(styler, i-1, state, bInAsm);
 				state = SCE_C_COMMENT;
 			} else if (ch == '(' && chNext == '*'
 						&& styler.SafeGetCharAt(i + 2) != '$'
 						&& styler.SafeGetCharAt(i + 2) != '&') {
-				styler.ColourTo(i-1, state);
+				ColourTo(styler, i-1, state, bInAsm);
 				state = SCE_C_COMMENTDOC;
 			} else if (ch == '/' && chNext == '/') {
-				styler.ColourTo(i-1, state);
+				ColourTo(styler, i-1, state, bInAsm);
 				state = SCE_C_COMMENTLINE;
 			} else if (ch == '\'') {
-				styler.ColourTo(i-1, state);
+				ColourTo(styler, i-1, state, bInAsm);
 				state = SCE_C_CHARACTER;
-			} else if (ch == '{' && (chNext == '$' || chNext=='&') && visibleChars == 1) {
-				styler.ColourTo(i-1, state);
+			} else if (ch == '{' && (chNext == '$' || chNext=='&')) {
+				ColourTo(styler, i-1, state, bInAsm);
 				state = SCE_C_PREPROCESSOR;
 			} else if (isoperator(ch)) {
-				styler.ColourTo(i-1, state);
-				styler.ColourTo(i, SCE_C_OPERATOR);
+				ColourTo(styler, i-1, state, bInAsm);
+				ColourTo(styler, i, SCE_C_OPERATOR, bInAsm);
 
 			}
 		} else if (state == SCE_C_IDENTIFIER) {
-			if (!iswordchar(ch)) {
-				int lStateChange = classifyWordPascal(styler.GetStartSegment(), i - 1, keywordlists, styler, bInClassDefinition);
+			bool bDoublePoint = ((ch == '.') && (chPrev == '.'));
+			if ((!iswordchar(ch) && ch != '$' && ch != '#' && (ch != '@' || !bInAsm)) || bDoublePoint) {
+				if (bDoublePoint) i--;
+				int lStateChange = classifyWordPascal(styler.GetStartSegment(), i - 1, keywordlists, styler, bInClassDefinition, bInAsm);
 
 				if(lStateChange == 1) {
 					styler.SetLineState(currentLine, 1);
 					bInClassDefinition = true;
+				} else if(lStateChange == 2) {
+					bInAsm = true;
 				} else if(lStateChange == -1) {
 					styler.SetLineState(currentLine, 0);
 					bInClassDefinition = false;
+					bInAsm = false;
+				}
+				if (bDoublePoint) {
+					i++;
+					ColourTo(styler, i-1, SCE_C_DEFAULT, bInAsm);
 				}
 
 				state = SCE_C_DEFAULT;
@@ -189,30 +213,30 @@ static void ColourisePascalDoc(unsigned int startPos, int length, int initStyle,
 				} else if (ch == '(' && chNext == '*'
 						&& styler.SafeGetCharAt(i + 2) != '$'
 						&& styler.SafeGetCharAt(i + 2) != '&') {
-					styler.ColourTo(i-1, state);
+					ColourTo(styler, i-1, state, bInAsm);
 					state = SCE_C_COMMENTDOC;
 				} else if (ch == '/' && chNext == '/') {
 					state = SCE_C_COMMENTLINE;
 				} else if (ch == '\'') {
 					state = SCE_C_CHARACTER;
 				} else if (isoperator(ch)) {
-					styler.ColourTo(i, SCE_C_OPERATOR);
+					ColourTo(styler, i, SCE_C_OPERATOR, bInAsm);
 				}
 			}
 		} else {
 			if (state == SCE_C_PREPROCESSOR) {
 				if (ch=='}'){
-					styler.ColourTo(i, state);
+					ColourTo(styler, i, state, bInAsm);
 					state = SCE_C_DEFAULT;
 				} else {
 					if ((ch == '\r' || ch == '\n') && !(chPrev == '\\' || chPrev == '\r')) {
-						styler.ColourTo(i-1, state);
+						ColourTo(styler, i-1, state, bInAsm);
 						state = SCE_C_DEFAULT;
 					}
 				}
 			} else if (state == SCE_C_COMMENT) {
 				if (ch == '}' ) {
-					styler.ColourTo(i, state);
+					ColourTo(styler, i, state, bInAsm);
 					state = SCE_C_DEFAULT;
 				}
 			} else if (state == SCE_C_COMMENTDOC) {
@@ -220,28 +244,25 @@ static void ColourisePascalDoc(unsigned int startPos, int length, int initStyle,
 					if (((i > styler.GetStartSegment() + 2) || (
 						(initStyle == SCE_C_COMMENTDOC) &&
 						(styler.GetStartSegment() == static_cast<unsigned int>(startPos))))) {
-							styler.ColourTo(i, state);
+							ColourTo(styler, i, state, bInAsm);
 							state = SCE_C_DEFAULT;
 					}
 				}
 			} else if (state == SCE_C_COMMENTLINE) {
 				if (ch == '\r' || ch == '\n') {
-					styler.ColourTo(i-1, state);
+					ColourTo(styler, i-1, state, bInAsm);
 					state = SCE_C_DEFAULT;
 				}
 			} else if (state == SCE_C_CHARACTER) {
-				if ((ch == '\r' || ch == '\n')) {
-					styler.ColourTo(i-1, SCE_C_STRINGEOL);
-					state = SCE_C_STRINGEOL;
-				} else if (ch == '\'') {
-					styler.ColourTo(i, state);
+				if (ch == '\'') {
+					ColourTo(styler, i, state, bInAsm);
 					state = SCE_C_DEFAULT;
 				}
 			}
 		}
 		chPrev = ch;
 	}
-	styler.ColourTo(lengthDoc - 1, state);
+	ColourTo(styler, lengthDoc - 1, state, bInAsm);
 }
 
 static void FoldPascalDoc(unsigned int startPos, int length, int initStyle, WordList *[],
