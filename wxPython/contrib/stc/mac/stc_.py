@@ -112,6 +112,14 @@ def EVT_STC_DO_DROP(win, id, func):
 def EVT_STC_ZOOM(win, id, func):
     win.Connect(id, -1, wxEVT_STC_ZOOM, func)
 
+def EVT_STC_HOTSPOT_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_HOTSPOT_CLICK, func)
+
+def EVT_STC_HOTSPOT_DCLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_HOTSPOT_DCLICK, func)
+
+def EVT_STC_CALLTIP_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_CALLTIP_CLICK, func)
 
 class wxStyledTextCtrlPtr(wxControlPtr):
     def __init__(self,this):
@@ -320,6 +328,9 @@ class wxStyledTextCtrlPtr(wxControlPtr):
         return val
     def StyleSetCharacterSet(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_StyleSetCharacterSet(self, *_args, **_kwargs)
+        return val
+    def StyleSetHotSpot(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_StyleSetHotSpot(self, *_args, **_kwargs)
         return val
     def SetSelForeground(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_SetSelForeground(self, *_args, **_kwargs)
@@ -717,6 +728,12 @@ class wxStyledTextCtrlPtr(wxControlPtr):
     def CallTipSetBackground(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_CallTipSetBackground(self, *_args, **_kwargs)
         return val
+    def CallTipSetForeground(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_CallTipSetForeground(self, *_args, **_kwargs)
+        return val
+    def CallTipSetForegroundHighlight(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_CallTipSetForegroundHighlight(self, *_args, **_kwargs)
+        return val
     def VisibleFromDocLine(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_VisibleFromDocLine(self, *_args, **_kwargs)
         return val
@@ -1017,6 +1034,15 @@ class wxStyledTextCtrlPtr(wxControlPtr):
         return val
     def GetPrintWrapMode(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_GetPrintWrapMode(self, *_args, **_kwargs)
+        return val
+    def SetHotspotActiveForeground(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_SetHotspotActiveForeground(self, *_args, **_kwargs)
+        return val
+    def SetHotspotActiveBackground(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_SetHotspotActiveBackground(self, *_args, **_kwargs)
+        return val
+    def SetHotspotActiveUnderline(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_SetHotspotActiveUnderline(self, *_args, **_kwargs)
         return val
     def StartRecord(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_StartRecord(self, *_args, **_kwargs)
@@ -1360,6 +1386,7 @@ wxSTC_FIND_WHOLEWORD = stc_c.wxSTC_FIND_WHOLEWORD
 wxSTC_FIND_MATCHCASE = stc_c.wxSTC_FIND_MATCHCASE
 wxSTC_FIND_WORDSTART = stc_c.wxSTC_FIND_WORDSTART
 wxSTC_FIND_REGEXP = stc_c.wxSTC_FIND_REGEXP
+wxSTC_FIND_POSIX = stc_c.wxSTC_FIND_POSIX
 wxSTC_FOLDLEVELBASE = stc_c.wxSTC_FOLDLEVELBASE
 wxSTC_FOLDLEVELWHITEFLAG = stc_c.wxSTC_FOLDLEVELWHITEFLAG
 wxSTC_FOLDLEVELHEADERFLAG = stc_c.wxSTC_FOLDLEVELHEADERFLAG
@@ -1463,6 +1490,7 @@ wxSTC_LEX_CPPNOCASE = stc_c.wxSTC_LEX_CPPNOCASE
 wxSTC_LEX_FORTRAN = stc_c.wxSTC_LEX_FORTRAN
 wxSTC_LEX_F77 = stc_c.wxSTC_LEX_F77
 wxSTC_LEX_CSS = stc_c.wxSTC_LEX_CSS
+wxSTC_LEX_POV = stc_c.wxSTC_LEX_POV
 wxSTC_LEX_AUTOMATIC = stc_c.wxSTC_LEX_AUTOMATIC
 wxSTC_P_DEFAULT = stc_c.wxSTC_P_DEFAULT
 wxSTC_P_COMMENTLINE = stc_c.wxSTC_P_COMMENTLINE
@@ -1689,6 +1717,8 @@ wxSTC_ERR_DIFF_ADDITION = stc_c.wxSTC_ERR_DIFF_ADDITION
 wxSTC_ERR_DIFF_DELETION = stc_c.wxSTC_ERR_DIFF_DELETION
 wxSTC_ERR_DIFF_MESSAGE = stc_c.wxSTC_ERR_DIFF_MESSAGE
 wxSTC_ERR_PHP = stc_c.wxSTC_ERR_PHP
+wxSTC_ERR_ELF = stc_c.wxSTC_ERR_ELF
+wxSTC_ERR_IFC = stc_c.wxSTC_ERR_IFC
 wxSTC_BAT_DEFAULT = stc_c.wxSTC_BAT_DEFAULT
 wxSTC_BAT_COMMENT = stc_c.wxSTC_BAT_COMMENT
 wxSTC_BAT_WORD = stc_c.wxSTC_BAT_WORD
@@ -1854,6 +1884,19 @@ wxSTC_CSS_COMMENT = stc_c.wxSTC_CSS_COMMENT
 wxSTC_CSS_ID = stc_c.wxSTC_CSS_ID
 wxSTC_CSS_IMPORTANT = stc_c.wxSTC_CSS_IMPORTANT
 wxSTC_CSS_DIRECTIVE = stc_c.wxSTC_CSS_DIRECTIVE
+wxSTC_CSS_DOUBLESTRING = stc_c.wxSTC_CSS_DOUBLESTRING
+wxSTC_CSS_SINGLESTRING = stc_c.wxSTC_CSS_SINGLESTRING
+wxSTC_POV_DEFAULT = stc_c.wxSTC_POV_DEFAULT
+wxSTC_POV_COMMENT = stc_c.wxSTC_POV_COMMENT
+wxSTC_POV_COMMENTLINE = stc_c.wxSTC_POV_COMMENTLINE
+wxSTC_POV_COMMENTDOC = stc_c.wxSTC_POV_COMMENTDOC
+wxSTC_POV_NUMBER = stc_c.wxSTC_POV_NUMBER
+wxSTC_POV_WORD = stc_c.wxSTC_POV_WORD
+wxSTC_POV_STRING = stc_c.wxSTC_POV_STRING
+wxSTC_POV_OPERATOR = stc_c.wxSTC_POV_OPERATOR
+wxSTC_POV_IDENTIFIER = stc_c.wxSTC_POV_IDENTIFIER
+wxSTC_POV_BRACE = stc_c.wxSTC_POV_BRACE
+wxSTC_POV_WORD2 = stc_c.wxSTC_POV_WORD2
 wxSTC_CMD_REDO = stc_c.wxSTC_CMD_REDO
 wxSTC_CMD_SELECTALL = stc_c.wxSTC_CMD_SELECTALL
 wxSTC_CMD_UNDO = stc_c.wxSTC_CMD_UNDO
@@ -1911,12 +1954,22 @@ wxSTC_CMD_HOMEDISPLAY = stc_c.wxSTC_CMD_HOMEDISPLAY
 wxSTC_CMD_HOMEDISPLAYEXTEND = stc_c.wxSTC_CMD_HOMEDISPLAYEXTEND
 wxSTC_CMD_LINEENDDISPLAY = stc_c.wxSTC_CMD_LINEENDDISPLAY
 wxSTC_CMD_LINEENDDISPLAYEXTEND = stc_c.wxSTC_CMD_LINEENDDISPLAYEXTEND
+wxSTC_CMD_HOMEWRAP = stc_c.wxSTC_CMD_HOMEWRAP
+wxSTC_CMD_HOMEWRAPEXTEND = stc_c.wxSTC_CMD_HOMEWRAPEXTEND
+wxSTC_CMD_LINEENDWRAP = stc_c.wxSTC_CMD_LINEENDWRAP
+wxSTC_CMD_LINEENDWRAPEXTEND = stc_c.wxSTC_CMD_LINEENDWRAPEXTEND
+wxSTC_CMD_VCHOMEWRAP = stc_c.wxSTC_CMD_VCHOMEWRAP
+wxSTC_CMD_VCHOMEWRAPEXTEND = stc_c.wxSTC_CMD_VCHOMEWRAPEXTEND
 wxSTC_CMD_WORDPARTLEFT = stc_c.wxSTC_CMD_WORDPARTLEFT
 wxSTC_CMD_WORDPARTLEFTEXTEND = stc_c.wxSTC_CMD_WORDPARTLEFTEXTEND
 wxSTC_CMD_WORDPARTRIGHT = stc_c.wxSTC_CMD_WORDPARTRIGHT
 wxSTC_CMD_WORDPARTRIGHTEXTEND = stc_c.wxSTC_CMD_WORDPARTRIGHTEXTEND
 wxSTC_CMD_DELLINELEFT = stc_c.wxSTC_CMD_DELLINELEFT
 wxSTC_CMD_DELLINERIGHT = stc_c.wxSTC_CMD_DELLINERIGHT
+wxSTC_CMD_PARADOWN = stc_c.wxSTC_CMD_PARADOWN
+wxSTC_CMD_PARADOWNEXTEND = stc_c.wxSTC_CMD_PARADOWNEXTEND
+wxSTC_CMD_PARAUP = stc_c.wxSTC_CMD_PARAUP
+wxSTC_CMD_PARAUPEXTEND = stc_c.wxSTC_CMD_PARAUPEXTEND
 STC_USE_DND = stc_c.STC_USE_DND
 wxEVT_STC_CHANGE = stc_c.wxEVT_STC_CHANGE
 wxEVT_STC_STYLENEEDED = stc_c.wxEVT_STC_STYLENEEDED
@@ -1941,6 +1994,9 @@ wxEVT_STC_START_DRAG = stc_c.wxEVT_STC_START_DRAG
 wxEVT_STC_DRAG_OVER = stc_c.wxEVT_STC_DRAG_OVER
 wxEVT_STC_DO_DROP = stc_c.wxEVT_STC_DO_DROP
 wxEVT_STC_ZOOM = stc_c.wxEVT_STC_ZOOM
+wxEVT_STC_HOTSPOT_CLICK = stc_c.wxEVT_STC_HOTSPOT_CLICK
+wxEVT_STC_HOTSPOT_DCLICK = stc_c.wxEVT_STC_HOTSPOT_DCLICK
+wxEVT_STC_CALLTIP_CLICK = stc_c.wxEVT_STC_CALLTIP_CLICK
 
 
 #-------------- USER INCLUDE -----------------------
