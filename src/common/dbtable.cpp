@@ -1945,6 +1945,14 @@ int wxDbTable::Insert(void)
                 }
             }
             retcode = SQLParamData(hstmtInsert, &pParmID);
+            if (retcode != SQL_SUCCESS &&
+                retcode != SQL_SUCCESS_WITH_INFO)
+            {
+                // record was not inserted
+                pDb->DispNextError();
+                pDb->DispAllErrors(henv, hdbc, hstmtInsert);
+                return(DB_FAILURE);
+            }
         }
     }
 
