@@ -269,10 +269,16 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
                 event.SetString(value);
                 event.SetEventObject(this);
-                ProcessCommand(event);
+                return ProcessCommand(event);
             }
             break;
     }
+
+	// I don't think the following should be true.  The return value is
+	// whether the event has been handled, not the status of the handling.
+	// So, we only return false if the switch fell through.  This will
+	// resolve the same event being sent multiple times by MS Windows.
+	// mea 05-22-01
 
     // there is no return value for the CBN_ notifications, so always return
     // FALSE from here to pass the message to DefWindowProc()
