@@ -39,6 +39,7 @@ capabilities for the various virtual methods.}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxSizer::wxSizer}\label{wxsizerwxsizer}
 
 \func{}{wxSizer}{\void}
@@ -46,11 +47,13 @@ capabilities for the various virtual methods.}
 The constructor. Note that wxSizer is an abstract base class and may not
 be instantiated.
 
+
 \membersection{wxSizer::\destruct{wxSizer}}\label{wxsizerdtor}
 
 \func{}{\destruct{wxSizer}}{\void}
 
 The destructor.
+
 
 \membersection{wxSizer::Add}\label{wxsizeradd}
 
@@ -115,12 +118,14 @@ control even if its text is changed during run-time.}
 item, for use in derived classes when sizing information is more
 complex than the {\it proportion} and {\it flag} will allow for.}
 
+
 \membersection{wxSizer::CalcMin}\label{wxsizercalcmin}
 
 \func{wxSize}{CalcMin}{\void}
 
 This method is abstract and has to be overwritten by any derived class.
 Here, the sizer will do the actual calculation of its children minimal sizes.
+
 
 \membersection{wxSizer::Detach}\label{wxsizerdetach}
 
@@ -142,6 +147,7 @@ Returns true if the child item was found and detached, false otherwise.
 
 \helpref{wxSizer::Remove}{wxsizerremove}
 
+
 \membersection{wxSizer::Fit}\label{wxsizerfit}
 
 \func{wxSize}{Fit}{\param{wxWindow* }{window}}
@@ -149,6 +155,9 @@ Returns true if the child item was found and detached, false otherwise.
 Tell the sizer to resize the {\it window} to match the sizer's minimal size. This
 is commonly done in the constructor of the window itself, see sample in the description
 of \helpref{wxBoxSizer}{wxboxsizer}. Returns the new size.
+
+For a top level window this is the total window size, not client size.
+
 
 \membersection{wxSizer::FitInside}\label{wxsizerfitinside}
 
@@ -164,17 +173,20 @@ windows which manage it.
 \helpref{wxScrolledWindow::SetScrollbars}{wxscrolledwindowsetscrollbars},\rtfsp
 \helpref{wxSizer::SetVirtualSizeHints}{wxsizersetvirtualsizehints}
 
+
 \membersection{wxSizer::GetSize}\label{wxsizergetsize}
 
 \func{wxSize}{GetSize}{\void}
 
 Returns the current size of the sizer.
 
+
 \membersection{wxSizer::GetPosition}\label{wxsizergetposition}
 
 \func{wxPoint}{GetPosition}{\void}
 
 Returns the current position of the sizer.
+
 
 \membersection{wxSizer::GetMinSize}\label{wxsizergetminsize}
 
@@ -183,6 +195,7 @@ Returns the current position of the sizer.
 Returns the minimal size of the sizer. This is either the combined minimal
 size of all the children and their borders or the minimal size set by 
 \helpref{SetMinSize}{wxsizersetminsize}, depending on which is bigger.
+
 
 \membersection{wxSizer::Insert}\label{wxsizerinsert}
 
@@ -198,6 +211,7 @@ Insert a child into the sizer before any existing item at {\it index}.
 
 See \helpref{wxSizer::Add}{wxsizeradd} for the meaning of the other parameters.
 
+
 \membersection{wxSizer::Layout}\label{wxsizerlayout}
 
 \func{void}{Layout}{\void}
@@ -205,6 +219,7 @@ See \helpref{wxSizer::Add}{wxsizeradd} for the meaning of the other parameters.
 Call this to force layout of the children anew, e.g. after having added a child
 to or removed a child (window, other sizer or space) from the sizer while keeping
 the current dimension.
+
 
 \membersection{wxSizer::Prepend}\label{wxsizerprepend}
 
@@ -217,6 +232,7 @@ the current dimension.
 Same as \helpref{wxSizer::Add}{wxsizeradd}, but prepends the items to the beginning of the
 list of items (windows, subsizers or spaces) owned by this sizer.
 
+
 \membersection{wxSizer::RecalcSizes}\label{wxsizerrecalcsizes}
 
 \func{void}{RecalcSizes}{\void}
@@ -224,6 +240,7 @@ list of items (windows, subsizers or spaces) owned by this sizer.
 This method is abstract and has to be overwritten by any derived class.
 Here, the sizer will do the actual calculation of its children's positions
 and sizes.
+
 
 \membersection{wxSizer::Remove}\label{wxsizerremove}
 
@@ -246,6 +263,7 @@ method that will both detach and destroy a wxWindow item.
 
 Returns true if the child item was found and removed, false otherwise.
 
+
 \membersection{wxSizer::SetDimension}\label{wxsizersetdimension}
 
 \func{void}{SetDimension}{\param{int }{x}, \param{int }{y}, \param{int }{width}, \param{int }{height}}
@@ -253,6 +271,7 @@ Returns true if the child item was found and removed, false otherwise.
 Call this to force the sizer to take the given dimension and thus force the items owned
 by the sizer to resize themselves according to the rules defined by the parameter in the 
 \helpref{Add}{wxsizeradd} and \helpref{Prepend}{wxsizerprepend} methods.
+
 
 \membersection{wxSizer::SetMinSize}\label{wxsizersetminsize}
 
@@ -266,6 +285,7 @@ method \helpref{GetMinSize}{wxsizergetminsize} will return either the minimal si
 as requested by its children or the minimal size set here, depending on which is
 bigger.
 
+
 \membersection{wxSizer::SetItemMinSize}\label{wxsizersetitemminsize}
 
 \func{void}{SetItemMinSize}{\param{wxWindow* }{window}, \param{int}{ width}, \param{int}{ height}}
@@ -278,6 +298,7 @@ Set an item's minimum size by window, sizer, or position. The item will be found
 in the sizer's descendants. This function enables an application to set the size of an item
 after initial creation.
 
+
 \membersection{wxSizer::SetSizeHints}\label{wxsizersetsizehints}
 
 \func{void}{SetSizeHints}{\param{wxWindow* }{window}}
@@ -286,6 +307,7 @@ Tell the sizer to set (and \helpref{Fit}{wxsizerfit}) the minimal size of the {\
 match the sizer's minimal size.  This is commonly done in the constructor of the window itself,
 see sample in the description of \helpref{wxBoxSizer}{wxboxsizer} if the window is resizable
 (as are many dialogs under Unix and frames on probably all platforms).
+
 
 \membersection{wxSizer::SetVirtualSizeHints}\label{wxsizersetvirtualsizehints}
 
@@ -297,6 +319,7 @@ minimal size. For windows with managed scrollbars this will set them appropriate
 \wxheading{See also}
 
 \helpref{wxScrolledWindow::SetScrollbars}{wxscrolledwindowsetscrollbars}
+
 
 \membersection{wxSizer::Show}\label{wxsizershow}
 
