@@ -1353,7 +1353,7 @@ static void gtk_wxwindow_commit_cb (GtkIMContext *context,
     if (ansistr.data() == NULL)
         return;
     event.m_keyCode = ansistr[0u];
-    wxLogTrace(TRACE_KEYS, _T("IM sent character '%c'"), event.m_keyCode);
+    wxLogTrace(TRACE_KEYS, _T("IM sent character '%c'"), (wxChar)event.m_keyCode);
 #endif // wxUSE_UNICODE
 
     bool ret = false;
