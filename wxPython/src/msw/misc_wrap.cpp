@@ -12830,30 +12830,6 @@ static PyObject *_wrap_new_ArtProvider(PyObject *self, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_delete_ArtProvider(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPyArtProvider *arg1 = (wxPyArtProvider *) 0 ;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:delete_ArtProvider",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyArtProvider,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        delete arg1;
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_ArtProvider__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyArtProvider *arg1 = (wxPyArtProvider *) 0 ;
@@ -24778,7 +24754,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_MimeTypesManager", (PyCFunction) _wrap_delete_MimeTypesManager, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"MimeTypesManager_swigregister", MimeTypesManager_swigregister, METH_VARARGS },
 	 { (char *)"new_ArtProvider", (PyCFunction) _wrap_new_ArtProvider, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"delete_ArtProvider", (PyCFunction) _wrap_delete_ArtProvider, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ArtProvider__setCallbackInfo", (PyCFunction) _wrap_ArtProvider__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ArtProvider_PushProvider", (PyCFunction) _wrap_ArtProvider_PushProvider, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ArtProvider_PopProvider", (PyCFunction) _wrap_ArtProvider_PopProvider, METH_VARARGS | METH_KEYWORDS },

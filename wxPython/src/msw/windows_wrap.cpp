@@ -405,9 +405,8 @@ IMP_PYCALLBACK_BOOL_(wxPyPopupTransientWindow, wxPopupTransientWindow, CanDismis
 
 #include <wx/tipwin.h>
 
-wxTipWindow *new_wxTipWindow(wxWindow *parent,wxString const *text,int maxLength,wxRect *rectBound){
-            wxString tmp = *text;
-            return new wxTipWindow(parent, tmp, maxLength, NULL, rectBound);
+wxTipWindow *new_wxTipWindow(wxWindow *parent,wxString const &text,int maxLength,wxRect *rectBound){
+            return new wxTipWindow(parent, text, maxLength, NULL, rectBound);
         }
 
 #include <wx/tipwin.h>
@@ -7922,10 +7921,11 @@ static PyObject * PopupTransientWindow_swigregister(PyObject *self, PyObject *ar
 static PyObject *_wrap_new_TipWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxString *arg2 = (wxString *) 0 ;
+    wxString *arg2 = 0 ;
     int arg3 = (int) 100 ;
     wxRect *arg4 = (wxRect *) NULL ;
     wxTipWindow *result;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -7935,20 +7935,32 @@ static PyObject *_wrap_new_TipWindow(PyObject *self, PyObject *args, PyObject *k
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|iO:new_TipWindow",kwnames,&obj0,&obj1,&arg3,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = True;
+    }
     if (obj3) {
         if ((SWIG_ConvertPtr(obj3,(void **) &arg4, SWIGTYPE_p_wxRect,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxTipWindow *)new_wxTipWindow(arg1,(wxString const *)arg2,arg3,arg4);
+        result = (wxTipWindow *)new_wxTipWindow(arg1,(wxString const &)*arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxTipWindow, 1);
+    {
+        if (temp2)
+        delete arg2;
+    }
     return resultobj;
     fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
     return NULL;
 }
 

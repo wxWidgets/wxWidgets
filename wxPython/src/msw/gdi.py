@@ -2664,13 +2664,13 @@ Get the DC size in milimeters."""
            raise ValueError('textlist and coords must have same length')
         if foregrounds is None:
            foregrounds = []
-        elif isinstance(foregrounds, wxColour):
+        elif isinstance(foregrounds, wx.Colour):
            foregrounds = [foregrounds]
         elif len(foregrounds) != len(coords):
            raise ValueError('foregrounds and coords must have same length')
         if backgrounds is None:
            backgrounds = []
-        elif isinstance(backgrounds, wxColour):
+        elif isinstance(backgrounds, wx.Colour):
            backgrounds = [backgrounds]
         elif len(backgrounds) != len(coords):
            raise ValueError('backgrounds and coords must have same length')
