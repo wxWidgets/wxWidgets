@@ -1210,7 +1210,18 @@
 #            define wxUSE_LISTBOX 1
 #        endif
 #   endif
-#endif /* wxUSE_RADIOBTN */
+#endif /* wxUSE_CHECKLISTBOX */
+
+#if wxUSE_CHOICEDLG
+#   if !wxUSE_LISTBOX
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "Choice dialogs requires wxListBox"
+#        else
+#            undef wxUSE_LISTBOX
+#            define wxUSE_LISTBOX 1
+#        endif
+#   endif
+#endif /* wxUSE_CHOICEDLG */
 
 #if wxUSE_HELP
 #   if !wxUSE_BMPBUTTON
