@@ -126,6 +126,20 @@ MPCriticalRegionID gs_guiCritical = kInvalidID;
 // wxMutex implementation
 // ----------------------------------------------------------------------------
 
+static bool wxMacMPThreadsInitVerify()
+{
+	static bool hasThreadManager = false ;
+	if ( !hasThreadManager )
+	    hasThreadManager = MPLibraryIsLoaded();
+    
+	if ( !hasThreadManager )
+    {
+		wxMessageBox( wxT("Error") , wxT("MP Thread Support is not available on this System" ), wxOK ) ;
+		return FALSE ;
+    }
+    return TRUE ;
+}	
+
 #if 0 
 
 class wxMutexInternal
@@ -145,6 +159,8 @@ private:
 
 wxMutexInternal::wxMutexInternal(wxMutexType mutexType )
 {
+    wxMacMPThreadsInitVerify() ;
+    
     m_isOk = false ;
     m_semaphore = kInvalidID ;
     
@@ -234,6 +250,7 @@ private:
 
 wxMutexInternal::wxMutexInternal(wxMutexType mutexType )
 {
+    wxMacMPThreadsInitVerify() ;
     m_isOk = false ;
     m_critRegion = kInvalidID ;
     
@@ -327,6 +344,7 @@ private:
 
 wxSemaphoreInternal::wxSemaphoreInternal(int initialcount, int maxcount)
 {
+    wxMacMPThreadsInitVerify() ;
     m_isOk = false ;
     m_semaphore = kInvalidID ;
 	if ( maxcount == 0 )
@@ -860,6 +878,7 @@ OSStatus wxThreadInternal::MacThreadStart(void *parameter)
 
 bool wxThreadInternal::Create(wxThread *thread, unsigned int stackSize)
 {
+    wxMacMPThreadsInitVerify() ;
     wxASSERT_MSG( m_state == STATE_NEW && !m_tid,
                     _T("Create()ing thread twice?") );
 
@@ -1414,13 +1433,9 @@ private:
 IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)
 
 bool wxThreadModule::OnInit()
-{
-	bool hasThreadManager = false ;
-	hasThreadManager = MPLibraryIsLoaded();
-    
-	if ( !hasThreadManager )
+{    
+	if ( !wxMacMPThreadsInitVerify() )
     {
-		wxMessageBox( wxT("Error") , wxT("MP Thread Support is not available on this System" ), wxOK ) ;
 		return FALSE ;
     }
 	
