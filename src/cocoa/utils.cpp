@@ -13,6 +13,7 @@
 #include "wx/utils.h"
 #include "wx/app.h"
 #include "wx/apptrait.h"
+#include "wx/display.h"
 
 #include <ctype.h>
 
@@ -22,6 +23,11 @@
 #include <stdarg.h>
 
 // Get size of display
+size_t wxDisplayBase::GetCount()
+{
+    return 1;
+}
+
 void wxDisplaySize(int *width, int *height)
 {
     // TODO
