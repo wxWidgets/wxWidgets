@@ -184,7 +184,6 @@ WXDLLIMPEXP_DATA_BASE(extern const bool) wxFalse;
  */
 
 #define wxMAKE_UNIQUE_ASSERT_NAME           wxMAKE_UNIQUE_NAME(wxAssert_)
-#define wxMAKE_UNIQUE_ASSERT_NAME2(text)    wxMAKE_UNIQUE_NAME(text)
 
 /*
   The second argument of this macro must be a valid C++ identifier and not a
@@ -196,6 +195,13 @@ WXDLLIMPEXP_DATA_BASE(extern const bool) wxFalse;
 */
 #define wxCOMPILE_TIME_ASSERT(expr, msg) \
     struct wxMAKE_UNIQUE_ASSERT_NAME { unsigned int msg: expr; }
+
+/*
+   When using VC++ 6 with "Edit and Continue" on, the compiler completely
+   mishandles __LINE__ and so wxCOMPILE_TIME_ASSERT() doesn't work, provide a
+   way to make "unique" assert names by specifying a unique prefix explicitly
+ */
+#define wxMAKE_UNIQUE_ASSERT_NAME2(text) wxCONCAT(wxAssert_, text)
 
 #define wxCOMPILE_TIME_ASSERT2(expr, msg, text) \
     struct wxMAKE_UNIQUE_ASSERT_NAME2(text) { unsigned int msg: expr; }
