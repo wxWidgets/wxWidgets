@@ -1236,7 +1236,7 @@ extern wxPyApp *wxPythonApp;
         bool rval=FALSE;                                                        \
         wxPyBeginBlockThreads();                                                \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                          \
-            PyObject* obj = wxPyConstructObject((void*)&a, "wxHtmlTag", 0);     \
+            PyObject* obj = wxPyConstructObject((void*)&a, wxT("wxHtmlTag"), 0);     \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));   \
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -1255,7 +1255,7 @@ extern wxPyApp *wxPythonApp;
         bool found;                                                             \
         wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* obj = wxPyConstructObject((void*)cell, "wxHtmlCell", 0);  \
+            PyObject* obj = wxPyConstructObject((void*)cell, wxT("wxHtmlCell"), 0);  \
             wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(Oii)",obj,x,y));  \
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -1279,8 +1279,8 @@ extern wxPyApp *wxPythonApp;
         bool found;                                                             \
         wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* obj = wxPyConstructObject((void*)cell, "wxHtmlCell", 0);  \
-            PyObject* o2  = wxPyConstructObject((void*)&e, "wxMouseEvent", 0);  \
+            PyObject* obj = wxPyConstructObject((void*)cell, wxT("wxHtmlCell"), 0);  \
+            PyObject* o2  = wxPyConstructObject((void*)&e, wxT("wxMouseEvent"), 0);  \
             wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(OiiO)",obj,x,y,o2));  \
             Py_DECREF(obj);                                                     \
             Py_DECREF(o2);                                                      \
@@ -1615,7 +1615,7 @@ extern wxPyApp *wxPythonApp;
         bool found;                                                             \
         wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* obj = wxPyConstructObject((void*)&a, #Type, 0);           \
+            PyObject* obj = wxPyConstructObject((void*)&a, wxT(#Type), 0);           \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));          \
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -1640,7 +1640,7 @@ extern wxPyApp *wxPythonApp;
         bool found;                                                             \
         wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* obj = wxPyConstructObject((void*)&a, #Type, 0);           \
+            PyObject* obj = wxPyConstructObject((void*)&a, wxT(#Type), 0);           \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));          \
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -1665,7 +1665,7 @@ extern wxPyApp *wxPythonApp;
         bool found;                                                             \
         wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* obj = wxPyConstructObject((void*)&a, #Type, 0);           \
+            PyObject* obj = wxPyConstructObject((void*)&a, wxT(#Type), 0);           \
             rv = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));     \
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -1689,7 +1689,7 @@ extern wxPyApp *wxPythonApp;
         bool rv=FALSE;                                                          \
         wxPyBeginBlockThreads();                                                \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                          \
-            PyObject* obj = wxPyConstructObject((void*)&a, #Type, 0);           \
+            PyObject* obj = wxPyConstructObject((void*)&a, wxT(#Type), 0);           \
             rv = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));     \
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -1799,7 +1799,7 @@ extern wxPyApp *wxPythonApp;
         wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
             PyObject* ro;                                                       \
-            PyObject* obj  = wxPyConstructObject((void*)&e, "wxMouseEvent", 0); \
+            PyObject* obj  = wxPyConstructObject((void*)&e, wxT("wxMouseEvent"), 0); \
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(O)",obj));   \
             if (ro) {                                                           \
                 rval = PyInt_AsLong(ro);                                        \
@@ -1916,7 +1916,7 @@ extern wxPyApp *wxPythonApp;
         bool rv=FALSE;                                                          \
         wxPyBeginBlockThreads();                                                \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                          \
-            PyObject* obj = wxPyConstructObject((void*)a, "wxXmlNode", 0);      \
+            PyObject* obj = wxPyConstructObject((void*)a, wxT("wxXmlNode"), 0);      \
             rv = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));     \
             Py_DECREF(obj);                                                     \
         }                                                                       \
