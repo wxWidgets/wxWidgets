@@ -1190,6 +1190,7 @@ gdiobj.h	X11H
 glcanvas.h	X11H
 icon.h	X11H
 joystick.h	X11H
+mdi.h	X11H
 minifram.h	X11H
 palette.h	X11H
 pen.h	X11H
@@ -1478,6 +1479,7 @@ choice.h	UnivH
 colschem.h	UnivH
 combobox.h	UnivH
 control.h	UnivH
+dialog.h	UnivH
 frame.h	UnivH
 toplevel.h	UnivH
 gauge.h	UnivH

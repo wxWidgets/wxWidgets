@@ -514,6 +514,7 @@ ALL_HEADERS = \
 		x11/glcanvas.h \
 		x11/icon.h \
 		x11/joystick.h \
+		x11/mdi.h \
 		x11/minifram.h \
 		x11/palette.h \
 		x11/pen.h \
@@ -534,6 +535,7 @@ ALL_HEADERS = \
 		univ/colschem.h \
 		univ/combobox.h \
 		univ/control.h \
+		univ/dialog.h \
 		univ/frame.h \
 		univ/gauge.h \
 		univ/inpcons.h \
