@@ -74,3 +74,35 @@ Checking in src/gtk/dcclient.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/gtk/dcclient.cpp,v  <--  dcclient.cpp
 new revision: 1.169; previous revision: 1.168
 
+
+8. UnixWare compilation fixes:
+
+Don't forget to rerun autoconf to regenerate configure!
+
+Checking in configure.in;
+/pack/cvsroots/wxwindows/wxWindows/configure.in,v  <--  configure.in
+new revision: 1.664; previous revision: 1.663
+Checking in setup.h.in;
+/pack/cvsroots/wxwindows/wxWindows/setup.h.in,v  <--  setup.h.in
+new revision: 1.111; previous revision: 1.110
+Checking in src/unix/gsocket.c;
+/pack/cvsroots/wxwindows/wxWindows/src/unix/gsocket.c,v  <--  gsocket.c
+new revision: 1.72; previous revision: 1.71
+
+9. wxSemaphore methods returned incorrect values:
+
+Checking in src/msw/thread.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/thread.cpp,v  <--  thread.cpp
+new revision: 1.62; previous revision: 1.61
+Checking in src/unix/threadpsx.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/unix/threadpsx.cpp,v  <--  threadpsx.cpp
+new revision: 1.62; previous revision: 1.61
+
+10. Unix/OpenGL build fix:
+
+Don't forget to rerun autoconf to regenerate configure!
+
+Checking in configure.in;
+/pack/cvsroots/wxwindows/wxWindows/configure.in,v  <--  configure.in
+new revision: 1.666; previous revision: 1.665
+
