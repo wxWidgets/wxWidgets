@@ -274,6 +274,8 @@ public:
     wxWindow *GetWindow();
     %name(MoveXY)void Move(int x, int y);
     void Move(const wxPoint& pt);
+    %name(SetSizeWH) void SetSize(int width, int height);
+    void SetSize(const wxSize& size);
     void Show(int show = TRUE);
     void Hide();
     void OnSetFocus();

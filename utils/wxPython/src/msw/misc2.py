@@ -71,6 +71,12 @@ class wxCaretPtr :
     def Move(self, *_args, **_kwargs):
         val = apply(misc2c.wxCaret_Move,(self,) + _args, _kwargs)
         return val
+    def SetSizeWH(self, *_args, **_kwargs):
+        val = apply(misc2c.wxCaret_SetSizeWH,(self,) + _args, _kwargs)
+        return val
+    def SetSize(self, *_args, **_kwargs):
+        val = apply(misc2c.wxCaret_SetSize,(self,) + _args, _kwargs)
+        return val
     def Show(self, *_args, **_kwargs):
         val = apply(misc2c.wxCaret_Show,(self,) + _args, _kwargs)
         return val

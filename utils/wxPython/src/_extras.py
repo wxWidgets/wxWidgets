@@ -733,14 +733,17 @@ class wxPyOnDemandOutputWindow:
         self.frame  = None
         self.title  = title
 
+
     def SetParent(self, parent):
         self.parent = parent
+
 
     def OnCloseWindow(self, event):
         if self.frame != None:
             self.frame.Destroy()
         self.frame = None
         self.text  = None
+
 
     # this provides the file-like behaviour
     def write(self, str):
@@ -753,7 +756,10 @@ class wxPyOnDemandOutputWindow:
             EVT_CLOSE(self.frame, self.OnCloseWindow)
         self.text.AppendText(str)
 
+
     def close(self):
+        if self.frame != None:
+            self.frame.Destroy()
         self.frame = None
         self.text  = None
 
@@ -789,18 +795,21 @@ class wxApp(wxPyApp):
     def SetTopWindow(self, frame):
         if self.stdioWin:
             self.stdioWin.SetParent(frame)
-            sys.stdout = self.stdioWin #sys.stderr =
+            sys.stderr = sys.stdout = self.stdioWin
         wxPyApp.SetTopWindow(self, frame)
+
 
     def MainLoop(self):
         wxPyApp.MainLoop(self)
         self.RestoreStdio()
+
 
     def RedirectStdio(self, filename):
         if filename:
             sys.stdout = sys.stderr = open(filename, 'a')
         else:
             self.stdioWin = self.outputWindowClass() # wxPyOnDemandOutputWindow
+
 
     def RestoreStdio(self):
         sys.stdout, sys.stderr = self.saveStdio

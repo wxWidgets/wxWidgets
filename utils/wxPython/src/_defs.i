@@ -23,6 +23,7 @@ class wxBitmap;
 class wxBrush;
 class wxButton;
 class wxCalculateLayoutEvent;
+class wxCaret;
 class wxCheckBox;
 class wxCheckListBox;
 class wxChoice;

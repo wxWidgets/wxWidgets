@@ -485,8 +485,22 @@ class wxWindowPtr(wxEvtHandlerPtr):
         val = apply(windowsc.wxWindow_GetBestSize,(self,) + _args, _kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
+    def SetCaret(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetCaret,(self,) + _args, _kwargs)
+        return val
+    def GetCaret(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetCaret,(self,) + _args, _kwargs)
+        if val: val = wxCaretPtr(val) 
+        return val
     def __repr__(self):
         return "<C wxWindow instance at %s>" % (self.this,)
+    # replaces broken shadow method
+    def GetCaret(self, *_args, **_kwargs):
+        from misc2 import wxCaretPtr
+        val = apply(windowsc.wxWindow_GetCaret,(self,) + _args, _kwargs)
+        if val: val = wxCaretPtr(val)
+        return val
+
 class wxWindow(wxWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxWindow,_args,_kwargs)
@@ -938,6 +952,12 @@ def wxWindow_FromHWND(*_args, **_kwargs):
     val = apply(windowsc.wxWindow_FromHWND,_args,_kwargs)
     if val: val = wxWindowPtr(val)
     return val
+
+wxWindow_NewControlId = windowsc.wxWindow_NewControlId
+
+wxWindow_NextControlId = windowsc.wxWindow_NextControlId
+
+wxWindow_PrevControlId = windowsc.wxWindow_PrevControlId
 
 
 

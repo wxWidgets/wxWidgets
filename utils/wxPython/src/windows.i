@@ -324,6 +324,16 @@ public:
     %pragma(python) addtomethod = "SetDropTarget:_args[0].thisown = 0"
 
     wxSize GetBestSize();
+
+    void SetCaret(wxCaret *caret);
+    wxCaret *GetCaret();
+    %pragma(python) addtoclass = "# replaces broken shadow method
+    def GetCaret(self, *_args, **_kwargs):
+        from misc2 import wxCaretPtr
+        val = apply(windowsc.wxWindow_GetCaret,(self,) + _args, _kwargs)
+        if val: val = wxCaretPtr(val)
+        return val
+"
 };
 
 //%clear int* x, int* y;
@@ -362,6 +372,17 @@ wxWindow* wxWindow_FromHWND(unsigned long hWnd) {
 %}
 #endif
 
+%inline %{
+    int wxWindow_NewControlId() {
+        return wxWindow::NewControlId();
+    }
+    int wxWindow_NextControlId(int id) {
+        return wxWindow::NextControlId(id);
+    }
+    int wxWindow_PrevControlId(int id) {
+        return wxWindow::PrevControlId(id);
+    }
+%}
 
 
 //---------------------------------------------------------------------------
