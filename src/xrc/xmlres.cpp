@@ -1097,7 +1097,7 @@ void wxXmlResourceHandler::SetupWindow(wxWindow *wnd)
     //FIXME : add cursor
 
     if (HasParam(wxT("exstyle")))
-        wnd->SetExtraStyle(GetStyle(wxT("exstyle")));
+        wnd->SetExtraStyle(wnd->GetExtraStyle()|GetStyle(wxT("exstyle")));
     if (HasParam(wxT("bg")))
         wnd->SetBackgroundColour(GetColour(wxT("bg")));
     if (HasParam(wxT("fg")))
