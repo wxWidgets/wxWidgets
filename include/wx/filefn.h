@@ -78,6 +78,9 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
     || ( defined(__MINGW32__) && !defined(__WINE__) && wxCHECK_W32API_VERSION( 0, 5 ) ) \
     || ( defined(__MWERKS__) && defined(__WXMSW__) )
     // functions
+#ifdef __BORLANDC__
+    #define   _tell        tell
+#endif
     #define   wxClose      _close
     #define   wxRead       _read
     #define   wxWrite      _write
@@ -89,7 +92,11 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
     #if wxUSE_UNICODE
         #if wxUSE_UNICODE_MSLU
-            #define   wxOpen       wxMSLU__wopen
+#ifdef __BORLANDC__
+            #define   wxOpen       open
+#else
+            #define   wxOpen       _open
+#endif 
             #define   wxAccess     wxMSLU__waccess
             #define   wxMkDir      wxMSLU__wmkdir
             #define   wxRmDir      wxMSLU__wrmdir
@@ -113,14 +120,16 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
     #define   wxStructStat struct _stat
 
     // constants (unless already defined by the user code)
-    #ifndef O_RDONLY
+    #if !defined(O_RDONLY) && !defined(__BORLANDC__)
         #define   O_RDONLY    _O_RDONLY
         #define   O_WRONLY    _O_WRONLY
         #define   O_RDWR      _O_RDWR
         #define   O_EXCL      _O_EXCL
         #define   O_CREAT     _O_CREAT
         #define   O_BINARY    _O_BINARY
+    #endif
 
+    #ifndef __BORLANDC__
         #define   S_IFMT      _S_IFMT
         #define   S_IFDIR     _S_IFDIR
         #define   S_IFREG     _S_IFREG
