@@ -133,6 +133,15 @@ wxRegisterId (long id)
     wxCurrentId = id + 1;
 }
 
+// for GUI ports this is defined (without any real reason) in src/*/data.cpp
+// files
+#if !wxUSE_GUI
+
+WXDLLEXPORT_DATA(const wxChar *) wxFloatToStringStr = wxT("%.2f");
+WXDLLEXPORT_DATA(const wxChar *) wxDoubleToStringStr = wxT("%.2f");
+
+#endif // wxUSE_GUI
+
 void
 StringToFloat (const wxChar *s, float *number)
 {
