@@ -3941,6 +3941,12 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
 void wxWindowGTK::Update()
 {
     GtkUpdate();
+
+    // when we call Update() we really want to update the window immediately on
+    // screen, even if itmeans flushing the entire queue and hence slowing down
+    // everything -- but it should still be done, it's just that Update() should
+    // be called very rarely
+    gdk_flush();
 }
 
 void wxWindowGTK::GtkUpdate()
