@@ -204,7 +204,6 @@ wxPrintData::~wxPrintData()
 #endif
 }
 
-
 void wxPrintData::ConvertToNative()
 {
 #ifdef __WXMAC__
@@ -258,6 +257,163 @@ bool wxPrintData::Ok() const
 
     return m_nativeData->Ok();
 }
+
+#if WXWIN_COMPATIBILITY_2_4
+
+#include "wx/generic/prntdlgg.h"
+
+wxString wxPrintData::GetPrinterCommand() const
+{
+#if wxUSE_POSTSCRIPT
+    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
+        return ((wxPostScriptPrintNativeData*)m_nativeData)->GetPrinterCommand();
+#endif
+    return wxT("");
+}
+
+wxString wxPrintData::GetPrinterOptions() const
+{
+#if wxUSE_POSTSCRIPT
+    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
+        return ((wxPostScriptPrintNativeData*)m_nativeData)->GetPrinterOptions();
+#endif
+    return wxT("");
+}
+
+wxString wxPrintData::GetPreviewCommand() const
+{
+#if wxUSE_POSTSCRIPT
+    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
+        return ((wxPostScriptPrintNativeData*)m_nativeData)->GetPreviewCommand();
+#endif
+    return wxT("");
+}
+
+wxString wxPrintData::GetFontMetricPath() const
+{
+#if wxUSE_POSTSCRIPT
+    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
+        return ((wxPostScriptPrintNativeData*)m_nativeData)->GetFontMetricPath();
+#endif
+    return wxT("");
+}
+
+double wxPrintData::GetPrinterScaleX() const
+{
+#if wxUSE_POSTSCRIPT
+    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
+        return ((wxPostScriptPrintNativeData*)m_nativeData)->GetPrinterScaleX();
+#endif
+    return 1.0;
+}
+
+double wxPrintData::GetPrinterScaleY() const
+{
+#if wxUSE_POSTSCRIPT
+    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
+        return ((wxPostScriptPrintNativeData*)m_nativeData)->GetPrinterScaleY();
+#endif
+    return 1.0;
+}
+
+long wxPrintData::GetPrinterTranslateX() const
+{
+#if wxUSE_POSTSCRIPT
+    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
+        return ((wxPostScriptPrintNativeData*)m_nativeData)->GetPrinterTranslateX();
+#endif
+    return 0;
+}
+
+long wxPrintData::GetPrinterTranslateY() const
+{
+#if wxUSE_POSTSCRIPT
+    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
+        return ((wxPostScriptPrintNativeData*)m_nativeData)->GetPrinterTranslateY();
+#endif
+    return 0;
+}
+
+void wxPrintData::SetPrinterCommand(const wxString& command)
+{
+#if wxUSE_POSTSCRIPT
+    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
+        ((wxPostScriptPrintNativeData*)m_nativeData)->SetPrinterCommand( command );
+#endif
+}
+
+void wxPrintData::SetPrinterOptions(const wxString& options)
+{
+#if wxUSE_POSTSCRIPT
+    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
+        ((wxPostScriptPrintNativeData*)m_nativeData)->SetPrinterOptions( options );
+#endif
+}
+
+void wxPrintData::SetPreviewCommand(const wxString& command)
+{
+#if wxUSE_POSTSCRIPT
+    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
+        ((wxPostScriptPrintNativeData*)m_nativeData)->SetPreviewCommand( command );
+#endif
+}
+
+void wxPrintData::SetFontMetricPath(const wxString& path)
+{
+#if wxUSE_POSTSCRIPT
+    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
+        ((wxPostScriptPrintNativeData*)m_nativeData)->SetFontMetricPath( path );
+#endif
+}
+
+void wxPrintData::SetPrinterScaleX(double x)
+{
+#if wxUSE_POSTSCRIPT
+    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
+        ((wxPostScriptPrintNativeData*)m_nativeData)->SetPrinterScaleX( x );
+#endif
+}
+
+void wxPrintData::SetPrinterScaleY(double y)
+{
+#if wxUSE_POSTSCRIPT
+    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
+        ((wxPostScriptPrintNativeData*)m_nativeData)->SetPrinterScaleY( y );
+#endif
+}
+
+void wxPrintData::SetPrinterScaling(double x, double y)
+{
+#if wxUSE_POSTSCRIPT
+    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
+        ((wxPostScriptPrintNativeData*)m_nativeData)->SetPrinterScaling( x, y );
+#endif
+}
+
+void wxPrintData::SetPrinterTranslateX(long x)
+{
+#if wxUSE_POSTSCRIPT
+    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
+        ((wxPostScriptPrintNativeData*)m_nativeData)->SetPrinterTranslateX( x );
+#endif
+}
+
+void wxPrintData::SetPrinterTranslateY(long y)
+{
+#if wxUSE_POSTSCRIPT
+    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
+        ((wxPostScriptPrintNativeData*)m_nativeData)->SetPrinterTranslateY( y );
+#endif
+}
+
+void wxPrintData::SetPrinterTranslation(long x, long y)
+{
+#if wxUSE_POSTSCRIPT
+    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
+        ((wxPostScriptPrintNativeData*)m_nativeData)->SetPrinterTranslation( x, y );
+#endif
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // Print dialog data

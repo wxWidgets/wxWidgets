@@ -217,6 +217,29 @@ public:
     
     void operator=(const wxPrintData& data);
 
+#if WXWIN_COMPATIBILITY_2_4
+    // PostScript-specific data
+    wxString GetPrinterCommand() const;
+    wxString GetPrinterOptions() const;
+    wxString GetPreviewCommand() const;
+    wxString GetFontMetricPath() const;
+    double GetPrinterScaleX() const;
+    double GetPrinterScaleY() const;
+    long GetPrinterTranslateX() const;
+    long GetPrinterTranslateY() const;
+
+    void SetPrinterCommand(const wxString& command);
+    void SetPrinterOptions(const wxString& options);
+    void SetPreviewCommand(const wxString& command);
+    void SetFontMetricPath(const wxString& path);
+    void SetPrinterScaleX(double x);
+    void SetPrinterScaleY(double y);
+    void SetPrinterScaling(double x, double y);
+    void SetPrinterTranslateX(long x);
+    void SetPrinterTranslateY(long y);
+    void SetPrinterTranslation(long x, long y);
+#endif
+
     // Convert between wxPrintData and native data
     void ConvertToNative();
     void ConvertFromNative();

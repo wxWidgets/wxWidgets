@@ -247,6 +247,23 @@ wxPrintNativeDataBase::wxPrintNativeDataBase()
 }
 
 //----------------------------------------------------------------------------
+// wxPrintFactoryModule
+//----------------------------------------------------------------------------
+
+class wxPrintFactoryModule: public wxModule
+{
+public:
+    wxPrintFactoryModule() {}
+    bool OnInit() { return true; }
+    void OnExit() { wxPrintFactory::SetPrintFactory( NULL ); }
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxPrintFactoryModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxPrintFactoryModule, wxModule)
+
+//----------------------------------------------------------------------------
 // wxPrinterBase
 //----------------------------------------------------------------------------
 
