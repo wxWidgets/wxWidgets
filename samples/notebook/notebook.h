@@ -1,96 +1,124 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        notebook.h
-// Purpose:     wxNotebook demo
+// Name:        samples/notebook/notebook.h
+// Purpose:     a sample demonstrating notebook usage
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Dimitri Schoolwerth
 // Created:     25/10/98
 // RCS-ID:      $Id$
-// Copyright:   (c)
-// Licence:     wxWindows licence
+// Copyright:   (c) 1998-2002 wxWindows team
+// License:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/notebook.h"
 
 // Define a new application
-class MyApp: public wxApp
+class MyApp : public wxApp
 {
 public:
     bool OnInit();
-    void InitTabView(wxNotebook* notebook, wxWindow* window);
-
-    wxButton*   m_okButton;
-    wxButton*   m_cancelButton;
-    wxButton*   m_addPageButton, *m_insertPageButton;
-    wxButton*   m_nextPageButton;
 };
 
 DECLARE_APP(MyApp)
 
-#if USE_TABBED_DIALOG
-
-class MyDialog: public wxDialog
+//
+class MyNotebook : public wxNotebook
 {
 public:
-    MyDialog(wxWindow* parent, const wxWindowID id, const wxString& title,
-        const wxPoint& pos, const wxSize& size, const long windowStyle = wxDEFAULT_DIALOG_STYLE);
+    MyNotebook(wxWindow *parent, wxWindowID id = -1,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, long style = 0);
 
-    void OnOK(wxCommandEvent& event);
-    void OnCloseWindow(wxCloseEvent& event);
-    void Init();
+    void CreateInitialPages();
 
-protected:
-    wxNotebook* m_notebook;
-
-    DECLARE_EVENT_TABLE()
+    int GetIconIndex() const;
 };
 
-#else // USE_TABBED_DIALOG
-
-class MyFrame: public wxFrame
+//
+class MyFrame : public wxFrame
 {
 public:
-    MyFrame(wxFrame* parent, const wxWindowID id, const wxString& title,
-        const wxPoint& pos, const wxSize& size, const long windowStyle = wxDEFAULT_FRAME_STYLE);
+    MyFrame(const wxString& title, const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE);
 
-    void OnOK(wxCommandEvent& event);
-    void OnCloseWindow(wxCloseEvent& event);
-    void OnAddPage(wxCommandEvent& event);
-    void OnInsertPage(wxCommandEvent& event);
-    void OnNextPage(wxCommandEvent& event);
-    void OnDeletePage(wxCommandEvent& event);
+    virtual ~MyFrame();
+
+    // Recreates the notebook with the same pages, but with possibly
+    // a different orientation and optionally with images.
+    void ReInitNotebook();
+
+    void CreateImageList();
+
+    void OnCheckOrRadioBox(wxCommandEvent& event);
+
+    void OnButtonAddPage(wxCommandEvent& event);
+    void OnButtonInsertPage(wxCommandEvent& event);
+    void OnButtonDeletePage(wxCommandEvent& event);
+    void OnButtonNextPage(wxCommandEvent& event);
+
+    void OnButtonExit(wxCommandEvent& event);
+
+    void OnNotebook(wxNotebookEvent& event);
+
     void OnIdle(wxIdleEvent& event);
 
-    void Init();
 
-protected:
-    wxNotebook*     m_notebook;
-    wxPanel*        m_panel; // Panel containing notebook and OK/Cancel/Help
+private:
+    wxLog *m_logTargetOld;
+
+
+    // Controls
+
+    wxPanel *m_panel; // Panel containing notebook and other controls
+
+    wxRadioBox *m_radioOrient;
+    wxCheckBox *m_chkShowImages;
+
+    wxButton *m_btnAddPage;
+    wxButton *m_btnInsertPage;
+    wxButton *m_btnDeletePage;
+    wxButton *m_btnNextPage;
+    wxButton *m_btnExit;
+
+    MyNotebook *m_notebook;
+
+    // Log window
+    wxTextCtrl *m_text;
+
+
+    // Sizers
+
+    // The frame's sizer. Consists of m_sizerTop and the log window
+    // at the bottom.
+    wxBoxSizer *m_sizerFrame;
+
+    // Sizer that contains the notebook and controls on the left
+    wxBoxSizer *m_sizerTop;
+
+    // Sizer for m_notebook
+    wxNotebookSizer *m_sizerNotebook;
+
+    wxImageList *m_imageList;
 
     DECLARE_EVENT_TABLE()
 };
 
-#endif // USE_TABBED_DIALOG
+enum ID_CONTROLS
+{
+    ID_RADIO_ORIENT = wxID_HIGHEST,
+    ID_CHK_SHOWIMAGES,
+    ID_BTN_ADD_PAGE,
+    ID_BTN_INSERT_PAGE,
+    ID_BTN_DELETE_PAGE,
+    ID_BTN_NEXT_PAGE,
+    ID_NOTEBOOK
+};
 
-// File ids
-#define TEST_ABOUT          2
-
-// Tab ids
-#define TEST_TAB_DOG        1
-#define TEST_TAB_CAT        2
-#define TEST_TAB_GOAT       3
-#define TEST_TAB_GUINEAPIG  4
-#define TEST_TAB_ANTEATER   5
-#define TEST_TAB_HUMMINGBIRD 6
-#define TEST_TAB_SHEEP      7
-#define TEST_TAB_COW        8
-#define TEST_TAB_HORSE      9
-#define TEST_TAB_PIG        10
-#define TEST_TAB_OSTRICH    11
-#define TEST_TAB_AARDVARK   12
-
-#define ID_NOTEBOOK         1000
-#define ID_ADD_PAGE         1200
-#define ID_DELETE_PAGE      1201
-#define ID_NEXT_PAGE        1202
-#define ID_INSERT_PAGE      1203
-
+// notebook orientations
+enum ORIENT
+{
+    ORIENT_TOP,
+    ORIENT_BOTTOM,
+    ORIENT_LEFT,
+    ORIENT_RIGHT,
+    ORIENT_MAX
+};
