@@ -65,6 +65,7 @@
 
 //-----------------------------------------
 // Commands that can be bound to keystrokes
+
 %(CMDS)s
 
 
