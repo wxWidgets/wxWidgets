@@ -727,6 +727,11 @@ xpm:	$(CFG)
 	make -f makefile.bcc -DCFG=$(CFG) -DFINAL=$(FINAL) -DWXWIN=$(WXDIR) -DDEBUG=$(DEBUG)
 	cd $(WXDIR)\src\msw
 
+clean_xpm:	$(CFG)
+	cd $(WXDIR)\src\xpm
+	make -f makefile.bcc clean
+	cd $(WXDIR)\src\msw
+
 png:    $(CFG)
         cd $(WXDIR)\src\png
         make -f makefile.bcc

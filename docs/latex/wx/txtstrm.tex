@@ -13,9 +13,10 @@ Operator >> is overloaded and you can use this class like a standard C++ iostrea
 Note, however, that the arguments are the fixed size types wxUint32, wxInt32 etc
 and on a typical 32-bit computer, none of these match to the "long" type (wxInt32
 is defined as int on 32-bit architectures) so that you cannot use long. To avoid
-problems (here and elsewhere), make use of the wxInt32, wxUint32, etc types.
+problems (here and elsewhere), make use of wxInt32, wxUint32 and similar types.
 
 For example:
+
 \begin{verbatim}
   wxFileInputStream input( "mytext.txt" );
   wxTextInputStream text( input );
@@ -79,7 +80,7 @@ Reads a double (IEEE encoded) from the stream.
 
 \func{wxString}{wxTextInputStream::ReadString}{\void}
 
-Reads a line from the stream. A line is a string which ends with
+Reads a line from the stream. A line is a string which ends with 
 $\backslash$n or $\backslash$r$\backslash$n or $\backslash$r.
 
 % ----------------------------------------------------------------------------
@@ -92,6 +93,7 @@ This class provides functions that write text datas using an output stream.
 So, you can write {\it text} floats, integers.
 
 You can also simulate the C++ cout class:
+
 \begin{verbatim}
   wxFFileOutputStream output( stderr );
   wxTextOutputStream cout( output );
@@ -117,7 +119,7 @@ be available.
 
 \docparam{stream}{The output stream.}
 
-\docparam{mode}{The end-of-line mode. One of {\bf wxEOL\_NATIVE}, {\bf wxEOL\_DOS}, {\bf wxEOL\_MAC} or {\bf wxEOL\_UNIX}.}
+\docparam{mode}{The end-of-line mode. One of {\bf wxEOL\_NATIVE}, {\bf wxEOL\_DOS}, {\bf wxEOL\_MAC} and {\bf wxEOL\_UNIX}.}
 
 \membersection{wxTextOutputStream::\destruct{wxTextOutputStream}}
 
@@ -129,13 +131,13 @@ Destroys the wxTextOutputStream object.
 
 \func{wxEOL}{wxTextOutputStream::GetMode}{\void}
 
-Returns the end-of-line mode. One of {\bf wxEOL\_DOS}, {\bf wxEOL\_MAC} or {\bf wxEOL\_UNIX}.
+Returns the end-of-line mode. One of {\bf wxEOL\_DOS}, {\bf wxEOL\_MAC} and {\bf wxEOL\_UNIX}.
 
 \membersection{wxTextOutputStream::SetMode}
 
 \func{void}{wxTextOutputStream::SetMode}{{\param wxEOL}{ mode = wxEOL\_NATIVE}}
 
-Set the end-of-line mode. One of {\bf wxEOL\_NATIVE}, {\bf wxEOL\_DOS}, {\bf wxEOL\_MAC} or {\bf wxEOL\_UNIX}.
+Set the end-of-line mode. One of {\bf wxEOL\_NATIVE}, {\bf wxEOL\_DOS}, {\bf wxEOL\_MAC} and {\bf wxEOL\_UNIX}.
 
 \membersection{wxTextOutputStream::Write8}
 
@@ -165,6 +167,6 @@ Writes the double {\it f} to the stream using the IEEE format.
 
 \func{virtual void}{wxTextOutputStream::WriteString}{{\param const wxString\& }{string}}
 
-Writes {\it string} as a line. Depending on the end-of-line mode, it adds
+Writes {\it string} as a line. Depending on the end-of-line mode, it adds 
 $\backslash$n, $\backslash$r or $\backslash$r$\backslash$n.
 

@@ -513,6 +513,9 @@
 
 #undef  wxUSE_DEBUG_NEW_ALWAYS
 #define wxUSE_DEBUG_NEW_ALWAYS          0
+
+#undef  wxUSE_GLCANVAS
+#define wxUSE_GLCANVAS                  0
 #endif
 
 // MFC duplicates these operators
@@ -582,12 +585,21 @@
 #define wxUSE_NEW_GRID            0
 #endif
 
+#if defined(__BORLANDC__) && (__BORLANDC__ < 0x500)
+// BC++ 4.0 can't compile JPEG library
+#undef wxUSE_LIBJPEG
+#define wxUSE_LIBJPEG 0
+#endif
+
 #if defined(__WXMSW__) && defined(__WATCOMC__)
 #undef wxUSE_LIBJPEG
 #define wxUSE_LIBJPEG 0
 
 #undef wxUSE_LIBTIFF
 #define wxUSE_LIBTIFF 0
+
+#undef  wxUSE_GLCANVAS
+#define wxUSE_GLCANVAS 0
 #endif
 
 #if defined(__WXMSW__) && !defined(__WIN32__)
@@ -624,6 +636,9 @@
 
 #undef wxUSE_PCX
 #define wxUSE_PCX 0
+
+#undef wxUSE_GLCANVAS
+#define wxUSE_GLCANVAS 0
 
 #endif
 

@@ -80,6 +80,8 @@ contrib/samples/mmedia/Makefile.in
 contrib/samples/stc/Makefile.in
 
 descrip.mms
+lib\vms.opt
+lib\vms_gtk.opt
 contrib\samples\mmedia\descrip.mms
 deliver\wx\src\common\descrip.mms
 deliver\wx\src\png\scripts\descrip.mms

@@ -48,18 +48,21 @@ No base class
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxTempFile::wxTempFile}\label{wxtempfilewxtempfilector}
+
 \func{}{wxTempFile}{\void}
 
 Default constructor - \helpref{Open}{wxtempfileopen} must be used to open the
 file.
 
 \membersection{wxTempFile::wxTempFile}\label{wxtempfilewxtempfile}
+
 \func{}{wxTempFile}{\param{const wxString\& }{strName}}
 
-Associates wxTempFile with the file to be replaced and opens it. You should use
+Associates wxTempFile with the file to be replaced and opens it. You should use 
 \helpref{IsOpened}{wxtempfileisopened} to verify if the constructor succeeded.
 
 \membersection{wxTempFile::Open}\label{wxtempfileopen}
+
 \func{bool}{Open}{\param{const wxString\& }{strName}}
 
 Open the temporary file (strName is the name of file to be replaced), returns
@@ -71,16 +74,19 @@ TRUE on success, FALSE if an error occured.
 Returns TRUE if the file was successfully opened.
 
 \membersection{wxTempFile::Write}\label{wxtempfilewrite}
+
 \func{bool}{Write}{\param{const void }{*p}, \param{size\_t }{n}}
 
 Write to the file, return TRUE on success, FALSE on failure.
 
 \membersection{wxTempFile::Write}\label{wxtempfilewrites}
+
 \func{bool}{Write}{\param{const wxString\& }{str}}
 
 Write to the file, return TRUE on success, FALSE on failure.
 
 \membersection{wxTempFile::Commit}\label{wxtempfilecommit}
+
 \func{bool}{Commit}{\void}
 
 Validate changes: deletes the old file of name m\_strName and renames the new
@@ -90,12 +96,14 @@ either the old file couldn't be deleted or that the new file couldn't be renamed
 to the old name.
 
 \membersection{wxTempFile::Discard}\label{wxtempfilediscard}
+
 \func{void}{Discard}{\void}
 
 Discard changes: the old file contents is not changed, temporary file is
 deleted.
 
 \membersection{wxTempFile::\destruct{wxTempFile}}\label{wxtempfiledtor}
+
 \func{}{\destruct{wxTempFile}}{\void}
 
 Destructor calls \helpref{Discard()}{wxtempfilediscard} if temporary file

@@ -33,7 +33,7 @@ you can still use Ctrl-Enter to pass to the next control from the keyboard.}
 \twocolitem{\windowstyle{wxHSCROLL}}{A horizontal scrollbar will be created. No effect under GTK+.}
 \end{twocollist}
 
-See also \helpref{window styles overview}{windowstyles} and
+See also \helpref{window styles overview}{windowstyles} and 
 \helpref{wxTextCtrl::wxTextCtrl}{wxtextctrlconstr}.
 
 \wxheading{Remarks}
@@ -320,8 +320,8 @@ consisting of the from and to values.}
 \constfunc{wxString}{GetValue}{\void}
 
 Gets the contents of the control. Notice that for a multiline text control,
-the lines will be separated by (Unix-style) '\\n' characters, even under
-Windows where they are separated by "\\r\\n" sequence in the native control.
+the lines will be separated by (Unix-style) $\backslash$n characters, even under
+Windows where they are separated by a $\backslash$r$\backslash$n sequence in the native control.
 
 \membersection{wxTextCtrl::IsModified}\label{wxtextctrlismodified}
 
@@ -384,7 +384,7 @@ is to load the first dropped file into the control.
 
 \wxheading{Remarks}
 
-This is not yet implemented for the GTK.
+This is not implemented on non-Windows platforms.
 
 \wxheading{See also}
 
@@ -476,8 +476,7 @@ TRUE if the operation was successful, FALSE otherwise.
 
 \func{virtual void}{SetEditable}{\param{const bool}{ editable}}
 
-Makes the text item editable or read-only, overriding the {\bf wxTE\_READONLY}
-flag.
+Makes the text item editable or read-only, overriding the {\bf wxTE\_READONLY} flag.
 
 \wxheading{Parameters}
 

@@ -456,7 +456,7 @@ case-sensitive comparison.
 \func{size\_t}{Strlen}{\param{const char *}{ p}}
 
 This is a safe version of standard function {\it strlen()}: it does exactly the
-same thing (i.e. returns the length of the string) except that it returns 0 if
+same thing (i.e. returns the length of the string) except that it returns 0 if 
 {\it p} is the NULL pointer.
 
 \membersection{::wxGetTranslation}\label{wxgettranslation}
@@ -465,7 +465,7 @@ same thing (i.e. returns the length of the string) except that it returns 0 if
 
 This function returns the translation of string {\it str} in the current 
 \helpref{locale}{wxlocale}. If the string is not found in any of the loaded
-message catalogs (see \helpref{i18n overview}{internationalization}), the
+message catalogs (see \helpref{internationalization overview}{internationalization}), the
 original string is returned. In debug build, an error message is logged - this
 should help to find the strings which were not yet translated. As this function
 is used very often, an alternative syntax is provided: the \_() macro is

@@ -341,7 +341,7 @@ OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
 
 default:	wx
 
-wx:    $(CFG) $(LNKCFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
+wx:    $(CFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
 
 all:	all_libs all_execs
 
@@ -991,13 +991,10 @@ $(DEBUG_FLAGS)
 $(WIN95FLAG)
 ! $(CFG)
 
-$(LNKCFG): makefile.b32
-	copy &&!
--L$(WXLIBDIR);$(WXLIBDIR2);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk
-! $(LNKCFG)
-
-#-I$(WXDIR)\src\common\wxxpm\libxpm.34b\lib
-# -Oxt
+#$(LNKCFG): makefile.b32
+#	copy &&!
+#-L$(WXLIBDIR);$(WXLIBDIR2);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk
+#! $(LNKCFG)
 
 clean: $(PERIPH_CLEAN_TARGET)
     -erase $(LIBTARGET)

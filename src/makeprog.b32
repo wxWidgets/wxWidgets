@@ -15,12 +15,17 @@ WXDIR = $(WXWIN)
 
 LIBS=$(WXLIB) $(EXTRALIBS) cw32mt import32 ole2w32 winpng zlib jpeg xpm tiff odbc32
 
+# Note: you may need to remove some libraries for earlier versions of BC++, as below
+#LIBS=$(WXLIB) $(EXTRALIBS) cw32mt import32 ole2w32 winpng zlib xpm tiff
+
 !if "$(FINAL)" == "0"
-LINKFLAGS=/v /c /Tpe +$(LNKCFG) $(EXTRALINKFLAGS)
+#LINKFLAGS=/v /c /Tpe $(LNKCFG) $(EXTRALINKFLAGS)
+LINKFLAGS=/v /c /Tpe -L$(WXLIBDIR);$(WXLIBDIR2);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk $(EXTRALINKFLAGS)
 OPT = -Od
 DEBUG_FLAGS= -v
 !else
-LINKFLAGS=/Tpe +$(LNKCFG) $(EXTRALINKFLAGS)
+#LINKFLAGS=/Tpe +$(LNKCFG) $(EXTRALINKFLAGS)
+LINKFLAGS=/Tpe -L$(WXLIBDIR);$(WXLIBDIR2);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk $(EXTRALINKFLAGS)
 OPT = -Od
 DEBUG_FLAGS =
 !endif

@@ -95,7 +95,7 @@ THISDIR = $(WXDIR)\src\msw
 # Please set these according to the settings in wx_setup.h, so we can include
 # the appropriate libraries in wx.lib
 USE_CTL3D=1
-USE_XPM_IN_MSW=0
+USE_XPM_IN_MSW=1
 
 PERIPH_LIBS=
 PERIPH_TARGET=
@@ -224,19 +224,15 @@ all_execs:
     make -f makefile.bcc all_execs
     cd $(WXDIR)\src\msw
 
-all_libs:
-    cd $(WXDIR)\src\msw
-    make -f makefile.bcc dib fafa gauge hytext itsy prologio rcparser wx wxgraph\
-          wxstring wxtree mfutils # wxxpm
-
-all_contribs:
-    cd $(WXDIR)\src\msw
-    make -f makefile.bcc fafa wxstring itsy gauge # wxxpm
-
 # CONTRIB
-wxxpm:	$(CFG)
+xpm:	$(CFG)
 	cd $(WXDIR)\src\xpm
 	make -f makefile.bcc -DCFG=$(CFG) -DFINAL=$(FINAL) -DWXWIN=$(WXDIR) -DDEBUG=$(DEBUG)
+	cd $(WXDIR)\src\msw
+
+clean_xpm:	$(CFG)
+	cd $(WXDIR)\src\xpm
+	make -f makefile.bcc clean
 	cd $(WXDIR)\src\msw
 
 png:    $(CFG)

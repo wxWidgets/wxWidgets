@@ -242,7 +242,8 @@ recompile wxWindows. The same applies if compiling using the IDE.
 
 Note (5): BC++ 4.5 (not 5.0) trips up over jdmerge.c in the JPEG folder;
 you will therefore need to set wxUSE_LIBJPEG to 0 in setup.h and remove
-the jpeg target from src\msw\makefile.b32.
+the jpeg target from src\msw\makefile.b32, and remove jpeg from
+src\makeprog.b32.
 
 Note (6): If using C++Builder 4 and above (BC++ 5.4 and above), change LINK=tlink32 to
 LINK=ilink32 in src\makeb32.env. You may also need to disable
@@ -372,7 +373,8 @@ improving the compiler.
 Cygwin b19/b20/Mingw32 compilation
 ----------------------------------
 
-wxWindows 2 supports Cygwin (formerly GnuWin32) b19, b20, Mingw32, and Mingw32/EGCS.
+wxWindows 2 supports Cygwin (formerly GnuWin32) b19, b20, Mingw32,
+and Mingw32/EGCS.
 
 Thanks are due to Keith Garry Boyce (garp@opustel.com) and Cygnus for making
 it all possible.
@@ -395,16 +397,19 @@ Here are the steps required:
   If using Mingw32 2.8.1, see also see mingw32.txt in this directory
   (docs/msw) about a fix that has to be applied to a Mingw32 header file.
 
-  If using Mingw32 2.95 with wxWindows 2.1 or above, and wish to use OLE, you
-  should hand-patch in Mingw32-gcc295.patches (located in the top-level of the
-  wxWindows 2 installation).
+  If using Mingw32 2.95 and below with wxWindows 2.1 or above, you
+  must hand-patch in Mingw32-gcc295.patches (located in the top-level of the
+  wxWindows 2 installation). Mingw32 2.95.2 and above contain the
+  fixes already.
 
 - Modify the file wx/src/cygnus.bat (or mingw32.bat or mingegcs.bat)
   to set up appropriate variables, if necessary mounting drives.
   Run it before compiling.
 
 - For Cygwin, make sure there's a \tmp directory on your
-  Windows drive or bison will crash.
+  Windows drive or bison will crash (actually you don't need this
+  for ordinary wxWindows compilation: a pre-generated .c file is
+  supplied).
 
 - Edit wx/src/makeg95.env and set the MINGW32 variable at the top of
   the file to either 1 (you have Mingw32) or 0 (you have Cygwin32).

@@ -98,7 +98,7 @@ is not stopped during this function execution, so the message handlers may be
 called from inside it!
 
 Delete() may be called for thread in any state: running, paused or even not yet
-created. Moreover, it must be called if \helpref{Create}{wxthreadcreate} or
+created. Moreover, it must be called if \helpref{Create}{wxthreadcreate} or 
 \helpref{Run}{wxthreadrun} failed for a detached thread to free the memory
 occupied by the thread object (it will be done in the destructor for joinable
 threads).

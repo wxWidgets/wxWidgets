@@ -190,7 +190,7 @@ or {\tt wxBOTH}.}
 
 This methods provides for a way to center top level windows over their
 parents instead of the entire screen.  If there is no parent or if the
-window is not a top level window, then behaviour is the same as
+window is not a top level window, then behaviour is the same as 
 \helpref{wxWindow::Centre}{wxwindowcentre}.
 
 \wxheading{See also}
@@ -536,7 +536,7 @@ Returns the associated drop target, which may be NULL.
 
 \wxheading{See also}
 
-\helpref{wxWindow::SetDropTarget}{wxwindowsetdroptarget},
+\helpref{wxWindow::SetDropTarget}{wxwindowsetdroptarget}, 
 \helpref{Drag and drop overview}{wxdndoverview}
 
 \membersection{wxWindow::GetEventHandler}\label{wxwindowgeteventhandler}
@@ -616,7 +616,7 @@ Each window has an integer identifier. If the application has not provided one
 
 \wxheading{See also}
 
-\helpref{wxWindow::SetId}{wxwindowsetid}\rtfsp
+\helpref{wxWindow::SetId}{wxwindowsetid},\rtfsp
 \helpref{Window identifiers}{windowids}
 
 \membersection{wxWindow::GetLabel}
@@ -1000,7 +1000,7 @@ Note that the ASCII values do not have explicit key codes: they are passed as AS
 values.
 
 Note that not all keypresses can be intercepted this way. If you wish to intercept modifier
-keypresses, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or
+keypresses, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or 
 \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}.
 
 Most, but not all, windows allow keypresses to be intercepted.
@@ -1037,7 +1037,7 @@ values.
 
 This function is only relevant to top-level windows (frames and dialogs), and under
 Windows only. Under GTK the normal EVT\_CHAR\_ event has the functionality, i.e.
-you can intercepts it and if you don't call \helpref{wxEvent::Skip}{wxeventskip}
+you can intercepts it and if you don't call \helpref{wxEvent::Skip}{wxeventskip} 
 the window won't get the event.
 
 \wxheading{See also}
@@ -1170,7 +1170,8 @@ Called when the background of the window needs to be erased.
 
 \wxheading{Remarks}
 
-This event is only generated under Windows. It is therefore recommended that
+Under non-Windows platforms, this event is simulated (simply generated just before the
+paint event) and may cause flicker. It is therefore recommended that
 you set the text background colour explicitly in order to prevent flicker.
 The default background colour under GTK is grey.
 
@@ -1199,7 +1200,7 @@ use the EVT\_KEY\_DOWN macro in an event table definition. Your {\bf OnKeyDown} 
 default function to achieve default keypress functionality.
 
 Note that not all keypresses can be intercepted this way. If you wish to intercept special
-keys, such as shift, control, and function keys, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or
+keys, such as shift, control, and function keys, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or 
 \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}.
 
 Most, but not all, windows allow keypresses to be intercepted.
@@ -1228,7 +1229,7 @@ use the EVT\_KEY\_UP macro in an event table definition. Your {\bf OnKeyUp} hand
 default function to achieve default keypress functionality.
 
 Note that not all keypresses can be intercepted this way. If you wish to intercept special
-keys, such as shift, control, and function keys, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or
+keys, such as shift, control, and function keys, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or 
 \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}.
 
 Most, but not all, windows allow key up events to be intercepted.
@@ -1755,8 +1756,8 @@ Sets the accelerator table for this window. See \helpref{wxAcceleratorTable}{wxa
 \func{void}{SetAutoLayout}{\param{bool}{ autoLayout}}
 
 Determines whether the \helpref{wxWindow::Layout}{wxwindowlayout} function will
-be called automatically when the window is resized. Use in connection with
-\helpref{wxWindow::SetSizer}{wxwindowsetsizer} and
+be called automatically when the window is resized. Use in connection with 
+\helpref{wxWindow::SetSizer}{wxwindowsetsizer} and 
 \helpref{wxWindow::SetConstraints}{wxwindowsetconstraints} for layouting subwindows.
 
 \wxheading{Parameters}
@@ -1909,7 +1910,7 @@ If the window already has a drop target, it is deleted.
 
 \wxheading{See also}
 
-\helpref{wxWindow::GetDropTarget}{wxwindowgetdroptarget},
+\helpref{wxWindow::GetDropTarget}{wxwindowgetdroptarget}, 
 \helpref{Drag and drop overview}{wxdndoverview}
 
 \membersection{wxWindow::SetExtraStyle}\label{wxwindowsetextrastyle}
@@ -2310,7 +2311,7 @@ Sets the style of the window. Please note that some styles cannot be changed
 after the window creation and that \helpref{Refresh()}{wxwindowrefresh} might
 be called after changing the others for the change to take place immediately.
 
-See \helpref{Windowstyles}{windowstyles} for more information about flags.
+See \helpref{Window styles}{windowstyles} for more information about flags.
 
 \wxheading{See also}
 

@@ -398,14 +398,14 @@ Returns the root item for the tree control.
 \constfunc{int}{GetItemSelectedImage}{\param{const wxTreeItemId\& }{item}}
 
 Gets the selected item image (this function is obsolete, use 
-{\tt GetItemImage(item, wxTreeItemIcon\_Selected} instead).
+{\tt GetItemImage(item, wxTreeItemIcon\_Selected}) instead).
 
 \membersection{wxTreeCtrl::GetSelection}\label{wxtreectrlgetselection}
 
 \constfunc{wxTreeItemId}{GetSelection}{\void}
 
 Returns the selection, or an invalid item if there is no selection.
-This function only works with the controls without wxTR\_MULTIPLE style, use
+This function only works with the controls without wxTR\_MULTIPLE style, use 
 \helpref{GetSelections}{wxtreectrlgetselections} for the controls which do have
 this style.
 
@@ -595,14 +595,14 @@ usage and loading time.
 \func{void}{SetItemImage}{\param{const wxTreeItemId\&}{ item},
  \param{int }{image}, \param{wxTreeItemIcon }{which = wxTreeItemIcon\_Normal}}
 
-Sets the specified item image. See \helpref{GetItemImage}{wxtreectrlgetitemimage}
-for the description of {\it which} parameter.
+Sets the specified item image. See \helpref{GetItemImage}{wxtreectrlgetitemimage} 
+for the description of the {\it which} parameter.
 
 \membersection{wxTreeCtrl::SetItemSelectedImage}\label{wxtreectrlsetitemselectedimage}
 
 \func{void}{SetItemSelectedImage}{\param{const wxTreeItemId\&}{ item}, \param{int }{selImage}}
 
-Sets the selected item image (this function is obsolete, use {\tt SetItemImage(item, wxTreeItemIcon\_Selected} instead).
+Sets the selected item image (this function is obsolete, use {\tt SetItemImage(item, wxTreeItemIcon\_Selected}) instead).
 
 \membersection{wxTreeCtrl::SetItemText}\label{wxtreectrlsetitemtext}
 
@@ -626,9 +626,9 @@ Sets the state image list (from which application-defined state images are taken
 
 \func{void}{SortChildren}{\param{const wxTreeItemId\&}{ item}}
 
-Sorts the children of the given item using
+Sorts the children of the given item using 
 \helpref{OnCompareItems}{wxtreectrloncompareitems} method of wxTreeCtrl. You
-should override that method to change the sort order (default is ascending
+should override that method to change the sort order (the default is ascending
 alphabetical order).
 
 \wxheading{See also}
@@ -651,7 +651,7 @@ Removes the selection from the currently selected item (if any).
 
 \func{void}{UnselectAll}{\void}
 
-This function either behaves the same as \helpref{Unselect}{wxtreectrlunselect}
+This function either behaves the same as \helpref{Unselect}{wxtreectrlunselect} 
 if the control doesn't have wxTR\_MULTIPLE style, or removes the selection from
 all items if it does have this style.
 

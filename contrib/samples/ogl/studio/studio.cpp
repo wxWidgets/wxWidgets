@@ -112,10 +112,16 @@ bool csApp::OnInit(void)
   (void) new wxDocTemplate(m_docManager, "Diagram", "*.dia", "", "dia", "Diagram Doc", "Diagram View",
           CLASSINFO(csDiagramDocument), CLASSINFO(csDiagramView));
 
-  // Create the main frame window
+  // Create the main frame window.
+  // Note that we use a frame style that doesn't have wxCLIP_CHILDREN in it
+  // (the default frame style contains wxCLIP_CHILDREN), otherwise the client
+  // area doesn't refresh properly when we change its position, under Windows.
+
+#define wxDEFAULT_FRAME_STYLE_NO_CLIP \
+  (wxSYSTEM_MENU | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxTHICK_FRAME | wxSYSTEM_MENU | wxCAPTION)
 
   csFrame* frame = new csFrame(m_docManager, NULL, -1, "OGL Studio", m_mainFramePos, m_mainFrameSize,
-   wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
+   wxDEFAULT_FRAME_STYLE_NO_CLIP | wxHSCROLL | wxVSCROLL);
 
   // Give it an icon
   frame->SetIcon(wxICON(studio));
