@@ -7,7 +7,7 @@
         <include file="common.bkl"/>
     </if>
     
-    <set var="CONTRIB_HDR_DIR">$(SRCDIR)/../../include</set>
+    <set var="CONTRIB_HDR_DIR" overwrite="0">$(SRCDIR)/../../include</set>
     
     <!-- =============================================================== -->
     <!--                      Contrib lib helpers:                       -->
