@@ -85,8 +85,7 @@ public:
   void ReadConstraints(wxExpr *clause, wxExprDatabase *database);
 #endif
   // Does the copying for this object
-  void Copy(wxCompositeShape& copy);
-  wxShape *PrivateCopy();
+  void Copy(wxShape& copy);
 
   virtual wxDivisionShape *OnCreateDivision();
 
@@ -160,8 +159,7 @@ class wxDivisionShape: public wxCompositeShape
   void ReadPrologAttributes(wxExpr *clause);
 #endif
   // Does the copying for this object
-  void Copy(wxDivisionShape& copy);
-  wxShape *PrivateCopy();
+  void Copy(wxShape& copy);
 
   // Divide horizontally (wxHORIZONTAL) or vertically (wxVERTICAL)
   bool Divide(int direction);

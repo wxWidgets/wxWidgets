@@ -336,16 +336,9 @@ bool wxDividedShape::AttachmentIsValid(int attachment)
     return FALSE;
 }
 
-void wxDividedShape::Copy(wxDividedShape& copy)
+void wxDividedShape::Copy(wxShape& copy)
 {
   wxRectangleShape::Copy(copy);
-}
-
-wxShape *wxDividedShape::PrivateCopy()
-{
-  wxDividedShape *obj = new wxDividedShape(m_width, m_height);
-  Copy(*obj);
-  return obj;
 }
 
 // Region operations

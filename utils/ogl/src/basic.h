@@ -114,8 +114,11 @@ class wxShapeEvtHandler: public wxObject
   wxShapeEvtHandler(wxShapeEvtHandler *prev = NULL, wxShape *shape = NULL);
   virtual ~wxShapeEvtHandler();
 
-  inline void SetHandlerShape(wxShape *sh) { m_handlerShape = sh; }
+  inline void SetShape(wxShape *sh) { m_handlerShape = sh; }
   inline wxShape *GetShape() const { return m_handlerShape; }
+
+  inline void SetPreviousHandler(wxShapeEvtHandler* handler) { m_previousHandler = handler; }
+  inline wxShapeEvtHandler* GetPreviousHandler() const { return m_previousHandler; }
 
   // This is called when the _shape_ is deleted.
   virtual void OnDelete();
@@ -142,8 +145,21 @@ class wxShapeEvtHandler: public wxObject
   virtual void OnEraseControlPoints(wxDC& dc);
   virtual void OnMoveLink(wxDC& dc, bool moveControlPoints = TRUE);
 
+  // Control points ('handles') redirect control to the actual shape, to make it easier
+  // to override sizing behaviour.
+  virtual void OnSizingDragLeft(wxControlPoint* pt, bool draw, float x, float y, int keys=0, int attachment = 0); // Erase if draw false
+  virtual void OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y, int keys=0, int attachment = 0);
+  virtual void OnSizingEndDragLeft(wxControlPoint* pt, float x, float y, int keys=0, int attachment = 0);
+
   virtual void OnBeginSize(float WXUNUSED(w), float WXUNUSED(h)) { }
   virtual void OnEndSize(float WXUNUSED(w), float WXUNUSED(h)) { }
+
+  // Creates a copy of this event handler.
+  wxShapeEvtHandler *CreateNewCopy();
+
+  // Does the copy - override for new event handlers which might store
+  // app-specific data.
+  virtual void CopyData(wxShapeEvtHandler& copy) {};
 
  private:
   wxShapeEvtHandler*    m_previousHandler;
@@ -206,6 +222,12 @@ class wxShape: public wxShapeEvtHandler
 
   virtual void OnBeginSize(float WXUNUSED(w), float WXUNUSED(h)) { }
   virtual void OnEndSize(float WXUNUSED(w), float WXUNUSED(h)) { }
+
+  // Control points ('handles') redirect control to the actual shape, to make it easier
+  // to override sizing behaviour.
+  virtual void OnSizingDragLeft(wxControlPoint* pt, bool draw, float x, float y, int keys=0, int attachment = 0); // Erase if draw false
+  virtual void OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y, int keys=0, int attachment = 0);
+  virtual void OnSizingEndDragLeft(wxControlPoint* pt, float x, float y, int keys=0, int attachment = 0);
 
   virtual void MakeControlPoints();
   virtual void DeleteControlPoints(wxDC *dc = NULL);
@@ -309,7 +331,7 @@ class wxShape: public wxShapeEvtHandler
   virtual void NameRegions(const wxString& parentName = "");
 
   // Get list of regions
-  inline wxList& GetRegions() { return m_regions; }
+  inline wxList& GetRegions() const { return (wxList&) m_regions; }
 
   virtual void AddRegion(wxShapeRegion *region);
 
@@ -341,10 +363,6 @@ class wxShape: public wxShapeEvtHandler
   virtual void ReadRegions(wxExpr *clause);
 #endif
 
-  // Does the WHOLE copy calling PrivateCopy - don't redefine.
-  // If canvas is non-null, set the canvas too.
-  wxShape *CreateNewCopy(wxShapeCanvas *theCanvas = NULL);
-
   // Attachment code
   virtual bool GetAttachmentPosition(int attachment, float *x, float *y,
                                      int nth = 0, int no_arcs = 1, wxLineShape *line = NULL);
@@ -369,10 +387,15 @@ class wxShape: public wxShapeEvtHandler
   // Returns TRUE if image is a descendant of this image
   bool HasDescendant(wxShape *image);
 
+  // Creates a copy of this shape.
+  wxShape *CreateNewCopy(bool resetMapping = TRUE, bool recompute = TRUE);
+
   // Does the copying for this object
-  void Copy(wxShape& copy);
-  // Returns a new instance, and does the copy for this class. Define for each class.
-  virtual wxShape *PrivateCopy() = 0;
+  virtual void Copy(wxShape& copy);
+
+  // Does the copying for this object, including copying event
+  // handler data if any. Calls the virtual Copy function.
+  void CopyWithHandler(wxShape& copy);
 
   // Rotate about the given axis by the given amount in radians
   // (does nothing for most objects)
@@ -455,6 +478,12 @@ class wxPolygonShape: public wxShape
   void OnDraw(wxDC& dc);
   void OnDrawOutline(wxDC& dc, float x, float y, float w, float h);
 
+  // Control points ('handles') redirect control to the actual shape, to make it easier
+  // to override sizing behaviour.
+  virtual void OnSizingDragLeft(wxControlPoint* pt, bool draw, float x, float y, int keys=0, int attachment = 0);
+  virtual void OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y, int keys=0, int attachment = 0);
+  virtual void OnSizingEndDragLeft(wxControlPoint* pt, float x, float y, int keys=0, int attachment = 0);
+
   // A polygon should have a control point at each vertex,
   // with the option of moving the control points individually
   // to change the shape.
@@ -485,8 +514,7 @@ class wxPolygonShape: public wxShape
                                      int nth = 0, int no_arcs = 1, wxLineShape *line = NULL);
   bool AttachmentIsValid(int attachment);
   // Does the copying for this object
-  void Copy(wxPolygonShape& copy);
-  wxShape *PrivateCopy();
+  void Copy(wxShape& copy);
 
   inline wxList *GetPoints() { return m_points; }
 
@@ -522,8 +550,7 @@ class wxRectangleShape: public wxShape
   bool GetAttachmentPosition(int attachment, float *x, float *y,
                                      int nth = 0, int no_arcs = 1, wxLineShape *line = NULL);
   // Does the copying for this object
-  void Copy(wxRectangleShape& copy);
-  wxShape *PrivateCopy();
+  void Copy(wxShape& copy);
 
   inline float GetWidth() const { return m_width; }
   inline float GetHeight() const { return m_height; }
@@ -547,8 +574,7 @@ class wxTextShape: public wxRectangleShape
 #endif
 
   // Does the copying for this object
-  void Copy(wxTextShape& copy);
-  wxShape *PrivateCopy();
+  void Copy(wxShape& copy);
 };
 
 class wxEllipseShape: public wxShape
@@ -576,8 +602,7 @@ class wxEllipseShape: public wxShape
                                      int nth = 0, int no_arcs = 1, wxLineShape *line = NULL);
 
   // Does the copying for this object
-  void Copy(wxEllipseShape& copy);
-  wxShape *PrivateCopy();
+  void Copy(wxShape& copy);
 
   inline float GetWidth() const { return m_width; }
   inline float GetHeight() const { return m_height; }
@@ -597,8 +622,7 @@ class wxCircleShape: public wxEllipseShape
                                  float x2, float y2,
                                  float *x3, float *y3);
   // Does the copying for this object
-  void Copy(wxCircleShape& copy);
-  wxShape *PrivateCopy();
+  void Copy(wxShape& copy);
 };
 
 #endif

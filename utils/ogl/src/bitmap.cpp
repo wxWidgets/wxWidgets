@@ -101,19 +101,16 @@ void wxBitmapShape::ReadPrologAttributes(wxExpr *clause)
 #endif
 
 // Does the copying for this object
-void wxBitmapShape::Copy(wxBitmapShape& copy)
+void wxBitmapShape::Copy(wxShape& copy)
 {
   wxRectangleShape::Copy(copy);
-  copy.m_bitmap = m_bitmap;
-  copy.SetFilename(m_filename);
-}
 
-// Returns a new instance, and does the copy for this class. Define for each class.
-wxShape *wxBitmapShape::PrivateCopy()
-{
-  wxBitmapShape *obj = new wxBitmapShape;
-  Copy(*obj);
-  return obj;
+  wxASSERT( copy.IsKindOf(CLASSINFO(wxBitmapShape)) ) ;
+
+  wxBitmapShape& bitmapCopy = (wxBitmapShape&) copy;
+
+  bitmapCopy.m_bitmap = m_bitmap;
+  bitmapCopy.SetFilename(m_filename);
 }
 
 void wxBitmapShape::SetBitmap(const wxBitmap& bm)

@@ -81,6 +81,22 @@ wxShapeEvtHandler::~wxShapeEvtHandler()
 {
 }
 
+// Creates a copy of this event handler.
+wxShapeEvtHandler* wxShapeEvtHandler::CreateNewCopy()
+{
+  wxShapeEvtHandler* newObject = (wxShapeEvtHandler*) GetClassInfo()->CreateObject();
+
+  wxASSERT( (newObject != NULL) );
+  wxASSERT( (newObject->IsKindOf(CLASSINFO(wxShapeEvtHandler))) );
+
+  newObject->m_previousHandler = newObject;
+
+  CopyData(*newObject);
+
+  return newObject;
+}
+
+
 void wxShapeEvtHandler::OnDelete()
 {
   if (this != GetShape())
@@ -197,6 +213,26 @@ void wxShapeEvtHandler::OnEndDragRight(float x, float y, int keys, int attachmen
     m_previousHandler->OnEndDragRight(x, y, keys, attachment);
 }
 
+// Control points ('handles') redirect control to the actual shape, to make it easier
+// to override sizing behaviour.
+void wxShapeEvtHandler::OnSizingDragLeft(wxControlPoint* pt, bool draw, float x, float y, int keys, int attachment)
+{
+  if (m_previousHandler)
+    m_previousHandler->OnSizingDragLeft(pt, draw, x, y, keys, attachment);
+}
+
+void wxShapeEvtHandler::OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y, int keys, int attachment)
+{
+  if (m_previousHandler)
+    m_previousHandler->OnSizingBeginDragLeft(pt, x, y, keys, attachment);
+}
+
+void wxShapeEvtHandler::OnSizingEndDragLeft(wxControlPoint* pt, float x, float y, int keys, int attachment)
+{
+  if (m_previousHandler)
+    m_previousHandler->OnSizingEndDragLeft(pt, x, y, keys, attachment);
+}
+
 void wxShapeEvtHandler::OnDrawOutline(wxDC& dc, float x, float y, float w, float h)
 {
   if (m_previousHandler)
@@ -220,7 +256,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxShape, wxShapeEvtHandler)
 wxShape::wxShape(wxShapeCanvas *can)
 {
   m_eventHandler = this;
-  SetHandlerShape(this);
+  SetShape(this);
   m_id = 0;
   m_formatted = FALSE;
   m_canvas = can;
@@ -1876,7 +1912,7 @@ void wxShape::ReadRegions(wxExpr *clause)
       m_regionProportionX = propXExpr->RealValue();
       m_regionProportionY = propYExpr->RealValue();
 
-      formatMode = (formatExpr->IntegerValue() != 0);
+      formatMode = (int) formatExpr->IntegerValue();
       fontSize = (int)sizeExpr->IntegerValue();
       fontFamily = (int)familyExpr->IntegerValue();
       fontStyle = (int)styleExpr->IntegerValue();
@@ -2056,15 +2092,47 @@ void wxShape::Copy(wxShape& copy)
 }
 
 // Create and return a new, fully copied object.
-wxShape *wxShape::CreateNewCopy(wxShapeCanvas *theCanvas)
+wxShape *wxShape::CreateNewCopy(bool resetMapping, bool recompute)
 {
-  wxObjectCopyMapping.Clear();
-  wxShape *newObject = PrivateCopy();
-  if (theCanvas)
-    newObject->AddToCanvas(theCanvas);
-  newObject->Recompute();
+  if (resetMapping)
+    wxObjectCopyMapping.Clear();
+
+  wxShape* newObject = (wxShape*) GetClassInfo()->CreateObject();
+
+  wxASSERT( (newObject != NULL) );
+  wxASSERT( (newObject->IsKindOf(CLASSINFO(wxShape))) );
+
+  Copy(*newObject);
+
+  if (GetEventHandler() != this)
+  {
+    wxShapeEvtHandler* newHandler = GetEventHandler()->CreateNewCopy();
+    newObject->SetEventHandler(newHandler);
+    newObject->SetPreviousHandler(newObject);
+    newHandler->SetPreviousHandler(newHandler);
+    newHandler->SetShape(newObject);
+  }
+
+  if (recompute)
+    newObject->Recompute();
   return newObject;
 }
+
+// Does the copying for this object, including copying event
+// handler data if any. Calls the virtual Copy function.
+void wxShape::CopyWithHandler(wxShape& copy)
+{
+    Copy(copy);
+
+    if (GetEventHandler() != this)
+    {
+        wxASSERT( copy.GetEventHandler() != NULL );
+        wxASSERT( copy.GetEventHandler() != (&copy) );
+        wxASSERT( GetEventHandler()->GetClassInfo() == copy.GetEventHandler()->GetClassInfo() );
+        GetEventHandler()->CopyData(* (copy.GetEventHandler()));
+    }
+}
+
 
 // Default - make 6 control points
 void wxShape::MakeControlPoints()

@@ -40,9 +40,13 @@ protected:
    float        m_y;
 };
 
+class wxShape;
 class wxControlPoint: public wxRectangleShape
 {
  DECLARE_DYNAMIC_CLASS(wxControlPoint)
+
+ friend class wxShapeEvtHandler;
+ friend class wxShape;
 
  public:
   wxControlPoint(wxShapeCanvas *the_canvas = NULL, wxShape *object = NULL, float size = 0.0, float the_xoffset = 0.0,
@@ -70,12 +74,25 @@ public:
   wxCursor*     m_oldCursor;
   bool          m_eraseObject; // If TRUE, erases object before dragging handle.
 
+/*
+ * Store original top-left, bottom-right coordinates
+ * in case we're doing non-vertical resizing.
+ */
+  static float controlPointDragStartX;
+  static float controlPointDragStartY;
+  static float controlPointDragStartWidth;
+  static float controlPointDragStartHeight;
+  static float controlPointDragEndWidth;
+  static float controlPointDragEndHeight;
+  static float controlPointDragPosX;
+  static float controlPointDragPosY;
 };
 
+class wxPolygonShape;
 class wxPolygonControlPoint: public wxControlPoint
 {
  DECLARE_DYNAMIC_CLASS(wxPolygonControlPoint)
-
+  friend class wxPolygonShape;
  public:
   wxPolygonControlPoint(wxShapeCanvas *the_canvas = NULL, wxShape *object = NULL, float size = 0.0, wxRealPoint *vertex = NULL,
     float the_xoffset = 0.0, float the_yoffset = 0.0);

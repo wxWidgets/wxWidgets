@@ -102,6 +102,7 @@ wxDocMDIChildFrame::wxDocMDIChildFrame(wxDocument *doc, wxView *view, wxMDIParen
 
 wxDocMDIChildFrame::~wxDocMDIChildFrame(void)
 {
+	m_childView = NULL;
 }
 
 // Extend event processing to search the view's event table

@@ -86,10 +86,7 @@ class wxDrawnShape: public wxRectangleShape
 #endif
 
   // Does the copying for this object
-  void Copy(wxDrawnShape& copy);
-
-  // Returns a new instance, and does the copy for this class. Define for each class.
-  wxShape *PrivateCopy();
+  void Copy(wxShape& copy);
 
   void Scale(float sx, float sy);
   void Translate(float x, float y);

@@ -1589,64 +1589,61 @@ void wxLineShape::ReadPrologAttributes(wxExpr *clause)
 }
 #endif
 
-void wxLineShape::Copy(wxLineShape& copy)
+void wxLineShape::Copy(wxShape& copy)
 {
   wxShape::Copy(copy);
 
-  copy.m_isSpline = m_isSpline;
-  copy.m_alignmentStart = m_alignmentStart;
-  copy.m_alignmentEnd = m_alignmentEnd;
-  copy.m_maintainStraightLines = m_maintainStraightLines;
-  copy.m_lineOrientations.Clear();
+  wxASSERT( copy.IsKindOf(CLASSINFO(wxLineShape)) );
+
+  wxLineShape& lineCopy = (wxLineShape&) copy;
+
+  lineCopy.m_isSpline = m_isSpline;
+  lineCopy.m_alignmentStart = m_alignmentStart;
+  lineCopy.m_alignmentEnd = m_alignmentEnd;
+  lineCopy.m_maintainStraightLines = m_maintainStraightLines;
+  lineCopy.m_lineOrientations.Clear();
   wxNode *node = m_lineOrientations.First();
   while (node)
   {
-    copy.m_lineOrientations.Append(node->Data());
+    lineCopy.m_lineOrientations.Append(node->Data());
     node = node->Next();
   }
 
-  if (copy.m_lineControlPoints)
+  if (lineCopy.m_lineControlPoints)
   {
-    ClearPointList(*copy.m_lineControlPoints);
-    delete copy.m_lineControlPoints;
+    ClearPointList(*lineCopy.m_lineControlPoints);
+    delete lineCopy.m_lineControlPoints;
   }
 
-  copy.m_lineControlPoints = new wxList;
+  lineCopy.m_lineControlPoints = new wxList;
 
   node = m_lineControlPoints->First();
   while (node)
   {
     wxRealPoint *point = (wxRealPoint *)node->Data();
     wxRealPoint *new_point = new wxRealPoint(point->x, point->y);
-    copy.m_lineControlPoints->Append((wxObject*) new_point);
+    lineCopy.m_lineControlPoints->Append((wxObject*) new_point);
     node = node->Next();
   }
 
 /*
-  copy.start_style = start_style;
-  copy.end_style = end_style;
-  copy.middle_style = middle_style;
+  lineCopy.start_style = start_style;
+  lineCopy.end_style = end_style;
+  lineCopy.middle_style = middle_style;
 
-  copy.arrow_length = arrow_length;
-  copy.arrow_width = arrow_width;
+  lineCopy.arrow_length = arrow_length;
+  lineCopy.arrow_width = arrow_width;
 */
 
   // Copy new OGL stuff
-  copy.ClearArrowsAtPosition(-1);
+  lineCopy.ClearArrowsAtPosition(-1);
   node = m_arcArrows.First();
   while (node)
   {
     wxArrowHead *arrow = (wxArrowHead *)node->Data();
-    copy.m_arcArrows.Append(new wxArrowHead(*arrow));
+    lineCopy.m_arcArrows.Append(new wxArrowHead(*arrow));
     node = node->Next();
   }
-}
-
-wxShape *wxLineShape::PrivateCopy()
-{
-  wxLineShape *line = new wxLineShape;
-  Copy(*line);
-  return line;
 }
 
 // Override select, to create/delete temporary label-moving objects
@@ -1725,6 +1722,25 @@ void wxLineControlPoint::OnDraw(wxDC& dc)
 // Implement movement of Line point
 void wxLineControlPoint::OnDragLeft(bool draw, float x, float y, int keys, int attachment)
 {
+    m_shape->GetEventHandler()->OnSizingDragLeft(this, draw, x, y, keys, attachment);
+}
+
+void wxLineControlPoint::OnBeginDragLeft(float x, float y, int keys, int attachment)
+{
+    m_shape->GetEventHandler()->OnSizingBeginDragLeft(this, x, y, keys, attachment);
+}
+  
+void wxLineControlPoint::OnEndDragLeft(float x, float y, int keys, int attachment)
+{
+    m_shape->GetEventHandler()->OnSizingEndDragLeft(this, x, y, keys, attachment);
+}
+
+// Control points ('handles') redirect control to the actual shape, to make it easier
+// to override sizing behaviour.
+void wxLineShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, float x, float y, int keys, int attachment)
+{
+  wxLineControlPoint* lpt = (wxLineControlPoint*) pt;
+
   wxClientDC dc(GetCanvas());
   GetCanvas()->PrepareDC(dc);
 
@@ -1734,14 +1750,14 @@ void wxLineControlPoint::OnDragLeft(bool draw, float x, float y, int keys, int a
   dc.SetPen(dottedPen);
   dc.SetBrush((* wxTRANSPARENT_BRUSH));
 
-  if (m_type == CONTROL_POINT_LINE)
+  if (lpt->m_type == CONTROL_POINT_LINE)
   {
     m_canvas->Snap(&x, &y);
 
-    m_xpos = x; m_ypos = y;
-    m_point->x = x; m_point->y = y;
+    lpt->SetX(x); lpt->SetY(y);
+    lpt->m_point->x = x; lpt->m_point->y = y;
 
-    wxLineShape *lineShape = (wxLineShape *)m_shape;
+    wxLineShape *lineShape = (wxLineShape *)this;
 
     wxPen *old_pen = lineShape->GetPen();
     wxBrush *old_brush = lineShape->GetBrush();
@@ -1756,24 +1772,26 @@ void wxLineControlPoint::OnDragLeft(bool draw, float x, float y, int keys, int a
     lineShape->SetBrush(old_brush);
   }
 
-  if (m_type == CONTROL_POINT_ENDPOINT_FROM || m_type == CONTROL_POINT_ENDPOINT_TO)
+  if (lpt->m_type == CONTROL_POINT_ENDPOINT_FROM || lpt->m_type == CONTROL_POINT_ENDPOINT_TO)
   {
-    m_xpos = x; m_ypos = y;
+    lpt->SetX(x); lpt->SetY(y);
   }
 
 }
 
-void wxLineControlPoint::OnBeginDragLeft(float x, float y, int keys, int attachment)
+void wxLineShape::OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y, int keys, int attachment)
 {
+  wxLineControlPoint* lpt = (wxLineControlPoint*) pt;
+
   wxClientDC dc(GetCanvas());
   GetCanvas()->PrepareDC(dc);
 
-  wxLineShape *lineShape = (wxLineShape *)m_shape;
-  if (m_type == CONTROL_POINT_LINE)
+  wxLineShape *lineShape = (wxLineShape *)this;
+  if (lpt->m_type == CONTROL_POINT_LINE)
   {
     m_canvas->Snap(&x, &y);
 
-    m_shape->Erase(dc);
+    this->Erase(dc);
 
     // Redraw start and end objects because we've left holes
     // when erasing the line
@@ -1782,11 +1800,11 @@ void wxLineControlPoint::OnBeginDragLeft(float x, float y, int keys, int attachm
     lineShape->GetTo()->OnDraw(dc);
     lineShape->GetTo()->OnDrawContents(dc);
 
-    m_shape->SetDisableLabel(TRUE);
+    this->SetDisableLabel(TRUE);
     dc.SetLogicalFunction(wxXOR);
 
-    m_xpos = x; m_ypos = y;
-    m_point->x = x; m_point->y = y;
+    lpt->m_xpos = x; lpt->m_ypos = y;
+    lpt->m_point->x = x; lpt->m_point->y = y;
 
     wxPen *old_pen = lineShape->GetPen();
     wxBrush *old_brush = lineShape->GetBrush();
@@ -1801,11 +1819,11 @@ void wxLineControlPoint::OnBeginDragLeft(float x, float y, int keys, int attachm
     lineShape->SetBrush(old_brush);
   }
 
-  if (m_type == CONTROL_POINT_ENDPOINT_FROM || m_type == CONTROL_POINT_ENDPOINT_TO)
+  if (lpt->m_type == CONTROL_POINT_ENDPOINT_FROM || lpt->m_type == CONTROL_POINT_ENDPOINT_TO)
   {
-    Erase(dc);
+    lpt->Erase(dc);
     lineShape->OnDraw(dc);
-    if (m_type == CONTROL_POINT_ENDPOINT_FROM)
+    if (lpt->m_type == CONTROL_POINT_ENDPOINT_FROM)
     {
       lineShape->GetFrom()->OnDraw(dc);
       lineShape->GetFrom()->OnDrawContents(dc);
@@ -1816,35 +1834,37 @@ void wxLineControlPoint::OnBeginDragLeft(float x, float y, int keys, int attachm
       lineShape->GetTo()->OnDrawContents(dc);
     }
     m_canvas->SetCursor(GraphicsBullseyeCursor);
-    m_oldCursor = wxSTANDARD_CURSOR;
+    lpt->m_oldCursor = wxSTANDARD_CURSOR;
   }
 }
-  
-void wxLineControlPoint::OnEndDragLeft(float x, float y, int keys, int attachment)
+
+void wxLineShape::OnSizingEndDragLeft(wxControlPoint* pt, float x, float y, int keys, int attachment)
 {
+  wxLineControlPoint* lpt = (wxLineControlPoint*) pt;
+
   wxClientDC dc(GetCanvas());
   GetCanvas()->PrepareDC(dc);
 
-  m_shape->SetDisableLabel(FALSE);
-  wxLineShape *lineShape = (wxLineShape *)m_shape;
+  this->SetDisableLabel(FALSE);
+  wxLineShape *lineShape = (wxLineShape *)this;
 
-  if (m_type == CONTROL_POINT_LINE)
+  if (lpt->m_type == CONTROL_POINT_LINE)
   {
     m_canvas->Snap(&x, &y);
 
     dc.SetLogicalFunction(wxCOPY);
-    m_xpos = x; m_ypos = y;
-    m_point->x = x; m_point->y = y;
+    lpt->m_xpos = x; lpt->m_ypos = y;
+    lpt->m_point->x = x; lpt->m_point->y = y;
 
     lineShape->GetEventHandler()->OnMoveLink(dc);
   }
-  if (m_type == CONTROL_POINT_ENDPOINT_FROM)
+  if (lpt->m_type == CONTROL_POINT_ENDPOINT_FROM)
   {
-    if (m_oldCursor)
-      m_canvas->SetCursor(m_oldCursor);
-    m_shape->Erase(dc);
+    if (lpt->m_oldCursor)
+      m_canvas->SetCursor(lpt->m_oldCursor);
+    this->Erase(dc);
 
-    m_xpos = x; m_ypos = y;
+    lpt->m_xpos = x; lpt->m_ypos = y;
 
     if (lineShape->GetFrom())
     {
@@ -1852,12 +1872,12 @@ void wxLineControlPoint::OnEndDragLeft(float x, float y, int keys, int attachmen
       lineShape->GetFrom()->MoveLinks(dc);
     }
   }
-  if (m_type == CONTROL_POINT_ENDPOINT_TO)
+  if (lpt->m_type == CONTROL_POINT_ENDPOINT_TO)
   {
-    if (m_oldCursor)
-      m_canvas->SetCursor(m_oldCursor);
+    if (lpt->m_oldCursor)
+      m_canvas->SetCursor(lpt->m_oldCursor);
 
-    m_xpos = x; m_ypos = y;
+    lpt->m_xpos = x; lpt->m_ypos = y;
 
     if (lineShape->GetTo())
     {
@@ -1867,7 +1887,7 @@ void wxLineControlPoint::OnEndDragLeft(float x, float y, int keys, int attachmen
   }
   int i = 0;
   for (i = 0; i < lineShape->GetLineControlPoints()->Number(); i++)
-    if (((wxRealPoint *)(lineShape->GetLineControlPoints()->Nth(i)->Data())) == m_point)
+    if (((wxRealPoint *)(lineShape->GetLineControlPoints()->Nth(i)->Data())) == lpt->m_point)
       break;
 
   // N.B. in OnMoveControlPoint, an event handler in Hardy could have deselected

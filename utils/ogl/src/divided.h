@@ -52,8 +52,7 @@ class wxDividedShape: public wxRectangleShape
   void ReadPrologAttributes(wxExpr *clause);
 #endif
 
-  void Copy(wxDividedShape &copy);
-  wxShape *PrivateCopy();
+  void Copy(wxShape &copy);
 
   // Set all region sizes according to proportions and
   // this object total size

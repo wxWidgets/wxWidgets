@@ -360,28 +360,32 @@ void wxCompositeShape::RemoveChildFromConstraints(wxShape *child)
   }
 }
 
-void wxCompositeShape::Copy(wxCompositeShape& copy)
+void wxCompositeShape::Copy(wxShape& copy)
 {
   wxRectangleShape::Copy(copy);
 
-  // Associate old and new copies for copying constraints and division geometry
-  wxObjectCopyMapping.Append((long)this, &copy);
+  wxASSERT( copy.IsKindOf(CLASSINFO(wxCompositeShape)) ) ;
+
+  wxCompositeShape& compositeCopy = (wxCompositeShape&) copy;
+
+  // Associate old and new copies for compositeCopying constraints and division geometry
+  wxObjectCopyMapping.Append((long)this, &compositeCopy);
 
   // Copy the children
   wxNode *node = m_children.First();
   while (node)
   {
     wxShape *object = (wxShape *)node->Data();
-    wxShape *newObject = object->PrivateCopy();
+    wxShape *newObject = object->CreateNewCopy(FALSE, FALSE);
     if (newObject->GetId() == 0)
       newObject->SetId(NewId());
       
-    newObject->SetParent(&copy);
-    copy.m_children.Append(newObject);
+    newObject->SetParent(&compositeCopy);
+    compositeCopy.m_children.Append(newObject);
 
     // Some m_children may be divisions
     if (m_divisions.Member(object))
-      copy.m_divisions.Append(newObject);
+      compositeCopy.m_divisions.Append(newObject);
 
     wxObjectCopyMapping.Append((long)object, newObject);
 
@@ -414,12 +418,12 @@ void wxCompositeShape::Copy(wxCompositeShape& copy)
       newConstraint->m_constraintName = constraint->m_constraintName;
     }
     newConstraint->SetSpacing(constraint->m_xSpacing, constraint->m_ySpacing);
-    copy.m_constraints.Append(newConstraint);
+    compositeCopy.m_constraints.Append(newConstraint);
 
     node = node->Next();
   }
 
-  // Now copy the division geometry
+  // Now compositeCopy the division geometry
   node = m_divisions.First();
   while (node)
   {
@@ -451,13 +455,6 @@ void wxCompositeShape::Copy(wxCompositeShape& copy)
     }
     node = node->Next();
   }
-}
-
-wxShape *wxCompositeShape::PrivateCopy()
-{
-  wxCompositeShape *obj = new wxCompositeShape;
-  Copy(*obj);
-  return obj;
 }
 
 OGLConstraint *wxCompositeShape::AddConstraint(OGLConstraint *constraint)
@@ -971,27 +968,24 @@ void wxDivisionShape::CalculateSize()
 {
 }
 
-void wxDivisionShape::Copy(wxDivisionShape& copy)
+void wxDivisionShape::Copy(wxShape& copy)
 {
   wxCompositeShape::Copy(copy);
 
-  copy.m_leftSideStyle = m_leftSideStyle;
-  copy.m_topSideStyle = m_topSideStyle;
-  copy.m_leftSideColour = m_leftSideColour;
-  copy.m_topSideColour = m_topSideColour;
+  wxASSERT( copy.IsKindOf(CLASSINFO(wxDivisionShape)) ) ;
 
-  copy.m_leftSidePen = m_leftSidePen;
-  copy.m_topSidePen = m_topSidePen;
-  copy.m_handleSide = m_handleSide;
+  wxDivisionShape& divisionCopy = (wxDivisionShape&) copy;
+
+  divisionCopy.m_leftSideStyle = m_leftSideStyle;
+  divisionCopy.m_topSideStyle = m_topSideStyle;
+  divisionCopy.m_leftSideColour = m_leftSideColour;
+  divisionCopy.m_topSideColour = m_topSideColour;
+
+  divisionCopy.m_leftSidePen = m_leftSidePen;
+  divisionCopy.m_topSidePen = m_topSidePen;
+  divisionCopy.m_handleSide = m_handleSide;
 
   // Division geometry copying is handled at the wxCompositeShape level.
-}
-
-wxShape *wxDivisionShape::PrivateCopy()
-{
-  wxDivisionShape *obj = new wxDivisionShape;
-  Copy(*obj);
-  return obj;
 }
 
 #ifdef PROLOGIO

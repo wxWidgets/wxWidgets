@@ -161,6 +161,12 @@ class wxLineShape: public wxShape
   void OnBeginDragLeft(float x, float y, int keys=0, int attachment = 0);
   void OnEndDragLeft(float x, float y, int keys=0, int attachment = 0);
 
+  // Control points ('handles') redirect control to the actual shape, to make it easier
+  // to override sizing behaviour.
+  virtual void OnSizingDragLeft(wxControlPoint* pt, bool draw, float x, float y, int keys=0, int attachment = 0);
+  virtual void OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y, int keys=0, int attachment = 0);
+  virtual void OnSizingEndDragLeft(wxControlPoint* pt, float x, float y, int keys=0, int attachment = 0);
+
   // Override select, to create/delete temporary label-moving objects
   void Select(bool select = TRUE, wxDC* dc = NULL);
 
@@ -192,8 +198,7 @@ class wxLineShape: public wxShape
   virtual bool Draggable() const { return FALSE; }
 
   // Does the copying for this object
-  void Copy(wxLineShape& copy);
-  wxShape *PrivateCopy();
+  void Copy(wxShape& copy);
 
   // New OGL stuff
   wxArrowHead *AddArrow(WXTYPE type, int end = ARROW_POSITION_END,

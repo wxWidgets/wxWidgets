@@ -73,6 +73,7 @@ void WXDLLEXPORT wxUnix2DosFilename(char *s);
 
 // Strip the extension, in situ
 void WXDLLEXPORT wxStripExtension(char *buffer);
+void WXDLLEXPORT wxStripExtension(wxString& buffer);
 
 // Get a temporary filename, opening and closing the file.
 char* WXDLLEXPORT wxGetTempFileName(const wxString& prefix, char *buf = NULL);

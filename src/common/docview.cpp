@@ -196,16 +196,28 @@ bool wxDocument::SaveAs(void)
   
   char *tmp = wxFileSelector("Save as", docTemplate->GetDirectory(), GetFilename(),
     docTemplate->GetDefaultExtension(), docTemplate->GetFileFilter(),
-    0, GetDocumentWindow());
+    wxSAVE|wxOVERWRITE_PROMPT, GetDocumentWindow());
     
   if (!tmp)
     return FALSE;
   else
   {
-    SetFilename(tmp);
-    SetTitle(wxFileNameFromPath(tmp));
+    wxString fileName(tmp);
+    wxString path("");
+    wxString name("");
+    wxString ext("");
+    wxSplitPath(fileName, & path, & name, & ext);
+
+    if (ext.IsEmpty() || ext == "")
+    {
+        fileName += ".";
+        fileName += docTemplate->GetDefaultExtension();
+    }
+
+    SetFilename(fileName);
+    SetTitle(wxFileNameFromPath(fileName));
     
-    GetDocumentManager()->AddFileToHistory(tmp);
+    GetDocumentManager()->AddFileToHistory(fileName);
 
     // Notify the views that the filename has changed
     wxNode *node = m_documentViews.First();

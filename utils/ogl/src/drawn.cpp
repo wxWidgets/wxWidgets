@@ -162,19 +162,16 @@ void wxDrawnShape::ReadPrologAttributes(wxExpr *clause)
 #endif
 
 // Does the copying for this object
-void wxDrawnShape::Copy(wxDrawnShape& copy)
+void wxDrawnShape::Copy(wxShape& copy)
 {
   wxRectangleShape::Copy(copy);
-  m_metafile.Copy(copy.m_metafile);
-  copy.m_saveToFile = m_saveToFile;
-}
 
-// Returns a new instance, and does the copy for this class. Define for each class.
-wxShape *wxDrawnShape::PrivateCopy()
-{
-  wxDrawnShape *obj = new wxDrawnShape;
-  Copy(*obj);
-  return obj;
+  wxASSERT( copy.IsKindOf(CLASSINFO(wxDrawnShape)) ) ;
+
+  wxDrawnShape& drawnCopy = (wxDrawnShape&) copy;
+
+  m_metafile.Copy(drawnCopy.m_metafile);
+  drawnCopy.m_saveToFile = m_saveToFile;
 }
 
 bool wxDrawnShape::LoadFromMetaFile(char *filename)

@@ -16,10 +16,11 @@
 #pragma interface "linesp.h"
 #endif
 
+class wxLineShape;
 class wxLineControlPoint: public wxControlPoint
 {
   DECLARE_DYNAMIC_CLASS(wxLineControlPoint)
-
+  friend class wxLineShape;
  public:
 
   wxLineControlPoint(wxShapeCanvas *the_canvas = NULL, wxShape *object = NULL, float size = 0.0,
