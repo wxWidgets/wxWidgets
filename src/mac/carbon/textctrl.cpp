@@ -553,8 +553,16 @@ void wxTextCtrl::DiscardEdits()
 
 int wxTextCtrl::GetNumberOfLines() const
 {
-    // TODO
-    return 0;
+	Size actualsize;
+	UMAGetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 32767 , wxBuffer , &actualsize) ;
+	
+	int count = 1;
+	for (int i = 0; i < actualsize; i++)
+	{
+	    if (wxBuffer[i] == '\r') count++;
+	}
+	
+    return count;
 }
 
 long wxTextCtrl::XYToPosition(long x, long y) const
@@ -575,12 +583,59 @@ void wxTextCtrl::ShowPosition(long pos)
 
 int wxTextCtrl::GetLineLength(long lineNo) const
 {
-    return GetValue().Length();
+	Size actualsize;
+	UMAGetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 32767 , wxBuffer , &actualsize) ;
+	
+	// Find line first
+	int count = 0;
+	for (int i = 0; i < actualsize; i++)
+	{
+	    if (count == lineNo)
+	    {
+	        // Count chars in line then
+	    	count = 0;
+	    	for (int j = i; j < actualsize; j++)
+	    	{
+	    	    count++;
+	    	    if (wxBuffer[j] == '\r') return count;
+	    	}
+	    	
+	    	return count;
+	    }
+	    if (wxBuffer[i] == '\r') count++;
+	}
+	
+    return 0;
 }
 
 wxString wxTextCtrl::GetLineText(long lineNo) const
 {
-    return GetValue();
+	Size actualsize;
+	UMAGetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 32767 , wxBuffer , &actualsize) ;
+	
+	// Find line first
+	int count = 0;
+	for (int i = 0; i < actualsize; i++)
+	{
+	    if (count == lineNo)
+	    {
+	        // Add chars in line then
+	    	wxString tmp("");
+	    	
+	    	for (int j = i; j < actualsize; j++)
+	    	{
+	    	    tmp += wxBuffer[j];
+	    	    
+	    	    if (wxBuffer[j] == '\r')
+	    	        return tmp;
+	    	}
+	    	
+	    	return tmp;
+	    }
+	    if (wxBuffer[i] == '\r') count++;
+	}
+	
+    return wxString("");
 }
 
 /*
