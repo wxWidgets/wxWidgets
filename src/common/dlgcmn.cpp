@@ -171,7 +171,28 @@ wxSizer *wxDialogBase::CreateTextSizer( const wxString& message )
 
 wxSizer *wxDialogBase::CreateButtonSizer( long flags )
 {
+#ifdef __SMARTPHONE__
+    wxDialog* dialog = (wxDialog*) this;
+    if (flags & wxOK){
+        dialog->SetLeftMenu(wxID_OK);
+    }
+
+    if (flags & wxCANCEL){
+        dialog->SetRightMenu(wxID_CANCEL);
+    }
+
+    if (flags & wxYES){
+        dialog->SetLeftMenu(wxID_YES);
+    }
+
+    if (flags & wxNO){
+        dialog->SetLeftMenu(wxID_NO);
+    }
+    wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
+    return sizer;
+#else
     return CreateStdDialogButtonSizer( flags );
+#endif
 }
 
 wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
