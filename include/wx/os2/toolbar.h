@@ -13,6 +13,7 @@
 #define _WX_TOOLBAR_H_
 
 #if wxUSE_TOOLBAR
+#include "wx/timer.h"
 #include "wx/tbarbase.h"
 
 #define ID_TOOLTIMER                100
