@@ -141,6 +141,11 @@
 #define HAVE_BOOL
 
 /*
+ * Define if your compiler supports the explicit keyword
+ */
+#define HAVE_EXPLICIT 1
+
+/*
  * Use regex support
  */
 #define wxUSE_REGEX 0

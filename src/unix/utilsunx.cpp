@@ -582,6 +582,9 @@ private:
 // ----------------------------------------------------------------------------
 // wxExecute: the real worker function
 // ----------------------------------------------------------------------------
+#ifdef __VMS
+#pragma message disable codeunreachable
+#endif
 
 long wxExecute(wxChar **argv,
                int flags,
@@ -847,6 +850,9 @@ long wxExecute(wxChar **argv,
 
     return ERROR_RETURN_CODE;
 }
+#ifdef __VMS
+#pragma message enable codeunreachable
+#endif
 
 #undef ERROR_RETURN_CODE
 #undef ARGS_CLEANUP

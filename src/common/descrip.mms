@@ -119,6 +119,7 @@ OBJECTS1=fs_inet.obj,\
 		menucmn.obj,\
 		mimecmn.obj,\
 		module.obj,\
+		msgout.obj,\
 		mstream.obj,\
 		nbkbase.obj,\
 		object.obj,\
@@ -240,6 +241,7 @@ SOURCES = \
 		menucmn.cpp,\
 		mimecmn.cpp,\
 		module.cpp,\
+		msgout.cpp,\
 		mstream.cpp,\
 		nbkbase.cpp,\
 		object.cpp,\
@@ -399,6 +401,7 @@ memory.obj : memory.cpp
 menucmn.obj : menucmn.cpp
 mimecmn.obj : mimecmn.cpp
 module.obj : module.cpp
+msgout.obj : msgout.cpp
 mstream.obj : mstream.cpp
 nbkbase.obj : nbkbase.cpp
 object.obj : object.cpp
