@@ -66,6 +66,7 @@ wxIconRefData::wxIconRefData( const wxIconRefData& data)
 
 wxIconRefData::~wxIconRefData()
 {
+    wxAutoNSAutoreleasePool pool;
     [m_cocoaNSImage release];
     m_cocoaNSImage = NULL;
 }
