@@ -21,6 +21,7 @@ NOTE: The Numeric module is substantially faster than numarray for this
 purpose, if you have lot's of objects
 """
 
+    import wx
     def runTest(frame, nb, log):
         dlg = wx.MessageDialog(frame, errorText, 'Sorry', wx.OK |
                                wx.ICON_INFORMATION)
