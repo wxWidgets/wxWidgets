@@ -1499,7 +1499,9 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
   se = getservbyname(port, protocol);
   if (!se)
   {
-    if (isdigit(port[0]))
+    /* the cast to int suppresses compiler warnings about subscript having the
+       type char */
+    if (isdigit((int)port[0]))
     {
       int port_int;
 
