@@ -588,7 +588,7 @@ bool wxWindowBase::SetCursor(const wxCursor& cursor)
 {
     // setting an invalid cursor is ok, it means that we don't have any special
     // cursor
-    if ( cursor == m_cursor )
+    if ( m_cursor == cursor )
     {
         // no change
         return FALSE;
