@@ -290,8 +290,12 @@ Returns the number of elements in the list.
 
 Allows the sorting of arbitrary lists by giving
 a function to compare two list elements. We use the system {\bf qsort} function
-for the actual sorting process. The sort function receives pointers to wxObject pointers (wxObject **),
-so be careful to dereference appropriately.
+for the actual sorting process.
+
+If you use untyped wxList the sort function receives pointers to wxObject
+pointers (wxObject **), so be careful to dereference appropriately - but,
+of course, a better solution is to use list of appropriate type defined with
+{\tt WX\_DECLARE\_LIST}.
 
 Example:
 
