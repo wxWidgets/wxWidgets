@@ -288,31 +288,31 @@ wxCursor::wxCursor(int idCursor)
     {
         {  true, NULL                        }, // wxCURSOR_NONE
         {  true, IDC_ARROW                   }, // wxCURSOR_ARROW
-        { false, _T("wxCURSOR_RIGHT_ARROW")  }, // wxCURSOR_RIGHT_ARROW
-        { false, _T("wxCURSOR_BULLSEYE")     }, // wxCURSOR_BULLSEYE
-        {  true, IDC_ARROW                   }, // wxCURSOR_CHAR
-        {  true, IDC_CROSS                   }, // wxCURSOR_CROSS
-        { false, _T("wxCURSOR_HAND")         }, // wxCURSOR_HAND
-        {  true, IDC_IBEAM                   }, // wxCURSOR_IBEAM
-        {  true, IDC_ARROW                   }, // wxCURSOR_LEFT_BUTTON
-        { false, _T("wxCURSOR_MAGNIFIER")    }, // wxCURSOR_MAGNIFIER
-        {  true, IDC_ARROW                   }, // wxCURSOR_MIDDLE_BUTTON
-        {  true, IDC_NO                      }, // wxCURSOR_NO_ENTRY
-        { false, _T("wxCURSOR_PAINT_BRUSH")  }, // wxCURSOR_PAINT_BRUSH
-        { false, _T("wxCURSOR_PENCIL")       }, // wxCURSOR_PENCIL
-        { false, _T("wxCURSOR_POINT_LEFT")   }, // wxCURSOR_POINT_LEFT
-        { false, _T("wxCURSOR_POINT_RIGHT")  }, // wxCURSOR_POINT_RIGHT
-        {  true, IDC_HELP                    }, // wxCURSOR_QUESTION_ARROW
-        {  true, IDC_ARROW                   }, // wxCURSOR_RIGHT_BUTTON
-        {  true, IDC_SIZENESW                }, // wxCURSOR_SIZENESW
-        {  true, IDC_SIZENS                  }, // wxCURSOR_SIZENS
-        {  true, IDC_SIZENWSE                }, // wxCURSOR_SIZENWSE
-        {  true, IDC_SIZEWE                  }, // wxCURSOR_SIZEWE
-        {  true, IDC_SIZEALL                 }, // wxCURSOR_SIZING
-        { false, _T("wxCURSOR_SPRAYCAN")     }, // wxCURSOR_SPRAYCAN
-        {  true, IDC_WAIT                    }, // wxCURSOR_WAIT
-        {  true, IDC_WAIT                    }, // wxCURSOR_WATCH
-        { false, _T("wxCURSOR_BLANK")        }, // wxCURSOR_BLANK
+        { false, _T("WXCURSOR_RIGHT_ARROW")  }, // wxCURSOR_RIGHT_ARROW
+        { false, _T("WXCURSOR_BULLSEYE")     }, // wxCURSOR_BULLSEYE
+        {  true, IDC_ARROW                   }, // WXCURSOR_CHAR
+        {  true, IDC_CROSS                   }, // WXCURSOR_CROSS
+        { false, _T("WXCURSOR_HAND")         }, // wxCURSOR_HAND
+        {  true, IDC_IBEAM                   }, // WXCURSOR_IBEAM
+        {  true, IDC_ARROW                   }, // WXCURSOR_LEFT_BUTTON
+        { false, _T("WXCURSOR_MAGNIFIER")    }, // wxCURSOR_MAGNIFIER
+        {  true, IDC_ARROW                   }, // WXCURSOR_MIDDLE_BUTTON
+        {  true, IDC_NO                      }, // WXCURSOR_NO_ENTRY
+        { false, _T("WXCURSOR_PAINT_BRUSH")  }, // wxCURSOR_PAINT_BRUSH
+        { false, _T("WXCURSOR_PENCIL")       }, // wxCURSOR_PENCIL
+        { false, _T("WXCURSOR_POINT_LEFT")   }, // wxCURSOR_POINT_LEFT
+        { false, _T("WXCURSOR_POINT_RIGHT")  }, // wxCURSOR_POINT_RIGHT
+        {  true, IDC_HELP                    }, // WXCURSOR_QUESTION_ARROW
+        {  true, IDC_ARROW                   }, // WXCURSOR_RIGHT_BUTTON
+        {  true, IDC_SIZENESW                }, // WXCURSOR_SIZENESW
+        {  true, IDC_SIZENS                  }, // WXCURSOR_SIZENS
+        {  true, IDC_SIZENWSE                }, // WXCURSOR_SIZENWSE
+        {  true, IDC_SIZEWE                  }, // WXCURSOR_SIZEWE
+        {  true, IDC_SIZEALL                 }, // WXCURSOR_SIZING
+        { false, _T("WXCURSOR_SPRAYCAN")     }, // wxCURSOR_SPRAYCAN
+        {  true, IDC_WAIT                    }, // WXCURSOR_WAIT
+        {  true, IDC_WAIT                    }, // WXCURSOR_WATCH
+        { false, _T("WXCURSOR_BLANK")        }, // wxCURSOR_BLANK
         {  true, IDC_APPSTARTING             }, // wxCURSOR_ARROWWAIT
 
         // no entry for wxCURSOR_MAX
