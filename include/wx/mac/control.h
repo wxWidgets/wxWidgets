@@ -74,6 +74,7 @@ public:
    virtual void 	 MacSuperEnabled( bool enabled ) ;
    virtual void 	 MacSuperShown( bool show ) ;
    virtual bool		 MacCanFocus() const ;
+   virtual void		 MacUpdateDimensions() ;
    
    virtual void  	 DoSetSize(int x, int y,int width, int height,int sizeFlags = wxSIZE_AUTO ) ;
    void 	         OnKeyDown( wxKeyEvent &event ) ;

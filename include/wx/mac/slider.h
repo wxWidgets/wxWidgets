@@ -88,6 +88,7 @@ public:
  
   void Command(wxCommandEvent& event);
 	void 					MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
+	virtual void            MacUpdateDimensions() ;
 
  	wxStaticText*	m_macMinimumStatic ;
  	wxStaticText*	m_macMaximumStatic ;
