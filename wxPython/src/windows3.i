@@ -16,6 +16,7 @@
 #include "helpers.h"
 #include <wx/sashwin.h>
 #include <wx/laywin.h>
+#include <wx/popupwin.h>
 %}
 
 //----------------------------------------------------------------------
@@ -87,6 +88,9 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = wxCLIP_CHILDREN | wxSW_3D,
                  const char* name = "sashWindow");
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreSashWindow:val._setOORInfo(self)"
 
     bool GetSashVisible(wxSashEdgePosition edge);
     int GetDefaultBorderSize();
@@ -175,6 +179,9 @@ public:
                 long style = wxCLIP_CHILDREN | wxSW_3D,
                 const char* name = "layoutWindow");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreSashLayoutWindow:val._setOORInfo(self)"
+
     wxLayoutAlignment GetAlignment();
     wxLayoutOrientation GetOrientation();
     void SetAlignment(wxLayoutAlignment alignment);
@@ -194,6 +201,65 @@ public:
     bool LayoutWindow(wxWindow* parent, wxWindow* mainWindow = NULL);
 };
 
+
+//---------------------------------------------------------------------------
+
+// wxPopupWindow: a special kind of top level window used for popup menus,
+// combobox popups and such.
+class wxPopupWindow : public wxWindow {
+public:
+    wxPopupWindow(wxWindow *parent, int flags = wxBORDER_NONE);
+    %name(wxPrePopupWindow)wxPopupWindow();
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPrePopupWindow:val._setOORInfo(self)"
+
+    bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
+
+    void Position(const wxPoint& ptOrigin,
+                  const wxSize& size);
+};
+
+
+%{
+class wxPyPopupTransientWindow : public wxPopupTransientWindow
+{
+public:
+    wxPyPopupTransientWindow() : wxPopupTransientWindow() {}
+    wxPyPopupTransientWindow(wxWindow* parent, int style = wxBORDER_NONE)
+        : wxPopupTransientWindow(parent, style) {}
+
+    DEC_PYCALLBACK_BOOL_ME(ProcessLeftDown);
+    PYPRIVATE;
+};
+
+IMP_PYCALLBACK_BOOL_ME(wxPyPopupTransientWindow, wxPopupTransientWindow, ProcessLeftDown);
+
+%}
+
+
+
+// wxPopupTransientWindow: a wxPopupWindow which disappears automatically
+// when the user clicks mouse outside it or if it loses focus in any other way
+%name(wxPopupTransientWindow) class wxPyPopupTransientWindow : public wxPopupWindow
+{
+public:
+    wxPyPopupTransientWindow(wxWindow *parent, int style = wxBORDER_NONE);
+    %name(wxPrePopupTransientWindow)wxPyPopupTransientWindow();
+
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPopupTransientWindow)"
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPrePopupTransientWindow:val._setOORInfo(self)"
+
+    // popup the window (this will show it too) and keep focus at winFocus
+    // (or itself if it's NULL), dismiss the popup if we lose focus
+    virtual void Popup(wxWindow *focus = NULL);
+
+    // hide the window
+    virtual void Dismiss();
+};
 
 //---------------------------------------------------------------------------
 

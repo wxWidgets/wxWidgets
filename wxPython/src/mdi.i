@@ -51,6 +51,9 @@ public:
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
                      const char* name = "frame");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreMDIParentFrame:val._setOORInfo(self)"
+
     void ActivateNext();
     void ActivatePrevious();
     void ArrangeIcons();
@@ -92,6 +95,8 @@ public:
                     long style = wxDEFAULT_FRAME_STYLE,
                     const char* name = "frame");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreMDIChildFrame:val._setOORInfo(self)"
 
     void Activate();
     void Maximize(bool maximize);
@@ -107,13 +112,10 @@ public:
     wxMDIClientWindow(wxMDIParentFrame* parent, long style = 0);
     %name(wxPreMDIClientWindow)wxMDIClientWindow();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
-    %pragma(python) addtomethod = "__init__:#wx._StdOnScrollCallbacks(self)"
-
     bool Create(wxMDIParentFrame* parent, long style = 0);
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
-    %pragma(python) addtomethod = "__init__:#wx._StdOnScrollCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreMDIClientWindow:val._setOORInfo(self)"
 };
 
 //---------------------------------------------------------------------------

@@ -63,12 +63,14 @@ class wxMDIParentFrame(wxMDIParentFramePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(mdic.new_wxMDIParentFrame,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
 def wxPreMDIParentFrame(*_args,**_kwargs):
     val = wxMDIParentFramePtr(apply(mdic.new_wxPreMDIParentFrame,_args,_kwargs))
     val.thisown = 1
+    val._setOORInfo(self)
     return val
 
 
@@ -94,12 +96,14 @@ class wxMDIChildFrame(wxMDIChildFramePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(mdic.new_wxMDIChildFrame,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
 def wxPreMDIChildFrame(*_args,**_kwargs):
     val = wxMDIChildFramePtr(apply(mdic.new_wxPreMDIChildFrame,_args,_kwargs))
     val.thisown = 1
+    val._setOORInfo(self)
     return val
 
 
@@ -116,16 +120,14 @@ class wxMDIClientWindow(wxMDIClientWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(mdic.new_wxMDIClientWindow,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
-        #wx._StdOnScrollCallbacks(self)
-        #wx._StdWindowCallbacks(self)
-        #wx._StdOnScrollCallbacks(self)
+        self._setOORInfo(self)
 
 
 
 def wxPreMDIClientWindow(*_args,**_kwargs):
     val = wxMDIClientWindowPtr(apply(mdic.new_wxPreMDIClientWindow,_args,_kwargs))
     val.thisown = 1
+    val._setOORInfo(self)
     return val
 
 

@@ -212,8 +212,8 @@ IMP_PYCALLBACK_BOOL_TAG_pure(wxPyHtmlTagHandler, wxHtmlTagHandler, HandleTag);
 public:
     wxPyHtmlTagHandler();
 
-    void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxHtmlTagHandler)"
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxHtmlTagHandler)"
 
     void SetParser(wxHtmlParser *parser);
     wxHtmlParser* GetParser();
@@ -250,8 +250,8 @@ IMP_PYCALLBACK_BOOL_TAG_pure(wxPyHtmlWinTagHandler, wxHtmlWinTagHandler, HandleT
 public:
     wxPyHtmlWinTagHandler();
 
-    void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxHtmlWinTagHandler)"
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxHtmlWinTagHandler)"
 
     void SetParser(wxHtmlParser *parser);
     wxHtmlWinParser* GetParser();
@@ -424,16 +424,21 @@ public:
     void base_OnLinkClicked(const wxHtmlLinkInfo& link);
 
     DEC_PYCALLBACK__STRING(OnSetTitle);
+    DEC_PYCALLBACK__CELLINTINT(OnCellMouseHover);
+    DEC_PYCALLBACK__CELLINTINTME(OnCellClicked);
     PYPRIVATE;
 };
 
 IMPLEMENT_ABSTRACT_CLASS( wxPyHtmlWindow, wxHtmlWindow );
 IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnSetTitle);
+IMP_PYCALLBACK__CELLINTINT(wxPyHtmlWindow, wxHtmlWindow, OnCellMouseHover);
+IMP_PYCALLBACK__CELLINTINTME(wxPyHtmlWindow, wxHtmlWindow, OnCellClicked);
+
 
 void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
     bool found;
     wxPyTState* state = wxPyBeginBlockThreads();
-    if ((found = wxPyCBH_findCallback(m_myInst, "OnLinkClicked)"))) {
+    if ((found = wxPyCBH_findCallback(m_myInst, "OnLinkClicked"))) {
         PyObject* obj = wxPyConstructObject((void*)&link, "wxHtmlLinkInfo", 0);
         wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));
         Py_DECREF(obj);
@@ -445,6 +450,7 @@ void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
 void wxPyHtmlWindow::base_OnLinkClicked(const wxHtmlLinkInfo& link) {
     wxHtmlWindow::OnLinkClicked(link);
 }
+
 %}
 
 
@@ -457,11 +463,10 @@ public:
                  int flags=wxHW_SCROLLBAR_AUTO,
                  char* name = "htmlWindow");
 
-    void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxHtmlWindow)"
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
-    %pragma(python) addtomethod = "__init__:#wx._StdOnScrollCallbacks(self)"
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxHtmlWindow)"
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     bool SetPage(const wxString& source);
     bool LoadPage(const wxString& location);
@@ -498,6 +503,10 @@ public:
 
     void base_OnLinkClicked(const wxHtmlLinkInfo& link);
     void base_OnSetTitle(const char* title);
+    void base_OnCellMouseHover(wxHtmlCell *cell, wxCoord x, wxCoord y);
+    void base_OnCellClicked(wxHtmlCell *cell,
+                            wxCoord x, wxCoord y,
+                            const wxMouseEvent& event);
 };
 
 // Static methods are mapped to stand-alone functions

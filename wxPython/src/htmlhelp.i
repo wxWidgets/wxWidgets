@@ -116,6 +116,8 @@ public:
 		    const wxString& title = wxEmptyString,
 		    int style = wxHF_DEFAULTSTYLE, wxHtmlHelpData* data = NULL);
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+
     wxHtmlHelpData* GetData();
     void SetTitleFormat(const wxString& format);
     void Display(const wxString& x);
@@ -149,6 +151,8 @@ class wxHtmlHelpController : public wxEvtHandler {
 public:
     wxHtmlHelpController(int style = wxHF_DEFAULTSTYLE);
     ~wxHtmlHelpController();
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void SetTitleFormat(const wxString& format);
     void SetTempDir(const wxString& path);

@@ -573,8 +573,8 @@ IMP_PYCALLBACK__STRING( wxPyGridCellRenderer, wxGridCellRenderer, SetParameters)
 class wxPyGridCellRenderer : public wxGridCellRenderer {
 public:
     wxPyGridCellRenderer();
-    void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyGridCellRenderer)"
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyGridCellRenderer)"
 
     void base_SetParameters(const wxString& params);
 };
@@ -796,8 +796,8 @@ IMP_PYCALLBACK__(wxPyGridCellEditor, wxGridCellEditor, Destroy);
 class wxPyGridCellEditor : public wxGridCellEditor {
 public:
     wxPyGridCellEditor();
-    void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyGridCellEditor)"
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyGridCellEditor)"
 
     void base_SetSize(const wxRect& rect);
     void base_Show(bool show, wxGridCellAttr *attr = NULL);
@@ -957,8 +957,8 @@ class wxPyGridCellAttrProvider : public wxGridCellAttrProvider
 {
 public:
     wxPyGridCellAttrProvider();
-    void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyGridCellAttrProvider)"
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyGridCellAttrProvider)"
 
     wxGridCellAttr *base_GetAttr(int row, int col,
                                  wxGridCellAttr::wxAttrKind kind);
@@ -1165,8 +1165,8 @@ class wxPyGridTableBase : public wxGridTableBase
 {
 public:
     wxPyGridTableBase();
-    void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyGridTableBase)"
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyGridTableBase)"
 
     %addmethods { void Destroy() { delete self; } }
 
@@ -1326,6 +1326,7 @@ public:
             long style = wxWANTS_CHARS,
             const char* name = wxPanelNameStr );
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     enum wxGridSelectionModes {wxGridSelectCells,
                                wxGridSelectRows,

@@ -344,8 +344,8 @@ IMP_PYCALLBACK_BOOL_STRINGSTRING(wxPyFontEnumerator, wxFontEnumerator, OnFontEnc
 public:
     wxPyFontEnumerator();
     ~wxPyFontEnumerator();
-    void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxFontEnumerator)"
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxFontEnumerator)"
 
     bool EnumerateFacenames(
         wxFontEncoding encoding = wxFONTENCODING_SYSTEM, // all
@@ -681,8 +681,8 @@ public:
 class wxPyLog : public wxLog {
 public:
     wxPyLog();
-    void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyLog)"
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyLog)"
     %addmethods { void Destroy() { delete self; } }
 
 };
@@ -731,8 +731,8 @@ public:
     wxPyProcess(wxEvtHandler *parent = NULL, int id = -1);
     %addmethods { void Destroy() { delete self; } }
 
-    void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxProcess)"
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxProcess)"
 
     void base_OnTerminate(int pid, int status);
 

@@ -279,8 +279,8 @@ IMP_PYCALLBACK_BOOL_INT(wxPyPrintout, wxPrintout, HasPage);
 public:
     wxPyPrintout(const char* title = "Printout");
 
-    void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPrintout)"
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPrintout)"
 
     %addmethods {
         void Destroy() { delete self; }
@@ -353,7 +353,7 @@ public:
                    long style = wxDEFAULT_FRAME_STYLE,
                    char* name = "frame");
 
-    %pragma(python) addtomethod = "__init__:#wx._StdFrameCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void Initialize();
 

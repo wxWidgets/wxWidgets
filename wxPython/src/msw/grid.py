@@ -100,8 +100,8 @@ class wxPyGridCellRendererPtr(wxGridCellRendererPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def _setSelf(self, *_args, **_kwargs):
-        val = apply(gridc.wxPyGridCellRenderer__setSelf,(self,) + _args, _kwargs)
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(gridc.wxPyGridCellRenderer__setCallbackInfo,(self,) + _args, _kwargs)
         return val
     def base_SetParameters(self, *_args, **_kwargs):
         val = apply(gridc.wxPyGridCellRenderer_base_SetParameters,(self,) + _args, _kwargs)
@@ -112,7 +112,7 @@ class wxPyGridCellRenderer(wxPyGridCellRendererPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxPyGridCellRenderer,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self, wxPyGridCellRenderer)
+        self._setCallbackInfo(self, wxPyGridCellRenderer)
 
 
 
@@ -302,8 +302,8 @@ class wxPyGridCellEditorPtr(wxGridCellEditorPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def _setSelf(self, *_args, **_kwargs):
-        val = apply(gridc.wxPyGridCellEditor__setSelf,(self,) + _args, _kwargs)
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(gridc.wxPyGridCellEditor__setCallbackInfo,(self,) + _args, _kwargs)
         return val
     def base_SetSize(self, *_args, **_kwargs):
         val = apply(gridc.wxPyGridCellEditor_base_SetSize,(self,) + _args, _kwargs)
@@ -338,7 +338,7 @@ class wxPyGridCellEditor(wxPyGridCellEditorPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxPyGridCellEditor,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self, wxPyGridCellEditor)
+        self._setCallbackInfo(self, wxPyGridCellEditor)
 
 
 
@@ -585,8 +585,8 @@ class wxPyGridCellAttrProviderPtr(wxGridCellAttrProviderPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def _setSelf(self, *_args, **_kwargs):
-        val = apply(gridc.wxPyGridCellAttrProvider__setSelf,(self,) + _args, _kwargs)
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(gridc.wxPyGridCellAttrProvider__setCallbackInfo,(self,) + _args, _kwargs)
         return val
     def base_GetAttr(self, *_args, **_kwargs):
         val = apply(gridc.wxPyGridCellAttrProvider_base_GetAttr,(self,) + _args, _kwargs)
@@ -607,7 +607,7 @@ class wxPyGridCellAttrProvider(wxPyGridCellAttrProviderPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxPyGridCellAttrProvider,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self, wxPyGridCellAttrProvider)
+        self._setCallbackInfo(self, wxPyGridCellAttrProvider)
 
 
 
@@ -733,8 +733,8 @@ class wxPyGridTableBasePtr(wxGridTableBasePtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def _setSelf(self, *_args, **_kwargs):
-        val = apply(gridc.wxPyGridTableBase__setSelf,(self,) + _args, _kwargs)
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(gridc.wxPyGridTableBase__setCallbackInfo,(self,) + _args, _kwargs)
         return val
     def Destroy(self, *_args, **_kwargs):
         val = apply(gridc.wxPyGridTableBase_Destroy,(self,) + _args, _kwargs)
@@ -803,7 +803,7 @@ class wxPyGridTableBase(wxPyGridTableBasePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxPyGridTableBase,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self, wxPyGridTableBase)
+        self._setCallbackInfo(self, wxPyGridTableBase)
 
 
 
@@ -1432,6 +1432,7 @@ class wxGrid(wxGridPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxGrid,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 

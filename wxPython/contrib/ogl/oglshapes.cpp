@@ -88,7 +88,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #if PYTHON_API_VERSION >= 1009
     static char* wxStringErrorMsg = "String or Unicode type required";
 #else
-    static char* wxStringErrorMsg = "string type is required for parameter";
+    static char* wxStringErrorMsg = "String type required";
 #endif
 
     WXSHAPE_IMP_CALLBACKS(wxPyRectangleShape, wxRectangleShape);
@@ -1746,8 +1746,8 @@ static PyObject *_wrap_new_wxPyRectangleShape(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
-#define wxPyRectangleShape__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPyRectangleShape__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPyRectangleShape__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyRectangleShape__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyRectangleShape * _arg0;
     PyObject * _arg1;
@@ -1758,12 +1758,12 @@ static PyObject *_wrap_wxPyRectangleShape__setSelf(PyObject *self, PyObject *arg
     char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyRectangleShape__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyRectangleShape__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyRectangleShape_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyRectangleShape__setSelf. Expected _wxPyRectangleShape_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyRectangleShape__setCallbackInfo. Expected _wxPyRectangleShape_p.");
         return NULL;
         }
     }
@@ -1775,7 +1775,7 @@ static PyObject *_wrap_wxPyRectangleShape__setSelf(PyObject *self, PyObject *arg
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyRectangleShape__setSelf(_arg0,_arg1,_arg2);
+        wxPyRectangleShape__setCallbackInfo(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -2904,8 +2904,8 @@ static PyObject *_wrap_new_wxPyControlPoint(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
-#define wxPyControlPoint__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPyControlPoint__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPyControlPoint__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyControlPoint__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyControlPoint * _arg0;
     PyObject * _arg1;
@@ -2916,12 +2916,12 @@ static PyObject *_wrap_wxPyControlPoint__setSelf(PyObject *self, PyObject *args,
     char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyControlPoint__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyControlPoint__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyControlPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyControlPoint__setSelf. Expected _wxPyControlPoint_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyControlPoint__setCallbackInfo. Expected _wxPyControlPoint_p.");
         return NULL;
         }
     }
@@ -2933,7 +2933,7 @@ static PyObject *_wrap_wxPyControlPoint__setSelf(PyObject *self, PyObject *args,
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyControlPoint__setSelf(_arg0,_arg1,_arg2);
+        wxPyControlPoint__setCallbackInfo(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -4040,8 +4040,8 @@ static PyObject *_wrap_new_wxPyBitmapShape(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
-#define wxPyBitmapShape__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPyBitmapShape__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPyBitmapShape__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyBitmapShape__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyBitmapShape * _arg0;
     PyObject * _arg1;
@@ -4052,12 +4052,12 @@ static PyObject *_wrap_wxPyBitmapShape__setSelf(PyObject *self, PyObject *args, 
     char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyBitmapShape__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyBitmapShape__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyBitmapShape_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyBitmapShape__setSelf. Expected _wxPyBitmapShape_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyBitmapShape__setCallbackInfo. Expected _wxPyBitmapShape_p.");
         return NULL;
         }
     }
@@ -4069,7 +4069,7 @@ static PyObject *_wrap_wxPyBitmapShape__setSelf(PyObject *self, PyObject *args, 
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyBitmapShape__setSelf(_arg0,_arg1,_arg2);
+        wxPyBitmapShape__setCallbackInfo(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -5302,8 +5302,8 @@ static PyObject *_wrap_new_wxPyDrawnShape(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
-#define wxPyDrawnShape__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPyDrawnShape__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPyDrawnShape__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyDrawnShape__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyDrawnShape * _arg0;
     PyObject * _arg1;
@@ -5314,12 +5314,12 @@ static PyObject *_wrap_wxPyDrawnShape__setSelf(PyObject *self, PyObject *args, P
     char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyDrawnShape__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyDrawnShape__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyDrawnShape_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyDrawnShape__setSelf. Expected _wxPyDrawnShape_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyDrawnShape__setCallbackInfo. Expected _wxPyDrawnShape_p.");
         return NULL;
         }
     }
@@ -5331,7 +5331,7 @@ static PyObject *_wrap_wxPyDrawnShape__setSelf(PyObject *self, PyObject *args, P
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyDrawnShape__setSelf(_arg0,_arg1,_arg2);
+        wxPyDrawnShape__setCallbackInfo(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -7564,8 +7564,8 @@ static PyObject *_wrap_new_wxPyCompositeShape(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
-#define wxPyCompositeShape__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPyCompositeShape__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPyCompositeShape__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyCompositeShape__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyCompositeShape * _arg0;
     PyObject * _arg1;
@@ -7576,12 +7576,12 @@ static PyObject *_wrap_wxPyCompositeShape__setSelf(PyObject *self, PyObject *arg
     char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyCompositeShape__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyCompositeShape__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyCompositeShape_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyCompositeShape__setSelf. Expected _wxPyCompositeShape_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyCompositeShape__setCallbackInfo. Expected _wxPyCompositeShape_p.");
         return NULL;
         }
     }
@@ -7593,7 +7593,7 @@ static PyObject *_wrap_wxPyCompositeShape__setSelf(PyObject *self, PyObject *arg
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyCompositeShape__setSelf(_arg0,_arg1,_arg2);
+        wxPyCompositeShape__setCallbackInfo(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -9164,8 +9164,8 @@ static PyObject *_wrap_new_wxPyDividedShape(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
-#define wxPyDividedShape__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPyDividedShape__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPyDividedShape__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyDividedShape__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyDividedShape * _arg0;
     PyObject * _arg1;
@@ -9176,12 +9176,12 @@ static PyObject *_wrap_wxPyDividedShape__setSelf(PyObject *self, PyObject *args,
     char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyDividedShape__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyDividedShape__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyDividedShape_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyDividedShape__setSelf. Expected _wxPyDividedShape_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyDividedShape__setCallbackInfo. Expected _wxPyDividedShape_p.");
         return NULL;
         }
     }
@@ -9193,7 +9193,7 @@ static PyObject *_wrap_wxPyDividedShape__setSelf(PyObject *self, PyObject *args,
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyDividedShape__setSelf(_arg0,_arg1,_arg2);
+        wxPyDividedShape__setCallbackInfo(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -10334,8 +10334,8 @@ static PyObject *_wrap_new_wxPyDivisionShape(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
-#define wxPyDivisionShape__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPyDivisionShape__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPyDivisionShape__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyDivisionShape__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyDivisionShape * _arg0;
     PyObject * _arg1;
@@ -10346,12 +10346,12 @@ static PyObject *_wrap_wxPyDivisionShape__setSelf(PyObject *self, PyObject *args
     char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyDivisionShape__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyDivisionShape__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyDivisionShape_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyDivisionShape__setSelf. Expected _wxPyDivisionShape_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyDivisionShape__setCallbackInfo. Expected _wxPyDivisionShape_p.");
         return NULL;
         }
     }
@@ -10363,7 +10363,7 @@ static PyObject *_wrap_wxPyDivisionShape__setSelf(PyObject *self, PyObject *args
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyDivisionShape__setSelf(_arg0,_arg1,_arg2);
+        wxPyDivisionShape__setCallbackInfo(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -12280,7 +12280,7 @@ static PyMethodDef oglshapescMethods[] = {
 	 { "wxPyDivisionShape_AdjustRight", (PyCFunction) _wrap_wxPyDivisionShape_AdjustRight, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyDivisionShape_AdjustLeft", (PyCFunction) _wrap_wxPyDivisionShape_AdjustLeft, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyDivisionShape_AdjustBottom", (PyCFunction) _wrap_wxPyDivisionShape_AdjustBottom, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyDivisionShape__setSelf", (PyCFunction) _wrap_wxPyDivisionShape__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyDivisionShape__setCallbackInfo", (PyCFunction) _wrap_wxPyDivisionShape__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyDivisionShape", (PyCFunction) _wrap_new_wxPyDivisionShape, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyDividedShape_base_OnEndSize", (PyCFunction) _wrap_wxPyDividedShape_base_OnEndSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyDividedShape_base_OnBeginSize", (PyCFunction) _wrap_wxPyDividedShape_base_OnBeginSize, METH_VARARGS | METH_KEYWORDS },
@@ -12313,7 +12313,7 @@ static PyMethodDef oglshapescMethods[] = {
 	 { "wxPyDividedShape_base_OnDelete", (PyCFunction) _wrap_wxPyDividedShape_base_OnDelete, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyDividedShape_SetRegionSizes", (PyCFunction) _wrap_wxPyDividedShape_SetRegionSizes, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyDividedShape_EditRegions", (PyCFunction) _wrap_wxPyDividedShape_EditRegions, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyDividedShape__setSelf", (PyCFunction) _wrap_wxPyDividedShape__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyDividedShape__setCallbackInfo", (PyCFunction) _wrap_wxPyDividedShape__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyDividedShape", (PyCFunction) _wrap_new_wxPyDividedShape, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyCompositeShape_base_OnEndSize", (PyCFunction) _wrap_wxPyCompositeShape_base_OnEndSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyCompositeShape_base_OnBeginSize", (PyCFunction) _wrap_wxPyCompositeShape_base_OnBeginSize, METH_VARARGS | METH_KEYWORDS },
@@ -12358,7 +12358,7 @@ static PyMethodDef oglshapescMethods[] = {
 	 { "wxPyCompositeShape_AddConstrainedShapes", (PyCFunction) _wrap_wxPyCompositeShape_AddConstrainedShapes, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyCompositeShape_AddConstraint", (PyCFunction) _wrap_wxPyCompositeShape_AddConstraint, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyCompositeShape_AddChild", (PyCFunction) _wrap_wxPyCompositeShape_AddChild, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyCompositeShape__setSelf", (PyCFunction) _wrap_wxPyCompositeShape__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyCompositeShape__setCallbackInfo", (PyCFunction) _wrap_wxPyCompositeShape__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyCompositeShape", (PyCFunction) _wrap_new_wxPyCompositeShape, METH_VARARGS | METH_KEYWORDS },
 	 { "wxOGLConstraint_Equals", (PyCFunction) _wrap_wxOGLConstraint_Equals, METH_VARARGS | METH_KEYWORDS },
 	 { "wxOGLConstraint_SetSpacing", (PyCFunction) _wrap_wxOGLConstraint_SetSpacing, METH_VARARGS | METH_KEYWORDS },
@@ -12421,7 +12421,7 @@ static PyMethodDef oglshapescMethods[] = {
 	 { "wxPyDrawnShape_DrawArc", (PyCFunction) _wrap_wxPyDrawnShape_DrawArc, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyDrawnShape_DestroyClippingRect", (PyCFunction) _wrap_wxPyDrawnShape_DestroyClippingRect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyDrawnShape_CalculateSize", (PyCFunction) _wrap_wxPyDrawnShape_CalculateSize, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyDrawnShape__setSelf", (PyCFunction) _wrap_wxPyDrawnShape__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyDrawnShape__setCallbackInfo", (PyCFunction) _wrap_wxPyDrawnShape__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyDrawnShape", (PyCFunction) _wrap_new_wxPyDrawnShape, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyBitmapShape_base_OnEndSize", (PyCFunction) _wrap_wxPyBitmapShape_base_OnEndSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyBitmapShape_base_OnBeginSize", (PyCFunction) _wrap_wxPyBitmapShape_base_OnBeginSize, METH_VARARGS | METH_KEYWORDS },
@@ -12456,7 +12456,7 @@ static PyMethodDef oglshapescMethods[] = {
 	 { "wxPyBitmapShape_SetBitmap", (PyCFunction) _wrap_wxPyBitmapShape_SetBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyBitmapShape_GetFilename", (PyCFunction) _wrap_wxPyBitmapShape_GetFilename, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyBitmapShape_GetBitmap", (PyCFunction) _wrap_wxPyBitmapShape_GetBitmap, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyBitmapShape__setSelf", (PyCFunction) _wrap_wxPyBitmapShape__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyBitmapShape__setCallbackInfo", (PyCFunction) _wrap_wxPyBitmapShape__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyBitmapShape", (PyCFunction) _wrap_new_wxPyBitmapShape, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyControlPoint_base_OnEndSize", (PyCFunction) _wrap_wxPyControlPoint_base_OnEndSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyControlPoint_base_OnBeginSize", (PyCFunction) _wrap_wxPyControlPoint_base_OnBeginSize, METH_VARARGS | METH_KEYWORDS },
@@ -12488,7 +12488,7 @@ static PyMethodDef oglshapescMethods[] = {
 	 { "wxPyControlPoint_base_OnDraw", (PyCFunction) _wrap_wxPyControlPoint_base_OnDraw, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyControlPoint_base_OnDelete", (PyCFunction) _wrap_wxPyControlPoint_base_OnDelete, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyControlPoint_SetCornerRadius", (PyCFunction) _wrap_wxPyControlPoint_SetCornerRadius, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyControlPoint__setSelf", (PyCFunction) _wrap_wxPyControlPoint__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyControlPoint__setCallbackInfo", (PyCFunction) _wrap_wxPyControlPoint__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyControlPoint", (PyCFunction) _wrap_new_wxPyControlPoint, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyRectangleShape_base_OnEndSize", (PyCFunction) _wrap_wxPyRectangleShape_base_OnEndSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyRectangleShape_base_OnBeginSize", (PyCFunction) _wrap_wxPyRectangleShape_base_OnBeginSize, METH_VARARGS | METH_KEYWORDS },
@@ -12520,7 +12520,7 @@ static PyMethodDef oglshapescMethods[] = {
 	 { "wxPyRectangleShape_base_OnDraw", (PyCFunction) _wrap_wxPyRectangleShape_base_OnDraw, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyRectangleShape_base_OnDelete", (PyCFunction) _wrap_wxPyRectangleShape_base_OnDelete, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyRectangleShape_SetCornerRadius", (PyCFunction) _wrap_wxPyRectangleShape_SetCornerRadius, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyRectangleShape__setSelf", (PyCFunction) _wrap_wxPyRectangleShape__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyRectangleShape__setCallbackInfo", (PyCFunction) _wrap_wxPyRectangleShape__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyRectangleShape", (PyCFunction) _wrap_new_wxPyRectangleShape, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPseudoMetaFile_SetBackgroundMode", (PyCFunction) _wrap_wxPseudoMetaFile_SetBackgroundMode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPseudoMetaFile_SetBackgroundColour", (PyCFunction) _wrap_wxPseudoMetaFile_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
@@ -12584,41 +12584,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
-    { "_wxPyCompositeShape","_class_wxPyDivisionShape",SwigwxPyDivisionShapeTowxPyCompositeShape},
     { "_wxPyCompositeShape","_wxPyDivisionShape",SwigwxPyDivisionShapeTowxPyCompositeShape},
-    { "_class_wxPyRectangleShape","_class_wxPyDivisionShape",SwigwxPyDivisionShapeTowxPyRectangleShape},
-    { "_class_wxPyRectangleShape","_wxPyDivisionShape",SwigwxPyDivisionShapeTowxPyRectangleShape},
-    { "_class_wxPyRectangleShape","_class_wxPyDividedShape",SwigwxPyDividedShapeTowxPyRectangleShape},
-    { "_class_wxPyRectangleShape","_wxPyDividedShape",SwigwxPyDividedShapeTowxPyRectangleShape},
-    { "_class_wxPyRectangleShape","_class_wxPyCompositeShape",SwigwxPyCompositeShapeTowxPyRectangleShape},
-    { "_class_wxPyRectangleShape","_wxPyCompositeShape",SwigwxPyCompositeShapeTowxPyRectangleShape},
-    { "_class_wxPyRectangleShape","_class_wxPyDrawnShape",SwigwxPyDrawnShapeTowxPyRectangleShape},
-    { "_class_wxPyRectangleShape","_wxPyDrawnShape",SwigwxPyDrawnShapeTowxPyRectangleShape},
-    { "_class_wxPyRectangleShape","_class_wxPyBitmapShape",SwigwxPyBitmapShapeTowxPyRectangleShape},
-    { "_class_wxPyRectangleShape","_wxPyBitmapShape",SwigwxPyBitmapShapeTowxPyRectangleShape},
-    { "_class_wxPyRectangleShape","_class_wxPyControlPoint",SwigwxPyControlPointTowxPyRectangleShape},
-    { "_class_wxPyRectangleShape","_wxPyControlPoint",SwigwxPyControlPointTowxPyRectangleShape},
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_class_wxObject","_class_wxPyDivisionShape",SwigwxPyDivisionShapeTowxObject},
-    { "_class_wxObject","_wxPyDivisionShape",SwigwxPyDivisionShapeTowxObject},
-    { "_class_wxObject","_class_wxPyDividedShape",SwigwxPyDividedShapeTowxObject},
-    { "_class_wxObject","_wxPyDividedShape",SwigwxPyDividedShapeTowxObject},
-    { "_class_wxObject","_class_wxPyCompositeShape",SwigwxPyCompositeShapeTowxObject},
-    { "_class_wxObject","_wxPyCompositeShape",SwigwxPyCompositeShapeTowxObject},
-    { "_class_wxObject","_class_wxOGLConstraint",SwigwxOGLConstraintTowxObject},
-    { "_class_wxObject","_wxOGLConstraint",SwigwxOGLConstraintTowxObject},
-    { "_class_wxObject","_class_wxPyDrawnShape",SwigwxPyDrawnShapeTowxObject},
-    { "_class_wxObject","_wxPyDrawnShape",SwigwxPyDrawnShapeTowxObject},
-    { "_class_wxObject","_class_wxPyBitmapShape",SwigwxPyBitmapShapeTowxObject},
-    { "_class_wxObject","_wxPyBitmapShape",SwigwxPyBitmapShapeTowxObject},
-    { "_class_wxObject","_class_wxPyControlPoint",SwigwxPyControlPointTowxObject},
-    { "_class_wxObject","_wxPyControlPoint",SwigwxPyControlPointTowxObject},
-    { "_class_wxObject","_class_wxPyRectangleShape",SwigwxPyRectangleShapeTowxObject},
-    { "_class_wxObject","_wxPyRectangleShape",SwigwxPyRectangleShapeTowxObject},
-    { "_class_wxObject","_class_wxPseudoMetaFile",SwigwxPseudoMetaFileTowxObject},
-    { "_class_wxObject","_wxPseudoMetaFile",SwigwxPseudoMetaFileTowxObject},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -12626,22 +12595,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
-    { "_class_wxPyShapeEvtHandler","_class_wxPyDivisionShape",SwigwxPyDivisionShapeTowxPyShapeEvtHandler},
-    { "_class_wxPyShapeEvtHandler","_wxPyDivisionShape",SwigwxPyDivisionShapeTowxPyShapeEvtHandler},
-    { "_class_wxPyShapeEvtHandler","_class_wxPyDividedShape",SwigwxPyDividedShapeTowxPyShapeEvtHandler},
-    { "_class_wxPyShapeEvtHandler","_wxPyDividedShape",SwigwxPyDividedShapeTowxPyShapeEvtHandler},
-    { "_class_wxPyShapeEvtHandler","_class_wxPyCompositeShape",SwigwxPyCompositeShapeTowxPyShapeEvtHandler},
-    { "_class_wxPyShapeEvtHandler","_wxPyCompositeShape",SwigwxPyCompositeShapeTowxPyShapeEvtHandler},
-    { "_class_wxPyShapeEvtHandler","_class_wxPyDrawnShape",SwigwxPyDrawnShapeTowxPyShapeEvtHandler},
-    { "_class_wxPyShapeEvtHandler","_wxPyDrawnShape",SwigwxPyDrawnShapeTowxPyShapeEvtHandler},
-    { "_class_wxPyShapeEvtHandler","_class_wxPyBitmapShape",SwigwxPyBitmapShapeTowxPyShapeEvtHandler},
-    { "_class_wxPyShapeEvtHandler","_wxPyBitmapShape",SwigwxPyBitmapShapeTowxPyShapeEvtHandler},
-    { "_class_wxPyShapeEvtHandler","_class_wxPyControlPoint",SwigwxPyControlPointTowxPyShapeEvtHandler},
-    { "_class_wxPyShapeEvtHandler","_wxPyControlPoint",SwigwxPyControlPointTowxPyShapeEvtHandler},
-    { "_class_wxPyShapeEvtHandler","_class_wxPyRectangleShape",SwigwxPyRectangleShapeTowxPyShapeEvtHandler},
-    { "_class_wxPyShapeEvtHandler","_wxPyRectangleShape",SwigwxPyRectangleShapeTowxPyShapeEvtHandler},
-    { "_class_wxPyCompositeShape","_class_wxPyDivisionShape",SwigwxPyDivisionShapeTowxPyCompositeShape},
-    { "_class_wxPyCompositeShape","_wxPyDivisionShape",SwigwxPyDivisionShapeTowxPyCompositeShape},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
     { "_uint","_time_t",0},
@@ -12671,39 +12624,23 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_short","_wxDateTime_t",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_wxObject","_class_wxPyDivisionShape",SwigwxPyDivisionShapeTowxObject},
     { "_wxObject","_wxPyDivisionShape",SwigwxPyDivisionShapeTowxObject},
-    { "_wxObject","_class_wxPyDividedShape",SwigwxPyDividedShapeTowxObject},
     { "_wxObject","_wxPyDividedShape",SwigwxPyDividedShapeTowxObject},
-    { "_wxObject","_class_wxPyCompositeShape",SwigwxPyCompositeShapeTowxObject},
     { "_wxObject","_wxPyCompositeShape",SwigwxPyCompositeShapeTowxObject},
-    { "_wxObject","_class_wxOGLConstraint",SwigwxOGLConstraintTowxObject},
     { "_wxObject","_wxOGLConstraint",SwigwxOGLConstraintTowxObject},
-    { "_wxObject","_class_wxPyDrawnShape",SwigwxPyDrawnShapeTowxObject},
     { "_wxObject","_wxPyDrawnShape",SwigwxPyDrawnShapeTowxObject},
-    { "_wxObject","_class_wxPyBitmapShape",SwigwxPyBitmapShapeTowxObject},
     { "_wxObject","_wxPyBitmapShape",SwigwxPyBitmapShapeTowxObject},
-    { "_wxObject","_class_wxPyControlPoint",SwigwxPyControlPointTowxObject},
     { "_wxObject","_wxPyControlPoint",SwigwxPyControlPointTowxObject},
-    { "_wxObject","_class_wxPyRectangleShape",SwigwxPyRectangleShapeTowxObject},
     { "_wxObject","_wxPyRectangleShape",SwigwxPyRectangleShapeTowxObject},
-    { "_wxObject","_class_wxPseudoMetaFile",SwigwxPseudoMetaFileTowxObject},
     { "_wxObject","_wxPseudoMetaFile",SwigwxPseudoMetaFileTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
-    { "_wxPyShape","_class_wxPyDivisionShape",SwigwxPyDivisionShapeTowxPyShape},
     { "_wxPyShape","_wxPyDivisionShape",SwigwxPyDivisionShapeTowxPyShape},
-    { "_wxPyShape","_class_wxPyDividedShape",SwigwxPyDividedShapeTowxPyShape},
     { "_wxPyShape","_wxPyDividedShape",SwigwxPyDividedShapeTowxPyShape},
-    { "_wxPyShape","_class_wxPyCompositeShape",SwigwxPyCompositeShapeTowxPyShape},
     { "_wxPyShape","_wxPyCompositeShape",SwigwxPyCompositeShapeTowxPyShape},
-    { "_wxPyShape","_class_wxPyDrawnShape",SwigwxPyDrawnShapeTowxPyShape},
     { "_wxPyShape","_wxPyDrawnShape",SwigwxPyDrawnShapeTowxPyShape},
-    { "_wxPyShape","_class_wxPyBitmapShape",SwigwxPyBitmapShapeTowxPyShape},
     { "_wxPyShape","_wxPyBitmapShape",SwigwxPyBitmapShapeTowxPyShape},
-    { "_wxPyShape","_class_wxPyControlPoint",SwigwxPyControlPointTowxPyShape},
     { "_wxPyShape","_wxPyControlPoint",SwigwxPyControlPointTowxPyShape},
-    { "_wxPyShape","_class_wxPyRectangleShape",SwigwxPyRectangleShapeTowxPyShape},
     { "_wxPyShape","_wxPyRectangleShape",SwigwxPyRectangleShapeTowxPyShape},
     { "_unsigned_char","_byte",0},
     { "_unsigned_int","_wxCoord",0},
@@ -12745,20 +12682,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_time_t","_wxWindowID",0},
     { "_time_t","_uint",0},
     { "_time_t","_size_t",0},
-    { "_class_wxPyShape","_class_wxPyDivisionShape",SwigwxPyDivisionShapeTowxPyShape},
-    { "_class_wxPyShape","_wxPyDivisionShape",SwigwxPyDivisionShapeTowxPyShape},
-    { "_class_wxPyShape","_class_wxPyDividedShape",SwigwxPyDividedShapeTowxPyShape},
-    { "_class_wxPyShape","_wxPyDividedShape",SwigwxPyDividedShapeTowxPyShape},
-    { "_class_wxPyShape","_class_wxPyCompositeShape",SwigwxPyCompositeShapeTowxPyShape},
-    { "_class_wxPyShape","_wxPyCompositeShape",SwigwxPyCompositeShapeTowxPyShape},
-    { "_class_wxPyShape","_class_wxPyDrawnShape",SwigwxPyDrawnShapeTowxPyShape},
-    { "_class_wxPyShape","_wxPyDrawnShape",SwigwxPyDrawnShapeTowxPyShape},
-    { "_class_wxPyShape","_class_wxPyBitmapShape",SwigwxPyBitmapShapeTowxPyShape},
-    { "_class_wxPyShape","_wxPyBitmapShape",SwigwxPyBitmapShapeTowxPyShape},
-    { "_class_wxPyShape","_class_wxPyControlPoint",SwigwxPyControlPointTowxPyShape},
-    { "_class_wxPyShape","_wxPyControlPoint",SwigwxPyControlPointTowxPyShape},
-    { "_class_wxPyShape","_class_wxPyRectangleShape",SwigwxPyRectangleShapeTowxPyShape},
-    { "_class_wxPyShape","_wxPyRectangleShape",SwigwxPyRectangleShapeTowxPyShape},
     { "_wxCoord","_int",0},
     { "_wxCoord","_signed_int",0},
     { "_wxCoord","_unsigned_int",0},
@@ -12768,31 +12691,18 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
-    { "_wxPyShapeEvtHandler","_class_wxPyDivisionShape",SwigwxPyDivisionShapeTowxPyShapeEvtHandler},
     { "_wxPyShapeEvtHandler","_wxPyDivisionShape",SwigwxPyDivisionShapeTowxPyShapeEvtHandler},
-    { "_wxPyShapeEvtHandler","_class_wxPyDividedShape",SwigwxPyDividedShapeTowxPyShapeEvtHandler},
     { "_wxPyShapeEvtHandler","_wxPyDividedShape",SwigwxPyDividedShapeTowxPyShapeEvtHandler},
-    { "_wxPyShapeEvtHandler","_class_wxPyCompositeShape",SwigwxPyCompositeShapeTowxPyShapeEvtHandler},
     { "_wxPyShapeEvtHandler","_wxPyCompositeShape",SwigwxPyCompositeShapeTowxPyShapeEvtHandler},
-    { "_wxPyShapeEvtHandler","_class_wxPyDrawnShape",SwigwxPyDrawnShapeTowxPyShapeEvtHandler},
     { "_wxPyShapeEvtHandler","_wxPyDrawnShape",SwigwxPyDrawnShapeTowxPyShapeEvtHandler},
-    { "_wxPyShapeEvtHandler","_class_wxPyBitmapShape",SwigwxPyBitmapShapeTowxPyShapeEvtHandler},
     { "_wxPyShapeEvtHandler","_wxPyBitmapShape",SwigwxPyBitmapShapeTowxPyShapeEvtHandler},
-    { "_wxPyShapeEvtHandler","_class_wxPyControlPoint",SwigwxPyControlPointTowxPyShapeEvtHandler},
     { "_wxPyShapeEvtHandler","_wxPyControlPoint",SwigwxPyControlPointTowxPyShapeEvtHandler},
-    { "_wxPyShapeEvtHandler","_class_wxPyRectangleShape",SwigwxPyRectangleShapeTowxPyShapeEvtHandler},
     { "_wxPyShapeEvtHandler","_wxPyRectangleShape",SwigwxPyRectangleShapeTowxPyShapeEvtHandler},
-    { "_wxPyRectangleShape","_class_wxPyDivisionShape",SwigwxPyDivisionShapeTowxPyRectangleShape},
     { "_wxPyRectangleShape","_wxPyDivisionShape",SwigwxPyDivisionShapeTowxPyRectangleShape},
-    { "_wxPyRectangleShape","_class_wxPyDividedShape",SwigwxPyDividedShapeTowxPyRectangleShape},
     { "_wxPyRectangleShape","_wxPyDividedShape",SwigwxPyDividedShapeTowxPyRectangleShape},
-    { "_wxPyRectangleShape","_class_wxPyCompositeShape",SwigwxPyCompositeShapeTowxPyRectangleShape},
     { "_wxPyRectangleShape","_wxPyCompositeShape",SwigwxPyCompositeShapeTowxPyRectangleShape},
-    { "_wxPyRectangleShape","_class_wxPyDrawnShape",SwigwxPyDrawnShapeTowxPyRectangleShape},
     { "_wxPyRectangleShape","_wxPyDrawnShape",SwigwxPyDrawnShapeTowxPyRectangleShape},
-    { "_wxPyRectangleShape","_class_wxPyBitmapShape",SwigwxPyBitmapShapeTowxPyRectangleShape},
     { "_wxPyRectangleShape","_wxPyBitmapShape",SwigwxPyBitmapShapeTowxPyRectangleShape},
-    { "_wxPyRectangleShape","_class_wxPyControlPoint",SwigwxPyControlPointTowxPyRectangleShape},
     { "_wxPyRectangleShape","_wxPyControlPoint",SwigwxPyControlPointTowxPyRectangleShape},
 {0,0,0}};
 

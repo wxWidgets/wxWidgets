@@ -266,8 +266,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxPySizer, wxSizer);
 class wxPySizer : public wxSizer {
 public:
     wxPySizer();
-    void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPySizer)"
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPySizer)"
 };
 
 

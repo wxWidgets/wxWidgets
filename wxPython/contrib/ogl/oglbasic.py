@@ -147,8 +147,8 @@ class wxPyShapeEvtHandlerPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def _setSelf(self, *_args, **_kwargs):
-        val = apply(oglbasicc.wxPyShapeEvtHandler__setSelf,(self,) + _args, _kwargs)
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(oglbasicc.wxPyShapeEvtHandler__setCallbackInfo,(self,) + _args, _kwargs)
         return val
     def Destroy(self, *_args, **_kwargs):
         val = apply(oglbasicc.wxPyShapeEvtHandler_Destroy,(self,) + _args, _kwargs)
@@ -261,7 +261,7 @@ class wxPyShapeEvtHandler(wxPyShapeEvtHandlerPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(oglbasicc.new_wxPyShapeEvtHandler,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self, wxPyShapeEvtHandler)
+        self._setCallbackInfo(self, wxPyShapeEvtHandler)
 
 
 
@@ -270,8 +270,8 @@ class wxPyShapePtr(wxPyShapeEvtHandlerPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def _setSelf(self, *_args, **_kwargs):
-        val = apply(oglbasicc.wxPyShape__setSelf,(self,) + _args, _kwargs)
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(oglbasicc.wxPyShape__setCallbackInfo,(self,) + _args, _kwargs)
         return val
     def Destroy(self, *_args, **_kwargs):
         val = apply(oglbasicc.wxPyShape_Destroy,(self,) + _args, _kwargs)

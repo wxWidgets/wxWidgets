@@ -14,6 +14,7 @@ class SimpleGrid(wxGrid): ##, wxGridAutoEditMixin):
         EVT_IDLE(self, self.OnIdle)
 
         self.CreateGrid(25, 25)
+        ##self.EnableEditing(false)
 
         # simple cell formatting
         self.SetColSize(3, 200)

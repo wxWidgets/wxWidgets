@@ -267,8 +267,8 @@ class wxHtmlTagHandlerPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def _setSelf(self, *_args, **_kwargs):
-        val = apply(htmlc.wxHtmlTagHandler__setSelf,(self,) + _args, _kwargs)
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlTagHandler__setCallbackInfo,(self,) + _args, _kwargs)
         return val
     def SetParser(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlTagHandler_SetParser,(self,) + _args, _kwargs)
@@ -286,7 +286,7 @@ class wxHtmlTagHandler(wxHtmlTagHandlerPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(htmlc.new_wxHtmlTagHandler,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self, wxHtmlTagHandler)
+        self._setCallbackInfo(self, wxHtmlTagHandler)
 
 
 
@@ -295,8 +295,8 @@ class wxHtmlWinTagHandlerPtr(wxHtmlTagHandlerPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def _setSelf(self, *_args, **_kwargs):
-        val = apply(htmlc.wxHtmlWinTagHandler__setSelf,(self,) + _args, _kwargs)
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWinTagHandler__setCallbackInfo,(self,) + _args, _kwargs)
         return val
     def SetParser(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWinTagHandler_SetParser,(self,) + _args, _kwargs)
@@ -314,7 +314,7 @@ class wxHtmlWinTagHandler(wxHtmlWinTagHandlerPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(htmlc.new_wxHtmlWinTagHandler,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self, wxHtmlWinTagHandler)
+        self._setCallbackInfo(self, wxHtmlWinTagHandler)
 
 
 
@@ -511,8 +511,8 @@ class wxHtmlWindowPtr(wxScrolledWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def _setSelf(self, *_args, **_kwargs):
-        val = apply(htmlc.wxHtmlWindow__setSelf,(self,) + _args, _kwargs)
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow__setCallbackInfo,(self,) + _args, _kwargs)
         return val
     def SetPage(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWindow_SetPage,(self,) + _args, _kwargs)
@@ -582,15 +582,20 @@ class wxHtmlWindowPtr(wxScrolledWindowPtr):
     def base_OnSetTitle(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWindow_base_OnSetTitle,(self,) + _args, _kwargs)
         return val
+    def base_OnCellMouseHover(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_base_OnCellMouseHover,(self,) + _args, _kwargs)
+        return val
+    def base_OnCellClicked(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_base_OnCellClicked,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxHtmlWindow instance at %s>" % (self.this,)
 class wxHtmlWindow(wxHtmlWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(htmlc.new_wxHtmlWindow,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self, wxHtmlWindow)
-        #wx._StdWindowCallbacks(self)
-        #wx._StdOnScrollCallbacks(self)
+        self._setCallbackInfo(self, wxHtmlWindow)
+        self._setOORInfo(self)
 
 
 

@@ -28,6 +28,9 @@ _treeList = [
                                 'VirtualListCtrl',
                                 'wxListCtrl',
                                 'TablePrint',
+                                'OOR',
+                                'wxFindReplaceDialog',
+                                ##'wxPopupWindow',
                                 ]),
 
     ('Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame',
@@ -35,12 +38,15 @@ _treeList = [
                  'wxScrolledWindow', 'wxSplitterWindow',
                  'wxStatusBar', 'wxNotebook',
                  'wxHtmlWindow',
-                 'wxStyledTextCtrl_1', 'wxStyledTextCtrl_2',]),
+                 'wxStyledTextCtrl_1', 'wxStyledTextCtrl_2',
+                 ##'wxPopupWindow',
+                 ]),
 
     ('Common Dialogs', ['wxColourDialog', 'wxDirDialog', 'wxFileDialog',
                         'wxSingleChoiceDialog', 'wxTextEntryDialog',
                         'wxFontDialog', 'wxPageSetupDialog', 'wxPrintDialog',
-                        'wxMessageDialog', 'wxProgressDialog']),
+                        'wxMessageDialog', 'wxProgressDialog', 'wxFindReplaceDialog',
+                        ]),
 
     ('Controls', ['wxButton', 'wxCheckBox', 'wxCheckListBox', 'wxChoice',
                   'wxComboBox', 'wxGauge', 'wxListBox', 'wxListCtrl', 'wxTextCtrl',

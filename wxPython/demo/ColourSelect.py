@@ -86,6 +86,5 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-A checkbox is a labelled box which is either on (checkmark is visible) or off (no checkmark).
 
 """

@@ -10,6 +10,10 @@ class TestPanel(wxPanel):
     def OnKillFocus(self, evt):
         print "OnKillFocus"
         evt.Skip()
+    def OnWindowDestroy(self, evt):
+        print "OnWindowDestroy"
+        evt.Skip()
+
 
     def __init__(self, parent, log):
         wxPanel.__init__(self, parent, -1)
@@ -22,6 +26,7 @@ class TestPanel(wxPanel):
         EVT_CHAR(t1, self.EvtChar)
         EVT_SET_FOCUS(t1, self.OnSetFocus)
         EVT_KILL_FOCUS(t1, self.OnKillFocus)
+        EVT_WINDOW_DESTROY(t1, self.OnWindowDestroy)
 
         l2 = wxStaticText(self, -1, "Passsword")
         t2 = wxTextCtrl(self, 20, "", size=(125, -1), style=wxTE_PASSWORD)

@@ -79,6 +79,9 @@ public:
                long style = 0,
                char* name = "notebook");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreNotebook:val._setOORInfo(self)"
+
     int GetPageCount();
     int SetSelection(int nPage);
     void AdvanceSelection(bool bForward = TRUE);
@@ -173,6 +176,8 @@ public:
                 long style=wxSP_3D|wxCLIP_CHILDREN,
                 char* name = "splitterWindow");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreSplitterWindow:val._setOORInfo(self)"
 
     // Gets the only or left/top pane
     wxWindow *GetWindow1();
@@ -256,6 +261,8 @@ class wxTaskBarIcon : public wxEvtHandler {
 public:
     wxTaskBarIcon();
     ~wxTaskBarIcon();
+
+    //%pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     // We still use the magic methods here since that is the way it is documented...
     %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnMouseMove',    wxEVT_TASKBAR_MOVE)"

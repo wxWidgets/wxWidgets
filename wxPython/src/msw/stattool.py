@@ -54,13 +54,14 @@ class wxStatusBar(wxStatusBarPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(stattoolc.new_wxStatusBar,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
+        self._setOORInfo(self)
 
 
 
 def wxPreStatusBar(*_args,**_kwargs):
     val = wxStatusBarPtr(apply(stattoolc.new_wxPreStatusBar,_args,_kwargs))
     val.thisown = 1
+    val._setOORInfo(self)
     return val
 
 
@@ -311,13 +312,14 @@ class wxToolBar(wxToolBarPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(stattoolc.new_wxToolBar,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
+        self._setOORInfo(self)
 
 
 
 def wxPreToolBar(*_args,**_kwargs):
     val = wxToolBarPtr(apply(stattoolc.new_wxPreToolBar,_args,_kwargs))
     val.thisown = 1
+    val._setOORInfo(self)
     return val
 
 
@@ -337,13 +339,14 @@ class wxToolBarSimple(wxToolBarSimplePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(stattoolc.new_wxToolBarSimple,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
+        self._setOORInfo(self)
 
 
 
 def wxPreToolBarSimple(*_args,**_kwargs):
     val = wxToolBarSimplePtr(apply(stattoolc.new_wxPreToolBarSimple,_args,_kwargs))
     val.thisown = 1
+    val._setOORInfo(self)
     return val
 
 

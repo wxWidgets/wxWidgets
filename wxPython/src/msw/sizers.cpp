@@ -89,7 +89,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #if PYTHON_API_VERSION >= 1009
     static char* wxStringErrorMsg = "String or Unicode type required";
 #else
-    static char* wxStringErrorMsg = "string type is required for parameter";
+    static char* wxStringErrorMsg = "String type required";
 #endif
 
 class wxPySizer : public wxSizer {
@@ -1844,8 +1844,8 @@ static PyObject *_wrap_new_wxPySizer(PyObject *self, PyObject *args, PyObject *k
     return _resultobj;
 }
 
-#define wxPySizer__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPySizer__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPySizer__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPySizer__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPySizer * _arg0;
     PyObject * _arg1;
@@ -1856,12 +1856,12 @@ static PyObject *_wrap_wxPySizer__setSelf(PyObject *self, PyObject *args, PyObje
     char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPySizer__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPySizer__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPySizer_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPySizer__setSelf. Expected _wxPySizer_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPySizer__setCallbackInfo. Expected _wxPySizer_p.");
         return NULL;
         }
     }
@@ -1873,7 +1873,7 @@ static PyObject *_wrap_wxPySizer__setSelf(PyObject *self, PyObject *args, PyObje
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPySizer__setSelf(_arg0,_arg1,_arg2);
+        wxPySizer__setCallbackInfo(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
@@ -2885,7 +2885,7 @@ static PyMethodDef sizerscMethods[] = {
 	 { "wxBoxSizer_RecalcSizes", (PyCFunction) _wrap_wxBoxSizer_RecalcSizes, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBoxSizer_GetOrientation", (PyCFunction) _wrap_wxBoxSizer_GetOrientation, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxBoxSizer", (PyCFunction) _wrap_new_wxBoxSizer, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPySizer__setSelf", (PyCFunction) _wrap_wxPySizer__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPySizer__setCallbackInfo", (PyCFunction) _wrap_wxPySizer__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPySizer", (PyCFunction) _wrap_new_wxPySizer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_GetChildren", (PyCFunction) _wrap_wxSizer_GetChildren, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_SetSizeHints", (PyCFunction) _wrap_wxSizer_SetSizeHints, METH_VARARGS | METH_KEYWORDS },

@@ -54,6 +54,9 @@ class wxEvtHandlerPtr(wxObjectPtr):
     def Disconnect(self, *_args, **_kwargs):
         val = apply(windowsc.wxEvtHandler_Disconnect,(self,) + _args, _kwargs)
         return val
+    def _setOORInfo(self, *_args, **_kwargs):
+        val = apply(windowsc.wxEvtHandler__setOORInfo,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxEvtHandler instance at %s>" % (self.this,)
 class wxEvtHandler(wxEvtHandlerPtr):
@@ -83,6 +86,7 @@ class wxValidator(wxValidatorPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxValidator,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -91,8 +95,8 @@ class wxPyValidatorPtr(wxValidatorPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def _setSelf(self, *_args, **_kwargs):
-        val = apply(windowsc.wxPyValidator__setSelf,(self,) + _args, _kwargs)
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(windowsc.wxPyValidator__setCallbackInfo,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxPyValidator instance at %s>" % (self.this,)
@@ -100,7 +104,8 @@ class wxPyValidator(wxPyValidatorPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxPyValidator,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self, wxPyValidator, 1)
+        self._setCallbackInfo(self, wxPyValidator, 1)
+        self._setOORInfo(self)
 
 
 
@@ -564,12 +569,14 @@ class wxWindow(wxWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxWindow,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
 def wxPreWindow(*_args,**_kwargs):
     val = wxWindowPtr(apply(windowsc.new_wxPreWindow,_args,_kwargs))
     val.thisown = 1
+    val._setOORInfo(self)
     return val
 
 
@@ -595,6 +602,7 @@ class wxPanel(wxPanelPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxPanel,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -672,12 +680,14 @@ class wxScrolledWindow(wxScrolledWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxScrolledWindow,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
 def wxPreScrolledWindow(*_args,**_kwargs):
     val = wxScrolledWindowPtr(apply(windowsc.new_wxPreScrolledWindow,_args,_kwargs))
     val.thisown = 1
+    val._setOORInfo(self)
     return val
 
 
@@ -799,6 +809,7 @@ class wxMenu(wxMenuPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxMenu,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -873,6 +884,7 @@ class wxMenuBar(wxMenuBarPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxMenuBar,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 

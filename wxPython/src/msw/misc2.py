@@ -100,8 +100,8 @@ class wxFontEnumeratorPtr :
     def __del__(self,misc2c=misc2c):
         if self.thisown == 1 :
             misc2c.delete_wxFontEnumerator(self)
-    def _setSelf(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFontEnumerator__setSelf,(self,) + _args, _kwargs)
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFontEnumerator__setCallbackInfo,(self,) + _args, _kwargs)
         return val
     def EnumerateFacenames(self, *_args, **_kwargs):
         val = apply(misc2c.wxFontEnumerator_EnumerateFacenames,(self,) + _args, _kwargs)
@@ -121,7 +121,7 @@ class wxFontEnumerator(wxFontEnumeratorPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(misc2c.new_wxFontEnumerator,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self, wxFontEnumerator)
+        self._setCallbackInfo(self, wxFontEnumerator)
 
 
 
@@ -462,8 +462,8 @@ class wxPyLogPtr(wxLogPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def _setSelf(self, *_args, **_kwargs):
-        val = apply(misc2c.wxPyLog__setSelf,(self,) + _args, _kwargs)
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(misc2c.wxPyLog__setCallbackInfo,(self,) + _args, _kwargs)
         return val
     def Destroy(self, *_args, **_kwargs):
         val = apply(misc2c.wxPyLog_Destroy,(self,) + _args, _kwargs)
@@ -474,7 +474,7 @@ class wxPyLog(wxPyLogPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(misc2c.new_wxPyLog,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self, wxPyLog)
+        self._setCallbackInfo(self, wxPyLog)
 
 
 
@@ -520,8 +520,8 @@ class wxProcessPtr(wxEvtHandlerPtr):
     def Destroy(self, *_args, **_kwargs):
         val = apply(misc2c.wxProcess_Destroy,(self,) + _args, _kwargs)
         return val
-    def _setSelf(self, *_args, **_kwargs):
-        val = apply(misc2c.wxProcess__setSelf,(self,) + _args, _kwargs)
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(misc2c.wxProcess__setCallbackInfo,(self,) + _args, _kwargs)
         return val
     def base_OnTerminate(self, *_args, **_kwargs):
         val = apply(misc2c.wxProcess_base_OnTerminate,(self,) + _args, _kwargs)
@@ -554,7 +554,7 @@ class wxProcess(wxProcessPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(misc2c.new_wxProcess,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self, wxProcess)
+        self._setCallbackInfo(self, wxProcess)
 
 
 

@@ -148,8 +148,8 @@ class wxPyShapeCanvasPtr(wxScrolledWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def _setSelf(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxPyShapeCanvas__setSelf,(self,) + _args, _kwargs)
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(oglcanvasc.wxPyShapeCanvas__setCallbackInfo,(self,) + _args, _kwargs)
         return val
     def AddShape(self, *_args, **_kwargs):
         val = apply(oglcanvasc.wxPyShapeCanvas_AddShape,(self,) + _args, _kwargs)
@@ -211,9 +211,8 @@ class wxPyShapeCanvas(wxPyShapeCanvasPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(oglcanvasc.new_wxPyShapeCanvas,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self, wxPyShapeCanvas)
-        #wx._StdWindowCallbacks(self)
-        #wx._StdOnScrollCallbacks(self)
+        self._setCallbackInfo(self, wxPyShapeCanvas)
+        self._setOORInfo(self)
 
 
 

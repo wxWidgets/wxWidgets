@@ -410,9 +410,11 @@ public:
                  const wxValidator& validator = wxDefaultValidator,
                  char* name = "listCtrl");
 
-    void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxListCtrl)"
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxListCtrl)"
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreListCtrl:val._setOORInfo(self)"
 
     // Set the control colours
     bool SetForegroundColour(const wxColour& col);
@@ -561,9 +563,6 @@ public:
     // refresh items selectively (only useful for virtual list controls)
     void RefreshItem(long item);
     void RefreshItems(long itemFrom, long itemTo);
-
-
-
 
     // Arranges the items
     bool Arrange(int flag = wxLIST_ALIGN_DEFAULT);
@@ -734,6 +733,8 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString &name = "listctrl" );
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreListView:val._setOORInfo(self)"
 
     // [de]select an item
     void Select(long n, bool on = TRUE);
@@ -1059,8 +1060,11 @@ public:
                const wxValidator& validator = wxDefaultValidator,
                char* name = "wxTreeCtrl");
 
-    void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxTreeCtrl)"
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxTreeCtrl)"
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreTreeCtrl:val._setOORInfo(self)"
 
     size_t GetCount();
     unsigned int GetIndent();

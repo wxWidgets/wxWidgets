@@ -92,8 +92,8 @@ public:
     wxPyShapeEvtHandler(wxPyShapeEvtHandler *prev = NULL,
                         wxPyShape *shape = NULL);
 
-    void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyShapeEvtHandler)"
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyShapeEvtHandler)"
 
     %addmethods { void Destroy() { delete self; } }
 
@@ -145,8 +145,8 @@ class wxPyShape : public wxPyShapeEvtHandler {
 public:
     // wxPyShape(wxPyShapeCanvas *can = NULL);     abstract base class...
 
-    void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyShape)"
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyShape)"
 
     %addmethods {
         void Destroy() { delete self; }

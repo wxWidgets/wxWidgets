@@ -159,8 +159,8 @@ IMP_PYCALLBACK_STRING__pure(wxPyFileSystemHandler, wxFileSystemHandler, FindNext
 public:
     wxPyFileSystemHandler();
 
-    void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxFileSystemHandler)"
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxFileSystemHandler)"
 
     bool CanOpen(const wxString& location);
     wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location);

@@ -17,8 +17,6 @@
 #define _WX_GLCANVAS_H_
 
 #include <wx/setup.h>
-
-
 #undef wxUSE_GLCANVAS
 #define wxUSE_GLCANVAS 1
 #if wxUSE_GLCANVAS
@@ -131,8 +129,28 @@ protected:
     wxPalette      m_palette;
     WXHDC          m_hDC;
 
-DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
+
+
+
+class wxGLApp : public wxApp
+{
+public:
+    wxGLApp() : wxApp() { }
+    virtual ~wxGLApp();
+
+    // use this in the constructor of the user-derived wxGLApp class to
+    // determine if an OpenGL rendering context with these attributes
+    // is available - returns TRUE if so, FALSE if not.
+    bool InitGLVisual(int *attribList);
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxGLApp)
+};
+
+
+
 
 #endif
     // wxUSE_GLCANVAS

@@ -418,8 +418,8 @@ class wxPrintoutPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def _setSelf(self, *_args, **_kwargs):
-        val = apply(printfwc.wxPrintout__setSelf,(self,) + _args, _kwargs)
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintout__setCallbackInfo,(self,) + _args, _kwargs)
         return val
     def Destroy(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrintout_Destroy,(self,) + _args, _kwargs)
@@ -469,7 +469,7 @@ class wxPrintout(wxPrintoutPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(printfwc.new_wxPrintout,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self, wxPrintout)
+        self._setCallbackInfo(self, wxPrintout)
 
 
 
@@ -586,7 +586,7 @@ class wxPreviewFrame(wxPreviewFramePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(printfwc.new_wxPreviewFrame,_args,_kwargs)
         self.thisown = 1
-        #wx._StdFrameCallbacks(self)
+        self._setOORInfo(self)
 
 
 

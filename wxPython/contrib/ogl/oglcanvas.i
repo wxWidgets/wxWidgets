@@ -116,11 +116,9 @@ public:
                     const wxSize& size = wxDefaultSize,
                     long style = wxBORDER);
 
-    void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyShapeCanvas)"
-
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
-    %pragma(python) addtomethod = "__init__:#wx._StdOnScrollCallbacks(self)"
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyShapeCanvas)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void AddShape(wxPyShape *shape, wxPyShape *addAfter = NULL);
 

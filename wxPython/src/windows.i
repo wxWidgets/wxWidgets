@@ -73,6 +73,11 @@ public:
         }
     }
 
+    %addmethods {
+        void _setOORInfo(PyObject* _self) {
+            self->SetClientObject(new wxPyClientData(_self));
+        }
+    }
 };
 
 
@@ -82,6 +87,8 @@ class wxValidator : public wxEvtHandler {
 public:
     wxValidator();
     //~wxValidator();
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     wxValidator* Clone();
     wxWindow* GetWindow();
@@ -147,9 +154,10 @@ class wxPyValidator : public wxValidator {
 public:
     wxPyValidator();
 
-    void _setSelf(PyObject* self, PyObject* _class, int incref=TRUE);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyValidator, 1)"
+    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref=TRUE);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyValidator, 1)"
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 };
 
 //----------------------------------------------------------------------
@@ -170,6 +178,10 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 char* name = "panel");
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreWindow:val._setOORInfo(self)"
+
 
     void CaptureMouse();
     void Center(int direction = wxBOTH);
@@ -429,6 +441,9 @@ public:
                 long style = wxTAB_TRAVERSAL,
                 const char* name = "panel");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "XXX:val._setOORInfo(self)"
+
     void InitDialog();
     wxButton* GetDefaultItem();
     void SetDefaultItem(wxButton *btn);
@@ -458,6 +473,9 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxHSCROLL | wxVSCROLL,
                 char* name = "scrolledWindow");
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreScrolledWindow:val._setOORInfo(self)"
 
     void EnableScrolling(bool xScrolling, bool yScrolling);
     int GetScrollPageSize(int orient);
@@ -491,6 +509,8 @@ public:
 class wxMenu : public wxEvtHandler {
 public:
     wxMenu(const wxString& title = wxPyEmptyStr, long style = 0);
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void Append(int id, const wxString& item,
                 const wxString& helpString = wxPyEmptyStr,
@@ -560,6 +580,8 @@ public:
 class wxMenuBar : public wxWindow {
 public:
     wxMenuBar(long style = 0);
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     bool Append(wxMenu *menu, const wxString& title);
     bool Insert(size_t pos, wxMenu *menu, const wxString& title);

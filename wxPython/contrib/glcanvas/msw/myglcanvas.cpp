@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -36,7 +36,8 @@
 
 #include "myglcanvas.h"
 
-wxChar wxGLCanvasClassName[]        = wxT("wxGLCanvasClass");
+static const wxChar *wxGLCanvasClassName = wxT("wxGLCanvasClass");
+static const wxChar *wxGLCanvasClassNameNoRedraw = wxT("wxGLCanvasClassNR");
 
 LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
                                    WPARAM wParam, LPARAM lParam);
@@ -216,25 +217,16 @@ wxGLCanvas::~wxGLCanvas()
   ::ReleaseDC((HWND) GetHWND(), (HDC) m_hDC);
 }
 
-// Replaces wxWindow::Create functionality, since we need to use a different window class
-bool wxGLCanvas::Create(wxWindow *parent, wxWindowID id,
-              const wxPoint& pos, const wxSize& size, long style, const wxString& name)
+// Replaces wxWindow::Create functionality, since we need to use a different
+// window class
+bool wxGLCanvas::Create(wxWindow *parent,
+                        wxWindowID id,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        long style,
+                        const wxString& name)
 {
-  /*
-  Suggestion from Kelly Brock <kbrock@8cs.com> (not yet implemented):
-
-  OpenGL corruption fix is simple assuming it doesn't screw anything else
-  up.  Add the following line to the top of the create function:
-
-       wxSize parentSize = GetClientSize();
-
-  All locations within the function that use 'size' are changed to
-  'parentSize'.
-  The above corrects the initial display corruption with the GeForce and
-  TNT2, not sure about other NVidia cards yet.
-  */
-
-  static bool registeredGLCanvasClass = FALSE;
+  static bool s_registeredGLCanvasClass = FALSE;
 
   // We have to register a special window class because we need
   // the CS_OWNDC style for GLCanvas.
@@ -256,11 +248,9 @@ bool wxGLCanvas::Create(wxWindow *parent, wxWindowID id,
   only way to prevent this, the only reliable means, is to set CS_OWNDC."
   */
 
-  if (!registeredGLCanvasClass)
+  if (!s_registeredGLCanvasClass)
   {
     WNDCLASS wndclass;
-
-    static const long styleNormal = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS | CS_OWNDC;
 
     // the fields which are common to all classes
     wndclass.lpfnWndProc   = (WNDPROC)wxWndProc;
@@ -274,15 +264,29 @@ bool wxGLCanvas::Create(wxWindow *parent, wxWindowID id,
     // Register the GLCanvas class name
     wndclass.hbrBackground = (HBRUSH)NULL;
     wndclass.lpszClassName = wxGLCanvasClassName;
-    wndclass.style         = styleNormal;
+    wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS | CS_OWNDC;
 
-    if ( !RegisterClass(&wndclass) )
+    if ( !::RegisterClass(&wndclass) )
     {
       wxLogLastError(wxT("RegisterClass(wxGLCanvasClass)"));
       return FALSE;
     }
 
-    registeredGLCanvasClass = TRUE;
+    // Register the GLCanvas class name for windows which don't do full repaint
+    // on resize
+    wndclass.lpszClassName = wxGLCanvasClassNameNoRedraw;
+    wndclass.style        &= ~(CS_HREDRAW | CS_VREDRAW);
+
+    if ( !::RegisterClass(&wndclass) )
+    {
+        wxLogLastError(wxT("RegisterClass(wxGLCanvasClassNameNoRedraw)"));
+
+        ::UnregisterClass(wxGLCanvasClassName, wxhInstance);
+
+        return FALSE;
+    }
+
+    s_registeredGLCanvasClass = TRUE;
   }
 
   wxCHECK_MSG( parent, FALSE, wxT("can't create wxWindow without parent") );
@@ -305,10 +309,7 @@ bool wxGLCanvas::Create(wxWindow *parent, wxWindowID id,
   books that contain the wgl function descriptions.
   */
 
-  msflags |= WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS;
-  //  if ( style & wxCLIP_CHILDREN )
-  //    msflags |= WS_CLIPCHILDREN;
-  msflags |= WS_CLIPCHILDREN;
+  msflags |= WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
 
   bool want3D;
   WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);
@@ -329,38 +330,11 @@ bool wxGLCanvas::Create(wxWindow *parent, wxWindowID id,
                  DLGC_WANTTAB | DLGC_WANTMESSAGE;
   }
 
-  MSWCreate(m_windowId, parent, wxGLCanvasClassName, this, NULL,
-            pos.x, pos.y,
-            WidthDefault(size.x), HeightDefault(size.y),
-            msflags, NULL, exStyle);
-
-  return TRUE;
+  return MSWCreate(wxGLCanvasClassName, NULL, pos, size, msflags, exStyle);
 }
 
-void wxGLCanvas::SetupPixelFormat(int *attribList) // (HDC hDC)
+static void AdjustPFDForAttributes(PIXELFORMATDESCRIPTOR& pfd, int *attribList)
 {
-  int pixelFormat;
-  PIXELFORMATDESCRIPTOR pfd = {
-		sizeof(PIXELFORMATDESCRIPTOR),	/* size */
-		1,				/* version */
-		PFD_SUPPORT_OPENGL |
-		PFD_DRAW_TO_WINDOW |
-		PFD_DOUBLEBUFFER,		/* support double-buffering */
-		PFD_TYPE_RGBA,			/* color type */
-		16,				/* prefered color depth */
-		0, 0, 0, 0, 0, 0,		/* color bits (ignored) */
-		0,				/* no alpha buffer */
-		0,				/* alpha bits (ignored) */
-		0,				/* no accumulation buffer */
-		0, 0, 0, 0,			/* accum bits (ignored) */
-		16,				/* depth buffer */
-		0,				/* no stencil buffer */
-		0,				/* no auxiliary buffers */
-		PFD_MAIN_PLANE,			/* main layer */
-		0,				/* reserved */
-		0, 0, 0,			/* no layer, visible, damage masks */
-	};
-
   if (attribList) {
     pfd.dwFlags &= ~PFD_DOUBLEBUFFER;
     pfd.iPixelType = PFD_TYPE_COLORINDEX;
@@ -433,17 +407,42 @@ void wxGLCanvas::SetupPixelFormat(int *attribList) // (HDC hDC)
       }
     }
   }
+}
+
+void wxGLCanvas::SetupPixelFormat(int *attribList) // (HDC hDC)
+{
+  int pixelFormat;
+  PIXELFORMATDESCRIPTOR pfd = {
+        sizeof(PIXELFORMATDESCRIPTOR),    /* size */
+        1,                /* version */
+        PFD_SUPPORT_OPENGL |
+        PFD_DRAW_TO_WINDOW |
+        PFD_DOUBLEBUFFER,        /* support double-buffering */
+        PFD_TYPE_RGBA,            /* color type */
+        16,                /* prefered color depth */
+        0, 0, 0, 0, 0, 0,        /* color bits (ignored) */
+        0,                /* no alpha buffer */
+        0,                /* alpha bits (ignored) */
+        0,                /* no accumulation buffer */
+        0, 0, 0, 0,            /* accum bits (ignored) */
+        16,                /* depth buffer */
+        0,                /* no stencil buffer */
+        0,                /* no auxiliary buffers */
+        PFD_MAIN_PLANE,            /* main layer */
+        0,                /* reserved */
+        0, 0, 0,            /* no layer, visible, damage masks */
+    };
+
+  AdjustPFDForAttributes(pfd, attribList);
+
   pixelFormat = ChoosePixelFormat((HDC) m_hDC, &pfd);
   if (pixelFormat == 0) {
-    MessageBox(WindowFromDC((HDC) m_hDC), wxT("ChoosePixelFormat failed."), wxT("Error"),
-               MB_ICONERROR | MB_OK);
-    exit(1);
+    wxLogWarning(_("ChoosePixelFormat failed."));
   }
-
-  if (SetPixelFormat((HDC) m_hDC, pixelFormat, &pfd) != TRUE) {
-    MessageBox(WindowFromDC((HDC) m_hDC), wxT("SetPixelFormat failed."), wxT("Error"),
-               MB_ICONERROR | MB_OK);
-    exit(1);
+  else {
+    if (SetPixelFormat((HDC) m_hDC, pixelFormat, &pfd) != TRUE) {
+      wxLogWarning(_("SetPixelFormat failed."));
+    }
   }
 }
 
@@ -459,7 +458,7 @@ void wxGLCanvas::SetupPalette(const wxPalette& palette)
     }
     else
     {
-	  return;
+      return;
     }
 
     m_palette = palette;
@@ -493,20 +492,20 @@ wxPalette wxGLCanvas::CreateDefaultPalette()
 
     /* build a simple RGB color palette */
     {
-	int redMask = (1 << pfd.cRedBits) - 1;
-	int greenMask = (1 << pfd.cGreenBits) - 1;
-	int blueMask = (1 << pfd.cBlueBits) - 1;
-	int i;
+    int redMask = (1 << pfd.cRedBits) - 1;
+    int greenMask = (1 << pfd.cGreenBits) - 1;
+    int blueMask = (1 << pfd.cBlueBits) - 1;
+    int i;
 
-	for (i=0; i<paletteSize; ++i) {
-	    pPal->palPalEntry[i].peRed =
-		    (((i >> pfd.cRedShift) & redMask) * 255) / redMask;
-	    pPal->palPalEntry[i].peGreen =
-		    (((i >> pfd.cGreenShift) & greenMask) * 255) / greenMask;
-	    pPal->palPalEntry[i].peBlue =
-		    (((i >> pfd.cBlueShift) & blueMask) * 255) / blueMask;
-	    pPal->palPalEntry[i].peFlags = 0;
-	}
+    for (i=0; i<paletteSize; ++i) {
+        pPal->palPalEntry[i].peRed =
+            (((i >> pfd.cRedShift) & redMask) * 255) / redMask;
+        pPal->palPalEntry[i].peGreen =
+            (((i >> pfd.cGreenShift) & greenMask) * 255) / greenMask;
+        pPal->palPalEntry[i].peBlue =
+            (((i >> pfd.cBlueShift) & blueMask) * 255) / blueMask;
+        pPal->palPalEntry[i].peFlags = 0;
+    }
     }
 
     HPALETTE hPalette = CreatePalette(pPal);
@@ -713,6 +712,54 @@ void glIndexMaterialSGI(GLenum face, GLenum mode)
 
 /* WIN_swap_hint */
 void glAddSwapHintRectWin(GLint x, GLint y, GLsizei width, GLsizei height)
+{
+}
+
+
+//---------------------------------------------------------------------------
+// wxGLApp
+//---------------------------------------------------------------------------
+
+IMPLEMENT_CLASS(wxGLApp, wxApp)
+
+bool wxGLApp::InitGLVisual(int *attribList)
+{
+  int pixelFormat;
+  PIXELFORMATDESCRIPTOR pfd = {
+        sizeof(PIXELFORMATDESCRIPTOR),    /* size */
+        1,                /* version */
+        PFD_SUPPORT_OPENGL |
+        PFD_DRAW_TO_WINDOW |
+        PFD_DOUBLEBUFFER,        /* support double-buffering */
+        PFD_TYPE_RGBA,            /* color type */
+        16,                /* prefered color depth */
+        0, 0, 0, 0, 0, 0,        /* color bits (ignored) */
+        0,                /* no alpha buffer */
+        0,                /* alpha bits (ignored) */
+        0,                /* no accumulation buffer */
+        0, 0, 0, 0,            /* accum bits (ignored) */
+        16,                /* depth buffer */
+        0,                /* no stencil buffer */
+        0,                /* no auxiliary buffers */
+        PFD_MAIN_PLANE,            /* main layer */
+        0,                /* reserved */
+        0, 0, 0,            /* no layer, visible, damage masks */
+    };
+
+  AdjustPFDForAttributes(pfd, attribList);
+
+  // use DC for whole (root) screen, since no windows have yet been created
+  pixelFormat = ChoosePixelFormat((HDC) ::GetDC(NULL), &pfd);
+
+  if (pixelFormat == 0) {
+    wxLogError(_("Failed to initialize OpenGL"));
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+wxGLApp::~wxGLApp()
 {
 }
 

@@ -167,6 +167,9 @@ public:
                 long style = wxCAL_SHOW_HOLIDAYS | wxWANTS_CHARS,
                 const char* name = "calendar");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreCalendarCtrl:val._setOORInfo(self)"
+
     // set/get the current date
     // ------------------------
 

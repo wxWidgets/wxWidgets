@@ -931,6 +931,7 @@ class wxStyledTextCtrl(wxStyledTextCtrlPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(stc_c.new_wxStyledTextCtrl,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 

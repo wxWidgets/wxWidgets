@@ -184,6 +184,7 @@ enum {
     wxBORDER,
     wxSIMPLE_BORDER,
     wxSTATIC_BORDER,
+    wxBORDER_MASK,
     wxTRANSPARENT_WINDOW,
     wxNO_BORDER,
     wxUSER_COLOURS,
@@ -191,6 +192,7 @@ enum {
 //wxOVERRIDE_KEY_TRANSLATIONS,
     wxTAB_TRAVERSAL,
     wxWANTS_CHARS,
+    wxPOPUP_WINDOW,
     wxHORIZONTAL,
     wxVERTICAL,
     wxBOTH,
@@ -467,7 +469,7 @@ enum {
     wxJOY_BUTTON_ANY,
 
     wxWS_EX_VALIDATE_RECURSIVELY,
-
+    wxWS_EX_BLOCK_EVENTS,
 
     // Mapping modes (as per Windows)
     wxMM_TEXT,

@@ -91,7 +91,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #if PYTHON_API_VERSION >= 1009
     static char* wxStringErrorMsg = "String or Unicode type required";
 #else
-    static char* wxStringErrorMsg = "string type is required for parameter";
+    static char* wxStringErrorMsg = "String type required";
 #endif
 
 // wxPyFileSystemHandler will be the Python class wxFileSystemHandler and handling
@@ -640,8 +640,8 @@ static PyObject *_wrap_new_wxFileSystemHandler(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
-#define wxFileSystemHandler__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxFileSystemHandler__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxFileSystemHandler__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxFileSystemHandler__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyFileSystemHandler * _arg0;
     PyObject * _arg1;
@@ -652,12 +652,12 @@ static PyObject *_wrap_wxFileSystemHandler__setSelf(PyObject *self, PyObject *ar
     char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxFileSystemHandler__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxFileSystemHandler__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyFileSystemHandler_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileSystemHandler__setSelf. Expected _wxPyFileSystemHandler_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileSystemHandler__setCallbackInfo. Expected _wxPyFileSystemHandler_p.");
         return NULL;
         }
     }
@@ -669,7 +669,7 @@ static PyObject *_wrap_wxFileSystemHandler__setSelf(PyObject *self, PyObject *ar
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxFileSystemHandler__setSelf(_arg0,_arg1,_arg2);
+        wxFileSystemHandler__setCallbackInfo(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -2166,7 +2166,7 @@ static PyMethodDef filesyscMethods[] = {
 	 { "wxFileSystemHandler_FindFirst", (PyCFunction) _wrap_wxFileSystemHandler_FindFirst, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileSystemHandler_OpenFile", (PyCFunction) _wrap_wxFileSystemHandler_OpenFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileSystemHandler_CanOpen", (PyCFunction) _wrap_wxFileSystemHandler_CanOpen, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFileSystemHandler__setSelf", (PyCFunction) _wrap_wxFileSystemHandler__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileSystemHandler__setCallbackInfo", (PyCFunction) _wrap_wxFileSystemHandler__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxFileSystemHandler", (PyCFunction) _wrap_new_wxFileSystemHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFSFile_GetModificationTime", (PyCFunction) _wrap_wxFSFile_GetModificationTime, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFSFile_GetAnchor", (PyCFunction) _wrap_wxFSFile_GetAnchor, METH_VARARGS | METH_KEYWORDS },

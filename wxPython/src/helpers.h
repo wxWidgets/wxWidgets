@@ -260,7 +260,7 @@ struct wxPyCoreAPI {
     bool        (*p_wxRect_helper)(PyObject* source, wxRect** obj);
     bool        (*p_wxColour_helper)(PyObject* source, wxColour** obj);
 
-    void        (*p_wxPyCBH_setSelf)(wxPyCallbackHelper& cbh, PyObject* self, PyObject* klass, int incref);
+    void        (*p_wxPyCBH_setCallbackInfo)(wxPyCallbackHelper& cbh, PyObject* self, PyObject* klass, int incref);
     bool        (*p_wxPyCBH_findCallback)(const wxPyCallbackHelper& cbh, const char* name);
     int         (*p_wxPyCBH_callCallback)(const wxPyCallbackHelper& cbh, PyObject* argTuple);
     PyObject*   (*p_wxPyCBH_callCallbackObj)(const wxPyCallbackHelper& cbh, PyObject* argTuple);
@@ -318,7 +318,7 @@ private:
 };
 
 
-void wxPyCBH_setSelf(wxPyCallbackHelper& cbh, PyObject* self, PyObject* klass, int incref);
+void wxPyCBH_setCallbackInfo(wxPyCallbackHelper& cbh, PyObject* self, PyObject* klass, int incref);
 bool wxPyCBH_findCallback(const wxPyCallbackHelper& cbh, const char* name);
 int  wxPyCBH_callCallback(const wxPyCallbackHelper& cbh, PyObject* argTuple);
 PyObject* wxPyCBH_callCallbackObj(const wxPyCallbackHelper& cbh, PyObject* argTuple);
@@ -381,8 +381,8 @@ public:
 //---------------------------------------------------------------------------
 
 #define PYPRIVATE                                                       \
-    void _setSelf(PyObject* self, PyObject* _class, int incref=1) {     \
-        wxPyCBH_setSelf(m_myInst, self, _class, incref);                \
+    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref=1) {     \
+        wxPyCBH_setCallbackInfo(m_myInst, self, _class, incref);                \
     }                                                                   \
     private: wxPyCallbackHelper m_myInst
 
@@ -1022,6 +1022,58 @@ public:
 
 //---------------------------------------------------------------------------
 
+#define DEC_PYCALLBACK__CELLINTINT(CBNAME)                                      \
+    void CBNAME(wxHtmlCell *cell, wxCoord x, wxCoord y);                        \
+    void base_##CBNAME(wxHtmlCell *cell, wxCoord x, wxCoord y);
+
+#define IMP_PYCALLBACK__CELLINTINT(CLASS, PCLASS, CBNAME)                       \
+    void CLASS::CBNAME(wxHtmlCell *cell, wxCoord x, wxCoord y) {                \
+        wxString rval;                                                          \
+        bool found;                                                             \
+        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
+            PyObject* obj = wxPyConstructObject((void*)cell, "wxHtmlCell", 0);  \
+            wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(Oii)",obj,x,y));  \
+            Py_DECREF(obj);                                                     \
+        }                                                                       \
+        wxPyEndBlockThreads(state);                                             \
+        if (! found)                                                            \
+            PCLASS::CBNAME(cell, x, y);                                         \
+    }                                                                           \
+    void CLASS::base_##CBNAME(wxHtmlCell *cell, wxCoord x, wxCoord y) {         \
+        PCLASS::CBNAME(cell, x, y);                                             \
+    }
+
+
+//---------------------------------------------------------------------------
+
+#define DEC_PYCALLBACK__CELLINTINTME(CBNAME)                                    \
+    void CBNAME(wxHtmlCell *cell, wxCoord x, wxCoord y, const wxMouseEvent& e); \
+    void base_##CBNAME(wxHtmlCell *cell, wxCoord x, wxCoord y, const wxMouseEvent& e);
+
+#define IMP_PYCALLBACK__CELLINTINTME(CLASS, PCLASS, CBNAME)                       \
+    void CLASS::CBNAME(wxHtmlCell *cell, wxCoord x, wxCoord y, const wxMouseEvent& e) {                \
+        bool found;                                                             \
+        wxPyTState* state = wxPyBeginBlockThreads();                            \
+        if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
+            PyObject* obj = wxPyConstructObject((void*)cell, "wxHtmlCell", 0);  \
+            PyObject* o2  = wxPyConstructObject((void*)&e, "wxMouseEvent", 0);  \
+            wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(OiiO)",obj,x,y,o2));  \
+            Py_DECREF(obj);                                                     \
+            Py_DECREF(o2);                                                      \
+        }                                                                       \
+        wxPyEndBlockThreads(state);                                             \
+        if (! found)                                                            \
+            PCLASS::CBNAME(cell, x, y, e);                                         \
+    }                                                                           \
+    void CLASS::base_##CBNAME(wxHtmlCell *cell, wxCoord x, wxCoord y, const wxMouseEvent& e) {         \
+        PCLASS::CBNAME(cell, x, y, e);                                             \
+    }
+
+
+
+//---------------------------------------------------------------------------
+
 #define DEC_PYCALLBACK___pure(CBNAME)                         \
     void CBNAME();                                            \
 
@@ -1428,6 +1480,36 @@ public:
     wxListItemAttr *CLASS::base_##CBNAME(long a) {                              \
         return PCLASS::CBNAME(a);                                               \
     }
+
+//---------------------------------------------------------------------------
+
+#define DEC_PYCALLBACK_BOOL_ME(CBNAME) \
+    bool CBNAME(wxMouseEvent& e); \
+    bool base_##CBNAME(wxMouseEvent& e);
+
+#define IMP_PYCALLBACK_BOOL_ME(CLASS, PCLASS, CBNAME) \
+    bool CLASS::CBNAME(wxMouseEvent& e) { \
+        bool rval; \
+        bool found; \
+        wxPyTState* state = wxPyBeginBlockThreads(); \
+        if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) { \
+            PyObject* ro; \
+            PyObject* obj  = wxPyConstructObject((void*)&e, "wxMouseEvent", 0);  \
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(O)",obj));  \
+            if (ro) { \
+                rval = PyInt_AsLong(ro); \
+                Py_DECREF(ro); \
+            } \
+            Py_DECREF(obj); \
+        } \
+        wxPyEndBlockThreads(state); \
+        if (! found) \
+            return PCLASS::CBNAME(e); \
+    } \
+    bool CLASS::base_##CBNAME(wxMouseEvent& e) { \
+        return PCLASS::CBNAME(e); \
+    }
+
 
 //---------------------------------------------------------------------------
 

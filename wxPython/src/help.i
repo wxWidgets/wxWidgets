@@ -110,6 +110,7 @@ public:
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
                         long style = wxBU_AUTODRAW);
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 };
 
 

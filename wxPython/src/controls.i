@@ -74,6 +74,8 @@ public:
                        const wxValidator& validator=wxDefaultValidator,
                        const char* name="control");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreControl:val._setOORInfo(self)"
 
     void Command(wxCommandEvent& event);
     wxString GetLabel();
@@ -151,6 +153,8 @@ public:
              const wxValidator& validator = wxDefaultValidator,
              char* name = "button");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreButton:val._setOORInfo(self)"
 
     void SetDefault();
     void SetBackgroundColour(const wxColour& colour);
@@ -181,6 +185,8 @@ public:
                    const wxValidator& validator = wxDefaultValidator,
                    char* name = "button");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreBitmapButton:val._setOORInfo(self)"
 
     wxBitmap& GetBitmapLabel();
     wxBitmap& GetBitmapDisabled();
@@ -215,6 +221,8 @@ public:
                const wxValidator& val = wxDefaultValidator,
                char* name = "checkBox");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreCheckBox:val._setOORInfo(self)"
 
     bool GetValue();
     void SetValue(const bool state);
@@ -240,6 +248,9 @@ public:
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
              char* name = "choice");
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreChoice:val._setOORInfo(self)"
 
     void Clear();
 
@@ -275,6 +286,8 @@ public:
                const wxValidator& validator = wxDefaultValidator,
                char* name = "comboBox");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreComboBox:val._setOORInfo(self)"
 
     void Copy();
     void Cut();
@@ -311,6 +324,8 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             char* name = "gauge");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreGauge:val._setOORInfo(self)"
 
     int GetBezelFace();
     int GetRange();
@@ -338,6 +353,9 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 char* name = "staticBox");
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreStaticBox:val._setOORInfo(self)"
 };
 
 
@@ -358,6 +376,9 @@ public:
                   const wxSize &size = wxDefaultSize,
                   long style = wxLI_HORIZONTAL,
                   const char* name = "staticLine" );
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreStaticLine:val._setOORInfo(self)"
 };
 
 
@@ -378,6 +399,8 @@ public:
                  long style = 0,
                  char* name = "staticText");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreStaticText:val._setOORInfo(self)"
 
     wxString GetLabel();
     void SetLabel(const wxString& label);
@@ -403,6 +426,9 @@ public:
               long style = 0,
               const wxValidator& validator = wxDefaultValidator,
               char* name = "listBox");
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreListBox:val._setOORInfo(self)"
 
     void Clear();
     void Deselect(int n);
@@ -457,6 +483,8 @@ public:
                    const wxValidator& validator = wxDefaultValidator,
                    char* name = "listBox");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreCheckListBox:val._setOORInfo(self)"
 
     bool  IsChecked(int uiIndex);
     void  Check(int uiIndex, int bCheck = TRUE);
@@ -511,6 +539,8 @@ public:
                const wxValidator& validator = wxDefaultValidator,
                char* name = "text");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreTextCtrl:val._setOORInfo(self)"
 
     void Clear();
     void Copy();
@@ -581,6 +611,8 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 char* name = "scrollBar");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreScrollBar:val._setOORInfo(self)"
 
     int GetRange();
     int GetPageSize();
@@ -610,6 +642,9 @@ public:
                  long style = wxSP_HORIZONTAL,
                  char* name = "spinButton");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreSpinButton:val._setOORInfo(self)"
+
     int GetMax();
     int GetMin();
     int GetValue();
@@ -636,6 +671,8 @@ public:
                    long style = 0,
                    char* name = "staticBitmap");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreStaticBitmap:val._setOORInfo(self)"
 
     const wxBitmap& GetBitmap();
     void SetBitmap(const wxBitmap& bitmap);
@@ -667,6 +704,8 @@ public:
                const wxValidator& validator = wxDefaultValidator,
                char* name = "radioBox");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreRadioBox:val._setOORInfo(self)"
 
     void Enable(bool enable);
     %name(EnableItem)void Enable(int n, bool enable);
@@ -719,6 +758,8 @@ public:
                   const wxValidator& validator = wxDefaultValidator,
                   char* name = "radioButton");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreRadioButton:val._setOORInfo(self)"
 
     bool GetValue();
     void SetValue(bool value);
@@ -745,6 +786,8 @@ public:
              const wxValidator& validator = wxDefaultValidator,
              char* name = "slider");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreSlider:val._setOORInfo(self)"
 
     void ClearSel();
     void ClearTicks();
@@ -791,6 +834,8 @@ public:
                int min = 0, int max = 100, int initial = 0,
                const char* name = "wxSpinCtrl");
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreSpinCtrl:val._setOORInfo(self)"
 
     int GetMax();
     int GetMin();
@@ -825,6 +870,9 @@ public:
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
                    const char* name = "toggle");
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreToggleButton:val._setOORInfo(self)"
 
     void SetValue(bool value);
     bool GetValue() const ;

@@ -290,30 +290,45 @@ PyObject* wxPyClassExists(const char* className) {
 
 
 PyObject*  wxPyMake_wxObject(wxObject* source) {
-    PyObject* target;
+    PyObject* target = NULL;
+    bool      isEvtHandler = FALSE;
 
     if (source) {
-        wxClassInfo* info = source->GetClassInfo();
-        wxChar*      name = (wxChar*)info->GetClassName();
-        PyObject*    klass = wxPyClassExists(name);
-        while (info && !klass) {
-            name = (wxChar*)info->GetBaseClassName1();
-            info = wxClassInfo::FindClass(name);
-            klass = wxPyClassExists(name);
+        if (wxIsKindOf(source, wxEvtHandler)) {
+            wxEvtHandler* eh = (wxEvtHandler*)source;
+            wxPyClientData* data = (wxPyClientData*)eh->GetClientObject();
+            if (data) {
+                target = data->m_obj;
+                Py_INCREF(target);
+            }
         }
-        if (info) {
-            target = wxPyConstructObject(source, name, klass, FALSE);
-        } else {
-            wxString msg("wxPython class not found for ");
-            msg += source->GetClassInfo()->GetClassName();
-            PyErr_SetString(PyExc_NameError, msg.c_str());
-            target = NULL;
+
+        if (! target) {
+            wxClassInfo* info = source->GetClassInfo();
+            wxChar*      name = (wxChar*)info->GetClassName();
+            PyObject*    klass = wxPyClassExists(name);
+            while (info && !klass) {
+                name = (wxChar*)info->GetBaseClassName1();
+                info = wxClassInfo::FindClass(name);
+                klass = wxPyClassExists(name);
+            }
+            if (info) {
+                target = wxPyConstructObject(source, name, klass, FALSE);
+                if (target && isEvtHandler)
+                    ((wxEvtHandler*)source)->SetClientObject(new wxPyClientData(target));
+            } else {
+                wxString msg("wxPython class not found for ");
+                msg += source->GetClassInfo()->GetClassName();
+                PyErr_SetString(PyExc_NameError, msg.c_str());
+                target = NULL;
+            }
         }
     } else {  // source was NULL so return None.
         Py_INCREF(Py_None); target = Py_None;
     }
     return target;
 }
+
 
 //---------------------------------------------------------------------------
 
@@ -576,7 +591,7 @@ PyObject* wxPyCallbackHelper::callCallbackObj(PyObject* argTuple) const {
 }
 
 
-void wxPyCBH_setSelf(wxPyCallbackHelper& cbh, PyObject* self, PyObject* klass, int incref) {
+void wxPyCBH_setCallbackInfo(wxPyCallbackHelper& cbh, PyObject* self, PyObject* klass, int incref) {
     cbh.setSelf(self, klass, incref);
 }
 

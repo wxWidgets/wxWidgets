@@ -445,8 +445,8 @@ class wxListCtrlPtr(wxControlPtr):
     def Create(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_Create,(self,) + _args, _kwargs)
         return val
-    def _setSelf(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl__setSelf,(self,) + _args, _kwargs)
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl__setCallbackInfo,(self,) + _args, _kwargs)
         return val
     def SetForegroundColour(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_SetForegroundColour,(self,) + _args, _kwargs)
@@ -672,13 +672,15 @@ class wxListCtrl(wxListCtrlPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controls2c.new_wxListCtrl,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self, wxListCtrl)
+        self._setCallbackInfo(self, wxListCtrl)
+        self._setOORInfo(self)
 
 
 
 def wxPreListCtrl(*_args,**_kwargs):
     val = wxListCtrlPtr(apply(controls2c.new_wxPreListCtrl,_args,_kwargs))
     val.thisown = 1
+    val._setOORInfo(self)
     return val
 
 
@@ -719,12 +721,14 @@ class wxListView(wxListViewPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controls2c.new_wxListView,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
 def wxPreListView(*_args,**_kwargs):
     val = wxListViewPtr(apply(controls2c.new_wxPreListView,_args,_kwargs))
     val.thisown = 1
+    val._setOORInfo(self)
     return val
 
 
@@ -865,8 +869,8 @@ class wxTreeCtrlPtr(wxControlPtr):
     def Create(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_Create,(self,) + _args, _kwargs)
         return val
-    def _setSelf(self, *_args, **_kwargs):
-        val = apply(controls2c.wxTreeCtrl__setSelf,(self,) + _args, _kwargs)
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl__setCallbackInfo,(self,) + _args, _kwargs)
         return val
     def GetCount(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_GetCount,(self,) + _args, _kwargs)
@@ -1113,13 +1117,15 @@ class wxTreeCtrl(wxTreeCtrlPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controls2c.new_wxTreeCtrl,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self, wxTreeCtrl)
+        self._setCallbackInfo(self, wxTreeCtrl)
+        self._setOORInfo(self)
 
 
 
 def wxPreTreeCtrl(*_args,**_kwargs):
     val = wxTreeCtrlPtr(apply(controls2c.new_wxPreTreeCtrl,_args,_kwargs))
     val.thisown = 1
+    val._setOORInfo(self)
     return val
 
 

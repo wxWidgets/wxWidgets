@@ -52,7 +52,8 @@ public:
                 long style = wxST_SIZEGRIP,
                 char* name = "statusBar");
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreStatusBar:val._setOORInfo(self)"
 
     %addmethods {
         %new wxRect* GetFieldRect(long item) {
@@ -293,7 +294,8 @@ public:
               long style = wxNO_BORDER | wxTB_HORIZONTAL,
               const char* name = wxToolBarNameStr);
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreToolBar:val._setOORInfo(self)"
 
     wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y);
 };
@@ -318,7 +320,8 @@ public:
                     long style = wxNO_BORDER | wxTB_HORIZONTAL,
                     const char* name = wxToolBarNameStr);
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreToolBarSimple:val._setOORInfo(self)"
 
     wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y);
 };

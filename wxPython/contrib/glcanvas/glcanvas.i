@@ -15,12 +15,7 @@
 
 %{
 #include "export.h"
-#ifdef __WXMSW__
 #include "myglcanvas.h"
-#else
-#include <wx/glcanvas.h>
-#endif
-
 %}
 
 //---------------------------------------------------------------------------
@@ -54,7 +49,8 @@ class wxGLCanvas;
 
 class wxGLContext : public wxObject {
 public:
-    wxGLContext(bool isRGB, wxGLCanvas *win, const wxPalette& palette = wxNullPalette);
+    wxGLContext(bool isRGB, wxGLCanvas *win,
+                const wxPalette& palette = wxNullPalette);
     ~wxGLContext();
 
     void SetCurrent();
@@ -102,13 +98,34 @@ public:
                int *attribList = NULL,
                const wxPalette& palette = wxNullPalette);
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    %name(wxGLCanvasWithContext)
+        wxGLCanvas( wxWindow *parent,
+                    const wxGLContext *shared = NULL,
+                    wxWindowID id = -1,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = 0,
+                    const char* name = "GLCanvas",
+                    int *attribList = NULL,
+                    const wxPalette& palette = wxNullPalette );
+
+    bool Create(wxWindow *parent, wxWindowID id,
+                const wxPoint& pos, const wxSize& size, long style, const wxString& name);
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxGLCanvasWithContext:val._setOORInfo(self)"
 
     void SetCurrent();
     void SetColour(const char *colour);
     void SwapBuffers();
 
     wxGLContext* GetContext();
+
+   void SetupPixelFormat(int *attribList = NULL);
+   void SetupPalette(const wxPalette& palette);
+   wxPalette CreateDefaultPalette();
+
+   wxPalette* GetPalette();
 };
 
 

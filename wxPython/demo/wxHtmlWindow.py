@@ -32,8 +32,13 @@ class MyHtmlWindow(wxHtmlWindow):
         self.log.WriteText('OnSetTitle: %s\n' % title)
         self.base_OnSetTitle(title)
 
-##     def __del__(self):
-##         print 'MyHtmlWindow.__del__'
+    def OnCellMouseHover(self, cell, x, y):
+        self.log.WriteText('OnCellMouseHover: %s, (%d %d)\n' % (cell, x, y))
+        self.base_OnCellMouseHover(cell, x, y)
+
+    def OnCellClicked(self, cell, x, y, evt):
+        self.log.WriteText('OnCellClicked: %s, (%d %d)\n' % (cell, x, y))
+        self.base_OnCellClicked(cell, x, y, evt)
 
 
 class TestHtmlPanel(wxPanel):

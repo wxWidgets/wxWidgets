@@ -88,7 +88,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #if PYTHON_API_VERSION >= 1009
     static char* wxStringErrorMsg = "String or Unicode type required";
 #else
-    static char* wxStringErrorMsg = "string type is required for parameter";
+    static char* wxStringErrorMsg = "String type required";
 #endif
 
     IMP_PYCALLBACK__2DBLINT(wxPyShapeCanvas, wxShapeCanvas, OnBeginDragLeft);
@@ -1213,8 +1213,8 @@ static PyObject *_wrap_new_wxPyShapeCanvas(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
-#define wxPyShapeCanvas__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPyShapeCanvas__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPyShapeCanvas__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyShapeCanvas__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyShapeCanvas * _arg0;
     PyObject * _arg1;
@@ -1225,12 +1225,12 @@ static PyObject *_wrap_wxPyShapeCanvas__setSelf(PyObject *self, PyObject *args, 
     char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyShapeCanvas__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyShapeCanvas__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyShapeCanvas_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyShapeCanvas__setSelf. Expected _wxPyShapeCanvas_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyShapeCanvas__setCallbackInfo. Expected _wxPyShapeCanvas_p.");
         return NULL;
         }
     }
@@ -1242,7 +1242,7 @@ static PyObject *_wrap_wxPyShapeCanvas__setSelf(PyObject *self, PyObject *args, 
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyShapeCanvas__setSelf(_arg0,_arg1,_arg2);
+        wxPyShapeCanvas__setCallbackInfo(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -1906,7 +1906,7 @@ static PyMethodDef oglcanvascMethods[] = {
 	 { "wxPyShapeCanvas_FindFirstSensitiveShape", (PyCFunction) _wrap_wxPyShapeCanvas_FindFirstSensitiveShape, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShapeCanvas_FindShape", (PyCFunction) _wrap_wxPyShapeCanvas_FindShape, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShapeCanvas_AddShape", (PyCFunction) _wrap_wxPyShapeCanvas_AddShape, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyShapeCanvas__setSelf", (PyCFunction) _wrap_wxPyShapeCanvas__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyShapeCanvas__setCallbackInfo", (PyCFunction) _wrap_wxPyShapeCanvas__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyShapeCanvas", (PyCFunction) _wrap_new_wxPyShapeCanvas, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDiagram_Snap", (PyCFunction) _wrap_wxDiagram_Snap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDiagram_ShowAll", (PyCFunction) _wrap_wxDiagram_ShowAll, METH_VARARGS | METH_KEYWORDS },
@@ -1957,15 +1957,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
-    { "_class_wxEvtHandler","_class_wxPyShapeCanvas",SwigwxPyShapeCanvasTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxPyShapeCanvas",SwigwxPyShapeCanvasTowxEvtHandler},
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_class_wxObject","_class_wxPyShapeCanvas",SwigwxPyShapeCanvasTowxObject},
-    { "_class_wxObject","_wxPyShapeCanvas",SwigwxPyShapeCanvasTowxObject},
-    { "_class_wxObject","_class_wxDiagram",SwigwxDiagramTowxObject},
-    { "_class_wxObject","_wxDiagram",SwigwxDiagramTowxObject},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -1973,7 +1967,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
-    { "_wxPanel","_class_wxPyShapeCanvas",SwigwxPyShapeCanvasTowxPanel},
     { "_wxPanel","_wxPyShapeCanvas",SwigwxPyShapeCanvasTowxPanel},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
@@ -1992,8 +1985,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_EBool","_wxWindowID",0},
     { "_unsigned_long","_long",0},
     { "_wxNativeFontInfo","_struct_wxNativeFontInfo",0},
-    { "_class_wxPanel","_class_wxPyShapeCanvas",SwigwxPyShapeCanvasTowxPanel},
-    { "_class_wxPanel","_wxPyShapeCanvas",SwigwxPyShapeCanvasTowxPanel},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
     { "_signed_int","_EBool",0},
@@ -2006,15 +1997,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_short","_wxDateTime_t",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_class_wxWindow","_class_wxPyShapeCanvas",SwigwxPyShapeCanvasTowxWindow},
-    { "_class_wxWindow","_wxPyShapeCanvas",SwigwxPyShapeCanvasTowxWindow},
-    { "_wxObject","_class_wxPyShapeCanvas",SwigwxPyShapeCanvasTowxObject},
     { "_wxObject","_wxPyShapeCanvas",SwigwxPyShapeCanvasTowxObject},
-    { "_wxObject","_class_wxDiagram",SwigwxDiagramTowxObject},
     { "_wxObject","_wxDiagram",SwigwxDiagramTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
-    { "_wxScrolledWindow","_class_wxPyShapeCanvas",SwigwxPyShapeCanvasTowxScrolledWindow},
     { "_wxScrolledWindow","_wxPyShapeCanvas",SwigwxPyShapeCanvasTowxScrolledWindow},
     { "_unsigned_char","_byte",0},
     { "_unsigned_int","_wxCoord",0},
@@ -2065,11 +2051,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
-    { "_wxEvtHandler","_class_wxPyShapeCanvas",SwigwxPyShapeCanvasTowxEvtHandler},
     { "_wxEvtHandler","_wxPyShapeCanvas",SwigwxPyShapeCanvasTowxEvtHandler},
-    { "_class_wxScrolledWindow","_class_wxPyShapeCanvas",SwigwxPyShapeCanvasTowxScrolledWindow},
-    { "_class_wxScrolledWindow","_wxPyShapeCanvas",SwigwxPyShapeCanvasTowxScrolledWindow},
-    { "_wxWindow","_class_wxPyShapeCanvas",SwigwxPyShapeCanvasTowxWindow},
     { "_wxWindow","_wxPyShapeCanvas",SwigwxPyShapeCanvasTowxWindow},
 {0,0,0}};
 

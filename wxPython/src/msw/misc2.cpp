@@ -101,7 +101,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #if PYTHON_API_VERSION >= 1009
     static char* wxStringErrorMsg = "String or Unicode type required";
 #else
-    static char* wxStringErrorMsg = "string type is required for parameter";
+    static char* wxStringErrorMsg = "String type required";
 #endif
 
     static wxString wxPyEmptyStr("");
@@ -3009,8 +3009,8 @@ static PyObject *_wrap_delete_wxFontEnumerator(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
-#define wxFontEnumerator__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxFontEnumerator__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxFontEnumerator__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxFontEnumerator__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyFontEnumerator * _arg0;
     PyObject * _arg1;
@@ -3021,12 +3021,12 @@ static PyObject *_wrap_wxFontEnumerator__setSelf(PyObject *self, PyObject *args,
     char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxFontEnumerator__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxFontEnumerator__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyFontEnumerator_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFontEnumerator__setSelf. Expected _wxPyFontEnumerator_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFontEnumerator__setCallbackInfo. Expected _wxPyFontEnumerator_p.");
         return NULL;
         }
     }
@@ -3038,7 +3038,7 @@ static PyObject *_wrap_wxFontEnumerator__setSelf(PyObject *self, PyObject *args,
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxFontEnumerator__setSelf(_arg0,_arg1,_arg2);
+        wxFontEnumerator__setCallbackInfo(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -5430,8 +5430,8 @@ static PyObject *_wrap_new_wxPyLog(PyObject *self, PyObject *args, PyObject *kwa
     return _resultobj;
 }
 
-#define wxPyLog__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPyLog__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPyLog__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyLog__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyLog * _arg0;
     PyObject * _arg1;
@@ -5442,12 +5442,12 @@ static PyObject *_wrap_wxPyLog__setSelf(PyObject *self, PyObject *args, PyObject
     char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyLog__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyLog__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyLog_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyLog__setSelf. Expected _wxPyLog_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyLog__setCallbackInfo. Expected _wxPyLog_p.");
         return NULL;
         }
     }
@@ -5459,7 +5459,7 @@ static PyObject *_wrap_wxPyLog__setSelf(PyObject *self, PyObject *args, PyObject
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyLog__setSelf(_arg0,_arg1,_arg2);
+        wxPyLog__setCallbackInfo(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -5780,8 +5780,8 @@ static PyObject *_wrap_wxProcess_Destroy(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
-#define wxProcess__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxProcess__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxProcess__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxProcess__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyProcess * _arg0;
     PyObject * _arg1;
@@ -5792,12 +5792,12 @@ static PyObject *_wrap_wxProcess__setSelf(PyObject *self, PyObject *args, PyObje
     char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxProcess__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxProcess__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyProcess_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcess__setSelf. Expected _wxPyProcess_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcess__setCallbackInfo. Expected _wxPyProcess_p.");
         return NULL;
         }
     }
@@ -5809,7 +5809,7 @@ static PyObject *_wrap_wxProcess__setSelf(PyObject *self, PyObject *args, PyObje
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxProcess__setSelf(_arg0,_arg1,_arg2);
+        wxProcess__setCallbackInfo(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -7473,7 +7473,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxProcess_IsRedirected", (PyCFunction) _wrap_wxProcess_IsRedirected, METH_VARARGS | METH_KEYWORDS },
 	 { "wxProcess_Redirect", (PyCFunction) _wrap_wxProcess_Redirect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxProcess_base_OnTerminate", (PyCFunction) _wrap_wxProcess_base_OnTerminate, METH_VARARGS | METH_KEYWORDS },
-	 { "wxProcess__setSelf", (PyCFunction) _wrap_wxProcess__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcess__setCallbackInfo", (PyCFunction) _wrap_wxProcess__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxProcess_Destroy", (PyCFunction) _wrap_wxProcess_Destroy, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxProcess", (PyCFunction) _wrap_new_wxProcess, METH_VARARGS | METH_KEYWORDS },
 	 { "wxProcessEvent_m_exitcode_get", (PyCFunction) _wrap_wxProcessEvent_m_exitcode_get, METH_VARARGS | METH_KEYWORDS },
@@ -7484,7 +7484,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxProcessEvent_GetPid", (PyCFunction) _wrap_wxProcessEvent_GetPid, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxProcessEvent", (PyCFunction) _wrap_new_wxProcessEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyLog_Destroy", (PyCFunction) _wrap_wxPyLog_Destroy, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyLog__setSelf", (PyCFunction) _wrap_wxPyLog__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyLog__setCallbackInfo", (PyCFunction) _wrap_wxPyLog__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyLog", (PyCFunction) _wrap_new_wxPyLog, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogChain_GetOldLog", (PyCFunction) _wrap_wxLogChain_GetOldLog, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogChain_IsPassingMessages", (PyCFunction) _wrap_wxLogChain_IsPassingMessages, METH_VARARGS | METH_KEYWORDS },
@@ -7562,7 +7562,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxFontEnumerator_GetEncodings", (PyCFunction) _wrap_wxFontEnumerator_GetEncodings, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFontEnumerator_EnumerateEncodings", (PyCFunction) _wrap_wxFontEnumerator_EnumerateEncodings, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFontEnumerator_EnumerateFacenames", (PyCFunction) _wrap_wxFontEnumerator_EnumerateFacenames, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFontEnumerator__setSelf", (PyCFunction) _wrap_wxFontEnumerator__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFontEnumerator__setCallbackInfo", (PyCFunction) _wrap_wxFontEnumerator__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxFontEnumerator", (PyCFunction) _wrap_delete_wxFontEnumerator, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxFontEnumerator", (PyCFunction) _wrap_new_wxFontEnumerator, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_Hide", (PyCFunction) _wrap_wxCaret_Hide, METH_VARARGS | METH_KEYWORDS },

@@ -2,7 +2,7 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
-?????
+2.3.2 (pre)
 -----
 Added EVT_HELP, EVT_HELP_RANGE, EVT_DETAILED_HELP,
 EVT_DETAILED_HELP_RANGE, EVT_CONTEXT_MENU, wxHelpEvent,
@@ -49,6 +49,10 @@ multi-processor machine.
 Added wxPyLog so log targets can be created in Python to handle log
 messages however is wished.  See demo/Main.py for an example.
 
+Added wxFindReplaceDialog.
+
+The second phase of OOR is implemented (for wxEvtHandler and derived
+classes at least.)
 
 
 

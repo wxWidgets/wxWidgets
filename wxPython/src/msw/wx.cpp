@@ -87,7 +87,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #if PYTHON_API_VERSION >= 1009
     static char* wxStringErrorMsg = "String or Unicode type required";
 #else
-    static char* wxStringErrorMsg = "string type is required for parameter";
+    static char* wxStringErrorMsg = "String type required";
 #endif
 
 
@@ -664,7 +664,7 @@ static wxPyCoreAPI API = {
     wxRect_helper,
     wxColour_helper,
 
-    wxPyCBH_setSelf,
+    wxPyCBH_setCallbackInfo,
     wxPyCBH_findCallback,
     wxPyCBH_callCallback,
     wxPyCBH_callCallbackObj,
@@ -1908,12 +1908,14 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxBORDER", PyInt_FromLong((long) wxBORDER));
 	 PyDict_SetItemString(d,"wxSIMPLE_BORDER", PyInt_FromLong((long) wxSIMPLE_BORDER));
 	 PyDict_SetItemString(d,"wxSTATIC_BORDER", PyInt_FromLong((long) wxSTATIC_BORDER));
+	 PyDict_SetItemString(d,"wxBORDER_MASK", PyInt_FromLong((long) wxBORDER_MASK));
 	 PyDict_SetItemString(d,"wxTRANSPARENT_WINDOW", PyInt_FromLong((long) wxTRANSPARENT_WINDOW));
 	 PyDict_SetItemString(d,"wxNO_BORDER", PyInt_FromLong((long) wxNO_BORDER));
 	 PyDict_SetItemString(d,"wxUSER_COLOURS", PyInt_FromLong((long) wxUSER_COLOURS));
 	 PyDict_SetItemString(d,"wxNO_3D", PyInt_FromLong((long) wxNO_3D));
 	 PyDict_SetItemString(d,"wxTAB_TRAVERSAL", PyInt_FromLong((long) wxTAB_TRAVERSAL));
 	 PyDict_SetItemString(d,"wxWANTS_CHARS", PyInt_FromLong((long) wxWANTS_CHARS));
+	 PyDict_SetItemString(d,"wxPOPUP_WINDOW", PyInt_FromLong((long) wxPOPUP_WINDOW));
 	 PyDict_SetItemString(d,"wxHORIZONTAL", PyInt_FromLong((long) wxHORIZONTAL));
 	 PyDict_SetItemString(d,"wxVERTICAL", PyInt_FromLong((long) wxVERTICAL));
 	 PyDict_SetItemString(d,"wxBOTH", PyInt_FromLong((long) wxBOTH));
@@ -2169,6 +2171,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxJOY_BUTTON4", PyInt_FromLong((long) wxJOY_BUTTON4));
 	 PyDict_SetItemString(d,"wxJOY_BUTTON_ANY", PyInt_FromLong((long) wxJOY_BUTTON_ANY));
 	 PyDict_SetItemString(d,"wxWS_EX_VALIDATE_RECURSIVELY", PyInt_FromLong((long) wxWS_EX_VALIDATE_RECURSIVELY));
+	 PyDict_SetItemString(d,"wxWS_EX_BLOCK_EVENTS", PyInt_FromLong((long) wxWS_EX_BLOCK_EVENTS));
 	 PyDict_SetItemString(d,"wxMM_TEXT", PyInt_FromLong((long) wxMM_TEXT));
 	 PyDict_SetItemString(d,"wxMM_LOMETRIC", PyInt_FromLong((long) wxMM_LOMETRIC));
 	 PyDict_SetItemString(d,"wxMM_HIMETRIC", PyInt_FromLong((long) wxMM_HIMETRIC));

@@ -91,7 +91,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #if PYTHON_API_VERSION >= 1009
     static char* wxStringErrorMsg = "String or Unicode type required";
 #else
-    static char* wxStringErrorMsg = "string type is required for parameter";
+    static char* wxStringErrorMsg = "String type required";
 #endif
 
 
@@ -3714,8 +3714,8 @@ static PyObject *_wrap_new_wxPrintout(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
-#define wxPrintout__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPrintout__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPrintout__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPrintout__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyPrintout * _arg0;
     PyObject * _arg1;
@@ -3726,12 +3726,12 @@ static PyObject *_wrap_wxPrintout__setSelf(PyObject *self, PyObject *args, PyObj
     char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPrintout__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPrintout__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPrintout_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintout__setSelf. Expected _wxPyPrintout_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintout__setCallbackInfo. Expected _wxPyPrintout_p.");
         return NULL;
         }
     }
@@ -3743,7 +3743,7 @@ static PyObject *_wrap_wxPrintout__setSelf(PyObject *self, PyObject *args, PyObj
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPrintout__setSelf(_arg0,_arg1,_arg2);
+        wxPrintout__setCallbackInfo(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
@@ -5335,7 +5335,7 @@ static PyMethodDef printfwcMethods[] = {
 	 { "wxPrintout_GetPageSizeMM", (PyCFunction) _wrap_wxPrintout_GetPageSizeMM, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintout_GetDC", (PyCFunction) _wrap_wxPrintout_GetDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintout_Destroy", (PyCFunction) _wrap_wxPrintout_Destroy, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintout__setSelf", (PyCFunction) _wrap_wxPrintout__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintout__setCallbackInfo", (PyCFunction) _wrap_wxPrintout__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPrintout", (PyCFunction) _wrap_new_wxPrintout, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintDialog_ShowModal", (PyCFunction) _wrap_wxPrintDialog_ShowModal, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintDialog_GetPrintDC", (PyCFunction) _wrap_wxPrintDialog_GetPrintDC, METH_VARARGS | METH_KEYWORDS },

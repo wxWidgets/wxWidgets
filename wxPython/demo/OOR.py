@@ -59,6 +59,15 @@ class TestPanel(wxPanel):
         else:
             self.log.write("The objects are NOT the same! <frown>\n")
 
+        win = evt.GetEventObject()
+        if win is None:
+            self.log.write("***** OOPS! None returned...\n")
+            return
+        if win is self.btn2:
+            self.log.write("The objects are the same! <grin>\n")
+        else:
+            self.log.write("The objects are NOT the same! <frown>\n")
+
 
 #----------------------------------------------------------------------
 
@@ -79,21 +88,21 @@ SWIG isn't able to tell the actual type it just creates a new Python
 shadow object of the base type to wrap around the base type pointer
 and returns it.
 
-<p>In wxPython this can cause annoying issues.  For example if you
-call:
+<p>In wxPython prior to 2.3.0 this could cause annoying issues.  For
+example if you called:
 
 <pre>
 
         myText = someWindow.FindWindowById(txtID)
 </pre>
 
-expecting to get a wxTextCtrl you will actually get a wxWindow object
+expecting to get a wxTextCtrl you would actually get a wxWindow object
 instead.  If you then try to call SetValue on that object you'll get
 an exception since there is no such method.  This is the reason for
 the wxPyTypeCast hack that has been in wxPython for so long.
 
-<p>Even with wxPyTypeCast there is the issue that the object returned
-is not the same one that was created in Python originally, but a new
+<p>Even with wxPyTypeCast there was the issue that the object returned
+was not the same one that was created in Python originally, but a new
 object of the same type that wraps the same C++ pointer.  If the
 programmer has set additional attributes of that original object they
 will not exist in the new object.
@@ -112,7 +121,7 @@ and be able to then turn wxPyTypeCast in to a no-op.
 </ol>
 
 <p>The first button below shows the first of these phases (<i>working</i>)
-and the second will show #2 (<i>not yet working.</i>)
+and the second will show #2 (<i>working as of 2.3.2</i>)
 
 </body></html>
 """
