@@ -14,10 +14,13 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-#include <wx/stream.h>
-#include <wx/zstream.h>
-#include <wx/utils.h>
-#include <wx/intl.h>
+
+#include "wx/zstream.h"
+
+#ifdef wxUSE_ZLIB
+
+#include "wx/utils.h"
+#include "wx/intl.h"
 #include "wx/log.h"
 #include "../zlib/zlib.h"   // don't change this, Robert
 
@@ -181,3 +184,8 @@ size_t wxZlibOutputStream::OnSysWrite(const void *buffer, size_t size)
   }
   return size;
 }
+
+#endif
+
+  // wxUSE_ZLIB
+  

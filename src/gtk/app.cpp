@@ -24,8 +24,9 @@
 #endif
 #include "wx/module.h"
 #include "wx/image.h"
+#ifdef wxUSE_THREADS
 #include "wx/thread.h"
-
+#endif
 #include "unistd.h"
 
 #include "glib.h"
@@ -145,9 +146,13 @@ END_EVENT_TABLE()
 gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 {
     if (wxTheApp) while (wxTheApp->ProcessIdle()) {}
+#ifdef wxUSE_THREADS
     wxMutexGuiLeave();
+#endif
     usleep(10000);
+#ifdef wxUSE_THREADS
     wxMutexGuiEnter();
+#endif
     return TRUE;
 }
 

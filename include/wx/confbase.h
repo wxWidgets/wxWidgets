@@ -18,14 +18,11 @@
 #pragma interface "confbase.h"
 #endif
 
-// ----------------------------------------------------------------------------
-// compile options
-// ----------------------------------------------------------------------------
+#include "wx/defs.h"
 
-// it won't compile without it anyhow
-#ifndef wxUSE_CONFIG
-  #error "Please define wxUSE_CONFIG or remove config.cpp from your makefile"
-#endif // wxUSE_CONFIG
+#ifdef wxUSE_CONFIG
+
+#include "wx/string.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -287,7 +284,10 @@ private:
   #define sm_classwxConfig sm_classwxFileConfig
 #endif
 
+#endif 
+ 
+  // wxUSE_CONFIG
 
-
-#endif  // _WX_CONFIG_H_
+#endif
+  // _WX_CONFIG_H_
 

@@ -28,7 +28,7 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_TIMEDATE
+#ifdef wxUSE_TIMEDATE
 
 #include "wx/date.h"
 #include <wx/intl.h>

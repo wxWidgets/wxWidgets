@@ -11,7 +11,11 @@
 #pragma implementation "combobox.h"
 #endif
 
+
 #include "wx/combobox.h"
+
+#ifdef wxUSE_COMBOBOX
+
 #include <wx/intl.h>
 
 #include "gdk/gdk.h"
@@ -538,3 +542,7 @@ bool wxComboBox::IsOwnGtkWindow( GdkWindow *window )
     return ( (window == GTK_ENTRY( GTK_COMBO(m_widget)->entry )->text_area) ||
              (window == GTK_COMBO(m_widget)->button->window ) );
 }
+
+#endif
+
+  // wxUSE_COMBOBOX

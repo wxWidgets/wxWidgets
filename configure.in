@@ -580,7 +580,6 @@ dnl ------------------------------------------------------------------------
 
 USE_UNIX=1
 
-
 USE_LINUX=
 USE_SGI=
 USE_HPUX=
@@ -698,24 +697,11 @@ DEFAULT_wxUSE_ZLIB=1
 DEFAULT_wxUSE_LIBPNG=1
 DEFAULT_wxUSE_ODBC=1
 
-DEFAULT_wxUSE_COMBOBOX=1
-DEFAULT_wxUSE_GAUGE=1
-DEFAULT_wxUSE_SCROLLBAR=1
-DEFAULT_wxUSE_LISTCTRL=1
-DEFAULT_wxUSE_TREECTRL=1
-DEFAULT_wxUSE_GRID=1
-DEFAULT_wxUSE_TAB_DIALOG=1
-DEFAULT_wxUSE_NOTEBOOK=1
-
 DEFAULT_wxUSE_TIMEDATE=1
-DEFAULT_wxUSE_FRACTION=1
-DEFAULT_wxUSE_LOG=1
 DEFAULT_wxUSE_INTL=1
 DEFAULT_wxUSE_CONFIG=1
 DEFAULT_wxUSE_STREAMS=1
 DEFAULT_wxUSE_SERIAL=1
-DEFAULT_wxUSE_FILE=1
-DEFAULT_wxUSE_TEXTFILE=1
 
 DEFAULT_wxUSE_AFM_FOR_POSTSCRIPT=1
 DEFAULT_WX_NORMALIZED_PS_FONTS=1
@@ -723,9 +709,8 @@ DEFAULT_wxUSE_POSTSCRIPT=1
 
 DEFAULT_wxUSE_IPC=1
 DEFAULT_wxUSE_RESOURCES=1
-DEFAULT_wxUSE_CONSTRAINTS=1
 DEFAULT_wxUSE_CLIPBOARD=1
-DEFAULT_wxUSE_DND=1
+DEFAULT_wxUSE_DRAG_AND_DROP=1
 
 DEFAULT_wxUSE_MDI_ARCHITECTURE=1
 DEFAULT_wxUSE_DOC_VIEW_ARCHITECTURE=1
@@ -734,11 +719,6 @@ DEFAULT_wxUSE_PRINTING_ARCHITECTURE=1
 DEFAULT_wxUSE_PROLOGIO=1
 DEFAULT_wxUSE_WX_RESOURCES=1
 DEFAULT_wxUSE_RPC=0
-
-DEFAULT_wxUSE_OPENGL=0
-DEFAULT_wxUSE_METAFILE=0
-DEFAULT_wxUSE_WXGRAPH=0
-DEFAULT_wxUSE_WXTREE=0
 DEFAULT_wxUSE_HELP=1
 
 DEFAULT_wxUSE_UNICODE=1
@@ -800,6 +780,10 @@ AC_OVERRIDES(apple_ieee, apple_ieee,
 **--with_apple_ieee	  use the Apple IEEE codec,
 wxUSE_APPLE_IEEE)
 
+AC_OVERRIDES(threads,threads,
+**--with-threads          for enabling threads,
+wxUSE_THREADS)
+
 dnl ----------------------------------------------------------------
 dnl user options for libraries
 dnl ----------------------------------------------------------------
@@ -816,46 +800,6 @@ AC_OVERRIDES(odbc,odbc,
 **--with-odbc             use iODBC and wxODBC classes,
 wxUSE_ODBC)
 
-AC_OVERRIDES(opengl,opengl,
-**--with-opengl           use OpenGL (or Mesa),
-wxUSE_OPENGL)
-
-dnl ----------------------------------------------------------------
-dnl user options for GUI control classes
-dnl ----------------------------------------------------------------
-
-AC_OVERRIDES(gauge,gauge,
-**--with-gauge            use wxGauge class,
-wxUSE_GAUGE)
-
-AC_OVERRIDES(combobox,combobox,
-**--with-combobox         use wxComboBox class,
-wxUSE_COMBOBOX)
-
-AC_OVERRIDES(scrollbar,scrollbar,
-**--with-scrollbar        use wxScrollbar class,
-wxUSE_SCROLLBAR)
-
-AC_OVERRIDES(listctrl,listctrl,
-**--with-listctrl         use wxListCtrl class,
-wxUSE_LISTCTRL)
-
-AC_OVERRIDES(treectrl,treectrl,
-**--with-treectrl         use wxTreeCtrl class,
-wxUSE_TREECTRL)
-
-AC_OVERRIDES(grid,grid,
-**--with-grid             use wxGrid class,
-wxUSE_GRID)
-
-AC_OVERRIDES(tab_dialog,tab_dialog,
-**--with-tab_dialog       use wxTabDia class,
-wxUSE_TAB_DIALOG)
-
-AC_OVERRIDES(notebook,notebook,
-**--with-notebook         use wxNotebook class,
-wxUSE_NOTEBOOK)
-
 dnl ----------------------------------------------------------------
 dnl user options for non-GUI classes
 dnl ----------------------------------------------------------------
@@ -863,14 +807,6 @@ dnl ----------------------------------------------------------------
 AC_OVERRIDES(timedate, timedate,
 **--with-timedate         use wxTime and wxDate classes,
 wxUSE_TIMEDATE)
-
-AC_OVERRIDES(fraction,fraction,
-**--with-fraction         use wxFraction class,
-wxUSE_FRACTION)
-
-AC_OVERRIDES(log,log,
-**--with-log              use logging system,
-wxUSE_LOG)
 
 AC_OVERRIDES(intl,intl,
 **--with-intl             use internationalization system,
@@ -887,14 +823,6 @@ wxUSE_STREAMS)
 AC_OVERRIDES(serial,serial,
 **--with-serial           use class serialization,
 wxUSE_SERIAL)
-
-AC_OVERRIDES(file,file,
-**--with-file             use wxFile class,
-wxUSE_FILE)
-
-AC_OVERRIDES(textfile,textfile,
-**--with-textfile         use wxTextFile class,
-wxUSE_TEXTFILE)
 
 dnl ----------------------------------------------------------------
 dnl user options for PostScript
@@ -958,11 +886,7 @@ wxUSE_CLIPBOARD)
 
 AC_OVERRIDES(dnd,dnd,
 **--with-dnd              use Drag'n'Drop classes,
-wxUSE_DND)
-
-AC_OVERRIDES(constraints,constrains,
-**--with-constraints      use layout-constraints system,
-wxUSE_CONSTRAINTS)
+wxUSE_DRAG_AND_DROP)
 
 dnl ----------------------------------------------------------------
 dnl user options for architectures
@@ -984,24 +908,6 @@ AC_OVERRIDES(help,help,
 **--with-help             use help (using external browser at present),
 wxUSE_HELP)
 
-dnl ----------------------------------------------------------------
-dnl user options with no effect yet
-dnl ----------------------------------------------------------------
-dnl
-dnl AC_OVERRIDES(metafile, metafile,
-dnl **--with-metafile         use metafile (no effect),
-dnl wxUSE_METAFILE)
-dnl
-dnl AC_OVERRIDES(wxgraph,wxgraph,
-dnl **--with-wxgraph          use wxgraph (no effect),
-dnl wxUSE_WXGRAPH)
-dnl
-dnl AC_OVERRIDES(wxtree,wxtree,
-dnl **--with-wxtree           use wxtree (no effect),
-dnl wxUSE_WXTREE)
-dnl
-dnl AC_OVERRIDES(package,message,helpmessage,variable)
-dnl
 dnl ----------------------------------------------------------------
 dnl Unix, obviously
 dnl ----------------------------------------------------------------
@@ -1201,11 +1107,15 @@ dnl ----------------------------------------------------------------
 
 if test "$wxUSE_ZLIB" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_ZLIB,$wxUSE_ZLIB)
+  Z_C_SRC="\$(Z_C_SRC)"
 fi
+AC_SUBST(Z_C_SRC)
 
 if test "$wxUSE_LIBPNG" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_LIBPNG,$wxUSE_LIBPNG) 
+  PNG_C_SRC="\$(PNG_C_SRC)"
 fi
+AC_SUBST(PNG_C_SRC)
 
 IODBC_C_SRC=""
 if test "$wxUSE_ODBC" = 1 ; then
@@ -1213,42 +1123,6 @@ if test "$wxUSE_ODBC" = 1 ; then
   IODBC_C_SRC="\$(IODBC_C_SRC)"
 fi
 AC_SUBST(IODBC_C_SRC)
-
-dnl ----------------------------------------------------------------
-dnl Register GUI-control options for makefiles and setup.h
-dnl ----------------------------------------------------------------
-
-if test "$wxUSE_GAUGE" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_GAUGE,$wxUSE_GAUGE)
-fi
-
-if test "$wxUSE_COMBOBOX" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_COMBOBOX,$wxUSE_COMBOBOX)
-fi
-
-if test "$wxUSE_SCROLLBAR" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_SCROLLBAR,$wxUSE_SCROLLBAR)
-fi
-
-if test "$wxUSE_LISTCTRL" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_LISTCTRL,$wxUSE_LISTCTRL)
-fi
-
-if test "$wxUSE_TREECTRL" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_TREECTRL,$wxUSE_TREECTRL)
-fi
-
-if test "$wxUSE_GRID" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_GRID,$wxUSE_GRID)
-fi
-
-if test "$wxUSE_TAB_DIALOG" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_TAB_DIALOG,$wxUSE_TAB_DIALOG)
-fi
-
-if test "$wxUSE_NOTEBOOK" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_NOTEBOOK,$wxUSE_NOTEBOOK)
-fi
 
 dnl ----------------------------------------------------------------
 dnl Register non-GUI class options for makefiles and setup.h
@@ -1262,14 +1136,6 @@ if test "$wxUSE_TIMEDATE" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_TIMEDATE,$wxUSE_TIMEDATE)
 fi
 
-if test "$wxUSE_FRACTION" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_FRACTION,$wxUSE_FRACTION)
-fi
-
-if test "$wxUSE_LOG" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_LOG,$wxUSE_LOG)
-fi
-
 if test "$wxUSE_INTL" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_INTL,$wxUSE_INTL)
 fi
@@ -1280,14 +1146,6 @@ fi
 
 if test "$wxUSE_SERIAL" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_SERIAL,$wxUSE_SERIAL)
-fi
-
-if test "$wxUSE_FILE" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_FILE,$wxUSE_FILE)
-fi
-
-if test "$wxUSE_TEXTFILE" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_TEXTFILE,$wxUSE_TEXTFILE)
 fi
 
 dnl ----------------------------------------------------------------
@@ -1362,24 +1220,13 @@ if test "$wxUSE_CLIPBOARD" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_CLIPBOARD,$wxUSE_CLIPBOARD)
 fi
 
-if test "$wxUSE_DND" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_DND,$wxUSE_DND)
-fi
-
-if test "$wxUSE_CONSTRAINTS" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_CONSTRAINTS,$wxUSE_CONSTRAINTS)
+if test "$wxUSE_DRAG_AND_DROP" = 1 ; then
+  AC_DEFINE_UNQUOTED(wxUSE_DRAG_AND_DROP,$wxUSE_DRAG_AND_DROP)
 fi
 
 dnl ----------------------------------------------------------------
-dnl No effect
+dnl No effect yet
 dnl ----------------------------------------------------------------
-
-METAFILE=NONE
-if test "$wxUSE_METAFILE" = 1 ; then
-  METAFILE="METAFILE"
-  AC_DEFINE_UNQUOTED(wxUSE_METAFILE,$wxUSE_METAFILE)
-fi
-AC_SUBST(METAFILE)
 
 HELP=NONE
 if test "$wxUSE_HELP" = 1 ; then
@@ -1387,25 +1234,6 @@ if test "$wxUSE_HELP" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_HELP,$wxUSE_HELP)
 fi
 AC_SUBST(HELP)
-
-WXGRAPH=NONE
-if test "$wxUSE_WXGRAPH" = 1 ; then
-  WXGRAPH="WXGRAPH"
-  AC_DEFINE_UNQUOTED(wxUSE_WXGRAPH,$wxUSE_WXGRAPH)
-fi
-AC_SUBST(WXGRAPH)
-
-WXTREE=NONE
-if test "$wxUSE_WXTREE" = 1 ; then
-  WXTREE="WXTREE"
-  AC_DEFINE_UNQUOTED(wxUSE_WXTREE,$wxUSE_WXTREE)
-fi
-AC_SUBST(WXTREE)
-
-GLCANVAS=NONE
-if test "$wxUSE_OPENGL" = 1 ; then
-  GLCANVAS="GLCANVAS"
-fi
 
 dnl ----------------------------------------------------------------
 dnl select  dynamic loader (used by iODBC to load drivers)
@@ -1418,28 +1246,10 @@ dnl ----------------------------------------------------------------
 dnl thread support
 dnl ----------------------------------------------------------------
 
-wxUSE_THREADS=1
 THREADS_LINK=""
-UNIX_THREAD="gtk/threadno.cpp"
-
-AC_OVERRIDES(threads,threads,
-**--without-threads       Force disabling threads,
-wxUSE_THREADS)
+UNIX_THREAD=""
 
 if test "$wxUSE_THREADS" = "1"; then
-
-  case "$os" in
-   solaris*)
-
-      AC_CHECK_LIB(thread, thr_create, [
-        UNIX_THREAD="gtk/threadsol.cpp"
-        THREADS_LINK="-lthread"
-      ])
-      ;;
-
-   *)
-  
-     UNIX_THREAD="gtk/threadno.cpp"
 
      dnl For glibc 2 users who have the old libc 5 too
 
@@ -1460,13 +1270,16 @@ if test "$wxUSE_THREADS" = "1"; then
      ])
     ])
 
+    if test "$THREADS_LINK" != ""; then
+      AC_DEFINE(wxUSE_THREADS)
+    fi
+
     dnl -lposix4 seems to be required on Solaris
 
     AC_CHECK_LIB(posix4, printf, [
       THREADS_LINK="$THREADS_LINK -lposix4"
-    ]);;
-
-  esac
+    ])
+    
 fi
 
 if test "$wxUSE_MOTIF" = "1"; then
@@ -1479,76 +1292,10 @@ fi
 
 AC_SUBST(UNIX_THREAD)
 AC_SUBST(THREADS_LINK)
-AC_DEFINE(wxUSE_THREADS)
 
 dnl   defines UNIX_THREAD it contains the source file to use for threads. (GL)
 dnl   defines THREADS_LINK it contains the thread library to link with. (GL)
 dnl   defines wxUSE_THREADS if thread support is activated. (GL)
-
-dnl ----------------------------------------------------------------
-dnl search for opengl
-dnl ----------------------------------------------------------------
-
-OPENGL_INCLUDE=
-OPENGL_LIBRARY=
-OPENGL_LINK=
-
-if test "$wxUSE_OPENGL" = 1; then
-  dnl checking OPENGL includes
-  AC_MSG_CHECKING(for OpenGL includes)
-  AC_PATH_FIND_INCLUDES($SEARCH_INCLUDE,GL/gl.h)
-  if test "$ac_find_includes" != "" ; then
-    OPENGL_INCLUDE="-I$ac_find_includes"
-    AC_MSG_RESULT(found $ac_find_includes)
-    dnl checking OPENGL libraries
-    AC_MSG_CHECKING(for OpenGL library)
-    AC_PATH_FIND_LIBRARIES($SEARCH_LIB,GL)
-    if test "$ac_find_libraries" != "" ; then
-      AC_INCLUDE_PATH_EXIST($ac_find_includes,$CHECK_INCLUDE)
-      AC_LINK_PATH_EXIST($ac_find_libraries,$CHECK_LIB)
-      CHECK_LINK="$CHECK_INCLUDE $ac_path_to_link"
-      CHECK_INCLUDE="$CHECK_INCLUDE $ac_path_to_include"
-      OPENGL_LIBRARY="$ac_path_to_link"
-      OPENGL_INCLUDE="$ac_path_to_include"
-      OPENGL_LINK="-lGL"
-      AC_MSG_RESULT(found OpenGL at $ac_find_libraries)
-    else
-      AC_PATH_FIND_LIBRARIES($SEARCH_LIB,MesaGL)
-      if test "$ac_find_libraries" != "" ; then
-        AC_INCLUDE_PATH_EXIST($ac_find_includes,$CHECK_INCLUDE)
-        AC_LINK_PATH_EXIST($ac_find_libraries,$CHECK_LIB)
-        CHECK_LINK="$CHECK_INCLUDE $ac_path_to_link"
-        CHECK_INCLUDE="$CHECK_INCLUDE $ac_path_to_include"
-        OPENGL_LIBRARY="$ac_path_to_link"
-        OPENGL_INCLUDE="$ac_path_to_include"
-        OPENGL_LINK="-lMesaGL"
-        AC_MSG_RESULT(found MESA at $ac_find_libraries)
-      else
-        AC_MSG_ERROR(no)
-      fi
-    fi
-  else
-    AC_MSG_ERROR(no)
-  fi
-fi
-
-dnl ----------------------------------------------------------------
-dnl left-over
-dnl ----------------------------------------------------------------
-
-wxUSE_GLX=$wxUSE_OPENGL
-if test "$wxUSE_OPENGL" != 1; then
-  OPENGL_LIBRARIES=
-  OPENGL_INCLUDE=
-  OPENGL_LINK=
-  GLCANVAS=NONE
-fi
-
-AC_DEFINE_UNQUOTED(wxUSE_GLX,$wxUSE_GLX)
-AC_SUBST(OPENGL_INCLUDE)
-AC_SUBST(OPENGL_LIBRARY)
-AC_SUBST(OPENGL_LINK)
-AC_SUBST(GLCANVAS)
 
 dnl ------------------------------------------------------------------------
 dnl compiler options for shared libs

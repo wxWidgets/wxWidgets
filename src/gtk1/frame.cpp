@@ -394,9 +394,9 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
     if (m_frameMenuBar)
     {
         int xx = m_miniEdge;
-  int yy = m_miniEdge + m_miniTitle;
-  int ww = m_width  - 2*m_miniEdge;
-  int hh = wxMENU_HEIGHT;
+        int yy = m_miniEdge + m_miniTitle;
+        int ww = m_width  - 2*m_miniEdge;
+        int hh = wxMENU_HEIGHT;
         m_frameMenuBar->m_x = xx;
         m_frameMenuBar->m_y = yy;
         m_frameMenuBar->m_width = ww;
@@ -409,9 +409,9 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
     if (m_frameToolBar)
     {
         int xx = m_miniEdge;
-  int yy = m_miniEdge + m_miniTitle;
+        int yy = m_miniEdge + m_miniTitle;
         if (m_frameMenuBar) yy += wxMENU_HEIGHT;
-  int ww = m_width - 2*m_miniEdge;
+        int ww = m_width - 2*m_miniEdge;
         int hh = m_frameToolBar->m_height;
 
         m_frameToolBar->m_x = xx;
@@ -426,9 +426,9 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
     if (m_frameStatusBar)
     {
         int xx = 0 + m_miniEdge;
-  int yy = m_height - wxSTATUS_HEIGHT - m_miniEdge;
-  int ww = m_width - 2*m_miniEdge;
-  int hh = wxSTATUS_HEIGHT;
+        int yy = m_height - wxSTATUS_HEIGHT - m_miniEdge;
+        int ww = m_width - 2*m_miniEdge;
+        int hh = wxSTATUS_HEIGHT;
 
         m_frameStatusBar->m_x = xx;
         m_frameStatusBar->m_y = yy;

@@ -17,6 +17,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#ifdef wxUSE_COMBOBOX
+
 #include "wx/object.h"
 #include "wx/control.h"
 
@@ -116,4 +119,10 @@ public:
   DECLARE_EVENT_TABLE()
 };
 
-#endif // __GTKCOMBOBOXH__
+#endif
+
+  // wxUSE_COMBOBOX
+
+#endif
+
+  // __GTKCOMBOBOXH__

@@ -91,7 +91,9 @@ public:
   void SetString( int n, const wxString &string );
   void SetStringSelection( const wxString &string, bool select = TRUE );
     
+#ifdef wxUSE_DRAG_AND_DROP
   void SetDropTarget( wxDropTarget *dropTarget );
+#endif
 
 // implementation
     

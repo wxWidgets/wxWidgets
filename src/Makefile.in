@@ -13,7 +13,7 @@ OS=@OS@
 # compile a library only
 RULE=gslib
 
-# define common stuff
+# define source file for odbc
 IODBC_C_SRC=\
   iodbc/catalog.c \
   iodbc/connect.c \
@@ -32,6 +32,41 @@ IODBC_C_SRC=\
   iodbc/prepare.c \
   iodbc/result.c
 
+# define source file for png
+PNG_C_SRC=\
+ png/png.c \
+ png/pngset.c \
+ png/pngget.c \
+ png/pngrutil.c \
+ png/pngtrans.c \
+ png/pngwutil.c \
+ png/pngread.c \
+ png/pngrio.c \
+ png/pngwio.c \
+ png/pngwrite.c \
+ png/pngrtran.c \
+ png/pngwtran.c \
+ png/pngmem.c \
+ png/pngerror.c \
+ png/pngpread.c
+ 
+# define source file for zlib
+Z_C_SRC=\
+ zlib/adler32.c \
+ zlib/compress.c \
+ zlib/crc32.c \
+ zlib/gzio.c \
+ zlib/uncompr.c \
+ zlib/deflate.c \
+ zlib/trees.c \
+ zlib/zutil.c \
+ zlib/inflate.c \
+ zlib/infblock.c \
+ zlib/inftrees.c \
+ zlib/infcodes.c \
+ zlib/infutil.c \
+ zlib/inffast.c
+ 
 # include gtk.inc, qt.inc or motif.inc here
 include @MAKEINCLUDE@
 
@@ -42,7 +77,7 @@ SHARED_LIBRARY=lib$(LIB_TARGET).so.$(LIB_MAJOR).$(LIB_MINOR)
 LIB_CPP_ALL_SRC=$(LIB_CPP_SRC) @UNIX_THREAD@
 # @GTK_JOYSTICK@
 
-LIB_C_ALL_SRC=$(LIB_C_SRC) @IODBC_C_SRC@ parser.c
+LIB_C_ALL_SRC=$(LIB_C_SRC) @IODBC_C_SRC@ @PNG_C_SRC@ @Z_C_SRC@ parser.c
 
 #define library objects
 LIB_OBJ=\

@@ -16,6 +16,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#ifdef wxUSE_CLIPBOARD
+
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/dataobj.h"
@@ -99,6 +102,9 @@ public:
     void OnExit();
 };
 
+#endif
+
+   // wxUSE_CLIPBOARD
 
 #endif
     // __GTKCLIPBOARDH__

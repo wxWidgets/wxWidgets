@@ -34,7 +34,9 @@ class WXDLLEXPORT wxPrintInfo;
 class WXDLLEXPORT wxCommand;
 class WXDLLEXPORT wxCommandProcessor;
 class WXDLLEXPORT wxFileHistory;
+#ifdef wxUSE_CONFIG
 class WXDLLEXPORT wxConfigBase;
+#endif
 
 #if wxUSE_IOSTREAMH
 // N.B. BC++ doesn't have istream.h, ostream.h
@@ -342,8 +344,10 @@ class WXDLLEXPORT wxDocManager: public wxEvtHandler
   virtual wxString GetHistoryFile(int i) const;
   virtual void FileHistoryUseMenu(wxMenu *menu);
   virtual void FileHistoryRemoveMenu(wxMenu *menu);
+#ifdef wxUSE_CONFIG
   virtual void FileHistoryLoad(wxConfigBase& config);
   virtual void FileHistorySave(wxConfigBase& config);
+#endif
   virtual void FileHistoryAddFilesToMenu();
   virtual void FileHistoryAddFilesToMenu(wxMenu* menu);
  protected:
@@ -512,8 +516,10 @@ class WXDLLEXPORT wxFileHistory: public wxObject
   // Remove menu from the list (MDI child may be closing)
   virtual void RemoveMenu(wxMenu *menu);
 
+#ifdef wxUSE_CONFIG
   virtual void Load(wxConfigBase& config);
   virtual void Save(wxConfigBase& config);
+#endif
 
   virtual void AddFilesToMenu();
   virtual void AddFilesToMenu(wxMenu* menu); // Single menu

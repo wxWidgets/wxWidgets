@@ -63,44 +63,24 @@
 /*
  * Use gauge item
  */
-#undef wxUSE_GAUGE
+#define wxUSE_GAUGE 1
 /*
  * Use combobox item
  */
-#undef wxUSE_COMBOBOX
+#define wxUSE_COMBOBOX 1
 /*
  * Use scrollbar item
  */
-#undef wxUSE_SCROLLBAR
+#define wxUSE_SCROLLBAR 1
 /*
- * Use notebook item
+ * Use scrollbar item
  */
-#undef wxUSE_NOTEBOOK
-/*
- * Use listctrl item
- */
-#undef wxUSE_LISTCTRL
-/*
- * Use treectrl item
- */
-#undef wxUSE_TREECTRL
-/*
- * Use grid item
- */
-#undef wxUSE_GRID
-/*
- * Use tab dialog item
- */
-#undef wxUSE_TAB_DIALOG
+#define wxUSE_RADIOBUTTON 1
 
 //------------------------------------------------------------------------
 // non-GUI options
 //------------------------------------------------------------------------
 
-/*
- * Use fraction class
- */
-#undef wxUSE_FRACTION
 /*
  * Use time and date classes
  */
@@ -117,14 +97,6 @@
  * Use streams
  */
 #undef wxUSE_STREAMS
-/*
- * Use wxFile
- */
-#undef wxUSE_FILE
-/*
- * Use wxTextFile
- */
-#undef wxUSE_TEXTFILE
 /*
  * Use class serialization
  */
@@ -182,11 +154,7 @@
 /*
  * Use dnd
  */
-#undef wxUSE_DND
-/*
- * Use wxWindows layout constraint system
- */
-#undef wxUSE_CONSTRAINTS
+#undef wxUSE_DRAG_AND_DROP
  
 //------------------------------------------------------------------------
 // architecture options
@@ -227,12 +195,6 @@
 //------------------------------------------------------------------------
 
 /*
- * Implement a GLCanvas class as an interface to OpenGL, using the GLX
- * extension to the X11 protocol.  You can use the (free) Mesa library
- * if you don't have a 'real' OpenGL.
- */
-#undef wxUSE_GLX
-/*
  * Use wxWindows help facility (needs wxUSE_IPC 1)
  */
 #undef wxUSE_HELP
@@ -240,18 +202,6 @@
  * Use iostream.h rather than iostream
  */
 #undef wxUSE_IOSTREAMH
-/*
- * Use Metafile and Metafile device context
- */
-#undef wxUSE_METAFILE
-/*
- * Use wxGraph
- */
-#undef wxUSE_WXGRAPH
-/*
- * Use wxTree
- */
-#undef wxUSE_WXTREE
 /*
  * Use Apple Ieee-double converter
  */

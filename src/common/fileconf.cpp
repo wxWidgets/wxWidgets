@@ -14,14 +14,14 @@
 #pragma implementation "fileconf.h"
 #endif
 
-// ============================================================================
-// declarations
-// ============================================================================
-
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
 #include  "wx/wxprec.h"
+
+#include  "wx/fileconf.h"
+
+#ifdef wxUSE_CONFIG
 
 #ifdef    __BORLANDC__
   #pragma hdrstop
@@ -38,7 +38,6 @@
 #include  "wx/log.h"
 #include  "wx/textfile.h"
 #include  "wx/config.h"
-#include  "wx/fileconf.h"
 
 #include  "wx/utils.h"    // for wxGetHomeDir
 
@@ -1380,3 +1379,7 @@ wxString FilterOut(const wxString& str)
 
   return strResult;
 }
+
+#endif
+
+   // wxUSE_CONFIG

@@ -13,6 +13,8 @@
 
 #include "wx/clipbrd.h"
 
+#ifdef wxUSE_CLIPBOARD
+
 #include "glib.h"
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
@@ -547,3 +549,8 @@ void wxClipboardModule::OnExit()
     if (wxTheClipboard) delete wxTheClipboard;
     wxTheClipboard = (wxClipboard*) NULL;
 }
+
+#endif
+
+  // wxUSE_CLIPBOARD
+

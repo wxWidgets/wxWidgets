@@ -10,10 +10,6 @@
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// declarations
-// ============================================================================
-
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
@@ -22,6 +18,10 @@
 #endif
 
 #include  "wx/wxprec.h"
+
+#include  <wx/confbase.h>
+
+#ifdef wxUSE_CONFIG
 
 #ifdef    __BORLANDC__
   #pragma hdrstop
@@ -36,7 +36,6 @@
 #include  <wx/file.h>
 #include  <wx/log.h>
 #include  <wx/textfile.h>
-#include  <wx/confbase.h>
 #include  <wx/utils.h>
 
 // we must include (one of) these files for wxConfigBase::Create
@@ -409,3 +408,9 @@ void wxSplitPath(wxArrayString& aParts, const char *sz)
     pc++;
   }
 }
+
+#endif
+
+  // wxUSE_CONFIG
+  
+  

@@ -22,7 +22,9 @@
 #include "wx/bitmap.h"
 #include "wx/debug.h"
 #include "wx/log.h"
+#ifdef wxUSE_LIBPNG
 #include "../png/png.h"
+#endif
 #include "wx/filefn.h"
 
 //-----------------------------------------------------------------------------
@@ -392,7 +394,9 @@ wxImageHandler *wxImage::FindHandler( long bitmapType )
 void wxImage::InitStandardHandlers()
 {
     AddHandler( new wxBMPHandler );
+#ifdef wxUSE_LIBPNG
     AddHandler( new wxPNGHandler );
+#endif
 }
 
 void wxImage::CleanUpHandlers()
@@ -429,6 +433,8 @@ bool wxImageHandler::SaveFile( wxImage *WXUNUSED(image), const wxString& WXUNUSE
 //-----------------------------------------------------------------------------
 // wxPNGHandler
 //-----------------------------------------------------------------------------
+
+#ifdef wxUSE_LIBPNG
 
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
@@ -654,6 +660,10 @@ bool wxPNGHandler::SaveFile( wxImage *image, const wxString& name )
   }
   return TRUE;
 }
+
+#endif 
+
+  // wxUSE_LIBPNG
 
 //-----------------------------------------------------------------------------
 // wxBMPHandler

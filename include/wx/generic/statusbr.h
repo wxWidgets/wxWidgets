@@ -17,6 +17,8 @@
 #endif
 
 #include "wx/window.h"
+#include "wx/pen.h"
+#include "wx/font.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxPanelNameStr;
 

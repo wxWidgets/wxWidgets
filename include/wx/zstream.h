@@ -15,6 +15,10 @@
 #pragma interface
 #endif
 
+#include "defs.h"
+
+#ifdef wxUSE_ZLIB
+
 #include <wx/stream.h>
 
 class WXDLLEXPORT wxZlibInputStream: public wxFilterInputStream {
@@ -46,5 +50,7 @@ class WXDLLEXPORT wxZlibOutputStream: public wxFilterOutputStream {
   unsigned char *m_z_buffer;
   struct z_stream_s *m_deflate;
 };
+
+#endif
 
 #endif

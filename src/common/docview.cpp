@@ -1044,6 +1044,7 @@ void wxDocManager::FileHistoryRemoveMenu(wxMenu *menu)
     m_fileHistory->RemoveMenu(menu);
 }
 
+#ifdef wxUSE_CONFIG
 void wxDocManager::FileHistoryLoad(wxConfigBase& config)
 {
   if (m_fileHistory)
@@ -1055,6 +1056,7 @@ void wxDocManager::FileHistorySave(wxConfigBase& config)
   if (m_fileHistory)
     m_fileHistory->Save(config);
 }
+#endif
 
 void wxDocManager::FileHistoryAddFilesToMenu(wxMenu* menu)
 {
@@ -1820,6 +1822,7 @@ void wxFileHistory::RemoveMenu(wxMenu *menu)
   m_fileMenus.DeleteObject(menu);
 }
 
+#ifdef wxUSE_CONFIG
 void wxFileHistory::Load(wxConfigBase& config)
 {
   m_fileHistoryN = 0;
@@ -1846,6 +1849,7 @@ void wxFileHistory::Save(wxConfigBase& config)
     config.Write(buf, wxString(m_fileHistory[i]));
   }
 }
+#endif
 
 void wxFileHistory::AddFilesToMenu()
 {

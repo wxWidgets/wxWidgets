@@ -16,6 +16,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#ifdef wxUSE_DRAG_AND_DROP
+
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/dataobj.h"
@@ -147,6 +150,10 @@ class wxDropSource: public wxObject
     wxCursor      m_defaultCursor;
     wxCursor      m_goaheadCursor;
 };
+
+#endif
+
+   // wxUSE_DRAG_AND_DROP
 
 #endif  
        //__GTKDNDH__

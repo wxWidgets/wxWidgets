@@ -319,8 +319,10 @@ void wxListBox::AppendCommon( const wxString &item )
 
     ConnectWidget( list_item );
 
+#ifdef wxUSE_DRAG_AND_DROP
 #ifndef NEW_GTK_DND_CODE
     if (m_dropTarget) m_dropTarget->RegisterWidget( list_item );
+#endif
 #endif
 }
 
@@ -650,6 +652,7 @@ int wxListBox::GetIndex( GtkWidget *item ) const
     return -1;
 }
 
+#ifdef wxUSE_DRAG_AND_DROP
 void wxListBox::SetDropTarget( wxDropTarget *dropTarget )
 {
     wxCHECK_RET( m_list != NULL, "invalid listbox" );
@@ -680,6 +683,7 @@ void wxListBox::SetDropTarget( wxDropTarget *dropTarget )
     }
 #endif
 }
+#endif
 
 GtkWidget *wxListBox::GetConnectWidget()
 {

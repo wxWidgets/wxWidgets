@@ -28,6 +28,7 @@ WXDLLEXPORT_DATA(extern const char*) wxTreeCtrlNameStr;
 #include "wx/event.h"
 #include "wx/scrolwin.h"
 #include "wx/textctrl.h"
+#include "wx/pen.h"
 
 // -----------------------------------------------------------------------------
 // constants

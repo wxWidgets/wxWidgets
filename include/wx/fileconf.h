@@ -18,17 +18,13 @@
 #endif
 
 #include "wx/defs.h"
+
+#ifdef wxUSE_CONFIG
+
+#include "wx/confbase.h"
 #include "wx/textfile.h"
 #include "wx/string.h"
 
-// ----------------------------------------------------------------------------
-// compile options
-// ----------------------------------------------------------------------------
-
-// it won't compile without it anyhow
-#ifndef wxUSE_CONFIG
-  #error "Please define wxUSE_CONFIG or remove fileconf.cpp from your makefile"
-#endif // wxUSE_CONFIG
 
 // ----------------------------------------------------------------------------
 // wxFileConfig
@@ -351,5 +347,9 @@ public:
   };
 };
 
-#endif  //_FILECONF_H
+#endif
+   // wxUSE_CONFIG
+
+#endif
+  //_FILECONF_H
 

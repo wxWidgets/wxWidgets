@@ -18,6 +18,7 @@
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/window.h"
+#include "wx/icon.h"
 
 //-----------------------------------------------------------------------------
 // classes

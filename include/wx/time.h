@@ -14,7 +14,7 @@
 
 #include "wx/object.h"
 
-#if wxUSE_TIMEDATE
+#ifdef wxUSE_TIMEDATE
 
 #ifdef __GNUG__
 #pragma interface "time.h"

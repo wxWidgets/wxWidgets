@@ -16,6 +16,7 @@
 
 #include "wx/defs.h"
 #include "wx/control.h"
+#include "wx/bitmap.h"
 
 //-----------------------------------------------------------------------------
 // classes

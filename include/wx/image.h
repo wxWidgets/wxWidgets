@@ -24,7 +24,9 @@
 //-----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxImageHandler;
+#ifdef wxUSE_LIBPNG
 class WXDLLEXPORT wxPNGHandler;
+#endif
 class WXDLLEXPORT wxBMPHandler;
 class WXDLLEXPORT wxImage;
 
@@ -62,6 +64,7 @@ protected:
 // wxPNGHandler
 //-----------------------------------------------------------------------------
 
+#ifdef wxUSE_LIBPNG
 class WXDLLEXPORT wxPNGHandler: public wxImageHandler
 {
   DECLARE_DYNAMIC_CLASS(wxPNGHandler)
@@ -78,6 +81,7 @@ public:
   virtual bool LoadFile( wxImage *image, const wxString& name );
   virtual bool SaveFile( wxImage *image, const wxString& name );
 };
+#endif
 
 //-----------------------------------------------------------------------------
 // wxBMPHandler

@@ -22,9 +22,7 @@
 #include "wx/validate.h"
 #include "wx/cursor.h"
 #include "wx/font.h"
-#include "wx/dc.h"
 #include "wx/region.h"
-#include "wx/dnd.h"
 #include "wx/accel.h"
 
 //-----------------------------------------------------------------------------
@@ -40,14 +38,17 @@ extern wxList wxTopLevelWindows;
 
 class wxLayoutConstraints;
 class wxSizer;
-#if wxUSE_WX_RESOURCES
-class wxResourceTable;
-class wxItemResource;
-#endif
-
+class wxDC;
 class wxClientData;
 class wxVoidClientData;
 class wxWindow;
+#ifdef wxUSE_WX_RESOURCES
+class wxResourceTable;
+class wxItemResource;
+#endif
+#ifdef wxUSE_DRAG_AND_DROP
+class wxDropTarget;
+#endif
 
 //-----------------------------------------------------------------------------
 // callback definition for inserting a window (internal)
@@ -289,8 +290,10 @@ public:
 
   virtual bool PopupMenu( wxMenu *menu, int x, int y );
 
+#ifdef wxUSE_DRAG_AND_DROP
   virtual void SetDropTarget( wxDropTarget *dropTarget );
   virtual wxDropTarget *GetDropTarget() const;
+#endif
 
   virtual void SetScrollbar( int orient, int pos, int thumbVisible,
     int range, bool refresh = TRUE );
@@ -332,7 +335,9 @@ public:
   int                  m_retCode;
   wxEvtHandler        *m_eventHandler;
   wxValidator         *m_windowValidator;
+#ifdef wxUSE_DRAG_AND_DROP
   wxDropTarget        *m_dropTarget;
+#endif
   wxWindowID           m_windowId;
   wxCursor            *m_cursor;
   wxFont               m_font;

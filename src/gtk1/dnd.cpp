@@ -12,6 +12,9 @@
 #endif
 
 #include "wx/dnd.h"
+
+#ifdef wxUSE_DRAG_AND_DROP
+
 #include "wx/window.h"
 #include "wx/app.h"
 #include "wx/gdicmn.h"
@@ -986,9 +989,9 @@ shape_create_icon (char     **data,
   return window;
 }
 
-
-
-
 #endif 
        // NEW_GTK_DND_CODE
        
+#endif
+
+      // wxUSE_DRAG_AND_DROP

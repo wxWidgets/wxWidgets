@@ -22,8 +22,6 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_CONSTRAINTS
-
 #ifndef WX_PRECOMP
 #include "wx/window.h"
 #include "wx/utils.h"
@@ -1727,6 +1725,3 @@ wxSpacingSizer::~wxSpacingSizer()
 {
 }
 
-
-
-#endif

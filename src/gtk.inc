@@ -35,8 +35,7 @@ LIB_CPP_SRC=\
  common/memory.cpp \
  common/module.cpp \
  common/object.cpp \
- common/db.cpp \
- common/dbtable.cpp \
+ common/odbc.cpp \
  common/postscrp.cpp \
  common/prntbase.cpp \
  common/serbase.cpp \
@@ -149,35 +148,4 @@ LIB_CPP_SRC=\
 LIB_C_SRC=\
  common/extended.c \
 \
- gtk/win_gtk.c \
-\
- png/png.c \
- png/pngset.c \
- png/pngget.c \
- png/pngrutil.c \
- png/pngtrans.c \
- png/pngwutil.c \
- png/pngread.c \
- png/pngrio.c \
- png/pngwio.c \
- png/pngwrite.c \
- png/pngrtran.c \
- png/pngwtran.c \
- png/pngmem.c \
- png/pngerror.c \
- png/pngpread.c \
-\
- zlib/adler32.c \
- zlib/compress.c \
- zlib/crc32.c \
- zlib/gzio.c \
- zlib/uncompr.c \
- zlib/deflate.c \
- zlib/trees.c \
- zlib/zutil.c \
- zlib/inflate.c \
- zlib/infblock.c \
- zlib/inftrees.c \
- zlib/infcodes.c \
- zlib/infutil.c \
- zlib/inffast.c \
+ gtk/win_gtk.c
