@@ -60,7 +60,9 @@
 #endif
 
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
-#include <io.h>
+#ifndef __UNIX__
+    #include <io.h>
+#endif
 
 #ifndef __GNUWIN32__
 #include <shellapi.h>

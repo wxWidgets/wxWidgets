@@ -16,7 +16,9 @@
 #pragma hdrstop
 #endif
 
-#include <io.h>
+#ifndef __UNIX__
+    #include <io.h>
+#endif
 #include <windows.h>
 
 #if defined(__MWERKS__)

@@ -4,10 +4,10 @@ rem using Inno Setup + ScriptMaker
 set src=%wxwin
 set dest=%src\deliver
 set webfiles=c:\wx2dev\wxWebSite
-set inno=1
+set inno=0
 
 Rem Set this to the required version
-set version=2.5.0
+set version=2.4.0
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
@@ -156,51 +156,71 @@ zip32 -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\utils.rsp
 zip32 -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\utilmake.rsp
 zip32 -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\univ.rsp
 
+echo Re-archiving wxWindows-%version%-win.zip
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-win.zip wxWindows-%version% %dest%
 
-zip32 -d %dest%\wxWindows-%version%-win.zip %dest%/src/gtk/descrip.mms %dest%/src/motif/descrip.mms
+echo Removing .mms files
+zip32 -d %dest%\wxWindows-%version%-win.zip wxWindows-%version%/src/gtk/descrip.mms wxWindows-%version%/src/motif/descrip.mms
 
+echo Creating %dest\wxWindows-%version%-DocSource.zip
 zip32 -@ %dest\wxWindows-%version%-DocSource.zip < %src\distrib\msw\docsrc.rsp
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-DocSource.zip wxWindows-%version% %dest%
 
+echo Creating %dest\wxWindows-%version%-WinHelp.zip
 zip32 -@ %dest\wxWindows-%version%-WinHelp.zip < %src\distrib\msw\wx_hlp.rsp
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-WinHelp.zip wxWindows-%version% %dest%
 
+echo Creating %dest\wxWindows-%version%-HTML.zip
 zip32 -@ %dest\wxWindows-%version%-HTML.zip < %src\distrib\msw\wx_html.rsp
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-HTML.zip wxWindows-%version% %dest%
 
+echo Creating %dest\wxWindows-%version%-PDF.zip
 zip32 -@ %dest\wxWindows-%version%-PDF.zip < %src\distrib\msw\wx_pdf.rsp
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-PDF.zip wxWindows-%version% %dest%
 
 Rem zip32 -@ %dest\wxWindows-%version%-Word.zip < %src\distrib\msw\wx_word.rsp
 Rem call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-Word.zip wxWindows-%version% %dest%
 
+echo Creating %dest\wxWindows-%version%-HTB.zip
 zip32 -@ %dest\wxWindows-%version%-HTB.zip < %src\distrib\msw\wx_htb.rsp
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-HTB.zip wxWindows-%version% %dest%
 
+echo Creating %dest\wxWindows-%version%-HTMLHelp.zip
 zip32 -@ %dest\wxWindows-%version%-HTMLHelp.zip < %src\distrib\msw\wx_chm.rsp
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-HTMLHelp.zip wxWindows-%version% %dest%
 
+Rem Add Linuxy docs to a separate archive to be transported to Linux for the
+Rem Linux-based releases
+echo Creating %dest\wxWindows-%version%-LinuxDocs.zip
+zip32 -@ %dest\wxWindows-%version%-LinuxDocs.zip < %src\distrib\msw\wx_html.rsp
+zip32 -@ -u %dest\wxWindows-%version%-LinuxDocs.zip < %src\distrib\msw\wx_pdf.rsp
+zip32 -@ -u %dest\wxWindows-%version%-LinuxDocs.zip < %src\distrib\msw\wx_htb.rsp
+
 Rem PDF/HTML docs that should go into the Windows setup because
 Rem there are no WinHelp equivalents
+echo Creating %dest\wxWindows-%version%-ExtraDoc.zip
 zip32 -@ %dest\wxWindows-%version%-ExtraDoc.zip < %src\distrib\msw\extradoc.rsp
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-ExtraDoc.zip wxWindows-%version% %dest%
 
 Rem zip up Univ-specific files
+echo Creating %dest\wxWindows-%version%-Univ.zip
 zip32 -@ %dest\wxWindows-%version%-Univ.zip < %src\distrib\msw\univ.rsp
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-Univ.zip wxWindows-%version% %dest%
 
 rem VC++ project files
+echo Creating %dest\wxWindows-%version%-VC.zip
 zip32 -@ %dest\wxWindows-%version%-VC.zip < %src\distrib\msw\vc.rsp
-call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-VC.zip wxWindows-%version% %dest%
+Rem call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-VC.zip wxWindows-%version% %dest%
 
 rem BC++ project files
+echo Creating %dest\wxWindows-%version%-BC.zip
 zip32 -@ %dest\wxWindows-%version%-BC.zip < %src\distrib\msw\bc.rsp
-call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-BC.zip wxWindows-%version% %dest%
+Rem call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-BC.zip wxWindows-%version% %dest%
 
 rem CodeWarrior project files
+echo Creating %dest\wxWindows-%version%-CW.zip
 zip32 -@ %dest\wxWindows-%version%-CW.zip < %src\distrib\msw\cw.rsp
-call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-CW.zip wxWindows-%version% %dest%
+Rem call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-CW.zip wxWindows-%version% %dest%
 
 rem Dialog Editor source and binary
 Rem erase %dest\dialoged-source.zip
@@ -241,11 +261,17 @@ Rem zip32 %dest\tex2rtf-win32-%version%.zip tex2rtf.*
 
 cd %dest
 
-rem Unzip the Windows files into 'wxWindows-%version%'
+rem Put all archives for transit to Linux in a zip file
+echo Creating %dest\wxWindows-%version%-LinuxTransit.zip
+erase %dest\wxWindows-%version%-LinuxTransit.zip
+zip32 %dest\wxWindows-%version%-LinuxTransit.zip wxWindows-%version%-LinuxDocs.zip wxWindows-%version%-VC.zip wxWindows-%version%-CW-Mac.zip
+
+echo Unzipping the Windows files into wxWindows-%version%
 
 unzip32 -o wxWindows-%version%-win.zip
-unzip32 -o wxWindows-%version%-VC.zip
-unzip32 -o wxWindows-%version%-BC.zip
+unzip32 -o wxWindows-%version%-VC.zip -d wxWindows-%version
+unzip32 -o wxWindows-%version%-BC.zip -d wxWindows-%version
+unzip32 -o wxWindows-%version%-CW.zip -d wxWindows-%version
 unzip32 -o wxWindows-%version%-HTMLHelp.zip
 unzip32 -o wxWindows-%version%-ExtraDoc.zip
 Rem Need Word file, for Remstar DB classes
