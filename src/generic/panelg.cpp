@@ -78,7 +78,7 @@ void wxPanel::OnSysColourChanged(wxSysColourChangedEvent& event)
 
 void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
 {
-    if (m_children.GetCount() < 2) 
+    if (GetChildren().GetCount() < 2)
     {
         event.Skip();
         return;
@@ -100,8 +100,8 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
         return;
     }
     
-    wxNode *start_node = m_children.Find( winFocus );
-    if (!start_node) start_node = m_children.First();
+    wxNode *start_node = GetChildren().Find( winFocus );
+    if (!start_node) start_node = GetChildren().First();
     
     wxNode *node = event.GetDirection() ? start_node->Next() : start_node->Previous();
 	    
@@ -124,7 +124,7 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
             }
 */
 	    
-	    node = event.GetDirection() ? m_children.First() : m_children.Last();
+	    node = event.GetDirection() ? GetChildren().First() : GetChildren().Last();
 	}
 	        
 	wxWindow *child = (wxWindow*) node->Data();
