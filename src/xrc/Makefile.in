@@ -34,8 +34,10 @@ OBJECTS=$(EXPAT_OBJECTS) \
         xh_text.o xh_listb.o xh_toolb.o xh_stlin.o xh_bmp.o xh_unkwn.o \
         xh_bmpbt.o xh_cald.o xh_listc.o xh_scrol.o xh_stbox.o xh_tree.o \
         xh_frame.o
+DEPFILES=$(OBJECTS:.o=.d)
 
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include $(EXPAT_DEFS)
 
 include $(top_builddir)/src/makelib.env
 
+-include $(DEPFILES)

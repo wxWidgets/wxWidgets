@@ -16,8 +16,10 @@ HEADER_SUBDIR=canvas
 HEADERS=canvas.h bbox.h liner.h polygon.h
 
 OBJECTS=canvas.o bbox.o liner.o polygon.o
+DEPFILES=$(OBJECTS:.o=.d)
 
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 include $(top_builddir)/src/makelib.env
 
+-include $(DEPFILES)

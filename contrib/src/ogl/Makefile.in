@@ -19,8 +19,10 @@ HEADERS=basic.h basicp.h bmpshape.h canvas.h composit.h constrnt.h \
 
 OBJECTS=basic.o bmpshape.o composit.o divided.o lines.o misc.o \
         basic2.o canvas.o constrnt.o drawn.o mfutils.o ogldiag.o
+DEPFILES=$(OBJECTS:.o=.d)
 
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 include $(top_builddir)/src/makelib.env
 
+-include $(DEPFILES)

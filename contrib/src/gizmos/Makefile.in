@@ -16,8 +16,10 @@ HEADER_SUBDIR=gizmos
 HEADERS=multicell.h splittree.h editlbox.h dynamicsash.h
 
 OBJECTS=multicell.o splittree.o editlbox.o dynamicsash.o
+DEPFILES=$(OBJECTS:.o=.d)
 
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 include $(top_builddir)/src/makelib.env
 
+-include $(DEPFILES)

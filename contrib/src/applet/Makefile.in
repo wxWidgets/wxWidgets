@@ -16,8 +16,10 @@ HEADER_SUBDIR=applet
 HEADERS=applet.h appletwindow.h
 
 OBJECTS=applet.o appletwindow.o
+DEPFILES=$(OBJECTS:.o=.d)
 
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 include $(top_builddir)/src/makelib.env
 
+-include $(DEPFILES)
