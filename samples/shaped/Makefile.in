@@ -9,6 +9,7 @@
 
 prefix = @prefix@
 exec_prefix = @exec_prefix@
+INSTALL = @INSTALL@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
@@ -28,7 +29,7 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
-SHAPED_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p)   -I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) -I$(srcdir) $(__DLLFLAG_p) $(CXXFLAGS)
+SHAPED_CXXFLAGS = $(CPPFLAGS)   -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p)   -I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) -I$(srcdir) $(__DLLFLAG_p) $(CXXFLAGS)
 
 ### Conditionally set variables: ###
 
@@ -36,38 +37,39 @@ SHAPED_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p)   -I$(top_
 @COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
-@COND_BUILD_debug@WXDEBUGFLAG = d
+@COND_TOOLKIT_MAC@WXBASEPORT = _carbon
+@COND_BUILD_DEBUG@WXDEBUGFLAG = d
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_WXUNIV_1@WXUNIVNAME = univ
 @COND_SHARED_1@__DLLFLAG_p = -DWXUSINGDLL
 @COND_SHARED_1@__DLLFLAG_p_1 = -d WXUSINGDLL
 @COND_SHARED_1@__DLLFLAG_p_2 = --define WXUSINGDLL
-@COND_WXUSE_LIBJPEG_builtin@__INC_JPEG_p = -I$(top_srcdir)/src/jpeg
-@COND_WXUSE_LIBJPEG_builtin@__INC_JPEG_p_1 = -i $(top_srcdir)/src/jpeg
-@COND_WXUSE_LIBJPEG_builtin@__INC_JPEG_p_2 = --include-dir $(top_srcdir)/src/jpeg
-@COND_WXUSE_ODBC_builtin@__INC_ODBC_p = -I$(top_srcdir)/src/odbc
-@COND_WXUSE_ODBC_builtin@__INC_ODBC_p_1 = -i $(top_srcdir)/src/odbc
-@COND_WXUSE_ODBC_builtin@__INC_ODBC_p_2 = --include-dir $(top_srcdir)/src/odbc
-@COND_WXUSE_LIBPNG_builtin@__INC_PNG_p = -I$(top_srcdir)/src/png
-@COND_WXUSE_LIBPNG_builtin@__INC_PNG_p_1 = -i $(top_srcdir)/src/png
-@COND_WXUSE_LIBPNG_builtin@__INC_PNG_p_2 = --include-dir $(top_srcdir)/src/png
-@COND_WXUSE_REGEX_builtin@__INC_REGEX_p = -I$(top_srcdir)/src/regex
-@COND_WXUSE_REGEX_builtin@__INC_REGEX_p_1 = -i $(top_srcdir)/src/regex
-@COND_WXUSE_REGEX_builtin@__INC_REGEX_p_2 = --include-dir $(top_srcdir)/src/regex
-@COND_WXUSE_LIBTIFF_builtin@__INC_TIFF_p = -I$(top_srcdir)/src/tiff
-@COND_WXUSE_LIBTIFF_builtin@__INC_TIFF_p_1 = -i $(top_srcdir)/src/tiff
-@COND_WXUSE_LIBTIFF_builtin@__INC_TIFF_p_2 = --include-dir $(top_srcdir)/src/tiff
-@COND_WXUSE_ZLIB_builtin@__INC_ZLIB_p = -I$(top_srcdir)/src/zlib
-@COND_WXUSE_ZLIB_builtin@__INC_ZLIB_p_1 = -i $(top_srcdir)/src/zlib
-@COND_WXUSE_ZLIB_builtin@__INC_ZLIB_p_2 = --include-dir $(top_srcdir)/src/zlib
-@COND_WXUSE_LIBJPEG_builtin@__LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)
-@COND_WXUSE_ODBC_builtin@__LIB_ODBC_p = -lwxodbc$(WXDEBUGFLAG)
-@COND_WXUSE_LIBPNG_builtin@__LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
-@COND_WXUSE_REGEX_builtin@__LIB_REGEX_p = -lwxregex$(WXDEBUGFLAG)
-@COND_WXUSE_LIBTIFF_builtin@__LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)
-@COND_WXUSE_ZLIB_builtin@__LIB_ZLIB_p = -lwxzlib$(WXDEBUGFLAG)
+@COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p = -I$(top_srcdir)/src/jpeg
+@COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p_1 = -i $(top_srcdir)/src/jpeg
+@COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p_2 = --include-dir $(top_srcdir)/src/jpeg
+@COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p = -I$(top_srcdir)/src/odbc
+@COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p_1 = -i $(top_srcdir)/src/odbc
+@COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p_2 = --include-dir $(top_srcdir)/src/odbc
+@COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p = -I$(top_srcdir)/src/png
+@COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p_1 = -i $(top_srcdir)/src/png
+@COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p_2 = --include-dir $(top_srcdir)/src/png
+@COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p = -I$(top_srcdir)/src/regex
+@COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p_1 = -i $(top_srcdir)/src/regex
+@COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p_2 = --include-dir $(top_srcdir)/src/regex
+@COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p = -I$(top_srcdir)/src/tiff
+@COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p_1 = -i $(top_srcdir)/src/tiff
+@COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p_2 = --include-dir $(top_srcdir)/src/tiff
+@COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p = -I$(top_srcdir)/src/zlib
+@COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p_1 = -i $(top_srcdir)/src/zlib
+@COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p_2 = --include-dir $(top_srcdir)/src/zlib
+@COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)
+@COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p = -lwxodbc$(WXDEBUGFLAG)
+@COND_WXUSE_LIBPNG_BUILTIN@__LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
+@COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_p = -lwxregex$(WXDEBUGFLAG)
+@COND_WXUSE_LIBTIFF_BUILTIN@__LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)
+@COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_p = -lwxzlib$(WXDEBUGFLAG)
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1)   -i $(top_srcdir)/include $(__INC_TIFF_p_1) $(__INC_JPEG_p_1) $(__INC_PNG_p_1) $(__INC_ZLIB_p_1) $(__INC_ODBC_p_1) $(__INC_REGEX_p_1) -i $(srcdir) $(__DLLFLAG_p_1) -o shaped$(EXEEXT) Carbon.r $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
-@COND_MONOLITHIC_0@__WXLIB_BASE_p = -lwx_base$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
+@COND_MONOLITHIC_0@__WXLIB_BASE_p = -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
@@ -95,7 +97,7 @@ install: all
 install-strip: install
 
 shaped$(EXEEXT): shaped_shaped.o $(__shaped___win32rc)
-	$(CXX) -o $@  shaped_shaped.o $(__shaped___win32rc) $(LDFLAGS) -L$(top_builddir)lib $(SAMPLES_RPATH_FLAG) $(LDFLAGS_GUI)  $(__WXLIB_MONO_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS)
+	$(CXX) -o $@  shaped_shaped.o $(__shaped___win32rc) $(LDFLAGS)   -L$(top_builddir)lib $(SAMPLES_RPATH_FLAG) $(LDFLAGS_GUI)  $(__WXLIB_MONO_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS)
 	$(__shaped___mac_rezcmd)
 	$(__shaped___mac_setfilecmd)
 
@@ -111,4 +113,4 @@ uninstall:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all
+.PHONY: all clean distclean install uninstall

@@ -9,6 +9,7 @@
 
 prefix = @prefix@
 exec_prefix = @exec_prefix@
+INSTALL = @INSTALL@
 
 ### Variables: ###
 
@@ -69,4 +70,4 @@ uninstall:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all artprov console dialogs image minimal
+.PHONY: all artprov clean console dialogs distclean image install minimal uninstall

@@ -9,6 +9,7 @@
 
 prefix = @prefix@
 exec_prefix = @exec_prefix@
+INSTALL = @INSTALL@
 AR = @AR@
 CC = @CC@
 CFLAGS = @CFLAGS@
@@ -40,10 +41,10 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
-XRCDLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p)   -I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p)   -I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_XRC -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(CXXFLAGS) $(PIC_FLAG)
-XRCDLL_CFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p)   -I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p)   -I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_XRC -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(CFLAGS) $(PIC_FLAG)
-XRCLIB_CFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p)   -I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p)   -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(CFLAGS)
-XRCLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p)   -I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p)   -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(CXXFLAGS)
+XRCDLL_CXXFLAGS = $(CPPFLAGS)   -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p)   -I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) -I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_XRC -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(CXXFLAGS) $(PIC_FLAG)
+XRCDLL_CFLAGS = $(CPPFLAGS)   -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p)   -I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) -I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_XRC -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(CFLAGS) $(PIC_FLAG)
+XRCLIB_CFLAGS = $(CPPFLAGS)   -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p)   -I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(CFLAGS)
+XRCLIB_CXXFLAGS = $(CPPFLAGS)   -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p)   -I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(CXXFLAGS)
 
 ### Conditionally set variables: ###
 
@@ -57,27 +58,28 @@ XRCLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p)   -I$(top_
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_OFFICIAL_BUILD_0_PLATFORM_WIN32_1@VENDORTAG = _$(VENDOR)
 @COND_OFFICIAL_BUILD_1_PLATFORM_WIN32_1@VENDORTAG = 
+@COND_TOOLKIT_MAC@WXBASEPORT = _carbon
 @COND_PLATFORM_WIN32_1@WXCOMPILER = _gcc
-@COND_BUILD_debug@WXDEBUGFLAG = d
+@COND_BUILD_DEBUG@WXDEBUGFLAG = d
 @COND_PLATFORM_WIN32_0@WXDLLNAMEPREFIXGUI = wx_$(PORTNAME)$(WXUNIVNAME)
 @COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIXGUI = wx$(PORTNAME)$(WXUNIVNAME)25
 @COND_PLATFORM_WIN32_0@WXDLLVERSIONTAG = -2.5
 @COND_PLATFORM_WIN32_1@WXDLLVERSIONTAG = 
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_WXUNIV_1@WXUNIVNAME = univ
-@COND_WXUSE_LIBJPEG_builtin@__INC_JPEG_p = -I$(top_srcdir)/src/jpeg
-@COND_WXUSE_ODBC_builtin@__INC_ODBC_p = -I$(top_srcdir)/src/odbc
-@COND_WXUSE_LIBPNG_builtin@__INC_PNG_p = -I$(top_srcdir)/src/png
-@COND_WXUSE_REGEX_builtin@__INC_REGEX_p = -I$(top_srcdir)/src/regex
-@COND_WXUSE_LIBTIFF_builtin@__INC_TIFF_p = -I$(top_srcdir)/src/tiff
-@COND_WXUSE_ZLIB_builtin@__INC_ZLIB_p = -I$(top_srcdir)/src/zlib
-@COND_WXUSE_LIBJPEG_builtin@__LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)
-@COND_WXUSE_ODBC_builtin@__LIB_ODBC_p = -lwxodbc$(WXDEBUGFLAG)
-@COND_WXUSE_LIBPNG_builtin@__LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
-@COND_WXUSE_REGEX_builtin@__LIB_REGEX_p = -lwxregex$(WXDEBUGFLAG)
-@COND_WXUSE_LIBTIFF_builtin@__LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)
-@COND_WXUSE_ZLIB_builtin@__LIB_ZLIB_p = -lwxzlib$(WXDEBUGFLAG)
-@COND_MONOLITHIC_0@__WXLIB_BASE_p = -lwx_base$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
+@COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p = -I$(top_srcdir)/src/jpeg
+@COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p = -I$(top_srcdir)/src/odbc
+@COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p = -I$(top_srcdir)/src/png
+@COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p = -I$(top_srcdir)/src/regex
+@COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p = -I$(top_srcdir)/src/tiff
+@COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p = -I$(top_srcdir)/src/zlib
+@COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)
+@COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p = -lwxodbc$(WXDEBUGFLAG)
+@COND_WXUSE_LIBPNG_BUILTIN@__LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
+@COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_p = -lwxregex$(WXDEBUGFLAG)
+@COND_WXUSE_LIBTIFF_BUILTIN@__LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)
+@COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_p = -lwxzlib$(WXDEBUGFLAG)
+@COND_MONOLITHIC_0@__WXLIB_BASE_p = -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5
 @COND_MONOLITHIC_0@__WXLIB_HTML_p = -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
@@ -146,7 +148,7 @@ install-strip: install
 uninstall: 
 
 @COND_SHARED_1@$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__xrcdll___targetsuf3): xrcdll_xmlparse.o xrcdll_xmltok.o xrcdll_xmlrole.o xrcdll_xml.o xrcdll_xmlres.o xrcdll_xh_bmp.o xrcdll_xh_bmpbt.o xrcdll_xh_bttn.o xrcdll_xh_cald.o xrcdll_xh_chckb.o xrcdll_xh_chckl.o xrcdll_xh_choic.o xrcdll_xh_combo.o xrcdll_xh_dlg.o xrcdll_xh_frame.o xrcdll_xh_gauge.o xrcdll_xh_gdctl.o xrcdll_xh_html.o xrcdll_xh_listb.o xrcdll_xh_listc.o xrcdll_xh_menu.o xrcdll_xh_notbk.o xrcdll_xh_panel.o xrcdll_xh_radbt.o xrcdll_xh_radbx.o xrcdll_xh_scrol.o xrcdll_xh_scwin.o xrcdll_xh_sizer.o xrcdll_xh_slidr.o xrcdll_xh_spin.o xrcdll_xh_split.o xrcdll_xh_stbmp.o xrcdll_xh_stbox.o xrcdll_xh_stlin.o xrcdll_xh_sttxt.o xrcdll_xh_text.o xrcdll_xh_toolb.o xrcdll_xh_tree.o xrcdll_xh_unkwn.o xrcdll_xh_wizrd.o xrcdll_xmlrsall.o
-@COND_SHARED_1@	$(SHARED_LD_CXX) $@  xrcdll_xmlparse.o xrcdll_xmltok.o xrcdll_xmlrole.o xrcdll_xml.o xrcdll_xmlres.o xrcdll_xh_bmp.o xrcdll_xh_bmpbt.o xrcdll_xh_bttn.o xrcdll_xh_cald.o xrcdll_xh_chckb.o xrcdll_xh_chckl.o xrcdll_xh_choic.o xrcdll_xh_combo.o xrcdll_xh_dlg.o xrcdll_xh_frame.o xrcdll_xh_gauge.o xrcdll_xh_gdctl.o xrcdll_xh_html.o xrcdll_xh_listb.o xrcdll_xh_listc.o xrcdll_xh_menu.o xrcdll_xh_notbk.o xrcdll_xh_panel.o xrcdll_xh_radbt.o xrcdll_xh_radbx.o xrcdll_xh_scrol.o xrcdll_xh_scwin.o xrcdll_xh_sizer.o xrcdll_xh_slidr.o xrcdll_xh_spin.o xrcdll_xh_split.o xrcdll_xh_stbmp.o xrcdll_xh_stbox.o xrcdll_xh_stlin.o xrcdll_xh_sttxt.o xrcdll_xh_text.o xrcdll_xh_toolb.o xrcdll_xh_tree.o xrcdll_xh_unkwn.o xrcdll_xh_wizrd.o xrcdll_xmlrsall.o $(LDFLAGS) $(__xrcdll___importlib) -L$(top_builddir)lib $(__xrcdll___macinstnamecmd)   $(__xrcdll___importlib) $(__xrcdll___soname_flags) $(__xrcdll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS) $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)
+@COND_SHARED_1@	$(SHARED_LD_CXX) $@  xrcdll_xmlparse.o xrcdll_xmltok.o xrcdll_xmlrole.o xrcdll_xml.o xrcdll_xmlres.o xrcdll_xh_bmp.o xrcdll_xh_bmpbt.o xrcdll_xh_bttn.o xrcdll_xh_cald.o xrcdll_xh_chckb.o xrcdll_xh_chckl.o xrcdll_xh_choic.o xrcdll_xh_combo.o xrcdll_xh_dlg.o xrcdll_xh_frame.o xrcdll_xh_gauge.o xrcdll_xh_gdctl.o xrcdll_xh_html.o xrcdll_xh_listb.o xrcdll_xh_listc.o xrcdll_xh_menu.o xrcdll_xh_notbk.o xrcdll_xh_panel.o xrcdll_xh_radbt.o xrcdll_xh_radbx.o xrcdll_xh_scrol.o xrcdll_xh_scwin.o xrcdll_xh_sizer.o xrcdll_xh_slidr.o xrcdll_xh_spin.o xrcdll_xh_split.o xrcdll_xh_stbmp.o xrcdll_xh_stbox.o xrcdll_xh_stlin.o xrcdll_xh_sttxt.o xrcdll_xh_text.o xrcdll_xh_toolb.o xrcdll_xh_tree.o xrcdll_xh_unkwn.o xrcdll_xh_wizrd.o xrcdll_xmlrsall.o $(LDFLAGS) $(__xrcdll___importlib)   -L$(top_builddir)lib $(__xrcdll___macinstnamecmd) $(__xrcdll___importlib) $(__xrcdll___soname_flags) $(__xrcdll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS) $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)
 @COND_SHARED_1@	$(__xrcdll___so_symlinks_cmd)
 
 xrcdll_xh_bmp.o: $(srcdir)/xh_bmp.cpp
@@ -404,4 +406,4 @@ xrclib_xmltok.o: $(srcdir)/expat/xmltok/xmltok.c
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all
+.PHONY: all clean distclean install install_xrcdll install_xrclib uninstall
