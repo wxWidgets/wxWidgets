@@ -3604,7 +3604,8 @@ void wxGrid::Create()
 
     // create the type registry
     m_typeRegistry = new wxGridTypeRegistry;
-    m_selection = 0;
+    m_selection = NULL;
+
     // subwindow components that make up the wxGrid
     m_cornerLabelWin = new wxGridCornerLabelWindow( this,
                                                     -1,
@@ -3670,9 +3671,9 @@ bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
     if ( m_created )
     {
         // RD: Actually, this should probably be allowed.  I think it would be
-        // nice to be able to switch multiple Tables in and out of a single
-        // View at runtime.  Is there anything in the implmentation that would
-        // prevent this?
+        //     nice to be able to switch multiple Tables in and out of a single
+        //     View at runtime.  Is there anything in the implementation that
+        //     would prevent this?
 
         // At least, you now have to cope with m_selection
         wxFAIL_MSG( wxT("wxGrid::CreateGrid or wxGrid::SetTable called more than once") );
@@ -3977,7 +3978,9 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 //
                 SetCurrentCell( 0, 0 );
             }
-            m_selection->UpdateRows( pos, numRows );
+
+            if ( m_selection )
+                m_selection->UpdateRows( pos, numRows );
             wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
             if (attrProvider)
                 attrProvider->UpdateAttrRows( pos, numRows );
@@ -4060,7 +4063,9 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 if ( m_currentCellCoords.GetRow() >= m_numRows )
                     m_currentCellCoords.Set( 0, 0 );
             }
-            m_selection->UpdateRows( pos, -((int)numRows) );
+
+            if ( m_selection )
+                m_selection->UpdateRows( pos, -((int)numRows) );
             wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
             if (attrProvider) {
                 attrProvider->UpdateAttrRows( pos, -((int)numRows) );
@@ -4114,7 +4119,9 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 //
                 SetCurrentCell( 0, 0 );
             }
-            m_selection->UpdateCols( pos, numCols );
+
+            if ( m_selection )
+                m_selection->UpdateCols( pos, numCols );
             wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
             if (attrProvider)
                 attrProvider->UpdateAttrCols( pos, numCols );
@@ -4196,7 +4203,9 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 if ( m_currentCellCoords.GetCol() >= m_numCols )
                   m_currentCellCoords.Set( 0, 0 );
             }
-            m_selection->UpdateCols( pos, -((int)numCols) );
+
+            if ( m_selection )
+                m_selection->UpdateCols( pos, -((int)numCols) );
             wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
             if (attrProvider) {
                 attrProvider->UpdateAttrCols( pos, -((int)numCols) );
@@ -4431,11 +4440,14 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
                 case WXGRID_CURSOR_SELECT_ROW:
                     if ( (row = YToRow( y )) >= 0 )
                     {
-                        m_selection->SelectRow( row,
-                                                event.ControlDown(),
-                                                event.ShiftDown(),
-                                                event.AltDown(),
-                                                event.MetaDown() );
+                        if ( m_selection )
+                        {
+                            m_selection->SelectRow( row,
+                                                    event.ControlDown(),
+                                                    event.ShiftDown(),
+                                                    event.AltDown(),
+                                                    event.MetaDown() );
+                        }
                     }
 
                 // default label to suppress warnings about "enumeration value
@@ -4480,21 +4492,29 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
             {
                 if ( !event.ShiftDown() && !event.ControlDown() )
                     ClearSelection();
-                if ( event.ShiftDown() )
-                    m_selection->SelectBlock( m_currentCellCoords.GetRow(),
-                                              0,
-                                              row,
-                                              GetNumberCols() - 1,
-                                              event.ControlDown(),
-                                              event.ShiftDown(),
-                                              event.AltDown(),
-                                              event.MetaDown() );
-                else
-                    m_selection->SelectRow( row,
-                                            event.ControlDown(),
-                                            event.ShiftDown(),
-                                            event.AltDown(),
-                                            event.MetaDown() );
+                else if ( m_selection )
+                {
+                    if ( event.ShiftDown() )
+                    {
+                        m_selection->SelectBlock( m_currentCellCoords.GetRow(),
+                                                  0,
+                                                  row,
+                                                  GetNumberCols() - 1,
+                                                  event.ControlDown(),
+                                                  event.ShiftDown(),
+                                                  event.AltDown(),
+                                                  event.MetaDown() );
+                    }
+                    else
+                    {
+                        m_selection->SelectRow( row,
+                                                event.ControlDown(),
+                                                event.ShiftDown(),
+                                                event.AltDown(),
+                                                event.MetaDown() );
+                    }
+                }
+
                 ChangeCursorMode(WXGRID_CURSOR_SELECT_ROW, m_rowLabelWin);
             }
         }
@@ -4627,11 +4647,14 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                 case WXGRID_CURSOR_SELECT_COL:
                     if ( (col = XToCol( x )) >= 0 )
                     {
-                        m_selection->SelectCol( col,
-                                                event.ControlDown(),
-                                                event.ShiftDown(),
-                                                event.AltDown(),
-                                                event.MetaDown() );
+                        if ( m_selection )
+                        {
+                            m_selection->SelectCol( col,
+                                                    event.ControlDown(),
+                                                    event.ShiftDown(),
+                                                    event.AltDown(),
+                                                    event.MetaDown() );
+                        }
                     }
 
                 // default label to suppress warnings about "enumeration value
@@ -4676,20 +4699,28 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
             {
                 if ( !event.ShiftDown() && !event.ControlDown() )
                     ClearSelection();
-                if ( event.ShiftDown() )
-                    m_selection->SelectBlock( 0,
-                                              m_currentCellCoords.GetCol(),
-                                              GetNumberRows() - 1, col,
-                                              event.ControlDown(),
-                                              event.ShiftDown(),
-                                              event.AltDown(),
-                                              event.MetaDown() );
-                else
-                    m_selection->SelectCol( col,
-                                            event.ControlDown(),
-                                            event.ShiftDown(),
-                                            event.AltDown(),
-                                            event.MetaDown() );
+                if ( m_selection )
+                {
+                    if ( event.ShiftDown() )
+                    {
+                        m_selection->SelectBlock( 0,
+                                                  m_currentCellCoords.GetCol(),
+                                                  GetNumberRows() - 1, col,
+                                                  event.ControlDown(),
+                                                  event.ShiftDown(),
+                                                  event.AltDown(),
+                                                  event.MetaDown() );
+                    }
+                    else
+                    {
+                        m_selection->SelectCol( col,
+                                                event.ControlDown(),
+                                                event.ShiftDown(),
+                                                event.AltDown(),
+                                                event.MetaDown() );
+                    }
+                }
+
                 ChangeCursorMode(WXGRID_CURSOR_SELECT_COL, m_colLabelWin);
             }
         }
@@ -5021,14 +5052,17 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 ClearSelection();
             if ( event.ShiftDown() )
             {
-                m_selection->SelectBlock( m_currentCellCoords.GetRow(),
-                                          m_currentCellCoords.GetCol(),
-                                          coords.GetRow(),
-                                          coords.GetCol(),
-                                          event.ControlDown(),
-                                          event.ShiftDown(),
-                                          event.AltDown(),
-                                          event.MetaDown() );
+                if ( m_selection )
+                {
+                    m_selection->SelectBlock( m_currentCellCoords.GetRow(),
+                                              m_currentCellCoords.GetCol(),
+                                              coords.GetRow(),
+                                              coords.GetCol(),
+                                              event.ControlDown(),
+                                              event.ShiftDown(),
+                                              event.AltDown(),
+                                              event.MetaDown() );
+                }
             }
             else if ( XToEdgeOfCol(x) < 0  &&
                       YToEdgeOfRow(y) < 0 )
@@ -5058,12 +5092,15 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 {
                     if ( event.ControlDown() )
                     {
-                        m_selection->ToggleCellSelection( coords.GetRow(),
-                                                          coords.GetCol(),
-                                                          event.ControlDown(),
-                                                          event.ShiftDown(),
-                                                          event.AltDown(),
-                                                          event.MetaDown() );
+                        if ( m_selection )
+                        {
+                            m_selection->ToggleCellSelection( coords.GetRow(),
+                                                              coords.GetCol(),
+                                                              event.ControlDown(),
+                                                              event.ShiftDown(),
+                                                              event.AltDown(),
+                                                              event.MetaDown() );
+                        }
                         m_selectingTopLeft = wxGridNoCellCoords;
                         m_selectingBottomRight = wxGridNoCellCoords;
                         m_selectingKeyboard = coords;
@@ -5071,9 +5108,14 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                     else
                     {
                         SetCurrentCell( coords );
-                        if ( m_selection->GetSelectionMode()
-                             != wxGrid::wxGridSelectCells)
-                            HighlightBlock( coords, coords );
+                        if ( m_selection )
+                        {
+                            if ( m_selection->GetSelectionMode() != 
+                                    wxGrid::wxGridSelectCells )
+                            {
+                                HighlightBlock( coords, coords );
+                            }
+                        }
                     }
                     m_waitForSlowClick = TRUE;
                 }
@@ -5112,14 +5154,19 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                     m_winCapture->ReleaseMouse();
                     m_winCapture = NULL;
                 }
-                m_selection->SelectBlock( m_selectingTopLeft.GetRow(),
-                                          m_selectingTopLeft.GetCol(),
-                                          m_selectingBottomRight.GetRow(),
-                                          m_selectingBottomRight.GetCol(),
-                                          event.ControlDown(),
-                                          event.ShiftDown(),
-                                          event.AltDown(),
-                                          event.MetaDown() );
+
+                if ( m_selection )
+                {
+                    m_selection->SelectBlock( m_selectingTopLeft.GetRow(),
+                                              m_selectingTopLeft.GetCol(),
+                                              m_selectingBottomRight.GetRow(),
+                                              m_selectingBottomRight.GetCol(),
+                                              event.ControlDown(),
+                                              event.ShiftDown(),
+                                              event.AltDown(),
+                                              event.MetaDown() );
+                }
+
                 m_selectingTopLeft = wxGridNoCellCoords;
                 m_selectingBottomRight = wxGridNoCellCoords;
             }
@@ -5775,12 +5822,15 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
             case WXK_SPACE:
                 if ( event.ControlDown() )
                 {
-                    m_selection->ToggleCellSelection( m_currentCellCoords.GetRow(),
-                                                      m_currentCellCoords.GetCol(),
-                                                      event.ControlDown(),
-                                                      event.ShiftDown(),
-                                                      event.AltDown(),
-                                                      event.MetaDown() );
+                    if ( m_selection )
+                    {
+                        m_selection->ToggleCellSelection( m_currentCellCoords.GetRow(),
+                                                          m_currentCellCoords.GetCol(),
+                                                          event.ControlDown(),
+                                                          event.ShiftDown(),
+                                                          event.AltDown(),
+                                                          event.MetaDown() );
+                    }
                     break;
                 }
                 if ( !IsEditable() )
@@ -5844,14 +5894,20 @@ void wxGrid::OnKeyUp( wxKeyEvent& event )
     {
         if ( m_selectingTopLeft != wxGridNoCellCoords &&
              m_selectingBottomRight != wxGridNoCellCoords )
-            m_selection->SelectBlock( m_selectingTopLeft.GetRow(),
-                                      m_selectingTopLeft.GetCol(),
-                                      m_selectingBottomRight.GetRow(),
-                                      m_selectingBottomRight.GetCol(),
-                                      event.ControlDown(),
-                                      TRUE,
-                                      event.AltDown(),
-                                      event.MetaDown() );
+        {
+            if ( m_selection )
+            {
+                m_selection->SelectBlock( m_selectingTopLeft.GetRow(),
+                                          m_selectingTopLeft.GetCol(),
+                                          m_selectingBottomRight.GetRow(),
+                                          m_selectingBottomRight.GetCol(),
+                                          event.ControlDown(),
+                                          TRUE,
+                                          event.AltDown(),
+                                          event.MetaDown() );
+            }
+        }
+
         m_selectingTopLeft = wxGridNoCellCoords;
         m_selectingBottomRight = wxGridNoCellCoords;
         m_selectingKeyboard = wxGridNoCellCoords;
@@ -5913,16 +5969,20 @@ void wxGrid::HighlightBlock( int topRow, int leftCol, int bottomRow, int rightCo
     int temp;
     wxGridCellCoords updateTopLeft, updateBottomRight;
 
-    if ( m_selection->GetSelectionMode() == wxGrid::wxGridSelectRows )
+    if ( m_selection )
     {
-        leftCol = 0;
-        rightCol = GetNumberCols() - 1;
+        if ( m_selection->GetSelectionMode() == wxGrid::wxGridSelectRows )
+        {
+            leftCol = 0;
+            rightCol = GetNumberCols() - 1;
+        }
+        else if ( m_selection->GetSelectionMode() == wxGrid::wxGridSelectColumns )
+        {
+            topRow = 0;
+            bottomRow = GetNumberRows() - 1;
+        }
     }
-    else if ( m_selection->GetSelectionMode() == wxGrid::wxGridSelectColumns )
-    {
-        topRow = 0;
-        bottomRow = GetNumberRows() - 1;
-    }
+
     if ( topRow > bottomRow )
     {
         temp = topRow;
@@ -8761,7 +8821,8 @@ void wxGrid::SelectRow( int row, bool addToSelected )
     if ( IsSelection() && !addToSelected )
         ClearSelection();
 
-    m_selection->SelectRow( row, FALSE, addToSelected );
+    if ( m_selection )
+        m_selection->SelectRow( row, FALSE, addToSelected );
 }
 
 
@@ -8770,7 +8831,8 @@ void wxGrid::SelectCol( int col, bool addToSelected )
     if ( IsSelection() && !addToSelected )
         ClearSelection();
 
-    m_selection->SelectCol( col, FALSE, addToSelected );
+    if ( m_selection )
+        m_selection->SelectCol( col, FALSE, addToSelected );
 }
 
 
@@ -8780,15 +8842,19 @@ void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol,
     if ( IsSelection() && !addToSelected )
         ClearSelection();
 
-    m_selection->SelectBlock( topRow, leftCol, bottomRow, rightCol,
-                              FALSE, addToSelected );
+    if ( m_selection )
+        m_selection->SelectBlock( topRow, leftCol, bottomRow, rightCol,
+                                  FALSE, addToSelected );
 }
 
 
 void wxGrid::SelectAll()
 {
     if ( m_numRows > 0 && m_numCols > 0 )
-        m_selection->SelectBlock( 0, 0, m_numRows-1, m_numCols-1 );
+    {
+        if ( m_selection )
+            m_selection->SelectBlock( 0, 0, m_numRows-1, m_numCols-1 );
+    }
 }
 
 //
@@ -8797,6 +8863,9 @@ void wxGrid::SelectAll()
 
 void wxGrid::DeselectRow( int row )
 {
+    if ( !m_selection )
+        return;
+
     if ( m_selection->GetSelectionMode() == wxGrid::wxGridSelectRows )
     {
         if ( m_selection->IsInSelection(row, 0 ) )
@@ -8815,6 +8884,9 @@ void wxGrid::DeselectRow( int row )
 
 void wxGrid::DeselectCol( int col )
 {
+    if ( !m_selection )
+        return;
+
     if ( m_selection->GetSelectionMode() == wxGrid::wxGridSelectColumns )
     {
         if ( m_selection->IsInSelection(0, col ) )
@@ -8833,31 +8905,32 @@ void wxGrid::DeselectCol( int col )
 
 void wxGrid::DeselectCell( int row, int col )
 {
-    if ( m_selection->IsInSelection(row, col) )
+    if ( m_selection && m_selection->IsInSelection(row, col) )
         m_selection->ToggleCellSelection(row, col);
 }
 
 bool wxGrid::IsSelection()
 {
-    return ( m_selection->IsSelection() ||
+    return ( m_selection && (m_selection->IsSelection() ||
              ( m_selectingTopLeft != wxGridNoCellCoords &&
-               m_selectingBottomRight != wxGridNoCellCoords ) );
+               m_selectingBottomRight != wxGridNoCellCoords) ) );
 }
 
 bool wxGrid::IsInSelection( int row, int col )
 {
-    return ( m_selection->IsInSelection( row, col ) ||
+    return ( m_selection && (m_selection->IsInSelection( row, col ) ||
              ( row >= m_selectingTopLeft.GetRow() &&
                col >= m_selectingTopLeft.GetCol() &&
                row <= m_selectingBottomRight.GetRow() &&
-               col <= m_selectingBottomRight.GetCol() ) );
+               col <= m_selectingBottomRight.GetCol() )) );
 }
 
 void wxGrid::ClearSelection()
 {
     m_selectingTopLeft = wxGridNoCellCoords;
     m_selectingBottomRight = wxGridNoCellCoords;
-    m_selection->ClearSelection();
+    if ( m_selection )
+        m_selection->ClearSelection();
 }
 
 
