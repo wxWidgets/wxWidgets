@@ -146,6 +146,7 @@ wxDC::wxDC(void)
 
 wxDC::~wxDC(void)
 {
+    [m_cocoaWxToBoundsTransform release];
 }
 
 bool wxDC::CocoaLockFocus()

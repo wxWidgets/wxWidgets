@@ -53,7 +53,10 @@ bool wxMemoryDC::CocoaLockFocus()
     {
         [m_cocoaNSImage lockFocus];
         sm_cocoaDCStack.Insert(this);
-        m_cocoaWxToBoundsTransform = CocoaGetWxToBoundsTransform([m_cocoaNSImage isFlipped], [m_cocoaNSImage size].height);
+        NSAffineTransform *newTransform = CocoaGetWxToBoundsTransform([m_cocoaNSImage isFlipped], [m_cocoaNSImage size].height);
+        [newTransform retain];
+        [m_cocoaWxToBoundsTransform release];
+        m_cocoaWxToBoundsTransform = newTransform;
         CocoaApplyTransformations();
         return true;
     }

@@ -70,7 +70,10 @@ bool wxWindowDC::CocoaUnlockFocusOnNSView()
 bool wxWindowDC::CocoaLockFocus()
 {
     wxLogTrace(wxTRACE_COCOA,wxT("Locking focus on wxWindowDC=%p, NSView=%p"),this, m_window->GetNonClientNSView());
-    m_cocoaWxToBoundsTransform = CocoaGetWxToBoundsTransform([m_window->GetNonClientNSView() isFlipped], [m_window->GetNonClientNSView() bounds].size.height);
+    NSAffineTransform *newTransform = CocoaGetWxToBoundsTransform([m_window->GetNonClientNSView() isFlipped], [m_window->GetNonClientNSView() bounds].size.height);
+    [newTransform retain];
+    [m_cocoaWxToBoundsTransform release];
+    m_cocoaWxToBoundsTransform = newTransform;
     return CocoaLockFocusOnNSView(m_window->GetNonClientNSView());
 }
 
@@ -113,7 +116,10 @@ wxClientDC::~wxClientDC(void)
 bool wxClientDC::CocoaLockFocus()
 {
     wxLogTrace(wxTRACE_COCOA,wxT("Locking focus on wxClientDC=%p, NSView=%p"),this, m_window->GetNSView());
-    m_cocoaWxToBoundsTransform = m_window->CocoaGetWxToBoundsTransform();
+    NSAffineTransform *newTransform = m_window->CocoaGetWxToBoundsTransform();
+    [newTransform retain];
+    [m_cocoaWxToBoundsTransform release];
+    m_cocoaWxToBoundsTransform = newTransform;
     return CocoaLockFocusOnNSView(m_window->GetNSView());
 }
 
@@ -138,7 +144,10 @@ wxPaintDC::wxPaintDC( wxWindow *window )
     wxASSERT_MSG([NSView focusView]==window->GetNSView(), wxT("PaintDC's NSView does not have focus.  Please use wxPaintDC only as the first DC created in a paint handler"));
     sm_cocoaDCStack.Insert(this);
     m_lockedNSView = window->GetNSView();
-    m_cocoaWxToBoundsTransform = window->CocoaGetWxToBoundsTransform();
+    NSAffineTransform *newTransform = window->CocoaGetWxToBoundsTransform();
+    [newTransform retain];
+    [m_cocoaWxToBoundsTransform release];
+    m_cocoaWxToBoundsTransform = newTransform;
     CocoaApplyTransformations();
 };
 
