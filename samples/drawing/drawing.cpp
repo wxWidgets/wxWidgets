@@ -170,7 +170,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // Create the main application window
-    MyFrame *frame = new MyFrame("Minimal wxWindows App",
+    MyFrame *frame = new MyFrame("Drawing sample",
                                  wxPoint(50, 50), wxSize(450, 340));
 
     // Show it and tell the application that it's our main window
@@ -208,10 +208,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuMapMode->Append( MapMode_Metric, "&METRIC map mode" );
     
     wxMenu *menuUserScale = new wxMenu;
-    menuUserScale->Append( UserScale_StretchHoriz, "Stretch horizontally\tAlt-P" );
-    menuUserScale->Append( UserScale_ShrinkHoriz, "Shrink  horizontally\tAlt-M" );
-    menuUserScale->Append( UserScale_StretchVertic, "Stretch vertically\tCtrl-P" );
-    menuUserScale->Append( UserScale_ShrinkVertic, "Shrink vertically\tCtrl-M" );
+    menuUserScale->Append( UserScale_StretchHoriz, "Stretch horizontally\tCtrl-H" );
+    menuUserScale->Append( UserScale_ShrinkHoriz, "Shrink  horizontally\tCtrl-G" );
+    menuUserScale->Append( UserScale_StretchVertic, "Stretch vertically\tCtrl-V" );
+    menuUserScale->Append( UserScale_ShrinkVertic, "Shrink vertically\tCtrl-W" );
     
     wxMenu *menuAxis = new wxMenu;
     menuAxis->Append( AxisMirror_Horiz, "Mirror horizontally" );
@@ -258,14 +258,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
     msg.Printf( _T("This is the about dialog of the drawing sample.\n")
-                _T("Welcome to %s")
-#ifdef wxBETA_NUMBER
-               _T(" (beta %d)!")
-#endif // wxBETA_NUMBER
-               , wxVERSION_STRING
-#ifdef wxBETA_NUMBER
-               , wxBETA_NUMBER
-#endif // wxBETA_NUMBER
+                _T("Copyright (c) Robert Roebling 1999")
               );
 
     wxMessageBox(msg, "About Drawing", wxOK | wxICON_INFORMATION, this);
@@ -290,7 +283,32 @@ void MyFrame::OnOption(wxCommandEvent &event)
 	case MapMode_Metric:
             m_mapMode = wxMM_METRIC;
 	    break;
+	case LogicalOrigin_MoveDown:
+	    m_yLogicalOrigin += 10;
+	    break;
+	case LogicalOrigin_MoveUp:
+	    m_yLogicalOrigin -= 10;
+	    break;
+	case LogicalOrigin_MoveLeft:
+	    m_xLogicalOrigin += 10;
+	    break;
+	case LogicalOrigin_MoveRight:
+	    m_xLogicalOrigin -= 10;
+	    break;
+	case UserScale_StretchHoriz:
+	    m_xUserScale *= 1.10;
+	    break;
+	case UserScale_ShrinkHoriz:
+	    m_xUserScale /= 1.10;
+	    break;
+	case UserScale_StretchVertic:
+	    m_yUserScale *= 1.10;
+	    break;
+	case UserScale_ShrinkVertic:
+	    m_yUserScale /= 1.10;
+	    break;
     }
+    
     Refresh();
 }
 
@@ -302,8 +320,11 @@ void MyFrame::OnPaint(wxPaintEvent &WXUNUSED(event) )
   dc.SetLogicalOrigin( m_xLogicalOrigin, m_yLogicalOrigin );
 
   dc.DrawRectangle( 10, 10, 90, 90 );
-  
   dc.DrawRoundedRectangle( 10, 110, 90, 90, 5 );
+  
+  dc.DrawText( "This is text.", 110, 10 );
+  
+  dc.DrawIcon( wxICON(mondrian), 110, 40 );
 }
 
 void MyFrame::OnMouseMove(wxMouseEvent &event)
