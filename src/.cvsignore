@@ -5,3 +5,6 @@ linux-gnu
 Makefile.in
 *.lo
 *.la
+make.env
+makeprog.env
+makelib.env
