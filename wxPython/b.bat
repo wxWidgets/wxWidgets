@@ -72,13 +72,6 @@ elseiff "%1" == "a" then
 	shift
 	set CMD=echo Finished!
 
-	call b.bat 21 d
-	call b.bat 21 h
-	call b.bat 21 r
-	call b.bat 21 d UNICODE=1
-	call b.bat 21 h UNICODE=1
-	call b.bat 21 r UNICODE=1
-
 	call b.bat 22 d
 	call b.bat 22 h
 	call b.bat 22 r
