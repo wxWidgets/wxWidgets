@@ -35,6 +35,13 @@
 // define this to 1 to use wxToolBarSimple instead of the native one
 #define USE_GENERIC_TBAR 0
 
+// define this to use XPMs everywhere (by default, BMPs are used under Win)
+#ifdef __WXMSW__
+    #define USE_XPM_BITMAPS 0
+#else
+    #define USE_XPM_BITMAPS 1
+#endif
+
 #if USE_GENERIC_TBAR
     #if !wxUSE_TOOLBAR_SIMPLE
         #error wxToolBarSimple is not compiled in, set wxUSE_TOOLBAR_SIMPLE \
@@ -44,11 +51,15 @@
     #endif
 #endif // USE_GENERIC_TBAR
 
+#if USE_XPM_BITMAPS && defined(__WXMSW__) && !wxUSE_XPM_IN_MSW
+    #error You need to enable XPM support to use XPM bitmaps with toolbar!
+#endif // USE_XPM_BITMAPS
+
 // ----------------------------------------------------------------------------
 // resources
 // ----------------------------------------------------------------------------
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if USE_XPM_BITMAPS
     #include "mondrian.xpm"
     #include "bitmaps/new.xpm"
     #include "bitmaps/open.xpm"
@@ -58,7 +69,7 @@
     #include "bitmaps/preview.xpm"  // paste XPM
     #include "bitmaps/print.xpm"
     #include "bitmaps/help.xpm"
-#endif // GTK or Motif
+#endif // USE_XPM_BITMAPS
 
 // ----------------------------------------------------------------------------
 // classes
@@ -221,6 +232,16 @@ void MyFrame::RecreateToolbar()
     // Set up toolbar
     wxBitmap toolBarBitmaps[8];
 
+#if USE_XPM_BITMAPS
+    toolBarBitmaps[0] = wxBitmap(new_xpm);
+    toolBarBitmaps[1] = wxBitmap(open_xpm);
+    toolBarBitmaps[2] = wxBitmap(save_xpm);
+    toolBarBitmaps[3] = wxBitmap(copy_xpm);
+    toolBarBitmaps[4] = wxBitmap(cut_xpm);
+    toolBarBitmaps[5] = wxBitmap(paste_xpm);
+    toolBarBitmaps[6] = wxBitmap(print_xpm);
+    toolBarBitmaps[7] = wxBitmap(help_xpm);
+#else // !USE_XPM_BITMAPS
     toolBarBitmaps[0] = wxBITMAP(new);
     toolBarBitmaps[1] = wxBITMAP(open);
     toolBarBitmaps[2] = wxBITMAP(save);
@@ -229,6 +250,7 @@ void MyFrame::RecreateToolbar()
     toolBarBitmaps[5] = wxBITMAP(paste);
     toolBarBitmaps[6] = wxBITMAP(print);
     toolBarBitmaps[7] = wxBITMAP(help);
+#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
 
     if ( !m_smallToolbar )
     {
