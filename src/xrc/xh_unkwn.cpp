@@ -34,8 +34,10 @@ public:
                               wxWindowID id = -1,
                               const wxPoint& pos = wxDefaultPosition,
                               const wxSize& size = wxDefaultSize,
-							  long style = wxTAB_TRAVERSAL | wxNO_BORDER)
-        : wxPanel(parent, id, pos, size, style,
+                              long style = 0)
+        // Always add the wxTAB_TRAVERSAL and wxNO_BORDER styles to what comes
+        // from the XRC if anything.
+        : wxPanel(parent, id, pos, size, style | wxTAB_TRAVERSAL | wxNO_BORDER,
                   controlName + wxT("_container")),
           m_controlName(controlName), m_controlAdded(false)
     {
@@ -92,8 +94,7 @@ wxObject *wxUnknownWidgetXmlHandler::DoCreateResource()
         new wxUnknownControlContainer(m_parentAsWindow,
                                       GetName(), -1,
                                       GetPosition(), GetSize(),
-                                      GetStyle(wxT("style"),
-                                               wxTAB_TRAVERSAL | wxNO_BORDER));
+                                      GetStyle(wxT("style")));
     SetupWindow(panel);
     return panel;
 }
