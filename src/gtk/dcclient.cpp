@@ -813,12 +813,16 @@ void wxWindowDC::DoGetTextExtent(const wxString &string,
 wxCoord wxWindowDC::GetCharWidth() const
 {
     GdkFont *font = m_font.GetInternalFont( m_scaleY );
+    wxCHECK_MSG( font, -1, _T("invalid font") );
+
     return wxCoord(gdk_string_width( font, "H" ) / m_scaleX);
 }
 
 wxCoord wxWindowDC::GetCharHeight() const
 {
     GdkFont *font = m_font.GetInternalFont( m_scaleY );
+    wxCHECK_MSG( font, -1, _T("invalid font") );
+
     return wxCoord((font->ascent + font->descent) / m_scaleY);
 }
 

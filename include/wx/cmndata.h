@@ -18,6 +18,7 @@
 
 #include "wx/window.h"
 #include "wx/font.h"
+#include "wx/fontutil.h"
 #include "wx/colour.h"
 #include "wx/gdicmn.h"
 
@@ -55,7 +56,6 @@ class WXDLLEXPORT wxFontData: public wxObject
     DECLARE_DYNAMIC_CLASS(wxFontData)
 public:
     wxFontData();
-    wxFontData(const wxFontData& fontData);
     ~wxFontData();
 
     void SetAllowSymbols(bool flag) { allowSymbols = flag; }
@@ -78,7 +78,13 @@ public:
 
     void SetRange(int minRange, int maxRange) { minSize = minRange; maxSize = maxRange; }
 
-    void operator=(const wxFontData& data);
+    // encoding info is split into 2 parts: the logical wxWin encoding
+    // (wxFontEncoding) and a structure containing the native parameters for
+    // it (wxNativeEncodingInfo)
+    wxFontEncoding GetEncoding() const { return m_encoding; }
+    void SetEncoding(wxFontEncoding encoding) { m_encoding = encoding; }
+
+    wxNativeEncodingInfo& EncodingInfo() { return m_encodingInfo; }
 
 public:
     wxColour        fontColour;
@@ -89,6 +95,10 @@ public:
     wxFont          chosenFont;
     int             minSize;
     int             maxSize;
+
+private:
+    wxFontEncoding       m_encoding;
+    wxNativeEncodingInfo m_encodingInfo;
 };
 
 #if wxUSE_PRINTING_ARCHITECTURE

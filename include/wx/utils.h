@@ -377,38 +377,6 @@ void wxAllocColor(Display *display,Colormap colormap,XColor *xcolor);
 
 #endif //__X__
 
-// ----------------------------------------------------------------------------
-// font-related functions (X and GTK)
-// ----------------------------------------------------------------------------
-
-#if defined(__X__) || defined(__WXGTK__)
-
-#ifdef __X__
-    typedef XFontStruct *wxNativeFont;
-#else // GDK
-    typedef GdkFont *wxNativeFont;
-#endif
-
-#include "wx/font.h"    // for wxFontEncoding
-    
-// returns the handle of the nearest available font or 0
-extern wxNativeFont wxLoadQueryNearestFont(int pointSize,
-                                           int family,
-                                           int style,
-                                           int weight,
-                                           bool underlined,
-                                           const wxString &facename,
-                                           wxFontEncoding encoding);
-
-// fills xencoding and xregistry with the X font spec parts for the given
-// encoding ('*' if encoding == wxFONTENCODING_SYSTEM) and returns TRUE if any
-// fonts with this encoding exist or FALSE if it's unknown (it does *not* mean
-// that they don't exist!)
-extern bool wxGetXFontEncoding(wxFontEncoding encoding,
-                               wxString *xencoding, wxString *xregistry);
-
-#endif // X || GTK
-
 #endif // wxUSE_GUI
 
 #endif

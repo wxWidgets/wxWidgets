@@ -100,7 +100,7 @@ public:
         // value of this method.
         //
         // Override: often.
-    virtual int OnExit() { return 0; }
+    virtual int OnExit();
 
         // called when a fatal exception occurs, this function should take care
         // not to do anything which might provoke a nested exception! It may be

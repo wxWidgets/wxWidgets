@@ -149,27 +149,12 @@ wxFontData::wxFontData()
     enableEffects = TRUE;
     minSize = 0;
     maxSize = 0;
-}
 
-wxFontData::wxFontData(const wxFontData& data)
-{
-    (*this) = data;
+    m_encoding = wxFONTENCODING_SYSTEM;
 }
 
 wxFontData::~wxFontData()
 {
-}
-
-void wxFontData::operator=(const wxFontData& data)
-{
-    fontColour = data.fontColour;
-    showHelp = data.showHelp;
-    allowSymbols = data.allowSymbols;
-    enableEffects = data.enableEffects;
-    initialFont = data.initialFont;
-    chosenFont = data.chosenFont;
-    minSize = data.minSize;
-    maxSize = data.maxSize;
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE

@@ -27,6 +27,7 @@
 #include "wx/utils.h"
 
 #include "wx/fontenum.h"
+#include "wx/fontutil.h"
 
 #include <X11/Xlib.h>
 
@@ -61,12 +62,14 @@ static char **CreateFontList(wxChar spacing,
                              wxFontEncoding encoding,
                              int *nFonts)
 {
-    wxString xencoding, xregistry;
-    wxGetXFontEncoding(encoding, &xregistry, &xencoding);
+    wxNativeEncodingInfo info;
+    wxGetNativeFontEncoding(encoding, &info);
 
     wxString pattern;
     pattern.Printf(wxT("-*-*-*-*-*-*-*-*-*-*-%c-*-%s-%s"),
-                   spacing, xregistry.c_str(), xencoding.c_str());
+                   spacing,
+                   info.xregistry.c_str(),
+                   info.xencoding.c_str());
 
     // get the list of all fonts
     return XListFonts((Display *)wxGetDisplay(), pattern.mb_str(), 32767, nFonts);

@@ -14,11 +14,7 @@
     #pragma interface
 #endif
 
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/string.h"
 #include "wx/hash.h"
-#include "wx/gdiobj.h"
 
 // ----------------------------------------------------------------------------
 // classes
@@ -31,12 +27,6 @@ class wxWindow;
 class wxFont;
 
 // ----------------------------------------------------------------------------
-// global variables
-// ----------------------------------------------------------------------------
-
-extern const wxChar* wxEmptyString;
-
-// ----------------------------------------------------------------------------
 // wxFont
 // ----------------------------------------------------------------------------
 
@@ -46,6 +36,7 @@ public:
     // ctors and such
     wxFont() { Init(); }
     wxFont(const wxFont& font) { Init(); Ref(font); }
+    wxFont(const wxString& fontname, const wxFontData& fontdata);
 
     // assignment
     wxFont& operator=(const wxFont& font);
@@ -91,7 +82,6 @@ public:
     virtual void SetEncoding(wxFontEncoding encoding);
 
     // implementation from now on
-    wxFont( GdkFont* font, char *xFontName );
     void Unshare();
 
     GdkFont* GetInternalFont(float scale = 1.0) const;

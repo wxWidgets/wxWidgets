@@ -85,7 +85,7 @@ static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation*
                                 (int)alloc->width,
                                 (int)alloc->height );
 */
-				
+
         win->m_width = alloc->width;
         win->m_height = alloc->height;
         win->UpdateSize();
@@ -164,14 +164,14 @@ static void gtk_toolbar_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidge
 // "configure_event"
 //-----------------------------------------------------------------------------
 
-static gint 
+static gint
 #if (GTK_MINOR_VERSON > 0)
 gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WXUNUSED(event), wxFrame *win )
 #else
 gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *event, wxFrame *win )
 #endif
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return FALSE;
@@ -255,13 +255,13 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
     if ((win->GetMaxWidth() != -1) || (win->GetMaxHeight() != -1)) flag |= GDK_HINT_MAX_SIZE;
     if (flag)
     {
-        gdk_window_set_hints( win->m_widget->window, 
-	                      win->m_x, win->m_y,
-			      win->GetMinWidth(), win->GetMinHeight(),
-			      win->GetMaxWidth(), win->GetMaxHeight(),
-			      flag );
+        gdk_window_set_hints( win->m_widget->window,
+                              win->m_x, win->m_y,
+                              win->GetMinWidth(), win->GetMinHeight(),
+                              win->GetMaxWidth(), win->GetMaxHeight(),
+                              flag );
     }
-    
+
     /* reset the icon */
     if (win->m_icon != wxNullIcon)
     {
@@ -300,7 +300,7 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
 static void wxInsertChildInFrame( wxFrame* parent, wxWindow* child )
 {
     wxASSERT( GTK_IS_WIDGET(child->m_widget) );
-    
+
     if (!parent->m_insertInClientArea)
     {
         /* these are outside the client area */
@@ -397,7 +397,7 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
         wxFAIL_MSG( wxT("wxFrame creation failed") );
-	return FALSE;
+        return FALSE;
     }
 
     m_title = title;
@@ -530,6 +530,7 @@ void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 
     int old_x = m_x;
     int old_y = m_y;
+
     int old_width = m_width;
     int old_height = m_height;
 
@@ -693,7 +694,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
 
     m_width = width;
     m_height = height;
-    
+
     /* space occupied by m_frameToolBar and m_frameMenuBar */
     int client_area_y_offset = 0;
 
@@ -737,7 +738,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
 
 #if wxUSE_TOOLBAR
         if ((m_frameToolBar) &&
-	    (m_frameToolBar->m_widget->parent == m_mainWidget))
+            (m_frameToolBar->m_widget->parent == m_mainWidget))
         {
             int xx = m_miniEdge;
             int yy = m_miniEdge + m_miniTitle;
@@ -750,7 +751,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
             }
             int ww = m_width - 2*m_miniEdge;
             int hh = m_frameToolBar->m_height;
-	    if (m_toolBarDetached) hh = wxPLACE_HOLDER;
+            if (m_toolBarDetached) hh = wxPLACE_HOLDER;
             m_frameToolBar->m_x = xx;
             m_frameToolBar->m_y = yy;
             /* m_frameToolBar->m_height = hh;   don't change the toolbar's reported size
@@ -798,7 +799,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
 
 
     m_sizeSet = TRUE;
-    
+
     // send size event to frame
     wxSizeEvent event( wxSize(m_width,m_height), GetId() );
     event.SetEventObject( this );
@@ -828,11 +829,11 @@ void wxFrame::OnInternalIdle()
     if (!m_sizeSet && GTK_WIDGET_REALIZED(m_wxwindow))
     {
         GtkOnSize( m_x, m_y, m_width, m_height );
-	
-	// we'll come back later
+
+        // we'll come back later
         if (g_isIdle)
             wxapp_install_idle_handler();
-	return;
+        return;
     }
 
     if (m_frameMenuBar) m_frameMenuBar->OnInternalIdle();
@@ -920,8 +921,8 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
                 gtk_signal_connect( GTK_OBJECT(menuBar->m_widget), "child_detached",
                     GTK_SIGNAL_FUNC(gtk_menu_detached_callback), (gpointer)this );
             }
-	    
-	    m_frameMenuBar->Show( TRUE );
+
+            m_frameMenuBar->Show( TRUE );
         }
     }
 
@@ -986,9 +987,9 @@ wxToolBar* wxFrame::OnCreateToolBar( long style, wxWindowID id, const wxString& 
     return new wxToolBar( this, id, wxDefaultPosition, wxDefaultSize, style, name );
 }
 
-void wxFrame::SetToolBar(wxToolBar *toolbar) 
-{ 
-    m_frameToolBar = toolbar; 
+void wxFrame::SetToolBar(wxToolBar *toolbar)
+{
+    m_frameToolBar = toolbar;
     if (m_frameToolBar)
     {
         /* insert into toolbar area if not already there */
@@ -996,10 +997,10 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
             (m_frameToolBar->m_widget->parent != m_mainWidget))
         {
             GetChildren().DeleteObject( m_frameToolBar );
-	
-	    gtk_widget_reparent( m_frameToolBar->m_widget, m_mainWidget );
-	    UpdateSize();
-	}
+
+            gtk_widget_reparent( m_frameToolBar->m_widget, m_mainWidget );
+            UpdateSize();
+        }
     }
 }
 
@@ -1113,25 +1114,25 @@ void wxFrame::SetIcon( const wxIcon &icon )
     gdk_window_set_icon( m_widget->window, (GdkWindow *) NULL, icon.GetPixmap(), bm );
 }
 
-void wxFrame::Maximize(bool WXUNUSED(maximize)) 
+void wxFrame::Maximize(bool WXUNUSED(maximize))
 {
 }
 
-void wxFrame::Restore() 
+void wxFrame::Restore()
 {
 }
 
-void wxFrame::Iconize( bool iconize ) 
-{ 
+void wxFrame::Iconize( bool iconize )
+{
    if (iconize)
    {
         XIconifyWindow( GDK_WINDOW_XDISPLAY( m_widget->window ),
-	                GDK_WINDOW_XWINDOW( m_widget->window ),
-			DefaultScreen( GDK_DISPLAY() ) );
+                        GDK_WINDOW_XWINDOW( m_widget->window ),
+                        DefaultScreen( GDK_DISPLAY() ) );
    }
 }
 
-bool wxFrame::IsIconized() const 
-{ 
-    return FALSE; 
+bool wxFrame::IsIconized() const
+{
+    return FALSE;
 }

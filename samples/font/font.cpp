@@ -95,8 +95,9 @@ public:
     void OnSize(wxSizeEvent& event);
 
 protected:
-    void DoEnumerateFamilies(bool fixedWidthOnly,
-                             wxFontEncoding encoding = wxFONTENCODING_SYSTEM);
+    bool DoEnumerateFamilies(bool fixedWidthOnly,
+                             wxFontEncoding encoding = wxFONTENCODING_SYSTEM,
+                             bool silent = FALSE);
 
     void DoChangeFont(const wxFont& font, const wxColour& col = wxNullColour);
 
@@ -268,7 +269,9 @@ void MyFrame::OnEnumerateEncodings(wxCommandEvent& WXUNUSED(event))
                  fontEnumerator.GetText().c_str());
 }
 
-void MyFrame::DoEnumerateFamilies(bool fixedWidthOnly, wxFontEncoding encoding)
+bool MyFrame::DoEnumerateFamilies(bool fixedWidthOnly,
+                                  wxFontEncoding encoding,
+                                  bool silent)
 {
     class MyFontEnumerator : public wxFontEnumerator
     {
@@ -301,8 +304,11 @@ void MyFrame::DoEnumerateFamilies(bool fixedWidthOnly, wxFontEncoding encoding)
         for ( n = 0; n < nFacenames; n++ )
             facenames[n] = fontEnumerator.GetFacenames().Item(n);
 
-        n = wxGetSingleChoiceIndex("Choose a facename", "Font demo",
-                                   nFacenames, facenames, this);
+        if ( silent )
+            n = 1;
+        else
+            n = wxGetSingleChoiceIndex("Choose a facename", "Font demo",
+                                       nFacenames, facenames, this);
         if ( n != -1 )
         {
             wxFont font(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
@@ -312,11 +318,15 @@ void MyFrame::DoEnumerateFamilies(bool fixedWidthOnly, wxFontEncoding encoding)
         }
 
         delete [] facenames;
+
+        return TRUE;
     }
-    else
+    else if ( !silent )
     {
         wxLogWarning("No such fonts found.");
     }
+
+    return FALSE;
 }
 
 void MyFrame::OnEnumerateFamiliesForEncoding(wxCommandEvent& WXUNUSED(event))
@@ -457,8 +467,7 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
     }
 
     // ok, now get the corresponding encoding
-    wxFontMapper fontMapper;
-    wxFontEncoding fontenc = fontMapper.CharsetToEncoding(charset);
+    wxFontEncoding fontenc = wxTheFontMapper->CharsetToEncoding(charset);
     if ( fontenc == wxFONTENCODING_SYSTEM )
     {
         wxLogError("Charset '%s' is unsupported.", charset.c_str());
@@ -466,9 +475,23 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
     }
 
     // and now create the correct font
-    m_textctrl->LoadFile(filename);
+    if ( !DoEnumerateFamilies(FALSE, fontenc, TRUE /* silent */) )
+    {
+        wxFont font(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
+                    wxFONTWEIGHT_NORMAL, FALSE /* !underlined */,
+                    wxEmptyString /* facename */, fontenc);
+        if ( font.Ok() )
+        {
+            DoChangeFont(font);
+        }
+        else
+        {
+            wxLogWarning("No fonts for encoding '%s' on this system.",
+                         wxFontMapper::GetEncodingDescription(fontenc).c_str());
+        }
+    }
 
-    DoEnumerateFamilies(FALSE, fontenc);
+    m_textctrl->LoadFile(filename);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))

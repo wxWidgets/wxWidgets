@@ -481,6 +481,7 @@ filedlg.h	W
 filefn.h	W
 filesys.h	W
 font.h	W
+fontdlg.h	W
 fontenum.h	W
 fontmap.h	W
 fontdlg.h	W
@@ -846,6 +847,7 @@ xpmhand.h	9
 # disable.bmp	9
 # wx.rc	9
 
+fontutil.h	S
 execute.h	S
 
 file.h	P

@@ -42,6 +42,7 @@
 
 wxFontEncoding wxFontBase::ms_encodingDefault = wxFONTENCODING_SYSTEM;
 
+/* static */
 wxFont *wxFontBase::New(int size,
                         int family,
                         int style,

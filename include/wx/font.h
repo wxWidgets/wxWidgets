@@ -27,6 +27,7 @@
 // forward declarations
 // ----------------------------------------------------------------------------
 
+class WXDLLEXPORT wxFontData;
 class WXDLLEXPORT wxFontBase;
 class WXDLLEXPORT wxFont;
 

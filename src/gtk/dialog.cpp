@@ -168,16 +168,16 @@ gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
         gtk_window_set_policy(GTK_WINDOW(win->m_widget), 1, 1, 1);
 
     /* set size hints */
-    gint flag =	0; // GDK_HINT_POS;
+    gint flag = 0; // GDK_HINT_POS;
     if ((win->GetMinWidth() != -1) || (win->GetMinHeight() != -1)) flag |= GDK_HINT_MIN_SIZE;
     if ((win->GetMaxWidth() != -1) || (win->GetMaxHeight() != -1)) flag |= GDK_HINT_MAX_SIZE;
     if (flag)
     {
         gdk_window_set_hints( win->m_widget->window,
-	                      win->m_x, win->m_y,
-			      win->GetMinWidth(), win->GetMinHeight(),
-			      win->GetMaxWidth(), win->GetMaxHeight(),
-			      flag );
+                              win->m_x, win->m_y,
+                              win->GetMinWidth(), win->GetMinHeight(),
+                              win->GetMaxWidth(), win->GetMaxHeight(),
+                              flag );
     }
 
     /* reset the icon */
@@ -262,7 +262,7 @@ bool wxDialog::Create( wxWindow *parent,
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
         wxFAIL_MSG( wxT("wxDialog creation failed") );
-	return FALSE;
+        return FALSE;
     }
 
     m_insertCallback = (wxInsertChildFunction) wxInsertChildInDialog;
@@ -456,6 +456,7 @@ void wxDialog::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 
     int old_x = m_x;
     int old_y = m_y;
+
     int old_width = m_width;
     int old_height = m_height;
 

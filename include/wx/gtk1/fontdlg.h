@@ -2,10 +2,10 @@
 // Name:        fontdlgg.h
 // Purpose:     wxFontDialog
 // Author:      Robert Roebling
-// Created:    
+// Created:
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __GTK_FONTDLGH__
@@ -38,7 +38,7 @@ public:
     wxFontDialog( wxWindow *parent, wxFontData *data = (wxFontData *) NULL );
     ~wxFontDialog();
 
-    inline wxFontData& GetFontData() { return m_fontData; }
+    wxFontData& GetFontData() { return m_fontData; }
 
 //protected:
     wxFontData m_fontData;

@@ -20,6 +20,8 @@
 #endif
 
 #include "wx/font.h"
+#include "wx/fontutil.h"
+#include "wx/cmndata.h"
 #include "wx/utils.h"
 #include "wx/log.h"
 #include "wx/gdicmn.h"
@@ -122,7 +124,7 @@ wxFontRefData::wxFontRefData(int size, int family, int style,
     int weight, bool underlined, const wxString& faceName, wxFontEncoding encoding )
     : m_scaled_xfonts(wxKEY_INTEGER)
 {
-    Init(size, family, style, weight, 
+    Init(size, family, style, weight,
         underlined, faceName, encoding);
 }
 
@@ -150,18 +152,16 @@ void wxFont::Init()
         wxTheFontList->Append( this );
 }
 
-wxFont::wxFont( GdkFont *WXUNUSED(font), char *xFontName )
+wxFont::wxFont( const wxString& fontname, const wxFontData& fontdata )
 {
-    if (!xFontName)
-        return;
-
     Init();
+
+    wxCHECK_RET( !!fontname, _T("invalid font spec") );
 
     m_refData = new wxFontRefData();
 
     wxString tmp;
 
-    wxString fontname( xFontName );
     wxStringTokenizer tn( fontname, wxT("-") );
 
     tn.GetNextToken();                           // foundry
@@ -177,7 +177,7 @@ wxFont::wxFont( GdkFont *WXUNUSED(font), char *xFontName )
 
     if (tmp == wxT("LIGHT")) M_FONTDATA->m_weight = wxLIGHT;
     if (tmp == wxT("THIN")) M_FONTDATA->m_weight = wxLIGHT;
-    
+
     tmp = tn.GetNextToken().MakeUpper();        // slant
     if (tmp == wxT("I")) M_FONTDATA->m_style = wxITALIC;
     if (tmp == wxT("O")) M_FONTDATA->m_style = wxITALIC;
@@ -211,32 +211,36 @@ wxFont::wxFont( GdkFont *WXUNUSED(font), char *xFontName )
     tn.GetNextToken();                           // avg width
 
     // deal with font encoding
-    wxString registry = tn.GetNextToken().MakeUpper(),
-             encoding = tn.GetNextToken().MakeUpper();
+    M_FONTDATA->m_encoding = fontdata.GetEncoding();
+    if ( M_FONTDATA->m_encoding == wxFONTENCODING_SYSTEM )
+    {
+        wxString registry = tn.GetNextToken().MakeUpper(),
+                 encoding = tn.GetNextToken().MakeUpper();
 
-    if ( registry == _T("ISO8859") )
-    {
-        int cp;
-        if ( wxSscanf(encoding, wxT("%d"), &cp) == 1 )
+        if ( registry == _T("ISO8859") )
         {
-            M_FONTDATA->m_encoding =
-                (wxFontEncoding)(wxFONTENCODING_ISO8859_1 + cp - 1);
+            int cp;
+            if ( wxSscanf(encoding, wxT("%d"), &cp) == 1 )
+            {
+                M_FONTDATA->m_encoding =
+                    (wxFontEncoding)(wxFONTENCODING_ISO8859_1 + cp - 1);
+            }
         }
-    }
-    else if ( registry == _T("MICROSOFT") )
-    {
-        int cp;
-        if ( wxSscanf(encoding, wxT("cp125%d"), &cp) == 1 )
+        else if ( registry == _T("MICROSOFT") )
         {
-            M_FONTDATA->m_encoding =
-                (wxFontEncoding)(wxFONTENCODING_CP1250 + cp);
+            int cp;
+            if ( wxSscanf(encoding, wxT("cp125%d"), &cp) == 1 )
+            {
+                M_FONTDATA->m_encoding =
+                    (wxFontEncoding)(wxFONTENCODING_CP1250 + cp);
+            }
         }
+        else if ( registry == _T("KOI8") )
+        {
+            M_FONTDATA->m_encoding = wxFONTENCODING_KOI8;
+        }
+        //else: unknown encoding - may be give a warning here?
     }
-    else if ( registry == _T("KOI8") )
-    {
-        M_FONTDATA->m_encoding = wxFONTENCODING_KOI8;
-    }
-    //else: unknown encoding - may be give a warning here?
 }
 
 bool wxFont::Create( int pointSize,
@@ -429,10 +433,9 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
         M_FONTDATA->m_scaled_xfonts.Append( int_scale, (wxObject*)font );
     }
 
-    if (!font)
-    {
-        wxLogError(wxT("could not load any font"));
-    }
+    // it's quite useless to make it a wxCHECK because we're going to crash
+    // anyhow...
+    wxASSERT_MSG( font, wxT("could not load any font?") );
 
     return font;
 }
