@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation custompropertydialog.h
+#pragma implementation "custompropertydialog.h"
 #endif
 
 #include <wx/wx.h>

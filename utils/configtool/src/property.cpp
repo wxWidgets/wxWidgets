@@ -158,7 +158,7 @@ ctProperty* ctProperties::GetNth(int i) const
     wxASSERT( i < (int) GetCount() );
     if (i < (int) GetCount())
     {
-        wxNode* node = m_list.Nth(i);
+        wxNode* node = m_list.Item(i);
         return (ctProperty*) node->GetData();
     }
     return NULL;

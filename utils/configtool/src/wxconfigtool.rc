@@ -4,5 +4,8 @@ wxconfigtool              ICON    "bitmaps/wxconfigtool.ico"
 
 #include "wx/msw/wx.rc"
 
+/* Use if compiling with earlier versions of wxWindows */
+#if 0
 1 24 "wxconfigtool.exe.manifest"
+#endif
 

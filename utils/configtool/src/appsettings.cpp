@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation appsettings.h
+#pragma implementation "appsettings.h"
 #endif
 
 #include "wx/wx.h"

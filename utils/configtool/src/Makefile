@@ -63,10 +63,12 @@ APPEXTRADEFS= \
 
 #  -I$(UTILSDIR) \
 
-WXVERSION=2.4
+WXVERSION=2.5
 
 # Use the small C++ support library
-APPEXTRALIBS=-lsupc++ ${top_builddir}/lib/libwx_$(WXTOOLKIT)$(WXDEBUGSUFFIX)_xrc-$(WXVERSION).a
+APPEXTRALIBS=-lsupc++
+
+# ${top_builddir}/lib/libwx_$(WXTOOLKIT)$(WXDEBUGSUFFIX)_xrc-$(WXVERSION).a
 
 PLATFORM_OS=$(shell echo $(OS))
 
@@ -211,7 +213,7 @@ $(APPBUILDDIR)/property.o: $(APPSRCDIR)/property.cpp $(APPINCDIR)/property.h $(A
 $(APPBUILDDIR)/settingsdialog.o: $(APPSRCDIR)/settingsdialog.cpp $(APPINCDIR)/settingsdialog.h $(APPSRCDIR)/symbols.h
 	$(CXX) -c $(CXXFLAGS) $(APPEXTRADEFS) -o $@ $<
 
-$(APPBUILDDIR)/utils.o: $(APPSRCDIR)/utils.cpp $(APPINCDIR)/imagewindow.h $(APPSRCDIR)/symbols.h
+$(APPBUILDDIR)/utils.o: $(APPSRCDIR)/utils.cpp $(APPINCDIR)/utils.h $(APPSRCDIR)/symbols.h
 	$(CXX) -c $(CXXFLAGS) $(APPEXTRADEFS) -o $@ $<
 
 $(APPBUILDDIR)/wxconfigtool_resources.o: $(APPSRCDIR)/wxconfigtool.rc

@@ -12,6 +12,10 @@
 #ifndef _SETTINGSDIALOG_H_
 #define _SETTINGSDIALOG_H_
 
+#ifdef __GNUG__
+#pragma interface "settingsdialog.cpp"
+#endif
+
 /*!
  * Includes
  */

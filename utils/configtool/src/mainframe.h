@@ -12,6 +12,10 @@
 #ifndef _AP_MAINFRAME_H_
 #define _AP_MAINFRAME_H_
 
+#ifdef __GNUG__
+#pragma interface "mainframe.cpp"
+#endif
+
 #include "wx/imaglist.h"
 #include "wx/docview.h"
 

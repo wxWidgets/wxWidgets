@@ -13,7 +13,7 @@
 #define _CONFIGITEMSELECTOR_H_
 
 #ifdef __GNUG__
-#pragma interface configitemselector.h
+#pragma interface "configitemselector.cpp"
 #endif
 
 /*!

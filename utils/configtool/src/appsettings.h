@@ -13,7 +13,7 @@
 #define _AP_APPSETTINGS_H_
 
 #ifdef __GNUG__
-#pragma interface appsettings.cpp
+#pragma interface "appsettings.cpp"
 #endif
 
 #include "wx/notebook.h"

@@ -352,7 +352,7 @@ bool ctConfigToolDoc::DoSave(ctConfigItem* item, wxOutputStream& stream, int ind
         stream << ctEscapeHTMLCharacters(prop->GetVariant().GetString()) ;
         stream << wxT("</") << prop->GetName() << wxT(">");
 
-        node = node->Next();
+        node = node->GetNext();
     }
 
     // Output children
@@ -362,7 +362,7 @@ bool ctConfigToolDoc::DoSave(ctConfigItem* item, wxOutputStream& stream, int ind
         ctConfigItem* child = (ctConfigItem*) node->GetData();
         DoSave(child, stream, indent);
 
-        node = node->Next();
+        node = node->GetNext();
     }
 
     indent --;

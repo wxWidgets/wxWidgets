@@ -128,7 +128,7 @@ ctConfigItem* ctConfigItem::GetChild(int n) const
 
     if ( n < GetChildCount() && n > -1 )
     {
-        ctConfigItem* child = wxDynamicCast(m_children.Nth(n)->Data(), ctConfigItem);
+        ctConfigItem* child = wxDynamicCast(m_children.Item(n)->GetData(), ctConfigItem);
         return child;
     }
     else

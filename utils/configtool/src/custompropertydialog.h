@@ -13,7 +13,7 @@
 #define _CUSTOMPROPERTYDIALOG_H_
 
 #ifdef __GNUG__
-#pragma interface custompropertydialog.cpp
+#pragma interface "custompropertydialog.cpp"
 #endif
 
 /*!

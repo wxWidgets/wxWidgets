@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation configitemselector.cpp
+#pragma implementation "configitemselector.h"
 #endif
 
 #include <wx/wx.h>

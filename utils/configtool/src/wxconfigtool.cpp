@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation wxconfigtool.h
+#pragma implementation "wxconfigtool.h"
 #endif
 
 #include "wx/wx.h"

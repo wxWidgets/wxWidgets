@@ -9,6 +9,10 @@
 // Licence:
 /////////////////////////////////////////////////////////////////////////////
 
+#ifdef __GNUG__
+#pragma implementation "mainframe.h"
+#endif
+
 #include "wx/wx.h"
 
 #ifdef __BORLANDC__
@@ -209,7 +213,7 @@ void ctMainFrame::InitToolBar(wxToolBar* toolBar)
     toolBarBitmaps[3] = wxBitmap(copy_xpm);
     toolBarBitmaps[4] = wxBitmap(cut_xpm);
     toolBarBitmaps[5] = wxBitmap(paste_xpm);
-    toolBarBitmaps[6] = wxBitmap(print_xpm);
+//    toolBarBitmaps[6] = wxBitmap(print_xpm);
     toolBarBitmaps[7] = wxBitmap(help_xpm);
     toolBarBitmaps[10] = wxBitmap(undo_xpm);
     toolBarBitmaps[11] = wxBitmap(redo_xpm);

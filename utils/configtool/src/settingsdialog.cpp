@@ -9,6 +9,10 @@
 // Licence:     
 /////////////////////////////////////////////////////////////////////////////
 
+#ifdef __GNUG__
+#pragma implementation "settingsdialog.h"
+#endif
+
 #include "wx/wx.h"
 #include "wx/cshelp.h"
 #include "wx/statline.h"

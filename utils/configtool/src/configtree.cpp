@@ -24,8 +24,6 @@
 #include "wx/cshelp.h"
 
 // Include XPM icons
-#include "bitmaps/folder1.xpm"
-
 #include "bitmaps/closedfolder.xpm"
 #include "bitmaps/closedfolder_dis.xpm"
 

@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-    #pragma implementation "configtoolview.cpp"
+    #pragma implementation "configtoolview.h"
 #endif
 
 // Includes other headers for precompiled compilation
@@ -448,8 +448,9 @@ void ctConfigToolView::OnDeleteItem(wxCommandEvent& event)
     ctConfigItem* sel = GetSelection();
     if (sel)
     {
+        wxString name(sel->GetName());
         wxString msg;
-        msg.Printf(_("Delete %s?"), sel->GetName());
+        msg.Printf(_("Delete %s?"), (const wxChar*) name);
         if (wxYES == wxMessageBox(msg, _("Delete item"), wxICON_QUESTION|wxYES_NO))
         {
             wxGetApp().GetMainFrame()->GetConfigTreeCtrl()->Delete(sel->GetTreeItemId());

@@ -13,7 +13,7 @@
 #define _HTMLPARSER_H_
 
 #ifdef __GNUG__
-    #pragma interface "htmlparser.h"
+    #pragma interface "htmlparser.cpp"
 #endif
 
 //#include "wx/module.h"

@@ -405,13 +405,13 @@ bool wxIconTable::AddInfo(const wxString& name, const wxIcon& icon, int state, b
 
 wxIconInfo* wxIconTable::FindInfo(const wxString& name) const
 {
-    wxNode* node = First();
+    wxNode* node = GetFirst();
     while (node)
     {
-        wxIconInfo* info = (wxIconInfo*) node->Data();
+        wxIconInfo* info = (wxIconInfo*) node->GetData();
         if (info->GetName() == name)
             return info;
-        node = node->Next();
+        node = node->GetNext();
     }
     return NULL;
 }

@@ -13,7 +13,7 @@
 #define _AP_WXCONFIGTOOL_H_
 
 #ifdef __GNUG__
-#pragma interface wxconfigtool.cpp
+#pragma interface "wxconfigtool.cpp"
 #endif
 
 #include "wx/docview.h"
