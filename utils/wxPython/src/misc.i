@@ -182,18 +182,19 @@ wxWindow * wxFindWindowByName(const wxString& name, wxWindow *parent=NULL);
 #ifdef __WXMSW__
 wxWindow * wxGetActiveWindow();
 long wxGetElapsedTime(bool resetTimer = TRUE);
-#endif
 long wxGetFreeMemory();
+#endif
 void wxGetMousePosition(int* OUTPUT, int* OUTPUT);
 bool wxIsBusy();
 wxString wxNow();
-bool wxShell(const wxString& command = wxPyEmptyStr);
 #ifdef __WXMSW__
+bool wxShell(const wxString& command = wxPyEmptyStr);
 void wxStartTimer();
+int wxGetOsVersion(int *OUTPUT, int *OUTPUT);
 #endif
+
 bool wxYield();
 
-int wxGetOsVersion(int *OUTPUT, int *OUTPUT);
 %inline %{
     char* wxGetResource(char *section, char *entry, char *file = NULL) {
         char * retval;
@@ -306,6 +307,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.4  1998/08/18 19:48:19  RD
+// more wxGTK compatibility things.
+//
+// It builds now but there are serious runtime problems...
+//
 // Revision 1.3  1998/08/16 04:31:10  RD
 // More wxGTK work.
 //

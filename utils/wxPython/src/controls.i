@@ -15,7 +15,10 @@
 %{
 #include "helpers.h"
 #include <wx/slider.h>
+
+#ifdef __WXMSW__
 #include <wx/spinbutt.h>
+#endif
 %}
 
 //----------------------------------------------------------------------
@@ -41,7 +44,7 @@ wxValidator wxPyDefaultValidator;       // Non-const default because of SWIG
 class wxControl : public wxWindow {
 public:
     void Command(wxCommandEvent& event);
-    wxString& GetLabel();
+    wxString GetLabel();
     void SetLabel(const wxString& label);
 };
 
@@ -69,14 +72,16 @@ public:
                    const wxValidator& validator = wxPyDefaultValidator,
                    char* name = "button");
 
+    wxBitmap& GetBitmapLabel();
+#ifdef __WXMSW__
     wxBitmap& GetBitmapDisabled();
     wxBitmap& GetBitmapFocus();
-    wxBitmap& GetBitmapLabel();
     wxBitmap& GetBitmapSelected();
     void SetBitmapDisabled(const wxBitmap& bitmap);
     void SetBitmapFocus(const wxBitmap& bitmap);
-    void SetBitmapLabel(const wxBitmap& bitmap);
     void SetBitmapSelected(const wxBitmap& bitmap);
+#endif
+    void SetBitmapLabel(const wxBitmap& bitmap);
 
 };
 
@@ -258,14 +263,18 @@ public:
     void DiscardEdits();
     long GetInsertionPoint();
     long GetLastPosition();
+#ifdef __WXMSW__
     int GetLineLength(long lineNo);
     wxString GetLineText(long lineNo);
     int GetNumberOfLines();
+#endif
     wxString GetValue();
     bool IsModified();
     bool LoadFile(const wxString& filename);
     void Paste();
+#ifdef __WXMSW__
     void PositionToXY(long pos, long *OUTPUT, long *OUTPUT);
+#endif
     void Remove(long from, long to);
     void Replace(long from, long to, const wxString& value);
     bool SaveFile(const wxString& filename);
@@ -276,7 +285,9 @@ public:
     void SetValue(const wxString& value);
     void ShowPosition(long pos);
     void WriteText(const wxString& text);
+#ifdef __WXMSW__
     long XYToPosition(long x, long y);
+#endif
 };
 
 //----------------------------------------------------------------------
@@ -302,6 +313,7 @@ public:
 
 //----------------------------------------------------------------------
 
+#ifdef __WXMSW__
 class wxSpinButton : public wxControl {
 public:
     wxSpinButton(wxWindow* parent, wxWindowID id = -1,
@@ -316,6 +328,7 @@ public:
     void SetRange(int min, int max);
     void SetValue(int value);
 };
+#endif
 
 //----------------------------------------------------------------------
 
@@ -419,6 +432,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.3  1998/08/18 19:48:14  RD
+// more wxGTK compatibility things.
+//
+// It builds now but there are serious runtime problems...
+//
 // Revision 1.2  1998/08/15 07:36:28  RD
 // - Moved the header in the .i files out of the code that gets put into
 // the .cpp files.  It caused CVS conflicts because of the RCS ID being

@@ -51,7 +51,9 @@ public:
     // TODO:  This isn't handled by the standard event-table system...
     //wxMDIClientWindow* OnCreateClient();
 
+#ifdef __WXMSW__
     void SetToolBar(wxToolBar* toolbar);
+#endif
     void Tile();
 };
 
@@ -70,6 +72,11 @@ public:
     void Activate();
     void Maximize();
     void Restore();
+
+    void SetMenuBar(wxMenuBar *menu_bar);
+    void SetClientSize(int width, int height);
+    void GetPosition(int* OUTPUT, int* OUTPUT) const ;
+
 };
 
 
@@ -84,6 +91,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.3  1998/08/18 19:48:18  RD
+// more wxGTK compatibility things.
+//
+// It builds now but there are serious runtime problems...
+//
 // Revision 1.2  1998/08/15 07:36:39  RD
 // - Moved the header in the .i files out of the code that gets put into
 // the .cpp files.  It caused CVS conflicts because of the RCS ID being

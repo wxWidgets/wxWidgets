@@ -149,9 +149,6 @@ extern "C" SWIGEXPORT(void,initcmndlgsc)();
 #ifdef __WXMSW__
     wxApp::Initialize((WXHINSTANCE)wxhInstance);
 #endif
-#ifdef __WXGTK__
-    wxApp::CommonInit();
-#endif
 
 
 //    wxPyWindows = new wxHashTable(wxKEY_INTEGER, 100);
@@ -180,6 +177,11 @@ extern "C" SWIGEXPORT(void,initcmndlgsc)();
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.4  1998/08/18 19:48:20  RD
+// more wxGTK compatibility things.
+//
+// It builds now but there are serious runtime problems...
+//
 // Revision 1.3  1998/08/15 07:36:53  RD
 // - Moved the header in the .i files out of the code that gets put into
 // the .cpp files.  It caused CVS conflicts because of the RCS ID being

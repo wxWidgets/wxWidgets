@@ -41,7 +41,7 @@ public:
 
     bool GetChooseFull();
     wxColour& GetColour();
-    wxColour& GetCustomColour(int i);
+    wxColour GetCustomColour(int i);
     void SetChooseFull(int flag);
     void SetColour(const wxColour& colour);
     void SetCustomColour(int i, const wxColour& colour);
@@ -52,13 +52,18 @@ class wxColourDialog : public wxDialog {
 public:
     wxColourDialog(wxWindow* parent, wxColourData* data = NULL);
 
+#ifdef __WXMSW__
     wxColourData& GetColourData();
+#else
+    wxColourData GetColourData();
+#endif
     int ShowModal();
 };
 
 
 //----------------------------------------------------------------------
 
+#ifdef __WXMSW__
 class wxDirDialog : public wxDialog {
 public:
     wxDirDialog(wxWindow* parent,
@@ -74,6 +79,7 @@ public:
     void SetPath(const wxString& path);
     int ShowModal();
 };
+#endif
 
 //----------------------------------------------------------------------
 
@@ -185,6 +191,7 @@ public:
 
 //----------------------------------------------------------------------
 
+#ifdef __WXMSW__
 class wxPageSetupData {
 public:
     wxPageSetupData();
@@ -226,9 +233,11 @@ public:
     wxPageSetupData& GetPageSetupData();
     int ShowModal();
 };
+#endif
 
 //----------------------------------------------------------------------
 
+#ifdef __WXMSW__
 class wxPrintData {
 public:
     wxPrintData();
@@ -266,6 +275,7 @@ public:
     wxDC* GetPrintDC();
     int ShowModal();
 };
+#endif
 
 //----------------------------------------------------------------------
 
@@ -286,6 +296,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.3  1998/08/18 19:48:13  RD
+// more wxGTK compatibility things.
+//
+// It builds now but there are serious runtime problems...
+//
 // Revision 1.2  1998/08/15 07:36:25  RD
 // - Moved the header in the .i files out of the code that gets put into
 // the .cpp files.  It caused CVS conflicts because of the RCS ID being

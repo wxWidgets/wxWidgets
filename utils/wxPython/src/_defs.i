@@ -113,7 +113,9 @@ enum {
     wxMINOR_VERSION,
     wxRELEASE_NUMBER,
 
+#ifdef __WXMSW__
     UNKNOWN,
+#endif
     NOT_FOUND,
 
     wxVSCROLL,
@@ -695,6 +697,11 @@ enum wxEventType {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.4  1998/08/18 19:48:11  RD
+// more wxGTK compatibility things.
+//
+// It builds now but there are serious runtime problems...
+//
 // Revision 1.3  1998/08/14 23:36:33  RD
 // Beginings of wxGTK compatibility
 //

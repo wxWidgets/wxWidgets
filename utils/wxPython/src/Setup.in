@@ -6,6 +6,7 @@
 CCC=c++
 WXWIN=../../..
 
+
 ## Pick one of these, or set your own
 #TARGETDIR=$(BINLIBDEST)/site-packages/wxPython
 TARGETDIR=..
@@ -13,6 +14,8 @@ TARGETDIR=..
 wxpc  wxp.cpp helpers.cpp windows.cpp events.cpp misc.cpp gdi.cpp \
       mdi.cpp controls.cpp controls2.cpp windows2.cpp cmndlgs.cpp \
       -I$(WXWIN)/include -I/usr/lib/glib/include -I$(WXWIN)/src   \
-      -DSWIG_GLOBAL -D__WXGTK__ -L$(WXWIN)/lib/Linux -lwx_gtk
+#      -D__WXDEBUG__  -ldmalloc		\
+      -DSWIG_GLOBAL -D__WXGTK__ -L$(WXWIN)/lib/Linux -lwx_gtk     \
+      -L/usr/X11R6/lib -lgtk -lgdk -lglib -lXext -lX11
 
 

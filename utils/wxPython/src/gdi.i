@@ -15,7 +15,6 @@
 
 %{
 #include "helpers.h"
-
 #include <wx/metafile.h>
 %}
 
@@ -35,7 +34,9 @@ public:
     wxBitmap(const wxString& name, long type);
     ~wxBitmap();
 
+#ifdef __WXMSW__
     void Create(int width, int height, int depth = -1);
+#endif
     int GetDepth();
     int GetHeight();
     wxPalette* GetPalette();
@@ -47,8 +48,9 @@ public:
     void SetDepth(int depth);
     void SetHeight(int height);
     void SetMask(wxMask* mask);
-    void SetOk(int isOk);
+#ifdef __WXMSW__
     void SetPalette(wxPalette* palette);
+#endif
     void SetWidth(int width);
 };
 
@@ -88,7 +90,10 @@ public:
 
 class wxIcon : public wxBitmap {
 public:
-    wxIcon(char *name, long flags);
+#ifdef __WXMSW__
+    wxIcon(const wxString& name, long flags,
+           int desiredWidth = -1, int desiredHeight = -1);
+#endif
     ~wxIcon();
 
     int GetDepth();
@@ -98,7 +103,6 @@ public:
     bool Ok();
     void SetDepth(int depth);
     void SetHeight(int height);
-    void SetOk(int isOk);
     void SetWidth(int width);
 };
 
@@ -106,7 +110,9 @@ public:
 
 class wxCursor : public wxBitmap {
 public:
+#ifdef __WXMSW__
     wxCursor(const wxString& cursorName, long flags, int hotSpotX=0, int hotSpotY=0);
+#endif
     ~wxCursor();
     bool Ok();
 };
@@ -142,12 +148,14 @@ public:
     int GetStyle();
     bool GetUnderlined();
     int GetWeight();
+#ifdef __WXMSW__
     void SetFaceName(const wxString& faceName);
     void SetFamily(int family);
     void SetPointSize(int pointSize);
     void SetStyle(int style);
     void SetUnderlined(bool underlined);
     void SetWeight(int weight);
+#endif
 };
 
 //----------------------------------------------------------------------
@@ -198,18 +206,22 @@ public:
     int GetCap();
     wxColour& GetColour();
 
+#ifdef __WXMSW__
             // **** This one needs to return a list of ints (wxDash)
     int GetDashes(wxDash **dashes);
-    int GetJoin();
     wxBitmap* GetStipple();
+#endif
+    int GetJoin();
     int GetStyle();
     int GetWidth();
     bool Ok();
     void SetCap(int cap_style);
     void SetColour(wxColour& colour);
+#ifdef __WXMSW__
     void SetDashes(int LCOUNT, wxDash* LIST);
-    void SetJoin(int join_style);
     void SetStipple(wxBitmap * stipple);
+#endif
+    void SetJoin(int join_style);
     void SetStyle(int style);
     void SetWidth(int width);
 };
@@ -231,9 +243,11 @@ public:
     wxBitmap * GetStipple();
     int GetStyle();
     bool Ok();
+#ifdef __WXMSW__
     void SetColour(wxColour &colour);
     void SetStipple(wxBitmap *bitmap);
     void SetStyle(int style);
+#endif
 };
 
 //----------------------------------------------------------------------
@@ -242,7 +256,7 @@ public:
 
 class wxDC {
 public:
-    wxDC();
+//    wxDC(); **** abstract base class, can't instantiate.
     ~wxDC();
 
     void BeginDrawing();
@@ -271,7 +285,12 @@ public:
     void EndDoc();
     void EndDrawing();
     void EndPage();
+#ifdef __WXWIN__
     void FloodFill(long x, long y, const wxColour& colour, int style=wxFLOOD_SURFACE);
+#endif
+#ifdef __WXGTK__
+    void FloodFill(long x, long y, wxColour* colour, int style=wxFLOOD_SURFACE);
+#endif
     wxBrush * GetBackground();
     wxBrush * GetBrush();
     long GetCharHeight();
@@ -283,7 +302,13 @@ public:
     int GetMapMode();
     bool GetOptimization();
     wxPen * GetPen();
-    //bool GetPixel(int x, int y, wxColour *T_OUTPUT);  ****  See below.
+    %addmethods {
+        %new wxColour* GetPixel(long x, long y) {
+            wxColour* wc = new wxColour();
+            self->GetPixel(x, y, wc);
+            return wc;
+        }
+    }
     void GetSize(int* OUTPUT, int* OUTPUT); //void GetSize(long* OUTPUT, long* OUTPUT);
     wxColour& GetTextBackground();
     void GetTextExtent(const wxString& string, long *OUTPUT, long *OUTPUT,
@@ -317,12 +342,6 @@ public:
 
 
     %addmethods {
-        %new wxColour* GetPixel(long x, long y) {
-            wxColor* wc = new wxColor();
-            self->GetPixel(x, y, wc);
-            return wc;
-        }
-
             // This one is my own creation...
         void DrawBitmap(wxBitmap* bitmap, long x, long y, bool swapPalette=TRUE) {
             wxMemoryDC* memDC = new wxMemoryDC;
@@ -389,19 +408,23 @@ public:
 
 //---------------------------------------------------------------------------
 
+#ifdef __WXMSW__
 class  wxPrinterDC : public wxDC {
 public:
     wxPrinterDC(const wxString& driver, const wxString& device, const wxString& output,
                 bool interactive = TRUE, int orientation = wxPORTRAIT);
 };
+#endif
 
 //---------------------------------------------------------------------------
 
+#ifdef __WXMSW__
 class wxMetaFileDC : public wxDC {
 public:
     wxMetaFileDC(const wxString& filename = wxPyEmptyStr);
     wxMetaFile* Close();
 };
+#endif
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
@@ -461,6 +484,11 @@ extern wxColour wxNullColour;
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.3  1998/08/18 19:48:16  RD
+// more wxGTK compatibility things.
+//
+// It builds now but there are serious runtime problems...
+//
 // Revision 1.2  1998/08/15 07:36:35  RD
 // - Moved the header in the .i files out of the code that gets put into
 // the .cpp files.  It caused CVS conflicts because of the RCS ID being

@@ -76,7 +76,7 @@ void wxPyApp::AfterMainLoop(void) {
 }
 
 
-//----------------------------------------------------------------------
+//---------------------------------------------------------------------
 // a few native methods to add to the module
 //----------------------------------------------------------------------
 
@@ -100,8 +100,18 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
     wxPythonApp->OnInitGui();
 #endif
 #ifdef __WXGTK__
-    wxTheApp->argc = 0;
-    wxTheApp->argv = NULL;
+    wxClassInfo::InitializeClasses();
+    PyObject* sysargv = PySys_GetObject("argv");
+    int argc = PyList_Size(sysargv);
+    char** argv = new char*[argc+1];
+    int x;
+    for(x=0; x<argc; x++)
+        argv[x] = PyString_AsString(PyList_GetItem(sysargv, x));
+    argv[argc] = NULL;
+
+
+    wxTheApp->argc = argc;
+    wxTheApp->argv = argv;
 
     gtk_init( &wxTheApp->argc, &wxTheApp->argv );
 
@@ -139,14 +149,16 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
         wxPythonApp->DeletePendingObjects();
         wxPythonApp->OnExit();
 #ifdef __WXMSW__
-    wxApp::CleanUp();
+        wxApp::CleanUp();
 #endif
 #ifdef __WXGTK__
-    wxApp::CommonCleanUp();
+        wxApp::CommonCleanUp();
 #endif
         PyErr_SetString(PyExc_SystemExit, "OnInit returned false, exiting...");
         return NULL;
     }
+
+    wxTheApp->m_initialized = (wxTopLevelWindows.Number() > 0);
 
     Py_INCREF(Py_None);
     return Py_None;
@@ -274,7 +286,7 @@ PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
 #define wxPlatform "__GTK__"
 #endif
 #if defined(__WIN32__) || defined(__WXMSW__)
-#define wxPlatform "__WIN32__"
+#define wxPlatform "__WXMSW__"
 #endif
 #ifdef __WXMAC__
 #define wxPlatform "__MAC__"
@@ -1059,6 +1071,11 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.5  1998/08/18 19:48:17  RD
+// more wxGTK compatibility things.
+//
+// It builds now but there are serious runtime problems...
+//
 // Revision 1.4  1998/08/16 04:31:06  RD
 // More wxGTK work.
 //

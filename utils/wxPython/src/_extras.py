@@ -370,17 +370,18 @@ class wxFrame(wxFramePtr):
         _StdFrameCallbacks(self)
 
 
-class wxMiniFrame(wxMiniFramePtr):
-    def __init__(self,arg0,arg1,arg2,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(windowsc.new_wxMiniFrame,(arg0.this,arg1,arg2,)+args)
-        self.thisown = 1
-        _StdFrameCallbacks(self)
+if wxPlatform == '__WXMSW__':
+    class wxMiniFrame(wxMiniFramePtr):
+        def __init__(self,arg0,arg1,arg2,*args) :
+            argl = map(None,args)
+            try: argl[0] = argl[0].this
+            except: pass
+            try: argl[1] = argl[1].this
+            except: pass
+            args = tuple(argl)
+            self.this = apply(windowsc.new_wxMiniFrame,(arg0.this,arg1,arg2,)+args)
+            self.thisown = 1
+            _StdFrameCallbacks(self)
 
 
 class wxPanel(wxPanelPtr):
@@ -603,17 +604,18 @@ class wxScrollBar(wxScrollBarPtr):
         self.thisown = 1
         _StdWindowCallbacks(self)
 
-class wxSpinButton(wxSpinButtonPtr):
-    def __init__(self,arg0,*args) :
-        argl = map(None,args)
-        try: argl[1] = argl[1].this
-        except: pass
-        try: argl[2] = argl[2].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(controlsc.new_wxSpinButton,(arg0.this,)+args)
-        self.thisown = 1
-        _StdWindowCallbacks(self)
+if wxPlatform == '__WXMSW__':
+    class wxSpinButton(wxSpinButtonPtr):
+        def __init__(self,arg0,*args) :
+            argl = map(None,args)
+            try: argl[1] = argl[1].this
+            except: pass
+            try: argl[2] = argl[2].this
+            except: pass
+            args = tuple(argl)
+            self.this = apply(controlsc.new_wxSpinButton,(arg0.this,)+args)
+            self.thisown = 1
+            _StdWindowCallbacks(self)
 
 class wxStaticBitmap(wxStaticBitmapPtr):
     def __init__(self,arg0,arg1,arg2,*args) :
@@ -716,7 +718,7 @@ wxPyDefaultSize.Set(-1,-1)
 ##         self.isShown = false
 
 
-_defRedirect = (wxPlatform == '__WIN32__')
+_defRedirect = (wxPlatform == '__WXMSW__')
 
 #----------------------------------------------------------------------
 # The main application class.  Derive from this and implement an OnInit
@@ -760,6 +762,11 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.2  1998/08/18 19:48:12  RD
+# more wxGTK compatibility things.
+#
+# It builds now but there are serious runtime problems...
+#
 # Revision 1.1  1998/08/09 08:25:49  RD
 # Initial version
 #

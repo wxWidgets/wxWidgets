@@ -209,11 +209,13 @@ public:
                  const wxString& strText,
                  bool bSelect = FALSE,
                  int imageId = -1);
+#ifdef __WXMSW__
     bool InsertPage(int nPage,
                     /*wxNotebookPage*/ wxWindow *pPage,
                     const wxString& strText,
                     bool bSelect = FALSE,
                     int imageId = -1);
+#endif
     wxNotebookPage *GetPage(int nPage);
 
 };
@@ -222,6 +224,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.3  1998/08/18 19:48:20  RD
+// more wxGTK compatibility things.
+//
+// It builds now but there are serious runtime problems...
+//
 // Revision 1.2  1998/08/15 07:36:50  RD
 // - Moved the header in the .i files out of the code that gets put into
 // the .cpp files.  It caused CVS conflicts because of the RCS ID being
