@@ -809,6 +809,9 @@ void wxScrollHelper::HandleOnChar(wxKeyEvent& event)
         szy = -1;
     }
 
+    int xScrollOld = m_xScrollPosition,
+        yScrollOld = m_yScrollPosition;
+
     int dsty;
     switch ( event.KeyCode() )
     {
@@ -850,6 +853,22 @@ void wxScrollHelper::HandleOnChar(wxKeyEvent& event)
         default:
             // not for us
             event.Skip();
+    }
+
+    if ( m_xScrollPosition != xScrollOld )
+    {
+        wxScrollWinEvent event(wxEVT_SCROLLWIN_THUMBTRACK, m_xScrollPosition,
+                               wxHORIZONTAL);
+        event.SetEventObject(m_win);
+        m_win->GetEventHandler()->ProcessEvent(event);
+    }
+
+    if ( m_yScrollPosition != yScrollOld )
+    {
+        wxScrollWinEvent event(wxEVT_SCROLLWIN_THUMBTRACK, m_yScrollPosition,
+                               wxVERTICAL);
+        event.SetEventObject(m_win);
+        m_win->GetEventHandler()->ProcessEvent(event);
     }
 }
 
