@@ -1,0 +1,65 @@
+\section{\class{wxHelpEvent}}\label{wxhelpevent}
+
+A help event is sent when the user has requested context-sensitive help.
+This can either be caused by the application requesting
+context-sensitive help mode via \helpref{wxContextHelp}{wxcontexthelp}, or
+(on MS Windows) by the system generating a WM\_HELP message when the user pressed F1 or clicked
+on the query button in a dialog caption.
+
+A help event is sent to the window that the user clicked on, and is propagated up the
+window hierarchy until the event is processed or there are no more event handlers.
+The application should call wxEvent::GetId to check the identity of the clicked-on window,
+and then either show some suitable help or call wxEvent::Skip if the identifier is unrecognised.
+Calling Skip is important because it allows wxWindows to generate further events for ancestors
+of the clicked-on window. Otherwise it would be impossible to show help for container windows,
+since processing would stop after the first window found.
+
+\wxheading{Derived from}
+
+\helpref{wxCommandEvent}{wxcommandevent}\\
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/event.h>
+
+\wxheading{Event table macros}
+
+To process an activate event, use these event handler macros to direct input to a member
+function that takes a wxHelpEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_HELP(id, func)}}{Process a wxEVT\_HELP event.}
+\twocolitem{{\bf EVT\_HELP\_RANGE(id1, id2, func)}}{Process a wxEVT\_HELP event for a range of ids.}
+\end{twocollist}%
+
+\wxheading{See also}
+
+\helpref{wxContextHelp}{wxcontexthelp},\rtfsp
+\helpref{wxDialog}{wxdialog},\rtfsp
+\helpref{Event handling overview}{eventhandlingoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxHelpEvent::wxHelpEvent}
+
+\func{}{wxHelpEvent}{\param{WXTYPE }{eventType = 0}, \param{bool}{ active = TRUE}, \param{wxWindowID }{id = 0},
+ \param{const wxPoint\& }{point}}
+
+Constructor.
+
+\membersection{wxHelpEvent::GetPosition}\label{wxhelpeventgetposition}
+
+\constfunc{const wxPoint\&}{GetPosition}{\void}
+
+Returns the left-click position of the mouse, in screen coordinates. This allows
+the application to position the help appropriately.
+
+\membersection{wxHelpEvent::SetPosition}\label{wxhelpeventsetposition}
+
+\func{void}{SetPosition}{\param{const wxPoint\&}{ pt}}
+
+Sets the left-click position of the mouse, in screen coordinates.
+

@@ -1,0 +1,58 @@
+\section{\class{wxContextHelp}}\label{wxcontexthelp}
+
+This class changes the cursor to a query and puts the application into a 'context-sensitive help mode'.
+When the user left-clicks on a window within the specified window, a wxEVT\_HELP event is
+sent to that control, and the application may respond to it by popping up some help.
+
+For example:
+
+\begin{verbatim}
+  wxContextHelp contextHelp(myWindow);
+\end{verbatim}
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/cshelp.h>
+
+\wxheading{See also}
+
+\helpref{wxHelpEvent}{wxhelpevent},\rtfsp
+\helpref{wxHelpController}{wxhelpcontroller}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxContextHelp::wxContextHelp}
+
+\func{}{wxContextHelp}{\param{wxWindow*}{ window = NULL}, \param{bool}{ doNow = TRUE}}
+
+Constructs a context help object, calling \helpref{BeginContextHelp}{wxcontexthelpbegincontexthelp} if\rtfsp
+{\it doNow} is TRUE (the default).
+
+If {\it window} is NULL, the top window is used.
+
+\membersection{wxContextHelp::\destruct{wxContextHelp}}
+
+\func{}{\destruct{wxContextHelp}}{\void}
+
+Destroys the context help object.
+
+\membersection{wxContextHelp::BeginContextHelp}\label{wxcontexthelpbegincontexthelp}
+
+\func{bool}{BeginContextHelp}{\param{wxWindow*}{ window = NULL}}
+
+Puts the application into context-sensitive help mode. {\it window} is the window
+which will be used to catch events; if NULL, the top window will be used.
+
+Returns TRUE if the application was successfully put into context-sensitive help mode.
+This function only returns when the event loop has finished.
+
+\membersection{wxContextHelp::EndContextHelp}\label{wxcontexthelpendcontexthelp}
+
+\func{bool}{EndContextHelp}{\void}
+
+Ends context-sensitive help mode. Not normally called by the application.
+
