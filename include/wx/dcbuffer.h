@@ -23,7 +23,7 @@
 //   Double buffering helper.
 // --------------------------------------------------------------
 
-class wxBufferedDC : public wxMemoryDC
+class WXDLLEXPORT wxBufferedDC : public wxMemoryDC
 {
 private:
 
@@ -82,7 +82,7 @@ public:
 // Creates a double buffered wxPaintDC, optionally allowing the
 // user to specify their own buffer to use.
 
-class wxBufferedPaintDC : public wxBufferedDC
+class WXDLLEXPORT wxBufferedPaintDC : public wxBufferedDC
 {
 private:
 
