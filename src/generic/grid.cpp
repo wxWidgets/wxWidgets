@@ -1953,7 +1953,7 @@ void wxGridCellAttr::MergeWith(wxGridCellAttr *mergefrom)
         SetBackgroundColour(mergefrom->GetBackgroundColour());
     if ( !HasFont() && mergefrom->HasFont() )
         SetFont(mergefrom->GetFont());
-    if ( !!HasAlignment() && mergefrom->HasAlignment() ){
+    if ( !HasAlignment() && mergefrom->HasAlignment() ){
         int hAlign, vAlign;
         mergefrom->GetAlignment( &hAlign, &vAlign);
         SetAlignment(hAlign, vAlign);
@@ -3997,6 +3997,12 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
     // Clear the attribute cache as the attribute might refer to a different
     // cell than stored in the cache after adding/removing rows/columns.
     ClearAttrCache();
+    // By the same reasoning, the editor should be dismissed if columns are
+    // added or removed. And for consistency, it should IMHO always be
+    // removed, not only if the cell "underneath" it actually changes.
+    // For now, I intentionally do not save the editor's content as the
+    // cell it might want to save that stuff to might no longer exist.
+    DisableCellEditControl();
 #if 0
     // if we were using the default widths/heights so far, we must change them
     // now
