@@ -568,10 +568,10 @@ bool wxSizer::DoSetItemMinSize( wxWindow *window, int width, int height )
         wxSizerItem *item = (wxSizerItem*)node->Data();
         if (item->GetSizer())
         {
-            /* It's a sizer, so lets search recursively. */
+            // It's a sizer, so lets search recursively.
             if (item->GetSizer()->DoSetItemMinSize( window, width, height ))
             {
-                /* A child sizer found the requested windw, exit. */
+                // A child sizer found the requested windw, exit.
                 return TRUE;
             }
         }
@@ -603,10 +603,10 @@ bool wxSizer::DoSetItemMinSize( wxSizer *sizer, int width, int height )
         wxSizerItem *item = (wxSizerItem*)node->Data();
         if (item->GetSizer())
         {
-            /* It's a sizer, so lets search recursively. */
+            // It's a sizer, so lets search recursively.
             if (item->GetSizer()->DoSetItemMinSize( sizer, width, height ))
             {
-                /* A child sizer found the requested windw, exit. */
+                // A child sizer found the requested windw, exit.
                 return TRUE;
             }
         }
@@ -624,13 +624,12 @@ bool wxSizer::DoSetItemMinSize( int pos, int width, int height )
     wxSizerItem *item = (wxSizerItem*) node->Data();
     if (item->GetSizer())
     {
-        /* Sizers contains the minimal size in them, if not calculated ... */
+        // Sizers contains the minimal size in them, if not calculated ...
         item->GetSizer()->DoSetMinSize( width, height );
     }
     else
     {
-        /* ... whereas the minimal size of spacers and windows in stored
-           in the item */
+        // ... but the minimal size of spacers and windows in stored in them
         item->SetInitSize( width, height );
     }
 
@@ -657,19 +656,37 @@ wxGridSizer::wxGridSizer( int cols, int vgap, int hgap )
     m_hgap = hgap;
 }
 
+int wxGridSizer::CalcRowsCols(int& nrows, int& ncols) const
+{
+    int nitems = m_children.GetCount();
+    if ( nitems) 
+    {
+        if ( m_cols )
+        {
+            ncols = m_cols;
+            nrows = (nitems + m_cols - 1) / m_cols;
+        }
+        else if ( m_rows )
+        {
+            ncols = (nitems + m_rows - 1) / m_rows;
+            nrows = m_rows;
+        }
+        else // 0 columns, 0 rows?
+        {
+            wxFAIL_MSG( _T("grid sizer must have either rows or columns fixed") );
+
+            nrows = ncols = 0;
+        }
+    }
+
+    return nitems;
+}
+
 void wxGridSizer::RecalcSizes()
 {
-    if (m_children.GetCount() == 0)
+    int nitems, nrows, ncols;
+    if ( (nitems = CalcRowsCols(nrows, ncols)) == 0 )
         return;
-
-    int nitems = m_children.GetCount();
-    int nrows = m_rows;
-    int ncols = m_cols;
-
-    if (ncols > 0)
-        nrows = (nitems + ncols-1) / ncols;
-    else
-        ncols = (nitems + nrows-1) / nrows;
 
     wxSize sz( GetSize() );
     wxPoint pt( GetPosition() );
@@ -699,17 +716,9 @@ void wxGridSizer::RecalcSizes()
 
 wxSize wxGridSizer::CalcMin()
 {
-    if (m_children.GetCount() == 0)
-        return wxSize(10,10);
-
-    int nitems = m_children.GetCount();
-    int nrows = m_rows;
-    int ncols = m_cols;
-
-    if (ncols > 0)
-        nrows = (nitems + ncols-1) / ncols;
-    else
-        ncols = (nitems + nrows-1) / nrows;
+    int nitems, nrows, ncols;
+    if ( (nitems = CalcRowsCols(nrows, ncols)) == 0 )
+        return wxSize(10, 10);
 
     // Find the max width and height for any component
     int w = 0;
@@ -797,21 +806,16 @@ void wxFlexGridSizer::CreateArrays()
     if (m_colWidths)
         delete[] m_colWidths;
 
-    if (m_children.GetCount() == 0)
-        return;
-
-    int nitems = m_children.GetCount();
-    int nrows = m_rows;
-    int ncols = m_cols;
-
-    if (ncols > 0)
-        nrows = (nitems + ncols-1) / ncols;
-    else
-        ncols = (nitems + nrows-1) / nrows;
+    int nitems, nrows, ncols;
+    if ( (nitems = CalcRowsCols(nrows, ncols)) == 0 )
+    {
+        m_rowHeights =
+        m_colWidths = NULL;
+    }
 
     m_rowHeights = new int[nrows];
     m_colWidths = new int[ncols];
-    
+
     for (int col = 0; col < ncols; col++)
         m_colWidths[ col ] = 0;
     for (int row = 0; row < nrows; row++)
@@ -820,17 +824,9 @@ void wxFlexGridSizer::CreateArrays()
 
 void wxFlexGridSizer::RecalcSizes()
 {
-    if (m_children.GetCount() == 0)
+    int nitems, nrows, ncols;
+    if ( (nitems = CalcRowsCols(nrows, ncols)) == 0 )
         return;
-
-    int nitems = m_children.GetCount();
-    int nrows = m_rows;
-    int ncols = m_cols;
-
-    if (ncols > 0)
-        nrows = (nitems + ncols-1) / ncols;
-    else
-        ncols = (nitems + nrows-1) / nrows;
 
     wxSize sz( GetSize() );
     wxSize minsz( CalcMin() );
@@ -838,7 +834,7 @@ void wxFlexGridSizer::RecalcSizes()
     int    delta;
     size_t idx,num;
     wxArrayInt temp;
-    
+
     // Transfer only those rows into temp which exist in the sizer
     // ignoring the superflouus ones. This prevents a segfault when
     // calling AddGrowableRow( 3 ) if the sizer only has 2 rows.
@@ -855,12 +851,12 @@ void wxFlexGridSizer::RecalcSizes()
     }
 
     temp.Empty();
-    // See above 
+    // See above
     for (idx = 0; idx < m_growableCols.GetCount(); idx++)
         if (m_growableCols[idx] < ncols)
             temp.Add( m_growableCols[idx] );
     num = temp.GetCount();
-    
+
     if ((num > 0) && (sz.x > minsz.x))
     {
         delta = (sz.x - minsz.x) / num;
@@ -895,22 +891,11 @@ void wxFlexGridSizer::RecalcSizes()
 
 wxSize wxFlexGridSizer::CalcMin()
 {
-    if (m_children.GetCount() == 0)
+    int nitems, nrows, ncols;
+    if ( (nitems = CalcRowsCols(nrows, ncols)) == 0 )
         return wxSize(10,10);
 
-    int nitems = m_children.GetCount();
-    int nrows = m_rows;
-    int ncols = m_cols;
-
-    if (ncols > 0)
-        nrows = (nitems + ncols-1) / ncols;
-    else
-        ncols = (nitems + nrows-1) / nrows;
-
     CreateArrays();
-
-    int col;
-    int row;
 
     int i = 0;
     wxNode *node = m_children.First();
@@ -918,8 +903,8 @@ wxSize wxFlexGridSizer::CalcMin()
     {
         wxSizerItem *item = (wxSizerItem*)node->Data();
         wxSize sz( item->CalcMin() );
-        row = i / ncols;
-        col = i % ncols;
+        int row = i / ncols;
+        int col = i % ncols;
         m_rowHeights[ row ] = wxMax( sz.y, m_rowHeights[ row ] );
         m_colWidths[ col ] = wxMax( sz.x, m_colWidths[ col ] );
 
@@ -928,11 +913,11 @@ wxSize wxFlexGridSizer::CalcMin()
     }
 
     int width = 0;
-    for (col = 0; col < ncols; col++)
+    for (int col = 0; col < ncols; col++)
         width += m_colWidths[ col ];
 
     int height = 0;
-    for (row = 0; row < nrows; row++)
+    for (int row = 0; row < nrows; row++)
         height += m_rowHeights[ row ];
 
     return wxSize( width +  (ncols-1) * m_hgap,

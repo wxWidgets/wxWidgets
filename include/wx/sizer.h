@@ -244,6 +244,9 @@ protected:
     int    m_vgap;
     int    m_hgap;
 
+    // return the number of total items and the number of columns and rows
+    int CalcRowsCols(int& rows, int& cols) const;
+
     void SetItemBounds( wxSizerItem *item, int x, int y, int w, int h );
 
 private:
