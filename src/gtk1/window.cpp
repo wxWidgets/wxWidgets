@@ -521,7 +521,8 @@ static int gtk_window_expose_callback( GtkWidget *widget,
     win->GetUpdateRegion() = wxRegion( gdk_event->region );
 
     win->GtkSendPaintEvents();
-
+    
+    
     // Let parent window draw window less widgets
     (* GTK_WIDGET_CLASS (pizza_parent_class)->expose_event) (widget, gdk_event);
 #else
@@ -2595,7 +2596,7 @@ bool wxWindowGTK::PreCreation( wxWindowGTK *parent, const wxPoint &pos,  const w
 void wxWindowGTK::PostCreation()
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid window") );
-
+    
     if (m_wxwindow)
     {
         if (!m_noExpose)
@@ -2617,7 +2618,7 @@ void wxWindowGTK::PostCreation()
                     GTK_SIGNAL_FUNC(gtk_window_event_event_callback), (gpointer)this );
             }
 #else
-            gtk_widget_set_redraw_on_allocate( GTK_WIDGET(m_wxwindow), HasFlag( wxNO_FULL_REPAINT_ON_RESIZE ) );
+            // gtk_widget_set_redraw_on_allocate( GTK_WIDGET(m_wxwindow), HasFlag( wxNO_FULL_REPAINT_ON_RESIZE ) );
 #endif
         }
 
