@@ -33,6 +33,7 @@
 #ifndef WX_PRECOMP
 #include "wx/utils.h"
 #include "wx/app.h"
+#include "wx/hash.h"
 #endif
 
 #if wxUSE_THREADS
@@ -774,7 +775,7 @@ bool wxDebugContext::PrintClasses(void)
   node = wxClassInfo::sm_classTable->Next();
   while (node)
   {
-    info = (wxClassInfo *)node->Data();
+    info = (wxClassInfo *)node->GetData();
     if (info->GetClassName())
     {
         wxString msg(info->GetClassName());
