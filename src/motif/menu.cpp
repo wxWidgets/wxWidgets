@@ -217,7 +217,7 @@ wxMenuBar::~wxMenuBar()
 void wxMenuBar::EnableTop(size_t WXUNUSED(pos), bool WXUNUSED(flag))
 {
   //    wxFAIL_MSG("TODO");
-  wxLogWarning("wxMenuBar::EnableTop not yet implemented.");
+//  wxLogWarning("wxMenuBar::EnableTop not yet implemented.");
 }
 
 void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
