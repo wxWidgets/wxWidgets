@@ -72,6 +72,48 @@ bool wxRadioButton::Create(wxWindow *parent,
 // radio button methods
 // ----------------------------------------------------------------------------
 
+void wxRadioButton::OnCheck()
+{
+    // clear all others radio buttons in our group: for this we need to
+    // find the radio button which is the first in the group, i.e. the one
+    // with wxRB_GROUP style
+    const wxWindowList& siblings = GetParent()->GetChildren();
+    wxWindowList::Node *nodeStart = siblings.Find(this);
+    while ( nodeStart )
+    {
+        // stop if we found a radio button with wxRB_GROUP style or it we
+        // are at the first control
+        if ( !nodeStart->GetPrevious() ||
+             (nodeStart->GetData()->GetWindowStyle() & wxRB_GROUP) )
+            break;
+
+        nodeStart = nodeStart->GetPrevious();
+    }
+
+    // now clear all radio buttons from the starting one until the next
+    // one with wxRB_GROUP style
+    while ( nodeStart )
+    {
+        wxWindow *win = nodeStart->GetData();
+        if ( win != this )
+        {
+            wxRadioButton *btn = wxDynamicCast(win, wxRadioButton);
+            if ( btn )
+            {
+                btn->ClearValue();
+            }
+        }
+
+        nodeStart = nodeStart->GetNext();
+        if ( !nodeStart ||
+             (nodeStart->GetData()->GetWindowStyle() & wxRB_GROUP) )
+        {
+            // we reached the next group
+            break;
+        }
+    }
+}
+
 void wxRadioButton::ChangeValue(bool value)
 {
     if ( value == IsChecked() )
@@ -79,52 +121,11 @@ void wxRadioButton::ChangeValue(bool value)
 
     if ( !IsChecked() )
     {
-        // clear all others radio buttons in our group: for this we need to
-        // find the radio button which is the first in the group, i.e. the one
-        // with wxRB_GROUP style
-        const wxWindowList& siblings = GetParent()->GetChildren();
-        wxWindowList::Node *nodeStart = siblings.Find(this);
-        while ( nodeStart )
-        {
-            // stop if we found a radio button with wxRB_GROUP style or it we
-            // are at the first control
-            if ( !nodeStart->GetPrevious() ||
-                 (nodeStart->GetData()->GetWindowStyle() & wxRB_GROUP) )
-                break;
-
-            nodeStart = nodeStart->GetPrevious();
-        }
-
-        // now clear all radio buttons from the starting one until the next
-        // one with wxRB_GROUP style
-        while ( nodeStart )
-        {
-            wxWindow *win = nodeStart->GetData();
-            if ( win != this )
-            {
-                wxRadioButton *btn = wxDynamicCast(win, wxRadioButton);
-                if ( btn )
-                {
-                    btn->ClearValue();
-                }
-            }
-
-            nodeStart = nodeStart->GetNext();
-            if ( !nodeStart ||
-                 (nodeStart->GetData()->GetWindowStyle() & wxRB_GROUP) )
-            {
-                // we reached the next group
-                break;
-            }
-        }
-
-        SetValue(TRUE);
-
-        SendEvent();
+        wxCheckBox::ChangeValue(value);
     }
     else // attempt to clear a radio button - this can't be done
     {
-        // but still refresh as ou PRESSED flag changed
+        // but still refresh as our PRESSED flag changed
         Refresh();
     }
 }

@@ -242,6 +242,7 @@ wxStdButtonInputHandler::wxStdButtonInputHandler(wxInputHandler *handler)
                        : wxStdInputHandler(handler)
 {
     m_winCapture = NULL;
+    m_winHasMouse = FALSE;
 }
 
 bool wxStdButtonInputHandler::HandleKey(wxControl *control,

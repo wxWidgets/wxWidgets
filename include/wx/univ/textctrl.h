@@ -256,6 +256,9 @@ protected:
     // get the extent (width) of the text
     wxCoord GetTextWidth(const wxString& text) const;
 
+    // get the logical text width (accounting for scrolling)
+    wxCoord GetTotalWidth() const;
+
     // refresh the text in the given (in logical coords) rect
     void RefreshTextRect(wxRect& rect);
 

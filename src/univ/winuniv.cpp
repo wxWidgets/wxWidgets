@@ -41,6 +41,13 @@
 #include "wx/univ/renderer.h"
 #include "wx/univ/theme.h"
 
+// turn Refresh() debugging on/off
+#define WXDEBUG_REFRESH
+
+#ifndef __WXDEBUG__
+    #undef WXDEBUG_REFRESH
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -278,28 +285,51 @@ void wxWindow::DoDraw(wxControlRenderer *renderer)
 
 void wxWindow::Refresh(bool eraseBackground, const wxRect *rectClient)
 {
+    wxRect rectWin;
+    wxPoint pt = GetClientAreaOrigin();
+
+    wxSize size = GetClientSize();
+
     if ( rectClient )
     {
-        wxRect rectWin = *rectClient;
-        rectWin.Offset(GetClientAreaOrigin());
+        rectWin = *rectClient;
 
-        wxWindowNative::Refresh(eraseBackground, &rectWin);
+        // don't refresh anything beyond the client area (scrollbars for
+        // example)
+        if ( rectWin.GetRight() > size.x )
+            rectWin.SetRight(size.x);
+        if ( rectWin.GetBottom() > size.y )
+            rectWin.SetBottom(size.y);
 
-        // debugging helper
-#if 0
+        rectWin.Offset(pt);
+    }
+    else // refresh the entire client area
+    {
+        rectWin.x = pt.x;
+        rectWin.y = pt.y;
+        rectWin.width = size.x;
+        rectWin.height = size.y;
+    }
+
+    wxWindowNative::Refresh(eraseBackground, &rectWin);
+
+    // debugging helper
+#ifdef WXDEBUG_REFRESH
+    static bool s_refreshDebug = FALSE;
+    if ( s_refreshDebug )
+    {
         wxWindowDC dc(this);
-        dc.SetBrush(*wxBLUE_BRUSH);
+        dc.SetBrush(*wxCYAN_BRUSH);
         dc.SetPen(*wxTRANSPARENT_PEN);
         dc.DrawRectangle(rectWin);
 
-        ::GdiFlush();
-        ::Sleep(1000);
-#endif // 0
+        // under Unix we use "--sync" X option for this
+        #ifdef __WXMSW__
+            ::GdiFlush();
+            ::Sleep(200);
+        #endif // __WXMSW__
     }
-    else
-    {
-        wxWindowNative::Refresh(eraseBackground);
-    }
+#endif // WXDEBUG_REFRESH
 }
 
 // ----------------------------------------------------------------------------
@@ -498,6 +528,15 @@ void wxWindow::DoSetClientSize(int width, int height)
 // window class
 // ----------------------------------------------------------------------------
 
+void wxWindow::RefreshScrollbars()
+{
+    if ( m_scrollbarHorz )
+        m_scrollbarHorz->Refresh();
+
+    if ( m_scrollbarVert )
+        m_scrollbarVert->Refresh();
+}
+
 void wxWindow::PositionScrollbars()
 {
     // do not use GetClientSize/Rect as it relies on the scrollbars being
@@ -543,6 +582,8 @@ void wxWindow::PositionScrollbars()
 
         m_scrollbarHorz->SetSize(rectBar, wxSIZE_NO_ADJUSTMENTS);
     }
+
+    RefreshScrollbars();
 }
 
 void wxWindow::SetScrollbar(int orient,
@@ -582,9 +623,10 @@ void wxWindow::SetScrollbar(int orient,
         {
             if ( GetWindowStyle() & wxALWAYS_SHOW_SB )
             {
+                // just disable the scrollbar
                 scrollbar->Disable();
             }
-            else
+            else // really remove the scrollbar
             {
                 delete scrollbar;
 
@@ -592,6 +634,12 @@ void wxWindow::SetScrollbar(int orient,
                     m_scrollbarVert = NULL;
                 else
                     m_scrollbarHorz = NULL;
+
+                // the size of the remaining scrollbar must be adjusted
+                if ( m_scrollbarHorz || m_scrollbarVert )
+                {
+                    PositionScrollbars();
+                }
             }
         }
     }
@@ -679,7 +727,7 @@ wxRect wxWindow::ScrollNoRefresh(int dx, int dy, const wxRect *rectTotal)
         // just redraw everything as nothing of the displayed image will stay
         wxLogTrace(_T("scroll"), _T("refreshing everything"));
 
-        rect = rectTotal ? *rectTotal : GetClientRect();
+        rect = rectTotal ? *rectTotal : wxRect(0, 0, sizeTotal.x, sizeTotal.y);
     }
     else // move the part which doesn't change to the new location
     {

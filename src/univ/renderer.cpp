@@ -497,6 +497,23 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
                    rectUpdate.GetTop(),
                    rectUpdate.GetRight(),
                    rectUpdate.GetBottom());
+
+#if 0 //def WXDEBUG_SCROLLBAR
+        static bool s_refreshDebug = FALSE;
+        if ( s_refreshDebug )
+        {
+            wxClientDC dc(wxConstCast(scrollbar, wxScrollBar));
+            dc.SetBrush(*wxRED_BRUSH);
+            dc.SetPen(*wxTRANSPARENT_PEN);
+            dc.DrawRectangle(rectUpdate);
+
+            // under Unix we use "--sync" X option for this
+            #ifdef __WXMSW__
+                ::GdiFlush();
+                ::Sleep(200);
+            #endif // __WXMSW__
+        }
+#endif // WXDEBUG_SCROLLBAR
     }
 
     wxOrientation orient = scrollbar->IsVertical() ? wxVERTICAL
@@ -620,17 +637,14 @@ void wxControlRenderer::DoDrawItems(const wxListBox *lbox,
     // scrollbar for the long strings
     m_dc.SetClippingRegion(rect.x, rect.y, rect.width + 1, rect.height + 1);
 
-    // the rect should go to the right visible border
-    int widthTotal;
-    lbox->GetVirtualSize(&widthTotal, NULL);
-    if ( widthTotal )
-        rect.width = widthTotal;
-    //else: no horz scrolling at all
-
     // adjust the rect position now
     lbox->CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);
     rect.y += itemFirst*lineHeight;
     rect.height = lineHeight;
+
+    // the rect should go to the right visible border so adjust the width if x
+    // is shifted (rightmost point should stay the same)
+    rect.width -= rect.x;
 
     // we'll keep the text colour unchanged
     m_dc.SetTextForeground(lbox->GetForegroundColour());

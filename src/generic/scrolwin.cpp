@@ -304,7 +304,7 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
 
     if ( needsRefresh )
     {
-        m_targetWindow->Refresh(GetRect());
+        m_targetWindow->Refresh(TRUE, GetRect());
     }
     else
     {

@@ -67,7 +67,6 @@
 enum
 {
     LboxTest_Reset = 100,
-    LboxTest_Create,
     LboxTest_Add,
     LboxTest_AddText,
     LboxTest_AddSeveral,
@@ -111,7 +110,6 @@ public:
 protected:
     // event handlers
     void OnButtonReset(wxCommandEvent& event);
-    void OnButtonCreate(wxCommandEvent& event);
     void OnButtonChange(wxCommandEvent& event);
     void OnButtonDelete(wxCommandEvent& event);
     void OnButtonDeleteSel(wxCommandEvent& event);
@@ -128,10 +126,10 @@ protected:
     void OnCheckOrRadioBox(wxCommandEvent& event);
 
     void OnUpdateUIAddSeveral(wxUpdateUIEvent& event);
-    void OnUpdateUICreateButton(wxUpdateUIEvent& event);
     void OnUpdateUIClearButton(wxUpdateUIEvent& event);
     void OnUpdateUIDeleteButton(wxUpdateUIEvent& event);
     void OnUpdateUIDeleteSelButton(wxUpdateUIEvent& event);
+    void OnUpdateUIResetButton(wxUpdateUIEvent& event);
 
     // reset the listbox parameters
     void Reset();
@@ -156,9 +154,6 @@ protected:
     // should it have horz scroll/vert scrollbar permanently shown?
     bool m_horzScroll,
          m_vertScrollAlways;
-
-    // should the recreate button be enabled?
-    bool m_dirty;
 
     // the controls
     // ------------
@@ -267,7 +262,6 @@ IMPLEMENT_APP(LboxTestApp)
 
 BEGIN_EVENT_TABLE(LboxTestFrame, wxFrame)
     EVT_BUTTON(LboxTest_Reset, LboxTestFrame::OnButtonReset)
-    EVT_BUTTON(LboxTest_Create, LboxTestFrame::OnButtonCreate)
     EVT_BUTTON(LboxTest_Change, LboxTestFrame::OnButtonChange)
     EVT_BUTTON(LboxTest_Delete, LboxTestFrame::OnButtonDelete)
     EVT_BUTTON(LboxTest_DeleteSel, LboxTestFrame::OnButtonDeleteSel)
@@ -281,9 +275,7 @@ BEGIN_EVENT_TABLE(LboxTestFrame, wxFrame)
     EVT_TEXT_ENTER(LboxTest_AddText, LboxTestFrame::OnButtonAdd)
     EVT_TEXT_ENTER(LboxTest_DeleteText, LboxTestFrame::OnButtonDelete)
 
-    EVT_UPDATE_UI_RANGE(LboxTest_Reset, LboxTest_Create,
-                        LboxTestFrame::OnUpdateUICreateButton)
-
+    EVT_UPDATE_UI(LboxTest_Reset, LboxTestFrame::OnUpdateUIResetButton)
     EVT_UPDATE_UI(LboxTest_AddSeveral, LboxTestFrame::OnUpdateUIAddSeveral)
     EVT_UPDATE_UI(LboxTest_Clear, LboxTestFrame::OnUpdateUIClearButton)
     EVT_UPDATE_UI(LboxTest_DeleteText, LboxTestFrame::OnUpdateUIClearButton)
@@ -325,7 +317,6 @@ LboxTestFrame::LboxTestFrame(const wxString& title)
              : wxFrame(NULL, -1, title, wxPoint(100, 100))
 {
     // init everything
-    m_dirty = FALSE;
     m_radioSelMode = (wxRadioBox *)NULL;
 
     m_chkVScroll =
@@ -377,12 +368,8 @@ LboxTestFrame::LboxTestFrame(const wxString& title)
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
     sizerLeft->Add(m_radioSelMode, 0, wxGROW | wxALL, 5);
 
-    wxSizer *sizerBtn = new wxBoxSizer(wxHORIZONTAL);
     wxButton *btn = new wxButton(m_panel, LboxTest_Reset, _T("&Reset"));
-    sizerBtn->Add(btn, 0, wxLEFT | wxRIGHT, 5);
-    btn = new wxButton(m_panel, LboxTest_Create, _T("&Create"));
-    sizerBtn->Add(btn, 0, wxLEFT | wxRIGHT, 5);
-    sizerLeft->Add(sizerBtn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
+    sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
     wxStaticBox *box2 = new wxStaticBox(m_panel, -1, _T("&Change listbox contents"));
@@ -452,13 +439,12 @@ LboxTestFrame::LboxTestFrame(const wxString& title)
     sizerDown->Add(sizerBtns, 0, wxALL | wxALIGN_RIGHT, 5);
 
     // put everything together
-    sizerTop->Add(sizerUp, 1, wxGROW | (wxALL & ~wxBOTTOM), 10);
+    sizerTop->Add(sizerUp, 1, wxGROW | (wxALL & ~(wxTOP | wxBOTTOM)), 10);
     sizerTop->Add(0, 5, 0, wxGROW); // spacer in between
     sizerTop->Add(sizerDown, 0,  wxGROW | (wxALL & ~wxTOP), 10);
 
     // final initialization
     Reset();
-    m_dirty = FALSE;
 
     m_panel->SetAutoLayout(TRUE);
     m_panel->SetSizer(sizerTop);
@@ -483,21 +469,10 @@ LboxTestFrame::~LboxTestFrame()
 
 void LboxTestFrame::Reset()
 {
-    if ( m_radioSelMode->GetSelection() == LboxSel_Single &&
-         !m_chkSort->GetValue() &&
-         m_chkHScroll->GetValue() &&
-         !m_chkVScroll->GetValue() )
-    {
-        // nothing to do
-        return;
-    }
-
     m_radioSelMode->SetSelection(LboxSel_Single);
     m_chkSort->SetValue(FALSE);
     m_chkHScroll->SetValue(TRUE);
     m_chkVScroll->SetValue(FALSE);
-
-    m_dirty = TRUE;
 }
 
 void LboxTestFrame::CreateLbox()
@@ -540,8 +515,6 @@ void LboxTestFrame::CreateLbox()
     m_lbox->Set(items);
     m_sizerLbox->Add(m_lbox, 1, wxGROW | wxALL, 5);
     m_sizerLbox->Layout();
-
-    m_dirty = FALSE;
 }
 
 // ----------------------------------------------------------------------------
@@ -556,10 +529,7 @@ void LboxTestFrame::OnButtonQuit(wxCommandEvent& WXUNUSED(event))
 void LboxTestFrame::OnButtonReset(wxCommandEvent& WXUNUSED(event))
 {
     Reset();
-}
 
-void LboxTestFrame::OnButtonCreate(wxCommandEvent& WXUNUSED(event))
-{
     CreateLbox();
 }
 
@@ -638,9 +608,12 @@ void LboxTestFrame::OnButtonAddSeveral(wxCommandEvent& event)
     m_lbox->InsertItems(items, 0);
 }
 
-void LboxTestFrame::OnUpdateUICreateButton(wxUpdateUIEvent& event)
+void LboxTestFrame::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 {
-    event.Enable(m_dirty);
+    event.Enable( (m_radioSelMode->GetSelection() != LboxSel_Single) ||
+                  m_chkSort->GetValue() ||
+                  !m_chkHScroll->GetValue() ||
+                  m_chkVScroll->GetValue() );
 }
 
 void LboxTestFrame::OnUpdateUIDeleteButton(wxUpdateUIEvent& event)
@@ -681,6 +654,6 @@ void LboxTestFrame::OnListboxDClick(wxCommandEvent& event)
 
 void LboxTestFrame::OnCheckOrRadioBox(wxCommandEvent& event)
 {
-    m_dirty = TRUE;
+    CreateLbox();
 }
 

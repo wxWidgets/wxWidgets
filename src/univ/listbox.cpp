@@ -245,6 +245,7 @@ void wxListBox::DoClear()
     }
 
     m_itemsClientData.Clear();
+    m_selections.Clear();
 }
 
 void wxListBox::Clear()
@@ -371,6 +372,9 @@ void wxListBox::SetSelection(int n, bool select)
         }
         //else: not selected
     }
+
+    wxASSERT_MSG( HasMultipleSelection() || (m_selections.GetCount() < 2),
+                  _T("multiple selected items in single selection lbox?") );
 }
 
 int wxListBox::GetSelection() const
@@ -390,9 +394,15 @@ int wxListBox::GetSelections(wxArrayInt& selections) const
 {
     // always return sorted array to the user
     selections = m_selections;
-    selections.Sort(wxCompareInts);
+    size_t count = m_selections.GetCount();
 
-    return m_selections.GetCount();
+    // don't call sort on an empty array
+    if ( count )
+    {
+        selections.Sort(wxCompareInts);
+    }
+
+    return count;
 }
 
 // ----------------------------------------------------------------------------
@@ -400,18 +410,6 @@ int wxListBox::GetSelections(wxArrayInt& selections) const
 // refreshes (and hence flicker) in case when several listbox items are
 // added/deleted/changed subsequently
 // ----------------------------------------------------------------------------
-
-void wxListBox::Refresh(bool eraseBackground, const wxRect *rect)
-{
-    if ( rect )
-        wxLogTrace(_T("listbox"), _T("Refreshing (%d, %d)-(%d, %d)"),
-                   rect->x, rect->y,
-                   rect->x + rect->width, rect->y + rect->height);
-    else
-        wxLogTrace(_T("listbox"), _T("Refreshing all"));
-
-    wxControl::Refresh(eraseBackground, rect);
-}
 
 void wxListBox::RefreshFromItemToEnd(int from)
 {
@@ -515,9 +513,12 @@ void wxListBox::UpdateScrollbars()
 
     // what should be the scrollbar range now?
     int scrollRangeX = showScrollbarX
-                        ? (maxWidth + 2*charWidth - 1) / charWidth
+                        ? (maxWidth + charWidth - 1) / charWidth + 2 // FIXME
                         : 0;
-    int scrollRangeY = showScrollbarY ? nLines : 0;
+    int scrollRangeY = showScrollbarY
+                        ? nLines +
+                            (size.y % lineHeight + lineHeight - 1) / lineHeight
+                        : 0;
 
     // reset scrollbars if something changed: either the visibility status
     // or the range of a scrollbar which is shown
@@ -558,7 +559,10 @@ void wxListBox::UpdateItems()
         rect.height = size.y;
         rect.y += m_updateFrom*GetLineHeight();
         rect.height = m_updateCount*GetLineHeight();
-        CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);
+
+        // we don't need to calculate x position as we always refresh the
+        // entire line(s)
+        CalcScrolledPosition(0, rect.y, NULL, &rect.y);
 
         wxLogTrace(_T("listbox"), _T("Refreshing items %d..%d (%d-%d)"),
                    m_updateFrom, m_updateFrom + m_updateCount - 1,
@@ -948,8 +952,15 @@ void wxListBox::Activate(int item)
 {
     if ( item != -1 )
         SetCurrentItem(item);
+    else
+        item = m_current;
 
-    if ( m_current != -1 )
+    if ( !(GetWindowStyle() & wxLB_MULTIPLE) )
+    {
+        DeselectAll(item);
+    }
+
+    if ( item != -1 )
     {
         Select();
 

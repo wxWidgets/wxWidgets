@@ -112,9 +112,6 @@ public:
     // override some more base class methods
     virtual bool SetFont(const wxFont& font);
 
-    virtual void Refresh( bool eraseBackground = TRUE,
-                          const wxRect *rect = (const wxRect *) NULL );
-
     // the wxUniversal-specific methods
     // --------------------------------
 

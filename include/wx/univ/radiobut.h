@@ -66,8 +66,12 @@ protected:
     // another radiobutton
     void ClearValue();
 
+    // called when the radio button becomes checked: we clear all the buttons
+    // in the same group with us here
+    virtual void OnCheck();
+
     // send event about radio button selection
-    void SendEvent();
+    virtual void SendEvent();
 
 private:
     DECLARE_DYNAMIC_CLASS(wxRadioButton)

@@ -155,6 +155,10 @@ public:
     // this with both dx and dy non zero)
     wxRect ScrollNoRefresh(int dx, int dy, const wxRect *rect = NULL);
 
+    // after scrollbars are added or removed they must be refreshed by calling
+    // this function
+    void RefreshScrollbars();
+
     // overridden base class methods
     // -----------------------------
 

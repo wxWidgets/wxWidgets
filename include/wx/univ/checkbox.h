@@ -114,6 +114,9 @@ protected:
     // send command event notifying about the checkbox state change
     virtual void SendEvent();
 
+    // called when the checkbox becomes checked - radio button hook
+    virtual void OnCheck();
+
     // get the state corresponding to the flags (combination of wxCONTROL_XXX)
     wxCheckBox::State GetState(int flags) const;
 

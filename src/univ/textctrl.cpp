@@ -64,6 +64,11 @@
 // turn wxTextCtrl::Replace() debugging on (very inefficient!)
 #define WXDEBUG_TEXT_REPLACE
 
+#ifndef __WXDEBUG__
+    #undef WXDEBUG_TEXT
+    #undef WXDEBUG_TEXT_REPLACE
+#endif
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -1427,6 +1432,13 @@ void wxTextCtrl::OnSize(wxSizeEvent& event)
     event.Skip();
 }
 
+wxCoord wxTextCtrl::GetTotalWidth() const
+{
+    wxCoord w;
+    CalcUnscrolledPosition(m_rectText.width, 0, &w, NULL);
+    return w;
+}
+
 wxCoord wxTextCtrl::GetTextWidth(const wxString& text) const
 {
     wxCoord w;
@@ -1984,7 +1996,7 @@ void wxTextCtrl::RefreshPixelRange(long line, wxCoord start, wxCoord width)
     if ( width == 0 )
     {
         // till the end of line
-        rect.width = m_rectText.width - rect.x;
+        rect.width = GetTotalWidth() - rect.x;
     }
     else
     {

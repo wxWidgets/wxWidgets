@@ -92,8 +92,19 @@ void wxCheckBox::SetValue(bool value)
     {
         m_status = status;
 
+        if ( m_status == Status_Checked )
+        {
+            // invoke the hook
+            OnCheck();
+        }
+
         Refresh();
     }
+}
+
+void wxCheckBox::OnCheck()
+{
+    // we do nothing here
 }
 
 // ----------------------------------------------------------------------------

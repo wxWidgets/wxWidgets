@@ -41,6 +41,12 @@
 #include "wx/univ/inphand.h"
 #include "wx/univ/theme.h"
 
+#define WXDEBUG_SCROLLBAR
+
+#ifndef __WXDEBUG__
+    #undef WXDEBUG_SCROLLBAR
+#endif // !__WXDEBUG__
+
 // ----------------------------------------------------------------------------
 // wxScrollBarTimer: this class is used to repeatedly scroll the scrollbar
 // when the mouse is help pressed on the arrow or on the bar. It generates the
@@ -196,13 +202,23 @@ void wxScrollBar::SetScrollbar(int position, int thumbSize,
                                int range, int pageSize,
                                bool refresh)
 {
+    // we only refresh everythign when the range changes, thumb position
+    // changes are handled in OnIdle
+    bool needsRefresh = (range != m_range) ||
+                        (thumbSize != m_thumbSize) ||
+                        (pageSize != m_pageSize);
+
     // set all parameters
     m_range = range;
     m_thumbSize = thumbSize;
     SetThumbPosition(position);
     m_pageSize = pageSize;
 
-    if ( refresh )
+    // ignore refresh parameter unless we really need to refresh everything -
+    // there ir a lot of existing code which just calls SetScrollbar() without
+    // specifying the last parameter even though it doesn't need at all to
+    // refresh the window immediately
+    if ( refresh && needsRefresh )
     {
         // and update the window
         Refresh();
@@ -270,6 +286,23 @@ void wxScrollBar::OnIdle(wxIdleEvent& event)
                                                                m_thumbPosOld);
 #endif // 0/1
                     }
+
+#ifdef WXDEBUG_SCROLLBAR
+        static bool s_refreshDebug = FALSE;
+        if ( s_refreshDebug )
+        {
+            wxClientDC dc(this);
+            dc.SetBrush(*wxCYAN_BRUSH);
+            dc.SetPen(*wxTRANSPARENT_PEN);
+            dc.DrawRectangle(rect);
+
+            // under Unix we use "--sync" X option for this
+            #ifdef __WXMSW__
+                ::GdiFlush();
+                ::Sleep(200);
+            #endif // __WXMSW__
+        }
+#endif // WXDEBUG_SCROLLBAR
 
                     Refresh(TRUE, &rect);
                 }
