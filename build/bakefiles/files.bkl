@@ -2012,7 +2012,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/radiobut.mm
     src/cocoa/region.mm
     src/cocoa/scrolbar.mm
-    src/cocoa/settings.cpp
+    src/cocoa/settings.mm
     src/cocoa/slider.mm
     src/cocoa/sound.mm
     src/cocoa/spinbutt.mm
