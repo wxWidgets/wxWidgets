@@ -56,7 +56,7 @@ dnl   libwx_$(TOOLKIT)-$(WX_RELEASE).so.$(WX_CURRENT).$(WX_REVISION).$(WX_AGE)
 wx_major_version_number=2
 wx_minor_version_number=5
 wx_release_number=3
-wx_subrelease_number=2
+wx_subrelease_number=3
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
 WX_VERSION=$WX_RELEASE.$wx_release_number
@@ -66,7 +66,7 @@ WX_MSW_VERSION=$wx_major_version_number$wx_minor_version_number$wx_release_numbe
 
 WX_CURRENT=3
 WX_REVISION=0
-WX_AGE=2
+WX_AGE=3
 
 
 dnl ------------------------------------------------------------------------
