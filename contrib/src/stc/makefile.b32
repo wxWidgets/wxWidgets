@@ -70,6 +70,8 @@ STCCPPFLAGS=$(DLL_FLAGS) $(EXTRACPPFLAGS) @$(STCCFG)
 
 default: $(STCCFG) $(LIBTARGET)
 
+cleancfg: 
+	del $(STCCFG)
 
 {$(S)}.cxx.obj:
 	bcc32 $(STCCPPFLAGS) -P -c {$< }
@@ -91,7 +93,8 @@ $(STCCFG): makefile.b32
 -tWM
 
 -I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/generic;$(WXDIR)/src/png;$(WXDIR)/src/jpeg;$(WXDIR)/src/zlib;$(WXDIR)/src/xpm;$(WXDIR)/src/tiff
--I$(WXDIR)\include\wx\msw\gnuwin32
+-I$(WXDIR)\include\wx\msw\gnuwin32;$(ARCHINCDIR)
+
 
 -L$(BCCDIR)\lib
 -D__WXWIN__

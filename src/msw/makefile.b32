@@ -377,8 +377,6 @@ HTMLOBJS = $(MSWDIR)\helpctrl.obj \
 		$(MSWDIR)\winpars.obj
 
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
-ARCHINCDIR=$(WXDIR)\lib\msw
-ARCHSETUPH=$(ARCHINCDIR)\wx\setup.h
 
 default:	wx
 
