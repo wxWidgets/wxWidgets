@@ -4,12 +4,12 @@ started, stopped, reversed, etc.  Useful for showing
 an ongoing process (like most web browsers use) or
 simply for adding eye-candy to an application.
 
-Throbbers run in a separate thread so normal application
-processing can continue unencumbered.
+Throbbers utilize a wxTimer so that normal processing
+can continue unencumbered.
 """
 
 #
-# throbber.py - Cliff Wells <clifford.wells@attbi.com>
+# throbber.py - Cliff Wells <clifford.wells@comcast.net>
 #
 # Thanks to Harald Massa <harald.massa@suedvers.de> for
 # suggestions and sample code.
@@ -17,23 +17,22 @@ processing can continue unencumbered.
 # $Id$
 #
 
-import threading, os
-from wxPython.wx import *
+import os
+import wx
 
 # ------------------------------------------------------------------------------
-
-wxEVT_UPDATE_THROBBER = wxNewEventType()
+THROBBER_EVENT = wx.NewEventType()
 def EVT_UPDATE_THROBBER(win, func):
-    win.Connect(-1, -1, wxEVT_UPDATE_THROBBER, func)
+    win.Connect(-1, -1, THROBBER_EVENT, func)
 
-class UpdateThrobberEvent(wxPyEvent):
+class UpdateThrobberEvent(wx.PyEvent):
     def __init__(self):
-        wxPyEvent.__init__(self)
-        self.SetEventType(wxEVT_UPDATE_THROBBER)
+        wx.PyEvent.__init__(self)
+        self.SetEventType(THROBBER_EVENT)
 
 # ------------------------------------------------------------------------------
 
-class Throbber(wxPanel):
+class Throbber(wx.Panel):
     """
     The first argument is either the name of a file that will be split into frames
     (a composite image) or a list of  strings of image names that will be treated
@@ -46,8 +45,8 @@ class Throbber(wxPanel):
     """
     def __init__(self, parent, id,
                  bitmap,          # single (composite) bitmap or list of bitmaps
-                 pos = wxDefaultPosition,
-                 size = wxDefaultSize,
+                 pos = wx.DefaultPosition,
+                 size = wx.DefaultSize,
                  frameDelay = 0.1,# time between frames
                  frames = 0,      # number of frames (only necessary for composite image)
                  frameWidth = 0,  # width of each frame (only necessary for composite image)
@@ -56,9 +55,10 @@ class Throbber(wxPanel):
                  reverse = 0,     # reverse direction at end of animation
                  style = 0,       # window style
                  name = "throbber"):
-        wxPanel.__init__(self, parent, id, pos, size, style, name)
+        wx.Panel.__init__(self, parent, id, pos, size, style, name)
         self.name = name
         self.label = label
+        self.running = (1 != 1)
         _seqTypes = (type([]), type(()))
 
         # set size, guessing if necessary
@@ -115,18 +115,20 @@ class Throbber(wxPanel):
 
         self.SetClientSize((width, height))
 
-        EVT_PAINT(self, self.OnPaint)
-        EVT_UPDATE_THROBBER(self, self.Rotate)
-        EVT_WINDOW_DESTROY(self, self.OnDestroyWindow)
+        timerID  = wx.NewId()
+        self.timer = wx.Timer(self, timerID)
 
-        self.event = threading.Event()
-        self.event.set() # we start out in the "resting" state
+        EVT_UPDATE_THROBBER(self, self.Rotate)
+        wx.EVT_PAINT(self, self.OnPaint)
+        wx.EVT_TIMER(self, timerID, self.OnTimer)
+        wx.EVT_WINDOW_DESTROY(self, self.OnDestroyWindow)
+            
+
+    def OnTimer(self, event):
+        wx.PostEvent(self, UpdateThrobberEvent())
 
 
     def OnDestroyWindow(self, event):
-        # this is currently broken due to a bug in wxWindows... hopefully
-        # it'll be fixed soon.  Meanwhile be sure to explicitly call Stop()
-        # before the throbber is destroyed.
         self.Stop()
         event.Skip()
 
@@ -137,27 +139,16 @@ class Throbber(wxPanel):
             dc.DrawBitmap(self.overlay, self.overlayX, self.overlayY, True)
         if self.label and self.showLabel:
             dc.DrawText(self.label, self.labelX, self.labelY)
-            dc.SetTextForeground(wxWHITE)
+            dc.SetTextForeground(wx.WHITE)
             dc.DrawText(self.label, self.labelX-1, self.labelY-1)
 
 
     def OnPaint(self, event):
-        self.Draw(wxPaintDC(self))
+        self.Draw(wx.PaintDC(self))
         event.Skip()
 
 
-    def UpdateThread(self):
-        try:
-            while hasattr(self, 'event') and not self.event.isSet():
-                wxPostEvent(self, UpdateThrobberEvent())
-                self.event.wait(self.frameDelay)
-        except wxPyDeadObjectError: # BUG: we were destroyed
-            return
-
-
     def Rotate(self, event):
-        if self.event.isSet():
-            return
         self.current += self.direction
         if self.current >= len(self.sequence):
             if self.autoReverse:
@@ -171,22 +162,22 @@ class Throbber(wxPanel):
                 self.current = 1
             else:
                 self.current = len(self.sequence) - 1
-        self.Draw(wxClientDC(self))
+        self.Draw(wx.ClientDC(self))
 
 
     # --------- public methods ---------
     def SetFont(self, font):
         """Set the font for the label"""
-        wxPanel.SetFont(self, font)
+        wx.Panel.SetFont(self, font)
         self.SetLabel(self.label)
-        self.Draw(wxClientDC(self))
+        self.Draw(wx.ClientDC(self))
 
 
     def Rest(self):
         """Stop the animation and return to frame 0"""
         self.Stop()
         self.current = 0
-        self.Draw(wxClientDC(self))
+        self.Draw(wx.ClientDC(self))
 
 
     def Reverse(self):
@@ -196,28 +187,29 @@ class Throbber(wxPanel):
 
     def Running(self):
         """Returns True if the animation is running"""
-        return not self.event.isSet()
+        return self.running
 
 
     def Start(self):
         """Start the animation"""
-        if not self.Running():
-            self.event.clear()
-            thread = threading.Thread(target = self.UpdateThread,
-                                      name = "%s-thread" % self.name)
-            thread.start()
+        if not self.running:
+            self.running = not self.running
+            self.timer.Start(self.frameDelay * 1000)
 
 
     def Stop(self):
         """Stop the animation"""
-        if self.event.isSet():
-            return
-        self.event.set()
+        if self.running:
+            self.timer.Stop()
+            self.running = not self.running
 
 
     def SetFrameDelay(self, frameDelay = 0.05):
         """Delay between each frame"""
         self.frameDelay = frameDelay
+        if self.running:
+            self.Stop()
+            self.Start()
 
 
     def ToggleOverlay(self, state = None):
@@ -226,7 +218,7 @@ class Throbber(wxPanel):
             self.showOverlay = not self.showOverlay
         else:
             self.showOverlay = state
-        self.Draw(wxClientDC(self))
+        self.Draw(wx.ClientDC(self))
 
 
     def ToggleLabel(self, state = None):
@@ -235,7 +227,7 @@ class Throbber(wxPanel):
             self.showLabel = not self.showLabel
         else:
             self.showLabel = state
-        self.Draw(wxClientDC(self))
+        self.Draw(wx.ClientDC(self))
 
 
     def SetLabel(self, label):
@@ -245,7 +237,7 @@ class Throbber(wxPanel):
             extentX, extentY = self.GetTextExtent(label)
             self.labelX = (self.width - extentX)/2
             self.labelY = (self.height - extentY)/2
-        self.Draw(wxClientDC(self))
+        self.Draw(wx.ClientDC(self))
 
 
 
