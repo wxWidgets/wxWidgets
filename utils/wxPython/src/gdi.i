@@ -322,12 +322,6 @@ public:
 
 //----------------------------------------------------------------------
 
-#ifdef __WXMSW__
-typedef unsigned long wxDash;
-#else
-typedef char wxDash;
-#endif
-
 
 class wxPen {
 public:

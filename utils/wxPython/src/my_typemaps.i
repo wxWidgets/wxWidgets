@@ -45,6 +45,17 @@
     delete [] $source;
 }
 
+// wxDash is a signed char
+%typemap(python,in) wxDash* choices  {
+    $target = (wxDash*)byte_LIST_helper($source);
+    if ($target == NULL) {
+        return NULL;
+    }
+}
+%typemap(python,freearg) wxDash* choices {
+    delete [] $source;
+}
+
 
 %typemap(python,in) int* choices  {
     $target = int_LIST_helper($source);
@@ -77,15 +88,6 @@
 %typemap(python,freearg) unsigned long* choices {
     delete [] $source;
 }
-
-
-#ifdef __WXMSW__
-%typemap(python,in) wxDash* choices = unsigned long* choices;
-%typemap(python,freearg) wxDash* choices = unsigned long* choices;
-#else
-%typemap(python,in) wxDash* choices = byte* choices;
-%typemap(python,freearg) wxDash* choices = byte* choices;
-#endif
 
 
 %typemap(python,in) char** choices {
