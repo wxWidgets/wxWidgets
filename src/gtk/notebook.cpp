@@ -566,7 +566,7 @@ bool wxNotebook::DeleteAllPages()
 
 bool wxNotebook::DeletePage( size_t page )
 {
-    if ( m_selection >= page )
+    if ( m_selection != -1 && (size_t)m_selection >= page )
     {
         // the index will become invalid after the page is deleted
         m_selection = -1;
