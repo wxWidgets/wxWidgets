@@ -1562,3 +1562,23 @@ bool wxQuantize::Quantize(const wxImage& src, wxImage& dest, wxPalette** pPalett
     return TRUE;
 }
 
+// This version sets a palette in the destination image so you don't
+// have to manage it yourself.
+
+bool wxQuantize::Quantize(const wxImage& src, wxImage& dest, int desiredNoColours,
+        unsigned char** eightBitData, int flags)
+{
+    wxPalette* palette = NULL;
+    if (Quantize(src, dest, & palette, desiredNoColours, eightBitData, flags))
+    {
+        if (palette)
+        {
+            dest.SetPalette(* palette);
+            delete palette;
+        }
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
