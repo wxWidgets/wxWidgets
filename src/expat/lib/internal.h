@@ -38,6 +38,9 @@
    Likely reason: __fastcall on Windows is like stdcall, therefore
    the compiler cannot perform stack optimizations for call clusters.
 */
+#ifdef FASTCALL
+#undef FASTCALL
+#endif
 #define FASTCALL
 #define PTRCALL
 #define PTRFASTCALL
