@@ -9,6 +9,7 @@ s|*OPTIMISE*|@OPTIMISE@|g
 s|*CC*|@CC@|g
 s|*CFLAGS*|@CFLAGS@|g
 s|*CPP*|@CPP@|g
+s|*CPPFLAGS*|@CPPFLAGS@|g
 s|*CXX*|@CXX@|g
 s|*CXXFLAGS*|@CXXFLAGS@|g
 s|*CXXCPP*|@CXXCPP@|g

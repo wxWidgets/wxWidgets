@@ -431,6 +431,15 @@ if test "$ac_cv_header_linux_joystick_h" = "yes"; then
 fi
 AC_SUBST(GTK_JOYSTICK)
 
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+AC_CHECK_HEADERS(iostream)
+if test "x$HAVE_IOSTREAM" = "x" ; then
+  AC_DEFINE(wxUSE_IOSTREAMH)
+fi
+AC_LANG_RESTORE
+
+dnl   defines HAVE_IOSTREAM
 dnl ###################
 dnl # checks typedefs #
 dnl ###################
