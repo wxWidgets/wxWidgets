@@ -548,6 +548,14 @@ wxTextCtrl under wxGTK) but is not implemented on all platforms nor for all
 controls so it is mostly just a hint to wxWindows and not a mandatory
 directive.
 
+\membersection{wxWindow::GetAccessible}\label{wxwindowgetaccessible}
+
+\func{wxAccessibile*}{GetAccessible}{\void}
+
+Returns the accessible object for this window, if any.
+
+See also \helpref{wxAccessible}{wxaccessible}.
+
 \membersection{wxWindow::GetAdjustedBestSize}\label{wxwindowgetadjustedbestsize}
 
 \constfunc{wxSize}{GetAdjustedBestSize}{\void}
@@ -1928,6 +1936,15 @@ redrawn. Note that it is rarely required to call this function from a user progr
 \func{virtual void}{SetAcceleratorTable}{\param{const wxAcceleratorTable\&}{ accel}}
 
 Sets the accelerator table for this window. See \helpref{wxAcceleratorTable}{wxacceleratortable}.
+
+\membersection{wxWindow::SetAccessible}\label{wxwindowsetaccessible}
+
+\func{void}{SetAccessible}{\param{wxAccessibile*}{ accessible}}
+
+Sets the accessible for this window. Any existing accessible for this window
+will be deleted first, if not identical to {\it accessible}.
+
+See also \helpref{wxAccessible}{wxaccessible}.
 
 \membersection{wxWindow::SetAutoLayout}\label{wxwindowsetautolayout}
 
