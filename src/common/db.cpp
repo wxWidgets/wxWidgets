@@ -33,11 +33,12 @@
 // SYNOPSIS STOP
 */
 
+#include "wx/wxprec.h"
+
 // Use this line for wxWindows v1.x
 //#include "wx_ver.h"
 // Use this line for wxWindows v2.x
 #include "wx/version.h"
-#include "wx/wxprec.h"
 
 #if wxMAJOR_VERSION == 2
 	#ifdef __GNUG__

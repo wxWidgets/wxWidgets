@@ -8,23 +8,69 @@ First release Feb. 1999, detlev@reymann-online.de
 
 1. What you can do with this ide-files
 ======================================
-There are three ide-files. One ide-file should help you to create the wxWindows libraries from within the Ide of Borlands C++, v. 5.x. The second is called bc32d.ide and produces the debug-version of the wxWindows-library.
-If you want to produce the debugging-version, using the special ide-file bc32d.ide you have to create a seperate subdirectory \WXWIN_PATH\src\debug.
-The last one should help you to create most of the samples of wxWindows.
+
+There are two ide-files. src\bc32.ide should help you to
+create the wxWindows libraries from within the Ide of Borlands
+C++, v. 5.x. Note that this doesn't include debugging code: you
+need to change the settings if you wish to include debug
+information. Previously, bc32d.ide was supplied with debug
+settings, but this proved to time-consuming to maintain.
 
 2. Where to install the files
 =============================
-You should copy the files for the libraries into the src-directory of your wxWindows-Installation (e.g. C:\wxwin\src).
-And the other file for the samples should be copied into the samples-directory (e.g. C:\wxwin\samples).
+
+You should copy the files for the libraries into the
+src-directory of your wxWindows-Installation (e.g. C:\wxwin\src).
+And the other file for the samples should be copied into the
+samples-directory (e.g. C:\wxwin\samples).
+
+(If installing from setup.exe or wx2..._bc.zip the files
+will be installed into the appropriate directories
+automatically).
 
 3. How to modify them for your own needs
 ========================================
-If your wxWindows-Installation resides on the same drive as your Borland-Compiler and additionally the Borland-Installation is the default (e.g. C:\BC5) then there should be no need to change anything.
-Otherwise please change the path from within the ide (Options->project->directories). Because we use the $inherit-makro (Julian foung the trick), this should do the trick.
+
+If your wxWindows-Installation resides on the same drive as your
+Borland-Compiler and additionally the Borland-Installation is
+the default (e.g. C:\BC5) then there should be no need to change
+anything. Otherwise please change the path from within the ide
+(Options->project->directories). Because we use the
+$inherit-macro (Julian found the trick), this should work.
+
+To add a new sample to samples\bc32.ide, follow these steps:
+
+a. Choose Project->New target... and type in e.g.
+   samples\newsample. Press OK.
+b. Static, no OWL, MFC or class libraries. Press OK.
+c. Right-click on the new node, choose Add node... and add
+   ..\lib\wx32.lib. Add any other source files you require.
+d. Right-click on the new node, choose Edit Local Options.. and
+   add in Directories, specify the following:
+
+   Include: $inherit;.\newsample
+   Library: $inherit;
+   Source:  .\newsample
+   Intermediate: .\newsample
+   Final: .\newsample
 
 4. How to create ide-files for your own wxWindows-programs
 ==========================================================
-I think you are familiar with the necessary options for your own programm. So I will only describe what is neccessary to link yout programm with the wxWindows-library. If you want to create a ide-file for your own wxWindows-program, create a new project from the menu file->new->project. Deactivate all the standard-options, the only two thing that should be aktivated is "static" for the libraries, if you want to use the library produced with the library-ide and the checkbox OLE (You can leave this checkbox unchecked, but then you have to add the library \bc5\lib\ole2w32.lib to your project). You have to add the include-path of wxWindows to the include-path in the options-dialog (options->project->directories->include). The result should be something like:
-path_of_my_program;\bc5\include;\wxwin2\include;
-Then you have to add the libraries to the project.
-Open the project-view and activate your programm. Then right-click and choose "add" and select the wxWindows-library (e.g. \wxwin\lib\wx32.lib).
+
+I think you are familiar with the necessary options for your own
+programm. So I will only describe what is neccessary to link
+yout programm with the wxWindows-library. If you want to create
+a ide-file for your own wxWindows-program, create a new project
+from the menu file->new->project. Deactivate all the
+standard-options, the only two thing that should be activated is
+"static" for the libraries, if you want to use the library
+produced with the library-ide and the checkbox OLE (You can
+leave this checkbox unchecked, but then you have to add the
+library \bc5\lib\ole2w32.lib to your project). You have to add
+the include-path of wxWindows to the include-path in the
+options-dialog (options->project->directories->include). The
+result should be something like:
+path_of_my_program;\bc5\include;\wxwin2\include; Then you have
+to add the libraries to the project. Open the project-view and
+activate your programm. Then right-click and choose "add" and
+select the wxWindows-library (e.g. \wxwin\lib\wx32.lib).

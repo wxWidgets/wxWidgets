@@ -81,7 +81,7 @@ void wxHtmlParser::DoParsing(int begin_pos, int end_pos)
     i = begin_pos;
 
     while (i < end_pos) {
-        c = m_Source[i];
+        c = m_Source[(unsigned int) i];
 
         // continue building word:
         if (c != '<') {

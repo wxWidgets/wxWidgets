@@ -110,6 +110,12 @@ bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
     return TRUE;
 }
 
+#if defined(__GNUWIN32__) && !defined(__MINGW32__)
+#define wxFONTENUMPROC int(*)(ENUMLOGFONTEX *, NEWTEXTMETRICEX*, int, LPARAM)
+#else
+#define wxFONTENUMPROC FONTENUMPROC
+#endif
+
 void wxFontEnumeratorHelper::DoEnumerate()
 {
     HDC hDC = ::GetDC(NULL);
@@ -119,7 +125,7 @@ void wxFontEnumeratorHelper::DoEnumerate()
     lf.lfCharSet = m_charset;
     wxStrncpy(lf.lfFaceName, m_facename, WXSIZEOF(lf.lfFaceName));
     lf.lfPitchAndFamily = 0;
-    ::EnumFontFamiliesEx(hDC, &lf, (FONTENUMPROC)wxFontEnumeratorProc,
+    ::EnumFontFamiliesEx(hDC, &lf, (wxFONTENUMPROC)wxFontEnumeratorProc,
                          (LPARAM)this, 0 /* reserved */) ;
 #else // Win16
     ::EnumFonts(hDC, (LPTSTR)NULL, (FONTENUMPROC)wxFontEnumeratorProc,

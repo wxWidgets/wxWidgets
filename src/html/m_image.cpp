@@ -366,7 +366,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 }
                 if (tag.HasParam("USEMAP")) {
                     mn = tag.GetParam( "USEMAP" );
-                    if (mn[ 0 ] == '#') {
+                    if (mn[ (unsigned int) 0 ] == '#') {
                         mn = mn.Mid( 1 );
                     }
                 }

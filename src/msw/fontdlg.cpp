@@ -42,6 +42,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/cmndata.h"
+#include "wx/log.h"
 
 #include <math.h>
 #include <stdlib.h>

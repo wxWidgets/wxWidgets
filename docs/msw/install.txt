@@ -16,22 +16,37 @@ then send a patch to the author.
 Unarchiving
 -----------
 
-If there is a setup program, run the setup program that comes with the Windows version.
-Do not install into a path that contains spaces. The installation program should set the
-WXWIN environment variable, which will be activated when your machine is rebooted.
+A setup program is provided to automatically copy files to a
+directory on your hard disk. Do not install into a path that contains spaces.
+The installation program should set the WXWIN environment variable, which
+will be activated when your machine is rebooted. The setup
+program contains the following:
 
-If there is no setup program, it will come as a series of .zip
-files:
+- All common, generic and MSW-specific wxWindows source;
+- samples;
+- documentation in Windows Help format;
+- makefiles for most Windows compilers, plus BC++ and
+  VC++ IDE files;
+- JPEG library source;
+- Object Graphics Library;
+- wxGLCanvas library;
+- wxTreeLayout library;
+- Tex2RTF source;
+- Dialog Editor binary.
 
-wx200gen.zip            Generic source code and samples (required)
-wx200msw.zip            Windows-specific source code and samples (required)
-wx200doc.zip            Documentation source code (not required)
-wx200hlp.zip            WinHelp documentation
-wx200pdf.zip            Acrobat PDF documentation
-wx200htm.zip            HTML documentation
-wx200vc.zip             MS VC++ 5.0 project files
-wx200cw.zip             Metrowerks CodeWarrior project files
-wx200bc.zip             BC++ 5 project files
+Alternatively, you may unarchive the set of .zip files by hand,
+where x is the minor version number and y is the release number:
+
+wx2_x_y_gen.zip            Generic source code and samples (required)
+wx2_x_y_msw.zip            Windows-specific source code and samples (required)
+wx2_x_y_doc.zip            Documentation source code (not required)
+wx2_x_y_hlp.zip            WinHelp documentation
+wx2_x_y_pdf.zip            Acrobat PDF documentation
+wx2_x_y_htm.zip            HTML documentation
+wx2_x_y_vc.zip             MS VC++ 5.0 project files
+wx2_x_y_cw.zip             Metrowerks CodeWarrior project files
+wx2_x_y_bc.zip             BC++ 5 project files
+jpeg.zip                   Use this to allow wxImage to read and write JPEG files
 
 Unarchive the required files plus any optional documentation
 files into a suitable directory such as c:\wx.
@@ -65,17 +80,17 @@ Visual C++ 4.0/5.0/6.0 compilation
 
 Using project files:
 
-1. Unarchive wx200vc.zip, the VC++ 5/6 project makefiles.
+1. Unarchive wx2_x_y_vc.zip, the VC++ 5/6 project makefiles.
 2. Open src/wxvc.dsp, set Debug or Release configuration, and
    compile. This will produce src/Debug/wxvc.lib or
    src/Release/wxvc.lib.  The project file src/wxvc_dll.dsp
    will make a DLL version of wxWindow, which will go in
    src/DebugDLL/wxvc.[lib,dll] and src/ReleaseDLL/wxvc.[lib,dll].
 3. If you want to use JPEG in your application (such as the image
-   sample), open src/jpeg/jpeg.dsp (VC++ 6 only) and compile in
-   Debug and Release configurations. If you have VC++ 5 or
-   earlier, use makefile.vc, but you may only have one set of object
-   files at a time in use (debug or release).
+   sample), open src/jpeg/jpeg.dsp (VC++ 5/6 only) and compile in
+   Debug and Release configurations. If you have VC++ 4,
+   use makefile.vc, but you may only have one set of object
+   files at a time in use (debug or release versions).
 4. Open a sample project file, choose a configuration, and compile.
    The project files don't use precompiled headers, to save
    space, but you can switch PCH compiling on for greater speed.
@@ -121,7 +136,7 @@ To build the DLL version using makefiles:
    suitable precompiled header file for compiling applications.
    The resulting libraries are called:
 
-      wx\lib\wx200_d.lib(dll) (debug version)
+      wx\lib\wx200.lib(dll) (debug version)
       wx\lib\wx200.lib(dll)   (release version, using FINAL=1)
 
 2. Invoke a sample makefile with 'nmake -f makefile.vc WXUSINGDLL=1'
@@ -210,18 +225,21 @@ in src/msw/makefile.b32.
 
 Compiling using the IDE files:
 
-1. Load src\bc32.ide (or src\bc32d.ide for a debugging version).
+1. Load src\bc32.ide (Release settings)
 2. Go to Options|Project... and specify the correct BC++ include and lib path for
    your file structure.
 3. Press F9 to compile the wxWindows library.
 4. Load samples\bc32.ide.
 5. Go to Options|Project... and specify the correct BC++ include and lib path for
    your file structure.
-6. Press F9 to compile the samples.
+6. Press F9 to compile the samples (build each node separately if
+   you prefer, by right clicking and choose Build Node).
+7. Run each sample: you may need to run from each sample's directory
+   since some (notably the wxHTML samples) look for files
+   relative to the working directory.
 
-Note that to make the png, xpm and zlib libraries (needed for
-some samples) you need to compile with bc32.ide. bc32d.ide only
-makes the wxWindows library (lib\wx32d.lib).
+Note that to make the png, xpm, zlib and jpeg libraries (needed for
+some samples) you need to compile them with bc32.ide.
 
 The debug version of the wxWindows library is about 37 MB, and the
 release version is around 3 MB.
@@ -255,7 +273,7 @@ directory. See the notes in that directory.
 Metrowerks CodeWarrior compilation
 ----------------------------------
 
-1. Downloaded and unzip wx200cw.zip.
+1. Downloaded and unzip wx2_x_y_cw.zip.
 2. Load the make_cw.mcp project in wx\src, and compile.
 3. Load the make_cw.mcp project in wx\samples\minimal, and compile.
    Further project files for samples will be available in due

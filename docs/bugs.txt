@@ -1,31 +1,44 @@
 wxWindows Buglist
 -----------------
 
-wxGTK:
-------
+Until the wxWindows bug database is up and running, please add
+entries in this style:
 
-- It is impossible to reposition a window before showing it
-  on screen. Suspected GTK bug.
-  
-- DnD does only moderately work.
+BUG NUMBER:
+SHORT DESCRIPTION:
+DETAILS:
+WORKAROUND:
+wxWINDOWS VERSION:
+PLATFORM(S):
+DATE IDENTIFIED:
+IDENTIFIED BY:
+DATE FIXED:
+FIXED BY:
 
-wxMSW:
-------
+-------------------------START OF BUGLIST-------------------------
 
-- TODO
+BUG NUMBER:             1
+SHORT DESCRIPTION:      Popup menu bug
+DETAILS:
+If a popup wxMenu is destroyed after its parent window has been
+destroyed, we get the message "Object XXX does not have windowed
+ancestor".
+Possible fix: call menu->DestroyMenu() before deleting the window,
+if the window knows about the menu that was last popped up (hard
+to know this with confidence).
+WORKAROUND:
+Delete the menu before deleting the window on which it
+was popped up.
+wxWINDOWS VERSION:      2.0.1
+PLATFORM(S):            wxMotif
+DATE IDENTIFIED:        ?/?/1998
+IDENTIFIED BY:          Julian Smart <julian.smart@ukonline.co.uk>
+DATE FIXED:
+FIXED BY:
 
-wxMotif:
---------
-
-- If a popup wxMenu is destroyed after its parent window has been
-  destroyed, we get the message "Object XXX does not have windowed
-  ancestor".
-  Workaround: delete the menu before deleting the window on which it
-  was popped up.
-  Possible fix: call menu->DestroyMenu() before deleting the window,
-  if the window knows about the menu that was last popped up (hard
-  to know this with confidence).
-
+BUG NUMBER:             2
+SHORT DESCRIPTION:      Misc. Motif bugs
+DETAILS:
 - In wxGrid, cell highlight is not drawn/erased properly.
 
 - Setting the size of a hidden window may show that window.
@@ -44,11 +57,29 @@ wxMotif:
 
 - There are reports that scrolling can cause crashes under Lesstif.
   This is probably a Lesstif bug.
+WORKAROUND:
+wxWINDOWS VERSION:      2.0.1
+PLATFORM(S):            wxMotif
+DATE IDENTIFIED:        ?/?/1999
+IDENTIFIED BY:          Julian Smart
+DATE FIXED:
+FIXED BY:
 
-General:
---------
+BUG NUMBER:             3
+SHORT DESCRIPTION:      Dialog Editor issues
+DETAILS:
+Dialog Editor could be more user-friendly. Controls are hard to
+size and position accurately. No way of changing tab order
+except by editing .wxr file.
+WORKAROUND:
+wxWINDOWS VERSION:      2.0.1
+PLATFORM(S):            All
+DATE IDENTIFIED:        ?/?/1998
+IDENTIFIED BY:          Julian Smart <julian.smart@ukonline.co.uk>
+DATE FIXED:
+FIXED BY:
 
-- Dialog Editor could be more user-friendly. Controls are hard to
-  size and position accurately. No way of changing tab order
-  except by editing .wxr file.
+
+---------------------------END OF BUGLIST-------------------------
+
 

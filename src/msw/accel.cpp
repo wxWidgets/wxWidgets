@@ -165,4 +165,6 @@ bool wxAcceleratorTable::Translate(wxWindow *window, WXMSG *wxmsg) const
 {
     MSG *msg = (MSG *)wxmsg;
 
-    return Ok() && ::TranslateAccelerator(GetHwndOf(window), GetHaccel(), msg); }
+    return Ok() && ::TranslateAccelerator(GetHwndOf(window), GetHaccel(), msg);
+}
+

@@ -56,7 +56,9 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 // ---------------------------------------------------------------------------
 
 #if defined(__GNUWIN32__) && !defined(wxUSE_NORLANDER_HEADERS)
+#ifndef ZeroMemory
     inline void ZeroMemory(void *buf, size_t len) { memset(buf, 0, len); }
+#endif
 #endif // old mingw32
 
 // this defines a CASTWNDPROC macro which casts a pointer to the type of a
@@ -220,6 +222,8 @@ extern LONG APIENTRY _EXPORT
 #else
 #define wxZeroMemory(obj)   memset((void*) & obj, 0, sizeof(obj))
 #endif
+
+#include <wx/gdicmn.h>
 
 // make conversion from wxColour and COLORREF a bit less painful
 inline COLORREF wxColourToRGB(const wxColour& c)

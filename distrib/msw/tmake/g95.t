@@ -103,6 +103,10 @@ ZLIBDIR = $(WXDIR)/src/zlib
 OLEDIR  = $(WXDIR)/src/msw/ole
 MSWDIR  = $(WXDIR)/src/msw
 
+PNGLIB = $(WXDIR)/lib/libpng.a
+ZLIBLIB = $(WXDIR)/lib/libzlib.a
+JPEGLIB = $(WXDIR)/lib/libjpeg.a
+
 DOCDIR = $(WXDIR)\docs
 
 GENERICOBJS = \
@@ -215,26 +219,34 @@ XPMOBJECTS = 	$(XPMDIR)/crbuffri.o\
 		$(XPMDIR)/simx.o $(XPMDIR)/wrffrdat.o\
 		$(XPMDIR)/wrffrp.o $(XPMDIR)/wrffri.o
 
-OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) \
-	  $(JPEGOBJS) $(PNGOBJS) $(ZLIBOBJS) # $(ADVANCEDOBJS) # $(XPMOBJECTS)
+#OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS)
 
 ifeq ($(MINGW32),1)
   ifeq ($(MINGW32VERSION),2.95)
-    OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) \
-	  $(JPEGOBJS) $(PNGOBJS) $(ZLIBOBJS) $(ADVANCEDOBJS) # $(XPMOBJECTS)   
+    OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(ADVANCEDOBJS) # $(XPMOBJECTS)   
   else
-    OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) \
-	  $(JPEGOBJS) $(PNGOBJS) $(ZLIBOBJS) # $(XPMOBJECTS)
+    OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) # $(XPMOBJECTS)
   endif
 else
-  OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) \
-	  $(JPEGOBJS) $(PNGOBJS) $(ZLIBOBJS) # $(XPMOBJECTS)
+  OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) # $(XPMOBJECTS)
 endif
 
-all:    $(OBJECTS) $(WXLIB)
+all:    $(OBJECTS) $(WXLIB) $(ZLIBLIB) $(JPEGLIB) $(PNGLIB)
 
 $(WXLIB): $(OBJECTS) $(EXTRAOBJS)
 	ar $(AROPTIONS) $@ $(EXTRAOBJS) $(OBJECTS)
+	$(RANLIB) $@
+
+$(ZLIBLIB): $(ZLIBOBJS)
+	ar $(AROPTIONS) $@ $(ZLIBOBJS)
+	$(RANLIB) $@
+
+$(PNGLIB): $(PNGOBJS)
+	ar $(AROPTIONS) $@ $(PNGOBJS)
+	$(RANLIB) $@
+
+$(JPEGLIB): $(JPEGOBJS)
+	ar $(AROPTIONS) $@ $(JPEGOBJS)
 	$(RANLIB) $@
 
 $(OBJECTS):	$(WXINC)/wx/defs.h $(WXINC)/wx/object.h $(WXINC)/wx/setup.h
@@ -243,10 +255,10 @@ $(COMMDIR)/y_tab.$(OBJSUFF):    $(COMMDIR)/y_tab.c $(COMMDIR)/lex_yy.c
 	$(CCLEX) -c $(CPPFLAGS) -DUSE_DEFINE -DYY_USE_PROTOS -o $@ $(COMMDIR)/y_tab.c
 
 $(COMMDIR)/y_tab.c:     $(COMMDIR)/dosyacc.c
-	copy ..\\common\\dosyacc.c ..\\common\\y_tab.c
+	$(COPY) ..\\common\\dosyacc.c ..\\common\\y_tab.c
 
 $(COMMDIR)/lex_yy.c:    $(COMMDIR)/doslex.c
-	copy ..\\common\doslex.c ..\\common\\lex_yy.c
+	$(COPY) ..\\common\\doslex.c ..\\common\\lex_yy.c
 
 # Replace lex with flex if you run into compilation
 # problems with lex_yy.c. See also note about LEX_SCANNER
@@ -280,20 +292,21 @@ $(COMMDIR)/lex_yy.c:    $(COMMDIR)/doslex.c
 
 clean:
 	-$(RM) *.o
+	-$(RM) ole/*.o
 	-$(RM) *.bak
 	-$(RM) core
-	-$(RM) ..\common\y_tab.c
-	-$(RM) ..\common\lex_yy.c
-	-$(RM) ..\common\*.o
-	-$(RM) ..\common\*.bak
-	-$(RM) ..\generic\*.o
-	-$(RM) ..\generic\*.bak
-	-$(RM) ..\html\*.o
-	-$(RM) ..\png\*.o
-	-$(RM) ..\png\*.bak
-	-$(RM) ..\zlib\*.o
-	-$(RM) ..\zlib\*.bak
-	-$(RM) ..\jpeg\*.o
-	-$(RM) ..\..\lib\libwx.a
+	-$(RM) ../common/y_tab.c
+	-$(RM) ../common/lex_yy.c
+	-$(RM) ../common/*.o
+	-$(RM) ../common/*.bak
+	-$(RM) ../generic/*.o
+	-$(RM) ../generic/*.bak
+	-$(RM) ../html/*.o
+	-$(RM) ../png/*.o
+	-$(RM) ../png/*.bak
+	-$(RM) ../zlib/*.o
+	-$(RM) ../zlib/*.bak
+	-$(RM) ../jpeg/*.o
+	-$(RM) ../../lib/libwx.a
 
 cleanall: clean

@@ -241,3 +241,4 @@ bool MyApp::OnInit()
     // we're done
     return FALSE;
 }
+

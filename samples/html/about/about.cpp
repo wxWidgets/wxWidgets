@@ -156,7 +156,7 @@
    void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
    {
         wxHtmlWindow *html;
-#if __WXMSW__
+#ifdef __WXMSW__
         wxDialog dlg(this, -1, "About", wxDefaultPosition, wxSize(400, 250), wxDIALOG_MODAL | wxDEFAULT_DIALOG_STYLE);
 #else
         wxDialog dlg(this, -1, "About", wxDefaultPosition, wxSize(400, 230), wxDIALOG_MODAL | wxDEFAULT_DIALOG_STYLE);
@@ -169,10 +169,4 @@
         bu1 -> SetDefault();
         dlg.ShowModal();
     }
-
-
-
-
-
-
 
