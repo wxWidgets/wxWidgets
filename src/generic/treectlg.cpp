@@ -886,7 +886,7 @@ bool wxGenericTreeCtrl::ItemHasChildren(const wxTreeItemId& item) const
     // could have them as well and it's better to err on this side rather than
     // disabling some operations which are restricted to the items with
     // children for an item which does have them
-    return !((wxGenericTreeItem*) item.m_pItem)->HasPlus();
+    return ((wxGenericTreeItem*) item.m_pItem)->HasPlus();
 }
 
 bool wxGenericTreeCtrl::IsExpanded(const wxTreeItemId& item) const
