@@ -130,8 +130,6 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
            sizeLabel = m_msg->GetSize();
     sizeDlg.y = 2*LAYOUT_MARGIN + sizeLabel.y;
 
-    wxWindow *lastWindow = m_msg;
-
     if ( maximum > 0 )
     {
         // note that we can't use wxGA_SMOOTH because it happens to
@@ -143,7 +141,6 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
         sizer->Add(m_gauge, 0, wxLEFT | wxRIGHT | wxTOP | wxEXPAND, 2*LAYOUT_MARGIN);
         m_gauge->SetValue(0);
-        lastWindow = m_gauge;
 
         wxSize sizeGauge = m_gauge->GetSize();
         sizeDlg.y += 2*LAYOUT_MARGIN + sizeGauge.y;
