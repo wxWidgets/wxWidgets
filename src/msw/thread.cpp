@@ -79,6 +79,11 @@
     #define THREAD_CALLCONV WINAPI
 #endif
 
+// the old mingw32 headers don't have this one
+#ifndef QS_ALLPOSTMESSAGE
+    #define QS_ALLPOSTMESSAGE 0x0100
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -985,7 +990,7 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
         // we can't just wait for the thread to terminate because it might be
         // calling some GUI functions and so it will never terminate before we
         // process the Windows messages that result from these functions
-        DWORD result;
+        DWORD result = 0;       // suppress warnings from broken compilers
         do
         {
             if ( IsMain() )
