@@ -129,7 +129,8 @@ wxScrollBar::~wxScrollBar()
 
 void wxScrollBar::DoSetThumb(int pos)
 {
-    // don't do checks here, we're a private function
+    // don't assert hecks here, we're a private function which is meant to be
+    // called with any args at all
     if ( pos < 0 )
     {
         pos = 0;
@@ -137,6 +138,12 @@ void wxScrollBar::DoSetThumb(int pos)
     else if ( pos > m_range - m_thumbSize )
     {
         pos = m_range - m_thumbSize;
+    }
+
+    if ( m_thumbPos == pos )
+    {
+        // nothing changed, avoid refreshes which would provoke flicker
+        return;
     }
 
     if ( m_thumbPosOld == -1 )
