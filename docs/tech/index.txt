@@ -1,1 +1,2 @@
 TN0001   How to add a new sample
+TN0002   wxWindows translator guide
