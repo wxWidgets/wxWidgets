@@ -7,17 +7,17 @@ wxWindows 2 Change Log
 wxBase:
 
 - Fixes for gcc 3.0
-- Fixed new charset detection code (langinfo.h not included in intl.cpp;
-  langinfo.h not neccessary in strconv.cpp)
+- Fixed new charset detection code
 - ODBC Informix fixes (submitted by Roger Gammans)
 - Added ODBC date support to wxVariant
-- Added wxDbGrid class for displaying ODBC tables
 - Added wxDir::Traverse
+- Added wxSingleInstanceChecker class
 - Removed redundant wxDebugContext functions using C++ streams,
   so now standard stream usage should be unnecessary
 
 All (GUI):
 
+- Added wxDbGrid class for displaying ODBC tables
 - Added EVT_GRID_EDITOR_CREATED and wxGridEditorCreatedEvent so the
   user code can get access to the edit control when it is created, (to
   push on a custom event handler for example)
@@ -83,12 +83,11 @@ wxBase:
 - wxLocale now provides much more convenient API for setting language and
   detecting current system language. New API is more abstracted and truly
   cross-platform, independent of underlying C runtime library.
-- wxDir::Traverse() added
 
 All (GUI):
 
 - new wxToggleButton class (John Norris, Axel Schlueter)
-- wxCalendarCtrl now highlighting the date with time part bug fixed
+- wxCalendarCtrl not highlighting the date with time part bug fixed
 - wxADJUST_MINSIZE sizer flag added
 - FindOrCreateBrush/Pen() bug fix for invalid colour values
 - new wxXPMHandler for reading and writing XPM images
