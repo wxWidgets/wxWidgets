@@ -558,11 +558,6 @@ void wxTreeCtrl::Init()
       wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHT),
       wxSOLID
     );
-    m_normalBrush = new wxBrush
-    (
-      wxSystemSettings::GetSystemColour(wxSYS_COLOUR_LISTBOX),
-      wxSOLID
-    );
 
     m_imageListNormal =
     m_imageListState = (wxImageList *) NULL;
@@ -603,7 +598,6 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
 wxTreeCtrl::~wxTreeCtrl()
 {
     wxDELETE( m_hilightBrush );
-    wxDELETE( m_normalBrush );
 
     DeleteAllItems();
 
@@ -1537,12 +1531,17 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     int total_h = GetLineHeight(item);
 
-    wxColour colBg;
-    if ( attr && attr->HasBackgroundColour() )
-        colBg = attr->GetBackgroundColour();
+    if (item->IsSelected())
+        dc.SetBrush(*m_hilightBrush);
     else
-        colBg = m_backgroundColour;
-    dc.SetBrush(wxBrush(colBg, wxSOLID));
+    {
+        wxColour colBg;
+        if ( attr && attr->HasBackgroundColour() )
+            colBg = attr->GetBackgroundColour();
+        else
+            colBg = m_backgroundColour;
+        dc.SetBrush(wxBrush(colBg, wxSOLID));
+    }
 
     dc.DrawRectangle( item->GetX()-2, item->GetY(), item->GetWidth()+2, total_h );
 
@@ -1606,14 +1605,11 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
         }
 
         wxPen *pen = wxTRANSPARENT_PEN;
-        wxBrush *brush;                 // FIXME is this really needed?
         wxColour colText;
 
         if ( item->IsSelected() )
         {
             colText = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
-
-            brush = m_hilightBrush;
 
             if ( m_hasFocus )
                pen = wxBLACK_PEN;
@@ -1626,14 +1622,11 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
                 colText = attr->GetTextColour();
             else
                 colText = *wxBLACK;
-
-            brush = m_normalBrush;
         }
 
         // prepare to draw
         dc.SetTextForeground(colText);
         dc.SetPen(*pen);
-        dc.SetBrush(*brush);
 
         // draw
         PaintItem(item, dc);
