@@ -20,11 +20,16 @@ class MyApp: public wxApp
 class MyTreeCtrl: public wxTreeCtrl
 {
 public:
-   MyTreeCtrl(wxWindow *parent, const wxWindowID id, const wxPoint& pos,
-    const wxSize& size, long style):
-        wxTreeCtrl(parent, id, pos, size, style)
-   {
-   }
+	MyTreeCtrl(wxWindow *parent, const wxWindowID id, const wxPoint& pos,
+    const wxSize& size, long style);
+	~MyTreeCtrl();
+
+	void AddItemsRecursively(const wxTreeItemId& idParent,
+                                     size_t numChildren,
+                                     size_t depth);
+	void AddTestItemsToTree(size_t numChildren,
+                                    size_t depth);
+
 
 	void OnBeginDrag(wxTreeEvent& event);
 	void OnBeginRDrag(wxTreeEvent& event);
@@ -35,6 +40,8 @@ public:
 	void OnSetInfo(wxTreeEvent& event);
 	void OnItemExpanded(wxTreeEvent& event);
 	void OnItemExpanding(wxTreeEvent& event);
+	void OnItemCollapsed(wxTreeEvent& event);
+	void OnItemCollapsing(wxTreeEvent& event);
 	void OnSelChanged(wxTreeEvent& event);
 	void OnSelChanging(wxTreeEvent& event);
 	void OnKeyDown(wxTreeEvent& event);
@@ -48,7 +55,7 @@ class MyFrame: public wxFrame
     MyTreeCtrl *m_treeCtrl;
     wxTextCtrl *m_logWindow;
 
-    MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
+    MyFrame(const wxString& title, int x, int y, int w, int h);
     ~MyFrame(void);
     
  public:
@@ -59,6 +66,11 @@ class MyFrame: public wxFrame
    DECLARE_EVENT_TABLE()
 };
 
+class MyTreeItemData : public wxTreeItemData
+{
+public:
+	void ShowInfo(wxTreeCtrl *tree);
+};
 
 // ID for the menu quit command
 #define TREE_QUIT 	1

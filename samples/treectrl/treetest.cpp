@@ -40,25 +40,25 @@
 #include "treetest.h"
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-  EVT_MENU(TreeTest_Quit, MyFrame::OnQuit)
-  EVT_MENU(TreeTest_About, MyFrame::OnAbout)
+  EVT_MENU(TREE_QUIT, MyFrame::OnQuit)
+  EVT_MENU(TREE_ABOUT, MyFrame::OnAbout)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
-  EVT_TREE_BEGIN_DRAG(TreeTest_Ctrl, MyTreeCtrl::OnBeginDrag)
-  EVT_TREE_BEGIN_RDRAG(TreeTest_Ctrl, MyTreeCtrl::OnBeginRDrag)
-  EVT_TREE_BEGIN_LABEL_EDIT(TreeTest_Ctrl, MyTreeCtrl::OnBeginLabelEdit)
-  EVT_TREE_END_LABEL_EDIT(TreeTest_Ctrl, MyTreeCtrl::OnEndLabelEdit)
-  EVT_TREE_DELETE_ITEM(TreeTest_Ctrl, MyTreeCtrl::OnDeleteItem)
-  EVT_TREE_GET_INFO(TreeTest_Ctrl, MyTreeCtrl::OnGetInfo)
-  EVT_TREE_SET_INFO(TreeTest_Ctrl, MyTreeCtrl::OnSetInfo)
-  EVT_TREE_ITEM_EXPANDED(TreeTest_Ctrl, MyTreeCtrl::OnItemExpanded)
-  EVT_TREE_ITEM_EXPANDING(TreeTest_Ctrl, MyTreeCtrl::OnItemExpanding)
-  EVT_TREE_ITEM_COLLAPSED(TreeTest_Ctrl, MyTreeCtrl::OnItemCollapsed)
-  EVT_TREE_ITEM_COLLAPSING(TreeTest_Ctrl, MyTreeCtrl::OnItemCollapsing)
-  EVT_TREE_SEL_CHANGED(TreeTest_Ctrl, MyTreeCtrl::OnSelChanged)
-  EVT_TREE_SEL_CHANGING(TreeTest_Ctrl, MyTreeCtrl::OnSelChanging)
-  EVT_TREE_KEY_DOWN(TreeTest_Ctrl, MyTreeCtrl::OnKeyDown)
+  EVT_TREE_BEGIN_DRAG(TREE_CTRL, MyTreeCtrl::OnBeginDrag)
+  EVT_TREE_BEGIN_RDRAG(TREE_CTRL, MyTreeCtrl::OnBeginRDrag)
+  EVT_TREE_BEGIN_LABEL_EDIT(TREE_CTRL, MyTreeCtrl::OnBeginLabelEdit)
+  EVT_TREE_END_LABEL_EDIT(TREE_CTRL, MyTreeCtrl::OnEndLabelEdit)
+  EVT_TREE_DELETE_ITEM(TREE_CTRL, MyTreeCtrl::OnDeleteItem)
+  EVT_TREE_GET_INFO(TREE_CTRL, MyTreeCtrl::OnGetInfo)
+  EVT_TREE_SET_INFO(TREE_CTRL, MyTreeCtrl::OnSetInfo)
+  EVT_TREE_ITEM_EXPANDED(TREE_CTRL, MyTreeCtrl::OnItemExpanded)
+  EVT_TREE_ITEM_EXPANDING(TREE_CTRL, MyTreeCtrl::OnItemExpanding)
+  EVT_TREE_ITEM_COLLAPSED(TREE_CTRL, MyTreeCtrl::OnItemCollapsed)
+  EVT_TREE_ITEM_COLLAPSING(TREE_CTRL, MyTreeCtrl::OnItemCollapsing)
+  EVT_TREE_SEL_CHANGED(TREE_CTRL, MyTreeCtrl::OnSelChanged)
+  EVT_TREE_SEL_CHANGING(TREE_CTRL, MyTreeCtrl::OnSelChanging)
+  EVT_TREE_KEY_DOWN(TREE_CTRL, MyTreeCtrl::OnKeyDown)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
@@ -92,14 +92,14 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
 
-  file_menu->Append(TreeTest_About, "&About...");
-  file_menu->Append(TreeTest_Quit, "E&xit");
+  file_menu->Append(TREE_ABOUT, "&About...");
+  file_menu->Append(TREE_QUIT, "E&xit");
   wxMenuBar *menu_bar = new wxMenuBar;
   menu_bar->Append(file_menu, "&File");
   SetMenuBar(menu_bar);
 
   // Make a panel with a message
-  m_treeCtrl = new MyTreeCtrl(this, TreeTest_Ctrl,
+  m_treeCtrl = new MyTreeCtrl(this, TREE_CTRL,
                               wxDefaultPosition, wxDefaultSize,
                               wxTR_HAS_BUTTONS | wxSUNKEN_BORDER);
   wxTextCtrl *textCtrl = new wxTextCtrl(this, -1, "",
