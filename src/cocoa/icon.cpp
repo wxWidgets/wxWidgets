@@ -32,6 +32,10 @@ wxIcon::wxIcon(const char **xpm)
 {
 }
 
+wxIcon::wxIcon(char **xpm)
+{
+}
+
 wxIcon::wxIcon(const char WXUNUSED(bits)[], int WXUNUSED(width), int WXUNUSED(height))
 {
 }
