@@ -20,64 +20,103 @@ WXDLLEXPORT_DATA(extern const char*) wxComboBoxNameStr;
 WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
 
 // Combobox item
-class WXDLLEXPORT wxComboBox: public wxChoice
+class WXDLLEXPORT wxComboBox : public wxChoice
 {
-  DECLARE_DYNAMIC_CLASS(wxComboBox)
 
  public:
   inline wxComboBox() {}
 
-  inline wxComboBox(wxWindow *parent, wxWindowID id,
-           const wxString& value = wxEmptyString,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           int n = 0, const wxString choices[] = NULL,
-           long style = 0,
+  inline wxComboBox( wxWindow*          pParent
+                    ,wxWindowID         vId
+                    ,const wxString&    rsValue = wxEmptyString
+                    ,const wxPoint&     rPos = wxDefaultPosition
+                    ,const wxSize&      rSize = wxDefaultSize
+                    ,int                n = 0
+                    ,const wxString     asChoices[] = NULL
+                    ,long               lStyle = 0
 #if wxUSE_VALIDATORS
-           const wxValidator& validator = wxDefaultValidator,
+                    ,const wxValidator& rValidator = wxDefaultValidator
 #endif
-           const wxString& name = wxComboBoxNameStr)
-  {
-    Create(parent, id, value, pos, size, n, choices, style, validator, name);
-  }
-
-  bool Create(wxWindow *parent, wxWindowID id,
-           const wxString& value = wxEmptyString,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           int n = 0, const wxString choices[] = NULL,
-           long style = 0,
+                    ,const wxString&    rsName = wxComboBoxNameStr
+                   )
+    {
+        Create( pParent
+               ,vId
+               ,rsValue
+               ,rPos
+               ,rSize
+               ,n
+               ,asChoices
+               ,lStyle
 #if wxUSE_VALIDATORS
-           const wxValidator& validator = wxDefaultValidator,
+               ,rValidator
 #endif
-           const wxString& name = wxComboBoxNameStr);
+               ,rsName
+              );
+    }
 
+    bool Create( wxWindow*          pParent
+                ,wxWindowID         vId
+                ,const wxString&    rsValue = wxEmptyString
+                ,const wxPoint&     rPos = wxDefaultPosition
+                ,const wxSize&      rSize = wxDefaultSize
+                ,int                n = 0
+                ,const wxString     asChoices[] = NULL
+                ,long               lStyle = 0
+#if wxUSE_VALIDATORS
+                ,const wxValidator& rValidator = wxDefaultValidator
+#endif
+                ,const wxString&    rsName = wxComboBoxNameStr
+               );
+
+    //
     // List functions: see wxChoice
+    //
+    inline wxString GetValue(void) const { return GetLabel(); }
+    virtual void    SetValue(const wxString& rsValue);
 
-    wxString GetValue() const { return GetLabel(); }
-    virtual void SetValue(const wxString& value);
-
+    //
     // Clipboard operations
+    //
     virtual void Copy();
     virtual void Cut();
     virtual void Paste();
-    virtual void SetInsertionPoint(long pos);
-    virtual void SetInsertionPointEnd();
-    virtual long GetInsertionPoint() const;
-    virtual long GetLastPosition() const;
-    virtual void Replace(long from, long to, const wxString& value);
-    virtual void Remove(long from, long to);
-    virtual void SetSelection(int n) { wxChoice::SetSelection(n); }
-    virtual void SetSelection(long from, long to);
-    virtual void SetEditable(bool editable);
 
-    virtual bool OS2Command(WXUINT param, WXWORD id);
+    virtual void        SetInsertionPoint(long lPos);
+    virtual void        SetInsertionPointEnd(void);
+    virtual long        GetInsertionPoint(void) const;
+    virtual long        GetLastPosition(void) const;
+    virtual void        Replace( long            lFrom
+                                ,long            lTo
+                                ,const wxString& rsValue
+                               );
+    virtual void        Remove( long lFrom
+                               ,long lTo
+                              );
+    inline virtual void SetSelection(int n) { wxChoice::SetSelection(n); }
+    virtual void        SetSelection( long lFrom
+                                     ,long lTo
+                                    );
+    virtual void        SetEditable(bool bEditable);
+
+    virtual bool        OS2Command( WXUINT uParam
+                                   ,WXWORD wId
+                                  );
+    bool                ProcessEditMsg( WXUINT   uMsg
+                                       ,WXWPARAM wParam
+                                       ,WXLPARAM lParam
+                                      );
 
 protected:
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
-};
+    virtual void        DoSetSize( int nX
+                                  ,int nY
+                                  ,int nWidth
+                                  ,int nHeight
+                                  ,int nSizeFlags = wxSIZE_AUTO
+                                 );
+private:
+    DECLARE_DYNAMIC_CLASS(wxComboBox)
+}; // end of CLASS wxComboBox
 
 #endif // wxUSE_COMBOBOX
 #endif

@@ -114,6 +114,16 @@ public:
 
     virtual wxSize DoGetBestSize(void) const;
 
+    bool OS2CreateControl( wxWindow*          pParent
+                          ,wxWindowID         lId
+                          ,const wxPoint&     rPos
+                          ,const wxSize&      rSize
+                          ,long               lStyle
+#if wxUSE_VALIDATORS
+                          ,const wxValidator& rValidator
+#endif
+                          ,const wxString&    rsName
+                         );
     //
     // Create the control of the given class with the given style, returns FALSE
     // if creation failed.

@@ -23,57 +23,91 @@ public:
     // ctors
     inline wxChoice() { }
 
-    inline wxChoice(wxWindow *parent, wxWindowID id,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize,
-             int n = 0, const wxString choices[] = NULL,
-             long style = 0,
+    inline wxChoice( wxWindow*          pParent
+                    ,wxWindowID         vId
+                    ,const wxPoint&     rPos = wxDefaultPosition
+                    ,const wxSize&      rSize = wxDefaultSize
+                    ,int                n = 0
+                    ,const wxString     asChoices[] = NULL
+                    ,long               lStyle = 0
 #if wxUSE_VALIDATORS
-             const wxValidator& validator = wxDefaultValidator,
+                    ,const wxValidator& rValidator = wxDefaultValidator
 #endif
-             const wxString& name = wxChoiceNameStr)
+                    ,const wxString&    rsName = wxChoiceNameStr
+                   )
     {
-        Create(parent, id, pos, size, n, choices, style, validator, name);
+        Create( pParent
+               ,vId
+               ,rPos
+               ,rSize
+               ,n
+               ,asChoices
+               ,lStyle
+#if wxUSE_VALIDATORS
+               ,rValidator
+#endif
+               ,rsName
+              );
     }
 
-    bool Create(wxWindow *parent, wxWindowID id,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize,
-             int n = 0, const wxString choices[] = NULL,
-             long style = 0,
+    bool Create( wxWindow*          pParent
+                ,wxWindowID         vId
+                ,const wxPoint&     rPos = wxDefaultPosition
+                ,const wxSize&      rSize = wxDefaultSize
+                ,int                n = 0
+                ,const wxString     asChoices[] = NULL
+                ,long               lStyle = 0
 #if wxUSE_VALIDATORS
-             const wxValidator& validator = wxDefaultValidator,
+                ,const wxValidator& rValidator = wxDefaultValidator
 #endif
-             const wxString& name = wxChoiceNameStr);
+                ,const wxString&    rsName = wxChoiceNameStr
+               );
 
+    //
     // Implement base class virtuals
-    virtual int  DoAppend(const wxString& item);
-    virtual void Delete(int n);
-    virtual void Clear();
+    //
+    virtual int      DoAppend(const wxString& rsItem);
+    virtual void     Delete(int n);
+    virtual void     Clear(void);
 
-    virtual int GetCount() const;
-    virtual int GetSelection() const ;
-    virtual void SetSelection(int n);
+    virtual int      GetCount(void) const;
+    virtual int      GetSelection(void) const ;
+    virtual void     SetSelection(int n);
 
-    virtual int FindString(const wxString& s) const;
+    virtual int      FindString(const wxString& rsStr) const;
     virtual wxString GetString(int n) const ;
-    virtual void SetString(int n, const wxString& s);
+    virtual void     SetString( int n
+                               ,const wxString& rsStr
+                              );
 
+    //
     // OS2 only
-    virtual bool OS2Command(WXUINT param, WXWORD id);
-    MRESULT OS2WindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    //
+    virtual bool     OS2Command( WXUINT uParam
+                                ,WXWORD wId
+                               );
+    MRESULT          OS2WindowProc( WXUINT   uMsg
+                                   ,WXWPARAM wParam
+                                   ,WXLPARAM lParam
+                                  );
 
 protected:
-    virtual void DoSetItemClientData( int n, void* clientData );
-    virtual void* DoGetItemClientData( int n ) const;
-    virtual void DoSetItemClientObject( int n, wxClientData* clientData );
-    virtual wxClientData* DoGetItemClientObject( int n ) const;
-
-    // OS2 implementation
-    virtual wxSize DoGetBestSize() const;
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
-};
+    virtual void          DoSetItemClientData( int   n
+                                              ,void* pClientData
+                                             );
+    virtual void*         DoGetItemClientData(int n) const;
+    virtual void          DoSetItemClientObject( int           n
+                                                ,wxClientData* pClientData
+                                               );
+    virtual wxClientData* DoGetItemClientObject(int n) const;
+    virtual wxSize        DoGetBestSize(void) const;
+    virtual void          DoSetSize( int nX
+                                    ,int nY
+                                    ,int nWidth
+                                    ,int nHeight
+                                    ,int nsizeFlags = wxSIZE_AUTO
+                                   );
+    void                  Free(void);
+}; // end of CLASS wxChoice
 
 #endif // _WX_CHOICE_H_
