@@ -59,13 +59,18 @@ wxMutex::wxMutex()
 {
   p_internal = new wxMutexInternal;
   p_internal->p_mutex = CreateMutex(NULL, FALSE, NULL);
+  if ( !p_internal->p_mutex )
+  {
+    wxLogSysError(_("Can not create mutex."));
+  }
+
   m_locked = 0;
 }
 
 wxMutex::~wxMutex()
 {
   if (m_locked > 0)
-    wxDebugMsg("wxMutex warning: freeing a locked mutex (%d locks)\n", m_locked);
+    wxLogDebug("Warning: freeing a locked mutex (%d locks).", m_locked);
   CloseHandle(p_internal->p_mutex);
 }
 
@@ -75,10 +80,10 @@ wxMutexError wxMutex::Lock()
 
   ret = WaitForSingleObject(p_internal->p_mutex, INFINITE);
   if (ret == WAIT_ABANDONED)
-    return MUTEX_BUSY;
+    return wxMUTEX_BUSY;
 
   m_locked++;
-  return MUTEX_NO_ERROR;
+  return wxMUTEX_NO_ERROR;
 }
 
 wxMutexError wxMutex::TryLock()
@@ -87,23 +92,25 @@ wxMutexError wxMutex::TryLock()
 
   ret = WaitForSingleObject(p_internal->p_mutex, 0);
   if (ret == WAIT_TIMEOUT || ret == WAIT_ABANDONED)
-    return MUTEX_BUSY;
+    return wxMUTEX_BUSY;
 
   m_locked++;
-  return MUTEX_NO_ERROR;
+  return wxMUTEX_NO_ERROR;
 }
 
 wxMutexError wxMutex::Unlock()
 {
-  BOOL ret;
-
   if (m_locked > 0)
     m_locked--;
 
-    // Why does this have 3 args? The redundant ones removed by JACS
-//  ret = ReleaseMutex(p_internal->p_mutex, 1, NULL);
-  ret = ReleaseMutex(p_internal->p_mutex);
-  return MUTEX_NO_ERROR;
+  BOOL ret = ReleaseMutex(p_internal->p_mutex);
+  if ( ret != 0 )
+  {
+      wxLogSysError(_("Couldn't release a mutex"));
+      return wxMUTEX_MISC_ERROR;
+  }
+
+  return wxMUTEX_NO_ERROR;
 }
 
 class wxConditionInternal {
@@ -116,6 +123,11 @@ wxCondition::wxCondition()
 {
   p_internal = new wxConditionInternal;
   p_internal->event = CreateEvent(NULL, FALSE, FALSE, NULL);
+  if ( !p_internal->event )
+  {
+    wxLogSysError(_("Can not create event object."));
+  }
+
   p_internal->waiters = 0;
 }
 
@@ -157,7 +169,12 @@ void wxCondition::Broadcast()
   int i;
 
   for (i=0;i<p_internal->waiters;i++)
-    SetEvent(p_internal->event);
+  {
+    if ( SetEvent(p_internal->event) == 0 )
+    {
+        wxLogSysError(_("Couldn't change the state of event object."));
+    }
+  }
 }
 
 class wxThreadInternal {
@@ -183,16 +200,19 @@ DWORD wxThreadInternal::WinThreadStart(LPVOID arg)
 
 wxThreadError wxThread::Create()
 {
-  int win_prio, prio = p_internal->prio;
+  int prio = p_internal->prio;
 
   p_internal->thread_id = CreateThread(NULL, 0,
                    (LPTHREAD_START_ROUTINE)wxThreadInternal::WinThreadStart,
                    (void *)this, CREATE_SUSPENDED, &p_internal->tid);
-  if (p_internal->thread_id == NULL) {
-    printf("Error = %d\n", GetLastError());
-    return THREAD_NO_RESOURCE;
+
+  if ( p_internal->thread_id == NULL )
+  {
+    wxLogSysError(_("Can't create thread"));
+    return wxTHREAD_NO_RESOURCE;
   }
 
+  int win_prio;
   if (prio <= 20)
     win_prio = THREAD_PRIORITY_LOWEST;
   else if (prio <= 40)
@@ -203,26 +223,57 @@ wxThreadError wxThread::Create()
     win_prio = THREAD_PRIORITY_ABOVE_NORMAL;
   else if (prio <= 100)
     win_prio = THREAD_PRIORITY_HIGHEST;
+  else
+  {
+    wxFAIL_MSG("invalid value of thread priority parameter");
+    win_prio = THREAD_PRIORITY_NORMAL;
+  }
 
   SetThreadPriority(p_internal->thread_id, win_prio);
 
   ResumeThread(p_internal->thread_id);
   p_internal->state = STATE_RUNNING;
  
-  return THREAD_NO_ERROR;
+  return wxTHREAD_NO_ERROR;
 }
 
 wxThreadError wxThread::Destroy()
 {
   if (p_internal->state != STATE_RUNNING)
-    return THREAD_NOT_RUNNING;
+    return wxTHREAD_NOT_RUNNING;
 
   if (p_internal->defer == FALSE)
     TerminateThread(p_internal->thread_id, 0);
   else
     p_internal->state = STATE_CANCELED;
 
-  return THREAD_NO_ERROR;
+  return wxTHREAD_NO_ERROR;
+}
+
+wxThreadError wxThread::Pause()
+{
+    DWORD nSuspendCount = ::SuspendThread(p_internal->thread_id);
+    if ( nSuspendCount == (DWORD)-1 )
+    {
+        wxLogSysError(_("Can not suspend thread %x"), p_internal->thread_id);
+
+        return wxTHREAD_MISC_ERROR;   // no idea what might provoke this error...
+    }
+
+    return wxTHREAD_NO_ERROR;
+}
+
+wxThreadError wxThread::Resume()
+{
+    DWORD nSuspendCount = ::ResumeThread(p_internal->thread_id);
+    if ( nSuspendCount == (DWORD)-1 )
+    {
+        wxLogSysError(_("Can not resume thread %x"), p_internal->thread_id);
+
+        return wxTHREAD_MISC_ERROR;   // no idea what might provoke this error...
+    }
+
+    return wxTHREAD_NO_ERROR;
 }
 
 void wxThread::Exit(void *status)
@@ -335,3 +386,12 @@ public:
 
 IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)
 
+void WXDLLEXPORT wxMutexGuiEnter()
+{
+  wxFAIL_MSG("not implemented");
+}
+
+void WXDLLEXPORT wxMutexGuiLeave()
+{
+  wxFAIL_MSG("not implemented");
+}

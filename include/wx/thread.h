@@ -16,31 +16,40 @@
 #pragma interface "thread.h"
 #endif
 
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 #include "wx/object.h"
 #include "wx/setup.h"
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
 typedef enum {
-  MUTEX_NO_ERROR=0,
-  MUTEX_DEAD_LOCK,		// Mutex has been already locked by THE CALLING thread 
-  MUTEX_BUSY,			// Mutex has been already locked by ONE thread
-  MUTEX_UNLOCKED
+  wxMUTEX_NO_ERROR = 0,
+  wxMUTEX_DEAD_LOCK,      // Mutex has been already locked by THE CALLING thread 
+  wxMUTEX_BUSY,           // Mutex has been already locked by ONE thread
+  wxMUTEX_UNLOCKED,
+  wxMUTEX_MISC_ERROR
 } wxMutexError;
 
 typedef enum {
-  THREAD_NO_ERROR=0,		// No error
-  THREAD_NO_RESOURCE,		// No resource left to create a new thread
-  THREAD_RUNNING,		// The thread is already running
-  THREAD_NOT_RUNNING,		// The thread isn't running
-  THREAD_MISC_ERROR             // Some other error
+  wxTHREAD_NO_ERROR = 0,      // No error
+  wxTHREAD_NO_RESOURCE,       // No resource left to create a new thread
+  wxTHREAD_RUNNING,           // The thread is already running
+  wxTHREAD_NOT_RUNNING,       // The thread isn't running
+  wxTHREAD_MISC_ERROR         // Some other error
 } wxThreadError;
 
 // defines the interval of priority.
-#define WXTHREAD_MIN_PRIORITY 0
+#define WXTHREAD_MIN_PRIORITY     0
 #define WXTHREAD_DEFAULT_PRIORITY 50
-#define WXTHREAD_MAX_PRIORITY 100
+#define WXTHREAD_MAX_PRIORITY     100
 
-// ---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // Mutex handler
+// ----------------------------------------------------------------------------
 class WXDLLEXPORT wxMutexInternal;
 class WXDLLEXPORT wxMutex {
 public:
@@ -57,6 +66,7 @@ public:
 
   // Returns true if the mutex is locked.
   bool IsLocked() const { return (m_locked > 0); }
+
 protected:
   friend class wxCondition;
 
@@ -64,8 +74,9 @@ protected:
   wxMutexInternal *p_internal;
 };
 
-// ---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // Condition handler.
+// ----------------------------------------------------------------------------
 class wxConditionInternal;
 class WXDLLEXPORT wxCondition {
 public:
@@ -81,12 +92,14 @@ public:
   void Signal();
   // Broadcasts to all "Waiters".
   void Broadcast();
+
 private:
   wxConditionInternal *p_internal;
 };
 
-// ---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // Thread management class
+// ----------------------------------------------------------------------------
 class wxThreadInternal;
 class WXDLLEXPORT wxThread {
 public:
@@ -126,6 +139,9 @@ public:
   bool IsAlive() const;
   // Returns true if the thread is running (not paused, not killed).
   bool IsRunning() const;
+  // Returns true if the thread is suspended
+  bool IsPaused() const { return IsAlive() && !IsRunning(); }
+
   // Returns true if the thread is the main thread (aka the GUI thread).
   static bool IsMain();
 
@@ -137,6 +153,7 @@ protected:
   void TestDestroy();
   // Exits from the current thread.
   void Exit(void *status = NULL);
+
 private:
   // Entry point for the thread.
   virtual void *Entry() = 0;
@@ -147,11 +164,12 @@ private:
   wxThreadInternal *p_internal;
 };
 
-// ---------------------------------------------------------------------------
-// Global variables
+// ----------------------------------------------------------------------------
+// Global functions and variables
+// ----------------------------------------------------------------------------
 
 // GUI mutex handling.
 void WXDLLEXPORT wxMutexGuiEnter();
 void WXDLLEXPORT wxMutexGuiLeave();
 
-#endif
+#endif // __THREADH__
