@@ -1868,11 +1868,14 @@ bool wxWindowMac::Show(bool show)
         return FALSE;
 
     // TODO use visibilityChanged Carbon Event for OSX
-    bool former = MacIsReallyShown() ;
+    if ( m_peer )
+    {
+        bool former = MacIsReallyShown() ;
 
-    m_peer->SetVisibility( show , true ) ;
-    if ( former != MacIsReallyShown() )
-        MacPropagateVisibilityChanged() ;
+        m_peer->SetVisibility( show , true ) ;
+        if ( former != MacIsReallyShown() )
+            MacPropagateVisibilityChanged() ;
+    }
     return TRUE;
 }
 
