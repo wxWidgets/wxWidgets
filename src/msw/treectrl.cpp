@@ -519,7 +519,7 @@ bool wxTreeCtrl::Create(wxWindow *parent,
         return FALSE;
 
     DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP |
-                   TVS_HASLINES | TVS_SHOWSELALWAYS;
+                   TVS_HASLINES | TVS_SHOWSELALWAYS /* | WS_CLIPSIBLINGS */;
 
     if ( m_windowStyle & wxTR_HAS_BUTTONS )
         wstyle |= TVS_HASBUTTONS;

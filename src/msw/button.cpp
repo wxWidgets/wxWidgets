@@ -74,7 +74,7 @@ bool wxButton::Create(wxWindow *parent,
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
 
-	long msStyle = WS_VISIBLE | WS_TABSTOP | WS_CHILD;
+	long msStyle = WS_VISIBLE | WS_TABSTOP | WS_CHILD /* | WS_CLIPSIBLINGS */ ;
 
 #ifdef __WIN32__
     if(m_windowStyle & wxBU_LEFT)

@@ -122,7 +122,7 @@ bool wxStatusBar95::Create(wxWindow *parent,
 
     m_windowId = id == -1 ? NewControlId() : id;
 
-    DWORD wstyle = WS_CHILD | WS_VISIBLE;
+    DWORD wstyle = WS_CHILD | WS_VISIBLE /* | WS_CLIPSIBLINGS */ ;
 
     // setting SBARS_SIZEGRIP is perfectly useless: it's always on by default
     // (at least in the version of comctl32.dll I'm using), and the only way to

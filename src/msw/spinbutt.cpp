@@ -106,7 +106,7 @@ bool wxSpinButton::Create(wxWindow *parent,
         y = 0;
 
     // translate the styles
-    DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP |
+    DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP | /*  WS_CLIPSIBLINGS | */
                    UDS_NOTHOUSANDS | // never useful, sometimes harmful
                    UDS_SETBUDDYINT;  // it doesn't harm if we don't have buddy
 

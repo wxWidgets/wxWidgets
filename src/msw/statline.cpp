@@ -66,7 +66,7 @@ bool wxStaticLine::Create( wxWindow *parent,
                        (
                         wxT("STATIC"),
                         wxT(""),
-                        WS_VISIBLE | WS_CHILD |
+                        WS_VISIBLE | WS_CHILD /* | WS_CLIPSIBLINGS */ |
                         SS_GRAYRECT | SS_SUNKEN, // | SS_ETCHEDFRAME,
                         pos.x, pos.y, sizeReal.x, sizeReal.y,
                         GetWinHwnd(parent),

@@ -148,7 +148,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
                      WS_EX_CLIENTEDGE,       // sunken border
                      _T("EDIT"),             // window class
                      NULL,                   // no window title
-                     WS_CHILD | WS_BORDER,   // style (will be shown later)
+                     WS_CHILD | WS_BORDER /* | WS_CLIPSIBLINGS */,   // style (will be shown later)
                      pos.x, pos.y,           // position
                      0, 0,                   // size (will be set later)
                      GetHwndOf(parent),      // parent

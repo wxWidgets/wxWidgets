@@ -35,6 +35,7 @@
 #endif
 
 #include "wx/combobox.h"
+#include "wx/brush.h"
 #include "wx/clipbrd.h"
 #include "wx/msw/private.h"
 
@@ -253,7 +254,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 
     // get the right style
     long msStyle = WS_TABSTOP | WS_VSCROLL | WS_HSCROLL |
-                   CBS_AUTOHSCROLL | CBS_NOINTEGRALHEIGHT;
+                   CBS_AUTOHSCROLL | CBS_NOINTEGRALHEIGHT /* | WS_CLIPSIBLINGS */;
     if ( style & wxCB_READONLY )
         msStyle |= CBS_DROPDOWNLIST;
     else if ( style & wxCB_SIMPLE )

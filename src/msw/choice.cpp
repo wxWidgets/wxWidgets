@@ -32,6 +32,7 @@
     #include "wx/choice.h"
     #include "wx/utils.h"
     #include "wx/log.h"
+    #include "wx/brush.h"
     #include "wx/settings.h"
 #endif
 
@@ -59,7 +60,7 @@ bool wxChoice::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    long msStyle = WS_CHILD | CBS_DROPDOWNLIST | WS_TABSTOP | WS_VISIBLE | WS_HSCROLL | WS_VSCROLL;
+    long msStyle = WS_CHILD | CBS_DROPDOWNLIST | WS_TABSTOP | WS_VISIBLE | WS_HSCROLL | WS_VSCROLL /* | WS_CLIPSIBLINGS */;
     if ( style & wxCB_SORT )
         msStyle |= CBS_SORT;
 

@@ -156,7 +156,7 @@ bool wxListBox::Create(wxWindow *parent,
     m_windowStyle = style;
 
     DWORD wstyle = WS_VISIBLE | WS_VSCROLL | WS_TABSTOP |
-                   LBS_NOTIFY | LBS_HASSTRINGS;
+                   LBS_NOTIFY | LBS_HASSTRINGS /* | WS_CLIPSIBLINGS */;
     if (m_windowStyle & wxLB_MULTIPLE)
         wstyle |= LBS_MULTIPLESEL;
     else if (m_windowStyle & wxLB_EXTENDED)
