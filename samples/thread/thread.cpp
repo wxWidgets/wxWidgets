@@ -75,6 +75,7 @@ class MyFrame: public wxFrame
 public:
     // ctor
     MyFrame(wxFrame *frame, const wxString& title, int x, int y, int w, int h);
+    virtual ~MyFrame();
 
     // operations
     void WriteText(const wxString& text) { m_txtctrl->WriteText(text); }
@@ -428,6 +429,51 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title,
 
 }
 
+MyFrame::~MyFrame()
+{
+    // NB: although the OS will terminate all the threads anyhow when the main
+    //     one exits, it's good practice to do it ourselves -- even if it's not
+    //     completely trivial in this example
+
+    // tell all the threads to terminate: note that they can't terminate while
+    // we're deleting them because they will block in their OnExit() -- this is
+    // important as otherwise we might access invalid array elements
+    wxThread *thread;
+
+    wxGetApp().m_critsect.Enter();
+
+    // check if we have any threads running first
+    const wxArrayThread& threads = wxGetApp().m_threads;
+    size_t count = threads.GetCount();
+
+    if ( count )
+    {
+        // set the flag for MyThread::OnExit()
+        wxGetApp().m_waitingUntilAllDone = TRUE;
+
+        // stop all threads
+        while ( ! threads.IsEmpty() )
+        {
+            thread = threads.Last();
+
+            wxGetApp().m_critsect.Leave();
+
+            thread->Delete();
+
+            wxGetApp().m_critsect.Enter();
+        }
+    }
+
+    wxGetApp().m_critsect.Leave();
+
+    if ( count )
+    {
+        // now wait for them to really terminate
+        wxGetApp().m_semAllDone.Wait();
+    }
+    //else: no threads to terminate, no condition to wait for
+}
+
 MyThread *MyFrame::CreateThread()
 {
     MyThread *thread = new MyThread(this);
@@ -597,50 +643,6 @@ void MyFrame::OnIdle(wxIdleEvent& event)
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 {
-    // NB: although the OS will terminate all the threads anyhow when the main
-    //     one exits, it's good practice to do it ourselves -- even if it's not
-    //     completely trivial in this example
-
-    // tell all the threads to terminate: note that they can't terminate while
-    // we're deleting them because they will block in their OnExit() -- this is
-    // important as otherwise we might access invalid array elements
-    {
-        wxThread *thread;
-
-        wxGetApp().m_critsect.Enter();
-
-        // check if we have any threads running first
-        const wxArrayThread& threads = wxGetApp().m_threads;
-        size_t count = threads.GetCount();
-
-        if ( count )
-        {
-            // set the flag for MyThread::OnExit()
-            wxGetApp().m_waitingUntilAllDone = TRUE;
-
-            // stop all threads
-            while ( ! threads.IsEmpty() )
-            {
-                thread = threads.Last();
-
-                wxGetApp().m_critsect.Leave();
-
-                thread->Delete();
-
-                wxGetApp().m_critsect.Enter();
-            }
-        }
-
-        wxGetApp().m_critsect.Leave();
-
-        if ( count )
-        {
-            // now wait for them to really terminate
-            wxGetApp().m_semAllDone.Wait();
-        }
-        //else: no threads to terminate, no condition to wait for
-    }
-
     Close(TRUE);
 }
 
