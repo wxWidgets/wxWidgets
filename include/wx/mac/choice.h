@@ -20,7 +20,7 @@
 
   #include  "wx/dynarray.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxChoiceNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxChoiceNameStr;
 
 WX_DEFINE_ARRAY( char * , wxChoiceDataArray ) ;
 

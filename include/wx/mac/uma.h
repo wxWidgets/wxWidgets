@@ -56,7 +56,7 @@ OSStatus        UMAPrClose(void *macPrintSession) ;
 
 GrafPtr        UMAGetWindowPort( WindowRef inWindowRef ) ;
 void             UMADisposeWindow( WindowRef inWindowRef ) ;
-void             UMASetWTitleC( WindowRef inWindowRef , const char *title ) ;
+void             UMASetWTitle( WindowRef inWindowRef , const wxString& title ) ;
 void             UMAGetWTitleC( WindowRef inWindowRef , char *title ) ;
 
 void             UMADrawGrowIcon( WindowRef inWindowRef ) ;
@@ -75,6 +75,7 @@ void UMAShowControl                        (ControlHandle             theControl
 void UMAHideControl                        (ControlHandle             theControl);
 void UMAActivateControl                    (ControlHandle             inControl);
 void UMADeactivateControl                (ControlHandle             inControl);
+void UMASetControlTitle( ControlHandle inControl , const wxString& title ) ;
 
 void UMAMoveControl( ControlHandle inControl , short x , short y ) ;
 void UMASizeControl( ControlHandle inControl , short x , short y ) ;

@@ -40,7 +40,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxSP_VERTICAL | wxSP_ARROW_KEYS,
-                 const wxString& name = "wxSpinButton")
+                 const wxString& name = wxT("wxSpinButton"))
     {
         Create(parent, id, pos, size, style, name);
     }
@@ -52,7 +52,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxSP_VERTICAL | wxSP_ARROW_KEYS,
-                const wxString& name = "wxSpinButton");
+                const wxString& name = wxT("wxSpinButton"));
 
 
     // accessors

@@ -29,7 +29,7 @@ public:
 // Accessors
 
 // Operations
-    bool SetIcon(const wxIcon& icon, const wxString& tooltip = "");
+    bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString);
     bool RemoveIcon();
 
 // Overridables

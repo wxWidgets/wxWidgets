@@ -310,12 +310,8 @@ void *wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name, bool *su
     CFragSymbolClass    symClass;
     Str255              symName;
 
-#if TARGET_CARBON
-    c2pstrcpy( (StringPtr) symName, name );
-#else
-    strcpy( (char *) symName, name );
-    c2pstr( (char *) symName );
-#endif
+	wxMacStringToPascal( name.c_str() , symName ) ;
+
     if( FindSymbol( ((CFragConnectionID)dllHandle), symName, &symAddress, &symClass ) == noErr )
         symbol = (void *)symAddress;
 

@@ -20,7 +20,7 @@
 #include "wx/slider.h"
 #include "wx/stattext.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxSliderNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxSliderNameStr;
 
 // Slider
 class WXDLLEXPORT wxSlider: public wxControl

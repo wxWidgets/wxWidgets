@@ -434,7 +434,70 @@
             #define wxNEED_WX_STDIO_H
             #define wxNEED_WX_STDLIB_H
             #define wxNEED_WX_TIME_H
-        #else // !glibc
+        #elif defined(__MWERKS__) && defined(macintosh)
+            // ctype.h functions (wctype.h)
+            #define  wxIsalnum   iswalnum
+            #define  wxIsalpha   iswalpha
+            #define  wxIsctrl    iswcntrl
+            #define  wxIsdigit   iswdigit
+            #define  wxIsgraph   iswgraph
+            #define  wxIslower   iswlower
+            #define  wxIsprint   iswprint
+            #define  wxIspunct   iswpunct
+            #define  wxIsspace   iswspace
+            #define  wxIsupper   iswupper
+            #define  wxIsxdigit  iswxdigit
+            #define  wxTolower   towlower
+            #define  wxToupper   towupper
+
+            // string.h functions (wchar.h)
+            #define  wxStrcat    wcscat
+            #define  wxStrchr    wcschr
+            #define  wxStrcmp    wcscmp
+            #define  wxStrcoll   wcscoll
+            #define  wxStrcpy    wcscpy
+            #define  wxStrcspn   wcscspn
+            #define  wxStrlen_   wxWcslen // wxStrlen_() is used in wxStrlen()
+            #define  wxStrncat   wcsncat
+            #define  wxStrncmp   wcsncmp
+            #define  wxStrncpy   wcsncpy
+            #define  wxStrpbrk   wcspbrk
+            #define  wxStrrchr   wcsrchr
+            #define  wxStrspn    wcsspn
+            #define  wxStrstr    wcsstr
+            #define  wxStrtod    wcstod
+            #define  wxStrtol    wcstol
+            #define  wxStrtoul   wcstoul
+            #define  wxStrxfrm   wcsxfrm
+
+            #define  wxFgetc     fgetwc
+            #define  wxFgetchar  fgetwchar
+            #define  wxFgets     fgetws
+            #define  wxFputc     fputwc
+            #define  wxFputchar  fputwchar
+            #define  wxGetc      getwc
+            #define  wxGetchar   getwchar
+            #define  wxGets      getws
+            #define  wxUngetc    ungetwc
+
+            #define wxNEED_FPUTWC
+
+            #include <stdio.h>
+
+            int wxFputs(const wxChar *ch, FILE *stream);
+            int wxPutc(wxChar ch, FILE *stream);
+
+            #define wxPuts(ws) wxFputs(ws, stdout)
+            #define wxPutchar(wch) wxPutc(wch, stdout)
+
+            // we need %s to %ls conversion for printf and scanf etc
+            #define wxNEED_PRINTF_CONVERSION
+            // glibc doesn't have wide char equivalents of the other stuff so
+            // use our own versions
+            #define wxNEED_WX_STDIO_H
+            #define wxNEED_WX_STDLIB_H
+            #define wxNEED_WX_TIME_H
+        #else // !metrowerks for apple
             #error  "Please define wide character functions for your environment"
         #endif
     #else // ASCII
@@ -813,6 +876,9 @@ WXDLLEXPORT int      wxSystem(const wxChar *psz);
 
 // time.h functions
 #ifdef wxNEED_WX_TIME_H
+#if defined(__MWERKS__) && defined(macintosh)
+    #include <time.h> 
+#endif
     WXDLLEXPORT size_t wxStrftime(wxChar *s, size_t max,
                                   const wxChar *fmt, const struct tm *tm);
 #endif // wxNEED_WX_TIME_H

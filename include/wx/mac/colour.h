@@ -36,7 +36,7 @@ public:
   wxColour( const wxString &colourName )
       : m_isInit(FALSE), m_red(0), m_blue(0), m_green(0)
       { InitFromName(colourName); }
-  wxColour( const char *colourName )
+  wxColour( const wxChar *colourName )
       : m_isInit(FALSE), m_red(0), m_blue(0), m_green(0)
       { InitFromName(colourName); }
 

@@ -331,7 +331,7 @@ wxString wxFileConfig::GetGlobalFileName(const wxChar *szFile)
 
     if ( wxStrchr(szFile, wxT('.')) == NULL )
 #if defined( __WXMAC__ )
-        str << " Preferences";
+        str << wxT(" Preferences") ;
 #elif defined( __UNIX__ )
         str << wxT(".conf");
 #else   // Windows
@@ -364,7 +364,7 @@ wxString wxFileConfig::GetLocalFileName(const wxChar *szFile)
 #endif
 
 #ifdef __WXMAC__
-    str << " Preferences";
+    str << wxT(" Preferences") ;
 #endif
 
     return str;

@@ -63,6 +63,7 @@
     #include <stat.h>
     #include <unistd.h>
     #include <unix.h>
+    #include <fcntl.h>
 #endif
 
 #ifdef __UNIX__
@@ -935,7 +936,7 @@ wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
         (*myPath)[length-1] = 0 ;
 
     // create path string for return value
-    wxString result( (char*) *myPath ) ;
+    wxString result = wxMacMakeStringFromCString( *myPath ) ;
 
     // free allocated handle
     ::HUnlock( myPath ) ;
@@ -948,7 +949,8 @@ wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
 // Mac file names are POSIX (Unix style) under Darwin
 // therefore the conversion functions below are not needed
 
-static char sMacFileNameConversion[ 1000 ] ;
+static wxChar sMacFileNameConversion[ 1000 ] ;
+static char scMacFileNameConversion[ 1000 ] ;
 
 #endif
 void wxMacFilename2FSSpec( const char *path , FSSpec *spec )
@@ -965,10 +967,10 @@ void wxMacFilename2FSSpec( const char *path , FSSpec *spec )
     if ( strchr( path , ':' ) == NULL )
     {
         // try whether it is a volume / or a mounted volume
-        strncpy( sMacFileNameConversion , path , 1000 ) ;
-        sMacFileNameConversion[998] = 0 ;
-        strcat( sMacFileNameConversion , ":" ) ;
-        err = FSpLocationFromFullPath( strlen(sMacFileNameConversion) , sMacFileNameConversion , spec ) ;
+        strncpy( scMacFileNameConversion , path , 1000 ) ;
+        scMacFileNameConversion[998] = 0 ;
+        strcat( scMacFileNameConversion , ":" ) ;
+        err = FSpLocationFromFullPath( strlen(scMacFileNameConversion) , scMacFileNameConversion , spec ) ;
     }
     else
     {
@@ -977,15 +979,22 @@ void wxMacFilename2FSSpec( const char *path , FSSpec *spec )
 #endif
 }
 
+#if wxUSE_UNICODE
+WXDLLEXPORT void wxMacFilename2FSSpec( const wxChar *path , FSSpec *spec ) 
+{
+    return wxMacFilename2FSSpec( wxMacStringToCString( wxString( path ) ) , spec ) ;
+}
+#endif
+
 #ifndef __DARWIN__
 
-wxString wxMac2UnixFilename (const char *str)
+wxString wxMac2UnixFilename (const wxChar *str)
 {
-    char *s = sMacFileNameConversion ;
-    strcpy( s , str ) ;
+    wxChar *s = sMacFileNameConversion ;
+    wxStrcpy( s , str ) ;
     if (s)
     {
-        memmove( s+1 , s ,strlen( s ) + 1) ;
+        memmove( s+1 , s ,wxStrlen( s ) + 1 * sizeof(wxChar)) ;
         if ( *s == ':' )
             *s = '.' ;
         else
@@ -1003,25 +1012,25 @@ wxString wxMac2UnixFilename (const char *str)
     return wxString(sMacFileNameConversion) ;
 }
 
-wxString wxUnix2MacFilename (const char *str)
+wxString wxUnix2MacFilename (const wxChar *str)
 {
-    char *s = sMacFileNameConversion ;
-    strcpy( s , str ) ;
+    wxChar *s = sMacFileNameConversion ;
+    wxStrcpy( s , str ) ;
     if (s)
     {
         if ( *s == '.' )
         {
             // relative path , since it goes on with slash which is translated to a :
-            memmove( s , s+1 ,strlen( s ) ) ;
+            memmove( s , s+1 ,wxStrlen( s ) * sizeof(wxChar)) ;
         }
         else if ( *s == '/' )
         {
             // absolute path -> on mac just start with the drive name
-            memmove( s , s+1 ,strlen( s ) ) ;
+            memmove( s , s+1 ,wxStrlen( s ) * sizeof(wxChar) ) ;
         }
         else
         {
-            wxASSERT_MSG( 1 , "unkown path beginning" ) ;
+            wxASSERT_MSG( 1 , wxT("unkown path beginning") ) ;
         }
         while (*s)
         {
@@ -1031,7 +1040,7 @@ wxString wxUnix2MacFilename (const char *str)
                 if ( *(s+1) == '.' && *(s+2) == '.' && ( (*(s+3) == '/' || *(s+3) == '\\') ) )
                 {
                     *s = ':';
-                    memmove( s+1 , s+3 ,strlen( s+3 ) + 1 ) ;
+                    memmove( s+1 , s+3 ,(wxStrlen( s+3 ) + 1)*sizeof(wxChar) ) ;
                 }
                 else
                     *s = ':';
@@ -1039,7 +1048,7 @@ wxString wxUnix2MacFilename (const char *str)
             s++ ;
         }
     }
-    return wxString (sMacFileNameConversion) ;
+    return wxString(sMacFileNameConversion) ;
 }
 
 wxString wxMacFSSpec2UnixFilename( const FSSpec *spec )
@@ -1255,6 +1264,8 @@ bool wxRemoveFile(const wxString& file)
  || defined(__WATCOMC__) \
  || defined(__GNUWIN32__)
   int res = wxRemove(file);
+#elif defined(__WXMAC__)
+  int res = unlink(wxFNCONV(file));
 #else
   int res = unlink(OS_FILENAME(file));
 #endif
@@ -1265,7 +1276,7 @@ bool wxRemoveFile(const wxString& file)
 bool wxMkdir(const wxString& dir, int perm)
 {
 #if defined(__WXMAC__) && !defined(__UNIX__)
-  return (mkdir( dir , 0 ) == 0);
+  return (mkdir( wxFNCONV(dir) , 0 ) == 0);
 #else // !Mac
     const wxChar *dirname = dir.c_str();
 
@@ -1497,10 +1508,7 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
             cwdSpec.parID = pb.ioFCBParID;
             cwdSpec.name[0] = 0 ;
             wxString res = wxMacFSSpec2MacFilename( &cwdSpec ) ;
-
-            strcpy( cbuf , res ) ;
-            cbuf[res.length()]=0 ;
-
+			wxStrcpy( buf , res ) ;			
             ok = TRUE;
         }
         else
@@ -1518,7 +1526,7 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
         ok = getcwd(cbuf, sz) != NULL;
     #endif // platform
 
-    #if wxUSE_UNICODE
+    #if wxUSE_UNICODE && !defined(__WXMAC__)
         // finally convert the result to Unicode if needed
         wxConvFile.MB2WC(buf, cbuf, sz);
     #endif // wxUSE_UNICODE

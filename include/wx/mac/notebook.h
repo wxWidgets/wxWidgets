@@ -48,14 +48,14 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
-             const wxString& name = "notebook");
+             const wxString& name = wxT("notebook"));
     // Create() function
   bool Create(wxWindow *parent,
               wxWindowID id, 
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = 0,
-              const wxString& name = "notebook");
+              const wxString& name = wxT("notebook"));
     // dtor
   ~wxNotebook();
 

@@ -143,6 +143,9 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
     
 #if wxUSE_UNICODE
 #   define wxNEED_WX_UNISTD_H
+#if defined(__MWERKS__) && defined(macintosh)
+	#include <sys/stat.h>
+#endif
 WXDLLEXPORT int wxStat( const wxChar *file_name, wxStructStat *buf );
 WXDLLEXPORT int wxAccess( const wxChar *pathname, int mode );
 WXDLLEXPORT int wxOpen( const wxChar *pathname, int flags, mode_t mode );

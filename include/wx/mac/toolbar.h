@@ -21,7 +21,7 @@
 #include "wx/tbarbase.h"
 #include "wx/dynarray.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxToolBarNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxToolBarNameStr;
 
 class WXDLLEXPORT wxToolBar: public wxToolBarBase
 {

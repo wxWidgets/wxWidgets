@@ -991,6 +991,18 @@
 #   endif  /* wxUSE_DYNAMIC_LOADER */
 #endif /* wxMSW */
 
+/* wxMAC-specific dependencies */
+#ifdef __WXMAC__
+#   if wxUSE_UNICODE
+#       if !TARGET_CARBON
+#           ifdef wxABORT_ON_CONFIG_ERROR
+#               error "wxUSE_UNICODE is only supported for Carbon Targets."
+#           else
+#               define wxUSE_UNICODE 0
+#           endif
+#       endif
+#   endif
+#endif /* wxMAC */
 /* wxMotif-specific dependencies */
 #if defined(__WXMOTIF__) && wxUSE_NOTEBOOK && !wxUSE_TAB_DIALOG
 #  undef wxUSE_TAB_DIALOG

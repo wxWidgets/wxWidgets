@@ -76,8 +76,8 @@ class WXDLLEXPORT wxICONResourceHandler: public wxBitmapHandler
 public:
   inline wxICONResourceHandler()
   {
-    m_name = "ICON resource";
-    m_extension = "";
+    m_name = wxT("ICON resource");
+    m_extension = wxEmptyString;
     m_type = wxBITMAP_TYPE_ICON_RESOURCE;
   };
 

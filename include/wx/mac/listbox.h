@@ -123,9 +123,9 @@ public:
 protected:
     void            MacDestroy() ;
     void            MacDelete( int n ) ;
-    void            MacInsert( int n , const char * text) ;
-    void            MacAppend( const char * text) ;
-    void            MacSet( int n , const char *text ) ;
+    void            MacInsert( int n , const wxString& item) ;
+    void            MacAppend( const wxString& item) ;
+    void            MacSet( int n , const wxString& item ) ;
     void            MacClear() ;
     void            MacSetSelection( int n , bool select ) ;
     int             MacGetSelection() const ;

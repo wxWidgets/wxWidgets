@@ -22,8 +22,8 @@
  * File selector
  */
 
-WXDLLEXPORT_DATA(extern const char*) wxFileSelectorPromptStr;
-WXDLLEXPORT_DATA(extern const char*) wxFileSelectorDefaultWildcardStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxFileSelectorPromptStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxFileSelectorDefaultWildcardStr;
 
 class WXDLLEXPORT wxFileDialog: public wxDialog
 {
@@ -41,7 +41,7 @@ protected:
     int         m_filterIndex;
 public:
     wxFileDialog(wxWindow *parent, const wxString& message = wxFileSelectorPromptStr,
-        const wxString& defaultDir = "", const wxString& defaultFile = "", const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
+        const wxString& defaultDir = wxEmptyString, const wxString& defaultFile = wxEmptyString, const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
         long style = 0, const wxPoint& pos = wxDefaultPosition);
 
     inline void SetMessage(const wxString& message) { m_message = message; }
@@ -78,22 +78,22 @@ public:
 #define wxFILE_MUST_EXIST   0x0010
 
 // File selector - backward compatibility
-WXDLLEXPORT wxString wxFileSelector(const char *message = wxFileSelectorPromptStr, const char *default_path = NULL,
-                     const char *default_filename = NULL, const char *default_extension = NULL,
-                     const char *wildcard = wxFileSelectorDefaultWildcardStr, int flags = 0,
+WXDLLEXPORT wxString wxFileSelector(const wxChar *message = wxFileSelectorPromptStr, const wxChar *default_path = NULL,
+                     const wxChar *default_filename = NULL, const wxChar *default_extension = NULL,
+                     const wxChar *wildcard = wxFileSelectorDefaultWildcardStr, int flags = 0,
                      wxWindow *parent = NULL, int x = -1, int y = -1);
 
 // An extended version of wxFileSelector
-WXDLLEXPORT wxString wxFileSelectorEx(const char *message = wxFileSelectorPromptStr, const char *default_path = NULL,
-                     const char *default_filename = NULL, int *indexDefaultExtension = NULL,
-                     const char *wildcard = wxFileSelectorDefaultWildcardStr, int flags = 0,
+WXDLLEXPORT wxString wxFileSelectorEx(const wxChar *message = wxFileSelectorPromptStr, const wxChar *default_path = NULL,
+                     const wxChar *default_filename = NULL, int *indexDefaultExtension = NULL,
+                     const wxChar *wildcard = wxFileSelectorDefaultWildcardStr, int flags = 0,
                      wxWindow *parent = NULL, int x = -1, int y = -1);
 
 // Generic file load dialog
-WXDLLEXPORT wxString wxLoadFileSelector(const char *what, const char *extension, const char *default_name = NULL, wxWindow *parent = NULL);
+WXDLLEXPORT wxString wxLoadFileSelector(const wxChar *what, const wxChar *extension, const wxChar *default_name = NULL, wxWindow *parent = NULL);
 
 // Generic file save dialog
-WXDLLEXPORT wxString wxSaveFileSelector(const char *what, const char *extension, const char *default_name = NULL, wxWindow *parent = NULL);
+WXDLLEXPORT wxString wxSaveFileSelector(const wxChar *what, const wxChar *extension, const wxChar *default_name = NULL, wxWindow *parent = NULL);
 
 #endif
     // _WX_FILEDLG_H_
