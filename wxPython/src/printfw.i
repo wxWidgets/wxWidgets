@@ -16,6 +16,7 @@
 #include "helpers.h"
 #include <wx/print.h>
 #include <wx/printdlg.h>
+#include <wx/dcps.h>
 
 #include "printfw.h"
 %}
@@ -109,6 +110,22 @@ public:
                                     int orientation = wxPORTRAIT);
 };
 #endif
+
+//---------------------------------------------------------------------------
+
+class wxPostScriptDC : public wxDC {
+public:
+    wxPostScriptDC(const wxPrintData& printData);
+    %name(wxPostScriptDC2)wxPostScriptDC(const wxString& output,
+                                         bool interactive = TRUE,
+                                         wxWindow* parent = NULL);
+
+    wxPrintData& GetPrintData();
+    void SetPrintData(const wxPrintData& data);
+
+    static void SetResolution(int ppi);
+    static int GetResolution();
+};
 
 //---------------------------------------------------------------------------
 

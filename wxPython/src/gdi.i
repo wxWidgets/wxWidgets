@@ -16,9 +16,6 @@
 %{
 #include "helpers.h"
 #include <wx/imaglist.h>
-#ifndef __WXMSW__
-#include <wx/dcps.h>
-#endif
 #include <wx/fontmap.h>
 #include <wx/fontenc.h>
 #include <wx/fontmap.h>
@@ -1061,15 +1058,6 @@ class wxWindowDC : public wxDC {
 public:
       wxWindowDC(wxWindow* win);
 };
-
-//---------------------------------------------------------------------------
-
-#ifndef __WXMSW__
-class wxPostScriptDC : public wxDC {
-public:
-      wxPostScriptDC(const wxString& output, bool interactive = TRUE, wxWindow* win = NULL);
-};
-#endif
 
 //---------------------------------------------------------------------------
 

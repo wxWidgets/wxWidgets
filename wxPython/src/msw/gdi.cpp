@@ -57,9 +57,6 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "helpers.h"
 #include <wx/imaglist.h>
-#ifndef __WXMSW__
-#include <wx/dcps.h>
-#endif
 #include <wx/fontmap.h>
 #include <wx/fontenc.h>
 #include <wx/fontmap.h>
