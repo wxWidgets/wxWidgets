@@ -21,21 +21,21 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include <stdio.h>
-#include "wx/setup.h"
-#include "wx/menu.h"
-#include "wx/dc.h"
-#include "wx/dcclient.h"
-#include "wx/utils.h"
-#include "wx/app.h"
-#include "wx/panel.h"
-#include "wx/layout.h"
-#include "wx/dialog.h"
-#include "wx/frame.h"
-#include "wx/listbox.h"
-#include "wx/button.h"
-#include "wx/settings.h"
-#include "wx/msgdlg.h"
+    #include <stdio.h>
+    #include "wx/setup.h"
+    #include "wx/menu.h"
+    #include "wx/dc.h"
+    #include "wx/dcclient.h"
+    #include "wx/utils.h"
+    #include "wx/app.h"
+    #include "wx/panel.h"
+    #include "wx/layout.h"
+    #include "wx/dialog.h"
+    #include "wx/frame.h"
+    #include "wx/listbox.h"
+    #include "wx/button.h"
+    #include "wx/settings.h"
+    #include "wx/msgdlg.h"
 #endif
 
 #if     wxUSE_OWNER_DRAWN
@@ -48,25 +48,30 @@
 
 #include "wx/menuitem.h"
 #include "wx/log.h"
+#include "wx/tooltip.h"
+
 #include "wx/msw/private.h"
 
 #include <string.h>
 
 #ifndef __GNUWIN32__
-#include <shellapi.h>
-#include <mmsystem.h>
+    #include <shellapi.h>
+    #include <mmsystem.h>
 #endif
 
 #ifdef __WIN32__
-#include <windowsx.h>
+    #include <windowsx.h>
 #endif
+
+#include <commctrl.h>
 
 #ifndef __TWIN32__
-#ifdef __GNUWIN32__
-#include <wx/msw/gnuwin32/extra.h>
-#endif
+    #ifdef __GNUWIN32__
+        #include <wx/msw/gnuwin32/extra.h>
+    #endif
 #endif
 
+// all these are defined in <windows.h>
 #ifdef GetCharWidth
 #undef GetCharWidth
 #endif
@@ -97,13 +102,11 @@ void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win);
 wxWindow *wxFindWinFromHandle(WXHWND hWnd);
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxEvtHandler)
+    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxEvtHandler)
 #endif
 
 BEGIN_EVENT_TABLE(wxWindow, wxEvtHandler)
     EVT_CHAR(wxWindow::OnChar)
-    EVT_KEY_DOWN(wxWindow::OnKeyDown)
-    EVT_KEY_UP(wxWindow::OnKeyUp)
     EVT_ERASE_BACKGROUND(wxWindow::OnEraseBackground)
     EVT_SYS_COLOUR_CHANGED(wxWindow::OnSysColourChanged)
     EVT_INIT_DIALOG(wxWindow::OnInitDialog)
@@ -179,9 +182,19 @@ bool wxWindow::MSWCommand(WXUINT WXUNUSED(param), WXWORD WXUNUSED(id))
 }
 
 bool wxWindow::MSWNotify(WXWPARAM WXUNUSED(wParam),
-                         WXLPARAM WXUNUSED(lParam),
+                         WXLPARAM lParam,
                          WXLPARAM* WXUNUSED(result))
 {
+    NMHDR* hdr = (NMHDR *)lParam;
+    if ( hdr->code == TTN_NEEDTEXT && m_tooltip )
+    {
+        TOOLTIPTEXT *ttt = (TOOLTIPTEXT *)lParam;
+        ttt->lpszText = (char *)m_tooltip->GetTip().c_str();
+
+        // processed
+        return TRUE;
+    }
+
     return FALSE;
 }
 
@@ -268,6 +281,8 @@ void wxWindow::Init()
 #if  wxUSE_DRAG_AND_DROP
     m_pDropTarget = NULL;
 #endif
+
+    m_tooltip = NULL;
 }
 
 wxWindow::wxWindow()
@@ -279,6 +294,10 @@ wxWindow::wxWindow()
 wxWindow::~wxWindow()
 {
     m_isBeingDeleted = TRUE;
+
+    // first of all, delete the things on which nothing else depends
+
+    wxDELETE(m_tooltip);
 
     // JACS - if behaviour is odd, restore this
     // to the start of ~wxWindow. Vadim has changed
@@ -292,6 +311,7 @@ wxWindow::~wxWindow()
     // delete themselves.
 #if wxUSE_CONSTRAINTS
     DeleteRelatedConstraints();
+
     if (m_constraints)
     {
         // This removes any dangling pointers to this window
@@ -300,11 +320,9 @@ wxWindow::~wxWindow()
         delete m_constraints;
         m_constraints = NULL;
     }
-    if (m_windowSizer)
-    {
-        delete m_windowSizer;
-        m_windowSizer = NULL;
-    }
+
+    wxDELETE(m_windowSizer);
+
     // If this is a child of a sizer, remove self from parent
     if (m_sizerParent)
         m_sizerParent->RemoveChild((wxWindow *)this);
@@ -501,7 +519,8 @@ void wxWindow::SetDropTarget(wxDropTarget *pDropTarget)
         m_pDropTarget->Register(m_hWnd);
 }
 
-#endif
+#endif // wxUSE_DRAG_AND_DROP
+
 
 //old style file-manager drag&drop support
 // I think we should retain the old-style
@@ -512,6 +531,24 @@ void wxWindow::DragAcceptFiles(bool accept)
     HWND hWnd = (HWND) GetHWND();
     if (hWnd)
         ::DragAcceptFiles(hWnd, (BOOL)accept);
+}
+
+// ----------------------------------------------------------------------------
+// tooltips
+// ----------------------------------------------------------------------------
+
+void wxWindow::SetToolTip(const wxString &tip)
+{
+    SetToolTip(new wxToolTip(tip));
+}
+
+void wxWindow::SetToolTip(wxToolTip *tooltip)
+{
+    if ( m_tooltip )
+        delete m_tooltip;
+
+    m_tooltip = tooltip;
+    m_tooltip->SetWindow(this);
 }
 
 // Get total size
@@ -882,7 +919,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 
 #ifdef __WXDEBUG__
     wxLogTrace(wxTraceMessages, "Processing %s(%lx, %lx)",
-        wxGetMessageName(message), wParam, lParam);
+               wxGetMessageName(message), wParam, lParam);
 #endif // __WXDEBUG__
 
     HWND hWnd = (HWND)m_hWnd;
@@ -1164,10 +1201,10 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             break;
         }
 
+#if 0
     case WM_KEYDOWN:
     {
         MSWOnKeyDown((WORD) wParam, lParam);
-#if 0
         // we consider these message "not interesting"
         if ( wParam == VK_SHIFT || wParam == VK_CONTROL )
             return Default();
@@ -1185,9 +1222,9 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             MSWOnChar((WORD)wParam, lParam);
         else
             return Default();
-#endif
         break;
     }
+#endif
 
     case WM_KEYUP:
     {
@@ -1902,14 +1939,19 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
             lDlgCode = ::SendMessage(msg->hwnd, WM_GETDLGCODE, 0, 0);
         }
 
-        bool bForward = TRUE;
+        bool bForward = TRUE,
+             bWindowChange = FALSE;
         if ( bProcess ) {
             switch ( msg->wParam ) {
                 case VK_TAB:
-                    if ( lDlgCode & DLGC_WANTTAB )  // FALSE for Ctrl-Tab
+                    if ( lDlgCode & DLGC_WANTTAB ) {
                         bProcess = FALSE;
-                    else
+                    }
+                    else {
+                        // Ctrl-Tab cycles thru notebook pages
+                        bWindowChange = bCtrlDown;
                         bForward = !(::GetKeyState(VK_SHIFT) & 0x100);
+                    }
                     break;
 
                 case VK_UP:
@@ -1926,6 +1968,18 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
                         bProcess = FALSE;
                     break;
 
+                case VK_RETURN:
+                    // if there is a default button, Enter should press it
+                    if ( !GetDefaultItem() ) {
+                        // but if there is not it makes sense to make it work
+                        // like a TAB
+
+                        // nothing to do - all variables are already set
+
+                        break;
+                    }
+                    //else: fall through and don't process the message
+
                 default:
                     bProcess = FALSE;
             }
@@ -1934,7 +1988,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
         if ( bProcess ) {
             wxNavigationKeyEvent event;
             event.SetDirection(bForward);
-            event.SetWindowChange(bCtrlDown);
+            event.SetWindowChange(bWindowChange);
             event.SetEventObject(this);
 
             if ( GetEventHandler()->ProcessEvent(event) )
@@ -1943,6 +1997,14 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
 
         return ::IsDialogMessage((HWND)GetHWND(), msg) != 0;
     }
+#if wxUSE_TOOLTIPS
+    else if ( m_tooltip ) {
+        // relay mouse move events to the tooltip control
+        MSG *msg = (MSG *)pMsg;
+        if ( msg->message == WM_MOUSEMOVE )
+            m_tooltip->RelayEvent(pMsg);
+    }
+#endif // wxUSE_TOOLTIPS
 
     return FALSE;
 }
@@ -3049,13 +3111,6 @@ void wxWindow::Centre(int direction)
 
 }
 
-/* TODO (maybe)
-void wxWindow::OnPaint()
-{
-PaintSelectionHandles();
-}
-*/
-
 void wxWindow::WarpPointer (int x_pos, int y_pos)
 {
     // Move the pointer to (x_pos,y_pos) coordinates. They are expressed in
@@ -3550,17 +3605,17 @@ WXDWORD wxWindow::Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D)
 
 void wxWindow::OnChar(wxKeyEvent& event)
 {
-/* I'm commenting this out because otherwise, we lose tabs in e.g. a text window (see MDI sample)
- * (JACS, 14/01/99)
+#if 0
     if ( event.KeyCode() == WXK_TAB ) {
         // propagate the TABs to the parent - it's up to it to decide what
         // to do with it
-        if ( GetParent() ) {
-            if ( GetParent()->GetEventHandler()->ProcessEvent(event) )
+        wxWindow *parent = GetParent();
+        if ( parent ) {
+            if ( parent->GetEventHandler()->ProcessEvent(event) )
                 return;
         }
     }
-*/
+#endif // 0
 
     bool isVirtual;
     int id = wxCharCodeWXToMSW((int)event.KeyCode(), &isVirtual);
@@ -3570,21 +3625,6 @@ void wxWindow::OnChar(wxKeyEvent& event)
 
     if ( !event.ControlDown() )
         (void) MSWDefWindowProc(m_lastMsg, (WPARAM) id, m_lastLParam);
-}
-
-void wxWindow::OnKeyDown(wxKeyEvent& event)
-{
-    Default();
-}
-
-void wxWindow::OnKeyUp(wxKeyEvent& event)
-{
-    Default();
-}
-
-void wxWindow::OnPaint(wxPaintEvent& event)
-{
-    Default();
 }
 
 bool wxWindow::IsEnabled(void) const
@@ -4427,6 +4467,7 @@ long wxWindow::MSWGetDlgCode()
 
 bool wxWindow::AcceptsFocus() const
 {
+    // invisible and disabled controls don't need focus
     return IsShown() && IsEnabled();
 }
 
