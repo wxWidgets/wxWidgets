@@ -12,6 +12,10 @@
 #ifndef _WX_GENERIC_SPINCTRL_H_
 #define _WX_GENERIC_SPINCTRL_H_
 
+#ifdef __GNUG__
+    #pragma interface "spinctlg.h"
+#endif
+
 #include "wx/textctrl.h"
 
 // ----------------------------------------------------------------------------
