@@ -395,8 +395,6 @@ int wxFileDialog::ShowModal()
         }
     }
 
-     //== Execute FileDialog >>=================================================
-
     //== Execute FileDialog >>=================================================
 
     bool success = (m_dialogStyle & wxSAVE ? GetSaveFileName(&of)
