@@ -64,15 +64,6 @@
 // NB: EXTRA_ALLOC must be >= 0!
 #define EXTRA_ALLOC       (19 - nLen % 16)
 
-#if defined(__VISAGECPP__) && __IBMCPP__ >= 400
-// must define this in .cpp for VA or else you get multiply defined symbols everywhere
-
-// maximum possible length for a string means "take all string" everywhere
-//  (as sizeof(StringData) is unknown here, we substract 100)
-const unsigned int wxSTRING_MAXLEN = UINT_MAX - 100;
-
-#endif
-
 // ---------------------------------------------------------------------------
 // static class variables definition
 // ---------------------------------------------------------------------------

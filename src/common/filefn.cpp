@@ -110,10 +110,6 @@
 // constants
 // ----------------------------------------------------------------------------
 
-#if defined(__VISAGECPP__) && __IBMCPP__ >= 400
-const off_t wxInvalidOffset = (off_t)-1;
-#endif
-
 #define _MAXPATHLEN 500
 
 extern wxChar *wxBuffer;

@@ -95,8 +95,8 @@
 // ----------------------------------------------------------------------------
 
 #if defined(__VISAGECPP__) && __IBMCPP__ >= 400
-// must define this in .cpp for VA or else you get multiply defined symbols everywhere
-extern const unsigned int wxSTRING_MAXLEN;
+// must define this static for VA or else you get multiply defined symbols everywhere
+static const unsigned int wxSTRING_MAXLEN = UINT_MAX - 100;
 
 #else
 // maximum possible length for a string means "take all string" everywhere

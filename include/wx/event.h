@@ -45,215 +45,215 @@ class WXDLLEXPORT wxList;
 typedef int wxEventType;
 
 #if defined(__VISAGECPP__) && __IBMCPP__ >= 400
-// must define these in the .cpp for VA or else you get multiply defined symbols everywhere
-extern const wxEventType wxEVT_NULL;
-extern const wxEventType wxEVT_FIRST;
+// must define these static for VA or else you get multiply defined symbols everywhere
+static const wxEventType wxEVT_NULL = 0;
+static const wxEventType wxEVT_FIRST = 10000;
 
-extern const wxEventType wxEVT_COMMAND_BUTTON_CLICKED;
-extern const wxEventType wxEVT_COMMAND_CHECKBOX_CLICKED;
-extern const wxEventType wxEVT_COMMAND_CHOICE_SELECTED;
-extern const wxEventType wxEVT_COMMAND_LISTBOX_SELECTED;
-extern const wxEventType wxEVT_COMMAND_LISTBOX_DOUBLECLICKED;
-extern const wxEventType wxEVT_COMMAND_CHECKLISTBOX_TOGGLED;
-extern const wxEventType wxEVT_COMMAND_TEXT_UPDATED;
-extern const wxEventType wxEVT_COMMAND_TEXT_ENTER;
-extern const wxEventType wxEVT_COMMAND_MENU_SELECTED;
-extern const wxEventType wxEVT_COMMAND_TOOL_CLICKED;
-extern const wxEventType wxEVT_COMMAND_SLIDER_UPDATED;
-extern const wxEventType wxEVT_COMMAND_RADIOBOX_SELECTED;
-extern const wxEventType wxEVT_COMMAND_RADIOBUTTON_SELECTED;
-extern const wxEventType wxEVT_COMMAND_SCROLLBAR_UPDATED;
-extern const wxEventType wxEVT_COMMAND_VLBOX_SELECTED;
-extern const wxEventType wxEVT_COMMAND_COMBOBOX_SELECTED;
-extern const wxEventType wxEVT_COMMAND_TOOL_RCLICKED;
-extern const wxEventType wxEVT_COMMAND_TOOL_ENTER;
-extern const wxEventType wxEVT_COMMAND_SPINCTRL_UPDATED;
+static const wxEventType wxEVT_COMMAND_BUTTON_CLICKED =            wxEVT_FIRST + 1;
+static const wxEventType wxEVT_COMMAND_CHECKBOX_CLICKED =          wxEVT_FIRST + 2;
+static const wxEventType wxEVT_COMMAND_CHOICE_SELECTED =           wxEVT_FIRST + 3;
+static const wxEventType wxEVT_COMMAND_LISTBOX_SELECTED =          wxEVT_FIRST + 4;
+static const wxEventType wxEVT_COMMAND_LISTBOX_DOUBLECLICKED =     wxEVT_FIRST + 5;
+static const wxEventType wxEVT_COMMAND_CHECKLISTBOX_TOGGLED =      wxEVT_FIRST + 6;
+static const wxEventType wxEVT_COMMAND_TEXT_UPDATED =              wxEVT_FIRST + 7;
+static const wxEventType wxEVT_COMMAND_TEXT_ENTER =                wxEVT_FIRST + 8;
+static const wxEventType wxEVT_COMMAND_MENU_SELECTED =             wxEVT_FIRST + 9;
+static const wxEventType wxEVT_COMMAND_TOOL_CLICKED =              wxEVT_COMMAND_MENU_SELECTED;
+static const wxEventType wxEVT_COMMAND_SLIDER_UPDATED =            wxEVT_FIRST + 10;
+static const wxEventType wxEVT_COMMAND_RADIOBOX_SELECTED =         wxEVT_FIRST + 11;
+static const wxEventType wxEVT_COMMAND_RADIOBUTTON_SELECTED =      wxEVT_FIRST + 12;
+//static const wxEventType wxEVT_COMMAND_SCROLLBAR_UPDATED is now obsolete since we use wxEVT_SCROLL... events
+static const wxEventType wxEVT_COMMAND_SCROLLBAR_UPDATED =         wxEVT_FIRST + 13;
+static const wxEventType wxEVT_COMMAND_VLBOX_SELECTED =            wxEVT_FIRST + 14;
+static const wxEventType wxEVT_COMMAND_COMBOBOX_SELECTED =         wxEVT_FIRST + 15;
+static const wxEventType wxEVT_COMMAND_TOOL_RCLICKED =             wxEVT_FIRST + 16;
+static const wxEventType wxEVT_COMMAND_TOOL_ENTER =                wxEVT_FIRST + 17;
+static const wxEventType wxEVT_COMMAND_SPINCTRL_UPDATED =          wxEVT_FIRST + 18;
 
 /* Sockets send events, too */
-extern const wxEventType wxEVT_SOCKET;
+static const wxEventType wxEVT_SOCKET =                            wxEVT_FIRST + 50;
 
 /* Mouse event types */
-extern const wxEventType wxEVT_LEFT_DOWN;
-extern const wxEventType wxEVT_LEFT_UP;
-extern const wxEventType wxEVT_MIDDLE_DOWN;
-extern const wxEventType wxEVT_MIDDLE_UP;
-extern const wxEventType wxEVT_RIGHT_DOWN;
-extern const wxEventType wxEVT_RIGHT_UP;
-extern const wxEventType wxEVT_MOTION;
-extern const wxEventType wxEVT_ENTER_WINDOW;
-extern const wxEventType wxEVT_LEAVE_WINDOW;
-extern const wxEventType wxEVT_LEFT_DCLICK;
-extern const wxEventType wxEVT_MIDDLE_DCLICK;
-extern const wxEventType wxEVT_RIGHT_DCLICK;
-extern const wxEventType wxEVT_SET_FOCUS;
-extern const wxEventType wxEVT_KILL_FOCUS;
+static const wxEventType wxEVT_LEFT_DOWN =                         wxEVT_FIRST + 100;
+static const wxEventType wxEVT_LEFT_UP =                           wxEVT_FIRST + 101;
+static const wxEventType wxEVT_MIDDLE_DOWN =                       wxEVT_FIRST + 102;
+static const wxEventType wxEVT_MIDDLE_UP =                         wxEVT_FIRST + 103;
+static const wxEventType wxEVT_RIGHT_DOWN =                        wxEVT_FIRST + 104;
+static const wxEventType wxEVT_RIGHT_UP =                          wxEVT_FIRST + 105;
+static const wxEventType wxEVT_MOTION =                            wxEVT_FIRST + 106;
+static const wxEventType wxEVT_ENTER_WINDOW =                      wxEVT_FIRST + 107;
+static const wxEventType wxEVT_LEAVE_WINDOW =                      wxEVT_FIRST + 108;
+static const wxEventType wxEVT_LEFT_DCLICK =                       wxEVT_FIRST + 109;
+static const wxEventType wxEVT_MIDDLE_DCLICK =                     wxEVT_FIRST + 110;
+static const wxEventType wxEVT_RIGHT_DCLICK =                      wxEVT_FIRST + 111;
+static const wxEventType wxEVT_SET_FOCUS =                         wxEVT_FIRST + 112;
+static const wxEventType wxEVT_KILL_FOCUS =                        wxEVT_FIRST + 113;
 
  /* Non-client mouse events */
-extern const wxEventType wxEVT_NC_LEFT_DOWN;
-extern const wxEventType wxEVT_NC_LEFT_UP;
-extern const wxEventType wxEVT_NC_MIDDLE_DOWN;
-extern const wxEventType wxEVT_NC_MIDDLE_UP;
-extern const wxEventType wxEVT_NC_RIGHT_DOWN;
-extern const wxEventType wxEVT_NC_RIGHT_UP;
-extern const wxEventType wxEVT_NC_MOTION;
-extern const wxEventType wxEVT_NC_ENTER_WINDOW;
-extern const wxEventType wxEVT_NC_LEAVE_WINDOW;
-extern const wxEventType wxEVT_NC_LEFT_DCLICK;
-extern const wxEventType wxEVT_NC_MIDDLE_DCLICK;
-extern const wxEventType wxEVT_NC_RIGHT_DCLICK;
+static const wxEventType wxEVT_NC_LEFT_DOWN =                      wxEVT_FIRST + 200;
+static const wxEventType wxEVT_NC_LEFT_UP =                        wxEVT_FIRST + 201;
+static const wxEventType wxEVT_NC_MIDDLE_DOWN =                    wxEVT_FIRST + 202;
+static const wxEventType wxEVT_NC_MIDDLE_UP =                      wxEVT_FIRST + 203;
+static const wxEventType wxEVT_NC_RIGHT_DOWN =                     wxEVT_FIRST + 204;
+static const wxEventType wxEVT_NC_RIGHT_UP =                       wxEVT_FIRST + 205;
+static const wxEventType wxEVT_NC_MOTION =                         wxEVT_FIRST + 206;
+static const wxEventType wxEVT_NC_ENTER_WINDOW =                   wxEVT_FIRST + 207;
+static const wxEventType wxEVT_NC_LEAVE_WINDOW =                   wxEVT_FIRST + 208;
+static const wxEventType wxEVT_NC_LEFT_DCLICK =                    wxEVT_FIRST + 209;
+static const wxEventType wxEVT_NC_MIDDLE_DCLICK =                  wxEVT_FIRST + 210;
+static const wxEventType wxEVT_NC_RIGHT_DCLICK =                   wxEVT_FIRST + 211;
 
 /* Character input event type  */
-extern const wxEventType wxEVT_CHAR;
-extern const wxEventType wxEVT_CHAR_HOOK;
-extern const wxEventType wxEVT_NAVIGATION_KEY;
-extern const wxEventType wxEVT_KEY_DOWN;
-extern const wxEventType wxEVT_KEY_UP;
+static const wxEventType wxEVT_CHAR =                              wxEVT_FIRST + 212;
+static const wxEventType wxEVT_CHAR_HOOK =                         wxEVT_FIRST + 213;
+static const wxEventType wxEVT_NAVIGATION_KEY =                    wxEVT_FIRST + 214;
+static const wxEventType wxEVT_KEY_DOWN =                          wxEVT_FIRST + 215;
+static const wxEventType wxEVT_KEY_UP =                            wxEVT_FIRST + 216;
 
  /*
   * wxScrollbar and wxSlider event identifiers
   */
-extern const wxEventType wxEVT_SCROLL_TOP;
-extern const wxEventType wxEVT_SCROLL_BOTTOM;
-extern const wxEventType wxEVT_SCROLL_LINEUP;
-extern const wxEventType wxEVT_SCROLL_LINEDOWN;
-extern const wxEventType wxEVT_SCROLL_PAGEUP;
-extern const wxEventType wxEVT_SCROLL_PAGEDOWN;
-extern const wxEventType wxEVT_SCROLL_THUMBTRACK;
+static const wxEventType wxEVT_SCROLL_TOP =                        wxEVT_FIRST + 300;
+static const wxEventType wxEVT_SCROLL_BOTTOM =                     wxEVT_FIRST + 301;
+static const wxEventType wxEVT_SCROLL_LINEUP =                     wxEVT_FIRST + 302;
+static const wxEventType wxEVT_SCROLL_LINEDOWN =                   wxEVT_FIRST + 303;
+static const wxEventType wxEVT_SCROLL_PAGEUP =                     wxEVT_FIRST + 304;
+static const wxEventType wxEVT_SCROLL_PAGEDOWN =                   wxEVT_FIRST + 305;
+static const wxEventType wxEVT_SCROLL_THUMBTRACK =                 wxEVT_FIRST + 306;
 
  /*
   * Scroll events from wxWindow
   */
-extern const wxEventType wxEVT_SCROLLWIN_TOP;
-extern const wxEventType wxEVT_SCROLLWIN_BOTTOM;
-extern const wxEventType wxEVT_SCROLLWIN_LINEUP;
-extern const wxEventType wxEVT_SCROLLWIN_LINEDOWN;
-extern const wxEventType wxEVT_SCROLLWIN_PAGEUP;
-extern const wxEventType wxEVT_SCROLLWIN_PAGEDOWN;
-extern const wxEventType wxEVT_SCROLLWIN_THUMBTRACK;
+static const wxEventType wxEVT_SCROLLWIN_TOP =                     wxEVT_FIRST + 320;
+static const wxEventType wxEVT_SCROLLWIN_BOTTOM =                  wxEVT_FIRST + 321;
+static const wxEventType wxEVT_SCROLLWIN_LINEUP =                  wxEVT_FIRST + 322;
+static const wxEventType wxEVT_SCROLLWIN_LINEDOWN =                wxEVT_FIRST + 323;
+static const wxEventType wxEVT_SCROLLWIN_PAGEUP =                  wxEVT_FIRST + 324;
+static const wxEventType wxEVT_SCROLLWIN_PAGEDOWN =                wxEVT_FIRST + 325;
+static const wxEventType wxEVT_SCROLLWIN_THUMBTRACK =              wxEVT_FIRST + 326;
 
  /*
   * System events
   */
-extern const wxEventType wxEVT_SIZE;
-extern const wxEventType wxEVT_MOVE;
-extern const wxEventType wxEVT_CLOSE_WINDOW;
-extern const wxEventType wxEVT_END_SESSION;
-extern const wxEventType wxEVT_QUERY_END_SESSION;
-extern const wxEventType wxEVT_ACTIVATE_APP;
-extern const wxEventType wxEVT_POWER;
-extern const wxEventType wxEVT_ACTIVATE;
-extern const wxEventType wxEVT_CREATE;
-extern const wxEventType wxEVT_DESTROY;
-extern const wxEventType wxEVT_SHOW;
-extern const wxEventType wxEVT_ICONIZE;
-extern const wxEventType wxEVT_MAXIMIZE;
-extern const wxEventType wxEVT_MOUSE_CAPTURE_CHANGED;
-extern const wxEventType wxEVT_PAINT;
-extern const wxEventType wxEVT_ERASE_BACKGROUND;
-extern const wxEventType wxEVT_NC_PAINT;
-extern const wxEventType wxEVT_PAINT_ICON;
-extern const wxEventType wxEVT_MENU_CHAR;
-extern const wxEventType wxEVT_MENU_INIT;
-extern const wxEventType wxEVT_MENU_HIGHLIGHT;
-extern const wxEventType wxEVT_POPUP_MENU_INIT;
-extern const wxEventType wxEVT_CONTEXT_MENU;
-extern const wxEventType wxEVT_SYS_COLOUR_CHANGED;
-extern const wxEventType wxEVT_SETTING_CHANGED;
-extern const wxEventType wxEVT_QUERY_NEW_PALETTE;
-extern const wxEventType wxEVT_PALETTE_CHANGED;
-extern const wxEventType wxEVT_JOY_BUTTON_DOWN;
-extern const wxEventType wxEVT_JOY_BUTTON_UP;
-extern const wxEventType wxEVT_JOY_MOVE;
-extern const wxEventType wxEVT_JOY_ZMOVE;
-extern const wxEventType wxEVT_DROP_FILES;
-extern const wxEventType wxEVT_DRAW_ITEM;
-extern const wxEventType wxEVT_MEASURE_ITEM;
-extern const wxEventType wxEVT_COMPARE_ITEM;
-extern const wxEventType wxEVT_INIT_DIALOG;
-extern const wxEventType wxEVT_IDLE;
-extern const wxEventType wxEVT_UPDATE_UI;
+static const wxEventType wxEVT_SIZE =                              wxEVT_FIRST + 400;
+static const wxEventType wxEVT_MOVE =                              wxEVT_FIRST + 401;
+static const wxEventType wxEVT_CLOSE_WINDOW =                      wxEVT_FIRST + 402;
+static const wxEventType wxEVT_END_SESSION =                       wxEVT_FIRST + 403;
+static const wxEventType wxEVT_QUERY_END_SESSION =                 wxEVT_FIRST + 404;
+static const wxEventType wxEVT_ACTIVATE_APP =                      wxEVT_FIRST + 405;
+static const wxEventType wxEVT_POWER =                             wxEVT_FIRST + 406;
+static const wxEventType wxEVT_ACTIVATE =                          wxEVT_FIRST + 409;
+static const wxEventType wxEVT_CREATE =                            wxEVT_FIRST + 410;
+static const wxEventType wxEVT_DESTROY =                           wxEVT_FIRST + 411;
+static const wxEventType wxEVT_SHOW =                              wxEVT_FIRST + 412;
+static const wxEventType wxEVT_ICONIZE =                           wxEVT_FIRST + 413;
+static const wxEventType wxEVT_MAXIMIZE =                          wxEVT_FIRST + 414;
+static const wxEventType wxEVT_MOUSE_CAPTURE_CHANGED =             wxEVT_FIRST + 415;
+static const wxEventType wxEVT_PAINT =                             wxEVT_FIRST + 416;
+static const wxEventType wxEVT_ERASE_BACKGROUND =                  wxEVT_FIRST + 417;
+static const wxEventType wxEVT_NC_PAINT =                          wxEVT_FIRST + 418;
+static const wxEventType wxEVT_PAINT_ICON =                        wxEVT_FIRST + 419;
+static const wxEventType wxEVT_MENU_CHAR =                         wxEVT_FIRST + 420;
+static const wxEventType wxEVT_MENU_INIT =                         wxEVT_FIRST + 421;
+static const wxEventType wxEVT_MENU_HIGHLIGHT =                    wxEVT_FIRST + 422;
+static const wxEventType wxEVT_POPUP_MENU_INIT =                   wxEVT_FIRST + 423;
+static const wxEventType wxEVT_CONTEXT_MENU =                      wxEVT_FIRST + 424;
+static const wxEventType wxEVT_SYS_COLOUR_CHANGED =                wxEVT_FIRST + 425;
+static const wxEventType wxEVT_SETTING_CHANGED =                   wxEVT_FIRST + 426;
+static const wxEventType wxEVT_QUERY_NEW_PALETTE =                 wxEVT_FIRST + 427;
+static const wxEventType wxEVT_PALETTE_CHANGED =                   wxEVT_FIRST + 428;
+static const wxEventType wxEVT_JOY_BUTTON_DOWN =                   wxEVT_FIRST + 429;
+static const wxEventType wxEVT_JOY_BUTTON_UP =                     wxEVT_FIRST + 430;
+static const wxEventType wxEVT_JOY_MOVE =                          wxEVT_FIRST + 431;
+static const wxEventType wxEVT_JOY_ZMOVE =                         wxEVT_FIRST + 432;
+static const wxEventType wxEVT_DROP_FILES =                        wxEVT_FIRST + 433;
+static const wxEventType wxEVT_DRAW_ITEM =                         wxEVT_FIRST + 434;
+static const wxEventType wxEVT_MEASURE_ITEM =                      wxEVT_FIRST + 435;
+static const wxEventType wxEVT_COMPARE_ITEM =                      wxEVT_FIRST + 436;
+static const wxEventType wxEVT_INIT_DIALOG =                       wxEVT_FIRST + 437;
+static const wxEventType wxEVT_IDLE =                              wxEVT_FIRST + 438;
+static const wxEventType wxEVT_UPDATE_UI =                         wxEVT_FIRST + 439;
 
  /* System misc. */
-extern const wxEventType wxEVT_END_PROCESS;
+static const wxEventType wxEVT_END_PROCESS =                       wxEVT_FIRST + 440;
 
  /* Dial up events */
-extern const wxEventType wxEVT_DIALUP_CONNECTED;
-extern const wxEventType wxEVT_DIALUP_DISCONNECTED;
+static const wxEventType wxEVT_DIALUP_CONNECTED =                  wxEVT_FIRST + 450;
+static const wxEventType wxEVT_DIALUP_DISCONNECTED =               wxEVT_FIRST + 451;
 
  /* Generic command events */
  /* Note: a click is a higher-level event than button down/up */
-extern const wxEventType wxEVT_COMMAND_LEFT_CLICK;
-extern const wxEventType wxEVT_COMMAND_LEFT_DCLICK;
-extern const wxEventType wxEVT_COMMAND_RIGHT_CLICK;
-extern const wxEventType wxEVT_COMMAND_RIGHT_DCLICK;
-extern const wxEventType wxEVT_COMMAND_SET_FOCUS;
-extern const wxEventType wxEVT_COMMAND_KILL_FOCUS;
-extern const wxEventType wxEVT_COMMAND_ENTER;
+static const wxEventType wxEVT_COMMAND_LEFT_CLICK =                wxEVT_FIRST + 500;
+static const wxEventType wxEVT_COMMAND_LEFT_DCLICK =               wxEVT_FIRST + 501;
+static const wxEventType wxEVT_COMMAND_RIGHT_CLICK =               wxEVT_FIRST + 502;
+static const wxEventType wxEVT_COMMAND_RIGHT_DCLICK =              wxEVT_FIRST + 503;
+static const wxEventType wxEVT_COMMAND_SET_FOCUS =                 wxEVT_FIRST + 504;
+static const wxEventType wxEVT_COMMAND_KILL_FOCUS =                wxEVT_FIRST + 505;
+static const wxEventType wxEVT_COMMAND_ENTER =                     wxEVT_FIRST + 506;
 
  /* Tree control event types */
-extern const wxEventType wxEVT_COMMAND_TREE_BEGIN_DRAG;
-extern const wxEventType wxEVT_COMMAND_TREE_BEGIN_RDRAG;
-extern const wxEventType wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT;
-extern const wxEventType wxEVT_COMMAND_TREE_END_LABEL_EDIT;
-extern const wxEventType wxEVT_COMMAND_TREE_DELETE_ITEM;
-extern const wxEventType wxEVT_COMMAND_TREE_GET_INFO;
-extern const wxEventType wxEVT_COMMAND_TREE_SET_INFO;
-extern const wxEventType wxEVT_COMMAND_TREE_ITEM_EXPANDED;
-extern const wxEventType wxEVT_COMMAND_TREE_ITEM_EXPANDING;
-extern const wxEventType wxEVT_COMMAND_TREE_ITEM_COLLAPSED;
-extern const wxEventType wxEVT_COMMAND_TREE_ITEM_COLLAPSING;
-extern const wxEventType wxEVT_COMMAND_TREE_SEL_CHANGED;
-extern const wxEventType wxEVT_COMMAND_TREE_SEL_CHANGING;
-extern const wxEventType wxEVT_COMMAND_TREE_KEY_DOWN;
-extern const wxEventType wxEVT_COMMAND_TREE_ITEM_ACTIVATED;
-extern const wxEventType wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK;
-extern const wxEventType wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK;
+static const wxEventType wxEVT_COMMAND_TREE_BEGIN_DRAG =           wxEVT_FIRST + 600;
+static const wxEventType wxEVT_COMMAND_TREE_BEGIN_RDRAG =          wxEVT_FIRST + 601;
+static const wxEventType wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT =     wxEVT_FIRST + 602;
+static const wxEventType wxEVT_COMMAND_TREE_END_LABEL_EDIT =       wxEVT_FIRST + 603;
+static const wxEventType wxEVT_COMMAND_TREE_DELETE_ITEM =          wxEVT_FIRST + 604;
+static const wxEventType wxEVT_COMMAND_TREE_GET_INFO =             wxEVT_FIRST + 605;
+static const wxEventType wxEVT_COMMAND_TREE_SET_INFO =             wxEVT_FIRST + 606;
+static const wxEventType wxEVT_COMMAND_TREE_ITEM_EXPANDED =        wxEVT_FIRST + 607;
+static const wxEventType wxEVT_COMMAND_TREE_ITEM_EXPANDING =       wxEVT_FIRST + 608;
+static const wxEventType wxEVT_COMMAND_TREE_ITEM_COLLAPSED =       wxEVT_FIRST + 609;
+static const wxEventType wxEVT_COMMAND_TREE_ITEM_COLLAPSING =      wxEVT_FIRST + 610;
+static const wxEventType wxEVT_COMMAND_TREE_SEL_CHANGED =          wxEVT_FIRST + 611;
+static const wxEventType wxEVT_COMMAND_TREE_SEL_CHANGING =         wxEVT_FIRST + 612;
+static const wxEventType wxEVT_COMMAND_TREE_KEY_DOWN =             wxEVT_FIRST + 613;
+static const wxEventType wxEVT_COMMAND_TREE_ITEM_ACTIVATED =       wxEVT_FIRST + 614;
+static const wxEventType wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK =     wxEVT_FIRST + 615;
+static const wxEventType wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK =    wxEVT_FIRST + 616;
 
  /* List control event types */
-extern const wxEventType wxEVT_COMMAND_LIST_BEGIN_DRAG;
-extern const wxEventType wxEVT_COMMAND_LIST_BEGIN_RDRAG;
-extern const wxEventType wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT;
-extern const wxEventType wxEVT_COMMAND_LIST_END_LABEL_EDIT;
-extern const wxEventType wxEVT_COMMAND_LIST_DELETE_ITEM;
-extern const wxEventType wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS;
-extern const wxEventType wxEVT_COMMAND_LIST_GET_INFO;
-extern const wxEventType wxEVT_COMMAND_LIST_SET_INFO;
-extern const wxEventType wxEVT_COMMAND_LIST_ITEM_SELECTED;
-extern const wxEventType wxEVT_COMMAND_LIST_ITEM_DESELECTED;
-extern const wxEventType wxEVT_COMMAND_LIST_KEY_DOWN;
-extern const wxEventType wxEVT_COMMAND_LIST_INSERT_ITEM;
-extern const wxEventType wxEVT_COMMAND_LIST_COL_CLICK;
-extern const wxEventType wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK;
-extern const wxEventType wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK;
-extern const wxEventType wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
+static const wxEventType wxEVT_COMMAND_LIST_BEGIN_DRAG =           wxEVT_FIRST + 700;
+static const wxEventType wxEVT_COMMAND_LIST_BEGIN_RDRAG =          wxEVT_FIRST + 701;
+static const wxEventType wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT =     wxEVT_FIRST + 702;
+static const wxEventType wxEVT_COMMAND_LIST_END_LABEL_EDIT =       wxEVT_FIRST + 703;
+static const wxEventType wxEVT_COMMAND_LIST_DELETE_ITEM =          wxEVT_FIRST + 704;
+static const wxEventType wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS =     wxEVT_FIRST + 705;
+static const wxEventType wxEVT_COMMAND_LIST_GET_INFO =             wxEVT_FIRST + 706;
+static const wxEventType wxEVT_COMMAND_LIST_SET_INFO =             wxEVT_FIRST + 707;
+static const wxEventType wxEVT_COMMAND_LIST_ITEM_SELECTED =        wxEVT_FIRST + 708;
+static const wxEventType wxEVT_COMMAND_LIST_ITEM_DESELECTED =      wxEVT_FIRST + 709;
+static const wxEventType wxEVT_COMMAND_LIST_KEY_DOWN =             wxEVT_FIRST + 710;
+static const wxEventType wxEVT_COMMAND_LIST_INSERT_ITEM =          wxEVT_FIRST + 711;
+static const wxEventType wxEVT_COMMAND_LIST_COL_CLICK =            wxEVT_FIRST + 712;
+static const wxEventType wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK =     wxEVT_FIRST + 713;
+static const wxEventType wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK =    wxEVT_FIRST + 714;
+static const wxEventType wxEVT_COMMAND_LIST_ITEM_ACTIVATED =       wxEVT_FIRST + 715;
 
  /* Tab and notebook control event types */
-extern const wxEventType wxEVT_COMMAND_TAB_SEL_CHANGED;
-extern const wxEventType wxEVT_COMMAND_TAB_SEL_CHANGING;
-
-extern const wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED;
-extern const wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING;
+static const wxEventType wxEVT_COMMAND_TAB_SEL_CHANGED =           wxEVT_FIRST + 800;
+static const wxEventType wxEVT_COMMAND_TAB_SEL_CHANGING =          wxEVT_FIRST + 801;
+static const wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED =     wxEVT_FIRST + 802;
+static const wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING =    wxEVT_FIRST + 803;
 
 /* Splitter events */
-extern const wxEventType wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED;
-extern const wxEventType wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING;
-extern const wxEventType wxEVT_COMMAND_SPLITTER_DOUBLECLICKED;
-extern const wxEventType wxEVT_COMMAND_SPLITTER_UNSPLIT;
+static const wxEventType wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED = wxEVT_FIRST + 850;
+static const wxEventType wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING = wxEVT_FIRST + 851;
+static const wxEventType wxEVT_COMMAND_SPLITTER_DOUBLECLICKED = wxEVT_FIRST + 852;
+static const wxEventType wxEVT_COMMAND_SPLITTER_UNSPLIT = wxEVT_FIRST + 853;
 
 /* Wizard events */
-extern const wxEventType wxEVT_WIZARD_PAGE_CHANGED;
-extern const wxEventType wxEVT_WIZARD_PAGE_CHANGING;
-extern const wxEventType wxEVT_WIZARD_CANCEL;
+static const wxEventType wxEVT_WIZARD_PAGE_CHANGED = wxEVT_FIRST + 900;
+static const wxEventType wxEVT_WIZARD_PAGE_CHANGING = wxEVT_FIRST + 901;
+static const wxEventType wxEVT_WIZARD_CANCEL = wxEVT_FIRST + 902;
 
 /* Calendar events */
-extern const wxEventType wxEVT_CALENDAR_SEL_CHANGED;
-extern const wxEventType wxEVT_CALENDAR_DAY_CHANGED;
-extern const wxEventType wxEVT_CALENDAR_MONTH_CHANGED;
-extern const wxEventType wxEVT_CALENDAR_YEAR_CHANGED;
-extern const wxEventType wxEVT_CALENDAR_DOUBLECLICKED;
-extern const wxEventType wxEVT_CALENDAR_WEEKDAY_CLICKED;
+static const wxEventType wxEVT_CALENDAR_SEL_CHANGED = wxEVT_FIRST + 950;
+static const wxEventType wxEVT_CALENDAR_DAY_CHANGED = wxEVT_FIRST + 951;
+static const wxEventType wxEVT_CALENDAR_MONTH_CHANGED = wxEVT_FIRST + 952;
+static const wxEventType wxEVT_CALENDAR_YEAR_CHANGED = wxEVT_FIRST + 953;
+static const wxEventType wxEVT_CALENDAR_DOUBLECLICKED = wxEVT_FIRST + 954;
+static const wxEventType wxEVT_CALENDAR_WEEKDAY_CLICKED = wxEVT_FIRST + 955;
 
-extern const wxEventType wxEVT_USER_FIRST;
+static const wxEventType wxEVT_USER_FIRST = wxEVT_FIRST + 2000;
 
 #else // everybody else
 
