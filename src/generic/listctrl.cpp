@@ -2027,7 +2027,8 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
         // and the width of the icon, if any
         static const int MARGIN_BETWEEN_TEXT_AND_ICON = 2;
-        int ix, iy;
+        int ix = 0,     // init them just to suppress the compiler warnings
+            iy = 0;
         const int image = item.m_image;
         wxImageListType *imageList;
         if ( image != -1 )
