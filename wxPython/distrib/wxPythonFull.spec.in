@@ -208,32 +208,34 @@ cp $WXDIR/contrib/utils/wxrc/wxrc $RPM_BUILD_ROOT/%{pref}/bin
 
 
 # Copy icons and make menu entries
-mkdir -p $RPM_BUILD_ROOT/%{_iconsdir}
-mkdir -p $RPM_BUILD_ROOT/%{_miconsdir}
-mkdir -p $RPM_BUILD_ROOT/%{_menudir}
-install -p -m 644 $WXDIR/wxPython/wxPython/py/PyCrust_32.png $RPM_BUILD_ROOT/%{_iconsdir}/PyCrust.png
-install -p -m 644 $WXDIR/wxPython/wxPython/py/PyCrust_16.png $RPM_BUILD_ROOT/%{_miconsdir}/PyCrust.png
-install -p -m 644 $WXDIR/wxPython/wxPython/tools/XRCed/XRCed_32.png $RPM_BUILD_ROOT/%{_iconsdir}/XRCed.png
-install -p -m 644 $WXDIR/wxPython/wxPython/tools/XRCed/XRCed_16.png $RPM_BUILD_ROOT/%{_miconsdir}/XRCed.png
+#-- This only works for Mandrake.  Is there a cross-distro way to do it?
+##mkdir -p $RPM_BUILD_ROOT/%{_iconsdir}
+##mkdir -p $RPM_BUILD_ROOT/%{_miconsdir}
+##mkdir -p $RPM_BUILD_ROOT/%{_menudir}
+##install -p -m 644 $WXDIR/wxPython/wxPython/py/PyCrust_32.png $RPM_BUILD_ROOT/%{_iconsdir}/PyCrust.png
+##install -p -m 644 $WXDIR/wxPython/wxPython/py/PyCrust_16.png $RPM_BUILD_ROOT/%{_miconsdir}/PyCrust.png
+##install -p -m 644 $WXDIR/wxPython/wxPython/tools/XRCed/XRCed_32.png $RPM_BUILD_ROOT/%{_iconsdir}/XRCed.png
+##install -p -m 644 $WXDIR/wxPython/wxPython/tools/XRCed/XRCed_16.png $RPM_BUILD_ROOT/%{_miconsdir}/XRCed.png
+##
+##cat > $RPM_BUILD_ROOT/%{_menudir}/%{name} <<EOF
+##?package(%{name}): command="%_bindir/pyshell" needs="X11" \
+##icon="PyCrust.png" section="Applications/Development" \
+##title="PyShell" longtitle="Python Shell"
+##
+##?package(%{name}): command="%_bindir/pycrust" needs="X11" \
+##icon="PyCrust.png" section="Applications/Development" \
+##title="PyCrust" longtitle="Python Shell with Filling"
+##
+##?package(%{name}): command="%_bindir/pyalamode" needs="X11" \
+##icon="PyCrust.png" section="Applications/Development" \
+##title="PyAlaMode" longtitle="Python Shell with Filling and editor windows"
+##
+##?package(%{name}): command="%_bindir/xrced" needs="X11" \
+##icon="XRCed.png" section="Applications/Development" \
+##title="XRCed" longtitle="wxPython XRC resource editor"
+##
+##EOF
 
-cat > $RPM_BUILD_ROOT/%{_menudir}/%{name} <<EOF
-?package(%{name}): command="%_bindir/pyshell" needs="X11" \
-icon="PyCrust.png" section="Applications/Development" \
-title="PyShell" longtitle="Python Shell"
-
-?package(%{name}): command="%_bindir/pycrust" needs="X11" \
-icon="PyCrust.png" section="Applications/Development" \
-title="PyCrust" longtitle="Python Shell with Filling"
-
-?package(%{name}): command="%_bindir/pyalamode" needs="X11" \
-icon="PyCrust.png" section="Applications/Development" \
-title="PyAlaMode" longtitle="Python Shell with Filling and editor windows"
-
-?package(%{name}): command="%_bindir/xrced" needs="X11" \
-icon="XRCed.png" section="Applications/Development" \
-title="XRCed" longtitle="wxPython XRC resource editor"
-
-EOF
 
 
 # Generate the filelists.  For some reason the %defattr below is still
@@ -253,8 +255,8 @@ $GFL    $RPM_BUILD_ROOT %{wxpref}                  >> FILELIST
 $GFL    $RPM_BUILD_ROOT %{wxpref}/lib              >> FILELIST
 $GFL    $RPM_BUILD_ROOT "%{wxpref}/lib/libwx*"     >> FILELIST
 $GFL -r $RPM_BUILD_ROOT %{wxpref}/share            >> FILELIST
-#GFL -r $RPM_BUILD_ROOT %{_iconsdir}               >> FILELIST
-$GFL -r $RPM_BUILD_ROOT %{_menudir}                >> FILELIST
+###GFL -r $RPM_BUILD_ROOT %{_iconsdir}               >> FILELIST
+##$GFL -r $RPM_BUILD_ROOT %{_menudir}                >> FILELIST
 
 $GFL    $RPM_BUILD_ROOT %{wxpref}/include           > DEVELLIST
 $GFL -r $RPM_BUILD_ROOT %{wxpref}/include/wx       >> DEVELLIST
