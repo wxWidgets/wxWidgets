@@ -287,13 +287,8 @@ const wxChar *wxGetInstallPrefix()
 
 wxString wxGetDataDir()
 {
-    wxString format = wxGetInstallPrefix();
-    format <<  wxFILE_SEP_PATH
-           << wxT("share") << wxFILE_SEP_PATH
-           << wxT("wx") << wxFILE_SEP_PATH
-           << wxT("%i.%i");
-    wxString dir;
-    dir.Printf(format.c_str(), wxMAJOR_VERSION, wxMINOR_VERSION);
+    wxString dir = wxGetInstallPrefix();
+    dir <<  wxFILE_SEP_PATH << wxT("share") << wxFILE_SEP_PATH << wxT("wx");
     return dir;
 }
 

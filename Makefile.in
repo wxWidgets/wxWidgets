@@ -7883,12 +7883,12 @@ samples:
 @COND_USE_XRC_1@	(test -d utils/wxrc && cd utils/wxrc && $(MAKE) install) || true
 
 @COND_USE_GUI_1@install-afm: 
-@COND_USE_GUI_1@	$(INSTALL_DIR) $(DESTDIR)$(datadir)/wx/$(WX_RELEASE)/afm
-@COND_USE_GUI_1@	(cd $(srcdir) ; $(INSTALL_DATA)  misc/afm/*.afm $(DESTDIR)$(datadir)/wx/$(WX_RELEASE)/afm)
+@COND_USE_GUI_1@	$(INSTALL_DIR) $(DESTDIR)$(datadir)/wx/afm
+@COND_USE_GUI_1@	(cd $(srcdir) ; $(INSTALL_DATA)  misc/afm/*.afm $(DESTDIR)$(datadir)/wx/afm)
 
 @COND_USE_GUI_1@install-gsafm: 
-@COND_USE_GUI_1@	$(INSTALL_DIR) $(DESTDIR)$(datadir)/wx/$(WX_RELEASE)/gs_afm
-@COND_USE_GUI_1@	(cd $(srcdir) ; $(INSTALL_DATA)  misc/gs_afm/*.afm $(DESTDIR)$(datadir)/wx/$(WX_RELEASE)/gs_afm)
+@COND_USE_GUI_1@	$(INSTALL_DIR) $(DESTDIR)$(datadir)/wx/gs_afm
+@COND_USE_GUI_1@	(cd $(srcdir) ; $(INSTALL_DATA)  misc/gs_afm/*.afm $(DESTDIR)$(datadir)/wx/gs_afm)
 
 install-wxconfig: 
 	$(INSTALL_DIR) $(DESTDIR)$(bindir)
