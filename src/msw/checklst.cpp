@@ -101,7 +101,6 @@ wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex)
   // know that there will always be OnMeasure before OnDraw
 
   // fix appearance
-  SetFont(wxSystemSettings::GetSystemFont(wxSYS_ANSI_VAR_FONT));
   SetMarginWidth(GetDefaultMarginWidth());
 }
 
@@ -231,7 +230,7 @@ void wxCheckListBoxItem::Check(bool check)
 
     #ifdef __WIN32__
         RECT rcUpdate;
-        
+
         if ( ::SendMessage(hwndListbox, LB_GETITEMRECT,
                            m_nIndex, (LPARAM)&rcUpdate) == LB_ERR )
         {
@@ -245,7 +244,7 @@ void wxCheckListBoxItem::Check(bool check)
     #endif  // Win32/16
 
     InvalidateRect(hwndListbox, &rcUpdate, FALSE);
-    
+
     wxCommandEvent event(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, m_pParent->GetId());
     event.SetInt(m_nIndex);
     event.SetEventObject(m_pParent);
@@ -312,6 +311,16 @@ void wxCheckListBox::InsertItems(int nItems, const wxString items[], int pos)
     }
 }
 
+
+bool wxCheckListBox::SetFont( const wxFont &font )
+{
+    size_t i;
+    for (i=0; i < m_aItems.GetCount(); i++)
+        m_aItems[i]->SetFont(font);
+    wxListBox::SetFont(font);
+    return TRUE;
+}
+
 // create/retrieve item
 // --------------------
 
@@ -319,9 +328,6 @@ void wxCheckListBox::InsertItems(int nItems, const wxString items[], int pos)
 wxOwnerDrawn *wxCheckListBox::CreateItem(size_t nIndex)
 {
   wxCheckListBoxItem *pItem = new wxCheckListBoxItem(this, nIndex);
-  if ( m_font.Ok() )
-    pItem->SetFont(m_font);
-
   return pItem;
 }
 

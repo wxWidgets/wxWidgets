@@ -2,7 +2,7 @@
 // Name:        checklst.h
 // Purpose:     wxCheckListBox class - a listbox with checkable items
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     16.11.97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -35,7 +35,7 @@ public:
   wxCheckListBox(wxWindow *parent, wxWindowID id,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
-                 int nStrings = 0, 
+                 int nStrings = 0,
                  const wxString choices[] = NULL,
                  long style = 0,
                  const wxValidator& validator = wxDefaultValidator,
@@ -44,6 +44,8 @@ public:
   // override base class virtuals
   virtual void Delete(int n);
   virtual void InsertItems(int nItems, const wxString items[], int pos);
+
+  virtual bool SetFont( const wxFont &font );
 
   // items may be checked
   bool IsChecked(size_t uiIndex) const;
