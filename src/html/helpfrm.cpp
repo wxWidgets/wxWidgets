@@ -327,11 +327,6 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
         dummy->SetAutoLayout(TRUE);
         dummy->SetSizer(topsizer);
 
-        long treeStyle = wxSUNKEN_BORDER | wxTR_HAS_BUTTONS;
-        #ifndef __WXMSW__ // FIXME - temporary, till MSW supports wxTR_HIDE_ROOT
-        treeStyle |= wxTR_HIDE_ROOT;
-        #endif
-
         if ( style & wxHF_BOOKMARKS )
         {
             m_Bookmarks = new wxComboBox(dummy, wxID_HTML_BOOKMARKSLIST, 
@@ -366,7 +361,10 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 
         m_ContentsBox = new wxTreeCtrl(dummy, wxID_HTML_TREECTRL,
                                        wxDefaultPosition, wxDefaultSize,
-                                       treeStyle);
+                                       wxSUNKEN_BORDER | 
+                                       wxTR_HAS_BUTTONS | wxTR_HIDE_ROOT |
+                                       wxTR_LINES_AT_ROOT);
+
         m_ContentsBox->AssignImageList(ContentsImageList);
         
         topsizer->Add(m_ContentsBox, 1, wxEXPAND | wxLEFT | wxBOTTOM | wxRIGHT, 2);
@@ -711,7 +709,6 @@ void wxHtmlHelpFrame::CreateContents()
 
     int cnt = m_Data->GetContentsCnt();
     int i;
-    size_t booksCnt = m_Data->GetBookRecArray().GetCount();
 
     wxHtmlContentsItem *it;
 
@@ -726,52 +723,31 @@ void wxHtmlHelpFrame::CreateContents()
     bool imaged[MAX_ROOTS];
     m_ContentsBox->DeleteAllItems();
     
-    // FIXME - will go away when wxMSW's wxTreeCtrl supports wxTR_HIDE_ROOT!
-    bool hasSuperRoot = (booksCnt > 1) || 
-                        (m_ContentsBox->GetWindowStyle() & wxTR_HIDE_ROOT);
-
-    // Don't show (Help) root if there's only one boook
-    if (hasSuperRoot)
-    {
-        roots[0] = m_ContentsBox->AddRoot(_("(Help)"));
-        m_ContentsBox->SetItemImage(roots[0], IMG_RootFolder);
-        m_ContentsBox->SetItemSelectedImage(roots[0], IMG_RootFolder);
-        imaged[0] = TRUE;
-    }
+    roots[0] = m_ContentsBox->AddRoot(_("(Help)"));
+    m_ContentsBox->SetItemImage(roots[0], IMG_RootFolder);
+    m_ContentsBox->SetItemSelectedImage(roots[0], IMG_RootFolder);
+    imaged[0] = TRUE;
 
     for (it = m_Data->GetContents(), i = 0; i < cnt; i++, it++)
     {
         // Handle books:
         if (it->m_Level == 0)
         {
-            // special case, only one book, make it tree's root:
-            if (!hasSuperRoot)
-            {
-                roots[0] = roots[1] = m_ContentsBox->AddRoot(
-                                         it->m_Name, IMG_Book, -1,
-                                         new wxHtmlHelpTreeItemData(i));
-                imaged[0] = imaged[1] = TRUE;
-                m_ContentsBox->SetItemBold(roots[1], TRUE);
-            }
-            // multiple books:
+            if (m_hfStyle & wxHF_MERGE_BOOKS)
+                // VS: we don't want book nodes, books' content should
+                //    appear under tree's root. This line will create "fake"
+                //    record about book node so that the rest of this look
+                //    will believe there really _is_ book node and will
+                //    behave correctly.
+                roots[1] = roots[0];
             else
             {
-                if (m_hfStyle & wxHF_MERGE_BOOKS)
-                    // VS: we don't want book nodes, books' content should
-                    //    appear under tree's root. This line will create "fake"
-                    //    record about book node so that the rest of this look
-                    //    will believe there really _is_ book node and will
-                    //    behave correctly.
-                    roots[1] = roots[0];
-                else
-                {
-                    roots[1] = m_ContentsBox->AppendItem(roots[0],
-                                             it->m_Name, IMG_Book, -1,
-                                             new wxHtmlHelpTreeItemData(i));
-                    m_ContentsBox->SetItemBold(roots[1], TRUE);
-                }
-                imaged[1] = TRUE;
+                roots[1] = m_ContentsBox->AppendItem(roots[0],
+                                         it->m_Name, IMG_Book, -1,
+                                         new wxHtmlHelpTreeItemData(i));
+                m_ContentsBox->SetItemBold(roots[1], TRUE);
             }
+            imaged[1] = TRUE;
         }
         // ...and their contents:
         else
