@@ -1466,12 +1466,6 @@ bool wxGridCellChoiceEditor::EndEdit(int row, int col,
     if ( changed )
         grid->GetTable()->SetValue(row, col, value);
 
-    m_startValue = wxEmptyString;
-    if (m_allowOthers)
-        Combo()->SetValue(m_startValue);
-    else
-        Combo()->SetSelection(0);
-
     return changed;
 }
 
