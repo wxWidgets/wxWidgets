@@ -188,7 +188,11 @@ public:
   virtual bool Write(const wxString& key, double value);
   virtual bool Write(const wxString& key, bool value);
 
-    // permanently writes all changes
+  // we have to provide a separate version for C strings as otherwise they
+  // would be converted to bool and not to wxString as expected!
+  virtual bool Write(const wxString& key, const wxChar *value);
+
+  // permanently writes all changes
   virtual bool Flush(bool bCurrentOnly = FALSE) = 0;
 
   // renaming, all functions return FALSE on failure (probably because the new
