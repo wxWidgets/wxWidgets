@@ -416,9 +416,9 @@ MyFrame::MyFrame()
     wxMenu* subMenu = new wxMenu;
     subMenu->Append(Menu_SubMenu_Normal, _T("&Normal submenu item"), _T("Disabled submenu item"));
     subMenu->AppendCheckItem(Menu_SubMenu_Check, _T("&Unchecked submenu item"), _T("Unchecked submenu item"));
-    subMenu->AppendRadioItem(Menu_SubMenu_Radio1, _T("&Radio item 1"), _T("Radio item"));
-    subMenu->AppendRadioItem(Menu_SubMenu_Radio2, _T("&Radio item 2"), _T("Radio item"));
-    subMenu->AppendRadioItem(Menu_SubMenu_Radio3, _T("&Radio item 3"), _T("Radio item"));
+    subMenu->AppendRadioItem(Menu_SubMenu_Radio1, _T("Radio item &1"), _T("Radio item"));
+    subMenu->AppendRadioItem(Menu_SubMenu_Radio2, _T("Radio item &2"), _T("Radio item"));
+    subMenu->AppendRadioItem(Menu_SubMenu_Radio3, _T("Radio item &3"), _T("Radio item"));
 
     menubarMenu->Append(Menu_SubMenu, _T("Submenu"), subMenu);
 
