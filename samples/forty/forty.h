@@ -18,9 +18,9 @@ class FortyApp: public wxApp
 public:
 	bool OnInit();
 
-	static wxColour* BackgroundColour();
-	static wxColour* TextColour();
-	static wxBrush*  BackgroundBrush();
+	static const wxColour& BackgroundColour();
+	static const wxColour& TextColour();
+	static const wxBrush&  BackgroundBrush();
 
 private:
 	static wxColour* m_backgroundColour;

@@ -122,8 +122,8 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
 // MyFrame
 
-const  ID_QUIT  = 108;
-const  ID_ABOUT = 109;
+const int ID_QUIT  = 108;
+const int ID_ABOUT = 109;
 
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
 

@@ -96,31 +96,34 @@ bool FortyApp::OnInit()
 	return true;
 }
 
-wxColour* FortyApp::BackgroundColour()
+const wxColour& FortyApp::BackgroundColour()
 {
 	if (!m_backgroundColour)
 	{
 		m_backgroundColour = new wxColour(0, 128, 0);
 	}
-	return m_backgroundColour;
+
+	return *m_backgroundColour;
 }
 
-wxBrush* FortyApp::BackgroundBrush()
+const wxBrush& FortyApp::BackgroundBrush()
 {
 	if (!m_backgroundBrush)
 	{
 		m_backgroundBrush = new wxBrush(*BackgroundColour(), wxSOLID);
 	}
-	return m_backgroundBrush;
+
+	return *m_backgroundBrush;
 }
 
-wxColour* FortyApp::TextColour()
+const wxColour& FortyApp::TextColour()
 {
 	if (!m_textColour)
 	{
 		m_textColour = new wxColour("BLACK");
 	}
-	return m_textColour;
+
+	return *m_textColour;
 }
 
 // My frame constructor

@@ -364,7 +364,7 @@ bool Game::LButtonDown(wxDC& dc, int x, int y)
 			// Initialise the card bitmap to the background colour
 		{
 			wxMemoryDC memoryDC;
-			memoryDC.SelectObject(m_bmap);
+			memoryDC.SelectObject(*m_bmap);
 			m_liftedCard = m_srcPile->RemoveTopCard(memoryDC, m_xPos, m_yPos);
 		}
 
@@ -372,7 +372,7 @@ bool Game::LButtonDown(wxDC& dc, int x, int y)
 			// the screen
 		{
 			wxMemoryDC memoryDC;
-			memoryDC.SelectObject(m_bmapCard);
+			memoryDC.SelectObject(*m_bmapCard);
 			m_liftedCard->Draw(memoryDC, 0, 0);
 		}
     }
@@ -558,7 +558,7 @@ void Game::LButtonUp(wxDC& dc, int x, int y)
 
 		// Restore the area under the card
 		wxMemoryDC memoryDC;
-		memoryDC.SelectObject(m_bmap);
+		memoryDC.SelectObject(*m_bmap);
 		dc.Blit(m_xPos, m_yPos, CardWidth, CardHeight,
 			   &memoryDC, 0, 0, wxCOPY);
 
@@ -604,7 +604,7 @@ void Game::MouseMove(wxDC& dc, int mx, int my)
     if (m_liftedCard)
     {
 		wxMemoryDC memoryDC;
-		memoryDC.SelectObject(m_bmap);
+		memoryDC.SelectObject(*m_bmap);
 
 		int dx = mx + m_xOffset - m_xPos;
 		int dy = my + m_yOffset - m_yPos;
@@ -675,7 +675,7 @@ void Game::MouseMove(wxDC& dc, int mx, int my)
 		m_yPos += dy;
 
 			// draw the card in its new position
-		memoryDC.SelectObject(m_bmapCard);
+		memoryDC.SelectObject(*m_bmapCard);
 		dc.Blit(m_xPos, m_yPos, CardWidth, CardHeight,
 			   &memoryDC, 0, 0, wxCOPY);
     }
