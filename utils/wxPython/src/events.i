@@ -31,6 +31,9 @@
 
 class wxEvent {
 public:
+    wxEvent(int id = 0);
+    ~wxEvent();
+
     wxObject* GetEventObject();
     wxEventType GetEventType();
     int GetId();
@@ -47,6 +50,7 @@ public:
 
 class wxSizeEvent : public wxEvent {
 public:
+    wxSizeEvent(const wxSize& sz, int id = 0);
     wxSize GetSize();
 };
 
@@ -54,6 +58,8 @@ public:
 
 class wxCloseEvent : public wxEvent {
 public:
+    wxCloseEvent(int commandEventType = 0, int id = 0);
+
     void SetLoggingOff(bool loggingOff);
     bool GetLoggingOff();
     void Veto(bool veto = TRUE);
@@ -66,6 +72,8 @@ public:
 
 class wxCommandEvent : public wxEvent {
 public:
+    wxCommandEvent(int commandEventType = 0, int id = 0);
+
     bool Checked();
     long GetExtraLong();
     int GetInt();
@@ -79,6 +87,9 @@ public:
 
 class wxScrollEvent: public wxCommandEvent {
 public:
+    wxScrollEvent(int commandType = 0, int id = 0, int pos = 0,
+                  int orientation = 0);
+
     int GetOrientation();
     int GetPosition();
 };
@@ -87,6 +98,9 @@ public:
 
 class wxScrollWinEvent: public wxEvent {
 public:
+    wxScrollWinEvent(int commandType = 0, int pos = 0,
+                     int orientation = 0);
+
     int GetOrientation();
     int GetPosition();
 };
@@ -95,6 +109,7 @@ public:
 
 class wxSpinEvent : public wxScrollEvent {
 public:
+    wxSpinEvent(int commandType = 0, int id = 0);
 
 };
 
@@ -102,6 +117,8 @@ public:
 
 class wxMouseEvent: public wxEvent {
 public:
+    wxMouseEvent(int mouseEventType = 0);
+
     bool IsButton();
     bool ButtonDown(int but = -1);
     bool ButtonDClick(int but = -1);
@@ -139,33 +156,41 @@ public:
 
 class wxKeyEvent: public wxEvent {
 public:
+    wxKeyEvent(int keyEventType);
+
     bool ControlDown();
     bool MetaDown();
     bool AltDown();
     bool ShiftDown();
     long KeyCode();
 
+    long GetX();
+    long GetY();
+    wxPoint GetPosition();
+    %name(GetPositionTuple) void GetPosition(long* OUTPUT, long* OUTPUT);
 };
 
 //---------------------------------------------------------------------------
 
-//  class wxNavigationKeyEvent : public wxCommandEvent {
-//  public:
-//      wxNavigationKeyEvent();
+class wxNavigationKeyEvent : public wxCommandEvent {
+public:
+    wxNavigationKeyEvent();
 
-//      bool GetDirection();
-//      void SetDirection(bool bForward);
-//      bool IsWindowChange();
-//      void SetWindowChange(bool bIs);
-//      wxWindow* GetCurrentFocus();
-//      void SetCurrentFocus(wxWindow *win);
-//  };
+    bool GetDirection();
+    void SetDirection(bool bForward);
+    bool IsWindowChange();
+    void SetWindowChange(bool bIs);
+    wxWindow* GetCurrentFocus();
+    void SetCurrentFocus(wxWindow *win);
+};
 
 
 //---------------------------------------------------------------------------
 
 class wxMoveEvent: public wxEvent {
 public:
+    wxMoveEvent(const wxPoint& pt, int id = 0);
+
     wxPoint GetPosition();
 };
 
@@ -173,6 +198,7 @@ public:
 
 class wxPaintEvent: public wxEvent {
 public:
+    wxPaintEvent(int id = 0);
 
 };
 
@@ -180,6 +206,8 @@ public:
 
 class wxEraseEvent: public wxEvent {
 public:
+    wxEraseEvent(int id = 0, wxDC* dc = NULL);
+
     wxDC *GetDC();
 };
 
@@ -187,13 +215,14 @@ public:
 
 class wxFocusEvent: public wxEvent {
 public:
-
+    wxFocusEvent(WXTYPE eventType = 0, int id = 0);
 };
 
 //---------------------------------------------------------------------------
 
 class wxActivateEvent: public wxEvent{
 public:
+    wxActivateEvent(WXTYPE eventType = 0, int active = TRUE, int id = 0);
     bool GetActive();
 };
 
@@ -201,13 +230,14 @@ public:
 
 class wxInitDialogEvent: public wxEvent {
 public:
-
+    wxInitDialogEvent(int id = 0);
 };
 
 //---------------------------------------------------------------------------
 
 class wxMenuEvent: public wxEvent {
 public:
+    wxMenuEvent(WXTYPE id = 0, int id = 0);
     int GetMenuId();
 };
 
@@ -215,6 +245,7 @@ public:
 
 class wxShowEvent: public wxEvent {
 public:
+    wxShowEvent(int id = 0, int show = FALSE);
     void SetShow(bool show);
     bool GetShow();
 };
@@ -223,19 +254,24 @@ public:
 
 class wxIconizeEvent: public wxEvent {
 public:
+    wxIconizeEvent(int id = 0);
 };
 
 //---------------------------------------------------------------------------
 
 class wxMaximizeEvent: public wxEvent {
 public:
-
+    wxMaximizeEvent(int id = 0);
 };
 
 //---------------------------------------------------------------------------
 
 class wxJoystickEvent: public wxEvent {
 public:
+    wxJoystickEvent(int type = wxEVT_NULL,
+                    int state = 0,
+                    int joystick = wxJOYSTICK1,
+                    int change = 0);
     wxPoint GetPosition();
     int GetZPosition();
     int GetButtonState();
@@ -284,6 +320,7 @@ public:
 
 class wxIdleEvent: public wxEvent {
 public:
+    wxIdleEvent();
     void RequestMore(bool needMore = TRUE);
     bool MoreRequested();
 };
@@ -292,6 +329,7 @@ public:
 
 class wxUpdateUIEvent: public wxEvent {
 public:
+    wxUpdateUIEvent(wxWindowID commandId = 0);
     bool GetChecked();
     bool GetEnabled();
     wxString GetText();
@@ -308,7 +346,7 @@ public:
 
 class wxSysColourChangedEvent: public wxEvent {
 public:
-
+    wxSysColourChangedEvent();
 };
 
 //---------------------------------------------------------------------------
@@ -316,11 +354,52 @@ public:
 
 class wxNotifyEvent : public wxCommandEvent {
 public:
+    wxNotifyEvent(int commandType = wxEVT_NULL, int id = 0);
     bool IsAllowed();
     void Veto();
 };
 
 
+//---------------------------------------------------------------------------
+
+class  wxPaletteChangedEvent : public wxEvent {
+public:
+    wxPaletteChangedEvent(wxWindowID id = 0);
+
+    void SetChangedWindow(wxWindow* win);
+    wxWindow* GetChangedWindow();
+
+};
+
+//---------------------------------------------------------------------------
+
+class  wxQueryNewPaletteEvent : public wxEvent {
+public:
+    wxQueryNewPaletteEvent(wxWindowID id = 0);
+
+    void SetPaletteRealized(bool realized);
+    bool GetPaletteRealized();
+};
+
+
+//---------------------------------------------------------------------------
+
+class wxWindowCreateEvent : public wxEvent {
+public:
+    wxWindowCreateEvent(wxWindow *win = NULL);
+
+    wxWindow *GetWindow();
+};
+
+class wxWindowDestroyEvent : public wxEvent {
+public:
+    wxWindowDestroyEvent(wxWindow *win = NULL);
+
+    wxWindow *GetWindow();
+};
+
+
+//---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 // This one can be derived from in Python and passed through the event
