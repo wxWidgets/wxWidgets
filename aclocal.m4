@@ -1286,7 +1286,37 @@ dnl ---------------------------------------------------------------------------
 dnl Lots of compiler & linker detection code contained here was taken from
 dnl wxWindows configure.in script (see http://www.wxwindows.org)
 
+dnl Based on autoconf _AC_LANG_COMPILER_GNU
+AC_DEFUN([_AC_BAKEFILE_LANG_COMPILER_MWERKS],
+[AC_CACHE_CHECK([whether we are using the Metrowerks _AC_LANG compiler],
+    [bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_mwerks],
+    [AC_TRY_COMPILE([],[#ifndef __MWERKS__
+       choke me
+#endif
+],
+        [bakefile_compiler_mwerks=yes],
+        [bakefile_compiler_mwerks=no])
+    bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_mwerks=$bakefile_compiler_mwerks
+    ])
+])
 
+dnl Loosely based on autoconf AC_PROG_CC
+dnl TODO: Maybe this should wrap the call to AC_PROG_CC and be used instead.
+AC_DEFUN([AC_BAKEFILE_PROG_MWCC],
+[AC_LANG_PUSH(C)
+_AC_BAKEFILE_LANG_COMPILER_MWERKS
+MWCC=`test $bakefile_compiler_mwerks = yes && echo yes`
+AC_LANG_POP(C)
+])
+
+dnl Loosely based on autoconf AC_PROG_CXX
+dnl TODO: Maybe this should wrap the call to AC_PROG_CXX and be used instead.
+AC_DEFUN([AC_BAKEFILE_PROG_MWCXX],
+[AC_LANG_PUSH(C++)
+_AC_BAKEFILE_LANG_COMPILER_MWERKS
+MWCXX=`test $bakefile_compiler_mwerks = yes && echo yes`
+AC_LANG_POP(C++)
+])
 
 dnl ---------------------------------------------------------------------------
 dnl AC_BAKEFILE_GNUMAKE
@@ -1649,8 +1679,8 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
       ;;
 
       *-pc-os2_emx | *-pc-os2-emx )
-        SHARED_LD_CC="`pwd`/dllar.sh -o"
-        SHARED_LD_CXX="`pwd`/dllar.sh -o"
+        SHARED_LD_CC="`pwd`/dllar.sh -libf INITINSTANCE -libf TERMINSTANCE -o"
+        SHARED_LD_CXX="`pwd`/dllar.sh -libf INITINSTANCE -libf TERMINSTANCE -o"
         PIC_FLAG=""
         AC_BAKEFILE_CREATE_FILE_DLLAR_SH
         chmod +x dllar.sh
@@ -1704,14 +1734,7 @@ AC_DEFUN([AC_BAKEFILE_SHARED_VERSIONS],
     SONAME_FLAG=
 
     case "${BAKEFILE_HOST}" in
-      *-*-linux* )
-        SONAME_FLAG="-Wl,-soname,"
-        USE_SOVERSION=1
-        USE_SOVERLINUX=1
-        USE_SOSYMLINKS=1
-      ;;
-
-      *-*-freebsd* )
+      *-*-linux* | *-*-freebsd* )
         SONAME_FLAG="-Wl,-soname,"
         USE_SOVERSION=1
         USE_SOVERLINUX=1
@@ -1766,6 +1789,11 @@ AC_DEFUN([AC_BAKEFILE_DEPS],
             ;;
         esac
         AC_MSG_RESULT([gcc])
+    elif test "x$MWCC" = "xyes"; then
+        DEPSMODE=mwcc
+        DEPS_TRACKING=1
+        DEPSFLAG_MWCC="-MM"
+        AC_MSG_RESULT([mwcc])
     else
         AC_MSG_RESULT([none])
     fi
@@ -1937,7 +1965,7 @@ AC_DEFUN([AC_BAKEFILE],
 
     BAKEFILE_BAKEFILE_M4_VERSION="0.1.4"
     
-    builtin(include, autoconf_inc.m4)
+    m4_include([autoconf_inc.m4])
     
     if test "$BAKEFILE_BAKEFILE_M4_VERSION" != "$BAKEFILE_AUTOCONF_INC_M4_VERSION" ; then
         AC_MSG_ERROR([Versions of Bakefile used to generate makefiles ($BAKEFILE_AUTOCONF_INC_M4_VERSION) and configure ($BAKEFILE_BAKEFILE_M4_VERSION) do not match.])
@@ -2048,10 +2076,11 @@ CleanUp() {
 
 # Print usage and exit script with rc=1.
 PrintHelp() {
- echo 'Usage: dllar @<:@-o@<:${utput}:>@ output_file@:>@ @<:@-i@<:${mport}:>@ importlib_name@:>@'
- echo '       @<:@-d@<:${escription}:>@ "dll descrption"@:>@ @<:@-cc "CC"@:>@ @<:@-f@<:${lags}:>@ "CFLAGS"@:>@'
- echo '       @<:@-ord@<:${inals}:>@@:>@ -ex@<:${clude}:>@ "symbol(s)"'
- echo '       @<:@-libf@<:${lags}:>@ "{INIT|TERM}{GLOBAL|INSTANCE}"@:>@ @<:@-nocrt@<:${dll}:>@@:>@ @<:@-nolxl@<:${ite}:>@@:>@'
+ echo 'Usage: dllar.sh @<:@-o@<:@utput@:>@ output_file@:>@ @<:@-i@<:@mport@:>@ importlib_name@:>@'
+ echo '       @<:@-name-mangler-script script.sh@:>@'
+ echo '       @<:@-d@<:@escription@:>@ "dll descrption"@:>@ @<:@-cc "CC"@:>@ @<:@-f@<:@lags@:>@ "CFLAGS"@:>@'
+ echo '       @<:@-ord@<:@inals@:>@@:>@ -ex@<:@clude@:>@ "symbol(s)"'
+ echo '       @<:@-libf@<:@lags@:>@ "{INIT|TERM}{GLOBAL|INSTANCE}"@:>@ @<:@-nocrt@<:@dll@:>@@:>@ @<:@-nolxl@<:@ite@:>@@:>@'
  echo '       @<:@*.o@:>@ @<:@*.a@:>@'
  echo '*> "output_file" should have no extension.'
  echo '   If it has the .o, .a or .dll extension, it is automatically removed.'
@@ -2062,19 +2091,26 @@ PrintHelp() {
  echo '   This name is used as the import library name and may be longer and'
  echo '   more descriptive than the DLL name which has to follow the old '
  echo '   8.3 convention of FAT.'
+ echo '*> "script.sh may be given to override the output_file name by a'
+ echo '   different name. It is mainly useful if the regular make process'
+ echo '   of some package does not take into account OS/2 restriction of'
+ echo '   DLL name lengths. It takes the importlib name as input and is'
+ echo '   supposed to procude a shorter name as output. The script should'
+ echo '   expect to get importlib_name without extension and should produce'
+ echo '   a (max.) 8 letter name without extension.'
  echo '*> "cc" is used to use another GCC executable.   (default: gcc.exe)'
  echo '*> "flags" should be any set of valid GCC flags. (default: -s -Zcrtdll)'
  echo '   These flags will be put at the start of GCC command line.'
- echo '*> -ord@<:${inals}:>@ tells dllar to export entries by ordinals. Be careful.'
- echo '*> -ex@<:${clude}:>@ defines symbols which will not be exported. You can define'
+ echo '*> -ord@<:@inals@:>@ tells dllar to export entries by ordinals. Be careful.'
+ echo '*> -ex@<:@clude@:>@ defines symbols which will not be exported. You can define'
  echo '   multiple symbols, for example -ex "myfunc yourfunc _GLOBAL*".'
  echo '   If the last character of a symbol is "*", all symbols beginning'
  echo '   with the prefix before "*" will be exclude, (see _GLOBAL* above).'
- echo '*> -libf@<:${lags}:>@ can be used to add INITGLOBAL/INITINSTANCE and/or'
+ echo '*> -libf@<:@lags@:>@ can be used to add INITGLOBAL/INITINSTANCE and/or'
  echo '   TERMGLOBAL/TERMINSTANCE flags to the dynamically-linked library.'
- echo '*> -nocrt@<:${dll}:>@ switch will disable linking the library against emx''s'
+ echo '*> -nocrt@<:@dll@:>@ switch will disable linking the library against emx''s'
  echo '   C runtime DLLs.'
- echo '*> -nolxl@<:${ite}:>@ switch will disable running lxlite on the resulting DLL.'
+ echo '*> -nolxl@<:@ite@:>@ switch will disable running lxlite on the resulting DLL.'
  echo '*> All other switches (for example -L./ or -lmylib) will be passed'
  echo '   unchanged to GCC at the end of command line.'
  echo '*> If you create a DLL from a library and you do not specify -o,'
@@ -2111,6 +2147,7 @@ cmdLine=${D}*
 outFile=""
 outimpFile=""
 inputFiles=""
+renameScript=""
 description=""
 CC=gcc.exe
 CFLAGS="-s -Zcrtdll"
@@ -2129,6 +2166,7 @@ case ${D}curDirS in
 esac
 # Parse commandline
 libsToLink=0
+omfLinking=0
 while @<:@ ${D}1 @:>@; do
     case ${D}1 in
     -ord*)
@@ -2141,6 +2179,10 @@ while @<:@ ${D}1 @:>@; do
     -i*)
         shift
         outimpFile=${D}1
+        ;;
+    -name-mangler-script)
+        shift
+        renameScript=${D}1
         ;;
     -d*)
         shift
@@ -2176,10 +2218,21 @@ while @<:@ ${D}1 @:>@; do
         -L* | -l*)
             libsToLink=1
             ;;
+        -Zomf)
+            omfLinking=1
+            ;;
         *)
             ;;
         esac
         EXTRA_CFLAGS=${D}{EXTRA_CFLAGS}" "${D}1
+        ;;
+    *.dll)
+        EXTRA_CFLAGS="${D}{EXTRA_CFLAGS} \`basnam ${D}1 .dll\`"
+        if @<:@ ${D}omfLinking -eq 1 @:>@; then
+            EXTRA_CFLAGS="${D}{EXTRA_CFLAGS}.lib"
+	else
+            EXTRA_CFLAGS="${D}{EXTRA_CFLAGS}.a"
+        fi
         ;;
     *)
         found=0;
@@ -2311,9 +2364,13 @@ fi
 defFile="${D}{outFile}.def"
 arcFile="${D}{outimpFile}.a"
 arcFile2="${D}{outimpFile}.lib"
-dllFile="${D}outFile"
-# Add suffix to dllFile later, first we need a version to use as
-# name in .def file.
+
+#create ${D}dllFile as something matching 8.3 restrictions,
+if @<:@ -z ${D}renameScript @:>@ ; then
+    dllFile="${D}outFile"
+else
+    dllFile=\`${D}renameScript ${D}outimpFile\`
+fi
 
 if @<:@ ${D}do_backup -ne 0 @:>@ ; then
     if @<:@ -f ${D}arcFile @:>@ ; then
@@ -2340,8 +2397,8 @@ done
 # Create the def file.
 rm -f ${D}defFile
 echo "LIBRARY \`basnam ${D}dllFile\` ${D}library_flags" >> ${D}defFile
-dllFile="${D}dllFile.dll"
-if @<:@ -n ${D}description @:>@; then
+dllFile="${D}{dllFile}.dll"
+if @<:@ ! -z ${D}description @:>@; then
     echo "DESCRIPTION  \\"${D}{description}\\"" >> ${D}defFile
 fi
 echo "EXPORTS" >> ${D}defFile
@@ -2417,6 +2474,7 @@ cat <<EOF >bk-deps
 DEPSMODE=${DEPSMODE}
 DEPSDIR=.deps
 DEPSFLAG_GCC="${DEPSFLAG_GCC}"
+DEPSFLAG_MWCC="${DEPSFLAG_MWCC}"
 
 mkdir -p ${D}DEPSDIR
 
@@ -2453,6 +2511,31 @@ if test ${D}DEPSMODE = gcc ; then
             rm -f ${D}depfile
         fi
     fi
+    exit 0
+elif test ${D}DEPSMODE = mwcc ; then
+    ${D}*
+    status=${D}?
+    if test ${D}{status} != 0 ; then
+        exit ${D}{status}
+    fi
+    # Run mwcc again with -MM and redirect into the dep file we want
+    # NOTE: We can't use shift here because we need ${D}* to be valid
+    prevarg=
+    for arg in ${D}* ; do
+        if test "${D}prevarg" = "-o"; then
+            objfile=${D}arg
+        else
+            case "${D}arg" in
+                -* )
+                ;;
+                * )
+                    srcfile=${D}arg
+                ;;
+            esac
+        fi
+        prevarg="${D}arg"
+    done
+    ${D}* ${D}DEPSFLAG_MWCC >${D}{DEPSDIR}/${D}{objfile}.d
     exit 0
 else
     ${D}*
