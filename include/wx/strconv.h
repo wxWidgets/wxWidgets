@@ -20,6 +20,10 @@
 #include "wx/wxchar.h"
 #include "wx/buffer.h"
 
+#ifdef __DIGITALMARS__
+#include "typeinfo.h"
+#endif
+
 #if defined(__VISAGECPP__) && __IBMCPP__ >= 400
 #  undef __BSEXCPT__
 #endif
