@@ -65,6 +65,7 @@ public:
     void OnGetMenuItemInfo(wxCommandEvent& event);
 
     void OnAppendMenu(wxCommandEvent& event);
+    void OnInsertMenu(wxCommandEvent& event);
     void OnDeleteMenu(wxCommandEvent& event);
     void OnToggleMenu(wxCommandEvent& event);
     void OnEnableMenu(wxCommandEvent& event);
@@ -76,11 +77,13 @@ public:
     void OnUpdateCheckMenuItemUI(wxUpdateUIEvent& event);
 
 private:
-    wxMenu *CreateDummyMenu();
+    wxMenu *CreateDummyMenu(wxString *title);
 
     wxMenuItem *GetLastMenuItem() const;
 
     wxMenu     *m_menu;
+
+    size_t m_countDummy;
 
     DECLARE_EVENT_TABLE()
 };
@@ -95,6 +98,7 @@ enum
 
     Menu_MenuBar_Toggle = 200,
     Menu_MenuBar_Append,
+    Menu_MenuBar_Insert,
     Menu_MenuBar_Delete,
     Menu_MenuBar_Enable,
     Menu_MenuBar_GetLabel,
@@ -137,6 +141,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(Menu_MenuBar_Toggle,   MyFrame::OnToggleMenu)
     EVT_MENU(Menu_MenuBar_Append,   MyFrame::OnAppendMenu)
+    EVT_MENU(Menu_MenuBar_Insert,   MyFrame::OnInsertMenu)
     EVT_MENU(Menu_MenuBar_Delete,   MyFrame::OnDeleteMenu)
     EVT_MENU(Menu_MenuBar_Enable,   MyFrame::OnEnableMenu)
     EVT_MENU(Menu_MenuBar_GetLabel, MyFrame::OnGetLabelMenu)
@@ -195,6 +200,7 @@ MyFrame::MyFrame()
                  wxDefaultPosition, wxSize(300, 200))
 {
     m_menu = NULL;
+    m_countDummy = 0;
 
     CreateStatusBar();
 
@@ -205,6 +211,8 @@ MyFrame::MyFrame()
     wxMenu *menubarMenu = new wxMenu;
     menubarMenu->Append(Menu_MenuBar_Append, "&Append menu\tCtrl-A",
                         "Append a menu to the menubar");
+    menubarMenu->Append(Menu_MenuBar_Insert, "&Insert menu\tCtrl-I",
+                        "Insert a menu into the menubar");
     menubarMenu->Append(Menu_MenuBar_Delete, "&Delete menu\tCtrl-D",
                         "Delete the last menu from the menubar");
     menubarMenu->Append(Menu_MenuBar_Toggle, "&Toggle menu\tCtrl-T",
@@ -261,12 +269,17 @@ MyFrame::MyFrame()
     SetMenuBar(menuBar);
 }
 
-wxMenu *MyFrame::CreateDummyMenu()
+wxMenu *MyFrame::CreateDummyMenu(wxString *title)
 {
     wxMenu *menu = new wxMenu;
     menu->Append(Menu_Dummy_First, "First item\tCtrl-F1");
     menu->AppendSeparator();
     menu->Append(Menu_Dummy_Second, "Second item\tCtrl-F2", "", TRUE);
+
+    if ( title )
+    {
+        title->Printf("Dummy menu &%d", ++m_countDummy);
+    }
 
     return menu;
 }
@@ -317,14 +330,18 @@ void MyFrame::OnDeleteMenu(wxCommandEvent& WXUNUSED(event))
     }
 }
 
+void MyFrame::OnInsertMenu(wxCommandEvent& WXUNUSED(event))
+{
+    wxString title;
+    wxMenu *menu = CreateDummyMenu(&title);
+    GetMenuBar()->Insert(0, menu, title);
+}
+
 void MyFrame::OnAppendMenu(wxCommandEvent& WXUNUSED(event))
 {
-    static int s_count = 0;
-
     wxString title;
-    title.Printf("Dummy menu &%d", ++s_count);
-
-    GetMenuBar()->Append(CreateDummyMenu(), title);
+    wxMenu *menu = CreateDummyMenu(&title);
+    GetMenuBar()->Append(menu, title);
 }
 
 void MyFrame::OnToggleMenu(wxCommandEvent& WXUNUSED(event))
@@ -395,7 +412,7 @@ void MyFrame::OnAppendSubMenu(wxCommandEvent& WXUNUSED(event))
     wxMenu *menu = menubar->GetMenu(menubar->GetMenuCount() - 1);
     
     menu->Append(Menu_Dummy_Last, "Dummy sub menu\tCtrl-F2",
-                 CreateDummyMenu());
+                 CreateDummyMenu(NULL));
 }
 
 void MyFrame::OnDeleteMenuItem(wxCommandEvent& WXUNUSED(event))
@@ -549,7 +566,7 @@ void MyFrame::OnRightDown(wxMouseEvent &event )
     wxMenu menu("Test popup");
 
     menu.Append(Menu_Help_About, "&About");
-    menu.Append(Menu_Popup_Submenu, "Submenu", CreateDummyMenu());
+    menu.Append(Menu_Popup_Submenu, "Submenu", CreateDummyMenu(NULL));
     menu.Append(Menu_Popup_ToBeDeleted, "To be deleted");
     menu.Append(Menu_Popup_ToBeChecked, "To be checked", "", TRUE);
     menu.Append(Menu_Popup_ToBeGreyed, "To be greyed");

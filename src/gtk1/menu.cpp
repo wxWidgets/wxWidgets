@@ -205,8 +205,14 @@ void wxMenuBar::UnsetInvokingWindow( wxWindow *win )
 
 bool wxMenuBar::Append( wxMenu *menu, const wxString &title )
 {
-    m_menus.Append( menu );
+    if ( !wxMenuBarBase::Append( menu, title ) )
+        return FALSE;
 
+    return GtkAppend(menu, title);
+}
+
+bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title)
+{
     const wxChar *pc;
 
     /* GTK 1.2 wants to have "_" instead of "&" for accelerators */
@@ -296,9 +302,27 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
     if ( !wxMenuBarBase::Insert(pos, menu, title) )
         return FALSE;
 
-    wxFAIL_MSG(wxT("TODO"));
+#if __WXGTK12__
+    // GTK+ doesn't have a function to insert a menu using GtkItemFactory (as
+    // of version 1.2.6), so we first append the item and then change its
+    // index
+    if ( !GtkAppend(menu, title) )
+        return FALSE;
+
+    GtkMenuShell *menu_shell = GTK_MENU_SHELL(m_factory->widget);
+    gpointer data = g_list_last(menu_shell->children)->data;
+    menu_shell->children = g_list_remove(menu_shell->children, data);
+    menu_shell->children = g_list_insert(menu_shell->children, data, pos);
+
+    return TRUE;
+#else  // GTK < 1.2
+    // this should be easy to do with GTK 1.0 - can use standard functions for
+    // this and don't need any hacks like above, but as I don't have GTK 1.0
+    // any more I can't do it
+    wxFAIL_MSG( wxT("TODO") );
 
     return FALSE;
+#endif // GTK 1.2/1.0
 }
 
 wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
@@ -306,17 +330,48 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
     if ( !wxMenuBarBase::Replace(pos, menu, title) )
         return FALSE;
 
-    wxFAIL_MSG(wxT("TODO"));
+    // remove the old item and insert a new one
+    wxMenu *menuOld = Remove(pos);
+    if ( menuOld && !Insert(pos, menu, title) )
+    {
+        return NULL;
+    }
 
-    return NULL;
+    // either Insert() succeeded or Remove() failed and menuOld is NULL
+    return menuOld;
 }
 
 wxMenu *wxMenuBar::Remove(size_t pos)
 {
-    if ( !wxMenuBarBase::Remove(pos) )
+    wxMenu *menu = wxMenuBarBase::Remove(pos);
+    if ( !menu )
         return FALSE;
 
-    wxFAIL_MSG(wxT("TODO"));
+#ifdef __WXGTK12__
+    // gtk_item_factory_delete_entry() is buggy as of GTK+ 1.2.6, so don't use
+    // it but delete the widget manually instead
+    wxString path = _T("<main>/"),
+             title = menu->GetTitle();
+    for ( const wxChar *p = title.c_str(); *p; p++ )
+    {
+        if ( *p != _T('_') )
+            path += *p;
+    }
+
+    GtkWidget *widget = gtk_item_factory_get_item(m_factory, path.mb_str());
+    if ( widget )
+    {
+        gtk_widget_destroy(widget);
+
+        return menu;
+    }
+
+    // shouldn't happen (FIXME but does now)
+    wxFAIL_MSG( _T("gtk_item_factory_get_item() failed") );
+#else // GTK < 1.2
+    // this should be very simple to implement
+    wxFAIL_MSG( wxT("TODO") );
+#endif // GTK 1.2/1.0
 
     return NULL;
 }
@@ -705,7 +760,8 @@ bool wxMenuItem::IsChecked() const
 
 wxString wxMenuItem::GetFactoryPath() const
 {
-    /* in order to get the pointer to the item we need the item text _without_ underscores */
+    /* in order to get the pointer to the item we need the item text _without_
+       underscores */
     wxString path( wxT("<main>/") );
     path += GetLabel();
 
@@ -758,7 +814,7 @@ void wxMenu::Init()
 wxMenu::~wxMenu()
 {
    m_items.Clear();
- 
+
    gtk_widget_destroy( m_menu );
 
    gtk_object_unref( GTK_OBJECT(m_factory) );

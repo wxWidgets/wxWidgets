@@ -45,6 +45,9 @@ public:
     void SetInvokingWindow( wxWindow *win );
     void UnsetInvokingWindow( wxWindow *win );
 
+    // common part of Append and Insert
+    bool GtkAppend(wxMenu *menu, const wxString& title);
+
     GtkAccelGroup   *m_accel;
     GtkItemFactory  *m_factory;
     GtkWidget       *m_menubar;
