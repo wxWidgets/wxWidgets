@@ -459,7 +459,7 @@ wxString wxDoGetStringInList( Widget listBox, int n )
                    XmNitemCount, &count,
                    XmNitems, &strlist,
                    NULL );
-    if( n <= count && n >= 0 )
+    if( n < count && n >= 0 )
         return wxXmStringToString( strlist[n] );
     else
         return wxEmptyString;

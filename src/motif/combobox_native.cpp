@@ -229,18 +229,17 @@ void wxComboBox::Clear()
 
 void wxComboBox::SetSelection (int n)
 {
-#ifdef LESSTIF_VERSION
+#if wxCHECK_LESSTIF()
     XmListSelectPos (GetXmList(this), n + 1, false);
     SetValue(GetString(n));
 #else
+#if 0
     wxXmString str( GetString(n).c_str() );
     XmComboBoxSelectItem((Widget) m_mainWidget, str());
-#if 0
-    // does it work for Motif
-    XtVaSetValues( (Widget)m_mainWidget,
-                   XmNselectedPosition, n + 1,
-                   NULL );
 #endif
+    XtVaSetValues( (Widget)m_mainWidget,
+                   XmNselectedPosition, n,
+                   NULL );
 #endif
 }
 
