@@ -76,7 +76,7 @@ int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
     kernResult = task_for_pid(taskOfOurProcess,pid, &machPortForProcess);
     if(kernResult != KERN_SUCCESS)
     {
-        wxLogDebug("no task_for_pid()");
+        wxLogDebug(wxT("no task_for_pid()"));
         // try seeing if it is already dead or something
         // FIXME: a better method would be to call the callback function
         // from idle time until the process terminates. Of course, how
