@@ -878,7 +878,7 @@ bool wxRegKey::SetValue(const wxChar *szValue, const wxString& strValue)
 #if defined( __WIN32__) && !defined(__TWIN32__)
       m_dwLastError = RegSetValueEx((HKEY) m_hKey, szValue, (DWORD) RESERVED, REG_SZ,
                                     (RegString)strValue.c_str(),
-                                    strValue.Len() + 1);
+                                    (strValue.Len() + 1)*sizeof(wxChar));
       if ( m_dwLastError == ERROR_SUCCESS )
         return TRUE;
     #else   //WIN16
