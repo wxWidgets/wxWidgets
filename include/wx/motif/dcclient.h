@@ -131,7 +131,8 @@ class WXDLLEXPORT wxPaintDC: public wxWindowDC
   DECLARE_DYNAMIC_CLASS(wxPaintDC)
 public:
   wxPaintDC() {}
-  wxPaintDC(wxWindow* win): wxWindowDC(win) {}
+  wxPaintDC(wxWindow* win);
+  ~wxPaintDC();
 };
 
 class WXDLLEXPORT wxClientDC: public wxWindowDC

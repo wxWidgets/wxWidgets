@@ -232,7 +232,7 @@ void wxGenericColourDialog::CreateWidgets(void)
   int bw, bh;
   okButton->GetSize(&bw, &bh);
 
-  (void) new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(okButtonX + bw + 10, buttonY));
+  (void) new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(okButtonX + bw + 20, buttonY));
   (void) new wxButton(this, wxID_ADD_CUSTOM, _("Add to custom colours"),
      wxPoint(customButtonX, buttonY));
 
@@ -252,7 +252,7 @@ void wxGenericColourDialog::CreateWidgets(void)
   blueSlider = new wxSlider(this, wxID_BLUE_SLIDER, 0, 0, 255,
    wxPoint(sliderX + 2*sliderSpacing, 10), wxSize(-1, sliderHeight), wxVERTICAL|wxSL_LABELS);
 
-  SetClientSize(sliderX + 3*sliderSpacing, buttonY + 30);
+  SetClientSize(sliderX + 3*sliderSpacing, buttonY + 40);
   okButton->SetDefault();
 
   Centre(wxBOTH);

@@ -84,7 +84,8 @@ public:
 
 	// Is region empty?
 	bool Empty() const;
-    inline bool IsEmpty() const { return Empty(); }
+        inline bool IsEmpty() const { return Empty(); }
+        bool Ok() const { return (m_refData != NULL) ; }
 
 	//# Tests
 	// Does the region contain the point (x,y)?
@@ -100,6 +101,9 @@ public:
 	bool Combine(long x, long y, long width, long height, wxRegionOp op);
 	bool Combine(const wxRegion& region, wxRegionOp op);
 	bool Combine(const wxRect& rect, wxRegionOp op);
+
+    // Get the internal Region handle
+    WXRegion GetXRegion() ;
 };
 
 class WXDLLEXPORT wxRegionIterator : public wxObject {

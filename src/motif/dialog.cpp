@@ -617,86 +617,42 @@ static void wxCloseDialogCallback( Widget WXUNUSED(widget), XtPointer client_dat
 // TODO: Preferably, we should have a universal repaint proc.
 // Meanwhile, use a special one for dialogs.
 static void wxDialogBoxRepaintProc(Widget w, XtPointer WXUNUSED(c_data), XEvent *event, char *)
-   {
+{
      Window window;
      Display *display;
-/*
-     static XRectangle *xrect;
-     GC gc;
-     int llp = 0;
-     static int last_count = 0;
-     static int draw_count = 0;
-*/
 
      wxWindow* win = (wxWindow *)wxWidgetHashTable->Get((long)w);
      if (!win)
        return;
 
      switch(event -> type)
-        {
+     {
           case Expose :
+          {
                window = (Window) win -> GetXWindow();
                display = (Display *) win -> GetXDisplay();
-	       /* TODO
-               gc = (GC) panel -> GetDC() -> gc;
-               
-               llp = event -> xexpose.count;
-               
-               if ((last_count == 0) && (llp == 0))
-                  {
-                    xrect = new XRectangle[1];
-                    xrect[0].x = event -> xexpose.x;
-                    xrect[0].y = event -> xexpose.y;
-                    xrect[0].width = event -> xexpose.width;
-                    xrect[0].height = event -> xexpose.height;
-                    
-                    XSetClipRectangles(display,gc,0,0,xrect,1,Unsorted);
-//                    panel->DoPaint(xrect, 1);
-                    panel->GetEventHandler()->OnPaint();
 
-                    delete xrect;
-                  }
+               wxRect* rect = new wxRect(event->xexpose.x, event->xexpose.y,
+                                       event->xexpose.width, event->xexpose.height);
+               win->m_updateRects.Append((wxObject*) rect);
 
-               if ((last_count == 0) && (llp != 0))
-                  {
-                    xrect = new XRectangle[llp + 1];
-                    draw_count = llp + 1;
-                    
-                    xrect[draw_count - llp - 1].x = event -> xexpose.x;
-                    xrect[draw_count - llp - 1].y = event -> xexpose.y;
-                    xrect[draw_count - llp - 1].width = event -> xexpose.width;
-                    xrect[draw_count - llp - 1].height = event -> xexpose.height;
-                  }
+               if (event -> xexpose.count == 0)
+               {
+                    wxPaintEvent event(win->GetId());
+                    event.SetEventObject(win);
+                    win->GetEventHandler()->ProcessEvent(event);
 
-               if ((last_count != 0) && (llp != 0))
-                  {
-                    xrect[draw_count - llp - 1].x = event -> xexpose.x;
-                    xrect[draw_count - llp - 1].y = event -> xexpose.y;
-                    xrect[draw_count - llp - 1].width = event -> xexpose.width;
-                    xrect[draw_count - llp - 1].height = event -> xexpose.height;
-                  }
-               
-               if ((last_count != 0) && (llp == 0))
-                  {
-                    xrect[draw_count - llp - 1].x = event -> xexpose.x;
-                    xrect[draw_count - llp - 1].y = event -> xexpose.y;
-                    xrect[draw_count - llp - 1].width = event -> xexpose.width;
-                    xrect[draw_count - llp - 1].height = event -> xexpose.height;
-
-                    XSetClipRectangles(display,gc,0,0,xrect,draw_count,Unsorted);
-//                    panel->DoPaint(xrect,draw_count);
-                    panel->GetEventHandler()->OnPaint();
-
-                    delete xrect;
-                  }
-               last_count = event -> xexpose.count;
-	       */
+                    win->ClearUpdateRects();
+               }
                break;
-          default :
+	  }
+        default :
+	  {
                cout << "\n\nNew Event ! is = " << event -> type << "\n";
                break;
-        }
-   }
+	  }
+     }
+}
 
 static void wxDialogBoxEventHandler (Widget    wid,
                               XtPointer WXUNUSED(client_data),

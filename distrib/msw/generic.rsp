@@ -302,6 +302,22 @@ samples/wxsocket/*.xpm
 samples/wxsocket/*.ico
 samples/wxsocket/*.rc
 
+samples/help/*.cpp
+samples/help/*.h
+samples/help/*.def
+samples/help/makefile*
+samples/help/*.xbm
+samples/help/*.xpm
+samples/help/*.ico
+samples/help/*.rc
+samples/help/doc/*.html
+samples/help/doc/*.htm
+samples/help/doc/*.class
+samples/help/doc/*.db
+samples/help/doc/*.tex
+samples/help/doc/*.gif
+samples/help/doc/*.map
+
 samples/bombs/*.cpp
 samples/bombs/*.h
 samples/bombs/*.def

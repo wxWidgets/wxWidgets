@@ -209,8 +209,8 @@ void wxGenericFontDialog::CreateWidgets(void)
   int x=-1;
   int y=40;
   familyChoice = new wxChoice(this, wxID_FONT_FAMILY, wxPoint(10, 10), wxSize(120, -1), 5, families);
-  styleChoice = new wxChoice(this, wxID_FONT_STYLE, wxPoint(140, 10), wxSize(120, -1), 3, styles);
-  weightChoice = new wxChoice(this, wxID_FONT_WEIGHT, wxPoint(270, 10), wxSize(120, -1), 3, weights);
+  styleChoice = new wxChoice(this, wxID_FONT_STYLE, wxPoint(160, 10), wxSize(120, -1), 3, styles);
+  weightChoice = new wxChoice(this, wxID_FONT_WEIGHT, wxPoint(310, 10), wxSize(120, -1), 3, weights);
 
   colourChoice = new wxChoice(this, wxID_FONT_COLOUR, wxPoint(10, 40), wxSize(190, -1), NUM_COLS, wxColourDialogNames);
 #ifdef __MOTIF__
@@ -228,8 +228,8 @@ void wxGenericFontDialog::CreateWidgets(void)
 	pointSizes[i] = buf;
   }
 
-  pointSizeChoice = new wxChoice(this, wxID_FONT_SIZE, wxPoint(210, y), wxSize(50, -1), 40, pointSizes);
-  underLineCheckBox = new wxCheckBox(this, wxID_FONT_UNDERLINE, _("Underline"), wxPoint(280, y));
+  pointSizeChoice = new wxChoice(this, wxID_FONT_SIZE, wxPoint(230, y), wxSize(50, -1), 40, pointSizes);
+  underLineCheckBox = new wxCheckBox(this, wxID_FONT_UNDERLINE, _("Underline"), wxPoint(320, y));
 
   int rectY;
   pointSizeChoice->GetPosition(&x, &rectY); //NL mod
@@ -257,7 +257,7 @@ void wxGenericFontDialog::CreateWidgets(void)
 
   okButton->SetDefault();
 
-  SetClientSize(400, by + 30);
+  SetClientSize(450, by + 40);
 
   Centre(wxBOTH);
 

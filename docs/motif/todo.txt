@@ -23,6 +23,9 @@ High Priority
 
 - Make wxDialog OnPaint work.
 
+- Optimize wxWindow OnPaint, clipping the damaged
+  region.
+
 - Implementation of OnEraseBackground. How? Call OnEraseBackground
   just before OnPaint? Will duplicate Xlib's own erase of the background.
   However, this is usually OK, because the default wxWindow::OnEraseBackground

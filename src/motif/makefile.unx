@@ -137,6 +137,7 @@ LIB_CPP_SRC=\
  ../generic/colrdlgg.cpp \
  ../generic/fontdlgg.cpp \
  ../generic/gridg.cpp \
+ ../generic/helpext.cpp \
  ../generic/imaglist.cpp \
  ../generic/listctrl.cpp \
  ../generic/laywin.cpp \

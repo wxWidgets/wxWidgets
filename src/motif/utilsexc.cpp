@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation
+// #pragma implementation
 #endif
 
 #include "wx/utils.h"
@@ -135,7 +135,7 @@ long wxExecute(char **argv, bool sync, wxProcess *WXUNUSED(handler))
   // end VMS
 }
 
-long wxExecute (const wxString& command, bool sync)
+long wxExecute (const wxString& command, bool sync, wxProcess* WXUNUSED(process))
 {
 #ifdef VMS
   return(0);

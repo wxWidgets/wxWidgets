@@ -3,21 +3,16 @@
 
 #ifdef __WXMSW__
 #include "wx/msw/helpwin.h"
-#elif defined(__WXGTK__)
-#include "wx/generic/helpext.h"
 #else
-#include "wx/generic/helpxlp.h"
+#include "wx/generic/helpext.h"
 #endif
 
 #ifdef __WXMSW__
 #define wxHelpController wxWinHelpController
 #define sm_classwxHelpController sm_classwxWinHelpController
-#elif defined(__WXGTK__)
+#else
 #define wxHelpController wxExtHelpController
 #define sm_classwxHelpController sm_classwxExtHelpController
-#else
-#define wxHelpController wxXLPHelpController
-#define sm_classwxHelpController sm_classwxXLPHelpController
 #endif
 
 #endif

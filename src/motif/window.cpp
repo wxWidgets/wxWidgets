@@ -135,17 +135,12 @@ wxWindow::wxWindow()
     m_canAddEventHandler = FALSE;
     m_scrollPosX = 0;
     m_scrollPosY = 0;
-    m_paintRegion = (WXRegion) 0;
 }
 
 // Destructor
 wxWindow::~wxWindow()
 {
     //// Motif-specific
-
-    if (m_paintRegion)
-        XDestroyRegion ((Region) m_paintRegion);
-    m_paintRegion = (WXRegion) 0;
 
     if (GetMainWidget())
         DetachWidget(GetMainWidget()); // Removes event handlers
@@ -243,6 +238,8 @@ wxWindow::~wxWindow()
 
     if ( m_windowValidator ) delete m_windowValidator;
     if (m_clientObject) delete m_clientObject;
+
+    ClearUpdateRects();
 }
 
 // Destroy the window (delayed, if a managed window)
@@ -309,7 +306,6 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     m_pixmapOffsetY = 0;
     m_scrollPosX = 0;
     m_scrollPosY = 0;
-    m_paintRegion = (WXRegion) 0;
 
     if (!parent)
         return FALSE;
@@ -2016,9 +2012,9 @@ bool wxWindow::AcceptsFocus() const
 }
 
 // Update region access
-wxRegion wxWindow::GetUpdateRegion() const
+wxRegion& wxWindow::GetUpdateRegion() const
 {
-    return m_updateRegion;
+    return (wxRegion&) m_updateRegion;
 }
 
 bool wxWindow::IsExposed(int x, int y, int w, int h) const
@@ -2135,75 +2131,41 @@ void wxCanvasRepaintProc (Widget drawingArea, XtPointer clientData,
  XmDrawingAreaCallbackStruct * cbs)
 {
     if (!wxWidgetHashTable->Get ((long) (Widget) drawingArea))
-	return;
+	    return;
 
     XEvent * event = cbs->event;
-    wxWindow * canvas = (wxWindow *) clientData;
-    Display * display = (Display *) canvas->GetXDisplay();
-    //    GC gc = (GC) canvas->GetDC()->gc;
+    wxWindow * win = (wxWindow *) clientData;
+    Display * display = (Display *) win->GetXDisplay();
 
     switch (event->type)
     {
-      case Expose:
-      {
-	/* TODO
-        wxCanvasDC* canvasDC = canvas->GetDC();
-        if (canvasDC)
-	{
-          if (canvasDC->onpaint_reg)
-            XDestroyRegion(canvasDC->onpaint_reg);
-          canvasDC->onpaint_reg = XCreateRegion();
-          
-	}
-	*/
+        case Expose:
+        {
+            wxRect* rect = new wxRect(event->xexpose.x, event->xexpose.y,
+                                       event->xexpose.width, event->xexpose.height);
+	    /*
+            cout << "Expose proc. wxRect: " << rect->x << ", " << rect->y << ", ";
+            cout << rect->width << ", " << rect->height << "\n\n";
+	    */
 
-	int n = canvas->m_updateRects.Number();
-        XRectangle* xrects = new XRectangle[n];
-        int i;
-	for (i = 0; i < canvas->m_updateRects.Number(); i++)
-	{
-	  wxRect* rect = (wxRect*) canvas->m_updateRects.Nth(i)->Data();
-	  xrects[i].x = rect->x;
-          xrects[i].y = rect->y;
-          xrects[i].width = rect->width;
-          xrects[i].height = rect->height;
-	  /* TODO (?) Actually ignore it I think.
-          if (canvasDC)
-            XUnionRectWithRegion(&(xrects[i]), canvasDC->onpaint_reg,
-              canvasDC->onpaint_reg);
-      */
-	}
-	/* TODO must clip the area being repainted. So we need a gc.
-         * Alternatively, wxPaintDC must do the clipping
-         * when it's created.
-        XSetClipRectangles(display, gc, 0, 0, xrects, n, Unsorted);
-	*/
+            win->m_updateRects.Append((wxObject*) rect);
 
-        canvas->DoPaint() ; // xrects, n);
-        delete[] xrects;
+            if (event -> xexpose.count == 0)
+            {
+                wxPaintEvent event(win->GetId());
+                event.SetEventObject(win);
+                win->GetEventHandler()->ProcessEvent(event);
 
-        canvas->m_updateRects.Clear();
-
-	/*
-        if (canvasDC)
-	{
-          XDestroyRegion(canvasDC->onpaint_reg);
-          canvasDC->onpaint_reg = NULL;
-	}
-
-	XGCValues gc_val;
-	gc_val.clip_mask = None;
-	XChangeGC(display, gc, GCClipMask, &gc_val);
-	*/
-
-	break;
+                win->ClearUpdateRects();
+            }
+            break;
+        }
+        default:
+        {
+	        cout << "\n\nNew Event ! is = " << event -> type << "\n";
+	        break;
+        }
     }
-    default:
-    {
-	cout << "\n\nNew Event ! is = " << event -> type << "\n";
-	break;
-    }
-  }
 }
 
 // Unable to deal with Enter/Leave without a separate EventHandler (Motif 1.1.4)
@@ -3138,4 +3100,14 @@ void wxWindow::SetFont(const wxFont& font)
     ChangeFont();
 }
 
-
+void wxWindow::ClearUpdateRects()
+{
+    wxNode* node = m_updateRects.First();
+    while (node)
+    {
+        wxRect* rect = (wxRect*) node->Data();
+        delete rect;
+        node = node->Next();
+    }
+    m_updateRects.Clear();
+}

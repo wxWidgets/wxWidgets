@@ -104,6 +104,14 @@ wxRegion::~wxRegion()
     // m_refData unrefed in ~wxObject
 }
 
+// Get the internal region handle
+WXRegion wxRegion::GetXRegion()
+{
+    wxASSERT( m_refData !=NULL );
+
+    return (WXRegion) ((wxRegionRefData*)m_refData)->m_region;
+}
+
 //-----------------------------------------------------------------------------
 //# Modify region
 //-----------------------------------------------------------------------------
@@ -237,7 +245,7 @@ wxRect wxRegion::GetBox() const
 // Is region empty?
 bool wxRegion::Empty() const
 {
-	return m_refData ? XEmptyRegion(M_REGION) : FALSE;
+	return m_refData ? XEmptyRegion(M_REGION) : TRUE;
 }
 
 //-----------------------------------------------------------------------------

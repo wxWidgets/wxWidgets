@@ -615,6 +615,13 @@ bool wxIsBusy()
   return (wxBusyCursorCount > 0);
 }    
 
+const char* wxGetHomeDir( wxString *home  )
+{
+  *home = wxGetUserHome( wxString() );
+  if (home->IsNull()) *home = "/";
+  return *home;
+};
+
 char *wxGetUserHome (const wxString& user)
 {
 #ifdef VMS

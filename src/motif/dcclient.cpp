@@ -1992,17 +1992,17 @@ void wxWindowDC:: SetDCClipping ()
   // clipping imposed on a window by a repaint.
   // We'll combine it with the user region. But for now,
   // just use the currently-defined user clipping region.
-  if (m_userRegion || (m_window && m_window->GetPaintRegion()) )
+  if (m_userRegion || (m_window && m_window->GetUpdateRegion().Ok()) )
     m_currentRegion = (WXRegion) XCreateRegion ();
   else
     m_currentRegion = (WXRegion) NULL;
 
-  if ((m_window && m_window->GetPaintRegion()) && m_userRegion)
-    XIntersectRegion ((Region) m_window->GetPaintRegion(), (Region) m_userRegion, (Region) m_currentRegion);
+  if ((m_window && m_window->GetUpdateRegion().Ok()) && m_userRegion)
+    XIntersectRegion ((Region) m_window->GetUpdateRegion().GetXRegion(), (Region) m_userRegion, (Region) m_currentRegion);
   else if (m_userRegion)
     XIntersectRegion ((Region) m_userRegion, (Region) m_userRegion, (Region) m_currentRegion);
-  else if (m_window && m_window->GetPaintRegion())
-    XIntersectRegion ((Region) m_window->GetPaintRegion(), (Region) m_window->GetPaintRegion(), 
+  else if (m_window && m_window->GetUpdateRegion().Ok())
+    XIntersectRegion ((Region) m_window->GetUpdateRegion().GetXRegion(), (Region) m_window->GetUpdateRegion().GetXRegion(), 
 (Region) m_currentRegion);
 
   if (m_currentRegion)
@@ -2225,3 +2225,56 @@ void wxWindowDC::DrawSpline( wxList *points )
 
     wx_spline_draw_point_array( this );
 };
+
+/*
+ * wxPaintDC
+ */
+
+wxPaintDC::wxPaintDC(wxWindow* win): wxWindowDC(win)
+{
+    wxRegion* region = NULL;
+
+    // Combine all the update rects into a region
+    if (win->m_updateRects.Number() > 0)
+    {
+        int i = 0;
+        for (i = 0; i < win->m_updateRects.Number(); i++)
+        {
+            wxRect* rect = (wxRect*) win->m_updateRects.Nth(i)->Data();
+	    /*
+            cout << "wxPaintDC. wxRect: " << rect->x << ", " << rect->y << ", ";
+            cout << rect->width << ", " << rect->height << "\n\n";
+	    */
+
+            if (!region)
+                region = new wxRegion(*rect);
+            else
+                // TODO: is this correct? In SetDCClipping above,
+                // XIntersectRegion is used to combine paint and user
+                // regions. XIntersectRegion appears to work in that case...
+                region->Union(*rect);
+        }
+    }
+    else
+    {
+        int cw, ch;
+        win->GetClientSize(&cw, &ch);
+        region = new wxRegion(wxRect(0, 0, cw, ch));
+    }
+
+    win->m_updateRegion = *region;
+
+    // Set the clipping region. Any user-defined region will be combined with this
+    // one in SetDCClipping.
+    XSetRegion ((Display*) m_display, (GC) m_gc, (Region) region->GetXRegion());
+
+    delete region;
+}
+
+wxPaintDC::~wxPaintDC()
+{
+    XSetClipMask ((Display*) m_display, (GC) m_gc, None);
+    if (m_window)
+        m_window->m_updateRegion.Clear();
+}
+
