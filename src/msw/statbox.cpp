@@ -39,6 +39,7 @@
 #include "wx/notebook.h"
 #include "wx/sysopt.h"
 #include "wx/image.h"
+#include "wx/dcmemory.h"
 
 #include "wx/msw/private.h"
 
