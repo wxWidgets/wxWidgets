@@ -94,6 +94,9 @@
     <add-flags files="wx.bkl" formats="borland">
         -DOPTIONS_FILE=config.bcc
     </add-flags>
+    <add-flags files="wx.bkl" formats="dmars">
+        -DOPTIONS_FILE=config.dmc
+    </add-flags>
     <add-flags files="wx.bkl" formats="mingw">
         -DOPTIONS_FILE=config.gcc
     </add-flags>
@@ -112,6 +115,9 @@
     <add-flags files="../../*/*" formats="borland">
         -DOPTIONS_FILE=../build/msw/config.bcc
     </add-flags>
+    <add-flags files="../../*/*" formats="dmars">
+        -DOPTIONS_FILE=../build/msw/config.dmc
+    </add-flags>
     <add-flags files="../../*/*" formats="mingw">
         -DOPTIONS_FILE=../build/msw/config.gcc
     </add-flags>
@@ -123,6 +129,9 @@
     </add-flags>
     <add-flags files="../../*/*/*" formats="borland">
         -DOPTIONS_FILE=../../build/msw/config.bcc
+    </add-flags>
+    <add-flags files="../../*/*/*" formats="dmars">
+        -DOPTIONS_FILE=../../build/msw/config.dmc
     </add-flags>
     <add-flags files="../../*/*/*" formats="mingw">
         -DOPTIONS_FILE=../../build/msw/config.gcc
@@ -136,6 +145,9 @@
     <add-flags files="../../*/*/*/*" formats="borland">
         -DOPTIONS_FILE=../../../build/msw/config.bcc
     </add-flags>
+    <add-flags files="../../*/*/*/*" formats="dmars">
+        -DOPTIONS_FILE=../../../build/msw/config.dmc
+    </add-flags>
     <add-flags files="../../*/*/*/*" formats="mingw">
         -DOPTIONS_FILE=../../../build/msw/config.gcc
     </add-flags>
@@ -147,6 +159,9 @@
     </add-flags>
     <add-flags files="../../*/*/*/*/*" formats="borland">
         -DOPTIONS_FILE=../../../../build/msw/config.bcc
+    </add-flags>
+    <add-flags files="../../*/*/*/*/*" formats="dmars">
+        -DOPTIONS_FILE=../../../../build/msw/config.dmc
     </add-flags>
     <add-flags files="../../*/*/*/*/*" formats="mingw">
         -DOPTIONS_FILE=../../../../build/msw/config.gcc
