@@ -3022,7 +3022,7 @@ bool wxDb::Catalog(const wxChar *userID, const wxString &fileName)
     tblNameSave.Empty();
     int cnt = 0;
 
-    while (true)
+    while (TRUE)
     {
         retcode = SQLFetch(hstmt);
         if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
@@ -3722,7 +3722,7 @@ const wxChar WXDLLEXPORT *wxDbLogExtendedErrorMsg(const wxChar *userText, wxDb *
 
     msg.Append (wxT("\nODBC errors:\n"));
     msg += wxT("\n");
-    
+
     // Display errors for this connection
     int i;
     for (i = 0; i < DB_MAX_ERROR_HISTORY; i++)
