@@ -30,11 +30,11 @@
 #include "wx/version.h"
 
 // Helps SGI compilation, apparently
-#if defined(__SGI__) 
+#if defined(__SGI__)
 #if defined(__GNUG__)
 #define __need_wchar_t
 #else
-/* Note I use the term __SGI_CC__ for both cc and CC, its not a good idea to 
+/* Note I use the term __SGI_CC__ for both cc and CC, its not a good idea to
  * mix gcc and cc/CC, the name mangling is different */
 #define __SGI_CC__
 #endif
@@ -210,13 +210,13 @@ enum  ErrCode
 //  be considered as an error by some overzealous debugging implementations of
 //  the library, so we do it ourselves)
 #if defined(__SGI_CC__)
-// Okay this is bad styling, but the native SGI compiler is very picky, it 
+// Okay this is bad styling, but the native SGI compiler is very picky, it
 // wont let you compare/assign between a NULL (void *) and another pointer
-// type. To be really clean we'd need to pass in another argument, the type 
-// of p. 
-// Also note the use of 0L, this would allow future possible 64bit support 
-// (as yet untested) by ensuring that we zero all the bits in a pointer 
-// (which is always the same length as a long (at least with the LP64 standard) 
+// type. To be really clean we'd need to pass in another argument, the type
+// of p.
+// Also note the use of 0L, this would allow future possible 64bit support
+// (as yet untested) by ensuring that we zero all the bits in a pointer
+// (which is always the same length as a long (at least with the LP64 standard)
 // --- offer aug 98
 #define wxDELETE(p)      if ( (p) ) { delete (p); p = 0L; }
 #else
@@ -243,7 +243,7 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
 // ----------------------------------------------------------------------------
 
 // OS
-#if     defined(__HPUX__) || defined(____SVR4____) || defined(__LINUX__) || defined(__sgi )
+#if     defined(__HPUX__) || defined(____SVR4____) || defined(__LINUX__) || defined(__sgi ) || defined(__unix__)
   #ifndef __UNIX__
     #define __UNIX__
   #endif
@@ -270,7 +270,7 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
 // warnings just must be disabled
 #ifdef  __VISUALC__
   #pragma warning(disable: 4514) // unreferenced inline func has been removed
-/* 
+/*
   you might be tempted to disable this one also: triggered by CHECK and FAIL
   macros in debug.h, but it's, overall, is a rather useful one, so I leave it
   and will try to find some way to disable this warning just for CHECK/FAIL.
@@ -294,7 +294,7 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
  * Window (cross-group) styles now take up the first half
  * of the flag, and control-specific styles the
  * second half.
- * 
+ *
  */
 
 /*
@@ -373,7 +373,7 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 /*
  * wxToolBar style flags
  */
- 
+
 #define wxTB_3DBUTTONS      0x8000
 #define wxTB_HORIZONTAL     0x0002
 #define wxTB_VERTICAL       0x0004
@@ -383,7 +383,7 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 /*
  * Apply to all panel items
  */
- 
+
 #define wxCOLOURED          0x0800
 // Alignment for panel item labels: replaces characters with zeros
 // when creating label, so spaces can be included in string for alignment.
@@ -445,7 +445,7 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 /*
  * wxSlider flags
  */
- 
+
 #define wxSL_HORIZONTAL      wxHORIZONTAL
 #define wxSL_VERTICAL        wxVERTICAL
 // The next one is obsolete - use scroll events instead
@@ -463,7 +463,7 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 /*
  * wxScrollBar flags
  */
- 
+
 #define wxSB_HORIZONTAL      wxHORIZONTAL
 #define wxSB_VERTICAL        wxVERTICAL
 
