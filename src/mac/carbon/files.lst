@@ -104,6 +104,7 @@ ALL_SOURCES = \
 		common/mimecmn.cpp \
 		common/module.cpp \
 		common/mstream.cpp \
+		common/nbkbase.cpp \
 		common/object.cpp \
 		common/objstrm.cpp \
 		common/paper.cpp \
@@ -497,6 +498,7 @@ COMMONOBJS = \
 		mimecmn.o \
 		module.o \
 		mstream.o \
+		nbkbase.o \
 		object.o \
 		objstrm.o \
 		paper.o \
