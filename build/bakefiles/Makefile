@@ -192,7 +192,7 @@ Makefile: regenMakefile.py
 
 # from ../../samples/samples.bkl
 ../../samples/Makefile.in: ../../samples/samples.bkl
-	$(BAKEFILE) $(BAKEARGS) -fautoconf -o../../samples/Makefile.in ../../samples/samples.bkl
+	$(BAKEFILE) $(BAKEARGS) -fautoconf -o../../samples/Makefile.in -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/samples.bkl
 	touch ../../samples/Makefile.in
 ../../samples/makefile.bcc: ../../samples/samples.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/makefile.bcc ../../samples/samples.bkl

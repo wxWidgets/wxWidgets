@@ -64,7 +64,8 @@ addMakefile('wx.bkl', {'all':'..','autoconf':'../..'},
              'multilib.bkl', 'wxwin.py'])
 
 # samples main makefile:
-addMakefile('../../samples/samples.bkl', {'all':'../../samples'})
+addMakefile('../../samples/samples.bkl', {'all':'../../samples'},
+            args={'autoconf':'-DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4'})
 
 
 CONTRIB_DIR = 1
