@@ -1,3 +1,4 @@
+import sys, string
 
 from   wxPython.wx       import *
 from   wxPython.html     import *
@@ -12,7 +13,9 @@ class MyAboutBox(wxDialog):
 <center><table bgcolor="#458154" width="100%%" cellspacing="0"
 cellpadding="0" border="1">
 <tr>
-    <td align="center"><h1>wxPython %s</h1></td>
+    <td align="center"><h1>wxPython %s</h1>
+    Running on Python %s
+    </td>
 </tr>
 </table>
 
@@ -42,9 +45,10 @@ demo item so you can learn how to use the classes yourself.</p>
     def __init__(self, parent):
         wxDialog.__init__(self, parent, -1, 'About the wxPython demo',)
         html = wxHtmlWindow(self, -1, size=(420, -1))
-        html.SetPage(self.text % wx.__version__)
+        py_version = string.split(sys.version)[0]
+        html.SetPage(self.text % (wx.__version__, py_version))
         ir = html.GetInternalRepresentation()
-        html.SetSize( (ir.GetWidth(), ir.GetHeight()) )
+        html.SetSize( (ir.GetWidth()+5, ir.GetHeight()+5) )
         self.SetClientSize(html.GetSize())
         self.CentreOnParent(wxBOTH)
 
