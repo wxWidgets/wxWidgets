@@ -389,7 +389,10 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     {
         // this control draws the border itself
         if ( !HasFlag(wxNO_BORDER) )
+        {
             m_windowStyle &= ~wxSUNKEN_BORDER ;
+            bounds = wxMacGetBoundsForControl( this , pos , size ) ;    
+        }    
         m_peer = new wxMacMLTEClassicControl( this , str , pos , size , style ) ;
     }
 
@@ -764,6 +767,7 @@ void wxTextCtrl::OnEraseBackground(wxEraseEvent& event)
     // while this is true for MLTE under classic, the HITextView is somehow
     // transparent but background erase is not working correctly, so intercept
     // things while we can...
+    event.Skip() ;
 }
 
 void wxTextCtrl::OnChar(wxKeyEvent& event)
@@ -1153,7 +1157,7 @@ wxMacUnicodeTextControl::wxMacUnicodeTextControl( wxWindow *wxPeer,
     m_windowStyle = style ;
     Rect bounds = wxMacGetBoundsForControl( wxPeer , pos , size ) ;    
     wxString st = str ;
-    wxMacConvertNewlines13To10( &st ) ;
+    wxMacConvertNewlines10To13( &st ) ;
     wxMacCFStringHolder cf(st , m_font.GetEncoding()) ;
     CFStringRef cfr = cf ;
     Boolean isPassword = ( m_windowStyle & wxTE_PASSWORD ) != 0 ;
@@ -1195,13 +1199,17 @@ wxString wxMacUnicodeTextControl::GetStringValue() const
         wxMacCFStringHolder cf(value) ;
         result = cf.AsString() ;
     }
+#if TARGET_API_MAC_OSX
+    wxMacConvertNewlines13To10( &result ) ;
+#else
     wxMacConvertNewlines10To13( &result ) ;
+#endif
     return result ;
 }
 void wxMacUnicodeTextControl::SetStringValue( const wxString &str) 
 {
     wxString st = str ;
-    wxMacConvertNewlines13To10( &st ) ;
+    wxMacConvertNewlines10To13( &st ) ;
     wxMacCFStringHolder cf(st , m_font.GetEncoding() ) ;
     verify_noerr( SetData<CFStringRef>(  0, m_valueTag , cf ) ) ;
 }
@@ -1248,7 +1256,7 @@ void wxMacUnicodeTextControl::SetSelection( long from , long to )
 void wxMacUnicodeTextControl::WriteText(const wxString& str)
 {
     wxString st = str ;
-    wxMacConvertNewlines13To10( &st ) ;
+    wxMacConvertNewlines10To13( &st ) ;
     #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
         wxMacCFStringHolder cf(st , m_font.GetEncoding() ) ;
         CFStringRef value = cf ;
@@ -1369,14 +1377,19 @@ wxString wxMacMLTEControl::GetStringValue() const
         }
 #endif
     }
+#if TARGET_API_MAC_OSX
+    wxMacConvertNewlines13To10( &result ) ;
+#else
     wxMacConvertNewlines10To13( &result ) ;
+#endif
     return result ;
 }
 
 void wxMacMLTEControl::SetStringValue( const wxString &str) 
 {
     wxString st = str ;
-    wxMacConvertNewlines13To10( &st ) ;
+
+    wxMacConvertNewlines10To13( &st ) ;
     EditHelper help(m_txn) ;
 
     // wxMacWindowClipper c( this ) ;
@@ -1598,13 +1611,13 @@ long wxMacMLTEControl::GetLastPosition() const
 void wxMacMLTEControl::Replace( long from , long to , const wxString str ) 
 {
     wxString value = str ;
-    wxMacConvertNewlines13To10( &value ) ;
+    wxMacConvertNewlines10To13( &value ) ;
 
     EditHelper help( m_txn ) ;
 
     TXNSetSelection(m_txn , from , to ) ;
     TXNClear( m_txn ) ;
-    SetTXNData( str , kTXNUseCurrentSelection, kTXNUseCurrentSelection ) ;
+    SetTXNData( value , kTXNUseCurrentSelection, kTXNUseCurrentSelection ) ;
 }
 
 void wxMacMLTEControl::Remove( long from , long to )
@@ -1634,7 +1647,7 @@ void wxMacMLTEControl::WriteText(const wxString& str)
 {
     EditHelper helper( m_txn ) ;
     wxString st = str ;
-    wxMacConvertNewlines13To10( &st ) ;
+    wxMacConvertNewlines10To13( &st ) ;
 
     long start , end , dummy ;
     GetSelection( &start , &dummy ) ;
@@ -2343,9 +2356,7 @@ wxMacMLTEClassicControl::wxMacMLTEClassicControl( wxWindow *wxPeer,
     m_windowStyle = style ;
     Rect bounds = wxMacGetBoundsForControl( wxPeer , pos , size ) ;    
     wxString st = str ;
-    wxMacConvertNewlines13To10( &st ) ;
-
-    wxMacConvertNewlines13To10( &st ) ;
+    wxMacConvertNewlines10To13( &st ) ;
 
     short featurSet;
 
@@ -2478,7 +2489,7 @@ wxMacMLTEHIViewControl::wxMacMLTEHIViewControl( wxWindow *wxPeer,
     m_windowStyle = style ;
     Rect bounds = wxMacGetBoundsForControl( wxPeer , pos , size ) ;    
     wxString st = str ;
-    wxMacConvertNewlines13To10( &st ) ;
+    wxMacConvertNewlines10To13( &st ) ;
     
     HIRect hr = { bounds.left , bounds.top , bounds.right - bounds.left , bounds.bottom- bounds.top } ;
 
