@@ -22,6 +22,7 @@
 
 #define wxHTML_ALIGN_LEFT            0x0000
 #define wxHTML_ALIGN_RIGHT           0x0002
+#define wxHTML_ALIGN_JUSTIFY         0x0010
 
 #define wxHTML_ALIGN_TOP             0x0004
 #define wxHTML_ALIGN_BOTTOM          0x0008
