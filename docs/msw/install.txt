@@ -129,9 +129,10 @@ Using project files (VC++ 6 and later):
    compilation or DLL compilation, and each of these available in
    Unicode/ANSI, Debug/Release and wxUniversal or native variations.
    Normally you'll use a static linking ANSI configuration.
-   Choose the Win32 Debug or Win32 Release configuration for the wxWindows
-   project, and compile. Alternatively, use Batch Build to build more than
-   one configuration. It will also produce similar variations on jpeg.lib,
+   Choose the Win32 Debug or Win32 Release configuration (or any other that
+   suits your needs) and use Batch Build to compile _all_ projects. If you
+   know you want need some of the libraries (i.e. html part), you don't have
+   to compile it.  It will also produce similar variations on jpeg.lib,
    png.lib, tiff.lib, zlib.lib, and regex.lib.
 3. Open a sample project file, choose a configuration such as
    Win32 Debug using Build | Set Active Configuration..., and compile.
