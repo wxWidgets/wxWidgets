@@ -95,6 +95,8 @@ wxString wxFileConfig::GetGlobalDir()
     strDir = "/etc/";
   #elif defined(__WXSTUBS__)
     wxASSERT_MSG( FALSE, "TODO" ) ;
+  #elif defined(__WXMAC__)
+    wxASSERT_MSG( FALSE, "TODO" ) ;
   #else // Windows
     char szWinDir[MAX_PATH];
     ::GetWindowsDirectory(szWinDir, MAX_PATH);

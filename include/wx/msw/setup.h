@@ -22,7 +22,7 @@
 #define _WX_GOODCOMPILER__
                                 // gcc can have problems, but Windows compilers
                                 // are generally OK.
-#define WXWIN_COMPATIBILITY  0
+#define WXWIN_COMPATIBILITY  1  
                                 // Compatibility with 1.68 API.
                                 // Level 0: no backward compatibility, all new features
                                 // Level 1: Some compatibility. In fact

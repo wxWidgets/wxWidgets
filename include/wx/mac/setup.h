@@ -30,12 +30,16 @@
                                 // Level 1: wxDC, OnSize (etc.) compatibility, but
                                 //          some new features such as event tables
 
+#define wxUSE_AUTOTRANS   0
+                                // Define wxTString
 #define wxUSE_POSTSCRIPT  1
                         	// 0 for no PostScript device context
 #define wxUSE_AFM_FOR_POSTSCRIPT 0
                                 // 1 to use font metric files in GetTextExtent
 #define wxUSE_METAFILE    1
                                 // 0 for no Metafile and metafile device context
+#define wxUSE_FORM        0
+                                // 0 for no wxForm
 #define wxUSE_IPC         1
                                 // 0 for no interprocess comms
 #define wxUSE_HELP        1

@@ -144,6 +144,12 @@
 #define MAX_PATH 512
 #endif
 
+#ifdef __WXMAC__
+char gwxMacFileName[ MAX_PATH ] ;
+char gwxMacFileName2[ MAX_PATH ] ;
+char gwxMacFileName3[ MAX_PATH ] ;
+#endif
+
 // ============================================================================
 // implementation of wxFile
 // ============================================================================

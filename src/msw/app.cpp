@@ -565,7 +565,7 @@ int wxEntry(WXHINSTANCE hInstance,
   // FIXME other compilers must support Win32 SEH (structured exception
   //       handling) too, just find the appropriate keyword in their docs!
   //       Please note that it's _not_ the same as C++ exceptions!
-#if !defined(__WXDEBUG__) && defined(_MSC_VER)
+#if !defined(__WXDEBUG__) && defined(_MSC_VER) && !defined(__MWERKS__)
     #define CATCH_PROGRAM_EXCEPTIONS
 
   __try {
