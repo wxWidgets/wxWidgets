@@ -62,7 +62,11 @@ enum wxIEHtmlRefreshLevel {
 class wxIEHtmlWin : public wxActiveX
 {
 public:
-    wxIEHtmlWin(wxWindow * parent, wxWindowID id = -1);
+    wxIEHtmlWin(wxWindow * parent, wxWindowID id = -1,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxPanelNameStr);
     virtual ~wxIEHtmlWin();
 
     void LoadUrl(const wxString&);

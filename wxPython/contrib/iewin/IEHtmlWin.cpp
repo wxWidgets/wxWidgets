@@ -177,8 +177,12 @@ static const CLSID CLSID_MozillaBrowser =
 //#define PROGID L"SoftwareFX.ChartFX.20"
 
 
-wxIEHtmlWin::wxIEHtmlWin(wxWindow * parent, wxWindowID id)
-	: wxActiveX(parent, PROGID, id)
+wxIEHtmlWin::wxIEHtmlWin(wxWindow * parent, wxWindowID id,
+              const wxPoint& pos,
+              const wxSize& size,
+              long style,
+              const wxString& name)
+	: wxActiveX(parent, PROGID, id, pos, size, style, name)
 {
     SetupBrowser();
 }

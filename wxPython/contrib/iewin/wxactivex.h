@@ -258,20 +258,29 @@ class wxOleInit
 
 class wxActiveX : public wxWindow {
 public:
-	wxActiveX(wxWindow * parent, REFCLSID clsid, wxWindowID id = -1);
-    wxActiveX(wxWindow * parent, wxString progId, wxWindowID id = -1);
-	virtual ~wxActiveX();
+    wxActiveX(wxWindow * parent, REFCLSID clsid, wxWindowID id = -1,
+              const wxPoint& pos = wxDefaultPosition,
+              const wxSize& size = wxDefaultSize,
+              long style = 0,
+              const wxString& name = wxPanelNameStr);
+    wxActiveX(wxWindow * parent, wxString progId, wxWindowID id = -1,
+              const wxPoint& pos = wxDefaultPosition,
+              const wxSize& size = wxDefaultSize,
+              long style = 0,
+              const wxString& name = wxPanelNameStr);
 
-	void CreateActiveX(REFCLSID clsid);
+    virtual ~wxActiveX();
+
+    void CreateActiveX(REFCLSID clsid);
     void CreateActiveX(LPOLESTR progId);
 
-	HRESULT ConnectAdvise(REFIID riid, IUnknown *eventSink);
+    HRESULT ConnectAdvise(REFIID riid, IUnknown *eventSink);
 
-	void OnSize(wxSizeEvent&);
-	void OnSetFocus(wxFocusEvent&);
+    void OnSize(wxSizeEvent&);
+    void OnSetFocus(wxFocusEvent&);
     void OnKillFocus(wxFocusEvent&);
 
-	DECLARE_EVENT_TABLE();
+    DECLARE_EVENT_TABLE();
 
 protected:
     friend class FrameSite;

@@ -185,16 +185,24 @@ DEFINE_OLE_TABLE(FrameSite)
 END_OLE_TABLE;
 
 
-wxActiveX::wxActiveX(wxWindow * parent, REFCLSID clsid, wxWindowID id) :
-	wxWindow(parent, id)
+wxActiveX::wxActiveX(wxWindow * parent, REFCLSID clsid, wxWindowID id,
+              const wxPoint& pos,
+              const wxSize& size,
+              long style,
+              const wxString& name) :
+	wxWindow(parent, id, pos, size, style, name)
 {
 	m_bAmbientUserMode = true;
     m_docAdviseCookie = 0;
 	CreateActiveX(clsid);
 }
 
-wxActiveX::wxActiveX(wxWindow * parent, wxString progId, wxWindowID id) :
-	wxWindow(parent, id)
+wxActiveX::wxActiveX(wxWindow * parent, wxString progId, wxWindowID id,
+              const wxPoint& pos,
+              const wxSize& size,
+              long style,
+              const wxString& name) :
+	wxWindow(parent, id, pos, size, style, name)
 {
 	m_bAmbientUserMode = true;
     m_docAdviseCookie = 0;

@@ -33,6 +33,13 @@
 
 //---------------------------------------------------------------------------
 
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    DECLARE_DEF_STRING(PanelNameStr);
+%}
+
+//---------------------------------------------------------------------------
+
 class wxMSHTMLEvent : public wxNotifyEvent
 {
 public:
@@ -86,7 +93,11 @@ enum wxIEHtmlRefreshLevel {
 class wxIEHtmlWin : public wxWindow /* wxActiveX */
 {
 public:
-    wxIEHtmlWin(wxWindow * parent, wxWindowID id = -1);
+    wxIEHtmlWin(wxWindow * parent, wxWindowID id = -1,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxPyPanelNameStr);
 
     void LoadUrl(const wxString&);
     bool LoadString(wxString html);
