@@ -1894,10 +1894,11 @@ wxString& wxString::replace(size_t nStart, size_t nLen,
 // ArrayString
 // ============================================================================
 
-// size increment = max(50% of current size, ARRAY_MAXSIZE_INCREMENT)
+// size increment = min(50% of current size, ARRAY_MAXSIZE_INCREMENT)
 #define   ARRAY_MAXSIZE_INCREMENT       4096
+
 #ifndef   ARRAY_DEFAULT_INITIAL_SIZE    // also defined in dynarray.h
-  #define   ARRAY_DEFAULT_INITIAL_SIZE    (16)
+#define   ARRAY_DEFAULT_INITIAL_SIZE    (16)
 #endif
 
 #define   STRING(p)   ((wxString *)(&(p)))
@@ -2045,6 +2046,21 @@ void wxArrayString::Shrink()
     delete [] m_pItems;
     m_pItems = pNew;
   }
+}
+
+// return a wxString[] as required for some control ctors.
+wxString* wxArrayString::GetStringArray() const
+{
+    wxString *array = 0;
+
+    if( m_nCount > 0 )
+    {
+        array = new wxString[m_nCount];
+        for( size_t i = 0; i < m_nCount; i++ )
+            array[i] = m_pItems[i];
+    }
+
+    return array;
 }
 
 // searches the array for an item (forward or backwards)
