@@ -191,7 +191,7 @@ const char *wxGetStockGtkID(wxWindowID id)
             return gtk;
     
     #define STOCKITEM_MISSING(wx)  \
-        case wxid:                 \
+        case wx:                 \
             return NULL;
 
     #if GTK_CHECK_VERSION(2,4,0)
