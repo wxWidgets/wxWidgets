@@ -691,7 +691,7 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
                 long from, to;
                 GetSelection(&from, &to);
 
-                wxString sel = GetSelection();
+                wxString sel = GetStringSelection();
 
                 wxLogMessage(_T("Selection: from %ld to %ld."), from, to);
                 wxLogMessage(_T("Selection = '%s' (len = %u)"),
