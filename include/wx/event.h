@@ -1075,11 +1075,16 @@ class WXDLLEXPORT wxEvtHandler: public wxObject
 
   virtual bool ProcessEvent(wxEvent& event);
   virtual bool SearchEventTable(wxEventTable& table, wxEvent& event);
-  
-  void Connect( int id, int lastId,
-                int eventType,
+
+  // Dynamic association of a member function handler with the event handler, id and event type
+  void Connect( int id, int lastId, wxEventType eventType,
 		wxObjectEventFunction func,
 		wxObject *userData = (wxObject *) NULL );
+
+  // Convenience function: take just one id
+  inline void Connect( int id, wxEventType eventType,
+		wxObjectEventFunction func,
+		wxObject *userData = (wxObject *) NULL ) { Connect(id, -1, eventType, func, userData); }
 		
   bool SearchDynamicEventTable( wxEvent& event );
 

@@ -42,7 +42,7 @@
 // we must include (one of) these files for wxConfigBase::Create
 #if defined(__WXMSW__) && defined(wxCONFIG_WIN32_NATIVE)
   #ifdef __WIN32__
-    #include  <wx/msw/iniconf.h>
+    #include  <wx/msw/regconf.h>
   #else  //WIN16
     #include  <wx/msw/iniconf.h>
   #endif

@@ -398,7 +398,7 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
 }
 
 void wxEvtHandler::Connect( int id, int lastId,
-                            int eventType,
+                            wxEventType eventType,
                     wxObjectEventFunction func,
                     wxObject *userData )
 {
