@@ -28,6 +28,7 @@
 #include <wx/fontdlg.h>
 #include <wx/fontenum.h>
 #include <wx/fontmap.h>
+#include <wx/encconv.h>
 #include <wx/textfile.h>
 
 // ----------------------------------------------------------------------------
@@ -489,6 +490,32 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
         return;
     }
 
+    m_textctrl->LoadFile(filename);
+
+    if (!wxTheFontMapper->IsEncodingAvailable(fontenc))
+    {
+        // try to find some similar encoding:
+        wxFontEncoding enc2;
+        if (wxTheFontMapper->GetAltForEncoding(fontenc, &enc2, 
+                                       wxEmptyString /*facename*/, FALSE /*interactive*/))
+        {
+            wxEncodingConverter conv;
+            
+            if (conv.Init(fontenc, enc2))
+            {
+                fontenc = enc2;
+                m_textctrl -> SetValue(conv.Convert(m_textctrl -> GetValue()));
+            }
+            else
+                wxLogWarning("Cannot convert from '%s' to '%s'.",
+                             wxFontMapper::GetEncodingDescription(fontenc).c_str(),
+                             wxFontMapper::GetEncodingDescription(enc2).c_str());
+        }
+        else
+            wxLogWarning("No fonts for encoding '%s' on this system.",
+                         wxFontMapper::GetEncodingDescription(fontenc).c_str());
+    }
+
     // and now create the correct font
     if ( !DoEnumerateFamilies(FALSE, fontenc, TRUE /* silent */) )
     {
@@ -505,8 +532,6 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
                          wxFontMapper::GetEncodingDescription(fontenc).c_str());
         }
     }
-
-    m_textctrl->LoadFile(filename);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
