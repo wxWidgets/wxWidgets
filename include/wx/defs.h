@@ -95,7 +95,7 @@
 // compiler defects workarounds
 // ----------------------------------------------------------------------------
 
-#if defined(__VISUALC__) && !defined(WIN32)
+#if defined(__VISUALC__) && !defined(__WIN32__)
     // VC1.5 does not have LPTSTR type
 #define LPTSTR  LPSTR
 #define LPCTSTR LPCSTR
