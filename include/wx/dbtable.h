@@ -106,7 +106,7 @@ private:
     bool getRec(UWORD fetchType);
     bool execDelete(const char *pSqlStmt);
     bool execUpdate(const char *pSqlStmt);
-    bool query(int queryType, bool forUpdate, bool distinct, char *pSqlStmt = 0);
+    bool query(int queryType, bool forUpdate, bool distinct, const char *pSqlStmt = 0);
 
 public:
     // Pointer to the database object this table belongs to
@@ -160,7 +160,7 @@ public:
     bool    DeleteWhere(const char *pWhereClause);
     bool    DeleteMatching(void);
     virtual bool Query(bool forUpdate = FALSE, bool distinct = FALSE);
-    bool    QueryBySqlStmt(char *pSqlStmt);
+    bool    QueryBySqlStmt(const char *pSqlStmt);
     bool    QueryMatching(bool forUpdate = FALSE, bool distinct = FALSE);
     bool    QueryOnKeyFields(bool forUpdate = FALSE, bool distinct = FALSE);
     bool    GetNext(void)   { return(getRec(SQL_FETCH_NEXT));  }

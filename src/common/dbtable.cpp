@@ -536,7 +536,7 @@ bool wxDbTable::execUpdate(const char *pSqlStmt)
 
 
 /********** wxDbTable::query() **********/
-bool wxDbTable::query(int queryType, bool forUpdate, bool distinct, char *pSqlStmt)
+bool wxDbTable::query(int queryType, bool forUpdate, bool distinct, const char *pSqlStmt)
 {
     char sqlStmt[DB_MAX_STATEMENT_LEN];
 
@@ -666,7 +666,7 @@ bool wxDbTable::Query(bool forUpdate, bool distinct)
 
 
 /********** wxDbTable::QueryBySqlStmt() **********/
-bool wxDbTable::QueryBySqlStmt(char *pSqlStmt)
+bool wxDbTable::QueryBySqlStmt(const char *pSqlStmt)
 {
     pDb->WriteSqlLog(pSqlStmt);
 
