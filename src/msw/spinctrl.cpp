@@ -336,6 +336,20 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
     }
 }
 
+// get total size of the control
+void wxSpinCtrl::DoGetSize(int *x, int *y) const
+{
+    RECT spinrect, textrect, ctrlrect;
+    GetWindowRect(GetHwnd(), &spinrect);
+    GetWindowRect((HWND)m_hwndBuddy, &textrect);
+    UnionRect(&ctrlrect,&textrect, &spinrect);
+    
+    if ( x )
+        *x = ctrlrect.right - ctrlrect.left;
+    if ( y )
+        *y = ctrlrect.bottom - ctrlrect.top;
+}
+
 #endif // __WIN95__
 
 #endif
