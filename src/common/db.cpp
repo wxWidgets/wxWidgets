@@ -3897,7 +3897,7 @@ int WXDLLIMPEXP_ODBC wxDbConnectionsInUse(void)
 
 /********** wxDbLogExtendedErrorMsg() **********/
 // DEBUG ONLY function
-const wxChar* WXDLLIMPEXP_ODBC wxDbLogExtendedErrorMsg(const wxChar *userText,
+const wxChar WXDLLIMPEXP_ODBC *wxDbLogExtendedErrorMsg(const wxChar *userText,
                                                   wxDb *pDb,
                                                   const wxChar *ErrFile,
                                                   int ErrLine)
