@@ -1371,7 +1371,8 @@ void wxWindowMac::OnIdle(wxIdleEvent& event)
 {
     // This calls the UI-update mechanism (querying windows for
     // menu/toolbar/control state information)
-    UpdateWindowUI();
+    if (wxUpdateUIEvent::CanUpdate())
+        UpdateWindowUI();
 }
 
 // Raise the window to the top of the Z order

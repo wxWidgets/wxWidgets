@@ -1687,7 +1687,8 @@ void wxWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
 {
     // This calls the UI-update mechanism (querying windows for
     // menu/toolbar/control state information)
-    UpdateWindowUI();
+    if (wxUpdateUIEvent::CanUpdate())
+        UpdateWindowUI();
 }
 
 // ----------------------------------------------------------------------------

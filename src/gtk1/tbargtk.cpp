@@ -673,7 +673,8 @@ void wxToolBar::OnInternalIdle()
         }
     }
 
-    UpdateWindowUI();
+    if (wxUpdateUIEvent::CanUpdate())
+        UpdateWindowUI();
 }
 
 #endif // wxUSE_TOOLBAR_NATIVE

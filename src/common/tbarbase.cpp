@@ -583,7 +583,8 @@ void wxToolBarBase::OnMouseEnter(int id)
 
 void wxToolBarBase::OnIdle(wxIdleEvent& event)
 {
-    DoToolbarUpdates();
+    if (wxUpdateUIEvent::CanUpdate())
+        DoToolbarUpdates();
 
     event.Skip();
 }

@@ -142,6 +142,7 @@ public:
 
     // event handlers
     void OnIdle(wxIdleEvent& event);
+    void OnMenuOpen(wxMenuEvent& event);
     void OnMenuHighlight(wxMenuEvent& event);
 
 #if wxUSE_MENUS

@@ -1037,7 +1037,8 @@ void wxListBox::OnInternalIdle()
         }
     }
 
-    UpdateWindowUI();
+    if (wxUpdateUIEvent::CanUpdate())
+        UpdateWindowUI();
 }
 
 wxSize wxListBox::DoGetBestSize() const

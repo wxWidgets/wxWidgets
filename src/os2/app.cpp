@@ -668,6 +668,7 @@ bool wxApp::ProcessIdle()
 
     vEvent.SetEventObject(this);
     ProcessEvent(vEvent);
+    wxUpdateUIEvent::ResetUpdateTime();    
     return vEvent.MoreRequested();
 } // end of wxApp::ProcessIdle
 

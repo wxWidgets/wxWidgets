@@ -1529,6 +1529,20 @@ public:
     void Enable(bool enable) { m_enabled = enable; m_setEnabled = TRUE; }
     void SetText(const wxString& text) { m_text = text; m_setText = TRUE; }
 
+    // Sets the interval between updates in milliseconds.
+    // Set to -1 to disable updates, or to 0 to update as frequently as possible.
+    static void SetUpdateInterval(long updateInterval) { m_updateInterval = updateInterval; }
+
+    // Returns the current interval between updates in milliseconds
+    static long GetUpdateInterval() { return m_updateInterval ; }
+
+    // Can we update?
+    static bool CanUpdate() ;
+
+    // Reset the update time to provide a delay until the next
+    // time we should update
+    static void ResetUpdateTime() ;
+
     virtual wxEvent *Clone() const { return new wxUpdateUIEvent(*this); }
 
 protected:
@@ -1538,6 +1552,10 @@ protected:
     bool          m_setText;
     bool          m_setChecked;
     wxString      m_text;
+#if wxUSE_LONGLONG
+    static wxLongLong   m_lastUpdate;
+#endif
+    static long         m_updateInterval;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxUpdateUIEvent)

@@ -46,7 +46,12 @@
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxFrameBase, wxTopLevelWindow)
+#if wxUSE_MENUS && wxUSE_IDLEMENUUPDATES
     EVT_IDLE(wxFrameBase::OnIdle)
+#endif
+#if wxUSE_MENUS && !wxUSE_IDLEMENUUPDATES
+    EVT_MENU_OPEN(wxFrameBase::OnMenuOpen)
+#endif
     EVT_MENU_HIGHLIGHT_ALL(wxFrameBase::OnMenuHighlight)
 END_EVENT_TABLE()
 
@@ -219,9 +224,17 @@ void wxFrameBase::OnMenuHighlight(wxMenuEvent& event)
 
 void wxFrameBase::OnIdle(wxIdleEvent& WXUNUSED(event) )
 {
-#if wxUSE_MENUS
+#if wxUSE_MENUS && wxUSE_IDLEMENUUPDATES
+    if (wxUpdateUIEvent::CanUpdate())
+        DoMenuUpdates();
+#endif
+}
+
+void wxFrameBase::OnMenuOpen(wxMenuEvent& WXUNUSED(event))
+{
+#if wxUSE_MENUS && !wxUSE_IDLEMENUUPDATES
     DoMenuUpdates();
-#endif // wxUSE_MENUS
+#endif
 }
 
 // ----------------------------------------------------------------------------

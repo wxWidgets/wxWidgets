@@ -1591,7 +1591,8 @@ void wxTextCtrl::OnInternalIdle()
         }
     }
 
-    UpdateWindowUI();
+    if (wxUpdateUIEvent::CanUpdate())
+        UpdateWindowUI();
 }
 
 wxSize wxTextCtrl::DoGetBestSize() const

@@ -139,7 +139,11 @@ bool wxEventLoopImpl::SendIdleMessage()
 {
     wxIdleEvent event;
 
-    return wxTheApp->ProcessEvent(event) && event.MoreRequested();
+    bool processed = wxTheApp->ProcessEvent(event) ;
+
+    wxUpdateUIEvent::ResetUpdateTime();
+    
+    return processed && event.MoreRequested();
 }
 
 // ============================================================================

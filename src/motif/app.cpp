@@ -176,7 +176,11 @@ bool wxApp::ProcessIdle()
 {
     wxIdleEvent event;
 
-    return ProcessEvent(event) && event.MoreRequested();
+    bool processed = ProcessEvent(event);
+
+    wxUpdateUIEvent::ResetUpdateTime();
+    
+    return processed && event.MoreRequested();
 }
 
 void wxApp::ExitMainLoop()

@@ -1184,7 +1184,8 @@ void wxWindowMSW::OnIdle(wxIdleEvent& WXUNUSED(event))
         }
     }
 
-    UpdateWindowUI();
+    if (wxUpdateUIEvent::CanUpdate())
+        UpdateWindowUI();
 }
 
 // Set this window to be the child of 'parent'.

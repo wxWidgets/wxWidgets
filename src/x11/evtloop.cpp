@@ -338,7 +338,11 @@ bool wxEventLoopImpl::SendIdleEvent()
     wxIdleEvent event;
     event.SetEventObject(wxTheApp);
 
-    return wxTheApp->ProcessEvent(event) && event.MoreRequested();
+    bool processed = wxTheApp->ProcessEvent(event) ;
+    
+    wxUpdateUIEvent::ResetUpdateTime();
+    
+    return processed && event.MoreRequested();
 }
 
 // ============================================================================

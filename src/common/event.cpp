@@ -44,6 +44,9 @@
 
 #if wxUSE_GUI
     #include "wx/validate.h"
+#if wxUSE_STOPWATCH
+    #include "wx/stopwatch.h"
+#endif
 #endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
@@ -361,6 +364,57 @@ wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
     m_commandString = wxEmptyString;
     m_isCommandEvent = TRUE;
 }
+
+/*
+ * UI update events
+ */
+
+#if wxUSE_LONGLONG
+wxLongLong wxUpdateUIEvent::m_lastUpdate = 0;
+#endif
+
+long wxUpdateUIEvent::m_updateInterval = 0;
+
+// Can we update?
+bool wxUpdateUIEvent::CanUpdate()
+{
+    if (m_updateInterval == -1)
+        return FALSE;
+    else if (m_updateInterval == 0)
+        return TRUE;
+    else
+    {
+#if wxUSE_STOPWATCH && wxUSE_LONGLONG
+        wxLongLong now = wxGetLocalTimeMillis();
+        if (now > (m_lastUpdate + m_updateInterval))
+        {
+            return TRUE;
+        }
+#else
+        // If we don't have wxStopWatch or wxLongLong, we
+        // should err on the safe side and update now anyway. 
+        return TRUE;
+#endif
+    }
+    return FALSE;
+}
+
+// Reset the update time to provide a delay until the next
+// time we should update
+void wxUpdateUIEvent::ResetUpdateTime()
+{
+#if wxUSE_STOPWATCH && wxUSE_LONGLONG
+    if (m_updateInterval > 0)
+    {
+        wxLongLong now = wxGetLocalTimeMillis();
+        if (now > (m_lastUpdate + m_updateInterval))
+        {
+            m_lastUpdate = now;
+        }
+    }
+#endif
+}
+
 
 /*
  * Scroll events

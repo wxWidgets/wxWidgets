@@ -1278,5 +1278,6 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 
 void wxWindowMGL::OnIdle(wxIdleEvent& WXUNUSED(event))
 {
-    UpdateWindowUI();
+    if (wxUpdateUIEvent::CanUpdate())
+        UpdateWindowUI();
 }

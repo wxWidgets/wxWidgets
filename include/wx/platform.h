@@ -327,5 +327,17 @@
     #endif
 #endif
 
+/* Choose which method we will use for updating menus
+ * - in OnIdle, or when we receive a wxEVT_MENU_OPEN event.
+ * Presently, only Windows and GTK+ support wxEVT_MENU_OPEN.
+ */
+#ifndef wxUSE_IDLEMENUUPDATES
+    #if defined(__WXMSW__) || defined(__WXGTK__)
+        #define wxUSE_IDLEMENUUPDATES 0
+    #else
+        #define wxUSE_IDLEMENUUPDATES 1
+    #endif
+#endif
+
 #endif /* _WX_PLATFORM_H_ */
 

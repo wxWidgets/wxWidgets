@@ -239,7 +239,8 @@ void wxRadioButton::OnInternalIdle()
         }
     }
 
-    UpdateWindowUI();
+    if (wxUpdateUIEvent::CanUpdate())
+        UpdateWindowUI();
 }
 
 wxSize wxRadioButton::DoGetBestSize() const

@@ -3022,7 +3022,8 @@ void wxWindowGTK::OnInternalIdle()
         }
     }
 
-    UpdateWindowUI();
+    if (wxUpdateUIEvent::CanUpdate())
+        UpdateWindowUI();
 }
 
 void wxWindowGTK::DoGetSize( int *width, int *height ) const

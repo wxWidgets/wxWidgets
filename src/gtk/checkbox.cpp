@@ -220,7 +220,8 @@ void wxCheckBox::OnInternalIdle()
         }
     }
     
-    UpdateWindowUI();
+    if (wxUpdateUIEvent::CanUpdate())
+        UpdateWindowUI();
 }
 
 wxSize wxCheckBox::DoGetBestSize() const
