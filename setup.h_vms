@@ -63,6 +63,7 @@
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */
 #undef WORDS_BIGENDIAN
 
+#ifdef __WXGTK__
 /* Define this if your version of GTK+ is greater than 1.2 */
 #define __WXGTK12__ 1
 
@@ -71,6 +72,7 @@
 
 /* Define this if your version of GTK+ is greater than 1.3 */
 #undef __WXGTK20__
+#endif
 
 /*
  * Define to 1 for Unix[-like] system
@@ -642,7 +644,7 @@
 /*
  * Compile wxString with some Unicode (wide character) support?
  */
-#define wxUSE_WCHAR_T 0
+#define wxUSE_WCHAR_T 1
 
 /*
  * Compile wxWindows in Unicode mode (Win32 only for now)?
