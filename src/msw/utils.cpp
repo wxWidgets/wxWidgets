@@ -459,10 +459,10 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
     (!defined(__GNUWIN32__) || wxCHECK_W32API_VERSION( 0, 3 ))
     // GetDiskFreeSpaceEx() is not available under original Win95, check for
     // it
-    typedef BOOL (*GetDiskFreeSpaceEx_t)(LPCTSTR,
-                                         PULARGE_INTEGER,
-                                         PULARGE_INTEGER,
-                                         PULARGE_INTEGER);
+    typedef BOOL (WINAPI *GetDiskFreeSpaceEx_t)(LPCTSTR,
+                                                PULARGE_INTEGER,
+                                                PULARGE_INTEGER,
+                                                PULARGE_INTEGER);
 
     GetDiskFreeSpaceEx_t
         pGetDiskFreeSpaceEx = (GetDiskFreeSpaceEx_t)::GetProcAddress
