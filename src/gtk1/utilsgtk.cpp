@@ -301,7 +301,7 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
     /* Create pipes */
     if (pipe(end_proc_detect) == -1)
     {
-        wxLogSysError( "Pipe creation failed" );
+        wxLogSysError( _("Pipe creation failed") );
         return 0;
     }
 
@@ -313,7 +313,7 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
 #endif
     if (pid == -1)
     {
-        wxLogSysError( "Fork failed" );
+        wxLogSysError( _("Fork failed") );
         return 0;
     }
     else if (pid == 0)
@@ -321,21 +321,23 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
         // we're in child
         close(end_proc_detect[0]); // close reading side
 
-        // These three lines close the open file descriptors to
-        // to avoid any input/output which might block the process
-        // or irritate the user. If one wants proper IO for the sub-
-        // process, the "right thing to do" is to start an xterm executing
-        // it.
+        // These three lines close the open file descriptors to to avoid any
+        // input/output which might block the process or irritate the user. If
+        // one wants proper IO for the subprocess, the "right thing to do is
+        // to start an xterm executing it.
         close(STDIN_FILENO);
         close(STDOUT_FILENO);
+
+        // leave stderr opened, it won't do any hurm
+#if 0
         close(STDERR_FILENO);
 
-        // some programs complain about sterr not being open, so
-        // redirect them:
+        // some programs complain about stderr not being open, so redirect
+        // them:
         open("/dev/null", O_RDONLY);  // stdin
         open("/dev/null", O_WRONLY);  // stdout
         open("/dev/null", O_WRONLY);  // stderr
-
+#endif
 
 #ifdef _AIX
         execvp ((const char *)*argv, (const char **)argv);
@@ -344,7 +346,7 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
 #endif
 
         // there is no return after successful exec()
-        wxLogSysError( "Can't execute '%s'", *argv);
+        fprintf(stderr, _("Can't execute '%s'\n"), *argv);
 
         _exit(-1);
     }
@@ -353,7 +355,7 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
         // we're in parent
         close(end_proc_detect[1]); // close writing side
         data->tag = gdk_input_add(end_proc_detect[0], GDK_INPUT_READ,
-                GTK_EndProcessDetector, (gpointer)data);
+                                  GTK_EndProcessDetector, (gpointer)data);
         data->pid = pid;
         if (!sync)
         {
@@ -361,7 +363,7 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
         }
         else
         {
-            data->process = (wxProcess *) NULL;
+            data->process = process;
             data->pid = -(data->pid);
 
             while (data->pid != 0)
