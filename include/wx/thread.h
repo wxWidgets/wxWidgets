@@ -177,10 +177,10 @@ class WXDLLIMPEXP_BASE wxMutexLocker
 public:
     // lock the mutex in the ctor
     wxMutexLocker(wxMutex& mutex)
-        : m_isOk(FALSE), m_mutex(mutex)
+        : m_isOk(false), m_mutex(mutex)
         { m_isOk = ( m_mutex.Lock() == wxMUTEX_NO_ERROR ); }
 
-    // returns TRUE if mutex was successfully locked in ctor
+    // returns true if mutex was successfully locked in ctor
     bool IsOk() const
         { return m_isOk; }
 
@@ -315,7 +315,7 @@ public:
     // dtor is not virtual, don't use this class polymorphically
     ~wxCondition();
 
-    // return TRUE if the condition has been created successfully
+    // return true if the condition has been created successfully
     bool IsOk() const;
 
     // NB: the associated mutex MUST be locked beforehand by the calling thread
@@ -328,8 +328,8 @@ public:
 
     // exactly as Wait() except that it may also return if the specified
     // timeout ellapses even if the condition hasn't been signalled: in this
-    // case, the return value is FALSE, otherwise (i.e. in case of a normal
-    // return) it is TRUE
+    // case, the return value is false, otherwise (i.e. in case of a normal
+    // return) it is true
     // 
     // the timeeout parameter specifies a interval that needs to be waited in
     // milliseconds
@@ -377,7 +377,7 @@ public:
     // dtor is not virtual, don't use this class polymorphically
     ~wxSemaphore();
 
-    // return TRUE if the semaphore has been created successfully
+    // return true if the semaphore has been created successfully
     bool IsOk() const;
 
     // wait indefinitely, until the semaphore count goes beyond 0
@@ -463,7 +463,7 @@ public:
         // default value (usually acceptable, but may not yield the best
         // performance for this process)
         //
-        // Returns TRUE on success, FALSE otherwise (if not implemented, for
+        // Returns true on success, false otherwise (if not implemented, for
         // example)
     static bool SetConcurrency(size_t level);
 
@@ -550,16 +550,16 @@ public:
     // NB: this function will not be called if the thread is Kill()ed
     virtual void OnExit() { }
 
+    // Returns true if the thread was asked to terminate: this function should
+    // be called by the thread from time to time, otherwise the main thread
+    // will be left forever in Delete()!
+    virtual bool TestDestroy();
+
     // dtor is public, but the detached threads should never be deleted - use
     // Delete() instead (or leave the thread terminate by itself)
     virtual ~wxThread();
 
 protected:
-    // Returns TRUE if the thread was asked to terminate: this function should
-    // be called by the thread from time to time, otherwise the main thread
-    // will be left forever in Delete()!
-    bool TestDestroy();
-
     // exits from the current thread - can be called only from this thread
     void Exit(ExitCode exitcode = 0);
 
@@ -742,7 +742,7 @@ public:
     // thread
     extern void WXDLLIMPEXP_BASE wxMutexGuiLeaveOrEnter();
 
-    // returns TRUE if the main thread has GUI lock
+    // returns true if the main thread has GUI lock
     extern bool WXDLLIMPEXP_BASE wxGuiOwnedByMainThread();
 
 #ifndef __WXPM__
@@ -750,7 +750,7 @@ public:
     extern void WXDLLIMPEXP_BASE wxWakeUpMainThread();
 #endif // !OS/2
 
-    // return TRUE if the main thread is waiting for some other to terminate:
+    // return true if the main thread is waiting for some other to terminate:
     // wxApp then should block all "dangerous" messages
     extern bool WXDLLIMPEXP_BASE wxIsWaitingForThread();
 #endif // MSW, Mac, OS/2

@@ -102,7 +102,7 @@ One of:
 
 Calling \helpref{Delete}{wxthreaddelete} is a graceful way to terminate the
 thread. It asks the thread to terminate and, if the thread code is well
-written, the thread will terminate after the next call to
+written, the thread will terminate after the next call to 
 \helpref{TestDestroy}{wxthreadtestdestroy} which should happen quite soon.
 
 However, if the thread doesn't call \helpref{TestDestroy}{wxthreadtestdestroy}
@@ -341,17 +341,21 @@ Sets the thread concurrency level for this process. This is, roughly, the
 number of threads that the system tries to schedule to run in parallel.
 The value of $0$ for {\it level} may be used to set the default one.
 
-Returns true on success or false otherwise (for example, if this function is
+Returns \true on success or false otherwise (for example, if this function is
 not implemented for this platform -- currently everything except Solaris).
 
 
 \membersection{wxThread::TestDestroy}\label{wxthreadtestdestroy}
 
-\func{bool}{TestDestroy}{\void}
+\func{virtual bool}{TestDestroy}{\void}
 
 This function should be called periodically by the thread to ensure that calls
 to \helpref{Pause}{wxthreadpause} and \helpref{Delete}{wxthreaddelete} will
-work. If it returns true, the thread should exit as soon as possible.
+work. If it returns \true, the thread should exit as soon as possible.
+
+Notice that under some platforms (POSIX), implementation of 
+\helpref{Pause}{wxthreadpause} also relies on this function being called, so
+not calling it would prevent both stopping and suspending thread from working.
 
 
 \membersection{wxThread::This}\label{wxthreadthis}
