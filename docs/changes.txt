@@ -11,8 +11,17 @@ All (GUI):
 
 wxMSW:
 
+- the event type constants are not constants any more but are dynamically
+  allocated during run-time which means that they can't be used as case labels
+  in the switch()es, you must rewrite them to use if()s instead
+
+  You may also define WXWIN_COMPATIBILITY_EVENT_TYPES to get the old behaviour
+  but this is strongly discouraged, please consider changing your codei
+  instead!
+
 - child frames appear in the taskbar by default now, use wxFRAME_NO_TASKBAR
-  style to avoid it
+  style to avoid it, wxFRAME_FLOAT_ON_PARENT style is now obsolete and has no
+  effect
 
 2.3.2
 -----
