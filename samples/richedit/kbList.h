@@ -1,11 +1,13 @@
 /*-*- c++ -*-********************************************************
  * kbList.h : a double linked list                                  *
  *                                                                  *
- * (C) 1998 by Karsten Ballüder (Ballueder@usa.net)                 *
+ * (C) 1998-1999 by Karsten Ballüder (karsten@phy.hw.ac.uk)         *
  *                                                                  *
  * $Id$
  *
  *******************************************************************/
+
+
 
 #ifndef   KBLIST_H
 #   define   KBLIST_H
@@ -76,6 +78,7 @@ public:
       */
       operator void*() const { return node == NULL ? (void*)0 : (void*)(-1); }
       
+
       /** Increment operator - prefix, goes to next node in list.
           @return itself
       */
@@ -142,6 +145,8 @@ public:
    bool ownsObjects(void)
       { return ownsEntries; }
 
+   // This must be protected to disallow insertion of wrong elements.
+protected:
    /** Add an entry at the end of the list.
        @param element pointer to data
    */
@@ -152,25 +157,26 @@ public:
    */
    void push_front(void *element);
 
+   /** Insert an element into the list.
+       @param i an iterator pointing to the element, before which the new one should be inserted
+       @param element the element data
+   */
+   void insert(iterator & i, void *element);
+
+public:
    /** Get element from end of the list and delete it.
        NOTE: In this case the element's data will not get deleted by
        the list. It is the responsibility of the caller to free it.
        @return the element data
    */
-   void *pop_back(void);
+   void * pop_back(void);
 
    /** Get element from head of the list and delete it.
        NOTE: In this case the element's data will not get deleted by
        the list. It is the responsibility of the caller to free it.
        @return the element data
    */
-   void *pop_front(void);
-
-   /** Insert an element into the list.
-       @param i an iterator pointing to the element, before which the new one should be inserted
-       @param element the element data
-   */
-   void insert(iterator & i, void *element);
+   void * pop_front(void);
 
    /** Remove an element from the list _without_ deleting the object.
        @param  i iterator pointing to the element to be deleted
@@ -276,7 +282,12 @@ public: \
    \
    inline type *pop_front(void) \
       { return (type *) kbList::pop_front(); } \
-   \
+   inline void push_back(type *element) \
+      { kbList::push_back( (void *) element); } \
+   void push_front(type *element) \
+      { kbList::push_front( (void *) element); } \
+   void insert(iterator & i, void *element) \
+      { kbList::insert( i, (void *) element); } \
    type *remove(iterator& i) \
       { return (type *)kbList::remove(i); } \
    inline void erase(iterator & i) \
@@ -312,4 +323,5 @@ protected: \
 KBLIST_DEFINE(kbStringList, String);
 #endif
 //@}
+
 #endif // KBLIST_H
