@@ -1,0 +1,16 @@
+Aug. 2 1999 Harm van der Heijden
+
+What's in here:
+
+Makefile.pre.in
+	A custom Makefile.pre.in, originally by Robin Dunn as part of the
+	wxPython source distribution. Intented for separate wxPython
+	modules, it should require little or no modification for other
+	module projects
+
+Setup.in
+	A custom Setup.in for building the modules below. It expects to find
+	the wxPython source dir in the directory specified by WXP_SRCDIR.
+	All modules are linked agains libwx_pymodule.so, which should
+	contain the SWIG runtime code and wxPython's helpers.cpp code.
+	
