@@ -322,9 +322,27 @@ typedef  _TUCHAR     wxUChar;
 // this is probably glibc-specific
 #    if defined(__WCHAR_TYPE__)
 
-typedef __WCHAR_TYPE__          wxChar;
-typedef signed __WCHAR_TYPE__   wxSChar;
-typedef unsigned __WCHAR_TYPE__ wxUChar;
+// VS: wxWindows used to define wxChar as __WCHAR_TYPE__ here. However, this doesn't
+//     work with new GCC 3.x compilers because wchar_t is C++'s builtin type in the new
+//     standard. OTOH, old compilers (GCC 2.x) won't accept new definition 
+//     of wx{S,U}Char, therefore we have to define wxChar conditionally depending on
+//     detected compiler & compiler version.
+//     The most complicated case is the infamous so-called "gcc-2.96" which does not
+//     accept new definition of wxSChar but doesn't work with old definition of wxChar.
+#if defined(__GNUC__) && (__GNUC__ >= 3)
+    // modern C++ compiler
+    typedef wchar_t                 wxChar;
+    typedef signed wchar_t          wxSChar;
+    typedef unsigned wchar_t        wxUChar;
+#else
+    #if defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ == 96)
+    typedef wchar_t                 wxChar;
+    #else
+    typedef __WCHAR_TYPE__          wxChar;
+    #endif
+    typedef signed __WCHAR_TYPE__   wxSChar;
+    typedef unsigned __WCHAR_TYPE__ wxUChar;
+#endif
 
 #      define _T(x)                   L##x
 
