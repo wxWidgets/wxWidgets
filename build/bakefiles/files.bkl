@@ -72,6 +72,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/regconf.cpp
     src/msw/registry.cpp
     src/msw/snglinst.cpp
+    src/msw/stdpaths.cpp
     src/msw/thread.cpp
     src/msw/utils.cpp
     src/msw/utilsexc.cpp
@@ -1137,7 +1138,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/region.cpp
     src/msw/renderer.cpp
     src/msw/settings.cpp
-    src/msw/stdpaths.cpp
     src/msw/timer.cpp
     src/msw/tooltip.cpp
     src/msw/toplevel.cpp

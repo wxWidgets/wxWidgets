@@ -409,6 +409,7 @@ ALL_BASE_SOURCES =  \
 	src/msw/regconf.cpp \
 	src/msw/registry.cpp \
 	src/msw/snglinst.cpp \
+	src/msw/stdpaths.cpp \
 	src/msw/thread.cpp \
 	src/msw/utils.cpp \
 	src/msw/utilsexc.cpp \
@@ -1233,7 +1234,7 @@ COND_TOOLKIT_COCOA_BASE_PLATFORM_HDR =  \
 @COND_TOOLKIT_MAC@	wx/mac/corefoundation/cfstring.h \
 @COND_TOOLKIT_MAC@	wx/mac/corefoundation/stdpaths.h
 @COND_PLATFORM_MACOSX_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
-@COND_PLATFORM_MACOS_1@NET_PLATFORM_HDR = include/wx/mac/carbon/gsockmac.h
+@COND_PLATFORM_MACOS_1@NET_PLATFORM_HDR = wx/mac/carbon/gsockmac.h
 @COND_PLATFORM_OS2_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
 @COND_PLATFORM_UNIX_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
 @COND_PLATFORM_WIN32_1@NET_PLATFORM_HDR = \
@@ -1428,8 +1429,8 @@ COND_TOOLKIT_COCOA_GUI_HDR =  \
 	wx/generic/region.h \
 	wx/generic/statusbr.h \
 	wx/generic/tabg.h \
-	include/wx/mac/corefoundation/cfstring.h \
-	include/wx/mac/corefoundation/stdpaths.h
+	wx/mac/corefoundation/cfstring.h \
+	wx/mac/corefoundation/stdpaths.h
 @COND_TOOLKIT_COCOA@GUI_HDR = $(COND_TOOLKIT_COCOA_GUI_HDR)
 COND_TOOLKIT_GTK_GUI_HDR =  \
 	wx/generic/colrdlgg.h \
@@ -2052,7 +2053,7 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/wince/textctrlce.h \
 	wx/msw/wince/resources.h
 @COND_TOOLKIT_WINCE@GUI_HDR = $(COND_TOOLKIT_WINCE_GUI_HDR)
-@COND_TOOLKIT_COCOA@ADVANCED_PLATFORM_HDR = include/wx/cocoa/taskbar.h
+@COND_TOOLKIT_COCOA@ADVANCED_PLATFORM_HDR = wx/cocoa/taskbar.h
 @COND_TOOLKIT_GTK@ADVANCED_PLATFORM_HDR = \
 @COND_TOOLKIT_GTK@	wx/unix/joystick.h wx/unix/sound.h wx/unix/taskbarx11.h
 COND_TOOLKIT_MAC_ADVANCED_PLATFORM_HDR =  \
@@ -2074,7 +2075,7 @@ COND_TOOLKIT_MAC_ADVANCED_PLATFORM_HDR =  \
 @COND_TOOLKIT_X11@	wx/unix/joystick.h wx/unix/sound.h wx/unix/taskbarx11.h
 @COND_TOOLKIT_COCOA@MEDIA_PLATFORM_HDR = 
 @COND_TOOLKIT_GTK@MEDIA_PLATFORM_HDR = 
-@COND_TOOLKIT_MAC@MEDIA_PLATFORM_HDR = include/mac/carbon/mediactrl.h
+@COND_TOOLKIT_MAC@MEDIA_PLATFORM_HDR = wx/mac/carbon/mediactrl.h
 @COND_TOOLKIT_MOTIF@MEDIA_PLATFORM_HDR = 
 @COND_TOOLKIT_MSW@MEDIA_PLATFORM_HDR = wx/msw/mediactrl.h 
 @COND_TOOLKIT_PM@MEDIA_PLATFORM_HDR = 
@@ -2470,6 +2471,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_regconf.o \
 	monodll_registry.o \
 	monodll_snglinst.o \
+	monodll_stdpaths.o \
 	monodll_thread.o \
 	monodll_utils.o \
 	monodll_utilsexc.o \
@@ -3455,6 +3457,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_regconf.o \
 	monolib_registry.o \
 	monolib_snglinst.o \
+	monolib_stdpaths.o \
 	monolib_thread.o \
 	monolib_utils.o \
 	monolib_utilsexc.o \
@@ -4475,6 +4478,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_regconf.o \
 	basedll_registry.o \
 	basedll_snglinst.o \
+	basedll_stdpaths.o \
 	basedll_thread.o \
 	basedll_utils.o \
 	basedll_utilsexc.o \
@@ -4593,6 +4597,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_regconf.o \
 	baselib_registry.o \
 	baselib_snglinst.o \
+	baselib_stdpaths.o \
 	baselib_thread.o \
 	baselib_utils.o \
 	baselib_utilsexc.o \
@@ -6907,7 +6912,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_region.o \
 	monodll_renderer.o \
 	monodll_settings.o \
-	monodll_stdpaths.o \
 	monodll_timer.o \
 	monodll_tooltip.o \
 	monodll_toplevel.o \
@@ -6959,7 +6963,6 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_region.o \
 	monodll_renderer.o \
 	monodll_settings.o \
-	monodll_stdpaths.o \
 	monodll_timer.o \
 	monodll_tooltip.o \
 	monodll_toplevel.o \
@@ -7129,7 +7132,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_0 =  \
 	monolib_region.o \
 	monolib_renderer.o \
 	monolib_settings.o \
-	monolib_stdpaths.o \
 	monolib_timer.o \
 	monolib_tooltip.o \
 	monolib_toplevel.o \
@@ -7181,7 +7183,6 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_0 =  \
 	monolib_region.o \
 	monolib_renderer.o \
 	monolib_settings.o \
-	monolib_stdpaths.o \
 	monolib_timer.o \
 	monolib_tooltip.o \
 	monolib_toplevel.o \
@@ -7351,7 +7352,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_8 =  \
 	coredll_region.o \
 	coredll_renderer.o \
 	coredll_settings.o \
-	coredll_stdpaths.o \
 	coredll_timer.o \
 	coredll_tooltip.o \
 	coredll_toplevel.o \
@@ -7403,7 +7403,6 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_8 =  \
 	coredll_region.o \
 	coredll_renderer.o \
 	coredll_settings.o \
-	coredll_stdpaths.o \
 	coredll_timer.o \
 	coredll_tooltip.o \
 	coredll_toplevel.o \
@@ -7573,7 +7572,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_9 =  \
 	corelib_region.o \
 	corelib_renderer.o \
 	corelib_settings.o \
-	corelib_stdpaths.o \
 	corelib_timer.o \
 	corelib_tooltip.o \
 	corelib_toplevel.o \
@@ -7625,7 +7623,6 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_9 =  \
 	corelib_region.o \
 	corelib_renderer.o \
 	corelib_settings.o \
-	corelib_stdpaths.o \
 	corelib_timer.o \
 	corelib_tooltip.o \
 	corelib_toplevel.o \
@@ -9438,14 +9435,11 @@ monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@monodll_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+@COND_PLATFORM_WIN32_1@monodll_stdpaths.o: $(srcdir)/src/msw/stdpaths.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 @COND_PLATFORM_OS2_1@monodll_stdpaths.o: $(srcdir)/src/os2/stdpaths.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_MSW_USE_GUI_1@monodll_stdpaths.o: $(srcdir)/src/msw/stdpaths.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_stdpaths.o: $(srcdir)/src/msw/stdpaths.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_PLATFORM_UNIX_1@monodll_threadpsx.o: $(srcdir)/src/unix/threadpsx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -12729,14 +12723,11 @@ monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@monolib_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+@COND_PLATFORM_WIN32_1@monolib_stdpaths.o: $(srcdir)/src/msw/stdpaths.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 @COND_PLATFORM_OS2_1@monolib_stdpaths.o: $(srcdir)/src/os2/stdpaths.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_MSW_USE_GUI_1@monolib_stdpaths.o: $(srcdir)/src/msw/stdpaths.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_stdpaths.o: $(srcdir)/src/msw/stdpaths.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_PLATFORM_UNIX_1@monolib_threadpsx.o: $(srcdir)/src/unix/threadpsx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -15585,6 +15576,9 @@ basedll_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@basedll_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
+@COND_PLATFORM_WIN32_1@basedll_stdpaths.o: $(srcdir)/src/msw/stdpaths.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
 @COND_PLATFORM_OS2_1@basedll_stdpaths.o: $(srcdir)/src/os2/stdpaths.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
@@ -16022,6 +16016,9 @@ baselib_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@baselib_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+@COND_PLATFORM_WIN32_1@baselib_stdpaths.o: $(srcdir)/src/msw/stdpaths.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 @COND_PLATFORM_OS2_1@baselib_stdpaths.o: $(srcdir)/src/os2/stdpaths.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
@@ -17359,12 +17356,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@coredll_printwin.o: $(srcdir)/src/msw/printwin.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_MSW_USE_GUI_1@coredll_stdpaths.o: $(srcdir)/src/msw/stdpaths.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@coredll_stdpaths.o: $(srcdir)/src/msw/stdpaths.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_utilsgui.o: $(srcdir)/src/msw/utilsgui.cpp $(COREDLL_ODEP)
@@ -19855,12 +19846,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@corelib_printwin.o: $(srcdir)/src/msw/printwin.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_MSW_USE_GUI_1@corelib_stdpaths.o: $(srcdir)/src/msw/stdpaths.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@corelib_stdpaths.o: $(srcdir)/src/msw/stdpaths.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_utilsgui.o: $(srcdir)/src/msw/utilsgui.cpp $(CORELIB_ODEP)
