@@ -133,6 +133,15 @@ protected:
     // common part of the 3 methods above
     WXHBRUSH MSWControlColorSolid(WXHDC pDC, wxColour colBg);
 
+    // another WM_CTLCOLOR-related function: override this to return the brush
+    // which should be used to paint the control background by default
+    //
+    // for most controls, the default behaviour of returning 0 and letting the
+    // system do it is correct, but for some -- e.g. checkboxes -- we actually
+    // have to return transparent brush from here to prevent the system from
+    // overwriting background with solid colour
+    virtual WXHBRUSH MSWGetDefaultBgBrush() { return 0; }
+
     // this is a helper for the derived class GetClassDefaultAttributes()
     // implementation: it returns the right colours for the classes which
     // contain something else (e.g. wxListBox, wxTextCtrl, ...) instead of

@@ -382,7 +382,7 @@ WXHBRUSH wxControl::MSWControlColor(WXHDC pDC)
 #endif // wxUSE_UXTHEME
 
     // let the control deal with background itself
-    return 0;
+    return MSWGetDefaultBgBrush();
 }
 
 WXHBRUSH wxControl::MSWControlColorDisabled(WXHDC pDC)
