@@ -13,6 +13,7 @@
 
 #ifdef __VMS
 #include <vms_jackets.h>
+#undef ConnectionNumber
 #endif
 
 #include "wx/app.h"
