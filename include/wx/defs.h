@@ -975,17 +975,6 @@ enum wxBorder
 #endif
 
 /*
- * wxToolBar style flags
- */
-#define wxTB_HORIZONTAL         wxHORIZONTAL
-#define wxTB_VERTICAL           wxVERTICAL
-#define wxTB_3DBUTTONS          0x0010
-// Flatbar/Coolbar under Win98/ GTK 1.2
-#define wxTB_FLAT               0x0020
-// use native docking under GTK
-#define wxTB_DOCKABLE           0x0040
-
-/*
  * wxMenuBar style flags
  */
 // use native docking
@@ -1124,6 +1113,15 @@ enum wxBorder
 #define wxTC_FIXEDWIDTH       0x0020
 #define wxTC_OWNERDRAW        0x0040
 #define wxTC_MULTILINE        wxNB_MULTILINE
+
+// wxToolBar style flags
+#define wxTB_HORIZONTAL     wxHORIZONTAL    // == 0x0004
+#define wxTB_VERTICAL       wxVERTICAL      // == 0x0008
+#define wxTB_3DBUTTONS      0x0010
+#define wxTB_FLAT           0x0020          // supported only under Win98+/GTK
+#define wxTB_DOCKABLE       0x0040          // use native docking under GTK
+#define wxTB_NOICONS        0x0080          // don't show the icons
+#define wxTB_TEXT           0x0100          // show the text
 
 /*
  * wxStatusBar95 flags
