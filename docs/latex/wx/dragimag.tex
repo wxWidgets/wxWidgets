@@ -22,6 +22,10 @@ either across the whole screen, or just restricted to one area
 of the screen to save resources. If you want the user to drag between
 two windows, then you will need to use full-screen dragging.
 
+If you wish to draw the image yourself, use wxGenericDragImage and
+override \helpref{wxDragImage::DoDrawImage}{wxdragimagedodrawimage} and 
+\helpref{wxDragImage::GetImageRect}{wxdragimagegetimagerect}.
+
 Please see {\tt samples/dragimag} for an example.
 
 \wxheading{Derived from}
@@ -72,6 +76,13 @@ Constructs a drag image from the text in the given tree control item, and option
 
 \pythonnote{This constructor is called wxDragListItem in wxPython.}
 
+\func{}{wxDragImage}{\param{const wxCursor\& }{cursor = wxNullCursor},
+ \param{const wxPoint& }{hotspot = wxPoint(0, 0)}}
+
+Constructs a drag image an optional cursor. This constructor is only available for
+wxGenericDragImage, and can be used when the application
+supplies \helpref{wxDragImage::DoDrawImage}{wxdragimagedodrawimage} and \helpref{wxDragImage::GetImageRect}{wxdragimagegetimagerect}.
+
 \wxheading{Parameters}
 
 \docparam{image}{Icon or bitmap to be used as the drag image. The bitmap can
@@ -101,7 +112,7 @@ Start dragging the image, using the first window to capture the mouse and the se
 to specify the bounding area. This form is equivalent to using the first form,
 but more convenient than working out the bounding rectangle explicitly.
 
-You need to then call \helpref{wxDragImage::Show}{wxdragimageshow}
+You need to then call \helpref{wxDragImage::Show}{wxdragimageshow} 
 and \helpref{wxDragImage::Move}{wxdragimagemove} to show the image on the screen.
 
 Call \helpref{wxDragImage::EndDrag}{wxdragimageenddrag} when the drag has finished.
@@ -128,6 +139,16 @@ bounds the dragging operation. Specifying this can make the operation more effic
 by cutting down on the area under consideration, and it can also make a visual difference
 since the drag is clipped to this area.}
 
+\membersection{wxDragImage::DoDrawImage}\label{wxdragimagedodrawimage}
+
+\func{virtual bool}{DoDrawImage}{\param{wxDC\&}{ dc}, \param{const wxPoint\&}{ pos}}
+
+Draws the image on the device context with top-left corner at the given position.
+
+This function is only available with wxGenericDragImage, to allow applications to
+draw their own image instead of using an actual bitmap. If you override this function,
+you must also override \helpref{wxDragImage::GetImageRect}{wxdragimagegetimagerect}.
+
 \membersection{wxDragImage::EndDrag}\label{wxdragimageenddrag}
 
 \func{bool}{EndDrag}{\void}
@@ -136,19 +157,29 @@ Call this when the drag has finished.
 
 Note that this call automatically calls ReleaseMouse.
 
+\membersection{wxDragImage::GetImageRect}\label{wxdragimagegetimagerect}
+
+\constfunc{virtual wxRect}{GetImageRect}{\param{const wxPoint\&}{ pos}}
+
+Returns the rectangle enclosing the image, assuming that the image is drawn with its
+top-left corner at the given point.
+
+This function is available in wxGenericDragImage only, and may be overridden (together with 
+\helpref{wxDragImage::DoDrawImage}{wxdragimagedodrawimage}) to provide a virtual drawing capability.
+
 \membersection{wxDragImage::Hide}\label{wxdragimagehide}
 
 \func{bool}{Hide}{\void}
 
 Hides the image. You may wish to call this before updating the window
-contents (perhaps highlighting an item). Then call \helpref{wxDragImage::Move}{wxdragimagemove}
+contents (perhaps highlighting an item). Then call \helpref{wxDragImage::Move}{wxdragimagemove} 
 and \helpref{wxDragImage::Show}{wxdragimageshow}.
 
 \membersection{wxDragImage::Move}\label{wxdragimagemove}
 
 \func{bool}{Move}{\param{const wxPoint\& }{pt}}
 
-Call this to move the image to a new position. The image will only be shown if
+Call this to move the image to a new position. The image will only be shown if 
 \helpref{wxDragImage::Show}{wxdragimageshow} has been called previously (for example
 at the start of the drag).
 

@@ -97,7 +97,11 @@ public:
     // Ctors & dtor
     ////////////////////////////////////////////////////////////////////////////
 
-    wxGenericDragImage();
+    wxGenericDragImage(const wxCursor& cursor = wxNullCursor, const wxPoint& hotspot = wxPoint(0, 0))
+    {
+        Init();
+        Create(cursor, hotspot);
+    }
     wxGenericDragImage(const wxBitmap& image, const wxCursor& cursor = wxNullCursor, const wxPoint& hotspot = wxPoint(0, 0))
     {
         Init();
@@ -135,6 +139,9 @@ public:
 
     // Operations
     ////////////////////////////////////////////////////////////////////////////
+
+    // Create a drag image with a virtual image (need to override DoDrawImage, GetImageRect)
+    bool Create(const wxCursor& cursor = wxNullCursor, const wxPoint& hotspot = wxPoint(0, 0));
 
     // Create a drag image from a bitmap and optional cursor
     bool Create(const wxBitmap& image, const wxCursor& cursor = wxNullCursor, const wxPoint& hotspot = wxPoint(0, 0));
@@ -178,10 +185,14 @@ public:
 
     void Init();
 
-    wxRect GetImageRect(const wxPoint& pos) const;
+    // Override this if you are using a virtual image (drawing your own image)
+    virtual wxRect GetImageRect(const wxPoint& pos) const;
+
+    // Override this if you are using a virtual image (drawing your own image)
+    virtual bool DoDrawImage(wxDC& dc, const wxPoint& pos) const;
 
     // Erase and redraw simultaneously if possible
-    bool RedrawImage(const wxPoint& oldPos, const wxPoint& newPos, bool eraseOld, bool drawNew);
+    virtual bool RedrawImage(const wxPoint& oldPos, const wxPoint& newPos, bool eraseOld, bool drawNew);
 
 protected:
     wxBitmap        m_bitmap;
