@@ -155,6 +155,7 @@
 
       help.UseConfig(wxConfig::Get());
       bool ret;
+      help.SetTempDir(".");
       ret = help.AddBook("helpfiles/testing.hhp");
       if (! ret)
 	  wxMessageBox("Failed adding book helpfiles/testing.hhp");
