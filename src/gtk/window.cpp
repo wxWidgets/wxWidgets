@@ -4206,7 +4206,7 @@ void wxWindowGTK::SetWidgetStyle()
         }
     }
 
-    if ( m_hasBgCol )
+    if ( m_hasBgCol && m_backgroundColour.Ok() )
     {
         m_backgroundColour.CalcPixel( gtk_widget_get_colormap( m_widget ) );
         if (m_backgroundColour != wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE))
