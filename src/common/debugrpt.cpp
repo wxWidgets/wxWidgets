@@ -329,8 +329,8 @@ bool wxDebugReport::DoAddLoadedModules(wxXmlNode *nodeModules)
         if ( !path.empty() )
             nodeModule->AddProperty(_T("path"), path);
 
-        void *addr;
-        size_t len;
+        void *addr = NULL;
+        size_t len = 0;
         if ( info.GetAddress(&addr, &len) )
         {
             HexProperty(nodeModule, _T("address"), (unsigned long)addr);

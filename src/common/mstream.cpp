@@ -54,7 +54,7 @@ wxMemoryInputStream::wxMemoryInputStream(const void *data, size_t len)
 
 wxMemoryInputStream::wxMemoryInputStream(const wxMemoryOutputStream& stream)
 {
-    int len = stream.GetLength();
+    ssize_t len = (ssize_t)stream.GetLength();
     if (len == wxInvalidOffset) {
         m_i_streambuf = NULL;
         m_lasterror = wxSTREAM_EOF;
