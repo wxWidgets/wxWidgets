@@ -634,6 +634,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_GUI=yes
   DEFAULT_wxUSE_CONTROLS=no
 
+  DEFAULT_wxUSE_REGEX=no
   DEFAULT_wxUSE_ZLIB=no
   DEFAULT_wxUSE_LIBPNG=no
   DEFAULT_wxUSE_LIBJPEG=no
@@ -790,6 +791,7 @@ else
 
   DEFAULT_wxUSE_GUI=yes
 
+  DEFAULT_wxUSE_REGEX=sys
   DEFAULT_wxUSE_ZLIB=yes
   DEFAULT_wxUSE_LIBPNG=yes
   DEFAULT_wxUSE_LIBJPEG=yes
@@ -973,6 +975,7 @@ fi
 dnl for GUI only
 
 WX_ARG_WITH(dmalloc,       [  --with-dmalloc          use dmalloc library (www.letters.com/dmalloc)], wxUSE_DMALLOC)
+WX_ARG_SYS_WITH(regex,     [  --with-regex            enable support for wxRegEx class], wxUSE_REGEX)
 WX_ARG_SYS_WITH(zlib,      [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
 WX_ARG_WITH(odbc,          [  --with-odbc             use the IODBC and wxODBC classes], wxUSE_ODBC)
 
@@ -3181,6 +3184,26 @@ dnl ---------------------------------------------------------------------------
 dnl Optional libraries
 dnl ---------------------------------------------------------------------------
 
+REGEX_INCLUDE=
+if test "$wxUSE_REGEX" != "no"; then
+    dnl according to Unix 98 specs, regcomp() is in libc but I believe that
+    dnl on some old systems it may be in libregex - check for it too?
+    AC_CHECK_HEADER(regex.h, AC_CHECK_FUNCS(regcomp))
+
+    if test "x$ac_cv_func_regcomp" != "xyes"; then
+        dnl we were asked to use the system version of regex lib only but it
+        dnl is not available
+        if test "$wxUSE_REGEX" = "sys"; then
+            AC_MSG_ERROR([system regex library not found! Use --with-regex to use the built-in regex library.])
+        fi
+
+        dnl fallback to the built in code
+        REGEX_INCLUDE="-I\${top_srcdir}/src/regex"
+    fi
+
+    AC_DEFINE(wxUSE_REGEX)
+fi
+
 ZLIB_INCLUDE=
 if test "$wxUSE_ZLIB" = "yes" -o "$wxUSE_ZLIB" = "sys" ; then
   AC_DEFINE(wxUSE_ZLIB)
@@ -4404,7 +4427,9 @@ dnl makefile system without libtool
 LD_LIBS="\${top_builddir}/lib/${WX_LIBRARY_NAME_STATIC} $EXTRA_LIBS"
 
 dnl all -I options we must pass to the compiler
-INCLUDES="-I. -I\${top_builddir}/include -I\${top_srcdir}/include $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE $FREETYPE_INCLUDE $TOOLKIT_INCLUDE"
+INCLUDES="-I. -I\${top_builddir}/include -I\${top_srcdir}/include \
+$REGEX_INCLUDE $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE \
+$FREETYPE_INCLUDE $TOOLKIT_INCLUDE"
 
 dnl wxGTK does not need TOOLKIT includes in wx-config
 if test "$wxUSE_GTK" = 1; then

@@ -121,6 +121,10 @@
 #undef HAVE_BOOL
 
 /*
+ * Use regex support
+ */
+#define wxUSE_REGEX 0
+/*
  * Use zlib
  */
 #define wxUSE_ZLIB 0
