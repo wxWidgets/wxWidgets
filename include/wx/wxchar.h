@@ -168,32 +168,7 @@ typedef  _TUCHAR     wxUChar;
 #undef wxUSE_WCHAR_T
 #define wxUSE_WCHAR_T 1
 
-#include <windef.h>
-#include <winbase.h>
-#include <winnls.h>
-#include <winnt.h>
-
-   // ctype.h functions
-inline WORD __wxMSW_ctype(wxChar ch)
-{
-  WORD ret;
-  GetStringTypeEx(LOCALE_USER_DEFAULT, CT_CTYPE1, &ch, 1, &ret);
-  return ret;
-}
-#define  wxIsalnum(x)  IsCharAlphaNumeric
-#define  wxIsalpha     IsCharAlpha
-#define  wxIsctrl(x)   (__wxMSW_ctype(x) & C1_CNTRL)
-#define  wxIsdigit(x)  (__wxMSW_ctype(x) & C1_DIGIT)
-#define  wxIsgraph(x)  (__wxMSW_ctype(x) & (C1_DIGIT|C1_PUNCT|C1_ALPHA))
-#define  wxIslower(x)  IsCharLower
-#define  wxIsprint(x)  (__wxMSW_ctype(x) & (C1_DIGIT|C1_SPACE|C1_PUNCT|C1_ALPHA))
-#define  wxIspunct(x)  (__wxMSW_ctype(x) & C1_PUNCT)
-#define  wxIsspace(x)  (__wxMSW_ctype(x) & C1_SPACE)
-#define  wxIsupper(x)  IsCharUpper
-#define  wxIsxdigit(x) (__wxMSW_ctype(x) & C1_XDIGIT)
-#define  wxTolower(x)  (wxChar)CharLower((LPTSTR)(x))
-#define  wxToupper(x)  (wxChar)CharUpper((LPTSTR)(x))
-
+#define wxNEED_WX_CTYPE_H
 // #define  wxStrtok    strtok_r // Borland C++ 4.52 doesn't have strtok_r
 #define wxNEED_WX_STRING_H
 #define wxNEED_WX_STDIO_H
@@ -488,6 +463,22 @@ wxChar * WXDLLEXPORT wxSetlocale(int category, const wxChar *locale);
 
 #ifdef wxNEED_WCSLEN // for use in buffer.h
 size_t   WXDLLEXPORT wcslen(const wchar_t *s);
+#endif
+
+#ifdef wxNEED_WX_CTYPE_H
+int WXDLLEXPORT wxIsalnum(wxChar ch);
+int WXDLLEXPORT wxIsalpha(wxChar ch);
+int WXDLLEXPORT wxIsctrl(wxChar ch);
+int WXDLLEXPORT wxIsdigit(wxChar ch);
+int WXDLLEXPORT wxIsgraph(wxChar ch);
+int WXDLLEXPORT wxIslower(wxChar ch);
+int WXDLLEXPORT wxIsprint(wxChar ch);
+int WXDLLEXPORT wxIspunct(wxChar ch);
+int WXDLLEXPORT wxIsspace(wxChar ch);
+int WXDLLEXPORT wxIsupper(wxChar ch);
+int WXDLLEXPORT wxIsxdigit(wxChar ch);
+int WXDLLEXPORT wxTolower(wxChar ch);
+int WXDLLEXPORT wxToupper(wxChar ch);
 #endif
 
 #ifdef wxNEED_WX_STRING_H

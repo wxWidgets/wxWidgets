@@ -39,6 +39,13 @@
   #include "wx/hash.h"
 #endif
 
+#if defined(__WIN32__) && defined(wxNEED_WX_CTYPE_H)
+#include <windef.h>
+#include <winbase.h>
+#include <winnls.h>
+#include <winnt.h>
+#endif
+
 #if wxUSE_WCHAR_T
 size_t WXDLLEXPORT wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 {
@@ -113,6 +120,29 @@ size_t   WXDLLEXPORT wcslen(const wchar_t *s)
   while (s[len]) len++;
   return len;
 }
+#endif
+
+#if defined(__WIN32__) && defined(wxNEED_WX_CTYPE_H)
+inline WORD wxMSW_ctype(wxChar ch)
+{
+  WORD ret;
+  GetStringTypeEx(LOCALE_USER_DEFAULT, CT_CTYPE1, &ch, 1, &ret);
+  return ret;
+}
+
+int WXDLLEXPORT wxIsalnum(wxChar ch) { return IsCharAlphaNumeric(ch); }
+int WXDLLEXPORT wxIsalpha(wxChar ch) { return IsCharAlpha(ch); }
+int WXDLLEXPORT wxIsctrl(wxChar ch) { return wxMSW_ctype(ch) & C1_CNTRL; }
+int WXDLLEXPORT wxIsdigit(wxChar ch) { return wxMSW_ctype(ch) & C1_DIGIT; }
+int WXDLLEXPORT wxIsgraph(wxChar ch) { return wxMSW_ctype(ch) & (C1_DIGIT|C1_PUNCT|C1_ALPHA); }
+int WXDLLEXPORT wxIslower(wxChar ch) { return IsCharLower(ch); }
+int WXDLLEXPORT wxIsprint(wxChar ch) { return wxMSW_ctype(ch) & (C1_DIGIT|C1_SPACE|C1_PUNCT|C1_ALPHA); }
+int WXDLLEXPORT wxIspunct(wxChar ch) { return wxMSW_ctype(ch) & C1_PUNCT; }
+int WXDLLEXPORT wxIsspace(wxChar ch) { return wxMSW_ctype(ch) & C1_SPACE; }
+int WXDLLEXPORT wxIsupper(wxChar ch) { return IsCharUpper(ch); }
+int WXDLLEXPORT wxIsxdigit(wxChar ch) { return wxMSW_ctype(ch) & C1_XDIGIT; }
+int WXDLLEXPORT wxTolower(wxChar ch) { return (wxChar)CharLower((LPTSTR)(ch); }
+int WXDLLEXPORT wxToupper(wxChar ch) { return (wxChar)CharUpper((LPTSTR)(ch); }
 #endif
 
 #ifndef wxStrdup
