@@ -39,7 +39,7 @@
 //#define TEST_CMDLINE
 //#define TEST_DATETIME
 //#define TEST_DIR
-#define TEST_DLLLOADER
+//#define TEST_DLLLOADER
 //#define TEST_EXECUTE
 //#define TEST_FILECONF
 //#define TEST_HASH
@@ -51,7 +51,7 @@
 //#define TEST_STRINGS
 //#define TEST_THREADS
 //#define TEST_TIMER
-//#define TEST_WCHAR
+#define TEST_WCHAR
 
 // ============================================================================
 // implementation
@@ -1072,14 +1072,31 @@ static void TestUtf8()
 {
     puts("*** Testing UTF8 support ***\n");
 
-    wxString testString =
+    wxString testString = "français";
+#if 0
 "************ French - Français ****************"
 "Juste un petit exemple pour dire que les français aussi"
 "ont à cœur de pouvoir utiliser tous leurs caractères ! :)";
+#endif
 
     wxWCharBuffer wchBuf = testString.wc_str(wxConvUTF8);
-    printf("Decoding '%s' => '%s'\n",
-           testString.c_str(), wxString(wchBuf, wxConvCurrent).c_str());
+    const wchar_t *pwz = (const wchar_t *)wchBuf;
+    wxString testString2(pwz, wxConvLocal);
+
+    printf("Decoding '%s' => '%s'\n", testString.c_str(), testString2.c_str());
+
+    char *psz = "fran" "\xe7" "ais";
+    size_t len = strlen(psz);
+    wchar_t *pwz2 = new wchar_t[len + 1];
+    for ( size_t n = 0; n <= len; n++ )
+    {
+        pwz2[n] = (wchar_t)(unsigned char)psz[n];
+    }
+
+    wxString testString3(pwz2, wxConvUTF8);
+    delete [] pwz2;
+
+    printf("Encoding '%s' -> '%s'\n", psz, testString3.c_str());
 }
 
 #endif // TEST_WCHAR
