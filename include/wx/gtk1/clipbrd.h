@@ -71,6 +71,10 @@ public:
     // clears wxTheClipboard and the system's clipboard if possible
     virtual void Clear();
 
+    /// If primary == TRUE, use primary selection in all further ops,
+    /// primary=FALSE resets it.
+    inline void UsePrimarySelection(bool primary = TRUE) { m_usePrimary = primary; }
+    
     // implementation
 
     bool              m_open;
@@ -85,7 +89,7 @@ public:
 
     bool              m_formatSupported;
     GdkAtom           m_targetRequested;
-
+    bool              m_usePrimary;
     wxDataObject      *m_receivedData;
 };
 
