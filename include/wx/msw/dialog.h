@@ -82,6 +82,9 @@ public:
     bool Iconized() const { return IsIconized(); };
 #endif
 
+    // wxMSW only: remove the "Close" button from the dialog
+    bool EnableCloseButton(bool enable = TRUE);
+
     // implementation only from now on
     // -------------------------------
 

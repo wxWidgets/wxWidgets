@@ -92,6 +92,18 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     m_windowStyle |= style;
 
     bool hasAbortButton = (style & wxPD_CAN_ABORT) != 0;
+
+#ifdef __WXMSW__
+    // we have to remove the "Close" button from the title bar then as it is
+    // confusing to have it - it doesn't work anyhow
+    //
+    // FIXME: should probably have a (extended?) window style for this
+    if ( !hasAbortButton )
+    {
+        EnableCloseButton(FALSE);
+    }
+#endif // wxMSW
+
     m_state = hasAbortButton ? Continue : Uncancelable;
     m_maximum = maximum;
 
@@ -123,13 +135,13 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
     if ( maximum > 0 )
     {
+        // note that we can't use wxGA_SMOOTH because it happens to also mean
+        // wxDIALOG_MODAL and will cause the dialog to be modal. Have an extra
+        // style argument to wxProgressDialog, perhaps.
         m_gauge = new wxGauge(this, -1, maximum,
-                wxDefaultPosition, wxDefaultSize,
-                wxGA_HORIZONTAL | wxRAISED_BORDER);
-// Sorry, but wxGA_SMOOTH happens to also mean wxDIALOG_MODAL and will
-// cause the dialog to be modal. Have an extra style argument to wxProgressDialog,
-// perhaps.
-//                wxGA_HORIZONTAL | wxRAISED_BORDER | (style & wxGA_SMOOTH));
+                              wxDefaultPosition, wxDefaultSize,
+                              wxGA_HORIZONTAL);
+
         c = new wxLayoutConstraints;
         c->left.SameAs(this, wxLeft, 2*LAYOUT_X_MARGIN);
         c->top.Below(m_msg, 2*LAYOUT_Y_MARGIN);
@@ -309,6 +321,12 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
             // tell the user what he should do...
             m_btnAbort->SetLabel(_("Close"));
         }
+#ifdef __WXMSW__
+        else // enable the close button to give the user a way to close the dlg
+        {
+            EnableCloseButton(TRUE);
+        }
+#endif // __WXMSW__
 
         if ( !newmsg )
         {
