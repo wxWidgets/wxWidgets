@@ -4,6 +4,7 @@
 # Created:      19990808
 # Updated:
 # Copyright:    (c) Mark Johnson
+# Licence:      wxWindows licence
 #
 # Makefile : Builds sample (VC++, WIN32)
 # Use FINAL=1 argument to nmake to build final version with no debug info.
