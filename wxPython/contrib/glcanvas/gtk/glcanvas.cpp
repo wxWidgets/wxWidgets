@@ -414,22 +414,6 @@ static PyObject *_wrap_wxGLContext_GetWindow(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
-static void *SwigwxGLCanvasTowxScrolledWindow(void *ptr) {
-    wxGLCanvas *src;
-    wxScrolledWindow *dest;
-    src = (wxGLCanvas *) ptr;
-    dest = (wxScrolledWindow *) src;
-    return (void *) dest;
-}
-
-static void *SwigwxGLCanvasTowxPanel(void *ptr) {
-    wxGLCanvas *src;
-    wxPanel *dest;
-    src = (wxGLCanvas *) ptr;
-    dest = (wxPanel *) src;
-    return (void *) dest;
-}
-
 static void *SwigwxGLCanvasTowxWindow(void *ptr) {
     wxGLCanvas *src;
     wxWindow *dest;
@@ -791,7 +775,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
-    { "_wxPanel","_wxGLCanvas",SwigwxGLCanvasTowxPanel},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
     { "_uint","_time_t",0},
@@ -825,7 +808,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxObject","_wxGLContext",SwigwxGLContextTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
-    { "_wxScrolledWindow","_wxGLCanvas",SwigwxGLCanvasTowxScrolledWindow},
     { "_unsigned_char","_byte",0},
     { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},

@@ -144,6 +144,23 @@ class wxCalendarCtrlPtr(wxControlPtr):
         val = apply(calendarc.wxCalendarCtrl_GetDate,(self,) + _args, _kwargs)
         if val: val = wxDateTimePtr(val) 
         return val
+    def SetLowerDateLimit(self, *_args, **_kwargs):
+        val = apply(calendarc.wxCalendarCtrl_SetLowerDateLimit,(self,) + _args, _kwargs)
+        return val
+    def GetLowerDateLimit(self, *_args, **_kwargs):
+        val = apply(calendarc.wxCalendarCtrl_GetLowerDateLimit,(self,) + _args, _kwargs)
+        if val: val = wxDateTimePtr(val) 
+        return val
+    def SetUpperDateLimit(self, *_args, **_kwargs):
+        val = apply(calendarc.wxCalendarCtrl_SetUpperDateLimit,(self,) + _args, _kwargs)
+        return val
+    def GetUpperDateLimit(self, *_args, **_kwargs):
+        val = apply(calendarc.wxCalendarCtrl_GetUpperDateLimit,(self,) + _args, _kwargs)
+        if val: val = wxDateTimePtr(val) 
+        return val
+    def SetDateRange(self, *_args, **_kwargs):
+        val = apply(calendarc.wxCalendarCtrl_SetDateRange,(self,) + _args, _kwargs)
+        return val
     def EnableYearChange(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarCtrl_EnableYearChange,(self,) + _args, _kwargs)
         return val
@@ -202,6 +219,12 @@ class wxCalendarCtrlPtr(wxControlPtr):
     def HitTest(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarCtrl_HitTest,(self,) + _args, _kwargs)
         return val
+    def Enable(self, *_args, **_kwargs):
+        val = apply(calendarc.wxCalendarCtrl_Enable,(self,) + _args, _kwargs)
+        return val
+    def Show(self, *_args, **_kwargs):
+        val = apply(calendarc.wxCalendarCtrl_Show,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxCalendarCtrl instance at %s>" % (self.this,)
 class wxCalendarCtrl(wxCalendarCtrlPtr):
@@ -232,9 +255,14 @@ wxCAL_MONDAY_FIRST = calendarc.wxCAL_MONDAY_FIRST
 wxCAL_SHOW_HOLIDAYS = calendarc.wxCAL_SHOW_HOLIDAYS
 wxCAL_NO_YEAR_CHANGE = calendarc.wxCAL_NO_YEAR_CHANGE
 wxCAL_NO_MONTH_CHANGE = calendarc.wxCAL_NO_MONTH_CHANGE
+wxCAL_SEQUENTIAL_MONTH_SELECTION = calendarc.wxCAL_SEQUENTIAL_MONTH_SELECTION
+wxCAL_SHOW_SURROUNDING_WEEKS = calendarc.wxCAL_SHOW_SURROUNDING_WEEKS
 wxCAL_HITTEST_NOWHERE = calendarc.wxCAL_HITTEST_NOWHERE
 wxCAL_HITTEST_HEADER = calendarc.wxCAL_HITTEST_HEADER
 wxCAL_HITTEST_DAY = calendarc.wxCAL_HITTEST_DAY
+wxCAL_HITTEST_INCMONTH = calendarc.wxCAL_HITTEST_INCMONTH
+wxCAL_HITTEST_DECMONTH = calendarc.wxCAL_HITTEST_DECMONTH
+wxCAL_HITTEST_SURROUNDING_WEEK = calendarc.wxCAL_HITTEST_SURROUNDING_WEEK
 wxCAL_BORDER_NONE = calendarc.wxCAL_BORDER_NONE
 wxCAL_BORDER_SQUARE = calendarc.wxCAL_BORDER_SQUARE
 wxCAL_BORDER_ROUND = calendarc.wxCAL_BORDER_ROUND

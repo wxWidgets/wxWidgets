@@ -84,7 +84,7 @@ class wxGLContext(wxGLContextPtr):
 
 
 
-class wxGLCanvasPtr(wxScrolledWindowPtr):
+class wxGLCanvasPtr(wxWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0

@@ -50,7 +50,7 @@ enum wxCalendarHitTestResult
 {
     wxCAL_HITTEST_NOWHERE,      // outside of anything
     wxCAL_HITTEST_HEADER,       // on the header (weekdays)
-    wxCAL_HITTEST_DAY           // on a day in the calendar
+    wxCAL_HITTEST_DAY,          // on a day in the calendar
     wxCAL_HITTEST_INCMONTH,
     wxCAL_HITTEST_DECMONTH,
     wxCAL_HITTEST_SURROUNDING_WEEK
