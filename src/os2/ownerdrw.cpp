@@ -386,8 +386,9 @@ bool wxOwnerDrawn::OnDrawItem(
                                                 ,rRect.x + GetMarginWidth()
                                                 ,rRect.y + m_nHeight
                                                };
-                POINTL              vPnt1 = {2, 4}; // Leave a little background border
+                POINTL              vPnt1 = {rRect.x + 1, rRect.y + 3}; // Leave a little background border
                 POINTL              vPnt2 = {rRect.x + GetMarginWidth(), rRect.y + m_nHeight - 3};
+
                 LINEBUNDLE          vLine;
 
                 vLine.lColor = vColBack.GetPixel();
@@ -398,6 +399,7 @@ bool wxOwnerDrawn::OnDrawItem(
                               ,&vLine
                              );
                 ::GpiMove(hPS, &vPnt1);
+                char   zMsg[128];
                 ::GpiBox( hPS
                          ,DRO_OUTLINE
                          ,&vPnt2
