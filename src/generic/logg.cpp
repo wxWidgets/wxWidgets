@@ -42,6 +42,7 @@
     #include "wx/textctrl.h"
     #include "wx/sizer.h"
     #include "wx/statbmp.h"
+    #include "wx/button.h"
 #endif // WX_PRECOMP
 
 #include "wx/file.h"
