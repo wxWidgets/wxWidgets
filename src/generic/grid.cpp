@@ -1600,7 +1600,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
                   rect.height = ch - rect.y;
                   m_rowLabelWin->Refresh( TRUE, &rect );
                   rect.width = cw;
-                  m_gridWin->Refresh( TRUE, &rect );
+                  m_gridWin->Refresh( FALSE, &rect );
                 }
 
                 ShowCellEditControl();
@@ -1787,7 +1787,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                   rect.height = m_colLabelHeight;
                   m_colLabelWin->Refresh( TRUE, &rect );
                   rect.height = ch;
-                  m_gridWin->Refresh( TRUE, &rect );
+                  m_gridWin->Refresh( FALSE, &rect );
                 }
 
                 ShowCellEditControl();
@@ -2558,7 +2558,7 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
     {
         wxRect r( SelectionToDeviceRect() );
         ClearSelection();
-        if ( !GetBatchCount() ) m_gridWin->Refresh( TRUE, &r );
+        if ( !GetBatchCount() ) m_gridWin->Refresh( FALSE, &r );
     }
 }
 
@@ -4152,7 +4152,7 @@ void wxGrid::SetGridLineColour( const wxColour& colour )
 
         wxClientDC dc( m_gridWin );
         PrepareDC( dc );
-        DrawAllGridLines( dc );
+        DrawAllGridLines( dc, wxRegion() );
     }
 }
 
@@ -4168,7 +4168,7 @@ void wxGrid::EnableGridLines( bool enable )
             {
                 wxClientDC dc( m_gridWin );
                 PrepareDC( dc );
-                DrawAllGridLines( dc );
+                DrawAllGridLines( dc, wxRegion() );
             }
             else
             {
@@ -4492,18 +4492,18 @@ void wxGrid::SelectRow( int row, bool addToSelected )
 
         for (i = 0; i < 4; i++ )
             if ( need_refresh[i] && rect[i] != wxGridNoCellRect )
-                m_gridWin->Refresh( TRUE, &(rect[i]) );
+                m_gridWin->Refresh( FALSE, &(rect[i]) );
     }
     else
     {
         r = SelectionToDeviceRect();
         ClearSelection();
-        if ( r != wxGridNoCellRect ) m_gridWin->Refresh( TRUE, &r );
+        if ( r != wxGridNoCellRect ) m_gridWin->Refresh( FALSE, &r );
 
         m_selectedTopLeft.Set( row, 0 );
         m_selectedBottomRight.Set( row, m_numCols-1 );
         r = SelectionToDeviceRect();
-        m_gridWin->Refresh( TRUE, &r );
+        m_gridWin->Refresh( FALSE, &r );
     }
 
     wxGridRangeSelectEvent gridEvt( GetId(),
@@ -4568,7 +4568,7 @@ void wxGrid::SelectCol( int col, bool addToSelected )
 
         for (i = 0; i < 4; i++ )
             if ( need_refresh[i] && rect[i] != wxGridNoCellRect )
-                m_gridWin->Refresh( TRUE, &(rect[i]) );
+                m_gridWin->Refresh( FALSE, &(rect[i]) );
     }
     else
     {
@@ -4576,12 +4576,12 @@ void wxGrid::SelectCol( int col, bool addToSelected )
     
         r = SelectionToDeviceRect();
         ClearSelection();
-        if ( r != wxGridNoCellRect ) m_gridWin->Refresh( TRUE, &r );
+        if ( r != wxGridNoCellRect ) m_gridWin->Refresh( FALSE, &r );
 
         m_selectedTopLeft.Set( 0, col );
         m_selectedBottomRight.Set( m_numRows-1, col );
         r = SelectionToDeviceRect();
-        m_gridWin->Refresh( TRUE, &r );
+        m_gridWin->Refresh( FALSE, &r );
     }
 
     wxGridRangeSelectEvent gridEvt( GetId(),
@@ -4706,7 +4706,7 @@ void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol )
         // various Refresh() calls
         for (i = 0; i < 4; i++ )
             if ( need_refresh[i] && rect[i] != wxGridNoCellRect )
-                m_gridWin->Refresh( TRUE, &(rect[i]) );
+                m_gridWin->Refresh( FALSE, &(rect[i]) );
     }
 
     // only generate an event if the block is not being selected by
