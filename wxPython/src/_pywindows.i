@@ -93,6 +93,8 @@ public:
     DEC_PYCALLBACK__COLOUR(ApplyParentThemeBackground);
     DEC_PYCALLBACK_VIZATTR_(GetDefaultAttributes);
     
+    DEC_PYCALLBACK_BOOL_(HasTransparentBackground);
+
     PYPRIVATE;
 };
 
@@ -125,7 +127,8 @@ IMP_PYCALLBACK_VOID_WXWINBASE(wxPyWindow, wxWindow, RemoveChild);
 IMP_PYCALLBACK_BOOL_const(wxPyWindow, wxWindow, ShouldInheritColours);
 IMP_PYCALLBACK__COLOUR(wxPyWindow, wxWindow, ApplyParentThemeBackground);
 IMP_PYCALLBACK_VIZATTR_(wxPyWindow, wxWindow, GetDefaultAttributes);
- 
+
+IMP_PYCALLBACK_BOOL_(wxPyWindow, wxWindow, HasTransparentBackground);
 %}
 
 // And now the one for SWIG to see
@@ -238,6 +241,8 @@ public:
     DEC_PYCALLBACK__COLOUR(ApplyParentThemeBackground);
     DEC_PYCALLBACK_VIZATTR_(GetDefaultAttributes);
     
+    DEC_PYCALLBACK_BOOL_(HasTransparentBackground);
+
     PYPRIVATE;
 };
 
@@ -271,7 +276,8 @@ IMP_PYCALLBACK_BOOL_const(wxPyPanel, wxPanel, ShouldInheritColours);
 IMP_PYCALLBACK__COLOUR(wxPyPanel, wxPanel, ApplyParentThemeBackground);
 IMP_PYCALLBACK_VIZATTR_(wxPyPanel, wxPanel, GetDefaultAttributes);
 
- %}
+IMP_PYCALLBACK_BOOL_(wxPyPanel, wxPanel, HasTransparentBackground);
+%}
 
 // And now the one for SWIG to see
 MustHaveApp(wxPyPanel);
@@ -375,6 +381,8 @@ public:
     DEC_PYCALLBACK__COLOUR(ApplyParentThemeBackground);
     DEC_PYCALLBACK_VIZATTR_(GetDefaultAttributes);
     
+    DEC_PYCALLBACK_BOOL_(HasTransparentBackground);
+
     PYPRIVATE;
 };
 
@@ -408,6 +416,7 @@ IMP_PYCALLBACK_BOOL_const(wxPyScrolledWindow, wxScrolledWindow, ShouldInheritCol
 IMP_PYCALLBACK__COLOUR(wxPyScrolledWindow, wxScrolledWindow, ApplyParentThemeBackground);
 IMP_PYCALLBACK_VIZATTR_(wxPyScrolledWindow, wxScrolledWindow, GetDefaultAttributes);
 
+IMP_PYCALLBACK_BOOL_(wxPyScrolledWindow, wxScrolledWindow, HasTransparentBackground);
 %}
 
 // And now the one for SWIG to see

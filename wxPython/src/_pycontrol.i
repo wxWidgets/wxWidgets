@@ -64,6 +64,8 @@ public:
     DEC_PYCALLBACK__COLOUR(ApplyParentThemeBackground);
     DEC_PYCALLBACK_VIZATTR_(GetDefaultAttributes);
     
+    DEC_PYCALLBACK_BOOL_(HasTransparentBackground);
+
     PYPRIVATE;
 };
 
@@ -96,7 +98,9 @@ IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, RemoveChild);
 IMP_PYCALLBACK_BOOL_const(wxPyControl, wxControl, ShouldInheritColours);
 IMP_PYCALLBACK__COLOUR(wxPyControl, wxControl, ApplyParentThemeBackground);
 IMP_PYCALLBACK_VIZATTR_(wxPyControl, wxControl, GetDefaultAttributes);
-%}
+
+IMP_PYCALLBACK_BOOL_(wxPyControl, wxControl, HasTransparentBackground);
+ %}
 
 // And now the one for SWIG to see
 MustHaveApp(wxPyControl);
