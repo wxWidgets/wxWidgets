@@ -996,6 +996,25 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
             }
             break;
 
+        case WM_SETFOCUS:
+        case WM_KILLFOCUS:
+            {
+                wxRadioBox *radiobox = (wxRadioBox *)
+                    ::GetWindowLong(hwnd, GWL_USERDATA);
+
+                wxCHECK_MSG( radiobox, 0, wxT("radio button without radio box?") );
+
+                // if we don't do this, no focus events are generated for the
+                // radiobox and, besides, we need to notify the parent about
+                // the focus change, otherwise the focus handling logic in
+                // wxControlContainer doesn't work
+                if ( message == WM_SETFOCUS )
+                    radiobox->HandleSetFocus((WXHWND)wParam);
+                else
+                    radiobox->HandleKillFocus((WXHWND)wParam);
+            }
+            break;
+
 #ifdef __WIN32__
         case WM_HELP:
             {
