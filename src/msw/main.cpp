@@ -64,26 +64,21 @@ HINSTANCE wxhInstance = 0;
 #if !defined(_WINDLL)
 
 #if defined(__TWIN32__) || defined(__WXWINE__)
+    #define HINSTANCE HANDLE
 
-extern "C"
-BOOL PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+    extern "C"
+#endif // WINE
 
-#else
-
-#ifdef __WATCOMC__
-int PASCAL
-#else
-int APIENTRY
-#endif
-
- WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
-#endif
-// __TWIN32__
-
+int PASCAL WinMain(HINSTANCE hInstance,
+                   HINSTANCE hPrevInstance,
+                   LPSTR lpCmdLine,
+                   int nCmdShow)
 {
-  return wxEntry((WXHINSTANCE) hInstance, (WXHINSTANCE) hPrevInstance, lpCmdLine, nCmdShow);
+    return wxEntry((WXHINSTANCE) hInstance, (WXHINSTANCE) hPrevInstance,
+                   lpCmdLine, nCmdShow);
 }
-#endif
+
+#endif // !defined(_WINDLL)
 
 /////////////////////////////////////////////////////////////////////////////////
 // DllMain

@@ -747,7 +747,7 @@ wxBitmap wxImage::ConvertToBitmap() const
 
     // create a DIB header
     int headersize = sizeof(BITMAPINFOHEADER);
-    LPBITMAPINFO lpDIBh = (BITMAPINFO *) malloc( headersize );
+    BITMAPINFO *lpDIBh = (BITMAPINFO *) malloc( headersize );
     wxCHECK_MSG( lpDIBh, bitmap, wxT("could not allocate memory for DIB header") );
     // Fill in the DIB header
     lpDIBh->bmiHeader.biSize = headersize;
@@ -939,7 +939,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
 
     // create a DIB header
     int headersize = sizeof(BITMAPINFOHEADER);
-    LPBITMAPINFO lpDIBh = (BITMAPINFO *) malloc( headersize );
+    BITMAPINFO *lpDIBh = (BITMAPINFO *) malloc( headersize );
     if( !lpDIBh )
     {
         wxFAIL_MSG( wxT("could not allocate data for DIB header") );
@@ -1260,11 +1260,11 @@ wxImage::wxImage( const wxBitmap &bitmap )
         }       
         SetMaskColour( r, g, b );
         SetMask( TRUE );
-    }	
+    }
     else
     {
         SetMask( FALSE );
-    }	
+    }
     // free allocated resources      
     ::ReleaseDC(NULL, hdc);   
     free(lpDIBh);

@@ -80,7 +80,7 @@ bool wxImageList::Replace( int index, const wxBitmap &bitmap )
 //so construct it from a bitmap object until I can figure this nonsense out. (DW)
         newBitmap = new wxBitmap(bitmap) ;
 #else
-        newBitmap = new wxIcon( (const wxIcon&) bitmap );
+        newBitmap = new wxBitmap( (const wxIcon&) bitmap );
 #endif
     else
         newBitmap = new wxBitmap(bitmap) ;

@@ -21,29 +21,27 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include <stdio.h>
-    #include "wx/defs.h"
     #include "wx/utils.h"
     #include "wx/msgdlg.h"
     #include "wx/dialog.h"
     #include "wx/filedlg.h"
     #include "wx/intl.h"
     #include "wx/log.h"
-#endif
 
-#include <windows.h>
+    #include "wx/msw/private.h"
+#endif
 
 #if !defined(__WIN32__) || defined(__SALFORDC__) || defined(__WXWINE__)
     #include <commdlg.h>
 #endif
 
-#include "wx/msw/private.h"
-
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
-    IMPLEMENT_CLASS(wxFileDialog, wxDialog)
+#include "wx/tokenzr.h"
+
+IMPLEMENT_CLASS(wxFileDialog, wxDialog)
 
 wxString wxFileSelector(const wxChar *title,
                         const wxChar *defaultDir,

@@ -45,12 +45,12 @@ public:
 #if wxUSE_STREAMS
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
-  
+
   virtual int GetImageCount( wxInputStream& stream );
 
   bool CanRead( wxInputStream& stream ) { return DoCanRead(stream); }
   bool CanRead( const wxString& name );
-#endif
+#endif // wxUSE_STREAMS
 
   void SetName(const wxString& name) { m_name = name; }
   void SetExtension(const wxString& ext) { m_extension = ext; }
@@ -62,16 +62,175 @@ public:
   wxString GetMimeType() const { return m_mime; }
 
 protected:
+#if wxUSE_STREAMS
   virtual bool DoCanRead( wxInputStream& stream ) = 0;
+#endif // wxUSE_STREAMS
 
   wxString  m_name;
   wxString  m_extension;
   wxString  m_mime;
   long      m_type;
+};
 
+//-----------------------------------------------------------------------------
+// wxPNGHandler
+//-----------------------------------------------------------------------------
+
+#if wxUSE_LIBPNG
+class WXDLLEXPORT wxPNGHandler: public wxImageHandler
+{
+  DECLARE_DYNAMIC_CLASS(wxPNGHandler)
+
+public:
+
+  inline wxPNGHandler()
+  {
+      m_name = "PNG file";
+      m_extension = "png";
+      m_type = wxBITMAP_TYPE_PNG;
+      m_mime = "image/png";
+  };
+
+#if wxUSE_STREAMS
+  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
+  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
+  virtual bool DoCanRead( wxInputStream& stream );
+#endif
+};
+#endif
+
+//-----------------------------------------------------------------------------
+// wxJPEGHandler
+//-----------------------------------------------------------------------------
+
+#if wxUSE_LIBJPEG
+class WXDLLEXPORT wxJPEGHandler: public wxImageHandler
+{
+  DECLARE_DYNAMIC_CLASS(wxJPEGHandler)
+
+public:
+
+  inline wxJPEGHandler()
+  {
+      m_name = "JPEG file";
+      m_extension = "jpg";
+      m_type = wxBITMAP_TYPE_JPEG;
+      m_mime = "image/jpeg";
+  };
+
+#if wxUSE_STREAMS
+  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
+  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
+  virtual bool DoCanRead( wxInputStream& stream );
+#endif
+};
+#endif
+
+//-----------------------------------------------------------------------------
+// wxTIFFHandler
+//-----------------------------------------------------------------------------
+
+#if wxUSE_LIBTIFF
+class WXDLLEXPORT wxTIFFHandler: public wxImageHandler
+{
+  DECLARE_DYNAMIC_CLASS(wxTIFFHandler)
+
+public:
+
+  inline wxTIFFHandler()
+  {
+      m_name = "TIFF file";
+      m_extension = "tif";
+      m_type = wxBITMAP_TYPE_TIF;
+      m_mime = "image/tiff";
+  };
+
+#if wxUSE_STREAMS
+  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
+  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
+  virtual bool DoCanRead( wxInputStream& stream );
+  virtual int GetImageCount( wxInputStream& stream );
+#endif
+};
+#endif
+
+//-----------------------------------------------------------------------------
+// wxBMPHandler
+//-----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxBMPHandler: public wxImageHandler
+{
+  DECLARE_DYNAMIC_CLASS(wxBMPHandler)
+
+public:
+
+  inline wxBMPHandler()
+  {
+      m_name = "BMP file";
+      m_extension = "bmp";
+      m_type = wxBITMAP_TYPE_BMP;
+      m_mime = "image/bmp";
+  };
+
+#if wxUSE_STREAMS
+  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
+  virtual bool DoCanRead( wxInputStream& stream );
+#endif
 };
 
 
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_PNM
+class WXDLLEXPORT wxPNMHandler : public wxImageHandler
+{
+  DECLARE_DYNAMIC_CLASS(wxPNMHandler)
+
+public:
+
+  inline wxPNMHandler()
+  {
+      m_name = "PNM file";
+      m_extension = "pnm";
+      m_type = wxBITMAP_TYPE_PNM;
+      m_mime = "image/pnm";
+  };
+
+#if wxUSE_STREAMS
+  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
+  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
+  virtual bool DoCanRead( wxInputStream& stream );
+#endif
+};
+#endif
+
+//-----------------------------------------------------------------------------
+// wxPCXHandler
+//-----------------------------------------------------------------------------
+
+#if wxUSE_PCX
+class WXDLLEXPORT wxPCXHandler : public wxImageHandler
+{
+  DECLARE_DYNAMIC_CLASS(wxPCXHandler)
+
+public:
+
+  inline wxPCXHandler()
+  {
+      m_name = "PCX file";
+      m_extension = "pcx";
+      m_type = wxBITMAP_TYPE_PCX;
+      m_mime = "image/pcx";
+  };
+
+#if wxUSE_STREAMS
+  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
+  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
+  virtual bool DoCanRead( wxInputStream& stream );
+#endif // wxUSE_STREAMS
+};
+#endif // wxUSE_PCX
 
 //-----------------------------------------------------------------------------
 // wxImage

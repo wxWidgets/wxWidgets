@@ -328,7 +328,7 @@ typedef int wxWindowID;
 
 // wxCALLBACK should be used for the functions which are called back by
 // Windows (such as compare function for wxListCtrl)
-#if defined(__WXMSW__)
+#if defined(__WIN32__)
     #if defined(__MINGW32__) || defined(__GNUWIN32__)
         #define wxCALLBACK __attribute__((stdcall))
     #else
@@ -336,7 +336,7 @@ typedef int wxWindowID;
         #define wxCALLBACK _stdcall
     #endif
 #else
-    // no stdcall under Unix
+    // no stdcall under Unix nor Win16
     #define wxCALLBACK
 #endif // platform
 

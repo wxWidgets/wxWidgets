@@ -129,7 +129,12 @@ void wxFontEnumeratorHelper::DoEnumerate()
                          (LPARAM)this, 0 /* reserved */) ;
 #else // Win16
     ::EnumFonts(hDC, (LPTSTR)NULL, (FONTENUMPROC)wxFontEnumeratorProc,
-                (LPARAM) (void*) this) ;
+    #ifdef STRICT
+               (LPARAM)
+    #else
+               (LPSTR)
+    #endif
+               this);
 #endif // Win32/16
 
     ::ReleaseDC(NULL, hDC);

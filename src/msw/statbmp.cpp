@@ -185,7 +185,9 @@ bool wxStaticBitmap::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 {
     LPDRAWITEMSTRUCT lpDIS = (LPDRAWITEMSTRUCT) item;
 
-    wxBitmap* bitmap = m_image.bitmap;
+    wxCHECK_MSG( !m_isIcon, FALSE, _T("icons not supported in wxStaticBitmap") );
+
+    wxBitmap* bitmap = (wxBitmap *)m_image;
     if ( !bitmap->Ok() )
         return FALSE;
 

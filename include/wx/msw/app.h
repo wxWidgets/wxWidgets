@@ -104,8 +104,8 @@ protected:
 };
 
 #if !defined(_WINDLL) || (defined(_WINDLL) && defined(WXMAKINGDLL))
-int WXDLLEXPORT wxEntry(WXHINSTANCE hInstance, WXHINSTANCE hPrevInstance, char *lpszCmdLine,
-                    int nCmdShow, bool enterLoop = TRUE);
+int WXDLLEXPORT wxEntry(WXHINSTANCE hInstance, WXHINSTANCE hPrevInstance,
+                        char *lpszCmdLine, int nCmdShow, bool enterLoop = TRUE);
 #else
 int WXDLLEXPORT wxEntry(WXHINSTANCE hInstance);
 #endif

@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_COLOUR_H_
@@ -75,8 +75,11 @@ public:
 
   WXCOLORREF GetPixel() const { return m_pixel; };
 
+public:
+  WXCOLORREF m_pixel;
+
 private:
-  bool 			    m_isInit;
+  bool          m_isInit;
   unsigned char m_red;
   unsigned char m_blue;
   unsigned char m_green;
@@ -84,12 +87,9 @@ private:
   // helper func
   void InitFromName(const wxString& colourName);
 
-public:
-  WXCOLORREF m_pixel ;
-
 private:
   DECLARE_DYNAMIC_CLASS(wxColour)
 };
 
 #endif
-	// _WX_COLOUR_H_
+        // _WX_COLOUR_H_

@@ -314,7 +314,7 @@ void wxPrintData::ConvertToNative()
 
     if ( hDevMode )
     {
-        DEVMODE *devMode = (DEVMODE*) GlobalLock(hDevMode);
+        LPDEVMODE devMode = (LPDEVMODE) GlobalLock(hDevMode);
 
         //// Orientation
 
@@ -436,7 +436,7 @@ void wxPrintData::ConvertFromNative()
 
     if ( hDevMode )
     {
-        DEVMODE *devMode = (DEVMODE*) GlobalLock(hDevMode);
+        LPDEVMODE devMode = (LPDEVMODE)GlobalLock(hDevMode);
 
 #ifndef __WXWINE__
         //// Orientation

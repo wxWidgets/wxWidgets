@@ -172,6 +172,9 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     }
 
     BOOL ok;
+
+    // no MaskBlt() under Win16
+#ifdef __WIN32__
     wxMask *mask = bitmap->GetMask();
     if ( mask )
     {
@@ -196,6 +199,7 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
         ::DeleteObject(hbrBackground);
     }
     else
+#endif // Win32
     {
         ok = ::BitBlt(hDC, x1, y1, wBmp, hBmp,  // dst
                       memDC, 0, 0,              // src

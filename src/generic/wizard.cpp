@@ -240,7 +240,8 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     // and update the buttons state
     m_btnPrev->Enable(m_page->GetPrev() != (wxWizardPage *)NULL);
 
-    if ( btnLabelWasNext != (m_page->GetNext() != (wxWizardPage *)NULL) )
+    bool hasNext = m_page->GetNext() != (wxWizardPage *)NULL;
+    if ( btnLabelWasNext != hasNext )
     {
         // need to update
         m_btnNext->SetLabel(btnLabelWasNext ? _("&Finish") : _("&Next >"));

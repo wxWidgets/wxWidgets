@@ -101,7 +101,7 @@ config.cpp	C	B
 ctrlcmn.cpp	C
 ctrlsub.cpp	C
 date.cpp	C	B
-datetime.cpp	C	B
+datetime.cpp	C	32,B
 datstrm.cpp	C
 db.cpp	C
 dbtable.cpp	C
@@ -146,7 +146,7 @@ layout.cpp	C
 lboxcmn.cpp	C
 list.cpp	C	B
 log.cpp	C	B
-longlong.cpp	C	B
+longlong.cpp	C	32,B
 memory.cpp	C
 menucmn.cpp	C
 mimetype.cpp	C	32,B

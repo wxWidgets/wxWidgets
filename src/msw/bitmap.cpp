@@ -172,9 +172,9 @@ bool wxBitmap::CopyFromCursor(const wxCursor& cursor)
     wxFAIL_MSG( _T("don't know how to convert cursor to bitmap") );
 
     return FALSE;
-#endif // Win16
-
+#else
     return CopyFromIconOrCursor(cursor);
+#endif // Win16
 }
 
 bool wxBitmap::CopyFromIcon(const wxIcon& icon)

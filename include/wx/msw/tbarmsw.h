@@ -16,7 +16,7 @@
 #pragma interface "tbarmsw.h"
 #endif
 
-#if wxUSE_BUTTONBAR && wxUSE_TOOLBAR
+#if wxUSE_TOOLBAR
 
 #include "wx/tbarbase.h"
 
@@ -144,7 +144,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxToolBar)
 };
 
-#endif // wxUSE_TOOL/BUTTONBAR
+#endif // wxUSE_TOOLBAR
 
 #endif
     // _WX_TBARMSW_H_
