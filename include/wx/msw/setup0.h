@@ -1120,13 +1120,6 @@
 // Recommended setting: 1, set to 0 if your programs never crash
 #define wxUSE_STACKWALKER 1
 
-#if !wxUSE_ON_FATAL_EXCEPTION
-    #undef wxUSE_CRASHREPORT
-    #define wxUSE_CRASHREPORT 0
-    #undef wxUSE_STACKWALKER
-    #define wxUSE_STACKWALKER 0
-#endif
-
 // ----------------------------------------------------------------------------
 // obsolete settings
 // ----------------------------------------------------------------------------
