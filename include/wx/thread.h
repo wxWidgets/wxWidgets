@@ -241,11 +241,23 @@ private:
 #elif defined(__WXMSW__)
     // we can't allocate any memory in the ctor, so use placement new -
     // unfortunately, we have to hardcode the sizeof() here because we can't
-    // include windows.h from this public header
+    // include windows.h from this public header and we also have to use the
+    // union to force the correct (i.e. maximal) alignment
     //
     // if CRITICAL_SECTION size changes in Windows, you'll get an assert from
     // thread.cpp and will need to increase the buffer size
-    char m_buffer[24];
+    //
+    // finally, we need this typedef instead of declaring m_buffer directly
+    // because otherwise the assert mentioned above wouldn't compile with some
+    // compilers (notably CodeWarrior 8)
+    typedef char wxCritSectBuffer[24];
+    union
+    {
+        unsigned long m_dummy1;
+        void *m_dummy2;
+
+        wxCritSectBuffer m_buffer;
+    };
 #else
     // nothing for OS/2
 #endif // Unix/Win32/OS2

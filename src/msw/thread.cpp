@@ -132,7 +132,7 @@ static bool gs_waitingForThread = FALSE;
 
 wxCriticalSection::wxCriticalSection()
 {
-    wxCOMPILE_TIME_ASSERT( sizeof(CRITICAL_SECTION) <= sizeof(m_buffer),
+    wxCOMPILE_TIME_ASSERT( sizeof(CRITICAL_SECTION) <= sizeof(wxCritSectBuffer),
                            wxCriticalSectionBufferTooSmall );
 
     ::InitializeCriticalSection((CRITICAL_SECTION *)m_buffer);
