@@ -21,6 +21,7 @@
 
 #include "wx/dialog.h"
 #include "wx/panel.h"
+#include "wx/frame.h"
 #include "wx/wfstream.h"
 #include "wx/filesys.h"
 #include "wx/log.h"

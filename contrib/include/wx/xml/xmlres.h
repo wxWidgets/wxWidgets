@@ -30,6 +30,7 @@ class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxDialog;
 class WXDLLEXPORT wxPanel;
 class WXDLLEXPORT wxWindow;
+class WXDLLEXPORT wxFrame;
 class WXDLLEXPORT wxToolBar;
 
 class WXDLLEXPORT wxXmlResourceHandler;
