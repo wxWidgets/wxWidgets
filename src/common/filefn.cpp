@@ -144,10 +144,14 @@
 #endif
 
 #ifdef __WXMAC__
+#  ifdef __DARWIN__
+#    include "MoreFilesX.h"
+#  else
 #    include "MoreFiles.h"
 #    include "MoreFilesExtras.h"
 #    include "FullPath.h"
 #    include "FSpCompat.h"
+#  endif
 #endif
 
 // ----------------------------------------------------------------------------

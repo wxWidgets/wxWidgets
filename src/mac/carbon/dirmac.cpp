@@ -42,8 +42,12 @@
 
 #include "wx/mac/private.h"
 
-#include "MoreFiles.h"
-#include "MoreFilesExtras.h"
+#ifdef __DARWIN__
+#  include "MoreFilesX.h"
+#else
+#  include "MoreFiles.h"
+#  include "MoreFilesExtras.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // constants
@@ -102,6 +106,8 @@ private:
 wxDirData::wxDirData(const wxString& dirname)
          : m_dirname(dirname)
 {
+    OSErr err;
+    
     // throw away the trailing slashes
     size_t n = m_dirname.length();
     wxCHECK_RET( n, _T("empty dir name in wxDir") );
@@ -110,16 +116,27 @@ wxDirData::wxDirData(const wxString& dirname)
         ;
 
     m_dirname.Truncate(n + 1);
+    
+#ifdef __DARWIN__
+    FSRef theRef;
 
-	FSSpec fsspec ;
+    // get the FSRef associated with the POSIX path
+    err = FSPathMakeRef((const UInt8 *) m_dirname, &theRef, NULL);
+    FSGetVRefNum(&theRef, &(m_CPB.hFileInfo.ioVRefNum));
+    
+    err = FSGetNodeID( &theRef , &m_dirId , &m_isDir ) ;
+#else
+    FSSpec fsspec ;
 
-	wxMacFilename2FSSpec( m_dirname , &fsspec ) ;
-	m_CPB.hFileInfo.ioVRefNum = fsspec.vRefNum ;
-	m_CPB.hFileInfo.ioNamePtr = m_name ;
-	m_index = 0 ;
+    wxMacFilename2FSSpec( m_dirname , &fsspec ) ;
+    m_CPB.hFileInfo.ioVRefNum = fsspec.vRefNum ;
 
-	OSErr err = FSpGetDirectoryID( &fsspec , &m_dirId , &m_isDir ) ;
-        wxASSERT_MSG( err == noErr , "Error accessing directory") ;
+    err = FSpGetDirectoryID( &fsspec , &m_dirId , &m_isDir ) ;
+#endif
+    wxASSERT_MSG( (err == noErr) || (err == nsvErr) , "Error accessing directory " + m_dirname) ;
+
+    m_CPB.hFileInfo.ioNamePtr = m_name ;
+    m_index = 0 ;
 }
 
 wxDirData::~wxDirData()
@@ -141,68 +158,75 @@ bool wxDirData::Read(wxString *filename)
 #endif
     wxString result;
 
-	short err = noErr ;
+    short err = noErr ;
 	
-	while ( err == noErr )
-	{
-		m_index++ ;
-		m_CPB.dirInfo.ioFDirIndex = m_index;
-		m_CPB.dirInfo.ioDrDirID = m_dirId;	/* we need to do this every time */
-		err = PBGetCatInfoSync((CInfoPBPtr)&m_CPB);
-		if ( err != noErr )
-			break ;
-
+    while ( err == noErr )
+    {
+        m_index++ ;
+        m_CPB.dirInfo.ioFDirIndex = m_index;
+        m_CPB.dirInfo.ioDrDirID = m_dirId;	/* we need to do this every time */
+        err = PBGetCatInfoSync((CInfoPBPtr)&m_CPB);
+        if ( err != noErr )
+            break ;
+        
 #if TARGET_CARBON
-		p2cstrcpy( c_name, m_name ) ;
-		strcpy( (char *)m_name, c_name);
+        p2cstrcpy( c_name, m_name ) ;
+        strcpy( (char *)m_name, c_name);
 #else
-		p2cstr( m_name ) ;
+        p2cstr( m_name ) ;
+#endif
+        // its hidden but we don't want it
+        if ( ( m_CPB.hFileInfo.ioFlFndrInfo.fdFlags & kIsInvisible ) && !(m_flags & wxDIR_HIDDEN) )
+            continue ;
+#ifdef __DARWIN__
+        // under X, names that start with '.' are hidden
+        if ( ( m_name[0] == '.' ) && !(m_flags & wxDIR_HIDDEN) )
+            continue;
 #endif
 #if TARGET_CARBON
-                // under X thats the way the mounting points look like
-                if ( ( m_CPB.dirInfo.ioDrDirID == 0 ) && ( m_flags & wxDIR_DIRS) )
-                        break ;
+        // under X thats the way the mounting points look like
+        if ( ( m_CPB.dirInfo.ioDrDirID == 0 ) && ( m_flags & wxDIR_DIRS) )
+            break ;
 #endif
-		if ( ( m_CPB.dirInfo.ioFlAttrib & ioDirMask) != 0 && (m_flags & wxDIR_DIRS) ) //  we have a directory
-			break ;
-			
-		if ( ( m_CPB.dirInfo.ioFlAttrib & ioDirMask) == 0 && !(m_flags & wxDIR_FILES ) ) // its a file but we don't want it
-			continue ;
-			 
-        if ( ( m_CPB.hFileInfo.ioFlFndrInfo.fdFlags & kIsInvisible ) && !(m_flags & wxDIR_HIDDEN) ) // its hidden but we don't want it
-			continue ;
-
-		wxString file( m_name ) ;
-		if ( m_filespec.IsEmpty() || m_filespec == "*.*" || m_filespec == "*" )
-		{
-		}
-		else if ( m_filespec.Length() > 1 && m_filespec.Left(1) =="*" )
-		{
-			if ( file.Right( m_filespec.Length() - 1 ).Upper() != m_filespec.Mid(1).Upper() )
-			{
-				continue ;
-			}
-		}
-		else if ( m_filespec.Length() > 1 && m_filespec.Right(1) == "*" )
-		{
-			if ( file.Left( m_filespec.Length() - 1 ).Upper() != m_filespec.Left( m_filespec.Length() - 1 ).Upper() )
-			{
-				continue ;
-			}
-		}
-		else if ( file.Upper() != m_filespec.Upper() )
-		{
-			continue ;
-		}
-
-		break ;
-	}
-	if ( err != noErr )
-	{
-		return FALSE ;
-	}
-
-	*filename = (char*) m_name ;
+        //  we have a directory
+        if ( ( m_CPB.dirInfo.ioFlAttrib & ioDirMask) != 0 && (m_flags & wxDIR_DIRS) )
+            break ;
+        
+        // its a file but we don't want it
+        if ( ( m_CPB.dirInfo.ioFlAttrib & ioDirMask) == 0 && !(m_flags & wxDIR_FILES ) )
+            continue ;
+        
+        wxString file( m_name ) ;
+        if ( m_filespec.IsEmpty() || m_filespec == "*.*" || m_filespec == "*" )
+        {
+        }
+        else if ( m_filespec.Length() > 1 && m_filespec.Left(1) =="*" )
+        {
+            if ( file.Right( m_filespec.Length() - 1 ).Upper() != m_filespec.Mid(1).Upper() )
+            {
+                continue ;
+            }
+        }
+        else if ( m_filespec.Length() > 1 && m_filespec.Right(1) == "*" )
+        {
+            if ( file.Left( m_filespec.Length() - 1 ).Upper() != m_filespec.Left( m_filespec.Length() - 1 ).Upper() )
+            {
+                continue ;
+            }
+        }
+        else if ( file.Upper() != m_filespec.Upper() )
+        {
+            continue ;
+        }
+        
+        break ;
+    }
+    if ( err != noErr )
+    {
+        return FALSE ;
+    }
+    
+    *filename = (char*) m_name ;
 
     return TRUE;
 }

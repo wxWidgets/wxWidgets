@@ -26,8 +26,12 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include "MoreFiles.h"
-#include "MoreFilesExtras.h"
+#ifdef __DARWIN__
+#  include "MoreFilesX.h"
+#else
+#  include "MoreFiles.h"
+#  include "MoreFilesExtras.h"
+#endif
 
 #ifndef __DARWIN__
 #include <Threads.h>
@@ -362,19 +366,19 @@ wxString wxMacFindFolder( short        vol,
 			  OSType       folderType,
 			  Boolean      createFolder)
 {
-	short 		vRefNum  ;
-	long 		dirID ;
-	wxString strDir ;
-
-	if ( FindFolder( vol, folderType, createFolder, &vRefNum, &dirID) == noErr)
-	{
-		FSSpec file ;
-		if ( FSMakeFSSpec( vRefNum , dirID , "\p" , &file ) == noErr )
-		{
-			strDir = wxMacFSSpec2MacFilename( &file ) + wxFILE_SEP_PATH ;
-		}
-	}
-	return strDir ;
+    short    vRefNum  ;
+    long     dirID ;
+    wxString strDir ;
+    
+    if ( FindFolder( vol, folderType, createFolder, &vRefNum, &dirID) == noErr)
+    {
+        FSSpec file ;
+        if ( FSMakeFSSpec( vRefNum , dirID , "\p" , &file ) == noErr )
+        {
+            strDir = wxMacFSSpec2MacFilename( &file ) + wxFILE_SEP_PATH ;
+        }
+    }
+    return strDir ;
 }
 
 #ifndef __DARWIN__
@@ -479,8 +483,8 @@ void wxDisplaySizeMM(int *width, int *height)
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {
-  	BitMap screenBits;
-  	GetQDGlobalsScreenBits( &screenBits );
+    BitMap screenBits;
+    GetQDGlobalsScreenBits( &screenBits );
 
     if (x) *x = 0;
     if (y) *y = 0;
@@ -488,15 +492,15 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
     *width = screenBits.bounds.right - screenBits.bounds.left  ;
     *height = screenBits.bounds.bottom - screenBits.bounds.top ;
 
-   	SInt16 mheight ;
-  #if TARGET_CARBON
-   	GetThemeMenuBarHeight( &mheight ) ;
-  #else
+    SInt16 mheight ;
+#if TARGET_CARBON
+    GetThemeMenuBarHeight( &mheight ) ;
+#else
     mheight = LMGetMBarHeight() ;
-  #endif
+#endif
     *height -= mheight ;
     if ( y )
-      *y = mheight ;
+        *y = mheight ;
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)

@@ -35,9 +35,13 @@ IMPLEMENT_CLASS(wxFileDialog, wxDialog)
 
 #include <Navigation.h>
 
-#include "MoreFiles.h"
-#include "MoreFilesExtras.h"
-
+#ifdef __DARWIN__
+#  include "MoreFilesX.h"
+#else
+#  include "MoreFiles.h"
+#  include "MoreFilesExtras.h"
+#endif
+    
 extern bool gUseNavServices ;
 
 // the data we need to pass to our standard file hook routine
@@ -350,204 +354,204 @@ pascal Boolean CrossPlatformFilterCallback (
     NavFilterModes filterMode
 )
 {
-	bool display = true;
-	OpenUserDataRecPtr data = (OpenUserDataRecPtr) callBackUD ;
-
-	if (filterMode == kNavFilteringBrowserList)
-	{
-	  NavFileOrFolderInfo* theInfo = (NavFileOrFolderInfo*) info ;
-		if (theItem->descriptorType == typeFSS && !theInfo->isFolder)
-		{
-		  FSSpec	spec;
-		  memcpy( &spec , *theItem->dataHandle , sizeof(FSSpec) ) ;
-		  display = CheckFile( spec.name , theInfo->fileAndFolder.fileInfo.finderInfo.fdType , data ) ;
-		}
-	}
-
-	return display;
+    bool display = true;
+    OpenUserDataRecPtr data = (OpenUserDataRecPtr) callBackUD ;
+    
+    if (filterMode == kNavFilteringBrowserList)
+    {
+        NavFileOrFolderInfo* theInfo = (NavFileOrFolderInfo*) info ;
+        if (theItem->descriptorType == typeFSS && !theInfo->isFolder)
+        {
+            FSSpec	spec;
+            memcpy( &spec , *theItem->dataHandle , sizeof(FSSpec) ) ;
+            display = CheckFile( spec.name , theInfo->fileAndFolder.fileInfo.finderInfo.fdType , data ) ;
+        }
+    }
+    
+    return display;
 }
 
 int wxFileDialog::ShowModal()
 {
-		NavDialogOptions		mNavOptions;
-		NavObjectFilterUPP		mNavFilterUPP = NULL;
-		NavPreviewUPP			mNavPreviewUPP = NULL ;
-		NavReplyRecord			mNavReply;
-		AEDesc					mDefaultLocation ;
-		bool					mSelectDefault = false ;
+    NavDialogOptions	       mNavOptions;
+    NavObjectFilterUPP	       mNavFilterUPP = NULL;
+    NavPreviewUPP	       mNavPreviewUPP = NULL ;
+    NavReplyRecord	       mNavReply;
+    AEDesc		       mDefaultLocation ;
+    bool		       mSelectDefault = false ;
 		
-		::NavGetDefaultDialogOptions(&mNavOptions);
+    ::NavGetDefaultDialogOptions(&mNavOptions);
 	
-		mNavFilterUPP	= nil;
-		mNavPreviewUPP	= nil;
-		mSelectDefault	= false;
-		mNavReply.validRecord				= false;
-		mNavReply.replacing					= false;
-		mNavReply.isStationery				= false;
-		mNavReply.translationNeeded			= false;
-		mNavReply.selection.descriptorType = typeNull;
-		mNavReply.selection.dataHandle		= nil;
-		mNavReply.keyScript					= smSystemScript;
-		mNavReply.fileTranslation			= nil;
+    mNavFilterUPP	= nil;
+    mNavPreviewUPP	= nil;
+    mSelectDefault	= false;
+    mNavReply.validRecord              = false;
+    mNavReply.replacing	               = false;
+    mNavReply.isStationery             = false;
+    mNavReply.translationNeeded	       = false;
+    mNavReply.selection.descriptorType = typeNull;
+    mNavReply.selection.dataHandle     = nil;
+    mNavReply.keyScript	               = smSystemScript;
+    mNavReply.fileTranslation          = nil;
 		
-		// Set default location, the location
-		//   that's displayed when the dialog
-		//   first appears
+    // Set default location, the location
+    //   that's displayed when the dialog
+    //   first appears
 		
-		FSSpec location ;
-		wxMacFilename2FSSpec( m_dir , &location ) ;
-		OSErr err = noErr ;
+    FSSpec location ;
+    wxMacFilename2FSSpec( m_dir , &location ) ;
+    OSErr err = noErr ;
 		
-		mDefaultLocation.descriptorType = typeNull;
-		mDefaultLocation.dataHandle     = nil;
+    mDefaultLocation.descriptorType = typeNull;
+    mDefaultLocation.dataHandle     = nil;
 
-		err = ::AECreateDesc(typeFSS, &location, sizeof(FSSpec), &mDefaultLocation );
+    err = ::AECreateDesc(typeFSS, &location, sizeof(FSSpec), &mDefaultLocation );
 
-		if ( mDefaultLocation.dataHandle ) {
+    if ( mDefaultLocation.dataHandle ) {
 			
-			if (mSelectDefault) {
-				mNavOptions.dialogOptionFlags |= kNavSelectDefaultLocation;
-			} else {
-				mNavOptions.dialogOptionFlags &= ~kNavSelectDefaultLocation;
-			}
-		}
+        if (mSelectDefault) {
+            mNavOptions.dialogOptionFlags |= kNavSelectDefaultLocation;
+        } else {
+            mNavOptions.dialogOptionFlags &= ~kNavSelectDefaultLocation;
+        }
+    }
 		
 #if TARGET_CARBON
-		c2pstrcpy((StringPtr)mNavOptions.message, m_message) ;
+    c2pstrcpy((StringPtr)mNavOptions.message, m_message) ;
 #else
-		strcpy((char *)mNavOptions.message, m_message) ;
-		c2pstr((char *)mNavOptions.message ) ;
+    strcpy((char *)mNavOptions.message, m_message) ;
+    c2pstr((char *)mNavOptions.message ) ;
 #endif
 #if TARGET_CARBON
-		c2pstrcpy((StringPtr)mNavOptions.savedFileName, m_fileName) ;
+    c2pstrcpy((StringPtr)mNavOptions.savedFileName, m_fileName) ;
 #else
-		strcpy((char *)mNavOptions.savedFileName, m_fileName) ;
-		c2pstr((char *)mNavOptions.savedFileName ) ;
+    strcpy((char *)mNavOptions.savedFileName, m_fileName) ;
+    c2pstr((char *)mNavOptions.savedFileName ) ;
 #endif
 
-		OpenUserDataRec			myData;
-		MakeUserDataRec( &myData , m_wildCard ) ;
-		myData.currentfilter = m_filterIndex ;
-	  	if ( myData.extensions.GetCount() > 0 )
-	  	{
-		  	mNavOptions.popupExtension = (NavMenuItemSpecArrayHandle) NewHandle( sizeof( NavMenuItemSpec ) * myData.extensions.GetCount() ) ;
-			myData.menuitems = mNavOptions.popupExtension ;
-		  	for ( size_t i = 0 ; i < myData.extensions.GetCount() ; ++i ) 
-		  	{
-		  	    (*mNavOptions.popupExtension)[i].version = kNavMenuItemSpecVersion ;
-		  	    (*mNavOptions.popupExtension)[i].menuCreator = 'WXNG' ;
-		  	    (*mNavOptions.popupExtension)[i].menuType = i ;
-	          #if TARGET_CARBON
-	          		c2pstrcpy((StringPtr)(*mNavOptions.popupExtension)[i].menuItemName, myData.name[i]) ;
-	          #else
-	          		strcpy((char *)(*mNavOptions.popupExtension)[i].menuItemName, myData.name[i]) ;
-	          		c2pstr((char *)(*mNavOptions.popupExtension)[i].menuItemName ) ;
-	          #endif
-	  	 	}
-		}
-		if ( m_dialogStyle & wxSAVE )
-		{
-		  	myData.saveMode = true ;
+    OpenUserDataRec			myData;
+    MakeUserDataRec( &myData , m_wildCard ) ;
+    myData.currentfilter = m_filterIndex ;
+    if ( myData.extensions.GetCount() > 0 )
+    {
+        mNavOptions.popupExtension = (NavMenuItemSpecArrayHandle) NewHandle( sizeof( NavMenuItemSpec ) * myData.extensions.GetCount() ) ;
+        myData.menuitems = mNavOptions.popupExtension ;
+        for ( size_t i = 0 ; i < myData.extensions.GetCount() ; ++i ) 
+        {
+            (*mNavOptions.popupExtension)[i].version     = kNavMenuItemSpecVersion ;
+            (*mNavOptions.popupExtension)[i].menuCreator = 'WXNG' ;
+            (*mNavOptions.popupExtension)[i].menuType    = i ;
+#if TARGET_CARBON
+            c2pstrcpy((StringPtr)(*mNavOptions.popupExtension)[i].menuItemName, myData.name[i]) ;
+#else
+            strcpy((char *)(*mNavOptions.popupExtension)[i].menuItemName, myData.name[i]) ;
+            c2pstr((char *)(*mNavOptions.popupExtension)[i].menuItemName ) ;
+#endif
+        }
+    }
+    if ( m_dialogStyle & wxSAVE )
+    {
+        myData.saveMode = true ;
 
-			mNavOptions.dialogOptionFlags |= kNavDontAutoTranslate ;
-			mNavOptions.dialogOptionFlags |= kNavDontAddTranslateItems ;
+        mNavOptions.dialogOptionFlags |= kNavDontAutoTranslate ;
+        mNavOptions.dialogOptionFlags |= kNavDontAddTranslateItems ;
 			
-			err = ::NavPutFile(
-						&mDefaultLocation,
-						&mNavReply,
-						&mNavOptions,
-						sStandardNavEventFilter ,
-						NULL,
-						kNavGenericSignature,
-						&myData);					// User Data
-			m_filterIndex = myData.currentfilter ;
-		}
-		else
-		{
-		  	myData.saveMode = false ;
+        err = ::NavPutFile(
+                           &mDefaultLocation,
+                           &mNavReply,
+                           &mNavOptions,
+                           sStandardNavEventFilter ,
+                           NULL,
+                           kNavGenericSignature,
+                           &myData);					// User Data
+        m_filterIndex = myData.currentfilter ;
+    }
+    else
+    {
+        myData.saveMode = false ;
 
-      		mNavFilterUPP = NewNavObjectFilterUPP( CrossPlatformFilterCallback ) ;
-			if ( m_dialogStyle & wxMULTIPLE )
-				mNavOptions.dialogOptionFlags |= kNavAllowMultipleFiles ;
-			else
-				mNavOptions.dialogOptionFlags &= ~kNavAllowMultipleFiles ;
+        mNavFilterUPP = NewNavObjectFilterUPP( CrossPlatformFilterCallback ) ;
+        if ( m_dialogStyle & wxMULTIPLE )
+            mNavOptions.dialogOptionFlags |= kNavAllowMultipleFiles ;
+        else
+            mNavOptions.dialogOptionFlags &= ~kNavAllowMultipleFiles ;
 			
-		 	err = ::NavGetFile(
-						&mDefaultLocation,
-						&mNavReply,
-						&mNavOptions,
-						sStandardNavEventFilter ,
-						mNavPreviewUPP,
-						mNavFilterUPP,
-						NULL ,
-						&myData);						
-			m_filterIndex = myData.currentfilter ;
-		}
+        err = ::NavGetFile(
+                           &mDefaultLocation,
+                           &mNavReply,
+                           &mNavOptions,
+                           sStandardNavEventFilter ,
+                           mNavPreviewUPP,
+                           mNavFilterUPP,
+                           NULL ,
+                           &myData);
+        m_filterIndex = myData.currentfilter ;
+    }
 		
-		DisposeNavObjectFilterUPP(mNavFilterUPP);
-		if ( mDefaultLocation.dataHandle != nil )
-		{
-			::AEDisposeDesc(&mDefaultLocation);
-		}
+    DisposeNavObjectFilterUPP(mNavFilterUPP);
+    if ( mDefaultLocation.dataHandle != nil )
+    {
+        ::AEDisposeDesc(&mDefaultLocation);
+    }
 		
-		if ( (err != noErr) && (err != userCanceledErr) ) {
-			m_path = "" ;
-			return wxID_CANCEL ;
-		}
+    if ( (err != noErr) && (err != userCanceledErr) ) {
+        m_path = "" ;
+        return wxID_CANCEL ;
+    }
 
-		if (mNavReply.validRecord) {
+    if (mNavReply.validRecord) {
 		
-			FSSpec  outFileSpec ;
-			AEDesc specDesc ;
-			AEKeyword keyWord ;
+        FSSpec  outFileSpec ;
+        AEDesc specDesc ;
+        AEKeyword keyWord ;
 			
-			long count ;
-			::AECountItems( &mNavReply.selection , &count ) ;
-			for ( long i = 1 ; i <= count ; ++i )
-			{
-				OSErr err = ::AEGetNthDesc( &mNavReply.selection , i , typeFSS, &keyWord , &specDesc);
-				if ( err != noErr ) {
-					m_path = "" ;
-					return wxID_CANCEL ;
-				}			
-				outFileSpec = **(FSSpec**) specDesc.dataHandle;
-				if (specDesc.dataHandle != nil) {
-					::AEDisposeDesc(&specDesc);
-				}
-				m_path = wxMacFSSpec2MacFilename( &outFileSpec ) ;
-				m_paths.Add( m_path ) ;
-                m_fileName = wxFileNameFromPath(m_path);
-	            m_fileNames.Add(m_fileName);
-	        }
-            // set these to the first hit
-            m_path = m_paths[ 0 ] ;
+        long count ;
+        ::AECountItems( &mNavReply.selection , &count ) ;
+        for ( long i = 1 ; i <= count ; ++i )
+        {
+            OSErr err = ::AEGetNthDesc( &mNavReply.selection , i , typeFSS, &keyWord , &specDesc);
+            if ( err != noErr ) {
+                m_path = "" ;
+                return wxID_CANCEL ;
+            }			
+            outFileSpec = **(FSSpec**) specDesc.dataHandle;
+            if (specDesc.dataHandle != nil) {
+                ::AEDisposeDesc(&specDesc);
+            }
+            m_path = wxMacFSSpec2MacFilename( &outFileSpec ) ;
+            m_paths.Add( m_path ) ;
             m_fileName = wxFileNameFromPath(m_path);
-            m_dir = wxPathOnly(m_path);
-            NavDisposeReply( &mNavReply ) ;
-    	    return wxID_OK ;
-		}
-		return wxID_CANCEL;
+            m_fileNames.Add(m_fileName);
+        }
+        // set these to the first hit
+        m_path = m_paths[ 0 ] ;
+        m_fileName = wxFileNameFromPath(m_path);
+        m_dir = wxPathOnly(m_path);
+        NavDisposeReply( &mNavReply ) ;
+        return wxID_OK ;
+    }
+    return wxID_CANCEL;
 }
 
 // Generic file load/save dialog
 static wxString
 wxDefaultFileSelector(bool load, const char *what, const char *extension, const char *default_name, wxWindow *parent)
 {
-  char *ext = (char *)extension;
-  
-  char prompt[50];
-  wxString str;
-  if (load)
-    str = "Load %s file";
-  else
-    str = "Save %s file";
-  sprintf(prompt, wxGetTranslation(str), what);
-
-  if (*ext == '.') ext++;
-  char wild[60];
-  sprintf(wild, "*.%s", ext);
-
-  return wxFileSelector (prompt, NULL, default_name, ext, wild, 0, parent);
+    char *ext = (char *)extension;
+    
+    char prompt[50];
+    wxString str;
+    if (load)
+        str = "Load %s file";
+    else
+        str = "Save %s file";
+    sprintf(prompt, wxGetTranslation(str), what);
+    
+    if (*ext == '.') ext++;
+    char wild[60];
+    sprintf(wild, "*.%s", ext);
+    
+    return wxFileSelector (prompt, NULL, default_name, ext, wild, 0, parent);
 }
 
 // Generic file load dialog
