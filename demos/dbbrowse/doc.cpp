@@ -102,7 +102,7 @@ bool MainDoc::OnInitView()
     // create "workplace" window
     //---------------------------------------------------------------------------------------
     p_TabArea = new wxTabbedWindow(); // Init the Pointer
-    p_TabArea->Create(p_Splitter, wxID_ANY);
+    p_TabArea->Create(p_Splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE);
     //---------------------------------------------------------------------------------------
     p_PgmCtrl = new PgmCtrl(p_TabArea, TREE_CTRL_PGM,wxDefaultPosition, wxDefaultSize,
         wxTR_HAS_BUTTONS | wxSUNKEN_BORDER);
@@ -119,7 +119,7 @@ bool MainDoc::OnInitView()
     // now create "output" window
     //---------------------------------------------------------------------------------------
     p_PageArea = new wxPagedWindow();  // Init the Pointer
-    p_PageArea->Create(p_Splitter, wxID_ANY);
+    p_PageArea->Create(p_Splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE);
     //---------------------------------------------------------------------------------------
     p_LogWin = new wxTextCtrl(p_PageArea,wxID_ANY,wxEmptyString,
         wxDefaultPosition, wxDefaultSize,wxTE_MULTILINE );
