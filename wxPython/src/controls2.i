@@ -259,9 +259,9 @@ public:
     bool HasBackgroundColour();
     bool HasFont();
 
-    const wxColour& GetTextColour();
-    const wxColour& GetBackgroundColour();
-    const wxFont& GetFont();
+    wxColour GetTextColour();
+    wxColour GetBackgroundColour();
+    wxFont GetFont();
 };
 
 
@@ -908,9 +908,9 @@ public:
     bool HasBackgroundColour();
     bool HasFont();
 
-    const wxColour& GetTextColour();
-    const wxColour& GetBackgroundColour();
-    const wxFont& GetFont();
+    wxColour GetTextColour();
+    wxColour GetBackgroundColour();
+    wxFont GetFont();
 };
 
 

@@ -402,8 +402,10 @@ PyObject* wxPyConstructObject(void* ptr,
     }
 
     char    buff[64];               // should always be big enough...
-
     sprintf(buff, "%sPtr", className);
+
+	wxASSERT_MSG(wxPython_dict, "wxPython_dict is not set yet!!");
+
     PyObject* classobj = PyDict_GetItemString(wxPython_dict, buff);
     if (! classobj) {
         char temp[128];

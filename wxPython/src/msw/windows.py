@@ -204,7 +204,7 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def GetFont(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetFont,(self,) + _args, _kwargs)
-        if val: val = wxFontPtr(val) 
+        if val: val = wxFontPtr(val) ; val.thisown = 1
         return val
     def GetForegroundColour(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetForegroundColour,(self,) + _args, _kwargs)
@@ -963,7 +963,7 @@ class wxMenuItemPtr(wxObjectPtr):
         return val
     def GetFont(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_GetFont,(self,) + _args, _kwargs)
-        if val: val = wxFontPtr(val) 
+        if val: val = wxFontPtr(val) ; val.thisown = 1
         return val
     def SetTextColour(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_SetTextColour,(self,) + _args, _kwargs)
@@ -987,7 +987,7 @@ class wxMenuItemPtr(wxObjectPtr):
         return val
     def GetBitmap(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_GetBitmap,(self,) + _args, _kwargs)
-        if val: val = wxBitmapPtr(val) 
+        if val: val = wxBitmapPtr(val) ; val.thisown = 1
         return val
     def SetMarginWidth(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_SetMarginWidth,(self,) + _args, _kwargs)

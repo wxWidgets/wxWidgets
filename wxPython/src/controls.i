@@ -188,10 +188,10 @@ public:
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreBitmapButton:val._setOORInfo(val)"
 
-    wxBitmap& GetBitmapLabel();
-    wxBitmap& GetBitmapDisabled();
-    wxBitmap& GetBitmapFocus();
-    wxBitmap& GetBitmapSelected();
+    wxBitmap GetBitmapLabel();
+    wxBitmap GetBitmapDisabled();
+    wxBitmap GetBitmapFocus();
+    wxBitmap GetBitmapSelected();
     void SetBitmapDisabled(const wxBitmap& bitmap);
     void SetBitmapFocus(const wxBitmap& bitmap);
     void SetBitmapSelected(const wxBitmap& bitmap);
@@ -616,9 +616,9 @@ public:
     bool HasBackgroundColour() const;
     bool HasFont() const;
 
-    const wxColour& GetTextColour() const;
-    const wxColour& GetBackgroundColour() const;
-    const wxFont& GetFont() const;
+    wxColour GetTextColour() const;
+    wxColour GetBackgroundColour() const;
+    wxFont GetFont() const;
 
     // returns false if we have any attributes set, true otherwise
     bool IsDefault();
@@ -828,7 +828,7 @@ public:
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreStaticBitmap:val._setOORInfo(val)"
 
-    const wxBitmap& GetBitmap();
+    wxBitmap GetBitmap();
     void SetBitmap(const wxBitmap& bitmap);
     void SetIcon(const wxIcon& icon);
 };

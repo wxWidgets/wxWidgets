@@ -39,7 +39,7 @@ class wxTopLevelWindowPtr(wxWindowPtr):
         return val
     def GetIcon(self, *_args, **_kwargs):
         val = apply(framesc.wxTopLevelWindow_GetIcon,(self,) + _args, _kwargs)
-        if val: val = wxIconPtr(val) 
+        if val: val = wxIconPtr(val) ; val.thisown = 1
         return val
     def SetIcon(self, *_args, **_kwargs):
         val = apply(framesc.wxTopLevelWindow_SetIcon,(self,) + _args, _kwargs)

@@ -2015,17 +2015,11 @@ static PyObject *_wrap_wxHtmlWinParser_GetLinkColor(PyObject *self, PyObject *ar
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxColour & _result_ref = wxHtmlWinParser_GetLinkColor(_arg0);
-    _result = (wxColour *) &_result_ref;
+        _result = new wxColour (wxHtmlWinParser_GetLinkColor(_arg0));
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -2085,17 +2079,11 @@ static PyObject *_wrap_wxHtmlWinParser_GetActualColor(PyObject *self, PyObject *
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxColour & _result_ref = wxHtmlWinParser_GetActualColor(_arg0);
-    _result = (wxColour *) &_result_ref;
+        _result = new wxColour (wxHtmlWinParser_GetActualColor(_arg0));
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 

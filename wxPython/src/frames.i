@@ -90,7 +90,7 @@ public:
     virtual bool IsIconized() const;
 
     // get the frame icon
-    const wxIcon& GetIcon() const;
+    wxIcon GetIcon() const;
 
     // set the frame icon
     virtual void SetIcon(const wxIcon& icon);

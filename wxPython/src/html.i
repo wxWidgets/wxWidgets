@@ -172,9 +172,9 @@ public:
     void SetFontFixed(int x);
     int GetAlign();
     void SetAlign(int a);
-    const wxColour& GetLinkColor();
+    wxColour GetLinkColor();
     void SetLinkColor(const wxColour& clr);
-    const wxColour& GetActualColor();
+    wxColour GetActualColor();
     void SetActualColor(const wxColour& clr);
     void SetLink(const wxString& link);
     wxFont* CreateCurrentFont();

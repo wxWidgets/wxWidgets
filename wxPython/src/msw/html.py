@@ -230,14 +230,14 @@ class wxHtmlWinParserPtr(wxHtmlParserPtr):
         return val
     def GetLinkColor(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWinParser_GetLinkColor,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def SetLinkColor(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWinParser_SetLinkColor,(self,) + _args, _kwargs)
         return val
     def GetActualColor(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWinParser_GetActualColor,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def SetActualColor(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWinParser_SetActualColor,(self,) + _args, _kwargs)

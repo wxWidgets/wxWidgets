@@ -7391,18 +7391,12 @@ static PyObject *_wrap_wxDC_GetBackground(PyObject *self, PyObject *args, PyObje
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxBrush & _result_ref = wxDC_GetBackground(_arg0);
-    _result = (wxBrush *) &_result_ref;
+        _result = new wxBrush (wxDC_GetBackground(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBrush_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBrush_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -7427,18 +7421,12 @@ static PyObject *_wrap_wxDC_GetBrush(PyObject *self, PyObject *args, PyObject *k
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxBrush & _result_ref = wxDC_GetBrush(_arg0);
-    _result = (wxBrush *) &_result_ref;
+        _result = new wxBrush (wxDC_GetBrush(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBrush_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBrush_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -7587,18 +7575,12 @@ static PyObject *_wrap_wxDC_GetFont(PyObject *self, PyObject *args, PyObject *kw
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxFont & _result_ref = wxDC_GetFont(_arg0);
-    _result = (wxFont *) &_result_ref;
+        _result = new wxFont (wxDC_GetFont(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -7755,18 +7737,12 @@ static PyObject *_wrap_wxDC_GetPen(PyObject *self, PyObject *args, PyObject *kwa
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPen & _result_ref = wxDC_GetPen(_arg0);
-    _result = (wxPen *) &_result_ref;
+        _result = new wxPen (wxDC_GetPen(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPen_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPen_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -12768,6 +12744,16 @@ SWIGEXPORT(void) initgdic() {
 	 PyDict_SetItemString(d,"wxFONTENCODING_UTF8", PyInt_FromLong((long) wxFONTENCODING_UTF8));
 	 PyDict_SetItemString(d,"wxFONTENCODING_UNICODE", PyInt_FromLong((long) wxFONTENCODING_UNICODE));
 	 PyDict_SetItemString(d,"wxFONTENCODING_MAX", PyInt_FromLong((long) wxFONTENCODING_MAX));
+	 PyDict_SetItemString(d,"wxIMAGELIST_DRAW_NORMAL", PyInt_FromLong((long) wxIMAGELIST_DRAW_NORMAL));
+	 PyDict_SetItemString(d,"wxIMAGELIST_DRAW_TRANSPARENT", PyInt_FromLong((long) wxIMAGELIST_DRAW_TRANSPARENT));
+	 PyDict_SetItemString(d,"wxIMAGELIST_DRAW_SELECTED", PyInt_FromLong((long) wxIMAGELIST_DRAW_SELECTED));
+	 PyDict_SetItemString(d,"wxIMAGELIST_DRAW_FOCUSED", PyInt_FromLong((long) wxIMAGELIST_DRAW_FOCUSED));
+	 PyDict_SetItemString(d,"wxIMAGE_LIST_NORMAL", PyInt_FromLong((long) wxIMAGE_LIST_NORMAL));
+	 PyDict_SetItemString(d,"wxIMAGE_LIST_SMALL", PyInt_FromLong((long) wxIMAGE_LIST_SMALL));
+	 PyDict_SetItemString(d,"wxIMAGE_LIST_STATE", PyInt_FromLong((long) wxIMAGE_LIST_STATE));
+	 PyDict_SetItemString(d,"wxOutRegion", PyInt_FromLong((long) wxOutRegion));
+	 PyDict_SetItemString(d,"wxPartRegion", PyInt_FromLong((long) wxPartRegion));
+	 PyDict_SetItemString(d,"wxInRegion", PyInt_FromLong((long) wxInRegion));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxNORMAL_FONT",_wrap_wxNORMAL_FONT_get, _wrap_wxNORMAL_FONT_set);
 	 SWIG_addvarlink(SWIG_globals,"wxSMALL_FONT",_wrap_wxSMALL_FONT_get, _wrap_wxSMALL_FONT_set);
@@ -12815,16 +12801,6 @@ SWIGEXPORT(void) initgdic() {
 	 SWIG_addvarlink(SWIG_globals,"wxThePenList",_wrap_wxThePenList_get, _wrap_wxThePenList_set);
 	 SWIG_addvarlink(SWIG_globals,"wxTheBrushList",_wrap_wxTheBrushList_get, _wrap_wxTheBrushList_set);
 	 SWIG_addvarlink(SWIG_globals,"wxTheColourDatabase",_wrap_wxTheColourDatabase_get, _wrap_wxTheColourDatabase_set);
-	 PyDict_SetItemString(d,"wxIMAGELIST_DRAW_NORMAL", PyInt_FromLong((long) wxIMAGELIST_DRAW_NORMAL));
-	 PyDict_SetItemString(d,"wxIMAGELIST_DRAW_TRANSPARENT", PyInt_FromLong((long) wxIMAGELIST_DRAW_TRANSPARENT));
-	 PyDict_SetItemString(d,"wxIMAGELIST_DRAW_SELECTED", PyInt_FromLong((long) wxIMAGELIST_DRAW_SELECTED));
-	 PyDict_SetItemString(d,"wxIMAGELIST_DRAW_FOCUSED", PyInt_FromLong((long) wxIMAGELIST_DRAW_FOCUSED));
-	 PyDict_SetItemString(d,"wxIMAGE_LIST_NORMAL", PyInt_FromLong((long) wxIMAGE_LIST_NORMAL));
-	 PyDict_SetItemString(d,"wxIMAGE_LIST_SMALL", PyInt_FromLong((long) wxIMAGE_LIST_SMALL));
-	 PyDict_SetItemString(d,"wxIMAGE_LIST_STATE", PyInt_FromLong((long) wxIMAGE_LIST_STATE));
-	 PyDict_SetItemString(d,"wxOutRegion", PyInt_FromLong((long) wxOutRegion));
-	 PyDict_SetItemString(d,"wxPartRegion", PyInt_FromLong((long) wxPartRegion));
-	 PyDict_SetItemString(d,"wxInRegion", PyInt_FromLong((long) wxInRegion));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

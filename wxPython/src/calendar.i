@@ -98,10 +98,10 @@ public:
 
     bool IsHoliday() const;
 
-    const wxColour& GetTextColour() const;
-    const wxColour& GetBackgroundColour() const;
-    const wxColour& GetBorderColour() const;
-    const wxFont& GetFont() const;
+    wxColour GetTextColour() const;
+    wxColour GetBackgroundColour() const;
+    wxColour GetBorderColour() const;
+    wxFont GetFont() const;
     wxCalendarDateBorder GetBorder() const;
 };
 
@@ -214,18 +214,18 @@ public:
 
     // header colours are used for painting the weekdays at the top
     void SetHeaderColours(const wxColour& colFg, const wxColour& colBg);
-    const wxColour& GetHeaderColourFg() const;
-    const wxColour& GetHeaderColourBg() const;
+    wxColour GetHeaderColourFg() const;
+    wxColour GetHeaderColourBg() const;
 
     // highlight colour is used for the currently selected date
     void SetHighlightColours(const wxColour& colFg, const wxColour& colBg);
-    const wxColour& GetHighlightColourFg() const;
-    const wxColour& GetHighlightColourBg() const;
+    wxColour GetHighlightColourFg() const;
+    wxColour GetHighlightColourBg() const;
 
     // holiday colour is used for the holidays (if style & wxCAL_SHOW_HOLIDAYS)
     void SetHolidayColours(const wxColour& colFg, const wxColour& colBg);
-    const wxColour& GetHolidayColourFg() const;
-    const wxColour& GetHolidayColourBg() const;
+    wxColour GetHolidayColourFg() const;
+    wxColour GetHolidayColourBg() const;
 
     // an item without custom attributes is drawn with the default colours and
     // font and without border, setting custom attributes allows to modify this

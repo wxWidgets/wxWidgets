@@ -110,9 +110,9 @@ public:
     bool IsEnabled();
     bool IsToggled();
     bool CanBeToggled();
-    const wxBitmap& GetBitmap1();
-    const wxBitmap& GetBitmap2();
-    const wxBitmap& GetBitmap();
+    wxBitmap GetBitmap1();
+    wxBitmap GetBitmap2();
+    wxBitmap GetBitmap();
     wxString GetShortHelp();
     wxString GetLongHelp();
     bool Enable(bool enable);

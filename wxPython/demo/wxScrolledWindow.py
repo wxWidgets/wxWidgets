@@ -89,10 +89,20 @@ class MyCanvas(wxScrolledWindow):
             if style == wxUSER_DASH:
                 pen.SetDashes([1, 2, 3, 4, 5, 6, 7, 8])
                 pen.SetColour("RED")
-
             dc.SetPen(pen)
             dc.DrawLine(300, y, 400, y)
             y = y + 10
+
+        dc.SetBrush(wxNullBrush)
+        dc.SetPen(wxPen(wxColour(0xFF, 0x20, 0xFF), 1, wxSOLID))
+        dc.DrawRectangle(450, 50, 100, 100)
+        old_pen = dc.GetPen()
+        new_pen = wxPen("BLACK", 5)
+        dc.SetPen(new_pen)
+        dc.DrawRectangle(470, 70, 60, 60)
+        dc.SetPen(old_pen)
+        dc.DrawRectangle(490, 90, 20, 20)
+
 
         self.DrawSavedLines(dc)
         dc.EndDrawing()

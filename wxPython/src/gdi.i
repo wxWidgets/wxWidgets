@@ -757,18 +757,18 @@ public:
     void EndDrawing();
     void EndPage();
     void FloodFill(long x, long y, const wxColour& colour, int style=wxFLOOD_SURFACE);
-    wxBrush&  GetBackground();
-    wxBrush&  GetBrush();
+    wxBrush  GetBackground();
+    wxBrush  GetBrush();
     long GetCharHeight();
     long GetCharWidth();
     void GetClippingBox(long *OUTPUT, long *OUTPUT,
                         long *OUTPUT, long *OUTPUT);
-    wxFont& GetFont();
+    wxFont GetFont();
     int GetLogicalFunction();
     void GetLogicalScale(double *OUTPUT, double *OUTPUT);
     int GetMapMode();
     bool GetOptimization();
-    wxPen& GetPen();
+    wxPen GetPen();
     %addmethods {
         %new wxColour* GetPixel(long x, long y) {
             wxColour* wc = new wxColour();
@@ -1117,74 +1117,6 @@ public:
 #endif
 
 //---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-
-
-%readonly
-%{
-#if 0
-%}
-extern wxFont *wxNORMAL_FONT;
-extern wxFont *wxSMALL_FONT;
-extern wxFont *wxITALIC_FONT;
-extern wxFont *wxSWISS_FONT;
-
-extern wxPen *wxRED_PEN;
-extern wxPen *wxCYAN_PEN;
-extern wxPen *wxGREEN_PEN;
-extern wxPen *wxBLACK_PEN;
-extern wxPen *wxWHITE_PEN;
-extern wxPen *wxTRANSPARENT_PEN;
-extern wxPen *wxBLACK_DASHED_PEN;
-extern wxPen *wxGREY_PEN;
-extern wxPen *wxMEDIUM_GREY_PEN;
-extern wxPen *wxLIGHT_GREY_PEN;
-
-extern wxBrush *wxBLUE_BRUSH;
-extern wxBrush *wxGREEN_BRUSH;
-extern wxBrush *wxWHITE_BRUSH;
-extern wxBrush *wxBLACK_BRUSH;
-extern wxBrush *wxTRANSPARENT_BRUSH;
-extern wxBrush *wxCYAN_BRUSH;
-extern wxBrush *wxRED_BRUSH;
-extern wxBrush *wxGREY_BRUSH;
-extern wxBrush *wxMEDIUM_GREY_BRUSH;
-extern wxBrush *wxLIGHT_GREY_BRUSH;
-
-extern wxColour *wxBLACK;
-extern wxColour *wxWHITE;
-extern wxColour *wxRED;
-extern wxColour *wxBLUE;
-extern wxColour *wxGREEN;
-extern wxColour *wxCYAN;
-extern wxColour *wxLIGHT_GREY;
-
-extern wxCursor *wxSTANDARD_CURSOR;
-extern wxCursor *wxHOURGLASS_CURSOR;
-extern wxCursor *wxCROSS_CURSOR;
-
-extern wxBitmap wxNullBitmap;
-extern wxIcon   wxNullIcon;
-extern wxCursor wxNullCursor;
-extern wxPen    wxNullPen;
-extern wxBrush  wxNullBrush;
-extern wxPalette wxNullPalette;
-extern wxFont   wxNullFont;
-extern wxColour wxNullColour;
-
-
-extern wxFontList*       wxTheFontList;
-extern wxPenList*        wxThePenList;
-extern wxBrushList*      wxTheBrushList;
-extern wxColourDatabase* wxTheColourDatabase;
-
-
-%readwrite
-%{
-#endif
-%}
-
-//---------------------------------------------------------------------------
 
 class wxPalette : public wxGDIObject {
 public:
@@ -1299,5 +1231,74 @@ public:
 };
 
 
+//---------------------------------------------------------------------------
+
+%readonly
+%{
+#if 0
+%}
+
+extern wxFont *wxNORMAL_FONT;
+extern wxFont *wxSMALL_FONT;
+extern wxFont *wxITALIC_FONT;
+extern wxFont *wxSWISS_FONT;
+
+extern wxPen *wxRED_PEN;
+extern wxPen *wxCYAN_PEN;
+extern wxPen *wxGREEN_PEN;
+extern wxPen *wxBLACK_PEN;
+extern wxPen *wxWHITE_PEN;
+extern wxPen *wxTRANSPARENT_PEN;
+extern wxPen *wxBLACK_DASHED_PEN;
+extern wxPen *wxGREY_PEN;
+extern wxPen *wxMEDIUM_GREY_PEN;
+extern wxPen *wxLIGHT_GREY_PEN;
+
+extern wxBrush *wxBLUE_BRUSH;
+extern wxBrush *wxGREEN_BRUSH;
+extern wxBrush *wxWHITE_BRUSH;
+extern wxBrush *wxBLACK_BRUSH;
+extern wxBrush *wxTRANSPARENT_BRUSH;
+extern wxBrush *wxCYAN_BRUSH;
+extern wxBrush *wxRED_BRUSH;
+extern wxBrush *wxGREY_BRUSH;
+extern wxBrush *wxMEDIUM_GREY_BRUSH;
+extern wxBrush *wxLIGHT_GREY_BRUSH;
+
+extern wxColour *wxBLACK;
+extern wxColour *wxWHITE;
+extern wxColour *wxRED;
+extern wxColour *wxBLUE;
+extern wxColour *wxGREEN;
+extern wxColour *wxCYAN;
+extern wxColour *wxLIGHT_GREY;
+
+extern wxCursor *wxSTANDARD_CURSOR;
+extern wxCursor *wxHOURGLASS_CURSOR;
+extern wxCursor *wxCROSS_CURSOR;
+
+
+extern wxBitmap wxNullBitmap;
+extern wxIcon   wxNullIcon;
+extern wxCursor wxNullCursor;
+extern wxPen    wxNullPen;
+extern wxBrush  wxNullBrush;
+extern wxPalette wxNullPalette;
+extern wxFont   wxNullFont;
+extern wxColour wxNullColour;
+
+
+extern wxFontList*       wxTheFontList;
+extern wxPenList*        wxThePenList;
+extern wxBrushList*      wxTheBrushList;
+extern wxColourDatabase* wxTheColourDatabase;
+
+
+%readwrite
+%{
+#endif
+%}
+
+//---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 

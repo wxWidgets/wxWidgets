@@ -1888,18 +1888,12 @@ static PyObject *_wrap_wxWindow_GetFont(PyObject *self, PyObject *args, PyObject
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxFont & _result_ref = wxWindow_GetFont(_arg0);
-    _result = (wxFont *) &_result_ref;
+        _result = new wxFont (wxWindow_GetFont(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -10057,18 +10051,12 @@ static PyObject *_wrap_wxMenuItem_GetFont(PyObject *self, PyObject *args, PyObje
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxFont & _result_ref = wxMenuItem_GetFont(_arg0);
-    _result = (wxFont *) &_result_ref;
+        _result = new wxFont (wxMenuItem_GetFont(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -10311,18 +10299,12 @@ static PyObject *_wrap_wxMenuItem_GetBitmap(PyObject *self, PyObject *args, PyOb
     _arg1 = (bool ) tempbool1;
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxBitmap & _result_ref = wxMenuItem_GetBitmap(_arg0,_arg1);
-    _result = (wxBitmap *) &_result_ref;
+        _result = new wxBitmap (wxMenuItem_GetBitmap(_arg0,_arg1));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBitmap_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 

@@ -234,7 +234,7 @@ public:
     wxLayoutConstraints * GetConstraints();
     wxEvtHandler* GetEventHandler();
 
-    wxFont& GetFont();
+    wxFont GetFont();
     wxColour GetForegroundColour();
     wxWindow * GetGrandParent();
     %addmethods {
@@ -332,7 +332,7 @@ public:
     %name(SetClientSizeWH)void SetClientSize(int width, int height);
     void SetClientSize(const wxSize& size);
     //void SetPalette(wxPalette* palette);
-    void SetCursor(const wxCursor&cursor);
+    void SetCursor(const wxCursor& cursor);
     void SetEventHandler(wxEvtHandler* handler);
     void SetExtraStyle(long exStyle);
     void SetTitle(const wxString& title);
@@ -656,7 +656,7 @@ public:
     // wxOwnerDrawn methods
 #ifdef __WXMSW__
     void SetFont(const wxFont& font);
-    wxFont& GetFont();
+    wxFont GetFont();
     void SetTextColour(const wxColour& colText);
     wxColour GetTextColour();
     void SetBackgroundColour(const wxColour& colBack);
@@ -664,7 +664,7 @@ public:
     void SetBitmaps(const wxBitmap& bmpChecked,
                     const wxBitmap& bmpUnchecked = wxNullBitmap);
     void SetBitmap(const wxBitmap& bmpChecked);
-    const wxBitmap& GetBitmap(bool bChecked = TRUE);
+    wxBitmap GetBitmap(bool bChecked = TRUE);
     void SetMarginWidth(int nWidth);
     int GetMarginWidth();
     static int GetDefaultMarginWidth();

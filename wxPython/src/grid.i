@@ -904,9 +904,9 @@ public:
     bool HasEditor() const;
     bool HasReadWriteMode() const;
 
-    const wxColour& GetTextColour() const;
-    const wxColour& GetBackgroundColour() const;
-    const wxFont& GetFont() const;
+    wxColour GetTextColour() const;
+    wxColour GetBackgroundColour() const;
+    wxFont GetFont() const;
     void GetAlignment(int *OUTPUT, int *OUTPUT) const;
     wxGridCellRenderer *GetRenderer(wxGrid* grid, int row, int col) const;
     wxGridCellEditor *GetEditor(wxGrid* grid, int row, int col) const;
