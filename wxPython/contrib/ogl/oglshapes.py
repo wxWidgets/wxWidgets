@@ -713,9 +713,6 @@ class wxOGLConstraintPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,oglshapesc=oglshapesc):
-        if self.thisown == 1 :
-            oglshapesc.delete_wxOGLConstraint(self)
     def Evaluate(self, *_args, **_kwargs):
         val = apply(oglshapesc.wxOGLConstraint_Evaluate,(self,) + _args, _kwargs)
         return val
