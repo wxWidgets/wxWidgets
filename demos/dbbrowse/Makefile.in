@@ -7,17 +7,17 @@
 #
 # "%W% %G%"
 #
-# Makefile for bombs example (UNIX).
+# Makefile for dbbrowse example (UNIX).
 
 top_srcdir = @top_srcdir@
 top_builddir = ../..
 program_dir = demos/dbbrowse
 
-PROGRAM=dbbrowser
+PROGRAM=dbbrowse
 
 
-OBJECTS= dbbrowser.o doc.o pgmctrl.o wxtbpgwin.o \
-         browserdb.o dbtree.o dbgrid.o  dlguser.o
-         
+OBJECTS= dbbrowse.o doc.o pgmctrl.o tabpgwin.o \
+         browsedb.o dbtree.o dbgrid.o  dlguser.o
+
 include ../../src/makeprog.env
 
