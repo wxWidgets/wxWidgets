@@ -319,14 +319,6 @@ bool wxGLCanvas::Create(wxWindow *parent,
     msflags |= WS_BORDER;
   }
 
-  // calculate the value to return from WM_GETDLGCODE handler
-  if ( GetWindowStyleFlag() & wxWANTS_CHARS )
-  {
-    // want everything: i.e. all keys and WM_CHAR message
-    m_lDlgCode = DLGC_WANTARROWS | DLGC_WANTCHARS |
-                 DLGC_WANTTAB | DLGC_WANTMESSAGE;
-  }
-
   return MSWCreate(wxGLCanvasClassName, NULL, pos, size, msflags, exStyle);
 }
 
