@@ -111,202 +111,266 @@ bool DataTypeSupported(wxDb *pDb, SWORD datatype)
 
 void CheckSupportForAllDataTypes(wxDb *pDb)
 {
-    bool supported;
+    wxLogMessage("\nThe following datatypes are supported by the\ndatabase you are currently connected to:");
 #ifdef SQL_C_BINARY
-    supported = DataTypeSupported(pDb,SQL_C_BINARY);
+    if (DataTypeSupported(pDb,SQL_C_BINARY))
+        wxLogMessage("SQL_C_BINARY");
 #endif
 #ifdef SQL_C_BIT
-    supported = DataTypeSupported(pDb,SQL_C_BIT);
+    if (DataTypeSupported(pDb,SQL_C_BIT))
+        wxLogMessage("SQL_C_BIT");
 #endif
 #ifdef SQL_C_BOOKMARK
-    supported = DataTypeSupported(pDb,SQL_C_BOOKMARK);
+    if (DataTypeSupported(pDb,SQL_C_BOOKMARK))
+        wxLogMessage("SQL_C_BOOKMARK");
 #endif
 #ifdef SQL_C_CHAR
-    supported = DataTypeSupported(pDb,SQL_C_CHAR);
+    if (DataTypeSupported(pDb,SQL_C_CHAR))
+        wxLogMessage("SQL_C_CHAR");
 #endif
 #ifdef SQL_C_DATE
-    supported = DataTypeSupported(pDb,SQL_C_DATE);
+    if (DataTypeSupported(pDb,SQL_C_DATE))
+        wxLogMessage("SQL_C_DATE");
 #endif
 #ifdef SQL_C_DEFAULT
-    supported = DataTypeSupported(pDb,SQL_C_DEFAULT);
+    if (DataTypeSupported(pDb,SQL_C_DEFAULT))
+        wxLogMessage("SQL_C_DEFAULT");
 #endif
 #ifdef SQL_C_DOUBLE
-    supported = DataTypeSupported(pDb,SQL_C_DOUBLE);
+    if (DataTypeSupported(pDb,SQL_C_DOUBLE))
+        wxLogMessage("SQL_C_DOUBLE");
 #endif
 #ifdef SQL_C_FLOAT
-    supported = DataTypeSupported(pDb,SQL_C_FLOAT);
+    if (DataTypeSupported(pDb,SQL_C_FLOAT))
+        wxLogMessage("SQL_C_FLOAT");
 #endif
 #ifdef SQL_C_GUID
-    supported = DataTypeSupported(pDb,SQL_C_GUID);
+    if (DataTypeSupported(pDb,SQL_C_GUID))
+        wxLogMessage("SQL_C_GUID");
 #endif
 #ifdef SQL_C_INTERVAL_DAY
-    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_DAY);
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_DAY))
+        wxLogMessage("SQL_C_INTERVAL_DAY");
 #endif
 #ifdef SQL_C_INTERVAL_DAY_TO_HOUR
-    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_HOUR);
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_HOUR))
+        wxLogMessage("SQL_C_INTERVAL_DAY_TO_HOUR");
 #endif
 #ifdef SQL_C_INTERVAL_DAY_TO_MINUTE
-    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_MINUTE);
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_MINUTE))
+        wxLogMessage("SQL_C_INTERVAL_DAY_TO_MINUTE");
 #endif
 #ifdef SQL_C_INTERVAL_DAY_TO_SECOND
-    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_SECOND);
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_SECOND))
+        wxLogMessage("SQL_C_INTERVAL_DAY_TO_SECOND");
 #endif
 #ifdef SQL_C_INTERVAL_HOUR
-    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR);
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR))
+        wxLogMessage("SQL_C_INTERVAL_HOUR");
 #endif
 #ifdef SQL_C_INTERVAL_HOUR_TO_MINUTE
-    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR_TO_MINUTE);
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR_TO_MINUTE))
+        wxLogMessage("SQL_C_INTERVAL_HOUR_TO_MINUTE");
 #endif
 #ifdef SQL_C_INTERVAL_HOUR_TO_SECOND
-    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR_TO_SECOND);
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR_TO_SECOND))
+        wxLogMessage("SQL_C_INTERVAL_HOUR_TO_SECOND");
 #endif
 #ifdef SQL_C_INTERVAL_MINUTE
-    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_MINUTE);
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_MINUTE))
+        wxLogMessage("SQL_C_INTERVAL_MINUTE");
 #endif
 #ifdef SQL_C_INTERVAL_MINUTE_TO_SECOND
-    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_MINUTE_TO_SECOND);
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_MINUTE_TO_SECOND))
+        wxLogMessage("SQL_C_INTERVAL_MINUTE_TO_SECOND");
 #endif
 #ifdef SQL_C_INTERVAL_MONTH
-    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_MONTH);
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_MONTH))
+        wxLogMessage("SQL_C_INTERVAL_MONTH");
 #endif
 #ifdef SQL_C_INTERVAL_SECOND
-    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_SECOND);
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_SECOND))
+        wxLogMessage("SQL_C_INTERVAL_SECOND");
 #endif
 #ifdef SQL_C_INTERVAL_YEAR
-    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_YEAR);
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_YEAR))
+        wxLogMessage("SQL_C_INTERVAL_YEAR");
 #endif
 #ifdef SQL_C_INTERVAL_YEAR_TO_MONTH
-    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_YEAR_TO_MONTH);
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_YEAR_TO_MONTH))
+        wxLogMessage("SQL_C_INTERVAL_YEAR_TO_MONTH");
 #endif
 #ifdef SQL_C_LONG
-    supported = DataTypeSupported(pDb,SQL_C_LONG);
+    if (DataTypeSupported(pDb,SQL_C_LONG))
+        wxLogMessage("SQL_C_LONG");
 #endif
 #ifdef SQL_C_NUMERIC
-    supported = DataTypeSupported(pDb,SQL_C_NUMERIC);
+    if (DataTypeSupported(pDb,SQL_C_NUMERIC))
+        wxLogMessage("SQL_C_NUMERIC");
 #endif
 #ifdef SQL_C_SBIGINT
-    supported = DataTypeSupported(pDb,SQL_C_SBIGINT);
+    if (DataTypeSupported(pDb,SQL_C_SBIGINT))
+        wxLogMessage("SQL_C_SBIGINT");
 #endif
 #ifdef SQL_C_SHORT
-    supported = DataTypeSupported(pDb,SQL_C_SHORT);
+    if (DataTypeSupported(pDb,SQL_C_SHORT))
+        wxLogMessage("SQL_C_SHORT");
 #endif
 #ifdef SQL_C_SLONG
-    supported = DataTypeSupported(pDb,SQL_C_SLONG);
+    if (DataTypeSupported(pDb,SQL_C_SLONG))
+        wxLogMessage("SQL_C_SLONG");
 #endif
 #ifdef SQL_C_SSHORT
-    supported = DataTypeSupported(pDb,SQL_C_SSHORT);
+    if (DataTypeSupported(pDb,SQL_C_SSHORT))
+        wxLogMessage("SQL_C_SSHORT");
 #endif
 #ifdef SQL_C_STINYINT
-    supported = DataTypeSupported(pDb,SQL_C_STINYINT);
+    if (DataTypeSupported(pDb,SQL_C_STINYINT))
+        wxLogMessage("SQL_C_STINYINT");
 #endif
 #ifdef SQL_C_TIME
-    supported = DataTypeSupported(pDb,SQL_C_TIME);
+    if (DataTypeSupported(pDb,SQL_C_TIME))
+        wxLogMessage("SQL_C_TIME");
 #endif
 #ifdef SQL_C_TIMESTAMP
-    supported = DataTypeSupported(pDb,SQL_C_TIMESTAMP);
+    if (DataTypeSupported(pDb,SQL_C_TIMESTAMP))
+        wxLogMessage("SQL_C_TIMESTAMP");
 #endif
 #ifdef SQL_C_TINYINT
-    supported = DataTypeSupported(pDb,SQL_C_TINYINT);
+    if (DataTypeSupported(pDb,SQL_C_TINYINT))
+        wxLogMessage("SQL_C_TINYINT");
 #endif
 #ifdef SQL_C_TYPE_DATE
-    supported = DataTypeSupported(pDb,SQL_C_TYPE_DATE);
+    if (DataTypeSupported(pDb,SQL_C_TYPE_DATE))
+        wxLogMessage("SQL_C_TYPE_DATE");
 #endif
 #ifdef SQL_C_TYPE_TIME
-    supported = DataTypeSupported(pDb,SQL_C_TYPE_TIME);
+    if (DataTypeSupported(pDb,SQL_C_TYPE_TIME))
+        wxLogMessage("SQL_C_TYPE_TIME");
 #endif
 #ifdef SQL_C_TYPE_TIMESTAMP
-    supported = DataTypeSupported(pDb,SQL_C_TYPE_TIMESTAMP);
+    if (DataTypeSupported(pDb,SQL_C_TYPE_TIMESTAMP))
+        wxLogMessage("SQL_C_TYPE_TIMESTAMP");
 #endif
 #ifdef SQL_C_UBIGINT
-    supported = DataTypeSupported(pDb,SQL_C_UBIGINT);
+    if (DataTypeSupported(pDb,SQL_C_UBIGINT))
+        wxLogMessage("SQL_C_UBIGINT");
 #endif
 #ifdef SQL_C_ULONG
-    supported = DataTypeSupported(pDb,SQL_C_ULONG);
+    if (DataTypeSupported(pDb,SQL_C_ULONG))
+        wxLogMessage("SQL_C_ULONG");
 #endif
 #ifdef SQL_C_USHORT
-    supported = DataTypeSupported(pDb,SQL_C_USHORT);
+    if (DataTypeSupported(pDb,SQL_C_USHORT))
+        wxLogMessage("SQL_C_USHORT");
 #endif
 #ifdef SQL_C_UTINYINT
-    supported = DataTypeSupported(pDb,SQL_C_UTINYINT);
+    if (DataTypeSupported(pDb,SQL_C_UTINYINT))
+        wxLogMessage("SQL_C_UTINYINT");
 #endif
 #ifdef SQL_C_VARBOOKMARK
-    supported = DataTypeSupported(pDb,SQL_C_VARBOOKMARK);
+    if (DataTypeSupported(pDb,SQL_C_VARBOOKMARK))
+        wxLogMessage("SQL_C_VARBOOKMARK");
 #endif
 
 // Extended SQL types
 #ifdef SQL_DATE
-    supported = DataTypeSupported(pDb,SQL_DATE);
+    if (DataTypeSupported(pDb,SQL_DATE))
+        wxLogMessage("SQL_DATE");
 #endif
 #ifdef SQL_INTERVAL
-    supported = DataTypeSupported(pDb,SQL_INTERVAL);
+    if (DataTypeSupported(pDb,SQL_INTERVAL))
+        wxLogMessage("SQL_INTERVAL");
 #endif
 #ifdef SQL_TIME
-    supported = DataTypeSupported(pDb,SQL_TIME);
+    if (DataTypeSupported(pDb,SQL_TIME))
+        wxLogMessage("SQL_TIME");
 #endif
 #ifdef SQL_TIMESTAMP
-    supported = DataTypeSupported(pDb,SQL_TIMESTAMP);
+    if (DataTypeSupported(pDb,SQL_TIMESTAMP))
+        wxLogMessage("SQL_TIMESTAMP");
 #endif
 #ifdef SQL_LONGVARCHAR
-    supported = DataTypeSupported(pDb,SQL_LONGVARCHAR);
+    if (DataTypeSupported(pDb,SQL_LONGVARCHAR))
+        wxLogMessage("SQL_LONGVARCHAR");
 #endif
 #ifdef SQL_BINARY
-    supported = DataTypeSupported(pDb,SQL_BINARY);
+    if (DataTypeSupported(pDb,SQL_BINARY))
+        wxLogMessage("SQL_BINARY");
 #endif
 #ifdef SQL_VARBINARY
-    supported = DataTypeSupported(pDb,SQL_VARBINARY);
+    if (DataTypeSupported(pDb,SQL_VARBINARY))
+        wxLogMessage("SQL_VARBINARY");
 #endif
 #ifdef SQL_LONGVARBINARY
-    supported = DataTypeSupported(pDb,SQL_LONGVARBINARY);
+    if (DataTypeSupported(pDb,SQL_LONGVARBINARY))
+        wxLogMessage("SQL_LONGVARBINARY");
 #endif
 #ifdef SQL_BIGINT
-    supported = DataTypeSupported(pDb,SQL_BIGINT);
+    if (DataTypeSupported(pDb,SQL_BIGINT))
+        wxLogMessage("SQL_BIGINT");
 #endif
 #ifdef SQL_TINYINT
-    supported = DataTypeSupported(pDb,SQL_TINYINT);
+    if (DataTypeSupported(pDb,SQL_TINYINT))
+        wxLogMessage("SQL_TINYINT");
 #endif
 #ifdef SQL_BIT
-    supported = DataTypeSupported(pDb,SQL_BIT);
+    if (DataTypeSupported(pDb,SQL_BIT))
+        wxLogMessage("SQL_BIT");
 #endif
 #ifdef SQL_GUID
-    supported = DataTypeSupported(pDb,SQL_GUID);
+    if (DataTypeSupported(pDb,SQL_GUID))
+        wxLogMessage("SQL_GUID");
 #endif
 
 #ifdef SQL_CHAR
-    supported = DataTypeSupported(pDb,SQL_CHAR);
+    if (DataTypeSupported(pDb,SQL_CHAR))
+        wxLogMessage("SQL_CHAR");
 #endif
 #ifdef SQL_INTEGER
-    supported = DataTypeSupported(pDb,SQL_INTEGER);
+    if (DataTypeSupported(pDb,SQL_INTEGER))
+        wxLogMessage("SQL_INTEGER");
 #endif
 #ifdef SQL_SMALLINT
-    supported = DataTypeSupported(pDb,SQL_SMALLINT);
+    if (DataTypeSupported(pDb,SQL_SMALLINT))
+        wxLogMessage("SQL_SMALLINT");
 #endif
 #ifdef SQL_REAL
-    supported = DataTypeSupported(pDb,SQL_REAL);
+    if (DataTypeSupported(pDb,SQL_REAL))
+        wxLogMessage("SQL_REAL");
 #endif
 #ifdef SQL_DOUBLE
-    supported = DataTypeSupported(pDb,SQL_DOUBLE);
+    if (DataTypeSupported(pDb,SQL_DOUBLE))
+        wxLogMessage("SQL_DOUBLE");
 #endif
 #ifdef SQL_NUMERIC
-    supported = DataTypeSupported(pDb,SQL_NUMERIC);
+    if (DataTypeSupported(pDb,SQL_NUMERIC))
+        wxLogMessage("SQL_NUMERIC");
 #endif
 #ifdef SQL_DATE
-    supported = DataTypeSupported(pDb,SQL_DATE);
+    if (DataTypeSupported(pDb,SQL_DATE))
+        wxLogMessage("SQL_DATE");
 #endif
 #ifdef SQL_TIME
-    supported = DataTypeSupported(pDb,SQL_TIME);
+    if (DataTypeSupported(pDb,SQL_TIME))
+        wxLogMessage("SQL_TIME");
 #endif
 #ifdef SQL_TIMESTAMP
-    supported = DataTypeSupported(pDb,SQL_TIMESTAMP);
+    if (DataTypeSupported(pDb,SQL_TIMESTAMP))
+        wxLogMessage("SQL_TIMESTAMP");
 #endif
 #ifdef SQL_VARCHAR
-    supported = DataTypeSupported(pDb,SQL_VARCHAR);
+    if (DataTypeSupported(pDb,SQL_VARCHAR))
+        wxLogMessage("SQL_VARCHAR");
 #endif
-
 
 // UNICODE
 #ifdef SQL_C_TCHAR
-    supported = DataTypeSupported(pDb,SQL_C_TCHAR);
+    if (DataTypeSupported(pDb,SQL_C_TCHAR))
+        wxLogMessage("SQL_C_TCHAR (Unicode support is possible)");
 #endif
+
+    wxLogMessage("\n");
 }  // CheckSupportForAllDataTypes()
 
 
@@ -520,7 +584,15 @@ DatabaseDemoFrame::DatabaseDemoFrame(wxFrame *frame, const wxString& title,
     // Put any code in necessary for initializing the main frame here
     pEditorDlg = NULL;
     pParamDlg  = NULL;
+
+    delete wxLog::SetActiveTarget(new wxLogStderr);
+
 }  // DatabaseDemoFrame constructor
+
+DatabaseDemoFrame::~DatabaseDemoFrame()
+{
+    delete wxLog::SetActiveTarget(NULL);
+}  // DatabaseDemoFrame destructor
 
 
 void DatabaseDemoFrame::OnCreate(wxCommandEvent& event)
@@ -710,7 +782,7 @@ Ccontact::~Ccontact()
  * functions to interface to the data structure used to store records in 
  * memory, and for all the column definitions that define the table structure
  */
-void Ccontact::SetupColumns()
+void Ccontact::SetupColumns() 
 {
     // NOTE: Columns now are 8 character names, as that is all dBase can support.  Longer
     //       names can be used for other database engines
@@ -862,13 +934,9 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 
     if (widgetName == pCopyBtn->GetName())
     {
-
-        CheckSupportForAllDataTypes(wxGetApp().READONLY_DB);
-/*
         SetMode(mCreate);
         pNameTxt->SetValue(wxT(""));
         pNameTxt->SetFocus();
-*/
         return;
     }
 
@@ -1099,6 +1167,19 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 
         return;
     }
+
+    if (widgetName == pDataTypesBtn->GetName())
+    {
+        CheckSupportForAllDataTypes(wxGetApp().READONLY_DB);
+        return;
+    }  // Data types Button
+
+    if (widgetName == pDbDiagsBtn->GetName())
+    {
+        DisplayDbDiagnostics(wxGetApp().READONLY_DB);
+        return;
+    }
+
 }  // CeditorDlg::OnCommand()
 
 
@@ -1224,6 +1305,9 @@ bool CeditorDlg::Initialize()
     pContribTxt       = new wxTextCtrl(this, EDITOR_DIALOG_CONTRIB_TEXT, wxT(""),                 wxPoint(175, 397), wxSize(120,  25), 0, wxDefaultValidator, wxT("ContribTxt"));
     pLinesMsg         = new wxStaticText(this, EDITOR_DIALOG_LINES_MSG,  wxT("Lines of code:"),   wxPoint(303, 380), wxSize( -1,  -1), 0, wxT("LinesMsg"));
     pLinesTxt         = new wxTextCtrl(this, EDITOR_DIALOG_LINES_TEXT,   wxT(""),                 wxPoint(303, 397), wxSize(100,  25), 0, wxDefaultValidator, wxT("LinesTxt"));
+
+    pDataTypesBtn     = new wxButton(this, EDITOR_DIALOG_DATATYPES,      wxT("Data&types"),       wxPoint(430, 337), wxSize( 70,  35), 0, wxDefaultValidator, wxT("DataTypesBtn"));
+    pDbDiagsBtn       = new wxButton(this, EDITOR_DIALOG_DB_DIAGS,       wxT("DB Dia&gs"),        wxPoint(430, 387), wxSize( 70,  35), 0, wxDefaultValidator, wxT("DbDiagsBtn"));
 
     // Now that all the widgets on the panel are created, its safe to allow ::OnCommand() to 
     // handle all widget processing
@@ -2409,6 +2493,340 @@ bool CqueryDlg::ValidateWhereClause()
     return(TRUE);
 
 }  // CqueryDlg::ValidateWhereClause()
+
+
+
+void DisplayDbDiagnostics(wxDb *pDb)
+{
+	wxString s, t;
+	bool comma = FALSE;
+
+	s = langDBINF_DB_NAME;
+	s += pDb->dbInf.dbmsName;
+	s += "\n";
+
+	s += langDBINF_DB_VER;
+	s += pDb->dbInf.dbmsVer;
+	s += "\n";
+
+	s += langDBINF_DRIVER_NAME;
+	s += pDb->dbInf.driverName;
+	s += "\n";
+
+	s += langDBINF_DRIVER_ODBC_VER;
+	s += pDb->dbInf.odbcVer;
+	s += "\n";
+
+	s += langDBINF_DRIVER_MGR_ODBC_VER;
+	s += pDb->dbInf.drvMgrOdbcVer;
+	s += "\n";
+
+	s += langDBINF_DRIVER_VER;
+	s += pDb->dbInf.driverVer;
+	s += "\n";
+
+	s += langDBINF_SERVER_NAME;
+	s += pDb->dbInf.serverName;
+	s += "\n";
+
+	s += langDBINF_FILENAME;
+	s += pDb->dbInf.databaseName;
+	s += "\n";
+
+	s += langDBINF_OUTER_JOINS;
+	s += pDb->dbInf.outerJoins;
+	s += "\n";
+
+	s += langDBINF_STORED_PROC;
+	s += pDb->dbInf.procedureSupport;
+	s += "\n";
+
+	if (pDb->dbInf.maxConnections)
+		t.sprintf("%s%d\n", langDBINF_MAX_HDBC, pDb->dbInf.maxConnections);
+	else
+		t.sprintf("%s%s\n", langDBINF_MAX_HDBC, langDBINF_UNLIMITED);
+	s += t;
+
+	if (pDb->dbInf.maxStmts)
+		t.sprintf("%s%d\n", langDBINF_MAX_HSTMT, pDb->dbInf.maxStmts);
+	else
+		t.sprintf("%s%s\n", langDBINF_MAX_HSTMT, langDBINF_UNLIMITED);
+	s += t;
+
+	s += langDBINF_API_LVL;
+	switch(pDb->dbInf.apiConfLvl)
+	{
+		case SQL_OAC_NONE:	s += langDBINF_NONE;		break;
+		case SQL_OAC_LEVEL1:	s += langDBINF_LEVEL1;	break;
+		case SQL_OAC_LEVEL2:	s += langDBINF_LEVEL2;	break;
+	}
+	s += "\n";
+
+	s += langDBINF_CLI_LVL;
+	switch(pDb->dbInf.cliConfLvl)
+	{
+		case SQL_OSCC_NOT_COMPLIANT:	s += langDBINF_NOT_COMPLIANT;	break;
+		case SQL_OSCC_COMPLIANT:		s += langDBINF_COMPLIANT;			break;
+	}
+	s += "\n";
+
+	s += langDBINF_SQL_LVL;
+	switch(pDb->dbInf.sqlConfLvl)
+	{
+		case SQL_OSC_MINIMUM:	s += langDBINF_MIN_GRAMMAR;	break;
+		case SQL_OSC_CORE:		s += langDBINF_CORE_GRAMMAR;	break;
+		case SQL_OSC_EXTENDED:	s += langDBINF_EXT_GRAMMAR;	break;
+	}
+	s += "\n";
+
+	s += langDBINF_COMMIT_BEHAVIOR;
+	switch(pDb->dbInf.cursorCommitBehavior)
+	{
+		case SQL_CB_DELETE:		s += langDBINF_DELETE_CURSORS;	break;
+		case SQL_CB_CLOSE:		s += langDBINF_CLOSE_CURSORS;		break;
+		case SQL_CB_PRESERVE:	s += langDBINF_PRESERVE_CURSORS;	break;
+	}
+	s += "\n";
+
+	s += langDBINF_ROLLBACK_BEHAVIOR;
+	switch(pDb->dbInf.cursorRollbackBehavior)
+	{
+		case SQL_CB_DELETE:		s += langDBINF_DELETE_CURSORS;	break;
+		case SQL_CB_CLOSE:		s += langDBINF_CLOSE_CURSORS;		break;
+		case SQL_CB_PRESERVE:	s += langDBINF_PRESERVE_CURSORS;	break;
+	}
+	s += "\n";
+
+	s += langDBINF_SUPP_NOT_NULL;
+	switch(pDb->dbInf.supportNotNullClause)
+	{
+		case SQL_NNC_NULL:		s += langNO;	break;
+		case SQL_NNC_NON_NULL:	s += langYES;	break;
+	}
+	s += "\n";
+
+	s += langDBINF_SUPP_IEF;
+	s += pDb->dbInf.supportIEF;
+	s += "\n";
+
+	// DEFAULT setting for "Transaction Isolation Level"
+	s += langDBINF_TXN_ISOLATION;
+	switch(pDb->dbInf.txnIsolation)
+	{
+		case SQL_TXN_READ_UNCOMMITTED:	s += langDBINF_READ_UNCOMMITTED;	break;
+		case SQL_TXN_READ_COMMITTED:		s += langDBINF_READ_COMMITTED;	break;
+		case SQL_TXN_REPEATABLE_READ:		s += langDBINF_REPEATABLE_READ;	break;
+		case SQL_TXN_SERIALIZABLE:			s += langDBINF_SERIALIZABLE;		break;
+#ifdef ODBC_V20
+		case SQL_TXN_VERSIONING:			s += langDBINF_VERSIONING;			break;
+#endif
+	}
+	s += "\n";
+
+	// CURRENT setting for "Transaction Isolation Level"
+	long txnIsoLvl;
+	s += langDBINF_TXN_ISOLATION_CURR;
+	if (SQLGetConnectOption(pDb->GetHDBC(),SQL_TXN_ISOLATION,&txnIsoLvl) == SQL_SUCCESS)
+	{
+		switch(txnIsoLvl)
+		{
+			case SQL_TXN_READ_UNCOMMITTED:	s += langDBINF_READ_UNCOMMITTED;	break;
+			case SQL_TXN_READ_COMMITTED:		s += langDBINF_READ_COMMITTED;	break;
+			case SQL_TXN_REPEATABLE_READ:		s += langDBINF_REPEATABLE_READ;	break;
+			case SQL_TXN_SERIALIZABLE:			s += langDBINF_SERIALIZABLE;		break;
+#ifdef ODBC_V20
+			case SQL_TXN_VERSIONING:			s += langDBINF_VERSIONING;			break;
+#endif
+		}
+	}
+	s += "\n";
+
+	comma = FALSE;
+	s += langDBINF_TXN_ISOLATION_OPTS;
+	if (pDb->dbInf.txnIsolationOptions & SQL_TXN_READ_UNCOMMITTED)
+		{s += langDBINF_READ_UNCOMMITTED; comma++;}
+	if (pDb->dbInf.txnIsolationOptions & SQL_TXN_READ_COMMITTED)
+		{if (comma++) s += ", "; s += langDBINF_READ_COMMITTED;}
+	if (pDb->dbInf.txnIsolationOptions & SQL_TXN_REPEATABLE_READ)
+		{if (comma++) s += ", "; s += langDBINF_REPEATABLE_READ;}
+	if (pDb->dbInf.txnIsolationOptions & SQL_TXN_SERIALIZABLE)
+		{if (comma++) s += ", "; s += langDBINF_SERIALIZABLE;}
+#ifdef ODBC_V20
+	if (pDb->dbInf.txnIsolationOptions & SQL_TXN_VERSIONING)
+		{if (comma++) s += ", "; s += langDBINF_VERSIONING;}
+#endif
+	s += "\n";
+
+	comma = FALSE;
+	s += langDBINF_FETCH_DIRS;
+	if (pDb->dbInf.fetchDirections & SQL_FD_FETCH_NEXT)
+		{s += langDBINF_NEXT; comma++;}
+	if (pDb->dbInf.fetchDirections & SQL_FD_FETCH_PRIOR)
+		{if (comma++) s += ", "; s += langDBINF_PREV;}
+	if (pDb->dbInf.fetchDirections & SQL_FD_FETCH_FIRST)
+		{if (comma++) s += ", "; s += langDBINF_FIRST;}
+	if (pDb->dbInf.fetchDirections & SQL_FD_FETCH_LAST)
+		{if (comma++) s += ", "; s += langDBINF_LAST;}
+	if (pDb->dbInf.fetchDirections & SQL_FD_FETCH_ABSOLUTE)
+		{if (comma++) s += ", "; s += langDBINF_ABSOLUTE;}
+	if (pDb->dbInf.fetchDirections & SQL_FD_FETCH_RELATIVE)
+		{if (comma++) s += ", "; s += langDBINF_RELATIVE;}
+#ifdef ODBC_V20
+	if (pDb->dbInf.fetchDirections & SQL_FD_FETCH_RESUME)
+		{if (comma++) s += ", "; s += langDBINF_RESUME;}
+#endif
+	if (pDb->dbInf.fetchDirections & SQL_FD_FETCH_BOOKMARK)
+		{if (comma++) s += ", "; s += langDBINF_BOOKMARK;}
+	s += "\n";
+
+	comma = FALSE;
+	s += langDBINF_LOCK_TYPES;
+	if (pDb->dbInf.lockTypes & SQL_LCK_NO_CHANGE)
+		{s += langDBINF_NO_CHANGE; comma++;}
+	if (pDb->dbInf.lockTypes & SQL_LCK_EXCLUSIVE)
+		{if (comma++) s += ", "; s += langDBINF_EXCLUSIVE;}
+	if (pDb->dbInf.lockTypes & SQL_LCK_UNLOCK)
+		{if (comma++) s += ", "; s += langDBINF_UNLOCK;}
+	s += "\n";
+
+	comma = FALSE;
+	s += langDBINF_POS_OPERS;
+	if (pDb->dbInf.posOperations & SQL_POS_POSITION)
+		{s += langDBINF_POSITION; comma++;}
+	if (pDb->dbInf.posOperations & SQL_POS_REFRESH)
+		{if (comma++) s += ", "; s += langDBINF_REFRESH;}
+	if (pDb->dbInf.posOperations & SQL_POS_UPDATE)
+		{if (comma++) s += ", "; s += langDBINF_UPD;}
+	if (pDb->dbInf.posOperations & SQL_POS_DELETE)
+		{if (comma++) s += ", "; s += langDBINF_DEL;}
+	if (pDb->dbInf.posOperations & SQL_POS_ADD)
+		{if (comma++) s += ", "; s += langDBINF_ADD;}
+	s += "\n";
+
+	comma = FALSE;
+	s += langDBINF_POS_STMTS;
+	if (pDb->dbInf.posStmts & SQL_PS_POSITIONED_DELETE)
+		{s += langDBINF_POS_DEL; comma++;}
+	if (pDb->dbInf.posStmts & SQL_PS_POSITIONED_UPDATE)
+		{if (comma++) s += ", "; s += langDBINF_POS_UPD;}
+	if (pDb->dbInf.posStmts & SQL_PS_SELECT_FOR_UPDATE)
+		{if (comma++) s += ", "; s += langDBINF_SELECT_FOR_UPD;}
+	s += "\n";
+
+	comma = FALSE;
+	s += langDBINF_SCROLL_CONCURR;
+	if (pDb->dbInf.scrollConcurrency & SQL_SCCO_READ_ONLY)
+		{s += langDBINF_READ_ONLY; comma++;}
+	if (pDb->dbInf.scrollConcurrency & SQL_SCCO_LOCK)
+		{if (comma++) s += ", "; s += langDBINF_LOCK;}
+	if (pDb->dbInf.scrollConcurrency & SQL_SCCO_OPT_ROWVER)
+		{if (comma++) s += ", "; s += langDBINF_OPT_ROWVER;}
+	if (pDb->dbInf.scrollConcurrency & SQL_SCCO_OPT_VALUES)
+		{if (comma++) s += ", "; s += langDBINF_OPT_VALUES;}
+	s += "\n";
+
+	comma = FALSE;
+	s += langDBINF_SCROLL_OPTS;
+	if (pDb->dbInf.scrollOptions & SQL_SO_FORWARD_ONLY)
+		{s += langDBINF_FWD_ONLY; comma++;}
+	if (pDb->dbInf.scrollOptions & SQL_SO_STATIC)
+		{if (comma++) s += ", "; s += langDBINF_STATIC;}
+	if (pDb->dbInf.scrollOptions & SQL_SO_KEYSET_DRIVEN)
+		{if (comma++) s += ", "; s += langDBINF_KEYSET_DRIVEN;}
+	if (pDb->dbInf.scrollOptions & SQL_SO_DYNAMIC)
+		{if (comma++) s += ", "; s += langDBINF_DYNAMIC;}
+	if (pDb->dbInf.scrollOptions & SQL_SO_MIXED)
+		{if (comma++) s += ", "; s += langDBINF_MIXED;}
+	s += "\n";
+
+	comma = FALSE;
+	s += langDBINF_STATIC_SENS;
+	if (pDb->dbInf.staticSensitivity & SQL_SS_ADDITIONS)
+		{s += langDBINF_ADDITIONS; comma++;}
+	if (pDb->dbInf.staticSensitivity & SQL_SS_DELETIONS)
+		{if (comma++) s += ", "; s += langDBINF_DELETIONS;}
+	if (pDb->dbInf.staticSensitivity & SQL_SS_UPDATES)
+		{if (comma++) s += ", "; s += langDBINF_UPDATES;}
+	s += "\n";
+
+
+	s += langDBINF_TXN_CAPABLE;
+	switch(pDb->dbInf.txnCapable)
+	{
+		case SQL_TC_NONE:			s += langNO;						break;
+		case SQL_TC_DML:			s += langDBINF_DML_ONLY;		break;
+		case SQL_TC_DDL_COMMIT:	s += langDBINF_DDL_COMMIT;		break;
+		case SQL_TC_DDL_IGNORE:	s += langDBINF_DDL_IGNORE;		break;
+		case SQL_TC_ALL:			s += langDBINF_DDL_AND_DML;	break;
+	}
+	s += "\n";
+
+	t.sprintf("%s%d\n", langDBINF_LOGIN_TIMEOUT, pDb->dbInf.loginTimeout);
+	s += t;
+
+	// Oracle specific information
+	if (pDb->Dbms() == dbmsORACLE)
+	{
+		s += "\n";
+		s += langDBINF_ORACLE_BANNER;
+		s += "\n";
+
+		// Oracle cache hit ratio
+		SDWORD cb;
+		ULONG dbBlockGets;
+		pDb->ExecSql("SELECT VALUE FROM V$SYSSTAT WHERE NAME = 'db block gets'");
+		pDb->GetNext();
+		if (pDb->GetData(1, SQL_C_ULONG, &dbBlockGets, 0, &cb))
+		{
+			t.sprintf("%s: %lu\n", langDBINF_DB_BLOCK_GETS, dbBlockGets);
+			s += t;
+		}
+
+		ULONG consistentGets;
+		pDb->ExecSql("SELECT VALUE FROM V$SYSSTAT WHERE NAME = 'consistent gets'");
+		pDb->GetNext();
+		if (pDb->GetData(1, SQL_C_ULONG, &consistentGets, 0, &cb))
+		{
+			t.sprintf("%s: %lu\n", langDBINF_CONSISTENT_GETS, consistentGets);
+			s += t;
+		}
+
+		ULONG physReads;
+		pDb->ExecSql("SELECT VALUE FROM V$SYSSTAT WHERE NAME = 'physical reads'");
+		pDb->GetNext();
+		if (pDb->GetData(1, SQL_C_ULONG, &physReads, 0, &cb))
+		{
+			t.sprintf("%s: %lu\n", langDBINF_PHYSICAL_READS, physReads);
+			s += t;
+		}
+
+		ULONG hitRatio = (ULONG)((1.00 - ((float)physReads / (float)(dbBlockGets + consistentGets))) * 100.00);
+		t.sprintf("*** %s: %lu%%\n", langDBINF_CACHE_HIT_RATIO, hitRatio);
+		s += t;
+
+		// Tablespace information
+		s += "\n";
+		s += langDBINF_TABLESPACE_IO;
+		s += "\n";
+		ULONG physWrites;
+		char tablespaceName[257];
+		pDb->ExecSql("SELECT NAME,PHYRDS,PHYWRTS FROM V$DATAFILE, V$FILESTAT WHERE V$DATAFILE.FILE# = V$FILESTAT.FILE#");
+		while (pDb->GetNext())
+		{
+			pDb->GetData(1, SQL_C_CHAR,  tablespaceName, 257, &cb);
+			pDb->GetData(2, SQL_C_ULONG, &physReads,     0,   &cb);
+			pDb->GetData(3, SQL_C_ULONG, &physWrites,    0,   &cb);
+			t.sprintf("%s\n\t%s: %lu\t%s: %lu\n", tablespaceName,
+				langDBINF_PHYSICAL_READS, physReads, langDBINF_PHYSICAL_WRITES, physWrites);
+			s += t;
+		}
+
+		s += "\n";
+	}
+
+    wxLogMessage(s);
+
+}  // DisplayDbDiagnostics()
 
 
 

@@ -57,6 +57,12 @@ enum Language {langENGLISH, langFRENCH, langGERMAN, langSPANISH, langOTHER};
 class CeditorDlg;
 class CparameterDlg;
 
+
+// Used for displaying many of the database capabilites
+// and usage statistics on a database connection
+void DisplayDbDiagnostics(wxDb *pDb);
+
+
 //
 // This class contains the actual data members that are used for transferring
 // data back and forth from the database to the program.  
@@ -151,6 +157,7 @@ class DatabaseDemoFrame: public wxFrame
 
     public:
         DatabaseDemoFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& sz);
+        ~DatabaseDemoFrame();
 
         void    OnCloseWindow(wxCloseEvent& event);
         void    OnCreate(wxCommandEvent& event);
@@ -245,6 +252,7 @@ class CeditorDlg : public wxPanel
         wxButton        *pCreateBtn,  *pEditBtn,      *pDeleteBtn,  *pCopyBtn,  *pSaveBtn,  *pCancelBtn;
         wxButton        *pPrevBtn,    *pNextBtn,      *pQueryBtn,   *pResetBtn, *pDoneBtn,  *pHelpBtn;
         wxButton        *pNameListBtn;
+        wxButton        *pDataTypesBtn, *pDbDiagsBtn;
         wxTextCtrl      *pNameTxt,    *pAddress1Txt,  *pAddress2Txt,*pCityTxt,  *pStateTxt, *pCountryTxt,*pPostalCodeTxt;
         wxStaticText    *pNameMsg,    *pAddress1Msg,  *pAddress2Msg,*pCityMsg,  *pStateMsg, *pCountryMsg,*pPostalCodeMsg;
         wxTextCtrl      *pJoinDateTxt,*pContribTxt,   *pLinesTxt;
@@ -340,6 +348,8 @@ DECLARE_EVENT_TABLE()
 #define EDITOR_DIALOG_DEVELOPER         236
 #define EDITOR_DIALOG_JOIN_MSG          237
 #define EDITOR_DIALOG_JOIN_TEXT         238
+#define EDITOR_DIALOG_DATATYPES         250
+#define EDITOR_DIALOG_DB_DIAGS          260
 
 // *************************** CparameterDlg ***************************
 
@@ -524,3 +534,95 @@ DECLARE_EVENT_TABLE()
 #define QUERY_DIALOG_HINT_GROUP         323
 #define QUERY_DIALOG_HINT_MSG           324
 
+char * const langNO                        = "No";
+char * const langYES                       = "Yes";
+char * const langDBINF_DB_NAME             = "Database Name = ";
+char * const langDBINF_DB_VER              = "Database Version = ";
+char * const langDBINF_DRIVER_NAME         = "Driver Name = ";
+char * const langDBINF_DRIVER_ODBC_VER     = "Driver ODBC Version = ";
+char * const langDBINF_DRIVER_MGR_ODBC_VER = "Driver Manager ODBC Version = ";
+char * const langDBINF_DRIVER_VER          = "Driver Version = ";
+char * const langDBINF_SERVER_NAME         = "Server Name = ";
+char * const langDBINF_FILENAME            = "Filename = ";
+char * const langDBINF_OUTER_JOINS         = "Outer Joins = ";
+char * const langDBINF_STORED_PROC         = "Stored Procedures = ";
+char * const langDBINF_MAX_HDBC            = "Max # of Db connections = ";
+char * const langDBINF_MAX_HSTMT           = "Max # of cursors (per db connection) = ";
+char * const langDBINF_UNLIMITED           = "Unlimited or Unknown"; 
+char * const langDBINF_API_LVL             = "ODBC API conformance level = ";
+char * const langDBINF_CLI_LVL             = "Client (SAG) conformance level = ";
+char * const langDBINF_SQL_LVL             = "SQL conformance level = ";
+char * const langDBINF_COMMIT_BEHAVIOR     = "Commit Behavior = ";
+char * const langDBINF_ROLLBACK_BEHAVIOR   = "Rollback Behavior = ";
+char * const langDBINF_SUPP_NOT_NULL       = "Support NOT NULL clause = ";
+char * const langDBINF_SUPP_IEF            = "Support IEF = ";
+char * const langDBINF_TXN_ISOLATION       = "Transaction Isolation Level (default) = ";
+char * const langDBINF_TXN_ISOLATION_CURR  = "Transaction Isolation Level (current) = ";
+char * const langDBINF_TXN_ISOLATION_OPTS  = "Transaction Isolation Options Available = ";
+char * const langDBINF_FETCH_DIRS          = "Fetch Directions = ";
+char * const langDBINF_LOCK_TYPES          = "Lock Types (SQLSetPos) = ";
+char * const langDBINF_POS_OPERS           = "Position Operations (SQLSetPos) = ";
+char * const langDBINF_POS_STMTS           = "Position Statements = ";
+char * const langDBINF_SCROLL_CONCURR      = "Concurrency Options (scrollable cursors) = ";
+char * const langDBINF_SCROLL_OPTS         = "Scroll Options (scrollable cursors) = ";
+char * const langDBINF_STATIC_SENS         = "Static Sensitivity = ";
+char * const langDBINF_TXN_CAPABLE         = "Transaction Support = ";
+char * const langDBINF_LOGIN_TIMEOUT       = "Login Timeout = ";
+char * const langDBINF_NONE                = "None";
+char * const langDBINF_LEVEL1              = "Level 1";
+char * const langDBINF_LEVEL2              = "Level 2";
+char * const langDBINF_NOT_COMPLIANT       = "Not Compliant";
+char * const langDBINF_COMPLIANT           = "Compliant";
+char * const langDBINF_MIN_GRAMMAR         = "Minimum Grammer";
+char * const langDBINF_CORE_GRAMMAR        = "Core Grammer";
+char * const langDBINF_EXT_GRAMMAR         = "Extended Grammer";
+char * const langDBINF_DELETE_CURSORS      = "Delete cursors";
+char * const langDBINF_CLOSE_CURSORS       = "Close cursors";
+char * const langDBINF_PRESERVE_CURSORS    = "Preserve cursors";
+char * const langDBINF_READ_UNCOMMITTED    = "Read Uncommitted";
+char * const langDBINF_READ_COMMITTED      = "Read Committed";
+char * const langDBINF_REPEATABLE_READ     = "Repeatable Read";
+char * const langDBINF_SERIALIZABLE        = "Serializable";
+char * const langDBINF_VERSIONING          = "Versioning";
+char * const langDBINF_NEXT                = "Next";
+char * const langDBINF_PREV                = "Prev";
+char * const langDBINF_FIRST               = "First";
+char * const langDBINF_LAST                = "Last";
+char * const langDBINF_ABSOLUTE            = "Absolute";
+char * const langDBINF_RELATIVE            = "Relative";
+char * const langDBINF_RESUME              = "Resume";
+char * const langDBINF_BOOKMARK            = "Bookmark";
+char * const langDBINF_NO_CHANGE           = "No Change";
+char * const langDBINF_EXCLUSIVE           = "Exclusive";
+char * const langDBINF_UNLOCK              = "Unlock";
+char * const langDBINF_POSITION            = "Position";
+char * const langDBINF_REFRESH             = "Refresh";
+char * const langDBINF_UPD                 = "Upd";
+char * const langDBINF_DEL                 = "Del";
+char * const langDBINF_ADD                 = "Add";
+char * const langDBINF_POS_DEL             = "Pos Delete";
+char * const langDBINF_POS_UPD             = "Pos Update";
+char * const langDBINF_SELECT_FOR_UPD      = "Select For Update";
+char * const langDBINF_READ_ONLY           = "Read Only";
+char * const langDBINF_LOCK                = "Lock";
+char * const langDBINF_OPT_ROWVER          = "Opt. Rowver";
+char * const langDBINF_OPT_VALUES          = "Opt. Values";
+char * const langDBINF_FWD_ONLY            = "Fwd Only";
+char * const langDBINF_STATIC              = "Static";
+char * const langDBINF_KEYSET_DRIVEN       = "Keyset Driven";
+char * const langDBINF_DYNAMIC             = "Dynamic";
+char * const langDBINF_MIXED               = "Mixed";
+char * const langDBINF_ADDITIONS           = "Additions";
+char * const langDBINF_DELETIONS           = "Deletions";
+char * const langDBINF_UPDATES             = "Updates";
+char * const langDBINF_DML_ONLY            = "DML Only";
+char * const langDBINF_DDL_COMMIT          = "DDL Commit";
+char * const langDBINF_DDL_IGNORE          = "DDL Ignore";
+char * const langDBINF_DDL_AND_DML         = "DDL and DML";
+char * const langDBINF_ORACLE_BANNER       = ">>> ORACLE STATISTICS AND TUNING INFORMATION <<<";
+char * const langDBINF_DB_BLOCK_GETS       = "DB block gets";
+char * const langDBINF_CONSISTENT_GETS     = "Consistent gets";
+char * const langDBINF_PHYSICAL_READS      = "Physical reads";
+char * const langDBINF_CACHE_HIT_RATIO     = "Cache hit ratio";
+char * const langDBINF_TABLESPACE_IO       = "TABLESPACE I/O LEVELS";
+char * const langDBINF_PHYSICAL_WRITES     = "Physical writes";
