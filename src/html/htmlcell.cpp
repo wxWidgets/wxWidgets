@@ -407,24 +407,9 @@ void wxHtmlContainerCell::Layout(int w)
 
 void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
 {
-    int y1 = y + m_PosY;
-    int y2 = y + m_PosY + m_Height;
-
-    // If the container is visible, draw it.
-    // This calculation checks for:
-    // (1) the cell is wholly within the view, OR
-    // (2) the cell overlaps, above the view, OR
-    // (3) the cell overlaps, below the view, OR
-    // (4) the cell overlaps, above and below the view.
-    if ((y1 <= view_y2 && y1 >= view_y1) ||
-        (y2 <= view_y2 && y2 >= view_y1) ||
-        (y1 <= view_y2 && y1 >= view_y1) ||
-        (y1 <= view_y1 && y2 >= view_y2))
-
-    // Old calculation, which I believe is wrong (JACS).
-//    if ((y + m_PosY < view_y2) && (y + m_PosY + m_Height > view_y1))
+    // container visible, draw it:
+    if ((y + m_PosY <= view_y2) && (y + m_PosY + m_Height > view_y1))
     {
-
         if (m_UseBkColour)
         {
             wxBrush myb = wxBrush(m_BkColour, wxSOLID);
@@ -442,18 +427,12 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
             wxPen mypen1(m_BorderColour1, 1, wxSOLID);
             wxPen mypen2(m_BorderColour2, 1, wxSOLID);
 
-            int subtractMe = 1;
-            // Check on other platforms whether we should be subtracting
-            // 1. On wxMSW, we get a notch if we do.
-#ifdef __WXMSW__
-            subtractMe = 0;
-#endif
             dc.SetPen(mypen1);
             dc.DrawLine(x + m_PosX, y + m_PosY, x + m_PosX, y + m_PosY + m_Height - 1);
-            dc.DrawLine(x + m_PosX, y + m_PosY, x + m_PosX + m_Width - subtractMe, y + m_PosY);
+            dc.DrawLine(x + m_PosX, y + m_PosY, x + m_PosX + m_Width - 1, y + m_PosY);
             dc.SetPen(mypen2);
             dc.DrawLine(x + m_PosX + m_Width - 1, y + m_PosY, x + m_PosX +  m_Width - 1, y + m_PosY + m_Height - 1);
-            dc.DrawLine(x + m_PosX, y + m_PosY + m_Height - 1, x + m_PosX + m_Width - subtractMe, y + m_PosY + m_Height - 1);
+            dc.DrawLine(x + m_PosX, y + m_PosY + m_Height - 1, x + m_PosX + m_Width - 1, y + m_PosY + m_Height - 1);
         }
 
         if (m_Cells)
