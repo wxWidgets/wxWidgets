@@ -860,7 +860,7 @@ the item.", "");
     }
 
     %pythoncode {
-    def Hide(self, item, recursive=false):
+    def Hide(self, item, recursive=False):
         """
         A convenience method for Show(item, False, recursive).
         """

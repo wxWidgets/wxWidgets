@@ -113,7 +113,7 @@ public:
         elif index == 1: self.SetCol(val)
         else: raise IndexError
     def __nonzero__(self):               return self.Get() != (0,0)
-    __safe_for_unpickling__ = true
+    __safe_for_unpickling__ = True
     def __reduce__(self):                return (wx.GBPosition, self.Get())
     }
 
@@ -182,7 +182,7 @@ cell in each direction.", "");
         elif index == 1: self.SetColspan(val)
         else: raise IndexError
     def __nonzero__(self):               return self.Get() != (0,0)
-    __safe_for_unpickling__ = true
+    __safe_for_unpickling__ = True
     def __reduce__(self):                return (wx.GBSpan, self.Get())
     }
 
