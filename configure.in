@@ -99,10 +99,11 @@ NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 dnl the list of all available toolkits
 dnl
 dnl update NUM_TOOLKITS calculation below when adding a new toolkit here!
-ALL_TOOLKITS="GTK MAC MGL MICROWIN MOTIF MSW PM X11"
+ALL_TOOLKITS="COCOA GTK MAC MGL MICROWIN MOTIF MSW PM X11"
 
 dnl NB: these wxUSE_XXX constants have value of 0 or 1 unlike all the other ones
 dnl     which are either yes or no
+DEFAULT_wxUSE_COCOA=0
 DEFAULT_wxUSE_GTK=0
 DEFAULT_wxUSE_MAC=0
 DEFAULT_wxUSE_MGL=0
@@ -115,6 +116,7 @@ DEFAULT_wxUSE_X11=0
 dnl these are the values which are really default for the given platform -
 dnl they're not cached and are only used if no --with-toolkit was given *and*
 dnl nothing was found in the cache
+DEFAULT_DEFAULT_wxUSE_COCOA=0
 DEFAULT_DEFAULT_wxUSE_GTK=0
 DEFAULT_DEFAULT_wxUSE_MAC=0
 DEFAULT_DEFAULT_wxUSE_MGL=0
@@ -687,6 +689,7 @@ WX_ARG_ENABLE(universal,   [  --enable-universal      use wxWindows GUI controls
 AC_ARG_WITH(gtk,           [  --with-gtk              use GTK+], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(mac,           [  --with-mac              use Mac OS X], [wxUSE_MAC="$withval" TOOLKIT_GIVEN=1])
+AC_ARG_WITH(cocoa,         [  --with-cocoa            use Cocoa], [wxUSE_COCOA="$withval" TOOLKIT_GIVEN=1])
 AC_ARG_WITH(wine,          [  --with-wine             use Wine], [wxUSE_WINE="$withval" CACHE_WINE=1])
 AC_ARG_WITH(msw,           [  --with-msw              use MS-Windows], [wxUSE_MSW="$withval" CACHE_MSW=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(pm,            [  --with-pm               use OS/2 Presentation Manager], [wxUSE_PM="$withval" CACHE_PM=1 TOOLKIT_GIVEN=1])
@@ -952,6 +955,42 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_TIPWINDOW=no
 fi
 
+## FIXME: This is a blatant hack
+if test "x$wxUSE_COCOA" != "x" -a "$wxUSE_COCOA" != "0" ; then
+  wxUSE_PRINTING_ARCHITECTURE=no
+  wxUSE_HELP=no
+  wxUSE_CLIPBOARD=no
+  wxUSE_DRAG_AND_DROP=no
+  wxUSE_DATAOBJ=no
+  DEFAULT_wxUSE_TOOLBAR_NATIVE=no
+  DEFAULT_wxUSE_TEXTDLG=no
+  DEFAULT_wxUSE_GAUGE=no
+  DEFAULT_wxUSE_SCROLLBAR=no
+  DEFAULT_wxUSE_SLIDER=no
+  DEFAULT_wxUSE_COMBOBOX=no
+  DEFAULT_wxUSE_CALCTRL=no
+  DEFAULT_wxUSE_SPINBTN=no
+  DEFAULT_wxUSE_SPINCTRL=no
+  DEFAULT_wxUSE_TOOLTIPS=no
+  DEFAULT_wxUSE_CHOICEDLG=no
+  DEFAULT_wxUSE_COLOURDLG=no
+  DEFAULT_wxUSE_DIRDLG=no
+  DEFAULT_wxUSE_DRAGIMAGE=no
+  DEFAULT_wxUSE_FINDREPLDLG=no
+  DEFAULT_wxUSE_FONTDLG=no
+  DEFAULT_wxUSE_GRID=no
+  DEFAULT_wxUSE_NEW_GRID=no
+  DEFAULT_wxUSE_NUMBERDLG=no
+  DEFAULT_wxUSE_PROGRESSDLG=no
+  DEFAULT_wxUSE_PROPSHEET=no
+  DEFAULT_wxUSE_SASH=no
+  DEFAULT_wxUSE_SPLITTER=no
+  DEFAULT_wxUSE_WIZARDDLG=no
+  DEFAULT_wxUSE_SPLITTER=no
+  DEFAULT_wxUSE_STARTUP_TIPS=no
+  DEFAULT_wxUSE_TREECTRL=no
+fi
+
 WX_ARG_ENABLE(accel,       [  --enable-accel          use accelerators], wxUSE_ACCEL)
 WX_ARG_ENABLE(button,      [  --enable-button         use wxButton class], wxUSE_BUTTON)
 WX_ARG_ENABLE(bmpbutton,   [  --enable-bmpbutton      use wxBitmapButton class], wxUSE_BMPBUTTON)
@@ -1101,8 +1140,9 @@ if test "$wxUSE_GUI" = "yes"; then
 
     dnl we suppose that expr is available (maybe there is a better way to do
     dnl this? what about using ALL_TOOLKITS? TODO)
-    NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MAC:-0}  \
-                  + ${wxUSE_MSW:-0} + ${wxUSE_MGL:-0} + ${wxUSE_MICROWIN:-0} + ${wxUSE_X11:-0}`
+    NUM_TOOLKITS=`expr ${wxUSE_COCOA:-0} + ${wxUSE_GTK:-0} + ${wxUSE_MAC:-0} \
+                  + ${wxUSE_MGL:-0} + ${wxUSE_MICROWIN:-0} \
+                  + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} + ${wxUSE_X11:-0}`
 
     dnl Allow wxUSE_PM only for OS/2 with EMX.
     case "${host}" in
@@ -1401,7 +1441,7 @@ dnl ------------------------------------------------------------------------
 dnl test for strings.h needed under AIX, but do not check for it wxMac as
 dnl it exists but is only a simple redirection to string.h and it is in
 dnl conflict with Strings.h in FlatCarbon headers
-if test "$wxUSE_MAC" != 1; then
+if test "$wxUSE_MAC" != 1 -a "$wxUSE_COCOA" != 1; then
   dnl defines HAVE_STRINGS_H
   AC_CHECK_HEADERS(strings.h)
 fi
@@ -2582,6 +2622,12 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         GUIDIST=MACX_DIST
     fi
 
+    if test "$wxUSE_COCOA" = 1; then
+        TOOLKIT_VPATH="\${top_srcdir}/src/cocoa"
+        TOOLKIT=COCOA
+        GUIDIST=COCOA_DIST
+    fi
+
     if test "$wxUSE_PM" = 1; then
         TOOLKIT=PM
         GUIDIST=GTK_DIST
@@ -2699,7 +2745,7 @@ dnl OpenGL libraries
 dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_OPENGL" = "yes"; then
-    if test "$wxUSE_MAC" = 1; then
+    if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = "1"; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
@@ -3041,7 +3087,7 @@ if test "$wxUSE_SHARED" = "no"; then
         WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall"
     fi
 
-    if test "$wxUSE_MAC" = 1; then
+    if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 ; then
         WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall"
     fi
 
@@ -4412,7 +4458,7 @@ dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_GUI" = "yes"; then
 
-    if test "$TOOLKIT" = "MAC"; then
+    if test "$TOOLKIT" = "MAC" -o "$TOOLKIT" = "COCOA"; then
         AC_MSG_WARN([Joystick not yet supported under Mac OS X... disabled])
         wxUSE_JOYSTICK=no
      fi
@@ -4950,7 +4996,7 @@ if test "$wxUSE_TEXTCTRL" = "yes"; then
 fi
 
 if test "$wxUSE_TOGGLEBTN" = "yes"; then
-    if test "$wxUSE_MAC" = 1; then
+    if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 ; then
         AC_MSG_WARN([Toggle button not yet supported under Mac OS X... disabled])
         wxUSE_TOGGLEBTN=no
     fi
@@ -5011,7 +5057,7 @@ if test "$wxUSE_TREECTRL" = "yes"; then
 fi
 
 if test "$wxUSE_POPUPWIN" = "yes"; then
-    if test "$wxUSE_MAC" = 1; then
+    if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 ; then
         AC_MSG_WARN([Popup window not yet supported under Mac OS X... disabled])
     else
         if test "$wxUSE_MOTIF" = 1; then
@@ -5268,6 +5314,9 @@ dnl extended.c uses floor() and is always linked in
 
 if test "$wxUSE_MAC" = 1 ; then
     LDFLAGS="$LDFLAGS -framework Carbon -framework System"
+fi
+if test "$wxUSE_COCOA" = 1 ; then
+    LDFLAGS="$LDFLAGS -framework Cocoa -framework System"
 fi
 
 dnl FIXME: should this be covered by the conditional above
