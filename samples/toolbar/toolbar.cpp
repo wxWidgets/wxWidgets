@@ -257,7 +257,7 @@ bool MyApp::OnInit()
     MyFrame* frame = new MyFrame((wxFrame *) NULL, -1,
                                  _T("wxToolBar Sample"),
 #ifdef __WXWINCE__
-                                 wxPoint(0, 0), wxDefaultSize, wxNO_BORDER
+                                 wxPoint(0, 0), wxDefaultSize
 #else
                                  wxPoint(100, 100), wxSize(550, 300)
 #endif
@@ -387,10 +387,8 @@ MyFrame::MyFrame(wxFrame* parent,
     m_rows = 1;
     m_nPrint = 1;
 
-#ifndef __WXWINCE__
     // Give it a status line
     CreateStatusBar();
-#endif
 
     // Give it an icon
     SetIcon(wxICON(mondrian));
