@@ -27,7 +27,7 @@
 #include "wx/defs.h"
 #endif
 
-#if wxUSE_SOCKETS 
+#if wxUSE_SOCKETS && wxUSE_IPC
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -124,12 +124,7 @@ wxConnectionBase *wxTCPClient::MakeConnection (const wxString& host,
 
       if (connection)
       {
-        if (!connection->IsKindOf(CLASSINFO(wxTCPConnection)))
-        {
-          delete connection;
-          // and fall through to delete everything else
-        }
-        else
+        if (connection->IsKindOf(CLASSINFO(wxTCPConnection)))
         {
           connection->m_topic = topic;
           connection->m_sock  = client;
@@ -142,15 +137,21 @@ wxConnectionBase *wxTCPClient::MakeConnection (const wxString& host,
           client->Notify(TRUE);
           return connection;
         }
+        else
+        {
+          delete connection;
+          // and fall through to delete everything else
+        }
       }
     }
   }
 
-  // something went wrong
+  // Something went wrong, delete everything
   delete data_is;
   delete data_os;
   delete stream;
-  delete client;
+  client->Destroy();
+
   return NULL;
 }
 
@@ -211,10 +212,11 @@ wxTCPConnection::wxTCPConnection(char * WXUNUSED(buffer), int WXUNUSED(size))
 
 wxTCPConnection::~wxTCPConnection ()
 {
-  wxDELETE(m_sock);
   wxDELETE(m_codeci);
   wxDELETE(m_codeco);
   wxDELETE(m_sockstrm);
+
+  if (m_sock) m_sock->Destroy();
 }
 
 void wxTCPConnection::Compress(bool WXUNUSED(on))
@@ -227,6 +229,7 @@ bool wxTCPConnection::Disconnect ()
 {
   // Send the the disconnect message to the peer.
   m_codeco->Write8(IPC_DISCONNECT);
+  m_sock->Callback(NULL);
   m_sock->Close();
 
   return TRUE;
@@ -354,8 +357,9 @@ bool wxTCPConnection::Advise (const wxString& item,
   return TRUE;
 }
 
-void Client_OnRequest(wxSocketBase& sock, wxSocketNotify evt,
-		      char *cdata)
+void Client_OnRequest(wxSocketBase& sock,
+                      wxSocketNotify evt,
+                      char *cdata)
 {
   int msg = 0;
   wxTCPConnection *connection = (wxTCPConnection *)cdata;
@@ -368,6 +372,7 @@ void Client_OnRequest(wxSocketBase& sock, wxSocketNotify evt,
   // The socket handler signals us that we lost the connection: destroy all.
   if (evt == wxSOCKET_LOST)
   {
+    sock.Callback(NULL);
     sock.Close();
     connection->OnDisconnect();
     return;
@@ -483,6 +488,8 @@ void Client_OnRequest(wxSocketBase& sock, wxSocketNotify evt,
   }
   case IPC_DISCONNECT:
   {
+    wxLogDebug("IPC_DISCONNECT");
+    sock.Callback(NULL);
     sock.Close();
     connection->OnDisconnect();
     break;
@@ -494,7 +501,8 @@ void Client_OnRequest(wxSocketBase& sock, wxSocketNotify evt,
 }
 
 void Server_OnRequest(wxSocketServer& server,
-		      wxSocketNotify evt, char *cdata)
+                      wxSocketNotify evt,
+                      char *cdata)
 {
   wxTCPServer *ipcserv = (wxTCPServer *)cdata;
   wxSocketStream *stream;
@@ -504,10 +512,13 @@ void Server_OnRequest(wxSocketServer& server,
   if (evt != wxSOCKET_CONNECTION)
     return;
 
-  /* Accept the connection, getting a new socket */
+  // Accept the connection, getting a new socket
   wxSocketBase *sock = server.Accept();
   if (!sock->Ok())
+  {
+    sock->Destroy();
     return;
+  }
 
   stream = new wxSocketStream(*sock);
   codeci = new wxDataInputStream(*stream);
@@ -521,36 +532,42 @@ void Server_OnRequest(wxSocketServer& server,
     wxString topic_name;
     topic_name = codeci->ReadString();
 
-    /* Register new socket with the notifier */
     wxTCPConnection *new_connection =
          (wxTCPConnection *)ipcserv->OnAcceptConnection (topic_name);
+
     if (new_connection)
     {
-      if (!new_connection->IsKindOf(CLASSINFO(wxTCPConnection)))
+      if (new_connection->IsKindOf(CLASSINFO(wxTCPConnection)))
       {
-        delete new_connection;
-        codeco->Write8(IPC_FAIL);
+        // Acknowledge success
+        codeco->Write8(IPC_CONNECT);
+        new_connection->m_topic = topic_name;
+        new_connection->m_sock = sock;      
+        new_connection->m_sockstrm = stream;
+        new_connection->m_codeci = codeci;
+        new_connection->m_codeco = codeco;
+        sock->Callback(Client_OnRequest);
+        sock->CallbackData((char *)new_connection);
+        sock->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
+        sock->Notify(TRUE);
         return;
       }
-      // Acknowledge success
-      codeco->Write8(IPC_CONNECT);
-      new_connection->m_topic = topic_name;
-      new_connection->m_sock = sock;      
-      new_connection->m_sockstrm = stream;
-      new_connection->m_codeci = codeci;
-      new_connection->m_codeco = codeco;
-      sock->Callback(Client_OnRequest);
-      sock->CallbackData((char *)new_connection);
-      sock->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
-      sock->Notify(TRUE);
-    }
-    else
-    {
-      // Send failure message
-      codeco->Write8(IPC_FAIL);
+      else
+      {
+        delete new_connection;
+        // and fall through to delete everything else
+      }
     }
   }
+
+  // Something went wrong, send failure message and delete everything
+  codeco->Write8(IPC_FAIL);
+
+  delete codeco;
+  delete codeci;
+  delete stream;
+  sock->Destroy();
 }
 
 #endif
-  // wxUSE_SOCKETS
+    // wxUSE_SOCKETS && wxUSE_IPC
