@@ -66,6 +66,7 @@ public:
     void OnKeyDown(wxKeyEvent& event);
     void OnKeyUp(wxKeyEvent& event);
     void OnChar(wxKeyEvent& event);
+    void OnText(wxCommandEvent& event);
 
     bool  m_hasCapture;
 
@@ -239,6 +240,7 @@ BEGIN_EVENT_TABLE(MyTextCtrl, wxTextCtrl)
     EVT_KEY_DOWN(MyTextCtrl::OnKeyDown)
     EVT_KEY_UP(MyTextCtrl::OnKeyUp)
     EVT_CHAR(MyTextCtrl::OnChar)
+    EVT_TEXT(-1, MyTextCtrl::OnText)
 END_EVENT_TABLE()
 
 void MyTextCtrl::LogEvent(const wxChar *name, wxKeyEvent& event) const
@@ -370,16 +372,19 @@ void MyTextCtrl::LogEvent(const wxChar *name, wxKeyEvent& event) const
 
 }
 
-void MyTextCtrl::OnChar(wxKeyEvent& event)
+void MyTextCtrl::OnText(wxCommandEvent& event)
 {
-    LogEvent( _T("Char"), event);
-
-    wxWindow *win = (wxWindow *)event.GetEventObject();
+    MyTextCtrl *win = (MyTextCtrl *)event.GetEventObject();
     const wxChar *data = (const wxChar *)(win->GetClientData());
     if ( data )
     {
-        wxLogMessage(_T(" (from control '%s')"), data);
+        wxLogMessage(_T("text changed in control '%s'"), data);
     }
+}
+
+void MyTextCtrl::OnChar(wxKeyEvent& event)
+{
+    LogEvent( _T("Char"), event);
 
 /*  How are we supposed to test wxTE_PROCESS_TAB with this code?
 
