@@ -312,6 +312,7 @@ void MyFrame::DirChoose(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::ShowTip(wxCommandEvent& event)
 {
+#if wxUSE_STARTUP_TIPS
     static size_t s_index = (size_t)-1;
 
     if ( s_index == (size_t)-1 )
@@ -335,6 +336,7 @@ void MyFrame::ShowTip(wxCommandEvent& event)
 
     s_index = tipProvider->GetCurrentTip();
     delete tipProvider;
+#endif
 }
 
 void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event) )

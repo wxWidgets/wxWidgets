@@ -80,6 +80,7 @@ GENERICOBJS= \
   ..\generic\$D\statusbr.obj \
   ..\generic\$D\tabg.obj \
   ..\generic\$D\textdlgg.obj \
+  ..\generic\$D\extdlgg.obj \
   ..\generic\$D\tipdlg.obj
 
 #  ..\generic\$D\imaglist.obj \
