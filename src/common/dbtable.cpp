@@ -763,14 +763,15 @@ bool wxDbTable::Open(bool checkPrivileges, bool checkTableExists)
     if (!queryOnly && noCols > 0)
     {
         bool needComma = FALSE;
-        sqlStmt.Printf(wxT("INSERT INTO %s ("), tableName.c_str());
+        sqlStmt.Printf(wxT("INSERT INTO %s ("), pDb->SQLTableName(tableName.c_str()));
         for (i = 0; i < noCols; i++)
         {
             if (! colDefs[i].InsertAllowed)
                 continue;
             if (needComma)
                 sqlStmt += wxT(",");
-            sqlStmt += colDefs[i].ColName;
+            sqlStmt += pDb->SQLColumnName(colDefs[i].ColName);
+//            sqlStmt += colDefs[i].ColName;
             needComma = TRUE;
         }
         needComma = FALSE;
@@ -914,11 +915,11 @@ void wxDbTable::BuildDeleteStmt(wxString &pSqlStmt, int typeOfDel, const wxStrin
     // delete all records from the database in this case.
     if (typeOfDel == DB_DEL_WHERE && (pWhereClause.Length() == 0))
     {
-        pSqlStmt.Printf(wxT("DELETE FROM %s"), tableName.c_str());
+        pSqlStmt.Printf(wxT("DELETE FROM %s"), pDb->SQLTableName(tableName.c_str()));
         return;
     }
 
-    pSqlStmt.Printf(wxT("DELETE FROM %s WHERE "), tableName.c_str());
+    pSqlStmt.Printf(wxT("DELETE FROM %s WHERE "), pDb->SQLTableName(tableName.c_str()));
 
     // Append the WHERE clause to the SQL DELETE statement
     switch(typeOfDel)
@@ -1000,10 +1001,12 @@ void wxDbTable::BuildSelectStmt(wxString &pSqlStmt, int typeOfSelect, bool disti
         // If joining tables, the base table column names must be qualified to avoid ambiguity
         if (appendFromClause || pDb->Dbms() == dbmsACCESS)
         {
-            pSqlStmt += queryTableName;
+            pSqlStmt += pDb->SQLTableName(queryTableName.c_str());
+//            pSqlStmt += queryTableName;
             pSqlStmt += wxT(".");
         }
-        pSqlStmt += colDefs[i].ColName;
+        pSqlStmt += pDb->SQLColumnName(colDefs[i].ColName);
+//        pSqlStmt += colDefs[i].ColName;
         if (i + 1 < noCols)
             pSqlStmt += wxT(",");
     }
@@ -1016,7 +1019,8 @@ void wxDbTable::BuildSelectStmt(wxString &pSqlStmt, int typeOfSelect, bool disti
         if (appendFromClause || pDb->Dbms() == dbmsACCESS)
         {
             pSqlStmt += wxT(",");
-            pSqlStmt += queryTableName;
+            pSqlStmt += pDb->SQLTableName(queryTableName);
+//            pSqlStmt += queryTableName;
             pSqlStmt += wxT(".ROWID");
         }
         else
@@ -1025,7 +1029,8 @@ void wxDbTable::BuildSelectStmt(wxString &pSqlStmt, int typeOfSelect, bool disti
 
     // Append the FROM tablename portion
     pSqlStmt += wxT(" FROM ");
-    pSqlStmt += queryTableName;
+    pSqlStmt += pDb->SQLTableName(queryTableName);
+//    pSqlStmt += queryTableName;
 
     // Sybase uses the HOLDLOCK keyword to lock a record during query.
     // The HOLDLOCK keyword follows the table name in the from clause.
@@ -1112,7 +1117,7 @@ void wxDbTable::BuildUpdateStmt(wxString &pSqlStmt, int typeOfUpd, const wxStrin
 
     bool firstColumn = TRUE;
 
-    pSqlStmt.Printf(wxT("UPDATE %s SET "), tableName.Upper().c_str());
+    pSqlStmt.Printf(wxT("UPDATE %s SET "), pDb->SQLTableName(tableName.Upper().c_str()));
 
     // Append a list of columns to be updated
     int i;
@@ -1125,7 +1130,9 @@ void wxDbTable::BuildUpdateStmt(wxString &pSqlStmt, int typeOfUpd, const wxStrin
                 pSqlStmt += wxT(",");
             else
                 firstColumn = FALSE;
-            pSqlStmt += colDefs[i].ColName;
+
+            pSqlStmt += pDb->SQLColumnName(colDefs[i].ColName);
+//            pSqlStmt += colDefs[i].ColName;
             pSqlStmt += wxT(" = ?");
         }
     }
@@ -1205,10 +1212,12 @@ void wxDbTable::BuildWhereClause(wxString &pWhereClause, int typeOfWhere,
             // Concatenate where phrase for the column
             if (qualTableName.Length())
             {
-                pWhereClause += qualTableName;
+                pWhereClause += pDb->SQLTableName(qualTableName);
+//                pWhereClause += qualTableName;
                 pWhereClause += wxT(".");
             }
-            pWhereClause += colDefs[i].ColName;
+            pWhereClause += pDb->SQLColumnName(colDefs[i].ColName);
+//            pWhereClause += colDefs[i].ColName;
             if (useLikeComparison && (colDefs[i].SqlCtype == SQL_C_CHAR))
                 pWhereClause += wxT(" LIKE ");
             else
@@ -1331,7 +1340,8 @@ bool wxDbTable::CreateTable(bool attemptDrop)
 
     // Build a CREATE TABLE string from the colDefs structure.
     bool needComma = FALSE;
-    sqlStmt.Printf(wxT("CREATE TABLE %s ("), tableName.c_str());
+
+    sqlStmt.Printf(wxT("CREATE TABLE %s ("), pDb->SQLTableName(tableName.c_str()));
 
     for (i = 0; i < noCols; i++)
     {
@@ -1342,7 +1352,8 @@ bool wxDbTable::CreateTable(bool attemptDrop)
         if (needComma)
             sqlStmt += wxT(",");
         // Column Name
-        sqlStmt += colDefs[i].ColName;
+        sqlStmt += pDb->SQLColumnName(colDefs[i].ColName);
+//        sqlStmt += colDefs[i].ColName;
         sqlStmt += wxT(" ");
         // Column Type
         switch(colDefs[i].DbDataType)
@@ -1415,10 +1426,12 @@ bool wxDbTable::CreateTable(bool attemptDrop)
                 if (pDb->Dbms() == dbmsDB2)
                 {
                     wxASSERT_MSG((tableName && wxStrlen(tableName) <= 13), wxT("DB2 table/index names must be no longer than 13 characters in length.\n\nTruncating table name to 13 characters."));
-                    sqlStmt += tableName.substr(0, 13);
+                    sqlStmt += pDb->SQLTableName(tableName.substr(0, 13).c_str());
+//                    sqlStmt += tableName.substr(0, 13);
                 }
                 else
-                    sqlStmt += tableName;
+                    sqlStmt += pDb->SQLTableName(tableName.c_str());
+//                    sqlStmt += tableName;
 
                 sqlStmt += wxT("_PIDX PRIMARY KEY (");
                 break;
@@ -1432,7 +1445,8 @@ bool wxDbTable::CreateTable(bool attemptDrop)
             {
                 if (j++) // Multi part key, comma separate names
                     sqlStmt += wxT(",");
-                sqlStmt += colDefs[i].ColName;
+                sqlStmt += pDb->SQLColumnName(colDefs[i].ColName);
+//                sqlStmt += colDefs[i].ColName;
             }
         }
         sqlStmt += wxT(")");
@@ -1442,7 +1456,8 @@ bool wxDbTable::CreateTable(bool attemptDrop)
             pDb->Dbms() == dbmsSYBASE_ASE)
         {
             sqlStmt += wxT(" CONSTRAINT ");
-            sqlStmt += tableName;
+            sqlStmt += pDb->SQLTableName(tableName);
+//            sqlStmt += tableName;
             sqlStmt += wxT("_PIDX");
         }
     }
@@ -1487,16 +1502,13 @@ bool wxDbTable::DropTable()
 
     wxString sqlStmt;
 
-    sqlStmt.Printf(wxT("DROP TABLE %s"), tableName.c_str());
+    sqlStmt.Printf(wxT("DROP TABLE %s"), pDb->SQLTableName(tableName.c_str()));
 
     pDb->WriteSqlLog(sqlStmt);
 
 #ifdef DBDEBUG_CONSOLE
     cout << endl << sqlStmt.c_str() << endl;
 #endif
-
-
-
 
     RETCODE retcode = SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt.c_str(), SQL_NTS);
     if (retcode != SQL_SUCCESS)
@@ -1603,16 +1615,19 @@ bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCol
         sqlStmt += wxT("UNIQUE ");
 
     sqlStmt += wxT("INDEX ");
-    sqlStmt += idxName;
+    sqlStmt += pDb->SQLTableName(idxName);
     sqlStmt += wxT(" ON ");
-    sqlStmt += tableName;
+
+    sqlStmt += pDb->SQLTableName(tableName);
+//    sqlStmt += tableName;
     sqlStmt += wxT(" (");
 
     // Append list of columns making up index
     int i;
     for (i = 0; i < noIdxCols; i++)
     {
-        sqlStmt += pIdxDefs[i].ColName;
+        sqlStmt += pDb->SQLColumnName(pIdxDefs[i].ColName);
+//        sqlStmt += pIdxDefs[i].ColName;
 
         // Postgres and SQL Server 7 do not support the ASC/DESC keywords for index columns
         if (!((pDb->Dbms() == dbmsMS_SQL_SERVER) && (strncmp(pDb->dbInf.dbmsVer,"07",2)==0)) &&
@@ -1672,12 +1687,12 @@ bool wxDbTable::DropIndex(const wxString &idxName)
 
     if (pDb->Dbms() == dbmsACCESS || pDb->Dbms() == dbmsMY_SQL ||
         pDb->Dbms() == dbmsDBASE /*|| Paradox needs this syntax too when we add support*/)
-        sqlStmt.Printf(wxT("DROP INDEX %s ON %s"),idxName.c_str(), tableName.c_str());
+        sqlStmt.Printf(wxT("DROP INDEX %s ON %s"),pDb->SQLTableName(idxName.c_str()), pDb->SQLTableName(tableName.c_str()));
     else if ((pDb->Dbms() == dbmsMS_SQL_SERVER) ||
              (pDb->Dbms() == dbmsSYBASE_ASE))
-        sqlStmt.Printf(wxT("DROP INDEX %s.%s"),tableName.c_str(), idxName.c_str());
+        sqlStmt.Printf(wxT("DROP INDEX %s.%s"), pDb->SQLTableName(tableName.c_str()), pDb->SQLTableName(idxName.c_str()));
     else
-        sqlStmt.Printf(wxT("DROP INDEX %s"),idxName.c_str());
+        sqlStmt.Printf(wxT("DROP INDEX %s"),pDb->SQLTableName(idxName.c_str()));
 
     pDb->WriteSqlLog(sqlStmt);
 
@@ -2226,7 +2241,8 @@ ULONG wxDbTable::Count(const wxString &args)
     sqlStmt  = wxT("SELECT COUNT(");
     sqlStmt += args;
     sqlStmt += wxT(") FROM ");
-    sqlStmt += queryTableName;
+    sqlStmt += pDb->SQLTableName(queryTableName);
+//    sqlStmt += queryTableName;
 #if wxODBC_BACKWARD_COMPATABILITY
     if (from && wxStrlen(from))
 #else
@@ -2318,7 +2334,8 @@ bool wxDbTable::Refresh(void)
         // based on the key fields.
         if (SQLGetData(hstmt, (UWORD)(noCols+1), SQL_C_CHAR, (UCHAR*) rowid, wxDB_ROWID_LEN, &cb) == SQL_SUCCESS)
         {
-            whereClause += queryTableName;
+            whereClause += pDb->SQLTableName(queryTableName);
+//            whereClause += queryTableName;
             whereClause += wxT(".ROWID = '");
             whereClause += rowid;
             whereClause += wxT("'");

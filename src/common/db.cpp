@@ -603,15 +603,6 @@ bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthSt
                          (UCHAR FAR *) uid.c_str(), SQL_NTS,
                          (UCHAR FAR *) authStr.c_str(), SQL_NTS);
 
-/*
-    if (retcode == SQL_SUCCESS_WITH_INFO)
-        DispAllErrors(henv, hdbc);
-    else if (retcode != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
-
-    if (retcode == SQL_ERROR)
-        return(DispAllErrors(henv, hdbc));
-*/
     if ((retcode != SQL_SUCCESS) &&
         (retcode != SQL_SUCCESS_WITH_INFO))
         return(DispAllErrors(henv, hdbc));
@@ -1784,7 +1775,7 @@ bool wxDb::Grant(int privileges, const wxString &tableName, const wxString &user
     }
 
     sqlStmt += wxT(" ON ");
-    sqlStmt += tableName;
+    sqlStmt += SQLTableName(tableName);
     sqlStmt += wxT(" TO ");
     sqlStmt += userList;
 
@@ -2687,7 +2678,7 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
     // Build a generic SELECT statement which returns 0 rows
     wxString Stmt;
 
-    Stmt.Printf(wxT("select * from %s where 0=1"), tableName);
+    Stmt.Printf(wxT("select * from \"%s\" where 0=1"), tableName);
 
     // Execute query
     if (SQLExecDirect(hstmt, (UCHAR FAR *) Stmt.c_str(), SQL_NTS) != SQL_SUCCESS)
@@ -3281,6 +3272,34 @@ bool wxDb::TablePrivileges(const wxString &tableName, const wxString &priv, cons
 }  // wxDb::TablePrivileges
 
 
+const wxString wxDb::SQLTableName(const char *tableName)
+{
+    wxString TableName;
+
+    if (Dbms() == dbmsACCESS)
+        TableName = '"';
+    TableName += tableName;
+    if (Dbms() == dbmsACCESS)
+        TableName += '"';
+
+    return TableName;
+}  // wxDb::SQLTableName()
+
+
+const wxString wxDb::SQLColumnName(const char *colName)
+{
+    wxString ColName;
+
+    if (Dbms() == dbmsACCESS)
+        ColName = '"';
+    ColName += colName;
+    if (Dbms() == dbmsACCESS)
+        ColName += '"';
+
+    return ColName;
+}  // wxDb::SQLColumnName()
+
+
 /********** wxDb::SetSqlLogging() **********/
 bool wxDb::SetSqlLogging(wxDbSqlLogState state, const wxString &filename, bool append)
 {
@@ -3529,7 +3548,7 @@ bool wxDb::ModifyColumn(const wxString &tableName, const wxString &columnName,
     }
 
     // create the SQL statement
-    sqlStmt.Printf(wxT("ALTER TABLE %s %s %s %s"), tableName.c_str(), alterSlashModify.c_str(),
+    sqlStmt.Printf(wxT("ALTER TABLE \"%s\" \"%s\" \"%s\" %s"), tableName.c_str(), alterSlashModify.c_str(),
               columnName.c_str(), dataTypeName.c_str());
 
     // For varchars only, append the size of the column

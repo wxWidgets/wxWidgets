@@ -345,7 +345,7 @@ bool BrowserDB::OnSelect(wxString tb_Name, int Quiet)
     wxString SQLStmt;
     i_Records = 0;
     //---------------------------------------------------------------------------------------
-    SQLStmt.sprintf("SELECT * FROM %s",tb_Name.c_str());
+    SQLStmt.sprintf("SELECT * FROM %s",db_BrowserDB->SQLTableName(tb_Name.c_str()));
     if (!db_BrowserDB->ExecSql((char *)(SQLStmt.GetData())))
     {
         Temp0.Printf(_("\n-E-> BrowserDB::OnSelect - ODBC-Error with ExecSql of >%s<.\n-E-> "),tb_Name.c_str());

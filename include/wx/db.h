@@ -627,6 +627,14 @@ public:
                                  const wxChar *userID=NULL, const wxChar *schema=NULL, 
                                  const wxString &path=wxEmptyString);
 
+    // These two functions return the table name or column name in a form ready
+    // for use in SQL statements.  For example, if the datasource allows spaces
+    // in the table name or column name, the returned string will have the
+    // correct enclosing marks around the name to allow it to be properly 
+    // included in a SQL statement
+    const wxString  SQLTableName(const char *tableName);
+    const wxString  SQLColumnName(const char *colName);
+
     void         LogError(const wxString &errMsg, const wxString &SQLState = wxEmptyString) 
                         { logError(errMsg, SQLState); }
     void         SetDebugErrorMessages(bool state) { silent = !state; }
