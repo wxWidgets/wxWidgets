@@ -769,12 +769,16 @@ static void
 dumpchr(chr c,
 		FILE *f)
 {
+#ifdef wxUSE_UNICODE
+    fprintf(f, "Debugging not implemented in unicode mode");
+#else
 	if (c == '\\')
 		fprintf(f, "\\\\");
 	else if (c > ' ' && c <= '~')
 		putc((char) c, f);
 	else
 		fprintf(f, "\\u%04lx", (long) c);
+#endif
 }
 
 #endif   /* REG_DEBUG */
