@@ -68,7 +68,7 @@ GENERICOBJS= \
   $(GENDIR)/splitter.$(OBJSUFF) \
   $(GENDIR)/statusbr.$(OBJSUFF) \
   $(GENDIR)/tabg.$(OBJSUFF) \
-  $(GENDIR)/textdlgg.$(OBJSUFF)
+  $(GENDIR)/textdlgg.$(OBJSUFF) \
   $(GENDIR)/tipdlg.$(OBJSUFF)
 
 #  $(GENDIR)/colrdlgg.$(OBJSUFF) \

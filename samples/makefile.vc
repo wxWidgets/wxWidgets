@@ -66,6 +66,8 @@ all:
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\sashtest
         nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\config
+        nmake -f makefile.vc FINAL=$(FINAL)
 !if "$(FINAL)" == "0"
         cd $(WXDIR)\samples\memcheck
 !endif
@@ -148,6 +150,8 @@ clean:
         cd $(WXDIR)\samples\taskbar
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\sashtest
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\config
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\memcheck
         nmake -f makefile.vc clean

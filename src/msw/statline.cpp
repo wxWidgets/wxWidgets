@@ -29,6 +29,8 @@
 
 #include "wx/statline.h"
 
+#if wxUSE_STATLINE
+
 #include "wx/msw/private.h"
 
 // ============================================================================
@@ -83,4 +85,5 @@ bool wxStaticLine::Create( wxWindow *parent,
 
     return TRUE;
 }
+#endif
 

@@ -264,11 +264,17 @@ public:
     wxPoint GetPosition() const { return wxPoint(x, y); }
     wxSize GetSize() const { return wxSize(width, height); }
 
+    // MFC-like functions
+
     long GetLeft()   const { return x; }
     long GetTop()    const { return y; }
-    long GetBottom() const { return y + height; }
-    long GetRight()  const { return x + width; }
+    long GetBottom() const { return y + height - 1; }
+    long GetRight()  const { return x + width - 1; }
 
+    void SetLeft(long left) { x = left; }
+    void SetRight(long right) { width = right - x + 1; }
+    void SetTop(long top) { y = top; }
+    void SetBottom(long bottom) { height = bottom - y + 1; }
 
     bool operator==(const wxRect& rect) const;
     bool operator!=(const wxRect& rect) const { return !(*this == rect); }
