@@ -32,6 +32,11 @@
 
 #include "wx/validate.h"        // for wxDefaultValidator (always include it)
 
+#if wxUSE_PALETTE
+	#include "wx/dcclient.h"
+	#include "wx/palette.h"
+#endif // wxUSE_PALETTE
+
 #if wxUSE_ACCEL
     #include "wx/accel.h"
 #endif // wxUSE_ACCEL
@@ -761,6 +766,21 @@ public:
         // platform-specific APIs
     virtual WXWidget GetHandle() const = 0;
 
+#if wxUSE_PALETTE
+        // Store the palette used by DCs in wxWindow so that the dcs can share
+        // a palette. And we can respond to palette messages.
+    wxPalette GetPalette() const { return m_palette; }
+        // When palette is changed tell the DC to set the system palette to the
+        // new one.
+    void SetPalette(wxPalette &pal) {
+			m_custompalette=true;
+			m_palette=pal;
+            wxWindowDC d((wxWindow *) this);
+			d.SetPalette(pal);
+			}
+    bool HasCustomPalette() { return m_custompalette; }
+#endif // wxUSE_PALETTE
+
 protected:
     // the window id - a number which uniquely identifies a window among
     // its siblings unless it is -1
@@ -843,6 +863,11 @@ protected:
                          m_exStyle;
     wxString             m_windowName;
     bool                 m_themeEnabled;
+
+#ifdef wxUSE_PALETTE
+    wxPalette            m_palette;
+    bool                 m_custompalette;
+#endif
 
 protected:
 

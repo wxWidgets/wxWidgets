@@ -300,7 +300,7 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString &name = "listctrl" )
     {
-        Create(parent, id, pos, size, style, wxDefaultValidator, name);
+        Create(parent, id, pos, size, style, validator, name);
     }
 
     // focus/selection stuff

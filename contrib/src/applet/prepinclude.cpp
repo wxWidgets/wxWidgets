@@ -27,18 +27,52 @@
 *
 ****************************************************************************/
 
-// For compilers that support precompilation
-#include "wx/wxprec.h"
-//#include "wx/file.h"
-#include "wx/filesys.h"
 // Include private headers
 #include "wx/applet/prepinclude.h"
+#include "wx/applet/echovar.h"
 
-#define RECURSE_LIMIT 50
-/*---------------------------- Global variables ---------------------------*/
-
+// wxWindows
+#include "wx/filesys.h"
+#include "wx/msgdlg.h"
 
 /*----------------------------- Implementation ----------------------------*/
+
+#define RECURSE_LIMIT 50
+
+/****************************************************************************
+PARAMETERS:
+text        - text to process for echo variables
+
+RETURNS:
+The string containing the processed filename
+
+REMARKS:
+This routine searches through the text of the filename for variables contained
+in % percent signs
+****************************************************************************/
+wxString ParseFilename(
+    wxString &text)
+{
+    int f = 0;
+    int e;
+    while ((f = text.find('%', f)) != wxString::npos) {
+        f++;
+        e = text.find('%', f);
+#ifdef CHECKED	
+        if (e == wxString::npos) {
+            wxMessageBox(wxString("wxHTML #include error: % signs should bracket variable names in file attribute. To use a percent sign in a filename write double percents (%%)."), "Error" ,wxICON_ERROR);
+            return text;
+            }
+#endif			
+        if (e == f)
+            text.replace(f-1, 2, "%");
+        else {
+            wxString varname = text.Mid(f, (e-f));
+            text.replace(f-1, (e-f)+2, wxEchoVariable::GetValue(varname));
+            }
+        }
+    return text;
+}
 
 /****************************************************************************
 PARAMETERS:
@@ -58,8 +92,6 @@ wxString wxIncludePrep::Process(
 {
     int i;
 	char ft[] = "<!--#include virtual=";
-	
-
     int openedcount = 0;
 
     // make a copy so we can replace text as we go without affecting the original
@@ -91,7 +123,7 @@ wxString wxIncludePrep::Process(
         output.Remove(i, n+21+3);
 
         wxFSFile * file;
-        file = m_FS->OpenFile(fname);
+        file = m_FS->OpenFile(ParseFilename(fname));
 	
         if (!file) {
 #ifdef CHECKED		
@@ -112,14 +144,12 @@ wxString wxIncludePrep::Process(
 			} while (c == 256);
 
 		output = (output.Mid(0,i) + tmp + output.Mid(i));
-
-        #ifdef CHECKED	
+#ifdef CHECKED	
         if (openedcount > RECURSE_LIMIT) {
             wxMessageBox(wxString("wxHTML #include error: More than RECURSE_LIMIT files have been #included you may have a file that is directly or indirectly including itself, causing an endless loop"), "Error" ,wxICON_ERROR);
             break;
             }
-        #endif			
-
+#endif			
         openedcount++;
         delete file;
         }

@@ -46,6 +46,21 @@ class wxToolBarBase;
 WX_DECLARE_LIST(wxApplet, wxAppletList);
 
 /*--------------------------- Class Definitions ---------------------------*/
+class wxAppletEvent {
+protected:
+    int               m_id;
+    wxObject         *m_eventObject;
+public:
+    wxAppletEvent(int id) { m_eventObject=NULL; m_id = id; }
+
+    int GetId() const { return m_id; }
+    void SetId(int Id) { m_id = Id; }
+
+    wxObject *GetEventObject() const { return m_eventObject; }
+    void SetEventObject(wxObject *obj) { m_eventObject = obj; }
+
+};
+
 
 /****************************************************************************
 REMARKS:
@@ -53,16 +68,21 @@ Defines the class for virtual-link data types
 ****************************************************************************/
 class VirtualData : public wxObject {
 private:
+    DECLARE_DYNAMIC_CLASS(VirtualData);
+	
+protected:
     wxString m_name;
     wxString m_group;
     wxString m_href;
+    wxString m_plugIn;
 
 public:
             // Ctors
             VirtualData(
                 wxString& name,
                 wxString& group,
-                wxString& href );
+                wxString& href,
+                wxString& plugin );
 
             VirtualData();
 
@@ -70,11 +90,14 @@ public:
             wxString GetName(){ return m_name;};
             wxString GetGroup(){ return m_group;};
             wxString GetHref(){ return m_href;};
+            wxString GetPlugIn(){ return m_plugIn;};
 
             // Sets
             void SetName (wxString& s){ m_name = s; };
             void SetGroup(wxString& s){ m_group = s; };
             void SetHref (wxString& s){ m_href = s; };
+            void SetPlugIn (wxString& s){ m_plugIn = s;};
+            void EmptyPlugIn () { m_plugIn = "";};
     };
 
 /****************************************************************************
@@ -98,7 +121,7 @@ protected:
     wxToolBarBase       *m_NavBar;
     int                 m_NavBackId;
     int                 m_NavForwardId;
-    wxPalette           m_globalPalette;
+    wxString            m_openedlast;
     	
             // Override this so we can do proper palette management!!
     virtual void OnDraw(wxDC& dc);
@@ -114,8 +137,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxHW_SCROLLBAR_AUTO,
-                const wxString& name = "htmlAppletWindow",
-                const wxPalette& globalPalette = wxNullPalette);
+                const wxString& name = "htmlAppletWindow");
 
             // Destructor
             ~wxHtmlAppletWindow();
@@ -128,7 +150,7 @@ public:
                 const wxSize& size);
 
             // Create an instance of an Qlet based on it's class name
-            bool CreatePlugIn(const wxString& classId );
+            bool CreatePlugIn(const wxString& classId,const wxString& cmdLine = "");
 
             // Find an instance of an applet based on it's class name
             wxApplet *FindApplet(const wxString& className);
@@ -157,7 +179,7 @@ public:
             void SetNavBar(wxToolBarBase *navBar);
 
             // Broadcast a message to all applets on the page
-            void SendMessage(wxEvent& msg);
+            void SendAppletMessage(wxAppletEvent& msg);
 
             // Register a cookie of data in the applet manager
             static bool RegisterCookie(const wxString& name,wxObject *cookie);
@@ -184,25 +206,7 @@ public:
             // Tries to lock the mutex. If it can't, returns immediately with false.
             bool TryLock();
 
-    };
-
-/****************************************************************************
-REMARKS:
-Defines the class for AppetProcess
-***************************************************************************/
-class AppletProcess : public wxProcess {
-public:
-            AppletProcess(
-                wxWindow *parent)
-                : wxProcess(parent)
-            {
-            }
-
-            // instead of overriding this virtual function we might as well process the
-            // event from it in the frame class - this might be more convenient in some
-            // cases
-    virtual void OnTerminate(int pid, int status);
-
+            wxString GetLastOpened() { return m_openedlast; }
     };
 
 /****************************************************************************
@@ -213,7 +217,7 @@ class wxHtmlAppletCell : public wxHtmlCell
 {
 public:
     wxHtmlAppletCell(wxWindow *wnd, int w = 0);
-    ~wxHtmlAppletCell() { m_Wnd->Destroy(); }
+    virtual ~wxHtmlAppletCell();
     virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
     virtual void DrawInvisible(wxDC& dc, int x, int y);
     virtual void Layout(int w);
@@ -222,7 +226,6 @@ protected:
     wxWindow* m_Wnd;
             // width float is used in adjustWidth (it is in percents)
 };
-
 
 #endif // __WX_APPLET_WINDOW_H
 

@@ -68,14 +68,15 @@ public:
             // Destructor
             ~wxLoadPageEvent() {}
 
+            // Clone Virtual
+            virtual wxEvent *Clone() const { return new wxLoadPageEvent(m_hRef, m_htmlWindow); }
+
             // Return the hmtl window for the load page operation
             wxHtmlAppletWindow  *GetHtmlWindow() { return m_htmlWindow; };
 
             // Get the hRef string for the load page operation
             const wxString & GetHRef() { return m_hRef; };
 
-            // Copy constructor for the object
-            void CopyObject(wxObject& obj) const;
     };
 
 
@@ -97,8 +98,10 @@ public:
             // Destructor
             ~wxPageLoadedEvent() {}
 
-            // Copy constructor for the object
-            void CopyObject(wxObject& obj) const;
+            // Clone Virtual
+            virtual wxEvent *Clone() const {
+                return new wxPageLoadedEvent(); }
+
     };
 
 // Define the macro to create our event type

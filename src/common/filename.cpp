@@ -359,7 +359,7 @@ void wxFileName::Assign(const wxString& fullpathOrig,
                   _T("the path shouldn't contain file name nor extension") );
 
 #else // !__WXDEBUG__
-    SplitPath(fullname, NULL /* no path */, &name, &ext, format);
+    SplitPath(fullname, NULL /* no path */, &name, &ext, format); 
     SplitPath(fullpath, &volume, &path, NULL, NULL, format);
 #endif // __WXDEBUG__/!__WXDEBUG__
 
@@ -1043,8 +1043,10 @@ wxString wxFileName::GetFullName() const
     return fullname;
 }
 
-wxString wxFileName::GetPath( bool add_separator, wxPathFormat format ) const
+wxString wxFileName::GetPath( bool, wxPathFormat format ) const
 {
+    // Should add_seperator parameter be used?
+
     format = GetFormat( format );
 
     wxString fullpath;
@@ -1776,4 +1778,3 @@ void wxFileName::MacRegisterDefaultTypeAndCreator( const wxString& ext , wxUint3
   gMacDefaultExtensions.Add( rec ) ;
 }
 #endif
-

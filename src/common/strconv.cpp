@@ -124,7 +124,7 @@ static size_t encode_utf16(wxUint32 input, wchar_t *output)
 {
     if (input<=0xffff)
     {
-        if (output) *output++ = input;
+        if (output) *output++ = (wchar_t) input;
         return 1;
     }
     else if (input>=0x110000)
@@ -135,8 +135,8 @@ static size_t encode_utf16(wxUint32 input, wchar_t *output)
     {
         if (output)
         {
-            *output++ = (input >> 10)+0xd7c0;
-            *output++ = (input&0x3ff)+0xdc00;
+            *output++ = (wchar_t) ((input >> 10)+0xd7c0);
+            *output++ = (wchar_t) ((input&0x3ff)+0xdc00);
         }
         return 2;
     }
@@ -389,7 +389,7 @@ size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
         {
             // plain ASCII char
             if (buf)
-                *buf++ = cc;
+                *buf++ = (char) cc;
             len++;
         }
 
@@ -398,9 +398,9 @@ size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
             len += cnt + 1;
             if (buf)
             {
-                *buf++ = (-128 >> cnt) | ((cc >> (cnt * 6)) & (0x3f >> cnt));
+                *buf++ = (char) ((-128 >> cnt) | ((cc >> (cnt * 6)) & (0x3f >> cnt)));
                 while (cnt--)
-                    *buf++ = 0x80 | ((cc >> (cnt * 6)) & 0x3f);
+                    *buf++ = (char) (0x80 | ((cc >> (cnt * 6)) & 0x3f));
             }
         }
     }
@@ -778,7 +778,7 @@ public:
                w2m.Init(wxFONTENCODING_UNICODE, enc);
     }
 
-    size_t MB2WC(wchar_t *buf, const char *psz, size_t n)
+    size_t MB2WC(wchar_t *buf, const char *psz, size_t WXUNUSED(n))
     {
         size_t inbuf = strlen(psz);
         if (buf)
@@ -786,7 +786,7 @@ public:
         return inbuf;
     }
 
-    size_t WC2MB(char *buf, const wchar_t *psz, size_t n)
+    size_t WC2MB(char *buf, const wchar_t *psz, size_t WXUNUSED(n))
     {
 #if ( defined(__BORLANDC__) && (__BORLANDC__ > 0x530) ) \
     || ( defined(__MWERKS__) && defined(__WXMSW__) )

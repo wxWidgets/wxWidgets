@@ -30,7 +30,12 @@
 #ifndef __WX_PREPINCLUDE_H
 #define __WX_PREPINCLUDE_H
 
+#include "wx/object.h"
 #include "wx/html/htmlproc.h"
+
+/*------------------------------- Prototypes ------------------------------*/
+
+class wxFileSystem;
 
 /*--------------------------- Class Definitions ---------------------------*/
 

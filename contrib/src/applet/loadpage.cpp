@@ -26,12 +26,11 @@
 *
 ****************************************************************************/
 
-// For compilers that support precompilation
-#include "wx/wxprec.h"
-#include "wx/html/forcelnk.h"
-
 // Include private headers
 #include "wx/applet/loadpage.h"
+
+// wxWindows forcelink macro
+#include "wx/html/forcelnk.h"
 
 /*------------------------- Implementation --------------------------------*/
 
@@ -61,36 +60,11 @@ wxLoadPageEvent::wxLoadPageEvent(
 
 /****************************************************************************
 REMARKS:
-Function to copy the wxLoadPageEvent object
-****************************************************************************/
-void wxLoadPageEvent::CopyObject(
-    wxObject& obj_d) const
-{
-    wxLoadPageEvent *obj = (wxLoadPageEvent*)&obj_d;
-    wxEvent::CopyObject(obj_d);
-    obj->m_hRef         = m_hRef;
-    obj->m_htmlWindow   = m_htmlWindow;
-}
-
-
-/****************************************************************************
-REMARKS:
 Constructor for the wxPageLoadedEvent class
 ****************************************************************************/
 wxPageLoadedEvent::wxPageLoadedEvent()
 {
     m_eventType = wxEVT_LOAD_PAGE;
-}
-
-/****************************************************************************
-REMARKS:
-Function to copy the wxPageLoadedEvent object
-****************************************************************************/
-void wxPageLoadedEvent::CopyObject(
-    wxObject& obj_d) const
-{
-    wxPageLoadedEvent *obj = (wxPageLoadedEvent*)&obj_d;
-    wxEvent::CopyObject(obj_d);
 }
 
 // This is out little force link hack

@@ -30,57 +30,98 @@
 #ifndef __WX_ECHOVAR_H
 #define __WX_ECHOVAR_H
 
+#include "wx/object.h"
+#include "wx/hash.h"
+
 /*--------------------------- Class Definitions ---------------------------*/
+
+/****************************************************************************
+RETURNS:
+The string value of the variable
+
+PARAMETERS:
+parms   - Optional parameter string passed from parm= field in HTML
+
+REMARKS:
+To create new variables for the #echo HTML preprocessing directives
+you need to derive classes from wxEchoVariable and override the
+pure virtual GetValue function. However this should not be done directly
+but by using the BEGIN_ECHO_VARIABLE and END_ECHO_VARIABLE macros
+
+SEE ALSO:
+wxEchoPrep, BEGIN_ECHO_VARIABLE, END_ECHO_VARIABLE
+****************************************************************************/
+typedef wxString (*wxEchoVariableGetValueFn)(const char *parms);
 
 /****************************************************************************
 REMARKS:
 wxEchoVariable class Definition
 ****************************************************************************/
 class wxEchoVariable : public wxObject {
-private:
-    DECLARE_ABSTRACT_CLASS(wxEchoVariable);
+protected:
+    const wxChar                *m_varName;
+    wxEchoVariableGetValueFn    m_getValueFn;
+    static wxEchoVariable       *sm_first;
+    wxEchoVariable              *m_next;
+    static wxHashTable          *sm_varTable;
+
+    static inline wxEchoVariable *wxEchoVariable::FindVariable(const wxChar *varName);
 
 public:
-    wxEchoVariable() : wxObject() {}
-    ~wxEchoVariable() {}
+    // Constructor to create the echo variable and register the class
+    wxEchoVariable(
+        const char *varName,
+        wxEchoVariableGetValueFn getValueFn);
+
+    // Member variable access functions
+    const wxChar *GetClassName() const          { return m_varName; }
+    wxEchoVariableGetValueFn GetValueFn() const { return m_getValueFn; }
+    static const wxEchoVariable* GetFirst()     { return sm_first; }
+    const wxEchoVariable* GetNext() const       { return m_next; }
 	
-    /****************************************************************************
-    RETURNS:
-    The boolean value of the variable
+    // Static functions to retrieve any variable avaliable
+    static wxString GetValue(const wxChar *varName,const wxChar *parms = NULL);
+    static bool Exists(const wxChar *varName);
 
-    PARAMETERS:
-    parms   - Optional parameter string passed from parm= field in HTML
+    // Initializes parent pointers and hash table for fast searching.
+    static void Initialize();
 
-    REMARKS:
-    To create new variables for the #echo HTML preprocessing directives
-    you need to derive classes from wxEchoVariable and override the
-    pure virtual GetValue function. However this should not be done directly
-    but by using the BEGIN_ECHO_VARIABLE and END_ECHO_VARIABLE macros
-
-    SEE ALSO:
-    wxEchoPrep, BEGIN_ECHO_VARIABLE, END_ECHO_VARIABLE
-    ****************************************************************************/
-    virtual wxString GetValue(const char *parms = NULL) const = 0;
-
-
-public:
-    // static function to retrieve any variable avaliable
-    static wxString FindValue(const wxString &cls, const char *parms = NULL);
+    // Cleans up hash table used for fast searching.
+    static void CleanUp();
     };
 	
+/****************************************************************************
+PARAMETERS:
+class   - Name of class for echo variable to find
+
+RETURNS:
+Pointer to the echo variable class
+
+REMARKS:
+Inline helper function to find the echo variable from it's class name.
+****************************************************************************/
+inline wxEchoVariable *wxEchoVariable::FindVariable(
+    const wxChar *varName)
+{
+    if (sm_varTable)
+        return (wxEchoVariable*)sm_varTable->Get(varName);
+    else {
+        wxEchoVariable *info = sm_first;
+        while (info) {
+            if (info->m_varName && wxStrcmp(info->m_varName, varName) == 0)
+                return info;
+            info = info->m_next;
+            }
+        return NULL;
+        }
+}
+
 /*--------------------------------- MACROS --------------------------------*/
 
-#define ECHO_PARM (_BEV_parm)
 #define BEGIN_ECHO_VARIABLE(name)                                           \
-    class wxEchoVariable##name : public wxEchoVariable {                    \
-    private:                                                                \
-        DECLARE_DYNAMIC_CLASS(wxEchoVariable##name##);                      \
-    public:                                                                 \
-        wxEchoVariable##name##() : wxEchoVariable() {}                      \
-        virtual wxString GetValue(const char *parms = NULL) const;          \
-        };                                                                  \
-    IMPLEMENT_DYNAMIC_CLASS(wxEchoVariable##name##, wxEchoVariable);        \
-    wxString wxEchoVariable##name :: GetValue(const char *parms) const {    \
+wxString wxEchoVariableFn##name(const char *parms);                         \
+wxEchoVariable wxEchoVariable##name(#name,wxEchoVariableFn##name);          \
+wxString wxEchoVariableFn##name(const char *parms) {                        \
     wxString _BEV_parm = wxString(parms);
 
 #define END_ECHO_VARIABLE(returnval)                                        \

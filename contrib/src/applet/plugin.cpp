@@ -26,9 +26,6 @@
 *
 ****************************************************************************/
 
-// For compilers that support precompilation
-#include "wx/wxprec.h"
-
 // Include private headers
 #include "wx/applet/plugin.h"
 #include "wx/applet/window.h"
@@ -36,7 +33,7 @@
 /*------------------------- Implementation --------------------------------*/
 
 // Implement the abstract class functions
-IMPLEMENT_ABSTRACT_CLASS(wxPlugIn, wxObject);
+IMPLEMENT_ABSTRACT_CLASS(wxPlugIn, wxEvtHandler);
 
 /****************************************************************************
 REMARKS:
@@ -57,4 +54,12 @@ wxPlugIn::~wxPlugIn()
 {
 }
 
+/****************************************************************************
+REMARKS:
+Destructor for the wxPlugIn class.
+****************************************************************************/
+void wxPlugIn::Run(
+    const wxString& WXUNUSED(cmdLine))
+{
+}
 

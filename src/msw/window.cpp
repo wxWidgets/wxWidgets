@@ -890,14 +890,14 @@ void wxWindowMSW::SetScrollbar(int orient, int pos, int thumbVisible,
 
 void wxWindowMSW::ScrollWindow(int dx, int dy, const wxRect *prect)
 {
-    RECT rect, *pr;
+    RECT rect;
+    RECT *pr;
     if ( prect )
     {
         rect.left = prect->x;
         rect.top = prect->y;
         rect.right = prect->x + prect->width;
         rect.bottom = prect->y + prect->height;
-
         pr = &rect;
     }
     else
@@ -1951,11 +1951,12 @@ bool wxWindowMSW::MSWTranslateMessage(WXMSG* pMsg)
 #if wxUSE_ACCEL && !defined(__WXUNIVERSAL__)
     return m_acceleratorTable.Translate(this, pMsg);
 #else
+    (void) pMsg;
     return FALSE;
 #endif // wxUSE_ACCEL
 }
 
-bool wxWindowMSW::MSWShouldPreProcessMessage(WXMSG* pMsg)
+bool wxWindowMSW::MSWShouldPreProcessMessage(WXMSG* WXUNUSED(pMsg))
 {
     // preprocess all messages by default
     return TRUE;
@@ -2499,6 +2500,10 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
         case WM_SYSCOLORCHANGE:
             // the return value for this message is ignored
             processed = HandleSysColorChange();
+            break;
+
+        case WM_DISPLAYCHANGE:
+            processed = HandleDisplayChange();
             break;
 
         case WM_PALETTECHANGED:
@@ -3289,6 +3294,14 @@ bool wxWindowMSW::HandleSysColorChange()
     return FALSE;
 }
 
+bool wxWindowMSW::HandleDisplayChange()
+{
+    wxDisplayChangedEvent event;
+    event.SetEventObject(this);
+
+    return GetEventHandler()->ProcessEvent(event);
+}
+
 bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush,
                               WXHDC pDC,
                               WXHWND pWnd,
@@ -3335,6 +3348,32 @@ WXHBRUSH wxWindowMSW::OnCtlColor(WXHDC WXUNUSED(hDC),
 
 bool wxWindowMSW::HandlePaletteChanged(WXHWND hWndPalChange)
 {
+#if wxUSE_PALETTE
+        // same as below except we don't respond to our own messages
+        if (hWndPalChange != GetHWND()) {
+        // check to see if we our our parents have a custom palette
+        wxWindow *win = this;
+        while (!win->HasCustomPalette() && win->GetParent()) win = win->GetParent();
+        if (win->HasCustomPalette()) {
+            /* realize the palette to see whether redrawing is needed */
+            HDC hdc = GetDC((HWND) hWndPalChange);
+            win->m_palette.SetHPALETTE( (WXHPALETTE)
+                ::SelectPalette(hdc, (HPALETTE) win->m_palette.GetHPALETTE(), false) );
+
+            int result = ::RealizePalette(hdc);
+            /* restore the palette (before releasing the DC) */
+            win->m_palette.SetHPALETTE( (WXHPALETTE)
+                ::SelectPalette(hdc, (HPALETTE) win->m_palette.GetHPALETTE(), true) );
+            RealizePalette(hdc);
+            ReleaseDC((HWND) hWndPalChange, hdc);
+            /* now check for the need to redraw */
+            if (result > 0)
+                InvalidateRect((HWND) hWndPalChange, NULL, TRUE);
+            }
+
+        }
+#endif
+
     wxPaletteChangedEvent event(GetId());
     event.SetEventObject(this);
     event.SetChangedWindow(wxFindWinFromHandle(hWndPalChange));
@@ -3344,6 +3383,29 @@ bool wxWindowMSW::HandlePaletteChanged(WXHWND hWndPalChange)
 
 bool wxWindowMSW::HandleQueryNewPalette()
 {
+
+#if wxUSE_PALETTE
+    // check to see if we our our parents have a custom palette
+    wxWindow *win = this;
+    while (!win->HasCustomPalette() && win->GetParent()) win = win->GetParent();
+    if (win->HasCustomPalette()) {
+        /* realize the palette to see whether redrawing is needed */
+        HDC hdc = GetDC((HWND) GetHWND());
+        win->m_palette.SetHPALETTE( (WXHPALETTE)
+             ::SelectPalette(hdc, (HPALETTE) win->m_palette.GetHPALETTE(), false) );
+
+        int result = ::RealizePalette(hdc);
+        /* restore the palette (before releasing the DC) */
+        win->m_palette.SetHPALETTE( (WXHPALETTE)
+             ::SelectPalette(hdc, (HPALETTE) win->m_palette.GetHPALETTE(), true) );
+        ::RealizePalette(hdc);
+        ::ReleaseDC((HWND) GetHWND(), hdc);
+        /* now check for the need to redraw */
+        if (result > 0)
+            ::InvalidateRect((HWND) GetHWND(), NULL, TRUE);
+        }
+#endif
+
     wxQueryNewPaletteEvent event(GetId());
     event.SetEventObject(this);
 
@@ -3351,7 +3413,7 @@ bool wxWindowMSW::HandleQueryNewPalette()
 }
 
 // Responds to colour changes: passes event on to children.
-void wxWindowMSW::OnSysColourChanged(wxSysColourChangedEvent& event)
+void wxWindowMSW::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 {
     // the top level window also reset the standard colour map as it might have
     // changed (there is no need to do it for the non top level windows as we

@@ -28,64 +28,105 @@
 ****************************************************************************/
 
 // For compilers that support precompilation
-#include "wx/wxprec.h"
+
+#include "wx/applet/echovar.h"
+#include "wx/msgdlg.h"
 #include "wx/html/forcelnk.h"
 
 // Include private headers
-#include "wx/applet/echovar.h"
 
 /*---------------------------- Global variables ---------------------------*/
 
-// Implement the dynamic class so it can be constructed dynamically
-IMPLEMENT_ABSTRACT_CLASS(wxEchoVariable, wxObject);
+static wxEchoVariable   *wxEchoVariable::sm_first = NULL;
+static wxHashTable      *wxEchoVariable::sm_varTable = NULL;
 
 /*----------------------------- Implementation ----------------------------*/
 
 /****************************************************************************
 PARAMETERS:
-cls     - The String name of the class
-parms   - an optional parameter string to pass off to the child class
-
-RETURNS:
-The string value of the variable
+varName         - The String name of the class
+getValueFn      - Pointer to the function that returns the echo variable value
 
 REMARKS:
-To grab a value from any class which is derived from this one simple use this
-static function and the name of the derived class to get the value.
-This static function is the only function implemented in this base class
-basically this is provided for an easier method of grabbing a variable. We
-keep all the dynamic object handling in this class to avoid confusing the source
-where these are used.
-
-SEE ALSO:
-wxEchoPrep
+Constructor for the wxEchoVariable class that self registers itself with
+the list of all echo variables when the static class instance is created
+at program init time (remember all the constructors get called before
+the main program function!).
 ****************************************************************************/
-static wxString wxEchoVariable::FindValue(
-    const wxString &cls,
-    const char *parms)
+wxEchoVariable::wxEchoVariable(
+    const char *varName,
+    wxEchoVariableGetValueFn getValueFn)
 {
-    wxObject * tmpclass;
-
-    tmpclass = wxCreateDynamicObject(wxString("wxEchoVariable") + cls);
-    if (!tmpclass) {
-#ifdef CHECKED		
-        wxMessageBox(wxString("wxHTML #echo error: Class not found (") + cls + wxString(")."),"Error",wxICON_ERROR);
-#endif
-        return wxString("");
-        }
-
-    wxEchoVariable * ev = wxDynamicCast(tmpclass, wxEchoVariable);
-		
-    if (!ev) {
-#ifdef CHECKED		
-        wxMessageBox(wxString("wxHTML #echo error: Class is not a valid echo variable (") + cls + wxString(")."),"Error",wxICON_ERROR);
-#endif		
-        return wxString("");
-		}
-
-    return ev->GetValue(parms);
+    m_varName = varName;
+    m_getValueFn = getValueFn;
+    m_next = sm_first;
+    sm_first = this;
 }
 
+/****************************************************************************
+REMARKS:
+Initializes parent pointers and hash table for fast searching for echo
+variables.
+****************************************************************************/
+void wxEchoVariable::Initialize()
+{
+    wxEchoVariable::sm_varTable = new wxHashTable(wxKEY_STRING);
+
+    // Index all class infos by their class name
+    wxEchoVariable *info = sm_first;
+    while (info) {
+        if (info->m_varName)
+            sm_varTable->Put(info->m_varName, info);
+        info = info->m_next;
+        }
+}
+
+/****************************************************************************
+REMARKS:
+Clean up echo variable hash tables on application exit.
+****************************************************************************/
+void wxEchoVariable::CleanUp()
+{
+    delete wxEchoVariable::sm_varTable;
+    wxEchoVariable::sm_varTable = NULL;
+}
+
+/****************************************************************************
+PARAMETERS:
+varName         - The String name of the class
+parms           - Parameter string for the echo variable
+
+REMARKS:
+Constructor for the wxEchoVariable class that self registers itself with
+the list of all echo variables when the static class instance is created
+at program init time (remember all the constructors get called before
+the main program function!).
+****************************************************************************/
+wxString wxEchoVariable::GetValue(
+    const wxChar *varName,
+    const wxChar *parms)
+{
+    wxEchoVariable *info = wxEchoVariable::FindVariable(varName);
+    if (info)
+        return info->m_getValueFn(parms);
+#ifdef CHECKED		
+    wxMessageBox(wxString("wxHTML #echo error: Class is not a valid echo variable (") + varName + wxString(")."),"Error",wxICON_ERROR);
+#endif		
+    return wxString("");
+}
+
+/****************************************************************************
+PARAMETERS:
+varName       - The String name of the class
+
+RETURNS:
+True if the echo variable exists, false if not.
+****************************************************************************/
+bool wxEchoVariable::Exists(
+    const wxChar *varName)
+{
+    return wxEchoVariable::FindVariable(varName) != NULL;
+}
 
 /*------------------------ Macro Documentation ---------------------------*/
 
@@ -177,4 +218,5 @@ void STRING_ECHO_VARIABLE(
     wxString string);
 
 // hack to make this file link
-FORCE_LINK_ME(echovar)				
+FORCE_LINK_ME(echovar)
+

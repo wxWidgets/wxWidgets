@@ -28,7 +28,6 @@
 #include "wx/brush.h"
 #include "wx/pen.h"
 #include "wx/palette.h"
-
 #include "wx/list.h"            // we use wxList in inline functions
 
 class WXDLLEXPORT wxDCBase;
@@ -741,6 +740,7 @@ protected:
 
 #if wxUSE_PALETTE
     wxPalette         m_palette;
+    bool              m_custompalette;
 #endif // wxUSE_PALETTE
 
 private:

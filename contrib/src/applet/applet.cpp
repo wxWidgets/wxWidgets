@@ -26,9 +26,6 @@
 *
 ****************************************************************************/
 
-// For compilers that support precompilation
-#include "wx/wxprec.h"
-
 // Include private headers
 #include "wx/applet/applet.h"
 #include "wx/applet/window.h"

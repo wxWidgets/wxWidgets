@@ -27,16 +27,15 @@
 *
 ****************************************************************************/
 
-// For compilers that support precompilation
-#include "wx/wxprec.h"
-#include "wx/html/forcelnk.h"
-
 // Include private headers
 #include "wx/applet/prepecho.h"
 #include "wx/applet/echovar.h"
 
-/*---------------------------- Global variables ---------------------------*/
+// Force Link macro
+#include "wx/html/forcelnk.h"
 
+// wxWindows headers
+#include "wx/msgdlg.h"
 
 /*----------------------------- Implementation ----------------------------*/
 
@@ -68,7 +67,6 @@ wxString wxEchoPrep::Process(
 	
 	while ((i = (output.Lower()).Find(ft)) != -1) {
 		// Loop until every #echo directive is found
-		
 		int n, c, end;
         wxString cname, parms;
         wxString tag;
@@ -97,7 +95,7 @@ wxString wxEchoPrep::Process(
             cname = tag.Mid(10, n);
 
             // grab the value from the class, put it in tag since the data is no longer needed
-            tag = wxEchoVariable::FindValue(cname, NULL);
+            tag = wxEchoVariable::GetValue(cname, NULL);
             }
         else {
             // Find the parms
@@ -114,9 +112,7 @@ wxString wxEchoPrep::Process(
             cname = tag.Mid(10, n);
 
             // grab the value from the class, put it in tag since the data is no longer needed
-            tag = wxEchoVariable::FindValue(cname, parms.c_str());
-
-
+            tag = wxEchoVariable::GetValue(cname, parms.c_str());
             }
         // remove ampersands and <> chars
         tag.Replace("&", "&amp;");
@@ -125,7 +121,6 @@ wxString wxEchoPrep::Process(
 
         output = (output.Mid(0,i) + tag + output.Mid(i));
 		}
-	
     return output;
 }
 

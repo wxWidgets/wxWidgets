@@ -2339,7 +2339,7 @@ static void wxConvertToMSWListItem(const wxListCtrl *ctrl,
         lvItem.mask |= LVIF_PARAM;
 }
 
-static void wxConvertToMSWListCol(int col, const wxListItem& item,
+static void wxConvertToMSWListCol(int WXUNUSED(col), const wxListItem& item,
                                   LV_COLUMN& lvCol)
 {
     wxZeroMemory(lvCol);

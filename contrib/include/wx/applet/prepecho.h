@@ -30,6 +30,7 @@
 #ifndef __WX_PREPECHO_H
 #define __WX_PREPECHO_H
 
+#include "wx/object.h"
 #include "wx/html/htmlproc.h"
 
 /*--------------------------- Class Definitions ---------------------------*/

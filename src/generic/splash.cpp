@@ -108,6 +108,16 @@ wxSplashScreenWindow::wxSplashScreenWindow(const wxBitmap& bitmap, wxWindow* par
     wxWindow(parent, id, pos, size, style)
 {
     m_bitmap = bitmap;
+
+#ifndef __WXGTK__
+    bool hiColour = (wxDisplayDepth() >= 16) ;
+
+    if (bitmap.GetPalette() && !hiColour)
+    {
+        SetPalette(* bitmap.GetPalette());
+    }
+#endif
+
 }
 
 void wxSplashScreenWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
@@ -131,7 +141,6 @@ static void wxDrawSplashBitmap(wxDC& dc, const wxBitmap& bitmap, int WXUNUSED(x)
 
     if (bitmap.GetPalette() && !hiColour)
     {
-        dc.SetPalette(* bitmap.GetPalette());
         dcMem.SetPalette(* bitmap.GetPalette());
     }
 #endif // USE_PALETTE_IN_SPLASH
@@ -143,7 +152,6 @@ static void wxDrawSplashBitmap(wxDC& dc, const wxBitmap& bitmap, int WXUNUSED(x)
 #ifdef USE_PALETTE_IN_SPLASH
     if (bitmap.GetPalette() && !hiColour)
     {
-        dc.SetPalette(wxNullPalette);
         dcMem.SetPalette(wxNullPalette);
     }
 #endif // USE_PALETTE_IN_SPLASH

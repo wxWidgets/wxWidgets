@@ -30,6 +30,7 @@
 #ifndef __WX_PREPIFELSE_H
 #define __WX_PREPIFELSE_H
 
+#include "wx/object.h"
 #include "wx/html/htmlproc.h"
 
 /*--------------------------- Class Definitions ---------------------------*/

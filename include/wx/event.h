@@ -230,20 +230,21 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_POPUP_MENU_INIT, 423)
     DECLARE_EVENT_TYPE(wxEVT_CONTEXT_MENU, 424)
     DECLARE_EVENT_TYPE(wxEVT_SYS_COLOUR_CHANGED, 425)
-    DECLARE_EVENT_TYPE(wxEVT_SETTING_CHANGED, 426)
-    DECLARE_EVENT_TYPE(wxEVT_QUERY_NEW_PALETTE, 427)
-    DECLARE_EVENT_TYPE(wxEVT_PALETTE_CHANGED, 428)
-    DECLARE_EVENT_TYPE(wxEVT_JOY_BUTTON_DOWN, 429)
-    DECLARE_EVENT_TYPE(wxEVT_JOY_BUTTON_UP, 430)
-    DECLARE_EVENT_TYPE(wxEVT_JOY_MOVE, 431)
-    DECLARE_EVENT_TYPE(wxEVT_JOY_ZMOVE, 432)
-    DECLARE_EVENT_TYPE(wxEVT_DROP_FILES, 433)
-    DECLARE_EVENT_TYPE(wxEVT_DRAW_ITEM, 434)
-    DECLARE_EVENT_TYPE(wxEVT_MEASURE_ITEM, 435)
-    DECLARE_EVENT_TYPE(wxEVT_COMPARE_ITEM, 436)
-    DECLARE_EVENT_TYPE(wxEVT_INIT_DIALOG, 437)
-    DECLARE_EVENT_TYPE(wxEVT_IDLE, 438)
-    DECLARE_EVENT_TYPE(wxEVT_UPDATE_UI, 439)
+    DECLARE_EVENT_TYPE(wxEVT_DISPLAY_CHANGED, 426)
+    DECLARE_EVENT_TYPE(wxEVT_SETTING_CHANGED, 427)
+    DECLARE_EVENT_TYPE(wxEVT_QUERY_NEW_PALETTE, 428)
+    DECLARE_EVENT_TYPE(wxEVT_PALETTE_CHANGED, 429)
+    DECLARE_EVENT_TYPE(wxEVT_JOY_BUTTON_DOWN, 430)
+    DECLARE_EVENT_TYPE(wxEVT_JOY_BUTTON_UP, 431)
+    DECLARE_EVENT_TYPE(wxEVT_JOY_MOVE, 432)
+    DECLARE_EVENT_TYPE(wxEVT_JOY_ZMOVE, 433)
+    DECLARE_EVENT_TYPE(wxEVT_DROP_FILES, 434)
+    DECLARE_EVENT_TYPE(wxEVT_DRAW_ITEM, 435)
+    DECLARE_EVENT_TYPE(wxEVT_MEASURE_ITEM, 436)
+    DECLARE_EVENT_TYPE(wxEVT_COMPARE_ITEM, 437)
+    DECLARE_EVENT_TYPE(wxEVT_INIT_DIALOG, 438)
+    DECLARE_EVENT_TYPE(wxEVT_IDLE, 439)
+    DECLARE_EVENT_TYPE(wxEVT_UPDATE_UI, 440)
 
         // Generic command events
         // Note: a click is a higher-level event than button down/up
@@ -1381,6 +1382,21 @@ private:
 };
 
 /*
+ wxEVT_DISPLAY_CHANGED
+ */
+class WXDLLEXPORT wxDisplayChangedEvent : public wxEvent
+{
+private:
+    DECLARE_DYNAMIC_CLASS(wxDisplayChangedEvent)
+
+public:
+    wxDisplayChangedEvent()
+        { m_eventType = wxEVT_DISPLAY_CHANGED; }
+
+    virtual wxEvent *Clone() const { return new wxDisplayChangedEvent(*this); }
+};
+
+/*
  wxEVT_PALETTE_CHANGED
  */
 
@@ -1899,6 +1915,7 @@ typedef void (wxEvtHandler::*wxJoystickEventFunction)(wxJoystickEvent&);
 typedef void (wxEvtHandler::*wxDropFilesEventFunction)(wxDropFilesEvent&);
 typedef void (wxEvtHandler::*wxInitDialogEventFunction)(wxInitDialogEvent&);
 typedef void (wxEvtHandler::*wxSysColourChangedFunction)(wxSysColourChangedEvent&);
+typedef void (wxEvtHandler::*wxDisplayChangedFunction)(wxDisplayChangedEvent&);
 typedef void (wxEvtHandler::*wxUpdateUIEventFunction)(wxUpdateUIEvent&);
 typedef void (wxEvtHandler::*wxIdleEventFunction)(wxIdleEvent&);
 typedef void (wxEvtHandler::*wxCloseEventFunction)(wxCloseEvent&);
@@ -1968,6 +1985,7 @@ typedef void (wxEvtHandler::*wxContextMenuEventFunction)(wxContextMenuEvent&);
 #define EVT_DROP_FILES(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_DROP_FILES, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxDropFilesEventFunction) & func, (wxObject *) NULL ),
 #define EVT_INIT_DIALOG(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_INIT_DIALOG, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxInitDialogEventFunction) & func, (wxObject *) NULL ),
 #define EVT_SYS_COLOUR_CHANGED(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SYS_COLOUR_CHANGED, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxSysColourChangedFunction) & func, (wxObject *) NULL ),
+#define EVT_DISPLAY_CHANGED(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_DISPLAY_CHANGED, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxDisplayChangedFunction) & func, (wxObject *) NULL ),
 #define EVT_SHOW(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SHOW, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxShowEventFunction) & func, (wxObject *) NULL ),
 #define EVT_MAXIMIZE(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MAXIMIZE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMaximizeEventFunction) & func, (wxObject *) NULL ),
 #define EVT_ICONIZE(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_ICONIZE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxIconizeEventFunction) & func, (wxObject *) NULL ),

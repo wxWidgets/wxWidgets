@@ -275,8 +275,9 @@ bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
 
 #ifndef __WXMICROWIN__
 int CALLBACK wxFontEnumeratorProc(LPLOGFONT lplf, LPTEXTMETRIC lptm,
-                                  DWORD dwStyle, LONG lParam)
+                                  DWORD WXUNUSED(dwStyle), LONG lParam)
 {
+
     // we used to process TrueType fonts only, but there doesn't seem to be any
     // reasons to restrict ourselves to them here
 #if 0

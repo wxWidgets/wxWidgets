@@ -67,7 +67,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxBMPHandler,wxImageHandler)
 bool wxBMPHandler::SaveFile(wxImage *image,
                             wxOutputStream& stream,
                             bool verbose)
-{      
+{
     return SaveDib(image, stream, verbose, TRUE/*IsBmp*/, FALSE/*IsMask*/);
 }
 
@@ -82,7 +82,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
 
     if ( !image->Ok() )
     {
-        if ( verbose ) 
+        if ( verbose )
             wxLogError(_("BMP: Couldn't save invalid image."));
         return FALSE;
     }
@@ -92,7 +92,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
     if ( image->HasOption(wxBMP_FORMAT) )
         format = image->GetOptionInt(wxBMP_FORMAT);
 
-    unsigned bpp;     // # of bits per pixel
+    wxUint16 bpp;     // # of bits per pixel
     int palette_size; // # of color map entries, ie. 2^bpp colors
 
     // set the bpp and appropriate palette_size, and do additional checks
@@ -179,7 +179,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
     hdr.h_res = hdr.v_res = wxUINT32_SWAP_ON_BE(72);  // 72dpi is standard
     hdr.num_clrs = wxUINT32_SWAP_ON_BE(palette_size); // # colors in colormap
     hdr.num_signif_clrs = 0;     // all colors are significant
-    
+
     if ( IsBmp )
     {
         if (// VS: looks ugly but compilers tend to do ugly things with structs,
@@ -188,7 +188,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
             !stream.Write(&hdr.magic, 2) ||
             !stream.Write(&hdr.filesize, 4) ||
             !stream.Write(&hdr.reserved, 4) ||
-            !stream.Write(&hdr.data_offset, 4) 
+            !stream.Write(&hdr.data_offset, 4)
            )
         {
             if (verbose)
@@ -443,7 +443,7 @@ typedef struct
     unsigned char r, g, b;
 }  _cmap;
 
-bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height, 
+bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                              int bpp, int ncolors, int comp,
                              off_t bmpOffset, wxInputStream& stream,
                              bool verbose, bool IsBmp, bool hasPalette)
@@ -474,7 +474,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
     // destroy existing here instead of:
     image->Destroy();
     image->Create(width, height);
-    
+
     unsigned char *ptr = image->GetData();
 
     if ( !ptr )
@@ -753,7 +753,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
     return stream.IsOk();
 }
 
-bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream, 
+bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
                            bool verbose, bool IsBmp)
 {
     wxUint16        aWord;
@@ -785,7 +785,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     int width = (int)wxINT32_SWAP_ON_BE(dbuf[0]);
     int height = (int)wxINT32_SWAP_ON_BE(dbuf[1]);
     if ( !IsBmp)height = height  / 2; // for icons divide by 2
-        
+
     if ( width > 32767 )
     {
         if (verbose)
@@ -815,7 +815,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
 
     stream.Read(dbuf, 4 * 4);
     int comp = (int)wxINT32_SWAP_ON_BE(dbuf[0]);
-    if ( comp != BI_RGB && comp != BI_RLE4 && comp != BI_RLE8 && 
+    if ( comp != BI_RGB && comp != BI_RLE4 && comp != BI_RLE8 &&
          comp != BI_BITFIELDS )
     {
         if (verbose)
@@ -865,7 +865,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     return TRUE;
 }
 
-bool wxBMPHandler::LoadFile(wxImage *image, wxInputStream& stream, 
+bool wxBMPHandler::LoadFile(wxImage *image, wxInputStream& stream,
                             bool verbose, int WXUNUSED(index))
 {
     // Read a single DIB fom the file:
@@ -935,7 +935,7 @@ bool wxICOHandler::SaveFile(wxImage *image,
 
     int images = 1; // only generate one image
 
-    // VS: This is a hack of sort - since ICO and CUR files are almost 
+    // VS: This is a hack of sort - since ICO and CUR files are almost
     //     identical, we have all the meat in wxICOHandler and check for
     //     the actual (handler) type when the code has to distinguish between
     //     the two formats
@@ -966,7 +966,7 @@ bool wxICOHandler::SaveFile(wxImage *image,
         wxImage mask;
 
         if ( image->HasMask() )
-        {            
+        {
             // make another image with black/white:
             mask = image->ConvertToMono (image->GetMaskRed(), image->GetMaskGreen(), image->GetMaskBlue() );
 
@@ -982,8 +982,8 @@ bool wxICOHandler::SaveFile(wxImage *image,
                 {
                     for (j = 0; j < mask.GetHeight(); j++)
                     {
-                        if ((r == mask.GetRed(i, j)) && 
-                            (g == mask.GetGreen(i, j))&& 
+                        if ((r == mask.GetRed(i, j)) &&
+                            (g == mask.GetGreen(i, j))&&
                             (b == mask.GetBlue(i, j)) )
                                 image->SetRGB(i, j, 0, 0, 0 );
                     }
@@ -1106,16 +1106,17 @@ bool wxICOHandler::SaveFile(wxImage *image,
     return TRUE;
 }
 
-bool wxICOHandler::LoadFile(wxImage *image, wxInputStream& stream, 
+bool wxICOHandler::LoadFile(wxImage *image, wxInputStream& stream,
                             bool verbose, int index)
 {
     stream.SeekI(0);
     return DoLoadFile(image, stream, verbose, index);
 }
 
-bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream, 
+bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
                             bool verbose, int index)
 {
+    (void) verbose;
     bool bResult = FALSE;
     bool IsBmp = FALSE;
 
@@ -1126,7 +1127,7 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
     wxUint16 nIcons = wxUINT16_SWAP_ON_BE(IconDir.idCount);
     // nType is 1 for Icons, 2 for Cursors:
     wxUint16 nType = wxUINT16_SWAP_ON_BE(IconDir.idType);
-    
+
     // loop round the icons and choose the best one:
     ICONDIRENTRY *pIconDirEntry = new ICONDIRENTRY[nIcons];
     ICONDIRENTRY *pCurrentEntry = pIconDirEntry;
@@ -1144,7 +1145,7 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
             if ( pCurrentEntry->bColorCount == 0 )
                 pCurrentEntry->bColorCount = 255;
             if ( pCurrentEntry->bColorCount >= colmax )
-            {                
+            {
                 iSel = i;
                 wMax = pCurrentEntry->bWidth;
                 colmax = pCurrentEntry->bColorCount;
@@ -1152,14 +1153,14 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
         }
         pCurrentEntry++;
     }
-    
+
     if ( index != -1 )
     {
         // VS: Note that we *have* to run the loop above even if index != -1, because
         //     it reads ICONDIRENTRies.
         iSel = index;
     }
-    
+
     if ( iSel == wxNOT_FOUND || iSel < 0 || iSel >= nIcons )
     {
         wxLogError(_("ICO: Invalid icon index."));
@@ -1230,11 +1231,11 @@ bool wxCURHandler::DoCanRead(wxInputStream& stream)
 
 IMPLEMENT_DYNAMIC_CLASS(wxANIHandler, wxCURHandler)
 
-bool wxANIHandler::LoadFile(wxImage *image, wxInputStream& stream, 
+bool wxANIHandler::LoadFile(wxImage *image, wxInputStream& stream,
                             bool verbose, int index)
 {
-    wxInt32 FCC1, FCC2; 
-    wxUint32 datalen;        
+    wxInt32 FCC1, FCC2;
+    wxUint32 datalen;
     static const char *rifftxt = "RIFF";
     static const char *listtxt = "LIST";
     static const char *icotxt  = "icon";
@@ -1244,15 +1245,15 @@ bool wxANIHandler::LoadFile(wxImage *image, wxInputStream& stream,
     wxInt32 *ico32  = (wxInt32 *) icotxt;
 
     int iIcon = 0;
-    
+
     stream.SeekI(0);
     stream.Read(&FCC1, 4);
-    if ( FCC1 != *riff32 ) 
+    if ( FCC1 != *riff32 )
         return FALSE;
 
     // we have a riff file:
     while (stream.IsOk())
-    {                    
+    {
         // we always have a data size
         stream.Read(&datalen, 4);
 
@@ -1261,12 +1262,12 @@ bool wxANIHandler::LoadFile(wxImage *image, wxInputStream& stream,
         {
     	    stream.Read(&FCC2, 4);
         }
-        else 
+        else
         {
             if (FCC1 == *ico32 && iIcon >= index)
             {
                 return DoLoadFile(image, stream, verbose, -1);
-            }    
+            }
             else
             {
                 stream.SeekI(stream.TellI() + datalen);
@@ -1274,7 +1275,7 @@ bool wxANIHandler::LoadFile(wxImage *image, wxInputStream& stream,
                     iIcon ++;
             }
         }
-        
+
         // try to read next data chunk:
         stream.Read(&FCC1, 4);
     }
@@ -1283,8 +1284,8 @@ bool wxANIHandler::LoadFile(wxImage *image, wxInputStream& stream,
 
 bool wxANIHandler::DoCanRead(wxInputStream& stream)
 {
-    wxInt32 FCC1, FCC2; 
-    wxUint32 datalen ;        
+    wxInt32 FCC1, FCC2;
+    wxUint32 datalen ;
     static const char *rifftxt = "RIFF";
     static const char *listtxt = "LIST";
     static const char *anihtxt = "anih";
@@ -1292,30 +1293,30 @@ bool wxANIHandler::DoCanRead(wxInputStream& stream)
     wxInt32 *riff32 = (wxInt32 *) rifftxt;
     wxInt32 *list32 = (wxInt32 *) listtxt;
     wxInt32 *anih32 = (wxInt32 *) anihtxt;
-            
+
     stream.SeekI(0);
     stream.Read(&FCC1, 4);
-    if ( FCC1 != *riff32 ) 
+    if ( FCC1 != *riff32 )
         return FALSE;
 
     // we have a riff file:
     while ( stream.IsOk() )
     {
         if ( FCC1 != *anih32 )
-            return TRUE;    
+            return TRUE;
         // we always have a data size:
         stream.Read(&datalen, 4);
- 
+
         // now either data or a FCC:
-        if ( (FCC1 == *riff32) || (FCC1 == *list32) ) 
+        if ( (FCC1 == *riff32) || (FCC1 == *list32) )
         {
        	    stream.Read(&FCC2, 4);
         }
-        else 
+        else
         {
             stream.SeekI(stream.TellI() + datalen);
         }
-        
+
         // try to read next data chunk:
         stream.Read(&FCC1, 4);
     }
@@ -1325,8 +1326,8 @@ bool wxANIHandler::DoCanRead(wxInputStream& stream)
 
 int wxANIHandler::GetImageCount(wxInputStream& stream)
 {
-    wxInt32 FCC1, FCC2; 
-    wxUint32 datalen ;        
+    wxInt32 FCC1, FCC2;
+    wxUint32 datalen ;
     static const char *rifftxt = "RIFF";
     static const char *listtxt = "LIST";
     static const char *anihtxt = "anih";
@@ -1334,7 +1335,7 @@ int wxANIHandler::GetImageCount(wxInputStream& stream)
     wxInt32 *riff32 = (wxInt32 *) rifftxt;
     wxInt32 *list32 = (wxInt32 *) listtxt;
     wxInt32 *anih32 = (wxInt32 *) anihtxt;
-            
+
     stream.SeekI(0);
     stream.Read(&FCC1, 4);
     if ( FCC1 != *riff32 )
@@ -1345,9 +1346,9 @@ int wxANIHandler::GetImageCount(wxInputStream& stream)
     {
         // we always have a data size:
         stream.Read(&datalen, 4);
- 
+
         // now either data or a FCC:
-        if ( (FCC1 == *riff32) || (FCC1 == *list32) ) 
+        if ( (FCC1 == *riff32) || (FCC1 == *list32) )
     	{
     	    stream.Read(&FCC2, 4);
         }
@@ -1361,10 +1362,10 @@ int wxANIHandler::GetImageCount(wxInputStream& stream)
                 delete[] pData;
                 return nIcons;
             }
-            else 
+            else
                 stream.SeekI(stream.TellI() + datalen);
         }
-        
+
         // try to read next data chunk:
         stream.Read(&FCC1, 4);
     }

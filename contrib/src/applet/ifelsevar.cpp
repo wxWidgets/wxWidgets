@@ -27,61 +27,134 @@
 *
 ****************************************************************************/
 
-// For compilers that support precompilation
-#include "wx/wxprec.h"
-#include "wx/html/forcelnk.h"
-
 // Include private headers
 #include "wx/applet/ifelsevar.h"
 
+// wxWindows forcelink macro
+#include "wx/html/forcelnk.h"
+#include "wx/msgdlg.h"
+
 /*---------------------------- Global variables ---------------------------*/
 
-// Implement the dynamic class so it can be constructed dynamically
-IMPLEMENT_ABSTRACT_CLASS(wxIfElseVariable, wxObject);
+static wxIfElseVariable *wxIfElseVariable::sm_first = NULL;
+static wxHashTable      *wxIfElseVariable::sm_varTable = NULL;
 
 /*----------------------------- Implementation ----------------------------*/
 
 /****************************************************************************
 PARAMETERS:
-cls     - The String name of the class
-
-RETURNS:
-The boolean value of the variable
+varName         - The String name of the class
+getValueFn      - Pointer to the function that returns the echo variable value
 
 REMARKS:
-To grab a value from any class which is derived from this one simple use this
-static function and the name of the derived class to get the value.
-This static function is the only function implemented in this base class
-basically this is provided for an easier method of grabbing a variable. We
-keep all the dynamic object handling in this class to avoid confusing the source
-where these are used.
-
-SEE ALSO:
-wxIfElsePrep
+Constructor for the wxIfElseVariable class that self registers itself with
+the list of all echo variables when the static class instance is created
+at program init time (remember all the constructors get called before
+the main program function!).
 ****************************************************************************/
-static bool wxIfElseVariable::FindValue(
-    const wxString &cls)
+wxIfElseVariable::wxIfElseVariable(
+    const char *varName,
+    wxIfElseVariableGetValueFn getValueFn)
 {
-    wxObject * tmpclass;
+    m_varName = varName;
+    m_getValueFn = getValueFn;
+    m_next = sm_first;
+    sm_first = this;
+}
 
-    tmpclass = wxCreateDynamicObject(wxString("wxIfElseVariable") + cls);
-    if (!tmpclass) {
-#ifdef CHECKED		
-        wxMessageBox(wxString("wxHTML #if error: Class not found (") + cls + wxString(")."),"Error",wxICON_ERROR);
-#endif
-        return wxString("");
+/****************************************************************************
+REMARKS:
+Initializes parent pointers and hash table for fast searching for echo
+variables.
+****************************************************************************/
+void wxIfElseVariable::Initialize()
+{
+    wxIfElseVariable::sm_varTable = new wxHashTable(wxKEY_STRING);
+
+    // Index all class infos by their class name
+    wxIfElseVariable *info = sm_first;
+    while (info) {
+        if (info->m_varName)
+            sm_varTable->Put(info->m_varName, info);
+        info = info->m_next;
         }
+}
 
-    wxIfElseVariable * ev = wxDynamicCast(tmpclass, wxIfElseVariable);
-		
-    if (!ev) {
+/****************************************************************************
+REMARKS:
+Clean up echo variable hash tables on application exit.
+****************************************************************************/
+void wxIfElseVariable::CleanUp()
+{
+    delete wxIfElseVariable::sm_varTable;
+    wxIfElseVariable::sm_varTable = NULL;
+}
+
+/****************************************************************************
+PARAMETERS:
+varName       - The String name of the class
+
+REMARKS:
+Constructor for the wxIfElseVariable class that self registers itself with
+the list of all ifelse variables when the static class instance is created
+at program init time (remember all the constructors get called before
+the main program function!).
+****************************************************************************/
+bool wxIfElseVariable::GetValue(
+    const wxChar *varName)
+{
+    wxIfElseVariable *info = wxIfElseVariable::FindVariable(varName);
+    if (info) {
+        // Return the forced value if the variable has been forced.
+        if (info->forced)
+            return info->forceVal;
+        return info->m_getValueFn();
+        }
 #ifdef CHECKED		
-        wxMessageBox(wxString("wxHTML #if error: Class is not a valid ifelse variable (") + cls + wxString(")."),"Error",wxICON_ERROR);
+    wxMessageBox(wxString("wxHTML #if error: Class is not a valid if else variable (") + varName + wxString(")."),"Error",wxICON_ERROR);
 #endif		
-        return wxString("");
-		}
+    return wxString("");
+}
 
-    return ev->GetValue();
+/****************************************************************************
+PARAMETERS:
+varName       - The String name of the class
+
+RETURNS:
+True if the if/else variable exists, false if not.
+****************************************************************************/
+bool wxIfElseVariable::Exists(
+    const wxChar *varName)
+{
+    return wxIfElseVariable::FindVariable(varName) != NULL;
+}
+
+/****************************************************************************
+PARAMETERS:
+varName     - The String name of the class
+val         - Value to force the if/else variable with
+
+REMARKS:
+Function to forcibly override the value of an if/else variable for
+testing purposes. Once the variable has been forced, it will always return
+the forced value until the application exists.
+
+NOTE:   This is only available when compiled in CHECKED mode.
+****************************************************************************/
+void wxIfElseVariable::Force(
+    const wxChar *varName,
+    bool val)
+{
+    wxIfElseVariable *info = wxIfElseVariable::FindVariable(varName);
+    if (info) {
+        info->forced = true;
+        info->forceVal = val;
+        }
+    else {
+#ifdef CHECKED		
+        wxMessageBox(wxString("wxHTML #if error: Class is not a valid if else variable (") + varName + wxString(")."),"Error",wxICON_ERROR);
+#endif
+        }		
 }
 
 /*------------------------ Macro Documentation ---------------------------*/
@@ -155,5 +228,5 @@ void IFELSE_VARIABLE(
     const char *name,
     bool state);
 
-
 FORCE_LINK_ME(ifelsevar)
+

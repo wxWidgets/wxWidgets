@@ -1810,7 +1810,7 @@ void wxVariant::operator= (const TIMESTAMP_STRUCT* value)
 
 #endif // wxUSE_ODBC
 
-bool wxVariant::operator==(const wxArrayString& value) const
+bool wxVariant::operator==(const wxArrayString& WXUNUSED(value)) const
 {
     wxFAIL_MSG( _T("TODO") );
 

@@ -34,7 +34,7 @@
 
 // Forward declaration
 class wxHtmlAppletWindow;
-
+class wxAppletEvent;
 /*--------------------------- Class Definitions ---------------------------*/
 
 /****************************************************************************
@@ -76,7 +76,7 @@ public:
     virtual void OnHistoryBack() = 0;
 
             // Handle messages from the wxAppletManager and other applets
-    virtual void OnMessage(wxEvent& msg) = 0;
+    virtual void OnMessage(wxAppletEvent& msg) = 0;
     };
 
 

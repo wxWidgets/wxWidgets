@@ -85,7 +85,7 @@ public:
     // specify document location, use LoadPage() istead
     // Return value : FALSE if an error occured, TRUE otherwise
     bool SetPage(const wxString& source);
-    
+
     // Append to current page
     bool AppendToPage(const wxString& source);
 
@@ -175,14 +175,14 @@ public:
     // Called when user clicked on hypertext link. Default behavior is to
     // call LoadPage(loc)
     virtual void OnLinkClicked(const wxHtmlLinkInfo& link);
-    
-    // Called when wxHtmlWindow wants to fetch data from an URL (e.g. when 
-    // loading a page or loading an image). The data are downloaded if and only if 
+
+    // Called when wxHtmlWindow wants to fetch data from an URL (e.g. when
+    // loading a page or loading an image). The data are downloaded if and only if
     // OnOpeningURL returns TRUE. If OnOpeningURL returns wxHTML_REDIRECT,
     // it must set *redirect to the new URL
-    virtual wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType type,
-                                             const wxString& url,
-                                             wxString *redirect) const 
+    virtual wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType WXUNUSED(type),
+                                             const wxString& WXUNUSED(url),
+                                             wxString *WXUNUSED(redirect)) const
         { return wxHTML_OPEN; }
 
 protected:

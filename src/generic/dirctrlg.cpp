@@ -407,7 +407,7 @@ static int LINKAGEMODE wxDirCtrlStringCompareFunction(const void *first, const v
 {
     wxString *strFirst = (wxString *)first;
     wxString *strSecond = (wxString *)second;
-    
+
     return strFirst->CmpNoCase(*strSecond);
 }
 
@@ -454,7 +454,7 @@ bool wxDirItemData::HasSubDirs() const
     return dir.HasSubDirs();
 }
 
-bool wxDirItemData::HasFiles(const wxString& spec) const
+bool wxDirItemData::HasFiles(const wxString& WXUNUSED(spec)) const
 {
     if (m_path.IsEmpty())
         return FALSE;
@@ -578,8 +578,8 @@ void wxGenericDirCtrl::Init()
 void wxGenericDirCtrl::ShowHidden( bool show )
 {
     m_showHidden = show;
-    
-    // reparse FIXME 
+
+    // reparse FIXME
 }
 
 void wxGenericDirCtrl::AddSection(const wxString& path, const wxString& name, int imageId)

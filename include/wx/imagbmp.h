@@ -53,11 +53,11 @@ public:
     virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
     virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=-1 );
     virtual bool DoCanRead( wxInputStream& stream );
-                                
+
 protected:
-    bool SaveDib(wxImage *image, wxOutputStream& stream, bool verbose, 
+    bool SaveDib(wxImage *image, wxOutputStream& stream, bool verbose,
                  bool IsBmp, bool IsMask);
-    bool DoLoadDib(wxImage *image, int width, int height, int bpp, int ncolors, 
+    bool DoLoadDib(wxImage *image, int width, int height, int bpp, int ncolors,
                    int comp, off_t bmpOffset, wxInputStream& stream,
                    bool verbose, bool IsBmp, bool hasPalette);
     bool LoadDib(wxImage *image, wxInputStream& stream, bool verbose, bool IsBmp);
@@ -115,7 +115,7 @@ public:
         m_type = wxBITMAP_TYPE_CUR;
         m_mime = _T("image/x-cur");
     };
-    
+
     // VS: This handler's meat is implemented inside wxICOHandler (the two
     //     formats are almost identical), but we hide this fact at
     //     the API level, since it is a mere implementation detail.
@@ -141,10 +141,10 @@ public:
         m_type = wxBITMAP_TYPE_ANI;
         m_mime = _T("image/x-ani");
     };
-    
+
 
 #if wxUSE_STREAMS
-    virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE ) {return FALSE ;};
+    virtual bool SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSED(stream), bool WXUNUSED(verbose=TRUE) ){return FALSE ;};
     virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=-1 );
     virtual bool DoCanRead( wxInputStream& stream );
     virtual int GetImageCount( wxInputStream& stream );

@@ -368,7 +368,7 @@ void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
 
         if (!wxPendingDelete.Member(this))
             wxPendingDelete.Append(this);
-            
+
         m_finished = TRUE;
         m_owner->SetFocus(); // This doesn't work. TODO.
 
@@ -424,7 +424,7 @@ void wxTreeTextCtrl::OnKillFocus( wxFocusEvent &event )
 
     (*m_accept) = TRUE;
     (*m_res) = GetValue();
-    
+
     if ((*m_res) != m_startValue)
         m_owner->OnRenameAccept();
 }
@@ -716,7 +716,7 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
 #ifdef __WXMAC__
     int major,minor;
     wxGetOsVersion( &major, &minor );
-    
+
     if (style & wxTR_HAS_BUTTONS) style |= wxTR_MAC_BUTTONS;
     if (style & wxTR_HAS_BUTTONS) style &= ~wxTR_HAS_BUTTONS;
     style &= ~wxTR_LINES_AT_ROOT;
@@ -766,7 +766,7 @@ wxGenericTreeCtrl::~wxGenericTreeCtrl()
 {
     delete m_hilightBrush;
     delete m_hilightUnfocusedBrush;
-    
+
     if (m_arrowRight) delete m_arrowRight;
     if (m_arrowDown) delete m_arrowDown;
 
@@ -789,13 +789,13 @@ size_t wxGenericTreeCtrl::GetCount() const
 
 void wxGenericTreeCtrl::SetIndent(unsigned int indent)
 {
-    m_indent = indent;
+    m_indent = (unsigned short) indent;
     m_dirty = TRUE;
 }
 
 void wxGenericTreeCtrl::SetSpacing(unsigned int spacing)
 {
-    m_spacing = spacing;
+    m_spacing = (unsigned short) spacing;
     m_dirty = TRUE;
 }
 
@@ -2115,7 +2115,7 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
             else if (HasFlag(wxTR_TWIST_BUTTONS))
             {
                 // draw the twisty button here
-                
+
                 if (HasFlag(wxTR_AQUA_BUTTONS))
                 {
                     if (item->IsExpanded())

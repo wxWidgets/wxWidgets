@@ -685,13 +685,13 @@ void wxDataObject::SetAutoDelete()
     m_pIDataObject = NULL;
 }
 
-size_t wxDataObject::GetBufferOffset( const wxDataFormat& format )
+size_t wxDataObject::GetBufferOffset( const wxDataFormat& WXUNUSED(format) )
 {
     return sizeof(size_t);
 }
 
 const void* wxDataObject::GetSizeFromBuffer( const void* buffer, size_t* size,
-                                             const wxDataFormat& format )
+                                             const wxDataFormat& WXUNUSED(format) )
 {
     size_t* p = (size_t*)buffer;
     *size = *p;
@@ -700,7 +700,7 @@ const void* wxDataObject::GetSizeFromBuffer( const void* buffer, size_t* size,
 }
 
 void* wxDataObject::SetSizeInBuffer( void* buffer, size_t size,
-                                       const wxDataFormat& format )
+                                       const wxDataFormat& WXUNUSED(format) )
 {
     size_t* p = (size_t*)buffer;
     *p = size;
@@ -1070,13 +1070,13 @@ class CFSTR_SHELLURLDataObject:public wxCustomDataObject
 public:
     CFSTR_SHELLURLDataObject() : wxCustomDataObject(CFSTR_SHELLURL) {}
 protected:
-    virtual size_t GetBufferOffset( const wxDataFormat& format )
+    virtual size_t GetBufferOffset( const wxDataFormat& WXUNUSED(format) )
     {
         return 0;
     }
 
     virtual const void* GetSizeFromBuffer( const void* buffer, size_t* size,
-                                           const wxDataFormat& format )
+                                           const wxDataFormat& WXUNUSED(format) )
     {
         // CFSTR_SHELLURL is _always_ ANSI text
         *size = strlen( (const char*)buffer );
@@ -1084,8 +1084,8 @@ protected:
         return buffer;
     }
 
-    virtual void* SetSizeInBuffer( void* buffer, size_t size,
-                                   const wxDataFormat& format )
+    virtual void* SetSizeInBuffer( void* buffer, size_t WXUNUSED(size),
+                                   const wxDataFormat& WXUNUSED(format) )
     {
         return buffer;
     }

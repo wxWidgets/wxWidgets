@@ -32,17 +32,19 @@
 // Forward declaration
 class wxHtmlAppletWindow;
 
+#include "wx/event.h"
+
 /*--------------------------- Class Definitions ---------------------------*/
 
 /****************************************************************************
 REMARKS:
-Defines the abstract base class for wxQlet objects.
+Defines the abstract base class for wxPlugIn objects.
 ****************************************************************************/
-class wxPlugIn : public wxObject {
+class wxPlugIn : public wxEvtHandler {
 private:
+    wxHtmlAppletWindow *m_parent;
     DECLARE_ABSTRACT_CLASS(wxPlugIn);
 
-    wxHtmlAppletWindow *m_parent;
 public:
             // Constructor (called during dynamic creation)
             wxPlugIn() { m_parent = NULL; };
@@ -50,8 +52,12 @@ public:
             // Psuedo virtual constructor
     virtual bool Create(wxHtmlAppletWindow *parent);
 
+            // Function that actually executes the main plugin code
+    virtual void Run(const wxString& cmdLine);
+
             // Virtual destructor
     virtual ~wxPlugIn();
     };
+
 #endif // __WX_PLUGIN_H
 

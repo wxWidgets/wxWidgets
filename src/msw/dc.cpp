@@ -1143,7 +1143,7 @@ void wxDC::DoDrawRotatedText(const wxString& text,
 
 #if wxUSE_PALETTE
 
-void wxDC::SetPalette(const wxPalette& palette)
+void wxDC::DoSelectPalette(bool realize)
 {
 #ifdef __WXMICROWIN__
     if (!GetHDC()) return;
@@ -1157,31 +1157,44 @@ void wxDC::SetPalette(const wxPalette& palette)
         m_oldPalette = 0;
     }
 
-    m_palette = palette;
-
-    if (!m_palette.Ok())
-    {
-        // Setting a NULL colourmap is a way of restoring
-        // the original colourmap
-        if (m_oldPalette)
-        {
-            ::SelectPalette(GetHdc(), (HPALETTE) m_oldPalette, FALSE);
-            m_oldPalette = 0;
-        }
-
-        return;
-    }
-
     if (m_palette.Ok() && m_palette.GetHPALETTE())
     {
         HPALETTE oldPal = ::SelectPalette(GetHdc(), (HPALETTE) m_palette.GetHPALETTE(), FALSE);
         if (!m_oldPalette)
             m_oldPalette = (WXHPALETTE) oldPal;
 
-        ::RealizePalette(GetHdc());
+        if (realize)
+            ::RealizePalette(GetHdc());
     }
+
+
 }
 
+void wxDC::SetPalette(const wxPalette& palette)
+{
+    if (palette.Ok()) {
+        m_palette = palette;
+        DoSelectPalette(true);
+        }
+}
+
+void wxDC::InitializePalette()
+{
+    if (wxDisplayDepth() <= 8) {
+        // look for any window or parent that has a custom palette. If any has
+        // one then we need to use it in drawing operations
+        wxWindow *win = m_canvas;
+        while (!win->HasCustomPalette() && win->GetParent()) win = win->GetParent();
+        if (win->HasCustomPalette()) {
+            m_palette = win->GetPalette();
+            m_custompalette = true;
+            // turn on MSW translation for this palette
+            DoSelectPalette();
+            }
+        else
+            m_custompalette = false;
+        }
+}
 #endif // wxUSE_PALETTE
 
 void wxDC::SetFont(const wxFont& the_font)

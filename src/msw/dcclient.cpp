@@ -113,6 +113,11 @@ void wxWindowDC::InitDC()
 
     // default bg colour is pne of the window
     SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
+
+    // since we are a window dc we need to grab the palette from the window
+#if wxUSE_PALETTE
+    InitializePalette();
+#endif
 }
 
 // ----------------------------------------------------------------------------

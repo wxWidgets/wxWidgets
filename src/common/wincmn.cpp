@@ -167,6 +167,10 @@ void wxWindowBase::InitBase()
     m_caret = (wxCaret *)NULL;
 #endif // wxUSE_CARET
 
+#if wxUSE_PALETTE
+    m_custompalette = false;
+#endif // wxUSE_PALETTE
+
     // Whether we're using the current theme for this window (wxGTK only for now)
     m_themeEnabled = FALSE;
 }
@@ -1002,7 +1006,7 @@ void wxWindowBase::OnHelp(wxHelpEvent& event)
 #endif // wxUSE_HELP
 
 // ----------------------------------------------------------------------------
-// tooltips
+// tooltipsroot.Replace("\\", "/");
 // ----------------------------------------------------------------------------
 
 #if wxUSE_TOOLTIPS

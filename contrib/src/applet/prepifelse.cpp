@@ -27,16 +27,16 @@
 *
 ****************************************************************************/
 
-// For compilers that support precompilation
-#include "wx/wxprec.h"
-#include "wx/html/forcelnk.h"
-
 // Include private headers
 #include "wx/applet/prepifelse.h"
 #include "wx/applet/ifelsevar.h"
+#include "wx/applet/echovar.h"
+#include "wx/string.h"
 
-/*---------------------------- Global variables ---------------------------*/
-
+// Force link macro
+#include "wx/html/forcelnk.h"
+// wxWindows
+#include "wx/msgdlg.h"
 
 /*----------------------------- Implementation ----------------------------*/
 
@@ -65,8 +65,54 @@ int ReverseFind(
             return p;
         p--;
         }
-
     return -1;
+}
+
+/* {SECRET} */
+/****************************************************************************
+REMARKS:
+tells if a character is a letter.
+replace this when wxWindows gets regex library. (without strange licensing
+restrictions)
+****************************************************************************/
+bool IsLetter(
+    char c, bool acceptspace = false)
+{
+    if (acceptspace && (c == ' ')) return true;
+    if (c >= '0' && c <= '9') return true;
+    return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_' || c == '\"' || c == '\'' );
+}
+
+#define IsQuote(c) (c == '\'' || c == '\"')
+
+/* {SECRET} */
+/****************************************************************************
+REMARKS:
+tells if a character is a letter.
+replace this when wxWindows gets regex library. (without strange licensing
+restrictions)
+****************************************************************************/
+wxString GetEquals(
+    wxString var,
+    wxString value)
+{
+    if (!wxEchoVariable::Exists(var)) {
+        // TODO: when we implement the set variable, check for a set variable as well
+        #ifdef CHECKED		
+            wxMessageBox(wxString("wxHTML #if\\else error: Variable ") + var + wxString(" not found."),"Error",wxICON_ERROR);
+        #endif
+        return wxString("0"); // false
+        }
+
+    wxString tmp = wxEchoVariable::GetValue(var);
+
+    if (IsQuote( value.GetChar(0) ))
+        value = value.Mid(1);
+    if (IsQuote(value.GetChar(value.Length()-1)))
+        value = value.Mid(0,value.Length()-1);
+
+    if (tmp.CmpNoCase(value) == 0) return wxString("1");
+    return wxString("0");
 }
 
 /****************************************************************************
@@ -77,12 +123,14 @@ RETURNS:
 true or false depending on how it evaluated
 
 REMARKS:
+TODO: rewrite this whole thing using regular expressions when they are done.
 
 SEE ALSO:
 wxIfElseVariable
 ****************************************************************************/
-bool ParseIfStatementValue(wxString &str) {
-
+bool ParseIfStatementValue(
+    wxString &str)
+{
     // Find out if the tag has parenthesis
     // recursive to parse the text within the parenthesis,
     // replacing the text with 1 or 0, (hardcoded true or false)
@@ -93,7 +141,6 @@ bool ParseIfStatementValue(wxString &str) {
         int nextbeg, nextend;
         int parencount = 1, min = b+1;
         do {
-
             nextbeg = str.find('(', min);
             nextend = str.find(')', min);
             if (nextbeg < nextend && nextbeg != wxString::npos) {
@@ -106,9 +153,9 @@ bool ParseIfStatementValue(wxString &str) {
                 }
 
             if (nextend == wxString::npos) {
-                #ifdef CHECKED		
+#ifdef CHECKED		
                 wxMessageBox("wxHTML #if\\else error: Unmatched parenthesis in #if expression.","Error",wxICON_ERROR);
-                #endif
+#endif
                 return true;
                 }
             // once parencount reaches 0 again we have found our matchin )
@@ -124,7 +171,6 @@ bool ParseIfStatementValue(wxString &str) {
         // Add extra spaces just in case of NOT(VAL)
         if (val) str = str.Mid(0, b) + " 1" + str.Mid(e+1);
         else str = str.Mid(0, b) + " 0" + str.Mid(e+1);
-
         }
 
     // Remove spaces from left and right
@@ -135,6 +181,51 @@ bool ParseIfStatementValue(wxString &str) {
     // this makes only one special case necessary for each later on
     str.Replace(" AND ", "&&");
     str.Replace(" OR ", "||");
+    str.Replace(" EQUALS ", "==");
+
+    // Check for equals statements
+    // == statements are special because they are evaluated as a single block
+    int equ;
+    equ = str.find("==");
+    while (equ != wxString::npos) {
+        int begin, end;
+        int begin2, end2; // ends of words
+        begin = equ-1;
+        end = equ+2;
+
+        // remove spaces, find extents
+        while (end < str.Length() && str.GetChar(end) == ' ')
+            end++;
+        while (begin >= 0 && str.GetChar(begin) == ' ')
+            begin--;
+        end2 = end;
+        begin2 = begin;
+        if (str.GetChar(end2) == '\'' || str.GetChar(end2) == '\"') {
+            end2++;
+            while (end2 < str.Length() && str.GetChar(end2) != '\'' && str.GetChar(end2) != '\"' )
+                end2++;
+            end2++;
+            }
+        else {
+            while (end2 < str.Length() && IsLetter(str.GetChar(end2)))
+                end2++;
+            }
+        while (begin >= 0 && IsLetter(str.GetChar(begin)))
+            begin--;
+
+        if (begin < 0) begin = 0;
+        else begin++;
+        if (end2 >= str.Length()) end2 = str.Length();
+
+        wxString tmpeq = GetEquals(str.Mid(begin, begin2-begin+1), str.Mid(end, end2-end));
+        str = str.Mid(0, begin) + wxString(" ") + tmpeq + wxString(" ") +
+            str.Mid(end2);
+        equ = str.find("==");
+
+        // Remove spaces from left and right
+        str.Trim(false);
+        str.Trim(true);
+        }
 
     // We use ReverseFind so that the whole left expression gets evaluated agains
     // the right single item, creating a left -> right evaluation
@@ -145,7 +236,7 @@ bool ParseIfStatementValue(wxString &str) {
     if ( (and != -1) || (or != -1) ) {
         wxString tag1, tag2;
         // handle the rightmost first to force left->right evaluation
-        if (and > or) {
+        if ( (and > or) ) {
             return (
                 ParseIfStatementValue(tag2 = str.Mid(and+2)) &&
                 ParseIfStatementValue(tag1 = str.Mid(0, and)) );
@@ -155,7 +246,6 @@ bool ParseIfStatementValue(wxString &str) {
                 ParseIfStatementValue(tag2 = str.Mid(or+2)) ||
                 ParseIfStatementValue(tag1 = str.Mid(0, or)) );
             }
-
         }
 
     // By the time we get to this place in the function we are guarenteed to have a single
@@ -175,11 +265,10 @@ bool ParseIfStatementValue(wxString &str) {
         }
 
     // now all we have left is the name of the class or a hardcoded 0 or 1
-
     if (str == "") {
-        #ifdef CHECKED		
+#ifdef CHECKED		
         wxMessageBox("wxHTML #if\\else error: Empty expression in #if\\#elif statement.","Error",wxICON_ERROR);
-        #endif
+#endif
         return true;
         }
 
@@ -189,7 +278,7 @@ bool ParseIfStatementValue(wxString &str) {
     if (str == "1") return !notval;
 
     // Grab the value from the variable class identified by cname
-    bool value = wxIfElseVariable::FindValue(str);
+    bool value = wxIfElseVariable::GetValue(str);
     if (notval) value = !value;
     return value;
 
@@ -220,7 +309,6 @@ wxString wxIfElsePrep::Process(
     char ftelse[] = "<!--#else-->";
     char ftnot[] = "<!--#if not ";
     char ftnot2[] = "<!--#if !";
-
     char ftelif[] = "<!--#elif ";
 	
     // make a copy so we can replace text as we go without affecting the original
@@ -234,9 +322,9 @@ wxString wxIfElsePrep::Process(
         e = output.find("-->", b + strlen(ftelif));
 
         if (e == wxString::npos) {
-            #ifdef CHECKED		
+#ifdef CHECKED		
             wxMessageBox("wxHTML #elif error: Premature end of file while parsing #elif.","Error",wxICON_ERROR);
-            #endif
+#endif
             break;
             }
 
@@ -259,9 +347,9 @@ wxString wxIfElsePrep::Process(
                 }
 
             if (nextendif == wxString::npos) {
-                #ifdef CHECKED		
+#ifdef CHECKED		
                 wxMessageBox("wxHTML #elif error: Premature end of file before finding #endif.","Error",wxICON_ERROR);
-                #endif
+#endif
                 break;
                 }
             // once ifcount reaches 0 again we have found our matchin #endif
@@ -269,9 +357,9 @@ wxString wxIfElsePrep::Process(
 
         // If it couldn't be found die gracefully
         if (nextendif == wxString::npos) {
-                // We already displayed a message, just break all the way out
-                break;
-                }
+            // We already displayed a message, just break all the way out
+            break;
+            }
 
         int elifsize = e - (b + strlen(ftelif)) + strlen("-->");
         // Create the #if/else block, removing the #elif code
@@ -280,7 +368,6 @@ wxString wxIfElsePrep::Process(
             output.Mid(b+strlen(ftelif), elifsize+nextendif) +
             wxString(ftend) +
             output.Mid(b+strlen(ftelif)+elifsize+nextendif);
-
         }
 	
     // Parse out the if else blocks themselves
@@ -350,4 +437,5 @@ wxString wxIfElsePrep::Process(
     return output;
 }
 
-FORCE_LINK(ifelsevar)				
+FORCE_LINK(ifelsevar)
+				

@@ -30,57 +30,98 @@
 #ifndef __WX_IFELSEVAR_H
 #define __WX_IFELSEVAR_H
 
+#include "wx/object.h"
+#include "wx/hash.h"
+
 /*--------------------------- Class Definitions ---------------------------*/
 
 /****************************************************************************
+RETURNS:
+The boolean value of the variable
+
 REMARKS:
-This class is used to create variables for the HTML preprocessor #if, #else,
-and #endif directives.
+To create new variables for the #if, #else and #endif HTML preprocessing
+blocks you need to derive classes from wxIfElseVariable and override the
+pure virtual GetValue function. However this should not be done directly
+but by using the BEGIN_IFELSE_VARIABLE and END_IFELSE_VARIABLE macros
 
 SEE ALSO:
-wxIfElsePrep
+wxIfElsePrep, BEGIN_IFELSE_VARIABLE, END_IFELSE_VARIABLE
+****************************************************************************/
+typedef bool (*wxIfElseVariableGetValueFn)();
+
+/****************************************************************************
+REMARKS:
+wxIfElseVariable class Definition
 ****************************************************************************/
 class wxIfElseVariable : public wxObject {
-private:
-    DECLARE_ABSTRACT_CLASS(wxIfElseVariable);
+protected:
+    const wxChar                *m_varName;
+    wxIfElseVariableGetValueFn  m_getValueFn;
+    static wxIfElseVariable     *sm_first;
+    wxIfElseVariable            *m_next;
+    static wxHashTable          *sm_varTable;
+    bool                        forced;
+    bool                        forceVal;
+
+    static inline wxIfElseVariable *wxIfElseVariable::FindVariable(const wxChar *varName);
 
 public:
-    wxIfElseVariable() : wxObject() {}
-    ~wxIfElseVariable() {}
+    // Constructor to create the echo variable and register the class
+    wxIfElseVariable(
+        const char *varName,
+        wxIfElseVariableGetValueFn getValueFn);
+
+    // Member variable access functions
+    const wxChar *GetClassName() const            { return m_varName; }
+    wxIfElseVariableGetValueFn GetValueFn() const { return m_getValueFn; }
+    static const wxIfElseVariable* GetFirst()     { return sm_first; }
+    const wxIfElseVariable* GetNext() const       { return m_next; }
 	
-    /****************************************************************************
-    RETURNS:
-    The boolean value of the variable
+    // Static functions to retrieve any variable avaliable
+    static bool GetValue(const wxChar *varName);
+    static bool Exists(const wxChar *varName);
+    static void Force(const wxChar *varName, bool val);
 
-    REMARKS:
-    To create new variables for the #if, #else and #endif HTML preprocessing
-    blocks you need to derive classes from wxIfElseVariable and override the
-    pure virtual GetValue function. However this should not be done directly
-    but by using the BEGIN_IFELSE_VARIABLE and END_IFELSE_VARIABLE macros
+    // Initializes parent pointers and hash table for fast searching.
+    static void Initialize();
 
-    SEE ALSO:
-    wxIfElsePrep, BEGIN_IFELSE_VARIABLE, END_IFELSE_VARIABLE
-    ****************************************************************************/
-    virtual bool GetValue() const = 0;
-
-
-public:
-    // static function to retrieve any variable avaliable
-    static bool FindValue(const wxString &cls);
+    // Cleans up hash table used for fast searching.
+    static void CleanUp();
     };
+	
+/****************************************************************************
+PARAMETERS:
+class   - Name of class for echo variable to find
+
+RETURNS:
+Pointer to the echo variable class
+
+REMARKS:
+Inline helper function to find the echo variable from it's class name.
+****************************************************************************/
+inline wxIfElseVariable *wxIfElseVariable::FindVariable(
+    const wxChar *varName)
+{
+    if (sm_varTable)
+        return (wxIfElseVariable*)sm_varTable->Get(varName);
+    else {
+        wxIfElseVariable *info = sm_first;
+        while (info) {
+            if (info->m_varName && wxStrcmp(info->m_varName, varName) == 0)
+                return info;
+            info = info->m_next;
+            }
+        return NULL;
+        }
+}
 
 /*--------------------------------- MACROS --------------------------------*/
 
 #define BEGIN_IFELSE_VARIABLE(name)                                         \
-    class wxIfElseVariable##name : public wxIfElseVariable {                \
-    private:                                                                \
-        DECLARE_DYNAMIC_CLASS(wxIfElseVariable##name##);                    \
-    public:                                                                 \
-        wxIfElseVariable##name##() : wxIfElseVariable() {}                  \
-        virtual bool GetValue() const;                                      \
-        };                                                                  \
-    IMPLEMENT_DYNAMIC_CLASS(wxIfElseVariable##name##, wxIfElseVariable);    \
-    bool wxIfElseVariable##name :: GetValue() const {
+bool wxIfElseVariableFn##name();                                            \
+wxIfElseVariable wxIfElseVariable##name(#name,wxIfElseVariableFn##name);    \
+bool wxIfElseVariableFn##name() {                                           \
 
 #define END_IFELSE_VARIABLE(returnval)                                      \
     return returnval;                                                       \
