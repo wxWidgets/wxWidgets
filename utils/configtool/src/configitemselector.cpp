@@ -13,7 +13,16 @@
 #pragma implementation "configitemselector.h"
 #endif
 
-#include <wx/wx.h>
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+
 #include <wx/cshelp.h>
 #include <wx/statline.h>
 #include <wx/splitter.h>
@@ -21,6 +30,7 @@
 #include <wx/spinctrl.h>
 #include <wx/spinbutt.h>
 #include <wx/valgen.h>
+#include <wx/notebook.h>
 
 #include "configitemselector.h"
 #include "configtooldoc.h"

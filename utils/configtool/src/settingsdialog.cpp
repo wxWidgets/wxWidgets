@@ -78,12 +78,11 @@ void ctSettingsDialog::CreateControls()
     item1->SetSizer(item2);
 
     wxNotebook* item3 = new wxNotebook(item1, ID_NOTEBOOK, wxDefaultPosition, wxSize(200, 200), wxNB_TOP);
-    wxNotebookSizer* item3Sizer = new wxNotebookSizer(item3);
     ctGeneralSettingsDialog* item4 = new ctGeneralSettingsDialog(item3, ID_GENERAL_SETTINGS_DIALOG, wxDefaultPosition, wxSize(100, 80), 0);
     item3->AddPage(item4, _("General"));
     ctLocationSettingsDialog* item11 = new ctLocationSettingsDialog(item3, ID_LOCATION_SETTINGS_DIALOG, wxDefaultPosition, wxSize(100, 80), 0);
     item3->AddPage(item11, _("Locations"));
-    item2->Add(item3Sizer, 0, wxGROW|wxALL, 5);
+    item2->Add(item3, 0, wxGROW|wxALL, 5);
 
     wxBoxSizer* item21 = new wxBoxSizer(wxHORIZONTAL);
     item2->Add(item21, 0, wxGROW|wxALL, 5);
