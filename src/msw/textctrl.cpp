@@ -822,13 +822,13 @@ wxTextCtrl::StreamOut(wxFontEncoding encoding, bool selectionOnly) const
         // decreased by wxRichEditStreamOut
         *(wchBuf.data() + data.len) = L'\0';
 
-        // now convert to the given encoding (this is a lossful conversion but
-        // what else can we do)
+        // now convert to the given encoding (this is a possibly lossful
+        // conversion but what else can we do)
         wxCSConv conv(encoding);
-        size_t lenNeeded = conv.WC2MB(NULL, wchBuf, len);
-        if ( lenNeeded )
+        size_t lenNeeded = conv.WC2MB(NULL, wchBuf, 0);
+        if ( lenNeeded++ )
         {
-            conv.WC2MB(wxStringBuffer(out, lenNeeded), wchBuf, len);
+            conv.WC2MB(wxStringBuffer(out, lenNeeded), wchBuf, lenNeeded);
         }
     }
 
