@@ -387,6 +387,7 @@ typedef int wxWindowID;
 // WXDLLEXPORT maps to export declaration when building the DLL, to import
 // declaration if using it or to nothing at all if we don't use wxWin as DLL
 #ifdef WXMAKINGDLL_BASE
+    #undef WXUSINGDLL_BASE
     #define WXDLLIMPEXP_BASE WXEXPORT
     #define WXDLLIMPEXP_DATA_BASE(type) WXEXPORT type
 #elif defined(WXUSINGDLL_BASE)
@@ -398,6 +399,7 @@ typedef int wxWindowID;
 #endif
 
 #ifdef WXMAKINGDLL_CORE
+    #undef WXUSINGDLL_CORE
     #define WXDLLIMPEXP_CORE WXEXPORT
     #define WXDLLIMPEXP_DATA_CORE(type) WXEXPORT type
 #elif defined(WXUSINGDLL_CORE)
