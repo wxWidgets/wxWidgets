@@ -26,6 +26,7 @@
 #include "wx/string.h"
 #include "wx/list.h"
 #include "wx/utils.h"
+#include "wx/module.h"
 #include "wx/url.h"
 
 IMPLEMENT_CLASS(wxProtoInfo, wxObject)
