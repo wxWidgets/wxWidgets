@@ -148,6 +148,7 @@ public:
     // wxCocoa
     WX_NSBitmapImageRep GetNSBitmapImageRep();
     void SetNSBitmapImageRep(WX_NSBitmapImageRep bitmapImageRep);
+    WX_NSImage GetNSImage(bool useMask) const;
 
     static void InitStandardHandlers() { }
     static void CleanUpHandlers() { }

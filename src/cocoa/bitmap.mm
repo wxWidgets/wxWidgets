@@ -27,6 +27,7 @@
 
 #import <AppKit/NSBitmapImageRep.h>
 #import <AppKit/NSGraphics.h>
+#import <AppKit/NSImage.h>
 
 // ========================================================================
 // wxBitmapRefData
@@ -143,6 +144,27 @@ WX_NSBitmapImageRep wxBitmap::GetNSBitmapImageRep()
     if(!M_BITMAPDATA)
         return NULL;
     return M_BITMAPDATA->m_cocoaNSBitmapImageRep;
+}
+
+WX_NSImage wxBitmap::GetNSImage(bool useMask) const
+{
+    if(!Ok())
+        return nil;
+    NSImage *nsimage = [[[NSImage alloc]
+            initWithSize:NSMakeSize(GetWidth(), GetHeight())] autorelease];
+    if(!nsimage)
+        return nil;
+    [nsimage addRepresentation: M_BITMAPDATA->m_cocoaNSBitmapImageRep];
+    if(useMask && GetMask())
+    {
+        NSImage *maskImage = [[NSImage alloc]
+                initWithSize:NSMakeSize(GetWidth(), GetHeight())];
+        [maskImage addRepresentation: GetMask()->GetNSBitmapImageRep()];
+        [nsimage lockFocus];
+        [maskImage compositeToPoint:NSZeroPoint operation:NSCompositeDestinationIn];
+        [nsimage unlockFocus];
+    }
+    return nsimage;
 }
 
 void wxBitmap::SetNSBitmapImageRep(WX_NSBitmapImageRep bitmapImageRep)
