@@ -238,7 +238,6 @@ ALL_SOURCES = \
 		mac/statlmac.cpp \
 		mac/stattext.cpp \
 		mac/tabctrl.cpp \
-		mac/taskbar.cpp \
 		mac/textctrl.cpp \
 		mac/thread.cpp \
 		mac/timer.cpp \
@@ -584,7 +583,6 @@ ALL_HEADERS = \
 		mac/stattext.h \
 		mac/statusbr.h \
 		mac/tabctrl.h \
-		mac/taskbar.h \
 		mac/textctrl.h \
 		mac/timer.h \
 		mac/toolbar.h \
@@ -900,7 +898,6 @@ GUIOBJS = \
 		statlmac.o \
 		stattext.o \
 		tabctrl.o \
-		taskbar.o \
 		textctrl.o \
 		thread.o \
 		timer.o \

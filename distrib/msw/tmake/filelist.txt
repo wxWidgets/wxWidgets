@@ -548,7 +548,6 @@ statbrma.cpp	Mac
 statlmac.cpp	Mac
 stattext.cpp	Mac
 tabctrl.cpp	Mac
-taskbar.cpp	Mac
 textctrl.cpp	Mac
 thread.cpp	Mac
 timer.cpp	Mac
@@ -765,7 +764,6 @@ statbox.cpp	OS2
 statline.cpp	OS2
 stattext.cpp	OS2
 tabctrl.cpp	OS2
-taskbar.cpp	OS2
 textctrl.cpp	OS2
 timer.cpp	OS2
 thread.cpp	OS2
@@ -1177,7 +1175,6 @@ statline.h	MacH
 stattext.h	MacH
 statusbr.h	MacH
 tabctrl.h	MacH
-taskbar.h	MacH
 textctrl.h	MacH
 timer.h	MacH
 toolbar.h	MacH
@@ -1486,7 +1483,6 @@ dc.h	OS2H
 tabctrl.h	OS2H
 dcclient.h	OS2H
 print.h	OS2H
-taskbar.h	OS2H
 bmpbuttn.h	OS2H
 dcmemory.h	OS2H
 iniconf.h	OS2H

@@ -234,7 +234,6 @@ ALL_SOURCES = \
 		os2/statline.cpp \
 		os2/stattext.cpp \
 		os2/tabctrl.cpp \
-		os2/taskbar.cpp \
 		os2/textctrl.cpp \
 		os2/thread.cpp \
 		os2/timer.cpp \
@@ -567,7 +566,6 @@ ALL_HEADERS = \
 		os2/statline.h \
 		os2/stattext.h \
 		os2/tabctrl.h \
-		os2/taskbar.h \
 		os2/textctrl.h \
 		os2/timer.h \
 		os2/toolbar.h \
@@ -872,7 +870,6 @@ GUIOBJS = \
 		statline.o \
 		stattext.o \
 		tabctrl.o \
-		taskbar.o \
 		textctrl.o \
 		thread.o \
 		timer.o \
