@@ -29,7 +29,7 @@ class TestComboBox(wxPanel):
         EVT_SET_FOCUS(cb, self.OnSetFocus)
         EVT_KILL_FOCUS(cb, self.OnKillFocus)
 
-        cb.Append("foo")
+        cb.Append("foo", "This is some client data for this item")
 
         wxComboBox(self, 501, "default value", wxPoint(80, 80), wxSize(95, -1),
                         sampleList, wxCB_SIMPLE)
@@ -37,11 +37,13 @@ class TestComboBox(wxPanel):
         EVT_TEXT(self, 501, self.EvtText)
 
 
-    def EvtComboBox(self, event):
-        self.log.WriteText('EvtComboBox: %s\n' % event.GetString())
+    def EvtComboBox(self, evt):
+        cb = evt.GetEventObject()
+        data = cb.GetClientData(cb.GetSelection())
+        self.log.WriteText('EvtComboBox: %s\nClientData: %s\n' % (evt.GetString(), data))
 
-    def EvtText(self, event):
-        self.log.WriteText('EvtText: %s\n' % event.GetString())
+    def EvtText(self, evt):
+        self.log.WriteText('EvtText: %s\n' % evt.GetString())
 
 #---------------------------------------------------------------------------
 
