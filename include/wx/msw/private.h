@@ -242,7 +242,11 @@ WXDLLEXPORT_DATA(extern HINSTANCE) wxhInstance;
 // global functions
 // ---------------------------------------------------------------------------
 
+extern "C"
+{
 WXDLLEXPORT HINSTANCE wxGetInstance();
+}
+
 WXDLLEXPORT void wxSetInstance(HINSTANCE hInst);
 
 WXDLLEXPORT wxWindow* wxFindWinFromHandle(WXHWND hWnd);
