@@ -3191,7 +3191,7 @@ bool wxWindowMSW::HandleCreate(WXLPCREATESTRUCT cs, bool *mayCreate)
     {
         // there is no need to do anything for the top level windows
         const wxWindow *parent = GetParent();
-        if ( parent && !parent->IsTopLevel() )
+        while ( parent && !parent->IsTopLevel() )
         {
             LONG exStyle = ::GetWindowLong(GetHwndOf(parent), GWL_EXSTYLE);
             if ( !(exStyle & WS_EX_CONTROLPARENT) )
@@ -3200,6 +3200,8 @@ bool wxWindowMSW::HandleCreate(WXLPCREATESTRUCT cs, bool *mayCreate)
                 ::SetWindowLong(GetHwndOf(parent), GWL_EXSTYLE,
                                 exStyle | WS_EX_CONTROLPARENT);
             }
+
+            parent = parent->GetParent();
         }
     }
 
