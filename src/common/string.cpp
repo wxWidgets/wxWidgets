@@ -1340,7 +1340,7 @@ static inline int wxDoCmpNoCase(const wxChar* s1, size_t l1,
             if(wxTolower(s1[i]) != wxTolower(s2[i]))
                 break;
         }
-        return i == l2 ? 1 : s1[i] < s2[i] ? -1 : 1;
+        return i == l2 ? 1 : wxTolower(s1[i]) < wxTolower(s2[i]) ? -1 : 1;
     }
 
     wxFAIL;   // must never get there
