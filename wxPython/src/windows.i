@@ -520,6 +520,11 @@ public:
 
 //---------------------------------------------------------------------------
 
+
+// TODO: Add wrappers for the wxScrollHelper class, make wxScrolledWindow
+//       derive from it and wxPanel.
+
+
 class wxScrolledWindow : public wxPanel {
 public:
     wxScrolledWindow(wxWindow* parent,
@@ -546,7 +551,7 @@ public:
     void SetScrollPageSize(int orient, int pageSize);
     void SetTargetWindow(wxWindow* window);
     void GetViewStart(int* OUTPUT, int* OUTPUT);
-    void ViewStart(int* OUTPUT, int* OUTPUT);
+    %pragma(python) addtoclass = "ViewStart = GetViewStart"
 
     void CalcScrolledPosition( int x, int y, int *OUTPUT, int *OUTPUT);
     void CalcUnscrolledPosition( int x, int y, int *OUTPUT, int *OUTPUT);

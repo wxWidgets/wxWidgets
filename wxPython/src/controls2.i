@@ -112,6 +112,30 @@ enum {
     wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK,
 };
 
+enum {
+    /* Style flags */
+    wxLC_ICON,
+    wxLC_SMALL_ICON,
+    wxLC_LIST,
+    wxLC_REPORT,
+    wxLC_ALIGN_TOP,
+    wxLC_ALIGN_LEFT,
+    wxLC_AUTOARRANGE,
+    wxLC_USER_TEXT,
+    wxLC_EDIT_LABELS,
+    wxLC_NO_HEADER,
+    wxLC_NO_SORT_HEADER,
+    wxLC_SINGLE_SEL,
+    wxLC_SORT_ASCENDING,
+    wxLC_SORT_DESCENDING,
+    wxLC_MASK_TYPE,
+    wxLC_MASK_ALIGN,
+    wxLC_MASK_SORT,
+    wxLC_HRULES,
+    wxLC_VRULES,
+    wxLC_VIRTUAL,
+};
+
 
 
 class wxListItemAttr

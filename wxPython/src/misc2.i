@@ -835,7 +835,7 @@ public:
 //----------------------------------------------------------------------
 
 %{
-#if !wxUSE_WAVE && !defined(__WXMSW__)
+#if !wxUSE_WAVE
 // A C++ stub class for wxWave for platforms that don't have it.
 class wxWave : public wxObject
 {

@@ -158,15 +158,23 @@ public:
 
     void Append(const wxString& item);
     void Clear();
+    void Delete(int n);
     int FindString(const wxString& string);
     int GetColumns();
     int GetSelection();
     wxString GetString(const int n);
     wxString GetStringSelection();
-    int Number();
+    int GetCount();
     void SetColumns(const int n = 1);
     void SetSelection(const int n);
     void SetStringSelection(const wxString& string);
+    void SetString(int n, const wxString& s);
+
+    %pragma(python) addtoclass = "
+    Number = GetCount
+    Select = SetSelection
+    "
+
 };
 
 //----------------------------------------------------------------------
@@ -198,7 +206,6 @@ public:
     wxString GetString(int n);
     wxString GetStringSelection();
     wxString GetValue();
-    int Number();
     void Paste();
     void Replace(long from, long to, const wxString& text);
     void Remove(long from, long to);
@@ -208,6 +215,7 @@ public:
     void SetSelection(int n);
     %name(SetMark)void SetSelection(long from, long to);
     void SetValue(const wxString& text);
+    void SetEditable(bool editable);
 };
 
 //----------------------------------------------------------------------
@@ -314,7 +322,9 @@ public:
 
     wxString GetString(int n);
     wxString GetStringSelection();
-    int Number();
+    int GetCount();
+    %pragma(python) addtoclass = "Number = GetCount"
+    bool IsSelected(const int n);
     bool Selected(const int n);
     void Set(int LCOUNT, wxString* choices);
     // TODO:    void SetClientData(const int n, char* data);
@@ -518,12 +528,20 @@ public:
 //***    wxString GetLabel();
 //***    void SetLabel(const wxString& label);
 
-    %name(GetItemLabel)wxString GetLabel(int n);
-    int GetSelection();
     wxString GetString(int n);
+    void SetString(int n, const wxString& label);
+    %pragma(python) addtoclass = "
+    GetItemLabel = GetString
+    SetItemLabel = SetString
+    "
+    int GetSelection();
     wxString GetStringSelection();
-    int Number();
-    %name(SetItemLabel)void SetLabel(int n, const wxString& label);
+    int GetCount();
+    %pragma(python) addtoclass = "Number = GetCount"
+
+    int GetColumnCount();
+    int GetRowCount();
+
     void SetSelection(int n);
     void SetStringSelection(const wxString& string);
     void Show(bool show);

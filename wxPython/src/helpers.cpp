@@ -1016,10 +1016,7 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
             PyObject* o1 = PyTuple_GetItem(o, 0);
             PyObject* o2 = PyTuple_GetItem(o, 1);
             PyObject* o3 = PyTuple_GetItem(o, 2);
-
-            temp[x].m_flags   = PyInt_AsLong(o1);
-            temp[x].m_keyCode = PyInt_AsLong(o2);
-            temp[x].m_command = PyInt_AsLong(o3);
+            temp[x].Set(PyInt_AsLong(o1), PyInt_AsLong(o2), PyInt_AsLong(o3));
         }
         else {
             PyErr_SetString(PyExc_TypeError, "Expected a list of 3-tuples or wxAcceleratorEntry objects.");
