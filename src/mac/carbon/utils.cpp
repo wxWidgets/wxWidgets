@@ -111,10 +111,23 @@ bool wxGetUserName(char *buf, int maxSize)
   return TRUE;
 }
 
-int wxKill(long pid, wxSignal sig)
+int wxKill(long pid, wxSignal sig , wxKillError *rc )
 {
     // TODO
     return 0;
+}
+
+WXDLLEXPORT bool wxGetEnv(const wxString& var, wxString *value)
+{
+  // TODO : under classic there is no environement support, under X yes
+  return false ;
+}
+
+// set the env var name to the given value, return TRUE on success
+WXDLLEXPORT bool wxSetEnv(const wxString& var, const wxChar *value)
+{
+  // TODO : under classic there is no environement support, under X yes
+  return false ;
 }
 
 //
@@ -469,4 +482,9 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 {
     return wxGenericFindWindowAtPoint(pt);
+}
+
+wxString wxGetOsDescription()
+{
+  return "MacOS" ; //TODO:define further
 }
