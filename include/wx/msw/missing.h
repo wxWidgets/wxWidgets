@@ -526,5 +526,40 @@ typedef struct {
 
 #endif
 
+// This didn't appear in mingw until 2.95.2
+#ifndef SIF_TRACKPOS
+#define SIF_TRACKPOS 16
+#endif
+
+#if wxUSE_MOUSEWHEEL
+    #ifndef WM_MOUSEWHEEL
+        #define WM_MOUSEWHEEL           0x020A
+    #endif
+    #ifndef WHEEL_DELTA
+        #define WHEEL_DELTA             120
+    #endif
+    #ifndef SPI_GETWHEELSCROLLLINES
+        #define SPI_GETWHEELSCROLLLINES 104
+    #endif
+#endif // wxUSE_MOUSEWHEEL
+
+#ifndef VK_OEM_1
+    #define VK_OEM_1        0xBA
+    #define VK_OEM_2        0xBF
+    #define VK_OEM_3        0xC0
+    #define VK_OEM_4        0xDB
+    #define VK_OEM_5        0xDC
+    #define VK_OEM_6        0xDD
+    #define VK_OEM_7        0xDE
+#endif
+
+#ifndef VK_OEM_COMMA
+    #define VK_OEM_PLUS     0xBB
+    #define VK_OEM_COMMA    0xBC
+    #define VK_OEM_MINUS    0xBD
+    #define VK_OEM_PERIOD   0xBE
+#endif
+
+
 #endif
     // _WX_MISSING_H_
