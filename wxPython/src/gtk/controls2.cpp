@@ -4944,6 +4944,40 @@ static PyObject *_wrap_wxListCtrl_SortItems(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
+static wxWindow * wxPyListCtrl_GetMainWindow(wxPyListCtrl *self) {
+        #ifdef __WXMSW__
+            return self;
+        #else
+            return (wxWindow*)self->m_mainWin;
+        #endif
+        }
+static PyObject *_wrap_wxListCtrl_GetMainWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _result;
+    wxPyListCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxListCtrl_GetMainWindow",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl_GetMainWindow. Expected _wxPyListCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxWindow *)wxPyListCtrl_GetMainWindow(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{ _resultobj = wxPyMake_wxObject(_result); }
+    return _resultobj;
+}
+
 static void *SwigwxListViewTowxPyListCtrl(void *ptr) {
     wxListView *src;
     wxPyListCtrl *dest;
@@ -10685,6 +10719,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxListView_Create", (PyCFunction) _wrap_wxListView_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreListView", (PyCFunction) _wrap_new_wxPreListView, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxListView", (PyCFunction) _wrap_new_wxListView, METH_VARARGS | METH_KEYWORDS },
+	 { "wxListCtrl_GetMainWindow", (PyCFunction) _wrap_wxListCtrl_GetMainWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_SortItems", (PyCFunction) _wrap_wxListCtrl_SortItems, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_GetItemBackgroundColour", (PyCFunction) _wrap_wxListCtrl_GetItemBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_SetItemBackgroundColour", (PyCFunction) _wrap_wxListCtrl_SetItemBackgroundColour, METH_VARARGS | METH_KEYWORDS },
