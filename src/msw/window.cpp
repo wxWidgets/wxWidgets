@@ -608,8 +608,7 @@ bool wxWindowMSW::SetCursor(const wxCursor& cursor)
         POINT point;
         ::GetCursorPos(&point);
 
-        RECT rect;
-        ::GetWindowRect(hWnd, &rect);
+        RECT rect = wxGetWindowRect(hWnd);
 
         if ( ::PtInRect(&rect, point) && !wxIsBusy() )
             ::SetCursor(GetHcursorOf(m_cursor));
@@ -1184,11 +1183,7 @@ void wxWindowMSW::OnIdle(wxIdleEvent& WXUNUSED(event))
 
             // we need to have client coordinates here for symmetry with
             // wxEVT_ENTER_WINDOW
-            RECT rect;
-            if ( !::GetWindowRect(GetHwnd(), &rect) )
-            {
-                wxLogLastError(_T("GetWindowRect"));
-            }
+            RECT rect = wxGetWindowRect(GetHwnd());
             pt.x -= rect.left;
             pt.y -= rect.top;
 
@@ -1329,28 +1324,28 @@ void wxWindowMSW::DoSetToolTip(wxToolTip *tooltip)
 // Get total size
 void wxWindowMSW::DoGetSize(int *x, int *y) const
 {
-    HWND hWnd = GetHwnd();
-    RECT rect;
-#ifdef __WIN16__
-    ::GetWindowRect(hWnd, &rect);
-#else
-    if ( !::GetWindowRect(hWnd, &rect) )
-    {
-        wxLogLastError(_T("GetWindowRect"));
-    }
-#endif
+    RECT rect = wxGetWindowRect(GetHwnd());
+
     if ( x )
         *x = rect.right - rect.left;
     if ( y )
         *y = rect.bottom - rect.top;
 }
 
+// Get size *available for subwindows* i.e. excluding menu bar etc.
+void wxWindowMSW::DoGetClientSize(int *x, int *y) const
+{
+    RECT rect = wxGetClientRect(GetHwnd());
+
+    if ( x )
+        *x = rect.right;
+    if ( y )
+        *y = rect.bottom;
+}
+
 void wxWindowMSW::DoGetPosition(int *x, int *y) const
 {
-    HWND hWnd = GetHwnd();
-
-    RECT rect;
-    GetWindowRect(hWnd, &rect);
+    RECT rect = wxGetWindowRect(GetHwnd());
 
     POINT point;
     point.x = rect.left;
@@ -1396,8 +1391,7 @@ void wxWindowMSW::DoScreenToClient(int *x, int *y) const
     if ( y )
         pt.y = *y;
 
-    HWND hWnd = GetHwnd();
-    ::ScreenToClient(hWnd, &pt);
+    ::ScreenToClient(GetHwnd(), &pt);
 
     if ( x )
         *x = pt.x;
@@ -1413,25 +1407,12 @@ void wxWindowMSW::DoClientToScreen(int *x, int *y) const
     if ( y )
         pt.y = *y;
 
-    HWND hWnd = GetHwnd();
-    ::ClientToScreen(hWnd, &pt);
+    ::ClientToScreen(GetHwnd(), &pt);
 
     if ( x )
         *x = pt.x;
     if ( y )
         *y = pt.y;
-}
-
-// Get size *available for subwindows* i.e. excluding menu bar etc.
-void wxWindowMSW::DoGetClientSize(int *x, int *y) const
-{
-    HWND hWnd = GetHwnd();
-    RECT rect;
-    ::GetClientRect(hWnd, &rect);
-    if ( x )
-        *x = rect.right;
-    if ( y )
-        *y = rect.bottom;
 }
 
 void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)

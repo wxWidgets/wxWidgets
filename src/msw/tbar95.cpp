@@ -866,20 +866,24 @@ wxSize wxToolBar::GetToolSize() const
     }
 }
 
-static wxToolBarToolBase *GetItemSkippingDummySpacers( const wxToolBarToolsList& tools, size_t index )
+static
+wxToolBarToolBase *GetItemSkippingDummySpacers(const wxToolBarToolsList& tools,
+                                               size_t index )
 {
     wxToolBarToolsList::Node* current = tools.GetFirst();
 
-    for( ; current != 0; current = current->GetNext() )
+    for ( ; current != 0; current = current->GetNext() )
     {
-        if( index == 0 )
+        if ( index == 0 )
             return current->GetData();
-        size_t separators = ((wxToolBarTool*)current->GetData())->GetSeparatorsCount();
-        // if it is a normal button, sepcount == 0, so skip 1
-        // item ( the button )
-        // otherwise, skip as many items as the separator count,
-        // plus the control itself
-        index -= separators ? separators + 1: 1;
+
+        wxToolBarTool *tool = (wxToolBarTool *)current->GetData();
+        size_t separators = tool->GetSeparatorsCount();
+
+        // if it is a normal button, sepcount == 0, so skip 1 item (the button)
+        // otherwise, skip as many items as the separator count, plus the
+        // control itself
+        index -= separators ? separators + 1 : 1;
     }
 
     return 0;
@@ -897,20 +901,17 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
         return (wxToolBarToolBase *)NULL;
     }
 
-    // if comctl32 version < 4.71
-    // wxToolBar95 adds dummy spacers
+    // if comctl32 version < 4.71 wxToolBar95 adds dummy spacers
 #if defined(_WIN32_IE) && (_WIN32_IE >= 0x400 )
     if ( wxTheApp->GetComCtl32Version() >= 471 )
     {
         return m_tools.Item((size_t)index)->GetData();
     }
     else
+#endif
     {
         return GetItemSkippingDummySpacers( m_tools, (size_t) index );
     }
-#else
-    return GetItemSkippingDummySpacers( m_tools, (size_t) index );
-#endif
 }
 
 void wxToolBar::UpdateSize()

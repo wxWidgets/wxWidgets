@@ -61,12 +61,6 @@
 // globals
 // ----------------------------------------------------------------------------
 
-// all objects to be deleted during next idle processing - from window.cpp
-extern wxList WXDLLEXPORT wxPendingDelete;
-
-// all frames and modeless dialogs - not static, used in frame.cpp, mdi.cpp &c
-wxWindowList wxModelessWindows;
-
 // all modal dialogs currently shown
 static wxWindowList wxModalDialogs;
 
@@ -74,9 +68,9 @@ static wxWindowList wxModalDialogs;
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxPanel)
+IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
 
-BEGIN_EVENT_TABLE(wxDialog, wxPanel)
+BEGIN_EVENT_TABLE(wxDialog, wxTopLevelWindow)
     EVT_BUTTON(wxID_OK, wxDialog::OnOK)
     EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
     EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
@@ -117,19 +111,12 @@ bool wxDialog::Create(wxWindow *parent,
 {
     Init();
 
+    SetExtraStyle(GetExtraStyle() | wxTOPLEVEL_EX_DIALOG);
+
+    if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
+        return FALSE;
+
     m_oldFocus = FindFocus();
-
-    SetName(name);
-
-    wxTopLevelWindows.Append(this);
-
-    if ( parent )
-        parent->AddChild(this);
-
-    if ( id == -1 )
-        m_windowId = (int)NewControlId();
-    else
-        m_windowId = id;
 
     int x = pos.x;
     int y = pos.y;
@@ -140,8 +127,6 @@ bool wxDialog::Create(wxWindow *parent,
         x = wxDIALOG_DEFAULT_X;
     if (y < 0)
         y = wxDIALOG_DEFAULT_Y;
-
-    m_windowStyle = style;
 
     if (width < 0)
         width = wxDIALOG_DEFAULT_WIDTH;
@@ -173,7 +158,7 @@ bool wxDialog::Create(wxWindow *parent,
 
 #ifdef __WXMICROWIN__
     extern const wxChar *wxFrameClassName;
-    
+
     int msflags = WS_OVERLAPPED|WS_POPUP;
     if (style & wxCAPTION)
         msflags |= WS_CAPTION;
@@ -206,7 +191,7 @@ bool wxDialog::Create(wxWindow *parent,
 #ifndef __WXMICROWIN__
     SubclassWin(GetHWND());
 #endif
-    
+
     SetWindowText(hwnd, title);
 
     return TRUE;
@@ -240,7 +225,7 @@ bool wxDialog::EnableCloseButton(bool enable)
         wxLogLastError(_T("DrawMenuBar"));
     }
 #endif
-    
+
     return TRUE;
 }
 
@@ -264,24 +249,8 @@ wxDialog::~wxDialog()
 {
     m_isBeingDeleted = TRUE;
 
-    wxTopLevelWindows.DeleteObject(this);
-
     // this will also reenable all the other windows for a modal dialog
     Show(FALSE);
-
-    if ( !IsModal() )
-        wxModelessWindows.DeleteObject(this);
-
-    // If this is the last top-level window, exit.
-    if ( wxTheApp && (wxTopLevelWindows.Number() == 0) )
-    {
-        wxTheApp->SetTopWindow(NULL);
-
-        if ( wxTheApp->GetExitOnFrameDelete() )
-        {
-            ::PostQuitMessage(0);
-        }
-    }
 }
 
 // ----------------------------------------------------------------------------
@@ -311,56 +280,6 @@ void wxDialog::OnCharHook(wxKeyEvent& event)
 
     // We didn't process this event.
     event.Skip();
-}
-
-// ----------------------------------------------------------------------------
-// Windows dialog boxes can't be iconized
-// ----------------------------------------------------------------------------
-
-void wxDialog::Iconize(bool WXUNUSED(iconize))
-{
-}
-
-bool wxDialog::IsIconized() const
-{
-    return FALSE;
-}
-
-// ----------------------------------------------------------------------------
-// size/position handling
-// ----------------------------------------------------------------------------
-
-void wxDialog::DoSetClientSize(int width, int height)
-{
-    HWND hWnd = (HWND) GetHWND();
-    RECT rect;
-    ::GetClientRect(hWnd, &rect);
-
-    RECT rect2;
-    GetWindowRect(hWnd, &rect2);
-
-    // Find the difference between the entire window (title bar and all)
-    // and the client area; add this to the new client size to move the
-    // window
-    int actual_width = rect2.right - rect2.left - rect.right + width;
-    int actual_height = rect2.bottom - rect2.top - rect.bottom + height;
-
-    MoveWindow(hWnd, rect2.left, rect2.top, actual_width, actual_height, TRUE);
-
-    wxSizeEvent event(wxSize(actual_width, actual_height), m_windowId);
-    event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent(event);
-}
-
-void wxDialog::DoGetPosition(int *x, int *y) const
-{
-    RECT rect;
-    GetWindowRect(GetHwnd(), &rect);
-
-    if ( x )
-        *x = rect.left;
-    if ( y )
-        *y = rect.top;
 }
 
 // ----------------------------------------------------------------------------
@@ -579,17 +498,6 @@ void wxDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
     closing.DeleteObject(this);
 }
 
-// Destroy the window (delayed, if a managed window)
-bool wxDialog::Destroy()
-{
-    wxCHECK_MSG( !wxPendingDelete.Member(this), FALSE,
-                 _T("wxDialog destroyed twice") );
-
-    wxPendingDelete.Append(this);
-
-    return TRUE;
-}
-
 void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 {
 #if wxUSE_CTL3D
@@ -672,7 +580,7 @@ long wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                 rc = FALSE;
             }
             break;
-#endif
+#endif // __WXMICROWIN__
     }
 
     if ( !processed )

@@ -52,10 +52,7 @@ class WXDLLEXPORT wxTopLevelWindowBase : public wxWindow
 public:
     // construction
     wxTopLevelWindowBase();
-#ifdef __DARWIN__
-    virtual ~wxTopLevelWindowBase() {}
-#endif
-    
+
     // top level wnd state
     // --------------------
 
@@ -108,6 +105,10 @@ public:
     // so should be there for all platforms
     void OnActivate(wxActivateEvent &WXUNUSED(event)) { }
 
+#ifdef __DARWIN__
+    virtual ~wxTopLevelWindowBase() {}
+#endif
+
 protected:
     // the frame client to screen translation should take account of the
     // toolbar which may shift the origin of the client area
@@ -129,7 +130,10 @@ protected:
 
 
 // include the real class declaration
-#if defined(__WXGTK__)
+#if defined(__WXMSW__)
+    #include "wx/msw/toplevel.h"
+    #define wxTopLevelWindowNative wxTopLevelWindowMSW
+#elif defined(__WXGTK__)
     #include "wx/gtk/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowGTK
 #elif defined(__WXMGL__)

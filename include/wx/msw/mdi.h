@@ -30,8 +30,6 @@ class WXDLLEXPORT wxMDIChildFrame;
 
 class WXDLLEXPORT wxMDIParentFrame : public wxFrame
 {
-    DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
-
 public:
     wxMDIParentFrame();
     wxMDIParentFrame(wxWindow *parent,
@@ -102,6 +100,8 @@ protected:
     virtual void InternalSetMenuBar();
 #endif // wxUSE_MENUS_NATIVE
 
+    virtual WXHICON GetDefaultIcon() const;
+
     wxMDIClientWindow *             m_clientWindow;
     wxMDIChildFrame *               m_currentChild;
     wxMenu*                         m_windowMenu;
@@ -113,6 +113,7 @@ private:
     friend class WXDLLEXPORT wxMDIChildFrame;
 
     DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
 };
 
 // ---------------------------------------------------------------------------
@@ -177,6 +178,8 @@ protected:
     virtual void DoSetClientSize(int width, int height);
     virtual void InternalSetMenuBar();
     virtual bool IsMDIChild() const { return TRUE; }
+
+    virtual WXHICON GetDefaultIcon() const;
 
     // common part of all ctors
     void Init();

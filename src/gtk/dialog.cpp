@@ -59,11 +59,8 @@ wxDialog::wxDialog( wxWindow *parent,
                     long style, const wxString &name )
 {
     Init();
-    
-    // all dialogs should have tab traversal enabled
-    style |= wxTAB_TRAVERSAL;
 
-    Create( parent, id, title, pos, size, style, name );
+    (void)Create( parent, id, title, pos, size, style, name );
 }
 
 bool wxDialog::Create( wxWindow *parent,
@@ -73,12 +70,16 @@ bool wxDialog::Create( wxWindow *parent,
 {
     SetExtraStyle(GetExtraStyle() | wxTOPLEVEL_EX_DIALOG);
 
+    // all dialogs should have tab traversal enabled
+    style |= wxTAB_TRAVERSAL;
+
     return wxTopLevelWindow::Create(parent, id, title, pos, size, style, name);
 }
 
 void wxDialog::OnApply( wxCommandEvent &WXUNUSED(event) )
 {
-    if (Validate()) TransferDataFromWindow();
+    if (Validate())
+        TransferDataFromWindow();
 }
 
 void wxDialog::OnCancel( wxCommandEvent &WXUNUSED(event) )

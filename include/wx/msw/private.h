@@ -248,6 +248,38 @@ inline bool wxIsCtrlDown()
     return (::GetKeyState(VK_CONTROL) & 0x100) != 0;
 }
 
+// wrapper around GetWindowRect() and GetClientRect() APIs doing error checking
+// for Win32
+inline RECT wxGetWindowRect(HWND hwnd)
+{
+    RECT rect;
+#ifdef __WIN16__
+    ::GetWindowRect(hwnd, &rect);
+#else // Win32
+    if ( !::GetWindowRect(hwnd, &rect) )
+    {
+        wxLogLastError(_T("GetWindowRect"));
+    }
+#endif // Win16/32
+
+    return rect;
+}
+
+inline RECT wxGetClientRect(HWND hwnd)
+{
+    RECT rect;
+#ifdef __WIN16__
+    ::GetClientRect(hwnd, &rect);
+#else // Win32
+    if ( !::GetClientRect(hwnd, &rect) )
+    {
+        wxLogLastError(_T("GetClientRect"));
+    }
+#endif // Win16/32
+
+    return rect;
+}
+
 // ---------------------------------------------------------------------------
 // small helper classes
 // ---------------------------------------------------------------------------
@@ -357,8 +389,8 @@ WXDLLEXPORT extern WXWORD wxGetWindowId(WXHWND hWnd);
 // Does this window style specify any border?
 inline bool wxStyleHasBorder(long style)
 {
-  return (style & (wxSIMPLE_BORDER | wxRAISED_BORDER |
-                   wxSUNKEN_BORDER | wxDOUBLE_BORDER)) != 0;
+    return (style & (wxSIMPLE_BORDER | wxRAISED_BORDER |
+                     wxSUNKEN_BORDER | wxDOUBLE_BORDER)) != 0;
 }
 
 // find the window for HWND which is part of some wxWindow, returns just the

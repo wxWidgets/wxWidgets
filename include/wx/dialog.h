@@ -30,10 +30,10 @@ class WXDLLEXPORT wxDialogBase : public wxTopLevelWindow
 {
 public:
     wxDialogBase() { Init(); }
-    ~wxDialogBase() {}
-    
+    virtual ~wxDialogBase() { }
+
     void Init();
-    
+
     // the modal dialogs have a return code - usually the id of the last
     // pressed button
     void SetReturnCode(int returnCode) { m_returnCode = returnCode; }
@@ -44,7 +44,7 @@ public:
     // lines into a vertical wxBoxSizer
     wxSizer *CreateTextSizer( const wxString &message );
 #endif // wxUSE_STATTEXT && wxUSE_TEXTCTRL
-    
+
 #if wxUSE_BUTTON
     // places buttons into a horizontal wxBoxSizer
     wxSizer *CreateButtonSizer( long flags );
@@ -55,10 +55,10 @@ protected:
     int m_returnCode;
 
     // FIXME - temporary hack in absence of wxTLW !!
-    #ifdef wxTopLevelWindowNative
+#ifdef wxTopLevelWindowNative
     DECLARE_EVENT_TABLE()
     WX_DECLARE_CONTROL_CONTAINER();
-    #endif
+#endif
 };
 
 

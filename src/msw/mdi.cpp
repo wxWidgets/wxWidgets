@@ -163,10 +163,6 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
                               long style,
                               const wxString& name)
 {
-  m_defaultIcon = (WXHICON) (wxSTD_MDIPARENTFRAME_ICON
-                                ? wxSTD_MDIPARENTFRAME_ICON
-                                : wxDEFAULT_MDIPARENTFRAME_ICON);
-
   m_clientWindow = NULL;
   m_currentChild = NULL;
 
@@ -347,6 +343,12 @@ void wxMDIParentFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
     }
 
     event.Skip();
+}
+
+WXHICON wxMDIParentFrame::GetDefaultIcon() const
+{
+    return (WXHICON)(wxSTD_MDIPARENTFRAME_ICON ? wxSTD_MDIPARENTFRAME_ICON
+                                               : wxDEFAULT_MDIPARENTFRAME_ICON);
 }
 
 // ---------------------------------------------------------------------------
@@ -647,9 +649,6 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
                              long style,
                              const wxString& name)
 {
-  m_defaultIcon = (WXHICON)(wxSTD_MDICHILDFRAME_ICON ? wxSTD_MDICHILDFRAME_ICON
-                                                     : wxDEFAULT_MDICHILDFRAME_ICON);
-
   SetName(name);
   wxWindowBase::Show(TRUE); // MDI child frame starts off shown
 
@@ -812,6 +811,12 @@ void wxMDIChildFrame::InternalSetMenuBar()
     InsertWindowMenu(parent->GetClientWindow(), m_hMenu, subMenu);
 
     parent->m_parentFrameActive = FALSE;
+}
+
+WXHICON wxMDIChildFrame::GetDefaultIcon() const
+{
+    return (WXHICON)(wxSTD_MDICHILDFRAME_ICON ? wxSTD_MDICHILDFRAME_ICON
+                                              : wxDEFAULT_MDICHILDFRAME_ICON);
 }
 
 // ---------------------------------------------------------------------------

@@ -50,10 +50,6 @@ extern int g_openDialogs;
 // event tables
 // ----------------------------------------------------------------------------
 
-#ifndef __WXUNIVERSAL__
-    IMPLEMENT_DYNAMIC_CLASS(wxTopLevelWindow, wxWindow)
-#endif
-
 // ----------------------------------------------------------------------------
 // data
 // ----------------------------------------------------------------------------
@@ -190,9 +186,9 @@ gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget), wxTopLevelWindowGTK *
 
     /* All this is for Motif Window Manager "hints" and is supposed to be
        recognized by other WM as well. Not tested. */
-    gdk_window_set_decorations(win->m_widget->window, 
+    gdk_window_set_decorations(win->m_widget->window,
                                (GdkWMDecoration)win->m_gdkDecor);
-    gdk_window_set_functions(win->m_widget->window, 
+    gdk_window_set_functions(win->m_widget->window,
                                (GdkWMFunction)win->m_gdkFunc);
 
     /* GTK's shrinking/growing policy */
@@ -377,7 +373,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 
     if (style & wxFRAME_TOOL_WINDOW)
         win_type = GTK_WINDOW_POPUP;
-        
+
     if (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)
         win_type = GTK_WINDOW_DIALOG;
 
@@ -474,9 +470,9 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     {
         m_gdkDecor = (long) GDK_DECOR_BORDER;
         m_gdkFunc = (long) GDK_FUNC_MOVE;
-    
+
         // All this is for Motif Window Manager "hints" and is supposed to be
-        // recognized by other WM as well. Not tested. 
+        // recognized by other WM as well. Not tested.
         if ((style & wxCAPTION) != 0)
             m_gdkDecor |= GDK_DECOR_TITLE;
         if ((style & wxSYSTEM_MENU) != 0)
@@ -679,12 +675,12 @@ void wxTopLevelWindowGTK::DoSetClientSize( int width, int height )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
-    DoSetSize(-1, -1, 
+    DoSetSize(-1, -1,
               width + m_miniEdge*2, height  + m_miniEdge*2 + m_miniTitle, 0);
 }
 
 void wxTopLevelWindowGTK::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
-                         int width, int height )
+                                     int width, int height )
 {
     // due to a bug in gtk, x,y are always 0
     // m_x = x;

@@ -37,8 +37,6 @@
 // event tables
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxTopLevelWindow, wxWindow)
-
 BEGIN_EVENT_TABLE(wxTopLevelWindow, wxTopLevelWindowNative)
     EVT_NC_PAINT(wxTopLevelWindow::OnNcPaint)
 END_EVENT_TABLE()

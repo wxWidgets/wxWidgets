@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dialog.h
+// Name:        wx/msw/dialog.h
 // Purpose:     wxDialog class
 // Author:      Julian Smart
 // Modified by:
@@ -56,15 +56,7 @@ public:
                 long style = wxDEFAULT_DIALOG_STYLE,
                 const wxString& name = wxDialogNameStr);
 
-    ~wxDialog();
-
-    // override some base class virtuals
-    virtual bool Destroy();
-    virtual bool Show(bool show);
-    virtual void Iconize(bool iconize);
-    virtual bool IsIconized() const;
-
-    virtual bool IsTopLevel() const { return TRUE; }
+    virtual ~wxDialog();
 
     void SetModal(bool flag);
     virtual bool IsModal() const;
@@ -78,15 +70,14 @@ public:
     // returns TRUE if we're in a modal loop
     bool IsModalShowing() const;
 
-#if WXWIN_COMPATIBILITY
-    bool Iconized() const { return IsIconized(); };
-#endif
-
     // wxMSW only: remove the "Close" button from the dialog
     bool EnableCloseButton(bool enable = TRUE);
 
     // implementation only from now on
     // -------------------------------
+
+    // override some base class virtuals
+    virtual bool Show(bool show);
 
     // event handlers
     bool OnClose();
@@ -110,10 +101,6 @@ public:
 #endif // wxUSE_CTL3D
 
 protected:
-    // override more base class virtuals
-    virtual void DoSetClientSize(int width, int height);
-    virtual void DoGetPosition(int *x, int *y) const;
-
     // show modal dialog and enter modal loop
     void DoShowModal();
 

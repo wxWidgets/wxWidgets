@@ -45,21 +45,12 @@ public:
     virtual ~wxFrameMSW();
 
     // implement base class pure virtuals
-    virtual void Raise();
-    virtual void Maximize(bool maximize = TRUE);
-    virtual bool IsMaximized() const;
-    virtual void Iconize(bool iconize = TRUE);
-    virtual bool IsIconized() const;
-    virtual void Restore();
-    virtual void SetIcon(const wxIcon& icon);
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
     virtual bool IsFullScreen() const { return m_fsIsShowing; };
+    virtual void Raise();
 
     // implementation only from now on
     // -------------------------------
-
-    // override some more virtuals
-    virtual bool Show(bool show = TRUE);
 
     // event handlers
     void OnActivate(wxActivateEvent& event);
@@ -124,14 +115,8 @@ protected:
     // common part of all ctors
     void Init();
 
-    // common part of Iconize(), Maximize() and Restore()
-    void DoShowWindow(int nShowCmd);
-
     // override base class virtuals
     virtual void DoGetClientSize(int *width, int *height) const;
-    virtual void DoGetSize(int *width, int *height) const;
-    virtual void DoGetPosition(int *x, int *y) const;
-
     virtual void DoSetClientSize(int width, int height);
 
 #if wxUSE_MENUS_NATIVE
@@ -154,14 +139,8 @@ protected:
 
     virtual bool IsMDIChild() const { return FALSE; }
 
-    // is the frame currently iconized?
-    bool m_iconized;
-
-    // should the frame be maximized when it will be shown? set by Maximize()
-    // when it is called while the frame is hidden
-    bool m_maximizeOnShow;
-
-    WXHICON               m_defaultIcon;
+    // get default (wxWindows) icon for the frame
+    virtual WXHICON GetDefaultIcon() const;
 
 #if wxUSE_STATUSBAR
     static bool           m_useNativeStatusBar;
