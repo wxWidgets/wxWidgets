@@ -32,7 +32,8 @@ enum wxPrintMode
     wxPRINT_MODE_NONE =    0,
     wxPRINT_MODE_PREVIEW = 1,   // Preview in external application
     wxPRINT_MODE_FILE =    2,   // Print to file
-    wxPRINT_MODE_PRINTER = 3    // Send to printer
+    wxPRINT_MODE_PRINTER = 3,   // Send to printer
+    wxPRINT_MODE_STREAM = 4     // Send postscript data into a stream 
 };
 
 
@@ -91,6 +92,9 @@ public:
     void SetPrinterTranslateY(long y);
     void SetPrinterTranslation(long x, long y);
     void SetPrintMode(wxPrintMode printMode);
+
+    wxOutputStream* GetOutputStream();
+    void SetOutputStream(wxOutputStream* outputstream);
 
     %pythoncode { def __nonzero__(self): return self.Ok() }
 };

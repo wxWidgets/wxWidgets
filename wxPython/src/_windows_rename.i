@@ -108,6 +108,7 @@
 %rename(PRINT_MODE_PREVIEW)                 wxPRINT_MODE_PREVIEW;
 %rename(PRINT_MODE_FILE)                    wxPRINT_MODE_FILE;
 %rename(PRINT_MODE_PRINTER)                 wxPRINT_MODE_PRINTER;
+%rename(PRINT_MODE_STREAM)                  wxPRINT_MODE_STREAM;
 %rename(PrintData)                          wxPrintData;
 %rename(PageSetupDialogData)                wxPageSetupDialogData;
 %rename(PageSetupDialog)                    wxPageSetupDialog;
