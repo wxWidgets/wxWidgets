@@ -72,6 +72,11 @@ All GUI ports:
 - In various places, changed tests for pathsep on last char of string to call
   wxEndsWithPathSeparator(s)
 - Added to defs.h a couple of macros (wxPtrToULong & wxULongToPtr)
+- Minor improvements to document/view framework, including
+  delayed deletion of a document (until after the user has chosen
+  a new document), and more intelligent addition of filenames to
+  the file history, including not adding filenames if not using the
+  default extension for the template
 
 Unix:
 
