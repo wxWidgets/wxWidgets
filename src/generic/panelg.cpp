@@ -36,6 +36,7 @@ BEGIN_EVENT_TABLE(wxPanel, wxWindow)
   EVT_SYS_COLOUR_CHANGED(wxPanel::OnSysColourChanged)
   EVT_SET_FOCUS(wxPanel::OnFocus)
   EVT_NAVIGATION_KEY(wxPanel::OnNavigationKey)
+  EVT_SIZE(wxPanel::OnSize)
 END_EVENT_TABLE()
 
 #endif
@@ -101,7 +102,7 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
     wxWindow *winFocus = event.GetCurrentFocus();
     if (!winFocus)
         winFocus = wxWindow::FindFocus();
-	
+
     if (!winFocus)
     {
         event.Skip();
@@ -132,7 +133,7 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
 	        // we don't want to tab into a different dialog or frame
 	        if ( focussed_child_of_p->IsTopLevel() )
 		    break;
-		    
+
                 if ( wxDynamicCast(p, wxPanel) )
                 {
 		    event.SetCurrentFocus( focussed_child_of_p );
@@ -164,6 +165,14 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
     // we cycled through all of our children and none of them wanted to accept
     // focus
     event.Skip();
+}
+
+
+void wxPanel::OnSize(wxSizeEvent& WXUNUSED(event))
+{
+#if wxUSE_CONSTRAINTS
+    if (GetAutoLayout()) Layout();
+#endif
 }
 
 void wxPanel::OnFocus(wxFocusEvent& event)

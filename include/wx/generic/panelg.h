@@ -25,7 +25,7 @@ class WXDLLEXPORT wxPanel : public wxWindow
 {
 public:
     wxPanel() { Init(); }
-    
+
     // Old-style constructor (no default values for coordinates to avoid
     // ambiguity with the new one)
     wxPanel(wxWindow *parent,
@@ -37,7 +37,7 @@ public:
 
         Create(parent, -1, wxPoint(x, y), wxSize(width, height), style, name);
     }
-    
+
     // Constructor
     wxPanel(wxWindow *parent,
             wxWindowID id = -1,
@@ -57,7 +57,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxTAB_TRAVERSAL | wxNO_BORDER,
                 const wxString& name = wxPanelNameStr);
-    
+
     // Sends an OnInitDialog event, which in turns transfers data to
     // to the dialog via validators.
     virtual void InitDialog();
@@ -71,12 +71,14 @@ public:
 
         // responds to colour changes
     void OnSysColourChanged(wxSysColourChangedEvent& event);
-    
+
         // process a keyboard navigation message (Tab traversal)
     void OnNavigationKey(wxNavigationKeyEvent& event);
-    
+
         // set the focus to the first child if we get it
     void OnFocus(wxFocusEvent& event);
+
+    void OnSize(wxSizeEvent& event);
 
         // called by wxWindow whenever it gets focus
     void SetLastFocus(wxWindow *win) { m_winLastFocused = win; }
