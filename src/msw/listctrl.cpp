@@ -291,8 +291,11 @@ bool wxListCtrl::Create(wxWindow *parent,
     if ( m_windowStyle & wxCLIP_SIBLINGS )
         wstyle |= WS_CLIPSIBLINGS;
 
+/*
     if ( wxStyleHasBorder(m_windowStyle) )
         wstyle |= WS_BORDER;
+*/
+
     m_baseStyle = wstyle;
 
     if ( !DoCreateControl(x, y, width, height) )
@@ -308,13 +311,8 @@ bool wxListCtrl::DoCreateControl(int x, int y, int w, int h)
 {
     DWORD wstyle = m_baseStyle;
 
-    bool want3D;
-    WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);
-
-    // Even with extended styles, need to combine with WS_BORDER
-    // for them to look right.
-    if ( want3D )
-        wstyle |= WS_BORDER;
+    WXDWORD exStyle = 0;
+    (void) MSWGetStyle(GetWindowStyle(), & exStyle) ;
 
     long oldStyle = 0; // Dummy
     wstyle |= ConvertToMSWStyle(oldStyle, m_windowStyle);

@@ -212,13 +212,6 @@ public:
     wxWindow *FindItem(long id) const;
     wxWindow *FindItemByHWND(WXHWND hWnd, bool controlOnly = FALSE) const;
 
-    // Make a Windows extended style from the given wxWindows window style
-    static WXDWORD MakeExtendedStyle(long style,
-                                     bool eliminateBorders = FALSE);
-
-    // Determine whether 3D effects are wanted
-    WXDWORD Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D) const;
-
     // MSW only: TRUE if this control is part of the main control
     virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return FALSE; };
 
@@ -227,7 +220,7 @@ public:
     //
     // this is the function that should be overridden in the derived classes,
     // but you will mostly use MSWGetCreateWindowFlags() below
-    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const ;
 
     // get the MSW window flags corresponding to wxWindows ones
     //

@@ -123,8 +123,8 @@ bool wxListBox::Create(wxWindow *parent,
     int height = size.y;
     m_windowStyle = style;
 
-    DWORD wstyle = WS_VISIBLE | WS_VSCROLL | WS_TABSTOP |
-                   LBS_NOTIFY | LBS_HASSTRINGS /* | WS_CLIPSIBLINGS */;
+    DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_VSCROLL | WS_TABSTOP |
+                   LBS_NOTIFY | LBS_HASSTRINGS ;
 
     wxASSERT_MSG( !(style & wxLB_MULTIPLE) || !(style & wxLB_EXTENDED),
                   _T("only one of listbox selection modes can be specified") );
@@ -158,31 +158,16 @@ bool wxListBox::Create(wxWindow *parent,
     // doesn't work properly
     wstyle |= LBS_NOINTEGRALHEIGHT;
 
-    bool want3D;
-    WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);
-
-    // Even with extended styles, need to combine with WS_BORDER for them to
-    // look right.
-    if ( want3D || wxStyleHasBorder(m_windowStyle) )
-    {
-        wstyle |= WS_BORDER;
-    }
+    WXDWORD exStyle = 0;
+    (void) MSWGetStyle(style, & exStyle) ;
 
     m_hWnd = (WXHWND)::CreateWindowEx(exStyle, wxT("LISTBOX"), NULL,
-            wstyle | WS_CHILD,
+            wstyle ,
             0, 0, 0, 0,
             (HWND)parent->GetHWND(), (HMENU)m_windowId,
             wxGetInstance(), NULL);
 
     wxCHECK_MSG( m_hWnd, FALSE, wxT("Failed to create listbox") );
-
-#if wxUSE_CTL3D
-    if (want3D)
-    {
-        Ctl3dSubclassCtl(GetHwnd());
-        m_useCtl3D = TRUE;
-    }
-#endif
 
     // Subclass again to catch messages
     SubclassWin(m_hWnd);

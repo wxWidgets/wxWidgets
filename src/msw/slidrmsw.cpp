@@ -78,13 +78,11 @@ bool wxSliderMSW::Create(wxWindow *parent, wxWindowID id,
 
   // non-Win95 implementation
   
-  long msStyle = WS_CHILD | WS_VISIBLE | WS_BORDER | SS_CENTER;
+  long msStyle = SS_CENTER;
 
-   if ( m_windowStyle & wxCLIP_SIBLINGS )
-        msStyle |= WS_CLIPSIBLINGS;
-
-  bool want3D;
-  WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
+ // WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
+  WXDWORD exStyle = 0;
+  msStyle |= MSWGetStyle(GetWindowStyle(), & exStyle) ;
 
   m_staticValue = (WXHWND) CreateWindowEx(exStyle, wxT("STATIC"), NULL,
                            msStyle,
@@ -108,7 +106,7 @@ bool wxSliderMSW::Create(wxWindow *parent, wxWindowID id,
   else
     msStyle = SBS_HORZ | WS_CHILD | WS_VISIBLE | WS_TABSTOP ;
 
-  HWND scroll_bar = CreateWindowEx(MakeExtendedStyle(m_windowStyle), wxT("SCROLLBAR"), wxT(""),
+  HWND scroll_bar = CreateWindowEx(exStyle, wxT("SCROLLBAR"), wxT(""),
                          msStyle,
                          0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                          wxGetInstance(), NULL);

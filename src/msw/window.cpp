@@ -1165,9 +1165,22 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
         style |= WS_CLIPSIBLINGS;
 
     wxBorder border = (wxBorder)(flags & wxBORDER_MASK);
-    if ( border != wxBORDER_NONE && border != wxBORDER_DEFAULT )
-        style |= WS_BORDER;
+    
+    // Check if we want to automatically give it a sunken style.
+    // Note than because 'sunken' actually maps to WS_EX_CLIENTEDGE, which
+    // is a more neutral term, we don't necessarily get a sunken effect in
+    // Windows XP. Instead we get the appropriate style for the theme.
 
+    if (border == wxBORDER_DEFAULT && wxTheApp->GetAuto3D() && GetParent() &&
+        ((GetParent()->GetWindowStyleFlag() & wxUSER_COLOURS) != wxUSER_COLOURS))
+    {
+        border = (wxBorder)((flags & wxBORDER_MASK) | wxBORDER_SUNKEN);
+    }   
+    
+    // Only give it WS_BORDER for wxBORDER_SIMPLE
+    if (border & wxBORDER_SIMPLE)
+        style |= WS_BORDER;
+    
     // now deal with ext style if the caller wants it
     if ( exstyle )
     {
@@ -1176,7 +1189,7 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
         if ( flags & wxTRANSPARENT_WINDOW )
             *exstyle |= WS_EX_TRANSPARENT;
 
-        switch ( flags & wxBORDER_MASK )
+        switch ( border )
         {
             default:
                 wxFAIL_MSG( _T("unknown border style") );
@@ -1197,6 +1210,7 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
 
             case wxBORDER_SUNKEN:
                 *exstyle |= WS_EX_CLIENTEDGE;
+                style &= ~WS_BORDER;
                 break;
 
             case wxBORDER_DOUBLE:
@@ -1216,94 +1230,6 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
     }
 
     return style;
-}
-
-// Make a Windows extended style from the given wxWindows window style
-WXDWORD wxWindowMSW::MakeExtendedStyle(long style, bool eliminateBorders)
-{
-    WXDWORD exStyle = 0;
-    if ( style & wxTRANSPARENT_WINDOW )
-        exStyle |= WS_EX_TRANSPARENT;
-
-    if ( !eliminateBorders )
-    {
-        if ( style & wxSUNKEN_BORDER )
-            exStyle |= WS_EX_CLIENTEDGE;
-        if ( style & wxDOUBLE_BORDER )
-            exStyle |= WS_EX_DLGMODALFRAME;
-#if defined(__WIN95__)
-        if ( style & wxRAISED_BORDER )
-            // It seems that WS_EX_WINDOWEDGE doesn't work, but WS_EX_DLGMODALFRAME does
-            exStyle |= WS_EX_DLGMODALFRAME; /* WS_EX_WINDOWEDGE */;
-        if ( style & wxSTATIC_BORDER )
-            exStyle |= WS_EX_STATICEDGE;
-#endif
-    }
-
-    return exStyle;
-}
-
-// Determines whether native 3D effects or CTL3D should be used,
-// applying a default border style if required, and returning an extended
-// style to pass to CreateWindowEx.
-WXDWORD wxWindowMSW::Determine3DEffects(WXDWORD defaultBorderStyle,
-                                        bool *want3D) const
-{
-    // If matches certain criteria, then assume no 3D effects
-    // unless specifically requested (dealt with in MakeExtendedStyle)
-    if ( !GetParent()
-#if wxUSE_CONTROLS
-            || !IsKindOf(CLASSINFO(wxControl))
-#endif // wxUSE_CONTROLS
-            || (m_windowStyle & wxNO_BORDER) )
-    {
-        *want3D = FALSE;
-        return MakeExtendedStyle(m_windowStyle);
-    }
-
-    // Determine whether we should be using 3D effects or not.
-    bool nativeBorder = FALSE; // by default, we don't want a Win95 effect
-
-    // 1) App can specify global 3D effects
-    *want3D = wxTheApp->GetAuto3D();
-
-    // 2) If the parent is being drawn with user colours, or simple border specified,
-    // switch effects off. TODO: replace wxUSER_COLOURS with wxNO_3D
-    if ( GetParent() && (GetParent()->GetWindowStyleFlag() & wxUSER_COLOURS) || (m_windowStyle & wxSIMPLE_BORDER) )
-        *want3D = FALSE;
-
-    // 3) Control can override this global setting by defining
-    // a border style, e.g. wxSUNKEN_BORDER
-    if ( m_windowStyle & wxSUNKEN_BORDER  )
-        *want3D = TRUE;
-
-    // 4) If it's a special border, CTL3D can't cope so we want a native border
-    if ( (m_windowStyle & wxDOUBLE_BORDER) || (m_windowStyle & wxRAISED_BORDER) ||
-        (m_windowStyle & wxSTATIC_BORDER) )
-    {
-        *want3D = TRUE;
-        nativeBorder = TRUE;
-    }
-
-    // 5) If this isn't a Win95 app, and we are using CTL3D, remove border
-    // effects from extended style
-#if wxUSE_CTL3D
-    if ( *want3D )
-        nativeBorder = FALSE;
-#endif
-
-    DWORD exStyle = MakeExtendedStyle(m_windowStyle, !nativeBorder);
-
-    // If we want 3D, but haven't specified a border here,
-    // apply the default border style specified.
-    // TODO what about non-Win95 WIN32? Does it have borders?
-#if defined(__WIN95__) && !wxUSE_CTL3D
-    if ( defaultBorderStyle && (*want3D) && ! ((m_windowStyle & wxDOUBLE_BORDER) || (m_windowStyle & wxRAISED_BORDER ) ||
-        (m_windowStyle & wxSTATIC_BORDER) || (m_windowStyle & wxSIMPLE_BORDER) ))
-        exStyle |= defaultBorderStyle; // WS_EX_CLIENTEDGE;
-#endif
-
-    return exStyle;
 }
 
 #if WXWIN_COMPATIBILITY
