@@ -95,6 +95,11 @@ public:
         // get the window we're associated with
     wxWindow *GetWindow() const { return (wxWindow *)m_window; }
 
+        // change the size of the caret
+    void SetSize(int width, int height) { m_width = width; m_height = height; }
+    void SetSize(const wxSize& size) { SetSize(size.x, size.y); }
+
+
     // operations
     // ----------
 
