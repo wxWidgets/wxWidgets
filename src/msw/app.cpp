@@ -1180,7 +1180,7 @@ bool wxYield()
     }
     // If they are pending events, we must process them.
 #if wxUSE_THREADS
-    ProcessPendingEvents();
+    wxTheApp->ProcessPendingEvents();
 #endif
 
     return TRUE;
