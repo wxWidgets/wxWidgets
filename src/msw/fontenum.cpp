@@ -152,7 +152,7 @@ bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
     #define wxFONTENUMPROC FONTENUMPROCEX
 #elif (defined(__GNUWIN32__) && !defined(__CYGWIN10__) && !wxCHECK_W32API_VERSION( 1, 1 ))
     #if wxUSE_NORLANDER_HEADERS
-        #define wxFONTENUMPROC int(*)(const LOGFONT *, const TEXTMETRIC *, long unsigned int, LPARAM)
+        #define wxFONTENUMPROC FONTENUMPROC
     #else
         #define wxFONTENUMPROC int(*)(ENUMLOGFONTEX *, NEWTEXTMETRICEX*, int, LPARAM)
     #endif

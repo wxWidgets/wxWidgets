@@ -105,7 +105,7 @@ size_t WXDLLEXPORT wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
 
 bool WXDLLEXPORT wxOKlibc()
 {
-#if wxUSE_WCHAR_T && defined(__UNIX__) && defined(__GLIBC__)
+#if wxUSE_WCHAR_T && defined(__UNIX__) && defined(__GLIBC__) && !defined(__WINE__)
   // glibc 2.0 uses UTF-8 even when it shouldn't
   wchar_t res = 0;
   if ((MB_CUR_MAX == 2) &&

@@ -26,6 +26,7 @@
 // With Borland C++, all samples crash if this is compiled in.
 #if wxUSE_OLE &&!defined(__WATCOMC__) && !(defined(__BORLANDC__) && (__BORLANDC__ < 0x520)) && !defined(__CYGWIN10__) && !defined(__WXWINE__)
 
+#define _FORCENAMELESSUNION
 #include "wx/log.h"
 #include "wx/msw/ole/automtn.h"
 #include "wx/msw/private.h"

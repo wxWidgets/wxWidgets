@@ -1068,7 +1068,7 @@
 // ----------------------------------------------------------------------------
 
 #ifndef wxUSE_NORLANDER_HEADERS
-#if (defined(__MINGW32__) || defined(__CYGWIN__)) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
+#if ((defined(__MINGW32__) && defined(__CYGWIN__)) ||defined(__WINE__)) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
 #   define wxUSE_NORLANDER_HEADERS 1
 #else
 #   define wxUSE_NORLANDER_HEADERS 0

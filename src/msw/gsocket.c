@@ -26,6 +26,8 @@
 #  pragma warning(disable:4100)
 #endif /* _MSC_VER */
 
+#include <winsock.h>
+
 #ifndef __GSOCKET_STANDALONE__
 #  include "wx/defs.h"
 #  include "wx/setup.h"
@@ -55,8 +57,6 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <ctype.h>
-
-#include <winsock.h>
 
 /* if we use configure for MSW SOCKLEN_T will be already defined */
 #ifndef SOCKLEN_T

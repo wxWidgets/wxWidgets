@@ -130,6 +130,7 @@ typedef char JOCTET;
  */
 
 /* UINT8 must hold at least the values 0..255. */
+#ifndef __WINE_BASETSD_H
 
 #ifdef HAVE_UNSIGNED_CHAR
 typedef unsigned char UINT8;
@@ -154,6 +155,8 @@ typedef unsigned int UINT16;
 #ifndef XMD_H			/* X11/xmd.h correctly defines INT16 */
 typedef short INT16;
 #endif
+
+#endif /* __WINE_BASETSD_H */
 
 /* INT32 must hold at least signed 32-bit values. */
 

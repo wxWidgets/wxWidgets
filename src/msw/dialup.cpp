@@ -55,6 +55,7 @@ DEFINE_EVENT_TYPE(wxEVT_DIALUP_DISCONNECTED)
     !defined(__GNUWIN32_OLD__) && \
     !defined(__WATCOMC__) && \
     !defined(__WXWINE__) && \
+    !defined(__WINE__) && \
     (!defined(__VISUALC__) || (__VISUALC__ >= 1020))
 
 #include <ras.h>

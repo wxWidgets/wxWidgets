@@ -137,7 +137,7 @@
         #define __HPUX__
     #endif /* HP-UX */
 
-    #if defined(__CYGWIN__)
+    #if defined(__CYGWIN__) || defined(__WINE__)
         #if !defined(wxSIZE_T_IS_UINT)
             #define wxSIZE_T_IS_UINT
         #endif

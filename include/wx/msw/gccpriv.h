@@ -3,7 +3,7 @@
 #ifndef _WX_MSW_GCCPRIV_H_
 #define _WX_MSW_GCCPRIV_H_
 
-#if defined( __MINGW32__ ) && !defined( HAVE_W32API_H )
+#if defined( __MINGW32__ ) && !defined(__WINE__) && !defined( HAVE_W32API_H )
     #if ( __GNUC__ > 2 ) || ( ( __GNUC__ == 2 ) && ( __GNUC_MINOR__ >= 95 ) )
         #include <_mingw.h>
         #if __MINGW32_MAJOR_VERSION >= 1
@@ -24,7 +24,7 @@
 
 // Cygwin / Mingw32 with gcc >= 2.95 use new windows headers which
 // are more ms-like (header author is Anders Norlander, hence the name)
-#if (defined(__MINGW32__) || defined(__CYGWIN__)) && ((__GNUC__>2) || ((__GNUC__==2) && (__GNUC_MINOR__>=95)))
+#if (defined(__MINGW32__) || defined(__CYGWIN__) || defined(__WINE__)) && ((__GNUC__>2) || ((__GNUC__==2) && (__GNUC_MINOR__>=95)))
     #ifndef wxUSE_NORLANDER_HEADERS
         #define wxUSE_NORLANDER_HEADERS 1
     #endif
