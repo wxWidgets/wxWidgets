@@ -1,10 +1,13 @@
+utils/ogl/Makefile
+
 utils/ogl/src/*.cpp
 utils/ogl/src/*.h
 utils/ogl/src/*.rc
 utils/ogl/src/*.def
 utils/ogl/src/*.xbm
 utils/ogl/src/*.xpm
-utils/ogl/src/makefile*
+utils/ogl/src/make*.*
+utils/ogl/src/Makefile
 utils/ogl/src/*.txt
 utils/ogl/src/*.ico
 utils/ogl/src/*.bmp
@@ -14,7 +17,8 @@ utils/ogl/samples/ogledit/*.h
 utils/ogl/samples/ogledit/*.rc
 utils/ogl/samples/ogledit/*.def
 utils/ogl/samples/ogledit/*.xbm
-utils/ogl/samples/ogledit/makefile*
+utils/ogl/samples/ogledit/make*.*
+utils/ogl/samples/ogledit/Makefile
 utils/ogl/samples/ogledit/*.txt
 utils/ogl/samples/ogledit/*.ico
 utils/ogl/samples/ogledit/*.bmp

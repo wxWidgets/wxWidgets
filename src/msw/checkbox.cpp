@@ -95,7 +95,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
                                   (HWND)parent->GetHWND(), (HMENU)m_windowId,
                                   wxGetInstance(), NULL);
 
-#if CTL3D
+#if wxUSE_CTL3D
   if (want3D)
   {
     Ctl3dSubclassCtl((HWND)m_hWnd);
@@ -186,7 +186,7 @@ bool wxCheckBox::GetValue(void) const
 WXHBRUSH wxCheckBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
-#if CTL3D
+#if wxUSE_CTL3D
   if ( m_useCtl3D )
   {
     HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
@@ -250,7 +250,7 @@ bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id, const wxBitmap *l
                     0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                     wxGetInstance(), NULL);
 
-#if CTL3D
+#if wxUSE_CTL3D
   if (!(GetParent()->GetWindowStyleFlag() & wxUSER_COLOURS))
   {
     Ctl3dSubclassCtl(wx_button);

@@ -177,7 +177,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
   wxCHECK_MSG( m_hWnd, FALSE, "Failed to create text ctrl" );
 
-#if CTL3D
+#if wxUSE_CTL3D
   if ( want3D )
   {
     Ctl3dSubclassCtl((HWND)m_hWnd);
@@ -923,7 +923,7 @@ wxTextCtrl& wxTextCtrl::operator<<(const char c)
 WXHBRUSH wxTextCtrl::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
       WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
-#if CTL3D
+#if wxUSE_CTL3D
   if ( m_useCtl3D )
   {
     HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);

@@ -216,7 +216,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
   wxCHECK_MSG( m_hWnd, FALSE, "Failed to create listbox" );
 
-#if CTL3D
+#if wxUSE_CTL3D
   if (want3D)
   {
     Ctl3dSubclassCtl(hwnd);
@@ -688,7 +688,7 @@ void wxListBox::Command (wxCommandEvent & event)
 WXHBRUSH wxListBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
-#if CTL3D
+#if wxUSE_CTL3D
   if ( m_useCtl3D )
   {
     HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);

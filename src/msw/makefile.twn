@@ -215,6 +215,7 @@ MSWOBJS = \
   textctrl.$(OBJSUFF) \
   thread.$(OBJSUFF) \
   timer.$(OBJSUFF) \
+  tooltip.$(OBJSUFF) \
   treectrl.$(OBJSUFF) \
   utils.$(OBJSUFF) \
   utilsexc.$(OBJSUFF) \

@@ -14,9 +14,9 @@ functions that take a wxCommandEvent argument.
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf EVT\_COMMAND(id, cmd, func)}}{Process a command, supplying the window identifier,
+\twocolitem{{\bf EVT\_COMMAND(id, event, func)}}{Process a command, supplying the window identifier,
 command event identifier, and member function.}
-\twocolitem{{\bf EVT\_COMMAND\_RANGE(id1, id2, cmd, func)}}{Process a command for a range
+\twocolitem{{\bf EVT\_COMMAND\_RANGE(id1, id2, event, func)}}{Process a command for a range
 of window identifiers, supplying the minimum and maximum window identifiers,
 command event identifier, and member function.}
 \twocolitem{{\bf EVT\_BUTTON(id, func)}}{Process a wxEVT\_COMMAND\_BUTTON\_CLICKED command,
@@ -181,8 +181,3 @@ Sets the {\bf m\_commandInt} member.
 
 Sets the {\bf m\_commandString} member.
 
-
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: "referenc"
-%%% End: 

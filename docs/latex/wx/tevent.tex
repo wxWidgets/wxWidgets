@@ -77,9 +77,9 @@ It may be noted that wxWindows' event processing system implements something
 very close to virtual methods in normal C++, i.e. it is possible to alter
 the behaviour of a class by overriding its event handling functions. In
 many cases this works even for changing the behaviour of native controls.
-E.g. it is possible to filter out a number of key events sent by the
+For example it is possible to filter out a number of key events sent by the
 system to a native text control by overriding wxTextCtrl and defining a
-handler for key events using EVT_KEY_DOWN. This would in-deed prevent
+handler for key events using EVT\_KEY\_DOWN. This would indeed prevent
 any key events from being sent to the native control - which might not be
 what is desired. In this case the event handler function has to call Skip()
 so as to indicate that it did NOT handle the event at all.
@@ -107,7 +107,6 @@ void MyTextCtrl::OnChar(wxKeyEvent& event)
        wxBell();
     }
 }
-
 \end{verbatim}
 }%
 
@@ -158,7 +157,7 @@ events which will NOT get sent to the parent's event handler:
 \end{twocollist}
 
 In some cases, it might be desired by the programmer to get a certain number
-of system events in a parent window, e.g. all key events sent to, but not
+of system events in a parent window, for example all key events sent to, but not
 used by, the native controls in a dialog. In this case, a special event handler
 will have to be written that will override ProcessEvent() in order to pass
 all events (or any selection of them) to the parent window. See next section.
@@ -191,31 +190,87 @@ the original event handler. Use PushEventHandler/PopEventHandler
 to form a chain of event handlers, where each handler processes a different
 range of events independently from the other handlers.
 
+\subsection{Window identifiers}\label{windowids}
+
+\index{identifiers}\index{wxID}Window identifiers are integers, and are used to uniquely determine window identity in the
+event system (though you can use it for other purposes). In fact, identifiers do not need
+to be unique across your entire application just so long as they are unique within a particular context you're interested
+in, such as a frame and its children. You may use the wxID\_OK identifier, for example, on
+any number of dialogs so long as you don't have several within the same dialog.
+
+If you pass -1 to a window constructor, an identifier will be generated for you, but beware:
+if things don't respond in the way they should, it could be because of an id conflict. It's safer
+to supply window ids at all times. Automatic generation of identifiers starts at 1 so may well conflict
+with your own identifiers.
+
+The following standard identifiers are supplied. You can use wxID\_HIGHEST to determine the
+number above which it is safe to define your own identifiers. Or, you can use identifiers below
+wxID\_LOWEST.
+
+\begin{verbatim}
+#define wxID_LOWEST             4999
+
+#define wxID_OPEN               5000
+#define wxID_CLOSE              5001
+#define wxID_NEW                5002
+#define wxID_SAVE               5003
+#define wxID_SAVEAS             5004
+#define wxID_REVERT             5005
+#define wxID_EXIT               5006
+#define wxID_UNDO               5007
+#define wxID_REDO               5008
+#define wxID_HELP               5009
+#define wxID_PRINT              5010
+#define wxID_PRINT_SETUP        5011
+#define wxID_PREVIEW            5012
+#define wxID_ABOUT              5013
+#define wxID_HELP_CONTENTS      5014
+#define wxID_HELP_COMMANDS      5015
+#define wxID_HELP_PROCEDURES    5016
+#define wxID_HELP_CONTEXT       5017
+
+#define wxID_CUT                5030
+#define wxID_COPY               5031
+#define wxID_PASTE              5032
+#define wxID_CLEAR              5033
+#define wxID_FIND               5034
+#define wxID_DUPLICATE          5035
+#define wxID_SELECTALL          5036
+
+#define wxID_FILE1              5050
+#define wxID_FILE2              5051
+#define wxID_FILE3              5052
+#define wxID_FILE4              5053
+#define wxID_FILE5              5054
+#define wxID_FILE6              5055
+#define wxID_FILE7              5056
+#define wxID_FILE8              5057
+#define wxID_FILE9              5058
+
+#define wxID_OK                 5100
+#define wxID_CANCEL             5101
+#define wxID_APPLY              5102
+#define wxID_YES                5103
+#define wxID_NO                 5104
+#define wxID_STATIC             5105
+
+#define wxID_HIGHEST            5999
+\end{verbatim}
+
 \subsection{Event macros summary}\label{eventmacros}
-
-\wxheading{Specifying an event table}
-
-\twocolwidtha{8cm}%
-\begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{EVT\_CUSTOM(eventId, id, func)}}{Allows you to add a custom event table
-entry by specifying the event identifier (such as wxEVT\_SIZE), the window identifier,
-and a member function to call.}
-\twocolitem{\windowstyle{EVT\_CUSTOM\_RANGE(eventId, id1, id2, func)}}{The same as EVT\_CUSTOM,
-but responds to a range of window identifiers.}
-\end{twocollist}
 
 \wxheading{Generic event table macros}
 
 \twocolwidtha{8cm}%
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{EVT\_CUSTOM(eventId, id, func)}}{Allows you to add a custom event table
+\twocolitem{\windowstyle{EVT\_CUSTOM(event, id, func)}}{Allows you to add a custom event table
 entry by specifying the event identifier (such as wxEVT\_SIZE), the window identifier,
 and a member function to call.}
-\twocolitem{\windowstyle{EVT\_CUSTOM\_RANGE(eventId, id1, id2, func)}}{The same as EVT\_CUSTOM,
+\twocolitem{\windowstyle{EVT\_CUSTOM\_RANGE(event, id1, id2, func)}}{The same as EVT\_CUSTOM,
 but responds to a range of window identifiers.}
-\twocolitem{\windowstyle{EVT\_COMMAND(eventId, id, func)}}{The same as EVT\_CUSTOM, but
+\twocolitem{\windowstyle{EVT\_COMMAND(id, event, func)}}{The same as EVT\_CUSTOM, but
 expects a member function with a wxCommandEvent argument.}
-\twocolitem{\windowstyle{EVT\_COMMAND\_RANGE(eventId, id1, id2, func)}}{The same as EVT\_CUSTOM\_RANGE, but
+\twocolitem{\windowstyle{EVT\_COMMAND\_RANGE(id1, id2, event, func)}}{The same as EVT\_CUSTOM\_RANGE, but
 expects a member function with a wxCommandEvent argument.}
 \end{twocollist}
 

@@ -148,7 +148,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
          NULL
         );
 
-#if CTL3D
+#if wxUSE_CTL3D
     if (want3D)
     {
         Ctl3dSubclassCtl((HWND)m_hWnd);
@@ -178,7 +178,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
         m_radioButtons[i] = (WXHWND) CreateWindowEx(exStyle, RADIO_CLASS, choices[i],
                 msStyle,0,0,0,0,
                 the_handle, (HMENU)newId, wxGetInstance(), NULL);
-#if CTL3D
+#if wxUSE_CTL3D
         if (want3D)
         {
             Ctl3dSubclassCtl((HWND) m_hWnd);
@@ -256,7 +256,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 
     the_handle = (HWND) parent->GetHWND();
 
-#if CTL3D
+#if wxUSE_CTL3D
     if (want3D)
     {
         Ctl3dSubclassCtl((HWND) m_hWnd);
@@ -289,7 +289,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
         m_radioButtons[i] = (WXHWND) CreateWindowEx(exStyle, RADIO_CLASS, tmp,
                 msStyle,0,0,0,0,
                 the_handle, (HMENU)newId, wxhInstance, NULL);
-#if CTL3D
+#if wxUSE_CTL3D
         if (want3D)
         {
             Ctl3dSubclassCtl((HWND) m_hWnd);
@@ -488,7 +488,7 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
             totHeight = nbVer * (maxHeight+cy1/2) ;
         totWidth  = nbHor * (maxWidth+cx1) ;
 
-#if (!CTL3D)
+#if (!wxUSE_CTL3D)
         // Requires a bigger group box in plain Windows
         MoveWindow((HWND) m_hWnd,x_offset,y_offset,totWidth+cx1,totHeight+(3*cy1)/2,TRUE) ;
 #else
@@ -498,7 +498,7 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
         y_offset += cy1;
     }
 
-#if (!CTL3D)
+#if (!wxUSE_CTL3D)
     y_offset += (int)(cy1/2); // Fudge factor since buttons overlapped label
     // JACS 2/12/93. CTL3D draws group label quite high.
 #endif
@@ -688,7 +688,7 @@ void wxRadioBox::Show(int item, bool show)
 WXHBRUSH wxRadioBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
         WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
-#if CTL3D
+#if wxUSE_CTL3D
     if ( m_useCtl3D )
     {
         HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);

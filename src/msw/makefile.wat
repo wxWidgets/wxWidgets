@@ -190,6 +190,7 @@ MSWOBJS = &
   textctrl.obj &
   thread.obj &
   timer.obj &
+  tooltip.obj &
   treectrl.obj &
   utils.obj &
   utilsexc.obj &
@@ -465,6 +466,9 @@ thread.obj:     $(MSWDIR)\thread.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 timer.obj:     $(MSWDIR)\timer.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+tooltip.obj:     $(MSWDIR)\tooltip.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 treectrl.obj:     $(MSWDIR)\treectrl.cpp

@@ -3584,7 +3584,7 @@ WXDWORD wxWindow::Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D)
 
     // 5) If this isn't a Win95 app, and we are using CTL3D, remove border
     // effects from extended style
-#if CTL3D
+#if wxUSE_CTL3D
     if ( *want3D )
         nativeBorder = FALSE;
 #endif
@@ -3594,7 +3594,7 @@ WXDWORD wxWindow::Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D)
     // If we want 3D, but haven't specified a border here,
     // apply the default border style specified.
     // TODO what about non-Win95 WIN32? Does it have borders?
-#if defined(__WIN95__) && !CTL3D
+#if defined(__WIN95__) && !wxUSE_CTL3D
     if (defaultBorderStyle && (*want3D) && ! ((m_windowStyle & wxDOUBLE_BORDER) || (m_windowStyle & wxRAISED_BORDER) ||
         (m_windowStyle & wxSTATIC_BORDER) || (m_windowStyle & wxSIMPLE_BORDER) ))
         exStyle |= defaultBorderStyle; // WS_EX_CLIENTEDGE ;

@@ -192,7 +192,7 @@ bool wxApp::Initialize()
       wxFatalError(_("Cannot initialize OLE"));
 #endif
 
-#if CTL3D
+#if wxUSE_CTL3D
     if (!Ctl3dRegister(wxhInstance))
       wxFatalError("Cannot register CTL3D");
 
@@ -511,7 +511,7 @@ void wxApp::CleanUp()
   ::OleUninitialize();
 #endif
 
-#if CTL3D
+#if wxUSE_CTL3D
   Ctl3dUnregister(wxhInstance);
 #endif
 

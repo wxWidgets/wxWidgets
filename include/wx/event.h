@@ -1225,8 +1225,8 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
  { wxEVT_LEAVE_WINDOW, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL },
 
 // EVT_COMMAND
-#define EVT_COMMAND(id, cmd, fn)  { cmd, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL },
-#define EVT_COMMAND_RANGE(id1, id2, cmd, fn)  { cmd, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL },
+#define EVT_COMMAND(id, event, fn)  { event, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL },
+#define EVT_COMMAND_RANGE(id1, id2, event, fn)  { eventId, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL },
 
 // Scrolling
 #define EVT_SCROLL(func) \

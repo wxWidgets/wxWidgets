@@ -513,7 +513,7 @@ void wxDialog::EndModal(int retCode)
 WXHBRUSH wxDialog::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
       WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
-#if CTL3D
+#if wxUSE_CTL3D
   HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
   return (WXHBRUSH) hbrush;
 #else
@@ -607,7 +607,7 @@ bool wxDialog::Destroy(void)
 
 void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-#if CTL3D
+#if wxUSE_CTL3D
   Ctl3dColorChange();
 #else
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));

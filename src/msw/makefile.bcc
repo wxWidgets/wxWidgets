@@ -228,6 +228,7 @@ MSWOBJS = \
   $(MSWDIR)\tbarmsw.obj \
   $(MSWDIR)\textctrl.obj \
   $(MSWDIR)\timer.obj \
+  $(MSWDIR)\tooltip.obj \
   $(MSWDIR)\utils.obj \
   $(MSWDIR)\utilsexc.obj \
   $(MSWDIR)\wave.obj \
@@ -433,6 +434,8 @@ $(MSWDIR)\textctrl.obj:     $(MSWDIR)\textctrl.$(SRCSUFF)
 $(MSWDIR)\thread.obj:     $(MSWDIR)\thread.$(SRCSUFF)
 
 $(MSWDIR)\timer.obj:     $(MSWDIR)\timer.$(SRCSUFF)
+
+$(MSWDIR)\tooltip.obj:     $(MSWDIR)\tooltip.$(SRCSUFF)
 
 # $(MSWDIR)\treectrl.obj:     $(MSWDIR)\treectrl.$(SRCSUFF)
 

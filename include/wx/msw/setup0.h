@@ -19,9 +19,7 @@
 
 #define wxUSE_CONFIG           1
                                 // Use wxConfig, with CreateConfig in wxApp
-#define _WX_GOODCOMPILER__
-                                // gcc can have problems, but Windows compilers
-                                // are generally OK.
+
 #define WXWIN_COMPATIBILITY  0
                                 // Compatibility with 1.68 API.
                                 // Level 0: no backward compatibility, all new features
@@ -29,16 +27,12 @@
                                 // the compatibility code is now very minimal so there
                                 // is little advantage to setting it to 1.
 
-#define wxUSE_AUTOTRANS   1
-                                // Define wxTString
 #define wxUSE_POSTSCRIPT  0
                             // 0 for no PostScript device context
 #define wxUSE_AFM_FOR_POSTSCRIPT 0
                                 // 1 to use font metric files in GetTextExtent
 #define wxUSE_METAFILE    1
                                 // 0 for no Metafile and metafile device context
-#define wxUSE_FORM        0
-                                // 0 for no wxForm
 #define wxUSE_IPC         1
                                 // 0 for no interprocess comms
 // Note: wxHELP uses IPC under X so these are interdependent!
@@ -54,11 +48,9 @@
 
 #define wxUSE_CLIPBOARD   1
                                 // 0 for no clipboard functions
+
 #define wxUSE_SPLINES     1
                                     // 0 for no splines
-#define wxUSE_XFIG_SPLINE_CODE  1
-                                   // 1 for XFIG spline code, 0 for AIAI spline code.
-// AIAI spline code is slower, but freer of copyright issues.
 
 #define wxUSE_DRAG_AND_DROP 1
                                 // 0 for no drag and drop
@@ -95,8 +87,6 @@
 #define wxUSE_WX_RESOURCES        0
 #endif
 
-#define HAVE_SOCKET             1
-                                  // Use WinSock if 1
 #define wxUSE_DOC_VIEW_ARCHITECTURE 1
                                   // Set to 0 to disable document/view architecture
 #define wxUSE_PRINTING_ARCHITECTURE  1
@@ -184,9 +174,9 @@
  */
 
 #if defined(__WIN95__)
-#define CTL3D                      0
+#define wxUSE_CTL3D                      0
 #else
-#define CTL3D                      1
+#define wxUSE_CTL3D                      1
                                     // Define 1 to use Microsoft CTL3D library.
                                     // See note above about using FAFA and CTL3D.
 #endif
@@ -206,7 +196,7 @@
 #define wxUSE_PORTABLE_FONTS_IN_MSW  0
                                     // Define 1 to use new portable font scheme in Windows
                                     // (used by default under X)
-#define FONT_SIZE_COMPATIBILITY    0
+#define wxFONT_SIZE_COMPATIBILITY    0
                                     // Define 1 for font size to be backward compatible
                                     // to 1.63 and earlier. 1.64 and later define point
                                     // sizes to be compatible with Windows.
@@ -290,54 +280,6 @@
 #undef wxUSE_THREADS
 #define wxUSE_THREADS 0
 
-#endif
-
-// Minimal setup e.g. for compiling small utilities
-#define MINIMAL_WXWINDOWS_SETUP 0
-
-#if MINIMAL_WXWINDOWS_SETUP
-#undef wxUSE_POSTSCRIPT
-# define wxUSE_POSTSCRIPT 0
-#undef wxUSE_PRINTING_ARCHITECTURE
-# define wxUSE_PRINTING_ARCHITECTURE 0
-#undef wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW
-# define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 0
-#undef wxUSE_METAFILE
-# define wxUSE_METAFILE 0
-#undef wxUSE_FORM
-# define wxUSE_FORM 0
-#undef wxUSE_SPLINES
-# define wxUSE_SPLINES 0
-#undef wxUSE_SCROLLBAR
-# define wxUSE_SCROLLBAR 0
-#undef wxUSE_COMBOBOX
-# define wxUSE_COMBOBOX 0
-#undef wxUSE_RADIOBUTTON
-# define wxUSE_RADIOBUTTON 0
-#undef wxUSE_XPM_IN_MSW
-# define wxUSE_XPM_IN_MSW 0
-#undef wxUSE_WX_RESOURCES
-# define wxUSE_WX_RESOURCES 0
-#undef wxUSE_DOC_VIEW_ARCHITECTURE
-# define wxUSE_DOC_VIEW_ARCHITECTURE 0
-#undef wxUSE_GNU_WXSTRING
-# define wxUSE_GNU_WXSTRING 0
-#undef wxUSE_ODBC
-# define wxUSE_ODBC 0
-#undef wxUSE_TIMEDATE
-# define wxUSE_TIMEDATE 0
-#undef CTL3D
-# define CTL3D 0
-#undef wxUSE_ITSY_BITSY
-# define wxUSE_ITSY_BITSY 0
-#undef wxUSE_IMAGE_LOADING_IN_MSW
-# define wxUSE_IMAGE_LOADING_IN_MSW 0
-#undef wxUSE_GAUGE
-# define wxUSE_GAUGE 0
-#undef wxUSE_RESOURCE_LOADING_IN_MSW
-# define wxUSE_RESOURCE_LOADING_IN_MSW 0
-#undef wxUSE_DRAG_AND_DROP
-# define wxUSE_DRAG_AND_DROP 0
 #endif
 
 #endif

@@ -79,7 +79,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
   wxCHECK_MSG( m_hWnd, FALSE, "Failed to create static ctrl" );
 
-#if CTL3D
+#if wxUSE_CTL3D
 /*
   if (!(GetParent()->GetWindowStyleFlag() & wxUSER_COLOURS))
     Ctl3dSubclassCtl(static_item);
@@ -171,7 +171,7 @@ WXHBRUSH wxStaticText::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
       WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
 /*
-#if CTL3D
+#if wxUSE_CTL3D
   if ( m_useCtl3D )
   {
     HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);

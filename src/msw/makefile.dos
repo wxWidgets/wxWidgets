@@ -195,6 +195,7 @@ MSWOBJS = \
   $(MSWDIR)\tbarmsw.obj \
   $(MSWDIR)\textctrl.obj \
   $(MSWDIR)\timer.obj \
+  $(MSWDIR)\tooltip.obj \
   $(MSWDIR)\utils.obj \
   $(MSWDIR)\utilsexc.obj \
   $(MSWDIR)\wave.obj \
@@ -610,6 +611,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(MSWDIR)/timer.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(MSWDIR)/tooltip.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

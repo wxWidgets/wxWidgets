@@ -96,7 +96,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 
   wxCHECK_MSG( m_hWnd, FALSE, "Failed to create radiobutton" );
 
-#if CTL3D
+#if wxUSE_CTL3D
   if (want3D)
   {
     Ctl3dSubclassCtl((HWND) m_hWnd);
@@ -160,7 +160,7 @@ bool wxRadioButton::GetValue(void) const
 WXHBRUSH wxRadioButton::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
       WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
-#if CTL3D
+#if wxUSE_CTL3D
   if ( m_useCtl3D )
   {
     HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
@@ -231,7 +231,7 @@ bool wxBitmapRadioButton::Create(wxWindow *parent, wxWindowID id,
 
   wxCHECK_MSG( m_hWnd, "Failed to create radio button", FALSE );
 
-#if CTL3D
+#if wxUSE_CTL3D
   if (!(GetParent()->GetWindowStyleFlag() & wxUSER_COLOURS))
   {
     Ctl3dSubclassCtl((HWND) GetHWND());

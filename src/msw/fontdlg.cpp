@@ -174,7 +174,7 @@ void wxFillLogFont(LOGFONT *logFont, wxFont *font)
     // up fonts. So, set ppInch to a constant 96 dpi.
     ppInch = 96;
 
-#if FONT_SIZE_COMPATIBILITY
+#if wxFONT_SIZE_COMPATIBILITY
     // Incorrect, but compatible with old wxWindows behaviour
     int nHeight = (font->GetPointSize()*ppInch/72);
 #else

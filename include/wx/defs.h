@@ -140,7 +140,7 @@
             typedef unsigned char bool;
         #endif // Sun CC version
     #else
-        #error "Unknown compiler: only Sun's CC and gcc are currently reckognized."
+        #error "Unknown compiler: only Sun's CC and gcc are currently recognised."
     #endif // Sun CC
 #endif
 
@@ -894,6 +894,8 @@ enum
 #endif
 
 /* Standard menu identifiers */
+#define wxID_LOWEST             4999
+
 #define wxID_OPEN               5000
 #define wxID_CLOSE              5001
 #define wxID_NEW                5002

@@ -115,7 +115,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
   wxCHECK_MSG( m_hWnd, FALSE, "Failed to create combobox" );
 
 /*
-#if CTL3D
+#if wxUSE_CTL3D
   if (want3D)
   {
     Ctl3dSubclassCtl(wx_combo);

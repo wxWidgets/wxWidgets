@@ -5,16 +5,19 @@ utils/glcanvas/win/make*.*
 utils/glcanvas/gtk/*.cpp
 utils/glcanvas/gtk/*.h
 utils/glcanvas/gtk/make*.*
+utils/glcanvas/gtk/Makefile
 utils/glcanvas/motif/*.cpp
 utils/glcanvas/motif/*.h
 utils/glcanvas/motif/make*.*
 utils/glcanvas/motif/*.txt
+utils/glcanvas/motif/Makefile
 utils/glcanvas/samples/cube/*.cpp
 utils/glcanvas/samples/cube/*.h
 utils/glcanvas/samples/cube/*.rc
 utils/glcanvas/samples/cube/*.ico
 utils/glcanvas/samples/cube/*.xbm
 utils/glcanvas/samples/cube/make*.*
+utils/glcanvas/samples/cube/Makefile
 
 utils/glcanvas/samples/isosurf/*.cpp
 utils/glcanvas/samples/isosurf/*.h
@@ -23,6 +26,7 @@ utils/glcanvas/samples/isosurf/*.ico
 utils/glcanvas/samples/isosurf/*.xbm
 utils/glcanvas/samples/isosurf/*.dat.gz
 utils/glcanvas/samples/isosurf/make*.*
+utils/glcanvas/samples/isosurf/Makefile
 
 utils/glcanvas/samples/penguin/*.cpp
 utils/glcanvas/samples/penguin/*.c
@@ -32,6 +36,7 @@ utils/glcanvas/samples/penguin/*.ico
 utils/glcanvas/samples/penguin/*.xbm
 utils/glcanvas/samples/penguin/*.xpm
 utils/glcanvas/samples/penguin/make*.*
+utils/glcanvas/samples/penguin/Makefile
 utils/glcanvas/samples/penguin/penguin.lwo
 
 

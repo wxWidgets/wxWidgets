@@ -111,7 +111,7 @@ VOID    WINAPI ibAdjustWindowRect( HWND hWnd, LPRECT lprc ) ;
  *
  */
 
-#if CTL3D
+#if wxUSE_CTL3D
 #include <wx/msw/ctl3d/ctl3d.h>
 #endif
 

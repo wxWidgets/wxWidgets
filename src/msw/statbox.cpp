@@ -76,7 +76,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
     CreateWindowEx(exStyle, "BUTTON", (const char *)label, msStyle,
                     0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                     wxGetInstance(), NULL);
-#if CTL3D
+#if wxUSE_CTL3D
   if (want3D)
   {
     Ctl3dSubclassCtl(wx_button);
@@ -146,7 +146,7 @@ void wxStaticBox::SetSize(int x, int y, int width, int height, int sizeFlags)
 WXHBRUSH wxStaticBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
-#if CTL3D
+#if wxUSE_CTL3D
   if ( m_useCtl3D )
   {
     HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);

@@ -687,6 +687,11 @@ $(MSWDIR)/timer.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
+$(MSWDIR)/tooltip.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
 $(MSWDIR)/treectrl.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@

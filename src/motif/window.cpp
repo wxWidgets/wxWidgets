@@ -3414,6 +3414,11 @@ void wxWindow::SetFont(const wxFont& font)
     ChangeFont();
 }
 
+void wxWindow::SetToolTip(const wxString& tooltip)
+{
+    // TODO
+}
+
 void wxWindow::ClearUpdateRects()
 {
     wxNode* node = m_updateRects.First();

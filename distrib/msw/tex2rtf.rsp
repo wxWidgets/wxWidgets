@@ -1,6 +1,7 @@
 utils/tex2rtf/src/*.cpp
 utils/tex2rtf/src/*.h
 utils/tex2rtf/src/make*.*
+utils/tex2rtf/src/Makefile
 utils/tex2rtf/src/*.xbm
 utils/tex2rtf/src/*.xpm
 utils/tex2rtf/src/*.sty

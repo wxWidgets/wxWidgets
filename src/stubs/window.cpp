@@ -1293,6 +1293,11 @@ bool wxWindow::IsExposed(const wxRect& rect) const
     return (m_updateRegion.Contains(rect) != wxOutRegion);
 }
 
+void wxWindow::SetToolTip(const wxString& tooltip)
+{
+    // TODO
+}
+
 /*
  * Allocates control IDs
  */

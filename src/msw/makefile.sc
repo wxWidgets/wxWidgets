@@ -192,6 +192,7 @@ MSWOBJS = \
   $(MSWDIR)\textctrl.obj \
   $(MSWDIR)\thread.obj \
   $(MSWDIR)\timer.obj \
+  $(MSWDIR)\tooltip.obj \
   $(MSWDIR)\utils.obj \
   $(MSWDIR)\utilsexc.obj \
   $(MSWDIR)\wave.obj \

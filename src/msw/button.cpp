@@ -78,7 +78,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
                     0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                     wxGetInstance(), NULL);
 
-#if CTL3D
+#if wxUSE_CTL3D
 //  if (!(GetParent()->GetWindowStyleFlag() & wxUSER_COLOURS))
 //    Ctl3dSubclassCtl(wx_button);
 #endif

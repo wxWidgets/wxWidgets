@@ -230,6 +230,18 @@ public:
   // Accept files for dragging
   virtual void DragAcceptFiles(bool accept);
 
+  // tooltips
+    // create a tooltip with this text
+  void SetToolTip(const wxString& tip);
+
+  // TODO
+#if 0
+    // pointer may be NULL to remove the tooltip
+  void SetToolTip(wxToolTip *tooltip);
+    // get the current tooltip (may return NULL if none)
+  wxToolTip* GetToolTip() const { return m_tooltip; }
+#endif
+
   // Update region access
   virtual wxRegion GetUpdateRegion() const;
   virtual bool IsExposed(int x, int y, int w, int h) const;
