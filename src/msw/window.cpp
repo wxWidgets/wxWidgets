@@ -3063,11 +3063,9 @@ bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
 {
 #ifndef __WXMICROWIN__
     HDROP hFilesInfo = (HDROP) wParam;
-    POINT dropPoint;
-    DragQueryPoint(hFilesInfo, (LPPOINT) &dropPoint);
 
     // Get the total number of files dropped
-    WORD gwFilesDropped = (WORD)::DragQueryFile
+    UINT gwFilesDropped = ::DragQueryFile
                             (
                                 (HDROP)hFilesInfo,
                                 (UINT)-1,
@@ -3076,24 +3074,28 @@ bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
                             );
 
     wxString *files = new wxString[gwFilesDropped];
-    int wIndex;
-    for (wIndex=0; wIndex < (int)gwFilesDropped; wIndex++)
+    for ( UINT wIndex = 0; wIndex < gwFilesDropped; wIndex++ )
     {
-        DragQueryFile (hFilesInfo, wIndex, (LPTSTR) wxBuffer, 1000);
-        files[wIndex] = wxBuffer;
+        // first get the needed buffer length (+1 for terminating NUL)
+        size_t len = ::DragQueryFile(hFilesInfo, wIndex, NULL, 0) + 1;
+
+        // and now get the file name
+        ::DragQueryFile(hFilesInfo, wIndex,
+                        files[wIndex].GetWriteBuf(len), len);
+
+        files[wIndex].UngetWriteBuf();
     }
     DragFinish (hFilesInfo);
 
     wxDropFilesEvent event(wxEVT_DROP_FILES, gwFilesDropped, files);
     event.m_eventObject = this;
+
+    POINT dropPoint;
+    DragQueryPoint(hFilesInfo, (LPPOINT) &dropPoint);
     event.m_pos.x = dropPoint.x;
     event.m_pos.y = dropPoint.y;
 
-    bool rc = GetEventHandler()->ProcessEvent(event);
-
-    delete[] files;
-
-    return rc;
+    return GetEventHandler()->ProcessEvent(event);
 #else // __WXMICROWIN__
     return FALSE;
 #endif

@@ -1284,18 +1284,35 @@ class WXDLLEXPORT wxDropFilesEvent : public wxEvent
 public:
     int       m_noFiles;
     wxPoint   m_pos;
-    wxString* m_files;        // Memory (de)allocated by code calling ProcessEvent
+    wxString* m_files;
 
     wxDropFilesEvent(wxEventType type = wxEVT_NULL,
                      int noFiles = 0,
                      wxString *files = (wxString *) NULL)
         { m_eventType = type; m_noFiles = noFiles; m_files = files; }
 
+    // we need a copy ctor to avoid deleting m_files pointer twice
+    wxDropFilesEvent(const wxDropFilesEvent& other)
+        : m_pos(other.m_pos)
+    {
+        m_noFiles = other.m_noFiles;
+        m_files = new wxString[m_noFiles];
+        for ( int n = 0; n < m_noFiles; n++ )
+        {
+            m_files[n] = other.m_files[n];
+        }
+    }
+
+    virtual ~wxDropFilesEvent()
+    {
+        delete [] m_files;
+    }
+
     wxPoint GetPosition() const { return m_pos; }
     int GetNumberOfFiles() const { return m_noFiles; }
     wxString *GetFiles() const { return m_files; }
 
-    virtual wxEvent *Clone() const { wxFAIL_MSG("error"); return NULL; }
+    virtual wxEvent *Clone() const { return new wxDropFilesEvent(*this); }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDropFilesEvent)
