@@ -166,6 +166,7 @@ void MyApp::PropertyListTest(bool useDialog)
 
   wxPropertyListView *view =
     new wxPropertyListView(NULL,
+     wxPROP_BUTTON_OK | wxPROP_BUTTON_CANCEL |
      wxPROP_BUTTON_CHECK_CROSS|wxPROP_DYNAMIC_VALUE_FIELD|wxPROP_PULLDOWN|wxPROP_SHOWVALUES);
 
   wxDialog *propDialog = NULL;

@@ -129,6 +129,10 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
 	    wxWindow *focussed_child_of_p = this;
             for ( wxWindow *p = GetParent(); p; p = p->GetParent() )
             {
+	        // we don't want to tab into a different dialog or frame
+	        if ( focussed_child_of_p->IsTopLevel() )
+		    break;
+		    
                 if ( wxDynamicCast(p, wxPanel) )
                 {
 		    event.SetCurrentFocus( focussed_child_of_p );

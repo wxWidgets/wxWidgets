@@ -44,6 +44,7 @@ limitation)
 #include "wx/url.h"
 #include "wx/filesys.h"
 #include "wx/fs_inet.h"
+#include "wx/module.h"
 
 class wxInetCacheNode : public wxObject
 {

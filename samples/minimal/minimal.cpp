@@ -86,7 +86,7 @@ enum
 {
     // menu items
     Minimal_Quit = 1,
-    Minimal_About,
+    Minimal_About
 };
 
 // ----------------------------------------------------------------------------

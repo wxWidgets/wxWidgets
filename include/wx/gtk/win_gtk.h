@@ -31,7 +31,7 @@ typedef enum
   GTK_MYSHADOW_NONE,
   GTK_MYSHADOW_THIN,
   GTK_MYSHADOW_IN,
-  GTK_MYSHADOW_OUT,
+  GTK_MYSHADOW_OUT
 } GtkMyShadowType;
 
 typedef struct _GtkMyFixed        GtkMyFixed;

@@ -420,7 +420,7 @@ bool wxPropertyListView::CreateControls()
 {
     wxPanel *panel = (wxPanel *)m_propertyWindow;
 
-    wxSize largeButtonSize( 60, 25 );
+    wxSize largeButtonSize( 70, 25 );
     wxSize smallButtonSize( 23, 23 );
 
     if (m_valueText)
@@ -511,7 +511,7 @@ bool wxPropertyListView::CreateControls()
             m_windowCloseButton = new wxButton(panel, wxID_OK, _("OK"), wxPoint(-1, -1), largeButtonSize );
             m_windowCloseButton->SetDefault();
             m_windowCloseButton->SetFocus();
-            bottomsizer->Add( m_windowCloseButton, 0, wxLEFT|wxTOP|wxBOTTOM, buttonborder );
+            bottomsizer->Add( m_windowCloseButton, 0, wxALL, buttonborder );
         }
         else if (m_buttonFlags & wxPROP_BUTTON_CLOSE)
         {
@@ -529,7 +529,7 @@ bool wxPropertyListView::CreateControls()
             bottomsizer->Add( m_windowHelpButton, 0, wxALL, buttonborder );
         }
 
-        mainsizer->Add( bottomsizer, 1, wxALIGN_RIGHT | wxEXPAND );
+        mainsizer->Add( bottomsizer, 0, wxALIGN_RIGHT | wxEXPAND );
     }
 
     panel->SetSizer( mainsizer );
