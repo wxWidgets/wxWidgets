@@ -52,7 +52,7 @@ DECLARE_DYNAMIC_CLASS(wxQuantize)
     // This palette may be passed to ConvertImageToBitmap, for example.
     // If you pass a palette pointer, you must free the palette yourself.
 
-    static bool Quantize(const wxImage& src, wxImage& dest, wxPalette** pPalette = NULL, int desiredNoColours = 236,
+    static bool Quantize(const wxImage& src, wxImage& dest, wxPalette** pPalette, int desiredNoColours = 236,
         unsigned char** eightBitData = 0, int flags = wxQUANTIZE_INCLUDE_WINDOWS_COLOURS|wxQUANTIZE_FILL_DESTINATION_IMAGE|wxQUANTIZE_RETURN_8BIT_DATA);
 
     // This version sets a palette in the destination image so you don't
