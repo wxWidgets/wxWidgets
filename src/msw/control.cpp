@@ -98,14 +98,18 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     // by default)
     style |= WS_CHILD | WS_VISIBLE;
 
+    int x = pos.x == -1 ? 0 : pos.x,
+        y = pos.y == -1 ? 0 : pos.y,
+        w = size.x == -1 ? 0 : size.x,
+        h = size.y == -1 ? 0 : size.y;
+
     m_hWnd = (WXHWND)::CreateWindowEx
                        (
                         exstyle,            // extended style
                         classname,          // the kind of control to create
                         label,              // the window name
                         style,              // the window style
-                        pos.x, pos.y,       // the window position
-                        size.x, size.y,     //            and size
+                        x, y, w, h,         // the window position and size
                         GetHwndOf(GetParent()),  // parent
                         (HMENU)GetId(),     // child id
                         wxGetInstance(),    // app instance
@@ -133,6 +137,12 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
 
     // controls use the same font and colours as their parent dialog by default
     InheritAttributes();
+
+    // set the size now if no initial size specified
+    if ( w == 0 || h == 0 )
+    {
+        SetBestSize(size);
+    }
 
     return TRUE;
 }
