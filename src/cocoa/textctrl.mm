@@ -12,6 +12,8 @@
 #include "wx/app.h"
 #include "wx/textctrl.h"
 
+#include "wx/cocoa/string.h"
+
 #import <Foundation/NSString.h>
 #import <AppKit/NSTextField.h>
 
@@ -110,8 +112,9 @@ void wxTextCtrl::Replace(long, long, wxString const&)
 {
 }
 
-void wxTextCtrl::SetValue(wxString const&)
+void wxTextCtrl::SetValue(wxString const& value)
 {
+    [GetNSTextField() setStringValue: wxNSStringWithWxString(value)];
 }
 
 void wxTextCtrl::WriteText(wxString const&)
@@ -179,6 +182,6 @@ bool wxTextCtrl::CanUndo() const
 
 wxString wxTextCtrl::GetValue() const
 {
-    return wxEmptyString;
+    return wxString([[GetNSTextField() stringValue] lossyCString]);
 }
 
