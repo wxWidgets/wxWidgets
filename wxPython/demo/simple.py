@@ -23,11 +23,7 @@ class MyFrame(wxFrame):
         self.SetMenuBar(menuBar)
 
         panel = wxPanel(self, -1)
-        if wxPlatform == "__WXMAC__":
-            text = wxStaticText(panel, -1,
-                                "Hello World!\nWhere is my menu?")
-        else:
-            text = wxStaticText(panel, -1, "Hello World!")
+        text = wxStaticText(panel, -1, "Hello World!")
         text.SetFont(wxFont(12, wxSWISS, wxNORMAL, wxBOLD))
         text.SetSize(text.GetBestSize())
         btn = wxButton(panel, -1, "Close")
