@@ -49,7 +49,8 @@ wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NUL
 
 extern bool g_isIdle;
 
-bool g_mainThreadLocked = FALSE;
+bool   g_mainThreadLocked = FALSE;
+gint   g_pendingTag = 0;
 
 GtkWidget *wxRootWindow = (GtkWidget*) NULL;
 
@@ -59,6 +60,7 @@ GtkWidget *wxRootWindow = (GtkWidget*) NULL;
 
 /* forward declaration */
 gint   wxapp_idle_callback( gpointer WXUNUSED(data) );
+gint   wxapp_pending_callback( gpointer WXUNUSED(data) );
 void   wxapp_install_idle_handler();
 
 #if wxUSE_THREADS
@@ -78,26 +80,28 @@ void wxExit()
 // wxYield
 //-----------------------------------------------------------------------------
 
+static bool gs_inYield = FALSE;
+
 bool wxYield()
 {
-    bool has_idle = (wxTheApp->m_idleTag != 0);
+#ifdef __WXDEBUG__
+    if (gs_inYield)
+        wxFAIL_MSG( wxT("wxYield called recursively" ) );
+#endif
+    
+    gs_inYield = TRUE;
 
-    if (has_idle)
+    if (!g_isIdle)
     {
-        /* We need to temporarily remove idle callbacks or the loop will
-           never finish. */
+        // We need to remove idle callbacks or the loop will
+        // never finish.
         gtk_idle_remove( wxTheApp->m_idleTag );
         wxTheApp->m_idleTag = 0;
+        g_isIdle = TRUE;
     }
 
     while (gtk_events_pending())
         gtk_main_iteration();
-
-    if (has_idle)
-    {
-        /* re-add idle handler (very low priority) */
-        wxTheApp->m_idleTag = gtk_idle_add_priority( 500, wxapp_idle_callback, (gpointer) NULL );
-    }
 
     // disable log flushing from here because a call to wxYield() shouldn't
     // normally result in message boxes popping up &c
@@ -106,13 +110,27 @@ bool wxYield()
     /* it's necessary to call ProcessIdle() to update the frames sizes which
        might have been changed (it also will update other things set from
        OnUpdateUI() which is a nice (and desired) side effect) */
-    while (wxTheApp->ProcessIdle())
-        ;
+    while (wxTheApp->ProcessIdle()) { }
 
     // let the logs be flashed again
     wxLog::Resume();
 
+    gs_inYield = FALSE;
+
     return TRUE;
+}
+
+//-----------------------------------------------------------------------------
+// wxYieldIfNeeded
+// Like wxYield, but fails silently if the yield is recursive.
+//-----------------------------------------------------------------------------
+
+bool wxYieldIfNeeded()
+{
+    if (gs_inYield)
+        return FALSE;
+        
+    return wxYield();    
 }
 
 //-----------------------------------------------------------------------------
@@ -139,55 +157,89 @@ void wxWakeUpIdle()
 // local functions
 //-----------------------------------------------------------------------------
 
-gint wxapp_idle_callback( gpointer WXUNUSED(data) )
+gint wxapp_pending_callback( gpointer WXUNUSED(data) )
 {
     if (!wxTheApp) return TRUE;
-
+    
     // when getting called from GDK's time-out handler
     // we are no longer within GDK's grab on the GUI
     // thread so we must lock it here ourselves
     gdk_threads_enter();
 
-    /* we don't want any more idle events until the next event is
-       sent to wxGTK */
-    gtk_idle_remove( wxTheApp->m_idleTag );
-    wxTheApp->m_idleTag = 0;
+    // Sent idle event to all who request them
+    wxTheApp->ProcessPendingEvents();
 
-    /* indicate that we are now in idle mode - even so deeply
+    g_pendingTag = 0;
+
+    // flush the logged messages if any
+#if wxUSE_LOG
+    wxLog::FlushActive();
+#endif // wxUSE_LOG
+
+    // Release lock again
+    gdk_threads_leave();
+
+    // Return FALSE to indicate that no more idle events are
+    // to be sent (single shot instead of continuous stream)
+    return FALSE;
+}
+
+gint wxapp_idle_callback( gpointer WXUNUSED(data) )
+{
+    if (!wxTheApp) return TRUE;
+    
+    // when getting called from GDK's time-out handler
+    // we are no longer within GDK's grab on the GUI
+    // thread so we must lock it here ourselves
+    gdk_threads_enter();
+
+    /* Indicate that we are now in idle mode - even so deeply
        in idle mode that we don't get any idle events anymore.
        this is like wxMSW where an idle event is sent only
        once each time after the event queue has been completely
        emptied */
     g_isIdle = TRUE;
+    wxTheApp->m_idleTag = 0;
 
-    /* sent idle event to all who request them */
+    // Sent idle event to all who request them
     while (wxTheApp->ProcessIdle()) { }
 
-    // release lock again
+    // Release lock again
     gdk_threads_leave();
 
-    return TRUE;
+    // Return FALSE to indicate that no more idle events are
+    // to be sent (single shot instead of continuous stream)
+    return FALSE;
 }
 
 void wxapp_install_idle_handler()
 {
     wxASSERT_MSG( wxTheApp->m_idleTag == 0, wxT("attempt to install idle handler twice") );
 
+    g_isIdle = FALSE;
+
+    if (g_pendingTag == 0)
+        g_pendingTag = gtk_idle_add_priority( 900, wxapp_pending_callback, (gpointer) NULL );
+        
     /* This routine gets called by all event handlers
        indicating that the idle is over. It may also
        get called from other thread for sending events
        to the main thread (and processing these in
        idle time). Very low priority. */
 
-    wxTheApp->m_idleTag = gtk_idle_add_priority( 500, wxapp_idle_callback, (gpointer) NULL );
-
-    g_isIdle = FALSE;
+    wxTheApp->m_idleTag = gtk_idle_add_priority( 1000, wxapp_idle_callback, (gpointer) NULL );
 }
 
 #if wxUSE_THREADS
 
+static int g_threadUninstallLevel = 0;
+
 void wxapp_install_thread_wakeup()
 {
+    g_threadUninstallLevel++;
+    
+    if (g_threadUninstallLevel != 1) return;
+
     if (wxTheApp->m_wakeUpTimerTag) return;
 
     wxTheApp->m_wakeUpTimerTag = gtk_timeout_add( 50, wxapp_wakeup_timerout_callback, (gpointer) NULL );
@@ -195,6 +247,10 @@ void wxapp_install_thread_wakeup()
 
 void wxapp_uninstall_thread_wakeup()
 {
+    g_threadUninstallLevel--;
+    
+    if (g_threadUninstallLevel != 0) return;
+
     if (!wxTheApp->m_wakeUpTimerTag) return;
 
     gtk_timeout_remove( wxTheApp->m_wakeUpTimerTag );
@@ -250,7 +306,8 @@ wxApp::wxApp()
     m_topWindow = (wxWindow *) NULL;
     m_exitOnFrameDelete = TRUE;
 
-    m_idleTag = gtk_idle_add_priority( 500, wxapp_idle_callback, (gpointer) NULL );
+    m_idleTag = 0;
+    wxapp_install_idle_handler();
 
 #if wxUSE_THREADS
     m_wakeUpTimerTag = 0;
@@ -365,31 +422,26 @@ void wxApp::OnIdle( wxIdleEvent &event )
 {
     static bool s_inOnIdle = FALSE;
 
-    /* Avoid recursion (via ProcessEvent default case) */
+    // Avoid recursion (via ProcessEvent default case)
     if (s_inOnIdle)
         return;
 
     s_inOnIdle = TRUE;
 
-    /* Resend in the main thread events which have been prepared in other
-       threads */
+    // Resend in the main thread events which have been prepared in other
+    // threads
     ProcessPendingEvents();
 
-    /* 'Garbage' collection of windows deleted with Close(). */
+    // 'Garbage' collection of windows deleted with Close().
     DeletePendingObjects();
 
-    /* Send OnIdle events to all windows */
+    // Send OnIdle events to all windows
     bool needMore = SendIdleEvents();
 
     if (needMore)
         event.RequestMore(TRUE);
 
     s_inOnIdle = FALSE;
-
-    /* flush the logged messages if any */
-#if wxUSE_LOG
-    wxLog::FlushActive();
-#endif // wxUSE_LOG
 }
 
 bool wxApp::SendIdleEvents()
@@ -415,7 +467,7 @@ bool wxApp::SendIdleEvents( wxWindow* win )
     wxIdleEvent event;
     event.SetEventObject(win);
 
-    win->ProcessEvent(event);
+    win->GetEventHandler()->ProcessEvent(event);
 
     win->OnInternalIdle();
 

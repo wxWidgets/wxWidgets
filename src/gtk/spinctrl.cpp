@@ -51,7 +51,34 @@ static void gtk_spinctrl_callback( GtkWidget *WXUNUSED(widget), wxSpinCtrl *win 
 
     wxCommandEvent event( wxEVT_COMMAND_SPINCTRL_UPDATED, win->GetId());
     event.SetEventObject( win );
+
     event.SetInt( win->GetValue() );
+    win->GetEventHandler()->ProcessEvent( event );
+}
+
+//-----------------------------------------------------------------------------
+//  "changed"
+//-----------------------------------------------------------------------------
+
+static void
+gtk_spinctrl_text_changed_callback( GtkWidget *WXUNUSED(widget), wxSpinCtrl *win )
+{
+    if (!win->m_hasVMT) return;
+
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+
+    wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->GetId() );
+    event.SetEventObject( win );
+
+    // note that we don't use wxSpinCtrl::GetValue() here because it would
+    // adjust the value to fit into the control range and this means that we
+    // would never be able to enter an "invalid" value in the control, even
+    // temporarily - and trying to enter 10 into the control which accepts the
+    // values in range 5..50 is then, ummm, quite challenging (hint: you can't
+    // enter 1!) (VZ)
+    event.SetInt( (int)ceil(win->m_adjust->value) );
+
     win->GetEventHandler()->ProcessEvent( event );
 }
 
@@ -125,6 +152,9 @@ void wxSpinCtrl::GtkDisableEvents()
                         GTK_SIGNAL_FUNC(gtk_spinctrl_callback),
                         (gpointer) this );
 
+    gtk_signal_disconnect_by_func( GTK_OBJECT(m_widget),
+                        GTK_SIGNAL_FUNC(gtk_spinctrl_text_changed_callback),
+                        (gpointer) this );
 }
 
 void wxSpinCtrl::GtkEnableEvents()
@@ -133,6 +163,11 @@ void wxSpinCtrl::GtkEnableEvents()
                         "value_changed",
                         GTK_SIGNAL_FUNC(gtk_spinctrl_callback),
                         (gpointer) this );
+    
+    gtk_signal_connect( GTK_OBJECT(m_widget),
+                        "changed",
+                        GTK_SIGNAL_FUNC(gtk_spinctrl_text_changed_callback),
+                        (gpointer)this);
 }
 
 int wxSpinCtrl::GetMin() const
@@ -222,7 +257,7 @@ void wxSpinCtrl::OnChar( wxKeyEvent &event )
     if (event.KeyCode() == WXK_RETURN)
     {
         wxWindow *top_frame = m_parent;
-        while (top_frame->GetParent() && !(top_frame->GetParent()->m_isFrame))
+        while (top_frame->GetParent() && !(top_frame->GetParent()->IsTopLevel()))
             top_frame = top_frame->GetParent();
         GtkWindow *window = GTK_WINDOW(top_frame->m_widget);
 

@@ -16,45 +16,30 @@ varaibles and PATH entries.
 Continue with item c) below.
 
 
-b) If using the GNU MinGW32 or GNU CygWin32 compilers
+b) If using the GNU Mingw32 or GNU Cygwin32 compilers
 
-You'll need the compiler itself which is available from
+You can get Mingw32 from  http://www.mingw.org
 
-  http://www.cygwin.com
+Cygwin32 is available at  http://www.cygwin.com
 
-When using MingW32 you'll need GNU make which is a part
-of the CygWin32 toolchain and is also available as a stand
-alone port without the infamous Cygwin.dll from
-
-  http://agnes.dida.physik.uni-essen.de/~janjaap/mingw32
-
-The makefile has small problems with Cygwin´s tools
-so it is recommended not to use these (but MingGW32
-and its make.exe).
+The makefile might have small problems with Cygwin's tools
+so it is recommended to use Mingw32 and its toolchain instead
+if possible.
 
 -> Set your path so that it includes the directory
    where your compiler and tools reside
 
-b-2) Using Mingw32 with gcc-2.95 and Anders Norlander's
-     Win32 headers
-
-Using the newer gcc-2.95/Noralander header combination
-will allow you to compile more of the MSW code, such
-as OLE and Drag-n-Drop.
-
-Instructions are similar to those for Regular Mingw32 except
-
-->Get the compiler from
-    ftp://ftp.xraylith.wisc.edu/pub/khan/gnu-win32/mingw32/gcc-2.95/
-
-->patch the gcc headers with info in wxWin\Mingw32-gcc295.patches.
-  PLEASE APPLY THESE PATCHES BY HAND! There are apparently a few
-  different versions of the headers floating around.
-
-->Edit wx/src/makeg95.env and set the MINGW32 variable at the top of
-  the file to either 1 (you have Mingw32) or 0 (you have Cygwin32).
-  If using MINGW32, also set the MINGW32VERSION variable
-  appropriately.
+-> If your are using an old Mingw32 version (gcc-2.95 or older),
+   you might need to fix some headers with the patches contained
+   in the wxWin\Mingw32-gcc295.patches file. PLEASE APPLY THESE
+   PATCHES BY HAND! There are apparently a few different versions
+   of the headers floating around. Note that these patches are
+   not needed if you are using Mingw32 gcc-2.95.2 or newer.
+  
+-> Edit wx/src/makeg95.env and set the MINGW32 variable at the top of
+   the file to either 1 (you have Mingw32) or 0 (you have Cygwin32).
+   If using MINGW32, also set the MINGW32VERSION variable
+   appropiately.
 
 
 c) Build instructions
@@ -64,9 +49,9 @@ c) Build instructions
 -> Copy c:\wxWin\include\wx\msw\setup0.h
    to   c:\wxWin\include\wx\msw\setup.h
 -> Edit c:\wxWin\include\wx\msw\setup.h so that
-   most features are enabled (i.e. defined to 1) with
+   most features are enabled (i.e. defined to 1), for example:
    #define wxUSE_ODBC          0
-   #define wxUSE_SOCKETS       0
+   #define wxUSE_SOCKETS       1
    #define wxUSE_HTML          1
    #define wxUSE_THREADS       1
    #define wxUSE_FS_INET       0
@@ -77,14 +62,12 @@ c) Build instructions
    #define wxUSE_LIBJPEG       1
    #define wxUSE_LIBPNG        1
 
-   and iostreams ares disabled with
+   and std iostreams are disabled with
    #define wxUSE_STD_IOSTREAM   0
-
-   note: ODBC and SOCKETS can be 1 for gcc-2.95
-
+ 
 -> type: cd c:\wxWin\src\msw
 -> type: make -f makefile.g95  (if using GNU tools)
-or type: make -f makefile.vc   (if using MS VC++)
+or type: nmake -f makefile.vc   (if using MS VC++)
 
 
 II) Unix ports
@@ -131,6 +114,20 @@ ftp server at ftp://sourceware.cygnus.com/pub/cygwin/.
 
 Of course, you can also build the library using plain makefiles (see
 section I).
+
+IV) wxBase
+----------------------------------------
+
+wxBase is the non GUI part of wxWindows. Currently it can be only built using
+configure (i.e. under Unix and probably under Win32 with cygwin) and with
+Visual C++.
+
+To build it using configure, just add "--disable-gui" argument to it.
+
+To build wxBase with VC++, use the project files wxBase.dsp and wxBaseDll.dsp
+included in the CVS. See http://www.wxwindows.org/vadim/wxDocs/buildmsw.html
+for the instructions on how to generate the project files for the programs
+using wxBase.
 
 V) MacOS
 ----------------------------------------

@@ -227,7 +227,7 @@ void MyFrame::TestNotebookSizers(wxCommandEvent& WXUNUSED(event) )
     wxPanel *panel = new wxPanel( notebook, -1 );
     notebook->AddPage( panel, "Page Two" );
 
-    wxBoxSizer *panelsizer = new wxBoxSizer( wxVERTICAL );
+    wxSizer *panelsizer = new wxBoxSizer( wxVERTICAL );
 
     wxTextCtrl *text = new wxTextCtrl( panel, -1, "TextLine 1.", wxDefaultPosition, wxSize(250,-1) );
     panelsizer->Add( text, 0, wxGROW|wxALL, 30 );
@@ -349,6 +349,22 @@ MySizerFrame::MySizerFrame(wxFrame *frame, char *title, int x, int y ):
     wxALL,
     30);
   topsizer->Add(statsizer, 1, wxEXPAND | wxALL, 10);
+
+    // 2.7) And a test of wxGridSizer
+    wxGridSizer *gridsizer = new wxGridSizer(2, 5, 5);
+    gridsizer->Add(new wxStaticText(this, -1, "Label"), 0,
+                  wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL);
+    gridsizer->Add(new wxTextCtrl(this, -1, "Grid sizer demo"), 1,
+                   wxGROW | wxALIGN_CENTER_VERTICAL);
+    gridsizer->Add(new wxStaticText(this, -1, "Another label"), 0,
+                   wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL);
+    gridsizer->Add(new wxTextCtrl(this, -1, "More text"), 1,
+                   wxGROW | wxALIGN_CENTER_VERTICAL);
+    gridsizer->Add(new wxStaticText(this, -1, "Final label"), 0,
+                   wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL);
+    gridsizer->Add(new wxTextCtrl(this, -1, "And yet more text"), 1,
+                   wxGROW | wxALIGN_CENTER_VERTICAL);
+    topsizer->Add(gridsizer, 1, wxGROW | wxALL, 10);
 
 
   // 3) middle: create wxStaticLine with minimum size (3x3)

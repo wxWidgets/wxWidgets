@@ -63,8 +63,10 @@
 extern wxWindowList wxModelessWindows;      // from dialog.cpp
 extern wxMenu *wxCurrentPopupMenu;
 
-extern const wxChar *wxMDIFrameClassName;
+extern const wxChar *wxMDIFrameClassName;   // from app.cpp
 extern const wxChar *wxMDIChildFrameClassName;
+extern const wxChar *wxMDIChildFrameClassNameNoRedraw;
+
 extern wxWindow *wxWndHook;                 // from window.cpp
 
 extern void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win);
@@ -132,6 +134,10 @@ BEGIN_EVENT_TABLE(wxMDIParentFrame, wxFrame)
     EVT_SYS_COLOUR_CHANGED(wxMDIParentFrame::OnSysColourChanged)
 END_EVENT_TABLE()
 
+BEGIN_EVENT_TABLE(wxMDIChildFrame, wxFrame)
+    EVT_IDLE(wxMDIChildFrame::OnIdle)
+END_EVENT_TABLE()
+
 BEGIN_EVENT_TABLE(wxMDIClientWindow, wxWindow)
     EVT_SCROLL(wxMDIClientWindow::OnScroll)
 END_EVENT_TABLE()
@@ -157,25 +163,29 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
                               long style,
                               const wxString& name)
 {
-  m_defaultIcon = (WXHICON) (wxSTD_MDIPARENTFRAME_ICON ? wxSTD_MDIPARENTFRAME_ICON : wxDEFAULT_MDIPARENTFRAME_ICON);
+  m_defaultIcon = (WXHICON) (wxSTD_MDIPARENTFRAME_ICON
+                                ? wxSTD_MDIPARENTFRAME_ICON
+                                : wxDEFAULT_MDIPARENTFRAME_ICON);
 
   m_clientWindow = NULL;
   m_currentChild = NULL;
 
-  if (style & wxFRAME_NO_WINDOW_MENU)
-      m_windowMenu = (wxMenu*) NULL;
-  else
+  // this style can be used to prevent a window from having the standard MDI
+  // "Window" menu
+  if ( style & wxFRAME_NO_WINDOW_MENU )
   {
-  // m_windowMenu = (WXHMENU) ::LoadMenu(wxGetInstance(), wxT("wxWindowMenu"));
+      m_windowMenu = (wxMenu *)NULL;
+  }
+  else // normal case: we have the window menu, so construct it
+  {
       m_windowMenu = new wxMenu;
 
-
-      m_windowMenu->Append(4002, wxT("&Cascade"));
-      m_windowMenu->Append(4001, wxT("Tile &Horizontally"));
-      m_windowMenu->Append(4005, wxT("Tile &Vertically"));
+      m_windowMenu->Append(IDM_WINDOWCASCADE, wxT("&Cascade"));
+      m_windowMenu->Append(IDM_WINDOWTILEHOR, wxT("Tile &Horizontally"));
+      m_windowMenu->Append(IDM_WINDOWTILEVERT, wxT("Tile &Vertically"));
       m_windowMenu->AppendSeparator();
-      m_windowMenu->Append(4003, wxT("&Arrange Icons"));
-      m_windowMenu->Append(4004, wxT("&Next"));
+      m_windowMenu->Append(IDM_WINDOWICONS, wxT("&Arrange Icons"));
+      m_windowMenu->Append(IDM_WINDOWNEXT, wxT("&Next"));
   }
 
   m_parentFrameActive = TRUE;
@@ -217,10 +227,21 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
   if (style & wxCLIP_CHILDREN)
     msflags |= WS_CLIPCHILDREN;
 
-  wxWindow::MSWCreate(m_windowId, parent, wxMDIFrameClassName, this, title, x, y, width, height,
-         msflags);
+  if ( !wxWindow::MSWCreate(m_windowId,
+                            parent,
+                            wxMDIFrameClassName,
+                            this,
+                            title,
+                            x, y, width, height,
+                            msflags) )
+  {
+      return FALSE;
+  }
 
   wxModelessWindows.Append(this);
+
+  // unlike (almost?) all other windows, frames are created hidden
+  m_isShown = FALSE;
 
   return TRUE;
 }
@@ -559,8 +580,7 @@ bool wxMDIParentFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
     {
         // this shouldn't happen because it means that our messages are being
         // lost (they're not sent to the parent frame nor to the children)
-        wxFAIL_MSG(wxT("MDI parent frame is not active, "
-                      "yet there is no active MDI child?"));
+        wxFAIL_MSG(wxT("MDI parent frame is not active, yet there is no active MDI child?"));
     }
 
     return FALSE;
@@ -583,17 +603,20 @@ bool wxMDIParentFrame::MSWTranslateMessage(WXMSG* msg)
 {
     MSG *pMsg = (MSG *)msg;
 
+    // first let the current child get it
     if ( m_currentChild && m_currentChild->GetHWND() &&
          m_currentChild->MSWTranslateMessage(msg) )
     {
         return TRUE;
     }
 
-    if ( m_acceleratorTable.Translate(this, msg) )
+    // then try out accel table (will also check the menu accels)
+    if ( wxFrame::MSWTranslateMessage(msg) )
     {
         return TRUE;
     }
 
+    // finally, check for MDI specific built in accel keys
     if ( pMsg->message == WM_KEYDOWN || pMsg->message == WM_SYSKEYDOWN )
     {
         if ( ::TranslateMDISysAccel(GetWinHwnd(GetClientWindow()), pMsg))
@@ -607,8 +630,9 @@ bool wxMDIParentFrame::MSWTranslateMessage(WXMSG* msg)
 // wxMDIChildFrame
 // ===========================================================================
 
-wxMDIChildFrame::wxMDIChildFrame()
+void wxMDIChildFrame::Init()
 {
+    m_needsResize = TRUE;
 }
 
 bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
@@ -643,7 +667,9 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 
   MDICREATESTRUCT mcs;
 
-  mcs.szClass = wxMDIChildFrameClassName;
+  mcs.szClass = style & wxNO_FULL_REPAINT_ON_RESIZE
+                    ? wxMDIChildFrameClassNameNoRedraw
+                    : wxMDIChildFrameClassName;
   mcs.szTitle = title;
   mcs.hOwner = wxGetInstance();
   if (x > -1)
@@ -686,12 +712,8 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 
   mcs.lParam = 0;
 
-  DWORD Return = SendMessage(GetWinHwnd(parent->GetClientWindow()),
-                             WM_MDICREATE, 0, (LONG)(LPSTR)&mcs);
-
-  //handle = (HWND)LOWORD(Return);
-  // Must be the DWORRD for WIN32. And in 16 bits, HIWORD=0 (says Microsoft)
-  m_hWnd = (WXHWND)Return;
+  m_hWnd = (WXHWND)::SendMessage(GetWinHwnd(parent->GetClientWindow()),
+                                 WM_MDICREATE, 0, (LONG)(LPSTR)&mcs);
 
   wxWndHook = NULL;
   wxAssociateWinWithHandle((HWND) GetHWND(), this);
@@ -907,15 +929,17 @@ bool wxMDIChildFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
             return TRUE;
     }
 
+    bool processed;
     if (GetMenuBar() && GetMenuBar()->FindItem(id))
     {
-        ProcessCommand(id);
-        return TRUE;
+        processed = ProcessCommand(id);
     }
     else
-        return FALSE;
+    {
+        processed = FALSE;
+    }
 
-    return TRUE;
+    return processed;
 }
 
 bool wxMDIChildFrame::HandleMDIActivate(long WXUNUSED(activate),
@@ -1136,7 +1160,7 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
                         (LPSTR)(LPCLIENTCREATESTRUCT)&ccs);
     if ( !m_hWnd )
     {
-        wxLogLastError("CreateWindowEx(MDI client)");
+        wxLogLastError(wxT("CreateWindowEx(MDI client)"));
 
         return FALSE;
     }
@@ -1196,6 +1220,22 @@ void wxMDIClientWindow::DoSetSize(int x, int y, int width, int height, int sizeF
     }
 }
 
+void wxMDIChildFrame::OnIdle(wxIdleEvent& event)
+{
+    // MDI child frames get their WM_SIZE when they're constructed but at this
+    // moment they don't have any children yet so all child windows will be
+    // positioned incorrectly when they are added later - to fix this, we
+    // generate an artificial size event here
+    if ( m_needsResize )
+    {
+        m_needsResize = FALSE; // avoid any possibility of recursion
+
+        SendSizeEvent();
+    }
+
+    event.Skip();
+}
+
 // ---------------------------------------------------------------------------
 // non member functions
 // ---------------------------------------------------------------------------
@@ -1204,10 +1244,11 @@ static void MDISetMenu(wxWindow *win, HMENU hmenuFrame, HMENU hmenuWindow)
 {
     ::SendMessage(GetWinHwnd(win), WM_MDISETMENU,
 #ifdef __WIN32__
-                  (WPARAM)hmenuFrame, (LPARAM)hmenuWindow);
+                  (WPARAM)hmenuFrame, (LPARAM)hmenuWindow
 #else
-                  0, MAKELPARAM(hmenuFrame, hmenuWindow));
+                  0, MAKELPARAM(hmenuFrame, hmenuWindow)
 #endif
+                 );
 
     // update menu bar of the parent window
     wxWindow *parent = win->GetParent();
@@ -1236,18 +1277,18 @@ static void InsertWindowMenu(wxWindow *win, WXHMENU menu, HMENU subMenu)
             continue;
         }
 
-        if ( wxStripMenuCodes(wxString(buf)).IsSameAs(wxT("Help")) )
+        if ( wxStripMenuCodes(wxString(buf)).IsSameAs(_("Help")) )
         {
             success = TRUE;
             ::InsertMenu(hmenu, i, MF_BYPOSITION | MF_POPUP | MF_STRING,
-                         (UINT)subMenu, wxT("&Window"));
+                         (UINT)subMenu, _("&Window"));
             break;
         }
     }
 
     if ( !success )
     {
-        ::AppendMenu(hmenu, MF_POPUP, (UINT)subMenu, wxT("&Window"));
+        ::AppendMenu(hmenu, MF_POPUP, (UINT)subMenu, _("&Window"));
     }
     }
 
@@ -1271,7 +1312,7 @@ static void RemoveWindowMenu(wxWindow *win, WXHMENU menu)
             continue;
         }
 
-        if ( wxStripMenuCodes(wxString(buf)).IsSameAs(wxT("Window")) )
+        if ( wxStripMenuCodes(wxString(buf)).IsSameAs(_("Window")) )
         {
             success = TRUE;
             ::RemoveMenu(hmenu, i, MF_BYPOSITION);

@@ -7,16 +7,17 @@
 #define KEYTOCOMMAND_H
 
 #define SCI_NORM 0
-#define SCI_SHIFT SHIFT_PRESSED
-#define SCI_CTRL LEFT_CTRL_PRESSED
-#define SCI_ALT LEFT_ALT_PRESSED
+#define SCI_SHIFT SCMOD_SHIFT
+#define SCI_CTRL SCMOD_CTRL
+#define SCI_ALT SCMOD_ALT
 #define SCI_CSHIFT (SCI_CTRL | SCI_SHIFT)
+#define SCI_ASHIFT (SCI_ALT | SCI_SHIFT)
 
 class KeyToCommand {
 public:
 	int key;
 	int modifiers;
-	UINT msg;
+	unsigned int msg;
 };
 
 class KeyMap {
@@ -28,8 +29,8 @@ public:
 	KeyMap();
 	~KeyMap();
 	void Clear();
-	void AssignCmdKey(int key, int modifiers, UINT msg);
-	UINT Find(int key, int modifiers);	// 0 returned on failure
+	void AssignCmdKey(int key, int modifiers, unsigned int msg);
+	unsigned int Find(int key, int modifiers);	// 0 returned on failure
 };
 
 #endif

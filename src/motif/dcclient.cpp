@@ -323,7 +323,7 @@ void wxWindowDC::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCo
 
     wxCoord dx = xx1 - xxc;
     wxCoord dy = yy1 - yyc;
-    double radius = sqrt (dx * dx + dy * dy);
+    double radius = sqrt ((double)(dx * dx + dy * dy));
     wxCoord r = (wxCoord) radius;
 
     double radius1, radius2;

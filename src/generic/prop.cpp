@@ -179,7 +179,7 @@ wxPropertyValue::wxPropertyValue(wxStringList *the_list)
   wxNode *node = the_list->First();
   while (node)
   {
-    char *s = (char *)node->Data();
+    wxChar *s = (wxChar *)node->Data();
     Append(new wxPropertyValue(s));
     node = node->Next();
   }

@@ -63,8 +63,6 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
 {
     m_dialogStyle = style;
 
-    wxBeginBusyCursor();
-
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
     wxBoxSizer *icon_text = new wxBoxSizer( wxHORIZONTAL );
@@ -103,8 +101,6 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
     }
 
     Centre( wxBOTH | wxCENTER_FRAME);
-
-    wxEndBusyCursor();
 }
 
 void wxGenericMessageDialog::OnYes(wxCommandEvent& WXUNUSED(event))

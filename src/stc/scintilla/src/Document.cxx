@@ -32,7 +32,10 @@ Document::Document() {
 	}
 	endStyled = 0;
 	enteredCount = 0;
+	enteredReadOnlyCount = 0;
 	tabInChars = 8;
+	indentInChars = 0;
+	useTabs = true;
 	watchers = 0;
 	lenWatchers = 0;
 }
@@ -51,7 +54,7 @@ int Document::AddRef() {
 	return refCount++;
 }
 
-// Decrease reference count and return its provius value.
+// Decrease reference count and return its previous value.
 // Delete the document if reference count reaches zero.
 int Document::Release() {
 	int curRefCount = --refCount;
@@ -65,8 +68,46 @@ void Document::SetSavePoint() {
 	NotifySavePoint(true);
 }
 
+int Document::AddMark(int line, int markerNum) { 
+	int prev = cb.AddMark(line, markerNum); 
+	DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0);
+	NotifyModified(mh);
+	return prev;
+}
+
+void Document::DeleteMark(int line, int markerNum) { 
+	cb.DeleteMark(line, markerNum); 
+	DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0);
+	NotifyModified(mh);
+}
+
+void Document::DeleteMarkFromHandle(int markerHandle) { 
+	cb.DeleteMarkFromHandle(markerHandle); 
+	DocModification mh(SC_MOD_CHANGEMARKER, 0, 0, 0, 0);
+	NotifyModified(mh);
+}
+
+void Document::DeleteAllMarks(int markerNum) { 
+	cb.DeleteAllMarks(markerNum); 
+	DocModification mh(SC_MOD_CHANGEMARKER, 0, 0, 0, 0);
+	NotifyModified(mh);
+}
+
 int Document::LineStart(int line) {
 	return cb.LineStart(line);
+}
+
+int Document::LineEnd(int line) {
+	if (line == LinesTotal() - 1) {
+		return LineStart(line + 1);
+	} else {
+		int position = LineStart(line + 1) - 1;
+		// When line terminator is CR+LF, may need to go back one more
+		if ((position > LineStart(line)) && (cb.CharAt(position - 1) == '\r')) {
+			position--;
+		}
+		return position;
+	}
 }
 
 int Document::LineFromPosition(int pos) {
@@ -74,17 +115,7 @@ int Document::LineFromPosition(int pos) {
 }
 
 int Document::LineEndPosition(int position) {
-	int line = LineFromPosition(position);
-	if (line == LinesTotal() - 1) {
-		position = LineStart(line + 1);
-	} else {
-		position = LineStart(line + 1) - 1;
-		// When line terminator is CR+LF, may need to go back one more
-		if ((position > LineStart(line)) && (cb.CharAt(position - 1) == '\r')) {
-			position--;
-		}
-	}
-	return position;
+	return LineEnd(LineFromPosition(position));
 }
 
 int Document::VCHomePosition(int position) {
@@ -124,7 +155,10 @@ int Document::GetLastChild(int lineParent, int level) {
 		level = GetLevel(lineParent) & SC_FOLDLEVELNUMBERMASK;
 	int maxLine = LinesTotal();
 	int lineMaxSubord = lineParent;
-	while ((lineMaxSubord < maxLine-1) && IsSubordinate(level, GetLevel(lineMaxSubord+1))) {
+	while (lineMaxSubord < maxLine-1) {
+		EnsureStyledTo(LineStart(lineMaxSubord+2));
+		if (!IsSubordinate(level, GetLevel(lineMaxSubord+1)))
+			break;
 		lineMaxSubord++;
 	}
 	if (lineMaxSubord > lineParent) {
@@ -167,27 +201,58 @@ bool Document::IsCrLf(int pos) {
 	return (cb.CharAt(pos) == '\r') && (cb.CharAt(pos + 1) == '\n');
 }
 
-bool Document::IsDBCS(int pos) {
 #if PLAT_WIN
+bool Document::IsDBCS(int pos) {
 	if (dbcsCodePage) {
-		// Anchor DBCS calculations at start of line because start of line can
-		// not be a DBCS trail byte.
-		int startLine = pos;
-		while (startLine > 0 && cb.CharAt(startLine) != '\r' && cb.CharAt(startLine) != '\n')
-			startLine--;
-		while (startLine <= pos) {
-			if (IsDBCSLeadByteEx(dbcsCodePage, cb.CharAt(startLine))) {
+		if (SC_CP_UTF8 == dbcsCodePage) {
+			unsigned char ch = static_cast<unsigned char>(cb.CharAt(pos));
+			return ch >= 0x80;
+		} else {
+			// Anchor DBCS calculations at start of line because start of line can
+			// not be a DBCS trail byte.
+			int startLine = pos;
+			while (startLine > 0 && cb.CharAt(startLine) != '\r' && cb.CharAt(startLine) != '\n')
+				startLine--;
+			while (startLine <= pos) {
+				if (IsDBCSLeadByteEx(dbcsCodePage, cb.CharAt(startLine))) {
+					startLine++;
+					if (startLine >= pos)
+						return true;
+				}
 				startLine++;
-				if (startLine >= pos)
-					return true;
 			}
-			startLine++;
 		}
 	}
 	return false;
+}
 #else
+// PLAT_GTK or PLAT_WX
+// TODO: support DBCS under GTK+ and WX
+bool Document::IsDBCS(int) {
 	return false;
+}
 #endif
+
+int Document::LenChar(int pos) {
+	if (IsCrLf(pos)) {
+		return 2;
+	} else if (SC_CP_UTF8 == dbcsCodePage) {
+		unsigned char ch = static_cast<unsigned char>(cb.CharAt(pos));
+		if (ch < 0x80)
+			return 1;
+		int len = 2;
+		if (ch >= (0x80+0x40+0x20))
+			len = 3;
+		int lengthDoc = Length();
+		if ((pos + len) > lengthDoc)
+			return lengthDoc-pos;
+		else 
+			return len;
+	} else if (IsDBCS(pos)) {
+		return 2;
+	} else {
+		return 1;
+	}
 }
 
 // Normalise a position so that it is not halfway through a two byte character.
@@ -221,29 +286,41 @@ int Document::MovePositionOutsideChar(int pos, int moveDir, bool checkLineEnd) {
 
 #if PLAT_WIN
 	if (dbcsCodePage) {
-		// Anchor DBCS calculations at start of line because start of line can
-		// not be a DBCS trail byte.
-		int startLine = pos;
-		while (startLine > 0 && cb.CharAt(startLine) != '\r' && cb.CharAt(startLine) != '\n')
-			startLine--;
-		bool atLeadByte = false;
-		while (startLine < pos) {
-			if (atLeadByte)
-				atLeadByte = false;
-			else if (IsDBCSLeadByteEx(dbcsCodePage, cb.CharAt(startLine)))
-				atLeadByte = true;
-			else
-				atLeadByte = false;
-			startLine++;
-			//Platform::DebugPrintf("DBCS %s\n", atlead ? "D" : "-");
-		}
+		if (SC_CP_UTF8 == dbcsCodePage) {
+			unsigned char ch = static_cast<unsigned char>(cb.CharAt(pos));
+			while ((pos > 0) && (pos < Length()) && (ch >= 0x80) && (ch < (0x80 + 0x40))) {
+				// ch is a trail byte
+				if (moveDir > 0)
+					pos++;
+				else 
+					pos--;
+				ch = static_cast<unsigned char>(cb.CharAt(pos));
+			}
+		} else {
+			// Anchor DBCS calculations at start of line because start of line can
+			// not be a DBCS trail byte.
+			int startLine = pos;
+			while (startLine > 0 && cb.CharAt(startLine) != '\r' && cb.CharAt(startLine) != '\n')
+				startLine--;
+			bool atLeadByte = false;
+			while (startLine < pos) {
+				if (atLeadByte)
+					atLeadByte = false;
+				else if (IsDBCSLeadByteEx(dbcsCodePage, cb.CharAt(startLine)))
+					atLeadByte = true;
+				else
+					atLeadByte = false;
+				startLine++;
+				//Platform::DebugPrintf("DBCS %s\n", atlead ? "D" : "-");
+			}
 
-		if (atLeadByte) {
-			// Position is between a lead byte and a trail byte
-			if (moveDir > 0)
-				return pos + 1;
-			else
-				return pos - 1;
+			if (atLeadByte) {
+				// Position is between a lead byte and a trail byte
+				if (moveDir > 0)
+					return pos + 1;
+				else
+					return pos - 1;
+			}
 		}
 	}
 #endif
@@ -261,41 +338,62 @@ void Document::ModifiedAt(int pos) {
 
 // Unlike Undo, Redo, and InsertStyledString, the pos argument is a cell number not a char number
 void Document::DeleteChars(int pos, int len) {
+    if ((pos + len) > Length())
+        return;
+	if (cb.IsReadOnly() && enteredReadOnlyCount==0) {
+		enteredReadOnlyCount++;
+		NotifyModifyAttempt();
+		enteredReadOnlyCount--;
+	}
 	if (enteredCount == 0) {
 		enteredCount++;
-		if (cb.IsReadOnly())
-			NotifyModifyAttempt();
 		if (!cb.IsReadOnly()) {
+			NotifyModified(
+                DocModification(
+                    SC_MOD_BEFOREDELETE | SC_PERFORMED_USER, 
+                    pos, len, 
+                    0, 0));
 			int prevLinesTotal = LinesTotal();
 			bool startSavePoint = cb.IsSavePoint();
 			const char *text = cb.DeleteChars(pos*2, len * 2);
 			if (startSavePoint && cb.IsCollectingUndo())
 				NotifySavePoint(!startSavePoint);
 			ModifiedAt(pos);
-			int modFlags = SC_MOD_DELETETEXT | SC_PERFORMED_USER;
-			DocModification mh(modFlags, pos, len, LinesTotal() - prevLinesTotal, text);
-			NotifyModified(mh);
+			NotifyModified(
+                DocModification(
+                    SC_MOD_DELETETEXT | SC_PERFORMED_USER, 
+                    pos, len, 
+                    LinesTotal() - prevLinesTotal, text));
 		}
 		enteredCount--;
 	}
 }
 
 void Document::InsertStyledString(int position, char *s, int insertLength) {
+	if (cb.IsReadOnly() && enteredReadOnlyCount==0) {
+		enteredReadOnlyCount++;
+		NotifyModifyAttempt();
+		enteredReadOnlyCount--;
+	}
 	if (enteredCount == 0) {
 		enteredCount++;
-		if (cb.IsReadOnly())
-			NotifyModifyAttempt();
 		if (!cb.IsReadOnly()) {
+			NotifyModified(
+                DocModification(
+                    SC_MOD_BEFOREINSERT | SC_PERFORMED_USER, 
+                    position / 2, insertLength / 2, 
+                    0, 0));
 			int prevLinesTotal = LinesTotal();
 			bool startSavePoint = cb.IsSavePoint();
 			const char *text = cb.InsertString(position, s, insertLength);
 			if (startSavePoint && cb.IsCollectingUndo())
 				NotifySavePoint(!startSavePoint);
 			ModifiedAt(position / 2);
-	
-			int modFlags = SC_MOD_INSERTTEXT | SC_PERFORMED_USER;
-			DocModification mh(modFlags, position / 2, insertLength / 2, LinesTotal() - prevLinesTotal, text);
-			NotifyModified(mh);
+			NotifyModified(
+                DocModification(
+                    SC_MOD_INSERTTEXT | SC_PERFORMED_USER, 
+                    position / 2, insertLength / 2, 
+                    LinesTotal() - prevLinesTotal, text));
 		}
 		enteredCount--;
 	}
@@ -307,9 +405,18 @@ int Document::Undo() {
 		enteredCount++;
 		bool startSavePoint = cb.IsSavePoint();
 		int steps = cb.StartUndo();
+		//Platform::DebugPrintf("Steps=%d\n", steps);
 		for (int step=0; step<steps; step++) {
 			int prevLinesTotal = LinesTotal();
-			const Action &action = cb.UndoStep();
+			const Action &action = cb.GetUndoStep();
+			if (action.at == removeAction) {
+			    NotifyModified(DocModification(
+                    SC_MOD_BEFOREINSERT | SC_PERFORMED_UNDO, action));
+            } else {
+			    NotifyModified(DocModification(
+                    SC_MOD_BEFOREDELETE | SC_PERFORMED_UNDO, action));
+            }
+			cb.PerformUndoStep();
 			int cellPosition = action.position / 2;
 			ModifiedAt(cellPosition);
 			newPos = cellPosition;
@@ -344,10 +451,17 @@ int Document::Redo() {
 		int steps = cb.StartRedo();
 		for (int step=0; step<steps; step++) {
 			int prevLinesTotal = LinesTotal();
-			const Action &action = cb.RedoStep();
-			int cellPosition = action.position / 2;
-			ModifiedAt(cellPosition);
-			newPos = cellPosition;
+			const Action &action = cb.GetRedoStep();
+			if (action.at == insertAction) {
+			    NotifyModified(DocModification(
+                    SC_MOD_BEFOREINSERT | SC_PERFORMED_REDO, action));
+            } else {
+			    NotifyModified(DocModification(
+                    SC_MOD_BEFOREDELETE | SC_PERFORMED_REDO, action));
+            }
+			cb.PerformRedoStep();
+			ModifiedAt(action.position / 2);
+			newPos = action.position / 2;
 			
 			int modFlags = SC_PERFORMED_REDO;
 			if (action.at == insertAction) {
@@ -358,7 +472,8 @@ int Document::Redo() {
 			}
 			if (step == steps-1)
 				modFlags |= SC_LASTSTEPINUNDOREDO;
-			NotifyModified(DocModification(modFlags, cellPosition, action.lenData, 
+			NotifyModified(
+                DocModification(modFlags, action.position / 2, action.lenData, 
 				LinesTotal() - prevLinesTotal, action.data));
 		}
 	
@@ -395,14 +510,13 @@ void Document::InsertString(int position, const char *s, int insertLength) {
 	}
 }
 
+void Document::ChangeChar(int pos, char ch) {
+	DeleteChars(pos, 1);
+	InsertChar(pos, ch);
+}
+
 void Document::DelChar(int pos) {
-	if (IsCrLf(pos)) {
-		DeleteChars(pos, 2);
-	} else if (IsDBCS(pos)) {
-		DeleteChars(pos, 2);
-	} else if (pos < Length()) {
-		DeleteChars(pos, 1);
-	}
+	DeleteChars(pos, LenChar(pos));
 }
 
 int Document::DelCharBack(int pos) {
@@ -411,6 +525,10 @@ int Document::DelCharBack(int pos) {
 	} else if (IsCrLf(pos - 2)) {
 		DeleteChars(pos - 2, 2);
 		return pos - 2;
+	} else if (SC_CP_UTF8 == dbcsCodePage) {
+		int startChar = MovePositionOutsideChar(pos-1, -1, false);
+		DeleteChars(startChar, pos - startChar);
+		return startChar;
 	} else if (IsDBCS(pos - 1)) {
 		DeleteChars(pos - 2, 2);
 		return pos - 2;
@@ -420,27 +538,101 @@ int Document::DelCharBack(int pos) {
 	}
 }
 
+static bool isindentchar(char ch) {
+	return (ch == ' ') || (ch == '\t');
+}
+
+static int NextTab(int pos, int tabSize) {
+	return ((pos / tabSize) + 1) * tabSize;
+}
+
+static void CreateIndentation(char *linebuf, int length, int indent, int tabSize, bool insertSpaces) {
+	length--;	// ensure space for \0
+	if (!insertSpaces) {
+		while ((indent >= tabSize) && (length > 0)) {
+			*linebuf++ = '\t';
+			indent -= tabSize;
+			length--;
+		}
+	}
+	while ((indent > 0) && (length > 0)) {
+		*linebuf++ = ' ';
+		indent--;
+		length--;
+	}
+	*linebuf = '\0';
+}
+
+int Document::GetLineIndentation(int line) {
+	int indent = 0;
+	if ((line >= 0) && (line < LinesTotal())) {
+		int lineStart = LineStart(line);
+		int length = Length();
+		for (int i=lineStart;i<length;i++) {
+			char ch = cb.CharAt(i);
+			if (ch == ' ')
+				indent++;
+			else if (ch == '\t')
+				indent = NextTab(indent, tabInChars);
+			else 
+				return indent;
+		}
+	}
+	return indent;
+}
+
+void Document::SetLineIndentation(int line, int indent) {
+	int indentOfLine = GetLineIndentation(line);
+	if (indent < 0)
+		indent = 0;
+	if (indent != indentOfLine) {
+		char linebuf[1000];
+		CreateIndentation(linebuf, sizeof(linebuf), indent, tabInChars, !useTabs);
+		int thisLineStart = LineStart(line);
+		int indentPos = GetLineIndentPosition(line);
+		DeleteChars(thisLineStart, indentPos - thisLineStart);
+		InsertString(thisLineStart, linebuf);
+	}
+}
+
+int Document::GetLineIndentPosition(int line) {
+    if (line < 0)
+        return 0;
+	int pos = LineStart(line);
+	int length = Length();
+	while ((pos < length) && isindentchar(cb.CharAt(pos))) {
+		pos++;
+	}
+	return pos;
+}
+
+int Document::GetColumn(int pos) {
+	int column = 0;
+	int line = LineFromPosition(pos);
+	if ((line >= 0) && (line < LinesTotal())) {
+		for (int i=LineStart(line);i<pos;i++) {
+			char ch = cb.CharAt(i);
+			if (ch == '\t')
+				column = NextTab(column, tabInChars);
+			else if (ch == '\r')
+				return column;
+			else if (ch == '\n')
+				return column;
+			else
+				column++;
+		}
+	}
+	return column;
+}
+
 void Document::Indent(bool forwards, int lineBottom, int lineTop) {
-	if (forwards) {
-		// Indent by a tab
-		for (int line = lineBottom; line >= lineTop; line--) {
-			InsertChar(LineStart(line), '\t');
-		}
-	} else {
-		// Dedent - suck white space off the front of the line to dedent by equivalent of a tab
-		for (int line = lineBottom; line >= lineTop; line--) {
-			int ispc = 0;
-			while (ispc < tabInChars && cb.CharAt(LineStart(line) + ispc) == ' ')
-				ispc++;
-			int posStartLine = LineStart(line);
-			if (ispc == tabInChars) {
-				DeleteChars(posStartLine, ispc);
-			} else if (cb.CharAt(posStartLine + ispc) == '\t') {
-				DeleteChars(posStartLine, ispc + 1);
-			} else {	// Hit a non-white
-				DeleteChars(posStartLine, ispc);
-			}
-		}
+	// Dedent - suck white space off the front of the line to dedent by equivalent of a tab
+	for (int line = lineBottom; line >= lineTop; line--) {
+		int indentOfLine = GetLineIndentation(line);
+		if (forwards)
+			SetLineIndentation(line, indentOfLine + IndentSize());
+		else
+			SetLineIndentation(line, indentOfLine - IndentSize());
 	}
 }
 
@@ -485,6 +677,8 @@ void Document::ConvertLineEnds(int eolModeSet) {
 }
 
 bool Document::IsWordChar(unsigned char ch) {
+	if ((SC_CP_UTF8 == dbcsCodePage) && (ch >0x80))
+		return true;
 	return wordchars[ch];
 }
 
@@ -523,25 +717,29 @@ int Document::NextWordStart(int pos, int delta) {
 	return pos;
 }
 
-bool Document::IsWordAt(int start, int end) {
-	int lengthDoc = Length();
-	if (start > 0) {
-		char ch = CharAt(start - 1);
-		if (IsWordChar(ch))
-			return false;
-	}
-	if (end < lengthDoc - 1) {
-		char ch = CharAt(end);
-		if (IsWordChar(ch))
-			return false;
+bool Document::IsWordStartAt(int pos) {
+	if (pos > 0) {
+		return !IsWordChar(CharAt(pos - 1));
 	}
 	return true;
+}
+
+bool Document::IsWordEndAt(int pos) {
+	if (pos < Length() - 1) {
+		return !IsWordChar(CharAt(pos));
+	}
+	return true;
+}
+
+bool Document::IsWordAt(int start, int end) {
+	return IsWordStartAt(start) && IsWordEndAt(end);
 }
 
 // Find text in document, supporting both forward and backward
 // searches (just pass minPos > maxPos to do a backward search)
 // Has not been tested with backwards DBCS searches yet.
-long Document::FindText(int minPos, int maxPos, const char *s, bool caseSensitive, bool word) {
+long Document::FindText(int minPos, int maxPos, const char *s, 
+	bool caseSensitive, bool word, bool wordStart) {
  	bool forward = minPos <= maxPos;
 	int increment = forward ? 1 : -1;
 
@@ -551,16 +749,14 @@ long Document::FindText(int minPos, int maxPos, const char *s, bool caseSensitiv
  	
 	// Compute actual search ranges needed
 	int lengthFind = strlen(s);
- 	int endSearch = 0;
+ 	int endSearch = endPos;
  	if (startPos <= endPos) {
  		endSearch = endPos - lengthFind + 1;
- 	} else {
- 		endSearch = endPos;
  	}
 	//Platform::DebugPrintf("Find %d %d %s %d\n", startPos, endPos, ft->lpstrText, lengthFind);
 	char firstChar = s[0];
 	if (!caseSensitive)
-		firstChar = toupper(firstChar);
+		firstChar = static_cast<char>(toupper(firstChar));
 	int pos = startPos;
 	while (forward ? (pos < endSearch) : (pos >= endSearch)) {
 		char ch = CharAt(pos);
@@ -573,8 +769,10 @@ long Document::FindText(int minPos, int maxPos, const char *s, bool caseSensitiv
 						found = false;
 				}
 				if (found) {
-					if ((!word) || IsWordAt(pos, pos + lengthFind))
-						return pos;
+					if ((!word && !wordStart) ||
+						word && IsWordAt(pos, pos + lengthFind) ||
+						wordStart && IsWordStartAt(pos))
+ 						return pos;
 				}
 			}
 		} else {
@@ -586,8 +784,10 @@ long Document::FindText(int minPos, int maxPos, const char *s, bool caseSensitiv
 						found = false;
 				}
 				if (found) {
-					if ((!word) || IsWordAt(pos, pos + lengthFind))
-						return pos;
+					if (!(word && wordStart) ||
+						word && IsWordAt(pos, pos + lengthFind) ||
+						wordStart && IsWordStartAt(pos))
+ 						return pos;
 				}
 			}
 		}
@@ -603,6 +803,25 @@ long Document::FindText(int minPos, int maxPos, const char *s, bool caseSensitiv
 
 int Document::LinesTotal() {
 	return cb.Lines();
+}
+
+void Document::ChangeCase(Range r, bool makeUpperCase) {
+	for (int pos=r.start; pos<r.end; pos++) {
+		char ch = CharAt(pos);
+		if (dbcsCodePage && IsDBCS(pos)) {
+			pos += LenChar(pos);
+		} else {
+			if (makeUpperCase) {
+				if (islower(ch)) {
+					ChangeChar(pos, static_cast<char>(toupper(ch)));
+				}
+			} else {
+				if (isupper(ch)) {
+					ChangeChar(pos, static_cast<char>(tolower(ch)));
+				}
+			}
+		}
+	}
 }
 
 void Document::SetWordChars(unsigned char *chars) {
@@ -669,6 +888,13 @@ void Document::SetStyles(int length, char *styles) {
 		}
 		enteredCount--;
 	}
+}
+
+bool Document::EnsureStyledTo(int pos) {
+	// Ask the watchers to style, and stop as soon as one responds.
+	for (int i = 0; pos > GetEndStyled() && i < lenWatchers; i++)
+		watchers[i].watcher->NotifyStyleNeeded(this, watchers[i].userData, pos);
+	return pos <= GetEndStyled();
 }
 
 bool Document::AddWatcher(DocWatcher *watcher, void *userData) {

@@ -363,6 +363,14 @@ bool FindEndEnvironment(char *buffer, int *pos, char *env)
 bool readingVerbatim = FALSE;
 bool readInVerbatim = FALSE;  // Within a verbatim, but not nec. verbatiminput
 
+// Switched this off because e.g. \verb${$ causes it to fail. There is no
+// detection of \verb yet.
+#define CHECK_BRACES 0
+
+unsigned long leftCurly = 0;
+unsigned long rightCurly = 0;
+static wxString currentFileName = "";
+
 bool read_a_line(char *buf)
 {
   if (CurrentInputIndex < 0)
@@ -374,6 +382,7 @@ bool read_a_line(char *buf)
   int ch = -2;
   int i = 0;
   buf[0] = 0;
+
   while (ch != EOF && ch != 10)
   {
     if (((i == 14) && (strncmp(buf, "\\end{verbatim}", 14) == 0)) ||
@@ -381,6 +390,26 @@ bool read_a_line(char *buf)
       readInVerbatim = FALSE;
 
     ch = getc(Inputs[CurrentInputIndex]);
+
+#if CHECK_BRACES
+    if (ch == '{' && !readInVerbatim)
+       leftCurly++;
+    if (ch == '}' && !readInVerbatim)
+    {
+       rightCurly++;
+       if (rightCurly > leftCurly)
+       {
+           wxString errBuf;
+           errBuf.Printf("An extra right Curly brace ('}') was detected at line %l inside file %s",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
+           OnError((char *)errBuf.c_str());
+
+           // Reduce the count of right curly braces, so the mismatched count
+           // isn't reported on every line that has a '}' after the first mismatch
+           rightCurly--;
+       }
+    }
+#endif
+
     if (ch != EOF)
     {
       // Check for 2 consecutive newlines and replace with \par
@@ -450,8 +479,19 @@ bool read_a_line(char *buf)
       buf[i] = 0;
       fclose(Inputs[CurrentInputIndex]);
       Inputs[CurrentInputIndex] = NULL;
-      if (CurrentInputIndex > 0) ch = ' '; // No real end of file
+      if (CurrentInputIndex > 0) 
+         ch = ' '; // No real end of file
       CurrentInputIndex --;
+#if CHECK_BRACES
+      if (leftCurly != rightCurly)
+      {
+        wxString errBuf;
+        errBuf.Printf("Curly braces do not match inside file %s\n%lu opens, %lu closes", (const char*) currentFileName.c_str(),leftCurly,rightCurly);
+        OnError((char *)errBuf.c_str());
+      }
+      leftCurly = 0;
+      rightCurly = 0;
+#endif
       if (readingVerbatim)
       {
         readingVerbatim = FALSE;
@@ -491,6 +531,7 @@ bool read_a_line(char *buf)
     if (buf[j-1] == '}') buf[j-1] = 0; // Ignore final brace
 
     wxString actualFile = TexPathList.FindValidPath(fileName);
+    currentFileName = actualFile;
     if (actualFile == "")
     {
       char errBuf[300];
@@ -500,6 +541,9 @@ bool read_a_line(char *buf)
     }
     else
     {
+      wxString informStr;
+      informStr.Printf("Processing: %s",actualFile.c_str());
+      OnInform((char *)informStr.c_str());
       CurrentInputIndex ++;
       Inputs[CurrentInputIndex] = fopen(actualFile, "r");
       LineNumbers[CurrentInputIndex] = 1;
@@ -550,18 +594,25 @@ bool read_a_line(char *buf)
 
     if (buf[j-1] == '}') buf[j-1] = 0; // Ignore final brace
 
+    // Remove backslashes from name
+    wxString fileNameStr(fileName);
+    fileNameStr.Replace("\\", "");
+
     // Ignore some types of input files (e.g. macro definition files)
-    char *fileOnly = FileNameFromPath(fileName);
+    char *fileOnly = FileNameFromPath((char*) (const char*) fileNameStr);
+    currentFileName = fileOnly;
     if (IgnorableInputFiles.Member(fileOnly))
       return read_a_line(buf);
 
-    wxString actualFile = TexPathList.FindValidPath(fileName);
+    wxString actualFile = TexPathList.FindValidPath(fileNameStr);
     if (actualFile == "")
     {
       char buf2[400];
-      sprintf(buf2, "%s.tex", fileName);
+      sprintf(buf2, "%s.tex", (const char*) fileNameStr);
       actualFile = TexPathList.FindValidPath(buf2);
     }
+    currentFileName = actualFile;
+
     if (actualFile == "")
     {
       char errBuf[300];
@@ -575,6 +626,9 @@ bool read_a_line(char *buf)
       // then we look in the same directory as this one.
       TexPathList.EnsureFileAccessible(actualFile);
 
+      wxString informStr;
+      informStr.Printf("Processing: %s",actualFile.c_str());
+      OnInform((char *)informStr.c_str());
       CurrentInputIndex ++;
       Inputs[CurrentInputIndex] = fopen(actualFile, "r");
       LineNumbers[CurrentInputIndex] = 1;
@@ -599,6 +653,15 @@ bool read_a_line(char *buf)
   else if (strncmp(buf, "\\end{verbatim}", 14) == 0 ||
            strncmp(buf, "\\end{toocomplex}", 16) == 0)
     readInVerbatim = FALSE;
+
+#if CHECK_BRACES
+  if (ch == EOF && leftCurly != rightCurly)
+  {
+    wxString errBuf;
+    errBuf.Printf("Curly braces do not match inside file %s\n%lu opens, %lu closes", (const char*) currentFileName.c_str(),leftCurly,rightCurly);
+    OnError((char *)errBuf.c_str());
+  }
+#endif
 
   return (ch == EOF);
 }
@@ -2024,7 +2087,7 @@ void DefineDefaultMacros(void)
   AddMacroDef(ltNABLA,            "nabla", 0);
   AddMacroDef(ltNEG,              "neg", 0);
   AddMacroDef(ltNEQ,              "neq", 0);
-  AddMacroDef(ltNEWCOUNTER,       "newcounter", 1, FALSE, FORBID_ABSOLUTELY);
+  AddMacroDef(ltNEWCOUNTER,       "newcounter", 1, FALSE, (bool)FORBID_ABSOLUTELY);
   AddMacroDef(ltNEWLINE,          "newline", 0);
   AddMacroDef(ltNEWPAGE,          "newpage", 0);
   AddMacroDef(ltNI,               "ni", 0);
@@ -2077,8 +2140,8 @@ void DefineDefaultMacros(void)
   AddMacroDef(ltPRECEQ,           "preceq", 0);
   AddMacroDef(ltPRINTINDEX,       "printindex", 0);
   AddMacroDef(ltPROPTO,           "propto", 0);
-  AddMacroDef(ltPSBOXTO,          "psboxto", 1, FALSE, FORBID_ABSOLUTELY);
-  AddMacroDef(ltPSBOX,            "psbox", 1, FALSE, FORBID_ABSOLUTELY);
+  AddMacroDef(ltPSBOXTO,          "psboxto", 1, FALSE, (bool)FORBID_ABSOLUTELY);
+  AddMacroDef(ltPSBOX,            "psbox", 1, FALSE, (bool)FORBID_ABSOLUTELY);
   AddMacroDef(ltPSI,              "psi", 0);
   AddMacroDef(ltCAP_PSI,          "Psi", 0);
 

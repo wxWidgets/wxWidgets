@@ -206,7 +206,7 @@ protected:
 };
 
 // a list of toolbar tools
-WX_DECLARE_LIST(wxToolBarToolBase, wxToolBarToolsList);
+WX_DECLARE_EXPORTED_LIST(wxToolBarToolBase, wxToolBarToolsList);
 
 // ----------------------------------------------------------------------------
 // the base class for all toolbars
@@ -220,6 +220,16 @@ public:
 
     // toolbar construction
     // --------------------
+
+    // the most commonly used version of AddTool()
+    wxToolBarToolBase *AddTool(int id,
+                               const wxBitmap& bitmap,
+                               const wxString& shortHelpString = wxEmptyString,
+                               const wxString& longHelpString = wxEmptyString)
+    {
+        return AddTool(id, bitmap, wxNullBitmap, FALSE, NULL,
+                       shortHelpString, longHelpString);
+    }
 
     // If pushedBitmap is NULL, a reversed version of bitmap is created and
     // used as the pushed/toggled image. If toggle is TRUE, the button toggles
@@ -325,9 +335,12 @@ public:
     virtual void SetToolSeparation(int separation)
         { m_toolSeparation = separation; }
 
-    virtual wxSize GetToolMargins() { return wxSize(m_xMargin, m_yMargin); }
+    virtual wxSize GetToolMargins() { return GetToolMargins(); }
     virtual int GetToolPacking() { return m_toolPacking; }
     virtual int GetToolSeparation() { return m_toolSeparation; }
+
+    // for compatibility
+    wxSize GetMargins() const { return wxSize(m_xMargin, m_yMargin); }
 
     // toolbar geometry
     // ----------------

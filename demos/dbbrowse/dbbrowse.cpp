@@ -269,6 +269,11 @@ MainFrame::MainFrame(wxFrame *frame, char *title,  const wxPoint& pos, const wxS
 //----------------------------------------------------------------------------------------
 MainFrame::~MainFrame(void)
 {
+ // Close the help frame; this will cause the config data to get written.
+ if (p_Help->GetFrame()) // returns NULL if no help frame active
+  p_Help->GetFrame()->Close(TRUE);
+ delete p_Help;  // Memory Leak
+ p_Help = NULL;
  // save the control's values to the config
  if (p_ProgramCfg == NULL)
    return;
@@ -292,9 +297,6 @@ MainFrame::~MainFrame(void)
 //----------------------------------------------------------------------------------------
 void MainFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
- // Close the help frame; this will cause the config data to get written.
- if (p_Help->GetFrame()) // returns NULL if no help frame active
-  p_Help->GetFrame()->Close(TRUE);
  Close(TRUE);
 }
 //----------------------------------------------------------------------------------------

@@ -77,13 +77,13 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 
 void wxMemoryDC::DoGetSize( int *width, int *height ) const
 {
-  if (!m_selectedBitmap.Ok())
+  if (!m_vSelectedBitmap.Ok())
   {
     *width = 0; *height = 0;
     return;
   }
-  *width = m_selectedBitmap.GetWidth();
-  *height = m_selectedBitmap.GetHeight();
+  *width = m_vSelectedBitmap.GetWidth();
+  *height = m_vSelectedBitmap.GetHeight();
 };
 
 

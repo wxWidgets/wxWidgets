@@ -79,15 +79,15 @@ LIBTARGET=$(WXLIB)
 DUMMYOBJ=$D\dummy.obj
 !endif
 
-# Please set these according to the settings in setup.h, so we can include
-# the appropriate libraries in wx.lib
-
 # This one overrides the others, to be consistent with the settings in setup.h
 MINIMAL_WXWINDOWS_SETUP=0
 
 PERIPH_LIBS=
 PERIPH_TARGET=
 PERIPH_CLEAN_TARGET=
+
+# Set to 0 if not using GLCanvas (only affects DLL build)
+USE_GLCANVAS=1
 
 # These are absolute paths, so that the compiler
 # generates correct __FILE__ symbols for debugging.
@@ -235,6 +235,7 @@ $(WXDIR)\lib\$(WXLIBNAME).lib: $(DUMMYOBJ) $(OBJECTS)
 
 !if "$(USE_GLCANVAS)" == "1"
 GL_LIBS=opengl32.lib glu32.lib
+# GL_LIBS_DELAY=/delayload:opengl32.dll
 !endif
 
 # Update the dynamic link library
@@ -243,10 +244,15 @@ $(WXDIR)\lib\$(WXLIBNAME).dll: $(DUMMYOBJ) $(OBJECTS)
     $(LINKFLAGS)
     -out:$(WXDIR)\lib\$(WXLIBNAME).dll
     $(DUMMYOBJ) $(OBJECTS) $(guilibsdll) shell32.lib comctl32.lib ctl3d32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib odbc32.lib advapi32.lib winmm.lib $(GL_LIBS) $(WXDIR)\lib\png$(LIBEXT).lib $(WXDIR)\lib\zlib$(LIBEXT).lib $(WXDIR)\lib\xpm$(LIBEXT).lib $(WXDIR)\lib\jpeg$(LIBEXT).lib $(WXDIR)\lib\tiff$(LIBEXT).lib
+	delayimp.lib
+	/delayload:ws2_32.dll /delayload:advapi32.dll /delayload:user32.dll /delayload:gdi32.dll
+	/delayload:comdlg32.dll /delayload:shell32.dll /delayload:comctl32.dll /delayload:ole32.dll
+	/delayload:oleaut32.dll /delayload:rpcrt4.dll $(GL_LIBS_DELAY)
 <<
 
 !endif
 
+# /delayload:winmm.dll # Removed because it can cause a crash for some people
 
 ########################################################
 # Windows-specific objects
@@ -409,7 +415,7 @@ rcparser:
     nmake -f makefile.vc FINAL=$(FINAL)
     cd $(WXDIR)\src\msw
 
-cleanall: clean_png clean_zlib clean_xpm clean_jpeg clean_tiff
+cleanall: clean clean_png clean_zlib clean_xpm clean_jpeg clean_tiff
         -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).dll
         -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).lib
         -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).exp
@@ -448,7 +454,7 @@ clean: $(PERIPH_CLEAN_TARGET)
 
 
 # Making documents
-docs:   allhlp allhtml allpdfrtf
+docs:   allhlp allhtml allpdfrtf htb htmlhelp
 alldocs: docs
 hlp:    wxhlp
 wxhlp:  $(DOCDIR)/winhelp/wx.hlp
@@ -457,8 +463,9 @@ rtf:    $(DOCDIR)/winhelp/wx.rtf
 pdfrtf:    $(DOCDIR)/pdf/wx.rtf
 refpdfrtf: $(DOCDIR)/pdf/techref.rtf
 html:	wxhtml
+htb:	$(DOCDIR)\htb\wx.htb
 wxhtml:	$(DOCDIR)\html\wx\wx.htm
-htmlhelp: $(DOCDIR)\html\wx\wx.chm
+htmlhelp: $(DOCDIR)\htmlhelp\wx.chm
 ps:     wxps referencps
 wxps:	$(WXDIR)\docs\ps\wx.ps
 referencps:	$(WXDIR)\docs\ps\referenc.ps
@@ -569,6 +576,7 @@ $(DOCDIR)/pdf/techref.rtf:         $(DOCDIR)/latex/techref/techref.tex
 $(DOCDIR)\html\wx\wx.htm:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex\wx\body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)\latex\wx\manual.tex
         cd $(DOCDIR)\latex\wx
         -mkdir $(DOCDIR)\html\wx
+        copy *.gif $(DOCDIR)\html\wx
         -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\html\wx\wx.htm -twice -html
         -erase $(DOCDIR)\html\wx\*.con
         -erase $(DOCDIR)\html\wx\*.ref
@@ -576,9 +584,11 @@ $(DOCDIR)\html\wx\wx.htm:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex
         -erase $(DOCDIR)\latex\wx\*.ref
          cd $(THISDIR)
 
-$(DOCDIR)\html\wx\wx.chm : $(DOCDIR)\html\wx\wx.htm $(DOCDIR)\html\wx\wx.hhp
+$(DOCDIR)\htmlhelp\wx.chm : $(DOCDIR)\html\wx\wx.htm $(DOCDIR)\html\wx\wx.hhp
 	cd $(DOCDIR)\html\wx
 	-hhc wx.hhp
+    -mkdir ..\..\htmlhelp
+    move wx.chm ..\..\htmlhelp
 	cd $(THISDIR)
 
 $(WXDIR)\docs\latex\wx\manual.dvi:	$(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/manual.tex
@@ -617,11 +627,12 @@ $(WXDIR)\docs\ps\referenc.ps:	$(WXDIR)\docs\latex\wx\referenc.dvi
 # files, renamed to htb.
 # This can then be used with e.g. helpview.
 # Optionally, a cached version of the .hhp file can be generated with hhp2cached.
-htb:
+$(DOCDIR)\htb\wx.htb: $(DOCDIR)\html\wx\wx.htm
 	cd $(WXDIR)\docs\html\wx
     -erase /Y wx.zip wx.htb
     zip32 wx.zip *.htm *.gif *.hhp *.hhc *.hhk
-    ren wx.zip wx.htb
+    -mkdir $(DOCDIR)\htb
+    move wx.zip $(DOCDIR)\htb\wx.htb
     cd $(THISDIR)
 
 # In order to force document reprocessing
@@ -629,6 +640,13 @@ touchmanual:
     -touch $(WXDIR)\docs\latex\wx\manual.tex
 
 updatedocs: touchmanual alldocs
+
+cleandocs:
+    -erase /Y $(DOCDIR)\html\wx\wx.htm
+    -erase /Y $(DOCDIR)\pdf\wx.rtf
+    -erase /Y $(DOCDIR)\latex\wx\wx.rtf
+    -erase /Y $(DOCDIR)\htmlhelp\wx.chm
+    -erase /Y $(DOCDIR)\htb\wx.htb
 
 # Start Word, running the GeneratePDF macro. MakeManual.dot should be in the
 # Office StartUp folder, and PDFMaker should be installed.

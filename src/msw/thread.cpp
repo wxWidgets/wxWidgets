@@ -211,44 +211,83 @@ class wxConditionInternal
 public:
     wxConditionInternal()
     {
-        event = ::CreateEvent(
-                              NULL,   // default secutiry
-                              FALSE,  // not manual reset
-                              FALSE,  // nonsignaled initially
-                              NULL    // nameless event
-                             );
-        if ( !event )
+        m_hEvent = ::CreateEvent(
+                                 NULL,   // default secutiry
+                                 FALSE,  // not manual reset
+                                 FALSE,  // nonsignaled initially
+                                 NULL    // nameless event
+                                );
+        if ( !m_hEvent )
         {
             wxLogSysError(_("Can not create event object."));
         }
-        waiters = 0;
+
+        // nobody waits for us yet
+        m_nWaiters = 0;
     }
 
     bool Wait(DWORD timeout)
     {
-        waiters++;
+        // as m_nWaiters variable is accessed from multiple waiting threads
+        // (and possibly from the broadcasting thread), we need to change its
+        // value atomically
+        ::InterlockedIncrement(&m_nWaiters);
 
-        // FIXME this should be MsgWaitForMultipleObjects() as well probably
-        DWORD rc = ::WaitForSingleObject(event, timeout);
+        // FIXME this should be MsgWaitForMultipleObjects() as we want to keep
+        //       processing Windows messages while waiting (or don't we?)
+        DWORD rc = ::WaitForSingleObject(m_hEvent, timeout);
 
-        waiters--;
+        ::InterlockedDecrement(&m_nWaiters);
 
         return rc != WAIT_TIMEOUT;
     }
 
+    void Signal()
+    {
+        // set the event to signaled: if a thread is already waiting on it, it
+        // will be woken up, otherwise the event will remain in the signaled
+        // state until someone waits on it. In any case, the system will return
+        // it to a non signalled state afterwards. If multiple threads are
+        // waiting, only one will be woken up.
+        if ( !::SetEvent(m_hEvent) )
+        {
+            wxLogLastError(wxT("SetEvent"));
+        }
+    }
+
+    void Broadcast()
+    {
+        // we need to save the original value as m_nWaiters is goign to be
+        // decreased by the signalled thread resulting in the loop being
+        // executed less times than needed
+        LONG nWaiters = m_nWaiters;
+
+        // this works because all these threads are already waiting and so each
+        // SetEvent() inside Signal() is really a PulseEvent() because the
+        // event state is immediately returned to non-signaled
+        for ( LONG n = 0; n < nWaiters; n++ )
+        {
+            Signal();
+        }
+    }
+
     ~wxConditionInternal()
     {
-        if ( event )
+        if ( m_hEvent )
         {
-            if ( !::CloseHandle(event) )
+            if ( !::CloseHandle(m_hEvent) )
             {
-                wxLogLastError("CloseHandle(event)");
+                wxLogLastError(wxT("CloseHandle(event)"));
             }
         }
     }
 
-    HANDLE event;
-    int waiters;
+private:
+    // the Win32 synchronization object corresponding to this event
+    HANDLE m_hEvent;
+
+    // number of threads waiting for this condition
+    LONG m_nWaiters;
 };
 
 wxCondition::wxCondition()
@@ -274,26 +313,12 @@ bool wxCondition::Wait(unsigned long sec,
 
 void wxCondition::Signal()
 {
-    // set the event to signaled: if a thread is already waiting on it, it will
-    // be woken up, otherwise the event will remain in the signaled state until
-    // someone waits on it. In any case, the system will return it to a non
-    // signalled state afterwards. If multiple threads are waiting, only one
-    // will be woken up.
-    if ( !::SetEvent(m_internal->event) )
-    {
-        wxLogLastError("SetEvent");
-    }
+    m_internal->Signal();
 }
 
 void wxCondition::Broadcast()
 {
-    // this works because all these threads are already waiting and so each
-    // SetEvent() inside Signal() is really a PulseEvent() because the event
-    // state is immediately returned to non-signaled
-    for ( int i = 0; i < m_internal->waiters; i++ )
-    {
-        Signal();
-    }
+    m_internal->Broadcast();
 }
 
 // ----------------------------------------------------------------------------
@@ -351,7 +376,7 @@ public:
         {
             if ( !::CloseHandle(m_hThread) )
             {
-                wxLogLastError("CloseHandle(thread)");
+                wxLogLastError(wxT("CloseHandle(thread)"));
             }
 
             m_hThread = 0;
@@ -390,31 +415,38 @@ private:
 
 DWORD wxThreadInternal::WinThreadStart(wxThread *thread)
 {
-    // first of all, check whether we hadn't been cancelled already
+    DWORD rc;
+    bool wasCancelled;
+
+    // first of all, check whether we hadn't been cancelled already and don't
+    // start the user code at all then
     if ( thread->m_internal->GetState() == STATE_EXITED )
     {
-        return (DWORD)-1;
+        rc = (DWORD)-1;
+        wasCancelled = TRUE;
     }
-
-    // store the thread object in the TLS
-    if ( !::TlsSetValue(gs_tlsThisThread, thread) )
+    else // do run thread
     {
-        wxLogSysError(_("Can not start thread: error writing TLS."));
+        // store the thread object in the TLS
+        if ( !::TlsSetValue(gs_tlsThisThread, thread) )
+        {
+            wxLogSysError(_("Can not start thread: error writing TLS."));
 
-        return (DWORD)-1;
+            return (DWORD)-1;
+        }
+
+        rc = (DWORD)thread->Entry();
+
+        // enter m_critsect before changing the thread state
+        thread->m_critsect.Enter();
+        wasCancelled = thread->m_internal->GetState() == STATE_CANCELED;
+        thread->m_internal->SetState(STATE_EXITED);
+        thread->m_critsect.Leave();
     }
-
-    DWORD rc = (DWORD)thread->Entry();
-
-    // enter m_critsect before changing the thread state
-    thread->m_critsect.Enter();
-    bool wasCancelled = thread->m_internal->GetState() == STATE_CANCELED;
-    thread->m_internal->SetState(STATE_EXITED);
-    thread->m_critsect.Leave();
 
     thread->OnExit();
 
-    // if the thread was cancelled (from Delete()), then it the handle is still
+    // if the thread was cancelled (from Delete()), then its handle is still
     // needed there
     if ( thread->IsDetached() && !wasCancelled )
     {
@@ -522,7 +554,13 @@ bool wxThreadInternal::Resume()
         return FALSE;
     }
 
-    m_state = STATE_RUNNING;
+    // don't change the state from STATE_EXITED because it's special and means
+    // we are going to terminate without running any user code - if we did it,
+    // the codei n Delete() wouldn't work
+    if ( m_state != STATE_EXITED )
+    {
+        m_state = STATE_RUNNING;
+    }
 
     return TRUE;
 }
@@ -645,18 +683,12 @@ bool wxThread::SetConcurrency(size_t level)
         if ( hModKernel )
         {
             pfnSetProcessAffinityMask = (SETPROCESSAFFINITYMASK)
-                ::GetProcAddress(hModKernel,
-#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x520)
-                                 "SetProcessAffinityMask");
-#else
-                                 _T("SetProcessAffinityMask"));
-#endif
+                ::GetProcAddress(hModKernel, "SetProcessAffinityMask");
         }
 
         // we've discovered a MT version of Win9x!
         wxASSERT_MSG( pfnSetProcessAffinityMask,
-                      _T("this system has several CPUs but no "
-                         "SetProcessAffinityMask function?") );
+                      _T("this system has several CPUs but no SetProcessAffinityMask function?") );
     }
 
     if ( !pfnSetProcessAffinityMask )
@@ -759,29 +791,44 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
 
     // Delete() is always safe to call, so consider all possible states
 
-    // has the thread started to run?
-    bool shouldResume = FALSE;
+    // we might need to resume the thread, but we might also not need to cancel
+    // it if it doesn't run yet
+    bool shouldResume = FALSE,
+         shouldCancel = TRUE,
+         isRunning = FALSE;
 
+    // check if the thread already started to run
     {
         wxCriticalSectionLocker lock(m_critsect);
 
         if ( m_internal->GetState() == STATE_NEW )
         {
-            // WinThreadStart() will see it and terminate immediately
+            // WinThreadStart() will see it and terminate immediately, no need
+            // to cancel the thread - but we still need to resume it to let it
+            // run
             m_internal->SetState(STATE_EXITED);
 
-            shouldResume = TRUE;
+            Resume();   // it knows about STATE_EXITED special case
+
+            shouldCancel = FALSE;
+            isRunning = TRUE;
+
+            // shouldResume is correctly set to FALSE here
+        }
+        else
+        {
+            shouldResume = IsPaused();
         }
     }
 
-    // is the thread paused?
-    if ( shouldResume || IsPaused() )
+    // resume the thread if it is paused
+    if ( shouldResume )
         Resume();
 
     HANDLE hThread = m_internal->GetHandle();
 
     // does is still run?
-    if ( IsRunning() )
+    if ( isRunning || IsRunning() )
     {
         if ( IsMain() )
         {
@@ -794,6 +841,7 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
         }
 
         // ask the thread to terminate
+        if ( shouldCancel )
         {
             wxCriticalSectionLocker lock(m_critsect);
 
@@ -877,7 +925,7 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
 
     if ( !::GetExitCodeThread(hThread, (LPDWORD)&rc) )
     {
-        wxLogLastError("GetExitCodeThread");
+        wxLogLastError(wxT("GetExitCodeThread"));
 
         rc = (ExitCode)-1;
     }
@@ -886,7 +934,7 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
     {
         // if the thread exits normally, this is done in WinThreadStart, but in
         // this case it would have been too early because
-        // MsgWaitForMultipleObject() would fail if the therad handle was
+        // MsgWaitForMultipleObject() would fail if the thread handle was
         // closed while we were waiting on it, so we must do it here
         delete this;
     }
@@ -1020,9 +1068,7 @@ bool wxThreadModule::OnInit()
         // in normal circumstances it will only happen if all other
         // TLS_MINIMUM_AVAILABLE (>= 64) indices are already taken - in other
         // words, this should never happen
-        wxLogSysError(_("Thread module initialization failed: "
-                        "impossible to allocate index in thread "
-                        "local storage"));
+        wxLogSysError(_("Thread module initialization failed: impossible to allocate index in thread local storage"));
 
         return FALSE;
     }
@@ -1034,8 +1080,7 @@ bool wxThreadModule::OnInit()
         ::TlsFree(gs_tlsThisThread);
         gs_tlsThisThread = 0xFFFFFFFF;
 
-        wxLogSysError(_("Thread module initialization failed: "
-                        "can not store value in thread local storage"));
+        wxLogSysError(_("Thread module initialization failed: can not store value in thread local storage"));
 
         return FALSE;
     }
@@ -1055,7 +1100,7 @@ void wxThreadModule::OnExit()
 {
     if ( !::TlsFree(gs_tlsThisThread) )
     {
-        wxLogLastError("TlsFree failed.");
+        wxLogLastError(wxT("TlsFree failed."));
     }
 
     if ( gs_critsectGui )
@@ -1106,7 +1151,7 @@ void WXDLLEXPORT wxMutexGuiLeave()
     }
     else
     {
-        // decrement the number of waiters now
+        // decrement the number of threads waiting for GUI access now
         wxASSERT_MSG( gs_nWaitingForGui > 0,
                       wxT("calling wxMutexGuiLeave() without entering it first?") );
 
@@ -1160,7 +1205,7 @@ void WXDLLEXPORT wxWakeUpMainThread()
     if ( !::PostThreadMessage(gs_idMainThread, WM_NULL, 0, 0) )
     {
         // should never happen
-        wxLogLastError("PostThreadMessage(WM_NULL)");
+        wxLogLastError(wxT("PostThreadMessage(WM_NULL)"));
     }
 }
 

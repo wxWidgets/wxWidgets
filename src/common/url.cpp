@@ -35,6 +35,11 @@ IMPLEMENT_CLASS(wxURL, wxObject)
 // Protocols list
 wxProtoInfo *wxURL::ms_protocols = NULL;
 
+// Enforce linking of protocol classes:
+USE_PROTOCOL(wxHTTP)
+USE_PROTOCOL(wxFTP)
+USE_PROTOCOL(wxFileProto)
+
 #if wxUSE_SOCKETS
     wxHTTP *wxURL::ms_proxyDefault = NULL;
     bool wxURL::ms_useDefaultProxy = FALSE;
@@ -77,35 +82,40 @@ bool wxURL::ParseURL()
 {
   wxString last_url = m_url;
 
- // If the URL was already parsed (so m_protocol != NULL), we pass this section.
-  if (!m_protocol) {
-
+  // If the URL was already parsed (m_protocol != NULL), pass this section.
+  if (!m_protocol)
+  {
     // Clean up
     CleanData();
 
     // Extract protocol name
-    if (!PrepProto(last_url)) {
+    if (!PrepProto(last_url))
+    {
       m_error = wxURL_SNTXERR;
       return FALSE;
     }
 
     // Find and create the protocol object
-    if (!FetchProtocol()) {
+    if (!FetchProtocol())
+    {
       m_error = wxURL_NOPROTO;
       return FALSE;
     }
 
     // Do we need a host name ?
-    if (m_protoinfo->m_needhost) {
+    if (m_protoinfo->m_needhost)
+    {
       // Extract it
-      if (!PrepHost(last_url)) {
+      if (!PrepHost(last_url))
+      {
         m_error = wxURL_SNTXERR;
         return FALSE;
       }
     }
 
     // Extract full path
-    if (!PrepPath(last_url)) {
+    if (!PrepPath(last_url))
+    {
       m_error = wxURL_NOPATH;
       return FALSE;
     }
@@ -113,7 +123,8 @@ bool wxURL::ParseURL()
   // URL parse finished.
 
 #if wxUSE_SOCKETS
-  if (m_useProxy) {
+  if (m_useProxy)
+  {
     // We destroy the newly created protocol.
     CleanData();
 
@@ -192,7 +203,8 @@ bool wxURL::PrepHost(wxString& url)
 
   // Retrieve service number
   pos2 = temp_url.Find(wxT(':'), TRUE);
-  if (pos2 != -1 && pos2 < pos) {
+  if (pos2 != -1 && pos2 < pos)
+  {
     m_servname = temp_url(pos2+1, pos);
     if (!m_servname.IsNumber())
       return FALSE;
@@ -235,8 +247,10 @@ bool wxURL::FetchProtocol()
 {
   wxProtoInfo *info = ms_protocols;
 
-  while (info) {
-    if (m_protoname == info->m_protoname) {
+  while (info)
+  {
+    if (m_protoname == info->m_protoname)
+    {
       if (m_servname.IsNull())
         m_servname = info->m_servname;
 
@@ -257,13 +271,15 @@ wxInputStream *wxURL::GetInputStream()
 {
   wxInputStream *the_i_stream = NULL;
 
-  if (!m_protocol) {
+  if (!m_protocol)
+  {
     m_error = wxURL_NOPROTO;
     return NULL;
   }
 
   m_error = wxURL_NOERR;
-  if (m_user != wxT("")) {
+  if (m_user != wxT(""))
+  {
     m_protocol->SetUser(m_user);
     m_protocol->SetPassword(m_password);
   }
@@ -272,8 +288,10 @@ wxInputStream *wxURL::GetInputStream()
     wxIPV4address addr;
 
   // m_protoinfo is NULL when we use a proxy
-  if (!m_useProxy && m_protoinfo->m_needhost) {
-    if (!addr.Hostname(m_hostname)) {
+  if (!m_useProxy && m_protoinfo->m_needhost)
+  {
+    if (!addr.Hostname(m_hostname))
+    {
       m_error = wxURL_NOHOST;
       return NULL;
     }
@@ -294,7 +312,8 @@ wxInputStream *wxURL::GetInputStream()
   else
     the_i_stream = m_protocol->GetInputStream(m_path);
 
-  if (!the_i_stream) {
+  if (!the_i_stream)
+  {
     m_error = wxURL_PROTOERR;
     return NULL;
   }
@@ -384,23 +403,45 @@ void wxURL::SetProxy(const wxString& url_proxy)
 }
 #endif // wxUSE_SOCKETS
 
-wxString wxURL::ConvertToValidURI(const wxString& uri)
+wxString wxURL::ConvertToValidURI(const wxString& uri, const wxChar* delims)
 {
   wxString out_str;
   wxString hexa_code;
   size_t i;
 
-  for (i=0;i<uri.Len();i++) {
+  for (i = 0; i < uri.Len(); i++)
+  {
     wxChar c = uri.GetChar(i);
 
     if (c == wxT(' '))
-      out_str += wxT('+');
-    else {
-      if (!isalpha(c) && c != wxT('.') && c != wxT('+') && c != wxT('/')) {
+    {
+      // GRG, Apr/2000: changed to "%20" instead of '+'
+
+      out_str += wxT("%20");
+    }
+    else
+    {
+      // GRG, Apr/2000: modified according to the URI definition (RFC 2396)
+      // 
+      // - Alphanumeric characters are never escaped
+      // - Unreserved marks are never escaped
+      // - Delimiters must be escaped if they appear within a component
+      //     but not if they are used to separate components. Here we have
+      //     no clear way to distinguish between these two cases, so they
+      //     are escaped unless they are passed in the 'delims' parameter
+      //     (allowed delimiters).
+
+      static const wxChar marks[] = wxT("-_.!~*()'");
+
+      if ( !wxIsalnum(c) && !wxStrchr(marks, c) && !wxStrchr(delims, c) )
+      {
         hexa_code.Printf(wxT("%%%02X"), c);
         out_str += hexa_code;
-      } else
+      }
+      else
+      {
         out_str += c;
+      }
     }
   }
 
@@ -412,19 +453,23 @@ wxString wxURL::ConvertFromURI(const wxString& uri)
   wxString new_uri;
 
   size_t i = 0;
-  while (i<uri.Len()) {
+  while (i < uri.Len())
+  {
     int code;
-    if (uri[i] == wxT('%')) {
+    if (uri[i] == wxT('%'))
+    {
       i++;
       if (uri[i] >= wxT('A') && uri[i] <= wxT('F'))
         code = (uri[i] - wxT('A') + 10) * 16;
       else
         code = (uri[i] - wxT('0')) * 16;
+
       i++;
       if (uri[i] >= wxT('A') && uri[i] <= wxT('F'))
         code += (uri[i] - wxT('A')) + 10;
       else
         code += (uri[i] - wxT('0'));
+
       i++;
       new_uri += (wxChar)code;
       continue;
@@ -459,6 +504,7 @@ bool wxURLModule::OnInit()
     // set, but don't try to create this proxy right now because it will slow
     // down the program startup (especially if there is no DNS server
     // available, in which case it may take up to 1 minute)
+
     if ( getenv("HTTP_PROXY") )
     {
         wxURL::ms_useDefaultProxy = TRUE;

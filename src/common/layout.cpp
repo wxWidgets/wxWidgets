@@ -66,11 +66,20 @@ wxIndividualLayoutConstraint::~wxIndividualLayoutConstraint()
 
 void wxIndividualLayoutConstraint::Set(wxRelationship rel, wxWindowBase *otherW, wxEdge otherE, int val, int marg)
 {
-  relationship = rel;
-  otherWin = otherW;
-  otherEdge = otherE;
-  value = val;
-  margin = marg;
+    relationship = rel;
+    otherWin = otherW;
+    otherEdge = otherE;
+
+    if ( rel == wxPercentOf )
+    {
+        percent = val;
+    }
+    else
+    {
+        value = val;
+    }
+
+    margin = marg;
 }
 
 void wxIndividualLayoutConstraint::LeftOf(wxWindowBase *sibling, int marg)
@@ -98,18 +107,13 @@ void wxIndividualLayoutConstraint::Below(wxWindowBase *sibling, int marg)
 //
 void wxIndividualLayoutConstraint::SameAs(wxWindowBase *otherW, wxEdge edge, int marg)
 { 
-    Set(wxPercentOf, otherW, edge, 0, marg);
-    percent = 100;
+    Set(wxPercentOf, otherW, edge, 100, marg);
 }
 
 // The edge is a percentage of the other window's edge
 void wxIndividualLayoutConstraint::PercentOf(wxWindowBase *otherW, wxEdge wh, int per)
 { 
-    otherWin = otherW;
-    relationship = wxPercentOf;
-    percent = per;
-
-    otherEdge = wh;
+    Set(wxPercentOf, otherW, wh, per);
 }
 
 //

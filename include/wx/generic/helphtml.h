@@ -103,6 +103,10 @@ DECLARE_ABSTRACT_CLASS(wxHTMLHelpControllerBase)
    /** Display help for id sectionNo -- identical with DisplaySection().
        @return true on success
    */
+   virtual bool DisplaySection(const wxString& section);
+   /** Display help for URL (using DisplayHelp) or keyword (using KeywordSearch)
+       @return true on success
+   */
    virtual bool DisplayBlock(long blockNo);
    /** Search comment/documentation fields in map file and present a
        list to chose from.
@@ -117,7 +121,7 @@ DECLARE_ABSTRACT_CLASS(wxHTMLHelpControllerBase)
    virtual void OnQuit(void);
 
    /// Call the browser using a relative URL.
-   virtual bool DisplayHelp(wxString const &) = 0;
+   virtual bool DisplayHelp(const wxString &) = 0;
 
    /// Allows one to override the default settings for the help frame.
    virtual void SetFrameParameters(const wxString& WXUNUSED(title),

@@ -233,6 +233,20 @@ static char wxPostScriptHeaderReencodeISO2[] =
 // wxPostScriptDC
 //-------------------------------------------------------------------------------
 
+float wxPostScriptDC::ms_PSScaleFactor = 10.0;
+
+void wxPostScriptDC::SetResolution(int ppi)
+{
+    ms_PSScaleFactor = (float)ppi / 72.0;
+}
+
+int wxPostScriptDC::GetResolution()
+{
+    return (int)(ms_PSScaleFactor * 72.0);
+}
+  
+
+
 wxPostScriptDC::wxPostScriptDC ()
 {
     m_pstream = (FILE*) NULL;
@@ -635,7 +649,7 @@ void wxPostScriptDC::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wx
 
         wxCoord xx = XLOG2DEV(points[0].x + xoffset);
         wxCoord yy = YLOG2DEV(points[0].y + yoffset);
-
+        
         fprintf( m_pstream, "%d %d moveto\n", xx, yy );
 
         CalcBoundingBox( points[0].x + xoffset, points[0].y + yoffset );
@@ -650,7 +664,8 @@ void wxPostScriptDC::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wx
             CalcBoundingBox( points[i].x + xoffset, points[i].y + yoffset);
         }
 
-        fprintf( m_pstream, "fill\n" );
+        fprintf( m_pstream, "closepath\n" );
+        fprintf( m_pstream, "stroke\n" );
     }
 }
 
@@ -824,7 +839,7 @@ void wxPostScriptDC::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoord
                 "%d %d %d %d 0 360 ellipse\n"
                 "fill\n",
                 XLOG2DEV(x + width / 2), YLOG2DEV(y + height / 2),
-                XLOG2DEV(width / 2), YLOG2DEVREL(height / 2) );
+                XLOG2DEVREL(width / 2), YLOG2DEVREL(height / 2) );
 
         CalcBoundingBox( x - width, y - height );
         CalcBoundingBox( x + width, y + height );
@@ -839,7 +854,7 @@ void wxPostScriptDC::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoord
                 "%d %d %d %d 0 360 ellipse\n"
                 "stroke\n",
                 XLOG2DEV(x + width / 2), YLOG2DEV(y + height / 2),
-                XLOG2DEV(width / 2), YLOG2DEVREL(height / 2) );
+                XLOG2DEVREL(width / 2), YLOG2DEVREL(height / 2) );
 
         CalcBoundingBox( x - width, y - height );
         CalcBoundingBox( x + width, y + height );
@@ -872,12 +887,11 @@ void wxPostScriptDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
 
     if (!image.Ok()) return;
 
+    wxCoord w = image.GetWidth();
+    wxCoord h = image.GetHeight();
+
     wxCoord ww = XLOG2DEVREL(image.GetWidth());
     wxCoord hh = YLOG2DEVREL(image.GetHeight());
-
-    image = image.Scale( ww, hh );
-
-    if (!image.Ok()) return;
 
     wxCoord xx = XLOG2DEV(x);
     wxCoord yy = YLOG2DEV(y + bitmap.GetHeight());
@@ -895,11 +909,12 @@ void wxPostScriptDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
             "[%d 0 0 %d 0 %d]\n"
             "{currentfile pix readhexstring pop}\n"
             "false 3 colorimage\n",
-            ww, ww, xx, yy, ww, hh, ww, hh, ww, -hh, hh );
+            w, w, xx, yy, ww, hh, w, h, w, -h, h );
 
-    for (int j = 0; j < hh; j++)
+
+    for (int j = 0; j < h; j++)
     {
-        for (int i = 0; i < ww; i++)
+        for (int i = 0; i < w; i++)
         {
             char buffer[5];
             LocalDecToHex( image.GetRed(i,j), buffer );
@@ -924,91 +939,90 @@ void wxPostScriptDC::SetFont( const wxFont& font )
 
     m_font = font;
 
-    const char *name;
-    const char *style = "";
     int Style = m_font.GetStyle();
     int Weight = m_font.GetWeight();
 
+    const char *name;
     switch (m_font.GetFamily())
     {
         case wxTELETYPE:
         case wxMODERN:
-            name = "/Courier";
+        {
+            if (Style == wxITALIC)
+            {
+                if (Weight == wxBOLD)
+                    name = "/Courier-BoldOblique";
+                else
+                    name = "/Courier-Oblique";
+            }
+            else
+            {
+                if (Weight == wxBOLD)
+                    name = "/Courier-Bold";
+                else
+                    name = "/Courier";
+            }
             break;
-        case wxSWISS:
-            name = "/Helvetica";
-            break;
+        }
         case wxROMAN:
-//          name = "/Times-Roman";
-            name = "/Times"; // Altered by EDZ
+        {
+            if (Style == wxITALIC)
+            {
+                if (Weight == wxBOLD)
+                    name = "/Times-BoldItalic";
+                else
+                    name = "/Times-Italic";
+            }
+            else
+            {
+                if (Weight == wxBOLD)
+                    name = "/Times-Bold";
+                else
+                    name = "/Times-Roman";
+            }
             break;
+        }
         case wxSCRIPT:
-            name = "/Zapf-Chancery-MediumItalic";
+        {
+            name = "/ZapfChancery-MediumItalic";
             Style  = wxNORMAL;
             Weight = wxNORMAL;
             break;
+        }
+        case wxSWISS:
         default:
-        case wxDEFAULT: // Sans Serif Font
-            name = "/LucidaSans";
+        {
+            if (Style == wxITALIC)
+            {
+                if (Weight == wxBOLD)
+                    name = "/Helvetica-BoldOblique";
+                else
+                    name = "/Helvetica-Oblique";
+            }
+            else
+            {
+                if (Weight == wxBOLD)
+                    name = "/Helvetica-Bold";
+                else
+                    name = "/Helvetica";
+            }
+            break;
+        }
     }
 
-    if (Style == wxNORMAL && (Weight == wxNORMAL || Weight == wxLIGHT))
-    {
-        if (m_font.GetFamily () == wxROMAN)
-            style = "-Roman";
-        else
-            style = "";
-    }
-    else if (Style == wxNORMAL && Weight == wxBOLD)
-    {
-        style = "-Bold";
-    }
-    else if (Style == wxITALIC && (Weight == wxNORMAL || Weight == wxLIGHT))
-    {
-        if (m_font.GetFamily () == wxROMAN)
-            style = "-Italic";
-        else
-            style = "-Oblique";
-    }
-    else if (Style == wxITALIC && Weight == wxBOLD)
-    {
-        if (m_font.GetFamily () == wxROMAN)
-            style = "-BoldItalic";
-        else
-            style = "-BoldOblique";
-    }
-    else if (Style == wxSLANT && (Weight == wxNORMAL || Weight == wxLIGHT))
-    {
-        if (m_font.GetFamily () == wxROMAN)
-            style = "-Italic";
-        else
-            style = "-Oblique";
-    }
-    else if (Style == wxSLANT && Weight == wxBOLD)
-    {
-        if (m_font.GetFamily () == wxROMAN)
-            style = "-BoldItalic";
-        else
-            style = "-BoldOblique";
-    }
-    else
-    {
-        style = "";
-    }
-
-    char buffer[100];
-    strcpy( buffer, name );
-    strcat( buffer, style );
-
-    fprintf( m_pstream, buffer );
+    fprintf( m_pstream, name );
     fprintf( m_pstream, " reencodeISO def\n" );
-    fprintf( m_pstream, buffer );
+    fprintf( m_pstream, name );
     fprintf( m_pstream, " findfont\n" );
 
-    fprintf( m_pstream, "%f scalefont setfont\n", YLOG2DEVREL(m_font.GetPointSize() * 1000) / 1000.0F);
+    char buffer[100];
+    sprintf( buffer, "%f scalefont setfont\n", YLOG2DEVREL(m_font.GetPointSize() * 1000) / 1000.0F);
                 // this is a hack - we must scale font size (in pts) according to m_scaleY but
                 // YLOG2DEVREL works with wxCoord type (int or longint). Se we first convert font size
                 // to 1/1000th of pt and then back.
+    for (int i = 0; i < 100; i++)
+        if (buffer[i] == ',') buffer[i] = '.';
+    fprintf( m_pstream, buffer );
 }
 
 void wxPostScriptDC::SetPen( const wxPen& pen )
@@ -1021,11 +1035,18 @@ void wxPostScriptDC::SetPen( const wxPen& pen )
 
     m_pen = pen;
 
-    #ifdef __WXMSW__
-    fprintf( m_pstream, "%d setlinewidth\n", XLOG2DEVREL(m_pen.GetWidth()) );
-    #else
-    fprintf( m_pstream, "%d setlinewidth\n", XLOG2DEVREL(m_pen.GetWidth()) );
-    #endif
+    {
+        char buffer[100];
+        #ifdef __WXMSW__
+        sprintf( buffer, "%f setlinewidth\n", XLOG2DEVREL(1000 * m_pen.GetWidth()) / 1000.0f );
+        #else
+        sprintf( buffer, "%f setlinewidth\n", XLOG2DEVREL(1000 * m_pen.GetWidth()) / 1000.0f );
+        #endif
+        for (int i = 0; i < 100; i++)
+            if (buffer[i] == ',') buffer[i] = '.';
+        fprintf( m_pstream, buffer );
+    }
+
 /*
      Line style - WRONG: 2nd arg is OFFSET
 
@@ -1086,9 +1107,13 @@ void wxPostScriptDC::SetPen( const wxPen& pen )
         double bluePS = (double)(blue) / 255.0;
         double greenPS = (double)(green) / 255.0;
 
-        fprintf( m_pstream,
+        char buffer[100];
+        sprintf( buffer,
                 "%.8f %.8f %.8f setrgbcolor\n",
                 redPS, greenPS, bluePS );
+        for (int i = 0; i < 100; i++)
+            if (buffer[i] == ',') buffer[i] = '.';
+        fprintf( m_pstream, buffer );
 
         m_currentRed = red;
         m_currentBlue = blue;
@@ -1129,9 +1154,13 @@ void wxPostScriptDC::SetBrush( const wxBrush& brush )
         double bluePS = (double)(blue) / 255.0;
         double greenPS = (double)(green) / 255.0;
 
-        fprintf( m_pstream,
+        char buffer[100];
+        sprintf( buffer,
                 "%.8f %.8f %.8f setrgbcolor\n",
                 redPS, greenPS, bluePS );
+        for (int i = 0; i < 100; i++)
+            if (buffer[i] == ',') buffer[i] = '.';
+        fprintf( m_pstream, buffer );
 
         m_currentRed = red;
         m_currentBlue = blue;
@@ -1175,9 +1204,13 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
             double bluePS = (double)(blue) / 255.0;
             double greenPS = (double)(green) / 255.0;
 
-            fprintf( m_pstream,
-                    "%.8f %.8f %.8f setrgbcolor\n",
-                    redPS, greenPS, bluePS );
+            char buffer[100];
+            sprintf( buffer,
+                "%.8f %.8f %.8f setrgbcolor\n",
+                redPS, greenPS, bluePS );
+            for (int i = 0; i < 100; i++)
+                if (buffer[i] == ',') buffer[i] = '.';
+            fprintf( m_pstream, buffer );
 
             m_currentRed = red;
             m_currentBlue = blue;
@@ -1193,10 +1226,6 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     wxCoord by = y + size - text_descent; // baseline
     fprintf( m_pstream, "%d %d moveto\n", XLOG2DEV(x), YLOG2DEV(by) );
 
-    /* I don't know how to write char to a stream, so I use a mini string */
-    char tmpbuf[2];
-    tmpbuf[1] = 0;
-
     fprintf( m_pstream, "(" );
     const wxWX2MBbuf textbuf = text.mb_str();
     int len = strlen(textbuf);
@@ -1208,8 +1237,7 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
         {
             /* Cope with special characters */
             fprintf( m_pstream, "\\" );
-            tmpbuf[0] = (char) c;
-            fprintf( m_pstream, tmpbuf );
+            fputc(c, m_pstream);
         }
         else if ( c >= 128 )
         {
@@ -1218,8 +1246,7 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
         }
         else
         {
-            tmpbuf[0] = (char) c;
-            fprintf( m_pstream, tmpbuf );
+            fputc(c, m_pstream);
         }
     }
 
@@ -1228,17 +1255,21 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     if (m_font.GetUnderlined())
     {
         wxCoord uy = (wxCoord)(y + size - m_underlinePosition);
+        char buffer[100];
 
-        fprintf( m_pstream,
+        sprintf( buffer,
                 "gsave\n"
                 "%d %d moveto\n"
-                "%d setlinewidth\n"
+                "%f setlinewidth\n"
                 "%d %d lineto\n"
                 "stroke\n"
                 "grestore\n",
                 XLOG2DEV(x), YLOG2DEV(uy),
-                (wxCoord)m_underlineThickness,
+                m_underlineThickness,
                 XLOG2DEV(x + text_w), YLOG2DEV(uy) );
+        for (i = 0; i < 100; i++)
+            if (buffer[i] == ',') buffer[i] = '.';
+        fprintf( m_pstream, buffer );
     }
 
     CalcBoundingBox( x, y );
@@ -1283,9 +1314,13 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
             double bluePS = (double)(blue) / 255.0;
             double greenPS = (double)(green) / 255.0;
 
-            fprintf( m_pstream,
-                    "%.8f %.8f %.8f setrgbcolor\n",
-                    redPS, greenPS, bluePS );
+            char buffer[100];
+            sprintf( buffer,
+                "%.8f %.8f %.8f setrgbcolor\n",
+                redPS, greenPS, bluePS );
+            for (int i = 0; i < 100; i++)
+                if (buffer[i] == ',') buffer[i] = '.';
+            fprintf( m_pstream, buffer );
 
             m_currentRed = red;
             m_currentBlue = blue;
@@ -1299,17 +1334,18 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
 
     // FIXME only correct for 90 degrees
     fprintf(m_pstream, "%d %d moveto\n",
-            XLOG2DEV((wxCoord)(x + size)), YLOG2DEV(by) );
-    fprintf(m_pstream, "%.8f rotate\n", angle);
+            XLOG2DEV((wxCoord)(x + size)), YLOG2DEV((wxCoord)by) );
 
-    /* I don't know how to write char to a stream, so I use a mini string */
-    char tmpbuf[2];
-    tmpbuf[1] = 0;
+    char buffer[100];
+    sprintf(buffer, "%.8f rotate\n", angle);
+    int i;
+    for (i = 0; i < 100; i++)
+        if (buffer[i] == ',') buffer[i] = '.';
+    fprintf(m_pstream, buffer);
 
     fprintf( m_pstream, "(" );
     const wxWX2MBbuf textbuf = text.mb_str();
     int len = strlen(textbuf);
-    int i;
     for (i = 0; i < len; i++)
     {
         int c = (unsigned char) textbuf[i];
@@ -1317,8 +1353,7 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
         {
             /* Cope with special characters */
             fprintf( m_pstream, "\\" );
-            tmpbuf[0] = (char) c;
-            fprintf( m_pstream, tmpbuf );
+            fputc(c, m_pstream);
         }
         else if ( c >= 128 )
         {
@@ -1327,30 +1362,37 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
         }
         else
         {
-            tmpbuf[0] = (char) c;
-            fprintf( m_pstream, tmpbuf );
+            fputc(c, m_pstream);
         }
     }
 
     fprintf( m_pstream, ") show\n" );
-    fprintf( m_pstream, "%.8f rotate\n", -angle );
+
+    sprintf( buffer, "%.8f rotate\n", -angle );
+    for (i = 0; i < 100; i++)
+        if (buffer[i] == ',') buffer[i] = '.';
+    fprintf( m_pstream, buffer );
 
     if (m_font.GetUnderlined())
     {
         wxCoord uy = (wxCoord)(y + size - m_underlinePosition);
         wxCoord w, h;
+        char buffer[100];
         GetTextExtent(text, &w, &h);
 
-        fprintf( m_pstream,
+        sprintf( buffer,
                  "gsave\n"
                  "%d %d moveto\n"
-                 "%ld setlinewidth\n"
+                 "%f setlinewidth\n"
                  "%d %d lineto\n"
                  "stroke\n"
                  "grestore\n",
                  XLOG2DEV(x), YLOG2DEV(uy),
-                 (long)m_underlineThickness,
+                 m_underlineThickness,
                  XLOG2DEV(x + w), YLOG2DEV(uy) );
+        for (i = 0; i < 100; i++)
+            if (buffer[i] == ',') buffer[i] = '.';
+        fprintf( m_pstream, buffer );
     }
 
     CalcBoundingBox( x, y );
@@ -1486,8 +1528,8 @@ void wxPostScriptDC::DoGetSize(int* width, int* height) const
         h = tmp;
     }
 
-    if (width) *width = w;
-    if (height) *height = h;
+    if (width) *width = (int)(w * ms_PSScaleFactor);
+    if (height) *height = (int)(h * ms_PSScaleFactor);
 }
 
 void wxPostScriptDC::DoGetSizeMM(int *width, int *height) const
@@ -1520,7 +1562,8 @@ void wxPostScriptDC::DoGetSizeMM(int *width, int *height) const
 // Resolution in pixels per logical inch
 wxSize wxPostScriptDC::GetPPI(void) const
 {
-    return wxSize(72, 72);
+    return wxSize((int)(72 * ms_PSScaleFactor), 
+                  (int)(72 * ms_PSScaleFactor));
 }
 
 
@@ -1538,7 +1581,7 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
 
     if (!m_pstream)
     {
-        wxMessageBox( _("Cannot open file for PostScript printing!"), _("Error"), wxOK );
+        wxLogError( _("Cannot open file for PostScript printing!"));
         m_ok = FALSE;
         return FALSE;
     }
@@ -1755,7 +1798,13 @@ void wxPostScriptDC::StartPage()
         // fprintf( m_pstream, "90 rotate llx neg ury nef translate\n" );
     }
 
-    fprintf( m_pstream, "%.8f %.8f scale\n", scale_x, scale_y );
+    char buffer[100];
+    sprintf( buffer, "%.8f %.8f scale\n", scale_x / ms_PSScaleFactor, 
+                                          scale_y / ms_PSScaleFactor);
+    for (int i = 0; i < 100; i++)
+        if (buffer[i] == ',') buffer[i] = '.';
+    fprintf( m_pstream, buffer );
+
     fprintf( m_pstream, "%d %d translate\n", translate_x, translate_y );
 }
 
@@ -1792,7 +1841,7 @@ bool wxPostScriptDC::DoBlit( wxCoord xdest, wxCoord ydest,
 wxCoord wxPostScriptDC::GetCharHeight() const
 {
     if (m_font.Ok())
-        return  m_font.GetPointSize();
+        return m_font.GetPointSize();
     else
         return 12;
 }
@@ -1807,8 +1856,6 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
     if (!fontToUse) fontToUse = (wxFont*) &m_font;
 
     wxCHECK_RET( fontToUse, wxT("GetTextExtent: no font defined") );
-    wxCHECK_RET( x, wxT("GetTextExtent: x == NULL") );
-    wxCHECK_RET( y, wxT("GetTextExtent: y == NULL") );
 
     const wxWX2MBbuf strbuf = string.mb_str();
 
@@ -1880,10 +1927,10 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
     double UnderlineThickness = 0.0;
 
     /* get actual parameters */
-    const int Family = fontToUse->GetFamily();
-    const int Size =   fontToUse->GetPointSize();
-    const int Style =  fontToUse->GetStyle();
-    const int Weight = fontToUse->GetWeight();
+    int Family = fontToUse->GetFamily();
+    int Size =   fontToUse->GetPointSize();
+    int Style =  fontToUse->GetStyle();
+    int Weight = fontToUse->GetWeight();
 
     /* if we have another font, read the font-metrics */
     if (Family!=lastFamily || Size!=lastSize || Style!=lastStyle || Weight!=lastWeight)
@@ -1899,29 +1946,37 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         switch (Family)
         {
             case wxMODERN:
-                {
-                    if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "CourBoO";
-                    else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "CourBo";
-                    else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "CourO";
-                    else name = "Cour";
-                }
+            case wxTELETYPE:
+            {
+                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "CourBoO.afm";
+                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "CourBo.afm";
+                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "CourO.afm";
+                else name = "Cour.afm";
                 break;
+            }
             case wxROMAN:
-                {
-                    if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "TimesBoO";
-                    else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "TimesBo";
-                    else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "TimesO";
-                    else name = "TimesRo";
-                }
+            {
+                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "TimesBoO.afm";
+                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "TimesBo.afm";
+                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "TimesO.afm";
+                else name = "TimesRo.afm";
                 break;
+            }
+            case wxSCRIPT:
+            {
+                name = "Zapf.afm";
+                Style = wxNORMAL;
+                Weight = wxNORMAL;
+            }
+            case wxSWISS:
             default:
-                {
-                    if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "HelvBoO";
-                    else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "HelvBo";
-                    else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "HelvO";
-                    else name = "Helv";
-                }
+            {
+                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "HelvBoO.afm";
+                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "HelvBo.afm";
+                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "HelvO.afm";
+                else name = "Helv.afm";
                 break;
+            }
         }
 
         /* get the directory of the AFM files */
@@ -1947,17 +2002,17 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
 
         /* new elements JC Sun Aug 25 23:21:44 MET DST 1996 */
 
-        afmName << name << wxT(".afm");
+        afmName << name;
         FILE *afmFile = wxFopen(afmName,wxT("r"));
+        
         if (afmFile==NULL)
         {
            afmName = wxThePrintSetupData->GetAFMPath();
-           afmName << wxFILE_SEP_PATH << name << wxT(".afm");
+           afmName << wxFILE_SEP_PATH << name;
            afmFile = wxFopen(afmName,wxT("r"));
         }
 
-#ifdef __UNIX__
-#ifndef __VMS__
+#if defined(__UNIX__) && !defined(__VMS__)
        if (afmFile==NULL)
         /* please do NOT change the line above to "else if (afmFile==NULL)" -
            - afmFile = fopen() may fail and in that case the next if branch
@@ -1967,11 +2022,14 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
            afmName <<  wxFILE_SEP_PATH
                    << wxT("share") << wxFILE_SEP_PATH
                    << wxT("wx") << wxFILE_SEP_PATH
+#if defined(__LINUX__) || defined(__FREEBSD__)
+                   << wxT("gs_afm") << wxFILE_SEP_PATH
+#else
                    << wxT("afm") << wxFILE_SEP_PATH
-                   << name << wxT(".afm");
+#endif
+                   << name;
            afmFile = wxFopen(afmName,wxT("r"));
         }
-#endif
 #endif
 
         if (afmFile==NULL)
@@ -2071,23 +2129,24 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         lastWidths[220] = lastWidths['U'];  // Ü
         lastWidths[252] = lastWidths['u'];  // ü
         lastWidths[223] = lastWidths[251];  // ß
-    }
 
-    /* JC: calculate UnderlineThickness/UnderlinePosition */
-    {
+        /* JC: calculate UnderlineThickness/UnderlinePosition */
+
         // VS: dirty, but is there any better solution?
         double *pt;
         pt = (double*) &m_underlinePosition;
-        *pt = UnderlinePosition * fontToUse->GetPointSize() / 1000.0f;
+        *pt = YLOG2DEVREL((wxCoord)(UnderlinePosition * fontToUse->GetPointSize())) / 1000.0f;
         pt = (double*) &m_underlineThickness;
-        *pt = UnderlineThickness * fontToUse->GetPointSize() / 1000.0f * m_scaleFactor;
+        *pt = YLOG2DEVREL((wxCoord)(UnderlineThickness * fontToUse->GetPointSize())) / 1000.0f;
+
     }
+
 
     /* 3. now the font metrics are read in, calc size this
        /  is done by adding the widths of the characters in the
        /  string. they are given in 1/1000 of the size! */
 
-    double widthSum=0;
+    long sum=0;
     wxCoord height=Size; /* by default */
     unsigned char *p;
     for(p=(unsigned char *)wxMBSTRINGCAST strbuf; *p; p++)
@@ -2095,14 +2154,18 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         if(lastWidths[*p]== INT_MIN)
         {
             wxLogDebug(wxT("GetTextExtent: undefined width for character '%hc' (%d)\n"), *p,*p);
-            widthSum += (lastWidths[' ']/1000.0F * Size); /* assume space */
+            sum += lastWidths[' ']; /* assume space */
         }
         else
         {
-            widthSum += ((lastWidths[*p]/1000.0F)*Size);
+            sum += lastWidths[*p];
         }
     }
-
+    
+    double widthSum = sum;
+    widthSum *= Size;
+    widthSum /= 1000.0F;
+    
     /* add descender to height (it is usually a negative value) */
     //if (lastDescender != INT_MIN)
     //{
@@ -2445,7 +2508,8 @@ void wxPrintSetupData::operator=(const wxPrintData& data)
     SetPrinterCommand(data.GetPrinterCommand());
     SetPrintPreviewCommand(data.GetPreviewCommand());
     SetPrinterOptions(data.GetPrinterOptions());
-    SetPrinterTranslation(data.GetPrinterTranslateX(), data.GetPrinterTranslateY());
+    SetPrinterTranslation((wxCoord)data.GetPrinterTranslateX(),
+                          (wxCoord)data.GetPrinterTranslateY());
     SetPrinterScaling(data.GetPrinterScaleX(), data.GetPrinterScaleY());
     SetPrinterOrientation(data.GetOrientation());
     SetPrinterMode((int) data.GetPrintMode());

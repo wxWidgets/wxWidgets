@@ -27,7 +27,6 @@ public:
     void SetReturnCode(int returnCode) { m_returnCode = returnCode; }
     int GetReturnCode() const { return m_returnCode; }
 
-protected:
     // splits text up at newlines and places the
     // lines into a vertical wxBoxSizer
     wxSizer *CreateTextSizer( const wxString &message );
@@ -35,6 +34,7 @@ protected:
     // places buttons into a horizontal wxBoxSizer
     wxSizer *CreateButtonSizer( long flags );
 
+protected:
     // the return code from modal dialog
     int m_returnCode;
 };

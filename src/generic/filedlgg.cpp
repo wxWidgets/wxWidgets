@@ -534,7 +534,7 @@ void wxFileCtrl::Update()
         InsertColumn( 1, _("Size"), wxLIST_FORMAT_LEFT, 60 );
         InsertColumn( 2, _("Date"), wxLIST_FORMAT_LEFT, 65 );
         InsertColumn( 3, _("Time"), wxLIST_FORMAT_LEFT, 50 );
-        InsertColumn( 4, _("Permissions"), wxLIST_FORMAT_LEFT, 120 );
+        InsertColumn( 4, _("Permissions"), wxLIST_FORMAT_LEFT, 110 );
     }
     wxFileData *fd = (wxFileData *) NULL;
     wxListItem item;
@@ -557,7 +557,7 @@ void wxFileCtrl::Update()
         res = wxFileNameFromPath( f );
         fd = new wxFileData( res, f );
         wxString s = fd->GetName();
-        if (m_showHidden || (s[0] != wxT('.')))
+        if (m_showHidden || (s[0u] != wxT('.')))
         {
             Add( fd, item );
             item.m_itemId++;
@@ -572,7 +572,7 @@ void wxFileCtrl::Update()
         res = wxFileNameFromPath( f );
         fd = new wxFileData( res, f );
         wxString s = fd->GetName();
-        if (m_showHidden || (s[0] != wxT('.')))
+        if (m_showHidden || (s[0u] != wxT('.')))
         {
             Add( fd, item );
             item.m_itemId++;
@@ -582,9 +582,12 @@ void wxFileCtrl::Update()
 
     SortItems( ListCompare, 0 );
 
-    SetColumnWidth( 1, wxLIST_AUTOSIZE );
-    SetColumnWidth( 2, wxLIST_AUTOSIZE );
-    SetColumnWidth( 3, wxLIST_AUTOSIZE );
+    if (my_style & wxLC_REPORT)
+    {
+       SetColumnWidth( 1, wxLIST_AUTOSIZE );
+       SetColumnWidth( 2, wxLIST_AUTOSIZE );
+       SetColumnWidth( 3, wxLIST_AUTOSIZE );
+    }
 }
 
 void wxFileCtrl::SetWild( const wxString &wild )
@@ -891,10 +894,10 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 
     if (m_dialogStyle & wxMULTIPLE)
         m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, firstWild, wxDefaultPosition,
-                                 wxSize(440,180), s_lastViewStyle | wxSUNKEN_BORDER );
+                                 wxSize(510,180), s_lastViewStyle | wxSUNKEN_BORDER );
     else
         m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, firstWild, wxDefaultPosition,
-                                 wxSize(440,180), s_lastViewStyle | wxSUNKEN_BORDER | wxLC_SINGLE_SEL );
+                                 wxSize(510,180), s_lastViewStyle | wxSUNKEN_BORDER | wxLC_SINGLE_SEL );
     m_list -> ShowHidden(s_lastShowHidden);
     mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 10 );
 
@@ -1023,7 +1026,7 @@ void wxFileDialog::HandleAction( const wxString &fn )
         return;
     }
 
-    if (filename[0] == wxT('~'))
+    if (filename[0u] == wxT('~'))
     {
         filename.Remove( 0, 1 );
         wxString tmp( wxGetUserHome() );
@@ -1045,7 +1048,7 @@ void wxFileDialog::HandleAction( const wxString &fn )
     }
 
     if (dir != wxT("/")) dir += wxT("/");
-    if (filename[0] != wxT('/'))
+    if (filename[0u] != wxT('/'))
     {
         dir += filename;
         filename = dir;

@@ -18,7 +18,7 @@ lib: $(LIBTARGET)
    
 $(LIBTARGET): $(OBJECTS)
    -erase $(LIBTARGET)
-   tlib $(LIBTARGET) /P512 @&&!
+   tlib "$(LIBTARGET)" /P512 @&&!
 +$(OBJECTS:.obj =.obj +)
 !
 

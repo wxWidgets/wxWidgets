@@ -23,7 +23,7 @@ may be retrieved with the corresponding functions:
 \helpref{IsSelected}{wxtreectrlisselected}, 
 \helpref{IsVisible}{wxtreectrlisvisible}, \helpref{IsBold}{wxtreectrlisbold} 
 and \helpref{IsExpanded}{wxtreectrlisexpanded}. Only one item at a time may be
-selected, selecting anopther one (with 
+selected, selecting another one (with 
 \helpref{SelectItem}{wxtreectrlselectitem}) automatically unselects the
 previously selected one.
 
@@ -47,7 +47,7 @@ beginning, only the root item is created (with
 EVT\_TREE\_ITEM\_EXPANDING event is received: then all items lying immediately
 under the item being expanded should be added, but, of course, only when this
 event is received for the first time for this item - otherwise, the items would
-be added twice if the user expands/collapses/reexapnds the branch.
+be added twice if the user expands/collapses/re-expands the branch.
 
 The tree control provides functions for enumerating its items. There are 3
 groups of enumeration functions: for the children of a given item, for the

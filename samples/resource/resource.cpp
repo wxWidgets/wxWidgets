@@ -113,8 +113,10 @@ bool MyApp::OnInit(void)
 
 MyApp::~MyApp()
 {
+#if defined(__WXMSW__)
     delete dialog1;
     delete menu1;
+#endif
 }
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)

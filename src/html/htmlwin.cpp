@@ -15,7 +15,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/defs.h"
-#if wxUSE_HTML
+#if wxUSE_HTML && wxUSE_STREAMS
 
 #ifdef __BORDLANDC__
 #pragma hdrstop
@@ -41,7 +41,7 @@ WX_DEFINE_OBJARRAY(HtmlHistoryArray)
 
 
 wxHtmlWindow::wxHtmlWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-                long style, const wxString& name) : wxScrolledWindow(parent, id, pos, size, wxVSCROLL | wxHSCROLL, name)
+                long style, const wxString& name) : wxScrolledWindow(parent, id, pos, size, style | wxVSCROLL | wxHSCROLL, name)
 {
     m_tmpMouseMoved = FALSE;
     m_tmpLastLink = NULL;
@@ -172,7 +172,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         if (f == NULL) {
             wxString err;
 
-            wxLogError(_("Unable to open requested HTML document: %s"), location.mb_str());
+            wxLogError(_("Unable to open requested HTML document: %s"), location.c_str());
             m_tmpCanDrawLocks--;
 
             SetCursor(*wxSTANDARD_CURSOR);
@@ -248,7 +248,7 @@ bool wxHtmlWindow::ScrollToAnchor(const wxString& anchor)
     const wxHtmlCell *c = m_Cell -> Find(wxHTML_COND_ISANCHOR, &anchor);
     if (!c)
     {
-        wxLogWarning(_("HTML anchor %s does not exist."), anchor.mb_str());
+        wxLogWarning(_("HTML anchor %s does not exist."), anchor.c_str());
         return FALSE;
     }
     else {
@@ -282,7 +282,7 @@ void wxHtmlWindow::CreateLayout()
 
     if (!m_Cell) return;
 
-    if (m_Style == wxHW_SCROLLBAR_NEVER) {
+    if (m_Style & wxHW_SCROLLBAR_NEVER) {
         SetScrollbars(wxHTML_SCROLL_STEP, 1, m_Cell -> GetWidth() / wxHTML_SCROLL_STEP, 0); // always off
         GetClientSize(&ClientWidth, &ClientHeight);
         m_Cell -> Layout(ClientWidth);
@@ -483,6 +483,7 @@ void wxHtmlWindow::OnSize(wxSizeEvent& event)
 {
     wxScrolledWindow::OnSize(event);
     CreateLayout();
+    Refresh();
 }
 
 

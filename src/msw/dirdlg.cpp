@@ -117,7 +117,7 @@ int wxDirDialog::ShowModal()
 
     if ( !ok )
     {
-        wxLogLastError("SHGetPathFromIDList");
+        wxLogLastError(wxT("SHGetPathFromIDList"));
 
         return wxID_CANCEL;
     }
@@ -148,7 +148,14 @@ BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
                 TCHAR szDir[MAX_PATH];
                 if ( SHGetPathFromIDList((LPITEMIDLIST)lp, szDir) )
                 {
-                    SendMessage(hwnd, BFFM_SETSTATUSTEXT, 0, (LPARAM)szDir);
+                    wxString strDir(szDir);
+                    int maxChars = 40; // Have to truncate string else it displays incorrectly
+                    if (strDir.Len() > (size_t) (maxChars - 3))
+                    {
+                        strDir = strDir.Right(maxChars - 3);
+                        strDir = wxString(wxT("...")) + strDir;
+                    }
+                    SendMessage(hwnd, BFFM_SETSTATUSTEXT, 0, (LPARAM) (const wxChar*) strDir);
                 }
             }
             break;
@@ -174,7 +181,7 @@ static void ItemListFree(LPITEMIDLIST pidl)
         }
         else
         {
-            wxLogLastError("SHGetMalloc");
+            wxLogLastError(wxT("SHGetMalloc"));
         }
     }
 }

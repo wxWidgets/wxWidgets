@@ -1,0 +1,5 @@
+
+TODO for wxBase 2
+-----------------
+
+better BeOS support.
