@@ -1783,6 +1783,61 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget,
     return FALSE;
 }
 
+#ifdef __WXGTK20__
+//-----------------------------------------------------------------------------
+// "mouse_wheel_event"
+//-----------------------------------------------------------------------------
+
+static gint gtk_window_wheel_callback (GtkWidget * widget,
+					GdkEventScroll * gdk_event,
+					wxWindowGTK * win)
+{
+    DEBUG_MAIN_THREAD
+
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+
+    wxEventType event_type = wxEVT_NULL;
+    if (gdk_event->direction == GDK_SCROLL_UP)
+        event_type = wxEVT_MOUSEWHEEL;
+    else if (gdk_event->direction == GDK_SCROLL_DOWN)
+        event_type = wxEVT_MOUSEWHEEL;
+    else
+        return FALSE;
+    
+    wxMouseEvent event( event_type );
+    // Can't use InitMouse macro because scroll events don't have button
+    event.SetTimestamp( gdk_event->time );
+    event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
+    event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
+    event.m_altDown = (gdk_event->state & GDK_MOD1_MASK);
+    event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK);
+    event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK);
+    event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK);
+    event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK);
+    if (gdk_event->direction == GDK_SCROLL_UP)
+        event.m_wheelRotation = 120;
+    else
+        event.m_wheelRotation = -120;
+
+    wxPoint pt = win->GetClientAreaOrigin();
+    event.m_x = (wxCoord)gdk_event->x - pt.x;
+    event.m_y = (wxCoord)gdk_event->y - pt.y;
+
+    event.SetEventObject( win );
+    event.SetId( win->GetId() );
+    event.SetTimestamp( gdk_event->time );
+    
+    if (win->GetEventHandler()->ProcessEvent( event ))
+    {
+        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "scroll_event" );
+        return TRUE;
+    }
+
+    return FALSE;
+}
+#endif
+
 //-----------------------------------------------------------------------------
 // "focus_in_event"
 //-----------------------------------------------------------------------------
@@ -2845,6 +2900,11 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 
     gtk_signal_connect( GTK_OBJECT(widget), "motion_notify_event",
       GTK_SIGNAL_FUNC(gtk_window_motion_notify_callback), (gpointer)this );
+
+#ifdef __WXGTK20__
+    gtk_signal_connect( GTK_OBJECT(widget), "scroll_event",
+      GTK_SIGNAL_FUNC(gtk_window_wheel_callback), (gpointer)this );
+#endif
 
     gtk_signal_connect( GTK_OBJECT(widget), "enter_notify_event",
       GTK_SIGNAL_FUNC(gtk_window_enter_callback), (gpointer)this );
