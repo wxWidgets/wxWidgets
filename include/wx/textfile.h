@@ -108,19 +108,8 @@ public:
   bool Write(Type typeNew = Type_None);
 
   // get the file termination string
-  inline static const char *GetEOL(Type type = typeDefault)
-  {
-    switch ( type ) {
-      case Type_None: return "";
-      case Type_Unix: return "\n";
-      case Type_Dos:  return "\r\n";
-      case Type_Mac:  return "\r";
-
-      default:
-        wxFAIL_MSG("bad file type in wxTextFile::GetEOL.");
-        return (const char *) NULL;
-    }
-  }
+  // Note: implementation moved to textfile to prevent warning due to switch.
+  static const char *GetEOL(Type type = typeDefault);
 
   // dtor
   ~wxTextFile();

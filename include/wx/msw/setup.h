@@ -78,16 +78,10 @@
 
 #define wxUSE_SCROLLBAR   1
                                     // Define 1 to compile contributed wxScrollBar class
-#define wxUSE_XPM_IN_X    1
-#define wxUSE_XPM_IN_MSW  1
+#define wxUSE_XPM_IN_MSW  0
                                     // Define 1 to support the XPM package in wxBitmap,
                                     // separated by platform. If 1, you must link in
                                     // the XPM library to your applications.
-#define wxUSE_IMAGE_LOADING_IN_X          1
-                                  // Use dynamic icon/bitmap loading/saving code in utils/image under X.
-                                  // If this is 1, you will need to link your applications
-                                  // with image_X.lib. where X is motif, ol, or hp.
-
 #define wxUSE_IMAGE_LOADING_IN_MSW        1
                                   // Use dynamic DIB loading/saving code in utils/dib under MSW.
 #define wxUSE_RESOURCE_LOADING_IN_MSW     1
@@ -95,12 +89,6 @@
                                   // under MSW.
 #define wxUSE_WX_RESOURCES        1
                                   // Use .wxr resource mechanism (requires PrologIO library)
-
-#define wxUSE_GNU_WXSTRING        0
-                                  // Define 1 to use modified GNU wxString class
-                                  // from (stefan.hammes@urz.uni-heidelberg.de) in contrib\string
-                                  // TODO: why does this give an unresolved 'wxRegex::Search'
-                                  // symbol if 1?
 
 #define HAVE_SOCKET             1
                                   // Use WinSock if 1

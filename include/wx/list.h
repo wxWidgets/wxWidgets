@@ -106,23 +106,10 @@ public:
     long GetNumber() const
         { wxASSERT( m_keyType == wxKEY_INTEGER ); return m_key.integer; }
 
-    // comparaison
-    bool operator==(wxListKeyValue value) const
-    {
-        switch ( m_keyType )
-        {
-            default:
-                wxFAIL_MSG("bad key type.");
-                // let compiler optimize the line above away in release build
-                // by not putting return here...
-
-            case wxKEY_STRING:
-                return strcmp(m_key.string, value.string) == 0;
-
-            case wxKEY_INTEGER:
-                return m_key.integer == value.integer;
-        }
-    }
+    // comparison
+    // Note: implementation moved to list.cpp to prevent BC++ inline
+    // expansion warning.
+    bool operator==(wxListKeyValue value) const ;
 
     // dtor
     ~wxListKey()
@@ -267,7 +254,7 @@ protected:
 
     // this function allows the sorting of arbitrary lists by giving
     // a function to compare two list elements. The list is sorted in place.
-    void Sort(wxSortCompareFunction compfunc);
+    void Sort(const wxSortCompareFunction compfunc);
 
     // functions for iterating over the list
     void *FirstThat(wxListIterateFunction func);

@@ -61,7 +61,7 @@ protected:
     static bool     sm_registeredClass;
     static unsigned int sm_taskbarMsg;
 
-    DECLARE_EVENT_TABLE();
+    DECLARE_EVENT_TABLE()
 };
 
 

@@ -232,3 +232,18 @@ bool wxTextFile::Write(Type typeNew)
   // replace the old file with this one
   return fileTmp.Commit();
 }
+
+const char *wxTextFile::GetEOL(Type type)
+  {
+    switch ( type ) {
+      case Type_None: return "";
+      case Type_Unix: return "\n";
+      case Type_Dos:  return "\r\n";
+      case Type_Mac:  return "\r";
+
+      default:
+        wxFAIL_MSG("bad file type in wxTextFile::GetEOL.");
+        return (const char *) NULL;
+    }
+  }
+

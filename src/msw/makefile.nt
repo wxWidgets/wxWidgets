@@ -309,7 +309,7 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 
 $(MSWDIR)/app.obj:     $*.$(SRCSUFF)
         cl @<<
-$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+$(CPPFLAGS) /D__NO_VC_CRTDBG__ /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
 $(MSWDIR)/bitmap.obj:     $*.$(SRCSUFF)

@@ -923,6 +923,15 @@ int wxString::Printf(const char *pszFormat, ...)
 
 int wxString::PrintfV(const char* pszFormat, va_list argptr)
 {
+#ifdef __BORLANDC__
+  static char s_szScratch[1024];
+
+  int iLen = vsprintf(s_szScratch, pszFormat, argptr);
+  AllocBeforeWrite(iLen);
+  strcpy(m_pchData, s_szScratch);
+
+  return iLen;
+#else
 #ifdef __WXMSW__
   #ifdef _MSC_VER
     #define wxVsprintf     _vsnprintf
@@ -972,6 +981,7 @@ int wxString::PrintfV(const char* pszFormat, va_list argptr)
       free(buffer);
 
   return iLen;
+#endif
 }
 
 // ----------------------------------------------------------------------------

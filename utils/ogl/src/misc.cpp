@@ -444,12 +444,12 @@ wxStringList *oglFormatText(wxDC& dc, const wxString& text, double width, double
     {
       word[j] = 0;
       j = 0;
-      word_list.Append((wxObject *)copystring(word));
+      word_list.Add(word);
       end_word = FALSE;
     }
     if (new_line)
     {
-      word_list.Append((wxObject *)NULL);
+      word_list.Append(NULL);
       new_line = FALSE;
     }
   }

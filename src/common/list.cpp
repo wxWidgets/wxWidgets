@@ -440,6 +440,23 @@ void wxListBase::Sort(const wxSortCompareFunction compfunc)
     delete[] objArray;
 }
 
+bool wxListKey::operator==(wxListKeyValue value) const
+    {
+        switch ( m_keyType )
+        {
+            default:
+                wxFAIL_MSG("bad key type.");
+                // let compiler optimize the line above away in release build
+                // by not putting return here...
+
+            case wxKEY_STRING:
+                return strcmp(m_key.string, value.string) == 0;
+
+            case wxKEY_INTEGER:
+                return m_key.integer == value.integer;
+        }
+    }
+
 // -----------------------------------------------------------------------------
 // wxList (a.k.a. wxObjectList)
 // -----------------------------------------------------------------------------

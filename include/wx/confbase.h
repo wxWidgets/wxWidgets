@@ -208,15 +208,7 @@ public:
   void SetRecordDefaults(bool bDoIt = TRUE) { m_bRecordDefaults = bDoIt; }
   bool IsRecordingDefaults() const { return m_bRecordDefaults; }
   // does expansion only if needed
-  wxString ExpandEnvVars(const wxString& str) const
-    {
-        wxString tmp; // Required for BC++
-        if (IsExpandingEnvVars())
-            tmp = wxExpandEnvVars(str);
-        else
-            tmp = str;
-        return tmp;
-    }
+  wxString ExpandEnvVars(const wxString& str) const;
 
     // misc accessors
   inline wxString GetAppName() const { return m_appName; }

@@ -79,14 +79,15 @@ GENERICOBJS= \
   $(MSWDIR)\laywin.obj \
   $(MSWDIR)\msgdlgg.obj \
   $(MSWDIR)\panelg.obj \
-  $(MSWDIR)\printps.obj \
-  $(MSWDIR)\prntdlgg.obj \
   $(MSWDIR)\sashwin.obj \
   $(MSWDIR)\scrolwin.obj \
   $(MSWDIR)\splitter.obj \
   $(MSWDIR)\statusbr.obj \
   $(MSWDIR)\tabg.obj \
   $(MSWDIR)\textdlgg.obj
+
+#  $(MSWDIR)\printps.obj \
+#  $(MSWDIR)\prntdlgg.obj \
 
 COMMONOBJS = \
   $(MSWDIR)\config.obj \
