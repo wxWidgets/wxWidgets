@@ -147,6 +147,7 @@ MyFrame::MyFrame()
     topsizer->Add(gridsizer, 1, wxGROW | wxALL, 10);
 
 
+#if wxUSE_STATLINE
   // 3) middle: create wxStaticLine with minimum size (3x3)
   topsizer->Add(
      new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxSize(3,3), wxHORIZONTAL),
@@ -154,6 +155,7 @@ MyFrame::MyFrame()
      wxEXPAND |   // make horizontally stretchable
      wxALL,       //   and make border all around
      5 );         // set border width to 5
+#endif // wxUSE_STATLINE
 
 
   // 4) bottom: create two centred wxButtons
