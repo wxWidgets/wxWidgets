@@ -740,8 +740,6 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
     // init our fields
     Init();
 
-    style = style & ~wxFRAME_SHAPED ;
-
     m_windowStyle = style;
 
     SetName(name);
