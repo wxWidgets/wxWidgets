@@ -24,37 +24,12 @@ SIMPLE_BORDER = _core.SIMPLE_BORDER
 STATIC_BORDER = _core.STATIC_BORDER
 TRANSPARENT_WINDOW = _core.TRANSPARENT_WINDOW
 NO_BORDER = _core.NO_BORDER
-USER_COLOURS = _core.USER_COLOURS
-NO_3D = _core.NO_3D
 TAB_TRAVERSAL = _core.TAB_TRAVERSAL
 WANTS_CHARS = _core.WANTS_CHARS
 POPUP_WINDOW = _core.POPUP_WINDOW
 CENTER_FRAME = _core.CENTER_FRAME
 CENTRE_ON_SCREEN = _core.CENTRE_ON_SCREEN
 CENTER_ON_SCREEN = _core.CENTER_ON_SCREEN
-STAY_ON_TOP = _core.STAY_ON_TOP
-ICONIZE = _core.ICONIZE
-MINIMIZE = _core.MINIMIZE
-MAXIMIZE = _core.MAXIMIZE
-CLOSE_BOX = _core.CLOSE_BOX
-THICK_FRAME = _core.THICK_FRAME
-SYSTEM_MENU = _core.SYSTEM_MENU
-MINIMIZE_BOX = _core.MINIMIZE_BOX
-MAXIMIZE_BOX = _core.MAXIMIZE_BOX
-TINY_CAPTION_HORIZ = _core.TINY_CAPTION_HORIZ
-TINY_CAPTION_VERT = _core.TINY_CAPTION_VERT
-RESIZE_BOX = _core.RESIZE_BOX
-RESIZE_BORDER = _core.RESIZE_BORDER
-DIALOG_MODAL = _core.DIALOG_MODAL
-DIALOG_MODELESS = _core.DIALOG_MODELESS
-DIALOG_NO_PARENT = _core.DIALOG_NO_PARENT
-DEFAULT_FRAME_STYLE = _core.DEFAULT_FRAME_STYLE
-DEFAULT_DIALOG_STYLE = _core.DEFAULT_DIALOG_STYLE
-FRAME_TOOL_WINDOW = _core.FRAME_TOOL_WINDOW
-FRAME_FLOAT_ON_PARENT = _core.FRAME_FLOAT_ON_PARENT
-FRAME_NO_WINDOW_MENU = _core.FRAME_NO_WINDOW_MENU
-FRAME_NO_TASKBAR = _core.FRAME_NO_TASKBAR
-FRAME_SHAPED = _core.FRAME_SHAPED
 ED_CLIENT_MARGIN = _core.ED_CLIENT_MARGIN
 ED_BUTTONS_BOTTOM = _core.ED_BUTTONS_BOTTOM
 ED_BUTTONS_RIGHT = _core.ED_BUTTONS_RIGHT
@@ -2116,6 +2091,10 @@ class Image(Object):
         """GetHeight() -> int"""
         return _core.Image_GetHeight(*args, **kwargs)
 
+    def GetSize(*args, **kwargs):
+        """GetSize() -> Size"""
+        return _core.Image_GetSize(*args, **kwargs)
+
     def GetSubImage(*args, **kwargs):
         """GetSubImage(Rect rect) -> Image"""
         return _core.Image_GetSubImage(*args, **kwargs)
@@ -2293,9 +2272,12 @@ def ImageFromStreamMime(*args, **kwargs):
     val.thisown = 1
     return val
 
-def EmptyImage(*args, **kwargs):
-    """EmptyImage(int width=0, int height=0, bool clear=True) -> Image"""
-    val = _core.new_EmptyImage(*args, **kwargs)
+def EmptyImage(*args):
+    """
+    EmptyImage(int width=0, int height=0, bool clear=True) -> Image
+    EmptyImage(Size size, bool clear=True) -> Image
+    """
+    val = _core.new_EmptyImage(*args)
     val.thisown = 1
     return val
 
@@ -6647,6 +6629,10 @@ class Window(EvtHandler):
         """
         return _core.Window_SetBackgroundColour(*args, **kwargs)
 
+    def SetDefaultBackgroundColour(*args, **kwargs):
+        """SetDefaultBackgroundColour(Colour colour)"""
+        return _core.Window_SetDefaultBackgroundColour(*args, **kwargs)
+
     def SetForegroundColour(*args, **kwargs):
         """
         SetForegroundColour(Colour colour) -> bool
@@ -6657,6 +6643,10 @@ class Window(EvtHandler):
         not be used at all.
         """
         return _core.Window_SetForegroundColour(*args, **kwargs)
+
+    def SetDefaultForegroundColour(*args, **kwargs):
+        """SetDefaultForegroundColour(Colour colour)"""
+        return _core.Window_SetDefaultForegroundColour(*args, **kwargs)
 
     def GetBackgroundColour(*args, **kwargs):
         """
@@ -6703,6 +6693,10 @@ class Window(EvtHandler):
         Sets the font for this window.
         """
         return _core.Window_SetFont(*args, **kwargs)
+
+    def SetDefaultFont(*args, **kwargs):
+        """SetDefaultFont(Font font)"""
+        return _core.Window_SetDefaultFont(*args, **kwargs)
 
     def GetFont(*args, **kwargs):
         """

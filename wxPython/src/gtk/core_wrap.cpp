@@ -1094,11 +1094,14 @@ SWIG_CheckUnsignedChar(PyObject* obj)
   }
 }
 
-wxImage *new_wxImage(int width,int height,bool clear){
+wxImage *new_wxImage__SWIG_0(int width,int height,bool clear){
             if (width > 0 && height > 0)
                 return new wxImage(width, height, clear);
             else
                 return new wxImage;
+        }
+wxImage *new_wxImage__SWIG_1(wxSize const &size,bool clear){
+            return new wxImage(size.x, size.y, clear);
         }
 wxImage *new_wxImage(wxBitmap const &bitmap){
             return new wxImage(bitmap.ConvertToImage());
@@ -1112,6 +1115,10 @@ wxImage *new_wxImage(int width,int height,unsigned char *data){
             }
             memcpy(copy, data, width*height*3);
             return new wxImage(width, height, copy, False);
+        }
+wxSize wxImage_GetSize(wxImage *self){
+            wxSize size(self->GetWidth(), self->GetHeight());
+            return size;
         }
 PyObject *wxImage_GetData(wxImage *self){
             unsigned char* data = self->GetData();
@@ -8784,7 +8791,7 @@ static PyObject *_wrap_new_ImageFromStreamMime(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_new_EmptyImage(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_EmptyImage__SWIG_0(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     int arg2 = (int) 0 ;
@@ -8793,11 +8800,8 @@ static PyObject *_wrap_new_EmptyImage(PyObject *self, PyObject *args, PyObject *
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
-    char *kwnames[] = {
-        (char *) "width",(char *) "height",(char *) "clear", NULL 
-    };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOO:new_EmptyImage",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"|OOO:new_EmptyImage",&obj0,&obj1,&obj2)) goto fail;
     if (obj0) {
         arg1 = (int) SWIG_AsInt(obj0); 
         if (PyErr_Occurred()) SWIG_fail;
@@ -8812,7 +8816,7 @@ static PyObject *_wrap_new_EmptyImage(PyObject *self, PyObject *args, PyObject *
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxImage *)new_wxImage(arg1,arg2,arg3);
+        result = (wxImage *)new_wxImage__SWIG_0(arg1,arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -8820,6 +8824,90 @@ static PyObject *_wrap_new_EmptyImage(PyObject *self, PyObject *args, PyObject *
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxImage, 1);
     return resultobj;
     fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_EmptyImage__SWIG_1(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    wxSize *arg1 = 0 ;
+    bool arg2 = (bool) True ;
+    wxImage *result;
+    wxSize temp1 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O|O:new_EmptyImage",&obj0,&obj1)) goto fail;
+    {
+        arg1 = &temp1;
+        if ( ! wxSize_helper(obj0, &arg1)) SWIG_fail;
+    }
+    if (obj1) {
+        arg2 = (bool) SWIG_AsBool(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxImage *)new_wxImage__SWIG_1((wxSize const &)*arg1,arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxImage, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_EmptyImage(PyObject *self, PyObject *args) {
+    int argc;
+    PyObject *argv[4];
+    int ii;
+    
+    argc = PyObject_Length(args);
+    for (ii = 0; (ii < argc) && (ii < 3); ii++) {
+        argv[ii] = PyTuple_GetItem(args,ii);
+    }
+    if ((argc >= 0) && (argc <= 3)) {
+        int _v;
+        if (argc <= 0) {
+            return _wrap_new_EmptyImage__SWIG_0(self,args);
+        }
+        _v = SWIG_CheckInt(argv[0]);
+        if (_v) {
+            if (argc <= 1) {
+                return _wrap_new_EmptyImage__SWIG_0(self,args);
+            }
+            _v = SWIG_CheckInt(argv[1]);
+            if (_v) {
+                if (argc <= 2) {
+                    return _wrap_new_EmptyImage__SWIG_0(self,args);
+                }
+                _v = SWIG_CheckBool(argv[2]);
+                if (_v) {
+                    return _wrap_new_EmptyImage__SWIG_0(self,args);
+                }
+            }
+        }
+    }
+    if ((argc >= 1) && (argc <= 2)) {
+        int _v;
+        {
+            _v = wxPySimple_typecheck(argv[0], wxT("wxSize"), 2);
+        }
+        if (_v) {
+            if (argc <= 1) {
+                return _wrap_new_EmptyImage__SWIG_1(self,args);
+            }
+            _v = SWIG_CheckBool(argv[1]);
+            if (_v) {
+                return _wrap_new_EmptyImage__SWIG_1(self,args);
+            }
+        }
+    }
+    
+    PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'new_EmptyImage'");
     return NULL;
 }
 
@@ -10002,6 +10090,36 @@ static PyObject *_wrap_Image_GetHeight(PyObject *self, PyObject *args, PyObject 
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Image_GetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxImage *arg1 = (wxImage *) 0 ;
+    wxSize result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Image_GetSize",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxImage,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxImage_GetSize(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxSize * resultptr;
+        resultptr = new wxSize((wxSize &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxSize, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -25876,6 +25994,38 @@ static PyObject *_wrap_Window_SetBackgroundColour(PyObject *self, PyObject *args
 }
 
 
+static PyObject *_wrap_Window_SetDefaultBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    wxColour *arg2 = 0 ;
+    wxColour temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "colour", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_SetDefaultBackgroundColour",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetDefaultBackgroundColour((wxColour const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Window_SetForegroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -25905,6 +26055,38 @@ static PyObject *_wrap_Window_SetForegroundColour(PyObject *self, PyObject *args
     {
         resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_SetDefaultForegroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    wxColour *arg2 = 0 ;
+    wxColour temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "colour", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_SetDefaultForegroundColour",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetDefaultForegroundColour((wxColour const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
     return NULL;
@@ -26071,6 +26253,40 @@ static PyObject *_wrap_Window_SetFont(PyObject *self, PyObject *args, PyObject *
     {
         resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_SetDefaultFont(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    wxFont *arg2 = 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "font", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_SetDefaultFont",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxFont,
+    SWIG_POINTER_EXCEPTION | 0)) == -1)
+    SWIG_fail;
+    if (arg2 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference");
+        SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetDefaultFont((wxFont const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
     return NULL;
@@ -40199,7 +40415,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_ImageFromMime", (PyCFunction) _wrap_new_ImageFromMime, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_ImageFromStream", (PyCFunction) _wrap_new_ImageFromStream, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_ImageFromStreamMime", (PyCFunction) _wrap_new_ImageFromStreamMime, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"new_EmptyImage", (PyCFunction) _wrap_new_EmptyImage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_EmptyImage", _wrap_new_EmptyImage, METH_VARARGS },
 	 { (char *)"new_ImageFromBitmap", (PyCFunction) _wrap_new_ImageFromBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_ImageFromData", (PyCFunction) _wrap_new_ImageFromData, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Image_Create", (PyCFunction) _wrap_Image_Create, METH_VARARGS | METH_KEYWORDS },
@@ -40228,6 +40444,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Image_Ok", (PyCFunction) _wrap_Image_Ok, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Image_GetWidth", (PyCFunction) _wrap_Image_GetWidth, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Image_GetHeight", (PyCFunction) _wrap_Image_GetHeight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_GetSize", (PyCFunction) _wrap_Image_GetSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Image_GetSubImage", (PyCFunction) _wrap_Image_GetSubImage, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Image_Copy", (PyCFunction) _wrap_Image_Copy, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Image_Paste", (PyCFunction) _wrap_Image_Paste, METH_VARARGS | METH_KEYWORDS },
@@ -40799,12 +41016,15 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_GetDefaultAttributes", (PyCFunction) _wrap_Window_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetClassDefaultAttributes", (PyCFunction) _wrap_Window_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetBackgroundColour", (PyCFunction) _wrap_Window_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetDefaultBackgroundColour", (PyCFunction) _wrap_Window_SetDefaultBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetForegroundColour", (PyCFunction) _wrap_Window_SetForegroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetDefaultForegroundColour", (PyCFunction) _wrap_Window_SetDefaultForegroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetBackgroundColour", (PyCFunction) _wrap_Window_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetForegroundColour", (PyCFunction) _wrap_Window_GetForegroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetCursor", (PyCFunction) _wrap_Window_SetCursor, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetCursor", (PyCFunction) _wrap_Window_GetCursor, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetFont", (PyCFunction) _wrap_Window_SetFont, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetDefaultFont", (PyCFunction) _wrap_Window_SetDefaultFont, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetFont", (PyCFunction) _wrap_Window_GetFont, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetCaret", (PyCFunction) _wrap_Window_SetCaret, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetCaret", (PyCFunction) _wrap_Window_GetCaret, METH_VARARGS | METH_KEYWORDS },
@@ -41980,37 +42200,12 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"STATIC_BORDER", SWIG_FromInt((int)wxSTATIC_BORDER));
     PyDict_SetItemString(d,"TRANSPARENT_WINDOW", SWIG_FromInt((int)wxTRANSPARENT_WINDOW));
     PyDict_SetItemString(d,"NO_BORDER", SWIG_FromInt((int)wxNO_BORDER));
-    PyDict_SetItemString(d,"USER_COLOURS", SWIG_FromInt((int)wxUSER_COLOURS));
-    PyDict_SetItemString(d,"NO_3D", SWIG_FromInt((int)wxNO_3D));
     PyDict_SetItemString(d,"TAB_TRAVERSAL", SWIG_FromInt((int)wxTAB_TRAVERSAL));
     PyDict_SetItemString(d,"WANTS_CHARS", SWIG_FromInt((int)wxWANTS_CHARS));
     PyDict_SetItemString(d,"POPUP_WINDOW", SWIG_FromInt((int)wxPOPUP_WINDOW));
     PyDict_SetItemString(d,"CENTER_FRAME", SWIG_FromInt((int)wxCENTER_FRAME));
     PyDict_SetItemString(d,"CENTRE_ON_SCREEN", SWIG_FromInt((int)wxCENTRE_ON_SCREEN));
     PyDict_SetItemString(d,"CENTER_ON_SCREEN", SWIG_FromInt((int)wxCENTER_ON_SCREEN));
-    PyDict_SetItemString(d,"STAY_ON_TOP", SWIG_FromInt((int)wxSTAY_ON_TOP));
-    PyDict_SetItemString(d,"ICONIZE", SWIG_FromInt((int)wxICONIZE));
-    PyDict_SetItemString(d,"MINIMIZE", SWIG_FromInt((int)wxMINIMIZE));
-    PyDict_SetItemString(d,"MAXIMIZE", SWIG_FromInt((int)wxMAXIMIZE));
-    PyDict_SetItemString(d,"CLOSE_BOX", SWIG_FromInt((int)wxCLOSE_BOX));
-    PyDict_SetItemString(d,"THICK_FRAME", SWIG_FromInt((int)wxTHICK_FRAME));
-    PyDict_SetItemString(d,"SYSTEM_MENU", SWIG_FromInt((int)wxSYSTEM_MENU));
-    PyDict_SetItemString(d,"MINIMIZE_BOX", SWIG_FromInt((int)wxMINIMIZE_BOX));
-    PyDict_SetItemString(d,"MAXIMIZE_BOX", SWIG_FromInt((int)wxMAXIMIZE_BOX));
-    PyDict_SetItemString(d,"TINY_CAPTION_HORIZ", SWIG_FromInt((int)wxTINY_CAPTION_HORIZ));
-    PyDict_SetItemString(d,"TINY_CAPTION_VERT", SWIG_FromInt((int)wxTINY_CAPTION_VERT));
-    PyDict_SetItemString(d,"RESIZE_BOX", SWIG_FromInt((int)wxRESIZE_BOX));
-    PyDict_SetItemString(d,"RESIZE_BORDER", SWIG_FromInt((int)wxRESIZE_BORDER));
-    PyDict_SetItemString(d,"DIALOG_MODAL", SWIG_FromInt((int)wxDIALOG_MODAL));
-    PyDict_SetItemString(d,"DIALOG_MODELESS", SWIG_FromInt((int)wxDIALOG_MODELESS));
-    PyDict_SetItemString(d,"DIALOG_NO_PARENT", SWIG_FromInt((int)wxDIALOG_NO_PARENT));
-    PyDict_SetItemString(d,"DEFAULT_FRAME_STYLE", SWIG_FromInt((int)wxDEFAULT_FRAME_STYLE));
-    PyDict_SetItemString(d,"DEFAULT_DIALOG_STYLE", SWIG_FromInt((int)wxDEFAULT_DIALOG_STYLE));
-    PyDict_SetItemString(d,"FRAME_TOOL_WINDOW", SWIG_FromInt((int)wxFRAME_TOOL_WINDOW));
-    PyDict_SetItemString(d,"FRAME_FLOAT_ON_PARENT", SWIG_FromInt((int)wxFRAME_FLOAT_ON_PARENT));
-    PyDict_SetItemString(d,"FRAME_NO_WINDOW_MENU", SWIG_FromInt((int)wxFRAME_NO_WINDOW_MENU));
-    PyDict_SetItemString(d,"FRAME_NO_TASKBAR", SWIG_FromInt((int)wxFRAME_NO_TASKBAR));
-    PyDict_SetItemString(d,"FRAME_SHAPED", SWIG_FromInt((int)wxFRAME_SHAPED));
     PyDict_SetItemString(d,"ED_CLIENT_MARGIN", SWIG_FromInt((int)wxED_CLIENT_MARGIN));
     PyDict_SetItemString(d,"ED_BUTTONS_BOTTOM", SWIG_FromInt((int)wxED_BUTTONS_BOTTOM));
     PyDict_SetItemString(d,"ED_BUTTONS_RIGHT", SWIG_FromInt((int)wxED_BUTTONS_RIGHT));

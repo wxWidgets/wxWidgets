@@ -447,7 +447,7 @@ class GridCellFloatEditor(GridCellTextEditor):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellFloatEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> GridCellFloatEditor"""
+        """__init__(int width=-1, int precision=-1) -> GridCellFloatEditor"""
         newobj = _grid.new_GridCellFloatEditor(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1

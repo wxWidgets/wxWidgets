@@ -218,9 +218,9 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxImage swig_types[9] 
 #define  SWIGTYPE_p_wxMetaFileDC swig_types[10] 
 #define  SWIGTYPE_p_wxMask swig_types[11] 
-#define  SWIGTYPE_p_wxFont swig_types[12] 
-#define  SWIGTYPE_p_wxWindow swig_types[13] 
-#define  SWIGTYPE_p_wxSize swig_types[14] 
+#define  SWIGTYPE_p_wxSize swig_types[12] 
+#define  SWIGTYPE_p_wxFont swig_types[13] 
+#define  SWIGTYPE_p_wxWindow swig_types[14] 
 #define  SWIGTYPE_p_double swig_types[15] 
 #define  SWIGTYPE_p_wxMemoryDC swig_types[16] 
 #define  SWIGTYPE_p_wxFontMapper swig_types[17] 
@@ -246,8 +246,8 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxIcon swig_types[37] 
 #define  SWIGTYPE_p_wxLocale swig_types[38] 
 #define  SWIGTYPE_p_wxRegion swig_types[39] 
-#define  SWIGTYPE_p_wxLanguageInfo swig_types[40] 
-#define  SWIGTYPE_p_wxConfigBase swig_types[41] 
+#define  SWIGTYPE_p_wxConfigBase swig_types[40] 
+#define  SWIGTYPE_p_wxLanguageInfo swig_types[41] 
 #define  SWIGTYPE_p_wxWindowDC swig_types[42] 
 #define  SWIGTYPE_p_wxPrintData swig_types[43] 
 #define  SWIGTYPE_p_wxBrushList swig_types[44] 
@@ -600,9 +600,23 @@ wxBitmap *new_wxBitmap(PyObject *bits,int width,int height,int depth){
             PyString_AsStringAndSize(bits, &buf, &length);
             return new wxBitmap(buf, width, height, depth);
         }
+wxBitmap *new_wxBitmap__SWIG_0(int width,int height,int depth){
+            return new wxBitmap(width, height, depth);
+        }
+wxBitmap *new_wxBitmap__SWIG_1(wxSize const &size,int depth){
+            return new wxBitmap(size.x, size.y, depth);
+        }
+wxSize wxBitmap_GetSize(wxBitmap *self){
+            wxSize size(self->GetWidth(), self->GetHeight());
+            return size;
+        }
 void wxBitmap_SetMaskColour(wxBitmap *self,wxColour const &colour){
             wxMask *mask = new wxMask(*self, colour);
             self->SetMask(mask);
+        }
+void wxBitmap_SetSize(wxBitmap *self,wxSize const &size){
+            self->SetWidth(size.x);
+            self->SetHeight(size.y);
         }
 bool wxBitmap___eq__(wxBitmap *self,wxBitmap const *other){ return other ? (*self == *other) : False; }
 bool wxBitmap___ne__(wxBitmap *self,wxBitmap const *other){ return other ? (*self != *other) : True;  }
@@ -2768,42 +2782,6 @@ static PyObject *_wrap_delete_Bitmap(PyObject *self, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_new_EmptyBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    int arg1 ;
-    int arg2 ;
-    int arg3 = (int) -1 ;
-    wxBitmap *result;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
-    char *kwnames[] = {
-        (char *) "width",(char *) "height",(char *) "depth", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:new_EmptyBitmap",kwnames,&obj0,&obj1,&obj2)) goto fail;
-    arg1 = (int) SWIG_AsInt(obj0); 
-    if (PyErr_Occurred()) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
-    if (obj2) {
-        arg3 = (int) SWIG_AsInt(obj2); 
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxBitmap *)new wxBitmap(arg1,arg2,arg3);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBitmap, 1);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_new_BitmapFromIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIcon *arg1 = 0 ;
@@ -2936,6 +2914,117 @@ static PyObject *_wrap_new_BitmapFromBits(PyObject *self, PyObject *args, PyObje
 }
 
 
+static PyObject *_wrap_new_EmptyBitmap__SWIG_0(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    int arg1 ;
+    int arg2 ;
+    int arg3 = (int) -1 ;
+    wxBitmap *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"OO|O:new_EmptyBitmap",&obj0,&obj1,&obj2)) goto fail;
+    arg1 = (int) SWIG_AsInt(obj0); 
+    if (PyErr_Occurred()) SWIG_fail;
+    arg2 = (int) SWIG_AsInt(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    if (obj2) {
+        arg3 = (int) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxBitmap *)new_wxBitmap__SWIG_0(arg1,arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBitmap, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_EmptyBitmap__SWIG_1(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    wxSize *arg1 = 0 ;
+    int arg2 = (int) -1 ;
+    wxBitmap *result;
+    wxSize temp1 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O|O:new_EmptyBitmap",&obj0,&obj1)) goto fail;
+    {
+        arg1 = &temp1;
+        if ( ! wxSize_helper(obj0, &arg1)) SWIG_fail;
+    }
+    if (obj1) {
+        arg2 = (int) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxBitmap *)new_wxBitmap__SWIG_1((wxSize const &)*arg1,arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBitmap, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_EmptyBitmap(PyObject *self, PyObject *args) {
+    int argc;
+    PyObject *argv[4];
+    int ii;
+    
+    argc = PyObject_Length(args);
+    for (ii = 0; (ii < argc) && (ii < 3); ii++) {
+        argv[ii] = PyTuple_GetItem(args,ii);
+    }
+    if ((argc >= 1) && (argc <= 2)) {
+        int _v;
+        {
+            _v = wxPySimple_typecheck(argv[0], wxT("wxSize"), 2);
+        }
+        if (_v) {
+            if (argc <= 1) {
+                return _wrap_new_EmptyBitmap__SWIG_1(self,args);
+            }
+            _v = SWIG_CheckInt(argv[1]);
+            if (_v) {
+                return _wrap_new_EmptyBitmap__SWIG_1(self,args);
+            }
+        }
+    }
+    if ((argc >= 2) && (argc <= 3)) {
+        int _v;
+        _v = SWIG_CheckInt(argv[0]);
+        if (_v) {
+            _v = SWIG_CheckInt(argv[1]);
+            if (_v) {
+                if (argc <= 2) {
+                    return _wrap_new_EmptyBitmap__SWIG_0(self,args);
+                }
+                _v = SWIG_CheckInt(argv[2]);
+                if (_v) {
+                    return _wrap_new_EmptyBitmap__SWIG_0(self,args);
+                }
+            }
+        }
+    }
+    
+    PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'new_EmptyBitmap'");
+    return NULL;
+}
+
+
 static PyObject *_wrap_Bitmap_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxBitmap *arg1 = (wxBitmap *) 0 ;
@@ -3036,6 +3125,36 @@ static PyObject *_wrap_Bitmap_GetDepth(PyObject *self, PyObject *args, PyObject 
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Bitmap_GetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxBitmap *arg1 = (wxBitmap *) 0 ;
+    wxSize result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Bitmap_GetSize",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxBitmap,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxBitmap_GetSize(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxSize * resultptr;
+        resultptr = new wxSize((wxSize &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxSize, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -3411,6 +3530,38 @@ static PyObject *_wrap_Bitmap_SetDepth(PyObject *self, PyObject *args, PyObject 
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetDepth(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Bitmap_SetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxBitmap *arg1 = (wxBitmap *) 0 ;
+    wxSize *arg2 = 0 ;
+    wxSize temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "size", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Bitmap_SetSize",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxBitmap,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxBitmap_SetSize(arg1,(wxSize const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -7235,6 +7386,44 @@ static PyObject *_wrap_FontMapper_GetEncodingDescription(PyObject *self, PyObjec
     }
     return resultobj;
     fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_FontMapper_GetEncodingFromName(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxString *arg1 = 0 ;
+    int result;
+    bool temp1 = False ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "name", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:FontMapper_GetEncodingFromName",kwnames,&obj0)) goto fail;
+    {
+        arg1 = wxString_in_helper(obj0);
+        if (arg1 == NULL) SWIG_fail;
+        temp1 = True;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)wxFontMapper::GetEncodingFromName((wxString const &)*arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_FromInt((int)result);
+    {
+        if (temp1)
+        delete arg1;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp1)
+        delete arg1;
+    }
     return NULL;
 }
 
@@ -18131,15 +18320,16 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Brush_swigregister", Brush_swigregister, METH_VARARGS },
 	 { (char *)"new_Bitmap", (PyCFunction) _wrap_new_Bitmap, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_Bitmap", (PyCFunction) _wrap_delete_Bitmap, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"new_EmptyBitmap", (PyCFunction) _wrap_new_EmptyBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_BitmapFromIcon", (PyCFunction) _wrap_new_BitmapFromIcon, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_BitmapFromImage", (PyCFunction) _wrap_new_BitmapFromImage, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_BitmapFromXPMData", (PyCFunction) _wrap_new_BitmapFromXPMData, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_BitmapFromBits", (PyCFunction) _wrap_new_BitmapFromBits, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_EmptyBitmap", _wrap_new_EmptyBitmap, METH_VARARGS },
 	 { (char *)"Bitmap_Ok", (PyCFunction) _wrap_Bitmap_Ok, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Bitmap_GetWidth", (PyCFunction) _wrap_Bitmap_GetWidth, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Bitmap_GetHeight", (PyCFunction) _wrap_Bitmap_GetHeight, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Bitmap_GetDepth", (PyCFunction) _wrap_Bitmap_GetDepth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Bitmap_GetSize", (PyCFunction) _wrap_Bitmap_GetSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Bitmap_ConvertToImage", (PyCFunction) _wrap_Bitmap_ConvertToImage, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Bitmap_GetMask", (PyCFunction) _wrap_Bitmap_GetMask, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Bitmap_SetMask", (PyCFunction) _wrap_Bitmap_SetMask, METH_VARARGS | METH_KEYWORDS },
@@ -18151,6 +18341,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Bitmap_SetHeight", (PyCFunction) _wrap_Bitmap_SetHeight, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Bitmap_SetWidth", (PyCFunction) _wrap_Bitmap_SetWidth, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Bitmap_SetDepth", (PyCFunction) _wrap_Bitmap_SetDepth, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Bitmap_SetSize", (PyCFunction) _wrap_Bitmap_SetSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Bitmap___eq__", (PyCFunction) _wrap_Bitmap___eq__, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Bitmap___ne__", (PyCFunction) _wrap_Bitmap___ne__, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Bitmap_swigregister", Bitmap_swigregister, METH_VARARGS },
@@ -18279,6 +18470,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"FontMapper_GetEncoding", (PyCFunction) _wrap_FontMapper_GetEncoding, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"FontMapper_GetEncodingName", (PyCFunction) _wrap_FontMapper_GetEncodingName, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"FontMapper_GetEncodingDescription", (PyCFunction) _wrap_FontMapper_GetEncodingDescription, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"FontMapper_GetEncodingFromName", (PyCFunction) _wrap_FontMapper_GetEncodingFromName, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"FontMapper_SetConfig", (PyCFunction) _wrap_FontMapper_SetConfig, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"FontMapper_SetConfigPath", (PyCFunction) _wrap_FontMapper_SetConfigPath, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"FontMapper_GetDefaultConfigPath", (PyCFunction) _wrap_FontMapper_GetDefaultConfigPath, METH_VARARGS | METH_KEYWORDS },
@@ -18999,9 +19191,9 @@ static swig_type_info _swigt__p_wxIconLocation[] = {{"_p_wxIconLocation", 0, "wx
 static swig_type_info _swigt__p_wxImage[] = {{"_p_wxImage", 0, "wxImage *", 0, 0, 0, 0},{"_p_wxImage", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMetaFileDC[] = {{"_p_wxMetaFileDC", 0, "wxMetaFileDC *", 0, 0, 0, 0},{"_p_wxMetaFileDC", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMask[] = {{"_p_wxMask", 0, "wxMask *", 0, 0, 0, 0},{"_p_wxMask", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxSize[] = {{"_p_wxSize", 0, "wxSize *", 0, 0, 0, 0},{"_p_wxSize", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxFont[] = {{"_p_wxFont", 0, "wxFont *", 0, 0, 0, 0},{"_p_wxFont", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxWindow[] = {{"_p_wxWindow", 0, "wxWindow *", 0, 0, 0, 0},{"_p_wxControl", _p_wxControlTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxWindow", 0, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxWindow, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxSize[] = {{"_p_wxSize", 0, "wxSize *", 0, 0, 0, 0},{"_p_wxSize", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_double[] = {{"_p_double", 0, "double *", 0, 0, 0, 0},{"_p_double", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMemoryDC[] = {{"_p_wxMemoryDC", 0, "wxMemoryDC *", 0, 0, 0, 0},{"_p_wxBufferedDC", _p_wxBufferedDCTo_p_wxMemoryDC, 0, 0, 0, 0, 0},{"_p_wxMemoryDC", 0, 0, 0, 0, 0, 0},{"_p_wxBufferedPaintDC", _p_wxBufferedPaintDCTo_p_wxMemoryDC, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxFontMapper[] = {{"_p_wxFontMapper", 0, "wxFontMapper *", 0, 0, 0, 0},{"_p_wxFontMapper", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -19027,8 +19219,8 @@ static swig_type_info _swigt__p_wxGDIObject[] = {{"_p_wxGDIObject", 0, "wxGDIObj
 static swig_type_info _swigt__p_wxIcon[] = {{"_p_wxIcon", 0, "wxIcon *", 0, 0, 0, 0},{"_p_wxIcon", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxLocale[] = {{"_p_wxLocale", 0, "wxLocale *", 0, 0, 0, 0},{"_p_wxLocale", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxRegion[] = {{"_p_wxRegion", 0, "wxRegion *", 0, 0, 0, 0},{"_p_wxRegion", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxLanguageInfo[] = {{"_p_wxLanguageInfo", 0, "wxLanguageInfo *", 0, 0, 0, 0},{"_p_wxLanguageInfo", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxConfigBase[] = {{"_p_wxConfigBase", 0, "wxConfigBase *", 0, 0, 0, 0},{"_p_wxConfigBase", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxLanguageInfo[] = {{"_p_wxLanguageInfo", 0, "wxLanguageInfo *", 0, 0, 0, 0},{"_p_wxLanguageInfo", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxWindowDC[] = {{"_p_wxWindowDC", 0, "wxWindowDC *", 0, 0, 0, 0},{"_p_wxWindowDC", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPrintData[] = {{"_p_wxPrintData", 0, "wxPrintData *", 0, 0, 0, 0},{"_p_wxPrintData", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxBrushList[] = {{"_p_wxBrushList", 0, "wxBrushList *", 0, 0, 0, 0},{"_p_wxBrushList", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -19057,9 +19249,9 @@ _swigt__p_wxIconLocation,
 _swigt__p_wxImage, 
 _swigt__p_wxMetaFileDC, 
 _swigt__p_wxMask, 
+_swigt__p_wxSize, 
 _swigt__p_wxFont, 
 _swigt__p_wxWindow, 
-_swigt__p_wxSize, 
 _swigt__p_double, 
 _swigt__p_wxMemoryDC, 
 _swigt__p_wxFontMapper, 
@@ -19085,8 +19277,8 @@ _swigt__p_wxGDIObject,
 _swigt__p_wxIcon, 
 _swigt__p_wxLocale, 
 _swigt__p_wxRegion, 
-_swigt__p_wxLanguageInfo, 
 _swigt__p_wxConfigBase, 
+_swigt__p_wxLanguageInfo, 
 _swigt__p_wxWindowDC, 
 _swigt__p_wxPrintData, 
 _swigt__p_wxBrushList, 
@@ -19183,6 +19375,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"FONTENCODING_ISO8859_15", SWIG_FromInt((int)wxFONTENCODING_ISO8859_15));
     PyDict_SetItemString(d,"FONTENCODING_ISO8859_MAX", SWIG_FromInt((int)wxFONTENCODING_ISO8859_MAX));
     PyDict_SetItemString(d,"FONTENCODING_KOI8", SWIG_FromInt((int)wxFONTENCODING_KOI8));
+    PyDict_SetItemString(d,"FONTENCODING_KOI8_U", SWIG_FromInt((int)wxFONTENCODING_KOI8_U));
     PyDict_SetItemString(d,"FONTENCODING_ALTERNATIVE", SWIG_FromInt((int)wxFONTENCODING_ALTERNATIVE));
     PyDict_SetItemString(d,"FONTENCODING_BULGARIAN", SWIG_FromInt((int)wxFONTENCODING_BULGARIAN));
     PyDict_SetItemString(d,"FONTENCODING_CP437", SWIG_FromInt((int)wxFONTENCODING_CP437));
