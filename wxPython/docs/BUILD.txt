@@ -77,7 +77,6 @@ place, then do the same for wxPython.
          ../configure --prefix=/opt/wx/2.5 \
                       --with-gtk \
                       --with-opengl \
-                      --disable-monolithic \
                       --enable-debug \
                       --enable-geometry \
                       --enable-sound --with-sdl \
@@ -86,6 +85,16 @@ place, then do the same for wxPython.
 
    On OS X of course you'll want to use --with-mac instead of
    --with-gtk.  
+
+   **NOTE**: Due to a recent change there is a dependency problem in the
+   multilib builds of wxWidgets on OSX, so I have switched to a
+   monolithic build on that platform.  (IOW, all of the core code in
+   one shared library instead of several.)  I would also expect other
+   unix builds to do just fine with a monolithic library, but I havn't
+   tested it in a while so your mileage may vary.  Anyway, to switch
+   to the monolithic build of wxWidgets just add this configure flag::
+
+		     --enable-monolithic \
 
    By default GTK2 will be selected if it is on your build system.  To
    force the use of GTK 1.2.x then add::

@@ -179,7 +179,7 @@ if [ $skipconfig != yes ]; then
     $WXDIR/configure \
 	--prefix=$PREFIX \
 	--with-mac \
-	--disable-monolithic \
+	--enable-monolithic \
 	--with-opengl \
 	--enable-sound \
 	--enable-display \
