@@ -513,12 +513,17 @@ void MyCanvas::DrawDefault(wxDC& dc)
     // mark the origin
     dc.DrawCircle(0, 0, 10);
 
+#if !wxMAC_USE_CORE_GRAPHICS
+    // GetPixel and FloodFill not supported by Mac OS X CoreGraphics
+    // (FloodFill uses Blit from a non-wxMemoryDC)
     //flood fill using brush, starting at 1,1 and replacing whatever colour we find there
     dc.SetBrush(wxBrush(wxColour(128,128,0), wxSOLID));
+
     wxColour tmpColour ;
     dc.GetPixel(1,1, &tmpColour);
     dc.FloodFill(1,1, tmpColour, wxFLOOD_SURFACE);
-
+#endif
+    
     dc.DrawCheckMark(5, 80, 15, 15);
     dc.DrawCheckMark(25, 80, 30, 30);
     dc.DrawCheckMark(60, 80, 60, 60);
