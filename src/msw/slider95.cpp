@@ -250,8 +250,15 @@ bool wxSlider95::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
             break;
 
         case SB_THUMBTRACK:
-        case SB_THUMBPOSITION:
             scrollEvent = wxEVT_SCROLL_THUMBTRACK;
+            break;
+
+        case SB_THUMBPOSITION:
+            scrollEvent = wxEVT_SCROLL_THUMBRELEASE;
+            break;
+
+        case SB_ENDSCROLL:
+            scrollEvent = wxEVT_SCROLL_ENDSCROLL;
             break;
 
         default:

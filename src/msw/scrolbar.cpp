@@ -179,27 +179,36 @@ bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
             scrollEvent = wxEVT_SCROLL_THUMBTRACK;
             break;
 
+        case SB_ENDSCROLL:
+            nScrollInc = 0;
+            scrollEvent = wxEVT_SCROLL_ENDSCROLL;
+            break;
+
         default:
             nScrollInc = 0;
     }
 
-    // don't process the event if there is no displacement,
-    // unless this is a thumb release event.
-    if (( nScrollInc == 0 ) && ( scrollEvent != wxEVT_SCROLL_THUMBRELEASE ))
+    if ( nScrollInc )
     {
+        position += nScrollInc;
+
+        if ( position < 0 )
+            position = 0;
+        if ( position > maxPos )
+            position = maxPos;
+
+        SetThumbPosition(position);
+    }
+    else if ( scrollEvent != wxEVT_SCROLL_THUMBRELEASE &&
+                scrollEvent != wxEVT_SCROLL_ENDSCROLL )
+    {
+        // don't process the event if there is no displacement,
+        // unless this is a thumb release or end scroll event.
         return FALSE;
     }
 
-    int new_pos = position + nScrollInc;
-
-    if (new_pos < 0)
-        new_pos = 0;
-    if (new_pos > maxPos)
-        new_pos = maxPos;
-
-    SetThumbPosition(new_pos);
     wxScrollEvent event(scrollEvent, m_windowId);
-    event.SetPosition(new_pos);
+    event.SetPosition(position);
     event.SetEventObject( this );
 
     return GetEventHandler()->ProcessEvent(event);
