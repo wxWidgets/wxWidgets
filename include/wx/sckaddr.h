@@ -64,10 +64,14 @@ public:
   bool AnyAddress();
 
   wxString Hostname();
+  wxString OrigHostname() { return m_origHostname; }
   unsigned short Service();
 
   virtual int Type() { return wxSockAddress::IPV4; }
-  virtual wxSockAddress *Clone() const { return new wxIPV4address(*this); }
+  virtual wxSockAddress *Clone() const;
+
+private:
+  wxString m_origHostname;
 };
 
 #ifdef ENABLE_IPV6

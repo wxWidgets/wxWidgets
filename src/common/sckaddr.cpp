@@ -108,13 +108,18 @@ bool wxIPV4address::Hostname(const wxString& name)
     wxLogWarning( _("Trying to solve a NULL hostname: giving up") );
     return FALSE;
   }
-
+  m_origHostname = name;
   return (GAddress_INET_SetHostName(m_address, name.mb_str()) == GSOCK_NOERROR);
 }
 
 bool wxIPV4address::Hostname(unsigned long addr)
 {
-  return (GAddress_INET_SetHostAddress(m_address, addr) == GSOCK_NOERROR);
+  bool rv = (GAddress_INET_SetHostAddress(m_address, addr) == GSOCK_NOERROR);
+  if (rv)
+      m_origHostname = Hostname();
+  else
+      m_origHostname = "";
+  return rv;
 }
 
 bool wxIPV4address::Service(const wxString& name)
@@ -149,6 +154,13 @@ wxString wxIPV4address::Hostname()
 unsigned short wxIPV4address::Service()
 {
   return GAddress_INET_GetPort(m_address);
+}
+
+wxSockAddress *wxIPV4address::Clone() const
+{
+    wxIPV4address *addr = new wxIPV4address(*this);
+    addr->m_origHostname = m_origHostname;
+    return addr;
 }
 
 #if 0
