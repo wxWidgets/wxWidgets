@@ -179,7 +179,8 @@ protected:
     void UpdateResources();
 
     // Finds resource (calls UpdateResources) and returns node containing it
-    wxXmlNode *FindResource(const wxString& name, const wxString& classname);
+    wxXmlNode *FindResource(const wxString& name, const wxString& classname, bool recursive = FALSE);
+    wxXmlNode *DoFindResource(wxXmlNode *parent, const wxString& name, const wxString& classname, bool recursive);
 
     // Creates resource from info in given node:
     wxObject *CreateResFromNode(wxXmlNode *node, wxObject *parent, wxObject *instance = NULL);

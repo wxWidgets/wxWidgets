@@ -344,29 +344,64 @@ void wxXmlResource::UpdateResources()
 }
 
 
+wxXmlNode *wxXmlResource::DoFindResource(wxXmlNode *parent, 
+                                         const wxString& name, 
+                                         const wxString& classname, 
+                                         bool recursive)
+{
+    wxString dummy;
+    wxXmlNode *node;
 
-wxXmlNode *wxXmlResource::FindResource(const wxString& name, const wxString& classname)
+    // first search for match at the top-level nodes (as this is
+    // where the resource is most commonly looked for):
+    for (node = parent->GetChildren(); node; node = node->GetNext())
+    {
+        if ( node->GetType() == wxXML_ELEMENT_NODE && 
+                 (node->GetName() == wxT("object") || 
+                  node->GetName() == wxT("object_ref")) &&
+                (!classname || 
+                 node->GetPropVal(wxT("class"), wxEmptyString) == classname) &&
+                node->GetPropVal(wxT("name"), &dummy) && dummy == name )
+            return node;
+    }
+
+    if ( recursive )
+        for (node = parent->GetChildren(); node; node = node->GetNext())
+        {
+            if ( node->GetType() == wxXML_ELEMENT_NODE && 
+                 (node->GetName() == wxT("object") || 
+                  node->GetName() == wxT("object_ref")) )
+            {
+                wxXmlNode* found = DoFindResource(node, name, classname, TRUE);
+                if ( found )
+                    return found;
+            }
+        }
+
+   return NULL;
+}
+
+wxXmlNode *wxXmlResource::FindResource(const wxString& name, 
+                                       const wxString& classname,
+                                       bool recursive)
 {
     UpdateResources(); //ensure everything is up-to-date
 
     wxString dummy;
     for (size_t f = 0; f < m_data.GetCount(); f++)
     {
-        if (m_data[f].Doc == NULL || m_data[f].Doc->GetRoot() == NULL) continue;
-        for (wxXmlNode *node = m_data[f].Doc->GetRoot()->GetChildren();
-                                      node; node = node->GetNext())
-            if (node->GetType() == wxXML_ELEMENT_NODE &&
-                (!classname ||
-                  node->GetPropVal(wxT("class"), wxEmptyString) == classname) &&
-                node->GetName() == wxT("object") &&
-                node->GetPropVal(wxT("name"), &dummy) &&
-                dummy == name)
-            {
+        if ( m_data[f].Doc == NULL || m_data[f].Doc->GetRoot() == NULL )
+            continue;
+
+        wxXmlNode* found = DoFindResource(m_data[f].Doc->GetRoot(), 
+                                          name, classname, recursive);
+        if ( found )
+        {
 #if wxUSE_FILESYSTEM
-                m_curFileSystem.ChangePathTo(m_data[f].File);
+            m_curFileSystem.ChangePathTo(m_data[f].File);
 #endif
-                return node;
-            }
+            return found;
+        }
     }
 
     wxLogError(_("XRC resource '%s' (class '%s') not found!"),
@@ -374,11 +409,73 @@ wxXmlNode *wxXmlResource::FindResource(const wxString& name, const wxString& cla
     return NULL;
 }
 
+static void MergeNodes(wxXmlNode& dest, wxXmlNode& with)
+{
+    // Merge properties:
+    for (wxXmlProperty *prop = with.GetProperties(); prop; prop = prop->GetNext())
+    {
+        wxXmlProperty *dprop;
+        for (dprop = dest.GetProperties(); dprop; dprop = dprop->GetNext())
+        {
+       
+            if ( dprop->GetName() == prop->GetName() )
+            {
+                dprop->SetValue(prop->GetValue());
+                break;
+            }
+        }
 
+        if ( !dprop )
+            dest.AddProperty(prop->GetName(), prop->GetValue());
+   }
+
+    // Merge child nodes:
+    for (wxXmlNode* node = with.GetChildren(); node; node = node->GetNext())
+    {
+        wxString name = node->GetPropVal(wxT("name"), wxEmptyString);
+        wxXmlNode *dnode;
+
+        for (dnode = dest.GetChildren(); dnode; dnode = dnode->GetNext() )
+        {
+            if ( dnode->GetName() == node->GetName() &&
+                 dnode->GetPropVal("name", wxEmptyString) == name &&
+                 dnode->GetType() == node->GetType() )
+            {
+                MergeNodes(*dnode, *node);
+                break;
+            }
+        }
+
+        if ( !dnode )
+            dest.AddChild(new wxXmlNode(*node));
+    }
+
+    if ( dest.GetType() == wxXML_TEXT_NODE && with.GetContent().Length() )
+         dest.SetContent(with.GetContent());
+}
 
 wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent, wxObject *instance)
 {
     if (node == NULL) return NULL;
+
+    // handling of referenced resource
+    if ( node->GetName() == wxT("object_ref") )
+    {
+        wxString refName = node->GetPropVal(wxT("ref"), wxEmptyString);
+        wxXmlNode* refNode = FindResource(refName, wxEmptyString, TRUE);
+
+        if ( !refNode )
+        {
+            wxLogError(_("Referenced object node with ref=\"%s\" not found!"), 
+                       refName.c_str());
+            return NULL;
+        }
+
+        wxXmlNode copy(*refNode);
+        MergeNodes(copy, *node);
+
+        return CreateResFromNode(&copy, parent, instance);
+    }
 
     wxXmlResourceHandler *handler;
     wxObject *ret;
@@ -399,11 +496,6 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent, wx
                node->GetPropVal(wxT("class"), wxEmptyString).c_str());
     return NULL;
 }
-
-
-
-
-
 
 
 
