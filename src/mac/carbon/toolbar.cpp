@@ -401,9 +401,10 @@ bool wxToolBar::Realize()
             // if not set yet, only one row
             SetRows(1);
         }
+        m_minWidth = maxWidth;
         maxWidth = tw ; 
         maxHeight += m_yMargin + kwxMacToolBarTopMargin;
-        m_maxHeight = maxHeight ;
+        m_minHeight = m_maxHeight = maxHeight ;
     }
     else
     {
@@ -412,9 +413,10 @@ bool wxToolBar::Realize()
             // if not set yet, have one column
             SetRows(GetToolsCount());
         }
+        m_minHeight = maxHeight;
         maxHeight = th ;
         maxWidth += m_xMargin + kwxMacToolBarLeftMargin;
-        m_maxWidth = maxWidth ;
+        m_minWidth = m_maxWidth = maxWidth ;
     }
     
     SetSize( maxWidth, maxHeight );
