@@ -66,7 +66,9 @@ public:
     virtual bool OnInit() { return TRUE; }
     virtual void OnExit()
     {
+#if wxUSE_WCHAR_T
         wxConvLocal.Clear();
+#endif
     }
 
     DECLARE_DYNAMIC_CLASS(wxStrConvModule)
