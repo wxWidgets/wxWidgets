@@ -147,7 +147,7 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
 
     if ( m_windowStyle & wxSL_LABELS )
     {
-        msStyle |= SS_CENTER;
+        msStyle |= SS_CENTER|WS_VISIBLE;
 
         WXDWORD exStyle = 0;
         long valueStyle = m_windowStyle & ~wxBORDER_MASK;
@@ -830,20 +830,16 @@ bool wxSlider95::Show(bool show)
 {
     wxWindow::Show(show);
 
-    int cshow;
-    if (show)
-        cshow = SW_SHOW;
-    else
-        cshow = SW_HIDE;
+    int cshow = show ? SW_SHOW : SW_HIDE;
 
     if(m_staticValue)
-        ShowWindow((HWND) m_staticValue, (BOOL)cshow);
+        ShowWindow((HWND) m_staticValue, cshow);
 
     if(m_staticMin)
-        ShowWindow((HWND) m_staticMin, (BOOL)cshow);
+        ShowWindow((HWND) m_staticMin, cshow);
 
     if(m_staticMax)
-        ShowWindow((HWND) m_staticMax, (BOOL)cshow);
+        ShowWindow((HWND) m_staticMax, cshow);
 
     return true;
 }
