@@ -3748,8 +3748,8 @@ if test "$wxUSE_SOCKETS" = "yes"; then
         AC_CHECK_FUNC(socket,,
             AC_CHECK_LIB(socket, socket,
                 if test "$INET_LINK" != " -lsocket"; then
-                    INET_LINK="$INET_LINK -lsocket",
-                fi
+                    INET_LINK="$INET_LINK -lsocket"
+                fi,
                 [
                     AC_MSG_WARN([socket library not found - sockets will be disabled])
                     wxUSE_SOCKETS=no
