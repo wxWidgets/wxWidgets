@@ -218,7 +218,7 @@ void wxMacToolTip::Draw()
 
 		SetOrigin( 0 , 0 ) ;
 		TextFont( kFontIDGeneva ) ;
-		TextSize( 9 ) ;
+		TextSize( 10 ) ;
 		TextFace( 0 ) ;
 		FontInfo fontInfo;
 		::GetFontInfo(&fontInfo);

@@ -388,7 +388,7 @@ bool wxToolBar::Realize()
 
 void wxToolBar::SetToolBitmapSize(const wxSize& size)
 {
-    m_defaultWidth = size.x+2; m_defaultHeight = size.y+2;
+    m_defaultWidth = size.x+4; m_defaultHeight = size.y+4;
 }
 
 // The button size is bigger than the bitmap size
