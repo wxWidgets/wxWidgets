@@ -356,7 +356,7 @@ inline static wxString CharToString(wxMBConv *conv,
     if ( conv )
     {
         size_t nLen = (len != wxSTRING_MAXLEN) ? len :
-                          nLen = wxConvUTF8.MB2WC((wchar_t*) NULL, s, 0);
+                          wxConvUTF8.MB2WC((wchar_t*) NULL, s, 0);
 
         wchar_t *buf = new wchar_t[nLen+1];
         wxConvUTF8.MB2WC(buf, s, nLen);
