@@ -1,0 +1,17 @@
+#if __POWERPC__
+	#pragma precompile_target "wx_PPC_d.mch"
+	
+#elif __INTEL__
+	#pragma precompile_target "wx_x86_d.mch"
+
+#elif __CFM68K__
+	#pragma precompile_target "wx_cfm_d.mch"
+	
+#else
+	#pragma precompile_target "wx_68k_d.mch"
+#endif
+
+#pragma once on
+#undef WX_PRECOMP
+#define __WXDEBUG__
+#include "wx/wx_cw_cm.h"
