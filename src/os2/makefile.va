@@ -933,57 +933,57 @@ pch1:   dirs $(DUMMYOBJ)
 ### Static library
 
 $(WXDIR)\lib\wxcom1.lib: $(COMLIBOBJS1)
- touch $(WXDIR)\lib\wxcom1.lib
- del $(WXDIR)\lib\wxcom1.lib
+ -touch $(WXDIR)\lib\wxcom1.lib
+ -del $(WXDIR)\lib\wxcom1.lib
  ilib $(LIBFLAGS) $@ @<<
     $**;
 <<
 
 $(WXDIR)\lib\wxcom2.lib: $(COMLIBOBJS2)
- touch $(WXDIR)\lib\wxcom2.lib
- del $(WXDIR)\lib\wxcom2.lib
+ -touch $(WXDIR)\lib\wxcom2.lib
+ -del $(WXDIR)\lib\wxcom2.lib
  ilib $(LIBFLAGS) $@ @<<
     $**;
 <<
 
 $(WXDIR)\lib\wxcom3.lib: $(COMLIBOBJS3)
- touch $(WXDIR)\lib\wxcom3.lib
- del $(WXDIR)\lib\wxcom3.lib
+ -touch $(WXDIR)\lib\wxcom3.lib
+ -del $(WXDIR)\lib\wxcom3.lib
  ilib $(LIBFLAGS) $@ @<<
     $**;
 <<
 
 $(WXDIR)\lib\wxgen.lib: $(GENLIBOBJS)
- touch $(WXDIR)\lib\wxgen.lib
- del $(WXDIR)\lib\wxgen.lib
+ -touch $(WXDIR)\lib\wxgen.lib
+ -del $(WXDIR)\lib\wxgen.lib
  ilib $(LIBFLAGS) $@ @<<
     $**;
 <<
 
 $(WXDIR)\lib\wxhtml.lib: $(HTMLLIBOBJS)
- touch $(WXDIR)\lib\wxhtml.lib
- del $(WXDIR)\lib\wxhtml.lib
+ -touch $(WXDIR)\lib\wxhtml.lib
+ -del $(WXDIR)\lib\wxhtml.lib
  ilib $(LIBFLAGS) $@ @<<
     $**;
 <<
 
 $(WXDIR)\lib\wxnones.lib: $(NONESSENTIALOBJS)
- touch $(WXDIR)\lib\wxnones.lib
- del $(WXDIR)\lib\wxnones.lib
+ -touch $(WXDIR)\lib\wxnones.lib
+ -del $(WXDIR)\lib\wxnones.lib
  ilib $(LIBFLAGS) $@ @<<
     $**;
 <<
 
 $(WXDIR)\lib\wxos21.lib: $(OS2LIBOBJS1)
- touch $(WXDIR)\lib\wxos21.lib
- del $(WXDIR)\lib\wxos21.lib
+ -touch $(WXDIR)\lib\wxos21.lib
+ -del $(WXDIR)\lib\wxos21.lib
  ilib $(LIBFLAGS) $@ @<<
     $**;
 <<
 
 $(WXDIR)\lib\wxos22.lib: $(OS2LIBOBJS2)
- touch $(WXDIR)\lib\wxos22.lib
- del $(WXDIR)\lib\wxos22.lib
+ -touch $(WXDIR)\lib\wxos22.lib
+ -del $(WXDIR)\lib\wxos22.lib
  ilib $(LIBFLAGS) $@ @<<
     $**;
 <<
@@ -1000,8 +1000,8 @@ $(WXDIR)\lib\wx.lib: \
   $(OS2TEMPTGT1) \
   $(OS2TEMPTGT2) \
   $(PERIPH_LIBS)
- touch $(LIBTARGET)
- del $(LIBTARGET)
+ -touch $(LIBTARGET)
+ -del $(LIBTARGET)
  ilib $(LIBFLAGS) $@ @<<
     $**;
 <<

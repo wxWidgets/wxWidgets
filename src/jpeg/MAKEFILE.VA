@@ -287,15 +287,15 @@ $(DLIBLIBOBJS):
 $(WXDIR)\lib\os2jpeg1.lib: \
     $(COMLIBOBJS) \
     $(CLIBLIBOBJS)
- touch $(WXDIR)\lib\os2jpeg1.lib
- del $(WXDIR)\lib\os2jpeg1.lib
+ -touch $(WXDIR)\lib\os2jpeg1.lib
+ -del $(WXDIR)\lib\os2jpeg1.lib
  ilib $(OS2LIBFLAGS) $@ @<<
     $**;
 <<
 
 $(WXDIR)\lib\os2jpeg2.lib: $(DLIBLIBOBJS)
- touch $(WXDIR)\lib\os2jpeg2.lib
- del $(WXDIR)\lib\os2jpeg2.lib
+ -touch $(WXDIR)\lib\os2jpeg2.lib
+ -del $(WXDIR)\lib\os2jpeg2.lib
  ilib $(OS2LIBFLAGS) $@ @<<
     $**;
 <<
@@ -303,8 +303,8 @@ $(WXDIR)\lib\os2jpeg2.lib: $(DLIBLIBOBJS)
 $(WXDIR)\lib\os2jpeg.lib: \
     $(TEMP1TGT) \
     $(TEMP2TGT)
- touch $(WXDIR)\lib\os2jpeg.lib
- del $(WXDIR)\lib\os2jpeg.lib
+ -touch $(WXDIR)\lib\os2jpeg.lib
+ -del $(WXDIR)\lib\os2jpeg.lib
  ilib $(OS2LIBFLAGS) $@ @<<
     $**;
 <<
