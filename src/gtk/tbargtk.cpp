@@ -54,7 +54,7 @@ wxToolBarTool::~wxToolBarTool()
 }
 
 //-----------------------------------------------------------------------------
-// wxToolBar
+// "clicked" (internal from gtk_toolbar)
 //-----------------------------------------------------------------------------
 
 static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget), wxToolBarTool *tool )
@@ -67,6 +67,10 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget), wxToolBarTool *to
   tool->m_owner->OnLeftClick( tool->m_index, tool->m_toggleState );
 }
 
+//-----------------------------------------------------------------------------
+// "enter_notify_event"
+//-----------------------------------------------------------------------------
+
 static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget), 
   GdkEventCrossing *WXUNUSED(gdk_event), wxToolBarTool *tool )
 {
@@ -78,11 +82,10 @@ static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget),
 }
 
 //-----------------------------------------------------------------------------
+// wxToolBar
+//-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxToolBar,wxControl)
-
-BEGIN_EVENT_TABLE(wxToolBar, wxControl)
-END_EVENT_TABLE()
 
 wxToolBar::wxToolBar()
 {

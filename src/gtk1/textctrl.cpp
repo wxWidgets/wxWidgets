@@ -17,10 +17,8 @@
 #include <wx/intl.h>
 
 //-----------------------------------------------------------------------------
-//  wxTextCtrl
+//  "changed"
 //-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl,wxControl)
 
 static void gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
@@ -32,6 +30,12 @@ static void gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *
   event.SetEventObject( win );
   win->GetEventHandler()->ProcessEvent( event );
 }
+
+//-----------------------------------------------------------------------------
+//  wxTextCtrl
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl,wxControl)
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
   EVT_CHAR(wxTextCtrl::OnChar)

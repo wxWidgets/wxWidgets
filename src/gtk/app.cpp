@@ -339,7 +339,7 @@ int wxEntry( int argc, char *argv[] )
 
   if (!wxTheApp)
   {
-    printf( _("wxWindows error: wxTheApp == NULL\n") );
+    printf( "wxWindows error: wxTheApp == NULL\n" );
     return 0;
   }
 

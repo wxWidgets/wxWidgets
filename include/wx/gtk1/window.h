@@ -97,9 +97,8 @@ public:
   virtual void Centre( int direction = wxHORIZONTAL );
   inline void Center(int direction = wxHORIZONTAL) { Centre(direction); }
   virtual void Fit();
-    // set minimal/maxmimal size for the frame
-  virtual void SetSizeHints( int WXUNUSED(minW), int WXUNUSED(minH), int WXUNUSED(maxW),
-    int WXUNUSED(maxH), int WXUNUSED(incW),  int WXUNUSED(incH) ) { }
+
+  virtual void SetSizeHints( int minW, int minH, int maxW = -1, int maxH = -1, int incW = -1, int incH = -1 );
 
   void OnSize( wxSizeEvent &event );
   void OnIdle( wxIdleEvent& event );
@@ -241,6 +240,8 @@ public:         // cannot get private going yet
   wxList          m_children;
   int             m_x,m_y;
   int             m_width,m_height;
+  int             m_minWidth,m_minHeight;
+  int             m_maxWidth,m_maxHeight;
   int             m_retCode;
   wxEvtHandler   *m_eventHandler;
   wxValidator    *m_windowValidator;

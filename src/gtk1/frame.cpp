@@ -23,20 +23,25 @@
 #include "wx/dcclient.h"
 #include "wx/gtk/win_gtk.h"
 
+//-----------------------------------------------------------------------------
+// constants
+//-----------------------------------------------------------------------------
+
 const int wxMENU_HEIGHT    = 28;
 const int wxSTATUS_HEIGHT  = 25;
+
+//-----------------------------------------------------------------------------
+// data
+//-----------------------------------------------------------------------------
 
 extern wxList wxTopLevelWindows;
 extern wxList wxPendingDelete;
 
 //-----------------------------------------------------------------------------
-// wxFrame
+// "size_allocate"
 //-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-// set size
-
-void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxFrame *win )
+static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxFrame *win )
 {
   if (!win->HasVMT()) return;
 
@@ -51,9 +56,10 @@ void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc,
 }
 
 //-----------------------------------------------------------------------------
-// delete
+// "delete_event"
+//-----------------------------------------------------------------------------
 
-bool gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxFrame *win )
+static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxFrame *win )
 {
 /*
   printf( "OnDelete from " );
@@ -68,9 +74,10 @@ bool gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(
 }
 
 //-----------------------------------------------------------------------------
-// configure
+// "configure_event"
+//-----------------------------------------------------------------------------
 
-gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *event, wxFrame *win )
+static gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *event, wxFrame *win )
 {
   if (!win->HasVMT()) return FALSE;
   
@@ -80,6 +87,8 @@ gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigur
   return FALSE;
 }
 
+//-----------------------------------------------------------------------------
+// wxFrame
 //-----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxFrame, wxWindow)
@@ -268,9 +277,12 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
 
   m_width = width;
   m_height = height;
+  if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
+  if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
+  if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_minWidth;
+  if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_minHeight;
 
-  // VZ: why??
-  //gtk_widget_set_usize( m_widget, width, height );
+  gtk_widget_set_usize( m_widget, width, height );
 
   int main_x = 0;
   int main_y = 0;
@@ -368,7 +380,7 @@ void wxFrame::AddChild( wxWindow *child )
 {
   // wxFrame and wxDialog as children aren't placed into the parents
   
-  if (IS_KIND_OF(child,wxMDIChildFrame)) printf( "wxFrame::AddChild error.\n" );
+  if (IS_KIND_OF(child,wxMDIChildFrame)) wxFAIL_MSG( "wxFrame::AddChild error.\n" );
   
   if ( IS_KIND_OF(child,wxFrame) || IS_KIND_OF(child,wxDialog))
   {
@@ -513,21 +525,6 @@ void wxFrame::SetTitle( const wxString &title )
   m_title = title;
   if (m_title.IsNull()) m_title = "";
   gtk_window_set_title( GTK_WINDOW(m_widget), title );
-}
-
-void wxFrame::SetSizeHints(int minW, int minH,
-                           int WXUNUSED(maxW), int WXUNUSED(maxH),
-                           int WXUNUSED(incW), int WXUNUSED(incH) )
-{
-  // gdk_window_set_hints alone doesn't really prevent the user from shrinking
-  // the window to the size smaller than (minW, minH)
-  gtk_widget_set_usize( GTK_WIDGET(m_widget), minW, minH );
-
-  /*
-  gdk_window_set_hints( m_widget->window, -1, -1, 
-	                      minW, minH, maxW, maxH,
-                        GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE );
-  */
 }
 
 void wxFrame::SetIcon( const wxIcon &icon )

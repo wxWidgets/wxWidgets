@@ -133,8 +133,6 @@ class wxToolBar: public wxControl
   
     GtkToolbar   *m_toolbar;
     wxList        m_tools;
-  
-  DECLARE_EVENT_TABLE()
 };
 
 #endif
