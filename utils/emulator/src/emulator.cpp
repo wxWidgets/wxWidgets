@@ -76,12 +76,12 @@ IMPLEMENT_APP(wxEmulatorApp)
 
 static const wxCmdLineEntryDesc sg_cmdLineDesc[] =
 {
-    { wxCMD_LINE_OPTION, "u", "use-display",   "display number to use (default 100)" },
+    { wxCMD_LINE_OPTION, _T("u"), _T("use-display"),   _T("display number to use (default 100)") },
 
-    { wxCMD_LINE_SWITCH, "h", "help",   "displays help on the command line parameters" },
-    { wxCMD_LINE_SWITCH, "v", "version",    "print version" },
+    { wxCMD_LINE_SWITCH, _T("h"), _T("help"),   _T("displays help on the command line parameters") },
+    { wxCMD_LINE_SWITCH, _T("v"), _T("version"),    _T("print version") },
 
-    { wxCMD_LINE_PARAM,  NULL, NULL, "config file 1", wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
+    { wxCMD_LINE_PARAM,  NULL, NULL, _T("config file 1"), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
 
     { wxCMD_LINE_NONE }
 };
@@ -117,10 +117,10 @@ bool wxEmulatorApp::OnInit()
     
     // If the development version, go up a directory.
 #ifdef __WXMSW__
-    if ((m_appDir.Right(5).CmpNoCase("DEBUG") == 0) ||
-        (m_appDir.Right(11).CmpNoCase("DEBUGSTABLE") == 0) ||
-        (m_appDir.Right(7).CmpNoCase("RELEASE") == 0) ||
-        (m_appDir.Right(13).CmpNoCase("RELEASESTABLE") == 0)
+    if ((m_appDir.Right(5).CmpNoCase(_T("DEBUG")) == 0) ||
+        (m_appDir.Right(11).CmpNoCase(_T("DEBUGSTABLE")) == 0) ||
+        (m_appDir.Right(7).CmpNoCase(_T("RELEASE")) == 0) ||
+        (m_appDir.Right(13).CmpNoCase(_T("RELEASESTABLE")) == 0)
         )
         m_appDir = wxPathOnly(m_appDir);
 #endif
@@ -307,7 +307,7 @@ void wxEmulatorFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxMessageBox(msg, _T("About wxEmulator"), wxOK | wxICON_INFORMATION, this);
 }
 
-void wxEmulatorFrame::OnCloseWindow(wxCloseEvent& event)
+void wxEmulatorFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
 #ifdef __WXX11__
     if (wxGetApp().m_xnestWindow)
@@ -336,7 +336,7 @@ wxEmulatorContainer::wxEmulatorContainer(wxWindow* parent, wxWindowID id):
 {
 }
 
-void wxEmulatorContainer::OnSize(wxSizeEvent& event)
+void wxEmulatorContainer::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     DoResize();
 }
@@ -364,7 +364,7 @@ void wxEmulatorContainer::DoResize()
     Refresh();
 }
 
-void wxEmulatorContainer::OnPaint(wxPaintEvent& event)
+void wxEmulatorContainer::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
     
@@ -513,17 +513,17 @@ wxBitmapType wxDetermineImageType(const wxString& filename)
     wxSplitPath(filename, & path, & name, & ext);
 
     ext.MakeLower();
-    if (ext == "jpg" || ext == "jpeg")
+    if (ext == _T("jpg") || ext == _T("jpeg"))
         return wxBITMAP_TYPE_JPEG;
-    if (ext == "gif")
+    if (ext == _T("gif"))
         return wxBITMAP_TYPE_GIF;
-    if (ext == "bmp")
+    if (ext == _T("bmp"))
         return wxBITMAP_TYPE_BMP;
-    if (ext == "png")
+    if (ext == _T("png"))
         return wxBITMAP_TYPE_PNG;
-    if (ext == "pcx")
+    if (ext == _T("pcx"))
         return wxBITMAP_TYPE_PCX;
-    if (ext == "tif" || ext == "tiff")
+    if (ext == _T("tif") || ext == _T("tiff"))
         return wxBITMAP_TYPE_TIF;
     
     return wxBITMAP_TYPE_INVALID;
