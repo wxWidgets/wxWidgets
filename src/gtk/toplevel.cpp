@@ -710,14 +710,37 @@ void wxTopLevelWindowGTK::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
     if (m_mainWidget)
     {
         // set size hints
-        gint flag = 0; // GDK_HINT_POS;
+        gint            flag = 0; // GDK_HINT_POS;
+        GdkGeometry     geom;
+
         if ((minWidth != -1) || (minHeight != -1)) flag |= GDK_HINT_MIN_SIZE;
         if ((maxWidth != -1) || (maxHeight != -1)) flag |= GDK_HINT_MAX_SIZE;
-        GdkGeometry geom;
+
         geom.min_width = minWidth;
         geom.min_height = minHeight;
-        geom.max_width = maxWidth;
-        geom.max_height = maxHeight;
+
+            // Because of the way we set GDK_HINT_MAX_SIZE above, if either of
+            // maxHeight or maxWidth is set, we must set them both, else the
+            // remaining -1 will be taken literally.
+
+            // I'm certain this also happens elsewhere, and is the probable
+            // cause of other such things as:
+            // Gtk-WARNING **: gtk_widget_size_allocate():
+            //       attempt to allocate widget with width 65535 and height 600
+            // but I don't have time to track them all now..
+            // 
+            // Really we need to encapulate all this height/width business and
+            // stop any old method from ripping at the members directly and
+            // scattering -1's without regard for who might resolve them later.
+
+        geom.max_width = ( maxHeight == -1 ) ? maxWidth
+                         : ( maxWidth == -1 ) ? wxGetDisplaySize().GetWidth()
+                           : maxWidth ;
+
+        geom.max_height = ( maxWidth == -1 ) ? maxHeight    // ( == -1 here )
+                          : ( maxHeight == -1 ) ? wxGetDisplaySize().GetHeight()
+                            : maxHeight ;
+
         gtk_window_set_geometry_hints( GTK_WINDOW(m_widget),
                                        (GtkWidget*) NULL,
                                        &geom,
@@ -733,6 +756,7 @@ void wxTopLevelWindowGTK::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
         int client_y = m_miniEdge + m_miniTitle;
         int client_w = m_width - 2*m_miniEdge;
         int client_h = m_height - 2*m_miniEdge - m_miniTitle;
+
         gtk_pizza_set_size( GTK_PIZZA(m_mainWidget),
                               m_wxwindow,
                               client_x, client_y, client_w, client_h );
@@ -896,3 +920,5 @@ void wxTopLevelWindowGTK::RemoveGrab()
         m_grabbed = FALSE;
     }
 }
+
+// vi:sts=4:sw=4:et

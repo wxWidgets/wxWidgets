@@ -764,6 +764,15 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     SetSizer(sizerTop);
 
     // see comments in OnDetails()
+    //
+    // Note: Doing this, this way, triggered a nasty bug in
+    //       wxTopLevelWindowGTK::GtkOnSize which took -1 literally once
+    //       either of maxWidth or maxHeight was set.  This symptom has been
+    //       fixed there, but it is a problem that remains as long as we allow
+    //       unchecked access to the internal size members.  We really need to
+    //       encapuslate window sizes more cleanly and make it clear when -1 will
+    //       be substituted and when it will not.
+
     wxSize size = sizerTop->Fit(this);
     m_maxHeight = size.y;
     SetSizeHints(size.x, size.y, m_maxWidth, m_maxHeight);
@@ -1015,6 +1024,7 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
     // we have to reset min size constraints or Fit() would never reduce the
     // dialog size when collapsing it and we have to reset max constraint
     // because it wouldn't expand it otherwise
+
     m_minHeight =
     m_maxHeight = -1;
 
@@ -1146,3 +1156,4 @@ void wxLogTextCtrl::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 
 #endif // wxUSE_TEXTCTRL
 
+// vi:sts=4:sw=4:et
