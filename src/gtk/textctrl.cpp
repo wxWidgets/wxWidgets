@@ -34,11 +34,11 @@ extern bool   g_blockEventsOnDrag;
 //  "changed"
 //-----------------------------------------------------------------------------
 
-static void 
+static void
 gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
     win->SetModified();
-    
+
     win->CalculateScrollbar();
 
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->m_windowId );
@@ -52,7 +52,7 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 // "size_allocate"
 //-----------------------------------------------------------------------------
 
-static void 
+static void
 gtk_text_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* WXUNUSED(alloc), wxTextCtrl *win )
 {
     win->CalculateScrollbar();
@@ -112,7 +112,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
     PreCreation( parent, id, pos, size, style, name );
 
     SetValidator( validator );
-    
+
     m_vScrollbarVisible = TRUE;
 
     bool multi_line = (style & wxTE_MULTILINE) != 0;
@@ -121,7 +121,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
         // a multi-line edit control: create a vertical scrollbar by default and
         // horizontal if requested
         bool bHasHScrollbar = (style & wxHSCROLL) != 0;
- 
+
         // create our control...
         m_text = gtk_text_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
 
@@ -150,7 +150,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
                      (GtkAttachOptions)(GTK_EXPAND | GTK_FILL | GTK_SHRINK),
                      0, 0);
         gtk_widget_show( m_vScrollbar );
-	
+
         gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
           GTK_SIGNAL_FUNC(gtk_text_size_callback), (gpointer)this );
     }
@@ -205,9 +205,9 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
         if (multi_line)
             gtk_text_set_editable( GTK_TEXT(m_text), 1 );
     }
-    
+
     Show( TRUE );
-    
+
     SetBackgroundColour( parent->GetBackgroundColour() );
     SetForegroundColour( parent->GetForegroundColour() );
 
@@ -219,23 +219,23 @@ void wxTextCtrl::CalculateScrollbar()
     if ((m_windowStyle & wxTE_MULTILINE) == 0) return;
 
     GtkAdjustment *adj = GTK_TEXT(m_text)->vadj;
-    
+
     if (adj->upper - adj->page_size < 0.8)
     {
         if (m_vScrollbarVisible)
         {
-	    gtk_widget_hide( m_vScrollbar );
-	
-	    m_vScrollbarVisible = FALSE;
+        gtk_widget_hide( m_vScrollbar );
+
+        m_vScrollbarVisible = FALSE;
         }
     }
     else
     {
         if (!m_vScrollbarVisible)
         {
-	    gtk_widget_show( m_vScrollbar );
-	    
-	    m_vScrollbarVisible = TRUE;
+        gtk_widget_show( m_vScrollbar );
+
+        m_vScrollbarVisible = TRUE;
         }
     }
 }
@@ -321,8 +321,8 @@ bool wxTextCtrl::LoadFile( const wxString &file )
       return FALSE;
     }
     if (fread (text, sizeof (char), len, fp) != (size_t) len)
-	{
-	}
+    {
+    }
     fclose (fp);
 
     text[len] = 0;
@@ -372,13 +372,13 @@ bool wxTextCtrl::SaveFile( const wxString &file )
       }
 
       if (fwrite (text, sizeof (char), len, fp) != (size_t) len)
-	{
-	  // Did not write whole file
-	}
+    {
+      // Did not write whole file
+    }
 
       // Make sure newline terminates the file
       if (text[len - 1] != '\n')
-	fputc ('\n', fp);
+    fputc ('\n', fp);
 
       fclose (fp);
 
@@ -445,12 +445,12 @@ long wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
   for (int i = 0; i < pos; i++ )
     {
       if (text[i] == '\n')
-	{
-	  (*y)++;
-	  *x=1;
-	}
+    {
+      (*y)++;
+      *x=1;
+    }
       else
-	(*x)++;
+    (*x)++;
     }
   g_free( text );
   return 1;
@@ -459,11 +459,11 @@ long wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
 long wxTextCtrl::XYToPosition(long x, long y ) const
 {
     if (!(m_windowStyle & wxTE_MULTILINE)) return 0;
-    
+
     long pos=0;
 
     for( int i=1; i<y; i++ ) pos += GetLineLength(i);
-    
+
     pos +=x-1; // Pos start with 0
     return pos;
 }
@@ -485,17 +485,17 @@ int wxTextCtrl::GetNumberOfLines() const
         {
             int currentLine = 0;
             for (int i = 0; i < len; i++ )
-	    {
+        {
                 if (text[i] == '\n')
                   currentLine++;
-	    }
+        }
             g_free( text );
             return currentLine;
         }
         else
-	{
+    {
             return 0;
-	}
+    }
     }
     else
     {
@@ -518,13 +518,7 @@ void wxTextCtrl::SetInsertionPointEnd()
 {
     wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
-    int pos = 0;
-    if (m_windowStyle & wxTE_MULTILINE)
-        pos = gtk_text_get_length( GTK_TEXT(m_text) );
-    else
-      pos = GTK_ENTRY(m_text)->text_length;
-      
-    SetInsertionPoint((pos-1)>0 ? (pos-1):0);
+    SetInsertionPoint(-1);
 }
 
 void wxTextCtrl::SetEditable( bool editable )
@@ -565,7 +559,7 @@ long wxTextCtrl::GetLastPosition() const
         pos = gtk_text_get_length( GTK_TEXT(m_text) );
     else
         pos = GTK_ENTRY(m_text)->text_length;
-	
+
     return (long)pos-1;
 }
 
@@ -627,7 +621,7 @@ void wxTextCtrl::Clear()
 void wxTextCtrl::OnChar( wxKeyEvent &key_event )
 {
     wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
-    
+
     if ((key_event.KeyCode() == WXK_RETURN) && (m_windowStyle & wxPROCESS_ENTER))
     {
         wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
@@ -751,13 +745,13 @@ void wxTextCtrl::SetBackgroundColour( const wxColour &colour )
     wxControl::SetBackgroundColour( colour );
 
     wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
-    if (sysbg.Red() == colour.Red() && 
-        sysbg.Green() == colour.Green() && 
+    if (sysbg.Red() == colour.Red() &&
+        sysbg.Green() == colour.Green() &&
         sysbg.Blue() == colour.Blue())
     {
         return;
-    } 
-    
+    }
+
     if (!m_backgroundColour.Ok()) return;
 
     if (m_windowStyle & wxTE_MULTILINE)
@@ -774,7 +768,7 @@ void wxTextCtrl::ApplyWidgetStyle()
     if (m_windowStyle & wxTE_MULTILINE)
     {
         // how ?
-    } 
+    }
     else
     {
         SetWidgetStyle();
