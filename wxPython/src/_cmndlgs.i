@@ -54,7 +54,7 @@ meaning under other platforms.  The default value is true.", "");
         wxColour , GetCustomColour(int i),
         "Gets the i'th custom colour associated with the colour dialog. i
 should be an integer between 0 and 15. The default custom colours are
-all white.", "");
+all invalid colours.", "");
     
     DocDeclStr(
         void , SetChooseFull(int flag),
@@ -70,7 +70,7 @@ black.", "");
     DocDeclStr(
         void , SetCustomColour(int i, const wxColour& colour),
         "Sets the i'th custom colour for the colour dialog. i should be an
-integer between 0 and 15. The default custom colours are all white.", "");
+integer between 0 and 15. The default custom colours are all invalid colours.", "");
     
 };
 
