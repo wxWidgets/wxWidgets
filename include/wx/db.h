@@ -52,7 +52,7 @@
 #include "wx/defs.h"
 #include "wx/string.h"
 
-#ifdef __VISUALC__
+#if defined(__VISUALC__) 
     // we need to include standard Windows headers but we can't include
     // <windows.h> directly when using MFC because it includes it itself in a
     // different manner
@@ -77,6 +77,10 @@
     #include "sqlext.h"
     #include "odbcinst.h"
 #else
+    #if defined(__WINDOWS__) && defined(HAVE_W32API_H)
+        #include <windows.h>
+        #include "wx/msw/winundef.h"
+    #endif
     // Use the ones from the library
     extern "C" {
         #include <sql.h>
