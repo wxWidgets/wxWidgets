@@ -313,7 +313,7 @@ FAIL_WITH(s->Write(&signature, 4).LastWrite() != 4, wxSOUND_INVSTRM);
         delete frmt;
     }
 
-#ifdef __ALPHA__
+#ifdef defined(__ALPHA__) || defined(__IA64__)
     // FIXME:
     // Linux Alpha spits passing size_t to a wxDataOutputStream, since it
     // appears to be an unsigned long type there.
