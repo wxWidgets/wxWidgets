@@ -861,26 +861,35 @@ colour.
 ", "");
     
 
-    DocDeclStr(
-        virtual void , SetOptimization(bool optimize),
-        "If *optimize* is true this function sets optimization mode on. This
-currently means that under X, the device context will not try to set a
-pen or brush property if it is known to be set already. This approach
-can fall down if non-wxWidgets code is using the same device context
-or window, for example when the window is a panel on which the
-windowing system draws panel items. The wxWidgets device context
-'memory' will now be out of step with reality.
+//     DocDeclStr(
+//         virtual void , SetOptimization(bool optimize),
+//         "If *optimize* is true this function sets optimization mode on. This
+// currently means that under X, the device context will not try to set a
+// pen or brush property if it is known to be set already. This approach
+// can fall down if non-wxWidgets code is using the same device context
+// or window, for example when the window is a panel on which the
+// windowing system draws panel items. The wxWidgets device context
+// 'memory' will now be out of step with reality.
 
-Setting optimization off, drawing, then setting it back on again, is a
-trick that must occasionally be employed.", "");
+// Setting optimization off, drawing, then setting it back on again, is a
+// trick that must occasionally be employed.", "");
     
-    DocDeclStr(
-        virtual bool , GetOptimization(),
-        "Returns true if device context optimization is on. See
-`SetOptimization` for details.", "");
+//     DocDeclStr(
+//         virtual bool , GetOptimization(),
+//         "Returns true if device context optimization is on. See
+// `SetOptimization` for details.", "");
     
+    %pythoncode {
+        def SetOptimization(self, optimize):
+            pass
+        def GetOptimization(self):
+            return False
 
+        SetOptimization = wx._deprecated(SetOptimization)
+        GetOptimization = wx._deprecated(GetOptimization)
+   }
 
+    
     // bounding box
     // ------------
 
