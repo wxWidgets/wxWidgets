@@ -4097,6 +4097,11 @@ fi
 
 if test "$wxUSE_CLIPBOARD" = "yes"; then
     AC_DEFINE(wxUSE_CLIPBOARD)
+
+    if test "$wxUSE_GTK" = 1; then
+        dnl required by clipboard code in wxGTK
+        AC_DEFINE(wxUSE_DATAOBJ)
+    fi
 fi
 
 if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
