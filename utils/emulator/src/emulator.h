@@ -16,6 +16,8 @@
     #pragma interface "emulator.h"
 #endif
 
+#define wxEMULATOR_VERSION 0.1
+
 // Information about the emulator decorations
 class wxEmulatorInfo: public wxObject
 {
@@ -31,7 +33,10 @@ public:
     void Init();
 
     // Loads bitmaps
-    bool Load();
+    bool Load(const wxString& appDir);
+
+    // Emulator config filename
+    wxString m_emulatorFilename;
 
     // Emulator title
     wxString m_emulatorTitle;
@@ -46,6 +51,10 @@ public:
 
     // The emulated screen size, e.g. 320x240
     wxSize m_emulatorScreenSize;
+
+    // The emulated device size. This is ignored
+    // if there is a background bitmap
+    wxSize m_emulatorDeviceSize;
 
     // The bitmap used for drawing the main emulator
     // decorations
@@ -68,9 +77,16 @@ public:
     virtual bool OnInit();
 
     // Load the specified emulator
-    bool LoadEmulator();
+    bool LoadEmulator(const wxString& appDir);
+
+    // Get app dir
+    wxString GetAppDir() const { return m_appDir; }
+
+    // Prepend the current app program directory to the name
+    wxString GetFullAppPath(const wxString& filename) const;
 
 public:
+
     wxEmulatorInfo          m_emulatorInfo;
 #ifdef __WXX11__
     wxAdoptedWindow*        m_xnestWindow;
@@ -78,6 +94,8 @@ public:
     wxWindow*               m_xnestWindow;
 #endif
     wxEmulatorContainer*    m_containerWindow;
+    wxString                m_appDir;
+    wxString                m_displayNumber;
 };
 
 // The container for the Xnest window. The decorations
@@ -133,6 +151,15 @@ enum
 
 // Returns the image type, or -1, determined from the extension.
 int wxDetermineImageType(const wxString& filename);
+
+// Convert a colour to a 6-digit hex string
+wxString wxColourToHexString(const wxColour& col);
+
+// Convert 6-digit hex string to a colour
+wxColour wxHexStringToColour(const wxString& hex);
+
+// Find the absolute path where this application has been run from.
+wxString wxFindAppPath(const wxString& argv0, const wxString& cwd, const wxString& appVariableName);
 
 #endif
     // _WX_EMULATOR_H_

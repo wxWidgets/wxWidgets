@@ -44,6 +44,14 @@ Then run wxEmulator:
 
 % emulator &
 
+or
+
+% emulator mydevice.wxe &
+
+to specify a configuration file. Run emulator --help
+to show what options are available, such as --use-display
+for specifying a display other than :100.
+
 After a brief flicker in which wxEmulator steals
 Xnest's window, you should see an emulated iPAQ with
 a checked screen that indicates raw X with nothing else
@@ -69,9 +77,9 @@ before running it. E.g.:
 % export DISPLAY=:100
 % xterm &
 
-Eventually the emulator will support configurable
-skins, complete with buttons as on the actual device.
-For now, it just pretends to be an iPAQ.
+For details on the configuration file format, please
+see default.wxe. Eventually it will support
+device buttons.
 
 Compiling wxEmulator
 ====================
