@@ -971,10 +971,6 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
         {
             // set flag for wxIsWaitingForThread()
             gs_waitingForThread = TRUE;
-
-#if wxUSE_GUI
-            wxBeginBusyCursor();
-#endif // wxUSE_GUI
         }
 
         // ask the thread to terminate
@@ -992,13 +988,24 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
         DWORD result;
         do
         {
+            if ( IsMain() )
+            {
+                // give the thread we're waiting for chance to do the GUI call
+                // it might be in
+                if ( (gs_nWaitingForGui > 0) && wxGuiOwnedByMainThread() )
+                {
+                    wxMutexGuiLeave();
+                }
+            }
+
             result = ::MsgWaitForMultipleObjects
                      (
                        1,              // number of objects to wait for
                        &hThread,       // the objects
                        FALSE,          // don't wait for all objects
                        INFINITE,       // no timeout
-                       QS_ALLEVENTS    // return as soon as there are any events
+                       QS_ALLINPUT |   // return as soon as there are any events
+                       QS_ALLPOSTMESSAGE
                      );
 
             switch ( result )
@@ -1022,17 +1029,6 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
 
                         return wxTHREAD_KILLED;
                     }
-
-                    if ( IsMain() )
-                    {
-                        // give the thread we're waiting for chance to exit
-                        // from the GUI call it might have been in
-                        if ( (gs_nWaitingForGui > 0) && wxGuiOwnedByMainThread() )
-                        {
-                            wxMutexGuiLeave();
-                        }
-                    }
-
                     break;
 
                 default:
@@ -1053,10 +1049,6 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
         if ( IsMain() )
         {
             gs_waitingForThread = FALSE;
-
-#if wxUSE_GUI
-            wxEndBusyCursor();
-#endif // wxUSE_GUI
         }
     }
 
