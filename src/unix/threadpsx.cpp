@@ -53,6 +53,9 @@
 // we use wxFFile under Linux in GetCPUCount()
 #ifdef __LINUX__
     #include "wx/ffile.h"
+    // For setpriority.
+    #include <sys/time.h>
+    #include <sys/resource.h>
 #endif
 
 // ----------------------------------------------------------------------------
@@ -1172,6 +1175,45 @@ void wxThread::SetPriority(unsigned int prio)
         case STATE_RUNNING:
         case STATE_PAUSED:
 #ifdef HAVE_THREAD_PRIORITY_FUNCTIONS
+#if defined(__LINUX__)
+// On Linux, pthread_setschedparam with SCHED_OTHER does not allow
+// a priority other than 0.  Instead, we use the BSD setpriority
+// which alllows us to set a 'nice' value between 20 to -20.  Only
+// super user can set a value less than zero (more negative yields
+// higher priority).  setpriority set the static priority of a process,
+// but this is OK since Linux is configured as a thread per process.
+            {
+                float   fPrio;
+                float	pSpan;
+                int		iPrio;
+
+                // Map Wx priorites (WXTHREAD_MIN_PRIORITY -
+                // WXTHREAD_MAX_PRIORITY) into BSD priorities (20 - -20).
+                // Do calculation of values instead of hard coding them
+                // to make maintenance easier.
+
+                pSpan = ((float)(WXTHREAD_MAX_PRIORITY - WXTHREAD_MIN_PRIORITY)) / 2.0;
+
+                // prio starts as ...................  // value =>  (0) >=  p  <=  (n)
+
+                fPrio = ((float)prio) -  pSpan;        // value =>  (-n) >=  p  <=  (+n)
+
+                fPrio = 0.0 - fPrio;                   // value =>  (+n) <=  p  >=  (-n)
+
+                fPrio = fPrio * (20. / pSpan) + .5;    // value =>  (20) <=  p  >=  (-20)
+
+                iPrio = (int)fPrio;
+
+                // Clamp prio from 20 - -20;
+                iPrio = (iPrio > 20)  ?  20 : iPrio;
+                iPrio = (iPrio < -20) ? -20 : iPrio;
+
+                if (setpriority(PRIO_PROCESS, 0, iPrio) == -1)
+                {
+                    wxLogError(_("Failed to set thread priority %d."), prio);
+                }
+            }
+#else // __LINUX__
             {
                 struct sched_param sparam;
                 sparam.sched_priority = prio;
@@ -1182,6 +1224,7 @@ void wxThread::SetPriority(unsigned int prio)
                     wxLogError(_("Failed to set thread priority %d."), prio);
                 }
             }
+#endif // __LINUX__
 #endif // HAVE_THREAD_PRIORITY_FUNCTIONS
             break;
 
