@@ -108,6 +108,8 @@ int wxMessageDialog::ShowModal()
             // fall through
 
         case GTK_RESPONSE_CANCEL:
+        case GTK_RESPONSE_DELETE_EVENT:
+        case GTK_RESPONSE_CLOSE:
             return wxID_CANCEL;
         case GTK_RESPONSE_OK:
             return wxID_OK;
