@@ -130,8 +130,8 @@ MPCriticalRegionID gs_guiCritical = kInvalidID;
 
 #if TARGET_API_MAC_OSX
 #define wxUSE_MAC_SEMAPHORE_MUTEX 0
-#define wxUSE_MAC_CRITICAL_REGION_MUTEX 0
-#define wxUSE_MAC_PTHREADS_MUTEX 1
+#define wxUSE_MAC_CRITICAL_REGION_MUTEX 1
+#define wxUSE_MAC_PTHREADS_MUTEX 0
 #else
 #define wxUSE_MAC_SEMAPHORE_MUTEX 0
 #define wxUSE_MAC_CRITICAL_REGION_MUTEX 1
@@ -347,6 +347,7 @@ wxMutexInternal::~wxMutexInternal()
 {
     if ( m_semaphore != kInvalidID )
 	    MPDeleteSemaphore( m_semaphore);
+	MPYield() ;
 }
 
 wxMutexError wxMutexInternal::Lock()
@@ -383,12 +384,12 @@ wxMutexError wxMutexInternal::Unlock()
 {
     wxCHECK_MSG( m_isOk , wxMUTEX_MISC_ERROR , wxT("Invalid Mutex") ) ;
 	OSStatus err = MPSignalSemaphore( m_semaphore);
+	MPYield() ;
 	if ( err)
     {
 		wxLogSysError(_("Could not unlock mutex"));
 		return wxMUTEX_MISC_ERROR;	  
     }
-    
 	return wxMUTEX_NO_ERROR;
 }
 
@@ -427,6 +428,7 @@ wxMutexInternal::~wxMutexInternal()
 {
     if ( m_critRegion != kInvalidID )
 	    MPDeleteCriticalRegion( m_critRegion);
+	MPYield() ;
 }
 
 wxMutexError wxMutexInternal::Lock()
@@ -463,6 +465,7 @@ wxMutexError wxMutexInternal::Unlock()
 {
     wxCHECK_MSG( m_isOk , wxMUTEX_MISC_ERROR , wxT("Invalid Mutex") ) ;
 	OSStatus err = MPExitCriticalRegion( m_critRegion);
+	MPYield() ;
 	if ( err)
     {
 		wxLogSysError(_("Could not unlock mutex"));
@@ -524,6 +527,7 @@ wxSemaphoreInternal::~wxSemaphoreInternal()
 {
     if( m_semaphore != kInvalidID )
 	    MPDeleteSemaphore( m_semaphore);
+	MPYield() ;
 }
 
 wxSemaError wxSemaphoreInternal::WaitTimeout(unsigned long milliseconds)
@@ -543,6 +547,7 @@ wxSemaError wxSemaphoreInternal::WaitTimeout(unsigned long milliseconds)
 wxSemaError wxSemaphoreInternal::Post()
 {
 	OSStatus err = MPSignalSemaphore( m_semaphore);
+	MPYield() ;
 	if ( err)
     {
 		return wxSEMA_MISC_ERROR;
