@@ -38,8 +38,6 @@
 //----------------------------------------------------------------------------------------
 //-- Some Global Vars for this file ------------------------------------------------------
 //----------------------------------------------------------------------------------------
-MainFrame *frame = NULL;                            // The one and only MainFrame
-//----------------------------------------------------------------------------------------
 BEGIN_EVENT_TABLE(MainFrame, wxFrame)
  EVT_MENU(QUIT, MainFrame::OnQuit)                  // Program End
  EVT_MENU(ABOUT, MainFrame::OnAbout)                // Program Discription
@@ -152,7 +150,7 @@ bool MainApp::OnInit(void)  // Does everything needed for a program start
   else
   { // Read in Foreign language's text for GetAppName() and Help
    m_locale.AddCatalog(GetAppName().c_str());
-   m_locale.AddCatalog("Help");
+   m_locale.AddCatalog("help");
   }
  } // Support the following languages  (std = english)
  else
@@ -165,6 +163,7 @@ bool MainApp::OnInit(void)  // Does everything needed for a program start
  p_ProgramCfg->Write("/Local/language",s_Language);
  p_ProgramCfg->Write("/Local/langid",s_LangId);
  s_LangHelp.Printf("help.%s/%s.hhp",s_LangId.c_str(),GetAppName().c_str()); // "help.std/Garantie.hhp";
+ s_LangHelp = s_LangHelp.Lower();                       // A must for Linux
  //---------------------------------------------------------------------------------------
  Temp0 = "NONE";                               // I don't remember why I did this
  p_ProgramCfg->Write("/NONE",Temp0);           // I don't remember why I did this

@@ -8,15 +8,6 @@
 // Licence:     wxWindows license
 // RCS-ID:      $Id$
 //----------------------------------------------------------------------------------------
-// Define a new application type
-//----------------------------------------------------------------------------------------
-class MainApp: public wxApp
-{
- public:
-  bool OnInit(void); // Programmstart
-  wxLocale m_locale; // locale we'll be using and language support - MUST be here !
-};
-//----------------------------------------------------------------------------------------
 // Define a new frame type
 //----------------------------------------------------------------------------------------
 class MainFrame: public wxFrame
@@ -38,6 +29,16 @@ class MainFrame: public wxFrame
   wxHtmlHelpController *p_Help;      // Help System
   //--------------------------------------------------------------------------------------
  DECLARE_EVENT_TABLE()
+};
+//----------------------------------------------------------------------------------------
+// Define a new application type
+//----------------------------------------------------------------------------------------
+class MainApp: public wxApp
+{
+ public:
+  MainFrame *frame;                           // The one and only MainFrame
+  bool OnInit(void); // Programmstart
+  wxLocale m_locale; // locale we'll be using and language support - MUST be here !
 };
 //----------------------------------------------------------------------------------------
 // ID for the menu quit command
