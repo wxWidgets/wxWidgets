@@ -77,6 +77,12 @@
 
 #include <ctype.h>
 
+#ifdef __WINDOWS__
+    #include "wx/msw/wrapwin.h"
+    #include <winnls.h>
+    #include <locale.h>
+#endif
+
 #include "wx/datetime.h"
 #include "wx/stopwatch.h"           // for wxGetLocalTimeMillis()
 
@@ -2824,6 +2830,60 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
     return p;
 }
 
+#ifdef __WINDOWS__
+// Get's current locale's date formatting string and stores it in fmt if
+// the locale is set; otherwise or in case of failure, leaves fmt unchanged
+void GetLocaleDateFormat(wxString *fmt)
+{
+    if ( strcmp(setlocale(LC_ALL, NULL), "C") != 0 )
+    {
+        // The locale was programatically set to non-C. We assume that this was
+        // done using wxLocale, in which case thread's current locale is also
+        // set to correct LCID value and we can use GetLocaleInfo to determine
+        // the correct formatting string:
+        LCID lcid = GetThreadLocale();
+        wxChar delim[5]; // fields deliminer, 4 chars max
+        if ( GetLocaleInfo(lcid, LOCALE_SDATE, delim, 5) )
+        {
+            wxChar centurybuf[2]; // use %y or %Y, 1 char max
+            wxChar century = 'y';
+            if ( GetLocaleInfo(lcid, LOCALE_ICENTURY, centurybuf, 2) )
+            {
+                if ( centurybuf[0] == _T('1') )
+                    century = 'Y';
+                // else 'y' as above
+            }
+
+            wxChar order[2]; // order code, 1 char max
+            if ( GetLocaleInfo(lcid, LOCALE_IDATE, order, 2) )
+            {
+                if ( order[0] == _T('0') ) // M-D-Y
+                {
+                    *fmt = wxString::Format(_T("%%m%s%%d%s%%%c"),
+                                            delim, delim, century);
+                }
+                else if ( order[0] == _T('1') ) // D-M-Y
+                {
+                    *fmt = wxString::Format(_T("%%d%s%%m%s%%%c"),
+                                            delim, delim, century);
+                }
+                else if ( order[0] == _T('2') ) // Y-M-D
+                {
+                    *fmt = wxString::Format(_T("%%%c%s%%m%s%%d"),
+                                            century, delim, delim);
+                }
+                else
+                {
+                    wxFAIL_MSG(_T("unexpected GetLocaleInfo return value"));
+                }
+            }
+        }
+        // if we failed, leave fmtDate value unchanged and
+        // try our luck with the default set above
+    }
+}
+#endif // __WINDOWS__
+
 const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                                       const wxChar *format,
                                       const wxDateTime& dateDef)
@@ -3183,11 +3243,11 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 }
 #endif // HAVE_STRPTIME
 
-                // TODO query the LOCALE_IDATE setting under Win32
                 {
                     wxDateTime dt;
 
                     wxString fmtDate, fmtDateAlt;
+
                     if ( IsWestEuropeanCountry(GetCountry()) ||
                          GetCountry() == Russia )
                     {
@@ -3199,6 +3259,12 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                         fmtDate = _T("%m/%d/%y");
                         fmtDateAlt = _T("%d/%m/%y");
                     }
+
+#ifdef __WINDOWS__
+                    // The above doesn't work for all locales, try to query
+                    // Windows for the right way of formatting the date:
+                    GetLocaleDateFormat(&fmtDate);
+#endif
 
                     const wxChar *result = dt.ParseFormat(input, fmtDate);
 
