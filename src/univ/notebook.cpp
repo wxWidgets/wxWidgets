@@ -1127,7 +1127,7 @@ void wxNotebook::UpdateSpinBtn()
     }
     else // all tabs are visible, we don't need spin button
     {
-        if ( m_spinbtn )
+        if ( m_spinbtn && m_spinbtn -> IsShown() )
         {
             m_spinbtn->Hide();
         }
