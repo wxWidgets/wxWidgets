@@ -1270,7 +1270,7 @@ wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
                 // normally the absolute file names start with a slash
                 // with one exception: the ones like "~/foo.bar" don't
                 // have it
-                if ( m_dirs[0u] != _T('~') )
+                if ( m_dirs.IsEmpty() || m_dirs[0u] != _T('~') )
                 {
                     fullpath += wxFILE_SEP_PATH_UNIX;
                 }
