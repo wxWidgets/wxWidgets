@@ -13,7 +13,9 @@ class TestFrame(wx.Frame):
     def __init__(self):
         wx.Frame.__init__(self, None, -1, "wxGridBagSizer")
         p = wx.Panel(self, -1)
-        gbs = self.gbs = wx.GridBagSizer()
+        p.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
+        
+        gbs = self.gbs = wx.GridBagSizer(5, 5)
 
         gbs.Add( wx.StaticText(p, -1, gbsDescription),
                  (0,0), (1,7), wx.ALIGN_CENTER | wx.ALL, 5)
@@ -58,7 +60,7 @@ class TestFrame(wx.Frame):
         self.Bind(wx.EVT_BUTTON, self.OnMoveButton, moveBtn2)
         
         # Add a spacer at the end to ensure some extra space at the bottom
-        gbs.Add((10,10), (14,0))
+        gbs.Add((10,10), (14,7))
   
         gbs.AddGrowableRow(3)
         gbs.AddGrowableCol(2)
@@ -106,6 +108,15 @@ when compiled in debug mode.""",
         
         self.gbs.Layout()
        
+
+    def OnLeftDown(self, evt):
+        pt = evt.GetPosition()
+        item = self.gbs.FindItemAtPoint(pt)
+        if item is None:
+            print "no item at", `pt`
+        else:
+            print "item found: ", `item.GetPos()`, "--", `item.GetSpan()`
+
         
 #----------------------------------------------------------------------
 
