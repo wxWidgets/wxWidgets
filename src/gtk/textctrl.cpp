@@ -916,20 +916,34 @@ bool wxTextCtrl::CanRedo() const
 
 // If the return values from and to are the same, there is no
 // selection.
-void wxTextCtrl::GetSelection(long* from, long* to) const
+void wxTextCtrl::GetSelection(long* fromOut, long* toOut) const
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-    if (!(GTK_EDITABLE(m_text)->has_selection))
+    long from, to;
+    if ( !(GTK_EDITABLE(m_text)->has_selection) )
     {
-        long i = GetInsertionPoint();
-        if (from) *from = i;
-        if (to)   *to = i;
-        return;
+        from =
+        to = GetInsertionPoint();
+    }
+    else // got selection
+    {
+        from = (long) GTK_EDITABLE(m_text)->selection_start_pos;
+        to = (long) GTK_EDITABLE(m_text)->selection_end_pos;
+
+        if ( from > to )
+        {
+            // exchange them to be compatible with wxMSW
+            long tmp = from;
+            from = to;
+            to = tmp;
+        }
     }
 
-    if (from) *from = (long) GTK_EDITABLE(m_text)->selection_start_pos;
-    if (to)   *to = (long) GTK_EDITABLE(m_text)->selection_end_pos;
+    if ( fromOut )
+        *fromOut = from;
+    if ( toOut )
+        *toOut = to;
 }
 
 bool wxTextCtrl::IsEditable() const
