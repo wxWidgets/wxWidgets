@@ -301,7 +301,8 @@ that direction).
 
 \func{void}{SetScrollbars}{\param{int}{ pixelsPerUnitX}, \param{int}{ pixelsPerUnitY},\rtfsp
 \param{int}{ noUnitsX}, \param{int}{ noUnitsY},\rtfsp
-\param{int }{xPos = 0}, \param{int}{ yPos = 0}}
+\param{int }{xPos = 0}, \param{int}{ yPos = 0},\rtfsp
+\param{bool }{noRefresh = FALSE}}
 
 Sets up vertical and/or horizontal scrollbars.
 
@@ -318,6 +319,8 @@ Sets up vertical and/or horizontal scrollbars.
 \docparam{xPos}{Position to initialize the scrollbars in the horizontal direction, in scroll units.}
 
 \docparam{yPos}{Position to initialize the scrollbars in the vertical direction, in scroll units.}
+
+\docparam{noRefresh}{Will not refresh window if TRUE.}
 
 \wxheading{Remarks}
 
