@@ -287,7 +287,7 @@ value to fall within the current bounds.
 <DT><B>SetNoneAllowed(bool)</B>
 <DD>If called with a value of True, this function will cause the control
 to allow the value to be empty, representing a value of None.
-If called with a value of fakse, this function will prevent the value
+If called with a value of false, this function will prevent the value
 from being None.  If the value of the control is currently None,
 ie. the control is empty, then the value will be changed to that
 of the lower bound of the control, or 0 if no lower bound is set.
