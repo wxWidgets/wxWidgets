@@ -2854,6 +2854,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 wxPoint pt(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 
                 wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU, GetId(), pt);
+                evtCtx.SetEventObject(this);
                 processed = GetEventHandler()->ProcessEvent(evtCtx);
             }
             break;
