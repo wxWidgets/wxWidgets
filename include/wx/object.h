@@ -537,13 +537,14 @@ inline wxObject *wxCheckDynamicCast(wxObject *obj, wxClassInfo *classInfo)
 #if wxUSE_EXTENDED_RTTI
 class WXDLLIMPEXP_BASE wxDynamicObject : public wxObject
 {
+    friend class WXDLLIMPEXP_BASE wxDynamicClassInfo ;
 public:
     // instantiates this object with an instance of its superclass
     wxDynamicObject(wxObject* superClassInstance, const wxDynamicClassInfo *info) ;
     ~wxDynamicObject();
 
-    void SetProperty (const wxChar *PropertyName, const wxxVariant &Value);
-    wxxVariant GetProperty (const wxChar *PropertyName) const ;
+    void SetProperty (const wxChar *propertyName, const wxxVariant &value);
+    wxxVariant GetProperty (const wxChar *propertyName) const ;
 
     // get the runtime identity of this object
     wxClassInfo *GetClassInfo() const
@@ -556,6 +557,12 @@ public:
         return m_superClassInstance ;
     }
 private :
+    // removes an existing runtime-property
+    void RemoveProperty( const wxChar *propertyName ) ;
+
+    // renames an existing runtime-property
+    void RenameProperty( const wxChar *oldPropertyName , const wxChar *newPropertyName ) ;
+
     wxObject *m_superClassInstance ;
     const wxDynamicClassInfo *m_classInfo;
     struct wxDynamicObjectInternal;

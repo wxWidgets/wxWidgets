@@ -37,6 +37,7 @@
 #include "wx/beforestd.h"
 #include <map>
 #include <string>
+#include <list>
 #include "wx/afterstd.h"
 
 using namespace std ;
@@ -546,31 +547,22 @@ wxObject* wxxVariant::GetAsObject()
 // own attributes in a hash map. Like this it is possible to create the objects and
 // stream them, as if their class information was already available from compiled data
 
-// can't keep the attributes in a hash map, because if someone renames a property in
-// the class info, then things go potty later on when we try to iterate through
-// the property values by name.
-struct wxDynamicProperty__
-{
-#if wxUSE_UNICODE
-    wstring name;
-#else
-    string name;
-#endif
-    wxxVariant value;
-    wxDynamicProperty__ *next;
-};
-
 struct wxDynamicObject::wxDynamicObjectInternal
 {
-    wxDynamicObjectInternal() : m_properties(NULL) {}
-    wxDynamicProperty__ *m_properties;
-#if 0
+    wxDynamicObjectInternal() {}
+
 #if wxUSE_UNICODE
     map<wstring,wxxVariant> m_properties ;
 #else
     map<string,wxxVariant> m_properties ;
 #endif
-#endif
+} ;
+
+typedef list< wxDynamicObject* > wxDynamicObjectList ;
+
+struct wxDynamicClassInfo::wxDynamicClassInfoInternal
+{
+    wxDynamicObjectList m_dynamicObjects ;
 } ;
 
 // instantiates this object with an instance of its superclass
@@ -583,6 +575,7 @@ wxDynamicObject::wxDynamicObject(wxObject* superClassInstance, const wxDynamicCl
 
 wxDynamicObject::~wxDynamicObject()
 {
+    dynamic_cast<const wxDynamicClassInfo*>(m_classInfo)->m_data->m_dynamicObjects.remove( this ) ;
     delete m_data ;
     delete m_superClassInstance ;
 }
@@ -590,40 +583,29 @@ wxDynamicObject::~wxDynamicObject()
 void wxDynamicObject::SetProperty (const wxChar *propertyName, const wxxVariant &value)
 {
     wxASSERT_MSG(m_classInfo->FindPropertyInfoInThisClass(propertyName),wxT("Accessing Unknown Property in a Dynamic Object") ) ;
-    wxDynamicProperty__ *prop;
-    prop = m_data->m_properties;
-    while (prop)
-    {
-	if (!strcmp(prop->name.c_str(), propertyName))
-	{
-	    prop->value = value;
-	    return;
-	}
-	prop = prop->next;
-    }
-    prop = new wxDynamicProperty__;
-    prop->name = propertyName;
-    prop->value = value;
-    prop->next = m_data->m_properties;
-    m_data->m_properties = prop;
-//    m_data->m_properties[propertyName] = value ;
+    m_data->m_properties[propertyName] = value ;
 }
 
 wxxVariant wxDynamicObject::GetProperty (const wxChar *propertyName) const
 {
     wxASSERT_MSG(m_classInfo->FindPropertyInfoInThisClass(propertyName),wxT("Accessing Unknown Property in a Dynamic Object") ) ;
-    wxDynamicProperty__ *prop;
-    prop = m_data->m_properties;
-    while (prop)
-    {
-	if (!strcmp(prop->name.c_str(), propertyName))
-	    return prop->value;
-	prop = prop->next;
-    }
-    // FIXME: needs to return something a little more sane here.
-    return wxxVariant();
-//    return m_data->m_properties[propertyName] ;
+    return m_data->m_properties[propertyName] ;
 }
+
+void wxDynamicObject::RemoveProperty( const wxChar *propertyName ) 
+{
+    wxASSERT_MSG(m_classInfo->FindPropertyInfoInThisClass(propertyName),wxT("Removing Unknown Property in a Dynamic Object") ) ;
+    m_data->m_properties.erase( propertyName ) ;
+}
+
+void wxDynamicObject::RenameProperty( const wxChar *oldPropertyName , const wxChar *newPropertyName ) 
+{
+    wxASSERT_MSG(m_classInfo->FindPropertyInfoInThisClass(oldPropertyName),wxT("Renaming Unknown Property in a Dynamic Object") ) ;
+    wxxVariant value = m_data->m_properties[oldPropertyName] ;
+    m_data->m_properties.erase( oldPropertyName ) ;
+    m_data->m_properties[newPropertyName] = value ;
+}
+
 
 // ----------------------------------------------------------------------------
 // wxDynamiClassInfo
@@ -634,17 +616,21 @@ wxClassInfo( unitName, className , new const wxClassInfo*[2])
 {
     GetParents()[0] = superClass ;
     GetParents()[1] = NULL ;
+    m_data = new wxDynamicClassInfoInternal ;
 }
 
 wxDynamicClassInfo::~wxDynamicClassInfo()
 {
     delete[] GetParents() ;
+    delete m_data ;
 }
 
 wxObject *wxDynamicClassInfo::AllocateObject() const
 {
     wxObject* parent = GetParents()[0]->AllocateObject() ;
-    return new wxDynamicObject( parent , this ) ;
+    wxDynamicObject *obj = new wxDynamicObject( parent , this ) ;
+    m_data->m_dynamicObjects.push_back( obj ) ;
+    return obj ;
 }
 
 void wxDynamicClassInfo::Create (wxObject *object, int paramCount, wxxVariant *params) const
@@ -699,6 +685,8 @@ void wxDynamicClassInfo::AddHandler( const wxChar *handlerName , wxObjectEventFu
 // removes an existing runtime-property
 void wxDynamicClassInfo::RemoveProperty( const wxChar *propertyName ) 
 {
+    for ( wxDynamicObjectList::iterator iter = m_data->m_dynamicObjects.begin() ; iter != m_data->m_dynamicObjects.end() ; ++iter )
+        (*iter)->RemoveProperty( propertyName ) ;
     delete FindPropertyInfoInThisClass(propertyName) ;
 }
 
@@ -715,6 +703,8 @@ void wxDynamicClassInfo::RenameProperty( const wxChar *oldPropertyName , const w
     wxASSERT_MSG( pi ,wxT("not existing property") ) ;
     pi->m_name = newPropertyName ;
     dynamic_cast<wxGenericPropertyAccessor*>(pi->GetAccessor())->RenameProperty( oldPropertyName , newPropertyName ) ;
+    for ( wxDynamicObjectList::iterator iter = m_data->m_dynamicObjects.begin() ; iter != m_data->m_dynamicObjects.end() ; ++iter )
+        (*iter)->RenameProperty( oldPropertyName , newPropertyName ) ;
 }
 
 // renames an existing runtime-handler

@@ -152,8 +152,14 @@ void wxWriter::WriteAllProperties( const wxObject * obj , const wxClassInfo* ci 
     {
         wxString name = ci->GetCreateParamName(i) ;
         const wxPropertyInfo* prop = map.find(name)->second ;
-        wxASSERT_MSG( prop , wxT("Create Parameter not found in declared RTTI Parameters") ) ;
-        WriteOneProperty( obj , prop->GetDeclaringClass() , prop , persister , data ) ;
+        if ( prop )
+        {
+            WriteOneProperty( obj , prop->GetDeclaringClass() , prop , persister , data ) ;
+        }
+        else
+        {
+            wxLogError( _("Create Parameter not found in declared RTTI Parameters") ) ;
+        }
         map.erase( name ) ;
     }
 
@@ -227,18 +233,29 @@ void wxWriter::WriteOneProperty( const wxObject *obj , const wxClassInfo* ci , c
             const wxHandlerInfo *handler = NULL ;
 
             const wxEvtHandler * evSource = dynamic_cast<const wxEvtHandler *>(obj) ;
-            wxASSERT_MSG( evSource , wxT("Illegal Object Class (Non-wxEvtHandler) as Event Source") ) ;
-
-            FindConnectEntry( evSource , dti , sink , handler ) ;
-            if ( persister->BeforeWriteDelegate( this , obj , ci , pi , sink , handler ) )
+            if ( evSource )
             {
-                if ( sink != NULL && handler != NULL )
+                FindConnectEntry( evSource , dti , sink , handler ) ;
+                if ( persister->BeforeWriteDelegate( this , obj , ci , pi , sink , handler ) )
                 {
-                    DoBeginWriteProperty( pi ) ;
-                    wxASSERT_MSG( IsObjectKnown( sink ) , wxT("Streaming delegates for not already streamed objects not yet supported") ) ;
-                    DoWriteDelegate( obj , ci , pi , sink , GetObjectID( sink ) , sink->GetClassInfo() , handler ) ;
-                    DoEndWriteProperty( pi ) ;
+                    if ( sink != NULL && handler != NULL )
+                    {
+                        DoBeginWriteProperty( pi ) ;
+                        if ( IsObjectKnown( sink ) )
+                        {
+                            DoWriteDelegate( obj , ci , pi , sink , GetObjectID( sink ) , sink->GetClassInfo() , handler ) ;
+                            DoEndWriteProperty( pi ) ;
+                        }
+                        else
+                        {
+                            wxLogError( _("Streaming delegates for not already streamed objects not yet supported") ) ;
+                        }
+                    }
                 }
+            }
+            else
+            {
+                wxLogError(_("Illegal Object Class (Non-wxEvtHandler) as Event Source") ) ;
             }
         }
         else
@@ -253,8 +270,14 @@ void wxWriter::WriteOneProperty( const wxObject *obj , const wxClassInfo* ci , c
             if ( pi->GetFlags() & wxPROP_ENUM_STORE_LONG )
             {
                 const wxEnumTypeInfo *eti = dynamic_cast<const wxEnumTypeInfo*>( pi->GetTypeInfo() ) ;
-                wxASSERT_MSG( eti , wxT("Type must have enum - long conversion") ) ;
-                eti->ConvertFromLong( value.Get<long>() , value ) ;
+                if ( eti )
+                {
+                    eti->ConvertFromLong( value.Get<long>() , value ) ;
+                }
+                else
+                {
+                    wxLogError( _("Type must have enum - long conversion") ) ;
+                }
             }
 
             // avoid streaming out default values
@@ -335,18 +358,41 @@ wxReader::~wxReader()
 
 wxClassInfo* wxReader::GetObjectClassInfo(int objectID)
 {
-    assert( m_data->m_classInfos.find(objectID) != m_data->m_classInfos.end() );
+    if ( objectID == wxNullObjectID || objectID == wxInvalidObjectID )
+    {
+        wxLogError( _("Invalid or Null Object ID passed to GetObjectClassInfo" ) ) ;
+        return NULL ;
+    }
+    if ( m_data->m_classInfos.find(objectID) == m_data->m_classInfos.end() )
+    {
+        wxLogError( _("Unknown Object passed to GetObjectClassInfo" ) ) ;
+        return NULL ;
+    }
     return m_data->m_classInfos[objectID] ;
 }
 
 void wxReader::SetObjectClassInfo(int objectID, wxClassInfo *classInfo )
 {
-    assert(  m_data->m_classInfos.find(objectID) == m_data->m_classInfos.end()  ) ;
+    if ( objectID == wxNullObjectID || objectID == wxInvalidObjectID )
+    {
+        wxLogError( _("Invalid or Null Object ID passed to GetObjectClassInfo" ) ) ;
+        return ;
+    }
+    if ( m_data->m_classInfos.find(objectID) != m_data->m_classInfos.end() )
+    {
+        wxLogError( _("Already Registered Object passed to SetObjectClassInfo" ) ) ;
+        return ;
+    }
     m_data->m_classInfos[objectID] = classInfo ;
 }
 
 bool wxReader::HasObjectClassInfo( int objectID )
 {
+    if ( objectID == wxNullObjectID || objectID == wxInvalidObjectID )
+    {
+        wxLogError( _("Invalid or Null Object ID passed to HasObjectClassInfo" ) ) ;
+        return NULL ;
+    }
     return m_data->m_classInfos.find(objectID) != m_data->m_classInfos.end() ;
 }
 
@@ -372,15 +418,23 @@ struct wxRuntimeDepersister::wxRuntimeDepersisterInternal
 
     void SetObject(int objectID, wxObject *obj )
     {
-        assert(  m_objects.find(objectID) == m_objects.end()  ) ;
+        if ( m_objects.find(objectID) != m_objects.end() )
+        {
+            wxLogError( _("Passing a already registered object to SetObject") ) ;
+            return  ;
+        }
         m_objects[objectID] = obj ;
     }
     wxObject* GetObject( int objectID )
     {
         if ( objectID == wxNullObjectID )
             return NULL ;
+        if ( m_objects.find(objectID) == m_objects.end() )
+        {
+            wxLogError( _("Passing an unkown object to GetObject") ) ;
+            return NULL ;
+        }
 
-        assert(  m_objects.find(objectID) != m_objects.end()  ) ;
         return m_objects[objectID] ;
     }
 } ;
@@ -582,15 +636,24 @@ struct wxCodeDepersister::wxCodeDepersisterInternal
 
     void SetObjectName(int objectID, const wxString &name )
     {
-        assert(  m_objectNames.find(objectID) == m_objectNames.end()  ) ;
+        if ( m_objectNames.find(objectID) != m_objectNames.end() )
+        {
+            wxLogError( _("Passing a already registered object to SetObjectName") ) ;
+            return  ;
+        }
         m_objectNames[objectID] = (const wxChar *)name;
     }
+
     wxString GetObjectName( int objectID )
     {
         if ( objectID == wxNullObjectID )
             return wxT("NULL") ;
 
-        assert(  m_objectNames.find(objectID) != m_objectNames.end()  ) ;
+        if ( m_objectNames.find(objectID) == m_objectNames.end() )
+        {
+            wxLogError( _("Passing an unkown object to GetObject") ) ;
+            return wxEmptyString ;
+        }
         return wxString( m_objectNames[objectID].c_str() ) ;
     }
 } ;
@@ -630,8 +693,14 @@ wxString wxCodeDepersister::ValueAsCode( const wxxVariant &param )
     if ( type->GetKind() == wxT_CUSTOM )
     {
         const wxCustomTypeInfo* cti = dynamic_cast<const wxCustomTypeInfo*>(type) ;
-        wxASSERT_MSG( cti , wxT("Internal error, illegal wxCustomTypeInfo") ) ;
-        value.Printf( wxT("%s(%s)"), cti->GetTypeName().c_str(),param.GetAsString().c_str() );
+        if ( cti )
+        {
+            value.Printf( wxT("%s(%s)"), cti->GetTypeName().c_str(),param.GetAsString().c_str() );
+        }
+        else
+        {
+            wxLogError ( _("Internal error, illegal wxCustomTypeInfo") ) ;
+        }
     }
     else if ( type->GetKind() == wxT_STRING )
     {
@@ -759,12 +828,18 @@ void wxCodeDepersister::SetConnect(int eventSourceObjectID,
     wxString ehsink = m_data->GetObjectName(eventSinkObjectID) ;
     wxString ehsinkClass = eventSinkClassInfo->GetClassName() ;
     const wxDelegateTypeInfo *delegateTypeInfo = dynamic_cast<const wxDelegateTypeInfo*>(delegateInfo->GetTypeInfo());
-    wxASSERT_MSG(delegateTypeInfo, "delegate has no type info");
-    int eventType = delegateTypeInfo->GetEventType() ;
-    wxString handlerName = handlerInfo->GetName() ;
+    if ( delegateTypeInfo )
+    {
+        int eventType = delegateTypeInfo->GetEventType() ;
+        wxString handlerName = handlerInfo->GetName() ;
 
-    m_fp->WriteString( wxString::Format(  wxT("\t%s->Connect( %s->GetId() , %d , (wxObjectEventFunction)(wxEventFunction) & %s::%s , NULL , %s ) ;") ,
-        ehsource.c_str() , ehsource.c_str() , eventType , ehsinkClass.c_str() , handlerName.c_str() , ehsink.c_str() ) );
+        m_fp->WriteString( wxString::Format(  wxT("\t%s->Connect( %s->GetId() , %d , (wxObjectEventFunction)(wxEventFunction) & %s::%s , NULL , %s ) ;") ,
+            ehsource.c_str() , ehsource.c_str() , eventType , ehsinkClass.c_str() , handlerName.c_str() , ehsink.c_str() ) );
+    }
+    else
+    {
+        wxLogError(_("delegate has no type info"));
+    }
 }
 
 #include <wx/arrimpl.cpp>

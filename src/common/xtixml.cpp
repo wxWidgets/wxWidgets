@@ -226,8 +226,15 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
         if (node->GetPropVal(wxT("href") , &ObjectIdString ) )
         {
             objectID = atoi( ObjectIdString.ToAscii() ) ;
-            wxASSERT_MSG( HasObjectClassInfo( objectID ) , wxT("Forward hrefs are not supported") ) ;
-            return objectID ;
+            if ( HasObjectClassInfo( objectID ) )
+            {
+                return objectID ;
+            }
+            else
+            {
+                wxLogError( _("Forward hrefs are not supported") ) ;
+                return wxInvalidObjectID ;                
+            }
         }
         if ( !node->GetPropVal(wxT("id") , &ObjectIdString ) )
         {
@@ -240,17 +247,30 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
         return wxInvalidObjectID;
     }
     classInfo = wxClassInfo::FindClass(className);
-    wxASSERT_MSG( classInfo , wxString::Format(wxT("unknown class %s"),className ) ) ;
-    wxASSERT_MSG( !children || children->GetType() != wxXML_TEXT_NODE , wxT("objects cannot have XML Text Nodes") ) ;
+    if ( classInfo == NULL )
+    {
+        wxLogError( wxString::Format(_("unknown class %s"),className ) ) ;
+        return wxInvalidObjectID ;
+    }
+
+    if ( children != NULL && children->GetType() == wxXML_TEXT_NODE )
+    {
+        wxLogError(_("objects cannot have XML Text Nodes") ) ; 
+        return wxInvalidObjectID;
+    }
     if (!node->GetPropVal(wxT("id"), &ObjectIdString))
     {
-        wxASSERT_MSG(0,wxT("Objects must have an id attribute") ) ;
+        wxLogError(_("Objects must have an id attribute") ) ;
         // No object id.  Eek. FIXME: error handling
         return wxInvalidObjectID;
     }
     objectID = atoi( ObjectIdString.ToAscii() ) ;
     // is this object already has been streamed in, return it here
-    wxASSERT_MSG( !HasObjectClassInfo( objectID ) , wxString::Format(wxT("Doubly used id : %d"), objectID ) ) ;
+    if ( HasObjectClassInfo( objectID ) )
+    {
+        wxLogError ( wxString::Format(_("Doubly used id : %d"), objectID ) ) ; 
+        return wxInvalidObjectID ;
+    }
 
     // new object, start with allocation
     // first make the object know to our internal registry
@@ -299,7 +319,10 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
         const wxChar* paramName = classInfo->GetCreateParamName(i) ;
         PropertyNodes::iterator propiter = propertyNodes.find( paramName ) ;
         const wxPropertyInfo* pi = classInfo->FindPropertyInfo( paramName ) ;
-        wxASSERT_MSG(pi,wxString::Format(wxT("Unkown Property %s"),paramName) ) ;
+        if ( pi == 0 )
+        {
+            wxLogError( wxString::Format(_("Unkown Property %s"),paramName) ) ;
+        }
         // if we don't have the value of a create param set in the xml
         // we use the default value
         if ( propiter != propertyNodes.end() )
@@ -317,11 +340,16 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                 if( pi->GetFlags() & wxPROP_ENUM_STORE_LONG )
                 {
                     const wxEnumTypeInfo *eti = dynamic_cast<const wxEnumTypeInfo*>( pi->GetTypeInfo() ) ;
-                    wxASSERT_MSG( eti , wxT("Type must have enum - long conversion") ) ;
-
-                    long realval ;
-                    eti->ConvertToLong( createParams[i]  , realval ) ;
-                    createParams[i] = wxxVariant( realval ) ;
+                    if ( eti )
+                    {
+                        long realval ;
+                        eti->ConvertToLong( createParams[i]  , realval ) ;
+                        createParams[i] = wxxVariant( realval ) ;
+                    }
+                    else
+                    {
+                        wxLogError( _("Type must have enum - long conversion") ) ;
+                    }
                 }
                 createClassInfos[i] = NULL ;
             }
@@ -376,7 +404,11 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                     const wxTypeInfo * elementType = collType->GetElementType() ;
                     while( prop )
                     {
-                        wxASSERT_MSG(prop->GetName() == wxT("element") , wxT("A non empty collection must consist of 'element' nodes")) ;
+                        if ( prop->GetName() != wxT("element") )
+                        {
+                            wxLogError( _("A non empty collection must consist of 'element' nodes" ) ) ;
+                            break ;
+                        }
                         wxXmlNode* elementContent = prop->GetChildren() ;
                         if ( elementContent )
                         {
@@ -433,13 +465,19 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                     {
                         wxString resstring = prop->GetContent() ;
                         wxInt32 pos = resstring.Find('.') ;
-                        assert( pos != wxNOT_FOUND ) ;
-                        int sinkOid = atol(resstring.Left(pos).ToAscii()) ;
-                        wxString handlerName = resstring.Mid(pos+1) ;
-                        wxClassInfo* sinkClassInfo = GetObjectClassInfo( sinkOid ) ;
+                        if ( pos != wxNOT_FOUND )
+                        {
+                            int sinkOid = atol(resstring.Left(pos).ToAscii()) ;
+                            wxString handlerName = resstring.Mid(pos+1) ;
+                            wxClassInfo* sinkClassInfo = GetObjectClassInfo( sinkOid ) ;
 
-                        callbacks->SetConnect( objectID , classInfo , pi , sinkClassInfo ,
-                            sinkClassInfo->FindHandlerInfo(handlerName) ,  sinkOid ) ;
+                            callbacks->SetConnect( objectID , classInfo , pi , sinkClassInfo ,
+                                sinkClassInfo->FindHandlerInfo(handlerName) ,  sinkOid ) ;
+                        }
+                        else
+                        {
+                            wxLogError( _("incorrect event handler string, missing dot") ) ;
+                        }
                     }
 
                 }
@@ -449,11 +487,16 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                     if( pi->GetFlags() & wxPROP_ENUM_STORE_LONG )
                     {
                         const wxEnumTypeInfo *eti = dynamic_cast<const wxEnumTypeInfo*>( pi->GetTypeInfo() ) ;
-                        wxASSERT_MSG( eti , wxT("Type must have enum - long conversion") ) ;
-
-                        long realval ;
-                        eti->ConvertToLong( nodeval , realval ) ;
-                        nodeval = wxxVariant( realval ) ;
+                        if ( eti )
+                        {
+                            long realval ;
+                            eti->ConvertToLong( nodeval , realval ) ;
+                            nodeval = wxxVariant( realval ) ;
+                        }
+                        else
+                        {
+                            wxLogError( _("Type must have enum - long conversion") ) ;
+                        }
                     }
                     callbacks->SetProperty( objectID, classInfo ,pi , nodeval ) ;
                 }

@@ -42,6 +42,8 @@
 #include "wx/string.h"
 #include "wx/arrstr.h"
 #include "wx/hashmap.h"
+#include "wx/log.h"
+#include  "wx/intl.h"
 
 #include <typeinfo>
 
@@ -391,11 +393,11 @@ public :
     // convert a wxxVariant holding data of this type into a string
     void ConvertToString( const wxxVariant& data , wxString &result ) const
 
-    { wxASSERT_MSG( m_toString , wxT("String conversions not supported") ) ; (*m_toString)( data , result ) ; }
+    { if ( m_toString ) (*m_toString)( data , result ) ; else wxLogError( _("String conversions not supported") ) ; }
 
     // convert a string into a wxxVariant holding the corresponding data in this type
     void ConvertFromString( const wxString& data , wxxVariant &result ) const
-    { wxASSERT_MSG( m_fromString , wxT("String conversions not supported") ) ; (*m_fromString)( data , result ) ; }
+    { if( m_fromString ) (*m_fromString)( data , result ) ; else wxLogError( _("String conversions not supported") ) ; }
 
 #if wxUSE_UNICODE
     static wxTypeInfo        *FindType(const char *typeName) { return FindType( wxString::FromAscii(typeName) ) ; }
@@ -464,11 +466,11 @@ public :
     // convert a wxxVariant holding data of this type into a long
     void ConvertToLong( const wxxVariant& data , long &result ) const
 
-    { wxASSERT_MSG( m_toLong , wxT("Long conversions not supported") ) ; (*m_toLong)( data , result ) ; }
+    { if( m_toLong ) (*m_toLong)( data , result ) ; else wxLogError( _("Long Conversions not supported") ) ; }
 
     // convert a long into a wxxVariant holding the corresponding data in this type
     void ConvertFromLong( long data , wxxVariant &result ) const
-    { wxASSERT_MSG( m_fromLong , wxT("Long conversions not supported") ) ; (*m_fromLong)( data , result ) ; }
+    { if( m_fromLong ) (*m_fromLong)( data , result ) ; else wxLogError( _("Long Conversions not supported") ) ;}
 
 private :
     converterToLong_t m_toLong ;
@@ -536,15 +538,10 @@ template<typename T> const wxTypeInfo* wxGetTypeInfo( T * ) { return wxTypeInfo:
 #define wxCOLLECTION_TYPE_INFO( element , collection ) \
     wxCollectionTypeInfo s_typeInfo##collection( typeid(element).name() , NULL , NULL , typeid(collection).name() ) ;
 
-// sometimes a compiler invents specializations that are nowhere called, use this macro to satisfy the refs
+// sometimes a compiler invents specializations that are nowhere called, use this macro to satisfy the refs, currently
+// we don't have to play tricks, but if we will have to according to the compiler, we will use that macro for that
 
 #define wxILLEGAL_TYPE_SPECIALIZATION( a )
-/*
-    template<>  const wxTypeInfo* wxGetTypeInfo( a * ) { assert(0) ; \
-    static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ; return &s_typeInfo ; } \
-    template<>  void wxStringReadValue(const wxString & , a & ) { assert(0) ; }\
-    template<>  void wxStringWriteValue(wxString & , a const & ) { assert(0) ; }
-*/
 
 // ----------------------------------------------------------------------------
 // wxxVariant as typesafe data holder
@@ -798,19 +795,19 @@ public :
 
     // Setting a simple property (non-collection)
     virtual void SetProperty(wxObject *object, const wxxVariant &value) const
-    { wxASSERT_MSG(m_setter,wxT("SetProperty called w/o valid setter") ) ; m_setter->Set( object , value ) ;}
+    { if ( m_setter ) m_setter->Set( object , value ) ; wxLogError( _("SetProperty called w/o valid setter") ) ;}
 
     // Getting a simple property (non-collection)
     virtual void GetProperty(const wxObject *object, wxxVariant &result) const
-    { wxASSERT_MSG(m_getter,wxT("GetProperty called w/o valid getter") ) ; m_getter->Get( object , result ) ;}
+    { if ( m_getter ) m_getter->Get( object , result ) ; else wxLogError( _("GetProperty called w/o valid getter") ) ;}
 
     // Adding an element to a collection property
     virtual void AddToPropertyCollection(wxObject *object, const wxxVariant &value) const
-    { wxASSERT_MSG(m_adder,wxT("AddToPropertyCollection called w/o valid adder") ) ; m_adder->Add( object , value ) ;}
+    { if ( m_adder ) m_adder->Add( object , value ) ; else wxLogError( _("AddToPropertyCollection called w/o valid adder") ) ;}
 
     // Getting a collection property
     virtual void GetPropertyCollection( const wxObject *obj, wxxVariantArray &result) const
-    { wxASSERT_MSG(m_collectionGetter,wxT("GetPropertyCollection called w/o valid collection getter") ) ; m_collectionGetter->Get( obj , result) ;}
+    { if ( m_collectionGetter ) m_collectionGetter->Get( obj , result) ; else wxLogError( _("GetPropertyCollection called w/o valid collection getter") ) ;}
 
     virtual bool HasSetter() const { return m_setter != NULL ; }
     virtual bool HasCollectionGetter() const { return m_collectionGetter != NULL ; }
@@ -858,11 +855,11 @@ public :
 
     // Adding an element to a collection property
     virtual void AddToPropertyCollection(wxObject *WXUNUSED(object), const wxxVariant &WXUNUSED(value)) const
-    { wxASSERT_MSG(0,wxT("AddToPropertyCollection called on a generic accessor") ) ;}
+    { wxLogError( _("AddToPropertyCollection called on a generic accessor") ) ;}
 
     // Getting a collection property
     virtual void GetPropertyCollection( const wxObject *WXUNUSED(obj), wxxVariantArray &WXUNUSED(result)) const
-    { wxASSERT_MSG(0,wxT("GetPropertyCollection called on a generic accessor") ) ;}
+    { wxLogError ( _("GetPropertyCollection called on a generic accessor") ) ;}
 private :
     struct wxGenericPropertyAccessorInternal ;
     wxGenericPropertyAccessorInternal* m_data ;
@@ -1604,7 +1601,11 @@ public:
     // direct construction call for classes that cannot construct instances via alloc/create
     wxObject *ConstructObject(int ParamCount, wxxVariant *Params) const
     {
-        wxASSERT_MSG( ParamCount == m_constructorPropertiesCount , wxT("Illegal Parameter Count for ConstructObject Method")) ;
+        if ( ParamCount != m_constructorPropertiesCount )
+        {
+            wxLogError( _("Illegal Parameter Count for ConstructObject Method") ) ;
+            return NULL ;
+        }
         wxObject *object = NULL ;
         m_constructor->Create( object , Params ) ;
         return object ;
@@ -1673,7 +1674,11 @@ public:
     // initialized
     virtual void Create (wxObject *object, int ParamCount, wxxVariant *Params) const
     {
-        wxASSERT_MSG( ParamCount == m_constructorPropertiesCount , wxT("Illegal Parameter Count for Create Method")) ;
+        if ( ParamCount != m_constructorPropertiesCount )
+        {
+            wxLogError( _("Illegal Parameter Count for Create Method") ) ;
+            return ;
+        }
         m_constructor->Create( object , Params ) ;
     }
 
@@ -1770,6 +1775,7 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
 
 class WXDLLIMPEXP_BASE wxDynamicClassInfo : public wxClassInfo
 {
+    friend class WXDLLIMPEXP_BASE wxDynamicObject ;
 public :
     wxDynamicClassInfo( const wxChar *_UnitName, const wxChar *_ClassName , const wxClassInfo* superClass ) ;
     virtual ~wxDynamicClassInfo() ;
@@ -1807,6 +1813,9 @@ public :
 
     // renames an existing runtime-handler
     void RenameHandler( const wxChar *oldHandlerName , const wxChar *newHandlerName ) ;
+private :
+    struct wxDynamicClassInfoInternal ;
+    wxDynamicClassInfoInternal* m_data ;
 } ;
 
 // ----------------------------------------------------------------------------

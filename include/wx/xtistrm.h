@@ -21,7 +21,7 @@
 #if wxUSE_EXTENDED_RTTI
 
 const int wxInvalidObjectID = -2 ;
-const int wxNullObjectID = -1 ;
+const int wxNullObjectID = -3 ;
 
 // Filer contains the interfaces for streaming objects in and out of XML,
 // rendering them either to objects in memory, or to code.  Note:  We
@@ -173,6 +173,8 @@ public :
     // Reads the component the reader is pointed at from the underlying format.  
     // The return value is the root object ID, which can
     // then be used to ask the depersister about that object
+    // if there was a problem you will get back wxInvalidObjectID and the current
+    // error log will carry the problems encoutered
     virtual int ReadObject( const wxString &name , wxDepersister *depersist ) = 0 ;
 
 private :
