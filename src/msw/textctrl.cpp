@@ -1856,38 +1856,12 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     return true;
 }
 
-WXHBRUSH wxTextCtrl::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
-#if wxUSE_CTL3D
-                               WXUINT message,
-                               WXWPARAM wParam,
-                               WXLPARAM lParam
-#else
-                               WXUINT WXUNUSED(message),
-                               WXWPARAM WXUNUSED(wParam),
-                               WXLPARAM WXUNUSED(lParam)
-#endif
-    )
+WXHBRUSH wxTextCtrl::MSWControlColor(WXHDC hDC)
 {
-#if wxUSE_CTL3D
-    if ( m_useCtl3D )
-    {
-        HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
-        return (WXHBRUSH) hbrush;
-    }
-#endif // wxUSE_CTL3D
+    if ( !IsEnabled() && !HasFlag(wxTE_MULTILINE) )
+        return MSWControlColorDisabled(hDC);
 
-    HDC hdc = (HDC)pDC;
-    wxColour colBack = GetBackgroundColour();
-
-    if (!IsEnabled() && (GetWindowStyle() & wxTE_MULTILINE) == 0)
-        colBack = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-
-    ::SetBkColor(hdc, wxColourToRGB(colBack));
-    ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
-
-    wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
-
-    return (WXHBRUSH)brush->GetResourceHandle();
+    return wxTextCtrlBase::MSWControlColorSolid(hDC);
 }
 
 bool wxTextCtrl::AdjustSpaceLimit()

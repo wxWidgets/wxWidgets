@@ -2706,12 +2706,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                 WXHWND hwnd;
                 UnpackCtlColor(wParam, lParam, &hdc, &hwnd);
 
-                processed = HandleCtlColor(&rc.hBrush,
-                                           (WXHDC)hdc,
-                                           (WXHWND)hwnd,
-                                           message,
-                                           wParam,
-                                           lParam);
+                processed = HandleCtlColor(&rc.hBrush, (WXHDC)hdc, (WXHWND)hwnd);
             }
             break;
 #endif // !__WXMICROWIN__
@@ -3740,17 +3735,12 @@ bool wxWindowMSW::HandleDisplayChange()
 
 #ifndef __WXMICROWIN__
 
-bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush,
-                                 WXHDC pDC,
-                                 WXHWND pWnd,
-                                 WXUINT message,
-                                 WXWPARAM wParam,
-                                 WXLPARAM lParam)
+bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush, WXHDC pDC, WXHWND pWnd)
 {
 #if wxUSE_CONTROLS
-    wxControl *item = (wxControl *)FindItemByHWND(pWnd, true);
+    wxWindow *item = FindItemByHWND(pWnd, true);
     if ( item )
-        *brush = item->OnCtlColor(pDC, pWnd, 0, message, wParam, lParam);
+        *brush = item->MSWControlColor(pDC);
     else
 #endif // wxUSE_CONTROLS
         *brush = NULL;
@@ -3759,17 +3749,6 @@ bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush,
 }
 
 #endif // __WXMICROWIN__
-
-// Define for each class of dialog and control
-WXHBRUSH wxWindowMSW::OnCtlColor(WXHDC hDC,
-                                 WXHWND WXUNUSED(hWnd),
-                                 WXUINT WXUNUSED(nCtlColor),
-                                 WXUINT WXUNUSED(message),
-                                 WXWPARAM WXUNUSED(wParam),
-                                 WXLPARAM WXUNUSED(lParam))
-{
-    return MSWControlColor(hDC);
-}
 
 WXHBRUSH wxWindowMSW::MSWControlColor(WXHDC WXUNUSED(hDC))
 {

@@ -213,27 +213,6 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
     return ::CallWindowProc(CASTWNDPROC gs_wndprocEdit, hWnd, message, wParam, lParam);
 }
 
-WXHBRUSH wxComboBox::OnCtlColor(WXHDC pDC,
-                                WXHWND WXUNUSED(pWnd),
-                                WXUINT WXUNUSED(nCtlColor),
-                                WXUINT WXUNUSED(message),
-                                WXWPARAM WXUNUSED(wParam),
-                                WXLPARAM WXUNUSED(lParam))
-{
-    HDC hdc = (HDC)pDC;
-    wxColour colBack = GetBackgroundColour();
-
-    if (!IsEnabled())
-        colBack = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-
-    ::SetBkColor(hdc, wxColourToRGB(colBack));
-    ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
-
-    wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
-
-    return (WXHBRUSH)brush->GetResourceHandle();
-}
-
 // ----------------------------------------------------------------------------
 // wxComboBox callbacks
 // ----------------------------------------------------------------------------
@@ -244,16 +223,6 @@ WXLRESULT wxComboBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
     // colour correctly (to be the same as our own one)
     switch ( nMsg )
     {
-        // we have to handle both: one for the normal case and the other for
-        // wxCB_READONLY
-        case WM_CTLCOLOREDIT:
-        case WM_CTLCOLORSTATIC:
-            WXHDC hdc;
-            WXHWND hwnd;
-            UnpackCtlColor(wParam, lParam, &hdc, &hwnd);
-
-            return (WXLRESULT)OnCtlColor(hdc, hwnd, 0, nMsg, wParam, lParam);
-            
         case CB_SETCURSEL:
             // Selection was set with SetSelection.  Update the value too.
             if ((int)wParam > GetCount())
@@ -261,7 +230,6 @@ WXLRESULT wxComboBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
             else
                 m_value = GetString(wParam);
             break;
-            
     }
 
     return wxChoice::MSWWindowProc(nMsg, wParam, lParam);

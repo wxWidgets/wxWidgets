@@ -73,8 +73,6 @@ public:
     virtual bool ContainsHWND(WXHWND hWnd) const;
 
     void Command(wxCommandEvent& event);
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-            WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
     virtual bool MSWOnScroll(int orientation, WXWORD wParam,
                              WXWORD pos, WXHWND control);
 

@@ -582,8 +582,10 @@ WXLRESULT wxChoice::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                 WXHWND hwnd;
                 UnpackCtlColor(wParam, lParam, &hdc, &hwnd);
 
-                return (WXLRESULT)OnCtlColor(hdc, hwnd, 0,
-                                             nMsg, wParam, lParam);
+                WXHBRUSH hbr = MSWControlColor((WXHDC)hdc);
+                if ( hbr )
+                    return (WXLRESULT)hbr;
+                //else: fall through to default window proc
             }
     }
 
@@ -615,24 +617,13 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     return true;
 }
 
-WXHBRUSH wxChoice::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
-                               WXUINT WXUNUSED(message),
-                               WXWPARAM WXUNUSED(wParam),
-                               WXLPARAM WXUNUSED(lParam)
-     )
+WXHBRUSH wxChoice::MSWControlColor(WXHDC hDC)
 {
-    HDC hdc = (HDC)pDC;
-    wxColour colBack = GetBackgroundColour();
+    if ( !IsEnabled() )
+        return MSWControlColorDisabled(hDC);
 
-    if (!IsEnabled())
-        colBack = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-
-    ::SetBkColor(hdc, wxColourToRGB(colBack));
-    ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
-
-    wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
-
-    return (WXHBRUSH)brush->GetResourceHandle();
+    return wxChoiceBase::MSWControlColorSolid(hDC);
 }
 
 #endif // wxUSE_CHOICE && !(__SMARTPHONE__ && __WXWINCE__)
+

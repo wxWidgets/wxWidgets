@@ -148,8 +148,7 @@ public:
 
     virtual void Command(wxCommandEvent& event);
     virtual bool MSWCommand(WXUINT param, WXWORD id);
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-            WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    virtual WXHBRUSH MSWControlColor(WXHDC hDC);
 
 #if wxUSE_RICHEDIT
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);

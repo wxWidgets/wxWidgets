@@ -305,12 +305,7 @@ public:
 
     bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
 
-    bool HandleCtlColor(WXHBRUSH *hBrush,
-                        WXHDC hdc,
-                        WXHWND hWnd,
-                        WXUINT message,
-                        WXWPARAM wParam,
-                        WXLPARAM lParam);
+    bool HandleCtlColor(WXHBRUSH *hBrush, WXHDC hdc, WXHWND hWnd);
 
     bool HandlePaletteChanged(WXHWND hWndPalChange);
     bool HandleQueryNewPalette();
@@ -368,14 +363,6 @@ public:
     // this function should return the brush to paint the window background
     // with or 0 for the default brush
     virtual WXHBRUSH MSWControlColor(WXHDC hDC);
-
-    // deprecated, for compatibility only: override MSWControlColor instead
-    virtual WXHBRUSH OnCtlColor(WXHDC hDC,
-                                WXHWND hWnd,
-                                WXUINT nCtlColor,
-                                WXUINT message,
-                                WXWPARAM wParam,
-                                WXLPARAM lParam);
 
     // Responds to colour changes: passes event on to children.
     void OnSysColourChanged(wxSysColourChangedEvent& event);

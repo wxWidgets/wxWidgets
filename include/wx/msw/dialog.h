@@ -82,11 +82,6 @@ public:
     // Windows callbacks
     WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
-#if wxUSE_CTL3D
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                                WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-#endif // wxUSE_CTL3D
-
     // obsolete methods
     // ----------------
 

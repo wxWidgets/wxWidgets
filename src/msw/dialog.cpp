@@ -530,18 +530,3 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
     return rc;
 }
 
-#if wxUSE_CTL3D
-
-// Define for each class of dialog and control
-WXHBRUSH wxDialog::OnCtlColor(WXHDC WXUNUSED(pDC),
-                              WXHWND WXUNUSED(pWnd),
-                              WXUINT WXUNUSED(nCtlColor),
-                              WXUINT message,
-                              WXWPARAM wParam,
-                              WXLPARAM lParam)
-{
-    return (WXHBRUSH)Ctl3dCtlColorEx(message, wParam, lParam);
-}
-
-#endif // wxUSE_CTL3D
-

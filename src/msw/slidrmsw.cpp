@@ -481,16 +481,6 @@ void wxSliderMSW::SetRange(int minValue, int maxValue)
   }
 }
 
-WXHBRUSH wxSliderMSW::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-            WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
-{
-  if ( nCtlColor == CTLCOLOR_SCROLLBAR )
-    return 0;
-
-  // Otherwise, it's a static
-  return wxControl::OnCtlColor(pDC, pWnd, nCtlColor, message, wParam, lParam);
-}
-
 void wxSliderMSW::SetPageSize(int pageSize)
 {
   m_pageSize = pageSize;

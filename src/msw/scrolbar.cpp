@@ -363,13 +363,6 @@ void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageS
 #endif
 }
 
-
-WXHBRUSH wxScrollBar::OnCtlColor(WXHDC WXUNUSED(pDC), WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
-            WXUINT WXUNUSED(message), WXWPARAM WXUNUSED(wParam), WXLPARAM WXUNUSED(lParam))
-{
-  return 0;
-}
-
 void wxScrollBar::Command(wxCommandEvent& event)
 {
     SetThumbPosition(event.m_commandInt);
