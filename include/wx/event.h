@@ -1797,6 +1797,7 @@ public:
 
     enum
     {
+        IsBackward = 0x0000,
         IsForward = 0x0001,
         WinChange = 0x0002
     };
