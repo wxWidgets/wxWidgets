@@ -273,7 +273,7 @@ static char *GetResourcePath(char *buf, const char *name, bool create = FALSE)
         // Put in standard place for resource files if not absolute
         strcpy (buf, DEFAULT_XRESOURCE_DIR);
         strcat (buf, "/");
-        strcat (buf, (const char*) wxFileNameFromPath (name));
+        strcat (buf, wxFileNameFromPath (name).c_str());
     }
 
     if (create) {
@@ -335,9 +335,9 @@ bool wxWriteResource(const wxString& section, const wxString& entry, const wxStr
     }
 
     char resName[300];
-    strcpy (resName, (const char*) section);
+    strcpy (resName, section.c_str());
     strcat (resName, ".");
-    strcat (resName, (const char*) entry);
+    strcat (resName, entry.c_str());
 
     XrmPutStringResource (&database, resName, value);
     return TRUE;
@@ -481,7 +481,7 @@ void wxXMergeDatabases (wxApp * theApp, Display * display)
     wxString classname = theApp->GetClassName();
     char name[256];
     (void) strcpy (name, "/usr/lib/X11/app-defaults/");
-    (void) strcat (name, (const char*) classname);
+    (void) strcat (name, classname.c_str());
 
     /* Get application defaults file, if any */
     applicationDB = XrmGetFileDatabase (name);
@@ -674,9 +674,9 @@ bool wxSetDisplay(const wxString& display_name)
         Cardinal argc = 0;
 
         Display *display = XtOpenDisplay((XtAppContext) wxTheApp->GetAppContext(),
-            (const char*) display_name,
-            (const char*) wxTheApp->GetAppName(),
-            (const char*) wxTheApp->GetClassName(),
+            display_name.c_str(),
+            wxTheApp->GetAppName().c_str(),
+            wxTheApp->GetClassName().c_str(),
             NULL,
 #if XtSpecificationRelease < 5
             0, &argc,
@@ -1283,3 +1283,12 @@ wxString wxXmStringToString( const XmString& xmString )
     return wxEmptyString;
 }
 
+XmString wxStringToXmString( const wxString& str )
+{
+    return XmStringCreateLtoR((char *)str.c_str(), XmSTRING_DEFAULT_CHARSET);
+}
+
+XmString wxStringToXmString( const char* str )
+{
+    return XmStringCreateLtoR((char *)str, XmSTRING_DEFAULT_CHARSET);
+}

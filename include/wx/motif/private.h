@@ -94,6 +94,10 @@ extern XColor itemColors[5] ;
 // utility classes
 // ----------------------------------------------------------------------------
 
+wxString wxXmStringToString( const XmString& xmString );
+XmString wxStringToXmString( const wxString& string );
+XmString wxStringToXmString( const char* string );
+
 // XmString made easy to use in wxWindows (and has an added benefit of
 // cleaning up automatically)
 class wxXmString
@@ -122,8 +126,6 @@ public:
 private:
     XmString m_string;
 };
-
-wxString wxXmStringToString( const XmString& xmString );
 
 // ----------------------------------------------------------------------------
 // Routines used in both wxTextCtrl/wxListBox and nativa wxComboBox
