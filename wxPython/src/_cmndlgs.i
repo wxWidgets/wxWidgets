@@ -184,14 +184,14 @@ public:
         // TODO: ignoring clientData for now...  FIX THIS
         //       SWIG is messing up the &/*'s for some reason.
         wxSingleChoiceDialog(wxWindow* parent,
-                             wxString* message,
-                             wxString* caption,
-                             int LCOUNT, wxString* choices,
+                             const wxString& message,
+                             const wxString& caption,
+                             int choices, wxString* choices_array,
                              //char** clientData = NULL,
                              long style = wxCHOICEDLG_STYLE,
-                             wxPoint* pos = &wxDefaultPosition) {
-            return new wxSingleChoiceDialog(parent, *message, *caption,
-                                            LCOUNT, choices, NULL, style, *pos);
+                             const wxPoint& pos = wxDefaultPosition) {
+            return new wxSingleChoiceDialog(parent, message, caption,
+                                            choices, choices_array, NULL, style, pos);
         }
     }
 
