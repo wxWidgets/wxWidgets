@@ -78,9 +78,9 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
                 m_Items = (HtmlContentsItem*) realloc(m_Items, (m_ItemsCnt + HTML_REALLOC_STEP) * sizeof(HtmlContentsItem));
             m_Items[m_ItemsCnt].m_Level = m_Level;
             m_Items[m_ItemsCnt].m_ID = m_ID;
-            m_Items[m_ItemsCnt].m_Page = (char*) malloc(m_Page.Length() + 1);
+            m_Items[m_ItemsCnt].m_Page = new char[m_Page.Length() + 1];
             strcpy(m_Items[m_ItemsCnt].m_Page, m_Page.c_str());
-            m_Items[m_ItemsCnt].m_Name = (char*) malloc(m_Name.Length() + 1);
+            m_Items[m_ItemsCnt].m_Name = new char [m_Name.Length() + 1];
             strcpy(m_Items[m_ItemsCnt].m_Name, m_Name.c_str());
             m_Items[m_ItemsCnt].m_Book = m_Book;
             m_ItemsCnt++;
@@ -130,27 +130,27 @@ void wxHtmlHelpController::LoadMSProject(HtmlBookRecord *book, wxFileSystem& fsy
     f = fsys.OpenFile(contentsfile);
     if (f) {
         sz = f -> GetStream() -> GetSize();
-        buf = (char*) malloc(sz+1);
+        buf = new char[sz+1];
         buf[sz] = 0;
         f -> GetStream() -> Read(buf, sz);
         delete f;
         handler -> ReadIn(m_Contents, m_ContentsCnt);
         parser.Parse(buf);
         handler -> WriteOut(m_Contents, m_ContentsCnt);
-        free(buf);
+        delete[] buf;
     }
 
     f = fsys.OpenFile(indexfile);
     if (f) {
         sz = f -> GetStream() -> GetSize();
-        buf = (char*) malloc(sz+1);
+        buf = new  char[sz+1];
         buf[sz] = 0;
         f -> GetStream() -> Read(buf, sz);
         delete f;
         handler -> ReadIn(m_Index, m_IndexCnt);
         parser.Parse(buf);
         handler -> WriteOut(m_Index, m_IndexCnt);
-        free(buf);
+        delete[] buf;
     }
     if (show_wait_msg) delete busyinfo;
 }
@@ -177,10 +177,10 @@ void wxHtmlHelpController::LoadCachedBook(HtmlBookRecord *book, wxInputStream *f
         f -> Read(&x, sizeof(x));
         m_Contents[i].m_ID = x;
         f -> Read(&x, sizeof(x));
-        m_Contents[i].m_Name = (char*) malloc(x);
+        m_Contents[i].m_Name = new char[x];
         f -> Read(m_Contents[i].m_Name, x);
         f -> Read(&x, sizeof(x));
-        m_Contents[i].m_Page = (char*) malloc(x);
+        m_Contents[i].m_Page = new char[x];
         f -> Read(m_Contents[i].m_Page, x);
         m_Contents[i].m_Book = book;
     }
@@ -193,10 +193,10 @@ void wxHtmlHelpController::LoadCachedBook(HtmlBookRecord *book, wxInputStream *f
     m_Index = (HtmlContentsItem*) realloc(m_Index, (m_IndexCnt / HTML_REALLOC_STEP + 1) * HTML_REALLOC_STEP * sizeof(HtmlContentsItem));
     for (i = st; i < m_IndexCnt; i++) {
         f -> Read(&x, sizeof(x));
-        m_Index[i].m_Name = (char*) malloc(x);
+        m_Index[i].m_Name = new char[x];
         f -> Read(m_Index[i].m_Name, x);
         f -> Read(&x, sizeof(x));
-        m_Index[i].m_Page = (char*) malloc(x);
+        m_Index[i].m_Page = new char[x];
         f -> Read(m_Index[i].m_Page, x);
         m_Index[i].m_Book = book;
     }

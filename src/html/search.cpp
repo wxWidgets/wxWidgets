@@ -35,8 +35,8 @@
 
 void wxSearchEngine::LookFor(const wxString& keyword)
 {
-    if (m_Keyword) free(m_Keyword);
-    m_Keyword = (char*) malloc(keyword.Length() + 1);
+    if (m_Keyword) delete[] m_Keyword;
+    m_Keyword = new char[keyword.Length() + 1];
     strcpy(m_Keyword, keyword.c_str());
     for (int i = strlen(m_Keyword) - 1; i >= 0; i--)
         if ((m_Keyword[i] >= 'A') && (m_Keyword[i] <= 'Z'))
@@ -53,7 +53,7 @@ bool wxSearchEngine::Scan(wxInputStream *stream)
     int lng = stream ->GetSize();
     int wrd = strlen(m_Keyword);
     bool found = FALSE;
-    char *buf = (char*) malloc(lng + 1);
+    char *buf = new char[lng + 1];
     stream -> Read(buf, lng);
     buf[lng] = 0;
 
@@ -66,7 +66,7 @@ bool wxSearchEngine::Scan(wxInputStream *stream)
         if (j == wrd) {found = TRUE; break;}
     }
 
-    free(buf);
+    delete[] buf;
     return found;
 }
 

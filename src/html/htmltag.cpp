@@ -64,7 +64,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
                 i++;
             }
             dummy[i] = 0;
-            m_Cache[tg].Name = (char*) malloc(i+1);
+            m_Cache[tg].Name = new char[i+1];
             memcpy(m_Cache[tg].Name, dummy, i+1);
 
             while (src[pos] != '>') pos++;
@@ -89,7 +89,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
 
     // ok, we're done, now we'll free .Name members of cache - we don't need it anymore:
     for (i = 0; i < m_CacheSize; i++) {
-        free(m_Cache[i].Name);
+        delete[] m_Cache[i].Name;
         m_Cache[i].Name = NULL;
     }
 }

@@ -140,11 +140,11 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
     wxString doc;
 
     if (s == NULL) return wxEmptyString;
-    src = (char*) malloc(s -> GetSize() + 1);
+    src = new char[s -> GetSize() + 1];
     src[s -> GetSize()] = 0;
     s -> Read(src, s -> GetSize());
     doc = src;
-    free(src);
+    delete[] src;
 
     return doc;
 }

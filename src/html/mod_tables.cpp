@@ -169,7 +169,7 @@ void wxHtmlTableCell::ReallocRows(int rows)
     m_CellInfo = (cellStruct**) realloc(m_CellInfo, sizeof(cellStruct*) * rows);
     if (m_NumCols != 0) {
         int x = rows - 1;
-        m_CellInfo[x] = (cellStruct*) malloc(sizeof(cellStruct) * m_NumCols);
+        m_CellInfo[x] = new cellStruct[m_NumCols];
         for (int i = 0; i < m_NumCols; i++)
             m_CellInfo[x][i].flag = cellFree;
     }
@@ -338,7 +338,7 @@ void wxHtmlTableCell::Layout(int w)
 
     /* 3.  sub-layout all cells: */
     {
-        int *ypos = (int*) malloc(sizeof(int) * (m_NumRows + 1));
+        int *ypos = new int[m_NumRows + 1];
 
         int actcol, actrow;
         int fullwid;
@@ -385,7 +385,7 @@ void wxHtmlTableCell::Layout(int w)
 
         }
         m_Height = ypos[m_NumRows];
-        free(ypos);
+        delete[] ypos;
     }
 }
 

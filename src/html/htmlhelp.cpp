@@ -154,15 +154,15 @@ wxHtmlHelpController::~wxHtmlHelpController()
     delete m_ContentsImageList;
     if (m_Contents) {
         for (i = 0; i < m_ContentsCnt; i++) {
-            free(m_Contents[i].m_Page);
-            free(m_Contents[i].m_Name);
+            delete[] m_Contents[i].m_Page;
+            delete[] m_Contents[i].m_Name;
         }
         free(m_Contents);
     }
     if (m_Index) {
         for (i = 0; i < m_IndexCnt; i++) {
-            free(m_Index[i].m_Page);
-            free(m_Index[i].m_Name);
+            delete[] m_Index[i].m_Page;
+            delete[] m_Index[i].m_Name;
         }
         free(m_Index);
     }
@@ -243,7 +243,7 @@ bool wxHtmlHelpController::AddBook(const wxString& book, bool show_wait_msg)
     fsys.ChangePathTo(bookFull);
     s = fi -> GetStream();
     sz = s -> GetSize();
-    buff = (char*) malloc(sz+1);
+    buff = new char[sz+1];
     buff[sz] = 0;
     s -> Read(buff, sz);
     lineptr = buff;
@@ -259,7 +259,7 @@ bool wxHtmlHelpController::AddBook(const wxString& book, bool show_wait_msg)
         if (strstr(linebuf, "Contents file=") == linebuf)
             contents = linebuf + strlen("Contents file=");
     }
-    free(buff);
+    delete[] buff;
 
     bookr = new HtmlBookRecord(fsys.GetPath(), title, start);
 
@@ -267,9 +267,9 @@ bool wxHtmlHelpController::AddBook(const wxString& book, bool show_wait_msg)
         m_Contents = (HtmlContentsItem*) realloc(m_Contents, (m_ContentsCnt + HTML_REALLOC_STEP) * sizeof(HtmlContentsItem));
     m_Contents[m_ContentsCnt].m_Level = 0;
     m_Contents[m_ContentsCnt].m_ID = 0;
-    m_Contents[m_ContentsCnt].m_Page = (char*) malloc(start.Length() + 1);
+    m_Contents[m_ContentsCnt].m_Page = new char[start.Length() + 1];
     strcpy(m_Contents[m_ContentsCnt].m_Page, start.c_str());
-    m_Contents[m_ContentsCnt].m_Name = (char*) malloc(title.Length() + 1);
+    m_Contents[m_ContentsCnt].m_Name = new char [title.Length() + 1];
     strcpy(m_Contents[m_ContentsCnt].m_Name, title.c_str());
     m_Contents[m_ContentsCnt].m_Book = bookr;
     m_ContentsCnt++;
@@ -527,7 +527,7 @@ void wxHtmlHelpController::CreateHelpWindow()
 
     if (m_Frame) {
         m_Frame -> Raise();
-	m_Frame -> Show(TRUE);
+    	m_Frame -> Show(TRUE);
         return;
     }
 
