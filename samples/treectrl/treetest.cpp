@@ -285,7 +285,7 @@ void MyFrame::OnCount(wxCommandEvent& WXUNUSED(event))
 
     int i = m_treeCtrl->GetChildrenCount( item, FALSE );
     
-    wxLogMessage(T("%d children"), i);
+    wxLogMessage(wxT("%d children"), i);
 }
 
 void MyFrame::OnCountRec(wxCommandEvent& WXUNUSED(event))
@@ -296,7 +296,7 @@ void MyFrame::OnCountRec(wxCommandEvent& WXUNUSED(event))
 
     int i = m_treeCtrl->GetChildrenCount( item );
     
-    wxLogMessage(T("%d children"), i);
+    wxLogMessage(wxT("%d children"), i);
 }
 
 void MyFrame::DoSort(bool reverse)
@@ -324,7 +324,7 @@ void MyFrame::OnDumpSelected(wxCommandEvent& WXUNUSED(event))
     wxArrayTreeItemIds array;
 
     size_t count = m_treeCtrl->GetSelections(array);
-    wxLogMessage(T("%u items selected"), count);
+    wxLogMessage(wxT("%u items selected"), count);
 
     for ( size_t n = 0; n < count; n++ )
     {

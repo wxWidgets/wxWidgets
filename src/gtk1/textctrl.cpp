@@ -946,7 +946,7 @@ void wxTextCtrl::OnInternalIdle()
             cursor = *wxSTANDARD_CURSOR;
 
         window = m_widget->window;
-        if (window)
+        if ((window) && !(GTK_WIDGET_NO_WINDOW(m_widget)))
             gdk_window_set_cursor( window, cursor.GetCursor() );
     }
 }
