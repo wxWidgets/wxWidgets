@@ -90,10 +90,11 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
 
 void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool enable)
 {
-    // TODO: figure out why it gives a BadMatch when
-    // creating the bitmap (out.ConvertToBitmap).
-    // Possibly we should ensure all depths match.
-#if 0
+    // Comment this out if you don't want the disabled look,
+    // which currently acts weirdly for the scissors icon
+    // in the toolbar sample. See src/common/tbarbase.cpp
+    // for the wxCreateGreyedImage function.
+#if 1
     // Created disabled-state bitmap on demand
     if (!enable && !tool->GetBitmap2().Ok())
     {
