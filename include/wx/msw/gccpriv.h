@@ -48,7 +48,8 @@
 
 // Mingw runtime 1.0-20010604 has some missing _tXXXX functions,
 // so let's define them ourselves:
-#if defined(__GNUWIN32__) && wxCHECK_W32API_VERSION( 1, 0 )
+#if defined(__GNUWIN32__) && wxCHECK_W32API_VERSION( 1, 0 ) \
+    && !wxCHECK_W32API_VERSION( 1, 1 )
     #ifndef _tsetlocale
       #if wxUSE_UNICODE
       #define _tsetlocale _wsetlocale
