@@ -366,34 +366,6 @@ static PyObject *_wrap_wxWizardPage_Create(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
-#define wxWizardPage_Init(_swigobj)  (_swigobj->Init())
-static PyObject *_wrap_wxWizardPage_Init(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxWizardPage * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWizardPage_Init",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWizardPage_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWizardPage_Init. Expected _wxWizardPage_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxWizardPage_Init(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxWizardPage_GetPrev(_swigobj)  (_swigobj->GetPrev())
 static PyObject *_wrap_wxWizardPage_GetPrev(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1471,34 +1443,6 @@ static PyObject *_wrap_wxWizardPageSimple_Create(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
-#define wxWizardPageSimple_Init(_swigobj)  (_swigobj->Init())
-static PyObject *_wrap_wxWizardPageSimple_Init(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxWizardPageSimple * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWizardPageSimple_Init",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWizardPageSimple_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWizardPageSimple_Init. Expected _wxWizardPageSimple_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxWizardPageSimple_Init(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxWizardPageSimple_SetPrev(_swigobj,_swigarg0)  (_swigobj->SetPrev(_swigarg0))
 static PyObject *_wrap_wxWizardPageSimple_SetPrev(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2088,7 +2032,6 @@ static PyMethodDef wizardcMethods[] = {
 	 { "wxWizardPageSimple_Chain", (PyCFunction) _wrap_wxWizardPageSimple_Chain, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWizardPageSimple_SetNext", (PyCFunction) _wrap_wxWizardPageSimple_SetNext, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWizardPageSimple_SetPrev", (PyCFunction) _wrap_wxWizardPageSimple_SetPrev, METH_VARARGS | METH_KEYWORDS },
-	 { "wxWizardPageSimple_Init", (PyCFunction) _wrap_wxWizardPageSimple_Init, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWizardPageSimple_Create", (PyCFunction) _wrap_wxWizardPageSimple_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreWizardPageSimple", (PyCFunction) _wrap_new_wxPreWizardPageSimple, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxWizardPageSimple", (PyCFunction) _wrap_new_wxWizardPageSimple, METH_VARARGS | METH_KEYWORDS },
@@ -2117,7 +2060,6 @@ static PyMethodDef wizardcMethods[] = {
 	 { "wxWizardPage_GetBitmap", (PyCFunction) _wrap_wxWizardPage_GetBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWizardPage_GetNext", (PyCFunction) _wrap_wxWizardPage_GetNext, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWizardPage_GetPrev", (PyCFunction) _wrap_wxWizardPage_GetPrev, METH_VARARGS | METH_KEYWORDS },
-	 { "wxWizardPage_Init", (PyCFunction) _wrap_wxWizardPage_Init, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWizardPage_Create", (PyCFunction) _wrap_wxWizardPage_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWizardEvent_GetPage", (PyCFunction) _wrap_wxWizardEvent_GetPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWizardEvent_GetDirection", (PyCFunction) _wrap_wxWizardEvent_GetDirection, METH_VARARGS | METH_KEYWORDS },

@@ -9116,6 +9116,50 @@ static PyObject *_wrap_new_wxRegion(PyObject *self, PyObject *args, PyObject *kw
     return _resultobj;
 }
 
+#define new_wxRegionFromPoints(_swigarg0,_swigarg1,_swigarg2) (new wxRegion(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_new_wxRegionFromPoints(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRegion * _result;
+    int  _arg0;
+    wxPoint * _arg1;
+    int  _arg2 = (int ) wxWINDING_RULE;
+    int  NPOINTS;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "points","fillStyle", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:new_wxRegionFromPoints",_kwnames,&_obj1,&_arg2)) 
+        return NULL;
+    if (_obj1)
+{
+    _arg1 = wxPoint_LIST_helper(_obj1, &NPOINTS);
+	if (_arg1 == NULL) {
+		return NULL;
+	}
+}
+{
+	_arg0 = NPOINTS;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxRegion *)new_wxRegionFromPoints(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxRegion_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    delete [] _arg1;
+}
+    return _resultobj;
+}
+
 #define delete_wxRegion(_swigobj) (delete _swigobj)
 static PyObject *_wrap_delete_wxRegion(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -10203,6 +10247,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxRegion_Offset", (PyCFunction) _wrap_wxRegion_Offset, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRegion_Clear", (PyCFunction) _wrap_wxRegion_Clear, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxRegion", (PyCFunction) _wrap_delete_wxRegion, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxRegionFromPoints", (PyCFunction) _wrap_new_wxRegionFromPoints, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxRegion", (PyCFunction) _wrap_new_wxRegion, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageList_GetSize", (PyCFunction) _wrap_wxImageList_GetSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageList_RemoveAll", (PyCFunction) _wrap_wxImageList_RemoveAll, METH_VARARGS | METH_KEYWORDS },
