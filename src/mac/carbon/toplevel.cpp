@@ -1112,19 +1112,19 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
         }
     }
 
-    if ( HasFlag( wxMINIMIZE_BOX ) )
+    if ( HasFlag( wxMINIMIZE_BOX ) && wclass != kPlainWindowClass )
     {
         attr |= kWindowCollapseBoxAttribute ;
     }
-    if ( HasFlag( wxMAXIMIZE_BOX ) )
+    if ( HasFlag( wxMAXIMIZE_BOX ) && wclass != kPlainWindowClass  )
     {
         attr |= kWindowFullZoomAttribute ;
     }
-    if ( HasFlag( wxRESIZE_BORDER ) )
+    if ( HasFlag( wxRESIZE_BORDER ) && wclass != kPlainWindowClass  )
     {
         attr |= kWindowResizableAttribute ;
     }
-    if ( HasFlag( wxCLOSE_BOX) )
+    if ( HasFlag( wxCLOSE_BOX) && wclass != kPlainWindowClass  )
     {
         attr |= kWindowCloseBoxAttribute ;
     }
