@@ -286,7 +286,7 @@ bool wxSlider::Create(
     if (m_windowStyle & wxSL_VERTICAL)
         lMsStyle = SLS_VERTICAL | SLS_HOMEBOTTOM | WS_VISIBLE | WS_TABSTOP;
     else
-        lMsStyle = SLS_HORIZONTAL | SLS_HOMELEFT| WS_VISIBLE | WS_TABSTOP;
+        lMsStyle = SLS_HORIZONTAL | SLS_HOMELEFT | WS_VISIBLE | WS_TABSTOP;
 
     if (m_windowStyle & wxCLIP_SIBLINGS)
         lMsStyle |= WS_CLIPSIBLINGS;
@@ -657,10 +657,6 @@ void wxSlider::DoSetSize(
                 int              nNewWidth = wxMax(nMinLen, nMaxLen);
                 int              nValueHeight = nCyf;
 
-                //
-                // The height needs to be a bit bigger under Win95 if using native
-                // 3D effects.
-                //
                 ::WinSetWindowPos( (HWND)m_hStaticValue
                                   ,HWND_TOP
                                   ,(LONG)nXOffset
