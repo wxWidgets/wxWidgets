@@ -506,6 +506,8 @@ elif os.name == 'posix':
     if debug:
         cflags.append('-g')
         cflags.append('-O0')
+    else:
+        cflags.append('-O3')
 
     lflags = os.popen(WX_CONFIG + ' --libs', 'r').read()[:-1]
     lflags = lflags.split()
@@ -657,6 +659,7 @@ swig_sources = run_swig(['core.i'], 'src', GENDIR, PKGDIR,
                           'src/_menu.i',
                           'src/_obj.i',
                           'src/_sizers.i',
+                          'src/_gbsizer.i',
                           'src/_streams.i',
                           'src/_validator.i',
                           'src/_window.i',
