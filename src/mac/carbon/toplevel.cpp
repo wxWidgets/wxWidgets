@@ -39,6 +39,7 @@
 
 #include "wx/mac/uma.h"
 #include "wx/mac/aga.h"
+#include "wx/app.h"
 #include "wx/tooltip.h"
 #include "wx/dnd.h"
 
@@ -110,6 +111,7 @@ void wxTopLevelWindowMac::Init()
     m_macNoEraseUpdateRgn = NewRgn() ;
     m_macNeedsErasing = false ;
     m_macWindow = NULL ;
+    m_macEventHandler = NULL ;
 }
 
 class wxMacDeferredWindowDeleter : public wxObject
@@ -159,7 +161,14 @@ wxTopLevelWindowMac::~wxTopLevelWindowMac()
         wxToolTip::NotifyWindowDelete(m_macWindow) ;
         wxPendingDelete.Append( new wxMacDeferredWindowDeleter( (WindowRef) m_macWindow ) ) ;
     }
-    
+ 
+ #if TARGET_CARBON
+    if ( m_macEventHandler )
+    {
+        ::RemoveEventHandler((EventHandlerRef) m_macEventHandler);
+        m_macEventHandler = NULL ;
+    }
+#endif   
     wxRemoveMacWindowAssociation( this ) ;
 
     wxTopLevelWindows.DeleteObject(this);
@@ -219,6 +228,52 @@ void wxTopLevelWindowMac::SetIcon(const wxIcon& icon)
 {
     // this sets m_icon
     wxTopLevelWindowBase::SetIcon(icon);
+}
+
+#if TARGET_CARBON
+
+EventHandlerUPP wxMacWindowEventHandlerUPP = NULL ;
+
+pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+    EventRecord rec ;
+    switch ( GetEventClass( event ) )
+    {
+        case kEventClassTextInput :
+            if ( wxMacConvertEventToRecord( event , &rec ) )
+            {
+                wxTheApp->MacHandleOneEvent( &rec ) ;
+                result = noErr ;
+            }
+            break ;
+        default :
+            break ;
+    }
+    return result ;
+}
+
+#endif
+
+void wxTopLevelWindowMac::MacInstallEventHandler()
+{
+#if TARGET_CARBON
+	if ( wxMacWindowEventHandlerUPP == NULL )
+	{
+	    wxMacWindowEventHandlerUPP = NewEventHandlerUPP( wxMacWindowEventHandler ) ;
+	}
+	    
+	static const EventTypeSpec eventList[] = 
+	{
+	    { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent }
+	} ;
+	if ( m_macEventHandler )
+	{
+        ::RemoveEventHandler((EventHandlerRef) m_macEventHandler);
+        m_macEventHandler = NULL ;
+    }
+	InstallWindowEventHandler(MAC_WXHWND(m_macWindow), wxMacWindowEventHandlerUPP, WXSIZEOF(eventList), eventList, this, &((EventHandlerRef)m_macEventHandler));    
+#endif
 }
 
 void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
@@ -322,6 +377,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
         label = title ;
     UMASetWTitleC( (WindowRef)m_macWindow , label ) ;
     ::CreateRootControl( (WindowRef)m_macWindow , (ControlHandle*)&m_macRootControl ) ;
+    MacInstallEventHandler() ;
 
     m_macFocus = NULL ;
 }
