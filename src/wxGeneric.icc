@@ -11,6 +11,7 @@ option ProjectOptions = gen(arch, "pentium2"), lang(longlong, "yes"),  gen(mangl
    target type("lib") "..\\LIB\\wxGeneric.lib"
    {
       source "GENERIC\\busyinfo.cpp"
+      source "GENERIC\\calctrl.cpp"
       source "GENERIC\\caret.cpp"
       source "GENERIC\\choicdgg.cpp"
       source "GENERIC\\colrdlgg.cpp"
