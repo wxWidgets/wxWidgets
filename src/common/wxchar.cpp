@@ -133,12 +133,14 @@ int WXDLLEXPORT wxVsprintf(wxChar *buf, const wxChar *fmt, va_list argptr)
 }
 #endif
 
-#ifdef wxNEED_WX_STDLIB_H
+#ifndef wxAtof
 double   WXDLLEXPORT wxAtof(const wxChar *psz)
 {
   return atof(wxConv_libc.cWX2MB(psz));
 }
+#endif
 
+#ifdef wxNEED_WX_STDLIB_H
 int      WXDLLEXPORT wxAtoi(const wxChar *psz)
 {
   return atoi(wxConv_libc.cWX2MB(psz));
