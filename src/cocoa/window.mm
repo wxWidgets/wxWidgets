@@ -16,6 +16,9 @@
 
 #import <Appkit/NSView.h>
 #import <AppKit/NSEvent.h>
+#import <AppKit/NSScrollView.h>
+#import <AppKit/NSColor.h>
+#import <AppKit/NSClipView.h>
 
 // ========================================================================
 // wxWindowCocoaHider
@@ -33,6 +36,28 @@ protected:
     virtual void Cocoa_FrameChanged(void);
 private:
     wxWindowCocoaHider();
+};
+
+// ========================================================================
+// wxWindowCocoaScroller
+// ========================================================================
+class wxWindowCocoaScroller: protected wxCocoaNSView
+{
+    DECLARE_NO_COPY_CLASS(wxWindowCocoaScroller)
+public:
+    wxWindowCocoaScroller(wxWindow *owner);
+    virtual ~wxWindowCocoaScroller();
+    inline WX_NSScrollView GetNSScrollView() { return m_cocoaNSScrollView; }
+    void ClientSizeToSize(int &width, int &height);
+    void DoGetClientSize(int *x, int *y) const;
+    void Encapsulate();
+    void Unencapsulate();
+protected:
+    wxWindowCocoa *m_owner;
+    WX_NSScrollView m_cocoaNSScrollView;
+    virtual void Cocoa_FrameChanged(void);
+private:
+    wxWindowCocoaScroller();
 };
 
 // ========================================================================
@@ -62,6 +87,97 @@ void wxWindowCocoaHider::Cocoa_FrameChanged(void)
 }
 
 // ========================================================================
+// wxFlippedNSClipView
+// ========================================================================
+@interface wxFlippedNSClipView : NSClipView
+- (BOOL)isFlipped;
+@end
+
+@implementation wxFlippedNSClipView : NSClipView
+- (BOOL)isFlipped
+{
+    return YES;
+}
+
+@end
+
+// ========================================================================
+// wxWindowCocoaScroller
+// ========================================================================
+wxWindowCocoaScroller::wxWindowCocoaScroller(wxWindow *owner)
+:   m_owner(owner)
+{
+    wxASSERT(owner);
+    wxASSERT(owner->GetNSView());
+    m_cocoaNSScrollView = [[NSScrollView alloc]
+        initWithFrame:[owner->GetNSView() frame]];
+    AssociateNSView(m_cocoaNSScrollView);
+
+    /* Replace the default NSClipView with a flipped one.  This ensures
+       scrolling is "pinned" to the top-left instead of bottom-right. */
+    NSClipView *flippedClip = [[wxFlippedNSClipView alloc]
+        initWithFrame: [[m_cocoaNSScrollView contentView] frame]];
+    [m_cocoaNSScrollView setContentView:flippedClip];
+    [flippedClip release];
+
+    [m_cocoaNSScrollView setBackgroundColor: [NSColor windowBackgroundColor]];
+    [m_cocoaNSScrollView setHasHorizontalScroller: YES];
+    [m_cocoaNSScrollView setHasVerticalScroller: YES];
+    Encapsulate();
+}
+
+void wxWindowCocoaScroller::Encapsulate()
+{
+    // NOTE: replaceSubView will cause m_cocaNSView to be released
+    // except when it hasn't been added into an NSView hierarchy in which
+    // case it doesn't need to be and this should work out to a no-op
+    m_owner->CocoaReplaceView(m_owner->GetNSView(), m_cocoaNSScrollView);
+    // The NSView is still retained by owner
+    [m_cocoaNSScrollView setDocumentView: m_owner->GetNSView()];
+    // Now it's also retained by the NSScrollView
+}
+
+void wxWindowCocoaScroller::Unencapsulate()
+{
+    [m_cocoaNSScrollView setDocumentView: nil];
+    m_owner->CocoaReplaceView(m_cocoaNSScrollView, m_owner->GetNSView());
+}
+
+wxWindowCocoaScroller::~wxWindowCocoaScroller()
+{
+    DisassociateNSView(m_cocoaNSScrollView);
+    [m_cocoaNSScrollView release];
+}
+
+void wxWindowCocoaScroller::ClientSizeToSize(int &width, int &height)
+{
+    NSSize frameSize = [NSScrollView
+        frameSizeForContentSize: NSMakeSize(width,height)
+        hasHorizontalScroller: [m_cocoaNSScrollView hasHorizontalScroller]
+        hasVerticalScroller: [m_cocoaNSScrollView hasVerticalScroller]
+        borderType: [m_cocoaNSScrollView borderType]];
+    width = frameSize.width;
+    height = frameSize.height;
+}
+
+void wxWindowCocoaScroller::DoGetClientSize(int *x, int *y) const
+{
+    NSSize nssize = [m_cocoaNSScrollView contentSize];
+    if(x)
+        *x = nssize.width;
+    if(y)
+        *y = nssize.height;
+}
+
+void wxWindowCocoaScroller::Cocoa_FrameChanged(void)
+{
+    wxLogDebug("Cocoa_FrameChanged");
+    wxSizeEvent event(m_owner->GetSize(), m_owner->GetId());
+    event.SetEventObject(m_owner);
+    m_owner->GetEventHandler()->ProcessEvent(event);
+}
+
+// ========================================================================
 // wxWindowCocoa
 // ========================================================================
 // normally the base classes aren't included, but wxWindow is special
@@ -83,6 +199,7 @@ void wxWindowCocoa::Init()
 
     m_cocoaNSView = NULL;
     m_cocoaHider = NULL;
+    m_cocoaScroller = NULL;
     m_isBeingDeleted = FALSE;
     m_isInPaint = FALSE;
 }
@@ -123,6 +240,7 @@ wxWindow::~wxWindow()
 
     CocoaRemoveFromParent();
     delete m_cocoaHider;
+    delete m_cocoaScroller;
     SetNSView(NULL);
 }
 
@@ -156,12 +274,16 @@ WX_NSView wxWindowCocoa::GetNSViewForSuperview() const
 {
     return m_cocoaHider
         ?   m_cocoaHider->GetNSView()
-        :   m_cocoaNSView;
+        :   m_cocoaScroller
+            ?   m_cocoaScroller->GetNSScrollView()
+            :   m_cocoaNSView;
 }
 
 WX_NSView wxWindowCocoa::GetNSViewForHiding() const
 {
-    return m_cocoaNSView;
+    return m_cocoaScroller
+        ?   m_cocoaScroller->GetNSScrollView()
+        :   m_cocoaNSView;
 }
 
 bool wxWindowCocoa::Cocoa_drawRect(const NSRect &rect)
@@ -469,8 +591,10 @@ void wxWindow::DoClientToScreen(int *x, int *y) const
 void wxWindow::DoGetClientSize(int *x, int *y) const
 {
     wxLogDebug("DoGetClientSize:");
-    wxWindowCocoa::DoGetSize(x,y);
-    // TODO: Actually account for menubar, borders, etc...
+    if(m_cocoaScroller)
+        m_cocoaScroller->DoGetClientSize(x,y);
+    else
+        wxWindowCocoa::DoGetSize(x,y);
 }
 
 void wxWindow::DoSetClientSize(int width, int height)
@@ -528,6 +652,14 @@ void wxWindow::SetScrollPos(int orient, int pos, bool refresh)
     // TODO
 }
 
+void wxWindow::CocoaCreateNSScrollView()
+{
+    if(!m_cocoaScroller)
+    {
+        m_cocoaScroller = new wxWindowCocoaScroller(this);
+    }
+}
+
 // New function that will replace some of the above.
 void wxWindow::SetScrollbar(int orient, int pos, int thumbVisible,
     int range, bool refresh)
@@ -539,6 +671,13 @@ void wxWindow::SetScrollbar(int orient, int pos, int thumbVisible,
 void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
     // TODO
+}
+
+void wxWindow::DoSetVirtualSize( int x, int y )
+{
+    wxWindowBase::DoSetVirtualSize(x,y);
+    CocoaCreateNSScrollView();
+    [m_cocoaNSView setFrameSize:NSMakeSize(m_virtualSize.x,m_virtualSize.y)];
 }
 
 bool wxWindow::SetFont(const wxFont& font)

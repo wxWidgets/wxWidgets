@@ -19,6 +19,7 @@
 #endif //def __OBJC__
 
 class wxWindowCocoaHider;
+class wxWindowCocoaScroller;
 
 // ========================================================================
 // wxWindowCocoa
@@ -29,6 +30,7 @@ class WXDLLEXPORT wxWindowCocoa: public wxWindowBase, protected wxCocoaNSView
     DECLARE_NO_COPY_CLASS(wxWindowCocoa)
     DECLARE_EVENT_TABLE()
     friend wxWindow *wxWindowBase::GetCapture();
+    friend class wxWindowCocoaScroller;
 // ------------------------------------------------------------------------
 // initialization
 // ------------------------------------------------------------------------
@@ -66,6 +68,7 @@ public:
     void CocoaAddChild(wxWindowCocoa *child);
     void CocoaRemoveFromParent(void);
 protected:
+    void CocoaCreateNSScrollView();
     void InitMouseEvent(wxMouseEvent &event, WX_NSEvent cocoaEvent);
     virtual void Cocoa_FrameChanged(void);
     virtual bool Cocoa_drawRect(const NSRect &rect);
@@ -84,6 +87,7 @@ protected:
     void SetNSView(WX_NSView cocoaNSView);
     WX_NSView m_cocoaNSView;
     wxWindowCocoaHider *m_cocoaHider;
+    wxWindowCocoaScroller *m_cocoaScroller;
     bool m_isInPaint;
     static wxWindow *sm_capturedWindow;
     virtual void CocoaReplaceView(WX_NSView oldView, WX_NSView newView);
@@ -128,6 +132,7 @@ public:
     virtual int GetScrollThumb(int orient) const;
     virtual int GetScrollRange(int orient) const;
     virtual void ScrollWindow(int dx, int dy, const wxRect *rect = NULL);
+    virtual void DoSetVirtualSize(int x, int y);
     // Get the private handle (platform-dependent)
     virtual WXWidget GetHandle() const;
     // Convert client to screen coordinates
