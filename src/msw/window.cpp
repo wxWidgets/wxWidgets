@@ -4720,7 +4720,7 @@ int wxWindowMSW::HandleMenuChar(int chAccel, WXLPARAM lParam)
                         // FIXME-UNICODE: this comparison doesn't risk to work
                         // for non ASCII accelerator characters I'm afraid, but
                         // what can we do?
-                        if ( wxToupper(*p) == chAccel )
+                        if ( wxToupper(*p) == (wchar_t)chAccel )
                         {
                             return i;
                         }
