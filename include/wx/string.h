@@ -212,9 +212,9 @@ class type : public wxMBConv { \
 WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConv_file)) wxConv_file;
 WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConv_UTF7)) wxConv_UTF7;
 WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConv_UTF8)) wxConv_UTF8;
-#ifdef __WXGTK__
-WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConv_gdk)) wxConv_gdk;
-#endif
+#if defined(__WXGTK__) && (GTK_MINOR_VERSION > 0)
+    WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConv_gdk)) wxConv_gdk;
+#endif // GTK > 1.0
 
 class wxCharacterSet;
 class WXDLLEXPORT wxCSConv : public wxMBConv
