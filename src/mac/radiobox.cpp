@@ -77,6 +77,8 @@ wxRadioBox::wxRadioBox()
 
 wxRadioBox::~wxRadioBox()
 {
+    m_isBeingDeleted = TRUE;
+
     wxRadioButton *next,*current;
     
     current=m_radioButtonCycle->NextInCycle();

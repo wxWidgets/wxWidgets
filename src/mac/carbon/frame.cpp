@@ -107,10 +107,10 @@ bool wxFrame::Create(wxWindow *parent,
         return FALSE;
     
     MacCreateRealWindow( title, pos , size , MacRemoveBordersFromStyle(style) , name ) ;
-    
+
     m_macWindowBackgroundTheme = kThemeBrushDocumentWindowBackground ;
     SetThemeWindowBackground( (WindowRef) m_macWindow , m_macWindowBackgroundTheme , false ) ;
-    
+
     wxModelessWindows.Append(this);
     
     return TRUE;
@@ -119,7 +119,6 @@ bool wxFrame::Create(wxWindow *parent,
 wxFrame::~wxFrame()
 {
     m_isBeingDeleted = TRUE;
-    
     DeleteAllBars();
 }
 

@@ -104,6 +104,7 @@ void wxWindowMac::Init()
     // generic
     InitBase();
 
+    m_isBeingDeleted = FALSE;
     m_backgroundTransparent = FALSE;
 
     // as all windows are created with WS_VISIBLE style...
@@ -139,6 +140,8 @@ wxWindowMac::~wxWindowMac()
         }
     }
 
+    m_isBeingDeleted = TRUE;
+    
 #ifndef __WXUNIVERSAL__
     // VS: make sure there's no wxFrame with last focus set to us:
     for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
