@@ -661,6 +661,14 @@ class wxListCtrlPtr(wxControlPtr):
         '''get the currently focused item or -1 if none'''
         return self.GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED)
 
+    def GetFirstSelected(self, item):
+        '''return first selected item, or -1 when none'''
+        return self.GetNextSelected(-1)
+
+    def GetNextSelected(self, item):
+        '''return subsequent selected items, or -1 when no more'''
+        return self.GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)
+
     def IsSelected(self, idx):
         '''return TRUE if the item is selected'''
         return self.GetItemState(idx, wxLIST_STATE_SELECTED) != 0

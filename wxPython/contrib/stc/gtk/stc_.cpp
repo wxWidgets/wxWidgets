@@ -12030,7 +12030,6 @@ SWIGEXPORT(void) initstc_c() {
 	 PyDict_SetItemString(d,"wxSTC_SCRIPTOL_COMMENTDOCKEYWORD", PyInt_FromLong((long) 17));
 	 PyDict_SetItemString(d,"wxSTC_SCRIPTOL_COMMENTDOCKEYWORDERROR", PyInt_FromLong((long) 18));
 	 PyDict_SetItemString(d,"wxSTC_SCRIPTOL_COMMENTBASIC", PyInt_FromLong((long) 19));
-	 PyDict_SetItemString(d,"wxSTCNameStr", PyString_FromString("wxSTCNameStr"));
 	 PyDict_SetItemString(d,"STC_USE_DND", PyInt_FromLong((long) 1));
 	 PyDict_SetItemString(d,"wxEVT_STC_CHANGE", PyInt_FromLong((long) wxEVT_STC_CHANGE));
 	 PyDict_SetItemString(d,"wxEVT_STC_STYLENEEDED", PyInt_FromLong((long) wxEVT_STC_STYLENEEDED));

@@ -509,6 +509,24 @@ class wxHtmlWidgetCell(wxHtmlWidgetCellPtr):
 
 
 
+class wxHtmlFilterPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlFilter__setCallbackInfo,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxHtmlFilter instance at %s>" % (self.this,)
+class wxHtmlFilter(wxHtmlFilterPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(htmlc.new_wxHtmlFilter,_args,_kwargs)
+        self.thisown = 1
+        self._setCallbackInfo(self, wxHtmlFilter)
+
+
+
+
 class wxHtmlWindowPtr(wxScrolledWindowPtr):
     def __init__(self,this):
         self.this = this
@@ -789,4 +807,5 @@ wx.wxHtmlContainerCellPtr   = wxHtmlContainerCellPtr
 wx.wxHtmlWidgetCellPtr      = wxHtmlWidgetCellPtr
 wx.wxHtmlWindowPtr          = wxHtmlWindowPtr
 wx.wxHtmlLinkInfoPtr        = wxHtmlLinkInfoPtr
+wx.wxHtmlFilterPtr          = wxHtmlFilterPtr
 

@@ -2346,6 +2346,26 @@ static PyObject *_wrap_wxDateTime_Now(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
+static PyObject *_wrap_wxDateTime_UNow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDateTime * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxDateTime_UNow",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxDateTime (wxDateTime::UNow());
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxDateTime_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 static PyObject *_wrap_wxDateTime_Today(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDateTime * _result;
@@ -7677,6 +7697,7 @@ static PyMethodDef utilscMethods[] = {
 	 { "new_wxDateTimeFromTimeT", (PyCFunction) _wrap_new_wxDateTimeFromTimeT, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxDateTime", (PyCFunction) _wrap_new_wxDateTime, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDateTime_Today", (PyCFunction) _wrap_wxDateTime_Today, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDateTime_UNow", (PyCFunction) _wrap_wxDateTime_UNow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDateTime_Now", (PyCFunction) _wrap_wxDateTime_Now, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDateTime_GetEndDST", (PyCFunction) _wrap_wxDateTime_GetEndDST, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDateTime_GetBeginDST", (PyCFunction) _wrap_wxDateTime_GetBeginDST, METH_VARARGS | METH_KEYWORDS },

@@ -62,6 +62,7 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/fs_zip.h>
 #include <wx/fs_inet.h>
 #include <wx/wfstream.h>
+#include <wx/filesys.h>
 
 #include "printfw.h"
 
@@ -197,6 +198,51 @@ private:
         // and adds itself to the wxModules list and to the wxHtmlWinParser.
         new wxPyHtmlTagsModule(tagHandlerClass);
     }
+ // here's the C++ version
+class wxPyHtmlFilter : public wxHtmlFilter {
+    DECLARE_ABSTRACT_CLASS(wxPyHtmlFilter);
+public:
+    wxPyHtmlFilter() : wxHtmlFilter() {}
+
+    // returns TRUE if this filter is able to open&read given file
+    virtual bool CanRead(const wxFSFile& file) const {
+        bool rval = FALSE;
+        bool found;
+        wxPyBeginBlockThreads();
+        if ((found = wxPyCBH_findCallback(m_myInst, "CanRead"))) {
+            PyObject* obj = wxPyMake_wxObject((wxFSFile*)&file);  // cast away const
+            rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));
+            Py_DECREF(obj);
+        }
+        wxPyEndBlockThreads();
+        return rval;
+    }
+
+
+    // Reads given file and returns HTML document.
+    // Returns empty string if opening failed
+    virtual wxString ReadFile(const wxFSFile& file) const {
+        wxString rval;
+        bool found;
+        wxPyBeginBlockThreads();
+        if ((found = wxPyCBH_findCallback(m_myInst, "ReadFile"))) {
+            PyObject* obj = wxPyMake_wxObject((wxFSFile*)&file);  // cast away const
+            PyObject* ro;
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(O)", obj));
+            Py_DECREF(obj);
+            if (ro) {
+                rval = Py2wxString(ro);
+                Py_DECREF(ro);
+            }
+        }
+        wxPyEndBlockThreads();
+        return rval;
+    }
+
+    PYPRIVATE;
+};
+
+IMPLEMENT_ABSTRACT_CLASS(wxPyHtmlFilter, wxHtmlFilter);
 
 class wxPyHtmlWindow : public wxHtmlWindow {
     DECLARE_ABSTRACT_CLASS(wxPyHtmlWindow);
@@ -228,7 +274,6 @@ public:
     DEC_PYCALLBACK__STRING(OnSetTitle);
     DEC_PYCALLBACK__CELLINTINT(OnCellMouseHover);
     DEC_PYCALLBACK__CELLINTINTME(OnCellClicked);
-//     DEC_PYCALLBACK_BOOL_STRING(OnOpeningURL);
     PYPRIVATE;
 };
 
@@ -236,7 +281,6 @@ IMPLEMENT_ABSTRACT_CLASS( wxPyHtmlWindow, wxHtmlWindow );
 IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnSetTitle);
 IMP_PYCALLBACK__CELLINTINT(wxPyHtmlWindow, wxHtmlWindow, OnCellMouseHover);
 IMP_PYCALLBACK__CELLINTINTME(wxPyHtmlWindow, wxHtmlWindow, OnCellClicked);
-// IMP_PYCALLBACK_BOOL_STRING(wxPyHtmlWindow, wxHtmlWindow, OnOpeningURL);
 
 
 void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
@@ -290,10 +334,6 @@ wxHtmlOpeningStatus wxPyHtmlWindow::OnOpeningURL(wxHtmlURLType type,
 
 
 
-    void wxHtmlWindow_AddFilter(wxHtmlFilter *filter) {
-        wxHtmlWindow::AddFilter(filter);
-    }
-
     extern "C" SWIGEXPORT(void) inithtmlhelpc();
 #ifdef __cplusplus
 extern "C" {
@@ -313,33 +353,6 @@ static PyObject *_wrap_wxHtmlWinParser_AddTagHandler(PyObject *self, PyObject *a
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     wxHtmlWinParser_AddTagHandler(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxHtmlWindow_AddFilter(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxHtmlFilter * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "filter", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlWindow_AddFilter",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlFilter_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlWindow_AddFilter. Expected _wxHtmlFilter_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxHtmlWindow_AddFilter(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -4012,6 +4025,70 @@ static PyObject *_wrap_new_wxHtmlWidgetCell(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
+#define new_wxHtmlFilter() (new wxPyHtmlFilter())
+static PyObject *_wrap_new_wxHtmlFilter(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyHtmlFilter * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxHtmlFilter",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxPyHtmlFilter *)new_wxHtmlFilter();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyHtmlFilter_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxHtmlFilter__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxHtmlFilter__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyHtmlFilter * _arg0;
+    PyObject * _arg1;
+    PyObject * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxHtmlFilter__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyHtmlFilter_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlFilter__setCallbackInfo. Expected _wxPyHtmlFilter_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+  _arg2 = _obj2;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxHtmlFilter__setCallbackInfo(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void *SwigwxPyHtmlWindowTowxScrolledWindow(void *ptr) {
     wxPyHtmlWindow *src;
     wxScrolledWindow *dest;
@@ -5097,6 +5174,33 @@ static PyObject *_wrap_wxHtmlWindow_HasAnchor(PyObject *self, PyObject *args, Py
     if (_obj1)
         delete _arg1;
 }
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxHtmlWindow_AddFilter(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyHtmlFilter * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "filter", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlWindow_AddFilter",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyHtmlFilter_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlWindow_AddFilter. Expected _wxPyHtmlFilter_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyHtmlWindow::AddFilter(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -6266,6 +6370,7 @@ static PyMethodDef htmlcMethods[] = {
 	 { "wxHtmlWindow_base_OnCellMouseHover", (PyCFunction) _wrap_wxHtmlWindow_base_OnCellMouseHover, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_base_OnSetTitle", (PyCFunction) _wrap_wxHtmlWindow_base_OnSetTitle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_base_OnLinkClicked", (PyCFunction) _wrap_wxHtmlWindow_base_OnLinkClicked, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlWindow_AddFilter", (PyCFunction) _wrap_wxHtmlWindow_AddFilter, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_HasAnchor", (PyCFunction) _wrap_wxHtmlWindow_HasAnchor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_ScrollToAnchor", (PyCFunction) _wrap_wxHtmlWindow_ScrollToAnchor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_GetParser", (PyCFunction) _wrap_wxHtmlWindow_GetParser, METH_VARARGS | METH_KEYWORDS },
@@ -6293,6 +6398,8 @@ static PyMethodDef htmlcMethods[] = {
 	 { "wxHtmlWindow_Create", (PyCFunction) _wrap_wxHtmlWindow_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreHtmlWindow", (PyCFunction) _wrap_new_wxPreHtmlWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlWindow", (PyCFunction) _wrap_new_wxHtmlWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlFilter__setCallbackInfo", (PyCFunction) _wrap_wxHtmlFilter__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxHtmlFilter", (PyCFunction) _wrap_new_wxHtmlFilter, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlWidgetCell", (PyCFunction) _wrap_new_wxHtmlWidgetCell, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlFontCell", (PyCFunction) _wrap_new_wxHtmlFontCell, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlColourCell", (PyCFunction) _wrap_new_wxHtmlColourCell, METH_VARARGS | METH_KEYWORDS },
@@ -6397,7 +6504,6 @@ static PyMethodDef htmlcMethods[] = {
 	 { "wxHtmlLinkInfo_GetTarget", (PyCFunction) _wrap_wxHtmlLinkInfo_GetTarget, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlLinkInfo_GetHref", (PyCFunction) _wrap_wxHtmlLinkInfo_GetHref, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlLinkInfo", (PyCFunction) _wrap_new_wxHtmlLinkInfo, METH_VARARGS | METH_KEYWORDS },
-	 { "wxHtmlWindow_AddFilter", (PyCFunction) _wrap_wxHtmlWindow_AddFilter, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWinParser_AddTagHandler", (PyCFunction) _wrap_wxHtmlWinParser_AddTagHandler, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };
@@ -6587,6 +6693,7 @@ SWIGEXPORT(void) inithtmlc() {
     wxPyPtrTypeMap_Add("wxHtmlTagHandler", "wxPyHtmlTagHandler");
     wxPyPtrTypeMap_Add("wxHtmlWinTagHandler", "wxPyHtmlWinTagHandler");
     wxPyPtrTypeMap_Add("wxHtmlWindow", "wxPyHtmlWindow");
+    wxPyPtrTypeMap_Add("wxHtmlFilter", "wxPyHtmlFilter");
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)
