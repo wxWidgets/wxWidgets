@@ -348,6 +348,7 @@ Checking in src/common/wxexpr.cpp;
 new revision: 1.27; previous revision: 1.26
 done
 
+
 27. Fix assert (and crash in debug) in wxFileConfigGroup::DeleteSubgroupByName
 
 Checking in src/common/fileconf.cpp;
@@ -411,4 +412,11 @@ diff -r1.55 win32.cpp
 >         }
 > 
 
+
+30. [wxMotif] Coloured stipples, don't use stipples in DoDrawText
+
+Checking in src/motif/dcclient.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/motif/dcclient.cpp,v  <--  dcclient.cpp
+new revision: 1.47; previous revision: 1.46
+done
 
