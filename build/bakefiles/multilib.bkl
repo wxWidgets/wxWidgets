@@ -65,5 +65,24 @@
     <!-- ================================================================ -->
 
     <!-- included by wx.bkl from opengl.bkl -->
+    
+    
+    <!-- ================================================================ -->
+    <!--                              XML                                 -->
+    <!-- ================================================================ -->
+    
+    <dll id="xmldll" template="wx_base_dll"
+         cond="SHARED=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_XML</define>
+        <sources>$(XML_SRC)</sources>
+        <library>basedll</library>
+        <ldlibs>$(EXTRALIBS_XML)</ldlibs>
+    </dll>
+    
+    <lib id="xmllib" template="wx_base_lib"
+         cond="SHARED=='0' and MONOLITHIC=='0'">
+        <sources>$(XML_SRC)</sources>
+    </lib>
 
 </makefile>

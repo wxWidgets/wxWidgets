@@ -112,6 +112,9 @@
     <set var="WXLIB_HTML">
         <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('html')))</if>
     </set>
+    <set var="WXLIB_XML">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('xml')))</if>
+    </set>
 
     <set var="WXLIB_MONO">
         <if cond="MONOLITHIC=='1'">$(mk.evalExpr(wxwin.mkLibName('mono')))</if>
@@ -194,6 +197,7 @@
     <include file="jpeg.bkl"/>
     <include file="tiff.bkl"/>
     <include file="odbc.bkl"/>
+    <include file="expat.bkl"/>
 
     
     <!-- =============================================================== -->
@@ -226,6 +230,7 @@
         <sys-lib>$(LIB_ZLIB)</sys-lib>
         <sys-lib>$(LIB_ODBC)</sys-lib>
         <sys-lib>$(LIB_REGEX)</sys-lib>
+        <sys-lib>$(LIB_EXPAT)</sys-lib>
         
         <ldlibs>$(EXTRALIBS)</ldlibs>
 
@@ -301,6 +306,7 @@
         <depends>wxtiff</depends>
         <depends>wxjpeg</depends>
         <depends>wxpng</depends>
+        <depends>wxexpat</depends>
         <depends>wxzlib</depends>
         <depends cond="FORMAT=='autoconf'">wxodbc</depends>
         <depends>wxregex</depends>

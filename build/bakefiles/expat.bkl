@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <if cond="FORMAT=='autoconf'">
+        <option name="wxUSE_EXPAT"/>
+    </if>
+    <if cond="FORMAT!='autoconf'">
+        <set var="wxUSE_EXPAT">builtin</set>
+    </if>
+    <set var="LIB_EXPAT">
+        <if cond="wxUSE_EXPAT=='builtin'">wxexpat$(WXDEBUGFLAG)$(HOST_SUFFIX)</if>
+    </set>
+    <set var="INC_EXPAT">
+        <if cond="wxUSE_EXPAT=='builtin'">$(TOP_SRCDIR)src/expat/lib</if>
+    </set>
+
+    <lib id="wxexpat" template="3rdparty_lib"
+         cond="wxUSE_EXPAT=='builtin' and BUILDING_LIB=='1'">
+        <dirname>$(LIBDIRNAME)</dirname>
+        <include cond="FORMAT!='autoconf'">$(LIBDIRNAME)</include>
+        <include cond="FORMAT=='autoconf'">$(BUILDDIR)/src/expat</include>
+        <sources>
+            src/expat/lib/xmlparse.c
+            src/expat/lib/xmlrole.c
+            src/expat/lib/xmltok.c
+        </sources>
+    </lib>
+
+</makefile>

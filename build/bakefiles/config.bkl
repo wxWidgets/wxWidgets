@@ -53,7 +53,7 @@
             Build OpenGL canvas library (USE_GUI must be 1)?
         </description>
     </option>
-
+    
     <option name="WXUNIV">
         <values>0 1</values>
         <default-value>0</default-value>
@@ -61,7 +61,6 @@
             Build wxUniversal instead of native port?
         </description>
     </option>
-
 
     <option name="OFFICIAL_BUILD">
         <values>0 1</values>
@@ -99,6 +98,7 @@
         <option name="TOOLKIT_VERSION"/>
         <option name="TOOLCHAIN_NAME"/>
         <option name="EXTRALIBS"/>
+        <option name="EXTRALIBS_XML"/>
         <option name="EXTRALIBS_GUI"/>
         <option name="EXTRALIBS_OPENGL"/>
         <option name="SAMPLES_RPATH_FLAG"/>
@@ -132,6 +132,7 @@
         <set var="SAMPLES_RPATH_FLAG"/>
         <set var="HOST_SUFFIX"/>
         <set var="EXTRALIBS"/>
+        <set var="EXTRALIBS_XML"/>
         <set var="EXTRALIBS_GUI"/>
         <set var="EXTRACFLAGS"/>
 

@@ -6,7 +6,7 @@
         <if cond="USE_GUI=='1'">$(CORE_SRC) $(HTML_SRC)</if>
     </set>
     <set var="MONOLIB_SRC">
-        $(BASE_SRC) $(BASE_AND_GUI_SRC) $(MONOLIB_GUI_SRC)
+        $(BASE_SRC) $(BASE_AND_GUI_SRC) $(MONOLIB_GUI_SRC) $(XML_SRC)
     </set>
 
     <dll id="monodll" template="wx_dll"
@@ -14,6 +14,7 @@
         <define>wxUSE_BASE=1</define> 
         <define>WXMAKINGDLL</define>
         <sources>$(MONOLIB_SRC)</sources>
+        <ldlibs>$(EXTRALIBS_XML)</ldlibs>
     </dll>
     
     <lib id="monolib" template="wx_lib"
