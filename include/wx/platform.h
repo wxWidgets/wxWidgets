@@ -360,6 +360,11 @@
 #    endif
 #endif
 
+/* Force linking against required libraries under Windows CE: */
+#ifdef __WXWINCE__
+#   include "wx/msw/wince/libraries.h"
+#endif
+
 /*
    This macro can be used to test the gcc version and can be used like this:
 

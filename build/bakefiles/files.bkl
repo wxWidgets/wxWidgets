@@ -1323,6 +1323,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/fdrepdlg.h
     wx/generic/fontdlgg.h
     wx/msw/wince/helpwce.h
+    wx/msw/wince/libraries.h
     wx/msw/wince/missing.h
     wx/msw/wince/tbarwce.h
 </set>
