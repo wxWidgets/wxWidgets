@@ -266,11 +266,11 @@ application must therefore be prepared to handle socket event messages
 even after calling Close.
 
 %
-% Discard
+% Destroy
 %
 \membersection{wxSocketBase::Destroy}\label{wxsocketbasedestroy}
 
-\func{void}{Destroy}{\void}
+\func{bool}{Destroy}{\void}
 
 Destroys the socket safely. Use this function instead of the delete operator,
 since otherwise socket events could reach the application even after the
@@ -280,6 +280,10 @@ events have been processed. For the same reason, you should avoid creating
 socket objects in the stack.
 
 Destroy calls \helpref{Close}{wxsocketbaseclose} automatically.
+
+\wxheading{Return value}
+
+Always TRUE.
 
 %
 % Discard
