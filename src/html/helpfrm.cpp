@@ -984,12 +984,14 @@ class wxHtmlHelpFrameOptionsDialog : public wxDialog
 
                 topsizer->Add(new wxStaticText(this, -1, _("Preview:")),
                                 0, wxLEFT | wxTOP, 10);
-                topsizer->Add(TestWin = new wxHtmlWindow(this, -1, wxDefaultPosition, wxSize(-1, 150),
+                topsizer->Add(TestWin = new wxHtmlWindow(this, -1, wxDefaultPosition, wxSize(20, 150),
                                                          wxHW_SCROLLBAR_AUTO | wxSUNKEN_BORDER),
                                 1, wxEXPAND | wxLEFT|wxTOP|wxRIGHT, 10);
 
                 sizer = new wxBoxSizer(wxHORIZONTAL);
-                sizer->Add(new wxButton(this, wxID_OK, _("OK")), 0, wxALL, 10);
+                wxButton *ok;
+                sizer->Add(ok = new wxButton(this, wxID_OK, _("OK")), 0, wxALL, 10);
+                ok->SetDefault();
                 sizer->Add(new wxButton(this, wxID_CANCEL, _("Cancel")), 0, wxALL, 10);
                 topsizer->Add(sizer, 0, wxALIGN_RIGHT);
 
