@@ -3,7 +3,7 @@
 
 <makefile>
     
-    <include file="__fake.bkl"/>
+    <include file="presets/fake.bkl"/>
     <set var="COMPILER">vc</set>
 
 

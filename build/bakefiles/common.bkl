@@ -3,11 +3,7 @@
 
 <makefile>
 
-    <requires version="0.1.3"/>
-    <!-- FIXME: remove this kludge when upgraded to 0.1.4: -->
-    <if cond="BAKEFILE_VERSION=='0.1.3'">
-        <define-tag name="pic" rules="exe,dll,lib,module"/>
-    </if>
+    <requires version="0.1.4"/>
     
     <!-- bakefile modules we need: -->
     <using module="datafiles"/>
@@ -305,15 +301,6 @@ InputPath=..\include\wx\msw\$(vc_setup_h)
 "$(SETUPHDIR)\wx\setup.h" : $(DOLLAR)(SOURCE) "$(DOLLAR)(INTDIR)" "$(DOLLAR)(OUTDIR)"
 $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
             </set>
-            <!-- FIXME: temporary kludge! remove after upgrade to 0.1.4 -->
-            <if cond="FORMAT=='msvc6prj'">
-                <set var="__custom_build_files">
-                    $(_custom_build_files)
-                </set>
-                <set var="__custom_build_include_wx_msw_setup_h">
-                    $(_custom_build_include_wx_msw_setup_h)
-                </set>
-            </if>
         </if>
     </define-tag>
 
