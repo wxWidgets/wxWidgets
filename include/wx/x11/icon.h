@@ -51,6 +51,8 @@ public:
     inline bool operator != (const wxIcon& icon) const { return m_refData != icon.m_refData; }
     
     virtual bool Ok() const { return ((m_refData != NULL) && (M_ICONDATA->m_ok)); }
+
+    bool CopyFromBitmap(const wxBitmap& bitmap);
 };
 
 #endif

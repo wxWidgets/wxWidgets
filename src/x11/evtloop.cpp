@@ -25,7 +25,9 @@
 #include "wx/app.h"
 #include "wx/evtloop.h"
 #include "wx/tooltip.h"
-
+#if wxUSE_THREADS
+#include "wx/thread.h"
+#endif
 #include "wx/x11/private.h"
 #include "X11/Xlib.h"
 
@@ -52,7 +54,7 @@ public:
 public:
     // preprocess an event, return TRUE if processed (i.e. no further
     // dispatching required)
-    bool PreProcessMessage(XEvent* event);
+    bool PreProcessEvent(XEvent* event);
 
     // the exit code of the event loop
     int m_exitcode;
@@ -152,8 +154,8 @@ int wxEventLoop::Run()
     m_impl->m_keepGoing = TRUE;
     while ( m_impl->m_keepGoing )
     {
-#if wxUSE_THREADS
-        wxMutexGuiLeaveOrEnter();
+#if 0 // wxUSE_THREADS
+	wxMutexGuiLeaveOrEnter();
 #endif // wxUSE_THREADS
 
         // generate and process idle events for as long as we don't have
@@ -162,7 +164,7 @@ int wxEventLoop::Run()
         {
             if (!m_impl->SendIdleEvent())
             {
-#if wxUSE_THREADS
+#if 0 // wxUSE_THREADS
                 // leave the main loop to give other threads a chance to
                 // perform their GUI work
                 wxMutexGuiLeave();
@@ -205,8 +207,8 @@ void wxEventLoop::Exit(int rc)
 
 bool wxEventLoop::Pending() const
 {
-    XFlush(wxGetDisplay());
-    return (XPending(wxGetDisplay()) > 0);
+    XFlush((Display*) wxGetDisplay());
+    return (XPending((Display*) wxGetDisplay()) > 0);
 }
 
 bool wxEventLoop::Dispatch()
@@ -215,7 +217,7 @@ bool wxEventLoop::Dispatch()
 
     // TODO allowing for threads, as per e.g. wxMSW
 
-    XNextEvent(wxGetDisplay(), & event);
+    XNextEvent((Display*) wxGetDisplay(), & event);
     m_impl->ProcessEvent(& event);
     return TRUE;
 }

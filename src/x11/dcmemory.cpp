@@ -24,7 +24,7 @@
 #pragma message enable nosimpint
 #endif
 
-#include "wx/motif/private.h"
+#include "wx/x11/private.h"
 
 //-----------------------------------------------------------------------------
 // wxMemoryDC

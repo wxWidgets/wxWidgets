@@ -40,13 +40,16 @@ void wxTimerCallback (wxTimer * timer)
   if (timer->m_id == 0)
     return;			// Avoid to process spurious timer events
 
+  // TODO
+#if 0
   if (!timer->m_oneShot)
     timer->m_id = XtAppAddTimeOut((XtAppContext) wxTheApp->GetAppContext(),
                                   timer->m_milli,
                                   (XtTimerCallbackProc) wxTimerCallback,
                                   (XtPointer) timer);
   else
-    timer->m_id = 0;
+#endif
+      timer->m_id = 0;
 
   timer->Notify();
 }
@@ -71,11 +74,13 @@ bool wxTimer::Start(int milliseconds, bool mode)
 
     if (!wxTimerList.Find((long)this))
         wxTimerList.Append((long)this, this);
-
+    // TODO
+#if 0
     m_id = XtAppAddTimeOut((XtAppContext) wxTheApp->GetAppContext(),
                             m_milli,
                             (XtTimerCallbackProc) wxTimerCallback,
                             (XtPointer) this);
+#endif
     return TRUE;
 }
 
@@ -83,7 +88,10 @@ void wxTimer::Stop()
 {
     if (m_id > 0)
     {
+    // TODO
+#if 0
         XtRemoveTimeOut (m_id);
+#endif
         m_id = 0;
     }
     m_milli = 0 ;

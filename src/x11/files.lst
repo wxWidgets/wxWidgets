@@ -27,7 +27,6 @@ ALL_SOURCES = \
 		generic/msgdlgg.cpp \
 		generic/notebook.cpp \
 		generic/numdlgg.cpp \
-		generic/paletteg.cpp \
 		generic/panelg.cpp \
 		generic/printps.cpp \
 		generic/prntdlgg.cpp \
@@ -175,7 +174,6 @@ ALL_SOURCES = \
 		common/xpmdecod.cpp \
 		common/zipstrm.cpp \
 		common/zstream.cpp \
-		x11/accel.cpp \
 		x11/app.cpp \
 		x11/bitmap.cpp \
 		x11/brush.cpp \
@@ -712,7 +710,6 @@ GENERICOBJS = \
 		msgdlgg.o \
 		notebook.o \
 		numdlgg.o \
-		paletteg.o \
 		panelg.o \
 		printps.o \
 		prntdlgg.o \
@@ -736,8 +733,7 @@ GENERICOBJS = \
 		treelay.o \
 		wizard.o
 
-GUIOBJS = \
-		accel.o \
+GUI_LOWLEVEL_OBJS = \
 		app.o \
 		bitmap.o \
 		brush.o \

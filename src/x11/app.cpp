@@ -73,6 +73,8 @@ typedef int (*XErrorHandlerFunc)(Display *, XErrorEvent *);
 
 XErrorHandlerFunc gs_pfnXErrorHandler = 0;
 
+static Window XGetParent(Window window);
+
 static int wxXErrorHandler(Display *dpy, XErrorEvent *xevent)
 {
     // just forward to the default handler for now
@@ -315,13 +317,13 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                 if (win)
                 {
                     wxKeyEvent keyEvent(wxEVT_KEY_DOWN);
-                    wxTranslateKeyEvent(keyEvent, win, window, xEvent);
+                    wxTranslateKeyEvent(keyEvent, win, window, event);
         
                     // We didn't process wxEVT_KEY_DOWN, so send
-                    // wxEVT_KEY_CHAR
+                    // wxEVT_CHAR
                     if (!win->ProcessEvent( keyEvent ))
                     {
-                        keyEvent.SetEventType(wxEVT_KEY_CHAR);
+                        keyEvent.SetEventType(wxEVT_CHAR);
                         win->ProcessEvent( keyEvent );
                     }
 
@@ -354,7 +356,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             * window is recieved. Prevents flicker as windows are resized.
             */
         
-            Display *disp = wxGetDisplay();
+            Display *disp = (Display*) wxGetDisplay();
             XEvent report;
             
             //  to avoid flicker
@@ -370,7 +372,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                 wxSizeEvent sizeEvent(sz, win->GetId());
                 sizeEvent.SetEventObject(win);
 
-                win->ProcessEvent( wxevent );
+                win->ProcessEvent( sizeEvent );
             }
 
             return;
@@ -589,8 +591,8 @@ bool wxApp::OnInitGui()
             (const char*) className);
         exit(-1);
     }
-    XSelectInput(m_initialDisplay,
-        XDefaultRootWindow(m_initialDisplay),
+    XSelectInput((Display*) m_initialDisplay,
+        XDefaultRootWindow((Display*) m_initialDisplay),
         PropertyChangeMask);
 
 #ifdef __WXDEBUG__
@@ -624,7 +626,7 @@ static Window XGetParent(Window window)
 {
     Window parent, root = 0;
     unsigned int noChildren = 0;
-    if (XQueryTree(wxGetDisplay(), window, & root, & parent,
+    if (XQueryTree((Display*) wxGetDisplay(), window, & root, & parent,
         NULL, & noChildren))
         return parent;
     else

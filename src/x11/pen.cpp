@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/motif/pen.cpp
+// Name:        src/x11/pen.cpp
 // Purpose:     wxPen
 // Author:      Julian Smart
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        motif/toolbar.cpp
+// Name:        x11/toolbar.cpp
 // Purpose:     wxToolBar
 // Author:      Julian Smart
 // Modified by: 13.12.99 by VZ during toolbar classes reorganization

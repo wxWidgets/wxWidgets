@@ -28,7 +28,7 @@
 #pragma message enable nosimpint
 #endif
 
-#include "wx/motif/private.h"
+#include "wx/x11/private.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 

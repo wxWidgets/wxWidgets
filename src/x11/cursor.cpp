@@ -23,6 +23,7 @@
 #pragma message disable nosimpint
 #endif
 #include <X11/cursorfont.h>
+#include <X11/Xutil.h>
 #ifdef __VMS__
 #pragma message enable nosimpint
 #endif

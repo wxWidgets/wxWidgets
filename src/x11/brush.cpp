@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/motif/brush.cpp
+// Name:        src/x11/brush.cpp
 // Purpose:     wxBrush
 // Author:      Julian Smart
 // Modified by:

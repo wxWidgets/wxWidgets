@@ -51,6 +51,8 @@
 #ifdef __VMS__
 #pragma message disable nosimpint
 #endif
+#include "X11/Xlib.h"
+#include "X11/Xutil.h"
 #ifdef __VMS__
 #pragma message enable nosimpint
 #endif

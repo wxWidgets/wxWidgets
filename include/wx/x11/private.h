@@ -13,6 +13,7 @@
 #define _WX_PRIVATE_H_
 
 #include "wx/defs.h"
+#include "X11/Xlib.h"
 
 class wxMouseEvent;
 class wxKeyEvent;
@@ -76,6 +77,25 @@ extern XColor itemColors[5] ;
 #define wxSELE_INDEX 2
 #define wxTOPS_INDEX 3
 #define wxBOTS_INDEX 4
+
+#define wxMAX_RGB           0xff
+#define wxMAX_SV            1000
+#define wxSIGN(x)           ((x < 0) ? -x : x)
+#define wxH_WEIGHT          4
+#define wxS_WEIGHT          1
+#define wxV_WEIGHT          2
+
+typedef struct wx_hsv {
+                        int h,s,v;
+                      } wxHSV;
+
+#define wxMax3(x,y,z) ((x > y) ? ((x > z) ? x : z) : ((y > z) ? y : z))
+#define wxMin3(x,y,z) ((x < y) ? ((x < z) ? x : z) : ((y < z) ? y : z))
+
+void wxHSVToXColor(wxHSV *hsv,XColor *xcolor);
+void wxXColorToHSV(wxHSV *hsv,XColor *xcolor);
+void wxAllocNearestColor(Display *display,Colormap colormap,XColor *xcolor);
+void wxAllocColor(Display *display,Colormap colormap,XColor *xcolor);
 
 // ----------------------------------------------------------------------------
 // accessors for C modules

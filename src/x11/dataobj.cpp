@@ -25,6 +25,7 @@
 #pragma message enable nosimpint
 #endif
 #include "wx/utils.h"
+#include "wx/x11/private.h"
 
 //-------------------------------------------------------------------------
 // global data

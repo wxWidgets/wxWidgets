@@ -77,6 +77,9 @@ bool wxClipboardOpen()
 
 bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
 {
+    // TODO
+    return FALSE;
+#if 0
     // Only text is supported.
     if (dataFormat != wxDF_TEXT)
         return FALSE;
@@ -86,7 +89,7 @@ bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
     
     Window window = (Window) 0;
     if (wxTheApp->GetTopWindow())
-        window = XtWindow( (Widget) wxTheApp->GetTopWindow()->GetTopWidget() );
+        window = XtWindow( (Widget) wxTheApp->GetTopWindow()->GetTopWindow() );
 
     int success = XmClipboardRetrieve((Display*) wxGetDisplay(),
       window, "TEXT", (XtPointer) 0, 0, & numBytes, & privateId) ;
@@ -97,10 +100,14 @@ bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
         return FALSE;
     else
         return TRUE;
+#endif
 }
 
 bool wxSetClipboardData(wxDataFormat dataFormat, wxObject *obj, int WXUNUSED(width), int WXUNUSED(height))
 {
+    // TODO
+    return FALSE;
+#if 0
     if (dataFormat != wxDF_TEXT)
         return FALSE;
 
@@ -147,10 +154,14 @@ bool wxSetClipboardData(wxDataFormat dataFormat, wxObject *obj, int WXUNUSED(wid
        ;
     
     return TRUE;
+#endif
 }
 
 wxObject *wxGetClipboardData(wxDataFormat dataFormat, long *len)
 {
+    // TODO
+    return FALSE;
+#if 0
     if (dataFormat != wxDF_TEXT)
         return (wxObject*) NULL;
 
@@ -206,6 +217,7 @@ wxObject *wxGetClipboardData(wxDataFormat dataFormat, long *len)
     }
 
     return NULL;
+#endif
 }
 
 wxDataFormat  wxEnumClipboardFormats(wxDataFormat dataFormat)

@@ -37,7 +37,7 @@
         ($fileobj = $file) =~ s/cp?p?$/\o/;
 
         $project{"X11_SOURCES"} .= "x11/" . $file . " ";
-        $project{"GUIOBJS"} .= $fileobj . " ";
+        $project{"GUI_LOWLEVEL_OBJS"} .= $fileobj . " ";
     }
 
     foreach $file (sort keys %wxUNIX) {
@@ -94,8 +94,8 @@ COMMONOBJS = \
 GENERICOBJS = \
 		#$ ExpandList("GENERICOBJS");
 
-GUIOBJS = \
-		#$ ExpandList("GUIOBJS");
+GUI_LOWLEVEL_OBJS = \
+		#$ ExpandList("GUI_LOWLEVEL_OBJS");
 
 UNIXOBJS = \
 		#$ ExpandList("UNIXOBJS");

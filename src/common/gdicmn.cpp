@@ -55,6 +55,10 @@
 #endif
 #endif
 
+#ifdef __WXX11__
+#include "X11/Xlib.h"
+#endif
+
 IMPLEMENT_CLASS(wxColourDatabase, wxList)
 IMPLEMENT_DYNAMIC_CLASS(wxFontList, wxList)
 IMPLEMENT_DYNAMIC_CLASS(wxPenList, wxList)
@@ -370,12 +374,9 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
 #ifdef __WXMOTIF__
     Display *display = XtDisplay((Widget) wxTheApp->GetTopLevelWidget()) ;
 #endif
-#ifdef __XVIEW__
-    Xv_Screen screen = xv_get(xview_server, SERVER_NTH_SCREEN, 0);
-    Xv_opaque root_window = xv_get(screen, XV_ROOT);
-    Display *display = (Display *)xv_get(root_window, XV_DISPLAY);
+#ifdef __WXX11__
+    Display* display = (Display*) wxGetDisplay();
 #endif
-
     /* MATTHEW: [4] Use wxGetMainColormap */
     if (!XParseColor(display, (Colormap) wxTheApp->GetMainColormap((WXDisplay*) display), colour,&xcolour))
       return NULL;

@@ -14,15 +14,17 @@
 
 #include "wx/region.h"
 #include "wx/gdicmn.h"
+#include "wx/window.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint
 #endif
-
+#include "wx/x11/private.h"
+#include "X11/Xutil.h"
 #ifdef __VMS__
 #pragma message enable nosimpint
 #endif
-// #include "wx/x11/private.h"
+
 
     IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject)
     IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator, wxObject)

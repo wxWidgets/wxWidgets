@@ -135,8 +135,8 @@ public:
     wxBitmap(const char bits[], int width, int height, int depth = 1);
     
     // from XPM
-    wxBitmap(const char **data) { (void)CreateFromXpm(data); }
-    wxBitmap(char **data) { (void)CreateFromXpm((const char **)data); }
+    wxBitmap(const char **data) { (void) Create((void *)data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0); }
+    wxBitmap(char **data) { (void) Create((void *)data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0); }
     
     // Load a file or resource
     wxBitmap(const wxString& name, long type = wxBITMAP_TYPE_XPM);
@@ -161,6 +161,8 @@ public:
     virtual bool SaveFile(const wxString& name, int type, const wxPalette *cmap = NULL);
     
     wxImage ConvertToImage() const;
+
+    bool CopyFromIcon(const wxIcon& icon);
     
     bool Ok() const { return (M_BITMAPDATA && M_BITMAPDATA->m_ok); }
     int GetWidth() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_width : 0); }
@@ -205,7 +207,6 @@ protected:
     static wxList sm_handlers;
     
 protected:
-    bool CreateFromXpm(const char **bits);
     bool CreateFromImage(const wxImage& image, int depth);    
 };
 

@@ -45,6 +45,7 @@
 #endif
 
 #include "wx/x11/private.h"
+#include "X11/Xutil.h"
 
 #include <string.h>
 
@@ -97,9 +98,9 @@ void wxWindowX11::Init()
     // generic initializations first
     InitBase();
 
-    // Motif-specific
+    // X11-specific
     m_needsRefresh = TRUE;
-    m_mainWidget = (WXWidget) 0;
+    m_mainWidget = (WXWindow) 0;
 
     m_button1Pressed =
     m_button2Pressed =
@@ -114,7 +115,7 @@ void wxWindowX11::Init()
     m_vScrollBar =
     m_borderWidget =
     m_scrolledWindow =
-    m_drawingArea = (WXWidget) 0;
+    m_drawingArea = (WXWindow) 0;
 
     m_hScroll =
     m_vScroll = FALSE;
@@ -175,14 +176,14 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
 }
 
 // Destructor
-wxWindowX11::~wxWindow()
+wxWindowX11::~wxWindowX11()
 {
     if (g_captureWindow == this)
 	g_captureWindow = NULL;
     
     m_isBeingDeleted = TRUE;
     
-    // Motif-specific actions first
+    // X11-specific actions first
     WXWindow wMain = GetMainWindow();
     if ( wMain )
     {
@@ -477,17 +478,17 @@ bool wxWindowX11::Show(bool show)
 // Raise the window to the top of the Z order
 void wxWindowX11::Raise()
 {
-    Window window = GetTopWindow();
+    Window window = (Window) GetTopWindow();
     if (window)
-        XRaiseWindow(wxGetDisplay(), window);
+        XRaiseWindow((Display*) wxGetDisplay(), window);
 }
 
 // Lower the window to the bottom of the Z order
 void wxWindowX11::Lower()
 {
-    Window window = GetTopWindow();
+    Window window = (Window) GetTopWindow();
     if (window)
-        XLowerWindow(wxGetDisplay(), window);
+        XLowerWindow((Display*) wxGetDisplay(), window);
 }
 
 void wxWindowX11::SetTitle(const wxString& title)
@@ -510,7 +511,7 @@ wxString wxWindowX11::GetTitle() const
 
 void wxWindowX11::DoCaptureMouse()
 {
-    g_captureWindow = this;
+    g_captureWindow = (wxWindow*) this;
     if ( m_winCaptured )
         return;
 
@@ -581,7 +582,7 @@ void wxWindowX11::WarpPointer (int x, int y)
 {
     Window wClient = (Window) GetClientWindow();
 
-    XWarpPointer(wxGetDisplay(), None, wClient, 0, 0, 0, 0, x, y);
+    XWarpPointer((Display*) wxGetDisplay(), None, wClient, 0, 0, 0, 0, x, y);
 }
 
 // ---------------------------------------------------------------------------
@@ -627,7 +628,7 @@ int wxWindowX11::GetScrollThumb(int orient) const
 #endif
 }
 
-void wxWindowX11::SetScrollPos(int WXUNUSED(orient), int WXUNUSED(pos), bool WXUNUSED(refresh))
+void wxWindowX11::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
 {
     // TODO
 
@@ -755,12 +756,12 @@ void wxWindowX11::ScrollWindow(int dx, int dy, const wxRect *rect)
     int x2 = (dx >= 0) ? x + dx : x;
     int y2 = (dy >= 0) ? y + dy : y;
     
-    wxClientDC dc(this);
+    wxClientDC dc((wxWindow*) this);
     
     dc.SetLogicalFunction (wxCOPY);
     
     Window window = (Window) GetMainWindow();
-    Display* display = wxGetDisplay();
+    Display* display = (Display*) wxGetDisplay();
     
     XCopyArea(display, window, window, (GC) dc.GetGC(),
         x1, y1, w1, h1, x2, y2);
@@ -978,7 +979,7 @@ void wxWindowX11::DoGetPosition(int *x, int *y) const
 
 void wxWindowX11::DoScreenToClient(int *x, int *y) const
 {
-    Display *display = wxGetDisplay();
+    Display *display = (Display*) wxGetDisplay();
     Window rootWindow = RootWindowOfScreen(DefaultScreenOfDisplay(display));
     Window thisWindow = (Window) GetClientWindow();
 
@@ -990,7 +991,7 @@ void wxWindowX11::DoScreenToClient(int *x, int *y) const
 
 void wxWindowX11::DoClientToScreen(int *x, int *y) const
 {
-    Display *display = wxGetDisplay();
+    Display *display = (Display*) wxGetDisplay();
     Window rootWindow = RootWindowOfScreen(DefaultScreenOfDisplay(display));
     Window thisWindow = (Window) GetClientWindow();
 
@@ -1237,8 +1238,8 @@ void wxWindowX11::GetTextExtent(const wxString& string,
 void wxWindowX11::Refresh(bool eraseBack, const wxRect *rect)
 {
     m_needsRefresh = TRUE;
-    Display *display = wxGetDisplay();
-    Window thisWindow = (Widget) GetMainWindow();
+    Display *display = (Display*) wxGetDisplay();
+    Window thisWindow = (Window) GetMainWindow();
 
     XExposeEvent dummyEvent;
     int width, height;
@@ -1266,7 +1267,7 @@ void wxWindowX11::Refresh(bool eraseBack, const wxRect *rect)
 
     if (eraseBack)
     {
-        wxClientDC dc(this);
+        wxClientDC dc((wxWindow*) this);
         wxBrush backgroundBrush(GetBackgroundColour(), wxSOLID);
         dc.SetBackground(backgroundBrush);
         if (rect)
@@ -1280,7 +1281,7 @@ void wxWindowX11::Refresh(bool eraseBack, const wxRect *rect)
 
 void wxWindowX11::Clear()
 {
-    wxClientDC dc(this);
+    wxClientDC dc((wxWindow*) this);
     wxBrush brush(GetBackgroundColour(), wxSOLID);
     dc.SetBackground(brush);
     dc.Clear();
@@ -1352,20 +1353,15 @@ bool wxWindowX11::ProcessAccelerator(wxKeyEvent& event)
     if (!m_acceleratorTable.Ok())
         return FALSE;
 
-    int count = m_acceleratorTable.GetCount();
-    wxAcceleratorEntry* entries = m_acceleratorTable.GetEntries();
-    int i;
-    for (i = 0; i < count; i++)
+    const wxAcceleratorEntry* entry = m_acceleratorTable.GetEntry(event);
+    if (entry)
     {
-        wxAcceleratorEntry* entry = & (entries[i]);
-        if (entry->MatchesEvent(event))
-        {
             // Bingo, we have a match. Now find a control that matches the
 	    // entry command id.
 
             // Need to go up to the top of the window hierarchy, since it might
             // be e.g. a menu item
-            wxWindow* parent = this;
+            wxWindow* parent = (wxWindow*) this;
             while ( parent && !parent->IsTopLevel() )
                 parent = parent->GetParent();
 
@@ -1408,8 +1404,8 @@ bool wxWindowX11::ProcessAccelerator(wxKeyEvent& event)
             }
 
             return FALSE;
-        } // matches event
-    }// for
+
+    }// if
 
     // We didn't match the key event against an accelerator.
     return FALSE;
@@ -1456,10 +1452,10 @@ void wxDeleteWindowFromTable(Window w)
 // ----------------------------------------------------------------------------
 
 // Add to hash table, add event handler
-bool wxWindowX11::AttachWidget (wxWindow* WXUNUSED(parent), WXWindow mainWidget,
+bool wxWindowX11::AttachWindow (wxWindow* WXUNUSED(parent), WXWindow mainWidget,
                              int x, int y, int width, int height)
 {
-    wxAddWindowToTable((Window ) mainWidget, this);
+    wxAddWindowToTable((Window ) mainWidget, (wxWindow*) this);
 
     // TODO
 #if 0
@@ -1503,7 +1499,7 @@ bool wxWindowX11::AttachWidget (wxWindow* WXUNUSED(parent), WXWindow mainWidget,
 }
 
 // Remove event handler, remove from hash table
-bool wxWindowX11::DetachWidget(WXWindow widget)
+bool wxWindowX11::DetachWindow(WXWindow widget)
 {
     // TODO
 #if 0
@@ -1545,7 +1541,7 @@ WXWindow wxWindowX11::GetMainWindow() const
         return m_mainWidget;
 }
 
-WXWindow wxWindowX11::GetClientWidget() const
+WXWindow wxWindowX11::GetClientWindow() const
 {
     if (m_drawingArea != (WXWindow) 0)
         return m_drawingArea;
@@ -1903,7 +1899,7 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Window window, 
                 // check for a double click
                 // TODO: where can we get this value from?
                 //long dclickTime = XtGetMultiClickTime((Display*) wxGetDisplay());
-                long dClickTime = 200;
+                long dclickTime = 200;
                 long ts = wxevent.GetTimestamp();
 
                 int buttonLast = win->GetLastClickedButton();

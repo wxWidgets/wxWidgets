@@ -69,7 +69,7 @@ public:
     bool operator == (const wxPalette& palette) const { return m_refData == palette.m_refData; }
     bool operator != (const wxPalette& palette) const { return m_refData != palette.m_refData; }
     
-    // Motif-specific
+    // X-specific
     WXColormap GetXColormap(WXDisplay* display = NULL) const;
     bool TransferBitmap(void *data, int depth, int size);
     bool TransferBitmap8(unsigned char *data, unsigned long size, void *dest, unsigned int bpp);

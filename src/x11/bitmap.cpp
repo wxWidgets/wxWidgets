@@ -115,11 +115,6 @@ wxBitmap::wxBitmap(const wxString& filename, long type)
     LoadFile(filename, (int)type);
 }
 
-wxBitmap::wxBitmap(char **data)
-{
-    (void) Create((void *)data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
-}
-
 bool wxBitmap::Create(int w, int h, int d)
 {
     UnRef();
@@ -502,200 +497,6 @@ bool wxXBMDataHandler::Create( wxBitmap *bitmap, void *data, long WXUNUSED(flags
     return TRUE;
 }
 
-#if wxHAVE_LIB_XPM
-class WXDLLEXPORT wxXPMFileHandler: public wxBitmapHandler
-{
-    DECLARE_DYNAMIC_CLASS(wxXPMFileHandler)
-public:
-    inline wxXPMFileHandler()
-    {
-        m_name = "XPM file";
-        m_extension = "xpm";
-        m_type = wxBITMAP_TYPE_XPM;
-    };
-
-    virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-        int desiredWidth, int desiredHeight);
-    virtual bool SaveFile(wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette = NULL);
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxXPMFileHandler, wxBitmapHandler)
-
-bool wxXPMFileHandler::LoadFile( wxBitmap *bitmap, const wxString& name, long WXUNUSED(flags),
-                                int WXUNUSED(desiredWidth), int WXUNUSED(desiredHeight) )
-{
-    Display *dpy = (Display*) wxGetDisplay();
-    M_BITMAPHANDLERDATA->m_display = (WXDisplay*) dpy;
-
-    XpmAttributes xpmAttr;
-    Pixmap pixmap;
-    Pixmap mask = 0;
-
-    M_BITMAPHANDLERDATA->m_ok = FALSE;
-    xpmAttr.valuemask = XpmReturnInfos | XpmCloseness;
-    xpmAttr.closeness = 40000;
-    int errorStatus = XpmReadFileToPixmap(dpy,
-        RootWindow(dpy, DefaultScreen(dpy)), (char*) (const char*) name,
-        &pixmap, &mask, &xpmAttr);
-
-    if (errorStatus == XpmSuccess)
-    {
-        M_BITMAPHANDLERDATA->m_pixmap = (WXPixmap) pixmap;
-        if ( mask )
-        {
-            M_BITMAPHANDLERDATA->m_bitmapMask = new wxMask;
-            M_BITMAPHANDLERDATA->m_bitmapMask->SetPixmap((WXPixmap) mask);
-        }
-
-        unsigned int depthRet;
-        int xRet, yRet;
-        unsigned int widthRet, heightRet, borderWidthRet;
-        Window rootWindowRet;
-        XGetGeometry(dpy, pixmap, &rootWindowRet, &xRet, &yRet,
-            &widthRet, &heightRet, &borderWidthRet, &depthRet);
-
-        M_BITMAPHANDLERDATA->m_width = xpmAttr.width;
-        M_BITMAPHANDLERDATA->m_height = xpmAttr.height;
-
-        /*
-        if ( xpmAttr.npixels > 2 )
-        {
-        M_BITMAPHANDLERDATA->m_depth = 8;	// TODO: next time not just a guess :-) ...
-        } else
-        {
-        M_BITMAPHANDLERDATA->m_depth = 1;	// mono
-        }
-        */
-
-        M_BITMAPHANDLERDATA->m_depth = depthRet;
-
-        M_BITMAPHANDLERDATA->m_numColors = xpmAttr.npixels;
-
-        XpmFreeAttributes(&xpmAttr);
-
-        M_BITMAPHANDLERDATA->m_ok = TRUE;
-        return TRUE;
-    } else
-    {
-        //      XpmDebugError(errorStatus, name);
-        M_BITMAPHANDLERDATA->m_ok = FALSE;
-        return FALSE;
-    }
-}
-
-bool wxXPMFileHandler::SaveFile( wxBitmap *bitmap, const wxString& name, int WXUNUSED(type),
-                                const wxPalette *WXUNUSED(palette))
-{
-    if (M_BITMAPHANDLERDATA->m_ok && M_BITMAPHANDLERDATA->m_pixmap)
-    {
-        Display *dpy =  (Display*) M_BITMAPHANDLERDATA->m_display;
-        int errorStatus = XpmWriteFileFromPixmap(dpy, (char*) (const char*) name,
-            (Pixmap) M_BITMAPHANDLERDATA->m_pixmap,
-            (M_BITMAPHANDLERDATA->m_bitmapMask ? (Pixmap) M_BITMAPHANDLERDATA->m_bitmapMask->GetPixmap() : (Pixmap) 0),
-            (XpmAttributes *) NULL);
-        if (errorStatus == XpmSuccess)
-            return TRUE;
-        else
-            return FALSE;
-    }
-    else
-        return FALSE;
-}
-
-class WXDLLEXPORT wxXPMDataHandler: public wxBitmapHandler
-{
-    DECLARE_DYNAMIC_CLASS(wxXPMDataHandler)
-public:
-    inline wxXPMDataHandler()
-    {
-        m_name = "XPM data";
-        m_extension = "xpm";
-        m_type = wxBITMAP_TYPE_XPM_DATA;
-    };
-
-    virtual bool Create(wxBitmap *bitmap, void *data, long flags, int width, int height, int depth = 1);
-};
-IMPLEMENT_DYNAMIC_CLASS(wxXPMDataHandler, wxBitmapHandler)
-
-bool wxXPMDataHandler::Create( wxBitmap *bitmap, void *data, long WXUNUSED(flags),
-                              int width, int height, int WXUNUSED(depth))
-{
-    M_BITMAPHANDLERDATA->m_width = width;
-    M_BITMAPHANDLERDATA->m_height = height;
-    M_BITMAPHANDLERDATA->m_depth = 1;
-    M_BITMAPHANDLERDATA->m_freePixmap = TRUE;
-
-    Display *dpy = (Display*) wxGetDisplay();
-    M_BITMAPHANDLERDATA->m_display = (WXDisplay*) dpy;
-
-    XpmAttributes xpmAttr;
-
-    xpmAttr.valuemask = XpmReturnInfos;    /* nothing yet, but get infos back */
-
-    XpmColorSymbol symbolicColors[4];
-    if (sg_Control && sg_Control->GetMainWidget())
-    {
-        symbolicColors[0].name = "foreground";
-        symbolicColors[0].value = NULL;
-        symbolicColors[1].name = "background";
-        symbolicColors[1].value = NULL;
-        XtVaGetValues((Widget) sg_Control->GetMainWidget(),
-            XmNforeground,  &symbolicColors[0].pixel,
-            XmNbackground,  &symbolicColors[1].pixel,NULL);
-        xpmAttr.numsymbols = 2;
-        xpmAttr.colorsymbols = symbolicColors;
-        xpmAttr.valuemask |= XpmColorSymbols;    // add flag
-    }
-
-    Pixmap pixmap;
-    Pixmap mask = 0;
-    int ErrorStatus = XpmCreatePixmapFromData(dpy, RootWindow(dpy, DefaultScreen(dpy)),
-        (char**) data, &pixmap, &mask, &xpmAttr);
-    if (ErrorStatus == XpmSuccess)
-    {
-        // Set attributes
-        M_BITMAPHANDLERDATA->m_width = xpmAttr.width;
-        M_BITMAPHANDLERDATA->m_height = xpmAttr.height;
-
-        unsigned int depthRet;
-        int xRet, yRet;
-        unsigned int widthRet, heightRet, borderWidthRet;
-        Window rootWindowRet;
-        XGetGeometry(dpy, pixmap, &rootWindowRet, &xRet, &yRet,
-            &widthRet, &heightRet, &borderWidthRet, &depthRet);
-
-            /*
-            if ( xpmAttr.npixels > 2 )
-            {
-            M_BITMAPHANDLERDATA->m_depth = 8;    // next time not just a guess :-) ...
-            } else
-            {
-            M_BITMAPHANDLERDATA->m_depth = 1;    // mono
-            }
-        */
-
-        M_BITMAPHANDLERDATA->m_depth = depthRet;
-
-        M_BITMAPHANDLERDATA->m_numColors = xpmAttr.npixels;
-        XpmFreeAttributes(&xpmAttr);
-        M_BITMAPHANDLERDATA->m_ok = TRUE;
-        M_BITMAPHANDLERDATA->m_pixmap = (WXPixmap) pixmap;
-        if ( mask )
-        {
-            M_BITMAPHANDLERDATA->m_bitmapMask = new wxMask;
-            M_BITMAPHANDLERDATA->m_bitmapMask->SetPixmap((WXPixmap) mask);
-        }
-    }
-    else
-    {
-        //      XpmDebugError(ErrorStatus, NULL);
-        M_BITMAPHANDLERDATA->m_ok = FALSE;
-    }
-    return M_BITMAPHANDLERDATA->m_ok ;
-}
-
-#endif // wxHAVE_LIB_XPM
-
 void wxBitmap::CleanUpHandlers()
 {
     wxNode *node = sm_handlers.First();
@@ -715,106 +516,7 @@ void wxBitmap::InitStandardHandlers()
     AddHandler(new wxXBMFileHandler);
     AddHandler(new wxXBMDataHandler);
 
-    // XPM is considered standard for Motif, although it can be omitted if
-    // libXpm is not installed
-#if wxHAVE_LIB_XPM
-    AddHandler(new wxXPMFileHandler);
-    AddHandler(new wxXPMDataHandler);
-#endif // wxHAVE_LIB_XPM
-}
-
-// We may need this sometime...
-
-/****************************************************************************
-
-  NAME
-  XCreateInsensitivePixmap - create a grayed-out copy of a pixmap
-
-  SYNOPSIS
-  Pixmap XCreateInsensitivePixmap( Display *display, Pixmap pixmap )
-
-  DESCRIPTION
-  This function creates a grayed-out copy of the argument pixmap, suitable
-  for use as a XmLabel's XmNlabelInsensitivePixmap resource.
-
-  RETURN VALUES
-  The return value is the new Pixmap id or zero on error.  Errors include
-  a NULL display argument or an invalid Pixmap argument.
-
-  ERRORS
-  If one of the XLib functions fail, it will produce a X error.  The
-  default X error handler prints a diagnostic and calls exit().
-
-  SEE ALSO
-  XCopyArea(3), XCreateBitmapFromData(3), XCreateGC(3), XCreatePixmap(3),
-  XFillRectangle(3), exit(2)
-
-  AUTHOR
-  John R Veregge - john@puente.jpl.nasa.gov
-  Advanced Engineering and Prototyping Group (AEG)
-  Information Systems Technology Section (395)
-  Jet Propulsion Lab - Calif Institute of Technology
-
-*****************************************************************************/
-
-Pixmap
-XCreateInsensitivePixmap( Display *display, Pixmap pixmap )
-
-{
-    static char stipple_data[] =
-        {
-            0x55, 0x55, 0xAA, 0xAA, 0x55, 0x55, 0xAA, 0xAA,
-            0x55, 0x55, 0xAA, 0xAA, 0x55, 0x55, 0xAA, 0xAA,
-            0x55, 0x55, 0xAA, 0xAA, 0x55, 0x55, 0xAA, 0xAA,
-            0x55, 0x55, 0xAA, 0xAA, 0x55, 0x55, 0xAA, 0xAA
-        };
-    GC        gc;
-    Pixmap    ipixmap, stipple;
-    unsigned    width, height, depth;
-
-    Window    window;    /* These return values */
-    unsigned    border;    /* from XGetGeometry() */
-    int        x, y;    /* are not needed.     */
-
-    ipixmap = 0;
-
-    if ( NULL == display || 0 == pixmap )
-        return ipixmap;
-
-    if ( 0 == XGetGeometry( display, pixmap, &window, &x, &y,
-                &width, &height, &border, &depth )
-       )
-        return ipixmap; /* BadDrawable: probably an invalid pixmap */
-
-    /* Get the stipple pixmap to be used to 'gray-out' the argument pixmap.
-     */
-    stipple = XCreateBitmapFromData( display, pixmap, stipple_data, 16, 16 );
-    if ( 0 != stipple )
-    {
-        gc = XCreateGC( display, pixmap, (XtGCMask)0, (XGCValues*)NULL );
-        if ( NULL != gc )
-        {
-            /* Create an identical copy of the argument pixmap.
-             */
-            ipixmap = XCreatePixmap( display, pixmap, width, height, depth );
-            if ( 0 != ipixmap )
-            {
-                /* Copy the argument pixmap into the new pixmap.
-                 */
-                XCopyArea( display, pixmap, ipixmap,
-                        gc, 0, 0, width, height, 0, 0 );
-
-                /* Refill the new pixmap using the stipple algorithm/pixmap.
-                 */
-                XSetStipple( display, gc, stipple );
-                XSetFillStyle( display, gc, FillStippled );
-                XFillRectangle( display, ipixmap, gc, 0, 0, width, height );
-            }
-            XFreeGC( display, gc );
-        }
-        XFreePixmap( display, stipple );
-    }
-    return ipixmap;
+    // XPM will be handled by wxImage
 }
 
 // Creates a bitmap with transparent areas drawn in
@@ -837,9 +539,6 @@ wxBitmap wxCreateMaskedBitmap(const wxBitmap& bitmap, wxColour& colour)
 
     return newBitmap;
 }
-
-
-
 
 //-----------------------------------------------------------------------------
 // wxImage conversion routines
@@ -1205,7 +904,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     {
         wxBitmap maskBitmap(width, height, 1);
 
-        GC gcMask = XCreateGC( dpy, (Pixmap) maskBitmap.GetPixmap(), (XtGCMask) 0, (XGCValues*)NULL );
+        GC gcMask = XCreateGC( dpy, (Pixmap) maskBitmap.GetPixmap(), 0, (XGCValues*)NULL );
         XPutImage( dpy, (Drawable)maskBitmap.GetPixmap(), gcMask, mask_image, 0, 0, 0, 0, width, height );
 
         XDestroyImage( mask_image );
@@ -1341,4 +1040,10 @@ wxImage wxBitmap::ConvertToImage() const
     */
 
     return image;
+}
+
+bool wxBitmap::CopyFromIcon(const wxIcon& icon)
+{
+    // TODO
+    return FALSE;
 }

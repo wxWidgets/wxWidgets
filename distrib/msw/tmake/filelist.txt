@@ -93,7 +93,7 @@ logg.cpp	Generic
 msgdlgg.cpp	Generic	Generic
 notebook.cpp	Generic	NotWin32,NotGTK,NotOS2,NotMGL,NotMac,NotMicro
 numdlgg.cpp	Generic
-paletteg.cpp	Generic	NotMSW,NotX,NotOS2,NotMGL,NotMac,NotMicro
+paletteg.cpp	Generic	NotMSW,NotX,NotX11,NotOS2,NotMGL,NotMac,NotMicro
 panelg.cpp	Generic
 printps.cpp	Generic	NotMSW,NotX11
 prntdlgg.cpp	Generic	NotMSW
@@ -601,7 +601,6 @@ utils.cpp	Motif
 window.cpp	Motif
 
 gsockx11.c	X11	Socket
-accel.cpp	X11
 app.cpp	X11
 bitmap.cpp	X11
 brush.cpp	X11

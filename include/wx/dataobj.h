@@ -161,6 +161,8 @@ public:
     #include "wx/msw/ole/dataobj.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/dataobj.h"
+#elif defined(__WXX11__)
+    #include "wx/x11/dataobj.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/dataobj.h"
 #elif defined(__WXMAC__)

@@ -52,6 +52,8 @@
 #include "wx/unix/execute.h"
 
 #include "wx/x11/private.h"
+#include "X11/Xresource.h"
+#include "X11/Xutil.h"
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -81,7 +83,11 @@ void wxFlushEvents()
     Display *display = (Display*) wxGetDisplay();
 
     XSync (display, FALSE);
+    XFlush(display);
 
+    // TODO
+#if 0
+    
     // XtAppPending returns availability of events AND timers/inputs, which
     // are processed via callbacks, so XtAppNextEvent will not return if
     // there are no events. So added '& XtIMXEvent' - Sergey.
@@ -91,6 +97,7 @@ void wxFlushEvents()
         // Jan Lessner: works better when events are non-X events
         XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMXEvent);
     }
+#endif
 }
 
 // Check whether this window wants to process messages, e.g. Stop button
@@ -705,8 +712,6 @@ bool wxSetDisplay(const wxString& display_name)
     }
     else
     {
-        Cardinal argc = 0;
-
         Display* display = XOpenDisplay((const char*) display_name);
 
         if (display)
@@ -810,24 +815,6 @@ char * wxFindAccelerator (const char *s)
     }
     delete[]tmp;
     return wxBuffer;
-#endif
-}
-
-XmString wxFindAcceleratorText (const char *s)
-{
-    // VZ: this function returns incorrect keysym which completely breaks kbd
-    //     handling
-    return NULL;
-
-#if 0
-   // The accelerator text is after the \t char.
-    while (*s && *s != '\t')
-        s++;
-    if (*s == '\0')
-        return (NULL);
-    s++;
-    XmString text = XmStringCreateSimple ((char *)s);
-    return text;
 #endif
 }
 
