@@ -198,7 +198,7 @@ bool wxStreamBuffer::FillBuffer()
 {
     wxInputStream *inStream = GetInputStream();
 
-    // It's legal to have no stream, so we shouldn't don't about it just return FALSE
+    // It's legal to have no stream, so we don't complain about it just return FALSE
     if ( !inStream )
         return FALSE;
 
