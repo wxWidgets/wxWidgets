@@ -210,7 +210,7 @@ Plus, wxGenericTreeCtrl::OnPaint will reset the device origin.
 
     // Assumption: wxGenericTreeCtrl will adjust the scrollbars automatically,
     // since it'll call SetScrollbars and we've defined this to Do The Right Thing.
-    if (!IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
+    if (IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
         return;
 
 	wxScrolledWindow* scrolledWindow = GetScrolledWindow();
