@@ -2,7 +2,7 @@
 # File:		makefile.nt
 # Author:	Julian Smart
 # Created:	1999
-# Updated:	
+# Updated:
 # Copyright:	(c) Julian Smart
 #
 # Makefile environment for building samples. Include this from
@@ -10,8 +10,8 @@
 # Use FINAL=1 argument to nmake to build final version with no debugging
 # info
 
-# Set WXDIR for your system
-WXDIR = j:\dev\wx2\wxWindows
+# Set WXDIR for your system (hint, set an environment variable named WXWIN)
+WXDIR = $(WXWIN)
 
 WXUSINGDLL=0
 

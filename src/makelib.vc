@@ -9,7 +9,7 @@
 # Use FINAL=1 argument to nmake to build final version with no debugging
 # info
 
-# Set WXDIR for your system (hint, set an environment variable anmed WXWIN)
+# Set WXDIR for your system (hint, set an environment variable named WXWIN)
 WXDIR = $(WXWIN)
 
 !include $(WXDIR)\src\makevc.env
