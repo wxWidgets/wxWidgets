@@ -53,6 +53,9 @@ struct MacGSocketData* _GSocket_Get_Mac_Socket(GSocket *socket)
   /* If socket is already created, returns a pointer to the data */
   /* Otherwise, creates socket and returns the pointer */
   CFSocketContext cont;
+  CFSocketRef cf;
+  CFRunLoopSourceRef source;
+
   struct MacGSocketData* data = (struct MacGSocketData*)socket->m_gui_dependent;
 
   if (data && data->source) return data;
@@ -63,9 +66,9 @@ struct MacGSocketData* _GSocket_Get_Mac_Socket(GSocket *socket)
   cont.release = NULL; cont.copyDescription = NULL;
   cont.info = socket;
 
-  CFSocketRef cf = CFSocketCreateWithNative(NULL, socket->m_fd,
+  cf = CFSocketCreateWithNative(NULL, socket->m_fd,
   			ALL_CALLBACK_TYPES, Mac_Socket_Callback, &cont);
-  CFRunLoopSourceRef source = CFSocketCreateRunLoopSource(NULL, cf, 0);
+  source = CFSocketCreateRunLoopSource(NULL, cf, 0);
   assert(source);
   socket->m_gui_dependent = (char*)data;
 
