@@ -154,7 +154,6 @@ PyPlot updates from Gordon Williams:
    - Modified line end shape from round to square.
    - Removed FloatDCWrapper for conversion to ints and ints in arguments
 
-
 MaskedEdit updates from Will Sadkin:
     - Added '*' mask char that means "all ansii chars" (ords 32-255)
     - Added proper unicode support to masked controls and wx.tools.dbg
