@@ -26,7 +26,7 @@
 //--------------------------------------------------------------------------------
 
 
-class WXDLLEXPORT_BASE wxZipInputStream : public wxInputStream
+class WXDLLIMPEXP_BASE wxZipInputStream : public wxInputStream
 {
 public:
     wxZipInputStream(const wxString& archive, const wxString& file);

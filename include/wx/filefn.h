@@ -154,9 +154,9 @@ enum wxSeekMode
 #if defined(__MWERKS__) && defined(macintosh)
 	#include <sys/stat.h>
 #endif
-WXDLLEXPORT_BASE int wxStat( const wxChar *file_name, wxStructStat *buf );
-WXDLLEXPORT_BASE int wxAccess( const wxChar *pathname, int mode );
-WXDLLEXPORT_BASE int wxOpen( const wxChar *pathname, int flags, mode_t mode );
+WXDLLIMPEXP_BASE int wxStat( const wxChar *file_name, wxStructStat *buf );
+WXDLLIMPEXP_BASE int wxAccess( const wxChar *pathname, int mode );
+WXDLLIMPEXP_BASE int wxOpen( const wxChar *pathname, int flags, mode_t mode );
 #else
     #define   wxOpen       open
     #define   wxStat       stat
@@ -168,98 +168,98 @@ WXDLLEXPORT_BASE int wxOpen( const wxChar *pathname, int flags, mode_t mode );
 // ----------------------------------------------------------------------------
 // functions
 // ----------------------------------------------------------------------------
-WXDLLEXPORT_BASE bool wxFileExists(const wxString& filename);
+WXDLLIMPEXP_BASE bool wxFileExists(const wxString& filename);
 
 // does the path exist? (may have or not '/' or '\\' at the end)
-WXDLLEXPORT_BASE bool wxPathExists(const wxChar *pszPathName);
+WXDLLIMPEXP_BASE bool wxPathExists(const wxChar *pszPathName);
 
-WXDLLEXPORT_BASE bool wxIsAbsolutePath(const wxString& filename);
+WXDLLIMPEXP_BASE bool wxIsAbsolutePath(const wxString& filename);
 
 // Get filename
-WXDLLEXPORT_BASE wxChar* wxFileNameFromPath(wxChar *path);
-WXDLLEXPORT_BASE wxString wxFileNameFromPath(const wxString& path);
+WXDLLIMPEXP_BASE wxChar* wxFileNameFromPath(wxChar *path);
+WXDLLIMPEXP_BASE wxString wxFileNameFromPath(const wxString& path);
 
 // Get directory
-WXDLLEXPORT_BASE wxString wxPathOnly(const wxString& path);
+WXDLLIMPEXP_BASE wxString wxPathOnly(const wxString& path);
 
 // wxString version
-WXDLLEXPORT_BASE wxString wxRealPath(const wxString& path);
+WXDLLIMPEXP_BASE wxString wxRealPath(const wxString& path);
 
-WXDLLEXPORT_BASE void wxDos2UnixFilename(wxChar *s);
+WXDLLIMPEXP_BASE void wxDos2UnixFilename(wxChar *s);
 
-WXDLLEXPORT_BASE void wxUnix2DosFilename(wxChar *s);
+WXDLLIMPEXP_BASE void wxUnix2DosFilename(wxChar *s);
 
 // Strip the extension, in situ
-WXDLLEXPORT_BASE void wxStripExtension(wxChar *buffer);
-WXDLLEXPORT_BASE void wxStripExtension(wxString& buffer);
+WXDLLIMPEXP_BASE void wxStripExtension(wxChar *buffer);
+WXDLLIMPEXP_BASE void wxStripExtension(wxString& buffer);
 
 // Get a temporary filename
-WXDLLEXPORT_BASE wxChar* wxGetTempFileName(const wxString& prefix, wxChar *buf = (wxChar *) NULL);
-WXDLLEXPORT_BASE bool wxGetTempFileName(const wxString& prefix, wxString& buf);
+WXDLLIMPEXP_BASE wxChar* wxGetTempFileName(const wxString& prefix, wxChar *buf = (wxChar *) NULL);
+WXDLLIMPEXP_BASE bool wxGetTempFileName(const wxString& prefix, wxString& buf);
 
 // Expand file name (~/ and ${OPENWINHOME}/ stuff)
-WXDLLEXPORT_BASE wxChar* wxExpandPath(wxChar *dest, const wxChar *path);
-WXDLLEXPORT_BASE bool wxExpandPath(wxString& dest, const wxChar *path);
+WXDLLIMPEXP_BASE wxChar* wxExpandPath(wxChar *dest, const wxChar *path);
+WXDLLIMPEXP_BASE bool wxExpandPath(wxString& dest, const wxChar *path);
 
 // Contract w.r.t environment (</usr/openwin/lib, OPENWHOME> -> ${OPENWINHOME}/lib)
 // and make (if under the home tree) relative to home
 // [caller must copy-- volatile]
-WXDLLEXPORT_BASE wxChar* wxContractPath(const wxString& filename,
+WXDLLIMPEXP_BASE wxChar* wxContractPath(const wxString& filename,
                                    const wxString& envname = wxEmptyString,
                                    const wxString& user = wxEmptyString);
 
 // Destructive removal of /./ and /../ stuff
-WXDLLEXPORT_BASE wxChar* wxRealPath(wxChar *path);
+WXDLLIMPEXP_BASE wxChar* wxRealPath(wxChar *path);
 
 // Allocate a copy of the full absolute path
-WXDLLEXPORT_BASE wxChar* wxCopyAbsolutePath(const wxString& path);
+WXDLLIMPEXP_BASE wxChar* wxCopyAbsolutePath(const wxString& path);
 
 // Get first file name matching given wild card.
 // Flags are reserved for future use.
 #define wxFILE  1
 #define wxDIR   2
-WXDLLEXPORT_BASE wxString wxFindFirstFile(const wxChar *spec, int flags = wxFILE);
-WXDLLEXPORT_BASE wxString wxFindNextFile();
+WXDLLIMPEXP_BASE wxString wxFindFirstFile(const wxChar *spec, int flags = wxFILE);
+WXDLLIMPEXP_BASE wxString wxFindNextFile();
 
 // Does the pattern contain wildcards?
-WXDLLEXPORT_BASE bool wxIsWild(const wxString& pattern);
+WXDLLIMPEXP_BASE bool wxIsWild(const wxString& pattern);
 
 // Does the pattern match the text (usually a filename)?
 // If dot_special is TRUE, doesn't match * against . (eliminating
 // `hidden' dot files)
-WXDLLEXPORT_BASE bool wxMatchWild(const wxString& pattern,  const wxString& text, bool dot_special = TRUE);
+WXDLLIMPEXP_BASE bool wxMatchWild(const wxString& pattern,  const wxString& text, bool dot_special = TRUE);
 
 // Concatenate two files to form third
-WXDLLEXPORT_BASE bool wxConcatFiles(const wxString& file1, const wxString& file2, const wxString& file3);
+WXDLLIMPEXP_BASE bool wxConcatFiles(const wxString& file1, const wxString& file2, const wxString& file3);
 
 // Copy file1 to file2
-WXDLLEXPORT_BASE bool wxCopyFile(const wxString& file1, const wxString& file2,
+WXDLLIMPEXP_BASE bool wxCopyFile(const wxString& file1, const wxString& file2,
                             bool overwrite = TRUE);
 
 // Remove file
-WXDLLEXPORT_BASE bool wxRemoveFile(const wxString& file);
+WXDLLIMPEXP_BASE bool wxRemoveFile(const wxString& file);
 
 // Rename file
-WXDLLEXPORT_BASE bool wxRenameFile(const wxString& file1, const wxString& file2);
+WXDLLIMPEXP_BASE bool wxRenameFile(const wxString& file1, const wxString& file2);
 
 // Get current working directory.
 // If buf is NULL, allocates space using new, else
 // copies into buf.
 // IMPORTANT NOTE getcwd is know not to work under some releases
 // of Win32s 1.3, according to MS release notes!
-WXDLLEXPORT_BASE wxChar* wxGetWorkingDirectory(wxChar *buf = (wxChar *) NULL, int sz = 1000);
+WXDLLIMPEXP_BASE wxChar* wxGetWorkingDirectory(wxChar *buf = (wxChar *) NULL, int sz = 1000);
 // new and preferred version of wxGetWorkingDirectory
 // NB: can't have the same name because of overloading ambiguity
-WXDLLEXPORT_BASE wxString wxGetCwd();
+WXDLLIMPEXP_BASE wxString wxGetCwd();
 
 // Set working directory
-WXDLLEXPORT_BASE bool wxSetWorkingDirectory(const wxString& d);
+WXDLLIMPEXP_BASE bool wxSetWorkingDirectory(const wxString& d);
 
 // Make directory
-WXDLLEXPORT_BASE bool wxMkdir(const wxString& dir, int perm = 0777);
+WXDLLIMPEXP_BASE bool wxMkdir(const wxString& dir, int perm = 0777);
 
 // Remove directory. Flags reserved for future use.
-WXDLLEXPORT_BASE bool wxRmdir(const wxString& dir, int flags = 0);
+WXDLLIMPEXP_BASE bool wxRmdir(const wxString& dir, int flags = 0);
 
 // compatibility defines, don't use in new code
 #define wxDirExists wxPathExists
@@ -333,31 +333,31 @@ inline bool wxIsPathSeparator(wxChar c)
 }
 
 // does the string ends with path separator?
-WXDLLEXPORT_BASE bool wxEndsWithPathSeparator(const wxChar *pszFileName);
+WXDLLIMPEXP_BASE bool wxEndsWithPathSeparator(const wxChar *pszFileName);
 
 // split the full path into path (including drive for DOS), name and extension
 // (understands both '/' and '\\')
-WXDLLEXPORT_BASE void wxSplitPath(const wxChar *pszFileName,
+WXDLLIMPEXP_BASE void wxSplitPath(const wxChar *pszFileName,
                              wxString *pstrPath,
                              wxString *pstrName,
                              wxString *pstrExt);
 
 // find a file in a list of directories, returns false if not found
-WXDLLEXPORT_BASE bool wxFindFileInPath(wxString *pStr, const wxChar *pszPath, const wxChar *pszFile);
+WXDLLIMPEXP_BASE bool wxFindFileInPath(wxString *pStr, const wxChar *pszPath, const wxChar *pszFile);
 
 // Get the OS directory if appropriate (such as the Windows directory).
 // On non-Windows platform, probably just return the empty string.
-WXDLLEXPORT_BASE wxString wxGetOSDirectory();
+WXDLLIMPEXP_BASE wxString wxGetOSDirectory();
 
 // Get file modification time
-WXDLLEXPORT_BASE time_t wxFileModificationTime(const wxString& filename);
+WXDLLIMPEXP_BASE time_t wxFileModificationTime(const wxString& filename);
 
 // ----------------------------------------------------------------------------
 // classes
 // ----------------------------------------------------------------------------
 
 // Path searching
-class WXDLLEXPORT_BASE wxPathList : public wxStringList
+class WXDLLIMPEXP_BASE wxPathList : public wxStringList
 {
 public:
     // Adds all paths in environment variable

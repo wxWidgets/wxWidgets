@@ -56,7 +56,7 @@ const int   wxDB_NO_MORE_COLUMN_NUMBERS = -1;
 // wxDbTable class which allows it to create a table in the data
 // source, exchange data between the data source and the C++
 // object, and so on.
-class WXDLLEXPORT_BASE wxDbColDef
+class WXDLLIMPEXP_BASE wxDbColDef
 {
 public:
     wxChar  ColName[DB_MAX_COLUMN_NAME_LEN+1];  // Column Name
@@ -77,7 +77,7 @@ public:
 };  // wxDbColDef
 
 
-class WXDLLEXPORT_BASE wxDbColDataPtr
+class WXDLLIMPEXP_BASE wxDbColDataPtr
 {
 public:
     void    *PtrDataObj;
@@ -87,7 +87,7 @@ public:
 
 
 // This structure is used when creating secondary indexes.
-class WXDLLEXPORT_BASE wxDbIdxDef
+class WXDLLIMPEXP_BASE wxDbIdxDef
 {
 public:
     wxChar  ColName[DB_MAX_COLUMN_NAME_LEN+1];
@@ -95,7 +95,7 @@ public:
 };  // wxDbIdxDef
 
 
-class WXDLLEXPORT_BASE wxDbTable
+class WXDLLIMPEXP_BASE wxDbTable
 {
 private:
     ULONG       tableID;  // Used for debugging.  This can help to match up mismatched constructors/destructors

@@ -52,7 +52,7 @@ enum wxFSVolumeKind
     wxFS_VOL_MAX
 };
 
-class WXDLLEXPORT_BASE wxFSVolumeBase
+class WXDLLIMPEXP_BASE wxFSVolumeBase
 {
 public:
     // return the array containing the names of the volumes

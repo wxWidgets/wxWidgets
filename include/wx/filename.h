@@ -38,7 +38,7 @@
 #include "wx/filefn.h"
 #include "wx/datetime.h"
 
-class WXDLLEXPORT_BASE wxFile;
+class WXDLLIMPEXP_BASE wxFile;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -90,7 +90,7 @@ enum
 // wxFileName: encapsulates a file path
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxFileName
+class WXDLLIMPEXP_BASE wxFileName
 {
 public:
     // constructors and assignment

@@ -20,7 +20,7 @@
 
 #if wxUSE_REGEX
 
-class WXDLLEXPORT_BASE wxString;
+class WXDLLIMPEXP_BASE wxString;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -67,9 +67,9 @@ enum
 // wxRegEx: a regular expression
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxRegExImpl;
+class WXDLLIMPEXP_BASE wxRegExImpl;
 
-class WXDLLEXPORT_BASE wxRegEx
+class WXDLLIMPEXP_BASE wxRegEx
 {
 public:
     // default ctor: use Compile() later

@@ -36,7 +36,7 @@
 // wxMBConv (base class for conversions, using libc conversion itself)
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxMBConv
+class WXDLLIMPEXP_BASE wxMBConv
 {
 public:
     // the actual conversion takes place here
@@ -63,33 +63,33 @@ public:
     virtual ~wxMBConv();
 };
 
-WXDLLEXPORT_DATA_BASE(extern wxMBConv) wxConvLibc;
+WXDLLIMPEXP_DATA_BASE(extern wxMBConv) wxConvLibc;
 
 // ----------------------------------------------------------------------------
 // wxMBConvUTF7 (for conversion using UTF7 encoding)
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxMBConvUTF7 : public wxMBConv
+class WXDLLIMPEXP_BASE wxMBConvUTF7 : public wxMBConv
 {
 public:
     virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
     virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
 };
 
-WXDLLEXPORT_DATA_BASE(extern wxMBConvUTF7) wxConvUTF7;
+WXDLLIMPEXP_DATA_BASE(extern wxMBConvUTF7) wxConvUTF7;
 
 // ----------------------------------------------------------------------------
 // wxMBConvUTF8 (for conversion using UTF8 encoding)
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxMBConvUTF8 : public wxMBConv
+class WXDLLIMPEXP_BASE wxMBConvUTF8 : public wxMBConv
 {
 public:
     virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
     virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
 };
 
-WXDLLEXPORT_DATA_BASE(extern wxMBConvUTF8) wxConvUTF8;
+WXDLLIMPEXP_DATA_BASE(extern wxMBConvUTF8) wxConvUTF8;
 
 #ifdef __WXGTK12__
 
@@ -97,14 +97,14 @@ WXDLLEXPORT_DATA_BASE(extern wxMBConvUTF8) wxConvUTF8;
 // wxMBConvUTF8 (for conversion using GDK's internal converions)
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxMBConvGdk : public wxMBConv
+class WXDLLIMPEXP_BASE wxMBConvGdk : public wxMBConv
 {
 public:
     virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
     virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
 };
 
-WXDLLEXPORT_DATA_BASE(extern wxMBConvGdk) wxConvGdk;
+WXDLLIMPEXP_DATA_BASE(extern wxMBConvGdk) wxConvGdk;
 
 #endif // wxGTK 1.2
 
@@ -112,9 +112,9 @@ WXDLLEXPORT_DATA_BASE(extern wxMBConvGdk) wxConvGdk;
 // wxCSConv (for conversion based on loadable char sets)
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxCharacterSet;
+class WXDLLIMPEXP_BASE wxCharacterSet;
 
-class WXDLLEXPORT_BASE wxCSConv : public wxMBConv
+class WXDLLIMPEXP_BASE wxCSConv : public wxMBConv
 {
 public:
     wxCSConv(const wxChar *charset);
@@ -141,9 +141,9 @@ private:
 };
 
 #define wxConvFile wxConvLocal
-WXDLLEXPORT_DATA_BASE(extern wxCSConv) wxConvLocal;
-WXDLLEXPORT_DATA_BASE(extern wxCSConv) wxConvISO8859_1;
-WXDLLEXPORT_DATA_BASE(extern wxMBConv *) wxConvCurrent;
+WXDLLIMPEXP_DATA_BASE(extern wxCSConv) wxConvLocal;
+WXDLLIMPEXP_DATA_BASE(extern wxCSConv) wxConvISO8859_1;
+WXDLLIMPEXP_DATA_BASE(extern wxMBConv *) wxConvCurrent;
 
 // ----------------------------------------------------------------------------
 // filename conversion macros
@@ -171,15 +171,15 @@ WXDLLEXPORT_DATA_BASE(extern wxMBConv *) wxConvCurrent;
 // stand-ins in absence of wchar_t
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxMBConv
+class WXDLLIMPEXP_BASE wxMBConv
 {
 public:
     const char* cMB2WX(const char *psz) const { return psz; }
     const char* cWX2MB(const char *psz) const { return psz; }
 };
 
-WXDLLEXPORT_DATA_BASE(extern wxMBConv) wxConvLibc, wxConvFile, wxConvLocal, wxConvISO8859_1, wxConvUTF8;
-WXDLLEXPORT_DATA_BASE(extern wxMBConv *) wxConvCurrent;
+WXDLLIMPEXP_DATA_BASE(extern wxMBConv) wxConvLibc, wxConvFile, wxConvLocal, wxConvISO8859_1, wxConvUTF8;
+WXDLLIMPEXP_DATA_BASE(extern wxMBConv *) wxConvCurrent;
 
 #define wxFNCONV(name) name
 #define wxFNSTRINGCAST WXSTRINGCAST

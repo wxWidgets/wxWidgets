@@ -26,7 +26,7 @@ WX_DECLARE_EXPORTED_LIST(wxModule, wxModuleList);
 // declaring a class derived from wxModule will automatically create an
 // instance of this class on program startup, call its OnInit() method and call
 // OnExit() on program termination (but only if OnInit() succeeded)
-class WXDLLEXPORT_BASE wxModule : public wxObject
+class WXDLLIMPEXP_BASE wxModule : public wxObject
 {
 public:
     wxModule() {}

@@ -24,7 +24,7 @@
 #include "wx/defs.h"
 #include "wx/memory.h"
 
-class WXDLLEXPORT_BASE wxObject;
+class WXDLLIMPEXP_BASE wxObject;
 
 #if wxUSE_DYNAMIC_CLASSES
 
@@ -41,9 +41,9 @@ class WXDLLEXPORT_BASE wxObject;
 #undef GetClassInfo
 #endif
 
-class WXDLLEXPORT_BASE wxClassInfo;
-class WXDLLEXPORT_BASE wxHashTable;
-class WXDLLEXPORT_BASE wxObjectRefData;
+class WXDLLIMPEXP_BASE wxClassInfo;
+class WXDLLIMPEXP_BASE wxHashTable;
+class WXDLLIMPEXP_BASE wxObjectRefData;
 
 // ----------------------------------------------------------------------------
 // wxClassInfo
@@ -51,7 +51,7 @@ class WXDLLEXPORT_BASE wxObjectRefData;
 
 typedef wxObject *(*wxObjectConstructorFn)(void);
 
-class WXDLLEXPORT_BASE wxClassInfo
+class WXDLLIMPEXP_BASE wxClassInfo
 {
 public:
     wxClassInfo( const wxChar *className,
@@ -133,7 +133,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxClassInfo)
 };
 
-WXDLLEXPORT_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
+WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
 
 // ----------------------------------------------------------------------------
 // Dynamic class macros
@@ -392,7 +392,7 @@ inline void wxCheckCast(void *ptr)
 // wxObject: the root class of wxWindows object hierarchy
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxObject
+class WXDLLIMPEXP_BASE wxObject
 {
     DECLARE_ABSTRACT_CLASS(wxObject)
 
@@ -490,9 +490,9 @@ protected:
 // wxObjectRefData: ref counted data meant to be stored in wxObject
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxObjectRefData
+class WXDLLIMPEXP_BASE wxObjectRefData
 {
-    friend class WXDLLEXPORT_BASE wxObject;
+    friend class WXDLLIMPEXP_BASE wxObject;
 
 public:
     wxObjectRefData() : m_count(1) { }

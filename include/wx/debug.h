@@ -78,21 +78,21 @@
        szFile and nLine - file name and line number of the ASSERT
        szMsg            - optional message explaining the reason
   */
-  extern void WXDLLEXPORT_BASE wxOnAssert(const wxChar *szFile,
+  extern void WXDLLIMPEXP_BASE wxOnAssert(const wxChar *szFile,
                                           int nLine,
                                           const wxChar *szCond,
                                           const wxChar *szMsg = NULL);
 
   // call this function to break into the debugger unconditionally (assuming
   // the program is running under debugger, of course)
-  extern void WXDLLEXPORT_BASE wxTrap();
+  extern void WXDLLIMPEXP_BASE wxTrap();
 
   // helper function used to implement wxASSERT and wxASSERT_MSG
   //
   // note using "int" and not "bool" for cond to avoid VC++ warnings about
   // implicit conversions when doing "wxAssert( pointer )" and also use of
   // "!!cond" below to ensure that everything is converted to int
-  extern void WXDLLEXPORT_BASE wxAssert(int cond,
+  extern void WXDLLIMPEXP_BASE wxAssert(int cond,
                                         const wxChar *szFile,
                                         int nLine,
                                         const wxChar *szCond,
@@ -112,7 +112,7 @@
   //
   // NB: this is made obsolete by wxCOMPILE_TIME_ASSERT() and shouldn't be
   //     used any longer
-  extern bool WXDLLEXPORT_BASE wxAssertIsEqual(int x, int y);
+  extern bool WXDLLIMPEXP_BASE wxAssertIsEqual(int x, int y);
 #else
   #define wxTrap()
 
@@ -124,7 +124,7 @@
 
 // Use of wxFalse instead of FALSE suppresses compiler warnings about testing
 // constant expression
-WXDLLEXPORT_DATA_BASE(extern const bool) wxFalse;
+WXDLLIMPEXP_DATA_BASE(extern const bool) wxFalse;
 #define wxAssertFailure wxFalse
 
 // special form of assert: always triggers it (in debug mode)
@@ -227,7 +227,7 @@ WXDLLEXPORT_DATA_BASE(extern const bool) wxFalse;
 // currently this only really works under Mac in CodeWarrior builds, it always
 // returns false otherwise
 #ifdef __WXMAC__
-    extern bool WXDLLEXPORT_BASE wxIsDebuggerRunning();
+    extern bool WXDLLIMPEXP_BASE wxIsDebuggerRunning();
 #else // !Mac
     inline bool wxIsDebuggerRunning() { return false; }
 #endif // Mac/!Mac

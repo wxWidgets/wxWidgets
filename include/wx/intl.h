@@ -45,9 +45,9 @@
 // forward decls
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxLocale;
-class WXDLLEXPORT_BASE wxMsgCatalog;
-class WXDLLEXPORT_BASE wxLanguageInfoArray;
+class WXDLLIMPEXP_BASE wxLocale;
+class WXDLLIMPEXP_BASE wxMsgCatalog;
+class WXDLLIMPEXP_BASE wxLanguageInfoArray;
 
 // ============================================================================
 // locale support
@@ -308,7 +308,7 @@ enum wxLanguage
 //                 translation information
 // ----------------------------------------------------------------------------
 
-struct WXDLLEXPORT_BASE wxLanguageInfo
+struct WXDLLIMPEXP_BASE wxLanguageInfo
 {
     int Language;                   // wxLanguage id
     wxString CanonicalName;         // Canonical name, e.g. fr_FR
@@ -362,7 +362,7 @@ enum wxLocaleInitFlags
     wxLOCALE_CONV_ENCODING = 0x0002      // convert encoding on the fly?
 };
 
-class WXDLLEXPORT_BASE wxLocale
+class WXDLLIMPEXP_BASE wxLocale
 {
 public:
     // ctor & dtor
@@ -522,7 +522,7 @@ private:
 // ----------------------------------------------------------------------------
 
 // get the current locale object (note that it may be NULL!)
-extern WXDLLEXPORT_BASE wxLocale* wxGetLocale();
+extern WXDLLIMPEXP_BASE wxLocale* wxGetLocale();
 
 // get the translation of the string in the current locale
 inline const wxChar *wxGetTranslation(const wxChar *sz)

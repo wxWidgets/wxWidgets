@@ -566,7 +566,7 @@ DWORD CALLBACK wxRichEditStreamIn(DWORD dwCookie, BYTE *buf, LONG cb, LONG *pcb)
 }
 
 // from utils.cpp
-extern WXDLLEXPORT_BASE long wxEncodingToCodepage(wxFontEncoding encoding);
+extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding);
 
 #if wxUSE_UNICODE_MSLU
 bool wxTextCtrl::StreamIn(const wxString& value,

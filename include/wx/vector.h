@@ -13,7 +13,7 @@
 
 #include "wx/defs.h"
 
-class WXDLLEXPORT_BASE wxVectorBase
+class WXDLLIMPEXP_BASE wxVectorBase
 {
 public:
     typedef size_t size_type;

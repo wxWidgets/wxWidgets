@@ -387,30 +387,30 @@ typedef int wxWindowID;
 // WXDLLEXPORT maps to export declaration when building the DLL, to import
 // declaration if using it or to nothing at all if we don't use wxWin as DLL
 #ifdef WXMAKINGDLL_BASE
-    #define WXDLLEXPORT_BASE WXEXPORT
-    #define WXDLLEXPORT_DATA_BASE(type) WXEXPORT type
+    #define WXDLLIMPEXP_BASE WXEXPORT
+    #define WXDLLIMPEXP_DATA_BASE(type) WXEXPORT type
 #elif defined(WXUSINGDLL_BASE)
-    #define WXDLLEXPORT_BASE WXIMPORT
-    #define WXDLLEXPORT_DATA_BASE(type) WXIMPORT type
+    #define WXDLLIMPEXP_BASE WXIMPORT
+    #define WXDLLIMPEXP_DATA_BASE(type) WXIMPORT type
 #else // not making nor using DLL
-    #define WXDLLEXPORT_BASE
-    #define WXDLLEXPORT_DATA_BASE(type) type
+    #define WXDLLIMPEXP_BASE
+    #define WXDLLIMPEXP_DATA_BASE(type) type
 #endif
 
 #ifdef WXMAKINGDLL_CORE
-    #define WXDLLEXPORT_CORE WXEXPORT
-    #define WXDLLEXPORT_DATA_CORE(type) WXEXPORT type
+    #define WXDLLIMPEXP_CORE WXEXPORT
+    #define WXDLLIMPEXP_DATA_CORE(type) WXEXPORT type
 #elif defined(WXUSINGDLL_CORE)
-    #define WXDLLEXPORT_CORE WXIMPORT
-    #define WXDLLEXPORT_DATA_CORE(type) WXIMPORT type
+    #define WXDLLIMPEXP_CORE WXIMPORT
+    #define WXDLLIMPEXP_DATA_CORE(type) WXIMPORT type
 #else // not making nor using DLL
-    #define WXDLLEXPORT_CORE
-    #define WXDLLEXPORT_DATA_CORE(type) type
+    #define WXDLLIMPEXP_CORE
+    #define WXDLLIMPEXP_DATA_CORE(type) type
 #endif
 
 // for backwards compatibility, define suffix-less versions too
-#define WXDLLEXPORT WXDLLEXPORT_CORE
-#define WXDLLEXPORT_DATA WXDLLEXPORT_DATA_CORE
+#define WXDLLEXPORT WXDLLIMPEXP_CORE
+#define WXDLLEXPORT_DATA WXDLLIMPEXP_DATA_CORE
 
 // ----------------------------------------------------------------------------
 // Very common macros

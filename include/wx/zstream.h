@@ -21,7 +21,7 @@
 
 #include "wx/stream.h"
 
-class WXDLLEXPORT_BASE wxZlibInputStream: public wxFilterInputStream {
+class WXDLLIMPEXP_BASE wxZlibInputStream: public wxFilterInputStream {
  public:
   wxZlibInputStream(wxInputStream& stream);
   virtual ~wxZlibInputStream();
@@ -37,7 +37,7 @@ class WXDLLEXPORT_BASE wxZlibInputStream: public wxFilterInputStream {
     DECLARE_NO_COPY_CLASS(wxZlibInputStream)
 };
 
-class WXDLLEXPORT_BASE wxZlibOutputStream: public wxFilterOutputStream {
+class WXDLLIMPEXP_BASE wxZlibOutputStream: public wxFilterOutputStream {
  public:
   wxZlibOutputStream(wxOutputStream& stream, int level = -1);
   virtual ~wxZlibOutputStream();

@@ -1049,7 +1049,7 @@ void wxSleep(int nSecs)
 // font encoding <-> Win32 codepage conversion functions
 // ----------------------------------------------------------------------------
 
-extern WXDLLEXPORT_BASE long wxEncodingToCharset(wxFontEncoding encoding)
+extern WXDLLIMPEXP_BASE long wxEncodingToCharset(wxFontEncoding encoding)
 {
     switch ( encoding )
     {
@@ -1120,7 +1120,7 @@ extern WXDLLEXPORT_BASE long wxEncodingToCharset(wxFontEncoding encoding)
 
 #include "wx/fontmap.h"
 
-extern WXDLLEXPORT_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
+extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
 {
     // translate encoding into the Windows CHARSET
     long charset = wxEncodingToCharset(encoding);

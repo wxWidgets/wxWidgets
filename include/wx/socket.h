@@ -105,7 +105,7 @@ typedef int wxSocketFlags;
 // wxSocketBase
 // --------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxSocketBase : public wxObject
+class WXDLLIMPEXP_BASE wxSocketBase : public wxObject
 {
   DECLARE_CLASS(wxSocketBase)
 
@@ -270,7 +270,7 @@ private:
 // wxSocketServer
 // --------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxSocketServer : public wxSocketBase
+class WXDLLIMPEXP_BASE wxSocketServer : public wxSocketBase
 {
   DECLARE_CLASS(wxSocketServer)
 
@@ -290,7 +290,7 @@ public:
 // wxSocketClient
 // --------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxSocketClient : public wxSocketBase
+class WXDLLIMPEXP_BASE wxSocketClient : public wxSocketBase
 {
   DECLARE_CLASS(wxSocketClient)
 
@@ -312,7 +312,7 @@ public:
 
 // WARNING: still in alpha stage
 
-class WXDLLEXPORT_BASE wxDatagramSocket : public wxSocketBase
+class WXDLLIMPEXP_BASE wxDatagramSocket : public wxSocketBase
 {
   DECLARE_CLASS(wxDatagramSocket)
 
@@ -337,7 +337,7 @@ public:
 // wxSocketEvent
 // --------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxSocketEvent : public wxEvent
+class WXDLLIMPEXP_BASE wxSocketEvent : public wxEvent
 {
 public:
   wxSocketEvent(int id = 0)

@@ -28,7 +28,7 @@
 // something you can printf() to
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxMessageOutput
+class WXDLLIMPEXP_BASE wxMessageOutput
 {
 public:
     virtual ~wxMessageOutput() { }
@@ -50,7 +50,7 @@ private:
 // implementation which sends output to stderr
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxMessageOutputStderr : public wxMessageOutput
+class WXDLLIMPEXP_BASE wxMessageOutputStderr : public wxMessageOutput
 {
 public:
     wxMessageOutputStderr() { }
@@ -64,7 +64,7 @@ public:
 
 #if wxUSE_GUI
 
-class WXDLLEXPORT_CORE wxMessageOutputMessageBox : public wxMessageOutput
+class WXDLLIMPEXP_CORE wxMessageOutputMessageBox : public wxMessageOutput
 {
 public:
     wxMessageOutputMessageBox() { }
@@ -78,7 +78,7 @@ public:
 // implementation using the native way of outputting debug messages
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxMessageOutputDebug : public wxMessageOutput
+class WXDLLIMPEXP_BASE wxMessageOutputDebug : public wxMessageOutput
 {
 public:
     wxMessageOutputDebug() { }
@@ -90,7 +90,7 @@ public:
 // implementation using wxLog (mainly for backwards compatibility)
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxMessageOutputLog : public wxMessageOutput
+class WXDLLIMPEXP_BASE wxMessageOutputLog : public wxMessageOutput
 {
 public:
     wxMessageOutputLog() { }

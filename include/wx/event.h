@@ -31,12 +31,12 @@
 // forward declarations
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxList;
+class WXDLLIMPEXP_BASE wxList;
 
 #if wxUSE_GUI
-    class WXDLLEXPORT_CORE wxDC;
-    class WXDLLEXPORT_CORE wxMenu;
-    class WXDLLEXPORT_CORE wxWindow;
+    class WXDLLIMPEXP_CORE wxDC;
+    class WXDLLIMPEXP_CORE wxMenu;
+    class WXDLLIMPEXP_CORE wxWindow;
 #endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
@@ -91,14 +91,14 @@ typedef int wxEventType;
 #define DECLARE_EXPORTED_EVENT_TYPE(expdecl, name, value) \
     extern expdecl const wxEventType name;
 #define DECLARE_EVENT_TYPE(name, value) \
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLEXPORT_CORE, name, value)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_CORE, name, value)
 #define DECLARE_LOCAL_EVENT_TYPE(name, value) \
     DECLARE_EXPORTED_EVENT_TYPE(/* */, name, value)
 #define DEFINE_EVENT_TYPE(name) const wxEventType name = wxNewEventType();
 #define DEFINE_LOCAL_EVENT_TYPE(name) DEFINE_EVENT_TYPE(name)
 
 // generate a new unique event type
-extern WXDLLEXPORT_BASE wxEventType wxNewEventType();
+extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
 
 #endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
@@ -111,9 +111,9 @@ BEGIN_DECLARE_EVENT_TYPES()
 #else // !WXWIN_COMPATIBILITY_EVENT_TYPES
     // it is important to still have these as constants to avoid
     // initialization order related problems
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLEXPORT_BASE, wxEVT_NULL, 0)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLEXPORT_BASE, wxEVT_FIRST, 10000)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLEXPORT_BASE, wxEVT_USER_FIRST, wxEVT_FIRST + 2000)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_BASE, wxEVT_NULL, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_BASE, wxEVT_FIRST, 10000)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_BASE, wxEVT_USER_FIRST, wxEVT_FIRST + 2000)
 #endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_BUTTON_CLICKED, 1)
@@ -145,7 +145,7 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_SPINCTRL_UPDATED, 18)
 
         // Sockets and timers send events, too
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLEXPORT_BASE, wxEVT_SOCKET, 50)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_BASE, wxEVT_SOCKET, 50)
     DECLARE_EVENT_TYPE(wxEVT_TIMER , 80)
 
         // Mouse event types
@@ -249,7 +249,7 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_MEASURE_ITEM, 436)
     DECLARE_EVENT_TYPE(wxEVT_COMPARE_ITEM, 437)
     DECLARE_EVENT_TYPE(wxEVT_INIT_DIALOG, 438)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLEXPORT_BASE, wxEVT_IDLE, 439)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_BASE, wxEVT_IDLE, 439)
     DECLARE_EVENT_TYPE(wxEVT_UPDATE_UI, 440)
     DECLARE_EVENT_TYPE(wxEVT_SIZING, 441)
     DECLARE_EVENT_TYPE(wxEVT_MOVING, 4442)
@@ -282,7 +282,7 @@ END_DECLARE_EVENT_TYPES()
 //
 // still, any new code using it should include wx/textctrl.h explicitly
 #if !WXWIN_COMPATIBILITY_EVENT_TYPES
-    extern const wxEventType WXDLLEXPORT_CORE wxEVT_COMMAND_TEXT_UPDATED;
+    extern const wxEventType WXDLLIMPEXP_CORE wxEVT_COMMAND_TEXT_UPDATED;
 #endif
 
 #if WXWIN_COMPATIBILITY
@@ -341,7 +341,7 @@ END_DECLARE_EVENT_TYPES()
  *
  */
 
-class WXDLLEXPORT_BASE wxEvent : public wxObject
+class WXDLLIMPEXP_BASE wxEvent : public wxObject
 {
 private:
     wxEvent& operator=(const wxEvent&);
@@ -411,7 +411,7 @@ private:
  wxEVT_COMMAND_TOGGLEBUTTON_CLICKED
 */
 
-class WXDLLEXPORT_CORE wxCommandEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxCommandEvent : public wxEvent
 {
 private:
     wxCommandEvent& operator=(const wxCommandEvent& event);
@@ -474,7 +474,7 @@ private:
 
 // this class adds a possibility to react (from the user) code to a control
 // notification: allow or veto the operation being reported.
-class WXDLLEXPORT_CORE wxNotifyEvent  : public wxCommandEvent
+class WXDLLIMPEXP_CORE wxNotifyEvent  : public wxCommandEvent
 {
 public:
     wxNotifyEvent(wxEventType commandType = wxEVT_NULL, int winid = 0)
@@ -517,7 +517,7 @@ private:
  wxEVT_SCROLL_ENDSCROLL
 */
 
-class WXDLLEXPORT_CORE wxScrollEvent : public wxCommandEvent
+class WXDLLIMPEXP_CORE wxScrollEvent : public wxCommandEvent
 {
 public:
     wxScrollEvent(wxEventType commandType = wxEVT_NULL,
@@ -547,7 +547,7 @@ private:
  wxEVT_SCROLLWIN_THUMBRELEASE
 */
 
-class WXDLLEXPORT_CORE wxScrollWinEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxScrollWinEvent : public wxEvent
 {
 public:
     wxScrollWinEvent(wxEventType commandType = wxEVT_NULL,
@@ -610,7 +610,7 @@ enum
     wxMOUSE_BTN_RIGHT   = 2
 };
 
-class WXDLLEXPORT_CORE wxMouseEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxMouseEvent : public wxEvent
 {
 public:
     wxMouseEvent(wxEventType mouseType = wxEVT_NULL);
@@ -780,7 +780,7 @@ private:
    wxEVT_SET_CURSOR
  */
 
-class WXDLLEXPORT_CORE wxSetCursorEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxSetCursorEvent : public wxEvent
 {
 public:
     wxSetCursorEvent(wxCoord x = 0, wxCoord y = 0)
@@ -821,7 +821,7 @@ private:
  wxEVT_KEY_UP
  */
 
-class WXDLLEXPORT_CORE wxKeyEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxKeyEvent : public wxEvent
 {
 public:
     wxKeyEvent(wxEventType keyType = wxEVT_NULL);
@@ -927,7 +927,7 @@ private:
  wxEVT_SIZE
  */
 
-class WXDLLEXPORT_CORE wxSizeEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxSizeEvent : public wxEvent
 {
 public:
     wxSizeEvent() : wxEvent(0, wxEVT_SIZE)
@@ -964,7 +964,7 @@ private:
  wxEVT_MOVE
  */
 
-class WXDLLEXPORT_CORE wxMoveEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxMoveEvent : public wxEvent
 {
 public:
     wxMoveEvent()
@@ -1004,10 +1004,10 @@ private:
 
 #if defined(__WXDEBUG__) && (defined(__WXMSW__) || defined(__WXPM__))
     // see comments in src/msw|os2/dcclient.cpp where g_isPainting is defined
-    extern WXDLLEXPORT_CORE int g_isPainting;
+    extern WXDLLIMPEXP_CORE int g_isPainting;
 #endif // debug
 
-class WXDLLEXPORT_CORE wxPaintEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxPaintEvent : public wxEvent
 {
 public:
     wxPaintEvent(int Id = 0)
@@ -1032,7 +1032,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxPaintEvent)
 };
 
-class WXDLLEXPORT_CORE wxNcPaintEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxNcPaintEvent : public wxEvent
 {
 public:
     wxNcPaintEvent(int winid = 0)
@@ -1050,7 +1050,7 @@ private:
  wxEVT_ERASE_BACKGROUND
  */
 
-class WXDLLEXPORT_CORE wxEraseEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxEraseEvent : public wxEvent
 {
 private:
     wxEraseEvent& operator=(const wxEraseEvent& event);
@@ -1082,7 +1082,7 @@ private:
  wxEVT_KILL_FOCUS
  */
 
-class WXDLLEXPORT_CORE wxFocusEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxFocusEvent : public wxEvent
 {
 private:
     wxFocusEvent& operator=(const wxFocusEvent& event);
@@ -1113,7 +1113,7 @@ private:
 
 // wxChildFocusEvent notifies the parent that a child has got the focus: unlike
 // wxFocusEvent it is propgated upwards the window chain
-class WXDLLEXPORT_CORE wxChildFocusEvent : public wxCommandEvent
+class WXDLLIMPEXP_CORE wxChildFocusEvent : public wxCommandEvent
 {
 public:
     wxChildFocusEvent(wxWindow *win = NULL);
@@ -1132,7 +1132,7 @@ private:
  wxEVT_ACTIVATE_APP
  */
 
-class WXDLLEXPORT_CORE wxActivateEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxActivateEvent : public wxEvent
 {
 public:
     wxActivateEvent(wxEventType type = wxEVT_NULL, bool active = TRUE, int Id = 0)
@@ -1158,7 +1158,7 @@ private:
  wxEVT_INIT_DIALOG
  */
 
-class WXDLLEXPORT_CORE wxInitDialogEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxInitDialogEvent : public wxEvent
 {
 public:
     wxInitDialogEvent(int Id = 0)
@@ -1178,7 +1178,7 @@ private:
  wxEVT_MENU_HIGHLIGHT,
 */
 
-class WXDLLEXPORT_CORE wxMenuEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxMenuEvent : public wxEvent
 {
 public:
     wxMenuEvent(wxEventType type = wxEVT_NULL, int winid = 0)
@@ -1209,7 +1209,7 @@ private:
  wxEVT_QUERY_END_SESSION
  */
 
-class WXDLLEXPORT_CORE wxCloseEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxCloseEvent : public wxEvent
 {
 public:
     wxCloseEvent(wxEventType type = wxEVT_NULL, int winid = 0)
@@ -1276,7 +1276,7 @@ private:
  wxEVT_SHOW
  */
 
-class WXDLLEXPORT_CORE wxShowEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxShowEvent : public wxEvent
 {
 public:
     wxShowEvent(int winid = 0, bool show = FALSE)
@@ -1302,7 +1302,7 @@ private:
  wxEVT_ICONIZE
  */
 
-class WXDLLEXPORT_CORE wxIconizeEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxIconizeEvent : public wxEvent
 {
 public:
     wxIconizeEvent(int winid = 0, bool iconized = TRUE)
@@ -1327,7 +1327,7 @@ private:
  wxEVT_MAXIMIZE
  */
 
-class WXDLLEXPORT_CORE wxMaximizeEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxMaximizeEvent : public wxEvent
 {
 public:
     wxMaximizeEvent(int winid = 0)
@@ -1365,7 +1365,7 @@ enum
     wxJOY_BUTTON4    = 8
 };
 
-class WXDLLEXPORT_CORE wxJoystickEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxJoystickEvent : public wxEvent
 {
 public:
     wxPoint   m_pos;
@@ -1443,7 +1443,7 @@ private:
  wxEVT_DROP_FILES
  */
 
-class WXDLLEXPORT_CORE wxDropFilesEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxDropFilesEvent : public wxEvent
 {
 private:
     wxDropFilesEvent& operator=(const wxDropFilesEvent& event);
@@ -1496,7 +1496,7 @@ private:
  wxEVT_UPDATE_UI
  */
 
-class WXDLLEXPORT_CORE wxUpdateUIEvent : public wxCommandEvent
+class WXDLLIMPEXP_CORE wxUpdateUIEvent : public wxCommandEvent
 {
 public:
     wxUpdateUIEvent(wxWindowID commandId = 0)
@@ -1548,7 +1548,7 @@ private:
  */
 
 // TODO: shouldn't all events record the window ID?
-class WXDLLEXPORT_CORE wxSysColourChangedEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxSysColourChangedEvent : public wxEvent
 {
 public:
     wxSysColourChangedEvent()
@@ -1567,7 +1567,7 @@ private:
  (even if it released the capture itself).
  */
 
-class WXDLLEXPORT_CORE wxMouseCaptureChangedEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxMouseCaptureChangedEvent : public wxEvent
 {
 private:
     wxMouseCaptureChangedEvent operator=(const wxMouseCaptureChangedEvent& event);
@@ -1595,7 +1595,7 @@ private:
 /*
  wxEVT_DISPLAY_CHANGED
  */
-class WXDLLEXPORT_CORE wxDisplayChangedEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxDisplayChangedEvent : public wxEvent
 {
 private:
     DECLARE_DYNAMIC_CLASS(wxDisplayChangedEvent)
@@ -1612,7 +1612,7 @@ public:
  wxEVT_PALETTE_CHANGED
  */
 
-class WXDLLEXPORT_CORE wxPaletteChangedEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxPaletteChangedEvent : public wxEvent
 {
 private:
     wxPaletteChangedEvent& operator=(const wxPaletteChangedEvent& event);
@@ -1645,7 +1645,7 @@ private:
  Indicates the window is getting keyboard focus and should re-do its palette.
  */
 
-class WXDLLEXPORT_CORE wxQueryNewPaletteEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxQueryNewPaletteEvent : public wxEvent
 {
 public:
     wxQueryNewPaletteEvent(wxWindowID winid = 0)
@@ -1675,7 +1675,7 @@ private:
  wxEVT_NAVIGATION_KEY
  */
 // NB: don't derive from command event to avoid being propagated to the parent
-class WXDLLEXPORT_CORE wxNavigationKeyEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxNavigationKeyEvent : public wxEvent
 {
 private:
     wxNavigationKeyEvent& operator=(const wxNavigationKeyEvent& event);
@@ -1746,7 +1746,7 @@ private:
  wxEVT_DESTROY
  */
 
-class WXDLLEXPORT_CORE wxWindowCreateEvent : public wxCommandEvent
+class WXDLLIMPEXP_CORE wxWindowCreateEvent : public wxCommandEvent
 {
 public:
     wxWindowCreateEvent(wxWindow *win = NULL);
@@ -1759,7 +1759,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxWindowCreateEvent)
 };
 
-class WXDLLEXPORT_CORE wxWindowDestroyEvent : public wxCommandEvent
+class WXDLLIMPEXP_CORE wxWindowDestroyEvent : public wxCommandEvent
 {
 public:
     wxWindowDestroyEvent(wxWindow *win = NULL);
@@ -1778,7 +1778,7 @@ private:
  wxEVT_DETAILED_HELP
 */
 
-class WXDLLEXPORT_CORE wxHelpEvent : public wxCommandEvent
+class WXDLLIMPEXP_CORE wxHelpEvent : public wxCommandEvent
 {
 public:
     wxHelpEvent(wxEventType type = wxEVT_NULL,
@@ -1825,7 +1825,7 @@ private:
  wxEVT_CONTEXT_MENU
 */
 
-class WXDLLEXPORT_CORE wxContextMenuEvent : public wxCommandEvent
+class WXDLLIMPEXP_CORE wxContextMenuEvent : public wxCommandEvent
 {
 public:
     wxContextMenuEvent(wxEventType type = wxEVT_NULL,
@@ -1857,7 +1857,7 @@ private:
  wxEVT_IDLE
  */
 
-class WXDLLEXPORT_CORE wxIdleEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxIdleEvent : public wxEvent
 {
 public:
     wxIdleEvent()
@@ -1906,7 +1906,7 @@ typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
 // we have to keep both versions
 #if WXWIN_COMPATIBILITY_EVENT_TYPES
 
-struct WXDLLEXPORT_BASE wxEventTableEntry
+struct WXDLLIMPEXP_BASE wxEventTableEntry
 {
     // For some reason, this can't be wxEventType, or VC++ complains.
     int m_eventType;            // main event type
@@ -1922,7 +1922,7 @@ struct WXDLLEXPORT_BASE wxEventTableEntry
 
 // struct containing the members common to static and dynamic event tables
 // entries
-struct WXDLLEXPORT_BASE wxEventTableEntryBase
+struct WXDLLIMPEXP_BASE wxEventTableEntryBase
 {
 private:
     wxEventTableEntryBase& operator=(const wxEventTableEntryBase& event);
@@ -1956,7 +1956,7 @@ public:
 };
 
 // an entry from a static event table
-struct WXDLLEXPORT_BASE wxEventTableEntry : public wxEventTableEntryBase
+struct WXDLLIMPEXP_BASE wxEventTableEntry : public wxEventTableEntryBase
 {
     wxEventTableEntry(const int& evType, int winid, int idLast,
                       wxObjectEventFunction fn, wxObject *data)
@@ -1973,10 +1973,10 @@ struct WXDLLEXPORT_BASE wxEventTableEntry : public wxEventTableEntryBase
     const int& m_eventType;
 };
 
-class WXDLLEXPORT_BASE wxEvtHandler;
+class WXDLLIMPEXP_BASE wxEvtHandler;
 
 // an entry used in dynamic event table managed by wxEvtHandler::Connect()
-struct WXDLLEXPORT_BASE wxDynamicEventTableEntry : public wxEventTableEntryBase
+struct WXDLLIMPEXP_BASE wxDynamicEventTableEntry : public wxEventTableEntryBase
 {
     wxDynamicEventTableEntry(int evType, int winid, int idLast,
                              wxObjectEventFunction fn, wxObject *data, wxEvtHandler* eventSink)
@@ -2002,7 +2002,7 @@ struct WXDLLEXPORT_BASE wxDynamicEventTableEntry : public wxEventTableEntryBase
 // wxEventTable: an array of event entries terminated with {0, 0, 0, 0, 0}
 // ----------------------------------------------------------------------------
 
-struct WXDLLEXPORT_BASE wxEventTable
+struct WXDLLIMPEXP_BASE wxEventTable
 {
     const wxEventTable *baseTable;    // base event table (next in chain)
     const wxEventTableEntry *entries; // bottom of entry array
@@ -2012,7 +2012,7 @@ struct WXDLLEXPORT_BASE wxEventTable
 // wxEvtHandler: the base class for all objects handling wxWindows events
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxEvtHandler : public wxObject
+class WXDLLIMPEXP_BASE wxEvtHandler : public wxObject
 {
 public:
     wxEvtHandler();
@@ -2476,9 +2476,9 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
 
 // for pending event processing - notice that there is intentionally no
 // WXDLLEXPORT here
-extern WXDLLEXPORT_BASE wxList *wxPendingEvents;
+extern WXDLLIMPEXP_BASE wxList *wxPendingEvents;
 #if wxUSE_THREADS
-    extern WXDLLEXPORT_BASE wxCriticalSection *wxPendingEventsLocker;
+    extern WXDLLIMPEXP_BASE wxCriticalSection *wxPendingEventsLocker;
 #endif
 
 // ----------------------------------------------------------------------------

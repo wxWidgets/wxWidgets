@@ -39,11 +39,11 @@
 // Forward declaration
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxProcess;
-class WXDLLEXPORT_BASE wxFrame;
-class WXDLLEXPORT_BASE wxWindow;
-class WXDLLEXPORT_BASE wxWindowList;
-class WXDLLEXPORT_BASE wxPoint;
+class WXDLLIMPEXP_BASE wxProcess;
+class WXDLLIMPEXP_BASE wxFrame;
+class WXDLLIMPEXP_BASE wxWindow;
+class WXDLLIMPEXP_BASE wxWindowList;
+class WXDLLIMPEXP_BASE wxPoint;
 
 // ----------------------------------------------------------------------------
 // Macros
@@ -59,15 +59,15 @@ class WXDLLEXPORT_BASE wxPoint;
 // Useful buffer (FIXME VZ: To be removed!!!)
 // Now only needed in MSW port
 #if !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__) && !defined(__WXMGL__) && !defined(__WXMAC__)
-WXDLLEXPORT_DATA_BASE(extern wxChar*) wxBuffer;
+WXDLLIMPEXP_DATA_BASE(extern wxChar*) wxBuffer;
 #endif
 
 // Make a copy of this string using 'new'
-WXDLLEXPORT_BASE wxChar* copystring(const wxChar *s);
+WXDLLIMPEXP_BASE wxChar* copystring(const wxChar *s);
 
 #if WXWIN_COMPATIBILITY_2
 // Matches string one within string two regardless of case
-WXDLLEXPORT_BASE bool StringMatch(const wxChar *one, const wxChar *two, bool subString = TRUE, bool exact = FALSE);
+WXDLLIMPEXP_BASE bool StringMatch(const wxChar *one, const wxChar *two, bool subString = TRUE, bool exact = FALSE);
 #endif
 
 // A shorter way of using strcmp
@@ -78,22 +78,22 @@ WXDLLEXPORT_BASE bool StringMatch(const wxChar *one, const wxChar *two, bool sub
 // ----------------------------------------------------------------------------
 
 // Sound the bell
-WXDLLEXPORT_BASE void wxBell();
+WXDLLIMPEXP_BASE void wxBell();
 
 // Get OS description as a user-readable string
-WXDLLEXPORT_BASE wxString wxGetOsDescription();
+WXDLLIMPEXP_BASE wxString wxGetOsDescription();
 
 // Get OS version
-WXDLLEXPORT_BASE int wxGetOsVersion(int *majorVsn = (int *) NULL,
+WXDLLIMPEXP_BASE int wxGetOsVersion(int *majorVsn = (int *) NULL,
                                int *minorVsn = (int *) NULL);
 
 // Return a string with the current date/time
-WXDLLEXPORT_BASE wxString wxNow();
+WXDLLIMPEXP_BASE wxString wxNow();
 
 // Return path where wxWindows is installed (mostly useful in Unices)
-WXDLLEXPORT_BASE const wxChar *wxGetInstallPrefix();
+WXDLLIMPEXP_BASE const wxChar *wxGetInstallPrefix();
 // Return path to wxWin data (/usr/share/wx/%{version}) (Unices)
-WXDLLEXPORT_BASE wxString wxGetDataDir();
+WXDLLIMPEXP_BASE wxString wxGetDataDir();
 
 
 #if wxUSE_GUI
@@ -130,26 +130,26 @@ WXDLLEXPORT long wxGetCurrentId();
 // these functions are deprecated, use wxString methods instead!
 #if WXWIN_COMPATIBILITY_2_4
 
-WXDLLEXPORT_DATA_BASE(extern const wxChar*) wxFloatToStringStr;
-WXDLLEXPORT_DATA_BASE(extern const wxChar*) wxDoubleToStringStr;
+WXDLLIMPEXP_DATA_BASE(extern const wxChar*) wxFloatToStringStr;
+WXDLLIMPEXP_DATA_BASE(extern const wxChar*) wxDoubleToStringStr;
 
-WXDLLEXPORT_BASE void StringToFloat(const wxChar *s, float *number);
-WXDLLEXPORT_BASE wxChar* FloatToString(float number, const wxChar *fmt = wxFloatToStringStr);
-WXDLLEXPORT_BASE void StringToDouble(const wxChar *s, double *number);
-WXDLLEXPORT_BASE wxChar* DoubleToString(double number, const wxChar *fmt = wxDoubleToStringStr);
-WXDLLEXPORT_BASE void StringToInt(const wxChar *s, int *number);
-WXDLLEXPORT_BASE void StringToLong(const wxChar *s, long *number);
-WXDLLEXPORT_BASE wxChar* IntToString(int number);
-WXDLLEXPORT_BASE wxChar* LongToString(long number);
+WXDLLIMPEXP_BASE void StringToFloat(const wxChar *s, float *number);
+WXDLLIMPEXP_BASE wxChar* FloatToString(float number, const wxChar *fmt = wxFloatToStringStr);
+WXDLLIMPEXP_BASE void StringToDouble(const wxChar *s, double *number);
+WXDLLIMPEXP_BASE wxChar* DoubleToString(double number, const wxChar *fmt = wxDoubleToStringStr);
+WXDLLIMPEXP_BASE void StringToInt(const wxChar *s, int *number);
+WXDLLIMPEXP_BASE void StringToLong(const wxChar *s, long *number);
+WXDLLIMPEXP_BASE wxChar* IntToString(int number);
+WXDLLIMPEXP_BASE wxChar* LongToString(long number);
 
 #endif // WXWIN_COMPATIBILITY_2_4
 
 // Convert 2-digit hex number to decimal
-WXDLLEXPORT_BASE int wxHexToDec(const wxString& buf);
+WXDLLIMPEXP_BASE int wxHexToDec(const wxString& buf);
 
 // Convert decimal integer to 2-character hex string
-WXDLLEXPORT_BASE void wxDecToHex(int dec, wxChar *buf);
-WXDLLEXPORT_BASE wxString wxDecToHex(int dec);
+WXDLLIMPEXP_BASE void wxDecToHex(int dec, wxChar *buf);
+WXDLLIMPEXP_BASE wxString wxDecToHex(int dec);
 
 // ----------------------------------------------------------------------------
 // Process management
@@ -180,18 +180,18 @@ enum
 // If flags contain wxEXEC_SYNC, return -1 on failure and the exit code of the
 // process if everything was ok. Otherwise (i.e. if wxEXEC_ASYNC), return 0 on
 // failure and the PID of the launched process if ok.
-WXDLLEXPORT_BASE long wxExecute(wxChar **argv, int flags = wxEXEC_ASYNC,
+WXDLLIMPEXP_BASE long wxExecute(wxChar **argv, int flags = wxEXEC_ASYNC,
                            wxProcess *process = (wxProcess *) NULL);
-WXDLLEXPORT_BASE long wxExecute(const wxString& command, int flags = wxEXEC_ASYNC,
+WXDLLIMPEXP_BASE long wxExecute(const wxString& command, int flags = wxEXEC_ASYNC,
                            wxProcess *process = (wxProcess *) NULL);
 
 // execute the command capturing its output into an array line by line, this is
 // always synchronous
-WXDLLEXPORT_BASE long wxExecute(const wxString& command,
+WXDLLIMPEXP_BASE long wxExecute(const wxString& command,
                            wxArrayString& output);
 
 // also capture stderr (also synchronous)
-WXDLLEXPORT_BASE long wxExecute(const wxString& command,
+WXDLLIMPEXP_BASE long wxExecute(const wxString& command,
                            wxArrayString& output,
                            wxArrayString& error);
 
@@ -234,38 +234,38 @@ enum wxShutdownFlags
 };
 
 // Shutdown or reboot the PC
-WXDLLEXPORT_BASE bool wxShutdown(wxShutdownFlags wFlags);
+WXDLLIMPEXP_BASE bool wxShutdown(wxShutdownFlags wFlags);
 
 // send the given signal to the process (only NONE and KILL are supported under
 // Windows, all others mean TERM), return 0 if ok and -1 on error
 //
 // return detailed error in rc if not NULL
-WXDLLEXPORT_BASE int wxKill(long pid,
+WXDLLIMPEXP_BASE int wxKill(long pid,
                        wxSignal sig = wxSIGTERM,
                        wxKillError *rc = NULL);
 
 // Execute a command in an interactive shell window (always synchronously)
 // If no command then just the shell
-WXDLLEXPORT_BASE bool wxShell(const wxString& command = wxEmptyString);
+WXDLLIMPEXP_BASE bool wxShell(const wxString& command = wxEmptyString);
 
 // As wxShell(), but must give a (non interactive) command and its output will
 // be returned in output array
-WXDLLEXPORT_BASE bool wxShell(const wxString& command, wxArrayString& output);
+WXDLLIMPEXP_BASE bool wxShell(const wxString& command, wxArrayString& output);
 
 // Sleep for nSecs seconds
-WXDLLEXPORT_BASE void wxSleep(int nSecs);
+WXDLLIMPEXP_BASE void wxSleep(int nSecs);
 
 // Sleep for a given amount of milliseconds
-WXDLLEXPORT_BASE void wxUsleep(unsigned long milliseconds);
+WXDLLIMPEXP_BASE void wxUsleep(unsigned long milliseconds);
 
 // Get the process id of the current process
-WXDLLEXPORT_BASE unsigned long wxGetProcessId();
+WXDLLIMPEXP_BASE unsigned long wxGetProcessId();
 
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
-WXDLLEXPORT_BASE long wxGetFreeMemory();
+WXDLLIMPEXP_BASE long wxGetFreeMemory();
 
 // should wxApp::OnFatalException() be called?
-WXDLLEXPORT_BASE bool wxHandleFatalExceptions(bool doit = TRUE);
+WXDLLIMPEXP_BASE bool wxHandleFatalExceptions(bool doit = TRUE);
 
 // ----------------------------------------------------------------------------
 // Environment variables
@@ -273,10 +273,10 @@ WXDLLEXPORT_BASE bool wxHandleFatalExceptions(bool doit = TRUE);
 
 // returns TRUE if variable exists (value may be NULL if you just want to check
 // for this)
-WXDLLEXPORT_BASE bool wxGetEnv(const wxString& var, wxString *value);
+WXDLLIMPEXP_BASE bool wxGetEnv(const wxString& var, wxString *value);
 
 // set the env var name to the given value, return TRUE on success
-WXDLLEXPORT_BASE bool wxSetEnv(const wxString& var, const wxChar *value);
+WXDLLIMPEXP_BASE bool wxSetEnv(const wxString& var, const wxChar *value);
 
 // remove the env var from environment
 inline bool wxUnsetEnv(const wxString& var) { return wxSetEnv(var, NULL); }
@@ -288,39 +288,39 @@ inline bool wxUnsetEnv(const wxString& var) { return wxSetEnv(var, NULL); }
 // NB: "char *" functions are deprecated, use wxString ones!
 
 // Get eMail address
-WXDLLEXPORT_BASE bool wxGetEmailAddress(wxChar *buf, int maxSize);
-WXDLLEXPORT_BASE wxString wxGetEmailAddress();
+WXDLLIMPEXP_BASE bool wxGetEmailAddress(wxChar *buf, int maxSize);
+WXDLLIMPEXP_BASE wxString wxGetEmailAddress();
 
 // Get hostname.
-WXDLLEXPORT_BASE bool wxGetHostName(wxChar *buf, int maxSize);
-WXDLLEXPORT_BASE wxString wxGetHostName();
+WXDLLIMPEXP_BASE bool wxGetHostName(wxChar *buf, int maxSize);
+WXDLLIMPEXP_BASE wxString wxGetHostName();
 
 // Get FQDN
-WXDLLEXPORT_BASE wxString wxGetFullHostName();
-WXDLLEXPORT_BASE bool wxGetFullHostName(wxChar *buf, int maxSize);
+WXDLLIMPEXP_BASE wxString wxGetFullHostName();
+WXDLLIMPEXP_BASE bool wxGetFullHostName(wxChar *buf, int maxSize);
 
 // Get user ID e.g. jacs (this is known as login name under Unix)
-WXDLLEXPORT_BASE bool wxGetUserId(wxChar *buf, int maxSize);
-WXDLLEXPORT_BASE wxString wxGetUserId();
+WXDLLIMPEXP_BASE bool wxGetUserId(wxChar *buf, int maxSize);
+WXDLLIMPEXP_BASE wxString wxGetUserId();
 
 // Get user name e.g. Julian Smart
-WXDLLEXPORT_BASE bool wxGetUserName(wxChar *buf, int maxSize);
-WXDLLEXPORT_BASE wxString wxGetUserName();
+WXDLLIMPEXP_BASE bool wxGetUserName(wxChar *buf, int maxSize);
+WXDLLIMPEXP_BASE wxString wxGetUserName();
 
 // Get current Home dir and copy to dest (returns pstr->c_str())
-WXDLLEXPORT_BASE wxString wxGetHomeDir();
-WXDLLEXPORT_BASE const wxChar* wxGetHomeDir(wxString *pstr);
+WXDLLIMPEXP_BASE wxString wxGetHomeDir();
+WXDLLIMPEXP_BASE const wxChar* wxGetHomeDir(wxString *pstr);
 
 // Get the user's home dir (caller must copy --- volatile)
 // returns NULL is no HOME dir is known
 #if defined(__UNIX__) && wxUSE_UNICODE
-WXDLLEXPORT_BASE const wxMB2WXbuf wxGetUserHome(const wxString& user = wxEmptyString);
+WXDLLIMPEXP_BASE const wxMB2WXbuf wxGetUserHome(const wxString& user = wxEmptyString);
 #else
-WXDLLEXPORT_BASE wxChar* wxGetUserHome(const wxString& user = wxEmptyString);
+WXDLLIMPEXP_BASE wxChar* wxGetUserHome(const wxString& user = wxEmptyString);
 #endif
 
 // get number of total/free bytes on the disk where path belongs
-WXDLLEXPORT_BASE bool wxGetDiskSpace(const wxString& path,
+WXDLLIMPEXP_BASE bool wxGetDiskSpace(const wxString& path,
                                 wxLongLong *pTotal = NULL,
                                 wxLongLong *pFree = NULL);
 
@@ -486,10 +486,10 @@ void WXDLLEXPORT wxGetMousePosition( int* x, int* y );
 // ----------------------------------------------------------------------------
 
 // Yield to other apps/messages
-WXDLLEXPORT_BASE bool wxYield();
+WXDLLIMPEXP_BASE bool wxYield();
 
 // Like wxYield, but fails silently if the yield is recursive.
-WXDLLEXPORT_BASE bool wxYieldIfNeeded();
+WXDLLIMPEXP_BASE bool wxYieldIfNeeded();
 
 // ----------------------------------------------------------------------------
 // Error message functions used by wxWindows (deprecated, use wxLog)
@@ -499,15 +499,15 @@ WXDLLEXPORT_BASE bool wxYieldIfNeeded();
 
 // Format a message on the standard error (UNIX) or the debugging
 // stream (Windows)
-WXDLLEXPORT_BASE void wxDebugMsg(const wxChar *fmt ...) ATTRIBUTE_PRINTF_1;
+WXDLLIMPEXP_BASE void wxDebugMsg(const wxChar *fmt ...) ATTRIBUTE_PRINTF_1;
 
 // Non-fatal error (continues)
-WXDLLEXPORT_DATA_BASE(extern const wxChar*) wxInternalErrorStr;
-WXDLLEXPORT_BASE void wxError(const wxString& msg, const wxString& title = wxInternalErrorStr);
+WXDLLIMPEXP_DATA_BASE(extern const wxChar*) wxInternalErrorStr;
+WXDLLIMPEXP_BASE void wxError(const wxString& msg, const wxString& title = wxInternalErrorStr);
 
 // Fatal error (exits)
-WXDLLEXPORT_DATA_BASE(extern const wxChar*) wxFatalErrorStr;
-WXDLLEXPORT_BASE void wxFatalError(const wxString& msg, const wxString& title = wxFatalErrorStr);
+WXDLLIMPEXP_DATA_BASE(extern const wxChar*) wxFatalErrorStr;
+WXDLLIMPEXP_BASE void wxFatalError(const wxString& msg, const wxString& title = wxFatalErrorStr);
 
 #endif // WXWIN_COMPATIBILITY_2_2
 

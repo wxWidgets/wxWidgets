@@ -29,14 +29,14 @@ enum wxClientDataType
     wxClientData_Void     // client data is untyped and we don't own it
 };
 
-class WXDLLEXPORT_BASE wxClientData
+class WXDLLIMPEXP_BASE wxClientData
 {
 public:
     wxClientData() { }
     virtual ~wxClientData() { }
 };
 
-class WXDLLEXPORT_BASE wxStringClientData : public wxClientData
+class WXDLLIMPEXP_BASE wxStringClientData : public wxClientData
 {
 public:
     wxStringClientData() : m_data() { }
@@ -57,7 +57,7 @@ private:
 // NOTE:  This functionality is currently duplicated in wxEvtHandler in order
 //        to avoid having more than one vtable in that class hierarchy.
 
-class WXDLLEXPORT_BASE wxClientDataContainer
+class WXDLLIMPEXP_BASE wxClientDataContainer
 {
 public:
     wxClientDataContainer();

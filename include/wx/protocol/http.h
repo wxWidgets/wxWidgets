@@ -18,7 +18,7 @@
 #include "wx/list.h"
 #include "wx/protocol/protocol.h"
 
-class WXDLLEXPORT_BASE wxHTTP : public wxProtocol {
+class WXDLLIMPEXP_BASE wxHTTP : public wxProtocol {
   DECLARE_DYNAMIC_CLASS(wxHTTP)
   DECLARE_PROTOCOL(wxHTTP)
 protected:

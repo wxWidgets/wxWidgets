@@ -37,7 +37,7 @@ typedef enum {
   wxURL_PROTOERR
 } wxURLError;
 
-class WXDLLEXPORT_BASE wxURL : public wxObject
+class WXDLLIMPEXP_BASE wxURL : public wxObject
 {
 public:
     wxURL(const wxString& url);

@@ -45,7 +45,7 @@
  * overloading wxVariant with unnecessary functionality.
  */
 
-class WXDLLEXPORT_BASE wxVariantData: public wxObject
+class WXDLLIMPEXP_BASE wxVariantData: public wxObject
 {
 DECLARE_ABSTRACT_CLASS(wxVariantData)
 public:
@@ -79,7 +79,7 @@ public:
  * this class too much.
  */
 
-class WXDLLEXPORT_BASE wxVariant: public wxObject
+class WXDLLIMPEXP_BASE wxVariant: public wxObject
 {
 DECLARE_DYNAMIC_CLASS(wxVariant)
 public:
@@ -284,7 +284,7 @@ protected:
 	((classname*)(var.IsValueKindOf(&classname::sm_class##classname) ?\
 		      var.GetWxObjectPtr() : NULL));
 
-extern wxVariant WXDLLEXPORT_BASE wxNullVariant;
+extern wxVariant WXDLLIMPEXP_BASE wxNullVariant;
 
 #endif
     // _WX_VARIANT_H_

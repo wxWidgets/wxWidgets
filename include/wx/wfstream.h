@@ -30,7 +30,7 @@
 // wxFileStream using wxFile
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxFileInputStream: public wxInputStream {
+class WXDLLIMPEXP_BASE wxFileInputStream: public wxInputStream {
  public:
   wxFileInputStream(const wxString& ifileName);
   wxFileInputStream(wxFile& file);
@@ -55,7 +55,7 @@ class WXDLLEXPORT_BASE wxFileInputStream: public wxInputStream {
     DECLARE_NO_COPY_CLASS(wxFileInputStream)
 };
 
-class WXDLLEXPORT_BASE wxFileOutputStream: public wxOutputStream {
+class WXDLLIMPEXP_BASE wxFileOutputStream: public wxOutputStream {
  public:
   wxFileOutputStream(const wxString& fileName);
   wxFileOutputStream(wxFile& file);
@@ -85,7 +85,7 @@ class WXDLLEXPORT_BASE wxFileOutputStream: public wxOutputStream {
     DECLARE_NO_COPY_CLASS(wxFileOutputStream)
 };
 
-class WXDLLEXPORT_BASE wxFileStream: public wxFileInputStream, public wxFileOutputStream {
+class WXDLLIMPEXP_BASE wxFileStream: public wxFileInputStream, public wxFileOutputStream {
  public:
   wxFileStream(const wxString& fileName);
 };
@@ -94,7 +94,7 @@ class WXDLLEXPORT_BASE wxFileStream: public wxFileInputStream, public wxFileOutp
 // wxFFileStream using wxFFile
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxFFileInputStream: public wxInputStream {
+class WXDLLIMPEXP_BASE wxFFileInputStream: public wxInputStream {
  public:
   wxFFileInputStream(const wxString& ifileName);
   wxFFileInputStream(wxFFile& file);
@@ -119,7 +119,7 @@ class WXDLLEXPORT_BASE wxFFileInputStream: public wxInputStream {
     DECLARE_NO_COPY_CLASS(wxFFileInputStream)
 };
 
-class WXDLLEXPORT_BASE wxFFileOutputStream: public wxOutputStream {
+class WXDLLIMPEXP_BASE wxFFileOutputStream: public wxOutputStream {
  public:
   wxFFileOutputStream(const wxString& fileName);
   wxFFileOutputStream(wxFFile& file);
@@ -149,7 +149,7 @@ class WXDLLEXPORT_BASE wxFFileOutputStream: public wxOutputStream {
     DECLARE_NO_COPY_CLASS(wxFFileOutputStream)
 };
 
-class WXDLLEXPORT_BASE wxFFileStream: public wxFFileInputStream, public wxFFileOutputStream {
+class WXDLLIMPEXP_BASE wxFFileStream: public wxFFileInputStream, public wxFFileOutputStream {
  public:
   wxFFileStream(const wxString& fileName);
 };

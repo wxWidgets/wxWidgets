@@ -23,7 +23,7 @@
 // wxSingleInstanceChecker
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxSingleInstanceChecker
+class WXDLLIMPEXP_BASE wxSingleInstanceChecker
 {
 public:
     // default ctor, use Create() after it
@@ -59,7 +59,7 @@ private:
     void Init() { m_impl = NULL; }
 
     // the implementation details (platform specific)
-    class WXDLLEXPORT_BASE wxSingleInstanceCheckerImpl *m_impl;
+    class WXDLLIMPEXP_BASE wxSingleInstanceCheckerImpl *m_impl;
 
     DECLARE_NO_COPY_CLASS(wxSingleInstanceChecker)
 };

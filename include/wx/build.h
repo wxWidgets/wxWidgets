@@ -14,7 +14,7 @@
 
 #include "wx/version.h"
 
-class WXDLLEXPORT_BASE wxAppConsole;
+class WXDLLIMPEXP_BASE wxAppConsole;
 
 // ----------------------------------------------------------------------------
 // wxBuildOptions

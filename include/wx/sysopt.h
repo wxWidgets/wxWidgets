@@ -20,7 +20,7 @@
 // Enables an application to influence the wxWindows implementation
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxSystemOptions : public wxObject
+class WXDLLIMPEXP_BASE wxSystemOptions : public wxObject
 {
 public:
     wxSystemOptions() { }

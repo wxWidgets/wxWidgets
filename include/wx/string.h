@@ -101,7 +101,7 @@ const unsigned int wxSTRING_MAXLEN = UINT_MAX - 100;
 // ----------------------------------------------------------------------------
 
 // global pointer to empty string
-extern WXDLLEXPORT_DATA_BASE(const wxChar*) wxEmptyString;
+extern WXDLLIMPEXP_DATA_BASE(const wxChar*) wxEmptyString;
 
 // ---------------------------------------------------------------------------
 // global functions complementing standard C string library replacements for
@@ -166,7 +166,7 @@ inline int Stricmp(const char *psz1, const char *psz2)
 }
 
 // return an empty wxString
-class WXDLLEXPORT_BASE wxString; // not yet defined
+class WXDLLIMPEXP_BASE wxString; // not yet defined
 inline const wxString& wxGetEmptyString() { return *(wxString *)&wxEmptyString; }
 
 // ---------------------------------------------------------------------------
@@ -174,7 +174,7 @@ inline const wxString& wxGetEmptyString() { return *(wxString *)&wxEmptyString; 
 // is never used directly (but had to be put here to allow inlining)
 // ---------------------------------------------------------------------------
 
-struct WXDLLEXPORT_BASE wxStringData
+struct WXDLLIMPEXP_BASE wxStringData
 {
   int     nRefs;        // reference count
   size_t  nDataLength,  // actual string length
@@ -233,9 +233,9 @@ struct WXDLLEXPORT_BASE wxStringData
 //  - regular expressions support
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxString
+class WXDLLIMPEXP_BASE wxString
 {
-friend class WXDLLEXPORT_BASE wxArrayString;
+friend class WXDLLIMPEXP_BASE wxArrayString;
 
   // NB: special care was taken in arranging the member functions in such order
   //     that all inline functions can be effectively inlined, verify that all
@@ -607,15 +607,15 @@ public:
 
     // non-destructive concatenation
       //
-  friend wxString WXDLLEXPORT_BASE operator+(const wxString& string1,  const wxString& string2);
+  friend wxString WXDLLIMPEXP_BASE operator+(const wxString& string1,  const wxString& string2);
       //
-  friend wxString WXDLLEXPORT_BASE operator+(const wxString& string, wxChar ch);
+  friend wxString WXDLLIMPEXP_BASE operator+(const wxString& string, wxChar ch);
       //
-  friend wxString WXDLLEXPORT_BASE operator+(wxChar ch, const wxString& string);
+  friend wxString WXDLLIMPEXP_BASE operator+(wxChar ch, const wxString& string);
       //
-  friend wxString WXDLLEXPORT_BASE operator+(const wxString& string, const wxChar *psz);
+  friend wxString WXDLLIMPEXP_BASE operator+(const wxString& string, const wxChar *psz);
       //
-  friend wxString WXDLLEXPORT_BASE operator+(const wxChar *psz, const wxString& string);
+  friend wxString WXDLLIMPEXP_BASE operator+(const wxChar *psz, const wxString& string);
 
   // stream-like functions
       // insert an int into string
@@ -1027,7 +1027,7 @@ public:
 // from the array (operator[] or Item() method), a reference is returned.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxArrayString
+class WXDLLIMPEXP_BASE wxArrayString
 {
 public:
   // type of function used by wxArrayString::Sort()
@@ -1151,7 +1151,7 @@ private:
   bool    m_autoSort; // if TRUE, keep the array always sorted
 };
 
-class WXDLLEXPORT_BASE wxSortedArrayString : public wxArrayString
+class WXDLLIMPEXP_BASE wxSortedArrayString : public wxArrayString
 {
 public:
   wxSortedArrayString() : wxArrayString(TRUE)
@@ -1164,7 +1164,7 @@ public:
 // wxStringBuffer: a tiny class allowing to get a writable pointer into string
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxStringBuffer
+class WXDLLIMPEXP_BASE wxStringBuffer
 {
 public:
     wxStringBuffer(wxString& str, size_t lenWanted = 1024)
@@ -1249,11 +1249,11 @@ inline bool operator!=(const wxCharBuffer& s1, const wxString& s2)
     { return (s2.Cmp((const char *)s1) != 0); }
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
-wxString WXDLLEXPORT_BASE operator+(const wxString& string1,  const wxString& string2);
-wxString WXDLLEXPORT_BASE operator+(const wxString& string, wxChar ch);
-wxString WXDLLEXPORT_BASE operator+(wxChar ch, const wxString& string);
-wxString WXDLLEXPORT_BASE operator+(const wxString& string, const wxChar *psz);
-wxString WXDLLEXPORT_BASE operator+(const wxChar *psz, const wxString& string);
+wxString WXDLLIMPEXP_BASE operator+(const wxString& string1,  const wxString& string2);
+wxString WXDLLIMPEXP_BASE operator+(const wxString& string, wxChar ch);
+wxString WXDLLIMPEXP_BASE operator+(wxChar ch, const wxString& string);
+wxString WXDLLIMPEXP_BASE operator+(const wxString& string, const wxChar *psz);
+wxString WXDLLIMPEXP_BASE operator+(const wxChar *psz, const wxString& string);
 #if wxUSE_UNICODE
 inline wxString operator+(const wxString& string, const wxWCharBuffer& buf)
     { return string + (const wchar_t *)buf; }
@@ -1277,8 +1277,8 @@ inline wxString operator+(const wxCharBuffer& buf, const wxString& string)
 
 #include "wx/iosfwrap.h"
 
-WXDLLEXPORT_BASE wxSTD istream& operator>>(wxSTD istream&, wxString&);
-WXDLLEXPORT_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxString&);
+WXDLLIMPEXP_BASE wxSTD istream& operator>>(wxSTD istream&, wxString&);
+WXDLLIMPEXP_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxString&);
 
 #endif  // wxSTD_STRING_COMPATIBILITY
 

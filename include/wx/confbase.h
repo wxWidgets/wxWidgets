@@ -74,7 +74,7 @@ enum
 // (long) type (TODO doubles and other types such as wxDate coming soon).
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxConfigBase
+class WXDLLIMPEXP_BASE wxConfigBase
 {
 public:
   // constants
@@ -293,7 +293,7 @@ private:
 // you work in the entry directory and the path is automatically restored
 // when the function returns
 // Taken out of wxConfig since not all compilers can cope with nested classes.
-class WXDLLEXPORT_BASE wxConfigPathChanger
+class WXDLLIMPEXP_BASE wxConfigPathChanger
 {
 public:
   // ctor/dtor do path changing/restorin
@@ -339,12 +339,12 @@ private:
   '_' only. '$' must be escaped ('\$') in order to be taken literally.
 */
 
-WXDLLEXPORT_BASE wxString wxExpandEnvVars(const wxString &sz);
+WXDLLIMPEXP_BASE wxString wxExpandEnvVars(const wxString &sz);
 
 /*
   Split path into parts removing '..' in progress
  */
-WXDLLEXPORT_BASE void wxSplitPath(wxArrayString& aParts, const wxChar *sz);
+WXDLLIMPEXP_BASE void wxSplitPath(wxArrayString& aParts, const wxChar *sz);
 
 
 #endif

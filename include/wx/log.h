@@ -25,9 +25,9 @@
 // ----------------------------------------------------------------------------
 
 #if wxUSE_GUI
-    class WXDLLEXPORT_CORE wxTextCtrl;
-    class WXDLLEXPORT_CORE wxLogFrame;
-    class WXDLLEXPORT_CORE wxFrame;
+    class WXDLLIMPEXP_CORE wxTextCtrl;
+    class WXDLLIMPEXP_CORE wxLogFrame;
+    class WXDLLIMPEXP_CORE wxFrame;
 #endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
@@ -109,7 +109,7 @@ enum
 // normally, only a single instance of this class exists but it's not enforced
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxLog
+class WXDLLIMPEXP_BASE wxLog
 {
 public:
     // ctor
@@ -261,7 +261,7 @@ private:
 // ----------------------------------------------------------------------------
 
 // log everything to a "FILE *", stderr by default
-class WXDLLEXPORT_BASE wxLogStderr : public wxLog
+class WXDLLIMPEXP_BASE wxLogStderr : public wxLog
 {
     DECLARE_NO_COPY_CLASS(wxLogStderr)
 
@@ -279,7 +279,7 @@ protected:
 #if wxUSE_STD_IOSTREAM
 
 // log everything to an "ostream", cerr by default
-class WXDLLEXPORT_BASE wxLogStream : public wxLog
+class WXDLLIMPEXP_BASE wxLogStream : public wxLog
 {
 public:
     // redirect log output to an ostream
@@ -315,7 +315,7 @@ protected:
         // ~wxLogNull called, old log sink restored
     }
  */
-class WXDLLEXPORT_BASE wxLogNull
+class WXDLLIMPEXP_BASE wxLogNull
 {
 public:
     wxLogNull() : m_flagOld(wxLog::EnableLogging(FALSE)) { }
@@ -334,7 +334,7 @@ private:
 // does it itself in its ctor
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_BASE wxLogChain : public wxLog
+class WXDLLIMPEXP_BASE wxLogChain : public wxLog
 {
 public:
     wxLogChain(wxLog *logger);
@@ -374,7 +374,7 @@ private:
 };
 
 // a chain log target which uses itself as the new logger
-class WXDLLEXPORT_BASE wxLogPassThrough : public wxLogChain
+class WXDLLIMPEXP_BASE wxLogPassThrough : public wxLogChain
 {
 public:
     wxLogPassThrough();
@@ -399,19 +399,19 @@ public:
 // ----------------------------------------------------------------------------
 
 // return the last system error code
-WXDLLEXPORT_BASE unsigned long wxSysErrorCode();
+WXDLLIMPEXP_BASE unsigned long wxSysErrorCode();
 
 // return the error message for given (or last if 0) error code
-WXDLLEXPORT_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
+WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 
 // ----------------------------------------------------------------------------
 // define wxLog<level>
 // ----------------------------------------------------------------------------
 
 #define DECLARE_LOG_FUNCTION(level)                                         \
-extern void WXDLLEXPORT_BASE wxVLog##level(const wxChar *szFormat,          \
+extern void WXDLLIMPEXP_BASE wxVLog##level(const wxChar *szFormat,          \
                                       va_list argptr);                      \
-extern void WXDLLEXPORT_BASE wxLog##level(const wxChar *szFormat,           \
+extern void WXDLLIMPEXP_BASE wxLog##level(const wxChar *szFormat,           \
                                      ...) ATTRIBUTE_PRINTF_1
 #define DECLARE_LOG_FUNCTION2_EXP(level, arg, expdecl)                      \
 extern void expdecl wxVLog##level(arg, const wxChar *szFormat,              \
@@ -419,7 +419,7 @@ extern void expdecl wxVLog##level(arg, const wxChar *szFormat,              \
 extern void expdecl wxLog##level(arg, const wxChar *szFormat,               \
                                      ...) ATTRIBUTE_PRINTF_2
 #define DECLARE_LOG_FUNCTION2(level, arg)                                   \
-    DECLARE_LOG_FUNCTION2_EXP(level, arg, WXDLLEXPORT_BASE)
+    DECLARE_LOG_FUNCTION2_EXP(level, arg, WXDLLIMPEXP_BASE)
 
 #else // !wxUSE_LOG
 
@@ -434,7 +434,7 @@ inline void wxVLog##level(arg, const wxChar *szFormat,                      \
 inline void wxLog##level(arg, const wxChar *szFormat, ...) { }
 
 // Empty Class to fake wxLogNull
-class WXDLLEXPORT_BASE wxLogNull
+class WXDLLIMPEXP_BASE wxLogNull
 {
 public:
     wxLogNull() { }
@@ -467,7 +467,7 @@ DECLARE_LOG_FUNCTION(Status);
 #if wxUSE_GUI
     // this one is the same as previous except that it allows to explicitly
     // specify the frame to which the output should go
-    DECLARE_LOG_FUNCTION2_EXP(Status, wxFrame *pFrame, WXDLLEXPORT_CORE);
+    DECLARE_LOG_FUNCTION2_EXP(Status, wxFrame *pFrame, WXDLLIMPEXP_CORE);
 #endif // wxUSE_GUI
 
 // additional one: as wxLogError, but also logs last system call error code
@@ -507,7 +507,7 @@ DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
 
 // wxLogFatalError helper: show the (fatal) error to the user in a safe way,
 // i.e. without using wxMessageBox() for example because it could crash
-void WXDLLEXPORT_BASE
+void WXDLLIMPEXP_BASE
 wxSafeShowMessage(const wxString& title, const wxString& text);
 
 // ----------------------------------------------------------------------------

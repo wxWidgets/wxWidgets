@@ -21,7 +21,7 @@
 
 #include "wx/socket.h"
 
-class WXDLLEXPORT_BASE wxSocketOutputStream : public wxOutputStream
+class WXDLLIMPEXP_BASE wxSocketOutputStream : public wxOutputStream
 {
  public:
   wxSocketOutputStream(wxSocketBase& s);
@@ -40,7 +40,7 @@ class WXDLLEXPORT_BASE wxSocketOutputStream : public wxOutputStream
     DECLARE_NO_COPY_CLASS(wxSocketOutputStream)
 };
 
-class WXDLLEXPORT_BASE wxSocketInputStream : public wxInputStream
+class WXDLLIMPEXP_BASE wxSocketInputStream : public wxInputStream
 {
  public:
   wxSocketInputStream(wxSocketBase& s);
@@ -59,7 +59,7 @@ class WXDLLEXPORT_BASE wxSocketInputStream : public wxInputStream
     DECLARE_NO_COPY_CLASS(wxSocketInputStream)
 };
 
-class WXDLLEXPORT_BASE wxSocketStream : public wxSocketInputStream,
+class WXDLLIMPEXP_BASE wxSocketStream : public wxSocketInputStream,
                    public wxSocketOutputStream
 {
  public:
