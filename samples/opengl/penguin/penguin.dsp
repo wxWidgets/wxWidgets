@@ -8,12 +8,12 @@ CFG=glpenguin - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "penguin.mak".
+!MESSAGE NMAKE /f "penguin/penguin.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "penguin.mak" CFG="glpenguin - Win32 Debug"
+!MESSAGE NMAKE /f "penguin/penguin.mak" CFG="glpenguin - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
@@ -144,11 +144,19 @@ LINK32=link.exe
 # Name "glpenguin - Win32 Debug"
 # Begin Source File
 
+SOURCE=.\lw.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\penguin.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\penguin.rc
+# End Source File
+# Begin Source File
+
+SOURCE=.\trackball.c
 # End Source File
 # End Target
 # End Project

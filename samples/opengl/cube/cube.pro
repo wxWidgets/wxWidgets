@@ -15,6 +15,9 @@ CONFIG  = wx
 # not the default "../.." for this sample
 WXDIR=../../..
 
+# need to link against OpenGL libs, of course
+win32:LIBS=opengl32.lib glu32.lib
+
 # project files
 SOURCES = cube.cpp
 RC_FILE = cube.rc
