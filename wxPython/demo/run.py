@@ -78,6 +78,9 @@ def main(argv):
         raise SystemExit
 
     name = argv[1]
+    if name[-3:] == '.py':
+        name = name[:-3]
+        print name
     module = __import__(name)
 
 

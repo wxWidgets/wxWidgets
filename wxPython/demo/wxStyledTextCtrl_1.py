@@ -98,9 +98,15 @@ def runTest(frame, nb, log):
     # and finally, an indicator or two
     ed.IndicatorSetStyle(0, wxSTC_INDIC_SQUIGGLE)
     ed.IndicatorSetColour(0, wxRED)
+    ed.IndicatorSetStyle(1, wxSTC_INDIC_DIAGONAL)
+    ed.IndicatorSetColour(1, wxBLUE)
+    ed.IndicatorSetStyle(2, wxSTC_INDIC_STRIKE)
+    ed.IndicatorSetColour(2, wxRED)
 
     ed.StartStyling(836, wxSTC_INDICS_MASK)
     ed.SetStyleFor(10, wxSTC_INDIC0_MASK)
+    ed.SetStyleFor(10, wxSTC_INDIC1_MASK)
+    ed.SetStyleFor(10, wxSTC_INDIC2_MASK | wxSTC_INDIC1_MASK)
 
 
     return ed

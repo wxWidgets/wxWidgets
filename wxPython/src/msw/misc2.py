@@ -221,6 +221,41 @@ class wxDragImage(wxDragImagePtr):
 
 
 
+class wxPyTimerPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,misc2c=misc2c):
+        if self.thisown == 1 :
+            misc2c.delete_wxPyTimer(self)
+    def GetInterval(self, *_args, **_kwargs):
+        val = apply(misc2c.wxPyTimer_GetInterval,(self,) + _args, _kwargs)
+        return val
+    def IsOneShot(self, *_args, **_kwargs):
+        val = apply(misc2c.wxPyTimer_IsOneShot,(self,) + _args, _kwargs)
+        return val
+    def IsRunning(self, *_args, **_kwargs):
+        val = apply(misc2c.wxPyTimer_IsRunning,(self,) + _args, _kwargs)
+        return val
+    def SetOwner(self, *_args, **_kwargs):
+        val = apply(misc2c.wxPyTimer_SetOwner,(self,) + _args, _kwargs)
+        return val
+    def Start(self, *_args, **_kwargs):
+        val = apply(misc2c.wxPyTimer_Start,(self,) + _args, _kwargs)
+        return val
+    def Stop(self, *_args, **_kwargs):
+        val = apply(misc2c.wxPyTimer_Stop,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxPyTimer instance at %s>" % (self.this,)
+class wxPyTimer(wxPyTimerPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxPyTimer,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------

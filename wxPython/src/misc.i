@@ -291,18 +291,6 @@ wxString wxStripMenuCodes(const wxString& in);
 
 //----------------------------------------------------------------------
 
-class wxPyTimer {
-public:
-    wxPyTimer(PyObject* notify);
-    ~wxPyTimer();
-    int GetInterval();
-    bool IsOneShot();
-    void Start(int milliseconds=-1, int oneShot=FALSE);
-    void Stop();
-};
-
-//---------------------------------------------------------------------------
-
 enum wxEdge { wxLeft, wxTop, wxRight, wxBottom, wxWidth, wxHeight,
               wxCentre, wxCenter = wxCentre, wxCentreX, wxCentreY };
 enum wxRelationship { wxUnconstrained = 0,
@@ -439,6 +427,18 @@ public:
     ~wxAcceleratorTable();
 
 };
+
+
+%readonly
+%{
+#if 0  // we want to use the definition from the header, no the
+       // one SWIG will generate.
+%}
+extern wxAcceleratorTable wxNullAcceleratorTable;
+%{
+#endif
+%}
+%readwrite
 
 //---------------------------------------------------------------------------
 

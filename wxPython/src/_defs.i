@@ -159,6 +159,7 @@ typedef signed   int    EBool;
 typedef unsigned int    size_t
 typedef int             wxPrintQuality;
 typedef int             wxCoord;
+typedef char            wxChar;
 
 
 //---------------------------------------------------------------------------
@@ -434,10 +435,12 @@ enum {
     wxHIDE_READONLY,
     wxOVERWRITE_PROMPT,
     wxFILE_MUST_EXIST,
+    wxMULTIPLE,
 
     wxACCEL_ALT,
     wxACCEL_CTRL,
     wxACCEL_SHIFT,
+    wxACCEL_NORMAL,
 
     wxPD_AUTO_HIDE,
     wxPD_APP_MODAL,
@@ -949,6 +952,8 @@ enum wxEventType {
  wxEVT_COMMAND_SPLITTER_DOUBLECLICKED,
 
  wxEVT_NAVIGATION_KEY,
+
+ wxEVT_TIMER,
 
 };
 

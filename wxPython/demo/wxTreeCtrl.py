@@ -5,6 +5,20 @@ import string
 
 #---------------------------------------------------------------------------
 
+class MyTreeCtrl(wxTreeCtrl):
+    def __init__(self, parent, id, pos, size, style):
+        wxTreeCtrl.__init__(self, parent, id, pos, size, style)
+
+
+    def OnCompareItems(self, item1, item2):
+        t1 = self.GetItemText(item1)
+        t2 = self.GetItemText(item2)
+        if t1 < t2: return -1
+        if t1 == t2: return 0
+        return 1
+
+#---------------------------------------------------------------------------
+
 class TestTreeCtrlPanel(wxPanel):
     def __init__(self, parent, log):
         wxPanel.__init__(self, parent, -1)
@@ -12,7 +26,7 @@ class TestTreeCtrlPanel(wxPanel):
         self.log = log
         tID = NewId()
 
-        self.tree = wxTreeCtrl(self, tID, wxDefaultPosition, wxDefaultSize,
+        self.tree = MyTreeCtrl(self, tID, wxDefaultPosition, wxDefaultSize,
                                wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS)# | wxTR_MULTIPLE)
 
         #il = wxImageList(16, 16)
@@ -25,19 +39,27 @@ class TestTreeCtrlPanel(wxPanel):
         #self.tree.SetImageList(il)
         #self.il = il
 
+        # NOTE:  For some reason tree items have to have a data object in
+        #        order to be sorted.  Since our compare just uses the labels
+        #        we don't need any real data, so we'll just use None.
+
         self.root = self.tree.AddRoot("The Root Item")
+        self.tree.SetPyData(self.root, None)
         #self.tree.SetItemImage(self.root, idx1)
 
         for x in range(15):
             child = self.tree.AppendItem(self.root, "Item %d" % x)
+            self.tree.SetPyData(child, None)
             #self.tree.SetItemImage(child, idx2)
             #self.tree.SetItemSelectedImage(child, idx3)
             for y in range(5):
                 last = self.tree.AppendItem(child, "item %d-%s" % (x, chr(ord("a")+y)))
+                self.tree.SetPyData(last, None)
                 #self.tree.SetItemImage(last, idx4)
                 #self.tree.SetItemSelectedImage(last, idx5)
                 for z in range(5):
-                    self.tree.AppendItem(last,  "item %d-%s-%d" % (x, chr(ord("a")+y), z))
+                    item = self.tree.AppendItem(last,  "item %d-%s-%d" % (x, chr(ord("a")+y), z))
+                    self.tree.SetPyData(item, None)
 
         self.tree.Expand(self.root)
         EVT_TREE_ITEM_EXPANDED  (self, tID, self.OnItemExpanded)
@@ -49,6 +71,7 @@ class TestTreeCtrlPanel(wxPanel):
         EVT_LEFT_DCLICK(self.tree, self.OnLeftDClick)
         EVT_RIGHT_DOWN(self.tree, self.OnRightClick)
         EVT_RIGHT_UP(self.tree, self.OnRightUp)
+
 
     def OnRightClick(self, event):
         pt = event.GetPosition();
@@ -89,6 +112,9 @@ class TestTreeCtrlPanel(wxPanel):
         pt = event.GetPosition();
         item, flags = self.tree.HitTest(pt)
         self.log.WriteText("OnLeftDClick: %s\n" % self.tree.GetItemText(item))
+        parent = self.tree.GetItemParent(item)
+        self.tree.SortChildren(parent)
+        event.Skip()
 
 
     def OnSize(self, event):

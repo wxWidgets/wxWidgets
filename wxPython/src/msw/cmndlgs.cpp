@@ -1343,6 +1343,84 @@ static PyObject *_wrap_wxFileDialog_ShowModal(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
+static PyObject * wxFileDialog_GetFilenames(wxFileDialog *self) {
+            wxArrayString arr;
+            self->GetFilenames(arr);
+            size_t count = arr.GetCount();
+            PyObject* listObj = PyList_New(0);
+            for(size_t x=0; x<count; x++) {
+                PyObject* name = PyString_FromString(arr[x]);
+                PyList_Append(listObj, name);
+            }
+            return listObj;
+        }
+static PyObject *_wrap_wxFileDialog_GetFilenames(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxFileDialog * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileDialog_GetFilenames",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_GetFilenames. Expected _wxFileDialog_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxFileDialog_GetFilenames(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+static PyObject * wxFileDialog_GetPaths(wxFileDialog *self) {
+            wxArrayString arr;
+            self->GetPaths(arr);
+            size_t count = arr.GetCount();
+            PyObject* listObj = PyList_New(0);
+            for(size_t x=0; x<count; x++) {
+                PyObject* name = PyString_FromString(arr[x]);
+                PyList_Append(listObj, name);
+            }
+            return listObj;
+        }
+static PyObject *_wrap_wxFileDialog_GetPaths(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxFileDialog * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileDialog_GetPaths",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_GetPaths. Expected _wxFileDialog_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxFileDialog_GetPaths(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
 static void *SwigwxSingleChoiceDialogTowxDialog(void *ptr) {
     wxSingleChoiceDialog *src;
     wxDialog *dest;
@@ -2631,6 +2709,8 @@ static PyMethodDef cmndlgscMethods[] = {
 	 { "wxSingleChoiceDialog_GetStringSelection", (PyCFunction) _wrap_wxSingleChoiceDialog_GetStringSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSingleChoiceDialog_GetSelection", (PyCFunction) _wrap_wxSingleChoiceDialog_GetSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxSingleChoiceDialog", (PyCFunction) _wrap_new_wxSingleChoiceDialog, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileDialog_GetPaths", (PyCFunction) _wrap_wxFileDialog_GetPaths, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileDialog_GetFilenames", (PyCFunction) _wrap_wxFileDialog_GetFilenames, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileDialog_ShowModal", (PyCFunction) _wrap_wxFileDialog_ShowModal, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileDialog_SetWildcard", (PyCFunction) _wrap_wxFileDialog_SetWildcard, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileDialog_SetStyle", (PyCFunction) _wrap_wxFileDialog_SetStyle, METH_VARARGS | METH_KEYWORDS },
@@ -2811,6 +2891,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_unsigned_int",0},
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
+    { "_wxChar","_char",0},
     { "_wxPyValidator","_class_wxPyValidator",0},
     { "_class_wxEvent","_wxEvent",0},
     { "_wxCheckListBox","_class_wxCheckListBox",0},
@@ -2821,9 +2902,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxButton","_wxButton",0},
     { "_wxRadioBox","_class_wxRadioBox",0},
     { "_class_wxFontData","_wxFontData",0},
+    { "_char","_wxChar",0},
     { "_wxBitmap","_class_wxBitmap",0},
-    { "_wxPyTimer","_class_wxPyTimer",0},
     { "_wxWindowDC","_class_wxWindowDC",0},
+    { "_wxTimerEvent","_class_wxTimerEvent",0},
     { "_wxScrollBar","_class_wxScrollBar",0},
     { "_wxSpinButton","_class_wxSpinButton",0},
     { "_wxColourDialog","_class_wxColourDialog",0},
@@ -2862,9 +2944,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxQueryNewPaletteEvent","_class_wxQueryNewPaletteEvent",0},
     { "_class_wxWindowCreateEvent","_wxWindowCreateEvent",0},
     { "_class_wxDirDialog","_wxDirDialog",0},
-    { "_class_wxPyTimer","_wxPyTimer",0},
     { "_wxFocusEvent","_class_wxFocusEvent",0},
     { "_wxMaximizeEvent","_class_wxMaximizeEvent",0},
+    { "_class_wxTimerEvent","_wxTimerEvent",0},
     { "_class_wxSpinButton","_wxSpinButton",0},
     { "_wxAcceleratorEntry","_class_wxAcceleratorEntry",0},
     { "_class_wxPanel","_class_wxMessageDialog",SwigwxMessageDialogTowxPanel},

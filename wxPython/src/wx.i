@@ -139,6 +139,7 @@ extern "C" SWIGEXPORT(void) initgridc();
 extern "C" SWIGEXPORT(void) initutilsc();
 extern "C" SWIGEXPORT(void) inithtmlc();
 extern "C" SWIGEXPORT(void) inithtmlhelpc();
+extern "C" SWIGEXPORT(void) initcalendarc();
 %}
 
 
@@ -173,7 +174,7 @@ extern "C" SWIGEXPORT(void) inithtmlhelpc();
     initutilsc();
     inithtmlc();
     inithtmlhelpc();
-
+    initcalendarc();
 %}
 
 //----------------------------------------------------------------------

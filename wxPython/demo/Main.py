@@ -22,7 +22,7 @@ _useSplitter       = true
 _useNestedSplitter = true
 
 _treeList = [
-    ('New since last release', ['wxDragImage',
+    ('New since last release', ['wxDragImage', 'wxCalendarCtrl',
                                 ]),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
@@ -51,6 +51,7 @@ _treeList = [
                         'wxImage', 'wxMask', 'PrintFramework', 'wxOGL',
                         'PythonEvents', 'Threads',
                         'ActiveXWrapper_Acrobat', 'ActiveXWrapper_IE',
+                        'wxDragImage', 'wxCalendarCtrl',
                         ]),
 
     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',

@@ -136,7 +136,7 @@ static char* wxStringErrorMsg = "string type is required for parameter";
         if (m_myInst.findCallback(#CBNAME))                             \
             m_myInst.callCallback(                                      \
                 Py_BuildValue("(Oii)",                                  \
-                              wxPyConstructObject((void*)attr, "_wxGridCellAttr_p"),    \
+                              wxPyConstructObject((void*)attr, "wxGridCellAttr"),    \
                               a, b));                                   \
         else                                                            \
             PCLASS::CBNAME(attr, a, b);                                 \
@@ -154,7 +154,7 @@ static char* wxStringErrorMsg = "string type is required for parameter";
         if (m_myInst.findCallback(#CBNAME))                             \
             m_myInst.callCallback(                                      \
                 Py_BuildValue("(Oi)",                                   \
-                              wxPyConstructObject((void*)attr, "_wxGridCellAttr_p"),    \
+                              wxPyConstructObject((void*)attr, "wxGridCellAttr"),    \
                               val));                                    \
         else                                                            \
             PCLASS::CBNAME(attr, val);                                  \
@@ -618,7 +618,7 @@ public:
         if (m_myInst.findCallback("Show"))
             m_myInst.callCallback(
                 Py_BuildValue("(iO)", show,
-                              wxPyConstructObject((void*)attr, "_wxGridCellAttr_p")));
+                              wxPyConstructObject((void*)attr, "wxGridCellAttr")));
         else
             wxGridCellEditor::Show(show, attr);
         wxPySaveThread(doSave);
@@ -633,8 +633,8 @@ public:
         if (m_myInst.findCallback("PaintBackground"))
             m_myInst.callCallback(
                 Py_BuildValue("(OO)",
-                              wxPyConstructObject((void*)&rectCell, "_wxRect_p"),
-                              wxPyConstructObject((void*)attr, "_wxGridCellAttr_p")));
+                              wxPyConstructObject((void*)&rectCell, "wxRect"),
+                              wxPyConstructObject((void*)attr, "wxGridCellAttr")));
         else
             wxGridCellEditor::PaintBackground(rectCell, attr);
         wxPySaveThread(doSave);
@@ -12909,6 +12909,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_unsigned_int",0},
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
+    { "_wxChar","_char",0},
     { "_wxPyValidator","_class_wxPyValidator",0},
     { "_class_wxEvent","_class_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxEvent},
     { "_class_wxEvent","_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxEvent},
@@ -12933,6 +12934,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPoint","_class_wxPoint",0},
     { "_class_wxButton","_wxButton",0},
     { "_wxRadioBox","_class_wxRadioBox",0},
+    { "_char","_wxChar",0},
     { "_wxBitmap","_class_wxBitmap",0},
     { "_wxGridCellStringRenderer","_class_wxGridCellFloatRenderer",SwigwxGridCellFloatRendererTowxGridCellStringRenderer},
     { "_wxGridCellStringRenderer","_wxGridCellFloatRenderer",SwigwxGridCellFloatRendererTowxGridCellStringRenderer},
@@ -12940,8 +12942,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxGridCellStringRenderer","_wxGridCellNumberRenderer",SwigwxGridCellNumberRendererTowxGridCellStringRenderer},
     { "_wxGridCellStringRenderer","_class_wxGridCellStringRenderer",0},
     { "_wxPyGridTableBase","_class_wxPyGridTableBase",0},
-    { "_wxPyTimer","_class_wxPyTimer",0},
     { "_wxWindowDC","_class_wxWindowDC",0},
+    { "_wxTimerEvent","_class_wxTimerEvent",0},
     { "_wxScrollBar","_class_wxScrollBar",0},
     { "_wxSpinButton","_class_wxSpinButton",0},
     { "_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0},
@@ -13009,9 +13011,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxGridCellStringRenderer","_wxGridCellNumberRenderer",SwigwxGridCellNumberRendererTowxGridCellStringRenderer},
     { "_class_wxGridCellStringRenderer","_wxGridCellStringRenderer",0},
     { "_class_wxGridCellFloatRenderer","_wxGridCellFloatRenderer",0},
-    { "_class_wxPyTimer","_wxPyTimer",0},
     { "_wxFocusEvent","_class_wxFocusEvent",0},
     { "_wxMaximizeEvent","_class_wxMaximizeEvent",0},
+    { "_class_wxTimerEvent","_wxTimerEvent",0},
     { "_class_wxSpinButton","_wxSpinButton",0},
     { "_wxAcceleratorEntry","_class_wxAcceleratorEntry",0},
     { "_class_wxPanel","_class_wxGrid",SwigwxGridTowxPanel},

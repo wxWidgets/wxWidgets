@@ -92,7 +92,7 @@ public:
 
 class wxImage {
 public:
-    wxImage( const wxString& name, long type = wxBITMAP_TYPE_PNG );
+    wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY );
     ~wxImage();
 
     wxBitmap ConvertToBitmap();
@@ -117,6 +117,8 @@ public:
     int GetHeight();
 
     wxImage GetSubImage(const wxRect& rect);
+    wxImage Copy();
+    void Paste( const wxImage &image, int x, int y );
 
     //unsigned char *GetData();
     //void SetData( unsigned char *data );
@@ -152,6 +154,9 @@ public:
 
     wxImage Rotate(double angle, const wxPoint & centre_of_rotation,
                    bool interpolating = TRUE, wxPoint * offset_after_rotation = NULL) const ;
+    wxImage Rotate90( bool clockwise = TRUE ) ;
+    wxImage Mirror( bool horizontally = TRUE ) ;
+
     void Replace( unsigned char r1, unsigned char g1, unsigned char b1,
                   unsigned char r2, unsigned char g2, unsigned char b2 );
 

@@ -219,7 +219,7 @@ class wxRectPtr :
         return val
     def __add__(self, *_args, **_kwargs):
         val = apply(miscc.wxRect___add__,(self,) + _args, _kwargs)
-        if val: val = wxRectPtr(val) 
+        if val: val = wxRectPtr(val) ; val.thisown = 1
         return val
     def __cmp__(self, *_args, **_kwargs):
         val = apply(miscc.wxRect___cmp__,(self,) + _args, _kwargs)
@@ -293,35 +293,6 @@ class wxRectPtr :
 class wxRect(wxRectPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(miscc.new_wxRect,_args,_kwargs)
-        self.thisown = 1
-
-
-
-
-class wxPyTimerPtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __del__(self,miscc=miscc):
-        if self.thisown == 1 :
-            miscc.delete_wxPyTimer(self)
-    def GetInterval(self, *_args, **_kwargs):
-        val = apply(miscc.wxPyTimer_GetInterval,(self,) + _args, _kwargs)
-        return val
-    def IsOneShot(self, *_args, **_kwargs):
-        val = apply(miscc.wxPyTimer_IsOneShot,(self,) + _args, _kwargs)
-        return val
-    def Start(self, *_args, **_kwargs):
-        val = apply(miscc.wxPyTimer_Start,(self,) + _args, _kwargs)
-        return val
-    def Stop(self, *_args, **_kwargs):
-        val = apply(miscc.wxPyTimer_Stop,(self,) + _args, _kwargs)
-        return val
-    def __repr__(self):
-        return "<C wxPyTimer instance at %s>" % (self.this,)
-class wxPyTimer(wxPyTimerPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(miscc.new_wxPyTimer,_args,_kwargs)
         self.thisown = 1
 
 
@@ -690,3 +661,5 @@ wxAbsolute = miscc.wxAbsolute
 wxOutRegion = miscc.wxOutRegion
 wxPartRegion = miscc.wxPartRegion
 wxInRegion = miscc.wxInRegion
+cvar = miscc.cvar
+wxNullAcceleratorTable = wxAcceleratorTablePtr(miscc.cvar.wxNullAcceleratorTable)

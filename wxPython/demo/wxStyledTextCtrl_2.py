@@ -53,6 +53,8 @@ class PythonSTC(wxStyledTextCtrl):
         self.SetEdgeMode(wxSTC_EDGE_BACKGROUND)
         self.SetEdgeColumn(78)
 
+        self.SetCaretForeground("red")
+
         # Setup a margin to hold fold markers
         #self.SetFoldFlags(16)  ###  WHAT IS THIS VALUE?  WHAT ARE THE OTHER FLAGS?  DOES IT MATTER?
         self.SetMarginType(2, wxSTC_MARGIN_SYMBOL)
@@ -74,49 +76,44 @@ class PythonSTC(wxStyledTextCtrl):
         self.StyleClearAll()
 
         # Global default styles for all languages
-        # Default
-        self.StyleSetSpec(32, "face:%(helv)s,size:%(size)d" % faces)
-        # Line number
-        self.StyleSetSpec(33, "back:#C0C0C0,face:%(helv)s,size:%(size2)d" % faces)
-        # Brace highlight
-        self.StyleSetSpec(34, "fore:#0000FF,bold")
-        # Brace incomplete highlight
-        self.StyleSetSpec(35, "fore:#FF0000,bold")
-        # Control characters
-        self.StyleSetSpec(36, "face:%(other)s" % faces)
+        self.StyleSetSpec(wxSTC_STYLE_DEFAULT,     "face:%(helv)s,size:%(size)d" % faces)
+        self.StyleSetSpec(wxSTC_STYLE_LINENUMBER,  "back:#C0C0C0,face:%(helv)s,size:%(size2)d" % faces)
+        self.StyleSetSpec(wxSTC_STYLE_CONTROLCHAR, "face:%(other)s" % faces)
+        self.StyleSetSpec(wxSTC_STYLE_BRACELIGHT,  "fore:#FFFFFF,back:#0000FF,bold")
+        self.StyleSetSpec(wxSTC_STYLE_BRACEBAD,    "fore:#000000,back:#FF0000,bold")
 
         # Python styles
         # White space
-        self.StyleSetSpec(0, "fore:#808080")
+        self.StyleSetSpec(SCE_P_DEFAULT, "fore:#808080")
         # Comment
-        self.StyleSetSpec(1, "fore:#007F00,face:%(other)s" % faces)
+        self.StyleSetSpec(SCE_P_COMMENTLINE, "fore:#007F00,face:%(other)s" % faces)
         # Number
-        self.StyleSetSpec(2, "fore:#007F7F")
+        self.StyleSetSpec(SCE_P_NUMBER, "fore:#007F7F")
         # String
-        self.StyleSetSpec(3, "fore:#7F007F,italic,face:%(times)s" % faces)
+        self.StyleSetSpec(SCE_P_STRING, "fore:#7F007F,italic,face:%(times)s" % faces)
         # Single quoted string
-        self.StyleSetSpec(4, "fore:#7F007F,italic,face:%(times)s" % faces)
+        self.StyleSetSpec(SCE_P_CHARACTER, "fore:#7F007F,italic,face:%(times)s" % faces)
         # Keyword
-        self.StyleSetSpec(5, "fore:#00007F,bold")
+        self.StyleSetSpec(SCE_P_WORD, "fore:#00007F,bold")
         # Triple quotes
-        self.StyleSetSpec(6, "fore:#7F0000")
+        self.StyleSetSpec(SCE_P_TRIPLE, "fore:#7F0000")
         # Triple double quotes
-        self.StyleSetSpec(7, "fore:#7F0000")
+        self.StyleSetSpec(SCE_P_TRIPLEDOUBLE, "fore:#7F0000")
         # Class name definition
-        self.StyleSetSpec(8, "fore:#0000FF,bold")
+        self.StyleSetSpec(SCE_P_CLASSNAME, "fore:#0000FF,bold,underline")
         # Function or method name definition
-        self.StyleSetSpec(9, "fore:#007F7F,bold")
+        self.StyleSetSpec(SCE_P_DEFNAME, "fore:#007F7F,bold")
         # Operators
-        self.StyleSetSpec(10, "bold")
+        self.StyleSetSpec(SCE_P_OPERATOR, "bold")
         # Identifiers
-        #self.StyleSetSpec(11, "bold")#,fore:#FF00FF")
+        #self.StyleSetSpec(SCE_P_IDENTIFIER, "bold")#,fore:#FF00FF")
         # Comment-blocks
-        self.StyleSetSpec(12, "fore:#7F7F7F")
+        self.StyleSetSpec(SCE_P_COMMENTBLOCK, "fore:#7F7F7F")
         # End of line where string is not closed
-        self.StyleSetSpec(13, "fore:#000000,face:%(mono)s,back:#E0C0E0,eolfilled" % faces)
-        # Matched Operators
-        self.StyleSetSpec(34, "fore:#FFFFFF,back:#0000FF,bold")
-        self.StyleSetSpec(35, "fore:#000000,back:#FF0000,bold")
+        self.StyleSetSpec(SCE_P_STRINGEOL, "fore:#000000,face:%(mono)s,back:#E0C0E0,eolfilled" % faces)
+
+
+        self.SetCaretForeground("BLUE")
 
         EVT_KEY_UP(self, self.OnKeyPressed)
 

@@ -406,9 +406,11 @@ wxSAVE = wxc.wxSAVE
 wxHIDE_READONLY = wxc.wxHIDE_READONLY
 wxOVERWRITE_PROMPT = wxc.wxOVERWRITE_PROMPT
 wxFILE_MUST_EXIST = wxc.wxFILE_MUST_EXIST
+wxMULTIPLE = wxc.wxMULTIPLE
 wxACCEL_ALT = wxc.wxACCEL_ALT
 wxACCEL_CTRL = wxc.wxACCEL_CTRL
 wxACCEL_SHIFT = wxc.wxACCEL_SHIFT
+wxACCEL_NORMAL = wxc.wxACCEL_NORMAL
 wxPD_AUTO_HIDE = wxc.wxPD_AUTO_HIDE
 wxPD_APP_MODAL = wxc.wxPD_APP_MODAL
 wxPD_CAN_ABORT = wxc.wxPD_CAN_ABORT
@@ -821,6 +823,7 @@ wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED = wxc.wxEVT_COMMAND_SPLITTER_SASH_POS_CH
 wxEVT_COMMAND_SPLITTER_UNSPLIT = wxc.wxEVT_COMMAND_SPLITTER_UNSPLIT
 wxEVT_COMMAND_SPLITTER_DOUBLECLICKED = wxc.wxEVT_COMMAND_SPLITTER_DOUBLECLICKED
 wxEVT_NAVIGATION_KEY = wxc.wxEVT_NAVIGATION_KEY
+wxEVT_TIMER = wxc.wxEVT_TIMER
 __version__ = wxc.__version__
 cvar = wxc.cvar
 wxPyDefaultPosition = wxPointPtr(wxc.cvar.wxPyDefaultPosition)
@@ -1500,6 +1503,12 @@ def EVT_SPLITTER_UNSPLIT(win, id, func):
 
 def EVT_SPLITTER_DOUBLECLICKED(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_SPLITTER_DOUBLECLICKED, func)
+
+
+# wxTimer
+def EVT_TIMER(win, id, func):
+    win.Connect(id, -1, wxEVT_TIMER, func)
+
 
 
 #----------------------------------------------------------------------

@@ -201,6 +201,13 @@ class wxImagePtr :
         val = apply(imagec.wxImage_GetSubImage,(self,) + _args, _kwargs)
         if val: val = wxImagePtr(val) ; val.thisown = 1
         return val
+    def Copy(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_Copy,(self,) + _args, _kwargs)
+        if val: val = wxImagePtr(val) ; val.thisown = 1
+        return val
+    def Paste(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_Paste,(self,) + _args, _kwargs)
+        return val
     def GetData(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_GetData,(self,) + _args, _kwargs)
         return val
@@ -227,6 +234,14 @@ class wxImagePtr :
         return val
     def Rotate(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_Rotate,(self,) + _args, _kwargs)
+        if val: val = wxImagePtr(val) ; val.thisown = 1
+        return val
+    def Rotate90(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_Rotate90,(self,) + _args, _kwargs)
+        if val: val = wxImagePtr(val) ; val.thisown = 1
+        return val
+    def Mirror(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_Mirror,(self,) + _args, _kwargs)
         if val: val = wxImagePtr(val) ; val.thisown = 1
         return val
     def Replace(self, *_args, **_kwargs):

@@ -4,9 +4,10 @@ from wxPython.wx import *
 #---------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    dlg = wxFileDialog(frame, "Choose a file", ".", "", "*.*", wxOPEN)
+    dlg = wxFileDialog(frame, "Choose a file", ".", "", "*.*", wxOPEN|wxMULTIPLE)
     if dlg.ShowModal() == wxID_OK:
-        log.WriteText('You selected: %s\n' % dlg.GetPath())
+        for path in dlg.GetPaths():
+            log.WriteText('You selected: %s\n' % path)
     dlg.Destroy()
 
 #---------------------------------------------------------------------------

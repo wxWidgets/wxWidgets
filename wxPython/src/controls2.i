@@ -444,21 +444,55 @@ public:
 };
 
 
+
+%{
+class wxPyTreeCtrl : public wxTreeCtrl {
+public:
+    wxPyTreeCtrl(wxWindow *parent, wxWindowID id,
+                 const wxPoint& pos,
+                 const wxSize& size,
+                 long style,
+                 const wxValidator& validator,
+                 char* name) :
+        wxTreeCtrl(parent, id, pos, size, style, validator, name) {}
+
+
+    int OnCompareItems(const wxTreeItemId& item1,
+                       const wxTreeItemId& item2) {
+        int rval = 0;
+        bool doSave = wxPyRestoreThread();
+        if (m_myInst.findCallback("OnCompareItems"))
+            rval = m_myInst.callCallback(Py_BuildValue(
+                "(OO)",
+                wxPyConstructObject((void*)&item1, "wxTreeItemId"),
+                wxPyConstructObject((void*)&item2, "wxTreeItemId")));
+        else
+            rval = wxTreeCtrl::OnCompareItems(item1, item2);
+        wxPySaveThread(doSave);
+        return rval;
+    }
+    PYPRIVATE;
+};
+
+%}
+
 // These are for the GetFirstChild/GetNextChild methods below
 %typemap(python, in)     long& INOUT = long* INOUT;
 %typemap(python, argout) long& INOUT = long* INOUT;
 
 
-class wxTreeCtrl : public wxControl {
+%name(wxTreeCtrl)class wxPyTreeCtrl : public wxControl {
 public:
-    wxTreeCtrl(wxWindow *parent, wxWindowID id = -1,
+    wxPyTreeCtrl(wxWindow *parent, wxWindowID id = -1,
                const wxPoint& pos = wxPyDefaultPosition,
                const wxSize& size = wxPyDefaultSize,
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
                const wxValidator& validator = wxPyDefaultValidator,
                char* name = "wxTreeCtrl");
 
+    void _setSelf(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxTreeCtrl)"
 
     size_t GetCount();
     unsigned int GetIndent();
@@ -489,13 +523,15 @@ public:
             wxPyTreeItemData* data = (wxPyTreeItemData*)self->GetItemData(item);
             if (data == NULL) {
                 data = new wxPyTreeItemData();
+                data->SetId(item); // set the id
                 self->SetItemData(item, data);
             }
             return data;
         }
 
         void SetItemData(const wxTreeItemId& item, wxPyTreeItemData* data) {
-	  self->SetItemData(item, data);
+            data->SetId(item); // set the id
+            self->SetItemData(item, data);
 	}
 
 	// [Get|Set]PyData are short-cuts.  Also made somewhat crash-proof by
@@ -504,6 +540,7 @@ public:
             wxPyTreeItemData* data = (wxPyTreeItemData*)self->GetItemData(item);
             if (data == NULL) {
                 data = new wxPyTreeItemData();
+                data->SetId(item); // set the id
                 self->SetItemData(item, data);
             }
             return data->GetData();
@@ -513,6 +550,7 @@ public:
             wxPyTreeItemData* data = (wxPyTreeItemData*)self->GetItemData(item);
             if (data == NULL) {
                 data = new wxPyTreeItemData(obj);
+                data->SetId(item); // set the id
                 self->SetItemData(item, data);
             } else
                 data->SetData(obj);
@@ -573,6 +611,12 @@ public:
                             const wxString& text,
                             int image = -1, int selectedImage = -1,
                             wxPyTreeItemData *data = NULL);
+    %name(InsertItemBefore)
+        wxTreeItemId InsertItem(const wxTreeItemId& parent,
+                                size_t before,
+                                const wxString& text,
+                                int image = -1, int selectedImage = -1,
+                                wxTreeItemData *data = NULL);
     wxTreeItemId AppendItem(const wxTreeItemId& parent,
                             const wxString& text,
                             int image = -1, int selectedImage = -1,

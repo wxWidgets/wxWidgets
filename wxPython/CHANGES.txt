@@ -2,7 +2,7 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
-New in 2.1.??
+New in 2.1.16
 -------------
 
 Added an attribute named labelDelta to the generic buttons that
@@ -12,6 +12,14 @@ depressed state.
 Added wxTipProvider and friends.  See the demo for an example.
 
 wxGrid can now change the cell highlight colour.
+
+Added wxDragImage.
+
+Fixed printing on wxGTK.
+
+Added wxDateTime, wxTimeSpan, and wxDateSpan to wxPython.utils.
+
+Added wxCalendarCtrl.
 
 
 

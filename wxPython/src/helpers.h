@@ -115,6 +115,7 @@ extern "C" char *SWIG_GetPtrObj(PyObject *obj, void **ptr, char *type);
 
 #ifdef _MSC_VER
 # pragma warning(disable:4800)
+# pragma warning(disable:4190)
 #endif
 
 

@@ -671,6 +671,12 @@ def EVT_SPLITTER_DOUBLECLICKED(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_SPLITTER_DOUBLECLICKED, func)
 
 
+# wxTimer
+def EVT_TIMER(win, id, func):
+    win.Connect(id, -1, wxEVT_TIMER, func)
+
+
+
 #----------------------------------------------------------------------
 
 class wxTimer(wxPyTimer):

@@ -6,7 +6,7 @@
 //
 // Created:     17-March-2000
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 by Total Control Software
+// Copyright:   (c) 2000 by Total Control Software
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -74,7 +74,7 @@
         if (m_myInst.findCallback(#CBNAME))                             \
             m_myInst.callCallback(                                      \
                 Py_BuildValue("(Oii)",                                  \
-                              wxPyConstructObject((void*)attr, "_wxGridCellAttr_p"),    \
+                              wxPyConstructObject((void*)attr, "wxGridCellAttr"),    \
                               a, b));                                   \
         else                                                            \
             PCLASS::CBNAME(attr, a, b);                                 \
@@ -92,7 +92,7 @@
         if (m_myInst.findCallback(#CBNAME))                             \
             m_myInst.callCallback(                                      \
                 Py_BuildValue("(Oi)",                                   \
-                              wxPyConstructObject((void*)attr, "_wxGridCellAttr_p"),    \
+                              wxPyConstructObject((void*)attr, "wxGridCellAttr"),    \
                               val));                                    \
         else                                                            \
             PCLASS::CBNAME(attr, val);                                  \
@@ -687,7 +687,7 @@ public:
         if (m_myInst.findCallback("Show"))
             m_myInst.callCallback(
                 Py_BuildValue("(iO)", show,
-                              wxPyConstructObject((void*)attr, "_wxGridCellAttr_p")));
+                              wxPyConstructObject((void*)attr, "wxGridCellAttr")));
         else
             wxGridCellEditor::Show(show, attr);
         wxPySaveThread(doSave);
@@ -702,8 +702,8 @@ public:
         if (m_myInst.findCallback("PaintBackground"))
             m_myInst.callCallback(
                 Py_BuildValue("(OO)",
-                              wxPyConstructObject((void*)&rectCell, "_wxRect_p"),
-                              wxPyConstructObject((void*)attr, "_wxGridCellAttr_p")));
+                              wxPyConstructObject((void*)&rectCell, "wxRect"),
+                              wxPyConstructObject((void*)attr, "wxGridCellAttr")));
         else
             wxGridCellEditor::PaintBackground(rectCell, attr);
         wxPySaveThread(doSave);

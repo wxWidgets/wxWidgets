@@ -158,6 +158,12 @@ class wxFileDialogPtr(wxDialogPtr):
     def ShowModal(self, *_args, **_kwargs):
         val = apply(cmndlgsc.wxFileDialog_ShowModal,(self,) + _args, _kwargs)
         return val
+    def GetFilenames(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFileDialog_GetFilenames,(self,) + _args, _kwargs)
+        return val
+    def GetPaths(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFileDialog_GetPaths,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxFileDialog instance at %s>" % (self.this,)
 class wxFileDialog(wxFileDialogPtr):

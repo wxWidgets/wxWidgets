@@ -133,6 +133,12 @@ static char* wxStringErrorMsg = "string type is required for parameter";
         wxGetResource(section, entry, &retval, file);
         return retval;
     }
+
+#if 0  // we want to use the definition from the header, no the
+       // one SWIG will generate.
+extern wxAcceleratorTable  wxNullAcceleratorTable; 
+
+#endif
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -666,6 +672,21 @@ static PyObject *_wrap_wxStripMenuCodes(PyObject *self, PyObject *args, PyObject
     delete _result;
 }
     return _resultobj;
+}
+
+static int _wrap_wxNullAcceleratorTable_set(PyObject *val) {
+
+    PyErr_SetString(PyExc_TypeError,"Variable wxNullAcceleratorTable is read-only.");
+    return 1;
+}
+
+static PyObject *_wrap_wxNullAcceleratorTable_get() {
+    PyObject * pyobj;
+    char ptemp[128];
+
+    SWIG_MakePtr(ptemp,(char *) &wxNullAcceleratorTable,"_wxAcceleratorTable_p");
+    pyobj = PyString_FromString(ptemp);
+    return pyobj;
 }
 
 #define wxSize_x_set(_swigobj,_swigval) (_swigobj->x = _swigval,_swigval)
@@ -2330,9 +2351,9 @@ static PyObject *_wrap_wxRect_asTuple(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
-static wxRect * wxRect___add__(wxRect *self,const wxRect * rect) {
-            if (! rect) return self;
-            return &(*self + *rect);
+static wxRect  wxRect___add__(wxRect *self,const wxRect * rect) {
+            if (! rect) return *self;
+            return *self + *rect;
         }
 static PyObject *_wrap_wxRect___add__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2361,16 +2382,11 @@ static PyObject *_wrap_wxRect___add__(PyObject *self, PyObject *args, PyObject *
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxRect *)wxRect___add__(_arg0,_arg1);
+        _result = new wxRect (wxRect___add__(_arg0,_arg1));
 
     wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxRect_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxRect_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -2408,173 +2424,6 @@ static PyObject *_wrap_wxRect___cmp__(PyObject *self, PyObject *args, PyObject *
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define new_wxPyTimer(_swigarg0) (new wxPyTimer(_swigarg0))
-static PyObject *_wrap_new_wxPyTimer(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPyTimer * _result;
-    PyObject * _arg0;
-    PyObject * _obj0 = 0;
-    char *_kwnames[] = { "notify", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxPyTimer",_kwnames,&_obj0)) 
-        return NULL;
-{
-  _arg0 = _obj0;
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxPyTimer *)new_wxPyTimer(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyTimer_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
-#define delete_wxPyTimer(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxPyTimer(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPyTimer * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxPyTimer",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTimer_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxPyTimer. Expected _wxPyTimer_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        delete_wxPyTimer(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPyTimer_GetInterval(_swigobj)  (_swigobj->GetInterval())
-static PyObject *_wrap_wxPyTimer_GetInterval(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPyTimer * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyTimer_GetInterval",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTimer_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyTimer_GetInterval. Expected _wxPyTimer_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxPyTimer_GetInterval(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPyTimer_IsOneShot(_swigobj)  (_swigobj->IsOneShot())
-static PyObject *_wrap_wxPyTimer_IsOneShot(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPyTimer * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyTimer_IsOneShot",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTimer_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyTimer_IsOneShot. Expected _wxPyTimer_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxPyTimer_IsOneShot(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPyTimer_Start(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Start(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPyTimer_Start(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPyTimer * _arg0;
-    int  _arg1 = (int ) -1;
-    int  _arg2 = (int ) FALSE;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","milliseconds","oneShot", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|ii:wxPyTimer_Start",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTimer_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyTimer_Start. Expected _wxPyTimer_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPyTimer_Start(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPyTimer_Stop(_swigobj)  (_swigobj->Stop())
-static PyObject *_wrap_wxPyTimer_Stop(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPyTimer * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyTimer_Stop",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTimer_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyTimer_Stop. Expected _wxPyTimer_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPyTimer_Stop(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -4596,12 +4445,6 @@ static PyMethodDef misccMethods[] = {
 	 { "wxIndividualLayoutConstraint_AsIs", (PyCFunction) _wrap_wxIndividualLayoutConstraint_AsIs, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIndividualLayoutConstraint_Absolute", (PyCFunction) _wrap_wxIndividualLayoutConstraint_Absolute, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIndividualLayoutConstraint_Above", (PyCFunction) _wrap_wxIndividualLayoutConstraint_Above, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyTimer_Stop", (PyCFunction) _wrap_wxPyTimer_Stop, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyTimer_Start", (PyCFunction) _wrap_wxPyTimer_Start, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyTimer_IsOneShot", (PyCFunction) _wrap_wxPyTimer_IsOneShot, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyTimer_GetInterval", (PyCFunction) _wrap_wxPyTimer_GetInterval, METH_VARARGS | METH_KEYWORDS },
-	 { "delete_wxPyTimer", (PyCFunction) _wrap_delete_wxPyTimer, METH_VARARGS | METH_KEYWORDS },
-	 { "new_wxPyTimer", (PyCFunction) _wrap_new_wxPyTimer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect___cmp__", (PyCFunction) _wrap_wxRect___cmp__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect___add__", (PyCFunction) _wrap_wxRect___add__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_asTuple", (PyCFunction) _wrap_wxRect_asTuple, METH_VARARGS | METH_KEYWORDS },
@@ -4730,9 +4573,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_unsigned_int",0},
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
+    { "_wxChar","_char",0},
     { "_wxRect","_class_wxRect",0},
     { "_wxPoint","_class_wxPoint",0},
-    { "_wxPyTimer","_class_wxPyTimer",0},
+    { "_char","_wxChar",0},
     { "_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
@@ -4742,7 +4586,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxRegion","_wxRegion",0},
     { "_unsigned_long","_long",0},
     { "_class_wxRect","_wxRect",0},
-    { "_class_wxPyTimer","_wxPyTimer",0},
     { "_wxAcceleratorEntry","_class_wxAcceleratorEntry",0},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
@@ -4834,6 +4677,8 @@ SWIGEXPORT(void) initmiscc() {
 	 PyDict_SetItemString(d,"wxOutRegion", PyInt_FromLong((long) wxOutRegion));
 	 PyDict_SetItemString(d,"wxPartRegion", PyInt_FromLong((long) wxPartRegion));
 	 PyDict_SetItemString(d,"wxInRegion", PyInt_FromLong((long) wxInRegion));
+	 PyDict_SetItemString(d,"cvar", SWIG_globals);
+	 SWIG_addvarlink(SWIG_globals,"wxNullAcceleratorTable",_wrap_wxNullAcceleratorTable_get, _wrap_wxNullAcceleratorTable_set);
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

@@ -798,6 +798,23 @@ class wxWindowDestroyEvent(wxWindowDestroyEventPtr):
 
 
 
+class wxTimerEventPtr(wxEventPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetInterval(self, *_args, **_kwargs):
+        val = apply(eventsc.wxTimerEvent_GetInterval,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxTimerEvent instance at %s>" % (self.this,)
+class wxTimerEvent(wxTimerEventPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxTimerEvent,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxPyEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
