@@ -315,6 +315,10 @@ wxWizardPage *wxWizard::GetCurrentPage() const
 
 wxSize wxWizard::GetPageSize() const
 {
+    // make sure that the controls are created because otherwise m_width and
+    // m_height would be both still -1
+    DoCreateControls();
+
     return wxSize(m_width, m_height);
 }
 
