@@ -254,7 +254,7 @@ methodOverrideMap = {
                      TextToFind  ft;
                      ft.chrg.cpMin = minPos;
                      ft.chrg.cpMax = maxPos;
-                     wxWX2MBbuf buf = wx2stc(text);
+                     wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
                      ft.lpstrText = (char*)(const char*)buf;
 
                      return SendMsg(%s, flags, (long)&ft);''',
