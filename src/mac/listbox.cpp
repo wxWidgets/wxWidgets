@@ -259,12 +259,12 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     }
     SetListSelectionFlags((ListHandle)m_macList, options);
 
-    MacPostControlCreate() ;
-
     for ( int i = 0 ; i < n ; i++ )
     {
         Append( choices[i] ) ;
     }
+
+    MacPostControlCreate() ;
 
     LSetDrawingMode( true , (ListHandle)m_macList ) ;
 
@@ -616,7 +616,56 @@ void wxListBox::SetString(int N, const wxString& s)
 
 wxSize wxListBox::DoGetBestSize() const
 {
-    return wxSize(100, 100);
+    int lbWidth = 100;  // some defaults
+    int lbHeight = 110;
+    int wLine;
+
+	{
+		wxMacPortStateHelper st( UMAGetWindowPort( (WindowRef) MacGetRootWindow() ) ) ; 
+ 		Rect drawRect ;
+#if TARGET_CARBON
+	    int sizeFont = 12;
+
+	    Str255 fontName ;
+	    SInt16 fontSize ;
+	    Style fontStyle ;
+		SInt16 fontNum ;
+
+		GetThemeFont(kThemeViewsFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
+		GetFNum(fontName , &fontNum ) ;
+		if ( 1 )
+	    {
+	        ::TextFont( fontNum ) ;
+	        ::TextSize( fontSize  );
+	        ::TextFace( fontStyle ) ;
+	    }
+	    else
+
+#endif
+	    {
+	        ::TextFont( kFontIDMonaco ) ;
+	        ::TextSize( 9  );
+	        ::TextFace( 0 ) ;
+	    }
+
+    // Find the widest line
+    for(int i = 0; i < GetCount(); i++) {
+        wxString str(GetString(i));
+        wLine = ::TextWidth( str.c_str() , 0 , str.Length() ) ;
+        lbWidth = wxMax(lbWidth, wLine);
+    }
+
+    // Add room for the scrollbar
+    lbWidth += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+
+    // And just a bit more
+    int cy = 12 ;
+    
+    // don't make the listbox too tall (limit height to around 10 items) but don't
+    // make it too small neither
+    lbHeight = (cy+4) * wxMin(wxMax(GetCount(), 3), 10);
+	}
+    return wxSize(lbWidth, lbHeight);
 }
 
 int wxListBox::GetCount() const
