@@ -14,6 +14,7 @@ All:
 - Fixed wxDateTime::SetToWeekDayInSameWeek(Sun, Monday_First).
 - Added WXK_SPECIAL keycodes for special hardware buttons.
 - Fixed bug with wxFile::Seek(-1, wxFromCurrent)
+- Added wxString/C array constructors to wxArrayString
 
 All (GUI):
 

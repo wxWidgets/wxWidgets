@@ -42,6 +42,8 @@ public:
 
     wxArrayString() { }
     wxArrayString(const wxArrayString& a) : wxArrayStringBase(a) { }
+    wxArrayString(size_t sz, const wxChar** a);
+    wxArrayString(size_t sz, const wxString* a);
 
     int Index(const wxChar* sz, bool bCase = true, bool bFromEnd = false) const;
 
@@ -110,6 +112,10 @@ public:
     //     of course, using explicit would be even better - if all compilers
     //     supported it...
   wxArrayString(int autoSort) { Init(autoSort != 0); }
+    // C string array ctor
+  wxArrayString(size_t sz, const wxChar** a);
+    // wxString string array ctor
+  wxArrayString(size_t sz, const wxString* a);
     // copy ctor
   wxArrayString(const wxArrayString& array);
     // assignment operator

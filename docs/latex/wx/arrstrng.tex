@@ -60,12 +60,20 @@ functions.
 
 \func{}{wxArrayString}{\void}
 
+Default constructor.
+
 \func{}{wxArrayString}{\param{const wxArrayString\&}{ array}}
 
-Default and copy constructors.
-
-Note that when an array is assigned to a sorted array, its contents is
+Copy constructor. Note that when an array is assigned to a sorted array, its contents is
 automatically sorted during construction.
+
+\func{}{wxArrayString}{\param{size\_t}{ sz}, \param{const wxChar**}{ arr}}
+
+Constructor from a C string array. Pass a size {\it sz} and array {\it arr}.
+
+\func{}{wxArrayString}{\param{size\_t}{ sz}, \param{const wxString*}{ arr}}
+
+Constructor from a wxString array. Pass a size {\it sz} and array {\it arr}.
 
 \membersection{wxArrayString::\destruct{wxArrayString}}\label{wxarraystringdtor}
 

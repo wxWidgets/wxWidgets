@@ -2032,6 +2032,24 @@ int wxString::sprintf(const wxChar *pszFormat, ...)
 
 #include "wx/arrstr.h"
 
+wxArrayString::wxArrayString(size_t sz, const wxChar** a)
+{
+#if !wxUSE_STL
+    Init(false);
+#endif
+    for (size_t i=0; i < sz; i++)
+        Add(a[i]);
+}
+
+wxArrayString::wxArrayString(size_t sz, const wxString* a)
+{
+#if !wxUSE_STL
+    Init(false);
+#endif
+    for (size_t i=0; i < sz; i++)
+        Add(a[i]);
+}
+
 #if !wxUSE_STL
 
 // size increment = min(50% of current size, ARRAY_MAXSIZE_INCREMENT)
