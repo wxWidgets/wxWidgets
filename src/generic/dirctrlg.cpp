@@ -242,7 +242,7 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
                 !CFStringGetCString(cfstr, cstr, CFStringGetLength(cfstr) + 1,
                                     kCFStringEncodingMacRoman))
             {
-                CFRelease( cstr );
+                CFRelease( cfstr );
                 continue;
             }
             wxString name( cstr , wxConvLocal );
