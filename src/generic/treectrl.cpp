@@ -1024,7 +1024,20 @@ wxImageList *wxTreeCtrl::GetStateImageList() const
 
 void wxTreeCtrl::SetImageList(wxImageList *imageList)
 {
-    m_imageListNormal = imageList;
+   m_imageListNormal = imageList;
+   // calculate a m_lineHeight value from the image sizes
+   wxPaintDC dc(this);
+   PrepareDC( dc );
+   m_lineHeight = (int)(dc.GetCharHeight() + 4);
+   int
+      width = 0,
+      height = 0,
+      n = m_imageListNormal->GetImageCount();
+   for(int i = 0; i < n ; i++)
+   {
+      m_imageListNormal->GetSize(i, width, height);
+      if(height > m_lineHeight) m_lineHeight = height;
+   }
 }
 
 void wxTreeCtrl::SetStateImageList(wxImageList *imageList)
@@ -1096,11 +1109,12 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         image_w += 4;
     }
 
-    dc.DrawRectangle( item->GetX()-2, item->GetY()-2, image_w+text_w+4, text_h+4 );
+    int total_h = (image_h > text_h) ? image_h : text_h;
+    dc.DrawRectangle( item->GetX()-2, item->GetY()-2, image_w+text_w+4, total_h+4 );
 
     if ((item->IsExpanded()) && (item->GetSelectedImage() != -1))
     {
-        dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, text_h );
+        dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, total_h );
         m_imageListNormal->Draw( item->GetSelectedImage(), dc,
                                  item->GetX(), item->GetY()-1,
                                  wxIMAGELIST_DRAW_TRANSPARENT );
@@ -1108,7 +1122,7 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     }
     else if (item->GetImage() != -1)
     {
-        dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, text_h );
+        dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, total_h );
         m_imageListNormal->Draw( item->GetImage(), dc,
                                  item->GetX(), item->GetY()-1,
                                  wxIMAGELIST_DRAW_TRANSPARENT );
@@ -1116,7 +1130,8 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     }
 
     dc.SetBackgroundMode(wxTRANSPARENT);
-    dc.DrawText( item->GetText(), image_w + item->GetX(), item->GetY() );
+    dc.DrawText( item->GetText(), image_w + item->GetX(), item->GetY()
+                 + (total_h > text_h)? (total_h - text_h)/2 : 0);
 
     // restore normal font for bold items
     if (fontOld.Ok())
@@ -1159,9 +1174,9 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
             dc.DrawLine( horizX+13, y, horizX+18, y );
 
             if (!item->IsExpanded())
-        {
+            {
                 dc.DrawLine( horizX+15, y-2, horizX+15, y+3 );
-        }
+            }
         }
 
         if (item->HasHilight())
@@ -1228,7 +1243,8 @@ void wxTreeCtrl::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT ) );
 
     dc.SetPen( m_dottedPen );
-    m_lineHeight = (int)(dc.GetCharHeight() + 4);
+    if(GetImageList() == NULL)
+       m_lineHeight = (int)(dc.GetCharHeight() + 4);
 
     int y = m_lineHeight / 2 + 2;
     PaintLevel( m_anchor, dc, 0, y );
@@ -1531,7 +1547,8 @@ void wxTreeCtrl::CalculatePositions()
     dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT ) );
 
     dc.SetPen( m_dottedPen );
-    m_lineHeight = (int)(dc.GetCharHeight() + 4);
+    if(GetImageList() == NULL)
+       m_lineHeight = (int)(dc.GetCharHeight() + 4);
 
     int y = m_lineHeight / 2 + 2;
     CalculateLevel( m_anchor, dc, 0, y ); // start recursion
