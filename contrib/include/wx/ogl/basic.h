@@ -299,8 +299,6 @@ class wxShape: public wxShapeEvtHandler
 
   void SetPen(wxPen *pen);
   void SetBrush(wxBrush *brush);
-  inline void SetClientData(wxObject *client_data) { m_clientData = client_data; };
-  inline wxObject *GetClientData() const { return m_clientData; };
 
   virtual void Show(bool show);
   virtual bool IsShown() const { return m_visible; }
@@ -519,9 +517,6 @@ class wxShape: public wxShapeEvtHandler
   wxPen GetBackgroundPen();
   wxBrush GetBackgroundBrush();
 
-
- private:
-  wxObject*             m_clientData;
 
  protected:
   wxShapeEvtHandler*    m_eventHandler;

@@ -240,25 +240,17 @@ public:
 
     // void SetClientData(wxObject *client_data);
     // wxObject *GetClientData();
-    %addmethods {
-        void SetClientData(PyObject* userData) {
-            wxPyUserData* data = NULL;
-            if (userData)
-                data = new wxPyUserData(userData);
-            self->SetClientData(data);
-        }
 
-        PyObject* GetClientData() {
-            wxPyUserData* data = (wxPyUserData*)self->GetClientData();
-            if (data) {
-                Py_INCREF(data->m_obj);
-                return data->m_obj;
-            } else {
-                Py_INCREF(Py_None);
-                return Py_None;
-            }
-        }
-    }
+    // The real client data methods are being used for OOR, so just fake it.
+    %pragma(python) addtoclass = "
+    def SetClientData(self, data):
+        self.clientData = data
+    def GetClientData(self):
+        if hasattr(self, 'clientData'):
+            return self.clientData
+        else:
+            return None
+"
 
     void Show(bool show);
     bool IsShown();

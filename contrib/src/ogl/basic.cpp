@@ -288,7 +288,6 @@ wxShape::wxShape(wxShapeCanvas *can)
   m_textColour = wxBLACK;
   m_textColourName = "BLACK";
   m_visible = FALSE;
-  m_clientData = NULL;
   m_selected = FALSE;
   m_attachmentMode = ATTACHMENT_MODE_NONE;
   m_spaceAttachments = TRUE;
@@ -337,11 +336,6 @@ wxShape::~wxShape()
 
   if (m_canvas)
     m_canvas->RemoveShape(this);
-
-  if (m_clientData) {
-      delete m_clientData;
-      m_clientData = NULL;
-  }
 
   GetEventHandler()->OnDelete();
 }
