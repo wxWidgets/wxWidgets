@@ -65,6 +65,7 @@ public:
     void PasswordEntry(wxCommandEvent& event);
     void NumericEntry(wxCommandEvent& event);
     void FileOpen(wxCommandEvent& event);
+    void FileOpen2(wxCommandEvent& event);
     void FilesOpen(wxCommandEvent& event);
     void FileSave(wxCommandEvent& event);
     void DirChoose(wxCommandEvent& event);
@@ -112,6 +113,7 @@ enum
     DIALOGS_TEXT_ENTRY,
     DIALOGS_PASSWORD_ENTRY,
     DIALOGS_FILE_OPEN,
+    DIALOGS_FILE_OPEN2,
     DIALOGS_FILES_OPEN,
     DIALOGS_FILE_SAVE,
     DIALOGS_DIR_CHOOSE,

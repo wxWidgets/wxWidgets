@@ -61,6 +61,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_NUM_ENTRY,                     MyFrame::NumericEntry)
     EVT_MENU(DIALOGS_SINGLE_CHOICE,                 MyFrame::SingleChoice)
     EVT_MENU(DIALOGS_FILE_OPEN,                     MyFrame::FileOpen)
+    EVT_MENU(DIALOGS_FILE_OPEN2,                    MyFrame::FileOpen2)
     EVT_MENU(DIALOGS_FILES_OPEN,                    MyFrame::FilesOpen)
     EVT_MENU(DIALOGS_FILE_SAVE,                     MyFrame::FileSave)
     EVT_MENU(DIALOGS_DIR_CHOOSE,                    MyFrame::DirChoose)
@@ -130,6 +131,7 @@ bool MyApp::OnInit()
   file_menu->Append(DIALOGS_TIP,  "&Tip of the day\tCtrl-T");
   file_menu->AppendSeparator();
   file_menu->Append(DIALOGS_FILE_OPEN,  "&Open file\tCtrl-O");
+  file_menu->Append(DIALOGS_FILE_OPEN2,  "&Second open file\tCtrl-2");
   file_menu->Append(DIALOGS_FILES_OPEN,  "Open &files\tCtrl-Q");
   file_menu->Append(DIALOGS_FILE_SAVE,  "Sa&ve file\tCtrl-S");
   file_menu->Append(DIALOGS_DIR_CHOOSE,  "&Choose a directory\tCtrl-D");
@@ -363,6 +365,31 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
         wxMessageDialog dialog2(this, info, "Selected file");
         dialog2.ShowModal();
     }
+}
+
+// this shows how to take advantage of specifying a default extension in the
+// call to wxFileSelector: it is remembered after each new call and the next
+// one will use it by default
+void MyFrame::FileOpen2(wxCommandEvent& WXUNUSED(event) )
+{
+    static wxString s_extDef;
+    wxString path = wxFileSelector(
+                                    _T("Select the file to load"),
+                                    _T(""), _T(""),
+                                    s_extDef,
+                                    _T("Waveform (*.wav)|*.wav|Plain text (*.txt)|*.txt|All files (*.*)|*.*"),
+                                    0,
+                                    this
+                                   );
+
+    if ( !path )
+        return;
+
+    // it is just a sample, would use wxSplitPath in real program
+    s_extDef = path.AfterLast(_T('.'));
+
+    wxLogMessage(_T("You selected the file '%s', remembered extension '%s'"),
+                 path, s_extDef);
 }
 
 void MyFrame::FilesOpen(wxCommandEvent& WXUNUSED(event) )
