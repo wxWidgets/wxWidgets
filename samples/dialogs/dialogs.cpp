@@ -253,8 +253,8 @@ void MyFrame::NumericEntry(wxCommandEvent& WXUNUSED(event) )
         icon = wxICON_HAND;
     }
     else
-    {
-        msg.Printf(_T("You've entered %lu"), res);
+    {            
+	msg.Printf(_T("You've entered %lu"), res );
         icon = wxICON_INFORMATION;
     }
 
