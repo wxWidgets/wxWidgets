@@ -12,6 +12,8 @@
 #include "wx/app.h"
 #include "wx/radiobox.h"
 
+#import <AppKit/NSView.h>
+
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
 BEGIN_EVENT_TABLE(wxRadioBox, wxControl)
 END_EVENT_TABLE()
@@ -28,7 +30,8 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID winid,
 {
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
-    m_cocoaNSView = NULL;
+    SetNSView([[NSView alloc] initWithFrame: NSMakeRect(10,10,20,20)]);
+    [m_cocoaNSView release];
     if(m_parent)
         m_parent->CocoaAddChild(this);
     return true;
@@ -37,6 +40,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID winid,
 wxRadioBox::~wxRadioBox()
 {
     CocoaRemoveFromParent();
+    SetNSView(NULL);
 }
 
     // selection
