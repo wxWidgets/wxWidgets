@@ -24,6 +24,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_LISTBOX
+
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -43,7 +45,7 @@
 #include "wx/checklst.h"
 
 #include "widgets.h"
-#if 1
+
 #include "icons/listbox.xpm"
 
 // ----------------------------------------------------------------------------
@@ -517,4 +519,4 @@ void ListboxWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
     CreateLbox();
 }
 
-#endif
+#endif // wxUSE_LISTBOX

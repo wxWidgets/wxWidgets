@@ -28,7 +28,7 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_OWNER_DRAWN
+#if wxUSE_CHECKLISTBOX && wxUSE_OWNER_DRAWN
 
 #ifndef WX_PRECOMP
     #include "wx/object.h"
