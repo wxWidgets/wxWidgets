@@ -84,7 +84,7 @@ public:
 #endif
     wxVariant(char val, const wxString& name = g_szNul);
     wxVariant(const wxString& val, const wxString& name = g_szNul);
-    wxVariant(const char* val, const wxString& name = g_szNul); // Necessary or VC++ assumes bool!
+    wxVariant(const wxChar* val, const wxString& name = g_szNul); // Necessary or VC++ assumes bool!
     wxVariant(const wxStringList& val, const wxString& name = g_szNul);
     wxVariant(const wxList& val, const wxString& name = g_szNul); // List of variants
 #if wxUSE_TIMEDATE
@@ -124,7 +124,7 @@ public:
     bool operator== (const wxString& value) const;
     bool operator!= (const wxString& value) const;
     void operator= (const wxString& value) ;
-    void operator= (const char* value) ; // Necessary or VC++ assumes bool!
+    void operator= (const wxChar* value) ; // Necessary or VC++ assumes bool!
     bool operator== (const wxStringList& value) const;
     bool operator!= (const wxStringList& value) const;
     void operator= (const wxStringList& value) ;

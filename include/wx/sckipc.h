@@ -73,17 +73,17 @@ public:
   virtual ~wxTCPConnection();
 
   // Calls that CLIENT can make
-  bool Execute(char *data, int size = -1,
+  bool Execute(wxChar *data, int size = -1,
                wxIPCFormat format = wxIPC_TEXT);
   char *Request(const wxString& item, int *size = NULL,
                 wxIPCFormat format = wxIPC_TEXT);
-  bool Poke(const wxString& item, char *data, int size = -1,
+  bool Poke(const wxString& item, wxChar *data, int size = -1,
             wxIPCFormat format = wxIPC_TEXT);
   bool StartAdvise(const wxString& item);
   bool StopAdvise(const wxString& item);
 
   // Calls that SERVER can make
-  bool Advise(const wxString& item, char *data, int size = -1,
+  bool Advise(const wxString& item, wxChar *data, int size = -1,
               wxIPCFormat format = wxIPC_TEXT);
 
   // Calls that both can make

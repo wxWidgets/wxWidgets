@@ -69,8 +69,8 @@ class WXDLLEXPORT wxConnectionBase: public wxObject
   // Callbacks to SERVER - override at will
   virtual bool OnExecute( const wxString& WXUNUSED(topic), char *WXUNUSED(data), int WXUNUSED(size), 
                           int WXUNUSED(format) ) { return FALSE; };
-  virtual wxChar *OnRequest( const wxString& WXUNUSED(topic), const wxString& WXUNUSED(item), 
-			     int *WXUNUSED(size), int WXUNUSED(format) ) { return (wxChar *) NULL; };
+  virtual char *OnRequest( const wxString& WXUNUSED(topic), const wxString& WXUNUSED(item), 
+			     int *WXUNUSED(size), int WXUNUSED(format) ) { return (char *) NULL; };
   virtual bool OnPoke( const wxString& WXUNUSED(topic), const wxString& WXUNUSED(item), wxChar *WXUNUSED(data), 
 		       int WXUNUSED(size), int WXUNUSED(format) ) { return FALSE; };
   virtual bool OnStartAdvise( const wxString& WXUNUSED(topic), const wxString& WXUNUSED(item) ) 
@@ -79,7 +79,7 @@ class WXDLLEXPORT wxConnectionBase: public wxObject
                              { return FALSE; };
 
   // Callbacks to CLIENT - override at will
-  virtual bool OnAdvise( const wxString& WXUNUSED(topic), const wxString& WXUNUSED(item), wxChar *WXUNUSED(data), 
+  virtual bool OnAdvise( const wxString& WXUNUSED(topic), const wxString& WXUNUSED(item), char *WXUNUSED(data), 
 			 int WXUNUSED(size), int WXUNUSED(format) ) { return FALSE; };
 
   // Callbacks to BOTH
