@@ -454,7 +454,7 @@ bool wxIsDragResultOk(wxDragResult res);
 %{
 class wxPyDropSource : public wxDropSource {
 public:
-#ifdef __WXMSW__
+#ifndef __WXGTK__
      wxPyDropSource(wxWindow *win = NULL,
                     const wxCursor &copy = wxNullCursor,
                     const wxCursor &move = wxNullCursor,
@@ -480,7 +480,7 @@ IMP_PYCALLBACK_BOOL_DR(wxPyDropSource, wxDropSource, GiveFeedback);
 
 %name(wxDropSource) class wxPyDropSource {
 public:
-#ifdef __WXMSW__
+#ifndef __WXGTK__
      wxPyDropSource(wxWindow *win = NULL,
                     const wxCursor &copy = wxNullCursor,
                     const wxCursor &move = wxNullCursor,
