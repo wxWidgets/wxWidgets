@@ -130,6 +130,7 @@ class wxApp: public wxEvtHandler
     wxWindow       *m_topWindow;
     
     gint            m_idleTag;
+    gint            m_wakeUpTimerTag;
     unsigned char  *m_colorCube;
 
     int             argc;

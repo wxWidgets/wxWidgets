@@ -140,9 +140,9 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) );
 
 bool wxYield()
 {
-    // it's necessary to call ProcessIdle() to update the frames sizes which
-    // might have been changed (it also will update other things set from
-    // OnUpdateUI() which is a nice (and desired) side effect)
+    /* it's necessary to call ProcessIdle() to update the frames sizes which
+       might have been changed (it also will update other things set from
+       OnUpdateUI() which is a nice (and desired) side effect) */
     for ( wxWindowList::Node *node = wxTopLevelWindows.GetFirst();
           node;
           node = node->GetNext() )
@@ -177,6 +177,11 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 {
     if (!wxTheApp) return TRUE;
     
+    /* when getting called from GDK's idle handler we
+       are no longer within GDK's grab on the GUI
+       thread so we must lock it here ourselves */
+    GDK_THREADS_ENTER ();
+    
     /* sent idle event to all who request them */
     while (wxTheApp->ProcessIdle()) { }
     
@@ -192,23 +197,50 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) )
        emptied */
     g_isIdle = TRUE;
     
-    /* wake up other threads */
-
-    wxMutexGuiLeave();
-    wxUsleep(0);
-    wxMutexGuiEnter();
+    /* release lock again */
+    GDK_THREADS_LEAVE ();
 
     return TRUE;
 }
 
 void wxapp_install_idle_handler()
 {
+    wxASSERT_MSG( wxTheApp->m_idleTag == 0, "attempt to install idle handler twice" );
+
     /* this routine gets called by all event handlers
        indicating that the idle is over. */
 
     wxTheApp->m_idleTag = gtk_idle_add( wxapp_idle_callback, (gpointer) NULL );
     
     g_isIdle = FALSE;
+}
+
+
+static gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
+{
+    gtk_timeout_remove( wxTheApp->m_wakeUpTimerTag );
+    wxTheApp->m_wakeUpTimerTag = 0;
+    
+    /* when getting called from GDK's time-out handler 
+       we are no longer within GDK's grab on the GUI
+       thread so we must lock it here ourselves */
+    GDK_THREADS_ENTER ();
+    
+    /* unblock other threads wishing to do some GUI things */
+    wxMutexGuiLeave();
+    
+    /* wake up other threads */
+    wxUsleep( 1 );
+    
+    /* block other thread again  */
+    wxMutexGuiEnter();
+    
+    /* release lock again */
+    GDK_THREADS_LEAVE ();
+    
+    wxTheApp->m_wakeUpTimerTag = gtk_timeout_add( 10, wxapp_wakeup_timerout_callback, (gpointer) NULL );
+    
+    return TRUE;
 }
 
 //-----------------------------------------------------------------------------
@@ -229,6 +261,8 @@ wxApp::wxApp()
     m_exitOnFrameDelete = TRUE;
 
     m_idleTag = gtk_idle_add( wxapp_idle_callback, (gpointer) NULL );
+    
+    m_wakeUpTimerTag = gtk_timeout_add( 10, wxapp_wakeup_timerout_callback, (gpointer) NULL );
 
     m_colorCube = (unsigned char*) NULL;
 }
@@ -237,6 +271,8 @@ wxApp::~wxApp()
 {
     if (m_idleTag) gtk_idle_remove( m_idleTag );
 
+    if (m_wakeUpTimerTag) gtk_timeout_remove( m_wakeUpTimerTag );
+    
     if (m_colorCube) free(m_colorCube);
 }
 

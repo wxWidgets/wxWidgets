@@ -47,10 +47,6 @@
     #include <sched.h>
 #endif
 
-#ifdef __WXGTK12__
-#include "gtk/gtk.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -85,10 +81,8 @@ static pthread_t gs_tidMain;
 // the key for the pointer to the associated wxThread object
 static pthread_key_t gs_keySelf;
 
-#ifndef __WXGTK12__
 // this mutex must be acquired before any call to a GUI function
 static wxMutex *gs_mutexGui;
-#endif
 
 // ============================================================================
 // implementation
@@ -818,15 +812,11 @@ bool wxThreadModule::OnInit()
         return FALSE;
     }
 
-#ifndef __WXGTK12__
     gs_mutexGui = new wxMutex();
-#endif
 
     gs_tidMain = pthread_self();
 
-#ifndef __WXGTK12__
     gs_mutexGui->Lock();
-#endif
 
     return TRUE;
 }
@@ -845,12 +835,10 @@ void wxThreadModule::OnExit()
         gs_allThreads[n]->Delete();
     }
 
-#ifndef __WXGTK12__
     // destroy GUI mutex
     gs_mutexGui->Unlock();
 
     delete gs_mutexGui;
-#endif
 
     // and free TLD slot
     (void)pthread_key_delete(gs_keySelf);
@@ -862,20 +850,12 @@ void wxThreadModule::OnExit()
 
 void wxMutexGuiEnter()
 {
-#ifdef __WXGTK12__
-  gdk_threads_enter();
-#else
   gs_mutexGui->Lock();
-#endif
 }
 
 void wxMutexGuiLeave()
 {
-#ifdef __WXGTK12__
-  gdk_threads_leave();
-#else
   gs_mutexGui->Unlock();
-#endif
 }
 
 #endif

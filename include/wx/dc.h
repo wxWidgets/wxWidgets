@@ -110,7 +110,7 @@ public:
         { DoDrawArc(pt1.x, pt1.y, pt2.x, pt2.y, centre.x, centre.y); }
 
     void DrawEllipticArc(long x, long y, long w, long h, double sa, double ea)
-        { DoDrawEllipticArc(x, y, x, y, sa, ea); }
+        { DoDrawEllipticArc(x, y, w, h, sa, ea); }
     void DrawEllipticArc(const wxPoint& pt, const wxSize& sz,
                          double sa, double ea)
         { DoDrawEllipticArc(pt.x, pt.y, sz.x, sz.y, sa, ea); }

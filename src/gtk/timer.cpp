@@ -67,7 +67,7 @@ long wxGetCurrentTime()
 
 IMPLEMENT_ABSTRACT_CLASS(wxTimer,wxObject)
 
-gint timeout_callback( gpointer data )
+static gint timeout_callback( gpointer data )
 {
     wxTimer *timer = (wxTimer*)data;
     timer->Notify();
