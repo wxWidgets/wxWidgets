@@ -135,6 +135,9 @@ class wxHtmlParserPtr(wxObjectPtr):
     def DoParsing(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlParser_DoParsing,(self,) + _args, _kwargs)
         return val
+    def StopParsing(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlParser_StopParsing,(self,) + _args, _kwargs)
+        return val
     def AddTagHandler(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlParser_AddTagHandler,(self,) + _args, _kwargs)
         return val

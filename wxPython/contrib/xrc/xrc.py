@@ -59,10 +59,6 @@ class wxXmlResourcePtr(wxObjectPtr):
     def __del__(self,xrcc=xrcc):
         if self.thisown == 1 :
             xrcc.delete_wxXmlResource(self)
-    def GetFirstRoot(self, *_args, **_kwargs):
-        val = apply(xrcc.wxXmlResource_GetFirstRoot,(self,) + _args, _kwargs)
-        if val: val = wxXmlNodePtr(val) 
-        return val
     def Load(self, *_args, **_kwargs):
         val = apply(xrcc.wxXmlResource_Load,(self,) + _args, _kwargs)
         return val
