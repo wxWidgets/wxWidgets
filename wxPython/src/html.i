@@ -199,8 +199,12 @@ public:
         }
     }
 
-    // Sets font sizes to be relative to the given size or the system default size
-    void NormalizeFontSizes(int size=-1);
+    // Sets font sizes to be relative to the given size or the system
+    // default size; use either specified or default font
+    void SetStandardFonts(int size = -1,
+                          const wxString& normal_face = wxPyEmptyString,
+                          const wxString& fixed_face = wxPyEmptyString);
+     
     
     wxHtmlContainerCell* GetContainer();
     wxHtmlContainerCell* OpenContainer();
@@ -868,8 +872,11 @@ public:
         }
     }
 
-    // Sets font sizes to be relative to the given size or the system default size
-    void NormalizeFontSizes(int size=-1);
+    // Sets font sizes to be relative to the given size or the system
+    // default size; use either specified or default font
+    void SetStandardFonts(int size = -1,
+                          const wxString& normal_face = wxPyEmptyString,
+                          const wxString& fixed_face = wxPyEmptyString);
     
     DocDeclStr(
         void, SetTitle(const wxString& title),
@@ -959,8 +966,11 @@ public:
         }
     }
 
-    // Sets font sizes to be relative to the given size or the system default size
-    void NormalizeFontSizes(int size=-1);
+    // Sets font sizes to be relative to the given size or the system
+    // default size; use either specified or default font
+    void SetStandardFonts(int size = -1,
+                          const wxString& normal_face = wxPyEmptyString,
+                          const wxString& fixed_face = wxPyEmptyString);
     
     int Render(int x, int y, int from = 0, int dont_render = false, int to = INT_MAX,
                //int *known_pagebreaks = NULL, int number_of_pages = 0
@@ -1004,8 +1014,11 @@ public:
         }
     }
 
-    // Sets font sizes to be relative to the given size or the system default size
-    void NormalizeFontSizes(int size=-1);
+    // Sets font sizes to be relative to the given size or the system
+    // default size; use either specified or default font
+    void SetStandardFonts(int size = -1,
+                          const wxString& normal_face = wxPyEmptyString,
+                          const wxString& fixed_face = wxPyEmptyString);
     
     void SetMargins(float top = 25.2, float bottom = 25.2,
                     float left = 25.2, float right = 25.2,
@@ -1047,8 +1060,11 @@ public:
         }
     }
 
-    // Sets font sizes to be relative to the given size or the system default size
-    void NormalizeFontSizes(int size=-1);
+    // Sets font sizes to be relative to the given size or the system
+    // default size; use either specified or default font
+    void SetStandardFonts(int size = -1,
+                          const wxString& normal_face = wxPyEmptyString,
+                          const wxString& fixed_face = wxPyEmptyString);
     
     wxPrintData *GetPrintData() {return m_PrintData;}
     wxPageSetupDialogData *GetPageSetupData() {return m_PageSetupData;}

@@ -1122,7 +1122,7 @@ class wxPythonDemo(wx.Frame):
             panel.Bind(wx.EVT_ERASE_BACKGROUND, EmptyHandler)
 
         if "gtk2" in wx.PlatformInfo:
-            self.ovr.NormalizeFontSizes()
+            self.ovr.SetStandardFonts()
         self.SetOverview(self.overviewText, mainOverview)
 
 

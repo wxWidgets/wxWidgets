@@ -18,7 +18,7 @@ class MyHtmlWindow(html.HtmlWindow):
         self.log = log
         self.Bind(wx.EVT_SCROLLWIN, self.OnScroll )
         if "gtk2" in wx.PlatformInfo:
-            self.NormalizeFontSizes()
+            self.SetStandardFonts()
 
     def OnScroll( self, event ):
         #print 'event.GetOrientation()',event.GetOrientation()
