@@ -913,17 +913,17 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
     fd_set exceptfds;
     struct timeval tv;
 
+    assert(socket != NULL);
+
     /* Do not use a static struct, Linux can garble it */
     tv.tv_sec = socket->m_timeout / 1000;
     tv.tv_usec = (socket->m_timeout % 1000) / 1000;
-
-    assert(socket != NULL);
 
     FD_ZERO(&readfds);
     FD_ZERO(&writefds);
     FD_ZERO(&exceptfds);
     FD_SET(socket->m_fd, &readfds);
-    if (flags & GSOCK_OUTPUT_FLAG)
+    if (flags & GSOCK_OUTPUT_FLAG || flags & GSOCK_CONNECTION_FLAG)
       FD_SET(socket->m_fd, &writefds);
     FD_SET(socket->m_fd, &exceptfds);
 

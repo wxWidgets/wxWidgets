@@ -780,7 +780,7 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
     FD_ZERO(&writefds);
     FD_ZERO(&exceptfds);
     FD_SET(socket->m_fd, &readfds);
-	if (flags & GSOCK_OUTPUT_FLAG)
+	if (flags & GSOCK_OUTPUT_FLAG || flags & GSOCK_CONNECTION_FLAG)
       FD_SET(socket->m_fd, &writefds);
     FD_SET(socket->m_fd, &exceptfds);
 
