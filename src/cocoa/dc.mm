@@ -28,6 +28,7 @@
 #import <AppKit/NSTypesetter.h>
 #import <AppKit/NSImage.h>
 
+#include "wx/math.h" //math constants
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxCocoaDCStack);
 
@@ -364,17 +365,6 @@ int wxDCBase::LogicalToDeviceYRel(int y) const
 ///////////////////////////////////////////////////////////////////////////
 // cut here, the rest is stubs
 ///////////////////////////////////////////////////////////////////////////
-
-//-----------------------------------------------------------------------------
-// constants
-//-----------------------------------------------------------------------------
-
-#define mm2inches		0.0393700787402
-#define inches2mm		25.4
-#define mm2twips		56.6929133859
-#define twips2mm		0.0176388888889
-#define mm2pt			2.83464566929
-#define pt2mm			0.352777777778
 
 //-----------------------------------------------------------------------------
 // wxDC
