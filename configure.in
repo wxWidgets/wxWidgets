@@ -1631,7 +1631,7 @@ if test "$wxUSE_MOTIF" = 1; then
         AC_MSG_WARN(library will be compiled without support for images in XPM format)
     fi
 
-    GUI_TK_LINK="-lXm $XPM_LINK -lXmu -lXt -lX11 -lm"
+    GUI_TK_LINK="-lXm $XPM_LINK -lXmu -lXext -lXt -lX11 -lm"
     GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
     TOOLKIT=MOTIF
 
@@ -1948,10 +1948,32 @@ AC_CHECK_FUNCS(uname gethostname, break)
 dnl check for MT-safe version of strtok
 AC_CHECK_FUNCS(strtok_r)
 
-dnl check for inet_addr, inet_aton, ...
-AC_CHECK_FUNCS(inet_addr)
-AC_CHECK_FUNCS(inet_aton)
-AC_CHECK_LIB(resolv, inet_aton)
+dnl check for inet_addr and inet_aton (these may live either in libc, or in
+dnl libnsl or libresolv)
+INET_LINK=
+AC_CHECK_FUNCS(inet_addr,
+    AC_DEFINE(HAVE_INET_ADDR),
+    [
+        AC_CHECK_LIB(nsl, inet_addr,
+            INET_LINK="nsl",          
+            AC_CHECK_LIB(resolv, inet_addr,
+                INET_LINK="resolv"
+            )
+        )
+    ]
+)
+
+AC_CHECK_FUNCS(inet_aton,
+        AC_DEFINE(HAVE_INET_ATON),
+        [
+            dnl only check it in the same lib
+            AC_CHECK_LIB($INET_LINK, inet_aton, AC_DEFINE(HAVE_INET_ATON))
+        ])
+
+if test "x$INET_LINK" != "x"; then
+    AC_DEFINE(HAVE_INET_ADDR)
+    INET_LINK="-l$INET_LINK"
+fi
 
 fi
 dnl Unix
@@ -2376,6 +2398,13 @@ if test "$wxUSE_SOCKETS" = "yes"; then
         )
     )
     AC_LANG_RESTORE
+
+    dnl under Solaris, socket functions live in -lsocket
+    AC_CHECK_FUNC(socket,,
+        AC_CHECK_LIB(socket, socket,
+            INET_LINK="$INET_LINK -lsocket"
+        )
+    )
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -2812,7 +2841,7 @@ dnl ---------------------------------------------------------------------------
 GUILIBS="$GUI_TK_LIBRARY $OPENGL_LINK $LIBPNG_LINK $ZLIB_LINK $TOOLKIT_LINK"
 
 dnl all additional libraries (except wxWindows itself) we link with
-EXTRA_LIBS="$LIBS $POSIX4_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK"
+EXTRA_LIBS="$LIBS $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK"
 if test "$wxUSE_GUI" = "yes"; then
     EXTRA_LIBS="$EXTRA_LIBS $GUILIBS"
 fi
