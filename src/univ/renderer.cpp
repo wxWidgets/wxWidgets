@@ -429,10 +429,6 @@ void wxControlRenderer::DrawLabel(const wxBitmap& bitmap,
         if ( bitmap.Ok() )
         {
             rectLabel.Inflate(-marginX, -marginY);
-            
-            // I don't know why this is necessary. RR.
-            rectLabel.x ++;
-            rectLabel.y ++;
         }
 
         wxControl *ctrl = wxStaticCast(m_window, wxControl);

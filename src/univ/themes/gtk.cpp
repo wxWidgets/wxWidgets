@@ -1610,6 +1610,10 @@ void wxGTKRenderer::DrawRadioButton(wxDC& dc,
         dc.SetBackground(*wxLIGHT_GREY_BRUSH);
         dc.Clear();
         DrawRadioBitmap(dc, rect, flags);
+
+        // must unselect the bitmap before setting a mask for it because of the
+        // MSW limitations
+        dc.SelectObject(wxNullBitmap);
         bitmap.SetMask(new wxMask(bitmap, *wxLIGHT_GREY));
     }
 

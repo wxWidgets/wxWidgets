@@ -1737,8 +1737,7 @@ void wxWin32Renderer::DrawHalfRect(wxDC& dc, wxRect *rect, const wxPen& pen)
                 rect->GetRight(), rect->GetBottom());
 
     // adjust the rect
-    rect->width--;
-    rect->height--;
+    rect->Inflate(-1);
 }
 
 void wxWin32Renderer::DrawShadedRect(wxDC& dc, wxRect *rect,
