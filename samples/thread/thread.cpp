@@ -726,6 +726,7 @@ void MyFrame::OnStartWorker(wxCommandEvent& WXUNUSED(event))
     if ( thread->Create() != wxTHREAD_NO_ERROR )
     {
         wxLogError(wxT("Can't create thread!"));
+        return;
     }
 
     m_dlgProgress = new wxProgressDialog
