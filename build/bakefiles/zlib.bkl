@@ -18,6 +18,9 @@
          cond="wxUSE_ZLIB=='builtin' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <cflags-borland>-w-8004 -w-8012 -w-8057</cflags-borland> 
+        <if cond="FORMAT=='msevc4prj'">
+            <define>NO_ERRNO_H</define>
+        </if>
         <sources>
             src/zlib/adler32.c
             src/zlib/compress.c
