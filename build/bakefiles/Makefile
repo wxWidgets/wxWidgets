@@ -46,6 +46,7 @@ AUTOCONF_ALL = \
 	../../contrib/src/svg/Makefile.in \
 	../../contrib/src/xrc/Makefile.in \
 	../../contrib/utils/wxrc/Makefile.in \
+	../../demos/Makefile.in \
 	../../demos/bombs/Makefile.in \
 	../../demos/dbbrowse/Makefile.in \
 	../../demos/forty/Makefile.in \
@@ -173,6 +174,7 @@ BORLAND_ALL = \
 	../../demos/forty/makefile.bcc \
 	../../demos/fractal/makefile.bcc \
 	../../demos/life/makefile.bcc \
+	../../demos/makefile.bcc \
 	../../demos/poem/makefile.bcc \
 	../../samples/access/makefile.bcc \
 	../../samples/artprov/makefile.bcc \
@@ -297,6 +299,7 @@ MINGW_ALL = \
 	../../demos/forty/makefile.gcc \
 	../../demos/fractal/makefile.gcc \
 	../../demos/life/makefile.gcc \
+	../../demos/makefile.gcc \
 	../../demos/poem/makefile.gcc \
 	../../samples/access/makefile.gcc \
 	../../samples/artprov/makefile.gcc \
@@ -421,6 +424,7 @@ MSVC_ALL = \
 	../../demos/forty/makefile.vc \
 	../../demos/fractal/makefile.vc \
 	../../demos/life/makefile.vc \
+	../../demos/makefile.vc \
 	../../demos/poem/makefile.vc \
 	../../samples/access/makefile.vc \
 	../../samples/artprov/makefile.vc \
@@ -666,6 +670,7 @@ WATCOM_ALL = \
 	../../demos/forty/makefile.wat \
 	../../demos/fractal/makefile.wat \
 	../../demos/life/makefile.wat \
+	../../demos/makefile.wat \
 	../../demos/poem/makefile.wat \
 	../../samples/access/makefile.wat \
 	../../samples/artprov/makefile.wat \
@@ -798,6 +803,7 @@ clean:
 	rm -f ../../contrib/src/svg/Makefile.in
 	rm -f ../../contrib/src/xrc/Makefile.in
 	rm -f ../../contrib/utils/wxrc/Makefile.in
+	rm -f ../../demos/Makefile.in
 	rm -f ../../demos/bombs/Makefile.in
 	rm -f ../../demos/dbbrowse/Makefile.in
 	rm -f ../../demos/forty/Makefile.in
@@ -924,6 +930,7 @@ clean:
 	rm -f ../../demos/forty/makefile.bcc
 	rm -f ../../demos/fractal/makefile.bcc
 	rm -f ../../demos/life/makefile.bcc
+	rm -f ../../demos/makefile.bcc
 	rm -f ../../demos/poem/makefile.bcc
 	rm -f ../../samples/access/makefile.bcc
 	rm -f ../../samples/artprov/makefile.bcc
@@ -1047,6 +1054,7 @@ clean:
 	rm -f ../../demos/forty/makefile.gcc
 	rm -f ../../demos/fractal/makefile.gcc
 	rm -f ../../demos/life/makefile.gcc
+	rm -f ../../demos/makefile.gcc
 	rm -f ../../demos/poem/makefile.gcc
 	rm -f ../../samples/access/makefile.gcc
 	rm -f ../../samples/artprov/makefile.gcc
@@ -1170,6 +1178,7 @@ clean:
 	rm -f ../../demos/forty/makefile.vc
 	rm -f ../../demos/fractal/makefile.vc
 	rm -f ../../demos/life/makefile.vc
+	rm -f ../../demos/makefile.vc
 	rm -f ../../demos/poem/makefile.vc
 	rm -f ../../samples/access/makefile.vc
 	rm -f ../../samples/artprov/makefile.vc
@@ -1413,6 +1422,7 @@ clean:
 	rm -f ../../demos/forty/makefile.wat
 	rm -f ../../demos/fractal/makefile.wat
 	rm -f ../../demos/life/makefile.wat
+	rm -f ../../demos/makefile.wat
 	rm -f ../../demos/poem/makefile.wat
 	rm -f ../../samples/access/makefile.wat
 	rm -f ../../samples/artprov/makefile.wat
@@ -2164,6 +2174,23 @@ Makefile: regenMakefile.py
 	touch $@
 ../../demos/dbbrowse/dbbrowse.dsw: $(SDEPS) ../../demos/dbbrowse/dbbrowse.bkl
 	$(BAKEFILE) -fmsvc6prj -o$@  -DWXTOPDIR=../../ $(DSWFLAGS) ../../demos/dbbrowse/dbbrowse.bkl
+	touch $@
+
+
+../../demos/Makefile.in: ../../demos/demos.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../demos/demos.bkl
+	touch $@
+../../demos/makefile.bcc: ../../demos/demos.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../build/msw/config.bcc -DWRITE_OPTIONS_FILE=0 ../../demos/demos.bkl
+	touch $@
+../../demos/makefile.vc: ../../demos/demos.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../build/msw/config.vc -DWRITE_OPTIONS_FILE=0 ../../demos/demos.bkl
+	touch $@
+../../demos/makefile.gcc: ../../demos/demos.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../build/msw/config.gcc -DWRITE_OPTIONS_FILE=0 ../../demos/demos.bkl
+	touch $@
+../../demos/makefile.wat: ../../demos/demos.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../build/msw/config.wat -DWRITE_OPTIONS_FILE=0 ../../demos/demos.bkl
 	touch $@
 
 

@@ -13,6 +13,7 @@ import string, os.path, copy
 DONT_GENERATE = [
     '../../samples/Makefile.in',
     '../../samples/samples.dsw',
+    '../../demos/demos.dsw',
     '../../samples/html/html_samples.dsw',
     '../../samples/opengl/opengl_samples.dsw',
 ]
@@ -108,7 +109,14 @@ addMakefile('../../samples/samples.bkl', {'all':'../../samples'},
             'msvc':'-DOPTIONS_FILE=../build/msw/config.vc -DWRITE_OPTIONS_FILE=0',
             'mingw':'-DOPTIONS_FILE=../build/msw/config.gcc -DWRITE_OPTIONS_FILE=0',
             'watcom':'-DOPTIONS_FILE=../build/msw/config.wat -DWRITE_OPTIONS_FILE=0',
-            'msvc6prj':None,
+            })
+addMakefile('../../demos/demos.bkl', {'all':'../../demos'},
+            args={
+            'autoconf':'-DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4',
+            'borland':'-DOPTIONS_FILE=../build/msw/config.bcc -DWRITE_OPTIONS_FILE=0',
+            'msvc':'-DOPTIONS_FILE=../build/msw/config.vc -DWRITE_OPTIONS_FILE=0',
+            'mingw':'-DOPTIONS_FILE=../build/msw/config.gcc -DWRITE_OPTIONS_FILE=0',
+            'watcom':'-DOPTIONS_FILE=../build/msw/config.wat -DWRITE_OPTIONS_FILE=0',
             })
 
 
