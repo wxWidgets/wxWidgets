@@ -185,13 +185,14 @@ bool wxHtmlTag::HasParam(const wxString& par) const
 {
     const wxChar *st = m_Params, *p = par;
     const wxChar *st2, *p2;
+    const wxChar invalid = wxT(1);
 
     if (*st == 0) return FALSE;
     if (*p == 0) return FALSE;
     for (st2 = st, p2 = p; ; st2++) {
         if (*p2 == 0) return TRUE;
         if (*st2 == 0) return FALSE;
-        if (*p2 != *st2) p2 = p;
+        if (*p2 != *st2) p2 = &invalid;
         if (*p2 == *st2) p2++;
         if (*st2 == ' ') p2 = p;
         else if (*st2 == '=') {
@@ -214,6 +215,7 @@ wxString wxHtmlTag::GetParam(const wxString& par, bool with_commas) const
 {
     const wxChar *st = m_Params, *p = par;
     const wxChar *st2, *p2;
+    const wxChar invalid = wxT(1);
     bool comma;
     char comma_char;
 
@@ -244,7 +246,7 @@ wxString wxHtmlTag::GetParam(const wxString& par, bool with_commas) const
             return fnd;
         }
         if (*st2 == 0) return "";
-        if (*p2 != *st2) p2 = p;
+        if (*p2 != *st2) p2 = &invalid;
         if (*p2 == *st2) p2++;
         if (*st2 == ' ') p2 = p;
         else if (*st2 == '=') {
