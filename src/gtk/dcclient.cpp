@@ -1422,13 +1422,19 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     x = XLOG2DEV(x);
     y = YLOG2DEV(y);
 
-#if defined(__WXGTK20__) && wxUSE_WCHAR_T
+#if defined(__WXGTK20__)
     // TODO: the layout engine should be abstracted at a higher level!
     PangoLayout *layout = pango_layout_new(m_context);
     pango_layout_set_font_description(layout, m_fontdesc);
     {
+#if wxUSE_UNICODE
         const wxCharBuffer data = wxConvUTF8.cWC2MB( text );
         pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
+#else
+        const wxWCharBuffer wdata = wxConvLocal.cMB2WC( text );
+        const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
+        pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
+#endif
     }
     PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
     PangoRectangle rect;
@@ -1459,7 +1465,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     }
 #endif // GTK+ 2.0/1.x
 
-#if defined(__WXGTK20__) && wxUSE_WCHAR_T
+#if defined(__WXGTK20__)
     g_object_unref( G_OBJECT( layout ) );
 #endif
 
@@ -1599,10 +1605,14 @@ void wxWindowDC::DoGetTextExtent(const wxString &string,
     PangoFontDescription *desc = fontToUse.GetNativeFontInfo()->description;
     PangoLayout *layout = pango_layout_new(m_context);
     pango_layout_set_font_description(layout, desc);
-    {
+#if wxUSE_UNICODE
         const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
         pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
-    }
+#else
+        const wxWCharBuffer wdata = wxConvLocal.cMB2WC( string );
+        const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
+        pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
+#endif
     PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
  
     PangoRectangle rect;

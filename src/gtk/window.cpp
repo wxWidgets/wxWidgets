@@ -3175,8 +3175,14 @@ void wxWindowGTK::GetTextExtent( const wxString& string,
     PangoLayout *layout = pango_layout_new(context);
     pango_layout_set_font_description(layout, desc);
     {
+#if wxUSE_UNICODE
         const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
         pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
+#else
+        const wxWCharBuffer wdata = wxConvLocal.cMB2WC( string );
+        const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
+        pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
+#endif
     }
     PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
  
