@@ -771,7 +771,7 @@ class Editor(wx.ScrolledWindow):
     def MoveLeft(self, event):
         if self.cx == 0:
             if self.cy == 0:
-                wxBell()
+                wx.Bell()
             else:
                 self.cVert(-1)
                 self.cx = self.CurrentLineLength()
@@ -782,7 +782,7 @@ class Editor(wx.ScrolledWindow):
         linelen = self.CurrentLineLength()
         if self.cx == linelen:
             if self.cy == len(self.lines) - 1:
-                wxBell()
+                wx.Bell()
             else:
                 self.cx = 0
                 self.cVert(1)
