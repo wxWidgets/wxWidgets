@@ -23,8 +23,8 @@
     #include "wx/sashwin.h"
 #endif // wxUSE_SASH
 
-const wxEventType wxEVT_QUERY_LAYOUT_INFO =     wxEVT_FIRST + 1500;
-const wxEventType wxEVT_CALCULATE_LAYOUT =      wxEVT_FIRST + 1501;
+extern const int wxEVT_QUERY_LAYOUT_INFO;
+extern const int wxEVT_CALCULATE_LAYOUT;
 
 enum wxLayoutOrientation
 {
@@ -100,7 +100,8 @@ protected:
 
 typedef void (wxEvtHandler::*wxQueryLayoutInfoEventFunction)(wxQueryLayoutInfoEvent&);
 
-#define EVT_QUERY_LAYOUT_INFO(func)  { wxEVT_QUERY_LAYOUT_INFO, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxQueryLayoutInfoEventFunction) & func, NULL },
+#define EVT_QUERY_LAYOUT_INFO(func) \
+    wxEventTableEntry( wxEVT_QUERY_LAYOUT_INFO, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxQueryLayoutInfoEventFunction) & func, NULL ),
 
 /*
  * This event is used to take a bite out of the available client area.
@@ -130,7 +131,8 @@ protected:
 
 typedef void (wxEvtHandler::*wxCalculateLayoutEventFunction)(wxCalculateLayoutEvent&);
 
-#define EVT_CALCULATE_LAYOUT(func)  { wxEVT_CALCULATE_LAYOUT, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCalculateLayoutEventFunction) & func, NULL },
+#define EVT_CALCULATE_LAYOUT(func) \
+    wxEventTableEntry( wxEVT_CALCULATE_LAYOUT, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCalculateLayoutEventFunction) & func, NULL ),
 
 #if wxUSE_SASH
 

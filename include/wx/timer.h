@@ -171,7 +171,8 @@ private:
 
 typedef void (wxEvtHandler::*wxTimerEventFunction)(wxTimerEvent&);
 
-#define EVT_TIMER(id, func) { wxEVT_TIMER, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTimerEventFunction) & func, NULL},
+#define EVT_TIMER(id, func) \
+    wxEventTableEntry( wxEVT_TIMER, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTimerEventFunction) & func, NULL),
 
 #endif // wxUSE_GUI
 

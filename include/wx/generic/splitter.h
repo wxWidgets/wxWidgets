@@ -323,39 +323,39 @@ private:
 typedef void (wxEvtHandler::*wxSplitterEventFunction)(wxSplitterEvent&);
 
 #define EVT_SPLITTER_SASH_POS_CHANGED(id, fn)                               \
-  {                                                                         \
+  wxEventTableEntry(                                                        \
     wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED,                                \
     id,                                                                     \
     -1,                                                                     \
     (wxObjectEventFunction)(wxEventFunction)(wxSplitterEventFunction) &fn,  \
     NULL                                                                    \
-  },
+  ),
 
 #define EVT_SPLITTER_SASH_POS_CHANGING(id, fn)                              \
-  {                                                                         \
+  wxEventTableEntry(                                                        \
     wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING,                               \
     id,                                                                     \
     -1,                                                                     \
     (wxObjectEventFunction)(wxEventFunction)(wxSplitterEventFunction) &fn,  \
     NULL                                                                    \
-  },
+  ),
 
 #define EVT_SPLITTER_DCLICK(id, fn)                                         \
-  {                                                                         \
+  wxEventTableEntry(                                                        \
     wxEVT_COMMAND_SPLITTER_DOUBLECLICKED,                                   \
     id,                                                                     \
     -1,                                                                     \
     (wxObjectEventFunction)(wxEventFunction)(wxSplitterEventFunction) &fn,  \
     NULL                                                                    \
-  },
+  ),
 
 #define EVT_SPLITTER_UNSPLIT(id, fn)                                        \
-  {                                                                         \
+  wxEventTableEntry(                                                        \
     wxEVT_COMMAND_SPLITTER_UNSPLIT,                                         \
     id,                                                                     \
     -1,                                                                     \
     (wxObjectEventFunction)(wxEventFunction)(wxSplitterEventFunction) &fn,  \
     NULL                                                                    \
-  },
+  ),
 
 #endif // __SPLITTERH_G__

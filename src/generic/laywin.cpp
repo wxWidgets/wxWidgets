@@ -33,6 +33,9 @@
 IMPLEMENT_DYNAMIC_CLASS(wxQueryLayoutInfoEvent, wxEvent)
 IMPLEMENT_DYNAMIC_CLASS(wxCalculateLayoutEvent, wxEvent)
 
+const int wxEVT_QUERY_LAYOUT_INFO = wxNewEventType();
+const int wxEVT_CALCULATE_LAYOUT = wxNewEventType();
+
 #if wxUSE_SASH
 IMPLEMENT_CLASS(wxSashLayoutWindow, wxSashWindow)
 

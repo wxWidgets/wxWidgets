@@ -114,13 +114,16 @@ typedef void (wxEvtHandler::*wxSpinEventFunction)(wxSpinEvent&);
 
 // macros for handling spin events
 #ifndef EVT_SPIN_UP
-#define EVT_SPIN_UP(id, func) { wxEVT_SCROLL_LINEUP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxSpinEventFunction) & func },
+#define EVT_SPIN_UP(id, func) \
+    wxEventTableEntry( wxEVT_SCROLL_LINEUP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxSpinEventFunction) & func ),
 #endif
 #ifndef EVT_SPIN_DOWN
-#define EVT_SPIN_DOWN(id, func) { wxEVT_SCROLL_LINEDOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxSpinEventFunction) & func },
+#define EVT_SPIN_DOWN(id, func) \
+    wxEventTableEntry( wxEVT_SCROLL_LINEDOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxSpinEventFunction) & func ),
 #endif
 #ifndef EVT_SPIN
-#define EVT_SPIN(id, func) { wxEVT_SCROLL_THUMBTRACK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxSpinEventFunction) & func },
+#define EVT_SPIN(id, func) \
+    wxEventTableEntry( wxEVT_SCROLL_THUMBTRACK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxSpinEventFunction) & func ),
 #endif
 
 #endif // wxUSE_SPINBTN

@@ -314,7 +314,7 @@ const wxEventTable wxEvtHandler::sm_eventTable =
     { (const wxEventTable *)NULL, &wxEvtHandler::sm_eventTableEntries[0] };
 
 const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] =
-    { { 0, 0, 0, (wxObjectEventFunction) NULL, (wxObject*) NULL } };
+    { wxEventTableEntry( 0, 0, 0, (wxObjectEventFunction) NULL, (wxObject*) NULL ) };
 
 
 // ----------------------------------------------------------------------------

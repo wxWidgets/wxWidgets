@@ -106,7 +106,8 @@ protected:
 
 typedef void (wxObject::*wxProcessEventFunction)(wxProcessEvent&);
 
-#define EVT_END_PROCESS(id, func) { wxEVT_END_PROCESS, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxProcessEventFunction) & func, NULL},
+#define EVT_END_PROCESS(id, func) \
+   wxEventTableEntry( wxEVT_END_PROCESS, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxProcessEventFunction) & func, NULL),
 
 #endif
     // _WX_PROCESSH__
