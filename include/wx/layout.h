@@ -20,7 +20,7 @@
     #pragma interface "layout.h"
 #endif
 
-#include "wx/defs.h"
+#include "wx/object.h"
 
 // X stupidly defines these in X.h
 #ifdef Above
