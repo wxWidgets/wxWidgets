@@ -100,7 +100,7 @@ bool NodeHandler::CanHandle(wxXmlNode *node)
 
 
 
-PropertyInfoArray& NodeHandler::GetPropsList(wxXmlNode *node)
+PropertyInfoArray& NodeHandler::GetPropsList(wxXmlNode *WXUNUSED(node))
 {
     return m_NodeInfo->Props;
 }
@@ -159,7 +159,7 @@ wxArrayString& NodeHandler::GetChildTypes()
 
 
 
-void NodeHandler::InsertNode(wxXmlNode *parent, wxXmlNode *node, wxXmlNode *insert_before)
+void NodeHandler::InsertNode(wxXmlNode *WXUNUSED(parent), wxXmlNode *node, wxXmlNode *WXUNUSED(insert_before))
 {
     delete node;
     wxLogError(_("Cannot insert child into this type of node!"));
@@ -178,7 +178,7 @@ wxTreeItemId NodeHandlerPanel::CreateTreeNode(wxTreeCtrl *treectrl,
 {
     wxTreeItemId root = NodeHandler::CreateTreeNode(treectrl, parent, node);
     
-    wxXmlNode *n = XmlFindNode(node, "object");
+    wxXmlNode *n = XmlFindNode(node, _T("object"));
 
     while (n)
     {

@@ -49,7 +49,7 @@ bool MyApp::OnInit()
 {
     SetVendorName(wxT("wxWindows"));
     SetAppName(wxT("wxrcedit"));
-    wxString arg = (argc >= 1) ? argv[1] : "";
+    wxString arg = (argc >= 1) ? argv[1] : _T("");
     wxInitAllImageHandlers();
     wxFrame *frame = new EditorFrame(NULL, arg);
     SetTopWindow(frame);

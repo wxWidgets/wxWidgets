@@ -37,12 +37,12 @@ BEGIN_EVENT_TABLE(PropEditCtrl, wxPanel)
     EVT_BUTTON(ID_DETAILS, PropEditCtrl::OnButtonDetails)
 END_EVENT_TABLE()
 
-void PropEditCtrl::OnButtonDetails(wxCommandEvent& event)
+void PropEditCtrl::OnButtonDetails(wxCommandEvent& WXUNUSED(event))
 {
     OnDetails();
 }
 
-void PropEditCtrl::OnButtonClear(wxCommandEvent& event)
+void PropEditCtrl::OnButtonClear(wxCommandEvent& WXUNUSED(event))
 {
     Clear();
     EditorFrame::Get()->NotifyChanged(CHANGED_PROPS);        

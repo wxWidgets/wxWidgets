@@ -202,7 +202,7 @@ void PreviewFrame::Preview(wxXmlNode *node, wxXmlDocument *orig_doc)
 
 void PreviewFrame::PreviewMenu()
 {
-    wxMenuBar *mbar;
+    wxMenuBar *mbar = NULL;
 
     if (XmlGetClass(m_Node) == _T("wxMenuBar"))
         mbar = m_RC->LoadMenuBar(m_Node->GetPropVal(_T("name"), _T("-1")));
@@ -274,7 +274,7 @@ BEGIN_EVENT_TABLE(PreviewFrame, wxFrame)
     EVT_ENTER_WINDOW(PreviewFrame::OnMouseEnter)
 END_EVENT_TABLE()
 
-void PreviewFrame::OnMouseEnter(wxMouseEvent& event)
+void PreviewFrame::OnMouseEnter(wxMouseEvent& WXUNUSED(event))
 {
     if (m_Dirty) Preview(m_Node,m_Doc);
 }

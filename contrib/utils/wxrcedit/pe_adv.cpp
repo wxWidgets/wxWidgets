@@ -94,7 +94,7 @@ void PropEditCtrlChoice::WriteValue()
 
 
 
-void PropEditCtrlChoice::OnChoice(wxCommandEvent& event)
+void PropEditCtrlChoice::OnChoice(wxCommandEvent& WXUNUSED(event))
 {
     if (CanSave()) 
     {

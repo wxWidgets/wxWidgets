@@ -192,35 +192,35 @@ EditorFrame::EditorFrame(wxFrame *parent, const wxString& filename)
     
     wxConfigBase *cfg = wxConfigBase::Get();
     
-    SetSize(wxRect(wxPoint(cfg->Read("editor_x", -1), cfg->Read("editor_y", -1)),
-            wxSize(cfg->Read("editor_w", 400), cfg->Read("editor_h", 400))));
+    SetSize(wxRect(wxPoint(cfg->Read(_T("editor_x"), -1), cfg->Read(_T("editor_y"), -1)),
+            wxSize(cfg->Read(_T("editor_w"), 400), cfg->Read(_T("editor_h"), 400))));
 
     m_SelectedNode = NULL;
     m_Resource = NULL;
     m_FileName = wxEmptyString;
 
     wxMenu *menuFile = new wxMenu;
-    menuFile->Append(ID_NEW, "&New");
-    menuFile->Append(ID_OPEN, "&Open\tCtrl-O");
-    menuFile->Append(ID_SAVE, "&Save\tCtrl-S");
-    menuFile->Append(ID_SAVEAS, "Save &as...");
+    menuFile->Append(ID_NEW, _T("&New"));
+    menuFile->Append(ID_OPEN, _T("&Open\tCtrl-O"));
+    menuFile->Append(ID_SAVE, _T("&Save\tCtrl-S"));
+    menuFile->Append(ID_SAVEAS, _T("Save &as..."));
     menuFile->AppendSeparator();
-    menuFile->Append(ID_EXIT, "E&xit\tAlt-X");
+    menuFile->Append(ID_EXIT, _T("E&xit\tAlt-X"));
 
     wxMenu *menuEdit = new wxMenu;
-    menuEdit->Append(ID_CUT, "Cut\tCtrl-X");
-    menuEdit->Append(ID_COPY, "Copy\tCtrl-C");
-    menuEdit->Append(ID_PASTE_SYBLING, "Paste as sybling\tCtrl-V");
-    menuEdit->Append(ID_PASTE_CHILD, "Paste as child");
+    menuEdit->Append(ID_CUT, _T("Cut\tCtrl-X"));
+    menuEdit->Append(ID_COPY, _T("Copy\tCtrl-C"));
+    menuEdit->Append(ID_PASTE_SYBLING, _T("Paste as sybling\tCtrl-V"));
+    menuEdit->Append(ID_PASTE_CHILD, _T("Paste as child"));
     menuEdit->AppendSeparator();
-    menuEdit->Append(ID_DELETE_NODE,  "Delete");
+    menuEdit->Append(ID_DELETE_NODE,  _T("Delete"));
 
     menuEdit->Enable(ID_PASTE_SYBLING, FALSE);
     menuEdit->Enable(ID_PASTE_CHILD, FALSE);
     
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(menuFile, "&File");
-    menuBar->Append(menuEdit, "&Edit");
+    menuBar->Append(menuFile, _T("&File"));
+    menuBar->Append(menuEdit, _T("&Edit"));
     SetMenuBar(menuBar);
   
     // Create toolbar:
@@ -294,7 +294,7 @@ void EditorFrame::LoadFile(const wxString& filename)
      // create new resource in order to handle version differences properly
     PreviewFrame::Get()->ResetResource();
     
-    m_FileName = "";
+    m_FileName = wxEmptyString;
     m_Resource = new wxXmlRcEditDocument;
     m_Modified = FALSE;
     
@@ -303,7 +303,7 @@ void EditorFrame::LoadFile(const wxString& filename)
         delete m_Resource;
         m_Resource = NULL;
         NewFile();
-        wxLogError("Error parsing " + filename);
+        wxLogError(_T("Error parsing ") + filename);
     }
     else
     {
@@ -339,11 +339,11 @@ void EditorFrame::NewFile()
 
     delete m_Resource;
     
-    m_FileName = "";
+    m_FileName = wxEmptyString;
     m_Resource = new wxXmlRcEditDocument;
     m_Resource->SetRoot(new wxXmlNode(wxXML_ELEMENT_NODE, _("resource")));
 	
-	m_Resource->SetFileEncoding("utf-8");
+	m_Resource->SetFileEncoding(_T("utf-8"));
 #if !wxUSE_UNICODE
     m_Resource->SetEncoding(wxLocale::GetSystemEncodingName());
 #endif
@@ -363,7 +363,7 @@ void EditorFrame::RefreshTitle()
     wxString s;
     if (m_Modified) s << _T("* ");
     s << _("wxrcedit");
-    if (m_FileName != "")
+    if (m_FileName != wxEmptyString)
         s << _T(" - ") << wxFileNameFromPath(m_FileName);
     SetTitle(s);
 }
@@ -376,7 +376,7 @@ void EditorFrame::RefreshTree()
     
     m_TreeCtrl->DeleteAllItems(); 
 
-    wxTreeItemId root = m_TreeCtrl->AddRoot("Resource: " + wxFileNameFromPath(m_FileName), 5, 5);
+    wxTreeItemId root = m_TreeCtrl->AddRoot(_T("Resource: ") + wxFileNameFromPath(m_FileName), 5, 5);
 
     wxXmlNode *n = m_Resource->GetRoot()->GetChildren();  
     while (n)
@@ -541,7 +541,7 @@ void EditorFrame::OnToolbar(wxCommandEvent& event)
             }
 
         case ID_SAVE :
-            if (m_FileName != "") { SaveFile(m_FileName); break;}
+            if (m_FileName != wxEmptyString) { SaveFile(m_FileName); break;}
             // else go to SAVEAS
 
         case ID_SAVEAS :

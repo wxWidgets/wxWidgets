@@ -39,7 +39,7 @@ wxWindow *PropEditCtrlTxt::CreateEditCtrl()
 
 
 
-void PropEditCtrlTxt::OnText(wxCommandEvent& event)
+void PropEditCtrlTxt::OnText(wxCommandEvent& WXUNUSED(event))
 {
     if (CanSave()) 
     {
@@ -126,7 +126,7 @@ wxString PropEditCtrlBool::GetValueAsText(wxTreeItemId ti)
 
 
 
-void PropEditCtrlBool::OnChoice(wxCommandEvent& event)
+void PropEditCtrlBool::OnChoice(wxCommandEvent& WXUNUSED(event))
 {
     if (CanSave()) 
     {
@@ -398,7 +398,7 @@ void PropEditCtrlXRCID::Clear()
 void PropEditCtrlXRCID::OnDetails()
 {
     wxString choices[] = {wxString(_T("-1"))
-      #define stdID(id) , wxString(#id)
+      #define stdID(id) , wxString(_T(#id))
       stdID(wxID_OK) stdID(wxID_CANCEL)
       stdID(wxID_YES) stdID(wxID_NO)
       stdID(wxID_APPLY) stdID(wxID_HELP) 
@@ -430,14 +430,14 @@ void PropEditCtrlXRCID::OnDetails()
 
 
 
-wxString PropEditCtrlXRCID::GetValueAsText(wxTreeItemId ti)
+wxString PropEditCtrlXRCID::GetValueAsText(wxTreeItemId WXUNUSED(ti))
 {
     return REAL_NODE->GetPropVal(_T("name"), wxEmptyString);
 }
 
 
 
-bool PropEditCtrlXRCID::IsPresent(const PropertyInfo& pinfo)
+bool PropEditCtrlXRCID::IsPresent(const PropertyInfo& WXUNUSED(pinfo))
 {
     return REAL_NODE->HasProp(_T("name"));
 }
