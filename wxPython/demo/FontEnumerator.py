@@ -24,7 +24,7 @@ class TestPanel(wxPanel):
         row = wxBoxSizer(wxHORIZONTAL)
         row.Add(s1, 0, wxALL, 5)
         row.Add(self.lb1, 0, wxALL, 5)
-        row.Add(self.txt, 0, wxALL, 5)
+        row.Add(self.txt, 0, wxALL|wxADJUST_MINSIZE, 5)
 
         sizer = wxBoxSizer(wxVERTICAL)
         sizer.Add(row, 0, wxALL, 30)
@@ -32,13 +32,27 @@ class TestPanel(wxPanel):
         self.Layout()
 
         self.lb1.SetSelection(0)
+        self.OnSelect(None)
+        wxFutureCall(300, self.SetTextSize)
+
+
+    def SetTextSize(self):
+        self.txt.SetSize(self.txt.GetBestSize())
 
 
     def OnSelect(self, evt):
+        #print "OnSelect: "
         face = self.lb1.GetStringSelection()
+        #print '\t '+face
         font = wxFont(28, wxDEFAULT, wxNORMAL, wxNORMAL, False, face)
+        #print "\t got font"
+        self.txt.SetLabel(face)
+        #print "\t set label"
         self.txt.SetFont(font)
-        self.txt.SetSize(self.txt.GetBestSize())
+        #print "\t set font"
+        #self.txt.SetSize(self.txt.GetBestSize())
+        #print "\t set size"
+
 
 ##         st = font.GetNativeFontInfo().ToString()
 ##         ni2 = wxNativeFontInfo()
