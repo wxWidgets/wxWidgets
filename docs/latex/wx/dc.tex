@@ -348,6 +348,11 @@ the string. See \helpref{wxDC::GetTextExtent}{wxdcgettextextent} for how
 to get the dimensions of a text string, which can be used to position the
 text more precisely.
 
+{\bf NB:} under wxGTK the current 
+\helpref{logical function}{wxdcgetlogicalfunction} is used by this function
+but it is ignored by wxMSW. Thus, you should avoid using logical functions
+with this function in portable programs.
+
 \membersection{wxDC::EndDoc}\label{wxdcenddoc}
 
 \func{void}{EndDoc}{\void}
