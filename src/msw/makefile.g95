@@ -128,7 +128,8 @@ COMMONOBJS = \
   $(COMMDIR)/datstrm.$(OBJSUFF) \
   $(COMMDIR)/objstrm.$(OBJSUFF) \
   $(COMMDIR)/extended.$(OBJSUFF) \
-  $(COMMDIR)/wincmn.$(OBJSUFF)
+  $(COMMDIR)/wincmn.$(OBJSUFF) \
+  $(COMMDIR)/wxchar.$(OBJSUFF)
 
 # NOTE: if the socket-related files fail with a syntax error in Sockets.h,
 # remove the files (probably all GnuWin32 releases < b20). Cygwin b20 is OK,
