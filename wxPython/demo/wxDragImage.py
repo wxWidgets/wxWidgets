@@ -137,7 +137,7 @@ class DragCanvas(wxScrolledWindow):
 
     def EraseShape(self, shape, dc):
         r = shape.GetRect()
-        dc.SetClippingRegion(r.x, r.y, r.width, r.height)
+        dc.SetClippingRect(r)
         self.TileBackground(dc)
         self.DrawShapes(dc)
         dc.DestroyClippingRegion()
@@ -148,7 +148,7 @@ class DragCanvas(wxScrolledWindow):
         if not dc:
             dc = wxClientDC(self)
             rect = self.GetUpdateRegion().GetBox()
-            dc.SetClippingRegion(rect.x, rect.y, rect.width, rect.height)
+            dc.SetClippingRect(rect)
         self.TileBackground(dc)
 
 

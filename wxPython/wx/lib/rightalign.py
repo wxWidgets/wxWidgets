@@ -61,7 +61,7 @@ class wxRightTextCtrl(wxTextCtrl):
             fclr = wxSystemSettings_GetColour(wxSYS_COLOUR_GRAYTEXT)
         dc.SetTextForeground(fclr)
 
-        dc.SetClippingRegion(0, 0, dcwidth, dcheight)
+        dc.SetClippingRegionXY(0, 0, dcwidth, dcheight)
         dc.DrawText(text, x, y)
 
         if x < 0:

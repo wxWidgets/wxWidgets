@@ -219,8 +219,8 @@ public:
     // clipping region
     // ---------------
 
-    void SetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
-    //void SetClippingRegion(const wxPoint& pt, const wxSize& sz)
+    %name(SetClippingRegionXY)void SetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
+    void SetClippingRegion(const wxPoint& pt, const wxSize& sz);
     %name(SetClippingRect) void SetClippingRegion(const wxRect& rect);
     %name(SetClippingRegionAsRegion) void SetClippingRegion(const wxRegion& region);
 

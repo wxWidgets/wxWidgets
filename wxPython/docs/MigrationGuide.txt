@@ -275,6 +275,11 @@ that are affected are listed here::
     Blit(destPt, size, sourceDC, srcPt,
          rop = wxCOPY, useMask = FALSE, srcPtMask = wx.DefaultPosition)
 
+    SetClippingRegionXY SetClippingRegion(x, y, width, height)
+    SetClippingRegion(point, size)
+    SetClippingRect(rect)
+    SetClippingRegionAsRegion(region);
+
 	
 If you have code that draws on a DC you **will** get errors because of
 these changes, but it should be easy to fix the code.  You can either

@@ -57,7 +57,7 @@ class TestWindow(wxScrolledWindow):
         if not dc:
             dc = wxClientDC(self)
             rect = self.GetUpdateRegion().GetBox()
-            dc.SetClippingRegion(rect.x, rect.y, rect.width, rect.height)
+            dc.SetClippingRect(rect)
         self.TileBackground(dc)
 
 
