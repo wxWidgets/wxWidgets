@@ -1320,9 +1320,9 @@ class wxXPMFileHandler : public wxBitmapHandler
 public:
     wxXPMFileHandler()
     {
-        m_name = wxT("XPM file");
-        m_extension = wxT("xpm");
-        m_type = wxBITMAP_TYPE_XPM;
+        SetName( wxT("XPM file") );
+        SetExtension( wxT("xpm") );
+        SetType( wxBITMAP_TYPE_XPM );
     };
 
     virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
@@ -1428,9 +1428,9 @@ class wxXPMDataHandler : public wxBitmapHandler
 public:
     wxXPMDataHandler()
     {
-        m_name = wxT("XPM data");
-        m_extension = wxT("xpm");
-        m_type = wxBITMAP_TYPE_XPM_DATA;
+        SetName( wxT("XPM data") );
+        SetExtension( wxT("xpm") );
+        SetType( wxBITMAP_TYPE_XPM_DATA );
     };
 
     virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
@@ -1529,9 +1529,9 @@ class WXDLLEXPORT wxXBMDataHandler: public wxBitmapHandler
 public:
     inline wxXBMDataHandler()
     {
-        m_name = wxT("XBM data");
-        m_extension = wxT("xbm");
-        m_type = wxBITMAP_TYPE_XBM_DATA;
+        SetName( wxT("XBM data") );
+        SetExtension( wxT("xbm") );
+        SetType( wxBITMAP_TYPE_XBM_DATA );
     };
 
     virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
