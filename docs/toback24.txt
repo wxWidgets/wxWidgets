@@ -1,33 +1,10 @@
-8. wxFrame support in wxrcedit
+1. wxFrame support in wxrcedit
 
 http://sourceforge.net/tracker/index.php?func=detail&aid=648659&group_id=9863&atid=309863
 
-15. XRC fixes for <object_ref> and relative file names
+[Is this worth applying if wxrcedit is not supported? - VS]
 
-Must be modified to be binary compatible before backporting!
-
-Checking in xmlres.cpp;
-/pack/cvsroots/wxwindows/wxWindows/contrib/src/xrc/xmlres.cpp,v  <--  xmlres.cpp
-new revision: 1.27; previous revision: 1.26
-done
-
-(also revision 1.30->1.31 of xmlres.cpp !!!)
-
-Checking in xmlres.h;
-/pack/cvsroots/wxwindows/wxWindows/contrib/include/wx/xrc/xmlres.h,v  <--  xmlres.h
-new revision: 1.22; previous revision: 1.21
-
-17. XRC: better wxToolBar handler
-
-Note: This depends on our agreement on what should be backported. Either
-only XRC_ADD_STYLE(...) lines will go into 2.4 or everything in this
-patch (including new features not present in 2.4.0's handler).
-
-Checking in xh_toolb.cpp;
-/pack/cvsroots/wxwindows/wxWindows/contrib/src/xrc/xh_toolb.cpp,v  <--  xh_toolb.cpp
-new revision: 1.7; previous revision: 1.6
-
-22. "Remove" wxFont::GetInternalFont from wxGTK w/ GTK2
+2. "Remove" wxFont::GetInternalFont from wxGTK w/ GTK2
 
 CVS: [RR] wxWindows/src/gtk dcclient.cpp,1.162,1.163 font.cpp,1.69,1.70 window.cpp,1.411,1.412
 CVS: [RR] wxWindows/src/gtk choice.cpp,1.55,1.56 combobox.cpp,1.87,1.88
@@ -38,7 +15,7 @@ When applying, be careful to not pick later revision of font.cpp -- 2.5 doesn't
 have wxFont::GetInternalFont while 2.4 must have it because of binary
 compatibility!
 
-26.  Fix Unicode + .wxr
+3.  Fix Unicode + .wxr
 
 Using an #if wxUSE_UNICODE in include/wx/wxexpr.h, safer for
 binary compatibility.
@@ -62,67 +39,3 @@ new revision: 1.85; previous revision: 1.84
 Checking in src/common/wxexpr.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/common/wxexpr.cpp,v  <--  wxexpr.cpp
 new revision: 1.27; previous revision: 1.26
-
-31. [wxHTML] Fix parsing of CDATA tags and ignore <script>
-
-CVS: [VS] wxWindows/src/html htmlpars.cpp,1.29,1.30 htmltag.cpp,1.31,1.32
-CVS: [VS] wxWindows/src/html m_layout.cpp,1.17,1.18
-CVS: [VS] wxWindows/src/html htmltag.cpp,1.32,1.33
-
-32. Fix wxFileConfig behaviour in Unicode mode
-
-Note: this must be done a bit differently, w/o wxFileConfig::m_conv!
-CVS: [VS] wxWindows/include/wx fileconf.h,1.39,1.40
-CVS: [VS] wxWindows/src/common fileconf.cpp,1.93,1.94
-CVS: [VS] wxWindows/include/wx strconv.h,1.12,1.13
-CVS: [VS] wxWindows/src/common strconv.cpp,1.71,1.72
-
-36. Add SetFonts to wxHTML printing classes; SetFonts(a,b,NULL) can be used
-to set default sizes now.
-
-(Do not apply wxHtmlEasyPrinting part of this changes!)
-
-Checking in src/html/winpars.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/html/winpars.cpp,v  <--  winpars.cpp
-new revision: 1.38; previous revision: 1.37
-Checking in src/html/htmprint.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/html/htmprint.cpp,v  <--  htmprint.cpp
-new revision: 1.29; previous revision: 1.28
-cvs diff: [21:30:15] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/src/html
-Checking in samples/html/printing/printing.cpp;
-/pack/cvsroots/wxwindows/wxWindows/samples/html/printing/printing.cpp,v  <--  printing.cpp
-new revision: 1.9; previous revision: 1.8
-cvs diff: [21:30:19] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/samples/html/printing
-Checking in include/wx/html/htmldefs.h;
-/pack/cvsroots/wxwindows/wxWindows/include/wx/html/htmldefs.h,v  <--  htmldefs.h
-new revision: 1.8; previous revision: 1.7
-Checking in include/wx/html/htmlwin.h;
-/pack/cvsroots/wxwindows/wxWindows/include/wx/html/htmlwin.h,v  <--  htmlwin.h
-new revision: 1.35; previous revision: 1.34
-Checking in include/wx/html/htmprint.h;
-/pack/cvsroots/wxwindows/wxWindows/include/wx/html/htmprint.h,v  <--  htmprint.h
-new revision: 1.13; previous revision: 1.12
-Checking in include/wx/html/winpars.h;
-/pack/cvsroots/wxwindows/wxWindows/include/wx/html/winpars.h,v  <--  winpars.h
-new revision: 1.18; previous revision: 1.17
-Checking in docs/changes.txt;
-/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
-new revision: 1.258; previous revision: 1.257
-Checking in docs/latex/wx/htwindow.tex;
-/pack/cvsroots/wxwindows/wxWindows/docs/latex/wx/htwindow.tex,v  <--  htwindow.tex
-new revision: 1.27; previous revision: 1.26
-Checking in docs/latex/wx/htwinprs.tex;
-/pack/cvsroots/wxwindows/wxWindows/docs/latex/wx/htwinprs.tex,v  <--  htwinprs.tex
-new revision: 1.19; previous revision: 1.18
-Checking in docs/latex/wx/htprint.tex;
-/pack/cvsroots/wxwindows/wxWindows/docs/latex/wx/htprint.tex,v  <--  htprint.tex
-new revision: 1.7; previous revision: 1.6
-Checking in docs/latex/wx/htdcrend.tex;
-/pack/cvsroots/wxwindows/wxWindows/docs/latex/wx/htdcrend.tex,v  <--  htdcrend.tex
-new revision: 1.8; previous revision: 1.7
-
-37. Backport wxLANGUAGE_CHINESE_TRADITIONAL fix in src/common/intl.cpp
-    (replace zh_CN with zh_TW)
-
-    I think this may already have been applied (JS)
-
