@@ -45,7 +45,7 @@
 
 // there is no src/{msw,mgl}/popupwin.cpp to put this in, so we do it here - BTW we
 // probably could do it for all ports here just as well
-#if defined(__WXMSW__) || defined(__WXMGL__)
+#if defined(__WXMSW__) || defined(__WXMGL__) || defined(__WXPM__)
     IMPLEMENT_DYNAMIC_CLASS(wxPopupWindow, wxWindow)
 #endif // __WXMSW__
 
