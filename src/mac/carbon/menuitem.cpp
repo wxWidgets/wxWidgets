@@ -158,18 +158,18 @@ void wxMenuItem::UpdateItemText()
 
 void wxMenuItem::Enable(bool bDoEnable)
 {
-    // Due to desychronisation of m_isEnabled from the
-    // true state after a modal dialog is shown in OnInit,
-    // and subsequent enabling of menu items that should be
-    // disabled, we now always update the item's status.
-    
-    if ( /* m_isEnabled != bDoEnable */ true
+    if (( m_isEnabled != bDoEnable
 #if TARGET_CARBON
-         || GetId() == wxApp::s_macPreferencesMenuItemId
-         || GetId() == wxApp::s_macExitMenuItemId
-         || GetId() == wxApp::s_macAboutMenuItemId
+      // avoid changing menuitem state when menu is disabled
+      // eg. BeginAppModalStateForWindow() will disable menus and ignore this change
+      // which in turn causes m_isEnabled to become out of sync with real menuitem state
+         && !(m_parentMenu && !IsMenuItemEnabled(MAC_WXHMENU(m_parentMenu->GetHMenu()), 0)) )
+      // always update builtin menuitems
+         || (   GetId() == wxApp::s_macPreferencesMenuItemId
+             || GetId() == wxApp::s_macExitMenuItemId
+             || GetId() == wxApp::s_macAboutMenuItemId
 #endif
-         ) 
+         ))
     {
         wxMenuItemBase::Enable( bDoEnable ) ;
         UpdateItemStatus() ;
