@@ -87,7 +87,7 @@ void *MyThread::Entry()
     TestDestroy();
     text_mutex.Lock();
     m_frame->m_txtctrl->WriteText(text);
-    text_mutex.UnLock();
+    text_mutex.Unlock();
     wxSleep(1);
   }
   
