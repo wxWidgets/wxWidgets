@@ -632,6 +632,10 @@ SOURCE=.\generic\tipdlg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\tipwin.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\treectlg.cpp
 # End Source File
 # Begin Source File

@@ -55,6 +55,8 @@ BEGIN_EVENT_TABLE(wxTipWindow, wxFrame)
     EVT_LEFT_DOWN(wxTipWindow::OnMouseClick)
     EVT_RIGHT_DOWN(wxTipWindow::OnMouseClick)
     EVT_MIDDLE_DOWN(wxTipWindow::OnMouseClick)
+    EVT_KILL_FOCUS(wxTipWindow::OnKillFocus)
+    EVT_ACTIVATE(wxTipWindow::OnActivate)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -79,8 +81,7 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
 
     Adjust(text, maxLength);
 
-    // capture mouse as we want to dismiss the window when it is clicked
-    CaptureMouse();
+    SetFocus();
 
     Show(TRUE);
 }
@@ -158,7 +159,13 @@ void wxTipWindow::OnPaint(wxPaintEvent& event)
 
     // first filll the background
     dc.SetBrush(wxBrush(GetBackgroundColour(), wxSOLID));
-    dc.SetPen(*wxBLACK_PEN);
+
+    // Under Windows, you apparently get a thin black border whether you like it or not :-(
+#ifdef __WXMSW__
+    dc.SetPen( * wxTRANSPARENT_PEN );
+#else
+    dc.SetPen( * wxBLACK_PEND );
+#endif
     dc.DrawRectangle(rect);
 
     // and then draw the text line by line
@@ -178,7 +185,16 @@ void wxTipWindow::OnPaint(wxPaintEvent& event)
 
 void wxTipWindow::OnMouseClick(wxMouseEvent& event)
 {
-    ReleaseMouse();
+    Close();
+}
 
+void wxTipWindow::OnActivate(wxActivateEvent& event)
+{
+    if (!event.GetActive())
+        Close();
+}
+
+void wxTipWindow::OnKillFocus(wxFocusEvent& event)
+{
     Close();
 }

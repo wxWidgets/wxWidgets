@@ -35,7 +35,7 @@
 
 #include "wx/tipwin.h"
 #include "wx/app.h"
-
+#include "wx/module.h"
 #include "wx/cshelp.h"
 
 // ----------------------------------------------------------------------------
@@ -310,6 +310,40 @@ bool wxSimpleHelpProvider::ShowHelp(wxWindowBase *window)
     }
 
     return FALSE;
+}
+
+// ----------------------------------------------------------------------------
+// wxHelpProviderModule: module responsible for cleaning up help provider.
+// ----------------------------------------------------------------------------
+
+class wxHelpProviderModule : public wxModule
+{
+public:
+    bool OnInit();
+    void OnExit();
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxHelpProviderModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxHelpProviderModule, wxModule)
+
+bool wxHelpProviderModule::OnInit()
+{
+    // Probably we don't want to do anything by default,
+    // since it could pull in extra code
+    // wxHelpProvider::Set(new wxSimpleHelpProvider);
+
+    return TRUE;
+}
+
+void wxHelpProviderModule::OnExit()
+{
+    if (wxHelpProvider::Get())
+    {
+        delete wxHelpProvider::Get();
+        wxHelpProvider::Set(NULL);
+    }
 }
 
 #endif // wxUSE_HELP

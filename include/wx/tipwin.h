@@ -34,6 +34,8 @@ protected:
     // event handlers
     void OnPaint(wxPaintEvent& event);
     void OnMouseClick(wxMouseEvent& event);
+    void OnActivate(wxActivateEvent& event);
+    void OnKillFocus(wxFocusEvent& event);
 
     // calculate the client rect we need to display the text
     void Adjust(const wxString& text, wxCoord maxLength);
