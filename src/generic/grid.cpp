@@ -5240,7 +5240,8 @@ bool wxGrid::SendEvent( const wxEventType type,
                                  type,
                                  this,
                                  rowOrCol,
-                                 mouseEv.GetX(), mouseEv.GetY(),
+                                 mouseEv.GetX() + GetColLabelSize(),
+                                 mouseEv.GetY() + GetRowLabelSize(),
                                  mouseEv.ControlDown(),
                                  mouseEv.ShiftDown(),
                                  mouseEv.AltDown(),
@@ -5270,7 +5271,8 @@ bool wxGrid::SendEvent( const wxEventType type,
                              type,
                              this,
                              row, col,
-                             mouseEv.GetX(), mouseEv.GetY(),
+                             mouseEv.GetX() + GetColLabelSize(),
+                             mouseEv.GetY() + GetRowLabelSize(),
                              FALSE,
                              mouseEv.ControlDown(),
                              mouseEv.ShiftDown(),
@@ -6149,6 +6151,17 @@ void wxGrid::EndBatch()
         }
     }
 }
+
+// Use this, rather than wxWindow::Refresh(), to force an immediate
+// repainting of the grid. Has no effect if you are already inside a
+// BeginBatch / EndBatch block.
+//
+void wxGrid::ForceRefresh()
+{
+    BeginBatch();
+    EndBatch();
+}
+
 
 //
 // ------ Edit control functions

@@ -1069,6 +1069,15 @@ public:
 
     int      GetBatchCount() { return m_batchCount; }
 
+    // Use this, rather than wxWindow::Refresh(), to force an
+    // immediate repainting of the grid. Has no effect if you are
+    // already inside a BeginBatch / EndBatch block.
+    //
+    // This function is necessary because wxGrid has a minimal OnPaint()
+    // handler to reduce screen flicker.
+    //
+    void     ForceRefresh();
+    
 
     // ------ edit control functions
     //
