@@ -108,6 +108,7 @@ LIB_CPP_SRC=\
  gtk/tbargtk.cpp \
  gtk/textctrl.cpp \
  gtk/timer.cpp \
+ gtk/treectrl.cpp \
  gtk/utilsgtk.cpp \
  gtk/utilsres.cpp \
  gtk/window.cpp \
@@ -128,8 +129,7 @@ LIB_CPP_SRC=\
  generic/splitter.cpp \
  generic/statusbr.cpp \
  generic/tabg.cpp \
- generic/textdlgg.cpp \
- generic/treectrl.cpp
+ generic/textdlgg.cpp
  
  
 LIB_C_SRC=\

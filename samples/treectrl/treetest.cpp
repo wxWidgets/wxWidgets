@@ -25,8 +25,10 @@
 #include "wx/wx.h"
 #endif
 
-#ifdef __WXGTK__
-#include "mondrian.xpm"
+#ifndef __WXMSW__
+  #include "icon1.xpm"
+  #include "icon2.xpm"
+  #include "mondrian.xpm"
 #endif
 
 #include "wx/treectrl.h"
@@ -56,7 +58,7 @@ END_EVENT_TABLE()
 IMPLEMENT_APP(MyApp)
 
 // `Main program' equivalent, creating windows and returning main app frame
-bool MyApp::OnInit(void)
+bool MyApp::OnInit()
 {
   // Create the main frame window
   MyFrame *frame = new MyFrame((wxFrame *) NULL, (char *) "wxTreeCtrl Test", 50, 50, 450, 340);
@@ -67,22 +69,13 @@ bool MyApp::OnInit(void)
   frame->SetBackgroundColour(wxColour(255, 255, 255));
 
   // Give it an icon
-#ifdef __WXMSW__
-  frame->SetIcon(wxIcon("mondrian"));
-#else
-  frame->SetIcon(wxIcon(mondrian_xpm));
-#endif
+  frame->SetIcon(wxICON(mondrian));
 
   // Make an image list containing small icons
   m_imageListNormal = new wxImageList(16, 16, TRUE);
 
-#ifdef __WXMSW__
-  wxIcon icon1("icon1", wxBITMAP_TYPE_ICO_RESOURCE);
-  m_imageListNormal->Add(icon1);
-  wxIcon icon2("icon2", wxBITMAP_TYPE_ICO_RESOURCE);
-  m_imageListNormal->Add(icon2);
-#else
-#endif
+  m_imageListNormal->Add(wxICON(icon1));
+  m_imageListNormal->Add(wxICON(icon2));
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
@@ -161,7 +154,7 @@ MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h):
 	m_logWindow = (wxTextCtrl *) NULL;
 }
 
-MyFrame::~MyFrame(void)
+MyFrame::~MyFrame()
 {
 	delete wxGetApp().m_imageListNormal;
 }
