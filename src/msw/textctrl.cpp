@@ -657,11 +657,13 @@ bool wxTextCtrl::StreamIn(const wxString& value,
         m_suppressNextUpdate = TRUE;
     }
 
-    if ( !::SendMessage(GetHwnd(), EM_STREAMIN,
-                        SF_TEXT |
-                        SF_UNICODE |
-                        (selectionOnly ? SFF_SELECTION : 0),
-                        (LPARAM)&eds) || eds.dwError )
+    ::SendMessage(GetHwnd(), EM_STREAMIN,
+                  SF_TEXT |
+                  SF_UNICODE |
+                  (selectionOnly ? SFF_SELECTION : 0),
+                  (LPARAM)&eds);
+
+    if ( eds.dwError )
     {
         wxLogLastError(_T("EM_STREAMIN"));
     }
