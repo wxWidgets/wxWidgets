@@ -1288,8 +1288,9 @@ void wxFlexGridSizer::AddGrowableRow( size_t idx, int proportion )
     m_growableRowsProportions.Add( proportion );
 }
 
-void wxFlexGridSizer::RemoveGrowableRow( size_t WXUNUSED(idx) )
+void wxFlexGridSizer::RemoveGrowableRow( size_t idx )
 {
+    m_growableRows.Remove( idx );
 }
 
 void wxFlexGridSizer::AddGrowableCol( size_t idx, int proportion )
@@ -1298,8 +1299,9 @@ void wxFlexGridSizer::AddGrowableCol( size_t idx, int proportion )
     m_growableColsProportions.Add( proportion );
 }
 
-void wxFlexGridSizer::RemoveGrowableCol( size_t WXUNUSED(idx) )
+void wxFlexGridSizer::RemoveGrowableCol( size_t idx )
 {
+    m_growableCols.Remove( idx );
 }
 
 //---------------------------------------------------------------------------
