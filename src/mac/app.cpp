@@ -553,37 +553,24 @@ bool wxApp::Initialize()
     wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
     wxTheColourDatabase->Initialize();
 
-#ifdef __WXDEBUG__
-#if wxUSE_LOG
-    // flush the logged messages if any and install a 'safer' log target: the
-    // default one (wxLogGui) can't be used after the resources are freed just
-    // below and the user suppliedo ne might be even more unsafe (using any
-    // wxWindows GUI function is unsafe starting from now)
-    wxLog::DontCreateOnDemand();
+    wxWinMacWindowList = new wxList(wxKEY_INTEGER);
+    wxWinMacControlList = new wxList(wxKEY_INTEGER);
 
-    // this will flush the old messages if any
-    delete wxLog::SetActiveTarget(new wxLogStderr);
-#endif // wxUSE_LOG
-#endif
+    wxInitializeStockLists();
+    wxInitializeStockObjects();
 
-  wxWinMacWindowList = new wxList(wxKEY_INTEGER);
-  wxWinMacControlList = new wxList(wxKEY_INTEGER);
+    wxBitmap::InitStandardHandlers();
 
-  wxInitializeStockLists();
-  wxInitializeStockObjects();
+    wxModule::RegisterModules();
+    if (!wxModule::InitializeModules()) {
+        return FALSE;
+    }
 
-  wxBitmap::InitStandardHandlers();
+    wxMacCreateNotifierTable() ;
 
-  wxModule::RegisterModules();
-  if (!wxModule::InitializeModules()) {
-     return FALSE;
-  }
+    UMAShowArrowCursor() ;
 
-  wxMacCreateNotifierTable() ;
-
-  UMAShowArrowCursor() ;
-
-  return TRUE;
+    return TRUE;
 }
 
 bool wxApp::OnInitGui()
@@ -801,8 +788,15 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
             theModule = NSModuleForSymbol(theSymbol);
             theLibPath = NSLibraryNameForModule(theModule);
 
+            // if we call wxLogDebug from here then, as wxTheApp hasn't been
+            // created yet when we're called from wxApp::Initialize(), wxLog
+            // is going to create a default stderr-based log target instead of
+            // the expected normal GUI one -- don't do it, if we really want
+            // to see this message just use fprintf() here
+#if 0
             wxLogDebug( wxT("wxMac library installation name is '%s'"),
                         theLibPath );
+#endif
 
             // allocate copy to replace .dylib.* extension with .rsrc
             theResPath = strdup(theLibPath);
@@ -817,8 +811,10 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
                 // overwrite extension with ".rsrc"
                 strcpy(theExt, ".rsrc");
 
+#if 0
                 wxLogDebug( wxT("wxMac resources file name is '%s'"),
                             theResPath );
+#endif
 
                 theErr = FSPathMakeRef((UInt8 *) theResPath, &theResRef, false);
                 if (theErr != noErr) {
@@ -832,8 +828,11 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
                                                  &gSharedLibraryResource);
                 }
                 if (theErr != noErr) {
-                    wxLogDebug( wxT("unable to open wxMac resource file '%s'"),
-                                theResPath );
+#ifdef __WXDEBUG__
+                    fprintf(stderr,
+                            wxT("unable to open wxMac resource file '%s'\n"),
+                            theResPath );
+#endif // __WXDEBUG__
                 }
 
                 // free duplicated resource file path
