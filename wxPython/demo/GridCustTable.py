@@ -1,8 +1,6 @@
 from wxPython.wx import *
 from wxPython.grid import *
 
-import string
-
 #---------------------------------------------------------------------------
 
 class CustomDataTable(wxPyGridTableBase):
@@ -93,7 +91,7 @@ class CustomDataTable(wxPyGridTableBase):
     # editor and renderer.  This allows you to enforce some type-safety
     # in the grid.
     def CanGetValueAs(self, row, col, typeName):
-        colType = string.split(self.dataTypes[col], ':')[0]
+        colType = self.dataTypes[col].split(':')[0]
         if typeName == colType:
             return true
         else:

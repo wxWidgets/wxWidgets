@@ -3,6 +3,7 @@
 %define pyver 	@PYVER@
 %define port  	@PORT@
 %define lcport 	@LCPORT@
+%define unicode @UNICODE@
 %define tarname @TARNAME@
 %define version @VERSION@
 %define ver2    @VER2@
@@ -10,12 +11,15 @@
 %define wxpref  %{pref}/lib/wxPython
 %define name    wxPython%{port}-py%{pyver}
 
+# Should the builtin image and etc. libs be used, or system libs?
+# Distro specific RPMs should probably set this to 0, generic ones
+# should use 1
+%define builtin_libs 1
+
 # Should --enable-debug_flag be used in release builds?
 # Using it defines __WXDEBUG__ and gives us runtime diagnostics
 # that are turned into Python exceptions starting with 2.3.4.
 %define debug_flag 1
-
-
 
 %if %{debug_flag}
     %define wxconfigname %{wxpref}/bin/wx%{lcport}d-%{ver2}-config
@@ -91,16 +95,21 @@ $WXDIR/configure --with-%{lcport} \
 	--disable-soname \
 	--enable-rpath=%{wxpref}/lib \
 	--with-opengl \
+%if %{unicode}
+	--enable-gtk2 \
+	--enable-unicode \
+%endif
 	--enable-geometry \
 	--enable-optimise \
 %if %{debug_flag}
 	--enable-debug_flag \
 %endif
+%if %{builtin_libs}
 	--with-libjpeg=builtin \
 	--with-libpng=builtin \
 	--with-libtiff=builtin \
 	--with-zlib=builtin \
-
+%endif
 
 
 # Build wxWindows

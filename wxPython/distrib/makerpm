@@ -20,6 +20,7 @@ cvsroot=:pserver:anoncvs@cvs.wxwindows.org:/pack/cvsroots/wxwindows
 pythonbin=/usr/bin/python
 port=GTK
 lcport=gtk
+unicode=0
 tarname=wxPythonSrc
 
 
@@ -38,6 +39,7 @@ function useage {
     echo "   skiptar        Don't build the tarball"
     echo "   skiprpm        Don't build the RPM (but why?)"
     echo "   skipclean      Don't do the cleanup at the end"
+    echo "   gtk2           Build using wxGTK2 and Unicode"
     echo "   speconly       Do nothing but write the RPM spec file"
     echo "   smp            Add SMP=2 to the envivonment to speed wxGTK build"
 }
@@ -73,6 +75,7 @@ function makespec {
 	| sed s:@TARNAME@:${tarname}:g \
 	| sed s:@VERSION@:${version}:g \
 	| sed s:@VER2@:${ver2}:g \
+	| sed s:@UNICODE@:${unicode}:g \
 	> ${distdir}/wxPython${port}.spec
 }
 
@@ -80,12 +83,13 @@ function makespec {
 
 for flag in $*; do
     case ${flag} in
-	skipcvs)   skipcvs=1        ;;
-	skipclean) skipclean=1      ;;
-	skiptar)   skiptar=1        ;;
-	skiprpm)   skiprpm=1        ;;
-	smp)       export SMP=2     ;;
-	speconly)  makespec; exit 0 ;;
+	skipcvs)   skipcvs=1                           ;;
+	skipclean) skipclean=1                         ;;
+	skiptar)   skiptar=1                           ;;
+	skiprpm)   skiprpm=1                           ;;
+	gtk2)      unicode=1; port=GTK2; lcport=gtk2   ;;
+	smp)       export SMP=2                        ;;
+	speconly)  makespec; exit 0                    ;;
 
 	*)  echo "Unknown flag \"${flag}\""
 	    useage

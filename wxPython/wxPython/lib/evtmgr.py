@@ -449,7 +449,7 @@ class MessageAdapter:
     def notify(self, message):
         event = message.data        # Extract the wxEvent
         self.eventHandler(event)    # Perform the call as wxWindows would
-        event.Skip(1)               # Make sure Skip(1) wasn't set.       ##????
+        ##event.Skip(1)               # Make sure Skip(1) wasn't set.       ##????
 
 
     def Destroy(self):
