@@ -35,6 +35,7 @@ public:
     ~wxZipInputStream();
 
     virtual size_t GetSize() const {return m_Size;}
+    virtual bool Eof() const;
 
 protected:
     virtual size_t OnSysRead(void *buffer, size_t bufsize);

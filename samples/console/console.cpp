@@ -47,7 +47,7 @@
 //#define TEST_LIST
 //#define TEST_LOG
 //#define TEST_LONGLONG
-#define TEST_MIME
+//#define TEST_MIME
 //#define TEST_INFO_FUNCTIONS
 //#define TEST_SOCKETS
 //#define TEST_STRINGS
@@ -55,6 +55,7 @@
 //#define TEST_TIMER
 //#define TEST_VCARD
 //#define TEST_WCHAR
+#define TEST_ZIP
 
 // ----------------------------------------------------------------------------
 // test class for container objects
@@ -1575,6 +1576,33 @@ static void TestUtf8()
 }
 
 #endif // TEST_WCHAR
+
+// ----------------------------------------------------------------------------
+// ZIP stream
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_ZIP
+
+#include "wx/zipstrm.h"
+
+static void TestZipStreamRead()
+{
+    puts("*** Testing ZIP reading ***\n");
+
+    wxZipInputStream istr(_T("idx.zip"), _T("IDX.txt"));
+    printf("Archive size: %u\n", istr.GetSize());
+
+    puts("Dumping the file:");
+    while ( !istr.Eof() )
+    {
+        putchar(istr.GetC());
+        fflush(stdout);
+    }
+
+    puts("\n----- done ------");
+}
+
+#endif // TEST_ZIP
 
 // ----------------------------------------------------------------------------
 // date time
@@ -3453,6 +3481,10 @@ int main(int argc, char **argv)
 #ifdef TEST_WCHAR
     TestUtf8();
 #endif // TEST_WCHAR
+
+#ifdef TEST_ZIP
+    TestZipStreamRead();
+#endif // TEST_ZIP
 
     wxUninitialize();
 
