@@ -1,4 +1,18 @@
-#include <wx/wx.h>
+/////////////////////////////////////////////////////////////////////////////
+// Name:        hid.h
+// Purpose:     DARWIN HID layer for WX
+// Author:      Ryan Norton
+// Modified by:
+// Created:     11/11/2003
+// RCS-ID:      $Id$
+// Copyright:   (c) Ryan Norton
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
+#include "wx/defs.h"
+
+#ifdef __DARWIN__
+
 #include <IOKit/IOKitLib.h>
 #include <IOKit/IOCFPlugIn.h>
 #include <IOKit/hid/IOHIDLib.h>
@@ -61,3 +75,5 @@ public:
 	bool Create();
 	virtual void BuildCookies(wxCFArray& Array);
 };
+
+#endif //__DARWIN__

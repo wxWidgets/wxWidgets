@@ -1621,6 +1621,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/gauge.cpp
     src/mac/carbon/gdiobj.cpp
     src/mac/carbon/gsockosx.cpp
+    src/mac/carbon/hid.cpp
     src/mac/carbon/icon.cpp
     src/mac/carbon/listbox.cpp
     src/mac/carbon/mdi.cpp

@@ -1,4 +1,22 @@
-#include "hid.h"
+/////////////////////////////////////////////////////////////////////////////
+// Name:        hid.cpp
+// Purpose:     DARWIN HID layer for WX Implementation
+// Author:      Ryan Norton
+// Modified by:
+// Created:     11/11/2003
+// RCS-ID:      $Id$
+// Copyright:   (c) Ryan Norton
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
+#include "wx/defs.h"
+
+//DARWIN _ONLY_
+#ifdef __DARWIN__
+
+#include "wx/mac/carbon/private/hid.h"
+#include "wx/string.h"
+#include "wx/log.h"
 
 #define wxFORCECHECK_MSG(arg, msg)  \
 {\
@@ -12,11 +30,18 @@
 #define wxKERNCHECK(arg, msg) wxFORCECHECK_MSG(arg != KERN_SUCCESS, msg)
 #define wxSCHECK(arg, msg) wxFORCECHECK_MSG(arg != S_OK, msg)
 
+#ifdef __WXDEBUG___
+#	define wxVERIFY(arg)	wxASSERT(arg)
+#else
+#	define wxVERIFY(arg)	arg
+#endif
+
+/*
 void CFShowTypeIDDescription(CFTypeRef pData)
 {
 	if(!pData)
 	{
-		wxMessageBox("AHHH!");
+		wxASSERT(false);
 		return;
 	}
 	
@@ -26,6 +51,7 @@ void CFShowTypeIDDescription(CFTypeRef pData)
 							 )
 				);	
 }
+*/
 
 // ============================================================================
 // implementation
@@ -46,7 +72,7 @@ bool wxHIDDevice::Create (const int& nClass, const int& nType)
 	//The call to IOServiceMatching filters down the
 	//the services we want to hid services (and also eats the
 	//dictionary up for us (consumes one reference))
-	wxASSERT((pDictionary = IOServiceMatching(kIOHIDDeviceKey)) != NULL );
+	wxVERIFY((pDictionary = IOServiceMatching(kIOHIDDeviceKey)) != NULL );
 
 	//Here we'll filter down the services to what we want
 	if (nType != -1)
@@ -73,11 +99,11 @@ bool wxHIDDevice::Create (const int& nClass, const int& nType)
 	io_object_t pObject;
 	while ( (pObject = IOIteratorNext(pIterator)) != NULL)
 	{
-		wxASSERT(IORegistryEntryCreateCFProperties(pObject, &pDictionary,
+		wxVERIFY(IORegistryEntryCreateCFProperties(pObject, &pDictionary,
 											kCFAllocatorDefault, kNilOptions) == KERN_SUCCESS);
 
 		//Just for sanity :)
-		wxASSERT(CFGetTypeID(CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDProductKey))) == CFStringGetTypeID());
+		wxVERIFY(CFGetTypeID(CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDProductKey))) == CFStringGetTypeID());
 			
 		//Get [product] name
 		m_szName = CFStringGetCStringPtr	(
@@ -91,7 +117,7 @@ bool wxHIDDevice::Create (const int& nClass, const int& nType)
 		wxCFArray CookieArray = CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDElementKey));
 		BuildCookies(CookieArray);
 		if (m_ppQueue != NULL)
-			wxASSERT((*m_ppQueue)->start(m_ppQueue) == S_OK);
+			wxVERIFY((*m_ppQueue)->start(m_ppQueue) == S_OK);
 
 		//Create the interface (good grief - long function names!)
 		SInt32 nScore;
@@ -111,7 +137,7 @@ bool wxHIDDevice::Create (const int& nClass, const int& nType)
 		(*ppPlugin)->Release(ppPlugin);
 		
 		//open the HID interface...
-		wxASSERT((*m_ppDevice)->open(m_ppDevice, 0) == S_OK);
+		wxVERIFY((*m_ppDevice)->open(m_ppDevice, 0) == S_OK);
 		
 		//cleanup
 		CFRelease(pDictionary);
@@ -138,7 +164,7 @@ void wxHIDDevice::AddCookie(CFTypeRef Data, const int& i)
 void wxHIDDevice::AddCookieInQueue(CFTypeRef Data, const int& i)
 {
 	AddCookie(Data, i);
-	wxASSERT((*m_ppQueue)->addElement(m_ppQueue, m_pCookies[i], 0) == S_OK);//3rd Param flags (none yet)
+	wxVERIFY((*m_ppQueue)->addElement(m_ppQueue, m_pCookies[i], 0) == S_OK);//3rd Param flags (none yet)
 }
 	
 void wxHIDDevice::InitCookies(const size_t& dwSize, bool bQueue)
@@ -147,8 +173,8 @@ void wxHIDDevice::InitCookies(const size_t& dwSize, bool bQueue)
 	if (bQueue)
 	{
 		wxASSERT( m_ppQueue != NULL);
-		wxASSERT(  (m_ppQueue = (*m_ppDevice)->allocQueue(m_ppDevice)) != NULL);
-		wxASSERT(  (*m_ppQueue)->create(m_ppQueue, 0, 512) == S_OK); //Param 2, flags, none yet
+		wxVERIFY(  (m_ppQueue = (*m_ppDevice)->allocQueue(m_ppDevice)) != NULL);
+		wxVERIFY(  (*m_ppQueue)->create(m_ppQueue, 0, 512) == S_OK); //Param 2, flags, none yet
 	}		
 }
 
@@ -415,3 +441,5 @@ void wxHIDKeyboard::BuildCookies(wxCFArray& Array)
 		}
 	}
 }//end buildcookies
+
+#endif //__DARWIN__
