@@ -29,12 +29,17 @@
 
 // wxWindows
 #ifndef WX_PRECOMP
-  #include  <wx/string.h>
   #include  <wx/app.h>
-  #include  <wx/generic/msgdlgg.h>
-#endif
+  #include  <wx/string.h>
+  #include  <wx/intl.h>
 
-#include  <wx/intl.h>
+  #include  <wx/generic/msgdlgg.h>
+  #include  <wx/filedlg.h>
+  #include  <wx/textctrl.h>
+#endif //WX_PRECOMP
+
+#include  <wx/file.h>
+#include  <wx/textfile.h>
 #include  <wx/log.h>
 
 // other standard headers
@@ -42,13 +47,10 @@
 #include  <stdlib.h>
 #include  <time.h>
 
-// C++ headers
-#include  <iostream.h>
-
 // _WINDOWS_ is defined when windows.h is included,
 // __WINDOWS__ is defined for MS Windows compilation
 #if       defined(__WINDOWS__) && !defined(_WINDOWS_)
-#include  <windows.h>
+  #include  <windows.h>
 #endif  //windows.h
 
 // ----------------------------------------------------------------------------
@@ -58,7 +60,7 @@
 // define this to enable wrapping of log messages
 //#define LOG_PRETTY_WRAP
 
-#ifdef LOG_PRETTY_WRAP
+#ifdef  LOG_PRETTY_WRAP
   static void wxLogWrap(FILE *f, const char *pszPrefix, const char *psz);
 #endif
 
@@ -81,16 +83,16 @@
 static char s_szBuf[LOG_BUFFER_SIZE];
 
 // generic log function
-void wxLogGeneric(wxLog::Level level, wxTString strFormat, ...)
+void wxLogGeneric(wxLogLevel level, wxTString strFormat, ...)
 {
-  if ( wxLog::GetActiveTarget() != NULL ) {               
-    va_list argptr;                                             
-    va_start(argptr, strFormat);                                
-    vsprintf(s_szBuf, strFormat, argptr);                       
-    va_end(argptr);                                             
-                                                                
-    wxLog::OnLog(level, s_szBuf);                         
-  }                                                             
+  if ( wxLog::GetActiveTarget() != NULL ) {
+    va_list argptr;
+    va_start(argptr, strFormat);
+    vsprintf(s_szBuf, strFormat, argptr);
+    va_end(argptr);
+
+    wxLog::OnLog(level, s_szBuf);
+  }
 }
 
 #define IMPLEMENT_LOG_FUNCTION(level)                             \
@@ -102,7 +104,7 @@ void wxLogGeneric(wxLog::Level level, wxTString strFormat, ...)
       vsprintf(s_szBuf, strFormat, argptr);                       \
       va_end(argptr);                                             \
                                                                   \
-      wxLog::OnLog(wxLog::level, s_szBuf);                        \
+      wxLog::OnLog(wxLOG_##level, s_szBuf);                       \
     }                                                             \
   }
 
@@ -113,9 +115,23 @@ IMPLEMENT_LOG_FUNCTION(Message)
 IMPLEMENT_LOG_FUNCTION(Info)
 IMPLEMENT_LOG_FUNCTION(Status)
 
-// debug functions don't use wxTString
-#undef  IMPLEMENT_LOG_FUNCTION
-#define IMPLEMENT_LOG_FUNCTION(level)                             \
+// same as info, but only if 'verbose' mode is on
+void wxLogVerbose(wxTString strFormat, ...)
+{
+  wxLog *pLog = wxLog::GetActiveTarget();
+  if ( pLog != NULL && pLog->GetVerbose() ) {
+    va_list argptr;
+    va_start(argptr, strFormat);
+    vsprintf(s_szBuf, strFormat, argptr);
+    va_end(argptr);
+
+    wxLog::OnLog(wxLOG_Info, s_szBuf);
+  }
+}
+
+// debug functions
+#ifdef __DEBUG__
+#define IMPLEMENT_LOG_DEBUG_FUNCTION(level)                       \
   void wxLog##level(const char *szFormat, ...)                    \
   {                                                               \
     if ( wxLog::GetActiveTarget() != NULL ) {                     \
@@ -124,55 +140,65 @@ IMPLEMENT_LOG_FUNCTION(Status)
       vsprintf(s_szBuf, szFormat, argptr);                        \
       va_end(argptr);                                             \
                                                                   \
-      wxLog::OnLog(wxLog::level, s_szBuf);                        \
+      wxLog::OnLog(wxLOG_##level, s_szBuf);                       \
     }                                                             \
   }
 
-IMPLEMENT_LOG_FUNCTION(Debug)
-IMPLEMENT_LOG_FUNCTION(Trace)
+  void wxLogTrace(wxTraceMask mask, const char *szFormat, ...)
+  {
+    wxLog *pLog = wxLog::GetActiveTarget();
 
-void wxLogVerbose(wxTString strFormat, ...)
-{                                            
-  if ( wxLog::GetVerbose() && wxLog::GetActiveTarget() != NULL ) {
-    va_list argptr;                              
-    va_start(argptr, strFormat);                 
-    vsprintf(s_szBuf, strFormat, argptr);        
-    va_end(argptr);                              
-                                                 
-    wxLog::OnLog(wxLog::Info, s_szBuf);
-  }                                              
-}
-  
-void wxLogSysError(wxTString str, ...)
-{
-  if ( wxLog::GetActiveTarget() != NULL ) {
-    va_list argptr;
-    va_start(argptr, str);
-    vsprintf(s_szBuf, str, argptr);
-    va_end(argptr);
+    // we check that all of mask bits are set in the current mask, so
+    // that wxLogTrace(wxTraceRefCount | wxTraceOle) will only do something
+    // if both bits are set.
+    if ( pLog != NULL && (pLog->GetTraceMask() & mask == mask) ) {
+      va_list argptr;
+      va_start(argptr, szFormat);
+      vsprintf(s_szBuf, szFormat, argptr);
+      va_end(argptr);
 
-    char szErrMsg[LOG_BUFFER_SIZE / 2];
-    sprintf(szErrMsg, _(" (error %ld: %s)"), wxSysErrorCode(), wxSysErrorMsg());
-    strncat(s_szBuf, szErrMsg, WXSIZEOF(s_szBuf) - strlen(s_szBuf));
-
-    wxLog::OnLog(wxLog::Error, s_szBuf);
+      wxLog::OnLog(wxLOG_Trace, s_szBuf);
+    }
   }
+
+#else // release
+  #define IMPLEMENT_LOG_DEBUG_FUNCTION(level)
+#endif
+
+IMPLEMENT_LOG_DEBUG_FUNCTION(Debug)
+IMPLEMENT_LOG_DEBUG_FUNCTION(Trace)
+
+// wxLogSysError: one uses the last error code, for other  you must give it
+// explicitly
+
+// common part of both wxLogSysError
+void wxLogSysErrorHelper(long lErrCode)
+{
+  char szErrMsg[LOG_BUFFER_SIZE / 2];
+  sprintf(szErrMsg, _(" (error %ld: %s)"), lErrCode, wxSysErrorMsg(lErrCode));
+  strncat(s_szBuf, szErrMsg, WXSIZEOF(s_szBuf) - strlen(s_szBuf));
+
+  wxLog::OnLog(wxLOG_Error, s_szBuf);
+}
+
+void WXDLLEXPORT wxLogSysError(wxTString strFormat, ...)
+{
+  va_list argptr;
+  va_start(argptr, strFormat);
+  vsprintf(s_szBuf, strFormat, argptr);
+  va_end(argptr);
+
+  wxLogSysErrorHelper(wxSysErrorCode());
 }
 
 void WXDLLEXPORT wxLogSysError(long lErrCode, wxTString strFormat, ...)
 {
-  if ( wxLog::GetActiveTarget() != NULL ) {
-    va_list argptr;
-    va_start(argptr, strFormat);
-    vsprintf(s_szBuf, strFormat, argptr);
-    va_end(argptr);
+  va_list argptr;
+  va_start(argptr, strFormat);
+  vsprintf(s_szBuf, strFormat, argptr);
+  va_end(argptr);
 
-    char szErrMsg[LOG_BUFFER_SIZE / 2];
-    sprintf(szErrMsg, _(" (error %ld: %s)"), lErrCode, wxSysErrorMsg(lErrCode));
-    strncat(s_szBuf, szErrMsg, WXSIZEOF(s_szBuf) - strlen(s_szBuf));
-
-    wxLog::OnLog(wxLog::Error, s_szBuf);
-  }
+  wxLogSysErrorHelper(lErrCode);
 }
 
 // ----------------------------------------------------------------------------
@@ -182,19 +208,24 @@ void WXDLLEXPORT wxLogSysError(long lErrCode, wxTString strFormat, ...)
 wxLog::wxLog()
 {
   m_bHasMessages = FALSE;
+  m_bVerbose     = FALSE;
+  m_szTimeFormat = "[%d/%b/%y %H:%M:%S] ";
+  m_ulTraceMask  = (wxTraceMask)-1;        // set all bits
 }
 
 wxLog *wxLog::GetActiveTarget() 
 { 
   if ( !ms_bInitialized ) {
-    // prevent infinite recursion if someone calls wxLogXXX() from wxApp
+    // prevent infinite recursion if someone calls wxLogXXX() from
+    // wxApp::CreateLogTarget()
     ms_bInitialized = TRUE;
 
-    // ask the application to create a log target for us if it exists
-    if ( wxTheApp != NULL )
+    #ifdef  WX_TEST_MINIMAL
+      ms_pLogger = new wxLogStderr;
+    #else
+      // ask the application to create a log target for us
       ms_pLogger = wxTheApp->CreateLogTarget();
-    else
-      ms_pLogger = new wxLogStderr; 
+    #endif
 
     // do nothing if it fails - what can we do?
   }
@@ -215,53 +246,58 @@ wxLog *wxLog::SetActiveTarget(wxLog *pLogger)
   return pOldLogger; 
 }
 
-void wxLog::DoLog(Level level, const char *szString)
+void wxLog::DoLog(wxLogLevel level, const char *szString)
 {
-  char szBuf[128];
-  time_t timeNow;
-  struct tm *ptmNow;
+  wxString str;
 
-  time(&timeNow);
-  ptmNow = localtime(&timeNow);
+  // prepend a timestamp if not disabled
+  if ( !IsEmpty(m_szTimeFormat) ) {
+    char szBuf[128];
+    time_t timeNow;
+    struct tm *ptmNow;
 
-  strftime(szBuf, WXSIZEOF(szBuf), ms_szTimeFormat, ptmNow);
-  wxString str = szBuf;
+    time(&timeNow);
+    ptmNow = localtime(&timeNow);
+
+    strftime(szBuf, WXSIZEOF(szBuf), m_szTimeFormat, ptmNow);
+    str = szBuf;
+  }
 
   switch ( level ) {
-    case FatalError:
+    case wxLOG_FatalError:
       DoLogString(str << _("Fatal error: ") << szString);
       DoLogString(_("Program aborted."));
       Flush();
       abort();
       break;
 
-    case Error:
+    case wxLOG_Error:
       DoLogString(str << _("Error: ") << szString);
       break;
 
-    case Warning:
+    case wxLOG_Warning:
       DoLogString(str << _("Warning: ") << szString);
       break;
 
-    case Info:
+    case wxLOG_Info:
       if ( GetVerbose() )
-    case Message:
+    case wxLOG_Message:
         DoLogString(str + szString);
       // fall through
 
-    case Status:
+    case wxLOG_Status:
       // nothing to do
       break;
 
-    case Trace:
-    case Debug:
+    case wxLOG_Trace:
+    case wxLOG_Debug:
       #ifdef __DEBUG__
         #ifdef  __WIN32__
           // in addition to normal logging, also send the string to debugger
           // (don't prepend "Debug" here: it will go to debug window anyhow)
           ::OutputDebugString(str + szString + "\n\r");
         #endif  //Win32
-        DoLogString(str << (level == Trace ? _("Trace") : _("Debug"))
+        DoLogString(str << (level == wxLOG_Trace ? "Trace" : "Debug")
                         << ": " << szString);
       #endif
             
@@ -272,7 +308,7 @@ void wxLog::DoLog(Level level, const char *szString)
   }
 }
 
-void wxLog::DoLogString(const char *WXUNUSED(szString))
+void wxLog::DoLogString(const char *szString)
 {
   wxFAIL_MSG("DoLogString must be overrided if it's called.");
 }
@@ -321,18 +357,20 @@ void wxLogStream::DoLogString(const char *szString)
 // ----------------------------------------------------------------------------
 // wxLogTextCtrl implementation
 // ----------------------------------------------------------------------------
-
-/*
 wxLogTextCtrl::wxLogTextCtrl(wxTextCtrl *pTextCtrl)
+// @@@ TODO: in wxGTK wxTextCtrl doesn't derive from streambuf
+#ifndef __GTK__
              : wxLogStream(new ostream(pTextCtrl))
+#endif //GTK
 {
 }
 
 wxLogTextCtrl::~wxLogTextCtrl()
 {
-  delete m_ostr;
+  #ifndef __GTK__
+    delete m_ostr;
+  #endif //GTK
 }
-*/
 
 // ----------------------------------------------------------------------------
 // wxLogGui implementation
@@ -385,19 +423,19 @@ void wxLogGui::Flush()
 
 // the default behaviour is to discard all informational messages if there
 // are any errors/warnings.
-void wxLogGui::DoLog(Level level, const char *szString)
+void wxLogGui::DoLog(wxLogLevel level, const char *szString)
 {
   switch ( level ) {
-    case Info:
+    case wxLOG_Info:
       if ( GetVerbose() )
-    case Message:
+    case wxLOG_Message:
         if ( !m_bErrors ) {
           m_aMessages.Add(szString);
           m_bHasMessages = TRUE;
         }
       break;
 
-    case Status:
+    case wxLOG_Status:
       {
         // find the top window and set it's status text if it has any
         wxWindow *pWin = wxTheApp->GetTopWindow();
@@ -408,8 +446,8 @@ void wxLogGui::DoLog(Level level, const char *szString)
       }
       break;
 
-    case Trace:
-    case Debug:
+    case wxLOG_Trace:
+    case wxLOG_Debug:
       #ifdef __DEBUG__
         #ifdef  __WIN32__
           OutputDebugString(szString);
@@ -423,13 +461,13 @@ void wxLogGui::DoLog(Level level, const char *szString)
       #endif
       break;
 
-    case FatalError:
+    case wxLOG_FatalError:
       // show this one immediately
       wxMessageBox(szString, "Fatal error", wxICON_HAND);
       break;
 
-    case Error:
-    case Warning:
+    case wxLOG_Error:
+    case wxLOG_Warning:
       // discard earlier informational messages if this is the 1st error
       if ( !m_bErrors ) {
         m_aMessages.Empty();
@@ -445,6 +483,200 @@ void wxLogGui::DoLog(Level level, const char *szString)
   }
 }
 
+// ----------------------------------------------------------------------------
+// wxLogWindow implementation
+// ----------------------------------------------------------------------------
+
+// log frame class
+class wxLogFrame : public wxFrame
+{
+public:
+  // ctor
+  wxLogFrame(const char *szTitle);
+
+  // menu callbacks
+  void OnClose(wxCommandEvent& event);
+  void OnSave (wxCommandEvent& event);
+  void OnClear(wxCommandEvent& event);
+
+  // accessors
+  wxTextCtrl *TextCtrl() const { return m_pTextCtrl; }
+
+private:
+  enum
+  {
+    Menu_Close = 100,
+    Menu_Save,
+    Menu_Clear
+  };
+
+  wxTextCtrl *m_pTextCtrl;
+
+  DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(wxLogFrame, wxFrame)
+  // wxLogWindow menu events
+  EVT_MENU(Menu_Close, wxLogFrame::OnClose)
+  EVT_MENU(Menu_Save,  wxLogFrame::OnSave)
+  EVT_MENU(Menu_Clear, wxLogFrame::OnClear)
+
+  EVT_CLOSE(wxLogFrame::OnClose)
+END_EVENT_TABLE() 
+
+wxLogFrame::wxLogFrame(const char *szTitle)
+          : wxFrame(NULL, -1, szTitle)
+{
+  // @@ kludge: wxSIMPLE_BORDER is simply to prevent wxWindows from creating
+  //    a rich edit control instead of a normal one we want
+  m_pTextCtrl = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition,
+                               wxDefaultSize,
+                               wxSIMPLE_BORDER |
+                               wxTE_MULTILINE  |
+                               wxHSCROLL       |
+                               wxTE_READONLY);
+  /*
+  m_pTextCtrl->SetEditable(FALSE);
+  m_pTextCtrl->SetRichEdit(FALSE);
+  */
+
+  // create menu
+  wxMenuBar *pMenuBar = new wxMenuBar;
+  wxMenu *pMenu = new wxMenu;
+  pMenu->Append(Menu_Save,  "&Save...");
+  pMenu->Append(Menu_Clear, "C&lear");
+  pMenu->AppendSeparator();
+  pMenu->Append(Menu_Close, "&Close");
+  pMenuBar->Append(pMenu, "&Log");
+  SetMenuBar(pMenuBar);
+
+  // @@ what about status bar? needed (for menu prompts)?
+}
+
+void wxLogFrame::OnClose(wxCommandEvent& event)
+{
+  // just hide the window
+  Show(FALSE);
+}
+
+void wxLogFrame::OnSave(wxCommandEvent& event)
+{
+  // get the file name
+  // -----------------
+  const char *szFileName = wxSaveFileSelector("log", "txt", "log.txt");
+  if ( szFileName == NULL ) {
+    // cancelled
+    return;
+  }
+
+  // open file
+  // ---------
+  wxFile file;
+  Bool bOk;
+  if ( wxFile::Exists(szFileName) ) {
+    Bool bAppend;
+    wxString strMsg;
+    strMsg.Printf(_("Append log to file '%s' "
+                    "(choosing [No] will overwrite it)?"), szFileName);
+    switch ( wxMessageBox(strMsg, "Question", wxYES_NO | wxCANCEL) ) {
+      case wxYES:
+        bAppend = TRUE;
+        break;
+
+      case wxNO:
+        bAppend = FALSE;
+        break;
+
+      case wxCANCEL:
+        return;
+
+      default:
+        wxFAIL_MSG("invalid message box return value");
+    }
+
+    if ( bAppend ) {
+      bOk = file.Open(szFileName, wxFile::write_append);
+    }
+    else {
+      bOk = file.Create(szFileName, TRUE /* overwrite */);
+    }
+  }
+  else {
+    bOk = file.Create(szFileName);
+  }
+
+  // retrieve text and save it
+  // -------------------------
+  
+  // @@@@ TODO: no GetNumberOfLines and GetLineText in wxGTK yet
+#ifndef __GTK__
+  int nLines = m_pTextCtrl->GetNumberOfLines();
+  for ( int nLine = 0; bOk && nLine < nLines; nLine++ ) {
+    bOk = file.Write(m_pTextCtrl->GetLineText(nLine) + wxTextFile::GetEOL());
+  }
+#endif //GTK
+  
+  if ( bOk )
+    bOk = file.Close();
+
+  if ( !bOk ) {
+    wxLogError("Can't save log contents to file.");
+    return;
+  }
+}
+
+void wxLogFrame::OnClear(wxCommandEvent& event)
+{
+  m_pTextCtrl->Clear();
+}
+
+wxLogWindow::wxLogWindow(const wxTString& strTitle)
+{
+  m_pOldLog = wxLog::GetActiveTarget();
+  m_pLogFrame = new wxLogFrame(strTitle);
+}
+
+void wxLogWindow::Show(Bool bShow)
+{
+  m_pLogFrame->Show(bShow);
+}
+
+void wxLogWindow::DoLog(wxLogLevel level, const char *szString)
+{
+  // first let the previous logger show it
+  if ( m_pOldLog != NULL ) {
+    // @@@ why can't we access protected wxLog method from here (we derive 
+    // from wxLog)? gcc gives "DoLog is protected in this context", what
+    // does this mean? Anyhow, the cast is harmless and let's us do what
+    // we want.
+    ((wxLogWindow *)m_pOldLog)->DoLog(level, szString);
+  }
+  
+  // and this will format it nicely and call our DoLogString()
+  wxLog::DoLog(level, szString);
+}
+
+void wxLogWindow::DoLogString(const char *szString)
+{
+  // put the text into our window
+  wxTextCtrl *pText = m_pLogFrame->TextCtrl();
+
+  // remove selection (WriteText is in fact ReplaceSelection)
+  long nLen = pText->GetLastPosition();
+  pText->SetSelection(nLen, nLen);
+
+  pText->WriteText(szString);
+  pText->WriteText("\n"); // "\n" ok here (_not_ "\r\n")
+
+  // ensure that the line can be seen
+  // @@@ TODO
+}
+
+wxLogWindow::~wxLogWindow()
+{
+  m_pLogFrame->Close(TRUE);
+}
+
 #endif  //WX_TEST_MINIMAL
 
 // ============================================================================
@@ -456,8 +688,6 @@ void wxLogGui::DoLog(Level level, const char *szString)
 // ----------------------------------------------------------------------------
 wxLog      *wxLog::ms_pLogger      = NULL;
 bool        wxLog::ms_bInitialized = FALSE;
-bool        wxLog::ms_bVerbose     = FALSE;
-const char *wxLog::ms_szTimeFormat = "[%d/%b/%y %H:%M:%S] ";
 
 // ----------------------------------------------------------------------------
 // stdout error logging helper
@@ -467,8 +697,7 @@ const char *wxLog::ms_szTimeFormat = "[%d/%b/%y %H:%M:%S] ";
 // (looks more pretty on the terminal). Also adds newline at the end.
 //
 // @@ this is now disabled until I find a portable way of determining the
-//    terminal window size
-
+//    terminal window size (ok, I found it but does anybody really cares?)
 #ifdef    LOG_PRETTY_WRAP
 static void wxLogWrap(FILE *f, const char *pszPrefix, const char *psz)
 {
@@ -522,40 +751,40 @@ const char *wxSysErrorMsg(unsigned long nErrCode)
   if ( nErrCode == 0 )
     nErrCode = wxSysErrorCode();
 
-#ifdef  __WINDOWS__
-#ifdef  __WIN32__
-  static char s_szBuf[LOG_BUFFER_SIZE / 2];
+  #ifdef  __WINDOWS__
+    #ifdef  __WIN32__
+      static char s_szBuf[LOG_BUFFER_SIZE / 2];
 
-  // get error message from system
-  LPVOID lpMsgBuf;
-  FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-                NULL, nErrCode, 
-                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                (LPTSTR)&lpMsgBuf,
-                0, NULL);
+      // get error message from system
+      LPVOID lpMsgBuf;
+      FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+                    NULL, nErrCode, 
+                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                    (LPTSTR)&lpMsgBuf,
+                    0, NULL);
 
-  // copy it to our buffer and free memory
-  strncpy(s_szBuf, (const char *)lpMsgBuf, WXSIZEOF(s_szBuf) - 1);
-  s_szBuf[WXSIZEOF(s_szBuf) - 1] = '\0';
-  LocalFree(lpMsgBuf);
+      // copy it to our buffer and free memory
+      strncpy(s_szBuf, (const char *)lpMsgBuf, WXSIZEOF(s_szBuf) - 1);
+      s_szBuf[WXSIZEOF(s_szBuf) - 1] = '\0';
+      LocalFree(lpMsgBuf);
 
-  // returned string is capitalized and ended with '\r\n' - bad
-  s_szBuf[0] = (char)tolower(s_szBuf[0]);
-  size_t len = strlen(s_szBuf);
-  if ( len > 0 ) {
-    // truncate string
-    if ( s_szBuf[len - 2] == '\r' )
-      s_szBuf[len - 2] = '\0';
-  }
+      // returned string is capitalized and ended with '\r\n' - bad
+      s_szBuf[0] = (char)tolower(s_szBuf[0]);
+      size_t len = strlen(s_szBuf);
+      if ( len > 0 ) {
+        // truncate string
+        if ( s_szBuf[len - 2] == '\r' )
+          s_szBuf[len - 2] = '\0';
+      }
 
-  return s_szBuf;
-#else
-  // TODO: Windows 3.1
-  return NULL;
-#endif
-#else
-  return strerror(nErrCode);
-#endif
+      return s_szBuf;
+    #else   //Win16
+      // TODO @@@@
+      return NULL;
+    #endif // Win16/32
+  #else   // Unix
+    return strerror(nErrCode);
+  #endif  // Win/Unix
 }
 
 // ----------------------------------------------------------------------------
@@ -600,11 +829,11 @@ void wxOnAssert(const char *szFile, int nLine, const char *szMsg)
           break;
       }
     }
-  #else   
+  #else   // !Windows
     // @@@@ don't know how to start the debugger under generic Unix
     s_bNoAsserts = TRUE; // suppress 'unused var' warning
     abort();
-  #endif
+  #endif  // Windows/!Windows
 }
 
 #endif  //DEBUG
