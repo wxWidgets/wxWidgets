@@ -252,7 +252,7 @@ pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef 
                 long keyval = wxMacTranslateKey(keychar, keycode) ;
                 wxWindow* focus = wxWindow::FindFocus() ;
 
-                if ( wxTheApp->MacSendKeyDownEvent( focus , keyval , rec.modifiers , rec.when , rec.where.h , rec.where.v ) )
+                if ( (focus != NULL) && wxTheApp->MacSendKeyDownEvent( focus , keyval , rec.modifiers , rec.when , rec.where.h , rec.where.v ) )
                 {
                     // was handled internally
                     result = noErr ;
