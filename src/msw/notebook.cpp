@@ -171,8 +171,9 @@ bool wxNotebook::Create(wxWindow *parent,
   if (m_windowStyle & wxNB_RIGHT)
     tabStyle |= TCS_VERTICAL|TCS_RIGHT;
 
-
-  if ( !MSWCreateControl(WC_TABCONTROL, tabStyle, pos, size) )
+  // note that we don't want to have the default WS_EX_CLIENTEDGE style for the
+  // notebook, so explicitly specify 0 as last parameter
+  if ( !MSWCreateControl(WC_TABCONTROL, tabStyle, pos, size, _T(""), 0) )
   {
     return FALSE;
   }
