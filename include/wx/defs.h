@@ -1808,12 +1808,13 @@ enum
     wxSTIPPLE_MASK,        /* mask is used for masking areas in the stipple bitmap (TO DO) */
     /*  drawn with a Pen, and without any Brush -- and it can be stippled. */
     wxSTIPPLE =          110,
-    wxBDIAGONAL_HATCH,
-    wxCROSSDIAG_HATCH,
-    wxFDIAGONAL_HATCH,
-    wxCROSS_HATCH,
-    wxHORIZONTAL_HATCH,
-    wxVERTICAL_HATCH,
+
+    wxBDIAGONAL_HATCH,     /* In wxWidgets < 2.6 use WX_HATCH macro  */
+    wxCROSSDIAG_HATCH,     /* to verify these wx*_HATCH are in style */
+    wxFDIAGONAL_HATCH,     /* of wxBrush. In wxWidgets >= 2.6 use    */
+    wxCROSS_HATCH,         /* wxBrush::IsHatch() instead.            */
+    wxHORIZONTAL_HATCH,    /* Adding new hatch styles remember to    */
+    wxVERTICAL_HATCH,      /* adjust style check accordingly.        */
 
     wxJOIN_BEVEL =     120,
     wxJOIN_MITER,
