@@ -3155,11 +3155,9 @@ case "${host}" in
         WX_LIBRARY_LINK1_GL="lib${WX_LIBRARY_GL}.${WX_CURRENT}.${SO_SUFFIX}"
         WX_LIBRARY_LINK2_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}"
 
-        dnl Under Mac OS X, we should build real frameworks instead of simple
-        dnl dynamic shared libraries (in order to embed the resources)
-        if test "$wxUSE_MAC" = 1; then
-            dnl base name of the resource file for wxMac must be the same
-            dnl as library installation base name (-install_name)
+        dnl base name of the resource file for wxMac must be the same
+        dnl as library installation base name (-install_name)
+        if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = "1"; then
             WX_RESOURCES_MACOSX_ASCII="lib${WX_LIBRARY}.${WX_CURRENT}.r"
             WX_RESOURCES_MACOSX_DATA="lib${WX_LIBRARY}.${WX_CURRENT}.rsrc"
         fi
@@ -3303,34 +3301,40 @@ else
     STATIC_FLAG="no"
 fi
 
-dnl default value is to (silently) do nothing in the makefile
-MACRESCOMP="@#"
-MACSETFILE="@#"
-MACRESWXCONFIG="#"
-if test "$wxUSE_MAC" = 1; then
+if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
     dnl add the resources target for wxMac
     LIBWXMACRES="\$(top_builddir)lib/${WX_RESOURCES_MACOSX_ASCII}"
     WX_ALL="${WX_ALL} ${LIBWXMACRES}"
     WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall_res"
+
     AC_CHECK_PROG(RESCOMP, Rez, Rez, /Developer/Tools/Rez)
     AC_CHECK_PROG(DEREZ, DeRez, DeRez, /Developer/Tools/DeRez)
     AC_CHECK_PROG(SETFILE, SetFile, SetFile, /Developer/Tools/SetFile)
-    MACOSX_BUNDLE="bundle"
+
+    MACSETFILE="\$(SETFILE)"
+
     dnl resources are bundled both with shared library and applications
     dnl since the carb resource *must* be included in the application
-    MACRESCOMP="\$(RESCOMP) -d __DARWIN__ -t APPL Carbon.r ${LIBWXMACRES} -o"
-    MACSETFILE="\$(SETFILE)"
-    MACRESWXCONFIG="${RESCOMP} -d __DARWIN__ -t APPL Carbon.r \${exec_prefix}/lib/${WX_RESOURCES_MACOSX_ASCII} -o"
-elif test "$wxUSE_COCOA" = 1; then
-    AC_CHECK_PROG(RESCOMP, Rez, Rez, /Developer/Tools/Rez)
-    AC_CHECK_PROG(DEREZ, DeRez, DeRez, /Developer/Tools/DeRez)
-    AC_CHECK_PROG(SETFILE, SetFile, SetFile, /Developer/Tools/SetFile)
-    MACRESCOMP="echo -n | \$(RESCOMP) -d __DARWIN__ -t APPL ${LIBWXMACRES} -o"
-    MACSETFILE="\$(SETFILE)"
-    MACRESWXCONFIG="echo -n | ${RESCOMP} -d __DARWIN__ -t APPL \${exec_prefix}/lib/${WX_RESOURCES_MACOSX_ASCII} -o"
+    if test "$wxUSE_MAC" = 1; then
+        MACRESCOMP="\$(RESCOMP) -d __DARWIN__ -t APPL Carbon.r ${LIBWXMACRES} -o"
+
+        dnl this command is used to implement `wx-config --rezflags` and it is
+        dnl eval'd there so escape any metacharacters inside
+        MACRESWXCONFIG="${RESCOMP} -d __DARWIN__ -t APPL Carbon.r \\\${exec_prefix}/lib/${WX_RESOURCES_MACOSX_ASCII} -o"
+    else
+        MACRESCOMP="echo -n | \$(RESCOMP) -d __DARWIN__ -t APPL ${LIBWXMACRES} -o"
+        MACRESWXCONFIG="echo -n \\\| ${RESCOMP} -d __DARWIN__ -t APPL \\\${exec_prefix}/lib/${WX_RESOURCES_MACOSX_ASCII} -o"
+    fi
 else
+    dnl default value is to (silently) do nothing in the makefile
+    MACSETFILE="@#"
+    MACRESWXCONFIG="#"
+
+    dnl confusingly, wxOS2 also uses MACRESCOMP in its post-link step
     if test "$wxUSE_PM" = 1; then
         MACRESCOMP="emxbind -ep"
+    else
+        MACRESCOMP="@#"
     fi
 fi
 
@@ -5904,7 +5908,6 @@ AC_SUBST(WX_RESOURCES_MACOSX_DATA)
 
 dnl additional for Mac OS X
 AC_SUBST(DEREZ)
-AC_SUBST(MACOSX_BUNDLE)
 AC_SUBST(LIBWXMACRES)
 AC_SUBST(MACRESCOMP)
 AC_SUBST(MACSETFILE)

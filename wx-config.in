@@ -292,7 +292,7 @@ while test $# -gt 0; do
       echo ${LDFLAGS_EXE}
       ;;
     --rezflags)
-      echo ${MACRESWXCONFIG}
+      echo `eval echo ${MACRESWXCONFIG}`
       ;;
 
     --libs*)
