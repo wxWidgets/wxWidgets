@@ -152,16 +152,19 @@ long wxTopLevelWindowMSW::MSWGetCreateWindowFlags(long *exflags) const
     {
         *exflags = MakeExtendedStyle(style);
 
-        // make all frames appear in the win9x shell taskbar unless
-        // wxFRAME_TOOL_WINDOW or wxFRAME_NO_TASKBAR is given - without giving
-        // them WS_EX_APPWINDOW style, the child (i.e. owned) frames wouldn't
-        // appear in it
 #if !defined(__WIN16__) && !defined(__SC__)
-        if ( (style & wxFRAME_TOOL_WINDOW) || (style & wxFRAME_NO_TASKBAR) )
-            *exflags |= WS_EX_TOOLWINDOW;
-        else if ( !(style & wxFRAME_NO_TASKBAR) )
-            *exflags |= WS_EX_APPWINDOW;
-#endif
+        if ( !(GetExtraStyle() & wxTOPLEVEL_EX_DIALOG) )
+        {
+            // make all frames appear in the win9x shell taskbar unless
+            // wxFRAME_TOOL_WINDOW or wxFRAME_NO_TASKBAR is given - without
+            // giving them WS_EX_APPWINDOW style, the child (i.e. owned) frames
+            // wouldn't appear in it
+            if ( (style & wxFRAME_TOOL_WINDOW) || (style & wxFRAME_NO_TASKBAR) )
+                *exflags |= WS_EX_TOOLWINDOW;
+            else if ( !(style & wxFRAME_NO_TASKBAR) )
+                *exflags |= WS_EX_APPWINDOW;
+        }
+#endif // !Win16
 
         if ( style & wxSTAY_ON_TOP )
             *exflags |= WS_EX_TOPMOST;
