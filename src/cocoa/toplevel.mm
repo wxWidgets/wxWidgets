@@ -29,6 +29,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/cocoa/autorelease.h"
+#include "wx/cocoa/string.h"
 #include "wx/cocoa/mbarman.h"
 
 #import <AppKit/NSView.h>
@@ -93,6 +94,7 @@ bool wxTopLevelWindowCocoa::Create(wxWindow *parent,
     // above alloc and thus the retain count will be 1.
     [m_cocoaNSWindow release];
 
+    [m_cocoaNSWindow setTitle:wxNSStringWithWxString(title)];
     return TRUE;
 }
 
