@@ -45,7 +45,7 @@ if test "x$OS" = x; then
   exit 1
 fi
 
-SRC_DIR=`readbase src src`
+SRC_DIR=`readbase src`
 SAMPLES_DIR=`readbase2 samples`
 UTILS_DIR=`readbase2 utils`
 USER_DIR=`readbase2 user`

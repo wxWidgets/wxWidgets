@@ -117,8 +117,8 @@ class wxPropertyFormValidator: public wxPropertyValidator
   
    // Called to check value is OK (e.g. when OK is pressed)
    // Return FALSE if value didn't check out; signal to restore old value.
-   virtual bool OnCheckValue(wxProperty *property, wxPropertyFormView *view, wxWindow *parentWindow)
-   { return TRUE; }
+   virtual bool OnCheckValue( wxProperty *WXUNUSED(property), wxPropertyFormView *WXUNUSED(view), 
+     wxWindow *WXUNUSED(parentWindow) ) { return TRUE; }
 
    // Does the transferance from the property editing area to the property itself.
    // Called by the view, e.g. when closing the window.
@@ -127,11 +127,14 @@ class wxPropertyFormValidator: public wxPropertyValidator
    // Called by the view to transfer the property to the window.
    virtual bool OnDisplayValue(wxProperty *property, wxPropertyFormView *view, wxWindow *parentWindow) = 0;
 
-  virtual void OnDoubleClick(wxProperty *property, wxPropertyFormView *view, wxWindow *parentWindow) {};
-  virtual void OnSetFocus(wxProperty *property, wxPropertyFormView *view, wxWindow *parentWindow) {};
-  virtual void OnKillFocus(wxProperty *property, wxPropertyFormView *view, wxWindow *parentWindow) {};
-  virtual void OnCommand(wxProperty *property, wxPropertyFormView *view, wxWindow *parentWindow, wxCommandEvent& event) {};
-
+  virtual void OnDoubleClick( wxProperty *WXUNUSED(property), wxPropertyFormView *WXUNUSED(view), 
+     wxWindow *WXUNUSED(parentWindow) ) { } 
+  virtual void OnSetFocus( wxProperty *WXUNUSED(property), wxPropertyFormView *WXUNUSED(view), 
+     wxWindow *WXUNUSED(parentWindow) ) { }
+  virtual void OnKillFocus( wxProperty *WXUNUSED(property), wxPropertyFormView *WXUNUSED(view), 
+     wxWindow *WXUNUSED(parentWindow) ) { }
+  virtual void OnCommand( wxProperty *WXUNUSED(property), wxPropertyFormView *WXUNUSED(view), 
+     wxWindow *WXUNUSED(parentWindow), wxCommandEvent& WXUNUSED(event) ) {}
 };
 
 /*

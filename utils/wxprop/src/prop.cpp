@@ -942,17 +942,17 @@ wxPropertySheet::~wxPropertySheet(void)
   Clear();
 }
 
-bool wxPropertySheet::Save(ostream& str)
+bool wxPropertySheet::Save( ostream& WXUNUSED(str) )
 {
   return FALSE;
 }
 
-bool wxPropertySheet::Load(ostream& str)
+bool wxPropertySheet::Load( ostream& WXUNUSED(str) )
 {
   return FALSE;
 }
 
-void wxPropertySheet::UpdateAllViews(wxPropertyView *thisView)
+void wxPropertySheet::UpdateAllViews( wxPropertyView *WXUNUSED(thisView) )
 {
 }
 

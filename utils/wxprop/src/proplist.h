@@ -216,32 +216,30 @@ class wxPropertyListValidator: public wxPropertyValidator
 
    // Called when the property is double clicked. Extra functionality can be provided, such as
    // cycling through possible values.
-   inline virtual bool OnDoubleClick(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow)
-   { return TRUE; }
+   inline virtual bool OnDoubleClick( 
+     wxProperty *WXUNUSED(property), wxPropertyListView *WXUNUSED(view), wxWindow *WXUNUSED(parentWindow) )
+     { return TRUE; }
 
    // Called when the value listbox is selected. Default behaviour is to copy
    // string to text control, and retrieve the value into the property.
    virtual bool OnValueListSelect(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
    // Called when the property value is edited using standard text control
-   virtual bool OnPrepareControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow)
-   {
-     return TRUE;
-   }
+   inline virtual bool OnPrepareControls(
+     wxProperty *WXUNUSED(property), wxPropertyListView *WXUNUSED(view), wxWindow *WXUNUSED(parentWindow) )
+     { return TRUE; }
 
    virtual bool OnClearControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
       // Called when the property is edited in detail
-   virtual bool OnPrepareDetailControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow)
-   {
-     return TRUE;
-   }
+   inline virtual bool OnPrepareDetailControls(
+     wxProperty *WXUNUSED(property), wxPropertyListView *WXUNUSED(view), wxWindow *WXUNUSED(parentWindow) )
+     { return TRUE; }
 
    // Called if focus lost, IF we're in a modeless property editing situation.
-   virtual bool OnClearDetailControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow)
-   {
-     return TRUE;
-   }
+   inline virtual bool OnClearDetailControls(
+     wxProperty *WXUNUSED(property), wxPropertyListView *WXUNUSED(view), wxWindow *WXUNUSED(parentWindow) )
+     { return TRUE; }
 
    // Called when the edit (...) button is pressed. The default implementation
    // calls view->BeginDetailedEditing; the filename validator (for example) overrides
@@ -250,8 +248,9 @@ class wxPropertyListValidator: public wxPropertyValidator
 
    // Called when TICK is pressed or focus is lost.
    // Return FALSE if value didn't check out; signal to restore old value.
-   virtual bool OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow)
-   { return TRUE; }
+   inline virtual bool OnCheckValue(
+     wxProperty *WXUNUSED(property), wxPropertyListView *WXUNUSED(view), wxWindow *WXUNUSED(parentWindow) )
+     { return TRUE; }
 
    // Called when TICK is pressed or focus is lost or view wants to update
    // the property list.

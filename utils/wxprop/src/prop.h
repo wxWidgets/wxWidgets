@@ -86,7 +86,7 @@ class wxPropertyView: public wxEvtHandler
   ~wxPropertyView(void);
 
   // Associates and shows the view
-  virtual void ShowView(wxPropertySheet *propertySheet, wxWindow *panel) {};
+  virtual void ShowView(wxPropertySheet *WXUNUSED(propertySheet), wxWindow *WXUNUSED(panel)) {}
 
   // Update this view of the viewed object, called e.g. by
   // the object itself.
@@ -240,13 +240,16 @@ class wxPropertyValue: public wxObject
   virtual void Insert(wxPropertyValue *expr);
 
   // Get first expr in list
-  virtual inline wxPropertyValue *GetFirst(void) { return ((type == wxPropertyValueList) ? value.first : NULL); }
+  virtual inline wxPropertyValue *GetFirst(void) 
+    { return ((type == wxPropertyValueList) ? value.first : (wxPropertyValue*)NULL); }
 
   // Get next expr if this is a node in a list
-  virtual inline wxPropertyValue *GetNext(void) { return next; }
+  virtual inline wxPropertyValue *GetNext(void) 
+    { return next; }
 
   // Get last expr in list
-  virtual inline wxPropertyValue *GetLast(void) { return ((type == wxPropertyValueList) ? last : NULL); }
+  virtual inline wxPropertyValue *GetLast(void) 
+    { return ((type == wxPropertyValueList) ? last : (wxPropertyValue*)NULL); }
   
   // Delete this node from the list
   virtual void Delete(wxPropertyValue *node);

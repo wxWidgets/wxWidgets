@@ -373,13 +373,13 @@ bool wxPropertyListView::RetrieveProperty(wxProperty *property)
 }
 
 
-bool wxPropertyListView::EditProperty(wxProperty *property)
+bool wxPropertyListView::EditProperty(wxProperty *WXUNUSED(property))
 {
   return TRUE;
 }
 
 // Called by the listbox callback
-void wxPropertyListView::OnPropertySelect(wxCommandEvent& event)
+void wxPropertyListView::OnPropertySelect(wxCommandEvent& WXUNUSED(event))
 {
   int sel = propertyScrollingList->GetSelection();
   if (sel > -1)
@@ -692,7 +692,7 @@ bool wxPropertyListView::OnClose(void)
   return TRUE;
 }
 
-void wxPropertyListView::OnValueListSelect(wxCommandEvent& event)
+void wxPropertyListView::OnValueListSelect(wxCommandEvent& WXUNUSED(event))
 {
   if (currentProperty && currentValidator)
   {
@@ -713,18 +713,18 @@ void wxPropertyListView::OnOk(wxCommandEvent& event)
   managedWindow->Close(TRUE);
 }
 
-void wxPropertyListView::OnCancel(wxCommandEvent& event)
+void wxPropertyListView::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
 //  SetReturnCode(wxID_CANCEL);
   managedWindow->Close(TRUE);
   dialogCancelled = TRUE;
 }
 
-void wxPropertyListView::OnHelp(wxCommandEvent& event)
+void wxPropertyListView::OnHelp(wxCommandEvent& WXUNUSED(event))
 {
 }
 
-void wxPropertyListView::OnCheck(wxCommandEvent& event)
+void wxPropertyListView::OnCheck(wxCommandEvent& WXUNUSED(event))
 {
   if (currentProperty)
   {
@@ -732,7 +732,7 @@ void wxPropertyListView::OnCheck(wxCommandEvent& event)
   }
 }
 
-void wxPropertyListView::OnCross(wxCommandEvent& event)
+void wxPropertyListView::OnCross(wxCommandEvent& WXUNUSED(event))
 {
   if (currentProperty && currentValidator)
   {
@@ -746,7 +746,7 @@ void wxPropertyListView::OnCross(wxCommandEvent& event)
   }
 }
 
-void wxPropertyListView::OnPropertyDoubleClick(wxCommandEvent& event)
+void wxPropertyListView::OnPropertyDoubleClick(wxCommandEvent& WXUNUSED(event))
 {
   if (currentProperty && currentValidator)
   {
@@ -760,7 +760,7 @@ void wxPropertyListView::OnPropertyDoubleClick(wxCommandEvent& event)
   }
 }
 
-void wxPropertyListView::OnEdit(wxCommandEvent& event)
+void wxPropertyListView::OnEdit(wxCommandEvent& WXUNUSED(event))
 {
   if (currentProperty && currentValidator)
   {
@@ -797,7 +797,7 @@ wxPropertyListDialog::wxPropertyListDialog(wxPropertyListView *v, wxWindow *pare
      wxDialog(parent, -1, title, pos, size, style, name)
 {
   view = v;
-  view->AssociatePanel(this);
+  view->AssociatePanel( ((wxPanel*)this) );
   view->SetManagedWindow(this);
   SetAutoLayout(TRUE);
 }
@@ -815,7 +815,7 @@ bool wxPropertyListDialog::OnClose(void)
     return FALSE;
 }
 
-void wxPropertyListDialog::OnCancel(wxCommandEvent& event)
+void wxPropertyListDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
 	SetReturnCode(wxID_CANCEL);
     this->Close();
@@ -865,7 +865,7 @@ bool wxPropertyListPanel::ProcessEvent(wxEvent& event)
 		return TRUE;
 }
 
-void wxPropertyListPanel::OnSize(wxSizeEvent& event)
+void wxPropertyListPanel::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     Layout();
 }
@@ -1778,7 +1778,7 @@ bool wxListOfStringsListValidator::EditStringList(wxWindow *parent, wxStringList
  *
  */
 
-void wxPropertyStringListEditorDialog::OnStrings(wxCommandEvent& event)
+void wxPropertyStringListEditorDialog::OnStrings(wxCommandEvent& WXUNUSED(event))
 {
   int sel = listBox->GetSelection();
   if (sel > -1)
@@ -1789,7 +1789,7 @@ void wxPropertyStringListEditorDialog::OnStrings(wxCommandEvent& event)
   }
 }
 
-void wxPropertyStringListEditorDialog::OnDelete(wxCommandEvent& event)
+void wxPropertyStringListEditorDialog::OnDelete(wxCommandEvent& WXUNUSED(event))
 {
   int sel = listBox->GetSelection();
   if (sel == -1)
@@ -1806,7 +1806,7 @@ void wxPropertyStringListEditorDialog::OnDelete(wxCommandEvent& event)
   stringText->SetValue("");
 }
 
-void wxPropertyStringListEditorDialog::OnAdd(wxCommandEvent& event)
+void wxPropertyStringListEditorDialog::OnAdd(wxCommandEvent& WXUNUSED(event))
 {
   SaveCurrentSelection();
   
@@ -1819,14 +1819,14 @@ void wxPropertyStringListEditorDialog::OnAdd(wxCommandEvent& event)
   stringText->SetFocus();
 }
 
-void wxPropertyStringListEditorDialog::OnOK(wxCommandEvent& event)
+void wxPropertyStringListEditorDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
   SaveCurrentSelection();
   EndModal(wxID_OK);
   Close(TRUE);
 }
 
-void wxPropertyStringListEditorDialog::OnCancel(wxCommandEvent& event)
+void wxPropertyStringListEditorDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
   dialogCancelled = TRUE;
   EndModal(wxID_CANCEL);
