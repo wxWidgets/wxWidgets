@@ -62,10 +62,10 @@ wxExpr::wxExpr(wxExprType the_type, const wxString& word_or_string)
   switch (the_type)
   {
    case wxExprWord:
-    value.word = copystring((const char *)word_or_string);
+    value.word = copystring((const wxChar *)word_or_string);
     break;
    case wxExprString:
-    value.string = copystring((const char *)word_or_string);
+    value.string = copystring((const wxChar *)word_or_string);
     break;
    case wxExprList:
     last = NULL;
@@ -80,7 +80,7 @@ wxExpr::wxExpr(wxExprType the_type, const wxString& word_or_string)
   next = NULL;
 }
 
-wxExpr::wxExpr(wxExprType the_type, char *word_or_string, bool allocate)
+wxExpr::wxExpr(wxExprType the_type, wxChar *word_or_string, bool allocate)
 {
   type = the_type;
 
@@ -255,7 +255,7 @@ wxExpr *wxExpr::GetAttributeValueNode(const wxString& word) const // Use only fo
       {
         wxExpr *secondNode = firstNode->next;
         if ((secondNode->type == wxExprWord) && 
-            (strcmp((const char *)word, secondNode->value.word) == 0))
+            (wxStrcmp((const wxChar *)word, secondNode->value.word) == 0))
         {
           return expr;
         }
@@ -282,12 +282,12 @@ wxExpr *wxExpr::AttributeValue(const wxString& word) const // Use only for a cla
 wxString wxExpr::Functor(void) const // Use only for a clause
 {
   if ((type != wxExprList) || !value.first)
-    return wxString("");
+    return wxString(_T(""));
 
   if (value.first->type == wxExprWord)
     return wxString(value.first->value.word);
   else
-    return wxString("");
+    return wxString(_T(""));
 }
 
 bool wxExpr::IsFunctor(const wxString& f) const  // Use only for a clause
@@ -296,7 +296,7 @@ bool wxExpr::IsFunctor(const wxString& f) const  // Use only for a clause
     return FALSE;
 
   return (value.first->type == wxExprWord && 
-          (strcmp((const char *)f, value.first->value.word) == 0));
+          (wxStrcmp((const wxChar *)f, value.first->value.word) == 0));
 }
 
 // Return nth argument of a clause (starting from 1)
@@ -365,7 +365,7 @@ void wxExpr::DeleteAttributeValue(const wxString& attribute)
       {
         wxExpr *secondNode = firstNode->next;
         if ((secondNode->type == wxExprWord) && 
-            (strcmp((const char *)attribute, secondNode->value.word) == 0))
+            (wxStrcmp((const wxChar *)attribute, secondNode->value.word) == 0))
         {
           wxExpr *nextExpr = expr->next;
           delete expr;
@@ -397,7 +397,7 @@ void wxExpr::AddAttributeValue(const wxString& attribute, wxExpr *val)
 //  DeleteAttributeValue(attribute);
 
   wxExpr *patt = new wxExpr(wxExprWord, attribute);
-  wxExpr *pequals = new wxExpr(wxExprWord, "=");
+  wxExpr *pequals = new wxExpr(wxExprWord, _T("="));
 
   wxExpr *listExpr = new wxExpr(wxExprList);
 
@@ -421,7 +421,7 @@ void wxExpr::AddAttributeValue(const wxString& attribute, long val)
 
   wxExpr *patt = new wxExpr(wxExprWord, attribute);
   wxExpr *pval = new wxExpr(val);
-  wxExpr *pequals = new wxExpr(wxExprWord, "=");
+  wxExpr *pequals = new wxExpr(wxExprWord, _T("="));
 
   wxExpr *listExpr = new wxExpr(wxExprList);
 
@@ -443,7 +443,7 @@ void wxExpr::AddAttributeValue(const wxString& attribute, double val)
 //  DeleteAttributeValue(attribute);
   wxExpr *patt = new wxExpr(wxExprWord, attribute);
   wxExpr *pval = new wxExpr(val);
-  wxExpr *pequals = new wxExpr(wxExprWord, "=");
+  wxExpr *pequals = new wxExpr(wxExprWord, _T("="));
 
   wxExpr *listExpr = new wxExpr(wxExprList);
 
@@ -466,7 +466,7 @@ void wxExpr::AddAttributeValueString(const wxString& attribute, const wxString& 
 
   wxExpr *patt = new wxExpr(wxExprWord, attribute);
   wxExpr *pval = new wxExpr(wxExprString, val);
-  wxExpr *pequals = new wxExpr(wxExprWord, "=");
+  wxExpr *pequals = new wxExpr(wxExprWord, _T("="));
 
   wxExpr *listExpr = new wxExpr(wxExprList);
 
@@ -489,7 +489,7 @@ void wxExpr::AddAttributeValueWord(const wxString& attribute, const wxString& va
 
   wxExpr *patt = new wxExpr(wxExprWord, attribute);
   wxExpr *pval = new wxExpr(wxExprWord, val);
-  wxExpr *pequals = new wxExpr(wxExprWord, "=");
+  wxExpr *pequals = new wxExpr(wxExprWord, _T("="));
 
   wxExpr *listExpr = new wxExpr(wxExprList);
 
@@ -514,7 +514,7 @@ void wxExpr::AddAttributeValue(const wxString& attribute, wxList *val)
 
   wxExpr *patt = new wxExpr(wxExprWord, attribute);
   wxExpr *pval = new wxExpr(val);
-  wxExpr *pequals = new wxExpr(wxExprWord, "=");
+  wxExpr *pequals = new wxExpr(wxExprWord, _T("="));
 
   wxExpr *listExpr = new wxExpr(wxExprList);
 
@@ -550,7 +550,7 @@ void wxExpr::AddAttributeValueStringList(const wxString& attribute, wxList *stri
 
   // Now make an (=, Att, Value) triple
   wxExpr *patt = new wxExpr(wxExprWord, attribute);
-  wxExpr *pequals = new wxExpr(wxExprWord, "=");
+  wxExpr *pequals = new wxExpr(wxExprWord, _T("="));
 
   wxExpr *listExpr2 = new wxExpr(wxExprList);
 
@@ -660,14 +660,14 @@ bool wxExpr::GetAttributeValueStringList(const wxString& att, wxList *var) const
 }
 
 // Compatibility
-void wxExpr::AssignAttributeValue(char *att, char **var) const
+void wxExpr::AssignAttributeValue(wxChar *att, wxChar **var) const
 {
   wxString str;
   if (GetAttributeValue(att, str))
   {
     if (*var)
       delete[] *var;
-    *var = copystring((const char *) str);
+    *var = copystring((const wxChar *) str);
   }
 }
 
@@ -733,10 +733,11 @@ void wxExpr::WriteExpr(ostream& stream)    // Write as any other subexpression
     {
       stream << "\"";
       int i;
-      int len = strlen(value.string);
+      wxWX2MBbuf val = wxConv_libc.cWX2MB(value.string);
+      int len = strlen(val);
       for (i = 0; i < len; i++)
       {
-        char ch = value.string[i];
+        char ch = val[i];
         if (ch == '"' || ch == '\\')
           stream << "\\";
         stream << ch;
@@ -748,22 +749,23 @@ void wxExpr::WriteExpr(ostream& stream)    // Write as any other subexpression
     case wxExprWord:
     {
       bool quote_it = FALSE;
-      int len = strlen(value.word);
-      if ((len == 0) || (len > 0 && (value.word[0] > 64 && value.word[0] < 91)))
+      wxWX2MBbuf val = wxConv_libc.cWX2MB(value.word);
+      int len = strlen(val);
+      if ((len == 0) || (len > 0 && (val[0] > 64 && val[0] < 91)))
         quote_it = TRUE;
       else
       {
         int i;
         for (i = 0; i < len; i++)
-          if ((!isalpha(value.word[i])) && (!isdigit(value.word[i])) &&
-              (value.word[i] != '_'))
+          if ((!isalpha(val[i])) && (!isdigit(val[i])) &&
+              (val[i] != '_'))
             { quote_it = TRUE; i = len; }
       }
 
       if (quote_it)
         stream << "'";
 
-      stream << value.word;
+      stream << val;
 
       if (quote_it)
         stream << "'";
@@ -778,7 +780,7 @@ void wxExpr::WriteExpr(ostream& stream)    // Write as any other subexpression
       {
         wxExpr *expr = value.first;
 
-        if ((expr->Type() == wxExprWord) && (strcmp(expr->WordValue(), "=") == 0))
+        if ((expr->Type() == wxExprWord) && (wxStrcmp(expr->WordValue(), _T("=")) == 0))
         {
           wxExpr *arg1 = expr->next;
           wxExpr *arg2 = arg1->next;
@@ -992,12 +994,12 @@ void wxExprDatabase::Append(wxExpr *clause)
     wxExpr *expr = clause->AttributeValue(attribute_to_hash);
     if (expr)
     {
-      long functor_key = hash_table->MakeKey((char *)(const char *)functor);
+      long functor_key = hash_table->MakeKey(WXSTRINGCAST functor);
       long value_key = 0;
       if (expr && expr->Type() == wxExprString)
       {
-        value_key = hash_table->MakeKey((char *)(const char *)expr->StringValue());
-        hash_table->Put(functor_key + value_key, (char *)(const char *)expr->StringValue(), (wxObject *)clause);
+        value_key = hash_table->MakeKey(WXSTRINGCAST expr->StringValue());
+        hash_table->Put(functor_key + value_key, WXSTRINGCAST expr->StringValue(), (wxObject *)clause);
       }
       else if (expr && expr->Type() == wxExprInteger)
       {
@@ -1011,7 +1013,7 @@ void wxExprDatabase::Append(wxExpr *clause)
 
 wxExpr *wxExprDatabase::HashFind(const wxString& functor, long value) const
 {
-  long key = hash_table->MakeKey((char *)(const char *)functor) + value;
+  long key = hash_table->MakeKey(WXSTRINGCAST functor) + value;
 
   // The key alone isn't guaranteed to be unique:
   // must supply value too. Let's assume the value of the
@@ -1021,8 +1023,8 @@ wxExpr *wxExprDatabase::HashFind(const wxString& functor, long value) const
 
 wxExpr *wxExprDatabase::HashFind(const wxString& functor, const wxString& value) const
 {
-  long key = hash_table->MakeKey((char *)(const char *)functor) + hash_table->MakeKey((char *)(const char *)value);
-  return (wxExpr *)hash_table->Get(key, (char *)(const char *)value);
+  long key = hash_table->MakeKey(WXSTRINGCAST functor) + hash_table->MakeKey(WXSTRINGCAST value);
+  return (wxExpr *)hash_table->Get(key, WXSTRINGCAST value);
 }
 
 void wxExprDatabase::ClearDatabase(void)
@@ -1045,7 +1047,7 @@ bool wxExprDatabase::Read(const wxString& filename)
 {
   noErrors = 0;
 
-  FILE *f = fopen((const char *)filename, "r");
+  FILE *f = fopen(filename.fn_str(), "r");
   if (f)
   {
     thewxExprDatabase = this;
@@ -1068,7 +1070,8 @@ bool wxExprDatabase::ReadFromString(const wxString& buffer)
   noErrors = 0;
   thewxExprDatabase = this;
 
-  LexFromString((char *)(const char *)buffer);
+  wxWX2MBbuf buf = buffer.mb_str();
+  LexFromString(MBSTRINGCAST buf);
   yyparse();
   wxExprCleanUp();
   return (noErrors == 0);
@@ -1076,7 +1079,7 @@ bool wxExprDatabase::ReadFromString(const wxString& buffer)
 
 bool wxExprDatabase::Write(const wxString& fileName)
 {
-  ofstream str((char *)(const char *)fileName);
+  ofstream str(MBSTRINGCAST fileName.mb_str());
   if (str.bad())
     return FALSE;
   return Write(str);
@@ -1190,32 +1193,33 @@ char *wxmake_word(char *str)
 
 char *wxmake_string(char *str)
 {
-  char *s, *t;
+  wxChar *s, *t;
   int len, i;
+  wxMB2WXbuf sbuf = wxConv_libc.cMB2WX(str);
 
   str++;			/* skip leading quote */
-  len = strlen(str) - 1;	/* ignore trailing quote */
+  len = wxStrlen(sbuf) - 1;	/* ignore trailing quote */
     
-  s = new char[len + 1];
+  s = new wxChar[len + 1];
     
   t = s;
   for(i=0; i<len; i++)
   {
-    if (str[i] == '\\' && str[i+1] == '"')
+    if (sbuf[i] == _T('\\') && sbuf[i+1] == _T('"'))
     {
-      *t++ = '"';
+      *t++ = _T('"');
       i ++;
     }
-    else if (str[i] == '\\' && str[i+1] == '\\')
+    else if (sbuf[i] == _T('\\') && sbuf[i+1] == _T('\\'))
     {
-      *t++ = '\\';
+      *t++ = _T('\\');
       i ++;
     }
     else
-      *t++ = str[i];
+      *t++ = sbuf[i];
   }
 
-  *t = '\0';
+  *t = _T('\0');
 
   wxExpr *x = new wxExpr(wxExprString, s, FALSE);
   return (char *)x;
