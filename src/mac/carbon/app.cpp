@@ -133,23 +133,88 @@ pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long WX
     return wxTheApp->MacHandleAEQuit( (AppleEvent*) event , reply) ;
 }
 
-short wxApp::MacHandleAEODoc(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNUSED(reply))
+// new virtual public method in wxApp
+void wxApp::MacOpenFile(const wxString & WXUNUSED(fileName) )
 {
-    SysBeep(40) ;
+}
+
+void wxApp::MacPrintFile(const wxString & WXUNUSED(fileName) )
+{
+}
+
+void wxApp::MacNewFile()
+{
+}
+
+// new implementation, which parses the event and calls
+// MacOpenFile on each of the files it's passed
+short wxApp::MacHandleAEODoc(const WXEVENTREF event, WXEVENTREF WXUNUSED(reply))
+{
+    AEDescList docList;
+    AEKeyword keywd;
+    DescType returnedType;
+    Size actualSize;
+    long itemsInList;
+    FSSpec theSpec;
+    OSErr err;
+    short i;
+    err = AEGetParamDesc((AppleEvent *)event, keyDirectObject, typeAEList,&docList);
+    if (err != noErr)
+        return err;
+    
+    err = AECountItems(&docList, &itemsInList);
+    if (err != noErr)
+        return err;
+    
     ProcessSerialNumber PSN ;
     PSN.highLongOfPSN = 0 ;
     PSN.lowLongOfPSN = kCurrentProcess ;
     SetFrontProcess( &PSN ) ;
-    return noErr ;
+    
+    for (i = 1; i <= itemsInList; i++) {
+        AEGetNthPtr(&docList, i, typeFSS, &keywd, &returnedType,
+        (Ptr) & theSpec, sizeof(theSpec), &actualSize);
+        wxString fName = wxMacFSSpec2MacFilename(&theSpec);
+        MacOpenFile(fName);
+    }
+    return noErr;
 }
 
-short wxApp::MacHandleAEPDoc(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNUSED(reply))
+short wxApp::MacHandleAEPDoc(const WXEVENTREF event , WXEVENTREF WXUNUSED(reply))
 {
-    return noErr ;
+    AEDescList docList;
+    AEKeyword keywd;
+    DescType returnedType;
+    Size actualSize;
+    long itemsInList;
+    FSSpec theSpec;
+    OSErr err;
+    short i;
+    err = AEGetParamDesc((AppleEvent *)event, keyDirectObject, typeAEList,&docList);
+    if (err != noErr)
+        return err;
+    
+    err = AECountItems(&docList, &itemsInList);
+    if (err != noErr)
+        return err;
+    
+    ProcessSerialNumber PSN ;
+    PSN.highLongOfPSN = 0 ;
+    PSN.lowLongOfPSN = kCurrentProcess ;
+    SetFrontProcess( &PSN ) ;
+    
+    for (i = 1; i <= itemsInList; i++) {
+        AEGetNthPtr(&docList, i, typeFSS, &keywd, &returnedType,
+        (Ptr) & theSpec, sizeof(theSpec), &actualSize);
+        wxString fName = wxMacFSSpec2MacFilename(&theSpec);
+        MacPrintFile(fName);
+    }
+    return noErr;
 }
 
 short wxApp::MacHandleAEOApp(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNUSED(reply))
 {
+    MacNewFile() ;
     return noErr ;
 }
 
