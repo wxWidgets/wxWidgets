@@ -133,6 +133,11 @@ private:
     void InitWithIconItems(bool withText, bool sameIcon = FALSE);
     void InitWithVirtualItems();
 
+    // return true if the control is not in virtual view, give an error message
+    // and return false if it is
+    bool CheckNonVirtual() const;
+
+
     wxLog *m_logOld;
 
     DECLARE_NO_COPY_CLASS(MyFrame)

@@ -266,6 +266,17 @@ void MyFrame::DoSize()
     m_logWindow->SetSize(0, y + 1, size.x, size.y - y);
 }
 
+bool MyFrame::CheckNonVirtual() const
+{
+    if ( !m_listCtrl->HasFlag(wxLC_VIRTUAL) )
+        return true;
+
+    // "this" == whatever
+    wxLogWarning(_T("Can't do this in virtual view, sorry."));
+
+    return false;
+}
+
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     Close(TRUE);
@@ -312,6 +323,9 @@ void MyFrame::OnToggleFirstSel(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnDeselectAll(wxCommandEvent& WXUNUSED(event))
 {
+    if ( !CheckNonVirtual() )
+        return;
+
     int n = m_listCtrl->GetItemCount();
     for (int i = 0; i < n; i++)
         m_listCtrl->SetItemState(i,0,wxLIST_STATE_SELECTED);
@@ -319,6 +333,9 @@ void MyFrame::OnDeselectAll(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSelectAll(wxCommandEvent& WXUNUSED(event))
 {
+    if ( !CheckNonVirtual() )
+        return;
+
     int n = m_listCtrl->GetItemCount();
     for (int i = 0; i < n; i++)
         m_listCtrl->SetItemState(i,wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
