@@ -138,22 +138,6 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
 #endif
         if (tag.GetParam(wxT("TYPE")) == wxT("text/sitemap"))
         {
-/*
-            // We're reading in items at level zero, which must mean we want to specify
-            // our own 'books', so chuck out the first (empty) one that AddBook already
-            // created
-            if (m_firstTime && (m_Level == 0) && (m_ItemsCnt > 0))
-            {
-                delete[] m_Items[0].m_Name;
-                delete[] m_Items[0].m_Page;
-                m_ItemsCnt --;
-            }
-            else
-            {
-                if (m_ItemsCnt % wxHTML_REALLOC_STEP == 0)
-                    m_Items = (wxHtmlContentsItem*) realloc(m_Items, (m_ItemsCnt + wxHTML_REALLOC_STEP) * sizeof(wxHtmlContentsItem));
-            }
-*/
             if (m_ItemsCnt % wxHTML_REALLOC_STEP == 0)
                 m_Items = (wxHtmlContentsItem*) realloc(m_Items, 
                                        (m_ItemsCnt + wxHTML_REALLOC_STEP) * 
