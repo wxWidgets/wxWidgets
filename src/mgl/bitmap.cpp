@@ -48,6 +48,9 @@ static pixel_format_t gs_pixel_format_24 =
 static pixel_format_t gs_pixel_format_32 =
 	{0xFF,0x18,0, 0xFF,0x10,0, 0xFF,0x08,0, 0xFF,0x00,0}; // RGBA 32bpp
 
+static pixel_format_t gs_pixel_format_wxImage =
+	{0xFF,0x00,0, 0xFF,0x08,0, 0xFF,0x10,0, 0x00,0x00,0}; // RGB 24bpp for wxImage
+
 //-----------------------------------------------------------------------------
 // wxMask
 //-----------------------------------------------------------------------------
@@ -275,7 +278,7 @@ wxBitmap::wxBitmap(const wxImage& image, int depth = -1)
 
     if ( !Create(width, height, depth) ) return;
     
-    MGLMemoryDC idc(width, height, 24, &gs_pixel_format_24,
+    MGLMemoryDC idc(width, height, 24, &gs_pixel_format_wxImage,
                     width * 3, (void*)image.GetData(), NULL);
     wxASSERT_MSG( idc.isValid(), wxT("cannot create custom MGLDC") );
 
@@ -309,7 +312,7 @@ wxImage wxBitmap::ConvertToImage() const
     wxImage image(width, height);
     wxASSERT_MSG( image.Ok(), wxT("cannot create image") );
     
-    MGLMemoryDC idc(width, height, 24, &gs_pixel_format_24,
+    MGLMemoryDC idc(width, height, 24, &gs_pixel_format_wxImage,
                     width * 3, (void*)image.GetData(), NULL);
     wxASSERT_MSG( idc.isValid(), wxT("cannot create custom MGLDC") );
 
