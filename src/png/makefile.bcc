@@ -1,0 +1,107 @@
+# This file is special for Widows because setjmp 
+# is incompatible with the DOS version.
+# Alejandro Aguilar, 1995
+
+#
+# Borland C++ tools
+#
+IMPLIB  = Implib
+BCC     = Bcc +BccW16.cfg
+TLINK   = TLink
+TLIB    = TLib
+BRC     = Brc
+TASM    = Tasm
+
+
+#
+# Options
+#   
+IDE_LFLAGS =  -LC:\BC4\LIB
+IDE_RFLAGS =  -IC:\BC4\INCLUDE;..\zlib;
+LLATW16_winpngdlib =  -Twe
+RLATW16_winpngdlib =  -31
+BLATW16_winpngdlib = 
+LEAT_winpngdlib = $(LLATW16_winpngdlib)
+REAT_winpngdlib = $(RLATW16_winpngdlib)
+BEAT_winpngdlib = $(BLATW16_winpngdlib)
+ZLIB=..\..\..\lib\zlib.lib
+LOBJECTS = png.obj pngrcb.obj pngread.obj pngrtran.obj pngrutil.obj pngstub.obj\
+	pngtrans.obj pngwrite.obj pngwtran.obj pngwutil.obj
+
+#
+# Dependency List
+#
+Dep_winpng = \
+	..\..\..\lib\winpng.lib
+
+winpng : BccW16.cfg $(Dep_winpng)
+  echo MakeNode winpng
+
+Dep_winpngdlib = \
+	png.obj\
+	pngrcb.obj\
+	pngread.obj\
+	pngrtran.obj\
+	pngrutil.obj\
+	pngstub.obj\
+	pngtrans.obj\
+	pngwrite.obj\
+	pngwtran.obj\
+	pngwutil.obj
+
+$(ZLIB): 
+	cd ..\zlib
+	make -fmakefile.bcc
+	cd ..\png
+	
+winpng.lib : $(Dep_winpngdlib) $(ZLIB)  
+  copy /b $(ZLIB) winpng.lib
+  $(TLIB) $< $(IDE_BFLAGS) $(BEAT_winpngdlib) @&&|    
++$(LOBJECTS:.obj =.obj +)
+|
+
+png.obj :  png.c
+  $(BCC)   -P- -c $(CEAT_winpngdlib) -o$@ png.c
+
+pngrcb.obj :  pngrcb.c
+  $(BCC)   -P- -c $(CEAT_winpngdlib) -o$@ pngrcb.c
+
+pngread.obj :  pngread.c
+  $(BCC)   -P- -c $(CEAT_winpngdlib) -o$@ pngread.c
+
+pngrtran.obj :  pngrtran.c
+  $(BCC)   -P- -c $(CEAT_winpngdlib) -o$@ pngrtran.c
+
+pngrutil.obj :  pngrutil.c
+  $(BCC)   -P- -c $(CEAT_winpngdlib) -o$@ pngrutil.c
+
+pngstub.obj :  pngstub.c
+  $(BCC)   -P- -c $(CEAT_winpngdlib) -o$@ pngstub.c
+
+pngtrans.obj :  pngtrans.c
+  $(BCC)   -P- -c $(CEAT_winpngdlib) -o$@ pngtrans.c
+
+pngwrite.obj :  pngwrite.c
+  $(BCC)   -P- -c $(CEAT_winpngdlib) -o$@ pngwrite.c
+
+pngwtran.obj :  pngwtran.c
+  $(BCC)   -P- -c $(CEAT_winpngdlib) -o$@ pngwtran.c
+
+pngwutil.obj :  pngwutil.c
+  $(BCC)   -P- -c $(CEAT_winpngdlib) -o$@ pngwutil.c
+
+# Compiler configuration file
+BccW16.cfg :
+	Copy &&|
+-v
+-vi
+-X-
+-H
+-IC:\BC4\INCLUDE
+-H=winpng.csm
+-ml
+-WS
+-3
+-Ff
+| $@
+

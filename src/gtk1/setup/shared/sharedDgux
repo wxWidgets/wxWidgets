@@ -1,0 +1,29 @@
+#! /bin/sh
+
+COMPILER=$1
+LIBRARY_BASE=$2
+LIBRARY_MAJOR=$3
+LIBRARY_MINOR=$4
+shift 3
+LIBRARY_OBJS=
+while (test $# -ne 1) do
+  shift;
+  LIBRARY_OBJS="$LIBRARY_OBJS $1sh";
+done
+
+LIBRARY_BASE=`echo $LIBRARY_BASE | sed 's/.so/.sl/'`
+LIBRARY_NAME=`basename $LIBRARY_BASE`
+LIBRARY_FILE=$LIBRARY_BASE
+
+echo "Creating shared library: $LIBRARY_FILE"
+
+if test "x$COMPILER" = xgcc ; then
+  gcc -shared -h $LIBRARY_NAME -o $LIBRARY_FILE $LIBRARY_OBJS
+else
+  CC -G -h $LIBRARY_NAME -o $LIBRARY_FILE $LIBRARY_OBJS
+fi
+chmod a+x $LIBRARY_FILE
+
+
+
+

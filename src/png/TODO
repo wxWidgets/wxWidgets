@@ -1,0 +1,22 @@
+TODO - list of things to do for libpng
+
+fix problem with C++ and EXTERN "C"
+add "grayscale->palette" transformation and "palette->grayscale" detection
+add "grayscale" -> "grayscale+alpha" and "grayscale+FILLER" transformations
+improved dithering
+multi-lingual error and warning message support
+sPLT chunk handling
+cHRM transformation
+complete sRGB transformation (presently it simply uses gamma=0.45)
+man pages for function calls
+high-level API for reading images
+final bug fixes
+better documentation
+better filter selection
+   (counting huffman bits/precompression?  filter inertia?  filter costs?)
+optional palette creation
+histogram creation
+support for application-defined chunk handlers
+keep up with public chunks
+better C++ wrapper/full C++ implementation?
+text conversion between different code pages (Latin-1 -> Mac and DOS)

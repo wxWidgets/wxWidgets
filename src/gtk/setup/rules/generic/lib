@@ -1,0 +1,17 @@
+# create library
+
+library:: $(LIB_BASE_DIR)/lib$(LIB_TARGET).a
+
+$(LIB_BASE_DIR)/lib$(LIB_TARGET).a: $(LIB_OBJ)
+	@$(RM) -f $@
+	$(AR) rv $@ $(LIB_OBJ)
+
+# defining dependencies
+
+depend_library::
+
+# cleaning all files
+
+clean_library::
+	@$(RM) -f $(LIB_BASE_DIR)/lib$(LIB_TARGET).a
+

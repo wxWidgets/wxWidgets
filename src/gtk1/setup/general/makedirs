@@ -1,0 +1,19 @@
+SHELL=/bin/sh
+
+DIRS=`find . -print | sed "s|\./||g" | grep -v "/" | grep -v "\." `
+
+all:
+	@for i in $(DIRS) xxx; do \
+	  if test -r $$i/Makefile ; then \
+	    echo "entering directory $$i building $@";\
+	    (cd $$i ; ${MAKE} $@); \
+	  fi; \
+	done
+
+.DEFAULT:
+	@for i in $(DIRS) xxx; do \
+	  if test -r $$i/Makefile ; then \
+	    echo "entering directory $$i building $@";\
+	    (cd $$i ; ${MAKE} $@); \
+	  fi; \
+	done

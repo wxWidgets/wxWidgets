@@ -1,0 +1,70 @@
+s|@OS@|linux|g
+s|@WXBASEDIR@|/home/karl/cvs/wxGTK|g
+s|@PROFILE@||g
+s|@DEBUG@||g
+s|@OPTIMISE@|-O2 |g
+s|@CC@|gcc|g
+s|@CFLAGS@|  -Wall|g
+s|@CPP@|gcc -E|g
+s|@CXX@|c++|g
+s|@CXXFLAGS@|  -Wall|g
+s|@CXXCPP@|c++ -E|g
+s|@PICFLAGS@|-fPIC|g
+s|@CREATE_SHARED@|sharedLinux|g
+s|@LEX@|flex|g
+s|@LEXLIB@|-lfl|g
+s|@YACC@|bison -y|g
+s|@RANLIB@|ranlib|g
+s|@INSTALL@|/usr/bin/install -c|g
+s|@INSTALL_PROGRAM@|${INSTALL}|g
+s|@INSTALL_DATA@|${INSTALL} -m 644|g
+s|@AWK@|mawk|g
+s|@LN_S@|ln -s|g
+s|@prefix@|/usr/local|g
+s|@exec_prefix@|${prefix}|g
+s|@bindir@|${exec_prefix}/bin|g
+s|@datadir@|${prefix}/share|g
+s|@infodir@|${prefix}/info|g
+s|@X_CFLAGS@| -I/usr/X11R6/include|g
+s|@X_LIBS@| -L/usr/X11R6/lib|g
+s|@X_EXTRA_LIBS@||g
+s|@X_PRE_LIBS@| -lSM -lICE|g
+s|@GUI_TK_INCLUDE@|-I/usr/local/lib/glib/include -I/usr/local/include -I/usr/X11R6/include|g
+s|@GUI_TK_LIBRARY@|-L/usr/local/lib -L/usr/X11R6/lib -lgtk -lgdk -lglib -lXext -lX11 -lm|g
+s|@GUI_TK_LINK@||g
+s|@OPENGL_INCLUDE@||g
+s|@OPENGL_LIBRARY@||g
+s|@OPENGL_LINK@||g
+s|@TOOLKIT@|GTK|g
+s|@TOOLKIT_DEF@|__GTK__|g
+s|@THREADS@|NONE|g
+s|@THREADS_LINK@||g
+s|@WXSTRING@|@WXSTRING@|g
+s|@TYPETREE@|NONE|g
+s|@METAFILE@|NONE|g
+s|@POSTSCRIPTDC@|POSTSCRIPTDC|g
+s|@WXGRAPH@|NONE|g
+s|@WXTREE@|NONE|g
+s|@DOCVIEW@|DOCVIEW|g
+s|@FORM@|NONE|g
+s|@PRINTPREVIEW@|PRINTPREVIEW|g
+s|@IPC@|IPC|g
+s|@HELP@|NONE|g
+s|@CLIPBOARD@|NONE|g
+s|@TIMEDATE@|TIMEDATE|g
+s|@FRACTION@|FRACTION|g
+s|@PROLOGIO@|NONE|g
+s|@PROLOGIOSRC@|NONE|g
+s|@ENHDIALOGBOX@|NONE|g
+s|@GAUGE@|GAUGE|g
+s|@GLCANVAS@|NONE|g
+s|@LAYOUT@|@LAYOUT@|g
+s|@WXRESOURCES@|WXRESOURCES|g
+s|@XRESOURCES@|XRESOURCES|g
+s|@SCROLLBAR@|SCROLLBAR|g
+s|@STATICITEMS@|@STATICITEMS@|g
+s|@TOOLBAR@|TOOLBAR|g
+s|@CONSTRAINTS@|CONSTRAINTS|g
+s|@RPC@|NONE|g
+s|@VIRLISTBOX@|NONE|g
+

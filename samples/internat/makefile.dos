@@ -1,0 +1,65 @@
+#
+# File:		makefile.dos
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds internat example (DOS).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+WXDIR = $(WXWIN)
+
+!include $(WXDIR)\src\makemsc.env
+
+THISDIR = $(WXDIR)\samples\internat
+
+!ifndef FINAL
+FINAL=0
+!endif
+
+HEADERS =
+SOURCES = internat.$(SRCSUFF)
+OBJECTS = internat.obj
+
+all:    internat.exe
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.dos clean
+        cd $(THISDIR)
+
+internat.exe:      $(WXDIR)\src\msw\dummy.obj $(WXLIB) internat.obj internat.def internat.res
+        link $(LINKFLAGS) @<<
+internat.obj $(WXDIR)\src\msw\dummy.obj,
+internat,
+NUL,
+$(LIBS),
+internat.def
+;
+<<
+        rc -K internat.res
+
+internat.obj:      internat.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+internat.res :      internat.rc $(WXDIR)\include\wx\msw\wx.rc
+    rc -r /i$(WXDIR)\include internat
+
+clean:
+        -erase *.obj
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.sbr
+        -erase *.pdb

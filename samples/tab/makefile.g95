@@ -1,0 +1,37 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for tab example
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+OBJECTS = $(OBJDIR)/test.$(OBJSUFF) $(OBJDIR)/test_resources.$(OBJSUFF)
+
+all:    $(OBJDIR) test$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+test$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o test$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/test.$(OBJSUFF):	test.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ test.$(SRCSUFF)
+
+$(OBJDIR)/test_resources.o:  test.rc
+	$(RESCOMP) -i test.rc -o $(OBJDIR)/test_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) test$(GUISUFFIX).exe core *.rsc *.res

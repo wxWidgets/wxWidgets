@@ -1,0 +1,36 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for internat example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+OBJECTS = $(OBJDIR)/internat.$(OBJSUFF)
+
+all:    $(OBJDIR) internat$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+internat$(GUISUFFIX)$(EXESUFF):	$(OBJDIR)/internat.$(OBJSUFF) internat.res internat.$(RSCSUFF) $(WXLIB)
+	$(CC) $(LDFLAGS) -o internat$(GUISUFFIX)$(EXESUFF) internat.$(RSCSUFF) $(OBJDIR)/internat.$(OBJSUFF) $(XVIEW_LINK) $(LDLIBS)
+
+$(OBJDIR)/internat.$(OBJSUFF):	internat.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ internat.$(SRCSUFF)
+
+internat.res:  internat.rc
+
+clean:
+	rm -f $(OBJECTS) internat$(GUISUFFIX).exe core *.rsc *.res

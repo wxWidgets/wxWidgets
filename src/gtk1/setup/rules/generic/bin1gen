@@ -1,0 +1,16 @@
+# create binary
+
+binary1:: $(BIN_BASE_DIR)/$(BIN_TARGET)
+
+$(BIN_BASE_DIR)/$(BIN_TARGET): $(BIN_OBJ)
+	@$(RM) -f $@
+	$(LINK) $(BIN_OBJ) -L. $(BIN_LINK) $(LINK_LIBS)
+
+# defining dependencies
+
+depend_binary1::
+
+# cleaning all files
+
+clean_binary1::
+	@$(RM) -f $(BIN_BASE_DIR)/$(BIN_TARGET)

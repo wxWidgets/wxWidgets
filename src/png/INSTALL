@@ -1,0 +1,87 @@
+
+Installing libpng version 1.0.1 March 15, 1998
+
+Before installing libpng, you must first install zlib.  zlib
+can usually be found wherever you got libpng.  zlib can be
+placed in another directory, at the same level as libpng.
+Note that your system might already have a preinstalled
+zlib, but you will still need to have access to the 
+zlib.h and zconf.h include files that correspond to the
+version of zlib that's installed.
+
+You can rename the directories that you downloaded (they
+might be called "libpng-1.0.1 or "lpng100" and "zlib-1.1.1"
+or "zlib111") so that you have directories called "zlib" and "libpng".
+
+Your directory structure should look like this:
+
+   ..       (the parent directory)
+      libpng  (this directory)
+          INSTALL (this file)
+          README
+          *.h
+          *.c
+          scripts
+             makefile.*
+          pngtest.png
+          etc.
+      zlib
+          README
+          *.h
+          *.c
+          contrib
+          etc.
+
+First enter the zlib directory and follow the instructions
+in zlib/README.  Then come back here and choose the
+appropriate makefile.sys in the scripts directory.
+The files that are presently available in the scripts directory
+include
+
+      descrip.mms   =>  VMS makefile for MMS or MMK
+      makefile.std  =>  Generic UNIX makefile
+      makefile.knr  =>  Archaic UNIX Makefile that converts files with ansi2knr
+      makefile.dec  =>  DEC Alpha UNIX makefile
+      makefile.sgi  =>  Silicon Graphics IRIX makefile
+      makefile.sun  =>  Sun makefile
+      makefile.s2x  =>  Solaris 2.X makefile (gcc, creates libpng.so.2.1.0)
+      makefile.lnx  =>  Linux/ELF makefile (gcc, creates libpng.so.2.1.0)
+      makefile.mip  =>  MIPS makefile
+      makefile.aco  =>  Acorn makefile
+      makefile.ama  =>  Amiga makefile
+      smakefile.ppc =>  AMIGA smakefile for SAS C V6.58/7.00 PPC compiler
+                        (Requires SCOPTIONS, copied from scripts/SCOPTIONS.ppc)
+      makefile.atr  =>  Atari makefile
+      makefile.bor  =>  Borland makefile
+      build.bat     =>  MS-DOS batch file for Borland compiler
+      makefile.dj2  =>  DJGPP 2 makefile
+      makefile.msc  =>  Microsoft C makefile
+      makefile.tc3  =>  Turbo C 3.0 makefile
+      makefile.os2  =>  OS/2 Makefile (gcc and emx, requires pngos2.def)
+      pngos2.def    =>  OS/2 module definition file used by makefile.os2
+      makefile.wat  =>  Watcom 10a+ Makefile, 32-bit flat memory model
+      makevms.com   =>  VMS build script
+
+Copy the file (or files) that you need from the
+scripts directory into this directory, for example
+
+   MSDOS example: copy scripts\makefile.msd makefile
+   UNIX example:    cp scripts/makefile.std makefile
+
+Read the makefile to see if you need to change any source or
+target directories to match your preferences.
+
+Then read pngconf.h to see if you want to make any configuration
+changes.
+
+Then just run "make test" which will create the libpng library in
+this directory and run a quick test that reads the "pngtest.png"
+file and writes a "pngout.png" file that should be identical to it.
+
+Most of the makefiles will allow you to run "make install" to
+put the library in its final resting place (if you want to
+do that, run "make install" in the zlib directory first if necessary).
+
+Further information can be found in the README and libpng.txt
+files, in the individual makefiles, and in png.h, and the manual
+pages libpng.3 and png.5.

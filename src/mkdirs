@@ -1,0 +1,32 @@
+#! /bin/sh
+
+# create "/gtk" if not present
+if test ! -d gtk; then
+    mkdir gtk
+fi
+
+# create "/common" if not present
+if test ! -d common; then
+    mkdir common
+fi
+
+# create "/generic" if not present
+if test ! -d generic; then
+    mkdir generic
+fi
+
+# create "/png" if not present
+if test ! -d png; then
+    mkdir png
+fi
+
+# create "/zlib" if not present
+if test ! -d zlib; then
+    mkdir zlib
+fi
+
+# create "/gdk_imlib" if not present
+if test ! -d gdk_imlib; then
+    mkdir gdk_imlib
+fi
+

@@ -1,0 +1,31 @@
+/* XPM */
+static char * reportview_xpm[] = {
+"22 22 3 1",
+" 	c None",
+".	c #000000000000",
+"X	c #FFFFFFFFFFFF",
+"                      ",
+"                      ",
+"                      ",
+"                      ",
+"                      ",
+"  .................   ",
+"  .XXXXXXXXXXXXXXX.   ",
+"  .................   ",
+"  .XXXXXXXXXXXXXXX.   ",
+"  .XX..XXXX.XX..XX.   ",
+"  .XXXXXXXXXXXXXXX.   ",
+"  .XX...XXX.XX..XX.   ",
+"  .XXXXXXXXXXXXXXX.   ",
+"  .XX...XXX.XX..XX.   ",
+"  .XXXXXXXXXXXXXXX.   ",
+"  .XX...XXX.XX..XX.   ",
+"  .XXXXXXXXXXXXXXX.   ",
+"  .................   ",
+"                      ",
+"                      ",
+"                      ",
+"                      "};
+
+
+

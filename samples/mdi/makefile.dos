@@ -1,0 +1,63 @@
+#
+# File:		makefile.dos
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds mdi example (DOS).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+WXDIR = $(WXWIN)
+
+!include $(WXDIR)\src\makemsc.env
+
+THISDIR = $(WXDIR)\samples\mdi
+INC=/I$(WXDIR)\include
+
+HEADERS = mdi.h
+SOURCES = mdi.$(SRCSUFF)
+OBJECTS = mdi.obj
+
+all:    mdi.exe
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.dos
+        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.dos clean
+        cd $(THISDIR)
+
+
+mdi.exe:      $(WXDIR)\src\msw\dummy.obj $(WXLIB) mdi.obj mdi.def mdi.res
+        link $(LINKFLAGS) @<<
+$(WXDIR)\src\msw\dummy.obj mdi.obj,
+mdi,
+NUL,
+$(LIBS),
+mdi.def
+;
+<<
+        rc -K mdi.res
+
+mdi.obj:      mdi.h mdi.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+mdi.res :      mdi.rc $(WXDIR)\include\wx\msw\wx.rc
+    rc -r /i$(WXDIR)\include mdi
+
+clean:
+        -erase *.obj
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.sbr
+        -erase *.pdb

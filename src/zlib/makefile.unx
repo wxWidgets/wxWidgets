@@ -1,0 +1,133 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for tree library and example (UNIX).
+# Change the WXDIR directory, and CPPFLAGS and LDFLAGS, for your system.
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/make.env
+
+ZLIBDIR = $(WXDIR)/utils/zlib
+ZLIBLIB = $(WXDIR)/lib/libzlib$(GUISUFFIX).a
+
+SOURCES =	adler32.c deflate.c infblock.c inflate.c zutil.c compress.c \
+		infcodes.c inftrees.c trees.c \
+		crc32.c gzio.c inffast.c infutil.c uncompr.c
+OBJECTS =	$(OBJDIR)/adler32.$(OBJSUFF) $(OBJDIR)/deflate.$(OBJSUFF) \
+		$(OBJDIR)/infblock.$(OBJSUFF) $(OBJDIR)/inflate.$(OBJSUFF) \
+		$(OBJDIR)/zutil.$(OBJSUFF) $(OBJDIR)/trees.$(OBJSUFF) \
+		$(OBJDIR)/compress.$(OBJSUFF) $(OBJDIR)/infcodes.$(OBJSUFF) \
+		$(OBJDIR)/inftrees.$(OBJSUFF) $(OBJDIR)/crc32.$(OBJSUFF) \
+		$(OBJDIR)/gzio.$(OBJSUFF) $(OBJDIR)/inffast.$(OBJSUFF) \
+		$(OBJDIR)/infutil.$(OBJSUFF) $(OBJDIR)/uncompr.$(OBJSUFF)
+
+# Default
+
+.SUFFIXES:
+
+all:	$(OBJDIR) $(ZLIBLIB)
+
+demo:
+
+$(ZLIBLIB): $(OBJECTS)
+	rm -f $@
+	ar $(AROPTIONS) $@ $(OBJECTS)
+	$(RANLIB) $@
+
+motif:
+	$(MAKE) -f makefile.unx GUISUFFIX=_motif GUI=-Dwx_motif GUISUFFIX=_motif DEBUG='$(DEBUG)' OPT='$(OPT)' LDLIBS='$(MOTIFLDLIBS)' XVIEW_LINK=
+
+xview:
+	$(MAKE) -f makefile.unx GUI=-Dwx_xview GUISUFFIX=_ol OPT='$(OPT)' DEBUG='$(DEBUG)'
+
+demo_motif:
+	$(MAKE) -f makefile.unx all test_motif GUI=-Dwx_motif GUISUFFIX=_motif DEBUG='$(DEBUG)' OPT='$(OPT)' LDLIBS='$(MOTIFLDLIBS)' XVIEW_LINK=
+
+demo_ol:
+	cd $(WXDIR)/src/x; $(MAKE) -f makefile.unx xview OPT='$(OPT)' DEBUG='$(DEBUG)'
+	$(MAKE) -f makefile.unx all test_ol GUI=-Dwx_xview OPT='$(OPT)' DEBUG='$(DEBUG)'
+
+hp:
+	$(MAKE) -f makefile.unx GUI=-Dwx_motif GUISUFFIX=_hp CC=CC DEBUG='$(DEBUG)' DEBUGFLAGS='-g' OPT='' WARN='-w' \
+           XINCLUDE='$(HPXINCLUDE)' XLIB='$(HPXLIB)' XVIEW_LINK='' CCLEX='cc' \
+           LDLIBS='$(HPLDLIBS)'
+
+demo_hp:
+	$(MAKE) -f makefile.unx all test_hp GUI=-Dwx_motif GUISUFFIX=_hp CC=CC DEBUG='$(DEBUG)' DEBUGFLAGS='-g' OPT='' WARN='-w' \
+           XINCLUDE='$(HPXINCLUDE)' XLIB='$(HPXLIB)' XVIEW_LINK='' CCLEX='cc' \
+           LDLIBS='$(HPLDLIBS)'
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+$(OBJDIR)/adler32.$(OBJSUFF):	adler32.c
+	$(CC) -c $(CPPFLAGS) -o $@ adler32.c
+
+$(OBJDIR)/deflate.$(OBJSUFF):	deflate.c
+	$(CC) -c $(CPPFLAGS) -o $@ deflate.c
+
+$(OBJDIR)/infblock.$(OBJSUFF):	infblock.c
+	$(CC) -c $(CPPFLAGS) -o $@ infblock.c
+
+$(OBJDIR)/inflate.$(OBJSUFF):	inflate.c
+	$(CC) -c $(CPPFLAGS) -o $@ inflate.c
+
+$(OBJDIR)/zutil.$(OBJSUFF):	zutil.c
+	$(CC) -c $(CPPFLAGS) -o $@ zutil.c
+
+$(OBJDIR)/compress.$(OBJSUFF):	compress.c
+	$(CC) -c $(CPPFLAGS) -o $@ compress.c
+
+$(OBJDIR)/infcodes.$(OBJSUFF):	infcodes.c
+	$(CC) -c $(CPPFLAGS) -o $@ infcodes.c
+
+$(OBJDIR)/inftrees.$(OBJSUFF):	inftrees.c
+	$(CC) -c $(CPPFLAGS) -o $@ inftrees.c
+
+$(OBJDIR)/trees.$(OBJSUFF):	trees.c
+	$(CC) -c $(CPPFLAGS) -o $@ trees.c
+
+$(OBJDIR)/crc32.$(OBJSUFF):	crc32.c
+	$(CC) -c $(CPPFLAGS) -o $@ crc32.c
+
+$(OBJDIR)/gzio.$(OBJSUFF):	gzio.c
+	$(CC) -c $(CPPFLAGS) -o $@ gzio.c
+
+$(OBJDIR)/inffast.$(OBJSUFF):	inffast.c
+	$(CC) -c $(CPPFLAGS) -o $@ inffast.c
+
+$(OBJDIR)/infutil.$(OBJSUFF):	infutil.c
+	$(CC) -c $(CPPFLAGS) -o $@ infutil.c
+
+$(OBJDIR)/uncompr.$(OBJSUFF):	uncompr.c
+	$(CC) -c $(CPPFLAGS) -o $@ uncompr.c
+
+clean_motif:
+	$(MAKE) -f makefile.unx GUISUFFIX=_motif cleanany
+
+clean_ol:
+	$(MAKE) -f makefile.unx GUISUFFIX=_ol cleanany
+
+clean_hp:
+	$(MAKE) -f makefile.unx GUISUFFIX=_hp cleanany
+
+cleanany:
+	rm -f $(OBJECTS) $(OBJDIR)/*.$(OBJSUFF) $(ZLIBLIB) core
+
+wxclean_ol:
+	cd $(WXDIR)/src/x; $(MAKE) -f makefile.unx clean_ol
+
+wxclean_motif:
+	cd $(WXDIR)/src/x; $(MAKE) -f makefile.unx clean_motif
+
+wxclean_hp:
+	cd $(WXDIR)/src/x; $(MAKE) -f makefile.unx clean_hp

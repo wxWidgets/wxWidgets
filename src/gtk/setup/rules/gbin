@@ -1,0 +1,14 @@
+# all that is to do
+all:: checkneeds binary
+clean:: clean_binary clean_obj
+
+# now include definite rules
+BIN_BASE_DIR=$(GLOBAL_BIN_DIR)
+
+# include rules to create library
+include $(RULES_GENERIC)/bin1
+# include rules to create objects
+include $(RULES_GENERIC)/obj
+# include rule to check for defines needed
+include $(RULES_GENERIC)/needed
+

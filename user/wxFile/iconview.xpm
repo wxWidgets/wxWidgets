@@ -1,0 +1,31 @@
+/* XPM */
+static char * iconview_xpm[] = {
+"22 22 3 1",
+" 	c None",
+".	c #000000000000",
+"X	c #FFFFFFFFFFFF",
+"                      ",
+"                      ",
+"                      ",
+"                      ",
+"                      ",
+"  .................   ",
+"  .XXXXXXXXXXXXXXX.   ",
+"  .XX...XXXXX...XX.   ",
+"  .XX...XXXXX...XX.   ",
+"  .XXXXXXXXXXXXXXX.   ",
+"  .X.....XXX.....X.   ",
+"  .XXXXXXXXXXXXXXX.   ",
+"  .XX...XXXXX...XX.   ",
+"  .XX...XXXXX...XX.   ",
+"  .XXXXXXXXXXXXXXX.   ",
+"  .X.....XXX.....X.   ",
+"  .XXXXXXXXXXXXXXX.   ",
+"  .................   ",
+"                      ",
+"                      ",
+"                      ",
+"                      "};
+
+
+

@@ -1,0 +1,29 @@
+-------------------------------------------------------------------------------
+                                I   M   L   I   B
+				       1.4
+-------------------------------------------------------------------------------
+
+This software is Copyright (C) 1998 By The Rasterman (Carsten Haitzler). I
+accept no responsability for anythign this software may or may not do to
+your system - you use it completely at your own risk. This software comes
+under the LGPL and GPL licences. The library itself is LGPL (all software in
+Imlib and gdk_imlib directories) see the COPYING and COPYING.LIB files for
+full legal details.
+
+-------------------------------------------------------------------------------
+
+If you have picked up a net release of imlib you should be able to
+just follow the instructions in the INSTALL file.
+
+If you are using imlib out of the CVS repository, then you need to
+have some extra tools installed, and the configuration process is
+lengthier.  the HACKING file has all the details for building from a
+CVS checkout.
+
+Imlib will run MARKEDLY better if you get certain libraries. Notably,
+libjpeg, libpng, libtiff and libgif. For more information please go look at:
+
+http://www.labs.redhat.com/imlib/
+
+This will give links to everything you need or may want for Imlib's optimal
+functionality.

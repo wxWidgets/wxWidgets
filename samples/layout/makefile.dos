@@ -1,0 +1,85 @@
+#
+# File:		makefile.dos
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds layout example (DOS).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info.
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+
+!include $(WXDIR)\src\makemsc.env
+
+THISDIR = $(WXDIR)\samples\layout
+WXLIB = $(WXDIR)\lib\wx.lib
+LIBS=$(WXLIB) oldnames libw llibcew commdlg ddeml shell mmsystem
+INC=-I$(WXDIR)\include\base -I$(WXDIR)\include\msw
+DUMMY=$(WXDIR)\src\msw\dummy.obj
+
+# Set this to nothing if using MS C++ 7
+ZOPTION=/Z7
+
+!ifndef FINAL
+FINAL=0
+!endif
+
+!if "$(FINAL)" == "0"
+CPPFLAGS=/AL /W3 /Zi $(ZOPTION) /G2sw /Od $(INC) /YuWX_PREC.H /Dwx_msw /Fp$(WXDIR)\src\msw\wx.pch
+LINKFLAGS=/NOD /CO /ONERROR:NOEXE /SEG:512
+!else
+CPPFLAGS=/AL /W3 /G2sw $(INC) /Ox /YuWX_PREC.H /Dwx_msw /Fp$(WXDIR)\src\msw\wx.pch
+LINKFLAGS=/NOD /ONERROR:NOEXE /SEG:512
+!endif
+
+HEADERS = layout.h
+SOURCES = layout.$(SRCSUFF)
+OBJECTS = layout.obj
+
+layout:    layout.exe
+
+all:    wx layout.exe
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.dos clean
+        cd $(THISDIR)
+
+
+layout.exe:      $(DUMMY) $(WXLIB) layout.obj layout.def layout.res
+        link $(LINKFLAGS) @<<
+$(DUMMY) layout.obj,
+layout,
+NUL,
+$(LIBS),
+layout.def
+;
+<<
+        rc -31 -K layout.res
+
+layout.obj:      layout.h layout.$(SRCSUFF) $(DUMMY)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+layout.res :      layout.rc $(WXDIR)\include\msw\wx.rc
+    rc -r /i$(WXDIR)\include\msw /i$(WXDIR)\contrib\fafa layout
+
+clean:
+        -erase *.obj
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.sbr
+        -erase *.pdb
+

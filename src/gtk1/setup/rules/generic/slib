@@ -1,0 +1,21 @@
+# create library
+
+library:: $(LIB_BASE_DIR)/lib$(LIB_TARGET).a
+
+$(LIB_BASE_DIR)/lib$(LIB_TARGET).a: $(LIB_OBJ)
+	@$(RM) -f $@ $(LIB_BASE_DIR)/lib$(LIB_TARGET).so $(LIB_BASE_DIR)/lib$(LIB_TARGET).so.*
+	@if test "x$(CREATE_SHARED)" != x; then\
+	  echo "$(SHARE_DIR)/$(CREATE_SHARED) $(CC) $(LIB_BASE_DIR)/lib$(LIB_TARGET).so $(LIB_MAJOR) $(LIB_MINOR) $(LIB_OBJ)"; \
+	  $(SHARE_DIR)/$(CREATE_SHARED) $(CC) $(LIB_BASE_DIR)/lib$(LIB_TARGET).so $(LIB_MAJOR) $(LIB_MINOR) $(LIB_OBJ); \
+	fi
+	$(AR) rv $@ $(LIB_OBJ)
+
+# defining dependencies
+
+depend_library::
+
+# cleaning all files
+
+clean_library::
+	@$(RM) -f $(LIB_BASE_DIR)/lib$(LIB_TARGET).a $(LIB_BASE_DIR)/lib$(LIB_TARGET).so.* $(LIB_BASE_DIR)/lib$(LIB_TARGET).so
+

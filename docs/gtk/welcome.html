@@ -1,0 +1,292 @@
+<html>
+<head><title>wxGTK Homepage</title>
+</head>
+<body bgcolor=#FFFFFF text=#000000 link=#0020FF vlink=#800000 alink=#007777>
+<h1>"wxWindows for the GTK" Homepage</h1>
+
+<hr>
+<h3>Current version</h3>
+15th May '98: wxGTK v0.12 (alpha-)
+<p> 
+This release is hardly more stable than the one before, but it
+has many new features. It's main purpose is actually to prepare
+the final merge of the Windows port and the GTK port source
+trees into a common tree, developed using CVS. The growing
+number of demos which compile and run with wxGTK "although"
+being written for wxMSW shows that we seem to be on the right
+track. One nice new feature for many potential users is that
+wxGTK no longer needs any extra libraries to be installed,
+other than the GTK.
+<p>
+If you have a compiler
+better than gcc 2.7.2.2 then you can uncomment a line in src/common/prntbase.cpp
+which defines __GOOD_COMPILER__. This should make the printing demo work.
+I haven't got such a compiler, so I actually don't know. Somebody reported
+problems with version 2.7.2.3 as well.
+<p>
+<hr>
+<h3>Acknowledgements</h3>
+I'd like to thank the 
+<a href="http://www.freiburg.linux.de">Freiburg Linux User Group</a>
+ for kindly providing
+this site and Christian Wetzel in particular for helping me with
+this site's administration.
+<p>
+
+<hr>
+<h3>What is wxWindows?</h3>
+wxWindows is a C++ cross-platform GUI toolkit written mainly by Julian Smart. 
+More information about wxWindows can be found at the
+<a href="http://web.ukonline.co.uk/julian.smart/wxwin">wxWindows Homepage</a>.
+
+<p>
+The current version of wxWindows (v1.68) supports Windows ('95 and NT), Motif and
+XView (aka OpenLook). There is another port (wxXt) available, which uses the 
+free-ware widget set from the Free Widget Foundation (FSF). Ports have been
+started for the Mac, OS/2 and NextStep.
+<p>
+For different reasons, it was decided to start a complete rewrite of wxWindows,
+which will then be called wxWindows 2.0. For a list of new features and changes
+from the current version, you may read the wxWindows Homepage (see above).
+<p>
+Currently, work is being done on four ports of wxWindows 2.0:
+<dl>
+  <li> Windows (wxMSW, main author Julian Smart)
+  <li> Unix, Motif (wxMotif, main author Markus Holzhem)
+  <li> Unix, GIMP Toolkit (wxGTK, main author Robert Roebling)
+  <li> Macintosh (wxMac, main author Greg Whitehead)
+</dl>
+<p>
+wxWindows provides a rich set of classes which help to make cross-platform
+GUI programming easy. In many aspect, it is modelled after MFC, making transition
+from MFC to wxWindows relatively painless. The main technical
+difference between most other free or commercial cross platform libraries is
+that wxWindows is a wrapper around existing widget sets, whereas the other
+toolkits (Qt, Tk, Java, Amulet, OPaC, JX, Fresko) draw their widgets themselves, 
+which results in applications having a different look than native applications 
+for that specific platform.
+<p>
+There are classes for the following categories
+<dl>
+  <li> Window classes: wxWindow, wxFrame, wxDialogBox, wxPanel, wxCanvas etc.
+  <li> Widget classes: wxButton, wxCheckbox, wxChoice, wxListBox, wxListCtrl, wxText, wxGauge etc.
+  <li> Data structures: wxList, wxString, wxHashTable, wxDate etc.
+  <li> Layout/constraint system
+  <li> GDI classes: wxPen, wxBrush, wxFont, wxBitmap etc.
+  <li> Events: wxCommandEvent, wxMouseEvent, wxKeyEvent etc.
+  <li> Devices contexts: wxCanvasDC, wxPostScriptDC, wxMemoryDC, wxPrinterDC
+  <li> Base classes for runtime-type information: wxObject
+  <li> Interprocess communication: wxClient, wxConnection, wxSocket, wxServer etc.
+  <li> Document-view architecture: wxDocument, wxView, wxDocManager etc.
+  <li> Printing framework: wxPreviewFrame, wxPrintDialog, wxPrinter etc.
+  <li> Many helper classes, wxApplication, wxTypeTree, wxPathList etc.
+  <li> Classes for internationalization
+  <li> Built-in memory leak checking, log-files
+  <li> A multitude of functions and macros
+</dl>
+
+<hr>
+<h3>Copyright</h3>
+The choice of a suitable copyright has been subject to endless discussions. It
+has always been the aim, to put wxWindows under a copyright, which protects
+the work of its authors while at the same time encouraging the use of wxWindows
+in as many projects as possible. 
+<p>
+The (so far) last decision has been to put the whole of wxWindows
+under a modified (less restrictive) version of the GNU library general 
+public license.
+<p>
+The only exception is that wxGTK now contains code (gdk_imlib) which is 
+under the GNU library general public license. When you make changes to 
+this part of wxGTK, you'll have to make these changes public (in contrast 
+to changes to the rest).
+<p>
+It is obviously encouraged that anybody who uses wxWindows and who
+makes any improvements to it will make these changes available to
+wxWindows' authors.
+<p>
+<hr>
+<h3>What can I do with wxWindows 2.0?</h3>
+wxWindows is still in alpha stage, which means that there are still bugs
+waiting for you and several features are not yet (fully) implemented, but
+you can expect the interface to be more or less stable, so no major 
+modifications will have to be made to your source code. wxGTK is already
+used in a number of medium sized projects and is it being developped
+in close cooperation with the authors of these applications.
+<p>
+<hr>
+<h3>Can I write a GNOME application with wxGTK 2.0?</h3>
+Good question. The idea to use wxGTK for the GNOME desktop environment is
+quite obvious. When this topic came up on the GNOME mailing list, the GNOME
+people have shown an amazingly negative opinion about wxWindows. One reason
+might be that several of the main authors of the GNOME-project consider
+C++ a "broken language". I don't share that view and I am sure many people
+find C++ easier to handle and better suited for GUI programming than C.
+<p>
+Just recently, the topic of C++ in general and wxGTK in particular appeared
+again on the GNOME list. It has shown that - at least - the opinion on C++
+on the GNOME list is split. 
+<p>
+There is already a C++ wrapper for the GTK called GTK-- written by Tero Pulkkinen. 
+It is very small and adds very little overhead to the GTK. If platform
+independence is no issue for you and you want to write a small tool
+for Linux, you should probably use GTK--. Of course you can use wxGTK
+for that, too :-)
+<p>
+<hr>
+<h3>Screenshots</h3>
+What would a home page of a GUI be without a screenshot? Well, as wxWindows
+is a wrapper around existing widget/item sets, a wxWindows application will
+look like any other native Windows, Motif, GTK or Mac application.
+<p>
+But for those of you, who wouldn't download wxGTK only because there
+is no screenshot, 
+<a href="ftp://ftp.freiburg.linux.de/pub/linux/wxxt/sshot.jpg">here it comes</a>.
+<p>
+<hr>
+<h3>Download 1.68</h3>
+Go to the 
+<a href="ftp://ftp.freiburg.linux.de/pub/linux/wxxt">FTP</a>
+section directly.
+<p>
+There is documentation for version 1.68 in html available. 
+<a href="ftp://ftp.freiburg.linux.de/pub/linux/wxxt">here</a>. Not yet.
+<p>
+You can download current wxWindows version 1.68 for Windows, Motif and
+XView from
+<a href="ftp://ftp.freiburg.linux.de/pub/linux/wxxt">here</a>. Not yet.
+<p>
+You can download wxXt 1.66d from
+<a href="ftp://ftp.freiburg.linux.de/pub/linux/wxxt/wxxt166d.tgz">here</a>.
+<p>
+<hr>
+<h3>Download 2.0 alpha</h3>
+There is documentation for version 2.0 in html available. 
+<a href="ftp://ftp.freiburg.linux.de/pub/linux/wxxt/wxGTK_doc.tgz">here</a>.
+<p>
+You can download the first alpha for wxWindows 2.0 for Windows from
+<a href="ftp://ftp.freiburg.linux.de/pub/linux/wxxt/">here</a>. Not yet.
+<p>
+You can download the current alpha for wxWindows 2.0 for GTK from
+<a href="ftp://ftp.freiburg.linux.de/pub/linux/wxxt/wxGTK-0.12.tgz">here</a>. 
+<p>
+
+<hr>
+<h3>News from wxGTK 0.12</h3>
+<p>
+PNG, zlib and gdk_imlib code included.
+<p>
+MDI implementation. More a basis for further testing
+than of real value.
+<p>
+Split "--with-debug" option into two options: "--with-debug_info"
+and "--with-debug_flag". The first one sets the "-g" flag when
+compiling, the second defines "DEBUG" in setup.h (which is included
+from defs.h).
+<p>
+Merged DocView framework. The sample doesn't compile yet, because
+it uses features from wxTextCtrl, which I haven't implemented yet.
+<p>
+Merged TabCtrl. Doesn't look perfect, but it seems to work.
+<p>
+Merged remaining classes from the newest wxMSW alpha. (wxDynArray,
+wxModule etc.).
+<p>
+Further updates, bug fixes or additions:
+<p>
+<dl>
+  <li> wxYield() (again)
+  <li> postscript support for bitmaps
+  <li> spline code merged
+  <li> several bug fixes
+  <li> new samples
+</dl>
+
+<p>
+<hr>
+<h3>Known problems</h3>
+
+Missing implementation of:
+<dl>
+  <li>Impossible to set new font in GTK's widgets
+  <li>Items containing bitmaps
+  <li>Masks, bitmap handlers (partially done)
+  <li>Gauge
+  <li>Combobox
+  <li>Palettes (colormaps)
+  <li>Keyboard accelerators for menus
+  <li>Validation
+  <li>Clipboard functions
+  <li>Resources (for use with wxIDE-to-be)
+  <li>Drag and Drop
+  <li>Threads, Interprocess communication
+  <li>Sockets
+  <li>Database classes
+</dl>
+
+<p>
+<hr>
+<h3>Installation of wxGTK under Linux</h3>
+
+GTK requires an up-to-date version of the 
+<dl>
+  <li> GTK (GIMP ToolKit)
+</dl>
+to be installed as a shared lib on your system. wxGTK is being developped with
+version 1.0.1 and it is known not to work with earlier versions.
+The GTK library is available from 
+<a href="ftp://ftp.gtk.org/pub/">somewhere here (gtk.org).</a>
+After having typed "make install" the GTK header files should be
+in "/usr/local/include". Correct me, if I am wrong.
+<p>
+Compilation itself works as usual with autoconf:
+<dl>
+  <li> Unpack it to a suitable subdirectory, let's say ~/wxGTK
+  <li> Type "cd wxGTK"
+  <li> Type "configure"
+  <li> Type "make"
+</dl>
+Some demos use files stored in the source directory of those demos
+(e.g. internat uses files in samples/internat) whereas the binaries
+will end up in samples/internat/linux. You'll have to copy the binaries
+down or call them like "linux/test" from samples/internat. This is
+also the case for wxTest (which should display a horse).
+<p>
+You can create a shared library by adding the option "--with-shared" to
+the "configure" command. Afterwards, you'll have to copy the library
+~/wxGTK/lib/linux (if you have Linux) to a directory in your LDPATH (e.g. /usr/X11R6/lib)
+and run "ldconfig".
+<p>
+
+<hr>
+<h3>Mailing list for wxGTK</h3>
+The mailing list (as well as this page) is called wxxt for more
+or less historical reasons.
+<p>
+You can subsribe to the mailing list by sending a mail to
+<a href="mailto:majordomo@wesley.informatik.uni-freiburg.de">majordomo@wesley.informatik.uni-freiburg.de</a>.
+This mail must contain the text "subscribe wxxt" in the body (not the subject) of the
+mail. You will then get a confirmation that somebody asked majordomo to put you
+on the list and you will have to confirm this once again by sending back
+the authentisation, which comes in the confirmation mail. The last step
+is also described in the actual confirmation mail (I think).
+<p>
+You can send a mail to the mailing list to the address
+<a href="mailto:wxxt@www.freiburg.linux.de">wxxt@www.freiburg.linux.de</a>.
+
+<p>
+Unsubscribe by sending "unsubscribe wxxt" to majordomo (see above). Not to
+the actual mailing list.
+<p>
+<hr>
+<address>
+<br>This page is maintained by <a href="mailto:roebling@sun2.ruf.uni-freiburg.de">Robert Roebling</a>.
+Comments, in contrast to junk and flames, welcome.
+<p>
+Last changed 15th Mai '98. 
+</address>
+</body>
+</html>
+
+
+

@@ -1,0 +1,74 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: hello.cpp:44
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1997-12-19 17:46+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+#: hello.cpp:31 hello.cpp:38
+msgid "bad luck! try again..."
+msgstr "pas de chance! essayez encore..."
+
+#: hello.cpp:23 hello.cpp:24
+#, c-format
+msgid "usage: %s <number>"
+msgstr "syntaxe: %s <nombre>"
+
+#: hello.cpp:29 hello.cpp:34
+msgid "you've probably entered an invalid number."
+msgstr "vous avez du entrer un nombre invalide."
+
+#: hello.cpp:33 hello.cpp:40
+msgid "congratulations! you've won. Here is the magic phrase:"
+msgstr "felicitations! vous avez gagne. Voici la phrase magique:"
+
+#: hello.cpp:17
+msgid "wxstd"
+msgstr ""
+
+#: hello.cpp:18
+msgid "hello"
+msgstr ""
+
+#: hello.cpp:19
+msgid "fileutils"
+msgstr ""
+
+#: hello.cpp:20
+msgid "french"
+msgstr ""
+
+#: hello.cpp:20
+msgid "fr"
+msgstr ""
+
+#: hello.cpp:20
+msgid "C"
+msgstr ""
+
+#: hello.cpp:27
+msgid "nosuchfi.le"
+msgstr ""
+
+#: hello.cpp:36
+msgid "You've found a bug in this program!"
+msgstr ""
+
+#: hello.cpp:43
+#, c-format
+msgid "cannot create fifo `%s'"
+msgstr ""
+
+#: hello.cpp:43
+msgid "foo"
+msgstr ""

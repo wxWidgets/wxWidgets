@@ -1,0 +1,37 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for splitter example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+OBJECTS = $(OBJDIR)/test.$(OBJSUFF)
+
+all:    $(OBJDIR) test$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+test$(GUISUFFIX)$(EXESUFF):	$(OBJDIR)/test.$(OBJSUFF) test.res $(WXLIB)
+	$(CC) $(LDFLAGS) -o test$(GUISUFFIX)$(EXESUFF) $(OBJDIR)/test.$(OBJSUFF) $(XVIEW_LINK) $(LDLIBS)
+	$(RSRC) test.$(RESSUFF) test.exe
+
+$(OBJDIR)/test.$(OBJSUFF):	test.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ test.$(SRCSUFF)
+
+test.res:  test.rc
+
+clean:
+	rm -f $(OBJECTS) test$(GUISUFFIX).exe core *.rsc *.res

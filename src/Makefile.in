@@ -1,0 +1,183 @@
+#
+#  wxGTK main source makefile
+#
+#  Copyright 1998, Markus Holzhem and Robert Roebling
+#
+
+# wxGTK base directory
+WXBASEDIR=@WXBASEDIR@
+
+# set the OS type for compilation
+OS=@OS@
+
+# compile a library only
+RULE=gslib
+
+# define common stuff
+
+# needed for unactivated
+NONE =
+
+# define library name
+LIB_TARGET=wx_gtk
+LIB_MAJOR=0
+LIB_MINOR=12
+
+# define library sources
+
+LIB_CPP_SRC=\
+\
+ common/cmndata.cpp \
+ common/config.cpp \
+ common/date.cpp \
+ common/docview.cpp \
+ common/dynarray.cpp \
+ common/event.cpp \
+ common/file.cpp \
+ common/fileconf.cpp \
+ common/filefn.cpp \
+ common/gdicmn.cpp \
+ common/hash.cpp \
+ common/helpbase.cpp \
+ common/intl.cpp \
+ common/ipcbase.cpp \
+ common/layout.cpp \
+ common/list.cpp \
+ common/log.cpp \
+ common/matrix.cpp \
+ common/memory.cpp \
+ common/module.cpp \
+ common/object.cpp \
+ common/postscrp.cpp \
+ common/prntbase.cpp \
+ common/string.cpp \
+ common/textfile.cpp \
+ common/time.cpp \
+ common/timercmn.cpp \
+ common/utilscmn.cpp \
+\
+ gtk/app.cpp \
+ gtk/bitmap.cpp \
+ gtk/brush.cpp \
+ gtk/button.cpp \
+ gtk/checkbox.cpp \
+ gtk/choice.cpp \
+ gtk/colour.cpp \
+ gtk/control.cpp \
+ gtk/cursor.cpp \
+ gtk/data.cpp \
+ gtk/dc.cpp \
+ gtk/dcclient.cpp \
+ gtk/dcmemory.cpp \
+ gtk/dcscreen.cpp \
+ gtk/dnd.cpp \
+ gtk/dialog.cpp \
+ gtk/filedlg.cpp \
+ gtk/font.cpp \
+ gtk/frame.cpp \
+ gtk/gdiobj.cpp \
+ gtk/icon.cpp \
+ gtk/listbox.cpp \
+ gtk/mdi.cpp \
+ gtk/menu.cpp \
+ gtk/palette.cpp \
+ gtk/pen.cpp \
+ gtk/radiobox.cpp \
+ gtk/radiobut.cpp \
+ gtk/region.cpp \
+ gtk/scrolbar.cpp \
+ gtk/settings.cpp \
+ gtk/slider.cpp \
+ gtk/statbox.cpp \
+ gtk/stattext.cpp \
+ gtk/tbargtk.cpp \
+ gtk/textctrl.cpp \
+ gtk/timer.cpp \
+ gtk/utilsgtk.cpp \
+ gtk/utilsres.cpp \
+ gtk/window.cpp \
+\
+ generic/choicdgg.cpp \
+ generic/colrdlgg.cpp \
+ generic/fontdlgg.cpp \
+ generic/gridg.cpp \
+ generic/imaglist.cpp \
+ generic/listctrl.cpp \
+ generic/msgdlgg.cpp \
+ generic/panelg.cpp \
+ generic/printps.cpp \
+ generic/prntdlgg.cpp \
+ generic/scrolwin.cpp \
+ generic/splitter.cpp \
+ generic/statusbr.cpp \
+ generic/tabg.cpp \
+ generic/textdlgg.cpp \
+ generic/treectrl.cpp
+ 
+LIB_C_SRC=\
+\
+ gtk/win_gtk.c \
+\
+ png/png.c \
+ png/pngset.c \
+ png/pngget.c \
+ png/pngrutil.c \
+ png/pngtrans.c \
+ png/pngwutil.c \
+ png/pngread.c \
+ png/pngrio.c \
+ png/pngwio.c \
+ png/pngwrite.c \
+ png/pngrtran.c \
+ png/pngwtran.c \
+ png/pngmem.c \
+ png/pngerror.c \
+ png/pngpread.c \
+\
+ zlib/adler32.c \
+ zlib/compress.c \
+ zlib/crc32.c \
+ zlib/gzio.c \
+ zlib/uncompr.c \
+ zlib/deflate.c \
+ zlib/trees.c \
+ zlib/zutil.c \
+ zlib/inflate.c \
+ zlib/infblock.c \
+ zlib/inftrees.c \
+ zlib/infcodes.c \
+ zlib/infutil.c \
+ zlib/inffast.c \
+\
+ gdk_imlib/cache.c \
+ gdk_imlib/colors.c \
+ gdk_imlib/globals.c \
+ gdk_imlib/load.c \
+ gdk_imlib/misc.c \
+ gdk_imlib/rend.c \
+ gdk_imlib/save.c \
+ gdk_imlib/utils.c
+
+ 
+#define library objects
+LIB_OBJ=\
+ $(LIB_CPP_SRC:.cpp=.o) \
+ $(LIB_C_SRC:.c=.o)
+
+all::
+	-../mkdirs
+
+clean::
+	$(RM) -rf gtk
+	$(RM) -rf common
+	$(RM) -rf generic
+	$(RM) -rf png
+	$(RM) -rf zlib
+	$(RM) -rf gdk_imlib
+
+#additional things needed for compile
+ADD_COMPILE= \
+   -DHAVE_LIBPNG -DDJPEG_PROG=\"\" -DCJPEG_PROG=\"\"
+
+# include the definitions now
+include ../../template.mak

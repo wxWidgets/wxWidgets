@@ -1,0 +1,63 @@
+#
+# File:		makefile.nt
+# Author:	Julian Smart
+# Created:	1997
+# Updated:	
+# Copyright:	(c) 1997, Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile : Builds wxSplitterWindow sample MS VC++).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+WXSPLITDIR = $(WXDIR)\samples\splitter
+THISDIR = $(WXDIR)\samples\splitter
+
+!include $(WXDIR)\src\ntwxwin.mak
+
+PROGRAM=test
+ 
+PROGOBJECTS = $(PROGRAM).obj
+
+all:    $(PROGRAM)
+
+$(PROGRAM):    $(PROGRAM).exe
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.nt FINAL=$(FINAL)
+        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.nt clean
+        cd $(THISDIR)
+
+$(PROGRAM).exe:      $(DUMMYOBJ) $(WXLIB) $(PROGOBJECTS) $(PROGRAM).res
+	$(link) @<<
+-out:$(PROGRAM).exe
+$(LINKFLAGS)
+$(DUMMYOBJ) $(PROGOBJECTS) $(PROGRAM).res
+$(LIBS)
+<<
+
+$(PROGRAM).obj:      $(PROGRAM).$(SRCSUFF) $(DUMMYOBJ)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+$(PROGRAM).res :      $(PROGRAM).rc $(WXDIR)\include\wx\msw\wx.rc
+    $(rc) -r /i$(WXDIR)\include -fo$@ $(PROGRAM).rc
+
+
+clean:
+        -erase *.obj
+        -erase *.sbr
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.pdb
+

@@ -1,0 +1,26 @@
+#! /bin/sh
+
+COMPILER=$1
+LIBRARY_BASE=$2
+LIBRARY_MAJOR=$3
+LIBRARY_MINOR=$4
+shift 3
+LIBRARY_OBJS=
+while (test $# -ne 1) do
+  shift;
+  LIBRARY_OBJS="$LIBRARY_OBJS $1sh";
+done
+
+LIBRARY_BASE=`echo $LIBRARY_BASE | sed 's/.so/.sa/'`
+LIBRARY_NAME=`basename $LIBRARY_BASE`
+LIBRARY_FILE=$LIBRARY_BASE
+
+echo "Creating shared library: $LIBRARY_FILE"
+
+ar cr $LIBRARY_FILE~ $LIBRARY_OBJS
+nm $LIBRARY_OBJS | awk  '/ [BD] /{print $$3}' | sort | uniq > ${LIBRARY_FILE}.syms
+ld -o shr.o $LIBRARY_FILE~ -lX11 -lXt -lc -lm -H512 -T512 -bE:${LIBRARY_FILE}.syms -bM:SRE
+rm -f $LIBRARY_FILE~
+ar ruv $LIBRARY_FILE shr.o
+chmod a+x $LIBRARY_FILE
+

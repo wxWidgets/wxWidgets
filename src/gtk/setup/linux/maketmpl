@@ -1,0 +1,123 @@
+# Makefile for Autoconf.
+# Copyright (C) 1992, 1993, 1994 Free Software Foundation, Inc.
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+
+#### Start of system configuration section. ####
+
+GLOBAL_LIB_DIR = $(WXBASEDIR)/lib/$(OS)
+GLOBAL_BIN_DIR = $(WXBASEDIR)/bin/$(OS)
+
+# define toolkit to use
+TOOLKIT_DEF = -D__GTK__
+
+# general compiler stuff
+OPTIMISE = -O2 
+PROFILE = 
+DEBUG = 
+
+# c-compiler stuff
+CC = gcc
+CFLAGS =   -Wall $(OPTIMISE) $(PROFILE) $(DEBUG)
+CPP = gcc -E
+
+# c++-compiler stuff
+CXX = c++
+CXXFLAGS =   -Wall $(OPTIMISE) $(PROFILE) $(DEBUG)
+CXXCPP = c++ -E
+
+# shared compile stuff
+PICFLAGS = -fPIC
+CREATE_SHARED = sharedLinux
+
+# other stuff
+RM = rm -f
+LEX = flex
+LEXLIB = -lfl
+YACC = bison -y
+RANLIB = ranlib
+INSTALL = /usr/bin/install -c
+INSTALL_PROGRAM = ${INSTALL}
+INSTALL_DATA = ${INSTALL} -m 644
+AWK = mawk
+LN_S = ln -s
+CJPEG_PROG = 
+CONVERT_PATH = /usr/bin/X11
+CONVERT_PROG = /usr/bin/X11/convert
+DJPEG_PROG = 
+GIFTOPNM_PROG = 
+NETPBM_PATH = 
+
+prefix = /usr/local
+exec_prefix = ${prefix}
+
+# Directory in which to install scripts.
+#bindir = ${exec_prefix}/bin
+
+# Directory in which to install library files.
+datadir = ${prefix}/share
+acdatadir = $(datadir)/autoconf
+
+# Directory in which to install documentation info files.
+infodir = ${prefix}/info
+
+X_CFLAGS =  -I/usr/X11R6/include
+X_LIBS =  -L/usr/X11R6/lib
+X_EXTRA_LIBS = 
+X_PRE_LIBS =  -lSM -lICE
+
+GUI_TK_INCLUDE = -I/usr/local/lib/glib/include -I/usr/local/include -I/usr/X11R6/include
+GUI_TK_LIBRARY = -L/usr/local/lib -L/usr/X11R6/lib -lgtk -lgdk -lglib -lXext -lX11 -lm
+GUI_TK_LINK = 
+
+OPENGL_INCLUDE = 
+OPENGL_LIBRARY = 
+OPENGL_LINK = 
+
+THREADS_LINK = 
+
+# INCLUDES
+WX_INCLUDES = \
+$(TOOLKIT_DEF) \
+-I. \
+-I.. \
+-I$(WXBASEDIR)/include \
+-I$(WXBASEDIR)/src/png \
+-I$(WXBASEDIR)/src/zlib \
+-I$(WXBASEDIR)/src/gdk_imlib \
+$(GUI_TK_INCLUDE) \
+$(OPENGL_INCLUDE) \
+$(X_CFLAGS)
+
+WX_LIBS = -L$(GLOBAL_LIB_DIR) -lwx_gtk
+
+OPENGL_LIBS = $(OPENGL_LIBRARY) $(OPENGL_LINK)
+
+GUI_TK_LIBS = $(GUI_TK_LIBRARY) $(GUI_TK_LINK)
+
+LINK = $(CXX) -o $@
+LINK_LIBS= \
+  $(WX_LIBS) \
+  $(GUI_TK_LIBS) \
+  $(X_EXTRA_LIBS) \
+  $(X_PRE_LIBS)
+  
+#  $(X_LIBS) -lX11 -lXext -lm      gtk-config does this for me
+
+# Don't include $(OPENGL_LIBS) or $(THREADS_LINK) in LINK_LIBS; they
+# can be conveniently added to BIN_LINK in Makefile.in.
+
+#### End of system configuration section. ####

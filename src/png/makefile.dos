@@ -1,0 +1,76 @@
+#
+# File:		makefile.dos
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds winpng.lib library for Windows 3.1
+
+# Change WXDIR or WXWIN to wherever wxWindows is found
+WXDIR = $(WXWIN)
+WXLIB = $(WXDIR)\lib\wx.lib
+WXINC = $(WXDIR)\include
+
+WINPNGDIR = $(WXDIR)\utils\imatest\png
+WINPNGINC = $(WINPNGDIR)
+WINPNGLIB = ..\..\..\lib\winpng.lib
+
+INC = /I..\zlib
+
+LIBS=$(WXLIB) $(WINPNGLIB) libw llibcew commdlg ddeml shell # ctl3d
+
+# Set this to nothing if your compiler is MS C++ 7
+ZOPTION=
+
+!ifndef FINAL
+FINAL=0
+!endif
+
+PRECOMP=/YuWX.H 
+
+!if "$(FINAL)" == "0"
+OPT = /Od
+CPPFLAGS= /AL /W4 /Gt4 /Zi $(ZOPTION) /G2sw $(OPT) /Dwx_msw $(INC) # $(PRECOMP) /Fp$(WXDIR)\src\msw\wx.pch
+CFLAGS= /AL /W4 /Gt4 /Zi /G2sw /Od /Dwx_msw $(INC)
+LINKFLAGS=/NOD /CO /ONERROR:NOEXE
+!else
+# /Ox for real FINAL version
+OPT = /Ox
+CPPFLAGS= /AL /W4 /Gt4 /Zi /Os /G2sw $(OPT) /Dwx_msw $(INC) # $(PRECOMP) /Fp$(WXDIR)\src\msw\wx.pch
+CFLAGS= /AL /W4 /Gt4 /Zi /Os /G2sw /Dwx_msw $(INC)
+LINKFLAGS=/NOD /ONERROR:NOEXE
+!endif
+
+OBJECTS = png.obj pngrcb.obj pngread.obj pngrtran.obj pngrutil.obj pngstub.obj \
+ pngtrans.obj pngwrite.obj pngwtran.obj pngwutil.obj
+
+all:    $(WINPNGLIB)
+
+wx:
+        cd $(WXDIR)\src
+        nmake -f makefile.dos $(WXLIB) FINAL=$(FINAL)
+
+$(WINPNGLIB):      $(OBJECTS)
+        erase $(WINPNGLIB)
+        lib /PAGESIZE:128 @<<
+$(WINPNGLIB)
+y
+$(OBJECTS)
+nul
+;
+<<
+
+.c.obj:
+  cl $(CFLAGS) /c $*.c
+
+clean:
+        -erase *.obj
+        -erase *.exe
+        -erase *.lib
+        -erase *.sbr
+        -erase *.pdb
+
+cleanall:	clean

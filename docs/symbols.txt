@@ -1,0 +1,56 @@
+This is a list of preprocessor symbols used in the wxWindows source.
+
+GUIs:
+-----
+
+__X__           any X, but not GTK
+__MOTIF__       Motif
+__XT__          Xt; mutually exclusive with WX_MOTIF (?)
+__GTK__         GTK
+__XVIEW__       Obsolete!
+__WINDOWS__     Any Windows
+__MAC__         MacOS
+__UNIX__        any Unix
+__WIN95__       GUI for Windows 95 and above; NT 4.0 and above.
+__WIN32__       WIN32 API
+__NT__          Windows NT
+__CURSES__      CURSES
+
+OSes/machines:
+
+__HPUX__
+__SVR4__
+__SYSV__
+__LINUX__
+__SGI__
+__ULTRIX__
+__BSD__
+__VMS__
+__SUN__         Any Sun
+__SUNOS__
+__SOLARIS__
+__ALPHA__
+__AIX__
+__DATA_GENERAL__
+__OSF__
+__FREEBSD__
+
+Compilers:
+----------
+
+__GNUWIN32__    Gnu-Win32 compiler
+__DJGPP__       DJGPP
+__GNUG__        Gnu C++ on any platform
+__BORLANDC__    Borland C++
+__WATCOMC__     Watcom C++
+__SYMANTECC__   Symantec C++
+__VISUALC__     VC++
+__SUNCC__
+__XLC__         ?? compiler
+
+wxWindows modes:
+----------------
+
+__DEBUG__       usage: #ifdef __DEBUG__ (=> debug mode, else => release)
+WXDEBUG         usage: #if DEBUG (0: release, 1: minimal debug code, ...)
+
