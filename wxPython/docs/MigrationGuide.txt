@@ -258,70 +258,70 @@ been reverted and the wx.DC Draw methods with 2.4 compatible
 signatures have been restored.  In addition a new set of methods have
 been added that take wx.Point and/or wx.Size parameters instead of
 separate integer parameters.  The Draw and etc. methods now available
-are::
+in the wx.DC class are::
 
 
-    FloodFill(x, y, colour, style = wx.FLOOD_SURFACE)
-    FoodFillPoint(pt, colour, style = wx.FLOOD_SURFACE)
+    FloodFill(self, x, y, colour, style = wx.FLOOD_SURFACE)
+    FoodFillPoint(self, pt, colour, style = wx.FLOOD_SURFACE)
 
-    GetPixel(x,y)
-    GetPixelPoint(pt) 
+    GetPixel(self, x,y)
+    GetPixelPoint(self, pt) 
     
-    DrawLine(x1, y1, x2, y2)
-    DrawLinePoint(pt1, pt2)
+    DrawLine(self, x1, y1, x2, y2)
+    DrawLinePoint(self, pt1, pt2)
 
-    CrossHair(x, y)
-    CrossHairPoint(pt)
+    CrossHair(self, x, y)
+    CrossHairPoint(self, pt)
 
-    DrawArc(x1, y1, x2, y2, xc, yc)
-    DrawArcPoint(pt1, pt2, centre)
+    DrawArc(self, x1, y1, x2, y2, xc, yc)
+    DrawArcPoint(self, pt1, pt2, centre)
 
-    DrawCheckMark(x, y, width, height)
-    DrawCheckMarkRect(rect)
+    DrawCheckMark(self, x, y, width, height)
+    DrawCheckMarkRect(self, rect)
 
-    DrawEllipticArc(x, y, w, h, sa, ea)
-    DrawEllipticArcPointSize(pt, sz, sa, ea)
+    DrawEllipticArc(self, x, y, w, h, sa, ea)
+    DrawEllipticArcPointSize(self, pt, sz, sa, ea)
 
-    DrawPoint(x, y)
-    DrawPointPoint(pt)
+    DrawPoint(self, x, y)
+    DrawPointPoint(self, pt)
 
-    DrawRectangle(x, y, width, height)
-    DrawRectangleRect(rect)
-    DrawRectanglePointSize(pt, sz)
+    DrawRectangle(self, x, y, width, height)
+    DrawRectangleRect(self, rect)
+    DrawRectanglePointSize(self, pt, sz)
 
-    DrawRoundedRectangle(x, y, width, height, radius)
-    DrawRoundedRectangleRect(r, radius)
-    DrawRoundedRectanglePointSize(pt, sz, radius)
+    DrawRoundedRectangle(self, x, y, width, height, radius)
+    DrawRoundedRectangleRect(self, r, radius)
+    DrawRoundedRectanglePointSize(self, pt, sz, radius)
 
-    DrawCircle(x, y, radius)
-    DrawCirclePoint(pt, radius)
+    DrawCircle(self, x, y, radius)
+    DrawCirclePoint(self, pt, radius)
 
-    DrawEllipse(x, y, width, height)
-    DrawEllipseRect(rect)
-    DrawEllipsePointSize(pt, sz)
+    DrawEllipse(self, x, y, width, height)
+    DrawEllipseRect(self, rect)
+    DrawEllipsePointSize(self, pt, sz)
 
-    DrawIcon(icon, x, y)
-    DrawIconPoint(icon, pt)
+    DrawIcon(self, icon, x, y)
+    DrawIconPoint(self, icon, pt)
 
-    DrawBitmap(bmp, x, y, useMask = False)
-    DrawBitmapPoint(bmp, pt, useMask = False)
+    DrawBitmap(self, bmp, x, y, useMask = False)
+    DrawBitmapPoint(self, bmp, pt, useMask = False)
 
-    DrawText(text, x, y)
-    DrawTextPoint(text, pt)
+    DrawText(self, text, x, y)
+    DrawTextPoint(self, text, pt)
 
-    DrawRotatedText(text, x, y, angle)
-    DrawRotatedTextPoint(text, pt, angle)
+    DrawRotatedText(self, text, x, y, angle)
+    DrawRotatedTextPoint(self, text, pt, angle)
 
-    bool Blit(xdest, ydest, width, height, sourceDC, xsrc, ysrc,
+    bool Blit(self, xdest, ydest, width, height, sourceDC, xsrc, ysrc,
               rop = wx.COPY, useMask = False, xsrcMask = -1, ysrcMask = -1)
-    BlitPointSize(destPt, sz, sourceDC, srcPt, rop = wx.COPY, 
+    BlitPointSize(self, destPt, sz, sourceDC, srcPt, rop = wx.COPY, 
                   useMask = False, srcPtMask = wxDefaultPosition)
 
 
-    SetClippingRegion(x, y, width, height)
-    SetClippingRegionPointSize(pt, sz)
-    SetClippingRegionAsRegion(region)
-    SetClippingRect(rect)
+    SetClippingRegion(self, x, y, width, height)
+    SetClippingRegionPointSize(self, pt, sz)
+    SetClippingRegionAsRegion(self, region)
+    SetClippingRect(self, rect)
 
 
 
