@@ -1965,6 +1965,12 @@ void wxGrid::OnGridScroll( wxScrollEvent& ev )
 
 void wxGrid::SelectCell( const wxGridCellCoords& coords )
 {
+    if ( SendEvent( EVT_GRID_SELECT_CELL, coords.GetRow(), coords.GetCol() ) )
+    {
+        // the event has been intercepted - do nothing
+        return;
+    }
+
     wxClientDC dc( this );
 
     if ( m_currentCellCoords != wxGridNoCellCoords )
