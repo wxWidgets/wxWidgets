@@ -40,7 +40,11 @@ MenuHandle NewUniqueMenu()
 
 // the margin between the text control and the choice
 static const wxCoord MARGIN = 2;
+#if TARGET_API_MAC_OSX
+static const int    POPUPWIDTH = 24;
+#else
 static const int    POPUPWIDTH = 18;
+#endif
 static const int    POPUPHEIGHT = 23;
 
 
@@ -149,6 +153,12 @@ protected:
         event2.SetString(m_cb->GetStringSelection());
         m_cb->ProcessCommand(event2);
     }
+    virtual wxSize DoGetBestSize() const
+    {
+        wxSize sz = wxChoice::DoGetBestSize() ;
+        sz.x = POPUPWIDTH ;
+        return sz ;
+    }  
 
 private:
     wxComboBox *m_cb;
@@ -290,7 +300,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     }
 
     m_choice = new wxComboBoxChoice(this, style );
-
+    m_choice->SetSizeHints( wxSize( POPUPWIDTH , POPUPHEIGHT ) ) ;
     wxSize csize = size;
     if ( style & wxCB_READONLY )
     {
