@@ -47,12 +47,13 @@ class CheckListBoxFrame : public wxFrame
 public:
     // ctor & dtor
     CheckListBoxFrame(wxFrame *frame, const char *title,
-            int x, int y, int w, int h);
-    ~CheckListBoxFrame();
+                      int x, int y, int w, int h);
+    virtual ~CheckListBoxFrame();
 
     // notifications
     void OnQuit           (wxCommandEvent& event);
     void OnAbout          (wxCommandEvent& event);
+    void OnToggleSelection(wxCommandEvent& event);
     void OnListboxSelect  (wxCommandEvent& event);
     void OnCheckboxToggle (wxCommandEvent& event);
     void OnListboxDblClick(wxCommandEvent& event);
@@ -60,9 +61,13 @@ public:
     void OnButtonDown     (wxCommandEvent& event);
 
 private:
+    void CreateCheckListbox(long flags = 0);
+
     void OnButtonMove(bool up);
 
     void AdjustColour(size_t index);
+
+    wxPanel *m_panel;
 
     wxCheckListBox *m_pListBox;
 
@@ -71,7 +76,10 @@ private:
 
 enum
 {
-    Menu_Quit = 1,
+    Menu_About = 100,
+    Menu_Quit,
+    Menu_Selection,
+
     Control_First = 1000,
     Control_Listbox,
     Btn_Up,
@@ -79,7 +87,10 @@ enum
 };
 
 BEGIN_EVENT_TABLE(CheckListBoxFrame, wxFrame)
+    EVT_MENU(Menu_About, CheckListBoxFrame::OnAbout)
     EVT_MENU(Menu_Quit, CheckListBoxFrame::OnQuit)
+
+    EVT_MENU(Menu_Selection, CheckListBoxFrame::OnToggleSelection)
 
     EVT_LISTBOX(Control_Listbox, CheckListBoxFrame::OnListboxSelect)
     EVT_CHECKLISTBOX(Control_Listbox, CheckListBoxFrame::OnCheckboxToggle)
@@ -97,7 +108,7 @@ bool CheckListBoxApp::OnInit(void)
     CheckListBoxFrame *pFrame = new CheckListBoxFrame
                                     (
                                      NULL,
-                                     "wxWindows Checklistbox Sample",
+                                     _T("wxWindows Checklistbox Sample"),
                                      50, 50, 480, 320
                                     );
     SetTopWindow(pFrame);
@@ -107,9 +118,9 @@ bool CheckListBoxApp::OnInit(void)
 
 // main frame constructor
 CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
-        const char *title,
-        int x, int y, int w, int h)
-: wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
+                                     const wxChar *title,
+                                     int x, int y, int w, int h)
+                 : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {
     // create the status line
     const int widths[] = { -1, 60 };
@@ -118,26 +129,65 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
     wxLogStatus(this, _T("no selection"));
 
     // Make a menubar
-    wxMenu *file_menu = new wxMenu;
+    // --------------
 
-    // construct submenu
-    file_menu->Append(Menu_Quit, "E&xit");
+    // file submenu
+    wxMenu *menuFile = new wxMenu;
+    menuFile->Append(Menu_About, _T("&About...\tF1"));
+    menuFile->AppendSeparator();
+    menuFile->Append(Menu_Quit, _T("E&xit\tAlt-X"));
 
+    // listbox submenu
+    wxMenu *menuList = new wxMenu;
+    menuList->AppendCheckItem(Menu_Selection, _T("Multiple selection\tCtrl-M"));
+
+    // put it all together
     wxMenuBar *menu_bar = new wxMenuBar;
-    menu_bar->Append(file_menu, "&File");
+    menu_bar->Append(menuFile, _T("&File"));
+    menu_bar->Append(menuList, _T("&List"));
     SetMenuBar(menu_bar);
 
     // make a panel with some controls
-    wxPanel *panel = new wxPanel(this, -1, wxPoint(0, 0),
-                                 wxSize(400, 200), wxTAB_TRAVERSAL);
+    m_panel = new wxPanel(this, -1, wxPoint(0, 0),
+                          wxSize(400, 200), wxTAB_TRAVERSAL);
 
+    CreateCheckListbox();
+
+    // create buttons for moving the items around
+    wxButton *button1 = new wxButton(m_panel, Btn_Up, _T("   &Up  "), wxPoint(420, 90));
+    wxButton *button2 = new wxButton(m_panel, Btn_Down, _T("&Down"), wxPoint(420, 120));
+
+
+    wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
+
+    mainsizer->Add( m_pListBox, 1, wxGROW|wxALL, 10 );
+
+    wxBoxSizer *bottomsizer = new wxBoxSizer( wxHORIZONTAL );
+
+    bottomsizer->Add( button1, 0, wxALL, 10 );
+    bottomsizer->Add( button2, 0, wxALL, 10 );
+
+    mainsizer->Add( bottomsizer, 0, wxCENTER );
+
+    // tell frame to make use of sizer (or constraints, if any)
+    m_panel->SetAutoLayout( TRUE );
+    m_panel->SetSizer( mainsizer );
+
+    // don't allow frame to get smaller than what the sizers tell ye
+    mainsizer->SetSizeHints( this );
+
+    Show(TRUE);
+}
+
+void CheckListBoxFrame::CreateCheckListbox(long flags)
+{
     // check list box
-    static const char* aszChoices[] =
+    static const wxChar *aszChoices[] =
     {
-        "Zeroth",
-        "First", "Second", "Third",
-        "Fourth", "Fifth", "Sixth",
-        "Seventh", "Eighth", "Nineth"
+        _T("Zeroth"),
+        _T("First"), _T("Second"), _T("Third"),
+        _T("Fourth"), _T("Fifth"), _T("Sixth"),
+        _T("Seventh"), _T("Eighth"), _T("Nineth")
     };
 
     wxString *astrChoices = new wxString[WXSIZEOF(aszChoices)];
@@ -147,12 +197,13 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
 
     m_pListBox = new wxCheckListBox
         (
-         panel,                 // parent
+         m_panel,               // parent
          Control_Listbox,       // control id
          wxPoint(10, 10),       // listbox poistion
          wxSize(400, 100),      // listbox size
          WXSIZEOF(aszChoices),  // number of strings
-         astrChoices            // array of strings
+         astrChoices,           // array of strings
+         flags
         );
 
     //m_pListBox->SetBackgroundColour(*wxGREEN);
@@ -165,32 +216,7 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
     }
 
     m_pListBox->Check(2);
-
-    // create buttons for moving the items around
-    wxButton *button1 = new wxButton(panel, Btn_Up, "   &Up  ", wxPoint(420, 90));
-    wxButton *button2 = new wxButton(panel, Btn_Down, "&Down", wxPoint(420, 120));
-
-
-    wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
-  
-    mainsizer->Add( m_pListBox, 1, wxGROW|wxALL, 10 );
-    
-    wxBoxSizer *bottomsizer = new wxBoxSizer( wxHORIZONTAL );
-    
-    bottomsizer->Add( button1, 0, wxALL, 10 );
-    bottomsizer->Add( button2, 0, wxALL, 10 );
-
-    mainsizer->Add( bottomsizer, 0, wxCENTER );
-  
-    // tell frame to make use of sizer (or constraints, if any)
-    panel->SetAutoLayout( TRUE );
-    panel->SetSizer( mainsizer );
-
-    // don't allow frame to get smaller than what the sizers tell ye
-    mainsizer->SetSizeHints( this );  
-
-  
-    Show(TRUE);
+    m_pListBox->Select(3);
 }
 
 CheckListBoxFrame::~CheckListBoxFrame()
@@ -204,9 +230,23 @@ void CheckListBoxFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void CheckListBoxFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(wxT("Demo of wxCheckListBox control\n© Vadim Zeitlin 1998-1999"),
+    wxMessageBox(wxT("Demo of wxCheckListBox control\n© Vadim Zeitlin 1998-2002"),
                  wxT("About wxCheckListBox"),
                  wxICON_INFORMATION, this);
+}
+
+void CheckListBoxFrame::OnToggleSelection(wxCommandEvent& event)
+{
+    wxSizer *sizer = m_panel->GetSizer();
+
+    sizer->Remove(m_pListBox);
+    delete m_pListBox;
+
+    CreateCheckListbox(event.IsChecked() ? wxLB_EXTENDED : 0);
+
+    sizer->Insert(0, m_pListBox, 1, wxGROW | wxALL, 10);
+
+    m_panel->Layout();
 }
 
 void CheckListBoxFrame::OnListboxSelect(wxCommandEvent& event)
