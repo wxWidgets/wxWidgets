@@ -2208,9 +2208,9 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         case "${host}" in
             *-*-linux* )
               if test "x$wxUSE_SHARED" = xyes ; then
-                  mgl_os_candidates="linux/gcc/glibc.so linux/gcc/glibc"
+                  mgl_os_candidates="linux/gcc/x86/so linux/gcc/x86/a linux/gcc/glibc.so linux/gcc/glibc"
               else
-                  mgl_os_candidates="linux/gcc/glibc linux/gcc/glibc.so"
+                  mgl_os_candidates="linux/gcc/x86/a linux/gcc/x86/so linux/gcc/glibc linux/gcc/glibc.so"
               fi
               ;;
             *-pc-msdosdjgpp )
