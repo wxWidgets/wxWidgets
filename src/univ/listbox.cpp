@@ -635,7 +635,7 @@ wxCoord wxListBox::GetLineHeight() const
 
 wxCoord wxListBox::GetMaxWidth() const
 {
-    if ( m_maxWidth == -1 )
+    if ( m_maxWidth == 0 )
     {
         wxCoord width;
         size_t count = m_strings.GetCount();
