@@ -597,14 +597,24 @@ private:
     bool m_isOnGrip;
 };
 
+class wxWin32SystemMenuEvtHandler;
+
 class wxWin32FrameInputHandler : public wxStdFrameInputHandler
 {
 public:
     wxWin32FrameInputHandler(wxInputHandler *handler)
-        : wxStdFrameInputHandler(handler) { }
+        : wxStdFrameInputHandler(handler), m_menuHandler(NULL) { }
 
     virtual bool HandleMouse(wxInputConsumer *control,
                              const wxMouseEvent& event);
+
+    virtual bool HandleActivation(wxInputConsumer *consumer, bool activated);
+                             
+    void PopupSystemMenu(wxTopLevelWindow *window, const wxPoint& pos) const;
+
+private:
+    // was the mouse over the grip last time we checked?
+    wxWin32SystemMenuEvtHandler *m_menuHandler;
 };
 
 // ----------------------------------------------------------------------------
@@ -4335,22 +4345,170 @@ bool wxWin32StatusBarInputHandler::HandleMouseMove(wxInputConsumer *consumer,
 bool wxWin32FrameInputHandler::HandleMouse(wxInputConsumer *consumer,
                                            const wxMouseEvent& event)
 {
-    if ( event.LeftDClick() )
+    if ( event.LeftDClick() || event.LeftDown() || event.RightDown() )
     {
         wxTopLevelWindow *tlw =
             wxStaticCast(consumer->GetInputWindow(), wxTopLevelWindow);
 
         long hit = tlw->HitTest(event.GetPosition());
 
-        if ( hit == wxHT_TOPLEVEL_TITLEBAR )
+        if ( event.LeftDClick() && hit == wxHT_TOPLEVEL_TITLEBAR )
         {
             tlw->PerformAction(wxACTION_TOPLEVEL_BUTTON_CLICK,
                                tlw->IsMaximized() ? wxTOPLEVEL_BUTTON_RESTORE
                                                   : wxTOPLEVEL_BUTTON_MAXIMIZE);
             return TRUE;
         }
+        else if ( tlw->GetWindowStyle() & wxSYSTEM_MENU )
+        {
+            if ( (event.LeftDown() && hit == wxHT_TOPLEVEL_ICON) ||
+                 (event.RightDown() && 
+                      (hit == wxHT_TOPLEVEL_TITLEBAR || 
+                       hit == wxHT_TOPLEVEL_ICON)) )
+            {
+                PopupSystemMenu(tlw, event.GetPosition());
+                return TRUE;
+            }
+        }
     }
 
     return wxStdFrameInputHandler::HandleMouse(consumer, event);
 }
 
+void wxWin32FrameInputHandler::PopupSystemMenu(wxTopLevelWindow *window, 
+                                               const wxPoint& pos) const
+{
+    wxMenu *menu = new wxMenu;
+
+    if ( window->GetWindowStyle() & wxMAXIMIZE_BOX )
+        menu->Append(wxID_RESTORE_FRAME , _("&Restore"));
+    menu->Append(wxID_MOVE_FRAME , _("&Move"));
+    if ( window->GetWindowStyle() & wxRESIZE_BORDER )
+        menu->Append(wxID_RESIZE_FRAME , _("&Size"));
+    if ( wxSystemSettings::HasFeature(wxSYS_CAN_ICONIZE_FRAME) )
+        menu->Append(wxID_ICONIZE_FRAME , _("Mi&nimize"));
+    if ( window->GetWindowStyle() & wxMAXIMIZE_BOX )
+        menu->Append(wxID_MAXIMIZE_FRAME , _("Ma&ximize"));
+    menu->AppendSeparator();
+    menu->Append(wxID_CLOSE_FRAME, _("Close\tAlt-F4"));
+    
+    if ( window->GetWindowStyle() & wxMAXIMIZE_BOX )
+    {
+        if ( window->IsMaximized() )
+        {
+            menu->Enable(wxID_MAXIMIZE_FRAME, FALSE);
+            menu->Enable(wxID_MOVE_FRAME, FALSE);
+            if ( window->GetWindowStyle() & wxRESIZE_BORDER )
+                menu->Enable(wxID_RESIZE_FRAME, FALSE);
+        }
+        else
+            menu->Enable(wxID_RESTORE_FRAME, FALSE);
+    }
+
+    window->PopupMenu(menu, pos);
+    delete menu;
+}
+
+class wxWin32SystemMenuEvtHandler : public wxEvtHandler
+{
+public:
+    wxWin32SystemMenuEvtHandler(wxWin32FrameInputHandler *handler,
+                                wxInputConsumer *consumer);
+    void RemoveSelf();
+    
+private:
+    DECLARE_EVENT_TABLE()
+    void OnSystemMenu(wxCommandEvent &event);
+    void OnCloseFrame(wxCommandEvent &event);
+    void OnClose(wxCloseEvent &event);
+   
+    wxWin32FrameInputHandler *m_inputHnd;
+    wxTopLevelWindow         *m_wnd;
+    wxAcceleratorTable        m_oldAccelTable;
+};
+
+wxWin32SystemMenuEvtHandler::wxWin32SystemMenuEvtHandler(
+                                wxWin32FrameInputHandler *handler,
+                                wxInputConsumer *consumer)
+{
+    m_inputHnd = handler;
+    m_wnd = wxStaticCast(consumer->GetInputWindow(), wxTopLevelWindow);
+    m_wnd->PushEventHandler(this);
+    
+    // VS: This code relies on using generic implementation of 
+    //     wxAcceleratorTable in wxUniv!
+    wxAcceleratorTable table = *m_wnd->GetAcceleratorTable();
+    m_oldAccelTable = table;
+    table.Add(wxAcceleratorEntry(wxACCEL_ALT, WXK_SPACE, wxID_SYSTEM_MENU));
+    table.Add(wxAcceleratorEntry(wxACCEL_ALT, WXK_F4, wxID_CLOSE_FRAME));
+    m_wnd->SetAcceleratorTable(table);
+}
+
+void wxWin32SystemMenuEvtHandler::RemoveSelf()
+{
+    if ( m_wnd )
+    {
+        m_wnd->SetAcceleratorTable(m_oldAccelTable);
+        m_wnd->RemoveEventHandler(this); 
+    }
+}
+
+BEGIN_EVENT_TABLE(wxWin32SystemMenuEvtHandler, wxEvtHandler)
+    EVT_MENU(wxID_SYSTEM_MENU, wxWin32SystemMenuEvtHandler::OnSystemMenu)
+    EVT_MENU(wxID_CLOSE_FRAME, wxWin32SystemMenuEvtHandler::OnCloseFrame)
+    EVT_CLOSE(wxWin32SystemMenuEvtHandler::OnClose)
+END_EVENT_TABLE()
+
+void wxWin32SystemMenuEvtHandler::OnSystemMenu(wxCommandEvent &WXUNUSED(event))
+{
+    int border = ((m_wnd->GetWindowStyle() & wxRESIZE_BORDER) &&
+                  !m_wnd->IsMaximized()) ?
+                      RESIZEABLE_FRAME_BORDER_THICKNESS :
+                      FRAME_BORDER_THICKNESS;
+    wxPoint pt = m_wnd->GetClientAreaOrigin();
+    pt.x = -pt.x + border;
+    pt.y = -pt.y + border + FRAME_TITLEBAR_HEIGHT;
+
+    wxAcceleratorTable table = *m_wnd->GetAcceleratorTable();
+    m_wnd->SetAcceleratorTable(wxNullAcceleratorTable);
+    m_inputHnd->PopupSystemMenu(m_wnd, pt);
+    m_wnd->SetAcceleratorTable(table);
+}
+
+void wxWin32SystemMenuEvtHandler::OnCloseFrame(wxCommandEvent &WXUNUSED(event))
+{
+    m_wnd->PerformAction(wxACTION_TOPLEVEL_BUTTON_CLICK,
+                         wxTOPLEVEL_BUTTON_CLOSE);
+}
+
+void wxWin32SystemMenuEvtHandler::OnClose(wxCloseEvent &event)
+{
+    m_wnd = NULL;
+    event.Skip();
+}
+
+
+bool wxWin32FrameInputHandler::HandleActivation(wxInputConsumer *consumer, 
+                                                bool activated)
+{
+    if ( consumer->GetInputWindow()->GetWindowStyle() & wxSYSTEM_MENU )
+    {
+        if ( !activated && m_menuHandler )
+        {
+            m_menuHandler->RemoveSelf();
+            wxDELETE(m_menuHandler);
+        }
+        else if ( activated )
+        {
+            if ( m_menuHandler )
+            {
+                m_menuHandler->RemoveSelf();
+                delete m_menuHandler;
+            }
+
+            m_menuHandler = new wxWin32SystemMenuEvtHandler(this, consumer);
+        }
+    }
+
+    return wxStdFrameInputHandler::HandleActivation(consumer, activated);
+}
