@@ -126,10 +126,12 @@ fi
 
 echo $CMD
 eval $CMD
+RC=$?
 
-
-if [ "$OTHERCMD" != "" ]; then
+if [ "$RC" = "0" -a  "$OTHERCMD" != "" ]; then
     echo $OTHERCMD
     $OTHERCMD
+    RC=$?
 fi
 
+exit $RC
