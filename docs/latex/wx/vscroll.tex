@@ -144,6 +144,16 @@ Finally note that {\it lineMin} is inclusive, while {\it lineMax} is exclusive,
 as usual.
 
 
+\membersection{wxVScrolledWindow::RefreshAll}\label{wxvscrolledwindowrefreshall}
+
+\func{void}{RefreshAll}{\void}
+
+This function completely refreshes the control, recalculating the number of
+items shown on screen and repaining them. It should be called when the values
+returned by \helpref{OnGetLineHeight}{wxvscrolledwindowongetlineheight} change
+for some reason and the window must be updated to reflect this.
+
+
 \membersection{wxVScrolledWindow::ScrollLines}\label{wxvscrolledwindowscrolllines}
 
 \func{bool}{ScrollLines}{\param{int }{lines}}
