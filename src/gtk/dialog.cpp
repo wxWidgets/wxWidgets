@@ -678,11 +678,6 @@ void wxDialog::EndModal( int retCode )
     Show( FALSE );
 }
 
-void wxDialog::InitDialog()
-{
-    wxWindow::InitDialog();
-}
-
 void wxDialog::SetIcon( const wxIcon &icon )
 {
     m_icon = icon;

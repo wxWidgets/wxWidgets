@@ -74,8 +74,6 @@ public:
     virtual bool IsModal() const;
     void SetModal( bool modal );
 
-    virtual void InitDialog(void);
-
     virtual void SetIcon( const wxIcon &icon );
     virtual void Iconize( bool WXUNUSED(iconize)) { }
     virtual bool IsIconized() const { return FALSE; }

@@ -73,10 +73,6 @@ public:
     // implementation from now on
     // --------------------------
 
-    // Sends an OnInitDialog event, which in turns transfers data to
-    // to the dialog via validators.
-    virtual void InitDialog();
-
         // responds to colour changes
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 

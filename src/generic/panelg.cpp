@@ -82,15 +82,8 @@ wxPanel::~wxPanel()
 }
 
 // ----------------------------------------------------------------------------
-// misc
+// event handlers
 // ----------------------------------------------------------------------------
-
-void wxPanel::InitDialog()
-{
-    wxInitDialogEvent event(GetId());
-    event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
-}
 
 // Responds to colour changes, and passes event on to children.
 void wxPanel::OnSysColourChanged(wxSysColourChangedEvent& event)
