@@ -188,25 +188,6 @@ dospinwxx11()
   echo Now try the RPMs with rpm -i.
 }
 
-init=""
-if [ "$1" = "" ]
-then
-  echo Usage: makerpm wx-dir output-dir version
-  exit
-fi
-
-if [ "$2" = "" ]
-then
-  echo Usage: makerpm wx-dir output-dir version
-  exit
-fi
-
-if [ "$3" = "" ]
-then
-  echo Usage: makerpm wx-dir output-dir version
-  exit
-fi
-
 PROGNAME=$0
 WXSRC=$1
 WXDEST=$2
@@ -231,6 +212,25 @@ usage()
 
     exit 1
 }
+
+init=""
+if [ "$1" = "" ]
+then
+  usage
+  exit
+fi
+
+if [ "$2" = "" ]
+then
+  usage
+  exit
+fi
+
+if [ "$3" = "" ]
+then
+  usage
+  exit
+fi
 
 # Process command line options.
 shift 3
