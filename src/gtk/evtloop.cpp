@@ -31,6 +31,7 @@
 #ifndef WX_PRECOMP
 #endif //WX_PRECOMP
 
+#include "wx/app.h"
 #include "wx/evtloop.h"
 
 #include <gtk/gtk.h>
@@ -103,9 +104,20 @@ void wxEventLoop::Exit(int rc)
 // wxEventLoop message processing dispatching
 // ----------------------------------------------------------------------------
 
+extern bool g_isIdle;
+
 bool wxEventLoop::Pending() const
 {
-    return gtk_events_pending() > 0;
+    if (wxTheApp && !g_isIdle)
+    {
+        // We need to remove idle callbacks or gtk_events_pending will
+        // never return false.
+        gtk_idle_remove( wxTheApp->m_idleTag );
+        wxTheApp->m_idleTag = 0;
+        g_isIdle = TRUE;
+    }
+
+    return gtk_events_pending();
 }
 
 bool wxEventLoop::Dispatch()

@@ -88,7 +88,7 @@ public:
     virtual void Exit(int rc = 0);
     virtual bool Pending() const;
     virtual bool Dispatch();
-    virtual bool IsRunning() const { return m_impl != NULL; }
+    virtual bool IsRunning() const { return GetActive() == this; }
 
 protected:
     // the pointer to the port specific implementation class
