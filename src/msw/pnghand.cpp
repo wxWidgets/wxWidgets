@@ -38,7 +38,7 @@
 #include <wx/msw/dibutils.h>
 
 extern "C" {
-#include "png.h"
+#include "../png/png.h"
 }
 
 extern "C" void png_read_init PNGARG((png_structp png_ptr));
@@ -130,7 +130,8 @@ wxPNGReader::Create(int width, int height, int depth, int colortype)
   }
   RawImage = 0;
   Palette = 0;
-  if (lpbi = DibCreate(Depth, Width, Height))  {
+  lpbi = DibCreate(Depth, Width, Height);
+  if (lpbi)  {
     RawImage = (ImagePointerType)DibPtr(lpbi);
     EfeWidth = (long)(((long)Width*Depth + 31) / 32) * 4;
         imageOK = TRUE;
@@ -291,7 +292,7 @@ bool wxPNGReader::InstantiateBitmap(wxBitmap *bitmap)
 
         if ( Palette )
         {
-            HPALETTE oldPal = ::SelectPalette(dc, (HPALETTE) Palette->GetHPALETTE(), FALSE);
+            ::SelectPalette(dc, (HPALETTE) Palette->GetHPALETTE(), FALSE);
         ::RealizePalette(dc);
         }
 

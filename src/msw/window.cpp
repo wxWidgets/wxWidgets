@@ -102,8 +102,8 @@
 
 // standard macros missing from some compilers headers
 #ifndef GET_X_LPARAM
-        #define GET_X_LPARAM(lp) ((int)(short)LOWORD(lp))
-        #define GET_Y_LPARAM(lp) ((int)(short)HIWORD(lp))
+    #define GET_X_LPARAM(lp) ((int)(short)LOWORD(lp))
+    #define GET_Y_LPARAM(lp) ((int)(short)HIWORD(lp))
 #endif // GET_X_LPARAM
 
 // ---------------------------------------------------------------------------
@@ -116,6 +116,17 @@ extern MSG s_currentMsg;
 wxMenu *wxCurrentPopupMenu = NULL;
 extern wxList WXDLLEXPORT wxPendingDelete;
 extern char wxCanvasClassName[];
+
+#ifdef __WXDEBUG__
+    // see comments in dcclient.cpp where g_isPainting is defined
+    extern bool g_isPainting;
+
+    inline static void wxStartPainting() { g_isPainting = TRUE; }
+    inline static void wxEndPainting() { g_isPainting = FALSE; }
+#else // !debug
+    inline static void wxStartPainting() { }
+    inline static void wxEndPainting() { }
+#endif // debug/!debug
 
 // ---------------------------------------------------------------------------
 // private functions
@@ -1674,7 +1685,9 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             break;
 
         case WM_PAINT:
+            wxStartPainting();
             processed = HandlePaint();
+            wxEndPainting();
             break;
 
         case WM_CLOSE:

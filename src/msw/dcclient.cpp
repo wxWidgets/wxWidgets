@@ -6,39 +6,66 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ===========================================================================
+// declarations
+// ===========================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "dcclient.h"
+    #pragma implementation "dcclient.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
+    #pragma hdrstop
 #endif
 
 #include "wx/dcclient.h"
 #include "wx/log.h"
 
-#include <windows.h>
+#include "wx/msw/private.h"
+
+// ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
-IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
-IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
+    IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
+    IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
+    IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
 #endif
 
-/*
- * wxWindowDC
- */
+// ----------------------------------------------------------------------------
+// global variables
+// ----------------------------------------------------------------------------
 
-wxWindowDC::wxWindowDC(void)
+static PAINTSTRUCT g_paintStruct;
+
+#ifdef __WXDEBUG__
+    // a global variable which we check to verify that wxPaintDC are only
+    // created in resopnse to WM_PAINT message - doing this from elsewhere is a
+    // common programming error among wxWindows programmers and might lead to
+    // very subtle and difficult to debug refresh/repaint bugs.
+    extern bool g_isPainting = FALSE;
+#endif // __WXDEBUG__
+
+// ===========================================================================
+// implementation
+// ===========================================================================
+
+// ----------------------------------------------------------------------------
+// wxWindowDC
+// ----------------------------------------------------------------------------
+
+wxWindowDC::wxWindowDC()
 {
   m_canvas = NULL;
 }
@@ -46,30 +73,30 @@ wxWindowDC::wxWindowDC(void)
 wxWindowDC::wxWindowDC(wxWindow *the_canvas)
 {
   m_canvas = the_canvas;
-//  m_hDC = (WXHDC) ::GetDCEx((HWND) the_canvas->GetHWND(), NULL, DCX_WINDOW);
-  m_hDC = (WXHDC) ::GetWindowDC((HWND) the_canvas->GetHWND() );
-  m_hDCCount ++;
+  m_hDC = (WXHDC) ::GetWindowDC(GetWinHwnd(the_canvas) );
+  m_hDCCount++;
 
   SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
 }
 
-wxWindowDC::~wxWindowDC(void)
+wxWindowDC::~wxWindowDC()
 {
   if (m_canvas && m_hDC)
   {
     SelectOldObjects(m_hDC);
 
-    ::ReleaseDC((HWND) m_canvas->GetHWND(), (HDC) m_hDC);
-	m_hDC = 0;
+    ::ReleaseDC(GetWinHwnd(m_canvas), GetHdc());
+    m_hDC = 0;
   }
-  m_hDCCount --;
+
+  m_hDCCount--;
 }
 
-/*
- * wxClientDC
- */
+// ----------------------------------------------------------------------------
+// wxClientDC
+// ----------------------------------------------------------------------------
 
-wxClientDC::wxClientDC(void)
+wxClientDC::wxClientDC()
 {
   m_canvas = NULL;
 }
@@ -77,47 +104,49 @@ wxClientDC::wxClientDC(void)
 wxClientDC::wxClientDC(wxWindow *the_canvas)
 {
   m_canvas = the_canvas;
-//  BeginDrawing();
-  m_hDC = (WXHDC) ::GetDC((HWND) the_canvas->GetHWND());
+  m_hDC = (WXHDC) ::GetDC(GetWinHwnd(the_canvas));
 
   SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
 }
 
-wxClientDC::~wxClientDC(void)
+wxClientDC::~wxClientDC()
 {
-//  EndDrawing();
-
-  if (m_canvas && (HDC) m_hDC)
+  if ( m_canvas && GetHdc() )
   {
     SelectOldObjects(m_hDC);
 
-    ::ReleaseDC((HWND) m_canvas->GetHWND(), (HDC) m_hDC);
-	m_hDC = 0;
+    ::ReleaseDC(GetWinHwnd(m_canvas), GetHdc());
+    m_hDC = 0;
   }
 }
 
-/*
- * wxPaintDC
- */
+// ----------------------------------------------------------------------------
+// wxPaintDC
+// ----------------------------------------------------------------------------
 
-wxPaintDC::wxPaintDC(void)
-{
-  m_canvas = NULL;
-}
-
-static PAINTSTRUCT g_paintStruct;
-
-// Don't call Begin/EndPaint if it's already been called:
-// for example, if calling a base class OnPaint.
+// TODO (VZ) I have still some doubts about this hack and I still think that we
+//           should store pairs of (hwnd, hdc) and not just the DC - what if
+//           BeginPaint() was called on other window? It seems to work like
+//           this, but to be sure about it we'd need to store hwnd too...
 
 WXHDC  wxPaintDC::ms_PaintHDC = 0;
 size_t wxPaintDC::ms_PaintCount = 0; // count of ms_PaintHDC usage
 
+wxPaintDC::wxPaintDC()
+{
+  m_canvas = NULL;
+}
+
 wxPaintDC::wxPaintDC(wxWindow *canvas)
 {
   wxCHECK_RET( canvas, "NULL canvas in wxPaintDC ctor" );
+  wxCHECK_RET( g_isPainting,
+               _T("wxPaintDC may be created only in EVT_PAINT handler!") );
 
   m_canvas = canvas;
+
+  // Don't call Begin/EndPaint if it's already been called: for example, if
+  // calling a base class OnPaint.
   if ( ms_PaintCount > 0 ) {
     // it means that we've already called BeginPaint and so we must just
     // reuse the same HDC (BeginPaint shouldn't be called more than once)
@@ -145,7 +174,7 @@ wxPaintDC::~wxPaintDC()
       m_hDC = (WXHDC) NULL;
       ms_PaintHDC = (WXHDC) NULL;
     }
-    else { }//: ms_PaintHDC still in use
+    //else: ms_PaintHDC still in use
   }
 }
 

@@ -243,7 +243,6 @@ PDIB DibOpenFile(LPSTR szFile)
 PDIB DibReadBitmapInfo(HFILE fh)
 {
     DWORD     off;
-    HANDLE    hbi = NULL;
     int       size;
     int       i;
     int       nNumColors;

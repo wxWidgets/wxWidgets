@@ -140,11 +140,12 @@ void wxCaret::DoShow()
 
 void wxCaret::DoHide()
 {
-    wxASSERT_MSG( m_hasCaret, "cannot hide non existent caret" );
-
-    if ( !::HideCaret(GetWinHwnd(GetWindow())) )
+    if ( m_hasCaret )
     {
-        wxLogLastError("HideCaret");
+        if ( !::HideCaret(GetWinHwnd(GetWindow())) )
+        {
+            wxLogLastError("HideCaret");
+        }
     }
 }
 
