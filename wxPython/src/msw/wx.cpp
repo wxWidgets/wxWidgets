@@ -2121,6 +2121,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxRA_SPECIFY_ROWS", PyInt_FromLong((long) wxRA_SPECIFY_ROWS));
 	 PyDict_SetItemString(d,"wxRA_SPECIFY_COLS", PyInt_FromLong((long) wxRA_SPECIFY_COLS));
 	 PyDict_SetItemString(d,"wxRB_GROUP", PyInt_FromLong((long) wxRB_GROUP));
+	 PyDict_SetItemString(d,"wxRB_SINGLE", PyInt_FromLong((long) wxRB_SINGLE));
 	 PyDict_SetItemString(d,"wxGA_PROGRESSBAR", PyInt_FromLong((long) wxGA_PROGRESSBAR));
 	 PyDict_SetItemString(d,"wxGA_HORIZONTAL", PyInt_FromLong((long) wxGA_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxGA_VERTICAL", PyInt_FromLong((long) wxGA_VERTICAL));

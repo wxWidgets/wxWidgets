@@ -36,6 +36,12 @@ and _DIALOG if you wish, although I don't know why you would.
 You can now overload OnInitGui, OnExit and OnAssert in your classes
 derived from wxApp.
 
+Added GetSelectedCells, GetSelectionBlockTopLeft,
+GetSelectionBlockBottomRight, GetSelectedRows, GetSelectedCols nethods
+to wxGrid.
+
+Added Python == and != operators for some basic classes
+
 
 
 

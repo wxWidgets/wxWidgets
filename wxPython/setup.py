@@ -788,6 +788,7 @@ if not GL_ONLY and BUILD_XRC:
                                 '%s/xh_radbt.cpp' % XMLLOC,
                                 '%s/xh_radbx.cpp' % XMLLOC,
                                 '%s/xh_scrol.cpp' % XMLLOC,
+                                '%s/xh_scwin.cpp' % XMLLOC,
 
                                 '%s/xh_sizer.cpp' % XMLLOC,
                                 '%s/xh_slidr.cpp' % XMLLOC,
