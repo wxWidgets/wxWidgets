@@ -505,7 +505,10 @@ static long wxDoExecuteWithCapture(const wxString& command,
         }
 
     }
-#endif // wxUSE_STREAMS
+#else
+    wxUnusedVar(output);
+    wxUnusedVar(error);
+#endif // wxUSE_STREAMS/!wxUSE_STREAMS
 
     delete process;
 
