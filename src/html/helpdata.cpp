@@ -700,9 +700,11 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
             charset = linebuf + wxStrlen(_T("charset="));
     } while (lineptr != NULL);
 
-    wxFontEncoding enc;
-    if (charset == wxEmptyString) enc = wxFONTENCODING_SYSTEM;
-    else enc = wxFontMapper::Get()->CharsetToEncoding(charset);
+    wxFontEncoding enc = wxFONTENCODING_SYSTEM;
+#if wxUSE_FONTMAP
+    if (charset != wxEmptyString)
+        enc = wxFontMapper::Get()->CharsetToEncoding(charset);
+#endif
 
     bool rtval = AddBookParam(*fi, enc,
                               title, contents, index, start, fsys.GetPath());
