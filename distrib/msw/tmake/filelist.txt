@@ -815,8 +815,8 @@ imaglist.h	WXH
 intl.h	WXH	Base
 ioswrap.h	WXH	Base
 ipcbase.h	WXH	Base
-isql.h	WXH
-isqlext.h	WXH
+isql.h	WXH Base
+isqlext.h	WXH Base
 joystick.h	WXH
 layout.h	WXH
 laywin.h	WXH
