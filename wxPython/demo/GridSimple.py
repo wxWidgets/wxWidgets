@@ -57,7 +57,7 @@ class SimpleGrid(gridlib.Grid): ##, mixins.GridAutoEditMixin):
         self.SetColLabelAlignment(wx.ALIGN_LEFT, wx.ALIGN_BOTTOM)
 
         #self.SetDefaultCellOverflow(False)
-        #r = wxGridCellAutoWrapStringRenderer()
+        #r = gridlib.GridCellAutoWrapStringRenderer()
         #self.SetCellRenderer(9, 1, r)
 
         # overflow cells
