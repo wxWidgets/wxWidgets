@@ -42,9 +42,9 @@ public:
     // the actual conversion takes place here
     //
     // note that n is the size of the output buffer, not the length of input
-    // (which is always supposed to be NUL-terminated)
-    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const = 0;
-    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const = 0;
+    // (the latter is always supposed to be NUL-terminated)
+    virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const = 0;
+    virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const = 0;
 
     // MB <-> WC
     const wxWCharBuffer cMB2WC(const char *psz) const;
@@ -75,8 +75,8 @@ public:
 class WXDLLIMPEXP_BASE wxMBConvLibc : public wxMBConv
 {
 public:
-    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
-    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+    virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
+    virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
 };
 
 // not very accurately named because it is not necessarily of type wxMBConvLibc
@@ -91,8 +91,8 @@ WXDLLIMPEXP_DATA_BASE(extern wxMBConv&) wxConvLibc;
 class WXDLLIMPEXP_BASE wxMBConvUTF7 : public wxMBConv
 {
 public:
-    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
-    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+    virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
+    virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
 };
 
 WXDLLIMPEXP_DATA_BASE(extern wxMBConvUTF7&) wxConvUTF7;
@@ -104,8 +104,8 @@ WXDLLIMPEXP_DATA_BASE(extern wxMBConvUTF7&) wxConvUTF7;
 class WXDLLIMPEXP_BASE wxMBConvUTF8 : public wxMBConv
 {
 public:
-    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
-    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+    virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
+    virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
 };
 
 WXDLLIMPEXP_DATA_BASE(extern wxMBConvUTF8&) wxConvUTF8;
@@ -117,8 +117,8 @@ WXDLLIMPEXP_DATA_BASE(extern wxMBConvUTF8&) wxConvUTF8;
 class WXDLLIMPEXP_BASE wxMBConvUTF16LE : public wxMBConv
 {
 public:
-    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
-    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+    virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
+    virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -128,8 +128,8 @@ public:
 class WXDLLIMPEXP_BASE wxMBConvUTF16BE : public wxMBConv
 {
 public:
-    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
-    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+    virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
+    virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -139,8 +139,8 @@ public:
 class WXDLLIMPEXP_BASE wxMBConvUTF32LE : public wxMBConv
 {
 public:
-    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
-    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+    virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
+    virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -150,8 +150,8 @@ public:
 class WXDLLIMPEXP_BASE wxMBConvUTF32BE : public wxMBConv
 {
 public:
-    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
-    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+    virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
+    virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -173,8 +173,8 @@ public:
 
     wxCSConv& operator=(const wxCSConv& conv);
 
-    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
-    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+    virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
+    virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
 
     void Clear() ;
 

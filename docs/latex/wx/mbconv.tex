@@ -35,29 +35,30 @@ Constructor.
 
 \membersection{wxMBConv::MB2WC}\label{wxmbconvmb2wc}
 
-\constfunc{virtual size\_t}{MB2WC}{\param{wchar\_t* }{buf}, \param{const char* }{psz}, \param{size\_t }{n}}
+\constfunc{virtual size\_t}{MB2WC}{\param{wchar\_t *}{outputBuf}, \param{const char *}{psz}, \param{size\_t }{outputSize}}
 
 Converts from a string {\it psz} in multibyte encoding to Unicode putting the
-output into the buffer {\it buf} of the size {\it n} (in wide characters, not
-bytes). If {\it buf} is {\tt NULL}, nothing is written to it but the length of
-the string which would result from the conversion is calculated and returned.
+output into the buffer {\it outputBuf} of the maximum size {\it outputSize} (in wide
+characters, not bytes). If {\it outputBuf} is {\tt NULL}, only the length of the
+string which would result from the conversion is calculated and returned.
 Note that this is the length and not size, i.e. the returned value does 
 {\bf not} include the trailing NUL. But when the function is called with a
-non-{\tt NULL} buffer, the {\it n} parameter should be the size of the buffer
+non-{\tt NULL} {\it outputBuf}, the {\it outputSize} parameter should be the size of the buffer
 and so it {\bf should} take into account the trailing NUL.
 
 \wxheading{Parameters}
 
-\docparam{buf}{the output buffer, may be {\tt NULL} if the caller is only
+\docparam{outputBuf}{the output buffer, may be {\tt NULL} if the caller is only
 interested in the length of the resulting string}
 
 \docparam{psz}{the {\tt NUL}-terminated input string, cannot be {\tt NULL}}
 
-\docparam{n}{the size of the output buffer, ignored if {\it buf} is {\tt NULL}}
+\docparam{outputSize}{the size of the output buffer (in wide characters, {\bf including} the
+NUL) , ignored if {\it outputBuf} is {\tt NULL}}
 
 \wxheading{Return value}
 
-The length of the converted string.
+The length of the converted string (in wide characters, {\bf excluding} the NUL)
 
 \membersection{wxMBConv::WC2MB}\label{wxmbconvwc2mb}
 
