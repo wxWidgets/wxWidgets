@@ -46,7 +46,7 @@
 // ctor
 // ----
 wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
-                           bool bCheckable, bool WXUNUSED(bMenuItem))
+                           bool bCheckable, bool bMenuItem)
             : m_strName(str)
 {
 #if defined(__WXMSW__) && defined(__WIN32__) && defined(SM_CXMENUCHECK)
@@ -64,9 +64,23 @@ wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
        ms_nLastMarginWidth = nm.iMenuWidth;
     }
 
-    wxNativeFontInfo info;
-    memcpy(&info.lf, &nm.lfMenuFont, sizeof(LOGFONT));
-    m_font.Create(info);
+    if (bMenuItem)
+    {
+        static wxFont menu_font;
+        if (!menu_font.Ok())
+        {
+            // create menu font
+            wxNativeFontInfo info;
+            memcpy(&info.lf, &nm.lfMenuFont, sizeof(LOGFONT));
+            menu_font.Create(info);
+        }
+
+        m_font = menu_font;
+    }
+    else
+    {
+        m_font = *wxNORMAL_FONT;
+    }
 #else
     // windows clean install default
     m_nMinHeight = 18;

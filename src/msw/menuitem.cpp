@@ -104,7 +104,7 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
           : wxMenuItemBase(parentMenu, id, text, help,
                            isCheckable ? wxITEM_CHECK : wxITEM_NORMAL, subMenu)
 #if wxUSE_OWNER_DRAWN
-           , wxOwnerDrawn(text, isCheckable)
+           , wxOwnerDrawn(text, isCheckable, true)
 #endif // owner drawn
 {
     Init();
