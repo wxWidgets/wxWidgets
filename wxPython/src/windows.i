@@ -827,18 +827,18 @@ public:
     wxColour GetBackgroundColour();
     void SetBitmaps(const wxBitmap& bmpChecked,
                     const wxBitmap& bmpUnchecked = wxNullBitmap);
-    void SetBitmap(const wxBitmap& bmpChecked);
-    wxBitmap GetBitmap(bool bChecked = TRUE);
+    //void SetBitmap(const wxBitmap& bmpChecked);
+    //wxBitmap GetBitmap(bool bChecked = TRUE);
     void SetMarginWidth(int nWidth);
     int GetMarginWidth();
     static int GetDefaultMarginWidth();
-    //void SetName(const wxString& strName);
-    //const wxString& GetName();
-    //void SetCheckable(bool checkable);
-    //bool IsCheckable();
     bool IsOwnerDrawn();
     void ResetOwnerDrawn();
 #endif
+
+    void SetBitmap(const wxBitmap& bitmap);
+    const wxBitmap& GetBitmap();
+
 };
 
 //---------------------------------------------------------------------------

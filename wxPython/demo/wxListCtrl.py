@@ -269,8 +269,7 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
 
         # Show how to put an icon in the menu
         item = wxMenuItem(menu, tPopupID1,"One")
-        if wxPlatform == '__WXMSW__':
-            item.SetBitmap(images.getSmilesBitmap())
+        item.SetBitmap(images.getSmilesBitmap())
 
         menu.AppendItem(item)
         menu.Append(tPopupID2, "Two")
