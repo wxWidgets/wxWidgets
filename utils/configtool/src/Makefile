@@ -127,6 +127,11 @@ else
 include $(top_builddir)/src/makeprog.env
 endif
 
+# Need to place -lsupc++ at end of libs or we get
+# link errors. Note the := syntax to prevent a
+# recursive variable error.
+LDLIBS:=${LDLIBS} -lsupc++
+
 # Only omit C++ libs for economy of size on Unix
 ifeq "$(WXTOOLKIT)" "msw"
 CC=c++

@@ -2,7 +2,7 @@
 # Makefile : Builds wxWindows utils for Unix.
 #
 
-UTILS_SUBDIRS=tex2rtf hhp2cached makegen HelpGen dialoged helpview
+UTILS_SUBDIRS=tex2rtf hhp2cached makegen HelpGen dialoged helpview configtool
 
 all:
 	@for d in $(UTILS_SUBDIRS); do (cd $$d && $(MAKE)); done

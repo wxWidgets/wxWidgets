@@ -660,6 +660,8 @@ trap 'rm -fr `echo "
             emulator/src/Makefile
             helpview/Makefile
             helpview/src/Makefile
+            wxconfigtool/Makefile
+            wxconfigtool/src/Makefile
          " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -749,6 +751,8 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             emulator/src/Makefile
             helpview/Makefile
             helpview/src/Makefile
+            configtool/Makefile
+            configtool/src/Makefile
          "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF

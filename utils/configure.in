@@ -30,4 +30,6 @@ AC_OUTPUT([
             emulator/src/Makefile
             helpview/Makefile
             helpview/src/Makefile
+            wxconfigtool/Makefile
+            wxconfigtool/src/Makefile
          ])
