@@ -46,13 +46,6 @@
   #include <clib.h>
 #endif
 
-#if wxUSE_UNICODE
-    #undef wxUSE_EXPERIMENTAL_PRINTF
-    #ifndef wvsnprintf
-        #define wxUSE_EXPERIMENTAL_PRINTF 1
-    #endif
-#endif
-
 // allocating extra space for each string consumes more memory but speeds up
 // the concatenation operations (nLen is the current string's length)
 // NB: EXTRA_ALLOC must be >= 0!
@@ -87,54 +80,6 @@ static const struct
 
 // empty C style string: points to 'string data' byte of g_strEmpty
 extern const wxChar WXDLLEXPORT *wxEmptyString = &g_strEmpty.dummy;
-
-// ----------------------------------------------------------------------------
-// conditional compilation
-// ----------------------------------------------------------------------------
-
-#if !defined(__WXSW__) && wxUSE_UNICODE
-  #ifdef wxUSE_EXPERIMENTAL_PRINTF
-    #undef wxUSE_EXPERIMENTAL_PRINTF
-  #endif
-  #define wxUSE_EXPERIMENTAL_PRINTF 1
-#endif
-
-// we want to find out if the current platform supports vsnprintf()-like
-// function: for Unix this is done with configure, for Windows we test the
-// compiler explicitly.
-//
-// FIXME currently, this is only for ANSI (!Unicode) strings, so we call this
-//       function wxVsnprintfA (A for ANSI), should also find one for Unicode
-//       strings in Unicode build
-#ifdef __WXMSW__
-    #if defined(__VISUALC__) || (defined(__MINGW32__) && wxUSE_NORLANDER_HEADERS)
-        #define wxVsnprintfA     _vsnprintf
-    #endif
-#elif defined(__WXMAC__)
-    #define wxVsnprintfA       vsnprintf
-#else   // !Windows
-    #ifdef HAVE_VSNPRINTF
-        #define wxVsnprintfA       vsnprintf
-    #endif
-#endif  // Windows/!Windows
-
-#ifndef wxVsnprintfA
-    // in this case we'll use vsprintf() (which is ANSI and thus should be
-    // always available), but it's unsafe because it doesn't check for buffer
-    // size - so give a warning
-    #define wxVsnprintfA(buf, len, format, arg) vsprintf(buf, format, arg)
-
-    #if defined(__VISUALC__)
-        #pragma message("Using sprintf() because no snprintf()-like function defined")
-    #elif defined(__GNUG__)
-        #warning "Using sprintf() because no snprintf()-like function defined"
-    #endif //compiler
-#endif // no vsnprintf
-
-#if defined(_AIX)
-  // AIX has vsnprintf, but there's no prototype in the system headers.
-  extern "C" int vsnprintf(char* str, size_t n, const char* format, va_list ap);
-#endif
 
 // ----------------------------------------------------------------------------
 // global functions
@@ -196,15 +141,15 @@ wxSTD ostream& operator<<(wxSTD ostream& os, const wxString& str)
   class Averager
   {
   public:
-    Averager(const char *sz) { m_sz = sz; m_nTotal = m_nCount = 0; }
+    Averager(const wxChar *sz) { m_sz = sz; m_nTotal = m_nCount = 0; }
    ~Averager()
-   { printf("wxString: average %s = %f\n", m_sz, ((float)m_nTotal)/m_nCount); }
+   { wxPrintf("wxString: average %s = %f\n", m_sz, ((float)m_nTotal)/m_nCount); }
 
     void Add(size_t n) { m_nTotal += n; m_nCount++; }
 
   private:
     size_t m_nCount, m_nTotal;
-    const char *m_sz;
+    const wxChar *m_sz;
   } g_averageLength("allocation size"),
     g_averageSummandLength("summand length"),
     g_averageConcatHit("hit probability in concat"),
@@ -235,8 +180,9 @@ wxString::wxString(wxChar ch, size_t nLength)
     }
 
 #if wxUSE_UNICODE
-    // memset only works on char
-    for (size_t n=0; n<nLength; n++) m_pchData[n] = ch;
+    // memset only works on chars
+    for ( size_t n = 0; n < nLength; n++ )
+        m_pchData[n] = ch;
 #else
     memset(m_pchData, ch, nLength);
 #endif
@@ -1273,281 +1219,38 @@ int wxString::Printf(const wxChar *pszFormat, ...)
 
 int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
 {
-#if wxUSE_EXPERIMENTAL_PRINTF
-  // the new implementation
-
-  // buffer to avoid dynamic memory allocation each time for small strings
-  char szScratch[1024];
-
-  Reinit();
-  for (size_t n = 0; pszFormat[n]; n++)
-    if (pszFormat[n] == wxT('%')) {
-      static char s_szFlags[256] = "%";
-      size_t flagofs = 1;
-      bool adj_left = FALSE, in_prec = FALSE,
-           prec_dot = FALSE, done = FALSE;
-      int ilen = 0;
-      size_t min_width = 0, max_width = wxSTRING_MAXLEN;
-      do {
-#define CHECK_PREC if (in_prec && !prec_dot) { s_szFlags[flagofs++] = '.'; prec_dot = TRUE; }
-        switch (pszFormat[++n]) {
-        case wxT('\0'):
-          done = TRUE;
-          break;
-        case wxT('%'):
-          *this += wxT('%');
-          done = TRUE;
-          break;
-        case wxT('#'):
-        case wxT('0'):
-        case wxT(' '):
-        case wxT('+'):
-        case wxT('\''):
-          CHECK_PREC
-          s_szFlags[flagofs++] = pszFormat[n];
-          break;
-        case wxT('-'):
-          CHECK_PREC
-          adj_left = TRUE;
-          s_szFlags[flagofs++] = pszFormat[n];
-          break;
-        case wxT('.'):
-          CHECK_PREC
-          in_prec = TRUE;
-          prec_dot = FALSE;
-          max_width = 0;
-          // dot will be auto-added to s_szFlags if non-negative number follows
-          break;
-        case wxT('h'):
-          ilen = -1;
-          CHECK_PREC
-          s_szFlags[flagofs++] = pszFormat[n];
-          break;
-        case wxT('l'):
-          ilen = 1;
-          CHECK_PREC
-          s_szFlags[flagofs++] = pszFormat[n];
-          break;
-        case wxT('q'):
-        case wxT('L'):
-          ilen = 2;
-          CHECK_PREC
-          s_szFlags[flagofs++] = pszFormat[n];
-          break;
-        case wxT('Z'):
-          ilen = 3;
-          CHECK_PREC
-          s_szFlags[flagofs++] = pszFormat[n];
-          break;
-        case wxT('*'):
-          {
-            int len = va_arg(argptr, int);
-            if (in_prec) {
-              if (len<0) break;
-              CHECK_PREC
-              max_width = len;
-            } else {
-              if (len<0) {
-                adj_left = !adj_left;
-                s_szFlags[flagofs++] = '-';
-                len = -len;
-              }
-              min_width = len;
-            }
-            flagofs += ::sprintf(s_szFlags+flagofs,"%d",len);
-          }
-          break;
-        case wxT('1'): case wxT('2'): case wxT('3'):
-        case wxT('4'): case wxT('5'): case wxT('6'):
-        case wxT('7'): case wxT('8'): case wxT('9'):
-          {
-            int len = 0;
-            CHECK_PREC
-            while ((pszFormat[n]>=wxT('0')) && (pszFormat[n]<=wxT('9'))) {
-              s_szFlags[flagofs++] = pszFormat[n];
-              len = len*10 + (pszFormat[n] - wxT('0'));
-              n++;
-            }
-            if (in_prec) max_width = len;
-            else min_width = len;
-            n--; // the main loop pre-increments n again
-          }
-          break;
-        case wxT('d'):
-        case wxT('i'):
-        case wxT('o'):
-        case wxT('u'):
-        case wxT('x'):
-        case wxT('X'):
-          CHECK_PREC
-          s_szFlags[flagofs++] = pszFormat[n];
-          s_szFlags[flagofs] = '\0';
-          if (ilen == 0 ) {
-            int val = va_arg(argptr, int);
-            ::sprintf(szScratch, s_szFlags, val);
-          }
-          else if (ilen == -1) {
-            short int val = va_arg(argptr, short int);
-            ::sprintf(szScratch, s_szFlags, val);
-          }
-          else if (ilen == 1) {
-            long int val = va_arg(argptr, long int);
-            ::sprintf(szScratch, s_szFlags, val);
-          }
-          else if (ilen == 2) {
-#if SIZEOF_LONG_LONG
-            long long int val = va_arg(argptr, long long int);
-            ::sprintf(szScratch, s_szFlags, val);
-#else
-            long int val = va_arg(argptr, long int);
-            ::sprintf(szScratch, s_szFlags, val);
-#endif
-          }
-          else if (ilen == 3) {
-            size_t val = va_arg(argptr, size_t);
-            ::sprintf(szScratch, s_szFlags, val);
-          }
-          *this += wxString(szScratch);
-          done = TRUE;
-          break;
-        case wxT('e'):
-        case wxT('E'):
-        case wxT('f'):
-        case wxT('g'):
-        case wxT('G'):
-          CHECK_PREC
-          s_szFlags[flagofs++] = pszFormat[n];
-          s_szFlags[flagofs] = '\0';
-          if (ilen == 2) {
-            long double val = va_arg(argptr, long double);
-            ::sprintf(szScratch, s_szFlags, val);
-          } else {
-            double val = va_arg(argptr, double);
-            ::sprintf(szScratch, s_szFlags, val);
-          }
-          *this += wxString(szScratch);
-          done = TRUE;
-          break;
-        case wxT('p'):
-          {
-            void *val = va_arg(argptr, void *);
-            CHECK_PREC
-            s_szFlags[flagofs++] = pszFormat[n];
-            s_szFlags[flagofs] = '\0';
-            ::sprintf(szScratch, s_szFlags, val);
-            *this += wxString(szScratch);
-            done = TRUE;
-          }
-          break;
-        case wxT('c'):
-          {
-            wxChar val = va_arg(argptr, int);
-            // we don't need to honor padding here, do we?
-            *this += val;
-            done = TRUE;
-          }
-          break;
-        case wxT('s'):
-          if (ilen == -1) {
-            // wx extension: we'll let %hs mean non-Unicode strings
-            char *val = va_arg(argptr, char *);
-#if wxUSE_UNICODE
-            // ASCII->Unicode constructor handles max_width right
-            wxString s(val, wxConvLibc, max_width);
-#else
-            size_t len = wxSTRING_MAXLEN;
-            if (val) {
-              for (len = 0; val[len] && (len<max_width); len++);
-            } else val = wxT("(null)");
-            wxString s(val, len);
-#endif
-            if (s.Len() < min_width)
-              s.Pad(min_width - s.Len(), wxT(' '), adj_left);
-            *this += s;
-          } else {
-            wxChar *val = va_arg(argptr, wxChar *);
-            size_t len = wxSTRING_MAXLEN;
-            if (val) {
-              for (len = 0; val[len] && (len<max_width); len++);
-            } else val = wxT("(null)");
-            wxString s(val, len);
-            if (s.Len() < min_width)
-              s.Pad(min_width - s.Len(), wxT(' '), adj_left);
-            *this += s;
-          }
-          done = TRUE;
-          break;
-        case wxT('n'):
-          if (ilen == 0) {
-            int *val = va_arg(argptr, int *);
-            *val = Len();
-          }
-          else if (ilen == -1) {
-            short int *val = va_arg(argptr, short int *);
-            *val = Len();
-          }
-          else if (ilen >= 1) {
-            long int *val = va_arg(argptr, long int *);
-            *val = Len();
-          }
-          done = TRUE;
-          break;
-        default:
-          if (wxIsalpha(pszFormat[n]))
-            // probably some flag not taken care of here yet
-            s_szFlags[flagofs++] = pszFormat[n];
-          else {
-            // bad format
-            *this += wxT('%'); // just to pass the glibc tst-printf.c
-            n--;
-            done = TRUE;
-          }
-          break;
+    int size = 1024;
+    for ( ;; )
+    {
+        wxChar *buf = GetWriteBuf(size + 1);
+        if ( !buf )
+        {
+            // out of memory
+            return -1;
         }
-#undef CHECK_PREC
-      } while (!done);
-    } else *this += pszFormat[n];
 
-#else
-  // buffer to avoid dynamic memory allocation each time for small strings
-  char szScratch[1024];
+        int len = wxVsnprintf(buf, size, pszFormat, argptr);
 
-  // NB: wxVsnprintf() may return either less than the buffer size or -1 if
-  //     there is not enough place depending on implementation
-  int iLen = wxVsnprintfA(szScratch, WXSIZEOF(szScratch), (char *)pszFormat, argptr);
-  if ( iLen != -1 ) {
-    // the whole string is in szScratch
-    *this = szScratch;
-  }
-  else {
-      bool outOfMemory = FALSE;
-      int size = 2*WXSIZEOF(szScratch);
-      while ( !outOfMemory ) {
-          char *buf = GetWriteBuf(size);
-          if ( buf )
-            iLen = wxVsnprintfA(buf, size, pszFormat, argptr);
-          else
-            outOfMemory = TRUE;
+        // some implementations of vsnprintf() don't NUL terminate the string
+        // if there is not enough space for it so always do it manually
+        buf[size] = _T('\0');
 
-          UngetWriteBuf();
+        UngetWriteBuf();
 
-          if ( iLen != -1 ) {
-              // ok, there was enough space
-              break;
-          }
+        if ( len >= 0 )
+        {
+            // ok, there was enough space
+            break;
+        }
 
-          // still not enough, double it again
-          size *= 2;
-      }
+        // still not enough, double it again
+        size *= 2;
+    }
 
-      if ( outOfMemory ) {
-          // out of memory
-          return -1;
-      }
-  }
-#endif // wxUSE_EXPERIMENTAL_PRINTF/!wxUSE_EXPERIMENTAL_PRINTF
+    // we could have overshot
+    Shrink();
 
-  return Len();
+    return Len();
 }
 
 // ----------------------------------------------------------------------------
