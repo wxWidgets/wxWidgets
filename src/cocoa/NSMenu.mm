@@ -95,6 +95,8 @@ struct objc_object *wxCocoaNSMenu::sm_cocoaObserver = [[wxNSMenuNotificationObse
 // ========================================================================
 // wxCocoaNSMenu
 // ========================================================================
+WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSMenu)
+
 void wxCocoaNSMenu::AssociateNSMenu(WX_NSMenu cocoaNSMenu, unsigned int flags)
 {
     if(cocoaNSMenu)
