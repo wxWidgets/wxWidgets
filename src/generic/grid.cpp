@@ -3738,7 +3738,7 @@ void wxGridWindow::OnEraseBackground( wxEraseEvent& WXUNUSED(event) )
 
 static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
                            const wxArrayInt& BorderArray, int nMax,
-                           bool maxOnOverflow);
+                           bool clipToMinMax);
 
 #define internalXToCol(x) CoordToRowOrCol(x, m_defaultColWidth, \
                                           WXGRID_MIN_COL_WIDTH, \
@@ -4791,7 +4791,11 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
         if ( row < 0 )
         {
             row = YToRow(y);
-            SendEvent( wxEVT_GRID_LABEL_LEFT_DCLICK, row, -1, event );
+            if ( row >=0 &&
+	         !SendEvent( wxEVT_GRID_LABEL_LEFT_DCLICK, row, -1, event ) )
+	    {
+                // no default action at the moment
+	    }
         }
         else
         {
@@ -4828,7 +4832,8 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
     else if ( event.RightDown() )
     {
         row = YToRow(y);
-        if ( !SendEvent( wxEVT_GRID_LABEL_RIGHT_CLICK, row, -1, event ) )
+        if ( row >=0 && 
+	    !SendEvent( wxEVT_GRID_LABEL_RIGHT_CLICK, row, -1, event ) )
         {
             // no default action at the moment
         }
@@ -4840,7 +4845,8 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
     else if ( event.RightDClick() )
     {
         row = YToRow(y);
-        if ( !SendEvent( wxEVT_GRID_LABEL_RIGHT_DCLICK, row, -1, event ) )
+        if ( row >= 0 &&
+	     !SendEvent( wxEVT_GRID_LABEL_RIGHT_DCLICK, row, -1, event ) )
         {
             // no default action at the moment
         }
@@ -5006,7 +5012,11 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
         if ( col < 0 )
         {
             col = XToCol(x);
-            SendEvent( wxEVT_GRID_LABEL_LEFT_DCLICK, -1, col, event );
+            if ( col >= 0 &&
+                 ! SendEvent( wxEVT_GRID_LABEL_LEFT_DCLICK, -1, col, event ) )
+            {
+		// no default action at the moment
+            }
         }
         else
         {
@@ -5043,7 +5053,8 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
     else if ( event.RightDown() )
     {
         col = XToCol(x);
-        if ( !SendEvent( wxEVT_GRID_LABEL_RIGHT_CLICK, -1, col, event ) )
+        if ( col >= 0 &&
+	     !SendEvent( wxEVT_GRID_LABEL_RIGHT_CLICK, -1, col, event ) )
         {
             // no default action at the moment
         }
@@ -5055,7 +5066,8 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
     else if ( event.RightDClick() )
     {
         col = XToCol(x);
-        if ( !SendEvent( wxEVT_GRID_LABEL_RIGHT_DCLICK, -1, col, event ) )
+        if ( col >= 0 &&
+	     !SendEvent( wxEVT_GRID_LABEL_RIGHT_DCLICK, -1, col, event ) )
         {
             // no default action at the moment
         }
@@ -5604,10 +5616,9 @@ void wxGrid::DoEndDragResizeRow()
             {
                 int i, cell_rows, cell_cols, subtract_rows = 0;
                 int leftCol = XToCol(left);
-                int rightCol = XToCol(left+cw);
+                int rightCol = internalXToCol(left+cw);
                 if (leftCol >= 0)
                 {
-                    if (rightCol < 0) rightCol = m_numCols;
                     for (i=leftCol; i<rightCol; i++)
                     {
                         GetCellSize(m_dragRowOrCol, i, &cell_rows, &cell_cols);
@@ -5664,10 +5675,9 @@ void wxGrid::DoEndDragResizeCol()
             {
                 int i, cell_rows, cell_cols, subtract_cols = 0;
                 int topRow = YToRow(top);
-                int bottomRow = YToRow(top+cw);
+                int bottomRow = internalYToRow(top+cw);
                 if (topRow >= 0)
                 {
-                    if (bottomRow < 0) bottomRow = m_numRows;
                     for (i=topRow; i<bottomRow; i++)
                     {
                         GetCellSize(i, m_dragRowOrCol, &cell_rows, &cell_cols);
@@ -6913,37 +6923,32 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
     bottom = wxMin( bottom, GetRowBottom(m_numRows - 1) );
 
     // no gridlines inside multicells, clip them out
-    int leftCol   = XToCol(left);
-    int topRow    = YToRow(top);
-    int rightCol  = XToCol(right);
-    int bottomRow = YToRow(bottom);
+    int leftCol   = internalXToCol(left);
+    int topRow    = internalYToRow(top);
+    int rightCol  = internalXToCol(right);
+    int bottomRow = internalYToRow(bottom);
     wxRegion clippedcells(0, 0, cw, ch);
 
-    if ((leftCol >= 0) && (topRow >= 0))
+
+    int i, j, cell_rows, cell_cols;
+    wxRect rect;
+
+    for (j=topRow; j<bottomRow; j++)
     {
-        if (rightCol  < 0) rightCol  = m_numCols;
-        if (bottomRow < 0) bottomRow = m_numRows;
-
-        int i, j, cell_rows, cell_cols;
-        wxRect rect;
-
-        for (j=topRow; j<bottomRow; j++)
+        for (i=leftCol; i<rightCol; i++)
         {
-            for (i=leftCol; i<rightCol; i++)
+            GetCellSize( j, i, &cell_rows, &cell_cols );
+            if ((cell_rows > 1) || (cell_cols > 1))
             {
-                GetCellSize( j, i, &cell_rows, &cell_cols );
-                if ((cell_rows > 1) || (cell_cols > 1))
-                {
-                    rect = CellToRect(j,i);
-                    CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
-                    clippedcells.Subtract(rect);
-                }
-                else if ((cell_rows < 0) || (cell_cols < 0))
-                {
-                    rect = CellToRect(j+cell_rows, i+cell_cols);
-                    CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
-                    clippedcells.Subtract(rect);
-                }
+                rect = CellToRect(j,i);
+                CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+                clippedcells.Subtract(rect);
+            }
+            else if ((cell_rows < 0) || (cell_cols < 0))
+            {
+                rect = CellToRect(j+cell_rows, i+cell_cols);
+                CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+                clippedcells.Subtract(rect);
             }
         }
     }
@@ -6953,7 +6958,7 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
 
     // horizontal grid lines
     //
-    int i;
+    // already declared above - int i;
     for ( i = internalYToRow(top); i < m_numRows; i++ )
     {
         int bot = GetRowBottom(i) - 1;
@@ -7594,10 +7599,16 @@ void wxGrid::XYToCell( int x, int y, wxGridCellCoords& coords )
 
 static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
                            const wxArrayInt& BorderArray, int nMax,
-                           bool maxOnOverflow)
+                           bool clipToMinMax)
 {
+
+    if (coord < 0)
+        return clipToMinMax && (nMax > 0) ? 0 : -1;
+
+	
     if (!defaultDist)
         defaultDist = 1;
+
     size_t i_max = coord / defaultDist,
            i_min = 0;
 
@@ -7605,7 +7616,7 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
     {
         if((int) i_max < nMax)
             return i_max;
-        return maxOnOverflow ? nMax - 1 : -1;
+        return clipToMinMax ? nMax - 1 : -1;
     }
 
     if ( i_max >= BorderArray.GetCount())
@@ -7621,7 +7632,7 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
             i_max = BorderArray.GetCount() - 1;
     }
     if ( coord >= BorderArray[i_max])
-        return maxOnOverflow ? (int)i_max : -1;
+        return clipToMinMax ? (int)i_max : -1;
     if ( coord < BorderArray[0] )
         return 0;
 
@@ -7997,13 +8008,11 @@ bool wxGrid::MovePageUp()
         m_gridWin->GetClientSize( &cw, &ch );
 
         int y = GetRowTop(row);
-        int newRow = YToRow( y - ch + 1 );
-        if ( newRow < 0 )
+        int newRow = internalYToRow( y - ch + 1 );
+        
+        if ( newRow == row )
         {
-            newRow = 0;
-        }
-        else if ( newRow == row )
-        {
+	    //row > 0 , so newrow can never be less than 0 here. 
             newRow = row - 1;
         }
 
@@ -8027,14 +8036,11 @@ bool wxGrid::MovePageDown()
         m_gridWin->GetClientSize( &cw, &ch );
 
         int y = GetRowTop(row);
-        int newRow = YToRow( y + ch );
-        if ( newRow == -1 )
+        int newRow = internalYToRow( y + ch );
+        if ( newRow == row )
         {
-            newRow = m_numRows - 1;
-        }
-        else if ( newRow == row )
-        {
-            newRow = row + 1;
+            // row < m_numRows , so newrow can't overflow here.	
+	    newRow = row + 1;
         }
 
         MakeCellVisible( newRow, m_currentCellCoords.GetCol() );
