@@ -28,7 +28,7 @@ else:
 # 1 adds CMD command to Help menu
 debug = 0
 
-helpText = """\
+g.helpText = """\
 <HTML><H2>Welcome to XRCed!</H2><H3><font color="green">DON'T PANIC :)</font></H3>
 To start select tree root, then popup menu with your right mouse button,
 select "Append Child", and then any command.<P>
