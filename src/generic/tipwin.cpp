@@ -46,6 +46,38 @@
 static const wxCoord TEXT_MARGIN_X = 3;
 static const wxCoord TEXT_MARGIN_Y = 3;
 
+// ----------------------------------------------------------------------------
+// wxTipWindowView
+// ----------------------------------------------------------------------------
+
+// Viewer window to put in the frame
+class WXDLLEXPORT wxTipWindowView : public wxWindow
+{
+public:
+    wxTipWindowView(wxWindow *parent);
+
+    // event handlers
+    void OnPaint(wxPaintEvent& event);
+    void OnMouseClick(wxMouseEvent& event);
+    void OnMouseMove(wxMouseEvent& event);
+
+#if !wxUSE_POPUPWIN
+    void OnKillFocus(wxFocusEvent& event);
+#endif // wxUSE_POPUPWIN
+
+    // calculate the client rect we need to display the text
+    void Adjust(const wxString& text, wxCoord maxLength);
+
+private:
+    wxTipWindow* m_parent;
+
+#if !wxUSE_POPUPWIN
+    long m_creationTime;
+#endif // !wxUSE_POPUPWIN
+
+    DECLARE_EVENT_TABLE()
+};
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -54,51 +86,29 @@ static const wxCoord TEXT_MARGIN_Y = 3;
 // event tables
 // ----------------------------------------------------------------------------
 
-#if wxUSE_POPUPWIN
-BEGIN_EVENT_TABLE(wxTipWindow, wxPopupTransientWindow)
-#else
-BEGIN_EVENT_TABLE(wxTipWindow, wxFrame)
-#endif
+BEGIN_EVENT_TABLE(wxTipWindow, wxTipWindowBase)
     EVT_LEFT_DOWN(wxTipWindow::OnMouseClick)
     EVT_RIGHT_DOWN(wxTipWindow::OnMouseClick)
     EVT_MIDDLE_DOWN(wxTipWindow::OnMouseClick)
+
 #if !wxUSE_POPUPWIN
     EVT_KILL_FOCUS(wxTipWindow::OnKillFocus)
     EVT_ACTIVATE(wxTipWindow::OnActivate)
-#endif
+#endif // !wxUSE_POPUPWIN
 END_EVENT_TABLE()
-
-
-// Viewer window to put in the frame
-class wxTipWindowView: public wxWindow
-{
-public:
-    wxTipWindowView(wxWindow *parent);
-
-    // event handlers
-    void OnPaint(wxPaintEvent& event);
-    void OnMouseClick(wxMouseEvent& event);
-#if !wxUSE_POPUPWIN
-    void OnKillFocus(wxFocusEvent& event);
-#endif
-    // calculate the client rect we need to display the text
-    void Adjust(const wxString& text, wxCoord maxLength);
-
-private:
-    long m_creationTime;
-    wxTipWindow* m_parent;
-
-  DECLARE_EVENT_TABLE()
-};
 
 BEGIN_EVENT_TABLE(wxTipWindowView, wxWindow)
     EVT_PAINT(wxTipWindowView::OnPaint)
+
     EVT_LEFT_DOWN(wxTipWindowView::OnMouseClick)
     EVT_RIGHT_DOWN(wxTipWindowView::OnMouseClick)
     EVT_MIDDLE_DOWN(wxTipWindowView::OnMouseClick)
+
+    EVT_MOTION(wxTipWindowView::OnMouseMove)
+
 #if !wxUSE_POPUPWIN
     EVT_KILL_FOCUS(wxTipWindowView::OnKillFocus)
-#endif
+#endif // !wxUSE_POPUPWIN
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -107,7 +117,9 @@ END_EVENT_TABLE()
 
 wxTipWindow::wxTipWindow(wxWindow *parent,
                          const wxString& text,
-                         wxCoord maxLength, wxTipWindow** windowPtr)
+                         wxCoord maxLength,
+                         wxTipWindow** windowPtr,
+                         wxRect *rectBounds)
 #if wxUSE_POPUPWIN
            : wxPopupTransientWindow(parent)
 #else
@@ -116,36 +128,50 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
                      wxNO_BORDER | wxFRAME_NO_TASKBAR )
 #endif
 {
-    m_windowPtr = windowPtr;
+    SetTipWindowPtr(windowPtr);
+    if ( rectBounds )
+    {
+        SetBoundingRect(*rectBounds);
+    }
 
     // set colours
-    SetForegroundColour(*wxBLACK);
-
+    //
+    // VZ: why don't we use wxSystemSettings for !MSW? (FIXME)
 #ifdef __WXMSW__
-    wxColour bkCol(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK));
+    SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK));
 #else
-    wxColour bkCol(wxColour(255, 255, 225));
+    SetForegroundColour(*wxBLACK);
+    SetBackgroundColour(*wxWHITE);
 #endif
-    SetBackgroundColour(bkCol);
 
     // set size, position and show it
-    wxTipWindowView* tipWindowView = new wxTipWindowView(this);
-    tipWindowView->Adjust(text, maxLength);
-    tipWindowView->SetFocus();
+    m_view = new wxTipWindowView(this);
+    m_view->Adjust(text, maxLength);
+    m_view->SetFocus();
+
     int x, y;
     wxGetMousePosition(&x, &y);
+
+    // we want to show the tip below the mouse, not over it
+    //
+    // NB: the reason we use "/ 2" here is that we don't know where the current
+    //     cursors hot spot is... it would be nice if we could find this out
+    //     though
+    y += wxSystemSettings::GetMetric(wxSYS_CURSOR_Y) / 2;
+
 #if wxUSE_POPUPWIN
-    Position(wxPoint(x, y+10), wxSize(0,0));
-    Popup(tipWindowView);
+    Position(wxPoint(x, y), wxSize(0, 0));
+    Popup(m_view);
 #else
-    Move(x, y + 10);
+    Move(x, y);
     Show(TRUE);
 #endif
 }
 
 wxTipWindow::~wxTipWindow()
 {
-    if (m_windowPtr)
+    if ( m_windowPtr )
     {
         *m_windowPtr = NULL;
     }
@@ -156,7 +182,15 @@ void wxTipWindow::OnMouseClick(wxMouseEvent& WXUNUSED(event))
     Close();
 }
 
-#if !wxUSE_POPUPWIN
+#if wxUSE_POPUPWIN
+
+void wxTipWindow::OnDismiss()
+{
+    Close();
+}
+
+#else // !wxUSE_POPUPWIN
+
 void wxTipWindow::OnActivate(wxActivateEvent& event)
 {
     if (!event.GetActive())
@@ -172,11 +206,22 @@ void wxTipWindow::OnKillFocus(wxFocusEvent& WXUNUSED(event))
     Close();
 #endif
 }
-#endif
 
+#endif // wxUSE_POPUPWIN // !wxUSE_POPUPWIN
+
+void wxTipWindow::SetBoundingRect(const wxRect& rectBound)
+{
+    m_rectBound = rectBound;
+}
 
 void wxTipWindow::Close()
 {
+    if ( m_windowPtr )
+    {
+        *m_windowPtr = NULL;
+        m_windowPtr = NULL;
+    }
+
 #if wxUSE_POPUPWIN
     Show(FALSE);
     Destroy();
@@ -190,19 +235,25 @@ void wxTipWindow::Close()
 // ----------------------------------------------------------------------------
 
 wxTipWindowView::wxTipWindowView(wxWindow *parent)
-           : wxWindow(parent, -1,
-                     wxDefaultPosition, wxDefaultSize,
-                     wxNO_BORDER)
+               : wxWindow(parent, -1,
+                          wxDefaultPosition, wxDefaultSize,
+                          wxNO_BORDER)
 {
     // set colours
-    SetForegroundColour(*wxBLACK);
+    //
+    // VZ: why don't we use wxSystemSettings for !MSW? (FIXME)
 #ifdef __WXMSW__
-    wxColour bkCol(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK));
+    SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK));
 #else
-    wxColour bkCol(wxColour(255, 255, 225));
+    SetForegroundColour(*wxBLACK);
+    SetBackgroundColour(*wxWHITE);
 #endif
-    SetBackgroundColour(bkCol);
+
+#if !wxUSE_POPUPWIN
     m_creationTime = wxGetLocalTime();
+#endif // !wxUSE_POPUPWIN
+
     m_parent = (wxTipWindow*)parent;
 }
 
@@ -306,6 +357,22 @@ void wxTipWindowView::OnMouseClick(wxMouseEvent& WXUNUSED(event))
     m_parent->Close();
 }
 
+void wxTipWindowView::OnMouseMove(wxMouseEvent& event)
+{
+    const wxRect& rectBound = m_parent->m_rectBound;
+
+    if ( rectBound.width &&
+            !rectBound.Inside(ClientToScreen(event.GetPosition())) )
+    {
+        // mouse left the bounding rect, disappear
+        m_parent->Close();
+    }
+    else
+    {
+        event.Skip();
+    }
+}
+
 #if !wxUSE_POPUPWIN
 void wxTipWindowView::OnKillFocus(wxFocusEvent& WXUNUSED(event))
 {
@@ -313,6 +380,6 @@ void wxTipWindowView::OnKillFocus(wxFocusEvent& WXUNUSED(event))
     if (wxGetLocalTime() > m_creationTime + 1)
         m_parent->Close();
 }
-#endif
+#endif // !wxUSE_POPUPWIN
 
-#endif
+#endif // wxUSE_TIPWINDOW

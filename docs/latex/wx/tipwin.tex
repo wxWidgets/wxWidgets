@@ -1,11 +1,12 @@
 \section{\class{wxTipWindow}}\label{wxtipwindow}
 
-Shows simple text in a popup tip window on creation. This is used by \helpref{wxSimpleHelpProvider}{wxsimplehelpprovider} to
-show popup help. The window automatically destroys itself when the user clicks on it or it loses
-the focus.
+Shows simple text in a popup tip window on creation. This is used by 
+\helpref{wxSimpleHelpProvider}{wxsimplehelpprovider} to show popup help. The
+window automatically destroys itself when the user clicks on it or it loses the
+focus.
 
-You should not normally need to use it explicitly in your application since a help provider class
-will create it when required.
+You may also use this class to emulate the tooltips when you need finer
+control over them than what the standard tooltips provide.
 
 \wxheading{Derived from}
 
@@ -23,13 +24,48 @@ wxPopupWindow\\
 
 \membersection{wxTipWindow::wxTipWindow}\label{wxtipwindowwxtipwindow}
 
-\func{}{wxTipWindow}{\param{wxWindow* }{parent}, \param{const wxString\& }{text}, \param{wxCoord }{maxLength = 100}}
+\func{}{wxTipWindow}{\param{wxWindow* }{parent}, \param{const wxString\& }{text}, \param{wxCoord }{maxLength = 100}, \param{wxTipWindow** }{windowPtr}}
 
 Constructor. The tip is shown immediately the window is constructed.
 
-\membersection{wxTipWindow::Adjust}\label{wxtipwindowadjust}
+\wxheading{Parameters}
 
-\func{void}{Adjust}{\param{const wxString\& }{text}, \param{wxCoord }{maxLength}}
+\docparam{parent}{The parent window, must be non {\tt NULL}}
 
-Calculates the client rect we need to display the text.
+\docparam{text}{The text to show, may contain the new line characters}
+
+\docparam{windowPtr}{Simply passed to 
+\helpref{SetTipWindowPtr}{wxtipwindowsettipwindowptr} below, please see its
+documentation for the description of this parameter}
+
+\docparam{rectBounds}{If non {\tt NULL}, passed to 
+\helpref{SetBoundingRect}{wxtipwindowsetboundingrect} below, please see its
+documentation for the description of this parameter}
+
+
+\membersection{wxTipWindow::SetTipWindowPtr}\label{wxtipwindowsettipwindowptr}
+
+\func{void}{SetTipWindowPtr}{\param{wxTipWindow** }{windowPtr}}
+
+When the tip window closes itself (which may happen at any moment and
+unexpectedly to the caller) it may {\tt NULL} out the pointer pointed to by 
+{\it windowPtr}. This is helpful to avoid dereferencing the tip window which
+had been already closed and deleted.
+
+
+\membersection{wxTipWindow::SetBoundingRect}{wxtipwindowsetboundingrect}
+
+\func{void}{SetBoundingRect}{\param{const wxRect\& }{rectBound}}
+
+By default, the tip window disappears when the user clicks the mouse or presses
+a keyboard key or if it loses focus in any other way - for example because the
+user switched to another application window.
+
+Additionally, if a non empty {\it rectBound} is provided, the tip window will
+also automatically close if the mouse leaves this area. This is useful to
+dismiss the tip mouse when the mouse leaves the object it is associated with.
+
+\wxheading{Parameters}
+
+\docparam{rectBound}{The bounding rectangle for the mouse in the screen coordinates}
 
