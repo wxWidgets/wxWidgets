@@ -33,6 +33,8 @@
 #pragma message enable nosimpint
 #endif
 
+#include "wx/motif/private.h"
+
 IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
 
 bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
@@ -142,5 +144,38 @@ void wxStaticText::ChangeBackgroundColour()
 void wxStaticText::ChangeForegroundColour()
 {
     wxWindow::ChangeForegroundColour();
+}
+
+void wxStaticText::SetLabel(const wxString& label)
+{
+    wxString buf(wxStripMenuCodes(label));
+    wxXmString label_str(buf);
+
+    // This variable means we don't need so many casts later.
+    Widget widget = (Widget) m_labelWidget;
+
+    if (GetWindowStyle() & wxST_NO_AUTORESIZE)
+    {
+        XtUnmanageChild(widget);
+        Dimension width, height;
+        XtVaGetValues(widget, XmNwidth, &width, XmNheight, &height, NULL);
+
+        XtVaSetValues(widget,
+            XmNlabelString, label_str(),
+            XmNlabelType, XmSTRING,
+            NULL);
+        XtVaSetValues(widget,
+            XmNwidth, width,
+            XmNheight, height,
+            NULL);        
+        XtManageChild(widget);
+    }
+    else
+    {
+        XtVaSetValues(widget,
+            XmNlabelString, label_str(),
+            XmNlabelType, XmSTRING,
+            NULL);
+    }
 }
 
