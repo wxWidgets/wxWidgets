@@ -1,11 +1,26 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        socket.tex
+%% Purpose:     wxSocket docs
+%% Author:      Guillermo Rodriguez Garcia <guille@iies.es>
+%% Modified by:
+%% Created:     1999
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWindows team
+%% Licence:     wxWindows licence
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % -----------------------------------------------------------------------------
 % wxSocketInputStream
 % -----------------------------------------------------------------------------
 \section{\class{wxSocketInputStream}}\label{wxsocketinputstream}
 
+This class implements an input stream which reads data from
+a connected socket. Note that this stream is purely sequential
+and it does not support seeking.
+
 \wxheading{Derived from}
 
-\helpref{wxInputStream}{wxinputStream}
+\helpref{wxInputStream}{wxinputstream}
 
 \wxheading{Include files}
 
@@ -13,7 +28,7 @@
 
 \wxheading{See also}
 
-\helpref{wxStreamBuffer}{wxstreamBuffer}, \helpref{wxSocketBase}{wxsocketbase}
+\helpref{wxSocketBase}{wxsocketbase}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -21,17 +36,21 @@
 
 \func{}{wxSocketInputStream}{\param{wxSocketBase\&}{ s}}
 
-Initializes a new read-only socket stream using the specified initialized
-socket connection.
+Creates a new read-only socket stream using the specified initialized
+socket connection. 
 
 % -----------------------------------------------------------------------------
 % wxSocketOutputStream
 % -----------------------------------------------------------------------------
 \section{\class{wxSocketOutputStream}}\label{wxsocketoutputstream}
 
+This class implements an output stream which writes data from
+a connected socket. Note that this stream is purely sequential
+and it does not support seeking.
+
 \wxheading{Derived from}
 
-\helpref{wxOutputStream}{wxoutputStream}
+\helpref{wxOutputStream}{wxoutputstream}
 
 \wxheading{Include files}
 
@@ -39,7 +58,7 @@ socket connection.
 
 \wxheading{See also}
 
-\helpref{wxStreamBuffer}{wxstreambuffer}, \helpref{wxSocketBase}{wxsocketbase}
+\helpref{wxSocketBase}{wxsocketbase}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -47,6 +66,6 @@ socket connection.
 
 \func{}{wxSocketInputStream}{\param{wxSocketBase\&}{ s}}
 
-Initializes a new write-only socket stream using the specified initialized
+Creates a new write-only socket stream using the specified initialized
 socket connection.
 
