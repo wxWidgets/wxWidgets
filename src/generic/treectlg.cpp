@@ -1201,16 +1201,17 @@ wxTreeItemId wxGenericTreeCtrl::AddRoot(const wxString& text,
 
     m_anchor = new wxGenericTreeItem((wxGenericTreeItem *)NULL, text,
                                    image, selImage, data);
+    if ( data != NULL )
+    {
+        data->m_pItem = (long) m_anchor;
+    }
+
     if (HasFlag(wxTR_HIDE_ROOT))
     {
         // if root is hidden, make sure we can navigate
         // into children
         m_anchor->SetHasPlus();
         Expand(m_anchor);
-    }
-    if ( data != NULL )
-    {
-        data->m_pItem = (long) m_anchor;
     }
 
     if (!HasFlag(wxTR_MULTIPLE))
