@@ -24,6 +24,7 @@
 #include <wx/image.h>
 #include <wx/imagpng.h>
 #include <wx/wxhtml.h>
+#include <wx/statline.h>
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -156,18 +157,31 @@
 
    void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
    {
+        wxBoxSizer *topsizer;
         wxHtmlWindow *html;
-#ifdef __WXMSW__
-        wxDialog dlg(this, -1, "About", wxDefaultPosition, wxSize(400, 250), wxDIALOG_MODAL | wxDEFAULT_DIALOG_STYLE);
-#else
-        wxDialog dlg(this, -1, "About", wxDefaultPosition, wxSize(400, 230), wxDIALOG_MODAL | wxDEFAULT_DIALOG_STYLE);
-#endif
+        wxDialog dlg(this, -1, "About");
 
-        html = new wxHtmlWindow(&dlg, -1, wxPoint(10, 10), wxSize(380, 160), wxHW_SCROLLBAR_NEVER);
+        topsizer = new wxBoxSizer(wxVERTICAL);
+
+        html = new wxHtmlWindow(&dlg, -1, wxDefaultPosition, wxSize(380, 160), wxHW_SCROLLBAR_NEVER);
         html -> SetBorders(0);
         html -> LoadPage("data/about.htm");
-        wxButton *bu1 = new wxButton(&dlg, wxID_OK, "OK", wxPoint(250, 185), wxSize(100, 30));
+        html -> SetSize(html -> GetInternalRepresentation() -> GetWidth(), 
+                        html -> GetInternalRepresentation() -> GetHeight());
+
+        topsizer -> Add(html, 1, wxALL, 10);
+
+        topsizer -> Add(new wxStaticLine(&dlg, -1), 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
+                        
+        wxButton *bu1 = new wxButton(&dlg, wxID_OK, "Okay");
         bu1 -> SetDefault();
+
+        topsizer -> Add(bu1, 0, wxALL | wxALIGN_RIGHT, 15);
+
+        dlg.SetAutoLayout(TRUE);
+        dlg.SetSizer(topsizer);
+        topsizer -> Fit(&dlg);
+
         dlg.ShowModal();
     }
 
