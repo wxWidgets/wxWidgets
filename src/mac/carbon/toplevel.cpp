@@ -283,6 +283,9 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
     
     if ( cEvent.GetKind() == kEventMouseDown )
         lastButton = button ;
+        
+    if ( button == 0 )
+        lastButton = 0 ;    
     else if ( lastButton )
         button = lastButton ;
 
@@ -338,8 +341,6 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
         else
             wxevent.SetEventType(wxEVT_MOTION ) ;
     }
-    if ( cEvent.GetKind() == kEventMouseUp )
-        lastButton = 0 ;
 }
 
 ControlRef wxMacFindSubControl( Point location , ControlRef superControl , ControlPartCode *outPart )
