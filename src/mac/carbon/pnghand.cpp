@@ -27,6 +27,17 @@
 #include <stdio.h>
 #include <string.h>
 
+#if defined(__DARWIN__)
+/* MW's math routines do certain things if __FP__ (the include guard around
+CarbonCore's fp.h) is defined.  CarbonCore's fp.h does certain things if
+__cmath__ is defined so it seems the easy thing to do is to make sure
+__cmath__ is effectively not defined which counteracts the MWERKS check
+then when the real cmath is included everything will be okay.
+*/
+#include <CoreServices/CoreServices.h>
+//#include <cmath>
+#endif //defined(__DARWIN__)
+
 #if wxUSE_IOSTREAMH
 #   include <fstream.h>
 #else
