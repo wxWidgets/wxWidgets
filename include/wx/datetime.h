@@ -1262,7 +1262,7 @@ WX_DEFINE_EXPORTED_ARRAY(wxDateTimeHolidayAuthority *, wxHolidayAuthoritiesArray
 class wxDateTimeHolidaysModule;
 class WXDLLEXPORT wxDateTimeHolidayAuthority
 {
-    friend wxDateTimeHolidaysModule;
+friend class wxDateTimeHolidaysModule;
 public:
     // returns TRUE if the given date is a holiday
     static bool IsHoliday(const wxDateTime& dt);

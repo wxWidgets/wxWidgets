@@ -1284,8 +1284,8 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
         for ( wxCoord srcY = 0; srcY < h; srcY++ )
         {
             // transform source coords to dest coords
-            double r = sqrt(srcX*srcX + srcY*srcY);
-            double angleOrig = atan2(srcY, srcX) - rad;
+            double r = sqrt((double)srcX*srcX + srcY*srcY);
+            double angleOrig = atan2((double)srcY, (double)srcX) - rad;
             wxCoord dstX = (wxCoord)(r*cos(angleOrig) + 0.5),
                     dstY = (wxCoord)(r*sin(angleOrig) + 0.5);
 
