@@ -7,7 +7,7 @@
 <title>The wxPython Manual</title>
 <meta name="author" content="Patrick K. O'Brien" />
 <meta name="organization" content="Orbtech" />
-<meta name="date" content="2003-07-02" />
+<meta name="date" content="2004-03-26" />
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
@@ -25,9 +25,9 @@
 <tr><th class="docinfo-name">Organization:</th>
 <td><a class="first last reference" href="http://www.orbtech.com/">Orbtech</a></td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>2003-07-02</td></tr>
+<td>2004-03-26</td></tr>
 <tr><th class="docinfo-name">Revision:</th>
-<td>1.2</td></tr>
+<td>1.3</td></tr>
 <tr class="field"><th class="docinfo-name">License:</th><td class="field-body">wxWindows Free Documentation Licence, Version 3</td>
 </tr>
 </tbody>
@@ -43,7 +43,7 @@
 <li><a class="reference" href="#mac-os-x" id="id6" name="id6">Mac OS X</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#what-is-wxwindows" id="id7" name="id7">What is wxWindows?</a></li>
+<li><a class="reference" href="#what-is-wxwidgets" id="id7" name="id7">What is wxWidgets?</a></li>
 <li><a class="reference" href="#why-another-cross-platform-development-tool" id="id8" name="id8">Why another cross-platform development tool?</a></li>
 <li><a class="reference" href="#wxpython-overview" id="id9" name="id9">wxPython Overview</a></li>
 <li><a class="reference" href="#utilities-and-libraries-supplied-with-wxpython" id="id10" name="id10">Utilities and libraries supplied with wxPython</a></li>
@@ -97,11 +97,11 @@
 <h1><a class="toc-backref" href="#id1" name="introduction">Introduction</a></h1>
 <p>This is a guide to the wxPython GUI toolkit, written <strong>by</strong> a Python
 programmer <strong>for</strong> his fellow Python programmers.  It began as a
-simple translation of the wxWindows documentation (which is written
+simple translation of the wxWidgets documentation (which is written
 for C++ programmers), and evolved from there.  And while there's
 nothing wrong with C++...</p>
 <p>Okay, you got me there.  I hate C++.  That's why I use Python.  If you
-like C++, go read the wxWindows documentation.  If you'd rather read a
+like C++, go read the wxWidgets documentation.  If you'd rather read a
 guide that's written with Python programmers in mind, keep reading
 this one.  If you like it, feel free to send me freshly roasted coffee
 beans, dark chocolate, and large denomination currency.  Better yet,
@@ -114,8 +114,8 @@ send one to each of your friends, relatives, and coworkers.</p>
 allows Python programmers to create programs with a robust, highly
 functional graphical user interface, simply and easily.  It is
 implemented as a Python extension module (native code) that wraps the
-popular wxWindows cross platform GUI library, which is written in C++.</p>
-<p>Like Python and wxWindows, wxPython is Open Source, which means that
+popular wxWidgets cross platform GUI library, which is written in C++.</p>
+<p>Like Python and wxWidgets, wxPython is Open Source, which means that
 it is free for anyone to use and the source code is available for
 anyone to look at and modify.  And anyone can contribute fixes or
 enhnacments to the project.</p>
@@ -154,13 +154,13 @@ setups.</p>
 </ul>
 </div>
 </div>
-<div class="section" id="what-is-wxwindows">
-<h1><a class="toc-backref" href="#id7" name="what-is-wxwindows">What is wxWindows?</a></h1>
-<p>wxWindows is a C++ framework providing GUI (Graphical User Interface)
+<div class="section" id="what-is-wxwidgets">
+<h1><a class="toc-backref" href="#id7" name="what-is-wxwidgets">What is wxWidgets?</a></h1>
+<p>wxWidgets is a C++ framework providing GUI (Graphical User Interface)
 and other facilities on more than one platform.  Version 2 currently
 supports all desktop versions of MS Windows, Unix with GTK+, Unix with
 Motif, and MacOS.  An OS/2 port is in progress.</p>
-<p>wxWindows was originally developed at the Artificial Intelligence
+<p>wxWidgets was originally developed at the Artificial Intelligence
 Applications Institute, University of Edinburgh, for internal use, and
 was first made publicly available in 1992.  Version 2 is a vastly
 improved version written and maintained by Julian Smart, Robert
@@ -171,7 +171,7 @@ variants, unless otherwise stated.  All trademarks are acknowledged.</p>
 </div>
 <div class="section" id="why-another-cross-platform-development-tool">
 <h1><a class="toc-backref" href="#id8" name="why-another-cross-platform-development-tool">Why another cross-platform development tool?</a></h1>
-<p>wxWindows was developed to provide a cheap and flexible way to
+<p>wxWidgets was developed to provide a cheap and flexible way to
 maximize investment in GUI application development.  While a number of
 commercial class libraries already existed for cross-platform
 development, none met all of the following criteria:</p>
@@ -181,13 +181,13 @@ development, none met all of the following criteria:</p>
 <li>simplicity of programming</li>
 <li>support for a wide range of compilers</li>
 </ul>
-<p>Since wxWindows was started, several other free or almost-free GUI
+<p>Since wxWidgets was started, several other free or almost-free GUI
 frameworks have emerged.  However, none has the range of features,
 flexibility, documentation and the well-established development team
-that wxWindows has.</p>
-<p>As open source software, wxWindows has benefited from comments, ideas,
+that wxWidgets has.</p>
+<p>As open source software, wxWidgets has benefited from comments, ideas,
 bug fixes, enhancements and the sheer enthusiasm of users.  This gives
-wxWindows a certain advantage over its commercial competitors (and
+wxWidgets a certain advantage over its commercial competitors (and
 over free libraries without an independent development team), plus a
 robustness against the transience of one individual or company.  This
 openness and availability of source code is especially important when
@@ -201,16 +201,16 @@ toolkits such as Motif, GTK+ and MFC.</p>
 overstated, since GUI application development is very time-consuming,
 and sustained popularity of particular GUIs cannot be guaranteed.
 Code can very quickly become obsolete if it addresses the wrong
-platform or audience.  wxWindows helps to insulate the programmer from
-these winds of change.  Although wxWindows may not be suitable for
+platform or audience.  wxWidgets helps to insulate the programmer from
+these winds of change.  Although wxWidgets may not be suitable for
 every application (such as an OLE-intensive program), it provides
 access to most of the functionality a GUI program normally requires,
 plus many extras such as network programming, PostScript output, and
 HTML rendering; and it can of course be extended as needs dictate.  As
 a bonus, it provides a far cleaner and easier programming interface
 than the native APIs.  Programmers may find it worthwhile to use
-wxWindows even if they are developing on only one platform.</p>
-<p>It is impossible to sum up the functionality of wxWindows in a few
+wxWidgets even if they are developing on only one platform.</p>
+<p>It is impossible to sum up the functionality of wxWidgets in a few
 paragraphs, but here are some of the benefits:</p>
 <ul class="simple">
 <li>Low cost (free, in fact!)</li>
@@ -281,10 +281,10 @@ Help.</p>
 <p>GUI applications aren't all graphical wizardry.  You'll also need
 lists and hash tables.  But since you're working with Python, you
 should use the ones Python provides (list, tuple, dict), rather than
-the wxWindows versions.  Same goes for the database related classes.
+the wxWidgets versions.  Same goes for the database related classes.
 The basic rule of thumb is this: If you can do it directly in Python,
 you probably should.  If there is a reason not to use a Python data
-type, wxPython will provide a wrapper for the wxWindows class.</p>
+type, wxPython will provide a wrapper for the wxWidgets class.</p>
 <p>You will undoubtedly need some platform-independent file functions,
 and you may find it handy to maintain and search a list of paths using
 PathList. There's a miscellany of operating system and other
@@ -293,7 +293,7 @@ functions.</p>
 </div>
 <div class="section" id="utilities-and-libraries-supplied-with-wxpython">
 <h1><a class="toc-backref" href="#id10" name="utilities-and-libraries-supplied-with-wxpython">Utilities and libraries supplied with wxPython</a></h1>
-<p>In addition to the core wxWindows library, a number of further
+<p>In addition to the core wxWidgets library, a number of further
 libraries and utilities are supplied with each distribution.</p>
 <p>[Need to list these.]</p>
 </div>
@@ -305,13 +305,13 @@ allocated with new and deleted with delete. If you delete a window,
 all of its children and descendants will be automatically deleted,
 so you don't need to delete these descendants explicitly. -->
 <!-- When deleting a frame or dialog, use Destroy rather than delete so
-that the wxWindows delayed deletion can take effect. This waits
+that the wxWidgets delayed deletion can take effect. This waits
 until idle time (when all messages have been processed) to actually
 delete the window, to avoid problems associated with the GUI
 sending events to deleted windows. -->
 <!-- If you decide to allocate a C++ array of objects (such as wxBitmap)
-that may be cleaned up by wxWindows, make sure you delete the array
-explicitly before wxWindows has a chance to do so on exit, since
+that may be cleaned up by wxWidgets, make sure you delete the array
+explicitly before wxWidgets has a chance to do so on exit, since
 calling delete on array members will cause memory problems. -->
 <!-- wxColour can be created statically: it is not automatically cleaned
 up and is unlikely to be shared between other objects; it is
@@ -977,7 +977,7 @@ documents into html, xml, pdf, and even OpenOffice files.</p>
 <h1><a class="toc-backref" href="#id44" name="submitting-changes-to-the-source-document">Submitting changes to the source document</a></h1>
 <p>Some items in the source text file look like this:</p>
 <pre class="literal-block">
-.. This is text from the wxWindows documentation that needs to be
+.. This is text from the wxWidgets documentation that needs to be
    translated into something appropriate for the wxPython version.
    The two dots followed by uniformly indented text turns this
    paragraph into a reStructuredText comment, so it doesn't appear
@@ -1005,7 +1005,7 @@ name):</p>
 </div>
 <div class="section" id="license">
 <h1><a class="toc-backref" href="#id46" name="license">License</a></h1>
-<p>This document began as a translation of the wxWindows documentation.
+<p>This document began as a translation of the wxWidgets documentation.
 As such, it adheres to the same license, which is provided here:</p>
 <pre class="literal-block">
                 wxWindows Free Documentation Licence, Version 3
@@ -1071,10 +1071,6 @@ As such, it adheres to the same license, which is provided here:</p>
 
 </pre>
 </div>
-</div>
-<hr class="footer" />
-<div class="footer">
-Generated on: 2004-03-26 21:09 UTC.
 </div>
 </body>
 </html>
