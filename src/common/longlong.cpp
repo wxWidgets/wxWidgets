@@ -591,7 +591,9 @@ wxLongLongWx& wxLongLongWx::operator/=(const wxLongLongWx& ll)
 
     Divide(ll, quotient, remainder);
 
-    return *this = quotient;
+    *this = quotient;
+    
+    return *this;
 }
 
 wxLongLongWx wxLongLongWx::operator%(const wxLongLongWx& ll) const

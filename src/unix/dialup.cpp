@@ -566,7 +566,7 @@ wxDialUpManagerImpl::CheckIfconfig(void)
                     || strstr(output,"sl")  // slip
                     || strstr(output,"pl"); // plip
 #elif defined(__SGI__)  // IRIX
-               rc = strstr(output, "ppp"); // PPP
+               rc = (int) strstr(output, "ppp"); // PPP
 #elif defined(__HPUX__)
                // if could run ifconfig on interface, then it exists
                rc = TRUE;

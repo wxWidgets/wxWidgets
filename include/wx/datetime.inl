@@ -75,7 +75,8 @@ wxDateTime& wxDateTime::Set(time_t timet)
 
 wxDateTime& wxDateTime::SetToCurrent()
 {
-    return *this = Now();
+    *this = Now();
+    return *this;
 }
 
 #if (!(defined(__VISAGECPP__) && __IBMCPP__ >= 400))
