@@ -329,6 +329,11 @@ public:
     // still exist across 3 callbacks.
     wxChar *AddPool(const wxString& str);
 
+    // Event handlers
+    ////////////////////////////////////////////////////////////////////////////
+    // Necessary for drawing hrules and vrules, if specified
+    void OnPaint(wxPaintEvent& event);
+
 protected:
     // common part of all ctors
     void Init();
@@ -356,6 +361,7 @@ private:
     bool DoCreateControl(int x, int y, int w, int h);
 
     DECLARE_DYNAMIC_CLASS(wxListCtrl)
+    DECLARE_EVENT_TABLE()
 };
 
 #endif

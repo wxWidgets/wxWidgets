@@ -1096,6 +1096,8 @@ enum wxStretch
 /*
  * wxListCtrl flags
  */
+#define wxLC_VRULES          0x0001
+#define wxLC_HRULES          0x0002
 #define wxLC_ICON            0x0004
 #define wxLC_SMALL_ICON      0x0008
 #define wxLC_LIST            0x0010
