@@ -64,6 +64,8 @@ class wxGenStaticText(wxPyControl):
         style = self.GetWindowStyleFlag()
         if not style & wxST_NO_AUTORESIZE:
             self.SetSize(self.GetBestSize())
+        self.Refresh()
+
 
     def SetFont(self, font):
         """
@@ -74,6 +76,7 @@ class wxGenStaticText(wxPyControl):
         style = self.GetWindowStyleFlag()
         if not style & wxST_NO_AUTORESIZE:
             self.SetSize(self.GetBestSize())
+        self.Refresh()
 
 
     def DoGetBestSize(self):
