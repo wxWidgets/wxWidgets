@@ -146,14 +146,16 @@ bool wxFrame::Create(wxWindow *parent,
 
     int x = pos.x, y = pos.y;
     int width = size.x, height = size.y;
-    
-    // Set reasonable values for position and size if defaults have
-    // been requested 
-    // 
-    // MB TODO: something better than these arbitrary values ?
+
+    // Set reasonable values for position and size if defaults have been
+    // requested
     //
-    if ( width == -1 ) width = 400;
-    if ( height = -1 ) height = 400;
+    // MB TODO: something better than these arbitrary values ?
+    // VZ       should use X resources for this...
+    if ( width == -1 )
+        width = 400;
+    if ( height == -1 )
+        height = 400;
 
     int displayW, displayH;
     wxDisplaySize( &displayW, &displayH );
@@ -166,9 +168,9 @@ bool wxFrame::Create(wxWindow *parent,
     if ( y == -1 )
     {
         y = (displayH - height) / 2;
-        if (y < 10) y = 10;        
+        if (y < 10) y = 10;
     }
-        
+
     if (wxTopLevelUsed)
     {
         // Change suggested by Matthew Flatt
@@ -323,7 +325,7 @@ bool wxFrame::Create(wxWindow *parent,
 wxFrame::~wxFrame()
 {
     m_isBeingDeleted = TRUE;
-    
+
     if (m_clientArea)
       XtRemoveEventHandler((Widget) m_clientArea, ExposureMask, FALSE,
           wxUniversalRepaintProc, (XtPointer) this);
