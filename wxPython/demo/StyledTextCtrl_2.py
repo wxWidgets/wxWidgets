@@ -59,6 +59,7 @@ class PythonSTC(stc.StyledTextCtrl):
         self.SetViewWhiteSpace(False)
         #self.SetBufferedDraw(False)
         #self.SetViewEOL(True)
+        #self.SetEOLMode(stc.STC_EOL_CRLF)
         #self.SetUseAntiAliasing(True)
         
         self.SetEdgeMode(stc.STC_EDGE_BACKGROUND)

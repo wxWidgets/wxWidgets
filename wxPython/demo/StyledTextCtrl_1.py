@@ -175,6 +175,7 @@ def runTest(frame, nb, log):
     #ed.SetScrollWidth(800)
     #ed.SetWrapMode(True)
     #ed.SetUseAntiAliasing(False)    
+    #ed.SetViewEOL(True)
 
     ed.SetText(demoText)
 
