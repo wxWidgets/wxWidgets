@@ -834,7 +834,7 @@ VERSION = "%s.%s.%s.%s%s" % (VER_MAJOR, VER_MINOR, VER_RELEASE,
 # SWIG defaults
 #----------------------------------------------------------------------
 
-# i files could live in the wxWidgets/wxPython/src dir, or in 
+# *.i files could live in the wxWidgets/wxPython/src dir, or in 
 # a subdirectory of the devel package. Let's specify both 
 # dirs as includes so we don't have to guess which is correct.
  
@@ -844,12 +844,9 @@ if os.name != "nt":
     wxfilesdir = opj(WXPREFIX, i_subdir)
 else:
     wxfilesdir = opj(WXPY_SRC, i_subdir)
-    
+
 i_files_includes = [ '-I' + opj(WXPY_SRC, 'src'),
                      '-I' + wxfilesdir ]
-                     
-if wxfilesdir != "":
-    i_files_includes.append(wxfilesdir)
 
 swig_cmd = SWIG
 swig_force = force
