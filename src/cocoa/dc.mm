@@ -110,6 +110,20 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     [sm_cocoaNSTextStorage setAttributedString:attributedString];
     [attributedString release];
 
+    // Set the color (and later font) attributes
+    NSColor *fgColor = m_textForegroundColour.GetNSColor();
+    NSColor *bgColor = m_textBackgroundColour.GetNSColor();
+    if(!fgColor)
+        fgColor = [NSColor clearColor];
+    if(!bgColor)
+        bgColor = [NSColor clearColor];
+    NSDictionary *attrDict = [[NSDictionary alloc] initWithObjectsAndKeys:
+            fgColor, NSForegroundColorAttributeName,
+            bgColor, NSBackgroundColorAttributeName,
+            nil];
+    [sm_cocoaNSTextStorage addAttributes: attrDict range:NSMakeRange(0,[sm_cocoaNSTextStorage length])];
+    [attrDict release];
+
     NSRange glyphRange = [sm_cocoaNSLayoutManager glyphRangeForTextContainer:sm_cocoaNSTextContainer];
     NSRect usedRect = [sm_cocoaNSLayoutManager usedRectForTextContainer:sm_cocoaNSTextContainer];
     // NOTE: We'll crash trying to get the location of glyphAtIndex:0 if
@@ -150,8 +164,8 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     layoutLocation.x = 0.0;
     layoutLocation.y *= -1.0;
     layoutLocation.y += [[sm_cocoaNSLayoutManager typesetter] baselineOffsetInLayoutManager:sm_cocoaNSLayoutManager glyphIndex:0];
-    // NOTE: That's NSMakePoint, not NSMakePint (working on that though)
-    [m_textForegroundColour.GetNSColor() set];
+    if(m_backgroundMode==wxSOLID)
+        [sm_cocoaNSLayoutManager drawBackgroundForGlyphRange:glyphRange  atPoint:NSZeroPoint];
     [sm_cocoaNSLayoutManager drawGlyphsForGlyphRange:glyphRange  atPoint:layoutLocation];
 
     [context restoreGraphicsState];
