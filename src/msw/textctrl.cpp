@@ -39,6 +39,7 @@
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/menu.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/module.h"

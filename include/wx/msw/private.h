@@ -33,19 +33,6 @@ class WXDLLEXPORT wxWindow;
 // private constants
 // ---------------------------------------------------------------------------
 
-// Conversion
-static const double METRIC_CONVERSION_CONSTANT = 0.0393700787;
-
-// Scaling factors for various unit conversions
-static const double mm2inches = (METRIC_CONVERSION_CONSTANT);
-static const double inches2mm = (1/METRIC_CONVERSION_CONSTANT);
-
-static const double mm2twips = (METRIC_CONVERSION_CONSTANT*1440);
-static const double twips2mm = (1/(METRIC_CONVERSION_CONSTANT*1440));
-
-static const double mm2pt = (METRIC_CONVERSION_CONSTANT*72);
-static const double pt2mm = (1/(METRIC_CONVERSION_CONSTANT*72));
-
 // 260 was taken from windef.h
 #ifndef MAX_PATH
     #define MAX_PATH  260

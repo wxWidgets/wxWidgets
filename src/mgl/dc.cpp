@@ -47,12 +47,6 @@
 // constants
 //-----------------------------------------------------------------------------
 
-const double mm2inches      = 0.0393700787402;
-const double inches2mm      = 25.4;
-const double mm2twips       = 56.6929133859;
-const double twips2mm       = 0.0176388888889;
-const double mm2pt          = 2.83464566929;
-const double pt2mm          = 0.352777777778;
 const double RAD2DEG        = 180.0 / M_PI;
 
 

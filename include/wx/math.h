@@ -26,6 +26,36 @@
     #define M_PI 3.1415926535897932384626433832795
 #endif
 
+// Scaling factors for various unit conversions
+#ifndef METRIC_CONVERSION_CONSTANT
+    #define METRIC_CONVERSION_CONSTANT 0.0393700787
+#endif
+
+#ifndef mm2inches
+    #define mm2inches (METRIC_CONVERSION_CONSTANT)
+#endif
+
+#ifndef inches2mm
+    #define inches2mm (1/(mm2inches))
+#endif
+
+#ifndef mm2twips
+    #define mm2twips (METRIC_CONVERSION_CONSTANT*1440)
+#endif
+
+#ifndef twips2mm
+    #define twips2mm (1/(mm2twips))
+#endif
+
+#ifndef mm2pt
+    #define mm2pt (METRIC_CONVERSION_CONSTANT*72)
+#endif
+
+#ifndef pt2mm
+    #define pt2mm (1/(mm2pt))
+#endif
+
+
 /* unknown __VISAGECC__, __SYMANTECCC__ */
 
 #if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__WATCOMC__)
