@@ -1451,8 +1451,8 @@ size_t wxString::rfind(wxChar ch, size_t nStart) const
 
 size_t wxString::find_first_of(const wxChar* sz, size_t nStart) const
 {
-    const char *start = c_str() + nStart;
-    char *firstOf = strpbrk(start, sz);
+    const wxChar *start = c_str() + nStart;
+    const wxChar *firstOf = wxStrpbrk(start, sz);
     if ( firstOf )
         return firstOf - start;
     else
