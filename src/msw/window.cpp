@@ -313,7 +313,7 @@ void wxWindowMSW::Init()
 
     // MSW specific
     m_isBeingDeleted = FALSE;
-    m_oldWndProc = 0;
+    m_oldWndProc = NULL;
     m_useCtl3D = FALSE;
     m_mouseInWindow = FALSE;
     m_lastKeydownProcessed = FALSE;
@@ -991,7 +991,10 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
     }
     else
     {
-        // don't bother restoring it neither
+        // don't bother restoring it neither: this also makes it easy to
+        // implement IsOfStandardClass() method which returns TRUE for the
+        // standard controls and FALSE for the wxWindows own windows as it can
+        // simply check m_oldWndProc
         m_oldWndProc = NULL;
     }
 }
@@ -2525,11 +2528,19 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
 #endif // defined(WM_DRAWITEM)
 
         case WM_GETDLGCODE:
-            if ( GetWindowStyleFlag() & wxWANTS_CHARS )
+            if ( !IsOfStandardClass() )
             {
-                // want everything: i.e. all keys and WM_CHAR message
-                rc.result = DLGC_WANTARROWS | DLGC_WANTCHARS |
-                            DLGC_WANTTAB | DLGC_WANTMESSAGE;
+                // we always want to get the char events
+                rc.result = DLGC_WANTCHARS;
+
+                if ( GetWindowStyleFlag() & wxWANTS_CHARS )
+                {
+                    // in fact, we want everything
+                    rc.result |= DLGC_WANTARROWS |
+                                 DLGC_WANTTAB |
+                                 DLGC_WANTALLKEYS;
+                }
+
                 processed = TRUE;
             }
             //else: get the dlg code from the DefWindowProc()

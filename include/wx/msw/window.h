@@ -204,6 +204,11 @@ public:
     WXFARPROC MSWGetOldWndProc() const { return m_oldWndProc; }
     void MSWSetOldWndProc(WXFARPROC proc) { m_oldWndProc = proc; }
 
+    // return TRUE if the window is of a standard (i.e. not wxWindows') class
+    //
+    // to understand why does it work, look at SubclassWin() code and comments
+    bool IsOfStandardClass() const { return m_oldWndProc != NULL; }
+
     wxWindow *FindItem(long id) const;
     wxWindow *FindItemByHWND(WXHWND hWnd, bool controlOnly = FALSE) const;
 
