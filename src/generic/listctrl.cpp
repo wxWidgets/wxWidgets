@@ -2263,6 +2263,7 @@ wxListMainWindow::~wxListMainWindow()
 {
     DoDeleteAllItems();
     WX_CLEAR_LIST(wxListHeaderDataList, m_columns);
+    WX_CLEAR_ARRAY(m_aColWidths);
 
     delete m_highlightBrush;
     delete m_highlightUnfocusedBrush;
@@ -4353,7 +4354,7 @@ void wxListMainWindow::DoDeleteAllItems()
         ResetVisibleLinesRange();
         for (size_t i = 0; i < m_aColWidths.GetCount(); i++)
         {
-            delete m_aColWidths.Item(i);
+            m_aColWidths.Item(i)->bNeedsUpdate = true;
         }
     }
 
@@ -4370,6 +4371,7 @@ void wxListMainWindow::DeleteAllItems()
 void wxListMainWindow::DeleteEverything()
 {
     WX_CLEAR_LIST(wxListHeaderDataList, m_columns);
+    WX_CLEAR_ARRAY(m_aColWidths);
 
     DeleteAllItems();
 }
