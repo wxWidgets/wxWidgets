@@ -460,7 +460,7 @@ void wxComboBox::SetInsertionPoint( long pos )
     wxCHECK_RET( m_widget != NULL, "invalid combobox" );
 
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
-    gtk_entry_set_position( GTK_ENTRY(entry), (int)tmp );
+    gtk_entry_set_position( GTK_ENTRY(entry), (int)pos );
 }
 
 void wxComboBox::SetInsertionPointEnd()
