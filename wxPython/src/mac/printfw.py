@@ -525,6 +525,9 @@ class wxPrinterPtr(wxObjectPtr):
     def Setup(self, *_args, **_kwargs):
         val = printfwc.wxPrinter_Setup(self, *_args, **_kwargs)
         return val
+    def GetAbort(self, *_args, **_kwargs):
+        val = printfwc.wxPrinter_GetAbort(self, *_args, **_kwargs)
+        return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxPrinter instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxPrinter(wxPrinterPtr):
@@ -624,7 +627,12 @@ wxPostScriptDC_SetResolution = printfwc.wxPostScriptDC_SetResolution
 
 wxPostScriptDC_GetResolution = printfwc.wxPostScriptDC_GetResolution
 
+wxPrinter_GetLastError = printfwc.wxPrinter_GetLastError
+
 
 
 #-------------- VARIABLE WRAPPERS ------------------
 
+wxPRINTER_NO_ERROR = printfwc.wxPRINTER_NO_ERROR
+wxPRINTER_CANCELLED = printfwc.wxPRINTER_CANCELLED
+wxPRINTER_ERROR = printfwc.wxPRINTER_ERROR

@@ -185,11 +185,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     }
 
     wxCursor* wxCursorFromImage(const wxImage& image) {
-    #ifndef __WXMAC__
         return new wxCursor(image);
-    #else
-        return NULL;
-    #endif
     }
                                       // Alternate 'constructor'
     wxColour* wxNamedColour(const wxString& colorName) {

@@ -1103,6 +1103,9 @@ class wxSpinCtrlPtr(wxSpinButtonPtr):
     def SetValue(self, *_args, **_kwargs):
         val = controlsc.wxSpinCtrl_SetValue(self, *_args, **_kwargs)
         return val
+    def SetSelection(self, *_args, **_kwargs):
+        val = controlsc.wxSpinCtrl_SetSelection(self, *_args, **_kwargs)
+        return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxSpinCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxSpinCtrl(wxSpinCtrlPtr):
