@@ -132,6 +132,10 @@ BEGIN_EVENT_TABLE(wxMDIParentFrame, wxFrame)
     EVT_SYS_COLOUR_CHANGED(wxMDIParentFrame::OnSysColourChanged)
 END_EVENT_TABLE()
 
+BEGIN_EVENT_TABLE(wxMDIChildFrame, wxFrame)
+    EVT_IDLE(wxMDIChildFrame::OnIdle)
+END_EVENT_TABLE()
+
 BEGIN_EVENT_TABLE(wxMDIClientWindow, wxWindow)
     EVT_SCROLL(wxMDIClientWindow::OnScroll)
 END_EVENT_TABLE()
@@ -612,8 +616,9 @@ bool wxMDIParentFrame::MSWTranslateMessage(WXMSG* msg)
 // wxMDIChildFrame
 // ===========================================================================
 
-wxMDIChildFrame::wxMDIChildFrame()
+void wxMDIChildFrame::Init()
 {
+    m_needsResize = TRUE;
 }
 
 bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
@@ -1199,6 +1204,22 @@ void wxMDIClientWindow::DoSetSize(int x, int y, int width, int height, int sizeF
             }
         }
     }
+}
+
+void wxMDIChildFrame::OnIdle(wxIdleEvent& event)
+{
+    // MDI child frames get their WM_SIZE when they're constructed but at this
+    // moment they don't have any children yet so all child windows will be
+    // positioned incorrectly when they are added later - to fix this, we
+    // generate an artificial size event here
+    if ( m_needsResize )
+    {
+        m_needsResize = FALSE; // avoid any possibility of recursion
+
+        SendSizeEvent();
+    }
+
+    event.Skip();
 }
 
 // ---------------------------------------------------------------------------

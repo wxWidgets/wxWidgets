@@ -108,10 +108,7 @@
 // private function prototypes
 // ----------------------------------------------------------------------------
 
-// send a dummy WM_SIZE to the given window: this is used to relayout the frame
-// which contains us
-static void SendResizeMessage(HWND hwnd);
-
+// adjust toolbar bitmap colours
 static void wxMapBitmap(HBITMAP hBitmap, int width, int height);
 
 // ----------------------------------------------------------------------------
@@ -270,7 +267,7 @@ wxToolBar::~wxToolBar()
     wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
     if ( frame && wxTopLevelWindows.Find(frame) )
     {
-        SendResizeMessage(GetHwndOf(frame));
+        frame->SendSizeEvent();
     }
 
     if ( m_hBitmap )
@@ -895,7 +892,7 @@ void wxToolBar::UpdateSize()
     wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
     if ( frame )
     {
-        SendResizeMessage(GetHwndOf(frame));
+        frame->SendSizeEvent();
     }
 }
 
@@ -1004,19 +1001,6 @@ long wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
-
-static void SendResizeMessage(HWND hwnd)
-{
-    // don't change the size, we just need to generate a WM_SIZE
-    RECT r;
-    if ( !::GetWindowRect(hwnd, &r) )
-    {
-        wxLogLastError(_T("GetWindowRect"));
-    }
-
-    (void)::PostMessage(hwnd, WM_SIZE, SIZE_RESTORED,
-                        MAKELPARAM(r.right - r.left, r.bottom - r.top));
-}
 
 // These are the default colors used to map the bitmap colors to the current
 // system colors. Note that they are in BGR format because this is what Windows

@@ -3061,6 +3061,19 @@ bool wxWindow::HandleGetMinMaxInfo(void *mmInfo)
     return rc;
 }
 
+// generate an artificial resize event
+void wxWindow::SendSizeEvent()
+{
+    RECT r;
+    if ( !::GetWindowRect(GetHwnd(), &r) )
+    {
+        wxLogLastError(_T("GetWindowRect"));
+    }
+
+    (void)::PostMessage(GetHwnd(), WM_SIZE, SIZE_RESTORED,
+                        MAKELPARAM(r.right - r.left, r.bottom - r.top));
+}
+
 // ---------------------------------------------------------------------------
 // command messages
 // ---------------------------------------------------------------------------
