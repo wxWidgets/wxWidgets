@@ -5,7 +5,7 @@ from Main import opj
 
 #----------------------------------------------------------------------
 
-msg = "This is some text that will appear behind the image..."
+msg = "Some text will appear in the image's shadow..."
 
 class TestPanel(wx.Panel):
     def __init__(self, parent, log):
@@ -26,8 +26,10 @@ class TestPanel(wx.Panel):
         
         bmp = wx.Bitmap(opj('bitmaps/toucan.png'))
         if "__WXGTK__" in wx.PlatformInfo:
-            # try to make up for it a bit...
-            bmp.SetMaskColour("black")
+            # try to make up for lack of alpha support a bit...
+            img = bmp.ConvertToImage()
+            img.ConvertAlphaToMask(220) #threshold below which alpha will be made fully transparent
+            bmp = img.ConvertToBitmap()
             
         dc.DrawBitmap(bmp, 25,100, True)
 
