@@ -221,7 +221,7 @@ private:
     void OnKeyDown( wxKeyEvent& );
     void OnKeyUp( wxKeyEvent& );
     void OnEraseBackground( wxEraseEvent& );
-
+    void OnFocus( wxFocusEvent& );
 
     DECLARE_DYNAMIC_CLASS(wxGridWindow)
     DECLARE_EVENT_TABLE()
@@ -3662,6 +3662,8 @@ BEGIN_EVENT_TABLE( wxGridWindow, wxWindow )
     EVT_MOUSE_EVENTS( wxGridWindow::OnMouseEvent )
     EVT_KEY_DOWN( wxGridWindow::OnKeyDown )
     EVT_KEY_UP( wxGridWindow::OnKeyUp )
+    EVT_SET_FOCUS( wxGridWindow::OnFocus )
+    EVT_KILL_FOCUS( wxGridWindow::OnFocus )
     EVT_ERASE_BACKGROUND( wxGridWindow::OnEraseBackground )
 END_EVENT_TABLE()
 
@@ -3737,6 +3739,11 @@ void wxGridWindow::OnEraseBackground( wxEraseEvent& WXUNUSED(event) )
 {
 }
 
+void wxGridWindow::OnFocus(wxFocusEvent& event)
+{
+    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) )
+        event.Skip();
+}
 
 //////////////////////////////////////////////////////////////////////
 
