@@ -230,6 +230,7 @@ void wxPrintData::operator=(const wxPrintData& data)
     m_paperSize = data.m_paperSize;
     m_bin = data.m_bin;
     m_printMode = data.m_printMode;
+    m_filename = data.m_filename;   
     
     m_nativeData = data.GetNativeData();
     m_nativeData->m_ref++;

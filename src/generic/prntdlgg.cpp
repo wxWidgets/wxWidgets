@@ -301,7 +301,7 @@ void wxGenericPrintDialog::OnOK(wxCommandEvent& WXUNUSED(event))
     {
         m_printDialogData.GetPrintData().SetPrintMode(wxPRINT_MODE_PRINTER);
     }
-
+    
     EndModal(wxID_OK);
 }
 
@@ -397,10 +397,16 @@ bool wxGenericPrintDialog::TransferDataFromWindow()
         }
         if(m_rangeRadioBox)
         {
-           if (m_rangeRadioBox->GetSelection() == 0)
-              m_printDialogData.SetAllPages(true);
-           else
-              m_printDialogData.SetAllPages(false);
+            if (m_rangeRadioBox->GetSelection() == 0)
+            {
+                m_printDialogData.SetAllPages(true);
+                
+                // This means all pages, more or less
+                m_printDialogData.SetFromPage(1);
+                m_printDialogData.SetToPage(32000);
+            }
+            else
+                m_printDialogData.SetAllPages(false);
         }
     }
     else
@@ -417,11 +423,6 @@ bool wxGenericPrintDialog::TransferDataFromWindow()
 
     return true;
 }
-
-/*
-TODO: collate and noCopies should be duplicated across dialog data and print data objects
-(slightly different semantics on Windows but let's ignore this for a bit).
-*/
 
 wxDC *wxGenericPrintDialog::GetPrintDC()
 {
