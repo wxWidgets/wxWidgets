@@ -844,23 +844,23 @@ void wxFrame::Command(int id)
 
 void wxFrame::ProcessCommand(int id)
 {
-    wxCommandEvent commandEvent(wxEVENT_TYPE_MENU_COMMAND, id);
-    commandEvent.SetInt( id );
-    commandEvent.SetEventObject( this );
-    
-    wxMenuBar *bar = GetMenuBar() ;
-    if (!bar)
-        return;
-    
-        /* TODO: check the menu item if required
-        wxMenuItem *item = bar->FindItemForId(id) ;
-        if (item && item->IsCheckable())
-        {
-        bar->Check(id,!bar->Checked(id)) ;
-        }
-    */
-    
-    GetEventHandler()->ProcessEvent(commandEvent);
+  wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, id);
+  commandEvent.SetInt( id );
+  commandEvent.SetEventObject( this );
+
+  wxMenuBar *bar = GetMenuBar() ;
+  if (!bar)
+    return;
+
+/* TODO: check the menu item if required
+  wxMenuItem *item = bar->FindItemForId(id) ;
+  if (item && item->IsCheckable())
+  {
+    bar->Check(id,!bar->Checked(id)) ;
+  }
+*/
+
+  GetEventHandler()->ProcessEvent(commandEvent);
 }
 
 // Checks if there is a toolbar, and returns the first free client position

@@ -686,7 +686,7 @@ static void wxDialogBoxEventHandler (Widget    wid,
             // if this returns TRUE, set continueToDispatch to False
             // (don't continue processing).
             // Otherwise set it to True and call OnChar.
-            wxKeyEvent keyEvent(wxEVENT_TYPE_CHAR);
+            wxKeyEvent keyEvent(wxEVT_CHAR);
             if (wxTranslateKeyEvent(keyEvent, dialog, wid, event))
             {
                 keyEvent.SetEventObject(dialog);
