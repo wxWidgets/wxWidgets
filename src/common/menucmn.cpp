@@ -301,9 +301,12 @@ wxMenuItem *wxMenuBase::FindChildItem(int id, size_t *ppos) const
     size_t pos;
     for ( pos = 0; node; pos++ )
     {
-        item = node->GetData();
-        if ( item->GetId() == id )
+        if ( node->GetData()->GetId() == id )
+        {
+            item = node->GetData();
+
             break;
+        }
 
         node = node->GetNext();
     }
