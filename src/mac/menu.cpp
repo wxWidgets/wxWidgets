@@ -28,6 +28,7 @@
 #include "wx/window.h"
 #include "wx/log.h"
 #include "wx/utils.h"
+#include "wx/frame.h"
 
 #include "wx/mac/uma.h"
 
