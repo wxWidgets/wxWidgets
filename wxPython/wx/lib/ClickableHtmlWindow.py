@@ -2,6 +2,11 @@
 #
 # o Updated for wx namespace. Not tested though.
 #
+# 12/17/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Removed wx prefix from class name, 
+#   updated reverse renamer
+#
 
 """
 sorry no documentation...
@@ -12,7 +17,7 @@ Christopher J. Fama
 import  wx
 import  wx.html as  html
 
-class wxPyClickableHtmlWindow(html.HtmlWindow):
+class PyClickableHtmlWindow(html.HtmlWindow):
     """
     Class for a wxHtmlWindow which responds to clicks on links by opening a
     browser pointed at that link, and to shift-clicks by copying the link

@@ -6,4 +6,4 @@ import wx.lib.ClickableHtmlWindow
 
 __doc__ =  wx.lib.ClickableHtmlWindow.__doc__
 
-wxPyClickableHtmlWindow = wx.lib.ClickableHtmlWindow.wxPyClickableHtmlWindow
+wxPyClickableHtmlWindow = wx.lib.ClickableHtmlWindow.PyClickableHtmlWindow

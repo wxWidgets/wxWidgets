@@ -6,6 +6,10 @@ import wx.lib.calendar
 
 __doc__ =  wx.lib.calendar.__doc__
 
+wxEVT_COMMAND_PYCALENDAR_DAY_CLICKED = wx.lib.calendar.wxEVT_COMMAND_PYCALENDAR_DAY_CLICKED
+EVT_CALENDAR = wx.lib.calendar.EVT_CALENDAR
+
+
 Date = wx.lib.calendar.Date
 FillDate = wx.lib.calendar.FillDate
 FormatDay = wx.lib.calendar.FormatDay
@@ -27,5 +31,7 @@ CalDraw = wx.lib.calendar.CalDraw
 CalenDlg = wx.lib.calendar.CalenDlg
 GetMonthList = wx.lib.calendar.GetMonthList
 PrtCalDraw = wx.lib.calendar.PrtCalDraw
-wxCalendar = wx.lib.calendar.wxCalendar
+wxCalendar = wx.lib.calendar.Calendar
 
+wxEVT_COMMAND_PYCALENDAR_DAY_CLICKED = wx.lib.calendar.wxEVT_COMMAND_PYCALENDAR_DAY_CLICKED
+EVT_CALENDAR = wx.lib.calendar.EVT_CALENDAR
