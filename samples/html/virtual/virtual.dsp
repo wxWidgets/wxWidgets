@@ -1,10 +1,10 @@
-# Microsoft Developer Studio Project File - Name="virtual" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="htmlvirtual" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
-CFG=virtual - Win32 Debug
+CFG=htmlvirtual - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,14 +13,14 @@ CFG=virtual - Win32 Debug
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "virtual.mak" CFG="virtual - Win32 Debug"
+!MESSAGE NMAKE /f "virtual.mak" CFG="htmlvirtual - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "virtual - Win32 Release DLL" (based on "Win32 (x86) Application")
-!MESSAGE "virtual - Win32 Debug DLL" (based on "Win32 (x86) Application")
-!MESSAGE "virtual - Win32 Release" (based on "Win32 (x86) Application")
-!MESSAGE "virtual - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "htmlvirtual - Win32 Release DLL" (based on "Win32 (x86) Application")
+!MESSAGE "htmlvirtual - Win32 Debug DLL" (based on "Win32 (x86) Application")
+!MESSAGE "htmlvirtual - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "htmlvirtual - Win32 Debug" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -30,7 +30,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!ELSEIF "$(CFG)" == "virtual - Win32 Release DLL"
+!ELSEIF "$(CFG)" == "htmlvirtual - Win32 Release DLL"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -56,7 +56,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386 ../../..\lib\wxmsw232.lib
 
-!ELSEIF "$(CFG)" == "virtual - Win32 Debug DLL"
+!ELSEIF "$(CFG)" == "htmlvirtual - Win32 Debug DLL"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -82,7 +82,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept ../../..\lib\wxmsw232d.lib
 
-!ELSEIF "$(CFG)" == "virtual - Win32 Release"
+!ELSEIF "$(CFG)" == "htmlvirtual - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -108,7 +108,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386 ../../..\lib\zlib.lib ../../..\lib\regex.lib ../../..\lib\png.lib ../../..\lib\jpeg.lib ../../..\lib\tiff.lib ../../..\lib\wxmsw.lib
 
-!ELSEIF "$(CFG)" == "virtual - Win32 Debug"
+!ELSEIF "$(CFG)" == "htmlvirtual - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -138,10 +138,10 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "virtual - Win32 Release DLL"
-# Name "virtual - Win32 Debug DLL"
-# Name "virtual - Win32 Release"
-# Name "virtual - Win32 Debug"
+# Name "htmlvirtual - Win32 Release DLL"
+# Name "htmlvirtual - Win32 Debug DLL"
+# Name "htmlvirtual - Win32 Release"
+# Name "htmlvirtual - Win32 Debug"
 # Begin Source File
 
 SOURCE=.\virtual.cpp

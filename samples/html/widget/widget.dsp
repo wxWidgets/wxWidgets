@@ -1,10 +1,10 @@
-# Microsoft Developer Studio Project File - Name="widget" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="htmlwidget" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
-CFG=widget - Win32 Debug
+CFG=htmlwidget - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,14 +13,14 @@ CFG=widget - Win32 Debug
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "widget.mak" CFG="widget - Win32 Debug"
+!MESSAGE NMAKE /f "widget.mak" CFG="htmlwidget - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "widget - Win32 Release DLL" (based on "Win32 (x86) Application")
-!MESSAGE "widget - Win32 Debug DLL" (based on "Win32 (x86) Application")
-!MESSAGE "widget - Win32 Release" (based on "Win32 (x86) Application")
-!MESSAGE "widget - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "htmlwidget - Win32 Release DLL" (based on "Win32 (x86) Application")
+!MESSAGE "htmlwidget - Win32 Debug DLL" (based on "Win32 (x86) Application")
+!MESSAGE "htmlwidget - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "htmlwidget - Win32 Debug" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -30,7 +30,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!ELSEIF "$(CFG)" == "widget - Win32 Release DLL"
+!ELSEIF "$(CFG)" == "htmlwidget - Win32 Release DLL"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -56,7 +56,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386 ../../..\lib\wxmsw232.lib
 
-!ELSEIF "$(CFG)" == "widget - Win32 Debug DLL"
+!ELSEIF "$(CFG)" == "htmlwidget - Win32 Debug DLL"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -82,7 +82,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept ../../..\lib\wxmsw232d.lib
 
-!ELSEIF "$(CFG)" == "widget - Win32 Release"
+!ELSEIF "$(CFG)" == "htmlwidget - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -108,7 +108,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386 ../../..\lib\zlib.lib ../../..\lib\regex.lib ../../..\lib\png.lib ../../..\lib\jpeg.lib ../../..\lib\tiff.lib ../../..\lib\wxmsw.lib
 
-!ELSEIF "$(CFG)" == "widget - Win32 Debug"
+!ELSEIF "$(CFG)" == "htmlwidget - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -138,10 +138,10 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "widget - Win32 Release DLL"
-# Name "widget - Win32 Debug DLL"
-# Name "widget - Win32 Release"
-# Name "widget - Win32 Debug"
+# Name "htmlwidget - Win32 Release DLL"
+# Name "htmlwidget - Win32 Debug DLL"
+# Name "htmlwidget - Win32 Release"
+# Name "htmlwidget - Win32 Debug"
 # Begin Source File
 
 SOURCE=.\widget.cpp
