@@ -30,6 +30,7 @@
 #include "wx/tokenzr.h"
 #include "wx/notebook.h"
 #include "wx/list.h"
+#include "wx/datetime.h"
 #include <string.h>
 
 #if wxUSE_EXTENDED_RTTI
@@ -290,6 +291,21 @@ template<> void wxStringWriteValue(wxString & , wxSize * const & )
 
 WX_CUSTOM_TYPE_INFO(wxSize)
 
+template<> void wxStringReadValue(const wxString &s , wxDateTime &data )
+{
+    data.ParseFormat(s,wxT("%Y-%m-%d %H:%M:%S")) ;
+}
+
+template<> void wxStringWriteValue(wxString &s , const wxDateTime &data )
+{
+    s = data.Format(wxT("%Y-%m-%d %H:%M:%S")) ;
+}
+
+WX_CUSTOM_TYPE_INFO(wxDateTime)
+
+//
+// built-ins
+//
 
 template<> const wxTypeInfo* wxGetTypeInfo( void * )
 {
