@@ -244,14 +244,13 @@ void wxFileData::SetNewName( const wxString &name, const wxString &fname )
 void wxFileData::MakeItem( wxListItem &item )
 {
     item.m_text = m_name;
-    item.m_colour = wxBLACK;
-    if (IsExe()) item.m_colour = wxRED;
-    if (IsDir()) item.m_colour = wxBLUE;
-    if (IsDir()) item.m_image = 0; else item.m_image = -1;
+    if (IsExe()) item.SetTextColour(*wxRED);
+    if (IsDir()) item.SetTextColour(*wxBLUE);
+    item.m_image = IsDir() ? 0 : -1;
     if (IsLink())
     {
         wxColour *dg = wxTheColourDatabase->FindColour( "MEDIUM GREY" );
-        item.m_colour = dg;
+        item.SetTextColour(*dg);
     }
     item.m_data = (long)this;
 }

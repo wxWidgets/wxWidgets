@@ -48,7 +48,7 @@ wxListItemData::wxListItemData( const wxListItem &info )
 {
     m_image = -1;
     m_data = 0;
-    m_colour = info.m_colour;
+    m_colour = (wxColour *)&info.GetTextColour();
     SetItem( info );
 }
 
@@ -57,7 +57,7 @@ void wxListItemData::SetItem( const wxListItem &info )
     if (info.m_mask & wxLIST_MASK_TEXT) m_text = info.m_text;
     if (info.m_mask & wxLIST_MASK_IMAGE) m_image = info.m_image;
     if (info.m_mask & wxLIST_MASK_DATA) m_data = info.m_data;
-    m_colour = info.m_colour;
+    m_colour = (wxColour *)&info.GetTextColour();
     m_xpos = 0;
     m_ypos = 0;
     m_width = info.m_width;
@@ -146,7 +146,7 @@ void wxListItemData::GetItem( wxListItem &info )
     info.m_text = m_text;
     info.m_image = m_image;
     info.m_data = m_data;
-    info.m_colour = m_colour;
+    info.SetTextColour(*m_colour);
 }
 
 wxColour *wxListItemData::GetColour()
@@ -1302,7 +1302,7 @@ void wxListMainWindow::OnRenameAccept()
     info.m_mask = wxLIST_MASK_TEXT;
     info.m_itemId = le.m_itemIndex;
     info.m_text = m_renameRes;
-    info.m_colour = le.m_item.GetTextColour();
+    info.SetTextColour(le.m_item.GetTextColour());
     SetItem( info );
 }
 
@@ -2528,7 +2528,8 @@ wxListItem::wxListItem()
     m_data = 0;
     m_format = wxLIST_FORMAT_CENTRE;
     m_width = 0;
-    m_colour = wxBLACK;
+
+    m_attr = NULL;
 }
 
 // -------------------------------------------------------------------------------------
@@ -2571,7 +2572,11 @@ void wxListEvent::CopyObject(wxObject& object_dest) const
     obj->m_item.m_data = m_item.m_data;
     obj->m_item.m_format = m_item.m_format;
     obj->m_item.m_width = m_item.m_width;
-    obj->m_item.m_colour = m_item.m_colour;
+
+    if ( m_item.HasAttributes() )
+    {
+        obj->m_item.SetTextColour(m_item.GetTextColour());
+    }
 }
 
 // -------------------------------------------------------------------------------------
