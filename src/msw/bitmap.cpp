@@ -1185,14 +1185,12 @@ void wxBitmap::SetQuality(int WXUNUSED(quality))
 // raw bitmap access support
 // ----------------------------------------------------------------------------
 
-bool wxBitmap::GetRawData(wxRawBitmapData *data)
+void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 {
-    wxCHECK_MSG( data, FALSE, _T("NULL pointer in wxBitmap::GetRawData") );
-
     if ( !Ok() )
     {
         // no bitmap, no data (raw or otherwise)
-        return FALSE;
+        return NULL;
     }
 
     // if we're already a DIB we can access our data directly, but if not we
@@ -1209,7 +1207,7 @@ bool wxBitmap::GetRawData(wxRawBitmapData *data)
         {
             delete dib;
 
-            return FALSE;
+            return NULL;
         }
 
         // we'll free it in UngetRawData()
@@ -1227,79 +1225,94 @@ bool wxBitmap::GetRawData(wxRawBitmapData *data)
     {
         wxFAIL_MSG( _T("failed to get DIBSECTION from a DIB?") );
 
-        return FALSE;
+        return NULL;
     }
 
-    // ok, store the relevant info in wxRawBitmapData
+    // check that the bitmap is in correct format
+    if ( ds.dsBm.bmBitsPixel != bpp )
+    {
+        wxFAIL_MSG( _T("incorrect bitmap type in wxBitmap::GetRawData()") );
+
+        return NULL;
+    }
+
+    // ok, store the relevant info in wxPixelDataBase
     const LONG h = ds.dsBm.bmHeight;
 
-    data->m_width = ds.dsBm.bmWidth;
-    data->m_height = h;
-    data->m_bypp = ds.dsBm.bmBitsPixel / 8;
+    data.m_width = ds.dsBm.bmWidth;
+    data.m_height = h;
 
     // remember that DIBs are stored in top to bottom order!
     const LONG bytesPerRow = ds.dsBm.bmWidthBytes;
-    data->m_stride = -bytesPerRow;
-    data->m_pixels = (unsigned char *)ds.dsBm.bmBits;
+    data.m_stride = -bytesPerRow;
+
+    char *bits = (char *)ds.dsBm.bmBits;
     if ( h > 1 )
     {
-        data->m_pixels += (h - 1)*bytesPerRow;
+        bits += (h - 1)*bytesPerRow;
     }
 
-    return TRUE;
+    return bits;
 }
 
-void wxBitmap::UngetRawData(wxRawBitmapData *data)
+void wxBitmap::UngetRawData(wxPixelDataBase& dataBase)
 {
-    wxCHECK_RET( data, _T("NULL pointer in wxBitmap::UngetRawData()") );
-
     if ( !Ok() )
         return;
 
-    if ( !*data )
+    // the cast is ugly but we can't do without it and without making this
+    // function template (and hence inline) unfortunately
+    typedef wxPixelData<wxBitmap, wxAlphaPixelFormat> PixelData;
+    PixelData& data = (PixelData &)dataBase;
+
+    if ( !data )
     {
         // invalid data, don't crash -- but don't assert neither as we're
-        // called automatically from wxRawBitmapData dtor and so there is no
+        // called automatically from wxPixelDataBase dtor and so there is no
         // way to prevent this from happening
         return;
     }
 
-    // AlphaBlend() wants to have premultiplied source alpha but wxRawBitmap
-    // API uses normal, not premultiplied, colours, so adjust them here now
-    wxRawBitmapIterator p(*data);
-
-    const int w = data->GetWidth();
-    const int h = data->GetHeight();
-
-    for ( int y = 0; y < h; y++ )
+    if ( GetBitmapData()->m_hasAlpha )
     {
-        wxRawBitmapIterator rowStart = p;
+        // AlphaBlend() wants to have premultiplied source alpha but
+        // wxRawBitmap API uses normal, not premultiplied, colours, so adjust
+        // them here now
+        PixelData::Iterator p(data);
 
-        for ( int x = 0; x < w; x++ )
+        const int w = data.GetWidth();
+        const int h = data.GetHeight();
+
+        for ( int y = 0; y < h; y++ )
         {
-            const unsigned alpha = p.Alpha();
+            PixelData::Iterator rowStart = p;
 
-            p.Red() = (p.Red() * alpha + 127) / 255;
-            p.Blue() = (p.Blue() * alpha + 127) / 255;
-            p.Green() = (p.Green() * alpha + 127) / 255;
+            for ( int x = 0; x < w; x++ )
+            {
+                const unsigned alpha = p.Alpha();
 
-            ++p;
+                p.Red() = (p.Red() * alpha + 127) / 255;
+                p.Blue() = (p.Blue() * alpha + 127) / 255;
+                p.Green() = (p.Green() * alpha + 127) / 255;
+
+                ++p;
+            }
+
+            p = rowStart;
+            p.OffsetY(data, 1);
         }
 
-        p = rowStart;
-        p.OffsetY(1);
-    }
+        // if we're a DDB we need to convert DIB back to DDB now to make the
+        // changes made via raw bitmap access effective
+        if ( !GetBitmapData()->m_isDIB )
+        {
+            wxDIB *dib = GetBitmapData()->m_dib;
+            GetBitmapData()->m_dib = NULL;
 
-    // if we're a DDB we need to convert DIB back to DDB now to make the
-    // changes made via wxRawBitmapData effective
-    if ( !GetBitmapData()->m_isDIB )
-    {
-        wxDIB *dib = GetBitmapData()->m_dib;
-        GetBitmapData()->m_dib = NULL;
+            // TODO: convert
 
-        // TODO: convert
-
-        delete dib;
+            delete dib;
+        }
     }
 }
 

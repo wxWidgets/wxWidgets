@@ -31,7 +31,7 @@ class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxImage;
 class WXDLLEXPORT wxMask;
 class WXDLLEXPORT wxPalette;
-class WXDLLEXPORT wxRawBitmapData;
+class WXDLLEXPORT wxPixelDataBase;
 
 // ----------------------------------------------------------------------------
 // wxBitmap: a mono or colour bitmap
@@ -132,8 +132,8 @@ public:
         { return (wxBitmapRefData *)m_refData; }
 
     // raw bitmap access support functions
-    bool GetRawData(wxRawBitmapData *data);
-    void UngetRawData(wxRawBitmapData *);
+    void *GetRawData(wxPixelDataBase& data, int bpp);
+    void UngetRawData(wxPixelDataBase& data);
 
 #if wxUSE_PALETTE
     wxPalette* GetPalette() const;

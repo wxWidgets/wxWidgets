@@ -2313,19 +2313,19 @@ wxAlphaBlend(wxDC& dc, int xDst, int yDst, int w, int h, const wxBitmap& bmpSrc)
     }
 
     // combine them with the source bitmap using alpha
-    wxRawBitmapData dataDst(bmpDst),
-                    dataSrc(bmpSrc);
+    wxAlphaPixelData dataDst(bmpDst),
+                     dataSrc(bmpSrc);
 
     wxCHECK_RET( dataDst && dataSrc,
                     _T("failed to get raw data in wxAlphaBlend") );
 
-    wxRawBitmapIterator pDst(dataDst),
-                        pSrc(dataSrc);
+    wxAlphaPixelData::Iterator pDst(dataDst),
+                               pSrc(dataSrc);
 
     for ( int y = 0; y < h; y++ )
     {
-        wxRawBitmapIterator pDstRowStart = pDst,
-                            pSrcRowStart = pSrc;
+        wxAlphaPixelData::Iterator pDstRowStart = pDst,
+                                   pSrcRowStart = pSrc;
 
         for ( int x = 0; x < w; x++ )
         {
@@ -2343,8 +2343,8 @@ wxAlphaBlend(wxDC& dc, int xDst, int yDst, int w, int h, const wxBitmap& bmpSrc)
 
         pDst = pDstRowStart;
         pSrc = pSrcRowStart;
-        pDst.OffsetY(1);
-        pSrc.OffsetY(1);
+        pDst.OffsetY(dataDst, 1);
+        pSrc.OffsetY(dataSrc, 1);
     }
 
     // and finally blit them back to the destination DC
