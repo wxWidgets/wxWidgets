@@ -2,8 +2,8 @@
 // Name:        data.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $id$
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Id:          $Id$
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -2,9 +2,8 @@
 // Name:        dcmemory.h
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -29,7 +28,7 @@ class wxMemoryDC;
 // wxMemoryDC
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMemoryDC: public wxPaintDC
+class wxMemoryDC: public wxPaintDC
 {
   DECLARE_DYNAMIC_CLASS(wxMemoryDC)
 

@@ -119,6 +119,7 @@ wxPaintDC::wxPaintDC( wxWindow *window )
 
 wxPaintDC::~wxPaintDC(void)
 {
+  Destroy();
 }
 
 void wxPaintDC::FloodFill( long WXUNUSED(x1), long WXUNUSED(y1), 
@@ -827,15 +828,12 @@ void wxPaintDC::DestroyClippingRegion(void)
 
 void wxPaintDC::SetUpDC(void)
 {
+  Destroy();
   m_ok = TRUE;
   m_logicalFunction = wxCOPY;
-  if (m_penGC) gdk_gc_unref( m_penGC );
   m_penGC = gdk_gc_new( m_window );
-  if (m_brushGC) gdk_gc_unref( m_brushGC );
   m_brushGC = gdk_gc_new( m_window );
-  if (m_textGC) gdk_gc_unref( m_textGC );
   m_textGC = gdk_gc_new( m_window );
-  if (m_bgGC) gdk_gc_unref( m_bgGC );
   m_bgGC = gdk_gc_new( m_window );
   SetTextForeground( m_textForegroundColour );
   SetTextBackground( m_textBackgroundColour );
@@ -855,6 +853,18 @@ void wxPaintDC::SetUpDC(void)
     hatch_bitmap[4] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, horiz_bits, horiz_width, horiz_height );
     hatch_bitmap[5] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, verti_bits, verti_width, verti_height );
   }
+}
+
+void wxPaintDC::Destroy(void)
+{
+  if (m_penGC) gdk_gc_unref( m_penGC );
+  m_penGC = (GdkGC*) NULL;
+  if (m_brushGC) gdk_gc_unref( m_brushGC );
+  m_brushGC = (GdkGC*) NULL;
+  if (m_textGC) gdk_gc_unref( m_textGC );
+  m_textGC = (GdkGC*) NULL;
+  if (m_bgGC) gdk_gc_unref( m_bgGC );
+  m_bgGC = (GdkGC*) NULL;
 }
 
 GdkWindow *wxPaintDC::GetWindow(void)

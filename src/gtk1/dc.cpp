@@ -3,7 +3,7 @@
 // Purpose:
 // Author:      Robert Roebling
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Copyright:   (c) 1998 Robert Roebling, Markus Holzem
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

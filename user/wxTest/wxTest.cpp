@@ -28,6 +28,7 @@
 
 #include "folder.xpm"
 #include "list.xpm"
+#include "test.xpm"
 
 //-----------------------------------------------------------------------------
 // main program
@@ -324,8 +325,7 @@ MyCanvas::MyCanvas( wxWindow *parent, const wxWindowID id, const wxPoint &pos, c
   : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER ) 
 {
   my_bitmap = new wxBitmap( folder_xpm );
-//  my_horse = new wxBitmap();
-//  my_horse->LoadFile( "horse.png", 0 );
+  my_horse = new wxBitmap( test_xpm);
   my_backstore = new wxBitmap( 150, 150 );
   my_font = new wxFont( 20, wxROMAN, wxNORMAL, wxNORMAL );
   m_isCreated = FALSE;
@@ -337,7 +337,7 @@ MyCanvas::~MyCanvas(void)
 {
   delete my_bitmap;
   delete my_backstore;
-//  delete my_horse;
+  delete my_horse;
   delete my_font;
 };
 
@@ -387,7 +387,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
   dc.DrawText( "Hej, ho, hej, ho. (ItalicFont)", 80, 100 );
   
   dc.DrawBitmap( *my_bitmap, 30, 80, TRUE );
-//  dc.DrawBitmap( *my_horse, 30, 120 );
+  dc.DrawBitmap( *my_horse, 30, 120 );
   
   dc.Blit( 200, 200, 150, 150, &memDC, 0, 0, 0 );
   

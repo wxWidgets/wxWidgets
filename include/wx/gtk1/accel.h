@@ -1,9 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        accel.h
 // Purpose:     wxAcceleratorTable class
-// Author:      Robert
-// Modified by:
-// RCS-ID:      $id$
+// Author:      Robert Roebling
+// RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
