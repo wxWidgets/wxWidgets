@@ -68,7 +68,7 @@ bool wxVListBox::Create(wxWindow *parent,
                         long style,
                         const wxString& name)
 {
-    style |= wxWANTS_CHARS;
+    style |= wxWANTS_CHARS | wxFULL_REPAINT_ON_RESIZE;
     if ( !wxVScrolledWindow::Create(parent, id, pos, size, style, name) )
         return false;
 
