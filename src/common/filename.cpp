@@ -1689,29 +1689,52 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
 #ifdef __WXMAC__
 
 const short kMacExtensionMaxLength = 16 ;
-typedef struct
+class MacDefaultExtensionRecord
 {
+public :
+  MacDefaultExtensionRecord()
+  {
+    m_ext[0] = 0 ;
+    m_type = m_creator = NULL ;
+  }
+  MacDefaultExtensionRecord( const MacDefaultExtensionRecord& from )
+  {
+    strcpy( m_ext , from.m_ext ) ;
+    m_type = from.m_type ;
+    m_creator = from.m_creator ;
+  }
+  MacDefaultExtensionRecord( char * extension , OSType type , OSType creator )
+  {
+    strncpy( m_ext , extension , kMacExtensionMaxLength ) ;
+    m_ext[kMacExtensionMaxLength] = 0 ;
+    m_type = type ;
+    m_creator = creator ;
+  }
   char m_ext[kMacExtensionMaxLength] ;
   OSType m_type ;
   OSType m_creator ;
-} MacDefaultExtensionRecord ;
+}  ;
 
 #include "wx/dynarray.h"
 WX_DECLARE_OBJARRAY(MacDefaultExtensionRecord, MacDefaultExtensionArray) ;
+
+bool gMacDefaultExtensionsInited = false ;
+
 #include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(MacDefaultExtensionArray) ;
+
+WX_DEFINE_EXPORTED_OBJARRAY(MacDefaultExtensionArray) ;
 
 MacDefaultExtensionArray gMacDefaultExtensions ;
-bool gMacDefaultExtensionsInited = false ;
 
 static void MacEnsureDefaultExtensionsLoaded()
 {
   if ( !gMacDefaultExtensionsInited )
   {
+    
     // load the default extensions
-    MacDefaultExtensionRecord defaults[] =
+    MacDefaultExtensionRecord defaults[1] =
     {
-      { "txt" , 'TEXT' , 'ttxt' } ,
+      MacDefaultExtensionRecord( "txt" , 'TEXT' , 'ttxt' ) ,
 
     } ;
     // we could load the pc exchange prefs here too
