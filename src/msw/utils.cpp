@@ -104,7 +104,7 @@
 // ----------------------------------------------------------------------------
 
 // In the WIN.INI file
-static const wxChar WX_SECTION[] = wxT("wxWidgets");
+static const wxChar WX_SECTION[] = wxT("wxWindows");
 static const wxChar eUSERNAME[]  = wxT("UserName");
 
 // ============================================================================

@@ -28,7 +28,7 @@
 bool wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file )
 {
     wxString filename( file );
-    if (filename.IsEmpty()) filename = wxT(".wxWidgets");
+    if (filename.IsEmpty()) filename = wxT(".wxWindows");
     
     wxFileConfig conf( wxTheApp->GetAppName(), wxTheApp->GetVendorName(), filename );
     
@@ -64,7 +64,7 @@ bool wxWriteResource(const wxString& section, const wxString& entry, int value, 
 bool wxGetResource(const wxString& section, const wxString& entry, wxChar **value, const wxString& file )
 {
     wxString filename( file );
-    if (filename.IsEmpty()) filename = wxT(".wxWidgets");
+    if (filename.IsEmpty()) filename = wxT(".wxWindows");
 
     wxFileConfig conf( wxTheApp->GetAppName(), wxTheApp->GetVendorName(), filename );
 

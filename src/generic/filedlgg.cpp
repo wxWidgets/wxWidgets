@@ -873,9 +873,9 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
 
     if (wxConfig::Get(FALSE))
     {
-        wxConfig::Get()->Read(wxT("/wxWidgets/wxFileDialog/ViewStyle"),
+        wxConfig::Get()->Read(wxT("/wxWindows/wxFileDialog/ViewStyle"),
                               &ms_lastViewStyle);
-        wxConfig::Get()->Read(wxT("/wxWidgets/wxFileDialog/ShowHidden"),
+        wxConfig::Get()->Read(wxT("/wxWindows/wxFileDialog/ShowHidden"),
                               &ms_lastShowHidden);
     }
 
@@ -1037,9 +1037,9 @@ wxGenericFileDialog::~wxGenericFileDialog()
 {
     if (wxConfig::Get(FALSE))
     {
-        wxConfig::Get()->Write(wxT("/wxWidgets/wxFileDialog/ViewStyle"),
+        wxConfig::Get()->Write(wxT("/wxWindows/wxFileDialog/ViewStyle"),
                                ms_lastViewStyle);
-        wxConfig::Get()->Write(wxT("/wxWidgets/wxFileDialog/ShowHidden"),
+        wxConfig::Get()->Write(wxT("/wxWindows/wxFileDialog/ShowHidden"),
                                ms_lastShowHidden);
     }
 
