@@ -1098,9 +1098,60 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
   {
     m_usedKeys = FALSE;
     wxListLineData *oldCurrent = m_current;
-    m_current = line;
-    if (!event.ShiftDown() || (m_mode & wxLC_SINGLE_SEL)) HilightAll( FALSE );
-    m_current->ReverseHilight();
+    if (m_mode & wxLC_SINGLE_SEL)
+    {
+      m_current = line;
+      HilightAll( FALSE );
+      m_current->ReverseHilight();
+    }
+    else
+    {
+      if (event.ShiftDown())
+      {
+        m_current = line;
+        m_current->ReverseHilight();
+      }
+      else if (event.ControlDown())
+      {
+        m_current = line;
+        int numOfCurrent = -1;
+        node = m_lines.First();
+        while (node)
+        {
+          wxListLineData *test_line = (wxListLineData*)node->Data();
+	  numOfCurrent++;
+	  if (test_line == oldCurrent) break;
+          node = node->Next();
+        };
+        int numOfLine = -1;
+        node = m_lines.First();
+        while (node)
+        {
+          wxListLineData *test_line = (wxListLineData*)node->Data();
+	  numOfLine++;
+	  if (test_line == line) break;
+          node = node->Next();
+        };
+	
+	if (numOfLine < numOfCurrent) 
+	  { int i = numOfLine; numOfLine = numOfCurrent; numOfCurrent = i; }
+	wxNode *node = m_lines.Nth( numOfCurrent );
+	for (int i = 0; i <= numOfLine-numOfCurrent; i++)
+	{
+	  wxListLineData *test_line= (wxListLineData*)node->Data();
+	  test_line->Hilight(TRUE);
+	  RefreshLine( test_line );
+	  node = node->Next();
+	}
+	return;
+      }
+      else 
+      {
+        m_current = line;
+        HilightAll( FALSE );
+        m_current->ReverseHilight();
+      }
+    }
     RefreshLine( m_current );
     if (m_current != oldCurrent)
     {
@@ -1248,6 +1299,12 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
       };
       break;
     };
+    case WXK_SPACE:
+    {
+      m_current->ReverseHilight();
+      RefreshLine( m_current );
+    };
+    break;
     case WXK_INSERT:
     {
       if (!(m_mode & wxLC_SINGLE_SEL))

@@ -121,7 +121,7 @@ MyFrame::MyFrame(void) :
   SetStatusText( "Welcome", 0 );
   SetStatusText( "wxFile v0.2 by Robert Roebling.", 1 );
   
-  wxToolBar *m_tb = CreateToolBar( ID_TOOLBAR );
+  wxToolBar *m_tb = CreateToolBar();
   m_tb->SetMargins( 2, 2 );
   
   m_tb->AddSeparator();
@@ -148,7 +148,7 @@ MyFrame::MyFrame(void) :
   m_tb->AddSeparator();
   m_tb->AddTool( ID_ABOUT, wxBitmap( help_xpm ), wxNullBitmap, FALSE, -1, -1, NULL, "About wxFile" );
   
-  m_tb->Layout();
+  m_tb->Realize();
   
   m_splitter = new wxSplitterWindow( this, -1, wxPoint(0,0), wxSize(400,300), wxSP_3D );
   
