@@ -252,6 +252,20 @@
    }
 #endif
 
+// LoadIcon
+#ifdef LoadIcon
+    #undef LoadIcon
+    inline HINSTANCE LoadIcon(HINSTANCE hInstance, LPCTSTR lpIconName)
+    {
+        #ifdef _UNICODE
+            return LoadIconW(hInstance, lpIconName);
+        #else // ANSI
+            return LoadIconA(hInstance, lpIconName);
+        #endif // Unicode/ANSI
+    }
+#endif // LoadIcon
+
+
 // LoadLibrary
 
 #ifdef LoadLibrary
