@@ -29,6 +29,7 @@
     #include "wx/app.h"
     #include "wx/log.h"
 
+    #include "wx/bitmap.h"
     #include "wx/button.h"
     #include "wx/checkbox.h"
 
