@@ -58,7 +58,7 @@ Constructor. Use \helpref{wxFileDialog::ShowModal}{wxfiledialogshowmodal} to sho
 
 \docparam{defaultFile}{The default filename, or the empty string.}
 
-\docparam{wildcard}{A wildcard, such as ``*.*".}
+\docparam{wildcard}{A wildcard, such as ``*.*" or ``BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".}
 
 \docparam{style}{A dialog style. A bitlist of:
 
@@ -189,7 +189,9 @@ Sets the dialog style. See \helpref{wxFileDialog::wxFileDialog}{wxfiledialogcons
 
 \func{void}{SetWildcard}{\param{const wxString\& }{wildCard}}
 
-Sets the wildcard, which in Windows can contain multiple file types.
+Sets the wildcard, which can contain multiple file types, for example:
+
+``BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
 
 \membersection{wxFileDialog::ShowModal}\label{wxfiledialogshowmodal}
 
