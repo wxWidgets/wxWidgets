@@ -52,7 +52,7 @@ BEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)
     EVT_IDLE(wxSplitterWindow::OnIdle)
     EVT_MOUSE_EVENTS(wxSplitterWindow::OnMouseEvent)
 
-#ifdef __WXMSW__
+#if defined( __WXMSW__ ) || defined( __WXMAC__)
     EVT_SET_CURSOR(wxSplitterWindow::OnSetCursor)
 #endif // wxMSW
 
@@ -1087,7 +1087,7 @@ void wxSplitterWindow::OnUnsplit(wxWindow *winRemoved)
     (void)DoSendEvent(event);
 }
 
-#ifdef __WXMSW__
+#if defined( __WXMSW__ ) || defined( __WXMAC__)
 
 // this is currently called (and needed) under MSW only...
 void wxSplitterWindow::OnSetCursor(wxSetCursorEvent& event)

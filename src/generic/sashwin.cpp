@@ -46,7 +46,7 @@ BEGIN_EVENT_TABLE(wxSashWindow, wxWindow)
     EVT_PAINT(wxSashWindow::OnPaint)
     EVT_SIZE(wxSashWindow::OnSize)
     EVT_MOUSE_EVENTS(wxSashWindow::OnMouseEvent)
-#ifdef __WXMSW__
+#if defined( __WXMSW__ ) || defined( __WXMAC__)
     EVT_SET_CURSOR(wxSashWindow::OnSetCursor)
 #endif // wxMSW
 
@@ -702,7 +702,7 @@ void wxSashWindow::SetSashVisible(wxSashEdgePosition edge, bool sash)
         m_sashes[edge].m_margin = 0;
 }
 
-#ifdef __WXMSW__
+#if defined( __WXMSW__ ) || defined( __WXMAC__)
 
 // this is currently called (and needed) under MSW only...
 void wxSashWindow::OnSetCursor(wxSetCursorEvent& event)
