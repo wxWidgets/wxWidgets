@@ -43,10 +43,37 @@
 
 IMPLEMENT_APP(MyApp)
 
+BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+    EVT_PAINT(MyCanvas::OnPaint)
+END_EVENT_TABLE()
+
+BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_MENU(DIALOGS_CHOOSE_COLOUR,                 MyFrame::ChooseColour)
+    EVT_MENU(DIALOGS_CHOOSE_FONT,                   MyFrame::ChooseFont)
+    EVT_MENU(DIALOGS_LOG_DIALOG,                    MyFrame::LogDialog)
+    EVT_MENU(DIALOGS_MESSAGE_BOX,                   MyFrame::MessageBox)
+    EVT_MENU(DIALOGS_TEXT_ENTRY,                    MyFrame::TextEntry)
+    EVT_MENU(DIALOGS_PASSWORD_ENTRY,                MyFrame::PasswordEntry)
+    EVT_MENU(DIALOGS_NUM_ENTRY,                     MyFrame::NumericEntry)
+    EVT_MENU(DIALOGS_SINGLE_CHOICE,                 MyFrame::SingleChoice)
+    EVT_MENU(DIALOGS_FILE_OPEN,                     MyFrame::FileOpen)
+    EVT_MENU(DIALOGS_FILES_OPEN,                    MyFrame::FilesOpen)
+    EVT_MENU(DIALOGS_FILE_SAVE,                     MyFrame::FileSave)
+    EVT_MENU(DIALOGS_DIR_CHOOSE,                    MyFrame::DirChoose)
+    EVT_MENU(DIALOGS_MODELESS,                      MyFrame::ModelessDlg)
+    EVT_MENU(DIALOGS_TIP,                           MyFrame::ShowTip)
+#if defined(__WXMSW__) && wxTEST_GENERIC_DIALOGS_IN_MSW
+    EVT_MENU(DIALOGS_CHOOSE_COLOUR_GENERIC,         MyFrame::ChooseColourGeneric)
+    EVT_MENU(DIALOGS_CHOOSE_FONT_GENERIC,           MyFrame::ChooseFontGeneric)
+#endif
+    EVT_MENU(wxID_EXIT,                             MyFrame::OnExit)
+
+    EVT_BUTTON(DIALOGS_MODELESS_BTN,                MyFrame::OnButton)
+END_EVENT_TABLE()
 MyCanvas *myCanvas = (MyCanvas *) NULL;
 
 // `Main program' equivalent, creating windows and returning main app frame
-bool MyApp::OnInit(void)
+bool MyApp::OnInit()
 {
 #if defined(__WXGTK__) && defined(wxUSE_UNICODE)
   wxConvCurrent = &wxConvLibc;
@@ -80,14 +107,16 @@ bool MyApp::OnInit(void)
   file_menu->Append(DIALOGS_TEXT_ENTRY,  "Text &entry\tCtrl-E");
   file_menu->Append(DIALOGS_PASSWORD_ENTRY,  "&Password entry\tCtrl-P");
   file_menu->Append(DIALOGS_NUM_ENTRY, "&Numeric entry\tCtrl-N");
-  file_menu->Append(DIALOGS_SINGLE_CHOICE,  "&Single choice\tCtrl-S");
+  file_menu->Append(DIALOGS_SINGLE_CHOICE,  "&Single choice\tCtrl-C");
   file_menu->AppendSeparator();
   file_menu->Append(DIALOGS_TIP,  "&Tip of the day\tCtrl-T");
   file_menu->AppendSeparator();
   file_menu->Append(DIALOGS_FILE_OPEN,  "&Open file\tCtrl-O");
   file_menu->Append(DIALOGS_FILES_OPEN,  "Open &files\tCtrl-Q");
-  file_menu->Append(DIALOGS_FILE_SAVE,  "Sa&ve file");
+  file_menu->Append(DIALOGS_FILE_SAVE,  "Sa&ve file\tCtrl-S");
   file_menu->Append(DIALOGS_DIR_CHOOSE,  "&Choose a directory\tCtrl-D");
+  file_menu->AppendSeparator();
+  file_menu->Append(DIALOGS_MODELESS, "Modeless &dialog\tCtrl-Z", "", TRUE);
   file_menu->AppendSeparator();
   file_menu->Append(wxID_EXIT, "E&xit\tAlt-X");
   wxMenuBar *menu_bar = new wxMenuBar;
@@ -108,9 +137,14 @@ bool MyApp::OnInit(void)
 }
 
 // My frame constructor
-MyFrame::MyFrame(wxWindow *parent, const wxString& title, const wxPoint& pos, const wxSize& size):
-  wxFrame(parent, -1, title, pos, size)
-{}
+MyFrame::MyFrame(wxWindow *parent,
+                 const wxString& title,
+                 const wxPoint& pos,
+                 const wxSize& size)
+       : wxFrame(parent, -1, title, pos, size)
+{
+    m_dialog = (MyModelessDialog *)NULL;
+}
 
 void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event) )
 {
@@ -360,6 +394,31 @@ void MyFrame::DirChoose(wxCommandEvent& WXUNUSED(event) )
     }
 }
 
+void MyFrame::ModelessDlg(wxCommandEvent& event)
+{
+    bool show = GetMenuBar()->IsChecked(event.GetInt());
+
+    if ( show )
+    {
+        if ( !m_dialog )
+        {
+            m_dialog = new MyModelessDialog(this);
+        }
+
+        m_dialog->Show(TRUE);
+    }
+    else // hide
+    {
+        m_dialog->Hide();
+    }
+}
+
+void MyFrame::OnButton(wxCommandEvent& WXUNUSED(event))
+{
+    wxMessageBox("Button pressed in modeless dialog", "Info",
+                 wxOK | wxICON_INFORMATION, this);
+}
+
 void MyFrame::ShowTip(wxCommandEvent& event)
 {
 #if wxUSE_STARTUP_TIPS
@@ -403,28 +462,14 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event) )
     dc.DrawText("wxWindows common dialogs test application", 10, 10);
 }
 
-BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
-    EVT_PAINT(MyCanvas::OnPaint)
-END_EVENT_TABLE()
+// ----------------------------------------------------------------------------
+// MyModelessDialog
+// ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(DIALOGS_CHOOSE_COLOUR,                 MyFrame::ChooseColour)
-    EVT_MENU(DIALOGS_CHOOSE_FONT,                   MyFrame::ChooseFont)
-    EVT_MENU(DIALOGS_LOG_DIALOG,                    MyFrame::LogDialog)
-    EVT_MENU(DIALOGS_MESSAGE_BOX,                   MyFrame::MessageBox)
-    EVT_MENU(DIALOGS_TEXT_ENTRY,                    MyFrame::TextEntry)
-    EVT_MENU(DIALOGS_PASSWORD_ENTRY,                MyFrame::PasswordEntry)
-    EVT_MENU(DIALOGS_NUM_ENTRY,                     MyFrame::NumericEntry)
-    EVT_MENU(DIALOGS_SINGLE_CHOICE,                 MyFrame::SingleChoice)
-    EVT_MENU(DIALOGS_FILE_OPEN,                     MyFrame::FileOpen)
-    EVT_MENU(DIALOGS_FILES_OPEN,                    MyFrame::FilesOpen)
-    EVT_MENU(DIALOGS_FILE_SAVE,                     MyFrame::FileSave)
-    EVT_MENU(DIALOGS_DIR_CHOOSE,                    MyFrame::DirChoose)
-    EVT_MENU(DIALOGS_TIP,                           MyFrame::ShowTip)
-#if defined(__WXMSW__) && wxTEST_GENERIC_DIALOGS_IN_MSW
-    EVT_MENU(DIALOGS_CHOOSE_COLOUR_GENERIC,         MyFrame::ChooseColourGeneric)
-    EVT_MENU(DIALOGS_CHOOSE_FONT_GENERIC,           MyFrame::ChooseFontGeneric)
-#endif
-    EVT_MENU(wxID_EXIT,                             MyFrame::OnExit)
-END_EVENT_TABLE()
-
+MyModelessDialog::MyModelessDialog(wxWindow *parent)
+                : wxDialog(parent, -1, wxString("Modeless dialog"))
+{
+    (void)new wxButton(this, DIALOGS_MODELESS_BTN, "Press me");
+    Fit();
+    Centre();
+}

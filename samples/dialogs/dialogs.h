@@ -22,6 +22,13 @@ public:
     wxColour     m_canvasTextColour;
 };
 
+// A modeless dialog
+class MyModelessDialog : public wxDialog
+{
+public:
+    MyModelessDialog(wxWindow *parent);
+};
+
 // Define a new frame type
 class MyFrame: public wxFrame
 {
@@ -42,6 +49,7 @@ public:
     void FileSave(wxCommandEvent& event);
     void DirChoose(wxCommandEvent& event);
     void ShowTip(wxCommandEvent& event);
+    void ModelessDlg(wxCommandEvent& event);
 
 #if !defined(__WXMSW__) || wxTEST_GENERIC_DIALOGS_IN_MSW
     void ChooseColourGeneric(wxCommandEvent& event);
@@ -50,7 +58,12 @@ public:
 
     void OnExit(wxCommandEvent& event);
 
-  DECLARE_EVENT_TABLE()
+    void OnButton(wxCommandEvent& event);
+
+private:
+    MyModelessDialog *m_dialog;
+
+    DECLARE_EVENT_TABLE()
 };
 
 class MyCanvas: public wxScrolledWindow
@@ -81,7 +94,9 @@ enum
     DIALOGS_DIR_CHOOSE,
     DIALOGS_TIP,
     DIALOGS_NUM_ENTRY,
-    DIALOGS_LOG_DIALOG
+    DIALOGS_LOG_DIALOG,
+    DIALOGS_MODELESS,
+    DIALOGS_MODELESS_BTN
 };
 
 #endif

@@ -585,7 +585,9 @@ void MyCanvas::DrawDefault(wxDC& dc)
     memdc.DrawLine( 10,0,10,70 );
     
     // to the right
-    memdc.SetPen(*wxRED_PEN);
+    wxPen pen = *wxRED_PEN;
+    pen.SetWidth(2);
+    memdc.SetPen(pen);
     memdc.DrawLine( 10, 5,10, 5 );
     memdc.DrawLine( 10,10,11,10 );
     memdc.DrawLine( 10,15,12,15 );
