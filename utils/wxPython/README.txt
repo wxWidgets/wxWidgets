@@ -109,6 +109,7 @@ in wx.cpp.
 
 
 
+
 What's new in 2.1b1
 --------------------
 Fixed wxComboBox.SetSelection so that it actually sets the selected

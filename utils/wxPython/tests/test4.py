@@ -53,13 +53,13 @@ class TestSimpleControlsDlg(wxDialog):
         y_pos = y_pos + delta
 
         wxStaticText(self, -1, "wxComboBox", wxPoint(5, y_pos), wxSize(75, 18))
-        wxComboBox(self, 50, "default value", wxPoint(80, y_pos), wxSize(95, 20),
+        wxComboBox(self, 50, "default value", wxPoint(80, y_pos), wxSize(95, -1),
                    sampleList, wxCB_DROPDOWN)
         EVT_COMBOBOX(self, 50, self.EvtComboBox)
         y_pos = y_pos + delta
 
         wxStaticText(self, -1, "wxListBox", wxPoint(5, y_pos), wxSize(75, 18))
-        lb = wxListBox(self, 60, wxPoint(80, y_pos), wxDefaultSize,
+        lb = wxListBox(self, 60, wxPoint(80, y_pos), wxSize(95, 80),
                        sampleList, wxLB_SINGLE)
         EVT_LISTBOX(self, 60, self.EvtListBox)
         EVT_LISTBOX_DCLICK(self, 60, self.EvtListBoxDClick)
@@ -998,7 +998,11 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.17  1999/08/05 05:06:50  RD
+# Some minor tweaks
+#
 # Revision 1.16  1999/04/30 03:29:54  RD
+#
 # wxPython 2.0b9, first phase (win32)
 # Added gobs of stuff, see wxPython/README.txt for details
 #

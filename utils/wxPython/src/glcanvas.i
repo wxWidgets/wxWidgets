@@ -36,11 +36,11 @@
 
 
 %{
-//#ifdef SEPARATE
-//    static wxString wxPyEmptyStr("");
-//    static wxPoint  wxPyDefaultPosition(-1, -1);
-//    static wxSize   wxPyDefaultSize(-1, -1);
-//#endif
+#if defined(SEPARATE) && defined(__WXMSW__)
+    static wxString wxPyEmptyStr("");
+    static wxPoint  wxPyDefaultPosition(-1, -1);
+    static wxSize   wxPyDefaultSize(-1, -1);
+#endif
 %}
 
 %pragma(python) code = "import wx"
@@ -64,11 +64,13 @@ public:
     void SetColour(const char *colour);
     void SwapBuffers();
 
+#ifdef __WXGTK__
     void SetupPixelFormat();
     void SetupPalette(const wxPalette& palette);
     wxPalette CreateDefaultPalette();
-
     wxPalette* GetPalette();
+#endif
+
     wxWindow* GetWindow();
 };
 

@@ -33,50 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.13  1999/07/31 07:56:03  RD
- * wxPython 2.1b1:
- *
- * 	Added the missing wxWindow.GetUpdateRegion() method.
- *
- * 	Made a new change in SWIG (update your patches everybody) that
- * 	provides a fix for global shadow objects that get an exception in
- * 	their __del__ when their extension module has already been deleted.
- * 	It was only a 1 line change in .../SWIG/Modules/pycpp.cxx at about
- * 	line 496 if you want to do it by hand.
- *
- * 	It is now possible to run through MainLoop more than once in any one
- * 	process.  The cleanup that used to happen as MainLoop completed (and
- * 	prevented it from running again) has been delayed until the wxc module
- * 	is being unloaded by Python.
- *
- * 	wxWindow.PopupMenu() now takes a wxPoint instead of  x,y.  Added
- * 	wxWindow.PopupMenuXY to be consistent with some other methods.
- *
- * 	Added wxGrid.SetEditInPlace and wxGrid.GetEditInPlace.
- *
- * 	You can now provide your own app.MainLoop method.  See
- * 	wxPython/demo/demoMainLoop.py for an example and some explaination.
- *
- * 	Got the in-place-edit for the wxTreeCtrl fixed and added some demo
- * 	code to show how to use it.
- *
- * 	Put the wxIcon constructor back in for GTK as it now has one that
- * 	matches MSW's.
- *
- * 	Added wxGrid.GetCells
- *
- * 	Added wxSystemSettings static methods as functions with names like
- * 	wxSystemSettings_GetSystemColour.
- *
- * 	Removed wxPyMenu since using menu callbacks have been depreciated in
- * 	wxWindows.  Use wxMenu and events instead.
- *
- * 	Added alternate wxBitmap constructor (for MSW only) as
- * 	      wxBitmapFromData(data, type, width, height, depth = 1)
- *
- * 	Added a helper function named wxPyTypeCast that can convert shadow
- * 	objects of one type into shadow objects of another type.  (Like doing
- * 	a down-cast.)  See the implementation in wx.py for some docs.
+ * Revision 1.14  1999/08/05 05:06:38  RD
+ * Some minor tweaks
  *
  ************************************************************************/
 

@@ -115,7 +115,7 @@ extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
 
 static char* wxStringErrorMsg = "string type is required for parameter";
 
-#ifdef SEPARATE
+#if defined(SEPARATE) && defined(__WXMSW__)
     static wxString wxPyEmptyStr("");
     static wxPoint  wxPyDefaultPosition(-1, -1);
     static wxSize   wxPyDefaultSize(-1, -1);
