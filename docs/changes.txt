@@ -216,6 +216,9 @@ All (GUI):
 - updated libpng from 1.0.3 to 1.2.4
 - Added wxView::OnClosingDocument so the application can do
   cleanup.
+- generic wxListCtrl renamed to wxGenericListCtrl, wxImageList
+  renamed to wxGenericImageList, so they can be used on wxMSW
+  (Rene Rivera).
 
 wxMSW:
 

@@ -54,11 +54,11 @@ class WXDLLEXPORT wxListTextCtrl;
 // wxListCtrl
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxListCtrl: public wxControl
+class WXDLLEXPORT wxGenericListCtrl: public wxControl
 {
 public:
-    wxListCtrl();
-    wxListCtrl( wxWindow *parent,
+    wxGenericListCtrl();
+    wxGenericListCtrl( wxWindow *parent,
                 wxWindowID id = -1,
                 const wxPoint &pos = wxDefaultPosition,
                 const wxSize &size = wxDefaultSize,
@@ -68,7 +68,7 @@ public:
     {
         Create(parent, id, pos, size, style, validator, name);
     }
-    ~wxListCtrl();
+    ~wxGenericListCtrl();
 
     bool Create( wxWindow *parent,
                  wxWindowID id = -1,
@@ -114,9 +114,9 @@ public:
     void SetWindowStyleFlag( long style );
     void RecreateWindow() {}
     long GetNextItem( long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE ) const;
-    wxImageList *GetImageList( int which ) const;
-    void SetImageList( wxImageList *imageList, int which );
-    void AssignImageList( wxImageList *imageList, int which );
+    wxGenericImageList *GetImageList( int which ) const;
+    void SetImageList( wxGenericImageList *imageList, int which );
+    void AssignImageList( wxGenericImageList *imageList, int which );
     bool Arrange( int flag = wxLIST_ALIGN_DEFAULT ); // always wxLIST_ALIGN_LEFT in wxGLC
 
     void ClearAll();
@@ -183,9 +183,9 @@ public:
     // implementation
     // --------------
 
-    wxImageList         *m_imageListNormal;
-    wxImageList         *m_imageListSmall;
-    wxImageList         *m_imageListState;  // what's that ?
+    wxGenericImageList         *m_imageListNormal;
+    wxGenericImageList         *m_imageListSmall;
+    wxGenericImageList         *m_imageListState;  // what's that ?
     bool                 m_ownsImageListNormal,
                          m_ownsImageListSmall,
                          m_ownsImageListState;
@@ -217,7 +217,7 @@ private:
     void ResizeReportView(bool showHeader);
 
     DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxListCtrl);
+    DECLARE_DYNAMIC_CLASS(wxGenericListCtrl);
 };
 
 

@@ -646,7 +646,7 @@ public:
     void GetImageSize( int index, int &width, int &height ) const;
     int GetTextLength( const wxString &s ) const;
 
-    void SetImageList( wxImageList *imageList, int which );
+    void SetImageList( wxGenericImageList *imageList, int which );
     void SetItemSpacing( int spacing, bool isSmall = FALSE );
     int GetItemSpacing( bool isSmall = FALSE );
 
@@ -733,9 +733,9 @@ public:
     // these are for wxListLineData usage only
 
     // get the backpointer to the list ctrl
-    wxListCtrl *GetListCtrl() const
+    wxGenericListCtrl *GetListCtrl() const
     {
-        return wxStaticCast(GetParent(), wxListCtrl);
+        return wxStaticCast(GetParent(), wxGenericListCtrl);
     }
 
     // get the height of all lines (assuming they all do have the same height)
@@ -775,8 +775,8 @@ public:
     wxColour            *m_highlightColour;
     int                  m_xScroll,
                          m_yScroll;
-    wxImageList         *m_small_image_list;
-    wxImageList         *m_normal_image_list;
+    wxGenericImageList         *m_small_image_list;
+    wxGenericImageList         *m_normal_image_list;
     int                  m_small_spacing;
     int                  m_normal_spacing;
     bool                 m_hasFocus;
@@ -1922,7 +1922,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         int image = item.m_image;
         if ( image != -1 )
         {
-            wxImageList *imageList = m_owner->m_small_image_list;
+            wxGenericImageList *imageList = m_owner->m_small_image_list;
             if ( imageList )
             {
                 int ix, iy;
@@ -2280,8 +2280,8 @@ void wxListMainWindow::Init()
     m_headerWidth =
     m_lineHeight = 0;
 
-    m_small_image_list = (wxImageList *) NULL;
-    m_normal_image_list = (wxImageList *) NULL;
+    m_small_image_list = (wxGenericImageList *) NULL;
+    m_normal_image_list = (wxGenericImageList *) NULL;
 
     m_small_spacing = 30;
     m_normal_spacing = 40;
@@ -2375,7 +2375,7 @@ wxListMainWindow::~wxListMainWindow()
 
 void wxListMainWindow::CacheLineData(size_t line)
 {
-    wxListCtrl *listctrl = GetListCtrl();
+    wxGenericListCtrl *listctrl = GetListCtrl();
 
     wxListLineData *ld = GetDummyLine();
 
@@ -2933,7 +2933,7 @@ void wxListMainWindow::ChangeCurrent(size_t current)
 void wxListMainWindow::EditLabel( long item )
 {
     wxCHECK_RET( (item >= 0) && ((size_t)item < GetItemCount()),
-                 wxT("wrong index in wxListCtrl::EditLabel()") );
+                 wxT("wrong index in wxGenericListCtrl::EditLabel()") );
 
     size_t itemEdit = (size_t)item;
 
@@ -3529,7 +3529,7 @@ int wxListMainWindow::GetTextLength( const wxString &s ) const
     return lw + AUTOSIZE_COL_MARGIN;
 }
 
-void wxListMainWindow::SetImageList( wxImageList *imageList, int which )
+void wxListMainWindow::SetImageList( wxGenericImageList *imageList, int which )
 {
     m_dirty = TRUE;
 
@@ -4439,7 +4439,7 @@ void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
 
     if ( event.GetOrientation() == wxHORIZONTAL && HasHeader() )
     {
-        wxListCtrl* lc = GetListCtrl();
+        wxGenericListCtrl* lc = GetListCtrl();
         wxCHECK_RET( lc, _T("no listctrl window?") );
 
         lc->m_headerWin->Refresh();
@@ -4500,27 +4500,32 @@ void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
 // wxListItem
 // -------------------------------------------------------------------------------------
 
+#if !defined(__WIN32__)
 IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
+#endif
 
 // -------------------------------------------------------------------------------------
-// wxListCtrl
+// wxGenericListCtrl
 // -------------------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxControl)
-IMPLEMENT_DYNAMIC_CLASS(wxListView, wxListCtrl)
+IMPLEMENT_DYNAMIC_CLASS(wxGenericListCtrl, wxControl)
+
+#if !defined(__WIN32__)
+IMPLEMENT_DYNAMIC_CLASS(wxListView, wxGenericListCtrl)
 
 IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
+#endif
 
-BEGIN_EVENT_TABLE(wxListCtrl,wxControl)
-  EVT_SIZE(wxListCtrl::OnSize)
-  EVT_IDLE(wxListCtrl::OnIdle)
+BEGIN_EVENT_TABLE(wxGenericListCtrl,wxControl)
+  EVT_SIZE(wxGenericListCtrl::OnSize)
+  EVT_IDLE(wxGenericListCtrl::OnIdle)
 END_EVENT_TABLE()
 
-wxListCtrl::wxListCtrl()
+wxGenericListCtrl::wxGenericListCtrl()
 {
-    m_imageListNormal = (wxImageList *) NULL;
-    m_imageListSmall = (wxImageList *) NULL;
-    m_imageListState = (wxImageList *) NULL;
+    m_imageListNormal = (wxGenericImageList *) NULL;
+    m_imageListSmall = (wxGenericImageList *) NULL;
+    m_imageListState = (wxGenericImageList *) NULL;
 
     m_ownsImageListNormal =
     m_ownsImageListSmall =
@@ -4530,7 +4535,7 @@ wxListCtrl::wxListCtrl()
     m_headerWin = (wxListHeaderWindow*) NULL;
 }
 
-wxListCtrl::~wxListCtrl()
+wxGenericListCtrl::~wxGenericListCtrl()
 {
     if (m_ownsImageListNormal)
         delete m_imageListNormal;
@@ -4540,7 +4545,7 @@ wxListCtrl::~wxListCtrl()
         delete m_imageListState;
 }
 
-void wxListCtrl::CreateHeaderWindow()
+void wxGenericListCtrl::CreateHeaderWindow()
 {
     m_headerWin = new wxListHeaderWindow
                       (
@@ -4551,7 +4556,7 @@ void wxListCtrl::CreateHeaderWindow()
                       );
 }
 
-bool wxListCtrl::Create(wxWindow *parent,
+bool wxGenericListCtrl::Create(wxWindow *parent,
                         wxWindowID id,
                         const wxPoint &pos,
                         const wxSize &size,
@@ -4561,7 +4566,7 @@ bool wxListCtrl::Create(wxWindow *parent,
 {
     m_imageListNormal =
     m_imageListSmall =
-    m_imageListState = (wxImageList *) NULL;
+    m_imageListState = (wxGenericImageList *) NULL;
     m_ownsImageListNormal =
     m_ownsImageListSmall =
     m_ownsImageListState = FALSE;
@@ -4596,7 +4601,7 @@ bool wxListCtrl::Create(wxWindow *parent,
     return TRUE;
 }
 
-void wxListCtrl::SetSingleStyle( long style, bool add )
+void wxGenericListCtrl::SetSingleStyle( long style, bool add )
 {
     wxASSERT_MSG( !(style & wxLC_VIRTUAL),
                   _T("wxLC_VIRTUAL can't be [un]set") );
@@ -4625,7 +4630,7 @@ void wxListCtrl::SetSingleStyle( long style, bool add )
     SetWindowStyleFlag( flag );
 }
 
-void wxListCtrl::SetWindowStyleFlag( long flag )
+void wxGenericListCtrl::SetWindowStyleFlag( long flag )
 {
     if (m_mainWin)
     {
@@ -4666,47 +4671,47 @@ void wxListCtrl::SetWindowStyleFlag( long flag )
     wxWindow::SetWindowStyleFlag( flag );
 }
 
-bool wxListCtrl::GetColumn(int col, wxListItem &item) const
+bool wxGenericListCtrl::GetColumn(int col, wxListItem &item) const
 {
     m_mainWin->GetColumn( col, item );
     return TRUE;
 }
 
-bool wxListCtrl::SetColumn( int col, wxListItem& item )
+bool wxGenericListCtrl::SetColumn( int col, wxListItem& item )
 {
     m_mainWin->SetColumn( col, item );
     return TRUE;
 }
 
-int wxListCtrl::GetColumnWidth( int col ) const
+int wxGenericListCtrl::GetColumnWidth( int col ) const
 {
     return m_mainWin->GetColumnWidth( col );
 }
 
-bool wxListCtrl::SetColumnWidth( int col, int width )
+bool wxGenericListCtrl::SetColumnWidth( int col, int width )
 {
     m_mainWin->SetColumnWidth( col, width );
     return TRUE;
 }
 
-int wxListCtrl::GetCountPerPage() const
+int wxGenericListCtrl::GetCountPerPage() const
 {
   return m_mainWin->GetCountPerPage();  // different from Windows ?
 }
 
-bool wxListCtrl::GetItem( wxListItem &info ) const
+bool wxGenericListCtrl::GetItem( wxListItem &info ) const
 {
     m_mainWin->GetItem( info );
     return TRUE;
 }
 
-bool wxListCtrl::SetItem( wxListItem &info )
+bool wxGenericListCtrl::SetItem( wxListItem &info )
 {
     m_mainWin->SetItem( info );
     return TRUE;
 }
 
-long wxListCtrl::SetItem( long index, int col, const wxString& label, int imageId )
+long wxGenericListCtrl::SetItem( long index, int col, const wxString& label, int imageId )
 {
     wxListItem info;
     info.m_text = label;
@@ -4722,18 +4727,18 @@ long wxListCtrl::SetItem( long index, int col, const wxString& label, int imageI
     return TRUE;
 }
 
-int wxListCtrl::GetItemState( long item, long stateMask ) const
+int wxGenericListCtrl::GetItemState( long item, long stateMask ) const
 {
     return m_mainWin->GetItemState( item, stateMask );
 }
 
-bool wxListCtrl::SetItemState( long item, long state, long stateMask )
+bool wxGenericListCtrl::SetItemState( long item, long state, long stateMask )
 {
     m_mainWin->SetItemState( item, state, stateMask );
     return TRUE;
 }
 
-bool wxListCtrl::SetItemImage( long item, int image, int WXUNUSED(selImage) )
+bool wxGenericListCtrl::SetItemImage( long item, int image, int WXUNUSED(selImage) )
 {
     wxListItem info;
     info.m_image = image;
@@ -4743,17 +4748,17 @@ bool wxListCtrl::SetItemImage( long item, int image, int WXUNUSED(selImage) )
     return TRUE;
 }
 
-wxString wxListCtrl::GetItemText( long item ) const
+wxString wxGenericListCtrl::GetItemText( long item ) const
 {
     return m_mainWin->GetItemText(item);
 }
 
-void wxListCtrl::SetItemText( long item, const wxString& str )
+void wxGenericListCtrl::SetItemText( long item, const wxString& str )
 {
     m_mainWin->SetItemText(item, str);
 }
 
-long wxListCtrl::GetItemData( long item ) const
+long wxGenericListCtrl::GetItemData( long item ) const
 {
     wxListItem info;
     info.m_itemId = item;
@@ -4761,7 +4766,7 @@ long wxListCtrl::GetItemData( long item ) const
     return info.m_data;
 }
 
-bool wxListCtrl::SetItemData( long item, long data )
+bool wxGenericListCtrl::SetItemData( long item, long data )
 {
     wxListItem info;
     info.m_mask = wxLIST_MASK_DATA;
@@ -4771,44 +4776,44 @@ bool wxListCtrl::SetItemData( long item, long data )
     return TRUE;
 }
 
-bool wxListCtrl::GetItemRect( long item, wxRect &rect,  int WXUNUSED(code) ) const
+bool wxGenericListCtrl::GetItemRect( long item, wxRect &rect,  int WXUNUSED(code) ) const
 {
     m_mainWin->GetItemRect( item, rect );
     return TRUE;
 }
 
-bool wxListCtrl::GetItemPosition( long item, wxPoint& pos ) const
+bool wxGenericListCtrl::GetItemPosition( long item, wxPoint& pos ) const
 {
     m_mainWin->GetItemPosition( item, pos );
     return TRUE;
 }
 
-bool wxListCtrl::SetItemPosition( long WXUNUSED(item), const wxPoint& WXUNUSED(pos) )
+bool wxGenericListCtrl::SetItemPosition( long WXUNUSED(item), const wxPoint& WXUNUSED(pos) )
 {
     return 0;
 }
 
-int wxListCtrl::GetItemCount() const
+int wxGenericListCtrl::GetItemCount() const
 {
     return m_mainWin->GetItemCount();
 }
 
-int wxListCtrl::GetColumnCount() const
+int wxGenericListCtrl::GetColumnCount() const
 {
     return m_mainWin->GetColumnCount();
 }
 
-void wxListCtrl::SetItemSpacing( int spacing, bool isSmall )
+void wxGenericListCtrl::SetItemSpacing( int spacing, bool isSmall )
 {
     m_mainWin->SetItemSpacing( spacing, isSmall );
 }
 
-int wxListCtrl::GetItemSpacing( bool isSmall ) const
+int wxGenericListCtrl::GetItemSpacing( bool isSmall ) const
 {
     return m_mainWin->GetItemSpacing( isSmall );
 }
 
-void wxListCtrl::SetItemTextColour( long item, const wxColour &col )
+void wxGenericListCtrl::SetItemTextColour( long item, const wxColour &col )
 {
     wxListItem info;
     info.m_itemId = item;
@@ -4816,7 +4821,7 @@ void wxListCtrl::SetItemTextColour( long item, const wxColour &col )
     m_mainWin->SetItem( info );
 }
 
-wxColour wxListCtrl::GetItemTextColour( long item ) const
+wxColour wxGenericListCtrl::GetItemTextColour( long item ) const
 {
     wxListItem info;
     info.m_itemId = item;
@@ -4824,7 +4829,7 @@ wxColour wxListCtrl::GetItemTextColour( long item ) const
     return info.GetTextColour();
 }
 
-void wxListCtrl::SetItemBackgroundColour( long item, const wxColour &col )
+void wxGenericListCtrl::SetItemBackgroundColour( long item, const wxColour &col )
 {
     wxListItem info;
     info.m_itemId = item;
@@ -4832,7 +4837,7 @@ void wxListCtrl::SetItemBackgroundColour( long item, const wxColour &col )
     m_mainWin->SetItem( info );
 }
 
-wxColour wxListCtrl::GetItemBackgroundColour( long item ) const
+wxColour wxGenericListCtrl::GetItemBackgroundColour( long item ) const
 {
     wxListItem info;
     info.m_itemId = item;
@@ -4840,32 +4845,32 @@ wxColour wxListCtrl::GetItemBackgroundColour( long item ) const
     return info.GetBackgroundColour();
 }
 
-int wxListCtrl::GetSelectedItemCount() const
+int wxGenericListCtrl::GetSelectedItemCount() const
 {
     return m_mainWin->GetSelectedItemCount();
 }
 
-wxColour wxListCtrl::GetTextColour() const
+wxColour wxGenericListCtrl::GetTextColour() const
 {
     return GetForegroundColour();
 }
 
-void wxListCtrl::SetTextColour(const wxColour& col)
+void wxGenericListCtrl::SetTextColour(const wxColour& col)
 {
     SetForegroundColour(col);
 }
 
-long wxListCtrl::GetTopItem() const
+long wxGenericListCtrl::GetTopItem() const
 {
     return 0;
 }
 
-long wxListCtrl::GetNextItem( long item, int geom, int state ) const
+long wxGenericListCtrl::GetNextItem( long item, int geom, int state ) const
 {
     return m_mainWin->GetNextItem( item, geom, state );
 }
 
-wxImageList *wxListCtrl::GetImageList(int which) const
+wxGenericImageList *wxGenericListCtrl::GetImageList(int which) const
 {
     if (which == wxIMAGE_LIST_NORMAL)
     {
@@ -4879,10 +4884,10 @@ wxImageList *wxListCtrl::GetImageList(int which) const
     {
         return m_imageListState;
     }
-    return (wxImageList *) NULL;
+    return (wxGenericImageList *) NULL;
 }
 
-void wxListCtrl::SetImageList( wxImageList *imageList, int which )
+void wxGenericListCtrl::SetImageList( wxGenericImageList *imageList, int which )
 {
     if ( which == wxIMAGE_LIST_NORMAL )
     {
@@ -4906,7 +4911,7 @@ void wxListCtrl::SetImageList( wxImageList *imageList, int which )
     m_mainWin->SetImageList( imageList, which );
 }
 
-void wxListCtrl::AssignImageList(wxImageList *imageList, int which)
+void wxGenericListCtrl::AssignImageList(wxGenericImageList *imageList, int which)
 {
     SetImageList(imageList, which);
     if ( which == wxIMAGE_LIST_NORMAL )
@@ -4917,24 +4922,24 @@ void wxListCtrl::AssignImageList(wxImageList *imageList, int which)
         m_ownsImageListState = TRUE;
 }
 
-bool wxListCtrl::Arrange( int WXUNUSED(flag) )
+bool wxGenericListCtrl::Arrange( int WXUNUSED(flag) )
 {
     return 0;
 }
 
-bool wxListCtrl::DeleteItem( long item )
+bool wxGenericListCtrl::DeleteItem( long item )
 {
     m_mainWin->DeleteItem( item );
     return TRUE;
 }
 
-bool wxListCtrl::DeleteAllItems()
+bool wxGenericListCtrl::DeleteAllItems()
 {
     m_mainWin->DeleteAllItems();
     return TRUE;
 }
 
-bool wxListCtrl::DeleteAllColumns()
+bool wxGenericListCtrl::DeleteAllColumns()
 {
     size_t count = m_mainWin->m_columns.GetCount();
     for ( size_t n = 0; n < count; n++ )
@@ -4943,12 +4948,12 @@ bool wxListCtrl::DeleteAllColumns()
     return TRUE;
 }
 
-void wxListCtrl::ClearAll()
+void wxGenericListCtrl::ClearAll()
 {
     m_mainWin->DeleteEverything();
 }
 
-bool wxListCtrl::DeleteColumn( int col )
+bool wxGenericListCtrl::DeleteColumn( int col )
 {
     m_mainWin->DeleteColumn( col );
 
@@ -4961,45 +4966,45 @@ bool wxListCtrl::DeleteColumn( int col )
     return TRUE;
 }
 
-void wxListCtrl::Edit( long item )
+void wxGenericListCtrl::Edit( long item )
 {
     m_mainWin->EditLabel( item );
 }
 
-bool wxListCtrl::EnsureVisible( long item )
+bool wxGenericListCtrl::EnsureVisible( long item )
 {
     m_mainWin->EnsureVisible( item );
     return TRUE;
 }
 
-long wxListCtrl::FindItem( long start, const wxString& str,  bool partial )
+long wxGenericListCtrl::FindItem( long start, const wxString& str,  bool partial )
 {
     return m_mainWin->FindItem( start, str, partial );
 }
 
-long wxListCtrl::FindItem( long start, long data )
+long wxGenericListCtrl::FindItem( long start, long data )
 {
     return m_mainWin->FindItem( start, data );
 }
 
-long wxListCtrl::FindItem( long WXUNUSED(start), const wxPoint& WXUNUSED(pt),
+long wxGenericListCtrl::FindItem( long WXUNUSED(start), const wxPoint& WXUNUSED(pt),
                            int WXUNUSED(direction))
 {
     return 0;
 }
 
-long wxListCtrl::HitTest( const wxPoint &point, int &flags )
+long wxGenericListCtrl::HitTest( const wxPoint &point, int &flags )
 {
     return m_mainWin->HitTest( (int)point.x, (int)point.y, flags );
 }
 
-long wxListCtrl::InsertItem( wxListItem& info )
+long wxGenericListCtrl::InsertItem( wxListItem& info )
 {
     m_mainWin->InsertItem( info );
     return info.m_itemId;
 }
 
-long wxListCtrl::InsertItem( long index, const wxString &label )
+long wxGenericListCtrl::InsertItem( long index, const wxString &label )
 {
     wxListItem info;
     info.m_text = label;
@@ -5008,7 +5013,7 @@ long wxListCtrl::InsertItem( long index, const wxString &label )
     return InsertItem( info );
 }
 
-long wxListCtrl::InsertItem( long index, int imageIndex )
+long wxGenericListCtrl::InsertItem( long index, int imageIndex )
 {
     wxListItem info;
     info.m_mask = wxLIST_MASK_IMAGE;
@@ -5017,7 +5022,7 @@ long wxListCtrl::InsertItem( long index, int imageIndex )
     return InsertItem( info );
 }
 
-long wxListCtrl::InsertItem( long index, const wxString &label, int imageIndex )
+long wxGenericListCtrl::InsertItem( long index, const wxString &label, int imageIndex )
 {
     wxListItem info;
     info.m_text = label;
@@ -5027,7 +5032,7 @@ long wxListCtrl::InsertItem( long index, const wxString &label, int imageIndex )
     return InsertItem( info );
 }
 
-long wxListCtrl::InsertColumn( long col, wxListItem &item )
+long wxGenericListCtrl::InsertColumn( long col, wxListItem &item )
 {
     wxCHECK_MSG( m_headerWin, -1, _T("can't add column in non report mode") );
 
@@ -5045,7 +5050,7 @@ long wxListCtrl::InsertColumn( long col, wxListItem &item )
     return 0;
 }
 
-long wxListCtrl::InsertColumn( long col, const wxString &heading,
+long wxGenericListCtrl::InsertColumn( long col, const wxString &heading,
                                int format, int width )
 {
     wxListItem item;
@@ -5061,7 +5066,7 @@ long wxListCtrl::InsertColumn( long col, const wxString &heading,
     return InsertColumn( col, item );
 }
 
-bool wxListCtrl::ScrollList( int WXUNUSED(dx), int WXUNUSED(dy) )
+bool wxGenericListCtrl::ScrollList( int WXUNUSED(dx), int WXUNUSED(dy) )
 {
     return 0;
 }
@@ -5076,7 +5081,7 @@ bool wxListCtrl::ScrollList( int WXUNUSED(dx), int WXUNUSED(dy) )
 // or zero if the two items are equivalent.
 // data is arbitrary data to be passed to the sort function.
 
-bool wxListCtrl::SortItems( wxListCtrlCompare fn, long data )
+bool wxGenericListCtrl::SortItems( wxListCtrlCompare fn, long data )
 {
     m_mainWin->SortItems( fn, data );
     return TRUE;
@@ -5086,7 +5091,7 @@ bool wxListCtrl::SortItems( wxListCtrlCompare fn, long data )
 // event handlers
 // ----------------------------------------------------------------------------
 
-void wxListCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
+void wxGenericListCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     if ( !m_mainWin )
         return;
@@ -5096,7 +5101,7 @@ void wxListCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
     m_mainWin->RecalculatePositions();
 }
 
-void wxListCtrl::ResizeReportView(bool showHeader)
+void wxGenericListCtrl::ResizeReportView(bool showHeader)
 {
     int cw, ch;
     GetClientSize( &cw, &ch );
@@ -5112,7 +5117,7 @@ void wxListCtrl::ResizeReportView(bool showHeader)
     }
 }
 
-void wxListCtrl::OnIdle( wxIdleEvent & event )
+void wxGenericListCtrl::OnIdle( wxIdleEvent & event )
 {
     event.Skip();
 
@@ -5127,7 +5132,7 @@ void wxListCtrl::OnIdle( wxIdleEvent & event )
 // font/colours
 // ----------------------------------------------------------------------------
 
-bool wxListCtrl::SetBackgroundColour( const wxColour &colour )
+bool wxGenericListCtrl::SetBackgroundColour( const wxColour &colour )
 {
     if (m_mainWin)
     {
@@ -5138,7 +5143,7 @@ bool wxListCtrl::SetBackgroundColour( const wxColour &colour )
     return TRUE;
 }
 
-bool wxListCtrl::SetForegroundColour( const wxColour &colour )
+bool wxGenericListCtrl::SetForegroundColour( const wxColour &colour )
 {
     if ( !wxWindow::SetForegroundColour( colour ) )
         return FALSE;
@@ -5157,7 +5162,7 @@ bool wxListCtrl::SetForegroundColour( const wxColour &colour )
     return TRUE;
 }
 
-bool wxListCtrl::SetFont( const wxFont &font )
+bool wxGenericListCtrl::SetFont( const wxFont &font )
 {
     if ( !wxWindow::SetFont( font ) )
         return FALSE;
@@ -5182,34 +5187,34 @@ bool wxListCtrl::SetFont( const wxFont &font )
 
 #if wxUSE_DRAG_AND_DROP
 
-void wxListCtrl::SetDropTarget( wxDropTarget *dropTarget )
+void wxGenericListCtrl::SetDropTarget( wxDropTarget *dropTarget )
 {
     m_mainWin->SetDropTarget( dropTarget );
 }
 
-wxDropTarget *wxListCtrl::GetDropTarget() const
+wxDropTarget *wxGenericListCtrl::GetDropTarget() const
 {
     return m_mainWin->GetDropTarget();
 }
 
 #endif // wxUSE_DRAG_AND_DROP
 
-bool wxListCtrl::SetCursor( const wxCursor &cursor )
+bool wxGenericListCtrl::SetCursor( const wxCursor &cursor )
 {
     return m_mainWin ? m_mainWin->wxWindow::SetCursor(cursor) : FALSE;
 }
 
-wxColour wxListCtrl::GetBackgroundColour() const
+wxColour wxGenericListCtrl::GetBackgroundColour() const
 {
     return m_mainWin ? m_mainWin->GetBackgroundColour() : wxColour();
 }
 
-wxColour wxListCtrl::GetForegroundColour() const
+wxColour wxGenericListCtrl::GetForegroundColour() const
 {
     return m_mainWin ? m_mainWin->GetForegroundColour() : wxColour();
 }
 
-bool wxListCtrl::DoPopupMenu( wxMenu *menu, int x, int y )
+bool wxGenericListCtrl::DoPopupMenu( wxMenu *menu, int x, int y )
 {
 #if wxUSE_MENUS
     return m_mainWin->PopupMenu( menu, x, y );
@@ -5218,7 +5223,7 @@ bool wxListCtrl::DoPopupMenu( wxMenu *menu, int x, int y )
 #endif // wxUSE_MENUS
 }
 
-void wxListCtrl::SetFocus()
+void wxGenericListCtrl::SetFocus()
 {
     /* The test in window.cpp fails as we are a composite
        window, so it checks against "this", but not m_mainWin. */
@@ -5230,24 +5235,24 @@ void wxListCtrl::SetFocus()
 // virtual list control support
 // ----------------------------------------------------------------------------
 
-wxString wxListCtrl::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) const
+wxString wxGenericListCtrl::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) const
 {
     // this is a pure virtual function, in fact - which is not really pure
     // because the controls which are not virtual don't need to implement it
-    wxFAIL_MSG( _T("wxListCtrl::OnGetItemText not supposed to be called") );
+    wxFAIL_MSG( _T("wxGenericListCtrl::OnGetItemText not supposed to be called") );
 
     return wxEmptyString;
 }
 
-int wxListCtrl::OnGetItemImage(long WXUNUSED(item)) const
+int wxGenericListCtrl::OnGetItemImage(long WXUNUSED(item)) const
 {
     // same as above
-    wxFAIL_MSG( _T("wxListCtrl::OnGetItemImage not supposed to be called") );
+    wxFAIL_MSG( _T("wxGenericListCtrl::OnGetItemImage not supposed to be called") );
 
     return -1;
 }
 
-wxListItemAttr *wxListCtrl::OnGetItemAttr(long item) const
+wxListItemAttr *wxGenericListCtrl::OnGetItemAttr(long item) const
 {
     wxASSERT_MSG( item >= 0 && item < GetItemCount(),
                   _T("invalid item index in OnGetItemAttr()") );
@@ -5256,29 +5261,29 @@ wxListItemAttr *wxListCtrl::OnGetItemAttr(long item) const
     return NULL;
 }
 
-void wxListCtrl::SetItemCount(long count)
+void wxGenericListCtrl::SetItemCount(long count)
 {
     wxASSERT_MSG( IsVirtual(), _T("this is for virtual controls only") );
 
     m_mainWin->SetItemCount(count);
 }
 
-void wxListCtrl::RefreshItem(long item)
+void wxGenericListCtrl::RefreshItem(long item)
 {
     m_mainWin->RefreshLine(item);
 }
 
-void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
+void wxGenericListCtrl::RefreshItems(long itemFrom, long itemTo)
 {
     m_mainWin->RefreshLines(itemFrom, itemTo);
 }
 
-void wxListCtrl::Freeze()
+void wxGenericListCtrl::Freeze()
 {
     m_mainWin->Freeze();
 }
 
-void wxListCtrl::Thaw()
+void wxGenericListCtrl::Thaw()
 {
     m_mainWin->Thaw();
 }

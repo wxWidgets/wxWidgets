@@ -3,8 +3,11 @@
 
 #if defined(__WIN32__)
     #include "wx/msw/imaglist.h"
-#else
-    #include "wx/generic/imaglist.h"
+#endif
+#include "wx/generic/imaglist.h"
+#if !defined(__WIN32__)
+    #define wxImageList wxGenericImageList
+    #define sm_classwxImageList sm_classwxGenericImageList
 #endif
 
 #endif

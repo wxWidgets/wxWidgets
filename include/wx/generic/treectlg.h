@@ -20,12 +20,12 @@
 
 #include "wx/scrolwin.h"
 #include "wx/pen.h"
+#include "wx/imaglist.h"
 
 // -----------------------------------------------------------------------------
 // forward declaration
 // -----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxImageList;
 class WXDLLEXPORT wxGenericTreeItem;
 
 class WXDLLEXPORT wxTreeItemData;

@@ -26,8 +26,7 @@
 
 #include "wx/control.h"
 #include "wx/dynarray.h"
-
-class WXDLLEXPORT wxImageList;
+#include "wx/imaglist.h"
 
 // ----------------------------------------------------------------------------
 // types

@@ -315,8 +315,11 @@ private:
 
 #if defined(__WIN32__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/listctrl.h"
-#else
-    #include "wx/generic/listctrl.h"
+#endif
+#include "wx/generic/listctrl.h"
+#if !defined(__WIN32__) || defined(__WXUNIVERSAL__)
+    #define wxListCtrl wxGenericListCtrl
+    #define sm_classwxListCtrl sm_classwxGenericListCtrl
 #endif
 
 // ----------------------------------------------------------------------------
