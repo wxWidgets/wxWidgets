@@ -214,7 +214,7 @@ wxHelpFrame::wxHelpFrame(wxWindow *parent, int id,
 
 wxHelpFrame::~wxHelpFrame()
 {
-//   delete m_filter;
+   delete m_filter;
 }
 
 void
