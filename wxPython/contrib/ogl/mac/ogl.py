@@ -6,7 +6,7 @@ import _ogl
 import _windows
 import _core
 wx = _core 
-__docfilter__ = wx.__docfilter__ 
+__docfilter__ = wx.__DocFilter(globals()) 
 #---------------------------------------------------------------------------
 
 class ShapeRegion(_core.Object):

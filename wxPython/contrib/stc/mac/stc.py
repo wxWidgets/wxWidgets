@@ -6,7 +6,7 @@ import _stc
 import _core
 import _misc
 wx = _core 
-__docfilter__ = wx.__docfilter__ 
+__docfilter__ = wx.__DocFilter(globals()) 
 STC_USE_DND = _stc.STC_USE_DND
 STC_USE_POPUP = _stc.STC_USE_POPUP
 STC_INVALID_POSITION = _stc.STC_INVALID_POSITION
