@@ -105,7 +105,7 @@
 // string functions
 // ----------------------------------------------------------------------------
 
-#ifdef __WXMAC__
+#if defined(__WXMAC__) && !defined(__DARWIN)
 int strcasecmp(const char *str_1, const char *str_2)
 {
   register char c1, c2;
@@ -134,7 +134,7 @@ int strncasecmp(const char *str_1, const char *str_2, size_t maxchar)
   return 0 ;
 
 }
-#endif // wxMAC
+#endif // __WXMAC__ && !__DARWIN__
 
 #if defined( __VMS__ ) && ( __VMS_VER < 70000000 )
 // we have no strI functions under VMS, therefore I have implemented
