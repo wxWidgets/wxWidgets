@@ -1034,6 +1034,7 @@ wxFindWindowById = wx._core.FindWindowById
 wxFindWindowByName = wx._core.FindWindowByName
 wxFindWindowByLabel = wx._core.FindWindowByLabel
 wxWindow_FromHWND = wx._core.Window_FromHWND
+GetTopLevelWindows = wx._core.GetTopLevelWindows
 wxValidator = wx._core.Validator
 wxValidatorPtr = wx._core.ValidatorPtr
 wxValidator_IsSilent = wx._core.Validator_IsSilent
