@@ -58,7 +58,7 @@ One of:
 
 \membersection{wxThread::Delete}\label{wxthreaddelete}
 
-\func{\void}{Delete}{\void}
+\func{void}{Delete}{\void}
 
 This function should be called to terminate this thread. Unlike \helpref{Kill}{wxthreadkill}, it
 gives the target thread the time to terminate gracefully. Because of this, however, this function
@@ -69,6 +69,16 @@ it.
 Delete() may be called for thread in any state: running, paused or even not yet created. Moreover,
 it must be called if \helpref{Create}{wxthreadcreate} or \helpref{Run}{wxthreadrun} fail to free
 the memory occupied by the thread object.
+
+\membersection{wxThread::Entry}\label{wxthreadentry}
+
+\func{virtual void *}{Entry}{\void}
+
+This is the entry point of the thread. This function is pure virtual and must
+be implemented by any derived class. The thread execution will start here.
+
+The returned value is the thread exit code but is currently ignored in
+wxWindows implementation (this will change in near future).
 
 \membersection{wxThread::GetID}\label{wxthreadgetid}
 
