@@ -1,6 +1,8 @@
 
 *** wxWindows 2.3.3 ***
 
+wxStaticBox honours wxALIGN_XXX styles
+
 Reworked wxConfig class interface.
 
 Reworked wxDynamicLibary class for loading classes (particularly

@@ -676,7 +676,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200, wxPoint(18,90), wxSize(155,-1),
                              wxSL_AUTOTICKS | wxSL_LABELS );
     m_slider->SetTickFreq(40, 0);
-    (void)new wxStaticBox( panel, -1, "&Explanation", wxPoint(230,10), wxSize(270,130) );
+    (void)new wxStaticBox( panel, -1, "&Explanation",
+                           wxPoint(230,10), wxSize(270,130),
+                           wxALIGN_CENTER );
+
 #ifdef __WXMOTIF__
     // No wrapping text in wxStaticText yet :-(
     (void)new wxStaticText( panel, -1,
