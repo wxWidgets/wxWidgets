@@ -763,7 +763,7 @@ bool wxGetUserName(wxChar *buf, int sz)
     if ((who = getpwuid (getuid ())) != NULL)
     {
         // pw_gecos field in struct passwd is not standard
-#if HAVE_PW_GECOS
+#ifdef HAVE_PW_GECOS
        char *comma = strchr(who->pw_gecos, ',');
        if (comma)
            *comma = '\0'; // cut off non-name comment fields
@@ -784,6 +784,60 @@ wxString wxGetOsDescription()
 #else
     return WXWIN_OS_DESCRIPTION;
 #endif
+}
+
+// this function returns the GUI toolkit version in GUI programs, but OS
+// version in non-GUI ones
+#if !wxUSE_GUI
+
+int wxGetOsVersion(int *majorVsn, int *minorVsn)
+{
+    int major, minor;
+    char name[256];
+
+    if ( sscanf(WXWIN_OS_DESCRIPTION, "%s %d.%d", name, &major, &minor) != 3 )
+    {
+        // unreckognized uname string format
+        major = minor = -1;
+    }
+
+    if ( majorVsn )
+        *majorVsn = major;
+    if ( minorVsn )
+        *minorVsn = minor;
+
+    return wxUNIX;
+}
+
+#endif // !wxUSE_GUI
+
+long wxGetFreeMemory()
+{
+#if defined(__LINUX__)
+    // get it from /proc/meminfo
+    FILE *fp = fopen("/proc/meminfo", "r");
+    if ( fp )
+    {
+        long memFree = -1;
+
+        char buf[1024];
+        if ( fgets(buf, WXSIZEOF(buf), fp) && fgets(buf, WXSIZEOF(buf), fp) )
+        {
+            long memTotal, memUsed;
+            sscanf(buf, "Mem: %ld %ld %ld", &memTotal, &memUsed, &memFree);
+        }
+
+        fclose(fp);
+
+        return memFree;
+    }
+#elif defined(__SUN__) && defined(_SC_AVPHYS_PAGES)
+    return sysconf(_SC_AVPHYS_PAGES)*sysconf(_SC_PAGESIZE);
+//#elif defined(__FREEBSD__) -- might use sysctl() to find it out, probably
+#endif
+
+    // can't find it out
+    return -1;
 }
 
 // ----------------------------------------------------------------------------

@@ -155,6 +155,14 @@ HBRUSH wxDisableButtonBrush = (HBRUSH) 0;
 
 LRESULT WXDLLEXPORT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
 
+// FIXME wxUSE_ON_FATAL_EXCEPTION is only supported for VC++ now because it
+//       needs compiler support for Win32 SEH. Others (especially Borland)
+//       probably have it too, but I'm not sure about how it works
+#ifndef __VISUALC__
+    #undef wxUSE_ON_FATAL_EXCEPTION
+    #define wxUSE_ON_FATAL_EXCEPTION 0
+#endif // VC++
+
 #if wxUSE_ON_FATAL_EXCEPTION
     static bool gs_handleExceptions = FALSE;
 #endif
@@ -659,15 +667,6 @@ int wxEntry(WXHINSTANCE hInstance,
 
     // take everything into a try-except block to be able to call
     // OnFatalException() if necessary
-
-    // FIXME other compilers must support Win32 SEH (structured exception
-    //       handling) too, just find the appropriate keyword in their docs!
-    //       Please note that it's _not_ the same as C++ exceptions!
-#ifndef __VISUALC__
-    #undef wxUSE_ON_FATAL_EXCEPTION
-    #define wxUSE_ON_FATAL_EXCEPTION 0
-#endif // VC++
-
 #if wxUSE_ON_FATAL_EXCEPTION
     __try {
 #endif

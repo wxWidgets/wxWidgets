@@ -474,10 +474,12 @@ static void TestOsInfo()
     printf("Running under: %s, version %d.%d\n",
             wxGetOsDescription().c_str(), major, minor);
 
-    printf("%d free bytes of memory left.\n", wxGetFreeMemory());
+    printf("%ld free bytes of memory left.\n", wxGetFreeMemory());
 
     printf("Host name is %s (%s).\n",
            wxGetHostName().c_str(), wxGetFullHostName().c_str());
+
+    puts("");
 }
 
 static void TestUserInfo()
@@ -488,6 +490,8 @@ static void TestUserInfo()
     printf("User name is:\t%s\n", wxGetUserName().c_str());
     printf("Home dir is:\t%s\n", wxGetHomeDir().c_str());
     printf("Email address:\t%s\n", wxGetEmailAddress().c_str());
+
+    puts("");
 }
 
 #endif // TEST_INFO_FUNCTIONS

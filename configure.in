@@ -2184,7 +2184,6 @@ AC_CACHE_CHECK([for pw_gecos in struct passwd], wx_cv_struct_pw_gecos,
              ],
              [
                 wx_cv_struct_pw_gecos=yes
-                AC_DEFINE(HAVE_PW_GECOS)
              ],
              [
                 wx_cv_struct_pw_gecos=no
@@ -2192,6 +2191,10 @@ AC_CACHE_CHECK([for pw_gecos in struct passwd], wx_cv_struct_pw_gecos,
         )
     ]
 )
+
+if test "$wx_cv_struct_pw_gecos" = "yes"; then
+    AC_DEFINE(HAVE_PW_GECOS)
+fi
 
 dnl ---------------------------------------------------------------------------
 dnl Checks for compiler characteristics
