@@ -34,6 +34,21 @@
 
 #include "wx/msw/private.h"
 
+#if wxUSE_ON_FATAL_EXCEPTION
+    #include "wx/datetime.h"
+    #include "wx/msw/crashrpt.h"
+
+    #ifdef __VISUALC__
+        #include <eh.h>
+    #endif // __VISUALC__
+#endif // wxUSE_ON_FATAL_EXCEPTION
+
+#ifdef __WXWINCE__
+    // there is no ExitProcess() under CE but exiting the main thread has the
+    // same effect
+    #define ExitProcess ExitThread
+#endif
+
 #ifdef __BORLANDC__
     // BC++ has to be special: its run-time expects the DLL entry point to be
     // named DllEntryPoint instead of the (more) standard DllMain
@@ -44,11 +59,133 @@
     #define HINSTANCE HANDLE
 #endif
 
-#if wxUSE_GUI
-
 // ============================================================================
 // implementation: various entry points
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// wrapper wxEntry catching all Win32 exceptions occuring in a wx program
+// ----------------------------------------------------------------------------
+
+// wrap real wxEntry in a try-except block to be able to call
+// OnFatalException() if necessary
+#if wxUSE_ON_FATAL_EXCEPTION
+
+// global pointer to exception information, only valid inside OnFatalException,
+// used by wxStackWalker and wxCrashReport
+extern EXCEPTION_POINTERS *wxGlobalSEInformation = NULL;
+
+// flag telling us whether the application wants to handle exceptions at all
+static bool gs_handleExceptions = false;
+
+unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
+{
+    if ( gs_handleExceptions && wxTheApp )
+    {
+        // store the pointer to exception info
+        wxGlobalSEInformation = pExcPtrs;
+
+        // give the user a chance to do something special about this
+        __try
+        {
+            wxTheApp->OnFatalException();
+        }
+        __except ( EXCEPTION_EXECUTE_HANDLER )
+        {
+            // nothing to do here, just ignore the exception inside the
+            // exception handler
+            ;
+        }
+
+        wxGlobalSEInformation = NULL;
+
+        // this will execute our handler and terminate the process
+        return EXCEPTION_EXECUTE_HANDLER;
+    }
+
+    return EXCEPTION_CONTINUE_SEARCH;
+}
+
+#ifdef __VISUALC__
+
+static void wxSETranslator(unsigned int WXUNUSED(code), EXCEPTION_POINTERS *ep)
+{
+    wxGlobalSEHandler(ep);
+}
+
+#endif // __VISUALC__
+
+bool wxHandleFatalExceptions(bool doit)
+{
+    // assume this can only be called from the main thread
+    gs_handleExceptions = doit;
+
+#ifdef __VISUALC__
+    // VC++ (at least from 4.0 up to version 7.1) is incredibly broken in that
+    // a "catch ( ... )" will *always* catch SEH exceptions in it even though
+    // it should have never been the case... to prevent such catches from
+    // stealing the exceptions from our wxGlobalSEHandler which is only called
+    // if the exception is not handled elsewhere, we have to also call it from
+    // a special SEH translator function which is called by VC CRT when a Win32
+    // exception occurs
+    _set_se_translator(doit ? wxSETranslator : NULL);
+#endif
+
+#if wxUSE_CRASHREPORT
+    if ( doit )
+    {
+        // try to find a place where we can put out report file later
+        wxChar fullname[MAX_PATH];
+        if ( !::GetTempPath(WXSIZEOF(fullname), fullname) )
+        {
+            wxLogLastError(_T("GetTempPath"));
+
+            // when all else fails...
+            wxStrcpy(fullname, _T("c:\\"));
+        }
+
+        // use PID and date to make the report file name more unique
+        wxString name = wxString::Format
+                        (
+                            _T("%s_%s_%lu.dmp"),
+                            wxTheApp ? wxTheApp->GetAppName().c_str()
+                                     : _T("wxwindows"),
+                            wxDateTime::Now().Format(_T("%Y%m%dT%H%M%S")).c_str(),
+                            ::GetCurrentProcessId()
+                        );
+
+        wxStrncat(fullname, name, WXSIZEOF(fullname) - wxStrlen(fullname) - 1);
+
+        wxCrashReport::SetFileName(fullname);
+    }
+#endif // wxUSE_CRASHREPORT
+
+    return true;
+}
+
+int wxEntry(int& argc, wxChar **argv)
+{
+    __try
+    {
+        extern int wxEntryReal(int& argc, wxChar **argv);
+
+        return wxEntryReal(argc, argv);
+    }
+    __except ( wxGlobalSEHandler(GetExceptionInformation()) )
+    {
+        ::ExitProcess(3); // the same exit code as abort()
+
+#if !defined(_MSC_VER) || _MSC_VER < 1300
+        // this code is unreachable but put it here to suppress warnings
+        // from some compilers
+        return -1;
+#endif
+    }
+}
+
+#endif // wxUSE_ON_FATAL_EXCEPTION
+
+#if wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // Windows-specific wxEntry

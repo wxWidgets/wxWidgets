@@ -369,6 +369,7 @@ void wxEntryCleanup()
 // wxEntry
 // ----------------------------------------------------------------------------
 
+// for MSW with wxUSE_ON_FATAL_EXCEPTION on, wxEntry is defined in msw/main.cpp
 #if !defined(__WXMSW__) || !wxUSE_ON_FATAL_EXCEPTION
     #define wxEntryReal wxEntry
 #endif // !(__WXMSW__ && wxUSE_ON_FATAL_EXCEPTION)
@@ -411,43 +412,6 @@ int wxEntryReal(int& argc, wxChar **argv)
     }
     wxCATCH_ALL( wxTheApp->OnUnhandledException(); return -1; )
 }
-
-// wrap real wxEntry in a try-except block to be able to call
-// OnFatalException() if necessary
-#if defined(__WXMSW__) && wxUSE_ON_FATAL_EXCEPTION
-
-#ifdef __WXWINCE__
-// For ExitThread
-#include "wx/msw/private.h"
-#endif
-
-extern unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs);
-
-int wxEntry(int& argc, wxChar **argv)
-{
-    __try
-    {
-        return wxEntryReal(argc, argv);
-    }
-    __except ( wxGlobalSEHandler(GetExceptionInformation()) )
-    {
-#ifdef __WXWINCE__
-        ::ExitThread(3); // the same exit code as abort()
-#elif __WXPALMOS__
-        return -1;
-#else
-        ::ExitProcess(3); // the same exit code as abort()
-#endif
-
-#if !defined(_MSC_VER) || _MSC_VER < 1300
-        // this code is unreachable but put it here to suppress warnings
-        // from some compilers
-        return -1;
-#endif
-    }
-}
-
-#endif // __WXMSW__ && wxUSE_ON_FATAL_EXCEPTION
 
 #if wxUSE_UNICODE
 
