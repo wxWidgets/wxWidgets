@@ -359,15 +359,9 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
         return TRUE;
     }
 
-    // send the change event to the new page now
-    wxWizardEvent event(wxEVT_WIZARD_PAGE_CHANGED, GetId(), goingForward);
-    (void)m_page->GetEventHandler()->ProcessEvent(event);
-
     // position and show the new page
     (void)m_page->TransferDataToWindow();
     m_page->SetSize(m_x, m_y, m_width, m_height);
-    m_page->Show();
-    m_page->SetFocus();
 
     // check if bitmap needs to be updated
     // update default flag as well
@@ -404,6 +398,14 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
             m_btnNext->SetLabel(_("&Next >"));
     }
     // nothing to do: the label was already correct
+
+    // send the change event to the new page now
+    wxWizardEvent event(wxEVT_WIZARD_PAGE_CHANGED, GetId(), goingForward);
+    (void)m_page->GetEventHandler()->ProcessEvent(event);
+
+    // and finally show it
+    m_page->Show();
+    m_page->SetFocus();
 
     return TRUE;
 }
