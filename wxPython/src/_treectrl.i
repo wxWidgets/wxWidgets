@@ -82,7 +82,6 @@ enum {
 //---------------------------------------------------------------------------
 %newgroup
 
-typedef void *wxTreeItemIdValue;
 
 // wxTreeItemId identifies an element of the tree. In this implementation, it's
 // just a trivial wrapper around Win32 HTREEITEM or a pointer to some private
@@ -108,7 +107,7 @@ public:
         }
     }
 
-    wxTreeItemIdValue m_pItem;
+    void*  m_pItem;
 
 
     %pythoncode {
@@ -534,12 +533,12 @@ public:
         // opaque "cookie" value that should be passed to GetNextChild in
         // order to continue the search.
         PyObject* GetFirstChild(const wxTreeItemId& item) {
-            wxTreeItemIdValue cookie = 0;
-            wxTreeItemId ritem = self->GetFirstChild(item, cookie);
+            void* cookie = 0;
+            wxTreeItemId* ritem = new wxTreeItemId(self->GetFirstChild(item, cookie));
             wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
-            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(&ritem, wxT("wxTreeItemId"), True));
-            PyTuple_SET_ITEM(tup, 1, wxPyConstructObject(cookie, wxT("wxTreeItemIdValue"), True));
+            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(ritem, wxT("wxTreeItemId"), True));
+            PyTuple_SET_ITEM(tup, 1, wxPyMakeSwigPtr(cookie, wxT("void")));
             wxPyEndBlockThreads();
             return tup;
         }
@@ -549,12 +548,12 @@ public:
         // value returned from GetFirstChild or the previous GetNextChild.
         // Returns a wxTreeItemId and an opaque "cookie" value that should be
         // passed to GetNextChild in order to continue the search.
-        PyObject* GetNextChild(const wxTreeItemId& item, wxTreeItemIdValue& cookie) {
-            wxTreeItemId ritem = self->GetNextChild(item, cookie);
+        PyObject* GetNextChild(const wxTreeItemId& item, void* cookie) {
+            wxTreeItemId* ritem = new wxTreeItemId(self->GetNextChild(item, cookie));
             wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
-            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(&ritem, wxT("wxTreeItemId"), True));
-            PyTuple_SET_ITEM(tup, 1, wxPyConstructObject(cookie, wxT("wxTreeItemIdValue"), True));
+            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(ritem, wxT("wxTreeItemId"), True));
+            PyTuple_SET_ITEM(tup, 1, wxPyMakeSwigPtr(cookie, wxT("void")));
             wxPyEndBlockThreads();
             return tup;
         }            
