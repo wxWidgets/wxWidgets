@@ -992,15 +992,16 @@ int STRINGCLASS::compare(size_t nStart, size_t nLen,
 
 //Convert a wide character string of a specified length
 //to a multi-byte character string, ignoring intermittent null characters
-inline wxCharBuffer wxMbstr(const wchar_t* szString, size_t nStringLen, wxMBConv& conv)
+//returns the actual length of the string
+inline size_t wxMbstr(wxCharBuffer& buffer, const wchar_t* szString, 
+                      size_t nStringLen, wxMBConv& conv)
 {
     const wchar_t* szEnd = szString + nStringLen + 1;
     const wchar_t* szPos = szString;
     const wchar_t* szStart = szPos;
     
-    //Create the buffer we'll return on success
-    wxCharBuffer buffer(nStringLen + 1);
-    
+    size_t nActualLength = 0;
+        
     //Convert the string until the length() is reached, continuing the
     //loop every time a null character is reached
     while(szPos != szEnd)
@@ -1012,13 +1013,17 @@ inline wxCharBuffer wxMbstr(const wchar_t* szString, size_t nStringLen, wxMBConv
         
         wxASSERT(nLen != (size_t)-1); //should not be true!  If it is system wctomb could be bad
         
+        nActualLength += nLen + 1;
+        
+        wxASSERT(nActualLength <= (nStringLen<<1) + 1); //If this is true it means buffer overflow
+        
         //Convert the current (sub)string
         if ( conv.WC2MB(&buffer.data()[szPos - szStart], szPos, nLen + 1) == (size_t)-1 )
         {
             //error - return empty buffer
             wxFAIL_MSG(wxT("Error converting wide-character string to a multi-byte string"));
             buffer.data()[0] = '\0';
-            return buffer;
+            return 0;
         }        
         
         //Increment to next (sub)string
@@ -1028,18 +1033,20 @@ inline wxCharBuffer wxMbstr(const wchar_t* szString, size_t nStringLen, wxMBConv
         szPos += wxWcslen(szPos) + 1;
     }
     
-    return buffer;  //success - return converted string
+    return nActualLength - 1;  //success - return actual length
 }
 
 //Convert a multi-byte character string of a specified length
 //to a wide character string, ignoring intermittent null characters
-inline wxWCharBuffer wxWcstr(const char* szString, size_t nStringLen, wxMBConv& conv)
+//returns the actual length 
+inline size_t wxWcstr(	wxWCharBuffer& buffer, const char* szString, 
+                        size_t nStringLen, wxMBConv& conv)
 {
     const char* szEnd = szString + nStringLen + 1;
     const char* szPos = szString;
     const char* szStart = szPos;
-    
-    wxWCharBuffer buffer(nStringLen + 1);
+
+    size_t nActualLength = 0;
     
     //Convert the string until the length() is reached, continuing the
     //loop every time a null character is reached
@@ -1052,13 +1059,17 @@ inline wxWCharBuffer wxWcstr(const char* szString, size_t nStringLen, wxMBConv& 
         
         wxASSERT(nLen != (size_t)-1); //should not be true!  If it is system mbtowc could be bad
         
+        nActualLength += nLen + 1;
+        
+        wxASSERT(nActualLength <= nStringLen + 1); //If this is true it means buffer overflow
+
         //Convert the current (sub)string
         if ( conv.MB2WC(&buffer.data()[szPos - szStart], szPos, nLen + 1) == (size_t)-1 )
         {
             //error - return empty buffer
             wxFAIL_MSG(wxT("Error converting multi-byte string to a wide-character string"));
             buffer.data()[0] = '\0';
-            return buffer;
+            return 0;
         }        
         
         //Increment to next (sub)string
@@ -1068,7 +1079,7 @@ inline wxWCharBuffer wxWcstr(const char* szString, size_t nStringLen, wxMBConv& 
         szPos += strlen(szPos) + 1;
     }
     
-    return buffer;  //success - return converted string
+    return nActualLength - 1; //success - return actual length
 }
 
 #endif  //wxUSE_WCHAR_T
@@ -1115,15 +1126,30 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
     // anything to do?
     if ( (nLen != 0) && (nLen != (size_t)-1) )
     {
-        //do the actual conversion (if it fails we get an empty string)
-        (*this) = wxWcstr(psz, nLen, conv);
+        //When converting mb->wc it never inflates to more characters than the length
+        wxWCharBuffer buffer(nLen + 1);
+
+        //Convert the string
+        size_t nActualLength = wxWcstr(buffer, psz, nLen, conv);
+        
+        if ( !Alloc(nActualLength + 1) )
+            wxFAIL_MSG(wxT("Out of memory in wxString"));
+
+        //Copy the data
+        assign(buffer.data(), nActualLength);
     }
 }        
 
 //Convert wxString in Unicode mode to a multi-byte string
 const wxCharBuffer wxString::mb_str(wxMBConv& conv) const
 {
-    return wxMbstr((*this).c_str(), length(), conv);
+    //*2 is the worst case - probably for UTF8
+    wxCharBuffer buffer((length() << 1) + 1);
+
+    //Do the actual conversion (will return a blank string on error)
+    wxMbstr(buffer, (*this).c_str(), length(), conv);
+    
+    return buffer;
 }
 
 #else // ANSI
@@ -1165,8 +1191,17 @@ wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
     // anything to do?
     if ( (nLen != 0) && (nLen != (size_t)-1) )
     {
+        //*2 is the worst case - probably for UTF8
+        wxCharBuffer buffer((nLen << 1) + 1);
+        
         //do the actual conversion (if it fails we get an empty string)
-        (*this) = wxMbstr(pwz, nLen, conv);
+        size_t nActualLength = wxMbstr(buffer, pwz, nLen, conv);
+        
+        if ( !Alloc(nActualLength + 1) )
+            wxFAIL_MSG(wxT("Out of memory in wxString"));
+
+        //copy the data
+        assign(buffer.data(), nActualLength);
     }
 }
 
@@ -1174,8 +1209,13 @@ wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
 //mode is not enabled and wxUSE_WCHAR_T is enabled
 const wxWCharBuffer wxString::wc_str(wxMBConv& conv) const
 {
+    //mb->wc never inflates to more than the length
+    wxWCharBuffer buffer(length() + 1);
+    
     //Do the actual conversion (will return a blank string on error)
-    return wxWcstr((*this).c_str(), length(), conv);
+    wxWcstr(buffer, (*this).c_str(), length(), conv);
+    
+    return buffer;
 }
     
 #endif // wxUSE_WCHAR_T
