@@ -224,6 +224,14 @@ TAG_HANDLER_END(BLOCKQUOTE)
 
 
 
+// Tag handler for tags that we have to ignore, otherwise non-text data
+// would show up as text:
+TAG_HANDLER_BEGIN(DoNothing, "SCRIPT")
+    TAG_HANDLER_PROC(tag)
+    {
+        return true;
+    }
+TAG_HANDLER_END(DoNothing)
 
 
 
@@ -236,6 +244,7 @@ TAGS_MODULE_BEGIN(Layout)
     TAGS_MODULE_ADD(TITLE)
     TAGS_MODULE_ADD(BODY)
     TAGS_MODULE_ADD(BLOCKQUOTE)
+    TAGS_MODULE_ADD(DoNothing)
 
 TAGS_MODULE_END(Layout)
 
