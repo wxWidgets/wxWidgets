@@ -251,18 +251,17 @@ LifeFrame::LifeFrame() :
     toolBar->SetToolBitmapSize(wxSize(16, 16));
 
     ADD_TOOL(wxID_NEW, tbBitmaps[0], wxGetStockLabel(wxID_NEW, false), _("Start a new game"));
+#ifndef __POCKETPC__
     ADD_TOOL(wxID_OPEN, tbBitmaps[1], wxGetStockLabel(wxID_OPEN, false), _("Open an existing Life pattern"));
 
-    // PocketPC only works with standard identifiers, and there's restricted space
-#ifndef __POCKETPC__
     toolBar->AddSeparator();
     ADD_TOOL(wxID_ZOOM_IN, tbBitmaps[2], wxGetStockLabel(wxID_ZOOM_IN, false), _("Zoom in"));
     ADD_TOOL(wxID_ZOOM_OUT, tbBitmaps[3], wxGetStockLabel(wxID_ZOOM_OUT, false), _("Zoom out"));
     ADD_TOOL(ID_INFO, tbBitmaps[4], _("Description"), _("Show description"));
     toolBar->AddSeparator();
+#endif
     ADD_TOOL(ID_START, tbBitmaps[5], _("Start"), _("Start"));
     ADD_TOOL(wxID_STOP, tbBitmaps[6], wxGetStockLabel(wxID_STOP, false), _("Stop"));
-#endif
 
     toolBar->Realize();
     toolBar->EnableTool(wxID_STOP, false);    // must be after Realize() !
