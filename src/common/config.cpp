@@ -240,15 +240,20 @@ wxConfigPathChanger::wxConfigPathChanger(const wxConfigBase *pContainer,
     strPath = wxCONFIG_PATH_SEPARATOR;
   }
 
-  if ( !strPath.IsEmpty() && m_pContainer->GetPath() != strPath ) {
-    // do change the path
-    m_bChanged = true;
+  if ( !strPath.IsEmpty() )
+  {
+    if ( m_pContainer->GetPath() != strPath )
+    {
+        // do change the path
+        m_bChanged = true;
+        m_strOldPath = m_pContainer->GetPath();
+        if ( *m_strOldPath.c_str() != wxCONFIG_PATH_SEPARATOR )
+          m_strOldPath += wxCONFIG_PATH_SEPARATOR;
+        m_pContainer->SetPath(strPath);
+    }
+
+    // in any case, use the just the name, not full path
     m_strName = strEntry.AfterLast(wxCONFIG_PATH_SEPARATOR);
-    m_strOldPath = m_pContainer->GetPath();
-    if ( m_strOldPath.Len() == 0 ||
-         m_strOldPath.Last() != wxCONFIG_PATH_SEPARATOR )
-        m_strOldPath += wxCONFIG_PATH_SEPARATOR;
-    m_pContainer->SetPath(strPath);
   }
   else {
     // it's a name only, without path - nothing to do
