@@ -203,6 +203,9 @@ void wxMilliSleep(unsigned long milliseconds)
 int wxKill(long pid, wxSignal sig, wxKillError *rc)
 {
     int err = kill((pid_t)pid, (int)sig);
+    if ( !err )
+       *rc = wxKILL_OK;
+    else
     if ( rc )
     {
         switch ( errno )
