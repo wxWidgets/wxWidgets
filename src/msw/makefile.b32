@@ -483,6 +483,7 @@ COMMONOBJS = \
 		$(MSWDIR)\stream.obj \
 		$(MSWDIR)\string.obj \
 		$(MSWDIR)\sysopt.obj \
+		$(MSWDIR)\taskbarcmn.obj \
 		$(MSWDIR)\tbarbase.obj \
 		$(MSWDIR)\textbuf.obj \
 		$(MSWDIR)\textcmn.obj \
@@ -1226,6 +1227,8 @@ $(MSWDIR)\stream.obj: $(COMMDIR)\stream.$(SRCSUFF)
 $(MSWDIR)\string.obj: $(COMMDIR)\string.$(SRCSUFF)
 
 $(MSWDIR)\sysopt.obj: $(COMMDIR)\sysopt.$(SRCSUFF)
+
+$(MSWDIR)\taskbarcmn.obj: $(COMMDIR)\taskbarcmn.$(SRCSUFF)
 
 $(MSWDIR)\tbarbase.obj: $(COMMDIR)\tbarbase.$(SRCSUFF)
 

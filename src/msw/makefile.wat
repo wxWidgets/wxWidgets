@@ -185,6 +185,7 @@ COMMONOBJS = &
 	$(OUTPUTDIR)\stream.obj &
 	$(OUTPUTDIR)\string.obj &
 	$(OUTPUTDIR)\sysopt.obj &
+	$(OUTPUTDIR)\taskbarcmn.obj &
 	$(OUTPUTDIR)\tbarbase.obj &
 	$(OUTPUTDIR)\textbuf.obj &
 	$(OUTPUTDIR)\textcmn.obj &
@@ -1031,6 +1032,9 @@ $(OUTPUTDIR)\string.obj:     $(COMMDIR)\string.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\sysopt.obj:     $(COMMDIR)\sysopt.cpp
+  *$(CXX) $(CXXFLAGS) $<
+
+$(OUTPUTDIR)\taskbarcmn.obj:     $(COMMDIR)\taskbarcmn.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\tbarbase.obj:     $(COMMDIR)\tbarbase.cpp

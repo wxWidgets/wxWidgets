@@ -152,6 +152,7 @@ ALL_SOURCES = \
 		common/stream.cpp \
 		common/string.cpp \
 		common/sysopt.cpp \
+		common/taskbarcmn.cpp \
 		common/tbarbase.cpp \
 		common/textbuf.cpp \
 		common/textcmn.cpp \
@@ -244,6 +245,7 @@ ALL_SOURCES = \
 		unix/gsocket.c \
 		unix/mimetype.cpp \
 		unix/snglinst.cpp \
+		unix/taskbarx11.cpp \
 		unix/threadpsx.cpp \
 		unix/utilsunx.cpp \
 		unix/utilsx11.cpp \
@@ -611,6 +613,7 @@ ALL_HEADERS = \
 		unix/fontutil.h \
 		unix/gsockunx.h \
 		unix/mimetype.h \
+		unix/taskbarx11.h \
 		unix/utilsx11.h \
 		html/forcelnk.h \
 		html/helpctrl.h \
@@ -739,6 +742,7 @@ COMMONOBJS = \
 		stream.o \
 		string.o \
 		sysopt.o \
+		taskbarcmn.o \
 		tbarbase.o \
 		textbuf.o \
 		textcmn.o \
@@ -951,6 +955,7 @@ UNIXOBJS = \
 		gsocket.o \
 		mimetype.o \
 		snglinst.o \
+		taskbarx11.o \
 		threadpsx.o \
 		utilsunx.o \
 		utilsx11.o

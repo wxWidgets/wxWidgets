@@ -195,6 +195,7 @@ COMMONOBJS = &
 	stream.obj &
 	string.obj &
 	sysopt.obj &
+	taskbarcmn.obj &
 	tbarbase.obj &
 	textbuf.obj &
 	textcmn.obj &
@@ -855,6 +856,9 @@ string.obj:     $(COMMDIR)\string.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 sysopt.obj:     $(COMMDIR)\sysopt.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+taskbarcmn.obj:     $(COMMDIR)\taskbarcmn.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 tbarbase.obj:     $(COMMDIR)\tbarbase.cpp

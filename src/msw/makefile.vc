@@ -241,6 +241,7 @@ COMMONOBJS = \
 		$(COMMDIR)\$D\stream.obj \
 		$(COMMDIR)\$D\string.obj \
 		$(COMMDIR)\$D\sysopt.obj \
+		$(COMMDIR)\$D\taskbarcmn.obj \
 		$(COMMDIR)\$D\tbarbase.obj \
 		$(COMMDIR)\$D\textbuf.obj \
 		$(COMMDIR)\$D\textcmn.obj \

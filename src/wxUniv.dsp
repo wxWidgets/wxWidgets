@@ -517,6 +517,10 @@ SOURCE=.\common\sysopt.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\taskbarcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\tbarbase.cpp
 # End Source File
 # Begin Source File

@@ -233,6 +233,7 @@ COMMONOBJS  = \
 		$(COMMDIR)/settcmn.$(OBJSUFF) \
 		$(COMMDIR)/sizer.$(OBJSUFF) \
 		$(COMMDIR)/statbar.$(OBJSUFF) \
+		$(COMMDIR)/taskbarcmn.$(OBJSUFF) \
 		$(COMMDIR)/tbarbase.$(OBJSUFF) \
 		$(COMMDIR)/textcmn.$(OBJSUFF) \
 		$(COMMDIR)/toplvcmn.$(OBJSUFF) \

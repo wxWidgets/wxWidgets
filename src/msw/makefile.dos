@@ -179,6 +179,7 @@ COMMONOBJS2 = \
 		$(COMMDIR)\stream.obj \
 		$(COMMDIR)\string.obj \
 		$(COMMDIR)\sysopt.obj \
+		$(COMMDIR)\taskbarcmn.obj \
 		$(COMMDIR)\tbarbase.obj \
 		$(COMMDIR)\textbuf.obj \
 		$(COMMDIR)\textcmn.obj \
@@ -1236,6 +1237,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/sysopt.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/taskbarcmn.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
