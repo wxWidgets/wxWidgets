@@ -190,12 +190,50 @@ void wxCmdLineParserData::SetArguments(int argc, char **argv)
     }
 }
 
-void wxCmdLineParserData::SetArguments(const wxString& WXUNUSED(cmdline))
+void wxCmdLineParserData::SetArguments(const wxString& cmdLine)
 {
-    // either use wxMSW wxApp::ConvertToStandardCommandArgs() or move its logic
-    // here and use this method from it - but don't duplicate the code
+    m_arguments.Empty();
 
-    wxFAIL_MSG(_T("TODO"));
+    m_arguments.Add(wxTheApp->GetAppName());
+
+    // Break up string
+    // Treat strings enclosed in double-quotes as single arguments
+    int i = 0;
+    int len = cmdLine.Length();
+    while (i < len)
+    {
+        // Skip whitespace
+        while ((i < len) && wxIsspace(cmdLine.GetChar(i)))
+            i ++;
+
+        if (i < len)
+        {
+            if (cmdLine.GetChar(i) == wxT('"')) // We found the start of a string
+            {
+                i ++;
+                int first = i;
+                while ((i < len) && (cmdLine.GetChar(i) != wxT('"')))
+                    i ++;
+
+                wxString arg(cmdLine.Mid(first, (i - first)));
+
+                m_arguments.Add(arg);
+
+                if (i < len)
+                    i ++; // Skip past 2nd quote
+            }
+            else // Unquoted argument
+            {
+                int first = i;
+                while ((i < len) && !wxIsspace(cmdLine.GetChar(i)))
+                    i ++;
+
+                wxString arg(cmdLine.Mid(first, (i - first)));
+
+                m_arguments.Add(arg);
+            }
+        }
+    }
 }
 
 int wxCmdLineParserData::FindOption(const wxString& name)
