@@ -2370,6 +2370,7 @@ fi
 
 if test "$wxUSE_DIALUP_MANAGER" = "yes" ; then
   AC_DEFINE(wxUSE_DIALUP_MANAGER)
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS nettest"
 fi
 
 if test "$wxUSE_STREAMS" = "yes" ; then
@@ -2763,7 +2764,7 @@ fi
 
 if test "$wxUSE_SCROLLBAR" = "yes"; then
     AC_DEFINE(wxUSE_SCROLLBAR)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS scroll"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS scroll scrollsub"
 fi
 
 if test "$wxUSE_SLIDER" = "yes"; then
@@ -3052,6 +3053,7 @@ AC_OUTPUT([
             samples/dnd/Makefile
             samples/drawing/Makefile
             samples/forty/Makefile
+            samples/font/Makefile
             samples/fractal/Makefile
             samples/image/Makefile
             samples/internat/Makefile
