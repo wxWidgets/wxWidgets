@@ -586,12 +586,8 @@ const wxMB2WXbuf wxLocale::GetString(const wxChar *szOrigString,
   }
   else
   {
-    // FIXME it was
-    // return (wxMB2WXbuf)(wxConvCurrent->cMB2WX(pszTrans));
-    //       before, but we don't want to use wxConvCurrent explicitly to
-    //       avoid linking unnecessary code in ANSI programs without MB
-    //       support
-    return (wxMB2WXbuf)(pszTrans);
+    return wxConvertMB2WX(pszTrans); // or preferably wxCSConv(charset).cMB2WX(pszTrans) or something,
+                                     // a macro similar to wxConvertMB2WX could be written for that
   }
 
   #undef szOrgString
