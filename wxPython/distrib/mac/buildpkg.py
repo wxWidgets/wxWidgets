@@ -70,6 +70,7 @@ Relocatable
 Required
 InstallOnly
 RequiresReboot
+RootVolumeOnly
 InstallFat\
 """
 
@@ -147,6 +148,7 @@ class PackageMaker:
         'Required': 'NO',
         'InstallOnly': 'NO',
         'RequiresReboot': 'NO',
+        'RootVolumeOnly' : 'NO',
         'InstallFat': 'NO'}
 
 
