@@ -1,39 +1,8 @@
 <?xml version="1.0" ?>
 <!-- $Id$ -->
+
 <makefile>
     
-    <set var="UNICODE_DEFINE">
-        <if cond="FORMAT!='autoconf' and UNICODE=='1'">_UNICODE</if>
-    </set>
-    
-    <set var="UNICOWS_LIB">
-        <if cond="MSLU=='1'">unicows</if>
-    </set>
-
-    <define-tag name="msvc-headers" rules="dll,lib">
-        <if cond="FORMAT=='msvc6prj'">
-            <msvc-project-files>
-                $(addPrefixToList('include\', wxwin.headersOnly(value)))
-            </msvc-project-files>
-        </if>
-    </define-tag>
-
-    <define-tag name="msvc-copy-setup-h" rules="dll,lib">
-        <if cond="FORMAT=='msvc6prj'">
-            <msvc-headers>wx/msw/setup.h</msvc-headers>
-            <set var="__custom_build_files" append="1">
-                include\wx\msw\setup.h
-            </set>
-            <set var="__custom_build_include_wx_msw_setup_h">
-Creating $(SETUPHDIR)\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"$(SETUPHDIR)\wx\setup.h" : $(DOLLAR)(SOURCE) "$(DOLLAR)(INTDIR)" "$(DOLLAR)(OUTDIR)"
-$(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
-            </set>
-        </if>
-    </define-tag>
-
     <if cond="FORMAT=='autoconf'">
         <option name="wxUSE_REGEX"/>
     </if>
@@ -47,7 +16,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
         <if cond="wxUSE_REGEX=='builtin'">$(TOP_SRCDIR)src/regex</if>
     </set>
 
-    <lib id="wxregex" template="3rdparty_lib"
+    <lib id="wxregex" template="msvc_setup_h,3rdparty_lib"
          cond="wxUSE_REGEX=='builtin' and BUILDING_LIB=='1'">
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>

@@ -256,7 +256,37 @@
         -->
         <install-if>SHARED=='0'</install-if>
     </template>
+    
+    
+    <!-- deal with the need to copy setup.h here: -->
 
+    <define-tag name="msvc-headers" rules="dll,lib">
+        <if cond="FORMAT=='msvc6prj'">
+            <msvc-project-files>
+                $(addPrefixToList('include\', wxwin.headersOnly(value)))
+            </msvc-project-files>
+        </if>
+    </define-tag>
+
+    <define-tag name="msvc-copy-setup-h" rules="dll,lib">
+        <if cond="FORMAT=='msvc6prj'">
+            <msvc-headers>wx/msw/setup.h</msvc-headers>
+            <set var="__custom_build_files" append="1">
+                include\wx\msw\setup.h
+            </set>
+            <set var="__custom_build_include_wx_msw_setup_h">
+Creating $(SETUPHDIR)\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"$(SETUPHDIR)\wx\setup.h" : $(DOLLAR)(SOURCE) "$(DOLLAR)(INTDIR)" "$(DOLLAR)(OUTDIR)"
+$(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
+            </set>
+        </if>
+    </define-tag>
+
+    <template id="msvc_setup_h">
+        <msvc-copy-setup-h/>
+    </template>
 
     <!-- =============================================================== -->
     <!--                         3rd party libs:                         -->
@@ -331,30 +361,6 @@
             <sys-lib>odbc32</sys-lib>
         </if>
     </template>
-
-    <define-tag name="msvc-headers" rules="dll,lib">
-        <if cond="FORMAT=='msvc6prj'">
-            <msvc-project-files>
-                $(addPrefixToList('include\', wxwin.headersOnly(value)))
-            </msvc-project-files>
-        </if>
-    </define-tag>
-    
-    <define-tag name="msvc-copy-setup-h" rules="dll,lib">
-        <if cond="FORMAT=='msvc6prj'">
-            <msvc-headers>wx/msw/setup.h</msvc-headers>
-            <set var="__custom_build_files" append="1">
-                include\wx\msw\setup.h
-            </set>
-            <set var="__custom_build_include_wx_msw_setup_h">
-Creating $(SETUPHDIR)\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"$(SETUPHDIR)\wx\setup.h" : $(DOLLAR)(SOURCE) "$(DOLLAR)(INTDIR)" "$(DOLLAR)(OUTDIR)"
-$(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
-            </set>
-        </if>
-    </define-tag>
 
 
     <!-- for GUI libs/samples: -->
@@ -438,10 +444,6 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
         <include>$(INC_ODBC)</include>
         <include>$(INC_REGEX)</include>
         <include>$(INC_EXPAT)</include>
-    </template>
-
-    <template id="msvc_setup_h">
-        <msvc-copy-setup-h/>
     </template>
     
     <template id="wx_lib"
