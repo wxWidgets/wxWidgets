@@ -80,7 +80,7 @@ dirctrlg.cpp	Generic
 dirdlgg.cpp	Generic	NotWin32
 dragimgg.cpp	Generic	NotOS2
 fdrepdlg.cpp	Generic	NotMSW
-filedlgg.cpp	Generic	NotMSW,NotX,NotOS2,NotMac
+filedlgg.cpp	Generic	Generic,NotX,NotOS2,NotMac
 fontdlgg.cpp	Generic	Generic,NotOS2
 grid.cpp	Generic
 gridctrl.cpp	Generic
@@ -297,7 +297,7 @@ evtloop.cpp	MSW	LowLevel
 fdrepdlg.cpp	MSW	Win32Only
 # FIXME: the generic implementation doesn't work under MSW, so we must
 #        the native dialog under MSW
-filedlg.cpp	MSW	LowLevel
+filedlg.cpp	MSW
 font.cpp	MSW	LowLevel
 fontdlg.cpp	MSW
 fontenum.cpp	MSW	LowLevel
@@ -309,7 +309,7 @@ gdiimage.cpp	MSW	LowLevel
 gdiobj.cpp	MSW	LowLevel
 glcanvas.cpp	MSW
 helpchm.cpp	MSW	Win32Only,LowLevel
-helpwin.cpp	MSW LowLevel
+helpwin.cpp	MSW	LowLevel
 icon.cpp	MSW	LowLevel
 imaglist.cpp	MSW	Win32Only
 iniconf.cpp	MSW
