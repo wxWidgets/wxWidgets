@@ -542,6 +542,7 @@ PyObject* PyFindClassWithAttr(PyObject *klass, PyObject *name)
 
     if (PyType_Check(klass)) {      // new style classes
         // This code is borrowed/adapted from _PyType_Lookup in typeobject.c
+        // (TODO: This part is not tested yet, so I'm not sure it is correct...)
         PyTypeObject* type = (PyTypeObject*)klass;
         PyObject *mro, *res, *base, *dict;
         /* Look in tp_dict of types in MRO */
@@ -559,7 +560,7 @@ PyObject* PyFindClassWithAttr(PyObject *klass, PyObject *name)
             assert(dict && PyDict_Check(dict));
             res = PyDict_GetItem(dict, name);
             if (res != NULL)
-                return res;
+                return base;
         }
         return NULL;
     }
