@@ -88,8 +88,6 @@ public:
     void OnExecWithRedirect(wxCommandEvent& event);
     void OnExecWithPipe(wxCommandEvent& event);
 
-    void OnDDEExec(wxCommandEvent& event);
-
     void OnAbout(wxCommandEvent& event);
 
     // polling output of async processes
@@ -104,7 +102,20 @@ private:
                     const wxArrayString& output,
                     const wxString& title);
 
+    // last command we executed
     wxString m_cmdLast;
+
+#ifdef __WINDOWS__
+    void OnDDEExec(wxCommandEvent& event);
+    void OnDDERequest(wxCommandEvent& event);
+
+    bool GetDDEServer();
+
+    // last params of a DDE transaction
+    wxString m_server,
+             m_topic,
+             m_cmdDde;
+#endif // __WINDOWS__
 
     wxListBox *m_lbox;
 
@@ -179,6 +190,7 @@ enum
     Exec_AsyncExec,
     Exec_Shell,
     Exec_DDEExec,
+    Exec_DDERequest,
     Exec_Redirect,
     Exec_Pipe,
     Exec_About = 300
@@ -204,6 +216,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Exec_Pipe, MyFrame::OnExecWithPipe)
 
     EVT_MENU(Exec_DDEExec, MyFrame::OnDDEExec)
+    EVT_MENU(Exec_DDERequest, MyFrame::OnDDERequest)
 
     EVT_MENU(Exec_About, MyFrame::OnAbout)
 
@@ -279,6 +292,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #ifdef __WINDOWS__
     execMenu->AppendSeparator();
     execMenu->Append(Exec_DDEExec, _T("Execute command via &DDE...\tCtrl-D"));
+    execMenu->Append(Exec_DDERequest, _T("Send DDE &request...\tCtrl-R"));
 #endif
 
     wxMenu *helpMenu = new wxMenu(_T(""), wxMENU_TEAROFF);
@@ -474,47 +488,85 @@ void MyFrame::OnExecWithPipe(wxCommandEvent& WXUNUSED(event))
     m_cmdLast = cmd;
 }
 
+#ifdef __WINDOWS__
+
+bool MyFrame::GetDDEServer()
+{
+    wxString server = wxGetTextFromUser(_T("Server to connect to:"),
+                                        DIALOG_TITLE, m_server);
+    if ( !server )
+        return FALSE;
+
+    m_server = server;
+
+    wxString topic = wxGetTextFromUser(_T("DDE topic:"), DIALOG_TITLE, m_topic);
+    if ( !topic )
+        return FALSE;
+
+    m_topic = topic;
+
+    wxString cmd = wxGetTextFromUser(_T("DDE command:"), DIALOG_TITLE, m_cmdDde);
+    if ( !cmd )
+        return FALSE;
+
+    m_cmdDde = cmd;
+
+    return TRUE;
+}
+
 void MyFrame::OnDDEExec(wxCommandEvent& WXUNUSED(event))
 {
-#ifdef __WINDOWS__
-    wxString server = wxGetTextFromUser(_T("Server to connect to:"),
-                                        DIALOG_TITLE, _T("IExplore"));
-    if ( !server )
-        return;
-
-    wxString topic = wxGetTextFromUser(_T("DDE topic:"),
-                                       DIALOG_TITLE, _T("WWW_OpenURL"));
-    if ( !topic )
-        return;
-
-    wxString cmd = wxGetTextFromUser(_T("DDE command:"),
-                                     DIALOG_TITLE,
-                                     _T("\"file:F:\\wxWindows\\samples\\"
-                                        "image\\horse.gif\",,-1,,,,,"));
-    if ( !cmd )
+    if ( !GetDDEServer() )
         return;
 
     wxDDEClient client;
-    wxConnectionBase *conn = client.MakeConnection("", server, topic);
+    wxConnectionBase *conn = client.MakeConnection("", m_server, m_topic);
     if ( !conn )
     {
         wxLogError(_T("Failed to connect to the DDE server '%s'."),
-                   server.c_str());
+                   m_server.c_str());
     }
     else
     {
-        if ( !conn->Execute(cmd) )
+        if ( !conn->Execute(m_cmdDde) )
         {
             wxLogError(_T("Failed to execute command '%s' via DDE."),
-                       cmd.c_str());
+                       m_cmdDde.c_str());
         }
         else
         {
             wxLogStatus(_T("Successfully executed DDE command"));
         }
     }
-#endif // __WINDOWS__
 }
+
+void MyFrame::OnDDERequest(wxCommandEvent& WXUNUSED(event))
+{
+    if ( !GetDDEServer() )
+        return;
+
+    wxDDEClient client;
+    wxConnectionBase *conn = client.MakeConnection("", m_server, m_topic);
+    if ( !conn )
+    {
+        wxLogError(_T("Failed to connect to the DDE server '%s'."),
+                   m_server.c_str());
+    }
+    else
+    {
+        if ( !conn->Request(m_cmdDde) )
+        {
+            wxLogError(_T("Failed to  send request '%s' via DDE."),
+                       m_cmdDde.c_str());
+        }
+        else
+        {
+            wxLogStatus(_T("Successfully sent DDE request."));
+        }
+    }
+}
+
+#endif // __WINDOWS__
 
 // input polling
 void MyFrame::OnIdle(wxIdleEvent& event)

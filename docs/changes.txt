@@ -32,6 +32,7 @@ wxBase:
 
 wxMSW:
 
+- wxExecute DDE bug corrected: no spurious error messages any more
 - wxMSW focus handling problems (notable with toolbars and splitters) fixed
 - wxListCtrl attributes are handled correctly when inserting/deleting/sorting
 - wxPrinterDC resource leak fixed
