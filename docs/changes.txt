@@ -175,13 +175,14 @@ OTHER CHANGES
 2.4.2
 -----
 
-wxBase:
-
-- always NUL-terminate the log messages
-
 All:
 
+- always NUL-terminate the log messages
 - wxRegEx::Compile() now calculates the number of groups correctly
+
+All (GUI):
+
+- rare crash in wxFontMapper fixed (Robert Vazan)
 
 Generic:
 

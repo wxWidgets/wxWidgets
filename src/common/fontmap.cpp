@@ -758,13 +758,15 @@ bool wxFontMapper::TestAltEncoding(const wxString& configEntry,
 class ReentrancyBlocker
 {
 public:
-    ReentrancyBlocker(bool& b) : m_b(b) { m_b = TRUE; }
-    ~ReentrancyBlocker() { m_b = FALSE; }
+    ReentrancyBlocker(bool& flag) : m_flagOld(flag), m_flag(flag)
+        { m_flag = TRUE; }
+    ~ReentrancyBlocker() { m_flag = m_flagOld; }
 
 private:
-    bool& m_b;
+    bool m_flagOld;
+    bool& m_flag;
 };
-#endif
+#endif // wxUSE_GUI
 
 bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
                                      wxNativeEncodingInfo *info,
