@@ -589,6 +589,23 @@ directory or file really exists, you should use
 \helpref{DirExists}{wxfilenamedirexists} or 
 \helpref{FileExists}{wxfilenamefileexists} for this.
 
+\membersection{wxFileName::MacFindDefaultTypeAndCreator}\label{wxfilenamemacfinddefaulttypeandcreator}
+
+\func{static bool}{MacFindDefaultTypeAndCreator}{\param{const wxString\& }{ext}, \param{wxUint32* }{type}, \param{wxUint32* }{creator}}
+
+On Mac OS, gets the common type and creator for the given extension.
+
+\membersection{wxFileName::MacRegisterDefaultTypeAndCreator}\label{wxfilenamemacregisterdefaulttypeandcreator}
+
+\func{static void}{MacRegisterDefaultTypeAndCreator}{\param{const wxString\& }{ext}, \param{wxUint32 }{type}, \param{wxUint32 }{creator}}
+
+On Mac OS, registers application defined extensions and their default type and creator.
+
+\membersection{wxFileName::MacSetDefaultTypeAndCreator}\label{wxfilenamemacsetdefaulttypeandcreator}
+
+\func{bool}{MacSetDefaultTypeAndCreator}{\void}
+
+On Mac OS, looks up the appropriate type and creator from the registration and then sets it.
 
 \membersection{wxFileName::MakeAbsolute}\label{wxfilenamemakeabsolute}
 
