@@ -112,6 +112,7 @@ _treeList = [
         'SpinCtrl',
         'SplitterWindow',
         'StaticBitmap',
+        'StaticBox',
         'StaticText',
         'StatusBar',
         'StockButtons',
