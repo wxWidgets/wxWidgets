@@ -1032,6 +1032,10 @@ wxCheckForInterrupt = misc2c.wxCheckForInterrupt
 
 wxFlushEvents = misc2c.wxFlushEvents
 
+def wxGetTopLevelParent(*_args, **_kwargs):
+    val = apply(misc2c.wxGetTopLevelParent,_args,_kwargs)
+    return val
+
 wxResourceAddIdentifier = misc2c.wxResourceAddIdentifier
 
 wxResourceClear = misc2c.wxResourceClear

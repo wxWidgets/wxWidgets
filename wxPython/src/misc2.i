@@ -176,6 +176,8 @@ bool wxCheckForInterrupt(wxWindow *wnd);
 void wxFlushEvents();
 #endif
 
+wxWindow* wxGetTopLevelParent(wxWindow *win);
+
 //---------------------------------------------------------------------------
 // Resource System
 

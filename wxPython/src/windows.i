@@ -326,6 +326,7 @@ public:
     void SetConstraints(wxLayoutConstraints *constraints);
     void UnsetConstraints(wxLayoutConstraints *constraints);
     void SetFocus();
+    void SetFocusFromKbd();
     bool AcceptsFocus();
     void SetFont(const wxFont& font);
     void SetForegroundColour(const wxColour& colour);
@@ -349,7 +350,18 @@ public:
         }
     }
 
-    void SetSizeHints(int minW=-1, int minH=-1, int maxW=-1, int maxH=-1, int incW=-1, int incH=-1);
+    void SetSizeHints(int minW,    int minH,
+                      int maxW=-1, int maxH=-1,
+                      int incW=-1, int incH=-1);
+    void SetVirtualSizeHints( int minW, int minH,
+                              int maxW = -1, int maxH = -1 );
+
+    void SetVirtualSize( const wxSize &size );
+    %name(SetVirtualSizeWH)void SetVirtualSize( int x, int y );
+
+    wxSize GetVirtualSize() const;
+    %name(GetVirtualSizeTuple)void GetVirtualSize( int *OUTPUT, int *OUTPUT ) const;
+
     %name(SetClientSizeWH)void SetClientSize(int width, int height);
     void SetClientSize(const wxSize& size);
     //void SetPalette(wxPalette* palette);
@@ -377,6 +389,7 @@ public:
     wxToolTip* GetToolTip();
 
     void SetSizer(wxSizer* sizer, bool deleteOld=TRUE);
+    void SetSizerAndFit(wxSizer *sizer, bool deleteOld=TRUE);
     wxSizer* GetSizer();
 
         // Track if this window is a member of a sizer
@@ -541,7 +554,6 @@ public:
     int GetScrollPageSize(int orient);
     void GetScrollPixelsPerUnit(int* OUTPUT, int* OUTPUT);
     wxWindow* GetTargetWindow();
-    void GetVirtualSize(int* OUTPUT, int* OUTPUT);
     bool IsRetained();
     void PrepareDC(wxDC& dc);
     void Scroll(int x, int y);
@@ -584,6 +596,10 @@ public:
     void AdjustScrollbars();
 
     bool Layout();
+
+    // Set the x, y scrolling increments.
+    void SetScrollRate( int xstep, int ystep );
+
 };
 
 //----------------------------------------------------------------------

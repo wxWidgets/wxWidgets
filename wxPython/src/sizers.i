@@ -246,7 +246,10 @@ public:
     void Layout();
 
     void Fit( wxWindow *window );
+    void FitInside( wxWindow *window );
+
     void SetSizeHints( wxWindow *window );
+    void SetVirtualSizeHints( wxWindow *window );
 
     void Clear( bool delete_windows=FALSE );
     void DeleteWindows();
