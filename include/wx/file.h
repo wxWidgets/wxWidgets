@@ -164,7 +164,7 @@ public:
 
   // I/O (both functions return true on success, false on failure)
   bool Write(const void *p, size_t n) { return m_file.Write(p, n) != 0; }
-  bool Write(const wxString& str)   { return m_file.Write(str); }
+  bool Write(const wxString& str, wxMBConv& conv = wxConvLibc) { return m_file.Write(str, conv); }
 
   // different ways to close the file
     // validate changes and delete the old file of name m_strName
