@@ -2741,11 +2741,25 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <!-- At the moment, BASE_AND_GUI_TOOLKIT_SRC handles this -->
         <!-- if cond="PLATFORM_MACOS=='1'">$(BASE_AND_GUI_MAC_SRC)</if -->
     </set>
+
+    <!-- Nested if would be nicer, but this works -->
+    <!-- These are the files for PLATFORM_MACOSX -->
+    <set var="BASE_MACOSX_HDR" hints="files">
+        <if cond="TOOLKIT=='MAC'">$(BASE_MACOSX_WXMAC_HDR)</if>
+        <if cond="TOOLKIT=='COCOA'">$(BASE_MACOSX_NOTWXMAC_HDR)</if>
+        <if cond="TOOLKIT=='GTK'">$(BASE_MACOSX_NOTWXMAC_HDR)</if>
+        <if cond="TOOLKIT=='X11'">$(BASE_MACOSX_NOTWXMAC_HDR)</if>
+        <if cond="TOOLKIT=='MOTIF'">$(BASE_MACOSX_NOTWXMAC_HDR)</if>
+        <!-- FIXME: TOOLKIT!='MAC' is what we really want -->
+
+        <!-- FIXME: a hack because there are two wxBase versions on
+                    Mac; once fixed, this would no longer be needed -->
+        <if cond="TOOLKIT==''">$(BASE_MACOSX_NOTWXMAC_HDR)</if>
+    </set>
     <set var="BASE_PLATFORM_HDR" hints="files">
         <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_HDR)</if>
         <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_HDR) $(BASE_WINCE_HDR)</if>
-        <if cond="TOOLKIT=='MAC'">$(BASE_MACOSX_WXMAC_HDR)</if>
-        <if cond="TOOLKIT=='COCOA'">$(BASE_UNIX_HDR)</if>
+        <if cond="PLATFORM_MACOSX=='1'">$(BASE_MACOSX_HDR)</if>
         <if cond="PLATFORM_PALMOS=='1'">$(BASE_PALMOS_HDR)</if>
     </set>
 
