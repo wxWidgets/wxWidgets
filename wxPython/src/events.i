@@ -89,6 +89,18 @@ public:
     void SetExtraLong(long extraLong);
     void SetInt(int i);
 
+    %addmethods {
+        PyObject* GetClientData() {
+            wxPyClientData* data = (wxPyClientData*)self->GetClientObject();
+            if (data) {
+                Py_INCREF(data->m_obj);
+                return data->m_obj;
+            } else {
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+    }
 };
 
 

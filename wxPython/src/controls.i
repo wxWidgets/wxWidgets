@@ -83,6 +83,57 @@ public:
 
 //----------------------------------------------------------------------
 
+
+class wxControlWithItems : public wxControl {
+public:
+
+    // void Clear();  ambiguous, redefine below...
+    void Delete(int n);
+
+    int GetCount();
+    %pragma(python) addtoclass = "Number = GetCount"
+    wxString GetString(int n);
+    void SetString(int n, const wxString& s);
+    int FindString(const wxString& s);
+
+    void Select(int n);
+    int GetSelection();
+
+    wxString GetStringSelection() const;
+
+    //   void Append(const wxString& item);
+    //   void Append(const wxString& item, char* clientData);
+    //   char* GetClientData(const int n);
+    //   void SetClientData(const int n, char* data);
+    %addmethods {
+        void Append(const wxString& item, PyObject* clientData=NULL) {
+            if (clientData) {
+                wxPyClientData* data = new wxPyClientData(clientData);
+                self->Append(item, data);
+            } else
+                self->Append(item);
+        }
+
+        PyObject* GetClientData(int n) {
+            wxPyClientData* data = (wxPyClientData*)self->GetClientObject(n);
+            if (data) {
+                Py_INCREF(data->m_obj);
+                return data->m_obj;
+            } else {
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+
+        void SetClientData(int n, PyObject* clientData) {
+            wxPyClientData* data = new wxPyClientData(clientData);
+            self->SetClientObject(n, data);
+        }
+    }
+
+};
+//----------------------------------------------------------------------
+
 class wxButton : public wxControl {
 public:
     wxButton(wxWindow* parent, wxWindowID id, const wxString& label,
@@ -171,7 +222,7 @@ public:
 
 //----------------------------------------------------------------------
 
-class wxChoice : public wxControl {
+class wxChoice : public wxControlWithItems {
 public:
     wxChoice(wxWindow *parent, wxWindowID id,
              const wxPoint& pos = wxDefaultPosition,
@@ -190,26 +241,17 @@ public:
              const wxValidator& validator = wxDefaultValidator,
              char* name = "choice");
 
-
-    void Append(const wxString& item);
     void Clear();
-    void Delete(int n);
-    int FindString(const wxString& string);
+
     int GetColumns();
-    int GetSelection();
-    wxString GetString(const int n);
-    wxString GetStringSelection();
-    int GetCount();
     void SetColumns(const int n = 1);
     void SetSelection(const int n);
     void SetStringSelection(const wxString& string);
     void SetString(int n, const wxString& s);
 
     %pragma(python) addtoclass = "
-    Number = GetCount
     Select = SetSelection
     "
-
 };
 
 //----------------------------------------------------------------------
@@ -234,25 +276,14 @@ public:
                char* name = "comboBox");
 
 
-    void Append(const wxString& item);
-    // TODO: void Append(const wxString& item, char* clientData);
-    void Clear();
     void Copy();
     void Cut();
-    void Delete(int n);
-    // NotMember??:    void Deselect(int n);
-    int FindString(const wxString& string);
-    // TODO: char* GetClientData(const int n);
     long GetInsertionPoint();
     long GetLastPosition();
-    int GetSelection();
-    wxString GetString(int n);
-    wxString GetStringSelection();
     wxString GetValue();
     void Paste();
     void Replace(long from, long to, const wxString& text);
     void Remove(long from, long to);
-    // TODO:    void SetClientData(const int n, char* data);
     void SetInsertionPoint(long pos);
     void SetInsertionPointEnd();
     void SetSelection(int n);
@@ -354,7 +385,7 @@ public:
 
 //----------------------------------------------------------------------
 
-class wxListBox : public wxControl {
+class wxListBox : public wxControlWithItems {
 public:
     wxListBox(wxWindow* parent, wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
@@ -373,15 +404,8 @@ public:
               const wxValidator& validator = wxDefaultValidator,
               char* name = "listBox");
 
-
-    void Append(const wxString& item);
-    // TODO:    void Append(const wxString& item, char* clientData);
     void Clear();
-    void Delete(int n);
     void Deselect(int n);
-    int FindString(const wxString& string);
-    // TODO:    char* GetClientData(const int n);
-    int GetSelection();
 
     // int GetSelections(int **selections);
     %addmethods {
@@ -396,16 +420,12 @@ public:
       }
     }
 
+
     void InsertItems(int LCOUNT, wxString* choices, int pos);
 
-    wxString GetString(int n);
-    wxString GetStringSelection();
-    int GetCount();
-    %pragma(python) addtoclass = "Number = GetCount"
     bool IsSelected(const int n);
     bool Selected(const int n);
     void Set(int LCOUNT, wxString* choices);
-    // TODO:    void SetClientData(const int n, char* data);
     void SetFirstItem(int n);
     %name(SetFirstItemStr)void SetFirstItem(const wxString& string);
     void SetSelection(int n, bool select = TRUE);
