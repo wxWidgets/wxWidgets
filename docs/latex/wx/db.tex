@@ -1961,7 +1961,7 @@ Accessor function to set the user ID for this class instance.
 
 Accessor function to assign the user ID for this class instance.
 
-\section{\class{wxDbIdxDef}}\label{wxdbidxdef}
+\section{\class{wxDbIndexDef}}\label{wxdbIndexdef}
 
 Used in creation of non-primary indexes.  Currently there are no member
 functions for this class.
@@ -2032,7 +2032,7 @@ with the wxDbTable class.
 \begin{itemize}\itemsep=0pt
 \item \helpref{wxDbColDef}{wxdbcoldef}
 \item \helpref{wxDbColDataPtr}{wxdbcoldataptr}
-\item \helpref{wxDbIdxDef}{wxdbidxdef}
+\item \helpref{wxDbIndexDef}{wxdbIndexdef}
 \end{itemize}
 
 \wxheading{Constants}
@@ -2168,7 +2168,7 @@ this function.
 Constructs the full SQL statement that can be used to update all rows matching
 the criteria in the pWhereClause.
 
-If typeOfUpd is DB\_UPD\_KEYFIELDS, then the current values in the bound columns
+If typeOfUpdate is DB\_UPD\_KEYFIELDS, then the current values in the bound columns
 are used to determine which row(s) in the table are to be updated. The
 exception to this is when a datasource supports ROW IDs (Oracle).  The ROW ID
 column is used for efficiency purposes when available.
@@ -2184,9 +2184,9 @@ by this function.
 \docparam{pSqlStmt}{Pointer to storage for the SQL statement retrieved.  To be
 sure you have adequate space allocated for the SQL statement, allocate
 DB\_MAX\_STATEMENT\_LEN bytes.}
-\docparam{typeOfUpd}{The type of update statement being performed.  Can be one
+\docparam{typeOfUpdate}{The type of update statement being performed.  Can be one
 of two values: DB\_UPD\_KEYFIELDS or DB\_UPD\_WHERE.}
-\docparam{pWhereClause}{{\it OPTIONAL}.  If the typeOfUpd is DB\_UPD\_WHERE,
+\docparam{pWhereClause}{{\it OPTIONAL}.  If the typeOfUpdate is DB\_UPD\_WHERE,
 then you must also pass in a SQL WHERE clause in this argument. Default is "".}
 
 \wxheading{Remarks}
@@ -2414,8 +2414,8 @@ this function.
 
 \membersection{wxDbTable::CreateIndex}\label{wxdbtablecreateindex}
 
-\func{bool}{CreateIndex}{\param{const wxString \&}{idxName}, \param{bool }{unique},
-\param{UWORD }{noIdxCols}, \param{wxDbIdxDef *}{pIdxDefs},
+\func{bool}{CreateIndex}{\param{const wxString \&}{IndexName}, \param{bool }{unique},
+\param{UWORD }{numIndexColumns}, \param{wxDbIndexDef *}{pIndexDefs},
 \param{bool }{attemptDrop=true}}
 
 This member function allows you to create secondary (non primary) indexes on
@@ -2430,11 +2430,11 @@ take advantage of those indexes.
 
 \wxheading{Parameters}
 
-\docparam{idxName}{Name of the Index.  Name must be unique within the table
+\docparam{IndexName}{Name of the Index.  Name must be unique within the table
 space of the datasource.}
 \docparam{unique}{Indicates if this index is unique.}
-\docparam{noIdxCols}{Number of columns in the index.}
-\docparam{pIdxDefs}{A pointer to an array wxDbIdxDef structures. }
+\docparam{numIndexColumns}{Number of columns in the index.}
+\docparam{pIndexDefs}{A pointer to an array wxDbIndexDef structures. }
 \docparam{attemptDrop}{{\it OPTIONAL}.  Indicates if the function should try
 to execute a \helpref{wxDbTable::DropIndex}{wxdbtabledropindex} on the index
 name provided before trying to create the index name.  Default is true.}
@@ -2444,7 +2444,7 @@ name provided before trying to create the index name.  Default is true.}
 The first parameter, index name, must be unique and should be given a
 meaningful name.  Common practice is to include the table name as a prefix
 in the index name (e.g. For table PARTS, you might want to call your index
-PARTS\_IDX1).  This will allow you to easily view all
+PARTS\_Index1).  This will allow you to easily view all
 of the indexes defined for a given table grouped together alphabetically.
 
 The second parameter indicates if the index is unique or not.  Uniqueness
@@ -2453,12 +2453,12 @@ indexes from being inserted into the table when violating a unique index's
 uniqueness.
 
 In the third parameter, specify how many columns are in your index.  This
-number must match the number of columns defined in the 'pIdxDefs' parameter.
+number must match the number of columns defined in the 'pIndexDefs' parameter.
 
 The fourth parameter specifies which columns make up the index using the
-wxDbIdxDef structure.  For each column in the index, you must specify two
+wxDbIndexDef structure.  For each column in the index, you must specify two
 things, the column name and the sort order (ascending / descending).  See
-the example below to see how to build and pass in the wxDbIdxDef structure.
+the example below to see how to build and pass in the wxDbIndexDef structure.
 
 The fifth parameter is provided to handle the differences in datasources as
 to whether they will automatically overwrite existing indexes with the same
@@ -2483,18 +2483,18 @@ after executing this function.
 
 \begin{verbatim}
     // Create a secondary index on the PARTS table
-    wxDbIdxDef  idxDef[2];  // 2 columns make up the index
+    wxDbIndexDef  IndexDef[2];  // 2 columns make up the index
 
-    wxStrcpy(idxDef[0].ColName, "PART_DESC");  // Column 1
-    idxDef[0].Ascending = true;
+    wxStrcpy(IndexDef[0].ColName, "PART_DESC");  // Column 1
+    IndexDef[0].Ascending = true;
 
-    wxStrcpy(idxDef[1].ColName, "SERIAL_NO");  // Column 2
-    idxDef[1].Ascending = false;
+    wxStrcpy(IndexDef[1].ColName, "SERIAL_NO");  // Column 2
+    IndexDef[1].Ascending = false;
 
     // Create a name for the index based on the table's name
     wxString indexName;
-    indexName.Printf("%s_IDX1",parts->GetTableName());
-    parts->CreateIndex(indexName, true, 2, idxDef);
+    indexName.Printf("%s_Index1",parts->GetTableName());
+    parts->CreateIndex(indexName, true, 2, IndexDef);
 \end{verbatim}
 
 \membersection{wxDbTable::CreateTable}\label{wxdbtablecreatetable}
@@ -2692,18 +2692,18 @@ this function.
 
 \membersection{wxDbTable::DropIndex}\label{wxdbtabledropindex}
 
-\func{bool}{DropIndex}{\param{const wxString \&}{idxName}}
+\func{bool}{DropIndex}{\param{const wxString \&}{IndexName}}
 
 Allows an index on the associated table to be dropped (deleted) if the user
 login has sufficient privileges to do so.
 
 \wxheading{Parameters}
 
-\docparam{idxName}{Name of the index to be dropped.}
+\docparam{IndexName}{Name of the index to be dropped.}
 
 \wxheading{Remarks}
 
-If the index specified in the 'idxName' parameter does not exist, an error
+If the index specified in the 'IndexName' parameter does not exist, an error
 will be logged, and the function will return a result of false.
 
 It is not necessary to call \helpref{wxDb::CommitTrans}{wxdbcommittrans}
@@ -3513,10 +3513,10 @@ table's columns are refreshed to reflect the current data in the database.
 
 \membersection{wxDbTable::SetColDefs}\label{wxdbtablesetcoldefs}
 
-\func{void}{SetColDefs}{\param{UWORD }{index}, \param{const wxString \&}{fieldName},
+\func{bool}{SetColDefs}{\param{UWORD }{index}, \param{const wxString \&}{fieldName},
 \param{int }{dataType}, \param{void *}{pData}, \param{SWORD }{cType},
-\param{int }{size}, \param{bool }{keyField = false}, \param{bool }{upd = true},
-\param{bool }{insAllow = true}, \param{bool }{derivedCol = false}}
+\param{int }{size}, \param{bool }{keyField = false}, \param{bool }{updateable = true},
+\param{bool }{insertAllowed = true}, \param{bool }{derivedColumn = false}}
 
 \func{wxDbColDataPtr *}{SetColDefs}{\param{wxDbColInf *}{colInfs}, \param{UWORD }{numCols}}
 
@@ -3560,11 +3560,11 @@ Other valid types are available also, but these are the most common ones:}
 \docparam{size}{Maximum size in bytes of the {\it pData} object.}
 \docparam{keyField}{{\it OPTIONAL}.  Indicates if this column is part of the
 primary index.  Default is false.}
-\docparam{upd}{{\it OPTIONAL}.  Are updates allowed on this column?
+\docparam{updateable}{{\it OPTIONAL}.  Are updates allowed on this column?
 Default is true.}
-\docparam{insAllow}{{\it OPTIONAL}.  Inserts allowed on this column?
+\docparam{insertAllowed}{{\it OPTIONAL}.  Inserts allowed on this column?
 Default is true.}
-\docparam{derivedCol}{{\it OPTIONAL}.  Is this a derived column (non-base
+\docparam{derivedColumn}{{\it OPTIONAL}.  Is this a derived column (non-base
 table column for query only)?  Default is false.}
 
 \docparam{colInfs}{Pointer to an array of wxDbColInf instances which contains
@@ -3576,6 +3576,14 @@ to by {\it colInfs}, which are to have column definitions created from them.}
 
 If {\it pData} is to hold a string of characters, be sure to include enough
 space for the NULL terminator in pData and in the byte count of {\it size}.
+
+Using the first form of this function, if the column definition is not able 
+to be created, a value of false is returned.  If the specified index of the 
+column exceeds the number of columns defined in the wxDbTable instance, an
+assert is thrown and logged (in debug builds) and a false is returned.
+
+A failure to create the column definition in the second form results in a 
+value of NULL being returned.
 
 Both forms of this function provide a shortcut for defining the columns in
 your wxDbTable object.  Use this function in any derived wxDbTable

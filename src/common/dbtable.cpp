@@ -1178,7 +1178,7 @@ void wxDbTable::BuildSelectStmt(wxChar *pSqlStmt, int typeOfSelect, bool distinc
 
 
 /********** wxDbTable::BuildUpdateStmt() **********/
-void wxDbTable::BuildUpdateStmt(wxString &pSqlStmt, int typeOfUpd, const wxString &pWhereClause)
+void wxDbTable::BuildUpdateStmt(wxString &pSqlStmt, int typeOfUpdate, const wxString &pWhereClause)
 {
     wxASSERT(!queryOnly);
     if (queryOnly)
@@ -1212,7 +1212,7 @@ void wxDbTable::BuildUpdateStmt(wxString &pSqlStmt, int typeOfUpd, const wxStrin
 
     // Append the WHERE clause to the SQL UPDATE statement
     pSqlStmt += wxT(" WHERE ");
-    switch(typeOfUpd)
+    switch(typeOfUpdate)
     {
         case DB_UPD_KEYFIELDS:
             // If the datasource supports the ROWID column, build
@@ -1247,10 +1247,10 @@ void wxDbTable::BuildUpdateStmt(wxString &pSqlStmt, int typeOfUpd, const wxStrin
 
 
 /***** DEPRECATED: use wxDbTable::BuildUpdateStmt(wxString &....) form *****/
-void wxDbTable::BuildUpdateStmt(wxChar *pSqlStmt, int typeOfUpd, const wxString &pWhereClause)
+void wxDbTable::BuildUpdateStmt(wxChar *pSqlStmt, int typeOfUpdate, const wxString &pWhereClause)
 {
     wxString tempSqlStmt;
-    BuildUpdateStmt(tempSqlStmt, typeOfUpd, pWhereClause);
+    BuildUpdateStmt(tempSqlStmt, typeOfUpdate, pWhereClause);
     wxStrcpy(pSqlStmt, tempSqlStmt);
 }  // BuildUpdateStmt()
 
@@ -1648,13 +1648,13 @@ bool wxDbTable::DropTable()
 
 
 /********** wxDbTable::CreateIndex() **********/
-bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCols,
-                                     wxDbIdxDef *pIdxDefs, bool attemptDrop)
+bool wxDbTable::CreateIndex(const wxString &indexName, bool unique, UWORD numIndexColumns,
+                                     wxDbIdxDef *pIndexDefs, bool attemptDrop)
 {
     wxString sqlStmt;
 
     // Drop the index first
-    if (attemptDrop && !DropIndex(idxName))
+    if (attemptDrop && !DropIndex(indexName))
         return false;
 
     // MySQL (and possibly Sybase ASE?? - gt) require that any columns which are used as portions
@@ -1670,7 +1670,7 @@ bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCol
         wxString sqlStmt;
         int i;
         bool ok = true;
-        for (i = 0; i < noIdxCols && ok; i++)
+        for (i = 0; i < numIndexColumns && ok; i++)
         {
             int   j = 0;
             bool  found = false;
@@ -1680,7 +1680,7 @@ bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCol
             // this information
             while (!found && (j < this->m_numCols))
             {
-                if (wxStrcmp(colDefs[j].ColName,pIdxDefs[i].ColName) == 0)
+                if (wxStrcmp(colDefs[j].ColName,pIndexDefs[i].ColName) == 0)
                     found = true;
                 if (!found)
                     j++;
@@ -1688,7 +1688,7 @@ bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCol
 
             if (found)
             {
-                ok = pDb->ModifyColumn(tableName, pIdxDefs[i].ColName,
+                ok = pDb->ModifyColumn(tableName, pIndexDefs[i].ColName,
                                         colDefs[j].DbDataType, (int)(colDefs[j].SzDataObj / sizeof(wxChar)),
                                         wxT("NOT NULL"));
 
@@ -1722,7 +1722,7 @@ bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCol
         sqlStmt += wxT("UNIQUE ");
 
     sqlStmt += wxT("INDEX ");
-    sqlStmt += pDb->SQLTableName(idxName);
+    sqlStmt += pDb->SQLTableName(indexName);
     sqlStmt += wxT(" ON ");
 
     sqlStmt += pDb->SQLTableName(tableName);
@@ -1731,10 +1731,10 @@ bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCol
 
     // Append list of columns making up index
     int i;
-    for (i = 0; i < noIdxCols; i++)
+    for (i = 0; i < numIndexColumns; i++)
     {
-        sqlStmt += pDb->SQLColumnName(pIdxDefs[i].ColName);
-//        sqlStmt += pIdxDefs[i].ColName;
+        sqlStmt += pDb->SQLColumnName(pIndexDefs[i].ColName);
+//        sqlStmt += pIndexDefs[i].ColName;
 
         // MySQL requires a key length on VARCHAR keys
         if ( pDb->Dbms() == dbmsMY_SQL )
@@ -1743,7 +1743,7 @@ bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCol
             int j;
             for ( j = 0; j < m_numCols; ++j )
             {
-                if ( wxStrcmp( pIdxDefs[i].ColName, colDefs[j].ColName ) == 0 )
+                if ( wxStrcmp( pIndexDefs[i].ColName, colDefs[j].ColName ) == 0 )
                 {
                     break;
                 }
@@ -1761,15 +1761,15 @@ bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCol
             !(pDb->Dbms() == dbmsFIREBIRD) &&
             !(pDb->Dbms() == dbmsPOSTGRES))
         {
-            if (pIdxDefs[i].Ascending)
+            if (pIndexDefs[i].Ascending)
                 sqlStmt += wxT(" ASC");
             else
                 sqlStmt += wxT(" DESC");
         }
         else
-            wxASSERT_MSG(pIdxDefs[i].Ascending, _T("Datasource does not support DESCending index columns"));
+            wxASSERT_MSG(pIndexDefs[i].Ascending, _T("Datasource does not support DESCending index columns"));
 
-        if ((i + 1) < noIdxCols)
+        if ((i + 1) < numIndexColumns)
             sqlStmt += wxT(",");
     }
 
@@ -1805,7 +1805,7 @@ bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCol
 
 
 /********** wxDbTable::DropIndex() **********/
-bool wxDbTable::DropIndex(const wxString &idxName)
+bool wxDbTable::DropIndex(const wxString &indexName)
 {
     // NOTE: This function returns true if the Index does not exist, but
     //       only for identified databases.  Code will need to be added
@@ -1817,17 +1817,17 @@ bool wxDbTable::DropIndex(const wxString &idxName)
     if (pDb->Dbms() == dbmsACCESS || pDb->Dbms() == dbmsMY_SQL ||
         pDb->Dbms() == dbmsDBASE /*|| Paradox needs this syntax too when we add support*/)
         sqlStmt.Printf(wxT("DROP INDEX %s ON %s"),
-                       pDb->SQLTableName(idxName.c_str()).c_str(),
+                       pDb->SQLTableName(indexName.c_str()).c_str(),
                        pDb->SQLTableName(tableName.c_str()).c_str());
     else if ((pDb->Dbms() == dbmsMS_SQL_SERVER) ||
              (pDb->Dbms() == dbmsSYBASE_ASE) ||
              (pDb->Dbms() == dbmsXBASE_SEQUITER))
         sqlStmt.Printf(wxT("DROP INDEX %s.%s"),
                        pDb->SQLTableName(tableName.c_str()).c_str(),
-                       pDb->SQLTableName(idxName.c_str()).c_str());
+                       pDb->SQLTableName(indexName.c_str()).c_str());
     else
         sqlStmt.Printf(wxT("DROP INDEX %s"),
-                       pDb->SQLTableName(idxName.c_str()).c_str());
+                       pDb->SQLTableName(indexName.c_str()).c_str());
 
     pDb->WriteSqlLog(sqlStmt);
 
@@ -2270,7 +2270,7 @@ bool wxDbTable::SetQueryTimeout(UDWORD nSeconds)
 /********** wxDbTable::SetColDefs() **********/
 bool wxDbTable::SetColDefs(UWORD index, const wxString &fieldName, int dataType, void *pData,
                            SWORD cType, int size, bool keyField, bool updateable,
-                           bool insAllow, bool derivedCol)
+                           bool insertAllowed, bool derivedColumn)
 {
     wxString tmpStr;
 
@@ -2303,9 +2303,9 @@ bool wxDbTable::SetColDefs(UWORD index, const wxString &fieldName, int dataType,
     colDefs[index].SqlCtype         = cType;
     colDefs[index].SzDataObj        = size;  //TODO: glt ??? * sizeof(wxChar) ???
     colDefs[index].KeyField         = keyField;
-    colDefs[index].DerivedCol       = derivedCol;
+    colDefs[index].DerivedCol       = derivedColumn;
     // Derived columns by definition would NOT be "Insertable" or "Updateable"
-    if (derivedCol)
+    if (derivedColumn)
     {
         colDefs[index].Updateable       = false;
         colDefs[index].InsertAllowed    = false;
@@ -2313,7 +2313,7 @@ bool wxDbTable::SetColDefs(UWORD index, const wxString &fieldName, int dataType,
     else
     {
         colDefs[index].Updateable       = updateable;
-        colDefs[index].InsertAllowed    = insAllow;
+        colDefs[index].InsertAllowed    = insertAllowed;
     }
 
     colDefs[index].Null                 = false;

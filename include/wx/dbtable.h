@@ -197,9 +197,9 @@ public:
     bool            Open(bool checkPrivileges=false, bool checkTableExists=true);
     bool            CreateTable(bool attemptDrop=true);
     bool            DropTable(void);
-    bool            CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCols,
-                                wxDbIdxDef *pIdxDefs, bool attemptDrop=true);
-    bool            DropIndex(const wxString &idxName);
+    bool            CreateIndex(const wxString &indexName, bool unique, UWORD numIndexColumns,
+                                wxDbIdxDef *pIndexDefs, bool attemptDrop=true);
+    bool            DropIndex(const wxString &indexName);
 
     // Accessors
 
@@ -265,8 +265,8 @@ public:
     void            BuildDeleteStmt(wxString &pSqlStmt, int typeOfDel, const wxString &pWhereClause=wxEmptyString);
     void            BuildDeleteStmt(wxChar *pSqlStmt, int typeOfDel, const wxString &pWhereClause=wxEmptyString);
 
-    void            BuildUpdateStmt(wxString &pSqlStmt, int typeOfUpd, const wxString &pWhereClause=wxEmptyString);
-    void            BuildUpdateStmt(wxChar *pSqlStmt, int typeOfUpd, const wxString &pWhereClause=wxEmptyString);
+    void            BuildUpdateStmt(wxString &pSqlStmt, int typeOfUpdate, const wxString &pWhereClause=wxEmptyString);
+    void            BuildUpdateStmt(wxChar *pSqlStmt, int typeOfUpdate, const wxString &pWhereClause=wxEmptyString);
 
     void            BuildWhereClause(wxString &pWhereClause, int typeOfWhere, const wxString &qualTableName=wxEmptyString, bool useLikeComparison=false);
     void            BuildWhereClause(wxChar *pWhereClause, int typeOfWhere, const wxString &qualTableName=wxEmptyString, bool useLikeComparison=false);
@@ -277,8 +277,8 @@ public:
                            { BuildSelectStmt(pSqlStmt,typeOfSelect,distinct); }
     void            GetDeleteStmt(char *pSqlStmt, int typeOfDel, const char *pWhereClause = NULL)
                            { BuildDeleteStmt(pSqlStmt,typeOfDel,pWhereClause); }
-    void            GetUpdateStmt(char *pSqlStmt, int typeOfUpd, const char *pWhereClause = NULL)
-                           { BuildUpdateStmt(pSqlStmt,typeOfUpd,pWhereClause); }
+    void            GetUpdateStmt(char *pSqlStmt, int typeOfUpdate, const char *pWhereClause = NULL)
+                           { BuildUpdateStmt(pSqlStmt,typeOfUpdate,pWhereClause); }
     void            GetWhereClause(char *pWhereClause, int typeOfWhere,
                                    const char *qualTableName = NULL, bool useLikeComparison=false)
                            { BuildWhereClause(pWhereClause,typeOfWhere,qualTableName,useLikeComparison); }
@@ -295,8 +295,8 @@ public:
     wxDbColDef     *GetColDefs() { return colDefs; }
     bool            SetColDefs(UWORD index, const wxString &fieldName, int dataType,
                                void *pData, SWORD cType,
-                               int size, bool keyField = false, bool upd = true,
-                               bool insAllow = true, bool derivedCol = false);
+                               int size, bool keyField = false, bool updateable = true,
+                               bool insertAllowed = true, bool derivedColumn = false);
     wxDbColDataPtr *SetColDefs(wxDbColInf *colInfs, UWORD numCols);
 
     bool            CloseCursor(HSTMT cursor);
