@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/dcmemory.h"
+#include "wx/dcclient.h"
 
 
 // ==============================================================

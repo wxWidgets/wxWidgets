@@ -24,6 +24,7 @@
 
 #ifndef WX_PRECOMP
 #include "wx/dcmemory.h"
+#include "wx/dcclient.h"
 #endif
 
 #include "wx/splash.h"
