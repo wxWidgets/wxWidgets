@@ -139,7 +139,9 @@ void GSocket_Shutdown(GSocket *socket)
 
   /* If socket has been created, we shutdown it */
   if (socket->m_fd != -1) {
-    shutdown(socket->m_fd, 2);
+    /* Only oriented connection should be shutdowned */
+    if (socket->m_oriented)
+      shutdown(socket->m_fd, 2);
     close(socket->m_fd);
     socket->m_fd = -1;
   }
@@ -518,6 +520,10 @@ void GSocket_SetTimeout(GSocket *socket, unsigned long millisec)
     SO_RCVTIMEO. The man pages, that these flags should exist but
     are read only. RR. */
  /* OK, restrict this to GLIBC 2.1. GL. */
+ /* Anyway, they seem to pose problems: I need to know the socket level and
+    it varies (may be SOL_TCP, SOL_UDP, ...). I disables this and use the
+    other solution. GL. */
+#if 0
 #ifdef CAN_USE_TIMEOUT 
   if (socket->m_fd != -1) {
     struct timeval tval;
@@ -527,6 +533,7 @@ void GSocket_SetTimeout(GSocket *socket, unsigned long millisec)
     setsockopt(socket->m_fd, SOL_SOCKET, SO_SNDTIMEO, &tval, sizeof(tval));
     setsockopt(socket->m_fd, SOL_SOCKET, SO_RCVTIMEO, &tval, sizeof(tval));
   }
+#endif
 #endif
 }
 
@@ -962,7 +969,7 @@ GSocketError _GAddress_Init_INET(GAddress *address)
   ((struct sockaddr_in *)address->m_addr)->sin_family = AF_INET;
   ((struct sockaddr_in *)address->m_addr)->sin_addr.s_addr   = INADDR_ANY;
 
-  return TRUE;
+  return GSOCK_NOERROR;
 }
 
 GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
