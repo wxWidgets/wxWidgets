@@ -42,7 +42,6 @@ class MyCanvas(wxScrolledWindow):
 
     def DoDrawing(self, dc):
         dc.BeginDrawing()
-        #pen1 = wxPen(wxNamedColour('RED'))
         dc.SetPen(wxPen(wxNamedColour('RED')))
         dc.DrawRectangle(5, 5, 50, 50)
 
@@ -50,7 +49,6 @@ class MyCanvas(wxScrolledWindow):
         dc.SetPen(wxPen(wxNamedColour('BLUE'), 4))
         dc.DrawRectangle(15, 15, 50, 50)
 
-        #font = wxFont(14, wxSWISS, wxNORMAL, wxNORMAL)
         dc.SetFont(wxFont(14, wxSWISS, wxNORMAL, wxNORMAL))
         dc.SetTextForeground(wxColour(0xFF, 0x20, 0xFF))
         te = dc.GetTextExtent("Hello World")

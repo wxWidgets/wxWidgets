@@ -155,7 +155,7 @@ B. There are three different types of wxWindows DLLs that can be
 C. Change to the wx2\src\msw directory and type the following command,
    using the value for FINAL that you want:
 
-	 nmake -f makefile.vc dll pch USE_GLCANVAS=1 FINAL=hybrid
+	 nmake -f makefile.vc dll pch FINAL=hybrid
 
    Your machine will then crunch away for possibly a long time,
    depending on your hardware, and when it's done you should have a

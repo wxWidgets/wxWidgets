@@ -37,6 +37,8 @@ class SimpleGrid(wxGrid):
         self.SetColLabelValue(1, "column")
         self.SetColLabelValue(2, "labels")
 
+        self.SetColLabelAlignment(wxALIGN_LEFT, wxALIGN_BOTTOM)
+
         # test all the events
         EVT_GRID_CELL_LEFT_CLICK(self, self.OnCellLeftClick)
         EVT_GRID_CELL_RIGHT_CLICK(self, self.OnCellRightClick)

@@ -60,12 +60,12 @@ extern PyObject *SWIG_newvarlink(void);
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyList_Check(target)) {
             o2 = target;
             target = PyList_New(0);
@@ -82,23 +82,23 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
+        o3 = PyTuple_New(1);
+        PyTuple_SetItem(o3, 0, o);
 
         o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
+        target = PySequence_Concat(o2, o3);
+        Py_DECREF(o2);
         Py_DECREF(o3);
     }
     return target;
@@ -8533,9 +8533,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPyBitmapDataObject","_class_wxPyBitmapDataObject",0},
     { "_wxBitmapDataObject","_class_wxBitmapDataObject",0},
     { "_class_wxPyCommandEvent","_wxPyCommandEvent",0},
+    { "_wxFlexGridSizer","_class_wxFlexGridSizer",0},
     { "_wxBMPHandler","_class_wxBMPHandler",0},
     { "_wxImage","_class_wxImage",0},
-    { "_wxFlexGridSizer","_class_wxFlexGridSizer",0},
     { "_wxWindowDisabler","_class_wxWindowDisabler",0},
     { "_class_wxDateTime","_wxDateTime",0},
     { "_wxPrintQuality","_wxCoord",0},
@@ -8552,15 +8552,15 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxFontData","_class_wxFontData",0},
     { "_class_wxRegionIterator","_wxRegionIterator",0},
     { "_class_wxPyTextDropTarget","_wxPyTextDropTarget",0},
+    { "_class_wxStaticBoxSizer","_wxStaticBoxSizer",0},
     { "_class_wxMenuBar","_wxMenuBar",0},
     { "_class_wxPyTreeItemData","_wxPyTreeItemData",0},
-    { "_class_wxStaticBoxSizer","_wxStaticBoxSizer",0},
+    { "_wxPaintEvent","_class_wxPaintEvent",0},
+    { "_wxPySizer","_class_wxPySizer",0},
     { "_class_wxEvtHandler","_class_wxStyledTextCtrl",SwigwxStyledTextCtrlTowxEvtHandler},
     { "_class_wxEvtHandler","_wxStyledTextCtrl",SwigwxStyledTextCtrlTowxEvtHandler},
     { "_class_wxEvtHandler","_wxEvtHandler",0},
-    { "_wxPaintEvent","_class_wxPaintEvent",0},
     { "_wxGIFHandler","_class_wxGIFHandler",0},
-    { "_wxPySizer","_class_wxPySizer",0},
     { "_wxInternetFSHandler","_class_wxInternetFSHandler",0},
     { "_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0},
     { "_wxCursor","_class_wxCursor",0},
@@ -8568,6 +8568,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPyProcess","_class_wxPyProcess",0},
     { "_wxPyTreeCtrl","_class_wxPyTreeCtrl",0},
     { "_wxImageHandler","_class_wxImageHandler",0},
+    { "_wxMutexGuiLocker","_class_wxMutexGuiLocker",0},
     { "_wxLog","_class_wxLog",0},
     { "_class_wxToolBarBase","_wxToolBarBase",0},
     { "_wxMask","_class_wxMask",0},
@@ -8582,8 +8583,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxNotebookSizer","_wxNotebookSizer",0},
     { "_byte","_unsigned_char",0},
     { "_wxDataObject","_class_wxDataObject",0},
-    { "_class_wxPyFontEnumerator","_wxPyFontEnumerator",0},
     { "_wxStaticBox","_class_wxStaticBox",0},
+    { "_class_wxPyFontEnumerator","_wxPyFontEnumerator",0},
+    { "_wxColourDatabase","_class_wxColourDatabase",0},
     { "_wxPyDataObjectSimple","_class_wxPyDataObjectSimple",0},
     { "_wxPyDropSource","_class_wxPyDropSource",0},
     { "_wxChoice","_class_wxChoice",0},
@@ -8596,11 +8598,11 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxDataObjectSimple","_class_wxDataObjectSimple",0},
     { "_wxDropFilesEvent","_class_wxDropFilesEvent",0},
     { "_wxBitmapButton","_class_wxBitmapButton",0},
-    { "_wxSashWindow","_class_wxSashWindow",0},
     { "_class_wxSizer","_wxSizer",0},
+    { "_wxSashWindow","_class_wxSashWindow",0},
+    { "_wxGridSizer","_class_wxGridSizer",0},
     { "_class_wxTIFFHandler","_wxTIFFHandler",0},
     { "_class_wxPrintDialogData","_wxPrintDialogData",0},
-    { "_wxGridSizer","_class_wxGridSizer",0},
     { "_class_wxAcceleratorTable","_wxAcceleratorTable",0},
     { "_class_wxClipboard","_wxClipboard",0},
     { "_class_wxGauge","_wxGauge",0},
@@ -8608,12 +8610,12 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxDC","_class_wxDC",0},
     { "_wxSizerItem","_class_wxSizerItem",0},
     { "_class_wxBitmapDataObject","_wxBitmapDataObject",0},
+    { "_class_wxFlexGridSizer","_wxFlexGridSizer",0},
     { "_wxListEvent","_class_wxListEvent",0},
     { "_class_wxSingleChoiceDialog","_wxSingleChoiceDialog",0},
     { "_wxProgressDialog","_class_wxProgressDialog",0},
     { "_class_wxBMPHandler","_wxBMPHandler",0},
     { "_wxPrintPreview","_class_wxPrintPreview",0},
-    { "_class_wxFlexGridSizer","_wxFlexGridSizer",0},
     { "_wxSpinEvent","_class_wxSpinEvent",0},
     { "_wxSashLayoutWindow","_class_wxSashLayoutWindow",0},
     { "_size_t","_wxCoord",0},
@@ -8629,15 +8631,15 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowCreateEvent","_class_wxWindowCreateEvent",0},
     { "_wxLogGui","_class_wxLogGui",0},
     { "_wxPrinterDC","_class_wxPrinterDC",0},
-    { "_class_wxMenuItem","_wxMenuItem",0},
     { "_class_wxPaintEvent","_wxPaintEvent",0},
     { "_wxSysColourChangedEvent","_class_wxSysColourChangedEvent",0},
+    { "_class_wxPySizer","_wxPySizer",0},
+    { "_class_wxMenuItem","_wxMenuItem",0},
     { "_class_wxStatusBar","_wxStatusBar",0},
     { "_class_wxGIFHandler","_wxGIFHandler",0},
-    { "_class_wxPySizer","_wxPySizer",0},
-    { "_wxPanel","_class_wxPanel",0},
     { "_wxInitDialogEvent","_class_wxInitDialogEvent",0},
     { "_wxCheckBox","_class_wxCheckBox",0},
+    { "_wxPanel","_class_wxPanel",0},
     { "_class_wxPyTreeCtrl","_wxPyTreeCtrl",0},
     { "_wxPyEvent","_class_wxPyEvent",0},
     { "_wxTextCtrl","_class_wxTextCtrl",0},
@@ -8657,8 +8659,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxUpdateUIEvent","_wxUpdateUIEvent",0},
     { "_wxToolBar","_class_wxToolBar",0},
     { "_class_wxDataObject","_wxDataObject",0},
-    { "_wxCaret","_class_wxCaret",0},
     { "_wxStaticLine","_class_wxStaticLine",0},
+    { "_wxCaret","_class_wxCaret",0},
     { "_class_wxLayoutAlgorithm","_wxLayoutAlgorithm",0},
     { "_wxBrush","_class_wxBrush",0},
     { "_wxMiniFrame","_class_wxMiniFrame",0},
@@ -8676,11 +8678,11 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
-    { "_wxPyValidator","_class_wxPyValidator",0},
     { "_class_wxEvent","_class_wxStyledTextEvent",SwigwxStyledTextEventTowxEvent},
     { "_class_wxEvent","_wxStyledTextEvent",SwigwxStyledTextEventTowxEvent},
     { "_class_wxEvent","_wxEvent",0},
     { "_wxCheckListBox","_class_wxCheckListBox",0},
+    { "_wxPyValidator","_class_wxPyValidator",0},
     { "_wxSplitterEvent","_class_wxSplitterEvent",0},
     { "_wxRect","_class_wxRect",0},
     { "_wxCommandEvent","_class_wxStyledTextEvent",SwigwxStyledTextEventTowxCommandEvent},
@@ -8695,27 +8697,29 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxButton","_wxButton",0},
     { "_wxRadioBox","_class_wxRadioBox",0},
     { "_class_wxSpinCtrl","_wxSpinCtrl",0},
+    { "_wxBoxSizer","_class_wxBoxSizer",0},
     { "_class_wxFontData","_wxFontData",0},
     { "_class_wxPNMHandler","_wxPNMHandler",0},
-    { "_wxBoxSizer","_class_wxBoxSizer",0},
     { "_class_wxZipFSHandler","_wxZipFSHandler",0},
     { "_char","_wxChar",0},
     { "_wxBitmap","_class_wxBitmap",0},
+    { "_wxPenList","_class_wxPenList",0},
     { "_wxTaskBarIcon","_class_wxTaskBarIcon",0},
     { "_wxPrintDialog","_class_wxPrintDialog",0},
     { "_wxWindowDC","_class_wxWindowDC",0},
     { "_wxTimerEvent","_class_wxTimerEvent",0},
-    { "_wxPyTimer","_class_wxPyTimer",0},
     { "_wxScrollBar","_class_wxScrollBar",0},
     { "_wxSpinButton","_class_wxSpinButton",0},
+    { "_wxPyTimer","_class_wxPyTimer",0},
     { "_wxColourDialog","_class_wxColourDialog",0},
     { "_wxPrintData","_class_wxPrintData",0},
     { "_class_wxInternetFSHandler","_wxInternetFSHandler",0},
     { "_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0},
     { "_class_wxNotifyEvent","_wxNotifyEvent",0},
     { "_wxMessageDialog","_class_wxMessageDialog",0},
-    { "_class_wxValidator","_wxValidator",0},
     { "_class_wxPyEvent","_wxPyEvent",0},
+    { "_class_wxValidator","_wxValidator",0},
+    { "_class_wxMutexGuiLocker","_wxMutexGuiLocker",0},
     { "_wxTextEntryDialog","_class_wxTextEntryDialog",0},
     { "_wxConfig","_class_wxConfig",0},
     { "_class_wxIconizeEvent","_wxIconizeEvent",0},
@@ -8728,6 +8732,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxToolBar","_wxToolBar",0},
     { "_wxDropTarget","_class_wxDropTarget",0},
     { "_class_wxStaticLine","_wxStaticLine",0},
+    { "_class_wxColourDatabase","_wxColourDatabase",0},
     { "_wxScrollEvent","_class_wxScrollEvent",0},
     { "_wxToolBarToolBase","_class_wxToolBarToolBase",0},
     { "_wxCalculateLayoutEvent","_class_wxCalculateLayoutEvent",0},
@@ -8756,9 +8761,11 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxScrollWinEvent","_class_wxScrollWinEvent",0},
     { "_wxGenericDragImage","_class_wxGenericDragImage",0},
     { "_class_wxProgressDialog","_wxProgressDialog",0},
+    { "_class_wxBrushList","_wxBrushList",0},
     { "_wxQueryNewPaletteEvent","_class_wxQueryNewPaletteEvent",0},
     { "_wxPyInputStream","_class_wxPyInputStream",0},
     { "_wxPyApp","_class_wxPyApp",0},
+    { "_class_wxPenList","_wxPenList",0},
     { "_class_wxWindowCreateEvent","_wxWindowCreateEvent",0},
     { "_class_wxOutputStream","_wxOutputStream",0},
     { "_wxLogTextCtrl","_class_wxLogTextCtrl",0},
@@ -8769,13 +8776,13 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxFocusEvent","_class_wxFocusEvent",0},
     { "_wxMaximizeEvent","_class_wxMaximizeEvent",0},
     { "_class_wxTimerEvent","_wxTimerEvent",0},
-    { "_class_wxPyTimer","_wxPyTimer",0},
     { "_class_wxSpinButton","_wxSpinButton",0},
+    { "_class_wxPyTimer","_wxPyTimer",0},
     { "_wxAcceleratorEntry","_class_wxAcceleratorEntry",0},
-    { "_class_wxPanel","_wxPanel",0},
     { "_class_wxCheckBox","_wxCheckBox",0},
     { "_wxComboBox","_class_wxComboBox",0},
     { "_wxRadioButton","_class_wxRadioButton",0},
+    { "_class_wxPanel","_wxPanel",0},
     { "_class_wxMessageDialog","_wxMessageDialog",0},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
@@ -8787,9 +8794,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxLayoutConstraints","_class_wxLayoutConstraints",0},
     { "_wxMetaFileDC","_class_wxMetaFileDC",0},
     { "_class_wxTextDataObject","_wxTextDataObject",0},
-    { "_wxMenu","_class_wxMenu",0},
     { "_class_wxMoveEvent","_wxMoveEvent",0},
     { "_wxListBox","_class_wxListBox",0},
+    { "_wxMenu","_class_wxMenu",0},
     { "_wxScreenDC","_class_wxScreenDC",0},
     { "_class_wxToolBarSimple","_wxToolBarSimple",0},
     { "_class_wxMDIChildFrame","_wxMDIChildFrame",0},
@@ -8817,10 +8824,11 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintDialogData","_class_wxPrintDialogData",0},
     { "_class_wxFont","_wxFont",0},
     { "_wxClipboard","_class_wxClipboard",0},
-    { "_class_wxPyValidator","_wxPyValidator",0},
     { "_class_wxCloseEvent","_wxCloseEvent",0},
+    { "_class_wxPyValidator","_wxPyValidator",0},
     { "_wxSashEvent","_class_wxSashEvent",0},
     { "_wxBusyInfo","_class_wxBusyInfo",0},
+    { "_wxFontList","_class_wxFontList",0},
     { "_class_wxMenuEvent","_wxMenuEvent",0},
     { "_wxPaletteChangedEvent","_class_wxPaletteChangedEvent",0},
     { "_wxJoystick","_class_wxJoystick",0},
@@ -8857,11 +8865,11 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxTreeItemId","_class_wxTreeItemId",0},
     { "_unsigned_char","_byte",0},
     { "_class_wxMetaFileDC","_wxMetaFileDC",0},
-    { "_class_wxMenu","_wxMenu",0},
     { "_wxControl","_class_wxStyledTextCtrl",SwigwxStyledTextCtrlTowxControl},
     { "_wxControl","_wxStyledTextCtrl",SwigwxStyledTextCtrlTowxControl},
     { "_wxControl","_class_wxControl",0},
     { "_class_wxListBox","_wxListBox",0},
+    { "_class_wxMenu","_wxMenu",0},
     { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},
     { "_unsigned_int","_time_t",0},
@@ -8892,10 +8900,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxImageList","_wxImageList",0},
     { "_class_wxBitmapButton","_wxBitmapButton",0},
     { "_wxFileSystemHandler","_class_wxFileSystemHandler",0},
+    { "_class_wxGridSizer","_wxGridSizer",0},
     { "_wxPyTipProvider","_class_wxPyTipProvider",0},
     { "_wxFrame","_class_wxFrame",0},
     { "_wxPCXHandler","_class_wxPCXHandler",0},
-    { "_class_wxGridSizer","_wxGridSizer",0},
     { "_class_wxPaletteChangedEvent","_wxPaletteChangedEvent",0},
     { "_class_wxNotebook","_wxNotebook",0},
     { "_wxJPEGHandler","_class_wxJPEGHandler",0},
@@ -8938,19 +8946,19 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_time_t","_uint",0},
     { "_time_t","_size_t",0},
     { "_class_wxNavigationKeyEvent","_wxNavigationKeyEvent",0},
-    { "_wxLogNull","_class_wxLogNull",0},
     { "_wxButton","_class_wxButton",0},
+    { "_wxLogNull","_class_wxLogNull",0},
     { "_wxZipFSHandler","_class_wxZipFSHandler",0},
     { "_class_wxPyApp","_wxPyApp",0},
     { "_wxSize","_class_wxSize",0},
     { "_wxRegionIterator","_class_wxRegionIterator",0},
     { "_class_wxPyTextDataObject","_wxPyTextDataObject",0},
+    { "_wxStaticBoxSizer","_class_wxStaticBoxSizer",0},
     { "_class_wxLogTextCtrl","_wxLogTextCtrl",0},
     { "_class_wxLogGui","_wxLogGui",0},
     { "_class_wxMDIParentFrame","_wxMDIParentFrame",0},
     { "_wxPyTreeItemData","_class_wxPyTreeItemData",0},
     { "_class_wxPrinterDC","_wxPrinterDC",0},
-    { "_wxStaticBoxSizer","_class_wxStaticBoxSizer",0},
     { "_class_wxTimeSpan","_wxTimeSpan",0},
     { "_class_wxPyFileSystemHandler","_wxPyFileSystemHandler",0},
     { "_class_wxPaintDC","_wxPaintDC",0},
@@ -8993,9 +9001,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxFontDialog","_class_wxFontDialog",0},
     { "_wxMemoryFSHandler","_class_wxMemoryFSHandler",0},
     { "_wxRegion","_class_wxRegion",0},
+    { "_wxSizer","_class_wxSizer",0},
     { "_class_wxSplitterWindow","_wxSplitterWindow",0},
     { "_wxPreviewFrame","_class_wxPreviewFrame",0},
-    { "_wxSizer","_class_wxSizer",0},
     { "_class_wxDateSpan","_wxDateSpan",0},
     { "_wxFileSystem","_class_wxFileSystem",0},
     { "_class_wxShowEvent","_wxShowEvent",0},
@@ -9007,6 +9015,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxGauge","_class_wxGauge",0},
     { "_class_wxCheckListBox","_wxCheckListBox",0},
     { "_class_wxBusyInfo","_wxBusyInfo",0},
+    { "_class_wxFontList","_wxFontList",0},
     { "_class_wxJoystick","_wxJoystick",0},
     { "_class_wxCommandEvent","_class_wxStyledTextEvent",SwigwxStyledTextEventTowxCommandEvent},
     { "_class_wxCommandEvent","_wxStyledTextEvent",SwigwxStyledTextEventTowxCommandEvent},
@@ -9014,6 +9023,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxClientDC","_wxClientDC",0},
     { "_class_wxSizeEvent","_wxSizeEvent",0},
     { "_class_wxListCtrl","_wxListCtrl",0},
+    { "_wxBrushList","_class_wxBrushList",0},
     { "_wxCustomDataObject","_class_wxCustomDataObject",0},
     { "_class_wxLogNull","_wxLogNull",0},
     { "_class_wxSize","_wxSize",0},
@@ -9024,11 +9034,11 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxOutputStream","_class_wxOutputStream",0},
     { "_wxTreeEvent","_class_wxTreeEvent",0},
     { "_wxDirDialog","_class_wxDirDialog",0},
+    { "_class_wxScrollBar","_wxScrollBar",0},
     { "_wxEvtHandler","_class_wxStyledTextCtrl",SwigwxStyledTextCtrlTowxEvtHandler},
     { "_wxEvtHandler","_wxStyledTextCtrl",SwigwxStyledTextCtrlTowxEvtHandler},
     { "_wxEvtHandler","_class_wxEvtHandler",0},
     { "_wxMenuItem","_class_wxMenuItem",0},
-    { "_class_wxScrollBar","_wxScrollBar",0},
     { "_class_wxColourDialog","_wxColourDialog",0},
     { "_class_wxPrintData","_wxPrintData",0},
     { "_class_wxScrolledWindow","_wxScrolledWindow",0},
@@ -9041,18 +9051,18 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPageSetupDialogData","_class_wxPageSetupDialogData",0},
     { "_class_wxPalette","_wxPalette",0},
     { "_wxFileDataObject","_class_wxFileDataObject",0},
-    { "_class_wxQueryLayoutInfoEvent","_wxQueryLayoutInfoEvent",0},
     { "_wxNotebookSizer","_class_wxNotebookSizer",0},
+    { "_class_wxQueryLayoutInfoEvent","_wxQueryLayoutInfoEvent",0},
     { "_class_wxEraseEvent","_wxEraseEvent",0},
     { "_wxPyFontEnumerator","_class_wxPyFontEnumerator",0},
     { "_wxMDIClientWindow","_class_wxMDIClientWindow",0},
     { "_class_wxDataObjectComposite","_wxDataObjectComposite",0},
     { "_class_wxToolBarToolBase","_wxToolBarToolBase",0},
     { "_class_wxFontDialog","_wxFontDialog",0},
+    { "_class_wxWindowDestroyEvent","_wxWindowDestroyEvent",0},
     { "_wxWindow","_class_wxStyledTextCtrl",SwigwxStyledTextCtrlTowxWindow},
     { "_wxWindow","_wxStyledTextCtrl",SwigwxStyledTextCtrlTowxWindow},
     { "_wxWindow","_class_wxWindow",0},
-    { "_class_wxWindowDestroyEvent","_wxWindowDestroyEvent",0},
     { "_wxLogStderr","_class_wxLogStderr",0},
     { "_class_wxFileSystemHandler","_wxFileSystemHandler",0},
     { "_class_wxFileSystem","_wxFileSystem",0},
@@ -9131,7 +9141,7 @@ SWIGEXPORT(void) initstc_c() {
 	 PyDict_SetItemString(d,"wxSTC_INDIC0_MASK", PyInt_FromLong((long) 32));
 	 PyDict_SetItemString(d,"wxSTC_INDIC1_MASK", PyInt_FromLong((long) 64));
 	 PyDict_SetItemString(d,"wxSTC_INDIC2_MASK", PyInt_FromLong((long) 128));
-	 PyDict_SetItemString(d,"wxSTC_INDICS_MASK", PyInt_FromLong((long) 32|64|128));
+	 PyDict_SetItemString(d,"wxSTC_INDICS_MASK", PyInt_FromLong((long) 224));
 	 PyDict_SetItemString(d,"wxSTC_PRINT_NORMAL", PyInt_FromLong((long) 0));
 	 PyDict_SetItemString(d,"wxSTC_PRINT_INVERTLIGHT", PyInt_FromLong((long) 1));
 	 PyDict_SetItemString(d,"wxSTC_PRINT_BLACKONWHITE", PyInt_FromLong((long) 2));

@@ -623,8 +623,29 @@ class wxDialogPtr(wxPanelPtr):
     def SetReturnCode(self, *_args, **_kwargs):
         val = apply(windowsc.wxDialog_SetReturnCode,(self,) + _args, _kwargs)
         return val
+    def CreateTextSizer(self, *_args, **_kwargs):
+        val = apply(windowsc.wxDialog_CreateTextSizer,(self,) + _args, _kwargs)
+        if val: val = wxSizerPtr(val) 
+        return val
+    def CreateButtonSizer(self, *_args, **_kwargs):
+        val = apply(windowsc.wxDialog_CreateButtonSizer,(self,) + _args, _kwargs)
+        if val: val = wxSizerPtr(val) 
+        return val
     def __repr__(self):
         return "<C wxDialog instance at %s>" % (self.this,)
+    
+    # replace swig generated shadow methods to resolve import issues
+    def CreateTextSizer(self, *_args, **_kwargs):
+        import sizers
+        val = apply(windowsc.wxDialog_CreateTextSizer,(self,) + _args, _kwargs)
+        if val: val = sizers.wxSizerPtr(val)
+        return val
+    def CreateButtonSizer(self, *_args, **_kwargs):
+        import sizers
+        val = apply(windowsc.wxDialog_CreateButtonSizer,(self,) + _args, _kwargs)
+        if val: val = sizers.wxSizerPtr(val)
+        return val
+
 class wxDialog(wxDialogPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxDialog,_args,_kwargs)
@@ -969,6 +990,49 @@ class wxMenuItemPtr :
     def SetAccel(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_SetAccel,(self,) + _args, _kwargs)
         return val
+    def SetFont(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_SetFont,(self,) + _args, _kwargs)
+        return val
+    def GetFont(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_GetFont,(self,) + _args, _kwargs)
+        if val: val = wxFontPtr(val) 
+        return val
+    def SetTextColour(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_SetTextColour,(self,) + _args, _kwargs)
+        return val
+    def GetTextColour(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_GetTextColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) 
+        return val
+    def SetBackgroundColour(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_SetBackgroundColour,(self,) + _args, _kwargs)
+        return val
+    def GetBackgroundColour(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_GetBackgroundColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) 
+        return val
+    def SetBitmaps(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_SetBitmaps,(self,) + _args, _kwargs)
+        return val
+    def SetBitmap(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_SetBitmap,(self,) + _args, _kwargs)
+        return val
+    def GetBitmap(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_GetBitmap,(self,) + _args, _kwargs)
+        if val: val = wxBitmapPtr(val) 
+        return val
+    def SetMarginWidth(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_SetMarginWidth,(self,) + _args, _kwargs)
+        return val
+    def GetMarginWidth(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_GetMarginWidth,(self,) + _args, _kwargs)
+        return val
+    def IsOwnerDrawn(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_IsOwnerDrawn,(self,) + _args, _kwargs)
+        return val
+    def ResetOwnerDrawn(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_ResetOwnerDrawn,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxMenuItem instance at %s>" % (self.this,)
 class wxMenuItem(wxMenuItemPtr):
@@ -1004,6 +1068,8 @@ wxWindow_NextControlId = windowsc.wxWindow_NextControlId
 wxWindow_PrevControlId = windowsc.wxWindow_PrevControlId
 
 wxMenuItem_GetLabelFromText = windowsc.wxMenuItem_GetLabelFromText
+
+wxMenuItem_GetDefaultMarginWidth = windowsc.wxMenuItem_GetDefaultMarginWidth
 
 
 

@@ -366,6 +366,7 @@ enum {
     wxMORE,
     wxSETUP,
 
+
     wxCENTRE,
     wxCENTER,
     wxSIZE_AUTO_WIDTH,
@@ -418,6 +419,11 @@ enum {
     wxID_NO,
     wxID_STATIC,
     wxID_SEPARATOR,
+    wxID_FORWARD,
+    wxID_BACKWARD,
+    wxID_SETUP,
+    wxID_MORE,
+
 
     wxBITMAP_TYPE_BMP,
     wxBITMAP_TYPE_BMP_RESOURCE,

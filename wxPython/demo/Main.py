@@ -91,6 +91,8 @@ class wxPythonDemo(wxFrame):
         self.otherWin = None
         EVT_IDLE(self, self.OnIdle)
         EVT_CLOSE(self, self.OnCloseWindow)
+        EVT_ICONIZE(self, self.OnIconfiy)
+        EVT_MAXIMIZE(self, self.OnMaximize)
 
         self.Centre(wxBOTH)
         self.CreateStatusBar(1, wxST_SIZEGRIP)
@@ -401,6 +403,19 @@ class wxPythonDemo(wxFrame):
         # because of the way wxTaskBarIcon.PopupMenu is implemented we have to
         # prod the main idle handler a bit to get the window to actually close
         wxGetApp().ProcessIdle()
+
+
+    #---------------------------------------------
+    def OnIconfiy(self, evt):
+        wxLogMessage("OnIconfiy")
+        evt.Skip()
+
+    #---------------------------------------------
+    def OnMaximize(self, evt):
+        wxLogMessage("OnMaximize")
+        evt.Skip()
+
+
 
 
 #---------------------------------------------------------------------------

@@ -523,7 +523,7 @@ enum {
 class wxHtmlPrintout : public wxPyPrintout {
 public:
     wxHtmlPrintout(const char* title = "Printout");
-    //~wxHtmlPrintout();
+    //~wxHtmlPrintout();   wxPrintPreview object takes ownership...
 
     void SetHtmlText(const wxString& html,
                      const wxString &basepath = wxEmptyString,

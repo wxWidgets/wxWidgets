@@ -29,7 +29,7 @@ if wxPlatform == '__WXMSW__':
 #----------------------------------------------------------------------
 
 class TestPanel(wxPanel):
-    def __init__(self, parent):
+    def __init__(self, parent, log):
         wxPanel.__init__(self, parent, -1)
         self.pdf = None
 
@@ -94,7 +94,7 @@ class TestPanel(wxPanel):
 
 def runTest(frame, nb, log):
     if wxPlatform == '__WXMSW__':
-        win = TestPanel(nb)
+        win = TestPanel(nb, log)
         return win
     else:
         dlg = wxMessageDialog(frame, 'This demo only works on MSW.',
@@ -117,6 +117,7 @@ if __name__ == '__main__':
             EVT_CLOSE(self, self.OnCloseWindow)
 
         def OnCloseWindow(self, event):
+
             self.tp.pdf.Cleanup()
             self.Destroy()
 

@@ -43,12 +43,45 @@ class RoundedRectangleShape(wxRectangleShape):
 
 #----------------------------------------------------------------------
 
+## class LabeledBitmapShape(wxBitmapShape):
+##     def __init__(self, bmp, text):
+##         wxBitmapShape.__init__(self)
+##         self.SetBitmap(bmp)
+##         self.region = r = wxShapeRegion()
+##         r.SetPosition(0, 0) #bmp.GetHeight())
+##         r.SetSize(bmp.GetWidth(), bmp.GetHeight())
+##         r.SetText(text)
+##         self.AddRegion(r)
+
+##     def OnMovePost(self, dc, x, y, old_x, old_y, display):
+##         self.region.SetPosition(x, y)
+##         self.base_OnMovePost(dc, x, y, old_x, old_y, display)
+
+
+## class LabeledBitmapShape(wxCompositeShape):
+##     def __init__(self, canvas, bmp, text):
+##         wxCompositeShape.__init__(self)
+##         self.bs = wxBitmapShape()
+##         self.bs.SetBitmap(bmp)
+##         self.ts = wxTextShape()
+##         self.ts.AddText(text)
+
+##         self.AddChild(self.bs)
+##         self.AddChild(self.ts, self.bs)
+
+##         self.AddConstrainedShapes(gyCONSTRAINT_CENTRED_VERTICALLY, self, [self.bs, self.ts])
+##         self.AddSimpleConstraint(gyCONSTRAINT_BELOW, self.bs, self.ts)
+##         self.AddSimpleConstraint(gyCONSTRAINT_ALIGNED_TOP, self, self.bs)
+##         self.AddSimpleConstraint(gyCONSTRAINT_ALIGNED_BOTTOM, self, self.ts)
+
+
+#----------------------------------------------------------------------
+
 class MyEvtHandler(wxShapeEvtHandler):
     def __init__(self, log, frame):
         wxShapeEvtHandler.__init__(self)
         self.log = log
         self.statbarFrame = frame
-
 
     def UpdateStatusBar(self, shape):
         x,y = shape.GetX(), shape.GetY()
@@ -126,6 +159,7 @@ class TestWindow(wxShapeCanvas):
         self.SetDiagram(self.diagram)
         self.diagram.SetCanvas(self)
         self.shapes = []
+        self.save_gdi = []
 
         rRectBrush = wxBrush(wxNamedColour("MEDIUM TURQUOISE"), wxSOLID)
 
@@ -133,6 +167,24 @@ class TestWindow(wxShapeCanvas):
         self.MyAddShape(wxRectangleShape(85, 50), 305, 60, wxBLACK_PEN, wxLIGHT_GREY_BRUSH, "Rectangle")
         self.MyAddShape(DiamondShape(90, 90), 345, 235, wxPen(wxBLUE, 3, wxDOT), wxRED_BRUSH, "Polygon")
         self.MyAddShape(RoundedRectangleShape(95,70), 140, 255, wxPen(wxRED, 1), rRectBrush, "Rounded Rect")
+
+        bmp = wxBitmap('bitmaps/test2.bmp', wxBITMAP_TYPE_BMP)
+        mask = wxMaskColour(bmp, wxBLUE)
+        bmp.SetMask(mask)
+##         s = LabeledBitmapShape(self, bmp, "Hello")
+##         self.MyAddShape(s, 225, 150, None, None, None)
+##         print s.Recompute()
+##         s.CalculateSize()
+##         print s.GetX(), s.GetY()
+##         s.SetSize(225)
+##         s.SetY(150)
+##         s.SetSize(80, 80)
+##         print s.GetX(), s.GetY()
+##         #print s.GetSize()
+
+        s = wxBitmapShape()
+        s.SetBitmap(bmp)
+        self.MyAddShape(s, 225, 150, None, None, "Bitmap")
 
         dc = wxClientDC(self)
         self.PrepareDC(dc)
@@ -158,13 +210,13 @@ class TestWindow(wxShapeCanvas):
 
 
     def MyAddShape(self, shape, x, y, pen, brush, text):
-        shape.SetDraggable(true)
+        shape.SetDraggable(true, true)
         shape.SetCanvas(self)
         shape.SetX(x)
         shape.SetY(y)
-        shape.SetPen(pen)
-        shape.SetBrush(brush)
-        shape.AddText(text)
+        if pen:    shape.SetPen(pen)
+        if brush:  shape.SetBrush(brush)
+        if text:   shape.AddText(text)
         #shape.SetShadowMode(SHADOW_RIGHT)
         self.diagram.AddShape(shape)
         shape.Show(true)
@@ -175,6 +227,7 @@ class TestWindow(wxShapeCanvas):
         shape.SetEventHandler(evthandler)
 
         self.shapes.append(shape)
+
 
 
     def __del__(self):

@@ -540,6 +540,24 @@ public:
 
     int  GetReturnCode();
     void SetReturnCode(int retCode);
+
+    wxSizer* CreateTextSizer( const wxString &message );
+    wxSizer* CreateButtonSizer( long flags );
+
+    %pragma(python) addtoclass = "
+    # replace swig generated shadow methods to resolve import issues
+    def CreateTextSizer(self, *_args, **_kwargs):
+        import sizers
+        val = apply(windowsc.wxDialog_CreateTextSizer,(self,) + _args, _kwargs)
+        if val: val = sizers.wxSizerPtr(val)
+        return val
+    def CreateButtonSizer(self, *_args, **_kwargs):
+        import sizers
+        val = apply(windowsc.wxDialog_CreateButtonSizer,(self,) + _args, _kwargs)
+        if val: val = sizers.wxSizerPtr(val)
+        return val
+"
+
 };
 
 //---------------------------------------------------------------------------
@@ -586,7 +604,7 @@ public:
 
     void Append(int id, const wxString& item,
                 const wxString& helpString = wxPyEmptyStr,
-                int checkable = FALSE);
+                bool checkable = FALSE);
     %name(AppendMenu)void Append(int id, const wxString& item, wxMenu *subMenu,
                 const wxString& helpString = wxPyEmptyStr);
     %name(AppendItem)void Append(const wxMenuItem* item);
@@ -712,7 +730,27 @@ public:
 
     static wxString GetLabelFromText(const wxString& text);
 
-    // TODO:  Add wxOwnerDrawn methods, also look at other ownerdrawn classes...
+    // wxOwnerDrawn methods
+    // TODO: also look at other ownerdrawn classes...
+    void SetFont(const wxFont& font);
+    wxFont& GetFont();
+    void SetTextColour(const wxColour& colText);
+    wxColour& GetTextColour();
+    void SetBackgroundColour(const wxColour& colBack);
+    wxColour& GetBackgroundColour();
+    void SetBitmaps(const wxBitmap& bmpChecked,
+                    const wxBitmap& bmpUnchecked = wxNullBitmap);
+    void SetBitmap(const wxBitmap& bmpChecked);
+    const wxBitmap& GetBitmap(bool bChecked = TRUE);
+    void SetMarginWidth(int nWidth);
+    int GetMarginWidth();
+    static int GetDefaultMarginWidth();
+    //void SetName(const wxString& strName);
+    //const wxString& GetName();
+    //void SetCheckable(bool checkable);
+    //bool IsCheckable();
+    bool IsOwnerDrawn();
+    void ResetOwnerDrawn();
 
 };
 
