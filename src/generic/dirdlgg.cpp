@@ -68,7 +68,9 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
 
     m_path = defaultPath;
     if (m_path == wxT("~"))
-        wxGetHomeDir( &m_path );
+        wxGetHomeDir(&m_path);
+    if (m_path == wxT("."))
+        m_path = wxGetCwd();
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
