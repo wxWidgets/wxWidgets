@@ -40,7 +40,7 @@ def addMakefile(bake, makedirs, deps=[], args={}):
         else:
             makedir = makedirs['all']
         tfile = '%s/%s' % (makedir, make)
-        lines.append('%s: %s Makefile' % (tfile, dep))
+        lines.append('%s: %s' % (tfile, dep))
         lines.append('\t$(BAKEFILE) $(BAKEARGS) -f%s -o%s%s %s' % \
                      (format, tfile, a, bake))
         lines.append('\ttouch %s' % tfile)
