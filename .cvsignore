@@ -30,3 +30,4 @@ configure
 setup.h
 stamp-h
 libtool
+aclocal.m4
