@@ -35,7 +35,7 @@ class wxFont : public wxFontBase
 public:
     // ctors and such
     wxFont() { Init(); }
-    wxFont(const wxFont& font) { Init(); Ref(font); }
+    wxFont(const wxFont& font) : wxFontBase() { Init(); Ref(font); }
     wxFont(const wxString& fontname, const wxFontData& fontdata);
 
     // assignment

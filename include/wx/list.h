@@ -325,7 +325,7 @@ private:
 
 protected:
         // copy ctor. This has to go below Init, or VC++ 1.5 will complain.
-    wxListBase(const wxListBase& list)
+    wxListBase(const wxListBase& list) : wxObject()
         { Init(); DoCopy(list); }
 };
 
@@ -514,7 +514,8 @@ public:
 
         // copying the string list: the strings are copied, too (extremely
         // inefficient!)
-    wxStringList(const wxStringList& other) { DeleteContents(TRUE); DoCopy(other); }
+    wxStringList(const wxStringList& other) : wxStringListBase()
+    	{ DeleteContents(TRUE); DoCopy(other); }
     wxStringList& operator=(const wxStringList& other)
         { Clear(); DoCopy(other); return *this; }
 

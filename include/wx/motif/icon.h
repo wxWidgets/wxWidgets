@@ -42,7 +42,7 @@ public:
   wxIcon();
 
   // Copy constructors
-  inline wxIcon(const wxIcon& icon) { Ref(icon); }
+  inline wxIcon(const wxIcon& icon) : wxBitmap() { Ref(icon); }
 
   // Initialize with XBM data
   wxIcon(const char bits[], int width, int height);

@@ -134,7 +134,7 @@ public:
   wxBitmap(); // Platform-specific
 
   // Copy constructors
-  wxBitmap(const wxBitmap& bitmap)
+  wxBitmap(const wxBitmap& bitmap) : wxGDIObject()
   { Ref(bitmap); if ( wxTheBitmapList ) wxTheBitmapList->AddBitmap(this); }
 
   // Initialize with raw XBM data

@@ -54,7 +54,7 @@ public:
   wxCursor();
 
   // Copy constructors
-  wxCursor(const wxCursor& cursor) { Ref(cursor); }
+  wxCursor(const wxCursor& cursor) : wxBitmap() { Ref(cursor); }
 
   wxCursor(const char bits[], int width, int height, int hotSpotX = -1, int hotSpotY = -1,
     const char maskBits[] = NULL);
