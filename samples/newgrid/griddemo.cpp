@@ -70,6 +70,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_TOGGLEEDIT, GridFrame::ToggleEditing )
     EVT_MENU( ID_TOGGLEROWSIZING, GridFrame::ToggleRowSizing )
     EVT_MENU( ID_TOGGLECOLSIZING, GridFrame::ToggleColSizing )
+    EVT_MENU( ID_TOGGLEGRIDSIZING, GridFrame::ToggleGridSizing )
     EVT_MENU( ID_SETLABELCOLOUR, GridFrame::SetLabelColour )
     EVT_MENU( ID_SETLABELTEXTCOLOUR, GridFrame::SetLabelTextColour )
     EVT_MENU( ID_ROWLABELHORIZALIGN, GridFrame::SetRowLabelHorizAlignment )
@@ -124,6 +125,7 @@ GridFrame::GridFrame()
     viewMenu->Append( ID_TOGGLEEDIT,  "&Editable", "", TRUE );
     viewMenu->Append( ID_TOGGLEROWSIZING, "Ro&w drag-resize", "", TRUE );
     viewMenu->Append( ID_TOGGLECOLSIZING, "C&ol drag-resize", "", TRUE );
+    viewMenu->Append( ID_TOGGLEGRIDSIZING, "&Grid drag-resize", "", TRUE );
 
     wxMenu *rowLabelMenu = new wxMenu;
 
@@ -261,6 +263,7 @@ void GridFrame::SetDefaults()
     GetMenuBar()->Check( ID_TOGGLEEDIT, TRUE );
     GetMenuBar()->Check( ID_TOGGLEROWSIZING, TRUE );
     GetMenuBar()->Check( ID_TOGGLECOLSIZING, TRUE );
+    GetMenuBar()->Check( ID_TOGGLEGRIDSIZING, TRUE );
 }
 
 
@@ -308,6 +311,12 @@ void GridFrame::ToggleColSizing( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->EnableDragColSize(
         GetMenuBar()->IsChecked( ID_TOGGLECOLSIZING ) );
+}
+
+void GridFrame::ToggleGridSizing( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->EnableDragGridSize(
+        GetMenuBar()->IsChecked( ID_TOGGLEGRIDSIZING ) );
 }
 
 

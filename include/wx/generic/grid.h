@@ -958,7 +958,6 @@ public:
 
     void ShowCellEditControl();
     void HideCellEditControl();
-    void SetEditControlValue( const wxString& s = wxEmptyString );
     void SaveEditControlValue();
 
 
@@ -1041,6 +1040,10 @@ public:
     void     EnableDragColSize( bool enable = TRUE );
     void     DisableDragColSize() { EnableDragColSize( FALSE ); }
     bool     CanDragColSize() { return m_canDragColSize; }
+    void     EnableDragGridSize(bool enable = TRUE);
+    void     DisableDragGridSize() { EnableDragGridSize(FALSE); }
+    bool     CanDragGridSize() { return m_canDragGridSize; }
+
 
     // this sets the specified attribute for all cells in this row/col
     void     SetRowAttr(int row, wxGridCellAttr *attr);
@@ -1530,6 +1533,7 @@ protected:
 
     bool    m_canDragRowSize;
     bool    m_canDragColSize;
+    bool    m_canDragGridSize;
     int     m_dragLastPos;
     int     m_dragRowOrCol;
     bool    m_isDragging;

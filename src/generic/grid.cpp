@@ -2868,6 +2868,7 @@ void wxGrid::Init()
     m_winCapture = (wxWindow *)NULL;
     m_canDragRowSize = TRUE;
     m_canDragColSize = TRUE;
+    m_canDragGridSize = TRUE;
     m_dragLastPos  = -1;
     m_dragRowOrCol = -1;
     m_isDragging = FALSE;
@@ -3895,9 +3896,13 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
     m_isDragging = FALSE;
     m_startDragPos = wxDefaultPosition;
 
+//      if ( coords == wxGridNoCellCoords && m_cursorMode != WXGRID_CURSOR_SELECT_CELL )
+//      {
+//          ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
+//      }
 
-    if ( coords != wxGridNoCellCoords )
-    {
+//      if ( coords != wxGridNoCellCoords )
+//      {
         // VZ: if we do this, the mode is reset to WXGRID_CURSOR_SELECT_CELL
         //     immediately after it becomes WXGRID_CURSOR_RESIZE_ROW/COL under
         //     wxGTK
@@ -3912,7 +3917,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
         // ------------ Left button pressed
         //
-        if ( event.LeftDown() )
+        if ( event.LeftDown() && coords != wxGridNoCellCoords )
         {
             DisableCellEditControl();
             if ( event.ShiftDown() )
@@ -3955,7 +3960,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
         // ------------ Left double click
         //
-        else if ( event.LeftDClick() )
+        else if ( event.LeftDClick() && coords != wxGridNoCellCoords )
         {
             DisableCellEditControl();
             if ( XToEdgeOfCol(x) < 0  &&  YToEdgeOfRow(y) < 0 )
@@ -4015,7 +4020,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
         // ------------ Right button down
         //
-        else if ( event.RightDown() )
+        else if ( event.RightDown() && coords != wxGridNoCellCoords )
         {
             DisableCellEditControl();
             if ( !SendEvent( wxEVT_GRID_CELL_RIGHT_CLICK,
@@ -4030,7 +4035,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
         // ------------ Right double click
         //
-        else if ( event.RightDClick() )
+        else if ( event.RightDClick() && coords != wxGridNoCellCoords )
         {
             DisableCellEditControl();
             if ( !SendEvent( wxEVT_GRID_CELL_RIGHT_DCLICK,
@@ -4064,7 +4069,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
                 if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
                 {
-                    if ( CanDragRowSize() )
+                    if ( CanDragRowSize() && CanDragGridSize() )
                         ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW);
                 }
 
@@ -4077,7 +4082,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
                 if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
                 {
-                    if ( CanDragColSize() )
+                    if ( CanDragColSize() && CanDragGridSize() )
                         ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL);
                 }
 
@@ -4091,7 +4096,6 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
             }
         }
-    }
 }
 
 
@@ -4210,8 +4214,10 @@ void wxGrid::ClearGrid()
 {
     if ( m_table )
     {
+        if (IsCellEditControlEnabled())
+            DisableCellEditControl();
+
         m_table->Clear();
-        SetEditControlValue();
         if ( !GetBatchCount() ) m_gridWin->Refresh();
     }
 }
@@ -4260,7 +4266,6 @@ bool wxGrid::InsertRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
             if ( !GetBatchCount() ) Refresh();
         }
 
-        SetEditControlValue();
         return ok;
     }
     else
@@ -4368,7 +4373,6 @@ bool wxGrid::InsertCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
             if ( !GetBatchCount() ) Refresh();
         }
 
-        SetEditControlValue();
         return ok;
     }
     else
@@ -4537,7 +4541,6 @@ void wxGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
          m_numRows && m_numCols )
     {
         m_currentCellCoords.Set(0, 0);
-        SetEditControlValue();
         ShowCellEditControl();
     }
 
@@ -4736,9 +4739,6 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
          m_currentCellCoords != wxGridNoCellCoords )
     {
         HideCellEditControl();
-        // RD:  Does disabling this cause any problems?  It's called again
-        //      in DisableCellEditControl...
-        // SaveEditControlValue();
         DisableCellEditControl();
 
         // Clear the old current cell highlight
@@ -4751,8 +4751,6 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
     }
 
     m_currentCellCoords = coords;
-
-    SetEditControlValue();
 
     if ( m_displayed )
     {
@@ -5302,7 +5300,6 @@ void wxGrid::EnableCellEditControl( bool enable )
             // do it before ShowCellEditControl()
             m_cellEditCtrlEnabled = enable;
 
-            SetEditControlValue();
             ShowCellEditControl();
         }
         else
@@ -5403,12 +5400,6 @@ void wxGrid::HideCellEditControl()
     }
 }
 
-
-void wxGrid::SetEditControlValue( const wxString& value )
-{
-    // RD: The new Editors get the value from the table themselves now.  This
-    // method can probably be removed...
-}
 
 
 void wxGrid::SaveEditControlValue()
@@ -6684,6 +6675,11 @@ void wxGrid::EnableDragColSize( bool enable )
     m_canDragColSize = enable;
 }
 
+void wxGrid::EnableDragGridSize( bool enable )
+{
+    m_canDragGridSize = enable;
+}
+
 
 void wxGrid::SetDefaultRowSize( int height, bool resizeExistingRows )
 {
@@ -6839,15 +6835,13 @@ void wxGrid::SetCellValue( int row, int col, const wxString& s )
             DrawCell( dc, wxGridCellCoords(row, col) );
         }
 
-#if 0  // TODO: edit in place
-
         if ( m_currentCellCoords.GetRow() == row &&
-             m_currentCellCoords.GetCol() == col )
+             m_currentCellCoords.GetCol() == col &&
+             IsCellEditControlEnabled())
         {
-            SetEditControlValue( s );
+            HideCellEditControl();
+            ShowCellEditControl(); // will reread data from table
         }
-#endif
-
     }
 }
 
