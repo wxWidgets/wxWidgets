@@ -83,7 +83,6 @@ class MultipleChoiceDialog(wx.Dialog):
         
         self.SetSizer(dlgsizer)
         
-        self.SetAutoLayout(1)
         self.lst = lst
         self.Layout()
 

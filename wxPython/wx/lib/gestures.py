@@ -7,57 +7,58 @@
 
 #Released under the terms of the wxWindows License.
 
-#This is a class to add Mouse Gestures to a program.
-#It can be used in two ways:
-#
-#1.  Automatic:
-#    Automatically runs mouse gestures.
-#    You need to set the gestures, and their associated actions,
-#    as well as the Mouse Button/Modifiers to use.
-#
-#2.  Manual:
-#    Same as above, but you do not need to set the mouse button/modifiers.
-#    You can launch this from events as you wish.
-#
-#An example is provided in the demo.
-#The parent window is where the mouse events will be recorded.
-#(So if you want to record them in a pop up window, use manual mode,
-#and set the pop up as the parent).
-#
-#Start() starts recording mouse movement.
-#End() stops the recording, compiles all the gestures into a list,
-#and looks through the registered gestures to find a match.
-#The first matchs associated    action is then run.
+"""
+This is a class to add Mouse Gestures to a program.
+It can be used in two ways:
 
-#The marginoferror is how much to forgive when calculating movement:
-#If the margin is 25, then movement less than 25 pixels will not be detected.
+1.  Automatic:
+    Automatically runs mouse gestures.
+    You need to set the gestures, and their associated actions,
+    as well as the Mouse Button/Modifiers to use.
 
-#Recognized:  L, R, U, D, 1, 3, 7, 9
+2.  Manual:
+    Same as above, but you do not need to set the mouse button/modifiers.
+    You can launch this from events as you wish.
 
-#Styles:  Manual (Automatic By Default), DisplayNumbersForDiagonals (Off By Default).
-#Not Yet Implemented
+An example is provided in the demo.
+The parent window is where the mouse events will be recorded.
+(So if you want to record them in a pop up window, use manual mode,
+and set the pop up as the parent).
 
-#The criteria for a direction is as follows:
-#x in a row.  (Where x is the WobbleTolerance).
-#So if the WobbleTolerance is 9
-# 'URUUUUUUUUUUUUUUURUURUUUU1' is Up.
+Start() starts recording mouse movement.
+End() stops the recording, compiles all the gestures into a list,
+and looks through the registered gestures to find a match.
+The first matchs associated    action is then run.
 
-#The higher this number, the less sensitive this class is.
-#So the more likely something like 1L will translate to 1.
+The marginoferror is how much to forgive when calculating movement:
+If the margin is 25, then movement less than 25 pixels will not be detected.
 
-#This is good, since the mouse does tend to wobble somewhat,
-#and a higher number allows for this.
+Recognized:  L, R, U, D, 1, 3, 7, 9
 
-#To change this, use SetWobbleTolerance
+Styles:  Manual (Automatic By Default), DisplayNumbersForDiagonals (Off By Default).
+Not Yet Implemented
 
-#Also, to help with recognition of a diagonal versus
-#a vey messy straight line, if the greater absolute value
-#is not greater than twice the lesser, only the grater value
-#is counted.
+The criteria for a direction is as follows:
+x in a row.  (Where x is the WobbleTolerance).
+So if the WobbleTolerance is 9
+ 'URUUUUUUUUUUUUUUURUURUUUU1' is Up.
 
+The higher this number, the less sensitive this class is.
+So the more likely something like 1L will translate to 1.
 
-#In automatic mode, EVT_MOUSE_EVENTS is used.
-#This allows the user to change the mouse button/modifiers at runtime.
+This is good, since the mouse does tend to wobble somewhat,
+and a higher number allows for this.
+
+To change this, use SetWobbleTolerance
+
+Also, to help with recognition of a diagonal versus
+a vey messy straight line, if the greater absolute value
+is not greater than twice the lesser, only the grater value
+is counted.
+
+In automatic mode, EVT_MOUSE_EVENTS is used.
+This allows the user to change the mouse button/modifiers at runtime.
+"""
 
 ###########################################
 

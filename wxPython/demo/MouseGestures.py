@@ -1,6 +1,5 @@
 #*******************
 #By Daniel Pozmanter
-#Under the GPL, etc, etc.
 
 #Thanks to Robin Dunn for taking the time to show me how to do this
 #via the mailing list.
@@ -9,7 +8,7 @@
 
 #This is a hacked version of DragAndDrop.py from the wxPython demo 2.5.2.8
 
-import wx, wx.stc, wx.lib.dialogs
+import wx, wx.lib.dialogs
 from wx.lib.gestures import MouseGestures
 
 #ToDo:
@@ -32,7 +31,8 @@ class TestPanel(wx.Panel):
 
         #Mouse Gestures:
     
-        self.mg = MouseGestures(self, Auto=True)
+        self.mg = MouseGestures(self, Auto=True,
+                                MouseButton=wx.MOUSE_BTN_RIGHT)
         
         self.mg.SetGesturesVisible(True)
         
@@ -61,8 +61,6 @@ class TestPanel(wx.Panel):
         w,h = text.GetTextExtent(msg)
         text.SetSize(wx.Size(w,h+1))
         text.SetForegroundColour(wx.BLUE)
-        
-        self.SetBackgroundColour(wx.WHITE)
         
         #Sizer:
         outsideSizer = wx.BoxSizer(wx.VERTICAL)
@@ -134,7 +132,8 @@ class TestPanel(wx.Panel):
     def OnChangeMouseButton(self, event):
         choices = [wx.MOUSE_BTN_LEFT, wx.MOUSE_BTN_MIDDLE, wx.MOUSE_BTN_RIGHT]
         schoices = ['Left', 'Middle', 'Right']
-        d = wx.SingleChoiceDialog(self, "Set Mouse Button To", "Change Mouse Button", schoices, wx.OK|wx.CANCEL)
+        d = wx.SingleChoiceDialog(self, "Set Mouse Button To", "Change Mouse Button", schoices,
+                                  wx.CHOICEDLG_STYLE|wx.OK|wx.CANCEL)
         d.SetSize(wx.Size(250, 200))
         answer = d.ShowModal()
         i = d.GetSelection()
