@@ -6,7 +6,7 @@
 // Created:     25.03.02
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWindows team
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__WXX11__) || defined(__WXGTK__) || defined(__WXMOTIF__)

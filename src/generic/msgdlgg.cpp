@@ -5,8 +5,8 @@
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart, Markus Holzem, Robert Roebling
-// Licence:     wxWindows license
+// Copyright:   (c) Julian Smart and Robert Roebling
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
