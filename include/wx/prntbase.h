@@ -189,7 +189,6 @@ public:
     virtual void Initialize();
     virtual void CreateCanvas();
     virtual void CreateControlBar();
-
 protected:
     wxWindow*             m_previewCanvas;
     wxPreviewControlBar*  m_controlBar;
@@ -242,8 +241,11 @@ public:
 
     void OnPrint(wxCommandEvent& event);
     void OnWindowClose(wxCommandEvent& event);
-    void OnNext(wxCommandEvent& event);
-    void OnPrevious(wxCommandEvent& event);
+    void OnNext();
+    void OnPrevious();
+    void OnNextButton(wxCommandEvent &event) { OnNext(); }
+    void OnPreviousButton(wxCommandEvent &event) { OnPrevious(); }
+    void OnChar(wxKeyEvent &event);
     void OnZoom(wxCommandEvent& event);
     void OnPaint(wxPaintEvent& event);
 

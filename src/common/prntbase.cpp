@@ -220,8 +220,9 @@ void wxPreviewCanvas::OnSysColourChanged(wxSysColourChangedEvent& event)
 BEGIN_EVENT_TABLE(wxPreviewControlBar, wxPanel)
     EVT_BUTTON(wxID_PREVIEW_CLOSE,    wxPreviewControlBar::OnWindowClose)
     EVT_BUTTON(wxID_PREVIEW_PRINT,    wxPreviewControlBar::OnPrint)
-    EVT_BUTTON(wxID_PREVIEW_PREVIOUS, wxPreviewControlBar::OnPrevious)
-    EVT_BUTTON(wxID_PREVIEW_NEXT,     wxPreviewControlBar::OnNext)
+    EVT_BUTTON(wxID_PREVIEW_PREVIOUS, wxPreviewControlBar::OnPreviousButton)
+    EVT_BUTTON(wxID_PREVIEW_NEXT,     wxPreviewControlBar::OnNextButton)
+    EVT_CHAR(wxPreviewControlBar::OnChar)
     EVT_CHOICE(wxID_PREVIEW_ZOOM,     wxPreviewControlBar::OnZoom)
     EVT_PAINT(wxPreviewControlBar::OnPaint)
 END_EVENT_TABLE()
@@ -267,7 +268,20 @@ void wxPreviewControlBar::OnPrint(wxCommandEvent& WXUNUSED(event))
     preview->Print(TRUE);
 }
 
-void wxPreviewControlBar::OnNext(wxCommandEvent& WXUNUSED(event))
+void wxPreviewControlBar::OnChar(wxKeyEvent &event)
+{
+   switch(event.KeyCode())
+   {
+   case WXK_NEXT:
+      OnNext(); break;
+   case WXK_PRIOR:
+      OnPrevious(); break;
+   default:
+      event.Skip();
+   }
+}
+
+void wxPreviewControlBar::OnNext(void)
 {
     wxPrintPreviewBase *preview = GetPrintPreview();
     if (preview)
@@ -282,7 +296,7 @@ void wxPreviewControlBar::OnNext(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void wxPreviewControlBar::OnPrevious(wxCommandEvent& WXUNUSED(event))
+void wxPreviewControlBar::OnPrevious(void)
 {
     wxPrintPreviewBase *preview = GetPrintPreview();
     if (preview)
@@ -410,7 +424,7 @@ int wxPreviewControlBar::GetZoomControl()
 */
 
 BEGIN_EVENT_TABLE(wxPreviewFrame, wxFrame)
-EVT_CLOSE(wxPreviewFrame::OnCloseWindow)
+    EVT_CLOSE(wxPreviewFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
 wxPreviewFrame::wxPreviewFrame(wxPrintPreviewBase *preview, wxFrame *parent, const wxString& title,
