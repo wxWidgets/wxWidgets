@@ -41,6 +41,7 @@ struct _GSocket
   bool m_server;
   bool m_stream;
   bool m_oriented;
+  bool m_establishing;
   struct timeval m_timeout;
 
   /* Callbacks */
