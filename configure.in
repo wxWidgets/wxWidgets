@@ -3429,14 +3429,14 @@ if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
     fi
 else
     dnl default value is to (silently) do nothing in the makefile
-    MACSETFILE="@#"
-    MACRESWXCONFIG="#"
+    MACSETFILE="@true"
+    MACRESWXCONFIG="@true"
 
     dnl confusingly, wxOS2 also uses MACRESCOMP in its post-link step
     if test "$wxUSE_PM" = 1; then
         MACRESCOMP="emxbind -ep"
     else
-        MACRESCOMP="@#"
+        MACRESCOMP="@true"
     fi
 fi
 
