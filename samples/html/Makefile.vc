@@ -26,6 +26,8 @@ all:
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\html\help
         nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\html\helpview
+        nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\html\printing
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\html\test
@@ -41,6 +43,8 @@ clean:
         cd $(WXDIR)\samples\html\about
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\html\help
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\html\helpview
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\html\printing
         nmake -f makefile.vc clean
