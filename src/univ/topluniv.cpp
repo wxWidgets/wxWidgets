@@ -47,6 +47,7 @@
 BEGIN_EVENT_TABLE(wxTopLevelWindow, wxTopLevelWindowNative)
     WX_EVENT_TABLE_INPUT_CONSUMER(wxTopLevelWindow)
     EVT_NC_PAINT(wxTopLevelWindow::OnNcPaint)
+    EVT_MENU_RANGE(wxID_CLOSE_FRAME, wxID_RESTORE_FRAME, wxTopLevelWindow::OnSystemMenu)
 END_EVENT_TABLE()
 
 WX_FORWARD_TO_INPUT_CONSUMER(wxTopLevelWindow)
@@ -340,6 +341,7 @@ struct wxInteractiveMoveData
     wxRect                m_rectOrig;
     wxPoint               m_pos;
     wxSize                m_minSize, m_maxSize;
+    bool                  m_sizingCursor;
 };
 
 class wxInteractiveMoveHandler : public wxEvtHandler
@@ -439,19 +441,12 @@ void wxInteractiveMoveHandler::OnMouseDown(wxMouseEvent& event)
 {
     if ( m_data.m_flags & wxINTERACTIVE_WAIT_FOR_INPUT )
     {
-        m_data.m_flags &= ~wxINTERACTIVE_WAIT_FOR_INPUT;
-        m_data.m_pos = wxGetMousePosition();
+        m_data.m_evtLoop->Exit();
     }
 }
 
 void wxInteractiveMoveHandler::OnKeyDown(wxKeyEvent& event)
 {
-    if ( m_data.m_flags & wxINTERACTIVE_WAIT_FOR_INPUT )
-    {
-        m_data.m_flags &= ~wxINTERACTIVE_WAIT_FOR_INPUT;
-        m_data.m_pos = wxGetMousePosition();
-    }
-    
     wxPoint diff(-1,-1);
     
     switch ( event.GetKeyCode() )
@@ -471,28 +466,83 @@ void wxInteractiveMoveHandler::OnKeyDown(wxKeyEvent& event)
     
     if ( diff.x != -1 )
     {
+        if ( m_data.m_flags & wxINTERACTIVE_WAIT_FOR_INPUT )
+        {
+            m_data.m_flags &= ~wxINTERACTIVE_WAIT_FOR_INPUT;
+            if ( m_data.m_sizingCursor )
+            {
+                wxEndBusyCursor();
+                m_data.m_sizingCursor = FALSE;
+            }
+
+            if ( m_data.m_flags & wxINTERACTIVE_MOVE )
+            {
+                m_data.m_pos = m_data.m_window->GetPosition() + 
+                               wxPoint(m_data.m_window->GetSize().x/2, 8);
+            }
+        }
+
+        wxPoint warp;
+        
         if ( m_data.m_flags & wxINTERACTIVE_MOVE )
         {
             m_data.m_rect.Offset(diff);
             m_data.m_window->Move(m_data.m_rect.GetPosition());
+            warp = wxPoint(m_data.m_window->GetSize().x/2, 8);
         }
         else /* wxINTERACTIVE_RESIZE */
         {
-            if ( !(m_data.m_flags & wxINTERACTIVE_RESIZE_DIR) )
+            if ( !(m_data.m_flags & 
+                  (wxINTERACTIVE_RESIZE_N | wxINTERACTIVE_RESIZE_S)) )
             {
                 if ( diff.y < 0 )
+                {
                     m_data.m_flags |= wxINTERACTIVE_RESIZE_N;
+                    m_data.m_pos.y = m_data.m_window->GetPosition().y;
+                }
                 else if ( diff.y > 0 )
+                {
                     m_data.m_flags |= wxINTERACTIVE_RESIZE_S;
-                if ( diff.x < 0 )
-                    m_data.m_flags |= wxINTERACTIVE_RESIZE_W;
-                else if ( diff.x > 0 )
-                    m_data.m_flags |= wxINTERACTIVE_RESIZE_E;
+                    m_data.m_pos.y = m_data.m_window->GetPosition().y +
+                                     m_data.m_window->GetSize().y;
+                }
             }
-
+            if ( !(m_data.m_flags & 
+                  (wxINTERACTIVE_RESIZE_W | wxINTERACTIVE_RESIZE_E)) )
+            {
+                if ( diff.x < 0 )
+                {
+                    m_data.m_flags |= wxINTERACTIVE_RESIZE_W;
+                    m_data.m_pos.x = m_data.m_window->GetPosition().x;
+                }
+                else if ( diff.x > 0 )
+                {
+                    m_data.m_flags |= wxINTERACTIVE_RESIZE_E;
+                    m_data.m_pos.x = m_data.m_window->GetPosition().x +
+                                     m_data.m_window->GetSize().x;
+                }
+            }
+            
             wxApplyResize(m_data, diff);
             m_data.m_window->SetSize(m_data.m_rect);
+
+            if ( m_data.m_flags & wxINTERACTIVE_RESIZE_W )
+                warp.x = 0;
+            else if ( m_data.m_flags & wxINTERACTIVE_RESIZE_E )
+                warp.x = m_data.m_window->GetSize().x-1;
+            else
+                warp.x = wxGetMousePosition().x - m_data.m_window->GetPosition().x;
+
+            if ( m_data.m_flags & wxINTERACTIVE_RESIZE_N )
+                warp.y = 0;
+            else if ( m_data.m_flags & wxINTERACTIVE_RESIZE_S )
+                warp.y = m_data.m_window->GetSize().y-1;
+            else
+                warp.y = wxGetMousePosition().y - m_data.m_window->GetPosition().y;
         }
+
+        warp -= m_data.m_window->GetClientAreaOrigin();
+        m_data.m_window->WarpPointer(warp.x, warp.y);
     }
 }
 
@@ -514,9 +564,19 @@ void wxTopLevelWindow::InteractiveMove(int flags)
 
     wxInteractiveMoveData data;
     wxEventLoop loop;
-    wxWindow *focus = FindFocus();
     
-    // FIXME - display resize cursor if waiting for initial input
+    SetFocus();
+
+#ifndef __WXGTK__    
+    if ( flags & wxINTERACTIVE_WAIT_FOR_INPUT )
+    {
+        wxCursor sizingCursor(wxCURSOR_SIZING);
+        wxBeginBusyCursor(&sizingCursor);
+        data.m_sizingCursor = TRUE;
+    }
+    else
+#endif
+        data.m_sizingCursor = FALSE;
 
     data.m_window = this;
     data.m_evtLoop = &loop;
@@ -526,17 +586,18 @@ void wxTopLevelWindow::InteractiveMove(int flags)
     data.m_minSize = wxSize(GetMinWidth(), GetMinHeight());
     data.m_maxSize = wxSize(GetMaxWidth(), GetMaxHeight());
 
-    this->PushEventHandler(new wxInteractiveMoveHandler(data));
-    if ( focus )
-        focus->PushEventHandler(new wxInteractiveMoveHandler(data));
+    wxEvtHandler *handler = new wxInteractiveMoveHandler(data);
+    this->PushEventHandler(handler);
 
     CaptureMouse();
     loop.Run();
     ReleaseMouse();
 
-    this->PopEventHandler(TRUE/*delete*/);
-    if ( focus )
-        focus->PopEventHandler(TRUE/*delete*/);
+    this->RemoveEventHandler(handler);
+    delete handler;
+
+    if ( data.m_sizingCursor )
+        wxEndBusyCursor();
 }
 
 // ----------------------------------------------------------------------------
@@ -637,6 +698,43 @@ bool wxTopLevelWindow::PerformAction(const wxControlAction& action,
 
     else
         return FALSE;
+}
+
+void wxTopLevelWindow::OnSystemMenu(wxCommandEvent& event)
+{
+    bool ret = TRUE;
+    
+    switch (event.GetId())
+    {
+        case wxID_CLOSE_FRAME:
+            ret = PerformAction(wxACTION_TOPLEVEL_BUTTON_CLICK,
+                                wxTOPLEVEL_BUTTON_CLOSE);
+            break;
+        case wxID_MOVE_FRAME:
+            InteractiveMove(wxINTERACTIVE_MOVE | wxINTERACTIVE_WAIT_FOR_INPUT);
+            break;
+        case wxID_RESIZE_FRAME:
+            InteractiveMove(wxINTERACTIVE_RESIZE | wxINTERACTIVE_WAIT_FOR_INPUT);
+            break;
+        case wxID_MAXIMIZE_FRAME:
+            ret = PerformAction(wxACTION_TOPLEVEL_BUTTON_CLICK,
+                                wxTOPLEVEL_BUTTON_MAXIMIZE);
+            break;
+        case wxID_ICONIZE_FRAME:
+            ret = PerformAction(wxACTION_TOPLEVEL_BUTTON_CLICK,
+                                wxTOPLEVEL_BUTTON_ICONIZE);
+            break;
+        case wxID_RESTORE_FRAME:
+            ret = PerformAction(wxACTION_TOPLEVEL_BUTTON_CLICK,
+                                wxTOPLEVEL_BUTTON_RESTORE);
+            break;
+
+        default:
+            ret = FALSE;
+    }
+    
+    if ( !ret )
+        event.Skip();
 }
 
 

@@ -923,7 +923,7 @@ enum wxBorder
    wxMINIMIZE_BOX | wxMAXIMIZE_BOX | \
    wxCAPTION | wxCLIP_CHILDREN)
 
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXMGL__)
 #   define wxDEFAULT_DIALOG_STYLE  (wxSYSTEM_MENU | wxCAPTION)
 #else
 //  Under Unix, the dialogs don't have a system menu. Specifying wxSYSTEM_MENU
@@ -1232,8 +1232,18 @@ enum wxBorder
 #define wxID_RETRY              5116
 #define wxID_IGNORE             5117
 
-// IDs used by generic file dialog (11 consecutive starting from this value)
+// System menu IDs (used by wxUniv):
+#define wxID_SYSTEM_MENU        5200
+#define wxID_CLOSE_FRAME        5201
+#define wxID_MOVE_FRAME         5202
+#define wxID_RESIZE_FRAME       5203
+#define wxID_MAXIMIZE_FRAME     5204
+#define wxID_ICONIZE_FRAME      5205
+#define wxID_RESTORE_FRAME      5206
+
+// IDs used by generic file dialog (13 consecutive starting from this value)
 #define wxID_FILEDLGG           5900
+
 #define wxID_HIGHEST            5999
 
 // ----------------------------------------------------------------------------

@@ -155,6 +155,7 @@ protected:
 
     void RefreshTitleBar();
     void OnNcPaint(wxPaintEvent& event);
+    void OnSystemMenu(wxCommandEvent& event);
 
     // TRUE if wxTLW should render decorations (aka titlebar) itself
     static int ms_drawDecorations;
