@@ -111,7 +111,6 @@ static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , Even
     UInt32 keyCode ;
     UInt32 modifiers ;
     Point point ;
-    UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
 
     EventRef rawEvent ;
 
@@ -122,8 +121,6 @@ static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , Even
        GetEventParameter( rawEvent, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers);
     GetEventParameter( rawEvent, kEventParamMouseLocation, typeQDPoint, NULL,
         sizeof( Point ), NULL, &point );
-
-    UInt32 message = (keyCode << 8) + charCode;
 
     switch ( GetEventKind( event ) )
     {
@@ -142,6 +139,9 @@ static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , Even
             }
             /*
             // this may lead to double events sent to a window in case all handlers have skipped the key down event
+            UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
+            UInt32 message = (keyCode << 8) + charCode;
+
             if ( (focus != NULL) && wxTheApp->MacSendKeyDownEvent(
                 focus , message , modifiers , when , point.h , point.v ) )
             {
