@@ -72,6 +72,18 @@ private:
     const wxDC* m_dc ;
 } ;
 
+class WXDLLEXPORT wxMacWindowClipper
+{
+    DECLARE_NO_COPY_CLASS(wxMacWindowClipper)
+        
+public:
+    wxMacWindowClipper( const wxWindow* win ) ;
+    ~wxMacWindowClipper() ;
+private:
+    RgnHandle m_formerClip ;
+    RgnHandle m_newClip ;
+} ;
+
 class wxMacDrawingHelper
 {
     DECLARE_NO_COPY_CLASS(wxMacDrawingHelper)
