@@ -27,8 +27,7 @@ samples/ with demos/ where needed).
       You may also use "bakefile_gen -b ../../samples/foo/foo.bkl" to
       regenerate only the makefiles for this sample (path must be relative!)
       or even add a "-f<compiler>" to generate just the makefiles for the given
-      compiler (possible values are in FORMATS.bkmanifest file in bakefile
-      source tree)
+      compiler (run 'bakefile --help' to get the list of possible values)
 
 4. Modify configure.in and samples/configure.in for Unix compilation:
    a) if the sample should only be built if "wxUSE_FOO" is enabled, locate
