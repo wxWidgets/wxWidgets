@@ -100,9 +100,18 @@ public:
     bool ProcessHelpMessage(WXMSG* wxmsg, const wxCursor& cursor, wxWindow* win);
 #endif
 
+#ifdef __WXGTK__
+    void SetStatus(bool status, const wxPoint& pt) { m_status = status; m_mousePos = pt; }
+#endif
+
 protected:
 
     bool    m_inHelp;
+
+#ifdef __WXGTK__
+    bool    m_status; // The user left-clicked
+    wxPoint m_mousePos;
+#endif
 };
 
 #endif // wxUSE_HELP
