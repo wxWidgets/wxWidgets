@@ -427,6 +427,7 @@
     src/common/prntbase.cpp
     src/common/quantize.cpp
     src/common/radiocmn.cpp
+    src/common/rendcmn.cpp
     src/common/rgncmn.cpp
     src/common/settcmn.cpp
     src/common/sizer.cpp
