@@ -271,6 +271,7 @@ copy /q include\wx\zstream.h %DEST%\include\wx\zstream.h
 copy /q include\wx\unix\gsockunx.h %DEST%\include\wx\unix\gsockunx.h
 copy /q include\wx\unix\mimetype.h %DEST%\include\wx\unix\mimetype.h
 copy /q include\wx\msw\dde.h %DEST%\include\wx\msw\dde.h
+copy /q include\wx\msw\gccpriv.h %DEST%\include\wx\msw\gccpriv.h
 copy /q include\wx\msw\mimetype.h %DEST%\include\wx\msw\mimetype.h
 copy /q include\wx\msw\winundef.h %DEST%\include\wx\msw\winundef.h
 copy /q include\wx\protocol\file.h %DEST%\include\wx\protocol\file.h

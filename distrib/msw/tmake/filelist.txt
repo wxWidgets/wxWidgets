@@ -1266,7 +1266,7 @@ fontdlg.h	MSWH
 frame.h	MSWH
 gauge95.h	MSWH
 gaugemsw.h	MSWH
-gccpriv.h	MSWH
+gccpriv.h	MSWH	Base
 gdiimage.h	MSWH
 gdiobj.h	MSWH
 glcanvas.h	MSWH
