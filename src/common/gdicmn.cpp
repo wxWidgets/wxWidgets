@@ -61,6 +61,7 @@
 
 #ifdef __WXMAC__
 #include "wx/mac/private.h"
+#include "wx/mac/uma.h"
 #endif
 IMPLEMENT_CLASS(wxColourDatabase, wxList)
 IMPLEMENT_DYNAMIC_CLASS(wxFontList, wxList)
