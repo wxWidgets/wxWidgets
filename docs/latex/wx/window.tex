@@ -619,6 +619,21 @@ Each window has an integer identifier. If the application has not provided one
 \helpref{wxWindow::SetId}{wxwindowsetid}\rtfsp
 \helpref{Window identifiers}{windowids}
 
+\membersection{wxWindow::GetLabel}
+
+\constfunc{virtual wxString }{GetLabel}{\void}
+
+Generic way of getting a label from any window, for
+identification purposes.
+
+\wxheading{Remarks}
+
+The interpretation of this function differs from class to class.
+For frames and dialogs, the value returned is the title. For buttons or static text controls, it is
+the button text. This function can be useful for meta-programs (such as testing
+tools or special-needs access programs) which need to identify windows
+by name.
+
 \membersection{wxWindow::GetPosition}
 
 \constfunc{virtual void}{GetPosition}{\param{int* }{x}, \param{int* }{y}}
@@ -639,21 +654,6 @@ implements the following methods:\par
 \twocolitem{{\bf GetPositionTuple()}}{Returns a tuple (x, y)}
 \end{twocollist}}
 }
-
-\membersection{wxWindow::GetLabel}
-
-\constfunc{virtual wxString }{GetLabel}{\void}
-
-Generic way of getting a label from any window, for
-identification purposes.
-
-\wxheading{Remarks}
-
-The interpretation of this function differs from class to class.
-For frames and dialogs, the value returned is the title. For buttons or static text controls, it is
-the button text. This function can be useful for meta-programs (such as testing
-tools or special-needs access programs) which need to identify windows
-by name.
 
 \membersection{wxWindow::GetName}\label{wxwindowgetname}
 

@@ -875,6 +875,7 @@ samples/wizard/*.png
 samples/wizard/*.ico
 samples/wizard/*.txt
 
+samples/console/testdata.fc
 samples/console/*.cpp
 samples/console/*.h
 samples/console/makefile*

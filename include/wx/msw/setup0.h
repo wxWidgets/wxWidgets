@@ -173,6 +173,8 @@
 // Recommended setting: 1 for wxUSE_NEW_GRID, 0 if you have an old code using
 // wxGrid and 100% backwards compatible (with all old wxGrid quirks) is
 // essential.
+//
+// WIN16/BC++ resets wxUSE_NEW_GRID to 0 because it exceeds the data limit.
 #define wxUSE_GRID         1
 #define wxUSE_NEW_GRID     1
 
@@ -575,6 +577,9 @@
 
 #undef wxUSE_ODBC
 #define wxUSE_ODBC                0
+
+#undef wxUSE_NEW_GRID
+#define wxUSE_NEW_GRID            0
 #endif
 
 #if defined(__WXMSW__) && defined(__WATCOMC__)

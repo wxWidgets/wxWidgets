@@ -244,8 +244,10 @@ Note (5): BC++ 4.5 (not 5.0) trips up over jdmerge.c in the JPEG folder;
 you will therefore need to set wxUSE_LIBJPEG to 0 in setup.h and remove
 the jpeg target from src\msw\makefile.b32.
 
-Note (6): If using C++Builder 4 and above (BC++ 5.4), change LINK=tlink32 to
-LINK=ilink32 in src\makeb32.env.
+Note (6): If using C++Builder 4 and above (BC++ 5.4 and above), change LINK=tlink32 to
+LINK=ilink32 in src\makeb32.env. You may also need to disable
+wxUSE_LIBJPEG because there is a conflict in the BC++ headers
+(actually this problem seems to have gone away with 5.5 and SP1).
 
 Compiling using the IDE files:
 
