@@ -1,11 +1,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 2.5.2\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: Tsolakos Stavros <tsolako1@otenet.gr>\n"
 "POT-Creation-Date: 2004-05-07 14:03+0200\n"
-"PO-Revision-Date: 2003-04-14 21:28+0200\n"
+"PO-Revision-Date: 2004-05-30 20:02+0300\n"
 "Last-Translator: Tsolakos Stavros <tsolako1@otenet.gr>\n"
-"Language-Team: Tsolakos Stavros <tsolako1@otenet.gr>\n"
+"Language-Team: Tsolakos Stavros <tsolako1@otenet.gr>, Nassos Yiannopoulos <nassosy@compulink.gr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-7\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -75,9 +75,9 @@ msgid "%s Warning"
 msgstr "%s Προειδοποίηση"
 
 #: ../src/common/fldlgcmn.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "%s files (%s)|%s"
-msgstr "Αρχεία (%s)|%s"
+msgstr "%s αρχεία (%s)|%s"
 
 #: ../src/common/msgout.cpp:188
 #, c-format
@@ -118,9 +118,8 @@ msgid "&Details"
 msgstr "&Λεπτομέρειες"
 
 #: ../src/html/helpfrm.cpp:276
-#, fuzzy
 msgid "&File"
-msgstr "Αρχείο"
+msgstr "&Αρχείο"
 
 #: ../src/generic/fdrepdlg.cpp:162
 msgid "&Find"
@@ -406,9 +405,9 @@ msgid "All"
 msgstr "Όλα"
 
 #: ../src/common/fldlgcmn.cpp:57
-#, fuzzy, c-format
+#, c-format
 msgid "All files (%s)|%s"
-msgstr "Όλα τα αρχεία (*)|*"
+msgstr "Όλα τα αρχεία (%s)|%s"
 
 #: ../include/wx/defs.h:1975
 msgid "All files (*)|*"
@@ -683,9 +682,9 @@ msgid "Can't open registry key '%s'"
 msgstr "Δεν είναι δυνατό το άνοιγμα του κλειδιού μητρώου(registry) '%s'"
 
 #: ../src/common/zstream.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Can't read from inflate stream: %s"
-msgstr "Αδύνατη η ανάγνωση από την ροή inflate: %s\n"
+msgstr "Αδύνατη η ανάγνωση από την ροή inflate: %s"
 
 #: ../src/common/zstream.cpp:159
 msgid "Can't read inflate stream: unexpected EOF in underlying stream."
@@ -724,9 +723,9 @@ msgid "Can't set value of '%s'"
 msgstr "Δεν είναι δυνατή η ανάθεση τιμής του '%s'"
 
 #: ../src/common/zstream.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid "Can't write to deflate stream: %s"
-msgstr "Δεν είναι δυνατή η εγγραφή στην ροή deflate: %s\n"
+msgstr "Δεν είναι δυνατή η εγγραφή στην ροή deflate: %s"
 
 #: ../src/common/dlgcmn.cpp:240 ../src/generic/dirdlgg.cpp:155
 #: ../src/generic/filedlgg.cpp:996 ../src/generic/filedlgg.cpp:1015
@@ -1865,7 +1864,7 @@ msgstr "Ελληνικό (ISO-8859-7)"
 
 #: ../src/common/zstream.cpp:72 ../src/common/zstream.cpp:209
 msgid "Gzip not supported by this version of zlib"
-msgstr ""
+msgstr "Το Gzip δεν υποστηρίζεται από αυτήν την έκδοση της zlib"
 
 #: ../src/html/helpfrm.cpp:1408
 msgid "HTML Help Project (*.hhp)|*.hhp|"
@@ -2079,9 +2078,8 @@ msgid "KOI8-R"
 msgstr "KOI8-R"
 
 #: ../src/common/fmapbase.cpp:119
-#, fuzzy
 msgid "KOI8-U"
-msgstr "KOI8-R"
+msgstr "KOI8-U"
 
 #: ../src/generic/prntdlgg.cpp:428 ../src/generic/prntdlgg.cpp:638
 msgid "Landscape"
@@ -2881,7 +2879,7 @@ msgstr "Ταϋλανδέζικο (ISO-8859-11)"
 #: ../src/common/ftp.cpp:573
 msgid "The FTP server doesn't support passive mode."
 msgstr ""
-"Ο FTP εξυπηρετητής δεν υποστηρίζει κατάσταση λειτουργίας(mode) 'passive'."
+"Ο διακομιστής FTP δεν υποστηρίζει κατάσταση λειτουργίας(mode) 'passive'."
 
 #: ../src/common/fontmap.cpp:189
 #, c-format
@@ -3357,7 +3355,7 @@ msgstr ""
 msgid "a client's attempt to establish a conversation has failed."
 msgstr ""
 "η προσπάθεια ενός πελάτη(client) να εδραιώσει(establish) μία συνδιάλεξη"
-"(conversation) απέτυχε. "
+"(conversation) απέτυχε."
 
 #: ../src/msw/dde.cpp:1078
 msgid "a memory allocation failed."
@@ -3605,7 +3603,7 @@ msgstr "σφάλμα συμπίεσης"
 
 #: ../src/common/regex.cpp:141
 msgid "conversion to 8-bit encoding failed"
-msgstr ""
+msgstr "η μετατροπή σε 8-bit κωδικοποίηση απέτυχε"
 
 #: ../src/common/menucmn.cpp:112
 msgid "ctrl"
