@@ -97,7 +97,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
   int height = size.y;
 
   long msStyle = WS_CHILD | WS_TABSTOP | WS_VISIBLE |
-                 CBS_AUTOHSCROLL | CBS_NOINTEGRALHEIGHT;
+                 WS_VSCROLL | WS_HSCROLL | CBS_AUTOHSCROLL | CBS_NOINTEGRALHEIGHT;
 
   if (m_windowStyle & wxCB_READONLY)
     msStyle |= CBS_DROPDOWNLIST;
