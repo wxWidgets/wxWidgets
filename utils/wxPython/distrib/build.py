@@ -724,12 +724,15 @@ uninstall: %(OTHERUNINSTALLTARGETS)s
 %%.o : $(GENCODEDIR)/%%.c
 	$(CC) $(CCSHARED) $(CFLAGS) $(OTHERCFLAGS) -c $<
 
+ifndef NOSWIG
 $(GENCODEDIR)/%%.cpp : %%.i
 	swig $(SWIGFLAGS) -c -o $@ $<
 
 $(GENCODEDIR)/%%.py : %%.i
 	swig $(SWIGFLAGS) -c -o $(GENCODEDIR)/tmp_wrap.cpp $<
 	rm $(GENCODEDIR)/tmp_wrap.cpp
+endif
+
 
 $(TARGETDIR)/%% : %%
 	cp -f $< $@

@@ -44,7 +44,6 @@ class MyApp(wxApp):
         frame = MyParentFrame()
         frame.Show(true)
         self.SetTopWindow(frame)
-        print "after"
         return true
 
 
