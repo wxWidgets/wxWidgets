@@ -1064,7 +1064,7 @@ bool wxMDIChildFrame::HandleGetMinMaxInfo(void *mmInfo)
         processed = true;
     }
 
-    return true;
+    return processed;
 }
 
 // ---------------------------------------------------------------------------
