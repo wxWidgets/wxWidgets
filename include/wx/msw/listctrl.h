@@ -21,8 +21,9 @@
 #include "wx/control.h"
 #include "wx/event.h"
 #include "wx/hash.h"
+#include "wx/textctrl.h"
 
-class WXDLLEXPORT wxTextCtrl;
+
 class WXDLLEXPORT wxImageList;
 
 /*
