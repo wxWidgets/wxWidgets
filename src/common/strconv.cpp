@@ -1305,11 +1305,8 @@ public:
 	{
 	    OSStatus status = noErr ;
 		m_char_encoding = encoding ;
-#if SIZEOF_WCHAR_T == 4
-		m_unicode_encoding = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode32BitFormat) ;
-#else
 		m_unicode_encoding = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
-#endif		
+
 	    status = TECCreateConverter(&m_MB2WC_converter,
 	                                m_char_encoding,
 	                                m_unicode_encoding);
@@ -1324,21 +1321,32 @@ public:
 	    ByteCount byteOutLen ;
 	    ByteCount byteInLen = strlen(psz) ;
 		wchar_t *tbuf = NULL ;
+		UniChar* ubuf = NULL ;
+		size_t res = 0 ;
 		
 		if (buf == NULL)
 		{
 			n = byteInLen ;
 			tbuf = (wchar_t*) malloc( n * SIZEOF_WCHAR_T) ;
 		}
-	
-	    ByteCount byteBufferLen = n * SIZEOF_WCHAR_T ; 
+	    ByteCount byteBufferLen = n * sizeof( UniChar ) ; 
+#if SIZEOF_WCHAR_T == 4
+		ubuf = (UniChar*) malloc( byteBufferLen ) ;
+#else
+		ubuf = (UniChar*) (buf ? buf : tbuf) ;
+#endif
 	    status = TECConvertText(m_MB2WC_converter, (ConstTextPtr) psz , byteInLen, &byteInLen,
-	      (TextPtr) (buf ? buf : tbuf) , byteBufferLen, &byteOutLen);
-
+	      (TextPtr) ubuf , byteBufferLen, &byteOutLen);
+#if SIZEOF_WCHAR_T == 4
+		wxMBConvUTF16BE converter ;
+		res = converter.MB2WC( (buf ? buf : tbuf) , (const char*)ubuf , n ) ;
+		free( ubuf ) ;
+#else
+		res = byteOutLen / sizeof( UniChar ) ;
+#endif
 		if ( buf == NULL )
 			free(tbuf) ;
 
-		size_t res = byteOutLen / SIZEOF_WCHAR_T ;
         if ( buf  && res < n)
             buf[res] = 0;
 
@@ -1361,9 +1369,21 @@ public:
 		}
 
 	    ByteCount byteBufferLen = n ;
-	    status = TECConvertText(m_WC2MB_converter, (ConstTextPtr) psz , byteInLen, &byteInLen,
-	       (TextPtr) ( buf ? buf : tbuf ) , byteBufferLen, &byteOutLen);
-
+		UniChar* ubuf = NULL ;
+#if SIZEOF_WCHAR_T == 4
+		wxMBConvUTF16BE converter ;
+		size_t unicharlen = converter.WC2MB( NULL , psz , 0 ) ;
+		byteBufferLen = unicharlen ;
+		ubuf = (UniChar*) malloc( byteBufferLen + 2 ) ;
+		converter.WC2MB( (char*) ubuf , psz, unicharlen ) ;
+#else
+		ubuf = (UniChar*) psz ;
+#endif
+	    status = TECConvertText(m_WC2MB_converter, (ConstTextPtr) ubuf , byteInLen, &byteInLen,
+	       (TextPtr) (buf ? buf : tbuf) , byteBufferLen, &byteOutLen);
+#if SIZEOF_WCHAR_T == 4
+		free( ubuf ) ;
+#endif
 		if ( buf == NULL )
 			free(tbuf) ;
 
