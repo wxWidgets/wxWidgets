@@ -107,7 +107,7 @@ public:
     void ShowHidden( bool show = TRUE );
     long Add( wxFileData *fd, wxListItem &item );
     void Update();
-    virtual void StatusbarText( char *WXUNUSED(text) ) {};
+    virtual void StatusbarText( wxChar *WXUNUSED(text) ) {};
     void MakeDir();
     void GoToParentDir();
     void GoToHomeDir();
@@ -115,6 +115,7 @@ public:
     void SetWild( const wxString &wild );
     void GetDir( wxString &dir );
     void OnListDeleteItem( wxListEvent &event );
+    void OnListDeleteAllItems( wxListEvent &event );
     void OnListEndLabelEdit( wxListEvent &event );
 
 private:

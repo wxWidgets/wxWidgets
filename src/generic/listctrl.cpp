@@ -1171,6 +1171,8 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent, wxWindowID id,
 
 wxListMainWindow::~wxListMainWindow()
 {
+    DeleteEverything();
+
     if (m_hilightBrush) delete m_hilightBrush;
 
     delete m_renameTimer;
@@ -2392,7 +2394,7 @@ void wxListMainWindow::DeleteColumn( int col )
     if (node) m_columns.DeleteNode( node );
 }
 
-void wxListMainWindow::DeleteAllItems( void )
+void wxListMainWindow::DeleteAllItems()
 {
     m_dirty = TRUE;
     m_current = (wxListLineData *) NULL;
@@ -2400,34 +2402,18 @@ void wxListMainWindow::DeleteAllItems( void )
     // to make the deletion of all items faster, we don't send the
     // notifications in this case: this is compatible with wxMSW and
     // documented in DeleteAllItems() description
-#if 0
-    wxNode *node = m_lines.First();
-    while (node)
-    {
-        wxListLineData *line = (wxListLineData*)node->Data();
 
-        DeleteLine( line );
-
-        node = node->Next();
-    }
-#endif // 0
+    wxListEvent event( wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS, GetParent()->GetId() );
+    event.SetEventObject( GetParent() );
+    GetParent()->GetEventHandler()->ProcessEvent( event );
 
     m_lines.Clear();
 }
 
-void wxListMainWindow::DeleteEverything( void )
+void wxListMainWindow::DeleteEverything()
 {
-    m_dirty = TRUE;
-    m_current = (wxListLineData *) NULL;
-    wxNode *node = m_lines.First();
-    while (node)
-    {
-        wxListLineData *line = (wxListLineData*)node->Data();
-        DeleteLine( line );
-        node = node->Next();
-    }
-    m_lines.Clear();
-    m_current = (wxListLineData *) NULL;
+    DeleteAllItems();
+    
     m_columns.Clear();
 }
 

@@ -56,6 +56,7 @@ BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
     EVT_LIST_BEGIN_LABEL_EDIT(LIST_CTRL, MyListCtrl::OnBeginLabelEdit)
     EVT_LIST_END_LABEL_EDIT(LIST_CTRL, MyListCtrl::OnEndLabelEdit)
     EVT_LIST_DELETE_ITEM(LIST_CTRL, MyListCtrl::OnDeleteItem)
+    EVT_LIST_DELETE_ALL_ITEMS(LIST_CTRL, MyListCtrl::OnDeleteAllItems)
     EVT_LIST_GET_INFO(LIST_CTRL, MyListCtrl::OnGetInfo)
     EVT_LIST_SET_INFO(LIST_CTRL, MyListCtrl::OnSetInfo)
     EVT_LIST_ITEM_SELECTED(LIST_CTRL, MyListCtrl::OnSelected)
@@ -484,6 +485,18 @@ void MyListCtrl::OnDeleteItem(wxListEvent& WXUNUSED(event))
         return;
 
         text->WriteText("OnDeleteItem\n");
+}
+
+void MyListCtrl::OnDeleteAllItems(wxListEvent& WXUNUSED(event))
+{
+    if ( !wxGetApp().GetTopWindow() )
+        return;
+
+    wxTextCtrl *text = ((MyFrame *)wxGetApp().GetTopWindow())->m_logWindow;
+    if ( !text )
+        return;
+
+        text->WriteText("OnDeleteAllItems\n");
 }
 
 void MyListCtrl::OnGetInfo(wxListEvent& event)

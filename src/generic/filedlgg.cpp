@@ -444,9 +444,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxFileCtrl,wxListCtrl);
 
 BEGIN_EVENT_TABLE(wxFileCtrl,wxListCtrl)
     EVT_LIST_DELETE_ITEM(-1, wxFileCtrl::OnListDeleteItem)
+    EVT_LIST_DELETE_ALL_ITEMS(-1, wxFileCtrl::OnListDeleteAllItems)
     EVT_LIST_END_LABEL_EDIT(-1, wxFileCtrl::OnListEndLabelEdit)
 END_EVENT_TABLE()
-
 
 
 wxFileCtrl::wxFileCtrl()
@@ -680,6 +680,23 @@ void wxFileCtrl::OnListDeleteItem( wxListEvent &event )
 {
     wxFileData *fd = (wxFileData*)event.m_item.m_data;
     delete fd;
+}
+
+void wxFileCtrl::OnListDeleteAllItems( wxListEvent &WXUNUSED(event) )
+{
+    wxListItem item;
+    item.m_mask = wxLIST_MASK_DATA;
+
+    item.m_itemId = GetNextItem( -1, wxLIST_NEXT_ALL );
+    while ( item.m_itemId != -1 ) 
+    {
+        GetItem( item );
+        wxFileData *fd = (wxFileData*)item.m_data;
+        delete fd;
+        item.m_data = (void*) NULL;
+        SetItem( item );
+        item.m_itemId = GetNextItem( item.m_itemId, wxLIST_NEXT_ALL );
+    }
 }
 
 void wxFileCtrl::OnListEndLabelEdit( wxListEvent &event )

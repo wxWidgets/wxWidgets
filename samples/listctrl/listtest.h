@@ -34,6 +34,7 @@ public:
     void OnBeginLabelEdit(wxListEvent& event);
     void OnEndLabelEdit(wxListEvent& event);
     void OnDeleteItem(wxListEvent& event);
+    void OnDeleteAllItems(wxListEvent& event);
     void OnGetInfo(wxListEvent& event);
     void OnSetInfo(wxListEvent& event);
     void OnSelected(wxListEvent& event);
