@@ -32,8 +32,8 @@
 
 // use the wxWindows caret class instead of home grown cursor whenever possible
 #ifdef __WXMSW__
-    #undef WXLAYOUT_USE_CARET
-    #define WXLAYOUT_USE_CARET 1
+#   undef WXLAYOUT_USE_CARET
+#   define WXLAYOUT_USE_CARET 1
 #endif // __WXMSW__
 
 // do not enable debug mode within Mahogany
@@ -994,11 +994,6 @@ public:
        @return cursor position in pixels
    */
    wxPoint GetCursorScreenPos(wxDC &dc);
-
-   /** Calculates the cursor position on the screen.
-       @param dc the dc to use for cursor position calculations
-   */
-   void UpdateCursorScreenPos(wxDC &dc);
 
    /** Draws the cursor.
        @param active If true, draw a bold cursor to mark window as

@@ -2118,26 +2118,9 @@ wxLayoutList::Recalculate(wxDC &dc, CoordType bottom)
    }
 }
 
-void
-wxLayoutList::UpdateCursorScreenPos(wxDC &dc)
-{
-   wxCHECK_RET( m_CursorLine, "no cursor line" );
-
-   // we need to save the current style, in case the layout() of the line
-   // changes it
-   wxLayoutStyleInfo SiBackup = m_CurrentStyleInfo;
-   m_CursorLine->Layout(dc, this,
-                        &m_CursorScreenPos, &m_CursorSize,
-                        m_CursorPos.x,
-                        true /* suppress update */);
-   ApplyStyle(SiBackup, dc); // restore it
-}
-
 wxPoint
 wxLayoutList::GetCursorScreenPos(wxDC &dc)
 {
-   UpdateCursorScreenPos(dc);
-
    return m_CursorScreenPos;
 }
 
@@ -2348,11 +2331,7 @@ void
 wxLayoutList::DrawCursor(wxDC &dc, bool active, wxPoint const &translate)
 {
    if ( m_movedCursor )
-   {
-      UpdateCursorScreenPos(dc);
-
       m_movedCursor = false;
-   }
 
    wxPoint coords(m_CursorScreenPos);
    coords += translate;
