@@ -887,11 +887,14 @@ bool GetFileTypeIcon(wxIcon *pIcon, const wxString& strFileType)
       // NB: icon index may be negative as well as positive and the full path
       //     may contain the environment variables inside '%'
       wxString strFullPath = strIcon.Before(','),
-               strIndex = strIcon.After(',');
+               strIndex = strIcon.Right(',');
 
-      // unless I misunderstand the format (may be index may be ommited, I
-      // don't know)
-      wxASSERT( !(strFullPath.IsEmpty() || strIndex.IsEmpty()) );
+      // index may be omitted, in which case Before(',') is empty and
+      // Right(',') is the whole string
+      if ( strFullPath.IsEmpty() ) {
+        strFullPath = strIndex;
+        strIndex = "0";
+      }
 
       wxString strExpPath = wxExpandEnvVars(strFullPath);
       int nIndex = atoi(strIndex);

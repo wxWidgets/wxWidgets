@@ -71,62 +71,60 @@ bool TryGetValue(const wxRegKey& key, const wxString& str, long *plVal)
 // ctor/dtor
 // ----------------------------------------------------------------------------
 
-#if 0
-wxRegConfig::wxRegConfig(const wxString& strRoot)
-           : m_keyLocalRoot(wxRegKey::HKCU, SOFTWARE_KEY + strRoot),
-             m_keyLocal(m_keyLocalRoot, ""),
-             m_keyGlobalRoot(wxRegKey::HKLM, SOFTWARE_KEY + strRoot),
-             m_keyGlobal(m_keyGlobalRoot, "")
-{
-  // Create() will Open() if key already exists
-  m_keyLocalRoot.Create();
-
-  // as it's the same key, Open() shouldn't fail (i.e. no need for Create())
-  m_keyLocal.Open();
-
-  wxLogNull nolog;
-  m_keyGlobalRoot.Open();
-}
-#endif
-
-// TODO: vendor name is ignored, because we can't yet do the test for optional vendor
-// name in the constructor body. We need a wxRegKey::Set that takes the same
-// args as the constructor. Then we'll set m_keyLocalRoot etc. in the constructor body.
-
+// create the config object which stores its data under HKCU\vendor\app and, if
+// style & wxCONFIG_USE_GLOBAL_FILE, under HKLM\vendor\app
 wxRegConfig::wxRegConfig(const wxString& appName, const wxString& vendorName,
-      const wxString& strLocal, const wxString& strGlobal, long style)
-            : wxConfigBase(appName, vendorName, strLocal, strGlobal, style),
-
-             m_keyLocalRoot(wxRegKey::HKCU, SOFTWARE_KEY + appName),
-             m_keyLocal(m_keyLocalRoot, ""),
-             m_keyGlobalRoot(wxRegKey::HKLM, SOFTWARE_KEY + appName),
-             m_keyGlobal(m_keyGlobalRoot, "")
+                         const wxString& strLocal, const wxString& strGlobal,
+                         long style)
+           : wxConfigBase(appName, vendorName, strLocal, strGlobal, style)
 {
-    // TODO: really, we should check and supply an app name if one isn't supplied.
-    // Unfortunately I don't know how to initialise the member wxRegKey
-    // variables from within the constructor body. -- JACS
-    // Vadim - we just need an implementation of wxRegKey::Set,
-    // and then we can uncomment this and remove the constructor lines above.
-/*
-    wxString strRoot(appName);
-    if (appName.IsEmpty() && wxTheApp)
+  wxString strRoot;
+
+  bool bDoUseGlobal = (style & wxCONFIG_USE_GLOBAL_FILE) != 0;
+
+  // the convention is to put the programs keys under <vendor>\<appname>
+  // (but it can be overriden by specifying the pathes explicitly in strLocal
+  // and/or strGlobal)
+  if ( strLocal.IsEmpty() || (strGlobal.IsEmpty() && bDoUseGlobal) )
+  {
+    if ( vendorName.IsEmpty() )
     {
-        strRoot = wxTheApp->GetAppName();
+      if ( wxTheApp )
+        strRoot = wxTheApp->GetVendorName();
     }
-    wxASSERT( !strRoot.IsEmpty() );
-
-    if (!vendorName.IsEmpty())
+    else
     {
-        strRoot += "\\";
-        strRoot += vendorName;
+      strRoot = vendorName;
     }
 
-    m_keyLocalRoot.Set(wxRegKey::HKCU, SOFTWARE_KEY + strRoot),
-    m_keyLocal.Set(m_keyLocalRoot, ""),
+    // no '\\' needed if no vendor name
+    if ( !strRoot.IsEmpty() )
+    {
+      strRoot += '\\';
+    }
 
-    m_keyGlobalRoot.Set(wxRegKey::HKLM, SOFTWARE_KEY + strRoot),
-    m_keyGlobal.Set(m_keyGlobalRoot, "")
-*/
+    if ( appName.IsEmpty() )
+    {
+      wxCHECK_RET( wxTheApp, "No application name in wxRegConfig ctor!" );
+      strRoot << wxTheApp->GetAppName();
+    }
+    else
+    {
+      strRoot << appName;
+    }
+  }
+  //else: we don't need to do all the complicated stuff above
+
+  wxString str = strLocal.IsEmpty() ? strRoot : strLocal;
+  m_keyLocalRoot.SetName(wxRegKey::HKCU, SOFTWARE_KEY + str);
+  m_keyLocal.SetName(m_keyLocalRoot, "");
+
+  if ( bDoUseGlobal )
+  {
+    str = strGlobal.IsEmpty() ? strRoot : strGlobal;
+    m_keyGlobalRoot.SetName(wxRegKey::HKLM, SOFTWARE_KEY + str);
+    m_keyGlobal.SetName(m_keyGlobalRoot, "");
+  }
 
   // Create() will Open() if key already exists
   m_keyLocalRoot.Create();
@@ -134,9 +132,13 @@ wxRegConfig::wxRegConfig(const wxString& appName, const wxString& vendorName,
   // as it's the same key, Open() shouldn't fail (i.e. no need for Create())
   m_keyLocal.Open();
 
-  wxLogNull nolog;
-  m_keyGlobalRoot.Open();
-
+  // OTOH, this key may perfectly not exist, so suppress error messages the call
+  // to Open() might generate
+  if ( bDoUseGlobal )
+  {
+    wxLogNull nolog;
+    m_keyGlobalRoot.Open();
+  }
 }
 
 wxRegConfig::~wxRegConfig()
