@@ -133,21 +133,13 @@ void wxGLContext::SetColour(const char *colour)
 		       the_colour->Green(),
 		       the_colour->Blue());
 	} else {
-	    GLint pix = (GLint)the_colour->m_pixel;
-	    if(pix == -1) {
-		XColor exact_def;
-		exact_def.red = (unsigned short)the_colour->Red() << 8;
-		exact_def.green = (unsigned short)the_colour->Green() << 8;
-		exact_def.blue = (unsigned short)the_colour->Blue() << 8;
-		exact_def.flags = DoRed | DoGreen | DoBlue;
-		if(!XAllocColor((Display*) m_window->GetXDisplay(),
-                  (Colormap) wxTheApp->GetMainColormap(m_window->GetXDisplay()),
-                  &exact_def)) {
-		    wxDebugMsg("wxGLCanvas: cannot allocate color\n");
-		    return;
-		}
-		pix = the_colour->m_pixel = exact_def.pixel;
-	    }
+            the_colour->CalcPixel(wxTheApp->GetMainColormap(m_window->GetXDisplay()));
+	    GLint pix = (GLint)the_colour->GetPixel();
+	    if(pix == -1)
+            {
+                wxLogError("wxGLCanvas: cannot allocate color\n");
+		return;
+            }
 	    glIndexi(pix);
 	}
     }
