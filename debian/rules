@@ -389,6 +389,7 @@ build-doc-stamp: build-gtk-shared-stamp
 	dh_testdir
 	cd $(objdir_gtk_shared)/utils/tex2rtf/src \
 		&& $(MAKE)
+	rm -rf $(objdir_doc)
 	mkdir $(objdir_doc)
 	mkdir $(objdir_doc_cruft)
 	cd $(objdir_doc_cruft) \
