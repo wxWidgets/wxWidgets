@@ -1165,7 +1165,7 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
             }
 #endif // wxUSE_STREAMS
 
-            // don't consume 100% of the CPU while we're sitting this in this
+            // don't consume 100% of the CPU while we're sitting in this
             // loop
             if ( idle )
                 wxMilliSleep(1);
