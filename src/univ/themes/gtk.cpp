@@ -2395,7 +2395,7 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
             size->y += 4;
         }
     } else
-#endif wxUSE_BUTTON
+#endif //wxUSE_BUTTON
     if ( wxDynamicCast(window, wxScrollBar) )
     {
         // we only set the width of vert scrollbars and height of the
