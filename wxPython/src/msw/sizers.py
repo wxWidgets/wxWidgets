@@ -244,9 +244,9 @@ class wxSizerPtr(wxObjectPtr):
     def Insert(self, *args, **kw):
         if type(args[1]) == type(1):
             apply(self.InsertSpacer, args, kw)
-        elif isinstance(args[0], wxSizerPtr):
+        elif isinstance(args[1], wxSizerPtr):
             apply(self.InsertSizer, args, kw)
-        elif isinstance(args[0], wxWindowPtr):
+        elif isinstance(args[1], wxWindowPtr):
             apply(self.InsertWindow, args, kw)
         else:
             raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
