@@ -413,9 +413,11 @@ gtk_myfixed_size_allocate (GtkWidget     *widget,
 
   myfixed = GTK_MYFIXED (widget);
 
+#if (GTK_MINOR_VERSION > 0)
   if (myfixed->shadow_type == GTK_SHADOW_NONE)
     border = 0;
   else
+#endif
     border = 2;
 
   widget->allocation = *allocation;
@@ -424,10 +426,11 @@ gtk_myfixed_size_allocate (GtkWidget     *widget,
     gdk_window_move_resize( widget->window, 
                             allocation->x+border, allocation->y+border, 
 #if (GTK_MINOR_VERSION > 0)
-			    allocation->width-border*2, allocation->height-border*2 );
+			    allocation->width-border*2, allocation->height-border*2
 #else
-			    32000, 32000 );
+			    32000, 32000
 #endif
+                           );
   }
 
   children = myfixed->children;
