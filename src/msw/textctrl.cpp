@@ -433,6 +433,9 @@ void wxTextCtrl::SetValue(const wxString& value)
         Clear();
 
         WriteText(value);
+
+        // for compatibility, don't move the cursor when doing SetValue()
+        SetInsertionPoint(0);
     }
 }
 
