@@ -77,6 +77,11 @@ struct sockaddr_un
 #define INVALID_SOCKET -1
 #endif
 
+/* UnixWare reportedly needs this for FIONBIO definition */
+#ifdef __UNIXWARE__
+#include <sys/filio.h>
+#endif
+
 /*
  * INADDR_BROADCAST is identical to INADDR_NONE which is not defined
  * on all systems. INADDR_BROADCAST should be fine to indicate an error.
@@ -1685,6 +1690,4 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf)
 }
 
 #endif  /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
-
-/* vi:sts=4:sw=4:et */
 
