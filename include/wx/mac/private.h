@@ -20,8 +20,15 @@
 #    include <Carbon/Carbon.h>
 #    define TARGET_CARBON 1
 #else
-#    include "MacHeaders.c"
+#    include <Quickdraw.h>
+#    include <Appearance.h>
+#    include <Folders.h>
+#    include <Controls.h>
+#    include <ControlDefinitions.h>
+#    include <LowMem.h>
+#    include <Gestalt.h>
 #endif
+
 #if UNIVERSAL_INTERFACES_VERSION < 0x0340
     #error "please update to Apple's lastest universal headers from http://developer.apple.com/sdk/"
 #endif
@@ -58,6 +65,7 @@ public :
 	~wxMacPortSetter() ;
 private :
 	wxMacPortStateHelper m_ph ;
+	wxDC* m_dc ;
 } ;
 
 class wxMacDrawingHelper
