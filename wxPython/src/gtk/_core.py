@@ -2523,6 +2523,9 @@ def InitAllImageHandlers():
 
 IMAGE_RESOLUTION_INCHES = _core_.IMAGE_RESOLUTION_INCHES
 IMAGE_RESOLUTION_CM = _core_.IMAGE_RESOLUTION_CM
+PNG_TYPE_COLOUR = _core_.PNG_TYPE_COLOUR
+PNG_TYPE_GREY = _core_.PNG_TYPE_GREY
+PNG_TYPE_GREY_RED = _core_.PNG_TYPE_GREY_RED
 BMP_24BPP = _core_.BMP_24BPP
 BMP_8BPP = _core_.BMP_8BPP
 BMP_8BPP_GREY = _core_.BMP_8BPP_GREY
@@ -2563,6 +2566,8 @@ IMAGE_OPTION_BITSPERSAMPLE = cvar.IMAGE_OPTION_BITSPERSAMPLE
 IMAGE_OPTION_SAMPLESPERPIXEL = cvar.IMAGE_OPTION_SAMPLESPERPIXEL
 IMAGE_OPTION_COMPRESSION = cvar.IMAGE_OPTION_COMPRESSION
 IMAGE_OPTION_IMAGEDESCRIPTOR = cvar.IMAGE_OPTION_IMAGEDESCRIPTOR
+IMAGE_OPTION_PNG_FORMAT = cvar.IMAGE_OPTION_PNG_FORMAT
+IMAGE_OPTION_PNG_BITDEPTH = cvar.IMAGE_OPTION_PNG_BITDEPTH
 
 class ICOHandler(BMPHandler):
     """Proxy of C++ ICOHandler class"""
@@ -9602,18 +9607,45 @@ class Sizer(Object):
             self.Add(*item)
 
     # for backwards compatibility only, please do not use in new code
-    AddWindow     = wx._deprecated(Add, "AddWindow is deprecated, use `Add` instead.")
-    AddSizer      = wx._deprecated(Add, "AddSizer is deprecated, use `Add` instead.")
-    AddSpacer     = wx._deprecated(Add, "AddSpacer is deprecated, use `Add` instead.")
-    PrependWindow = wx._deprecated(Prepend, "PrependWindow is deprecated, use `Prepend` instead.")
-    PrependSizer  = wx._deprecated(Prepend, "PrependSizer is deprecated, use `Prepend` instead.")
-    PrependSpacer = wx._deprecated(Prepend, "PrependSpacer is deprecated, use `Prepend` instead.")
-    InsertWindow  = wx._deprecated(Insert, "InsertWindow is deprecated, use `Insert` instead.")
-    InsertSizer   = wx._deprecated(Insert, "InsertSizer is deprecated, use `Insert` instead.")
-    InsertSpacer  = wx._deprecated(Insert, "InsertSpacer is deprecated, use `Insert` instead.")
-    RemoveWindow  = wx._deprecated(Remove, "RemoveWindow is deprecated, use `Remove` instead.")
-    RemoveSizer   = wx._deprecated(Remove, "RemoveSizer is deprecated, use `Remove` instead.")
-    RemovePos     = wx._deprecated(Remove, "RemovePos is deprecated, use `Remove` instead.")
+    def AddWindow(self, *args, **kw):
+        """Compatibility alias for `Add`."""
+        return self.Add(*args, **kw)
+    def AddSizer(self, *args, **kw):
+        """Compatibility alias for `Add`."""
+        return self.Add(*args, **kw)
+    def AddSpacer(self, *args, **kw):
+        """Compatibility alias for `Add`."""
+        return self.Add(*args, **kw)
+
+    def PrependWindow(self, *args, **kw):
+        """Compatibility alias for `Prepend`."""
+        return self.Prepend(*args, **kw)
+    def PrependSizer(self, *args, **kw):
+        """Compatibility alias for `Prepend`."""
+        return self.Prepend(*args, **kw)
+    def PrependSpacer(self, *args, **kw):
+        """Compatibility alias for `Prepend`."""
+        return self.Prepend(*args, **kw)
+
+    def InsertWindow(self, *args, **kw):
+        """Compatibility alias for `Insert`."""
+        return self.Insert(*args, **kw)
+    def InsertSizer(self, *args, **kw):
+        """Compatibility alias for `Insert`."""
+        return self.Insert(*args, **kw)
+    def InsertSpacer(self, *args, **kw):
+        """Compatibility alias for `Insert`."""
+        return self.Insert(*args, **kw)
+
+    def RemoveWindow(self, *args, **kw):
+        """Compatibility alias for `Remove`."""
+        return self.Remove(*args, **kw)
+    def RemoveSizer(self, *args, **kw):
+        """Compatibility alias for `Remove`."""
+        return self.Remove(*args, **kw)
+    def RemovePos(self, *args, **kw):
+        """Compatibility alias for `Remove`."""
+        return self.Remove(*args, **kw)
 
 
     def SetDimension(*args, **kwargs):

@@ -2345,6 +2345,25 @@ IMP_PYCALLBACK_BOOL_(wxPyScrolledWindow, wxScrolledWindow, HasTransparentBackgro
 
  static const wxString wxPyPrintoutTitleStr(wxT("Printout")); 
  static const wxString wxPyPreviewCanvasNameStr(wxT("previewcanvas")); 
+static PyObject *wxPrintData_GetPrivData(wxPrintData *self){
+            PyObject* data;
+            bool blocked = wxPyBeginBlockThreads();
+            data = PyString_FromStringAndSize(self->GetPrivData(),
+                                              self->GetPrivDataLen());
+            wxPyEndBlockThreads(blocked);
+            return data;
+        }
+static void wxPrintData_SetPrivData(wxPrintData *self,PyObject *data){
+            if (! PyString_Check(data)) {
+                wxPyBLOCK_THREADS(PyErr_SetString(PyExc_TypeError,
+                                                  "Expected string object"));
+                return /* NULL */ ;
+            }
+
+            bool blocked = wxPyBeginBlockThreads();
+            self->SetPrivData(PyString_AS_STRING(data), PyString_GET_SIZE(data));
+            wxPyEndBlockThreads(blocked);
+        }
 
 
 IMPLEMENT_ABSTRACT_CLASS(wxPyPrintout, wxPrintout);
@@ -21263,6 +21282,60 @@ static PyObject *_wrap_PrintData_SetFilename(PyObject *, PyObject *args, PyObjec
 }
 
 
+static PyObject *_wrap_PrintData_GetPrivData(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintData *arg1 = (wxPrintData *) 0 ;
+    PyObject *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintData_GetPrivData",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (PyObject *)wxPrintData_GetPrivData(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintData_SetPrivData(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintData *arg1 = (wxPrintData *) 0 ;
+    PyObject *arg2 = (PyObject *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "data", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintData_SetPrivData",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    arg2 = obj1;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxPrintData_SetPrivData(arg1,arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_PrintData_GetPrinterCommand(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPrintData *arg1 = (wxPrintData *) 0 ;
@@ -28261,6 +28334,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PrintData_SetPrintMode", (PyCFunction) _wrap_PrintData_SetPrintMode, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintData_GetFilename", (PyCFunction) _wrap_PrintData_GetFilename, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintData_SetFilename", (PyCFunction) _wrap_PrintData_SetFilename, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PrintData_GetPrivData", (PyCFunction) _wrap_PrintData_GetPrivData, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PrintData_SetPrivData", (PyCFunction) _wrap_PrintData_SetPrivData, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintData_GetPrinterCommand", (PyCFunction) _wrap_PrintData_GetPrinterCommand, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintData_GetPrinterOptions", (PyCFunction) _wrap_PrintData_GetPrinterOptions, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintData_GetPreviewCommand", (PyCFunction) _wrap_PrintData_GetPreviewCommand, METH_VARARGS | METH_KEYWORDS, NULL},

@@ -4562,6 +4562,14 @@ class ImageList(_core.Object):
         """AddIcon(self, Icon icon) -> int"""
         return _gdi_.ImageList_AddIcon(*args, **kwargs)
 
+    def GetBitmap(*args, **kwargs):
+        """GetBitmap(self, int index) -> Bitmap"""
+        return _gdi_.ImageList_GetBitmap(*args, **kwargs)
+
+    def GetIcon(*args, **kwargs):
+        """GetIcon(self, int index) -> Icon"""
+        return _gdi_.ImageList_GetIcon(*args, **kwargs)
+
     def Replace(*args, **kwargs):
         """Replace(self, int index, Bitmap bitmap, Bitmap mask=NullBitmap) -> bool"""
         return _gdi_.ImageList_Replace(*args, **kwargs)

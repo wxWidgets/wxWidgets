@@ -2521,6 +2521,17 @@ static bool wxConfigBase_ReadBool(wxConfigBase *self,wxString const &key,bool de
 
 #define LOCAL_TZ wxDateTime::Local
 
+static PyObject *DateTime_GetAmPmStrings(){
+            wxString am;
+            wxString pm;
+            wxDateTime::GetAmPmStrings(&am, &pm);
+            bool blocked = wxPyBeginBlockThreads();
+            PyObject* tup = PyTuple_New(2);
+            PyTuple_SET_ITEM(tup, 0, wx2PyString(am));
+            PyTuple_SET_ITEM(tup, 1, wx2PyString(pm));
+            wxPyEndBlockThreads(blocked);
+            return tup;
+        }
 
 #if UINT_MAX < LONG_MAX
 /*@/opt/swig/share/swig/1.3.24/python/pymacros.swg,66,SWIG_define@*/
@@ -19308,53 +19319,22 @@ static PyObject *_wrap_DateTime_GetWeekDayName(PyObject *, PyObject *args, PyObj
 
 static PyObject *_wrap_DateTime_GetAmPmStrings(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
-    wxString *arg1 = (wxString *) 0 ;
-    wxString *arg2 = (wxString *) 0 ;
-    bool temp1 = false ;
-    bool temp2 = false ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
+    PyObject *result;
     char *kwnames[] = {
-        (char *) "OUTPUT",(char *) "OUTPUT", NULL 
+        NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_GetAmPmStrings",kwnames,&obj0,&obj1)) goto fail;
-    {
-        arg1 = wxString_in_helper(obj0);
-        if (arg1 == NULL) SWIG_fail;
-        temp1 = true;
-    }
-    {
-        arg2 = wxString_in_helper(obj1);
-        if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
-    }
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":DateTime_GetAmPmStrings",kwnames)) goto fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxDateTime::GetAmPmStrings(arg1,arg2);
+        result = (PyObject *)DateTime_GetAmPmStrings();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    {
-        if (temp1)
-        delete arg1;
-    }
-    {
-        if (temp2)
-        delete arg2;
-    }
+    resultobj = result;
     return resultobj;
     fail:
-    {
-        if (temp1)
-        delete arg1;
-    }
-    {
-        if (temp2)
-        delete arg2;
-    }
     return NULL;
 }
 

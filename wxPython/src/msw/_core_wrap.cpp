@@ -2476,6 +2476,8 @@ static wxBitmap wxImage_ConvertToMonoBitmap(wxImage *self,unsigned char red,unsi
  static const wxString wxPyIMAGE_OPTION_SAMPLESPERPIXEL(wxIMAGE_OPTION_SAMPLESPERPIXEL); 
  static const wxString wxPyIMAGE_OPTION_COMPRESSION(wxIMAGE_OPTION_COMPRESSION); 
  static const wxString wxPyIMAGE_OPTION_IMAGEDESCRIPTOR(wxIMAGE_OPTION_IMAGEDESCRIPTOR); 
+ static const wxString wxPyIMAGE_OPTION_PNG_FORMAT(wxIMAGE_OPTION_PNG_FORMAT); 
+ static const wxString wxPyIMAGE_OPTION_PNG_BITDEPTH(wxIMAGE_OPTION_PNG_BITDEPTH); 
 
 #include <wx/quantize.h>
 
@@ -2905,7 +2907,7 @@ struct wxPySizerItemInfo {
         : window(NULL), sizer(NULL), gotSize(false),
           size(wxDefaultSize), gotPos(false), pos(-1)
     {}
-    
+
     wxWindow* window;
     wxSizer*  sizer;
     bool      gotSize;
@@ -2913,7 +2915,7 @@ struct wxPySizerItemInfo {
     bool      gotPos;
     int       pos;
 };
- 
+
 static wxPySizerItemInfo wxPySizerItemTypeHelper(PyObject* item, bool checkSize, bool checkIdx ) {
 
     wxPySizerItemInfo info;
@@ -2925,12 +2927,12 @@ static wxPySizerItemInfo wxPySizerItemTypeHelper(PyObject* item, bool checkSize,
     if ( ! wxPyConvertSwigPtr(item, (void**)&info.window, wxT("wxWindow")) ) {
         PyErr_Clear();
         info.window = NULL;
-                
+
         // try wxSizer
         if ( ! wxPyConvertSwigPtr(item, (void**)&info.sizer, wxT("wxSizer")) ) {
             PyErr_Clear();
             info.sizer = NULL;
-            
+
             // try wxSize or (w,h)
             if ( checkSize && wxSize_helper(item, &sizePtr)) {
                 info.size = *sizePtr;
@@ -2966,14 +2968,14 @@ static void wxSizer__setOORInfo(wxSizer *self,PyObject *_self){
                 self->SetClientObject(new wxPyOORClientData(_self));
         }
 static wxSizerItem *wxSizer_Add(wxSizer *self,PyObject *item,int proportion=0,int flag=0,int border=0,PyObject *userData=NULL){
-            
+
             wxPyUserData* data = NULL;
             bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
             wxPyEndBlockThreads(blocked);
-            
+
             // Now call the real Add method if a valid item type was found
             if ( info.window )
                 return self->Add(info.window, proportion, flag, border, data);
@@ -2993,7 +2995,7 @@ static wxSizerItem *wxSizer_Insert(wxSizer *self,int before,PyObject *item,int p
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
             wxPyEndBlockThreads(blocked);
-            
+
             // Now call the real Insert method if a valid item type was found
             if ( info.window )
                 return self->Insert(before, info.window, proportion, flag, border, data);
@@ -3013,7 +3015,7 @@ static wxSizerItem *wxSizer_Prepend(wxSizer *self,PyObject *item,int proportion=
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
             wxPyEndBlockThreads(blocked);
-            
+
             // Now call the real Prepend method if a valid item type was found
             if ( info.window )
                 return self->Prepend(info.window, proportion, flag, border, data);
@@ -3035,7 +3037,7 @@ static bool wxSizer_Remove(wxSizer *self,PyObject *item){
                 return self->Remove(info.sizer);
             else if ( info.gotPos )
                 return self->Remove(info.pos);
-            else 
+            else
                 return false;
         }
 static bool wxSizer_Detach(wxSizer *self,PyObject *item){
@@ -3048,7 +3050,7 @@ static bool wxSizer_Detach(wxSizer *self,PyObject *item){
                 return self->Detach(info.sizer);
             else if ( info.gotPos )
                 return self->Detach(info.pos);
-            else 
+            else
                 return false;
         }
 static wxSizerItem *wxSizer_GetItem(wxSizer *self,PyObject *item){
@@ -3096,9 +3098,9 @@ static bool wxSizer_IsShown(wxSizer *self,PyObject *item){
             bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, false);
             wxPyEndBlockThreads(blocked);
-            if ( info.window ) 
+            if ( info.window )
                 return self->IsShown(info.window);
-            else if ( info.sizer ) 
+            else if ( info.sizer )
                 return self->IsShown(info.sizer);
             else if ( info.gotPos )
                 return self->IsShown(info.pos);
@@ -3106,7 +3108,7 @@ static bool wxSizer_IsShown(wxSizer *self,PyObject *item){
                 return false;
         }
 
-// See pyclasses.h    
+// See pyclasses.h
 IMP_PYCALLBACK___pure(wxPySizer, wxSizer, RecalcSizes);
 IMP_PYCALLBACK_wxSize__pure(wxPySizer, wxSizer, CalcMin);
 IMPLEMENT_DYNAMIC_CLASS(wxPySizer, wxSizer);
@@ -13637,6 +13639,46 @@ static PyObject *_wrap_IMAGE_OPTION_IMAGEDESCRIPTOR_get(void) {
         pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_IMAGEDESCRIPTOR)->c_str(), (&wxPyIMAGE_OPTION_IMAGEDESCRIPTOR)->Len());
 #else
         pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_IMAGEDESCRIPTOR)->c_str(), (&wxPyIMAGE_OPTION_IMAGEDESCRIPTOR)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_IMAGE_OPTION_PNG_FORMAT_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_PNG_FORMAT is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_IMAGE_OPTION_PNG_FORMAT_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_PNG_FORMAT)->c_str(), (&wxPyIMAGE_OPTION_PNG_FORMAT)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_PNG_FORMAT)->c_str(), (&wxPyIMAGE_OPTION_PNG_FORMAT)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_IMAGE_OPTION_PNG_BITDEPTH_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_PNG_BITDEPTH is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_IMAGE_OPTION_PNG_BITDEPTH_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_PNG_BITDEPTH)->c_str(), (&wxPyIMAGE_OPTION_PNG_BITDEPTH)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_PNG_BITDEPTH)->c_str(), (&wxPyIMAGE_OPTION_PNG_BITDEPTH)->Len());
 #endif
     }
     return pyobj;
@@ -48998,6 +49040,17 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_SAMPLESPERPIXEL",_wrap_IMAGE_OPTION_SAMPLESPERPIXEL_get, _wrap_IMAGE_OPTION_SAMPLESPERPIXEL_set);
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_COMPRESSION",_wrap_IMAGE_OPTION_COMPRESSION_get, _wrap_IMAGE_OPTION_COMPRESSION_set);
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_IMAGEDESCRIPTOR",_wrap_IMAGE_OPTION_IMAGEDESCRIPTOR_get, _wrap_IMAGE_OPTION_IMAGEDESCRIPTOR_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_PNG_FORMAT",_wrap_IMAGE_OPTION_PNG_FORMAT_get, _wrap_IMAGE_OPTION_PNG_FORMAT_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_PNG_BITDEPTH",_wrap_IMAGE_OPTION_PNG_BITDEPTH_get, _wrap_IMAGE_OPTION_PNG_BITDEPTH_set);
+    {
+        PyDict_SetItemString(d,"PNG_TYPE_COLOUR", SWIG_From_int((int)(wxPNG_TYPE_COLOUR))); 
+    }
+    {
+        PyDict_SetItemString(d,"PNG_TYPE_GREY", SWIG_From_int((int)(wxPNG_TYPE_GREY))); 
+    }
+    {
+        PyDict_SetItemString(d,"PNG_TYPE_GREY_RED", SWIG_From_int((int)(wxPNG_TYPE_GREY_RED))); 
+    }
     {
         PyDict_SetItemString(d,"BMP_24BPP", SWIG_From_int((int)(wxBMP_24BPP))); 
     }
