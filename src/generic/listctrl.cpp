@@ -499,28 +499,23 @@ public:
 
 class WXDLLEXPORT wxListTextCtrl: public wxTextCtrl
 {
-private:
-    bool               *m_accept;
-    wxString           *m_res;
-    wxListMainWindow   *m_owner;
-    wxString            m_startValue;
-    bool                m_finished;
-
 public:
-    wxListTextCtrl() {}
-    wxListTextCtrl( wxWindow *parent, const wxWindowID id,
-                    bool *accept, wxString *res, wxListMainWindow *owner,
-                    const wxString &value = "",
-                    const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
-                    int style = 0,
-                    const wxValidator& validator = wxDefaultValidator,
-                    const wxString &name = "listctrltextctrl" );
+    wxListTextCtrl(wxListMainWindow *owner, size_t itemEdit);
+
+protected:
     void OnChar( wxKeyEvent &event );
     void OnKeyUp( wxKeyEvent &event );
     void OnKillFocus( wxFocusEvent &event );
 
+    bool AcceptChanges();
+    void Finish();
+
 private:
-    DECLARE_DYNAMIC_CLASS(wxListTextCtrl)
+    wxListMainWindow   *m_owner;
+    wxString            m_startValue;
+    size_t              m_itemEdited;
+    bool                m_finished;
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -632,7 +627,7 @@ public:
     void SetFocus();
 
     void OnRenameTimer();
-    void OnRenameAccept();
+    bool OnRenameAccept(size_t itemEdit, const wxString& value);
 
     void OnMouse( wxMouseEvent &event );
 
@@ -667,12 +662,29 @@ public:
     int GetCountPerPage() const;
 
     void SetItem( wxListItem &item );
-    void GetItem( wxListItem &item );
+    void GetItem( wxListItem &item ) const;
     void SetItemState( long item, long state, long stateMask );
-    int GetItemState( long item, long stateMask );
-    void GetItemRect( long index, wxRect &rect );
-    bool GetItemPosition( long item, wxPoint& pos );
-    int GetSelectedItemCount();
+    int GetItemState( long item, long stateMask ) const;
+    void GetItemRect( long index, wxRect &rect ) const;
+    bool GetItemPosition( long item, wxPoint& pos ) const;
+    int GetSelectedItemCount() const;
+
+    wxString GetItemText(long item) const
+    {
+        wxListItem info;
+        info.m_itemId = item;
+        GetItem( info );
+        return info.m_text;
+    }
+
+    void SetItemText(long item, const wxString& value)
+    {
+        wxListItem info;
+        info.m_mask = wxLIST_MASK_TEXT;
+        info.m_itemId = item;
+        info.m_text = value;
+        SetItem( info );
+    }
 
     // set the scrollbars and update the positions of the items
     void RecalculatePositions(bool noRefresh = FALSE);
@@ -680,7 +692,7 @@ public:
     // refresh the window and the header
     void RefreshAll();
 
-    long GetNextItem( long item, int geometry, int state );
+    long GetNextItem( long item, int geometry, int state ) const;
     void DeleteItem( long index );
     void DeleteAllItems();
     void DeleteColumn( int col );
@@ -748,9 +760,6 @@ public:
     // currently focused item or -1
     size_t               m_current;
 
-    // the item currently being edited or -1
-    size_t               m_currentEdit;
-
     // the number of lines per page
     int                  m_linesPerPage;
 
@@ -773,8 +782,6 @@ public:
 
     bool                 m_lastOnSame;
     wxTimer             *m_renameTimer;
-    bool                 m_renameAccept;
-    wxString             m_renameRes;
     bool                 m_isCreated;
     int                  m_dragCount;
     wxPoint              m_dragStart;
@@ -2134,69 +2141,82 @@ void wxListRenameTimer::Notify()
 // wxListTextCtrl (internal)
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxListTextCtrl,wxTextCtrl)
-
 BEGIN_EVENT_TABLE(wxListTextCtrl,wxTextCtrl)
     EVT_CHAR           (wxListTextCtrl::OnChar)
     EVT_KEY_UP         (wxListTextCtrl::OnKeyUp)
     EVT_KILL_FOCUS     (wxListTextCtrl::OnKillFocus)
 END_EVENT_TABLE()
 
-wxListTextCtrl::wxListTextCtrl( wxWindow *parent,
-                                const wxWindowID id,
-                                bool *accept,
-                                wxString *res,
-                                wxListMainWindow *owner,
-                                const wxString &value,
-                                const wxPoint &pos,
-                                const wxSize &size,
-                                int style,
-                                const wxValidator& validator,
-                                const wxString &name )
-              : wxTextCtrl( parent, id, value, pos, size, style, validator, name )
+wxListTextCtrl::wxListTextCtrl(wxListMainWindow *owner, size_t itemEdit)
+              : m_startValue(owner->GetItemText(itemEdit)),
+                m_itemEdited(itemEdit)
 {
-    m_res = res;
-    m_accept = accept;
     m_owner = owner;
-    (*m_accept) = FALSE;
-    (*m_res) = "";
-    m_startValue = value;
     m_finished = FALSE;
+
+    wxRect rectLabel = owner->GetLineLabelRect(itemEdit);
+
+    m_owner->CalcScrolledPosition(rectLabel.x, rectLabel.y,
+                                  &rectLabel.x, &rectLabel.y);
+
+    (void)Create(owner, wxID_ANY, m_startValue,
+                 wxPoint(rectLabel.x-4,rectLabel.y-4),
+                 wxSize(rectLabel.width+11,rectLabel.height+8));
+}
+
+void wxListTextCtrl::Finish()
+{
+    if ( !m_finished )
+    {
+        wxPendingDelete.Append(this);
+
+        m_finished = TRUE;
+
+        m_owner->SetFocus();
+    }
+}
+
+bool wxListTextCtrl::AcceptChanges()
+{
+    const wxString value = GetValue();
+
+    if ( value == m_startValue )
+    {
+        // nothing changed, always accept
+        return TRUE;
+    }
+
+    if ( !m_owner->OnRenameAccept(m_itemEdited, value) )
+    {
+        // vetoed by the user
+        return FALSE;
+    }
+
+    // accepted, do rename the item
+    m_owner->SetItemText(m_itemEdited, value);
+
+    return TRUE;
 }
 
 void wxListTextCtrl::OnChar( wxKeyEvent &event )
 {
-    if (event.m_keyCode == WXK_RETURN)
+    switch ( event.m_keyCode )
     {
-        (*m_accept) = TRUE;
-        (*m_res) = GetValue();
+        case WXK_RETURN:
+            if ( !AcceptChanges() )
+            {
+                // vetoed by the user code
+                break;
+            }
+            //else: fall through
 
-        if (!wxPendingDelete.Member(this))
-            wxPendingDelete.Append(this);
+        case WXK_ESCAPE:
+            Finish();
+            break;
 
-        if ((*m_res) != m_startValue)
-            m_owner->OnRenameAccept();
-
-        m_finished = TRUE;
-        m_owner->SetFocus();
-
-        return;
+        default:
+            event.Skip();
     }
-    if (event.m_keyCode == WXK_ESCAPE)
-    {
-        (*m_accept) = FALSE;
-        (*m_res) = "";
-
-        if (!wxPendingDelete.Member(this))
-            wxPendingDelete.Append(this);
-
-        m_finished = TRUE;
-        m_owner->SetFocus();
-
-        return;
-    }
-
-    event.Skip();
 }
 
 void wxListTextCtrl::OnKeyUp( wxKeyEvent &event )
@@ -2224,20 +2244,14 @@ void wxListTextCtrl::OnKeyUp( wxKeyEvent &event )
 
 void wxListTextCtrl::OnKillFocus( wxFocusEvent &event )
 {
-    if (m_finished)
+    if ( !m_finished )
     {
-        event.Skip();
-        return;
+        (void)AcceptChanges();
+
+        Finish();
     }
 
-    if (!wxPendingDelete.Member(this))
-        wxPendingDelete.Append(this);
-
-    (*m_accept) = TRUE;
-    (*m_res) = GetValue();
-
-    if ((*m_res) != m_startValue)
-        m_owner->OnRenameAccept();
+    event.Skip();
 }
 
 //-----------------------------------------------------------------------------
@@ -2280,10 +2294,8 @@ void wxListMainWindow::Init()
 
     m_lastOnSame = FALSE;
     m_renameTimer = new wxListRenameTimer( this );
-    m_renameAccept = FALSE;
 
     m_current =
-    m_currentEdit =
     m_lineLastClicked =
     m_lineBeforeLastClicked = (size_t)-1;
 
@@ -2913,39 +2925,27 @@ void wxListMainWindow::EditLabel( long item )
     wxCHECK_RET( (item >= 0) && ((size_t)item < GetItemCount()),
                  wxT("wrong index in wxListCtrl::EditLabel()") );
 
-    m_currentEdit = (size_t)item;
+    size_t itemEdit = (size_t)item;
 
     wxListEvent le( wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT, GetParent()->GetId() );
     le.SetEventObject( GetParent() );
     le.m_itemIndex = item;
-    wxListLineData *data = GetLine(m_currentEdit);
+    wxListLineData *data = GetLine(itemEdit);
     wxCHECK_RET( data, _T("invalid index in EditLabel()") );
     data->GetItem( 0, le.m_item );
-    GetParent()->GetEventHandler()->ProcessEvent( le );
-
-    if (!le.IsAllowed())
+    if ( GetParent()->GetEventHandler()->ProcessEvent( le ) && !le.IsAllowed() )
+    {
+        // vetoed by user code
         return;
+    }
 
     // We have to call this here because the label in question might just have
     // been added and no screen update taken place.
-    if (m_dirty)
+    if ( m_dirty )
         wxSafeYield();
 
-    wxString s = data->GetText(0);
-    wxRect rectLabel = GetLineLabelRect(m_currentEdit);
+    wxListTextCtrl *text = new wxListTextCtrl(this, itemEdit);
 
-    CalcScrolledPosition(rectLabel.x, rectLabel.y, &rectLabel.x, &rectLabel.y);
-
-    wxListTextCtrl *text = new wxListTextCtrl
-                               (
-                                this, -1,
-                                &m_renameAccept,
-                                &m_renameRes,
-                                this,
-                                s,
-                                wxPoint(rectLabel.x-4,rectLabel.y-4),
-                                wxSize(rectLabel.width+11,rectLabel.height+8)
-                               );
     text->SetFocus();
 }
 
@@ -2956,27 +2956,19 @@ void wxListMainWindow::OnRenameTimer()
     EditLabel( m_current );
 }
 
-void wxListMainWindow::OnRenameAccept()
+bool wxListMainWindow::OnRenameAccept(size_t itemEdit, const wxString& value)
 {
     wxListEvent le( wxEVT_COMMAND_LIST_END_LABEL_EDIT, GetParent()->GetId() );
     le.SetEventObject( GetParent() );
-    le.m_itemIndex = m_currentEdit;
+    le.m_itemIndex = itemEdit;
 
-    wxListLineData *data = GetLine(m_currentEdit);
-    wxCHECK_RET( data, _T("invalid index in OnRenameAccept()") );
+    wxListLineData *data = GetLine(itemEdit);
+    wxCHECK_MSG( data, FALSE, _T("invalid index in OnRenameAccept()") );
 
     data->GetItem( 0, le.m_item );
-    le.m_item.m_text = m_renameRes;
-    GetParent()->GetEventHandler()->ProcessEvent( le );
-
-    if (!le.IsAllowed()) return;
-
-    wxListItem info;
-    info.m_mask = wxLIST_MASK_TEXT;
-    info.m_itemId = le.m_itemIndex;
-    info.m_text = m_renameRes;
-    info.SetTextColour(le.m_item.GetTextColour());
-    SetItem( info );
+    le.m_item.m_text = value;
+    return !GetParent()->GetEventHandler()->ProcessEvent( le ) ||
+                le.IsAllowed();
 }
 
 void wxListMainWindow::OnMouse( wxMouseEvent &event )
@@ -3822,7 +3814,7 @@ void wxListMainWindow::SetItemState( long litem, long state, long stateMask )
     }
 }
 
-int wxListMainWindow::GetItemState( long item, long stateMask )
+int wxListMainWindow::GetItemState( long item, long stateMask ) const
 {
     wxCHECK_MSG( item >= 0 && (size_t)item < GetItemCount(), 0,
                  _T("invalid list ctrl item index in GetItemState()") );
@@ -3844,7 +3836,7 @@ int wxListMainWindow::GetItemState( long item, long stateMask )
     return ret;
 }
 
-void wxListMainWindow::GetItem( wxListItem &item )
+void wxListMainWindow::GetItem( wxListItem &item ) const
 {
     wxCHECK_RET( item.m_itemId >= 0 && (size_t)item.m_itemId < GetItemCount(),
                  _T("invalid item index in GetItem") );
@@ -3873,7 +3865,7 @@ void wxListMainWindow::SetItemCount(long count)
     m_dirty = TRUE;
 }
 
-int wxListMainWindow::GetSelectedItemCount()
+int wxListMainWindow::GetSelectedItemCount() const
 {
     // deal with the quick case first
     if ( IsSingleSel() )
@@ -3902,7 +3894,7 @@ int wxListMainWindow::GetSelectedItemCount()
 // item position/size
 // ----------------------------------------------------------------------------
 
-void wxListMainWindow::GetItemRect( long index, wxRect &rect )
+void wxListMainWindow::GetItemRect( long index, wxRect &rect ) const
 {
     wxCHECK_RET( index >= 0 && (size_t)index < GetItemCount(),
                  _T("invalid index in GetItemRect") );
@@ -3912,7 +3904,7 @@ void wxListMainWindow::GetItemRect( long index, wxRect &rect )
     CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);
 }
 
-bool wxListMainWindow::GetItemPosition(long item, wxPoint& pos)
+bool wxListMainWindow::GetItemPosition(long item, wxPoint& pos) const
 {
     wxRect rect;
     GetItemRect(item, rect);
@@ -4094,7 +4086,7 @@ void wxListMainWindow::UpdateCurrent()
 
 long wxListMainWindow::GetNextItem( long item,
                                     int WXUNUSED(geometry),
-                                    int state )
+                                    int state ) const
 {
     long ret = item,
          max = GetItemCount();
@@ -4743,19 +4735,12 @@ bool wxListCtrl::SetItemImage( long item, int image, int WXUNUSED(selImage) )
 
 wxString wxListCtrl::GetItemText( long item ) const
 {
-    wxListItem info;
-    info.m_itemId = item;
-    m_mainWin->GetItem( info );
-    return info.m_text;
+    return m_mainWin->GetItemText(item);
 }
 
-void wxListCtrl::SetItemText( long item, const wxString &str )
+void wxListCtrl::SetItemText( long item, const wxString& str )
 {
-    wxListItem info;
-    info.m_mask = wxLIST_MASK_TEXT;
-    info.m_itemId = item;
-    info.m_text = str;
-    m_mainWin->SetItem( info );
+    m_mainWin->SetItemText(item, str);
 }
 
 long wxListCtrl::GetItemData( long item ) const
