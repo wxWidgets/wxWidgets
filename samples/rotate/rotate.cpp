@@ -99,19 +99,19 @@ bool MyApp::OnInit()
     {
         wxLogError(wxT("Can't load the test image, please copy it to the ")
                    wxT("program directory"));
-        return FALSE;
+        return false;
     }
 
     MyFrame *frame = new MyFrame (_T("wxWidgets rotate sample"),
                                   wxPoint(20,20), wxSize(600,450));
 
-    frame->Show (TRUE);
+    frame->Show (true);
     SetTopWindow (frame);
-    return TRUE;
+    return true;
 }
 
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-    : wxFrame((wxFrame *)NULL, -1, title, pos, size)
+    : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size)
 {
     m_angle = 0.1;
 
@@ -143,11 +143,11 @@ void MyFrame::OnAngle (wxCommandEvent &)
 
 void MyFrame::OnQuit (wxCommandEvent &)
 {
-    Close (TRUE);
+    Close (true);
 }
 
 MyCanvas::MyCanvas(wxWindow* parent):
-  wxScrolledWindow(parent, -1)
+  wxScrolledWindow(parent, wxID_ANY)
 {
     SetBackgroundColour (wxColour (0,80,60));
     ClearBackground();
@@ -160,12 +160,12 @@ void MyCanvas::OnMouseLeftUp (wxMouseEvent & event)
 
     wxPoint offset;
     const wxImage& img = wxGetApp().GetImage();
-    wxImage img2 = img.Rotate(frame->m_angle, wxPoint(img.GetWidth()/2, img.GetHeight()/2), TRUE, &offset);
+    wxImage img2 = img.Rotate(frame->m_angle, wxPoint(img.GetWidth()/2, img.GetHeight()/2), true, &offset);
 
     wxBitmap bmp(img2);
 
     wxClientDC dc (this);
-    dc.DrawBitmap (bmp, event.m_x + offset.x, event.m_y + offset.y, TRUE);
+    dc.DrawBitmap (bmp, event.m_x + offset.x, event.m_y + offset.y, true);
 }
 
 // without interpolation, and without offset correction
@@ -174,10 +174,10 @@ void MyCanvas::OnMouseRightUp (wxMouseEvent & event)
     MyFrame* frame = (MyFrame*) GetParent();
 
     const wxImage& img = wxGetApp().GetImage();
-    wxImage img2 = img.Rotate(frame->m_angle, wxPoint(img.GetWidth()/2, img.GetHeight()/2), FALSE);
+    wxImage img2 = img.Rotate(frame->m_angle, wxPoint(img.GetWidth()/2, img.GetHeight()/2), false);
 
     wxBitmap bmp(img2);
 
     wxClientDC dc (this);
-    dc.DrawBitmap (bmp, event.m_x, event.m_y, TRUE);
+    dc.DrawBitmap (bmp, event.m_x, event.m_y, true);
 }

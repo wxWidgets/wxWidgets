@@ -99,7 +99,7 @@ bool MyApp::OnInit()
                               wxICON_ERROR | wxYES_NO | wxCANCEL ) != wxYES )
             {
                 // no server
-                return FALSE;
+                return false;
             }
 
             the_connection = (MyConnection *)my_client->MakeConnection(hostName, service, _T("IPC TEST"));
@@ -110,9 +110,9 @@ bool MyApp::OnInit()
         wxMessageBox(_T("StartAdvise failed"), _T("Client Demo Error"));
 
     // Create the main frame window
-    (new MyFrame(NULL, _T("Client")))->Show(TRUE);
+    (new MyFrame(NULL, _T("Client")))->Show(true);
 
-    return TRUE;
+    return true;
 }
 
 int MyApp::OnExit()
@@ -131,7 +131,7 @@ int MyApp::OnExit()
 
 // Define my frame constructor
 MyFrame::MyFrame(wxFrame *frame, const wxString& title)
-        : wxFrame(frame, -1, title, wxDefaultPosition, wxSize(300, 200))
+        : wxFrame(frame, wxID_ANY, title, wxDefaultPosition, wxSize(300, 200))
 {
     // Give it an icon
     SetIcon(wxICON(mondrian));
@@ -201,10 +201,10 @@ bool MyConnection::OnAdvise(const wxString& WXUNUSED(topic), const wxString& WXU
     if (the_list)
     {
         int n = the_list->FindString(data);
-        if (n > -1)
+        if (n > wxNOT_FOUND)
             the_list->SetSelection(n);
     }
-    return TRUE;
+    return true;
 }
 
 bool MyConnection::OnDisconnect()

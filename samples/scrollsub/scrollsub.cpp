@@ -146,10 +146,10 @@ MyScrolledWindow::MyScrolledWindow( wxWindow *parent, wxWindowID id,
                     const wxPoint &pos, const wxSize &size )
         : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER, _T("test canvas") )
 {
-    MyTopLabels *top = new MyTopLabels( this, -1, wxDefaultPosition, wxSize(-1,25) );
-    MyRightLabels *right = new MyRightLabels( this, -1, wxDefaultPosition, wxSize(60,-1) );
+    MyTopLabels *top = new MyTopLabels( this, wxID_ANY, wxDefaultPosition, wxSize(wxDefaultSize.x,25) );
+    MyRightLabels *right = new MyRightLabels( this, wxID_ANY, wxDefaultPosition, wxSize(60,wxDefaultSize.y) );
 
-    m_canvas = new MyCanvas( this, top, right, -1, wxDefaultPosition, wxDefaultSize );
+    m_canvas = new MyCanvas( this, top, right, wxID_ANY, wxDefaultPosition, wxDefaultSize );
 
     SetTargetWindow( m_canvas );
 
@@ -171,7 +171,7 @@ MyScrolledWindow::MyScrolledWindow( wxWindow *parent, wxWindowID id,
 
     mainsizer->Add( middlesizer, 1, wxEXPAND );
 
-    SetAutoLayout( TRUE );
+    SetAutoLayout( true );
     SetSizer( mainsizer );
 }
 
@@ -280,14 +280,14 @@ MyCanvas::MyCanvas( wxScrolledWindow *parent, MyTopLabels *top, MyRightLabels *r
     m_topLabels = top;
     m_rightLabels = right;
 
-    (void)new wxButton( this, -1, _T("Hallo I"), wxPoint(0,50), wxSize(100,25) );
-    (void)new wxButton( this, -1, _T("Hallo II"), wxPoint(200,50), wxSize(100,25) );
+    (void)new wxButton( this, wxID_ANY, _T("Hallo I"), wxPoint(0,50), wxSize(100,25) );
+    (void)new wxButton( this, wxID_ANY, _T("Hallo II"), wxPoint(200,50), wxSize(100,25) );
 
-    (void)new wxTextCtrl( this, -1, _T("Text I"), wxPoint(0,100), wxSize(100,25) );
-    (void)new wxTextCtrl( this, -1, _T("Text II"), wxPoint(200,100), wxSize(100,25) );
+    (void)new wxTextCtrl( this, wxID_ANY, _T("Text I"), wxPoint(0,100), wxSize(100,25) );
+    (void)new wxTextCtrl( this, wxID_ANY, _T("Text II"), wxPoint(200,100), wxSize(100,25) );
 
-    (void)new wxComboBox( this, -1, _T("ComboBox I"), wxPoint(0,150), wxSize(100,25));
-    (void)new wxComboBox( this, -1, _T("ComboBox II"), wxPoint(200,150), wxSize(100,25));
+    (void)new wxComboBox( this, wxID_ANY, _T("ComboBox I"), wxPoint(0,150), wxSize(100,25));
+    (void)new wxComboBox( this, wxID_ANY, _T("ComboBox II"), wxPoint(200,150), wxSize(100,25));
 
     SetBackgroundColour( wxT("WHEAT") );
 
@@ -378,7 +378,7 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame()
-       : wxFrame( (wxFrame *)NULL, -1, _T("wxScrolledWindow sample"),
+       : wxFrame( (wxFrame *)NULL, wxID_ANY, _T("wxScrolledWindow sample"),
                   wxPoint(20,20), wxSize(470,500) )
 {
     wxMenu *file_menu = new wxMenu();
@@ -395,10 +395,10 @@ MyFrame::MyFrame()
     int widths[] = { -1, 100 };
     SetStatusWidths( 2, widths );
 
-    m_scrolled = new MyScrolledWindow( this, -1, wxDefaultPosition, wxSize(100,100) );
+    m_scrolled = new MyScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxSize(100,100) );
     m_scrolled->SetScrollbars( 10, 10, 50, 50 );
 
-    m_log = new wxTextCtrl( this, -1, _T("This is the log window.\n"), wxPoint(0,0), wxSize(100,100), wxTE_MULTILINE );
+    m_log = new wxTextCtrl( this, wxID_ANY, _T("This is the log window.\n"), wxPoint(0,0), wxSize(100,100), wxTE_MULTILINE );
     wxLog *old_log = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
     delete old_log;
 
@@ -406,13 +406,13 @@ MyFrame::MyFrame()
     topsizer->Add( m_scrolled, 1, wxEXPAND );
     topsizer->Add( m_log, 0, wxEXPAND );
 
-    SetAutoLayout( TRUE );
+    SetAutoLayout( true );
     SetSizer( topsizer );
 }
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 {
-  Close( TRUE );
+  Close( true );
 }
 
 void MyFrame::OnFullScreen( wxCommandEvent &WXUNUSED(event) )
@@ -434,8 +434,8 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 bool MyApp::OnInit()
 {
     wxFrame *frame = new MyFrame();
-    frame->Show( TRUE );
+    frame->Show( true );
 
-    return TRUE;
+    return true;
 }
 

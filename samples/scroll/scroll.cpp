@@ -109,7 +109,7 @@ public:
     MyScrolledWindowDumb(wxWindow *parent) : MyScrolledWindowBase(parent)
     {
         // no horz scrolling
-        SetScrollbars(0, m_hLine, 0, m_nLines + 1, 0, 0, TRUE /* no refresh */);
+        SetScrollbars(0, m_hLine, 0, m_nLines + 1, 0, 0, true /* no refresh */);
     }
 
     virtual void OnDraw(wxDC& dc);
@@ -217,18 +217,18 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 
     m_button = new wxButton( this, ID_QUERYPOS, "Query position", wxPoint(10,110) );
 
-    (void) new wxTextCtrl( this, -1, "wxTextCtrl", wxPoint(10,150), wxSize(80,-1) );
+    (void) new wxTextCtrl( this, wxID_ANY, "wxTextCtrl", wxPoint(10,150), wxSize(80,wxDefaultSize.y) );
 
-    (void) new wxRadioButton( this, -1, "Disable", wxPoint(10,190) );
+    (void) new wxRadioButton( this, wxID_ANY, "Disable", wxPoint(10,190) );
 
-    (void) new wxComboBox( this, -1, "This", wxPoint(10,230), wxDefaultSize, 5, choices );
+    (void) new wxComboBox( this, wxID_ANY, "This", wxPoint(10,230), wxDefaultSize, 5, choices );
 
-    (void) new wxRadioBox( this, -1, "This", wxPoint(10,310), wxDefaultSize, 5, choices, 2, wxRA_SPECIFY_COLS );
+    (void) new wxRadioBox( this, wxID_ANY, "This", wxPoint(10,310), wxDefaultSize, 5, choices, 2, wxRA_SPECIFY_COLS );
 
-    (void) new wxRadioBox( this, -1, "This", wxPoint(10,440), wxDefaultSize, 5, choices, 2, wxRA_SPECIFY_ROWS );
+    (void) new wxRadioBox( this, wxID_ANY, "This", wxPoint(10,440), wxDefaultSize, 5, choices, 2, wxRA_SPECIFY_ROWS );
 
     wxListCtrl *m_listCtrl = new wxListCtrl(
-            this, -1, wxPoint(200, 110), wxSize(180, 120),
+            this, wxID_ANY, wxPoint(200, 110), wxSize(180, 120),
             wxLC_REPORT | wxSIMPLE_BORDER | wxLC_SINGLE_SEL );
 
     m_listCtrl->InsertColumn(0, "First", wxLIST_FORMAT_LEFT, 90);
@@ -242,27 +242,27 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     }
     m_listCtrl->SetItemState( 3, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
 
-    (void) new wxListBox( this, -1, wxPoint(260,280), wxSize(120,120), 5, choices, wxLB_ALWAYS_SB );
+    (void) new wxListBox( this, wxID_ANY, wxPoint(260,280), wxSize(120,120), 5, choices, wxLB_ALWAYS_SB );
 
 #endif
 
-    wxPanel *test = new wxPanel( this, -1, wxPoint(10, 110), wxSize(130,50), wxSIMPLE_BORDER | wxTAB_TRAVERSAL );
+    wxPanel *test = new wxPanel( this, wxID_ANY, wxPoint(10, 110), wxSize(130,50), wxSIMPLE_BORDER | wxTAB_TRAVERSAL );
     test->SetBackgroundColour( wxT("WHEAT") );
 
 #if 0
 
-    wxButton *test2 = new wxButton( test, -1, "Hallo", wxPoint(10,10) );
+    wxButton *test2 = new wxButton( test, wxID_ANY, "Hallo", wxPoint(10,10) );
 
-    test = new wxPanel( this, -1, wxPoint(160, 530), wxSize(130,120), wxSUNKEN_BORDER | wxTAB_TRAVERSAL );
+    test = new wxPanel( this, wxID_ANY, wxPoint(160, 530), wxSize(130,120), wxSUNKEN_BORDER | wxTAB_TRAVERSAL );
     test->SetBackgroundColour( wxT("WHEAT") );
     test->SetCursor( wxCursor( wxCURSOR_NO_ENTRY ) );
-    test2 = new wxButton( test, -1, "Hallo", wxPoint(10,10) );
+    test2 = new wxButton( test, wxID_ANY, "Hallo", wxPoint(10,10) );
     test2->SetCursor( wxCursor( wxCURSOR_PENCIL ) );
 
-    test = new wxPanel( this, -1, wxPoint(310, 530), wxSize(130,120), wxRAISED_BORDER | wxTAB_TRAVERSAL );
+    test = new wxPanel( this, wxID_ANY, wxPoint(310, 530), wxSize(130,120), wxRAISED_BORDER | wxTAB_TRAVERSAL );
     test->SetBackgroundColour( wxT("WHEAT") );
     test->SetCursor( wxCursor( wxCURSOR_PENCIL ) );
-    test2 = new wxButton( test, -1, "Hallo", wxPoint(10,10) );
+    test2 = new wxButton( test, wxID_ANY, "Hallo", wxPoint(10,10) );
     test2->SetCursor( wxCursor( wxCURSOR_NO_ENTRY ) );
 
 #endif
@@ -286,7 +286,7 @@ void MyCanvas::OnMouseDown( wxMouseEvent &event )
         wxLogMessage( wxT("Mouse down event at: %d %d, scrolled: %d %d"), pt.x, pt.y, x, y );
 
         if ( !event.LeftIsDown() )
-            wxLogMessage( wxT("Error: LeftIsDown() should be TRUE if for LeftDown()") );
+            wxLogMessage( wxT("Error: LeftIsDown() should be true if for LeftDown()") );
     }
 }
 
@@ -334,7 +334,7 @@ void MyCanvas::OnMoveButton( wxCommandEvent &event )
     wxWindow *win = FindWindow( event.GetId() );
     wxPoint pt( win->GetPosition() );
     wxLogMessage( wxT("-> Position before move is %d %d"), pt.x, pt.y );
-    win->Move( -1, pt.y + 10 );
+    win->Move( wxDefaultPosition.x, pt.y + 10 );
     pt = win->GetPosition();
     wxLogMessage( wxT("-> Position after move is %d %d"), pt.x, pt.y );
 }
@@ -389,15 +389,15 @@ MyAutoScrollWindow::MyAutoScrollWindow( wxWindow *parent )
                      wxALIGN_CENTER | wxALL | wxADJUST_MINSIZE,
                      20 );
 
-    innersizer->Add( new wxStaticText( this, -1, _T("This is just") ),
+    innersizer->Add( new wxStaticText( this, wxID_ANY, _T("This is just") ),
                     0,
                     wxALIGN_CENTER );
 
-    innersizer->Add( new wxStaticText( this, -1, _T("some decoration") ),
+    innersizer->Add( new wxStaticText( this, wxID_ANY, _T("some decoration") ),
                     0,
                     wxALIGN_CENTER );
 
-    innersizer->Add( new wxStaticText( this, -1, _T("for you to scroll...") ),
+    innersizer->Add( new wxStaticText( this, wxID_ANY, _T("for you to scroll...") ),
                     0,
                     wxALIGN_CENTER );
 
@@ -439,7 +439,7 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame()
-       : wxFrame( (wxFrame *)NULL, -1, _T("wxScrolledWindow sample"),
+       : wxFrame( (wxFrame *)NULL, wxID_ANY, _T("wxScrolledWindow sample"),
                   wxPoint(20,20), wxSize(470,500) )
 {
     wxMenu *file_menu = new wxMenu();
@@ -461,7 +461,7 @@ MyFrame::MyFrame()
 
     // Setting an explicit size here is superfluous, it will be overridden
     // by the sizer in any case.
-    m_canvas = new MyCanvas( this, -1, wxPoint(0,0), wxSize(100,100) );
+    m_canvas = new MyCanvas( this, wxID_ANY, wxPoint(0,0), wxSize(100,100) );
 
     // This is done with ScrollRate/VirtualSize in MyCanvas ctor now,
     // both should produce identical results.
@@ -485,20 +485,20 @@ void MyFrame::OnDeleteAll( wxCommandEvent &WXUNUSED(event) )
 
 void MyFrame::OnInsertNew( wxCommandEvent &WXUNUSED(event) )
 {
-    (void)new wxButton( m_canvas, -1, _T("Hello"), wxPoint(100,100) );
+    (void)new wxButton( m_canvas, wxID_ANY, _T("Hello"), wxPoint(100,100) );
 }
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 {
-  Close( TRUE );
+  Close( true );
 }
 
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 {
-  (void)wxMessageBox( _T("wxScroll demo\n"
-                         "Robert Roebling (c) 1998\n"
-                         "Autoscrolling examples\n"
-                         "Ron Lee (c) 2002"),
+  (void)wxMessageBox( _T("wxScroll demo\n")
+                      _T("Robert Roebling (c) 1998\n")
+                      _T("Autoscrolling examples\n")
+                      _T("Ron Lee (c) 2002"),
                       _T("About wxScroll Demo"),
                       wxICON_INFORMATION | wxOK );
 }
@@ -510,9 +510,9 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 bool MyApp::OnInit()
 {
   wxFrame *frame = new MyFrame();
-  frame->Show( TRUE );
+  frame->Show( true );
 
-  return TRUE;
+  return true;
 }
 
 // ----------------------------------------------------------------------------

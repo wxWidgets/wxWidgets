@@ -134,13 +134,13 @@ bool MyApp::OnInit()
 
     // Create the main application window
     ShapedFrame *frame = new ShapedFrame();
-    frame->Show(TRUE);
+    frame->Show(true);
     SetTopWindow(frame);
 
     // success: wxApp::OnRun() will be called which will enter the main message
-    // loop and the application will run. If we returned FALSE here, the
+    // loop and the application will run. If we returned false here, the
     // application would exit immediately.
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -149,7 +149,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 ShapedFrame::ShapedFrame()
-       : wxFrame((wxFrame *)NULL, -1, wxEmptyString,
+       : wxFrame((wxFrame *)NULL, wxID_ANY, wxEmptyString,
                   wxDefaultPosition, wxSize(100, 100), //wxDefaultSize,
                   0
                   | wxFRAME_SHAPED
@@ -158,7 +158,7 @@ ShapedFrame::ShapedFrame()
                   | wxSTAY_ON_TOP
             )
 {
-    m_hasShape = FALSE;
+    m_hasShape = false;
     m_bmp = wxBitmap(_T("star.png"), wxBITMAP_TYPE_PNG);
     SetSize(wxSize(m_bmp.GetWidth(), m_bmp.GetHeight()));
 #ifndef __WXMAC__
@@ -188,7 +188,7 @@ void ShapedFrame::OnDoubleClick(wxMouseEvent& WXUNUSED(evt))
     {
         wxRegion region;
         SetShape(region);
-        m_hasShape = FALSE;
+        m_hasShape = false;
     }
     else
         SetWindowShape();
@@ -233,7 +233,7 @@ void ShapedFrame::OnExit(wxMouseEvent& WXUNUSED(evt))
 void ShapedFrame::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
     wxPaintDC dc(this);
-    dc.DrawBitmap(m_bmp, 0, 0, TRUE);
+    dc.DrawBitmap(m_bmp, 0, 0, true);
 }
 
 void ShapedFrame::OnWindowCreate(wxWindowCreateEvent& WXUNUSED(evt))

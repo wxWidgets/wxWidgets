@@ -70,7 +70,7 @@ MyConnection *the_connection = NULL;
 bool MyApp::OnInit()
 {
     // Create the main frame window
-    (new MyFrame(NULL, _T("Server")))->Show(TRUE);
+    (new MyFrame(NULL, _T("Server")))->Show(true);
 
     // service name (DDE classes) or port number (TCP/IP based classes)
     wxString service = IPC_SERVICE;
@@ -82,7 +82,7 @@ bool MyApp::OnInit()
     m_server = new MyServer;
     m_server->Create(service);
 
-    return TRUE;
+    return true;
 }
 
 int MyApp::OnExit()
@@ -98,7 +98,7 @@ int MyApp::OnExit()
 
 // Define my frame constructor
 MyFrame::MyFrame(wxFrame *frame, const wxString& title)
-       : wxFrame(frame, -1, title, wxDefaultPosition, wxSize(350, 250))
+       : wxFrame(frame, wxID_ANY, title, wxDefaultPosition, wxSize(350, 250))
 {
     CreateStatusBar();
 
@@ -145,7 +145,7 @@ void MyFrame::OnListBoxClick(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 {
-    Close(TRUE);
+    Close(true);
 }
 
 // ----------------------------------------------------------------------------
@@ -155,7 +155,7 @@ void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 IPCDialogBox::IPCDialogBox(wxWindow *parent, const wxString& title,
                            const wxPoint& pos, const wxSize& size,
                            MyConnection *connection)
-            : wxDialog(parent, -1, title, pos, size)
+            : wxDialog(parent, wxID_ANY, title, pos, size)
 {
     m_connection = connection;
     (void)new wxButton(this, SERVER_QUIT_BUTTON, _T("Quit this connection"),
@@ -199,7 +199,7 @@ MyConnection::MyConnection()
 {
     dialog = new IPCDialogBox(wxTheApp->GetTopWindow(), _T("Connection"),
                               wxPoint(100, 100), wxSize(500, 500), this);
-    dialog->Show(TRUE);
+    dialog->Show(true);
     the_connection = this;
 }
 
@@ -222,7 +222,7 @@ bool MyConnection::OnExecute(const wxString& WXUNUSED(topic),
                              wxIPCFormat WXUNUSED(format))
 {
     wxLogStatus(wxT("Execute command: %s"), data);
-    return TRUE;
+    return true;
 }
 
 bool MyConnection::OnPoke(const wxString& WXUNUSED(topic),
@@ -232,7 +232,7 @@ bool MyConnection::OnPoke(const wxString& WXUNUSED(topic),
                           wxIPCFormat WXUNUSED(format))
 {
     wxLogStatus(wxT("Poke command: %s = %s"), item.c_str(), data);
-    return TRUE;
+    return true;
 }
 
 wxChar *MyConnection::OnRequest(const wxString& WXUNUSED(topic),
@@ -246,6 +246,6 @@ wxChar *MyConnection::OnRequest(const wxString& WXUNUSED(topic),
 bool MyConnection::OnStartAdvise(const wxString& WXUNUSED(topic),
                                  const wxString& WXUNUSED(item))
 {
-    return TRUE;
+    return true;
 }
 
