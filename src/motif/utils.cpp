@@ -648,6 +648,16 @@ void wxDisplaySize(int *width, int *height)
         *height = DisplayHeight (dpy, DefaultScreen (dpy));
 }
 
+void wxDisplaySizeMM(int *width, int *height)
+{
+    Display *dpy = (Display*) wxGetDisplay();
+
+    if ( width )
+        *width = DisplayWidthMM(dpy, DefaultScreen (dpy));
+    if ( height )
+        *height = DisplayHeightMM(dpy, DefaultScreen (dpy));
+}
+
 // Configurable display in Motif
 static WXDisplay *gs_currentDisplay = NULL;
 static wxString gs_displayName;

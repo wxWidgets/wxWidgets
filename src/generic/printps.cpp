@@ -148,25 +148,13 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
         return FALSE;
     }
 
-    int logPPIScreenX = 0;
-    int logPPIScreenY = 0;
-    int logPPIPrinterX = 0;
-    int logPPIPrinterY = 0;
+    wxSize ScreenPixels = wxGetDisplaySize();
+    wxSize ScreenMM = wxGetDisplaySizeMM();
 
-    logPPIScreenX = 100;
-    logPPIScreenY = 100;
-
-    /*
-    // Correct values for X/PostScript?
-    logPPIPrinterX = 100;
-    logPPIPrinterY = 100;
-    */
-
-    logPPIPrinterX = wxPostScriptDC::GetResolution();
-    logPPIPrinterY = wxPostScriptDC::GetResolution();
-
-    printout->SetPPIScreen(logPPIScreenX, logPPIScreenY);
-    printout->SetPPIPrinter(logPPIPrinterX, logPPIPrinterY);
+    printout->SetPPIScreen( (ScreenPixels.GetWidth() * 25.4) / ScreenMM.GetWidth(),
+                            (ScreenPixels.GetHeight() * 25.4) / ScreenMM.GetHeight() );
+    printout->SetPPIPrinter( wxPostScriptDC::GetResolution(),
+                             wxPostScriptDC::GetResolution() );
 
     // Set printout parameters
     printout->SetDC(dc);
@@ -348,8 +336,11 @@ void wxPostScriptPrintPreview::DetermineScaling()
 
     if (paper)
     {
-        m_previewPrintout->SetPPIScreen(100, 100);
-        //      m_previewPrintout->SetPPIPrinter(100, 100);
+        wxSize ScreenPixels = wxGetDisplaySize();
+        wxSize ScreenMM = wxGetDisplaySizeMM();
+
+        m_previewPrintout->SetPPIScreen( (ScreenPixels.GetWidth() * 25.4) / ScreenMM.GetWidth(),
+                                         (ScreenPixels.GetHeight() * 25.4) / ScreenMM.GetHeight() );
         m_previewPrintout->SetPPIPrinter(wxPostScriptDC::GetResolution(), wxPostScriptDC::GetResolution()); 
 
         wxSize sizeDevUnits(paper->GetSizeDeviceUnits());

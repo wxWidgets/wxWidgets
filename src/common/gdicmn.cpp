@@ -691,6 +691,13 @@ wxSize wxGetDisplaySize()
     return wxSize(x, y);
 }
 
+wxSize wxGetDisplaySizeMM()
+{
+    int x, y;
+    wxDisplaySizeMM(& x, & y);
+    return wxSize(x, y);
+}
+
 wxResourceCache::~wxResourceCache ()
 {
     wxNode *node = First ();

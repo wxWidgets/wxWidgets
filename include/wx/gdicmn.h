@@ -496,9 +496,11 @@ extern bool WXDLLEXPORT wxColourDisplay();
 extern int WXDLLEXPORT wxDisplayDepth();
 #define wxGetDisplayDepth wxDisplayDepth
 
-// get the diaplay size
+// get the display size
 extern void WXDLLEXPORT wxDisplaySize(int *width, int *height);
 extern wxSize WXDLLEXPORT wxGetDisplaySize();
+extern void WXDLLEXPORT wxDisplaySizeMM(int *width, int *height);
+extern wxSize WXDLLEXPORT wxGetDisplaySizeMM();
 
 // set global cursor
 extern void WXDLLEXPORT wxSetCursor(const wxCursor& cursor);
