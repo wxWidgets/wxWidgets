@@ -199,7 +199,7 @@ class BoldProcessor : public wxHtmlProcessor
       m_Html->SetRelatedFrame(this, _("HTML : %s"));
       m_Html->SetRelatedStatusBar(0);
       m_Html->ReadCustomization(wxConfig::Get());
-      m_Html->LoadPage(wxT("test.htm"));
+      m_Html->LoadFile(wxFileName(wxT("test.htm")));
       m_Html->AddProcessor(m_Processor);
    }
 

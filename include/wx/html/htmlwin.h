@@ -26,6 +26,7 @@
 #include "wx/html/htmlcell.h"
 #include "wx/filesys.h"
 #include "wx/html/htmlfilt.h"
+#include "wx/filename.h"
 
 class wxHtmlProcessor;
 class wxHtmlWinModule;
@@ -99,6 +100,9 @@ public:
     // Note : you can also use path relative to previously loaded page
     // Return value : same as SetPage
     virtual bool LoadPage(const wxString& location);
+
+    // Loads HTML page from file
+    bool LoadFile(const wxFileName& filename);
 
     // Returns full location of opened page
     wxString GetOpenedPage() const {return m_OpenedPage;}
