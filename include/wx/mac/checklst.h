@@ -21,7 +21,7 @@
 typedef   unsigned int  size_t;
 #endif
 
-class wxCheckListBox : public wxCheckListBoxBase
+class WXDLLEXPORT wxCheckListBox : public wxCheckListBoxBase
 {
   DECLARE_DYNAMIC_CLASS(wxCheckListBox)
 public:
