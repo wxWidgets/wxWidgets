@@ -19,11 +19,7 @@ line = sys.stdin.readline()
 while line:
     line = line[:-1]
     sys.stdout.write('\nYou typed "%s"\n' % line)
-    sys.stdout.flush()
-    #sys.stderr.write('\nTyped you "%s" Yoda say...\n' % line)
-    #sys.stderr.flush()
     line = sys.stdin.readline()
 
 
 sys.stdout.write('\nExiting...\n')
-sys.stdout.flush()

@@ -46,3 +46,4 @@ def runTest(frame, nb, log):
 #----------------------------------------------------------------------
 
 overview = wxPython.lib.rightalign.__doc__
+
