@@ -58,6 +58,11 @@
             #define __WXMAC__
         #endif
         #ifndef __WXMAC_X__
+            // This define really should not be necessary since __WXMAC__
+            // combined with __UNIX__ is sufficient to differentiate
+            // Classic Mac OS from Mac OS X. However, some code has been
+            // added to workaround defects(?) in the bundled gcc compiler
+            // and these corrections are identified by __WXMAC_X__
             #define __WXMAC_X__
         #endif
 
@@ -76,6 +81,11 @@
         #define __WXMAC__
     #endif
     #ifndef __WXMAC_X__
+        // This define really should not be necessary since __WXMAC__
+        // combined with __UNIX__ is sufficient to differentiate
+        // Classic Mac OS from Mac OS X. However, some code has been
+        // added to workaround defects(?) in the bundled gcc compiler
+        // and these corrections are identified by __WXMAC_X__
         #define __WXMAC_X__
     #endif
 
