@@ -42,10 +42,6 @@ extern "C" void add_expr(char *);
 extern "C" void LexFromFile(FILE *fd);
 extern "C" void LexFromString(char *buf);
 
-#ifndef USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxExprDatabase, wxList)
-#endif
-
 
 wxExprDatabase *thewxExprDatabase = NULL;
 wxExprErrorHandler currentwxExprErrorHandler;
