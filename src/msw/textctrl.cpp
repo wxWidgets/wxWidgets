@@ -65,45 +65,7 @@
     #include <richedit.h>
 #endif
 
-// old mingw32 doesn't define this
-#ifndef CFM_CHARSET
-    #define CFM_CHARSET 0x08000000
-#endif // CFM_CHARSET
-
-#ifndef CFM_BACKCOLOR
-    #define CFM_BACKCOLOR 0x04000000
-#endif
-
-// cygwin does not have these defined for richedit
-#ifndef ENM_LINK
-    #define ENM_LINK 0x04000000
-#endif
-
-#ifndef EM_AUTOURLDETECT
-    #define EM_AUTOURLDETECT (WM_USER + 91)
-#endif
-
-#ifndef EN_LINK
-    #define EN_LINK 0x070b
-
-    typedef struct _enlink
-    {
-        NMHDR nmhdr;
-        UINT msg;
-        WPARAM wParam;
-        LPARAM lParam;
-        CHARRANGE chrg;
-    } ENLINK;
-#endif // ENLINK
-
-#ifndef SF_UNICODE
-    #define SF_UNICODE 0x0010
-#endif
-
-// Watcom C++ doesn't define this
-#ifndef SCF_ALL
-    #define SCF_ALL 0x0004
-#endif
+#include "wx/msw/missing.h"
 
 #endif // wxUSE_RICHEDIT
 

@@ -240,6 +240,86 @@ struct HH_AKLINK
     BOOL      fIndexOnFail;
 };
 
+// ----------------------------------------------------------------------------
+// Rich text control
+// ----------------------------------------------------------------------------
+
+#if wxUSE_RICHEDIT && defined(MAX_TAB_STOPS)
+
+// old mingw32 doesn't define this
+#ifndef CFM_CHARSET
+    #define CFM_CHARSET 0x08000000
+#endif // CFM_CHARSET
+
+#ifndef CFM_BACKCOLOR
+    #define CFM_BACKCOLOR 0x04000000
+#endif
+
+// cygwin does not have these defined for richedit
+#ifndef ENM_LINK
+    #define ENM_LINK 0x04000000
+#endif
+
+#ifndef EM_AUTOURLDETECT
+    #define EM_AUTOURLDETECT (WM_USER + 91)
+#endif
+
+#ifndef EN_LINK
+    #define EN_LINK 0x070b
+
+    typedef struct _enlink
+    {
+        NMHDR nmhdr;
+        UINT msg;
+        WPARAM wParam;
+        LPARAM lParam;
+        CHARRANGE chrg;
+    } ENLINK;
+#endif // ENLINK
+
+#ifndef SF_UNICODE
+    #define SF_UNICODE 0x0010
+#endif
+
+// Watcom C++ doesn't define this
+#ifndef SCF_ALL
+    #define SCF_ALL 0x0004
+#endif
+
+#ifndef PFA_JUSTIFY
+#define PFA_JUSTIFY 4
+
+typedef struct _paraformat2 {
+    UINT cbSize;
+    DWORD dwMask;
+    WORD wNumbering;
+    WORD wEffects;
+    LONG dxStartIndent;
+    LONG dxRightIndent;
+    LONG dxOffset;
+    WORD wAlignment;
+    SHORT cTabCount;
+    LONG rgxTabs[MAX_TAB_STOPS];
+    LONG dySpaceBefore;
+    LONG dySpaceAfter;
+    LONG dyLineSpacing;
+    SHORT sStype;
+    BYTE bLineSpacingRule;
+    BYTE bOutlineLevel;
+    WORD wShadingWeight;
+    WORD wShadingStyle;
+    WORD wNumberingStart;
+    WORD wNumberingStyle;
+    WORD wNumberingTab;
+    WORD wBorderSpace;
+    WORD wBorderWidth;
+    WORD wBorders;
+} PARAFORMAT2;
+#define wxEffects wReserved
+
+#endif
+
+#endif
 
 // ----------------------------------------------------------------------------
 // Misc stuff
