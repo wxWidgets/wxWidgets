@@ -111,8 +111,13 @@ public:
    /** Draws an object.
        @param dc the wxDC to draw on
        @param coords where to draw the baseline of the object.
+       @param begin if !=-1, from which position on to highlight it
+       @param end if begin !=-1, how many positions to highlight it
    */
-   virtual void Draw(wxDC & /* dc */, wxPoint const & /* coords */)  { }
+   virtual void Draw(wxDC & /* dc */,
+                     wxPoint const & /* coords */,
+                     CoordType begin = -1,
+                     CoordType end = -1)  { }
 
    /** Calculates and returns the size of the object. 
        @param top where to store height above baseline
@@ -187,7 +192,9 @@ public:
 
    virtual wxLayoutObjectType GetType(void) const { return WXLO_TYPE_TEXT; }
    virtual void Layout(wxDC &dc);
-   virtual void Draw(wxDC &dc, wxPoint const &coords);
+   virtual void Draw(wxDC &dc, wxPoint const &coords,
+                     CoordType begin = -1,
+                     CoordType end = -1);
    /** Calculates and returns the size of the object. 
        @param top where to store height above baseline
        @param bottom where to store height below baseline
@@ -244,7 +251,9 @@ public:
 
    virtual wxLayoutObjectType GetType(void) const { return WXLO_TYPE_ICON; }
    virtual void Layout(wxDC &dc);
-   virtual void Draw(wxDC &dc, wxPoint const &coords);
+   virtual void Draw(wxDC &dc, wxPoint const &coords,
+                     CoordType begin = -1,
+                     CoordType end = -1);
 
    /** Calculates and returns the size of the object. 
        @param top where to store height above baseline
@@ -288,7 +297,9 @@ class wxLayoutObjectCmd : public wxLayoutObject
 public:
    virtual wxLayoutObjectType GetType(void) const { return WXLO_TYPE_CMD; }
    virtual void Layout(wxDC &dc);
-   virtual void Draw(wxDC &dc, wxPoint const &coords);
+   virtual void Draw(wxDC &dc, wxPoint const &coords,
+                     CoordType begin = -1,
+                     CoordType end = -1);
    wxLayoutObjectCmd(int size, int family, int style, int weight,
                 bool underline,
                 wxColour &fg, wxColour &bg);
@@ -435,11 +446,11 @@ public:
    /** Return the line number of this line.
        @return the line number
    */
-   CoordType GetLineNumber(void) const { return m_LineNumber; }
+   inline CoordType GetLineNumber(void) const { return m_LineNumber; }
    /** Return the length of the line.
        @return line lenght in cursor positions
    */
-   CoordType GetLength(void) const { return m_Length; }
+   inline CoordType GetLength(void) const { return m_Length; }
    //@}
 
    /**@name Drawing and Layout */
@@ -820,6 +831,17 @@ public:
    bool IsSelecting(void);
    bool IsSelected(const wxPoint &cursor);
 
+   /** Tests whether this layout line is selected and needs
+       highlighting.
+       @param line to test for
+       @param from set to first cursorpos to be highlighted (for returncode == -1)
+       @param to set to last cursorpos to be highlighted  (for returncode == -1)
+       @return 0 = not selected, 1 = fully selected, -1 = partially
+       selected
+       
+   */
+   int IsSelected(const wxLayoutLine *line, CoordType *from, CoordType *to);
+   
 #ifdef WXLAYOUT_DEBUG
    void Debug(void);
 #endif
@@ -938,10 +960,6 @@ private:
    int           m_NumOfPages;
    /// Top left corner where we start printing.
    wxPoint       m_Offset;
-#ifdef M_BASEDIR
-   /// A progress dialog for printing
-   MProgressDialog *m_ProgressDialog;
-#endif
 };
 
 

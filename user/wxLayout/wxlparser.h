@@ -52,20 +52,20 @@ struct wxLayoutExportObject
       }
 };
 
+
+extern const wxPoint wxLayoutExportNoPosition;
+
 struct wxLayoutExportStatus
 {
-   wxLayoutExportStatus(wxLayoutList *list)
-      {
-         list->GetDefaults()->GetStyle(&m_si);
-         m_line = list->GetFirstLine();
-         m_iterator = m_line->GetFirstObject();
-      }
-   
+   wxLayoutExportStatus(wxLayoutList *list,
+                        wxPoint fromPos =  wxLayoutExportNoPosition,
+                        wxPoint toPos =  wxLayoutExportNoPosition);
    wxLayoutLine      * m_line;
    wxLOiterator        m_iterator;
    wxLayoutStyleInfo   m_si;
+   wxPoint       m_fromPos;
+   wxPoint       m_toPos;
 };
-
 
 #ifdef OS_WIN
 /// import text into a wxLayoutList (including linefeeds):
@@ -74,7 +74,8 @@ void wxLayoutImportText(wxLayoutList *list, wxString const &str,
 
 wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
                                      int mode = WXLO_EXPORT_AS_TEXT,
-                                     int flags = WXLO_EXPORT_WITH_CRLF); 
+                                     int flags =
+                                     WXLO_EXPORT_WITH_CRLF); 
 #else
 /// import text into a wxLayoutList (including linefeeds):
 void wxLayoutImportText(wxLayoutList *list, wxString const &str,
@@ -83,8 +84,8 @@ void wxLayoutImportText(wxLayoutList *list, wxString const &str,
 /// export text in a given format
 wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
                                      int mode = WXLO_EXPORT_AS_TEXT,
-                                     int flags = WXLO_EXPORT_WITH_LF_ONLY
-                                     );
+                                     int flags =
+                                     WXLO_EXPORT_WITH_LF_ONLY);
 #endif
 
 #endif //WXLPARSER_H

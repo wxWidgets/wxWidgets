@@ -148,13 +148,36 @@ wxString wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
 
 
 
+wxLayoutExportStatus::wxLayoutExportStatus(wxLayoutList *list,
+                                           wxPoint fromPos,
+                                           wxPoint toPos)
+{
+   list->GetDefaults()->GetStyle(&m_si);
+   m_line = list->GetFirstLine();
+   m_iterator = m_line->GetFirstObject();
+   m_fromPos = fromPos;
+   m_toPos = toPos;
+
+   if(m_fromPos != wxLayoutExportNoPosition)
+   {
+      while(m_line && (*m_line)->GetLineNumber() != m_fromPos.y)
+         m_line->GetNextLine();
+      wxASSERT(m_line);
+      m_iterator = (**i).FindObject(fromPos.x);
+   }
+}
+   
+
+
 #define   WXLO_IS_TEXT(type) \
 ( type == WXLO_TYPE_TEXT \
   || (type == WXLO_TYPE_CMD \
       && mode == WXLO_EXPORT_AS_HTML))
 
 
-  
+
+extern const wxPoint wxLayoutExportNoPosition = wxPoint(-1,-1);
+
 wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
                                      int mode, int flags)
 {
@@ -197,7 +220,6 @@ wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
 
    wxString *str = new wxString();
    // text must be concatenated
-   int testf = WXLO_EXPORT_WITH_CRLF;
    for(;;)
    {
       while(status->m_iterator == NULLIT)

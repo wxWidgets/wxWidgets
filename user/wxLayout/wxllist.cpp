@@ -24,7 +24,6 @@
 
 #ifdef M_BASEDIR
 #   include "gui/wxllist.h"
-#   include "gui/wxMDialogs.h"
 #else
 #   include "wxllist.h"
 #endif
@@ -109,6 +108,23 @@ bool Contains(const wxRect &r, const wxPoint &p)
 {
    return r.x <= p.x && r.y <= p.y && (r.x+r.width) >= p.x && (r.y + r.height) >= p.y;
 }
+
+
+/// Starts highlighting the selection
+static
+inline void StartHighlighting(wxDC &dc)
+{
+   dc.SetBrush(*wxBLACK_BRUSH);
+   dc.SetPen(wxPen(*wxBLACK,1,wxSOLID));
+   dc.SetLogicalFunction(wxINVERT);
+}
+
+/// Ends highlighting the selection
+static
+inline void EndHighlighting(wxDC &dc)
+{
+   dc.SetLogicalFunction(wxCOPY);
+}
 //@}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -147,9 +163,33 @@ wxLayoutObjectText::GetSize(CoordType *top, CoordType *bottom) const
 }
 
 void
-wxLayoutObjectText::Draw(wxDC &dc, wxPoint const &coords)
+wxLayoutObjectText::Draw(wxDC &dc, wxPoint const &coords,
+                         CoordType begin, CoordType end)
 {
-   dc.DrawText(m_Text, coords.x, coords.y-m_Top);
+   if(begin == -1)
+      dc.DrawText(m_Text, coords.x, coords.y-m_Top);
+   else
+   {
+      // highlight the bit between begin and len
+      wxString str;
+      CoordType
+         xpos = coords.x,
+         ypos = coords.y-m_Top;
+      long width, height, descent;
+      
+      str = m_Text.Mid(0, begin);
+      dc.DrawText(str, xpos, ypos);
+      dc.GetTextExtent(str, &width, &height, &descent);
+      xpos += width;
+      StartHighlighting(dc);
+      str = m_Text.Mid(begin, end-begin);
+      dc.DrawText(str, xpos, ypos);
+      dc.GetTextExtent(str, &width, &height, &descent);
+      xpos += width;
+      dc.SetLogicalFunction(wxCOPY);
+      str = m_Text.Mid(end, m_Text.Length()-end);
+      dc.DrawText(str, xpos, ypos);
+   }
 }
 
 CoordType
@@ -222,8 +262,12 @@ wxLayoutObjectIcon::wxLayoutObjectIcon(wxBitmap *icon)
 }
 
 void
-wxLayoutObjectIcon::Draw(wxDC &dc, wxPoint const &coords)
+wxLayoutObjectIcon::Draw(wxDC &dc, wxPoint const &coords,
+                         CoordType begin, CoordType /* len */)
 {
+   if(begin == 0)
+      StartHighlighting(dc);
+   
    dc.DrawBitmap(*m_Icon, coords.x, coords.y-m_Icon->GetHeight(),
                  (m_Icon->GetMask() == NULL) ? FALSE : TRUE);
 }
@@ -296,7 +340,8 @@ wxLayoutObjectCmd::GetStyle(wxLayoutStyleInfo *si) const
 }
 
 void
-wxLayoutObjectCmd::Draw(wxDC &dc, wxPoint const & /* coords */)
+wxLayoutObjectCmd::Draw(wxDC &dc, wxPoint const & /* coords */,
+                        CoordType begin, CoordType /* len */)
 {
    wxASSERT(m_font);
    dc.SetFont(*m_font);
@@ -636,11 +681,36 @@ wxLayoutLine::Draw(wxDC &dc,
    pos = pos + GetPosition();
    
    pos.y += m_BaseLine;
-   
+
+   CoordType xpos = 0; // cursorpos, lenght of line
+
+   CoordType from, to, tempto;
+   int highlight = llist->IsSelected(this, &from, &to);
+   if(highlight == 1) // we need to draw the whole line inverted!
+      StartHighlighting(dc);
+   else
+      EndHighlighting(dc);
+
    for(i = m_ObjectList.begin(); i != NULLIT; i++)
    {
-      (**i).Draw(dc, pos);
+      if(highlight == -1) // partially highlight line
+      {
+         // parts of the line need highlighting
+         tempto = xpos+(**i).GetLength();
+         if(tempto >= from && tempto <= to)
+         {
+            tempto = to-xpos;
+            if(tempto > (**i).GetLength())
+               tempto = (**i).GetLength();
+            (**i).Draw(dc, pos, from-xpos, to);
+         }
+         else
+            EndHighlighting(dc);
+      }
+      else
+         (**i).Draw(dc, pos);
       pos.x += (**i).GetWidth();
+      xpos += (**i).GetLength();
    }
 }
 
@@ -1486,6 +1556,14 @@ wxLayoutList::EndSelection(void)
    m_Selection.m_CursorB = m_CursorPos;
    m_Selection.m_selecting = false;
    m_Selection.m_valid = true;
+
+   // We always want m_CursorA <= m_CursorB!
+   if(! (m_Selection.m_CursorA <= m_Selection.m_CursorB))
+   {
+      wxPoint help = m_Selection.m_CursorB;
+      m_Selection.m_CursorB = m_Selection.m_CursorA;
+      m_Selection.m_CursorA = help;
+   }
 }
 
 bool
@@ -1499,6 +1577,44 @@ wxLayoutList::IsSelected(const wxPoint &cursor)
 {
    return m_Selection.m_CursorA <= cursor
       && cursor <= m_Selection.m_CursorB;
+}
+
+
+/** Tests whether this layout line is selected and needs
+    highlighting.
+    @param line to test for
+    @return 0 = not selected, 1 = fully selected, -1 = partially
+    selected
+    */
+int
+wxLayoutList::IsSelected(const wxLayoutLine *line, CoordType *from,
+                         CoordType *to)
+{
+   wxASSERT(line); wxASSERT(to); wxASSERT(from);
+
+   CoordType y = line->GetLineNumber();
+   if(m_Selection.m_CursorA.y < y && m_Selection.m_CursorB.y > y)
+      return 1;
+   else if(m_Selection.m_CursorA.y == y)
+   {
+      *from = m_Selection.m_CursorA.x;
+      if(m_Selection.m_CursorB.y == y)
+         *to = m_Selection.m_CursorB.x;
+      else
+         *to = line->GetLength();
+      return -1;
+   }
+   else if(m_Selection.m_CursorB.y == y)
+   {
+      *to = m_Selection.m_CursorB.x;
+      if(m_Selection.m_CursorA.y == y)
+         *from = m_Selection.m_CursorA.x;
+      else
+         *from = 0;
+      return -1;
+   }
+   else
+      return 0;
 }
 
 #ifdef WXLAYOUT_DEBUG
@@ -1530,16 +1646,10 @@ wxLayoutPrintout::wxLayoutPrintout(wxLayoutList *llist,
 {
    m_llist = llist;
    m_title = title;
-#ifdef   M_BASEDIR
-   m_ProgressDialog = NULL;
-#endif
 }
 
 wxLayoutPrintout::~wxLayoutPrintout()
 {
-#ifdef   M_BASEDIR
-   if(m_ProgressDialog) delete m_ProgressDialog;
-#endif
 }
 
 float
@@ -1594,12 +1704,6 @@ wxLayoutPrintout::ScaleDC(wxDC *dc)
 
 bool wxLayoutPrintout::OnPrintPage(int page)
 {
-#ifdef M_BASEDIR
-   wxString msg;
-   msg.Printf(_("Printing page %d..."), page);
-   if(! m_ProgressDialog->Update(page, msg))
-      return false;
-#endif
    wxDC *dc = GetDC();
 
    ScaleDC(dc);
@@ -1650,12 +1754,6 @@ void wxLayoutPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom,
    *selPageFrom = 1;
    *selPageTo = m_NumOfPages;
    wxRemoveFile(WXLLIST_TEMPFILE);
-
-#ifdef M_BASEDIR
-   m_ProgressDialog = new MProgressDialog(
-      title, _("Printing..."),m_NumOfPages, NULL, false, true);
-#endif
-   
 }
 
 bool wxLayoutPrintout::HasPage(int pageNum)
