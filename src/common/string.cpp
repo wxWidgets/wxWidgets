@@ -2010,7 +2010,9 @@ static wxCharacterSet *wxFindCharacterSet(const wxString& charset)
   return (wxCharacterSet *)NULL;
 }
 
+#if wxUSE_UNICODE
 WXDLLEXPORT_DATA(wxCSConv) wxConv_local((const wxChar *)NULL);
+#endif
 
 wxCSConv::wxCSConv(const wxChar *charset)
 {
