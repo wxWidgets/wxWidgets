@@ -66,10 +66,10 @@ public:
 
 #if WXWIN_COMPATIBILITY_2_4
     wxDEPRECATED( void SetIncludeList(const wxStringList& list) );
-    wxDEPRECATED( inline wxStringList& GetIncludeList() );
+    wxDEPRECATED( wxStringList& GetIncludeList() );
 
     wxDEPRECATED( void SetExcludeList(const wxStringList& list) );
-    wxDEPRECATED( inline wxStringList& GetExcludeList() );
+    wxDEPRECATED( wxStringList& GetExcludeList() );
 
     wxDEPRECATED( bool IsInCharIncludeList(const wxString& val) );
     wxDEPRECATED( bool IsNotInCharExcludeList(const wxString& val) );
