@@ -38,6 +38,7 @@
 #include <Threads.h>
 #include "wx/mac/uma.h"
 #include "wx/mac/macnotfy.h"
+#include "Timer.h"
 #endif
 
 #define INFINITE 0xFFFFFFFF
@@ -528,11 +529,20 @@ void wxThread::Yield()
 
 void wxThread::Sleep(unsigned long milliseconds)
 {
-    clock_t start = clock();
+    UnsignedWide start, now;
+
+    Microseconds(&start);
+
+    double mssleep = milliseconds * 1000 ;
+    double msstart, msnow ;
+    msstart = (start.hi * 4294967296.0 + start.lo) ;
+    
     do
     {
         YieldToAnyThread();
-    } while( clock() - start < milliseconds * CLOCKS_PER_SEC /  1000.0 ) ;
+        Microseconds(&now);
+        msnow = (now.hi * 4294967296.0 + now.lo) ;
+    } while( msstart - msnow < mssleep );
 }
 
 int wxThread::GetCPUCount()
