@@ -2187,9 +2187,18 @@ void ObjectMenuProc(wxMenu& menu, wxCommandEvent& event)
  *
  */
 
+#ifdef __WXGTK__   // I don't dare to delete it...
+ 
+BEGIN_EVENT_TABLE(EditorToolBar, wxToolBar)
+END_EVENT_TABLE()
+
+#else
+
 BEGIN_EVENT_TABLE(EditorToolBar, wxToolBar)
 	EVT_PAINT(EditorToolBar::OnPaint)
 END_EVENT_TABLE()
+
+#endif
 
 EditorToolBar::EditorToolBar(wxFrame *frame, const wxPoint& pos, const wxSize& size,
             long style):

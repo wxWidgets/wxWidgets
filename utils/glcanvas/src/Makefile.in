@@ -1,0 +1,44 @@
+#
+#  wGLCanvas source makefile for Unix
+#
+#  Copyright 1998, Robert Roebling
+#
+
+# wxWindows base directory
+WXBASEDIR=@WXBASEDIR@
+
+# set the OS type for compilation
+OS=@OS@
+
+# compile a library only
+RULE=gslib
+
+# needed for unactivated
+NONE=
+
+# define library name
+LIB_TARGET=wx_opengl_gtk
+LIB_MAJOR=0
+LIB_MINOR=1
+
+# define library sources
+
+LIB_CPP_SRC= \
+\
+ glcanvas.cpp
+
+#define library objects
+LIB_OBJ= \
+\
+ $(LIB_CPP_SRC:.cpp=.o)
+
+all::
+
+clean::
+
+#additional things needed for compile
+ADD_COMPILE=
+
+# include the definitions now
+include ../../../../template.mak
+
