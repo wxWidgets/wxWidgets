@@ -945,7 +945,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_notebook.o \
 	$(OBJS)\monolib_access.o \
 	$(OBJS)\monolib_ownerdrw.o \
-	$(OBJS)\monolib_penwin.o \
 	$(OBJS)\monolib_printdlg.o \
 	$(OBJS)\monolib_printwin.o \
 	$(OBJS)\monolib_radiobox.o \
@@ -1329,7 +1328,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_notebook.o \
 	$(OBJS)\coredll_access.o \
 	$(OBJS)\coredll_ownerdrw.o \
-	$(OBJS)\coredll_penwin.o \
 	$(OBJS)\coredll_printdlg.o \
 	$(OBJS)\coredll_printwin.o \
 	$(OBJS)\coredll_radiobox.o \
@@ -1713,7 +1711,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_notebook.o \
 	$(OBJS)\corelib_access.o \
 	$(OBJS)\corelib_ownerdrw.o \
-	$(OBJS)\corelib_penwin.o \
 	$(OBJS)\corelib_printdlg.o \
 	$(OBJS)\corelib_printwin.o \
 	$(OBJS)\corelib_radiobox.o \
@@ -2097,7 +2094,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_notebook.o \
 	$(OBJS)\monodll_access.o \
 	$(OBJS)\monodll_ownerdrw.o \
-	$(OBJS)\monodll_penwin.o \
 	$(OBJS)\monodll_printdlg.o \
 	$(OBJS)\monodll_printwin.o \
 	$(OBJS)\monodll_radiobox.o \
@@ -3962,9 +3958,6 @@ $(OBJS)\coredll_pen.o: ..\..\src\msw\pen.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
 
-$(OBJS)\coredll_penwin.o: ..\..\src\msw\penwin.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_popupcmn.o: ..\..\src\common\popupcmn.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -5169,9 +5162,6 @@ ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_pen.o: ..\..\src\msw\pen.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
-
-$(OBJS)\corelib_penwin.o: ..\..\src\msw\penwin.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_popupcmn.o: ..\..\src\common\popupcmn.cpp
@@ -6762,9 +6752,6 @@ $(OBJS)\monodll_pen.o: ..\..\src\msw\pen.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
 
-$(OBJS)\monodll_penwin.o: ..\..\src\msw\penwin.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_popupcmn.o: ..\..\src\common\popupcmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -8308,9 +8295,6 @@ ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_pen.o: ..\..\src\msw\pen.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
-
-$(OBJS)\monolib_penwin.o: ..\..\src\msw\penwin.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_popupcmn.o: ..\..\src\common\popupcmn.cpp

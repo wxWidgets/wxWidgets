@@ -911,6 +911,14 @@ InputPath=..\include\wx\msw\setup.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\apptbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\apptrait.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\chkconf.h
 # End Source File
 # Begin Source File
@@ -1091,6 +1099,10 @@ SOURCE=..\..\include\wx\hashmap.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\hashset.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\iconloc.h
 # End Source File
 # Begin Source File
@@ -1183,7 +1195,15 @@ SOURCE=..\..\include\wx\process.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\ptr_scpd.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\regex.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\scopeguard.h
 # End Source File
 # Begin Source File
 
@@ -1220,6 +1240,10 @@ SOURCE=..\..\include\wx\textfile.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\thread.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\timer.h
 # End Source File
 # Begin Source File
 

@@ -241,7 +241,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_notebook.obj &
 	$(OBJS)\monolib_access.obj &
 	$(OBJS)\monolib_ownerdrw.obj &
-	$(OBJS)\monolib_penwin.obj &
 	$(OBJS)\monolib_printdlg.obj &
 	$(OBJS)\monolib_printwin.obj &
 	$(OBJS)\monolib_radiobox.obj &
@@ -626,7 +625,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_notebook.obj &
 	$(OBJS)\coredll_access.obj &
 	$(OBJS)\coredll_ownerdrw.obj &
-	$(OBJS)\coredll_penwin.obj &
 	$(OBJS)\coredll_printdlg.obj &
 	$(OBJS)\coredll_printwin.obj &
 	$(OBJS)\coredll_radiobox.obj &
@@ -1011,7 +1009,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_notebook.obj &
 	$(OBJS)\corelib_access.obj &
 	$(OBJS)\corelib_ownerdrw.obj &
-	$(OBJS)\corelib_penwin.obj &
 	$(OBJS)\corelib_printdlg.obj &
 	$(OBJS)\corelib_printwin.obj &
 	$(OBJS)\corelib_radiobox.obj &
@@ -1396,7 +1393,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_notebook.obj &
 	$(OBJS)\monodll_access.obj &
 	$(OBJS)\monodll_ownerdrw.obj &
-	$(OBJS)\monodll_penwin.obj &
 	$(OBJS)\monodll_printdlg.obj &
 	$(OBJS)\monodll_printwin.obj &
 	$(OBJS)\monodll_radiobox.obj &
@@ -4054,9 +4050,6 @@ $(OBJS)\coredll_pen.obj :  .AUTODEPEND ..\..\src\msw\pen.cpp
 	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
-$(OBJS)\coredll_penwin.obj :  .AUTODEPEND ..\..\src\msw\penwin.cpp
-	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
 !ifeq USE_GUI 1
 $(OBJS)\coredll_popupcmn.obj :  .AUTODEPEND ..\..\src\common\popupcmn.cpp
 	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -5261,9 +5254,6 @@ $(OBJS)\corelib_paper.obj :  .AUTODEPEND ..\..\src\common\paper.cpp
 $(OBJS)\corelib_pen.obj :  .AUTODEPEND ..\..\src\msw\pen.cpp
 	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
-
-$(OBJS)\corelib_penwin.obj :  .AUTODEPEND ..\..\src\msw\penwin.cpp
-	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_popupcmn.obj :  .AUTODEPEND ..\..\src\common\popupcmn.cpp
@@ -6854,9 +6844,6 @@ $(OBJS)\monodll_pen.obj :  .AUTODEPEND ..\..\src\msw\pen.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
-$(OBJS)\monodll_penwin.obj :  .AUTODEPEND ..\..\src\msw\penwin.cpp
-	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
 !ifeq USE_GUI 1
 $(OBJS)\monodll_popupcmn.obj :  .AUTODEPEND ..\..\src\common\popupcmn.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -8400,9 +8387,6 @@ $(OBJS)\monolib_paper.obj :  .AUTODEPEND ..\..\src\common\paper.cpp
 $(OBJS)\monolib_pen.obj :  .AUTODEPEND ..\..\src\msw\pen.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
-
-$(OBJS)\monolib_penwin.obj :  .AUTODEPEND ..\..\src\msw\penwin.cpp
-	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_popupcmn.obj :  .AUTODEPEND ..\..\src\common\popupcmn.cpp

@@ -2742,69 +2742,6 @@ SOURCE=..\..\src\msw\pen.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\penwin.cpp
-
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF
-
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\msw\popupwin.cpp
 # End Source File
 # Begin Source File
@@ -7229,7 +7166,7 @@ SOURCE=..\..\src\univ\winuniv.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\accel.h
+SOURCE=..\..\include\wx\xpmhand.hinclude\wx\msw\accel.h
 # End Source File
 # Begin Source File
 
@@ -7258,6 +7195,10 @@ SOURCE=..\..\include\wx\msw\brush.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\button.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\gnuwin32\winresrc.hinclude\wx\calctrl.h
 # End Source File
 # Begin Source File
 
@@ -7393,6 +7334,10 @@ SOURCE=..\..\include\wx\msw\gdiobj.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\glcanvas.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\helpbest.h
 # End Source File
 # Begin Source File
@@ -7414,6 +7359,10 @@ SOURCE=..\..\include\wx\msw\imaglist.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\iniconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\joystick.h
 # End Source File
 # Begin Source File
 
@@ -7557,6 +7506,10 @@ SOURCE=..\..\include\wx\msw\tabctrl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\taskbar.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\tbar95.h
 # End Source File
 # Begin Source File
@@ -7593,11 +7546,11 @@ SOURCE=..\..\include\wx\msw\ole\uuid.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\window.h
+SOURCE=..\..\include\wx\msw\wave.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\gnuwin32\winresrc.h
+SOURCE=..\..\include\wx\msw\window.h
 # End Source File
 # End Group
 # Begin Group "Generic Headers"
@@ -7606,6 +7559,14 @@ SOURCE=..\..\include\wx\msw\gnuwin32\winresrc.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\generic\accel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xpmhand.hinclude\wx\generic\accel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\calctrl.h
 # End Source File
 # Begin Source File
 
@@ -7645,7 +7606,27 @@ SOURCE=..\..\include\wx\generic\fontdlgg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\grid.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\gridctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\gridsel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\helpext.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\imaglist.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\laywin.h
 # End Source File
 # Begin Source File
 
@@ -7681,11 +7662,19 @@ SOURCE=..\..\include\wx\generic\progdlgg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\sashwin.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\scrolwin.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\generic\spinctlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\splash.h
 # End Source File
 # Begin Source File
 
@@ -7711,6 +7700,10 @@ SOURCE=..\..\include\wx\generic\timer.h
 
 SOURCE=..\..\include\wx\generic\treectlg.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\wizard.h
+# End Source File
 # End Group
 # Begin Group "wxUniv Headers"
 
@@ -7726,6 +7719,10 @@ SOURCE=..\..\include\wx\univ\bmpbuttn.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\univ\button.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\window.hinclude\wx\calctrl.h
 # End Source File
 # Begin Source File
 
@@ -7859,9 +7856,65 @@ SOURCE=..\..\include\wx\univ\toolbar.h
 
 SOURCE=..\..\include\wx\univ\toplevel.h
 # End Source File
+# End Group
+# Begin Group "wxHTML Headers"
+
+# PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\include\wx\univ\window.h
+SOURCE=..\..\include\wx\html\forcelnk.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\helpctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\helpdata.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\helpfrm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\htmlcell.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\htmldefs.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\htmlfilt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\htmlpars.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\htmlproc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\htmltag.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\htmlwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\htmprint.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\m_templ.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\winpars.h
 # End Source File
 # End Group
 # Begin Group "Common Headers"
@@ -7969,7 +8022,27 @@ SOURCE=..\..\include\wx\dataobj.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\db.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\dbgrid.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\dbkeyg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\dbtable.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\dc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\dcbuffer.h
 # End Source File
 # Begin Source File
 
@@ -8097,6 +8170,10 @@ SOURCE=..\..\include\wx\glcanvas.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\grid.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\help.h
 # End Source File
 # Begin Source File
@@ -8110,6 +8187,10 @@ SOURCE=..\..\include\wx\helphtml.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\helpwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\htmllbox.h
 # End Source File
 # Begin Source File
 
@@ -8165,7 +8246,15 @@ SOURCE=..\..\include\wx\imagxpm.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\joystick.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\layout.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\laywin.h
 # End Source File
 # Begin Source File
 
@@ -8281,6 +8370,10 @@ SOURCE=..\..\include\wx\renderer.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\sashwin.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\scopeguard.h
 # End Source File
 # Begin Source File
@@ -8314,6 +8407,10 @@ SOURCE=..\..\include\wx\spinbutt.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\spinctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\splash.h
 # End Source File
 # Begin Source File
 
@@ -8353,6 +8450,10 @@ SOURCE=..\..\include\wx\tabctrl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\taskbar.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\tbarbase.h
 # End Source File
 # Begin Source File
@@ -8373,7 +8474,7 @@ SOURCE=..\..\include\wx\tglbtn.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\timer.h
+SOURCE=..\..\include\wx\tipdlg.h
 # End Source File
 # Begin Source File
 
@@ -8425,15 +8526,23 @@ SOURCE=..\..\include\wx\vscroll.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\wave.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\window.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\xpmdecod.h
+SOURCE=..\..\include\wx\wizard.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\xpmhand.h
+SOURCE=..\..\include\wx\wxhtml.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xpmdecod.h
 # End Source File
 # End Group
 # End Target
