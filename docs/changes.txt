@@ -22,6 +22,7 @@ All:
 - wxFile, wxFFile, wxTextFile and wxTempFile now all use UTF-8 encoding
   by default in Unicode mode
 - bug in wxDateTime with timezones on systems with tm_gmtoff in struct tm fixed
+- added wx/math.h (John Labenski)
 
 wxBase:
 

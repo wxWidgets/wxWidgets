@@ -84,6 +84,7 @@ the corresponding topic.
 \helpref{wxFindWindowAtPoint}{wxfindwindowatpoint}\\
 \helpref{wxFindWindowByLabel}{wxfindwindowbylabel}\\
 \helpref{wxFindWindowByName}{wxfindwindowbyname}\\
+\helpref{wxFinite}{wxfinite}\\
 \helpref{wxGetActiveWindow}{wxgetactivewindow}\\
 \helpref{wxGetApp}{wxgetapp}\\
 \helpref{wxGetClipboardData}{wxgetclipboarddata}\\
@@ -144,6 +145,7 @@ the corresponding topic.
 \helpref{wxIsBusy}{wxisbusy}\\
 \helpref{wxIsClipboardFormatAvailable}{wxisclipboardformatavailable}\\
 \helpref{wxIsEmpty}{wxisempty}\\
+\helpref{wxIsNaN}{wxisnan}\\
 \helpref{wxIsWild}{wxiswild}\\
 \helpref{wxKill}{wxkill}\\
 \helpref{wxLoadUserResource}{wxloaduserresource}\\
@@ -1892,6 +1894,28 @@ checkbox which is shown in the tips dialog.}
 \wxheading{Include files}
 
 <wx/tipdlg.h>
+
+
+\section{Math functions}
+
+\wxheading{Include files}
+
+<wx/math.h>
+
+\membersection{wxFinite}\label{wxfinite}
+
+\func{int}{wxFinite}{\param{double }{x}}
+
+Returns a non-zero value if {\it x} is neither infinite or NaN (not a number), 
+returns 0 otherwise.
+
+\membersection{wxIsNaN}\label{wxisnan}
+
+\func{bool}{wxIsNaN}{\param{double }{x}}
+
+Returns a non-zero value if {\it x} is NaN (not a number), returns 0
+otherwise.
+
 
 \section{GDI functions}\label{gdifunctions}
 
