@@ -1504,7 +1504,8 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
 
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
 
-#if wxUSE_GUI
+// wxGetNativeFontEncoding() doesn't exist neither in wxBase nor in wxUniv
+#if wxUSE_GUI && !defined(__WXUNIVERSAL__)
 
 #include "wx/fontmap.h"
 
