@@ -104,11 +104,8 @@ public:
    // the "well-known host" (as specified by SetWellKnownHost) is reachable
    virtual bool IsOnline() const
       {
-         if( (! m_timer) // we are not polling, so test now:
-             || m_IsOnline < 0
-            )
-            CheckStatus();
-         return m_IsOnline != 0;
+         CheckStatus();
+         return m_IsOnline > 0;
       }
 
    /// do we have a constant net connection? -- GUESS!
@@ -203,6 +200,8 @@ private:
    /// real status check
    void CheckStatusInternal(void);
 
+   /// Check /proc/net (Linux only)
+   int CheckProcNet(void);
    /// Check output of ifconfig command for PPP/SLIP/PLIP devices
    int CheckIfconfig(void);
    /// Ping a host: 1 on success, -1 if it cannot be used, 0 if unreachable
@@ -447,12 +446,14 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
 
    int testResult;
 
-   testResult = CheckConnect();
+   testResult = CheckProcNet();
    if(testResult == -1)
       testResult = CheckIfconfig();
    if(testResult == -1)
+      testResult = CheckConnect();
+   if(testResult == -1)
       testResult = CheckPing();
-      m_IsOnline = testResult;
+   m_IsOnline = testResult;
 }
 
 int
@@ -489,6 +490,39 @@ wxDialUpManagerImpl::CheckConnect(void)
    // connect failed, but don't know why
    return -1;
 }
+
+
+int 
+wxDialUpManagerImpl::CheckProcNet(void)
+{
+   int rc = -1;
+
+#ifdef __LINUX__
+   if (wxFileExists(_T("/proc/net/route")))
+   {
+       // NOTE: cannot use wxFile::Length because file doesn't support
+       // seeking
+       FILE *f = fopen("/proc/net/route", "rt");
+       if (f != NULL)
+       {
+           char output[256];
+	   
+    	   while (fgets(output, 256, f) != NULL)
+    	   {
+                   if (strstr(output,"ppp")    // ppp
+                       || strstr(output,"sl")  // slip
+                       || strstr(output,"pl")) // plip
+    		       rc = 1;
+    	   }
+    	   if (rc == -1) rc = 0;
+           fclose(f);
+       }
+   }
+#endif
+   
+   return rc;
+}
+
 
 int
 wxDialUpManagerImpl::CheckIfconfig(void)
