@@ -230,7 +230,7 @@ bool wxDocument::Save()
 {
     bool ret = FALSE;
 
-    if (!IsModified()) return TRUE;
+    if (!IsModified() && m_savedYet) return TRUE;
     if (m_documentFile == wxT("") || !m_savedYet)
         ret = SaveAs();
     else
