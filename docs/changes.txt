@@ -43,9 +43,10 @@ OTHER CHANGES
 2.5.1
 -----
 
-Base:
+All:
 
 - wxDateTime::ParseDateTime() implemented (Linus McCabe)
+- wxHTTP::GetResponse() added (David Nock)
 
 All (GUI):
 
@@ -56,6 +57,7 @@ wxMSW:
 
 - fixed wxTE_*WRAP styles handling
 - wxTextCtrl::GetValue() works with text in non default encoding
+- changed wxCrashReport to generate minidumps instead of text files
 
 wxGTK:
 

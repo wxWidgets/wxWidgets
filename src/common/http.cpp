@@ -44,6 +44,7 @@ wxHTTP::wxHTTP()
   m_read = FALSE;
   m_proxy_mode = FALSE;
   m_post_buf = wxEmptyString;
+  m_http_response = 0;
 
   SetNotify(wxSOCKET_LOST_FLAG);
 }
@@ -213,6 +214,8 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
     return FALSE;
   }
 
+  m_http_response = 0;
+
   // If there is no User-Agent defined, define it.
   if (GetHeader(wxT("User-Agent")).IsNull())
     SetHeader(wxT("User-Agent"), wxT("wxWindows 2.x"));
@@ -255,6 +258,8 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
 
   token.NextToken();
   tmp_str2 = token.NextToken();
+
+  m_http_response = wxAtoi(tmp_str2);
 
   switch (tmp_str2[0u]) {
   case wxT('1'):

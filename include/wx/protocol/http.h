@@ -41,6 +41,8 @@ public:
 
   void SetProxyMode(bool on);
 
+  int GetResponse() { return m_http_response; }
+
 protected:
   enum wxHTTP_Req
   {
@@ -67,6 +69,7 @@ protected:
        m_proxy_mode;
   wxSockAddress *m_addr;
   wxString m_post_buf;
+  int m_http_response;
 
   DECLARE_DYNAMIC_CLASS(wxHTTP)
   DECLARE_PROTOCOL(wxHTTP)
