@@ -233,6 +233,7 @@ COMMONOBJS = \
 		$(COMMDIR)\$D\sckfile.obj \
 		$(COMMDIR)\$D\sckipc.obj \
 		$(COMMDIR)\$D\sckstrm.obj \
+		$(COMMDIR)\$D\settcmn.obj \
 		$(COMMDIR)\$D\sizer.obj \
 		$(COMMDIR)\$D\socket.obj \
 		$(COMMDIR)\$D\statbar.obj \

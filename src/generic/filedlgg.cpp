@@ -1109,16 +1109,14 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 #endif
     buttonsizer->Add( butNewDir, 0, wxALL, 5 );
 
-#ifdef __WXX11__
-    mainsizer->Add( buttonsizer, 0, wxALL | wxEXPAND, 0 );
-#else
-    mainsizer->Add( buttonsizer, 0, wxALL | wxEXPAND, 5 );
-#endif
+    if (wxSystemSettings::GetScreen() >= wxSYS_SCREEN_PDA)
+        mainsizer->Add( buttonsizer, 0, wxALL | wxEXPAND, 0 );
+    else
+        mainsizer->Add( buttonsizer, 0, wxALL | wxEXPAND, 5 );
 
     wxBoxSizer *staticsizer = new wxBoxSizer( wxHORIZONTAL );
-#ifndef __WXX11__
-    staticsizer->Add( new wxStaticText( this, -1, _("Current directory:") ), 0, wxRIGHT, 10 );
-#endif
+    if (wxSystemSettings::GetScreen() < wxSYS_SCREEN_PDA)
+        staticsizer->Add( new wxStaticText( this, -1, _("Current directory:") ), 0, wxRIGHT, 10 );
     m_static = new wxStaticText( this, -1, m_dir );
     staticsizer->Add( m_static, 1 );
     mainsizer->Add( staticsizer, 0, wxEXPAND | wxLEFT|wxRIGHT|wxBOTTOM, 10 );
@@ -1133,7 +1131,8 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     m_list->SetNewDirControl(butNewDir);
     m_list->SetGoToParentControl(butDirUp);
 
-#ifdef __WXX11__
+    if (wxSystemSettings::GetScreen() >= wxSYS_SCREEN_PDA)
+    {
     // PDAs have a different screen layout
     mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 5 );
 
@@ -1155,8 +1154,9 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     buttonsizer->Add( new wxButton( this, wxID_OK, _("OK") ), 0, wxCENTER | wxALL, 5 );
     buttonsizer->Add( new wxButton( this, wxID_CANCEL, _("Cancel") ), 0, wxCENTER | wxALL, 5 );
     mainsizer->Add( buttonsizer, 0, wxALIGN_RIGHT );
-
-#else
+    }
+    else
+    {
     mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 10 );
 
     wxBoxSizer *textsizer = new wxBoxSizer( wxHORIZONTAL );
@@ -1173,8 +1173,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     choicesizer->Add( m_check, 0, wxCENTER|wxALL, 10 );
     choicesizer->Add( new wxButton( this, wxID_CANCEL, _("Cancel") ), 0, wxCENTER | wxALL, 10 );
     mainsizer->Add( choicesizer, 0, wxEXPAND );
-
-#endif
+    }
 
     m_choice->Append( firstWildText, (void*) new wxString( firstWild ) );
     while (tokens.HasMoreTokens())

@@ -195,6 +195,7 @@ COMMONOBJS = &
 	sckfile.obj &
 	sckipc.obj &
 	sckstrm.obj &
+	settcmn.obj &
 	sizer.obj &
 	socket.obj &
 	statbar.obj &
@@ -1029,6 +1030,9 @@ sckipc.obj:     $(COMMDIR)\sckipc.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 sckstrm.obj:     $(COMMDIR)\sckstrm.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+settcmn.obj:     $(COMMDIR)\settcmn.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 sizer.obj:     $(COMMDIR)\sizer.cpp

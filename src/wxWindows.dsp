@@ -636,6 +636,10 @@ SOURCE=.\common\sckstrm.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\settcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\sizer.cpp
 # End Source File
 # Begin Source File

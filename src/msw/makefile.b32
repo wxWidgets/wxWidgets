@@ -15,7 +15,7 @@
 # Makefile : Builds wxWindows library wx.lib for MS Windows,
 # and Borland C++ (32-bit).
 
-#BCCDIR now defined in ../makeb32.env
+# BCCDIR now defined in ../makeb32.env
 
 !if "$(WXWIN)" == ""
 !error You must define the WXWIN variable in autoexec.bat, e.g. WXWIN=c:\wx
@@ -211,6 +211,7 @@ COMMONOBJS = \
 		$(MSWDIR)\sckfile.obj \
 		$(MSWDIR)\sckipc.obj \
 		$(MSWDIR)\sckstrm.obj \
+		$(MSWDIR)\settcmn.obj \
 		$(MSWDIR)\sizer.obj \
 		$(MSWDIR)\socket.obj \
 		$(MSWDIR)\statbar.obj \
@@ -858,6 +859,8 @@ $(MSWDIR)\sckfile.obj: $(COMMDIR)\sckfile.$(SRCSUFF)
 $(MSWDIR)\sckipc.obj: $(COMMDIR)\sckipc.$(SRCSUFF)
 
 $(MSWDIR)\sckstrm.obj: $(COMMDIR)\sckstrm.$(SRCSUFF)
+
+$(MSWDIR)\settcmn.obj: $(COMMDIR)\settcmn.$(SRCSUFF)
 
 $(MSWDIR)\sizer.obj: $(COMMDIR)\sizer.$(SRCSUFF)
 

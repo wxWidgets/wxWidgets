@@ -130,6 +130,16 @@ enum wxSystemFeature
     wxSYS_CAN_ICONIZE_FRAME
 };
 
+// values for different screen designs
+enum wxSystemScreen
+{
+    wxSYS_SCREEN_NONE = 0,  //   not yet defined
+    wxSYS_SCREEN_DESKTOP,   //   >= 800x600
+    wxSYS_SCREEN_SMALL,     //   >= 640x480
+    wxSYS_SCREEN_PDA,       //   >= 320x240
+    wxSYS_SCREEN_TINY       //   <
+};
+
 // ----------------------------------------------------------------------------
 // wxSystemSettingsNative: defines the API for wxSystemSettings class
 // ----------------------------------------------------------------------------
@@ -170,6 +180,16 @@ public:
     // wxSystemSettingsNative
     static wxColour GetColour(wxSystemColour index);
 #endif // __WXUNIVERSAL__
+
+    // Get system screen design (desktop, pda, ..) used for
+    // laying out various dialogs.
+    static wxSystemScreen GetScreen();
+    
+    // Override default.
+    static void SetScreen( wxSystemScreen screen );
+    
+    // Value
+    static wxSystemScreen ms_screen;
 
 
     // the backwards compatible versions of wxSystemSettingsNative functions,

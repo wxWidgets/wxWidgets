@@ -219,6 +219,7 @@ sckaddr.cpp	Common	Socket,Base
 sckfile.cpp	Common	Socket,Base
 sckipc.cpp	Common	Socket,Base
 sckstrm.cpp	Common	Socket,Base
+settcmn.cpp	Common
 sizer.cpp	Common
 socket.cpp	Common	Socket,Base
 statbar.cpp	Common

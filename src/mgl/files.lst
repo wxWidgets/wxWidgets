@@ -146,6 +146,7 @@ ALL_SOURCES = \
 		common/sckfile.cpp \
 		common/sckipc.cpp \
 		common/sckstrm.cpp \
+		common/settcmn.cpp \
 		common/sizer.cpp \
 		common/socket.cpp \
 		common/statbar.cpp \
@@ -628,6 +629,7 @@ COMMONOBJS = \
 		sckfile.o \
 		sckipc.o \
 		sckstrm.o \
+		settcmn.o \
 		sizer.o \
 		socket.o \
 		statbar.o \

@@ -127,6 +127,7 @@ ALL_HEADERS = \
 		hashmap.h \
 		intl.h \
 		ioswrap.h \
+		ipc.h \
 		ipcbase.h \
 		isql.h \
 		isqlext.h \

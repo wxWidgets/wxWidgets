@@ -34,6 +34,7 @@
     #include "wx/dcscreen.h"
     #include "wx/button.h"
     #include "wx/validate.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/univ/renderer.h"
@@ -136,15 +137,16 @@ wxSize wxButton::DoGetBestClientSize() const
     }
 
     // for compatibility with other ports, the buttons default size is never
-    // less than the standard one
-#ifndef __WXX11__
-    if ( !(GetWindowStyle() & wxBU_EXACTFIT) )
+    // less than the standard one, but not when display not PDAs.
+    if (wxSystemSettings::GetScreen() < wxSYS_SCREEN_PDA)
     {
-        wxSize szDef = GetDefaultSize();
-        if ( width < szDef.x )
-            width = szDef.x;
+        if ( !(GetWindowStyle() & wxBU_EXACTFIT) )
+        {
+            wxSize szDef = GetDefaultSize();
+            if ( width < szDef.x )
+                width = szDef.x;
+        }
     }
-#endif
 
     return wxSize(width, height);
 }
