@@ -770,8 +770,6 @@ void wxMenuBar::Attach(wxFrame *frame)
 {
     wxMenuBarBase::Attach(frame);
 
-    m_menuBarFrame = frame;
-
 #if wxUSE_ACCEL
     RebuildAccelTable();
 #endif // wxUSE_ACCEL
