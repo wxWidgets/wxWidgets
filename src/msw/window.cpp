@@ -114,7 +114,7 @@
     #include "wx/msw/gnuwin32/extra.h"
 #endif
 
-#if defined(__GNUG__)
+#if defined(__GNUG__) || defined(__DMC__)
 #include "wx/msw/missing.h"
 #endif
 

@@ -493,5 +493,38 @@ typedef struct {
     #define HANGUL_CHARSET  129
 #endif
 
+#ifndef TME_HOVER	
+    #define TME_HOVER	1
+#endif
+
+#ifndef TME_LEAVE	
+    #define TME_LEAVE	2
+#endif
+
+#ifndef TME_QUERY	
+    #define TME_QUERY	0x40000000
+#endif
+
+#ifndef TME_CANCEL	
+    #define TME_CANCEL	0x80000000
+#endif
+
+#ifndef HOVER_DEFAULT	
+    #define HOVER_DEFAULT	0xFFFFFFFF
+#endif
+
+#ifdef __DMC__
+
+  typedef struct tagTRACKMOUSEEVENT {
+      DWORD cbSize;
+      DWORD dwFlags;
+      HWND  hwndTrack;
+      DWORD dwHoverTime;
+  } TRACKMOUSEEVENT, *LPTRACKMOUSEEVENT;
+
+  WINCOMMCTRLAPI BOOL WINAPI _TrackMouseEvent(LPTRACKMOUSEEVENT lpEventTrack);
+
+#endif
+
 #endif
     // _WX_MISSING_H_
