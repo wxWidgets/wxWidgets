@@ -63,7 +63,7 @@ void  wxSTCDropTarget::OnLeave() {
 #endif
 
 
-#if wxUSE_POPUPWIN
+#if wxUSE_POPUPWIN && wxSTC_USE_POPUP
 #include <wx/popupwin.h>
 #define wxSTCCallTipBase wxPopupWindow
 #define param2  wxBORDER_NONE  // popup's 2nd param is flags
@@ -88,7 +88,7 @@ public:
         delete surfaceWindow;
     }
 
-#if wxUSE_POPUPWIN
+#if wxUSE_POPUPWIN && wxSTC_USE_POPUP
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO) {
@@ -97,6 +97,21 @@ public:
         if (y != -1)
             GetParent()->ClientToScreen(NULL, &y);
         wxSTCCallTipBase::DoSetSize(x, y, width, height, sizeFlags);
+    }
+
+    virtual bool Show( bool show = TRUE ) {
+        bool retval = wxSTCCallTipBase::Show(show);
+        if (show) {
+            CaptureMouse();
+        }
+        else {
+            ReleaseMouse();
+        }
+        return retval;
+    }
+
+    void OnLeftDown(wxMouseEvent& ) {
+        Show(FALSE);
     }
 #endif
 
@@ -107,6 +122,9 @@ private:
 
 BEGIN_EVENT_TABLE(wxSTCCallTip, wxSTCCallTipBase)
     EVT_PAINT(wxSTCCallTip::OnPaint)
+#if wxUSE_POPUPWIN && wxSTC_USE_POPUP
+    EVT_LEFT_DOWN(wxSTCCallTip::OnLeftDown)
+#endif
 END_EVENT_TABLE()
 
 

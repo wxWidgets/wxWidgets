@@ -673,19 +673,20 @@ BEGIN_EVENT_TABLE(wxSTCListBox, wxListBox)
     EVT_SET_FOCUS(wxSTCListBox::OnFocus)
 END_EVENT_TABLE()
 
+#undef wxSTC_USE_POPUP
+#define wxSTC_USE_POPUP 0  // Leave it off for this one...
 
 
 // A window to place the listbox upon.  If wxPopupWindow is supported then
 // that will be used so the listbox can extend beyond the client area of the
 // wxSTC if needed.
-
-#if wxUSE_POPUPWIN
+#if wxUSE_POPUPWIN && wxSTC_USE_POPUP
 #include <wx/popupwin.h>
 #define wxSTCListBoxWinBase wxPopupWindow
 #define param2  wxBORDER_NONE  // popup's 2nd param is flags
 #else
 #define wxSTCListBoxWinBase wxWindow
-#define param2 -1 // wxWindows 2nd param is ID
+#define param2 -1 // wxWindow's 2nd param is ID
 #endif
 
 class wxSTCListBoxWin : public wxSTCListBoxWinBase {
@@ -693,6 +694,7 @@ public:
     wxSTCListBoxWin(wxWindow* parent, wxWindowID id)
         : wxSTCListBoxWinBase(parent, param2) {
         lb = new wxSTCListBox(this, id);
+        lb->SetCursor(wxCursor(wxCURSOR_ARROW));
     }
 
     void OnSize(wxSizeEvent& event) {
@@ -703,9 +705,9 @@ public:
         event.Skip();
     }
 
-    wxListBox* GetLB() { return lb; }
+        wxListBox* GetLB() { return lb; }
 
-#if wxUSE_POPUPWIN
+#if wxUSE_POPUPWIN && wxSTC_USE_POPUP
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO) {
@@ -755,8 +757,8 @@ PRectangle ListBox::GetDesiredRect() {
     rc.left = 0;
     if (sz.x > 400)
         sz.x = 400;
-    if (sz.y > 160)  // TODO:  Use desiredVisibleRows??
-        sz.y = 160;
+    if (sz.y > 140)  // TODO:  Use desiredVisibleRows??
+        sz.y = 140;
     rc.right = sz.x;
     rc.bottom = sz.y;
     return rc;
