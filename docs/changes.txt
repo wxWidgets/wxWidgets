@@ -140,30 +140,24 @@ wxMSW:
 - wxCaret::SetSize() doesn't hide the caret any longer as it used to
 - wxCheckListBox::Check() doesn't send CHECKLISTBOX_TOGGLE event any more
 - fixed bug with wxTR_EDIT_LABELS not working with wxTR_MULTIPLE
-- fixes for compilation with OpenWatcom compiler
+- fixes for compilation with OpenWatcom and DigitalMars compilers
 - fixed wxStaticText best size calculation (was wrong by '&' width)
 - fixed calling wxFrame::Maximize(FALSE) before the window is shown
-= added wxNotebook::HitTest() (Otto Wyss)
-- all libraries built with makefile.g95 have a _min or _cyg suffix
-  (for MinGW and Cygwin)
-- When using DLL, wxLocalFSHandler was not being exported - added WXEXPORTDLL
-- A wxEvtHandler object was not removed from wxPendingEvents on deletion.
-  wxPendingEventsLocker was being deleted in App before all wxEvtHandler
-  objects have been destroyed resulting in stale handler/lock
-  ptrs; fixed
+- added wxNotebook::HitTest() (Otto Wyss)
+- libraries built with makefile.g95 have a _min or _cyg suffix (MinGW/Cygwin)
+- when using DLL, wxLocalFSHandler was not being exported
+- fixed problem with wxEvtHandler object not removed from wxPendingEvents
 - Windows XP manifest is now included in wx.rc; it is no longer neccessary
   to ship .exe.manifest file with applications to support XP themes
 - wxLocale::Init no longer reports error if trying to set Unicode-only locale
   or if user's default locale is Unicode-only
-- Improved border handling so it no longer shows a thin and
-  sunken border under XP
+- improved border handling under Windows XP
 - partial fix for wxNotebook pages looking bad under XP: wxUSE_UXTHEME
   enables XP theme engine code, and wxUSE_UXTHEME_AUTO tells
   wxWindows to use the theme tab colour for control backgrounds.
-  Proper XP theme support is planned for 2.6
-- disable wxNB_RIGHT, wxNB_LEFT, wxNB_BOTTOM notebook styles
-  if the version of CommCtl doesn't support it (XP)
+- disable wxNB_RIGHT, wxNB_LEFT, wxNB_BOTTOM notebook styles under Windows XP
 - fixed release mode build with VC 7.x (Martin Ecker)
+- added support for wxALWAYS_SHOW_SB style
 
 wxMotif:
 

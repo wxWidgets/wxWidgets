@@ -788,6 +788,11 @@ void wxWindowMSW::SetScrollPos(int orient, int pos, bool refresh)
     info.nMin = 0;
     info.nPos = pos;
     info.fMask = SIF_POS;
+    if ( HasFlag(wxALWAYS_SHOW_SB) )
+    {
+        // disable scrollbar instead of removing it then
+        info.fMask |= SIF_DISABLENOSCROLL;
+    }
 
     ::SetScrollInfo(hWnd, orient == wxHORIZONTAL ? SB_HORZ : SB_VERT,
                     &info, refresh);
@@ -806,6 +811,11 @@ void wxWindowMSW::SetScrollbar(int orient,
     info.nMax = range - 1;      //  as both nMax and nMax are inclusive
     info.nPos = pos;
     info.fMask = SIF_RANGE | SIF_PAGE | SIF_POS;
+    if ( HasFlag(wxALWAYS_SHOW_SB) )
+    {
+        // disable scrollbar instead of removing it then
+        info.fMask |= SIF_DISABLENOSCROLL;
+    }
 
     HWND hWnd = GetHwnd();
     if ( hWnd )

@@ -35,8 +35,6 @@ for this style. }
 \twocolitem{\windowstyle{wxSTATIC\_BORDER}}{Displays a border suitable for a static control. Windows only. }
 \twocolitem{\windowstyle{wxTRANSPARENT\_WINDOW}}{The window is transparent, that is, it will not receive paint
 events. Windows only.}
-\twocolitem{\windowstyle{wxNO\_3D}}{Prevents the children of this window taking on 3D styles, even though
-the application-wide policy is for 3D controls. Windows only.}
 \twocolitem{\windowstyle{wxTAB\_TRAVERSAL}}{Use this to enable tab traversal for non-dialog windows.}
 \twocolitem{\windowstyle{wxWANTS\_CHARS}}{Use this to indicate that the window
 wants to get all char events - even for keys like TAB or ENTER which are
@@ -48,6 +46,11 @@ new window area manually if you use this style. Currently only has an effect for
 Windows.}
 \twocolitem{\windowstyle{wxVSCROLL}}{Use this style to enable a vertical scrollbar.}
 \twocolitem{\windowstyle{wxHSCROLL}}{Use this style to enable a horizontal scrollbar.}
+\twocolitem{\windowstyle{wxALWAYS\_SHOW\_SB}{If a window has scrollbars,
+disable them instead of hiding them when they are not needed (i.e. when the
+size of the window is big enough to not require the scrollbars to navigate it).
+This style is currently only implemented for wxMSW and wxUniversal and does
+nothing on the other platforms.}
 \twocolitem{\windowstyle{wxCLIP\_CHILDREN}}{Use this style to eliminate flicker caused by the background being
 repainted, then children being painted over them. Windows only.}
 \end{twocollist}
