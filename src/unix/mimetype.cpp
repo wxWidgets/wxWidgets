@@ -2203,7 +2203,7 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
         // the flags and field values on the current line
         bool needsterminal = FALSE,
              copiousoutput = FALSE;
-        wxMimeArrayString *entry;
+        wxMimeArrayString *entry = NULL; // suppress compiler warning
 
         wxString strType,
                  strOpenCmd,
