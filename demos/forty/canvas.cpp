@@ -68,6 +68,8 @@ FortyCanvas::~FortyCanvas()
 	UpdateScores();
 	delete m_game;
 	delete m_scoreFile;
+    delete m_handCursor;
+    delete m_arrowCursor;
 }
 
 

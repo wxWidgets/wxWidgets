@@ -2,6 +2,7 @@ Makefile.in
 src/regex/Makefile.in
 locale/Makefile
 samples/Makefile.in
+samples/artprov/Makefile.in
 samples/calendar/Makefile.in
 samples/caret/Makefile.in
 samples/checklst/Makefile.in

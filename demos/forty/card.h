@@ -33,13 +33,14 @@ enum Suit { clubs = 0, diamonds = 1, hearts = 2, spades = 3 };
 enum SuitColour { red = 0, black = 1 };
 enum WayUp { faceup, facedown };
 
-
 //--------------------------------//
 // A class defining a single card //
 //--------------------------------//
 class Card {
-        static double m_scale;
-        static int m_width,m_height;
+    friend class FortyApp;
+
+    static double m_scale;
+    static int m_width,m_height;
 
 public:
 	Card(int value, WayUp way_up = facedown);

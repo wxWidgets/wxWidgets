@@ -16,6 +16,8 @@
 class FortyApp: public wxApp
 {
 public:
+    FortyApp();
+    ~FortyApp();
 	bool OnInit();
 
 	static const wxColour& BackgroundColour();

@@ -52,6 +52,20 @@ wxColour* FortyApp::m_backgroundColour = 0;
 wxColour* FortyApp::m_textColour = 0;
 wxBrush*  FortyApp::m_backgroundBrush = 0;
 
+FortyApp::FortyApp()
+{
+}
+
+FortyApp::~FortyApp()
+{
+    delete m_backgroundColour;
+    delete m_textColour;
+    delete m_backgroundBrush;
+    delete Card::m_symbolBmap;
+    delete Card::m_pictureBmap;
+
+}
+
 bool FortyApp::OnInit()
 {
         bool largecards = FALSE;
