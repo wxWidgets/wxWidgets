@@ -29,8 +29,9 @@ wxObject *wxButtonXmlHandler::DoCreateResource()
                                     GetID(),
                                     GetText(_T("label")),
                                     GetPosition(), GetSize(),
-                                    GetStyle());
-    button->SetName(GetName());
+                                    GetStyle(),
+                                    wxDefaultValidator,
+                                    GetName());
     if (GetBool(_T("default"), 0) == 1) button->SetDefault();
     SetupWindow(button);
     
