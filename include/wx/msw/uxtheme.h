@@ -18,6 +18,8 @@
 
 #include "wx/defs.h"
 
+#include "wx/msw/wrapwin.h"
+
 #if wxUSE_UNICODE
 typedef struct _WXUOSVERSIONINFOEXW {
     WXDWORD        dwOSVersionInfoSize;
@@ -54,30 +56,20 @@ typedef struct _WXUOSVERSIONINFOEXA {
 #define LPWXUOSVERSIONINFOEX LPWXUOSVERSIONINFOEXA
 #endif
 
-typedef int WXUBOOL;
-
-typedef struct tagWXURECT
-{
-    long    left;
-    long    top;
-    long    right;
-    long    bottom;
-} WXURECT;
-
 typedef void* WXHTHEME;
 typedef long WXUHRESULT;
 typedef WXHTHEME (__stdcall *PFNWXUOPENTHEMEDATA)(WXHWND, const wchar_t *); 
 typedef WXUHRESULT (__stdcall *PFNWXUCLOSETHEMEDATA)(WXHTHEME);
 typedef WXUHRESULT (__stdcall *PFNWXUDRAWTHEMEBACKGROUND)(WXHTHEME, WXHDC, 
-    int, int, const WXURECT *, const WXURECT *);
+    int, int, const RECT *, const RECT *);
 #define WXU_DTT_GRAYED 0x1
 typedef WXUHRESULT (__stdcall *PFNWXUDRAWTHEMETEXT)(WXHTHEME, WXHDC, int, 
     int, const wchar_t *, int, DWORD, 
-    DWORD, const WXURECT *);
+    DWORD, const RECT *);
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEBACKGROUNDCONTENTRECT)(WXHTHEME, WXHDC, 
-    int, int, const WXURECT *, WXURECT *);
+    int, int, const RECT *, RECT *);
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEBACKGROUNDEXTENT)(WXHTHEME, WXHDC, int, int, 
-    const WXURECT *, WXURECT *);
+    const RECT *, RECT *);
 
 enum WXUTHEMESIZE
 {
@@ -116,14 +108,14 @@ typedef struct tagWXUTEXTMETRIC
     unsigned char tmCharSet;
 } WXUTEXTMETRIC;
 
-typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEPARTSIZE)(WXHTHEME, WXHDC, int, int, const WXURECT *, 
+typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEPARTSIZE)(WXHTHEME, WXHDC, int, int, const RECT *, 
     enum WXUTHEMESIZE, WXUSIZE *);
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMETEXTEXTENT)(WXHTHEME, WXHDC, int, int, const wchar_t *, 
-    int, WXDWORD, const WXURECT *, WXURECT *);
+    int, WXDWORD, const RECT *, RECT *);
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMETEXTMETRICS)(WXHTHEME, WXHDC,
     int, int, WXUTEXTMETRIC*);
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEBACKGROUNDREGION)(WXHTHEME, WXHDC,
-    int, int, const WXURECT *, WXHRGN *);
+    int, int, const RECT *, WXHRGN *);
 
 #define WXU_HTTB_BACKGROUNDSEG          0x0000
 #define WXU_HTTB_FIXEDBORDER            0x0002
@@ -143,20 +135,20 @@ typedef struct tagWXUPOINT
 } WXUPOINT;
 
 typedef WXUHRESULT (__stdcall *PFNWXUHITTESTTHEMEBACKGROUND)(WXHTHEME, WXHDC, int,
-    int, WXDWORD, const WXURECT *, WXHRGN,
+    int, WXDWORD, const RECT *, WXHRGN,
     WXUPOINT, unsigned short *);
 typedef WXUHRESULT (__stdcall *PFNWXUDRAWTHEMEEDGE)(WXHTHEME, WXHDC, int, int,
-    const WXURECT *, unsigned int, unsigned int, WXURECT *);
+    const RECT *, unsigned int, unsigned int, RECT *);
 typedef WXUHRESULT (__stdcall *PFNWXUDRAWTHEMEICON)(WXHTHEME, WXHDC, int, int,
-    const WXURECT *, WXHIMAGELIST, int);
-typedef WXUBOOL (__stdcall *PFNWXUISTHEMEPARTDEFINED)(WXHTHEME, int, int);
-typedef WXUBOOL (__stdcall *PFNWXUISTHEMEBACKGROUNDPARTIALLYTRANSPARENT)(WXHTHEME, int, int);
+    const RECT *, WXHIMAGELIST, int);
+typedef BOOL (__stdcall *PFNWXUISTHEMEPARTDEFINED)(WXHTHEME, int, int);
+typedef BOOL (__stdcall *PFNWXUISTHEMEBACKGROUNDPARTIALLYTRANSPARENT)(WXHTHEME, int, int);
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMECOLOR)(WXHTHEME, int, int, int, WXCOLORREF*);
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEMETRIC)(WXHTHEME, WXHDC, int,
     int, int, int *);
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMESTRING)(WXHTHEME, int,
     int, int, wchar_t *, int);
-typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEBOOL)(WXHTHEME, int, int, int, WXUBOOL *);
+typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEBOOL)(WXHTHEME, int, int, int, BOOL *);
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEINT)(WXHTHEME, int, int, int, int *);
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEENUMVALUE)(WXHTHEME, int, int, int, int *);
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEPOSITION)(WXHTHEME, int, int, int, WXUPOINT *);
@@ -178,7 +170,7 @@ typedef struct tagWXULOGFONT
     wchar_t       lfFaceName[32];
 } WXULOGFONT;
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEFONT)(WXHTHEME, WXHDC, int, int, int, WXULOGFONT *);
-typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMERECT)(WXHTHEME, int, int, int, WXURECT *);
+typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMERECT)(WXHTHEME, int, int, int, RECT *);
 typedef struct _WXUMARGINS
 {
     int cxLeftWidth;      // width of left border that retains its size
@@ -187,7 +179,7 @@ typedef struct _WXUMARGINS
     int cyBottomHeight;   // height of bottom border that retains its size
 } WXUMARGINS, *PWXUMARGINS;
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEMARGINS)(WXHTHEME, WXHDC, int,
-    int, int, WXURECT *, WXUMARGINS *);
+    int, int, RECT *, WXUMARGINS *);
 
 #define WXU_MAX_INTLIST_COUNT 10
 typedef struct _WXUINTLIST
@@ -213,13 +205,13 @@ typedef WXUHRESULT (__stdcall *PFNWXUSETWINDOWTHEME)(WXHWND, const wchar_t*, con
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEFILENAME)(WXHTHEME, int, int, int, wchar_t *, int);
 typedef WXCOLORREF (__stdcall *PFNWXUGETTHEMESYSCOLOR)(WXHTHEME, int);
 typedef WXHBRUSH (__stdcall *PFNWXUGETTHEMESYSCOLORBRUSH)(WXHTHEME, int);
-typedef WXUBOOL (__stdcall *PFNWXUGETTHEMESYSBOOL)(WXHTHEME, int);
+typedef BOOL (__stdcall *PFNWXUGETTHEMESYSBOOL)(WXHTHEME, int);
 typedef int (__stdcall *PFNWXUGETTHEMESYSSIZE)(WXHTHEME, int);
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMESYSFONT)(WXHTHEME, int, WXULOGFONT *);
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMESYSSTRING)(WXHTHEME, int, wchar_t *, int);
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMESYSINT)(WXHTHEME, int, int *);
-typedef WXUBOOL (__stdcall *PFNWXUISTHEMEACTIVE)();
-typedef WXUBOOL (__stdcall *PFNWXUISAPPTHEMED)();
+typedef BOOL (__stdcall *PFNWXUISTHEMEACTIVE)();
+typedef BOOL (__stdcall *PFNWXUISAPPTHEMED)();
 typedef WXHTHEME (__stdcall *PFNWXUGETWINDOWTHEME)(WXHWND);
 
 #define WXU_ETDT_DISABLE        0x00000001
@@ -228,7 +220,7 @@ typedef WXHTHEME (__stdcall *PFNWXUGETWINDOWTHEME)(WXHWND);
 #define WXU_ETDT_ENABLETAB      0x00000006
 
 typedef WXUHRESULT (__stdcall *PFNWXUENABLETHEMEDIALOGTEXTURE)(WXHWND, WXDWORD);
-typedef WXUBOOL (__stdcall *PFNWXUISTHEMEDIALOGTEXTUREENABLED)(WXHWND);
+typedef BOOL (__stdcall *PFNWXUISTHEMEDIALOGTEXTUREENABLED)(WXHWND);
 
 #define WXU_STAP_ALLOW_NONCLIENT    1
 #define WXU_STAP_ALLOW_CONTROLS     2
@@ -246,8 +238,8 @@ typedef WXUHRESULT (__stdcall *PFNWXUGETCURRENTTHEMENAME)(wchar_t *, int,
 
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEDOCUMENTATIONPROPERTY)(const wchar_t *,
     const wchar_t *, wchar_t *, int);
-typedef WXUHRESULT (__stdcall *PFNWXUDRAWTHEMEPARENTBACKGROUND)(WXHWND, WXHDC, WXURECT *);
-typedef WXUHRESULT (__stdcall *PFNWXUENABLETHEMING)(WXUBOOL);
+typedef WXUHRESULT (__stdcall *PFNWXUDRAWTHEMEPARENTBACKGROUND)(WXHWND, WXHDC, RECT *);
+typedef WXUHRESULT (__stdcall *PFNWXUENABLETHEMING)(BOOL);
 
 // ----------------------------------------------------------------------------
 // wxUxThemeEngine: provides all theme functions from uxtheme.dll
@@ -359,6 +351,37 @@ private:
 }
 
 #endif // !wxUSE_UXTHEME
+
+// ----------------------------------------------------------------------------
+// wxUxThemeHandle: encapsulates ::Open/CloseThemeData()
+// ----------------------------------------------------------------------------
+
+class wxUxThemeHandle
+{
+public:
+    wxUxThemeHandle(wxWindow *win, const wchar_t *classes)
+    {
+        wxUxThemeEngine *engine = wxUxThemeEngine::Get();
+
+        m_hTheme = engine ? engine->OpenThemeData(win->GetHWND(), classes)
+                          : NULL;
+    }
+
+    operator WXHTHEME() const { return m_hTheme; }
+
+    ~wxUxThemeHandle()
+    {
+        if ( m_hTheme )
+        {
+            wxUxThemeEngine::Get()->CloseThemeData(m_hTheme);
+        }
+    }
+
+private:
+    WXHTHEME m_hTheme;
+
+    DECLARE_NO_COPY_CLASS(wxUxThemeHandle)
+};
 
 #endif // _WX_UXTHEME_H_
 
