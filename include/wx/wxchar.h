@@ -631,13 +631,13 @@ WXDLLEXPORT bool wxOKlibc(); // for internal use
 
     #include <stdio.h>  // for FILE
 
-    int wxScanf( const wxChar *format, ... ) ATTRIBUTE_PRINTF_2;
-    int wxSscanf( const wxChar *str, const wxChar *format, ... ) ATTRIBUTE_PRINTF_3;
-    int wxFscanf( FILE *stream, const wxChar *format, ... ) ATTRIBUTE_PRINTF_3;
+    int wxScanf( const wxChar *format, ... ) ATTRIBUTE_PRINTF_1;
+    int wxSscanf( const wxChar *str, const wxChar *format, ... ) ATTRIBUTE_PRINTF_2;
+    int wxFscanf( FILE *stream, const wxChar *format, ... ) ATTRIBUTE_PRINTF_2;
     int wxVsscanf( const wxChar *str, const wxChar *format, va_list ap );
-    int wxPrintf( const wxChar *format, ... ) ATTRIBUTE_PRINTF_2;
-    int wxSprintf( wxChar *str, const wxChar *format, ... ) ATTRIBUTE_PRINTF_3;
-    int wxFprintf( FILE *stream, const wxChar *format, ... ) ATTRIBUTE_PRINTF_3;
+    int wxPrintf( const wxChar *format, ... ) ATTRIBUTE_PRINTF_1;
+    int wxSprintf( wxChar *str, const wxChar *format, ... ) ATTRIBUTE_PRINTF_2;
+    int wxFprintf( FILE *stream, const wxChar *format, ... ) ATTRIBUTE_PRINTF_2;
     int wxVfprintf( FILE *stream, const wxChar *format, va_list ap );
     int wxVprintf( const wxChar *format, va_list ap );
     int wxVsprintf( wxChar *str, const wxChar *format, va_list ap );
@@ -646,7 +646,7 @@ WXDLLEXPORT bool wxOKlibc(); // for internal use
 // these 2 can be simply mapped to the versions with underscore at the end
 // if we don't have to do the conversion
 #ifdef wxNEED_PRINTF_CONVERSION
-    int wxSnprintf( wxChar *str, size_t size, const wxChar *format, ... ) ATTRIBUTE_PRINTF_4;
+    int wxSnprintf( wxChar *str, size_t size, const wxChar *format, ... ) ATTRIBUTE_PRINTF_3;
     int wxVsnprintf( wxChar *str, size_t size, const wxChar *format, va_list ap );
 #else
     #define wxSnprintf wxSnprintf_
