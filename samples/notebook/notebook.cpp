@@ -390,19 +390,7 @@ int MyFrame::SelectFlag(int id, int nb, int lb, int chb)
     }                                                                              \
     else                                                                           \
     {                                                                              \
-        wxPanel *panel = CreateRadioButtonsPage(newBook);                          \
-        newBook->AddPage( panel, RADIOBUTTONS_PAGE_NAME, false, GetIconIndex(newBook) ); \
-                                                                                   \
-        panel = CreateVetoPage(newBook);                                           \
-        newBook->AddPage( panel, VETO_PAGE_NAME, false, GetIconIndex(newBook) );   \
-                                                                                   \
-        panel = CreateBigButtonPage(newBook);                                      \
-        newBook->AddPage( panel, MAXIMIZED_BUTTON_PAGE_NAME, false, GetIconIndex(newBook) ); \
-                                                                                   \
-        panel = CreateInsertPage(newBook);                                         \
-        newBook->InsertPage( 0, panel, I_WAS_INSERTED_PAGE_NAME, false, GetIconIndex(newBook) ); \
-                                                                                   \
-        newBook->SetSelection(1);                                                  \
+        CreateInitialPages(newBook);                                               \
     }                                                                              \
                                                                                    \
     m_sizerFrame->Insert(0, newBook, 5, wxEXPAND | wxALL, 4);                      \
