@@ -841,13 +841,11 @@ wxString wxXmlResourceHandler::GetText(const wxString& param, bool translate)
 #endif
         }
     }
-    else
-    {
-        // If wxXRC_USE_LOCALE is not set, then the string is already in
-        // system's default encoding in ANSI build, so we don't have to
-        // do anything special here.
-        return str2;
-    }
+
+    // If wxXRC_USE_LOCALE is not set, then the string is already in
+    // system's default encoding in ANSI build, so we don't have to
+    // do anything special here.
+    return str2;
 }
 
 
@@ -902,7 +900,8 @@ bool wxXmlResourceHandler::GetBool(const wxString& param, bool defaultv)
     wxString v = GetParamValue(param);
     v.MakeLower();
     if (!v) return defaultv;
-    else return (v == wxT("1"));
+
+    return (v == wxT("1"));
 }
 
 
@@ -1120,7 +1119,8 @@ wxSize wxXmlResourceHandler::GetSize(const wxString& param)
             return wxDefaultSize;
         }
     }
-    else return wxSize(sx, sy);
+
+    return wxSize(sx, sy);
 }
 
 
@@ -1159,7 +1159,8 @@ wxCoord wxXmlResourceHandler::GetDimension(const wxString& param, wxCoord defaul
             return defaultv;
         }
     }
-    else return sx;
+
+    return sx;
 }
 
 
@@ -1306,12 +1307,10 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
         m_node = oldnode;
         return sysfont;
     }
-    else
-    {
-        m_node = oldnode;
-        return wxFont(isize, ifamily, istyle, iweight,
-                      underlined, facename, enc);
-    }
+
+    m_node = oldnode;
+    return wxFont(isize, ifamily, istyle, iweight,
+                  underlined, facename, enc);
 }
 
 
