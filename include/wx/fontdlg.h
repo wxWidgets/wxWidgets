@@ -65,10 +65,13 @@ protected:
 // platform-specific wxFontDialog implementation
 // ----------------------------------------------------------------------------
 
+#define USE_NATIVE_FONT_DIALOG_FOR_MACOSX 0
+
 #if defined(__WXUNIVERSAL__) || \
     defined(__WXMOTIF__)     || \
-    defined(__WXMAC__) && !defined(__WXMAC_OSX__)    || \
-    defined(__WXMAC_OSX__) && ( MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_2 ) || \
+    (defined(__WXMAC__) && !defined(__WXMAC_OSX__))  || \
+    (defined(__WXMAC__) && !USE_NATIVE_FONT_DIALOG_FOR_MACOSX)  || \
+    (defined(__WXMAC_OSX__) && ( MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_2 ) ) || \
     defined(__WXCOCOA__)     || \
     defined(__WXWINCE__)     || \
     defined(__WXGPE__)
