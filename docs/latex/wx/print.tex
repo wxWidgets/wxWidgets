@@ -729,7 +729,8 @@ wxPrintPreview object to initiate printing or previewing.
 
 \func{}{wxPrintout}{\param{const wxString\& }{title = "Printout"}}
 
-Constructor. Pass an optional title argument (currently unused).
+Constructor. Pass an optional title argument - the curent filename would be a good idea. This will appear in the printing list
+(at least in MSW)
 
 \membersection{wxPrintout::\destruct{wxPrintout}}
 
@@ -813,6 +814,12 @@ Returns the number of pixels per logical inch of the screen device context.
 Dividing the printer PPI by the screen PPI can give a suitable scaling
 factor for drawing text onto the printer. Remember to multiply
 this by a scaling factor to take the preview DC size into account.
+
+\membersection{wxPrintout::GetTitle}\label{wxprintoutgettitle}
+
+\func{wxString}{GetTitle}{\void}
+
+Returns the title of the printout
 
 \pythonnote{This method returns the output-only parameters as a tuple.}
 

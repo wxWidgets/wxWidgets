@@ -24,8 +24,9 @@
 
 	// Constants
 const int PackSize = 52;
-const int CardWidth = 50;
-const int CardHeight = 70;
+
+#define CardHeight Card::GetHeight()
+#define CardWidth  Card::GetWidth()
 
 	// Data types
 enum Suit { clubs = 0, diamonds = 1, hearts = 2, spades = 3 };
@@ -37,6 +38,9 @@ enum WayUp { faceup, facedown };
 // A class defining a single card //
 //--------------------------------//
 class Card {
+        static double m_scale;
+        static int m_width,m_height;
+
 public:
 	Card(int value, WayUp way_up = facedown);
 	virtual ~Card();
@@ -50,6 +54,10 @@ public:
 	int			GetPipValue() const { return m_pipValue; }
 	Suit		GetSuit() const { return m_suit; }
 	SuitColour	GetColour() const { return m_colour; }
+        static void     SetScale(double scale);
+        static int      GetHeight() { return m_height; };
+        static int      GetWidth() { return m_width; };
+        static double   GetScale() { return m_scale; };
 
 private:
 	Suit		m_suit;

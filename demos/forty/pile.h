@@ -69,6 +69,7 @@ public:
 	virtual bool AcceptCard(Card*) { return FALSE; }
 	virtual void AddCard(Card* card);	// Add card to top of pile
 	virtual void AddCard(wxDC& pDC, Card* card);	// Add card + redraw it
+        void SetPos(int x,int y) {m_x = x;m_y = y;};
 
 protected:
 	int   m_x, m_y;				// Position of the pile on the screen

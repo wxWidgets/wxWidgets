@@ -109,7 +109,7 @@ void FortyCanvas::OnDraw(wxDC& dc)
 			m_game->DisplayScore(dc);
 			m_playerDialog->Destroy();
 			m_playerDialog = 0;
-			Refresh();
+                        Refresh(false);
 		}
 		else
 		{
@@ -231,4 +231,9 @@ void FortyCanvas::Redo()
 	PrepareDC(dc);
 	dc.SetFont(* m_font);
 	m_game->Redo(dc);
+}
+
+void FortyCanvas::LayoutGame()
+{
+       m_game->Layout();
 }

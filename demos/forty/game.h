@@ -73,6 +73,7 @@ public:
 	Game(int wins, int games, int score);
 	virtual ~Game();
 
+        void Layout();
 	void NewPlayer(int wins, int games, int score);
 	void Deal();		// Shuffle and deal a new game
 	bool CanYouGo(int x, int y);	// can card under (x,y) go somewhere?

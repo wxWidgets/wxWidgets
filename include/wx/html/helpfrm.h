@@ -133,12 +133,12 @@ public:
 
     // call this to let wxHtmlHelpFrame know page changed
     void NotifyPageChanged();
-
-protected:
-    void Init(wxHtmlHelpData* data = NULL);
-
+    
     // Refreshes Contents and Index tabs
     void RefreshLists();
+    
+protected:
+    void Init(wxHtmlHelpData* data = NULL);
 
     // Adds items to m_Contents tree control
     void CreateContents();

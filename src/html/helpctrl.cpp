@@ -96,6 +96,8 @@ bool wxHtmlHelpController::AddBook(const wxString& book, bool show_wait_msg)
     if (show_wait_msg)
         delete busy;
 #endif
+    if (m_helpFrame) 
+        m_helpFrame->RefreshLists() ;
     return retval;
 }
 

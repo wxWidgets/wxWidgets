@@ -87,7 +87,7 @@ void Pile::Redraw(wxDC& dc )
 	{
 		if (m_dx == 0 && m_dy == 0)
 		{
-  			if ((canvas) && (canvas->IsExposed(m_x,m_y,60,200))) 
+                        if ((canvas) && (canvas->IsExposed(m_x,m_y,Card::GetScale()*60,Card::GetScale()*200)))
 			  m_cards[m_topCard]->Draw(dc, m_x, m_y);
 		}
 		else
@@ -96,16 +96,16 @@ void Pile::Redraw(wxDC& dc )
 			int y = m_y;
 			for (int i = 0; i <= m_topCard; i++)
 			{
-  			      if ((canvas) && (canvas->IsExposed(x,y,60,200))) 
+                              if ((canvas) && (canvas->IsExposed(x,y,Card::GetScale()*60,Card::GetScale()*200)))
 			        m_cards[i]->Draw(dc, x, y);
-			      x += m_dx;
-			      y += m_dy;
+                              x += (int)Card::GetScale()*m_dx;
+                              y += (int)Card::GetScale()*m_dy;
 			}
 		}
 	}
 	else
 	{
-            if ((canvas) && (canvas->IsExposed(m_x,m_y,60,200))) 
+            if ((canvas) && (canvas->IsExposed(m_x,m_y,Card::GetScale()*60,Card::GetScale()*200)))
 		Card::DrawNullCard(dc, m_x, m_y);
 	}
 }
@@ -195,8 +195,8 @@ void Pile::GetTopCardPos(int& x, int& y)
 	}
 	else
 	{
-		x = m_x + m_dx * m_topCard;
-		y = m_y + m_dy * m_topCard;
+                x = m_x + (int)Card::GetScale()*m_dx * m_topCard;
+                y = m_y + (int)Card::GetScale()*m_dy * m_topCard;
 	}
 }
 
@@ -249,13 +249,13 @@ Card* Pile::GetCard(int x, int y)
 
 	for (int i = m_topCard; i >= 0; i--)
 	{
-		if (x >= cardX && x <= cardX + CardWidth &&
-			y >= cardY && y <= cardY + CardHeight)
+                if (x >= cardX && x <= cardX + Card::GetWidth() &&
+                        y >= cardY && y <= cardY + Card::GetHeight())
 		{
 			return m_cards[i];
 		}
-		cardX -= m_dx;
-		cardY -= m_dy;
+                cardX -= (int)Card::GetScale()*m_dx;
+                cardY -= (int)Card::GetScale()*m_dy;
 	}
 	return 0;
 }
@@ -274,8 +274,8 @@ void Pile::GetCardPos(Card* card, int& x, int& y)
 		{
 			return;
 		}
-		x += m_dx;
-		y += m_dy;
+                x += (int)Card::GetScale()*m_dx;
+                y += (int)Card::GetScale()*m_dy;
 	}
 
 	// card not found in pile, return origin of pile
@@ -290,8 +290,8 @@ bool Pile::Overlap(int x, int y)
     int cardY;
     GetTopCardPos(cardX, cardY);
 
-    if (x >= cardX - CardWidth  && x <= cardX + CardWidth &&
-	y >= cardY - CardHeight && y <= cardY + CardHeight)
+    if (x >= cardX - Card::GetWidth()  && x <= cardX + Card::GetWidth() &&
+        y >= cardY - Card::GetHeight() && y <= cardY + Card::GetHeight())
     {
 	    return TRUE;
     }

@@ -46,6 +46,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <wx/sizer.h>
+									     
 #ifdef __WXMSW__
     #include "wx/msw/private.h"
     #include <commdlg.h>
@@ -101,17 +103,20 @@ void wxPrintAbortDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
     wxPrinterBase::sm_abortWindow = (wxWindow *) NULL;
 }
 
-wxWindow *wxPrinterBase::CreateAbortWindow(wxWindow *parent, wxPrintout *WXUNUSED(printout))
+wxWindow *wxPrinterBase::CreateAbortWindow(wxWindow *parent, wxPrintout * printout)
 {
-    wxPrintAbortDialog *dialog = new wxPrintAbortDialog(parent, _("Printing"), wxPoint(0, 0), wxSize(400, 400), wxDEFAULT_DIALOG_STYLE);
-    (void) new wxStaticText(dialog, -1, _("Please wait..."), wxPoint(5, 5));
+    wxPrintAbortDialog *dialog = new wxPrintAbortDialog(parent, _("Printing ") , wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
 
-    wxButton *button = new wxButton(dialog, wxID_CANCEL, _("Cancel"), wxPoint(5, 30));
+    wxBoxSizer *button_sizer = new wxBoxSizer( wxVERTICAL );
+    button_sizer->Add( new wxStaticText(dialog, -1, _("Please wait while printing\n") + printout->GetTitle() ), 0, wxALL, 10 );
+    button_sizer->Add( new wxButton( dialog, wxID_CANCEL, wxT("Cancel") ), 0, wxALL | wxALIGN_CENTER, 10 );
 
-    dialog->Fit();
-    button->Centre(wxHORIZONTAL);
+    dialog->SetAutoLayout( TRUE );
+    dialog->SetSizer( button_sizer );
 
-    dialog->Centre();
+    button_sizer->Fit(dialog);
+    button_sizer->SetSizeHints (dialog) ;
+
     return dialog;
 }
 
@@ -145,7 +150,7 @@ wxPrintout::~wxPrintout()
 
 bool wxPrintout::OnBeginDocument(int WXUNUSED(startPage), int WXUNUSED(endPage))
 {
-    return GetDC()->StartDoc(_("Printing"));
+    return GetDC()->StartDoc(_("Printing ") + m_printoutTitle);
 }
 
 void wxPrintout::OnEndDocument()

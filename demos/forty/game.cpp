@@ -72,6 +72,30 @@ Game::Game(int wins, int games, int score) :
 }
 
 
+void Game::Layout()
+{
+    int i;
+
+    m_pack->SetPos(2, 2 + 4 * (CardHeight + 2));
+
+    m_discard->SetPos(2, 2 + 5 * (CardHeight + 2));
+
+    for (i = 0; i < 8; i++)
+    {
+                m_foundations[i]->SetPos(2 + (i / 4) * (CardWidth + 2),
+                                         2 + (i % 4) * (CardHeight + 2));
+    }
+
+    for (i = 0; i < 10; i++)
+    {
+        m_bases[i]->SetPos(8 + (i + 2) * (CardWidth + 2), 2);
+    }
+    delete m_bmap;
+    delete m_bmapCard;
+    m_bmap = 0;
+    m_bmapCard = 0;
+}
+
 // Make sure we delete all objects created by the game object
 Game::~Game()
 {
