@@ -13,10 +13,9 @@ A scroll event holds information about events sent from scrolling windows.
 
 \wxheading{Event table macros}
 
-To process a scroll event, use these event handler macros to direct input to member
-functions that take a wxScrollEvent argument. You can use EVT\_COMMAND\_SCROLLWIN... macros
-with window IDs for when intercepting scroll events from controls, or EVT\_SCROLLWIN... macros
-without window IDs for intercepting scroll events from the receiving window.
+To process a scroll window event, use these event handler macros to direct input to member
+functions that take a wxScrollWinEvent argument. You can use the  EVT\_SCROLLWIN... macros
+for intercepting scroll window events from the receiving window.
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
@@ -28,15 +27,6 @@ without window IDs for intercepting scroll events from the receiving window.
 \twocolitem{{\bf EVT\_SCROLLWIN\_PAGEUP(func)}}{Process wxEVT\_SCROLL\_PAGEUP page up events.}
 \twocolitem{{\bf EVT\_SCROLLWIN\_PAGEDOWN(func)}}{Process wxEVT\_SCROLL\_PAGEDOWN page down events.}
 \twocolitem{{\bf EVT\_SCROLLWIN\_THUMBTRACK(func)}}{Process wxEVT\_SCROLL\_THUMBTRACK thumbtrack events (frequent events
-sent as the user drags the thumtrack).}
-\twocolitem{{\bf EVT\_COMMAND\_SCROLLWIN(id, func)}}{Process all scroll events.}
-\twocolitem{{\bf EVT\_COMMAND\_SCROLLWIN\_TOP(id, func)}}{Process wxEVT\_SCROLL\_TOP scroll-to-top events.}
-\twocolitem{{\bf EVT\_COMMAND\_SCROLLWIN\_BOTTOM(id, func)}}{Process wxEVT\_SCROLL\_TOP scroll-to-bottom events.}
-\twocolitem{{\bf EVT\_COMMAND\_SCROLLWIN\_LINEUP(id, func)}}{Process wxEVT\_SCROLL\_LINEUP line up events.}
-\twocolitem{{\bf EVT\_COMMAND\_SCROLLWIN\_LINEDOWN(id, func)}}{Process wxEVT\_SCROLL\_LINEDOWN line down events.}
-\twocolitem{{\bf EVT\_COMMAND\_SCROLLWIN\_PAGEUP(id, func)}}{Process wxEVT\_SCROLL\_PAGEUP page up events.}
-\twocolitem{{\bf EVT\_COMMAND\_SCROLLWIN\_PAGEDOWN(id, func)}}{Process wxEVT\_SCROLL\_PAGEDOWN page down events.}
-\twocolitem{{\bf EVT\_COMMAND\_SCROLLWIN\_THUMBTRACK(id, func)}}{Process wxEVT\_SCROLL\_THUMBTRACK thumbtrack events (frequent events
 sent as the user drags the thumtrack).}
 \end{twocollist}%
 
