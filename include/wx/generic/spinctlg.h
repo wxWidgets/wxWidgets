@@ -47,6 +47,7 @@ public:
                int min = 0, int max = 100, int initial = 0,
                const wxString& name = _T("wxSpinCtrl"))
     {
+        Init();
         Create(parent, id, value, pos, size, style, min, max, initial, name);
     }
 
