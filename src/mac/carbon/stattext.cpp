@@ -66,8 +66,9 @@ wxSize wxStaticText::DoGetBestSize() const
     Point bounds ;
     SInt16 baseline ;
     wxMacCFStringHolder str(m_label ,  m_font.GetEncoding() ) ;
-    verify_noerr( GetThemeTextDimensions( str , m_font.MacGetThemeFontID() , kThemeStateActive , false , &bounds , &baseline ) ) ;
-
+    verify_noerr( GetThemeTextDimensions( (m_label.Length() > 0 ? ((CFStringRef) str ) : CFSTR(" ") ) , m_font.MacGetThemeFontID() , kThemeStateActive , false , &bounds , &baseline ) ) ;
+    if ( m_label.Length() == 0 )
+        bounds.h = 0 ;
     return wxSize(bounds.h, bounds.v);
 }
 
