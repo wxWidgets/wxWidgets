@@ -665,14 +665,8 @@ wxWindow *wxPyListCtrl_GetMainWindow(wxPyListCtrl *self){
 #include "wx/wxPython/pytree.h"
 
  static const wxString wxPyTreeCtrlNameStr(_T("wxTreeCtrl")); 
-bool wxTreeItemId_operator_ee___(wxTreeItemId *self,wxTreeItemId const *other){
-            if (!other) return False;
-            return *self == *other;
-        }
-bool wxTreeItemId_operator_Ne___(wxTreeItemId *self,wxTreeItemId const *other){
-            if (!other) return True;
-            return *self != *other;
-        }
+bool wxTreeItemId___eq__(wxTreeItemId *self,wxTreeItemId const *other){ return other ? (*self == *other) : False; }
+bool wxTreeItemId___ne__(wxTreeItemId *self,wxTreeItemId const *other){ return other ? (*self != *other) : True;  }
 void wxPyTreeItemData_Destroy(wxPyTreeItemData *self){ delete self; }
  // C++ version of Python aware wxTreeCtrl
 class wxPyTreeCtrl : public wxTreeCtrl {
@@ -2787,7 +2781,7 @@ static PyObject *_wrap_ComboBox_Create(PyObject *self, PyObject *args, PyObject 
     long arg8 = (long) 0 ;
     wxValidator const &arg9_defvalue = wxDefaultValidator ;
     wxValidator *arg9 = (wxValidator *) &arg9_defvalue ;
-    wxString const &arg10_defvalue = wxPyComboBoxNameStr ;
+    wxString const &arg10_defvalue = wxPyChoiceNameStr ;
     wxString *arg10 = (wxString *) &arg10_defvalue ;
     bool result;
     bool temp4 = False ;
@@ -22593,7 +22587,7 @@ static PyObject *_wrap_TreeItemId___eq__(PyObject *self, PyObject *args, PyObjec
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxTreeItemId,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxTreeItemId_operator_ee___(arg1,(wxTreeItemId const *)arg2);
+        result = (bool)wxTreeItemId___eq__(arg1,(wxTreeItemId const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -22621,7 +22615,7 @@ static PyObject *_wrap_TreeItemId___ne__(PyObject *self, PyObject *args, PyObjec
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxTreeItemId,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxTreeItemId_operator_Ne___(arg1,(wxTreeItemId const *)arg2);
+        result = (bool)wxTreeItemId___ne__(arg1,(wxTreeItemId const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;

@@ -1953,13 +1953,16 @@ _windows.FileDialog_swigregister(FileDialogPtr)
 
 CHOICEDLG_STYLE = _windows.CHOICEDLG_STYLE
 class MultiChoiceDialog(Dialog):
+    """A simple dialog with a multi selection listbox."""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMultiChoiceDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, String message, String caption, int choices=0, 
-            String choices_array, long style=CHOICEDLG_STYLE, 
+        __init__(Window parent, String message, String caption,
+            List choices=[], long style=CHOICEDLG_STYLE,
             Point pos=DefaultPosition) -> MultiChoiceDialog
+
+        Constructor.  Use ShowModal method to show the dialog.
         """
         newobj = _windows.new_MultiChoiceDialog(*args, **kwargs)
         self.this = newobj.this
@@ -1968,11 +1971,19 @@ class MultiChoiceDialog(Dialog):
         self._setOORInfo(self)
 
     def SetSelections(*args, **kwargs):
-        """SetSelections(wxArrayInt selections)"""
+        """
+        SetSelections(List selections)
+
+        Specify the items in the list that shoudl be selected, using a list of integers.
+        """
         return _windows.MultiChoiceDialog_SetSelections(*args, **kwargs)
 
     def GetSelections(*args, **kwargs):
-        """GetSelections() -> PyObject"""
+        """
+        GetSelections() -> [selections]
+
+        Returns a list of integers representing the items that are selected.
+        """
         return _windows.MultiChoiceDialog_GetSelections(*args, **kwargs)
 
 
@@ -1984,13 +1995,16 @@ class MultiChoiceDialogPtr(MultiChoiceDialog):
 _windows.MultiChoiceDialog_swigregister(MultiChoiceDialogPtr)
 
 class SingleChoiceDialog(Dialog):
+    """A simple dialog with a single selection listbox."""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSingleChoiceDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, String message, String caption, int choices, 
-            String choices_array, long style=CHOICEDLG_STYLE, 
+        __init__(Window parent, String message, String caption,
+            List choices=[], long style=CHOICEDLG_STYLE,
             Point pos=DefaultPosition) -> SingleChoiceDialog
+
+        Constructor.  Use ShowModal method to show the dialog.
         """
         newobj = _windows.new_SingleChoiceDialog(*args, **kwargs)
         self.this = newobj.this
@@ -1999,20 +2013,28 @@ class SingleChoiceDialog(Dialog):
         self._setOORInfo(self)
 
     def GetSelection(*args, **kwargs):
-        """GetSelection() -> int"""
+        """
+        GetSelection() -> int
+
+        Get the index of teh currently selected item.
+        """
         return _windows.SingleChoiceDialog_GetSelection(*args, **kwargs)
 
     def GetStringSelection(*args, **kwargs):
-        """GetStringSelection() -> String"""
+        """
+        GetStringSelection() -> String
+
+        Returns the string value of the currently selected item
+        """
         return _windows.SingleChoiceDialog_GetStringSelection(*args, **kwargs)
 
     def SetSelection(*args, **kwargs):
-        """SetSelection(int sel)"""
-        return _windows.SingleChoiceDialog_SetSelection(*args, **kwargs)
+        """
+        SetSelection(int sel)
 
-    def ShowModal(*args, **kwargs):
-        """ShowModal() -> int"""
-        return _windows.SingleChoiceDialog_ShowModal(*args, **kwargs)
+        Set the current selected item to sel
+        """
+        return _windows.SingleChoiceDialog_SetSelection(*args, **kwargs)
 
 
 class SingleChoiceDialogPtr(SingleChoiceDialog):
@@ -2023,6 +2045,7 @@ class SingleChoiceDialogPtr(SingleChoiceDialog):
 _windows.SingleChoiceDialog_swigregister(SingleChoiceDialogPtr)
 
 class TextEntryDialog(Dialog):
+    """A dialog with text control, [ok] and [cancel] buttons"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTextEntryDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2030,6 +2053,8 @@ class TextEntryDialog(Dialog):
         __init__(Window parent, String message, String caption=GetTextFromUserPromptStr, 
             String defaultValue=EmptyString, 
             long style=wxOK|wxCANCEL|wxCENTRE, Point pos=DefaultPosition) -> TextEntryDialog
+
+        Constructor.  Use ShowModal method to show the dialog.
         """
         newobj = _windows.new_TextEntryDialog(*args, **kwargs)
         self.this = newobj.this
@@ -2038,16 +2063,21 @@ class TextEntryDialog(Dialog):
         self._setOORInfo(self)
 
     def GetValue(*args, **kwargs):
-        """GetValue() -> String"""
+        """
+        GetValue() -> String
+
+        Returns the text that the user has entered if the user has pressed OK,
+        or the original value if the user has pressed Cancel.
+        """
         return _windows.TextEntryDialog_GetValue(*args, **kwargs)
 
     def SetValue(*args, **kwargs):
-        """SetValue(String value)"""
-        return _windows.TextEntryDialog_SetValue(*args, **kwargs)
+        """
+        SetValue(String value)
 
-    def ShowModal(*args, **kwargs):
-        """ShowModal() -> int"""
-        return _windows.TextEntryDialog_ShowModal(*args, **kwargs)
+        Sets the default text value.
+        """
+        return _windows.TextEntryDialog_SetValue(*args, **kwargs)
 
 
 class TextEntryDialogPtr(TextEntryDialog):
@@ -2058,10 +2088,15 @@ class TextEntryDialogPtr(TextEntryDialog):
 _windows.TextEntryDialog_swigregister(TextEntryDialogPtr)
 
 class FontData(core.Object):
+    """This class holds a variety of information related to font dialogs."""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFontData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> FontData"""
+        """
+        __init__() -> FontData
+
+        This class holds a variety of information related to font dialogs.
+        """
         newobj = _windows.new_FontData(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2073,55 +2108,116 @@ class FontData(core.Object):
         except: pass
 
     def EnableEffects(*args, **kwargs):
-        """EnableEffects(bool enable)"""
+        """
+        EnableEffects(bool enable)
+
+        Enables or disables 'effects' under MS Windows only. This refers
+        to the controls for manipulating colour, strikeout and underline
+        properties.  The default value is true.
+        """
         return _windows.FontData_EnableEffects(*args, **kwargs)
 
     def GetAllowSymbols(*args, **kwargs):
-        """GetAllowSymbols() -> bool"""
+        """
+        GetAllowSymbols() -> bool
+
+        Under MS Windows, returns a flag determining whether symbol fonts can be
+        selected. Has no effect on other platforms. The default value is true.
+        """
         return _windows.FontData_GetAllowSymbols(*args, **kwargs)
 
     def GetColour(*args, **kwargs):
-        """GetColour() -> Colour"""
+        """
+        GetColour() -> Colour
+
+        Gets the colour associated with the font dialog. The default value is black.
+        """
         return _windows.FontData_GetColour(*args, **kwargs)
 
     def GetChosenFont(*args, **kwargs):
-        """GetChosenFont() -> Font"""
+        """
+        GetChosenFont() -> Font
+
+        Gets the font chosen by the user.
+        """
         return _windows.FontData_GetChosenFont(*args, **kwargs)
 
     def GetEnableEffects(*args, **kwargs):
-        """GetEnableEffects() -> bool"""
+        """
+        GetEnableEffects() -> bool
+
+        Determines whether 'effects' are enabled under Windows.
+        """
         return _windows.FontData_GetEnableEffects(*args, **kwargs)
 
     def GetInitialFont(*args, **kwargs):
-        """GetInitialFont() -> Font"""
+        """
+        GetInitialFont() -> Font
+
+        Gets the font that will be initially used by the font dialog. This should have
+        previously been set by the application.
+        """
         return _windows.FontData_GetInitialFont(*args, **kwargs)
 
     def GetShowHelp(*args, **kwargs):
-        """GetShowHelp() -> bool"""
+        """
+        GetShowHelp() -> bool
+
+        Returns true if the Help button will be shown (Windows only).  The default
+        value is false.
+        """
         return _windows.FontData_GetShowHelp(*args, **kwargs)
 
     def SetAllowSymbols(*args, **kwargs):
-        """SetAllowSymbols(bool allowSymbols)"""
+        """
+        SetAllowSymbols(bool allowSymbols)
+
+        Under MS Windows, determines whether symbol fonts can be selected. Has no
+        effect on other platforms.  The default value is true.
+        """
         return _windows.FontData_SetAllowSymbols(*args, **kwargs)
 
     def SetChosenFont(*args, **kwargs):
-        """SetChosenFont(Font font)"""
+        """
+        SetChosenFont(Font font)
+
+        Sets the font that will be returned to the user (for internal use only).
+        """
         return _windows.FontData_SetChosenFont(*args, **kwargs)
 
     def SetColour(*args, **kwargs):
-        """SetColour(Colour colour)"""
+        """
+        SetColour(Colour colour)
+
+        Sets the colour that will be used for the font foreground colour.  The default
+        colour is black.
+        """
         return _windows.FontData_SetColour(*args, **kwargs)
 
     def SetInitialFont(*args, **kwargs):
-        """SetInitialFont(Font font)"""
+        """
+        SetInitialFont(Font font)
+
+        Sets the font that will be initially used by the font dialog.
+        """
         return _windows.FontData_SetInitialFont(*args, **kwargs)
 
     def SetRange(*args, **kwargs):
-        """SetRange(int min, int max)"""
+        """
+        SetRange(int min, int max)
+
+        Sets the valid range for the font point size (Windows only).  The default is
+        0, 0 (unrestricted range).
+        """
         return _windows.FontData_SetRange(*args, **kwargs)
 
     def SetShowHelp(*args, **kwargs):
-        """SetShowHelp(bool showHelp)"""
+        """
+        SetShowHelp(bool showHelp)
+
+        Determines whether the Help button will be displayed in the font dialog
+        (Windows only).  The default value is false.
+        """
         return _windows.FontData_SetShowHelp(*args, **kwargs)
 
 
@@ -2133,10 +2229,16 @@ class FontDataPtr(FontData):
 _windows.FontData_swigregister(FontDataPtr)
 
 class FontDialog(Dialog):
+    """This class represents the font chooser dialog."""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFontDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, FontData data) -> FontDialog"""
+        """
+        __init__(Window parent, FontData data) -> FontDialog
+
+        Constructor. Pass a parent window and the FontData object to be
+        used to initialize the dialog controls.
+        """
         newobj = _windows.new_FontDialog(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2144,12 +2246,12 @@ class FontDialog(Dialog):
         self._setOORInfo(self)
 
     def GetFontData(*args, **kwargs):
-        """GetFontData() -> FontData"""
-        return _windows.FontDialog_GetFontData(*args, **kwargs)
+        """
+        GetFontData() -> FontData
 
-    def ShowModal(*args, **kwargs):
-        """ShowModal() -> int"""
-        return _windows.FontDialog_ShowModal(*args, **kwargs)
+        Returns a reference to the internal FontData used by the FontDialog.
+        """
+        return _windows.FontDialog_GetFontData(*args, **kwargs)
 
 
 class FontDialogPtr(FontDialog):
@@ -2160,6 +2262,10 @@ class FontDialogPtr(FontDialog):
 _windows.FontDialog_swigregister(FontDialogPtr)
 
 class MessageDialog(Dialog):
+    """
+    This class provides a dialog that shows a single or multi-line message, with
+    a choice of OK, Yes, No and Cancel buttons.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMessageDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2167,16 +2273,15 @@ class MessageDialog(Dialog):
         __init__(Window parent, String message, String caption=MessageBoxCaptionStr, 
             long style=wxOK|wxCANCEL|wxCENTRE, 
             Point pos=DefaultPosition) -> MessageDialog
+
+        This class provides a dialog that shows a single or multi-line message, with
+        a choice of OK, Yes, No and Cancel buttons.
         """
         newobj = _windows.new_MessageDialog(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
         self._setOORInfo(self)
-
-    def ShowModal(*args, **kwargs):
-        """ShowModal() -> int"""
-        return _windows.MessageDialog_ShowModal(*args, **kwargs)
 
 
 class MessageDialogPtr(MessageDialog):
@@ -2187,12 +2292,19 @@ class MessageDialogPtr(MessageDialog):
 _windows.MessageDialog_swigregister(MessageDialogPtr)
 
 class ProgressDialog(Frame):
+    """
+    A dialog that shows a short message and a progress bar. Optionally, it can
+    display an ABORT button.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxProgressDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
         __init__(String title, String message, int maximum=100, Window parent=None, 
             int style=wxPD_AUTO_HIDE|wxPD_APP_MODAL) -> ProgressDialog
+
+        Constructor. Creates the dialog, displays it and disables user input for other
+        windows, or, if wxPD_APP_MODAL flag is not given, for its parent window only.
         """
         newobj = _windows.new_ProgressDialog(*args, **kwargs)
         self.this = newobj.this
@@ -2201,11 +2313,25 @@ class ProgressDialog(Frame):
         self._setOORInfo(self)
 
     def Update(*args, **kwargs):
-        """Update(int value, String newmsg=EmptyString) -> bool"""
+        """
+        Update(int value, String newmsg=EmptyString) -> bool
+
+        Updates the dialog, setting the progress bar to the new value and, if given
+        changes the message above it. Returns true unless the Cancel button has been
+        pressed.
+
+        If false is returned, the application can either immediately destroy the
+        dialog or ask the user for the confirmation and if the abort is not confirmed
+        the dialog may be resumed with Resume function.
+        """
         return _windows.ProgressDialog_Update(*args, **kwargs)
 
     def Resume(*args, **kwargs):
-        """Resume()"""
+        """
+        Resume()
+
+        Can be used to continue with the dialog, after the user had chosen to abort.
+        """
         return _windows.ProgressDialog_Resume(*args, **kwargs)
 
 
@@ -2242,28 +2368,51 @@ EVT_COMMAND_FIND_REPLACE_ALL = EVT_FIND_REPLACE_ALL
 EVT_COMMAND_FIND_CLOSE       = EVT_FIND_CLOSE        
 
 class FindDialogEvent(core.CommandEvent):
+    """Events for the FindReplaceDialog"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFindDialogEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxEventType commandType=wxEVT_NULL, int id=0) -> FindDialogEvent"""
+        """
+        __init__(wxEventType commandType=wxEVT_NULL, int id=0) -> FindDialogEvent
+
+        Events for the FindReplaceDialog
+        """
         newobj = _windows.new_FindDialogEvent(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def GetFlags(*args, **kwargs):
-        """GetFlags() -> int"""
+        """
+        GetFlags() -> int
+
+        Get the currently selected flags: this is the combination of
+        wx.FR_DOWN, wx.FR_WHOLEWORD and wx.FR_MATCHCASE flags.
+        """
         return _windows.FindDialogEvent_GetFlags(*args, **kwargs)
 
     def GetFindString(*args, **kwargs):
-        """GetFindString() -> String"""
+        """
+        GetFindString() -> String
+
+        Return the string to find (never empty).
+        """
         return _windows.FindDialogEvent_GetFindString(*args, **kwargs)
 
     def GetReplaceString(*args, **kwargs):
-        """GetReplaceString() -> String"""
+        """
+        GetReplaceString() -> String
+
+        Return the string to replace the search string with (only
+        for replace and replace all events).
+        """
         return _windows.FindDialogEvent_GetReplaceString(*args, **kwargs)
 
     def GetDialog(*args, **kwargs):
-        """GetDialog() -> FindReplaceDialog"""
+        """
+        GetDialog() -> FindReplaceDialog
+
+        Return the pointer to the dialog which generated this event.
+        """
         return _windows.FindDialogEvent_GetDialog(*args, **kwargs)
 
     def SetFlags(*args, **kwargs):
@@ -2287,10 +2436,33 @@ class FindDialogEventPtr(FindDialogEvent):
 _windows.FindDialogEvent_swigregister(FindDialogEventPtr)
 
 class FindReplaceData(core.Object):
+    """
+    FindReplaceData holds the data for FindReplaceDialog. It is used to initialize
+    the dialog with the default values and will keep the last values from the
+    dialog when it is closed. It is also updated each time a wxFindDialogEvent is
+    generated so instead of using the wxFindDialogEvent methods you can also
+    directly query this object.
+
+    Note that all SetXXX() methods may only be called before showing the dialog
+    and calling them has no effect later.
+
+     Flags
+        wxFR_DOWN:          downward search/replace selected (otherwise, upwards)
+
+        wxFR_WHOLEWORD:     whole word search/replace selected
+
+        wxFR_MATCHCASE:     case sensitive search/replace selected (otherwise,
+                            case insensitive)
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFindReplaceData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(int flags=0) -> FindReplaceData"""
+        """
+        __init__(int flags=0) -> FindReplaceData
+
+        Constuctor initializes the flags to default value (0).
+        """
         newobj = _windows.new_FindReplaceData(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2302,27 +2474,51 @@ class FindReplaceData(core.Object):
         except: pass
 
     def GetFindString(*args, **kwargs):
-        """GetFindString() -> String"""
+        """
+        GetFindString() -> String
+
+        Get the string to find.
+        """
         return _windows.FindReplaceData_GetFindString(*args, **kwargs)
 
     def GetReplaceString(*args, **kwargs):
-        """GetReplaceString() -> String"""
+        """
+        GetReplaceString() -> String
+
+        Get the replacement string.
+        """
         return _windows.FindReplaceData_GetReplaceString(*args, **kwargs)
 
     def GetFlags(*args, **kwargs):
-        """GetFlags() -> int"""
+        """
+        GetFlags() -> int
+
+        Get the combination of flag values.
+        """
         return _windows.FindReplaceData_GetFlags(*args, **kwargs)
 
     def SetFlags(*args, **kwargs):
-        """SetFlags(int flags)"""
+        """
+        SetFlags(int flags)
+
+        Set the flags to use to initialize the controls of the dialog.
+        """
         return _windows.FindReplaceData_SetFlags(*args, **kwargs)
 
     def SetFindString(*args, **kwargs):
-        """SetFindString(String str)"""
+        """
+        SetFindString(String str)
+
+        Set the string to find (used as initial value by the dialog).
+        """
         return _windows.FindReplaceData_SetFindString(*args, **kwargs)
 
     def SetReplaceString(*args, **kwargs):
-        """SetReplaceString(String str)"""
+        """
+        SetReplaceString(String str)
+
+        Set the replacement string (used as initial value by the dialog).
+        """
         return _windows.FindReplaceData_SetReplaceString(*args, **kwargs)
 
 
@@ -2334,12 +2530,24 @@ class FindReplaceDataPtr(FindReplaceData):
 _windows.FindReplaceData_swigregister(FindReplaceDataPtr)
 
 class FindReplaceDialog(Dialog):
+    """
+    FindReplaceDialog is a standard modeless dialog which is used to allow the
+    user to search for some text (and possibly replace it with something
+    else). The actual searching is supposed to be done in the owner window which
+    is the parent of this dialog. Note that it means that unlike for the other
+    standard dialogs this one must have a parent window. Also note that there is
+    no way to use this dialog in a modal way; it is always, by design and
+    implementation, modeless.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFindReplaceDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, FindReplaceData data, String title, 
             int style=0) -> FindReplaceDialog
+
+        Create a FindReplaceDialog.  The parent and data parameters must be
+        non-None.  Use Show to display the dialog.
         """
         newobj = _windows.new_FindReplaceDialog(*args, **kwargs)
         self.this = newobj.this
@@ -2351,15 +2559,25 @@ class FindReplaceDialog(Dialog):
         """
         Create(Window parent, FindReplaceData data, String title, 
             int style=0) -> bool
+
+        Create the dialog, for 2-phase create.
         """
         return _windows.FindReplaceDialog_Create(*args, **kwargs)
 
     def GetData(*args, **kwargs):
-        """GetData() -> FindReplaceData"""
+        """
+        GetData() -> FindReplaceData
+
+        Get the FindReplaceData object used by this dialog.
+        """
         return _windows.FindReplaceDialog_GetData(*args, **kwargs)
 
     def SetData(*args, **kwargs):
-        """SetData(FindReplaceData data)"""
+        """
+        SetData(FindReplaceData data)
+
+        Set the FindReplaceData object used by this dialog.
+        """
         return _windows.FindReplaceDialog_SetData(*args, **kwargs)
 
 
@@ -2371,7 +2589,11 @@ class FindReplaceDialogPtr(FindReplaceDialog):
 _windows.FindReplaceDialog_swigregister(FindReplaceDialogPtr)
 
 def PreFindReplaceDialog(*args, **kwargs):
-    """PreFindReplaceDialog() -> FindReplaceDialog"""
+    """
+    PreFindReplaceDialog() -> FindReplaceDialog
+
+    Precreate a FindReplaceDialog for 2-phase creation
+    """
     val = _windows.new_PreFindReplaceDialog(*args, **kwargs)
     val.thisown = 1
     return val

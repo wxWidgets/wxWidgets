@@ -2478,6 +2478,26 @@ CONFIG_USE_GLOBAL_FILE = _misc.CONFIG_USE_GLOBAL_FILE
 CONFIG_USE_RELATIVE_PATH = _misc.CONFIG_USE_RELATIVE_PATH
 CONFIG_USE_NO_ESCAPE_CHARACTERS = _misc.CONFIG_USE_NO_ESCAPE_CHARACTERS
 class ConfigBase(object):
+    """
+    wx.ConfigBase class defines the basic interface of all config
+    classes. It can not be used by itself (it is an abstract base
+    class) and you will always use one of its derivations: wx.Config
+    or wx.FileConfig.
+
+    wx.ConfigBase organizes the items in a tree-like structure
+    (modeled after the Unix/Dos filesystem). There are groups
+    (directories) and keys (files).  There is always one current
+    group given by the current path.  As in the file system case, to
+    specify a key in the config class you must use a path to it.
+    Config classes also support the notion of the current group,
+    which makes it possible to use relative paths.
+
+    Keys are pairs "key_name = value" where value may be of string, integer
+    floating point or boolean, you can not store binary data without first
+    encoding it as a string.  For performance reasons items should be kept small,
+    no more than a couple kilobytes.
+
+    """
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxConfigBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -2493,147 +2513,311 @@ class ConfigBase(object):
     Type_Integer = _misc.ConfigBase_Type_Integer
     Type_Float = _misc.ConfigBase_Type_Float
     def Set(*args, **kwargs):
-        """Set(ConfigBase pConfig) -> ConfigBase"""
+        """
+        Set(ConfigBase config) -> ConfigBase
+
+        Sets the global config object (the one returned by Get) and
+        returns a reference to the previous global config object.
+        """
         return _misc.ConfigBase_Set(*args, **kwargs)
 
     Set = staticmethod(Set)
     def Get(*args, **kwargs):
-        """Get(bool createOnDemand=True) -> ConfigBase"""
+        """
+        Get(bool createOnDemand=True) -> ConfigBase
+
+        Returns the current global config object, creating one if neccessary.
+        """
         return _misc.ConfigBase_Get(*args, **kwargs)
 
     Get = staticmethod(Get)
     def Create(*args, **kwargs):
-        """Create() -> ConfigBase"""
+        """
+        Create() -> ConfigBase
+
+        Create and return a new global config object.  This function will
+        create the "best" implementation of wx.Config available for the
+        current platform.
+        """
         return _misc.ConfigBase_Create(*args, **kwargs)
 
     Create = staticmethod(Create)
     def DontCreateOnDemand(*args, **kwargs):
-        """DontCreateOnDemand()"""
+        """
+        DontCreateOnDemand()
+
+        Should Get() try to create a new log object if there isn't a current one?
+        """
         return _misc.ConfigBase_DontCreateOnDemand(*args, **kwargs)
 
     DontCreateOnDemand = staticmethod(DontCreateOnDemand)
     def SetPath(*args, **kwargs):
-        """SetPath(String strPath)"""
+        """
+        SetPath(String path)
+
+        Set current path: if the first character is '/', it's the absolute path,
+        otherwise it's a relative path. '..' is supported. If the strPath
+        doesn't exist it is created.
+        """
         return _misc.ConfigBase_SetPath(*args, **kwargs)
 
     def GetPath(*args, **kwargs):
-        """GetPath() -> String"""
+        """
+        GetPath() -> String
+
+        Retrieve the current path (always as absolute path)
+        """
         return _misc.ConfigBase_GetPath(*args, **kwargs)
 
     def GetFirstGroup(*args, **kwargs):
-        """GetFirstGroup() -> PyObject"""
+        """
+        GetFirstGroup() -> (more, value, index)
+
+        Allows enumerating the subgroups in a config object.  Returns
+        a tuple containing a flag indicating there are more items, the
+        name of the current item, and an index to pass to GetNextGroup to
+        fetch the next item.
+        """
         return _misc.ConfigBase_GetFirstGroup(*args, **kwargs)
 
     def GetNextGroup(*args, **kwargs):
-        """GetNextGroup(long index) -> PyObject"""
+        """
+        GetNextGroup(long index) -> (more, value, index)
+
+        Allows enumerating the subgroups in a config object.  Returns
+        a tuple containing a flag indicating there are more items, the
+        name of the current item, and an index to pass to GetNextGroup to
+        fetch the next item.
+        """
         return _misc.ConfigBase_GetNextGroup(*args, **kwargs)
 
     def GetFirstEntry(*args, **kwargs):
-        """GetFirstEntry() -> PyObject"""
+        """
+        GetFirstEntry() -> (more, value, index)
+
+        Allows enumerating the entries in the current group in a config
+        object.  Returns a tuple containing a flag indicating there are
+        more items, the name of the current item, and an index to pass to
+        GetNextGroup to fetch the next item.
+        """
         return _misc.ConfigBase_GetFirstEntry(*args, **kwargs)
 
     def GetNextEntry(*args, **kwargs):
-        """GetNextEntry(long index) -> PyObject"""
+        """
+        GetNextEntry(long index) -> (more, value, index)
+
+        Allows enumerating the entries in the current group in a config
+        object.  Returns a tuple containing a flag indicating there are
+        more items, the name of the current item, and an index to pass to
+        GetNextGroup to fetch the next item.
+        """
         return _misc.ConfigBase_GetNextEntry(*args, **kwargs)
 
     def GetNumberOfEntries(*args, **kwargs):
-        """GetNumberOfEntries(bool bRecursive=False) -> size_t"""
+        """
+        GetNumberOfEntries(bool recursive=False) -> size_t
+
+        Get the number of entries in the current group, with or
+        without its subgroups.
+        """
         return _misc.ConfigBase_GetNumberOfEntries(*args, **kwargs)
 
     def GetNumberOfGroups(*args, **kwargs):
-        """GetNumberOfGroups(bool bRecursive=False) -> size_t"""
+        """
+        GetNumberOfGroups(bool recursive=False) -> size_t
+
+        Get the number of subgroups in the current group, with or
+        without its subgroups.
+        """
         return _misc.ConfigBase_GetNumberOfGroups(*args, **kwargs)
 
     def HasGroup(*args, **kwargs):
-        """HasGroup(String strName) -> bool"""
+        """
+        HasGroup(String name) -> bool
+
+        Returns True if the group by this name exists
+        """
         return _misc.ConfigBase_HasGroup(*args, **kwargs)
 
     def HasEntry(*args, **kwargs):
-        """HasEntry(String strName) -> bool"""
+        """
+        HasEntry(String name) -> bool
+
+        Returns True if the entry by this name exists
+        """
         return _misc.ConfigBase_HasEntry(*args, **kwargs)
 
     def Exists(*args, **kwargs):
-        """Exists(String strName) -> bool"""
+        """
+        Exists(String name) -> bool
+
+        Returns True if either a group or an entry with a given name exists
+        """
         return _misc.ConfigBase_Exists(*args, **kwargs)
 
     def GetEntryType(*args, **kwargs):
-        """GetEntryType(String name) -> int"""
+        """
+        GetEntryType(String name) -> int
+
+        Get the type of the entry.  Returns one of the wx.Config.Type_XXX values.
+        """
         return _misc.ConfigBase_GetEntryType(*args, **kwargs)
 
     def Read(*args, **kwargs):
-        """Read(String key, String defaultVal=EmptyString) -> String"""
+        """
+        Read(String key, String defaultVal=EmptyString) -> String
+
+        Returns the value of key if it exists, defaultVal otherwise.
+        """
         return _misc.ConfigBase_Read(*args, **kwargs)
 
     def ReadInt(*args, **kwargs):
-        """ReadInt(String key, long defaultVal=0) -> long"""
+        """
+        ReadInt(String key, long defaultVal=0) -> long
+
+        Returns the value of key if it exists, defaultVal otherwise.
+        """
         return _misc.ConfigBase_ReadInt(*args, **kwargs)
 
     def ReadFloat(*args, **kwargs):
-        """ReadFloat(String key, double defaultVal=0.0) -> double"""
+        """
+        ReadFloat(String key, double defaultVal=0.0) -> double
+
+        Returns the value of key if it exists, defaultVal otherwise.
+        """
         return _misc.ConfigBase_ReadFloat(*args, **kwargs)
 
     def ReadBool(*args, **kwargs):
-        """ReadBool(String key, bool defaultVal=False) -> bool"""
+        """
+        ReadBool(String key, bool defaultVal=False) -> bool
+
+        Returns the value of key if it exists, defaultVal otherwise.
+        """
         return _misc.ConfigBase_ReadBool(*args, **kwargs)
 
     def Write(*args, **kwargs):
-        """Write(String key, String value) -> bool"""
+        """
+        Write(String key, String value) -> bool
+
+        write the value (return True on success)
+        """
         return _misc.ConfigBase_Write(*args, **kwargs)
 
     def WriteInt(*args, **kwargs):
-        """WriteInt(String key, long value) -> bool"""
+        """
+        WriteInt(String key, long value) -> bool
+
+        write the value (return True on success)
+        """
         return _misc.ConfigBase_WriteInt(*args, **kwargs)
 
     def WriteFloat(*args, **kwargs):
-        """WriteFloat(String key, double value) -> bool"""
+        """
+        WriteFloat(String key, double value) -> bool
+
+        write the value (return True on success)
+        """
         return _misc.ConfigBase_WriteFloat(*args, **kwargs)
 
     def WriteBool(*args, **kwargs):
-        """WriteBool(String key, bool value) -> bool"""
+        """
+        WriteBool(String key, bool value) -> bool
+
+        write the value (return True on success)
+        """
         return _misc.ConfigBase_WriteBool(*args, **kwargs)
 
     def Flush(*args, **kwargs):
-        """Flush(bool bCurrentOnly=False) -> bool"""
+        """
+        Flush(bool currentOnly=False) -> bool
+
+        permanently writes all changes
+        """
         return _misc.ConfigBase_Flush(*args, **kwargs)
 
     def RenameEntry(*args, **kwargs):
-        """RenameEntry(String oldName, String newName) -> bool"""
+        """
+        RenameEntry(String oldName, String newName) -> bool
+
+        Rename an entry.  Returns False on failure (probably because the new
+        name is already taken by an existing entry)
+        """
         return _misc.ConfigBase_RenameEntry(*args, **kwargs)
 
     def RenameGroup(*args, **kwargs):
-        """RenameGroup(String oldName, String newName) -> bool"""
+        """
+        RenameGroup(String oldName, String newName) -> bool
+
+        Rename aa group.  Returns False on failure (probably because the new
+        name is already taken by an existing entry)
+        """
         return _misc.ConfigBase_RenameGroup(*args, **kwargs)
 
     def DeleteEntry(*args, **kwargs):
-        """DeleteEntry(String key, bool bDeleteGroupIfEmpty=True) -> bool"""
+        """
+        DeleteEntry(String key, bool deleteGroupIfEmpty=True) -> bool
+
+        Deletes the specified entry and the group it belongs to if
+        it was the last key in it and the second parameter is True
+        """
         return _misc.ConfigBase_DeleteEntry(*args, **kwargs)
 
     def DeleteGroup(*args, **kwargs):
-        """DeleteGroup(String key) -> bool"""
+        """
+        DeleteGroup(String key) -> bool
+
+        Delete the group (with all subgroups)
+        """
         return _misc.ConfigBase_DeleteGroup(*args, **kwargs)
 
     def DeleteAll(*args, **kwargs):
-        """DeleteAll() -> bool"""
+        """
+        DeleteAll() -> bool
+
+        Delete the whole underlying object (disk file, registry key, ...)
+        primarly intended for use by desinstallation routine.
+        """
         return _misc.ConfigBase_DeleteAll(*args, **kwargs)
 
-    def IsExpandingEnvVars(*args, **kwargs):
-        """IsExpandingEnvVars() -> bool"""
-        return _misc.ConfigBase_IsExpandingEnvVars(*args, **kwargs)
-
     def SetExpandEnvVars(*args, **kwargs):
-        """SetExpandEnvVars(bool bDoIt=True)"""
+        """
+        SetExpandEnvVars(bool doIt=True)
+
+        We can automatically expand environment variables in the config entries
+        (this option is on by default, you can turn it on/off at any time)
+        """
         return _misc.ConfigBase_SetExpandEnvVars(*args, **kwargs)
 
+    def IsExpandingEnvVars(*args, **kwargs):
+        """
+        IsExpandingEnvVars() -> bool
+
+        Are we currently expanding environment variables?
+        """
+        return _misc.ConfigBase_IsExpandingEnvVars(*args, **kwargs)
+
     def SetRecordDefaults(*args, **kwargs):
-        """SetRecordDefaults(bool bDoIt=True)"""
+        """
+        SetRecordDefaults(bool doIt=True)
+
+        Set whether the config objec should record default values.
+        """
         return _misc.ConfigBase_SetRecordDefaults(*args, **kwargs)
 
     def IsRecordingDefaults(*args, **kwargs):
-        """IsRecordingDefaults() -> bool"""
+        """
+        IsRecordingDefaults() -> bool
+
+        Are we currently recording default values?
+        """
         return _misc.ConfigBase_IsRecordingDefaults(*args, **kwargs)
 
     def ExpandEnvVars(*args, **kwargs):
-        """ExpandEnvVars(String str) -> String"""
+        """
+        ExpandEnvVars(String str) -> String
+
+        Expand any environment variables in str and return the result
+        """
         return _misc.ConfigBase_ExpandEnvVars(*args, **kwargs)
 
     def GetAppName(*args, **kwargs):
@@ -2669,49 +2853,45 @@ class ConfigBasePtr(ConfigBase):
 _misc.ConfigBase_swigregister(ConfigBasePtr)
 
 def ConfigBase_Set(*args, **kwargs):
-    """ConfigBase_Set(ConfigBase pConfig) -> ConfigBase"""
+    """
+    ConfigBase_Set(ConfigBase config) -> ConfigBase
+
+    Sets the global config object (the one returned by Get) and
+    returns a reference to the previous global config object.
+    """
     return _misc.ConfigBase_Set(*args, **kwargs)
 
 def ConfigBase_Get(*args, **kwargs):
-    """ConfigBase_Get(bool createOnDemand=True) -> ConfigBase"""
+    """
+    ConfigBase_Get(bool createOnDemand=True) -> ConfigBase
+
+    Returns the current global config object, creating one if neccessary.
+    """
     return _misc.ConfigBase_Get(*args, **kwargs)
 
 def ConfigBase_Create(*args, **kwargs):
-    """ConfigBase_Create() -> ConfigBase"""
+    """
+    ConfigBase_Create() -> ConfigBase
+
+    Create and return a new global config object.  This function will
+    create the "best" implementation of wx.Config available for the
+    current platform.
+    """
     return _misc.ConfigBase_Create(*args, **kwargs)
 
 def ConfigBase_DontCreateOnDemand(*args, **kwargs):
-    """ConfigBase_DontCreateOnDemand()"""
+    """
+    ConfigBase_DontCreateOnDemand()
+
+    Should Get() try to create a new log object if there isn't a current one?
+    """
     return _misc.ConfigBase_DontCreateOnDemand(*args, **kwargs)
 
-class ConfigPathChanger(object):
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxConfigPathChanger instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        """__init__(ConfigBase pContainer, String strEntry) -> ConfigPathChanger"""
-        newobj = _misc.new_ConfigPathChanger(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc.delete_ConfigPathChanger):
-        """__del__()"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
-    def Name(*args, **kwargs):
-        """Name() -> String"""
-        return _misc.ConfigPathChanger_Name(*args, **kwargs)
-
-
-class ConfigPathChangerPtr(ConfigPathChanger):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = ConfigPathChanger
-_misc.ConfigPathChanger_swigregister(ConfigPathChangerPtr)
-
 class Config(ConfigBase):
+    """
+    This ConfigBase-derived class will use the registry on Windows,
+    and will be a wx.FileConfig on other platforms.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxConfig instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2739,6 +2919,7 @@ class ConfigPtr(Config):
 _misc.Config_swigregister(ConfigPtr)
 
 class FileConfig(ConfigBase):
+    """This config class will use a file for storage on all platforms."""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFileConfig instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2765,9 +2946,53 @@ class FileConfigPtr(FileConfig):
         self.__class__ = FileConfig
 _misc.FileConfig_swigregister(FileConfigPtr)
 
+class ConfigPathChanger(object):
+    """
+    A handy little class which changes current path to the path of
+    given entry and restores it in the destructoir: so if you declare
+    a local variable of this type, you work in the entry directory
+    and the path is automatically restored when the function returns.
+    """
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxConfigPathChanger instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """__init__(ConfigBase config, String entry) -> ConfigPathChanger"""
+        newobj = _misc.new_ConfigPathChanger(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __del__(self, destroy=_misc.delete_ConfigPathChanger):
+        """__del__()"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
+    def Name(*args, **kwargs):
+        """
+        Name() -> String
+
+        Get the key name
+        """
+        return _misc.ConfigPathChanger_Name(*args, **kwargs)
+
+
+class ConfigPathChangerPtr(ConfigPathChanger):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = ConfigPathChanger
+_misc.ConfigPathChanger_swigregister(ConfigPathChangerPtr)
+
 
 def ExpandEnvVars(*args, **kwargs):
-    """ExpandEnvVars(String sz) -> String"""
+    """
+    ExpandEnvVars(String sz) -> String
+
+    Replace environment variables ($SOMETHING) with their values. The
+    format is $VARNAME or ${VARNAME} where VARNAME contains
+    alphanumeric characters and '_' only. '$' must be escaped ('\$')
+    in order to be taken literally.
+    """
     return _misc.ExpandEnvVars(*args, **kwargs)
 #---------------------------------------------------------------------------
 
