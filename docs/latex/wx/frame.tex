@@ -12,6 +12,7 @@ application windows.
 
 \wxheading{Derived from}
 
+\helpref{wxTopLevelWindow}{wxtoplevelwindow}\\
 \helpref{wxWindow}{wxwindow}\\
 \helpref{wxEvtHandler}{wxevthandler}\\
 \helpref{wxObject}{wxobject}
@@ -293,12 +294,6 @@ Returns the status bar pane used to display menu and toolbar help.
 
 \helpref{wxFrame::SetStatusBarPane}{wxframesetstatusbarpane}
 
-\membersection{wxFrame::GetTitle}\label{wxframegettitle}
-
-\constfunc{wxString}{GetTitle}{\void}
-
-Gets a string containing the frame title. See \helpref{wxFrame::SetTitle}{wxframesettitle}.
-
 \membersection{wxFrame::GetToolBar}\label{wxframegettoolbar}
 
 \constfunc{wxToolBar*}{GetToolBar}{\void}
@@ -309,60 +304,6 @@ Returns a pointer to the toolbar currently associated with the frame (if any).
 
 \helpref{wxFrame::CreateToolBar}{wxframecreatetoolbar}, \helpref{wxToolBar}{wxtoolbar},\rtfsp
 \helpref{wxFrame::SetToolBar}{wxframesettoolbar}
-
-\membersection{wxFrame::Iconize}\label{wxframeiconize}
-
-\func{void}{Iconize}{\param{bool}{ iconize}}
-
-Iconizes or restores the frame.
-
-\wxheading{Parameters}
-
-\docparam{iconize}{If true, iconizes the frame; if false, shows and restores it.}
-
-\wxheading{See also}
-
-\helpref{wxFrame::IsIconized}{wxframeisiconized}, \helpref{wxFrame::Maximize}{wxframemaximize}.
-
-\membersection{wxFrame::IsFullScreen}\label{wxframeisfullscreen}
-
-\func{bool}{IsFullScreen}{\void}
-
-Returns true if the frame is in fullscreen mode.
-
-\wxheading{See also}
-
-\helpref{wxFrame::ShowFullScreen}{wxframeshowfullscreen}
-
-\membersection{wxFrame::IsIconized}\label{wxframeisiconized}
-
-\constfunc{bool}{IsIconized}{\void}
-
-Returns true if the frame is iconized.
-
-\membersection{wxFrame::IsMaximized}\label{wxframeismaximized}
-
-\constfunc{bool}{IsMaximized}{\void}
-
-Returns true if the frame is maximized.
-
-\membersection{wxFrame::Maximize}\label{wxframemaximize}
-
-\func{void}{Maximize}{\param{bool }{maximize}}
-
-Maximizes or restores the frame.
-
-\wxheading{Parameters}
-
-\docparam{maximize}{If true, maximizes the frame, otherwise it restores it.}
-
-\wxheading{Remarks}
-
-This function only works under Windows.
-
-\wxheading{See also}
-
-\helpref{wxFrame::Iconize}{wxframeiconize}
 
 \membersection{wxFrame::OnCreateStatusBar}\label{wxframeoncreatestatusbar}
 
@@ -440,36 +381,6 @@ Note that if the frame is using either sizers or constraints for the children
 layout, it is enough to call \helpref{Layout()}{wxwindowlayout} directly and
 this function should not be used in this case.
 
-\membersection{wxFrame::SetIcon}\label{wxframeseticon}
-
-\func{void}{SetIcon}{\param{const wxIcon\& }{icon}}
-
-Sets the icon for this frame.
-
-\wxheading{Parameters}
-
-\docparam{icon}{The icon to associate with this frame.}
-
-\wxheading{Remarks}
-
-The frame takes a `copy' of {\it icon}, but since it uses reference
-counting, the copy is very quick. It is safe to delete {\it icon} after
-calling this function.
-
-See also \helpref{wxIcon}{wxicon}.
-
-\membersection{wxFrame::SetIcons}\label{wxframeseticons}
-
-\func{void}{SetIcons}{\param{const wxIconBundle\& }{icons}}
-
-Sets the icons for this frame.
-
-\wxheading{Parameters}
-
-\docparam{icons}{The icons to associate with this frame.}
-
-See also \helpref{wxIconBundle}{wxiconbundle}.
-
 % VZ: we don't have all this any more (18.08.00)
 %
 %Under Windows, instead of using {\bf SetIcon}, you can add the
@@ -522,17 +433,6 @@ Note that on some platforms, it is not possible to call this function twice for 
 \wxheading{See also}
 
 \helpref{wxFrame::GetMenuBar}{wxframegetmenubar}, \helpref{wxMenuBar}{wxmenubar}, \helpref{wxMenu}{wxmenu}.
-
-\membersection{wxFrame::SetShape}\label{wxframesetshape}
-
-\func{bool}{SetShape}{\param{const wxRegion\&}{ region}}
-
-If the platform supports it, sets the shape of the window to that
-depicted by {\it region}.  The system will not display or
-respond to any mouse event for the pixels that lie outside of the
-region.  To reset the window to the normal rectangular shape simply
-call {\it SetShape} again with an empty region.  Returns TRUE if the
-operation is successful.
 
 \membersection{wxFrame::SetStatusBar}\label{wxframesetstatusbar}
 
@@ -608,45 +508,4 @@ Associates a toolbar with the frame.
 
 \helpref{wxFrame::CreateToolBar}{wxframecreatetoolbar}, \helpref{wxToolBar}{wxtoolbar},\rtfsp
 \helpref{wxFrame::GetToolBar}{wxframegettoolbar}
-
-\membersection{wxFrame::SetTitle}\label{wxframesettitle}
-
-\func{virtual void}{SetTitle}{\param{const wxString\& }{ title}}
-
-Sets the frame title.
-
-\wxheading{Parameters}
-
-\docparam{title}{The frame title.}
-
-\wxheading{See also}
-
-\helpref{wxFrame::GetTitle}{wxframegettitle}
-
-\membersection{wxFrame::ShowFullScreen}\label{wxframeshowfullscreen}
-
-\func{bool}{ShowFullScreen}{\param{bool}{ show}, \param{long}{ style = wxFULLSCREEN\_ALL}}
-
-Depending on the value of {\it show} parameter the frame is either shown full
-screen or restored to its normal state. {\it style} is a bit list containing
-some or all of the following values, which indicate what elements of the frame
-to hide in full-screen mode:
-
-\begin{itemize}\itemsep=0pt
-\item wxFULLSCREEN\_NOMENUBAR
-\item wxFULLSCREEN\_NOTOOLBAR
-\item wxFULLSCREEN\_NOSTATUSBAR
-\item wxFULLSCREEN\_NOBORDER
-\item wxFULLSCREEN\_NOCAPTION
-\item wxFULLSCREEN\_ALL (all of the above)
-\end{itemize}
-
-This function has not been tested with MDI frames.
-
-Note that showing a frame full screen also actually
-\helpref{Show()s}{wxwindowshow} if it hadn't been shown yet.
-
-\wxheading{See also}
-
-\helpref{wxFrame::IsFullScreen}{wxframeisfullscreen}
 
