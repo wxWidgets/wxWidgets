@@ -26,6 +26,7 @@
 #include "wx/log.h"
 #include "wx/intl.h"
 #include "wx/tokenzr.h"
+#include "wx/fontenum.h"
 #include "wx/module.h"
 #include "wx/bitmap.h"
 #include "wx/image.h"
@@ -37,13 +38,15 @@
 WX_DEFINE_OBJARRAY(wxXmlResourceDataRecords);
 
 
-wxXmlResource::wxXmlResource()
+wxXmlResource::wxXmlResource(bool use_locale = TRUE)
 {
     m_Handlers.DeleteContents(TRUE);
+    m_UseLocale = use_locale;
 }
     
-wxXmlResource::wxXmlResource(const wxString& filemask)
+wxXmlResource::wxXmlResource(const wxString& filemask, bool use_locale = TRUE)
 {
+    m_UseLocale = use_locale;
     m_Handlers.DeleteContents(TRUE);
     Load(filemask);
 }
@@ -172,6 +175,28 @@ wxPanel *wxXmlResource::LoadPanel(wxWindow *parent, const wxString& name)
 bool wxXmlResource::LoadPanel(wxPanel *panel, wxWindow *parent, const wxString& name)
 {
     return CreateResFromNode(FindResource(name, wxT("panel")), parent, panel) != NULL;
+}
+
+
+
+wxBitmap wxXmlResource::LoadBitmap(const wxString& name)
+{
+    wxBitmap *bmp = (wxBitmap*)CreateResFromNode(
+                               FindResource(name, wxT("bitmap")), NULL, NULL);
+    wxBitmap rt;
+
+    if (bmp) { rt = *bmp; delete bmp; }
+    return rt;
+}
+
+wxIcon wxXmlResource::LoadIcon(const wxString& name)
+{
+    wxIcon *icon = (wxIcon*)CreateResFromNode(
+                            FindResource(name, wxT("icon")), NULL, NULL);
+    wxIcon rt;
+
+    if (icon) { rt = *icon; delete icon; }
+    return rt;
 }
 
 
@@ -458,7 +483,11 @@ wxString wxXmlResourceHandler::GetText(const wxString& param)
             }
         else str2 << *dt;
     }
-    return str2;
+    
+    if (m_Resource->GetUseLocale())
+        return wxGetTranslation(str2);
+    else
+        return str2;
 }
 
 
@@ -615,7 +644,10 @@ wxString wxXmlResourceHandler::GetNodeContent(wxXmlNode *node)
 
 wxString wxXmlResourceHandler::GetParamValue(const wxString& param)
 {
-    return GetNodeContent(GetParamNode(param));
+    if (param.IsEmpty())
+        return GetNodeContent(m_Node);
+    else
+        return GetNodeContent(GetParamNode(param));
 }
 
 
@@ -695,9 +727,59 @@ wxCoord wxXmlResourceHandler::GetDimension(const wxString& param, wxCoord defaul
 
 
 
+wxFont wxXmlResourceHandler::GetFont(const wxString& param)
+{    
+    wxXmlNode *font_node = GetParamNode(param);
+    if (font_node == NULL)
+    {
+        wxLogError("Cannot find font node '%s'.", param.mb_str());
+        return wxNullFont;
+    }
+    
+    wxXmlNode *oldnode = m_Node;
+    m_Node = font_node;
+
+    long size = GetLong(_("size"), 12);
+
+    wxString style = GetParamValue(_("style"));
+    wxString weight = GetParamValue(_("weight"));
+    int istyle = wxNORMAL, iweight = wxNORMAL;  
+    if (style == _("italic")) istyle = wxITALIC;
+    else if (style == _("slant")) istyle = wxSLANT;
+    if (weight == _("bold")) iweight = wxBOLD;
+    else if (weight == _("light")) iweight = wxLIGHT;
+
+    bool underlined = GetBool(_("underlined"), FALSE);
+
+    wxString encoding = GetParamValue(_("encoding"));
+    // FIXME - handle encoding
+
+    wxString faces = GetParamValue(_("face"));
+    wxString facename = wxEmptyString;
+    wxFontEnumerator enu;
+    enu.EnumerateFacenames();
+    wxStringTokenizer tk(faces, ",");
+    while (tk.HasMoreTokens()) 
+    {
+        int index = enu.GetFacenames()->Index(tk.GetNextToken(), FALSE);
+        if (index != wxNOT_FOUND) 
+        {
+            facename = (*enu.GetFacenames())[index];
+            break;
+        }
+    }
+    
+    m_Node = oldnode;
+    
+    wxFont font(size, wxDEFAULT, istyle, iweight, underlined, 
+                facename, wxFONTENCODING_DEFAULT);
+    return font;
+}
+
+
 void wxXmlResourceHandler::SetupWindow(wxWindow *wnd)
 {
-    //FIXME : add font, cursor
+    //FIXME : add cursor
     
     if (HasParam(_T("exstyle")))
         wnd->SetExtraStyle(GetStyle(_T("exstyle")));
@@ -715,6 +797,8 @@ void wxXmlResourceHandler::SetupWindow(wxWindow *wnd)
     if (HasParam(_T("tooltip")))
         wnd->SetToolTip(GetText(_T("tooltip")));
 #endif      
+    if (HasParam(_T("font")))
+        wnd->SetFont(GetFont());
 }
 
 

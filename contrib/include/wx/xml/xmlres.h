@@ -57,8 +57,11 @@ WX_DECLARE_EXPORTED_OBJARRAY(wxXmlResourceDataRecord, wxXmlResourceDataRecords);
 class WXDLLEXPORT wxXmlResource : public wxObject
 {
     public:
-        wxXmlResource();
-        wxXmlResource(const wxString& filemask);
+        // Ctor. If use_locale is TRUE, translatable strings are
+        // translated via _(). You can disable it by passing use_locale=FALSE
+        // (for example if you provide resource file for each locale)
+        wxXmlResource(bool use_locale = TRUE);
+        wxXmlResource(const wxString& filemask, bool use_locale = TRUE);
         ~wxXmlResource();
 
         // Loads resources from XML files that match given filemask.
@@ -106,6 +109,10 @@ class WXDLLEXPORT wxXmlResource : public wxObject
         wxPanel *LoadPanel(wxWindow *parent, const wxString& name);
         bool LoadPanel(wxPanel *panel, wxWindow *parent, const wxString& name);
 
+        // Load bitmap or icon resource from file:
+        wxBitmap LoadBitmap(const wxString& name);
+        wxIcon LoadIcon(const wxString& name);
+
         // Returns numeric ID that is equivalent to string id used in XML
         // resource. To be used in event tables
         // Macro XMLID is provided for convenience
@@ -125,8 +132,11 @@ class WXDLLEXPORT wxXmlResource : public wxObject
         // Remove nodes with property "platform" that does not
         // match current platform
         void ProcessPlatformProperty(wxXmlNode *node);
+        
+        bool GetUseLocale() { return m_UseLocale; }
 
     private:
+        bool m_UseLocale;
         wxList m_Handlers;
         wxXmlResourceDataRecords m_Data;
 #if wxUSE_FILESYSTEM
@@ -154,7 +164,6 @@ extern wxXmlResource *wxTheXmlResource;
 
 #define XMLID(str_id) \
     wxXmlResource::GetXMLID(_T(str_id))
-
 
 
 // This macro returns pointer to particular control in dialog
@@ -226,8 +235,8 @@ class WXDLLEXPORT wxXmlResourceHandler : public wxObject
         // understood by this handler
         void AddStyle(const wxString& name, int value);
 	
-	// Add styles common to all wxWindow-derived classes
-	void AddWindowStyles();
+        // Add styles common to all wxWindow-derived classes
+        void AddWindowStyles();
         
         // Gets style flags from text in form "flag | flag2| flag3 |..."
         // Only understads flags added with AddStyle
@@ -236,7 +245,7 @@ class WXDLLEXPORT wxXmlResourceHandler : public wxObject
         // Gets text from param and does some convertions:
         // - replaces \n, \r, \t by respective chars (according to C syntax)
         // - replaces $ by & and $$ by $ (needed for $File => &File because of XML)
-        // - converts encodings if neccessary
+        // - calls wxGetTranslations (unless disabled in wxXmlResource)
         wxString GetText(const wxString& param);
 
         // Return XMLID
@@ -262,6 +271,9 @@ class WXDLLEXPORT wxXmlResourceHandler : public wxObject
         // Get bitmap:
         wxBitmap GetBitmap(const wxString& param = _T("bitmap"), wxSize size = wxDefaultSize);
         wxIcon GetIcon(const wxString& param = _T("icon"), wxSize size = wxDefaultSize);
+        
+        // Get font:
+        wxFont GetFont(const wxString& param = _T("font"));
         
         // Sets common window options:
         void SetupWindow(wxWindow *wnd);
