@@ -1830,34 +1830,28 @@ long wxPyGetWinHandle(wxWindow* win) {
 // Some helper functions for typemaps in my_typemaps.i, so they won't be
 // included in every file over and over again...
 
-#if PYTHON_API_VERSION >= 1009
-    static char* wxStringErrorMsg = "String or Unicode type required";
-#else
-    static char* wxStringErrorMsg = "String type required";
-#endif
-
-
 wxString* wxString_in_helper(PyObject* source) {
-    wxString* target;
-#if PYTHON_API_VERSION >= 1009  // Have Python unicode API
+    wxString* target = NULL;
+
     if (!PyString_Check(source) && !PyUnicode_Check(source)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
         return NULL;
     }
 #if wxUSE_UNICODE
-    if (PyUnicode_Check(source)) {
-        target = new wxString();
-        size_t len = PyUnicode_GET_SIZE(source);
-        if (len) {
-            PyUnicode_AsWideChar((PyUnicodeObject*)source, target->GetWriteBuf(len), len);
-            target->UngetWriteBuf();
-        }
-    } else {
-        // It is a string, get pointers to it and transform to unicode
-        char* tmpPtr; int tmpSize;
-        PyString_AsStringAndSize(source, &tmpPtr, &tmpSize);
-        target = new wxString(tmpPtr, *wxConvCurrent, tmpSize);
+    PyObject* uni = source;
+    if (PyString_Check(source)) {
+        uni = PyUnicode_FromObject(source);
+        if (PyErr_Occurred()) return NULL;
     }
+    target = new wxString();
+    size_t len = PyUnicode_GET_SIZE(uni);
+    if (len) {
+        PyUnicode_AsWideChar((PyUnicodeObject*)uni, target->GetWriteBuf(len), len);
+        target->UngetWriteBuf();
+    }
+
+    if (PyString_Check(source))
+        Py_DECREF(uni);
 #else
     char* tmpPtr; int tmpSize;
     if (PyString_AsStringAndSize(source, &tmpPtr, &tmpSize) == -1) {
@@ -1866,14 +1860,7 @@ wxString* wxString_in_helper(PyObject* source) {
     }
     target = new wxString(tmpPtr, tmpSize);
 #endif // wxUSE_UNICODE
-
-#else  // No Python unicode API (1.5.2)
-    if (!PyString_Check(source)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    target = new wxString(PyString_AS_STRING(source), PyString_GET_SIZE(source));
-#endif
+    
     return target;
 }
 
@@ -1882,45 +1869,37 @@ wxString* wxString_in_helper(PyObject* source) {
 wxString Py2wxString(PyObject* source)
 {
     wxString target;
-    bool     doDecRef = False;
-
-#if PYTHON_API_VERSION >= 1009  // Have Python unicode API
-    if (!PyString_Check(source) && !PyUnicode_Check(source)) {
-        // Convert to String if not one already...  (TODO: Unicode too?)
-        source = PyObject_Str(source);
-        doDecRef = True;
-    }
 
 #if wxUSE_UNICODE
-    if (PyUnicode_Check(source)) {
-        size_t len = PyUnicode_GET_SIZE(source);
-        if (len) {
-            PyUnicode_AsWideChar((PyUnicodeObject*)source, target.GetWriteBuf(len), len);
-            target.UngetWriteBuf();
-        }
-    } else {
-        // It is a string, get pointers to it and transform to unicode
-        char* tmpPtr; int tmpSize;
-        PyString_AsStringAndSize(source, &tmpPtr, &tmpSize);
-        target = wxString(tmpPtr, *wxConvCurrent, tmpSize);
+    // Convert to a unicode object, if not already, then to a wxString
+    PyObject* uni = source;
+    if (!PyUnicode_Check(source)) {
+        uni = PyUnicode_FromObject(source);
+        if (PyErr_Occurred()) return wxEmptyString;  // TODO:  should we PyErr_Clear?
+    }    
+    size_t len = PyUnicode_GET_SIZE(uni);
+    if (len) {
+        PyUnicode_AsWideChar((PyUnicodeObject*)uni, target.GetWriteBuf(len), len);
+        target.UngetWriteBuf();
     }
+    
+    if (!PyUnicode_Check(source))
+        Py_DECREF(uni);
 #else
+    // Convert to a string object if it isn't already, then to wxString
+    PyObject* str = source;
+    if (!PyString_Check(source)) {
+        str = PyObject_Str(source);
+        if (PyErr_Occurred()) return wxEmptyString;    // TODO:  should we PyErr_Clear?
+    }
     char* tmpPtr; int tmpSize;
-    PyString_AsStringAndSize(source, &tmpPtr, &tmpSize);
+    PyString_AsStringAndSize(str, &tmpPtr, &tmpSize);
     target = wxString(tmpPtr, tmpSize);
+    
+    if (!PyString_Check(source))
+        Py_DECREF(str);
 #endif // wxUSE_UNICODE
 
-#else  // No Python unicode API (1.5.2)
-    if (!PyString_Check(source)) {
-        // Convert to String if not one already...
-        source = PyObject_Str(source);
-        doDecRef = True;
-    }
-    target = wxString(PyString_AS_STRING(source), PyString_GET_SIZE(source));
-#endif
-
-    if (doDecRef)
-        Py_DECREF(source);
     return target;
 }
 
