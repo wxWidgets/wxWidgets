@@ -15,6 +15,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/mdi.h"
+#include "wx/notebook.h"
 
 #if wxUSE_MDI
 
@@ -82,8 +83,11 @@ gtk_mdi_page_change_callback( GtkNotebook *WXUNUSED(widget),
     while (node)
     {
         wxMDIChildFrame *child_frame = wxDynamicCast( node->GetData(), wxMDIChildFrame );
-
-        wxASSERT_MSG( child_frame, _T("child is not a wxMDIChildFrame") );
+        // CE: we come here in the destructor with a null child_frame - I think because
+        // gtk_signal_connect( GTK_OBJECT(m_widget), "switch_page", (see below)
+        // isn't deleted early enough
+        if (!child_frame)
+          return ;
 
         if (child_frame->m_page == page)
         {
@@ -329,7 +333,7 @@ wxMDIChildFrame::~wxMDIChildFrame()
 {
     if (m_menuBar)
         delete m_menuBar;
-}
+} 
 
 bool wxMDIChildFrame::Create( wxMDIParentFrame *parent,
       wxWindowID id, const wxString& title,
@@ -484,6 +488,7 @@ wxMDIClientWindow::wxMDIClientWindow( wxMDIParentFrame *parent, long style )
 
 wxMDIClientWindow::~wxMDIClientWindow()
 {
+
 }
 
 bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *parent, long style )
