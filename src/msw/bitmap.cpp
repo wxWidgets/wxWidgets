@@ -520,10 +520,6 @@ bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)
     else // create a DDB
 #endif
     {
-        if ( d == -1 )
-            d = wxDisplayDepth();
-
-        GetBitmapData()->m_depth = d;
 
 #ifndef __WXMICROWIN__
         if ( d > 0 )
