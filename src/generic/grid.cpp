@@ -5718,17 +5718,7 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
 
     bool isCurrent = coords == m_currentCellCoords;
 
-    wxRect rect;
-    rect.x = GetColLeft(col);
-    rect.y = GetRowTop(row);
-    rect.width = GetColWidth(col) - 1;
-    rect.height = GetRowHeight(row) - 1;
-
-    // if grid lines are disabled, then the area of the cell is a bit larger
-    if (! m_gridLinesEnabled) {
-        rect.width += 1;
-        rect.height += 1;
-    }
+    wxRect rect = CellToRect( row, col );
 
     // if the editor is shown, we should use it and not the renderer
     // Note: However, only if it is really _shown_, i.e. not hidden!
@@ -5758,11 +5748,7 @@ void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
     if ( GetColWidth(col) <= 0 || GetRowHeight(row) <= 0 )
         return;
 
-    wxRect rect;
-    rect.x = GetColLeft(col);
-    rect.y = GetRowTop(row);
-    rect.width = GetColWidth(col) - 1;
-    rect.height = GetRowHeight(row) - 1;
+    wxRect rect = CellToRect(row, col);
 
     // hmmm... what could we do here to show that the cell is disabled?
     // for now, I just draw a thinner border than for the other ones, but
@@ -6335,6 +6321,8 @@ void wxGrid::HideCellEditControl()
         editor->DecRef();
         attr->DecRef();
         m_gridWin->SetFocus();
+        wxRect rect( CellToRect( row, col ) );
+        m_gridWin->Refresh( FALSE, &rect );
     }
 }
 
@@ -6469,6 +6457,11 @@ wxRect wxGrid::CellToRect( int row, int col )
         rect.height = GetRowHeight(row);
     }
 
+    // if grid lines are enabled, then the area of the cell is a bit smaller
+    if (m_gridLinesEnabled) {
+        rect.width -= 1;
+        rect.height -= 1;
+    }
     return rect;
 }
 
