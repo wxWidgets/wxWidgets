@@ -143,7 +143,7 @@ public:
 
   // callbacks
   // ---------
-  void OnWindowCreate(wxWindowCreateEvent& event);
+  void OnSize(wxSizeEvent& event);
   void OnSelChange(wxNotebookEvent& event);
   void OnSetFocus(wxFocusEvent& event);
   void OnNavigationKey(wxNavigationKeyEvent& event);

@@ -68,8 +68,7 @@
   BEGIN_EVENT_TABLE(wxNotebook, wxControl)
     EVT_NOTEBOOK_PAGE_CHANGED(-1, wxNotebook::OnSelChange)
 
-    // doesn't work yet EVT_WINDOW_CREATE(wxNotebook::OnWindowCreate)
-    EVT_SIZE(wxNotebook::OnWindowCreate)
+    EVT_SIZE(wxNotebook::OnSize)
 
     EVT_SET_FOCUS(wxNotebook::OnSetFocus)
 
@@ -378,7 +377,7 @@ bool wxNotebook::InsertPage(int nPage,
 // wxNotebook callbacks
 // ----------------------------------------------------------------------------
 
-void wxNotebook::OnWindowCreate(wxWindowCreateEvent& event)
+void wxNotebook::OnSize(wxSizeEvent& event)
 {
   // make sure the current page is shown and has focus (it's useful because all
   // pages are created invisible initially)
