@@ -25,6 +25,8 @@
 #include "wx/wx.h"
 #endif
 
+#include "../sample.xpm"
+
 #include "wx/datetime.h"
 #include "wx/image.h"
 
@@ -71,6 +73,9 @@
 #if wxUSE_FINDREPLDLG
     #include "wx/fdrepdlg.h"
 #endif // wxUSE_FINDREPLDLG
+
+#include "wx/spinctrl.h"
+#include "wx/propdlg.h"
 
 #include "dialogs.h"
 
@@ -185,7 +190,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_FIND_CLOSE(wxID_ANY, MyFrame::OnFindDialog)
 #endif // wxUSE_FINDREPLDLG
 
-    EVT_MENU(DIALOGS_REQUEST, MyFrame::OnRequestUserAttention)
+    EVT_MENU(DIALOGS_PROPERTY_SHEET,                MyFrame::OnPropertySheet)
+    EVT_MENU(DIALOGS_REQUEST,                       MyFrame::OnRequestUserAttention)
 
     EVT_MENU(wxID_EXIT,                             MyFrame::OnExit)
 END_EVENT_TABLE()
@@ -348,6 +354,7 @@ bool MyApp::OnInit()
     file_menu->Append(wxID_ANY,_T("&Modal/Modeless"),modal_menu);
 #endif // USE_MODAL_PRESENTATION
 
+    file_menu->Append(DIALOGS_PROPERTY_SHEET, _T("&Property Sheet Dialog\tCtrl-P"));
     file_menu->Append(DIALOGS_REQUEST, _T("&Request user attention\tCtrl-R"));
 
     file_menu->AppendSeparator();
@@ -375,6 +382,8 @@ MyFrame::MyFrame(wxWindow *parent,
                  const wxString& title)
        : wxFrame(parent, wxID_ANY, title)
 {
+    SetIcon(sample_xpm);
+    
 #if USE_MODAL_PRESENTATION
     m_dialog = (MyModelessDialog *)NULL;
 #endif // USE_MODAL_PRESENTATION
@@ -956,6 +965,12 @@ void MyFrame::ShowTip(wxCommandEvent& WXUNUSED(event))
 }
 #endif // wxUSE_STARTUP_TIPS
 
+void MyFrame::OnPropertySheet(wxCommandEvent& WXUNUSED(event))
+{
+    SettingsDialog dialog(this);
+    dialog.ShowModal();
+}
+
 void MyFrame::OnRequestUserAttention(wxCommandEvent& WXUNUSED(event))
 {
     wxLogStatus(_T("Sleeping for 3 seconds to allow you to switch to another window"));
@@ -1341,4 +1356,131 @@ void MyModalDialog::OnButton(wxCommandEvent& event)
 }
 
 #endif // USE_MODAL_PRESENTATION
+
+// ----------------------------------------------------------------------------
+// SettingsDialog
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_CLASS(SettingsDialog, wxPropertySheetDialog)
+
+BEGIN_EVENT_TABLE(SettingsDialog, wxPropertySheetDialog)
+END_EVENT_TABLE()
+
+SettingsDialog::SettingsDialog(wxWindow* win)
+{
+    SetExtraStyle(wxDIALOG_EX_CONTEXTHELP);
+
+    Create(win, -1, _("Preferences"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER);
+    CreateButtons(wxOK|wxCANCEL|wxHELP);
+
+    wxBookCtrlBase* notebook = GetBookCtrl();
+
+    wxPanel* generalSettings = CreateGeneralSettingsPage(notebook);
+    wxPanel* aestheticSettings = CreateAestheticSettingsPage(notebook);
+
+    notebook->AddPage(generalSettings, _("General"));
+    notebook->AddPage(aestheticSettings, _("Aesthetics"));
+
+    LayoutDialog();
+}
+
+wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
+{
+    wxPanel* panel = new wxPanel(parent, wxID_ANY);
+
+    wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer *item0 = new wxBoxSizer( wxVERTICAL );
+
+    //// LOAD LAST FILE
+
+    wxBoxSizer* itemSizer3 = new wxBoxSizer( wxHORIZONTAL );
+    wxCheckBox* checkBox3 = new wxCheckBox(panel, ID_LOAD_LAST_PROJECT, _("&Load last project on startup"), wxDefaultPosition, wxDefaultSize);
+    itemSizer3->Add(checkBox3, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
+    item0->Add(itemSizer3, 0, wxGROW|wxALL, 0);
+
+    //// AUTOSAVE
+
+    wxString autoSaveLabel = _("&Auto-save every");
+    wxString minsLabel = _("mins");
+
+    wxBoxSizer* itemSizer12 = new wxBoxSizer( wxHORIZONTAL );
+    wxCheckBox* checkBox12 = new wxCheckBox(panel, ID_AUTO_SAVE, autoSaveLabel, wxDefaultPosition, wxDefaultSize);
+    wxSpinCtrl* spinCtrl12 = new wxSpinCtrl(panel, ID_AUTO_SAVE_MINS, wxEmptyString,
+        wxDefaultPosition, wxSize(40, -1), wxSP_ARROW_KEYS, 1, 60, 1);
+    
+    itemSizer12->Add(checkBox12, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
+    itemSizer12->Add(spinCtrl12, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
+    itemSizer12->Add(new wxStaticText(panel, wxID_STATIC, minsLabel), 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
+    item0->Add(itemSizer12, 0, wxGROW|wxALL, 0);
+
+    //// TOOLTIPS
+    
+    wxBoxSizer* itemSizer8 = new wxBoxSizer( wxHORIZONTAL );
+    wxCheckBox* checkBox6 = new wxCheckBox(panel, ID_SHOW_TOOLTIPS, _("Show &tooltips"), wxDefaultPosition, wxDefaultSize);
+    itemSizer8->Add(checkBox6, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
+    item0->Add(itemSizer8, 0, wxGROW|wxALL, 0);
+
+    topSizer->Add( item0, 1, wxGROW|wxALIGN_CENTRE|wxALL, 5 );
+
+    panel->SetSizer(topSizer);
+    topSizer->Fit(panel);
+    
+    return panel;
+}
+
+wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
+{
+    wxPanel* panel = new wxPanel(parent, wxID_ANY);
+
+    wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer *item0 = new wxBoxSizer( wxVERTICAL );
+
+    //// PROJECT OR GLOBAL
+    wxString globalOrProjectChoices[2];
+    globalOrProjectChoices[0] = _("&New projects");
+    globalOrProjectChoices[1] = _("&This project");
+
+    wxRadioBox* projectOrGlobal = new wxRadioBox(panel, ID_APPLY_SETTINGS_TO, _("&Apply settings to:"),
+        wxDefaultPosition, wxDefaultSize, 2, globalOrProjectChoices);
+    item0->Add(projectOrGlobal, 0, wxGROW|wxALL, 5);
+
+    projectOrGlobal->SetSelection(0);
+
+    //// BACKGROUND STYLE
+    wxArrayString backgroundStyleChoices;
+    backgroundStyleChoices.Add(wxT("Colour"));
+    backgroundStyleChoices.Add(wxT("Image"));
+    wxStaticBox* staticBox3 = new wxStaticBox(panel, -1, _("Background style:"));
+
+    wxBoxSizer* styleSizer = new wxStaticBoxSizer( staticBox3, wxVERTICAL );
+    item0->Add(styleSizer, 0, wxGROW|wxALL, 5);
+
+    wxBoxSizer* itemSizer2 = new wxBoxSizer( wxHORIZONTAL );
+
+    wxChoice* choice2 = new wxChoice(panel, ID_BACKGROUND_STYLE, wxDefaultPosition, wxDefaultSize, backgroundStyleChoices);
+
+    itemSizer2->Add(new wxStaticText(panel, wxID_ANY, _("&Window:")), 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
+    itemSizer2->Add(5, 5, 1, wxALL, 0);
+    itemSizer2->Add(choice2, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
+
+    styleSizer->Add(itemSizer2, 0, wxGROW|wxALL, 5);
+
+    //// FONT SIZE SELECTION
+
+    wxStaticBox* staticBox1 = new wxStaticBox(panel, -1, _("Tile font size:"));
+    wxBoxSizer* itemSizer5 = new wxStaticBoxSizer( staticBox1, wxHORIZONTAL );
+
+    wxSpinCtrl* spinCtrl = new wxSpinCtrl(panel, ID_FONT_SIZE, wxEmptyString, wxDefaultPosition,
+        wxSize(80, -1));
+    itemSizer5->Add(spinCtrl, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+
+    item0->Add(itemSizer5, 0, wxGROW|wxLEFT|wxRIGHT, 5);
+
+    topSizer->Add( item0, 1, wxGROW|wxALIGN_CENTRE|wxALL, 5 );
+
+    panel->SetSizer(topSizer);
+    topSizer->Fit(panel);
+    
+    return panel;
+}
 

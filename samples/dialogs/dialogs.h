@@ -128,6 +128,32 @@ private:
 
 #endif // USE_MODAL_PRESENTATION
 
+// Property sheet dialog
+class SettingsDialog: public wxPropertySheetDialog
+{
+DECLARE_CLASS(SettingsDialog)
+public:
+    SettingsDialog(wxWindow* parent);
+
+    wxPanel* CreateGeneralSettingsPage(wxWindow* parent);
+    wxPanel* CreateAestheticSettingsPage(wxWindow* parent);
+
+protected:
+
+    enum {
+        ID_SHOW_TOOLTIPS = 100,
+        ID_AUTO_SAVE,
+        ID_AUTO_SAVE_MINS,
+        ID_LOAD_LAST_PROJECT,
+
+        ID_APPLY_SETTINGS_TO,
+        ID_BACKGROUND_STYLE,
+        ID_FONT_SIZE
+    };
+
+DECLARE_EVENT_TABLE()
+};
+
 // Define a new frame type
 class MyFrame: public wxFrame
 {
@@ -215,6 +241,7 @@ public:
     void ChooseFontGeneric(wxCommandEvent& event);
 #endif // USE_FONTDLG_GENERIC
 
+    void OnPropertySheet(wxCommandEvent& event);
     void OnRequestUserAttention(wxCommandEvent& event);
     void OnExit(wxCommandEvent& event);
 
@@ -283,7 +310,8 @@ enum
     DIALOGS_BUSYINFO,
     DIALOGS_FIND,
     DIALOGS_REPLACE,
-    DIALOGS_REQUEST
+    DIALOGS_REQUEST,
+    DIALOGS_PROPERTY_SHEET
 };
 
 #endif
