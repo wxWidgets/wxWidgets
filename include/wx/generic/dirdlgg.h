@@ -37,10 +37,10 @@ class WXDLLEXPORT wxGenericDirDialog: public wxDialog
 public:
     wxGenericDirDialog(): wxDialog() {}
     wxGenericDirDialog(wxWindow* parent, const wxString& title,
-                       const wxString& defaultPath = wxEmptyString, 
+                       const wxString& defaultPath = wxEmptyString,
                        long style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER,
-                       const wxPoint& pos = wxDefaultPosition, 
-                       const wxSize& sz = wxSize(450, 550), 
+                       const wxPoint& pos = wxDefaultPosition,
+                       const wxSize& sz = wxSize(450, 550),
                        const wxString& name = _T("dialog"));
 
     //// Accessors
@@ -75,7 +75,7 @@ protected:
     DECLARE_EVENT_TABLE()
 };
 
-#if !defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXPM__)
+#if !defined(__WXMSW__) && !defined(__WXMAC__)
     #define wxDirDialog wxGenericDirDialog
 #endif
 
