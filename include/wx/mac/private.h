@@ -141,5 +141,16 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
 #define MAC_WXRECPTR(a) ((Rect*)a)
 #define MAC_WXPOINTPTR(a) ((Point*)a)
 #define MAC_WXHMENU(a) ((MenuHandle)a)
+
+#if TARGET_CARBON
+// converts this string into a carbon foundation string with optional pc 2 mac encoding
+CFStringRef wxMacCreateCFString( const wxString &str , bool pc2macEncoding ) ;
+
+// converts this string into a carbon foundation string with optional pc 2 mac encoding
+inline CFStringRef wxMacCreateCFString( const wxString &str ) 
+  { return wxMacCreateCFString( str , wxApp::s_macDefaultEncodingIsPC ) ; }
+
+#endif //TARGET_CARBON
+
 #endif
     // _WX_PRIVATE_H_

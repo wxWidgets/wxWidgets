@@ -518,3 +518,18 @@ wxString wxGetOsDescription()
 #endif
 }
 
+//---------------------------------------------------------------------------
+// wxMac Specific utility functions
+//---------------------------------------------------------------------------
+
+#if TARGET_CARBON
+// converts this string into a carbon foundation string with optional pc 2 mac encoding
+CFStringRef wxMacCreateCFString( const wxString &str , bool pc2macEncoding ) 
+{
+	return CFStringCreateWithCString( kCFAllocatorSystemDefault , str.c_str() ,
+		pc2macEncoding ? 
+		kCFStringEncodingWindowsLatin1 : CFStringGetSystemEncoding() ) ;
+}
+
+#endif //TARGET_CARBON
+
