@@ -933,11 +933,14 @@ inline void *wxUIntToPtr(wxUIntPtr p)
         #define HAVE_SSIZE_T
     #endif
 #endif
+#if defined(__PALMOS__) && !defined(HAVE_SSIZE_T)
+    #define HAVE_SSIZE_T
+#endif
 #ifndef HAVE_SSIZE_T
     #if SIZEOF_SIZE_T == 4
         typedef wxInt32 ssize_t;
     #elif SIZEOF_SIZE_T == 8
-        typedef wxInt64 ssize_t
+        typedef wxInt64 ssize_t;
     #else
         #error "error defining ssize_t, size_t is not 4 or 8 bytes"
     #endif
