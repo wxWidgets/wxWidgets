@@ -366,6 +366,9 @@ public:
     virtual wxSize GetMaxSize() const { return wxSize( m_maxWidth, m_maxHeight ); }
     virtual wxSize GetMinSize() const { return wxSize( m_minWidth, m_minHeight ); }
 
+    void SetMinSize(const wxSize& minSize) { SetSizeHints(minSize); }
+    void SetMaxSize(const wxSize& maxSize) { SetSizeHints(GetMinSize(), maxSize); }
+    
         // Methods for accessing the virtual size of a window.  For most
         // windows this is just the client area of the window, but for
         // some like scrolled windows it is more or less independent of
