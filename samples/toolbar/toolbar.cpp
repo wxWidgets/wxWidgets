@@ -31,6 +31,18 @@
 #include <wx/toolbar.h>
 #include <wx/log.h>
 
+// define this to 1 to use wxToolBarSimple instead of the native one
+#define USE_GENERIC_TBAR 1
+
+#if USE_GENERIC_TBAR
+    #if !wxUSE_TOOLBAR_SIMPLE
+        #error "wxToolBarSimple is not compiled in, set wxUSE_TOOLBAR_SIMPLE "\
+               "to 1 in setup.h and recompile the library."
+    #else
+        #include <wx/tbarsmpl.h>
+    #endif
+#endif // USE_GENERIC_TBAR
+
 // ----------------------------------------------------------------------------
 // resources
 // ----------------------------------------------------------------------------
@@ -78,10 +90,10 @@ public:
     void OnToggleToolbarOrient(wxCommandEvent& event);
     void OnToggleToolbarRows(wxCommandEvent& event);
 
-    void OnEnablePrint(wxCommandEvent& event) { DoEnablePrint(); }
-    void OnDeletePrint(wxCommandEvent& event) { DoDeletePrint(); }
+    void OnEnablePrint(wxCommandEvent& WXUNUSED(event)) { DoEnablePrint(); }
+    void OnDeletePrint(wxCommandEvent& WXUNUSED(event)) { DoDeletePrint(); }
     void OnInsertPrint(wxCommandEvent& event);
-    void OnToggleHelp(wxCommandEvent& event) { DoToggleHelp(); }
+    void OnToggleHelp(wxCommandEvent& WXUNUSED(event)) { DoToggleHelp(); }
 
     void OnToolLeftClick(wxCommandEvent& event);
     void OnToolEnter(wxCommandEvent& event);
@@ -89,6 +101,12 @@ public:
     void OnCombo(wxCommandEvent& event);
 
     void OnUpdateCopyAndCut(wxUpdateUIEvent& event);
+
+#if USE_GENERIC_TBAR
+    virtual wxToolBar *OnCreateToolBar(long style,
+                                       wxWindowID id,
+                                       const wxString& name );
+#endif // USE_GENERIC_TBAR
 
 private:
     void DoEnablePrint();
@@ -184,7 +202,7 @@ bool MyApp::OnInit()
 void MyFrame::RecreateToolbar()
 {
     // delete and recreate the toolbar
-    wxToolBar *toolBar = GetToolBar();
+    wxToolBarBase *toolBar = GetToolBar();
     delete toolBar;
 
     SetToolBar(NULL);
@@ -222,6 +240,8 @@ void MyFrame::RecreateToolbar()
     currentX += width + 5;
     toolBar->AddTool(wxID_OPEN, toolBarBitmaps[1], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Open file");
 
+    // neither the generic nor Motif native toolbars really support this
+#if (wxUSE_TOOLBAR_NATIVE && !USE_GENERIC_TBAR) && !defined(__WXMOTIF__)
     // adding a combo to a vertical toolbar is not very smart
     if ( m_horzToolbar )
     {
@@ -233,6 +253,7 @@ void MyFrame::RecreateToolbar()
         combo->Append("toolbar");
         toolBar->AddControl(combo);
     }
+#endif // toolbars which don't support controls
 
     if ( !m_smallToolbar )
     {
@@ -324,6 +345,19 @@ MyFrame::MyFrame(wxFrame* parent,
     RecreateToolbar();
 }
 
+#if USE_GENERIC_TBAR
+
+wxToolBar* MyFrame::OnCreateToolBar(long style,
+                                    wxWindowID id,
+                                    const wxString& name)
+{
+    return (wxToolBar *)new wxToolBarSimple(this, id,
+                                            wxDefaultPosition, wxDefaultSize,
+                                            style, name);
+}
+
+#endif // USE_GENERIC_TBAR
+
 void MyFrame::OnToggleToolbarSize(wxCommandEvent& WXUNUSED(event))
 {
     m_smallToolbar = !m_smallToolbar;
@@ -395,7 +429,7 @@ void MyFrame::OnCombo(wxCommandEvent& event)
 
 void MyFrame::DoEnablePrint()
 {
-    wxToolBar *tb = GetToolBar();
+    wxToolBarBase *tb = GetToolBar();
     if (tb->GetToolEnabled(wxID_PRINT))
         tb->EnableTool( wxID_PRINT, FALSE );
     else
@@ -404,14 +438,14 @@ void MyFrame::DoEnablePrint()
 
 void MyFrame::DoDeletePrint()
 {
-    wxToolBar *tb = GetToolBar();
+    wxToolBarBase *tb = GetToolBar();
 
     tb->DeleteTool( wxID_PRINT );
 }
 
 void MyFrame::DoToggleHelp()
 {
-    wxToolBar *tb = GetToolBar();
+    wxToolBarBase *tb = GetToolBar();
     tb->ToggleTool( wxID_HELP, !tb->GetToolState( wxID_HELP ) );
 }
 
@@ -434,13 +468,13 @@ void MyFrame::OnInsertPrint(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnToolEnter(wxCommandEvent& event)
 {
-  if (event.GetSelection() > -1)
-  {
-    wxString str;
-    str.Printf(_T("This is tool number %d"), event.GetSelection());
-    SetStatusText(str);
-  }
-  else
-    SetStatusText("");
+    if (event.GetSelection() > -1)
+    {
+        wxString str;
+        str.Printf(_T("This is tool number %d"), event.GetSelection());
+        SetStatusText(str);
+    }
+    else
+        SetStatusText("");
 }
 
