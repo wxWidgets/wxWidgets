@@ -1142,6 +1142,10 @@ void wxPostScriptDC::SetBrush( const wxBrush& brush )
 void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
 {
     wxCHECK_RET( m_ok && m_pstream, wxT("invalid postscript dc") );
+    
+    wxCoord text_w, text_h, text_descent;
+    
+    GetTextExtent(text, &text_w, &text_h, &text_descent);
 
     SetFont( m_font );
 
@@ -1183,7 +1187,10 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
 
     int size = m_font.GetPointSize();
 
-    wxCoord by = y + (wxCoord)floor( double(size) * 2.0 / 3.0 ); // approximate baseline
+//    wxCoord by = y + (wxCoord)floor( double(size) * 2.0 / 3.0 ); // approximate baseline
+//    commented by V. Slavik and replaced by accurate version
+//        - note that there is still rounding error in text_descent!
+    wxCoord by = y + size - text_descent; // baseline
     fprintf( m_pstream, "%d %d moveto\n", XLOG2DEV(x), YLOG2DEV(by) );
 
     /* I don't know how to write char to a stream, so I use a mini string */
@@ -1221,8 +1228,6 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     if (m_font.GetUnderlined())
     {
         wxCoord uy = (wxCoord)(y + size - m_underlinePosition);
-        wxCoord w, h;
-        GetTextExtent(text, &w, &h);
 
         fprintf( m_pstream,
                 "gsave\n"
@@ -1233,7 +1238,7 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
                 "grestore\n",
                 XLOG2DEV(x), YLOG2DEV(uy),
                 (wxCoord)m_underlineThickness,
-                XLOG2DEV(x + w), YLOG2DEV(uy) );
+                XLOG2DEV(x + text_w), YLOG2DEV(uy) );
     }
 
     CalcBoundingBox( x, y );
@@ -2098,10 +2103,12 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
     }
 
     /* add descender to height (it is usually a negative value) */
-    if (lastDescender != INT_MIN)
-    {
-        height += (wxCoord)(((-lastDescender)/1000.0F) * Size); /* MATTHEW: forgot scale */
-    }
+    //if (lastDescender != INT_MIN)
+    //{
+    //    height += (wxCoord)(((-lastDescender)/1000.0F) * Size); /* MATTHEW: forgot scale */
+    //}
+    // - commented by V. Slavik - height already contains descender in it
+    //   (judging from few experiments)
 
     /* return size values */
     if ( x )
