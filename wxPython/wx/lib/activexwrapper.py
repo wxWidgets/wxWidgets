@@ -1,15 +1,11 @@
-"""Provides a way to drop the wx prefix from wxPython objects."""
 
-__author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
+"""Renamer stub: provides a way to drop the wx prefix from wxPython objects."""
+
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
-import wx
-from wx import prefix
-
+from wx import _rename
 from wxPython.lib import activexwrapper
-prefix.rename(d_new=globals(), d_old=activexwrapper.__dict__)
+_rename(globals(), activexwrapper.__dict__, modulename='lib.activexwrapper')
 del activexwrapper
-
-del prefix
-del wx
+del _rename

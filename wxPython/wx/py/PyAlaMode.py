@@ -1,3 +1,11 @@
-# Py is really located in the old namespace, but it doesn't need any
-# renaming done.
-from wxPython.py.PyAlaMode import *
+
+"""Renamer stub: provides a way to drop the wx prefix from wxPython objects."""
+
+__cvsid__ = "$Id$"
+__revision__ = "$Revision$"[11:-2]
+
+from wx import _rename
+from wxPython.py import PyAlaMode
+_rename(globals(), PyAlaMode.__dict__, modulename='py.PyAlaMode')
+del PyAlaMode
+del _rename

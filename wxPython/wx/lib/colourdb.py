@@ -1,15 +1,11 @@
-"""Provides a way to drop the wx prefix from wxPython objects."""
 
-__author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
+"""Renamer stub: provides a way to drop the wx prefix from wxPython objects."""
+
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
-import wx
-from wx import prefix
-
+from wx import _rename
 from wxPython.lib import colourdb
-prefix.rename(d_new=globals(), d_old=colourdb.__dict__)
+_rename(globals(), colourdb.__dict__, modulename='lib.colourdb')
 del colourdb
-
-del prefix
-del wx
+del _rename

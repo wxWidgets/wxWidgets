@@ -1,15 +1,11 @@
-"""Provides a way to drop the wx prefix from wxPython objects."""
 
-__author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
+"""Renamer stub: provides a way to drop the wx prefix from wxPython objects."""
+
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
-import wx
-from wx import prefix
-
+from wx import _rename
 from wxPython.lib import anchors
-prefix.rename(d_new=globals(), d_old=anchors.__dict__)
+_rename(globals(), anchors.__dict__, modulename='lib.anchors')
 del anchors
-
-del prefix
-del wx
+del _rename
