@@ -97,10 +97,10 @@ typedef void *(*swig_converter_func)(void *);
 typedef struct swig_type_info *(*swig_dycast_func)(void **);
 
 typedef struct swig_type_info {
-  const char             *name;
+  const char             *name;                 
   swig_converter_func     converter;
   const char             *str;
-  void                   *clientdata;
+  void                   *clientdata;	
   swig_dycast_func        dcast;
   struct swig_type_info  *next;
   struct swig_type_info  *prev;
@@ -118,6 +118,7 @@ SWIGIMPORT(void)             SWIG_TypeClientData(swig_type_info *, void *);
 
 #ifdef __cplusplus
 }
+
 #endif
 
 /***********************************************************************
@@ -203,15 +204,8 @@ SWIGEXPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 
 /* Contract support */
 
-#define SWIG_preassert(expr, msg)  if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
-#define SWIG_postassert(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
+#define SWIG_contract_assert(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, (char *) msg ); goto fail; } else
 
-#define SWIG_inherit_preassert(expr, msg)  if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
-#define SWIG_inherit_postassert(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
-
-#define SWIG_invariant(expr, msg)       if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
-#define SWIG_invariant_begin(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
-#define SWIG_invariant_end(expr, msg)   if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
 
 #ifdef __cplusplus
 }
@@ -385,7 +379,7 @@ static PyObject *_wrap_new_WizardEvent(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     wxEventType arg1 = (wxEventType) wxEVT_NULL ;
     int arg2 = (int) -1 ;
-    bool arg3 = (bool) TRUE ;
+    bool arg3 = (bool) True ;
     wxWizardPage *arg4 = (wxWizardPage *) NULL ;
     wxWizardEvent *result;
     PyObject * obj2 = 0 ;
@@ -484,7 +478,7 @@ static PyObject *_wrap_WizardPage_Create(PyObject *self, PyObject *args, PyObjec
     wxString const &arg4_defvalue = wxPyEmptyString ;
     wxString *arg4 = (wxString *) &arg4_defvalue ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -506,7 +500,7 @@ static PyObject *_wrap_WizardPage_Create(PyObject *self, PyObject *args, PyObjec
         {
             arg4 = wxString_in_helper(obj3);
             if (arg4 == NULL) SWIG_fail;
-            temp4 = true;
+            temp4 = True;
         }
     }
     {
@@ -687,7 +681,7 @@ static PyObject *_wrap_PyWizardPage_Create(PyObject *self, PyObject *args, PyObj
     wxString const &arg4_defvalue = wxPyEmptyString ;
     wxString *arg4 = (wxString *) &arg4_defvalue ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -709,7 +703,7 @@ static PyObject *_wrap_PyWizardPage_Create(PyObject *self, PyObject *args, PyObj
         {
             arg4 = wxString_in_helper(obj3);
             if (arg4 == NULL) SWIG_fail;
-            temp4 = true;
+            temp4 = True;
         }
     }
     {
@@ -1509,7 +1503,7 @@ static PyObject *_wrap_new_Wizard(PyObject *self, PyObject *args, PyObject *kwar
     wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
     long arg6 = (long) wxDEFAULT_DIALOG_STYLE ;
     wxWizard *result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     wxPoint temp5 ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
@@ -1525,7 +1519,7 @@ static PyObject *_wrap_new_Wizard(PyObject *self, PyObject *args, PyObject *kwar
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = true;
+            temp3 = True;
         }
     }
     if (obj3) {
@@ -1596,7 +1590,7 @@ static PyObject *_wrap_Wizard_Create(PyObject *self, PyObject *args, PyObject *k
     wxPoint const &arg6_defvalue = wxDefaultPosition ;
     wxPoint *arg6 = (wxPoint *) &arg6_defvalue ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     wxPoint temp6 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -1614,7 +1608,7 @@ static PyObject *_wrap_Wizard_Create(PyObject *self, PyObject *args, PyObject *k
         {
             arg4 = wxString_in_helper(obj3);
             if (arg4 == NULL) SWIG_fail;
-            temp4 = true;
+            temp4 = True;
         }
     }
     if (obj4) {
@@ -1898,7 +1892,7 @@ static PyObject *_wrap_Wizard_ShowPage(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     wxWizard *arg1 = (wxWizard *) 0 ;
     wxWizardPage *arg2 = (wxWizardPage *) 0 ;
-    bool arg3 = (bool) TRUE ;
+    bool arg3 = (bool) True ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;

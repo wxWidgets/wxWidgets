@@ -97,10 +97,10 @@ typedef void *(*swig_converter_func)(void *);
 typedef struct swig_type_info *(*swig_dycast_func)(void **);
 
 typedef struct swig_type_info {
-  const char             *name;
+  const char             *name;                 
   swig_converter_func     converter;
   const char             *str;
-  void                   *clientdata;
+  void                   *clientdata;	
   swig_dycast_func        dcast;
   struct swig_type_info  *next;
   struct swig_type_info  *prev;
@@ -118,6 +118,7 @@ SWIGIMPORT(void)             SWIG_TypeClientData(swig_type_info *, void *);
 
 #ifdef __cplusplus
 }
+
 #endif
 
 /***********************************************************************
@@ -203,15 +204,8 @@ SWIGEXPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 
 /* Contract support */
 
-#define SWIG_preassert(expr, msg)  if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
-#define SWIG_postassert(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
+#define SWIG_contract_assert(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, (char *) msg ); goto fail; } else
 
-#define SWIG_inherit_preassert(expr, msg)  if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
-#define SWIG_inherit_postassert(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
-
-#define SWIG_invariant(expr, msg)       if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
-#define SWIG_invariant_begin(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
-#define SWIG_invariant_end(expr, msg)   if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
 
 #ifdef __cplusplus
 }
@@ -244,63 +238,67 @@ SWIGEXPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxToggleButton swig_types[20] 
 #define  SWIGTYPE_p_wxRadioButton swig_types[21] 
 #define  SWIGTYPE_p_wxChoice swig_types[22] 
-#define  SWIGTYPE_p_wxListItemAttr swig_types[23] 
-#define  SWIGTYPE_p_int swig_types[24] 
-#define  SWIGTYPE_p_wxSize swig_types[25] 
-#define  SWIGTYPE_p_wxListView swig_types[26] 
-#define  SWIGTYPE_p_wxIcon swig_types[27] 
-#define  SWIGTYPE_p_wxTextCtrl swig_types[28] 
-#define  SWIGTYPE_p_wxNotebook swig_types[29] 
-#define  SWIGTYPE_p_wxNotifyEvent swig_types[30] 
-#define  SWIGTYPE_p_wxArrayString swig_types[31] 
-#define  SWIGTYPE_p_wxListbook swig_types[32] 
-#define  SWIGTYPE_p_wxStaticBitmap swig_types[33] 
-#define  SWIGTYPE_p_wxSlider swig_types[34] 
-#define  SWIGTYPE_p_wxStaticBox swig_types[35] 
-#define  SWIGTYPE_p_wxArrayInt swig_types[36] 
-#define  SWIGTYPE_p_wxContextHelp swig_types[37] 
-#define  SWIGTYPE_p_long swig_types[38] 
-#define  SWIGTYPE_p_wxEvtHandler swig_types[39] 
-#define  SWIGTYPE_p_wxListEvent swig_types[40] 
-#define  SWIGTYPE_p_wxListBox swig_types[41] 
-#define  SWIGTYPE_p_wxCheckListBox swig_types[42] 
-#define  SWIGTYPE_p_wxBookCtrl swig_types[43] 
-#define  SWIGTYPE_p_wxSpinButton swig_types[44] 
-#define  SWIGTYPE_p_wxButton swig_types[45] 
-#define  SWIGTYPE_p_wxBitmapButton swig_types[46] 
-#define  SWIGTYPE_p_wxRect swig_types[47] 
-#define  SWIGTYPE_p_wxContextHelpButton swig_types[48] 
-#define  SWIGTYPE_p_wxRadioBox swig_types[49] 
-#define  SWIGTYPE_p_wxScrollBar swig_types[50] 
-#define  SWIGTYPE_p_wxTreeItemId swig_types[51] 
-#define  SWIGTYPE_p_wxComboBox swig_types[52] 
-#define  SWIGTYPE_p_wxHelpEvent swig_types[53] 
-#define  SWIGTYPE_p_wxListItem swig_types[54] 
-#define  SWIGTYPE_p_wxNotebookSizer swig_types[55] 
-#define  SWIGTYPE_p_wxSpinCtrl swig_types[56] 
-#define  SWIGTYPE_p_wxImageList swig_types[57] 
-#define  SWIGTYPE_p_wxHelpProvider swig_types[58] 
-#define  SWIGTYPE_p_wxTextAttr swig_types[59] 
-#define  SWIGTYPE_p_wxSimpleHelpProvider swig_types[60] 
-#define  SWIGTYPE_p_wxPoint swig_types[61] 
-#define  SWIGTYPE_p_wxListbookEvent swig_types[62] 
-#define  SWIGTYPE_p_wxNotebookEvent swig_types[63] 
-#define  SWIGTYPE_p_wxObject swig_types[64] 
-#define  SWIGTYPE_p_wxKeyEvent swig_types[65] 
-#define  SWIGTYPE_p_wxWindow swig_types[66] 
-#define  SWIGTYPE_p_wxString swig_types[67] 
-#define  SWIGTYPE_p_wxBitmap swig_types[68] 
-#define  SWIGTYPE_p_wxTreeEvent swig_types[69] 
-#define  SWIGTYPE_p_wxMouseEvent swig_types[70] 
-#define  SWIGTYPE_p_wxCommandEvent swig_types[71] 
-#define  SWIGTYPE_p_wxStaticText swig_types[72] 
-#define  SWIGTYPE_p_wxControlWithItems swig_types[73] 
-#define  SWIGTYPE_p_wxToolBarToolBase swig_types[74] 
-#define  SWIGTYPE_p_wxColour swig_types[75] 
-#define  SWIGTYPE_p_wxToolBar swig_types[76] 
-#define  SWIGTYPE_p_wxBookCtrlSizer swig_types[77] 
-#define  SWIGTYPE_p_wxValidator swig_types[78] 
-static swig_type_info *swig_types[80];
+#define  SWIGTYPE_p_wxMemoryDC swig_types[23] 
+#define  SWIGTYPE_p_wxListItemAttr swig_types[24] 
+#define  SWIGTYPE_p_int swig_types[25] 
+#define  SWIGTYPE_p_wxSize swig_types[26] 
+#define  SWIGTYPE_p_wxDC swig_types[27] 
+#define  SWIGTYPE_p_wxListView swig_types[28] 
+#define  SWIGTYPE_p_wxIcon swig_types[29] 
+#define  SWIGTYPE_p_wxTextCtrl swig_types[30] 
+#define  SWIGTYPE_p_wxNotebook swig_types[31] 
+#define  SWIGTYPE_p_wxNotifyEvent swig_types[32] 
+#define  SWIGTYPE_p_wxArrayString swig_types[33] 
+#define  SWIGTYPE_p_wxListbook swig_types[34] 
+#define  SWIGTYPE_p_wxStaticBitmap swig_types[35] 
+#define  SWIGTYPE_p_wxSlider swig_types[36] 
+#define  SWIGTYPE_p_wxStaticBox swig_types[37] 
+#define  SWIGTYPE_p_wxArrayInt swig_types[38] 
+#define  SWIGTYPE_p_wxContextHelp swig_types[39] 
+#define  SWIGTYPE_p_long swig_types[40] 
+#define  SWIGTYPE_p_wxEvtHandler swig_types[41] 
+#define  SWIGTYPE_p_wxListEvent swig_types[42] 
+#define  SWIGTYPE_p_wxListBox swig_types[43] 
+#define  SWIGTYPE_p_wxCheckListBox swig_types[44] 
+#define  SWIGTYPE_p_wxBookCtrl swig_types[45] 
+#define  SWIGTYPE_p_wxSpinButton swig_types[46] 
+#define  SWIGTYPE_p_wxButton swig_types[47] 
+#define  SWIGTYPE_p_wxBitmapButton swig_types[48] 
+#define  SWIGTYPE_p_wxRect swig_types[49] 
+#define  SWIGTYPE_p_wxContextHelpButton swig_types[50] 
+#define  SWIGTYPE_p_wxRadioBox swig_types[51] 
+#define  SWIGTYPE_p_wxScrollBar swig_types[52] 
+#define  SWIGTYPE_p_wxTreeItemId swig_types[53] 
+#define  SWIGTYPE_p_wxComboBox swig_types[54] 
+#define  SWIGTYPE_p_wxHelpEvent swig_types[55] 
+#define  SWIGTYPE_p_wxListItem swig_types[56] 
+#define  SWIGTYPE_p_wxNotebookSizer swig_types[57] 
+#define  SWIGTYPE_p_wxGenericDragImage swig_types[58] 
+#define  SWIGTYPE_p_wxSpinCtrl swig_types[59] 
+#define  SWIGTYPE_p_wxImageList swig_types[60] 
+#define  SWIGTYPE_p_wxHelpProvider swig_types[61] 
+#define  SWIGTYPE_p_wxTextAttr swig_types[62] 
+#define  SWIGTYPE_p_wxSimpleHelpProvider swig_types[63] 
+#define  SWIGTYPE_p_wxPoint swig_types[64] 
+#define  SWIGTYPE_p_wxListbookEvent swig_types[65] 
+#define  SWIGTYPE_p_wxNotebookEvent swig_types[66] 
+#define  SWIGTYPE_p_wxObject swig_types[67] 
+#define  SWIGTYPE_p_wxCursor swig_types[68] 
+#define  SWIGTYPE_p_wxKeyEvent swig_types[69] 
+#define  SWIGTYPE_p_wxWindow swig_types[70] 
+#define  SWIGTYPE_p_wxString swig_types[71] 
+#define  SWIGTYPE_p_wxBitmap swig_types[72] 
+#define  SWIGTYPE_p_wxTreeEvent swig_types[73] 
+#define  SWIGTYPE_p_wxMouseEvent swig_types[74] 
+#define  SWIGTYPE_p_wxCommandEvent swig_types[75] 
+#define  SWIGTYPE_p_wxStaticText swig_types[76] 
+#define  SWIGTYPE_p_wxControlWithItems swig_types[77] 
+#define  SWIGTYPE_p_wxToolBarToolBase swig_types[78] 
+#define  SWIGTYPE_p_wxColour swig_types[79] 
+#define  SWIGTYPE_p_wxToolBar swig_types[80] 
+#define  SWIGTYPE_p_wxBookCtrlSizer swig_types[81] 
+#define  SWIGTYPE_p_wxValidator swig_types[82] 
+static swig_type_info *swig_types[84];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -578,7 +576,7 @@ wxRect wxPyListCtrl_GetItemRect(wxPyListCtrl *self,long item,int code){
         }
 bool wxPyListCtrl_SortItems(wxPyListCtrl *self,PyObject *func){
             if (!PyCallable_Check(func))
-                return FALSE;
+                return False;
             return self->SortItems((wxListCtrlCompare)wxPyListCtrl_SortItems, (long)func);
         }
 wxWindow *wxPyListCtrl_GetMainWindow(wxPyListCtrl *self){
@@ -596,11 +594,11 @@ wxWindow *wxPyListCtrl_GetMainWindow(wxPyListCtrl *self){
     DECLARE_DEF_STRING(_TreeCtrlNameStr);
 
 bool wxTreeItemId_operator_ee___(wxTreeItemId *self,wxTreeItemId const *other){
-            if (!other) return false;
+            if (!other) return False;
             return *self == *other;
         }
 bool wxTreeItemId_operator_Ne___(wxTreeItemId *self,wxTreeItemId const *other){
-            if (!other) return true;
+            if (!other) return True;
             return *self != *other;
         }
 void wxPyTreeItemData_Destroy(wxPyTreeItemData *self){ delete self; }
@@ -633,8 +631,8 @@ public:
         bool found;
         wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "OnCompareItems"))) {
-            PyObject *o1 = wxPyConstructObject((void*)&item1, wxT("wxTreeItemId"), false);
-            PyObject *o2 = wxPyConstructObject((void*)&item2, wxT("wxTreeItemId"), false);
+            PyObject *o1 = wxPyConstructObject((void*)&item1, wxT("wxTreeItemId"), False);
+            PyObject *o2 = wxPyConstructObject((void*)&item2, wxT("wxTreeItemId"), False);
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OO)",o1,o2));
             Py_DECREF(o1);
             Py_DECREF(o2);
@@ -689,7 +687,7 @@ PyObject *wxPyTreeCtrl_GetSelections(wxPyTreeCtrl *self){
             num = self->GetSelections(array);
             for (x=0; x < num; x++) {
                 wxTreeItemId *tii = new wxTreeItemId(array.Item(x));
-                PyObject* item = wxPyConstructObject((void*)tii, wxT("wxTreeItemId"), true);
+                PyObject* item = wxPyConstructObject((void*)tii, wxT("wxTreeItemId"), True);
                 PyList_Append(rval, item);
             }
             wxPyEndBlockThreads();
@@ -700,8 +698,8 @@ PyObject *wxPyTreeCtrl_GetFirstChild(wxPyTreeCtrl *self,wxTreeItemId const &item
             wxTreeItemId ritem = self->GetFirstChild(item, cookie);
             wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
-            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(&ritem, wxT("wxTreeItemId"), true));
-            PyTuple_SET_ITEM(tup, 1, wxPyConstructObject(cookie, wxT("wxTreeItemIdValue"), true));
+            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(&ritem, wxT("wxTreeItemId"), True));
+            PyTuple_SET_ITEM(tup, 1, wxPyConstructObject(cookie, wxT("wxTreeItemIdValue"), True));
             wxPyEndBlockThreads();
             return tup;
         }
@@ -709,8 +707,8 @@ PyObject *wxPyTreeCtrl_GetNextChild(wxPyTreeCtrl *self,wxTreeItemId const &item,
             wxTreeItemId ritem = self->GetNextChild(item, cookie);
             wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
-            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(&ritem, wxT("wxTreeItemId"), true));
-            PyTuple_SET_ITEM(tup, 1, wxPyConstructObject(cookie, wxT("wxTreeItemIdValue"), true));
+            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(&ritem, wxT("wxTreeItemId"), True));
+            PyTuple_SET_ITEM(tup, 1, wxPyConstructObject(cookie, wxT("wxTreeItemIdValue"), True));
             wxPyEndBlockThreads();
             return tup;
         }
@@ -719,7 +717,7 @@ PyObject *wxPyTreeCtrl_GetBoundingRect(wxPyTreeCtrl *self,wxTreeItemId const &it
             if (self->GetBoundingRect(item, rect, textOnly)) {
                 wxPyBeginBlockThreads();
                 wxRect* r = new wxRect(rect);
-                PyObject* val = wxPyConstructObject((void*)r, wxT("wxRect"), true);
+                PyObject* val = wxPyConstructObject((void*)r, wxT("wxRect"), True);
                 wxPyEndBlockThreads();
                 return val;
             }
@@ -801,13 +799,16 @@ IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, RemoveChild);
 
 
 void wxHelpProvider_Destroy(wxHelpProvider *self){ delete self; }
+
+#include <wx/generic/dragimgg.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 static PyObject *_wrap_new_Button(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxString *arg3 = 0 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
@@ -819,10 +820,10 @@ static PyObject *_wrap_new_Button(PyObject *self, PyObject *args, PyObject *kwar
     wxString const &arg8_defvalue = wxPyButtonNameStr ;
     wxString *arg8 = (wxString *) &arg8_defvalue ;
     wxButton *result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp8 = false ;
+    bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -838,7 +839,7 @@ static PyObject *_wrap_new_Button(PyObject *self, PyObject *args, PyObject *kwar
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     if (obj3) {
         {
@@ -862,7 +863,7 @@ static PyObject *_wrap_new_Button(PyObject *self, PyObject *args, PyObject *kwar
         {
             arg8 = wxString_in_helper(obj7);
             if (arg8 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     {
@@ -925,7 +926,7 @@ static PyObject *_wrap_Button_Create(PyObject *self, PyObject *args, PyObject *k
     PyObject *resultobj;
     wxButton *arg1 = (wxButton *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     wxString *arg4 = 0 ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
     wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
@@ -937,10 +938,10 @@ static PyObject *_wrap_Button_Create(PyObject *self, PyObject *args, PyObject *k
     wxString const &arg9_defvalue = wxPyButtonNameStr ;
     wxString *arg9 = (wxString *) &arg9_defvalue ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     wxPoint temp5 ;
     wxSize temp6 ;
-    bool temp9 = false ;
+    bool temp9 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -958,7 +959,7 @@ static PyObject *_wrap_Button_Create(PyObject *self, PyObject *args, PyObject *k
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     if (obj4) {
         {
@@ -982,7 +983,7 @@ static PyObject *_wrap_Button_Create(PyObject *self, PyObject *args, PyObject *k
         {
             arg9 = wxString_in_helper(obj8);
             if (arg9 == NULL) SWIG_fail;
-            temp9 = true;
+            temp9 = True;
         }
     }
     {
@@ -1072,8 +1073,8 @@ static PyObject *_wrap_Button_SetImageLabel(PyObject *self, PyObject *args, PyOb
 static PyObject *_wrap_Button_SetImageMargins(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxButton *arg1 = (wxButton *) 0 ;
-    wxCoord arg2 ;
-    wxCoord arg3 ;
+    int arg2 ;
+    int arg3 ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x",(char *) "y", NULL 
@@ -1131,7 +1132,7 @@ static PyObject * Button_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_BitmapButton(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxBitmap *arg3 = 0 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
@@ -1145,7 +1146,7 @@ static PyObject *_wrap_new_BitmapButton(PyObject *self, PyObject *args, PyObject
     wxBitmapButton *result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp8 = false ;
+    bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -1184,7 +1185,7 @@ static PyObject *_wrap_new_BitmapButton(PyObject *self, PyObject *args, PyObject
         {
             arg8 = wxString_in_helper(obj7);
             if (arg8 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     {
@@ -1239,7 +1240,7 @@ static PyObject *_wrap_BitmapButton_Create(PyObject *self, PyObject *args, PyObj
     PyObject *resultobj;
     wxBitmapButton *arg1 = (wxBitmapButton *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     wxBitmap *arg4 = 0 ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
     wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
@@ -1253,7 +1254,7 @@ static PyObject *_wrap_BitmapButton_Create(PyObject *self, PyObject *args, PyObj
     bool result;
     wxPoint temp5 ;
     wxSize temp6 ;
-    bool temp9 = false ;
+    bool temp9 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -1294,7 +1295,7 @@ static PyObject *_wrap_BitmapButton_Create(PyObject *self, PyObject *args, PyObj
         {
             arg9 = wxString_in_helper(obj8);
             if (arg9 == NULL) SWIG_fail;
-            temp9 = true;
+            temp9 = True;
         }
     }
     {
@@ -1641,7 +1642,7 @@ static PyObject * BitmapButton_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_CheckBox(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxString *arg3 = 0 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
@@ -1653,10 +1654,10 @@ static PyObject *_wrap_new_CheckBox(PyObject *self, PyObject *args, PyObject *kw
     wxString const &arg8_defvalue = wxPyCheckBoxNameStr ;
     wxString *arg8 = (wxString *) &arg8_defvalue ;
     wxCheckBox *result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp8 = false ;
+    bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -1672,7 +1673,7 @@ static PyObject *_wrap_new_CheckBox(PyObject *self, PyObject *args, PyObject *kw
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     if (obj3) {
         {
@@ -1696,7 +1697,7 @@ static PyObject *_wrap_new_CheckBox(PyObject *self, PyObject *args, PyObject *kw
         {
             arg8 = wxString_in_helper(obj7);
             if (arg8 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     {
@@ -1755,7 +1756,7 @@ static PyObject *_wrap_CheckBox_Create(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     wxCheckBox *arg1 = (wxCheckBox *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     wxString *arg4 = 0 ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
     wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
@@ -1767,10 +1768,10 @@ static PyObject *_wrap_CheckBox_Create(PyObject *self, PyObject *args, PyObject 
     wxString const &arg9_defvalue = wxPyCheckBoxNameStr ;
     wxString *arg9 = (wxString *) &arg9_defvalue ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     wxPoint temp5 ;
     wxSize temp6 ;
-    bool temp9 = false ;
+    bool temp9 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -1788,7 +1789,7 @@ static PyObject *_wrap_CheckBox_Create(PyObject *self, PyObject *args, PyObject 
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     if (obj4) {
         {
@@ -1812,7 +1813,7 @@ static PyObject *_wrap_CheckBox_Create(PyObject *self, PyObject *args, PyObject 
         {
             arg9 = wxString_in_helper(obj8);
             if (arg9 == NULL) SWIG_fail;
-            temp9 = true;
+            temp9 = True;
         }
     }
     {
@@ -2033,7 +2034,7 @@ static PyObject * CheckBox_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_Choice(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -2048,7 +2049,7 @@ static PyObject *_wrap_new_Choice(PyObject *self, PyObject *args, PyObject *kwar
     wxChoice *result;
     wxPoint temp3 ;
     wxSize temp4 ;
-    bool temp8 = false ;
+    bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -2090,7 +2091,7 @@ static PyObject *_wrap_new_Choice(PyObject *self, PyObject *args, PyObject *kwar
         {
             arg9 = wxString_in_helper(obj7);
             if (arg9 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     {
@@ -2147,7 +2148,7 @@ static PyObject *_wrap_Choice_Create(PyObject *self, PyObject *args, PyObject *k
     PyObject *resultobj;
     wxChoice *arg1 = (wxChoice *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -2162,7 +2163,7 @@ static PyObject *_wrap_Choice_Create(PyObject *self, PyObject *args, PyObject *k
     bool result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp9 = false ;
+    bool temp9 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -2206,7 +2207,7 @@ static PyObject *_wrap_Choice_Create(PyObject *self, PyObject *args, PyObject *k
         {
             arg10 = wxString_in_helper(obj8);
             if (arg10 == NULL) SWIG_fail;
-            temp9 = true;
+            temp9 = True;
         }
     }
     {
@@ -2316,7 +2317,7 @@ static PyObject *_wrap_Choice_SetStringSelection(PyObject *self, PyObject *args,
     PyObject *resultobj;
     wxChoice *arg1 = (wxChoice *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -2328,7 +2329,7 @@ static PyObject *_wrap_Choice_SetStringSelection(PyObject *self, PyObject *args,
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2357,7 +2358,7 @@ static PyObject *_wrap_Choice_SetString(PyObject *self, PyObject *args, PyObject
     wxChoice *arg1 = (wxChoice *) 0 ;
     int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -2369,7 +2370,7 @@ static PyObject *_wrap_Choice_SetString(PyObject *self, PyObject *args, PyObject
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2403,7 +2404,7 @@ static PyObject * Choice_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_ComboBox(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxString const &arg3_defvalue = wxPyEmptyString ;
     wxString *arg3 = (wxString *) &arg3_defvalue ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
@@ -2418,10 +2419,10 @@ static PyObject *_wrap_new_ComboBox(PyObject *self, PyObject *args, PyObject *kw
     wxString const &arg10_defvalue = wxPyComboBoxNameStr ;
     wxString *arg10 = (wxString *) &arg10_defvalue ;
     wxComboBox *result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp9 = false ;
+    bool temp9 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -2439,7 +2440,7 @@ static PyObject *_wrap_new_ComboBox(PyObject *self, PyObject *args, PyObject *kw
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = true;
+            temp3 = True;
         }
     }
     if (obj3) {
@@ -2471,7 +2472,7 @@ static PyObject *_wrap_new_ComboBox(PyObject *self, PyObject *args, PyObject *kw
         {
             arg10 = wxString_in_helper(obj8);
             if (arg10 == NULL) SWIG_fail;
-            temp9 = true;
+            temp9 = True;
         }
     }
     {
@@ -2536,7 +2537,7 @@ static PyObject *_wrap_ComboBox_Create(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     wxComboBox *arg1 = (wxComboBox *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     wxString const &arg4_defvalue = wxPyEmptyString ;
     wxString *arg4 = (wxString *) &arg4_defvalue ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
@@ -2551,10 +2552,10 @@ static PyObject *_wrap_ComboBox_Create(PyObject *self, PyObject *args, PyObject 
     wxString const &arg11_defvalue = wxPyComboBoxNameStr ;
     wxString *arg11 = (wxString *) &arg11_defvalue ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     wxPoint temp5 ;
     wxSize temp6 ;
-    bool temp10 = false ;
+    bool temp10 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -2574,7 +2575,7 @@ static PyObject *_wrap_ComboBox_Create(PyObject *self, PyObject *args, PyObject 
         {
             arg4 = wxString_in_helper(obj3);
             if (arg4 == NULL) SWIG_fail;
-            temp4 = true;
+            temp4 = True;
         }
     }
     if (obj4) {
@@ -2606,7 +2607,7 @@ static PyObject *_wrap_ComboBox_Create(PyObject *self, PyObject *args, PyObject 
         {
             arg11 = wxString_in_helper(obj9);
             if (arg11 == NULL) SWIG_fail;
-            temp10 = true;
+            temp10 = True;
         }
     }
     {
@@ -2680,7 +2681,7 @@ static PyObject *_wrap_ComboBox_SetValue(PyObject *self, PyObject *args, PyObjec
     PyObject *resultobj;
     wxComboBox *arg1 = (wxComboBox *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -2692,7 +2693,7 @@ static PyObject *_wrap_ComboBox_SetValue(PyObject *self, PyObject *args, PyObjec
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2869,7 +2870,7 @@ static PyObject *_wrap_ComboBox_Replace(PyObject *self, PyObject *args, PyObject
     long arg2 ;
     long arg3 ;
     wxString *arg4 = 0 ;
-    bool temp4 = false ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
@@ -2881,7 +2882,7 @@ static PyObject *_wrap_ComboBox_Replace(PyObject *self, PyObject *args, PyObject
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3019,7 +3020,7 @@ static PyObject * ComboBox_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_Gauge(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     int arg3 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
@@ -3033,7 +3034,7 @@ static PyObject *_wrap_new_Gauge(PyObject *self, PyObject *args, PyObject *kwarg
     wxGauge *result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp8 = false ;
+    bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj3 = 0 ;
     PyObject * obj4 = 0 ;
@@ -3067,7 +3068,7 @@ static PyObject *_wrap_new_Gauge(PyObject *self, PyObject *args, PyObject *kwarg
         {
             arg8 = wxString_in_helper(obj7);
             if (arg8 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     {
@@ -3118,7 +3119,7 @@ static PyObject *_wrap_Gauge_Create(PyObject *self, PyObject *args, PyObject *kw
     PyObject *resultobj;
     wxGauge *arg1 = (wxGauge *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     int arg4 ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
     wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
@@ -3132,7 +3133,7 @@ static PyObject *_wrap_Gauge_Create(PyObject *self, PyObject *args, PyObject *kw
     bool result;
     wxPoint temp5 ;
     wxSize temp6 ;
-    bool temp9 = false ;
+    bool temp9 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj4 = 0 ;
@@ -3168,7 +3169,7 @@ static PyObject *_wrap_Gauge_Create(PyObject *self, PyObject *args, PyObject *kw
         {
             arg9 = wxString_in_helper(obj8);
             if (arg9 == NULL) SWIG_fail;
-            temp9 = true;
+            temp9 = True;
         }
     }
     {
@@ -3428,7 +3429,7 @@ static PyObject * Gauge_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_StaticBox(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxString *arg3 = 0 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
@@ -3438,10 +3439,10 @@ static PyObject *_wrap_new_StaticBox(PyObject *self, PyObject *args, PyObject *k
     wxString const &arg7_defvalue = wxPyStaticBoxNameStr ;
     wxString *arg7 = (wxString *) &arg7_defvalue ;
     wxStaticBox *result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp7 = false ;
+    bool temp7 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -3456,7 +3457,7 @@ static PyObject *_wrap_new_StaticBox(PyObject *self, PyObject *args, PyObject *k
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     if (obj3) {
         {
@@ -3474,7 +3475,7 @@ static PyObject *_wrap_new_StaticBox(PyObject *self, PyObject *args, PyObject *k
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = true;
+            temp7 = True;
         }
     }
     {
@@ -3537,7 +3538,7 @@ static PyObject *_wrap_StaticBox_Create(PyObject *self, PyObject *args, PyObject
     PyObject *resultobj;
     wxStaticBox *arg1 = (wxStaticBox *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     wxString *arg4 = 0 ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
     wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
@@ -3547,10 +3548,10 @@ static PyObject *_wrap_StaticBox_Create(PyObject *self, PyObject *args, PyObject
     wxString const &arg8_defvalue = wxPyStaticBoxNameStr ;
     wxString *arg8 = (wxString *) &arg8_defvalue ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     wxPoint temp5 ;
     wxSize temp6 ;
-    bool temp8 = false ;
+    bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -3567,7 +3568,7 @@ static PyObject *_wrap_StaticBox_Create(PyObject *self, PyObject *args, PyObject
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     if (obj4) {
         {
@@ -3585,7 +3586,7 @@ static PyObject *_wrap_StaticBox_Create(PyObject *self, PyObject *args, PyObject
         {
             arg8 = wxString_in_helper(obj7);
             if (arg8 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     {
@@ -3628,7 +3629,7 @@ static PyObject * StaticBox_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_StaticLine(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -3639,7 +3640,7 @@ static PyObject *_wrap_new_StaticLine(PyObject *self, PyObject *args, PyObject *
     wxStaticLine *result;
     wxPoint temp3 ;
     wxSize temp4 ;
-    bool temp6 = false ;
+    bool temp6 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -3666,7 +3667,7 @@ static PyObject *_wrap_new_StaticLine(PyObject *self, PyObject *args, PyObject *
         {
             arg6 = wxString_in_helper(obj5);
             if (arg6 == NULL) SWIG_fail;
-            temp6 = true;
+            temp6 = True;
         }
     }
     {
@@ -3717,7 +3718,7 @@ static PyObject *_wrap_StaticLine_Create(PyObject *self, PyObject *args, PyObjec
     PyObject *resultobj;
     wxStaticLine *arg1 = (wxStaticLine *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -3728,7 +3729,7 @@ static PyObject *_wrap_StaticLine_Create(PyObject *self, PyObject *args, PyObjec
     bool result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp7 = false ;
+    bool temp7 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -3757,7 +3758,7 @@ static PyObject *_wrap_StaticLine_Create(PyObject *self, PyObject *args, PyObjec
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = true;
+            temp7 = True;
         }
     }
     {
@@ -3839,7 +3840,7 @@ static PyObject * StaticLine_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_StaticText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxString *arg3 = 0 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
@@ -3849,10 +3850,10 @@ static PyObject *_wrap_new_StaticText(PyObject *self, PyObject *args, PyObject *
     wxString const &arg7_defvalue = wxPyStaticTextNameStr ;
     wxString *arg7 = (wxString *) &arg7_defvalue ;
     wxStaticText *result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp7 = false ;
+    bool temp7 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -3867,7 +3868,7 @@ static PyObject *_wrap_new_StaticText(PyObject *self, PyObject *args, PyObject *
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     if (obj3) {
         {
@@ -3885,7 +3886,7 @@ static PyObject *_wrap_new_StaticText(PyObject *self, PyObject *args, PyObject *
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = true;
+            temp7 = True;
         }
     }
     {
@@ -3944,7 +3945,7 @@ static PyObject *_wrap_StaticText_Create(PyObject *self, PyObject *args, PyObjec
     PyObject *resultobj;
     wxStaticText *arg1 = (wxStaticText *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     wxString *arg4 = 0 ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
     wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
@@ -3954,10 +3955,10 @@ static PyObject *_wrap_StaticText_Create(PyObject *self, PyObject *args, PyObjec
     wxString const &arg8_defvalue = wxPyStaticTextNameStr ;
     wxString *arg8 = (wxString *) &arg8_defvalue ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     wxPoint temp5 ;
     wxSize temp6 ;
-    bool temp8 = false ;
+    bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -3974,7 +3975,7 @@ static PyObject *_wrap_StaticText_Create(PyObject *self, PyObject *args, PyObjec
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     if (obj4) {
         {
@@ -3992,7 +3993,7 @@ static PyObject *_wrap_StaticText_Create(PyObject *self, PyObject *args, PyObjec
         {
             arg8 = wxString_in_helper(obj7);
             if (arg8 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     {
@@ -4035,7 +4036,7 @@ static PyObject * StaticText_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_StaticBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxBitmap *arg3 = 0 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
@@ -4047,7 +4048,7 @@ static PyObject *_wrap_new_StaticBitmap(PyObject *self, PyObject *args, PyObject
     wxStaticBitmap *result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp7 = false ;
+    bool temp7 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -4079,7 +4080,7 @@ static PyObject *_wrap_new_StaticBitmap(PyObject *self, PyObject *args, PyObject
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = true;
+            temp7 = True;
         }
     }
     {
@@ -4130,7 +4131,7 @@ static PyObject *_wrap_StaticBitmap_Create(PyObject *self, PyObject *args, PyObj
     PyObject *resultobj;
     wxStaticBitmap *arg1 = (wxStaticBitmap *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     wxBitmap *arg4 = 0 ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
     wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
@@ -4142,7 +4143,7 @@ static PyObject *_wrap_StaticBitmap_Create(PyObject *self, PyObject *args, PyObj
     bool result;
     wxPoint temp5 ;
     wxSize temp6 ;
-    bool temp8 = false ;
+    bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -4176,7 +4177,7 @@ static PyObject *_wrap_StaticBitmap_Create(PyObject *self, PyObject *args, PyObj
         {
             arg8 = wxString_in_helper(obj7);
             if (arg8 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     {
@@ -4300,7 +4301,7 @@ static PyObject * StaticBitmap_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_ListBox(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -4315,7 +4316,7 @@ static PyObject *_wrap_new_ListBox(PyObject *self, PyObject *args, PyObject *kwa
     wxListBox *result;
     wxPoint temp3 ;
     wxSize temp4 ;
-    bool temp8 = false ;
+    bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -4357,7 +4358,7 @@ static PyObject *_wrap_new_ListBox(PyObject *self, PyObject *args, PyObject *kwa
         {
             arg9 = wxString_in_helper(obj7);
             if (arg9 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     {
@@ -4414,7 +4415,7 @@ static PyObject *_wrap_ListBox_Create(PyObject *self, PyObject *args, PyObject *
     PyObject *resultobj;
     wxListBox *arg1 = (wxListBox *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -4429,7 +4430,7 @@ static PyObject *_wrap_ListBox_Create(PyObject *self, PyObject *args, PyObject *
     bool result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp9 = false ;
+    bool temp9 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -4473,7 +4474,7 @@ static PyObject *_wrap_ListBox_Create(PyObject *self, PyObject *args, PyObject *
         {
             arg10 = wxString_in_helper(obj8);
             if (arg10 == NULL) SWIG_fail;
-            temp9 = true;
+            temp9 = True;
         }
     }
     {
@@ -4510,7 +4511,7 @@ static PyObject *_wrap_ListBox_Insert(PyObject *self, PyObject *args, PyObject *
     wxString *arg2 = 0 ;
     int arg3 ;
     PyObject *arg4 = (PyObject *) NULL ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -4523,7 +4524,7 @@ static PyObject *_wrap_ListBox_Insert(PyObject *self, PyObject *args, PyObject *
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     if (obj3) {
         arg4 = obj3;
@@ -4683,7 +4684,7 @@ static PyObject *_wrap_ListBox_SetSelection(PyObject *self, PyObject *args, PyOb
     PyObject *resultobj;
     wxListBox *arg1 = (wxListBox *) 0 ;
     int arg2 ;
-    bool arg3 = (bool) TRUE ;
+    bool arg3 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -4789,9 +4790,9 @@ static PyObject *_wrap_ListBox_SetStringSelection(PyObject *self, PyObject *args
     PyObject *resultobj;
     wxListBox *arg1 = (wxListBox *) 0 ;
     wxString *arg2 = 0 ;
-    bool arg3 = (bool) TRUE ;
+    bool arg3 = (bool) True ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -4804,7 +4805,7 @@ static PyObject *_wrap_ListBox_SetStringSelection(PyObject *self, PyObject *args
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     if (obj2) {
         arg3 = PyInt_AsLong(obj2) ? true : false;
@@ -4886,7 +4887,7 @@ static PyObject *_wrap_ListBox_SetFirstItemStr(PyObject *self, PyObject *args, P
     PyObject *resultobj;
     wxListBox *arg1 = (wxListBox *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -4898,7 +4899,7 @@ static PyObject *_wrap_ListBox_SetFirstItemStr(PyObject *self, PyObject *args, P
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4951,7 +4952,7 @@ static PyObject *_wrap_ListBox_AppendAndEnsureVisible(PyObject *self, PyObject *
     PyObject *resultobj;
     wxListBox *arg1 = (wxListBox *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -4963,7 +4964,7 @@ static PyObject *_wrap_ListBox_AppendAndEnsureVisible(PyObject *self, PyObject *
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5022,7 +5023,7 @@ static PyObject * ListBox_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_CheckListBox(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -5037,7 +5038,7 @@ static PyObject *_wrap_new_CheckListBox(PyObject *self, PyObject *args, PyObject
     wxCheckListBox *result;
     wxPoint temp3 ;
     wxSize temp4 ;
-    bool temp8 = false ;
+    bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -5079,7 +5080,7 @@ static PyObject *_wrap_new_CheckListBox(PyObject *self, PyObject *args, PyObject
         {
             arg9 = wxString_in_helper(obj7);
             if (arg9 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     {
@@ -5136,7 +5137,7 @@ static PyObject *_wrap_CheckListBox_Create(PyObject *self, PyObject *args, PyObj
     PyObject *resultobj;
     wxCheckListBox *arg1 = (wxCheckListBox *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -5151,7 +5152,7 @@ static PyObject *_wrap_CheckListBox_Create(PyObject *self, PyObject *args, PyObj
     bool result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp9 = false ;
+    bool temp9 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -5195,7 +5196,7 @@ static PyObject *_wrap_CheckListBox_Create(PyObject *self, PyObject *args, PyObj
         {
             arg10 = wxString_in_helper(obj8);
             if (arg10 == NULL) SWIG_fail;
-            temp9 = true;
+            temp9 = True;
         }
     }
     {
@@ -5256,7 +5257,7 @@ static PyObject *_wrap_CheckListBox_Check(PyObject *self, PyObject *args, PyObje
     PyObject *resultobj;
     wxCheckListBox *arg1 = (wxCheckListBox *) 0 ;
     int arg2 ;
-    int arg3 = (int) TRUE ;
+    int arg3 = (int) True ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "index",(char *) "check", NULL 
@@ -5338,8 +5339,8 @@ static PyObject *_wrap_CheckListBox_HitTest(PyObject *self, PyObject *args, PyOb
 static PyObject *_wrap_CheckListBox_HitTestXY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCheckListBox *arg1 = (wxCheckListBox *) 0 ;
-    wxCoord arg2 ;
-    wxCoord arg3 ;
+    int arg2 ;
+    int arg3 ;
     int result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
@@ -6252,7 +6253,7 @@ static PyObject * TextAttr_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_TextCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxString const &arg3_defvalue = wxPyEmptyString ;
     wxString *arg3 = (wxString *) &arg3_defvalue ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
@@ -6265,10 +6266,10 @@ static PyObject *_wrap_new_TextCtrl(PyObject *self, PyObject *args, PyObject *kw
     wxString const &arg8_defvalue = wxPyTextCtrlNameStr ;
     wxString *arg8 = (wxString *) &arg8_defvalue ;
     wxTextCtrl *result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp8 = false ;
+    bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -6285,7 +6286,7 @@ static PyObject *_wrap_new_TextCtrl(PyObject *self, PyObject *args, PyObject *kw
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = true;
+            temp3 = True;
         }
     }
     if (obj3) {
@@ -6310,7 +6311,7 @@ static PyObject *_wrap_new_TextCtrl(PyObject *self, PyObject *args, PyObject *kw
         {
             arg8 = wxString_in_helper(obj7);
             if (arg8 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     {
@@ -6373,7 +6374,7 @@ static PyObject *_wrap_TextCtrl_Create(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     wxTextCtrl *arg1 = (wxTextCtrl *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     wxString const &arg4_defvalue = wxPyEmptyString ;
     wxString *arg4 = (wxString *) &arg4_defvalue ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
@@ -6386,10 +6387,10 @@ static PyObject *_wrap_TextCtrl_Create(PyObject *self, PyObject *args, PyObject 
     wxString const &arg9_defvalue = wxPyTextCtrlNameStr ;
     wxString *arg9 = (wxString *) &arg9_defvalue ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     wxPoint temp5 ;
     wxSize temp6 ;
-    bool temp9 = false ;
+    bool temp9 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -6408,7 +6409,7 @@ static PyObject *_wrap_TextCtrl_Create(PyObject *self, PyObject *args, PyObject 
         {
             arg4 = wxString_in_helper(obj3);
             if (arg4 == NULL) SWIG_fail;
-            temp4 = true;
+            temp4 = True;
         }
     }
     if (obj4) {
@@ -6433,7 +6434,7 @@ static PyObject *_wrap_TextCtrl_Create(PyObject *self, PyObject *args, PyObject 
         {
             arg9 = wxString_in_helper(obj8);
             if (arg9 == NULL) SWIG_fail;
-            temp9 = true;
+            temp9 = True;
         }
     }
     {
@@ -6501,7 +6502,7 @@ static PyObject *_wrap_TextCtrl_SetValue(PyObject *self, PyObject *args, PyObjec
     PyObject *resultobj;
     wxTextCtrl *arg1 = (wxTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -6513,7 +6514,7 @@ static PyObject *_wrap_TextCtrl_SetValue(PyObject *self, PyObject *args, PyObjec
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6852,7 +6853,7 @@ static PyObject *_wrap_TextCtrl_Replace(PyObject *self, PyObject *args, PyObject
     long arg2 ;
     long arg3 ;
     wxString *arg4 = 0 ;
-    bool temp4 = false ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
@@ -6864,7 +6865,7 @@ static PyObject *_wrap_TextCtrl_Replace(PyObject *self, PyObject *args, PyObject
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6919,7 +6920,7 @@ static PyObject *_wrap_TextCtrl_LoadFile(PyObject *self, PyObject *args, PyObjec
     wxTextCtrl *arg1 = (wxTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -6931,7 +6932,7 @@ static PyObject *_wrap_TextCtrl_LoadFile(PyObject *self, PyObject *args, PyObjec
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6961,7 +6962,7 @@ static PyObject *_wrap_TextCtrl_SaveFile(PyObject *self, PyObject *args, PyObjec
     wxString const &arg2_defvalue = wxPyEmptyString ;
     wxString *arg2 = (wxString *) &arg2_defvalue ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -6974,7 +6975,7 @@ static PyObject *_wrap_TextCtrl_SaveFile(PyObject *self, PyObject *args, PyObjec
         {
             arg2 = wxString_in_helper(obj1);
             if (arg2 == NULL) SWIG_fail;
-            temp2 = true;
+            temp2 = True;
         }
     }
     {
@@ -7079,7 +7080,7 @@ static PyObject *_wrap_TextCtrl_WriteText(PyObject *self, PyObject *args, PyObje
     PyObject *resultobj;
     wxTextCtrl *arg1 = (wxTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -7091,7 +7092,7 @@ static PyObject *_wrap_TextCtrl_WriteText(PyObject *self, PyObject *args, PyObje
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7119,7 +7120,7 @@ static PyObject *_wrap_TextCtrl_AppendText(PyObject *self, PyObject *args, PyObj
     PyObject *resultobj;
     wxTextCtrl *arg1 = (wxTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -7131,7 +7132,7 @@ static PyObject *_wrap_TextCtrl_AppendText(PyObject *self, PyObject *args, PyObj
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7826,7 +7827,7 @@ static PyObject *_wrap_TextCtrl_SetEditable(PyObject *self, PyObject *args, PyOb
 static PyObject *_wrap_TextCtrl_ShowNativeCaret(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxTextCtrl *arg1 = (wxTextCtrl *) 0 ;
-    bool arg2 = (bool) true ;
+    bool arg2 = (bool) True ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -7883,7 +7884,7 @@ static PyObject *_wrap_TextCtrl_write(PyObject *self, PyObject *args, PyObject *
     PyObject *resultobj;
     wxTextCtrl *arg1 = (wxTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -7895,7 +7896,7 @@ static PyObject *_wrap_TextCtrl_write(PyObject *self, PyObject *args, PyObject *
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8078,7 +8079,7 @@ static PyObject * TextUrlEvent_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_ScrollBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 = (wxWindowID) -1 ;
+    int arg2 = (int) -1 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -8091,7 +8092,7 @@ static PyObject *_wrap_new_ScrollBar(PyObject *self, PyObject *args, PyObject *k
     wxScrollBar *result;
     wxPoint temp3 ;
     wxSize temp4 ;
-    bool temp7 = false ;
+    bool temp7 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -8125,7 +8126,7 @@ static PyObject *_wrap_new_ScrollBar(PyObject *self, PyObject *args, PyObject *k
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = true;
+            temp7 = True;
         }
     }
     {
@@ -8176,7 +8177,7 @@ static PyObject *_wrap_ScrollBar_Create(PyObject *self, PyObject *args, PyObject
     PyObject *resultobj;
     wxScrollBar *arg1 = (wxScrollBar *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 = (wxWindowID) -1 ;
+    int arg3 = (int) -1 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -8189,7 +8190,7 @@ static PyObject *_wrap_ScrollBar_Create(PyObject *self, PyObject *args, PyObject
     bool result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp8 = false ;
+    bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -8225,7 +8226,7 @@ static PyObject *_wrap_ScrollBar_Create(PyObject *self, PyObject *args, PyObject
         {
             arg8 = wxString_in_helper(obj7);
             if (arg8 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     {
@@ -8407,7 +8408,7 @@ static PyObject *_wrap_ScrollBar_SetScrollbar(PyObject *self, PyObject *args, Py
     int arg3 ;
     int arg4 ;
     int arg5 ;
-    bool arg6 = (bool) TRUE ;
+    bool arg6 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj5 = 0 ;
     char *kwnames[] = {
@@ -8444,7 +8445,7 @@ static PyObject * ScrollBar_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_SpinButton(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 = (wxWindowID) -1 ;
+    int arg2 = (int) -1 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -8455,7 +8456,7 @@ static PyObject *_wrap_new_SpinButton(PyObject *self, PyObject *args, PyObject *
     wxSpinButton *result;
     wxPoint temp3 ;
     wxSize temp4 ;
-    bool temp6 = false ;
+    bool temp6 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -8482,7 +8483,7 @@ static PyObject *_wrap_new_SpinButton(PyObject *self, PyObject *args, PyObject *
         {
             arg6 = wxString_in_helper(obj5);
             if (arg6 == NULL) SWIG_fail;
-            temp6 = true;
+            temp6 = True;
         }
     }
     {
@@ -8533,7 +8534,7 @@ static PyObject *_wrap_SpinButton_Create(PyObject *self, PyObject *args, PyObjec
     PyObject *resultobj;
     wxSpinButton *arg1 = (wxSpinButton *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 = (wxWindowID) -1 ;
+    int arg3 = (int) -1 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -8544,7 +8545,7 @@ static PyObject *_wrap_SpinButton_Create(PyObject *self, PyObject *args, PyObjec
     bool result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp7 = false ;
+    bool temp7 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -8573,7 +8574,7 @@ static PyObject *_wrap_SpinButton_Create(PyObject *self, PyObject *args, PyObjec
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = true;
+            temp7 = True;
         }
     }
     {
@@ -8809,7 +8810,7 @@ static PyObject * SpinButton_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_SpinCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 = (wxWindowID) -1 ;
+    int arg2 = (int) -1 ;
     wxString const &arg3_defvalue = wxPyEmptyString ;
     wxString *arg3 = (wxString *) &arg3_defvalue ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
@@ -8823,10 +8824,10 @@ static PyObject *_wrap_new_SpinCtrl(PyObject *self, PyObject *args, PyObject *kw
     wxString const &arg10_defvalue = wxPySpinCtrlNameStr ;
     wxString *arg10 = (wxString *) &arg10_defvalue ;
     wxSpinCtrl *result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp10 = false ;
+    bool temp10 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -8842,7 +8843,7 @@ static PyObject *_wrap_new_SpinCtrl(PyObject *self, PyObject *args, PyObject *kw
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = true;
+            temp3 = True;
         }
     }
     if (obj3) {
@@ -8861,7 +8862,7 @@ static PyObject *_wrap_new_SpinCtrl(PyObject *self, PyObject *args, PyObject *kw
         {
             arg10 = wxString_in_helper(obj9);
             if (arg10 == NULL) SWIG_fail;
-            temp10 = true;
+            temp10 = True;
         }
     }
     {
@@ -8920,7 +8921,7 @@ static PyObject *_wrap_SpinCtrl_Create(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     wxSpinCtrl *arg1 = (wxSpinCtrl *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 = (wxWindowID) -1 ;
+    int arg3 = (int) -1 ;
     wxString const &arg4_defvalue = wxPyEmptyString ;
     wxString *arg4 = (wxString *) &arg4_defvalue ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
@@ -8934,10 +8935,10 @@ static PyObject *_wrap_SpinCtrl_Create(PyObject *self, PyObject *args, PyObject 
     wxString const &arg11_defvalue = wxPySpinCtrlNameStr ;
     wxString *arg11 = (wxString *) &arg11_defvalue ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     wxPoint temp5 ;
     wxSize temp6 ;
-    bool temp11 = false ;
+    bool temp11 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -8955,7 +8956,7 @@ static PyObject *_wrap_SpinCtrl_Create(PyObject *self, PyObject *args, PyObject 
         {
             arg4 = wxString_in_helper(obj3);
             if (arg4 == NULL) SWIG_fail;
-            temp4 = true;
+            temp4 = True;
         }
     }
     if (obj4) {
@@ -8974,7 +8975,7 @@ static PyObject *_wrap_SpinCtrl_Create(PyObject *self, PyObject *args, PyObject 
         {
             arg11 = wxString_in_helper(obj10);
             if (arg11 == NULL) SWIG_fail;
-            temp11 = true;
+            temp11 = True;
         }
     }
     {
@@ -9061,7 +9062,7 @@ static PyObject *_wrap_SpinCtrl_SetValueString(PyObject *self, PyObject *args, P
     PyObject *resultobj;
     wxSpinCtrl *arg1 = (wxSpinCtrl *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -9073,7 +9074,7 @@ static PyObject *_wrap_SpinCtrl_SetValueString(PyObject *self, PyObject *args, P
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9209,7 +9210,7 @@ static PyObject * SpinCtrl_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_RadioBox(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxString *arg3 = 0 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
@@ -9224,10 +9225,10 @@ static PyObject *_wrap_new_RadioBox(PyObject *self, PyObject *args, PyObject *kw
     wxString const &arg11_defvalue = wxPyRadioBoxNameStr ;
     wxString *arg11 = (wxString *) &arg11_defvalue ;
     wxRadioBox *result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp10 = false ;
+    bool temp10 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -9244,7 +9245,7 @@ static PyObject *_wrap_new_RadioBox(PyObject *self, PyObject *args, PyObject *kw
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     if (obj3) {
         {
@@ -9275,7 +9276,7 @@ static PyObject *_wrap_new_RadioBox(PyObject *self, PyObject *args, PyObject *kw
         {
             arg11 = wxString_in_helper(obj9);
             if (arg11 == NULL) SWIG_fail;
-            temp10 = true;
+            temp10 = True;
         }
     }
     {
@@ -9340,7 +9341,7 @@ static PyObject *_wrap_RadioBox_Create(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     wxRadioBox *arg1 = (wxRadioBox *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     wxString *arg4 = 0 ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
     wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
@@ -9355,10 +9356,10 @@ static PyObject *_wrap_RadioBox_Create(PyObject *self, PyObject *args, PyObject 
     wxString const &arg12_defvalue = wxPyRadioBoxNameStr ;
     wxString *arg12 = (wxString *) &arg12_defvalue ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     wxPoint temp5 ;
     wxSize temp6 ;
-    bool temp11 = false ;
+    bool temp11 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -9377,7 +9378,7 @@ static PyObject *_wrap_RadioBox_Create(PyObject *self, PyObject *args, PyObject 
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     if (obj4) {
         {
@@ -9408,7 +9409,7 @@ static PyObject *_wrap_RadioBox_Create(PyObject *self, PyObject *args, PyObject 
         {
             arg12 = wxString_in_helper(obj10);
             if (arg12 == NULL) SWIG_fail;
-            temp11 = true;
+            temp11 = True;
         }
     }
     {
@@ -9533,7 +9534,7 @@ static PyObject *_wrap_RadioBox_SetStringSelection(PyObject *self, PyObject *arg
     wxRadioBox *arg1 = (wxRadioBox *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -9545,7 +9546,7 @@ static PyObject *_wrap_RadioBox_SetStringSelection(PyObject *self, PyObject *arg
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9599,7 +9600,7 @@ static PyObject *_wrap_RadioBox_FindString(PyObject *self, PyObject *args, PyObj
     wxRadioBox *arg1 = (wxRadioBox *) 0 ;
     wxString *arg2 = 0 ;
     int result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -9611,7 +9612,7 @@ static PyObject *_wrap_RadioBox_FindString(PyObject *self, PyObject *args, PyObj
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9672,7 +9673,7 @@ static PyObject *_wrap_RadioBox_SetString(PyObject *self, PyObject *args, PyObje
     wxRadioBox *arg1 = (wxRadioBox *) 0 ;
     int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -9684,7 +9685,7 @@ static PyObject *_wrap_RadioBox_SetString(PyObject *self, PyObject *args, PyObje
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9712,7 +9713,7 @@ static PyObject *_wrap_RadioBox_EnableItem(PyObject *self, PyObject *args, PyObj
     PyObject *resultobj;
     wxRadioBox *arg1 = (wxRadioBox *) 0 ;
     int arg2 ;
-    bool arg3 = (bool) TRUE ;
+    bool arg3 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -9743,7 +9744,7 @@ static PyObject *_wrap_RadioBox_ShowItem(PyObject *self, PyObject *args, PyObjec
     PyObject *resultobj;
     wxRadioBox *arg1 = (wxRadioBox *) 0 ;
     int arg2 ;
-    bool arg3 = (bool) TRUE ;
+    bool arg3 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -9858,7 +9859,7 @@ static PyObject * RadioBox_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_RadioButton(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxString *arg3 = 0 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
@@ -9870,10 +9871,10 @@ static PyObject *_wrap_new_RadioButton(PyObject *self, PyObject *args, PyObject 
     wxString const &arg8_defvalue = wxPyRadioButtonNameStr ;
     wxString *arg8 = (wxString *) &arg8_defvalue ;
     wxRadioButton *result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp8 = false ;
+    bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -9889,7 +9890,7 @@ static PyObject *_wrap_new_RadioButton(PyObject *self, PyObject *args, PyObject 
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     if (obj3) {
         {
@@ -9913,7 +9914,7 @@ static PyObject *_wrap_new_RadioButton(PyObject *self, PyObject *args, PyObject 
         {
             arg8 = wxString_in_helper(obj7);
             if (arg8 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     {
@@ -9972,7 +9973,7 @@ static PyObject *_wrap_RadioButton_Create(PyObject *self, PyObject *args, PyObje
     PyObject *resultobj;
     wxRadioButton *arg1 = (wxRadioButton *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     wxString *arg4 = 0 ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
     wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
@@ -9984,10 +9985,10 @@ static PyObject *_wrap_RadioButton_Create(PyObject *self, PyObject *args, PyObje
     wxString const &arg9_defvalue = wxPyRadioButtonNameStr ;
     wxString *arg9 = (wxString *) &arg9_defvalue ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     wxPoint temp5 ;
     wxSize temp6 ;
-    bool temp9 = false ;
+    bool temp9 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -10005,7 +10006,7 @@ static PyObject *_wrap_RadioButton_Create(PyObject *self, PyObject *args, PyObje
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     if (obj4) {
         {
@@ -10029,7 +10030,7 @@ static PyObject *_wrap_RadioButton_Create(PyObject *self, PyObject *args, PyObje
         {
             arg9 = wxString_in_helper(obj8);
             if (arg9 == NULL) SWIG_fail;
-            temp9 = true;
+            temp9 = True;
         }
     }
     {
@@ -10125,7 +10126,7 @@ static PyObject * RadioButton_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_Slider(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     int arg3 ;
     int arg4 ;
     int arg5 ;
@@ -10141,7 +10142,7 @@ static PyObject *_wrap_new_Slider(PyObject *self, PyObject *args, PyObject *kwar
     wxSlider *result;
     wxPoint temp6 ;
     wxSize temp7 ;
-    bool temp10 = false ;
+    bool temp10 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj5 = 0 ;
     PyObject * obj6 = 0 ;
@@ -10175,7 +10176,7 @@ static PyObject *_wrap_new_Slider(PyObject *self, PyObject *args, PyObject *kwar
         {
             arg10 = wxString_in_helper(obj9);
             if (arg10 == NULL) SWIG_fail;
-            temp10 = true;
+            temp10 = True;
         }
     }
     {
@@ -10226,7 +10227,7 @@ static PyObject *_wrap_Slider_Create(PyObject *self, PyObject *args, PyObject *k
     PyObject *resultobj;
     wxSlider *arg1 = (wxSlider *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     int arg4 ;
     int arg5 ;
     int arg6 ;
@@ -10242,7 +10243,7 @@ static PyObject *_wrap_Slider_Create(PyObject *self, PyObject *args, PyObject *k
     bool result;
     wxPoint temp7 ;
     wxSize temp8 ;
-    bool temp11 = false ;
+    bool temp11 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj6 = 0 ;
@@ -10278,7 +10279,7 @@ static PyObject *_wrap_Slider_Create(PyObject *self, PyObject *args, PyObject *k
         {
             arg11 = wxString_in_helper(obj10);
             if (arg11 == NULL) SWIG_fail;
-            temp11 = true;
+            temp11 = True;
         }
     }
     {
@@ -10839,7 +10840,7 @@ static PyObject * Slider_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_ToggleButton(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxString *arg3 = 0 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
@@ -10851,10 +10852,10 @@ static PyObject *_wrap_new_ToggleButton(PyObject *self, PyObject *args, PyObject
     wxString const &arg8_defvalue = wxPyToggleButtonNameStr ;
     wxString *arg8 = (wxString *) &arg8_defvalue ;
     wxToggleButton *result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp8 = false ;
+    bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -10870,7 +10871,7 @@ static PyObject *_wrap_new_ToggleButton(PyObject *self, PyObject *args, PyObject
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     if (obj3) {
         {
@@ -10894,7 +10895,7 @@ static PyObject *_wrap_new_ToggleButton(PyObject *self, PyObject *args, PyObject
         {
             arg8 = wxString_in_helper(obj7);
             if (arg8 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     {
@@ -10953,7 +10954,7 @@ static PyObject *_wrap_ToggleButton_Create(PyObject *self, PyObject *args, PyObj
     PyObject *resultobj;
     wxToggleButton *arg1 = (wxToggleButton *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     wxString *arg4 = 0 ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
     wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
@@ -10965,10 +10966,10 @@ static PyObject *_wrap_ToggleButton_Create(PyObject *self, PyObject *args, PyObj
     wxString const &arg9_defvalue = wxPyToggleButtonNameStr ;
     wxString *arg9 = (wxString *) &arg9_defvalue ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     wxPoint temp5 ;
     wxSize temp6 ;
-    bool temp9 = false ;
+    bool temp9 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -10986,7 +10987,7 @@ static PyObject *_wrap_ToggleButton_Create(PyObject *self, PyObject *args, PyObj
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     if (obj4) {
         {
@@ -11010,7 +11011,7 @@ static PyObject *_wrap_ToggleButton_Create(PyObject *self, PyObject *args, PyObj
         {
             arg9 = wxString_in_helper(obj8);
             if (arg9 == NULL) SWIG_fail;
-            temp9 = true;
+            temp9 = True;
         }
     }
     {
@@ -11100,7 +11101,7 @@ static PyObject *_wrap_ToggleButton_SetLabel(PyObject *self, PyObject *args, PyO
     PyObject *resultobj;
     wxToggleButton *arg1 = (wxToggleButton *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -11112,7 +11113,7 @@ static PyObject *_wrap_ToggleButton_SetLabel(PyObject *self, PyObject *args, PyO
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -11230,7 +11231,7 @@ static PyObject *_wrap_BookCtrl_SetPageText(PyObject *self, PyObject *args, PyOb
     size_t arg2 ;
     wxString *arg3 = 0 ;
     bool result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -11245,7 +11246,7 @@ static PyObject *_wrap_BookCtrl_SetPageText(PyObject *self, PyObject *args, PyOb
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -11599,10 +11600,10 @@ static PyObject *_wrap_BookCtrl_AddPage(PyObject *self, PyObject *args, PyObject
     wxBookCtrl *arg1 = (wxBookCtrl *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
     wxString *arg3 = 0 ;
-    bool arg4 = (bool) false ;
+    bool arg4 = (bool) False ;
     int arg5 = (int) -1 ;
     bool result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -11617,7 +11618,7 @@ static PyObject *_wrap_BookCtrl_AddPage(PyObject *self, PyObject *args, PyObject
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     if (obj3) {
         arg4 = PyInt_AsLong(obj3) ? true : false;
@@ -11651,10 +11652,10 @@ static PyObject *_wrap_BookCtrl_InsertPage(PyObject *self, PyObject *args, PyObj
     size_t arg2 ;
     wxWindow *arg3 = (wxWindow *) 0 ;
     wxString *arg4 = 0 ;
-    bool arg5 = (bool) false ;
+    bool arg5 = (bool) False ;
     int arg6 = (int) -1 ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -11672,7 +11673,7 @@ static PyObject *_wrap_BookCtrl_InsertPage(PyObject *self, PyObject *args, PyObj
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     if (obj4) {
         arg5 = PyInt_AsLong(obj4) ? true : false;
@@ -11732,7 +11733,7 @@ static PyObject *_wrap_BookCtrl_SetSelection(PyObject *self, PyObject *args, PyO
 static PyObject *_wrap_BookCtrl_AdvanceSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxBookCtrl *arg1 = (wxBookCtrl *) 0 ;
-    bool arg2 = (bool) true ;
+    bool arg2 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -11902,7 +11903,7 @@ static PyObject * BookCtrlEvent_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_Notebook(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -11913,7 +11914,7 @@ static PyObject *_wrap_new_Notebook(PyObject *self, PyObject *args, PyObject *kw
     wxNotebook *result;
     wxPoint temp3 ;
     wxSize temp4 ;
-    bool temp6 = false ;
+    bool temp6 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -11940,7 +11941,7 @@ static PyObject *_wrap_new_Notebook(PyObject *self, PyObject *args, PyObject *kw
         {
             arg6 = wxString_in_helper(obj5);
             if (arg6 == NULL) SWIG_fail;
-            temp6 = true;
+            temp6 = True;
         }
     }
     {
@@ -11995,7 +11996,7 @@ static PyObject *_wrap_Notebook_Create(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     wxNotebook *arg1 = (wxNotebook *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -12006,7 +12007,7 @@ static PyObject *_wrap_Notebook_Create(PyObject *self, PyObject *args, PyObject 
     bool result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp7 = false ;
+    bool temp7 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -12035,7 +12036,7 @@ static PyObject *_wrap_Notebook_Create(PyObject *self, PyObject *args, PyObject 
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = true;
+            temp7 = True;
         }
     }
     {
@@ -12299,7 +12300,7 @@ static PyObject * NotebookEvent_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_Listbook(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -12310,7 +12311,7 @@ static PyObject *_wrap_new_Listbook(PyObject *self, PyObject *args, PyObject *kw
     wxListbook *result;
     wxPoint temp3 ;
     wxSize temp4 ;
-    bool temp6 = false ;
+    bool temp6 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -12337,7 +12338,7 @@ static PyObject *_wrap_new_Listbook(PyObject *self, PyObject *args, PyObject *kw
         {
             arg6 = wxString_in_helper(obj5);
             if (arg6 == NULL) SWIG_fail;
-            temp6 = true;
+            temp6 = True;
         }
     }
     {
@@ -12388,7 +12389,7 @@ static PyObject *_wrap_Listbook_Create(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     wxListbook *arg1 = (wxListbook *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -12399,7 +12400,7 @@ static PyObject *_wrap_Listbook_Create(PyObject *self, PyObject *args, PyObject 
     bool result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp7 = false ;
+    bool temp7 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -12428,7 +12429,7 @@ static PyObject *_wrap_Listbook_Create(PyObject *self, PyObject *args, PyObject 
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = true;
+            temp7 = True;
         }
     }
     {
@@ -13284,7 +13285,7 @@ static PyObject *_wrap_ToolBarToolBase_SetShortHelp(PyObject *self, PyObject *ar
     wxToolBarToolBase *arg1 = (wxToolBarToolBase *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -13296,7 +13297,7 @@ static PyObject *_wrap_ToolBarToolBase_SetShortHelp(PyObject *self, PyObject *ar
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13325,7 +13326,7 @@ static PyObject *_wrap_ToolBarToolBase_SetLongHelp(PyObject *self, PyObject *arg
     wxToolBarToolBase *arg1 = (wxToolBarToolBase *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -13337,7 +13338,7 @@ static PyObject *_wrap_ToolBarToolBase_SetLongHelp(PyObject *self, PyObject *arg
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13425,7 +13426,7 @@ static PyObject *_wrap_ToolBarToolBase_SetLabel(PyObject *self, PyObject *args, 
     PyObject *resultobj;
     wxToolBarToolBase *arg1 = (wxToolBarToolBase *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -13437,7 +13438,7 @@ static PyObject *_wrap_ToolBarToolBase_SetLabel(PyObject *self, PyObject *args, 
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13586,9 +13587,9 @@ static PyObject *_wrap_ToolBarBase_DoAddTool(PyObject *self, PyObject *args, PyO
     wxString *arg8 = (wxString *) &arg8_defvalue ;
     PyObject *arg9 = (PyObject *) NULL ;
     wxToolBarToolBase *result;
-    bool temp3 = false ;
-    bool temp7 = false ;
-    bool temp8 = false ;
+    bool temp3 = False ;
+    bool temp7 = False ;
+    bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -13605,7 +13606,7 @@ static PyObject *_wrap_ToolBarBase_DoAddTool(PyObject *self, PyObject *args, PyO
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     if ((SWIG_ConvertPtr(obj3,(void **) &arg4, SWIGTYPE_p_wxBitmap,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (arg4 == NULL) {
@@ -13621,14 +13622,14 @@ static PyObject *_wrap_ToolBarBase_DoAddTool(PyObject *self, PyObject *args, PyO
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = true;
+            temp7 = True;
         }
     }
     if (obj7) {
         {
             arg8 = wxString_in_helper(obj7);
             if (arg8 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     if (obj8) {
@@ -13690,9 +13691,9 @@ static PyObject *_wrap_ToolBarBase_DoInsertTool(PyObject *self, PyObject *args, 
     wxString *arg9 = (wxString *) &arg9_defvalue ;
     PyObject *arg10 = (PyObject *) NULL ;
     wxToolBarToolBase *result;
-    bool temp4 = false ;
-    bool temp8 = false ;
-    bool temp9 = false ;
+    bool temp4 = False ;
+    bool temp8 = False ;
+    bool temp9 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -13712,7 +13713,7 @@ static PyObject *_wrap_ToolBarBase_DoInsertTool(PyObject *self, PyObject *args, 
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     if ((SWIG_ConvertPtr(obj4,(void **) &arg5, SWIGTYPE_p_wxBitmap,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (arg5 == NULL) {
@@ -13728,14 +13729,14 @@ static PyObject *_wrap_ToolBarBase_DoInsertTool(PyObject *self, PyObject *args, 
         {
             arg8 = wxString_in_helper(obj7);
             if (arg8 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     if (obj8) {
         {
             arg9 = wxString_in_helper(obj8);
             if (arg9 == NULL) SWIG_fail;
-            temp9 = true;
+            temp9 = True;
         }
     }
     if (obj9) {
@@ -14287,7 +14288,7 @@ static PyObject *_wrap_ToolBarBase_SetToolShortHelp(PyObject *self, PyObject *ar
     wxToolBarBase *arg1 = (wxToolBarBase *) 0 ;
     int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -14299,7 +14300,7 @@ static PyObject *_wrap_ToolBarBase_SetToolShortHelp(PyObject *self, PyObject *ar
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -14360,7 +14361,7 @@ static PyObject *_wrap_ToolBarBase_SetToolLongHelp(PyObject *self, PyObject *arg
     wxToolBarBase *arg1 = (wxToolBarBase *) 0 ;
     int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -14372,7 +14373,7 @@ static PyObject *_wrap_ToolBarBase_SetToolLongHelp(PyObject *self, PyObject *arg
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -14836,8 +14837,8 @@ static PyObject *_wrap_ToolBarBase_GetToolSize(PyObject *self, PyObject *args, P
 static PyObject *_wrap_ToolBarBase_FindToolForPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxToolBarBase *arg1 = (wxToolBarBase *) 0 ;
-    wxCoord arg2 ;
-    wxCoord arg3 ;
+    int arg2 ;
+    int arg3 ;
     wxToolBarToolBase *result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
@@ -14897,7 +14898,7 @@ static PyObject * ToolBarBase_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_ToolBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -14908,7 +14909,7 @@ static PyObject *_wrap_new_ToolBar(PyObject *self, PyObject *args, PyObject *kwa
     wxToolBar *result;
     wxPoint temp3 ;
     wxSize temp4 ;
-    bool temp6 = false ;
+    bool temp6 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -14935,7 +14936,7 @@ static PyObject *_wrap_new_ToolBar(PyObject *self, PyObject *args, PyObject *kwa
         {
             arg6 = wxString_in_helper(obj5);
             if (arg6 == NULL) SWIG_fail;
-            temp6 = true;
+            temp6 = True;
         }
     }
     {
@@ -14990,7 +14991,7 @@ static PyObject *_wrap_ToolBar_Create(PyObject *self, PyObject *args, PyObject *
     PyObject *resultobj;
     wxToolBar *arg1 = (wxToolBar *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -15001,7 +15002,7 @@ static PyObject *_wrap_ToolBar_Create(PyObject *self, PyObject *args, PyObject *
     bool result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp7 = false ;
+    bool temp7 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -15030,7 +15031,7 @@ static PyObject *_wrap_ToolBar_Create(PyObject *self, PyObject *args, PyObject *
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = true;
+            temp7 = True;
         }
     }
     {
@@ -15058,8 +15059,8 @@ static PyObject *_wrap_ToolBar_Create(PyObject *self, PyObject *args, PyObject *
 static PyObject *_wrap_ToolBar_FindToolForPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxToolBar *arg1 = (wxToolBar *) 0 ;
-    wxCoord arg2 ;
-    wxCoord arg3 ;
+    int arg2 ;
+    int arg3 ;
     wxToolBarToolBase *result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
@@ -15652,7 +15653,7 @@ static PyObject *_wrap_ListItem_SetText(PyObject *self, PyObject *args, PyObject
     PyObject *resultobj;
     wxListItem *arg1 = (wxListItem *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -15664,7 +15665,7 @@ static PyObject *_wrap_ListItem_SetText(PyObject *self, PyObject *args, PyObject
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -16449,7 +16450,6 @@ static PyObject *_wrap_ListItem_m_text_set(PyObject *self, PyObject *args, PyObj
     PyObject *resultobj;
     wxListItem *arg1 = (wxListItem *) 0 ;
     wxString arg2 ;
-    wxString *argp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -16458,8 +16458,12 @@ static PyObject *_wrap_ListItem_m_text_set(PyObject *self, PyObject *args, PyObj
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ListItem_m_text_set",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxListItem,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
+    {
+        wxString* sptr = wxString_in_helper(obj1);
+        if (sptr == NULL) SWIG_fail;
+        arg2 = *sptr;
+        delete sptr;
+    }
     if (arg1) (arg1)->m_text = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -17286,7 +17290,7 @@ static PyObject * ListEvent_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_ListCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 = (wxWindowID) -1 ;
+    int arg2 = (int) -1 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -17299,7 +17303,7 @@ static PyObject *_wrap_new_ListCtrl(PyObject *self, PyObject *args, PyObject *kw
     wxPyListCtrl *result;
     wxPoint temp3 ;
     wxSize temp4 ;
-    bool temp7 = false ;
+    bool temp7 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -17333,7 +17337,7 @@ static PyObject *_wrap_new_ListCtrl(PyObject *self, PyObject *args, PyObject *kw
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = true;
+            temp7 = True;
         }
     }
     {
@@ -17384,7 +17388,7 @@ static PyObject *_wrap_ListCtrl_Create(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     wxPyListCtrl *arg1 = (wxPyListCtrl *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 = (wxWindowID) -1 ;
+    int arg3 = (int) -1 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -17397,7 +17401,7 @@ static PyObject *_wrap_ListCtrl_Create(PyObject *self, PyObject *args, PyObject 
     bool result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp8 = false ;
+    bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -17433,7 +17437,7 @@ static PyObject *_wrap_ListCtrl_Create(PyObject *self, PyObject *args, PyObject 
         {
             arg8 = wxString_in_helper(obj7);
             if (arg8 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     {
@@ -17814,7 +17818,7 @@ static PyObject *_wrap_ListCtrl_SetStringItem(PyObject *self, PyObject *args, Py
     wxString *arg4 = 0 ;
     int arg5 = (int) -1 ;
     long result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
@@ -17826,7 +17830,7 @@ static PyObject *_wrap_ListCtrl_SetStringItem(PyObject *self, PyObject *args, Py
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -17970,7 +17974,7 @@ static PyObject *_wrap_ListCtrl_SetItemText(PyObject *self, PyObject *args, PyOb
     wxPyListCtrl *arg1 = (wxPyListCtrl *) 0 ;
     long arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -17982,7 +17986,7 @@ static PyObject *_wrap_ListCtrl_SetItemText(PyObject *self, PyObject *args, PyOb
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -18346,7 +18350,7 @@ static PyObject *_wrap_ListCtrl_SetSingleStyle(PyObject *self, PyObject *args, P
     PyObject *resultobj;
     wxPyListCtrl *arg1 = (wxPyListCtrl *) 0 ;
     long arg2 ;
-    bool arg3 = (bool) TRUE ;
+    bool arg3 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -18826,9 +18830,9 @@ static PyObject *_wrap_ListCtrl_FindItem(PyObject *self, PyObject *args, PyObjec
     wxPyListCtrl *arg1 = (wxPyListCtrl *) 0 ;
     long arg2 ;
     wxString *arg3 = 0 ;
-    bool arg4 = (bool) FALSE ;
+    bool arg4 = (bool) False ;
     long result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -18841,7 +18845,7 @@ static PyObject *_wrap_ListCtrl_FindItem(PyObject *self, PyObject *args, PyObjec
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     if (obj3) {
         arg4 = PyInt_AsLong(obj3) ? true : false;
@@ -19006,7 +19010,7 @@ static PyObject *_wrap_ListCtrl_InsertStringItem(PyObject *self, PyObject *args,
     long arg2 ;
     wxString *arg3 = 0 ;
     long result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -19018,7 +19022,7 @@ static PyObject *_wrap_ListCtrl_InsertStringItem(PyObject *self, PyObject *args,
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -19076,7 +19080,7 @@ static PyObject *_wrap_ListCtrl_InsertImageStringItem(PyObject *self, PyObject *
     wxString *arg3 = 0 ;
     int arg4 ;
     long result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -19088,7 +19092,7 @@ static PyObject *_wrap_ListCtrl_InsertImageStringItem(PyObject *self, PyObject *
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -19152,7 +19156,7 @@ static PyObject *_wrap_ListCtrl_InsertColumn(PyObject *self, PyObject *args, PyO
     int arg4 = (int) wxLIST_FORMAT_LEFT ;
     int arg5 = (int) -1 ;
     long result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -19164,7 +19168,7 @@ static PyObject *_wrap_ListCtrl_InsertColumn(PyObject *self, PyObject *args, PyO
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -19429,7 +19433,7 @@ static PyObject * ListCtrl_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_ListView(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 = (wxWindowID) -1 ;
+    int arg2 = (int) -1 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -19442,7 +19446,7 @@ static PyObject *_wrap_new_ListView(PyObject *self, PyObject *args, PyObject *kw
     wxListView *result;
     wxPoint temp3 ;
     wxSize temp4 ;
-    bool temp7 = false ;
+    bool temp7 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -19476,7 +19480,7 @@ static PyObject *_wrap_new_ListView(PyObject *self, PyObject *args, PyObject *kw
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = true;
+            temp7 = True;
         }
     }
     {
@@ -19527,7 +19531,7 @@ static PyObject *_wrap_ListView_Create(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     wxListView *arg1 = (wxListView *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 = (wxWindowID) -1 ;
+    int arg3 = (int) -1 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -19540,7 +19544,7 @@ static PyObject *_wrap_ListView_Create(PyObject *self, PyObject *args, PyObject 
     bool result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp8 = false ;
+    bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -19576,7 +19580,7 @@ static PyObject *_wrap_ListView_Create(PyObject *self, PyObject *args, PyObject 
         {
             arg8 = wxString_in_helper(obj7);
             if (arg8 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     {
@@ -19605,7 +19609,7 @@ static PyObject *_wrap_ListView_Select(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     wxListView *arg1 = (wxListView *) 0 ;
     long arg2 ;
-    bool arg3 = (bool) TRUE ;
+    bool arg3 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -20478,7 +20482,7 @@ static PyObject *_wrap_TreeEvent_SetLabel(PyObject *self, PyObject *args, PyObje
     PyObject *resultobj;
     wxTreeEvent *arg1 = (wxTreeEvent *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -20490,7 +20494,7 @@ static PyObject *_wrap_TreeEvent_SetLabel(PyObject *self, PyObject *args, PyObje
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -20577,7 +20581,7 @@ static PyObject * TreeEvent_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_TreeCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 = (wxWindowID) -1 ;
+    int arg2 = (int) -1 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -20590,7 +20594,7 @@ static PyObject *_wrap_new_TreeCtrl(PyObject *self, PyObject *args, PyObject *kw
     wxPyTreeCtrl *result;
     wxPoint temp3 ;
     wxSize temp4 ;
-    bool temp7 = false ;
+    bool temp7 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -20624,7 +20628,7 @@ static PyObject *_wrap_new_TreeCtrl(PyObject *self, PyObject *args, PyObject *kw
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = true;
+            temp7 = True;
         }
     }
     {
@@ -20675,7 +20679,7 @@ static PyObject *_wrap_TreeCtrl_Create(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 = (wxWindowID) -1 ;
+    int arg3 = (int) -1 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -20688,7 +20692,7 @@ static PyObject *_wrap_TreeCtrl_Create(PyObject *self, PyObject *args, PyObject 
     bool result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp8 = false ;
+    bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -20724,7 +20728,7 @@ static PyObject *_wrap_TreeCtrl_Create(PyObject *self, PyObject *args, PyObject 
         {
             arg8 = wxString_in_helper(obj7);
             if (arg8 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     {
@@ -21313,7 +21317,7 @@ static PyObject *_wrap_TreeCtrl_SetItemText(PyObject *self, PyObject *args, PyOb
     wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
     wxTreeItemId *arg2 = 0 ;
     wxString *arg3 = 0 ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -21330,7 +21334,7 @@ static PyObject *_wrap_TreeCtrl_SetItemText(PyObject *self, PyObject *args, PyOb
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -21456,7 +21460,7 @@ static PyObject *_wrap_TreeCtrl_SetItemHasChildren(PyObject *self, PyObject *arg
     PyObject *resultobj;
     wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
     wxTreeItemId *arg2 = 0 ;
-    bool arg3 = (bool) TRUE ;
+    bool arg3 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -21492,7 +21496,7 @@ static PyObject *_wrap_TreeCtrl_SetItemBold(PyObject *self, PyObject *args, PyOb
     PyObject *resultobj;
     wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
     wxTreeItemId *arg2 = 0 ;
-    bool arg3 = (bool) TRUE ;
+    bool arg3 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -21528,7 +21532,7 @@ static PyObject *_wrap_TreeCtrl_SetItemDropHighlight(PyObject *self, PyObject *a
     PyObject *resultobj;
     wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
     wxTreeItemId *arg2 = 0 ;
-    bool arg3 = (bool) TRUE ;
+    bool arg3 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -21829,7 +21833,7 @@ static PyObject *_wrap_TreeCtrl_GetChildrenCount(PyObject *self, PyObject *args,
     PyObject *resultobj;
     wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
     wxTreeItemId *arg2 = 0 ;
-    bool arg3 = (bool) TRUE ;
+    bool arg3 = (bool) True ;
     size_t result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -22260,7 +22264,7 @@ static PyObject *_wrap_TreeCtrl_AddRoot(PyObject *self, PyObject *args, PyObject
     int arg4 = (int) -1 ;
     wxPyTreeItemData *arg5 = (wxPyTreeItemData *) NULL ;
     wxTreeItemId result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj4 = 0 ;
@@ -22273,7 +22277,7 @@ static PyObject *_wrap_TreeCtrl_AddRoot(PyObject *self, PyObject *args, PyObject
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     if (obj4) {
         if ((SWIG_ConvertPtr(obj4,(void **) &arg5, SWIGTYPE_p_wxPyTreeItemData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
@@ -22313,7 +22317,7 @@ static PyObject *_wrap_TreeCtrl_PrependItem(PyObject *self, PyObject *args, PyOb
     int arg5 = (int) -1 ;
     wxPyTreeItemData *arg6 = (wxPyTreeItemData *) NULL ;
     wxTreeItemId result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -22331,7 +22335,7 @@ static PyObject *_wrap_TreeCtrl_PrependItem(PyObject *self, PyObject *args, PyOb
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     if (obj5) {
         if ((SWIG_ConvertPtr(obj5,(void **) &arg6, SWIGTYPE_p_wxPyTreeItemData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
@@ -22372,7 +22376,7 @@ static PyObject *_wrap_TreeCtrl_InsertItem(PyObject *self, PyObject *args, PyObj
     int arg6 = (int) -1 ;
     wxPyTreeItemData *arg7 = (wxPyTreeItemData *) NULL ;
     wxTreeItemId result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -22395,7 +22399,7 @@ static PyObject *_wrap_TreeCtrl_InsertItem(PyObject *self, PyObject *args, PyObj
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     if (obj6) {
         if ((SWIG_ConvertPtr(obj6,(void **) &arg7, SWIGTYPE_p_wxPyTreeItemData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
@@ -22436,7 +22440,7 @@ static PyObject *_wrap_TreeCtrl_InsertItemBefore(PyObject *self, PyObject *args,
     int arg6 = (int) -1 ;
     wxPyTreeItemData *arg7 = (wxPyTreeItemData *) NULL ;
     wxTreeItemId result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -22457,7 +22461,7 @@ static PyObject *_wrap_TreeCtrl_InsertItemBefore(PyObject *self, PyObject *args,
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
-        temp4 = true;
+        temp4 = True;
     }
     if (obj6) {
         if ((SWIG_ConvertPtr(obj6,(void **) &arg7, SWIGTYPE_p_wxPyTreeItemData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
@@ -22497,7 +22501,7 @@ static PyObject *_wrap_TreeCtrl_AppendItem(PyObject *self, PyObject *args, PyObj
     int arg5 = (int) -1 ;
     wxPyTreeItemData *arg6 = (wxPyTreeItemData *) NULL ;
     wxTreeItemId result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -22515,7 +22519,7 @@ static PyObject *_wrap_TreeCtrl_AppendItem(PyObject *self, PyObject *args, PyObj
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     if (obj5) {
         if ((SWIG_ConvertPtr(obj5,(void **) &arg6, SWIGTYPE_p_wxPyTreeItemData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
@@ -22949,7 +22953,7 @@ static PyObject *_wrap_TreeCtrl_EndEditLabel(PyObject *self, PyObject *args, PyO
     PyObject *resultobj;
     wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
     wxTreeItemId *arg2 = 0 ;
-    bool arg3 = (bool) FALSE ;
+    bool arg3 = (bool) False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -23058,7 +23062,7 @@ static PyObject *_wrap_TreeCtrl_GetBoundingRect(PyObject *self, PyObject *args, 
     PyObject *resultobj;
     wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
     wxTreeItemId *arg2 = 0 ;
-    bool arg3 = (bool) FALSE ;
+    bool arg3 = (bool) False ;
     PyObject *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -23101,7 +23105,7 @@ static PyObject * TreeCtrl_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_GenericDirCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 = (wxWindowID) (wxWindowID)-1 ;
+    int arg2 = (int) (int)-1 ;
     wxString const &arg3_defvalue = wxPyDirDialogDefaultFolderStr ;
     wxString *arg3 = (wxString *) &arg3_defvalue ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
@@ -23115,11 +23119,11 @@ static PyObject *_wrap_new_GenericDirCtrl(PyObject *self, PyObject *args, PyObje
     wxString const &arg9_defvalue = wxPy_TreeCtrlNameStr ;
     wxString *arg9 = (wxString *) &arg9_defvalue ;
     wxGenericDirCtrl *result;
-    bool temp3 = false ;
+    bool temp3 = False ;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp7 = false ;
-    bool temp9 = false ;
+    bool temp7 = False ;
+    bool temp9 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -23136,7 +23140,7 @@ static PyObject *_wrap_new_GenericDirCtrl(PyObject *self, PyObject *args, PyObje
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = true;
+            temp3 = True;
         }
     }
     if (obj3) {
@@ -23155,14 +23159,14 @@ static PyObject *_wrap_new_GenericDirCtrl(PyObject *self, PyObject *args, PyObje
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = true;
+            temp7 = True;
         }
     }
     if (obj8) {
         {
             arg9 = wxString_in_helper(obj8);
             if (arg9 == NULL) SWIG_fail;
-            temp9 = true;
+            temp9 = True;
         }
     }
     {
@@ -23229,7 +23233,7 @@ static PyObject *_wrap_GenericDirCtrl_Create(PyObject *self, PyObject *args, PyO
     PyObject *resultobj;
     wxGenericDirCtrl *arg1 = (wxGenericDirCtrl *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 = (wxWindowID) (wxWindowID)-1 ;
+    int arg3 = (int) (int)-1 ;
     wxString const &arg4_defvalue = wxPyDirDialogDefaultFolderStr ;
     wxString *arg4 = (wxString *) &arg4_defvalue ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
@@ -23243,11 +23247,11 @@ static PyObject *_wrap_GenericDirCtrl_Create(PyObject *self, PyObject *args, PyO
     wxString const &arg10_defvalue = wxPy_TreeCtrlNameStr ;
     wxString *arg10 = (wxString *) &arg10_defvalue ;
     bool result;
-    bool temp4 = false ;
+    bool temp4 = False ;
     wxPoint temp5 ;
     wxSize temp6 ;
-    bool temp8 = false ;
-    bool temp10 = false ;
+    bool temp8 = False ;
+    bool temp10 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -23266,7 +23270,7 @@ static PyObject *_wrap_GenericDirCtrl_Create(PyObject *self, PyObject *args, PyO
         {
             arg4 = wxString_in_helper(obj3);
             if (arg4 == NULL) SWIG_fail;
-            temp4 = true;
+            temp4 = True;
         }
     }
     if (obj4) {
@@ -23285,14 +23289,14 @@ static PyObject *_wrap_GenericDirCtrl_Create(PyObject *self, PyObject *args, PyO
         {
             arg8 = wxString_in_helper(obj7);
             if (arg8 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     if (obj9) {
         {
             arg10 = wxString_in_helper(obj9);
             if (arg10 == NULL) SWIG_fail;
-            temp10 = true;
+            temp10 = True;
         }
     }
     {
@@ -23338,7 +23342,7 @@ static PyObject *_wrap_GenericDirCtrl_ExpandPath(PyObject *self, PyObject *args,
     wxGenericDirCtrl *arg1 = (wxGenericDirCtrl *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -23350,7 +23354,7 @@ static PyObject *_wrap_GenericDirCtrl_ExpandPath(PyObject *self, PyObject *args,
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -23409,7 +23413,7 @@ static PyObject *_wrap_GenericDirCtrl_SetDefaultPath(PyObject *self, PyObject *a
     PyObject *resultobj;
     wxGenericDirCtrl *arg1 = (wxGenericDirCtrl *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -23421,7 +23425,7 @@ static PyObject *_wrap_GenericDirCtrl_SetDefaultPath(PyObject *self, PyObject *a
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -23511,7 +23515,7 @@ static PyObject *_wrap_GenericDirCtrl_SetPath(PyObject *self, PyObject *args, Py
     PyObject *resultobj;
     wxGenericDirCtrl *arg1 = (wxGenericDirCtrl *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -23523,7 +23527,7 @@ static PyObject *_wrap_GenericDirCtrl_SetPath(PyObject *self, PyObject *args, Py
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -23635,7 +23639,7 @@ static PyObject *_wrap_GenericDirCtrl_SetFilter(PyObject *self, PyObject *args, 
     PyObject *resultobj;
     wxGenericDirCtrl *arg1 = (wxGenericDirCtrl *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -23647,7 +23651,7 @@ static PyObject *_wrap_GenericDirCtrl_SetFilter(PyObject *self, PyObject *args, 
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -23810,7 +23814,7 @@ static PyObject *_wrap_GenericDirCtrl_FindChild(PyObject *self, PyObject *args, 
     bool *arg4 = 0 ;
     wxTreeItemId result;
     wxTreeItemId *argp2 ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     bool temp4 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -23827,7 +23831,7 @@ static PyObject *_wrap_GenericDirCtrl_FindChild(PyObject *self, PyObject *args, 
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -23917,7 +23921,7 @@ static PyObject * GenericDirCtrl_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_DirFilterListCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGenericDirCtrl *arg1 = (wxGenericDirCtrl *) 0 ;
-    wxWindowID arg2 = (wxWindowID) (wxWindowID)-1 ;
+    int arg2 = (int) (int)-1 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -23987,7 +23991,7 @@ static PyObject *_wrap_DirFilterListCtrl_Create(PyObject *self, PyObject *args, 
     PyObject *resultobj;
     wxDirFilterListCtrl *arg1 = (wxDirFilterListCtrl *) 0 ;
     wxGenericDirCtrl *arg2 = (wxGenericDirCtrl *) 0 ;
-    wxWindowID arg3 = (wxWindowID) (wxWindowID)-1 ;
+    int arg3 = (int) (int)-1 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -24038,7 +24042,7 @@ static PyObject *_wrap_DirFilterListCtrl_FillFilterList(PyObject *self, PyObject
     wxDirFilterListCtrl *arg1 = (wxDirFilterListCtrl *) 0 ;
     wxString *arg2 = 0 ;
     int arg3 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -24050,7 +24054,7 @@ static PyObject *_wrap_DirFilterListCtrl_FillFilterList(PyObject *self, PyObject
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -24084,7 +24088,7 @@ static PyObject * DirFilterListCtrl_swigregister(PyObject *self, PyObject *args)
 static PyObject *_wrap_new_PyControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -24097,7 +24101,7 @@ static PyObject *_wrap_new_PyControl(PyObject *self, PyObject *args, PyObject *k
     wxPyControl *result;
     wxPoint temp3 ;
     wxSize temp4 ;
-    bool temp7 = false ;
+    bool temp7 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -24131,7 +24135,7 @@ static PyObject *_wrap_new_PyControl(PyObject *self, PyObject *args, PyObject *k
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = true;
+            temp7 = True;
         }
     }
     {
@@ -24709,7 +24713,7 @@ static PyObject * PyControl_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_HelpEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEventType arg1 = (wxEventType) wxEVT_NULL ;
-    wxWindowID arg2 = (wxWindowID) 0 ;
+    int arg2 = (int) 0 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxHelpEvent *result;
@@ -24831,7 +24835,7 @@ static PyObject *_wrap_HelpEvent_SetLink(PyObject *self, PyObject *args, PyObjec
     PyObject *resultobj;
     wxHelpEvent *arg1 = (wxHelpEvent *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -24843,7 +24847,7 @@ static PyObject *_wrap_HelpEvent_SetLink(PyObject *self, PyObject *args, PyObjec
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -24899,7 +24903,7 @@ static PyObject *_wrap_HelpEvent_SetTarget(PyObject *self, PyObject *args, PyObj
     PyObject *resultobj;
     wxHelpEvent *arg1 = (wxHelpEvent *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = false ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -24911,7 +24915,7 @@ static PyObject *_wrap_HelpEvent_SetTarget(PyObject *self, PyObject *args, PyObj
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
+        temp2 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -24945,7 +24949,7 @@ static PyObject * HelpEvent_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_ContextHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) NULL ;
-    bool arg2 = (bool) TRUE ;
+    bool arg2 = (bool) True ;
     wxContextHelp *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -25064,7 +25068,7 @@ static PyObject * ContextHelp_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_ContextHelpButton(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 = (wxWindowID) wxID_CONTEXT_HELP ;
+    int arg2 = (int) wxID_CONTEXT_HELP ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -25229,7 +25233,7 @@ static PyObject *_wrap_HelpProvider_AddHelp(PyObject *self, PyObject *args, PyOb
     wxHelpProvider *arg1 = (wxHelpProvider *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
     wxString *arg3 = 0 ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -25243,7 +25247,7 @@ static PyObject *_wrap_HelpProvider_AddHelp(PyObject *self, PyObject *args, PyOb
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -25270,9 +25274,9 @@ static PyObject *_wrap_HelpProvider_AddHelp(PyObject *self, PyObject *args, PyOb
 static PyObject *_wrap_HelpProvider_AddHelpById(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHelpProvider *arg1 = (wxHelpProvider *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxString *arg3 = 0 ;
-    bool temp3 = false ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -25284,7 +25288,7 @@ static PyObject *_wrap_HelpProvider_AddHelpById(PyObject *self, PyObject *args, 
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        temp3 = True;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -25365,6 +25369,611 @@ static PyObject * SimpleHelpProvider_swigregister(PyObject *self, PyObject *args
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxSimpleHelpProvider, obj);
+    Py_INCREF(obj);
+    return Py_BuildValue((char *)"");
+}
+static PyObject *_wrap_new_DragImage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxBitmap *arg1 = 0 ;
+    wxCursor const &arg2_defvalue = wxNullCursor ;
+    wxCursor *arg2 = (wxCursor *) &arg2_defvalue ;
+    wxGenericDragImage *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "image",(char *) "cursor", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:new_DragImage",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxBitmap,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (arg1 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    }
+    if (obj1) {
+        if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxCursor,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        if (arg2 == NULL) {
+            PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxGenericDragImage *)new wxGenericDragImage((wxBitmap const &)*arg1,(wxCursor const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxGenericDragImage, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_DragIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxIcon *arg1 = 0 ;
+    wxCursor const &arg2_defvalue = wxNullCursor ;
+    wxCursor *arg2 = (wxCursor *) &arg2_defvalue ;
+    wxGenericDragImage *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "image",(char *) "cursor", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:new_DragIcon",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxIcon,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (arg1 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    }
+    if (obj1) {
+        if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxCursor,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        if (arg2 == NULL) {
+            PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxGenericDragImage *)new wxGenericDragImage((wxIcon const &)*arg1,(wxCursor const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxGenericDragImage, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_DragString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxString *arg1 = 0 ;
+    wxCursor const &arg2_defvalue = wxNullCursor ;
+    wxCursor *arg2 = (wxCursor *) &arg2_defvalue ;
+    wxGenericDragImage *result;
+    bool temp1 = False ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "str",(char *) "cursor", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:new_DragString",kwnames,&obj0,&obj1)) goto fail;
+    {
+        arg1 = wxString_in_helper(obj0);
+        if (arg1 == NULL) SWIG_fail;
+        temp1 = True;
+    }
+    if (obj1) {
+        if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxCursor,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        if (arg2 == NULL) {
+            PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxGenericDragImage *)new wxGenericDragImage((wxString const &)*arg1,(wxCursor const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxGenericDragImage, 1);
+    {
+        if (temp1)
+        delete arg1;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp1)
+        delete arg1;
+    }
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_DragTreeItem(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyTreeCtrl *arg1 = 0 ;
+    wxTreeItemId *arg2 = 0 ;
+    wxGenericDragImage *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "treeCtrl",(char *) "id", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:new_DragTreeItem",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyTreeCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (arg1 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    }
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxTreeItemId,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (arg2 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxGenericDragImage *)new wxGenericDragImage((wxPyTreeCtrl const &)*arg1,*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxGenericDragImage, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_DragListItem(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyListCtrl *arg1 = 0 ;
+    long arg2 ;
+    wxGenericDragImage *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "listCtrl",(char *) "id", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Ol:new_DragListItem",kwnames,&obj0,&arg2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyListCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (arg1 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxGenericDragImage *)new wxGenericDragImage((wxPyListCtrl const &)*arg1,arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxGenericDragImage, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_delete_DragImage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGenericDragImage *arg1 = (wxGenericDragImage *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:delete_DragImage",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxGenericDragImage,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        delete arg1;
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DragImage_SetBackingBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGenericDragImage *arg1 = (wxGenericDragImage *) 0 ;
+    wxBitmap *arg2 = (wxBitmap *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "bitmap", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DragImage_SetBackingBitmap",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxGenericDragImage,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxBitmap,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetBackingBitmap(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DragImage_BeginDrag(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGenericDragImage *arg1 = (wxGenericDragImage *) 0 ;
+    wxPoint *arg2 = 0 ;
+    wxWindow *arg3 = (wxWindow *) 0 ;
+    bool arg4 = (bool) False ;
+    wxRect *arg5 = (wxRect *) NULL ;
+    bool result;
+    wxPoint temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "hotspot",(char *) "window",(char *) "fullScreen",(char *) "rect", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OO:DragImage_BeginDrag",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxGenericDragImage,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxPoint_helper(obj1, &arg2)) SWIG_fail;
+    }
+    if ((SWIG_ConvertPtr(obj2,(void **) &arg3, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj3) {
+        arg4 = PyInt_AsLong(obj3) ? true : false;
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj4) {
+        if ((SWIG_ConvertPtr(obj4,(void **) &arg5, SWIGTYPE_p_wxRect,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->BeginDrag((wxPoint const &)*arg2,arg3,arg4,arg5);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = PyInt_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DragImage_BeginDragBounded(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGenericDragImage *arg1 = (wxGenericDragImage *) 0 ;
+    wxPoint *arg2 = 0 ;
+    wxWindow *arg3 = (wxWindow *) 0 ;
+    wxWindow *arg4 = (wxWindow *) 0 ;
+    bool result;
+    wxPoint temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "hotspot",(char *) "window",(char *) "boundingWindow", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:DragImage_BeginDragBounded",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxGenericDragImage,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxPoint_helper(obj1, &arg2)) SWIG_fail;
+    }
+    if ((SWIG_ConvertPtr(obj2,(void **) &arg3, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj3,(void **) &arg4, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->BeginDrag((wxPoint const &)*arg2,arg3,arg4);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = PyInt_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DragImage_EndDrag(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGenericDragImage *arg1 = (wxGenericDragImage *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DragImage_EndDrag",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxGenericDragImage,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->EndDrag();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = PyInt_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DragImage_Move(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGenericDragImage *arg1 = (wxGenericDragImage *) 0 ;
+    wxPoint *arg2 = 0 ;
+    bool result;
+    wxPoint temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "pt", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DragImage_Move",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxGenericDragImage,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxPoint_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->Move((wxPoint const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = PyInt_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DragImage_Show(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGenericDragImage *arg1 = (wxGenericDragImage *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DragImage_Show",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxGenericDragImage,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->Show();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = PyInt_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DragImage_Hide(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGenericDragImage *arg1 = (wxGenericDragImage *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DragImage_Hide",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxGenericDragImage,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->Hide();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = PyInt_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DragImage_GetImageRect(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGenericDragImage *arg1 = (wxGenericDragImage *) 0 ;
+    wxPoint *arg2 = 0 ;
+    wxRect result;
+    wxPoint temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "pos", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DragImage_GetImageRect",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxGenericDragImage,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxPoint_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxGenericDragImage const *)arg1)->GetImageRect((wxPoint const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxRect * resultptr;
+        resultptr = new wxRect((wxRect &) result);
+        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxRect, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DragImage_DoDrawImage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGenericDragImage *arg1 = (wxGenericDragImage *) 0 ;
+    wxDC *arg2 = 0 ;
+    wxPoint *arg3 = 0 ;
+    bool result;
+    wxPoint temp3 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "dc",(char *) "pos", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:DragImage_DoDrawImage",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxGenericDragImage,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDC,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (arg2 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    }
+    {
+        arg3 = &temp3;
+        if ( ! wxPoint_helper(obj2, &arg3)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxGenericDragImage const *)arg1)->DoDrawImage(*arg2,(wxPoint const &)*arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = PyInt_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DragImage_UpdateBackingFromWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGenericDragImage *arg1 = (wxGenericDragImage *) 0 ;
+    wxDC *arg2 = 0 ;
+    wxMemoryDC *arg3 = 0 ;
+    wxRect *arg4 = 0 ;
+    wxRect *arg5 = 0 ;
+    bool result;
+    wxRect temp4 ;
+    wxRect temp5 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "windowDC",(char *) "destDC",(char *) "sourceRect",(char *) "destRect", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:DragImage_UpdateBackingFromWindow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxGenericDragImage,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDC,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (arg2 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    }
+    if ((SWIG_ConvertPtr(obj2,(void **) &arg3, SWIGTYPE_p_wxMemoryDC,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (arg3 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    }
+    {
+        arg4 = &temp4;
+        if ( ! wxRect_helper(obj3, &arg4)) SWIG_fail;
+    }
+    {
+        arg5 = &temp5;
+        if ( ! wxRect_helper(obj4, &arg5)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxGenericDragImage const *)arg1)->UpdateBackingFromWindow(*arg2,*arg3,(wxRect const &)*arg4,(wxRect const &)*arg5);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = PyInt_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DragImage_RedrawImage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGenericDragImage *arg1 = (wxGenericDragImage *) 0 ;
+    wxPoint *arg2 = 0 ;
+    wxPoint *arg3 = 0 ;
+    bool arg4 ;
+    bool arg5 ;
+    bool result;
+    wxPoint temp2 ;
+    wxPoint temp3 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "oldPos",(char *) "newPos",(char *) "eraseOld",(char *) "drawNew", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:DragImage_RedrawImage",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxGenericDragImage,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxPoint_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        arg3 = &temp3;
+        if ( ! wxPoint_helper(obj2, &arg3)) SWIG_fail;
+    }
+    arg4 = PyInt_AsLong(obj3) ? true : false;
+    if (PyErr_Occurred()) SWIG_fail;
+    arg5 = PyInt_AsLong(obj4) ? true : false;
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->RedrawImage((wxPoint const &)*arg2,(wxPoint const &)*arg3,arg4,arg5);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = PyInt_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject * DragImage_swigregister(PyObject *self, PyObject *args) {
+    PyObject *obj;
+    if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
+    SWIG_TypeClientData(SWIGTYPE_p_wxGenericDragImage, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
@@ -26151,6 +26760,24 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"HelpProvider_swigregister", HelpProvider_swigregister, METH_VARARGS },
 	 { (char *)"new_SimpleHelpProvider", (PyCFunction) _wrap_new_SimpleHelpProvider, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"SimpleHelpProvider_swigregister", SimpleHelpProvider_swigregister, METH_VARARGS },
+	 { (char *)"new_DragImage", (PyCFunction) _wrap_new_DragImage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_DragIcon", (PyCFunction) _wrap_new_DragIcon, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_DragString", (PyCFunction) _wrap_new_DragString, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_DragTreeItem", (PyCFunction) _wrap_new_DragTreeItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_DragListItem", (PyCFunction) _wrap_new_DragListItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_DragImage", (PyCFunction) _wrap_delete_DragImage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DragImage_SetBackingBitmap", (PyCFunction) _wrap_DragImage_SetBackingBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DragImage_BeginDrag", (PyCFunction) _wrap_DragImage_BeginDrag, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DragImage_BeginDragBounded", (PyCFunction) _wrap_DragImage_BeginDragBounded, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DragImage_EndDrag", (PyCFunction) _wrap_DragImage_EndDrag, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DragImage_Move", (PyCFunction) _wrap_DragImage_Move, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DragImage_Show", (PyCFunction) _wrap_DragImage_Show, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DragImage_Hide", (PyCFunction) _wrap_DragImage_Hide, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DragImage_GetImageRect", (PyCFunction) _wrap_DragImage_GetImageRect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DragImage_DoDrawImage", (PyCFunction) _wrap_DragImage_DoDrawImage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DragImage_UpdateBackingFromWindow", (PyCFunction) _wrap_DragImage_UpdateBackingFromWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DragImage_RedrawImage", (PyCFunction) _wrap_DragImage_RedrawImage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DragImage_swigregister", DragImage_swigregister, METH_VARARGS },
 	 { NULL, NULL }
 };
 
@@ -26859,6 +27486,9 @@ static void *_p_wxNotebookSizerTo_p_wxObject(void *x) {
 static void *_p_wxScrollWinEventTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvent *) ((wxScrollWinEvent *) x));
 }
+static void *_p_wxGenericDragImageTo_p_wxObject(void *x) {
+    return (void *)((wxObject *)  ((wxGenericDragImage *) x));
+}
 static void *_p_wxSpinCtrlTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxControl *) ((wxSpinCtrl *) x));
 }
@@ -27137,9 +27767,11 @@ static swig_type_info _swigt__p_wxFont[] = {{"_p_wxFont", 0, "wxFont *", 0},{"_p
 static swig_type_info _swigt__p_wxToggleButton[] = {{"_p_wxToggleButton", 0, "wxToggleButton *", 0},{"_p_wxToggleButton"},{0}};
 static swig_type_info _swigt__p_wxRadioButton[] = {{"_p_wxRadioButton", 0, "wxRadioButton *", 0},{"_p_wxRadioButton"},{0}};
 static swig_type_info _swigt__p_wxChoice[] = {{"_p_wxChoice", 0, "wxChoice *", 0},{"_p_wxComboBox", _p_wxComboBoxTo_p_wxChoice},{"_p_wxDirFilterListCtrl", _p_wxDirFilterListCtrlTo_p_wxChoice},{"_p_wxChoice"},{0}};
+static swig_type_info _swigt__p_wxMemoryDC[] = {{"_p_wxMemoryDC", 0, "wxMemoryDC *", 0},{"_p_wxMemoryDC"},{0}};
 static swig_type_info _swigt__p_wxListItemAttr[] = {{"_p_wxListItemAttr", 0, "wxListItemAttr *", 0},{"_p_wxListItemAttr"},{0}};
 static swig_type_info _swigt__p_int[] = {{"_p_int", 0, "int *", 0},{"_p_int"},{0}};
 static swig_type_info _swigt__p_wxSize[] = {{"_p_wxSize", 0, "wxSize *", 0},{"_p_wxSize"},{0}};
+static swig_type_info _swigt__p_wxDC[] = {{"_p_wxDC", 0, "wxDC *", 0},{"_p_wxDC"},{0}};
 static swig_type_info _swigt__p_wxListView[] = {{"_p_wxListView", 0, "wxListView *", 0},{"_p_wxListView"},{0}};
 static swig_type_info _swigt__p_wxIcon[] = {{"_p_wxIcon", 0, "wxIcon *", 0},{"_p_wxIcon"},{0}};
 static swig_type_info _swigt__p_wxTextCtrl[] = {{"_p_wxTextCtrl", 0, "wxTextCtrl *", 0},{"_p_wxTextCtrl"},{0}};
@@ -27170,6 +27802,7 @@ static swig_type_info _swigt__p_wxComboBox[] = {{"_p_wxComboBox", 0, "wxComboBox
 static swig_type_info _swigt__p_wxHelpEvent[] = {{"_p_wxHelpEvent", 0, "wxHelpEvent *", 0},{"_p_wxHelpEvent"},{0}};
 static swig_type_info _swigt__p_wxListItem[] = {{"_p_wxListItem", 0, "wxListItem *", 0},{"_p_wxListItem"},{0}};
 static swig_type_info _swigt__p_wxNotebookSizer[] = {{"_p_wxNotebookSizer", 0, "wxNotebookSizer *", 0},{"_p_wxNotebookSizer"},{0}};
+static swig_type_info _swigt__p_wxGenericDragImage[] = {{"_p_wxGenericDragImage", 0, "wxGenericDragImage *", 0},{"_p_wxGenericDragImage"},{0}};
 static swig_type_info _swigt__p_wxSpinCtrl[] = {{"_p_wxSpinCtrl", 0, "wxSpinCtrl *", 0},{"_p_wxSpinCtrl"},{0}};
 static swig_type_info _swigt__p_wxImageList[] = {{"_p_wxImageList", 0, "wxImageList *", 0},{"_p_wxImageList"},{0}};
 static swig_type_info _swigt__p_wxHelpProvider[] = {{"_p_wxHelpProvider", 0, "wxHelpProvider *", 0},{"_p_wxHelpProvider"},{"_p_wxSimpleHelpProvider", _p_wxSimpleHelpProviderTo_p_wxHelpProvider},{0}};
@@ -27178,7 +27811,8 @@ static swig_type_info _swigt__p_wxSimpleHelpProvider[] = {{"_p_wxSimpleHelpProvi
 static swig_type_info _swigt__p_wxPoint[] = {{"_p_wxPoint", 0, "wxPoint *", 0},{"_p_wxPoint"},{0}};
 static swig_type_info _swigt__p_wxListbookEvent[] = {{"_p_wxListbookEvent", 0, "wxListbookEvent *", 0},{"_p_wxListbookEvent"},{0}};
 static swig_type_info _swigt__p_wxNotebookEvent[] = {{"_p_wxNotebookEvent", 0, "wxNotebookEvent *", 0},{"_p_wxNotebookEvent"},{0}};
-static swig_type_info _swigt__p_wxObject[] = {{"_p_wxObject", 0, "wxObject *", 0},{"_p_wxLayoutConstraints", _p_wxLayoutConstraintsTo_p_wxObject},{"_p_wxGBSizerItem", _p_wxGBSizerItemTo_p_wxObject},{"_p_wxSizerItem", _p_wxSizerItemTo_p_wxObject},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxObject},{"_p_wxTextUrlEvent", _p_wxTextUrlEventTo_p_wxObject},{"_p_wxBookCtrlEvent", _p_wxBookCtrlEventTo_p_wxObject},{"_p_wxIndividualLayoutConstraint", _p_wxIndividualLayoutConstraintTo_p_wxObject},{"_p_wxStaticBoxSizer", _p_wxStaticBoxSizerTo_p_wxObject},{"_p_wxBoxSizer", _p_wxBoxSizerTo_p_wxObject},{"_p_wxSizer", _p_wxSizerTo_p_wxObject},{"_p_wxGridBagSizer", _p_wxGridBagSizerTo_p_wxObject},{"_p_wxCheckBox", _p_wxCheckBoxTo_p_wxObject},{"_p_wxPyTreeCtrl", _p_wxPyTreeCtrlTo_p_wxObject},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxObject},{"_p_wxMenu", _p_wxMenuTo_p_wxObject},{"_p_wxEvent", _p_wxEventTo_p_wxObject},{"_p_wxGridSizer", _p_wxGridSizerTo_p_wxObject},{"_p_wxFlexGridSizer", _p_wxFlexGridSizerTo_p_wxObject},{"_p_wxGenericDirCtrl", _p_wxGenericDirCtrlTo_p_wxObject},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxObject},{"_p_wxDirFilterListCtrl", _p_wxDirFilterListCtrlTo_p_wxObject},{"_p_wxPyListCtrl", _p_wxPyListCtrlTo_p_wxObject},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxObject},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxObject},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxObject},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxObject},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxObject},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxObject},{"_p_wxStaticLine", _p_wxStaticLineTo_p_wxObject},{"_p_wxPyControl", _p_wxPyControlTo_p_wxObject},{"_p_wxControl", _p_wxControlTo_p_wxObject},{"_p_wxToolBarBase", _p_wxToolBarBaseTo_p_wxObject},{"_p_wxRadioButton", _p_wxRadioButtonTo_p_wxObject},{"_p_wxToggleButton", _p_wxToggleButtonTo_p_wxObject},{"_p_wxGauge", _p_wxGaugeTo_p_wxObject},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxObject},{"_p_wxChoice", _p_wxChoiceTo_p_wxObject},{"_p_wxFSFile", _p_wxFSFileTo_p_wxObject},{"_p_wxPySizer", _p_wxPySizerTo_p_wxObject},{"_p_wxListView", _p_wxListViewTo_p_wxObject},{"_p_wxNotebook", _p_wxNotebookTo_p_wxObject},{"_p_wxTextCtrl", _p_wxTextCtrlTo_p_wxObject},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxObject},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxObject},{"_p_wxListbook", _p_wxListbookTo_p_wxObject},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxObject},{"_p_wxStaticBitmap", _p_wxStaticBitmapTo_p_wxObject},{"_p_wxSlider", _p_wxSliderTo_p_wxObject},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxObject},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxObject},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxObject},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxObject},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxObject},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxObject},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxObject},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxObject},{"_p_wxStaticBox", _p_wxStaticBoxTo_p_wxObject},{"_p_wxMenuItem", _p_wxMenuItemTo_p_wxObject},{"_p_wxContextHelp", _p_wxContextHelpTo_p_wxObject},{"_p_wxListEvent", _p_wxListEventTo_p_wxObject},{"_p_wxEvtHandler", _p_wxEvtHandlerTo_p_wxObject},{"_p_wxTIFFHandler", _p_wxTIFFHandlerTo_p_wxObject},{"_p_wxImageHandler", _p_wxImageHandlerTo_p_wxObject},{"_p_wxBMPHandler", _p_wxBMPHandlerTo_p_wxObject},{"_p_wxICOHandler", _p_wxICOHandlerTo_p_wxObject},{"_p_wxCURHandler", _p_wxCURHandlerTo_p_wxObject},{"_p_wxANIHandler", _p_wxANIHandlerTo_p_wxObject},{"_p_wxPNGHandler", _p_wxPNGHandlerTo_p_wxObject},{"_p_wxGIFHandler", _p_wxGIFHandlerTo_p_wxObject},{"_p_wxPCXHandler", _p_wxPCXHandlerTo_p_wxObject},{"_p_wxJPEGHandler", _p_wxJPEGHandlerTo_p_wxObject},{"_p_wxPNMHandler", _p_wxPNMHandlerTo_p_wxObject},{"_p_wxXPMHandler", _p_wxXPMHandlerTo_p_wxObject},{"_p_wxListBox", _p_wxListBoxTo_p_wxObject},{"_p_wxCheckListBox", _p_wxCheckListBoxTo_p_wxObject},{"_p_wxBookCtrl", _p_wxBookCtrlTo_p_wxObject},{"_p_wxContextHelpButton", _p_wxContextHelpButtonTo_p_wxObject},{"_p_wxSpinButton", _p_wxSpinButtonTo_p_wxObject},{"_p_wxButton", _p_wxButtonTo_p_wxObject},{"_p_wxBitmapButton", _p_wxBitmapButtonTo_p_wxObject},{"_p_wxScrollBar", _p_wxScrollBarTo_p_wxObject},{"_p_wxRadioBox", _p_wxRadioBoxTo_p_wxObject},{"_p_wxHelpEvent", _p_wxHelpEventTo_p_wxObject},{"_p_wxComboBox", _p_wxComboBoxTo_p_wxObject},{"_p_wxListItem", _p_wxListItemTo_p_wxObject},{"_p_wxImage", _p_wxImageTo_p_wxObject},{"_p_wxNotebookSizer", _p_wxNotebookSizerTo_p_wxObject},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxObject},{"_p_wxSpinCtrl", _p_wxSpinCtrlTo_p_wxObject},{"_p_wxListbookEvent", _p_wxListbookEventTo_p_wxObject},{"_p_wxNotebookEvent", _p_wxNotebookEventTo_p_wxObject},{"_p_wxObject"},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxObject},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxObject},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxObject},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxObject},{"_p_wxWindow", _p_wxWindowTo_p_wxObject},{"_p_wxFileSystem", _p_wxFileSystemTo_p_wxObject},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxObject},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxObject},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxObject},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxObject},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxObject},{"_p_wxTreeEvent", _p_wxTreeEventTo_p_wxObject},{"_p_wxPyApp", _p_wxPyAppTo_p_wxObject},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxObject},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxObject},{"_p_wxStaticText", _p_wxStaticTextTo_p_wxObject},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxObject},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxObject},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxObject},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxObject},{"_p_wxToolBarToolBase", _p_wxToolBarToolBaseTo_p_wxObject},{"_p_wxToolBar", _p_wxToolBarTo_p_wxObject},{"_p_wxBookCtrlSizer", _p_wxBookCtrlSizerTo_p_wxObject},{"_p_wxValidator", _p_wxValidatorTo_p_wxObject},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxObject},{0}};
+static swig_type_info _swigt__p_wxObject[] = {{"_p_wxObject", 0, "wxObject *", 0},{"_p_wxLayoutConstraints", _p_wxLayoutConstraintsTo_p_wxObject},{"_p_wxGBSizerItem", _p_wxGBSizerItemTo_p_wxObject},{"_p_wxSizerItem", _p_wxSizerItemTo_p_wxObject},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxObject},{"_p_wxTextUrlEvent", _p_wxTextUrlEventTo_p_wxObject},{"_p_wxBookCtrlEvent", _p_wxBookCtrlEventTo_p_wxObject},{"_p_wxIndividualLayoutConstraint", _p_wxIndividualLayoutConstraintTo_p_wxObject},{"_p_wxStaticBoxSizer", _p_wxStaticBoxSizerTo_p_wxObject},{"_p_wxBoxSizer", _p_wxBoxSizerTo_p_wxObject},{"_p_wxSizer", _p_wxSizerTo_p_wxObject},{"_p_wxGridBagSizer", _p_wxGridBagSizerTo_p_wxObject},{"_p_wxCheckBox", _p_wxCheckBoxTo_p_wxObject},{"_p_wxPyTreeCtrl", _p_wxPyTreeCtrlTo_p_wxObject},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxObject},{"_p_wxMenu", _p_wxMenuTo_p_wxObject},{"_p_wxEvent", _p_wxEventTo_p_wxObject},{"_p_wxGridSizer", _p_wxGridSizerTo_p_wxObject},{"_p_wxFlexGridSizer", _p_wxFlexGridSizerTo_p_wxObject},{"_p_wxGenericDirCtrl", _p_wxGenericDirCtrlTo_p_wxObject},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxObject},{"_p_wxDirFilterListCtrl", _p_wxDirFilterListCtrlTo_p_wxObject},{"_p_wxPyListCtrl", _p_wxPyListCtrlTo_p_wxObject},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxObject},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxObject},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxObject},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxObject},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxObject},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxObject},{"_p_wxStaticLine", _p_wxStaticLineTo_p_wxObject},{"_p_wxPyControl", _p_wxPyControlTo_p_wxObject},{"_p_wxControl", _p_wxControlTo_p_wxObject},{"_p_wxToolBarBase", _p_wxToolBarBaseTo_p_wxObject},{"_p_wxRadioButton", _p_wxRadioButtonTo_p_wxObject},{"_p_wxToggleButton", _p_wxToggleButtonTo_p_wxObject},{"_p_wxGauge", _p_wxGaugeTo_p_wxObject},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxObject},{"_p_wxChoice", _p_wxChoiceTo_p_wxObject},{"_p_wxFSFile", _p_wxFSFileTo_p_wxObject},{"_p_wxPySizer", _p_wxPySizerTo_p_wxObject},{"_p_wxListView", _p_wxListViewTo_p_wxObject},{"_p_wxNotebook", _p_wxNotebookTo_p_wxObject},{"_p_wxTextCtrl", _p_wxTextCtrlTo_p_wxObject},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxObject},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxObject},{"_p_wxListbook", _p_wxListbookTo_p_wxObject},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxObject},{"_p_wxStaticBitmap", _p_wxStaticBitmapTo_p_wxObject},{"_p_wxSlider", _p_wxSliderTo_p_wxObject},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxObject},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxObject},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxObject},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxObject},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxObject},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxObject},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxObject},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxObject},{"_p_wxStaticBox", _p_wxStaticBoxTo_p_wxObject},{"_p_wxMenuItem", _p_wxMenuItemTo_p_wxObject},{"_p_wxContextHelp", _p_wxContextHelpTo_p_wxObject},{"_p_wxListEvent", _p_wxListEventTo_p_wxObject},{"_p_wxEvtHandler", _p_wxEvtHandlerTo_p_wxObject},{"_p_wxTIFFHandler", _p_wxTIFFHandlerTo_p_wxObject},{"_p_wxImageHandler", _p_wxImageHandlerTo_p_wxObject},{"_p_wxBMPHandler", _p_wxBMPHandlerTo_p_wxObject},{"_p_wxICOHandler", _p_wxICOHandlerTo_p_wxObject},{"_p_wxCURHandler", _p_wxCURHandlerTo_p_wxObject},{"_p_wxANIHandler", _p_wxANIHandlerTo_p_wxObject},{"_p_wxPNGHandler", _p_wxPNGHandlerTo_p_wxObject},{"_p_wxGIFHandler", _p_wxGIFHandlerTo_p_wxObject},{"_p_wxPCXHandler", _p_wxPCXHandlerTo_p_wxObject},{"_p_wxJPEGHandler", _p_wxJPEGHandlerTo_p_wxObject},{"_p_wxPNMHandler", _p_wxPNMHandlerTo_p_wxObject},{"_p_wxXPMHandler", _p_wxXPMHandlerTo_p_wxObject},{"_p_wxListBox", _p_wxListBoxTo_p_wxObject},{"_p_wxCheckListBox", _p_wxCheckListBoxTo_p_wxObject},{"_p_wxBookCtrl", _p_wxBookCtrlTo_p_wxObject},{"_p_wxContextHelpButton", _p_wxContextHelpButtonTo_p_wxObject},{"_p_wxSpinButton", _p_wxSpinButtonTo_p_wxObject},{"_p_wxButton", _p_wxButtonTo_p_wxObject},{"_p_wxBitmapButton", _p_wxBitmapButtonTo_p_wxObject},{"_p_wxScrollBar", _p_wxScrollBarTo_p_wxObject},{"_p_wxRadioBox", _p_wxRadioBoxTo_p_wxObject},{"_p_wxHelpEvent", _p_wxHelpEventTo_p_wxObject},{"_p_wxComboBox", _p_wxComboBoxTo_p_wxObject},{"_p_wxListItem", _p_wxListItemTo_p_wxObject},{"_p_wxImage", _p_wxImageTo_p_wxObject},{"_p_wxNotebookSizer", _p_wxNotebookSizerTo_p_wxObject},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxObject},{"_p_wxGenericDragImage", _p_wxGenericDragImageTo_p_wxObject},{"_p_wxSpinCtrl", _p_wxSpinCtrlTo_p_wxObject},{"_p_wxListbookEvent", _p_wxListbookEventTo_p_wxObject},{"_p_wxNotebookEvent", _p_wxNotebookEventTo_p_wxObject},{"_p_wxObject"},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxObject},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxObject},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxObject},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxObject},{"_p_wxWindow", _p_wxWindowTo_p_wxObject},{"_p_wxFileSystem", _p_wxFileSystemTo_p_wxObject},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxObject},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxObject},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxObject},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxObject},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxObject},{"_p_wxTreeEvent", _p_wxTreeEventTo_p_wxObject},{"_p_wxPyApp", _p_wxPyAppTo_p_wxObject},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxObject},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxObject},{"_p_wxStaticText", _p_wxStaticTextTo_p_wxObject},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxObject},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxObject},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxObject},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxObject},{"_p_wxToolBarToolBase", _p_wxToolBarToolBaseTo_p_wxObject},{"_p_wxToolBar", _p_wxToolBarTo_p_wxObject},{"_p_wxBookCtrlSizer", _p_wxBookCtrlSizerTo_p_wxObject},{"_p_wxValidator", _p_wxValidatorTo_p_wxObject},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxObject},{0}};
+static swig_type_info _swigt__p_wxCursor[] = {{"_p_wxCursor", 0, "wxCursor *", 0},{"_p_wxCursor"},{0}};
 static swig_type_info _swigt__p_wxKeyEvent[] = {{"_p_wxKeyEvent", 0, "wxKeyEvent *", 0},{"_p_wxKeyEvent"},{0}};
 static swig_type_info _swigt__p_wxWindow[] = {{"_p_wxWindow", 0, "wxWindow *", 0},{"_p_wxBookCtrl", _p_wxBookCtrlTo_p_wxWindow},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxWindow},{"_p_wxToolBar", _p_wxToolBarTo_p_wxWindow},{"_p_wxToggleButton", _p_wxToggleButtonTo_p_wxWindow},{"_p_wxRadioButton", _p_wxRadioButtonTo_p_wxWindow},{"_p_wxWindow"},{"_p_wxPyControl", _p_wxPyControlTo_p_wxWindow},{"_p_wxControl", _p_wxControlTo_p_wxWindow},{"_p_wxToolBarBase", _p_wxToolBarBaseTo_p_wxWindow},{"_p_wxPyListCtrl", _p_wxPyListCtrlTo_p_wxWindow},{"_p_wxDirFilterListCtrl", _p_wxDirFilterListCtrlTo_p_wxWindow},{"_p_wxComboBox", _p_wxComboBoxTo_p_wxWindow},{"_p_wxGenericDirCtrl", _p_wxGenericDirCtrlTo_p_wxWindow},{"_p_wxScrollBar", _p_wxScrollBarTo_p_wxWindow},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxWindow},{"_p_wxGauge", _p_wxGaugeTo_p_wxWindow},{"_p_wxStaticLine", _p_wxStaticLineTo_p_wxWindow},{"_p_wxListbook", _p_wxListbookTo_p_wxWindow},{"_p_wxPyTreeCtrl", _p_wxPyTreeCtrlTo_p_wxWindow},{"_p_wxCheckBox", _p_wxCheckBoxTo_p_wxWindow},{"_p_wxRadioBox", _p_wxRadioBoxTo_p_wxWindow},{"_p_wxCheckListBox", _p_wxCheckListBoxTo_p_wxWindow},{"_p_wxListBox", _p_wxListBoxTo_p_wxWindow},{"_p_wxChoice", _p_wxChoiceTo_p_wxWindow},{"_p_wxListView", _p_wxListViewTo_p_wxWindow},{"_p_wxNotebook", _p_wxNotebookTo_p_wxWindow},{"_p_wxStaticBitmap", _p_wxStaticBitmapTo_p_wxWindow},{"_p_wxSpinCtrl", _p_wxSpinCtrlTo_p_wxWindow},{"_p_wxStaticText", _p_wxStaticTextTo_p_wxWindow},{"_p_wxStaticBox", _p_wxStaticBoxTo_p_wxWindow},{"_p_wxSlider", _p_wxSliderTo_p_wxWindow},{"_p_wxButton", _p_wxButtonTo_p_wxWindow},{"_p_wxSpinButton", _p_wxSpinButtonTo_p_wxWindow},{"_p_wxContextHelpButton", _p_wxContextHelpButtonTo_p_wxWindow},{"_p_wxBitmapButton", _p_wxBitmapButtonTo_p_wxWindow},{"_p_wxTextCtrl", _p_wxTextCtrlTo_p_wxWindow},{0}};
 static swig_type_info _swigt__p_wxString[] = {{"_p_wxString", 0, "wxString *", 0},{"_p_wxString"},{0}};
@@ -27218,9 +27852,11 @@ _swigt__p_wxFont,
 _swigt__p_wxToggleButton, 
 _swigt__p_wxRadioButton, 
 _swigt__p_wxChoice, 
+_swigt__p_wxMemoryDC, 
 _swigt__p_wxListItemAttr, 
 _swigt__p_int, 
 _swigt__p_wxSize, 
+_swigt__p_wxDC, 
 _swigt__p_wxListView, 
 _swigt__p_wxIcon, 
 _swigt__p_wxTextCtrl, 
@@ -27251,6 +27887,7 @@ _swigt__p_wxComboBox,
 _swigt__p_wxHelpEvent, 
 _swigt__p_wxListItem, 
 _swigt__p_wxNotebookSizer, 
+_swigt__p_wxGenericDragImage, 
 _swigt__p_wxSpinCtrl, 
 _swigt__p_wxImageList, 
 _swigt__p_wxHelpProvider, 
@@ -27260,6 +27897,7 @@ _swigt__p_wxPoint,
 _swigt__p_wxListbookEvent, 
 _swigt__p_wxNotebookEvent, 
 _swigt__p_wxObject, 
+_swigt__p_wxCursor, 
 _swigt__p_wxKeyEvent, 
 _swigt__p_wxWindow, 
 _swigt__p_wxString, 
@@ -27618,5 +28256,8 @@ SWIGEXPORT(void) SWIG_init(void) {
     
     PyDict_SetItemString(d, "wxEVT_HELP", PyInt_FromLong(wxEVT_HELP));
     PyDict_SetItemString(d, "wxEVT_DETAILED_HELP", PyInt_FromLong(wxEVT_DETAILED_HELP));
+    
+    wxPyPtrTypeMap_Add("wxDragImage", "wxGenericDragImage");
+    
 }
 

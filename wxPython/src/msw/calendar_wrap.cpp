@@ -97,10 +97,10 @@ typedef void *(*swig_converter_func)(void *);
 typedef struct swig_type_info *(*swig_dycast_func)(void **);
 
 typedef struct swig_type_info {
-  const char             *name;
+  const char             *name;                 
   swig_converter_func     converter;
   const char             *str;
-  void                   *clientdata;
+  void                   *clientdata;	
   swig_dycast_func        dcast;
   struct swig_type_info  *next;
   struct swig_type_info  *prev;
@@ -118,6 +118,7 @@ SWIGIMPORT(void)             SWIG_TypeClientData(swig_type_info *, void *);
 
 #ifdef __cplusplus
 }
+
 #endif
 
 /***********************************************************************
@@ -203,15 +204,8 @@ SWIGEXPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 
 /* Contract support */
 
-#define SWIG_preassert(expr, msg)  if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
-#define SWIG_postassert(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
+#define SWIG_contract_assert(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, (char *) msg ); goto fail; } else
 
-#define SWIG_inherit_preassert(expr, msg)  if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
-#define SWIG_inherit_postassert(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
-
-#define SWIG_invariant(expr, msg)       if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
-#define SWIG_invariant_begin(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
-#define SWIG_invariant_end(expr, msg)   if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
 
 #ifdef __cplusplus
 }
@@ -913,7 +907,7 @@ static PyObject * CalendarEvent_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_CalendarCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxWindowID arg2 ;
+    int arg2 ;
     wxDateTime const &arg3_defvalue = wxDefaultDateTime ;
     wxDateTime *arg3 = (wxDateTime *) &arg3_defvalue ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
@@ -926,7 +920,7 @@ static PyObject *_wrap_new_CalendarCtrl(PyObject *self, PyObject *args, PyObject
     wxCalendarCtrl *result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp7 = false ;
+    bool temp7 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
@@ -960,7 +954,7 @@ static PyObject *_wrap_new_CalendarCtrl(PyObject *self, PyObject *args, PyObject
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = true;
+            temp7 = True;
         }
     }
     {
@@ -1011,7 +1005,7 @@ static PyObject *_wrap_CalendarCtrl_Create(PyObject *self, PyObject *args, PyObj
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxWindowID arg3 ;
+    int arg3 ;
     wxDateTime const &arg4_defvalue = wxDefaultDateTime ;
     wxDateTime *arg4 = (wxDateTime *) &arg4_defvalue ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
@@ -1024,7 +1018,7 @@ static PyObject *_wrap_CalendarCtrl_Create(PyObject *self, PyObject *args, PyObj
     bool result;
     wxPoint temp5 ;
     wxSize temp6 ;
-    bool temp8 = false ;
+    bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj3 = 0 ;
@@ -1060,7 +1054,7 @@ static PyObject *_wrap_CalendarCtrl_Create(PyObject *self, PyObject *args, PyObj
         {
             arg8 = wxString_in_helper(obj7);
             if (arg8 == NULL) SWIG_fail;
-            temp8 = true;
+            temp8 = True;
         }
     }
     {
@@ -1313,7 +1307,7 @@ static PyObject *_wrap_CalendarCtrl_SetDateRange(PyObject *self, PyObject *args,
 static PyObject *_wrap_CalendarCtrl_EnableYearChange(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
-    bool arg2 = (bool) TRUE ;
+    bool arg2 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -1343,7 +1337,7 @@ static PyObject *_wrap_CalendarCtrl_EnableYearChange(PyObject *self, PyObject *a
 static PyObject *_wrap_CalendarCtrl_EnableMonthChange(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
-    bool arg2 = (bool) TRUE ;
+    bool arg2 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -1373,7 +1367,7 @@ static PyObject *_wrap_CalendarCtrl_EnableMonthChange(PyObject *self, PyObject *
 static PyObject *_wrap_CalendarCtrl_EnableHolidayDisplay(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
-    bool arg2 = (bool) TRUE ;
+    bool arg2 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -1849,7 +1843,7 @@ static PyObject *_wrap_CalendarCtrl_HitTest(PyObject *self, PyObject *args, PyOb
 static PyObject *_wrap_CalendarCtrl_Enable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
-    bool arg2 = (bool) TRUE ;
+    bool arg2 = (bool) True ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -1880,7 +1874,7 @@ static PyObject *_wrap_CalendarCtrl_Enable(PyObject *self, PyObject *args, PyObj
 static PyObject *_wrap_CalendarCtrl_Show(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
-    bool arg2 = (bool) TRUE ;
+    bool arg2 = (bool) True ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
