@@ -367,8 +367,10 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
  */
  
 #define wxTB_3DBUTTONS      0x8000
+#define wxTB_HORIZONTAL     0x0002
+#define wxTB_VERTICAL       0x0004
 // Flatbar/Coolbar under Win98
-#define wxTB_FLAT           0x0002
+#define wxTB_FLAT           0x0008
 
 /*
  * Apply to all panel items
@@ -665,16 +667,18 @@ typedef enum {
 // Possible SetSize flags
 
 // Use internally-calculated width if -1
-#define wxSIZE_AUTO_WIDTH       1
+#define wxSIZE_AUTO_WIDTH       0x0001
 // Use internally-calculated height if -1
-#define wxSIZE_AUTO_HEIGHT      2
+#define wxSIZE_AUTO_HEIGHT      0x0002
 // Use internally-calculated width and height if each is -1
-#define wxSIZE_AUTO             3
+#define wxSIZE_AUTO             (wxSIZE_AUTO_WIDTH|wxSIZE_AUTO_HEIGHT)
 // Ignore missing (-1) dimensions (use existing).
 // For readability only: test for wxSIZE_AUTO_WIDTH/HEIGHT in code.
-#define wxSIZE_USE_EXISTING     0
+#define wxSIZE_USE_EXISTING     0x0000
 // Allow -1 as a valid position
-#define wxSIZE_ALLOW_MINUS_ONE  4
+#define wxSIZE_ALLOW_MINUS_ONE  0x0004
+// Don't do parent client adjustments (for implementation only)
+#define wxSIZE_NO_ADJUSTMENTS   0x0008
 
 // Clipboard formats
 // Numbers as per winuser.h
@@ -858,7 +862,6 @@ typedef unsigned short  WXWORD;
 typedef unsigned int    WXWPARAM;
 typedef long            WXLPARAM;
 typedef unsigned long   WXCOLORREF;
-typedef void *          WXRGN;
 typedef void *          WXRGNDATA;
 typedef void *          WXMSG;
 typedef unsigned long   WXHCONV;

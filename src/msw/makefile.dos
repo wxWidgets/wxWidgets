@@ -78,7 +78,6 @@ COMMONOBJS = \
   $(COMMDIR)\event.obj \
   $(COMMDIR)\file.obj \
   $(COMMDIR)\filefn.obj \
-  $(COMMDIR)\fileconf.obj \
   $(COMMDIR)\framecmn.obj \
   $(COMMDIR)\gdicmn.obj \
   $(COMMDIR)\intl.obj \
@@ -115,6 +114,8 @@ COMMONOBJS = \
   $(COMMDIR)\datstrm.obj \
   $(COMMDIR)\extended.obj \
   $(COMMDIR)\wincmn.obj
+
+#  $(COMMDIR)\fileconf.obj # Doens't compile (nested classes)
 
 MSWOBJS = \
   $(MSWDIR)\app.obj \
@@ -825,6 +826,26 @@ $(CPPFLAGS2) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/time.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/stream.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/fstream.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/mstream.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/zstream.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

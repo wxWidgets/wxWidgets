@@ -192,6 +192,8 @@ void wxChoice::SetSize(int x, int y, int width, int height, int sizeFlags)
   if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     y1 = currentY;
 
+  AdjustForParentClientOrigin(x1, y1, sizeFlags);
+
   // If we're prepared to use the existing size, then...
   if (width == -1 && height == -1 && ((sizeFlags & wxSIZE_AUTO) != wxSIZE_AUTO))
   {

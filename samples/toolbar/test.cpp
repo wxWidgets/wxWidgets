@@ -34,7 +34,8 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit(void)
 {
   // Create the main frame window
-  MyFrame* frame = new MyFrame(NULL, -1, "wxToolBar Sample", wxPoint(100, 100), wxSize(450, 300));
+  MyFrame* frame = new MyFrame(NULL, -1, "wxToolBar Sample",
+     wxPoint(100, 100), wxSize(450, 300));
 
   // Give it a status line
   frame->CreateStatusBar();
@@ -63,14 +64,9 @@ bool MyApp::OnInit(void)
   frame->SetMenuBar(menuBar);
 
   // Create the toolbar
-  wxToolBar* toolBar = new wxToolBar(frame, -1, wxPoint(0, 0), wxSize(100, 30),
-    wxNO_BORDER|wxTB_FLAT, wxVERTICAL, 1);
-  toolBar->SetMargins(5, 5);
+  frame->CreateToolBar(wxNO_BORDER|wxHORIZONTAL|wxTB_FLAT, ID_TOOLBAR);
 
-  InitToolbar(toolBar);
-
-  // Tell the frame about it
-  frame->SetToolBar(toolBar);
+  InitToolbar(frame->GetToolBar());
 
   // Force a resize. This should probably be replaced by a call to a wxFrame
   // function that lays out default decorations and the remaining content window.
@@ -86,6 +82,8 @@ bool MyApp::OnInit(void)
 
 bool MyApp::InitToolbar(wxToolBar* toolBar)
 {
+  toolBar->SetMargins(5, 5);
+
   // Set up toolbar
   wxBitmap* toolBarBitmaps[8];
 
@@ -138,7 +136,7 @@ bool MyApp::InitToolbar(wxToolBar* toolBar)
   toolBar->AddSeparator();
   toolBar->AddTool(wxID_HELP, *(toolBarBitmaps[7]), wxNullBitmap, FALSE, currentX, -1, NULL, "Help");
 
-  toolBar->CreateTools();
+  toolBar->Realize();
 
   // Can delete the bitmaps since they're reference counted
   int i;
@@ -155,7 +153,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_HELP, MyFrame::OnAbout)
     EVT_CLOSE(MyFrame::OnCloseWindow)
     EVT_TOOL_RANGE(wxID_OPEN, wxID_PASTE, MyFrame::OnToolLeftClick)
-    EVT_TOOL_ENTER_RANGE(wxID_OPEN, wxID_PASTE, MyFrame::OnToolEnter)
+    EVT_TOOL_ENTER(ID_TOOLBAR, MyFrame::OnToolEnter)
 END_EVENT_TABLE()
 
 // Define my frame constructor
@@ -192,10 +190,10 @@ void MyFrame::OnToolLeftClick(wxCommandEvent& event)
 
 void MyFrame::OnToolEnter(wxCommandEvent& event)
 {
-  if (event.GetId() > -1)
+  if (event.GetSelection() > -1)
   {
     wxString str;
-    str.Printf("This is tool number %d", event.GetId());
+    str.Printf("This is tool number %d", event.GetSelection());
     SetStatusText(str);
   }
   else

@@ -21,6 +21,8 @@
 
 WXDLLEXPORT_DATA(extern const char*) wxButtonBarNameStr;
 
+class WXDLLEXPORT wxMemoryDC;
+
 // Non-Win95 (WIN32, WIN16, UNIX) version
 
 class WXDLLEXPORT wxToolBarMSW: public wxToolBarBase
@@ -32,23 +34,13 @@ public:
    */
   wxToolBarMSW(void);
 
-#if WXWIN_COMPATIBILITY > 0
-  inline wxToolBarMSW(wxWindow *parent, int x, int y, int w, int h,
-            long style = wxNO_BORDER, int orientation = wxVERTICAL, int RowsOrColumns = 2,
-            const char *name = wxButtonBarNameStr)
-  {
-    Create(parent, -1, wxPoint(x, y), wxSize(w, h), style, orientation, RowsOrColumns, name);
-  }
-#endif
   inline wxToolBarMSW(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            long style = wxNO_BORDER, int orientation = wxVERTICAL,
-            int RowsOrColumns = 2, const wxString& name = wxButtonBarNameStr)
+            long style = wxNO_BORDER|wxTB_HORIZONTAL, const wxString& name = wxButtonBarNameStr)
   {
-    Create(parent, id, pos, size, style, orientation, RowsOrColumns, name);
+    Create(parent, id, pos, size, style, name);
   }
   bool Create(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            long style = wxNO_BORDER, int orientation = wxVERTICAL,
-            int RowsOrColumns = 2, const wxString& name = wxButtonBarNameStr);
+            long style = wxNO_BORDER|wxTB_HORIZONTAL, const wxString& name = wxButtonBarNameStr);
 
   ~wxToolBarMSW(void);
 
@@ -66,13 +58,18 @@ public:
 
   void DrawTool(wxDC& dc, wxMemoryDC& memDc, wxToolBarTool *tool);
 
-  // New members
   // Set default bitmap size
-  virtual void SetDefaultSize(const wxSize& size);
+  virtual void SetToolBitmapSize(const wxSize& size);
   void EnableTool(int toolIndex, bool enable); // additional drawing on enabling
 
   // The button size is bigger than the bitmap size
-  wxSize GetDefaultButtonSize(void) const;
+  wxSize GetToolSize(void) const;
+
+  void Layout(void);
+
+  // The post-tool-addition call
+  bool Realize() { Layout(); return TRUE; };
+
  protected:
   void DrawTool(wxDC& dc, wxToolBarTool *tool, int state);
 
@@ -89,7 +86,9 @@ public:
   WXHBITMAP CreateMappedBitmap(WXHINSTANCE hInstance, void *lpBitmapInfo);
   WXHBITMAP CreateMappedBitmap(WXHINSTANCE hInstance, WXHBITMAP hBitmap);
 
- protected:
+protected:
+  int               m_currentRowsOrColumns;
+  long              m_lastX, m_lastY;
 
   WXHBRUSH          m_hbrDither;
   WXDWORD           m_rgbFace;
@@ -109,12 +108,6 @@ public:
 
 DECLARE_EVENT_TABLE()
 };
-
-#define DEFAULTBITMAPX   16
-#define DEFAULTBITMAPY   15
-#define DEFAULTBUTTONX   24
-#define DEFAULTBUTTONY   22
-#define DEFAULTBARHEIGHT 27
 
 //
 // States (not all of them currently used)

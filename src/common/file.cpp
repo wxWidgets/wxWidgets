@@ -102,6 +102,9 @@
 #include  <wx/file.h>
 #include  <wx/log.h>
 
+#ifndef MAX_PATH
+#define MAX_PATH 512
+#endif
 
 // ============================================================================
 // implementation of wxFile
@@ -401,7 +404,12 @@ bool wxTempFile::Open(const wxString& strName)
     wxSplitPath(strName, &strPath, NULL, NULL);
     if ( strPath.IsEmpty() )
       strPath = '.';  // GetTempFileName will fail if we give it empty string
+#ifdef __WIN32__
     if ( !GetTempFileName(strPath, "wx_",0, m_strTemp.GetWriteBuf(MAX_PATH)) )
+#else
+    // Not sure why MSVC++ 1.5 header defines first param as BYTE - bug?
+    if ( !GetTempFileName((BYTE) (const char*) strPath, "wx_",0, m_strTemp.GetWriteBuf(MAX_PATH)) )
+#endif
       wxLogLastError("GetTempFileName");
     m_strTemp.UngetWriteBuf();
   #endif  // Windows/Unix

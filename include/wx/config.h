@@ -161,7 +161,14 @@ public:
   void SetExpandEnvVars(bool bDoIt = TRUE) { m_bExpandEnvVars = bDoIt; }
     // does expansion only if needed
   wxString ExpandEnvVars(const wxString& str) const
-    { return IsExpandingEnvVars() ? wxExpandEnvVars(str) : str; }
+    {
+        wxString tmp; // Required for BC++
+        if (IsExpandingEnvVars())
+            tmp = wxExpandEnvVars(str);
+        else
+            tmp = str;
+        return tmp;
+    }
 
 protected:
   static bool IsImmutable(const char *szKey) 

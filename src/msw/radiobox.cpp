@@ -410,6 +410,8 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
   if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     yy = currentY;
 
+  AdjustForParentClientOrigin(xx, yy, sizeFlags);
+
   char buf[400];
 
   int y_offset = yy;
@@ -575,6 +577,15 @@ void wxRadioBox::GetPosition(int *x, int *y) const
   if (parent)
   {
     ::ScreenToClient((HWND) parent->GetHWND(), &point);
+  }
+  // We may be faking the client origin.
+  // So a window that's really at (0, 30) may appear
+  // (to wxWin apps) to be at (0, 0).
+  if (GetParent())
+  {
+    wxPoint pt(GetParent()->GetClientAreaOrigin());
+    point.x -= pt.x;
+    point.y -= pt.y;
   }
 
   *x = point.x;

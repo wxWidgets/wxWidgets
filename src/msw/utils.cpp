@@ -189,8 +189,8 @@ bool wxGetUserName(char *buf, int maxSize)
 //  }
 #else
 #if !defined(__WATCOMC__) && !defined(__GNUWIN32__) && USE_PENWINDOWS
-  extern HANDLE hPenWin; // PenWindows Running?
-  if (hPenWin)
+  extern HANDLE g_hPenWin; // PenWindows Running?
+  if (g_hPenWin)
   {
     // PenWindows Does have a user concept!
     // Get the current owner of the recognizer
@@ -365,9 +365,9 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
 #  ifdef __WINDOWS_386__
   retValue = wxWIN386;
 #  else
-#    if !defined(__WATCOMC__) && !defined(GNUWIN32)
-  extern HANDLE hPenWin;
-  retValue = hPenWin ? wxPENWINDOWS : wxWINDOWS ;
+#    if !defined(__WATCOMC__) && !defined(GNUWIN32) && USE_PENWINDOWS
+  extern HANDLE g_hPenWin;
+  retValue = g_hPenWin ? wxPENWINDOWS : wxWINDOWS ;
 #    endif
 #  endif
   // @@@@ To be completed. I don't have the manual here...

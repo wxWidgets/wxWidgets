@@ -174,20 +174,17 @@ void wxMDIParentFrame::GetClientSize(int *x, int *y) const
 
   int cwidth = rect.right;
   int cheight = rect.bottom;
-/*
-  if (m_frameToolBar)
-  {
-    int tw, th;
-    m_frameToolBar->GetSize(&tw, &th);
-    cheight -= th;
-  }
-*/
+
   if ( GetStatusBar() )
   {
 	int sw, sh;
 	GetStatusBar()->GetSize(&sw, &sh);
 	cheight -= sh;
   }
+
+  wxPoint pt(GetClientAreaOrigin());
+  cheight -= pt.y;
+  cwidth -= pt.x;
 
   *x = cwidth;
   *y = cheight;
@@ -276,23 +273,18 @@ void wxMDIParentFrame::OnSize(wxSizeEvent& event)
     int y = 0;
     int width, height;
     GetClientSize(&width, &height);
-    if ( GetToolBar() )
-    {
-        int wt, ht;
-        GetToolBar()->GetSize(&wt, &ht);
-        height -= ht;
-        y += ht;
-        GetToolBar()->SetSize(0, 0, width, ht);
-    }
 
     if ( GetClientWindow() )
         GetClientWindow()->SetSize(x, y, width, height);
 
+/* Already done in MSWOnSize
   // forward WM_SIZE to status bar control
 #if USE_NATIVE_STATUSBAR
   if (m_frameStatusBar && m_frameStatusBar->IsKindOf(CLASSINFO(wxStatusBar95)))
     ((wxStatusBar95 *)m_frameStatusBar)->OnSize(event);
 #endif
+*/
+
 }
 
 void wxMDIParentFrame::OnActivate(wxActivateEvent& event)
@@ -461,6 +453,7 @@ void wxMDIParentFrame::MSWOnSize(int x, int y, WXUINT id)
 #endif
 
 	PositionStatusBar();
+    PositionToolBar();
 
     wxSizeEvent event(wxSize(x, y), m_windowId);
     event.SetEventObject( this );
@@ -914,6 +907,7 @@ void wxMDIChildFrame::MSWOnSize(int x, int y, WXUINT id)
 #endif
 
     PositionStatusBar();
+    PositionToolBar();
 
     wxWindow::MSWOnSize(x, y, id);
   }

@@ -35,7 +35,7 @@
 #include <penwin.h>
 #endif
 
-HANDLE s_hPenWin = (HANDLE)NULL;
+HANDLE g_hPenWin = (HANDLE)NULL;
 typedef void (CALLBACK * PENREGPROC)(WORD,BOOL);
 
 // The routine below allows Windows applications (binaries) to
@@ -56,17 +56,17 @@ void wxEnablePenAppHooks (bool hook)
 #ifndef __WIN32__
   if (hook)
     {
-      if (s_hPenWin)
+      if (g_hPenWin)
 	return;
 
       ///////////////////////////////////////////////////////////////////////
       // If running on a Pen Windows system, register this app so all
       // EDIT controls in dialogs are replaced by HEDIT controls.
-      if ((s_hPenWin = (HANDLE)GetSystemMetrics (SM_PENWINDOWS)) != (HANDLE) NULL)
+      if ((g_hPenWin = (HANDLE)GetSystemMetrics (SM_PENWINDOWS)) != (HANDLE) NULL)
 	{
 	  // We do this fancy GetProcAddress simply because we don't
 	  // know if we're running Pen Windows.
-	  if ((RegPenApp = (PENREGPROC)GetProcAddress (s_hPenWin, "RegisterPenApp")) != NULL)
+	  if ((RegPenApp = (PENREGPROC)GetProcAddress (g_hPenWin, "RegisterPenApp")) != NULL)
 	    (*RegPenApp) (RPA_DEFAULT, TRUE);
 	}
     }
@@ -74,12 +74,12 @@ void wxEnablePenAppHooks (bool hook)
     {
       ///////////////////////////////////////////////////////////////////////
       // If running on a Pen Windows system, unregister
-      if (s_hPenWin)
+      if (g_hPenWin)
 	{
 	  // Unregister this app 
 	  if (RegPenApp != NULL)
 	    (*RegPenApp) (RPA_DEFAULT, FALSE);
-	  s_hPenWin = (HANDLE) NULL;
+	  g_hPenWin = (HANDLE) NULL;
 	}
     }
 #endif	/* ! Windows-NT */
@@ -97,10 +97,10 @@ void wxRegisterPenWin(void)
 // (Notice the CONTROL statement in the RC file is "EDIT",
 // RegisterPenApp will automatically change that control to
 // an HEDIT.
-  if ((s_hPenWin = (HANDLE)GetSystemMetrics(SM_PENWINDOWS)) != (HANDLE)NULL) {
+  if ((g_hPenWin = (HANDLE)GetSystemMetrics(SM_PENWINDOWS)) != (HANDLE)NULL) {
     // We do this fancy GetProcAddress simply because we don't
     // know if we're running Pen Windows.
-   if ( (RegPenApp = (void (CALLBACK *)(WORD, BOOL))GetProcAddress(s_hPenWin, "RegisterPenApp"))!= NULL)
+   if ( (RegPenApp = (void (CALLBACK *)(WORD, BOOL))GetProcAddress(g_hPenWin, "RegisterPenApp"))!= NULL)
      (*RegPenApp)(RPA_DEFAULT, TRUE);
   }
 ///////////////////////////////////////////////////////////////////////
@@ -110,8 +110,8 @@ void wxRegisterPenWin(void)
 void wxCleanUpPenWin(void)
 {
 #if USE_PENWINDOWS
-  if (s_hPenWin) {
-    // Unregister this app 
+  if (g_hPenWin) {
+    // Unregister this app
     if (RegPenApp != NULL)
 	(*RegPenApp)(RPA_DEFAULT, FALSE);
   }

@@ -98,8 +98,8 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, c
         wxTE_MULTILINE|wxSUNKEN_BORDER);
     textWindow->SetValue("A help window");
 
-    toolBar = new TestRibbon(this, 0, 0, 100, 30, wxNO_BORDER, wxVERTICAL, 1);
-    SetToolBar(toolBar);
+    CreateToolBar(wxNO_BORDER|wxTB_FLAT|wxTB_HORIZONTAL);
+    InitToolBar(GetToolBar());
 }
 
 void MyFrame::OnQuit(wxCommandEvent& event)
@@ -248,15 +248,8 @@ void MyFrame::OnSize(wxSizeEvent& event)
     int tw = 0;
     int th = 0;
     
-    wxWindow* tbar = GetToolBar();
-    if (tbar)
-    {
-        tbar->GetSize(&tw, &th);
-        tbar->SetSize(w, th);
-    }
-
-    textWindow->SetSize(0, th, 200, h-th);
-    GetClientWindow()->SetSize(200, th, w - 200, h-th);
+    textWindow->SetSize(0, 0, 200, h);
+    GetClientWindow()->SetSize(200, 0, w - 200, h);
 }
 
 // Note that MDI_NEW_WINDOW and MDI_ABOUT commands get passed
@@ -264,7 +257,6 @@ void MyFrame::OnSize(wxSizeEvent& event)
 // duplicate event handlers here.
 
 BEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
-  EVT_SIZE( MyChild::OnSize)
   EVT_MENU(MDI_CHILD_QUIT, MyChild::OnQuit)
 END_EVENT_TABLE()
 
@@ -279,14 +271,6 @@ const long style):
 MyChild::~MyChild(void)
 {
   my_children.DeleteObject(this);
-}
-
-void MyChild::OnSize(wxSizeEvent& WXUNUSED(event))
-{
-  int x = 0;
-  int y = 0;
-  GetClientSize( &x, &y );
-  if (canvas) canvas->SetSize( x, y );
 }
 
 void MyChild::OnQuit(wxCommandEvent& WXUNUSED(event))
@@ -305,13 +289,7 @@ bool MyChild::OnClose(void)
   return TRUE;
 }
 
-BEGIN_EVENT_TABLE(TestRibbon, wxToolBar)
-    EVT_PAINT(TestRibbon::OnPaint)
-END_EVENT_TABLE()
-
-TestRibbon::TestRibbon(wxFrame *frame, int x, int y, int w, int h,
-            long style, int direction, int RowsOrColumns):
-  wxToolBar(frame, -1, wxPoint(x, y), wxSize(w, h), style, direction, RowsOrColumns)
+void MyFrame::InitToolBar(wxToolBar* toolBar)
 {
     wxBitmap* bitmaps[8];
 
@@ -343,61 +321,29 @@ TestRibbon::TestRibbon(wxFrame *frame, int x, int y, int w, int h,
   int offX = 5;
   int currentX = 5;
 
-  AddTool(0, *bitmaps[0], wxNullBitmap, FALSE, currentX, -1, NULL, "New file");
+  toolBar->AddTool(0, *bitmaps[0], wxNullBitmap, FALSE, currentX, -1, NULL, "New file");
   currentX += width + 5;
-  AddTool(1, *bitmaps[1], wxNullBitmap, FALSE, currentX, -1, NULL, "Open file");
+  toolBar->AddTool(1, *bitmaps[1], wxNullBitmap, FALSE, currentX, -1, NULL, "Open file");
   currentX += width + 5;
-  AddTool(2, *bitmaps[2], wxNullBitmap, FALSE, currentX, -1, NULL, "Save file");
+  toolBar->AddTool(2, *bitmaps[2], wxNullBitmap, FALSE, currentX, -1, NULL, "Save file");
   currentX += width + 5;
-  AddSeparator();
-  AddTool(3, *bitmaps[3], wxNullBitmap, FALSE, currentX, -1, NULL, "Copy");
+  toolBar->AddSeparator();
+  toolBar->AddTool(3, *bitmaps[3], wxNullBitmap, FALSE, currentX, -1, NULL, "Copy");
   currentX += width + 5;
-  AddTool(4, *bitmaps[4], wxNullBitmap, FALSE, currentX, -1, NULL, "Cut");
+  toolBar->AddTool(4, *bitmaps[4], wxNullBitmap, FALSE, currentX, -1, NULL, "Cut");
   currentX += width + 5;
-  AddTool(5, *bitmaps[5], wxNullBitmap, FALSE, currentX, -1, NULL, "Paste");
+  toolBar->AddTool(5, *bitmaps[5], wxNullBitmap, FALSE, currentX, -1, NULL, "Paste");
   currentX += width + 5;
-  AddSeparator();
-  AddTool(6, *bitmaps[6], wxNullBitmap, FALSE, currentX, -1, NULL, "Print");
+  toolBar->AddSeparator();
+  toolBar->AddTool(6, *bitmaps[6], wxNullBitmap, FALSE, currentX, -1, NULL, "Print");
   currentX += width + 5;
-  AddSeparator();
-  AddTool(7, *bitmaps[7], wxNullBitmap, TRUE, currentX, -1, NULL, "Help");
+  toolBar->AddSeparator();
+  toolBar->AddTool(7, *bitmaps[7], wxNullBitmap, TRUE, currentX, -1, NULL, "Help");
 
-  CreateTools();
+  toolBar->Realize();
 
   int i;
   for (i = 0; i < 8; i++)
     delete bitmaps[i];
-}
-
-bool TestRibbon::OnLeftClick(int toolIndex, bool toggled)
-{
-  char buf[200];
-  sprintf(buf, "Clicked on tool %d", toolIndex);
-  frame->SetStatusText(buf);
-  return TRUE;
-}
-
-void TestRibbon::OnMouseEnter(int toolIndex)
-{
-  char buf[200];
-  if (toolIndex > -1)
-  {
-    sprintf(buf, "This is tool number %d", toolIndex);
-    frame->SetStatusText(buf);
-  }
-  else frame->SetStatusText("");
-}
-
-void TestRibbon::OnPaint(wxPaintEvent& event)
-{
-  wxToolBar::OnPaint(event);
-
-  wxPaintDC dc(this);
-  
-  int w, h;
-  GetSize(&w, &h);
-  dc.SetPen(*wxBLACK_PEN);
-  dc.SetBrush(*wxTRANSPARENT_BRUSH);
-  dc.DrawLine(0, h-1, w, h-1);
 }
 

@@ -17,8 +17,10 @@
 #endif
 
 #include "wx/window.h"
+#include "wx/toolbar.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxFrameNameStr;
+WXDLLEXPORT_DATA(extern const char*) wxToolBarNameStr;
 
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxStatusBar;
@@ -58,10 +60,6 @@ public:
   void GetPosition(int *x, int *y) const ;
   void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
 
-  // Toolbar: if made known to the frame, the frame will manage it automatically.
-  virtual inline void SetToolBar(wxWindow *toolbar) { m_frameToolBar = toolbar; }
-  virtual inline wxWindow *GetToolBar(void) const { return m_frameToolBar; }
-
   virtual bool OnClose(void);
 
   void OnSize(wxSizeEvent& event);
@@ -90,8 +88,20 @@ public:
   virtual void SetIcon(const wxIcon& icon);
 
   // Create status line
-  virtual bool CreateStatusBar(int number=1);
+  virtual wxStatusBar* CreateStatusBar(int number=1, long style = wxST_SIZEGRIP, wxWindowID id = 0,
+    const wxString& name = "statusBar");
   inline wxStatusBar *GetStatusBar() const { return m_frameStatusBar; }
+  virtual void PositionStatusBar(void);
+  virtual wxStatusBar *OnCreateStatusBar(int number, long style, wxWindowID id,
+    const wxString& name);
+
+  // Create toolbar
+  virtual wxToolBar* CreateToolBar(long style = wxNO_BORDER|wxTB_HORIZONTAL, wxWindowID id = -1, const wxString& name = wxToolBarNameStr);
+  virtual wxToolBar *OnCreateToolBar(long style, wxWindowID id, const wxString& name);
+  // If made known to the frame, the frame will manage it automatically.
+  virtual inline void SetToolBar(wxToolBar *toolbar) { m_frameToolBar = toolbar; }
+  virtual inline wxToolBar *GetToolBar(void) const { return m_frameToolBar; }
+  virtual void PositionToolBar(void);
 
   // Set status line text
   virtual void SetStatusText(const wxString& text, int number = 0);
@@ -118,8 +128,8 @@ public:
   virtual void Maximize(bool maximize);
   virtual bool LoadAccelerators(const wxString& table);
 
-  virtual void PositionStatusBar(void);
-  virtual wxStatusBar *OnCreateStatusBar(int number);
+  // Responds to colour changes
+  void OnSysColourChanged(wxSysColourChangedEvent& event);
 
   // Query app for menu item updates (called from OnIdle)
   void DoMenuUpdates(void);
@@ -127,8 +137,8 @@ public:
 
   WXHMENU GetWinMenu(void) const ;
 
-  // Responds to colour changes
-  void OnSysColourChanged(wxSysColourChangedEvent& event);
+  // Checks if there is a toolbar, and returns the first free client position
+  virtual wxPoint GetClientAreaOrigin() const;
 
   // Handlers
   bool MSWOnPaint(void);
@@ -148,7 +158,7 @@ protected:
   bool                  m_iconized;
   WXHICON               m_defaultIcon;
   static bool           m_useNativeStatusBar;
-  wxWindow *            m_frameToolBar ;
+  wxToolBar *           m_frameToolBar ;
 
   DECLARE_EVENT_TABLE()
 };

@@ -114,9 +114,9 @@ COMMONOBJS = \
   $(COMMDIR)\mstream.obj \
   $(COMMDIR)\zstream.obj \
   $(COMMDIR)\stream.obj \
+  $(COMMDIR)\datstrm.obj \
   $(COMMDIR)\wincmn.obj
 
-#  $(COMMDIR)\datstrm.obj
 
 MSWOBJS = \
   $(MSWDIR)\app.obj \

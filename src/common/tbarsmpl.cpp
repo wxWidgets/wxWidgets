@@ -47,10 +47,13 @@ static wxPen * white_pen = NULL,
 
 wxToolBarSimple::wxToolBarSimple(void)
 {
+    m_currentRowsOrColumns = 0;
+    m_lastX = 0;
+    m_lastY = 0;
 }
 
 bool wxToolBarSimple::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style,
-  int direction, int RowsOrColumns, const wxString& name )
+  const wxString& name )
 {
 	if ( ! wxWindow::Create(parent, id, pos, size, style, name) )
 		return FALSE;
@@ -79,12 +82,10 @@ bool wxToolBarSimple::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos
   {
     thick_black_pen = new wxPen("BLACK", 3, wxSOLID);
   }
-  m_tilingDirection = direction;
-  m_rowsOrColumns = RowsOrColumns;
-  if ( m_tilingDirection == wxVERTICAL )
-    { m_lastX = 3; m_lastY = 7; }
-  else
+  if ( GetWindowStyleFlag() & wxTB_VERTICAL )
     { m_lastX = 7; m_lastY = 3; }
+  else
+    { m_lastX = 3; m_lastY = 7; }
   m_maxWidth = m_maxHeight = 0;
   m_pressedTool = m_currentTool = -1;
   m_xMargin = 0;
@@ -355,5 +356,98 @@ void wxToolBarSimple::SpringUpButton(int index)
    }
   }
 }
+
+void wxToolBarSimple::Layout(void)
+{
+  m_currentRowsOrColumns = 0;
+  m_lastX = m_xMargin;
+  m_lastY = m_yMargin;
+  int maxToolWidth = 0;
+  int maxToolHeight = 0;
+  m_maxWidth = 0;
+  m_maxHeight = 0;
+
+  // Find the maximum tool width and height
+  wxNode *node = m_tools.First();
+  while (node)
+  {
+    wxToolBarTool *tool = (wxToolBarTool *)node->Data();
+    if (tool->GetWidth() > maxToolWidth)
+      maxToolWidth = (int)tool->GetWidth();
+    if (tool->GetHeight() > maxToolHeight)
+      maxToolHeight = (int)tool->GetHeight();
+    node = node->Next();
+  }
+
+  int separatorSize = m_toolSeparation;
+
+  node = m_tools.First();
+  while (node)
+  {
+    wxToolBarTool *tool = (wxToolBarTool *)node->Data();
+    if (tool->m_toolStyle == wxTOOL_STYLE_SEPARATOR)
+    {
+      if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
+      {
+        if (m_currentRowsOrColumns >= m_maxCols)
+          m_lastY += separatorSize;
+        else
+          m_lastX += separatorSize;
+      }
+      else
+      {
+        if (m_currentRowsOrColumns >= m_maxRows)
+          m_lastX += separatorSize;
+        else
+          m_lastY += separatorSize;
+      }
+    }
+    else if (tool->m_toolStyle == wxTOOL_STYLE_BUTTON)
+    {
+      if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
+      {
+        if (m_currentRowsOrColumns >= m_maxCols)
+        {
+          m_currentRowsOrColumns = 0;
+          m_lastX = m_xMargin;
+          m_lastY += maxToolHeight + m_toolPacking;
+        }
+        tool->m_x = (long) (m_lastX + (maxToolWidth - tool->GetWidth())/2.0);
+        tool->m_y = (long) (m_lastY + (maxToolHeight - tool->GetHeight())/2.0);
+  
+        m_lastX += maxToolWidth + m_toolPacking;
+      }
+      else
+      {
+        if (m_currentRowsOrColumns >= m_maxRows)
+        {
+          m_currentRowsOrColumns = 0;
+          m_lastX += (maxToolWidth + m_toolPacking);
+          m_lastY = m_yMargin;
+        }
+        tool->m_x = (long) (m_lastX + (maxToolWidth - tool->GetWidth())/2.0);
+        tool->m_y = (long) (m_lastY + (maxToolHeight - tool->GetHeight())/2.0);
+  
+        m_lastY += maxToolHeight + m_toolPacking;
+      }
+      m_currentRowsOrColumns ++;
+    }
+    
+    if (m_lastX > m_maxWidth)
+      m_maxWidth = m_lastX;
+    if (m_lastY > m_maxHeight)
+      m_maxHeight = m_lastY;
+
+    node = node->Next();
+  }
+  if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
+    m_maxWidth += maxToolWidth;
+  else
+    m_maxHeight += maxToolHeight;
+
+  m_maxWidth += m_xMargin;
+  m_maxHeight += m_yMargin;
+}
+
 
 #endif

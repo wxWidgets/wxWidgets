@@ -130,6 +130,8 @@ void wxCheckBox::SetSize(int x, int y, int width, int height, int sizeFlags)
   if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     y1 = currentY;
 
+  AdjustForParentClientOrigin(x1, y1, sizeFlags);
+
   char buf[300];
 
   int current_width, cyf;
@@ -279,6 +281,8 @@ void wxBitmapCheckBox::SetSize(int x, int y, int width, int height, int sizeFlag
     x1 = currentX;
   if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     y1 = currentY;
+
+  AdjustForParentClientOrigin(x1, y1, sizeFlags);
 
   HWND button = (HWND) GetHWND();
 /*

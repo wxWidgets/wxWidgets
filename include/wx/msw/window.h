@@ -25,6 +25,7 @@
 #include "wx/event.h"
 #include "wx/string.h"
 #include "wx/list.h"
+#include "wx/region.h"
 
 #define wxKEY_SHIFT     1
 #define wxKEY_CTRL      2
@@ -201,6 +202,12 @@ public:
 
   // Accept files for dragging
   virtual void DragAcceptFiles(bool accept);
+
+  // Update region access
+  virtual wxRegion GetUpdateRegion() const;
+  virtual bool IsExposed(int x, int y, int w, int h) const;
+  virtual bool IsExposed(const wxPoint& pt) const;
+  virtual bool IsExposed(const wxRect& rect) const;
 
   // Set/get the window title
   virtual inline void SetTitle(const wxString& WXUNUSED(title)) {};
@@ -398,6 +405,14 @@ public:
   ////////////////////////////////////////////////////////////////////////
   //// IMPLEMENTATION
   
+  // For implementation purposes - sometimes decorations make the client area
+  // smaller
+  virtual wxPoint GetClientAreaOrigin() const;
+
+  // Makes an adjustment to the window position (for example, a frame that has
+  // a toolbar that it manages itself).
+  virtual void AdjustForParentClientOrigin(int& x, int& y, int sizeFlags);
+
   // Windows subclassing
   void SubclassWin(WXHWND hWnd);
   void UnsubclassWin(void);
@@ -639,10 +654,15 @@ public:
   WXUINT                m_lastMsg;
   WXWPARAM              m_lastWParam;
   WXLPARAM              m_lastLParam;
+
+  wxRegion              m_updateRegion;
+/*
   wxRectangle           m_updateRect;             // Bounding box for screen damage area
 #ifdef __WIN32__
   WXHRGN                m_updateRgn;                  // NT allows access to the rectangle list
 #endif
+*/
+
   WXHANDLE              m_acceleratorTable;
   WXHMENU               m_hMenu; // Menu, if any
   wxList *              m_children;                           // Window's children
@@ -706,6 +726,8 @@ inline bool wxWindow::IsBeingDeleted(void) { return m_isBeingDeleted; }
 // Window specific (so far)
 wxWindow* WXDLLEXPORT wxGetActiveWindow(void);
 
+// OBSOLETE
+#if 0
 // Allows iteration through damaged rectangles in OnPaint
 class WXDLLEXPORT wxUpdateIterator
 {
@@ -728,6 +750,7 @@ class WXDLLEXPORT wxUpdateIterator
   int GetW();
   int GetH();
 };
+#endif
 
 WXDLLEXPORT_DATA(extern wxList) wxTopLevelWindows;
 

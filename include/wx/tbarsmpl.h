@@ -37,24 +37,16 @@ class WXDLLEXPORT wxToolBarSimple : public wxToolBarBase
  public:
 
   wxToolBarSimple(void);
-#if WXWIN_COMPATIBILITY > 0
-  inline wxToolBarSimple(wxWindow *parent, int x, int y, int w, int h,
-            long style = wxNO_BORDER, int orientation = wxVERTICAL, int RowsOrColumns = 1,
-            const char *name = wxToolBarNameStr)
-  {
-    Create(parent, -1, wxPoint(x, y), wxSize(w, h), style, orientation, RowsOrColumns, name);
-  }
-#endif
   inline wxToolBarSimple(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            long style = wxNO_BORDER, int orientation = wxVERTICAL,
-            int RowsOrColumns = 1, const wxString& name = wxToolBarNameStr)
+            long style = wxNO_BORDER|wxTB_HORIZONTAL,
+            const wxString& name = wxToolBarNameStr)
   {
-    Create(parent, id, pos, size, style, orientation, RowsOrColumns, name);
+    Create(parent, id, pos, size, style, name);
   }
   ~wxToolBarSimple(void);
 
   bool Create(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            long style = wxNO_BORDER, int orientation = wxVERTICAL, int RowsOrColumns = 1, const wxString& name = wxToolBarNameStr);
+            long style = wxNO_BORDER|wxTB_HORIZONTAL, const wxString& name = wxToolBarNameStr);
 
   void OnPaint(wxPaintEvent& event);
   void OnSize(wxSizeEvent& event);
@@ -68,7 +60,17 @@ class WXDLLEXPORT wxToolBarSimple : public wxToolBarBase
 
   virtual void SpringUpButton(int index);
 
-  DECLARE_EVENT_TABLE()
+  void Layout(void);
+
+  // The post-tool-addition call
+  bool Realize() { Layout(); return TRUE; };
+
+protected:
+  int                   m_currentRowsOrColumns;
+  long                  m_lastX, m_lastY;
+
+DECLARE_EVENT_TABLE()
+
 };
 
 #endif // USE_TOOLBAR

@@ -39,9 +39,19 @@ wxProcess::wxProcess(wxEvtHandler *parent, int id)
   m_id = id;
 }
 
+wxProcess::~wxProcess()
+{
+}
+
 void wxProcess::OnTerminate(int pid)
 {
   wxProcessEvent event(m_id, pid);
 
   ProcessEvent(event);
 }
+
+wxProcessEvent::wxProcessEvent(int id, int pid):
+  wxEvent(id), m_pid(pid)
+{
+}
+

@@ -33,6 +33,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/statusbr.h"
+#include "wx/toolbar.h"
 #include "wx/menuitem.h"
 
 #ifdef LoadAccelerators
@@ -154,19 +155,23 @@ WXHMENU wxFrame::GetWinMenu(void) const
   return m_hMenu;
 }
 
-// Get size *available for subwindows* i.e. excluding menu bar etc.
-// For XView, this is the same as GetSize
+// Get size *available for subwindows* i.e. excluding menu bar, toolbar etc.
 void wxFrame::GetClientSize(int *x, int *y) const
 {
   RECT rect;
   GetClientRect((HWND) GetHWND(), &rect);
 
-  if ( m_frameStatusBar )
+  if ( GetStatusBar() )
   {
-  int statusX, statusY;
-  m_frameStatusBar->GetClientSize(&statusX, &statusY);
-  rect.bottom -= statusY;
+    int statusX, statusY;
+    GetStatusBar()->GetClientSize(&statusX, &statusY);
+    rect.bottom -= statusY;
   }
+
+  wxPoint pt(GetClientAreaOrigin());
+  rect.bottom -= pt.y;
+  rect.right -= pt.x;
+
   *x = rect.right;
   *y = rect.bottom;
 }
@@ -189,12 +194,16 @@ void wxFrame::SetClientSize(int width, int height)
   int actual_width = rect2.right - rect2.left - rect.right + width;
   int actual_height = rect2.bottom - rect2.top - rect.bottom + height;
 
-  if ( m_frameStatusBar )
+  if ( GetStatusBar() )
   {
-  int statusX, statusY;
-  m_frameStatusBar->GetClientSize(&statusX, &statusY);
-  actual_height += statusY;
+    int statusX, statusY;
+    GetStatusBar()->GetClientSize(&statusX, &statusY);
+    actual_height += statusY;
   }
+
+  wxPoint pt(GetClientAreaOrigin());
+  actual_width += pt.y;
+  actual_height += pt.x;
 
   POINT point;
   point.x = rect2.left;
@@ -339,19 +348,21 @@ void wxFrame::SetIcon(const wxIcon& icon)
 #endif
 }
 
-wxStatusBar *wxFrame::OnCreateStatusBar(int number)
+wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,
+    const wxString& name)
 {
     wxStatusBar *statusBar = NULL;
 
 #if USE_NATIVE_STATUSBAR
     if (UsesNativeStatusBar())
     {
-        statusBar = new wxStatusBar95(this);
+        statusBar = new wxStatusBar95(this, id, style);
     }
     else
 #endif
     {
-        statusBar = new wxStatusBar(this, -1, wxPoint(0, 0), wxSize(100, 20));
+        statusBar = new wxStatusBar(this, id, wxPoint(0, 0), wxSize(100, 20),
+            style, name);
 
         // Set the height according to the font and the border size
         wxClientDC dc(statusBar);
@@ -369,20 +380,22 @@ wxStatusBar *wxFrame::OnCreateStatusBar(int number)
   return statusBar;
 }
 
-bool wxFrame::CreateStatusBar(int number)
+wxStatusBar* wxFrame::CreateStatusBar(int number, long style, wxWindowID id,
+    const wxString& name)
 {
   // VZ: calling CreateStatusBar twice is an error - why anyone would do it?
   wxCHECK_MSG( m_frameStatusBar == NULL, FALSE, 
                "recreating status bar in wxFrame" );
 
-  m_frameStatusBar = OnCreateStatusBar(number);
+  m_frameStatusBar = OnCreateStatusBar(number, style, id,
+    name);
   if ( m_frameStatusBar )
   {
     PositionStatusBar();
-    return TRUE;
+    return m_frameStatusBar;
   }
   else
-    return FALSE;
+    return NULL;
 }
 
 void wxFrame::SetStatusText(const wxString& text, int number)
@@ -413,6 +426,9 @@ void wxFrame::PositionStatusBar(void)
       GetClientSize(&w, &h);
       int sw, sh;
       m_frameStatusBar->GetSize(&sw, &sh);
+
+      // Since we wish the status bar to be directly under the client area,
+      // we use the adjusted sizes without using wxSIZE_NO_ADJUSTMENTS.
       m_frameStatusBar->SetSize(0, h, w, sh);
   }
 }
@@ -683,6 +699,8 @@ void wxFrame::MSWOnSize(int x, int y, WXUINT id)
 #endif
 
   PositionStatusBar();
+  PositionToolBar();
+
   wxSizeEvent event(wxSize(x, y), m_windowId);
   event.SetEventObject( this );
   if (!GetEventHandler()->ProcessEvent(event))
@@ -782,16 +800,6 @@ void wxFrame::OnSize(wxSizeEvent& event)
 
     int x = 0;
     int y = 0;
-
-    // Manage the toolbar if there is one
-    if ( GetToolBar() )
-    {
-        int wt, ht;
-        GetToolBar()->GetSize(&wt, &ht);
-        clientH -= ht;
-        y += ht;
-        GetToolBar()->SetSize(0, 0, clientW, ht);
-    }
 
     child->SetSize(x, y, clientW, clientH);
   }
@@ -905,5 +913,81 @@ void wxFrame::ProcessCommand(int id)
     bar->Check(id,!bar->Checked(id)) ;
   }
   GetEventHandler()->ProcessEvent(commandEvent);
+}
+
+// Checks if there is a toolbar, and returns the first free client position
+wxPoint wxFrame::GetClientAreaOrigin() const
+{
+    wxPoint pt(0, 0);
+    if (GetToolBar())
+    {
+        int w, h;
+        GetToolBar()->GetSize(& w, & h);
+
+        if (GetToolBar()->GetWindowStyleFlag() & wxTB_VERTICAL)
+        {
+            pt.x += w;
+        }
+        else
+        {
+            pt.y += h;
+        }
+    }
+    return pt;
+}
+
+wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& name)
+{
+    wxCHECK_MSG( m_frameToolBar == NULL, FALSE,
+               "recreating toolbar in wxFrame" );
+
+    wxToolBar* toolBar = OnCreateToolBar(style, id, name);
+    if (toolBar)
+    {
+        SetToolBar(toolBar);
+        PositionToolBar();
+        return toolBar;
+    }
+    else
+    {
+        return NULL;
+    }
+}
+
+wxToolBar* wxFrame::OnCreateToolBar(long style, wxWindowID id, const wxString& name)
+{
+    return new wxToolBar(this, id, wxDefaultPosition, wxDefaultSize, style, name);
+}
+
+void wxFrame::PositionToolBar(void)
+{
+    int cw, ch;
+
+    RECT rect;
+    ::GetClientRect((HWND) GetHWND(), &rect);
+
+    if ( GetStatusBar() )
+    {
+      int statusX, statusY;
+      GetStatusBar()->GetClientSize(&statusX, &statusY);
+      rect.bottom -= statusY;
+    }
+
+    if (GetToolBar())
+    {
+        int tw, th;
+        GetToolBar()->GetSize(& tw, & th);
+
+        if (GetToolBar()->GetWindowStyleFlag() & wxTB_VERTICAL)
+        {
+            // Use the 'real' MSW position
+            GetToolBar()->SetSize(0, 0, tw, rect.bottom, wxSIZE_NO_ADJUSTMENTS);
+        }
+        else
+        {
+            // Use the 'real' MSW position
+            GetToolBar()->SetSize(0, 0, rect.right, th, wxSIZE_NO_ADJUSTMENTS);
+        }
+    }
 }
 

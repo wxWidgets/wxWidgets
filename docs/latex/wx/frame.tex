@@ -4,6 +4,10 @@ A frame is a window whose size and position can (usually) be changed by the user
 thick borders and a title bar, and can optionally contain a menu bar, toolbar and
 status bar. A frame can contain any window that is not a frame or dialog.
 
+A frame that has a status bar and toolbar created via the CreateStatusBar/CreateToolBar functions
+manages these windows, and adjusts the value returned by GetClientSize to reflect
+the remaining size available to application windows.
+
 \wxheading{Derived from}
 
 \helpref{wxWindow}{wxwindow}\\
@@ -122,7 +126,9 @@ for further details.
 
 \membersection{wxFrame::CreateStatusBar}\label{wxframecreatestatusbar}
 
-\func{virtual bool}{CreateStatusBar}{\param{int}{ number = 1}}
+\func{virtual wxStatusBar*}{CreateStatusBar}{\param{int}{ number = 1},
+ \param{long}{ style = 0},
+ \param{wxWindowID}{ id = -1}, \param{const wxString\&}{ name = "statusBar"}}
 
 Creates a status bar at the bottom of the frame.
 
@@ -131,9 +137,17 @@ Creates a status bar at the bottom of the frame.
 \docparam{number}{The number of fields to create. Specify a
 value greater than 1 to create a multi-field status bar.}
 
+\docparam{style}{The status bar style. See \helpref{wxStatusBar}{wxstatusbar} for a list
+of valid styles.}
+
+\docparam{id}{The status bar window identifier. If -1, an identifier will be chosen by
+wxWindows.}
+
+\docparam{name}{The status bar window name.}
+
 \wxheading{Return value}
 
-TRUE if the status bar was created successfully.
+A pointer to the the status bar if it was created successfully, NULL otherwise.
 
 \wxheading{Remarks}
 
@@ -150,6 +164,45 @@ Note that you can put controls and other windows on the status bar if you wish.
 \helpref{wxFrame::SetStatusText}{wxframesetstatustext},\rtfsp
 \helpref{wxFrame::OnCreateStatusBar}{wxframeoncreatestatusbar},\rtfsp
 \helpref{wxFrame::GetStatusBar}{wxframegetstatusbar}
+
+\membersection{wxFrame::CreateToolBar}\label{wxframecreatetoolbar}
+
+\func{virtual wxToolBar*}{CreateToolBar}{\param{long}{ style = wxNO\_BORDER \pipe wxTB\_HORIZONTAL},
+ \param{wxWindowID}{ id = -1}, \param{const wxString\&}{ name = "toolBar"}}
+
+Creates a toolbar at the top or left of the frame.
+
+\wxheading{Parameters}
+
+\docparam{style}{The toolbar style. See \helpref{wxToolBar}{wxtoolbar} for a list
+of valid styles.}
+
+\docparam{id}{The toolbar window identifier. If -1, an identifier will be chosen by
+wxWindows.}
+
+\docparam{name}{The toolbar window name.}
+
+\wxheading{Return value}
+
+A pointer to the the toolbar if it was created successfully, NULL otherwise.
+
+\wxheading{Remarks}
+
+By default, the toolbar is an instance of wxToolBar (which is defined to be
+a suitable toolbar class on each platform, such as wxToolBar95). To use a different class,
+override \helpref{wxFrame::OnCreateToolBar}{wxframeoncreatetoolbar}.
+
+When a toolbar has been created with this function, or made known to the frame
+with \helpref{wxFrame::SetToolBar}{wxframesettoolbar}, the frame will manage the toolbar
+position and adjust the return value from \helpref{wxWindow::GetClientSize}{wxwindowgetclientsize} to
+reflect the available space for application windows.
+
+\wxheading{See also}
+
+\helpref{wxFrame::CreateStatusBar}{wxframecreatestatusbar},\rtfsp
+\helpref{wxFrame::OnCreateToolBar}{wxframeoncreatetoolbar},\rtfsp
+\helpref{wxFrame::SetToolBar}{wxframesettoolbar},\rtfsp
+\helpref{wxFrame::GetToolBar}{wxframegettoolbar}
 
 \membersection{wxFrame::GetMenuBar}\label{wxframegetmenubar}
 
@@ -177,6 +230,17 @@ Returns a pointer to the status bar currently associated with the frame (if any)
 
 Gets a temporary pointer to the frame title. See
 \helpref{wxFrame::SetTitle}{wxframesettitle}.
+
+\membersection{wxFrame::GetToolBar}\label{wxframegettoolbar}
+
+\func{wxToolBar*}{GetToolBar}{\void}
+
+Returns a pointer to the toolbar currently associated with the frame (if any).
+
+\wxheading{See also}
+
+\helpref{wxFrame::CreateToolBar}{wxframecreatetoolbar}, \helpref{wxToolBar}{wxtoolbar},\rtfsp
+\helpref{wxFrame::SetToolBar}{wxframesettoolbar}
 
 \membersection{wxFrame::Iconize}\label{wxframeiconize}
 
@@ -269,13 +333,23 @@ If you call wxFrame::LoadAccelerators, you need to override this function e.g.
 
 \membersection{wxFrame::OnCreateStatusBar}\label{wxframeoncreatestatusbar}
 
-\func{virtual wxStatusBar*}{OnCreateStatusBar}{\param{int }{number}}
+\func{virtual wxStatusBar*}{OnCreateStatusBar}{\param{int }{number}
+ \param{long}{ style},
+ \param{wxWindowID}{ id}, \param{const wxString\&}{ name}}
 
 Virtual function called when a status bar is requested by \helpref{wxFrame::CreateStatusBar}{wxframecreatestatusbar}.
 
 \wxheading{Parameters}
 
 \docparam{number}{The number of fields to create.}
+
+\docparam{style}{The window style. See \helpref{wxStatusBar}{wxstatusbar} for a list
+of valid styles.}
+
+\docparam{id}{The window identifier. If -1, an identifier will be chosen by
+wxWindows.}
+
+\docparam{name}{The window name.}
 
 \wxheading{Return value}
 
@@ -289,6 +363,36 @@ implementation returns an instance of \helpref{wxStatusBar}{wxstatusbar}.
 \wxheading{See also}
 
 \helpref{wxFrame::CreateStatusBar}{wxframecreatestatusbar}, \helpref{wxStatusBar}{wxstatusbar}.
+
+\membersection{wxFrame::OnCreateToolBar}\label{wxframeoncreatetoolbar}
+
+\func{virtual wxToolBar*}{OnCreateToolBar}{\param{long}{ style},
+ \param{wxWindowID}{ id}, \param{const wxString\&}{ name}}
+
+Virtual function called when a toolbar is requested by \helpref{wxFrame::CreateToolBar}{wxframecreatetoolbar}.
+
+\wxheading{Parameters}
+
+\docparam{style}{The toolbar style. See \helpref{wxToolBar}{wxtoolbar} for a list
+of valid styles.}
+
+\docparam{id}{The toolbar window identifier. If -1, an identifier will be chosen by
+wxWindows.}
+
+\docparam{name}{The toolbar window name.}
+
+\wxheading{Return value}
+
+A toolbar object.
+
+\wxheading{Remarks}
+
+An application can override this function to return a different kind of toolbar. The default
+implementation returns an instance of \helpref{wxToolBar}{wxtoolbar}.
+
+\wxheading{See also}
+
+\helpref{wxFrame::CreateToolBar}{wxframecreatetoolbar}, \helpref{wxToolBar}{wxtoolbar}.
 
 \membersection{wxFrame::OnMenuCommand}\label{wxframeonmenucommand}
 
@@ -388,6 +492,17 @@ Note that it is not possible to call this function twice for the same frame obje
 
 \helpref{wxFrame::GetMenuBar}{wxframegetmenubar}, \helpref{wxMenuBar}{wxmenubar}, \helpref{wxMenu}{wxmenu}.
 
+\membersection{wxFrame::SetStatusBar}\label{wxframesetstatusbar}
+
+\func{void}{SetStatusBar}{\param{wxStatusBar*}{ statusBar}}
+
+Associates a status bar with the frame.
+
+\wxheading{See also}
+
+\helpref{wxFrame::CreateStatusBar}{wxframecreatestatusbar}, \helpref{wxStatusBar}{wxstatusbar},\rtfsp
+\helpref{wxFrame::GetStatusBar}{wxframegetstatusbar}
+
 \membersection{wxFrame::SetStatusText}\label{wxframesetstatustext}
 
 \func{virtual void}{SetStatusText}{\param{const wxString\& }{ text}, \param{int}{ number = 0}}
@@ -428,6 +543,17 @@ field must be -1. You should delete this array after calling {\bf SetStatusWidth
 The widths of the variable fields are calculated from the total width of all fields,
 minus the sum of widths of the non-variable fields, divided by the number of 
 variable fields.
+
+\membersection{wxFrame::SetToolBar}\label{wxframesettoolbar}
+
+\func{void}{SetToolBar}{\param{wxToolBar*}{ toolBar}}
+
+Associates a toolbar with the frame.
+
+\wxheading{See also}
+
+\helpref{wxFrame::CreateToolBar}{wxframecreatetoolbar}, \helpref{wxToolBar}{wxtoolbar},\rtfsp
+\helpref{wxFrame::GetToolBar}{wxframegettoolbar}
 
 \membersection{wxFrame::SetTitle}\label{wxframesettitle}
 

@@ -64,6 +64,12 @@ Set the TBSTYLE_CUSTOMERASE style, then handle the
 NM_CUSTOMDRAW message and do your custom drawing.
 */
 
+#define DEFAULTBITMAPX   16
+#define DEFAULTBITMAPY   15
+#define DEFAULTBUTTONX   24
+#define DEFAULTBUTTONY   24
+#define DEFAULTBARHEIGHT 27
+
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxToolBar95, wxToolBarBase)
 
@@ -80,9 +86,6 @@ void wxMapBitmap(HBITMAP hBitmap, int width, int height);
 
 wxToolBar95::wxToolBar95(void)
 {
-  m_tilingDirection = wxVERTICAL ;
-  m_rowsOrColumns = 0;
-  m_currentRowsOrColumns = 0;
   m_maxWidth = -1;
   m_maxHeight = -1;
   m_hBitmap = 0;
@@ -91,8 +94,7 @@ wxToolBar95::wxToolBar95(void)
 }
 
 bool wxToolBar95::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-            long style, int orientation,
-            int RowsOrColumns, const wxString& name)
+            long style, const wxString& name)
 {
   m_backgroundColour = wxColour(GetRValue(GetSysColor(COLOR_BTNFACE)),
   	GetGValue(GetSysColor(COLOR_BTNFACE)), GetBValue(GetSysColor(COLOR_BTNFACE)));
@@ -102,11 +104,8 @@ bool wxToolBar95::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, co
   m_defaultBackgroundColour = wxColour(GetRValue(GetSysColor(COLOR_BTNFACE)),
   	GetGValue(GetSysColor(COLOR_BTNFACE)), GetBValue(GetSysColor(COLOR_BTNFACE)));
 
-  m_tilingDirection = orientation;
-  if (m_tilingDirection == wxHORIZONTAL)
-    wxMessageBox("Sorry, wxToolBar95 under Windows 95 only supports vertical tiling.\nPass the number of rows.", "wxToolBar95 usage", wxOK);
-  m_rowsOrColumns = RowsOrColumns;
-  m_currentRowsOrColumns = 0;
+  if (style & wxTB_VERTICAL)
+    wxMessageBox("Sorry, wxToolBar95 under Windows 95 only supports vertical tiling.", "wxToolBar95 usage", wxOK);
   m_maxWidth = -1;
   m_maxHeight = -1;
   
@@ -305,7 +304,7 @@ bool wxToolBar95::CreateTools(void)
   ans = (int)::SendMessage((HWND) GetHWND(), TB_AUTOSIZE, (WPARAM)0, (LPARAM) 0);
 
   RECT rect;
-  ::SendMessage((HWND) GetHWND(), TB_SETROWS, MAKEWPARAM(m_rowsOrColumns, TRUE), (LPARAM) & rect);
+  ::SendMessage((HWND) GetHWND(), TB_SETROWS, MAKEWPARAM(m_maxRows, TRUE), (LPARAM) & rect);
   m_maxWidth = (rect.right - rect.left + 2);
   m_maxHeight = (rect.bottom - rect.top + 2);
 
@@ -368,7 +367,7 @@ bool wxToolBar95::MSWNotify(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
   return TRUE;
 }
 
-void wxToolBar95::SetDefaultSize(const wxSize& size)
+void wxToolBar95::SetToolBitmapSize(const wxSize& size)
 {
   m_defaultWidth = size.x; m_defaultHeight = size.y;
   ::SendMessage((HWND) GetHWND(), TB_SETBITMAPSIZE, 0, (LPARAM) MAKELONG ((int)size.x, (int)size.y));
@@ -387,7 +386,7 @@ wxSize wxToolBar95::GetMaxSize(void) const
   if (m_maxWidth == -1 | m_maxHeight == -1)
   {
     RECT rect;
-    ::SendMessage((HWND) GetHWND(), TB_SETROWS, MAKEWPARAM(m_rowsOrColumns, TRUE), (LPARAM) & rect);
+    ::SendMessage((HWND) GetHWND(), TB_SETROWS, MAKEWPARAM(m_maxRows, TRUE), (LPARAM) & rect);
     ((wxToolBar95 *)this)->m_maxWidth = (rect.right - rect.left + 2); // ???
     ((wxToolBar95 *)this)->m_maxHeight = (rect.bottom - rect.top + 2); // ???
   }
@@ -403,7 +402,7 @@ void wxToolBar95::GetSize(int *w, int *h) const
 }
 
 // The button size is bigger than the bitmap size
-wxSize wxToolBar95::GetDefaultButtonSize(void) const
+wxSize wxToolBar95::GetToolSize(void) const
 {
   return wxSize(m_defaultWidth + 8, m_defaultHeight + 7);
 }

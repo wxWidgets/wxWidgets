@@ -38,6 +38,12 @@
 #include "wx/msw/private.h"
 #include "wx/msw/dib.h"
 
+#define DEFAULTBITMAPX   16
+#define DEFAULTBITMAPY   15
+#define DEFAULTBUTTONX   24
+#define DEFAULTBUTTONY   22
+#define DEFAULTBARHEIGHT 27
+
 /////// Non-Windows 95 implementation
 
 #if !USE_IMAGE_LOADING_IN_MSW
@@ -69,15 +75,12 @@ wxToolBarMSW::wxToolBarMSW(void)
 }
 
 bool wxToolBarMSW::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-            long style, int orientation,
-            int RowsOrColumns, const wxString& name)
+            long style, const wxString& name)
 {
 	if ( ! wxWindow::Create(parent, id, pos, size, style, name) )
 		return FALSE;
 
-  m_tilingDirection = orientation;
-  m_rowsOrColumns = RowsOrColumns;
-  if ( m_tilingDirection == wxVERTICAL )
+  if ( style & wxTB_HORIZONTAL )
     { m_lastX = 3; m_lastY = 7; }
   else
     { m_lastX = 7; m_lastY = 3; }
@@ -112,7 +115,7 @@ wxToolBarMSW::~wxToolBarMSW(void)
   FreeGlobalObjects();
 }
 
-void wxToolBarMSW::SetDefaultSize(const wxSize& size)
+void wxToolBarMSW::SetToolBitmapSize(const wxSize& size)
 {
   m_defaultWidth = size.x; m_defaultHeight = size.y;
   FreeGlobalObjects();
@@ -120,7 +123,7 @@ void wxToolBarMSW::SetDefaultSize(const wxSize& size)
 }
 
 // The button size is bigger than the bitmap size
-wxSize wxToolBarMSW::GetDefaultButtonSize(void) const
+wxSize wxToolBarMSW::GetToolSize(void) const
 {
   return wxSize(m_defaultWidth + 8, m_defaultHeight + 7);
 }
@@ -361,7 +364,7 @@ wxToolBarTool *wxToolBarMSW::AddTool(int index, const wxBitmap& bitmap, const wx
     tool->m_y = m_yMargin;
 
   tool->m_deleteSecondBitmap = TRUE;
-  tool->SetSize(GetDefaultButtonWidth(), GetDefaultButtonHeight());
+  tool->SetSize(GetToolSize().x, GetToolSize().y);
   
   // Calculate reasonable max size in case Layout() not called
   if ((tool->m_x + bitmap.GetWidth() + m_xMargin) > m_maxWidth)
@@ -374,6 +377,99 @@ wxToolBarTool *wxToolBarMSW::AddTool(int index, const wxBitmap& bitmap, const wx
   return tool;
 }
 
+void wxToolBarMSW::Layout(void)
+{
+  m_currentRowsOrColumns = 0;
+  m_lastX = m_xMargin;
+  m_lastY = m_yMargin;
+  int maxToolWidth = 0;
+  int maxToolHeight = 0;
+  m_maxWidth = 0;
+  m_maxHeight = 0;
+
+  // Find the maximum tool width and height
+  wxNode *node = m_tools.First();
+  while (node)
+  {
+    wxToolBarTool *tool = (wxToolBarTool *)node->Data();
+    if (tool->GetWidth() > maxToolWidth)
+      maxToolWidth = (int)tool->GetWidth();
+    if (tool->GetHeight() > maxToolHeight)
+      maxToolHeight = (int)tool->GetHeight();
+    node = node->Next();
+  }
+
+  int separatorSize = m_toolSeparation;
+
+  node = m_tools.First();
+  while (node)
+  {
+    wxToolBarTool *tool = (wxToolBarTool *)node->Data();
+    if (tool->m_toolStyle == wxTOOL_STYLE_SEPARATOR)
+    {
+      if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
+      {
+        if (m_currentRowsOrColumns >= m_maxCols)
+          m_lastY += separatorSize;
+        else
+          m_lastX += separatorSize;
+      }
+      else
+      {
+        if (m_currentRowsOrColumns >= m_maxRows)
+          m_lastX += separatorSize;
+        else
+          m_lastY += separatorSize;
+      }
+    }
+    else if (tool->m_toolStyle == wxTOOL_STYLE_BUTTON)
+    {
+      if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
+      {
+        if (m_currentRowsOrColumns >= m_maxCols)
+        {
+          m_currentRowsOrColumns = 0;
+          m_lastX = m_xMargin;
+          m_lastY += maxToolHeight + m_toolPacking;
+        }
+        tool->m_x = (long) (m_lastX + (maxToolWidth - tool->GetWidth())/2.0);
+        tool->m_y = (long) (m_lastY + (maxToolHeight - tool->GetHeight())/2.0);
+  
+        m_lastX += maxToolWidth + m_toolPacking;
+      }
+      else
+      {
+        if (m_currentRowsOrColumns >= m_maxRows)
+        {
+          m_currentRowsOrColumns = 0;
+          m_lastX += (maxToolWidth + m_toolPacking);
+          m_lastY = m_yMargin;
+        }
+        tool->m_x = (long) (m_lastX + (maxToolWidth - tool->GetWidth())/2.0);
+        tool->m_y = (long) (m_lastY + (maxToolHeight - tool->GetHeight())/2.0);
+  
+        m_lastY += maxToolHeight + m_toolPacking;
+      }
+      m_currentRowsOrColumns ++;
+    }
+    
+    if (m_lastX > m_maxWidth)
+      m_maxWidth = m_lastX;
+    if (m_lastY > m_maxHeight)
+      m_maxHeight = m_lastY;
+
+    node = node->Next();
+  }
+  if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
+    m_maxWidth += maxToolWidth;
+  else
+    m_maxHeight += maxToolHeight;
+
+  m_maxWidth += m_xMargin;
+  m_maxHeight += m_yMargin;
+}
+
+
 bool wxToolBarMSW::InitGlobalObjects(void)
 {
   GetSysColors();      
@@ -384,7 +480,7 @@ bool wxToolBarMSW::InitGlobalObjects(void)
   if (!m_hdcMono)
       return FALSE;
 
-  m_hbmMono = (WXHBITMAP) CreateBitmap((int)GetDefaultButtonWidth(), (int)GetDefaultButtonHeight(), 1, 1, NULL);
+  m_hbmMono = (WXHBITMAP) CreateBitmap((int)GetToolSize().x, (int)GetToolSize().y, 1, 1, NULL);
   if (!m_hbmMono)
       return FALSE;
 
@@ -448,12 +544,12 @@ void wxToolBarMSW::CreateMask(WXHDC hdc, int xoffset, int yoffset, int dx, int d
     // create mask based on color bitmap
     // convert this to 1's
     SetBkColor(hdcGlyphs, m_rgbFace);
-    BitBlt((HDC) m_hdcMono, xoffset, yoffset, (int)GetDefaultWidth(), (int)GetDefaultHeight(),
+    BitBlt((HDC) m_hdcMono, xoffset, yoffset, (int)GetToolBitmapSize().x, (int)GetToolBitmapSize().y,
         hdcGlyphs, 0, 0, SRCCOPY);
     // convert this to 1's
     SetBkColor(hdcGlyphs, m_rgbHilight);
     // OR in the new 1's
-    BitBlt((HDC) m_hdcMono, xoffset, yoffset, (int)GetDefaultWidth(), (int)GetDefaultHeight(),
+    BitBlt((HDC) m_hdcMono, xoffset, yoffset, (int)GetToolBitmapSize().x, (int)GetToolBitmapSize().y,
         hdcGlyphs, 0, 0, SRCPAINT);
 
     SelectObject(hdcGlyphs, bitmapOld);
@@ -538,7 +634,7 @@ void wxToolBarMSW::DrawButton(WXHDC hdc, int x, int y, int dx, int dy, wxToolBar
     // calculate offset of face from (x,y).  y is always from the top,
     // so the offset is easy.  x needs to be centered in face.
     yOffset = 1;
-    xCenterOffset = (dxFace - (int)GetDefaultWidth())/2;
+    xCenterOffset = (dxFace - (int)GetToolBitmapSize().x)/2;
     if (state & (wxTBSTATE_PRESSED | wxTBSTATE_CHECKED))
     {
 	// pressed state moves down and to the right
@@ -549,7 +645,7 @@ void wxToolBarMSW::DrawButton(WXHDC hdc, int x, int y, int dx, int dy, wxToolBar
     // now put on the face
     if (state & wxTBSTATE_ENABLED) {
         // regular version
-        BitBlt((HDC) hdc, x+xCenterOffset, y + yOffset, (int)GetDefaultWidth(), (int)GetDefaultHeight(),
+        BitBlt((HDC) hdc, x+xCenterOffset, y + yOffset, (int)GetToolBitmapSize().x, (int)GetToolBitmapSize().y,
             hdcGlyphs, 0, 0, SRCCOPY);
     } else {
         // disabled version (or indeterminate)

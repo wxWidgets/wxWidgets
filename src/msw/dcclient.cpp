@@ -117,12 +117,6 @@ wxPaintDC::wxPaintDC(wxWindow *the_canvas)
     }
 
   m_canvas = the_canvas;
-  RECT updateRect1 = g_paintStruct.rcPaint;
-  m_canvas->m_updateRect.x = updateRect1.left;
-  m_canvas->m_updateRect.y = updateRect1.top;
-  m_canvas->m_updateRect.width = updateRect1.right - updateRect1.left;
-  m_canvas->m_updateRect.height = updateRect1.bottom - updateRect1.top;
-//  m_canvas->m_paintHDC = m_staticPaintHDC ;
 }
 
 wxPaintDC::~wxPaintDC(void)
@@ -131,8 +125,6 @@ wxPaintDC::~wxPaintDC(void)
 
 	if (m_staticPaintCount == 0)
 	{
-//  		m_canvas->m_paintHDC = 0;
-
 		if ( m_hDC && m_canvas)
 		{
   			::EndPaint((HWND) m_canvas->GetHWND(), &g_paintStruct);
@@ -149,3 +141,4 @@ wxPaintDC::~wxPaintDC(void)
         wxDebugMsg("~wxPaintDC: Did not release HDC\n");
     }
 }
+

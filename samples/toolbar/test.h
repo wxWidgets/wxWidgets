@@ -37,3 +37,5 @@ private:
 DECLARE_EVENT_TABLE()
 };
 
+#define ID_TOOLBAR  500
+

@@ -621,6 +621,16 @@ void wxWindow::GetPosition(int *x, int *y) const
   {
     ::ScreenToClient(hParentWnd, &point);
   }
+
+  // We may be faking the client origin.
+  // So a window that's really at (0, 30) may appear
+  // (to wxWin apps) to be at (0, 0).
+  if (GetParent())
+  {
+    wxPoint pt(GetParent()->GetClientAreaOrigin());
+    point.x -= pt.x;
+    point.y -= pt.y;
+  }
   *x = point.x;
   *y = point.y;
 }
@@ -633,6 +643,15 @@ void wxWindow::ScreenToClient(int *x, int *y) const
   pt.y = *y;
   ::ScreenToClient(hWnd, &pt);
 
+  // We may be faking the client origin.
+  // So a window that's really at (0, 30) may appear
+  // (to wxWin apps) to be at (0, 0).
+  if (GetParent())
+  {
+    wxPoint pt1(GetParent()->GetClientAreaOrigin());
+    pt.x -= pt1.x;
+    pt.y -= pt1.y;
+  }
   *x = pt.x;
   *y = pt.y;
 }
@@ -643,6 +662,17 @@ void wxWindow::ClientToScreen(int *x, int *y) const
   POINT pt;
   pt.x = *x;
   pt.y = *y;
+
+  // We may be faking the client origin.
+  // So a window that's really at (0, 30) may appear
+  // (to wxWin apps) to be at (0, 0).
+  if (GetParent())
+  {
+    wxPoint pt1(GetParent()->GetClientAreaOrigin());
+    pt.x += pt1.x;
+    pt.y += pt1.y;
+  }
+
   ::ClientToScreen(hWnd, &pt);
 
   *x = pt.x;
@@ -674,7 +704,6 @@ void wxWindow::SetCursor(const wxCursor& cursor)
 
 
 // Get size *available for subwindows* i.e. excluding menu bar etc.
-// For XView, this is the same as GetSize
 void wxWindow::GetClientSize(int *x, int *y) const
 {
   HWND hWnd = (HWND) GetHWND();
@@ -696,6 +725,8 @@ void wxWindow::SetSize(int x, int y, int width, int height, int sizeFlags)
     actualX = currentX;
   if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     actualY = currentY;
+
+  AdjustForParentClientOrigin(actualX, actualY, sizeFlags);
 
   int currentW,currentH;
   GetSize(&currentW, &currentH);
@@ -743,6 +774,24 @@ void wxWindow::SetClientSize(int width, int height)
   wxSizeEvent event(wxSize(width, height), m_windowId);
   event.SetEventObject(this);
   GetEventHandler()->ProcessEvent(event);
+}
+
+// For implementation purposes - sometimes decorations make the client area
+// smaller
+wxPoint wxWindow::GetClientAreaOrigin() const
+{
+    return wxPoint(0, 0);
+}
+
+// Makes an adjustment to the window position (for example, a frame that has
+// a toolbar that it manages itself).
+void wxWindow::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags)
+{
+    if (((sizeFlags & wxSIZE_NO_ADJUSTMENTS) == 0) && GetParent())
+    {
+        wxPoint pt(GetParent()->GetClientAreaOrigin());
+        x += pt.x; y += pt.y;
+    }
 }
 
 bool wxWindow::Show(bool show)
@@ -1956,6 +2005,19 @@ void wxWindow::MSWDetachWindowMenu(void)
 
 bool wxWindow::MSWOnPaint(void)
 {
+#ifdef __WIN32__
+  HRGN hRegion = ::CreateRectRgn(0, 0, 0, 0); // Dummy call to get a handle
+  ::GetUpdateRgn((HWND) GetHWND(), hRegion, FALSE);
+
+  m_updateRegion = wxRegion((WXHRGN) hRegion);
+#else
+  RECT updateRect;
+  ::GetUpdateRect((HWND) GetHWND(), & updateRect, FALSE);
+
+  m_updateRegion = wxRegion(updateRect.left, updateRect.top,
+      updateRect.right - updateRect.left, updateRect.bottom - updateRect.top);
+#endif
+
   wxPaintEvent event(m_windowId);
   event.SetEventObject(this);
   if (!GetEventHandler()->ProcessEvent(event))
@@ -2866,6 +2928,9 @@ void wxWindow::GetCaretPos(int *x, int *y) const
   *y = point.y;
 }
 
+// OBSOLETE: use GetUpdateRegion instead.
+
+#if 0
 /*
  * Update iterator. Use from within OnPaint.
  */
@@ -2952,6 +3017,7 @@ int wxUpdateIterator::GetH()
 {
   return ((RECT *)rp)[current].bottom-GetY();
 }
+#endif
 
 wxWindow *wxGetActiveWindow(void)
 {
@@ -4469,6 +4535,29 @@ bool wxWindow::AcceptsFocus() const
 {
   return IsShown() && IsEnabled();
 }
+
+// Update region access
+wxRegion wxWindow::GetUpdateRegion() const
+{
+    return m_updateRegion;
+}
+
+bool wxWindow::IsExposed(int x, int y, int w, int h) const
+{
+    return (m_updateRegion.Contains(x, y, w, h) != wxOutRegion);
+}
+
+bool wxWindow::IsExposed(const wxPoint& pt) const
+{
+    return (m_updateRegion.Contains(pt) != wxOutRegion);
+}
+
+bool wxWindow::IsExposed(const wxRect& rect) const
+{
+    return (m_updateRegion.Contains(rect) != wxOutRegion);
+}
+
+
 
 #ifdef __WXDEBUG__
 static const char *GetMessageName(int message)

@@ -34,7 +34,7 @@
 #include "wx/tbarbase.h"
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxToolBarBase, wxControl)
+IMPLEMENT_ABSTRACT_CLASS(wxToolBarBase, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxToolBarTool, wxObject)
 
 BEGIN_EVENT_TABLE(wxToolBarBase, wxControl)
@@ -88,8 +88,8 @@ wxToolBarBase::wxToolBarBase(void) : m_tools(wxKEY_INTEGER)
 {
   gs_ToolBars.Append(this);
 
-  m_tilingDirection = wxVERTICAL;
-  m_rowsOrColumns = 0;
+  m_maxRows = 1;
+  m_maxCols = 32000;
   m_maxWidth = 0;
   m_maxHeight = 0;
   m_defaultWidth = 16;
@@ -148,9 +148,12 @@ void wxToolBarBase::OnRightClick(int toolIndex, long x, long y)
 
 // Called when the mouse cursor enters a tool bitmap (no button pressed).
 // Argument is -1 if mouse is exiting the toolbar.
+// Note that for this event, the id of the window is used,
+// and the integer parameter of wxCommandEvent is used to retrieve
+// the tool id.
 void wxToolBarBase::OnMouseEnter ( int toolIndex )
 {
-    wxCommandEvent event(wxEVT_COMMAND_TOOL_ENTER, toolIndex);
+    wxCommandEvent event(wxEVT_COMMAND_TOOL_ENTER, GetId());
     event.SetEventObject(this);
     event.SetInt(toolIndex);
 
@@ -369,94 +372,6 @@ void wxToolBarBase::Command(wxCommandEvent& event)
 
 void wxToolBarBase::Layout(void)
 {
-  m_currentRowsOrColumns = 0;
-  m_lastX = m_xMargin;
-  m_lastY = m_yMargin;
-  int maxToolWidth = 0;
-  int maxToolHeight = 0;
-  m_maxWidth = 0;
-  m_maxHeight = 0;
-
-  // Find the maximum tool width and height
-  wxNode *node = m_tools.First();
-  while (node)
-  {
-    wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-    if (tool->GetWidth() > maxToolWidth)
-      maxToolWidth = (int)tool->GetWidth();
-    if (tool->GetHeight() > maxToolHeight)
-      maxToolHeight = (int)tool->GetHeight();
-    node = node->Next();
-  }
-
-  int separatorSize = m_toolSeparation;
-
-  node = m_tools.First();
-  while (node)
-  {
-    wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-    if (tool->m_toolStyle == wxTOOL_STYLE_SEPARATOR)
-    {
-      if (m_tilingDirection == wxHORIZONTAL)
-      {
-        if (m_currentRowsOrColumns >= m_rowsOrColumns)
-          m_lastY += separatorSize;
-        else
-          m_lastX += separatorSize;
-      }
-      else
-      {
-        if (m_currentRowsOrColumns >= m_rowsOrColumns)
-          m_lastX += separatorSize;
-        else
-          m_lastY += separatorSize;
-      }
-    }
-    else if (tool->m_toolStyle == wxTOOL_STYLE_BUTTON)
-    {
-      if (m_tilingDirection == wxHORIZONTAL)
-      {
-        if (m_currentRowsOrColumns >= m_rowsOrColumns)
-        {
-          m_currentRowsOrColumns = 0;
-          m_lastX = m_xMargin;
-          m_lastY += maxToolHeight + m_toolPacking;
-        }
-        tool->m_x = (long) (m_lastX + (maxToolWidth - tool->GetWidth())/2.0);
-        tool->m_y = (long) (m_lastY + (maxToolHeight - tool->GetHeight())/2.0);
-  
-        m_lastX += maxToolWidth + m_toolPacking;
-      }
-      else
-      {
-        if (m_currentRowsOrColumns >= m_rowsOrColumns)
-        {
-          m_currentRowsOrColumns = 0;
-          m_lastX += (maxToolWidth + m_toolPacking);
-          m_lastY = m_yMargin;
-        }
-        tool->m_x = (long) (m_lastX + (maxToolWidth - tool->GetWidth())/2.0);
-        tool->m_y = (long) (m_lastY + (maxToolHeight - tool->GetHeight())/2.0);
-  
-        m_lastY += maxToolHeight + m_toolPacking;
-      }
-      m_currentRowsOrColumns ++;
-    }
-    
-    if (m_lastX > m_maxWidth)
-      m_maxWidth = m_lastX;
-    if (m_lastY > m_maxHeight)
-      m_maxHeight = m_lastY;
-
-    node = node->Next();
-  }
-  if (m_tilingDirection == wxVERTICAL)
-    m_maxWidth += maxToolWidth;
-  else
-    m_maxHeight += maxToolHeight;
-
-  m_maxWidth += m_xMargin;
-  m_maxHeight += m_yMargin;
 }
 
 
@@ -780,20 +695,6 @@ void wxToolBarBase::ViewStart (int *x, int *y) const
   *x = m_xScrollPosition;
   *y = m_yScrollPosition;
 }
-
-/*
-void wxToolBarBase::CalcScrolledPosition(int x, int y, int *xx, int *yy) const
-{
-  *xx = (m_calcScrolledOffset ? (x - m_xScrollPosition * m_xScrollPixelsPerLine) : x);
-  *yy = (m_calcScrolledOffset ? (y - m_yScrollPosition * m_yScrollPixelsPerLine) : y);
-}
-
-void wxToolBarBase::CalcUnscrolledPosition(int x, int y, float *xx, float *yy) const
-{
-  *xx = (float)(m_calcScrolledOffset ? (x + m_xScrollPosition * m_xScrollPixelsPerLine) : x);
-  *yy = (float)(m_calcScrolledOffset ? (y + m_yScrollPosition * m_yScrollPixelsPerLine) : y);
-}
-*/
 
 void wxToolBarBase::OnIdle(wxIdleEvent& event)
 {

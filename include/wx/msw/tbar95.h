@@ -21,12 +21,6 @@
 
 WXDLLEXPORT_DATA(extern const char*) wxToolBarNameStr;
 
-#define DEFAULTBITMAPX   16
-#define DEFAULTBITMAPY   15
-#define DEFAULTBUTTONX   24
-#define DEFAULTBUTTONY   24
-#define DEFAULTBARHEIGHT 27
-
 class WXDLLEXPORT wxToolBar95: public wxToolBarBase
 {
   DECLARE_DYNAMIC_CLASS(wxToolBar95)
@@ -37,25 +31,17 @@ class WXDLLEXPORT wxToolBar95: public wxToolBarBase
 
   wxToolBar95(void);
 
-#if WXWIN_COMPATIBILITY > 0
-  inline wxToolBar95(wxWindow *parent, int x, int y, int w, int h,
-            long style = wxNO_BORDER, int orientation = wxVERTICAL, int RowsOrColumns = 2,
-            const char *name = wxToolBarNameStr)
-  {
-    Create(parent, -1, wxPoint(x, y), wxSize(w, h), style, orientation, RowsOrColumns, name);
-  }
-#endif
   inline wxToolBar95(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            long style = wxNO_BORDER, int orientation = wxVERTICAL,
-            int RowsOrColumns = 1, const wxString& name = wxToolBarNameStr)
+            long style = wxNO_BORDER|wxTB_HORIZONTAL,
+            const wxString& name = wxToolBarNameStr)
   {
-    Create(parent, id, pos, size, style, orientation, RowsOrColumns, name);
+    Create(parent, id, pos, size, style, name);
   }
   ~wxToolBar95(void);
 
   bool Create(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            long style = wxNO_BORDER, int orientation = wxVERTICAL,
-            int RowsOrColumns = 1, const wxString& name = wxToolBarNameStr);
+            long style = wxNO_BORDER|wxTB_HORIZONTAL,
+            const wxString& name = wxToolBarNameStr);
 
   // Call default behaviour
   void OnPaint(wxPaintEvent& event) { Default() ; }
@@ -72,15 +58,14 @@ class WXDLLEXPORT wxToolBar95: public wxToolBarBase
                bool toggle = FALSE, long xPos = -1, long yPos = -1, wxObject *clientData = NULL,
                const wxString& helpString1 = "", const wxString& helpString2 = "");
 
-  // New members
   // Set default bitmap size
-  void SetDefaultSize(const wxSize& size);
+  void SetToolBitmapSize(const wxSize& size);
   void EnableTool(int toolIndex, bool enable); // additional drawing on enabling
   void ToggleTool(int toolIndex, bool toggle); // toggle is TRUE if toggled on
   void ClearTools(void);
 
   // The button size is bigger than the bitmap size
-  wxSize GetDefaultButtonSize(void) const;
+  wxSize GetToolSize(void) const;
 
   wxSize GetMaxSize(void) const;
   void GetSize(int *w, int *y) const;
@@ -89,6 +74,9 @@ class WXDLLEXPORT wxToolBar95: public wxToolBarBase
   virtual bool CreateTools(void);
   virtual void SetRows(int nRows);
   virtual void Layout(void) {}
+
+  // The post-tool-addition call
+  bool Realize() { return CreateTools(); };
 
   // IMPLEMENTATION
   bool MSWCommand(WXUINT param, WXWORD id);

@@ -302,6 +302,15 @@ void wxSliderMSW::GetPosition(int *x, int *y) const
   if (parent)
     ::ScreenToClient((HWND) parent->GetHWND(), &point);
 
+  // We may be faking the client origin.
+  // So a window that's really at (0, 30) may appear
+  // (to wxWin apps) to be at (0, 0).
+  if (GetParent())
+  {
+    wxPoint pt(GetParent()->GetClientAreaOrigin());
+    point.x -= pt.x;
+    point.y -= pt.y;
+  }
   *x = point.x;
   *y = point.y;
 }
@@ -319,6 +328,8 @@ void wxSliderMSW::SetSize(int x, int y, int width, int height, int sizeFlags)
     x1 = currentX;
   if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     y1 = currentY;
+
+  AdjustForParentClientOrigin(x1, y1, sizeFlags);
 
   char buf[300];
 

@@ -40,6 +40,7 @@
 
 #include  <wx/file.h>
 #include  <wx/textfile.h>
+#include  <wx/utils.h>
 #include  <wx/log.h>
 
 // other standard headers
@@ -786,7 +787,7 @@ const char *wxSysErrorMsg(unsigned long nErrCode)
       LocalFree(lpMsgBuf);
 
       // returned string is capitalized and ended with '\r\n' - bad
-      s_szBuf[0] = (char)tolower(s_szBuf[0]);
+      s_szBuf[0] = (char)wxToLower(s_szBuf[0]);
       size_t len = strlen(s_szBuf);
       if ( len > 0 ) {
         // truncate string

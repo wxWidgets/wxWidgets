@@ -93,6 +93,8 @@ void wxStaticBitmap::SetSize(int x, int y, int width, int height, int sizeFlags)
   if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     y1 = currentY;
 
+  AdjustForParentClientOrigin(x1, y1, sizeFlags);
+
   int actualWidth = width;
   int actualHeight = height;
 

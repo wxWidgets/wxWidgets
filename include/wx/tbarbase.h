@@ -47,10 +47,10 @@ public:
   int                   m_toolStyle;
   wxObject *            m_clientData;
   int                   m_index;
-  long                 m_x;
-  long                 m_y;
-  long                 m_width;
-  long                 m_height;
+  long                  m_x;
+  long                  m_y;
+  long                  m_width;
+  long                  m_height;
   bool                  m_toggleState;
   bool                  m_isToggle;
   bool                  m_deleteSecondBitmap;
@@ -64,7 +64,7 @@ public:
 
 class WXDLLEXPORT wxToolBarBase : public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxToolBarBase)
+  DECLARE_ABSTRACT_CLASS(wxToolBarBase)
  public:
 
   wxToolBarBase(void);
@@ -114,7 +114,7 @@ class WXDLLEXPORT wxToolBarBase : public wxControl
   virtual wxString GetToolLongHelp(int toolIndex) const;
 
   virtual void SetMargins(int x, int y);
-  inline void SetMargins(const wxSize& size) { SetMargins(size.x, size.y); }
+  inline void SetMargins(const wxSize& size) { SetMargins((int) size.x, (int) size.y); }
   virtual void SetToolPacking(int packing);
   virtual void SetToolSeparation(int separation);
 
@@ -122,28 +122,34 @@ class WXDLLEXPORT wxToolBarBase : public wxControl
   inline virtual int GetToolPacking(void) { return m_toolPacking; }
   inline virtual int GetToolSeparation(void) { return m_toolSeparation; }
 
-  virtual void SetDefaultSize(const wxSize& size) { m_defaultWidth = size.x; m_defaultHeight = size.y; };
-  virtual wxSize GetDefaultSize(void) const { return wxSize(m_defaultWidth, m_defaultHeight); }
+  virtual void SetToolBitmapSize(const wxSize& size) { m_defaultWidth = size.x; m_defaultHeight = size.y; };
+  virtual wxSize GetToolBitmapSize(void) const { return wxSize(m_defaultWidth, m_defaultHeight); }
 
   // The button size (in some implementations) is bigger than the bitmap size: this returns
   // the total button size.
-  virtual wxSize GetDefaultButtonSize(void) const { return wxSize(m_defaultWidth, m_defaultHeight); } ;
+  virtual wxSize GetToolSize(void) const { return wxSize(m_defaultWidth, m_defaultHeight); } ;
 
   // Compatibility
 #if WXWIN_COMPATIBILITY
   inline void SetDefaultSize(int w, int h) { SetDefaultSize(wxSize(w, h)); }
   inline long GetDefaultWidth(void) const { return m_defaultWidth; }
   inline long GetDefaultHeight(void) const { return m_defaultHeight; }
-  inline int GetDefaultButtonWidth(void) const { return GetDefaultButtonSize().x; };
-  inline int GetDefaultButtonHeight(void) const { return GetDefaultButtonSize().y; };
+  inline int GetDefaultButtonWidth(void) const { return (int) GetDefaultButtonSize().x; };
+  inline int GetDefaultButtonHeight(void) const { return (int) GetDefaultButtonSize().y; };
+  virtual void SetDefaultSize(const wxSize& size) { SetToolBitmapSize(size); }
+  virtual wxSize GetDefaultSize(void) const { return GetToolBitmapSize(); }
+  virtual wxSize GetDefaultButtonSize(void) const { return GetToolSize(); }
 #endif
 
   // Lay the tools out
   virtual void Layout(void);
   
   // Add all the buttons: required for Win95.
-  // TODO: unify API so there's no ambiguity
   virtual bool CreateTools(void) { return TRUE; }
+
+  // Calls the appropriate function after tools have been created.
+  // E.g. Layout, or CreateTools.
+  virtual bool Realize() = 0;
 
   void Command(wxCommandEvent& event);
 
@@ -178,10 +184,9 @@ class WXDLLEXPORT wxToolBarBase : public wxControl
   // Do the toolbar button updates (check for EVT_UPDATE_UI handlers)
   virtual void DoToolbarUpdates(void);
 
-/*
-  virtual void CalcScrolledPosition(int x, int y, int *xx, int *yy) const ;
-  virtual void CalcUnscrolledPosition(int x, int y, long *xx, long *yy) const ;
-*/
+  inline void SetMaxRowsCols(int rows, int cols) { m_maxRows = rows; m_maxCols = cols; }
+  inline int GetMaxRows() const { return m_maxRows; }
+  inline int GetMaxCols() const { return m_maxCols; }
 
   void OnScroll(wxScrollEvent& event);
   void OnSize(wxSizeEvent& event);
@@ -194,10 +199,10 @@ class WXDLLEXPORT wxToolBarBase : public wxControl
 
  protected:
   wxList                m_tools;
-  int                   m_tilingDirection;
-  int                   m_rowsOrColumns;
-  int                   m_currentRowsOrColumns;
-  long                  m_lastX, m_lastY;
+//  int                   m_tilingDirection;
+//  int                   m_rowsOrColumns;
+  int                   m_maxRows;
+  int                   m_maxCols;
   long                  m_maxWidth, m_maxHeight;
   int                   m_currentTool; // Tool where mouse currently is
   int                   m_pressedTool; // Tool where mouse pressed

@@ -28,27 +28,16 @@ class MyCanvas: public wxScrolledWindow
     DECLARE_EVENT_TABLE()
 };
 
-class TestRibbon: public wxToolBar
-{
-  public:
-  TestRibbon(wxFrame *frame, int x = 0, int y = 0, int w = -1, int h = -1,
-            long style = wxNO_BORDER, int direction = wxVERTICAL, int RowsOrColumns = 2);
-  bool OnLeftClick(int toolIndex, bool toggled);
-  void OnMouseEnter(int toolIndex);
-  void OnPaint(wxPaintEvent& event);
-  
-  DECLARE_EVENT_TABLE()
-};
-
 // Define a new frame
 class MyFrame: public wxMDIParentFrame
 {
   public:
     wxTextCtrl *textWindow;
     
-    TestRibbon* toolBar;
-
     MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, const long style);
+
+    void InitToolBar(wxToolBar* toolBar);
+
     bool OnClose(void);
     void OnSize(wxSizeEvent& event);
     void OnAbout(wxCommandEvent& event);
@@ -65,7 +54,6 @@ class MyChild: public wxMDIChildFrame
     MyChild(wxMDIParentFrame *parent, const wxString& title, const wxPoint& pos, const wxSize& size, const long style);
     ~MyChild(void);
     bool OnClose(void);
-    void OnSize(wxSizeEvent& event);
     void OnActivate(wxActivateEvent& event);
     void OnQuit(wxCommandEvent& event);
 

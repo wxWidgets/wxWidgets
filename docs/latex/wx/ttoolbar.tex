@@ -1,7 +1,6 @@
 \section{Toolbar overview}\label{wxtoolbaroverview}
 
-Classes: \helpref{wxToolBarBase}{wxtoolbarbase}, \helpref{wxToolBarSimple}{wxtoolbarsimple},\rtfsp
-\helpref{wxToolBarMSW}{wxtoolbarmsw}, \helpref{wxToolBar95}{wxtoolbar95}
+Classes: \helpref{wxToolBar}{wxtoolbar}
 
 The toolbar family of classes allows an application to use toolbars
 in a variety of configurations and styles.
@@ -16,21 +15,10 @@ out the classes. This is because there are a number of different toolbar
 styles that you may wish to use simultaneously, and also, future
 toolbar implementations will emerge (for example, using the
 new-style Windows `coolbar' as seen in Microsoft applications) which
-cannot be shoe-horned into the one class.
+cannot all be shoe-horned into the one class.
 
-This does mean that if you wish to use a more sophisticated toolbar
-on one platform (say, wxToolBar95) and a simple toolbar on another
-platform (wxToolBarSimple), then you will need some simple ifdefing, such as:
-
-\begin{verbatim}
-  #ifdef wx_msw
-  #  define wxToolBar wxToolBar95
-  #else
-  #  define wxToolBar wxToolBarSimple
-  #endif
-\end{verbatim}
-
-Fortunately, the APIs of the toolbar classes are virtually identical.
+For each platform, the symbol {\bf wxToolBar} is defined to be one of the
+specific toolbar classes.
 
 The following is a summary of the toolbar classes and their differences.
 
@@ -43,15 +31,15 @@ with the Windows look and feel. This toolbar can scroll, and you can have arbitr
 numbers of rows and columns.
 \item {\bf wxToolBarMSW.} This class implements an old-style Windows toolbar, only on
 Windows. There are small, three-dimensional buttons, which do not (currently) reflect
-the current Windows colour settings: the buttons are grey.
+the current Windows colour settings: the buttons are grey. This is the default wxToolBar
+on 16-bit windows.
 \item {\bf wxToolBar95.} Uses the native Windows 95 toolbar class. It dynamically adjusts its
 background and button colours according to user colour settings.
 CreateTools must be called after the tools have been added.
 No absolute positioning is supported but you can specify the number
-of rows, and add tool separators with {\bf AddSeparator}. {\bf Layout} does nothing.
-Tooltips are supported. {\bf OnRightClick} is not supported.
-For some reason, a wxToolBar95 control cannot be moved to any
-position other than the top-left of the frame.
+of rows, and add tool separators with {\bf AddSeparator}.
+Tooltips are supported. {\bf OnRightClick} is not supported. This is the default wxToolBar
+on Windows 95, Windows NT 4 and above.
 \end{itemize}
 
 A toolbar might appear as a single row of images under
@@ -73,56 +61,224 @@ as the demo shows, before adding tools to the button bar. Don't supply more than
 one bitmap for each tool, because the toolbar generates all three images (normal,
 depressed and checked) from the single bitmap you give it.
 
-Mouse click events for a given button are sent to a member called
-\rtfsp{\bf OnLeftClick}, and so an application must derive from wxToolBar in order
-to use it. The application can also handle {\bf OnMouseEnter} events for
-the tools, to give the user extra feedback about the tools as the mouse
-moves over them.
+To intercept
 
 \subsection{Using the toolbar library}
 
-Include one of the files {\tt tbarsmpl.h, tbar95.h, tbarmsw.h}.
+Include {\tt "wx/toolbar.h"}, or if using a class directly, one of:
 
-Example of toolbar use are given in the sample programs tbarsmpl,
-tbarmsw and tbar95.
+\begin{itemize}\itemsep=0pt
+\item {\tt "wx/msw/tbarmsw.h} for wxToolBarMSW
+\item {\tt "wx/msw/tbar95.h} for wxToolBar95
+\item {\tt "wx/tbarsmpl.h} for wxToolBarSimple
+\end{itemize}
 
-Each sample creates a main window, and two toolbars: a floating toolbar
-with 24 tools, and a toolbar along the top of the main drawing window, divided into groups.
+Example of toolbar use are given in the sample program ``toolbar''. The
+source is given below.
 
-The test program defines a general-purpose derived frame called
-\rtfsp{\bf wxFrameWithToolBar} which can manage a frame with one main subwindow
-and one horizontal toolbar.
-
-Note that one of the bitmaps on the floating toolbar is a small version of the
-main graphic: this demonstrates how a memory device context can be used to
-draw into a bitmap. An application which allowed the user to build up a symbol
-library dynamically might create this kind of bitmap.
-
-Left clicks and movements over the toolbars are intercepted and information
-is displayed on the status line.
-
-The following fragment illustrates the essence of creating a toolbar.
-
+{\small
 \begin{verbatim}
+/////////////////////////////////////////////////////////////////////////////
+// Name:        test.cpp
+// Purpose:     wxToolBar sample
+// Author:      Julian Smart
+// Modified by:
+// Created:     04/01/98
+// RCS-ID:      $Id$
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+#include "wx/wx.h"
+#endif
+
+#include "wx/toolbar.h"
+#include "test.h"
+
+IMPLEMENT_APP(MyApp)
+
+#ifdef __X__
+// TODO: include XBM or XPM icons for X apps
+#endif
+
+// The `main program' equivalent, creating the windows and returning the
+// main frame
+bool MyApp::OnInit(void)
+{
+  // Create the main frame window
+  MyFrame* frame = new MyFrame(NULL, -1, "wxToolBar Sample",
+     wxPoint(100, 100), wxSize(450, 300));
+
+  // Give it a status line
+  frame->CreateStatusBar();
+
+  // Give it an icon
+#ifdef __WXMSW__
+  frame->SetIcon(wxIcon("mondrian"));
+#endif
+#ifdef __X__
+  frame->SetIcon(wxIcon("mondrian.xbm"));
+#endif
+
+  // Make a menubar
+  wxMenu *fileMenu = new wxMenu;
+  fileMenu->Append(wxID_EXIT, "E&xit");
+
+  wxMenu *helpMenu = new wxMenu;
+  helpMenu->Append(wxID_HELP, "&About");
+
+  wxMenuBar* menuBar = new wxMenuBar;
+
+  menuBar->Append(fileMenu, "&File");
+  menuBar->Append(helpMenu, "&Help");
+
+  // Associate the menu bar with the frame
+  frame->SetMenuBar(menuBar);
+
+  // Create the toolbar
+  frame->CreateToolBar(wxNO_BORDER|wxHORIZONTAL|wxTB_FLAT, ID_TOOLBAR);
+
+  InitToolbar(frame->GetToolBar());
+
+  // Force a resize. This should probably be replaced by a call to a wxFrame
+  // function that lays out default decorations and the remaining content window.
+  frame->OnSize(wxSizeEvent(wxSize(-1, -1), frame->GetId()));
+  frame->Show(TRUE);
+
+  frame->SetStatusText("Hello, wxWindows");
+  
+  SetTopWindow(frame);
+
+  return TRUE;
+}
+
+bool MyApp::InitToolbar(wxToolBar* toolBar)
+{
+  toolBar->SetMargins(5, 5);
+
+  // Set up toolbar
+  wxBitmap* toolBarBitmaps[8];
+
+#ifdef __WXMSW__
   toolBarBitmaps[0] = new wxBitmap("icon1");
   toolBarBitmaps[1] = new wxBitmap("icon2");
   toolBarBitmaps[2] = new wxBitmap("icon3");
-  ...
+  toolBarBitmaps[3] = new wxBitmap("icon4");
+  toolBarBitmaps[4] = new wxBitmap("icon5");
+  toolBarBitmaps[5] = new wxBitmap("icon6");
+  toolBarBitmaps[6] = new wxBitmap("icon7");
+  toolBarBitmaps[7] = new wxBitmap("icon8");
+#endif
+#ifdef __X__
+  // TODO
+  toolBarBitmaps[0] = new wxBitmap(...);
+  toolBarBitmaps[1] = new wxBitmap(...);
+  toolBarBitmaps[2] = new wxBitmap(...);
+  toolBarBitmaps[3] = new wxBitmap(...);
+  toolBarBitmaps[4] = new wxBitmap(...);
+  toolBarBitmaps[5] = new wxBitmap(...);
+  toolBarBitmaps[6] = new wxBitmap(...);
+  toolBarBitmaps[7] = new wxBitmap(...);
+#endif
 
-  toolBarFrame = new wxFrame(NULL, "Tools", -1, wxPoint(0, 0), wxSize(300, 200),
-    wxDEFAULT_FRAME_STYLE | wxSTAY_ON_TOP);
+#ifdef __WXMSW__
+  int width = 24;
+#else
+  int width = 16;
+#endif
+  int offX = 5;
+  int currentX = 5;
 
-  // 5 rows
-  toolBar = new TestToolBar(toolBarFrame, -1, wxPoint(10, 10), wxSize(-1, -1), 0, wxVERTICAL, 5);
-  toolBar->SetMargins(2, 2);
+  toolBar->AddTool(wxID_NEW, *(toolBarBitmaps[0]), wxNullBitmap, FALSE, (float)currentX, -1, NULL, "New file");
+  currentX += width + 5;
+  toolBar->AddTool(wxID_OPEN, *(toolBarBitmaps[1]), wxNullBitmap, FALSE, (float)currentX, -1, NULL, "Open file");
+  currentX += width + 5;
+  toolBar->AddTool(wxID_SAVE, *(toolBarBitmaps[2]), wxNullBitmap, FALSE, (float)currentX, -1, NULL, "Save file");
+  currentX += width + 5;
+  toolBar->AddSeparator();
+  toolBar->AddTool(wxID_COPY, *(toolBarBitmaps[3]), wxNullBitmap, FALSE, (float)currentX, -1, NULL, "Copy");
+  currentX += width + 5;
+  toolBar->AddTool(wxID_CUT, *(toolBarBitmaps[4]), wxNullBitmap, FALSE, (float)currentX, -1, NULL, "Cut");
+  currentX += width + 5;
+  toolBar->AddTool(wxID_PASTE, *(toolBarBitmaps[5]), wxNullBitmap, FALSE, (float)currentX, -1, NULL, "Paste");
+  currentX += width + 5;
+  toolBar->AddSeparator();
+  toolBar->AddTool(wxID_PRINT, *(toolBarBitmaps[6]), wxNullBitmap, FALSE, (float)currentX, -1, NULL, "Print");
+  currentX += width + 5;
+  toolBar->AddSeparator();
+  toolBar->AddTool(wxID_HELP, *(toolBarBitmaps[7]), wxNullBitmap, FALSE, currentX, -1, NULL, "Help");
 
-  for (int i = 10; i < 25; i++)
-    toolBar->AddTool(i, toolBarBitmaps[i], NULL, TRUE);
+  toolBar->Realize();
 
-  toolBar->Layout();
-  float maxWidth, maxHeight;
-  wxSize size(toolBar->GetMaxSize());
-  toolBarFrame->SetClientSize(maxSize.x, maxSize.y);
-  toolBarFrame->Show(TRUE);
+  // Can delete the bitmaps since they're reference counted
+  int i;
+  for (i = 0; i < 8; i++)
+    delete toolBarBitmaps[i];
+
+  return TRUE;
+}
+
+// wxID_HELP will be processed for the 'About' menu and the toolbar help button.
+
+BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
+    EVT_MENU(wxID_HELP, MyFrame::OnAbout)
+    EVT_CLOSE(MyFrame::OnCloseWindow)
+    EVT_TOOL_RANGE(wxID_OPEN, wxID_PASTE, MyFrame::OnToolLeftClick)
+    EVT_TOOL_ENTER(ID_TOOLBAR, MyFrame::OnToolEnter)
+END_EVENT_TABLE()
+
+// Define my frame constructor
+MyFrame::MyFrame(wxFrame* parent, wxWindowID id, const wxString& title, const wxPoint& pos,
+        const wxSize& size, long style):
+  wxFrame(parent, id, title, pos, size, style)
+{
+  m_textWindow = new wxTextCtrl(this, -1, "", wxPoint(0, 0), wxSize(-1, -1), wxTE_MULTILINE);
+}
+
+void MyFrame::OnQuit(wxCommandEvent& event)
+{
+    Close(TRUE);
+}
+
+void MyFrame::OnAbout(wxCommandEvent& event)
+{
+    (void)wxMessageBox("wxWindows wxToolBar demo\n", "About wxToolBar");
+}
+
+// Define the behaviour for the frame closing
+// - must delete all frames except for the main one.
+void MyFrame::OnCloseWindow(wxCloseEvent& event)
+{
+  Destroy();
+}
+
+void MyFrame::OnToolLeftClick(wxCommandEvent& event)
+{
+  wxString str;
+  str.Printf("Clicked on tool %d", event.GetId());
+  SetStatusText(str);
+}
+
+void MyFrame::OnToolEnter(wxCommandEvent& event)
+{
+  if (event.GetSelection() > -1)
+  {
+    wxString str;
+    str.Printf("This is tool number %d", event.GetSelection());
+    SetStatusText(str);
+  }
+  else
+    SetStatusText("");
+}
 \end{verbatim}
+}
 

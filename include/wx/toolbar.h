@@ -4,11 +4,11 @@
 // the application code should use only wxToolBar which is #define'd to be the
 // native implementation for each platform
 #if defined(__WXMSW__) && defined(__WIN95__)
-#   include "wx/tbar95.h"
+#   include "wx/msw/tbar95.h"
 #   define wxToolBar wxToolBar95
 #   define classwxToolBar classwxToolBar95
 #elif defined(__WXMSW__)
-#   include "wx/tbarmsw.h"
+#   include "wx/msw/tbarmsw.h"
 #   define wxToolBar wxToolBarMSW
 #   define classwxToolBar classwxToolBarMSW
 #elif defined(__WXGTK__)

@@ -43,8 +43,12 @@ wxFont WXDLLEXPORT wxCreateFontFromLogFont(LOGFONT *logFont); // , bool createNe
 #  ifdef __BORLANDC__
 #    define CASTWNDPROC
 #  else
-     typedef long (_stdcall * WndProcCast) (HWND, unsigned int, unsigned int, long);
-#    define CASTWNDPROC (WndProcCast)
+#    ifdef __WIN32__
+       typedef long (_stdcall * WndProcCast) (HWND, unsigned int, unsigned int, long);
+#      define CASTWNDPROC (WndProcCast)
+#    else
+#      define CASTWNDPROC
+#    endif
 #  endif
 #endif
 

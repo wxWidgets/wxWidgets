@@ -77,6 +77,12 @@ wxRegion::wxRegion(void)
     M_REGION = ::CreateRectRgn(0, 0, 0, 0);
 }
 
+wxRegion::wxRegion(WXHRGN hRegion)
+{
+    m_refData = new wxRegionRefData;
+    M_REGION = (HRGN) hRegion;
+}
+
 wxRegion::wxRegion(long x, long y, long w, long h)
 {
     m_refData = new wxRegionRefData;
