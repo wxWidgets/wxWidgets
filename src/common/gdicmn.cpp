@@ -59,6 +59,9 @@
 #include "X11/Xlib.h"
 #endif
 
+#ifdef __WXMAC__
+#include "wx/mac/private.h"
+#endif
 IMPLEMENT_CLASS(wxColourDatabase, wxList)
 IMPLEMENT_DYNAMIC_CLASS(wxFontList, wxList)
 IMPLEMENT_DYNAMIC_CLASS(wxPenList, wxList)
@@ -450,8 +453,17 @@ void wxInitializeStockObjects ()
 #endif
 */
 #if defined(__WXMAC__)
-  static const int sizeFont = 12;
-  wxNORMAL_FONT = new wxFont (sizeFont, wxMODERN, wxNORMAL, wxNORMAL);
+    int sizeFont = 12;
+
+    FontFamilyID fontId ;
+    Str255 fontName ;
+    SInt16 fontSize ;
+    Style fontStyle ;
+
+	GetThemeFont(kThemeSystemFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
+	sizeFont = fontSize ;
+    p2cstrcpy( (char*) fontName , fontName ) ;
+    wxSWISS_FONT = new wxFont (fontSize, wxSWISS, wxNORMAL, wxNORMAL , false , fontName );
 #elif defined(__WXPM__)
   static const int sizeFont = 12;
 #else
@@ -469,9 +481,11 @@ void wxInitializeStockObjects ()
   wxITALIC_FONT = new wxFont (sizeFont, wxROMAN, wxITALIC, wxNORMAL);
   wxSWISS_FONT = new wxFont (sizeFont, wxSWISS, wxNORMAL, wxNORMAL); /* Helv */
 #elif defined(__WXMAC__)
-  wxSMALL_FONT = new wxFont (sizeFont - 2, wxSWISS, wxNORMAL, wxNORMAL);
-  wxITALIC_FONT = new wxFont (sizeFont, wxROMAN, wxITALIC, wxNORMAL);
-  wxSWISS_FONT = new wxFont (sizeFont - 2, wxSWISS, wxNORMAL, wxNORMAL);
+    wxNORMAL_FONT = new wxFont (sizeFont, wxMODERN, wxNORMAL, wxNORMAL);
+    wxITALIC_FONT = new wxFont (sizeFont, wxROMAN, wxITALIC, wxNORMAL);
+	GetThemeFont(kThemeSmallSystemFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
+    p2cstrcpy( (char*) fontName , fontName ) ;
+    wxSMALL_FONT = new wxFont (fontSize, wxSWISS, wxNORMAL, wxNORMAL , false , fontName );
 #else
   wxSMALL_FONT = new wxFont (sizeFont - 2, wxSWISS, wxNORMAL, wxNORMAL);
   wxITALIC_FONT = new wxFont (sizeFont, wxROMAN, wxITALIC, wxNORMAL);
