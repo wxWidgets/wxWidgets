@@ -96,6 +96,7 @@ $(CPPFLAGS) /Fo$@ /Tp $<
 
 GENERICOBJS= \
   ..\generic\$D\busyinfo.obj \
+  ..\generic\$D\calctrl.obj \
   ..\generic\$D\caret.obj \
   ..\generic\$D\choicdgg.obj \
   ..\generic\$D\colrdlgg.obj \
@@ -131,6 +132,7 @@ GENERICOBJS= \
 
 GENLIBOBJS= \
   busyinfo.obj \
+  calctrl.obj \
   caret.obj \
   choicdgg.obj \
   colrdlgg.obj \
@@ -678,6 +680,7 @@ $(COMLIBOBJS3):
 
 $(GENLIBOBJS):
   copy ..\generic\$D\busyinfo.obj
+  copy ..\generic\$D\calctrl.obj
   copy ..\generic\$D\caret.obj
   copy ..\generic\$D\choicdgg.obj
   copy ..\generic\$D\colrdlgg.obj
