@@ -112,6 +112,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     if (style & wxSL_LABELS)
     {
         gtk_scale_set_draw_value( GTK_SCALE( m_widget ), TRUE );
+	gtk_scale_set_digits( GTK_SCALE( m_widget ), 0 );
 
         /* labels need more space and too small window will
            cause junk to appear on the dialog */

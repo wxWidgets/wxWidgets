@@ -1185,8 +1185,6 @@ DnDShapeFrame::DnDShapeFrame(wxFrame *parent)
              : wxFrame(parent, -1, "Shape Frame",
                        wxDefaultPosition, wxSize(250, 150))
 {
-    SetBackgroundColour(*wxWHITE);
-
     CreateStatusBar();
 
     wxMenu *menuShape = new wxMenu;
@@ -1210,16 +1208,20 @@ DnDShapeFrame::DnDShapeFrame(wxFrame *parent)
     SetDropTarget(new DnDShapeDropTarget(this));
 
     m_shape = NULL;
+    
+    SetBackgroundColour(*wxWHITE);
 }
 
 DnDShapeFrame::~DnDShapeFrame()
 {
-    delete m_shape;
+    if (m_shape) 
+        delete m_shape;
 }
 
 void DnDShapeFrame::SetShape(DnDShape *shape)
 {
-    delete m_shape;
+    if (m_shape) 
+        delete m_shape;
     m_shape = shape;
     Refresh();
 }
