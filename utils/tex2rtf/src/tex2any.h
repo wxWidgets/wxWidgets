@@ -240,6 +240,7 @@ extern int  winHelpVersion;    // Version e.g. 4 for Win95
 extern bool winHelpContents;   // Generate .cnt file
 extern bool htmlIndex;         // Generate .htx HTML index file
 extern bool htmlFrameContents; // Use frames for HTML contents page
+extern char *htmlStylesheet;   // Use this CSS stylesheet for HTML pages
 extern int  contentsDepth;     // Depth of contents for linear RTF files
 extern bool upperCaseNames;    // Filenames; default is lower case
 extern char *backgroundImageString; // HTML background image

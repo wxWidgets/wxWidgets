@@ -129,6 +129,7 @@ int             winHelpVersion = 3; // WinHelp Version (3 for Windows 3.1, 4 for
 bool            winHelpContents = FALSE; // Generate .cnt file for WinHelp 4
 bool            htmlIndex = FALSE; // Generate .htx file for HTML
 bool            htmlFrameContents = FALSE; // Use frames for HTML contents page
+char           *htmlStylesheet = NULL; // Use this CSS stylesheet for HTML pages
 bool            useHeadingStyles = TRUE; // Insert \s1, s2 etc.
 bool            useWord = TRUE; // Insert proper Word table of contents, etc etc
 int             contentsDepth = 4; // Depth of Word table of contents

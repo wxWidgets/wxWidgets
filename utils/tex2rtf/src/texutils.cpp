@@ -1182,6 +1182,11 @@ char *RegisterSetting(char *settingName, char *settingValue, bool interactive)
     htmlWorkshopFiles = StringTobool(settingValue);
   else if (StringMatch(settingName, "htmlFrameContents", FALSE, TRUE))
     htmlFrameContents = StringTobool(settingValue);
+  else if (StringMatch(settingName, "htmlStylesheet", FALSE, TRUE))
+    {
+      if (htmlStylesheet) delete[] htmlStylesheet;
+      htmlStylesheet = copystring(settingValue);
+    }
   else if (StringMatch(settingName, "upperCaseNames", FALSE, TRUE))
     upperCaseNames = StringTobool(settingValue);
   else if (StringMatch(settingName, "ignoreBadRefs", FALSE, TRUE))

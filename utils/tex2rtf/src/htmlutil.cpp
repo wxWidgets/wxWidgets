@@ -652,6 +652,24 @@ void OutputBodyStart(void)
   OutputFont();
 }
 
+void HTMLHead()
+{
+  TexOutput("<head>");
+  if (htmlStylesheet) {
+    TexOutput("<link rel=stylesheet type=\"text/css\" href=\"");
+    TexOutput(htmlStylesheet);
+    TexOutput("\">");
+  }
+};
+
+void HTMLHeadTo(FILE* f)
+{
+  if (htmlStylesheet)
+    fprintf(f,"<head><link rel=stylesheet type=\"text/css\" href=\"%s\">",htmlStylesheet);
+  else
+    fprintf(f,"<head>");
+}
+
 // Called on start/end of macro examination
 void HTMLOnMacro(int macroId, int no_args, bool start)
 {
@@ -682,7 +700,8 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
 
       SetCurrentOutput(Chapters);
 
-      TexOutput("<head><title>");
+      HTMLHead();
+      TexOutput("<title>");
       OutputCurrentSection(); // Repeat section header
       TexOutput("</title></head>\n");
       OutputBodyStart();
@@ -751,7 +770,8 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
       if (htmlWorkshopFiles) HTMLWorkshopAddToContents(1, topicName, SectionsName);
 
       SetCurrentOutput(Sections);
-      TexOutput("<head><title>");
+      HTMLHead();
+      TexOutput("<title>");
       OutputCurrentSection();
       TexOutput("</title></head>\n");
       OutputBodyStart();
@@ -844,7 +864,8 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
             if (htmlWorkshopFiles) HTMLWorkshopAddToContents(2, topicName, SubsectionsName);
             SetCurrentOutput(Subsections);
 
-            TexOutput("<head><title>");
+	    HTMLHead();
+            TexOutput("<title>");
             OutputCurrentSection();
             TexOutput("</title></head>\n");
             OutputBodyStart();
@@ -924,7 +945,8 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
             if (htmlWorkshopFiles) HTMLWorkshopAddToContents(3, topicName, SubsubsectionsName);
 
             SetCurrentOutput(Subsubsections);
-            TexOutput("<head><title>");
+	    HTMLHead();
+            TexOutput("<title>");
             OutputCurrentSection();
             TexOutput("</title></head>\n");
             OutputBodyStart();
@@ -2690,7 +2712,8 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
       else
         sprintf(titleBuf, "%s_contents.html", FileNameFromPath(FileRoot));
 
-      TexOutput("<head><title>");
+      HTMLHead();
+      TexOutput("<title>");
       TexOutput(ReferencesNameString);
       TexOutput("</title></head>\n");
       OutputBodyStart();
@@ -2968,17 +2991,19 @@ bool HTMLGo(void)
       if (DocumentTitle)
       {
         SetCurrentOutput(tmpTitle);
-        TexOutput("\n<HTML>\n<HEAD><TITLE>");
+	HTMLHead();
+        TexOutput("\n<HEAD><TITLE>");
         TraverseChildrenFromChunk(DocumentTitle);
         TexOutput("</TITLE></HEAD>\n");
       }
       else
       {
         SetCurrentOutput(tmpTitle);
+	HTMLHeadTo(tmpTitle);
         if (contentsString)
-          fprintf(tmpTitle, "<HEAD><TITLE>%s</TITLE></HEAD>\n\n", contentsString);
+          fprintf(tmpTitle, "<TITLE>%s</TITLE></HEAD>\n\n", contentsString);
         else
-          fprintf(tmpTitle, "<HEAD><TITLE>%s</TITLE></HEAD>\n\n", FileNameFromPath(FileRoot));
+          fprintf(tmpTitle, "<TITLE>%s</TITLE></HEAD>\n\n", FileNameFromPath(FileRoot));
       }
 
       // Output frame information
@@ -3161,8 +3186,10 @@ void GenerateHTMLWorkshopFiles(char *fname)
 
   fprintf(f,
       "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML//EN\">\n"
-      "<HTML>\n"
-      "<HEAD>\n"
+      "<HTML>\n");
+  HTMLHeadTo(f);
+  fprintf(f,
+      "\n"
       "<meta name=\"GENERATOR\" content=\"tex2rtf\">\n"
       "<!-- Sitemap 1.0 -->\n"
       "</HEAD><BODY>\n"
@@ -3237,8 +3264,10 @@ void HTMLWorkshopStartContents()
 
   fprintf(HTMLWorkshopContents,
       "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML//EN\">\n"
-      "<HTML>\n"
-      "<HEAD>\n"
+      "<HTML>\n");
+  HTMLHeadTo(HTMLWorkshopContents);
+  fprintf(HTMLWorkshopContents,
+      "\n"
       "<meta name=\"GENERATOR\" content=\"tex2rtf\">\n"
       "<!-- Sitemap 1.0 -->\n"
       "</HEAD><BODY>\n"
