@@ -239,7 +239,9 @@ wxSETranslator(unsigned int WXUNUSED(code), EXCEPTION_POINTERS * WXUNUSED(ep))
 
 int wxEntry(int& argc, wxChar **argv)
 {
+#ifndef __WXWINCE__
     DisableAutomaticSETranslator();
+#endif
 
     return wxEntryReal(argc, argv);
 }
