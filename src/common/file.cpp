@@ -478,18 +478,11 @@ bool wxTempFile::Open(const wxString& strName)
 {
     m_strName = strName;
 
-    m_strTemp = wxFileName::CreateTempFileName(strName);
+    m_strTemp = wxFileName::CreateTempFileName(strName, &m_file);
 
     if ( m_strTemp.empty() )
     {
         // CreateTempFileName() failed
-        return FALSE;
-    }
-
-    // actually open the file now (it must already exist)
-    if ( !m_file.Open(m_strTemp, wxFile::write) )
-    {
-        // opening existing file failed?
         return FALSE;
     }
 

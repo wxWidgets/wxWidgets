@@ -456,9 +456,9 @@ wxString wxFileName::GetHomeDir()
     return ::wxGetHomeDir();
 }
 
-void wxFileName::AssignTempFileName( const wxString& prefix )
+void wxFileName::AssignTempFileName(const wxString& prefix, wxFile *fileTemp)
 {
-    wxString tempname = CreateTempFileName(prefix);
+    wxString tempname = CreateTempFileName(prefix, fileTemp);
     if ( tempname.empty() )
     {
         // error, failed to get temp file name
@@ -471,7 +471,8 @@ void wxFileName::AssignTempFileName( const wxString& prefix )
 }
 
 /* static */
-wxString wxFileName::CreateTempFileName(const wxString& prefix)
+wxString
+wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
 {
     wxString path, dir, name;
 
@@ -558,13 +559,25 @@ wxString wxFileName::CreateTempFileName(const wxString& prefix)
 
     // can use the cast here because the length doesn't change and the string
     // is not shared
-    if ( mkstemp((char *)path.mb_str()) == -1 )
+    int fdTemp = mkstemp((char *)path.mb_str());
+    if ( fdTemp == -1 )
     {
         // this might be not necessary as mkstemp() on most systems should have
         // already done it but it doesn't hurt neither...
         path.clear();
     }
-    //else: file already created
+    else // mkstemp() succeeded
+    {
+        // avoid leaking the fd
+        if ( fileTemp )
+        {
+            fileTemp->Attach(fdTemp);
+        }
+        else
+        {
+            close(fdTemp);
+        }
+    }
 #else // !HAVE_MKSTEMP
 
 #ifdef HAVE_MKTEMP
@@ -601,10 +614,20 @@ wxString wxFileName::CreateTempFileName(const wxString& prefix)
 
     if ( !path.empty() )
     {
-        // create the file - of course, there is a race condition here, this is
+    }
+#endif // HAVE_MKSTEMP/!HAVE_MKSTEMP
+
+#endif // Windows/!Windows
+
+    if ( path.empty() )
+    {
+        wxLogSysError(_("Failed to create a temporary file name"));
+    }
+    else if ( fileTemp && !fileTemp->IsOpened() )
+    {
+        // open the file - of course, there is a race condition here, this is
         // why we always prefer using mkstemp()...
-        wxFile file;
-        if ( !file.Open(path, wxFile::write_excl, wxS_IRUSR | wxS_IWUSR) )
+        if ( !fileTemp->Open(path, wxFile::write_excl, wxS_IRUSR | wxS_IWUSR) )
         {
             // FIXME: If !ok here should we loop and try again with another
             //        file name?  That is the standard recourse if open(O_EXCL)
@@ -615,14 +638,6 @@ wxString wxFileName::CreateTempFileName(const wxString& prefix)
 
             path.clear();
         }
-    }
-#endif // HAVE_MKSTEMP/!HAVE_MKSTEMP
-
-#endif // Windows/!Windows
-
-    if ( path.empty() )
-    {
-        wxLogSysError(_("Failed to create a temporary file name"));
     }
 
     return path;
