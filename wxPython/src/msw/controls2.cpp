@@ -132,15 +132,15 @@ extern wxValidator wxPyDefaultValidator;
 class wxPyTreeItemData : public wxTreeItemData {
 public:
     wxPyTreeItemData(PyObject* obj = NULL) {
-	if (obj == NULL)
+        if (obj == NULL)
             obj = Py_None;
-	Py_INCREF(obj);
-	m_obj = obj;
+        Py_INCREF(obj);
+        m_obj = obj;
     }
 
     ~wxPyTreeItemData() {
         bool doSave = wxPyRestoreThread();
-	Py_DECREF(m_obj);
+        Py_DECREF(m_obj);
         wxPySaveThread(doSave);
     }
 
@@ -4678,7 +4678,7 @@ static PyObject *_wrap_wxTreeItemId_IsOk(PyObject *self, PyObject *args, PyObjec
 }
 
 static int  wxTreeItemId___cmp__(wxTreeItemId *self,wxTreeItemId * other) {
-            if (! other) return 0;
+            if (! other) return -1;
             return *self != *other;
         }
 static PyObject *_wrap_wxTreeItemId___cmp__(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -5780,7 +5780,7 @@ static PyObject *_wrap_wxTreeCtrl_GetItemData(PyObject *self, PyObject *args, Py
 static void  wxPyTreeCtrl_SetItemData(wxPyTreeCtrl *self,const wxTreeItemId & item,wxPyTreeItemData * data) {
             data->SetId(item); // set the id
             self->SetItemData(item, data);
-	}
+        }
 static PyObject *_wrap_wxTreeCtrl_SetItemData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyTreeCtrl * _arg0;
@@ -5833,7 +5833,7 @@ static PyObject * wxPyTreeCtrl_GetPyData(wxPyTreeCtrl *self,const wxTreeItemId &
                 self->SetItemData(item, data);
             }
             return data->GetData();
-	}
+        }
 static PyObject *_wrap_wxTreeCtrl_GetPyData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     PyObject * _result;
@@ -5879,7 +5879,7 @@ static void  wxPyTreeCtrl_SetPyData(wxPyTreeCtrl *self,const wxTreeItemId & item
                 self->SetItemData(item, data);
             } else
                 data->SetData(obj);
-   	}
+        }
 static PyObject *_wrap_wxTreeCtrl_SetPyData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyTreeCtrl * _arg0;

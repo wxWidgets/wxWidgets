@@ -12,6 +12,8 @@ class TestPanel(wxPanel):
         t = wxTextCtrl(self, 10, "Test it out and see", wxPoint(80, 25), wxSize(150, 20))
         t.SetInsertionPoint(0)
         EVT_TEXT(self, 10, self.EvtText)
+        EVT_CHAR(t, self.EvtChar)
+
 
         wxStaticText(self, -1, "Passsword", wxPoint(5, 50), wxSize(75, 20))
         wxTextCtrl(self, 20, "", wxPoint(80, 50), wxSize(150, 20), wxTE_PASSWORD)
@@ -25,6 +27,10 @@ class TestPanel(wxPanel):
     def EvtText(self, event):
         self.log.WriteText('EvtText: %s\n' % event.GetString())
 
+
+    def EvtChar(self, event):
+        self.log.WriteText('EvtChar: %d\n' % event.GetKeyCode())
+        event.Skip()
 
 
 #---------------------------------------------------------------------------

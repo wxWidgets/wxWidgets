@@ -462,7 +462,7 @@ PyObject* wxPyCallbackHelper::callCallbackObj(PyObject* argTuple) const {
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 // These classes can be derived from in Python and passed through the event
-// system without loosing anything.  They do this by keeping a reference to
+// system without losing anything.  They do this by keeping a reference to
 // themselves and some special case handling in wxPyCallback::EventThunker.
 
 
