@@ -1033,12 +1033,17 @@ void wxLayoutPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom,
 
    // This code doesn't work, because we don't have a DC yet.
    // How on earth are we supposed to calculate the number of pages then?
+   *minPage = 0;    // set this to 0 to disable editing of page numbers 
+   *maxPage = 100;
 
-   *minPage = 1;
-   *maxPage = 32000;
+   *selPageFrom = 0; // set this to 0 to hide page number controls
+   *selPageTo = 100;  
 
-   *selPageFrom = 1;
-   *selPageTo = 1;
+//   *minPage = 1;
+//   *maxPage = 32000;
+
+//   *selPageFrom = 1;
+//   *selPageTo = 1;
 
 #if 0
    CoordType height;
@@ -1064,7 +1069,7 @@ void wxLayoutPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom,
 
 bool wxLayoutPrintout::HasPage(int pageNum)
 {
-   return true;
+   return pageNum <= 5; // for testing
 //   return m_maxPage >= pageNum;
 }
 
