@@ -168,7 +168,6 @@ void wxApp::CleanUp()
 wxApp::wxApp()
 {
     m_topWindow = NULL;
-    wxTheApp = this;
 
     m_isIdle = true;
 #if WXWIN_COMPATIBILITY_2_2
