@@ -73,6 +73,15 @@ wxpExtensions = []
 force = '--force' in sys.argv or '-f' in sys.argv
 debug = '--debug' in sys.argv or '-g' in sys.argv
 
+bcpp_compiling = '-c' in sys.argv and 'my_bcpp' in sys.argv # Bad heuristic
+
+if bcpp_compiling:
+    print "Compiling wxPython by Borland C/C++ Compiler"
+    HYBRID=0
+    WXBCPPLIBVER = string.replace(WXDLLVER,"_","")
+    # Version part of BCPP build LIBRARY name
+    WXDLLVER="" # no dll ver path avaible
+
 
 #----------------------------------------------------------------------
 # Check for build flags on the command line
@@ -142,6 +151,23 @@ if os.name == 'nt':
                 ('WXP_USE_THREAD', '1'),
                 ]
 
+    if bcpp_compiling:  # overwrite it
+        defines = [
+            ('_WINDOWS', None),
+            ('WINVER', '0x0400'),
+            ('STRICT', None),
+
+            ('WXUSINGDLL', '1'),
+
+            ('SWIG_GLOBAL', None),
+            ('HAVE_CONFIG_H', None),
+            ('WXP_USE_THREAD', '1'),
+
+            ('WXUSE_DEFINE','1'),
+            ('_RTLDLL',None),
+            ]
+
+
     if not FINAL or HYBRID:
         defines.append( ('__WXDEBUG__', None) )
 
@@ -155,17 +181,36 @@ if os.name == 'nt':
         wxdll = 'wx' + WXDLLVER + 'd'
 
 
-    libs = [wxdll, 'kernel32', 'user32', 'gdi32', 'comdlg32',
+    libs = [wxdll]
+    if bcpp_compiling:
+        libs = ['wx'+WXBCPPLIBVER]
+
+    libs = libs + ['kernel32', 'user32', 'gdi32', 'comdlg32',
             'winspool', 'winmm', 'shell32', 'oldnames', 'comctl32',
             'ctl3d32', 'odbc32', 'ole32', 'oleaut32', 'uuid', 'rpcrt4',
             'advapi32', 'wsock32']
 
+
     cflags = ['/GX-']  # workaround for internal compiler error in MSVC 5
     lflags = None
 
-    if not FINAL and HYBRID:
+
+    if bcpp_compiling:  # overwrite it
+        cflags = ['-5', '-VF',  ### To supplort MSVC spurious semicolons in the class scope
+                  ### else, all semicolons at the end of all DECLARE_...CALLBACK... macros must be eliminated
+                  '-Hc', '-H='+WXDIR+'\src\msw\wx32.csm',
+                  '@'+WXDIR+'\src\msw\wxwin32.cfg'
+                  ]
+
+
+    if not FINAL and HYBRID and not bcpp_compiling:
         cflags = cflags + ['/Od', '/Z7']
         lflags = ['/DEBUG', ]
+
+    elif bcpp_compiling and not FINAL:
+        cflags = cflags + ['/Od', '/v', '/y']
+        lflags = lflags + ['/v', ]   ## '/PDB:NONE']
+
 
 
 elif os.name == 'posix':
