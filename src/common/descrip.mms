@@ -120,6 +120,7 @@ OBJECTS1=framecmn.obj,\
 		serbase.obj,\
 		sizer.obj,\
 		socket.obj,\
+		statbar.obj,\
 		strconv.obj,\
 		stream.obj,\
 		string.obj,\
@@ -230,6 +231,7 @@ SOURCES = \
 		serbase.cpp,\
 		sizer.cpp,\
 		socket.cpp,\
+		statbar.cpp,\
 		strconv.cpp,\
 		stream.cpp,\
 		sysopt.cpp,\
@@ -372,6 +374,7 @@ sckstrm.obj : sckstrm.cpp
 serbase.obj : serbase.cpp
 sizer.obj : sizer.cpp
 socket.obj : socket.cpp
+statbar.obj : statbar.cpp
 strconv.obj : strconv.cpp
 stream.obj : stream.cpp
 sysopt.obj : sysopt.cpp
