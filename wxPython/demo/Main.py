@@ -481,7 +481,7 @@ class MySplashScreen(wxSplashScreen):
         frame = wxPythonDemo(None, -1, "wxPython: (A Demonstration)")
         frame.Show(true)
         self.ShowTip(frame)
-        evt.Skip()
+        self.Destroy()
 
     def ShowTip(self, frame):
         try:

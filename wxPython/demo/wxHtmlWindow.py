@@ -18,8 +18,8 @@ class MyHtmlWindow(wxHtmlWindow):
         EVT_SCROLLWIN( self, self.OnScroll )
 
     def OnScroll( self, event ):
-        print 'event.GetOrientation()',event.GetOrientation()
-        print 'event.GetPosition()',event.GetPosition()
+        #print 'event.GetOrientation()',event.GetOrientation()
+        #print 'event.GetPosition()',event.GetPosition()
         event.Skip()
 
 
@@ -62,32 +62,33 @@ class TestHtmlPanel(wxPanel):
         self.box.Add(self.html, 1, wxGROW)
 
         subbox = wxBoxSizer(wxHORIZONTAL)
-##         btn = wxButton(self, 1201, "Show Default")
-##         EVT_BUTTON(self, 1201, self.OnShowDefault)
-##         subbox.Add(btn, 1, wxGROW | wxALL, 2)
 
-        btn = wxButton(self, 1202, "Load File")
-        EVT_BUTTON(self, 1202, self.OnLoadFile)
+        btn = wxButton(self, -1, "Load File")
+        EVT_BUTTON(self, btn.GetId(), self.OnLoadFile)
         subbox.Add(btn, 1, wxGROW | wxALL, 2)
 
-        btn = wxButton(self, 1203, "With Widgets")
-        EVT_BUTTON(self, 1203, self.OnWithWidgets)
+        btn = wxButton(self, -1, "Load URL")
+        EVT_BUTTON(self, btn.GetId(), self.OnLoadURL)
         subbox.Add(btn, 1, wxGROW | wxALL, 2)
 
-        btn = wxButton(self, 1204, "Back")
-        EVT_BUTTON(self, 1204, self.OnBack)
+        btn = wxButton(self, -1, "With Widgets")
+        EVT_BUTTON(self, btn.GetId(), self.OnWithWidgets)
         subbox.Add(btn, 1, wxGROW | wxALL, 2)
 
-        btn = wxButton(self, 1205, "Forward")
-        EVT_BUTTON(self, 1205, self.OnForward)
+        btn = wxButton(self, -1, "Back")
+        EVT_BUTTON(self, btn.GetId(), self.OnBack)
         subbox.Add(btn, 1, wxGROW | wxALL, 2)
 
-        btn = wxButton(self, 1207, "Print")
-        EVT_BUTTON(self, 1207, self.OnPrint)
+        btn = wxButton(self, -1, "Forward")
+        EVT_BUTTON(self, btn.GetId(), self.OnForward)
         subbox.Add(btn, 1, wxGROW | wxALL, 2)
 
-        btn = wxButton(self, 1206, "View Source")
-        EVT_BUTTON(self, 1206, self.OnViewSource)
+        btn = wxButton(self, -1, "Print")
+        EVT_BUTTON(self, btn.GetId(), self.OnPrint)
+        subbox.Add(btn, 1, wxGROW | wxALL, 2)
+
+        btn = wxButton(self, -1, "View Source")
+        EVT_BUTTON(self, btn.GetId(), self.OnViewSource)
         subbox.Add(btn, 1, wxGROW | wxALL, 2)
 
         self.box.Add(subbox, 0, wxGROW)
@@ -98,10 +99,6 @@ class TestHtmlPanel(wxPanel):
         EVT_BUTTON(self, wxID_OK, self.OnOk)
 
         self.OnShowDefault(None)
-
-
-##     def __del__(self):
-##         print 'TestHtmlPanel.__del__'
 
 
 
@@ -115,6 +112,14 @@ class TestHtmlPanel(wxPanel):
         if dlg.ShowModal():
             path = dlg.GetPath()
             self.html.LoadPage(path)
+        dlg.Destroy()
+
+
+    def OnLoadURL(self, event):
+        dlg = wxTextEntryDialog(self, "Enter a URL")
+        if dlg.ShowModal():
+            url = dlg.GetValue()
+            self.html.LoadPage(url)
         dlg.Destroy()
 
 

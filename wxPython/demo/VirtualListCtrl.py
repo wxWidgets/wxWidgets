@@ -51,8 +51,10 @@ class TestVirtualList(wxListCtrl):
     def OnGetItemText(self, item, col):
         return "Item %d, column %d" % (item, col)
 
+
     def OnGetItemImage(self, item):
-        return 0
+        return -1  # if used you should return the index in the ImageList
+
 
     def OnGetItemAttr(self, item):
         if item % 3 == 1:
