@@ -330,7 +330,7 @@ MyFrame::MyFrame(const wxString& title)
 
 //
 //~MyFrame
-//-------
+//--------
 //Deletes child objects implicitly and our timer explicitly
 //
 MyFrame::~MyFrame()
@@ -340,7 +340,7 @@ MyFrame::~MyFrame()
 
 //
 //OnQuit
-//-------
+//------
 //Called from file->quit.
 //Closes this application.
 //
@@ -367,7 +367,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 //
 //OnLoop
-//-------
+//------
 //Called from file->loop.
 //Changes the state of whether we want to loop or not.
 //
@@ -378,7 +378,7 @@ void MyFrame::OnLoop(wxCommandEvent& WXUNUSED(event))
 
 //
 //OnOpenFile
-//-------
+//----------
 //Called from file->openfile.
 //Opens and plays a media file
 //
@@ -400,7 +400,7 @@ void MyFrame::OnOpenFile(wxCommandEvent& WXUNUSED(event))
 
 //
 //OnPlay
-//-------
+//------
 //Called from file->play.
 //Resumes the media if it is paused or stopped.
 //
@@ -424,10 +424,12 @@ void MyFrame::OnPause(wxCommandEvent& WXUNUSED(event))
 
 //
 //OnStop
-//-------
+//------
 //Called from file->stop.
-//Note that where the media stops is undefined - 
-//it could stop at the end or beginning.
+//Where it stops depends on whether you can seek in the
+//media control or not - if you can it stops and seeks to the beginning,
+//otherwise it will appear to be at the end - but it will start over again
+//when play() is called
 //
 void MyFrame::OnStop(wxCommandEvent& WXUNUSED(event))
 {
@@ -437,7 +439,7 @@ void MyFrame::OnStop(wxCommandEvent& WXUNUSED(event))
 
 //
 //OnSeek
-//-------
+//------
 //Called from file->seek.
 //Called when the user moves the slider -
 //seeks to a position within the media
@@ -450,7 +452,7 @@ void MyFrame::OnSeek(wxCommandEvent& WXUNUSED(event))
 
 //
 //OnMediaFinished
-//-------
+//---------------
 //Called when the media stops playing.
 //Here we loop it if the user wants to (has been selected from file menu)
 //
@@ -458,7 +460,7 @@ void MyFrame::OnMediaFinished(wxMediaEvent& WXUNUSED(event))
 {
     if(m_bLoop)
     {
-        if ( !m_mediactrl->SetPosition(0) || !m_mediactrl->Play() )
-            wxMessageBox(wxT("Couldn't seek or play to loop movie!"));
+        if ( !m_mediactrl->Play() )
+            wxMessageBox(wxT("Couldn't loop movie!"));
     }
 }

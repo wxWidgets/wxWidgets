@@ -531,7 +531,13 @@ bool wxDXMediaCtrlImpl::Pause()
 
 bool wxDXMediaCtrlImpl::Stop()
 {
-    return SUCCEEDED( m_pMC->Stop() ) && SetPosition(0);
+    bool bOK = SUCCEEDED( m_pMC->Stop() );
+
+    //We don't care if it can't get to the beginning in directshow -
+    //it could be a non-seeking filter (wince midi) in which case playing
+    //starts all over again
+    SetPosition(0);
+    return bOK;
 }
 
 bool wxDXMediaCtrlImpl::SetPosition(long where)
@@ -613,11 +619,14 @@ bool wxDXMediaCtrlImpl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPa
             // If this is the end of the clip, notify handler
             if(EC_COMPLETE == evCode)
             {
+                //Interestingly enough, DirectShow does not actually stop
+                //the filters - even when it reaches the end!
 #ifdef __WXDEBUG__
                 wxASSERT( Stop() );
 #else
                 Stop();
 #endif
+
                 wxMediaEvent theEvent(wxEVT_MEDIA_FINISHED, m_ctrl->GetId());
                 m_ctrl->GetParent()->ProcessEvent(theEvent);
             }
@@ -703,7 +712,8 @@ bool wxWMMEMediaCtrlImpl::Pause()
 
 bool wxWMMEMediaCtrlImpl::Stop()
 {
-    return (mciSendCommand(m_hDev, MCI_STOP, MCI_WAIT, 0) == 0);
+    return (mciSendCommand(m_hDev, MCI_STOP, MCI_WAIT, 0) == 0) &&
+            SetPosition(GetDuration());
 }
 
 #include "wx/log.h"
