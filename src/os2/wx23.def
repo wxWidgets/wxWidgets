@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
+;From library:  F:\DEV\WX2\WXWINDOWS\LIB\WX.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1758,7 +1758,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -5609,7 +5609,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -8623,6 +8623,7 @@ EXPORTS
       wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK
       ;wxListMainWindow::GetItemRect(long,wxRect&)
       GetItemRect__16wxListMainWindowFlR6wxRect
+      wxEVT_COMMAND_LIST_ITEM_FOCUSED
       wxEVT_COMMAND_LIST_ITEM_DESELECTED
       wxEVT_COMMAND_LIST_ITEM_ACTIVATED
       wxEVT_COMMAND_LIST_CACHE_HINT
@@ -8770,8 +8771,6 @@ EXPORTS
       RemoveAt__19wxListLineDataArrayFUi
       ;wxListMainWindow::RefreshLines(unsigned int,unsigned int)
       RefreshLines__16wxListMainWindowFUiT1
-      ;wxListMainWindow::OnFocusLine(unsigned int)
-      OnFocusLine__16wxListMainWindowFUi
       ;wxListCtrl::InsertItem(long,int)
       InsertItem__10wxListCtrlFli
       ;wxListMainWindow::GetVisibleLinesRange(unsigned int*,unsigned int*)
@@ -8784,6 +8783,8 @@ EXPORTS
       DrawImage__16wxListMainWindowFiP4wxDCN21
       ;wxListCtrl::DeleteColumn(int)
       DeleteColumn__10wxListCtrlFi
+      ;wxListMainWindow::ChangeCurrent(unsigned int)
+      ChangeCurrent__16wxListMainWindowFUi
       ;wxListCtrl::Arrange(int)
       Arrange__10wxListCtrlFi
       ;wxListCtrl::GetNextItem(long,int,int) const
@@ -8883,8 +8884,6 @@ EXPORTS
       RefreshItems__10wxListCtrlFlT1
       ;wxListMainWindow::RefreshAfter(unsigned int)
       RefreshAfter__16wxListMainWindowFUi
-      ;wxListMainWindow::OnUnfocusLine(unsigned int)
-      OnUnfocusLine__16wxListMainWindowFUi
       ;wxListLineData::InitItems(int)
       InitItems__14wxListLineDataFi
       ;wxListMainWindow::GetLineY(unsigned int) const
