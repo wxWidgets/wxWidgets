@@ -17,11 +17,6 @@
 // headers
 // ---------------------------------------------------------------------------
 
-#ifdef __VMS
-#define XtDisplay XTDISPLAY
-#define XtWindow XTWINDOW
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
@@ -88,8 +83,6 @@ BEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
     EVT_MENU(MDI_CHANGE_TITLE, MyChild::OnChangeTitle)
     EVT_MENU(MDI_CHANGE_POSITION, MyChild::OnChangePosition)
     EVT_MENU(MDI_CHANGE_SIZE, MyChild::OnChangeSize)
-
-    EVT_UPDATE_UI(MDI_REFRESH, MyChild::OnUpdateRefresh)
 
     EVT_SIZE(MyChild::OnSize)
     EVT_MOVE(MyChild::OnMove)
@@ -176,7 +169,7 @@ MyFrame::MyFrame(wxWindow *parent,
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE | wxSUNKEN_BORDER);
 
-    CreateToolBar(wxNO_BORDER | wxTB_HORIZONTAL);
+    CreateToolBar(wxNO_BORDER | wxTB_FLAT | wxTB_HORIZONTAL);
     InitToolBar(GetToolBar());
 
     // Accelerators
@@ -240,22 +233,25 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(MDI_NEW_WINDOW, "&New window\tCtrl-N");
+    file_menu->Append(MDI_NEW_WINDOW, "&New window");
     file_menu->Append(MDI_CHILD_QUIT, "&Close child", "Close this window");
-    file_menu->Append(MDI_QUIT, "&Exit\tAlt-X");
+    file_menu->Append(MDI_QUIT, "&Exit");
 
     wxMenu *option_menu = new wxMenu;
 
-    option_menu->Append(MDI_REFRESH, "&Refresh picture\tF5");
+    option_menu->Append(MDI_REFRESH, "&Refresh picture");
     option_menu->Append(MDI_CHANGE_TITLE, "Change &title...\tCtrl-T");
+    option_menu->AppendSeparator();
+    option_menu->Append(MDI_CHANGE_POSITION, "Move frame\tCtrl-M");
+    option_menu->Append(MDI_CHANGE_SIZE, "Resize frame\tCtrl-S");
 
     wxMenu *help_menu = new wxMenu;
-    help_menu->Append(MDI_ABOUT, "&About\tF1");
+    help_menu->Append(MDI_ABOUT, "&About");
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
     menu_bar->Append(file_menu, "&File");
-    menu_bar->Append(option_menu, "&Options");
+    menu_bar->Append(option_menu, "&Child");
     menu_bar->Append(help_menu, "&Help");
 
     // Associate the menu bar with the frame
@@ -428,15 +424,20 @@ void MyChild::OnQuit(wxCommandEvent& WXUNUSED(event))
     Close(TRUE);
 }
 
-void MyChild::OnUpdateRefresh(wxUpdateUIEvent& event)
-{
-    event.Enable( canvas && canvas->IsDirty() );
-}
-
 void MyChild::OnRefresh(wxCommandEvent& WXUNUSED(event))
 {
     if ( canvas )
         canvas->Refresh();
+}
+
+void MyChild::OnChangePosition(wxCommandEvent& WXUNUSED(event))
+{
+    Move(10, 10);
+}
+
+void MyChild::OnChangeSize(wxCommandEvent& WXUNUSED(event))
+{
+    SetClientSize(100, 100);
 }
 
 void MyChild::OnChangeTitle(wxCommandEvent& WXUNUSED(event))
@@ -446,7 +447,7 @@ void MyChild::OnChangeTitle(wxCommandEvent& WXUNUSED(event))
     wxString title = wxGetTextFromUser(_T("Enter the new title for MDI child"),
                                        _T("MDI sample question"),
                                        s_title,
-                                       GetParent());
+                                       GetParent()->GetParent());
     if ( !title )
         return;
 
@@ -458,6 +459,33 @@ void MyChild::OnActivate(wxActivateEvent& event)
 {
     if ( event.GetActive() && canvas )
         canvas->SetFocus();
+}
+
+void MyChild::OnMove(wxMoveEvent& event)
+{
+    // VZ: here everything is totally wrong under MSW, the positions are
+    //     different and both wrong (pos2 is off by 2 pixels for me which seems
+    //     to be the width of the MDI canvas border)
+    wxPoint pos1 = event.GetPosition(),
+            pos2 = GetPosition();
+    wxLogStatus("position from event: (%d, %d), from frame (%d, %d)",
+                pos1.x, pos1.y, pos2.x, pos2.y);
+
+    event.Skip();
+}
+
+void MyChild::OnSize(wxSizeEvent& event)
+{
+    // VZ: under MSW the size event carries the client size (quite
+    //     unexpectedly) *except* for the very first one which has the full
+    //     size... what should it really be? TODO: check under wxGTK
+    wxSize size1 = event.GetSize(),
+           size2 = GetSize(),
+           size3 = GetClientSize();
+    wxLogStatus("size from event: %dx%d, from frame %dx%d, client %dx%d",
+                size1.x, size1.y, size2.x, size2.y, size3.x, size3.y);
+
+    event.Skip();
 }
 
 void MyChild::OnClose(wxCloseEvent& event)
