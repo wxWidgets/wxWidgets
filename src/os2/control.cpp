@@ -133,6 +133,8 @@ bool wxControl::OS2CreateControl(
         zClass = WC_BUTTON;
     else if ((strcmp(zClassname, "NOTEBOOK")) == 0)
         zClass = WC_NOTEBOOK;
+    else if ((strcmp(zClassname, "CONTAINER")) == 0)
+        zClass = WC_CONTAINER;
     dwStyle |= WS_VISIBLE;
 
     m_hWnd = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle

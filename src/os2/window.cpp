@@ -1454,14 +1454,7 @@ void wxWindowOS2::SetDropTarget(
   wxDropTarget*                     pDropTarget
 )
 {
-    if (m_dropTarget != 0)
-    {
-        m_dropTarget->Revoke(m_hWnd);
-        delete m_dropTarget;
-    }
     m_dropTarget = pDropTarget;
-    if (m_dropTarget != 0)
-        m_dropTarget->Register(m_hWnd);
 } // end of wxWindowOS2::SetDropTarget
 #endif
 
@@ -3530,7 +3523,6 @@ bool wxWindowOS2::HandleDestroy()
 #if wxUSE_DRAG_AND_DROP
     if (m_dropTarget != NULL)
     {
-        m_dropTarget->Revoke(m_hWnd);
         delete m_dropTarget;
         m_dropTarget = NULL;
     }

@@ -12,6 +12,8 @@
 #ifndef _WX_TEXTCTRL_H_
 #define _WX_TEXTCTRL_H_
 
+typedef int (wxCALLBACK *wxTreeCtrlCompare)(long lItem1, long lItem2, long lSortData);
+
 class WXDLLEXPORT wxTextCtrl : public wxTextCtrlBase
 {
 public:

@@ -2266,7 +2266,7 @@ long wxListCtrl::InsertItem (
     ::WinSendMsg( GetHWND()
                  ,CM_INSERTRECORD
                  ,MPFROMP(pRecord)
-                 ,MPFROMP(pRecordAfter)
+                 ,MPFROMP(&vInsert)
                 );
     //
     // OS/2 must mannually bump the index's of following records

@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        mac/dataobj.h
 // Purpose:     declaration of the wxDataObject
-// Author:      Stefan Csomor 
+// Author:      Stefan Csomor
 // Modified by:
 // Created:     10/21/99
 // RCS-ID:      $Id$
@@ -24,8 +24,20 @@ class wxDataObject : public wxDataObjectBase
 {
 public:
     wxDataObject();
+    virtual ~wxDataObject();
 
-    virtual bool IsSupportedFormat( const wxDataFormat& format, Direction dir = Get ) const;
+    virtual bool IsSupportedFormat( const wxDataFormat& eFormat
+                                   ,Direction           eDir = Get
+                                  ) const
+    {
+        return(IsSupported( eFormat
+                           ,eDir
+                          ));
+    }
+
+    PDRAGITEM GetInterface(void) const {return m_pDataObject;}
+private:
+    PDRAGITEM                       m_pDataObject;
 };
 
 #endif // _WX_MAC_DATAOBJ_H_

@@ -134,7 +134,6 @@ GENERICOBJS= \
   ..\generic\$D\textdlgg.obj \
   ..\generic\$D\tipdlg.obj \
   ..\generic\$D\tipwin.obj \
-  ..\generic\$D\treectlg.obj \
   ..\generic\$D\treelay.obj \
   ..\generic\$D\wizard.obj
 
@@ -180,7 +179,6 @@ GENLIBOBJS= \
   textdlgg.obj \
   tipdlg.obj \
   tipwin.obj \
-  treectlg.obj \
   treelay.obj \
   wizard.obj
 
@@ -542,6 +540,7 @@ OS2OBJS = \
   ..\os2\$D\toolbar.obj \
   ..\os2\$D\tooltip.obj \
   ..\os2\$D\toplevel.obj \
+  ..\os2\$D\treectrl.obj \
   ..\os2\$D\utils.obj \
   ..\os2\$D\utilsexc.obj \
   ..\os2\$D\wave.obj \
@@ -624,6 +623,7 @@ OS2LIBOBJS2 = \
   toolbar.obj \
   tooltip.obj \
   toplevel.obj \
+  treectrl.obj \
   utils.obj \
   utilsexc.obj \
   wave.obj \
@@ -876,7 +876,6 @@ $(GENLIBOBJS):
   copy ..\generic\$D\textdlgg.obj
   copy ..\generic\$D\tipdlg.obj
   copy ..\generic\$D\tipwin.obj
-  copy ..\generic\$D\treectlg.obj
   copy ..\generic\$D\treelay.obj
   copy ..\generic\$D\wizard.obj
 
@@ -979,6 +978,7 @@ $(OS2LIBOBJS2):
   copy ..\os2\$D\toolbar.obj
   copy ..\os2\$D\tooltip.obj
   copy ..\os2\$D\toplevel.obj
+  copy ..\os2\$D\treectrl.obj
   copy ..\os2\$D\utils.obj
   copy ..\os2\$D\utilsexc.obj
   copy ..\os2\$D\wave.obj
