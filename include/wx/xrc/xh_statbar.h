@@ -17,7 +17,7 @@
 
 #include "wx/xrc/xmlres.h"
 
-class WXXMLDLLEXPORT wxStatusBarXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxStatusBarXmlHandler : public wxXmlResourceHandler
 {
     public:
         wxStatusBarXmlHandler();
