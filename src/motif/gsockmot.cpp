@@ -55,7 +55,7 @@ bool GSocketGUIFunctionsTableConcrete::Init_Socket(GSocket *socket)
   m_id[0] = -1;
   m_id[1] = -1;
 
-  return TRUE;
+  return true;
 }
 
 void GSocketGUIFunctionsTableConcrete::Destroy_Socket(GSocket *socket)

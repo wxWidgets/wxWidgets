@@ -171,13 +171,13 @@ GSocket::GSocket()
   m_local           = NULL;
   m_peer            = NULL;
   m_error           = GSOCK_NOERROR;
-  m_server          = FALSE;
-  m_stream          = TRUE;
+  m_server          = false;
+  m_stream          = true;
   m_non_blocking    = false;
   m_timeout.tv_sec  = 10 * 60;  /* 10 minutes */
   m_timeout.tv_usec = 0;
-  m_establishing    = FALSE;
-  m_reusable        = FALSE;
+  m_establishing    = false;
+  m_reusable        = false;
 
   assert(gs_gui_functions);
   /* Per-socket GUI-specific initialization */
@@ -382,8 +382,8 @@ GSocketError GSocket::SetServer()
   }
 
   /* Initialize all fields */
-  m_server   = TRUE;
-  m_stream   = TRUE;
+  m_server   = true;
+  m_stream   = true;
 
   /* Create the socket */
   m_fd = socket(m_local->m_realfamily, SOCK_STREAM, 0);
@@ -485,8 +485,8 @@ GSocket *GSocket::WaitConnection()
   }
 
   /* Initialize all fields */
-  connection->m_server   = FALSE;
-  connection->m_stream   = TRUE;
+  connection->m_server   = false;
+  connection->m_stream   = true;
 
   /* Setup the peer address field */
   connection->m_peer = GAddress_new();
@@ -519,14 +519,14 @@ GSocket *GSocket::WaitConnection()
 *  Returns TRUE if the flag was set correctly, FALSE if an error occured
 *  (ie, if the parameter was NULL)
 */
-int GSocket::SetReusable()
+bool GSocket::SetReusable()
 {
     /* socket must not be null, and must not be in use/already bound */
     if (this && m_fd == INVALID_SOCKET) {
-        m_reusable = TRUE;
-        return TRUE;
+        m_reusable = true;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 /* Client specific parts */
@@ -578,8 +578,8 @@ GSocketError GSocket::Connect(GSocketStream stream)
 
   /* Streamed or dgram socket? */
   m_stream   = (stream == GSOCK_STREAMED);
-  m_server   = FALSE;
-  m_establishing = FALSE;
+  m_server   = false;
+  m_establishing = false;
 
   /* Create the socket */
   m_fd = socket(m_peer->m_realfamily,
@@ -627,7 +627,7 @@ GSocketError GSocket::Connect(GSocketStream stream)
      */
     if ((err == WSAEWOULDBLOCK) && (m_non_blocking))
     {
-      m_establishing = TRUE;
+      m_establishing = true;
       m_error = GSOCK_WOULDBLOCK;
       return GSOCK_WOULDBLOCK;
     }
@@ -675,8 +675,8 @@ GSocketError GSocket::SetNonOriented()
   }
 
   /* Initialize all fields */
-  m_stream   = FALSE;
-  m_server   = FALSE;
+  m_stream   = false;
+  m_server   = false;
 
   /* Create the socket */
   m_fd = socket(m_local->m_realfamily, SOCK_DGRAM, 0);
@@ -821,7 +821,7 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
      */
     if ((m_detected & GSOCK_LOST_FLAG) != 0)
     {
-      m_establishing = FALSE;
+      m_establishing = false;
 
       return (GSOCK_LOST_FLAG & flags);
     }
@@ -853,7 +853,7 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
         else
         {
           m_detected = GSOCK_LOST_FLAG;
-          m_establishing = FALSE;
+          m_establishing = false;
 
           /* LOST event: Abort any further processing */
           return (GSOCK_LOST_FLAG & flags);
@@ -869,7 +869,7 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
         int error;
         SOCKLEN_T len = sizeof(error);
 
-        m_establishing = FALSE;
+        m_establishing = false;
 
         getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (char*)&error, &len);
 
@@ -895,7 +895,7 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
     /* Check for exceptions and errors (is this useful in Unices?) */
     if (FD_ISSET(m_fd, &exceptfds))
     {
-      m_establishing = FALSE;
+      m_establishing = false;
       m_detected = GSOCK_LOST_FLAG;
 
       /* LOST event: Abort any further processing */

@@ -21,14 +21,6 @@
 #include "gsocket.h"
 #endif
 
-#ifndef TRUE
-#define TRUE 1
-#endif
-
-#ifndef FALSE
-#define FALSE 0
-#endif
-
 class GSocketGUIFunctionsTableConcrete: public GSocketGUIFunctionsTable
 {
 public:
@@ -57,13 +49,13 @@ public:
     GAddress *GetPeer();
     GSocketError SetServer();
     GSocket *WaitConnection();
-    int SetReusable();
+    bool SetReusable();
     GSocketError Connect(GSocketStream stream);
     GSocketError SetNonOriented();
     int Read(char *buffer, int size);
     int Write(const char *buffer, int size);
     GSocketEventFlags Select(GSocketEventFlags flags);
-    void SetNonBlocking(int non_block);
+    void SetNonBlocking(bool non_block);
     void SetTimeout(unsigned long millisec);
     GSocketError WXDLLIMPEXP_NET GetError();
     void SetCallback(GSocketEventFlags flags,
@@ -95,11 +87,11 @@ public:
   GAddress *m_peer;
   GSocketError m_error;
 
-  int m_non_blocking;
-  int m_server;
-  int m_stream;
-  int m_establishing;
-  int m_reusable;
+  bool m_non_blocking;
+  bool m_server;
+  bool m_stream;
+  bool m_establishing;
+  bool m_reusable;
   unsigned long m_timeout;
 
   /* Callbacks */

@@ -23,12 +23,6 @@
 #ifdef __DARWIN__
   #include <CoreServices/CoreServices.h>
 
-  #ifndef FALSE
-    #define FALSE 0
-  #endif
-  #ifndef TRUE
-    #define TRUE 1
-  #endif
 #else
   #include <MacHeaders.c>
   #define OTUNIXERRORS 1
@@ -209,11 +203,11 @@ void GSocket_SetGUIFunctions(GSocketGUIFunctionsTable *table)
 
 int GSocket_Init()
 {
-    return TRUE;
+    return 1;
 }
 
-int GSocket_Verify_Inited() ;
-int GSocket_Verify_Inited()
+bool GSocket_Verify_Inited() ;
+bool GSocket_Verify_Inited()
 {
     OSStatus err ;
 #if TARGET_CARBON
@@ -222,7 +216,7 @@ int GSocket_Verify_Inited()
     OTClientContextPtr clientcontext;
 
     if ( gInetSvcRef )
-      return TRUE ;
+      return true ;
 
     InitOpenTransportInContext(kInitOTForApplicationMask, &clientcontext);
     gOTInited = 1 ;
@@ -230,7 +224,7 @@ int GSocket_Verify_Inited()
 						NULL, &err, clientcontext);
 #else	
     if ( gInetSvcRef )
-      return TRUE ;
+      return true ;
  
     InitOpenTransport() ;
     gOTInited = 1 ;
@@ -239,10 +233,10 @@ int GSocket_Verify_Inited()
     if ( gInetSvcRef == NULL ||  err != kOTNoError )
     {
 	OTAssert("Could not open Inet Services", err == noErr);
-	return FALSE ;
+	return false ;
     }
     gOTNotifierUPP = NewOTNotifyUPP( OTInetEventHandler ) ;
-    return TRUE ;
+    return true ;
 }
 
 void GSocket_Cleanup()
@@ -267,7 +261,7 @@ GSocket::GSocket()
 {
   int i;
 
-  m_ok = (GSocket_Verify_Inited() != FALSE);
+  m_ok = GSocket_Verify_Inited();
 
   m_endpoint                  = NULL ;
   for (i=0;i<GSOCK_MAX_EVENT;i++)
@@ -278,12 +272,12 @@ GSocket::GSocket()
   m_local               = NULL;
   m_peer                = NULL;
   m_error               = GSOCK_NOERROR;
-  m_server              = FALSE;
-  m_stream              = TRUE;
-  m_non_blocking        = FALSE;
+  m_server              = false;
+  m_stream              = true;
+  m_non_blocking        = false;
   m_timeout             = 1*1000;
                                 /* 10 sec * 1000 millisec */
-  m_takesEvents			= TRUE ;
+  m_takesEvents			= true ;
   m_mac_events			= wxMacGetNotifierTable() ;
 }
 
@@ -493,9 +487,9 @@ GSocketError GSocket::SetServer()
   }
 
   /* Initialize all fields */
-  m_stream   = TRUE;
-  m_server   = TRUE;
-  m_oriented = TRUE;
+  m_stream   = true;
+  m_server   = true;
+  m_oriented = true;
 
 // TODO
 #if 0
@@ -592,9 +586,9 @@ GSocket *GSocket::WaitConnection()
   }
 
   /* Initialize all fields */
-  connection->m_server   = FALSE;
-  connection->m_stream   = TRUE;
-  connection->m_oriented = TRUE;
+  connection->m_server   = false;
+  connection->m_stream   = true;
+  connection->m_oriented = true;
 
   /* Setup the peer address field */
   connection->m_peer = GAddress_new();
@@ -652,9 +646,9 @@ GSocketError GSocket::SetNonOriented()
   }
 
   /* Initialize all fields */
-  m_stream   = FALSE;
-  m_server   = FALSE;
-  m_oriented = FALSE;
+  m_stream   = false;
+  m_server   = false;
+  m_oriented = false;
 
   /* Create the socket */
   
@@ -745,8 +739,8 @@ GSocketError GSocket::Connect(GSocketStream stream)
 
   /* Streamed or dgram socket? */
   m_stream   = (stream == GSOCK_STREAMED);
-  m_oriented = TRUE;
-  m_server   = FALSE;
+  m_oriented = true;
+  m_server   = false;
 
   /* Create the socket */
 #if TARGET_CARBON
@@ -957,7 +951,7 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
  *  Sets the socket to non-blocking mode. All IO calls will return
  *  immediately.
  */
-void GSocket::SetNonBlocking(int non_block)
+void GSocket::SetNonBlocking(bool non_block)
 {
   assert(this);
 
@@ -1267,7 +1261,7 @@ GSocketError _GAddress_translate_from(GAddress *address,
 GSocketError _GAddress_translate_to(GAddress *address,
                                     InetAddress *addr)
 {
- if ( GSocket_Verify_Inited() == FALSE )
+ if ( !GSocket_Verify_Inited() )
     return GSOCK_IOERR ;
   memset(addr, 0 , sizeof(struct InetAddress));
   OTInitInetAddress( addr , address->m_port , address->m_host ) ;
@@ -1293,7 +1287,7 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   InetHostInfo hinfo ;
   OSStatus ret ;
 
- if ( GSocket_Verify_Inited() == FALSE )
+ if ( !GSocket_Verify_Inited() )
     return GSOCK_IOERR ;
 
   assert(address != NULL);
@@ -1387,7 +1381,7 @@ GSocketError GAddress_INET_SetPort(GAddress *address, unsigned short port)
 GSocketError GAddress_INET_GetHostName(GAddress *address, char *hostname, size_t sbuf)
 {
   InetDomainName name ;
- if ( GSocket_Verify_Inited() == FALSE )
+ if ( !GSocket_Verify_Inited() )
     return GSOCK_IOERR ;
   
   assert(address != NULL); 
@@ -1421,7 +1415,7 @@ void GSocket::Enable_Events()
   
   {
 	  OTResult	state ;
-	  m_takesEvents			= TRUE ;
+	  m_takesEvents			= true ;
 	  state = OTGetEndpointState(m_endpoint);
 	  
 	  {
@@ -1445,7 +1439,7 @@ void GSocket::Enable_Events()
 
 void GSocket::Disable_Events()
 {
-  m_takesEvents			= FALSE ;
+  m_takesEvents			= false ;
 }
 
 /* _GSocket_Input_Timeout:
@@ -1457,10 +1451,10 @@ GSocketError GSocket::Input_Timeout()
   if ( !m_non_blocking )
   {
     UnsignedWide now , start ;
-    short formerTakesEvents = m_takesEvents ;
+    bool formerTakesEvents = m_takesEvents ;
     Microseconds(&start);
     now = start ;
-    m_takesEvents = FALSE ;
+    m_takesEvents = false ;
     
     while( (now.hi * 4294967296.0 + now.lo) - (start.hi * 4294967296.0 + start.lo) < m_timeout * 1000.0 )
     {
@@ -1492,10 +1486,10 @@ GSocketError GSocket::Output_Timeout()
   if ( !m_non_blocking )
   {
     UnsignedWide now , start ;
-    short formerTakesEvents = m_takesEvents ;
+    bool formerTakesEvents = m_takesEvents ;
     Microseconds(&start);
     now = start ;
-    m_takesEvents = FALSE ;
+    m_takesEvents = false ;
     
     while( (now.hi * 4294967296.0 + now.lo) - (start.hi * 4294967296.0 + start.lo) < m_timeout * 1000.0 )
     {

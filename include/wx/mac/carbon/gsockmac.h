@@ -42,13 +42,13 @@ public:
     GAddress *GetPeer();
     GSocketError SetServer();
     GSocket *WaitConnection();
-    int SetReusable() { return 0; }
+    bool SetReusable() { return false; }
     GSocketError SetNonOriented();
     GSocketError Connect(GSocketStream stream);
     int Read(char *buffer, int size);
     int Write(const char *buffer, int size);
     GSocketEventFlags Select(GSocketEventFlags flags);
-    void SetNonBlocking(int non_block);
+    void SetNonBlocking(bool non_block);
     void SetTimeout(unsigned long millisec);
     GSocketError WXDLLIMPEXP_NET GetError();
     void SetCallback(GSocketEventFlags flags,
@@ -83,17 +83,17 @@ public:
   GAddress *m_peer;
   GSocketError m_error;
 
-  int m_non_blocking;
-  int m_server;
-  int m_stream;
-  int m_oriented;
+  bool m_non_blocking;
+  bool m_server;
+  bool m_stream;
+  bool m_oriented;
   unsigned long m_timeout;
 
   /* Callbacks */
   GSocketEventFlags m_detected;
   GSocketCallback m_cbacks[GSOCK_MAX_EVENT];
   char *m_data[GSOCK_MAX_EVENT];
-  int m_takesEvents ;
+  bool m_takesEvents ;
 };
 
 
