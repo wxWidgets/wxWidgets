@@ -56,7 +56,7 @@
 
     static inline void wxFreeFont(wxNativeFont font)
     {
-        XFreeFont((Display *)wxGetDisplay(), font);
+        XFreeFont((Display *)wxGetDisplay(), (XFontStruct *)font);
     }
 #elif defined(__WXGTK__)
     static inline wxNativeFont wxLoadFont(const wxString& fontSpec)
