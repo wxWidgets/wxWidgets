@@ -152,6 +152,7 @@
 #define wxUSE_GLCANVAS       0
 #define wxUSE_TREELAYOUT     0
 #define wxUSE_IPC         0
+#define wxUSE_DRAGIMAGE   0
 #define wxUSE_HELP        0
 #define wxUSE_MS_HTML_HELP 0
 #define wxUSE_RESOURCES   0
@@ -302,6 +303,7 @@
 #define wxUSE_GLCANVAS      0
 #define wxUSE_TREELAYOUT    0
 #define wxUSE_IPC           0
+#define wxUSE_DRAGIMAGE   0
 #define wxUSE_HELP          0
 #define wxUSE_MS_HTML_HELP  0
 #define wxUSE_WXHTML_HELP   0
@@ -460,6 +462,7 @@
 #define wxUSE_GLCANVAS       0
 #define wxUSE_TREELAYOUT     0
 #define wxUSE_IPC         0
+#define wxUSE_DRAGIMAGE   0
 #define wxUSE_HELP        0
 #define wxUSE_MS_HTML_HELP 0
 #define wxUSE_WXHTML_HELP 0
