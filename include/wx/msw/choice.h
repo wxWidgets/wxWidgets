@@ -103,9 +103,6 @@ protected:
 
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
-    // get the real height of the control
-    int GetVisibleHeight() const;
-
     // update the height of the drop down list to fit the number of items we
     // have (without changing the visible height)
     void UpdateVisibleHeight();

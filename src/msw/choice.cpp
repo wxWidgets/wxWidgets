@@ -438,15 +438,10 @@ wxClientData* wxChoice::DoGetItemClientObject( int n ) const
 // wxMSW specific helpers
 // ----------------------------------------------------------------------------
 
-int wxChoice::GetVisibleHeight() const
-{
-    return ::SendMessage(GetHwnd(), CB_GETITEMHEIGHT, (WPARAM)-1, 0);
-}
-
 void wxChoice::UpdateVisibleHeight()
 {
     // be careful to not change the width here
-    DoSetSize(-1, -1, -1, GetVisibleHeight(), wxSIZE_USE_EXISTING);
+    DoSetSize(-1, -1, -1, GetSize().y, wxSIZE_USE_EXISTING);
 }
 
 void wxChoice::DoMoveWindow(int x, int y, int width, int height)
@@ -469,13 +464,11 @@ void wxChoice::DoMoveWindow(int x, int y, int width, int height)
 
 void wxChoice::DoGetSize(int *w, int *h) const
 {
+    // this is weird: sometimes, the height returned by Windows is clearly the
+    // total height of the control including the drop down list -- but only
+    // sometimes, and normally it isn't... I have no idea about what to do with
+    // this
     wxControl::DoGetSize(w, h);
-
-    // we need to return only the height of the visible part, not the entire
-    // height in the Windows sense which includes the height of the drop down
-    // list as well
-    if ( h )
-        *h = GetVisibleHeight();
 }
 
 void wxChoice::DoSetSize(int x, int y,
@@ -509,10 +502,11 @@ void wxChoice::DoSetSize(int x, int y,
     // as it is not affected by normal WM_SETSIZE
     if ( height != -1 )
     {
-        const int hVisibleCurrent = GetVisibleHeight();
-        if ( hVisibleCurrent != heightOrig )
+        const int delta = heightOrig - GetSize().y;
+        if ( delta )
         {
-            SendMessage(GetHwnd(), CB_SETITEMHEIGHT, (WPARAM)-1, heightOrig);
+            int h = ::SendMessage(GetHwnd(), CB_GETITEMHEIGHT, (WPARAM)-1, 0);
+            SendMessage(GetHwnd(), CB_SETITEMHEIGHT, (WPARAM)-1, h + delta);
         }
     }
 }
@@ -538,7 +532,8 @@ wxSize wxChoice::DoGetBestSize() const
     // the combobox should be slightly larger than the widest string
     wChoice += 5*GetCharWidth();
 
-    return wxSize(wChoice, GetVisibleHeight());
+    // +5 is magic but seems to work well
+    return wxSize(wChoice, GetCharHeight() + 5);
 }
 
 long wxChoice::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
