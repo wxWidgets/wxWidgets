@@ -4084,9 +4084,10 @@ bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
 
 void wxWindowMSW::OnEraseBackground(wxEraseEvent& event)
 {
-    // standard controls always erase their background themselves (although the
-    // user may try to override it in a derived class)
-    if ( IsOfStandardClass() )
+    // standard non top level controls (i.e. except the dialogs) always erase
+    // their background themselves in HandleCtlColor() or have some control-
+    // specific ways to set the colours (common controls)
+    if ( IsOfStandardClass() && !IsTopLevel() )
     {
         event.Skip();
         return;
