@@ -1262,59 +1262,23 @@ bool wxPathExists(const wxChar *pszPathName)
 // Get a temporary filename, opening and closing the file.
 wxChar *wxGetTempFileName(const wxString& prefix, wxChar *buf)
 {
-#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
+    wxString filename = wxFileName::CreateTempFileName(prefix);
+    if ( filename.empty() )
+        return NULL;
 
-#ifndef        __WIN32__
-  wxChar tmp[144];
-  ::GetTempFileName(0, WXSTRINGCAST prefix, 0, tmp);
-#else
-  wxChar tmp[MAX_PATH];
-  wxChar tmpPath[MAX_PATH];
-  ::GetTempPath(MAX_PATH, tmpPath);
-  ::GetTempFileName(tmpPath, WXSTRINGCAST prefix, 0, tmp);
-#endif
-  if (buf) wxStrcpy(buf, tmp);
-  else buf = copystring(tmp);
-  return buf;
+    if ( buf )
+        wxStrcpy(buf, filename);
+    else
+        buf = copystring(filename);
 
-#else
-  static short last_temp = 0;        // cache last to speed things a bit
-  // At most 1000 temp files to a process! We use a ring count.
-  wxChar tmp[100]; // FIXME static buffer
-
-  for (short suffix = last_temp + 1; suffix != last_temp; ++suffix %= 1000)
-    {
-      wxSprintf (tmp, wxT("/tmp/%s%d.%03x"), WXSTRINGCAST prefix, (int) getpid (), (int) suffix);
-      if (!wxFileExists( tmp ))
-        {
-          // Touch the file to create it (reserve name)
-          FILE *fd = fopen (wxFNCONV(tmp), "w");
-          if (fd)
-            fclose (fd);
-          last_temp = suffix;
-          if (buf)
-            wxStrcpy( buf, tmp);
-          else
-            buf = copystring( tmp );
-          return buf;
-        }
-    }
-  wxLogError( _("wxWindows: error finding temporary file name.\n") );
-  if (buf) buf[0] = 0;
-  return (wxChar *) NULL;
-#endif
+    return buf;
 }
 
 bool wxGetTempFileName(const wxString& prefix, wxString& buf)
 {
-    wxChar buf2[512];
-    if (wxGetTempFileName(prefix, buf2) != (wxChar*) NULL)
-    {
-        buf = buf2;
-        return TRUE;
-    }
-    else
-        return FALSE;
+    buf = wxFileName::CreateTempFileName(prefix);
+
+    return !buf.empty();
 }
 
 // Get first file name matching given wild card.

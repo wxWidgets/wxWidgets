@@ -185,7 +185,7 @@ WXDLLEXPORT wxString wxUnix2MacFilename( const char *s);
 WXDLLEXPORT void wxStripExtension(wxChar *buffer);
 WXDLLEXPORT void wxStripExtension(wxString& buffer);
 
-// Get a temporary filename, opening and closing the file.
+// Get a temporary filename
 WXDLLEXPORT wxChar* wxGetTempFileName(const wxString& prefix, wxChar *buf = (wxChar *) NULL);
 WXDLLEXPORT bool wxGetTempFileName(const wxString& prefix, wxString& buf);
 
@@ -197,8 +197,8 @@ WXDLLEXPORT bool wxExpandPath(wxString& dest, const wxChar *path);
 // and make (if under the home tree) relative to home
 // [caller must copy-- volatile]
 WXDLLEXPORT wxChar* wxContractPath(const wxString& filename,
-				   const wxString& envname = wxEmptyString,
-				   const wxString& user = wxEmptyString);
+                                   const wxString& envname = wxEmptyString,
+                                   const wxString& user = wxEmptyString);
 
 // Destructive removal of /./ and /../ stuff
 WXDLLEXPORT wxChar* wxRealPath(wxChar *path);

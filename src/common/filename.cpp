@@ -360,17 +360,170 @@ wxString wxFileName::GetHomeDir()
     return ::wxGetHomeDir();
 }
 
-void wxFileName::AssignTempFileName( const wxString &prefix )
+void wxFileName::AssignTempFileName( const wxString& prefix )
 {
-    wxString fullname;
-    if ( wxGetTempFileName(prefix, fullname) )
+    wxString tempname = CreateTempFileName(prefix);
+    if ( tempname.empty() )
     {
-        Assign(fullname);
-    }
-    else // error
-    {
+        // error, failed to get temp file name
         Clear();
     }
+    else // ok
+    {
+        Assign(tempname);
+    }
+}
+
+/* static */
+wxString wxFileName::CreateTempFileName(const wxString& prefix)
+{
+    wxString path, dir, name;
+
+    // use the directory specified by the prefix
+    SplitPath(prefix, &dir, &name, NULL /* extension */);
+
+#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
+
+#ifdef __WIN32__
+    if ( dir.empty() )
+    {
+        if ( !::GetTempPath(MAX_PATH, wxStringBuffer(dir, MAX_PATH + 1)) )
+        {
+            wxLogLastError(_T("GetTempPath"));
+        }
+
+        if ( dir.empty() )
+        {
+            // GetTempFileName() fails if we pass it an empty string
+            dir = _T('.');
+        }
+    }
+
+    if ( !::GetTempFileName(dir, name, 0, wxStringBuffer(path, MAX_PATH + 1)) )
+    {
+        wxLogLastError(_T("GetTempFileName"));
+
+        path.clear();
+    }
+#else // Win16
+    if ( !::GetTempFileName(NULL, prefix, 0, wxStringBuffer(path, 1025)) )
+    {
+        path.clear();
+    }
+#endif // Win32/16
+
+#elif defined(__WXPM__)
+    // for now just create a file
+    //
+    // future enhancements can be to set some extended attributes for file
+    // systems OS/2 supports that have them (HPFS, FAT32) and security
+    // (HPFS386)
+    static const wxChar *szMktempSuffix = wxT("XXX");
+    path << dir << _T('/') << name << szMktempSuffix;
+
+    // Temporarily remove - MN
+    #ifndef __WATCOMC__
+        ::DosCreateDir(wxStringBuffer(MAX_PATH), NULL);
+    #endif
+
+#else // !Windows, !OS/2
+    if ( dir.empty() )
+    {
+        dir = wxGetenv(_T("TMP"));
+        if ( path.empty() )
+        {
+            dir = wxGetenv(_T("TEMP"));
+        }
+
+        if ( dir.empty() )
+        {
+            // default
+            dir = _T("/tmp");
+        }
+    }
+
+    path = dir;
+
+    if ( !wxEndsWithPathSeparator(dir) &&
+            (name.empty() || !wxIsPathSeparator(name[0u])) )
+    {
+        path += _T('/');
+    }
+
+    path += name;
+
+#ifdef HAVE_MKSTEMP
+    // scratch space for mkstemp()
+    path += _T("XXXXXX");
+
+    // can use the cast here because the length doesn't change and the string
+    // is not shared
+    if ( mkstemp((char *)path.mb_str()) == -1 )
+    {
+        // this might be not necessary as mkstemp() on most systems should have
+        // already done it but it doesn't hurt neither...
+        path.clear();
+    }
+    //else: file already created
+#else // !HAVE_MKSTEMP
+
+#ifdef HAVE_MKTEMP
+    // same as above
+    path += _T("XXXXXX");
+
+    if ( !mktemp((char *)path.mb_str()) )
+    {
+        path.clear();
+    }
+#else // !HAVE_MKTEMP
+    // generate the unique file name ourselves
+    path << (unsigned int)getpid();
+
+    wxString pathTry;
+
+    static const size_t numTries = 1000;
+    for ( size_t n = 0; n < numTries; n++ )
+    {
+        // 3 hex digits is enough for numTries == 1000 < 4096
+        pathTry = path + wxString::Format(_T("%.03x"), n);
+        if ( !wxFile::Exists(pathTry) )
+        {
+            break;
+        }
+
+        pathTry.clear();
+    }
+
+    path = pathTry;
+#endif // HAVE_MKTEMP/!HAVE_MKTEMP
+
+    if ( !path.empty() )
+    {
+        // create the file - of course, there is a race condition here, this is
+        // why we always prefer using mkstemp()...
+        wxFile file;
+        if ( !file.Open(path, wxFile::write_excl, wxS_IRUSR | wxS_IWUSR) )
+        {
+            // FIXME: If !ok here should we loop and try again with another
+            //        file name?  That is the standard recourse if open(O_EXCL)
+            //        fails, though of course it should be protected against
+            //        possible infinite looping too.
+
+            wxLogError(_("Failed to open temporary file."));
+
+            path.clear();
+        }
+    }
+#endif // HAVE_MKSTEMP/!HAVE_MKSTEMP
+
+#endif // Windows/!Windows
+
+    if ( path.empty() )
+    {
+        wxLogSysError(_("Failed to create a temporary file name"));
+    }
+
+    return path;
 }
 
 // ----------------------------------------------------------------------------

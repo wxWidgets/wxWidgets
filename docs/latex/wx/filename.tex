@@ -234,15 +234,33 @@ get the value of user home (Unix only mainly)
 
 \func{void}{AssignTempFileName}{\param{const wxString\& }{prefix}}
 
-get a temp file name starting with thespecified prefix
-
+The function calls \helpref{CreateTempFileName}{wxfilenamecreatetempfilename} to
+create a temporary file and sets this object to the name of the file. If a
+temporary file couldn't be created, the object is put into the\rtfsp
+\helpref{invalid}{wxfilenameisok} state.
 
 \membersection{wxFileName::Clear}\label{wxfilenameclear}
 
 \func{void}{Clear}{\void}
 
-reset all components to default, uninitialized state
+Reset all components to default, uninitialized state.
 
+\membersection{wxFileName::CreateTempFileName}{wxfilenamecreatetempfilename}
+
+\func{static wxString}{CreateTempFileName}{\param{const wxString\& }{prefix}}
+
+Returns a temporary file name starting with the given {\it prefix}. If
+the {\it prefix} is an absolute path, the temporary file is created in this
+directory, otherwise it is created in the default system directory for the
+temporary files or in the current directory.
+
+If the function succeeds, the temporary file is actually created (but not
+opened) as well. Under Unix, it will have read and write permissions for the
+owner only.
+
+\wxheading{Return value}
+
+The full temporary file name or an empty string on error.
 
 \membersection{wxFileName::DirExists}\label{wxfilenamedirexists}
 
@@ -443,9 +461,10 @@ are the file names of this type cases sensitive?
 
 \constfunc{bool}{IsOk}{\void}
 
-file tests
-is the filename valid at all?
-
+Returns {\tt TRUE} if the filename is valid, {\tt FALSE} if it is not
+initialized yet. The assignment functions and
+\helpref{Clear}{wxfilenameclear} may reset the object to the uninitialized,
+invalid state (the former only do it on failure).
 
 \membersection{wxFileName::IsPathSeparator}\label{wxfilenameispathseparator}
 

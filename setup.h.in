@@ -964,6 +964,12 @@
 /* Define if you have the inet_aton function.  */
 #undef HAVE_INET_ATON
 
+/* Define if you have the mktemp function.  */
+#undef HAVE_MKTEMP
+
+/* Define if you have the mkstemp function.  */
+#undef HAVE_MKSTEMP
+
 /* Define if you have the nanosleep function.  */
 #undef HAVE_NANOSLEEP
 

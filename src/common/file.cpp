@@ -54,7 +54,6 @@
     #define   NOMCX
 #endif
 
-    #include  <windows.h>     // for GetTempFileName
 #elif (defined(__UNIX__) || defined(__GNUWIN32__))
     #include  <unistd.h>
     #ifdef __GNUWIN32__
@@ -121,10 +120,14 @@
 #endif // Salford C
 
 // wxWindows
-#include  "wx/string.h"
-#include  "wx/intl.h"
-#include  "wx/file.h"
-#include  "wx/log.h"
+#ifndef WX_PRECOMP
+    #include  "wx/string.h"
+    #include  "wx/intl.h"
+    #include  "wx/file.h"
+    #include  "wx/log.h"
+#endif // !WX_PRECOMP
+
+#include  "wx/filename.h"
 
 // ============================================================================
 // implementation of wxFile
@@ -465,87 +468,39 @@ bool wxTempFile::Open(const wxString& strName)
 {
     m_strName = strName;
 
-    // we want to create the file in the same directory as strName because
-    // otherwise rename() in Commit() might not work (if the files are on
-    // different partitions for example). Unfortunately, the only standard
-    // (POSIX) temp file creation function tmpnam() can't do it.
-#if defined(__UNIX__) || defined(__WXSTUBS__)|| defined( __WXMAC__ )
-    static const wxChar *szMktempSuffix = wxT("XXXXXX");
-    m_strTemp << strName << szMktempSuffix;
-    // can use the cast because length doesn't change
-    mktemp(wxMBSTRINGCAST m_strTemp.mb_str());
-#elif  defined(__WXPM__)
-    // for now just create a file
-    // future enhancements can be to set some extended attributes for file systems
-    // OS/2 supports that have them (HPFS, FAT32) and security (HPFS386)
-    static const wxChar *szMktempSuffix = wxT("XXX");
-    m_strTemp << strName << szMktempSuffix;
-    // Temporarily remove - MN
-    #ifndef __WATCOMC__
-    ::DosCreateDir(m_strTemp.GetWriteBuf(MAX_PATH), NULL);
-    #endif
-#else // Windows
-    wxString strPath;
-    wxSplitPath(strName, &strPath, NULL, NULL);
-    if ( strPath.IsEmpty() )
-        strPath = wxT('.');  // GetTempFileName will fail if we give it empty string
-#ifdef __WIN32__
-    if ( !GetTempFileName(strPath, wxT("wx_"),0, m_strTemp.GetWriteBuf(MAX_PATH)) )
-#else
-        // Not sure why MSVC++ 1.5 header defines first param as BYTE - bug?
-        if ( !GetTempFileName((BYTE) (DWORD)(const wxChar*) strPath, wxT("wx_"),0, m_strTemp.GetWriteBuf(MAX_PATH)) )
-#endif
-            wxLogLastError(wxT("GetTempFileName"));
-    m_strTemp.UngetWriteBuf();
-#endif  // Windows/Unix
+    m_strTemp = wxFileName::CreateTempFileName(strName);
 
-    int access = wxS_DEFAULT;
+    if ( m_strTemp.empty() )
+    {
+        // CreateTempFileName() failed
+        return FALSE;
+    }
+
 #ifdef __UNIX__
-    // create the file with the same mode as the original one under Unix
-    mode_t umaskOld = 0; // just to suppress compiler warning
-    bool changedUmask;
+    // the temp file should have the same permissions as the original one
+    mode_t mode;
 
     wxStructStat st;
     if ( stat(strName.fn_str(), &st) == 0 )
     {
-        // this assumes that only lower bits of st_mode contain the access
-        // rights, but it's true for at least all Unices which have S_IXXXX()
-        // macros, so should not be less portable than using (not POSIX)
-        // S_IFREG &c
-        access = st.st_mode & 0777;
-
-        // we want to create the file with exactly the same access rights as
-        // the original one, so disable the user's umask for the moment
-        umaskOld = umask(0);
-        changedUmask = TRUE;
+        mode = st.st_mode;
     }
     else
     {
-        // file probably didn't exist, just create with default mode _using_
+        // file probably didn't exist, just give it the default mode _using_
         // user's umask (new files creation should respect umask)
-        changedUmask = FALSE;
+        mode_t mask = umask(0777);
+        mode = 0666 & ~mask;
+        umask(mask);
     }
-#endif // Unix
 
-    // Open this file securely, since it surely should not exist unless
-    // nefarious activities (or other random bad things) are at play.
-
-    bool ok = m_file.Open(m_strTemp, wxFile::write_excl, access);
-
-    // FIXME: If !ok here should we loop and try again with another file
-    //        name?  That is the standard recourse if open(O_EXCL) fails,
-    //        though of course it should be protected against possible
-    //        infinite looping too.
-
-#ifdef __UNIX__
-    if ( changedUmask )
+    if ( chmod(m_strTemp.mb_str(), mode) == -1 )
     {
-        // restore umask now that the file is created
-        (void)umask(umaskOld);
+        wxLogSysError(_("Failed to set temporary file permissions"));
     }
 #endif // Unix
 
-    return ok;
+    return TRUE;
 }
 
 // ----------------------------------------------------------------------------
@@ -582,5 +537,5 @@ void wxTempFile::Discard()
         wxLogSysError(_("can't remove temporary file '%s'"), m_strTemp.c_str());
 }
 
-#endif
+#endif // wxUSE_FILE
 

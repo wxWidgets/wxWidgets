@@ -200,8 +200,9 @@ public:
     void AssignHomeDir();
     static wxString GetHomeDir();
 
-        // get a temp file name starting with thespecified prefix
-    void AssignTempFileName( const wxString &prefix );
+        // get a temp file name starting with the specified prefix
+    void AssignTempFileName(const wxString& prefix);
+    static wxString CreateTempFileName(const wxString& prefix);
 
     // directory creation and removal.
     // if full is TRUE, will try to make each directory in the path.

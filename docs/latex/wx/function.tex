@@ -265,15 +265,19 @@ if the buffer is NULL.
 
 \func{bool}{wxGetTempFileName}{\param{const wxString\& }{prefix}, \param{wxString\& }{buf}}
 
-Makes a temporary filename based on {\it prefix}, opens and closes the file,
-and places the name in {\it buf}. If {\it buf} is NULL, new store
-is allocated for the temporary filename using {\it new}.
+%% Makes a temporary filename based on {\it prefix}, opens and closes the file,
+%% and places the name in {\it buf}. If {\it buf} is NULL, new store
+%% is allocated for the temporary filename using {\it new}.
+%%
+%% Under Windows, the filename will include the drive and name of the
+%% directory allocated for temporary files (usually the contents of the
+%% TEMP variable). Under Unix, the {\tt /tmp} directory is used.
+%%
+%% It is the application's responsibility to create and delete the file.
 
-Under Windows, the filename will include the drive and name of the
-directory allocated for temporary files (usually the contents of the
-TEMP variable). Under Unix, the {\tt /tmp} directory is used.
-
-It is the application's responsibility to create and delete the file.
+These functions are obsolete, please use\rtfsp
+\helpref{wxFileName::CreateTempFileName}{wxfilenamecreatetempfilename}\rtfsp
+instead.
 
 \membersection{::wxIsWild}\label{wxiswild}
 

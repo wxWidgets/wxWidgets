@@ -3055,6 +3055,9 @@ fi
 dnl check for vfork() (even if it's the same as fork() in modern Unices)
 AC_CHECK_FUNCS(vfork)
 
+dnl check for the function for temp files creation
+AC_CHECK_FUNCS(mkstemp mktemp, break)
+
 dnl get the library function to use for wxGetDiskSpace(): it is statfs() under
 dnl Linux and *BSD and statvfs() under Solaris
 AC_CACHE_CHECK(for statfs, wx_cv_func_statfs,

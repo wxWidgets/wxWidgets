@@ -844,6 +844,35 @@ static void TestFileNameSplit()
     }
 }
 
+static void TestFileNameTemp()
+{
+    puts("*** testing wxFileName temp file creation ***");
+
+    static const char *tmpprefixes[] =
+    {
+        "foo",
+        "/tmp/foo",
+        "..",
+        "../bar",
+        "/tmp/foo/bar", // this one must be an error
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(tmpprefixes); n++ )
+    {
+        wxString path = wxFileName::CreateTempFileName(tmpprefixes[n]);
+        if ( !path.empty() )
+        {
+            printf("Prefix '%s'\t-> temp file '%s'\n",
+                   tmpprefixes[n], path.c_str());
+
+            if ( !wxRemoveFile(path) )
+            {
+                wxLogWarning("Failed to remove temp file '%s'", path.c_str());
+            }
+        }
+    }
+}
+
 static void TestFileNameComparison()
 {
     // TODO!
@@ -5187,10 +5216,11 @@ int main(int argc, char **argv)
 #endif // TEST_FILE
 
 #ifdef TEST_FILENAME
-    TestFileNameConstruction();
-    TestFileNameSplit();
+    TestFileNameTemp();
     if ( 0 )
     {
+    TestFileNameConstruction();
+    TestFileNameSplit();
         TestFileNameCwd();
         TestFileNameComparison();
         TestFileNameOperations();
