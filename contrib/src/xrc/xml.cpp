@@ -353,8 +353,9 @@ inline static wxString CharToString(wxMBConv *conv,
         wchar_t *buf = new wchar_t[nLen+1];
         wxConvUTF8.MB2WC(buf, s, nLen);
         buf[nLen] = 0;
+        wxString s(buf, *conv, len);
         delete[] buf;
-        return wxString(buf, *conv, len);
+        return s;
     }
     else
         return wxString(s, len);
