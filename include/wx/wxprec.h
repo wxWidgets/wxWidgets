@@ -34,10 +34,6 @@
 
 // include standard Windows headers
 #if defined(__WXMSW__) && !wxUSE_MFC
-    #ifndef STRICT
-        #define STRICT 1
-    #endif
-
     #include "wx/msw/wrapwin.h"
 #endif
 
