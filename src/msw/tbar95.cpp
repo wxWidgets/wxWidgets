@@ -64,6 +64,10 @@
     #include "wx/msw/gnuwin32/extra.h"
 #endif
 
+#if !defined(CCS_VERT)
+#define CCS_VERT                0x00000080L
+#endif
+
 #endif // __TWIN32__
 
 #include "wx/msw/dib.h"
