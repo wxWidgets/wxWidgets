@@ -1722,9 +1722,9 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
             dc_mask = ::CreateCompatibleDC(GetHdcOf(*source));
             dc_buffer = ::CreateCompatibleDC(GetHdc());
             buffer_bmap = ::CreateCompatibleBitmap(GetHdc(), width, height);
+#endif // wxUSE_DC_CACHEING/!wxUSE_DC_CACHEING
             ::SelectObject(dc_mask, (HBITMAP) mask->GetMaskBitmap());
             ::SelectObject(dc_buffer, buffer_bmap);
-#endif // wxUSE_DC_CACHEING/!wxUSE_DC_CACHEING
 
             // copy dest to buffer
             if ( !::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
