@@ -379,6 +379,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
 
     switch (index)
     {
+#ifdef __WXGTK20__
         case wxSYS_BORDER_X:
         case wxSYS_BORDER_Y:
         case wxSYS_EDGE_X:
@@ -460,6 +461,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
             }
 
             return -1; // no window specified
+#endif // gtk2
 
         case wxSYS_CURSOR_X:
         case wxSYS_CURSOR_Y:
