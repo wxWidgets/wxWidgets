@@ -178,6 +178,9 @@ static void TranslateKbdEventToMouse(wxWindowMSW *win,
 // get the text metrics for the current font
 static TEXTMETRIC wxGetTextMetrics(const wxWindowMSW *win);
 
+// find the window for the mouse event at the specified position
+static wxWindowMSW *FindWindowForMouseEvent(wxWindow *win, int *x, int *y);
+
 // wrapper around BringWindowToTop() API
 static inline void wxBringWindowToTop(HWND hwnd)
 {
@@ -2378,68 +2381,43 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
         case WM_MBUTTONDOWN:
         case WM_MBUTTONUP:
         case WM_MBUTTONDBLCLK:
-         {
-                processed = FALSE;
+            {
 #ifdef __WXMICROWIN__
                 // MicroWindows seems to ignore the fact that a window is
                 // disabled. So catch mouse events and throw them away if
                 // necessary.
                 wxWindowMSW* win = this;
-                while (win)
+                for ( ;; )
                 {
                     if (!win->IsEnabled())
                     {
                         processed = TRUE;
                         break;
                     }
-                    win = win->GetParent();
-                    if (win && win->IsTopLevel())
-                        break;
-                }
-#endif // __WXMICROWIN__
-                if (!processed)
-                {
-                    if (message == WM_LBUTTONDOWN && AcceptsFocus())
-                        SetFocus();
-                     processed = HandleMouseEvent(message,
-                                         GET_X_LPARAM(lParam),
-                                         GET_Y_LPARAM(lParam),
-                                                  wParam);
-                }
-                break;
-         }
 
-#ifdef __WXMICROWIN__
-        case WM_NCLBUTTONDOWN:
-        case WM_NCLBUTTONUP:
-        case WM_NCLBUTTONDBLCLK:
-        case WM_NCRBUTTONDOWN:
-        case WM_NCRBUTTONUP:
-        case WM_NCRBUTTONDBLCLK:
-#if 0
-        case WM_NCMBUTTONDOWN:
-        case WM_NCMBUTTONUP:
-        case WM_NCMBUTTONDBLCLK:
-#endif
-            {
-                // MicroWindows seems to ignore the fact that a window
-                // is disabled. So catch mouse events and throw them away if necessary.
-                processed = FALSE;
-                wxWindowMSW* win = this;
-                while (win)
-                {
-                    if (!win->IsEnabled())
-                    {
-                        processed = TRUE;
-                        break;
-                    }
                     win = win->GetParent();
-                    if (win && win->IsTopLevel())
+                    if ( !win || win->IsTopLevel() )
                         break;
                 }
-                break;
-            }
+
+                if (!processed)
 #endif // __WXMICROWIN__
+                {
+                    // VZ: why do we need it here? DefWindowProc() is supposed
+                    //     to do this for us anyhow
+                    if ( message == WM_LBUTTONDOWN && AcceptsFocus() )
+                        SetFocus();
+
+                    int x = GET_X_LPARAM(lParam),
+                        y = GET_Y_LPARAM(lParam);
+
+                    // redirect the event to a static control if necessary
+                    wxWindow *win = FindWindowForMouseEvent(this, &x, &y);
+
+                    processed = win->HandleMouseEvent(message, x, y, wParam);
+                }
+            }
+            break;
 
 #ifdef MM_JOY1MOVE
         case MM_JOY1MOVE:
@@ -3980,6 +3958,64 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
     m_lastMouseY = y;
     m_lastMouseEvent = event.GetEventType();
 #endif // wxUSE_MOUSEEVENT_HACK
+}
+
+// Windows doesn't send the mouse events to the static controls (which are
+// transparent in the sense that their WM_NCHITTEST handler returns
+// HTTRANSPARENT) at all but we want all controls to receive the mouse events
+// and so we manually check if we don't have a child window under mouse and if
+// we do, send the event to it instead of the window Windows had sent WM_XXX
+// to.
+//
+// Notice that this is not done for the mouse move events because this could
+// (would?) be too slow, but only for clicks which means that the static texts
+// still don't get move, enter nor leave events.
+static wxWindowMSW *FindWindowForMouseEvent(wxWindow *win, int *x, int *y)
+{
+    wxCHECK_MSG( x && y, win, _T("NULL pointer in FindWindowForMouseEvent") );
+
+    // first try to find a non transparent child: this allows us to send events
+    // to a static text which is inside a static box, for example
+    POINT pt = { *x, *y };
+    HWND hwnd = GetHwndOf(win),
+         hwndUnderMouse;
+
+#ifdef __WIN32__
+    hwndUnderMouse = ::ChildWindowFromPointEx
+                       (
+                        hwnd,
+                        pt,
+                        CWP_SKIPINVISIBLE   |
+                        CWP_SKIPDISABLED    |
+                        CWP_SKIPTRANSPARENT
+                       );
+
+    if ( !hwndUnderMouse || hwndUnderMouse == hwnd )
+#endif // __WIN32__
+    {
+        // now try any child window at all
+        hwndUnderMouse = ::ChildWindowFromPoint(hwnd, pt);
+    }
+
+    // check that we have a child window which is susceptible to receive mouse
+    // events: for this it must be shown and enabled
+    if ( hwndUnderMouse &&
+            hwndUnderMouse != hwnd &&
+                ::IsWindowVisible(hwndUnderMouse) &&
+                    ::IsWindowEnabled(hwndUnderMouse) )
+    {
+        wxWindow *winUnderMouse = wxFindWinFromHandle((WXHWND)hwndUnderMouse);
+        if ( winUnderMouse )
+        {
+            // translate the mouse coords to the other window coords
+            win->ClientToScreen(x, y);
+            winUnderMouse->ScreenToClient(x, y);
+
+            win = winUnderMouse;
+        }
+    }
+
+    return win;
 }
 
 bool wxWindowMSW::HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags)
