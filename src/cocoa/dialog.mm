@@ -84,9 +84,6 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID winid,
 
 wxDialog::~wxDialog()
 {
-    wxLogTrace(wxTRACE_COCOA,wxT("Destroying"));
-    // setReleasedWhenClosed: NO
-    [m_cocoaNSWindow close];
     DisassociateNSPanel(GetNSPanel());
 }
 
