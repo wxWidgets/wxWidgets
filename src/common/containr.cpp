@@ -291,7 +291,7 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
 
         wxWindow *child = node->GetData();
 
-#if defined(__WXMSW__) && !defined(__WXPALMOS__)
+#if defined(__WXMSW__)
         bool is_not_msw_rb = !m_winLastFocused ||
                                 !wxIsKindOf(m_winLastFocused,wxRadioButton);
 #else
@@ -306,7 +306,7 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
             // direction we're coming
             event.SetEventObject(m_winParent);
 
-#if defined(__WXMSW__) && !defined(__WXPALMOS__)
+#if defined(__WXMSW__)
             // we need to hop to the next activated
             // radio button, not just the next radio
             // button under MSW

@@ -31,7 +31,7 @@ class WXDLLEXPORT wxWindow;
 #include "wx/gdicmn.h" // for wxPoint
 
 // some platforms have their own renderers, others use the generic one
-#if (defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXGTK__)) && !defined(__WXPALMOS__)
+#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXGTK__)
     #define wxHAS_NATIVE_RENDERER
 #else
     #undef wxHAS_NATIVE_RENDERER

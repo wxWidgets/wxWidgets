@@ -47,8 +47,8 @@
 #include "wx/utils.h"
 #include "wx/ptr_scpd.h"
 
-#if defined(__WXMSW__) && !defined(__WXPALMOS__)
-  #include  "wx/msw/private.h"  // includes windows.h for LOGFONT
+#if defined(__WXMSW__)
+    #include  "wx/msw/private.h"  // includes windows.h for LOGFONT
 #endif
 
 #if wxUSE_FONTMAP

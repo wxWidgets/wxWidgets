@@ -49,7 +49,7 @@
     #include "wx/paper.h"
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
-#if defined(__WXMSW__) && !defined(__WXPALMOS__)
+#if defined(__WXMSW__)
     #include <windowsx.h>
     #include "wx/msw/private.h"
 

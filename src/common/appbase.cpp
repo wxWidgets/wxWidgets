@@ -43,7 +43,7 @@
   #include  <signal.h>      // for SIGTRAP used by wxTrap()
 #endif  //Win/Unix
 
-#if defined(__WXMSW__) && !defined(__WXPALMOS__)
+#if defined(__WXMSW__)
   #include  "wx/msw/wrapwin.h"  // includes windows.h for MessageBox()
 #endif
 

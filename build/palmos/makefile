@@ -206,7 +206,6 @@ SOURCES =  ../../samples/minimal/minimal.cpp \
 ../../src/palmos/dcprint.cpp \
 ../../src/palmos/dcscreen.cpp \
 ../../src/palmos/dialog.cpp \
-../../src/palmos/dialup.cpp \
 ../../src/palmos/dib.cpp \
 ../../src/palmos/dir.cpp \
 ../../src/palmos/dirdlg.cpp \
@@ -238,10 +237,8 @@ SOURCES =  ../../samples/minimal/minimal.cpp \
 ../../src/palmos/menu.cpp \
 ../../src/palmos/menuitem.cpp \
 ../../src/palmos/metafile.cpp \
-../../src/palmos/mimetype.cpp \
 ../../src/palmos/minifram.cpp \
 ../../src/palmos/msgdlg.cpp \
-../../src/palmos/mslu.cpp \
 ../../src/palmos/nativdlg.cpp \
 ../../src/palmos/notebook.cpp \
 ../../src/palmos/ownerdrw.cpp \
@@ -254,8 +251,6 @@ SOURCES =  ../../samples/minimal/minimal.cpp \
 ../../src/palmos/radiobut.cpp \
 ../../src/palmos/regconf.cpp \
 ../../src/palmos/region.cpp \
-../../src/palmos/registry.cpp \
-../../src/palmos/renderer.cpp \
 ../../src/palmos/scrolbar.cpp \
 ../../src/palmos/settings.cpp \
 ../../src/palmos/slider.cpp \
