@@ -24,6 +24,7 @@
 
 #include "wx/fileconf.h"
 #include "wx/sstream.h"
+#include "wx/wfstream.h"
 
 #include "wx/cppunit.h"
 
@@ -44,7 +45,9 @@ _T("[root/group2]\n")
 class FileConfigTestCase : public CppUnit::TestCase
 {
 public:
-    FileConfigTestCase() { }
+    FileConfigTestCase() 
+    {
+    }
 
 private:
     CPPUNIT_TEST_SUITE( FileConfigTestCase );
@@ -84,9 +87,23 @@ private:
 
     static wxString Dump(wxFileConfig& fc)
     {
-        wxStringOutputStream sos;
-        fc.Save(sos);
-        return wxTextFile::Translate(sos.GetString(), wxTextFileType_Unix);
+        wxFileOutputStream* pOutFile = new wxFileOutputStream(_T("outconf.txt"));
+        fc.Save(*pOutFile);
+        delete pOutFile;
+
+        wxFileInputStream* pInFile = new wxFileInputStream(_T("outconf.txt"));
+        char* szOut = new char[pInFile->GetSize()];
+        pInFile->Read(szOut, pInFile->GetSize());
+
+        wxString realString = wxTextFile::Translate(
+                                     wxString(szOut, wxConvLocal, pInFile->GetSize()), 
+                                     wxTextFileType_Unix
+                                                   );
+
+        delete szOut;
+        delete pInFile;
+
+        return realString;
     }
 
     void CheckGroupEntries(const wxFileConfig& fc,
