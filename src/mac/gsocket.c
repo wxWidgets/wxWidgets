@@ -195,19 +195,25 @@ static void SetDefaultEndpointModes(EndpointRef ep , void *data )
 
 int GSocket_Init()
 {
-	OSStatus err ;
+    OSStatus err ;
 #if TARGET_CARBON
-	InitOpenTransportInContext( kInitOTForApplicationMask , NULL ) ;
+    // Marc Newsam: added the clientcontext variable
+    //              however, documentation is unclear how this works
+    OTClientContextPtr clientcontext;
+
+    InitOpenTransportInContext(kInitOTForApplicationMask, &clientcontext);
+    gInetSvcRef = OTOpenInternetServicesInContext(kDefaultInternetServicesPath,
+						NULL, &err, clientcontext);
 #else	
-	InitOpenTransport() ;
+    InitOpenTransport() ;
+    gInetSvcRef = OTOpenInternetServices(kDefaultInternetServicesPath, NULL, &err);
 #endif
-	gInetSvcRef = OTOpenInternetServices(kDefaultInternetServicesPath, NULL, &err);
-	if ( gInetSvcRef == NULL ||  err != kOTNoError )
-	{
-		OTAssert("Could not open Inet Services", err == noErr);
-		return FALSE ;
-	}
-  return TRUE;
+    if ( gInetSvcRef == NULL ||  err != kOTNoError )
+    {
+	OTAssert("Could not open Inet Services", err == noErr);
+	return FALSE ;
+    }
+    return TRUE;
 }
 
 void GSocket_Cleanup()
