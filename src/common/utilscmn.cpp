@@ -1071,17 +1071,6 @@ void wxEnableTopLevelWindows(bool enable)
 
 wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip)
 {
-#ifdef __WXMSW__
-#ifdef __WIN32__
-    // and the top level window too
-    HWND hwndFG = ::GetForegroundWindow();
-    m_winTop = hwndFG ? wxFindWinFromHandle((WXHWND)hwndFG) : (wxWindow *)NULL;
-#else
-    HWND hwndFG = ::GetTopWindow(0);
-    m_winTop = hwndFG ? wxFindWinFromHandle((WXHWND)hwndFG) : (wxWindow *)NULL;
-#endif
-#endif // MSW
-
     // remember the top level windows which were already disabled, so that we
     // don't reenable them later
     m_winDisabled = NULL;
@@ -1123,29 +1112,6 @@ wxWindowDisabler::~wxWindowDisabler()
     }
 
     delete m_winDisabled;
-
-#ifdef __WXMSW__
-#ifdef __WIN32__
-    if ( m_winTop )
-    {
-        if ( !::SetForegroundWindow(GetHwndOf(m_winTop)) )
-        {
-            wxLogLastError(wxT("SetForegroundWindow"));
-        }
-    }
-#else
-    if ( m_winTop )
-    {
-        // 16-bit SetForegroundWindow() replacement
-        RECT reWin;
-        GetWindowRect((HWND) m_winTop, &reWin);
-        SetWindowPos ((HWND) m_winTop, HWND_TOP,
-                             reWin.left, reWin.top, 
-                             reWin.right - reWin.left, reWin.bottom, 
-                             SWP_SHOWWINDOW);
-    }
-#endif
-#endif // MSW
 }
 
 // Yield to other apps/messages and disable user input to all windows except

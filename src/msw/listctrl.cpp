@@ -1737,7 +1737,6 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     wxRect itemRect;
     int cy=0;
 
-    int lastH = 0;
     int itemCount = GetItemCount();
     int i;
     for (i = 0; i < itemCount; i++)

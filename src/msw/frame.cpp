@@ -147,13 +147,6 @@ bool wxFrame::Create(wxWindow *parent,
 
   m_iconized = FALSE;
 
-  // we pass NULL as parent to MSWCreate because frames with parents behave
-  // very strangely under Win95 shell
-  // Alteration by JACS: keep normal Windows behaviour (float on top of parent)
-  // with this style.
-  if ((m_windowStyle & wxFRAME_FLOAT_ON_PARENT) == 0)
-    parent = NULL;
-
   wxTopLevelWindows.Append(this);
 
   MSWCreate(m_windowId, parent, wxFrameClassName, this, title,
@@ -672,9 +665,14 @@ bool wxFrame::MSWCreate(int id, wxWindow *parent, const wxChar *wclass, wxWindow
 
   WXDWORD extendedStyle = MakeExtendedStyle(style);
 
+  // make all frames appear in the win9x shell taskbar unless
+  // wxFRAME_TOOL_WINDOW is explicitly given - without giving them
+  // WS_EX_APPWINDOW style, the child (i.e. owned) frames wouldn't appear in it
 #if !defined(__WIN16__) && !defined(__SC__)
   if (style & wxFRAME_TOOL_WINDOW)
-    extendedStyle |= WS_EX_TOOLWINDOW;
+      extendedStyle |= WS_EX_TOOLWINDOW;
+  else
+      extendedStyle |= WS_EX_APPWINDOW;
 #endif
 
   if (style & wxSTAY_ON_TOP)

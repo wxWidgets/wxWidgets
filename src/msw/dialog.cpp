@@ -96,10 +96,13 @@ END_EVENT_TABLE()
 // wxDialog construction
 // ----------------------------------------------------------------------------
 
-wxDialog::wxDialog()
+void wxDialog::Init()
 {
     m_oldFocus = (wxWindow *)NULL;
+
     m_isShown = FALSE;
+
+    m_windowDisabler = (wxWindowDisabler *)NULL;
 
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
 }
@@ -111,9 +114,10 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
                       long style,
                       const wxString& name)
 {
+    Init();
+
     m_oldFocus = FindFocus();
 
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
     SetName(name);
 
     wxTopLevelWindows.Append(this);
@@ -138,8 +142,6 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
         y = wxDIALOG_DEFAULT_Y;
 
     m_windowStyle = style;
-
-    m_isShown = FALSE;
 
     if (width < 0)
         width = wxDIALOG_DEFAULT_WIDTH;
@@ -212,8 +214,7 @@ wxDialog::~wxDialog()
 
     wxTopLevelWindows.DeleteObject(this);
 
-    // this will call BringWindowToTop() if necessary to bring back our parent
-    // window to top
+    // this will also reenable all the other windows for a modal dialog
     Show(FALSE);
 
     if ( !IsModal() )
@@ -342,34 +343,34 @@ void wxDialog::DoShowModal()
     if (oldFocus)
         hwndOldFocus = (HWND) oldFocus->GetHWND();
 
-    // inside this block, all app windows are disabled
+    // remember where the focus was
+    if ( !oldFocus )
     {
-        wxWindowDisabler wd(this);
-
-        // remember where the focus was
-        if ( !oldFocus )
-        {
-            oldFocus = parent;
-            if (parent)
-                hwndOldFocus = (HWND) parent->GetHWND();
-        }
-
-        // enter the modal loop
-        while ( IsModalShowing() )
-        {
-#if wxUSE_THREADS
-            wxMutexGuiLeaveOrEnter();
-#endif // wxUSE_THREADS
-
-            while ( !wxTheApp->Pending() && wxTheApp->ProcessIdle() )
-                ;
-
-            // a message came or no more idle processing to do
-            wxTheApp->DoMessage();
-        }
+        oldFocus = parent;
+        if ( parent )
+            hwndOldFocus = GetHwndOf(parent);
     }
 
-#ifdef __WIN32__
+    // disable all other app windows
+    wxASSERT_MSG( !m_windowDisabler, _T("disabling windows twice?") );
+
+    m_windowDisabler = new wxWindowDisabler(this);
+
+    // enter the modal loop
+    while ( IsModalShowing() )
+    {
+#if wxUSE_THREADS
+        wxMutexGuiLeaveOrEnter();
+#endif // wxUSE_THREADS
+
+        while ( !wxTheApp->Pending() && wxTheApp->ProcessIdle() )
+            ;
+
+        // a message came or no more idle processing to do
+        wxTheApp->DoMessage();
+    }
+
+#if 0 //def __WIN32__
     if ( parent )
         ::SetActiveWindow(GetHwndOf(parent));
 #endif // __WIN32__
@@ -388,16 +389,15 @@ void wxDialog::DoShowModal()
 
 bool wxDialog::Show(bool show)
 {
-    // The following is required when the parent has been disabled, (modal
-    // dialogs, or modeless dialogs with disabling such as wxProgressDialog).
-    // Otherwise the parent disappears behind other windows when the dialog is
-    // hidden.
     if ( !show )
     {
-        wxWindow *parent = GetParent();
-        if ( parent )
+        // if we had disabled other app windows, reenable them back now because
+        // if they stay disabled Windows will activate another window (one
+        // which is enabled, anyhow) and we will lose activation
+        if ( m_windowDisabler )
         {
-            ::BringWindowToTop(GetHwndOf(parent));
+            delete m_windowDisabler;
+            m_windowDisabler = NULL;
         }
     }
 
@@ -552,6 +552,7 @@ long wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 
     switch ( message )
     {
+#if 0 // now that we got owner window right it doesn't seem to be needed
         case WM_ACTIVATE:
             switch ( LOWORD(wParam) )
             {
@@ -578,6 +579,7 @@ long wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                     // fall through to process it normally as well
             }
             break;
+#endif // 0
 
         case WM_CLOSE:
             // if we can't close, tell the system that we processed the

@@ -919,8 +919,8 @@ enum wxStretch
 #define wxDIALOG_MODAL          0x0020
 #define wxDIALOG_MODELESS       0x0000
 
-// Add for normal Windows frame behaviour
-#define wxFRAME_FLOAT_ON_PARENT 0x0020
+// deprecated flag, don't use any more, defined for compatibility only
+#define wxFRAME_FLOAT_ON_PARENT 0
 
 // Context-sensitive help
 #define wxFRAME_EX_CONTEXTHELP  0x00000004

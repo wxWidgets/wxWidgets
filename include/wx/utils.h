@@ -305,10 +305,6 @@ public:
 
 private:
     wxWindowList *m_winDisabled;
-
-#ifdef __WXMSW__
-    wxWindow *m_winTop;
-#endif // MSW
 };
 
 // ----------------------------------------------------------------------------
