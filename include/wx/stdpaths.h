@@ -84,8 +84,8 @@ protected:
 
 #if defined(__WXMSW__)
     #include "wx/msw/stdpaths.h"
-#elif defined(__WXMAC_OSX__) || defined(__WXCOCOA__)
-    #include "wx/mac/stdpaths.h"
+#elif defined(__WXMAC__) || defined(__WXCOCOA__)
+    #include "wx/mac/corefoundation/stdpaths.h"
 #elif defined(__UNIX__)
     #include "wx/unix/stdpaths.h"
 #endif
