@@ -67,6 +67,7 @@ public:
 
     void OnMouseEvent(wxMouseEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
+    void OnEraseBackground(wxEraseEvent& event);
 
     void SetFocus() {}
 

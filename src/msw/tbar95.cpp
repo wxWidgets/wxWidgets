@@ -124,6 +124,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
 BEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
     EVT_MOUSE_EVENTS(wxToolBar::OnMouseEvent)
     EVT_SYS_COLOUR_CHANGED(wxToolBar::OnSysColourChanged)
+    EVT_ERASE_BACKGROUND(wxToolBar::OnEraseBackground)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -1224,6 +1225,40 @@ void wxToolBar::OnMouseEvent(wxMouseEvent& event)
     {
         event.Skip();
     }
+}
+
+// This handler is required to allow the toolbar to be set to a non-default
+// colour: for example, when it must blend in with a notebook page.
+void wxToolBar::OnEraseBackground(wxEraseEvent& event)
+{
+    wxColour bgCol = GetBackgroundColour();
+    if (!bgCol.Ok())
+    {
+        event.Skip();
+        return;
+    }
+    
+    // notice that this 'dumb' implementation may cause flicker for some of the
+    // controls in which case they should intercept wxEraseEvent and process it
+    // themselves somehow
+
+    RECT rect;
+    ::GetClientRect(GetHwnd(), &rect);
+
+    HBRUSH hBrush = ::CreateSolidBrush(wxColourToRGB(bgCol));
+
+    HDC hdc = GetHdcOf((*event.GetDC()));
+
+#ifndef __WXWINCE__
+    int mode = ::SetMapMode(hdc, MM_TEXT);
+#endif
+
+    ::FillRect(hdc, &rect, hBrush);
+    ::DeleteObject(hBrush);
+
+#ifndef __WXWINCE__
+    ::SetMapMode(hdc, mode);
+#endif
 }
 
 bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
