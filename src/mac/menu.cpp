@@ -836,11 +836,13 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 
     m_titles.Insert(title, pos);
 
-    menu->Attach(this);
+    Str255 label ;
+		wxMenuItem::MacBuildMenuString( label, NULL , NULL , title , false );
+		UMASetMenuTitle( MAC_WXHMENU(menu->GetHMenu()) , label ) ;
 
     if ( IsAttached() )
     {
-    	if ( pos == (size_t) -1 )
+    	if ( pos == (size_t) -1  || pos + 1 == m_menus.GetCount() )
 		{
 			::InsertMenu( MAC_WXHMENU(menu->GetHMenu()) , 0 ) ;
 		}
@@ -946,13 +948,17 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
         return FALSE;
 
     m_titles.Add(title);
+    
+    Str255 label ;
+		wxMenuItem::MacBuildMenuString( label, NULL , NULL , title , false );
+		UMASetMenuTitle( MAC_WXHMENU(menu->GetHMenu()) , label ) ;
 
     if ( IsAttached() )
     {
-		if (s_macInstalledMenuBar == this)
-		{
-			::InsertMenu( MAC_WXHMENU(menu->GetHMenu()) , 0 ) ;
-		}
+    		if (s_macInstalledMenuBar == this)
+    		{
+    			::InsertMenu( MAC_WXHMENU(menu->GetHMenu()) , 0 ) ;
+    		}
 
 #if wxUSE_ACCEL
         if ( menu->HasAccels() )
