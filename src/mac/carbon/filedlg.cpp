@@ -105,6 +105,14 @@ NavEventProc(
             if (noErr == ::AECreateDesc(typeFSS, &theFSSpec, sizeof(FSSpec), &theLocation))
                 ::NavCustomControl(ioParams->context, kNavCtlSetLocation, (void *) &theLocation);
         }
+
+        NavMenuItemSpec  menuItem;
+        menuItem.version = kNavMenuItemSpecVersion;
+        menuItem.menuCreator = 'WXNG';
+        menuItem.menuType = data->currentfilter;
+        wxMacStringToPascal( data->name[data->currentfilter] , (StringPtr)(menuItem.menuItemName) ) ;
+        ::NavCustomControl(ioParams->context, kNavCtlSelectCustomType, &menuItem);
+
 #else
         if ( data->menuitems )
             NavCustomControl(ioParams->context, kNavCtlSelectCustomType, &(*data->menuitems)[data->currentfilter]);
@@ -114,6 +122,9 @@ NavEventProc(
     {
         NavMenuItemSpec * menu = (NavMenuItemSpec *) ioParams->eventData.eventDataParms.param ;
 #if TARGET_CARBON
+        const size_t numFilters = data->extensions.GetCount();
+
+        if ( menu->menuType < numFilters )
 #else
         if ( menu->menuCreator == 'WXNG' )
 #endif
@@ -369,9 +380,29 @@ int wxFileDialog::ShowModal()
     OpenUserDataRec myData;
     myData.defaultLocation = m_dir;
 
+    MakeUserDataRec(&myData , m_wildCard);
+    myData.currentfilter = m_filterIndex;
+    size_t numFilters = myData.extensions.GetCount();
+    if (numFilters)
+    {
+        CFMutableArrayRef popup = CFArrayCreateMutable( kCFAllocatorDefault ,
+            numFilters , &kCFTypeArrayCallBacks ) ;
+        dialogCreateOptions.popupExtension = popup ;
+        myData.menuitems = dialogCreateOptions.popupExtension ;
+        for ( size_t i = 0 ; i < numFilters ; ++i )
+        {
+            CFArrayAppendValue( popup , (CFStringRef) wxMacCFStringHolder( myData.name[i] , m_font.GetEncoding() ) ) ;
+        }
+    }
+
     if (m_dialogStyle & wxSAVE)
     {
-        dialogCreateOptions.optionFlags |= kNavNoTypePopup;
+        myData.saveMode = true;
+
+        if (!numFilters)
+        {
+            dialogCreateOptions.optionFlags |= kNavNoTypePopup;
+        }
         dialogCreateOptions.optionFlags |= kNavDontAutoTranslate;
         dialogCreateOptions.optionFlags |= kNavDontAddTranslateItems;
 
@@ -379,28 +410,14 @@ int wxFileDialog::ShowModal()
         dialogCreateOptions.optionFlags |= kNavPreserveSaveFileExtension;
 
         err = ::NavCreatePutFileDialog(&dialogCreateOptions,
-                                       'TEXT',
-                                       'TEXT',
+                                       // Suppresses the 'Default' (top) menu item
+                                       kNavGenericSignature, kNavGenericSignature,
                                        sStandardNavEventFilter,
                                        &myData, // for defaultLocation
                                        &dialog);
     }
     else
     {
-        MakeUserDataRec(&myData , m_wildCard);
-        size_t numfilters = myData.extensions.GetCount();
-        if (numfilters > 0)
-        {
-            CFMutableArrayRef popup = CFArrayCreateMutable( kCFAllocatorDefault ,
-                numfilters , &kCFTypeArrayCallBacks ) ;
-            dialogCreateOptions.popupExtension = popup ;
-            myData.menuitems = dialogCreateOptions.popupExtension ;
-            for ( size_t i = 0 ; i < numfilters ; ++i )
-            {
-                CFArrayAppendValue( popup , (CFStringRef) wxMacCFStringHolder( myData.name[i] , m_font.GetEncoding() ) ) ;
-            }
-        }
-
         navFilterUPP = NewNavObjectFilterUPP(CrossPlatformFilterCallback);
         err = ::NavCreateGetFileDialog(&dialogCreateOptions,
                                        NULL, // NavTypeListHandle
@@ -432,6 +449,9 @@ int wxFileDialog::ShowModal()
         Size        actualSize;
         FSRef       theFSRef;
         wxString thePath ;
+
+        m_filterIndex = myData.currentfilter ;
+
         long count;
         ::AECountItems(&navReply.selection , &count);
         for (long i = 1; i <= count; ++i)
