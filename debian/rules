@@ -633,11 +633,22 @@ install-msw-dev: build-msw-shared-stamp build-msw-static-stamp
 	dh_installdirs
 	dh_install $(objdir_msw_shared)/lib/*.dll*		     usr/$(cross_host)/lib
 	dh_install $(objdir_msw_shared)/lib/wx/include		     usr/$(cross_host)/lib/wx
-	dh_install $(objdir_msw_shared)/lib/wx/config/$(cross_host)* usr/lib/wx/config
+	dh_install $(objdir_msw_shared)/lib/wx/config/$(cross_host)* usr/$(cross_host)/lib/wx/config
 	dh_install $(objdir_msw_static)/lib/*.a			     usr/$(cross_host)/lib
 	dh_install $(objdir_msw_static)/lib/wx/include		     usr/$(cross_host)/lib/wx
-	dh_install $(objdir_msw_static)/lib/wx/config/$(cross_host)* usr/lib/wx/config
+	dh_install $(objdir_msw_static)/lib/wx/config/$(cross_host)* usr/$(cross_host)/lib/wx/config
 	$(cross_host)-strip --strip-debug debian/$(package_msw_dev)/usr/$(cross_host)/lib/*.a
+
+	@# As a special case for the cross packages, we link their config
+	@# under /usr as well as under the normal cross prefix.  This way
+	@# --prefix=/usr/$(cross_host) and --prefix=/usr --host=$(cross_host)
+	@# will have a congruent effect on wx-config.
+	@( for f in `ls -1 debian/$(package_msw_dev)/usr/$(cross_host)/lib/wx/config`; do \
+	      all_cfg="$${all_cfg} usr/$(cross_host)/lib/wx/config/$$f usr/lib/wx/config/$$f"; \
+	      echo "linking cross config /usr/$(cross_host)/lib/wx/config/$$f"; \
+	   done;                                                                \
+	   dh_link $${all_cfg};                                                 \
+	 )
 
 install-msw-dbg: DH_OPTIONS=-p$(package_msw_dbg)
 install-msw-dbg: build-msw-dbg-stamp
@@ -647,9 +658,16 @@ install-msw-dbg: build-msw-dbg-stamp
 	dh_installdirs
 	dh_install $(objdir_msw_dbg)/lib/*.dll*			  usr/$(cross_host)/lib
 	dh_install $(objdir_msw_dbg)/lib/wx/include		  usr/$(cross_host)/lib/wx
-	dh_install $(objdir_msw_dbg)/lib/wx/config/$(cross_host)* usr/lib/wx/config
+	dh_install $(objdir_msw_dbg)/lib/wx/config/$(cross_host)* usr/$(cross_host)/lib/wx/config
 	# No static lib, they're freakin' huge!
 	#$(cross_host)-strip --strip-debug debian/$(package_msw_dbg)/usr/$(cross_host)/lib/*.a
+
+	@( for f in `ls -1 debian/$(package_msw_dbg)/usr/$(cross_host)/lib/wx/config`; do \
+	      all_cfg="$${all_cfg} usr/$(cross_host)/lib/wx/config/$$f usr/lib/wx/config/$$f"; \
+	      echo "linking cross config /usr/$(cross_host)/lib/wx/config/$$f"; \
+	   done;                                                                \
+	   dh_link $${all_cfg};                                                 \
+	 )
 
 install-headers-msw: DH_OPTIONS=-p$(package_headers_msw)
 install-headers-msw:
@@ -665,7 +683,7 @@ install-headers-msw:
 	@# Symlink all the headers that will be installed by the main -headers
 	@# package to where the cross compiler will expect them.
 	@( for f in `ls -1 include/wx`; do                             \
-	      all_h="$${all_h} /usr/include/wx-$(release)/wx/$$f usr/$(cross_host)/include/wx-$(release)/wx/$$f"; \
+	      all_h="$${all_h} usr/include/wx-$(release)/wx/$$f usr/$(cross_host)/include/wx-$(release)/wx/$$f"; \
 	      echo "linking header /usr/include/wx-$(release)/wx/$$f"; \
 	   done;                                                       \
 	   dh_link $${all_h};                                          \

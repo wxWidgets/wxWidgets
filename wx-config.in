@@ -311,7 +311,7 @@ get_mask()
 
 # Determine the base directories we require.
 prefix=${input_option_prefix-${this_prefix:-@prefix@}}
-exec_prefix=${input_option_exec_prefix-${input_option_prefix-${this_exec_prefix:-@exec_prefix@}}}
+exec_prefix=${input_option_exec_prefix-${input_option_prefix-@exec_prefix@}}
 wxconfdir="@libdir@/wx/config"
 
 installed_configs=$( cd "$wxconfdir" 2> /dev/null && ls | grep -v "^inplace-" )
@@ -703,14 +703,12 @@ fi
 
 [ -z "$WXDEBUG" ] || decho "  using this config"
 
-if [ -n "$flag_option_inplace" ]; then
-    # If the user supplied a prefix, then the in tree config did not
-    # delegate out to anything in the user supplied prefix so reset
-    # the prefixes back to provide the correct compile options for
-    # this uninstalled wx build.
-    prefix=$this_prefix
-    exec_prefix=$this_exec_prefix
-fi
+# If the user supplied a prefix, and the in tree config did not
+# delegate out to anything in that prefix, then reset the build
+# tree prefix to provide the correct output for using this
+# uninstalled wx build.  Or put more simply:
+prefix=${this_prefix-$prefix}
+exec_prefix=${this_prefix-$exec_prefix}
 
 includedir="@includedir@"
 libdir="@libdir@"
@@ -883,36 +881,15 @@ fi
 # Endgame.  Nothing left to discover now.
 # --------------------------------------------------------------
 
-# cppflags
-# This function exists for no other reason than to make conditional
-# something that we may not use on several occasions.  It outputs
-# the basic cppflags determined from information gleaned above.
-# Nothing below here will change what it outputs, only whether it
-# does or not.
-cppflags()
-{
-    _cppflags="-I${libdir}/wx/include/@TOOLCHAIN_FULLNAME@"
+[ -n "$this_linkage"   ] || _static_cppflags="@TOOLCHAIN_DLL_DEFS@"
+[ "$using_gui" = "yes" ] || _gui_cppflags="-DwxUSE_GUI=0"
 
-    if [ -n "$flag_option_inplace" ]; then
-        # Bring in all the headers as if the whole tree had been installed.
-        _cppflags="$_cppflags -I$includedir -I${prefix}/contrib/include"
-    else
-        _cppflags="$_cppflags -I${includedir}/wx-@WX_RELEASE@@WX_FLAVOUR@"
-    fi
-
-    _cppflags="$_cppflags @WXDEBUG_DEFINE@ @TOOLCHAIN_DEFS@"
-
-    [ -n "$this_linkage"   ] || _cppflags="$_cppflags @TOOLCHAIN_DLL_DEFS@"
-    [ "$using_gui" = "yes" ] || _cppflags="$_cppflags -DwxUSE_GUI=0"
-
-    echo $_cppflags "@WXCONFIG_INCLUDE@" "@WX_LARGEFILE_FLAGS@" "@GCC_PRAGMA_FLAGS@"
-}
-
+_cppflags=$(echo "-I${libdir}/wx/include/@TOOLCHAIN_FULLNAME@ -I${includedir}/wx-@WX_RELEASE@@WX_FLAVOUR@" "@WXDEBUG_DEFINE@" "@TOOLCHAIN_DEFS@" $_static_cppflags $_gui_cppflags "@WXCONFIG_INCLUDE@" "@WX_LARGEFILE_FLAGS@" "@GCC_PRAGMA_FLAGS@")  
 
 # now without further ado, we can answer these too.
-[ -z "$output_option_cppflags" ] || echo $(cppflags)
-[ -z "$output_option_cflags"   ] || echo $(cppflags) "@CODE_GEN_FLAGS@"
-[ -z "$output_option_cxxflags" ] || echo $(cppflags) "@CODE_GEN_FLAGS@" "@CODE_GEN_FLAGS_CXX@"
+[ -z "$output_option_cppflags" ] || echo $_cppflags
+[ -z "$output_option_cflags"   ] || echo $_cppflags "@CODE_GEN_FLAGS@"
+[ -z "$output_option_cxxflags" ] || echo $_cppflags "@CODE_GEN_FLAGS@" "@CODE_GEN_FLAGS_CXX@"
 [ -z "$output_option_gl_libs"  ] || echo $(lib_flags_for gl)
 
 if [ -n "$output_option_libs" ]; then
