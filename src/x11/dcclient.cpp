@@ -2046,13 +2046,14 @@ wxClientDC::wxClientDC( wxWindow *window )
     
     m_window = (WXWindow*) window->GetClientAreaWindow();
     
-#if wxUSE_TWO_WINDOWS
-#else
+    // Adjust the client area when the wxWindow is not using 2 X windows.
+    if (m_window == (WXWindow*) window->GetMainWindow())
+    {
         wxPoint ptOrigin = window->GetClientAreaOrigin();
         SetDeviceOrigin(ptOrigin.x, ptOrigin.y);
         wxSize size = window->GetClientSize();
         SetClippingRegion(wxPoint(0, 0), size);
-#endif
+    }
 }
 
 void wxClientDC::DoGetSize(int *width, int *height) const
