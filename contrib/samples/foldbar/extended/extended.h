@@ -15,13 +15,13 @@ wxMenuBar *CreateMenuBar(bool with_window);
 
 enum
 {
-	ID_COLLAPSEME = 10000,
-	ID_APPLYTOALL,
-	ID_USE_HGRADIENT,
-	ID_USE_VGRADIENT,
-	ID_USE_SINGLE,
-	ID_USE_RECTANGLE,
-	ID_USE_FILLED_RECTANGLE
+    ID_COLLAPSEME = 10000,
+    ID_APPLYTOALL,
+    ID_USE_HGRADIENT,
+    ID_USE_VGRADIENT,
+    ID_USE_SINGLE,
+    ID_USE_RECTANGLE,
+    ID_USE_FILLED_RECTANGLE
 };
 
 // Define a new application
@@ -57,23 +57,23 @@ class MyFrame: public wxMDIParentFrame
     void OnCreateBottomStyle(wxCommandEvent& event);
     void OnCreateNormalStyle(wxCommandEvent& event);
 
-	void OnCollapseMe(wxCommandEvent &event);
-	void OnExpandMe(wxCommandEvent &event);
+    void OnCollapseMe(wxCommandEvent &event);
+    void OnExpandMe(wxCommandEvent &event);
 
-	void OnSlideColour(wxScrollEvent &event);
+    void OnSlideColour(wxScrollEvent &event);
 
-	void OnStyleChange(wxCommandEvent &event);
+    void OnStyleChange(wxCommandEvent &event);
 
 protected:
     wxSashLayoutWindow* m_leftWindow1;
 
 private:
-	void ReCreateFoldPanel(int fpb_flags);
-	wxFoldPanelBar *_pnl;
-	wxButton *_btn;
-	wxCheckBox *_single;
-	wxSlider *_rslider1, *_gslider1, *_bslider1, *_rslider2, *_gslider2, *_bslider2; 
-	int _flags;
+    void ReCreateFoldPanel(int fpb_flags);
+    wxFoldPanelBar *m_pnl;
+    wxButton *m_btn;
+    wxCheckBox *m_single;
+    wxSlider *m_rslider1, *m_gslider1, *m_bslider1, *m_rslider2, *m_gslider2, *m_bslider2;
+    int m_flags;
 
 DECLARE_EVENT_TABLE()
 };

@@ -28,9 +28,7 @@
 // ----------------------------------------------------------------------------
 
 // the application icon (under Windows and OS/2 it is in resources)
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
-    #include "mondrian.xpm"
-#endif
+#include "sample.xpm"
 
 // ----------------------------------------------------------------------------
 // MyApp Class
@@ -128,7 +126,7 @@ bool MyApp::OnInit()
 MyAppFrame::MyAppFrame(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
        : wxFrame(NULL, wxID_ANY, title, pos, size, style), m_pnl(NULL)
 {
-    SetIcon(wxICON(mondrian));
+    SetIcon(wxIcon(sample_xpm));
 
     SetMenuBar(CreateMenuBar());
 
