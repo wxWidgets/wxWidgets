@@ -391,6 +391,8 @@ SWIG_AsDouble(PyObject *obj)
 %typemap(out) wxHtmlWindow*             { $result = wxPyMake_wxObject($1); }
 %typemap(out) wxPyHtmlWindow*           { $result = wxPyMake_wxObject($1); }
 %typemap(out) wxWizardPage*             { $result = wxPyMake_wxObject($1); }
+%typemap(out) wxPanel*                  { $result = wxPyMake_wxObject($1); }
+%typemap(out) wxDialog*                 { $result = wxPyMake_wxObject($1); }
 
 %typemap(out) wxSizer*                  { $result = wxPyMake_wxSizer($1); }
 
