@@ -2026,6 +2026,30 @@ class Grid(_windows.ScrolledWindow):
         """GetGridCornerLabelWindow(self) -> Window"""
         return _grid.Grid_GetGridCornerLabelWindow(*args, **kwargs)
 
+    def SetScrollLineX(*args, **kwargs):
+        """SetScrollLineX(self, int x)"""
+        return _grid.Grid_SetScrollLineX(*args, **kwargs)
+
+    def SetScrollLineY(*args, **kwargs):
+        """SetScrollLineY(self, int y)"""
+        return _grid.Grid_SetScrollLineY(*args, **kwargs)
+
+    def GetScrollLineX(*args, **kwargs):
+        """GetScrollLineX(self) -> int"""
+        return _grid.Grid_GetScrollLineX(*args, **kwargs)
+
+    def GetScrollLineY(*args, **kwargs):
+        """GetScrollLineY(self) -> int"""
+        return _grid.Grid_GetScrollLineY(*args, **kwargs)
+
+    def GetScrollX(*args, **kwargs):
+        """GetScrollX(self, int x) -> int"""
+        return _grid.Grid_GetScrollX(*args, **kwargs)
+
+    def GetScrollY(*args, **kwargs):
+        """GetScrollY(self, int y) -> int"""
+        return _grid.Grid_GetScrollY(*args, **kwargs)
+
     def GetClassDefaultAttributes(*args, **kwargs):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes

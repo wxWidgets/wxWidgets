@@ -2612,7 +2612,7 @@ class TextEntryDialog(Dialog):
         """
         __init__(self, Window parent, String message, String caption=GetTextFromUserPromptStr, 
             String defaultValue=EmptyString, 
-            long style=wxOK|wxCANCEL|wxCENTRE, Point pos=DefaultPosition) -> TextEntryDialog
+            long style=wxTextEntryDialogStyle, Point pos=DefaultPosition) -> TextEntryDialog
 
         Constructor.  Use ShowModal method to show the dialog.
         """
@@ -2646,6 +2646,28 @@ class TextEntryDialogPtr(TextEntryDialog):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = TextEntryDialog
 _windows_.TextEntryDialog_swigregister(TextEntryDialogPtr)
+
+class PasswordEntryDialog(TextEntryDialog):
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxPasswordEntryDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, Window parent, String message, String caption=GetPasswordFromUserPromptStr, 
+            String value=EmptyString, 
+            long style=wxTextEntryDialogStyle, Point pos=DefaultPosition) -> PasswordEntryDialog
+        """
+        newobj = _windows_.new_PasswordEntryDialog(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+
+class PasswordEntryDialogPtr(PasswordEntryDialog):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = PasswordEntryDialog
+_windows_.PasswordEntryDialog_swigregister(PasswordEntryDialogPtr)
+GetPasswordFromUserPromptStr = cvar.GetPasswordFromUserPromptStr
 
 class FontData(_core.Object):
     """
@@ -3774,6 +3796,10 @@ class PrintData(_core.Object):
         """GetBin(self) -> int"""
         return _windows_.PrintData_GetBin(*args, **kwargs)
 
+    def GetPrintMode(*args, **kwargs):
+        """GetPrintMode(self) -> int"""
+        return _windows_.PrintData_GetPrintMode(*args, **kwargs)
+
     def SetNoCopies(*args, **kwargs):
         """SetNoCopies(self, int v)"""
         return _windows_.PrintData_SetNoCopies(*args, **kwargs)
@@ -3814,6 +3840,19 @@ class PrintData(_core.Object):
         """SetBin(self, int bin)"""
         return _windows_.PrintData_SetBin(*args, **kwargs)
 
+    def SetPrintMode(*args, **kwargs):
+        """SetPrintMode(self, int printMode)"""
+        return _windows_.PrintData_SetPrintMode(*args, **kwargs)
+
+    def GetFilename(*args, **kwargs):
+        """GetFilename(self) -> String"""
+        return _windows_.PrintData_GetFilename(*args, **kwargs)
+
+    def SetFilename(*args, **kwargs):
+        """SetFilename(self, String filename)"""
+        return _windows_.PrintData_SetFilename(*args, **kwargs)
+
+    def __nonzero__(self): return self.Ok() 
     def GetPrinterCommand(*args, **kwargs):
         """GetPrinterCommand(self) -> String"""
         return _windows_.PrintData_GetPrinterCommand(*args, **kwargs)
@@ -3825,10 +3864,6 @@ class PrintData(_core.Object):
     def GetPreviewCommand(*args, **kwargs):
         """GetPreviewCommand(self) -> String"""
         return _windows_.PrintData_GetPreviewCommand(*args, **kwargs)
-
-    def GetFilename(*args, **kwargs):
-        """GetFilename(self) -> String"""
-        return _windows_.PrintData_GetFilename(*args, **kwargs)
 
     def GetFontMetricPath(*args, **kwargs):
         """GetFontMetricPath(self) -> String"""
@@ -3850,10 +3885,6 @@ class PrintData(_core.Object):
         """GetPrinterTranslateY(self) -> long"""
         return _windows_.PrintData_GetPrinterTranslateY(*args, **kwargs)
 
-    def GetPrintMode(*args, **kwargs):
-        """GetPrintMode(self) -> int"""
-        return _windows_.PrintData_GetPrintMode(*args, **kwargs)
-
     def SetPrinterCommand(*args, **kwargs):
         """SetPrinterCommand(self, String command)"""
         return _windows_.PrintData_SetPrinterCommand(*args, **kwargs)
@@ -3865,10 +3896,6 @@ class PrintData(_core.Object):
     def SetPreviewCommand(*args, **kwargs):
         """SetPreviewCommand(self, String command)"""
         return _windows_.PrintData_SetPreviewCommand(*args, **kwargs)
-
-    def SetFilename(*args, **kwargs):
-        """SetFilename(self, String filename)"""
-        return _windows_.PrintData_SetFilename(*args, **kwargs)
 
     def SetFontMetricPath(*args, **kwargs):
         """SetFontMetricPath(self, String path)"""
@@ -3898,19 +3925,6 @@ class PrintData(_core.Object):
         """SetPrinterTranslation(self, long x, long y)"""
         return _windows_.PrintData_SetPrinterTranslation(*args, **kwargs)
 
-    def SetPrintMode(*args, **kwargs):
-        """SetPrintMode(self, int printMode)"""
-        return _windows_.PrintData_SetPrintMode(*args, **kwargs)
-
-    def GetOutputStream(*args, **kwargs):
-        """GetOutputStream(self) -> OutputStream"""
-        return _windows_.PrintData_GetOutputStream(*args, **kwargs)
-
-    def SetOutputStream(*args, **kwargs):
-        """SetOutputStream(self, OutputStream outputstream)"""
-        return _windows_.PrintData_SetOutputStream(*args, **kwargs)
-
-    def __nonzero__(self): return self.Ok() 
 
 class PrintDataPtr(PrintData):
     def __init__(self, this):
@@ -4149,6 +4163,10 @@ class PrintDialogData(_core.Object):
         """GetSetupDialog(self) -> bool"""
         return _windows_.PrintDialogData_GetSetupDialog(*args, **kwargs)
 
+    def SetSetupDialog(*args, **kwargs):
+        """SetSetupDialog(self, bool flag)"""
+        return _windows_.PrintDialogData_SetSetupDialog(*args, **kwargs)
+
     def SetFromPage(*args, **kwargs):
         """SetFromPage(self, int v)"""
         return _windows_.PrintDialogData_SetFromPage(*args, **kwargs)
@@ -4184,10 +4202,6 @@ class PrintDialogData(_core.Object):
     def SetPrintToFile(*args, **kwargs):
         """SetPrintToFile(self, bool flag)"""
         return _windows_.PrintDialogData_SetPrintToFile(*args, **kwargs)
-
-    def SetSetupDialog(*args, **kwargs):
-        """SetSetupDialog(self, bool flag)"""
-        return _windows_.PrintDialogData_SetSetupDialog(*args, **kwargs)
 
     def EnablePrintToFile(*args, **kwargs):
         """EnablePrintToFile(self, bool flag)"""
@@ -4253,17 +4267,21 @@ class PrintDialog(Dialog):
         del newobj.thisown
         self._setOORInfo(self)
 
+    def ShowModal(*args, **kwargs):
+        """ShowModal(self) -> int"""
+        return _windows_.PrintDialog_ShowModal(*args, **kwargs)
+
     def GetPrintDialogData(*args, **kwargs):
         """GetPrintDialogData(self) -> PrintDialogData"""
         return _windows_.PrintDialog_GetPrintDialogData(*args, **kwargs)
 
+    def GetPrintData(*args, **kwargs):
+        """GetPrintData(self) -> PrintData"""
+        return _windows_.PrintDialog_GetPrintData(*args, **kwargs)
+
     def GetPrintDC(*args, **kwargs):
         """GetPrintDC(self) -> DC"""
         return _windows_.PrintDialog_GetPrintDC(*args, **kwargs)
-
-    def ShowModal(*args, **kwargs):
-        """ShowModal(self) -> int"""
-        return _windows_.PrintDialog_ShowModal(*args, **kwargs)
 
 
 class PrintDialogPtr(PrintDialog):
@@ -4292,28 +4310,28 @@ class Printer(_core.Object):
         except: pass
 
     def CreateAbortWindow(*args, **kwargs):
-        """CreateAbortWindow(self, Window parent, Printout printout)"""
+        """CreateAbortWindow(self, Window parent, wxPrintout printout) -> Window"""
         return _windows_.Printer_CreateAbortWindow(*args, **kwargs)
 
-    def GetPrintDialogData(*args, **kwargs):
-        """GetPrintDialogData(self) -> PrintDialogData"""
-        return _windows_.Printer_GetPrintDialogData(*args, **kwargs)
+    def ReportError(*args, **kwargs):
+        """ReportError(self, Window parent, wxPrintout printout, String message)"""
+        return _windows_.Printer_ReportError(*args, **kwargs)
+
+    def Setup(*args, **kwargs):
+        """Setup(self, Window parent) -> bool"""
+        return _windows_.Printer_Setup(*args, **kwargs)
 
     def Print(*args, **kwargs):
-        """Print(self, Window parent, Printout printout, int prompt=True) -> bool"""
+        """Print(self, Window parent, wxPrintout printout, bool prompt=True) -> bool"""
         return _windows_.Printer_Print(*args, **kwargs)
 
     def PrintDialog(*args, **kwargs):
         """PrintDialog(self, Window parent) -> DC"""
         return _windows_.Printer_PrintDialog(*args, **kwargs)
 
-    def ReportError(*args, **kwargs):
-        """ReportError(self, Window parent, Printout printout, String message)"""
-        return _windows_.Printer_ReportError(*args, **kwargs)
-
-    def Setup(*args, **kwargs):
-        """Setup(self, Window parent) -> bool"""
-        return _windows_.Printer_Setup(*args, **kwargs)
+    def GetPrintDialogData(*args, **kwargs):
+        """GetPrintDialogData(self) -> PrintDialogData"""
+        return _windows_.Printer_GetPrintDialogData(*args, **kwargs)
 
     def GetAbort(*args, **kwargs):
         """GetAbort(self) -> bool"""
@@ -4820,5 +4838,116 @@ class PyPreviewControlBarPtr(PyPreviewControlBar):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = PyPreviewControlBar
 _windows_.PyPreviewControlBar_swigregister(PyPreviewControlBarPtr)
+
+class PrintFactory(object):
+    def __init__(self): raise RuntimeError, "No constructor defined"
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxPrintFactory instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def CreatePrinter(*args, **kwargs):
+        """CreatePrinter(self, PrintDialogData data) -> wxPrinterBase"""
+        return _windows_.PrintFactory_CreatePrinter(*args, **kwargs)
+
+    def CreatePrintPreview(*args):
+        """
+        CreatePrintPreview(self, wxPrintout preview, wxPrintout printout=None, PrintDialogData data=None) -> wxPrintPreviewBase
+        CreatePrintPreview(self, wxPrintout preview, wxPrintout printout, PrintData data) -> wxPrintPreviewBase
+        """
+        return _windows_.PrintFactory_CreatePrintPreview(*args)
+
+    def CreatePrintDialog(*args):
+        """
+        CreatePrintDialog(self, Window parent, PrintDialogData data=None) -> wxPrintDialogBase
+        CreatePrintDialog(self, Window parent, PrintData data) -> wxPrintDialogBase
+        """
+        return _windows_.PrintFactory_CreatePrintDialog(*args)
+
+    def HasPrintSetupDialog(*args, **kwargs):
+        """HasPrintSetupDialog(self) -> bool"""
+        return _windows_.PrintFactory_HasPrintSetupDialog(*args, **kwargs)
+
+    def CreatePrintSetupDialog(*args, **kwargs):
+        """CreatePrintSetupDialog(self, Window parent, PrintData data) -> Dialog"""
+        return _windows_.PrintFactory_CreatePrintSetupDialog(*args, **kwargs)
+
+    def HasOwnPrintToFile(*args, **kwargs):
+        """HasOwnPrintToFile(self) -> bool"""
+        return _windows_.PrintFactory_HasOwnPrintToFile(*args, **kwargs)
+
+    def HasPrinterLine(*args, **kwargs):
+        """HasPrinterLine(self) -> bool"""
+        return _windows_.PrintFactory_HasPrinterLine(*args, **kwargs)
+
+    def CreatePrinterLine(*args, **kwargs):
+        """CreatePrinterLine(self) -> String"""
+        return _windows_.PrintFactory_CreatePrinterLine(*args, **kwargs)
+
+    def HasStatusLine(*args, **kwargs):
+        """HasStatusLine(self) -> bool"""
+        return _windows_.PrintFactory_HasStatusLine(*args, **kwargs)
+
+    def CreateStatusLine(*args, **kwargs):
+        """CreateStatusLine(self) -> String"""
+        return _windows_.PrintFactory_CreateStatusLine(*args, **kwargs)
+
+    def CreatePrintNativeData(*args, **kwargs):
+        """CreatePrintNativeData(self) -> PrintNativeDataBase"""
+        return _windows_.PrintFactory_CreatePrintNativeData(*args, **kwargs)
+
+    def SetPrintFactory(*args, **kwargs):
+        """SetPrintFactory(PrintFactory factory)"""
+        return _windows_.PrintFactory_SetPrintFactory(*args, **kwargs)
+
+    SetPrintFactory = staticmethod(SetPrintFactory)
+    def GetFactory(*args, **kwargs):
+        """GetFactory() -> PrintFactory"""
+        return _windows_.PrintFactory_GetFactory(*args, **kwargs)
+
+    GetFactory = staticmethod(GetFactory)
+
+class PrintFactoryPtr(PrintFactory):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = PrintFactory
+_windows_.PrintFactory_swigregister(PrintFactoryPtr)
+
+def PrintFactory_SetPrintFactory(*args, **kwargs):
+    """PrintFactory_SetPrintFactory(PrintFactory factory)"""
+    return _windows_.PrintFactory_SetPrintFactory(*args, **kwargs)
+
+def PrintFactory_GetFactory(*args, **kwargs):
+    """PrintFactory_GetFactory() -> PrintFactory"""
+    return _windows_.PrintFactory_GetFactory(*args, **kwargs)
+
+class PrintNativeDataBase(_core.Object):
+    def __init__(self): raise RuntimeError, "No constructor defined"
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxPrintNativeDataBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __del__(self, destroy=_windows_.delete_PrintNativeDataBase):
+        """__del__(self)"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
+    def TransferTo(*args, **kwargs):
+        """TransferTo(self, PrintData data) -> bool"""
+        return _windows_.PrintNativeDataBase_TransferTo(*args, **kwargs)
+
+    def TransferFrom(*args, **kwargs):
+        """TransferFrom(self, PrintData data) -> bool"""
+        return _windows_.PrintNativeDataBase_TransferFrom(*args, **kwargs)
+
+    def Ok(*args, **kwargs):
+        """Ok(self) -> bool"""
+        return _windows_.PrintNativeDataBase_Ok(*args, **kwargs)
+
+    m_ref = property(_windows_.PrintNativeDataBase_m_ref_get, _windows_.PrintNativeDataBase_m_ref_set)
+
+class PrintNativeDataBasePtr(PrintNativeDataBase):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = PrintNativeDataBase
+_windows_.PrintNativeDataBase_swigregister(PrintNativeDataBasePtr)
 
 

@@ -3340,6 +3340,32 @@ static PyObject *_wrap_Bitmap_LoadFile(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
+static PyObject *_wrap_Bitmap_GetPalette(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxBitmap *arg1 = (wxBitmap *) 0 ;
+    wxPalette *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Bitmap_GetPalette",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxBitmap,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxPalette *)((wxBitmap const *)arg1)->GetPalette();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPalette, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Bitmap_CopyFromIcon(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxBitmap *arg1 = (wxBitmap *) 0 ;
@@ -18554,6 +18580,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Bitmap_GetSubBitmap", (PyCFunction) _wrap_Bitmap_GetSubBitmap, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Bitmap_SaveFile", (PyCFunction) _wrap_Bitmap_SaveFile, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Bitmap_LoadFile", (PyCFunction) _wrap_Bitmap_LoadFile, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Bitmap_GetPalette", (PyCFunction) _wrap_Bitmap_GetPalette, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Bitmap_CopyFromIcon", (PyCFunction) _wrap_Bitmap_CopyFromIcon, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Bitmap_SetHeight", (PyCFunction) _wrap_Bitmap_SetHeight, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Bitmap_SetWidth", (PyCFunction) _wrap_Bitmap_SetWidth, METH_VARARGS | METH_KEYWORDS, NULL },

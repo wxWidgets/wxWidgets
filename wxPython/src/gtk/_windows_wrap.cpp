@@ -211,91 +211,97 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxQueryLayoutInfoEvent swig_types[0] 
 #define  SWIGTYPE_p_wxPreviewFrame swig_types[1] 
 #define  SWIGTYPE_p_wxPyPreviewFrame swig_types[2] 
-#define  SWIGTYPE_p_wxPyPanel swig_types[3] 
-#define  SWIGTYPE_p_wxMenu swig_types[4] 
-#define  SWIGTYPE_p_wxFontData swig_types[5] 
-#define  SWIGTYPE_p_wxEvent swig_types[6] 
-#define  SWIGTYPE_p_wxPrintData swig_types[7] 
-#define  SWIGTYPE_p_wxTaskBarIcon swig_types[8] 
-#define  SWIGTYPE_p_wxPyTaskBarIcon swig_types[9] 
-#define  SWIGTYPE_p_wxIconBundle swig_types[10] 
-#define  SWIGTYPE_p_wxLayoutAlgorithm swig_types[11] 
-#define  SWIGTYPE_p_wxFindDialogEvent swig_types[12] 
-#define  SWIGTYPE_p_wxPreviewCanvas swig_types[13] 
-#define  SWIGTYPE_p_wxFont swig_types[14] 
-#define  SWIGTYPE_p_wxSplitterEvent swig_types[15] 
-#define  SWIGTYPE_p_wxRegion swig_types[16] 
-#define  SWIGTYPE_p_wxFindReplaceData swig_types[17] 
-#define  SWIGTYPE_p_int swig_types[18] 
-#define  SWIGTYPE_p_wxSize swig_types[19] 
-#define  SWIGTYPE_p_wxDC swig_types[20] 
-#define  SWIGTYPE_p_wxIcon swig_types[21] 
-#define  SWIGTYPE_p_wxVisualAttributes swig_types[22] 
-#define  SWIGTYPE_p_wxMDIChildFrame swig_types[23] 
-#define  SWIGTYPE_p_wxColourData swig_types[24] 
-#define  SWIGTYPE_p_wxNotifyEvent swig_types[25] 
-#define  SWIGTYPE_p_wxPyWindow swig_types[26] 
-#define  SWIGTYPE_p_wxSplashScreen swig_types[27] 
-#define  SWIGTYPE_p_wxFindReplaceDialog swig_types[28] 
-#define  SWIGTYPE_p_wxProgressDialog swig_types[29] 
-#define  SWIGTYPE_p_wxMessageDialog swig_types[30] 
-#define  SWIGTYPE_p_wxTextEntryDialog swig_types[31] 
-#define  SWIGTYPE_p_wxSingleChoiceDialog swig_types[32] 
-#define  SWIGTYPE_p_wxMultiChoiceDialog swig_types[33] 
-#define  SWIGTYPE_p_wxFileDialog swig_types[34] 
-#define  SWIGTYPE_p_wxPrinter swig_types[35] 
-#define  SWIGTYPE_p_wxArrayInt swig_types[36] 
-#define  SWIGTYPE_p_wxEvtHandler swig_types[37] 
-#define  SWIGTYPE_p_wxCalculateLayoutEvent swig_types[38] 
-#define  SWIGTYPE_p_wxPyHtmlListBox swig_types[39] 
-#define  SWIGTYPE_p_wxPyVListBox swig_types[40] 
-#define  SWIGTYPE_p_wxRect swig_types[41] 
-#define  SWIGTYPE_p_char swig_types[42] 
-#define  SWIGTYPE_p_wxMiniFrame swig_types[43] 
-#define  SWIGTYPE_p_wxFrame swig_types[44] 
-#define  SWIGTYPE_p_wxPyPrintout swig_types[45] 
-#define  SWIGTYPE_p_wxTaskBarIconEvent swig_types[46] 
-#define  SWIGTYPE_p_wxScrollWinEvent swig_types[47] 
-#define  SWIGTYPE_p_wxStatusBar swig_types[48] 
-#define  SWIGTYPE_p_wxMDIParentFrame swig_types[49] 
-#define  SWIGTYPE_p_wxPoint swig_types[50] 
-#define  SWIGTYPE_p_wxObject swig_types[51] 
-#define  SWIGTYPE_p_wxOutputStream swig_types[52] 
-#define  SWIGTYPE_p_wxMDIClientWindow swig_types[53] 
-#define  SWIGTYPE_p_wxTipWindow swig_types[54] 
-#define  SWIGTYPE_p_wxSashLayoutWindow swig_types[55] 
-#define  SWIGTYPE_p_wxSplitterWindow swig_types[56] 
-#define  SWIGTYPE_p_wxSplashScreenWindow swig_types[57] 
-#define  SWIGTYPE_p_wxPyVScrolledWindow swig_types[58] 
-#define  SWIGTYPE_p_wxPyPopupTransientWindow swig_types[59] 
-#define  SWIGTYPE_p_wxPopupWindow swig_types[60] 
-#define  SWIGTYPE_p_wxSashWindow swig_types[61] 
-#define  SWIGTYPE_p_wxTopLevelWindow swig_types[62] 
-#define  SWIGTYPE_p_wxWindow swig_types[63] 
-#define  SWIGTYPE_p_wxScrolledWindow swig_types[64] 
-#define  SWIGTYPE_p_wxMenuBar swig_types[65] 
-#define  SWIGTYPE_p_wxPyScrolledWindow swig_types[66] 
-#define  SWIGTYPE_p_wxPrintPreview swig_types[67] 
-#define  SWIGTYPE_p_wxSashEvent swig_types[68] 
-#define  SWIGTYPE_p_wxString swig_types[69] 
-#define  SWIGTYPE_p_wxPyPrintPreview swig_types[70] 
-#define  SWIGTYPE_p_wxFontDialog swig_types[71] 
-#define  SWIGTYPE_p_wxDirDialog swig_types[72] 
-#define  SWIGTYPE_p_wxColourDialog swig_types[73] 
-#define  SWIGTYPE_p_wxDialog swig_types[74] 
-#define  SWIGTYPE_p_wxPanel swig_types[75] 
-#define  SWIGTYPE_p_wxPageSetupDialog swig_types[76] 
-#define  SWIGTYPE_p_wxPrintDialog swig_types[77] 
-#define  SWIGTYPE_p_wxFileSystem swig_types[78] 
-#define  SWIGTYPE_p_wxBitmap swig_types[79] 
-#define  SWIGTYPE_p_wxCommandEvent swig_types[80] 
-#define  SWIGTYPE_p_wxPreviewControlBar swig_types[81] 
-#define  SWIGTYPE_p_wxPyPreviewControlBar swig_types[82] 
-#define  SWIGTYPE_p_wxColour swig_types[83] 
-#define  SWIGTYPE_p_wxToolBar swig_types[84] 
-#define  SWIGTYPE_p_wxPageSetupDialogData swig_types[85] 
-#define  SWIGTYPE_p_wxPrintDialogData swig_types[86] 
-static swig_type_info *swig_types[88];
+#define  SWIGTYPE_p_wxPrintDialogBase swig_types[3] 
+#define  SWIGTYPE_p_wxPrintFactory swig_types[4] 
+#define  SWIGTYPE_p_wxPyPanel swig_types[5] 
+#define  SWIGTYPE_p_wxMenu swig_types[6] 
+#define  SWIGTYPE_p_wxFontData swig_types[7] 
+#define  SWIGTYPE_p_wxEvent swig_types[8] 
+#define  SWIGTYPE_p_wxPrintData swig_types[9] 
+#define  SWIGTYPE_p_wxTaskBarIcon swig_types[10] 
+#define  SWIGTYPE_p_wxPyTaskBarIcon swig_types[11] 
+#define  SWIGTYPE_p_wxIconBundle swig_types[12] 
+#define  SWIGTYPE_p_wxLayoutAlgorithm swig_types[13] 
+#define  SWIGTYPE_p_wxFindDialogEvent swig_types[14] 
+#define  SWIGTYPE_p_wxPreviewCanvas swig_types[15] 
+#define  SWIGTYPE_p_wxFont swig_types[16] 
+#define  SWIGTYPE_p_wxSplitterEvent swig_types[17] 
+#define  SWIGTYPE_p_wxRegion swig_types[18] 
+#define  SWIGTYPE_p_wxFindReplaceData swig_types[19] 
+#define  SWIGTYPE_p_int swig_types[20] 
+#define  SWIGTYPE_p_wxSize swig_types[21] 
+#define  SWIGTYPE_p_wxDC swig_types[22] 
+#define  SWIGTYPE_p_wxIcon swig_types[23] 
+#define  SWIGTYPE_p_wxVisualAttributes swig_types[24] 
+#define  SWIGTYPE_p_wxMDIChildFrame swig_types[25] 
+#define  SWIGTYPE_p_wxColourData swig_types[26] 
+#define  SWIGTYPE_p_wxNotifyEvent swig_types[27] 
+#define  SWIGTYPE_p_wxPyWindow swig_types[28] 
+#define  SWIGTYPE_p_wxSplashScreen swig_types[29] 
+#define  SWIGTYPE_p_wxFindReplaceDialog swig_types[30] 
+#define  SWIGTYPE_p_wxProgressDialog swig_types[31] 
+#define  SWIGTYPE_p_wxMessageDialog swig_types[32] 
+#define  SWIGTYPE_p_wxPasswordEntryDialog swig_types[33] 
+#define  SWIGTYPE_p_wxSingleChoiceDialog swig_types[34] 
+#define  SWIGTYPE_p_wxMultiChoiceDialog swig_types[35] 
+#define  SWIGTYPE_p_wxFileDialog swig_types[36] 
+#define  SWIGTYPE_p_wxTextEntryDialog swig_types[37] 
+#define  SWIGTYPE_p_wxPrinter swig_types[38] 
+#define  SWIGTYPE_p_wxArrayInt swig_types[39] 
+#define  SWIGTYPE_p_wxEvtHandler swig_types[40] 
+#define  SWIGTYPE_p_wxCalculateLayoutEvent swig_types[41] 
+#define  SWIGTYPE_p_wxPyHtmlListBox swig_types[42] 
+#define  SWIGTYPE_p_wxPyVListBox swig_types[43] 
+#define  SWIGTYPE_p_wxRect swig_types[44] 
+#define  SWIGTYPE_p_char swig_types[45] 
+#define  SWIGTYPE_p_wxMiniFrame swig_types[46] 
+#define  SWIGTYPE_p_wxFrame swig_types[47] 
+#define  SWIGTYPE_p_wxPrintout swig_types[48] 
+#define  SWIGTYPE_p_wxPyPrintout swig_types[49] 
+#define  SWIGTYPE_p_wxTaskBarIconEvent swig_types[50] 
+#define  SWIGTYPE_p_wxScrollWinEvent swig_types[51] 
+#define  SWIGTYPE_p_wxStatusBar swig_types[52] 
+#define  SWIGTYPE_p_wxMDIParentFrame swig_types[53] 
+#define  SWIGTYPE_p_wxPoint swig_types[54] 
+#define  SWIGTYPE_p_wxPrintPreviewBase swig_types[55] 
+#define  SWIGTYPE_p_wxObject swig_types[56] 
+#define  SWIGTYPE_p_wxMDIClientWindow swig_types[57] 
+#define  SWIGTYPE_p_wxTipWindow swig_types[58] 
+#define  SWIGTYPE_p_wxSashLayoutWindow swig_types[59] 
+#define  SWIGTYPE_p_wxSplitterWindow swig_types[60] 
+#define  SWIGTYPE_p_wxSplashScreenWindow swig_types[61] 
+#define  SWIGTYPE_p_wxPyVScrolledWindow swig_types[62] 
+#define  SWIGTYPE_p_wxPyPopupTransientWindow swig_types[63] 
+#define  SWIGTYPE_p_wxPopupWindow swig_types[64] 
+#define  SWIGTYPE_p_wxSashWindow swig_types[65] 
+#define  SWIGTYPE_p_wxTopLevelWindow swig_types[66] 
+#define  SWIGTYPE_p_wxWindow swig_types[67] 
+#define  SWIGTYPE_p_wxScrolledWindow swig_types[68] 
+#define  SWIGTYPE_p_wxMenuBar swig_types[69] 
+#define  SWIGTYPE_p_wxPyScrolledWindow swig_types[70] 
+#define  SWIGTYPE_p_wxPrintPreview swig_types[71] 
+#define  SWIGTYPE_p_wxSashEvent swig_types[72] 
+#define  SWIGTYPE_p_wxString swig_types[73] 
+#define  SWIGTYPE_p_wxPyPrintPreview swig_types[74] 
+#define  SWIGTYPE_p_wxFontDialog swig_types[75] 
+#define  SWIGTYPE_p_wxDirDialog swig_types[76] 
+#define  SWIGTYPE_p_wxColourDialog swig_types[77] 
+#define  SWIGTYPE_p_wxDialog swig_types[78] 
+#define  SWIGTYPE_p_wxPanel swig_types[79] 
+#define  SWIGTYPE_p_wxPageSetupDialog swig_types[80] 
+#define  SWIGTYPE_p_wxPrintDialog swig_types[81] 
+#define  SWIGTYPE_p_wxFileSystem swig_types[82] 
+#define  SWIGTYPE_p_wxPrinterBase swig_types[83] 
+#define  SWIGTYPE_p_wxBitmap swig_types[84] 
+#define  SWIGTYPE_p_wxCommandEvent swig_types[85] 
+#define  SWIGTYPE_p_wxPreviewControlBar swig_types[86] 
+#define  SWIGTYPE_p_wxPyPreviewControlBar swig_types[87] 
+#define  SWIGTYPE_p_wxPrintNativeDataBase swig_types[88] 
+#define  SWIGTYPE_p_wxColour swig_types[89] 
+#define  SWIGTYPE_p_wxToolBar swig_types[90] 
+#define  SWIGTYPE_p_wxPageSetupDialogData swig_types[91] 
+#define  SWIGTYPE_p_wxPrintDialogData swig_types[92] 
+static swig_type_info *swig_types[94];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -1018,6 +1024,7 @@ wxSingleChoiceDialog *new_wxSingleChoiceDialog(wxWindow *parent,wxString const &
             return new wxSingleChoiceDialog(parent, message, caption,
                                             choices, choices_array, NULL, style, pos);
         }
+ static const wxString wxPyGetPasswordFromUserPromptStr(wxGetPasswordFromUserPromptStr); 
 
 #include <wx/mdi.h>
 
@@ -13196,7 +13203,7 @@ static PyObject *_wrap_new_TextEntryDialog(PyObject *, PyObject *args, PyObject 
     wxString *arg3 = (wxString *) &arg3_defvalue ;
     wxString const &arg4_defvalue = wxPyEmptyString ;
     wxString *arg4 = (wxString *) &arg4_defvalue ;
-    long arg5 = (long) wxOK|wxCANCEL|wxCENTRE ;
+    long arg5 = (long) wxTextEntryDialogStyle ;
     wxPoint const &arg6_defvalue = wxDefaultPosition ;
     wxPoint *arg6 = (wxPoint *) &arg6_defvalue ;
     wxTextEntryDialog *result;
@@ -13362,6 +13369,129 @@ static PyObject * TextEntryDialog_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxTextEntryDialog, obj);
+    Py_INCREF(obj);
+    return Py_BuildValue((char *)"");
+}
+static int _wrap_GetPasswordFromUserPromptStr_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable GetPasswordFromUserPromptStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_GetPasswordFromUserPromptStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyGetPasswordFromUserPromptStr)->c_str(), (&wxPyGetPasswordFromUserPromptStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyGetPasswordFromUserPromptStr)->c_str(), (&wxPyGetPasswordFromUserPromptStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static PyObject *_wrap_new_PasswordEntryDialog(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    wxString *arg2 = 0 ;
+    wxString const &arg3_defvalue = wxPyGetPasswordFromUserPromptStr ;
+    wxString *arg3 = (wxString *) &arg3_defvalue ;
+    wxString const &arg4_defvalue = wxPyEmptyString ;
+    wxString *arg4 = (wxString *) &arg4_defvalue ;
+    long arg5 = (long) wxTextEntryDialogStyle ;
+    wxPoint const &arg6_defvalue = wxDefaultPosition ;
+    wxPoint *arg6 = (wxPoint *) &arg6_defvalue ;
+    wxPasswordEntryDialog *result;
+    bool temp2 = false ;
+    bool temp3 = false ;
+    bool temp4 = false ;
+    wxPoint temp6 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    PyObject * obj5 = 0 ;
+    char *kwnames[] = {
+        (char *) "parent",(char *) "message",(char *) "caption",(char *) "value",(char *) "style",(char *) "pos", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOO:new_PasswordEntryDialog",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = true;
+    }
+    if (obj2) {
+        {
+            arg3 = wxString_in_helper(obj2);
+            if (arg3 == NULL) SWIG_fail;
+            temp3 = true;
+        }
+    }
+    if (obj3) {
+        {
+            arg4 = wxString_in_helper(obj3);
+            if (arg4 == NULL) SWIG_fail;
+            temp4 = true;
+        }
+    }
+    if (obj4) {
+        arg5 = (long)SWIG_As_long(obj4); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj5) {
+        {
+            arg6 = &temp6;
+            if ( ! wxPoint_helper(obj5, &arg6)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxPasswordEntryDialog *)new wxPasswordEntryDialog(arg1,(wxString const &)*arg2,(wxString const &)*arg3,(wxString const &)*arg4,arg5,(wxPoint const &)*arg6);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPasswordEntryDialog, 1);
+    {
+        if (temp2)
+        delete arg2;
+    }
+    {
+        if (temp3)
+        delete arg3;
+    }
+    {
+        if (temp4)
+        delete arg4;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
+    {
+        if (temp3)
+        delete arg3;
+    }
+    {
+        if (temp4)
+        delete arg4;
+    }
+    return NULL;
+}
+
+
+static PyObject * PasswordEntryDialog_swigregister(PyObject *, PyObject *args) {
+    PyObject *obj;
+    if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
+    SWIG_TypeClientData(SWIGTYPE_p_wxPasswordEntryDialog, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
@@ -18676,6 +18806,32 @@ static PyObject *_wrap_PrintData_GetBin(PyObject *, PyObject *args, PyObject *kw
 }
 
 
+static PyObject *_wrap_PrintData_GetPrintMode(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintData *arg1 = (wxPrintData *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintData_GetPrintMode",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintData,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)((wxPrintData const *)arg1)->GetPrintMode();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_From_int((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_PrintData_SetNoCopies(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPrintData *arg1 = (wxPrintData *) 0 ;
@@ -18981,6 +19137,108 @@ static PyObject *_wrap_PrintData_SetBin(PyObject *, PyObject *args, PyObject *kw
 }
 
 
+static PyObject *_wrap_PrintData_SetPrintMode(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintData *arg1 = (wxPrintData *) 0 ;
+    int arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "printMode", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintData_SetPrintMode",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintData,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (int)SWIG_As_int(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetPrintMode((wxPrintMode )arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintData_GetFilename(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintData *arg1 = (wxPrintData *) 0 ;
+    wxString result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintData_GetFilename",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintData,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxPrintData const *)arg1)->GetFilename();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintData_SetFilename(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintData *arg1 = (wxPrintData *) 0 ;
+    wxString *arg2 = 0 ;
+    bool temp2 = false ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "filename", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintData_SetFilename",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintData,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = true;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetFilename((wxString const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return NULL;
+}
+
+
 static PyObject *_wrap_PrintData_GetPrinterCommand(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPrintData *arg1 = (wxPrintData *) 0 ;
@@ -19067,41 +19325,6 @@ static PyObject *_wrap_PrintData_GetPreviewCommand(PyObject *, PyObject *args, P
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
             wxString const &_result_ref = (arg1)->GetPreviewCommand();
-            result = (wxString *) &_result_ref;
-        }
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-#if wxUSE_UNICODE
-        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
-#else
-        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
-#endif
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_GetFilename(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    wxString *result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintData_GetFilename",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintData,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        {
-            wxString const &_result_ref = (arg1)->GetFilename();
             result = (wxString *) &_result_ref;
         }
         
@@ -19260,32 +19483,6 @@ static PyObject *_wrap_PrintData_GetPrinterTranslateY(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_PrintData_GetPrintMode(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    int result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintData_GetPrintMode",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintData,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (int)(arg1)->GetPrintMode();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_From_int((int)result);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_PrintData_SetPrinterCommand(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPrintData *arg1 = (wxPrintData *) 0 ;
@@ -19390,47 +19587,6 @@ static PyObject *_wrap_PrintData_SetPreviewCommand(PyObject *, PyObject *args, P
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetPreviewCommand((wxString const &)*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    {
-        if (temp2)
-        delete arg2;
-    }
-    return resultobj;
-    fail:
-    {
-        if (temp2)
-        delete arg2;
-    }
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_SetFilename(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    wxString *arg2 = 0 ;
-    bool temp2 = false ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "filename", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintData_SetFilename",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintData,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    {
-        arg2 = wxString_in_helper(obj1);
-        if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetFilename((wxString const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19662,90 +19818,6 @@ static PyObject *_wrap_PrintData_SetPrinterTranslation(PyObject *, PyObject *arg
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetPrinterTranslation(arg2,arg3);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_SetPrintMode(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    int arg2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "printMode", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintData_SetPrintMode",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintData,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int)SWIG_As_int(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetPrintMode((wxPrintMode )arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_GetOutputStream(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    wxOutputStream *result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintData_GetOutputStream",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintData,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxOutputStream *)(arg1)->GetOutputStream();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxOutputStream, 0);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_SetOutputStream(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    wxOutputStream *arg2 = (wxOutputStream *) 0 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "outputstream", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintData_SetOutputStream",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintData,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxOutputStream,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetOutputStream(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -21201,6 +21273,35 @@ static PyObject *_wrap_PrintDialogData_GetSetupDialog(PyObject *, PyObject *args
 }
 
 
+static PyObject *_wrap_PrintDialogData_SetSetupDialog(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintDialogData *arg1 = (wxPrintDialogData *) 0 ;
+    bool arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "flag", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintDialogData_SetSetupDialog",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintDialogData,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (bool)SWIG_As_bool(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetSetupDialog(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_PrintDialogData_SetFromPage(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPrintDialogData *arg1 = (wxPrintDialogData *) 0 ;
@@ -21451,35 +21552,6 @@ static PyObject *_wrap_PrintDialogData_SetPrintToFile(PyObject *, PyObject *args
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetPrintToFile(arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintDialogData_SetSetupDialog(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintDialogData *arg1 = (wxPrintDialogData *) 0 ;
-    bool arg2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "flag", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintDialogData_SetSetupDialog",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintDialogData,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool)SWIG_As_bool(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetSetupDialog(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -21850,6 +21922,32 @@ static PyObject *_wrap_new_PrintDialog(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
+static PyObject *_wrap_PrintDialog_ShowModal(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintDialog *arg1 = (wxPrintDialog *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintDialog_ShowModal",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintDialog,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)(arg1)->ShowModal();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_From_int((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_PrintDialog_GetPrintDialogData(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPrintDialog *arg1 = (wxPrintDialog *) 0 ;
@@ -21879,6 +21977,35 @@ static PyObject *_wrap_PrintDialog_GetPrintDialogData(PyObject *, PyObject *args
 }
 
 
+static PyObject *_wrap_PrintDialog_GetPrintData(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintDialog *arg1 = (wxPrintDialog *) 0 ;
+    wxPrintData *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintDialog_GetPrintData",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintDialog,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        {
+            wxPrintData &_result_ref = (arg1)->GetPrintData();
+            result = (wxPrintData *) &_result_ref;
+        }
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPrintData, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_PrintDialog_GetPrintDC(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPrintDialog *arg1 = (wxPrintDialog *) 0 ;
@@ -21901,32 +22028,6 @@ static PyObject *_wrap_PrintDialog_GetPrintDC(PyObject *, PyObject *args, PyObje
     {
         resultobj = wxPyMake_wxObject(result, 1); 
     }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintDialog_ShowModal(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintDialog *arg1 = (wxPrintDialog *) 0 ;
-    int result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintDialog_ShowModal",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintDialog,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (int)(arg1)->ShowModal();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -21998,7 +22099,8 @@ static PyObject *_wrap_Printer_CreateAbortWindow(PyObject *, PyObject *args, PyO
     PyObject *resultobj;
     wxPrinter *arg1 = (wxPrinter *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxPyPrintout *arg3 = (wxPyPrintout *) 0 ;
+    wxPrintout *arg3 = (wxPrintout *) 0 ;
+    wxWindow *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -22011,112 +22113,11 @@ static PyObject *_wrap_Printer_CreateAbortWindow(PyObject *, PyObject *args, PyO
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxPyPrintout,
+    if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxPrintout,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->CreateAbortWindow(arg2,arg3);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_Printer_GetPrintDialogData(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrinter *arg1 = (wxPrinter *) 0 ;
-    wxPrintDialogData *result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Printer_GetPrintDialogData",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrinter,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        {
-            wxPrintDialogData &_result_ref = (arg1)->GetPrintDialogData();
-            result = (wxPrintDialogData *) &_result_ref;
-        }
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPrintDialogData, 0);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_Printer_Print(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrinter *arg1 = (wxPrinter *) 0 ;
-    wxWindow *arg2 = (wxWindow *) 0 ;
-    wxPyPrintout *arg3 = (wxPyPrintout *) 0 ;
-    int arg4 = (int) true ;
-    bool result;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
-    PyObject * obj3 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "parent",(char *) "printout",(char *) "prompt", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:Printer_Print",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrinter,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxPyPrintout,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    if (obj3) {
-        arg4 = (int)SWIG_As_int(obj3); 
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->Print(arg2,arg3,arg4);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_Printer_PrintDialog(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrinter *arg1 = (wxPrinter *) 0 ;
-    wxWindow *arg2 = (wxWindow *) 0 ;
-    wxDC *result;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "parent", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Printer_PrintDialog",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrinter,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxDC *)(arg1)->PrintDialog(arg2);
+        result = (wxWindow *)(arg1)->CreateAbortWindow(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -22134,7 +22135,7 @@ static PyObject *_wrap_Printer_ReportError(PyObject *, PyObject *args, PyObject 
     PyObject *resultobj;
     wxPrinter *arg1 = (wxPrinter *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    wxPyPrintout *arg3 = (wxPyPrintout *) 0 ;
+    wxPrintout *arg3 = (wxPrintout *) 0 ;
     wxString *arg4 = 0 ;
     bool temp4 = false ;
     PyObject * obj0 = 0 ;
@@ -22150,7 +22151,7 @@ static PyObject *_wrap_Printer_ReportError(PyObject *, PyObject *args, PyObject 
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxPyPrintout,
+    if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxPrintout,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         arg4 = wxString_in_helper(obj3);
@@ -22205,6 +22206,109 @@ static PyObject *_wrap_Printer_Setup(PyObject *, PyObject *args, PyObject *kwarg
     {
         resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Printer_Print(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrinter *arg1 = (wxPrinter *) 0 ;
+    wxWindow *arg2 = (wxWindow *) 0 ;
+    wxPrintout *arg3 = (wxPrintout *) 0 ;
+    bool arg4 = (bool) true ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "parent",(char *) "printout",(char *) "prompt", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:Printer_Print",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrinter,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxPrintout,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if (obj3) {
+        arg4 = (bool)SWIG_As_bool(obj3); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->Print(arg2,arg3,arg4);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Printer_PrintDialog(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrinter *arg1 = (wxPrinter *) 0 ;
+    wxWindow *arg2 = (wxWindow *) 0 ;
+    wxDC *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "parent", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Printer_PrintDialog",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrinter,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxDC *)(arg1)->PrintDialog(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = wxPyMake_wxObject(result, 0); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Printer_GetPrintDialogData(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrinter *arg1 = (wxPrinter *) 0 ;
+    wxPrintDialogData *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Printer_GetPrintDialogData",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrinter,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        {
+            wxPrintDialogData &_result_ref = ((wxPrinter const *)arg1)->GetPrintDialogData();
+            result = (wxPrintDialogData *) &_result_ref;
+        }
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPrintDialogData, 0);
     return resultobj;
     fail:
     return NULL;
@@ -25274,6 +25378,854 @@ static PyObject * PyPreviewControlBar_swigregister(PyObject *, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static PyObject *_wrap_PrintFactory_CreatePrinter(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintFactory *arg1 = (wxPrintFactory *) 0 ;
+    wxPrintDialogData *arg2 = (wxPrintDialogData *) 0 ;
+    wxPrinterBase *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "data", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintFactory_CreatePrinter",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintFactory,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxPrintDialogData,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxPrinterBase *)(arg1)->CreatePrinter(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPrinterBase, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintFactory_CreatePrintPreview__SWIG_0(PyObject *, PyObject *args) {
+    PyObject *resultobj;
+    wxPrintFactory *arg1 = (wxPrintFactory *) 0 ;
+    wxPrintout *arg2 = (wxPrintout *) 0 ;
+    wxPrintout *arg3 = (wxPrintout *) NULL ;
+    wxPrintDialogData *arg4 = (wxPrintDialogData *) NULL ;
+    wxPrintPreviewBase *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"OO|OO:PrintFactory_CreatePrintPreview",&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintFactory,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxPrintout,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if (obj2) {
+        if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxPrintout,
+        SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    }
+    if (obj3) {
+        if ((SWIG_ConvertPtr(obj3,(void **)(&arg4),SWIGTYPE_p_wxPrintDialogData,
+        SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxPrintPreviewBase *)(arg1)->CreatePrintPreview(arg2,arg3,arg4);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPrintPreviewBase, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintFactory_CreatePrintPreview__SWIG_1(PyObject *, PyObject *args) {
+    PyObject *resultobj;
+    wxPrintFactory *arg1 = (wxPrintFactory *) 0 ;
+    wxPrintout *arg2 = (wxPrintout *) 0 ;
+    wxPrintout *arg3 = (wxPrintout *) 0 ;
+    wxPrintData *arg4 = (wxPrintData *) 0 ;
+    wxPrintPreviewBase *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"OOOO:PrintFactory_CreatePrintPreview",&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintFactory,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxPrintout,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxPrintout,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj3,(void **)(&arg4),SWIGTYPE_p_wxPrintData,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxPrintPreviewBase *)(arg1)->CreatePrintPreview(arg2,arg3,arg4);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPrintPreviewBase, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintFactory_CreatePrintPreview(PyObject *self, PyObject *args) {
+    int argc;
+    PyObject *argv[5];
+    int ii;
+    
+    argc = PyObject_Length(args);
+    for (ii = 0; (ii < argc) && (ii < 4); ii++) {
+        argv[ii] = PyTuple_GetItem(args,ii);
+    }
+    if ((argc >= 2) && (argc <= 4)) {
+        int _v;
+        {
+            void *ptr;
+            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxPrintFactory, 0) == -1) {
+                _v = 0;
+                PyErr_Clear();
+            } else {
+                _v = 1;
+            }
+        }
+        if (_v) {
+            {
+                void *ptr;
+                if (SWIG_ConvertPtr(argv[1], &ptr, SWIGTYPE_p_wxPrintout, 0) == -1) {
+                    _v = 0;
+                    PyErr_Clear();
+                } else {
+                    _v = 1;
+                }
+            }
+            if (_v) {
+                if (argc <= 2) {
+                    return _wrap_PrintFactory_CreatePrintPreview__SWIG_0(self,args);
+                }
+                {
+                    void *ptr;
+                    if (SWIG_ConvertPtr(argv[2], &ptr, SWIGTYPE_p_wxPrintout, 0) == -1) {
+                        _v = 0;
+                        PyErr_Clear();
+                    } else {
+                        _v = 1;
+                    }
+                }
+                if (_v) {
+                    if (argc <= 3) {
+                        return _wrap_PrintFactory_CreatePrintPreview__SWIG_0(self,args);
+                    }
+                    {
+                        void *ptr;
+                        if (SWIG_ConvertPtr(argv[3], &ptr, SWIGTYPE_p_wxPrintDialogData, 0) == -1) {
+                            _v = 0;
+                            PyErr_Clear();
+                        } else {
+                            _v = 1;
+                        }
+                    }
+                    if (_v) {
+                        return _wrap_PrintFactory_CreatePrintPreview__SWIG_0(self,args);
+                    }
+                }
+            }
+        }
+    }
+    if (argc == 4) {
+        int _v;
+        {
+            void *ptr;
+            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxPrintFactory, 0) == -1) {
+                _v = 0;
+                PyErr_Clear();
+            } else {
+                _v = 1;
+            }
+        }
+        if (_v) {
+            {
+                void *ptr;
+                if (SWIG_ConvertPtr(argv[1], &ptr, SWIGTYPE_p_wxPrintout, 0) == -1) {
+                    _v = 0;
+                    PyErr_Clear();
+                } else {
+                    _v = 1;
+                }
+            }
+            if (_v) {
+                {
+                    void *ptr;
+                    if (SWIG_ConvertPtr(argv[2], &ptr, SWIGTYPE_p_wxPrintout, 0) == -1) {
+                        _v = 0;
+                        PyErr_Clear();
+                    } else {
+                        _v = 1;
+                    }
+                }
+                if (_v) {
+                    {
+                        void *ptr;
+                        if (SWIG_ConvertPtr(argv[3], &ptr, SWIGTYPE_p_wxPrintData, 0) == -1) {
+                            _v = 0;
+                            PyErr_Clear();
+                        } else {
+                            _v = 1;
+                        }
+                    }
+                    if (_v) {
+                        return _wrap_PrintFactory_CreatePrintPreview__SWIG_1(self,args);
+                    }
+                }
+            }
+        }
+    }
+    
+    PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'PrintFactory_CreatePrintPreview'");
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintFactory_CreatePrintDialog__SWIG_0(PyObject *, PyObject *args) {
+    PyObject *resultobj;
+    wxPrintFactory *arg1 = (wxPrintFactory *) 0 ;
+    wxWindow *arg2 = (wxWindow *) 0 ;
+    wxPrintDialogData *arg3 = (wxPrintDialogData *) NULL ;
+    wxPrintDialogBase *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"OO|O:PrintFactory_CreatePrintDialog",&obj0,&obj1,&obj2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintFactory,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if (obj2) {
+        if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxPrintDialogData,
+        SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxPrintDialogBase *)(arg1)->CreatePrintDialog(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPrintDialogBase, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintFactory_CreatePrintDialog__SWIG_1(PyObject *, PyObject *args) {
+    PyObject *resultobj;
+    wxPrintFactory *arg1 = (wxPrintFactory *) 0 ;
+    wxWindow *arg2 = (wxWindow *) 0 ;
+    wxPrintData *arg3 = (wxPrintData *) 0 ;
+    wxPrintDialogBase *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"OOO:PrintFactory_CreatePrintDialog",&obj0,&obj1,&obj2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintFactory,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxPrintData,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxPrintDialogBase *)(arg1)->CreatePrintDialog(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPrintDialogBase, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintFactory_CreatePrintDialog(PyObject *self, PyObject *args) {
+    int argc;
+    PyObject *argv[4];
+    int ii;
+    
+    argc = PyObject_Length(args);
+    for (ii = 0; (ii < argc) && (ii < 3); ii++) {
+        argv[ii] = PyTuple_GetItem(args,ii);
+    }
+    if ((argc >= 2) && (argc <= 3)) {
+        int _v;
+        {
+            void *ptr;
+            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxPrintFactory, 0) == -1) {
+                _v = 0;
+                PyErr_Clear();
+            } else {
+                _v = 1;
+            }
+        }
+        if (_v) {
+            {
+                void *ptr;
+                if (SWIG_ConvertPtr(argv[1], &ptr, SWIGTYPE_p_wxWindow, 0) == -1) {
+                    _v = 0;
+                    PyErr_Clear();
+                } else {
+                    _v = 1;
+                }
+            }
+            if (_v) {
+                if (argc <= 2) {
+                    return _wrap_PrintFactory_CreatePrintDialog__SWIG_0(self,args);
+                }
+                {
+                    void *ptr;
+                    if (SWIG_ConvertPtr(argv[2], &ptr, SWIGTYPE_p_wxPrintDialogData, 0) == -1) {
+                        _v = 0;
+                        PyErr_Clear();
+                    } else {
+                        _v = 1;
+                    }
+                }
+                if (_v) {
+                    return _wrap_PrintFactory_CreatePrintDialog__SWIG_0(self,args);
+                }
+            }
+        }
+    }
+    if (argc == 3) {
+        int _v;
+        {
+            void *ptr;
+            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxPrintFactory, 0) == -1) {
+                _v = 0;
+                PyErr_Clear();
+            } else {
+                _v = 1;
+            }
+        }
+        if (_v) {
+            {
+                void *ptr;
+                if (SWIG_ConvertPtr(argv[1], &ptr, SWIGTYPE_p_wxWindow, 0) == -1) {
+                    _v = 0;
+                    PyErr_Clear();
+                } else {
+                    _v = 1;
+                }
+            }
+            if (_v) {
+                {
+                    void *ptr;
+                    if (SWIG_ConvertPtr(argv[2], &ptr, SWIGTYPE_p_wxPrintData, 0) == -1) {
+                        _v = 0;
+                        PyErr_Clear();
+                    } else {
+                        _v = 1;
+                    }
+                }
+                if (_v) {
+                    return _wrap_PrintFactory_CreatePrintDialog__SWIG_1(self,args);
+                }
+            }
+        }
+    }
+    
+    PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'PrintFactory_CreatePrintDialog'");
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintFactory_HasPrintSetupDialog(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintFactory *arg1 = (wxPrintFactory *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintFactory_HasPrintSetupDialog",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintFactory,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->HasPrintSetupDialog();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintFactory_CreatePrintSetupDialog(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintFactory *arg1 = (wxPrintFactory *) 0 ;
+    wxWindow *arg2 = (wxWindow *) 0 ;
+    wxPrintData *arg3 = (wxPrintData *) 0 ;
+    wxDialog *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "parent",(char *) "data", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PrintFactory_CreatePrintSetupDialog",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintFactory,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxPrintData,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxDialog *)(arg1)->CreatePrintSetupDialog(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = wxPyMake_wxObject(result, 0); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintFactory_HasOwnPrintToFile(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintFactory *arg1 = (wxPrintFactory *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintFactory_HasOwnPrintToFile",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintFactory,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->HasOwnPrintToFile();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintFactory_HasPrinterLine(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintFactory *arg1 = (wxPrintFactory *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintFactory_HasPrinterLine",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintFactory,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->HasPrinterLine();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintFactory_CreatePrinterLine(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintFactory *arg1 = (wxPrintFactory *) 0 ;
+    wxString result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintFactory_CreatePrinterLine",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintFactory,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->CreatePrinterLine();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintFactory_HasStatusLine(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintFactory *arg1 = (wxPrintFactory *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintFactory_HasStatusLine",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintFactory,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->HasStatusLine();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintFactory_CreateStatusLine(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintFactory *arg1 = (wxPrintFactory *) 0 ;
+    wxString result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintFactory_CreateStatusLine",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintFactory,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->CreateStatusLine();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintFactory_CreatePrintNativeData(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintFactory *arg1 = (wxPrintFactory *) 0 ;
+    wxPrintNativeDataBase *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintFactory_CreatePrintNativeData",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintFactory,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxPrintNativeDataBase *)(arg1)->CreatePrintNativeData();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPrintNativeDataBase, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintFactory_SetPrintFactory(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintFactory *arg1 = (wxPrintFactory *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "factory", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintFactory_SetPrintFactory",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintFactory,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxPrintFactory::SetPrintFactory(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintFactory_GetFactory(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintFactory *result;
+    char *kwnames[] = {
+        NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":PrintFactory_GetFactory",kwnames)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxPrintFactory *)wxPrintFactory::GetFactory();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPrintFactory, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject * PrintFactory_swigregister(PyObject *, PyObject *args) {
+    PyObject *obj;
+    if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
+    SWIG_TypeClientData(SWIGTYPE_p_wxPrintFactory, obj);
+    Py_INCREF(obj);
+    return Py_BuildValue((char *)"");
+}
+static PyObject *_wrap_delete_PrintNativeDataBase(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintNativeDataBase *arg1 = (wxPrintNativeDataBase *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:delete_PrintNativeDataBase",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintNativeDataBase,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        delete arg1;
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintNativeDataBase_TransferTo(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintNativeDataBase *arg1 = (wxPrintNativeDataBase *) 0 ;
+    wxPrintData *arg2 = 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "data", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintNativeDataBase_TransferTo",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintNativeDataBase,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxPrintData,
+    SWIG_POINTER_EXCEPTION | 0)) == -1)
+    SWIG_fail;
+    if (arg2 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference");
+        SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->TransferTo(*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintNativeDataBase_TransferFrom(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintNativeDataBase *arg1 = (wxPrintNativeDataBase *) 0 ;
+    wxPrintData *arg2 = 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "data", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintNativeDataBase_TransferFrom",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintNativeDataBase,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxPrintData,
+    SWIG_POINTER_EXCEPTION | 0)) == -1)
+    SWIG_fail;
+    if (arg2 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference");
+        SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->TransferFrom((wxPrintData const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintNativeDataBase_Ok(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintNativeDataBase *arg1 = (wxPrintNativeDataBase *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintNativeDataBase_Ok",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintNativeDataBase,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxPrintNativeDataBase const *)arg1)->Ok();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintNativeDataBase_m_ref_set(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintNativeDataBase *arg1 = (wxPrintNativeDataBase *) 0 ;
+    int arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "m_ref", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintNativeDataBase_m_ref_set",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintNativeDataBase,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (int)SWIG_As_int(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    if (arg1) (arg1)->m_ref = arg2;
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintNativeDataBase_m_ref_get(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintNativeDataBase *arg1 = (wxPrintNativeDataBase *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintNativeDataBase_m_ref_get",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintNativeDataBase,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    result = (int) ((arg1)->m_ref);
+    
+    resultobj = SWIG_From_int((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject * PrintNativeDataBase_swigregister(PyObject *, PyObject *args) {
+    PyObject *obj;
+    if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
+    SWIG_TypeClientData(SWIGTYPE_p_wxPrintNativeDataBase, obj);
+    Py_INCREF(obj);
+    return Py_BuildValue((char *)"");
+}
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_Panel", (PyCFunction) _wrap_new_Panel, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"new_PrePanel", (PyCFunction) _wrap_new_PrePanel, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -25615,6 +26567,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TextEntryDialog_GetValue", (PyCFunction) _wrap_TextEntryDialog_GetValue, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"TextEntryDialog_SetValue", (PyCFunction) _wrap_TextEntryDialog_SetValue, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"TextEntryDialog_swigregister", TextEntryDialog_swigregister, METH_VARARGS, NULL },
+	 { (char *)"new_PasswordEntryDialog", (PyCFunction) _wrap_new_PasswordEntryDialog, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PasswordEntryDialog_swigregister", PasswordEntryDialog_swigregister, METH_VARARGS, NULL },
 	 { (char *)"new_FontData", (PyCFunction) _wrap_new_FontData, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"delete_FontData", (PyCFunction) _wrap_delete_FontData, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"FontData_EnableEffects", (PyCFunction) _wrap_FontData_EnableEffects, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -25778,6 +26732,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PrintData_GetPaperSize", (PyCFunction) _wrap_PrintData_GetPaperSize, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_GetQuality", (PyCFunction) _wrap_PrintData_GetQuality, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_GetBin", (PyCFunction) _wrap_PrintData_GetBin, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintData_GetPrintMode", (PyCFunction) _wrap_PrintData_GetPrintMode, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_SetNoCopies", (PyCFunction) _wrap_PrintData_SetNoCopies, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_SetCollate", (PyCFunction) _wrap_PrintData_SetCollate, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_SetOrientation", (PyCFunction) _wrap_PrintData_SetOrientation, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -25788,20 +26743,20 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PrintData_SetPaperSize", (PyCFunction) _wrap_PrintData_SetPaperSize, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_SetQuality", (PyCFunction) _wrap_PrintData_SetQuality, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_SetBin", (PyCFunction) _wrap_PrintData_SetBin, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintData_SetPrintMode", (PyCFunction) _wrap_PrintData_SetPrintMode, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintData_GetFilename", (PyCFunction) _wrap_PrintData_GetFilename, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintData_SetFilename", (PyCFunction) _wrap_PrintData_SetFilename, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_GetPrinterCommand", (PyCFunction) _wrap_PrintData_GetPrinterCommand, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_GetPrinterOptions", (PyCFunction) _wrap_PrintData_GetPrinterOptions, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_GetPreviewCommand", (PyCFunction) _wrap_PrintData_GetPreviewCommand, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PrintData_GetFilename", (PyCFunction) _wrap_PrintData_GetFilename, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_GetFontMetricPath", (PyCFunction) _wrap_PrintData_GetFontMetricPath, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_GetPrinterScaleX", (PyCFunction) _wrap_PrintData_GetPrinterScaleX, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_GetPrinterScaleY", (PyCFunction) _wrap_PrintData_GetPrinterScaleY, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_GetPrinterTranslateX", (PyCFunction) _wrap_PrintData_GetPrinterTranslateX, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_GetPrinterTranslateY", (PyCFunction) _wrap_PrintData_GetPrinterTranslateY, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PrintData_GetPrintMode", (PyCFunction) _wrap_PrintData_GetPrintMode, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_SetPrinterCommand", (PyCFunction) _wrap_PrintData_SetPrinterCommand, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_SetPrinterOptions", (PyCFunction) _wrap_PrintData_SetPrinterOptions, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_SetPreviewCommand", (PyCFunction) _wrap_PrintData_SetPreviewCommand, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PrintData_SetFilename", (PyCFunction) _wrap_PrintData_SetFilename, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_SetFontMetricPath", (PyCFunction) _wrap_PrintData_SetFontMetricPath, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_SetPrinterScaleX", (PyCFunction) _wrap_PrintData_SetPrinterScaleX, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_SetPrinterScaleY", (PyCFunction) _wrap_PrintData_SetPrinterScaleY, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -25809,9 +26764,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PrintData_SetPrinterTranslateX", (PyCFunction) _wrap_PrintData_SetPrinterTranslateX, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_SetPrinterTranslateY", (PyCFunction) _wrap_PrintData_SetPrinterTranslateY, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_SetPrinterTranslation", (PyCFunction) _wrap_PrintData_SetPrinterTranslation, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PrintData_SetPrintMode", (PyCFunction) _wrap_PrintData_SetPrintMode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PrintData_GetOutputStream", (PyCFunction) _wrap_PrintData_GetOutputStream, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PrintData_SetOutputStream", (PyCFunction) _wrap_PrintData_SetOutputStream, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_swigregister", PrintData_swigregister, METH_VARARGS, NULL },
 	 { (char *)"new_PageSetupDialogData", _wrap_new_PageSetupDialogData, METH_VARARGS, NULL },
 	 { (char *)"delete_PageSetupDialogData", (PyCFunction) _wrap_delete_PageSetupDialogData, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -25861,6 +26813,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PrintDialogData_GetCollate", (PyCFunction) _wrap_PrintDialogData_GetCollate, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintDialogData_GetPrintToFile", (PyCFunction) _wrap_PrintDialogData_GetPrintToFile, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintDialogData_GetSetupDialog", (PyCFunction) _wrap_PrintDialogData_GetSetupDialog, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintDialogData_SetSetupDialog", (PyCFunction) _wrap_PrintDialogData_SetSetupDialog, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintDialogData_SetFromPage", (PyCFunction) _wrap_PrintDialogData_SetFromPage, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintDialogData_SetToPage", (PyCFunction) _wrap_PrintDialogData_SetToPage, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintDialogData_SetMinPage", (PyCFunction) _wrap_PrintDialogData_SetMinPage, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -25870,7 +26823,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PrintDialogData_SetSelection", (PyCFunction) _wrap_PrintDialogData_SetSelection, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintDialogData_SetCollate", (PyCFunction) _wrap_PrintDialogData_SetCollate, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintDialogData_SetPrintToFile", (PyCFunction) _wrap_PrintDialogData_SetPrintToFile, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PrintDialogData_SetSetupDialog", (PyCFunction) _wrap_PrintDialogData_SetSetupDialog, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintDialogData_EnablePrintToFile", (PyCFunction) _wrap_PrintDialogData_EnablePrintToFile, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintDialogData_EnableSelection", (PyCFunction) _wrap_PrintDialogData_EnableSelection, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintDialogData_EnablePageNumbers", (PyCFunction) _wrap_PrintDialogData_EnablePageNumbers, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -25884,18 +26836,19 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PrintDialogData_SetPrintData", (PyCFunction) _wrap_PrintDialogData_SetPrintData, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintDialogData_swigregister", PrintDialogData_swigregister, METH_VARARGS, NULL },
 	 { (char *)"new_PrintDialog", (PyCFunction) _wrap_new_PrintDialog, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PrintDialog_GetPrintDialogData", (PyCFunction) _wrap_PrintDialog_GetPrintDialogData, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"PrintDialog_GetPrintDC", (PyCFunction) _wrap_PrintDialog_GetPrintDC, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintDialog_ShowModal", (PyCFunction) _wrap_PrintDialog_ShowModal, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintDialog_GetPrintDialogData", (PyCFunction) _wrap_PrintDialog_GetPrintDialogData, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintDialog_GetPrintData", (PyCFunction) _wrap_PrintDialog_GetPrintData, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintDialog_GetPrintDC", (PyCFunction) _wrap_PrintDialog_GetPrintDC, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintDialog_swigregister", PrintDialog_swigregister, METH_VARARGS, NULL },
 	 { (char *)"new_Printer", (PyCFunction) _wrap_new_Printer, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"delete_Printer", (PyCFunction) _wrap_delete_Printer, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Printer_CreateAbortWindow", (PyCFunction) _wrap_Printer_CreateAbortWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Printer_GetPrintDialogData", (PyCFunction) _wrap_Printer_GetPrintDialogData, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Printer_Print", (PyCFunction) _wrap_Printer_Print, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Printer_PrintDialog", (PyCFunction) _wrap_Printer_PrintDialog, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Printer_ReportError", (PyCFunction) _wrap_Printer_ReportError, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Printer_Setup", (PyCFunction) _wrap_Printer_Setup, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Printer_Print", (PyCFunction) _wrap_Printer_Print, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Printer_PrintDialog", (PyCFunction) _wrap_Printer_PrintDialog, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Printer_GetPrintDialogData", (PyCFunction) _wrap_Printer_GetPrintDialogData, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Printer_GetAbort", (PyCFunction) _wrap_Printer_GetAbort, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Printer_GetLastError", (PyCFunction) _wrap_Printer_GetLastError, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Printer_swigregister", Printer_swigregister, METH_VARARGS, NULL },
@@ -25988,6 +26941,27 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyPreviewControlBar_base_CreateButtons", (PyCFunction) _wrap_PyPreviewControlBar_base_CreateButtons, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PyPreviewControlBar_base_SetZoomControl", (PyCFunction) _wrap_PyPreviewControlBar_base_SetZoomControl, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PyPreviewControlBar_swigregister", PyPreviewControlBar_swigregister, METH_VARARGS, NULL },
+	 { (char *)"PrintFactory_CreatePrinter", (PyCFunction) _wrap_PrintFactory_CreatePrinter, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintFactory_CreatePrintPreview", _wrap_PrintFactory_CreatePrintPreview, METH_VARARGS, NULL },
+	 { (char *)"PrintFactory_CreatePrintDialog", _wrap_PrintFactory_CreatePrintDialog, METH_VARARGS, NULL },
+	 { (char *)"PrintFactory_HasPrintSetupDialog", (PyCFunction) _wrap_PrintFactory_HasPrintSetupDialog, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintFactory_CreatePrintSetupDialog", (PyCFunction) _wrap_PrintFactory_CreatePrintSetupDialog, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintFactory_HasOwnPrintToFile", (PyCFunction) _wrap_PrintFactory_HasOwnPrintToFile, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintFactory_HasPrinterLine", (PyCFunction) _wrap_PrintFactory_HasPrinterLine, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintFactory_CreatePrinterLine", (PyCFunction) _wrap_PrintFactory_CreatePrinterLine, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintFactory_HasStatusLine", (PyCFunction) _wrap_PrintFactory_HasStatusLine, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintFactory_CreateStatusLine", (PyCFunction) _wrap_PrintFactory_CreateStatusLine, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintFactory_CreatePrintNativeData", (PyCFunction) _wrap_PrintFactory_CreatePrintNativeData, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintFactory_SetPrintFactory", (PyCFunction) _wrap_PrintFactory_SetPrintFactory, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintFactory_GetFactory", (PyCFunction) _wrap_PrintFactory_GetFactory, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintFactory_swigregister", PrintFactory_swigregister, METH_VARARGS, NULL },
+	 { (char *)"delete_PrintNativeDataBase", (PyCFunction) _wrap_delete_PrintNativeDataBase, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintNativeDataBase_TransferTo", (PyCFunction) _wrap_PrintNativeDataBase_TransferTo, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintNativeDataBase_TransferFrom", (PyCFunction) _wrap_PrintNativeDataBase_TransferFrom, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintNativeDataBase_Ok", (PyCFunction) _wrap_PrintNativeDataBase_Ok, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintNativeDataBase_m_ref_set", (PyCFunction) _wrap_PrintNativeDataBase_m_ref_set, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintNativeDataBase_m_ref_get", (PyCFunction) _wrap_PrintNativeDataBase_m_ref_get, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintNativeDataBase_swigregister", PrintNativeDataBase_swigregister, METH_VARARGS, NULL },
 	 { NULL, NULL, 0, NULL }
 };
 
@@ -26123,6 +27097,9 @@ static void *_p_wxTaskBarIconEventTo_p_wxEvent(void *x) {
 static void *_p_wxSplitterEventTo_p_wxNotifyEvent(void *x) {
     return (void *)((wxNotifyEvent *)  ((wxSplitterEvent *) x));
 }
+static void *_p_wxPasswordEntryDialogTo_p_wxTextEntryDialog(void *x) {
+    return (void *)((wxTextEntryDialog *)  ((wxPasswordEntryDialog *) x));
+}
 static void *_p_wxSplashScreenTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxTopLevelWindow *)(wxFrame *) ((wxSplashScreen *) x));
 }
@@ -26143,6 +27120,9 @@ static void *_p_wxPyValidatorTo_p_wxEvtHandler(void *x) {
 }
 static void *_p_wxMenuTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *)  ((wxMenu *) x));
+}
+static void *_p_wxPasswordEntryDialogTo_p_wxEvtHandler(void *x) {
+    return (void *)((wxEvtHandler *) (wxWindow *)(wxTopLevelWindow *)(wxDialog *)(wxTextEntryDialog *) ((wxPasswordEntryDialog *) x));
 }
 static void *_p_wxTextEntryDialogTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxTopLevelWindow *)(wxDialog *) ((wxTextEntryDialog *) x));
@@ -26252,9 +27232,6 @@ static void *_p_wxPyTaskBarIconTo_p_wxEvtHandler(void *x) {
 static void *_p_wxFrameTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxTopLevelWindow *) ((wxFrame *) x));
 }
-static void *_p_wxFontDialogTo_p_wxEvtHandler(void *x) {
-    return (void *)((wxEvtHandler *) (wxWindow *)(wxTopLevelWindow *)(wxDialog *) ((wxFontDialog *) x));
-}
 static void *_p_wxDirDialogTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxTopLevelWindow *)(wxDialog *) ((wxDirDialog *) x));
 }
@@ -26263,6 +27240,9 @@ static void *_p_wxColourDialogTo_p_wxEvtHandler(void *x) {
 }
 static void *_p_wxDialogTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxTopLevelWindow *) ((wxDialog *) x));
+}
+static void *_p_wxFontDialogTo_p_wxEvtHandler(void *x) {
+    return (void *)((wxEvtHandler *) (wxWindow *)(wxTopLevelWindow *)(wxDialog *) ((wxFontDialog *) x));
 }
 static void *_p_wxPageSetupDialogTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxTopLevelWindow *)(wxDialog *) ((wxPageSetupDialog *) x));
@@ -26434,6 +27414,9 @@ static void *_p_wxSingleChoiceDialogTo_p_wxObject(void *x) {
 }
 static void *_p_wxTextEntryDialogTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxTopLevelWindow *)(wxDialog *) ((wxTextEntryDialog *) x));
+}
+static void *_p_wxPasswordEntryDialogTo_p_wxObject(void *x) {
+    return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxTopLevelWindow *)(wxDialog *)(wxTextEntryDialog *) ((wxPasswordEntryDialog *) x));
 }
 static void *_p_wxMessageDialogTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxTopLevelWindow *)(wxDialog *) ((wxMessageDialog *) x));
@@ -26678,6 +27661,9 @@ static void *_p_wxFocusEventTo_p_wxObject(void *x) {
 static void *_p_wxChildFocusEventTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvent *)(wxCommandEvent *) ((wxChildFocusEvent *) x));
 }
+static void *_p_wxPrintNativeDataBaseTo_p_wxObject(void *x) {
+    return (void *)((wxObject *)  ((wxPrintNativeDataBase *) x));
+}
 static void *_p_wxControlWithItemsTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxControl *) ((wxControlWithItems *) x));
 }
@@ -26744,14 +27730,14 @@ static void *_p_wxMDIParentFrameTo_p_wxTopLevelWindow(void *x) {
 static void *_p_wxMDIChildFrameTo_p_wxTopLevelWindow(void *x) {
     return (void *)((wxTopLevelWindow *) (wxFrame *) ((wxMDIChildFrame *) x));
 }
-static void *_p_wxFindReplaceDialogTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxFindReplaceDialog *) x));
-}
 static void *_p_wxProgressDialogTo_p_wxTopLevelWindow(void *x) {
     return (void *)((wxTopLevelWindow *) (wxFrame *) ((wxProgressDialog *) x));
 }
 static void *_p_wxMessageDialogTo_p_wxTopLevelWindow(void *x) {
     return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxMessageDialog *) x));
+}
+static void *_p_wxPasswordEntryDialogTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxDialog *)(wxTextEntryDialog *) ((wxPasswordEntryDialog *) x));
 }
 static void *_p_wxTextEntryDialogTo_p_wxTopLevelWindow(void *x) {
     return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxTextEntryDialog *) x));
@@ -26764,6 +27750,9 @@ static void *_p_wxMultiChoiceDialogTo_p_wxTopLevelWindow(void *x) {
 }
 static void *_p_wxFileDialogTo_p_wxTopLevelWindow(void *x) {
     return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxFileDialog *) x));
+}
+static void *_p_wxFindReplaceDialogTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxFindReplaceDialog *) x));
 }
 static void *_p_wxPreviewFrameTo_p_wxTopLevelWindow(void *x) {
     return (void *)((wxTopLevelWindow *) (wxFrame *) ((wxPreviewFrame *) x));
@@ -26792,6 +27781,9 @@ static void *_p_wxProgressDialogTo_p_wxWindow(void *x) {
 static void *_p_wxMessageDialogTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *) (wxTopLevelWindow *)(wxDialog *) ((wxMessageDialog *) x));
 }
+static void *_p_wxPasswordEntryDialogTo_p_wxWindow(void *x) {
+    return (void *)((wxWindow *) (wxTopLevelWindow *)(wxDialog *)(wxTextEntryDialog *) ((wxPasswordEntryDialog *) x));
+}
 static void *_p_wxTextEntryDialogTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *) (wxTopLevelWindow *)(wxDialog *) ((wxTextEntryDialog *) x));
 }
@@ -26809,9 +27801,6 @@ static void *_p_wxPanelTo_p_wxWindow(void *x) {
 }
 static void *_p_wxStatusBarTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *)  ((wxStatusBar *) x));
-}
-static void *_p_wxMDIClientWindowTo_p_wxWindow(void *x) {
-    return (void *)((wxWindow *)  ((wxMDIClientWindow *) x));
 }
 static void *_p_wxPyVScrolledWindowTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *) (wxPanel *) ((wxPyVScrolledWindow *) x));
@@ -26842,6 +27831,9 @@ static void *_p_wxSplitterWindowTo_p_wxWindow(void *x) {
 }
 static void *_p_wxSashWindowTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *)  ((wxSashWindow *) x));
+}
+static void *_p_wxMDIClientWindowTo_p_wxWindow(void *x) {
+    return (void *)((wxWindow *)  ((wxMDIClientWindow *) x));
 }
 static void *_p_wxPyScrolledWindowTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *) (wxPanel *)(wxScrolledWindow *) ((wxPyScrolledWindow *) x));
@@ -26939,6 +27931,9 @@ static void *_p_wxSingleChoiceDialogTo_p_wxDialog(void *x) {
 static void *_p_wxTextEntryDialogTo_p_wxDialog(void *x) {
     return (void *)((wxDialog *)  ((wxTextEntryDialog *) x));
 }
+static void *_p_wxPasswordEntryDialogTo_p_wxDialog(void *x) {
+    return (void *)((wxDialog *) (wxTextEntryDialog *) ((wxPasswordEntryDialog *) x));
+}
 static void *_p_wxMessageDialogTo_p_wxDialog(void *x) {
     return (void *)((wxDialog *)  ((wxMessageDialog *) x));
 }
@@ -27011,6 +28006,8 @@ static void *_p_wxPyPreviewControlBarTo_p_wxPreviewControlBar(void *x) {
 static swig_type_info _swigt__p_wxQueryLayoutInfoEvent[] = {{"_p_wxQueryLayoutInfoEvent", 0, "wxQueryLayoutInfoEvent *", 0, 0, 0, 0},{"_p_wxQueryLayoutInfoEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPreviewFrame[] = {{"_p_wxPreviewFrame", 0, "wxPreviewFrame *", 0, 0, 0, 0},{"_p_wxPreviewFrame", 0, 0, 0, 0, 0, 0},{"_p_wxPyPreviewFrame", _p_wxPyPreviewFrameTo_p_wxPreviewFrame, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPyPreviewFrame[] = {{"_p_wxPyPreviewFrame", 0, "wxPyPreviewFrame *", 0, 0, 0, 0},{"_p_wxPyPreviewFrame", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxPrintDialogBase[] = {{"_p_wxPrintDialogBase", 0, "wxPrintDialogBase *", 0, 0, 0, 0},{"_p_wxPrintDialogBase", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxPrintFactory[] = {{"_p_wxPrintFactory", 0, "wxPrintFactory *", 0, 0, 0, 0},{"_p_wxPrintFactory", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPyPanel[] = {{"_p_wxPyPanel", 0, "wxPyPanel *", 0, 0, 0, 0},{"_p_wxPyPanel", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMenu[] = {{"_p_wxMenu", 0, "wxMenu *", 0, 0, 0, 0},{"_p_wxMenu", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxFontData[] = {{"_p_wxFontData", 0, "wxFontData *", 0, 0, 0, 0},{"_p_wxFontData", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -27039,13 +28036,14 @@ static swig_type_info _swigt__p_wxSplashScreen[] = {{"_p_wxSplashScreen", 0, "wx
 static swig_type_info _swigt__p_wxFindReplaceDialog[] = {{"_p_wxFindReplaceDialog", 0, "wxFindReplaceDialog *", 0, 0, 0, 0},{"_p_wxFindReplaceDialog", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxProgressDialog[] = {{"_p_wxProgressDialog", 0, "wxProgressDialog *", 0, 0, 0, 0},{"_p_wxProgressDialog", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMessageDialog[] = {{"_p_wxMessageDialog", 0, "wxMessageDialog *", 0, 0, 0, 0},{"_p_wxMessageDialog", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxTextEntryDialog[] = {{"_p_wxTextEntryDialog", 0, "wxTextEntryDialog *", 0, 0, 0, 0},{"_p_wxTextEntryDialog", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxPasswordEntryDialog[] = {{"_p_wxPasswordEntryDialog", 0, "wxPasswordEntryDialog *", 0, 0, 0, 0},{"_p_wxPasswordEntryDialog", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxSingleChoiceDialog[] = {{"_p_wxSingleChoiceDialog", 0, "wxSingleChoiceDialog *", 0, 0, 0, 0},{"_p_wxSingleChoiceDialog", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMultiChoiceDialog[] = {{"_p_wxMultiChoiceDialog", 0, "wxMultiChoiceDialog *", 0, 0, 0, 0},{"_p_wxMultiChoiceDialog", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxFileDialog[] = {{"_p_wxFileDialog", 0, "wxFileDialog *", 0, 0, 0, 0},{"_p_wxFileDialog", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxTextEntryDialog[] = {{"_p_wxTextEntryDialog", 0, "wxTextEntryDialog *", 0, 0, 0, 0},{"_p_wxTextEntryDialog", 0, 0, 0, 0, 0, 0},{"_p_wxPasswordEntryDialog", _p_wxPasswordEntryDialogTo_p_wxTextEntryDialog, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPrinter[] = {{"_p_wxPrinter", 0, "wxPrinter *", 0, 0, 0, 0},{"_p_wxPrinter", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxArrayInt[] = {{"_p_wxArrayInt", 0, "wxArrayInt *", 0, 0, 0, 0},{"_p_wxArrayInt", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxEvtHandler[] = {{"_p_wxEvtHandler", 0, "wxEvtHandler *", 0, 0, 0, 0},{"_p_wxSplashScreen", _p_wxSplashScreenTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMiniFrame", _p_wxMiniFrameTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyPanel", _p_wxPyPanelTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxValidator", _p_wxValidatorTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxFindReplaceDialog", _p_wxFindReplaceDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxTextEntryDialog", _p_wxTextEntryDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxSingleChoiceDialog", _p_wxSingleChoiceDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMultiChoiceDialog", _p_wxMultiChoiceDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxFileDialog", _p_wxFileDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMessageDialog", _p_wxMessageDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxProgressDialog", _p_wxProgressDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPanel", _p_wxPanelTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxStatusBar", _p_wxStatusBarTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxTopLevelWindow", _p_wxTopLevelWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMDIClientWindow", _p_wxMDIClientWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyVScrolledWindow", _p_wxPyVScrolledWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyScrolledWindow", _p_wxPyScrolledWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxScrolledWindow", _p_wxScrolledWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxWindow", _p_wxWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxSashWindow", _p_wxSashWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxSashLayoutWindow", _p_wxSashLayoutWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxSplitterWindow", _p_wxSplitterWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxSplashScreenWindow", _p_wxSplashScreenWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPopupWindow", _p_wxPopupWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyPopupTransientWindow", _p_wxPyPopupTransientWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxTipWindow", _p_wxTipWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyPreviewFrame", _p_wxPyPreviewFrameTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPreviewFrame", _p_wxPreviewFrameTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxControl", _p_wxControlTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMDIChildFrame", _p_wxMDIChildFrameTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyApp", _p_wxPyAppTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxEvtHandler", 0, 0, 0, 0, 0, 0},{"_p_wxPreviewCanvas", _p_wxPreviewCanvasTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyWindow", _p_wxPyWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyHtmlListBox", _p_wxPyHtmlListBoxTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyVListBox", _p_wxPyVListBoxTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyPreviewControlBar", _p_wxPyPreviewControlBarTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPreviewControlBar", _p_wxPreviewControlBarTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyTaskBarIcon", _p_wxPyTaskBarIconTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxFrame", _p_wxFrameTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxDialog", _p_wxDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPageSetupDialog", _p_wxPageSetupDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPrintDialog", _p_wxPrintDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxColourDialog", _p_wxColourDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxDirDialog", _p_wxDirDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxFontDialog", _p_wxFontDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMenu", _p_wxMenuTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMDIParentFrame", _p_wxMDIParentFrameTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxEvtHandler[] = {{"_p_wxEvtHandler", 0, "wxEvtHandler *", 0, 0, 0, 0},{"_p_wxSplashScreen", _p_wxSplashScreenTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMiniFrame", _p_wxMiniFrameTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyPanel", _p_wxPyPanelTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxValidator", _p_wxValidatorTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMessageDialog", _p_wxMessageDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxFindReplaceDialog", _p_wxFindReplaceDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxProgressDialog", _p_wxProgressDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPasswordEntryDialog", _p_wxPasswordEntryDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxTextEntryDialog", _p_wxTextEntryDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxSingleChoiceDialog", _p_wxSingleChoiceDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMultiChoiceDialog", _p_wxMultiChoiceDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxFileDialog", _p_wxFileDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPanel", _p_wxPanelTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxStatusBar", _p_wxStatusBarTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxTopLevelWindow", _p_wxTopLevelWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMDIClientWindow", _p_wxMDIClientWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyVScrolledWindow", _p_wxPyVScrolledWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyScrolledWindow", _p_wxPyScrolledWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxScrolledWindow", _p_wxScrolledWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxWindow", _p_wxWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxSashWindow", _p_wxSashWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxSashLayoutWindow", _p_wxSashLayoutWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxSplitterWindow", _p_wxSplitterWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxSplashScreenWindow", _p_wxSplashScreenWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPopupWindow", _p_wxPopupWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyPopupTransientWindow", _p_wxPyPopupTransientWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxTipWindow", _p_wxTipWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyPreviewFrame", _p_wxPyPreviewFrameTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPreviewFrame", _p_wxPreviewFrameTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxControl", _p_wxControlTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMDIChildFrame", _p_wxMDIChildFrameTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyApp", _p_wxPyAppTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxEvtHandler", 0, 0, 0, 0, 0, 0},{"_p_wxPreviewCanvas", _p_wxPreviewCanvasTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyWindow", _p_wxPyWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyHtmlListBox", _p_wxPyHtmlListBoxTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyVListBox", _p_wxPyVListBoxTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyPreviewControlBar", _p_wxPyPreviewControlBarTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPreviewControlBar", _p_wxPreviewControlBarTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyTaskBarIcon", _p_wxPyTaskBarIconTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxFrame", _p_wxFrameTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPageSetupDialog", _p_wxPageSetupDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPrintDialog", _p_wxPrintDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxDialog", _p_wxDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxColourDialog", _p_wxColourDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxDirDialog", _p_wxDirDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxFontDialog", _p_wxFontDialogTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMenu", _p_wxMenuTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMDIParentFrame", _p_wxMDIParentFrameTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxCalculateLayoutEvent[] = {{"_p_wxCalculateLayoutEvent", 0, "wxCalculateLayoutEvent *", 0, 0, 0, 0},{"_p_wxCalculateLayoutEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPyHtmlListBox[] = {{"_p_wxPyHtmlListBox", 0, "wxPyHtmlListBox *", 0, 0, 0, 0},{"_p_wxPyHtmlListBox", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPyVListBox[] = {{"_p_wxPyVListBox", 0, "wxPyVListBox *", 0, 0, 0, 0},{"_p_wxPyVListBox", 0, 0, 0, 0, 0, 0},{"_p_wxPyHtmlListBox", _p_wxPyHtmlListBoxTo_p_wxPyVListBox, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -27053,14 +28051,15 @@ static swig_type_info _swigt__p_wxRect[] = {{"_p_wxRect", 0, "wxRect *", 0, 0, 0
 static swig_type_info _swigt__p_char[] = {{"_p_char", 0, "char *", 0, 0, 0, 0},{"_p_char", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMiniFrame[] = {{"_p_wxMiniFrame", 0, "wxMiniFrame *", 0, 0, 0, 0},{"_p_wxMiniFrame", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxFrame[] = {{"_p_wxFrame", 0, "wxFrame *", 0, 0, 0, 0},{"_p_wxMDIChildFrame", _p_wxMDIChildFrameTo_p_wxFrame, 0, 0, 0, 0, 0},{"_p_wxProgressDialog", _p_wxProgressDialogTo_p_wxFrame, 0, 0, 0, 0, 0},{"_p_wxPreviewFrame", _p_wxPreviewFrameTo_p_wxFrame, 0, 0, 0, 0, 0},{"_p_wxPyPreviewFrame", _p_wxPyPreviewFrameTo_p_wxFrame, 0, 0, 0, 0, 0},{"_p_wxMiniFrame", _p_wxMiniFrameTo_p_wxFrame, 0, 0, 0, 0, 0},{"_p_wxFrame", 0, 0, 0, 0, 0, 0},{"_p_wxSplashScreen", _p_wxSplashScreenTo_p_wxFrame, 0, 0, 0, 0, 0},{"_p_wxMDIParentFrame", _p_wxMDIParentFrameTo_p_wxFrame, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxPrintout[] = {{"_p_wxPrintout", 0, "wxPrintout *", 0, 0, 0, 0},{"_p_wxPrintout", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPyPrintout[] = {{"_p_wxPyPrintout", 0, "wxPyPrintout *", 0, 0, 0, 0},{"_p_wxPyPrintout", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxTaskBarIconEvent[] = {{"_p_wxTaskBarIconEvent", 0, "wxTaskBarIconEvent *", 0, 0, 0, 0},{"_p_wxTaskBarIconEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxScrollWinEvent[] = {{"_p_wxScrollWinEvent", 0, "wxScrollWinEvent *", 0, 0, 0, 0},{"_p_wxScrollWinEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxStatusBar[] = {{"_p_wxStatusBar", 0, "wxStatusBar *", 0, 0, 0, 0},{"_p_wxStatusBar", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMDIParentFrame[] = {{"_p_wxMDIParentFrame", 0, "wxMDIParentFrame *", 0, 0, 0, 0},{"_p_wxMDIParentFrame", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPoint[] = {{"_p_wxPoint", 0, "wxPoint *", 0, 0, 0, 0},{"_p_wxPoint", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxObject[] = {{"_p_wxObject", 0, "wxObject *", 0, 0, 0, 0},{"_p_wxQueryLayoutInfoEvent", _p_wxQueryLayoutInfoEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxLayoutConstraints", _p_wxLayoutConstraintsTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPreviewFrame", _p_wxPreviewFrameTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyPreviewFrame", _p_wxPyPreviewFrameTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxGBSizerItem", _p_wxGBSizerItemTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSizerItem", _p_wxSizerItemTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxIndividualLayoutConstraint", _p_wxIndividualLayoutConstraintTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxStaticBoxSizer", _p_wxStaticBoxSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxBoxSizer", _p_wxBoxSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSizer", _p_wxSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxGridBagSizer", _p_wxGridBagSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyPanel", _p_wxPyPanelTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMenu", _p_wxMenuTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFontData", _p_wxFontDataTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPrintData", _p_wxPrintDataTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxEvent", _p_wxEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxGridSizer", _p_wxGridSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFlexGridSizer", _p_wxFlexGridSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyTaskBarIcon", _p_wxPyTaskBarIconTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxLayoutAlgorithm", _p_wxLayoutAlgorithmTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFindDialogEvent", _p_wxFindDialogEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPreviewCanvas", _p_wxPreviewCanvasTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxControl", _p_wxControlTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSplitterEvent", _p_wxSplitterEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFSFile", _p_wxFSFileTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFindReplaceData", _p_wxFindReplaceDataTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPySizer", _p_wxPySizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMDIChildFrame", _p_wxMDIChildFrameTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxColourData", _p_wxColourDataTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyWindow", _p_wxPyWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSplashScreen", _p_wxSplashScreenTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxTextEntryDialog", _p_wxTextEntryDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMessageDialog", _p_wxMessageDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxProgressDialog", _p_wxProgressDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFindReplaceDialog", _p_wxFindReplaceDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSingleChoiceDialog", _p_wxSingleChoiceDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMultiChoiceDialog", _p_wxMultiChoiceDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFileDialog", _p_wxFileDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPrinter", _p_wxPrinterTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMenuItem", _p_wxMenuItemTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxCalculateLayoutEvent", _p_wxCalculateLayoutEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxEvtHandler", _p_wxEvtHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxTIFFHandler", _p_wxTIFFHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxImageHandler", _p_wxImageHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxBMPHandler", _p_wxBMPHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxICOHandler", _p_wxICOHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxCURHandler", _p_wxCURHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxANIHandler", _p_wxANIHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPNGHandler", _p_wxPNGHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxGIFHandler", _p_wxGIFHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPCXHandler", _p_wxPCXHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxJPEGHandler", _p_wxJPEGHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPNMHandler", _p_wxPNMHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxXPMHandler", _p_wxXPMHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyVListBox", _p_wxPyVListBoxTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyHtmlListBox", _p_wxPyHtmlListBoxTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxAcceleratorTable", _p_wxAcceleratorTableTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMiniFrame", _p_wxMiniFrameTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxImage", _p_wxImageTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFrame", _p_wxFrameTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyPrintout", _p_wxPyPrintoutTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxTaskBarIconEvent", _p_wxTaskBarIconEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxStatusBar", _p_wxStatusBarTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMDIParentFrame", _p_wxMDIParentFrameTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxObject", 0, 0, 0, 0, 0, 0},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxScrolledWindow", _p_wxScrolledWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyScrolledWindow", _p_wxPyScrolledWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyVScrolledWindow", _p_wxPyVScrolledWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMDIClientWindow", _p_wxMDIClientWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxTopLevelWindow", _p_wxTopLevelWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxWindow", _p_wxWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSashWindow", _p_wxSashWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSashLayoutWindow", _p_wxSashLayoutWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSplitterWindow", _p_wxSplitterWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSplashScreenWindow", _p_wxSplashScreenWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPopupWindow", _p_wxPopupWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyPopupTransientWindow", _p_wxPyPopupTransientWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxTipWindow", _p_wxTipWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSashEvent", _p_wxSashEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPrintPreview", _p_wxPrintPreviewTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyPrintPreview", _p_wxPyPrintPreviewTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPanel", _p_wxPanelTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPrintDialog", _p_wxPrintDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPageSetupDialog", _p_wxPageSetupDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxDialog", _p_wxDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxColourDialog", _p_wxColourDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxDirDialog", _p_wxDirDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFontDialog", _p_wxFontDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFileSystem", _p_wxFileSystemTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyApp", _p_wxPyAppTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPreviewControlBar", _p_wxPreviewControlBarTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyPreviewControlBar", _p_wxPyPreviewControlBarTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPageSetupDialogData", _p_wxPageSetupDialogDataTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPrintDialogData", _p_wxPrintDialogDataTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxValidator", _p_wxValidatorTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxObject, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxOutputStream[] = {{"_p_wxOutputStream", 0, "wxOutputStream *", 0, 0, 0, 0},{"_p_wxOutputStream", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxPrintPreviewBase[] = {{"_p_wxPrintPreviewBase", 0, "wxPrintPreviewBase *", 0, 0, 0, 0},{"_p_wxPrintPreviewBase", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxObject[] = {{"_p_wxObject", 0, "wxObject *", 0, 0, 0, 0},{"_p_wxQueryLayoutInfoEvent", _p_wxQueryLayoutInfoEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxLayoutConstraints", _p_wxLayoutConstraintsTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPreviewFrame", _p_wxPreviewFrameTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyPreviewFrame", _p_wxPyPreviewFrameTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxGBSizerItem", _p_wxGBSizerItemTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSizerItem", _p_wxSizerItemTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxIndividualLayoutConstraint", _p_wxIndividualLayoutConstraintTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxStaticBoxSizer", _p_wxStaticBoxSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxBoxSizer", _p_wxBoxSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSizer", _p_wxSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxGridBagSizer", _p_wxGridBagSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyPanel", _p_wxPyPanelTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMenu", _p_wxMenuTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFontData", _p_wxFontDataTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPrintData", _p_wxPrintDataTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxEvent", _p_wxEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxGridSizer", _p_wxGridSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFlexGridSizer", _p_wxFlexGridSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyTaskBarIcon", _p_wxPyTaskBarIconTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxLayoutAlgorithm", _p_wxLayoutAlgorithmTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFindDialogEvent", _p_wxFindDialogEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPreviewCanvas", _p_wxPreviewCanvasTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxControl", _p_wxControlTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSplitterEvent", _p_wxSplitterEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFSFile", _p_wxFSFileTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFindReplaceData", _p_wxFindReplaceDataTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPySizer", _p_wxPySizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMDIChildFrame", _p_wxMDIChildFrameTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxColourData", _p_wxColourDataTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyWindow", _p_wxPyWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSplashScreen", _p_wxSplashScreenTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPasswordEntryDialog", _p_wxPasswordEntryDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMessageDialog", _p_wxMessageDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxProgressDialog", _p_wxProgressDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFindReplaceDialog", _p_wxFindReplaceDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxTextEntryDialog", _p_wxTextEntryDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSingleChoiceDialog", _p_wxSingleChoiceDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMultiChoiceDialog", _p_wxMultiChoiceDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFileDialog", _p_wxFileDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPrinter", _p_wxPrinterTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMenuItem", _p_wxMenuItemTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxCalculateLayoutEvent", _p_wxCalculateLayoutEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxTIFFHandler", _p_wxTIFFHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxImageHandler", _p_wxImageHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxBMPHandler", _p_wxBMPHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxICOHandler", _p_wxICOHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxCURHandler", _p_wxCURHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxANIHandler", _p_wxANIHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPNGHandler", _p_wxPNGHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxGIFHandler", _p_wxGIFHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPCXHandler", _p_wxPCXHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxJPEGHandler", _p_wxJPEGHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPNMHandler", _p_wxPNMHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxXPMHandler", _p_wxXPMHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxEvtHandler", _p_wxEvtHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyVListBox", _p_wxPyVListBoxTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyHtmlListBox", _p_wxPyHtmlListBoxTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxAcceleratorTable", _p_wxAcceleratorTableTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMiniFrame", _p_wxMiniFrameTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxImage", _p_wxImageTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFrame", _p_wxFrameTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyPrintout", _p_wxPyPrintoutTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxTaskBarIconEvent", _p_wxTaskBarIconEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxStatusBar", _p_wxStatusBarTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMDIParentFrame", _p_wxMDIParentFrameTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxObject", 0, 0, 0, 0, 0, 0},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxScrolledWindow", _p_wxScrolledWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyScrolledWindow", _p_wxPyScrolledWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyVScrolledWindow", _p_wxPyVScrolledWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMDIClientWindow", _p_wxMDIClientWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxTopLevelWindow", _p_wxTopLevelWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxWindow", _p_wxWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSashWindow", _p_wxSashWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSashLayoutWindow", _p_wxSashLayoutWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSplitterWindow", _p_wxSplitterWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSplashScreenWindow", _p_wxSplashScreenWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPopupWindow", _p_wxPopupWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyPopupTransientWindow", _p_wxPyPopupTransientWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxTipWindow", _p_wxTipWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSashEvent", _p_wxSashEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPrintPreview", _p_wxPrintPreviewTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyPrintPreview", _p_wxPyPrintPreviewTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPanel", _p_wxPanelTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPrintDialog", _p_wxPrintDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPageSetupDialog", _p_wxPageSetupDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxDialog", _p_wxDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxColourDialog", _p_wxColourDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxDirDialog", _p_wxDirDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFontDialog", _p_wxFontDialogTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFileSystem", _p_wxFileSystemTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyApp", _p_wxPyAppTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPreviewControlBar", _p_wxPreviewControlBarTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyPreviewControlBar", _p_wxPyPreviewControlBarTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPrintNativeDataBase", _p_wxPrintNativeDataBaseTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPageSetupDialogData", _p_wxPageSetupDialogDataTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPrintDialogData", _p_wxPrintDialogDataTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxValidator", _p_wxValidatorTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxObject, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMDIClientWindow[] = {{"_p_wxMDIClientWindow", 0, "wxMDIClientWindow *", 0, 0, 0, 0},{"_p_wxMDIClientWindow", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxTipWindow[] = {{"_p_wxTipWindow", 0, "wxTipWindow *", 0, 0, 0, 0},{"_p_wxTipWindow", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxSashLayoutWindow[] = {{"_p_wxSashLayoutWindow", 0, "wxSashLayoutWindow *", 0, 0, 0, 0},{"_p_wxSashLayoutWindow", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -27070,8 +28069,8 @@ static swig_type_info _swigt__p_wxPyVScrolledWindow[] = {{"_p_wxPyVScrolledWindo
 static swig_type_info _swigt__p_wxPyPopupTransientWindow[] = {{"_p_wxPyPopupTransientWindow", 0, "wxPyPopupTransientWindow *", 0, 0, 0, 0},{"_p_wxPyPopupTransientWindow", 0, 0, 0, 0, 0, 0},{"_p_wxTipWindow", _p_wxTipWindowTo_p_wxPyPopupTransientWindow, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPopupWindow[] = {{"_p_wxPopupWindow", 0, "wxPopupWindow *", 0, 0, 0, 0},{"_p_wxPopupWindow", 0, 0, 0, 0, 0, 0},{"_p_wxPyPopupTransientWindow", _p_wxPyPopupTransientWindowTo_p_wxPopupWindow, 0, 0, 0, 0, 0},{"_p_wxTipWindow", _p_wxTipWindowTo_p_wxPopupWindow, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxSashWindow[] = {{"_p_wxSashWindow", 0, "wxSashWindow *", 0, 0, 0, 0},{"_p_wxSashWindow", 0, 0, 0, 0, 0, 0},{"_p_wxSashLayoutWindow", _p_wxSashLayoutWindowTo_p_wxSashWindow, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxTopLevelWindow[] = {{"_p_wxTopLevelWindow", 0, "wxTopLevelWindow *", 0, 0, 0, 0},{"_p_wxFrame", _p_wxFrameTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxMiniFrame", _p_wxMiniFrameTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxDirDialog", _p_wxDirDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxColourDialog", _p_wxColourDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxDialog", _p_wxDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxPageSetupDialog", _p_wxPageSetupDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxPrintDialog", _p_wxPrintDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxFontDialog", _p_wxFontDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxSplashScreen", _p_wxSplashScreenTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxTopLevelWindow", 0, 0, 0, 0, 0, 0},{"_p_wxMDIParentFrame", _p_wxMDIParentFrameTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxMDIChildFrame", _p_wxMDIChildFrameTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxProgressDialog", _p_wxProgressDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxFileDialog", _p_wxFileDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxMultiChoiceDialog", _p_wxMultiChoiceDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxSingleChoiceDialog", _p_wxSingleChoiceDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxTextEntryDialog", _p_wxTextEntryDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxMessageDialog", _p_wxMessageDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxFindReplaceDialog", _p_wxFindReplaceDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxPyPreviewFrame", _p_wxPyPreviewFrameTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxPreviewFrame", _p_wxPreviewFrameTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxWindow[] = {{"_p_wxWindow", 0, "wxWindow *", 0, 0, 0, 0},{"_p_wxSplashScreen", _p_wxSplashScreenTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMiniFrame", _p_wxMiniFrameTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPyPanel", _p_wxPyPanelTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxFindReplaceDialog", _p_wxFindReplaceDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxProgressDialog", _p_wxProgressDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMessageDialog", _p_wxMessageDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxTextEntryDialog", _p_wxTextEntryDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxSingleChoiceDialog", _p_wxSingleChoiceDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMultiChoiceDialog", _p_wxMultiChoiceDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxFileDialog", _p_wxFileDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPanel", _p_wxPanelTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxStatusBar", _p_wxStatusBarTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxTopLevelWindow", _p_wxTopLevelWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxSplashScreenWindow", _p_wxSplashScreenWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxSplitterWindow", _p_wxSplitterWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxSashLayoutWindow", _p_wxSashLayoutWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxSashWindow", _p_wxSashWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPyVScrolledWindow", _p_wxPyVScrolledWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPyScrolledWindow", _p_wxPyScrolledWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxWindow", 0, 0, 0, 0, 0, 0},{"_p_wxScrolledWindow", _p_wxScrolledWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPopupWindow", _p_wxPopupWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPyPopupTransientWindow", _p_wxPyPopupTransientWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxTipWindow", _p_wxTipWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMDIClientWindow", _p_wxMDIClientWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPyPreviewFrame", _p_wxPyPreviewFrameTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPreviewFrame", _p_wxPreviewFrameTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxControl", _p_wxControlTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMDIChildFrame", _p_wxMDIChildFrameTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPreviewCanvas", _p_wxPreviewCanvasTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPyWindow", _p_wxPyWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPyHtmlListBox", _p_wxPyHtmlListBoxTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPyVListBox", _p_wxPyVListBoxTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPyPreviewControlBar", _p_wxPyPreviewControlBarTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPreviewControlBar", _p_wxPreviewControlBarTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxFrame", _p_wxFrameTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPageSetupDialog", _p_wxPageSetupDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPrintDialog", _p_wxPrintDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxDialog", _p_wxDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxColourDialog", _p_wxColourDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxDirDialog", _p_wxDirDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxFontDialog", _p_wxFontDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMDIParentFrame", _p_wxMDIParentFrameTo_p_wxWindow, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxTopLevelWindow[] = {{"_p_wxTopLevelWindow", 0, "wxTopLevelWindow *", 0, 0, 0, 0},{"_p_wxFrame", _p_wxFrameTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxMiniFrame", _p_wxMiniFrameTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxDirDialog", _p_wxDirDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxColourDialog", _p_wxColourDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxDialog", _p_wxDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxPageSetupDialog", _p_wxPageSetupDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxPrintDialog", _p_wxPrintDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxFontDialog", _p_wxFontDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxSplashScreen", _p_wxSplashScreenTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxTopLevelWindow", 0, 0, 0, 0, 0, 0},{"_p_wxMDIParentFrame", _p_wxMDIParentFrameTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxMDIChildFrame", _p_wxMDIChildFrameTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxProgressDialog", _p_wxProgressDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxFileDialog", _p_wxFileDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxMultiChoiceDialog", _p_wxMultiChoiceDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxSingleChoiceDialog", _p_wxSingleChoiceDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxTextEntryDialog", _p_wxTextEntryDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxPasswordEntryDialog", _p_wxPasswordEntryDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxMessageDialog", _p_wxMessageDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxFindReplaceDialog", _p_wxFindReplaceDialogTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxPyPreviewFrame", _p_wxPyPreviewFrameTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{"_p_wxPreviewFrame", _p_wxPreviewFrameTo_p_wxTopLevelWindow, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxWindow[] = {{"_p_wxWindow", 0, "wxWindow *", 0, 0, 0, 0},{"_p_wxSplashScreen", _p_wxSplashScreenTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMiniFrame", _p_wxMiniFrameTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPyPanel", _p_wxPyPanelTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxFindReplaceDialog", _p_wxFindReplaceDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxProgressDialog", _p_wxProgressDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMessageDialog", _p_wxMessageDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPasswordEntryDialog", _p_wxPasswordEntryDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxTextEntryDialog", _p_wxTextEntryDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxSingleChoiceDialog", _p_wxSingleChoiceDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMultiChoiceDialog", _p_wxMultiChoiceDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxFileDialog", _p_wxFileDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPanel", _p_wxPanelTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxStatusBar", _p_wxStatusBarTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxTopLevelWindow", _p_wxTopLevelWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxSplashScreenWindow", _p_wxSplashScreenWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxSplitterWindow", _p_wxSplitterWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxSashLayoutWindow", _p_wxSashLayoutWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxSashWindow", _p_wxSashWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMDIClientWindow", _p_wxMDIClientWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPyVScrolledWindow", _p_wxPyVScrolledWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPyScrolledWindow", _p_wxPyScrolledWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxScrolledWindow", _p_wxScrolledWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxWindow", 0, 0, 0, 0, 0, 0},{"_p_wxPopupWindow", _p_wxPopupWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPyPopupTransientWindow", _p_wxPyPopupTransientWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxTipWindow", _p_wxTipWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPyPreviewFrame", _p_wxPyPreviewFrameTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPreviewFrame", _p_wxPreviewFrameTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxControl", _p_wxControlTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMDIChildFrame", _p_wxMDIChildFrameTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPreviewCanvas", _p_wxPreviewCanvasTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPyWindow", _p_wxPyWindowTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPyHtmlListBox", _p_wxPyHtmlListBoxTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPyVListBox", _p_wxPyVListBoxTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPyPreviewControlBar", _p_wxPyPreviewControlBarTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPreviewControlBar", _p_wxPreviewControlBarTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxFrame", _p_wxFrameTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPrintDialog", _p_wxPrintDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxPageSetupDialog", _p_wxPageSetupDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxDialog", _p_wxDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxColourDialog", _p_wxColourDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxDirDialog", _p_wxDirDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxFontDialog", _p_wxFontDialogTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMDIParentFrame", _p_wxMDIParentFrameTo_p_wxWindow, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxScrolledWindow[] = {{"_p_wxScrolledWindow", 0, "wxScrolledWindow *", 0, 0, 0, 0},{"_p_wxScrolledWindow", 0, 0, 0, 0, 0, 0},{"_p_wxPyScrolledWindow", _p_wxPyScrolledWindowTo_p_wxScrolledWindow, 0, 0, 0, 0, 0},{"_p_wxPreviewCanvas", _p_wxPreviewCanvasTo_p_wxScrolledWindow, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMenuBar[] = {{"_p_wxMenuBar", 0, "wxMenuBar *", 0, 0, 0, 0},{"_p_wxMenuBar", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPyScrolledWindow[] = {{"_p_wxPyScrolledWindow", 0, "wxPyScrolledWindow *", 0, 0, 0, 0},{"_p_wxPyScrolledWindow", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -27082,15 +28081,17 @@ static swig_type_info _swigt__p_wxPyPrintPreview[] = {{"_p_wxPyPrintPreview", 0,
 static swig_type_info _swigt__p_wxFontDialog[] = {{"_p_wxFontDialog", 0, "wxFontDialog *", 0, 0, 0, 0},{"_p_wxFontDialog", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxDirDialog[] = {{"_p_wxDirDialog", 0, "wxDirDialog *", 0, 0, 0, 0},{"_p_wxDirDialog", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxColourDialog[] = {{"_p_wxColourDialog", 0, "wxColourDialog *", 0, 0, 0, 0},{"_p_wxColourDialog", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxDialog[] = {{"_p_wxDialog", 0, "wxDialog *", 0, 0, 0, 0},{"_p_wxDialog", 0, 0, 0, 0, 0, 0},{"_p_wxColourDialog", _p_wxColourDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxDirDialog", _p_wxDirDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxFontDialog", _p_wxFontDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxPageSetupDialog", _p_wxPageSetupDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxPrintDialog", _p_wxPrintDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxFileDialog", _p_wxFileDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxMultiChoiceDialog", _p_wxMultiChoiceDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxSingleChoiceDialog", _p_wxSingleChoiceDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxTextEntryDialog", _p_wxTextEntryDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxMessageDialog", _p_wxMessageDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxFindReplaceDialog", _p_wxFindReplaceDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxDialog[] = {{"_p_wxDialog", 0, "wxDialog *", 0, 0, 0, 0},{"_p_wxDialog", 0, 0, 0, 0, 0, 0},{"_p_wxColourDialog", _p_wxColourDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxDirDialog", _p_wxDirDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxFontDialog", _p_wxFontDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxPageSetupDialog", _p_wxPageSetupDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxPrintDialog", _p_wxPrintDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxFileDialog", _p_wxFileDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxMultiChoiceDialog", _p_wxMultiChoiceDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxSingleChoiceDialog", _p_wxSingleChoiceDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxTextEntryDialog", _p_wxTextEntryDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxPasswordEntryDialog", _p_wxPasswordEntryDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxMessageDialog", _p_wxMessageDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{"_p_wxFindReplaceDialog", _p_wxFindReplaceDialogTo_p_wxDialog, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPanel[] = {{"_p_wxPanel", 0, "wxPanel *", 0, 0, 0, 0},{"_p_wxPanel", 0, 0, 0, 0, 0, 0},{"_p_wxScrolledWindow", _p_wxScrolledWindowTo_p_wxPanel, 0, 0, 0, 0, 0},{"_p_wxPyScrolledWindow", _p_wxPyScrolledWindowTo_p_wxPanel, 0, 0, 0, 0, 0},{"_p_wxPyVScrolledWindow", _p_wxPyVScrolledWindowTo_p_wxPanel, 0, 0, 0, 0, 0},{"_p_wxPyVListBox", _p_wxPyVListBoxTo_p_wxPanel, 0, 0, 0, 0, 0},{"_p_wxPyHtmlListBox", _p_wxPyHtmlListBoxTo_p_wxPanel, 0, 0, 0, 0, 0},{"_p_wxPyPanel", _p_wxPyPanelTo_p_wxPanel, 0, 0, 0, 0, 0},{"_p_wxPreviewCanvas", _p_wxPreviewCanvasTo_p_wxPanel, 0, 0, 0, 0, 0},{"_p_wxPreviewControlBar", _p_wxPreviewControlBarTo_p_wxPanel, 0, 0, 0, 0, 0},{"_p_wxPyPreviewControlBar", _p_wxPyPreviewControlBarTo_p_wxPanel, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPageSetupDialog[] = {{"_p_wxPageSetupDialog", 0, "wxPageSetupDialog *", 0, 0, 0, 0},{"_p_wxPageSetupDialog", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPrintDialog[] = {{"_p_wxPrintDialog", 0, "wxPrintDialog *", 0, 0, 0, 0},{"_p_wxPrintDialog", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxFileSystem[] = {{"_p_wxFileSystem", 0, "wxFileSystem *", 0, 0, 0, 0},{"_p_wxFileSystem", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxPrinterBase[] = {{"_p_wxPrinterBase", 0, "wxPrinterBase *", 0, 0, 0, 0},{"_p_wxPrinterBase", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxBitmap[] = {{"_p_wxBitmap", 0, "wxBitmap *", 0, 0, 0, 0},{"_p_wxBitmap", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxCommandEvent[] = {{"_p_wxCommandEvent", 0, "wxCommandEvent *", 0, 0, 0, 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxFindDialogEvent", _p_wxFindDialogEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxSplitterEvent", _p_wxSplitterEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxCommandEvent", 0, 0, 0, 0, 0, 0},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxSashEvent", _p_wxSashEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPreviewControlBar[] = {{"_p_wxPreviewControlBar", 0, "wxPreviewControlBar *", 0, 0, 0, 0},{"_p_wxPreviewControlBar", 0, 0, 0, 0, 0, 0},{"_p_wxPyPreviewControlBar", _p_wxPyPreviewControlBarTo_p_wxPreviewControlBar, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPyPreviewControlBar[] = {{"_p_wxPyPreviewControlBar", 0, "wxPyPreviewControlBar *", 0, 0, 0, 0},{"_p_wxPyPreviewControlBar", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxPrintNativeDataBase[] = {{"_p_wxPrintNativeDataBase", 0, "wxPrintNativeDataBase *", 0, 0, 0, 0},{"_p_wxPrintNativeDataBase", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxColour[] = {{"_p_wxColour", 0, "wxColour *", 0, 0, 0, 0},{"_p_wxColour", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxToolBar[] = {{"_p_wxToolBar", 0, "wxToolBar *", 0, 0, 0, 0},{"_p_wxToolBar", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPageSetupDialogData[] = {{"_p_wxPageSetupDialogData", 0, "wxPageSetupDialogData *", 0, 0, 0, 0},{"_p_wxPageSetupDialogData", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -27100,6 +28101,8 @@ static swig_type_info *swig_types_initial[] = {
 _swigt__p_wxQueryLayoutInfoEvent, 
 _swigt__p_wxPreviewFrame, 
 _swigt__p_wxPyPreviewFrame, 
+_swigt__p_wxPrintDialogBase, 
+_swigt__p_wxPrintFactory, 
 _swigt__p_wxPyPanel, 
 _swigt__p_wxMenu, 
 _swigt__p_wxFontData, 
@@ -27128,10 +28131,11 @@ _swigt__p_wxSplashScreen,
 _swigt__p_wxFindReplaceDialog, 
 _swigt__p_wxProgressDialog, 
 _swigt__p_wxMessageDialog, 
-_swigt__p_wxTextEntryDialog, 
+_swigt__p_wxPasswordEntryDialog, 
 _swigt__p_wxSingleChoiceDialog, 
 _swigt__p_wxMultiChoiceDialog, 
 _swigt__p_wxFileDialog, 
+_swigt__p_wxTextEntryDialog, 
 _swigt__p_wxPrinter, 
 _swigt__p_wxArrayInt, 
 _swigt__p_wxEvtHandler, 
@@ -27142,14 +28146,15 @@ _swigt__p_wxRect,
 _swigt__p_char, 
 _swigt__p_wxMiniFrame, 
 _swigt__p_wxFrame, 
+_swigt__p_wxPrintout, 
 _swigt__p_wxPyPrintout, 
 _swigt__p_wxTaskBarIconEvent, 
 _swigt__p_wxScrollWinEvent, 
 _swigt__p_wxStatusBar, 
 _swigt__p_wxMDIParentFrame, 
 _swigt__p_wxPoint, 
+_swigt__p_wxPrintPreviewBase, 
 _swigt__p_wxObject, 
-_swigt__p_wxOutputStream, 
 _swigt__p_wxMDIClientWindow, 
 _swigt__p_wxTipWindow, 
 _swigt__p_wxSashLayoutWindow, 
@@ -27176,10 +28181,12 @@ _swigt__p_wxPanel,
 _swigt__p_wxPageSetupDialog, 
 _swigt__p_wxPrintDialog, 
 _swigt__p_wxFileSystem, 
+_swigt__p_wxPrinterBase, 
 _swigt__p_wxBitmap, 
 _swigt__p_wxCommandEvent, 
 _swigt__p_wxPreviewControlBar, 
 _swigt__p_wxPyPreviewControlBar, 
+_swigt__p_wxPrintNativeDataBase, 
 _swigt__p_wxColour, 
 _swigt__p_wxToolBar, 
 _swigt__p_wxPageSetupDialogData, 
@@ -27336,6 +28343,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"GetTextFromUserPromptStr",_wrap_GetTextFromUserPromptStr_get, _wrap_GetTextFromUserPromptStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"MessageBoxCaptionStr",_wrap_MessageBoxCaptionStr_get, _wrap_MessageBoxCaptionStr_set);
     PyDict_SetItemString(d,"CHOICEDLG_STYLE", SWIG_From_int((int)wxCHOICEDLG_STYLE));
+    SWIG_addvarlink(SWIG_globals,(char*)"GetPasswordFromUserPromptStr",_wrap_GetPasswordFromUserPromptStr_get, _wrap_GetPasswordFromUserPromptStr_set);
     PyDict_SetItemString(d,"FR_DOWN", SWIG_From_int((int)wxFR_DOWN));
     PyDict_SetItemString(d,"FR_WHOLEWORD", SWIG_From_int((int)wxFR_WHOLEWORD));
     PyDict_SetItemString(d,"FR_MATCHCASE", SWIG_From_int((int)wxFR_MATCHCASE));
