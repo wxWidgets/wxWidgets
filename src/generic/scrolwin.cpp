@@ -662,7 +662,8 @@ void wxScrolledWindow::OnChar(wxKeyEvent& event)
     {
         case WXK_PAGEUP:
         case WXK_PRIOR:
-            Scroll(-1, sty - (5 * cliy / 6));
+            int y = sty - (5 * cliy / 6);
+            Scroll(-1, (y == -1) ? 0 : newy);
             break;
 
         case WXK_PAGEDOWN:
