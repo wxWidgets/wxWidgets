@@ -30,8 +30,9 @@ No base class
 The functions in this section work with and manipulate the active log target.
 The {\it OnLog()} is called by the {\it wxLogXXX()} functions and invokes the 
 {\it DoLog()} of the active log target if any. Get/Set methods are used to
-install/query the current active target and, finally, {\it
-DontCreateOnDemand()} disables the automatic creation of a standard log target
+install/query the current active target and, finally, 
+\helpref{DontCreateOnDemand()}{wxlogdontcreateondemand} 
+disables the automatic creation of a standard log target
 if none actually exists. It is only useful when the application is terminating
 and shouldn't be used in other situations because it may easily lead to a loss
 of messages.
@@ -123,6 +124,7 @@ window on the corresponding error message. If you wish to enable it, please use
 
 \helpref{AddTraceMask}{wxlogaddtracemask}\\
 \helpref{RemoveTraceMask}{wxlogremovetracemask}\\
+\helpref{ClearTraceMasks}{wxlogcleartracemasks}\\
 \helpref{IsAllowedTraceMask}{wxlogisallowedtracemask}\\
 \helpref{SetVerbose}{wxlogsetverbose}\\
 \helpref{GetVerbose}{wxloggetverbose}\\
@@ -144,6 +146,15 @@ window on the corresponding error message. If you wish to enable it, please use
 
 Add the {\it mask} to the list of allowed masks for 
 \helpref{wxLogTrace}{wxlogtrace}.
+
+See also: \helpref{RemoveTraceMask}{wxlogremovetracemask}
+
+\membersection{wxLog::ClearTraceMasks}\label{wxlogcleartracemasks}
+
+\func{static void}{ClearTraceMasks}{\void}
+
+Removes all trace masks previously set with 
+\helpref{AddTraceMask}{wxlogaddtracemask}.
 
 See also: \helpref{RemoveTraceMask}{wxlogremovetracemask}
 
@@ -172,7 +183,11 @@ previous active log target (may be NULL).
 \func{static void}{DontCreateOnDemand}{\void}
 
 Instructs wxLog to not create new log targets on the fly if there is none
-currently. (Almost) for internal use only.
+currently. (Almost) for internal use only: it is supposed to be called by the
+application shutdown code.
+
+Note that this function also calls 
+\helpref{ClearTraceMasks}{wxlogcleartracemasks}.
 
 \membersection{wxLog::Flush}\label{wxlogflush}
 

@@ -323,11 +323,26 @@ wxLog *wxLog::SetActiveTarget(wxLog *pLogger)
     return pOldLogger;
 }
 
+void wxLog::DontCreateOnDemand()
+{
+    ms_bAutoCreate = FALSE;
+
+    // this is usually called at the end of the program and we assume that it
+    // is *always* called at the end - so we free memory here to avoid false
+    // memory leak reports from wxWin  memory tracking code
+    ClearTraceMasks();
+}
+
 void wxLog::RemoveTraceMask(const wxString& str)
 {
     int index = ms_aTraceMasks.Index(str);
     if ( index != wxNOT_FOUND )
         ms_aTraceMasks.Remove((size_t)index);
+}
+
+void wxLog::ClearTraceMasks()
+{
+    ms_aTraceMasks.Clear();
 }
 
 void wxLog::TimeStamp(wxString *str)
