@@ -127,13 +127,11 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
 
 // draw a ">" or "v" button
 //
-// TODO: isn't there a GTK function to draw it?
+// TODO: replace the code below with gtk_paint_expander()
 void
 wxRendererGTK::DrawTreeItemButton(wxWindow* win,
                                   wxDC& dc, const wxRect& rect, int flags)
 {
-#if 1
-
 #define PM_SIZE 8
 
     GtkPizza *pizza = GTK_PIZZA( win->m_wxwindow );
@@ -143,7 +141,6 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
     y = dc.LogicalToDeviceY( y );
     x = dc.LogicalToDeviceX( x );
 
-#if 1
     // This draws the GTK+ 2.2.4 triangle
     x--;
     GdkPoint points[3];
@@ -173,57 +170,6 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
     else
         gdk_draw_polygon( pizza->bin_window, style->base_gc[GTK_STATE_NORMAL], TRUE, points, 3);
     gdk_draw_polygon( pizza->bin_window, style->fg_gc[GTK_STATE_NORMAL], FALSE, points, 3 );
-#else
-    // this draws the GTK+ 2.2.3 tree item square    
-    gdk_draw_rectangle( pizza->bin_window,
-        style->base_gc[GTK_STATE_NORMAL], TRUE,
-        x, y, PM_SIZE, PM_SIZE);
-    gdk_draw_rectangle( pizza->bin_window,
-        style->fg_gc[GTK_STATE_NORMAL], FALSE,
-        x, y, PM_SIZE, PM_SIZE);
-
-    gdk_draw_line( pizza->bin_window, style->fg_gc[GTK_STATE_NORMAL],
-        x + 2, y + PM_SIZE / 2, x + PM_SIZE - 2, y + PM_SIZE / 2);
-
-    if ( flags & wxCONTROL_EXPANDED )
-    {
-        gdk_draw_line( pizza->bin_window, style->fg_gc[GTK_STATE_NORMAL],
-               x + PM_SIZE / 2, y + 2,
-               x + PM_SIZE / 2, y + PM_SIZE - 2);
-    }
-#endif    
-    
-    
-#else
-    dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT),
-                        wxSOLID));
-    dc.SetPen(*wxBLACK_PEN);
-    wxPoint button[3];
-
-    const wxCoord xMiddle = rect.x + rect.width/2;
-    const wxCoord yMiddle = rect.y + rect.height/2;
-
-    if ( flags & wxCONTROL_EXPANDED )
-    {
-        button[0].x = rect.GetLeft();
-        button[0].y = yMiddle - 2;
-        button[1].x = rect.GetRight();
-        button[1].y = yMiddle - 2;
-        button[2].x = xMiddle;
-        button[2].y = yMiddle + 3;
-    }
-    else // collapsed
-    {
-        button[0].y = rect.GetBottom();
-        button[0].x = xMiddle - 2;
-        button[1].y = rect.GetTop();
-        button[1].x = xMiddle - 2;
-        button[2].y = yMiddle;
-        button[2].x = xMiddle + 3;
-    }
-
-    dc.DrawPolygon(3, button);
-#endif
 }
 
 #endif // GTK 2.0
