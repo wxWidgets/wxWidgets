@@ -72,8 +72,10 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 
   // Even with extended styles, need to combine with WS_BORDER
   // for them to look right.
+/*
   if ( want3D || wxStyleHasBorder(m_windowStyle) )
     msStyle |= WS_BORDER;
+*/
 
   m_hWnd = (WXHWND) CreateWindowEx(exStyle, RADIO_CLASS, (const char *)label,
                           msStyle,0,0,0,0,

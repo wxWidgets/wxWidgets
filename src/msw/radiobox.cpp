@@ -125,8 +125,10 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
   WXDWORD exStyle = Determine3DEffects(0, &want3D) ;
   // Even with extended styles, need to combine with WS_BORDER
   // for them to look right.
+/*
   if ( want3D || wxStyleHasBorder(m_windowStyle) )
     msStyle |= WS_BORDER;
+*/
 
 
   HWND the_handle = (HWND) parent->GetHWND() ;
