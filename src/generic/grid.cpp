@@ -6270,7 +6270,7 @@ void wxGrid::ShowCellEditControl()
     {
         if ( !IsVisible( m_currentCellCoords ) )
         {
-            m_cellEditCtrlEnabled = false;
+            m_cellEditCtrlEnabled = FALSE;
             return;
         }
         else
