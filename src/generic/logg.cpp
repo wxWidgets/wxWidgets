@@ -18,7 +18,9 @@
 // headers
 // ----------------------------------------------------------------------------
 
-// no #pragma implementation "log.h" because it's already in src/common/log.cpp
+#ifdef __GNUG__
+    #pragma implementation "logg.h"
+#endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
