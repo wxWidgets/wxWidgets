@@ -447,7 +447,7 @@ void wxTextCtrl::SetValue(const wxString& value)
     }
 }
 
-#if wxUSE_RICHEDIT && !wxUSE_UNICODE
+#if wxUSE_RICHEDIT && (!wxUSE_UNICODE || wxUSE_UNICODE_MSLU)
 
 DWORD CALLBACK wxRichEditStreamIn(DWORD dwCookie, BYTE *buf, LONG cb, LONG *pcb)
 {
@@ -470,6 +470,11 @@ DWORD CALLBACK wxRichEditStreamIn(DWORD dwCookie, BYTE *buf, LONG cb, LONG *pcb)
 
 extern long wxEncodingToCodepage(wxFontEncoding encoding); // from strconv.cpp
 
+#if wxUSE_UNICODE_MSLU
+bool wxTextCtrl::StreamIn(const wxString& value, wxFontEncoding WXUNUSED(encoding))
+{
+    const wchar_t *wpc = value.c_str();
+#else
 bool wxTextCtrl::StreamIn(const wxString& value, wxFontEncoding encoding)
 {
     // we have to use EM_STREAMIN to force richedit control 2.0+ to show any
@@ -495,6 +500,7 @@ bool wxTextCtrl::StreamIn(const wxString& value, wxFontEncoding encoding)
 
     // finally, stream it in the control
     const wchar_t *wpc = wchBuf;
+#endif // wxUSE_UNICODE_MSLU
 
     EDITSTREAM eds;
     wxZeroMemory(eds);
@@ -530,8 +536,17 @@ void wxTextCtrl::WriteText(const wxString& value)
         {
             long start, end;
             GetSelection(&start, &end);
-            SetStyle(start, end, m_defaultStyle );
+            SetStyle(start, end, m_defaultStyle);
         }
+
+#if wxUSE_UNICODE_MSLU
+        // RichEdit doesn't have Unicode version of EM_REPLACESEL on Win9x,
+        // but EM_STREAMIN works
+        if ( wxGetOsVersion() == wxWIN95 && GetRichVersion() > 1 )
+        {
+           done = StreamIn(valueDos, wxFONTENCODING_SYSTEM);
+        }
+#endif // wxUSE_UNICODE_MSLU
 
 #if !wxUSE_UNICODE
         // next check if the text we're inserting must be shown in a non
