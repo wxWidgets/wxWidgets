@@ -470,6 +470,7 @@ public:
 
     bool SetPage(const wxString& source);
     bool LoadPage(const wxString& location);
+    bool AppendToPage(const wxString& source);
     wxString GetOpenedPage();
     wxString GetOpenedAnchor();
     wxString GetOpenedPageTitle();
