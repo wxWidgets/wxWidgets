@@ -128,6 +128,18 @@ wxPalette wxGLContext::CreateDefaultPalette()
     return wxNullPalette;
 }
 
+//-----------------------------------------------------------------------------
+// "realize" from m_wxwindow
+//-----------------------------------------------------------------------------
+
+static gint
+gtk_glwindow_realized_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
+{
+    win->m_glContext = new wxGLContext( TRUE, win, wxNullPalette, win->m_glContext );
+
+    return FALSE;
+}
+
 //---------------------------------------------------------------------------
 // wxGlCanvas
 //---------------------------------------------------------------------------
@@ -166,21 +178,13 @@ bool wxGLCanvas::Create( wxWindow *parent,
                          int *attribList, 
 			 const wxPalette& palette)
 {
-    m_needParent = TRUE;
-    m_acceptsFocus = TRUE;
-
-    if (!PreCreation( parent, pos, size ) ||
-        !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
-    {
-        wxFAIL_MSG( _T("wxGLCanvas creation failed") );
-	return FALSE;
-    }
-
+    m_glContext = (wxGLContext*)shared;  // const_cast
+    
     if (!attribList)
     {
         int data[] = { GLX_RGBA, 
 	               GLX_DOUBLEBUFFER, 
-		       GLX_DEPTH_SIZE, 1,  /* use largest available depth buffer */
+		       GLX_DEPTH_SIZE, 1,  // use largest available depth buffer
 		       GLX_RED_SIZE, 1, 
 		       GLX_GREEN_SIZE, 1, 
 		       GLX_BLUE_SIZE, 1, 
@@ -225,37 +229,28 @@ bool wxGLCanvas::Create( wxWindow *parent,
     
     gtk_widget_push_colormap( colormap );
     gtk_widget_push_visual( visual );
+
+    wxScrolledWindow::Create( parent, id, pos, size, style, name );
+
+    m_glWidget = m_wxwindow;
     
-    m_glWidget = gtk_myfixed_new();
-    m_widget = m_glWidget;
-    
+    gtk_signal_connect( GTK_OBJECT(m_glWidget), "realize",
+                            GTK_SIGNAL_FUNC(gtk_glwindow_realized_callback), (gpointer) this );
     gtk_widget_pop_visual();
     gtk_widget_pop_colormap();
     
-    m_parent->DoAddChild( this );
-  
     /* must be realized for OpenGl output */
     gtk_widget_realize( m_glWidget );
  
-    m_glContext = new wxGLContext( TRUE, this, palette, shared );
-    
     XFree( g_vi );
     g_vi = (XVisualInfo*) NULL;
 
-    /* we pretend to have a m_wxwindow so that PostCreation hooks
-       up the events for expose and draw */
-    m_wxwindow = m_glWidget;
-    PostCreation();
-    
-    Show( TRUE );
-    
     return TRUE;
 }
 
 wxGLCanvas::~wxGLCanvas()
 {
     if (m_glContext) delete m_glContext;
-    m_wxwindow = (GtkWidget*) NULL;
 }
 
 void wxGLCanvas::SwapBuffers()
@@ -292,10 +287,10 @@ void wxGLCanvas::SetColour( const char *colour )
 
 GtkWidget *wxGLCanvas::GetConnectWidget()
 {
-    return m_glWidget;
+    return m_wxwindow;
 }
 
 bool wxGLCanvas::IsOwnGtkWindow( GdkWindow *window )
 {
-    return (window == m_glWidget->window);
+    return (window == m_wxwindow->window);
 }
