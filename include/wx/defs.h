@@ -457,7 +457,7 @@ typedef int wxWindowID;
 
 // sometimes the value of a variable is *really* not used, to suppress  the
 // resulting warning you may pass it to this function
-template <typename T>
+template <class T>
 inline void wxUnusedVar(const T& WXUNUSED(t)) { }
 
 // ----------------------------------------------------------------------------
