@@ -80,6 +80,8 @@ class MyPanel: public wxPanel
     void OnSpinUpdate( wxSpinEvent &event );
     void OnPasteFromClipboard( wxCommandEvent &event );
     void OnCopyToClipboard( wxCommandEvent &event );
+    void OnMoveToEndOfText( wxCommandEvent &event );
+    void OnMoveToEndOfEntry( wxCommandEvent &event );
 
     wxListBox     *m_listbox;
     wxChoice      *m_choice;
@@ -91,6 +93,7 @@ class MyPanel: public wxPanel
     wxSpinButton  *m_spinbutton;
     wxTextCtrl    *m_spintext;
     wxTextCtrl    *m_multitext;
+    wxTextCtrl    *m_textentry;
     wxCheckBox    *m_checkbox;
 
     wxTextCtrl    *m_text;
@@ -118,7 +121,7 @@ class MyFrame: public wxFrame
 // main()
 //----------------------------------------------------------------------
 
-IMPLEMENT_APP	(MyApp)
+IMPLEMENT_APP(MyApp)
 
 //----------------------------------------------------------------------
 // MyApp
@@ -192,6 +195,8 @@ const int  ID_COMBO_ENABLE      = 147;
 const int  ID_TEXT              = 150;
 const int  ID_PASTE_TEXT        = 151;
 const int  ID_COPY_TEXT         = 152;
+const int  ID_MOVE_END_ENTRY    = 153;
+const int  ID_MOVE_END_ZONE     = 154;
 
 const int  ID_RADIOBOX          = 160;
 const int  ID_RADIOBOX_SEL_NUM  = 161;
@@ -248,6 +253,8 @@ BEGIN_EVENT_TABLE(MyPanel, wxPanel)
   EVT_SPIN      (ID_SPIN,                 MyPanel::OnSpinUpdate)
   EVT_BUTTON    (ID_PASTE_TEXT,           MyPanel::OnPasteFromClipboard)
   EVT_BUTTON    (ID_COPY_TEXT,            MyPanel::OnCopyToClipboard)
+  EVT_BUTTON    (ID_MOVE_END_ZONE,        MyPanel::OnMoveToEndOfText)
+  EVT_BUTTON    (ID_MOVE_END_ENTRY,       MyPanel::OnMoveToEndOfEntry)
 END_EVENT_TABLE()
 
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
@@ -386,15 +393,21 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   panel = new wxPanel(m_notebook);
 //  panel->SetBackgroundColour("cadet blue");
 //  panel->SetForegroundColour("blue");
-  wxTextCtrl *tc = new wxTextCtrl( panel, ID_TEXT, "Write text here.", wxPoint(10,10), wxSize(320,28));
-  (*tc) << " More text.";
-//  tc->SetBackgroundColour("wheat");
+  m_textentry = new wxTextCtrl( panel, ID_TEXT, "Write text here.", wxPoint(10,10), wxSize(320,28));
+  (*m_textentry) << " More text.";
+//  m_textentry->SetBackgroundColour("wheat");
   m_multitext = new wxTextCtrl( panel, ID_TEXT, "And here.", wxPoint(10,50), wxSize(320,160), wxTE_MULTILINE  );
   (*m_multitext) << " More text.";
 //  m_multitext->SetBackgroundColour("wheat");
-  (void)new wxStaticBox( panel, -1, "wxClipboard", wxPoint(345,50), wxSize(160,145) );
-  (void)new wxButton( panel, ID_COPY_TEXT, "Copy line 1", wxPoint(370,80), wxSize(110,30) );
-  (void)new wxButton( panel, ID_PASTE_TEXT, "Paste text", wxPoint(370,140), wxSize(110,30) );
+  (void)new wxStaticBox( panel, -1, "Move cursor to the end of:",
+                         wxPoint(345, 0), wxSize(160, 100) );
+  (void)new wxButton(panel, ID_MOVE_END_ENTRY, "Text entry",
+                     wxPoint(370, 20), wxSize(110, 30));
+  (void)new wxButton(panel, ID_MOVE_END_ZONE, "Text zone",
+                     wxPoint(370, 60), wxSize(110, 30));
+  (void)new wxStaticBox( panel, -1, "wxClipboard", wxPoint(345,120), wxSize(160,100) );
+  (void)new wxButton( panel, ID_COPY_TEXT, "Copy line 1", wxPoint(370,140), wxSize(110,30) );
+  (void)new wxButton( panel, ID_PASTE_TEXT, "Paste text", wxPoint(370,180), wxSize(110,30) );
   m_notebook->AddPage(panel, "wxTextCtrl" , FALSE, Image_Text);
 
   wxString choices2[] =
@@ -531,6 +544,18 @@ void MyPanel::OnCopyToClipboard( wxCommandEvent &WXUNUSED(event) )
   *m_text << "Closed the clipboard." << "\n";
 
 #endif
+}
+
+void MyPanel::OnMoveToEndOfText( wxCommandEvent &event )
+{
+    m_multitext->SetInsertionPointEnd();
+    m_multitext->SetFocus();
+}
+
+void MyPanel::OnMoveToEndOfEntry( wxCommandEvent &event )
+{
+    m_textentry->SetInsertionPointEnd();
+    m_textentry->SetFocus();
 }
 
 void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )

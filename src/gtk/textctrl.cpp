@@ -435,7 +435,7 @@ long wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
     {
         wxString text = GetValue();
 
-        if( pos >= text.Len()  )
+        if( pos >= (long)text.Len()  )
             return FALSE;
 
         *x=1;   // Col 1
@@ -519,18 +519,20 @@ void wxTextCtrl::SetInsertionPoint( long pos )
 {
     wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
-    int tmp = (int) pos;
     if (m_windowStyle & wxTE_MULTILINE)
-        gtk_text_set_point( GTK_TEXT(m_text), tmp );
+        gtk_text_set_point( GTK_TEXT(m_text), (int)pos );
     else
-        gtk_entry_set_position( GTK_ENTRY(m_text), tmp );
+        gtk_entry_set_position( GTK_ENTRY(m_text), (int)pos );
 }
 
 void wxTextCtrl::SetInsertionPointEnd()
 {
     wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
-    SetInsertionPoint(-1);
+    if (m_windowStyle & wxTE_MULTILINE)
+        SetInsertionPoint(gtk_text_get_length(GTK_TEXT(m_text)));
+    else
+        gtk_entry_set_position( GTK_ENTRY(m_text), -1 );
 }
 
 void wxTextCtrl::SetEditable( bool editable )
