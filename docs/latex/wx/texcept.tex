@@ -46,7 +46,7 @@ add a try/catch clause around the call of the base class version. This would
 allow you to catch any exceptions generated during the execution of the main
 event loop. To deal with the exceptions which may arise during the program
 startup and/or shutdown you should insert try/catch clauses in 
-\helpref{OnInit()}{wxapponinit} and/or \helpref{OnExit()}{wxappoxexit} as well.
+\helpref{OnInit()}{wxapponinit} and/or \helpref{OnExit()}{wxapponexit} as well.
 
 Finally, you may also want to continue running even when certain exceptions
 occur. If all of your exceptions may happen only in the event handlers of a
