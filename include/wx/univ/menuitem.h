@@ -48,6 +48,11 @@ public:
     const wxBitmap& GetBitmap(bool checked = TRUE) const
       { return checked ? m_bmpChecked : m_bmpUnchecked; }
 
+    void SetDisabledBitmap( const wxBitmap& bmpDisabled )
+      { m_bmpDisabled = bmpDisabled; }
+    const wxBitmap& GetDisabledBitmap() const
+      { return m_bmpDisabled; }
+
     // mark item as belonging to the given radio group
     void SetAsRadioGroupStart();
     void SetRadioGroupStart(int start);
@@ -92,7 +97,8 @@ protected:
 
     // the bitmaps (may be invalid, then they're not used)
     wxBitmap m_bmpChecked,
-             m_bmpUnchecked;
+             m_bmpUnchecked,
+             m_bmpDisabled; 
 
     // the positions of the first and last items of the radio group this item
     // belongs to or -1: start is the radio group start and is valid for all

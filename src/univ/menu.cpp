@@ -585,6 +585,21 @@ void wxPopupMenuWindow::DoDraw(wxControlRenderer *renderer)
             if ( item == GetCurrentItem() )
                 flags |= wxCONTROL_SELECTED;
 
+            wxBitmap bmp;
+
+            if ( !item->IsEnabled() )
+            {
+                bmp = item->GetDisabledBitmap();
+            }
+
+            if ( !bmp.Ok() )
+            {
+                // strangely enough, for unchecked item we use the
+                // "checked" bitmap because this is the default one - this
+                // explains this strange boolean expression
+                bmp = item->GetBitmap(!item->IsCheckable() || item->IsChecked());
+            }
+
             rend->DrawMenuItem
                   (
                      dc,
@@ -592,10 +607,7 @@ void wxPopupMenuWindow::DoDraw(wxControlRenderer *renderer)
                      gi,
                      item->GetLabel(),
                      item->GetAccelString(),
-                     // strangely enough, for unchecked item we use the
-                     // "checked" bitmap because this is the default one - this
-                     // explains this strange boolean expression
-                     item->GetBitmap(!item->IsCheckable() || item->IsChecked()),
+                     bmp,
                      flags,
                      item->GetAccelIndex()
                   );
@@ -1486,6 +1498,8 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
 
     m_radioGroup.start = -1;
     m_isRadioGroupStart = FALSE;
+
+    m_bmpDisabled = wxNullBitmap;
 
     UpdateAccelInfo();
 }
