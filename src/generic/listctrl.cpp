@@ -3806,16 +3806,10 @@ void wxListMainWindow::SetItem( wxListItem &item )
         line->SetItem( item.m_col, item );
     }
 
-    if ( InReportView() )
-    {
-        // just refresh the line to show the new value of the text/image
-        RefreshLine((size_t)id);
-    }
-    else // !report
-    {
-        // refresh everything (resulting in horrible flicker - FIXME!)
-        m_dirty = TRUE;
-    }
+    // update the item on screen
+    wxRect rectItem;
+    GetItemRect(id, rectItem);
+    RefreshRect(rectItem);
 }
 
 void wxListMainWindow::SetItemState( long litem, long state, long stateMask )
