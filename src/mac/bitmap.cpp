@@ -547,55 +547,68 @@ wxBitmap::wxBitmap(const wxImage& image, int depth)
 
     // Create picture
 
-    Create( width , height , wxDisplayDepth() ) ;
-    wxBitmap maskBitmap( width, height, 1);
+    Create( width , height , 32 ) ;
     
     CGrafPtr origPort ;
     GDHandle origDevice ;
 
-    LockPixels( GetGWorldPixMap(GetHBITMAP()) );
-    LockPixels( GetGWorldPixMap(maskBitmap.GetHBITMAP()) );
+    PixMapHandle pixMap = GetGWorldPixMap(GetHBITMAP()) ;
+    LockPixels( pixMap );
 
     GetGWorld( &origPort , &origDevice ) ;
     SetGWorld( GetHBITMAP() , NULL ) ;
     
     // Render image
-    wxColour rgb, maskcolor(image.GetMaskRed(), image.GetMaskGreen(), image.GetMaskBlue());
-    RGBColor color;
-    RGBColor white = { 0xffff, 0xffff, 0xffff };
-    RGBColor black = { 0     , 0     , 0      };
+    RGBColor colorRGB ;
 
     register unsigned char* data = image.GetData();
-
-    int index = 0;
+    char* destinationBase = GetPixBaseAddr( pixMap );
+    register unsigned char* destination = (unsigned char*) destinationBase ;
     for (int y = 0; y < height; y++)
     {
         for (int x = 0; x < width; x++)
         {
-            rgb.Set(data[index++], data[index++], data[index++]);
-            color = rgb.GetPixel();
-            SetCPixel( x , y , &color ) ;
-            if (image.HasMask())
-            {
-                SetGWorld(maskBitmap.GetHBITMAP(), NULL);
-                if (rgb == maskcolor) {
-                    SetCPixel(x,y, &white);
-                }
-                else {
-                    SetCPixel(x,y, &black);
-                }
-                SetGWorld(GetHBITMAP(), NULL);
-            }
+            *destination++ = 0 ;
+            *destination++ = *data++ ;              
+            *destination++ = *data++ ;              
+            *destination++ = *data++ ;              
         }
-    }  // for height
+        destinationBase += ((**pixMap).rowBytes & 0x7fff);  
+        destination = (unsigned char*) destinationBase ;    
+    }  
+    if ( image.HasMask() )
+    {
+      data = image.GetData(); 
+      
+      wxColour maskcolor(image.GetMaskRed(), image.GetMaskGreen(), image.GetMaskBlue());
+      RGBColor white = { 0xffff, 0xffff, 0xffff };
+      RGBColor black = { 0     , 0     , 0      };
+      wxBitmap maskBitmap ;
 
-    // Create mask
-    if ( image.HasMask() ) {
-        SetMask(new wxMask( maskBitmap ));
+      maskBitmap.Create( width, height, 1);
+      LockPixels( GetGWorldPixMap(maskBitmap.GetHBITMAP()) );
+      SetGWorld(maskBitmap.GetHBITMAP(), NULL);
+
+      for (int y = 0; y < height; y++)
+      {
+          for (int x = 0; x < width; x++)
+          {
+              if ( data[0] == image.GetMaskRed() && data[1] == image.GetMaskRed() && data[2] == image.GetMaskRed() )
+              {
+                SetCPixel(x,y, &white);
+              }
+              else {
+                      SetCPixel(x,y, &black);
+              }
+              data += 3 ;
+          }
+      }  // for height
+      SetGWorld(GetHBITMAP(), NULL);
+      SetMask(new wxMask( maskBitmap ));
+      UnlockPixels( GetGWorldPixMap(maskBitmap.GetHBITMAP()) );
     }
     
     UnlockPixels( GetGWorldPixMap(GetHBITMAP()) );
-    UnlockPixels( GetGWorldPixMap(maskBitmap.GetHBITMAP()) );
     SetGWorld( origPort, origDevice );
 }
 
