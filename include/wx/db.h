@@ -77,7 +77,7 @@
     #include "sqlext.h"
     #include "odbcinst.h"
 #else
-    #if defined(__WINDOWS__) && defined(HAVE_W32API_H)
+    #if defined(__WINDOWS__) && ( defined(HAVE_W32API_H) || defined(__BORLANDC__) )
         #include <windows.h>
         #include "wx/msw/winundef.h"
     #endif
