@@ -266,6 +266,7 @@ wxMSW:
 - fixed bugs in multiple selection wxCheckListBox
 - default button handling is now closer to expected
 - setting tooltips for wxSlider now works
+- disabling a parent window also disables all of its children (as in wxGTK)
 - multiple events avoided in wxComboBox
 - tooltip asserts avoided for read-only wxComboBox
 - fixed a race condition during a thread exit and a join

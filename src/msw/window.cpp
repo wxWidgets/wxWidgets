@@ -318,6 +318,8 @@ void wxWindowMSW::Init()
     m_mouseInWindow = FALSE;
     m_lastKeydownProcessed = FALSE;
 
+    m_childrenDisabled = NULL;
+
     // wxWnd
     m_hMenu = 0;
 
@@ -378,6 +380,8 @@ wxWindowMSW::~wxWindowMSW()
         // remove hWnd <-> wxWindow association
         wxRemoveHandleAssociation(this);
     }
+
+    delete m_childrenDisabled;
 }
 
 // real construction (Init() must have been called before!)
@@ -498,19 +502,48 @@ bool wxWindowMSW::Enable(bool enable)
     if ( hWnd )
         ::EnableWindow(hWnd, (BOOL)enable);
 
-    // VZ: no, this is a bad idea: imagine that you have a dialog with some
-    //     disabled controls and disable it - you really wouldn't like the
-    //     disabled controls be reenabled too when you reenable the dialog!
-#if 0
+    // when the parent is disabled, all of its children should be disabled as
+    // well but when it is enabled back, only those of the children which
+    // hadn't been already disabled in the beginning should be enabled again,
+    // so we have to keep the list of those children
     wxWindowList::Node *node = GetChildren().GetFirst();
     while ( node )
     {
         wxWindow *child = node->GetData();
-        child->Enable(enable);
+
+        if ( enable )
+        {
+            // enable the child back unless it had been disabled before us
+            if ( !m_childrenDisabled || !m_childrenDisabled->Find(child) )
+                child->Enable();
+        }
+        else // we're being disabled
+        {
+            if ( child->IsEnabled() )
+            {
+                // disable it as children shouldn't stay enabled while the
+                // parent is not
+                child->Disable();
+            }
+            else // child already disabled, remember it
+            {
+                // have we created the list of disabled children already?
+                if ( !m_childrenDisabled )
+                    m_childrenDisabled = new wxWindowList;
+
+                m_childrenDisabled->Append(child);
+            }
+        }
 
         node = node->GetNext();
     }
-#endif // 0
+
+    if ( enable && m_childrenDisabled )
+    {
+        // we don't need this list any more, don't keep unused memory
+        delete m_childrenDisabled;
+        m_childrenDisabled = NULL;
+    }
 
     return TRUE;
 }

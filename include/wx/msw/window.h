@@ -488,6 +488,9 @@ private:
     bool HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 #endif // __WIN95__
 
+    // list of disabled children before last call to our Disable()
+    wxWindowList *m_childrenDisabled;
+
     DECLARE_DYNAMIC_CLASS(wxWindowMSW)
     DECLARE_NO_COPY_CLASS(wxWindowMSW)
     DECLARE_EVENT_TABLE()

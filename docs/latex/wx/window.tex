@@ -421,7 +421,9 @@ Windows only.
 
 \func{virtual bool}{Enable}{\param{bool}{ enable = {\tt TRUE}}}
 
-Enable or disable the window for user input.
+Enable or disable the window for user input. Note that when a parent window is
+disabled, all of its children are disabled as well and they are reenabled again
+when the parent is.
 
 \wxheading{Parameters}
 
