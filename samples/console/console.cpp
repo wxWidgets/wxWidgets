@@ -80,7 +80,7 @@
     #define TEST_REGCONF
     #define TEST_REGEX
     #define TEST_REGISTRY
-//    #define TEST_SCOPEGUARD
+    #define TEST_SCOPEGUARD
     #define TEST_SNGLINST
 //    #define TEST_SOCKETS
     #define TEST_STREAMS
@@ -3376,14 +3376,14 @@ struct Object
 
 static void TestScopeGuard()
 {
-    ON_BLOCK_EXIT0(function0);
-    ON_BLOCK_EXIT1(function1, 17);
-    ON_BLOCK_EXIT2(function2, 3.14, 'p');
+    wxON_BLOCK_EXIT0(function0);
+    wxON_BLOCK_EXIT1(function1, 17);
+    wxON_BLOCK_EXIT2(function2, 3.14, 'p');
 
     Object obj;
-    ON_BLOCK_EXIT_OBJ0(obj, &Object::method0);
-    ON_BLOCK_EXIT_OBJ1(obj, &Object::method1, 7);
-    ON_BLOCK_EXIT_OBJ2(obj, &Object::method2, 2.71, 'e');
+    wxON_BLOCK_EXIT_OBJ0(obj, &Object::method0);
+    wxON_BLOCK_EXIT_OBJ1(obj, &Object::method1, 7);
+    wxON_BLOCK_EXIT_OBJ2(obj, &Object::method2, 2.71, 'e');
 
     wxScopeGuard dismissed = wxMakeGuard(function0);
     dismissed.Dismiss();
