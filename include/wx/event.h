@@ -157,8 +157,13 @@ const wxEventType wxEVT_COMPARE_ITEM =                      wxEVT_FIRST + 436;
 const wxEventType wxEVT_INIT_DIALOG =                       wxEVT_FIRST + 437;
 const wxEventType wxEVT_IDLE =                              wxEVT_FIRST + 438;
 const wxEventType wxEVT_UPDATE_UI =                         wxEVT_FIRST + 439;
+
  /* System misc. */
 const wxEventType wxEVT_END_PROCESS =                       wxEVT_FIRST + 440;
+
+ /* Dial up events */
+const wxEventType wxEVT_DIALUP_CONNECTED =                  wxEVT_FIRST + 450;
+const wxEventType wxEVT_DIALUP_DISCONNECTED =               wxEVT_FIRST + 451;
 
  /* Generic command events */
  /* Note: a click is a higher-level event than button down/up */

@@ -48,12 +48,10 @@
 #   error "wxLibrary can't be compiled on this platform, sorry."
 #endif // OS
 
-// defined in windows.h
-// This breaks app.cpp if RICHEDIT is included.
-#if 0
-#ifdef LoadLibrary
-#   undef LoadLibrary
-#endif
+// LoadLibrary is defined in windows.h as LoadLibraryA, but wxDllLoader method
+// should be called LoadLibrary, not LoadLibraryA or LoadLibraryW!
+#if defined(__WIN32__) && defined(LoadLibrary)
+#   include "wx/msw/winundef.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -75,7 +73,7 @@ class wxDllLoader
        @param success Must point to a bool variable which will be set to TRUE or FALSE.
        @return A handle to the loaded DLL. Use success parameter to test if it is valid.
    */
-   static wxDllType LoadLibrary(const wxString & libname, bool *success);
+   static wxDllType LoadLibrary(const wxString & libname, bool *success = NULL);
    /** This function unloads the shared library. */
    static void UnloadLibrary(wxDllType dll);
    /** This function returns a valid handle for the main program

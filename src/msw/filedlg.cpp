@@ -341,9 +341,23 @@ int wxFileDialog::ShowModal(void)
             }
         }
 
-    } // END: if ( success )
+    }
+    else
+    {
+        // common dialog failed - why?
+#ifdef __WXDEBUG__
+        DWORD dwErr = CommDlgExtendedError();
+        if ( dwErr != 0 )
+        {
+            // this msg is only for developers
+            wxLogError(_T("Common dialog failed with error code %0lx."),
+                       dwErr);
+        }
+        //else: it was just cancelled
+#endif
+    }
 
-    return (success ? wxID_OK : wxID_CANCEL) ;
+    return success ? wxID_OK : wxID_CANCEL;
 
 }
 

@@ -63,6 +63,8 @@ const wxTextFileType wxTextFile::typeDefault =
 
 wxTextFile::wxTextFile(const wxString& strFile) : m_strFile(strFile)
 {
+  m_nCurLine = 0;
+  m_isOpened = FALSE;
 }
 
 wxTextFile::~wxTextFile()
@@ -91,11 +93,11 @@ bool wxTextFile::Open()
     return FALSE;
 
   // read file into memory
-  bool bRet = Read();
+  m_isOpened = Read();
 
   m_file.Close();
 
-  return bRet;
+  return m_isOpened;
 }
 
 // analyse some lines of the file trying to guess it's type.
@@ -175,7 +177,6 @@ bool wxTextFile::Read()
     nRead = m_file.Read(buf, WXSIZEOF(buf));
     if ( nRead == wxInvalidOffset ) {
       // read error (error message already given in wxFile::Read)
-      m_file.Close();
       return FALSE;
     }
 
@@ -231,6 +232,7 @@ bool wxTextFile::Close()
     m_aTypes.Clear();
     m_aLines.Clear();
     m_nCurLine = 0;
+    m_isOpened = FALSE;
 
     return TRUE;
 }

@@ -63,7 +63,7 @@ public:
     // closes the file and frees memory, losing all changes
   bool Close();
     // is file currently opened?
-  bool IsOpened() const { return m_file.IsOpened(); }
+  bool IsOpened() const { return m_isOpened; }
 
   // accessors
     // get the number of lines in the file
@@ -136,6 +136,8 @@ private:
   wxArrayString m_aLines;   // lines of file
 
   size_t        m_nCurLine; // number of current line in the file
+
+  bool          m_isOpened; // was the file successfully opened the last time?
 
   wxString      m_strFile;  // name of the file
 };

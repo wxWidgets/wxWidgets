@@ -182,44 +182,43 @@ wxDllLoader::GetProgramHandle(void)
     wxFAIL_MSG(_("This method is not implemented under Windows"));
 
     return 0;
-#endif   
+#endif
 }
-
 
 /* static */
 wxDllType
-wxDllLoader::LoadLibrary(const wxString & lib_name, bool *success)
+wxDllLoader::LoadLibrary(const wxString & libname, bool *success)
 {
-   wxASSERT(success);
-   
-   wxDllType handle;
+    wxDllType handle;
 
 #if defined(__WXMAC__)
-   FSSpec myFSSpec ;
-   Ptr	myMainAddr ;
-   Str255	myErrName ;
-   
-   wxMacPathToFSSpec( lib_name , &myFSSpec ) ;
-   if (GetDiskFragment( &myFSSpec , 0 , kCFragGoesToEOF , "\p" , kPrivateCFragCopy , &handle , &myMainAddr ,
-                        myErrName ) != noErr )
-   {
-      p2cstr( myErrName ) ;
-      wxASSERT_MSG( 1 , (char*)myErrName ) ;
-      return NULL ;
-   }
+    FSSpec myFSSpec ;
+    Ptr	myMainAddr ;
+    Str255	myErrName ;
+
+    wxMacPathToFSSpec( libname , &myFSSpec ) ;
+    if (GetDiskFragment( &myFSSpec , 0 , kCFragGoesToEOF , "\p" , kPrivateCFragCopy , &handle , &myMainAddr ,
+                myErrName ) != noErr )
+    {
+        p2cstr( myErrName ) ;
+        wxASSERT_MSG( 1 , (char*)myErrName ) ;
+        return NULL ;
+    }
 #else // !Mac
-   handle = wxDllOpen(lib_name);
+    handle = wxDllOpen(libname);
 #endif // OS
 
-   if ( !handle )
-   {
-      wxLogSysError(_("Failed to load shared library '%s'"),
-                    lib_name.c_str());
-      *success = FALSE;
-      return NULL;
-   }
-   *success = TRUE;
-   return handle;
+    if ( !handle )
+    {
+        wxLogSysError(_("Failed to load shared library '%s'"), libname.c_str());
+    }
+
+    if ( success )
+    {
+        *success = handle != 0;
+    }
+
+    return handle;
 }
 
 
@@ -234,26 +233,26 @@ wxDllLoader::UnloadLibrary(wxDllType handle)
 void *
 wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name)
 {
-   void *symbol = NULL;    // return value
+    void *symbol = NULL;    // return value
 
 #if defined( __WXMAC__ )
-   Ptr symAddress ;
-   CFragSymbolClass symClass ;
-   Str255	symName ;
-   
-   strcpy( (char*) symName , name ) ;
-   c2pstr( (char*) symName ) ;
-   
-   if ( FindSymbol( dllHandle , symName , &symAddress , &symClass ) == noErr )
-      symbol = (void *)symAddress ; 
+    Ptr symAddress ;
+    CFragSymbolClass symClass ;
+    Str255	symName ;
+
+    strcpy( (char*) symName , name ) ;
+    c2pstr( (char*) symName ) ;
+
+    if ( FindSymbol( dllHandle , symName , &symAddress , &symClass ) == noErr )
+        symbol = (void *)symAddress ;
 #else
     symbol = wxDllGetSymbol(dllHandle, name);
 #endif
 
     if ( !symbol )
     {
-       wxLogSysError(_("Couldn't find symbol '%s' in a dynamic library"),
-                     name.c_str());
+        wxLogSysError(_("Couldn't find symbol '%s' in a dynamic library"),
+                      name.c_str());
     }
     return symbol;
 }
@@ -291,7 +290,7 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
     old_sm_first = wxClassInfo::sm_first;
     wxClassInfo::sm_first = NULL;
 
-    wxString lib_name = ConstructLibraryName(name);
+    wxString libname = ConstructLibraryName(name);
 
 /*
   Unix automatically builds that library name, at least for dlopen()
@@ -308,10 +307,10 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
     {
         wxString fullname(tokenizer.NextToken());
 
-        fullname << '/' << lib_name;
+        fullname << '/' << libname;
         if ( wxFileExists(fullname) )
         {
-            lib_name = fullname;
+            libname = fullname;
 
             // found the library
             break;
@@ -323,7 +322,7 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
 #endif
 
     bool success = FALSE;
-    wxDllType handle = wxDllLoader::LoadLibrary(lib_name, &success);
+    wxDllType handle = wxDllLoader::LoadLibrary(libname, &success);
     if(success)
     {
        lib = new wxLibrary(handle);

@@ -551,7 +551,14 @@ bool wxListCtrl::SetItem(wxListItem& info)
     LV_ITEM item;
     wxConvertToMSWListItem(this, info, item);
     item.cchTextMax = 0;
-    return (ListView_SetItem(GetHwnd(), &item) != 0);
+    bool ok = ListView_SetItem(GetHwnd(), &item) != 0;
+    if ( ok && (info.m_mask & wxLIST_MASK_IMAGE) )
+    {
+        // make the change visible
+        ListView_Update(GetHwnd(), item.iItem);
+    }
+
+    return ok;
 }
 
 long wxListCtrl::SetItem(long index, int col, const wxString& label, int imageId)

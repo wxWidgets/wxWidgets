@@ -16,7 +16,14 @@
 #define _WX_WINUNDEF_H_
  */
 
-// windows.h #defines the following identifiers which are also used in wxWin
+// ----------------------------------------------------------------------------
+// windows.h #defines the following identifiers which are also used in wxWin so
+// we replace these symbols with the corresponding inline functions and
+// undefine the macro.
+//
+// This looks quite ugly here but allows us to write clear (and correct!) code
+// elsewhere because the functions, unlike the macros, respect the scope.
+// ----------------------------------------------------------------------------
 
 // GetCharWidth
 
@@ -152,6 +159,7 @@
    }
 #endif
 
+// GetMessage
 
 #ifdef GetMessage
    #undef GetMessage
@@ -163,6 +171,20 @@
       return GetMessageA(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax);
    #endif
    }
+#endif
+
+// LoadLibrary
+
+#ifdef LoadLibrary
+    #undef LoadLibrary
+    inline HINSTANCE LoadLibrary(LPCTSTR lpLibFileName)
+    {
+    #ifdef _UNICODE
+        return LoadLibraryW(lpLibFileName);
+    #else
+        return LoadLibraryA(lpLibFileName);
+    #endif
+    }
 #endif
 
 // For WINE
