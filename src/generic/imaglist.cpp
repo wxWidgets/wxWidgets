@@ -20,6 +20,7 @@
 
 #include "wx/generic/imaglist.h"
 #include "wx/icon.h"
+#include "wx/image.h"
 
 //-----------------------------------------------------------------------------
 //  wxImageList
@@ -56,6 +57,20 @@ int wxImageList::Add( const wxBitmap &bitmap )
     else
         m_images.Append( new wxBitmap(bitmap) );
     return m_images.Number()-1;
+}
+
+int wxImageList::Add( const wxBitmap& bitmap, const wxBitmap& mask )
+{
+    wxBitmap bmp(bitmap);
+    bmp.SetMask(new wxMask(mask));
+    return Add(bmp);
+}
+
+int wxImageList::Add( const wxBitmap& bitmap, const wxColour& maskColour )
+{
+    wxImage img(bitmap);
+    img.SetMaskColour(maskColour.Red(), maskColour.Green(), maskColour.Blue());
+    return Add(img.ConvertToBitmap());
 }
 
 const wxBitmap *wxImageList::GetBitmap( int index ) const
