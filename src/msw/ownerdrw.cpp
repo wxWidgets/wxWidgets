@@ -214,10 +214,11 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
       // there should be enough place!
       wxASSERT((nBmpWidth <= rc.GetWidth()) && (nBmpHeight <= rc.GetHeight()));
 
+      //MT: blit with mask enabled.
       dc.Blit(rc.x + (GetMarginWidth() - nBmpWidth) / 2, 
               rc.y + (m_nHeight - nBmpHeight) /2, 
               nBmpWidth, nBmpHeight, 
-              &dcMem, 0, 0, wxCOPY);
+              &dcMem, 0, 0, wxCOPY,true);
 
       if ( st & wxODSelected ) {
         #ifdef  O_DRAW_NATIVE_API
