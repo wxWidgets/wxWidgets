@@ -3303,9 +3303,9 @@ bool wxWindowMSW::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
 
 #if wxUSE_MENUS_NATIVE
     // is it a menu item?
-    if ( id == 0 )
+    DRAWITEMSTRUCT *pDrawStruct = (DRAWITEMSTRUCT *)itemStruct;
+    if ( id == 0 && pDrawStruct->CtlType == ODT_MENU )
     {
-        DRAWITEMSTRUCT *pDrawStruct = (DRAWITEMSTRUCT *)itemStruct;
         wxMenuItem *pMenuItem = (wxMenuItem *)(pDrawStruct->itemData);
 
         wxCHECK( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );
@@ -3344,9 +3344,9 @@ bool wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 {
 #if wxUSE_OWNER_DRAWN
     // is it a menu item?
-    if ( id == 0 )
+    MEASUREITEMSTRUCT *pMeasureStruct = (MEASUREITEMSTRUCT *)itemStruct;
+    if ( id == 0 && pMeasureStruct->CtlType == ODT_MENU )
     {
-        MEASUREITEMSTRUCT *pMeasureStruct = (MEASUREITEMSTRUCT *)itemStruct;
         wxMenuItem *pMenuItem = (wxMenuItem *)(pMeasureStruct->itemData);
 
         wxCHECK( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );

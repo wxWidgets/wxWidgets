@@ -366,9 +366,23 @@ void MyFrame::InitWithReportItems()
 {
     m_listCtrl->SetImageList(m_imageListSmall, wxIMAGE_LIST_SMALL);
 
+    // under MSW for SetColumnWidth() to work we need to create the items with
+    // images initially
+#if 1
+    wxListItem itemCol;
+    itemCol.m_mask = wxLIST_MASK_TEXT | wxLIST_MASK_IMAGE;
+    itemCol.m_text = "Column 1";
+    itemCol.m_image = -1;
+    m_listCtrl->InsertColumn(0, itemCol);
+    itemCol.m_text = "Column 2";
+    m_listCtrl->InsertColumn(1, itemCol);
+    itemCol.m_text = "Column 3";
+    m_listCtrl->InsertColumn(2, itemCol);
+#else
     m_listCtrl->InsertColumn(0, "Column 1"); // , wxLIST_FORMAT_LEFT, 140);
     m_listCtrl->InsertColumn(1, "Column 2"); // , wxLIST_FORMAT_LEFT, 140);
     m_listCtrl->InsertColumn(2, "One More Column (2)"); // , wxLIST_FORMAT_LEFT, 140);
+#endif
 
     // to speed up inserting we hide the control temporarily
     m_listCtrl->Hide();
@@ -578,13 +592,27 @@ void MyListCtrl::OnCacheHint(wxListEvent& event)
                   event.GetCacheFrom(), event.GetCacheTo() );
 }
 
+void MyListCtrl::SetColumnImage(int col, int image)
+{
+    wxListItem item;
+    item.SetMask(wxLIST_MASK_IMAGE);
+    item.SetImage(image);
+    SetColumn(col, item);
+}
+
 void MyListCtrl::OnColClick(wxListEvent& event)
 {
-    wxLogMessage( wxT("OnColumnClick at %d."), event.GetColumn() );
+    int col = event.GetColumn();
+    SetColumnImage(col, 0);
+
+    wxLogMessage( wxT("OnColumnClick at %d."), col );
 }
 
 void MyListCtrl::OnColRightClick(wxListEvent& event)
 {
+    int col = event.GetColumn();
+    SetColumnImage(col, -1);
+
     wxLogMessage( wxT("OnColumnRightClick at %d."), event.GetColumn() );
 }
 

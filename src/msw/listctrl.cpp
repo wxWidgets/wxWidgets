@@ -117,6 +117,10 @@ static void wxConvertFromMSWListItem(HWND hwndListCtrl,
                                      wxListItem& info,
                                      /* const */ LV_ITEM& lvItem);
 
+// convert our wxListItem to LV_COLUMN
+static void wxConvertToMSWListCol(int col, const wxListItem& item,
+                                  LV_COLUMN& lvCol);
+
 // ----------------------------------------------------------------------------
 // events
 // ----------------------------------------------------------------------------
@@ -553,9 +557,7 @@ bool wxListCtrl::SetBackgroundColour(const wxColour& col)
 bool wxListCtrl::GetColumn(int col, wxListItem& item) const
 {
     LV_COLUMN lvCol;
-    lvCol.mask = 0;
-    lvCol.fmt = 0;
-    lvCol.pszText = NULL;
+    wxZeroMemory(lvCol);
 
     if ( item.m_mask & wxLIST_MASK_TEXT )
     {
@@ -564,7 +566,7 @@ bool wxListCtrl::GetColumn(int col, wxListItem& item) const
         lvCol.cchTextMax = 512;
     }
 
-    bool success = (ListView_GetColumn(GetHwnd(), col, & lvCol) != 0);
+    bool success = ListView_GetColumn(GetHwnd(), col, & lvCol) != 0;
 
     //  item.m_subItem = lvCol.iSubItem;
     item.m_width = lvCol.cx;
@@ -592,41 +594,9 @@ bool wxListCtrl::GetColumn(int col, wxListItem& item) const
 bool wxListCtrl::SetColumn(int col, wxListItem& item)
 {
     LV_COLUMN lvCol;
-    lvCol.mask = 0;
-    lvCol.fmt = 0;
-    lvCol.pszText = NULL;
+    wxConvertToMSWListCol(col, item, lvCol);
 
-    if ( item.m_mask & wxLIST_MASK_TEXT )
-    {
-        lvCol.mask |= LVCF_TEXT;
-        lvCol.pszText = WXSTRINGCAST item.m_text;
-        lvCol.cchTextMax = 0; // Ignored
-    }
-    if ( item.m_mask & wxLIST_MASK_FORMAT )
-    {
-        lvCol.mask |= LVCF_FMT;
-
-        if ( item.m_format == wxLIST_FORMAT_LEFT )
-            lvCol.fmt = LVCFMT_LEFT;
-        if ( item.m_format == wxLIST_FORMAT_RIGHT )
-            lvCol.fmt = LVCFMT_RIGHT;
-        if ( item.m_format == wxLIST_FORMAT_CENTRE )
-            lvCol.fmt = LVCFMT_CENTER;
-    }
-
-    if ( item.m_mask & wxLIST_MASK_WIDTH )
-    {
-        lvCol.mask |= LVCF_WIDTH;
-        lvCol.cx = item.m_width;
-
-        if ( lvCol.cx == wxLIST_AUTOSIZE)
-            lvCol.cx = LVSCW_AUTOSIZE;
-        else if ( lvCol.cx == wxLIST_AUTOSIZE_USEHEADER)
-            lvCol.cx = LVSCW_AUTOSIZE_USEHEADER;
-    }
-    lvCol.mask |= LVCF_SUBITEM;
-    lvCol.iSubItem = col;
-    return (ListView_SetColumn(GetHwnd(), col, & lvCol) != 0);
+    return ListView_SetColumn(GetHwnd(), col, &lvCol) != 0;
 }
 
 // Gets the column width
@@ -648,7 +618,7 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
     else if ( width2 == wxLIST_AUTOSIZE_USEHEADER)
         width2 = LVSCW_AUTOSIZE_USEHEADER;
 
-    return (ListView_SetColumnWidth(GetHwnd(), col2, width2) != 0);
+    return ListView_SetColumnWidth(GetHwnd(), col2, width2) != 0;
 }
 
 // Gets the number of items that can fit vertically in the
@@ -1302,49 +1272,33 @@ long wxListCtrl::InsertItem(long index, const wxString& label, int imageIndex)
 long wxListCtrl::InsertColumn(long col, wxListItem& item)
 {
     LV_COLUMN lvCol;
-    lvCol.mask = 0;
-    lvCol.fmt = 0;
-    lvCol.pszText = NULL;
+    wxConvertToMSWListCol(col, item, lvCol);
 
-    if ( item.m_mask & wxLIST_MASK_TEXT )
-    {
-        lvCol.mask |= LVCF_TEXT;
-        lvCol.pszText = WXSTRINGCAST item.m_text;
-        lvCol.cchTextMax = 0; // Ignored
-    }
-    if ( item.m_mask & wxLIST_MASK_FORMAT )
-    {
-        lvCol.mask |= LVCF_FMT;
-
-        if ( item.m_format == wxLIST_FORMAT_LEFT )
-            lvCol.fmt = LVCFMT_LEFT;
-        if ( item.m_format == wxLIST_FORMAT_RIGHT )
-            lvCol.fmt = LVCFMT_RIGHT;
-        if ( item.m_format == wxLIST_FORMAT_CENTRE )
-            lvCol.fmt = LVCFMT_CENTER;
-    }
-
-    lvCol.mask |= LVCF_WIDTH;
-    if ( item.m_mask & wxLIST_MASK_WIDTH )
-    {
-        if ( item.m_width == wxLIST_AUTOSIZE)
-            lvCol.cx = LVSCW_AUTOSIZE;
-        else if ( item.m_width == wxLIST_AUTOSIZE_USEHEADER)
-            lvCol.cx = LVSCW_AUTOSIZE_USEHEADER;
-        else
-            lvCol.cx = item.m_width;
-    }
-    else
+    if ( !(lvCol.mask & LVCF_WIDTH) )
     {
         // always give some width to the new column: this one is compatible
-        // with wxGTK
+        // with the generic version
+        lvCol.mask |= LVCF_WIDTH;
         lvCol.cx = 80;
     }
 
-    lvCol.mask |= LVCF_SUBITEM;
-    lvCol.iSubItem = col;
+    // when we insert a column which can contain an image, we must specify this
+    // flag right now as doing it later in SetColumn() has no effect
+    //
+    // we use LVCFMT_BITMAP_ON_RIGHT by default because without it there is no
+    // way to dynamically set/clear the bitmap as the column without a bitmap
+    // on the left looks ugly (there is a hole)
+    //
+    // unfortunately with my version of comctl32.dll (5.80), the left column
+    // image is always on the left and it seems that it's a "feature" - I
+    // didn't find any way to work around it in any case
+    if ( lvCol.mask & LVCF_IMAGE )
+    {
+        lvCol.mask |= LVCF_FMT;
+        lvCol.fmt |= LVCFMT_BITMAP_ON_RIGHT;
+    }
 
-    bool success = ListView_InsertColumn(GetHwnd(), col, & lvCol) != -1;
+    bool success = ListView_InsertColumn(GetHwnd(), col, &lvCol) != -1;
     if ( success )
     {
         m_colCount++;
@@ -2286,6 +2240,51 @@ static void wxConvertToMSWListItem(const wxListCtrl *ctrl,
         lvItem.mask |= LVIF_IMAGE;
     if (info.m_mask & wxLIST_MASK_DATA)
         lvItem.mask |= LVIF_PARAM;
+}
+
+static void wxConvertToMSWListCol(int col, const wxListItem& item,
+                                  LV_COLUMN& lvCol)
+{
+    wxZeroMemory(lvCol);
+
+    if ( item.m_mask & wxLIST_MASK_TEXT )
+    {
+        lvCol.mask |= LVCF_TEXT;
+        lvCol.pszText = (wxChar *)item.m_text.c_str(); // cast is safe
+    }
+
+    if ( item.m_mask & wxLIST_MASK_FORMAT )
+    {
+        lvCol.mask |= LVCF_FMT;
+
+        if ( item.m_format == wxLIST_FORMAT_LEFT )
+            lvCol.fmt = LVCFMT_LEFT;
+        else if ( item.m_format == wxLIST_FORMAT_RIGHT )
+            lvCol.fmt = LVCFMT_RIGHT;
+        else if ( item.m_format == wxLIST_FORMAT_CENTRE )
+            lvCol.fmt = LVCFMT_CENTER;
+    }
+
+    if ( item.m_mask & wxLIST_MASK_WIDTH )
+    {
+        lvCol.mask |= LVCF_WIDTH;
+        if ( item.m_width == wxLIST_AUTOSIZE)
+            lvCol.cx = LVSCW_AUTOSIZE;
+        else if ( item.m_width == wxLIST_AUTOSIZE_USEHEADER)
+            lvCol.cx = LVSCW_AUTOSIZE_USEHEADER;
+        else
+            lvCol.cx = item.m_width;
+    }
+
+    if ( item.m_mask & wxLIST_MASK_IMAGE )
+    {
+        if ( wxTheApp->GetComCtl32Version() >= 470 )
+        {
+            lvCol.mask |= LVCF_IMAGE;
+            lvCol.iImage = item.m_image;
+        }
+        //else: it doesn't support item images anyhow
+    }
 }
 
 // ----------------------------------------------------------------------------
