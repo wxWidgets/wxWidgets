@@ -1,8 +1,92 @@
+wxwidgets2.5 (2.5.1) experimental; urgency=low
+
+  * The s/ndow/dget/g release.
+  * Yes, the name has changed and the terrorists have won again.
+    Having a name too similar to Lindows apparently makes us a
+    liability to the illusion their assailants will want to project
+    in court.  Eleven or so years of unbroken, unquestioned usage
+    was not nearly so interesting to these people as the fact we
+    were a soft target and easy to deprive of due process.
+  * wxGTK is now built with gtk2.
+  * wxBase is no longer a separate package, it is built with the
+    GUI libs which now depend on it.  We might split it out again
+    one day if there is a need for that.
+  * Added support for GNU/K*BSD (thanks again to Robert Millan).
+  * Non-core functionality is now provided by separate libraries
+    rather than simply being built into a single behemoth unit.
+    Of course, given the way these things work, almost none of
+    them are actually smaller, and the load time is unlikely to
+    improve either, but the logical separation may be beneficial.
+  * Removed many elements of the build scripts that are no longer
+    required due to improvements and changes elsewhere.
+
+ -- Ron Lee <ron@debian.org>  Fri, 27 Feb 2004 17:00:29 +1030
+
 wxwindows2.5 (2.5.0) unstable; urgency=low
 
   * New beginnings.  Back to development flavored chaos again.
 
  -- Ron Lee <ron@debian.org>  Thu, 19 Dec 2002 01:08:50 -0800
+
+wxwindows2.4 (2.4.2.4) unstable; urgency=low
+
+  * Modified build scripts to use pythonX.Y instead of python(>=X.Y)
+  * Removed bogus hard coded python2.2-xml.  Closes: #216182
+  * Enabled iostream support despite my opinion of this c++ 'feature'.
+    Closes: #211050
+  * Event handling for menus with bitmaps fixed.  Closes: #214788
+  * Includes fixes for wxHTTP and wxURL parsing. Closes: #211023, #213600
+
+ -- Ron Lee <ron@debian.org>  Sat, 25 Oct 2003 13:48:07 +0930
+
+wxwindows2.4 (2.4.1.2) unstable; urgency=low
+
+  * New stable release.  Closes: #198622
+  * Ack python NMU changes, Thanks Josselin!
+  * Hurd support added to configure.  Closes: #191581
+  * Fixes ctrl-tab problem with pyslsk.  Closes: #187923
+  * Fixed configure for autoconf 2.57-3.  Closes: #190755
+  * Added conflict/replace for -doc.  Closes: #202242
+
+ -- Ron Lee <ron@debian.org>  Fri, 22 Aug 2003 15:59:12 +0930
+
+wxwindows2.4 (2.4.0.8-0.1) unstable; urgency=low
+
+  * NMU for python transition.
+  * Build-depend and depend on python 2.3 (closes: #204737).
+
+ -- Josselin Mouette <joss@debian.org>  Wed, 13 Aug 2003 22:21:48 +0200
+
+wxwindows2.4 (2.4.0.9) unstable; urgency=low
+
+  * Updated package sections to suit the new taxonomy.
+  * No public release of this version.
+
+ -- Ron Lee <ron@debian.org>  Sat, 19 Apr 2003 20:13:39 -0700
+
+wxwindows2.4 (2.4.0.8) unstable; urgency=low
+
+  * The "I wish people would read the existing discussion about new releases
+    before posting 'reminder' bugs" release.  Closes: #189144
+  * Moved back to using png2.  gtk1 forces that on anything using it and
+    gtk2 support is still too flakey both in wx and dependent apps for
+    us to entertain it in a stable release.  This is a *really* messed
+    up situation for anyone trying to maintain a development machine.
+    Thank the png and gtk theme people if its a pain in your ass too.
+    Closes: #186779
+  * Add real package options to the gl build deps.  Closes: #182210
+  * Really fix the XRCed problem, unlike 2.4.0.7 ; ) Closes: #183712
+
+ -- Ron Lee <ron@debian.org>  Tue, 15 Apr 2003 18:42:54 -0700
+
+wxwindows2.4 (2.4.0.3) unstable; urgency=low
+
+  * Changed Conflict to Replaces so people can use 2.4 -dev before all
+    their 2.3 deps are gone.  Closes: #178305
+  * Added wxPy supplied 2.3 distutils to the source package, apparently the
+    standard 2.2 one is now insufficient.  This hopefully Closes: #178457
+
+ -- Ron Lee <ron@debian.org>  Mon, 27 Jan 2003 17:36:59 -0800
 
 wxwindows2.4 (2.4.0.2) unstable; urgency=low
 

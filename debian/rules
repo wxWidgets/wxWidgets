@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-# debian/rules file to build packages from wxWindows CVS source
+# debian/rules file to build packages from wx CVS source
 #
 # Sculpted 13/2/2000 by Ron Lee <ron@debian.org> from new and
 # variously stolen code :-)
@@ -7,215 +7,139 @@
 # Joey Hess and others.
 
 #export DH_VERBOSE=1
-export DH_COMPAT=2
 export DH_OPTIONS
 
-release:=$(shell dpkg-parsechangelog | sed -n 's/^Source: wxwindows//p')
-python_dir:=python$(shell python -c "import sys;print sys.version[:3]")
+release    := $(shell dpkg-parsechangelog | sed -n 's/^Source: wxwidgets//p')
+python_ver := python$(shell python -c "import sys;print sys.version[:3]")
 
-cross_host=i586-mingw32msvc
-cross_build=$(shell ./config.guess)
+cross_host  = i586-mingw32msvc
+cross_build = $(shell ./config.guess)
 
-config_cache=../config_deb.cache
-config_cache_cross=../config_deb_cross.cache
+config_cache       = ../config_deb.cache
+config_cache_cross = ../config_deb_cross.cache
 
 # Packages to build:
-package_wxbase_lib=libwxbase$(release)
-package_wxbase_dev=libwxbase$(release)-dev
-package_wxbase_dbg=libwxbase$(release)-dbg
-package_gtk_lib=libwxgtk$(release)
-package_gtk_dev=libwxgtk$(release)-dev
-package_gtk_dbg=libwxgtk$(release)-dbg
-package_gtk_py=libwxgtk$(release)-python
-package_gtk_contrib=libwxgtk$(release)-contrib
-package_gtk_contrib_dev=libwxgtk$(release)-contrib-dev
-package_headers=wxwin$(release)-headers
-package_i18n=wxwin$(release)-i18n
-package_doc=wxwin$(release)-doc
-package_examples=wxwin$(release)-examples
+package_gtk_lib         = libwxgtk$(release)
+package_gtk_dev         = libwxgtk$(release)-dev
+package_gtk_dbg         = libwxgtk$(release)-dbg
+package_gtk_py          = libwxgtk$(release)-python
+package_gtk_contrib     = libwxgtk$(release)-contrib
+package_gtk_contrib_dev = libwxgtk$(release)-contrib-dev
+package_headers         = wx$(release)-headers
+package_i18n            = wx$(release)-i18n
+package_doc             = wx$(release)-doc
+package_examples        = wx$(release)-examples
 
-package_gtk_univ=libwxgtk$(release)-univ
-
-package_wxbase_msw_dev=libwxbase-msw$(release)-dev
-package_wxbase_msw_dbg=libwxbase-msw$(release)-dbg
-package_msw_dev=libwxmsw$(release)-dev
-package_msw_dbg=libwxmsw$(release)-dbg
-package_headers_msw=wxwin$(release)-headers-msw
+package_msw_dev         = libwxmsw$(release)-dev
+package_msw_dbg         = libwxmsw$(release)-dbg
+package_headers_msw     = wx$(release)-headers-msw
 
 # Build directories:
-objdir_wxbase_shared=objs_wxbase_sh
-objdir_wxbase_static=objs_wxbase_st
-objdir_wxbase_debug=objs_wxbase_d
-objdir_gtk_shared=objs_gtk_sh
-objdir_gtk_static=objs_gtk_st
-objdir_gtk_debug=objs_gtk_d
-objdir_gtk_install=objs_gtk_install
-objdir_gtk_contrib_install=objs_gtk_contrib_install
-objdir_doc_cruft=objs_doc_con
-objdir_doc=docs/wxWindows-manual.html
-objdir_examples=docs/examples
-objdir_i18n=locale
+objdir_gtk_shared          = objs_gtk_sh
+objdir_gtk_static          = objs_gtk_st
+objdir_gtk_debug           = objs_gtk_d
+objdir_gtk_install         = objs_gtk_install
+objdir_gtk_contrib_install = objs_gtk_contrib_install
+objdir_doc_cruft           = objs_doc_con
+objdir_doc                 = docs/wx-manual.html
+objdir_examples            = docs/examples
+objdir_i18n                = locale
 
-objdir_gtk_univ=objs_gtk_univ
-objdir_univ_install=objs_univ_install
+objdir_msw_shared          = objs_msw_sh
+objdir_msw_static          = objs_msw_st
+objdir_msw_dbg             = objs_msw_d
 
-objdir_wxbase_msw_shared=objs_wxbase_msw_sh
-objdir_wxbase_msw_static=objs_wxbase_msw_st
-objdir_wxbase_msw_dbg=objs_wxbase_msw_d
-objdir_msw_shared=objs_msw_sh
-objdir_msw_static=objs_msw_st
-objdir_msw_dbg=objs_msw_d
-
-objdirs=$(objdir_wxbase_shared) $(objdir_wxbase_static) $(objdir_wxbase_debug) \
-	$(objdir_gtk_shared) $(objdir_gtk_static) $(objdir_gtk_debug)          \
-	$(objdir_gtk_install) $(objdir_gtk_contrib_install) $(objdir_gtk_univ) \
-	$(objdir_univ_install) $(objdir_doc_cruft) $(objdir_doc)               \
-	$(objdir_examples)                                                     \
-	$(objdir_wxbase_msw_shared) $(objdir_wxbase_msw_static)                \
-	$(objdir_wxbase_msw_dbg) $(objdir_msw_shared) $(objdir_msw_static)     \
-	$(objdir_msw_dbg)
+objdirs = $(objdir_gtk_shared) $(objdir_gtk_static) $(objdir_gtk_debug)   \
+	  $(objdir_gtk_install) $(objdir_gtk_contrib_install)             \
+	  $(objdir_doc_cruft) $(objdir_doc) $(objdir_examples)            \
+	  $(objdir_msw_shared) $(objdir_msw_static) $(objdir_msw_dbg)
 
 #	note that the i18n package is actually arch indep (once built)
 #	but must be built (and installed) during the arch any phase as
-#	it's pulled out of the wxGtk shared lib package.
+#	it's pulled out of the wxGTK shared lib package.
+
 
 # Build stamps:
-build_arch_stamps=build-wxbase-shared-stamp build-wxbase-static-stamp \
-                  build-wxbase-debug-stamp build-gtk-shared-stamp \
-                  build-gtk-static-stamp build-gtk-debug-stamp \
-                  build-contrib-shared-stamp build-contrib-static-stamp \
-                  build-gtk-py-stamp build-i18n-stamp
+build_arch_stamps = build-gtk-shared-stamp build-gtk-static-stamp         \
+                    build-gtk-debug-stamp                                 \
+                    build-contrib-shared-stamp build-contrib-static-stamp \
+                    build-i18n-stamp build-gtk-py-stamp
 
-# disable gtk-univ build, we'll  replace it with x11-univ later.
-#		  build-gtk-univ-stamp
 
-build_indep_stamps=build-examples-stamp build-doc-stamp
+build_indep_stamps  = build-examples-stamp build-doc-stamp
 
-build_cross_stamps=build-wxbase-msw-shared-stamp build-wxbase-msw-static-stamp \
-		   build-wxbase-msw-dbg-stamp build-msw-shared-stamp \
-		   build-msw-static-stamp build-msw-dbg-stamp
+build_cross_stamps  = build-msw-shared-stamp build-msw-static-stamp build-msw-dbg-stamp
 
-build_stamps_native=$(build_arch_stamps) $(build_indep_stamps)
+build_stamps_native = $(build_arch_stamps) $(build_indep_stamps)
 
-build_stamps=$(build_stamps_native) $(build_cross_stamps)
+build_stamps = $(build_stamps_native) $(build_cross_stamps)
+
 
 # Install targets:
-install_all_arch=install-wxbase-lib install-wxbase-dev install-wxbase-dbg \
-                 install-gtk-lib install-gtk-dev install-gtk-dbg \
-                 install-gtk-contrib install-gtk-contrib-dev install-gtk-py \
-                 install-headers install-i18n
+install_all_arch = install-gtk-lib install-gtk-dev install-gtk-dbg        \
+                   install-gtk-contrib install-gtk-contrib-dev            \
+                   install-headers install-i18n install-gtk-py
 
-# disable gtk-univ build, we'll  replace it with x11-univ later.
-#                install-gtk-univ
+install_all_indep  = install-examples install-doc
 
-install_all_indep=install-examples install-doc
+install_all_cross  = install-msw-dev install-msw-dbg install-headers-msw
 
-install_all_cross=install-wxbase-msw-dev install-wxbase-msw-dbg install-msw-dev install-msw-dbg install-headers-msw
+install_all_native = $(install_all_arch) $(install_all_indep)
 
-install_all_native=$(install_all_arch) $(install_all_indep)
-
-install_all=$(install_all_native) $(install_all_cross)
+install_all = $(install_all_native) $(install_all_cross)
 
 
-wxconfig:=$(shell pwd)/$(objdir_gtk_shared)/wx-config \
-                --prefix=$(shell pwd) \
+wxconfig := $(shell pwd)/$(objdir_gtk_shared)/wx-config          \
+                --prefix=$(shell pwd)                            \
                 --exec-prefix=$(shell pwd)/$(objdir_gtk_shared)
 
 
 # The Rules:
 
 debian/control: debian/control.in
-	sed -e 's/=V/$(release)/g' < debian/control.in > debian/control
+	sed -e 's/=V/$(release)/g;s/=PY/$(python_ver)/g' < debian/control.in > debian/control
 
 control-files-stamp: debian/control
 	dh_testdir
-	@for f in dirs postinst; do \
-		echo "generating control file $(package_wxbase_lib).$$f"; \
-		cp debian/libwxbase.$$f debian/$(package_wxbase_lib).$$f; \
+	@for f in links postinst prerm; do                                   \
+		echo "generating control file $(package_gtk_dev).$$f";       \
+		sed -e 's/=V/$(release)/g' < debian/libwxgtk-dev.$$f         \
+			> debian/$(package_gtk_dev).$$f;                     \
 	done;
-	@for f in dirs links postinst prerm; do \
-		echo "generating control file $(package_wxbase_dev).$$f"; \
-		sed -e 's/=V/$(release)/g' < debian/libwxbase-dev.$$f \
-			> debian/$(package_wxbase_dev).$$f; \
+	@for f in links postinst prerm; do                                   \
+		echo "generating control file $(package_gtk_dbg).$$f";       \
+		sed -e 's/=V/$(release)/g' < debian/libwxgtk-dbg.$$f         \
+			> debian/$(package_gtk_dbg).$$f;                     \
 	done;
-	@for f in dirs links postinst prerm; do \
-		echo "generating control file $(package_wxbase_dbg).$$f"; \
-		sed -e 's/=V/$(release)/g' < debian/libwxbase-dbg.$$f \
-			> debian/$(package_wxbase_dbg).$$f; \
+	@for f in dirs docs menu postinst prerm; do                          \
+		echo "generating control file $(package_gtk_py).$$f";        \
+		sed -e 's/=PY/$(python_ver)/g;s/=V/$(release)/g'             \
+			< debian/libwxgtk-python.$$f                         \
+			> debian/$(package_gtk_py).$$f;                      \
 	done;
-	@for f in dirs postinst; do \
-		echo "generating control file $(package_gtk_lib).$$f"; \
-		cp debian/libwxgtk.$$f debian/$(package_gtk_lib).$$f; \
+	@for f in docs doc-base; do                                          \
+		echo "generating control file $(package_doc).$$f";           \
+		sed -e 's/=V/$(release)/g' < debian/wxwin-doc.$$f            \
+			> debian/$(package_doc).$$f;                         \
 	done;
-	@for f in dirs links postinst prerm; do \
-		echo "generating control file $(package_gtk_dev).$$f"; \
-		sed -e 's/=V/$(release)/g' < debian/libwxgtk-dev.$$f \
-			> debian/$(package_gtk_dev).$$f; \
-	done;
-	@for f in dirs links postinst prerm; do \
-		echo "generating control file $(package_gtk_dbg).$$f"; \
-		sed -e 's/=V/$(release)/g' < debian/libwxgtk-dbg.$$f \
-			> debian/$(package_gtk_dbg).$$f; \
-	done;
-	@for f in dirs docs menu postinst prerm; do \
-		echo "generating control file $(package_gtk_py).$$f"; \
-		sed -e 's/=PY/$(python_dir)/g;s/=V/$(release)/g' < debian/libwxgtk-python.$$f \
-			> debian/$(package_gtk_py).$$f; \
-	done;
-	@for f in dirs postinst; do \
-		echo "generating control file $(package_gtk_contrib).$$f"; \
-		cp debian/libwxgtk-contrib.$$f debian/$(package_gtk_contrib).$$f; \
-	done;
-	@for f in dirs; do \
-		echo "generating control file $(package_gtk_contrib_dev).$$f"; \
-		cp debian/libwxgtk-contrib-dev.$$f debian/$(package_gtk_contrib_dev).$$f; \
-	done;
-	@for f in dirs; do \
-		echo "generating control file $(package_headers).$$f"; \
-		cp debian/wxwin-headers.$$f debian/$(package_headers).$$f; \
-	done;
-	@for f in dirs; do \
-		echo "generating control file $(package_i18n).$$f"; \
-		cp debian/wxwin-i18n.$$f debian/$(package_i18n).$$f; \
-	done;
-	@for f in dirs docs doc-base; do \
-		echo "generating control file $(package_doc).$$f"; \
-		sed -e 's/=V/$(release)/g' < debian/wxwin-doc.$$f \
-			> debian/$(package_doc).$$f; \
-	done;
-	@for f in examples; do \
-		echo "generating control file $(package_examples).$$f"; \
+	@for f in examples; do                                               \
+		echo "generating control file $(package_examples).$$f";      \
 		cp debian/wxwin-examples.$$f debian/$(package_examples).$$f; \
 	done;
-	@for f in dirs links postinst prerm; do \
-		echo "generating control file $(package_wxbase_msw_dev).$$f"; \
-		sed -e 's/=V/$(release)/g;s/=H/$(cross_host)/g' < debian/libwxbase-msw-dev.$$f \
-			> debian/$(package_wxbase_msw_dev).$$f; \
-	done;
-	@for f in dirs links postinst prerm; do \
-		echo "generating control file $(package_wxbase_msw_dbg).$$f"; \
-		sed -e 's/=V/$(release)/g;s/=H/$(cross_host)/g' < debian/libwxbase-msw-dbg.$$f \
-			> debian/$(package_wxbase_msw_dbg).$$f; \
-	done;
-	@for f in dirs links postinst prerm; do \
-		echo "generating control file $(package_msw_dev).$$f"; \
+	@for f in dirs links postinst prerm; do                              \
+		echo "generating control file $(package_msw_dev).$$f";       \
 		sed -e 's/=V/$(release)/g;s/=H/$(cross_host)/g' < debian/libwxmsw-dev.$$f \
-			> debian/$(package_msw_dev).$$f; \
+			> debian/$(package_msw_dev).$$f;                     \
 	done;
-	@for f in dirs links postinst prerm; do \
-		echo "generating control file $(package_msw_dbg).$$f"; \
+	@for f in dirs links postinst prerm; do                              \
+		echo "generating control file $(package_msw_dbg).$$f";       \
 		sed -e 's/=V/$(release)/g;s/=H/$(cross_host)/g' < debian/libwxmsw-dbg.$$f \
-			> debian/$(package_msw_dbg).$$f; \
+			> debian/$(package_msw_dbg).$$f;                     \
 	done;
-	@for f in dirs; do \
-		echo "generating control file $(package_headers_msw).$$f"; \
+	@for f in dirs; do                                                   \
+		echo "generating control file $(package_headers_msw).$$f";   \
 		sed -e 's/=H/$(cross_host)/g' < debian/wxwin-headers-msw.$$f \
-			> debian/$(package_headers_msw).$$f; \
-	done;
-	@for f in dirs links postinst prerm; do \
-		echo "generating control file $(package_gtk_univ).$$f"; \
-		sed -e 's/=V/$(release)/g' < debian/libwxgtk-univ.$$f \
-			> debian/$(package_gtk_univ).$$f; \
+			> debian/$(package_headers_msw).$$f;                 \
 	done;
 	touch $@
 
@@ -231,69 +155,22 @@ build_all: control-files-stamp $(build_stamps_native)
 build: build_arch
 
 
-configure-wxbase-shared-stamp:
-	dh_testdir
-	mkdir -p $(objdir_wxbase_shared)
-	cd $(objdir_wxbase_shared) \
-		&& ../configure --prefix=/usr \
-				--cache-file=$(config_cache) \
-				--disable-gui \
-				--enable-soname \
-				--with-zlib=sys
-	touch $@
-
-build-wxbase-shared-stamp: configure-wxbase-shared-stamp
-	dh_testdir
-	cd $(objdir_wxbase_shared) && $(MAKE)
-	touch $@
-
-configure-wxbase-static-stamp:
-	dh_testdir
-	mkdir -p $(objdir_wxbase_static)
-	cd $(objdir_wxbase_static) \
-		&& ../configure --prefix=/usr \
-				--cache-file=$(config_cache) \
-				--disable-gui \
-				--disable-shared \
-				--with-zlib=sys
-	touch $@
-
-build-wxbase-static-stamp: configure-wxbase-static-stamp
-	dh_testdir
-	cd $(objdir_wxbase_static) && $(MAKE)
-	touch $@
-
-configure-wxbase-debug-stamp:
-	dh_testdir
-	mkdir -p $(objdir_wxbase_debug)
-	cd $(objdir_wxbase_debug) \
-		&& ../configure --prefix=/usr \
-				--cache-file=$(config_cache) \
-				--disable-gui \
-				--enable-debug \
-				--enable-soname \
-				--with-zlib=sys
-	touch $@
-
-build-wxbase-debug-stamp: configure-wxbase-debug-stamp
-	dh_testdir
-	cd $(objdir_wxbase_debug) && $(MAKE)
-	touch $@
-
 configure-gtk-shared-stamp:
 	dh_testdir
 	mkdir -p $(objdir_gtk_shared)
 	cd $(objdir_gtk_shared) \
-		&& ../configure --prefix=/usr \
-				--cache-file=$(config_cache) \
-				--with-gtk \
-				--with-opengl \
-				--enable-soname \
-				--with-zlib=sys \
-				--with-libjpeg=sys \
-				--with-libpng=sys \
-				--with-libtiff=sys \
-				--enable-dynamic-loader
+		&& ../configure --prefix=/usr			\
+				--cache-file=$(config_cache)	\
+				--with-gtk			\
+				--enable-gtk2			\
+				--with-opengl			\
+				--enable-soname			\
+				--with-zlib=sys			\
+				--with-libjpeg=sys		\
+				--with-libpng=sys		\
+				--with-libtiff=sys		\
+				--enable-dynamic-loader		\
+				--enable-std_iostreams
 	touch $@
 
 build-gtk-shared-stamp: configure-gtk-shared-stamp
@@ -305,16 +182,18 @@ configure-gtk-static-stamp:
 	dh_testdir
 	mkdir -p $(objdir_gtk_static)
 	cd $(objdir_gtk_static) \
-		&& ../configure --prefix=/usr \
-				--cache-file=$(config_cache) \
-				--with-gtk \
-				--with-opengl \
-				--disable-shared \
-				--with-zlib=sys \
-				--with-libjpeg=sys \
-				--with-libpng=sys \
-				--with-libtiff=sys \
-				--enable-dynamic-loader
+		&& ../configure --prefix=/usr			\
+				--cache-file=$(config_cache)	\
+				--with-gtk			\
+				--enable-gtk2			\
+				--with-opengl			\
+				--disable-shared		\
+				--with-zlib=sys			\
+				--with-libjpeg=sys		\
+				--with-libpng=sys		\
+				--with-libtiff=sys		\
+				--enable-dynamic-loader		\
+				--enable-std_iostreams
 	touch $@
 
 build-gtk-static-stamp: configure-gtk-static-stamp
@@ -326,17 +205,19 @@ configure-gtk-debug-stamp:
 	dh_testdir
 	mkdir -p $(objdir_gtk_debug)
 	cd $(objdir_gtk_debug) \
-		&& ../configure --prefix=/usr \
-				--cache-file=$(config_cache) \
-				--with-gtk \
-				--with-opengl \
-				--enable-debug \
-				--enable-soname \
-				--with-zlib=sys \
-				--with-libjpeg=sys \
-				--with-libpng=sys \
-				--with-libtiff=sys \
-				--enable-dynamic-loader
+		&& ../configure --prefix=/usr			\
+				--cache-file=$(config_cache)	\
+				--with-gtk			\
+				--enable-gtk2			\
+				--with-opengl			\
+				--enable-debug			\
+				--enable-soname			\
+				--with-zlib=sys			\
+				--with-libjpeg=sys		\
+				--with-libpng=sys		\
+				--with-libtiff=sys		\
+				--enable-dynamic-loader		\
+				--enable-std_iostreams
 	touch $@
 
 build-gtk-debug-stamp: configure-gtk-debug-stamp
@@ -344,27 +225,6 @@ build-gtk-debug-stamp: configure-gtk-debug-stamp
 	cd $(objdir_gtk_debug) && $(MAKE)
 	touch $@
 
-configure-gtk-univ-stamp:
-	dh_testdir
-	mkdir -p $(objdir_gtk_univ)
-	cd $(objdir_gtk_univ) \
-		&& ../configure --prefix=/usr \
-				--cache-file=$(config_cache) \
-				--with-gtk \
-				--with-opengl \
-				--enable-universal \
-				--enable-soname \
-				--with-zlib=sys \
-				--with-libjpeg=sys \
-				--with-libpng=sys \
-				--with-libtiff=sys \
-				--enable-dynamic-loader
-	touch $@
-
-build-gtk-univ-stamp: configure-gtk-univ-stamp
-	dh_testdir
-	cd $(objdir_gtk_univ) && $(MAKE)
-	touch $@
 
 build-contrib-shared-stamp: build-gtk-shared-stamp
 	dh_testdir
@@ -382,13 +242,14 @@ build-gtk-py-stamp: build-gtk-shared-stamp
 	dh_testdir
 	touch docs/lgpl.txt
 	cd wxPython \
-		&& ./setup.py build IN_CVS_TREE=1 WX_CONFIG='$(wxconfig)'
+		&& $(python_ver) ./setup.py build WX_CONFIG='$(wxconfig)'
 	touch $@
 
 build-doc-stamp: build-gtk-shared-stamp
 	dh_testdir
 	cd $(objdir_gtk_shared)/utils/tex2rtf/src \
 		&& $(MAKE)
+	rm -rf $(objdir_doc)
 	mkdir $(objdir_doc)
 	mkdir $(objdir_doc_cruft)
 	cd $(objdir_doc_cruft) \
@@ -436,56 +297,6 @@ build-i18n-stamp: build-gtk-shared-stamp
 		&& $(MAKE) allmo
 	touch $@
 
-configure-wxbase-msw-shared-stamp:
-	dh_testdir
-	mkdir -p $(objdir_wxbase_msw_shared)
-	cd $(objdir_wxbase_msw_shared) \
-		&& ../configure --prefix=/usr/$(cross_host) \
-				--cache-file=$(config_cache_cross) \
-				--host=$(cross_host) \
-				--build=$(cross_build) \
-				--disable-gui
-	touch $@
-
-build-wxbase-msw-shared-stamp: configure-wxbase-msw-shared-stamp
-	dh_testdir
-	cd $(objdir_wxbase_msw_shared) && $(MAKE)
-	touch $@
-
-configure-wxbase-msw-static-stamp:
-	dh_testdir
-	mkdir -p $(objdir_wxbase_msw_static)
-	cd $(objdir_wxbase_msw_static) \
-		&& ../configure --prefix=/usr/$(cross_host) \
-				--cache-file=$(config_cache_cross) \
-				--host=$(cross_host) \
-				--build=$(cross_build) \
-				--disable-gui \
-				--disable-shared
-	touch $@
-
-build-wxbase-msw-static-stamp: configure-wxbase-msw-static-stamp
-	dh_testdir
-	cd $(objdir_wxbase_msw_static) && $(MAKE)
-	touch $@
-
-# Note this builds dll only, since wxmsw static debug is > 130MB !
-configure-wxbase-msw-dbg-stamp:
-	dh_testdir
-	mkdir -p $(objdir_wxbase_msw_dbg)
-	cd $(objdir_wxbase_msw_dbg) \
-		&& ../configure --prefix=/usr/$(cross_host) \
-				--cache-file=$(config_cache_cross) \
-				--host=$(cross_host) \
-				--build=$(cross_build) \
-				--disable-gui \
-				--enable-debug
-	touch $@
-
-build-wxbase-msw-dbg-stamp: configure-wxbase-msw-dbg-stamp
-	dh_testdir
-	cd $(objdir_wxbase_msw_dbg) && $(MAKE)
-	touch $@
 
 configure-msw-shared-stamp:
 	dh_testdir
@@ -558,9 +369,6 @@ clean: debian/control
 #		&& ./setup.py clean
 
 	dh_clean
-	rm -f debian/$(package_wxbase_lib).*
-	rm -f debian/$(package_wxbase_dev).*
-	rm -f debian/$(package_wxbase_dbg).*
 	rm -f debian/$(package_gtk_lib).*
 	rm -f debian/$(package_gtk_dev).*
 	rm -f debian/$(package_gtk_dbg).*
@@ -571,9 +379,6 @@ clean: debian/control
 	rm -f debian/$(package_i18n).*
 	rm -f debian/$(package_doc).*
 	rm -f debian/$(package_examples).*
-	rm -f debian/$(package_gtk_univ).*
-	rm -f debian/$(package_wxbase_msw_dev).*
-	rm -f debian/$(package_wxbase_msw_dbg).*
 	rm -f debian/$(package_msw_dev).*
 	rm -f debian/$(package_msw_dbg).*
 	rm -f debian/$(package_headers_msw).*
@@ -581,34 +386,6 @@ clean: debian/control
 install_arch: build_arch $(install_all_arch)
 
 install: build_all $(install_all_native)
-
-install-wxbase-lib: DH_OPTIONS=-p$(package_wxbase_lib)
-install-wxbase-lib: build-wxbase-shared-stamp
-	dh_testdir
-	dh_testroot
-	dh_clean -k
-	dh_installdirs
-	dh_install $(objdir_wxbase_shared)/lib/*.so.* 	usr/lib
-
-install-wxbase-dev: DH_OPTIONS=-p$(package_wxbase_dev)
-install-wxbase-dev: build-wxbase-static-stamp
-	dh_testdir
-	dh_testroot
-	dh_clean -k
-	dh_installdirs
-	dh_install $(objdir_wxbase_shared)/wxbase-$(release)-config 	usr/bin
-	dh_install $(objdir_wxbase_shared)/lib/{wx,*.so} 		usr/lib
-	dh_install $(objdir_wxbase_static)/lib/*.a 			usr/lib
-
-install-wxbase-dbg: DH_OPTIONS=-p$(package_wxbase_dbg)
-install-wxbase-dbg: build-wxbase-debug-stamp
-	dh_testdir
-	dh_testroot
-	dh_clean -k
-	dh_installdirs
-	dh_install $(objdir_wxbase_debug)/wxbased-$(release)-config 	usr/bin
-	dh_install $(objdir_wxbase_debug)/lib 				usr
-	cp debian/lintian-override debian/$(package_wxbase_dbg)/usr/share/lintian/overrides/$(package_wxbase_dbg)
 
 install-gtk-shared-stamp:
 	dh_testdir
@@ -632,29 +409,20 @@ install-gtk-dev: build-gtk-static-stamp install-gtk-shared-stamp
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	dh_install $(objdir_gtk_install)/bin/wxgtk-$(release)-config 	usr/bin
+	dh_install $(objdir_gtk_install)/bin/wxgtk2-$(release)-config 	usr/bin
 	dh_install $(objdir_gtk_install)/lib/{wx,*.so} 			usr/lib
-	dh_install $(objdir_gtk_static)/lib/libwx_gtk{-,_gl}*.a 	usr/lib
+	dh_install $(objdir_gtk_static)/lib/libwx_gtk2{-,_gl}*.a 	usr/lib
 
 install-gtk-dbg: DH_OPTIONS=-p$(package_gtk_dbg)
 install-gtk-dbg: build-gtk-debug-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
-	dh_installdirs
-	dh_install $(objdir_gtk_debug)/wxgtkd-$(release)-config 	usr/bin
+	dh_installdirs usr/share/lintian/overrides
+	dh_install $(objdir_gtk_debug)/wxgtk2d-$(release)-config 	usr/bin
 	dh_install $(objdir_gtk_debug)/lib 				usr
 	cp debian/lintian-override debian/$(package_gtk_dbg)/usr/share/lintian/overrides/$(package_gtk_dbg)
 
-install-gtk-univ: DH_OPTIONS=-p$(package_gtk_univ)
-install-gtk-univ: build-gtk-univ-stamp
-	dh_testdir
-	dh_testroot
-	dh_clean -k
-	dh_installdirs
-	dh_install $(objdir_gtk_univ)/wxgtkuniv-$(release)-config 	usr/bin
-	dh_install $(objdir_gtk_univ)/lib 				usr
-	cp debian/lintian-override debian/$(package_gtk_univ)/usr/share/lintian/overrides/$(package_gtk_univ)
 
 install-gtk-contrib-stamp:
 	dh_testdir
@@ -679,7 +447,7 @@ install-gtk-contrib-dev: build-contrib-static-stamp install-gtk-contrib-stamp
 	dh_installdirs
 	dh_install $(objdir_gtk_contrib_install)/include 	usr
 	dh_install $(objdir_gtk_contrib_install)/lib/*.so 	usr/lib
-	dh_install -Xlibwx_gtk- -Xlibwx_gtk_gl- \
+	dh_install -Xlibwx_gtk2- -Xlibwx_gtk2_gl- \
 		   $(objdir_gtk_static)/lib/*.a 		usr/lib
 
 install-gtk-py: DH_OPTIONS=-p$(package_gtk_py)
@@ -688,21 +456,28 @@ install-gtk-py: build-gtk-py-stamp
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	cd wxPython \
-		&& ./setup.py install \
-			      --prefix=`pwd`/../debian/$(package_gtk_py)/usr \
+	cd wxPython 								\
+		&& $(python_ver) ./setup.py install 				\
+			      --prefix=`pwd`/../debian/$(package_gtk_py)/usr 	\
 			      WX_CONFIG='$(wxconfig)'
-	find debian/$(package_gtk_py)/usr/lib/$(python_dir)/site-packages/wxPython \
+
+	find debian/$(package_gtk_py)/usr/lib/$(python_ver)/site-packages/wxPython \
 		-name '*.py?' -exec rm '{}' ';'
 
 	dh_installman debian/wxPython-tools.1
-	dh_link usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2py.1  \
-		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2xpm.1 \
-		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2png.1 \
-		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pycrust.1 \
-		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pyshell.1 \
-		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/xrced.1   \
-		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/helpviewer.1
+	dh_link usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2py.1     \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2xpm.1    \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2png.1    \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pycrust.1    \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pyshell.1    \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/xrced.1      \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/helpviewer.1 \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pyalacarte.1 \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pyalamode.1  \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pywrap.1
+
+	# This is rather bogus, its included in the main copyright file now though.
+	rm -f debian/$(package_gtk_py)/usr/lib/$(python_ver)/site-packages/wxPython/tools/XRCed/license.txt
 
 install-headers: DH_OPTIONS=-p$(package_headers)
 install-headers: install-gtk-shared-stamp
@@ -746,27 +521,6 @@ install-examples: build-examples-stamp
 	dh_clean -k
 	dh_installdirs
 
-install-wxbase-msw-dev: DH_OPTIONS=-p$(package_wxbase_msw_dev)
-install-wxbase-msw-dev: build-wxbase-msw-shared-stamp build-wxbase-msw-static-stamp
-	dh_testdir
-	dh_testroot
-	dh_clean -k
-	dh_installdirs
-	cp -a $(objdir_wxbase_msw_shared)/lib/* debian/$(package_wxbase_msw_dev)/usr/$(cross_host)/lib
-	cp -a $(objdir_wxbase_msw_static)/lib/*.a debian/$(package_wxbase_msw_dev)/usr/$(cross_host)/lib
-	cp $(objdir_wxbase_msw_shared)/wxbase-$(release)-$(cross_host)-config debian/$(package_wxbase_msw_dev)/usr/bin/
-	$(cross_host)-strip --strip-debug debian/$(package_wxbase_msw_dev)/usr/$(cross_host)/lib/*.a
-
-install-wxbase-msw-dbg: DH_OPTIONS=-p$(package_wxbase_msw_dbg)
-install-wxbase-msw-dbg: build-wxbase-msw-dbg-stamp
-	dh_testdir
-	dh_testroot
-	dh_clean -k
-	dh_installdirs
-	cp -a $(objdir_wxbase_msw_dbg)/lib/* debian/$(package_wxbase_msw_dbg)/usr/$(cross_host)/lib
-	cp $(objdir_wxbase_msw_dbg)/wxbased-$(release)-$(cross_host)-config debian/$(package_wxbase_msw_dbg)/usr/bin/
-	# No static lib, they're freakin' huge!
-	#$(cross_host)-strip --strip-debug debian/$(package_wxbase_msw_dbg)/usr/$(cross_host)/lib/*.a
 
 install-msw-dev: DH_OPTIONS=-p$(package_msw_dev)
 install-msw-dev: build-msw-shared-stamp build-msw-static-stamp
@@ -820,15 +574,13 @@ binary-common:
 
 	@# Don't strip debug libs at all, and strip cross libs elsewhere
 	@# with the cross host tools until dh_strip gets smarter.
-	dh_strip -N$(package_gtk_dbg) -N$(package_wxbase_dbg) \
-		 -N$(package_wxbase_msw_dev) -N$(package_wxbase_msw_dbg) \
-		 -N$(package_msw_dev) -N$(package_msw_dbg)
+	dh_strip -N$(package_gtk_dbg) -N$(package_msw_dev) -N$(package_msw_dbg)
 
 	dh_compress
 	dh_fixperms
 	dh_makeshlibs -N$(package_gtk_py) -V
 	dh_installdeb
-	dh_shlibdeps -ldebian/$(package_gtk_lib)/usr/lib
+	dh_shlibdeps -ldebian/$(package_gtk_lib)/usr/lib:debian/$(package_gtk_dbg)/usr/lib
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb
@@ -838,13 +590,13 @@ binary-common:
 # building the arch specific package files needed to create them.
 binary-indep: build_all install
 	$(MAKE) -f debian/rules \
-		DH_OPTIONS="-i -N$(package_wxbase_msw_dev) -N$(package_wxbase_msw_dbg) -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw) -N$(package_gtk_univ)" \
+		DH_OPTIONS="-i -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw)" \
 		binary-common
 
 # Build just the architecture-dependent files here.
 binary-arch: build_arch install_arch
 	$(MAKE) -f debian/rules \
-		DH_OPTIONS="-a -N$(package_wxbase_msw_dev) -N$(package_wxbase_msw_dbg) -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw) -N$(package_gtk_univ)" \
+		DH_OPTIONS="-a -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw)" \
 		binary-common
 
 # Build all packages target.
@@ -857,7 +609,7 @@ binary: binary-arch binary-indep
 # that is not in the control file.
 binary-cross: control-files-stamp $(install_all_cross)
 	$(MAKE) -f debian/rules \
-		DH_OPTIONS="-p$(package_wxbase_msw_dev) -p$(package_wxbase_msw_dbg) -p$(package_msw_dev) -p$(package_msw_dbg) -p$(package_headers_msw)" \
+		DH_OPTIONS="-p$(package_msw_dev) -p$(package_msw_dbg) -p$(package_headers_msw)" \
 		binary-common
 
 
@@ -881,20 +633,6 @@ binary-gtk-dev: control-files-stamp install-gtk-dev install-headers
 binary-gtk-dbg: control-files-stamp install-gtk-dbg install-headers
 	$(MAKE) -f debian/rules DH_OPTIONS="-p$(package_gtk_dbg) -p$(package_headers)" binary-common
 
-# libwxbase shared lib package
-binary-wxbase: control-files-stamp install-wxbase-lib install-headers
-	$(MAKE) -f debian/rules DH_OPTIONS="-p$(package_wxbase_lib) -p$(package_headers)" binary-common
-
-binary-wxbase-dev: control-files-stamp install-wxbase-dev install-headers
-	$(MAKE) -f debian/rules \
-	  DH_OPTIONS="-p$(package_wxbase_lib) -p$(package_wxbase_dev) -p$(package_headers)" \
-	  binary-common
-
-binary-wxbase-dbg: control-files-stamp install-wxbase-dbg install-headers
-	$(MAKE) -f debian/rules DH_OPTIONS="-p$(package_wxbase_dbg) -p$(package_headers)" binary-common
-
-binary-univ: control-files-stamp install-gtk-univ
-	$(MAKE) -f debian/rules DH_OPTIONS="-p$(package_gtk_univ)" binary-common
 
 # docs package
 binary-doc: control-files-stamp install-doc
@@ -905,12 +643,9 @@ binary-fast:control-files-stamp install-gtk-dbg install-msw-dev install-headers 
 
 
 .PHONY: build build_all build_arch clean binary-indep binary-arch binary binary-common \
-        binary-gtk binary-gtk-dev binary-gtk-dbg binary-wxbase binary-wxbase-dev \
-	binary-wxbase-dbg binary-doc binary-cross \
-	install install_arch install-wxbase-lib \
-        install-wxbase-dev install-wxbase-dbg install-gtk-lib install-gtk-dev \
+        binary-gtk binary-gtk-dev binary-gtk-dbg binary-doc binary-cross \
+	install install_arch install-gtk-lib install-gtk-dev \
         install-gtk-dbg install-gtk-contrib install-gtk-contrib-dev \
         install-gtk-py install-headers install-i18n install-doc install-examples \
-	install-wxbase-msw-dev install-msw-dev install-headers-msw \
-	install-wxbase-msw-dbg install-msw-dbg
+	install-msw-dev install-msw-dbg install-headers-msw
 

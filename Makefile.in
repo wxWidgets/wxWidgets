@@ -17962,9 +17962,6 @@ MSW_DIST: ALL_GUI_DIST
 	cp $(MSWDIR)/*.c $(DISTDIR)/src/msw
 	cp $(MSWDIR)/*.def $(DISTDIR)/src/msw
 	cp $(MSWDIR)/ole/*.cpp $(DISTDIR)/src/msw/ole
-	cp $(MSWDIR)/wince/*.* $(DISTDIR)/src/msw/wince
-	mkdir $(DISTDIR)/contrib
-	cp -R $(WXDIR)/contrib $(DISTDIR)
 
 MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
 	cp $(WXDIR)/wxWINE.spec $(DISTDIR)
@@ -18629,9 +18626,11 @@ PYTHON_DIST:
 	mkdir $(DISTDIR)/wxPython/contrib
 	mkdir $(DISTDIR)/wxPython/contrib/dllwidget
 	mkdir $(DISTDIR)/wxPython/contrib/gizmos
+	mkdir $(DISTDIR)/wxPython/contrib/gizmos/gtk
 	mkdir $(DISTDIR)/wxPython/contrib/glcanvas
 	mkdir $(DISTDIR)/wxPython/contrib/glcanvas/gtk
 	mkdir $(DISTDIR)/wxPython/contrib/ogl
+	mkdir $(DISTDIR)/wxPython/contrib/ogl/gtk
 	mkdir $(DISTDIR)/wxPython/contrib/stc
 	mkdir $(DISTDIR)/wxPython/contrib/stc/gtk
 	mkdir $(DISTDIR)/wxPython/contrib/xrc
@@ -18640,26 +18639,26 @@ PYTHON_DIST:
 	mkdir $(DISTDIR)/wxPython/demo/bmp_source
 	mkdir $(DISTDIR)/wxPython/demo/data
 	mkdir $(DISTDIR)/wxPython/demo/dllwidget
+	mkdir $(DISTDIR)/wxPython/docs
 	mkdir $(DISTDIR)/wxPython/src
 	mkdir $(DISTDIR)/wxPython/src/gtk
 	mkdir $(DISTDIR)/wxPython/scripts
 	mkdir $(DISTDIR)/wxPython/wxPython
 	mkdir $(DISTDIR)/wxPython/wxPython/lib
-	mkdir $(DISTDIR)/wxPython/wxPython/lib/PyCrust
+	mkdir $(DISTDIR)/wxPython/wxPython/lib/colourchooser
 	mkdir $(DISTDIR)/wxPython/wxPython/lib/editor
 	mkdir $(DISTDIR)/wxPython/wxPython/lib/mixins
 	mkdir $(DISTDIR)/wxPython/wxPython/tools
 	mkdir $(DISTDIR)/wxPython/wxPython/tools/XRCed
 
-	cp $(WXDIR)/wxPython/*.txt $(DISTDIR)/wxPython
 	cp $(WXDIR)/wxPython/*.py $(DISTDIR)/wxPython
-	cp $(WXDIR)/wxPython/setup.cfg $(DISTDIR)/wxPython
-	cp $(WXDIR)/wxPython/MANIFEST.in $(DISTDIR)/wxPython
 	cp $(WXDIR)/wxPython/contrib/dllwidget/*.{py,cpp,h,i} $(DISTDIR)/wxPython/contrib/dllwidget
-	cp $(WXDIR)/wxPython/contrib/gizmos/*.{py,cpp,i} $(DISTDIR)/wxPython/contrib/gizmos
+	cp $(WXDIR)/wxPython/contrib/gizmos/*.{cpp,h,i,txt} $(DISTDIR)/wxPython/contrib/gizmos
+	cp $(WXDIR)/wxPython/contrib/gizmos/gtk/*.{py,cpp} $(DISTDIR)/wxPython/contrib/gizmos/gtk
 	-cp $(WXDIR)/wxPython/contrib/glcanvas/* $(DISTDIR)/wxPython/contrib/glcanvas
 	cp $(WXDIR)/wxPython/contrib/glcanvas/gtk/glcanvas.* $(DISTDIR)/wxPython/contrib/glcanvas/gtk
-	-cp $(WXDIR)/wxPython/contrib/ogl/* $(DISTDIR)/wxPython/contrib/ogl
+	-cp $(WXDIR)/wxPython/contrib/ogl/*.{i,txt,h} $(DISTDIR)/wxPython/contrib/ogl
+	-cp $(WXDIR)/wxPython/contrib/ogl/gtk/*.{py,cpp} $(DISTDIR)/wxPython/contrib/ogl/gtk
 	-cp $(WXDIR)/wxPython/contrib/stc/* $(DISTDIR)/wxPython/contrib/stc
 	-cp $(WXDIR)/wxPython/contrib/stc/gtk/* $(DISTDIR)/wxPython/contrib/stc/gtk
 	-cp $(WXDIR)/wxPython/contrib/xrc/xrc.* $(DISTDIR)/wxPython/contrib/xrc
@@ -18674,11 +18673,10 @@ PYTHON_DIST:
 	cp $(WXDIR)/wxPython/src/gtk/*.py $(DISTDIR)/wxPython/src/gtk
 	cp $(WXDIR)/wxPython/src/gtk/*.cpp $(DISTDIR)/wxPython/src/gtk
 	cp $(WXDIR)/wxPython/wxPython/lib/*.py $(DISTDIR)/wxPython/wxPython/lib
-	cp $(WXDIR)/wxPython/wxPython/lib/PyCrust/*.py $(DISTDIR)/wxPython/wxPython/lib/PyCrust
+	cp $(WXDIR)/wxPython/wxPython/lib/colourchooser/*.py $(DISTDIR)/wxPython/wxPython/lib/colourchooser
 	cp $(WXDIR)/wxPython/wxPython/lib/editor/*.py $(DISTDIR)/wxPython/wxPython/lib/editor
 	cp $(WXDIR)/wxPython/wxPython/lib/mixins/*.py $(DISTDIR)/wxPython/wxPython/lib/mixins
 	cp $(WXDIR)/wxPython/wxPython/tools/*.py $(DISTDIR)/wxPython/wxPython/tools
-	cp $(WXDIR)/wxPython/wxPython/tools/XRCed/*.{py,ico,sh,xrc} $(DISTDIR)/wxPython/wxPython/tools/XRCed
 
 distrib_clean:
 	$(RM) -r _dist_dir
@@ -18776,8 +18774,16 @@ debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
 			\( -name "makefile.*" -a ! -name "makefile.unx" \) \) \
 			-print0 | xargs -0 rm -rf
 
-	rm -rf $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
-	mv $(DISTDIR) $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
+	@# We can't get at the individual components of the version here
+	@# anymore, so strip the major and minor version out of the blob.
+
+	(								\
+	wx_version=$(WX_VERSION);					\
+	wx_release=$${wx_version%.*};					\
+	rm -rf $(WXDIR)/../wxwidgets$${wx_release}-$${wx_version};	\
+	mv $(DISTDIR) $(WXDIR)/../wxwidgets$${wx_release}-$${wx_version};\
+	)
+
 
 debian-native-dist: @GUIDIST@ UNIV_DIST MANUAL_DIST PYTHON_DIST
 

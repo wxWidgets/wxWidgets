@@ -165,9 +165,8 @@ case "${host}" in
     fi
     DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
-  *-*-gnu* )
+  *-*-gnu* | *-*-k*bsd*-gnu )
     USE_GNU=1
-    AC_DEFINE(__GNU__)
     TMP=`uname -m`
     if test "x$TMP" = "xalpha"; then
       USE_ALPHA=1
