@@ -169,7 +169,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         y = (int)event.GetY();
 
     // reset the cursor
-#ifdef __WXMOTIF__
+#if defined( __WXMOTIF__ ) || defined( __WXMAC__ )
     SetCursor(* wxSTANDARD_CURSOR);
 #elif defined(__WXMSW__)
     SetCursor(wxCursor());
