@@ -222,7 +222,7 @@ void wxChoice::Delete(int n)
 void wxChoice::Clear()
 {
     m_stringList.Clear ();
-    int i;
+    size_t i;
     for (i = 0; i < m_noStrings; i++)
     {
         XtRemoveCallback((Widget) m_widgetArray[i],
@@ -286,7 +286,7 @@ void wxChoice::SetSelection(int n)
 #if 0
         Dimension selectionWidth, selectionHeight;
 #endif
-        wxXmString text( (char*)node->Data() );
+        wxXmString text( node->GetData() );
 // MBN: this seems silly, at best, and causes wxChoices to be clipped:
 //      will remove "soon"
 #if 0
@@ -369,7 +369,7 @@ void wxChoice::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
     if (width > -1)
     {
-        int i;
+        size_t i;
         for (i = 0; i < m_noStrings; i++)
             XtVaSetValues ((Widget) m_widgetArray[i],
                            XmNwidth, actualWidth,
@@ -379,7 +379,7 @@ void wxChoice::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     }
     if (height > -1)
     {
-        int i;
+        size_t i;
         for (i = 0; i < m_noStrings; i++)
             XtVaSetValues ((Widget) m_widgetArray[i],
                            XmNheight, actualHeight,
@@ -457,7 +457,7 @@ void wxChoice::ChangeBackgroundColour()
     DoChangeBackgroundColour(m_formWidget, m_backgroundColour);
     DoChangeBackgroundColour(m_buttonWidget, m_backgroundColour);
     DoChangeBackgroundColour(m_menuWidget, m_backgroundColour);
-    int i;
+    size_t i;
     for (i = 0; i < m_noStrings; i++)
         DoChangeBackgroundColour(m_widgetArray[i], m_backgroundColour);
 }
@@ -467,7 +467,7 @@ void wxChoice::ChangeForegroundColour()
     DoChangeForegroundColour(m_formWidget, m_foregroundColour);
     DoChangeForegroundColour(m_buttonWidget, m_foregroundColour);
     DoChangeForegroundColour(m_menuWidget, m_foregroundColour);
-    int i;
+    size_t i;
     for (i = 0; i < m_noStrings; i++)
         DoChangeForegroundColour(m_widgetArray[i], m_foregroundColour);
 }

@@ -591,10 +591,11 @@ void wxFrame::OnActivate(wxActivateEvent& event)
     if (!event.GetActive())
         return;
 
-    for(wxNode *node = GetChildren().First(); node; node = node->Next())
+    for(wxWindowList::Node *node = GetChildren().GetFirst(); node;
+        node = node->GetNext())
     {
         // Find a child that's a subwindow, but not a dialog box.
-        wxWindow *child = (wxWindow *)node->Data();
+        wxWindow *child = node->GetData();
         if (!child->IsTopLevel())
         {
             child->SetFocus();

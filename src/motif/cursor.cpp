@@ -44,14 +44,14 @@ wxCursorRefData::wxCursorRefData()
 
 wxCursorRefData::~wxCursorRefData()
 {
-    wxNode* node = m_cursors.First();
+    wxList::Node* node = m_cursors.GetFirst();
     while (node)
     {
-        wxXCursor* c = (wxXCursor*) node->Data();
+        wxXCursor* c = (wxXCursor*) node->GetData();
         // TODO: how to delete cursor?
         // XDestroyCursor((Display*) c->m_display, (Cursor) c->m_cursor); // ??
         delete c;
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 
@@ -402,13 +402,13 @@ WXCursor wxCursor::GetXCursor(WXDisplay* display)
 {
     if (!M_CURSORDATA)
         return (WXCursor) 0;
-    wxNode* node = M_CURSORDATA->m_cursors.First();
+    wxList::Node* node = M_CURSORDATA->m_cursors.GetFirst();
     while (node)
     {
-        wxXCursor* c = (wxXCursor*) node->Data();
+        wxXCursor* c = (wxXCursor*) node->GetData();
         if (c->m_display == display)
             return c->m_cursor;
-        node = node->Next();
+        node = node->GetNext();
     }
 
     // No cursor for this display, so let's see if we're an id-type cursor.
@@ -657,9 +657,10 @@ wxXSetBusyCursor (wxWindow * win, wxCursor * cursor)
 
     XFlush (display);
 
-    for(wxNode *node = win->GetChildren().First (); node; node = node->Next())
+    for(wxWindowList::Node *node = win->GetChildren().GetFirst (); node; 
+        node = node->GetNext())
     {
-        wxWindow *child = (wxWindow *) node->Data ();
+        wxWindow *child = node->GetData ();
         wxXSetBusyCursor (child, cursor);
     }
 }
@@ -670,9 +671,10 @@ void wxBeginBusyCursor(wxCursor *cursor)
     wxBusyCursorCount++;
     if (wxBusyCursorCount == 1)
     {
-        for(wxNode *node = wxTopLevelWindows.First (); node; node = node->Next())
+        for(wxWindowList::Node *node = wxTopLevelWindows.GetFirst (); node;
+            node = node->GetNext())
         {
-            wxWindow *win = (wxWindow *) node->Data ();
+            wxWindow *win = node->GetData ();
             wxXSetBusyCursor (win, cursor);
         }
     }
@@ -687,9 +689,10 @@ void wxEndBusyCursor()
     wxBusyCursorCount--;
     if (wxBusyCursorCount == 0)
     {
-        for(wxNode *node = wxTopLevelWindows.First (); node; node = node->Next())
+        for(wxWindowList::Node *node = wxTopLevelWindows.GetFirst (); node;
+            node = node->GetNext())
         {
-            wxWindow *win = (wxWindow *) node->Data ();
+            wxWindow *win = node->GetData ();
             wxXSetBusyCursor (win, NULL);
         }
     }

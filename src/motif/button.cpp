@@ -119,10 +119,12 @@ void wxButton::SetDefault()
     // Because it's very hard to find wxButton in the same row,
     // correction is straighforward: we set resource for all wxButton
     // in this parent (but not sub panels)
-    for (wxNode * node = parent->GetChildren().First (); node; node = node->Next ())
+    for (wxWindowList::Node * node = parent->GetChildren().GetFirst ();
+         node; node = node->GetNext ())
     {
-        wxButton *item = (wxButton *) node->Data ();
-        if (item->IsKindOf(CLASSINFO(wxButton)))
+        wxWindow *win = node->GetData ();
+        wxButton *item = wxDynamicCast(win, wxButton);
+        if (item)
         {
             bool managed = XtIsManaged((Widget) item->GetMainWidget());
             if (managed)

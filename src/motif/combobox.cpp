@@ -137,10 +137,10 @@ int wxComboBox::DoAppend(const wxString& item)
 void wxComboBox::Delete(int n)
 {
     XmComboBoxDeletePos((Widget) m_mainWidget, n+1);
-    wxNode *node = m_stringList.Nth(n);
+    wxStringList::Node *node = m_stringList.Item(n);
     if (node)
     {
-        delete[] (char *)node->Data();
+        delete[] node->GetData();
         delete node;
     }
     m_clientDataDict.Delete(n, HasClientObjectData());
@@ -173,9 +173,9 @@ int wxComboBox::GetSelection (void) const
 
 wxString wxComboBox::GetString(int n) const
 {
-    wxNode *node = m_stringList.Nth(n);
+    wxStringList::Node *node = m_stringList.Item(n);
     if (node)
-        return wxString((char *) node->Data ());
+        return wxString(node->GetData ());
     else
         return wxEmptyString;
 }

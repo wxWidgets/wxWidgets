@@ -94,7 +94,7 @@ protected:
     // common part of all contructors
     void Init();
 
-    int           m_noStrings;
+    size_t        m_noStrings;
     WXWidget      m_menuWidget;
     WXWidget      m_buttonWidget;
     wxWidgetArray m_widgetArray;
