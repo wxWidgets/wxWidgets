@@ -256,12 +256,23 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     WindowClass wclass = 0;
     WindowAttributes attr = kWindowNoAttributes ;
     
-    if ( HasFlag( wxFRAME_TOOL_WINDOW) /*|| HasFlag(wxTINY_CAPTION_HORIZ) ||  HasFlag(wxTINY_CAPTION_VERT)*/ )
+    if ( HasFlag( wxFRAME_TOOL_WINDOW) )
     {
-        wclass = kFloatingWindowClass ;
-        if ( HasFlag(wxTINY_CAPTION_VERT) )
+        if ( 
+            HasFlag( wxMINIMIZE_BOX ) || HasFlag( wxMAXIMIZE_BOX ) ||
+            HasFlag( wxSYSTEM_MENU ) || HasFlag( wxCAPTION ) ||
+            HasFlag(wxTINY_CAPTION_HORIZ) ||  HasFlag(wxTINY_CAPTION_VERT)
+             )
         {
-            attr |= kWindowSideTitlebarAttribute ;
+            wclass = kFloatingWindowClass ;
+            if ( HasFlag(wxTINY_CAPTION_VERT) )
+            {
+                attr |= kWindowSideTitlebarAttribute ;
+            }
+        }
+        else
+        {
+            wclass = kPlainWindowClass ;
         }
     }
     else if ( HasFlag( wxCAPTION ) )
@@ -277,7 +288,15 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     }
     else
     {
-        wclass = kDocumentWindowClass ;
+        if ( HasFlag( wxMINIMIZE_BOX ) || HasFlag( wxMAXIMIZE_BOX ) ||
+             HasFlag( wxSYSTEM_MENU ) )
+        {
+            wclass = kDocumentWindowClass ;
+        }
+        else
+        {
+            wclass = kPlainWindowClass ;
+        }
     }
     
     if ( HasFlag( wxMINIMIZE_BOX ) || HasFlag( wxMAXIMIZE_BOX ) )
