@@ -1522,15 +1522,11 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 
 wxString wxGetCwd()
 {
-    wxString str;
-
-    // we can't create wxStringBuffer object inline: Sun CC generates buggy
-    // code in this case!
-    {
-        wxStringBuffer buf(str, _MAXPATHLEN);
-        wxGetWorkingDirectory(buf, _MAXPATHLEN);
-    }
-
+    wxChar *buffer = new wxChar[_MAXPATHLEN];
+    wxGetWorkingDirectory(buffer, _MAXPATHLEN);
+    wxString str( buffer );
+    delete [] buffer;
+ 
     return str;
 }
 

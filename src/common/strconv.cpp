@@ -661,6 +661,9 @@ size_t IC_CharSet::MB2WC(wchar_t *buf, const char *psz, size_t n)
             // convert to native endianness
             WC_BSWAP(buf /* _not_ bufPtr */, res)
         }
+        
+        // iconv doesn't seem to set the trailing 0
+        buf[res] = 0;
     }
     else
     {
