@@ -2464,7 +2464,21 @@ if test "$wxUSE_TIMEDATE" = "yes"; then
                                     [
                                         wx_cv_var_timezone=_timezone
                                     ],
-                                    AC_MSG_ERROR(no timezone variable)
+                                    [
+                                        AC_TRY_COMPILE(
+                                            [
+                                                #include <time.h>
+                                            ],
+                                            [
+                                                int tz;
+                                                tz = timezone;
+                                            ],
+                                            [
+                                                wx_cv_var_timezone=timezone
+                                            ],
+                                            AC_MSG_ERROR(no timezone variable)
+                                        )
+                                    ]
                                 )
                             ]
                         )
