@@ -64,8 +64,8 @@ wxString wxHtmlFilterPlainText::ReadFile(const wxFSFile& file) const
     doc = src;
     delete [] src;
 
-    doc.Replace("<", "&lt;", TRUE);
-    doc.Replace(">", "&gt;", TRUE);
+    doc.Replace(wxT("<"), wxT("&lt;"), TRUE);
+    doc.Replace(wxT(">"), wxT("&gt;"), TRUE);
     doc2 = "<HTML><BODY><PRE>\n" + doc + "\n</PRE></BODY></HTML>";
     return doc2;
 }

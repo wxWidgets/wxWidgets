@@ -296,7 +296,7 @@ void wxHtmlWindow::ReadCustomization(wxConfigBase *cfg, wxString path)
     m_Parser -> m_ItalicModeFixed = cfg -> Read("wxHtmlWindow/ItalicModeFixed", m_Parser -> m_ItalicModeFixed);
     m_Parser -> m_ItalicModeNormal = cfg -> Read("wxHtmlWindow/ItalicModeNormal", m_Parser -> m_ItalicModeNormal);
     for (int i = 0; i < 7; i++) {
-        tmp.Printf("wxHtmlWindow/FontsSize%i", i);
+        tmp.Printf(wxT("wxHtmlWindow/FontsSize%i"), i);
         m_Parser -> m_FontsSizes[i] = cfg -> Read(tmp, m_Parser -> m_FontsSizes[i]);
     }
 
@@ -322,7 +322,7 @@ void wxHtmlWindow::WriteCustomization(wxConfigBase *cfg, wxString path)
     cfg -> Write("wxHtmlWindow/ItalicModeFixed", (long) m_Parser -> m_ItalicModeFixed);
     cfg -> Write("wxHtmlWindow/ItalicModeNormal", (long) m_Parser -> m_ItalicModeNormal);
     for (int i = 0; i < 7; i++) {
-        tmp.Printf("wxHtmlWindow/FontsSize%i", i);
+        tmp.Printf(wxT("wxHtmlWindow/FontsSize%i"), i);
         cfg -> Write(tmp, (long) m_Parser -> m_FontsSizes[i]);
     }
 

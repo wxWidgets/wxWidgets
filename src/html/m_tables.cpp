@@ -122,10 +122,10 @@ wxHtmlTableCell::wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& t
 
     /* scan params: */
     m_tBkg = m_rBkg = -1;
-    if (tag.HasParam("BGCOLOR")) tag.ScanParam("BGCOLOR", "#%lX", &m_tBkg);
-    if (tag.HasParam("VALIGN")) m_tValign = tag.GetParam("VALIGN"); else m_tValign = wxEmptyString;
-    if (tag.HasParam("CELLSPACING") && tag.ScanParam("CELLSPACING", "%i", &m_Spacing) == 1) {} else m_Spacing = 2;
-    if (tag.HasParam("CELLPADDING") && tag.ScanParam("CELLPADDING", "%i", &m_Padding) == 1) {} else m_Padding = 3;
+    if (tag.HasParam(wxT("BGCOLOR"))) tag.ScanParam(wxT("BGCOLOR"), wxT("#%lX"), &m_tBkg);
+    if (tag.HasParam(wxT("VALIGN"))) m_tValign = tag.GetParam(wxT("VALIGN")); else m_tValign = wxEmptyString;
+    if (tag.HasParam(wxT("CELLSPACING")) && tag.ScanParam(wxT("CELLSPACING"), wxT("%i"), &m_Spacing) == 1) {} else m_Spacing = 2;
+    if (tag.HasParam(wxT("CELLPADDING")) && tag.ScanParam(wxT("CELLPADDING"), wxT("%i"), &m_Padding) == 1) {} else m_Padding = 3;
 
     if (m_HasBorders)
         SetBorder(TABLE_BORDER_CLR_1, TABLE_BORDER_CLR_2);
@@ -191,8 +191,8 @@ void wxHtmlTableCell::AddRow(const wxHtmlTag& tag)
 
     /* scan params: */
     m_rBkg = m_tBkg;
-    if (tag.HasParam("BGCOLOR")) tag.ScanParam("BGCOLOR", "#%lX", &m_rBkg);
-    if (tag.HasParam("VALIGN")) m_rValign = tag.GetParam("VALIGN"); else m_rValign = m_tValign;
+    if (tag.HasParam(wxT("BGCOLOR"))) tag.ScanParam(wxT("BGCOLOR"), wxT("#%lX"), &m_rBkg);
+    if (tag.HasParam(wxT("VALIGN"))) m_rValign = tag.GetParam(wxT("VALIGN")); else m_rValign = m_tValign;
 }
 
 
@@ -222,11 +222,11 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
             wxString wd = tag.GetParam("WIDTH");
 
             if (wd[wd.Length()-1] == '%') {
-                sscanf(wd.c_str(), "%i%%", &m_ColsInfo[c].width);
+                wxSscanf(wd.c_str(), wxT("%i%%"), &m_ColsInfo[c].width);
                 m_ColsInfo[c].units = wxHTML_UNITS_PERCENT;
             }
             else {
-                sscanf(wd.c_str(), "%i", &m_ColsInfo[c].width);
+                wxSscanf(wd.c_str(), wxT("%i"), &m_ColsInfo[c].width);
                 m_ColsInfo[c].units = wxHTML_UNITS_PIXELS;
             }
         }
@@ -235,8 +235,8 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
 
     // spanning:
     {
-        if (tag.HasParam("COLSPAN")) tag.ScanParam("COLSPAN", "%i", &m_CellInfo[r][c].colspan);
-        if (tag.HasParam("ROWSPAN")) tag.ScanParam("ROWSPAN", "%i", &m_CellInfo[r][c].rowspan);
+        if (tag.HasParam(wxT("COLSPAN"))) tag.ScanParam(wxT("COLSPAN"), wxT("%i"), &m_CellInfo[r][c].colspan);
+        if (tag.HasParam(wxT("ROWSPAN"))) tag.ScanParam(wxT("ROWSPAN"), wxT("%i"), &m_CellInfo[r][c].rowspan);
         if ((m_CellInfo[r][c].colspan != 1) || (m_CellInfo[r][c].rowspan != 1)) {
             int i, j;
 
@@ -252,7 +252,7 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
     //background color:
     {
         int bk = m_rBkg;
-        if (tag.HasParam("BGCOLOR")) tag.ScanParam("BGCOLOR", "#%lX", &bk);
+        if (tag.HasParam(wxT("BGCOLOR"))) tag.ScanParam(wxT("BGCOLOR"), wxT("#%lX"), &bk);
         if (bk != -1) {
             wxColour clr = wxColour((bk & 0xFF0000) >> 16 , (bk & 0x00FF00) >> 8, (bk & 0x0000FF));
             cell -> SetBackgroundColour(clr);

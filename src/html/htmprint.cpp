@@ -370,11 +370,11 @@ wxString wxHtmlPrintout::TranslateHeader(const wxString& instr, int page)
     wxString r = instr;
     wxString num;
     
-    num.Printf("%i", page);
-    r.Replace("@PAGENUM@", num);
+    num.Printf(wxT("%i"), page);
+    r.Replace(wxT("@PAGENUM@"), num);
 
-    num.Printf("%i", m_NumPages);
-    r.Replace("@PAGESCNT@", num);
+    num.Printf(wxT("%i"), m_NumPages);
+    r.Replace(wxT("@PAGESCNT@"), num);
 
     return r;
 }

@@ -58,19 +58,19 @@ static char* ReadLine(char *line, char *buf)
 static wxString SafeFileName(const wxString& s)
 {
     wxString res = s;
-    res.Replace(":", "_", TRUE);
-    res.Replace(" ", "_", TRUE);
-    res.Replace("/", "_", TRUE);
-    res.Replace("\\", "_", TRUE);
-    res.Replace("#", "_", TRUE);
-    res.Replace(".", "_", TRUE);
+    res.Replace(wxT(":"), wxT("_"), TRUE);
+    res.Replace(wxT(" "), wxT("_"), TRUE);
+    res.Replace(wxT("/"), wxT("_"), TRUE);
+    res.Replace(wxT("\\"), wxT("_"), TRUE);
+    res.Replace(wxT("#"), wxT("_"), TRUE);
+    res.Replace(wxT("."), wxT("_"), TRUE);
     return res;
 }
 
 
 static int LINKAGEMODE IndexCompareFunc(const void *a, const void *b)
 {
-    return strcmp(((wxHtmlContentsItem*)a) -> m_Name, ((wxHtmlContentsItem*)b) -> m_Name);
+    return wxStrcmp(((wxHtmlContentsItem*)a) -> m_Name, ((wxHtmlContentsItem*)b) -> m_Name);
 }
 
 
@@ -103,7 +103,7 @@ class HP_TagHandler : public wxHtmlTagHandler
 
     public:
         HP_TagHandler(wxHtmlBookRecord *b) : wxHtmlTagHandler() {m_Book = b; m_Items = NULL; m_ItemsCnt = 0; m_Name = m_Page = wxEmptyString; m_Level = 0; }
-        wxString GetSupportedTags() { return "UL,OBJECT,PARAM"; }
+        wxString GetSupportedTags() { return wxT("UL,OBJECT,PARAM"); }
         bool HandleTag(const wxHtmlTag& tag);
         void WriteOut(wxHtmlContentsItem*& array, int& size);
         void ReadIn(wxHtmlContentsItem* array, int size);
@@ -118,7 +118,7 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
         m_Level--;
         return TRUE;
     }
-    else if (tag.GetName() == "OBJECT") {
+    else if (tag.GetName() == wxT("OBJECT")) {
         m_Name = m_Page = wxEmptyString;
         ParseInner(tag);
         if (m_Page != wxEmptyString) {
@@ -126,19 +126,19 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
                 m_Items = (wxHtmlContentsItem*) realloc(m_Items, (m_ItemsCnt + wxHTML_REALLOC_STEP) * sizeof(wxHtmlContentsItem));
             m_Items[m_ItemsCnt].m_Level = m_Level;
             m_Items[m_ItemsCnt].m_ID = m_ID;
-            m_Items[m_ItemsCnt].m_Page = new char[m_Page.Length() + 1];
-            strcpy(m_Items[m_ItemsCnt].m_Page, m_Page.c_str());
-            m_Items[m_ItemsCnt].m_Name = new char [m_Name.Length() + 1];
-            strcpy(m_Items[m_ItemsCnt].m_Name, m_Name.c_str());
+            m_Items[m_ItemsCnt].m_Page = new wxChar[m_Page.Length() + 1];
+            wxStrcpy(m_Items[m_ItemsCnt].m_Page, m_Page.c_str());
+            m_Items[m_ItemsCnt].m_Name = new wxChar [m_Name.Length() + 1];
+            wxStrcpy(m_Items[m_ItemsCnt].m_Name, m_Name.c_str());
             m_Items[m_ItemsCnt].m_Book = m_Book;
             m_ItemsCnt++;
         }
         return TRUE;
     }
     else { // "PARAM"
-        if (m_Name == wxEmptyString && tag.GetParam("NAME") == "Name") m_Name = tag.GetParam("VALUE");
-        if (tag.GetParam("NAME") == "Local") m_Page = tag.GetParam("VALUE");
-        if (tag.GetParam("NAME") == "ID") tag.ScanParam("VALUE", "%i", &m_ID);
+        if (m_Name == wxEmptyString && tag.GetParam(wxT("NAME")) == wxT("Name")) m_Name = tag.GetParam(wxT("VALUE"));
+        if (tag.GetParam(wxT("NAME")) == wxT("Local")) m_Page = tag.GetParam(wxT("VALUE"));
+        if (tag.GetParam(wxT("NAME")) == wxT("ID")) tag.ScanParam(wxT("VALUE"), wxT("%i"), &m_ID);
         return FALSE;
     }
 }
@@ -256,11 +256,11 @@ bool wxHtmlHelpData::LoadCachedBook(wxHtmlBookRecord *book, wxInputStream *f)
         f -> Read(&x, sizeof(x));
         m_Contents[i].m_ID = x;
         f -> Read(&x, sizeof(x));
-        m_Contents[i].m_Name = new char[x];
-        f -> Read(m_Contents[i].m_Name, x);
+        m_Contents[i].m_Name = new wxChar[x];
+        f -> Read(m_Contents[i].m_Name, x*sizeof(wxChar));
         f -> Read(&x, sizeof(x));
-        m_Contents[i].m_Page = new char[x];
-        f -> Read(m_Contents[i].m_Page, x);
+        m_Contents[i].m_Page = new wxChar[x];
+        f -> Read(m_Contents[i].m_Page, x*sizeof(wxChar));
         m_Contents[i].m_Book = book;
     }
 
@@ -272,11 +272,11 @@ bool wxHtmlHelpData::LoadCachedBook(wxHtmlBookRecord *book, wxInputStream *f)
     m_Index = (wxHtmlContentsItem*) realloc(m_Index, (m_IndexCnt / wxHTML_REALLOC_STEP + 1) * wxHTML_REALLOC_STEP * sizeof(wxHtmlContentsItem));
     for (i = st; i < m_IndexCnt; i++) {
         f -> Read(&x, sizeof(x));
-        m_Index[i].m_Name = new char[x];
-        f -> Read(m_Index[i].m_Name, x);
+        m_Index[i].m_Name = new wxChar[x];
+        f -> Read(m_Index[i].m_Name, x*sizeof(wxChar));
         f -> Read(&x, sizeof(x));
-        m_Index[i].m_Page = new char[x];
-        f -> Read(m_Index[i].m_Page, x);
+        m_Index[i].m_Page = new wxChar[x];
+        f -> Read(m_Index[i].m_Page, x*sizeof(wxChar));
         m_Index[i].m_Book = book;
     }
     return TRUE;
@@ -299,12 +299,12 @@ bool wxHtmlHelpData::SaveCachedBook(wxHtmlBookRecord *book, wxOutputStream *f)
         f -> Write(&x, sizeof(x));
         x = m_Contents[i].m_ID;
         f -> Write(&x, sizeof(x));
-        x = strlen(m_Contents[i].m_Name) + 1;
+        x = wxStrlen(m_Contents[i].m_Name) + 1;
         f -> Write(&x, sizeof(x));
-        f -> Write(m_Contents[i].m_Name, x);
-        x = strlen(m_Contents[i].m_Page) + 1;
+        f -> Write(m_Contents[i].m_Name, x*sizeof(wxChar));
+        x = wxStrlen(m_Contents[i].m_Page) + 1;
         f -> Write(&x, sizeof(x));
-        f -> Write(m_Contents[i].m_Page, x);
+        f -> Write(m_Contents[i].m_Page, x*sizeof(wxChar));
     }
 
     /* save index : */
@@ -314,12 +314,12 @@ bool wxHtmlHelpData::SaveCachedBook(wxHtmlBookRecord *book, wxOutputStream *f)
     f -> Write(&x, sizeof(x));
     for (i = 0; i < m_IndexCnt; i++) {
         if (m_Index[i].m_Book != book || m_Index[i].m_Level == 0) continue;
-        x = strlen(m_Index[i].m_Name) + 1;
+        x = wxStrlen(m_Index[i].m_Name) + 1;
         f -> Write(&x, sizeof(x));
-        f -> Write(m_Index[i].m_Name, x);
-        x = strlen(m_Index[i].m_Page) + 1;
+        f -> Write(m_Index[i].m_Name, x*sizeof(wxChar));
+        x = wxStrlen(m_Index[i].m_Page) + 1;
         f -> Write(&x, sizeof(x));
-        f -> Write(m_Index[i].m_Page, x);
+        f -> Write(m_Index[i].m_Page, x*sizeof(wxChar));
     }
     return TRUE;
 }
@@ -356,10 +356,10 @@ bool wxHtmlHelpData::AddBookParam(const wxString& title, const wxString& contfil
         m_Contents = (wxHtmlContentsItem*) realloc(m_Contents, (m_ContentsCnt + wxHTML_REALLOC_STEP) * sizeof(wxHtmlContentsItem));
     m_Contents[m_ContentsCnt].m_Level = 0;
     m_Contents[m_ContentsCnt].m_ID = 0;
-    m_Contents[m_ContentsCnt].m_Page = new char[deftopic.Length() + 1];
-    strcpy(m_Contents[m_ContentsCnt].m_Page, deftopic.c_str());
-    m_Contents[m_ContentsCnt].m_Name = new char [title.Length() + 1];
-    strcpy(m_Contents[m_ContentsCnt].m_Name, title.c_str());
+    m_Contents[m_ContentsCnt].m_Page = new wxChar[deftopic.Length() + 1];
+    wxStrcpy(m_Contents[m_ContentsCnt].m_Page, deftopic.c_str());
+    m_Contents[m_ContentsCnt].m_Name = new wxChar [title.Length() + 1];
+    wxStrcpy(m_Contents[m_ContentsCnt].m_Name, title.c_str());
     m_Contents[m_ContentsCnt].m_Book = bookr;
 
     // store the contents index for later
@@ -473,7 +473,7 @@ wxString wxHtmlHelpData::FindPageByName(const wxString& x)
 
     cnt = m_ContentsCnt;
     for (i = 0; i < cnt; i++) {
-        if (strcmp(m_Contents[i].m_Name, x) == 0) {
+        if (wxStrcmp(m_Contents[i].m_Name, x) == 0) {
             url = m_Contents[i].m_Book -> GetBasePath() + m_Contents[i].m_Page;
             return url;
         }
@@ -484,7 +484,7 @@ wxString wxHtmlHelpData::FindPageByName(const wxString& x)
 
     cnt = m_IndexCnt;
     for (i = 0; i < cnt; i++) {
-        if (strcmp(m_Index[i].m_Name, x) == 0) {
+        if (wxStrcmp(m_Index[i].m_Name, x) == 0) {
             url = m_Index[i].m_Book -> GetBasePath() + m_Index[i].m_Page;
             return url;
         }
@@ -592,11 +592,11 @@ wxASSERT(m_Active);
 void wxSearchEngine::LookFor(const wxString& keyword)
 {
     if (m_Keyword) delete[] m_Keyword;
-    m_Keyword = new char[keyword.Length() + 1];
-    strcpy(m_Keyword, keyword.c_str());
-    for (int i = strlen(m_Keyword) - 1; i >= 0; i--)
-        if ((m_Keyword[i] >= 'A') && (m_Keyword[i] <= 'Z'))
-            m_Keyword[i] += 'a' - 'A';
+    m_Keyword = new wxChar[keyword.Length() + 1];
+    wxStrcpy(m_Keyword, keyword.c_str());
+    for (int i = wxStrlen(m_Keyword) - 1; i >= 0; i--)
+        if ((m_Keyword[i] >= wxT('A')) && (m_Keyword[i] <= wxT('Z')))
+            m_Keyword[i] += wxT('a') - wxT('A');
 }
 
 
@@ -607,7 +607,7 @@ bool wxSearchEngine::Scan(wxInputStream *stream)
 
     int i, j;
     int lng = stream ->GetSize();
-    int wrd = strlen(m_Keyword);
+    int wrd = wxStrlen(m_Keyword);
     bool found = FALSE;
     char *buf = new char[lng + 1];
     stream -> Read(buf, lng);

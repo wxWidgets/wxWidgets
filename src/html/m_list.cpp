@@ -98,7 +98,7 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
                     c -> InsertCell(new wxHtmlListmarkCell(m_WParser -> GetDC(), m_WParser -> GetActualColor()));
                 else {
                     wxString mark;
-                    mark.Printf("%i.", m_Numbering);
+                    mark.Printf(wxT("%i."), m_Numbering);
                     c -> InsertCell(new wxHtmlWordCell(mark, *(m_WParser -> GetDC())));
                 }
                 m_WParser -> CloseContainer();

@@ -42,10 +42,10 @@ IMPLEMENT_CLASS(wxHtmlTagsCache,wxObject)
 
 wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
 {
-    const char *src = source.c_str();
+    const wxChar *src = source.c_str();
     int i, tg, pos, stpos;
     int lng = source.Length();
-    char dummy[256];
+    wxChar dummy[256];
 
     m_Cache = NULL;
     m_CacheSize = 0;
@@ -53,28 +53,28 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
 
     pos = 0;
     while (pos < lng) {
-        if (src[pos] == '<') {  // tag found:
+        if (src[pos] == wxT('<')) {  // tag found:
             if (m_CacheSize % CACHE_INCREMENT == 0)
                 m_Cache = (sCacheItem*) realloc(m_Cache, (m_CacheSize + CACHE_INCREMENT) * sizeof(sCacheItem));
             tg = m_CacheSize++;
             m_Cache[tg].Key = stpos = pos++;
             dummy[0] = 0; i = 0;
-            while ((src[pos] != '>') && (src[pos] != ' ')) {
+            while ((src[pos] != wxT('>')) && (src[pos] != wxT(' '))) {
                 dummy[i] = src[pos++];
-                if ((dummy[i] >= 'a') && (dummy[i] <= 'z')) dummy[i] -= ('a' - 'A');
+                if ((dummy[i] >= wxT('a')) && (dummy[i] <= wxT('z'))) dummy[i] -= (wxT('a') - wxT('A'));
                 i++;
             }
             dummy[i] = 0;
-            m_Cache[tg].Name = new char[i+1];
-            memcpy(m_Cache[tg].Name, dummy, i+1);
+            m_Cache[tg].Name = new wxChar[i+1];
+            memcpy(m_Cache[tg].Name, dummy, (i+1)*sizeof(wxChar));
 
-            while (src[pos] != '>') pos++;
+            while (src[pos] != wxT('>')) pos++;
 
-            if (src[stpos+1] == '/') { // ending tag:
+            if (src[stpos+1] == wxT('/')) { // ending tag:
                 m_Cache[tg].End1 = m_Cache[tg].End2 = -2;
                 // find matching begin tag:
                 for (i = tg; i >= 0; i--)
-                    if ((m_Cache[i].End1 == -1) && (strcmp(m_Cache[i].Name, dummy+1) == 0)) {
+                    if ((m_Cache[i].End1 == -1) && (wxStrcmp(m_Cache[i].Name, dummy+1) == 0)) {
                         m_Cache[i].End1 = stpos;
                         m_Cache[i].End2 = pos + 1;
                         break;
@@ -157,8 +157,8 @@ wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCac
 
 bool wxHtmlTag::HasParam(const wxString& par) const
 {
-    const char *st = m_Params, *p = par;
-    const char *st2, *p2;
+    const wxChar *st = m_Params, *p = par;
+    const wxChar *st2, *p2;
 
     if (*st == 0) return FALSE;
     if (*p == 0) return FALSE;
@@ -186,8 +186,8 @@ bool wxHtmlTag::HasParam(const wxString& par) const
 
 wxString wxHtmlTag::GetParam(const wxString& par, bool with_commas) const
 {
-    const char *st = m_Params, *p = par;
-    const char *st2, *p2;
+    const wxChar *st = m_Params, *p = par;
+    const wxChar *st2, *p2;
     bool comma;
     char comma_char;
 
@@ -240,10 +240,10 @@ wxString wxHtmlTag::GetParam(const wxString& par, bool with_commas) const
 
 
 
-int wxHtmlTag::ScanParam(const wxString& par, char *format, void *param) const
+int wxHtmlTag::ScanParam(const wxString& par, wxChar *format, void *param) const
 {
     wxString parval = GetParam(par);
-    return sscanf((const char*)parval, format, param);
+    return wxSscanf((const wxChar*)parval, format, param);
 }
 
 #endif

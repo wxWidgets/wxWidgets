@@ -75,10 +75,10 @@ wxHtmlImageMapAreaCell::wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::celltype
 	type = t;
 	while ((i = x.Find( ',' )) != -1)
 	{
-		coords.Add( atoi( x.Left( i ).c_str() ) );
+		coords.Add( wxAtoi( x.Left( i ).c_str() ) );
 		x = x.Mid( i + 1 );
 	}
-	coords.Add( atoi( x.c_str() ) );
+	coords.Add( wxAtoi( x.c_str() ) );
 }
 
 wxString wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
@@ -382,8 +382,8 @@ TAG_HANDLER_BEGIN(IMG, "IMG, MAP, AREA")
 		    wxString mn = wxEmptyString;
 
 		    str = m_WParser -> GetFS() -> OpenFile(tmp);
-		    if (tag.HasParam("WIDTH")) tag.ScanParam("WIDTH", "%i", &w);
-		    if (tag.HasParam("HEIGHT")) tag.ScanParam("HEIGHT", "%i", &h);
+		    if (tag.HasParam(wxT("WIDTH"))) tag.ScanParam(wxT("WIDTH"), wxT("%i"), &w);
+		    if (tag.HasParam(wxT("HEIGHT"))) tag.ScanParam(wxT("HEIGHT"), wxT("%i"), &h);
 		    al = wxHTML_ALIGN_BOTTOM;
 		    if (tag.HasParam("ALIGN")) {
 			wxString alstr = tag.GetParam("ALIGN");

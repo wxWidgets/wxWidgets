@@ -70,13 +70,13 @@ wxHtmlPRECell::wxHtmlPRECell(const wxString& s, wxDC& dc) : wxHtmlCell()
     while (tokenizer.HasMoreTokens()) {
         if (i % 10 == 0) m_Text = (wxString**) realloc(m_Text, sizeof(wxString*) * (i + 10));
         tmp = tokenizer.NextToken();
-        tmp.Replace("&nbsp;", " ", TRUE);
-        tmp.Replace("&quot;", "\"", TRUE);
-        tmp.Replace("&lt;", "<", TRUE);
-        tmp.Replace("&gt;", ">", TRUE);
-        tmp.Replace("&amp;", "&", TRUE);
-        tmp.Replace("\t", "        ", TRUE);
-        tmp.Replace("\r", "", TRUE);
+        tmp.Replace(wxT("&nbsp;"), wxT(" "), TRUE);
+        tmp.Replace(wxT("&quot;"), wxT("\""), TRUE);
+        tmp.Replace(wxT("&lt;"), wxT("<"), TRUE);
+        tmp.Replace(wxT("&gt;"), wxT(">"), TRUE);
+        tmp.Replace(wxT("&amp;"), wxT("&"), TRUE);
+        tmp.Replace(wxT("\t"), wxT("        "), TRUE);
+        tmp.Replace(wxT("\r"), wxT(""), TRUE);
         m_Text[i++] = new wxString(tmp);
 
         dc.GetTextExtent(tmp, &x, &z, &z);

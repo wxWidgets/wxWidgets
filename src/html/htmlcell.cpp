@@ -73,11 +73,11 @@ bool wxHtmlCell::AdjustPagebreak(int *pagebreak)
 wxHtmlWordCell::wxHtmlWordCell(const wxString& word, wxDC& dc) : wxHtmlCell()
 {
     m_Word = word;
-    m_Word.Replace("&nbsp;", " ", TRUE);
-    m_Word.Replace("&quot;", "\"", TRUE);
-    m_Word.Replace("&lt;", "<", TRUE);
-    m_Word.Replace("&gt;", ">", TRUE);
-    m_Word.Replace("&amp;", "&", TRUE);
+    m_Word.Replace(wxT("&nbsp;"), wxT(" "), TRUE);
+    m_Word.Replace(wxT("&quot;"), wxT("\""), TRUE);
+    m_Word.Replace(wxT("&lt;"), wxT("<"), TRUE);
+    m_Word.Replace(wxT("&gt;"), wxT(">"), TRUE);
+    m_Word.Replace(wxT("&amp;"), wxT("&"), TRUE);
     dc.GetTextExtent(m_Word, &m_Width, &m_Height, &m_Descent);
     SetCanLiveOnPagebreak(FALSE);
 }
@@ -381,11 +381,11 @@ void wxHtmlContainerCell::SetWidthFloat(const wxHtmlTag& tag)
         wxString wd = tag.GetParam("WIDTH");
 
         if (wd[wd.Length()-1] == '%') {
-            sscanf(wd.c_str(), "%i%%", &wdi);
+            wxSscanf(wd.c_str(), wxT("%i%%"), &wdi);
             SetWidthFloat(wdi, wxHTML_UNITS_PERCENT);
         }
         else {
-            sscanf(wd.c_str(), "%i", &wdi);
+            wxSscanf(wd.c_str(), wxT("%i"), &wdi);
             SetWidthFloat(wdi, wxHTML_UNITS_PIXELS);
         }
     }
