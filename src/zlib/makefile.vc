@@ -15,10 +15,17 @@ FINAL=0
 !endif
 
 !if "$(FINAL)" == "0"
-CFLAGS=/Od /MDd /GX
+CFLAGS=/Od $(CRTFLAG) /GX
+_CRTFLAG=/MDd
 !else
-CFLAGS=-O2 /MD /GX
+CFLAGS=-O2 $(CRTFLAG) /GX
+_CRTFLAG=/MD
 !endif
+
+!if "$(CRTFLAG)" == ""
+CRTFLAG=$(_CRTFLAG)
+!endif
+
 
 CC=cl
 LD=cl
@@ -31,9 +38,9 @@ LIBTARGET=..\..\lib\zlib.lib
 
 # variables
 OBJ1 = adler32$(O) compress$(O) crc32$(O) gzio$(O) uncompr$(O) deflate$(O) \
-  trees$(O) 
+  trees$(O)
 OBJ2 = zutil$(O) inflate$(O) infblock$(O) inftrees$(O) infcodes$(O) \
-  infutil$(O) inffast$(O) 
+  infutil$(O) inffast$(O)
 
 all: $(LIBTARGET)
 

@@ -290,7 +290,7 @@ $(CPPFLAGS2) /c $(COMMDIR)\unzip.c /Fo$@
 
 png:
     cd $(WXDIR)\src\png
-    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL)
+    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL) CRTFLAG=$(CRTFLAG)
     cd $(WXDIR)\src\msw
 
 clean_png:
@@ -300,7 +300,7 @@ clean_png:
 
 zlib:
     cd $(WXDIR)\src\zlib
-    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL)
+    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL) CRTFLAG=$(CRTFLAG)
     cd $(WXDIR)\src\msw
 
 clean_zlib:
@@ -310,7 +310,7 @@ clean_zlib:
 
 jpeg:
     cd $(WXDIR)\src\jpeg
-    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL) all
+    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL)  CRTFLAG=$(CRTFLAG) all
     cd $(WXDIR)\src\msw
 
 clean_jpeg:
@@ -320,7 +320,7 @@ clean_jpeg:
 
 xpm:
     cd $(WXDIR)\src\xpm
-    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL)
+    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL) CRTFLAG=$(CRTFLAG)
     cd $(WXDIR)\src\msw
 
 clean_xpm:
