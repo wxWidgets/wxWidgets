@@ -526,7 +526,7 @@ public:
     // ------------------------------------------------------------------------
 
         // default ctor does not initialize the object, use Set()!
-    wxDateTime() { }
+    wxDateTime() { m_time = wxLongLong((long)ULONG_MAX, ULONG_MAX); }
 
         // from time_t: seconds since the Epoch 00:00:00 UTC, Jan 1, 1970)
 #if (!(defined(__VISAGECPP__) && __IBMCPP__ >= 400))
