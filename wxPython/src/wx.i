@@ -54,8 +54,10 @@
 
 #define __version__ "0.0.0"   // The real value is now in setup.py...
 
+%readonly
 wxPoint     wxDefaultPosition;
 wxSize      wxDefaultSize;
+%readwrite
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
