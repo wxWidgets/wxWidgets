@@ -26,8 +26,8 @@ class MyHtmlWindow(wxHtmlWindow):
         self.log.WriteText('OnSetTitle: %s\n' % title)
         self.base_OnSetTitle(title)
 
-    def __del__(self):
-        print 'MyHtmlWindow.__del__'
+##     def __del__(self):
+##         print 'MyHtmlWindow.__del__'
 
 
 class TestHtmlPanel(wxPanel):
@@ -49,9 +49,9 @@ class TestHtmlPanel(wxPanel):
         self.box.Add(self.html, 1, wxGROW)
 
         subbox = wxBoxSizer(wxHORIZONTAL)
-        btn = wxButton(self, 1201, "Show Default")
-        EVT_BUTTON(self, 1201, self.OnShowDefault)
-        subbox.Add(btn, 1, wxGROW | wxALL, 2)
+##         btn = wxButton(self, 1201, "Show Default")
+##         EVT_BUTTON(self, 1201, self.OnShowDefault)
+##         subbox.Add(btn, 1, wxGROW | wxALL, 2)
 
         btn = wxButton(self, 1202, "Load File")
         EVT_BUTTON(self, 1202, self.OnLoadFile)
@@ -87,8 +87,8 @@ class TestHtmlPanel(wxPanel):
         self.OnShowDefault(None)
 
 
-    def __del__(self):
-        print 'TestHtmlPanel.__del__'
+##     def __del__(self):
+##         print 'TestHtmlPanel.__del__'
 
 
 

@@ -27,6 +27,8 @@ def runTest(frame, nb, log):
     global logger
     logger = log
     p = wxMVCTree(nb, -1)
+    #f = wxFrame(frame, -1, "wxMVCTree")
+    #p = wxMVCTree(f, -1)
     p.SetAssumeChildren(true)
     p.SetModel(LateFSTreeModel(os.path.normpath(os.getcwd() + os.sep +'..')))
     #Uncomment this to enable live filename editing!
@@ -39,7 +41,14 @@ def runTest(frame, nb, log):
     EVT_MVCTREE_ADD_ITEM(p, p.GetId(), add)
     EVT_MVCTREE_DELETE_ITEM(p, p.GetId(), delitem)
     EVT_MVCTREE_KEY_DOWN(p, p.GetId(), key)
+
     return p
+    #frame.otherWin = f
+    #f.Show(true)
+    #return None
+
+
+
 
 overview = """\
 wxMVCTree is a control which handles hierarchical data. It is constructed in model-view-controller architecture, so the display of that data, and the content of the data can be changed greatly without affecting the other parts.

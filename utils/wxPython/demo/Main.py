@@ -277,6 +277,7 @@ class wxPythonDemo(wxFrame):
                     self.nb.AddPage(self.window, 'Demo')
                     #self.nb.ResizeChildren()
                     self.nb.SetSelection(2)
+                    #self.window.Refresh()
                     #self.nb.ResizeChildren()
                     #if self.window.GetAutoLayout():
                     #    self.window.Layout()

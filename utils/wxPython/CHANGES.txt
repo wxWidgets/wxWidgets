@@ -8,7 +8,8 @@ New in 2.1.14
 Fixed wxTreeCtrl.HitTest to return both the tree item as well as the
 flags that clairify where the click was in relation to the item.
 
-Fixed problem in wxTreeCtrl.GetBoundingBox
+Fixed thread state problem in wxTreeCtrl.GetBoundingBox and
+GetSelections.
 
 
 

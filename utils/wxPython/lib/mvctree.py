@@ -770,6 +770,7 @@ class wxMVCTree(wxScrolledWindow):
         EVT_KEY_DOWN(self, self.OnKeyDown)
         self.doubleBuffered = true
 
+
     def Refresh(self):
         if self.doubleBuffered:
             self.painter.ClearBuffer()
