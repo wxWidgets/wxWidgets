@@ -45,6 +45,8 @@
 
 #include "wx/process.h"
 
+#include "wx/mimetype.h"
+
 #ifdef __WINDOWS__
     #include "wx/dde.h"
 #endif // __WINDOWS__
@@ -88,6 +90,8 @@ public:
     void OnExecWithRedirect(wxCommandEvent& event);
     void OnExecWithPipe(wxCommandEvent& event);
 
+    void OnFileExec(wxCommandEvent& event);
+
     void OnDDEExec(wxCommandEvent& event);
 
     void OnAbout(wxCommandEvent& event);
@@ -103,6 +107,8 @@ private:
     void ShowOutput(const wxString& cmd,
                     const wxArrayString& output,
                     const wxString& title);
+
+    void DoAsyncExec(const wxString& cmd);
 
     wxString m_cmdLast;
 
@@ -178,6 +184,7 @@ enum
     Exec_SyncExec = 200,
     Exec_AsyncExec,
     Exec_Shell,
+    Exec_OpenFile,
     Exec_DDEExec,
     Exec_Redirect,
     Exec_Pipe,
@@ -202,6 +209,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Exec_Shell, MyFrame::OnShell)
     EVT_MENU(Exec_Redirect, MyFrame::OnExecWithRedirect)
     EVT_MENU(Exec_Pipe, MyFrame::OnExecWithPipe)
+
+    EVT_MENU(Exec_OpenFile, MyFrame::OnFileExec)
 
     EVT_MENU(Exec_DDEExec, MyFrame::OnDDEExec)
 
@@ -276,6 +285,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     execMenu->Append(Exec_Pipe, _T("&Pipe through command...\tCtrl-P"),
                      _T("Pipe a string through a filter"));
 
+    execMenu->AppendSeparator();
+    execMenu->Append(Exec_OpenFile, _T("Open &file...\tCtrl-F"),
+                     _T("Launch the command to open this kind of files"));
 #ifdef __WINDOWS__
     execMenu->AppendSeparator();
     execMenu->Append(Exec_DDEExec, _T("Execute command via &DDE...\tCtrl-D"));
@@ -323,6 +335,24 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                  _T("About Exec"), wxOK | wxICON_INFORMATION, this);
 }
 
+void MyFrame::DoAsyncExec(const wxString& cmd)
+{
+    wxProcess *process = new MyProcess(this, cmd);
+    long pid = wxExecute(cmd, FALSE /* async */, process);
+    if ( !pid )
+    {
+        wxLogError(_T("Execution of '%s' failed."), cmd.c_str());
+
+        delete process;
+    }
+    else
+    {
+        wxLogStatus(_T("Process %ld (%s) launched."), pid, cmd.c_str());
+
+        m_cmdLast = cmd;
+    }
+}
+
 void MyFrame::OnSyncExec(wxCommandEvent& WXUNUSED(event))
 {
     wxString cmd = wxGetTextFromUser(_T("Enter the command: "),
@@ -350,20 +380,7 @@ void MyFrame::OnAsyncExec(wxCommandEvent& WXUNUSED(event))
     if ( !cmd )
         return;
 
-    wxProcess *process = new MyProcess(this, cmd);
-    long pid = wxExecute(cmd, FALSE /* async */, process);
-    if ( !pid )
-    {
-        wxLogError(_T("Execution of '%s' failed."), cmd.c_str());
-
-        delete process;
-    }
-    else
-    {
-        wxLogStatus(_T("Process %ld (%s) launched."), pid, cmd.c_str());
-
-        m_cmdLast = cmd;
-    }
+    DoAsyncExec(cmd);
 }
 
 void MyFrame::OnShell(wxCommandEvent& WXUNUSED(event))
@@ -472,6 +489,39 @@ void MyFrame::OnExecWithPipe(wxCommandEvent& WXUNUSED(event))
     }
 
     m_cmdLast = cmd;
+}
+
+void MyFrame::OnFileExec(wxCommandEvent& event)
+{
+    static wxString s_filename;
+
+    wxString filename = wxLoadFileSelector(_T("file"), _T(""), s_filename);
+    if ( !filename )
+        return;
+
+    s_filename = filename;
+
+    wxString ext = filename.AfterFirst(_T('.'));
+    wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
+    if ( !ft )
+    {
+        wxLogError(_T("Impossible to determine the file type for extension '%s'"),
+                   ext.c_str());
+        return;
+    }
+
+    wxString cmd;
+    bool ok = ft->GetOpenCommand(&cmd,
+                                 wxFileType::MessageParameters(filename, _T("")));
+    delete ft;
+    if ( !ok )
+    {
+        wxLogError(_T("Impossible to find out how to open files of extension '%s'"),
+                   ext.c_str());
+        return;
+    }
+
+    DoAsyncExec(cmd);
 }
 
 void MyFrame::OnDDEExec(wxCommandEvent& WXUNUSED(event))

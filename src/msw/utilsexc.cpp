@@ -320,6 +320,7 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
     wxCHECK_MSG( !!cmd, 0, wxT("empty command in wxExecute") );
 
     wxString command;
+
 #if wxUSE_IPC
     // DDE hack: this is really not pretty, but we need to allow this for
     // transparent handling of DDE servers in wxMimeTypesManager. Usually it
@@ -327,7 +328,7 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
     // given type. Sometimes, however, this command just launches the server
     // and an additional DDE request must be made to really open the file. To
     // keep all this well hidden from the application, we allow a special form
-    // of command: WX_DDE:<command>:DDE_SERVER:DDE_TOPIC:DDE_COMMAND in which
+    // of command: WX_DDE#<command>#DDE_SERVER#DDE_TOPIC#DDE_COMMAND in which
     // case we execute just <command> and process the rest below
     wxString ddeServer, ddeTopic, ddeCommand;
     static const size_t lenDdePrefix = 7;   // strlen("WX_DDE:")
@@ -383,6 +384,28 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
         {
             ddeCommand += *p++;
         }
+
+        // maybe we don't have to launch the DDE server at all - if it is
+        // already running, for example
+        wxDDEClient client;
+        wxLogNull nolog;
+        wxConnectionBase *conn = client.MakeConnection(_T(""),
+                                                       ddeServer,
+                                                       ddeTopic);
+        if ( conn )
+        {
+            // FIXME we don't check the return code as for some strange reason
+            //       it will sometimes be FALSE - it is probably a bug in our
+            //       DDE code but I don't see anything wrong there
+            (void)conn->Execute(ddeCommand);
+
+            // ok, the command executed - return value indicating success,
+            // making it up for async case as we really don't have any way to
+            // get the real PID of the DDE server here
+            return sync ? 0 : -1;
+        }
+        //else: couldn't establish DDE conversation, now try launching the app
+        //      and sending the DDE request again
     }
     else
 #endif // wxUSE_IPC
@@ -617,12 +640,37 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
     if ( !!ddeServer )
     {
         wxDDEClient client;
-        wxConnectionBase *conn = client.MakeConnection(_T(""),
-                                                       ddeServer,
-                                                       ddeTopic);
-        if ( !conn || !conn->Execute(ddeCommand) )
+        wxConnectionBase *conn;
+
         {
-            wxLogError(_("Couldn't launch DDE server '%s'."), command.c_str());
+            // try doing it the first time without error messages
+            wxLogNull nolog;
+
+            conn = client.MakeConnection(_T(""), ddeServer, ddeTopic);
+        }
+
+        if ( !conn )
+        {
+            // give the app some time to initialize itself: in fact, a common
+            // reason for failure is that we tried to open DDE conversation too
+            // soon (before the app had time to setup its DDE server), so wait
+            // a bit and try again
+            ::Sleep(2000);
+
+            wxConnectionBase *conn = client.MakeConnection(_T(""),
+                                                           ddeServer,
+                                                           ddeTopic);
+            if ( !conn )
+            {
+                wxLogError(_("Couldn't launch DDE server '%s'."), command.c_str());
+            }
+        }
+
+        if ( conn )
+        {
+            // FIXME just as above we don't check Execute() return code
+            wxLogNull nolog;
+            (void)conn->Execute(ddeCommand);
         }
     }
 #endif // wxUSE_IPC

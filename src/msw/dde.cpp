@@ -530,6 +530,7 @@ bool wxDDEConnection::Execute(const wxChar *data, int size, wxIPCFormat format)
                                     XTYP_EXECUTE,
                                     DDE_TIMEOUT,
                                     &result) != 0;
+
     if ( !ok )
     {
         DDELogError(_T("DDE execute request failed"));

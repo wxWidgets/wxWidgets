@@ -1134,6 +1134,39 @@ static void TestRegistryRead()
     }
 }
 
+static void TestRegistryAssociation()
+{
+    /*
+       The second call to deleteself genertaes an error message, with a
+       messagebox saying .flo is crucial to system operation, while the .ddf
+       call also fails, but with no error message
+    */
+
+    wxRegKey key;
+
+    key.SetName("HKEY_CLASSES_ROOT\\.ddf" );
+    key.Create();
+    key = "ddxf_auto_file" ;
+    key.SetName("HKEY_CLASSES_ROOT\\.flo" );
+    key.Create();
+    key = "ddxf_auto_file" ;
+    key.SetName("HKEY_CLASSES_ROOT\\ddxf_auto_file\\DefaultIcon");
+    key.Create();
+    key = "program,0" ;
+    key.SetName("HKEY_CLASSES_ROOT\\ddxf_auto_file\\shell\\open\\command");
+    key.Create();
+    key = "program \"%1\"" ;
+
+    key.SetName("HKEY_CLASSES_ROOT\\.ddf" );
+    key.DeleteSelf();
+    key.SetName("HKEY_CLASSES_ROOT\\.flo" );
+    key.DeleteSelf();
+    key.SetName("HKEY_CLASSES_ROOT\\ddxf_auto_file\\DefaultIcon");
+    key.DeleteSelf();
+    key.SetName("HKEY_CLASSES_ROOT\\ddxf_auto_file\\shell\\open\\command");
+    key.DeleteSelf();
+}
+
 #endif // TEST_REGISTRY
 
 // ----------------------------------------------------------------------------
@@ -3695,7 +3728,9 @@ int main(int argc, char **argv)
 #endif // TEST_INFO_FUNCTIONS
 
 #ifdef TEST_REGISTRY
-    TestRegistryRead();
+    if ( 0 )
+        TestRegistryRead();
+    TestRegistryAssociation();
 #endif // TEST_REGISTRY
 
 #ifdef TEST_SOCKETS
