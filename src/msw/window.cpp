@@ -176,13 +176,8 @@ static bool gs_hasStdCmap = FALSE;
 // ---------------------------------------------------------------------------
 
 // the window proc for all our windows
-#ifdef __DIGITALMARS__
-extern "C" LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
-                                   WPARAM wParam, LPARAM lParam);
-#else
 LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
                                    WPARAM wParam, LPARAM lParam);
-#endif
 
 
 #ifdef  __WXDEBUG__
@@ -190,11 +185,7 @@ LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
 #endif  //__WXDEBUG__
 
 void wxRemoveHandleAssociation(wxWindowMSW *win);
-#ifdef __DIGITALMARS__
-extern "C" void wxAssociateWinWithHandle(HWND hWnd, wxWindowMSW *win);
-#else
 extern void wxAssociateWinWithHandle(HWND hWnd, wxWindowMSW *win);
-#endif
 wxWindow *wxFindWinFromHandle(WXHWND hWnd);
 
 // this magical function is used to translate VK_APPS key presses to right
@@ -1739,11 +1730,7 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 long wxWindowMSW::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
     if ( m_oldWndProc )
-#ifdef __DIGITALMARS__
-        return ::CallWindowProc( (FARPROC) m_oldWndProc, GetHwnd(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
-#else
         return ::CallWindowProc(CASTWNDPROC m_oldWndProc, GetHwnd(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
-#endif
     else
         return ::DefWindowProc(GetHwnd(), nMsg, wParam, lParam);
 }
@@ -3309,9 +3296,6 @@ bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
 #endif
 }
 
-#ifdef __DIGITALMARS__
-extern "C" HCURSOR wxGetCurrentBusyCursor();
-#endif
 
 bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
                                   short nHitTest,

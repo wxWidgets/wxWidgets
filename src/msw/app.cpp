@@ -151,11 +151,7 @@ HICON wxDEFAULT_MDIPARENTFRAME_ICON = (HICON) NULL;
 
 HBRUSH wxDisableButtonBrush = (HBRUSH) 0;
 
-#ifdef __DIGITALMARS__
-extern "C" LRESULT WXDLLEXPORT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
-#else
 LRESULT WXDLLEXPORT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
-#endif
 
 // FIXME wxUSE_ON_FATAL_EXCEPTION is only supported for VC++ now because it
 //       needs compiler support for Win32 SEH. Others (especially Borland)

@@ -227,7 +227,7 @@
  */
 #ifndef MACOS
 #  if (defined(__MWERKS__) && defined(macintosh)) || defined(applec) || \
-      defined(THINK_C) || defined(__SC__) || defined(TARGET_OS_MAC)
+      defined(THINK_C) || (defined(__SC__) && !defined(__DMC__))|| defined(TARGET_OS_MAC)
 #    define MACOS
 #  endif
 #endif

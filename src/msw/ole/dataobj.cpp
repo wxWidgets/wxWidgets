@@ -410,19 +410,6 @@ STDMETHODIMP wxIDataObject::GetDataHere(FORMATETC *pformatetc,
     return S_OK;
 }
 
-#ifdef __DIGITALMARS__
-extern "C"
-size_t wxDataObjectComposite::GetBufferOffset( const wxDataFormat& format );
-
-extern "C"
-const void* wxDataObjectComposite::GetSizeFromBuffer( const void* buffer,
-                                                      size_t* size,
-                                                      const wxDataFormat& format ) ;
-extern "C"
-void* wxDataObjectComposite::SetSizeInBuffer( void* buffer, size_t size,
-                                              const wxDataFormat& format ) ;
-
-#endif
 
 // set data functions
 STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,

@@ -1316,11 +1316,7 @@ static HCURSOR gs_wxBusyCursor = 0;     // new, busy cursor
 static HCURSOR gs_wxBusyCursorOld = 0;  // old cursor
 static int gs_wxBusyCursorCount = 0;
 
-#ifdef __DIGITALMARS__
-extern "C" HCURSOR wxGetCurrentBusyCursor()
-#else
 extern HCURSOR wxGetCurrentBusyCursor()
-#endif
 {
     return gs_wxBusyCursor;
 }

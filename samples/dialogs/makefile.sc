@@ -1,7 +1,6 @@
-# Symantec C++ makefile 
-WXDIR = ..\..
-EXTRALIBS=
+#Makefile from wxHatch for Symantec/Digital Mars compiler 
+WXDIR=..\..\..\wxWindows.25
 TARGET=dialogs
-OBJECTS = $(TARGET).obj
+OBJECTS = $(TARGET).obj 
+EXTRALIBS =
 include $(WXDIR)\src\makeprog.sc
-

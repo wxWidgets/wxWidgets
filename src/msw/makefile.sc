@@ -327,13 +327,14 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS) 
 
-all: MAKEARCHDIR MAKELIBS $(LIBTARGET) zlib png jpeg tiff regex
+all: MAKEARCHDIR MAKELIBS PCH $(LIBTARGET) zlib png jpeg tiff regex
 
 MAKEARCHDIR:
     @if not exist $(MSWINCDIR)\setup.h copy $(MSWINCDIR)\setup0.h $(MSWINCDIR)\setup.h
     @if not exist $(ARCHINCDIR)\wx\setup.h mkdir $(ARCHINCDIR)
     @if not exist $(ARCHINCDIR)\wx\setup.h mkdir $(ARCHINCDIR)\wx
     @if not exist $(ARCHINCDIR)\wx\setup.h copy $(MSWINCDIR)\setup.h $(ARCHINCDIR)\wx\setup.h
+    @if not exist $(WXOUTDIR)\nul mkdir $(WXOUTDIR)
 
 #build our own copies of missing libraries
 MAKELIBS:
@@ -344,7 +345,7 @@ $(LIBTARGET): $(OBJECTS)
 	-del $(LIBTARGET)
 	*lib /PAGESIZE:512 $(LIBTARGET) y $(OBJECTS), nul;
 
-clean: clean_msw clean_zlib clean_png clean_jpeg clean_tiff clean_regex
+clean: clean_msw clean_zlib clean_png clean_jpeg clean_tiff clean_regex clean_pch
 
 clean_msw:
 	-del $(COMMDIR)\*.obj
@@ -355,6 +356,13 @@ clean_msw:
         -del *.sym
         -del ole\*.obj
         -del $(LIBTARGET)
+
+PCH: $(INCDIR)\wx\wxprec.h
+        dmc $(CPPFLAGS) $(CFLAGS) $(INCLUDE) -HF$(WXOUTDIR)\wxprec.SYM -o$(WXOUTDIR)\wxprec.PCO $(INCDIR)\wx\wxprec.h
+
+clean_pch:
+        del $(WXOUTDIR)\*.sym
+        del $(WXOUTDIR)\*.PCO
 
 png:   
         make -f $(WXDIR)\src\png\makefile.sc FINAL=$(FINAL)
