@@ -21,7 +21,7 @@
 #include "wx/bitmap.h"
 
 #if wxUSE_STREAMS
-    #include "wx/stream.h"
+#  include "wx/stream.h"
 #endif
 
 //-----------------------------------------------------------------------------
@@ -36,6 +36,9 @@ class WXDLLEXPORT wxPNGHandler;
 class WXDLLEXPORT wxJPEGHandler;
 #endif
 class WXDLLEXPORT wxBMPHandler;
+class WXDLLEXPORT wxGIFHandler;
+class WXDLLEXPORT wxPNMHandler;
+class WXDLLEXPORT wxPCXHandler;
 class WXDLLEXPORT wxImage;
 
 //-----------------------------------------------------------------------------
@@ -193,6 +196,31 @@ public:
       m_extension = "pnm";
       m_type = wxBITMAP_TYPE_PNM;
       m_mime = "image/pnm";
+  };
+
+#if wxUSE_STREAMS
+  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
+  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
+  virtual bool CanRead( wxInputStream& stream );
+#endif
+};
+
+//-----------------------------------------------------------------------------
+// wxPCXHandler
+//-----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxPCXHandler : public wxImageHandler
+{
+  DECLARE_DYNAMIC_CLASS(wxPCXHandler)
+
+public:
+
+  inline wxPCXHandler()
+  {
+      m_name = "PCX file";
+      m_extension = "pcx";
+      m_type = wxBITMAP_TYPE_PCX;
+      m_mime = "image/pcx";
   };
 
 #if wxUSE_STREAMS
