@@ -536,6 +536,8 @@ void wxGenericTreeItem::DeleteChildren(wxGenericTreeCtrl *tree)
             tree->SendDeleteEvent(child);
 
         child->DeleteChildren(tree);
+        if (child == tree->m_select_me)
+            tree->m_select_me = NULL;
         delete child;
     }
 
@@ -1568,6 +1570,10 @@ void wxGenericTreeCtrl::Delete(const wxTreeItemId& itemId)
     // and delete all of its children and the item itself now
     item->DeleteChildren(this);
     SendDeleteEvent(item);
+
+    if (item == m_select_me)
+        m_select_me = NULL;
+    
     delete item;
 }
 
