@@ -26,10 +26,8 @@
 
 #include "wx/process.h"
 
-#if !USE_SHARED_LIBRARY
-    IMPLEMENT_DYNAMIC_CLASS(wxProcess, wxEvtHandler)
-    IMPLEMENT_DYNAMIC_CLASS(wxProcessEvent, wxEvent)
-#endif
+IMPLEMENT_DYNAMIC_CLASS(wxProcess, wxEvtHandler)
+IMPLEMENT_DYNAMIC_CLASS(wxProcessEvent, wxEvent)
 
 wxProcess::wxProcess(wxEvtHandler *parent, int id)
 {
