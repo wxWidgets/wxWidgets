@@ -1,0 +1,6 @@
+src/msw/wince/wxWindowsCE.vcp
+src/msw/wince/wxWindowsCE.vcw
+
+samples/minimal/minimalCE.vcp
+samples/minimal/minimalCE.vcw
+

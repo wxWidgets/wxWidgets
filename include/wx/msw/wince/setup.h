@@ -380,7 +380,7 @@
 #define wxUSE_SOCKETS       0
 
 // Set to 1 to enable virtual file systems (required by wxHTML)
-#define wxUSE_FILESYSTEM    0
+#define wxUSE_FILESYSTEM    1
 
 // Set to 1 to enable virtual ZIP filesystem (requires wxUSE_FILESYSTEM)
 #define wxUSE_FS_ZIP        0
@@ -843,7 +843,7 @@
 
 #define wxUSE_IPC         0
                                 // 0 for no interprocess comms
-#define wxUSE_HELP        0
+#define wxUSE_HELP        1
                                 // 0 for no help facility
 #define wxUSE_MS_HTML_HELP 0
                                 // 0 for no MS HTML Help

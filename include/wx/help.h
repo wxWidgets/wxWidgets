@@ -5,7 +5,12 @@
 
 #include "wx/helpbase.h"
 
-#ifdef __WXMSW__
+#ifdef __WXWINCE__
+    #include "wx/msw/wince/helpwce.h"
+
+    #define wxHelpController wxWinceHelpController
+    #define sm_classwxHelpController sm_classwxWinceHelpController
+#elif defined(__WXMSW__)
     #include "wx/msw/helpwin.h"
 
     #define wxHelpController wxWinHelpController

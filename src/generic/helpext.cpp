@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_HELP
+#if wxUSE_HELP && !defined(__WXWINCE__)
 
 #ifndef WX_PRECOMP
     #include "wx/setup.h"
