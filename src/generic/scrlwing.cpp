@@ -389,10 +389,37 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX,
 
 void wxScrollHelper::DeleteEvtHandler()
 {
-    // FIXME: we should search for m_handler in the handler list
-    if ( m_win )
+    // search for m_handler in the handler list
+    if ( m_win && m_handler )
     {
-        m_win->PopEventHandler(TRUE /* Delete old event handler*/);
+        wxEvtHandler *handlerPrev = NULL,
+                     *handler = m_win->GetEventHandler();
+        while ( handler )
+        {
+            if ( handler == m_handler )
+            {
+                wxEvtHandler *handlerNext = handler->GetNextHandler();
+                if ( handlerPrev )
+                {
+                    handlerPrev->SetNextHandler(handlerNext);
+                }
+                else
+                {
+                    m_win->SetEventHandler(handlerNext);
+                }
+
+                handler->SetNextHandler(NULL);
+                delete handler;
+                m_handler = NULL;
+
+                return;
+            }
+
+            handlerPrev = handler;
+            handler = handler->GetNextHandler();
+        }
+
+        wxFAIL_MSG( _T("where has our event handler gone?") );
     }
 }
 
@@ -415,6 +442,9 @@ void wxScrollHelper::DoSetTargetWindow(wxWindow *target)
     // which we scroll - we don't need to hijack its events)
     if ( m_targetWindow == m_win )
     {
+        // if we already have a handler, delete it first
+        DeleteEvtHandler();
+
         m_handler = new wxScrollHelperEvtHandler(this);
         m_targetWindow->PushEventHandler(m_handler);
     }
