@@ -668,7 +668,8 @@ public :
 
     wxxVariant& operator=(const wxxVariant &d)
     {
-        m_data = d.m_data->Clone() ;
+        delete m_data;
+        m_data = d.m_data ? d.m_data->Clone() : NULL ;
         m_name = d.m_name ;
         return *this ;
     }
