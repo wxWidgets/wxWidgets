@@ -79,6 +79,8 @@ class wxEditor(wxScrolledWindow):
                                   pos, size,
                                   style|wxWANTS_CHARS)
 
+        self.isDrawing = False
+        
         self.InitCoords()
         self.InitFonts()
         self.SetColors()
@@ -167,8 +169,12 @@ class wxEditor(wxScrolledWindow):
 
     def OnPaint(self, event):
         dc = wxPaintDC(self)
+        if self.isDrawing:
+            return
+        self.isDrawing = True
         self.UpdateView(dc)
-        self.AdjustScrollbars()
+        wxCallAfter(self.AdjustScrollbars)
+        self.isDrawing = False
 
     def OnEraseBackground(self, evt):
         pass
