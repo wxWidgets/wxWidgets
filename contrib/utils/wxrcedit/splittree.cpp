@@ -35,14 +35,13 @@
     #include "wx/wx.h"
 #endif
 
-#include "wx/generic/treectlg.h"
-
 #ifdef __WXMSW__
-#include "windows.h"
+#include <windows.h>
 #include "wx/msw/winundef.h"
 #endif
 
-#include "splittree.h"
+#include "wx/gizmos/splittree.h"
+#include <math.h>
 
 /*
  * wxRemotelyScrolledTreeCtrl
@@ -78,7 +77,7 @@ wxRemotelyScrolledTreeCtrl::~wxRemotelyScrolledTreeCtrl()
 
 void wxRemotelyScrolledTreeCtrl::HideVScrollbar()
 {
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && USE_GENERIC_TREECTRL
     if (!IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
     {
         ::ShowScrollBar((HWND) GetHWND(), SB_VERT, FALSE);
@@ -98,6 +97,7 @@ void wxRemotelyScrolledTreeCtrl::SetScrollbars(int pixelsPerUnitX, int pixelsPer
                              int xPos, int yPos,
                              bool noRefresh)
 {
+#if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
     if (IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
     {
         wxGenericTreeCtrl* win = (wxGenericTreeCtrl*) this;
@@ -109,6 +109,7 @@ void wxRemotelyScrolledTreeCtrl::SetScrollbars(int pixelsPerUnitX, int pixelsPer
             scrolledWindow->SetScrollbars(0, pixelsPerUnitY, 0, noUnitsY, 0, yPos, noRefresh);
         }
     }
+#endif
 }
 
 // In case we're using the generic tree control.
@@ -116,6 +117,7 @@ int wxRemotelyScrolledTreeCtrl::GetScrollPos(int orient) const
 {
     wxScrolledWindow* scrolledWindow = GetScrolledWindow();
 
+#if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
     if (IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
     {
         wxGenericTreeCtrl* win = (wxGenericTreeCtrl*) this;
@@ -127,6 +129,7 @@ int wxRemotelyScrolledTreeCtrl::GetScrollPos(int orient) const
             return scrolledWindow->GetScrollPos(orient);
         }
     }
+#endif
     return 0;
 }
 
@@ -137,6 +140,7 @@ void wxRemotelyScrolledTreeCtrl::GetViewStart(int *x, int *y) const
 {
     wxScrolledWindow* scrolledWindow = GetScrolledWindow();
 
+#if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
     if (IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
     {
 
@@ -151,6 +155,7 @@ void wxRemotelyScrolledTreeCtrl::GetViewStart(int *x, int *y) const
         * y = y2;
     }
 	else
+#endif
 	{
 		// x is wrong since the horizontal scrollbar is controlled by the
 		// tree control, but we probably don't need it.
@@ -161,6 +166,7 @@ void wxRemotelyScrolledTreeCtrl::GetViewStart(int *x, int *y) const
 // In case we're using the generic tree control.
 void wxRemotelyScrolledTreeCtrl::PrepareDC(wxDC& dc)
 {
+#if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
     if (IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
     {
 	    wxScrolledWindow* scrolledWindow = GetScrolledWindow();
@@ -175,8 +181,9 @@ void wxRemotelyScrolledTreeCtrl::PrepareDC(wxDC& dc)
         scrolledWindow->GetScrollPixelsPerUnit(& xppu2, & yppu2);
 
         dc.SetDeviceOrigin( -startX * xppu1, -startY * yppu2 );
-        //dc.SetUserScale( win->GetScaleX(), win->GetScaleY() );
+        // dc.SetUserScale( win->GetScaleX(), win->GetScaleY() );
     }
+#endif
 }
 
 // Scroll to the given line (in scroll units where each unit is
@@ -184,14 +191,19 @@ void wxRemotelyScrolledTreeCtrl::PrepareDC(wxDC& dc)
 void wxRemotelyScrolledTreeCtrl::ScrollToLine(int posHoriz, int posVert)
 {
 #ifdef __WXMSW__
+#if USE_GENERIC_TREECTRL
     if (!IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
+#endif
     {
 	    UINT sbCode = SB_THUMBPOSITION;
 	    HWND vertScrollBar = 0;
 	    MSWDefWindowProc((WXUINT) WM_VSCROLL, MAKELONG(sbCode, posVert), (WXHWND) vertScrollBar);
     }
+#if USE_GENERIC_TREECTRL
     else
 #endif
+#endif
+#if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
     {
         wxGenericTreeCtrl* win = (wxGenericTreeCtrl*) this;
 		win->Refresh();
@@ -205,6 +217,7 @@ void wxRemotelyScrolledTreeCtrl::ScrollToLine(int posHoriz, int posVert)
 		}
 		*/
     }
+#endif
 }
 
 void wxRemotelyScrolledTreeCtrl::OnSize(wxSizeEvent& event)
@@ -231,6 +244,7 @@ void wxRemotelyScrolledTreeCtrl::OnExpand(wxTreeEvent& event)
 // Adjust the containing wxScrolledWindow's scrollbars appropriately
 void wxRemotelyScrolledTreeCtrl::AdjustRemoteScrollbars()
 {
+#if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
     if (IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
 	{
 		// This is for the generic tree control.
@@ -241,6 +255,7 @@ void wxRemotelyScrolledTreeCtrl::AdjustRemoteScrollbars()
         return;
 	}
 	else
+#endif
 	{
 		// This is for the wxMSW tree control
 		wxScrolledWindow* scrolledWindow = GetScrolledWindow();
@@ -249,14 +264,18 @@ void wxRemotelyScrolledTreeCtrl::AdjustRemoteScrollbars()
 			wxRect itemRect;
 			if (GetBoundingRect(GetRootItem(), itemRect))
 			{
-				int itemHeight = itemRect.GetHeight();
+                // Actually, the real height seems to be 1 less than reported
+                // (e.g. 16 instead of 16)
+                int itemHeight = itemRect.GetHeight() - 1;
 				
 				int w, h;
 				GetClientSize(&w, &h);
 				
 				wxRect rect(0, 0, 0, 0);
 				CalcTreeSize(rect);
-				int treeViewHeight = rect.GetHeight()/itemHeight;
+
+                double f = ((double) (rect.GetHeight()) / (double) itemHeight)  ;
+                int treeViewHeight = (int) ceil(f);
 				
 				int scrollPixelsPerLine = itemHeight;
 				int scrollPos = - (itemRect.y / itemHeight);
@@ -304,9 +323,6 @@ void wxRemotelyScrolledTreeCtrl::CalcTreeSize(wxRect& rect)
 
 void wxRemotelyScrolledTreeCtrl::CalcTreeSize(const wxTreeItemId& id, wxRect& rect)
 {
-	// TODO: implement GetFirst/NextVisibleItem
-	// for wxGenericTreeCtrl, plus GetBoundingRect.
-
 	// More efficient implementation would be to find the last item (but how?)
 	// Q: is the bounding rect relative to the top of the virtual tree workspace
 	// or the top of the window? How would we convert?
@@ -408,7 +424,7 @@ void wxTreeCompanionWindow::OnPaint(wxPaintEvent& event)
     if (!m_treeCtrl)
         return;
 
-        wxPen pen(wxColour(_T("BLACK")), 1, wxSOLID);
+        wxPen pen(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
 	dc.SetPen(pen);
 	dc.SetBrush(* wxTRANSPARENT_BRUSH);
 	wxFont font(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
@@ -576,12 +592,15 @@ void wxSplitterScrolledWindow::OnScroll(wxScrollWinEvent& event)
     // don't cause an infinite loop
     static bool inOnScroll = FALSE;
     if (inOnScroll)
+    {
+        event.Skip();
         return;
+    }
     inOnScroll = TRUE;
-
+    
     int orient = event.GetOrientation();
 
-    int nScrollInc = 16;// FIXME CalcScrollInc(event);
+    int nScrollInc = CalcScrollInc(event);
     if (nScrollInc == 0)
     {
         inOnScroll = FALSE;

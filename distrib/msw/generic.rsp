@@ -625,17 +625,6 @@ samples/dnd/*.ico
 samples/dnd/*.txt
 samples/dnd/*.cur
 
-samples/tab/*.cpp
-samples/tab/*.h
-samples/tab/makefile*
-samples/tab/*.rc
-samples/tab/*.def
-samples/tab/*.bmp
-samples/tab/*.xbm
-samples/tab/*.xpm
-samples/tab/*.ico
-samples/tab/*.txt
-
 samples/notebook/*.cpp
 samples/notebook/*.h
 samples/notebook/makefile*
