@@ -723,6 +723,16 @@ void wxPy_ReinitStockObjects(int pass)
     else if (pass == 2) { rsoPass2(#name); } \
     else if (pass == 3) { rsoPass3(#name, #classname, (void*)&name); }
 
+    // If there is already an App object then wxPython is probably embedded in
+    // a wx C++ application, so there is no need to do all this.
+    static bool embedded = false;
+    if ((pass == 1 || pass == 2) && wxTheApp) {
+        embedded = true;
+        return;
+    }
+    if (pass == 3 && embedded)
+        return;
+    
 
     REINITOBJ(wxNORMAL_FONT, wxFont);
     REINITOBJ(wxSMALL_FONT, wxFont);
