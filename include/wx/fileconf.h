@@ -96,7 +96,11 @@
 class WXDLLIMPEXP_BASE wxFileConfigGroup;
 class WXDLLIMPEXP_BASE wxFileConfigEntry;
 class WXDLLIMPEXP_BASE wxFileConfigLineList;
+
+#if wxUSE_STREAMS
 class WXDLLIMPEXP_BASE wxInputStream;
+class WXDLLIMPEXP_BASE wxOutputStream;
+#endif // wxUSE_STREAMS
 
 class WXDLLIMPEXP_BASE wxFileConfig : public wxConfigBase
 {
