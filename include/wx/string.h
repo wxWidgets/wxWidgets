@@ -1036,16 +1036,16 @@ public:
   int  Index (const wxChar *sz, bool bCase = TRUE, bool bFromEnd = FALSE) const;
     // add new element at the end (if the array is not sorted), return its
     // index
-  size_t Add(const wxString& str);
+  size_t Add(const wxString& str, size_t nInsert = 1);
     // add new element at given position
-  void Insert(const wxString& str, size_t uiIndex);
+  void Insert(const wxString& str, size_t uiIndex, size_t nInsert = 1);
     // expand the array to have count elements
   void SetCount(size_t count);
     // remove first item matching this value
   void Remove(const wxChar *sz);
     // remove item by index
-  void Remove(size_t nIndex);
-  void RemoveAt(size_t nIndex) { Remove(nIndex); }
+  void Remove(size_t nIndex, size_t nRemove = 1);
+  void RemoveAt(size_t nIndex, size_t nRemove = 1) { Remove(nIndex, nRemove); }
 
   // sorting
     // sort array elements in alphabetical order (or reversed alphabetical
@@ -1065,7 +1065,7 @@ protected:
   void Copy(const wxArrayString& src);  // copies the contents of another array
 
 private:
-  void Grow();                          // makes array bigger if needed
+  void Grow(size_t nIncrement = 0);     // makes array bigger if needed
   void Free();                          // free all the strings stored
 
   void DoSort();                        // common part of all Sort() variants

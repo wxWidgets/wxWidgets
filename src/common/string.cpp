@@ -1948,7 +1948,7 @@ void wxArrayString::Copy(const wxArrayString& src)
 }
 
 // grow the array
-void wxArrayString::Grow()
+void wxArrayString::Grow(size_t nIncrement)
 {
   // only do it if no more place
   if ( m_nCount == m_nSize ) {
@@ -1967,10 +1967,12 @@ void wxArrayString::Grow()
       // otherwise when it's called for the first time, nIncrement would be 0
       // and the array would never be expanded
       // add 50% but not too much
-      size_t nIncrement = m_nSize < ARRAY_DEFAULT_INITIAL_SIZE
+      size_t ndefIncrement = m_nSize < ARRAY_DEFAULT_INITIAL_SIZE
                           ? ARRAY_DEFAULT_INITIAL_SIZE : m_nSize >> 1;
-      if ( nIncrement > ARRAY_MAXSIZE_INCREMENT )
-        nIncrement = ARRAY_MAXSIZE_INCREMENT;
+      if ( ndefIncrement > ARRAY_MAXSIZE_INCREMENT )
+        ndefIncrement = ARRAY_MAXSIZE_INCREMENT;
+      if ( nIncrement < ndefIncrement )
+        nIncrement = ndefIncrement;
       m_nSize += nIncrement;
       wxChar **pNew = new wxChar *[m_nSize];
 
@@ -2113,7 +2115,7 @@ int wxArrayString::Index(const wxChar *sz, bool bCase, bool bFromEnd) const
 }
 
 // add item at the end
-size_t wxArrayString::Add(const wxString& str)
+size_t wxArrayString::Add(const wxString& str, size_t nInsert)
 {
   if ( m_autoSort ) {
     // insert the string at the correct position to keep the array sorted
@@ -2137,41 +2139,49 @@ size_t wxArrayString::Add(const wxString& str)
 
     wxASSERT_MSG( lo == hi, wxT("binary search broken") );
 
-    Insert(str, lo);
+    Insert(str, lo, nInsert);
 
     return (size_t)lo;
   }
   else {
     wxASSERT( str.GetStringData()->IsValid() );
 
-    Grow();
+    Grow(nInsert);
 
-    // the string data must not be deleted!
-    str.GetStringData()->Lock();
+    for (size_t i = 0; i < nInsert; i++)
+    {   
+        // the string data must not be deleted!
+        str.GetStringData()->Lock();
 
-    // just append
-    m_pItems[m_nCount] = (wxChar *)str.c_str(); // const_cast
-
-    return m_nCount++;
+        // just append
+        m_pItems[m_nCount + i] = (wxChar *)str.c_str(); // const_cast
+    }
+    size_t ret = m_nCount;
+    m_nCount += nInsert;
+    return ret;
   }
 }
 
 // add item at the given position
-void wxArrayString::Insert(const wxString& str, size_t nIndex)
+void wxArrayString::Insert(const wxString& str, size_t nIndex, size_t nInsert)
 {
   wxASSERT( str.GetStringData()->IsValid() );
 
   wxCHECK_RET( nIndex <= m_nCount, wxT("bad index in wxArrayString::Insert") );
+  wxCHECK_RET( m_nCount <= m_nCount + nInsert,
+               wxT("array size overflow in wxArrayString::Insert") );
 
-  Grow();
+  Grow(nInsert);
 
-  memmove(&m_pItems[nIndex + 1], &m_pItems[nIndex],
+  memmove(&m_pItems[nIndex + nInsert], &m_pItems[nIndex],
           (m_nCount - nIndex)*sizeof(wxChar *));
 
-  str.GetStringData()->Lock();
-  m_pItems[nIndex] = (wxChar *)str.c_str();
-
-  m_nCount++;
+  for (size_t i = 0; i < nInsert; i++)
+  {
+      str.GetStringData()->Lock();
+      m_pItems[nIndex + i] = (wxChar *)str.c_str();
+  }
+  m_nCount += nInsert;
 }
 
 // expand the array
@@ -2185,16 +2195,19 @@ void wxArrayString::SetCount(size_t count)
 }
 
 // removes item from array (by index)
-void wxArrayString::Remove(size_t nIndex)
+void wxArrayString::Remove(size_t nIndex, size_t nRemove)
 {
-  wxCHECK_RET( nIndex <= m_nCount, wxT("bad index in wxArrayString::Remove") );
+  wxCHECK_RET( nIndex < m_nCount, wxT("bad index in wxArrayString::Remove") );
+  wxCHECK_RET( nIndex + nRemove <= m_nCount,
+               wxT("removing too many elements in wxArrayString::Remove") );
 
   // release our lock
-  Item(nIndex).GetStringData()->Unlock();
+  for (size_t i = 0; i < nRemove; i++)
+      Item(nIndex + i).GetStringData()->Unlock();
 
-  memmove(&m_pItems[nIndex], &m_pItems[nIndex + 1],
-          (m_nCount - nIndex - 1)*sizeof(wxChar *));
-  m_nCount--;
+  memmove(&m_pItems[nIndex], &m_pItems[nIndex + nRemove],
+          (m_nCount - nIndex - nRemove)*sizeof(wxChar *));
+  m_nCount -= nRemove;
 }
 
 // removes item from array (by value)
