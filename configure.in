@@ -4966,7 +4966,7 @@ dnl ---------------------------------------------------------------------------
 
 dnl check for ole headers and disable a few features requiring it if not
 dnl present (earlier versions of mingw32 don't have ole2.h)
-if test "$wxUSE_MSW" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
+if test "$USE_WIN32" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
                           -o "$wxUSE_CLIPBOARD"     = "yes" \
                           -o "$wxUSE_OLE"     = "yes" \
                           -o "$wxUSE_DRAG_AND_DROP" = "yes" \) ; then
@@ -4987,12 +4987,15 @@ if test "$wxUSE_MSW" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
             AC_LANG_RESTORE
             ALL_OBJECTS="$ALL_OBJECTS \$(OLEOBJS)"
             LIBS=" -lrpcrt4 -loleaut32 -lole32 -luuid$LIBS"
-            AC_DEFINE(wxUSE_OLE)
-
+            if test "$wxUSE_OLE" = "yes" ; then
+                AC_DEFINE(wxUSE_OLE)
+            fi
         fi
 
         dnl for OLE clipboard and dnd
-        AC_DEFINE(wxUSE_DATAOBJ)
+        if test "$wxUSE_DATAOBJ" = "yes" ; then
+            AC_DEFINE(wxUSE_DATAOBJ)
+        fi
     else
         AC_MSG_WARN([Some features disabled because OLE headers not found])
 
