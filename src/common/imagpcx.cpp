@@ -148,6 +148,7 @@ enum {
     wxPCX_VERERR = 3        // error in pcx version number
 };
 
+
 // ReadPCX:
 //  Loads a PCX file into the wxImage object pointed by image.
 //  Returns wxPCX_OK on success, or an error code otherwise
@@ -288,10 +289,11 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
     // Get the histogram of the image, and decide whether to save
     // as 8 bit or 24 bit, according to the number of colours.
     //
-    ncolours = image->ComputeHistogram(h);
+    ncolours = image->CountColours(257);
 
     if (ncolours <= 256)
     {
+        image->ComputeHistogram(h);
         format = wxPCX_8BIT;
         nplanes = 1;
     }
@@ -358,10 +360,7 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
                     key = (r << 16) | (g << 8) | b;
 
                     hnode = (wxHNode *) h.Get(key);
-                    if (!hnode)
-                        wxLogError("!hnode");
-                    else
-                        p[i] = hnode->index;
+                    p[i] = hnode->index;
                 }
                 break;
             }
@@ -398,15 +397,10 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
             key = node->GetKeyInteger();
             hnode = (wxHNode *) node->GetData();
 
-            if (!hnode)
-                wxLogError("!hnode");
-            else
-            {
-                pal[3 * hnode->index]     = (unsigned char)(key >> 16);
-                pal[3 * hnode->index + 1] = (unsigned char)(key >> 8);
-                pal[3 * hnode->index + 2] = (unsigned char)(key);
-                delete hnode;
-            }
+            pal[3 * hnode->index]     = (unsigned char)(key >> 16);
+            pal[3 * hnode->index + 1] = (unsigned char)(key >> 8);
+            pal[3 * hnode->index + 2] = (unsigned char)(key);
+            delete hnode;
         }
 
         stream.PutC(12);
