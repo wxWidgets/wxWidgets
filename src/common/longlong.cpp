@@ -25,6 +25,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_LONGLONG
+
 #include "wx/longlong.h"
 
 #include <memory.h>     // for memset()
@@ -468,3 +470,4 @@ ostream& operator<< (ostream& o, const wxLongLongWx& ll)
 #endif
   // wxUSE_LONGLONG_NATIVE
 
+#endif // wxUSE_LONGLONG

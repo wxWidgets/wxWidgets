@@ -125,7 +125,7 @@ extern const wxChar WXDLLEXPORT *g_szNul = &g_strEmpty.dummy;
     #elif defined(__GNUG__) && !defined(__UNIX__)
         #warning "Using sprintf() because no snprintf()-like function defined"
     #elif defined(__MWERKS__)
- 	    #warning "Using sprintf() because no snprintf()-like function defined"
+             #warning "Using sprintf() because no snprintf()-like function defined"
     #endif //compiler
 #endif // no vsnprintf
 
@@ -1015,225 +1015,225 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
       static char s_szFlags[256] = "%";
       size_t flagofs = 1;
       bool adj_left = FALSE, in_prec = FALSE,
-	   prec_dot = FALSE, done = FALSE;
+           prec_dot = FALSE, done = FALSE;
       int ilen = 0;
       size_t min_width = 0, max_width = wxSTRING_MAXLEN;
       do {
 #define CHECK_PREC if (in_prec && !prec_dot) { s_szFlags[flagofs++] = '.'; prec_dot = TRUE; }
-	switch (pszFormat[++n]) {
-	case _T('\0'):
-	  done = TRUE;
-	  break;
-	case _T('%'):
-	  *this += _T('%');
-	  done = TRUE;
-	  break;
-	case _T('#'):
-	case _T('0'):
-	case _T(' '):
-	case _T('+'):
-	case _T('\''):
-	  CHECK_PREC
-	  s_szFlags[flagofs++] = pszFormat[n];
-	  break;
-	case _T('-'):
-	  CHECK_PREC
-	  adj_left = TRUE;
-	  s_szFlags[flagofs++] = pszFormat[n];
-	  break;
-	case _T('.'):
-	  CHECK_PREC
-	  in_prec = TRUE;
-	  prec_dot = FALSE;
-	  max_width = 0;
-	  // dot will be auto-added to s_szFlags if non-negative number follows
-	  break;
-	case _T('h'):
-	  ilen = -1;
-	  CHECK_PREC
-	  s_szFlags[flagofs++] = pszFormat[n];
-	  break;
-	case _T('l'):
-	  ilen = 1;
-	  CHECK_PREC
-	  s_szFlags[flagofs++] = pszFormat[n];
-	  break;
-	case _T('q'):
-	case _T('L'):
-	  ilen = 2;
-	  CHECK_PREC
-	  s_szFlags[flagofs++] = pszFormat[n];
-	  break;
-	case _T('Z'):
-	  ilen = 3;
-	  CHECK_PREC
-	  s_szFlags[flagofs++] = pszFormat[n];
-	  break;
-	case _T('*'):
-	  {
-	    int len = va_arg(argptr, int);
-	    if (in_prec) {
-	      if (len<0) break;
-	      CHECK_PREC
-	      max_width = len;
-	    } else {
-	      if (len<0) {
-		adj_left = !adj_left;
-		s_szFlags[flagofs++] = '-';
-		len = -len;
-	      }
-	      min_width = len;
-	    }
-	    flagofs += ::sprintf(s_szFlags+flagofs,"%d",len);
-	  }
-	  break;
-	case _T('1'): case _T('2'): case _T('3'):
-	case _T('4'): case _T('5'): case _T('6'):
-	case _T('7'): case _T('8'): case _T('9'):
-	  {
-	    int len = 0;
-	    CHECK_PREC
-	    while ((pszFormat[n]>=_T('0')) && (pszFormat[n]<=_T('9'))) {
-	      s_szFlags[flagofs++] = pszFormat[n];
-	      len = len*10 + (pszFormat[n] - _T('0'));
-	      n++;
-	    }
-	    if (in_prec) max_width = len;
-	    else min_width = len;
-	    n--; // the main loop pre-increments n again
-	  }
-	  break;
-	case _T('d'):
-	case _T('i'):
-	case _T('o'):
-	case _T('u'):
-	case _T('x'):
-	case _T('X'):
-	  CHECK_PREC
-	  s_szFlags[flagofs++] = pszFormat[n];
-	  s_szFlags[flagofs] = '\0';
-	  if (ilen == 0 ) {
-	    int val = va_arg(argptr, int);
-	    ::sprintf(s_szScratch, s_szFlags, val);
-	  }
-	  else if (ilen == -1) {
-	    short int val = va_arg(argptr, short int);
-	    ::sprintf(s_szScratch, s_szFlags, val);
-	  }
-	  else if (ilen == 1) {
-	    long int val = va_arg(argptr, long int);
-	    ::sprintf(s_szScratch, s_szFlags, val);
-	  }
-	  else if (ilen == 2) {
+        switch (pszFormat[++n]) {
+        case _T('\0'):
+          done = TRUE;
+          break;
+        case _T('%'):
+          *this += _T('%');
+          done = TRUE;
+          break;
+        case _T('#'):
+        case _T('0'):
+        case _T(' '):
+        case _T('+'):
+        case _T('\''):
+          CHECK_PREC
+          s_szFlags[flagofs++] = pszFormat[n];
+          break;
+        case _T('-'):
+          CHECK_PREC
+          adj_left = TRUE;
+          s_szFlags[flagofs++] = pszFormat[n];
+          break;
+        case _T('.'):
+          CHECK_PREC
+          in_prec = TRUE;
+          prec_dot = FALSE;
+          max_width = 0;
+          // dot will be auto-added to s_szFlags if non-negative number follows
+          break;
+        case _T('h'):
+          ilen = -1;
+          CHECK_PREC
+          s_szFlags[flagofs++] = pszFormat[n];
+          break;
+        case _T('l'):
+          ilen = 1;
+          CHECK_PREC
+          s_szFlags[flagofs++] = pszFormat[n];
+          break;
+        case _T('q'):
+        case _T('L'):
+          ilen = 2;
+          CHECK_PREC
+          s_szFlags[flagofs++] = pszFormat[n];
+          break;
+        case _T('Z'):
+          ilen = 3;
+          CHECK_PREC
+          s_szFlags[flagofs++] = pszFormat[n];
+          break;
+        case _T('*'):
+          {
+            int len = va_arg(argptr, int);
+            if (in_prec) {
+              if (len<0) break;
+              CHECK_PREC
+              max_width = len;
+            } else {
+              if (len<0) {
+                adj_left = !adj_left;
+                s_szFlags[flagofs++] = '-';
+                len = -len;
+              }
+              min_width = len;
+            }
+            flagofs += ::sprintf(s_szFlags+flagofs,"%d",len);
+          }
+          break;
+        case _T('1'): case _T('2'): case _T('3'):
+        case _T('4'): case _T('5'): case _T('6'):
+        case _T('7'): case _T('8'): case _T('9'):
+          {
+            int len = 0;
+            CHECK_PREC
+            while ((pszFormat[n]>=_T('0')) && (pszFormat[n]<=_T('9'))) {
+              s_szFlags[flagofs++] = pszFormat[n];
+              len = len*10 + (pszFormat[n] - _T('0'));
+              n++;
+            }
+            if (in_prec) max_width = len;
+            else min_width = len;
+            n--; // the main loop pre-increments n again
+          }
+          break;
+        case _T('d'):
+        case _T('i'):
+        case _T('o'):
+        case _T('u'):
+        case _T('x'):
+        case _T('X'):
+          CHECK_PREC
+          s_szFlags[flagofs++] = pszFormat[n];
+          s_szFlags[flagofs] = '\0';
+          if (ilen == 0 ) {
+            int val = va_arg(argptr, int);
+            ::sprintf(s_szScratch, s_szFlags, val);
+          }
+          else if (ilen == -1) {
+            short int val = va_arg(argptr, short int);
+            ::sprintf(s_szScratch, s_szFlags, val);
+          }
+          else if (ilen == 1) {
+            long int val = va_arg(argptr, long int);
+            ::sprintf(s_szScratch, s_szFlags, val);
+          }
+          else if (ilen == 2) {
 #if SIZEOF_LONG_LONG
-	    long long int val = va_arg(argptr, long long int);
-	    ::sprintf(s_szScratch, s_szFlags, val);
+            long long int val = va_arg(argptr, long long int);
+            ::sprintf(s_szScratch, s_szFlags, val);
 #else
-	    long int val = va_arg(argptr, long int);
-	    ::sprintf(s_szScratch, s_szFlags, val);
+            long int val = va_arg(argptr, long int);
+            ::sprintf(s_szScratch, s_szFlags, val);
 #endif
-	  }
-	  else if (ilen == 3) {
-	    size_t val = va_arg(argptr, size_t);
-	    ::sprintf(s_szScratch, s_szFlags, val);
-	  }
-	  *this += wxString(s_szScratch);
-	  done = TRUE;
-	  break;
-	case _T('e'):
-	case _T('E'):
-	case _T('f'):
-	case _T('g'):
-	case _T('G'):
-	  CHECK_PREC
-	  s_szFlags[flagofs++] = pszFormat[n];
-	  s_szFlags[flagofs] = '\0';
-	  if (ilen == 2) {
-	    long double val = va_arg(argptr, long double);
-	    ::sprintf(s_szScratch, s_szFlags, val);
-	  } else {
-	    double val = va_arg(argptr, double);
-	    ::sprintf(s_szScratch, s_szFlags, val);
-	  }
-	  *this += wxString(s_szScratch);
-	  done = TRUE;
-	  break;
-	case _T('p'):
-	  {
-	    void *val = va_arg(argptr, void *);
-	    CHECK_PREC
-	    s_szFlags[flagofs++] = pszFormat[n];
-	    s_szFlags[flagofs] = '\0';
-	    ::sprintf(s_szScratch, s_szFlags, val);
-	    *this += wxString(s_szScratch);
-	    done = TRUE;
-	  }
-	  break;
-	case _T('c'):
-	  {
-	    wxChar val = va_arg(argptr, int);
-	    // we don't need to honor padding here, do we?
-	    *this += val;
-	    done = TRUE;
-	  }
-	  break;
-	case _T('s'):
-	  if (ilen == -1) {
-	    // wx extension: we'll let %hs mean non-Unicode strings
-	    char *val = va_arg(argptr, char *);
+          }
+          else if (ilen == 3) {
+            size_t val = va_arg(argptr, size_t);
+            ::sprintf(s_szScratch, s_szFlags, val);
+          }
+          *this += wxString(s_szScratch);
+          done = TRUE;
+          break;
+        case _T('e'):
+        case _T('E'):
+        case _T('f'):
+        case _T('g'):
+        case _T('G'):
+          CHECK_PREC
+          s_szFlags[flagofs++] = pszFormat[n];
+          s_szFlags[flagofs] = '\0';
+          if (ilen == 2) {
+            long double val = va_arg(argptr, long double);
+            ::sprintf(s_szScratch, s_szFlags, val);
+          } else {
+            double val = va_arg(argptr, double);
+            ::sprintf(s_szScratch, s_szFlags, val);
+          }
+          *this += wxString(s_szScratch);
+          done = TRUE;
+          break;
+        case _T('p'):
+          {
+            void *val = va_arg(argptr, void *);
+            CHECK_PREC
+            s_szFlags[flagofs++] = pszFormat[n];
+            s_szFlags[flagofs] = '\0';
+            ::sprintf(s_szScratch, s_szFlags, val);
+            *this += wxString(s_szScratch);
+            done = TRUE;
+          }
+          break;
+        case _T('c'):
+          {
+            wxChar val = va_arg(argptr, int);
+            // we don't need to honor padding here, do we?
+            *this += val;
+            done = TRUE;
+          }
+          break;
+        case _T('s'):
+          if (ilen == -1) {
+            // wx extension: we'll let %hs mean non-Unicode strings
+            char *val = va_arg(argptr, char *);
 #if wxUSE_UNICODE
-	    // ASCII->Unicode constructor handles max_width right
-	    wxString s(val, wxConvLibc, max_width);
+            // ASCII->Unicode constructor handles max_width right
+            wxString s(val, wxConvLibc, max_width);
 #else
-	    size_t len = wxSTRING_MAXLEN;
-	    if (val) {
-	      for (len = 0; val[len] && (len<max_width); len++);
-	    } else val = _T("(null)");
-	    wxString s(val, len);
+            size_t len = wxSTRING_MAXLEN;
+            if (val) {
+              for (len = 0; val[len] && (len<max_width); len++);
+            } else val = _T("(null)");
+            wxString s(val, len);
 #endif
-	    if (s.Len() < min_width)
-	      s.Pad(min_width - s.Len(), _T(' '), adj_left);
-	    *this += s;
-	  } else {
-	    wxChar *val = va_arg(argptr, wxChar *);
-	    size_t len = wxSTRING_MAXLEN;
-	    if (val) {
-	      for (len = 0; val[len] && (len<max_width); len++);
-	    } else val = _T("(null)");
-	    wxString s(val, len);
-	    if (s.Len() < min_width)
-	      s.Pad(min_width - s.Len(), _T(' '), adj_left);
-	    *this += s;
-	  }
-	  done = TRUE;
-	  break;
-	case _T('n'):
-	  if (ilen == 0) {
-	    int *val = va_arg(argptr, int *);
-	    *val = Len();
-	  }
-	  else if (ilen == -1) {
-	    short int *val = va_arg(argptr, short int *);
-	    *val = Len();
-	  }
-	  else if (ilen >= 1) {
-	    long int *val = va_arg(argptr, long int *);
-	    *val = Len();
-	  }
-	  done = TRUE;
-	  break;
-	default:
-	  if (wxIsalpha(pszFormat[n]))
-	    // probably some flag not taken care of here yet
-	    s_szFlags[flagofs++] = pszFormat[n];
-	  else {
-	    // bad format
-	    *this += _T('%'); // just to pass the glibc tst-printf.c
-	    n--;
-	    done = TRUE;
-	  }
-	  break;
-	}
+            if (s.Len() < min_width)
+              s.Pad(min_width - s.Len(), _T(' '), adj_left);
+            *this += s;
+          } else {
+            wxChar *val = va_arg(argptr, wxChar *);
+            size_t len = wxSTRING_MAXLEN;
+            if (val) {
+              for (len = 0; val[len] && (len<max_width); len++);
+            } else val = _T("(null)");
+            wxString s(val, len);
+            if (s.Len() < min_width)
+              s.Pad(min_width - s.Len(), _T(' '), adj_left);
+            *this += s;
+          }
+          done = TRUE;
+          break;
+        case _T('n'):
+          if (ilen == 0) {
+            int *val = va_arg(argptr, int *);
+            *val = Len();
+          }
+          else if (ilen == -1) {
+            short int *val = va_arg(argptr, short int *);
+            *val = Len();
+          }
+          else if (ilen >= 1) {
+            long int *val = va_arg(argptr, long int *);
+            *val = Len();
+          }
+          done = TRUE;
+          break;
+        default:
+          if (wxIsalpha(pszFormat[n]))
+            // probably some flag not taken care of here yet
+            s_szFlags[flagofs++] = pszFormat[n];
+          else {
+            // bad format
+            *this += _T('%'); // just to pass the glibc tst-printf.c
+            n--;
+            done = TRUE;
+          }
+          break;
+        }
 #undef CHECK_PREC
       } while (!done);
     } else *this += pszFormat[n];
@@ -2060,25 +2060,25 @@ size_t wxMBConvUTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
     } else {
       cnt--;
       if (!cnt) {
-	// invalid UTF-8 sequence
-	return (size_t)-1;
+        // invalid UTF-8 sequence
+        return (size_t)-1;
       } else {
-	unsigned ocnt=cnt-1;
-	unsigned long res=cc&(0x3f>>cnt);
-	while (cnt--) {
-	  cc = *psz++;
-	  if ((cc&0xC0)!=0x80) {
-	    // invalid UTF-8 sequence
-	    return (size_t)-1;
-	  }
-	  res=(res<<6)|(cc&0x3f);
-	}
-	if (res<=utf8_max[ocnt]) {
-	  // illegal UTF-8 encoding
-	  return (size_t)-1;
-	}
-	if (buf) *buf++=res;
-	len++;
+        unsigned ocnt=cnt-1;
+        unsigned long res=cc&(0x3f>>cnt);
+        while (cnt--) {
+          cc = *psz++;
+          if ((cc&0xC0)!=0x80) {
+            // invalid UTF-8 sequence
+            return (size_t)-1;
+          }
+          res=(res<<6)|(cc&0x3f);
+        }
+        if (res<=utf8_max[ocnt]) {
+          // illegal UTF-8 encoding
+          return (size_t)-1;
+        }
+        if (buf) *buf++=res;
+        len++;
       }
     }
   }
@@ -2101,9 +2101,9 @@ size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     } else {
       len+=cnt+1;
       if (buf) {
-	*buf++=(-128>>cnt)|((cc>>(cnt*6))&(0x3f>>cnt));
-	while (cnt--)
-	  *buf++=0x80|((cc>>(cnt*6))&0x3f);
+        *buf++=(-128>>cnt)|((cc>>(cnt*6))&(0x3f>>cnt));
+        while (cnt--)
+          *buf++=0x80|((cc>>(cnt*6))&0x3f);
       }
     }
   }
@@ -2159,59 +2159,59 @@ static void wxLoadCharacterSets(void)
 
       wxString line;
       for (line = cmap.GetFirstLine();
-	   !cmap.Eof();
-	   line = cmap.GetNextLine()) {
-	// wxFprintf(stderr,_T("line contents: %s\n"),line.c_str());
-	wxStringTokenizer token(line);
-	wxString cmd = token.GetNextToken();
-	if (cmd == comchar) {
-	  if (token.GetNextToken() == _T("alias"))
-	    cset->names.Add(token.GetNextToken());
-	}
-	else if (cmd == _T("<code_set_name>"))
-	  cset->names.Add(token.GetNextToken());
-	else if (cmd == _T("<comment_char>"))
-	  comchar = token.GetNextToken();
-	else if (cmd == _T("<escape_char>"))
-	  escchar = token.GetNextToken();
-	else if (cmd == _T("<mb_cur_min>")) {
-	  delete cset;
-	  cset = (wxCharacterSet *) NULL;
-	  break; // we don't support multibyte charsets ourselves (yet)
-	}
-	else if (cmd == _T("CHARMAP")) {
-	  cset->data = (wchar_t *)calloc(256, sizeof(wchar_t));
-	  in_charset = TRUE;
-	}
-	else if (cmd == _T("END")) {
-	  if (token.GetNextToken() == _T("CHARMAP"))
-	    in_charset = FALSE;
-	}
-	else if (in_charset) {
-	  // format: <NUL> /x00 <U0000> NULL (NUL)
-	  //         <A>   /x41 <U0041> LATIN CAPITAL LETTER A
-	  wxString hex = token.GetNextToken();
-	  // skip whitespace (why doesn't wxStringTokenizer do this?)
-	  while (wxIsEmpty(hex) && token.HasMoreTokens()) hex = token.GetNextToken();
-	  wxString uni = token.GetNextToken();
-	  // skip whitespace again
-	  while (wxIsEmpty(uni) && token.HasMoreTokens()) uni = token.GetNextToken();
-	  if ((hex.Len() > 2) && (wxString(hex.GetChar(0)) == escchar) && (hex.GetChar(1) == _T('x')) &&
-	      (uni.Left(2) == _T("<U"))) {
-	    hex.MakeUpper(); uni.MakeUpper();
-	    int pos = ::wxHexToDec(hex.Mid(2,2));
-	    if (pos>=0) {
-	      unsigned long uni1 = ::wxHexToDec(uni.Mid(2,2));
-	      unsigned long uni2 = ::wxHexToDec(uni.Mid(4,2));
-	      cset->data[pos] = (uni1 << 16) | uni2;
-	      // wxFprintf(stderr,_T("char %02x mapped to %04x (%c)\n"),pos,cset->data[pos],cset->data[pos]);
-	    }
-	  }
-	}
+           !cmap.Eof();
+           line = cmap.GetNextLine()) {
+        // wxFprintf(stderr,_T("line contents: %s\n"),line.c_str());
+        wxStringTokenizer token(line);
+        wxString cmd = token.GetNextToken();
+        if (cmd == comchar) {
+          if (token.GetNextToken() == _T("alias"))
+            cset->names.Add(token.GetNextToken());
+        }
+        else if (cmd == _T("<code_set_name>"))
+          cset->names.Add(token.GetNextToken());
+        else if (cmd == _T("<comment_char>"))
+          comchar = token.GetNextToken();
+        else if (cmd == _T("<escape_char>"))
+          escchar = token.GetNextToken();
+        else if (cmd == _T("<mb_cur_min>")) {
+          delete cset;
+          cset = (wxCharacterSet *) NULL;
+          break; // we don't support multibyte charsets ourselves (yet)
+        }
+        else if (cmd == _T("CHARMAP")) {
+          cset->data = (wchar_t *)calloc(256, sizeof(wchar_t));
+          in_charset = TRUE;
+        }
+        else if (cmd == _T("END")) {
+          if (token.GetNextToken() == _T("CHARMAP"))
+            in_charset = FALSE;
+        }
+        else if (in_charset) {
+          // format: <NUL> /x00 <U0000> NULL (NUL)
+          //         <A>   /x41 <U0041> LATIN CAPITAL LETTER A
+          wxString hex = token.GetNextToken();
+          // skip whitespace (why doesn't wxStringTokenizer do this?)
+          while (wxIsEmpty(hex) && token.HasMoreTokens()) hex = token.GetNextToken();
+          wxString uni = token.GetNextToken();
+          // skip whitespace again
+          while (wxIsEmpty(uni) && token.HasMoreTokens()) uni = token.GetNextToken();
+          if ((hex.Len() > 2) && (wxString(hex.GetChar(0)) == escchar) && (hex.GetChar(1) == _T('x')) &&
+              (uni.Left(2) == _T("<U"))) {
+            hex.MakeUpper(); uni.MakeUpper();
+            int pos = ::wxHexToDec(hex.Mid(2,2));
+            if (pos>=0) {
+              unsigned long uni1 = ::wxHexToDec(uni.Mid(2,2));
+              unsigned long uni2 = ::wxHexToDec(uni.Mid(4,2));
+              cset->data[pos] = (uni1 << 16) | uni2;
+              // wxFprintf(stderr,_T("char %02x mapped to %04x (%c)\n"),pos,cset->data[pos],cset->data[pos]);
+            }
+          }
+        }
       }
       if (cset) {
-	cset->names.Shrink();
-	wxCharsets.Add(cset);
+        cset->names.Shrink();
+        wxCharsets.Add(cset);
       }
     }
   }
@@ -2256,10 +2256,10 @@ void wxCSConv::SetName(const wxChar *charset)
       charset += 3;
       if ((*charset == _T('-')) || (*charset == _T('_'))) charset++;
       if (wxStrlen(charset)>4) {
-	if (wxString(charset,4) == _T("8859")) {
-	  codeset << _T("8859-");
-	  if (*charset == _T('-')) charset++;
-	}
+        if (wxString(charset,4) == _T("8859")) {
+          codeset << _T("8859-");
+          if (*charset == _T('-')) charset++;
+        }
       }
     }
     codeset << charset;
@@ -2292,11 +2292,11 @@ size_t wxCSConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
   if (buf) {
     if (m_cset) {
       for (size_t c=0; c<n; c++)
-	buf[c] = m_cset->data[(unsigned char)(psz[c])];
+        buf[c] = m_cset->data[(unsigned char)(psz[c])];
     } else {
       // latin-1 (direct)
       for (size_t c=0; c<n; c++)
-	buf[c] = (unsigned char)(psz[c]);
+        buf[c] = (unsigned char)(psz[c]);
     }
     return n;
   }
@@ -2309,14 +2309,14 @@ size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
   if (buf) {
     if (m_cset) {
       for (size_t c=0; c<n; c++) {
-	size_t n;
-	for (n=0; (n<256) && (m_cset->data[n] != psz[c]); n++);
-	buf[c] = (n>0xff) ? '?' : n;
+        size_t n;
+        for (n=0; (n<256) && (m_cset->data[n] != psz[c]); n++);
+        buf[c] = (n>0xff) ? '?' : n;
       }
     } else {
       // latin-1 (direct)
       for (size_t c=0; c<n; c++)
-	buf[c] = (psz[c]>0xff) ? '?' : psz[c];
+        buf[c] = (psz[c]>0xff) ? '?' : psz[c];
     }
     return n;
   }
