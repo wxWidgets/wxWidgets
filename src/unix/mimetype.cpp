@@ -776,7 +776,13 @@ void wxMimeTypesManagerImpl::LoadGnomeMimeFilesFromDir(
     wxString strDesc;
     
     if ( !wxDir::Exists(dirname) )
-        return;
+    {
+        // Jst test for default GPE dir also
+        dirname = wxT("/usr/share/gpe/pixmaps/default/filemanager/document-icons");
+        
+        if ( !wxDir::Exists(dirname) )
+           return;
+    }
 
     wxDir dir2( dirname );
 

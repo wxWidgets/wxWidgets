@@ -44,12 +44,6 @@ wxSystemScreenType wxSystemSettings::ms_screen = wxSYS_SCREEN_NONE;
 wxSystemScreenType wxSystemSettings::GetScreenType()
 {
     if (ms_screen == wxSYS_SCREEN_NONE)
-#ifndef __WXUNIVERSAL__
-    {
-        // As a start, all GUI are desktops.
-        ms_screen = wxSYS_SCREEN_DESKTOP;
-    }
-#else
     {
         // wxUniv will be used on small devices, too.
         int x = GetMetric( wxSYS_SCREEN_X );
@@ -64,8 +58,11 @@ wxSystemScreenType wxSystemSettings::GetScreenType()
             
         if (x < 200)
             ms_screen = wxSYS_SCREEN_TINY;
+            
+        // This is probably a bug, but VNC seems to report 0
+        if (x < 10)
+            ms_screen = wxSYS_SCREEN_DESKTOP;
     }
-#endif
 
     return ms_screen;
 }

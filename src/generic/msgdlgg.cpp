@@ -67,9 +67,7 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
 {
     m_dialogStyle = style;
 
-#if wxUSE_STATIC_BITMAP
     bool is_pda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
-#endif
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
@@ -101,32 +99,24 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
                 bitmap = wxArtProvider::GetIcon(wxART_QUESTION, wxART_MESSAGE_BOX);
                 break;
         }
-#if wxUSE_STATIC_BITMAP
         wxStaticBitmap *icon = new wxStaticBitmap(this, -1, bitmap);
         if (is_pda)
             topsizer->Add( icon, 0, wxTOP|wxLEFT|wxRIGHT | wxALIGN_LEFT, 10 );
         else
             icon_text->Add( icon, 0, wxCENTER );
-#endif
     }
 
     // 2) text
-#if wxUSE_STATTEXT // && wxUSE_TEXTCTRL
     icon_text->Add( CreateTextSizer( message ), 0, wxCENTER | wxLEFT, 10 );
-#endif
 
     topsizer->Add( icon_text, 1, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
 
-#if wxUSE_STATLINE
     // 3) static line
     topsizer->Add( new wxStaticLine( this, -1 ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
-#endif
 
     // 4) buttons
-#if wxUSE_BUTTON
     topsizer->Add( CreateButtonSizer( style & (wxOK|wxCANCEL|wxYES_NO|wxYES_DEFAULT|wxNO_DEFAULT) ),
                    0, wxCENTRE | wxALL, 10 );
- #endif
 
     SetAutoLayout( TRUE );
     SetSizer( topsizer );

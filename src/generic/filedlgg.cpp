@@ -982,19 +982,14 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
         // PDAs have a different screen layout
         mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 5 );
 
-        wxBoxSizer *choicesizer = new wxBoxSizer( wxHORIZONTAL );
-        m_choice = new wxChoice( this, ID_CHOICE );
-        choicesizer->Add( m_choice, 1, wxCENTER|wxALL, 5 );
-        mainsizer->Add( choicesizer, 0, wxEXPAND );
-
         wxBoxSizer *textsizer = new wxBoxSizer( wxHORIZONTAL );
         m_text = new wxTextCtrl( this, ID_TEXT, m_fileName, wxDefaultPosition, wxDefaultSize, wxPROCESS_ENTER );
         textsizer->Add( m_text, 1, wxCENTER | wxALL, 5 );
         mainsizer->Add( textsizer, 0, wxEXPAND );
 
-        m_check = new wxCheckBox( this, ID_CHECK, _("Show hidden files") );
-        m_check->SetValue( ms_lastShowHidden );
-        textsizer->Add( m_check, 0, wxCENTER|wxALL, 5 );
+        m_check = NULL;
+        m_choice = new wxChoice( this, ID_CHOICE );
+        textsizer->Add( m_choice, 1, wxCENTER|wxALL, 5 );
 
         buttonsizer = new wxBoxSizer( wxHORIZONTAL );
         buttonsizer->Add( new wxButton( this, wxID_OK, _("OK") ), 0, wxCENTER | wxALL, 5 );
