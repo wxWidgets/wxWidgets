@@ -38,18 +38,20 @@
 #include "wx/busyinfo.h"
 #include "wx/progdlg.h"
 #include "wx/toolbar.h"
+#include "wx/fontenum.h"
 
 // Bitmaps:
 
 #ifndef __WXMSW__
-#include "bitmaps/panel.xpm"
-#include "bitmaps/back.xpm"
-#include "bitmaps/forward.xpm"
-#include "bitmaps/book.xpm"
-#include "bitmaps/folder.xpm"
-#include "bitmaps/page.xpm"
-#include "bitmaps/help.xpm"
-#include "bitmaps/helproot.xpm"
+#include "bitmaps/wpanel.xpm"
+#include "bitmaps/wback.xpm"
+#include "bitmaps/wforward.xpm"
+#include "bitmaps/wbook.xpm"
+#include "bitmaps/woptions.xpm"
+#include "bitmaps/wfolder.xpm"
+#include "bitmaps/wpage.xpm"
+#include "bitmaps/whelp.xpm"
+#include "bitmaps/whlproot.xpm"
 #endif
 
 #include "wx/stream.h"
@@ -99,10 +101,10 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
     }
 
     m_ContentsImageList = new wxImageList(16, 16);
-    m_ContentsImageList -> Add(wxICON(book));
-    m_ContentsImageList -> Add(wxICON(folder));
-    m_ContentsImageList -> Add(wxICON(page));
-    m_ContentsImageList -> Add(wxICON(helproot));
+    m_ContentsImageList -> Add(wxICON(wbook));
+    m_ContentsImageList -> Add(wxICON(wfolder));
+    m_ContentsImageList -> Add(wxICON(wpage));
+    m_ContentsImageList -> Add(wxICON(whlproot));
 
     m_ContentsBox = NULL;
     m_IndexBox = NULL;
@@ -121,6 +123,11 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
     m_Cfg.h = 480;
     m_Cfg.sashpos = 240;
     m_Cfg.navig_on = TRUE;
+
+    m_NormalFonts = m_FixedFonts = NULL;
+    m_FontSize = 1;
+    m_NormalFace = m_FixedFace = wxEmptyString;
+    m_NormalItalic =  m_FixedItalic = wxSLANT;
 }
 
 // Create: builds the GUI components.
@@ -142,17 +149,9 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
 
     wxFrame::Create(parent, id, _("Help"), wxPoint(m_Cfg.x, m_Cfg.y), wxSize(m_Cfg.w, m_Cfg.h));
 
-#if defined(__WXMSW__) || (__WXPM__)
-    wxIcon frameIcon("wxhelp", wxBITMAP_TYPE_ICO_RESOURCE, 32, 32);
-#else
-    wxIcon frameIcon(help_xpm);
-#endif
-    if (frameIcon.Ok())
-        SetIcon(frameIcon);
-
     GetPosition(&m_Cfg.x, &m_Cfg.y);
 
-    SetIcon(wxICON(help));
+    SetIcon(wxICON(whelp));
 
     int notebook_page = 0;
 
@@ -160,44 +159,26 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
 
     // toolbar?
     if (style & wxHF_TOOLBAR) {
-        wxToolBar *toolBar = CreateToolBar(wxNO_BORDER | wxTB_HORIZONTAL |  /*wxTB_FLAT | */
-                                           wxTB_DOCKABLE);
+        wxToolBar *toolBar = CreateToolBar(wxNO_BORDER | wxTB_HORIZONTAL | wxTB_DOCKABLE);
         toolBar -> SetMargins(2, 2);
-        wxBitmap* toolBarBitmaps[3];
 
-#if defined(__WXMSW__) || (__WXPM__)
-        toolBarBitmaps[0] = new wxBitmap("panel");
-        toolBarBitmaps[1] = new wxBitmap("back");
-        toolBarBitmaps[2] = new wxBitmap("forward");
-        int width = 24;
-#else
-        toolBarBitmaps[0] = new wxBitmap(panel_xpm);
-        toolBarBitmaps[1] = new wxBitmap(back_xpm);
-        toolBarBitmaps[2] = new wxBitmap(forward_xpm);
-        int width = 16;
-#endif
-
-        int currentX = 5;
-
-        toolBar -> AddTool(wxID_HTML_PANEL, *(toolBarBitmaps[0]), wxNullBitmap,
-                           FALSE, currentX, -1, (wxObject *) NULL,
+        toolBar -> AddTool(wxID_HTML_PANEL, wxBITMAP(wpanel), wxNullBitmap,
+                           FALSE, -1, -1, (wxObject *) NULL,
                            _("Show/hide navigation panel"));
-        currentX += width + 5;
         toolBar -> AddSeparator();
-        toolBar -> AddTool(wxID_HTML_BACK, *(toolBarBitmaps[1]), wxNullBitmap,
-                           FALSE, currentX, -1, (wxObject *) NULL,
+        toolBar -> AddTool(wxID_HTML_BACK, wxBITMAP(wback), wxNullBitmap,
+                           FALSE, -1, -1, (wxObject *) NULL,
                            _("Go back to the previous HTML page"));
-        currentX += width + 5;
-        toolBar -> AddTool(wxID_HTML_FORWARD, *(toolBarBitmaps[2]), wxNullBitmap,
-                           FALSE, currentX, -1, (wxObject *) NULL,
+        toolBar -> AddTool(wxID_HTML_FORWARD, wxBITMAP(wforward), wxNullBitmap,
+                           FALSE, -1, -1, (wxObject *) NULL,
                            _("Go forward to the next HTML page"));
-        currentX += width + 5;
+
+        toolBar -> AddSeparator();
+        toolBar -> AddTool(wxID_HTML_OPTIONS, wxBITMAP(woptions), wxNullBitmap,
+                           FALSE, -1, -1, (wxObject *) NULL,
+                           _("Display options dialog"));
 
         toolBar -> Realize();
-
-        // Can delete the bitmaps since they're reference counted
-        for (int i = 0; i < 3; i++)
-            delete toolBarBitmaps[i];
     }
 
     if (style & (wxHF_CONTENTS | wxHF_INDEX | wxHF_SEARCH)) {
@@ -315,6 +296,8 @@ wxHtmlHelpFrame::~wxHtmlHelpFrame()
     delete m_ContentsImageList;
     if (m_DataCreated)
         delete m_Data;
+    if (m_NormalFonts) delete m_NormalFonts;
+    if (m_FixedFonts) delete m_FixedFonts;
 }
 
 bool wxHtmlHelpFrame::Display(const wxString& x)
@@ -424,7 +407,7 @@ void wxHtmlHelpFrame::CreateContents(bool show_progress)
     if (! m_ContentsBox)
         return ;
 
-    wxProgressDialog *progress;
+    wxProgressDialog *progress = NULL;
     wxString proginfo;
 
     m_ContentsBox->Clear();
@@ -433,7 +416,7 @@ void wxHtmlHelpFrame::CreateContents(bool show_progress)
     int div = (cnt / PROGRESS_STEP) + 1;
     int i;
 
-    wxHtmlContentsItem *it = m_Data->GetContents();
+    wxHtmlContentsItem *it;
 
     if (show_progress)
         progress = new wxProgressDialog(_("Building contents tree..."), wxEmptyString,
@@ -449,7 +432,7 @@ void wxHtmlHelpFrame::CreateContents(bool show_progress)
     m_ContentsBox -> SetItemSelectedImage(roots[0], IMG_RootFolder);
     imaged[0] = TRUE;
 
-    for (i = 0; i < cnt; i++, it++) {
+    for (it = m_Data->GetContents(), i = 0; i < cnt; i++, it++) {
         if (show_progress && ((i % div) == 0)) {
             proginfo.Printf(_("Added %d/%d items"), i, cnt);
             if (! progress->Update(i, proginfo))
@@ -484,7 +467,7 @@ void wxHtmlHelpFrame::CreateIndex(bool show_progress)
     if (! m_IndexBox)
         return ;
 
-    wxProgressDialog *progress;
+    wxProgressDialog *progress = NULL;
     wxString proginfo;
 
     m_IndexBox->Clear();
@@ -551,6 +534,12 @@ void wxHtmlHelpFrame::ReadCustomization(wxConfigBase *cfg, const wxString& path)
     m_Cfg.w = cfg -> Read("hcW", m_Cfg.w);
     m_Cfg.h = cfg -> Read("hcH", m_Cfg.h);
 
+    m_FixedFace = cfg -> Read("hcFixedFace", m_FixedFace);
+    m_NormalFace = cfg -> Read("hcNormalFace", m_NormalFace);
+    m_FontSize = cfg -> Read("hcFontSize", m_FontSize);
+    m_NormalItalic = cfg -> Read("hcNormalItalic", m_NormalItalic);
+    m_FixedItalic = cfg -> Read("hcFixedItalic", m_FixedItalic);
+
     if (m_HtmlWin)
         m_HtmlWin->ReadCustomization(cfg, path);
 
@@ -574,6 +563,11 @@ void wxHtmlHelpFrame::WriteCustomization(wxConfigBase *cfg, const wxString& path
     cfg -> Write("hcY", (long)m_Cfg.y);
     cfg -> Write("hcW", (long)m_Cfg.w);
     cfg -> Write("hcH", (long)m_Cfg.h);
+    cfg -> Write("hcFixedFace", m_FixedFace);
+    cfg -> Write("hcNormalFace", m_NormalFace);
+    cfg -> Write("hcFontSize", (long)m_FontSize);
+    cfg -> Write("hcNormalItalic", (long)m_NormalItalic);
+    cfg -> Write("hcFixedItalic", (long)m_FixedItalic);
 
     if (m_HtmlWin)
         m_HtmlWin->WriteCustomization(cfg, path);
@@ -581,6 +575,195 @@ void wxHtmlHelpFrame::WriteCustomization(wxConfigBase *cfg, const wxString& path
     if (path != wxEmptyString)
         cfg -> SetPath(oldpath);
 }
+
+
+
+
+
+static void SetFontsToHtmlWin(wxHtmlWindow *win, wxString scalf, int scalit, wxString fixf, int fixit, int size)
+{
+#ifdef __WXMSW__
+    static int f_sizes[3][7] = 
+        {
+            {10, 12, 14, 16, 19, 24, 32},
+            {12, 14, 16, 18, 24, 32, 38},
+            {14, 16, 18, 24, 32, 38, 45}
+        };
+#else
+    static int f_sizes[3][7] = 
+        {
+            {10, 12, 14, 16, 19, 24, 32},
+            {12, 14, 16, 18, 24, 32, 38},
+            {14, 16, 18, 24, 32, 38, 45}
+        };
+#endif
+    win -> SetFonts(scalf, scalit, fixf, fixit, f_sizes[size]);
+}
+
+
+class wxHtmlHelpFrameOptionsDialog : public wxDialog
+{
+    public:
+        wxListBox *NormalFont, *FixedFont;
+        wxRadioButton *SFI_i, *SFI_s, *FFI_i, *FFI_s;
+        wxRadioBox *RadioBox;
+        wxHtmlWindow *TestWin;
+
+        wxHtmlHelpFrameOptionsDialog(wxWindow *parent) : wxDialog(parent, -1, wxString(_("Help Browser Options")))
+            {
+                static wxString choices[3] = {_("small"), _("medium"), _("large")};
+                static wxString choices2[2] = {_("italic"), _("slant")};
+                wxBoxSizer *topsizer, *sizer, *sizer2, *sizer3;
+
+                topsizer = new wxBoxSizer(wxVERTICAL);
+
+                sizer = new wxBoxSizer(wxHORIZONTAL);
+
+                sizer2 = new wxBoxSizer(wxVERTICAL);
+                sizer2 -> Add(new wxStaticText(this, -1, _("Normal font:")), 
+                              0, wxLEFT | wxTOP, 10);
+                sizer2 -> Add(NormalFont = new wxListBox(this, -1, wxDefaultPosition, wxSize(200, 150)), 
+                              1, wxEXPAND | wxLEFT | wxRIGHT, 10);
+
+                sizer3 = new wxBoxSizer(wxHORIZONTAL);
+                sizer3 -> Add(SFI_i = new wxRadioButton(this, -1, _("use italic"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP), 
+                              1, wxEXPAND, 0);
+                sizer3 -> Add(SFI_s = new wxRadioButton(this, -1, _("use slant"), wxDefaultPosition, wxDefaultSize, 0), 
+                              1, wxEXPAND, 0);
+                sizer2 -> Add(sizer3, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
+
+                sizer -> Add(sizer2, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
+
+                sizer2 = new wxBoxSizer(wxVERTICAL);
+                sizer2 -> Add(new wxStaticText(this, -1, _("Fixed font:")), 
+                              0, wxLEFT | wxTOP, 10);
+                sizer2 -> Add(FixedFont = new wxListBox(this, -1, wxDefaultPosition, wxSize(200, 150)), 
+                              1, wxEXPAND | wxLEFT | wxRIGHT, 10);
+
+                sizer3 = new wxBoxSizer(wxHORIZONTAL);
+                sizer3 -> Add(FFI_i = new wxRadioButton(this, -1, _("use italic"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP), 
+                              1, wxEXPAND, 0);
+                sizer3 -> Add(FFI_s = new wxRadioButton(this, -1, _("use slant"), wxDefaultPosition, wxDefaultSize, 0), 
+                              1, wxEXPAND, 0);
+                sizer2 -> Add(sizer3, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
+
+                sizer -> Add(sizer2, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
+
+                topsizer -> Add(sizer);
+
+                topsizer -> Add(RadioBox = new wxRadioBox(this, -1, _("Font size:"), 
+                                                          wxDefaultPosition, wxDefaultSize, 3, choices, 3), 
+                                0, wxEXPAND | wxLEFT | wxRIGHT, 10);
+                                
+                topsizer -> Add(new wxStaticText(this, -1, _("Preview:")), 
+                                0, wxLEFT | wxTOP, 10);
+                topsizer -> Add(TestWin = new wxHtmlWindow(this, -1, wxDefaultPosition, wxSize(-1, 150)), 
+                                1, wxEXPAND | wxLEFT | wxTOP, 10);
+
+                sizer = new wxBoxSizer(wxHORIZONTAL);
+                sizer -> Add(new wxButton(this, wxID_OK, _("OK")), 0, wxALL, 10);
+                sizer -> Add(new wxButton(this, wxID_CANCEL, _("Cancel")), 0, wxALL, 10);
+                topsizer -> Add(sizer, 0, wxALIGN_RIGHT);
+
+                SetAutoLayout(TRUE);
+                SetSizer(topsizer);
+                topsizer -> Fit(this);
+                Centre(wxBOTH);
+            }
+            
+
+        void UpdateTestWin()
+            {
+                wxBusyCursor bcur;
+                SetFontsToHtmlWin(TestWin, 
+                                  NormalFont -> GetStringSelection(), SFI_i -> GetValue() ? wxITALIC : wxSLANT,
+                                  FixedFont -> GetStringSelection(), FFI_i -> GetValue() ? wxITALIC : wxSLANT,
+                                  RadioBox -> GetSelection());
+                TestWin -> SetPage(_("<html><body>"
+                                   "Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> "
+                                   "<b>Bold face.</b> <b><i>Bold italic face.</i></b><br>"
+                                   "<font size=-2>font size -2</font><br>"
+                                   "<font size=-1>font size -1</font><br>"
+                                   "<font size=+0>font size +0</font><br>"
+                                   "<font size=+1>font size +1</font><br>"
+                                   "<font size=+2>font size +2</font><br>"
+                                   "<font size=+3>font size +3</font><br>"
+                                   "<font size=+4>font size +4</font><br>"
+
+                                   "<p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> "
+                                   "<b><i>bold italic <u>underlined</u></i></b></tt><br>"
+                                   "<font size=-2>font size -2</font><br>"
+                                   "<font size=-1>font size -1</font><br>"
+                                   "<font size=+0>font size +0</font><br>"
+                                   "<font size=+1>font size +1</font><br>"
+                                   "<font size=+2>font size +2</font><br>"
+                                   "<font size=+3>font size +3</font><br>"
+                                   "<font size=+4>font size +4</font>"
+                                   "</body></html>"));
+            }
+
+        void OnUpdate(wxCloseEvent& event)
+            {
+                UpdateTestWin();
+            }
+
+        DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(wxHtmlHelpFrameOptionsDialog, wxDialog)
+    EVT_LISTBOX(-1, wxHtmlHelpFrameOptionsDialog::OnUpdate)
+    EVT_RADIOBOX(-1, wxHtmlHelpFrameOptionsDialog::OnUpdate)
+    EVT_RADIOBUTTON(-1, wxHtmlHelpFrameOptionsDialog::OnUpdate)
+END_EVENT_TABLE()
+
+
+void wxHtmlHelpFrame::OptionsDialog()
+{
+    wxHtmlHelpFrameOptionsDialog dlg(this);
+    unsigned i;
+        
+    if (m_NormalFonts == NULL) {
+        wxFontEnumerator enu;
+        enu.EnumerateFacenames();
+        m_NormalFonts = new wxArrayString;
+        *m_NormalFonts = *enu.GetFacenames();
+        m_NormalFonts -> Sort();
+    }
+    if (m_FixedFonts == NULL) {
+        wxFontEnumerator enu;
+        enu.EnumerateFacenames(wxFONTENCODING_SYSTEM, TRUE);
+        m_FixedFonts = new wxArrayString;
+        *m_FixedFonts = *enu.GetFacenames();
+        m_FixedFonts -> Sort();
+    }
+    
+    for (i = 0; i < m_NormalFonts -> GetCount(); i++)
+        dlg.NormalFont -> Append((*m_NormalFonts)[i]);
+    for (i = 0; i < m_FixedFonts -> GetCount(); i++)
+        dlg.FixedFont -> Append((*m_FixedFonts)[i]);
+    if (!m_NormalFace.IsEmpty()) dlg.NormalFont -> SetStringSelection(m_NormalFace);
+    else dlg.NormalFont -> SetSelection(0);
+    if (!m_FixedFace.IsEmpty()) dlg.FixedFont -> SetStringSelection(m_FixedFace);
+    else dlg.FixedFont -> SetSelection(0);
+    dlg.RadioBox -> SetSelection(m_FontSize);
+    dlg.SFI_i -> SetValue(m_NormalItalic == wxITALIC);
+    dlg.SFI_s -> SetValue(m_NormalItalic == wxSLANT);
+    dlg.FFI_i -> SetValue(m_FixedItalic == wxITALIC);
+    dlg.FFI_s -> SetValue(m_FixedItalic == wxSLANT);
+    dlg.UpdateTestWin();
+    
+    if (dlg.ShowModal() == wxID_OK) {
+        m_NormalFace = dlg.NormalFont -> GetStringSelection();
+        m_FixedFace = dlg.FixedFont -> GetStringSelection();
+        m_FontSize = dlg.RadioBox -> GetSelection();
+        m_NormalItalic = dlg.SFI_i -> GetValue() ? wxITALIC : wxSLANT;
+        m_FixedItalic = dlg.FFI_i -> GetValue() ? wxITALIC : wxSLANT;
+        SetFontsToHtmlWin(m_HtmlWin, m_NormalFace, m_NormalItalic, m_FixedFace, m_FixedItalic, m_FontSize);
+    }
+}
+
+
+
 
 
 /*
@@ -610,6 +793,9 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
                 m_Splitter -> SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
                 m_Cfg.navig_on = TRUE;
             }
+            break;
+        case wxID_HTML_OPTIONS :
+            OptionsDialog();
             break;
     }
 }
@@ -661,7 +847,7 @@ void wxHtmlHelpFrame::OnCloseWindow(wxCloseEvent& evt)
 }
 
 BEGIN_EVENT_TABLE(wxHtmlHelpFrame, wxFrame)
-    EVT_TOOL_RANGE(wxID_HTML_PANEL, wxID_HTML_FORWARD, wxHtmlHelpFrame::OnToolbar)
+    EVT_TOOL_RANGE(wxID_HTML_PANEL, wxID_HTML_OPTIONS, wxHtmlHelpFrame::OnToolbar)
     EVT_TREE_SEL_CHANGED(wxID_HTML_TREECTRL, wxHtmlHelpFrame::OnContentsSel)
     EVT_LISTBOX(wxID_HTML_INDEXLIST, wxHtmlHelpFrame::OnIndexSel)
     EVT_LISTBOX(wxID_HTML_SEARCHLIST, wxHtmlHelpFrame::OnSearchSel)

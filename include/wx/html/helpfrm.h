@@ -45,6 +45,7 @@ enum
     wxID_HTML_PANEL = wxID_HIGHEST + 1,
     wxID_HTML_BACK,
     wxID_HTML_FORWARD,
+    wxID_HTML_OPTIONS,
     wxID_HTML_TREECTRL,
     wxID_HTML_INDEXPAGE,
     wxID_HTML_INDEXLIST,
@@ -120,26 +121,36 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
         // * word may be pretended by + or -
         //   (+ : page must contain the word ; - : page can't contain the word)
         // * if there is no + or - before the word, + is default
+
         void RefreshLists(bool show_progress = FALSE);
         // Refreshes Contents and Index tabs
+
         void CreateContents(bool show_progress = FALSE);
         // Adds items to m_Contents tree control
+
         void CreateIndex(bool show_progress = FALSE);
         // Adds items to m_IndexList
+
         void CreateSearch();
         // Add books to search choice panel
+
         void UseConfig(wxConfigBase *config, const wxString& rootpath = wxEmptyString)
-        {
-            m_Config = config;
-            m_ConfigRoot = rootpath;
-            ReadCustomization(config, rootpath);
-        }
+            {
+                m_Config = config;
+                m_ConfigRoot = rootpath;
+                ReadCustomization(config, rootpath);
+            }
+
         void ReadCustomization(wxConfigBase *cfg, const wxString& path = wxEmptyString);
         // saves custom settings into cfg config. it will use the path 'path'
         // if given, otherwise it will save info into currently selected path.
         // saved values : things set by SetFonts, SetBorders.
         void WriteCustomization(wxConfigBase *cfg, const wxString& path = wxEmptyString);
         // ...
+
+        virtual void OptionsDialog();
+        // Displays options dialog (fonts etc.)
+
         void OnToolbar(wxCommandEvent& event);
         void OnContentsSel(wxTreeEvent& event);
         void OnIndexSel(wxCommandEvent& event);
@@ -180,6 +191,12 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
         int m_ContentsPage;
         int m_IndexPage;
         int m_SearchPage;
+        
+        // lists of available fonts (used in options dialog)
+        wxArrayString *m_NormalFonts, *m_FixedFonts;
+        int m_FontSize; // 0,1,2 = small,medium,big
+        wxString m_NormalFace, m_FixedFace;
+        int m_NormalItalic, m_FixedItalic;
 
     protected:
         void Init(wxHtmlHelpData* data = NULL);
