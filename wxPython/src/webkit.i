@@ -4,9 +4,9 @@
 //
 // Author:      Robin Dunn / Kevin Ollivier
 //
-// Created:     28-Feb-2003
+// Created:     18-Oct-2004
 // RCS-ID:      $Id$
-// Copyright:   (c) 2001 by Total Control Software
+// Copyright:   (c) 2004 by Total Control Software
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -22,64 +22,71 @@
 #define scalb scalbn
 #endif
 
+#if wxUSE_WEBKIT
 #include "wx/html/webkit.h"
+#endif
 %}
 
 //---------------------------------------------------------------------------
 
-%include typemaps.i
-%include my_typemaps.i
-
 %import core.i
-%import windows.i
-%import misc.i
+%pythoncode { wx = _core }
+%pythoncode { __docfilter__ = wx.__DocFilter(globals()) }
+
 
 %include _webkit_rename.i
 
-%pragma(python) code = "import wx"
-
 //---------------------------------------------------------------------------
 
-%{
-    // Put some wx default wxChar* values into wxStrings.
-    DECLARE_DEF_STRING(PanelNameStr);
-%}
+// Put some wx default wxChar* values into wxStrings.
+MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
+MAKE_CONST_WXSTRING2(WebKitNameStr, wxT("webkitctrl"))
 
+
+
+    
 %{
 #if !wxUSE_WEBKIT
+// a dummy class for ports that don't have wxWebKitCtrl
 class wxWebKitCtrl : public wxControl
 {
 public:
     wxWebKitCtrl(wxWindow *parent,
-                    wxWindowID winID,
-                    const wxString& strURL,
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize, long style = 0,
-                    const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = wxT("webkitctrl")) {}
+                 wxWindowID winID,
+                 const wxString& strURL,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize, long style = 0,
+                 const wxValidator& validator = wxDefaultValidator,
+                 const wxString& name = wxPyWebKitNameStr)
+    { wxPyRaiseNotImplemented(); }
+
+    wxWebKitCtrl() { wxPyRaiseNotImplemented(); }
+    
     bool Create(wxWindow *parent,
                 wxWindowID winID,
                 const wxString& strURL,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxT("webkitctrl")) {return false;}
+                const wxString& name = wxPyWebKitNameStr)
+    { return false; }
 
     void LoadURL(const wxString &url) {}
 
-    bool CanGoBack() {return false;}
-    bool CanGoForward() {return false;}
-    bool GoBack() {return false;}
-    bool GoForward() {return false;}
+    bool CanGoBack() { return false; }
+    bool CanGoForward() { return false; }
+    bool GoBack() { return false; }
+    bool GoForward() { return false; }
     void Reload() {}
-    void Stop(){}
-    bool CanGetPageSource(){return false;}
-    wxString GetPageSource(){return wxEmptyString;}
-    void SetPageSource(wxString& source, const wxString& baseUrl = wxEmptyString){}
+    void Stop() {}
+    bool CanGetPageSource() { return false; }
+    wxString GetPageSource() { return wxEmptyString; }
+    void SetPageSource(wxString& source, const wxString& baseUrl = wxEmptyString) {}
 };
 #endif
 %}
 
+// Now define it for SWIG.
 class wxWebKitCtrl : public wxControl
 {
 public:
@@ -89,14 +96,18 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize, long style = 0,
                     const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = wxT("webkitctrl"));
+                    const wxString& name = wxPyWebKitNameStr);
+
+    %name(PreWebKitCtrl)wxWebKitCtrl();
+
+    
     bool Create(wxWindow *parent,
                 wxWindowID winID,
                 const wxString& strURL,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxT("webkitctrl"));
+                const wxString& name = wxPyWebKitNameStr);
 
     void LoadURL(const wxString &url);
 
@@ -108,8 +119,9 @@ public:
     void Stop();
     bool CanGetPageSource();
     wxString GetPageSource();
-    void SetPageSource(wxString& source, const wxString& baseUrl = wxEmptyString);
+    void SetPageSource(wxString& source, const wxString& baseUrl = wxPyEmptyString);
 };
+
 
 %init %{
 

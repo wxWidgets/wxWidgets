@@ -185,6 +185,10 @@ Applied patch from Pim Van Heuven that modifies 4 files:
       TextEditMixin)
     - wxPython/wx/lib/wxpTag.py (some small fixes)
 
+Added (thanks to Kevin Ollivier!) wrappers for wx.WebKitCtrl for the
+OSX build.  Other platforms will raise an exception if you try to use
+it. 
+
 
 
 
