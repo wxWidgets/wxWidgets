@@ -204,20 +204,20 @@ wxWindowDC::~wxWindowDC()
     m_userRegion = (WXRegion) 0;
 }
 
-void wxWindowDC::DoFloodFill( long WXUNUSED(x1), long WXUNUSED(y1),
+void wxWindowDC::DoFloodFill( wxCoord WXUNUSED(x1), wxCoord WXUNUSED(y1),
                            const wxColour& WXUNUSED(col), int WXUNUSED(style) )
 {
     wxFAIL_MSG("not implemented");
 }
 
-bool wxWindowDC::DoGetPixel( long WXUNUSED(x1), long WXUNUSED(y1), wxColour *WXUNUSED(col) ) const
+bool wxWindowDC::DoGetPixel( wxCoord WXUNUSED(x1), wxCoord WXUNUSED(y1), wxColour *WXUNUSED(col) ) const
 {
     wxFAIL_MSG("not implemented");
 
     return FALSE;
 }
 
-void wxWindowDC::DoDrawLine( long x1, long y1, long x2, long y2 )
+void wxWindowDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
 {
     wxCHECK_RET( Ok(), "invalid dc" );
 
@@ -244,7 +244,7 @@ void wxWindowDC::DoDrawLine( long x1, long y1, long x2, long y2 )
     CalcBoundingBox(x2, y2);
 }
 
-void wxWindowDC::DoCrossHair( long x, long y )
+void wxWindowDC::DoCrossHair( wxCoord x, wxCoord y )
 {
     wxCHECK_RET( Ok(), "invalid dc" );
 
@@ -273,7 +273,7 @@ void wxWindowDC::DoCrossHair( long x, long y )
     }
 }
 
-void wxWindowDC::DoDrawArc( long x1, long y1, long x2, long y2, long xc, long yc )
+void wxWindowDC::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord xc, wxCoord yc )
 {
     wxCHECK_RET( Ok(), "invalid dc" );
 
@@ -288,10 +288,10 @@ void wxWindowDC::DoDrawArc( long x1, long y1, long x2, long y2, long xc, long yc
     int xxc_2 = XLOG2DEV_2 (xc);
     int yyc_2 = YLOG2DEV_2 (yc);
 
-    long dx = xx1 - xxc;
-    long dy = yy1 - yyc;
+    wxCoord dx = xx1 - xxc;
+    wxCoord dy = yy1 - yyc;
     double radius = sqrt (dx * dx + dy * dy);
-    long r = (long) radius;
+    wxCoord r = (wxCoord) radius;
 
     double radius1, radius2;
 
@@ -356,7 +356,7 @@ void wxWindowDC::DoDrawArc( long x1, long y1, long x2, long y2, long xc, long yc
     CalcBoundingBox (x2, y2);
 }
 
-void wxWindowDC::DoDrawEllipticArc( long x, long y, long width, long height, double sa, double ea )
+void wxWindowDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double sa, double ea )
 {
     wxCHECK_RET( Ok(), "invalid dc" );
 
@@ -401,7 +401,7 @@ void wxWindowDC::DoDrawEllipticArc( long x, long y, long width, long height, dou
     CalcBoundingBox (x + width, y + height);
 }
 
-void wxWindowDC::DoDrawPoint( long x, long y )
+void wxWindowDC::DoDrawPoint( wxCoord x, wxCoord y )
 {
     wxCHECK_RET( Ok(), "invalid dc" );
 
@@ -417,7 +417,7 @@ void wxWindowDC::DoDrawPoint( long x, long y )
     CalcBoundingBox (x, y);
 }
 
-void wxWindowDC::DoDrawLines( int n, wxPoint points[], long xoffset, long yoffset )
+void wxWindowDC::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset )
 {
     wxCHECK_RET( Ok(), "invalid dc" );
 
@@ -452,7 +452,7 @@ void wxWindowDC::DoDrawLines( int n, wxPoint points[], long xoffset, long yoffse
 }
 
 void wxWindowDC::DoDrawPolygon( int n, wxPoint points[],
-                                long xoffset, long yoffset, int fillStyle )
+                                wxCoord xoffset, wxCoord yoffset, int fillStyle )
 {
     wxCHECK_RET( Ok(), "invalid dc" );
 
@@ -505,7 +505,7 @@ void wxWindowDC::DoDrawPolygon( int n, wxPoint points[],
     delete[]xpoints2;
 }
 
-void wxWindowDC::DoDrawRectangle( long x, long y, long width, long height )
+void wxWindowDC::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
     wxCHECK_RET( Ok(), "invalid dc" );
 
@@ -550,7 +550,7 @@ void wxWindowDC::DoDrawRectangle( long x, long y, long width, long height )
     CalcBoundingBox (x + width, y + height);
 }
 
-void wxWindowDC::DoDrawRoundedRectangle( long x, long y, long width, long height, double radius )
+void wxWindowDC::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius )
 {
     wxCHECK_RET( Ok(), "invalid dc" );
 
@@ -714,7 +714,7 @@ void wxWindowDC::DoDrawRoundedRectangle( long x, long y, long width, long height
 
 }
 
-void wxWindowDC::DoDrawEllipse( long x, long y, long width, long height )
+void wxWindowDC::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
     wxCHECK_RET( Ok(), "invalid dc" );
 
@@ -777,7 +777,7 @@ bool wxWindowDC::CanDrawBitmap() const
 }
 
 #if 0
-void wxWindowDC::DoDrawIcon( const wxIcon &icon, long x, long y)
+void wxWindowDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y)
 {
     //  FreeGetPixelCache();
 
@@ -837,8 +837,8 @@ void wxWindowDC::DoDrawIcon( const wxIcon &icon, long x, long y)
 #endif // 0
 
 // TODO: use scaled Blit e.g. as per John Price's implementation in Contrib/Utilities
-bool wxWindowDC::DoBlit( long xdest, long ydest, long width, long height,
-                         wxDC *source, long xsrc, long ysrc, int rop, bool useMask )
+bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
+                         wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop, bool useMask )
 {
     wxCHECK_MSG( Ok(), FALSE, "invalid dc" );
 
@@ -1011,7 +1011,7 @@ bool wxWindowDC::DoBlit( long xdest, long ydest, long width, long height,
   return FALSE;
 }
 
-void wxWindowDC::DoDrawText( const wxString &text, long x, long y )
+void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 {
     wxCHECK_RET( Ok(), "invalid dc" );
 
@@ -1155,7 +1155,7 @@ void wxWindowDC::DoDrawText( const wxString &text, long x, long y )
             XLOG2DEV_2 (x), YLOG2DEV_2 (y) + ascent, (char*) (const char*) text, slen);
     }
 
-    long w, h;
+    wxCoord w, h;
     GetTextExtent (text, &w, &h);
     CalcBoundingBox (x + w, y + h);
     CalcBoundingBox (x, y);
@@ -1166,8 +1166,8 @@ bool wxWindowDC::CanGetTextExtent() const
     return TRUE;
 }
 
-void wxWindowDC::GetTextExtent( const wxString &string, long *width, long *height,
-                                long *descent, long *externalLeading,
+void wxWindowDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *height,
+                                wxCoord *descent, wxCoord *externalLeading,
                                 wxFont *font ) const
 {
     wxCHECK_RET( Ok(), "invalid dc" );
@@ -1216,7 +1216,7 @@ void wxWindowDC::GetTextExtent( const wxString &string, long *width, long *heigh
         *externalLeading = 0;
 }
 
-long wxWindowDC::GetCharWidth() const
+wxCoord wxWindowDC::GetCharWidth() const
 {
     wxCHECK_MSG( Ok(), 0, "invalid dc" );
     wxCHECK_MSG( m_font.Ok(), 0, "invalid font" );
@@ -1230,7 +1230,7 @@ long wxWindowDC::GetCharWidth() const
     return XDEV2LOGREL(overall.width);
 }
 
-long wxWindowDC::GetCharHeight() const
+wxCoord wxWindowDC::GetCharHeight() const
 {
     wxCHECK_MSG( Ok(), 0, "invalid dc" );
     wxCHECK_MSG( m_font.Ok(), 0, "invalid font" );
@@ -1309,7 +1309,7 @@ void wxWindowDC::SetFont( const wxFont &font )
 
     if (!m_font.Ok())
     {
-        if ((m_oldFont != (WXFont) 0) && ((long) m_oldFont != -1))
+        if ((m_oldFont != (WXFont) 0) && ((wxCoord) m_oldFont != -1))
         {
             XSetFont ((Display*) m_display, (GC) m_gc, (Font) m_oldFont);
 
@@ -1991,7 +1991,7 @@ void wxWindowDC::SetDCClipping()
 
 }
 
-void wxWindowDC::DoSetClippingRegion( long x, long y, long width, long height )
+void wxWindowDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
     wxDC::DoSetClippingRegion( x, y, width, height );
 

@@ -59,104 +59,104 @@ public:
     virtual void SetMapMode(int mode);
     virtual void SetUserScale(double x, double y);
     virtual void SetLogicalScale(double x, double y);
-    virtual void SetLogicalOrigin(long x, long y);
-    virtual void SetDeviceOrigin(long x, long y);
+    virtual void SetLogicalOrigin(wxCoord x, wxCoord y);
+    virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
 
 protected:
-    virtual void DoDrawIcon(const wxIcon& icon, long x, long y);
-    virtual void DoDrawBitmap(const wxBitmap &bmp, long x, long y,
+    virtual void DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
+    virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
                               bool useMask = FALSE);
 
-    virtual void DoSetClippingRegion(long x, long y,
-                                     long width, long height);
+    virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
+                                     wxCoord width, wxCoord height);
     virtual void DoGetSize(int *width, int *height) const;
     virtual void DoGetSizeMM(int* width, int* height) const;
 
 public:
     void ComputeScaleAndOrigin();
 
-    long XDEV2LOG(long x) const
+    wxCoord XDEV2LOG(wxCoord x) const
     {
-        long new_x = x - m_deviceOriginX;
+        wxCoord new_x = x - m_deviceOriginX;
         if (new_x > 0)
-            return (long)((double)(new_x) / m_scaleX + 0.5) * m_signX + m_logicalOriginX;
+            return (wxCoord)((double)(new_x) / m_scaleX + 0.5) * m_signX + m_logicalOriginX;
         else
-            return (long)((double)(new_x) / m_scaleX - 0.5) * m_signX + m_logicalOriginX;
+            return (wxCoord)((double)(new_x) / m_scaleX - 0.5) * m_signX + m_logicalOriginX;
     }
-    long XDEV2LOGREL(long x) const
+    wxCoord XDEV2LOGREL(wxCoord x) const
     {
         if (x > 0)
-            return (long)((double)(x) / m_scaleX + 0.5);
+            return (wxCoord)((double)(x) / m_scaleX + 0.5);
         else
-            return (long)((double)(x) / m_scaleX - 0.5);
+            return (wxCoord)((double)(x) / m_scaleX - 0.5);
     }
-    long YDEV2LOG(long y) const
+    wxCoord YDEV2LOG(wxCoord y) const
     {
-        long new_y = y - m_deviceOriginY;
+        wxCoord new_y = y - m_deviceOriginY;
         if (new_y > 0)
-            return (long)((double)(new_y) / m_scaleY + 0.5) * m_signY + m_logicalOriginY;
+            return (wxCoord)((double)(new_y) / m_scaleY + 0.5) * m_signY + m_logicalOriginY;
         else
-            return (long)((double)(new_y) / m_scaleY - 0.5) * m_signY + m_logicalOriginY;
+            return (wxCoord)((double)(new_y) / m_scaleY - 0.5) * m_signY + m_logicalOriginY;
     }
-    long YDEV2LOGREL(long y) const
+    wxCoord YDEV2LOGREL(wxCoord y) const
     {
         if (y > 0)
-            return (long)((double)(y) / m_scaleY + 0.5);
+            return (wxCoord)((double)(y) / m_scaleY + 0.5);
         else
-            return (long)((double)(y) / m_scaleY - 0.5);
+            return (wxCoord)((double)(y) / m_scaleY - 0.5);
     }
-    long XLOG2DEV(long x) const
+    wxCoord XLOG2DEV(wxCoord x) const
     {
-        long new_x = x - m_logicalOriginX;
+        wxCoord new_x = x - m_logicalOriginX;
         if (new_x > 0)
-            return (long)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX;
+            return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX;
         else
-            return (long)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX;
+            return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX;
     }
     // Without device translation, for backing pixmap purposes
-    long XLOG2DEV_2(long x) const
+    wxCoord XLOG2DEV_2(wxCoord x) const
     {
-        long new_x = x - m_logicalOriginX;
+        wxCoord new_x = x - m_logicalOriginX;
         if (new_x > 0)
-            return (long)((double)(new_x) * m_scaleX + 0.5) * m_signX;
+            return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX;
         else
-            return (long)((double)(new_x) * m_scaleX - 0.5) * m_signX;
+            return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX;
     }
-    long XLOG2DEVREL(long x) const
+    wxCoord XLOG2DEVREL(wxCoord x) const
     {
         if (x > 0)
-            return (long)((double)(x) * m_scaleX + 0.5);
+            return (wxCoord)((double)(x) * m_scaleX + 0.5);
         else
-            return (long)((double)(x) * m_scaleX - 0.5);
+            return (wxCoord)((double)(x) * m_scaleX - 0.5);
     }
-    long YLOG2DEV(long y) const
+    wxCoord YLOG2DEV(wxCoord y) const
     {
-        long new_y = y - m_logicalOriginY;
+        wxCoord new_y = y - m_logicalOriginY;
         if (new_y > 0)
-            return (long)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY;
+            return (wxCoord)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY;
         else
-            return (long)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY;
+            return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY;
     }
     // Without device translation, for backing pixmap purposes
-    long YLOG2DEV_2(long y) const
+    wxCoord YLOG2DEV_2(wxCoord y) const
     {
-        long new_y = y - m_logicalOriginY;
+        wxCoord new_y = y - m_logicalOriginY;
         if (new_y > 0)
-            return (long)((double)(new_y) * m_scaleY + 0.5) * m_signY;
+            return (wxCoord)((double)(new_y) * m_scaleY + 0.5) * m_signY;
         else
-            return (long)((double)(new_y) * m_scaleY - 0.5) * m_signY;
+            return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY;
     }
-    long YLOG2DEVREL(long y) const
+    wxCoord YLOG2DEVREL(wxCoord y) const
     {
         if (y > 0)
-            return (long)((double)(y) * m_scaleY + 0.5);
+            return (wxCoord)((double)(y) * m_scaleY + 0.5);
         else
-            return (long)((double)(y) * m_scaleY - 0.5);
+            return (wxCoord)((double)(y) * m_scaleY - 0.5);
     }
 
-    void SetInternalDeviceOrigin( long x, long y );
-    void GetInternalDeviceOrigin( long *x, long *y );
+    void SetInternalDeviceOrigin( wxCoord x, wxCoord y );
+    void GetInternalDeviceOrigin( wxCoord *x, wxCoord *y );
 
 public:
     // not sure what for, but what is a mm on a screen you don't know the size of?
@@ -164,11 +164,11 @@ public:
 
     // If un-scrolled is non-zero or d.o. changes with scrolling. Set using
     // SetInternalDeviceOrigin().
-    long         m_internalDeviceOriginX,m_internalDeviceOriginY;
+    wxCoord         m_internalDeviceOriginX,m_internalDeviceOriginY;
 
     // To be set by external classes such as wxScrolledWindow using
     // SetDeviceOrigin()
-    long         m_externalDeviceOriginX,m_externalDeviceOriginY;
+    wxCoord         m_externalDeviceOriginX,m_externalDeviceOriginY;
 
     // recompute scale?
     bool         m_needComputeScaleX, m_needComputeScaleY;
