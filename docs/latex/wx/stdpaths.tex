@@ -40,6 +40,9 @@ applications. I.e. under Unix you should follow the standard installation
 conventions and under Mac you should create your application bundle according
 to the Apple guidelines. Again, this class doesn't help you to do it.
 
+This class is MT-safe: its methods may be called concurrently from different
+threads without additional locking.
+
 \wxheading{Derived from}
 
 No base class
@@ -61,7 +64,7 @@ Return the directory containing the system config files.
 Example return values:
 \begin{itemize}
     \item Unix: \texttt{/etc}
-    \item Windows: \texttt{C:$\backslash$Windows}
+    \item Windows: \texttt{C:$\backslash$Documents and Settings$\backslash$All Users$\backslash$Application Data}
     \item Mac: \texttt{/Library/Preferences}
 \end{itemize}
 
