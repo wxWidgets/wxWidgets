@@ -259,6 +259,7 @@ void wxStreamBuffer::GetFromBuffer(void *buffer, size_t size)
 void wxStreamBuffer::PutToBuffer(const void *buffer, size_t size)
 {
     size_t left = GetBytesLeft();
+    
     if ( size > left )
     {
         if ( m_fixed )
@@ -445,17 +446,22 @@ size_t wxStreamBuffer::Read(wxStreamBuffer *dbuf)
 
 size_t wxStreamBuffer::Write(const void *buffer, size_t size)
 {
-    wxOutputStream *outStream = GetOutputStream();
-
-    wxCHECK_MSG( outStream, 0, _T("should have a stream in wxStreamBuffer") );
-
-    // lasterror is reset before all new IO calls
-    m_stream->Reset();
+    if (m_stream)
+    {
+        // lasterror is reset before all new IO calls
+        m_stream->Reset();
+    }
+    
+    size_t ret = 0;
 
     if ( !HasBuffer() && m_fixed )
     {
+        wxOutputStream *outStream = GetOutputStream();
+
+        wxCHECK_MSG( outStream, 0, _T("should have a stream in wxStreamBuffer") );
+
         // no buffer, just forward the call to the stream
-        m_stream->m_lastcount = outStream->OnSysWrite(buffer, size);
+        ret = outStream->OnSysWrite(buffer, size);
     }
     else // we [may] have a buffer, use it
     {
@@ -473,6 +479,7 @@ size_t wxStreamBuffer::Write(const void *buffer, size_t size)
             //
             // FIXME: fine, but if it fails we should (re)try writing it by
             //        chunks as this will (hopefully) always work (VZ)
+            
             if ( size > left && m_fixed )
             {
                 PutToBuffer(buffer, left);
@@ -495,10 +502,16 @@ size_t wxStreamBuffer::Write(const void *buffer, size_t size)
             }
         }
 
-        m_stream->m_lastcount = orig_size - size;
+        ret = orig_size - size;
     }
 
-    return m_stream->m_lastcount;
+    if (m_stream)
+    {
+        // i am not entirely sure what we do this for
+        m_stream->m_lastcount = ret;
+    }
+    
+    return ret;
 }
 
 size_t wxStreamBuffer::Write(wxStreamBuffer *sbuf)
