@@ -128,6 +128,25 @@ public:
         }
     }
 
+    void SetPixmap(const wxBitmap& bitmap)
+    {
+        if (bitmap.Ok())
+        {
+            GdkBitmap *mask = bitmap.GetMask() ? bitmap.GetMask()->GetBitmap()
+                                               : (GdkBitmap *)NULL;
+#ifdef __WXGTK20__
+            if (bitmap.HasPixbuf())
+                gtk_image_set_from_pixbuf(GTK_IMAGE(m_pixmap),
+                                          bitmap.GetPixbuf());
+            else
+                gtk_image_set_from_pixmap(GTK_IMAGE(m_pixmap),
+                                          bitmap.GetPixmap(), mask);
+#else
+            gtk_pixmap_set(GTK_PIXMAP(m_pixmap), bitmap.GetPixmap(), mask);
+#endif // !__WXGTK20__
+        }
+    }
+
     GtkWidget            *m_item;
     GtkWidget            *m_pixmap;
 
@@ -166,16 +185,7 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
     {
         tool->Toggle();
 
-        wxBitmap bitmap = tool->GetBitmap();
-        if ( bitmap.Ok() )
-        {
-            GtkPixmap *pixmap = GTK_PIXMAP( tool->m_pixmap );
-
-            GdkBitmap *mask = bitmap.GetMask() ? bitmap.GetMask()->GetBitmap()
-                                               : (GdkBitmap *)NULL;
-
-            gtk_pixmap_set( pixmap, bitmap.GetPixmap(), mask );
-        }
+        tool->SetPixmap(tool->GetBitmap());
 
         if ( tool->IsRadio() && !tool->IsToggled() )
         {
@@ -189,16 +199,7 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
         // revert back
         tool->Toggle();
 
-        wxBitmap bitmap = tool->GetBitmap();
-        if ( bitmap.Ok() )
-        {
-            GtkPixmap *pixmap = GTK_PIXMAP( tool->m_pixmap );
-
-            GdkBitmap *mask = bitmap.GetMask() ? bitmap.GetMask()->GetBitmap()
-                                               : (GdkBitmap *)NULL;
-
-            gtk_pixmap_set( pixmap, bitmap.GetPixmap(), mask );
-        }
+        tool->SetPixmap(tool->GetBitmap());
     }
 }
 
@@ -393,14 +394,21 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 
             GtkWidget *tool_pixmap = (GtkWidget *)NULL;
 
+
+#ifdef __WXGTK20__
+            tool_pixmap = gtk_image_new();
+            tool->m_pixmap = tool_pixmap;
+            tool->SetPixmap(bitmap);
+#else
             GdkPixmap *pixmap = bitmap.GetPixmap();
 
             GdkBitmap *mask = (GdkBitmap *)NULL;
             if ( bitmap.GetMask() )
               mask = bitmap.GetMask()->GetBitmap();
-
+            
             tool_pixmap = gtk_pixmap_new( pixmap, mask );
             gtk_pixmap_set_build_insensitive( GTK_PIXMAP(tool_pixmap), TRUE );
+#endif
 
             gtk_misc_set_alignment( GTK_MISC(tool_pixmap), 0.5, 0.5 );
 
@@ -548,16 +556,7 @@ void wxToolBar::DoToggleTool( wxToolBarToolBase *toolBase, bool toggle )
     GtkWidget *item = tool->m_item;
     if ( item && GTK_IS_TOGGLE_BUTTON(item) )
     {
-        wxBitmap bitmap = tool->GetBitmap();
-        if ( bitmap.Ok() )
-        {
-            GtkPixmap *pixmap = GTK_PIXMAP( tool->m_pixmap );
-
-            GdkBitmap *mask = bitmap.GetMask() ? bitmap.GetMask()->GetBitmap()
-                                               : (GdkBitmap *)NULL;
-
-            gtk_pixmap_set( pixmap, bitmap.GetPixmap(), mask );
-        }
+        tool->SetPixmap(tool->GetBitmap());
 
         m_blockEvent = TRUE;
 
