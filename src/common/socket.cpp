@@ -45,12 +45,12 @@
 #include "wx/socket.h"
 
 
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) || defined(__WXPM__)
 #define PROCESS_EVENTS() wxYield()
 #elif defined(__WXGTK__)
 #include <gtk/gtk.h>
 #define PROCESS_EVENTS() gtk_main_iteration()
-#endif  
+#endif
 
 
 // --------------------------------------------------------------
@@ -188,7 +188,7 @@ wxUint32 wxSocketBase::DeferRead(char *buffer, wxUint32 nbytes)
     DoDefer();
   }
 
-  // Wait for buffer completion. 
+  // Wait for buffer completion.
   while (m_defer_buffer != NULL)
     PROCESS_EVENTS();
 
@@ -235,13 +235,13 @@ wxUint32 wxSocketBase::_Read(char* buffer, wxUint32 nbytes)
 
   // If the socket is not connected, or we have got the whole
   // needed buffer, return immedately
-  if (!m_connected || !m_socket || !nbytes) 
+  if (!m_connected || !m_socket || !nbytes)
     return total;
 
   // Possible combinations (they are checked in this order)
   // NOWAIT
   // SPEED | WAITALL
-  // SPEED          
+  // SPEED
   // WAITALL
   // NONE
   //
@@ -442,7 +442,7 @@ wxUint32 wxSocketBase::DeferWrite(const char *buffer, wxUint32 nbytes)
     DoDefer();
   }
 
-  // Wait for buffer completion. 
+  // Wait for buffer completion.
   while (m_defer_buffer != NULL)
     PROCESS_EVENTS();
 
@@ -490,7 +490,7 @@ wxUint32 wxSocketBase::_Write(const char *buffer, wxUint32 nbytes)
   // Possible combinations (they are checked in this order)
   // NOWAIT
   // SPEED | WAITALL
-  // SPEED          
+  // SPEED
   // WAITALL
   // NONE
   //
@@ -686,7 +686,7 @@ wxSocketBase& wxSocketBase::Discard()
 
   // TODO: TriggerRead
   return *this;
-  
+
 #undef MAX_BUFSIZE
 }
 
@@ -901,7 +901,7 @@ void wxSocketBase::SetFlags(wxSockFlags _flags)
 {
   m_flags = _flags;
 }
-                    
+
 // --------------------------------------------------------------
 // wxSocketBase callback management
 // --------------------------------------------------------------

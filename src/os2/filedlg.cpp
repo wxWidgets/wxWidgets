@@ -1,17 +1,13 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        filedlg.cpp
 // Purpose:     wxFileDialog
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/05/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) David Webster
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-
-#ifdef __GNUG__
-#pragma implementation "filedlg.h"
-#endif
 
 #include "wx/defs.h"
 #include "wx/utils.h"
@@ -23,10 +19,16 @@
 IMPLEMENT_CLASS(wxFileDialog, wxDialog)
 #endif
 
-wxString wxFileSelector(const char *title,
-                     const char *defaultDir, const char *defaultFileName,
-                     const char *defaultExtension, const char *filter, int flags,
-                     wxWindow *parent, int x, int y)
+wxString wxFileSelector( const char* title
+                        ,const char* defaultDir
+                        ,const char* defaultFileName
+                        ,const char* defaultExtension
+                        ,const char* filter
+                        ,int         flags
+                        ,wxWindow*   parent
+                        ,int         x
+                        ,int         y
+                       )
 {
     // If there's a default extension specified but no filter, we create a suitable
     // filter.
@@ -59,16 +61,16 @@ wxString wxFileSelector(const char *title,
         return wxEmptyString;
 }
 
-wxString wxFileSelectorEx(const char *title,
-                       const char *defaultDir,
-                       const char *defaultFileName,
-                       int* defaultFilterIndex,
-                       const char *filter,
-                       int       flags,
-                       wxWindow* parent,
-                       int       x,
-                       int       y)
-
+wxString wxFileSelectorEx( const char* title
+                          ,const char* defaultDir
+                          ,const char* defaultFileName
+                          ,int*        defaultFilterIndex
+                          ,const char* filter
+                          ,int         flags
+                          ,wxWindow*   parent
+                          ,int         x
+                          ,int         y
+                         )
 {
     wxFileDialog fileDialog(parent, title ? title : "", defaultDir ? defaultDir : "",
         defaultFileName ? defaultFileName : "", filter ? filter : "", flags, wxPoint(x, y));
@@ -82,9 +84,14 @@ wxString wxFileSelectorEx(const char *title,
         return wxEmptyString;
 }
 
-wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
-        const wxString& defaultDir, const wxString& defaultFileName, const wxString& wildCard,
-        long style, const wxPoint& pos)
+wxFileDialog::wxFileDialog( wxWindow*       parent
+                           ,const wxString& message
+                           ,const wxString& defaultDir
+                           ,const wxString& defaultFileName
+                           ,const wxString& wildCard
+                           ,long            style
+                           ,const wxPoint&  pos
+                          )
 {
     m_message = message;
     m_dialogStyle = style;
@@ -103,10 +110,15 @@ int wxFileDialog::ShowModal()
 }
 
 // Generic file load/save dialog
-static wxString wxDefaultFileSelector(bool load, const char *what, const char *extension, const char *default_name, wxWindow *parent)
+static wxString wxDefaultFileSelector( bool        load
+                                      ,const char* what
+                                      ,const char* extension
+                                      ,const char* default_name
+                                      ,wxWindow*   parent
+                                     )
 {
   char *ext = (char *)extension;
-  
+
   char prompt[50];
   wxString str;
   if (load)
@@ -123,14 +135,22 @@ static wxString wxDefaultFileSelector(bool load, const char *what, const char *e
 }
 
 // Generic file load dialog
-wxString wxLoadFileSelector(const char *what, const char *extension, const char *default_name, wxWindow *parent)
+wxString wxLoadFileSelector( const char* what
+                            ,const char* extension
+                            ,const char* default_name
+                            ,wxWindow*   parent
+                           )
 {
   return wxDefaultFileSelector(TRUE, what, extension, default_name, parent);
 }
 
 
 // Generic file save dialog
-wxString wxSaveFileSelector(const char *what, const char *extension, const char *default_name, wxWindow *parent)
+wxString wxSaveFileSelector( const char* what
+                            ,const char* extension
+                            ,const char* default_name
+                            ,wxWindow*   parent
+                           )
 {
   return wxDefaultFileSelector(FALSE, what, extension, default_name, parent);
 }

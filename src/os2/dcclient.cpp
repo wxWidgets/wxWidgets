@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcclient.cpp
 // Purpose:     wxClientDC class
-// Author:      Julian Smart
+// Author:      David Webster
 // Modified by:
-// Created:     01/02/97
+// Created:     09/21/99
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
+// Copyright:   (c) David Webster
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

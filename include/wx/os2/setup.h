@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        setup.h
 // Purpose:     Configuration for the library
-// Author:      Julian Smart
+// Author:      David Webster
 // Modified by:
-// Created:     01/02/97
+// Created:     04/02/99
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) David Webster
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcclient.h
 // Purpose:     wxClientDC class
-// Author:      Julian Smart
+// Author:      David Webster
 // Modified by:
-// Created:     01/02/97
+// Created:     09/12/99
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
+// Copyright:   (c) David Webster
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -15,10 +15,6 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
-
-#ifdef __GNUG__
-    #pragma interface "dcclient.h"
-#endif
 
 #include "wx/dc.h"
 #include "wx/dynarray.h"
