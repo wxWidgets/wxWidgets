@@ -524,12 +524,19 @@ bool wxNotebook::RefreshLayout(bool force)
         unsigned int nCount = m_pages.Count();
         for ( unsigned int nPage = 0; nPage < nCount; nPage++ ) {
             wxNotebookPage *pPage = m_pages[nPage];
+            wxRect clientRect = GetAvailableClientSize();
             if (pPage->IsShown())
             {
-                wxRect clientRect = GetAvailableClientSize();
                 pPage->SetSize(clientRect.x, clientRect.y, clientRect.width, clientRect.height);
                 if ( pPage->GetAutoLayout() )
                    pPage->Layout();
+            }
+            // MBN: this is probably just hiding a problem under the carpet,
+            // but: with OpenMotif 2.2 (not Lesstif), not moving the window
+            // may cause the tabs to be not clickable.
+            else
+            {
+                pPage->Move(clientRect.x, clientRect.y);
             }
         }
         Refresh();
