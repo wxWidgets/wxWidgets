@@ -105,7 +105,6 @@ public:
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     // IMPLEMENTATION
-    virtual bool MSWProcessMessage(WXMSG* pMsg);
     virtual bool MSWOnClose();
     virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
                                 WXUINT message, WXWPARAM wParam, WXLPARAM lParam);

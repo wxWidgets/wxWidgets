@@ -58,11 +58,6 @@ extern wxList WXDLLEXPORT wxPendingDelete;
     END_EVENT_TABLE()
 #endif
 
-bool wxDialog::MSWProcessMessage(WXMSG* pMsg)
-{
-  return (::IsDialogMessage((HWND) GetHWND(), (MSG*)pMsg) != 0);
-}
-
 bool wxDialog::MSWOnClose(void)
 {
     return Close();
@@ -361,12 +356,14 @@ bool wxDialog::Show(bool show)
       // a message before the deletion.
       while (wxModalDialogs.Member(this) && m_modalShowing && GetMessage(&msg, NULL, 0, 0))
       {
-        if (m_acceleratorTable.Ok() &&
-          ::TranslateAccelerator((HWND) GetHWND(), (HACCEL) m_acceleratorTable.GetHACCEL(), &msg))
+        if ( m_acceleratorTable.Ok() &&
+             ::TranslateAccelerator((HWND)GetHWND(),
+                                     (HACCEL)m_acceleratorTable.GetHACCEL(),
+                                     &msg) )
         {
             // Have processed the message
         }
-        else if (!IsDialogMessage((HWND) GetHWND(), &msg))
+        else if ( !wxTheApp->ProcessMessage((WXMSG *)&msg) )
         {
           TranslateMessage(&msg);
           DispatchMessage(&msg);
