@@ -94,11 +94,14 @@ initialTask = Task([ Job("", ["distrib/all/build-setup", CFGFILE]),
 # on the nature of the build machine configurations...) is a separate
 # task.
 
-jaguarTask =  Task( Job(config.OSX_HOST_jaguar,
+jaguarTask =  Task( Job("whopper.23",
                         ["distrib/all/build-osx", CFGFILE, config.OSX_HOST_jaguar, "jaguar", "2.3"]) )
 
-pantherTask =  Task( Job(config.OSX_HOST_panther,
-                         ["distrib/all/build-osx", CFGFILE, config.OSX_HOST_panther, "panther", "2.3"]) )
+pantherTask =  Task([ Job("bigmac.23", 
+                          ["distrib/all/build-osx", CFGFILE, config.OSX_HOST_panther, "panther", "2.3"]),
+                      Job("bigmac.24",
+                          ["distrib/all/build-osx", CFGFILE, config.OSX_HOST_panther, "panther", "2.4"])
+                     ])
 
 beastTask1 = Task([ Job("beast.23",     ["distrib/all/build-windows", CFGFILE, "2.3"]),
                     Job("beast.24",     ["distrib/all/build-windows", CFGFILE, "2.4"]),
