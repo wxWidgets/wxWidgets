@@ -307,7 +307,7 @@ wxBitmap::wxBitmap(const wxImage& image, int depth = -1)
 
     MGLDevCtx *bdc = CreateTmpDC();
 
-    if ( depth <= 8 && image.HasPalette() )
+    if ( GetDepth() <= 8 && image.HasPalette() )
         SetPalette(image.GetPalette());
 
     bdc->bitBlt(idc, 0, 0, width, height, 0, 0, MGL_REPLACE_MODE);
