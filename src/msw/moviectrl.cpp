@@ -20,6 +20,8 @@
 #pragma hdrstop
 #endif
 
+#define wxUSE_MOVIECTRL 1
+
 #if wxUSE_MOVIECTRL
 
 #include "wx/moviectrl.h"
