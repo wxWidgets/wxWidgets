@@ -21,7 +21,10 @@ class WXDLLEXPORT wxPopupWindow : public wxPopupWindowBase
 public:
     wxPopupWindow() { }
 
-    wxPopupWindow(wxWindow* pParent) { (void)Create(pParent); }
+    wxPopupWindow( wxWindow* pParent
+                  ,int       nFlags
+                 )
+    { (void)Create(pParent, nFlags); }
 
     bool Create( wxWindow* pParent
                 ,int       nFlags = wxBORDER_NONE
@@ -30,19 +33,8 @@ public:
     // Implementation only from now on
     // -------------------------------
     //
-
-    //
-    // Override Show() to prevent wxPopupWindow from being activated
-    //
-    virtual bool Show(bool show = TRUE);
-
-    //
-    // Find a shown popup window with the given window as parent, return NULL
-    // if none
-    //
-    static wxPopupWindow *FindPopupFor(wxWindow* pWin);
-
 protected:
+
     virtual void DoGetPosition( int* pnX
                                ,int* pny
                               ) const;
@@ -50,6 +42,11 @@ protected:
     virtual WXDWORD OS2GetStyle( long     lFlags
                                 ,WXDWORD* dwExstyle
                                ) const;
+    //
+    // Get the HWND to be used as parent of this window with CreateWindow()
+    //
+    virtual WXHWND OS2GetParent(void) const;
+
     //
     // The list of all currently shown popup windows used by FindPopupFor()
     //

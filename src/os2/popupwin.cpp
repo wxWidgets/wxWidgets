@@ -30,7 +30,7 @@
 
 #include "wx/popupwin.h"
 
-wxWindowList wxPopupWindow::m_svShownPopups;
+IMPLEMENT_DYNAMIC_CLASS(wxPopupWindow, wxWindow)
 
 // ============================================================================
 // implementation
@@ -64,6 +64,14 @@ void wxPopupWindow::DoGetPosition(
     GetParent()->ClientToScreen(pnX, pnY);
 } // end of wxPopupWindow::DoGetPosition
 
+WXHWND wxPopupWindow::OS2GetParent() const
+{
+    // we must be a child of the desktop to be able to extend beyond the parent
+    // window client area (like the comboboxes drop downs do)
+    //
+    return (WXHWND)HWND_DESKTOP;
+} // end of wxPopupWindow::OS2GetParent
+
 WXDWORD wxPopupWindow::OS2GetStyle(
   long                              lFlags
 , WXDWORD*                          dwExstyle
@@ -76,73 +84,4 @@ WXDWORD wxPopupWindow::OS2GetStyle(
     return dwStyle;
 } // end of wxPopupWindow::OS2GetStyle
 
-bool wxPopupWindow::Show(
-  bool                              bShow
-)
-{
-    SWP                             vSwp;
-    //
-    // Skip wxWindow::Show() which calls wxBringWindowToTop(): this results in
-    // activating the popup window and stealing the atcivation from our parent
-    // which means that the parent frame becomes deactivated when opening a
-    // combobox, for example -- definitely not what we want
-    //
-    if (!wxWindowBase::Show(bShow))
-        return FALSE;
-
-    if (bShow)
-    {
-        m_svShownPopups.Append(this);
-    }
-    else // remove from the shown list
-    {
-        m_svShownPopups.DeleteObject(this);
-    }
-    ::WinQueryWindowPos(GetHwnd(), &vSwp);
-
-    if (bShow)
-    {
-        ::WinSetWindowPos( GetHwnd()
-                          ,HWND_TOP
-                          ,vSwp.x
-                          ,vSwp.y
-                          ,vSwp.cx
-                          ,vSwp.cy
-                          ,SWP_DEACTIVATE | SWP_SHOW | SWP_ZORDER
-                         );
-    }
-    else
-    {
-        ::WinSetWindowPos( GetHwnd()
-                          ,HWND_BOTTOM
-                          ,vSwp.x
-                          ,vSwp.y
-                          ,vSwp.cx
-                          ,vSwp.cy
-                          ,SWP_HIDE | SWP_ZORDER
-                         );
-    }
-    return TRUE;
-} // end of wxPopupWindow::Show
-
-/* static */
-wxPopupWindow* wxPopupWindow::FindPopupFor(
-  wxWindow*                         pWinParent
-)
-{
-    //
-    // Find a popup with the given parent in the linked list of all shown
-    // popups
-    //
-    for ( wxWindowList::Node *node = m_svShownPopups.GetFirst();
-          node;
-          node = node->GetNext() )
-    {
-        wxWindow*                   pWin = node->GetData();
-
-        if (pWin->GetParent() == pWinParent )
-            return (wxPopupWindow *)pWin;
-    }
-    return NULL;
-} // end of wxPopupWindow::FindPopupFor
 

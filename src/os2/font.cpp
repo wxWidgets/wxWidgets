@@ -1117,5 +1117,5 @@ void wxFont::SetPS(
     M_FONTDATA->SetPS(hPS);
 
     RealizeResource();
-} // end of wxFont::SetUnderlined
+} // end of wxFont::SetPS
 

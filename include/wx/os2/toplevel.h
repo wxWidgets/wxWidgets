@@ -86,6 +86,11 @@ public:
     // --------------------------
     //
            PSWP         GetSwpClient(void) { return &m_vSwpClient; }
+
+           void         OnActivate(wxActivateEvent& rEvent);
+
+           void         SetLastFocus(wxWindow *pWin) { m_pWinLastFocused = pWin; }
+           wxWindow*    GetLastFocus(void) const { return m_pWinLastFocused; }
 protected:
     //
     // Common part of all ctors
@@ -157,11 +162,15 @@ protected:
     bool                            m_bFsIsMaximized;
     bool                            m_bFsIsShowing;
 
+    wxWindow*                       m_pWinLastFocused;
+
     WXHWND                          m_hFrame;
     SWP                             m_vSwp;
     SWP                             m_vSwpClient;
     static bool                     m_sbInitialized;
     static wxWindow*                m_spHiddenParent;
+
+    DECLARE_EVENT_TABLE()
 }; // end of CLASS wxTopLevelWindowOS2
 
 //

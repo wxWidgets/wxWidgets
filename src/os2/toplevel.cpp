@@ -60,6 +60,14 @@ bool                 wxTopLevelWindowOS2::m_sbInitialized = FALSE;
 wxWindow*            wxTopLevelWindowOS2::m_spHiddenParent = NULL;
 
 // ============================================================================
+// wxTopLevelWindowOS2 implementation
+// ============================================================================
+
+BEGIN_EVENT_TABLE(wxTopLevelWindowOS2, wxTopLevelWindowBase)
+    EVT_ACTIVATE(wxTopLevelWindowOS2::OnActivate)
+END_EVENT_TABLE()
+
+// ============================================================================
 // wxTopLevelWindowMSW implementation
 // ============================================================================
 
@@ -70,21 +78,20 @@ MRESULT EXPENTRY wxDlgProc( HWND WXUNUSED(hWnd)
                            ,MPARAM WXUNUSED(lParam)
                           )
 {
-    if (uMessage == WM_INITDLG)
+    switch(uMessage)
     {
-        //
-        // For this message, returning TRUE tells system to set focus to the
-        // first control in the dialog box.
-        //
-        return (MRESULT)TRUE;
-    }
-    else
-    {
-        //
-        // For all the other ones, FALSE means that we didn't process the
-        // message
-        //
-        return (MRESULT)FALSE;
+        case WM_INITDLG:
+            //
+            // For this message, returning TRUE tells system to set focus to
+            // the first control in the dialog box, but as we set the focus
+            // ourselves, we return FALSE from here as well, so fall through
+            //
+        default:
+            //
+            // For all the other ones, FALSE means that we didn't process the
+            // message
+            //
+            return (MRESULT)FALSE;
     }
 } // end of wxDlgProc
 
@@ -111,7 +118,64 @@ void wxTopLevelWindowOS2::Init()
     m_hFrame    = NULLHANDLE;
     memset(&m_vSwp, 0, sizeof(SWP));
     memset(&m_vSwpClient, 0, sizeof(SWP));
+    m_pWinLastFocused = (wxWindow *)NULL;
 } // end of wxTopLevelWindowIOS2::Init
+
+void wxTopLevelWindowOS2::OnActivate(
+  wxActivateEvent&                  rEvent
+)
+{
+    if (rEvent.GetActive())
+    {
+        //
+        // Restore focus to the child which was last focused
+        //
+        wxLogTrace(_T("focus"), _T("wxTLW %08x activated."), m_hWnd);
+
+        wxWindow*                   pParent = m_pWinLastFocused ? m_pWinLastFocused->GetParent()
+                                                                : NULL;
+        if (!pParent)
+        {
+            pParent = this;
+        }
+
+        wxSetFocusToChild( pParent
+                          ,&m_pWinLastFocused
+                         );
+    }
+    else // deactivating
+    {
+        //
+        // Remember the last focused child if it is our child
+        //
+        m_pWinLastFocused = FindFocus();
+
+        //
+        // So we NULL it out if it's a child from some other frame
+        //
+        wxWindow*                   pWin = m_pWinLastFocused;
+
+        while (pWin)
+        {
+            if (pWin->IsTopLevel())
+            {
+                if (pWin != this)
+                {
+                    m_pWinLastFocused = NULL;
+                }
+                break;
+            }
+            pWin = pWin->GetParent();
+        }
+
+        wxLogTrace(_T("focus"),
+                   _T("wxTLW %08x deactivated, last focused: %08x."),
+                   m_hWnd,
+                   m_pWinLastFocused ? GetHwndOf(m_pWinLastFocused)
+                                     : NULL);
+        rEvent.Skip();
+    }
+} // end of wxTopLevelWindowOS2::OnActivate
 
 WXDWORD wxTopLevelWindowOS2::OS2GetStyle(
   long                              lStyle

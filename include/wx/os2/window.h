@@ -237,6 +237,10 @@ public:
 
     WXFARPROC OS2GetOldWndProc(void) const { return m_fnOldWndProc; }
     void OS2SetOldWndProc(WXFARPROC fnProc) { m_fnOldWndProc = fnProc; }
+    //
+    // Return TRUE if the window is of a standard (i.e. not wxWindows') class
+    //
+    bool IsOfStandardClass(void) const { return m_fnOldWndProc != NULL; }
 
     wxWindow* FindItem(long lId) const;
     wxWindow* FindItemByHWND( WXHWND hWnd
@@ -503,7 +507,6 @@ protected:
     bool                            m_bUseCtl3D:1; // Using CTL3D for this control
     bool                            m_bBackgroundTransparent:1;
     bool                            m_bMouseInWindow:1;
-    bool                            m_bDoubleClickAllowed:1;
     bool                            m_bLastKeydownProcessed:1;
     bool                            m_bWinCaptured:1;
     WXDWORD                         m_dwExStyle;

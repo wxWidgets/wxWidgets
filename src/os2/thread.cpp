@@ -85,7 +85,9 @@ public:
     HMTX                            m_vMutex;
 };
 
-wxMutex::wxMutex()
+wxMutex::wxMutex(
+  wxMutexType                       eMutexType
+)
 {
     APIRET                          ulrc;
 
@@ -95,13 +97,10 @@ wxMutex::wxMutex()
     {
         wxLogSysError(_("Can not create mutex."));
     }
-    m_locked = 0;
 }
 
 wxMutex::~wxMutex()
 {
-    if (m_locked > 0)
-        wxLogDebug(wxT("Warning: freeing a locked mutex (%d locks)."), m_locked);
     ::DosCloseMutexSem(m_internal->m_vMutex);
     m_internal->m_vMutex = NULL;
 }
@@ -131,7 +130,6 @@ wxMutexError wxMutex::Lock()
         default:
             wxFAIL_MSG(wxT("impossible return value in wxMutex::Lock"));
     }
-    m_locked++;
     return wxMUTEX_NO_ERROR;
 }
 
@@ -143,16 +141,12 @@ wxMutexError wxMutex::TryLock()
     if (ulrc == ERROR_TIMEOUT || ulrc == ERROR_TOO_MANY_SEM_REQUESTS)
         return wxMUTEX_BUSY;
 
-    m_locked++;
     return wxMUTEX_NO_ERROR;
 }
 
 wxMutexError wxMutex::Unlock()
 {
     APIRET                          ulrc;
-
-    if (m_locked > 0)
-        m_locked--;
 
     ulrc = ::DosReleaseMutexSem(m_internal->m_vMutex);
     if (ulrc != 0)
@@ -180,7 +174,7 @@ public:
         m_nWaiters = 0;
     }
 
-    inline bool Wait(
+    inline APIRET Wait(
       unsigned long                 ulTimeout
     )
     {
@@ -189,7 +183,7 @@ public:
         m_nWaiters++;
         ulrc = ::DosWaitEventSem(m_vEvent, ulTimeout);
         m_nWaiters--;
-        return (ulrc != ERROR_TIMEOUT);
+        return (ulrc);
     }
 
     inline ~wxConditionInternal ()
@@ -234,33 +228,79 @@ wxCondition::~wxCondition()
     m_internal = NULL;
 }
 
-void wxCondition::Wait()
+wxCondError wxCondition::Wait()
 {
-    (void)m_internal->Wait(SEM_INDEFINITE_WAIT);
+    APIRET                          rc = m_internal->Wait(SEM_INDEFINITE_WAIT);
+
+    switch(rc)
+    {
+        case NO_ERROR:
+            return wxCOND_NO_ERROR;
+        case ERROR_INVALID_HANDLE:
+            return wxCOND_INVALID;
+        case ERROR_TIMEOUT:
+            return wxCOND_TIMEOUT;
+        default:
+            return wxCOND_MISC_ERROR;
+    }
 }
 
-bool wxCondition::Wait(
+wxCondError wxCondition::WaitTimeout(
   unsigned long                     lMilliSec
 )
 {
-    return m_internal->Wait(lMilliSec);
+    APIRET                          rc = m_internal->Wait(lMilliSec);
+
+    switch(rc)
+    {
+        case NO_ERROR:
+            return wxCOND_NO_ERROR;
+        case ERROR_INVALID_HANDLE:
+            return wxCOND_INVALID;
+        case ERROR_TIMEOUT:
+            return wxCOND_TIMEOUT;
+        default:
+            return wxCOND_MISC_ERROR;
+    }
 }
 
-void wxCondition::Signal()
+wxCondError wxCondition::Signal()
 {
-    ::DosPostEventSem(m_internal->m_vEvent);
+    APIRET                          rc = ::DosPostEventSem(m_internal->m_vEvent);
+
+    switch(rc)
+    {
+        case NO_ERROR:
+            return wxCOND_NO_ERROR;
+        case ERROR_INVALID_HANDLE:
+            return wxCOND_INVALID;
+        default:
+            return wxCOND_MISC_ERROR;
+    }
 }
 
-void wxCondition::Broadcast()
+wxCondError wxCondition::Broadcast()
 {
     int                             i;
+    APIRET                          rc = NO_ERROR;
 
     for (i = 0; i < m_internal->m_nWaiters; i++)
     {
-        if (::DosPostEventSem(m_internal->m_vEvent) != 0)
+        if ((rc = ::DosPostEventSem(m_internal->m_vEvent)) != NO_ERROR)
         {
             wxLogSysError(_("Couldn't change the state of event object."));
+            break;
         }
+    }
+
+    switch(rc)
+    {
+        case NO_ERROR:
+            return wxCOND_NO_ERROR;
+        case ERROR_INVALID_HANDLE:
+            return wxCOND_INVALID;
+        default:
+            return wxCOND_MISC_ERROR;
     }
 }
 

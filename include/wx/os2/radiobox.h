@@ -70,7 +70,7 @@ public:
 
     void             Command(wxCommandEvent& rEvent);
     bool             ContainsHWND(WXHWND hWnd) const;
-    bool             Enable(bool bEnable);
+    virtual bool     Enable(bool bEnable = TRUE);
     void             Enable( int  nItem
                             ,bool bEnable
                            );
@@ -87,7 +87,7 @@ public:
                                 ,WXWORD wId
                                );
     void             SendNotificationEvent(void);
-    void             Show( int  nItem
+    virtual void     Show( int  nItem
                           ,bool bShow =  TRUE
                          ) ;
     bool             Show(bool bShow);

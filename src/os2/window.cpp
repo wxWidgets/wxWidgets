@@ -293,11 +293,10 @@ void wxWindowOS2::Init()
     //
     // PM specific
     //
-    m_bDoubleClickAllowed = 0;
     m_bWinCaptured = FALSE;
 
     m_isBeingDeleted        = FALSE;
-    m_fnOldWndProc          = 0;
+    m_fnOldWndProc          = NULL;
     m_bUseCtl3D             = FALSE;
     m_bMouseInWindow        = FALSE;
     m_bLastKeydownProcessed = FALSE;
@@ -342,12 +341,12 @@ wxWindowOS2::~wxWindowOS2()
 
     for (wxWindow* pWin = GetParent(); pWin; pWin = pWin->GetParent())
     {
-        wxFrame*                    pFrame = wxDynamicCast(pWin, wxFrame);
+        wxTopLevelWindow*           pFrame = wxDynamicCast(pWin, wxTopLevelWindow);
 
         if (pFrame)
         {
             if (pFrame->GetLastFocus() == this)
-                pFrame->SetLastFocus((wxWindow*)NULL);
+                pFrame->SetLastFocus(NULL);
         }
     }
 
@@ -2732,10 +2731,13 @@ MRESULT wxWindowOS2::OS2WindowProc(
             break;
 
         case WM_QUERYDLGCODE:
-            if ( m_lDlgCode )
+            if (!IsOfStandardClass())
             {
-                mResult = (MRESULT)m_lDlgCode;
-                bProcessed = TRUE;
+                if ( m_lDlgCode )
+                {
+                    mResult = (MRESULT)m_lDlgCode;
+                    bProcessed = TRUE;
+                }
             }
             //
             //else: get the dlg code from the DefWindowProc()

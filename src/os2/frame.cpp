@@ -67,7 +67,6 @@ extern void  wxAssociateWinWithHandle( HWND         hWnd
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
-    EVT_ACTIVATE(wxFrame::OnActivate)
     EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
 END_EVENT_TABLE()
 
@@ -101,7 +100,6 @@ void wxFrame::Init()
     m_nFsToolBarHeight   = 0;
     m_hWndToolTip        = 0L;
     m_bWasMinimized      = FALSE;
-    m_pWinLastFocused    = NULL;
 
 
     m_frameMenuBar   = NULL;
@@ -658,70 +656,13 @@ bool wxFrame::ShowFullScreen(
                           ,m_vFsOldSize.height
                           ,SWP_SIZE | SWP_SHOW
                          );
-        return TRUE;
     }
+    return wxFrameBase::ShowFullScreen(bShow, lStyle);
 } // end of wxFrame::ShowFullScreen
 
 //
 // Frame window
 //
-//
-// Default activation behaviour - set the focus for the first child
-// subwindow found.
-//
-void wxFrame::OnActivate(
-  wxActivateEvent&                  rEvent
-)
-{
-    if ( rEvent.GetActive() )
-    {
-        // restore focus to the child which was last focused
-        wxLogTrace(_T("focus"), _T("wxFrame %08x activated."), m_hWnd);
-
-        wxWindow*                           pParent = m_pWinLastFocused ? m_pWinLastFocused->GetParent()
-                                            : NULL;
-        if (!pParent)
-        {
-            pParent = this;
-        }
-
-        wxSetFocusToChild( pParent
-                          ,&m_pWinLastFocused
-                         );
-    }
-    else // deactivating
-    {
-        //
-        // Remember the last focused child if it is our child
-        //
-        m_pWinLastFocused = FindFocus();
-
-        for (wxWindowList::Node* pNode = GetChildren().GetFirst();
-             pNode;
-             pNode = pNode->GetNext())
-        {
-            // FIXME all this is totally bogus - we need to do the same as wxPanel,
-            //       but how to do it without duplicating the code?
-
-            // restore focus
-            wxWindow*                   pChild = pNode->GetData();
-
-            if (!pChild->IsTopLevel()
-#if wxUSE_TOOLBAR
-                 && !wxDynamicCast(pChild, wxToolBar)
-#endif // wxUSE_TOOLBAR
-#if wxUSE_STATUSBAR
-                 && !wxDynamicCast(pChild, wxStatusBar)
-#endif // wxUSE_STATUSBAR
-               )
-            {
-                pChild->SetFocus();
-                return;
-            }
-        }
-    }
-} // end of wxFrame::OnActivate
-
 // ----------------------------------------------------------------------------
 // wxFrame size management: we exclude the areas taken by menu/status/toolbars
 // from the client area, so the client area is what's really available for the

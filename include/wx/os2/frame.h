@@ -62,7 +62,6 @@ public:
     virtual void Raise(void);
 
     // event handlers
-    void OnActivate(wxActivateEvent& rEvent);
     void OnSysColourChanged(wxSysColourChangedEvent& rEvent);
 
     // Toolbar
@@ -121,12 +120,6 @@ public:
     WXHWND GetToolTipCtrl(void) const { return m_hWndToolTip; }
     void   SetToolTipCtrl(WXHWND hHwndTT) { m_hWndToolTip = hHwndTT; }
 #endif // tooltips
-
-    //
-    // Called by wxWindow whenever it gets focus
-    //
-    void SetLastFocus(wxWindow* pWin) { m_pWinLastFocused = pWin; }
-    wxWindow *GetLastFocus(void) const { return m_pWinLastFocused; }
 
     void      SetClient(WXHWND    c_Hwnd);
     void      SetClient(wxWindow* c_Window);
@@ -188,7 +181,6 @@ protected:
     bool                            m_bFsIsShowing;
     bool                            m_bWasMinimized;
     bool                            m_bIsShown;
-    wxWindow*                       m_pWinLastFocused;
 
 private:
 #if wxUSE_TOOLTIPS

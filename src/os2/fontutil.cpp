@@ -323,27 +323,12 @@ void wxFillLogFont(
                  ,(int)lNumFonts
                 );
 
-    wxString                        sVals;
-
-    //
-    // For debugging, delete later
-    //
-    for (int i = 0; i < lNumFonts; i++)
-    {
-         sVals << "Face: " << pFM[i].szFacename
-               << "Family: " << pFM[i].szFamilyname
-               << " PointSize: " << pFM[i].lEmHeight
-               << " Height: " << pFM[i].lXHeight
-               ;
-         sVals = "";
-    }
-
     //
     // Initialize FATTR and FACENAMEDESC
     //
     pFattrs->usRecordLength = sizeof(FATTRS);
     pFattrs->fsFontUse = FATTR_FONTUSE_OUTLINE |       // only outline fonts allowed
-                          FATTR_FONTUSE_TRANSFORMABLE;  // may be transformed
+                         FATTR_FONTUSE_TRANSFORMABLE;  // may be transformed
     pFattrs->fsType = 0;
     pFattrs->lMaxBaselineExt = pFattrs->lAveCharWidth = 0;
     pFattrs->idRegistry = 0;
@@ -639,110 +624,12 @@ wxFont wxCreateFontFromLogFont(
 , PFACENAMEDESC                     pFaceName
 )
 {
-    //
-    // Extract family from facename
-    //
-    int                             nFontFamily;
+    wxNativeFontInfo                vInfo;
 
-    if (strcmp(pLogFont->szFacename, "Times New Roman") == 0)
-        nFontFamily = wxROMAN;
-    else if (strcmp(pLogFont->szFacename, "WarpSans") == 0)
-        nFontFamily = wxSWISS;
-    else if (strcmp(pLogFont->szFacename, "Script") == 0)
-        nFontFamily = wxSCRIPT;
-    else if (strcmp(pLogFont->szFacename, "Courier New") == 0)
-        nFontFamily = wxMODERN;
-    else
-        nFontFamily = wxSWISS;
-
-    //
-    // Weight and Style
-    //
-    int                             nFontWeight = wxNORMAL;
-
-    switch (pFaceName->usWeightClass)
-    {
-        case FWEIGHT_LIGHT:
-            nFontWeight = wxLIGHT;
-            break;
-
-        default:
-        case FWEIGHT_NORMAL:
-            nFontWeight = wxNORMAL;
-            break;
-
-        case FWEIGHT_BOLD:
-            nFontWeight = wxBOLD;
-            break;
-    }
-
-    int                             nFontStyle;
-
-    if(pLogFont->fsSelection & FATTR_SEL_ITALIC)
-        nFontStyle = wxITALIC;
-    else
-        nFontStyle = wxNORMAL;
-
-    bool                            bFontUnderline = (pLogFont->fsSelection & FATTR_SEL_UNDERSCORE);
-    wxString                        sFontFace = pLogFont->szFacename;
-    int                             nFontPoints = pFM->lEmHeight;
-    wxFontEncoding                  vFontEncoding;
-
-    switch (pLogFont->usCodePage)
-    {
-        default:
-            wxFAIL_MSG(wxT("unsupported charset"));
-            // fall through
-
-        case 850:
-            vFontEncoding = wxFONTENCODING_CP1252;
-            break;
-
-        case 1250:
-            vFontEncoding = wxFONTENCODING_CP1250;
-            break;
-
-        case 921:
-            vFontEncoding = wxFONTENCODING_CP1257;
-            break;
-
-        case 866:
-            vFontEncoding = wxFONTENCODING_CP1251;
-            break;
-
-        case 864:
-            vFontEncoding = wxFONTENCODING_CP1256;
-            break;
-
-        case 869:
-            vFontEncoding = wxFONTENCODING_CP1253;
-            break;
-
-        case 862:
-            vFontEncoding = wxFONTENCODING_CP1255;
-            break;
-
-        case 857:
-            vFontEncoding = wxFONTENCODING_CP1254;
-            break;
-
-        case 874:
-            vFontEncoding = wxFONTENCODING_CP437;
-            break;
-
-        case 437:
-            vFontEncoding = wxFONTENCODING_CP437;
-            break;
-    }
-
-    return wxFont( nFontPoints
-                  ,nFontFamily
-                  ,nFontStyle
-                  ,nFontWeight
-                  ,bFontUnderline
-                  ,sFontFace
-                  ,vFontEncoding
-                 );
+    vInfo.fa = *pLogFont;
+    vInfo.fm = *pFM;
+    vInfo.fn = *pFaceName;
+    return wxFont(vInfo);
 } // end of wxCreateFontFromLogFont
 
 int wxGpiStrcmp(
