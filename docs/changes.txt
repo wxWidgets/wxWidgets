@@ -74,6 +74,10 @@ wxMSW:
 - all overloads of wxDC::SetClippingRegion() combine the given region with the
   previously selected one instead of replacing it
 
+- wxGetHomeDir() uses HOME environment variable and if it is set will not
+  return the programs directory any longer but its value (this function has
+  never been meant to return the programs directory anyhow)
+
 Unix ports:
 
 - You should use `wx-config --cxxflags` in your makefiles instead of
