@@ -396,8 +396,10 @@ void 			UMAGetWTitleC( WindowRef inWindowRef , char *title )
 
 void UMAActivateControl( ControlHandle inControl ) 
 {
-      if ( !IsControlActive( inControl ) )
-      {
+    // we have to add the control after again to the update rgn
+    // otherwise updates get lost
+  if ( !IsControlActive( inControl ) )
+  {
         bool visible = IsControlVisible( inControl ) ;
         if ( visible )
           SetControlVisibility( inControl , false , false ) ;
@@ -407,7 +409,7 @@ void UMAActivateControl( ControlHandle inControl )
           Rect ctrlBounds ;
           InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
         }
-       }
+  }
 }
 
 void UMADrawControl( ControlHandle inControl ) 
@@ -415,13 +417,12 @@ void UMADrawControl( ControlHandle inControl )
     WindowRef theWindow = GetControlOwner(inControl) ;
     RgnHandle updateRgn = NewRgn() ;
     GetWindowUpdateRgn( theWindow , updateRgn ) ;
-	Point zero = { 0 , 0 } ;
-	LocalToGlobal( &zero ) ;
-	OffsetRgn( updateRgn , -zero.h , -zero.v ) ;
-  ::DrawControlInCurrentPort( inControl ) ;
-  InvalWindowRgn( theWindow, updateRgn) ;
-	DisposeRgn( updateRgn ) ;
-
+	  Point zero = { 0 , 0 } ;
+	  LocalToGlobal( &zero ) ;
+	  OffsetRgn( updateRgn , -zero.h , -zero.v ) ;
+    ::DrawControlInCurrentPort( inControl ) ;
+    InvalWindowRgn( theWindow, updateRgn) ;
+	  DisposeRgn( updateRgn ) ;
 }
 
 void UMAMoveControl( ControlHandle inControl , short x , short y ) 
@@ -458,8 +459,8 @@ void UMASizeControl( ControlHandle inControl , short x , short y )
 
 void UMADeactivateControl( ControlHandle inControl ) 
 {
-   if ( IsControlActive( inControl ) )
-   {
+    // we have to add the control after again to the update rgn
+    // otherwise updates get lost
      bool visible = IsControlVisible( inControl ) ;
      if ( visible )
        SetControlVisibility( inControl , false , false ) ;
@@ -469,7 +470,6 @@ void UMADeactivateControl( ControlHandle inControl )
        Rect ctrlBounds ;
        InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
      }
-    }
 }
 // shows the control and adds the region to the update region
 void UMAShowControl						(ControlHandle 			inControl)
@@ -479,6 +479,13 @@ void UMAShowControl						(ControlHandle 			inControl)
         InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
 }
 
+// shows the control and adds the region to the update region
+void UMAHideControl						(ControlHandle 			inControl)
+{
+        SetControlVisibility( inControl , false , false ) ;
+        Rect ctrlBounds ;
+        InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
+}
 // keyboard focus
 OSErr UMASetKeyboardFocus				(WindowPtr 				inWindow,
 								 ControlHandle 			inControl,
