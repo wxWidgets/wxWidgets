@@ -1,5 +1,5 @@
 
-25th October: wxWindows 2.2.3 released
+3rd November: wxWindows 2.2.3 released
 
 Fixed bugs in HTTP code.
 
@@ -20,8 +20,11 @@ Fixed compilation on RedHat 7.0.
 Updated many translations, added Swedish.
 
 Changed default screenpixels-per-inch from 100 to 75 in
-printing code. This seems to cause problems in program 
-using the former value somewhere.
+printing code.
+
+Updated AFM font metrics for Ghostscript fonts and let
+Linux and FreeBSD default to using GS fonts (and not
+Adobe fonts).
 
 20th September: wxWindows 2.2.2 released
 
