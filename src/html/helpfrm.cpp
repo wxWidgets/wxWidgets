@@ -440,9 +440,16 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 
         m_ContentsBox = new wxTreeCtrl(dummy, wxID_HTML_TREECTRL,
                                        wxDefaultPosition, wxDefaultSize,
+#ifdef __WXGTK20__
                                        wxSUNKEN_BORDER |
                                        wxTR_HAS_BUTTONS | wxTR_HIDE_ROOT |
-                                       wxTR_LINES_AT_ROOT);
+                                       wxTR_NO_LINES
+#else
+                                       wxSUNKEN_BORDER |
+                                       wxTR_HAS_BUTTONS | wxTR_HIDE_ROOT |
+                                       wxTR_LINES_AT_ROOT
+#endif
+                                       );
 
         m_ContentsBox->AssignImageList(ContentsImageList);
 
