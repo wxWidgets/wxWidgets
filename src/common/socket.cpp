@@ -468,13 +468,22 @@ void wxSocketBase::Discard()
 #undef MAX_BUFSIZE
 }
 
+// If what? Who seems to need unsigned int?
+// BTW uint isn't even defined on wxMSW for VC++ for some reason. Even if it
+// were, getpeername/getsockname don't take unsigned int*, they take int*.
+#if 0
+#define wxSOCKET_INT unsigned int
+#else
+#define wxSOCKET_INT int
+#endif
+
 // --------------------------------------------------------------
 // --------- wxSocketBase socket info functions -----------------
 // --------------------------------------------------------------
 bool wxSocketBase::GetPeer(wxSockAddress& addr_man) const
 {
   struct sockaddr my_addr;
-  uint len_addr = sizeof(my_addr);
+  wxSOCKET_INT len_addr = sizeof(my_addr);
 
   if (m_fd < 0)
     return FALSE;
@@ -489,7 +498,7 @@ bool wxSocketBase::GetPeer(wxSockAddress& addr_man) const
 bool wxSocketBase::GetLocal(wxSockAddress& addr_man) const
 {
   struct sockaddr my_addr;
-  uint len_addr = sizeof(my_addr);
+  wxSOCKET_INT len_addr = sizeof(my_addr);
 
   if (m_fd < 0)
     return FALSE;
