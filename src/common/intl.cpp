@@ -341,6 +341,12 @@ static wxString GetFullSearchPath(const wxChar *lang)
 
     // then take the current directory
     // FIXME it should be the directory of the executable
+#ifdef __WXMAC__
+    wxChar cwd[512] ;
+    wxGetWorkingDirectory( cwd , sizeof( cwd ) ) ;
+    searchPath << GetAllMsgCatalogSubdirs(cwd, lang);
+    // generic search paths could be somewhere in the system folder preferences
+#else
     searchPath << GetAllMsgCatalogSubdirs(wxT("."), lang);
 
     // and finally add some standard ones
@@ -348,7 +354,7 @@ static wxString GetFullSearchPath(const wxChar *lang)
         << GetAllMsgCatalogSubdirs(wxT("/usr/share/locale"), lang)
         << GetAllMsgCatalogSubdirs(wxT("/usr/lib/locale"), lang)
         << GetAllMsgCatalogSubdirs(wxT("/usr/local/share/locale"), lang);
-
+#endif
     return searchPath;
 }
 
@@ -749,7 +755,8 @@ bool wxLocale::Init(int language, int flags)
         wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
         return FALSE;
     }
-
+#elif defined(__WXMAC__)
+    retloc = wxSetlocale(LC_ALL , wxEmptyString);
 #else
     return FALSE;
 #endif
@@ -887,6 +894,292 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
             }
         }
     }
+#elif defined(__WXMAC__)
+    char* lc = NULL ;
+    long lang = GetScriptVariable( smSystemScript, smScriptLang) ;
+    switch( GetScriptManagerVariable( smRegionCode ) ) {
+      case verUS :
+        lc = "en_US" ;
+        break ;
+      case verFrance :
+        lc = "fr_FR" ;
+        break ;
+      case verBritain :
+        lc = "en_GB" ;
+        break ;
+      case verGermany :
+        lc = "de_DE" ;
+        break ;
+      case verItaly :
+        lc = "it_IT" ;
+        break ;
+      case verNetherlands :
+        lc = "nl_NL" ;
+        break ;
+      case verFlemish :
+        lc = "nl_BE" ;
+        break ;
+      case verSweden :
+        lc = "sv_SE" ;
+        break ;
+      case verSpain :
+        lc = "es_ES" ;
+        break ;
+      case verDenmark :
+        lc = "da_DK" ;
+        break ;
+      case verPortugal :
+        lc = "pt_PT" ;
+        break ;
+      case verFrCanada:
+        lc = "fr_CA" ;
+        break ;
+      case verNorway:
+        lc = "no_NO" ;
+        break ;
+      case verIsrael:
+        lc = "iw_IL" ;
+        break ;
+      case verJapan:
+        lc = "ja_JP" ;
+        break ;
+      case verAustralia:
+        lc = "en_AU" ;
+        break ;
+      case verArabic:
+        lc = "ar" ;
+        break ;
+      case verFinland:
+        lc = "fi_FI" ;
+        break ;
+      case verFrSwiss:
+        lc = "fr_CH" ;
+        break ;
+      case verGrSwiss:
+        lc = "de_CH" ;
+        break ;
+      case verGreece:
+        lc = "el_GR" ;
+        break ;
+      case verIceland:
+        lc = "is_IS" ;
+        break ;
+      case verMalta:
+        lc = "mt_MT" ;
+        break ;
+      case verCyprus:
+      // _CY is not part of wx, so we have to translate according to the system language
+        if ( lang == langGreek ) {
+          lc = "el_GR" ;
+        }
+        else if ( lang == langTurkish ) {
+          lc = "tr_TR" ;
+        }
+        break ;
+      case verTurkey:
+        lc = "tr_TR" ;
+        break ;
+      case verYugoCroatian:
+        lc = "hr_HR" ;
+        break ;
+      case verIndiaHindi:
+        lc = "hi_IN" ;
+        break ;
+      case verPakistanUrdu:
+        lc = "ur_PK" ;
+        break ;
+      case verTurkishModified:
+        lc = "tr_TR" ;
+        break ;
+      case verItalianSwiss:
+        lc = "it_CH" ;
+        break ;
+      case verInternational:
+        lc = "en" ;
+        break ;
+      case verRomania:
+        lc = "ro_RO" ;
+        break ;
+      case verGreecePoly:
+        lc = "el_GR" ;
+        break ;
+      case verLithuania:
+        lc = "lt_LT" ;
+        break ;
+      case verPoland:
+        lc = "pl_PL" ;
+        break ;
+      case verMagyar :
+      case verHungary:
+        lc = "hu_HU" ;
+        break ;
+      case verEstonia:
+        lc = "et_EE" ;
+        break ;
+      case verLatvia:
+        lc = "lv_LV" ;
+        break ;
+      case verSami:
+        // not known
+        break ;
+      case verFaroeIsl:
+        lc = "fo_FO" ;
+        break ;
+      case verIran:
+        lc = "fa_IR" ;
+        break ;
+      case verRussia:
+        lc = "ru_RU" ;
+        break ;
+       case verIreland:
+        lc = "ga_IE" ;
+        break ;
+      case verKorea:
+        lc = "ko_KR" ;
+        break ;
+      case verChina:
+        lc = "zh_CN" ;
+        break ;
+      case verTaiwan:
+        lc = "zh_TW" ;
+        break ;
+      case verThailand:
+        lc = "th_TH" ;
+        break ;
+      case verCzech:
+        lc = "cs_CZ" ;
+        break ;
+      case verSlovak:
+        lc = "sk_SK" ;
+        break ;
+      case verBengali:
+        lc = "bn" ;
+        break ;
+      case verByeloRussian:
+        lc = "be_BY" ;
+        break ;
+      case verUkraine:
+        lc = "uk_UA" ;
+        break ;
+      case verGreeceAlt:
+        lc = "el_GR" ;
+        break ;
+      case verSerbian:
+        lc = "sr_YU" ;
+        break ;
+      case verSlovenian:
+        lc = "sl_SI" ;
+        break ;
+      case verMacedonian:
+        lc = "mk_MK" ;
+        break ;
+      case verCroatia:
+        lc = "hr_HR" ;
+        break ;
+      case verBrazil:
+        lc = "pt_BR " ;
+        break ;
+      case verBulgaria:
+        lc = "bg_BG" ;
+        break ;
+      case verCatalonia:
+        lc = "ca_ES" ;
+        break ;
+      case verScottishGaelic:
+        lc = "gd" ;
+        break ;
+      case verManxGaelic:
+        lc = "gv" ;
+        break ;
+      case verBreton:
+        lc = "br" ;
+        break ;
+      case verNunavut:
+        lc = "iu_CA" ;
+        break ;
+      case verWelsh:
+        lc = "cy" ;
+        break ;
+      case verIrishGaelicScript:
+        lc = "ga_IE" ;
+        break ;
+      case verEngCanada:
+        lc = "en_CA" ;
+        break ;
+      case verBhutan:
+        lc = "dz_BT" ;
+        break ;
+      case verArmenian:
+        lc = "hy_AM" ;
+        break ;
+      case verGeorgian:
+        lc = "ka_GE" ;
+        break ;
+      case verSpLatinAmerica:
+        lc = "es_AR" ;
+        break ;
+      case verTonga:
+        lc = "to_TO" ;
+        break ;
+      case verFrenchUniversal:
+        lc = "fr_FR" ;
+        break ;
+      case verAustria:
+        lc = "de_AT" ;
+        break ;
+      case verGujarati:
+        lc = "gu_IN" ;
+        break ;
+      case verPunjabi:
+        lc = "pa" ;
+        break ;
+      case verIndiaUrdu:
+        lc = "ur_IN" ;
+        break ;
+      case verVietnam:
+        lc = "vi_VN" ;
+        break ;
+      case verFrBelgium:
+        lc = "fr_BE" ;
+        break ;
+      case verUzbek:
+        lc = "uz_UZ" ;
+        break ;
+      case verSingapore:
+        lc = "zh_SG" ;
+        break ;
+      case verNynorsk:
+        lc = "nn_NO" ;
+        break ;
+      case verAfrikaans:
+        lc = "af_ZA" ;
+        break ;
+      case verEsperanto:
+        lc = "eo" ;
+        break ;
+      case verMarathi:
+        lc = "mr_IN" ;
+        break ;
+      case verTibetan:
+        lc = "bo" ;
+        break ;
+      case verNepal:
+        lc = "ne_NP" ;
+        break ;
+      case verGreenland:
+        lc = "kl_GL" ;
+        break ;
+      default :
+        break ;
+   }
+  for ( i = 0; i < count; i++ )
+  {
+      if ( ms_languagesDB->Item(i).CanonicalName == lc )
+      {
+          break;
+      }
+  }
+    
 #elif defined(__WIN32__)
     LCID lcid = GetUserDefaultLCID();
     if ( lcid != 0 )
