@@ -46,6 +46,7 @@
 #endif
 
 #include "wx/dateevt.h"
+#include "wx/generic/datectrl.h"
 
 #include "wx/calctrl.h"
 #include "wx/popupwin.h"
@@ -76,7 +77,9 @@ BEGIN_EVENT_TABLE(wxDatePickerCtrlGeneric, wxDatePickerCtrlBase)
     EVT_CHILD_FOCUS(wxDatePickerCtrlGeneric::OnChildSetFocus)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxDatePickerCtrl, wxDatePickerCtrlBase)
+#ifndef wxHAS_NATIVE_DATEPICKCTRL
+    IMPLEMENT_DYNAMIC_CLASS(wxDatePickerCtrl, wxDatePickerCtrlBase)
+#endif
 
 // ----------------------------------------------------------------------------
 // creation
@@ -482,7 +485,7 @@ void wxDatePickerCtrlGeneric::OnChildSetFocus(wxChildFocusEvent &ev)
 }
 
 
-void wxDatePickerCtrlGeneric::OnClick(wxCommandEvent& event)
+void wxDatePickerCtrlGeneric::OnClick(wxCommandEvent& WXUNUSED(event))
 {
     if (m_ignoreDrop)
     {
@@ -497,7 +500,7 @@ void wxDatePickerCtrlGeneric::OnClick(wxCommandEvent& event)
 }
 
 
-void wxDatePickerCtrlGeneric::OnSetFocus(wxFocusEvent &ev)
+void wxDatePickerCtrlGeneric::OnSetFocus(wxFocusEvent& WXUNUSED(ev))
 {
     if (m_txt)
     {
