@@ -1543,7 +1543,7 @@ AC_CACHE_SAVE
 dnl check for glibc version
 dnl
 dnl VZ: I have no idea why had this check been there originally, but now
-dnl     it is only used to get the recursive mutexes under Linux
+dnl     we could probably do without it by just always adding _GNU_SOURCE
 if test "$USE_LINUX" = 1; then
     AC_CACHE_CHECK([for glibc 2.1 or later], wx_cv_lib_glibc21,[
         AC_TRY_COMPILE([#include <features.h>],
@@ -1562,6 +1562,20 @@ if test "$USE_LINUX" = 1; then
     ])
     if test "$wx_cv_lib_glibc21" = "yes"; then
         AC_DEFINE(wxHAVE_GLIBC2)
+    fi
+fi
+
+dnl we may need _GNU_SOURCE for 2 things:
+dnl
+dnl  1. to get PTHREAD_MUTEX_RECURSIVE with glibc 2.1+ (strictly speaking we
+dnl  only need _XOPEN_SOURCE=500 but just defining this disables _BSD_SOURCE
+dnl  which breaks libtiff compilation, so it is simpler to just define
+dnl  _GNU_SOURCE to get everything)
+dnl
+dnl  2. for Unicode functions
+if test "x$wx_cv_lib_glibc21" = "xyes"; then
+    if test "$wxUSE_UNICODE" = "yes" -o "$wxUSE_THREADS" = "yes"; then
+        AC_DEFINE(_GNU_SOURCE)
     fi
 fi
 
@@ -1900,9 +1914,16 @@ if test "$wxUSE_GUI" = "yes"; then
                     AM_PATH_GTK_2_0(2.0.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
 
                     if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
-                        PKG_CHECK_MODULES(PANGOFT2, pangoft2)
-                        CXXFLAGS="$CXXFLAGS $PANGOFT2_CFLAGS"
-                        LIBS="$LIBS $PANGOFT2_LIBS"
+                        PKG_CHECK_MODULES(PANGOFT2, pangoft2,
+                            [
+                                CXXFLAGS="$CXXFLAGS $PANGOFT2_CFLAGS"
+                                LIBS="$LIBS $PANGOFT2_LIBS"
+                            ],
+                            [
+                                AC_MSG_WARN([pangoft2 library not found, library will be compiled without printing support])
+                                wxUSE_PRINTING_ARCHITECTURE="no"
+                            ]
+                        )
                     fi
                 fi
 
@@ -3458,16 +3479,6 @@ if test "$TOOLKIT" != "MSW"; then
       dnl defined, we do it by directly assigned
       dnl PTHREAD_MUTEX_RECURSIVE_MUTEX_INITIALIZER_NP to attr
 
-      dnl we need _GNU_SOURCE to get PTHREAD_MUTEX_RECURSIVE with glibc 2.1+
-      dnl (strictly speaking we only need _XOPEN_SOURCE=500 but just defining
-      dnl this disables _BSD_SOURCE which breaks libtiff compilation, so it is
-      dnl simpler to just define _GNU_SOURCE to get everything)
-      
-      We define this already somewhere else
-      if test "x$wx_cv_lib_glibc21" = "xyes"; then
-          CPPFLAGS="$CPPFLAGS -D_GNU_SOURCE"
-      fi
-
       AC_CACHE_CHECK([for pthread_mutexattr_t], wx_cv_type_pthread_mutexattr_t,
       [
         AC_TRY_COMPILE([#include <pthread.h>],
@@ -3580,10 +3591,6 @@ if test "$wxUSE_PROFILE" = "yes" ; then
 fi
 
 CODE_GEN_FLAGS=
-if test "$GCC" = "yes" ; then
-    CODE_GEN_FLAGS="$CODE_GEN_FLAGS -D_GNU_SOURCE"
-fi
-
 CODE_GEN_FLAGS_CXX=
 if test "$GCC" = "yes" ; then
     if test "$wxUSE_NO_RTTI" = "yes" ; then

@@ -42,6 +42,9 @@
 /* Define if you have the ANSI C header files.  */
 #undef STDC_HEADERS
 
+/* Define this to get extra features from GNU libc. */
+#undef _GNU_SOURCE
+
 /* Define to `int' if <sys/types.h> doesn't define.  */
 #undef uid_t
 
