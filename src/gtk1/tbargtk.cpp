@@ -74,10 +74,11 @@ static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget),
 
     if (g_blockEventsOnDrag) return TRUE;
     
-    /* we grey-out the tip text of disabled tool */
     
     wxToolBar *tb = tool->m_owner;
     
+    /* we grey-out the tip text of disabled tool */
+#if 0
     if (tool->m_enabled)
     {
         if (tb->m_fg->red != 0)
@@ -121,6 +122,7 @@ static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget),
 #endif
         }
     }
+#endif
     
     /* emit the event */
   
@@ -289,7 +291,8 @@ wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
       mask = bitmap.GetMask()->GetBitmap();
     
     tool_pixmap = gtk_pixmap_new( pixmap, mask );
-  
+    gtk_pixmap_set_build_insensitive( GTK_PIXMAP(tool_pixmap), TRUE );
+    
     gtk_misc_set_alignment( GTK_MISC(tool_pixmap), 0.5, 0.5 );
 
     wxToolBarTool *tool = new wxToolBarTool( this, toolIndex, bitmap, pushedBitmap,
@@ -371,11 +374,10 @@ void wxToolBar::EnableTool(int toolIndex, bool enable)
             tool->m_enabled = enable;
             
 /*   we don't disable the tools for now as the bitmaps don't get
-     greyed anyway and this also disables tooltips
+     greyed anyway and this also disables tooltips */
 
             if (tool->m_item)
                 gtk_widget_set_sensitive( tool->m_item, enable );
-*/
                 
             return;
         }
