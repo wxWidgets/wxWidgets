@@ -239,7 +239,7 @@ class KeyLog(wxListCtrl, wxListCtrlAutoWidthMixin):
             else:
                 modifiers += '-'
 
-        id = self.InsertStringItem(0xffffff, evType)
+        id = self.InsertStringItem(self.GetItemCount(), evType)
         self.SetStringItem(id, 1, keyname)
         self.SetStringItem(id, 2, str(keycode))
         self.SetStringItem(id, 3, modifiers)
