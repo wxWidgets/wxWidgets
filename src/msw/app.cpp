@@ -398,12 +398,8 @@ void wxApp::ConvertToStandardCommandArgs(char* lpCmdLine)
     char name[260]; // 260 is MAX_PATH value from windef.h
     ::GetModuleFileName(wxhInstance, name, WXSIZEOF(name));
 
-    // GNUWIN32 already fills in the first arg with the application name.
-    // JACS: apparently not now (b20 and above?)
-#if 0 // !defined(__GNUWIN32__)
     args.Add(name);
-    count ++;
-#endif
+    count++;
 
     strcpy(name, wxFileNameFromPath(name));
     wxStripExtension(name);
