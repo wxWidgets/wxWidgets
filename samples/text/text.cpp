@@ -330,7 +330,6 @@ bool MyApp::OnInit()
                     "Clear the log window contents");
     menuLog->Check(TEXT_LOG_KEY, TRUE);
     menuLog->Check(TEXT_LOG_CHAR, TRUE);
-    menuLog->Check(TEXT_LOG_MOUSE, TRUE);
     menu_bar->Append(menuLog, "&Log");
 
     frame->SetMenuBar(menu_bar);
@@ -361,7 +360,7 @@ END_EVENT_TABLE()
 
 bool MyTextCtrl::ms_logKey = TRUE;
 bool MyTextCtrl::ms_logChar = TRUE;
-bool MyTextCtrl::ms_logMouse = TRUE;
+bool MyTextCtrl::ms_logMouse = FALSE;
 
 void MyTextCtrl::LogEvent(const wxChar *name, wxKeyEvent& event) const
 {
