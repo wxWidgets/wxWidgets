@@ -90,6 +90,10 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
 
 void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool enable)
 {
+    // TODO: figure out why it gives a BadMatch when
+    // creating the bitmap (out.ConvertToBitmap).
+    // Possibly we should ensure all depths match.
+#if 0
     // Created disabled-state bitmap on demand
     if (!enable && !tool->GetBitmap2().Ok())
     {
@@ -101,6 +105,7 @@ void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool enable)
         tool->SetBitmap2(out.ConvertToBitmap());
     }
     RefreshTool((wxToolBarTool*) tool);    
+#endif
 }
 
 void wxToolBar::DoToggleTool(wxToolBarToolBase *tool, bool toggle)
@@ -146,7 +151,7 @@ void wxToolBar::RefreshTool( wxToolBarTool *tool )
 
 void wxToolBar::DrawToolBarTool( wxToolBarTool *tool, wxDC &dc, bool down )
 {
-    const wxBitmap& bitmap = (tool->IsEnabled() || !tool->GetBitmap1().Ok()) ? tool->GetBitmap1() : tool->GetBitmap2() ;
+    const wxBitmap& bitmap = (tool->IsEnabled() || !tool->GetBitmap2().Ok()) ? tool->GetBitmap1() : tool->GetBitmap2() ;
     if (down)
     {
         dc.DrawBitmap( bitmap, tool->m_x+4, tool->m_y+4, TRUE );
