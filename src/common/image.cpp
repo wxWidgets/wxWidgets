@@ -459,9 +459,6 @@ void wxImage::InitStandardHandlers()
 #if wxUSE_LIBPNG
     AddHandler( new wxPNGHandler );
 #endif
-#if wxUSE_LIBJPEG
-    AddHandler( new wxJPEGHandler );
-#endif
 }
 
 void wxImage::CleanUpHandlers()
