@@ -67,8 +67,8 @@
 // implementation
 // ============================================================================
 
-// TODO: wxCONSTRUCTOR
-#if 0 // wxUSE_EXTENDED_RTTI
+
+#if wxUSE_EXTENDED_RTTI
 WX_DEFINE_FLAGS( wxCheckListBoxStyle )
 
 wxBEGIN_FLAGS( wxCheckListBoxStyle )
@@ -106,6 +106,7 @@ wxBEGIN_FLAGS( wxCheckListBoxStyle )
     wxFLAGS_MEMBER(wxLB_ALWAYS_SB)
     wxFLAGS_MEMBER(wxLB_NEEDED_SB)
     wxFLAGS_MEMBER(wxLB_SORT)
+    wxFLAGS_MEMBER(wxLB_OWNERDRAW)
 
 wxEND_FLAGS( wxCheckListBoxStyle )
 
@@ -113,19 +114,18 @@ IMPLEMENT_DYNAMIC_CLASS_XTI(wxCheckListBox, wxListBox,"wx/checklst.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxCheckListBox)
 	wxEVENT_PROPERTY( Toggle , wxEVT_COMMAND_CHECKLISTBOX_TOGGLED , wxCommandEvent )
-
-    wxPROPERTY_FLAGS( WindowStyle , wxCheckListBoxStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxPROPERTY_FLAGS( WindowStyle , wxCheckListBoxStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , wxLB_OWNERDRAW /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
+
+wxBEGIN_HANDLERS_TABLE(wxCheckListBox)
+wxEND_HANDLERS_TABLE()
+
+wxCONSTRUCTOR_4( wxCheckListBox , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size ) 
 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
 #endif
 
-/*
-TODO PROPERTIES
-	list content
-		item , checked (no)
-*/
 // ----------------------------------------------------------------------------
 // declaration and implementation of wxCheckListBoxItem class
 // ----------------------------------------------------------------------------
