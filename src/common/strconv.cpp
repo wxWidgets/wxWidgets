@@ -356,6 +356,41 @@ size_t wxMBConvLibc::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
     return wxWC2MB(buf, psz, n);
 }
+
+// ----------------------------------------------------------------------------
+// wxConvBrokenFileNames is made for GTK2 in Unicode mode when
+// files are accidentally written in an encoding which is not
+// the system encoding. Typically, the system encoding will be
+// UTF8 but there might be files stored in ISO8859-1 in disk. 
+// ----------------------------------------------------------------------------
+
+class wxConvBrokenFileNames: public wxMBConvLibc
+{
+public:
+    virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
+    virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
+};
+
+size_t wxConvBrokenFileNames::MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const
+{
+#if 0
+    if (we find some invalid characters)
+    {
+       Convert to Unicode range.
+    }
+    else
+#endif
+    return wxMBConvLibc::MB2WC( outputBuf, psz, outputSize );
+}
+
+size_t wxConvBrokenFileNames::WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const
+{
+#if 0
+    Convert back from Unicode range.
+#endif
+    return wxMBConvLibc::WC2MB( outputBuf, psz, outputSize );
+}
+
 // ----------------------------------------------------------------------------
 // UTF-7 
 // ----------------------------------------------------------------------------
