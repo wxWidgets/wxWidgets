@@ -105,7 +105,13 @@ int wxFontDialog::ShowModal()
         wxFillLogFont(&logFont, &m_fontData.initialFont);
     }
 
-    chooseFontStruct.rgbColors = wxColourToRGB(m_fontData.fontColour);
+    if ( m_fontData.fontColour.Ok() )
+    {
+        chooseFontStruct.rgbColors = wxColourToRGB(m_fontData.fontColour);
+
+        // need this for the colour to be taken into account
+        flags |= CF_EFFECTS;
+    }
 
     // CF_ANSIONLY flag is obsolete for Win32
     if ( !m_fontData.GetAllowSymbols() )
