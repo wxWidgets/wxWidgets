@@ -320,8 +320,6 @@ wxWindowMSW::~wxWindowMSW()
 {
     m_isBeingDeleted = TRUE;
 
-    MSWDetachWindowMenu();
-
 #ifndef __WXUNIVERSAL__
     // VS: make sure there's no wxFrame with last focus set to us:
     for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
@@ -2680,38 +2678,6 @@ void wxRemoveHandleAssociation(wxWindowMSW *win)
 // (e.g. with MDI child windows)
 void wxWindowMSW::MSWDestroyWindow()
 {
-}
-
-void wxWindowMSW::MSWDetachWindowMenu()
-{
-#ifndef __WXUNIVERSAL__
-    if ( m_hMenu )
-    {
-        wxChar buf[1024];
-        HMENU hMenu = (HMENU)m_hMenu;
-
-        int N = ::GetMenuItemCount(hMenu);
-        for ( int i = 0; i < N; i++ )
-        {
-            if ( !::GetMenuString(hMenu, i, buf, WXSIZEOF(buf), MF_BYPOSITION) )
-            {
-                wxLogLastError(wxT("GetMenuString"));
-
-                continue;
-            }
-
-            if ( wxStrcmp(buf, _("&Window")) == 0 )
-            {
-                if ( !::RemoveMenu(hMenu, i, MF_BYPOSITION) )
-                {
-                    wxLogLastError(wxT("RemoveMenu"));
-                }
-
-                break;
-            }
-        }
-    }
-#endif // __WXUNIVERSAL__
 }
 
 bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
