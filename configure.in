@@ -1155,7 +1155,7 @@ AC_CACHE_SAVE
 dnl cross-compiling support: we're cross compiling if the build system is
 dnl different from the target one (assume host and target be always the same)
 if test "$build" != "$host" ; then
-    if test "$USE_WIN32" = 1 -o "$USE_DOS" = 1 ; then
+    if test "$USE_WIN32" = 1 -o "$USE_DOS" = 1 -o "$USE_UNIX"; then
         CC=$host_alias-gcc
         CXX=$host_alias-c++
         AR=$host_alias-ar
@@ -2712,7 +2712,15 @@ AC_CHECK_SIZEOF(short, 2)
 AC_CHECK_SIZEOF(void *, 4)
 AC_CHECK_SIZEOF(int, 4)
 AC_CHECK_SIZEOF(long, 4)
-AC_CHECK_SIZEOF(long long, 0)
+
+case "${host}" in
+    arm-*-linux* )
+        AC_CHECK_SIZEOF(long long, 8)
+    ;;
+    * )
+        AC_CHECK_SIZEOF(long long, 0)
+esac
+
 
 dnl we have to do it ourselves because SGI/Irix's stdio.h does not include
 dnl wchar_t and AC_CHECK_SIZEOF only includes stdio.h
