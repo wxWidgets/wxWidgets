@@ -190,6 +190,7 @@ static wxPyCoreAPI API = {
 
     wxPyClassExists,
     wxPyMake_wxObject,
+    wxPyMake_wxSizer,
     wxPyPtrTypeMap_Add,
 };
 

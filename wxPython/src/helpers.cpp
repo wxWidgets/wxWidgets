@@ -287,25 +287,18 @@ PyObject* wxPyClassExists(const char* className) {
 }
 
 
-PyObject*  wxPyMake_wxObject(wxObject* source) {
+PyObject*  wxPyMake_wxObject(wxObject* source, bool checkEvtHandler) {
     PyObject* target = NULL;
     bool      isEvtHandler = FALSE;
 
     if (source) {
         // If it's derived from wxEvtHandler then there may
-        // already be a pointer to a Python objec that we can use.
-        if (wxIsKindOf(source, wxEvtHandler)) {
+        // already be a pointer to a Python object that we can use
+        // in the OOR data.
+        if (checkEvtHandler && wxIsKindOf(source, wxEvtHandler)) {
+            isEvtHandler = TRUE;
             wxEvtHandler* eh = (wxEvtHandler*)source;
             wxPyClientData* data = (wxPyClientData*)eh->GetClientObject();
-            if (data) {
-                target = data->m_obj;
-                Py_INCREF(target);
-            }
-        }
-        else if (wxIsKindOf(source, wxSizer)) {
-            // wxSizers also track the original object
-            wxSizer* sz = (wxSizer*)source;
-            wxPyClientData* data = (wxPyClientData*)sz->GetClientObject();
             if (data) {
                 target = data->m_obj;
                 Py_INCREF(target);
@@ -339,6 +332,30 @@ PyObject*  wxPyMake_wxObject(wxObject* source) {
     }
     return target;
 }
+
+
+PyObject*  wxPyMake_wxSizer(wxSizer* source) {
+    PyObject* target = NULL;
+
+    if (source && wxIsKindOf(source, wxSizer)) {
+        // If it's derived from wxSizer then there may
+        // already be a pointer to a Python object that we can use
+        // in the OOR data.
+        wxSizer* sz = (wxSizer*)source;
+        wxPyClientData* data = (wxPyClientData*)sz->GetClientObject();
+        if (data) {
+            target = data->m_obj;
+            Py_INCREF(target);
+        }
+    }
+    if (! target) {
+        target = wxPyMake_wxObject(source, FALSE);
+        if (target != Py_None)
+            ((wxSizer*)source)->SetClientObject(new wxPyClientData(target));
+    }
+    return target;
+}
+
 
 
 //---------------------------------------------------------------------------

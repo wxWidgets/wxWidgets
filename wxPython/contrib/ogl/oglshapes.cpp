@@ -7933,7 +7933,7 @@ static PyObject *_wrap_wxPyCompositeShape_FindContainerImage(PyObject *self, PyO
         _result = (wxPyShape *)wxPyCompositeShape_FindContainerImage(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxShapeEvtHandler(_result); }
     return _resultobj;
 }
 
@@ -10574,7 +10574,7 @@ static PyObject *_wrap_wxPyDivisionShape_GetBottomSide(PyObject *self, PyObject 
         _result = (wxPyDivisionShape *)wxPyDivisionShape_GetBottomSide(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxShapeEvtHandler(_result); }
     return _resultobj;
 }
 
@@ -10628,7 +10628,7 @@ static PyObject *_wrap_wxPyDivisionShape_GetLeftSide(PyObject *self, PyObject *a
         _result = (wxPyDivisionShape *)wxPyDivisionShape_GetLeftSide(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxShapeEvtHandler(_result); }
     return _resultobj;
 }
 
@@ -10721,7 +10721,7 @@ static PyObject *_wrap_wxPyDivisionShape_GetRightSide(PyObject *self, PyObject *
         _result = (wxPyDivisionShape *)wxPyDivisionShape_GetRightSide(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxShapeEvtHandler(_result); }
     return _resultobj;
 }
 
@@ -10748,7 +10748,7 @@ static PyObject *_wrap_wxPyDivisionShape_GetTopSide(PyObject *self, PyObject *ar
         _result = (wxPyDivisionShape *)wxPyDivisionShape_GetTopSide(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxShapeEvtHandler(_result); }
     return _resultobj;
 }
 

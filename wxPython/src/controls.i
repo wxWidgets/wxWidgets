@@ -622,6 +622,13 @@ public:
 
     // returns false if we have any attributes set, true otherwise
     bool IsDefault();
+
+    // return the attribute having the valid font and colours: it uses the
+    // attributes set in attr and falls back first to attrDefault and then to
+    // the text control font/colours for those attributes which are not set
+    static wxTextAttr Combine(const wxTextAttr& attr,
+                              const wxTextAttr& attrDef,
+                              const wxTextCtrl *text);
 };
 
 
@@ -725,6 +732,13 @@ public:
     %addmethods {
         void write(const wxString& text) {
             self->AppendText(text);
+        }
+    }
+
+    // TODO: replace this when the method is really added to wxTextCtrl
+    %addmethods {
+        wxString GetString(long from, long to) {
+            return self->GetValue().Mid(from, to-from);
         }
     }
 };

@@ -96,10 +96,11 @@
 
 
 //---------------------------------------------------------------------------
-// These are prototypes of some helper functions found in oglhelpers.cpp
+// These are prototypes of some helper functions found in ogl.i
 
 wxList* wxPy_wxListHelper(PyObject* pyList, char* className);
 wxList* wxPy_wxRealPoint_ListHelper(PyObject* pyList);
+PyObject* wxPyMake_wxShapeEvtHandler(wxShapeEvtHandler* source);
 
 
 

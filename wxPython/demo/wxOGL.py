@@ -60,6 +60,7 @@ class MyEvtHandler(wxShapeEvtHandler):
 
     def OnLeftClick(self, x, y, keys = 0, attachment = 0):
         shape = self.GetShape()
+        print shape.__class__
         canvas = shape.GetCanvas()
         dc = wxClientDC(canvas)
         canvas.PrepareDC(dc)
@@ -122,7 +123,7 @@ class TestWindow(wxShapeCanvas):
 
         self.log = log
         self.frame = frame
-        self.SetBackgroundColour(wxWHITE)
+        self.SetBackgroundColour("LIGHT BLUE") #wxWHITE)
         self.diagram = wxDiagram()
         self.SetDiagram(self.diagram)
         self.diagram.SetCanvas(self)
@@ -165,6 +166,11 @@ class TestWindow(wxShapeCanvas):
             # for some reason, the shapes have to be moved for the line to show up...
             fromShape.Move(dc, fromShape.GetX(), fromShape.GetY())
 
+##         EVT_PAINT(self, self.OnPaint)
+
+##     def OnPaint(self, evt):
+##         evt.Skip()
+##         print "TheLists:", wxThePenList.GetCount(), wxTheBrushList.GetCount(), wxTheFontList.GetCount()
 
 
     def MyAddShape(self, shape, x, y, pen, brush, text):

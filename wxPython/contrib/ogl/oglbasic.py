@@ -153,6 +153,9 @@ class wxPyShapeEvtHandlerPtr(wxObjectPtr):
     def Destroy(self, *_args, **_kwargs):
         val = apply(oglbasicc.wxPyShapeEvtHandler_Destroy,(self,) + _args, _kwargs)
         return val
+    def _setOORInfo(self, *_args, **_kwargs):
+        val = apply(oglbasicc.wxPyShapeEvtHandler__setOORInfo,(self,) + _args, _kwargs)
+        return val
     def SetShape(self, *_args, **_kwargs):
         val = apply(oglbasicc.wxPyShapeEvtHandler_SetShape,(self,) + _args, _kwargs)
         return val
@@ -262,6 +265,7 @@ class wxPyShapeEvtHandler(wxPyShapeEvtHandlerPtr):
         self.this = apply(oglbasicc.new_wxPyShapeEvtHandler,_args,_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxPyShapeEvtHandler)
+        self._setOORInfo(self)
 
 
 
@@ -272,9 +276,6 @@ class wxPyShapePtr(wxPyShapeEvtHandlerPtr):
         self.thisown = 0
     def _setCallbackInfo(self, *_args, **_kwargs):
         val = apply(oglbasicc.wxPyShape__setCallbackInfo,(self,) + _args, _kwargs)
-        return val
-    def Destroy(self, *_args, **_kwargs):
-        val = apply(oglbasicc.wxPyShape_Destroy,(self,) + _args, _kwargs)
         return val
     def GetBoundingBoxMax(self, *_args, **_kwargs):
         val = apply(oglbasicc.wxPyShape_GetBoundingBoxMax,(self,) + _args, _kwargs)
@@ -682,6 +683,14 @@ class wxPyShapePtr(wxPyShapeEvtHandlerPtr):
         return val
     def ClearPointList(self, *_args, **_kwargs):
         val = apply(oglbasicc.wxPyShape_ClearPointList,(self,) + _args, _kwargs)
+        return val
+    def GetBackgroundPen(self, *_args, **_kwargs):
+        val = apply(oglbasicc.wxPyShape_GetBackgroundPen,(self,) + _args, _kwargs)
+        if val: val = wxPenPtr(val) ; val.thisown = 1
+        return val
+    def GetBackgroundBrush(self, *_args, **_kwargs):
+        val = apply(oglbasicc.wxPyShape_GetBackgroundBrush,(self,) + _args, _kwargs)
+        if val: val = wxBrushPtr(val) ; val.thisown = 1
         return val
     def base_OnDelete(self, *_args, **_kwargs):
         val = apply(oglbasicc.wxPyShape_base_OnDelete,(self,) + _args, _kwargs)

@@ -110,6 +110,7 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyRectangleShape)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void SetCornerRadius(double radius);
 
@@ -160,6 +161,7 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyControlPoint)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void SetCornerRadius(double radius);
 
@@ -207,6 +209,7 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyBitmapShape)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     wxBitmap& GetBitmap();
     wxString GetFilename();
@@ -256,6 +259,7 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyDrawnShape)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void CalculateSize();
     void DestroyClippingRect();
@@ -360,6 +364,7 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyCompositeShape)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void AddChild(wxPyShape *child, wxPyShape *addAfter = NULL);
 
@@ -458,6 +463,7 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyDividedShape)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void EditRegions();
     void SetRegionSizes();
@@ -507,6 +513,7 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyDivisionShape)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void AdjustBottom(double bottom, bool test);
     void AdjustLeft(double left, bool test);

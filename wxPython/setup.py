@@ -773,8 +773,8 @@ if not GL_ONLY and BUILD_GIZMOS:
 
     ext = Extension('gizmosc', [
                                 '%s/dynamicsash.cpp' % GIZMOLOC,
-                                #'%s/editlbox.cpp' % GIZMOLOC,
-                                #'%s/multicell.cpp' % GIZMOLOC,
+                                '%s/editlbox.cpp' % GIZMOLOC,
+                                '%s/multicell.cpp' % GIZMOLOC,
                                 '%s/splittree.cpp' % GIZMOLOC,
                              ] + swig_sources,
 

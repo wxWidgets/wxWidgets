@@ -5065,7 +5065,7 @@ static PyObject *_wrap_wxWindow_GetSizer(PyObject *self, PyObject *args, PyObjec
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxSizer(_result); }
     return _resultobj;
 }
 

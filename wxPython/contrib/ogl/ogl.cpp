@@ -117,7 +117,7 @@ wxList* wxPy_wxListHelper(PyObject* pyList, char* className) {
             char errmsg[1024];
             sprintf(errmsg, "Type error, expected list of %s objects", className);
             PyErr_SetString(PyExc_TypeError, errmsg);
-             wxPyEndBlockThreads(state);
+            wxPyEndBlockThreads(state);
             return NULL;
         }
         list->Append(wxo);
@@ -167,6 +167,31 @@ wxList* wxPy_wxRealPoint_ListHelper(PyObject* pyList) {
     wxPyEndBlockThreads(state);
     return list;
 }
+
+//---------------------------------------------------------------------------
+
+PyObject*  wxPyMake_wxShapeEvtHandler(wxShapeEvtHandler* source) {
+    PyObject* target = NULL;
+
+    if (source && wxIsKindOf(source, wxShapeEvtHandler)) {
+        // If it's derived from wxShapeEvtHandler then there may
+        // already be a pointer to a Python object that we can use
+        // in the OOR data.
+        wxShapeEvtHandler* seh = (wxShapeEvtHandler*)source;
+        wxPyClientData* data = (wxPyClientData*)seh->GetClientObject();
+        if (data) {
+            target = data->m_obj;
+            Py_INCREF(target);
+        }
+    }
+    if (! target) {
+        target = wxPyMake_wxObject2(source, FALSE);
+        if (target != Py_None)
+            ((wxShapeEvtHandler*)source)->SetClientObject(new wxPyClientData(target));
+    }
+    return target;
+}
+
 
 
 //---------------------------------------------------------------------------

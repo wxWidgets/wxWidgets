@@ -401,6 +401,9 @@ class wxFontListPtr(wxObjectPtr):
     def RemoveFont(self, *_args, **_kwargs):
         val = apply(gdic.wxFontList_RemoveFont,(self,) + _args, _kwargs)
         return val
+    def GetCount(self, *_args, **_kwargs):
+        val = apply(gdic.wxFontList_GetCount,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxFontList instance at %s>" % (self.this,)
 class wxFontList(wxFontListPtr):
@@ -566,6 +569,9 @@ class wxPenListPtr(wxObjectPtr):
     def RemovePen(self, *_args, **_kwargs):
         val = apply(gdic.wxPenList_RemovePen,(self,) + _args, _kwargs)
         return val
+    def GetCount(self, *_args, **_kwargs):
+        val = apply(gdic.wxPenList_GetCount,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxPenList instance at %s>" % (self.this,)
 class wxPenList(wxPenListPtr):
@@ -628,6 +634,9 @@ class wxBrushListPtr(wxObjectPtr):
         return val
     def RemoveBrush(self, *_args, **_kwargs):
         val = apply(gdic.wxBrushList_RemoveBrush,(self,) + _args, _kwargs)
+        return val
+    def GetCount(self, *_args, **_kwargs):
+        val = apply(gdic.wxBrushList_GetCount,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxBrushList instance at %s>" % (self.this,)

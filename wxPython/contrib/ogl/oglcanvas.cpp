@@ -307,7 +307,7 @@ static PyObject *_wrap_wxDiagram_FindShape(PyObject *self, PyObject *args, PyObj
         _result = (wxPyShape *)wxDiagram_FindShape(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxShapeEvtHandler(_result); }
     return _resultobj;
 }
 
@@ -1343,7 +1343,7 @@ static PyObject *_wrap_wxPyShapeCanvas_FindShape(PyObject *self, PyObject *args,
         _result = (wxPyShape *)wxPyShapeCanvas_FindShape(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5);
 
     wxPy_END_ALLOW_THREADS;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxShapeEvtHandler(_result); }
 {
     PyObject *o;
     o = PyInt_FromLong((long) (*_arg3));
@@ -1383,7 +1383,7 @@ static PyObject *_wrap_wxPyShapeCanvas_FindFirstSensitiveShape(PyObject *self, P
         _result = (wxPyShape *)wxPyShapeCanvas_FindFirstSensitiveShape(_arg0,_arg1,_arg2,_arg3,_arg4);
 
     wxPy_END_ALLOW_THREADS;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxShapeEvtHandler(_result); }
 {
     PyObject *o;
     o = PyInt_FromLong((long) (*_arg3));

@@ -143,6 +143,7 @@ class wxPyEllipseShape(wxPyEllipseShapePtr):
         self.this = apply(oglshapes2c.new_wxPyEllipseShape,_args,_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxPyEllipseShape)
+        self._setOORInfo(self)
 
 
 
@@ -245,6 +246,7 @@ class wxPyCircleShape(wxPyCircleShapePtr):
         self.this = apply(oglshapes2c.new_wxPyCircleShape,_args,_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxPyCircleShape)
+        self._setOORInfo(self)
 
 
 
@@ -533,6 +535,7 @@ class wxPyLineShape(wxPyLineShapePtr):
         self.this = apply(oglshapes2c.new_wxPyLineShape,_args,_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxPyLineShape)
+        self._setOORInfo(self)
 
 
 
@@ -653,6 +656,7 @@ class wxPyPolygonShape(wxPyPolygonShapePtr):
         self.this = apply(oglshapes2c.new_wxPyPolygonShape,_args,_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxPyPolygonShape)
+        self._setOORInfo(self)
 
 
 
@@ -758,6 +762,7 @@ class wxPyTextShape(wxPyTextShapePtr):
         self.this = apply(oglshapes2c.new_wxPyTextShape,_args,_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxPyTextShape)
+        self._setOORInfo(self)
 
 
 

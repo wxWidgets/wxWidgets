@@ -94,8 +94,15 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyShapeEvtHandler)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     %addmethods { void Destroy() { delete self; } }
+    %addmethods {
+        void _setOORInfo(PyObject* _self) {
+            self->SetClientObject(new wxPyClientData(_self));
+        }
+    }
+
 
     void SetShape(wxPyShape *sh);
     wxPyShape *GetShape();
@@ -147,10 +154,7 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyShape)"
-
-    %addmethods {
-        void Destroy() { delete self; }
-    }
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void GetBoundingBoxMax(double *OUTPUT, double *OUTPUT);
     void GetBoundingBoxMin(double *OUTPUT, double *OUTPUT);
@@ -364,6 +368,8 @@ public:
     void ClearAttachments();
     void Recentre(wxDC& dc);
     void ClearPointList(wxList& list);
+    wxPen GetBackgroundPen();
+    wxBrush GetBackgroundBrush();
 
     void base_OnDelete();
     void base_OnDraw(wxDC& dc);

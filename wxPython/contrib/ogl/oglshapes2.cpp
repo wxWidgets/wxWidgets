@@ -3722,7 +3722,7 @@ static PyObject *_wrap_wxPyLineShape_GetFrom(PyObject *self, PyObject *args, PyO
         _result = (wxPyShape *)wxPyLineShape_GetFrom(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxShapeEvtHandler(_result); }
     return _resultobj;
 }
 
@@ -3840,7 +3840,7 @@ static PyObject *_wrap_wxPyLineShape_GetTo(PyObject *self, PyObject *args, PyObj
         _result = (wxPyShape *)wxPyLineShape_GetTo(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxShapeEvtHandler(_result); }
     return _resultobj;
 }
 

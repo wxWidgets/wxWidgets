@@ -49,6 +49,7 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyEllipseShape)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void base_OnDraw(wxDC& dc);
     void base_OnDrawContents(wxDC& dc);
@@ -92,6 +93,7 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyCircleShape)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void base_OnDraw(wxDC& dc);
     void base_OnDrawContents(wxDC& dc);
@@ -164,6 +166,7 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyLineShape)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void AddArrow(int type, int end = ARROW_POSITION_END,
                   double arrowSize = 10.0, double xOffset = 0.0,
@@ -269,6 +272,7 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyPolygonShape)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
 
     // void Create(wxList* points);
@@ -340,6 +344,7 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyTextShape)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
 
     void base_OnDelete();

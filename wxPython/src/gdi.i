@@ -543,6 +543,8 @@ public:
                               bool underline = FALSE, const char* facename = NULL,
                               wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     void RemoveFont(wxFont *font);
+
+    int GetCount();
 };
 
 
@@ -677,6 +679,8 @@ public:
     void AddPen(wxPen* pen);
     wxPen* FindOrCreatePen(const wxColour& colour, int width, int style);
     void RemovePen(wxPen* pen);
+
+    int GetCount();
 };
 
 
@@ -704,6 +708,8 @@ public:
     void AddBrush(wxBrush *brush);
     wxBrush * FindOrCreateBrush(const wxColour& colour, int style);
     void RemoveBrush(wxBrush *brush);
+
+    int GetCount();
 };
 
 //----------------------------------------------------------------------

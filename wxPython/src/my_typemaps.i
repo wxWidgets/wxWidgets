@@ -331,7 +331,6 @@
 %typemap(python, out) wxMouseEvent*             { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxObject*                 { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxPyPrintout*             { $target = wxPyMake_wxObject($source); }
-%typemap(python, out) wxSizer*                  { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxToolBarToolBase*        { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxToolTip*                { $target = wxPyMake_wxObject($source); }
 
@@ -350,6 +349,8 @@
 %typemap(python, out) wxToolBar*                { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxToolBarBase*            { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxWindow*                 { $target = wxPyMake_wxObject($source); }
+
+%typemap(python, out) wxSizer*                  { $target = wxPyMake_wxSizer($source); }
 
 
 //%typemap(python, out) wxHtmlCell*               { $target = wxPyMake_wxObject($source); }

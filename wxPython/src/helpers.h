@@ -65,7 +65,8 @@ PyObject* wxPyConstructObject(void* ptr,
                               PyObject* klass,
                               int setThisOwn=0);
 PyObject*  wxPyClassExists(const char* className);
-PyObject*  wxPyMake_wxObject(wxObject* source);
+PyObject*  wxPyMake_wxObject(wxObject* source, bool checkEvtHandler=TRUE);
+PyObject*  wxPyMake_wxSizer(wxSizer* source);
 void       wxPyPtrTypeMap_Add(const char* commonName, const char* ptrName);
 
 PyObject* wxPy_ConvertList(wxListBase* list, const char* className);
@@ -284,7 +285,8 @@ struct wxPyCoreAPI {
     void        (*p_wxPyCBH_delete)(wxPyCallbackHelper* cbh);
 
     PyObject*   (*p_wxPyClassExists)(const char* className);
-    PyObject*   (*p_wxPyMake_wxObject)(wxObject* source);
+    PyObject*   (*p_wxPyMake_wxObject)(wxObject* source, bool checkEvtHandler);
+    PyObject*   (*p_wxPyMake_wxSizer)(wxSizer* source);
     void        (*p_wxPyPtrTypeMap_Add)(const char* commonName, const char* ptrName);
 
 };

@@ -672,6 +672,7 @@ static wxPyCoreAPI API = {
 
     wxPyClassExists,
     wxPyMake_wxObject,
+    wxPyMake_wxSizer,
     wxPyPtrTypeMap_Add,
 };
 
@@ -1980,16 +1981,19 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxLB_HSCROLL", PyInt_FromLong((long) wxLB_HSCROLL));
 	 PyDict_SetItemString(d,"wxPROCESS_ENTER", PyInt_FromLong((long) wxPROCESS_ENTER));
 	 PyDict_SetItemString(d,"wxPASSWORD", PyInt_FromLong((long) wxPASSWORD));
-	 PyDict_SetItemString(d,"wxTE_PROCESS_ENTER", PyInt_FromLong((long) wxTE_PROCESS_ENTER));
-	 PyDict_SetItemString(d,"wxTE_PROCESS_TAB", PyInt_FromLong((long) wxTE_PROCESS_TAB));
-	 PyDict_SetItemString(d,"wxTE_PASSWORD", PyInt_FromLong((long) wxTE_PASSWORD));
 	 PyDict_SetItemString(d,"wxTE_READONLY", PyInt_FromLong((long) wxTE_READONLY));
-	 PyDict_SetItemString(d,"wxTE_RICH", PyInt_FromLong((long) wxTE_RICH));
 	 PyDict_SetItemString(d,"wxTE_MULTILINE", PyInt_FromLong((long) wxTE_MULTILINE));
-	 PyDict_SetItemString(d,"wxTE_AUTO_SCROLL", PyInt_FromLong((long) wxTE_AUTO_SCROLL));
+	 PyDict_SetItemString(d,"wxTE_PROCESS_TAB", PyInt_FromLong((long) wxTE_PROCESS_TAB));
+	 PyDict_SetItemString(d,"wxTE_RICH", PyInt_FromLong((long) wxTE_RICH));
 	 PyDict_SetItemString(d,"wxTE_NO_VSCROLL", PyInt_FromLong((long) wxTE_NO_VSCROLL));
+	 PyDict_SetItemString(d,"wxTE_AUTO_SCROLL", PyInt_FromLong((long) wxTE_AUTO_SCROLL));
+	 PyDict_SetItemString(d,"wxTE_PROCESS_ENTER", PyInt_FromLong((long) wxTE_PROCESS_ENTER));
+	 PyDict_SetItemString(d,"wxTE_PASSWORD", PyInt_FromLong((long) wxTE_PASSWORD));
 	 PyDict_SetItemString(d,"wxTE_AUTO_URL", PyInt_FromLong((long) wxTE_AUTO_URL));
 	 PyDict_SetItemString(d,"wxTE_NOHIDESEL", PyInt_FromLong((long) wxTE_NOHIDESEL));
+	 PyDict_SetItemString(d,"wxTE_DONTWRAP", PyInt_FromLong((long) wxTE_DONTWRAP));
+	 PyDict_SetItemString(d,"wxTE_LINEWRAP", PyInt_FromLong((long) wxTE_LINEWRAP));
+	 PyDict_SetItemString(d,"wxTE_WORDWRAP", PyInt_FromLong((long) wxTE_WORDWRAP));
 	 PyDict_SetItemString(d,"wxCB_SIMPLE", PyInt_FromLong((long) wxCB_SIMPLE));
 	 PyDict_SetItemString(d,"wxCB_DROPDOWN", PyInt_FromLong((long) wxCB_DROPDOWN));
 	 PyDict_SetItemString(d,"wxCB_SORT", PyInt_FromLong((long) wxCB_SORT));

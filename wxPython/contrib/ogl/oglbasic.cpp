@@ -1258,6 +1258,40 @@ static PyObject *_wrap_wxPyShapeEvtHandler_Destroy(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
+static void  wxPyShapeEvtHandler__setOORInfo(wxPyShapeEvtHandler *self,PyObject * _self) {
+            self->SetClientObject(new wxPyClientData(_self));
+        }
+static PyObject *_wrap_wxPyShapeEvtHandler__setOORInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyShapeEvtHandler * _arg0;
+    PyObject * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","_self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyShapeEvtHandler__setOORInfo",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyShapeEvtHandler_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyShapeEvtHandler__setOORInfo. Expected _wxPyShapeEvtHandler_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxPyShapeEvtHandler__setOORInfo(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxPyShapeEvtHandler_SetShape(_swigobj,_swigarg0)  (_swigobj->SetShape(_swigarg0))
 static PyObject *_wrap_wxPyShapeEvtHandler_SetShape(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1317,7 +1351,7 @@ static PyObject *_wrap_wxPyShapeEvtHandler_GetShape(PyObject *self, PyObject *ar
         _result = (wxPyShape *)wxPyShapeEvtHandler_GetShape(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxShapeEvtHandler(_result); }
     return _resultobj;
 }
 
@@ -1380,7 +1414,7 @@ static PyObject *_wrap_wxPyShapeEvtHandler_GetPreviousHandler(PyObject *self, Py
         _result = (wxPyShapeEvtHandler *)wxPyShapeEvtHandler_GetPreviousHandler(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxShapeEvtHandler(_result); }
     return _resultobj;
 }
 
@@ -1407,7 +1441,7 @@ static PyObject *_wrap_wxPyShapeEvtHandler_CreateNewCopy(PyObject *self, PyObjec
         _result = (wxPyShapeEvtHandler *)wxPyShapeEvtHandler_CreateNewCopy(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxShapeEvtHandler(_result); }
     return _resultobj;
 }
 
@@ -2478,33 +2512,6 @@ static PyObject *_wrap_wxPyShape__setCallbackInfo(PyObject *self, PyObject *args
     return _resultobj;
 }
 
-static void  wxPyShape_Destroy(wxPyShape *self) { delete self; }
-static PyObject *_wrap_wxPyShape_Destroy(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPyShape * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyShape_Destroy",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyShape_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyShape_Destroy. Expected _wxPyShape_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPyShape_Destroy(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxPyShape_GetBoundingBoxMax(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetBoundingBoxMax(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxPyShape_GetBoundingBoxMax(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2963,7 +2970,7 @@ static PyObject *_wrap_wxPyShape_GetParent(PyObject *self, PyObject *args, PyObj
         _result = (wxPyShape *)wxPyShape_GetParent(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxShapeEvtHandler(_result); }
     return _resultobj;
 }
 
@@ -3026,7 +3033,7 @@ static PyObject *_wrap_wxPyShape_GetTopAncestor(PyObject *self, PyObject *args, 
         _result = (wxPyShape *)wxPyShape_GetTopAncestor(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxShapeEvtHandler(_result); }
     return _resultobj;
 }
 
@@ -3259,7 +3266,7 @@ static PyObject *_wrap_wxPyShape_GetEventHandler(PyObject *self, PyObject *args,
         _result = (wxPyShapeEvtHandler *)wxPyShape_GetEventHandler(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxShapeEvtHandler(_result); }
     return _resultobj;
 }
 
@@ -5783,7 +5790,7 @@ static PyObject *_wrap_wxPyShape_FindRegion(PyObject *self, PyObject *args, PyOb
         _result = (wxPyShape *)wxPyShape_FindRegion(_arg0,*_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxShapeEvtHandler(_result); }
 {
     PyObject *o;
     o = PyInt_FromLong((long) (*_arg2));
@@ -6863,7 +6870,7 @@ static PyObject *_wrap_wxPyShape_CreateNewCopy(PyObject *self, PyObject *args, P
         _result = (wxPyShape *)wxPyShape_CreateNewCopy(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxShapeEvtHandler(_result); }
     return _resultobj;
 }
 
@@ -7092,6 +7099,64 @@ static PyObject *_wrap_wxPyShape_ClearPointList(PyObject *self, PyObject *args, 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyShape_GetBackgroundPen(_swigobj)  (_swigobj->GetBackgroundPen())
+static PyObject *_wrap_wxPyShape_GetBackgroundPen(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPen * _result;
+    wxPyShape * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyShape_GetBackgroundPen",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyShape_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyShape_GetBackgroundPen. Expected _wxPyShape_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxPen (wxPyShape_GetBackgroundPen(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPen_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxPyShape_GetBackgroundBrush(_swigobj)  (_swigobj->GetBackgroundBrush())
+static PyObject *_wrap_wxPyShape_GetBackgroundBrush(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBrush * _result;
+    wxPyShape * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyShape_GetBackgroundBrush",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyShape_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyShape_GetBackgroundBrush. Expected _wxPyShape_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxBrush (wxPyShape_GetBackgroundBrush(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBrush_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -8139,6 +8204,8 @@ static PyMethodDef oglbasiccMethods[] = {
 	 { "wxPyShape_base_OnDrawContents", (PyCFunction) _wrap_wxPyShape_base_OnDrawContents, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShape_base_OnDraw", (PyCFunction) _wrap_wxPyShape_base_OnDraw, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShape_base_OnDelete", (PyCFunction) _wrap_wxPyShape_base_OnDelete, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyShape_GetBackgroundBrush", (PyCFunction) _wrap_wxPyShape_GetBackgroundBrush, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyShape_GetBackgroundPen", (PyCFunction) _wrap_wxPyShape_GetBackgroundPen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShape_ClearPointList", (PyCFunction) _wrap_wxPyShape_ClearPointList, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShape_Recentre", (PyCFunction) _wrap_wxPyShape_Recentre, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShape_ClearAttachments", (PyCFunction) _wrap_wxPyShape_ClearAttachments, METH_VARARGS | METH_KEYWORDS },
@@ -8273,7 +8340,6 @@ static PyMethodDef oglbasiccMethods[] = {
 	 { "wxPyShape_GetPerimeterPoint", (PyCFunction) _wrap_wxPyShape_GetPerimeterPoint, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShape_GetBoundingBoxMin", (PyCFunction) _wrap_wxPyShape_GetBoundingBoxMin, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShape_GetBoundingBoxMax", (PyCFunction) _wrap_wxPyShape_GetBoundingBoxMax, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyShape_Destroy", (PyCFunction) _wrap_wxPyShape_Destroy, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShape__setCallbackInfo", (PyCFunction) _wrap_wxPyShape__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShapeEvtHandler_base_OnEndSize", (PyCFunction) _wrap_wxPyShapeEvtHandler_base_OnEndSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShapeEvtHandler_base_OnBeginSize", (PyCFunction) _wrap_wxPyShapeEvtHandler_base_OnBeginSize, METH_VARARGS | METH_KEYWORDS },
@@ -8309,6 +8375,7 @@ static PyMethodDef oglbasiccMethods[] = {
 	 { "wxPyShapeEvtHandler_SetPreviousHandler", (PyCFunction) _wrap_wxPyShapeEvtHandler_SetPreviousHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShapeEvtHandler_GetShape", (PyCFunction) _wrap_wxPyShapeEvtHandler_GetShape, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShapeEvtHandler_SetShape", (PyCFunction) _wrap_wxPyShapeEvtHandler_SetShape, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyShapeEvtHandler__setOORInfo", (PyCFunction) _wrap_wxPyShapeEvtHandler__setOORInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShapeEvtHandler_Destroy", (PyCFunction) _wrap_wxPyShapeEvtHandler_Destroy, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShapeEvtHandler__setCallbackInfo", (PyCFunction) _wrap_wxPyShapeEvtHandler__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyShapeEvtHandler", (PyCFunction) _wrap_new_wxPyShapeEvtHandler, METH_VARARGS | METH_KEYWORDS },

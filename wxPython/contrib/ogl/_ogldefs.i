@@ -58,12 +58,13 @@ class wxPyControlPoint;
 
 
 // OOR Support
-%typemap(python, out) wxPyShape*                { $target = wxPyMake_wxObject($source); }
-%typemap(python, out) wxPyShapeEvtHandler*      { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxPyShape*                { $target = wxPyMake_wxShapeEvtHandler($source); }
+%typemap(python, out) wxPyShapeEvtHandler*      { $target = wxPyMake_wxShapeEvtHandler($source); }
+%typemap(python, out) wxPyDivisionShape*        { $target = wxPyMake_wxShapeEvtHandler($source); }
+
 %typemap(python, out) wxPyShapeCanvas*          { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxDiagram*                { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxOGLConstraint*          { $target = wxPyMake_wxObject($source); }
-%typemap(python, out) wxPyDivisionShape*        { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxPseudoMetaFile*         { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxArrowHead*              { $target = wxPyMake_wxObject($source); }
 

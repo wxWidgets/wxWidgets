@@ -1804,7 +1804,7 @@ static PyObject *_wrap_wxDialog_CreateTextSizer(PyObject *self, PyObject *args, 
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxSizer(_result); }
 {
     if (_obj1)
         delete _arg1;
@@ -1837,7 +1837,7 @@ static PyObject *_wrap_wxDialog_CreateButtonSizer(PyObject *self, PyObject *args
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}{ _resultobj = wxPyMake_wxSizer(_result); }
     return _resultobj;
 }
 
