@@ -157,8 +157,6 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
 {
     OSStatus result = eventNotHandledErr ;
 
-    wxTopLevelWindow* tlw = (wxTopLevelWindow*) data ;
-
     wxWindow* focus = wxWindow::FindFocus() ;
     if ( focus == NULL )
         return result ;

@@ -62,8 +62,6 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
-    SInt16 procID;
-    
     m_macMinimumStatic = NULL ;
     m_macMaximumStatic = NULL ;
     m_macValueStatic = NULL ;

@@ -610,10 +610,18 @@ bool wxWindowMac::Create(wxWindowMac *parent, wxWindowID id,
     {
         Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
         
-        UInt32 features = kControlSupportsEmbedding | kControlSupportsLiveFeedback | kControlHasSpecialBackground  | 
-        kControlSupportsCalcBestRect | kControlHandlesTracking | kControlSupportsFocus | kControlWantsActivate | kControlWantsIdle; 
+        UInt32 features = 0
+			| kControlSupportsEmbedding 
+//			| kControlSupportsLiveFeedback 
+//			| kControlHasSpecialBackground  
+//			| kControlSupportsCalcBestRect 
+//			| kControlHandlesTracking 
+			| kControlSupportsFocus 
+//			| kControlWantsActivate 
+//			| kControlWantsIdle
+			; 
 
-        ::CreateUserPaneControl( MAC_WXHWND(GetParent()->MacGetTopLevelWindowRef()) , &bounds, kControlSupportsEmbedding , (ControlRef*) &m_macControl); 
+        ::CreateUserPaneControl( MAC_WXHWND(GetParent()->MacGetTopLevelWindowRef()) , &bounds, features , (ControlRef*) &m_macControl); 
 
         MacPostControlCreate(pos,size) ;
 #if !TARGET_API_MAC_OSX

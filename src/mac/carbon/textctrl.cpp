@@ -1504,7 +1504,7 @@ long wxTextCtrl::XYToPosition(long x, long y) const
     int lastHeight = 0 ;
 
     ItemCount n ;
-    for ( n = 0 ; n <= lastpos ; ++n )
+    for ( n = 0 ; n <= (ItemCount) lastpos ; ++n )
     {
         if ( y == ypos && x == xpos )
             return n ;
@@ -1546,7 +1546,7 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
         int lastHeight = 0 ;
 
         ItemCount n ;
-        for ( n = 0 ; n <= pos ; ++n )
+        for ( n = 0 ; n <= (ItemCount) pos ; ++n )
         {
             TXNOffsetToPoint( (TXNObject) m_macTXN,  n , &curpt);
 
@@ -1612,7 +1612,7 @@ int wxTextCtrl::GetLineLength(long lineNo) const
         long lastpos = GetLastPosition() ;
 
         ItemCount n ;
-        for ( n = 0 ; n <= lastpos ; ++n )
+        for ( n = 0 ; n <= (ItemCount) lastpos ; ++n )
         {
             TXNOffsetToPoint( (TXNObject) m_macTXN,  n , &curpt);
 
@@ -1653,7 +1653,7 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
         long lastpos = GetLastPosition() ;
 
         ItemCount n ;
-        for ( n = 0 ; n <= lastpos ; ++n )
+        for ( n = 0 ; n <= (ItemCount)lastpos ; ++n )
         {
             TXNOffsetToPoint( (TXNObject) m_macTXN,  n , &curpt);
 
