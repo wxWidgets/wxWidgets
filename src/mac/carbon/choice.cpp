@@ -63,6 +63,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
     if ( n > 0 )
         SetControl32BitValue( (ControlHandle) m_macControl , 1 ) ;
     MacPostControlCreate() ;
+    // TODO wxCB_SORT
     for ( int i = 0; i < n; i++ )
     {
         Append(choices[i]);
