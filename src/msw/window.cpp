@@ -1645,15 +1645,6 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
             break;
         }
 
-        if ( i == 3 )
-        {
-            // how did it happen? maybe OnSize() handler does something really
-            // strange in this class?
-            wxFAIL_MSG( _T("logic error in DoSetClientSize") );
-
-            break;
-        }
-
         int widthClient = width,
             heightClient = height;
 
@@ -5158,7 +5149,7 @@ wxPoint wxGetMousePosition()
 {
     POINT pt;
     GetCursorPos( & pt );
-    
+
     return wxPoint(pt.x, pt.y);
 }
 
