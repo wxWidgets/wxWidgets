@@ -15,6 +15,12 @@
    extern void exit  OF((int));
 #endif
 
+#if defined(VMS) || defined(RISCOS)
+#  define TESTFILE "foo-gz"
+#else
+#  define TESTFILE "foo.gz"
+#endif
+
 #define CHECK_ERR(err, msg) { \
     if (err != Z_OK) { \
         fprintf(stderr, "%s error: %d\n", msg, err); \
@@ -79,8 +85,8 @@ void test_compress(compr, comprLen, uncompr, uncomprLen)
  * Test read/write of .gz files
  */
 void test_gzio(out, in, uncompr, uncomprLen)
-    const char *out; /* output file */
-    const char *in;  /* input file */
+    const char *out; /* compressed output file */
+    const char *in;  /* compressed input file */
     Byte *uncompr;
     int  uncomprLen;
 {
@@ -528,8 +534,8 @@ int main(argc, argv)
     }
     test_compress(compr, comprLen, uncompr, uncomprLen);
 
-    test_gzio((argc > 1 ? argv[1] : "foo.gz"),
-              (argc > 2 ? argv[2] : "foo.gz"),
+    test_gzio((argc > 1 ? argv[1] : TESTFILE),
+              (argc > 2 ? argv[2] : TESTFILE),
 	      uncompr, (int)uncomprLen);
 
     test_deflate(compr, comprLen);

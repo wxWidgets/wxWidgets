@@ -1,5 +1,5 @@
 /* gzio.c -- IO on .gz files
- * Copyright (C) 1995-1998 Jean-loup Gailly.
+ * Copyright (C) 1995-2002 Jean-loup Gailly.
  * For conditions of distribution and use, see copyright notice in zlib.h
  *
  * Compile this file with -DNO_DEFLATE to avoid the compression code.
@@ -446,10 +446,14 @@ int ZEXPORT gzread (file, buf, len)
 	    s->crc = crc32(s->crc, start, (uInt)(s->stream.next_out - start));
 	    start = s->stream.next_out;
 
-	    if (getLong(s) != s->crc || getLong(s) != s->stream.total_out) {
+	    if (getLong(s) != s->crc) {
 		s->z_err = Z_DATA_ERROR;
 	    } else {
-		/* Check for concatenated .gz files: */
+	        (void)getLong(s);
+                /* The uncompressed length returned by above getlong() may
+                 * be different from s->stream.total_out) in case of
+		 * concatenated .gz files. Check for such files:
+		 */
 		check_header(s);
 		if (s->z_err == Z_OK) {
 		    uLong total_in = s->stream.total_in;
@@ -740,7 +744,7 @@ z_off_t ZEXPORT gzseek (file, offset, whence)
 	return -1L;
 #else
 	if (whence == SEEK_SET) {
-	    offset -= s->stream.total_out;
+	    offset -= s->stream.total_in;
 	}
 	if (offset < 0) return -1L;
 
@@ -819,6 +823,7 @@ int ZEXPORT gzrewind (file)
     s->z_eof = 0;
     s->stream.avail_in = 0;
     s->stream.next_in = s->inbuf;
+    s->crc = crc32(0L, Z_NULL, 0);
 	
     if (s->startpos == 0) { /* not a compressed file */
 	rewind(s->file);
@@ -879,7 +884,8 @@ local void putLong (file, x)
 }
 
 /* ===========================================================================
-   Reads a long in LSB order from the given gz_stream. Sets
+   Reads a long in LSB order from the given gz_stream. Sets z_err in case
+   of error.
 */
 #if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local uLong getLong (gz_stream* s)

@@ -1,5 +1,5 @@
 /* trees.c -- output deflated data using Huffman coding
- * Copyright (C) 1995-1998 Jean-loup Gailly
+ * Copyright (C) 1995-2002 Jean-loup Gailly
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
@@ -254,6 +254,13 @@ local void tr_static_init()
 
     if (static_init_done) return;
 
+    /* For some embedded targets, global variables are not initialized: */
+    static_l_desc.static_tree = static_ltree;
+    static_l_desc.extra_bits = extra_lbits;
+    static_d_desc.static_tree = static_dtree;
+    static_d_desc.extra_bits = extra_dbits;
+    static_bl_desc.extra_bits = extra_blbits;
+
     /* Initialize the mapping length (0..255) -> length code (0..28) */
     length = 0;
     for (code = 0; code < LENGTH_CODES-1; code++) {
@@ -386,8 +393,6 @@ void _tr_init(s)
 {
     tr_static_init();
 
-    s->compressed_len = 0L;
-
     s->l_desc.dyn_tree = s->dyn_ltree;
     s->l_desc.stat_desc = &static_l_desc;
 
@@ -401,6 +406,7 @@ void _tr_init(s)
     s->bi_valid = 0;
     s->last_eob_len = 8; /* enough lookahead for inflate */
 #ifdef __WXDEBUG__
+    s->compressed_len = 0L;
     s->bits_sent = 0L;
 #endif
 
@@ -612,7 +618,7 @@ local void gen_codes (tree, max_code, bl_count)
     /* Check that the bit counts in bl_count are consistent. The last code
      * must be all ones.
      */
-    Assert (code + bl_count[MAX_BITS]-1 == (ush)(1<<MAX_BITS)-(ush)1,
+    Assert (code + bl_count[MAX_BITS]-1 == (1<<MAX_BITS)-1,
             "inconsistent bit counts");
     Tracev((stderr,"\ngen_codes: max_code %d ", max_code));
 
@@ -913,9 +919,10 @@ void _tr_stored_block(s, buf, stored_len, eof)
 #endif
 {
     send_bits(s, (STORED_BLOCK<<1)+eof, 3);  /* send block type */
+#ifdef __WXDEBUG__
     s->compressed_len = (s->compressed_len + 3 + 7) & (ulg)~7L;
     s->compressed_len += (stored_len + 4) << 3;
-
+#endif
     copy_block(s, buf, (unsigned)stored_len, 1); /* with header */
 }
 
@@ -939,7 +946,9 @@ void _tr_align(s)
 {
     send_bits(s, STATIC_TREES<<1, 3);
     send_code(s, END_BLOCK, static_ltree);
+#ifdef __WXDEBUG__
     s->compressed_len += 10L; /* 3 for block type, 7 for EOB */
+#endif
     bi_flush(s);
     /* Of the 10 bits for the empty block, we have already sent
      * (10 - bi_valid) bits. The lookahead for the last real code (before
@@ -949,7 +958,9 @@ void _tr_align(s)
     if (1 + s->last_eob_len + 10 - s->bi_valid < 9) {
         send_bits(s, STATIC_TREES<<1, 3);
         send_code(s, END_BLOCK, static_ltree);
+#ifdef __WXDEBUG__
         s->compressed_len += 10L;
+#endif
         bi_flush(s);
     }
     s->last_eob_len = 7;
@@ -957,13 +968,12 @@ void _tr_align(s)
 
 /* ===========================================================================
  * Determine the best encoding for the current block: dynamic trees, static
- * trees or store, and output the encoded block to the zip file. This function
- * returns the total compressed length for the file so far.
+ * trees or store, and output the encoded block to the zip file.
  */
 #if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
-ulg _tr_flush_block(deflate_state* s, charf* buf, ulg stored_len, int eof)
+void _tr_flush_block(deflate_state* s, charf* buf, ulg stored_len, int eof)
 #else
-ulg _tr_flush_block(s, buf, stored_len, eof)
+void _tr_flush_block(s, buf, stored_len, eof)
     deflate_state *s;
     charf *buf;       /* input block, or NULL if too old */
     ulg stored_len;   /* length of input block */
@@ -1011,25 +1021,6 @@ ulg _tr_flush_block(s, buf, stored_len, eof)
 	opt_lenb = static_lenb = stored_len + 5; /* force a stored block */
     }
 
-    /* If compression failed and this is the first and last block,
-     * and if the .zip file can be seeked (to rewrite the local header),
-     * the whole file is transformed into a stored file:
-     */
-#ifdef STORED_FILE_OK
-#  ifdef FORCE_STORED_FILE
-    if (eof && s->compressed_len == 0L) { /* force stored file */
-#  else
-    if (stored_len <= opt_lenb && eof && s->compressed_len==0L && seekable()) {
-#  endif
-        /* Since LIT_BUFSIZE <= 2*WSIZE, the input data must be there: */
-        if (buf == (charf*)0) error ("block vanished");
-
-        copy_block(buf, (unsigned)stored_len, 0); /* without header */
-        s->compressed_len = stored_len << 3;
-        s->method = STORED;
-    } else
-#endif /* STORED_FILE_OK */
-
 #ifdef FORCE_STORED
     if (buf != (char*)0) { /* force stored block */
 #else
@@ -1051,25 +1042,32 @@ ulg _tr_flush_block(s, buf, stored_len, eof)
 #endif
         send_bits(s, (STATIC_TREES<<1)+eof, 3);
         compress_block(s, (ct_data *)static_ltree, (ct_data *)static_dtree);
+#ifdef __WXDEBUG__
         s->compressed_len += 3 + s->static_len;
+#endif
     } else {
         send_bits(s, (DYN_TREES<<1)+eof, 3);
         send_all_trees(s, s->l_desc.max_code+1, s->d_desc.max_code+1,
                        max_blindex+1);
         compress_block(s, (ct_data *)s->dyn_ltree, (ct_data *)s->dyn_dtree);
+#ifdef __WXDEBUG__
         s->compressed_len += 3 + s->opt_len;
+#endif
     }
     Assert (s->compressed_len == s->bits_sent, "bad compressed size");
+    /* The above check is made mod 2^32, for files larger than 512 MB
+     * and uLong implemented on 32 bits.
+     */
     init_block(s);
 
     if (eof) {
         bi_windup(s);
+#ifdef __WXDEBUG__
         s->compressed_len += 7;  /* align on byte boundary */
+#endif
     }
     Tracev((stderr,"\ncomprlen %lu(%lu) ", s->compressed_len>>3,
            s->compressed_len-7*eof));
-
-    return s->compressed_len >> 3;
 }
 
 /* ===========================================================================
@@ -1173,7 +1171,7 @@ local void compress_block(s, ltree, dtree)
         } /* literal or match pair ? */
 
         /* Check that the overlay between pending_buf and d_buf+l_buf is ok: */
-        Assert((unsigned)s->pending < s->lit_bufsize + 2*lx, "pendingBuf overflow");
+        Assert(s->pending < s->lit_bufsize + 2*lx, "pendingBuf overflow");
 
     } while (lx < s->last_lit);
 
