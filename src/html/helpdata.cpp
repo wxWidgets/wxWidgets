@@ -168,6 +168,8 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
                         {
                 ESCSEQ("quot", "\""),
                 ESCSEQ("#34", "\""),
+                ESCSEQ("#8220", "\""),
+                ESCSEQ("#8221", "\""),
                 ESCSEQ("lt", "<"),
                 ESCSEQ("#60", "<"),
                 ESCSEQ("gt", ">"),
@@ -184,6 +186,7 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
     
                 ESCSEQ("trade", "(TM)"),
                 ESCSEQ("#153", "(TM)"),
+                ESCSEQ("#8482", "(TM)"),
 
                 ESCSEQ("yen", "¥"),
                 ESCSEQ("#165", "¥"),
