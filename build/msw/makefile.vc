@@ -808,7 +808,7 @@ WXPNG_OBJECTS =  \
 WXREGEX_CFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__DEBUGINFO_32) /Fd$(LIBDIRNAME)\wxregex$(WXDEBUGFLAG).pdb \
 	$(____DEBUGRUNTIME_2_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) \
-	/I..\..\include /I$(SETUPHDIR) $(CPPFLAGS) $(CFLAGS)
+	/I..\..\include /I$(SETUPHDIR) $(__UNICODE_DEFINE_p) $(CPPFLAGS) $(CFLAGS)
 WXREGEX_OBJECTS =  \
 	$(OBJS)\wxregex_regcomp.obj \
 	$(OBJS)\wxregex_regexec.obj \

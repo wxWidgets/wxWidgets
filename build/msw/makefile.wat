@@ -2735,7 +2735,7 @@ WXPNG_OBJECTS =  &
 	$(OBJS)\wxpng_pngwtran.obj &
 	$(OBJS)\wxpng_pngwutil.obj
 WXREGEX_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
-	-i=..\..\include -i=$(SETUPHDIR) $(CPPFLAGS) $(CFLAGS)
+	-i=..\..\include -i=$(SETUPHDIR) $(__UNICODE_DEFINE_p) $(CPPFLAGS) $(CFLAGS)
 WXREGEX_OBJECTS =  &
 	$(OBJS)\wxregex_regcomp.obj &
 	$(OBJS)\wxregex_regexec.obj &

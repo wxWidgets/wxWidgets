@@ -715,7 +715,7 @@ WXPNG_OBJECTS =  \
 	$(OBJS)\wxpng_pngwtran.o \
 	$(OBJS)\wxpng_pngwutil.o
 WXREGEX_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
-	-I..\..\include -I$(SETUPHDIR) $(CPPFLAGS) $(CFLAGS)
+	-I..\..\include -I$(SETUPHDIR) $(__UNICODE_DEFINE_p) $(CPPFLAGS) $(CFLAGS)
 WXREGEX_OBJECTS =  \
 	$(OBJS)\wxregex_regcomp.o \
 	$(OBJS)\wxregex_regexec.o \
