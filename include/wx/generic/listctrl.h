@@ -371,6 +371,7 @@ class WXDLLEXPORT wxListTextCtrl: public wxTextCtrl
     bool               *m_accept;
     wxString           *m_res;
     wxListMainWindow   *m_owner;
+    wxString            m_startValue;
 
   public:
     wxListTextCtrl(void) {};
@@ -434,8 +435,8 @@ class WXDLLEXPORT wxListMainWindow: public wxScrolledWindow
     void DeselectLine( wxListLineData *line );
     void DeleteLine( wxListLineData *line );
     
-    wxTextCtrl *EditLabel( long item );
-    void Edit( long item ) { (void)EditLabel(item); }         // deprecated
+    void EditLabel( long item );
+    void Edit( long item ) { EditLabel(item); }         // deprecated
     void OnRenameTimer();
     void OnRenameAccept();
     

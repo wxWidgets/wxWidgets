@@ -172,7 +172,8 @@ class WXDLLEXPORT wxTreeTextCtrl: public wxTextCtrl
   private:
     bool               *m_accept;
     wxString           *m_res;
-    wxTreeCtrl        *m_owner;
+    wxTreeCtrl         *m_owner;
+    wxString            m_startValue;
 
   public:
     wxTreeTextCtrl(void) {};

@@ -899,6 +899,9 @@ wxListTextCtrl::wxListTextCtrl( wxWindow *parent, const wxWindowID id,
     m_res = res;
     m_accept = accept;
     m_owner = owner;
+    (*m_accept) = FALSE;
+    (*m_res) = "";
+    m_startValue = value;
 }
 
 void wxListTextCtrl::OnChar( wxKeyEvent &event )
@@ -907,15 +910,14 @@ void wxListTextCtrl::OnChar( wxKeyEvent &event )
     {
         (*m_accept) = TRUE;
         (*m_res) = GetValue();
-        m_owner->OnRenameAccept();
-        if (!wxPendingDelete.Member(this)) wxPendingDelete.Append(this);
+	m_owner->SetFocus();
         return;
     }
     if (event.m_keyCode == WXK_ESCAPE)
     {
         (*m_accept) = FALSE;
         (*m_res) = "";
-        if (!wxPendingDelete.Member(this)) wxPendingDelete.Append(this);
+	m_owner->SetFocus();
         return;
     }
     event.Skip();
@@ -923,10 +925,12 @@ void wxListTextCtrl::OnChar( wxKeyEvent &event )
 
 void wxListTextCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 {
-    (*m_accept) = FALSE;
-    (*m_res) = "";
-    if (!wxPendingDelete.Member(this)) wxPendingDelete.Append(this);
-    return;
+    if (wxPendingDelete.Member(this)) return;
+
+    wxPendingDelete.Append(this);
+    
+    if ((*m_accept) && ((*m_res) != m_startValue))
+        m_owner->OnRenameAccept();
 }
 
 //-----------------------------------------------------------------------------
@@ -1139,7 +1143,7 @@ void wxListMainWindow::DeleteLine( wxListLineData *line )
 
 /* *** */
 
-wxTextCtrl *wxListMainWindow::EditLabel( long item )
+void wxListMainWindow::EditLabel( long item )
 {
     wxNode *node = m_lines.Nth( item );
     wxCHECK_MSG( node, (wxTextCtrl *)NULL, _T("wrong index in wxListCtrl::Edit()") );
@@ -1153,7 +1157,7 @@ wxTextCtrl *wxListMainWindow::EditLabel( long item )
     GetParent()->GetEventHandler()->ProcessEvent( le );
     
     if (!le.IsAllowed())
-        return (wxTextCtrl *)NULL;
+        return;
     
     wxString s;
     m_currentEdit->GetText( 0, s );
@@ -1171,8 +1175,6 @@ wxTextCtrl *wxListMainWindow::EditLabel( long item )
     wxListTextCtrl *text = new wxListTextCtrl(
       this, -1, &m_renameAccept, &m_renameRes, this, s, wxPoint(x-4,y-4), wxSize(w+11,h+8) );
     text->SetFocus();
-
-    return text;
 }
 
 void wxListMainWindow::OnRenameTimer()
@@ -1193,7 +1195,11 @@ void wxListMainWindow::OnRenameAccept()
     
     if (!le.IsAllowed()) return;
     
-    /* DO CHANGE LABEL */
+    wxListItem info;
+    info.m_mask = wxLIST_MASK_TEXT;
+    info.m_itemId = le.m_itemIndex;
+    info.m_text = m_renameRes;
+    SetItem( info );
 }
 
 void wxListMainWindow::OnMouse( wxMouseEvent &event )

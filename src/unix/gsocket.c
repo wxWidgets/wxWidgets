@@ -62,6 +62,10 @@ void GSocket_Cleanup()
 {
 }
 
+void GSocket_Done()
+{
+}
+
 /* Constructors / Destructors */
 
 GSocket *GSocket_new()

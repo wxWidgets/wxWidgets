@@ -20,6 +20,7 @@
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/gdicmn.h"
+#include "wx/frame.h"
 
 #if wxUSE_HELP
 

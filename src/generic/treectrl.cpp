@@ -192,6 +192,9 @@ wxTreeTextCtrl::wxTreeTextCtrl( wxWindow *parent, const wxWindowID id,
     m_res = res;
     m_accept = accept;
     m_owner = owner;
+    (*m_accept) = FALSE;
+    (*m_res) = "";
+    m_startValue = value;
 }
 
 void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
@@ -200,15 +203,14 @@ void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
     {
         (*m_accept) = TRUE;
         (*m_res) = GetValue();
-        m_owner->OnRenameAccept();
-        if (!wxPendingDelete.Member(this)) wxPendingDelete.Append(this);
+	m_owner->SetFocus();
         return;
     }
     if (event.m_keyCode == WXK_ESCAPE)
     {
         (*m_accept) = FALSE;
         (*m_res) = "";
-        if (!wxPendingDelete.Member(this)) wxPendingDelete.Append(this);
+	m_owner->SetFocus();
         return;
     }
     event.Skip();
@@ -216,9 +218,12 @@ void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
 
 void wxTreeTextCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 {
-    (*m_accept) = FALSE;
-    (*m_res) = "";
-    if (!wxPendingDelete.Member(this)) wxPendingDelete.Append(this);
+    if (wxPendingDelete.Member(this)) return;
+
+    wxPendingDelete.Append(this);
+    
+    if ((*m_accept) && ((*m_res) != m_startValue))
+        m_owner->OnRenameAccept();
 }
 
 #define PIXELS_PER_UNIT 10
@@ -1801,6 +1806,21 @@ void wxTreeCtrl::Edit( const wxTreeItemId& item )
     int y = m_currentEdit->GetY();
     int w = m_currentEdit->GetWidth();
     int h = m_currentEdit->GetHeight();
+    
+    int image_h = 0;
+    int image_w = 0;
+    if ((m_currentEdit->IsExpanded()) && (m_currentEdit->GetSelectedImage() != -1))
+    {
+        m_imageListNormal->GetSize( m_currentEdit->GetSelectedImage(), image_w, image_h );
+        image_w += 4;
+    }
+    else if (m_currentEdit->GetImage() != -1)
+    {
+        m_imageListNormal->GetSize( m_currentEdit->GetImage(), image_w, image_h );
+        image_w += 4;
+    }
+    x += image_w;
+    w -= image_w + 4; // I don't know why +4 is needed
 
     wxClientDC dc(this);
     PrepareDC( dc );
@@ -1827,7 +1847,7 @@ void wxTreeCtrl::OnRenameAccept()
     
     if (!le.IsAllowed()) return;
     
-    /* DO CHANGE LABEL */
+    SetItemText( m_currentEdit, m_renameRes );
 }
     
 void wxTreeCtrl::OnMouse( wxMouseEvent &event )
