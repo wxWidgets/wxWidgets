@@ -177,6 +177,8 @@ protected:
     // common part of all ctors
     void Init();
 
+    // Always rely on GetBestSize, which will look at all the pages
+    virtual void SetInitialBestSize(const wxSize& WXUNUSED(size)) { }
 
     // the array of all pages of this control
     wxArrayPages m_pages;
