@@ -2771,6 +2771,9 @@ void wxWin32Renderer::DrawSliderTicks(wxDC& dc,
         return;
     }
 
+    // this would lead to an infinite loop below
+    wxCHECK_RET( step > 1, _T("invalid step in wxRenderer::DrawSliderTicks") );
+
     // the variable names correspond to horizontal case, but they can be used
     // for both orientations
     wxCoord x1, x2, y1, y2, len, widthThumb;

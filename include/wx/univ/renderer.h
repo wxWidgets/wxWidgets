@@ -655,7 +655,7 @@ public:
                                  int step = 1,
                                  int flags = 0)
         { m_renderer->DrawSliderTicks(dc, rect, sizeThumb, orient,
-                                      start, end, start, flags); }
+                                      start, end, step, flags); }
 
     virtual void DrawMenuBarItem(wxDC& dc,
                                  const wxRect& rect,
