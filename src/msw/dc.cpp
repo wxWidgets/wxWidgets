@@ -550,8 +550,8 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
     // to have the same size regardless of which pen is used - adjust
     if ( m_pen.GetStyle() == wxTRANSPARENT )
     {
-        x2++;
-        y2++;
+//        x2++;
+//        y2++;
     }
 
     (void)Rectangle(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2));
