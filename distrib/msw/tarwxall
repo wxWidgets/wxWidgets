@@ -75,9 +75,27 @@ cd $2
 rm -f -r wxWindows-${WXVER}
 mkdir wxWindows-${WXVER}
 cd wxWindows-${WXVER}
+
+# Copy OS/2 specific configure files
+cp $1/distrib/os2/os2-specific.zip docs/os2
+
+# Translate all .dsp and .dsw files to DOS format
+unix2dos --unix2dos `cat $1/distrib/msw/vc.rsp`
+
+# Copy the OS/2 files which probably haven't been copied yet
+mkdir include/wx/os2
+mkdir src/os2
+cp $1/include/wx/os2/*.H include/wx/os2
+cp $1/src/os2/*.CPP src/os2
+
+# Make all OS/2 files lower case
+$1/distrib/namedown include/wx/os2/*.H
+$1/distrib/namedown src/os2/*.CPP
+
 $TAR xf ../wxAll-${WXVER}.tar
 cd ..
 rm -f wxAll-${WXVER}.tar
 $TAR cf $2/wxAll-${WXVER}.tar wxWindows-${WXVER}/*
 rm -f -r wxWindows-${WXVER}
 gzip $2/wxAll-${WXVER}.tar
+

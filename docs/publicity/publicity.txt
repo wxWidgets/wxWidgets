@@ -20,12 +20,10 @@ Non-Microsoft:
 comp.programming
 comp.os.linux.development.apps
 comp.os.linux.announce
-comp.sys.mac.programmer.info
 comp.sys.mac.programmer.tools
 comp.software-eng
 comp.lang.c++
 
-comp.windows.misc
 comp.windows.x
 comp.windows.x.announce
 comp.windows.x.motif
