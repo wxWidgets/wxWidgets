@@ -48,7 +48,7 @@ class wxHtmlListmarkCell : public wxHtmlCell
 
 wxHtmlListmarkCell::wxHtmlListmarkCell(wxDC* dc, const wxColour& clr) : wxHtmlCell(), m_Brush(clr, wxSOLID)
 {
-    m_Width = dc->GetCharWidth();
+    m_Width =  dc->GetCharHeight();
     m_Height = dc->GetCharHeight();
     m_Descent = 0;
 }
@@ -58,12 +58,8 @@ wxHtmlListmarkCell::wxHtmlListmarkCell(wxDC* dc, const wxColour& clr) : wxHtmlCe
 void wxHtmlListmarkCell::Draw(wxDC& dc, int x, int y, int WXUNUSED(view_y1), int WXUNUSED(view_y2))
 {
     dc.SetBrush(m_Brush);
-    //dc.DrawEllipse(x + m_PosX + m_Width / 4, y + m_PosY + m_Height / 4, m_Width / 2, m_Width / 2);
-    // This looks better IMHO (JACS) -- I tried to get ellipses/circles working but they can
-    // just look terrible, at least on Windows. TODO: maybe have configurable bullets,
-    // possibly with the app supplying bitmaps.
-    int size = (int) ((m_Width / 2.0) + 0.5);
-    dc.DrawRectangle(x + m_PosX + (m_Width - size)/2, y + m_PosY + (m_Height - size)/ 2, size, size);
+    dc.DrawEllipse(x + m_PosX + m_Width / 3, y + m_PosY + m_Height / 3, 
+                   (m_Width / 3), (m_Width / 3));
 }
 
 
