@@ -105,8 +105,6 @@ wxBitmap wxCheckBox::GetBitmap(State state, Status status) const
     wxBitmap bmp = m_bitmaps[state][status];
     if ( !bmp.Ok() )
         bmp = m_bitmaps[State_Normal][status];
-    if ( !bmp.Ok() )
-        bmp = wxTheme::Get()->GetColourScheme()->GetCheckBitmap(state, status);
 
     return bmp;
 }
@@ -120,27 +118,33 @@ void wxCheckBox::SetBitmap(const wxBitmap& bmp, State state, Status status)
 // drawing
 // ----------------------------------------------------------------------------
 
+wxCheckBox::State wxCheckBox::GetState(int flags) const
+{
+    if ( flags & wxCONTROL_DISABLED )
+        return State_Disabled;
+    else if ( flags & wxCONTROL_PRESSED )
+        return State_Pressed;
+    else if ( flags & wxCONTROL_CURRENT )
+        return State_Current;
+    else
+        return State_Normal;
+}
+
 void wxCheckBox::DoDraw(wxControlRenderer *renderer)
 {
-    State state;
     int flags = GetStateFlags();
-    if ( flags & wxCONTROL_DISABLED )
-        state = State_Disabled;
-    else if ( flags & wxCONTROL_PRESSED )
-        state = State_Pressed;
-    else if ( flags & wxCONTROL_CURRENT )
-        state = State_Current;
-    else
-        state = State_Normal;
 
     wxDC& dc = renderer->GetDC();
     dc.SetFont(GetFont());
     dc.SetTextForeground(GetForegroundColour());
 
+    if ( m_status == Status_Checked )
+        flags |= wxCONTROL_CHECKED;
+
     renderer->GetRenderer()->
         DrawCheckButton(dc,
                         GetLabel(),
-                        GetBitmap(state, m_status),
+                        GetBitmap(GetState(flags), m_status),
                         renderer->GetRect(),
                         flags,
                         GetWindowStyle() & wxALIGN_RIGHT ? wxALIGN_RIGHT
@@ -152,6 +156,13 @@ void wxCheckBox::DoDraw(wxControlRenderer *renderer)
 // geometry calculations
 // ----------------------------------------------------------------------------
 
+wxSize wxCheckBox::GetBitmapSize() const
+{
+    wxBitmap bmp = GetBitmap(State_Normal, Status_Checked);
+    return bmp.Ok() ? wxSize(bmp.GetWidth(), bmp.GetHeight())
+                    : GetRenderer()->GetCheckBitmapSize();
+}
+
 wxSize wxCheckBox::DoGetBestClientSize() const
 {
     wxClientDC dc(wxConstCast(this, wxCheckBox));
@@ -159,12 +170,12 @@ wxSize wxCheckBox::DoGetBestClientSize() const
     wxCoord width, height;
     dc.GetMultiLineTextExtent(GetLabel(), &width, &height);
 
-    wxBitmap bmp = GetBitmap(State_Normal, Status_Checked);
-    if ( height < bmp.GetHeight() )
-        height = bmp.GetHeight();
+    wxSize sizeBmp = GetBitmapSize();
+    if ( height < sizeBmp.y )
+        height = sizeBmp.y;
     height += GetCharHeight()/2;
 
-    width += bmp.GetWidth() + 2*GetCharWidth();
+    width += sizeBmp.x + 2*GetCharWidth();
 
     return wxSize(width, height);
 }

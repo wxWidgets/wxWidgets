@@ -76,7 +76,44 @@ void wxRadioButton::ChangeValue(bool value)
 {
     if ( !IsChecked() && value )
     {
-        // TODO clear all all others in our group!
+        // clear all others radio buttons in our group: for this we need to
+        // find the radio button which is the first in the group, i.e. the one
+        // with wxRB_GROUP style
+        const wxWindowList& siblings = GetParent()->GetChildren();
+        wxWindowList::Node *nodeStart = siblings.Find(this);
+        while ( nodeStart )
+        {
+            // stop if we found a radio button with wxRB_GROUP style or it we
+            // are at the first control
+            if ( !nodeStart->GetPrevious() ||
+                 (nodeStart->GetData()->GetWindowStyle() & wxRB_GROUP) )
+                break;
+
+            nodeStart = nodeStart->GetPrevious();
+        }
+
+        // now clear all radio buttons from the starting one until the next
+        // one with wxRB_GROUP style
+        while ( nodeStart )
+        {
+            wxWindow *win = nodeStart->GetData();
+            if ( win != this )
+            {
+                wxRadioButton *btn = wxDynamicCast(win, wxRadioButton);
+                if ( btn )
+                {
+                    btn->ClearValue();
+                }
+            }
+
+            nodeStart = nodeStart->GetNext();
+            if ( !nodeStart ||
+                 (nodeStart->GetData()->GetWindowStyle() & wxRB_GROUP) )
+            {
+                // we reached the next group
+                break;
+            }
+        }
 
         SetValue(TRUE);
 
@@ -103,22 +140,36 @@ void wxRadioButton::SendEvent()
 }
 
 // ----------------------------------------------------------------------------
-// indicator bitmaps
+// overridden wxCheckBox methods
 // ----------------------------------------------------------------------------
 
-wxBitmap wxRadioButton::GetBitmap(State state, Status status) const
+wxSize wxRadioButton::GetBitmapSize() const
 {
-    // radio buttons don't have "undetermined" status
-    wxASSERT_MSG( status == Status_Checked || status == Status_Unchecked,
-                  _T("invalid status for a radio button") );
+    wxBitmap bmp = GetBitmap(State_Normal, Status_Checked);
+    return bmp.Ok() ? wxSize(bmp.GetWidth(), bmp.GetHeight())
+                    : GetRenderer()->GetRadioBitmapSize();
+}
 
-    wxBitmap bmp = DoGetBitmap(state, status);
-    if ( !bmp.Ok() )
-        bmp = DoGetBitmap(State_Normal, status);
-    if ( !bmp.Ok() )
-        bmp = wxTheme::Get()->GetColourScheme()->GetRadioBitmap(state, status);
+void wxRadioButton::DoDraw(wxControlRenderer *renderer)
+{
+    wxDC& dc = renderer->GetDC();
+    dc.SetFont(GetFont());
+    dc.SetTextForeground(GetForegroundColour());
 
-    return bmp;
+    int flags = GetStateFlags();
+    Status status = GetStatus();
+    if ( status == Status_Checked )
+        flags |= wxCONTROL_CHECKED;
+
+    renderer->GetRenderer()->
+        DrawRadioButton(dc,
+                        GetLabel(),
+                        GetBitmap(GetState(flags), status),
+                        renderer->GetRect(),
+                        flags,
+                        GetWindowStyle() & wxALIGN_RIGHT ? wxALIGN_RIGHT
+                                                         : wxALIGN_LEFT,
+                        GetAccelIndex());
 }
 
 #endif // wxUSE_RADIOBTN

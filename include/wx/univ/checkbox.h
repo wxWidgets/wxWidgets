@@ -104,16 +104,26 @@ protected:
     virtual wxString GetInputHandlerType() const;
     virtual bool CanBeHighlighted() const { return TRUE; }
 
+    // get the size of the bitmap using either the current one or the default
+    // one (query renderer then)
+    virtual wxSize GetBitmapSize() const;
+
     // common part of all ctors
     void Init();
 
     // send command event notifying about the checkbox state change
-    void SendEvent();
+    virtual void SendEvent();
+
+    // get the state corresponding to the flags (combination of wxCONTROL_XXX)
+    wxCheckBox::State GetState(int flags) const;
 
     // directly access the bitmaps array without trying to find a valid bitmap
     // to use as GetBitmap() does
     wxBitmap DoGetBitmap(State state, Status status) const
         { return m_bitmaps[state][status]; }
+
+    // get the current status
+    Status GetStatus() const { return m_status; }
 
 private:
     // the current check status

@@ -64,16 +64,6 @@ public:
     // get a standard colour
     virtual wxColour Get(StdColour col) const = 0;
 
-    // get a standard bitmap
-#if wxUSE_CHECKBOX
-    virtual wxBitmap GetCheckBitmap(wxCheckBox::State state,
-                                    wxCheckBox::Status status) = 0;
-#endif // wxUSE_CHECKBOX
-#if wxUSE_RADIOBTN
-    virtual wxBitmap GetRadioBitmap(wxCheckBox::State state,
-                                    wxCheckBox::Status status) = 0;
-#endif // wxUSE_RADIOBTN
-
     // get the background colour for the given window
     virtual wxColour GetBackground(wxWindow *win) const = 0;
 

@@ -16,6 +16,8 @@
     #pragma interface "univradiobut.h"
 #endif
 
+#include "wx/checkbox.h"
+
 // ----------------------------------------------------------------------------
 // wxRadioButton
 // ----------------------------------------------------------------------------
@@ -51,9 +53,14 @@ public:
 
     // override some base class methods
     virtual void ChangeValue(bool value);
-    virtual wxBitmap GetBitmap(State state, Status status) const;
 
 protected:
+    // implement our own drawing
+    virtual void DoDraw(wxControlRenderer *renderer);
+
+    // we use the radio button bitmaps for size calculation
+    virtual wxSize GetBitmapSize() const;
+
     // the radio button can only be cleared using this method, not
     // ChangeValue() above - and it is protected as it can only be called by
     // another radiobutton

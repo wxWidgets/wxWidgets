@@ -6,6 +6,7 @@ UNIVOBJS = \
            control.o \
            inphand.o \
            listbox.o \
+           radiobut.o \
            renderer.o \
            scrolbar.o \
            statbmp.o \
@@ -25,6 +26,7 @@ UNIVDEPS = \
            control.d \
            inphand.d \
            listbox.d \
+           radiobut.d \
            renderer.d \
            scrolbar.d \
            statbmp.d \

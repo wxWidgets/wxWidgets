@@ -133,6 +133,13 @@ public:
                                  int flags = 0,
                                  wxAlignment align = wxALIGN_LEFT,
                                  int indexAccel = -1);
+    virtual void DrawRadioButton(wxDC& dc,
+                                 const wxString& label,
+                                 const wxBitmap& bitmap,
+                                 const wxRect& rect,
+                                 int flags = 0,
+                                 wxAlignment align = wxALIGN_LEFT,
+                                 int indexAccel = -1);
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
     virtual wxRect GetBorderDimensions(wxBorder border) const;
@@ -149,6 +156,10 @@ public:
     virtual int PixelToScrollbar(const wxScrollBar *scrollbar, wxCoord coord);
     virtual wxCoord GetListboxItemHeight(wxCoord fontHeight)
         { return fontHeight; }
+    virtual wxSize GetCheckBitmapSize() const
+        { return wxSize(13, 13); }
+    virtual wxSize GetRadioBitmapSize() const
+        { return wxSize(13, 13); }
 
 protected:
     // common part of DrawLabel() and DrawItem()
@@ -194,6 +205,9 @@ protected:
     void DrawArrowButton(wxDC& dc, const wxRect& rect,
                          wxArrowDirection arrowDir,
                          wxArrowStyle arrowStyle);
+
+    // helper of DrawCheckButton
+    wxBitmap GetCheckBitmap(int flags);
 
 private:
     const wxColourScheme *m_scheme;
@@ -285,16 +299,6 @@ class wxWin32ColourScheme : public wxColourScheme
 public:
     virtual wxColour Get(StdColour col) const;
     virtual wxColour GetBackground(wxWindow *win) const;
-
-#if wxUSE_CHECKBOX
-    virtual wxBitmap GetCheckBitmap(wxCheckBox::State state,
-                                    wxCheckBox::Status status);
-#endif // wxUSE_CHECKBOX
-
-#if wxUSE_RADIOBTN
-    virtual wxBitmap GetRadioBitmap(wxCheckBox::State state,
-                                    wxCheckBox::Status status);
-#endif // wxUSE_RADIOBTN
 };
 
 // ----------------------------------------------------------------------------
@@ -475,134 +479,6 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col) const
             return *wxBLACK;
     }
 }
-
-#if wxUSE_CHECKBOX
-
-static char *checked_xpm[] = {
-/* columns rows colors chars-per-pixel */
-"13 13 5 1",
-"w c white",
-"b c black",
-"d c #7f7f7f",
-"g c #c0c0c0",
-"h c #e0e0e0",
-/* pixels */
-"ddddddddddddh",
-"dbbbbbbbbbbgh",
-"dbwwwwwwwwwgh",
-"dbwwwwwwwbwgh",
-"dbwwwwwwbbwgh",
-"dbwbwwwbbbwgh",
-"dbwbbwbbbwwgh",
-"dbwbbbbbwwwgh",
-"dbwwbbbwwwwgh",
-"dbwwwbwwwwwgh",
-"dbwwwwwwwwwgh",
-"dbwwwwwwwwwgh",
-"dgggggggggggh",
-"hhhhhhhhhhhhh"
-};
-
-static char *pressed_checked_xpm[] = {
-/* columns rows colors chars-per-pixel */
-"13 13 4 1",
-"b c black",
-"d c #7f7f7f",
-"g c #c0c0c0",
-"h c #e0e0e0",
-/* pixels */
-"ddddddddddddh",
-"dbbbbbbbbbbgh",
-"dbggggggggggh",
-"dbgggggggbggh",
-"dbggggggbbggh",
-"dbgbgggbbbggh",
-"dbgbbgbbbgggh",
-"dbgbbbbbggggh",
-"dbggbbbgggggh",
-"dbgggbggggggh",
-"dbggggggggggh",
-"dbggggggggggh",
-"dgggggggggggh",
-"hhhhhhhhhhhhh"
-};
-
-static char *unchecked_xpm[] = {
-/* columns rows colors chars-per-pixel */
-"13 13 5 1",
-"w c white",
-"b c black",
-"d c #7f7f7f",
-"g c #c0c0c0",
-"h c #e0e0e0",
-/* pixels */
-"ddddddddddddh",
-"dbbbbbbbbbbgh",
-"dbwwwwwwwwwgh",
-"dbwwwwwwwwwgh",
-"dbwwwwwwwwwgh",
-"dbwwwwwwwwwgh",
-"dbwwwwwwwwwgh",
-"dbwwwwwwwwwgh",
-"dbwwwwwwwwwgh",
-"dbwwwwwwwwwgh",
-"dbwwwwwwwwwgh",
-"dgggggggggggh",
-"hhhhhhhhhhhhh"
-};
-
-static char *pressed_unchecked_xpm[] = {
-/* columns rows colors chars-per-pixel */
-"13 13 4 1",
-"b c black",
-"d c #7f7f7f",
-"g c #c0c0c0",
-"h c #e0e0e0",
-/* pixels */
-"ddddddddddddh",
-"dbbbbbbbbbbgh",
-"dbggggggggggh",
-"dbggggggggggh",
-"dbggggggggggh",
-"dbggggggggggh",
-"dbggggggggggh",
-"dbggggggggggh",
-"dbggggggggggh",
-"dbggggggggggh",
-"dbggggggggggh",
-"dbggggggggggh",
-"hhhhhhhhhhhhh"
-};
-
-wxBitmap wxWin32ColourScheme::GetCheckBitmap(wxCheckBox::State state,
-                                             wxCheckBox::Status status)
-{
-    char **xpm;
-    if ( status == wxCheckBox::Status_Checked )
-    {
-        xpm = state == wxCheckBox::State_Pressed ? pressed_checked_xpm
-                                                  : checked_xpm;
-    }
-    else
-    {
-        xpm = state == wxCheckBox::State_Pressed ? pressed_unchecked_xpm
-                                                  : unchecked_xpm;
-    }
-
-    return wxBitmap(xpm);
-}
-
-#endif // wxUSE_CHECKBOX
-
-#if wxUSE_RADIOBTN
-
-wxBitmap wxWin32ColourScheme::GetRadioBitmap(wxCheckBox::State state,
-                                             wxCheckBox::Status status)
-{
-    return GetCheckBitmap(state, status);
-}
-
-#endif // wxUSE_RADIOBTN
 
 // ============================================================================
 // wxWin32Renderer
@@ -1282,6 +1158,119 @@ void wxWin32Renderer::DrawItem(wxDC& dc,
 // check/radio buttons
 // ----------------------------------------------------------------------------
 
+static char *checked_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 5 1",
+"w c white",
+"b c black",
+"d c #7f7f7f",
+"g c #c0c0c0",
+"h c #e0e0e0",
+/* pixels */
+"ddddddddddddh",
+"dbbbbbbbbbbgh",
+"dbwwwwwwwwwgh",
+"dbwwwwwwwbwgh",
+"dbwwwwwwbbwgh",
+"dbwbwwwbbbwgh",
+"dbwbbwbbbwwgh",
+"dbwbbbbbwwwgh",
+"dbwwbbbwwwwgh",
+"dbwwwbwwwwwgh",
+"dbwwwwwwwwwgh",
+"dbwwwwwwwwwgh",
+"dgggggggggggh",
+"hhhhhhhhhhhhh"
+};
+
+static char *pressed_checked_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 4 1",
+"b c black",
+"d c #7f7f7f",
+"g c #c0c0c0",
+"h c #e0e0e0",
+/* pixels */
+"ddddddddddddh",
+"dbbbbbbbbbbgh",
+"dbggggggggggh",
+"dbgggggggbggh",
+"dbggggggbbggh",
+"dbgbgggbbbggh",
+"dbgbbgbbbgggh",
+"dbgbbbbbggggh",
+"dbggbbbgggggh",
+"dbgggbggggggh",
+"dbggggggggggh",
+"dbggggggggggh",
+"dgggggggggggh",
+"hhhhhhhhhhhhh"
+};
+
+static char *unchecked_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 5 1",
+"w c white",
+"b c black",
+"d c #7f7f7f",
+"g c #c0c0c0",
+"h c #e0e0e0",
+/* pixels */
+"ddddddddddddh",
+"dbbbbbbbbbbgh",
+"dbwwwwwwwwwgh",
+"dbwwwwwwwwwgh",
+"dbwwwwwwwwwgh",
+"dbwwwwwwwwwgh",
+"dbwwwwwwwwwgh",
+"dbwwwwwwwwwgh",
+"dbwwwwwwwwwgh",
+"dbwwwwwwwwwgh",
+"dbwwwwwwwwwgh",
+"dgggggggggggh",
+"hhhhhhhhhhhhh"
+};
+
+static char *pressed_unchecked_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 4 1",
+"b c black",
+"d c #7f7f7f",
+"g c #c0c0c0",
+"h c #e0e0e0",
+/* pixels */
+"ddddddddddddh",
+"dbbbbbbbbbbgh",
+"dbggggggggggh",
+"dbggggggggggh",
+"dbggggggggggh",
+"dbggggggggggh",
+"dbggggggggggh",
+"dbggggggggggh",
+"dbggggggggggh",
+"dbggggggggggh",
+"dbggggggggggh",
+"dbggggggggggh",
+"hhhhhhhhhhhhh"
+};
+
+wxBitmap wxWin32Renderer::GetCheckBitmap(int flags)
+{
+    char **xpm;
+    if ( flags & wxCONTROL_CHECKED )
+    {
+        xpm = flags & wxCONTROL_PRESSED ? pressed_checked_xpm
+                                        : checked_xpm;
+    }
+    else // unchecked
+    {
+        xpm = flags & wxCONTROL_PRESSED ? pressed_unchecked_xpm
+                                        : unchecked_xpm;
+    }
+
+    return wxBitmap(xpm);
+}
+
 void wxWin32Renderer::DrawCheckButton(wxDC& dc,
                                       const wxString& label,
                                       const wxBitmap& bitmap,
@@ -1315,6 +1304,18 @@ void wxWin32Renderer::DrawCheckButton(wxDC& dc,
 
     DrawLabel(dc, label, rectLabel, flags,
               wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL, indexAccel);
+}
+
+void wxWin32Renderer::DrawRadioButton(wxDC& dc,
+                                      const wxString& label,
+                                      const wxBitmap& bitmap,
+                                      const wxRect& rect,
+                                      int flags,
+                                      wxAlignment align,
+                                      int indexAccel)
+{
+    // FIXME TODO
+    DrawCheckButton(dc, label, bitmap, rect, flags, align, indexAccel);
 }
 
 // ----------------------------------------------------------------------------

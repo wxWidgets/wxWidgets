@@ -117,6 +117,14 @@ public:
                                  wxAlignment align = wxALIGN_LEFT,
                                  int indexAccel = -1);
 
+    virtual void DrawRadioButton(wxDC& dc,
+                                 const wxString& label,
+                                 const wxBitmap& bitmap,
+                                 const wxRect& rect,
+                                 int flags = 0,
+                                 wxAlignment align = wxALIGN_LEFT,
+                                 int indexAccel = -1);
+
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
     virtual wxRect GetBorderDimensions(wxBorder border) const;
     virtual bool AreScrollbarsInsideBorder() const;
@@ -133,6 +141,10 @@ public:
     virtual int PixelToScrollbar(const wxScrollBar *scrollbar, wxCoord coord);
     virtual wxCoord GetListboxItemHeight(wxCoord fontHeight)
         { return fontHeight + 2; }
+    virtual wxSize GetCheckBitmapSize() const
+        { return wxSize(10, 10); }
+    virtual wxSize GetRadioBitmapSize() const
+        { return wxSize(11, 11); }
 
     // helpers for "wxBitmap wxColourScheme::Get()"
     void DrawCheckBitmap(wxDC& dc, const wxRect& rect);
@@ -215,6 +227,32 @@ protected:
         return size;
     }
 
+    // DrawCheckBitmap and DrawRadioBitmap helpers
+
+    // draw the check bitmaps once and cache them for later use
+    wxBitmap GetCheckBitmap(int flags);
+
+    // draw a /\ or \/ line from (x1, y1) to (x2, y1) passing by the point
+    // ((x1 + x2)/2, y2)
+    void DrawUpZag(wxDC& dc,
+                   wxCoord x1, wxCoord x2,
+                   wxCoord y1, wxCoord y2);
+    void DrawDownZag(wxDC& dc,
+                     wxCoord x1, wxCoord x2,
+                     wxCoord y1, wxCoord y2);
+
+    // draw the radio button bitmap for the given state
+    void DrawRadioBitmap(wxDC& dc, const wxRect& rect, int flags);
+
+    // draw check/radio - the bitmap must be a valid one by now
+    void DoDrawCheckOrRadioBitmap(wxDC& dc,
+                                  const wxString& label,
+                                  const wxBitmap& bitmap,
+                                  const wxRect& rectTotal,
+                                  int flags,
+                                  wxAlignment align,
+                                  int indexAccel);
+
 private:
     const wxColourScheme *m_scheme;
 
@@ -227,6 +265,11 @@ private:
           m_penGrey,
           m_penLightGrey,
           m_penHighlight;
+
+    // the checkbox bitmaps: first row is for the normal, second for the
+    // pressed state and the columns are for checked and unchecked status
+    // respectively
+    wxBitmap m_bitmapsCheckbox[2][2];
 };
 
 // ----------------------------------------------------------------------------
@@ -304,22 +347,6 @@ class wxGTKColourScheme : public wxColourScheme
 public:
     virtual wxColour Get(StdColour col) const;
     virtual wxColour GetBackground(wxWindow *win) const;
-
-#if wxUSE_CHECKBOX
-    virtual wxBitmap GetCheckBitmap(wxCheckBox::State state,
-                                    wxCheckBox::Status status);
-#endif // wxUSE_CHECKBOX
-
-#if wxUSE_RADIOBTN
-    virtual wxBitmap GetRadioBitmap(wxCheckBox::State state,
-                                    wxCheckBox::Status status);
-#endif // wxUSE_RADIOBTN
-
-private:
-    // the checkbox bitmaps: first row is for the normal, second for the
-    // pressed state and the columns are for checked and unchecked status
-    // respectively
-    wxBitmap m_bitmapsCheckbox[2][2];
 };
 
 // ----------------------------------------------------------------------------
@@ -494,61 +521,6 @@ wxColour wxGTKColourScheme::Get(wxGTKColourScheme::StdColour col) const
             return *wxBLACK;
     }
 }
-
-#if wxUSE_CHECKBOX
-
-wxBitmap wxGTKColourScheme::GetCheckBitmap(wxCheckBox::State state,
-                                           wxCheckBox::Status status)
-{
-    if ( !m_bitmapsCheckbox[0][0].Ok() )
-    {
-        // init the bitmaps once only
-        wxRect rect;
-        rect.width =
-        rect.height = 10;
-        for ( int i = 0; i < 2; i++ )
-        {
-            for ( int j = 0; j < 2; j++ )
-                m_bitmapsCheckbox[i][j].Create(rect.width, rect.height);
-        }
-
-        wxGTKRenderer *renderer = (wxGTKRenderer *)wxTheme::Get()->GetRenderer();
-
-        wxMemoryDC dc;
-
-        // normal checked
-        dc.SelectObject(m_bitmapsCheckbox[0][0]);
-        renderer->DrawCheckBitmap(dc, rect);
-
-        // normal unchecked
-        dc.SelectObject(m_bitmapsCheckbox[0][1]);
-        renderer->DrawUncheckBitmap(dc, rect, FALSE);
-
-        // pressed checked
-        m_bitmapsCheckbox[1][0] = m_bitmapsCheckbox[0][0];
-
-        // pressed unchecked
-        dc.SelectObject(m_bitmapsCheckbox[1][1]);
-        renderer->DrawUncheckBitmap(dc, rect, TRUE);
-    }
-
-    int row = state == wxCheckBox::State_Pressed ? 1 : 0;
-    int col = status == wxCheckBox::Status_Checked ? 0 : 1;
-
-    return m_bitmapsCheckbox[row][col];
-}
-
-#endif // wxUSE_CHECKBOX
-
-#if wxUSE_RADIOBTN
-
-wxBitmap wxGTKColourScheme::GetRadioBitmap(wxCheckBox::State state,
-                                           wxCheckBox::Status status)
-{
-    return GetCheckBitmap(state, status);
-}
-
-#endif // wxUSE_RADIOBTN
 
 // ============================================================================
 // wxGTKRenderer
@@ -973,13 +945,186 @@ void wxGTKRenderer::DrawItem(wxDC& dc,
 // check/radion buttons
 // ----------------------------------------------------------------------------
 
+void wxGTKRenderer::DrawUncheckBitmap(wxDC& dc,
+                                      const wxRect& rectTotal,
+                                      bool isPressed)
+{
+    wxRect rect = rectTotal;
+    DrawShadedRect(dc, &rect, m_penHighlight, m_penBlack);
+    DrawAntiShadedRect(dc, &rect, m_penLightGrey, m_penDarkGrey);
+
+    wxColour col = wxSCHEME_COLOUR(m_scheme, SHADOW_IN);
+    dc.SetPen(wxPen(col, 0, wxSOLID));
+    dc.DrawPoint(rect.GetRight() - 1, rect.GetBottom() - 1);
+
+    if ( isPressed )
+        col = wxSCHEME_COLOUR(m_scheme, CONTROL_PRESSED);
+    //else: it is SHADOW_IN, leave as is
+
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.SetBrush(wxBrush(col, wxSOLID));
+    dc.DrawRectangle(rect);
+}
+
+void wxGTKRenderer::DrawCheckBitmap(wxDC& dc, const wxRect& rectTotal)
+{
+    wxRect rect = rectTotal;
+    DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
+    DrawShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
+
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.SetBrush(wxBrush(wxSCHEME_COLOUR(m_scheme, CONTROL_PRESSED), wxSOLID));
+    dc.DrawRectangle(rect);
+}
+
+void wxGTKRenderer::DrawRadioBitmap(wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags)
+{
+    wxCoord x = rect.x,
+            y = rect.y,
+            xRight = rect.GetRight(),
+            yBottom = rect.GetBottom();
+
+    wxCoord yMid = (y + yBottom) / 2;
+
+
+    // first fill the middle: as FloodFill() is not implemented on all
+    // platforms, this is the only thing to do
+    wxColour colBg = flags & wxCONTROL_CURRENT
+                        ? wxSCHEME_COLOUR(m_scheme, CONTROL_CURRENT)
+                        : wxSCHEME_COLOUR(m_scheme, SHADOW_IN);
+    dc.SetBrush(wxBrush(colBg, wxSOLID));
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.DrawRectangle(rect);
+
+    // then draw the upper half
+    dc.SetPen(flags & wxCONTROL_CHECKED ? m_penDarkGrey : m_penHighlight);
+    DrawUpZag(dc, x, xRight, yMid, y);
+    DrawUpZag(dc, x + 1, xRight - 1, yMid, y + 1);
+
+    bool drawIt = TRUE;
+    if ( flags & wxCONTROL_CHECKED )
+        dc.SetPen(m_penBlack);
+    else if ( flags & wxCONTROL_PRESSED )
+        dc.SetPen(wxPen(wxSCHEME_COLOUR(m_scheme, CONTROL_PRESSED), 0, wxSOLID));
+    else // unchecked and unpressed
+        drawIt = FALSE;
+
+    if ( drawIt )
+        DrawUpZag(dc, x + 2, xRight - 2, yMid, y + 2);
+
+    // and then the lower one
+    dc.SetPen(flags & wxCONTROL_CHECKED ? m_penHighlight : m_penBlack);
+    DrawDownZag(dc, x, xRight, yMid, yBottom);
+    if ( !(flags & wxCONTROL_CHECKED) )
+        dc.SetPen(m_penDarkGrey);
+    DrawDownZag(dc, x + 1, xRight - 1, yMid, yBottom - 1);
+
+    if ( !(flags & wxCONTROL_CHECKED) )
+        drawIt = TRUE; // with the same pen
+    else if ( flags & wxCONTROL_PRESSED )
+    {
+        dc.SetPen(wxPen(wxSCHEME_COLOUR(m_scheme, CONTROL_PRESSED), 0, wxSOLID));
+        drawIt = TRUE;
+    }
+    else // checked and unpressed
+        drawIt = FALSE;
+
+    if ( drawIt )
+        DrawDownZag(dc, x + 2, xRight - 2, yMid, yBottom - 2);
+}
+
+void wxGTKRenderer::DrawUpZag(wxDC& dc,
+                              wxCoord x1,
+                              wxCoord x2,
+                              wxCoord y1,
+                              wxCoord y2)
+{
+    wxCoord xMid = (x1 + x2) / 2;
+    dc.DrawLine(x1, y1, xMid, y2);
+    dc.DrawLine(xMid, y2, x2 + 1, y1 + 1);
+}
+
+void wxGTKRenderer::DrawDownZag(wxDC& dc,
+                                wxCoord x1,
+                                wxCoord x2,
+                                wxCoord y1,
+                                wxCoord y2)
+{
+    wxCoord xMid = (x1 + x2) / 2;
+    dc.DrawLine(x1 + 1, y1 + 1, xMid, y2);
+    dc.DrawLine(xMid, y2, x2, y1);
+}
+
+wxBitmap wxGTKRenderer::GetCheckBitmap(int flags)
+{
+    if ( !m_bitmapsCheckbox[0][0].Ok() )
+    {
+        // init the bitmaps once only
+        wxRect rect;
+        wxSize size = GetCheckBitmapSize();
+        rect.width = size.x;
+        rect.height = size.y;
+        for ( int i = 0; i < 2; i++ )
+        {
+            for ( int j = 0; j < 2; j++ )
+                m_bitmapsCheckbox[i][j].Create(rect.width, rect.height);
+        }
+
+        wxMemoryDC dc;
+
+        // normal checked
+        dc.SelectObject(m_bitmapsCheckbox[0][0]);
+        DrawCheckBitmap(dc, rect);
+
+        // normal unchecked
+        dc.SelectObject(m_bitmapsCheckbox[0][1]);
+        DrawUncheckBitmap(dc, rect, FALSE);
+
+        // pressed checked
+        m_bitmapsCheckbox[1][0] = m_bitmapsCheckbox[0][0];
+
+        // pressed unchecked
+        dc.SelectObject(m_bitmapsCheckbox[1][1]);
+        DrawUncheckBitmap(dc, rect, TRUE);
+    }
+
+    int row = flags & wxCONTROL_PRESSED ? 1 : 0;
+    int col = flags & wxCONTROL_CHECKED ? 0 : 1;
+
+    return m_bitmapsCheckbox[row][col];
+}
+
 void wxGTKRenderer::DrawCheckButton(wxDC& dc,
                                     const wxString& label,
-                                    const wxBitmap& bitmap,
+                                    const wxBitmap& bitmapOrig,
                                     const wxRect& rectTotal,
                                     int flags,
                                     wxAlignment align,
                                     int indexAccel)
+{
+    wxBitmap bitmap;
+    if ( bitmapOrig.Ok() )
+    {
+        bitmap = bitmapOrig;
+    }
+    else
+    {
+        bitmap = GetCheckBitmap(flags);
+    }
+
+    DoDrawCheckOrRadioBitmap(dc, label, bitmap, rectTotal,
+                             flags, align, indexAccel);
+}
+
+void wxGTKRenderer::DoDrawCheckOrRadioBitmap(wxDC& dc,
+                                             const wxString& label,
+                                             const wxBitmap& bitmap,
+                                             const wxRect& rectTotal,
+                                             int flags,
+                                             wxAlignment align,
+                                             int indexAccel)
 {
     wxRect rect = rectTotal;
 
@@ -987,6 +1132,11 @@ void wxGTKRenderer::DrawCheckButton(wxDC& dc,
     {
         // draw the focus border around everything
         DrawRect(dc, &rect, m_penBlack);
+    }
+    else
+    {
+        // the border does not offset the string under GTK
+        rect.Inflate(-1);
     }
 
     // calculate the position of the bitmap and of the label
@@ -1014,6 +1164,35 @@ void wxGTKRenderer::DrawCheckButton(wxDC& dc,
 
     DrawLabel(dc, label, rectLabel, flags,
               wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL, indexAccel);
+}
+
+void wxGTKRenderer::DrawRadioButton(wxDC& dc,
+                                    const wxString& label,
+                                    const wxBitmap& bitmapOrig,
+                                    const wxRect& rectTotal,
+                                    int flags,
+                                    wxAlignment align,
+                                    int indexAccel)
+{
+    wxBitmap bitmap;
+    if ( bitmapOrig.Ok() )
+    {
+        bitmap = bitmapOrig;
+    }
+    else
+    {
+        wxRect rect;
+        wxSize size = GetRadioBitmapSize();
+        rect.width = size.x;
+        rect.height = size.y;
+        bitmap.Create(rect.width, rect.height);
+        wxMemoryDC dc;
+        dc.SelectObject(bitmap);
+        DrawRadioBitmap(dc, rect, flags);
+    }
+
+    DoDrawCheckOrRadioBitmap(dc, label, bitmap, rectTotal,
+                             flags, align, indexAccel);
 }
 
 // ----------------------------------------------------------------------------
@@ -1439,42 +1618,6 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
         size->x += rectBorder.x + rectBorder.width;
         size->y += rectBorder.y + rectBorder.height;
     }
-}
-
-// ----------------------------------------------------------------------------
-// checkbox buttons
-// ----------------------------------------------------------------------------
-
-void wxGTKRenderer::DrawUncheckBitmap(wxDC& dc,
-                                      const wxRect& rectTotal,
-                                      bool isPressed)
-{
-    wxRect rect = rectTotal;
-    DrawShadedRect(dc, &rect, m_penHighlight, m_penBlack);
-    DrawAntiShadedRect(dc, &rect, m_penLightGrey, m_penDarkGrey);
-
-    wxColour col = wxSCHEME_COLOUR(m_scheme, SHADOW_IN);
-    dc.SetPen(wxPen(col, 0, wxSOLID));
-    dc.DrawPoint(rect.GetRight() - 1, rect.GetBottom() - 1);
-
-    if ( isPressed )
-        col = wxSCHEME_COLOUR(m_scheme, CONTROL_PRESSED);
-    //else: it is SHADOW_IN, leave as is
-
-    dc.SetPen(*wxTRANSPARENT_PEN);
-    dc.SetBrush(wxBrush(col, wxSOLID));
-    dc.DrawRectangle(rect);
-}
-
-void wxGTKRenderer::DrawCheckBitmap(wxDC& dc, const wxRect& rectTotal)
-{
-    wxRect rect = rectTotal;
-    DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
-    DrawShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
-
-    dc.SetPen(*wxTRANSPARENT_PEN);
-    dc.SetBrush(wxBrush(wxSCHEME_COLOUR(m_scheme, CONTROL_PRESSED), wxSOLID));
-    dc.DrawRectangle(rect);
 }
 
 // ============================================================================

@@ -154,8 +154,17 @@ public:
                           const wxRect& rect,
                           int flags = 0) = 0;
 
-    // draw a checkbutton
+    // draw a checkbutton (bitmap may be invalid to use default one)
     virtual void DrawCheckButton(wxDC& dc,
+                                 const wxString& label,
+                                 const wxBitmap& bitmap,
+                                 const wxRect& rect,
+                                 int flags = 0,
+                                 wxAlignment align = wxALIGN_LEFT,
+                                 int indexAccel = -1) = 0;
+
+    // draw a radio button
+    virtual void DrawRadioButton(wxDC& dc,
                                  const wxString& label,
                                  const wxBitmap& bitmap,
                                  const wxRect& rect,
@@ -202,6 +211,10 @@ public:
 
     // get the height of a listbox item from the base font height
     virtual wxCoord GetListboxItemHeight(wxCoord fontHeight) = 0;
+
+    // get the size of a checkbox/radio button bitmap
+    virtual wxSize GetCheckBitmapSize() const = 0;
+    virtual wxSize GetRadioBitmapSize() const = 0;
 
     // virtual dtor for any base class
     virtual ~wxRenderer();
@@ -325,6 +338,15 @@ public:
                                  int indexAccel = -1)
         { m_renderer->DrawCheckButton(dc, label, bitmap, rect,
                                       flags, align, indexAccel); }
+    virtual void DrawRadioButton(wxDC& dc,
+                                 const wxString& label,
+                                 const wxBitmap& bitmap,
+                                 const wxRect& rect,
+                                 int flags = 0,
+                                 wxAlignment align = wxALIGN_LEFT,
+                                 int indexAccel = -1)
+        { m_renderer->DrawRadioButton(dc, label, bitmap, rect,
+                                      flags, align, indexAccel); }
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window)
         { m_renderer->AdjustSize(size, window); }
@@ -350,6 +372,10 @@ public:
         { return m_renderer->PixelToScrollbar(scrollbar, coord); }
     virtual wxCoord GetListboxItemHeight(wxCoord fontHeight)
         { return m_renderer->GetListboxItemHeight(fontHeight); }
+    virtual wxSize GetCheckBitmapSize() const
+        { return m_renderer->GetCheckBitmapSize(); }
+    virtual wxSize GetRadioBitmapSize() const
+        { return m_renderer->GetRadioBitmapSize(); }
 
 protected:
     wxRenderer *m_renderer;

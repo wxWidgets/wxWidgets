@@ -38,6 +38,7 @@
     #include "wx/button.h"
     #include "wx/checkbox.h"
     #include "wx/listbox.h"
+    #include "wx/radiobut.h"
     #include "wx/scrolbar.h"
     #include "wx/scrolwin.h"
     #include "wx/statbox.h"
@@ -109,6 +110,7 @@ protected:
     // event handlers
     void OnButton(wxCommandEvent& event);
     void OnCheckBox(wxCommandEvent& event);
+    void OnRadioBox(wxCommandEvent& event);
     void OnListBox(wxCommandEvent& event);
     void OnLeftUp(wxMouseEvent& event);
 
@@ -150,6 +152,7 @@ WX_USE_THEME(gtk);
 BEGIN_EVENT_TABLE(MyUnivFrame, wxFrame)
     EVT_BUTTON(-1, MyUnivFrame::OnButton)
     EVT_CHECKBOX(-1, MyUnivFrame::OnCheckBox)
+    EVT_RADIOBUTTON(-1, MyUnivFrame::OnRadioBox)
     EVT_LISTBOX(-1, MyUnivFrame::OnListBox)
 
     EVT_LEFT_UP(MyUnivFrame::OnLeftUp)
@@ -340,6 +343,8 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     new wxCheckBox(this, -1, _T("Don't check me"),
                    wxPoint(150, 550), wxDefaultSize,
                    wxALIGN_RIGHT);
+    new wxRadioButton(this, -1, _T("Toggle me"), wxPoint(10, 600));
+    new wxRadioButton(this, -1, _T("And then me"), wxPoint(150, 600));
 }
 
 void MyUnivFrame::OnButton(wxCommandEvent& event)
@@ -359,6 +364,11 @@ void MyUnivFrame::OnCheckBox(wxCommandEvent& event)
 {
     wxLogDebug(_T("Checkbox became %schecked."),
                event.IsChecked() ? _T("") : _T("un"));
+}
+
+void MyUnivFrame::OnRadioBox(wxCommandEvent& event)
+{
+    wxLogDebug(_T("Radio button selected."));
 }
 
 void MyUnivFrame::OnListBox(wxCommandEvent& event)

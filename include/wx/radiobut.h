@@ -29,6 +29,10 @@
    };
  */
 
+#include "wx/control.h"
+
+WXDLLEXPORT_DATA(extern const wxChar*) wxRadioButtonNameStr;
+
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/radiobut.h"
 #elif defined(__WXMSW__)
