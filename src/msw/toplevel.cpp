@@ -166,13 +166,9 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
     // first select the kind of window being created
     //
     // note that if we don't set WS_POPUP, Windows assumes WS_OVERLAPPED and
-    // creates a window with both caption and border, hence we also test it
-    // below in some other cases
-    if ( style & wxFRAME_TOOL_WINDOW )
-    {
-        msflags |= WS_POPUP;
-    }
-    //else: WS_OVERLAPPED is 0 anyhow, so it is on by default
+    // creates a window with both caption and border, hence we need to use
+    // WS_POPUP in a few cases just to avoid having caption/border which we
+    // don't want
 
 #if !(defined(__SMARTPHONE__) && defined(__WXWINCE__))
     // border and caption styles
