@@ -187,7 +187,7 @@ struct static_tree_desc_s {int dummy;}; /* for buggy compilers */
     zmemzero((Bytef *)s->head, (unsigned)(s->hash_size-1)*sizeof(*s->head));
 
 /* ========================================================================= */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int ZEXPORT deflateInit_(z_streamp strm, int level, const char* version, int stream_size)
 #else
 int ZEXPORT deflateInit_(strm, level, version, stream_size)
@@ -203,7 +203,7 @@ int ZEXPORT deflateInit_(strm, level, version, stream_size)
 }
 
 /* ========================================================================= */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int ZEXPORT deflateInit2_(z_streamp strm, int level, int method, int windowBits,
                           int memLevel, int strategy, const char* version, int stream_size)
 #else
@@ -297,7 +297,7 @@ int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
 }
 
 /* ========================================================================= */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int ZEXPORT deflateSetDictionary (z_streamp strm, const Bytef* dictionary, uInt dictLength)
 #else
 int ZEXPORT deflateSetDictionary (strm, dictionary, dictLength)
@@ -342,7 +342,7 @@ int ZEXPORT deflateSetDictionary (strm, dictionary, dictLength)
 }
 
 /* ========================================================================= */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int ZEXPORT deflateReset (z_streamp strm)
 #else
 int ZEXPORT deflateReset (strm)
@@ -376,7 +376,7 @@ int ZEXPORT deflateReset (strm)
 }
 
 /* ========================================================================= */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int ZEXPORT deflateParams(z_streamp strm, int level, int strategy)
 #else
 int ZEXPORT deflateParams(strm, level, strategy)
@@ -420,7 +420,7 @@ int ZEXPORT deflateParams(strm, level, strategy)
  * IN assertion: the stream state is correct and there is enough room in
  * pending_buf.
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local void putShortMSB (deflate_state* s, uInt b)
 #else
 local void putShortMSB (s, b)
@@ -438,7 +438,7 @@ local void putShortMSB (s, b)
  * to avoid allocating a large strm->next_out buffer and copying into it.
  * (See also read_buf()).
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local void flush_pending(z_streamp strm)
 #else
 local void flush_pending(strm)
@@ -462,7 +462,7 @@ local void flush_pending(strm)
 }
 
 /* ========================================================================= */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int ZEXPORT deflate (z_streamp strm, int flush)
 #else
 int ZEXPORT deflate (strm, flush)
@@ -600,7 +600,7 @@ int ZEXPORT deflate (strm, flush)
 }
 
 /* ========================================================================= */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int ZEXPORT deflateEnd (z_streamp strm)
 #else
 int ZEXPORT deflateEnd (strm)
@@ -634,7 +634,7 @@ int ZEXPORT deflateEnd (strm)
  * To simplify the source, this is not supported for 16-bit MSDOS (which
  * doesn't have enough memory anyway to duplicate compression states).
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int ZEXPORT deflateCopy (z_streamp dest, z_streamp source)
 #else
 int ZEXPORT deflateCopy (dest, source)
@@ -698,7 +698,7 @@ int ZEXPORT deflateCopy (dest, source)
  * allocating a large strm->next_in buffer and copying from it.
  * (See also flush_pending()).
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local int read_buf(z_streamp strm, Bytef* buf, unsigned size)
 #else
 local int read_buf(strm, buf, size)
@@ -727,7 +727,7 @@ local int read_buf(strm, buf, size)
 /* ===========================================================================
  * Initialize the "longest match" routines for a new zlib stream
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local void lm_init (deflate_state* s)
 #else
 local void lm_init (s)
@@ -770,7 +770,7 @@ local void lm_init (s)
  * match.S. The code will be functionally equivalent.
  */
 #ifndef FASTEST
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local uInt longest_match(deflate_state* s, IPos cur_match)
 #else
 local uInt longest_match(s, cur_match)
@@ -916,7 +916,7 @@ local uInt longest_match(s, cur_match)
 /* ---------------------------------------------------------------------------
  * Optimized version for level == 1 only
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local uInt longest_match(deflate_state* s, IPos cur_match)
 #else
 local uInt longest_match(s, cur_match)
@@ -979,7 +979,7 @@ local uInt longest_match(s, cur_match)
 /* ===========================================================================
  * Check that the match at match_start is indeed a match.
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local void check_match(deflate_state* s, IPos start, IPos match, int length)
 #else
 local void check_match(s, start, match, length)
@@ -1017,7 +1017,7 @@ local void check_match(s, start, match, length)
  *    performed for at least two bytes (required for the zip translate_eol
  *    option -- not supported here).
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local void fill_window(deflate_state* s)
 #else
 local void fill_window(s)
@@ -1141,7 +1141,7 @@ local void fill_window(s)
  * NOTE: this function should be optimized to avoid extra copying from
  * window to pending_buf.
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local block_state deflate_stored(deflate_state* s, int flush)
 #else
 local block_state deflate_stored(s, flush)
@@ -1203,7 +1203,7 @@ local block_state deflate_stored(s, flush)
  * new strings in the dictionary only for unmatched strings or for short
  * matches. It is used only for the fast compression options.
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local block_state deflate_fast(deflate_state* s, int flush)
 #else
 local block_state deflate_fast(s, flush)
@@ -1303,7 +1303,7 @@ local block_state deflate_fast(s, flush)
  * evaluation for matches: a match is finally adopted only if there is
  * no better match at the next window position.
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local block_state deflate_slow(deflate_state* s, int flush)
 #else
 local block_state deflate_slow(s, flush)

@@ -18,7 +18,7 @@
 #define DO16(buf)   DO8(buf,0); DO8(buf,8);
 
 /* ========================================================================= */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 uLong ZEXPORT adler32 (uLong adler, const Bytef* buf, uInt len)
 #else
 uLong ZEXPORT adler32(adler, buf, len)

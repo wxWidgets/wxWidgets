@@ -18,7 +18,7 @@
    memory, Z_BUF_ERROR if there was not enough room in the output buffer,
    Z_STREAM_ERROR if the level parameter is invalid.
 */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int ZEXPORT compress2 (Bytef* dest, uLongf* destLen, const Bytef* source, uLong sourceLen, int level)
 #else
 int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)
@@ -62,7 +62,7 @@ int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)
 
 /* ===========================================================================
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int ZEXPORT compress (Bytef* dest, uLongf* destLen, const Bytef* source, uLong sourceLen)
 #else
 int ZEXPORT compress (dest, destLen, source, sourceLen)

@@ -189,7 +189,7 @@ local void gen_trees_header OF((void));
 #ifdef __WXDEBUG__
 local void send_bits      OF((deflate_state *s, int value, int length));
 
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local void send_bits(deflate_state* s, int value, int length)
 #else
 local void send_bits(s, value, length)
@@ -377,7 +377,7 @@ void gen_trees_header()
 /* ===========================================================================
  * Initialize the tree data structures for a new zlib stream.
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 void _tr_init(deflate_state* s)
 #else
 void _tr_init(s)
@@ -411,7 +411,7 @@ void _tr_init(s)
 /* ===========================================================================
  * Initialize a new block.
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local void init_block(deflate_state* s)
 #else
 local void init_block(s)
@@ -459,7 +459,7 @@ local void init_block(s)
  * when the heap property is re-established (each father smaller than its
  * two sons).
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local void pqdownheap(deflate_state* s, ct_data* tree, int k)
 #else
 local void pqdownheap(s, tree, k)
@@ -498,7 +498,7 @@ local void pqdownheap(s, tree, k)
  *     The length opt_len is updated; static_len is also updated if stree is
  *     not null.
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local void gen_bitlen(deflate_state* s, tree_desc* desc)
 #else
 local void gen_bitlen(s, desc)
@@ -589,7 +589,7 @@ local void gen_bitlen(s, desc)
  * OUT assertion: the field code is set for all tree elements of non
  *     zero code length.
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local void gen_codes (ct_data* tree, int max_code, ushf* bl_count)
 #else
 local void gen_codes (tree, max_code, bl_count)
@@ -635,7 +635,7 @@ local void gen_codes (tree, max_code, bl_count)
  *     and corresponding code. The length opt_len is updated; static_len is
  *     also updated if stree is not null. The field max_code is set.
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local void build_tree(deflate_state* s, tree_desc* desc)
 #else
 local void build_tree(s, desc)
@@ -726,7 +726,7 @@ local void build_tree(s, desc)
  * Scan a literal or distance tree to determine the frequencies of the codes
  * in the bit length tree.
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local void scan_tree (deflate_state* s, ct_data* tree, int max_code)
 #else
 local void scan_tree (s, tree, max_code)
@@ -775,7 +775,7 @@ local void scan_tree (s, tree, max_code)
  * Send a literal or distance tree in compressed form, using the codes in
  * bl_tree.
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local void send_tree (deflate_state* s, ct_data* tree, int max_code)
 #else
 local void send_tree (s, tree, max_code)
@@ -830,7 +830,7 @@ local void send_tree (s, tree, max_code)
  * Construct the Huffman tree for the bit lengths and return the index in
  * bl_order of the last bit length code to send.
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local int build_bl_tree( deflate_state* s)
 #else
 local int build_bl_tree(s)
@@ -869,7 +869,7 @@ local int build_bl_tree(s)
  * lengths of the bit length codes, the literal tree and the distance tree.
  * IN assertion: lcodes >= 257, dcodes >= 1, blcodes >= 4.
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local void send_all_trees(deflate_state* s, int lcodes, int dcodes, int blcodes)
 #else
 local void send_all_trees(s, lcodes, dcodes, blcodes)
@@ -902,7 +902,7 @@ local void send_all_trees(s, lcodes, dcodes, blcodes)
 /* ===========================================================================
  * Send a stored block
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 void _tr_stored_block(deflate_state* s, charf* buf, ulg stored_len, int eof)
 #else
 void _tr_stored_block(s, buf, stored_len, eof)
@@ -930,7 +930,7 @@ void _tr_stored_block(s, buf, stored_len, eof)
  * To simplify the code, we assume the worst case of last real code encoded
  * on one bit only.
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 void _tr_align(deflate_state* s)
 #else
 void _tr_align(s)
@@ -960,7 +960,7 @@ void _tr_align(s)
  * trees or store, and output the encoded block to the zip file. This function
  * returns the total compressed length for the file so far.
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 ulg _tr_flush_block(deflate_state* s, charf* buf, ulg stored_len, int eof)
 #else
 ulg _tr_flush_block(s, buf, stored_len, eof)
@@ -1076,7 +1076,7 @@ ulg _tr_flush_block(s, buf, stored_len, eof)
  * Save the match info and tally the frequency counts. Return true if
  * the current block must be flushed.
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int _tr_tally (deflate_state* s, unsigned dist, unsigned lc)
 #else
 int _tr_tally (s, dist, lc)
@@ -1130,7 +1130,7 @@ int _tr_tally (s, dist, lc)
 /* ===========================================================================
  * Send the block data compressed using the given Huffman trees
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local void compress_block(deflate_state* s, ct_data* ltree, ct_data* dtree)
 #else
 local void compress_block(s, ltree, dtree)
@@ -1187,7 +1187,7 @@ local void compress_block(s, ltree, dtree)
  * IN assertion: the fields freq of dyn_ltree are set and the total of all
  * frequencies does not exceed 64K (to fit in an int on 16 bit machines).
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local void set_data_type(deflate_state* s)
 #else
 local void set_data_type(s)
@@ -1208,7 +1208,7 @@ local void set_data_type(s)
  * method would use a table)
  * IN assertion: 1 <= len <= 15
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local unsigned bi_reverse(unsigned code, int len)
 #else
 local unsigned bi_reverse(code, len)
@@ -1227,7 +1227,7 @@ local unsigned bi_reverse(code, len)
 /* ===========================================================================
  * Flush the bit buffer, keeping at most 7 bits in it.
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local void bi_flush(deflate_state* s)
 #else
 local void bi_flush(s)
@@ -1248,7 +1248,7 @@ local void bi_flush(s)
 /* ===========================================================================
  * Flush the bit buffer and align the output on a byte boundary
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local void bi_windup(deflate_state* s)
 #else
 local void bi_windup(s)
@@ -1271,7 +1271,7 @@ local void bi_windup(s)
  * Copy a stored block, storing first the length and its
  * one's complement if requested.
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local void copy_block(deflate_state* s, charf* buf, unsigned len, int header)
 #else
 local void copy_block(s, buf, len, header)

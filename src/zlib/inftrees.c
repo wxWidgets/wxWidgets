@@ -89,7 +89,7 @@ local const uInt cpdext[30] = { /* Extra bits for distance codes */
 /* If BMAX needs to be larger than 16, then h and x[] should be uLong. */
 #define BMAX 15         /* maximum bit length of any code */
 
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 local int huft_build(uIntf* b, uInt n, uInt s, const uIntf* d, const uIntf* e,
                      inflate_huft* FAR *t, uIntf* m, inflate_huft* hp, uInt* hn, uIntf* v)
 #else
@@ -294,7 +294,7 @@ uIntf *v;               /* working area: values in order of bit length */
   return y != 0 && g != 1 ? Z_BUF_ERROR : Z_OK;
 }
 
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int inflate_trees_bits(uIntf* c, uIntf* bb, inflate_huft* FAR *tb, inflate_huft* hp, z_streamp z)
 #else
 int inflate_trees_bits(c, bb, tb, hp, z)
@@ -324,7 +324,7 @@ z_streamp z;            /* for messages */
   return r;
 }
 
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int inflate_trees_dynamic(uInt nl, uInt nd, uInt* c, uInt* bl, uInt *bd, inflate_huft* FAR *tl,
                           inflate_huft* FAR *td, inflate_huft* hp, z_streamp z)
 #else
@@ -405,7 +405,7 @@ local inflate_huft *fixed_td;
 #include "inffixed.h"
 #endif
 
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int inflate_trees_fixed(uIntf* bl, uIntf *bd, inflate_huft* FAR *tl,
                         inflate_huft* FAR *td, z_streamp z)
 #else

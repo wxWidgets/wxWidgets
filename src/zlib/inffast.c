@@ -25,7 +25,7 @@ struct inflate_codes_state {int dummy;}; /* for buggy compilers */
    at least ten.  The ten bytes are six bytes for the longest length/
    distance pair plus four bytes for overloading the bit buffer. */
 
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int inflate_fast(uInt bl, uInt bd, inflate_huft* tl, inflate_huft* td, inflate_blocks_statef* s, z_streamp z)
 #else
 int inflate_fast(bl, bd, tl, td, s, z)

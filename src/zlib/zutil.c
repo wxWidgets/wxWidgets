@@ -38,7 +38,7 @@ const char * ZEXPORT zlibVersion()
 #  endif
 int z_verbose = verbose;
 
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 void z_error (char* m)
 #else
 void z_error (m)
@@ -53,7 +53,7 @@ void z_error (m)
 /* exported to allow conversion of error code to string for compress() and
  * uncompress()
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 const char* ZEXPORT zError(int err)
 #else
 const char * ZEXPORT zError(err)
@@ -66,7 +66,7 @@ const char * ZEXPORT zError(err)
 
 #ifndef HAVE_MEMCPY
 
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 void zmemcpy(Bytef* dest, Bytef* source, Uint len)
 #else
 void zmemcpy(dest, source, len)
@@ -81,7 +81,7 @@ void zmemcpy(dest, source, len)
     } while (--len != 0);
 }
 
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int zmemcmp(Bytef* s1, Bytef* s2, int len)
 #else
 int zmemcmp(s1, s2, len)
@@ -98,7 +98,7 @@ int zmemcmp(s1, s2, len)
     return 0;
 }
 
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 void zmemzero(Bytef* dest, uInt len)
 #else
 void zmemzero(dest, len)
@@ -225,7 +225,7 @@ extern voidp  calloc OF((uInt items, uInt size));
 extern void   free   OF((voidpf ptr));
 #endif
 
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 voidpf zcalloc (voidpf opaque, unsigned items, unsigned size)
 #else
 voidpf zcalloc (opaque, items, size)
@@ -238,7 +238,7 @@ voidpf zcalloc (opaque, items, size)
     return (voidpf)calloc(items, size);
 }
 
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 void zcfree(voidpf opaque, voidpf ptr)
 #else
 void  zcfree (opaque, ptr)

@@ -50,7 +50,7 @@ struct internal_state {
 };
 
 
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int ZEXPORT inflateReset(z_streamp z)
 #else
 int ZEXPORT inflateReset(z)
@@ -68,7 +68,7 @@ z_streamp z;
 }
 
 
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int ZEXPORT inflateEnd(z_streamp z)
 #else
 int ZEXPORT inflateEnd(z)
@@ -85,7 +85,7 @@ z_streamp z;
   return Z_OK;
 }
 
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int ZEXPORT inflateInit2_(z_streamp z, int w, const char* version, int stream_size)
 #else
 int ZEXPORT inflateInit2_(z, w, version, stream_size)
@@ -145,7 +145,7 @@ int stream_size;
   return Z_OK;
 }
 
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int ZEXPORT inflateInit_(z_streamp z, const char* version, int stream_size)
 #else
 int ZEXPORT inflateInit_(z, version, stream_size)
@@ -160,7 +160,7 @@ int stream_size;
 #define NEEDBYTE {if(z->avail_in==0)return r;r=f;}
 #define NEXTBYTE (z->avail_in--,z->total_in++,*z->next_in++)
 
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int ZEXPORT inflate(z_streamp z, int f)
 #else
 int ZEXPORT inflate(z, f)
@@ -291,7 +291,7 @@ int f;
 #endif
 }
 
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int ZEXPORT inflateSetDictionary(z_streamp z, const Bytef* dictionary, uInt dictLength)
 #else
 int ZEXPORT inflateSetDictionary(z, dictionary, dictLength)
@@ -318,7 +318,7 @@ uInt  dictLength;
   return Z_OK;
 }
 
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int ZEXPORT inflateSync(z_streamp z)
 #else
 int ZEXPORT inflateSync(z)
@@ -379,7 +379,7 @@ z_streamp z;
  * decompressing, PPP checks that at the end of input packet, inflate is
  * waiting for these length bytes.
  */
-#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
 int ZEXPORT inflateSyncPoint(z_streamp z)
 #else
 int ZEXPORT inflateSyncPoint(z)
