@@ -1,0 +1,23 @@
+How to make an RPM distribution of Tex2RTF
+==================================================
+
+You can make the RPM with standard commands: first make source tarball 
+with zipsrc.sh and then run 
+
+    rpm -ta tex2rtf-2.01-source.tar.bz2 
+
+to create both tex2rtf-2.01-1.src.rpm and tex2rtf-2.01-1.$(arch).rpm
+
+This builds the Tex2RTF binary using wxBase.
+
+Note that the 2.01 binaries have been built in completely
+different ways right now :-(
+
+The RPM has been built with wxBase, and the .tar.gz
+distribution has been built using wxGTK (but with no
+UI). All command-line versions should be built
+with wxBase in future, since the wxBase one is
+smaller.
+
+Julian Smart/Vaclav Slavik, August 2002
+
