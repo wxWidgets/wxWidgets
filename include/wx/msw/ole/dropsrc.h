@@ -43,8 +43,10 @@ public:
   };
 
   // ctors: if you use default ctor you must call SetData() later!
-  wxDropSource();
-  wxDropSource(wxDataObject& data);
+  // NB: the "wxWindow *win" parameter is unused and is here only for wxGTK
+  //     compatibility
+  wxDropSource(wxWindow *win = NULL);
+  wxDropSource(wxDataObject& data, wxWindow *win = NULL);
 
   void SetData(wxDataObject& data);
 
