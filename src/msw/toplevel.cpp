@@ -863,17 +863,22 @@ void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
 {
     if ( event.GetActive() )
     {
-        // restore focus to the child which was last focused
-//        wxLogTrace(_T("focus"), _T("wxTLW %08x activated."), (int) m_hWnd);
+        // restore focus to the child which was last focused unless we already
+        // have it
+        wxLogTrace(_T("focus"), _T("wxTLW %08x activated."), (int) m_hWnd);
 
-        wxWindow *parent = m_winLastFocused ? m_winLastFocused->GetParent()
-                                            : NULL;
-        if ( !parent )
+        wxWindow *winFocus = FindFocus();
+        if ( !winFocus || wxGetTopLevelParent(winFocus) != this )
         {
-            parent = this;
-        }
+            wxWindow *parent = m_winLastFocused ? m_winLastFocused->GetParent()
+                                                : NULL;
+            if ( !parent )
+            {
+                parent = this;
+            }
 
-        wxSetFocusToChild(parent, &m_winLastFocused);
+            wxSetFocusToChild(parent, &m_winLastFocused);
+        }
     }
     else // deactivating
     {
@@ -884,23 +889,12 @@ void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
         {
             // let it know that it doesn't have focus any more
             m_winLastFocused->HandleKillFocus((WXHWND)NULL);
-        }
 
-        // so we NULL it out if it's a child from some other frame
-        wxWindow *win = m_winLastFocused;
-        while ( win )
-        {
-            if ( win->IsTopLevel() )
+            // and don't remember it if it's a child from some other frame
+            if ( wxGetTopLevelParent(m_winLastFocused) != this )
             {
-                if ( win != this )
-                {
-                    m_winLastFocused = NULL;
-                }
-
-                break;
+                m_winLastFocused = NULL;
             }
-
-            win = win->GetParent();
         }
 
         wxLogTrace(_T("focus"),
