@@ -4505,7 +4505,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                        coords.GetCol(),
                        event ) )
         {
-            if ( !event.ShiftDown() && !event.ControlDown() )
+            if ( !event.ControlDown() )
                 ClearSelection();
             if ( event.ShiftDown() )
             {
@@ -5311,13 +5311,13 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
         // Clear the old current cell highlight
         wxRect r = BlockToDeviceRect(m_currentCellCoords, m_currentCellCoords);
 
-	if ( !m_gridLinesEnabled )
-	{
-	    r.x--;
-	    r.y--;
-	    r.width++;
-	    r.height++;
-	}
+        if ( !m_gridLinesEnabled )
+        {
+            r.x--;
+            r.y--;
+            r.width++;
+            r.height++;
+        }
 
         // Otherwise refresh redraws the highlight!
         m_currentCellCoords = coords;
@@ -6315,7 +6315,7 @@ bool wxGrid::MoveCursorUp( bool expandSelection )
             {
                 m_selectingKeyboard.SetRow( m_selectingKeyboard.GetRow() - 1 );
                 MakeCellVisible( m_selectingKeyboard.GetRow(),
-                        m_selectingKeyboard.GetCol() );
+                                 m_selectingKeyboard.GetCol() );
                 SelectBlock( m_currentCellCoords, m_selectingKeyboard );
             }
         }
