@@ -194,7 +194,8 @@ void *wxGetSingleChoiceData( const wxString& message,
                              bool WXUNUSED(centre),
                              int WXUNUSED(width), int WXUNUSED(height) )
 {
-    wxSingleChoiceDialog dialog(parent, message, caption, n, choices, (char **)client_data);
+    wxSingleChoiceDialog dialog(parent, message, caption, n, choices,
+                                (char **)client_data);
     void *data;
     if ( dialog.ShowModal() == wxID_OK )
         data = dialog.GetSelectionClientData();
@@ -202,6 +203,25 @@ void *wxGetSingleChoiceData( const wxString& message,
         data = NULL;
 
     return data;
+}
+
+void *wxGetSingleChoiceData( const wxString& message,
+                             const wxString& caption,
+                             const wxArrayString& aChoices,
+                             void **client_data,
+                             wxWindow *parent,
+                             int x, int y,
+                             bool centre,
+                             int width, int height)
+{
+    wxString *choices;
+    int n = ConvertWXArrayToC(aChoices, &choices);
+    void *res = wxGetSingleChoiceData(message, caption, n, choices,
+                                      client_data, parent,
+                                      x, y, centre, width, height);
+    delete [] choices;
+
+    return res;
 }
 
 #ifdef WXWIN_COMPATIBILITY_2
