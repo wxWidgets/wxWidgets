@@ -241,7 +241,7 @@ public:
     void _setSelf(PyObject* self, PyObject* _class, int incref=1) {     \
         m_myInst.setSelf(self, _class, incref);                         \
     }                                                                   \
-    private: wxPyCallbackHelper m_myInst;
+    private: wxPyCallbackHelper m_myInst
 
 //---------------------------------------------------------------------------
 
