@@ -1264,8 +1264,9 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
                 }
             }
             else {
-                // unquoted string ends at the first space
-                for ( pEnd = pc; !wxIsspace(*pEnd); pEnd++ )
+                // unquoted string ends at the first space or at the end of
+                // line
+                for ( pEnd = pc; *pEnd && !wxIsspace(*pEnd); pEnd++ )
                     ;
             }
 
