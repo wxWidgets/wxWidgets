@@ -372,7 +372,7 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
         txt = m_Word.Mid(part1, part2-part1);
         dc.DrawText(txt, ofs + x + m_PosX, y + m_PosY);
 
-        if ( part2 < m_Word.length() )
+        if ( (size_t)part2 < m_Word.length() )
         {
             dc.GetTextExtent(txt, &w, &h);
             ofs += w;
