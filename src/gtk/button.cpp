@@ -212,6 +212,10 @@ wxSize wxButton::DoGetBestSize() const
 {
     wxSize ret( wxControl::DoGetBestSize() );
 
+#ifndef __WXGTK20__
+    ret.x += 10;  // add a few pixels for sloppy (but common) themes
+#endif
+    
     if (!HasFlag(wxBU_EXACTFIT))
     {
         if (ret.x < 80) ret.x = 80;
