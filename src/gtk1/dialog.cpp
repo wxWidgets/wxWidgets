@@ -316,13 +316,6 @@ wxDialog::~wxDialog()
 {
     m_isBeingDeleted = TRUE;
 
-    wxTopLevelWindows.DeleteObject( this );
-
-    if (wxTheApp->GetTopWindow() == this)
-    {
-        wxTheApp->SetTopWindow( (wxWindow*) NULL );
-    }
-
     if ((wxTopLevelWindows.Number() == 0) &&
         (wxTheApp->GetExitOnFrameDelete()))
     {
@@ -412,7 +405,20 @@ void wxDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
 bool wxDialog::Destroy()
 {
-    if (!wxPendingDelete.Member(this)) wxPendingDelete.Append(this);
+    // schedule the dialog for the deletion
+    if ( !wxPendingDelete.Member(this) )
+    {
+        wxPendingDelete.Append(this);
+    }
+
+    // don't leave a dangling pointer as the app top window, we can be deleted
+    // any moment at all now!
+    if ( wxTheApp->GetTopWindow() == this )
+    {
+        wxTheApp->SetTopWindow( (wxWindow*) NULL );
+    }
+
+    wxTopLevelWindows.DeleteObject( this );
 
     return TRUE;
 }
