@@ -602,6 +602,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def SetDefaultItem(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetDefaultItem,(self,) + _args, _kwargs)
         return val
+    def SetTmpDefaultItem(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetTmpDefaultItem,(self,) + _args, _kwargs)
+        return val
     def WarpPointer(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_WarpPointer,(self,) + _args, _kwargs)
         return val

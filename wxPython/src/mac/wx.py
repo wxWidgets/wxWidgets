@@ -1623,7 +1623,7 @@ class wxPyOnDemandOutputWindow:
             self.frame.Close()
 
 
-_defRedirect = (wxPlatform == '__WXMSW__')
+_defRedirect = (wxPlatform == '__WXMSW__' or wxPlatform == '__WXMAC__')
 
 #----------------------------------------------------------------------
 # The main application class.  Derive from this and implement an OnInit
