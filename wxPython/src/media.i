@@ -11,7 +11,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 %define DOCSTRING
-"Classes for a medai player control"
+"Classes for a media player control"
 %enddef
 
 %module(package="wx", docstring=DOCSTRING) media
@@ -55,10 +55,6 @@ enum wxMediaState
     wxMEDIASTATE_PLAYING=0
 };
 
-enum wxMediaTimeFormat
-{
-    wxMEDIATIMEFORMAT_TIME=0
-};
 
 class wxMediaEvent : public wxNotifyEvent
 {
@@ -80,15 +76,15 @@ public:
                 const wxValidator& ,
                 const wxString& ) { wxPyRaiseNotImplemented(); }
 
-    wxMediaCtrl(wxWindow* ,
-                wxWindowID ,
-                const wxURI& ,
-                const wxPoint&,
-                const wxSize& ,
-                long style,
-                const wxString& ,
-                const wxValidator& ,
-                const wxString& ) { wxPyRaiseNotImplemented(); }
+//     wxMediaCtrl(wxWindow* ,
+//                 wxWindowID ,
+//                 const wxURI& ,
+//                 const wxPoint&,
+//                 const wxSize& ,
+//                 long style,
+//                 const wxString& ,
+//                 const wxValidator& ,
+//                 const wxString& ) { wxPyRaiseNotImplemented(); }
 
     bool Create(wxWindow* , wxWindowID ,
                 const wxString& ,
@@ -99,15 +95,15 @@ public:
                 const wxValidator& ,
                 const wxString& ) { return false; }
 
-    bool Create(wxWindow* ,
-                wxWindowID ,
-                const wxURI& ,
-                const wxPoint&,
-                const wxSize& ,
-                long style,
-                const wxString& ,
-                const wxValidator& ,
-                const wxString& ) { return false; }
+//     bool Create(wxWindow* ,
+//                 wxWindowID ,
+//                 const wxURI& ,
+//                 const wxPoint&,
+//                 const wxSize& ,
+//                 long style,
+//                 const wxString& ,
+//                 const wxValidator& ,
+//                 const wxString& ) { return false; }
     
     bool Play() { return false; }
     bool Pause() { return false; }
@@ -121,12 +117,14 @@ public:
 
     wxMediaState GetState() { return wxMEDIASTATE_STOPPED; }
 
-    double GetPlaybackRate() { return 0.0; };
+    double GetPlaybackRate()  { return 0.0; }
     bool SetPlaybackRate(double dRate) { return false; }
 
-    bool SetPosition(wxLongLong where) { return false; }
-    wxLongLong GetPosition() { return 0; }
-    wxLongLong GetDuration() { return 0; }
+    wxFileOffset Seek(wxFileOffset where, wxSeekMode mode = wxFromStart)
+    { return 0; }
+    
+    wxFileOffset Tell()    { return 0; }
+    wxFileOffset Length()    { return 0; }
 };
 
 const wxEventType wxEVT_MEDIA_FINISHED = 0;
@@ -146,10 +144,6 @@ enum wxMediaState
     wxMEDIASTATE_PLAYING
 };
 
-enum wxMediaTimeFormat
-{
-    wxMEDIATIMEFORMAT_TIME
-};
 
 
 // MAKE_CONST_WXSTRING(MEDIABACKEND_DIRECTSHOW);
@@ -191,36 +185,36 @@ public:
     
     %name(PreMediaCtrl) wxMediaCtrl();
 
-    %extend {
-        %name(MediaCtrlFromURI)
-             wxMediaCtrl(wxWindow* parent,
-                         wxWindowID id=-1,
-                         const wxString& location=wxPyEmptyString,
-                         const wxPoint& pos = wxDefaultPosition,
-                         const wxSize& size = wxDefaultSize,
-                         long style = 0,
-                         const wxString& szBackend = wxPyEmptyString,
-                         const wxValidator& validator = wxDefaultValidator,
-                         const wxString& name = wxPyMediaCtrlNameStr)
-        {
-            return new wxMediaCtrl(parent, id, wxURI(location),
-                                   pos, size, style, szBackend, validator, name);
-        }
+//     %extend {
+//         %name(MediaCtrlFromURI)
+//              wxMediaCtrl(wxWindow* parent,
+//                          wxWindowID id=-1,
+//                          const wxString& location=wxPyEmptyString,
+//                          const wxPoint& pos = wxDefaultPosition,
+//                          const wxSize& size = wxDefaultSize,
+//                          long style = 0,
+//                          const wxString& szBackend = wxPyEmptyString,
+//                          const wxValidator& validator = wxDefaultValidator,
+//                          const wxString& name = wxPyMediaCtrlNameStr)
+//         {
+//             return new wxMediaCtrl(parent, id, wxURI(location),
+//                                    pos, size, style, szBackend, validator, name);
+//         }
 
-        bool CreateFromURI(wxWindow* parent,
-                           wxWindowID id=-1,
-                           const wxString& location=wxPyEmptyString,
-                           const wxPoint& pos = wxDefaultPosition,
-                           const wxSize& size = wxDefaultSize,
-                           long style = 0,
-                           const wxString& szBackend = wxPyEmptyString,
-                           const wxValidator& validator = wxDefaultValidator,
-                           const wxString& name = wxPyMediaCtrlNameStr)
-        {
-            return self->Create(parent, id, wxURI(location),
-                                pos, size, style, szBackend, validator, name);
-        }
-    }
+//         bool CreateFromURI(wxWindow* parent,
+//                            wxWindowID id=-1,
+//                            const wxString& location=wxPyEmptyString,
+//                            const wxPoint& pos = wxDefaultPosition,
+//                            const wxSize& size = wxDefaultSize,
+//                            long style = 0,
+//                            const wxString& szBackend = wxPyEmptyString,
+//                            const wxValidator& validator = wxDefaultValidator,
+//                            const wxString& name = wxPyMediaCtrlNameStr)
+//         {
+//             return self->Create(parent, id, wxURI(location),
+//                                 pos, size, style, szBackend, validator, name);
+//         }
+//     }
 
 
     bool Create(wxWindow* parent,
@@ -253,9 +247,9 @@ public:
     double GetPlaybackRate();
     bool SetPlaybackRate(double dRate);
 
-    %name(SetMediaPosition) bool SetPosition(wxLongLong where);
-    %name(GetMediaPosition) wxLongLong GetPosition();
-    %name(GetMediaDuration) wxLongLong GetDuration();
+    wxFileOffset Seek(wxFileOffset where, wxSeekMode mode = wxFromStart);    
+    wxFileOffset Tell();
+    wxFileOffset Length();
 };
 
 

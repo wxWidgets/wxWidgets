@@ -6,7 +6,6 @@
 %rename(MEDIASTATE_STOPPED)                 wxMEDIASTATE_STOPPED;
 %rename(MEDIASTATE_PAUSED)                  wxMEDIASTATE_PAUSED;
 %rename(MEDIASTATE_PLAYING)                 wxMEDIASTATE_PLAYING;
-%rename(MEDIATIMEFORMAT_TIME)               wxMEDIATIMEFORMAT_TIME;
 %rename(MediaEvent)                         wxMediaEvent;
 %rename(MediaCtrl)                          wxMediaCtrl;
 
