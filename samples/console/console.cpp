@@ -66,6 +66,7 @@
     #define TEST_FTP
     #define TEST_HASH
     #define TEST_HASHMAP
+    #define TEST_HASHSET
     #define TEST_INFO_FUNCTIONS
     #define TEST_LIST
     #define TEST_LOCALE
@@ -96,7 +97,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = true;
 #else
-    #define TEST_HASHMAP
+    #define TEST_HASHSET
 
     static const bool TEST_ALL = false;
 #endif
@@ -1386,6 +1387,100 @@ static void TestHashMap()
 }
 
 #endif // TEST_HASHMAP
+
+// ----------------------------------------------------------------------------
+// wxHashSet
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_HASHSET
+
+#include "wx/hashset.h"
+
+// test compilation of basic map types
+WX_DECLARE_HASH_SET( int*, wxPointerHash, wxPointerEqual, myPtrHashSet );
+WX_DECLARE_HASH_SET( long, wxIntegerHash, wxIntegerEqual, myLongHashSet );
+WX_DECLARE_HASH_SET( unsigned long, wxIntegerHash, wxIntegerEqual,
+                     myUnsignedHashSet );
+WX_DECLARE_HASH_SET( unsigned int, wxIntegerHash, wxIntegerEqual,
+                     myTestHashSet1 );
+WX_DECLARE_HASH_SET( int, wxIntegerHash, wxIntegerEqual,
+                     myTestHashSet2 );
+WX_DECLARE_HASH_SET( short, wxIntegerHash, wxIntegerEqual,
+                     myTestHashSet3 );
+WX_DECLARE_HASH_SET( unsigned short, wxIntegerHash, wxIntegerEqual,
+                     myTestHashSet4 );
+WX_DECLARE_HASH_SET( wxString, wxStringHash, wxStringEqual,
+                     myTestHashSet5 );
+
+struct MyStruct
+{
+    int* ptr;
+    wxString str;
+};
+
+class MyHash
+{
+public:
+    unsigned long operator()(const MyStruct& s) const
+        { return m_dummy(s.ptr); }
+    MyHash& operator=(const MyHash&) { return *this; }
+private:
+    wxPointerHash m_dummy;
+};
+
+class MyEqual
+{
+public:
+    bool operator()(const MyStruct& s1, const MyStruct& s2) const
+        { return s1.ptr == s2.ptr; }
+    MyEqual& operator=(const MyEqual&) { return *this; }
+};
+
+WX_DECLARE_HASH_SET( MyStruct, MyHash, MyEqual, mySet );
+
+typedef myTestHashSet5 wxStringHashSet;
+
+static void TestHashSet()
+{
+    wxPrintf(_T("*** Testing wxHashSet ***\n"));
+
+    wxStringHashSet set1;
+
+    set1.insert( _T("abc") );
+    set1.insert( _T("bbc") );
+    set1.insert( _T("cbc") );
+    set1.insert( _T("abc") );
+
+    if( set1.size() != 3 )
+        wxPrintf(_T("*** ERROR IN INSERT ***\n"));
+
+    mySet set2;
+    int dummy;
+    MyStruct tmp;
+
+    tmp.ptr = &dummy; tmp.str = _T("ABC");
+    set2.insert( tmp );
+    tmp.ptr = &dummy + 1;
+    set2.insert( tmp );
+    tmp.ptr = &dummy; tmp.str = _T("CDE");
+    set2.insert( tmp );
+
+    if( set2.size() != 2 )
+        wxPrintf(_T("*** ERROR IN INSERT - 2 ***\n"));
+
+    mySet::iterator it = set2.find( tmp );
+
+    if( it == set2.end() )
+        wxPrintf(_T("*** ERROR IN FIND - 1 ***\n"));
+    if( it->ptr != &dummy )
+        wxPrintf(_T("*** ERROR IN FIND - 2 ***\n"));
+    if( it->str != _T("ABC") )
+        wxPrintf(_T("*** ERROR IN INSERT - 3 ***\n"));
+
+    wxPrintf(_T("*** Finished testing wxHashSet ***\n"));
+}
+
+#endif // TEST_HASHSET
 
 // ----------------------------------------------------------------------------
 // wxList
@@ -6929,6 +7024,10 @@ int main(int argc, char **argv)
 #ifdef TEST_HASHMAP
     TestHashMap();
 #endif // TEST_HASHMAP
+
+#ifdef TEST_HASHSET
+    TestHashSet();
+#endif // TEST_HASHSET
 
 #ifdef TEST_MIME
     wxLog::AddTraceMask(_T("mime"));
