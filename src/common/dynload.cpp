@@ -222,7 +222,8 @@ void wxPluginLibrary::UnregisterModules()
     for ( it = m_wxmodules.begin(); it != m_wxmodules.end(); ++it )
         wxModule::UnregisterModule( *it );
 
-    WX_CLEAR_LIST(wxModuleList, m_wxmodules);
+    // NB: content of the list was deleted by UnregisterModule calls above:
+    m_wxmodules.clear();
 }
 
 
