@@ -221,8 +221,12 @@ inline void wxCopyStringListToArrayString(wxArrayString& to, const wxStringList&
 {
     to.Clear();
 
-    for(wxStringList::Node* pNode = from.GetFirst(); pNode; pNode = pNode->GetNext())
+    for ( wxStringList::compatibility_iterator pNode = from.GetFirst();
+          pNode;
+          pNode = pNode->GetNext() )
+    {
         to.Add(pNode->GetData());
+    }
 }
 
 inline void wxCopyArrayStringToStringList(wxStringList& to, const wxArrayString& from)
