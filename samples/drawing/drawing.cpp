@@ -696,6 +696,37 @@ void MyCanvas::DrawDefault(wxDC& dc)
     dc.DrawLine(400, 270, 400, 310);
     dc.DrawLine(300, 300, 410, 300);
 
+    // Added by JACS to demonstrate bizarre behaviour.
+    // With a size of 70, we get a missing red RHS,
+    // and the hight is too small, so we get yellow
+    // showing. With a size of 40, it draws as expected:
+    // it just shows a white rectangle with red outline.
+    int totalWidth = 70;
+    int totalHeight = 70;
+    wxBitmap bitmap2(totalWidth, totalHeight);
+
+    wxMemoryDC memdc2;
+    memdc2.SelectObject(bitmap2);
+
+    memdc2.SetBackground(*wxWHITE_BRUSH);
+
+    // Draw a yellow rectangle filling the bitmap
+    memdc2.SetPen(wxPen(wxColour(255, 255, 0), 1, wxSOLID));
+    memdc2.SetBrush(wxBrush(wxColour(255, 255, 0), wxSOLID));
+    memdc2.DrawRectangle(0, 0, totalWidth+2, totalHeight+2); // Just to make sure!
+
+    // Now draw a white rectangle with red outline. It should
+    // entirely eclipse the yellow background.
+    memdc2.SetPen(*wxRED_PEN);
+    memdc2.SetBrush(*wxWHITE_BRUSH);
+
+    memdc2.DrawRectangle(0, 0, totalWidth, totalHeight);
+
+    memdc2.SelectObject(wxNullBitmap);
+    memdc2.SetPen(wxNullPen);
+    memdc2.SetBrush(wxNullBrush);
+
+    dc.DrawBitmap(bitmap2, 500, 270);
 }
 
 void MyCanvas::DrawText(wxDC& dc)
