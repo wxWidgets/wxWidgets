@@ -28,6 +28,13 @@ All (GUI):
 - added new (now recommended) API for conversion between wxImage and wxBitmap
   (wxBitmap::ConvertToImage() and wxBitmap::wxBitmap(wxImage&) instead of
   wxImage methods and ctor)
+- ODBC classes now support DB2, Interbase, and Pervasive SQL
+- ODBC documentation complete!!
+- ODBC classes have much Unicode support added, but not complete
+- ODBC experimental BLOB support added, but not completely tested
+- ODBC NULL column support completed (Roger/Paul Gammans)
+- ODBC All "char *" and char arrays removed and replaced with wxString use
+
 
 wxMSW:
 
