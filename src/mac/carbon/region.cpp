@@ -128,6 +128,22 @@ void wxRegion::Clear()
     UnRef();
 }
 
+// Move the region
+bool wxRegion::Offset(wxCoord x, wxCoord y)
+{
+    wxCHECK_MSG( M_REGION, false, _T("invalid wxRegion") );
+
+    if ( !x && !y )
+    {
+        // nothing to do
+        return true;
+    }
+
+    OffsetRgn( M_REGION , x , y ) ;
+    return true ;
+}
+
+
 //! Combine rectangle (x, y, w, h) with this.
 bool wxRegion::Combine(long x, long y, long width, long height, wxRegionOp op)
 {

@@ -69,6 +69,9 @@ public:
     // Clear current region
     void Clear();
 
+    // Move the region
+    bool Offset(wxCoord x, wxCoord y);
+
     // Union rectangle or region with this.
     bool Union(long x, long y, long width, long height)
         { return Combine(x, y, width, height, wxRGN_OR); }
