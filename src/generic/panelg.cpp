@@ -120,28 +120,10 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
     {
         if (!node)
         {
-#ifndef __WXGTK__
-     // FIXME seems to enter in an infinite loop - how is this possible?
-            // we arrived at the last/first of our children - but may be this
-            // panel is inside another panel, so make focus go to the next/prev
-            // control in the parent (if we have one)
-            if (GetParent() != NULL)
-            {
-                wxNavigationKeyEvent new_event;
-                new_event.SetDirection( event.GetDirection() );
-                new_event.SetWindowChange(FALSE);
-                new_event.SetCurrentFocus( this );
-
-                if (GetParent()->GetEventHandler()->ProcessEvent(new_event))
-                {
-                    return;
-                }
-            }
-#endif
-
             node = event.GetDirection() ? GetChildren().First()
                                         : GetChildren().Last();
 
+            continue;
         }
 
         wxWindow *child = (wxWindow *)node->Data();
