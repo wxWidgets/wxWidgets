@@ -859,15 +859,23 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     tback.bg.color = MAC_WXCOLORREF( GetBackgroundColour().GetPixel() );
     TXNSetBackground( (TXNObject) m_macTXN , &tback);
 
+#else
+    wxMacCFStringHolder cf(st , m_font.GetEncoding()) ;
+    CFStringRef cfr = cf ;
+    Boolean isPassword = ( m_windowStyle & wxTE_PASSWORD ) != 0 ;
+    CreateEditUnicodeTextControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds , cfr , isPassword , NULL , (ControlRef*) &m_macControl ) ;
+    if ( !(m_windowStyle & wxTE_MULTILINE) )
+    {
+        Boolean singleline = true ;
+        ::SetControlData( (ControlHandle) m_macControl, kControlEditTextPart , kControlEditTextSingleLineTag , sizeof( singleline ) , &singleline ) ;
+    }
+    MacPostControlCreate(pos,size) ;
+    
+#endif
     if ( m_windowStyle & wxTE_READONLY)
     {
         SetEditable( false ) ;
     }
-#else
-    wxMacCFStringHolder cf(st , m_font.GetEncoding()) ;
-    CreateEditUnicodeTextControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds , cf , style & wxTE_PASSWORD , NULL , (ControlRef*) &m_macControl ) ;
-    MacPostControlCreate(pos,size) ;
-#endif
         
 
     return TRUE;
@@ -875,10 +883,31 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
 void wxTextCtrl::MacVisibilityChanged() 
 {
-#if wxMAC_USE_MLTE && !wxMAC_USE_MLTE_HIVIEW
+#if wxMAC_USE_MLTE 
+#if !wxMAC_USE_MLTE_HIVIEW
     MLTESetObjectVisibility((STPTextPaneVars*) m_macTXNvars , MacIsReallyShown() , GetWindowStyle() ) ;
     if ( !MacIsReallyShown() )
         InvalWindowRect( GetControlOwner( (ControlHandle) m_macControl ) , &((STPTextPaneVars *)m_macTXNvars)->fRBounds ) ;
+#endif
+#else
+    if ( !(m_windowStyle & wxTE_MULTILINE) && MacIsReallyShown() )
+    {
+        // work around a refresh issue insofar as not always the entire content is shown even if this would be possible
+        ControlEditTextSelectionRec sel ;
+        CFStringRef value = NULL ;
+        Size    actualSize = 0 ;
+        ResType datatag = GetWindowStyle() & wxTE_PASSWORD ? 
+            kControlEditTextPasswordCFStringTag : kControlEditTextCFStringTag ;
+
+        verify_noerr( GetControlData( (ControlRef) m_macControl , 0, kControlEditTextSelectionTag, 
+                    sizeof(ControlEditTextSelectionRec), &sel, &actualSize ) );
+        verify_noerr( GetControlData( (ControlRef) m_macControl , 0, datatag , sizeof(CFStringRef), &value, &actualSize ) );
+        
+        verify_noerr( SetControlData(  (ControlRef) m_macControl , 0, datatag, sizeof(CFStringRef), &value ) );
+        verify_noerr( SetControlData(  (ControlRef) m_macControl , 0, kControlEditTextSelectionTag, sizeof(ControlEditTextSelectionRec), &sel ) );
+                        
+        CFRelease( value ) ;
+    }
 #endif
 }
 
@@ -1215,6 +1244,9 @@ void wxTextCtrl::SetEditable(bool editable)
         TXNControlTag tag[] = { kTXNIOPrivilegesTag } ;
         TXNControlData data[] = { { editable ? kTXNReadWrite : kTXNReadOnly } } ;
         TXNSetTXNObjectControls( (TXNObject) m_macTXN , false , sizeof(tag) / sizeof (TXNControlTag) , tag , data ) ;
+#else
+        Boolean value = !editable ;
+        ::SetControlData( (ControlHandle) m_macControl, 0, kControlEditTextLockedTag , sizeof( value ) , &value ) ;
 #endif
     }
 }
