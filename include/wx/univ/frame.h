@@ -43,6 +43,7 @@ public:
             const wxString& name = wxFrameNameStr);
 
     virtual wxPoint GetClientAreaOrigin() const;
+    virtual bool Enable( bool enable = TRUE );
 
 protected:
     void OnSize(wxSizeEvent& event);

@@ -108,3 +108,13 @@ wxPoint wxFrame::GetClientAreaOrigin() const
     return pt;
 }
 
+bool wxFrame::Enable( bool enable )
+{
+    if (!wxFrameNative::Enable(enable))
+	return FALSE;
+#ifdef __WXMICROWIN__
+    if (m_frameMenuBar)
+        m_frameMenuBar->Enable(enable);
+#endif
+    return TRUE;
+}

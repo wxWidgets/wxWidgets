@@ -2155,12 +2155,6 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
 #endif
 
         case WM_LBUTTONDOWN:
-           // set focus to this window
-           if (AcceptsFocus())
-                SetFocus();
-
-           // fall through
-
         case WM_LBUTTONUP:
         case WM_LBUTTONDBLCLK:
         case WM_RBUTTONDOWN:
@@ -2169,12 +2163,69 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
         case WM_MBUTTONDOWN:
         case WM_MBUTTONUP:
         case WM_MBUTTONDBLCLK:
-            processed = HandleMouseEvent(message,
+	 {
+		processed = FALSE;
+#ifdef __WXMICROWIN__
+	        // MicroWindows seems to ignore the fact that a window
+		// is disabled. So catch mouse events and throw them away if necessary.
+		wxWindowMSW* win = this;
+		while (win)
+		{
+		    if (!win->IsEnabled())
+		    {
+			processed = TRUE;
+			break;
+		    }
+		    win = win->GetParent();
+		    if (win && win->IsTopLevel())
+			break;
+		}
+#endif
+		if (!processed)
+		{
+                    if (message == WM_LBUTTONDOWN && AcceptsFocus())
+                        SetFocus();
+                     processed = HandleMouseEvent(message,
                                          GET_X_LPARAM(lParam),
                                          GET_Y_LPARAM(lParam),
-                                         wParam);
-            break;
+						  wParam);
+		}
+                break;
+	 }
 
+#ifdef __WXMICROWIN__
+        case WM_NCLBUTTONDOWN:
+        case WM_NCLBUTTONUP:
+        case WM_NCLBUTTONDBLCLK:
+        case WM_NCRBUTTONDOWN:
+        case WM_NCRBUTTONUP:
+        case WM_NCRBUTTONDBLCLK:
+#if 0
+        case WM_NCMBUTTONDOWN:
+        case WM_NCMBUTTONUP:
+        case WM_NCMBUTTONDBLCLK:
+ #endif
+	    {
+	        // MicroWindows seems to ignore the fact that a window
+		// is disabled. So catch mouse events and throw them away if necessary.
+		processed = FALSE;
+		wxWindowMSW* win = this;
+		while (win)
+		{
+		    if (!win->IsEnabled())
+		    {
+			processed = TRUE;
+			break;
+		    }
+		    win = win->GetParent();
+		    if (win && win->IsTopLevel())
+			break;
+		}
+		break;
+		
+            }
+#endif
+	    
 #ifdef MM_JOY1MOVE // __WXMICROWIN__
         case MM_JOY1MOVE:
         case MM_JOY2MOVE:
