@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        bmpbuttn.cpp
+// Name:        gtk/bmpbuttn.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -43,12 +43,12 @@ extern bool   g_blockEventsOnDrag;
 
 static void gtk_bmpbutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxBitmapButton *button )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     if (!button->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
-  
+
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, button->GetId());
     event.SetEventObject(button);
     button->GetEventHandler()->ProcessEvent(event);
@@ -63,7 +63,7 @@ static void gtk_bmpbutton_enter_callback( GtkWidget *WXUNUSED(widget), wxBitmapB
     if (!button->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
-    button->HasFocus(); 
+    button->HasFocus();
 }
 
 //-----------------------------------------------------------------------------
@@ -75,7 +75,7 @@ static void gtk_bmpbutton_leave_callback( GtkWidget *WXUNUSED(widget), wxBitmapB
     if (!button->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
-    button->NotFocus(); 
+    button->NotFocus();
 }
 
 //-----------------------------------------------------------------------------
@@ -87,7 +87,7 @@ static void gtk_bmpbutton_press_callback( GtkWidget *WXUNUSED(widget), wxBitmapB
     if (!button->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
-    button->StartSelect(); 
+    button->StartSelect();
 }
 
 //-----------------------------------------------------------------------------
@@ -99,7 +99,7 @@ static void gtk_bmpbutton_release_callback( GtkWidget *WXUNUSED(widget), wxBitma
     if (!button->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
-    button->EndSelect(); 
+    button->EndSelect();
 }
 
 //-----------------------------------------------------------------------------
@@ -113,29 +113,30 @@ wxBitmapButton::wxBitmapButton()
 }
 
 bool wxBitmapButton::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bitmap,
-                             const wxPoint &pos, const wxSize &size, 
+                             const wxPoint &pos, const wxSize &size,
                              long style, const wxValidator& validator, const wxString &name )
 {
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
-  
+
+    m_marginX =
+    m_marginY = 0;
+
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxBitmapButton creation failed") );
-	return FALSE;
+        return FALSE;
     }
 
     m_bitmap   = bitmap;
     m_disabled = bitmap;
     m_focus    = bitmap;
     m_selected = bitmap;
-  
-    m_label = "";
-  
+
     m_widget = gtk_button_new();
 
-#if (GTK_MINOR_VERSION > 0)    
+#if (GTK_MINOR_VERSION > 0)
     if (style & wxNO_BORDER)
        gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
 #endif
@@ -147,45 +148,45 @@ bool wxBitmapButton::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
         GdkBitmap *mask = (GdkBitmap *) NULL;
         if (m_bitmap.GetMask()) mask = m_bitmap.GetMask()->GetBitmap();
         GtkWidget *pixmap = gtk_pixmap_new( m_bitmap.GetPixmap(), mask );
-    
+
         gtk_widget_show( pixmap );
         gtk_container_add( GTK_CONTAINER(m_widget), pixmap );
-	
+
         int border = 10;
         if (style & wxNO_BORDER) border = 4;
         if (newSize.x == -1) newSize.x = m_bitmap.GetWidth()+border;
         if (newSize.y == -1) newSize.y = m_bitmap.GetHeight()+border;
         SetSize( newSize.x, newSize.y );
     }
-  
-    gtk_signal_connect( GTK_OBJECT(m_widget), "clicked", 
+
+    gtk_signal_connect( GTK_OBJECT(m_widget), "clicked",
       GTK_SIGNAL_FUNC(gtk_bmpbutton_clicked_callback), (gpointer*)this );
 
-    gtk_signal_connect( GTK_OBJECT(m_widget), "enter", 
+    gtk_signal_connect( GTK_OBJECT(m_widget), "enter",
       GTK_SIGNAL_FUNC(gtk_bmpbutton_enter_callback), (gpointer*)this );
-    gtk_signal_connect( GTK_OBJECT(m_widget), "leave", 
+    gtk_signal_connect( GTK_OBJECT(m_widget), "leave",
       GTK_SIGNAL_FUNC(gtk_bmpbutton_leave_callback), (gpointer*)this );
-    gtk_signal_connect( GTK_OBJECT(m_widget), "pressed", 
+    gtk_signal_connect( GTK_OBJECT(m_widget), "pressed",
       GTK_SIGNAL_FUNC(gtk_bmpbutton_press_callback), (gpointer*)this );
-    gtk_signal_connect( GTK_OBJECT(m_widget), "released", 
+    gtk_signal_connect( GTK_OBJECT(m_widget), "released",
       GTK_SIGNAL_FUNC(gtk_bmpbutton_release_callback), (gpointer*)this );
- 
+
     m_parent->DoAddChild( this );
-  
+
     PostCreation();
-  
+
     SetBackgroundColour( parent->GetBackgroundColour() );
 
     Show( TRUE );
-    
+
     return TRUE;
 }
-      
+
 void wxBitmapButton::SetDefault()
 {
     GTK_WIDGET_SET_FLAGS( m_widget, GTK_CAN_DEFAULT );
     gtk_widget_grab_default( m_widget );
-    
+
     SetSize( m_x, m_y, m_width, m_height );
 }
 
@@ -212,37 +213,37 @@ void wxBitmapButton::SetBitmap()
     wxCHECK_RET( m_widget != NULL, wxT("invalid button") );
 
     wxBitmap the_one;
-  
-    if (!m_isEnabled) 
+
+    if (!m_isEnabled)
         the_one = m_disabled;
-    else 
+    else
     {
-        if (m_isSelected) 
-	    {
-	        the_one = m_selected;
-	    }
-        else 
-	    {
-            if (m_hasFocus) 
-	            the_one = m_focus;
-            else 
-	            the_one = m_bitmap;
+        if (m_isSelected)
+        {
+            the_one = m_selected;
+        }
+        else
+        {
+            if (m_hasFocus)
+                the_one = m_focus;
+            else
+                the_one = m_bitmap;
         }
     }
 
     if (!the_one.Ok()) the_one = m_bitmap;
     if (!the_one.Ok()) return;
-  
+
     GtkButton *bin = GTK_BUTTON( m_widget );
     GtkPixmap *g_pixmap = GTK_PIXMAP( bin->child );
-  
+
     GdkBitmap *mask = (GdkBitmap *) NULL;
     if (the_one.GetMask()) mask = the_one.GetMask()->GetBitmap();
-  
+
     gtk_pixmap_set( g_pixmap, the_one.GetPixmap(), mask );
 }
 
-void wxBitmapButton::SetBitmapDisabled( const wxBitmap& bitmap ) 
+void wxBitmapButton::SetBitmapDisabled( const wxBitmap& bitmap )
 {
   wxCHECK_RET( m_widget != NULL, wxT("invalid button") );
 
@@ -252,7 +253,7 @@ void wxBitmapButton::SetBitmapDisabled( const wxBitmap& bitmap )
   SetBitmap();
 }
 
-void wxBitmapButton::SetBitmapFocus( const wxBitmap& bitmap ) 
+void wxBitmapButton::SetBitmapFocus( const wxBitmap& bitmap )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid button") );
 
@@ -268,7 +269,7 @@ void wxBitmapButton::SetBitmapLabel( const wxBitmap& bitmap )
 
     if (!m_bitmap.Ok()) return;
     m_bitmap = bitmap;
-  
+
     SetBitmap();
 }
 
@@ -315,5 +316,6 @@ void wxBitmapButton::EndSelect()
     m_isSelected = FALSE;
     SetBitmap();
 }
-#endif
+
+#endif // wxUSE_BMPBUTTON
 
