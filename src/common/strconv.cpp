@@ -2024,7 +2024,7 @@ public:
         if (buf == NULL)
         {
             //apple specs say at least 32
-            n = 32 ;
+            n = max( 32 , byteInLen ) ;
             tbuf = (wchar_t*) malloc( n * SIZEOF_WCHAR_T) ;
         }
         ByteCount byteBufferLen = n * sizeof( UniChar ) ;
@@ -2065,7 +2065,7 @@ public:
         if (buf == NULL)
         {
             //apple specs say at least 32
-            n = 32;
+            n = max( 32 , ((byteInLen / SIZEOF_WCHAR_T) * 8) + SIZEOF_WCHAR_T );
             tbuf = (char*) malloc( n ) ;
         }
 
