@@ -65,7 +65,7 @@ WX_DEFINE_USER_EXPORTED_OBJARRAY(wxDynamicLibraryDetailsArray);
 #endif
 
 // for Unix it is in src/unix/dlunix.cpp
-#ifndef __UNIX__
+#if !defined(__UNIX__) || defined(__EMX__)
 
 wxDllType wxDynamicLibrary::GetProgramHandle()
 {
@@ -139,7 +139,7 @@ bool wxDynamicLibrary::Load(const wxString& libnameOrig, int flags)
 // for MSW and Unix this is implemented in the platform-specific file
 //
 // TODO: move the rest to os2/dlpm.cpp and mac/dlmac.cpp!
-#if !defined(__WXMSW__) && !defined(__UNIX__)
+#if (!defined(__WXMSW__) && !defined(__UNIX__)) || defined(__EMX__)
 
 /* static */
 void wxDynamicLibrary::Unload(wxDllType handle)
@@ -215,7 +215,7 @@ wxDynamicLibrary::CanonicalizeName(const wxString& name,
     wxString nameCanonic;
 
     // under Unix the library names usually start with "lib" prefix, add it
-#ifdef __UNIX__
+#if defined(__UNIX__) && !defined(__EMX__)
     switch ( cat )
     {
         default:
@@ -263,7 +263,7 @@ wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
         suffix = wxString(_T("_")) + suffix;
 
 #define WXSTRINGIZE(x)  #x
-#ifdef __UNIX__
+#if defined(__UNIX__) && !defined(__EMX__)
     #if (wxMINOR_VERSION % 2) == 0
         #define wxDLLVER(x,y,z) "-" WXSTRINGIZE(x) "." WXSTRINGIZE(y)
     #else
