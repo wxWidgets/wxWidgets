@@ -326,7 +326,7 @@ wxHtmlImageCell::wxHtmlImageCell(wxWindow *window, wxFSFile *input,
                                  int w, int h, double scale, int align, 
                                  const wxString& mapname) : wxHtmlCell()
 {
-    m_window = wxStaticCast(window, wxScrolledWindow);
+    m_window = window ? wxStaticCast(window, wxScrolledWindow) : NULL;
     m_scale = scale;
     m_bitmap = NULL;
     m_bmpW = w;
