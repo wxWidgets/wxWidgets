@@ -1698,7 +1698,7 @@ bool wxIsWild( const wxString& pattern )
 
 bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
 
-#if defined(HAVE_FNMATCH_H)
+#ifdef HAVE_FNMATCH
 {
 // this probably won't work well for multibyte chars in Unicode mode?
    if(dot_special)
@@ -1706,7 +1706,7 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
    else
       return fnmatch(pat.fn_str(), text.fn_str(), 0) == 0;
 }
-#else
+#else // !HAVE_FNMATCH
 
 // #pragma error Broken implementation of wxMatchWild() -- needs fixing!
 
@@ -1847,7 +1847,7 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
     return ((*str == wxT('\0')) && (*pattern == wxT('\0')));
 };
 
-#endif
+#endif // HAVE_FNMATCH/!HAVE_FNMATCH
 
 #ifdef __VISUALC__
     #pragma warning(default:4706)   // assignment within conditional expression
