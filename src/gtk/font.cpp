@@ -71,7 +71,7 @@ private:
     wxString        m_faceName;
     wxFontEncoding  m_encoding;
 
-    friend wxFont;
+    friend class wxFont;
 };
 
 // ============================================================================

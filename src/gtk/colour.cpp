@@ -33,7 +33,7 @@ class wxColourRefData: public wxObjectRefData
     GdkColormap *m_colormap;
     bool         m_hasPixel;
 
-    friend wxColour;
+    friend class wxColour;
 };
 
 wxColourRefData::wxColourRefData()
