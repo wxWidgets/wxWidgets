@@ -186,7 +186,7 @@ void wxTopLevelWindowCocoa::CocoaDelegate_windowDidResignMain(void)
     wxMenuBarManager::GetInstance()->WindowDidResignMain(this);
 }
 
-void wxTopLevelWindowCocoa::Cocoa_close(void)
+void wxTopLevelWindowCocoa::CocoaDelegate_windowWillClose(void)
 {
     m_closed = true;
     Destroy();
@@ -257,8 +257,8 @@ bool wxTopLevelWindowCocoa::Close(bool force)
     // will invoke windowShouldClose which will call the base class version
     // of Close() which will NOT Destroy() the window (see below) but
     // if closing is not stopped, then performClose will go ahead and
-    // close the window which will invoke Cocoa_close() setting m_closed
-    // to true and Destroy()ing the window.
+    // close the window which will send the close notifications setting
+    // m_closed to true and Destroy()ing the window.
     [m_cocoaNSWindow performClose:m_cocoaNSWindow];
     return m_closed;
 }

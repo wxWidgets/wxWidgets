@@ -42,6 +42,7 @@
 - (void)windowDidBecomeMain: (NSNotification *)notification;
 - (void)windowDidResignMain: (NSNotification *)notification;
 - (BOOL)windowShouldClose: (id)sender;
+- (void)windowWillClose: (NSNotification *)notification;
 @end //interface wxNSWindowDelegate
 
 @implementation wxNSWindowDelegate : NSObject
@@ -87,6 +88,13 @@
     return YES;
 }
 
+- (void)windowWillClose: (NSNotification *)notification
+{
+    wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
+    wxCHECK_RET(win,"windowWillClose received but no wxWindow exists");
+    win->CocoaDelegate_windowWillClose();
+}
+
 @end //implementation wxNSWindowDelegate
 
 // ============================================================================
@@ -123,21 +131,11 @@ void wxCocoaNSWindow::DisassociateNSWindow(WX_NSWindow cocoaNSWindow)
 {
 }
 
-- (void)close;
 - (BOOL)canBecomeMainWindow;
 @end // wxPoserNSwindow
 
 WX_IMPLEMENT_POSER(wxPoserNSWindow);
 @implementation wxPoserNSWindow : NSWindow
-
-- (void)close
-{
-    wxLogDebug("close");
-    wxCocoaNSWindow *tlw = wxCocoaNSWindow::GetFromCocoa(self);
-    if(tlw)
-        tlw->Cocoa_close();
-    [super close];
-}
 
 - (BOOL)canBecomeMainWindow
 {

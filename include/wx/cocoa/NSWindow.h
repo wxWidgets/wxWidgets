@@ -24,10 +24,10 @@ class wxCocoaNSWindow
 public:
     void AssociateNSWindow(WX_NSWindow cocoaNSWindow);
     void DisassociateNSWindow(WX_NSWindow cocoaNSWindow);
-    virtual void Cocoa_close(void) = 0;
     virtual bool Cocoa_canBecomeMainWindow(bool &canBecome)
     {   return false; }
     virtual bool CocoaDelegate_windowShouldClose(void) = 0;
+    virtual void CocoaDelegate_windowWillClose(void) = 0;
     virtual void CocoaDelegate_windowDidBecomeKey(void) { }
     virtual void CocoaDelegate_windowDidResignKey(void) { }
     virtual void CocoaDelegate_windowDidBecomeMain(void) { }

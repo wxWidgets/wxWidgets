@@ -90,7 +90,7 @@ wxDialog::~wxDialog()
     DisassociateNSPanel(GetNSPanel());
 }
 
-void wxDialog::Cocoa_close(void)
+void wxDialog::CocoaDelegate_windowWillClose(void)
 {
     m_closed = true;
     /* Actually, this isn't true anymore */

@@ -73,7 +73,7 @@ protected:
 // Cocoa specifics
 // ------------------------------------------------------------------------
 protected:
-    virtual void Cocoa_close(void);
+    virtual void CocoaDelegate_windowWillClose(void);
     virtual bool Cocoa_canBecomeMainWindow(bool &canBecome)
     {   canBecome = true; return true; }
 
