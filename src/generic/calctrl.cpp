@@ -895,7 +895,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc.SetTextForeground(*wxBLACK);
         dc.SetBrush(wxBrush(m_colHeaderBg, wxSOLID));
         dc.SetPen(wxPen(m_colHeaderBg, 1, wxSOLID));
-        dc.DrawRectangle(0, y, 7*m_widthCol, m_heightRow);
+        dc.DrawRectangle(0, y, GetClientSize().x, m_heightRow);
 
         // Get extent of month-name + year
         wxCoord monthw, monthh;
