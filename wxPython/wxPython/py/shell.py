@@ -18,9 +18,9 @@ import os
 import sys
 import time
 
-import base
-import buffer
+from buffer import Buffer
 import dispatcher
+import editwindow
 import frame
 from pseudo import PseudoFileIn
 from pseudo import PseudoFileOut
@@ -70,6 +70,23 @@ class ShellFrame(frame.Frame):
         else:
             self.shell.destroy()
             self.Destroy()
+
+    def OnAbout(self, event):
+        """Display an About window."""
+        title = 'About PyShell'
+        text = 'PyShell %s\n\n' % VERSION + \
+               'Yet another Python shell, only flakier.\n\n' + \
+               'Half-baked by Patrick K. O\'Brien,\n' + \
+               'the other half is still in the oven.\n\n' + \
+               'Shell Revision: %s\n' % self.shell.revision + \
+               'Interpreter Revision: %s\n\n' % self.shell.interp.revision + \
+               'Python Version: %s\n' % sys.version.split()[0] + \
+               'wxPython Version: %s\n' % wx.__version__ + \
+               'Platform: %s\n' % sys.platform
+        dialog = wx.wxMessageDialog(self, text, title,
+                                    wx.wxOK | wx.wxICON_INFORMATION)
+        dialog.ShowModal()
+        dialog.Destroy()
 
 
 class ShellFacade:
@@ -156,7 +173,7 @@ Ctrl+=            Default font size.
         return list
 
 
-class Shell(base.Editor):
+class Shell(editwindow.EditWindow):
     """PyCrust Shell based on StyledTextCtrl."""
 
     name = 'PyCrust Shell'
@@ -166,7 +183,7 @@ class Shell(base.Editor):
                  size=wx.wxDefaultSize, style=wx.wxCLIP_CHILDREN,
                  introText='', locals=None, InterpClass=None, *args, **kwds):
         """Create a PyCrust Shell instance."""
-        base.Editor.__init__(self, parent, id, pos, size, style)
+        editwindow.EditWindow.__init__(self, parent, id, pos, size, style)
         self.wrap()
         if locals is None:
             locals = {}
@@ -193,8 +210,7 @@ class Shell(base.Editor):
                                   stderr=PseudoFileErr(self.writeErr),
                                   *args, **kwds)
         # Set up the buffer.
-        self.buffer = buffer.Buffer(editor=self, interp=self.interp,
-                                    filename=None)
+        self.buffer = Buffer()
         # Find out for which keycodes the interpreter will autocomplete.
         self.autoCompleteKeys = self.interp.getAutoCompleteKeys()
         # Keep track of the last non-continuation prompt positions.
@@ -230,6 +246,10 @@ class Shell(base.Editor):
 
     def destroy(self):
         del self.interp
+
+    def setFocus(self):
+        """Set focus to the shell."""
+        self.SetFocus()
 
     def OnIdle(self, event):
         """Free the CPU to do other things."""
@@ -878,7 +898,7 @@ Platform: %s""" % \
 
     def CanPaste(self):
         """Return true if a paste should succeed."""
-        if self.CanEdit() and base.Editor.CanPaste(self):
+        if self.CanEdit() and editwindow.EditWindow.CanPaste(self):
             return True
         else:
             return False

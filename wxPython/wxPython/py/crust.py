@@ -38,7 +38,7 @@ class Crust(wx.wxSplitterWindow):
         self.shell = Shell(parent=self, introText=intro, 
                            locals=locals, InterpClass=InterpClass, 
                            *args, **kwds)
-        self.buffer = self.shell.buffer
+        self.editor = self.shell
         if rootObject is None:
             rootObject = self.shell.interp.locals
         self.notebook = wx.wxNotebook(parent=self, id=-1)

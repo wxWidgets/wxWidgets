@@ -7,8 +7,8 @@ __revision__ = "$Revision$"[11:-2]
 
 from wxPython import wx
 
-import base
 import dispatcher
+import editwindow
 import inspect
 import introspect
 import keyword
@@ -245,7 +245,7 @@ class FillingTree(wx.wxTreeCtrl):
         print text
 
 
-class FillingText(base.Editor):
+class FillingText(editwindow.EditWindow):
     """FillingText based on StyledTextCtrl."""
 
     name = 'PyFilling Text'
@@ -255,7 +255,7 @@ class FillingText(base.Editor):
                  size=wx.wxDefaultSize, style=wx.wxCLIP_CHILDREN,
                  static=False):
         """Create a FillingText instance."""
-        base.Editor.__init__(self, parent, id, pos, size, style)
+        editwindow.EditWindow.__init__(self, parent, id, pos, size, style)
         # Configure various defaults and user preferences.
         self.SetReadOnly(True)
         self.SetWrapMode(True)
@@ -269,7 +269,7 @@ class FillingText(base.Editor):
 
     def SetText(self, *args, **kwds):
         self.SetReadOnly(False)
-        base.Editor.SetText(self, *args, **kwds)
+        editwindow.EditWindow.SetText(self, *args, **kwds)
         self.SetReadOnly(True)
 
 

@@ -6,6 +6,7 @@ __revision__ = "$Revision$"[11:-2]
 
 from wxPython import wx
 
+from interpreter import Interpreter
 import imp
 import os
 import sys
@@ -24,13 +25,14 @@ class Buffer:
 
     id = 0
 
-    def __init__(self, editor, interp, filename=None):
+    def __init__(self, filename=None):
         """Create a Buffer instance."""
         Buffer.id += 1
         self.id = Buffer.id
+        self.interp = Interpreter(locals={})
         self.name = ''
-        self.editor = editor
-        self.interp = interp
+        self.editors = {}
+        self.editor = None
         self.modules = sys.modules.keys()
         self.syspath = sys.path[:]
         while True:
@@ -45,18 +47,17 @@ class Buffer:
                 break
         self.open(filename)
 
-    def getStatus(self):
-        """Return (filepath, line, column) status tuple."""
-        editor = self.editor
-        pos = editor.GetCurrentPos()
-        line = editor.LineFromPosition(pos) + 1
-        col = editor.GetColumn(pos)
-        status = (self.doc.filepath or self.name, line, col)
-        return status
+    def addEditor(self, editor):
+        """Add an editor."""
+        self.editor = editor
+        self.editors[editor.id] = editor
 
     def hasChanged(self):
         """Return True if text in editor has changed since last save."""
-        return self.editor.GetModify()
+        if self.editor:
+            return self.editor.hasChanged()
+        else:
+            return False
 
     def new(self, filepath):
         """New empty buffer."""
@@ -72,14 +73,16 @@ class Buffer:
         self.doc = document.Document(filename)
         self.name = self.doc.filename or ('Untitled:' + str(self.id))
         self.modulename = self.doc.filebase
-        if self.doc.filepath and os.path.exists(self.doc.filepath):
-            self.editor.ClearAll()
-            self.editor.SetText(self.doc.read())
-            self.editor.EmptyUndoBuffer()
-            self.editor.SetSavePoint()
-            self.confirmed = True
+        # XXX This should really make sure filedir is first item in syspath.
+        # XXX Or maybe this should be moved to the update namespace method.
         if self.doc.filedir and self.doc.filedir not in self.syspath:
+            # To create the proper context for updateNamespace.
             self.syspath.insert(0, self.doc.filedir)
+        if self.doc.filepath and os.path.exists(self.doc.filepath):
+            self.confirmed = True
+        if self.editor:
+            text = self.doc.read()
+            self.editor._setBuffer(buffer=self, text=text)
 
     def overwriteConfirm(filepath):
         """Confirm overwriting an existing file."""
@@ -95,43 +98,36 @@ class Buffer:
         if not self.confirmed:
             self.confirmed = self.overwriteConfirm(filepath)
         if self.confirmed:
-            self.doc.write(self.editor.GetText())
-            self.editor.SetSavePoint()
+            self.doc.write(self.editor.getText())
+            if self.editor:
+                self.editor.setSavePoint()
 
     def saveAs(self, filename):
         """Save buffer."""
         self.doc = document.Document(filename)
         self.name = self.doc.filename
         self.modulename = self.doc.filebase
-        filepath = self.doc.filepath
-        if not filepath:
-            return  # XXX Get filename
-##         if not os.path.exists(filepath):
-        self.confirmed = True
-        if not self.confirmed:
-            self.confirmed = self.overwriteConfirm(filepath)
-        if self.confirmed:
-            self.doc.write(self.editor.GetText())
-            self.editor.SetSavePoint()
+        self.save()
 
     def updateNamespace(self):
         """Update the namespace for autocompletion and calltips.
 
         Return True if updated, False if there was an error."""
-        backup = self.interp.locals
+        if not self.interp or not hasattr(self.editor, 'getText'):
+            return False
         syspath = sys.path
         sys.path = self.syspath
-        code = self.editor.GetText()
+        code = self.editor.getText()
         module = imp.new_module(str(self.modulename))
         namespace = module.__dict__.copy()
         try:
             try:
                 exec code in namespace
             except:
-                self.interp.locals = backup
                 return False
             else:
-                self.interp.locals = namespace
+                self.interp.locals.clear()
+                self.interp.locals.update(namespace)
                 return True
         finally:
             sys.path = syspath

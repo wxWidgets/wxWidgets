@@ -30,11 +30,14 @@ class Document:
 
     def read(self):
         """Return contents of file."""
-        f = file(self.filepath, 'rb')
-        try:
-            return f.read()
-        finally:
-            f.close()
+        if self.filepath and os.path.exists(self.filepath):
+            f = file(self.filepath, 'rb')
+            try:
+                return f.read()
+            finally:
+                f.close()
+        else:
+            return ''
 
     def write(self, text):
         """Write text to file."""

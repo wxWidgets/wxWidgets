@@ -6,13 +6,12 @@ __revision__ = "$Revision$"[11:-2]
 
 from wxPython import wx
 
-import base
-import buffer
+from buffer import Buffer
 import crust
 import dispatcher
+import editwindow
 import frame
-import interpreter
-import shell
+from shell import Shell
 import version
 
 try:
@@ -28,12 +27,13 @@ class EditorFrame(frame.Frame):
     def __init__(self, parent=None, id=-1, title='PyAlaCarte',
                  pos=wx.wxDefaultPosition, size=(800, 600), 
                  style=wx.wxDEFAULT_FRAME_STYLE, filename=None):
-        """Create an EditorFrame instance."""
+        """Create EditorFrame instance."""
         frame.Frame.__init__(self, parent, id, title, pos, size, style)
-        self._buffers = {}
-        self._buffer = None  # Current buffer.
+        self.buffers = {}
+        self.buffer = None  # Current buffer.
         self.editor = None
-        self._statusText = title + ' - the tastiest Python editor.'
+        self._defaultText = title + ' - the tastiest Python editor.'
+        self._statusText = self._defaultText
         self.SetStatusText(self._statusText)
         wx.EVT_IDLE(self, self.OnIdle)
         self._setup()
@@ -46,6 +46,11 @@ class EditorFrame(frame.Frame):
         Useful for subclasses."""
         pass
 
+    def setEditor(self, editor):
+        self.editor = editor
+        self.buffer = self.editor.buffer
+        self.buffers[self.buffer.id] = self.buffer
+
     def OnAbout(self, event):
         """Display an About window."""
         title = 'About PyAlaCarte'
@@ -57,8 +62,8 @@ class EditorFrame(frame.Frame):
 
     def OnClose(self, event):
         """Event handler for closing."""
-        for buffer in self._buffers.values():
-            self._buffer = buffer
+        for buffer in self.buffers.values():
+            self.buffer = buffer
             if buffer.hasChanged():
                 cancel = self.bufferSuggestSave()
                 if cancel and event.CanVeto():
@@ -74,12 +79,14 @@ class EditorFrame(frame.Frame):
 
     def _updateStatus(self):
         """Show current status information."""
-        if self._buffer:
-            status = self._buffer.getStatus()
+        if self.editor and hasattr(self.editor, 'getStatus'):
+            status = self.editor.getStatus()
             text = 'File: %s  |  Line: %d  |  Column: %d' % status
-            if text != self._statusText:
-                self.SetStatusText(text)
-                self._statusText = text
+        else:
+            text = self._defaultText
+        if text != self._statusText:
+            self.SetStatusText(text)
+            self._statusText = text
 
     def _updateTitle(self):
         """Show current title information."""
@@ -95,7 +102,7 @@ class EditorFrame(frame.Frame):
         
     def hasBuffer(self):
         """Return True if there is a current buffer."""
-        if self._buffer:
+        if self.buffer:
             return True
         else:
             return False
@@ -113,25 +120,26 @@ class EditorFrame(frame.Frame):
     def bufferCreate(self, filename=None):
         """Create new buffer."""
         self.bufferDestroy()
-        interp = interpreter.Interpreter(locals={})
-        self.editor = Editor(interp=interp, parent=self, filename=filename)
-        self._buffer = self.editor.buffer
-        self._buffers[self._buffer.id] = self._buffer
-        self._buffer.editor.SetFocus()
+        buffer = Buffer()
+        editor = Editor(parent=self)
+        buffer.addEditor(editor)
+        buffer.open(filename)
+        self.setEditor(editor)
+        self.editor.setFocus()
 
     def bufferDestroy(self):
         """Destroy the current buffer."""
-        if self._buffer:
-            del self._buffers[self._buffer.id]
-            self._buffer = None
-        if self.editor:
-            self.editor.Destroy()
+        if self.buffer:
+            for editor in self.buffer.editors.values():
+                editor.destroy()
             self.editor = None
+            del self.buffers[self.buffer.id]
+            self.buffer = None
 
     def bufferHasChanged(self):
         """Return True if buffer has changed since last save."""
-        if self._buffer:
-            return self._buffer.hasChanged()
+        if self.buffer:
+            return self.buffer.hasChanged()
         else:
             return False
 
@@ -152,8 +160,8 @@ class EditorFrame(frame.Frame):
             if cancel:
                 return cancel
         filedir = ''
-        if self._buffer and self._buffer.doc.filedir:
-            filedir = self._buffer.doc.filedir
+        if self.buffer and self.buffer.doc.filedir:
+            filedir = self.buffer.doc.filedir
         result = openSingle(directory=filedir)
         if result.path:
             self.bufferCreate(result.path)
@@ -170,8 +178,8 @@ class EditorFrame(frame.Frame):
 
     def bufferSave(self):
         """Save buffer to its file."""
-        if self._buffer.doc.filepath:
-            self._buffer.save()
+        if self.buffer.doc.filepath:
+            self.buffer.save()
             cancel = False
         else:
             cancel = self.bufferSaveAs()
@@ -179,16 +187,16 @@ class EditorFrame(frame.Frame):
 
     def bufferSaveAs(self):
         """Save buffer to a new filename."""
-        if self.bufferHasChanged() and self._buffer.doc.filepath:
+        if self.bufferHasChanged() and self.buffer.doc.filepath:
             cancel = self.bufferSuggestSave()
             if cancel:
                 return cancel
         filedir = ''
-        if self._buffer and self._buffer.doc.filedir:
-            filedir = self._buffer.doc.filedir
+        if self.buffer and self.buffer.doc.filedir:
+            filedir = self.buffer.doc.filedir
         result = saveSingle(directory=filedir)
         if result.path:
-            self._buffer.saveAs(result.path)
+            self.buffer.saveAs(result.path)
             cancel = False
         else:
             cancel = True
@@ -199,7 +207,7 @@ class EditorFrame(frame.Frame):
         result = messageDialog(parent=None,
                                message='%s has changed.\n'
                                        'Would you like to save it first'
-                                       '?' % self._buffer.name,
+                                       '?' % self.buffer.name,
                                title='Save current file?')
         if result.positive:
             cancel = self.bufferSave()
@@ -209,7 +217,7 @@ class EditorFrame(frame.Frame):
 
     def updateNamespace(self):
         """Update the buffer namespace for autocompletion and calltips."""
-        if self._buffer.updateNamespace():
+        if self.buffer.updateNamespace():
             self.SetStatusText('Namespace updated')
         else:
             self.SetStatusText('Error executing, unable to update namespace')
@@ -221,24 +229,26 @@ class EditorNotebookFrame(EditorFrame):
     def __init__(self, parent=None, id=-1, title='PyAlaMode',
                  pos=wx.wxDefaultPosition, size=(800, 600), 
                  style=wx.wxDEFAULT_FRAME_STYLE, filename=None):
-        """Create an EditorNotebookFrame instance."""
+        """Create EditorNotebookFrame instance."""
+        self.notebook = None
         EditorFrame.__init__(self, parent, id, title, pos,
                              size, style, filename)
+        if self.notebook:
+            dispatcher.connect(receiver=self._editorChange,
+                               signal='EditorChange', sender=self.notebook)
 
     def _setup(self):
         """Setup prior to first buffer creation.
 
-        Useful for subclasses."""
-        self._notebook = BufferNotebook(parent=self)
-        dispatcher.connect(receiver=self._bufferChange,
-                           signal='BufferChange', sender=self._notebook)
+        Called automatically by base class during init."""
+        self.notebook = EditorNotebook(parent=self)
         intro = 'PyCrust %s' % version.VERSION
         import imp
         module = imp.new_module('__main__')
         import __builtin__
         module.__dict__['__builtins__'] = __builtin__
         namespace = module.__dict__.copy()
-        self.crust = crust.Crust(parent=self._notebook, intro=intro, locals=namespace)
+        self.crust = crust.Crust(parent=self.notebook, intro=intro, locals=namespace)
         self.shell = self.crust.shell
         # Override the filling so that status messages go to the status bar.
         self.crust.filling.tree.setStatusText = self.SetStatusText
@@ -246,14 +256,12 @@ class EditorNotebookFrame(EditorFrame):
         self.shell.setStatusText = self.SetStatusText
         # Fix a problem with the sash shrinking to nothing.
         self.crust.filling.SetSashPosition(200)
-        self._notebook.AddPage(page=self.crust, text='PyCrust', select=True)
-        self._buffer = self.crust.buffer
-        self._buffers[self._buffer.id] = self._buffer
-        self._buffer.editor.SetFocus()
+        self.notebook.AddPage(page=self.crust, text='PyCrust', select=True)
+        self.setEditor(self.crust.editor)
 
-    def _bufferChange(self, buffer):
-        """Buffer change signal receiver."""
-        self._buffer = buffer
+    def _editorChange(self, editor):
+        """Editor change signal receiver."""
+        self.setEditor(editor)
 
     def OnAbout(self, event):
         """Display an About window."""
@@ -278,24 +286,24 @@ class EditorNotebookFrame(EditorFrame):
         
     def bufferCreate(self, filename=None):
         """Create new buffer."""
-        interp = interpreter.Interpreter(locals={})
-        editor = Editor(interp=interp, parent=self._notebook,
-                        filename=filename)
-        self._buffer = editor.buffer
-        self._buffers[self._buffer.id] = self._buffer
-        self._notebook.AddPage(page=editor, text=self._buffer.name,
-                               select=True)
-        self._buffer.editor.SetFocus()
+        buffer = Buffer()
+        editor = Editor(parent=self.notebook)
+        buffer.addEditor(editor)
+        buffer.open(filename)
+        self.setEditor(editor)
+        self.notebook.AddPage(page=editor.window, text=self.buffer.name,
+                              select=True)
+        self.editor.setFocus()
 
     def bufferDestroy(self):
         """Destroy the current buffer."""
-        selection = self._notebook.GetSelection()
+        selection = self.notebook.GetSelection()
 ##         print "Destroy Selection:", selection
         if selection > 0:  # Don't destroy the PyCrust tab.
-            if self._buffer:
-                del self._buffers[self._buffer.id]
-                self._buffer = None  # Do this before DeletePage().
-            self._notebook.DeletePage(selection)
+            if self.buffer:
+                del self.buffers[self.buffer.id]
+                self.buffer = None  # Do this before DeletePage().
+            self.notebook.DeletePage(selection)
 
     def bufferNew(self):
         """Create new buffer."""
@@ -306,8 +314,8 @@ class EditorNotebookFrame(EditorFrame):
     def bufferOpen(self):
         """Open file in buffer."""
         filedir = ''
-        if self._buffer and self._buffer.doc.filedir:
-            filedir = self._buffer.doc.filedir
+        if self.buffer and self.buffer.doc.filedir:
+            filedir = self.buffer.doc.filedir
         result = openMultiple(directory=filedir)
         for path in result.paths:
             self.bufferCreate(path)
@@ -315,14 +323,16 @@ class EditorNotebookFrame(EditorFrame):
         return cancel
 
 
-class BufferNotebook(wx.wxNotebook):
-    """A notebook containing a page for each buffer."""
+class EditorNotebook(wx.wxNotebook):
+    """A notebook containing a page for each editor."""
 
     def __init__(self, parent):
-        """Create a BufferNotebook instance."""
+        """Create EditorNotebook instance."""
         wx.wxNotebook.__init__(self, parent, id=-1)
-        wx.EVT_NOTEBOOK_PAGE_CHANGING(self, self.GetId(), self.OnPageChanging)
-        wx.EVT_NOTEBOOK_PAGE_CHANGED(self, self.GetId(), self.OnPageChanged)
+        wx.EVT_NOTEBOOK_PAGE_CHANGING(self, self.GetId(),
+                                      self.OnPageChanging)
+        wx.EVT_NOTEBOOK_PAGE_CHANGED(self, self.GetId(),
+                                     self.OnPageChanged)
 
     def OnPageChanging(self, event):
         """Page changing event handler."""
@@ -338,87 +348,70 @@ class BufferNotebook(wx.wxNotebook):
 ##         print "Changed from:", old
         new = event.GetSelection()
 ##         print "Changed to new:", new
-        page = self.GetPage(new)
-        buffer = page.buffer
-        buffer.editor.SetFocus()
-        dispatcher.send(signal='BufferChange', sender=self, buffer=buffer)
+        window = self.GetPage(new)
+        dispatcher.send(signal='EditorChange', sender=self,
+                        editor=window.editor)
+        window.SetFocus()
         event.Skip()
 
 
-class BufferEditorShellNotebookFrame(EditorFrame):
-    """Frame containing one or more editor notebooks."""
+class EditorShellNotebookFrame(EditorNotebookFrame):
+    """Frame containing a notebook containing EditorShellNotebooks."""
 
     def __init__(self, parent=None, id=-1, title='PyAlaMode',
                  pos=wx.wxDefaultPosition, size=(600, 400), 
                  style=wx.wxDEFAULT_FRAME_STYLE,
                  filename=None, singlefile=False):
-        """Create a BufferEditorShellNotebookFrame instance."""
+        """Create EditorShellNotebookFrame instance."""
         self._singlefile = singlefile
-        EditorFrame.__init__(self, parent, id, title, pos,
-                             size, style, filename)
+        EditorNotebookFrame.__init__(self, parent, id, title, pos,
+                                     size, style, filename)
 
     def _setup(self):
         """Setup prior to first buffer creation.
 
-        Useful for subclasses."""
+        Called automatically by base class during init."""
         if not self._singlefile:
-            self._notebook = BufferNotebook(parent=self)
-            dispatcher.connect(receiver=self._bufferChange,
-                               signal='BufferChange', sender=self._notebook)
-
-    def _bufferChange(self, buffer):
-        """Buffer change signal receiver."""
-        self._buffer = buffer
+            self.notebook = EditorNotebook(parent=self)
 
     def OnAbout(self, event):
         """Display an About window."""
-        title = 'About PyAlaMode'
+        title = 'About PyAlaModePlus'
         text = 'Another fine, flaky program.'
         dialog = wx.wxMessageDialog(self, text, title,
                                     wx.wxOK | wx.wxICON_INFORMATION)
         dialog.ShowModal()
         dialog.Destroy()
 
-    def _updateTitle(self):
-        """Show current title information."""
-        title = self.GetTitle()
-        if self.bufferHasChanged():
-            if title.startswith('* '):
-                pass
-            else:
-                self.SetTitle('* ' + title)
-        else:
-            if title.startswith('* '):
-                self.SetTitle(title[2:])
-        
     def bufferCreate(self, filename=None):
         """Create new buffer."""
         if self._singlefile:
             self.bufferDestroy()
-            notebook = self._notebook = EditorShellNotebook(parent=self,
-                                                            filename=filename)
-        else:
-            notebook = EditorShellNotebook(parent=self._notebook,
+            notebook = EditorShellNotebook(parent=self,
                                            filename=filename)
-        self._buffer = notebook.buffer
+            self.notebook = notebook
+        else:
+            notebook = EditorShellNotebook(parent=self.notebook,
+                                           filename=filename)
+        self.setEditor(notebook.editor)
         if not self._singlefile:
-            self._notebook.AddPage(page=notebook, text=self._buffer.name,
-                                   select=True)
-        self._buffers[self._buffer.id] = self._buffer
-        self._buffer.editor.SetFocus()
+            self.notebook.AddPage(page=notebook, text=self.buffer.name,
+                                  select=True)
+        self.editor.setFocus()
 
     def bufferDestroy(self):
         """Destroy the current buffer."""
-        if self._buffer:
-            del self._buffers[self._buffer.id]
-            self._buffer = None  # Do this before DeletePage().
+        if self.buffer:
+            self.editor = None
+            del self.buffers[self.buffer.id]
+            self.buffer = None  # Do this before DeletePage().
         if self._singlefile:
-            self._notebook.Destroy()
-            self._notebook = None
+            self.notebook.Destroy()
+            self.notebook = None
         else:
-            selection = self._notebook.GetSelection()
-            print "Destroy Selection:", selection
-            self._notebook.DeletePage(selection)
+            selection = self.notebook.GetSelection()
+##             print "Destroy Selection:", selection
+            self.notebook.DeletePage(selection)
 
     def bufferNew(self):
         """Create new buffer."""
@@ -437,8 +430,8 @@ class BufferEditorShellNotebookFrame(EditorFrame):
             if cancel:
                 return cancel
         filedir = ''
-        if self._buffer and self._buffer.doc.filedir:
-            filedir = self._buffer.doc.filedir
+        if self.buffer and self.buffer.doc.filedir:
+            filedir = self.buffer.doc.filedir
         if self._singlefile:
             result = openSingle(directory=filedir)
             if result.path:
@@ -451,94 +444,125 @@ class BufferEditorShellNotebookFrame(EditorFrame):
         return cancel
 
 
-class BufferEditorShellNotebook(wx.wxNotebook):
-    """A notebook containing a page for each buffer."""
-
-    def __init__(self, parent):
-        """Create a BufferEditorShellNotebook instance."""
-        wx.wxNotebook.__init__(self, parent, id=-1)
-        wx.EVT_NOTEBOOK_PAGE_CHANGED(self, self.GetId(), self.OnPageChanged)
-
-    def OnPageChanged(self, event):
-        """Page changed event handler."""
-##         old = event.GetOldSelection()
-##         print "Changed from old:", old
-        new = event.GetSelection()
-##         print "Changed to new:", new
-        page = self.GetPage(new)
-        buffer = page.buffer
-        subselection = page.GetSelection()
-        page.focus(subselection)
-        dispatcher.send(signal='BufferChange', sender=self, buffer=buffer)
-        event.Skip()
-
-
 class EditorShellNotebook(wx.wxNotebook):
     """A notebook containing an editor page and a shell page."""
 
     def __init__(self, parent, filename=None):
-        """Create an EditorShellNotebook instance."""
+        """Create EditorShellNotebook instance."""
         wx.wxNotebook.__init__(self, parent, id=-1)
         usePanels = True
         if usePanels:
-            shellparent = shellpanel = wx.wxPanel(self, -1)
             editorparent = editorpanel = wx.wxPanel(self, -1)
+            shellparent = shellpanel = wx.wxPanel(self, -1)
         else:
-            shellparent = self
             editorparent = self
-        self.shell = shell.Shell(parent=shellparent,
-                                 style=wx.wxCLIP_CHILDREN | wx.wxSUNKEN_BORDER)
-        self.editor = Editor(interp=self.shell.interp, parent=editorparent,
-                             filename=filename)
+            shellparent = self
+        self.buffer = Buffer()
+        self.editor = Editor(parent=editorparent)
+        self.buffer.addEditor(self.editor)
+        self.buffer.open(filename)
+        self.shell = Shell(parent=shellparent, locals=self.buffer.interp.locals,
+                           style=wx.wxCLIP_CHILDREN | wx.wxSUNKEN_BORDER)
+        self.buffer.interp.locals.clear()
         if usePanels:
-            self.AddPage(page=editorpanel, text='File', select=True)
+            self.AddPage(page=editorpanel, text='Editor', select=True)
             self.AddPage(page=shellpanel, text='Shell')
             # Setup sizers
+            editorsizer = wx.wxBoxSizer(wx.wxVERTICAL)
+            editorsizer.Add(self.editor.window, 1, wx.wxEXPAND)
+            editorpanel.SetSizer(editorsizer)
+            editorpanel.SetAutoLayout(True)
             shellsizer = wx.wxBoxSizer(wx.wxVERTICAL)
             shellsizer.Add(self.shell, 1, wx.wxEXPAND)
             shellpanel.SetSizer(shellsizer)
             shellpanel.SetAutoLayout(True)
-            editorsizer = wx.wxBoxSizer(wx.wxVERTICAL)
-            editorsizer.Add(self.editor, 1, wx.wxEXPAND)
-            editorpanel.SetSizer(editorsizer)
-            editorpanel.SetAutoLayout(True)
         else:
-            self.AddPage(page=self.editor, text='File', select=True)
+            self.AddPage(page=self.editor.window, text='Editor', select=True)
             self.AddPage(page=self.shell, text='Shell')
-        self.buffer = self.editor.buffer
-        self.editor.SetFocus()
+        self.editor.setFocus()
         wx.EVT_NOTEBOOK_PAGE_CHANGED(self, self.GetId(), self.OnPageChanged)
 
     def OnPageChanged(self, event):
         """Page changed event handler."""
         selection = event.GetSelection()
-        self.focus(selection)
+        if selection == 0:
+            self.editor.setFocus()
+        else:
+            self.shell.SetFocus()
         event.Skip()
 
-    def focus(self, selection):
+    def SetFocus(self):
+        wx.wxNotebook.SetFocus(self)
+        selection = self.GetSelection()
         if selection == 0:
-            self.editor.SetFocus()
+            self.editor.setFocus()
         else:
             self.shell.SetFocus()
 
 
-class Editor(base.Editor):
-    """Editor based on StyledTextCtrl."""
+class Editor:
+    """Editor having an EditWindow."""
 
-    def __init__(self, interp, parent, id=-1, pos=wx.wxDefaultPosition,
+    def __init__(self, parent, id=-1, pos=wx.wxDefaultPosition,
                  size=wx.wxDefaultSize,
-                 style=wx.wxCLIP_CHILDREN | wx.wxSUNKEN_BORDER,
-                 filename=None):
-        """Create a Editor instance."""
-        base.Editor.__init__(self, parent, id, pos, size, style)
-        self.interp = interp
-        # Find out for which keycodes the interpreter will autocomplete.
-        self.autoCompleteKeys = self.interp.getAutoCompleteKeys()
+                 style=wx.wxCLIP_CHILDREN | wx.wxSUNKEN_BORDER):
+        """Create Editor instance."""
+        self.window = EditWindow(self, parent, id, pos, size, style)
+        self.id = self.window.GetId()
+        self.buffer = None
         # Assign handlers for keyboard events.
-        wx.EVT_CHAR(self, self.OnChar)
-        wx.EVT_KEY_DOWN(self, self.OnKeyDown)
-        self.buffer = buffer.Buffer(editor=self, interp=self.interp,
-                                    filename=filename)
+        wx.EVT_CHAR(self.window, self.OnChar)
+        wx.EVT_KEY_DOWN(self.window, self.OnKeyDown)
+
+    def _setBuffer(self, buffer, text):
+        """Set the editor to a buffer.  Private callback called by buffer."""
+        self.buffer = buffer
+        self.autoCompleteKeys = buffer.interp.getAutoCompleteKeys()
+        self.clearAll()
+        self.setText(text)
+        self.emptyUndoBuffer()
+        self.setSavePoint()
+
+    def destroy(self):
+        """Destroy all editor objects."""
+        self.window.Destroy()
+
+    def clearAll(self):
+        self.window.ClearAll()
+
+    def emptyUndoBuffer(self):
+        self.window.EmptyUndoBuffer()
+
+    def getStatus(self):
+        """Return (filepath, line, column) status tuple."""
+        pos = self.window.GetCurrentPos()
+        line = self.window.LineFromPosition(pos) + 1
+        col = self.window.GetColumn(pos)
+        if self.buffer:
+            name = self.buffer.doc.filepath or self.buffer.name
+        else:
+            name = ''
+        status = (name, line, col)
+        return status
+
+    def getText(self):
+        """Return contents of editor."""
+        return self.window.GetText()
+
+    def hasChanged(self):
+        """Return True if contents have changed."""
+        return self.window.GetModify()
+
+    def setFocus(self):
+        """Set the input focus to the editor window."""
+        self.window.SetFocus()
+
+    def setSavePoint(self):
+        self.window.SetSavePoint()
+
+    def setText(self, text):
+        """Set contents of editor."""
+        self.window.SetText(text)
 
     def OnChar(self, event):
         """Keypress event handler.
@@ -549,22 +573,22 @@ class Editor(base.Editor):
         key = event.KeyCode()
         if key in self.autoCompleteKeys:
             # Usually the dot (period) key activates auto completion.
-            if self.AutoCompActive(): 
-                self.AutoCompCancel()
-            self.ReplaceSelection('')
-            self.AddText(chr(key))
-            text, pos = self.GetCurLine()
+            if self.window.AutoCompActive(): 
+                self.window.AutoCompCancel()
+            self.window.ReplaceSelection('')
+            self.window.AddText(chr(key))
+            text, pos = self.window.GetCurLine()
             text = text[:pos]
-            if self.autoComplete: 
+            if self.window.autoComplete: 
                 self.autoCompleteShow(text)
         elif key == ord('('):
             # The left paren activates a call tip and cancels an
             # active auto completion.
-            if self.AutoCompActive(): 
-                self.AutoCompCancel()
-            self.ReplaceSelection('')
-            self.AddText('(')
-            text, pos = self.GetCurLine()
+            if self.window.AutoCompActive(): 
+                self.window.AutoCompCancel()
+            self.window.ReplaceSelection('')
+            self.window.AddText('(')
+            text, pos = self.window.GetCurLine()
             text = text[:pos]
             self.autoCallTipShow(text)
         else:
@@ -576,7 +600,7 @@ class Editor(base.Editor):
 
         key = event.KeyCode()
         # If the auto-complete window is up let it do its thing.
-        if self.AutoCompActive():
+        if self.window.AutoCompActive():
             event.Skip()
             return
         controlDown = event.ControlDown()
@@ -599,46 +623,57 @@ class Editor(base.Editor):
 
     def autoCompleteShow(self, command):
         """Display auto-completion popup list."""
-        list = self.interp.getAutoCompleteList(command, 
-                    includeMagic=self.autoCompleteIncludeMagic, 
-                    includeSingle=self.autoCompleteIncludeSingle, 
-                    includeDouble=self.autoCompleteIncludeDouble)
+        list = self.buffer.interp.getAutoCompleteList(command, 
+                    includeMagic=self.window.autoCompleteIncludeMagic, 
+                    includeSingle=self.window.autoCompleteIncludeSingle, 
+                    includeDouble=self.window.autoCompleteIncludeDouble)
         if list and len(list) < 2000:
             options = ' '.join(list)
             offset = 0
-            self.AutoCompShow(offset, options)
+            self.window.AutoCompShow(offset, options)
 
     def autoCallTipShow(self, command):
         """Display argument spec and docstring in a popup window."""
-        if self.CallTipActive():
-            self.CallTipCancel()
-        (name, argspec, tip) = self.interp.getCallTip(command)
+        if self.window.CallTipActive():
+            self.window.CallTipCancel()
+        (name, argspec, tip) = self.buffer.interp.getCallTip(command)
         if tip:
             dispatcher.send(signal='Shell.calltip', sender=self, calltip=tip)
-        if not self.autoCallTip:
+        if not self.window.autoCallTip:
             return
         if argspec:
-            startpos = self.GetCurrentPos()
-            self.AddText(argspec + ')')
-            endpos = self.GetCurrentPos()
-            self.SetSelection(endpos, startpos)
+            startpos = self.window.GetCurrentPos()
+            self.window.AddText(argspec + ')')
+            endpos = self.window.GetCurrentPos()
+            self.window.SetSelection(endpos, startpos)
         if tip:
-            curpos = self.GetCurrentPos()
+            curpos = self.window.GetCurrentPos()
             size = len(name)
             tippos = curpos - (size + 1)
-            fallback = curpos - self.GetColumn(curpos)
+            fallback = curpos - self.window.GetColumn(curpos)
             # In case there isn't enough room, only go back to the
             # fallback.
             tippos = max(tippos, fallback)
-            self.CallTipShow(tippos, tip)
-            self.CallTipSetHighlight(0, size)
+            self.window.CallTipShow(tippos, tip)
+            self.window.CallTipSetHighlight(0, size)
+
+
+class EditWindow(editwindow.EditWindow):
+    """EditWindow based on StyledTextCtrl."""
+
+    def __init__(self, editor, parent, id=-1, pos=wx.wxDefaultPosition,
+                 size=wx.wxDefaultSize,
+                 style=wx.wxCLIP_CHILDREN | wx.wxSUNKEN_BORDER):
+        """Create EditWindow instance."""
+        editwindow.EditWindow.__init__(self, parent, id, pos, size, style)
+        self.editor = editor
 
 
 class DialogResults:
     """DialogResults class."""
 
     def __init__(self, returned):
-        """Create a wrapper for the results returned by a dialog."""
+        """Create wrapper for results returned by dialog."""
         self.returned = returned
         self.positive = returned in (wx.wxID_OK, wx.wxID_YES)
         self.text = self._asString()
