@@ -22,8 +22,8 @@
 
 // OS: first test for generic Unix defines, then for particular flavours and
 //     finally for Unix-like systems
-#if defined(__unix) || defined(__unix__) || defined(____SVR4____) || \
-    defined(__LINUX__) || defined(__sgi) || \
+#if defined(__UNIX__) || defined(__unix) || defined(__unix__) || \
+    defined(____SVR4____) || defined(__LINUX__) || defined(__sgi) || \
     defined(__hpux) || defined(sun) || defined(__SUN__) || defined(_AIX) || \
     defined(__EMX__) || defined(__VMS) || defined(__BEOS__)
 

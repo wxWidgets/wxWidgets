@@ -492,6 +492,7 @@ USE_ALPHA=
 USE_OSF=
 USE_BSD=
 USE_FREEBSD=
+USE_NETBSD=
 USE_VMS=
 USE_ULTRIX=
 USE_CYGWIN=
@@ -572,11 +573,18 @@ case "${host}" in
     AC_DEFINE(__BSD__)
     DEFAULT_DEFAULT_wxUSE_MOTIF=1
   ;;
-  *-*-freebsd* | *-*-netbsd*)
+  *-*-freebsd*)
     USE_BSD=1
     USE_FREEBSD=1
     AC_DEFINE(__FREEBSD__)
     AC_DEFINE(__BSD__)
+    DEFAULT_DEFAULT_wxUSE_GTK=1
+  ;;
+  *-*-netbsd*)
+    USE_BSD=1
+    USE_NETBSD=1
+    AC_DEFINE(__FREEBSD__)
+    AC_DEFINE(__NETBSD__)
     DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-osf* )

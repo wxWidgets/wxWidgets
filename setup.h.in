@@ -86,6 +86,7 @@
 #undef __OSF__
 #undef __BSD__
 #undef __FREEBSD__
+#undef __NETBSD__
 #undef __VMS__
 #undef __ULTRIX__
 #undef __DATA_GENERAL__
