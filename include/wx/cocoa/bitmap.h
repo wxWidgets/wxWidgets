@@ -24,38 +24,36 @@ class WXDLLEXPORT wxPixelDataBase;
 // ========================================================================
 // wxMask
 // ========================================================================
-/* DFE: wxMask is not implemented yet */
 
-// A mask is a mono bitmap used for drawing bitmaps
-// transparently.
+// A mask is a 1-bit alpha bitmap used for drawing bitmaps transparently.
 class WXDLLEXPORT wxMask: public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxMask)
 public:
-  wxMask();
+    wxMask();
 
-  // Construct a mask from a bitmap and a colour indicating
-  // the transparent area
-  wxMask(const wxBitmap& bitmap, const wxColour& colour);
+    // Construct a mask from a bitmap and a colour indicating
+    // the transparent area
+    wxMask(const wxBitmap& bitmap, const wxColour& colour);
 
-  // Construct a mask from a bitmap and a palette index indicating
-  // the transparent area
-  wxMask(const wxBitmap& bitmap, int paletteIndex);
+    // Construct a mask from a bitmap and a palette index indicating
+    // the transparent area
+    wxMask(const wxBitmap& bitmap, int paletteIndex);
 
-  // Construct a mask from a mono bitmap (copies the bitmap).
-  wxMask(const wxBitmap& bitmap);
+    // Construct a mask from a mono bitmap (copies the bitmap).
+    wxMask(const wxBitmap& bitmap);
 
-  ~wxMask();
+    ~wxMask();
 
-  bool Create(const wxBitmap& bitmap, const wxColour& colour);
-  bool Create(const wxBitmap& bitmap, int paletteIndex);
-  bool Create(const wxBitmap& bitmap);
+    bool Create(const wxBitmap& bitmap, const wxColour& colour);
+    bool Create(const wxBitmap& bitmap, int paletteIndex);
+    bool Create(const wxBitmap& bitmap);
 
-  // Implementation
-//  inline WXHBITMAP GetMaskBitmap() const { return m_maskBitmap; }
-//  inline void SetMaskBitmap(WXHBITMAP bmp) { m_maskBitmap = bmp; }
+    // wxCocoa
+    inline WX_NSBitmapImageRep GetNSBitmapImageRep()
+    {   return m_cocoaNSBitmapImageRep; }
 protected:
-//  WXHBITMAP m_maskBitmap;
+    WX_NSBitmapImageRep m_cocoaNSBitmapImageRep;
 };
 
 // ========================================================================

@@ -15,6 +15,7 @@
     #include "wx/utils.h"
     #include "wx/palette.h"
     #include "wx/icon.h"
+    #include "wx/colour.h"
 #endif //WX_PRECOMP
 #include "wx/bitmap.h"
 #include "wx/image.h"
@@ -393,7 +394,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth)
     M_BITMAPDATA->m_numColors = 0;
     M_BITMAPDATA->m_quality = 0;
     M_BITMAPDATA->m_cocoaNSBitmapImageRep = bitmapImage;
-    M_BITMAPDATA->m_bitmapMask = NULL;
+    M_BITMAPDATA->m_bitmapMask = new wxMask(*this,wxColour(image.GetMaskRed(),image.GetMaskGreen(),image.GetMaskBlue()));
     return true;
 }
 
@@ -436,18 +437,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
 
 wxMask::wxMask()
 {
-/* TODO
-    m_maskBitmap = 0;
-*/
+    m_cocoaNSBitmapImageRep = nil;
 }
 
 // Construct a mask from a bitmap and a colour indicating
 // the transparent area
 wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
 {
-/* TODO
-    m_maskBitmap = 0;
-*/
+    m_cocoaNSBitmapImageRep = nil;
     Create(bitmap, colour);
 }
 
@@ -455,9 +452,7 @@ wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
 // the transparent area
 wxMask::wxMask(const wxBitmap& bitmap, int paletteIndex)
 {
-/* TODO
-    m_maskBitmap = 0;
-*/
+    m_cocoaNSBitmapImageRep = nil;
 
     Create(bitmap, paletteIndex);
 }
@@ -465,16 +460,14 @@ wxMask::wxMask(const wxBitmap& bitmap, int paletteIndex)
 // Construct a mask from a mono bitmap (copies the bitmap).
 wxMask::wxMask(const wxBitmap& bitmap)
 {
-/* TODO
-    m_maskBitmap = 0;
-*/
+    m_cocoaNSBitmapImageRep = nil;
 
     Create(bitmap);
 }
 
 wxMask::~wxMask()
 {
-// TODO: delete mask bitmap
+    [m_cocoaNSBitmapImageRep release];
 }
 
 // Create a mask from a mono bitmap (copies the bitmap).
@@ -492,11 +485,103 @@ bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
     return FALSE;
 }
 
+template <class PixelData>
+static bool wxMask_CreateFromBitmapData(PixelData srcData, const wxColour& colour, unsigned char *dstData)
+{
+    wxCHECK_MSG(dstData,false,"Couldn't access mask data");
+    class PixelData::Iterator p(srcData);
+    const int nRows = srcData.GetHeight();
+    const int nCols = srcData.GetWidth();
+    // Total number of bytes per destination column
+    const int dstRowLength = (nCols+7)/8;
+    // Number of source columns that fit into a byte in the destination
+    const int width_aligned = nCols/8*8;
+    for(int y=0; y<nRows; ++y)
+    {
+        class PixelData::Iterator rowStart(p);
+        unsigned char *dstRow = dstData + y*dstRowLength;
+        for(int x=0; x<width_aligned; x+=8)
+        {
+            unsigned char *dstByte = dstRow + x/8;
+            *dstByte = 0;
+            // Take source RGB, compare it with the wxColour
+            for(int j=0; j<8; ++j, ++p)
+            {
+                *dstByte +=
+                (   p.Red()!=colour.Red()
+                ||  p.Green()!=colour.Green()
+                ||  p.Blue()!=colour.Blue()
+                )   << (7-j);
+            }
+        }
+        // Handle the remaining 0-7 pixels in the row
+        unsigned char *dstByte = dstRow + width_aligned/8;
+        *dstByte = 0;
+        for(int j=0; j<(nCols%8); ++j, ++p)
+        {
+            *dstByte +=
+            (   p.Red()!=colour.Red()
+            ||  p.Green()!=colour.Green()
+            ||  p.Blue()!=colour.Blue()
+            )   << (7-j);
+        }
+        p = rowStart;
+        p.OffsetY(srcData,1);
+    }
+    return true;
+}
+
 // Create a mask from a bitmap and a colour indicating
 // the transparent area
 bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 {
-// TODO
-    return FALSE;
+    wxAutoNSAutoreleasePool pool;
+    if(!bitmap.Ok())
+        return false;
+    int bmpWidth = bitmap.GetWidth();
+    int bmpHeight = bitmap.GetHeight();
+    int dstRowLength = (bmpWidth+7)/8;
+
+    // Create a bitmap image rep with 1-bit per pixel data representing
+    // the alpha channel padded such that rows end on byte boundaries
+    // Since NSBitmapImageRep doesn't have any sort of NSNullColorSpace
+    // we must have at least one channel of non-alpha data.  In order to
+    // make our life easy, we use planar data which results in two
+    // separate arrays.  We don't need to touch the first because it
+    // should never be used.  The second is the 1-bit "alpha" data.
+    NSBitmapImageRep *maskRep = [[[NSBitmapImageRep alloc]
+        initWithBitmapDataPlanes:NULL pixelsWide:bmpWidth
+        pixelsHigh:bmpHeight bitsPerSample:1
+        samplesPerPixel:2 hasAlpha:YES isPlanar:YES
+        colorSpaceName:NSCalibratedWhiteColorSpace
+        bytesPerRow:dstRowLength bitsPerPixel:1] autorelease];
+    wxCHECK(maskRep,false);
+
+    // We need the source NSBitmapImageRep to detemine its pixel format
+    NSBitmapImageRep *srcBitmapRep = ((wxBitmapRefData*)bitmap.GetRefData())->m_cocoaNSBitmapImageRep;
+    wxCHECK_MSG(srcBitmapRep,false,"Can't create mask for an uninitialized bitmap");
+
+    // Get a pointer to the destination data
+    unsigned char *dstPlanes[5] = {NULL,NULL,NULL,NULL,NULL};
+    [maskRep getBitmapDataPlanes:dstPlanes];
+    unsigned char *dstData = dstPlanes[1];
+    if([srcBitmapRep bitsPerPixel]==24 && [srcBitmapRep bitsPerSample]==8 && [srcBitmapRep samplesPerPixel]==3 && [srcBitmapRep hasAlpha]==NO)
+    {
+        wxPixelData<wxBitmap,wxNativePixelFormat> pixelData(const_cast<wxBitmap&>(bitmap));
+        wxCHECK_MSG(wxMask_CreateFromBitmapData(pixelData, colour, dstData),
+            false, "Unable to access raw data");
+    }
+    else if([srcBitmapRep bitsPerPixel]==32 && [srcBitmapRep bitsPerSample]==8 && [srcBitmapRep samplesPerPixel]==4 && [srcBitmapRep hasAlpha]==YES)
+    {
+        wxPixelData<wxBitmap,wxAlphaPixelFormat> pixelData(const_cast<wxBitmap&>(bitmap));
+        wxCHECK_MSG(wxMask_CreateFromBitmapData(pixelData, colour, dstData),
+            false, "Unable to access raw data");
+    }
+    else
+    {   wxCHECK_MSG(false,false,"Unimplemented pixel format"); }
+
+    // maskRep was autoreleased in case we had to exit quickly
+    m_cocoaNSBitmapImageRep = [maskRep retain];
+    return true;
 }
 
