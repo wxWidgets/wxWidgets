@@ -154,7 +154,7 @@ bool BrowserDB::OnStartDB(int Quite)
    if (!Quite)
    {
     wxLogMessage(_("\n-E-> BrowserDB::OnConnectDataSource() DB CONNECTION ERROR : Unable to connect to the data source.\n\nCheck the name of your data source to verify it has been correctly entered/spelled.\n\nWith some databases, the user name and password must\nbe created with full rights to the table prior to making a connection\n(using tools provided by the database manufacturer)"));
-    wxLogMessage(_("-I-> BrowserDB::OnStartDB(%s) : End  - Time needed : %ld ms"),ODBCSource.c_str(),sw.Time());
+    wxLogMessage(_("-I-> BrowserDB::OnStartDB(%s) : End - Time needed : %ld ms"),ODBCSource.c_str(),sw.Time());
    }
    return FALSE;
   }

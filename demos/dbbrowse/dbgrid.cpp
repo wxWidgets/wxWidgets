@@ -98,7 +98,7 @@ int  DBGrid::OnTableView(wxString Table)
      (db_Br+i_Which)->i_Which = ValidTable;                          // Still used ???? mj10777
      if (i == 0)     // If the Table is empty, then show one empty row
       i++;
-     // wxLogMessage(_("\n-I-> DBGrid::OnTableView():: Vor CreateGrid"));
+     // wxLogMessage(_("\n-I-> DBGrid::OnTableView() : Vor CreateGrid"));
      CreateGrid(i,(ct_BrowserDB->pTableInf+x)->numCols);             // Records , Columns
      for (y=0;y<(ct_BrowserDB->pTableInf+x)->numCols;y++)            // Loop through the Fields
      {  // The Field / Column name is used here as Row Titel
@@ -128,12 +128,12 @@ int  DBGrid::OnTableView(wxString Table)
      goto Weiter;
     }   // if ((ct_BrowserDB->pTableInf+x)->pColInf)
     else
-     wxLogMessage(_("\n-E-> DBGrid::OnTableView():: Invalid Column Pointer : Failed"));
+     wxLogMessage(_("\n-E-> DBGrid::OnTableView() : Invalid Column Pointer : Failed"));
    }    // if ((ct_BrowserDB->pTableInf+x)->tableType == "TABLE")
   }     // for (x=0;x<ct_BrowserDB->numTables;x++)
  }      // if (ct_BrowserDB)
  else
-  wxLogMessage(_("\n-E-> DBGrid::OnTableView():: Invalid DSN Pointer : Failed"));
+  wxLogMessage(_("\n-E-> DBGrid::OnTableView() : Invalid DSN Pointer : Failed"));
  //---------------------------------------------------------------------------------------
  Weiter:
  SetEditInPlace(b_EditModus);   // Activate in-place Editing (FALSE)

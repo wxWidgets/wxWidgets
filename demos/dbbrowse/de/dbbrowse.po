@@ -1,20 +1,773 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
-# Mark Johnson, Berlin Germany - mj10777@gmx.net, 2000
-#
-#-----------------------------------------------------------
-#: ../BrowserDB.cpp:68 ../BrowserDB.cpp:72 ../DBGrid.cpp:151 ../DBGrid.cpp:174 ../DBGrid.cpp:197 ../DBGrid.cpp:220 ../DBGrid.cpp:232 ../DBGrid.cpp:247 ../DBGrid.cpp:262 ../DBGrid.cpp:277 ../DBGrid.cpp:292 ../DBGrid.cpp:305 ../DBGrid.cpp:315 ../DBGrid.cpp:329
-msgid   "\n"
-msgstr  ""
-
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#
-#:
+#: ../browsedb.cpp:67 ../browsedb.cpp:80 ../browsedb.cpp:81 ../browsedb.cpp:82 ../browsedb.cpp:124 ../browsedb.cpp:151 ../browsedb.cpp:152 ../browsedb.cpp:153 ../browsedb.cpp:240 ../browsedb.cpp:460 ../browsedb.cpp:469 ../dbbrowse.cpp:123 ../dbgrid.cpp:64 ../dbgrid.cpp:66 ../dbtree.cpp:40 ../dbtree.cpp:160 ../dbtree.cpp:229 ../dbtree.cpp:234 ../doc.cpp:149 ../doc.cpp:189 ../doc.cpp:190 ../doc.cpp:234 ../doc.cpp:283 ../doc.cpp:296 ../pgmctrl.cpp:47 ../pgmctrl.cpp:122 ../pgmctrl.cpp:257 ../tabpgwin.h:105
+#, fuzzy
+msgid   ""
+msgstr  "Project-Id-Version: PACKAGE VERSION\n"
+        "POT-Creation-Date: 2000-02-21 09:49+0100\n"
+        "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+        "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+        "Language-Team: LANGUAGE <LL@li.org>\n"
+        "MIME-Version: 1.0\n"
+        "Content-Type: text/plain; charset=CHARSET\n"
+        "Content-Transfer-Encoding: ENCODING\n"
+
+#: ../browsedb.cpp:68 ../browsedb.cpp:72 ../dbgrid.cpp:184 ../dbgrid.cpp:213 ../dbgrid.cpp:236 ../dbgrid.cpp:259 ../dbgrid.cpp:271 ../dbgrid.cpp:286 ../dbgrid.cpp:301 ../dbgrid.cpp:316 ../dbgrid.cpp:331 ../dbgrid.cpp:344 ../dbgrid.cpp:354 ../dbgrid.cpp:366
+msgid   "\n"
+msgstr  "\n"
+
+#: ../browsedb.cpp:96
 #, c-format
-msgid "Set Username and Password"
+msgid   "\n"
+        "\n"
+        "-E-> BrowserDB::OnStartDB(%s) : Failed ! "
+msgstr  "\n"
+        "\n"
+        "-E-> BrowserDB::OnStartDB(%s) : Gescheitert ! "
+
+#: ../browsedb.cpp:156
+msgid   "\n"
+        "-E-> BrowserDB::OnConnectDataSource() DB CONNECTION ERROR : Unable to connect to the data source.\n"
+        "\n"
+        "Check the name of your data source to verify it has been correctly entered/spelled.\n"
+        "\n"
+        "With some databases, the user name and password must\n"
+        "be created with full rights to the table prior to making a connection\n"
+        "(using tools provided by the database manufacturer)"
+msgstr  "\n"
+        "-E-> BrowserDB::OnConnectDataSource() DB VERBINDUNGSFEHLER : Verbindungsaufbau zur Datenquelle nicht möglich.\n"
+        "\n"
+        "Check the name of your data source to verify it has been correctly entered/spelled.\n"
+        "\n"
+        "With some databases, the user name and password must\n"
+        "be created with full rights to the table prior to making a connection\n"
+        "(using tools provided by the database manufacturer)"
+
+#: ../browsedb.cpp:371
+#, c-format
+msgid   "\n"
+        "-E-> BrowserDB::OnExecSQL - ODBC-Error with ExecSql of >%s<.\n"
+        "-E-> "
+msgstr  "\n"
+        "-E-> BrowserDB::OnSelect - ODBC-Fehler mit ExecSql  >%s<.\n"
+        "-E-> "
+
+#: ../browsedb.cpp:254 ../browsedb.cpp:267 ../browsedb.cpp:281
+msgid   "\n"
+        "-E-> BrowserDB::OnGetData - ODBC-Error with GetNext \n"
+        "-E-> "
+msgstr  "\n"
+        "-E-> BrowserDB::OnGetData - ODBC-Fehler mit GetNext \n"
+        "-E-> "
+
+#: ../browsedb.cpp:209
+msgid   "\n"
+        "-E-> BrowserDB::OnGetNext - ODBC-Error with GetNext \n"
+        "-E-> "
+msgstr  "\n"
+        "-E-> BrowserDB::OnGetNext - ODBC-Fehler mit GetNext \n"
+        "-E-> "
+
+#: ../browsedb.cpp:243
+#, c-format
+msgid   "\n"
+        "-E-> BrowserDB::OnGetNext - ODBC-Error with GetNext of >%s<.\n"
+        "-E-> "
+msgstr  "\n"
+        "-E-> BrowserDB::OnGetNext - ODBC-Fehler mit GetNext bei >%s<.\n"
+        "-E-> "
+
+#: ../browsedb.cpp:337 ../browsedb.cpp:351
+#, c-format
+msgid   "\n"
+        "-E-> BrowserDB::OnSelect - ODBC-Error with ExecSql of >%s<.\n"
+        "-E-> "
+msgstr  "\n"
+        "-E-> BrowserDB::OnSelect - ODBC-Fehler mit ExecSql bei >%s<.\n"
+        "-E-> "
+
+#: ../browsedb.cpp:117
+msgid   "\n"
+        "-E-> BrowserDB::OnStartDB() : DB CONNECTION ERROR : A problem occured while trying to get a connection to the data source"
+msgstr  "\n"
+        "-E-> BrowserDB::OnStartDB() : DB VERBINDUNGSFEHLER : Verbindungsaufbau zur Datenquelle nicht möglich"
+
+#: ../dbgrid.cpp:131
+msgid   "\n"
+        "-E-> DBGrid::OnTableView() : Invalid Column Pointer : Failed"
+msgstr  "\n"
+        "-E-> DBGrid::OnTableView() : Ungültige Spalten-Zeiger : Gescheitert"
+
+#: ../dbgrid.cpp:136
+msgid   "\n"
+        "-E-> DBGrid::OnTableView() : Invalid DSN Pointer : Failed"
+msgstr  "\n"
+        "-E-> DBGrid::OnTableView() : Ungültige DSN Zeiger : Gescheitert"
+
+#: ../dbtree.cpp:222
+msgid   "\n"
+        "-E-> DBTree::OnPopulate() : A valid Pointer could not be created : Failed"
+msgstr  "\n"
+        "-E-> DBTree::OnPopulate() : Eine gültiger Zeiger konnte nicht erstellt werden : Gescheitert"
+
+#: ../dbtree.cpp:214
+msgid   "\n"
+        "-E-> DBTree::OnPopulate() : Invalid Catalog Pointer : Failed"
+msgstr  "\n"
+        "-E-> DBTree::OnPopulate() : Ungüliter Zeiger auf Katalog : Gescheitert"
+
+#: ../browsedb.cpp:190
+msgid   "\n"
+        "-I-> BrowserDB::OnCloseDB() : End "
+msgstr  "\n"
+        "-I-> BrowserDB::OnCloseDB() : Ende"
+
+#: ../browsedb.cpp:361
+#, c-format
+msgid   "\n"
+        "-I-> BrowserDB::OnSelect(%s) Records(%d): End - Time needed : %ld ms"
+msgstr  "\n"
+        "-I-> BrowserDB::OnSelect(%s) Sätze(%d): Ende - Dauer : %ld ms"
+
+#: ../browsedb.cpp:106
+#, c-format
+msgid   "\n"
+        "-I-> BrowserDB::OnStartDB(%s) : Begin "
+msgstr  "\n"
+        "-I-> BrowserDB::OnStartDB(%s) : Begin "
+
+#: ../browsedb.cpp:110
+msgid   "\n"
+        "-I-> BrowserDB::OnStartDB() : DB is allready open."
+msgstr  "\n"
+        "-I-> BrowserDB::OnStartDB() : DB ist bereits geöffnet."
+
+#: ../doc.cpp:313
+#, c-format
+msgid   "\n"
+        "MainDoc::OnLeer(%s) : even this function will one day be available !"
+msgstr  "\n"
+        "MainDoc::OnLeer(%s) : eines Tages steht auch diese Funktion zur Verfügung !"
+
+#: ../browsedb.cpp:52
+msgid   "\n"
+        "ODBC errors:\n"
+msgstr  "\n"
+        "ODBC fehlern:\n"
+
+#: ../browsedb.cpp:47
+msgid   "   Line: "
+msgstr  "   Zeile: "
+
+#: ../dbgrid.cpp:182 ../dbgrid.cpp:211 ../dbgrid.cpp:234 ../dbgrid.cpp:257
+msgid   " (shift down)"
+msgstr  " (shift down)"
+
+#: ../doc.cpp:240
+msgid   " ? "
+msgstr  " ? "
+
+#: ../dbgrid.cpp:268 ../dbgrid.cpp:283 ../dbgrid.cpp:298 ../dbgrid.cpp:313 ../dbgrid.cpp:328 ../dbgrid.cpp:363 ../dbgrid.cpp:365
+msgid   " col "
+msgstr  " Spalte"
+
+#: ../dbgrid.cpp:364
+msgid   " to row "
+msgstr  "Teile"
+
+#: ../doc.cpp:191
+#, c-format
+msgid   "%02d) Dsn(%s) DsDesc(%s)"
+msgstr  ""
+
+#: ../dbgrid.cpp:112
+#, c-format
+msgid   "%06d"
+msgstr  "%06d"
+
+#: ../dbtree.cpp:195
+#, c-format
+msgid   "%10s %d,%d"
+msgstr  "%10s %d,%d"
+
+#: ../browsedb.cpp:48
+#, c-format
+msgid   "%d"
+msgstr  "%d"
+
+#: ../dbbrowse.cpp:128 ../dbbrowse.cpp:163 ../dbbrowse.cpp:164 ../dbtree.cpp:253 ../dbtree.cpp:298 ../dbtree.cpp:343 ../dbtree.cpp:378 ../pgmctrl.cpp:143 ../pgmctrl.cpp:195 ../pgmctrl.cpp:212
+#, c-format
+msgid   "%s"
+msgstr  "%s"
+
+#: ../dbbrowse.cpp:182
+#, c-format
+msgid   "%s - %s"
+msgstr  "%s - %s"
+
+#: ../dbtree.cpp:121
+#, c-format
+msgid   "%s - (%s) (%s)"
+msgstr  "%s - (%s) (%s)"
+
+#: ../pgmctrl.cpp:102
+#, c-format
+msgid   "%s Functions"
+msgstr  "%s Funktionen"
+
+#: ../dbbrowse.cpp:217
+#, c-format
+msgid   "%s has started !"
+msgstr  "%s wurde gestartet !"
+
+#: ../doc.cpp:170
+#, c-format
+msgid   "%s%c%s"
+msgstr  "%s%c%s"
+
+#: ../dbtree.cpp:190
+#, c-format
+msgid   "%s(%d)"
+msgstr  "%s(%d)"
+
+#: ../dbtree.cpp:183
+#, c-format
+msgid   "%s(%d) ; "
+msgstr  "%s(%d) ; "
+
+#: ../dbbrowse.cpp:209
+msgid   "&About"
+msgstr  "&Info"
+
+#: ../dbbrowse.cpp:213
+msgid   "&File"
+msgstr  "&Datei"
+
+#: ../dbbrowse.cpp:207 ../dbbrowse.cpp:214
+msgid   "&Help"
+msgstr  "&Hilfe"
+
+#: ../dbtree.cpp:157 ../dbtree.cpp:169
+#, c-format
+msgid   "(%d) - %s"
+msgstr  "(%d) - %s"
+
+#: ../dbtree.cpp:384
+#, c-format
+msgid   "(%d) Here is where a wxTable Class for >%s< will be made! "
+msgstr  "(%d) Hier ist wo eine wxTable Klasse für >%s< erstellt wird!"
+
+#: ../browsedb.cpp:218
+msgid   "-E->"
+msgstr  "-E->"
+
+#: ../dbbrowse.cpp:244
+#, c-format
+msgid   "-E-> %s : AddBook error : s_LangHelp(%s)"
+msgstr  "-E-> %s : AddBook fehler : s_LangHelp(%s)"
+
+#: ../dbbrowse.cpp:148
+#, c-format
+msgid   "-E-> %s : SetLocale error : langid(%s) ; language(%s)"
+msgstr  "-E-> %s : SetLocale fehler : langid(%s) ; language(%s)"
+
+#: ../browsedb.cpp:376
+msgid   "-E-> BrowserDB::OnExecSql - ExecSql()"
+msgstr  "-E-> BrowserDB::OnExecSql - ExecSql()"
+
+#: ../browsedb.cpp:314
+#, c-format
+msgid   "-E-> BrowserDB::OnGetNext - DB_DATA_TYPE_?? (%d) in Col(%s)"
+msgstr  "-E-> BrowserDB::OnGetNext - DB_DATA_TYPE_?? (%d) in Col(%s)"
+
+#: ../browsedb.cpp:340
+msgid   "-E-> BrowserDB::OnSelect - GetData()"
+msgstr  "-E-> BrowserDB::OnSelect - GetData()"
+
+#: ../doc.cpp:218
+msgid   "-E-> Fatal situation"
+msgstr  "-E-> Tötliche Situation"
+
+#: ../browsedb.cpp:318
+#, c-format
+msgid   "-E-> unknown Format(%d) - sql(%d)"
+msgstr  "-E-> unbekannte Format(%d) - sql(%d)"
+
+#: ../pgmctrl.cpp:165
+msgid   "-E-> wxConfigBase.p_ProgramCfg->DeleteAll() was not succesfull !"
+msgstr  "-E-> wxConfigBase.p_ProgramCfg->DeleteAll() war nicht Erfolgreich !"
+
+#: ../pgmctrl.cpp:149
+msgid   "-I-> After a programm restart, the language will be changed to English."
+msgstr  "-I-> Nach ein Programm neustart, wird die Sprache ins Englische geändert."
+
+#: ../pgmctrl.cpp:156
+msgid   "-I-> After a programm restart, the language will be changed to German."
+msgstr  "-I-> Nach ein Programm neustart, wird die Sprache ins Deutsche geändert."
+
+#: ../browsedb.cpp:176
+msgid   "-I-> BrowserDB::OnCloseDB() : Begin "
+msgstr  "-I-> BrowserDB::OnCloseDB() : Begin "
+
+#: ../browsedb.cpp:166
+#, c-format
+msgid   "-I-> BrowserDB::OnGetDataSourceODBC() - DatabaseName(%s) ; DataSource(%s)"
+msgstr  "-I-> BrowserDB::OnGetDataSourceODBC() - DatanbankName(%s) ; DSN(%s)"
+
+#: ../browsedb.cpp:167
+#, c-format
+msgid   "-I-> BrowserDB::OnStartDB(%s) : End - Time needed : %ld ms"
+msgstr  "-I-> BrowserDB::OnStartDB(%s) : Ende - Dauer : %ld ms"
+
+#: ../dbgrid.cpp:124
+#, c-format
+msgid   "-I-> DBGrid::OnTableView(%s) - %6d Records have been read. - Time needed : %ld ms"
+msgstr  "-I-> DBGrid::OnTableView(%s) - %6d Sätze wurde insgesamt gelesen. - Dauer : %ld ms"
+
+#: ../dbgrid.cpp:120
+#, c-format
+msgid   "-I-> DBGrid::OnTableView(%s) - Record %6d has been read."
+msgstr  "-I-> DBGrid::OnTableView(%s) - Satz %6d wurde gelesen."
+
+#: ../dbgrid.cpp:142
+msgid   "-I-> DBGrid::OnTableView() - End"
+msgstr  "-I-> DBGrid::OnTableView() - Ende"
+
+#: ../dbtree.cpp:205
+#, c-format
+msgid   "-I-> DBTree::OnPopulate(%s) - Table %6d has been read."
+msgstr  "-I-> DBTree::OnPopulate(%s) - Tabelle %6d wurde gelesen."
+
+#: ../dbtree.cpp:216
+#, c-format
+msgid   "-I-> DBTree::OnPopulate() - %6d Tables have been read. - Time needed : %ld ms"
+msgstr  "-I-> DBTree::OnPopulate() - %6d Tabellen wurde gelesen. - Dauer : %ld ms"
+
+#: ../doc.cpp:139
+#, c-format
+msgid   "-I-> MainDoc::OnInitView() - End - %d DSN's found"
+msgstr  "-I-> MainDoc::OnInitView() - Ende - %d DSN's gefunden"
+
+#: ../doc.cpp:89
+#, c-format
+msgid   "-I-> MainDoc::OnNewDocument() - End - Time needed : %ld ms"
+msgstr  "-I-> MainDoc::OnNewDocument() - Ende - Dauer : %ld ms"
+
+#: ../pgmctrl.cpp:194
+#, c-format
+msgid   "-I-> PgmCtrl::OnSelChanged - %s"
+msgstr  "-I-> PgmCtrl::OnSelChanged - %s"
+
+#: ../pgmctrl.cpp:163
+msgid   "-I-> wxConfigBase.p_ProgramCfg->DeleteAll() was succesfull."
+msgstr  "-I-> wxConfigBase.p_ProgramCfg->DeleteAll() war Erfolgreich !"
+
+#: ../dbbrowse.cpp:115 ../dbbrowse.cpp:175
+msgid   "/"
+msgstr  "/"
+
+#: ../dbbrowse.cpp:122 ../dbbrowse.cpp:166 ../pgmctrl.cpp:106 ../pgmctrl.cpp:148 ../pgmctrl.cpp:155
+msgid   "/Local/langid"
+msgstr  ""
+
+#: ../dbbrowse.cpp:165 ../pgmctrl.cpp:106
+msgid   "/Local/language"
+msgstr  ""
+
+#: ../dbbrowse.cpp:172
+msgid   "/MainFrame/NONE"
+msgstr  ""
+
+#: ../dbbrowse.cpp:281 ../doc.cpp:95
+msgid   "/MainFrame/Sash"
+msgstr  ""
+
+#: ../dbbrowse.cpp:179 ../dbbrowse.cpp:280
+msgid   "/MainFrame/h"
+msgstr  ""
+
+#: ../dbbrowse.cpp:179 ../dbbrowse.cpp:279
+msgid   "/MainFrame/w"
+msgstr  ""
+
+#: ../dbbrowse.cpp:178 ../dbbrowse.cpp:277
+msgid   "/MainFrame/x"
+msgstr  ""
+
+#: ../dbbrowse.cpp:178 ../dbbrowse.cpp:278
+msgid   "/MainFrame/y"
+msgstr  ""
+
+#: ../dbbrowse.cpp:170
+msgid   "/NONE"
+msgstr  ""
+
+#: ../dbbrowse.cpp:171
+msgid   "/Paths/NONE"
+msgstr  ""
+
+#: ../dbbrowse.cpp:174 ../pgmctrl.cpp:109
+msgid   "/Paths/Work"
+msgstr  ""
+
+#: ../dbbrowse.cpp:302
+msgid   "About DBBrowser"
+msgstr  "Info über DBBrowser"
+
+#: ../dbgrid.cpp:67
+msgid   "Browse Modus"
+msgstr  "Anzeige Modus"
+
+#: ../dbbrowse.cpp:150 ../dbbrowse.cpp:161
+msgid   "C"
+msgstr  ""
+
+#: ../dbgrid.cpp:267 ../dbgrid.cpp:282 ../dbgrid.cpp:297 ../dbgrid.cpp:312 ../dbgrid.cpp:327
+msgid   "Cell at row "
+msgstr  ""
+
+#: ../pgmctrl.cpp:111
+msgid   "Change the language to English"
+msgstr  "Sprache ins Englische ändern"
+
+#: ../pgmctrl.cpp:112
+msgid   "Change the language to German"
+msgstr  "Sprache ins deutsch ändern"
+
+#: ../tabpgwin.cpp:699
+msgid   "Comic Sans MS"
+msgstr  ""
+
+#: ../dbbrowse.cpp:100
+msgid   "DBBrowse"
+msgstr  ""
+
+#: ../dbbrowse.cpp:301
+msgid   "DBBrowser\n"
+        "Mark Johnson\n"
+        "Berlin, Germany\n"
+        "mj10777@gmx.net\n"
+        " (c) 1999"
+msgstr  ""
+
+#: ../dbgrid.cpp:326
+msgid   "DBGrid::OnCellChange : "
+msgstr  ""
+
+#: ../dbgrid.cpp:266
+msgid   "DBGrid::OnCellLeftClick : "
+msgstr  ""
+
+#: ../dbgrid.cpp:296
+msgid   "DBGrid::OnCellLeftDClick : "
+msgstr  ""
+
+#: ../dbgrid.cpp:281
+msgid   "DBGrid::OnCellRightClick : "
+msgstr  ""
+
+#: ../dbgrid.cpp:311
+msgid   "DBGrid::OnCellRightDClick : "
+msgstr  ""
+
+#: ../dbgrid.cpp:351
+msgid   "DBGrid::OnColSize : "
+msgstr  ""
+
+#: ../dbgrid.cpp:168
+msgid   "DBGrid::OnLabelLeftClick : "
+msgstr  ""
+
+#: ../dbgrid.cpp:220
+msgid   "DBGrid::OnLabelLeftDClick : "
+msgstr  ""
+
+#: ../dbgrid.cpp:197
+msgid   "DBGrid::OnLabelRightClick : "
+msgstr  ""
+
+#: ../dbgrid.cpp:243
+msgid   "DBGrid::OnLabelRightDClick : "
+msgstr  ""
+
+#: ../dbgrid.cpp:361
+msgid   "DBGrid::OnRangeSelected : "
+msgstr  ""
+
+#: ../dbgrid.cpp:341
+msgid   "DBGrid::OnRowSize : "
+msgstr  ""
+
+#: ../dbtree.cpp:178
+#, c-format
+msgid   "DB_DATA_TYPE_???? (%d)"
+msgstr  ""
+
+#: ../browsedb.cpp:468
+msgid   "DB_DATA_TYPE_DATE"
+msgstr  ""
+
+#: ../browsedb.cpp:467
+msgid   "DB_DATA_TYPE_FLOAT"
+msgstr  ""
+
+#: ../browsedb.cpp:466
+msgid   "DB_DATA_TYPE_INTEGER"
+msgstr  ""
+
+#: ../browsedb.cpp:465
+msgid   "DB_DATA_TYPE_VARCHAR"
+msgstr  ""
+
+#: ../pgmctrl.cpp:113
+msgid   "Delete all wxConfigBase Entry's"
+msgstr  "Lösche alle wxConfigBase Eintragungen"
+
+#: ../dbbrowse.cpp:210
+msgid   "E&xit"
+msgstr  "&Beenden"
+
+#: ../dbgrid.cpp:65
+msgid   "Edit Modus"
+msgstr  "Änderungs Modus"
+
+#: ../dbtree.cpp:153
+#, c-format
+msgid   "FN(%s"
+msgstr  ""
+
+#: ../browsedb.cpp:45
+msgid   "File: "
+msgstr  ""
+
+#: ../dbbrowse.cpp:155
+msgid   "Help"
+msgstr  "Hilfe"
+
+#: ../dbtree.cpp:365
+#, c-format
+msgid   "Here is where a wxDB Class for >%s< will be made! "
+msgstr  "Hier ist wo eine wxDB Klasse für >%s< erstellt wird!"
+
+#: ../dbtree.cpp:399
+#, c-format
+msgid   "Here is where all wxTable Classes in >%s< will be made! "
+msgstr  "Hier ist wo alle wxTable Klassen für >%s< erstellt wird!"
+
+#: ../pgmctrl.cpp:186
+#, c-format
+msgid   "Item '%s': %sselected, %sexpanded, %sbold,%u children (%u immediately under this item)."
+msgstr  ""
+
+#: ../dbtree.cpp:163
+msgid   "KEY"
+msgstr  ""
+
+#: ../dbtree.cpp:172
+msgid   "KEYF"
+msgstr  ""
+
+#: ../pgmctrl.cpp:111 ../pgmctrl.cpp:145
+msgid   "Language English"
+msgstr  ""
+
+#: ../pgmctrl.cpp:112 ../pgmctrl.cpp:152
+msgid   "Language German"
+msgstr  ""
+
+#: ../doc.cpp:126
+msgid   "LogBook"
+msgstr  "LogBuch"
+
+#: ../tabpgwin.cpp:477
+msgid   "MS Sans Serif"
+msgstr  ""
+
+#: ../dbbrowse.cpp:309
+msgid   "Main page"
+msgstr  ""
+
+#: ../dbtree.cpp:232
+msgid   "Make all wxTable.cpp/h classes"
+msgstr  "Alle wxTable.cpp/h Klassen erstellen"
+
+#: ../dbtree.cpp:230
+msgid   "Make wxDB.cpp/h "
+msgstr  "wxDB.cpp/h Erstellen"
+
+#: ../dbtree.cpp:237
+msgid   "Make wxTable.cpp/h "
+msgstr  "wxTable.cpp/h Erstellen"
+
+#: ../dbbrowse.cpp:169
+msgid   "NONE"
+msgstr  ""
+
+#: ../doc.cpp:216
+msgid   "No Dataset names found in ODBC!\n"
+        "           Program will exit!\n"
+        "\n"
+        "                       Ciao"
+msgstr  "Keine Datenquellen in ODBC gefunden\n"
+        "            Programm wird beendet!\n"
+        "\n"
+        "                       Ciao"
+
+#: ../dbtree.cpp:161
+msgid   "None"
+msgstr  "keine"
+
+#: ../pgmctrl.cpp:114
+msgid   "ODBC DSN"
+msgstr  ""
+
+#: ../dbtree.cpp:255 ../pgmctrl.cpp:170 ../pgmctrl.cpp:214
+msgid   "ODBC-"
+msgstr  ""
+
+#: ../pgmctrl.cpp:117
+#, c-format
+msgid   "ODBC-%s"
+msgstr  ""
+
+#: ../pgmctrl.cpp:114
+msgid   "ODBC-DSN"
+msgstr  ""
+
+#: ../pgmctrl.cpp:110
+msgid   "Path Work"
+msgstr  "Arbeitspfad"
+
+#: ../doc.cpp:108 ../doc.cpp:110
+msgid   "PgmCtrl"
+msgstr  ""
+
+#: ../pgmctrl.cpp:105
+msgid   "Program settings"
+msgstr  "Programm Einstellungen"
+
+#: ../dbgrid.cpp:352
+msgid   "Resized col "
+msgstr  ""
+
+#: ../dbgrid.cpp:342
+msgid   "Resized row "
+msgstr  ""
+
+#: ../dbtree.cpp:122 ../dbtree.cpp:300 ../pgmctrl.cpp:103
+msgid   "Root"
+msgstr  ""
+
+#: ../browsedb.cpp:334
+#, c-format
+msgid   "SELECT * FROM %s"
+msgstr  ""
+
+#: ../dbtree.cpp:177
+#, c-format
+msgid   "SQL_C_???? (%d)"
+msgstr  ""
+
+#: ../browsedb.cpp:437
+msgid   "SQL_C_BINARY"
+msgstr  ""
+
+#: ../browsedb.cpp:438
+msgid   "SQL_C_BIT"
+msgstr  ""
+
+#: ../browsedb.cpp:439
+msgid   "SQL_C_BOOKMARK"
+msgstr  ""
+
+#: ../browsedb.cpp:440
+msgid   "SQL_C_CHAR"
+msgstr  ""
+
+#: ../browsedb.cpp:441
+msgid   "SQL_C_DATE"
+msgstr  ""
+
+#: ../browsedb.cpp:442
+msgid   "SQL_C_DEFAULT"
+msgstr  ""
+
+#: ../browsedb.cpp:443
+msgid   "SQL_C_DOUBLE"
+msgstr  ""
+
+#: ../browsedb.cpp:444
+msgid   "SQL_C_FLOAT"
+msgstr  ""
+
+#: ../browsedb.cpp:445
+msgid   "SQL_C_LONG"
+msgstr  ""
+
+#: ../browsedb.cpp:446
+msgid   "SQL_C_SHORT"
+msgstr  ""
+
+#: ../browsedb.cpp:447
+msgid   "SQL_C_SLONG"
+msgstr  ""
+
+#: ../browsedb.cpp:448
+msgid   "SQL_C_SSHORT"
+msgstr  ""
+
+#: ../browsedb.cpp:449
+msgid   "SQL_C_STINYINT"
+msgstr  ""
+
+#: ../browsedb.cpp:450
+msgid   "SQL_C_TIME"
+msgstr  ""
+
+#: ../browsedb.cpp:451
+msgid   "SQL_C_TIMESTAMP"
+msgstr  ""
+
+#: ../browsedb.cpp:452
+msgid   "SQL_C_TINYINT"
+msgstr  ""
+
+#: ../browsedb.cpp:453
+msgid   "SQL_C_ULONG"
+msgstr  ""
+
+#: ../browsedb.cpp:454
+msgid   "SQL_C_USHORT"
+msgstr  ""
+
+#: ../browsedb.cpp:455
+msgid   "SQL_C_UTINYINT"
+msgstr  ""
+
+#: ../browsedb.cpp:458
+msgid   "SQL_LONGVARCHAR"
+msgstr  ""
+
+#: ../browsedb.cpp:457
+msgid   "SQL_NUMERIC"
+msgstr  ""
+
+#: ../browsedb.cpp:459
+msgid   "SQL_REAL"
+msgstr  ""
+
+#: ../browsedb.cpp:456
+msgid   "SQL_VARCHAR"
+msgstr  ""
+
+#: ../dbgrid.cpp:362
+msgid   "Selected cells from row "
+msgstr  ""
+
+#: ../pgmctrl.cpp:123
+msgid   "Set Username and Password"
 msgstr "Username und Passwort setzen"
 
 #:
@@ -31,932 +784,143 @@ msgstr "Passwort:"
 #, c-format
 msgid ">>> %s <<<"
 msgstr ">>> %s <<<"
-#
-#: ../BrowserDB.cpp:67 ../BrowserDB.cpp:79 ../BrowserDB.cpp:80 ../BrowserDB.cpp:81 ../BrowserDB.cpp:95 ../BrowserDB.cpp:127 ../BrowserDB.cpp:128 ../BrowserDB.cpp:129 ../BrowserDB.cpp:208 ../BrowserDB.cpp:358 ../BrowserDB.cpp:385 ../DBBrowser.cpp:87 ../DBBrowser.cpp:124 ../DBBrowser.cpp:127 ../DBTree.cpp:40 ../DBTree.cpp:200 ../Doc.cpp:100 ../Doc.cpp:121 ../Doc.cpp:149 ../Doc.cpp:150 ../Doc.cpp:189 ../Doc.cpp:238 ../Doc.cpp:251 ../PgmCtrl.cpp:45
-#, fuzzy, c-format
-msgid   "\n"
-        "\n"
-        "-E-> BrowserDB::OnStartDB(%s) : Failed ! "
-msgstr  "\n"
-        "\n"
-        "-E-> BrowserDB::OnStartDB(%s) : Gescheitert ! "
 
-#: ../BrowserDB.cpp:131
-msgid   "\n"
-        "-E-> BrowserDB::OnConnectDataSource() DB CONNECTION ERROR : Unable to connect to the data source.\n"
-msgstr  "\n"
-        "-E-> BrowserDB::OnConnectDataSource() DB VERBINDUNGSFEHLER : Verbindungsaufbau zur Datenquelle nicht möglich.\n"
-
-#: ../BrowserDB.cpp:131
-msgid   "\n"
-        "-E-> BrowserDB::OnConnectDataSource() DB CONNECTION ERROR : Unable to connect to the data source.\n"
-        "\n"
-        "Check the name of your data source to verify it has been correctly entered/spelled.\n"
-        "\n"
-        "With some databases, the user name and password must\n"
-        "be created with full rights to the table prior to making a connection\n"
-        "(using tools provided by the database manufacturer)"
-msgstr  ""
-
-#: ../BrowserDB.cpp:341
-#, c-format
-msgid   "\n"
-        "-E-> BrowserDB::OnExecSQL - ODBC-Error with ExecSql of >%s<.\n"
-        "-E-> "
-msgstr  ""
-
-#: ../BrowserDB.cpp:225 ../BrowserDB.cpp:235 ../BrowserDB.cpp:238 ../BrowserDB.cpp:249 ../BrowserDB.cpp:252
-msgid   "\n"
-        "-E-> BrowserDB::OnGetData - ODBC-Error with GetNext \n"
-        "-E-> "
-msgstr  "\n"
-        "-E-> BrowserDB::OnGetData - ODBC-Fehler mit GetNext \n"
-        "-E-> "
-
-#: ../BrowserDB.cpp:180
-msgid   "\n"
-        "-E-> BrowserDB::OnGetNext - ODBC-Error with GetNext \n"
-        "-E-> "
-msgstr  ""
-
-#: ../BrowserDB.cpp:214
-#, c-format
-msgid   "\n"
-        "-E-> BrowserDB::OnGetNext - ODBC-Error with GetNext of >%s<.\n"
-        "-E-> "
-msgstr  ""
-
-#: ../BrowserDB.cpp:279 ../BrowserDB.cpp:293 ../BrowserDB.cpp:307 ../BrowserDB.cpp:321
-#, c-format
-msgid   "\n"
-        "-E-> BrowserDB::OnSelect - ODBC-Error with ExecSql of >%s<.\n"
-        "-E-> "
-msgstr  "\n"
-        "-E-> BrowserDB::OnSelect - ODBC-Fehler mit ExecSql  >%s<.\n"
-        "-E-> "
-
-#: ../BrowserDB.cpp:115
-msgid   "\n"
-        "-E-> BrowserDB::OnStartDB() : DB CONNECTION ERROR : A problem occured while trying to get a connection to the data source"
-msgstr  "\n"
-        "-E-> BrowserDB::OnStartDB() DB VERBINDUNGSFEHLER : Verbindungsaufbau zur Datenquelle nicht möglich"
-
-#: ../DBGrid.cpp:113 ../DBGrid.cpp:120
-msgid   "\n"
-        "-E-> DBGrid::OnTableView():: Invalid Column Pointer : Failed"
-msgstr  "\n"
-        "-E-> DBGrid::OnTableView():: Ungültige Spalten-Zeiger : Gescheiter"
-
-#: ../DBGrid.cpp:118 ../DBGrid.cpp:125
-msgid   "\n"
-        "-E-> DBGrid::OnTableView():: Invalid DSN Pointer : Failed"
-msgstr  "\n"
-        "-E-> DBGrid::OnTableView():: Ungültige DSN Zeiger : Gescheitert"
-
-#: ../DBTree.cpp:190 ../DBTree.cpp:191
-msgid   "\n"
-        "-E-> DBTree::OnPopulate() : A valid Pointer could not be created : Failed"
-msgstr  "\n"
-        "-E-> DBTree::OnPopulate() : Eine gültiger Zeiger konnte nicht erstellt werden : Gescheitert"
-
-#: ../DBTree.cpp:186 ../DBTree.cpp:187
-msgid   "\n"
-        "-E-> DBTree::OnPopulate() : Invalid Catalog Pointer : Failed"
-msgstr  "\n"
-        "-E-> DBTree::OnPopulate() : Ungüliter Zeiger auf Katalog : Gescheitert"
-
-#: ../BrowserDB.cpp:148
-msgid   "\n"
-        "-I-> BrowserDB::OnCloseDB() : Begin "
-msgstr  ""
-
-#: ../BrowserDB.cpp:148
-msgid   "\n"
-        "-I-> BrowserDB::OnCloseDB() : End"
-msgstr  "\n"
-        "-I-> BrowserDB::OnCloseDB() : Ende"
-
-#: ../BrowserDB.cpp:139
-#, c-format
-msgid   "\n"
-        "-I-> BrowserDB::OnGetDataSourceODBC() - DatabaseName(%s) ; DataSource(%s)"
-msgstr  "\n"
-        "-I-> BrowserDB::OnGetDataSourceODBC() - DatabaseName(%s) ; Datenquelle(%s)"
-
-#: ../BrowserDB.cpp:303 ../BrowserDB.cpp:331
-#, c-format
-msgid   "\n"
-        "-I-> BrowserDB::OnSelect(%s) Records(%d): End - Time needed : %ld ms"
-msgstr  "\n"
-        "-I-> BrowserDB::OnSelect(%s) Sätze(%d): Ende - Dauer : %ld ms"
-
-#: ../BrowserDB.cpp:104
-#, c-format
-msgid   "\n"
-        "-I-> BrowserDB::OnStartDB(%s) : Begin "
-msgstr  "\n"
-        "-I-> BrowserDB::OnStartDB(%s) : Begin "
-
-#: ../BrowserDB.cpp:140
-#, c-format
-msgid   "\n"
-        "-I-> BrowserDB::OnStartDB(%s) : End - Time needed : %ld ms"
-msgstr  "\n"
-        "-I-> BrowserDB::OnStartDB(%s) : Ende - Dauer : %ld ms"
-
-#: ../BrowserDB.cpp:108
-msgid   "\n"
-        "-I-> BrowserDB::OnStartDB() : DB is allready open."
-msgstr  "\n"
-        "-I-> BrowserDB::OnStartDB() : DB ist bereits geöffnet."
-
-#: ../BrowserDB.cpp:52
-msgid   "\n"
-        "ODBC errors:\n"
-msgstr  "\n"
-        "ODBC fehlern:\n"
-
-#: ../Doc.cpp:268 ../Doc.cpp:281
-#, c-format
-msgid   "\n"
-        "MainDoc::OnLeer(%s) : even this function will one day be available !"
-msgstr  "\n"
-        "MainDoc::OnLeer(%s) : eines Tages steht auch diese Funktion zur Verfügung !"
-
-#: ../BrowserDB.cpp:47
-msgid   "   Line: "
-msgstr  "   Zeile: "
-
-#: ../BrowserDB.cpp:47
-msgid   "Time"
-msgstr  "Zeit"
-
-#: ../BrowserDB.cpp:47
-msgid   "-I-> MainDoc::OnNewDocument() - End - Time needed : %ld ms"
-msgstr  "-I-> MainDoc::OnNewDocument() - Ende - Dauer : %ld ms"
-
-#: ../BrowserDB.cpp:47
-msgid   "OK"
-msgstr  ""
-
-#: ../BrowserDB.cpp:47
-msgid   "None"
-msgstr  "Keine"
-
-#: ../BrowserDB.cpp:47
-msgid   "Message"
-msgstr  "Nachricht"
-
-#: ../DBGrid.cpp:142 ../DBGrid.cpp:149 ../DBGrid.cpp:165 ../DBGrid.cpp:172 ../DBGrid.cpp:188 ../DBGrid.cpp:195 ../DBGrid.cpp:211 ../DBGrid.cpp:218
-msgid   " (shift down)"
-msgstr  " (shift down)"
-
-#: ../Doc.cpp:208
-msgid   " ? "
-msgstr  " ?"
-
-#: ../DBGrid.cpp:229 ../DBGrid.cpp:244 ../DBGrid.cpp:259 ../DBGrid.cpp:274 ../DBGrid.cpp:289 ../DBGrid.cpp:325 ../DBGrid.cpp:327
-msgid   " col "
-msgstr  " Spalte"
-
-#: ../DBGrid.cpp:326
-msgid   " to row "
-msgstr  "Teile"
-
-#: ../DBGrid.cpp:102
-#, c-format
-msgid   "%06d"
-msgstr  "%06d"
-
-#: ../DBTree.cpp:174
-#, c-format
-msgid   "%10s %d,%d"
-msgstr  "%10s %d,%d"
-
-#: ../BrowserDB.cpp:48
-#, c-format
-msgid   "%d"
-msgstr  "%d"
-
-#: ../DBTree.cpp:215 ../DBTree.cpp:260 ../DBTree.cpp:300 ../DBTree.cpp:322 ../PgmCtrl.cpp:143 ../PgmCtrl.cpp:195
-#, c-format
-msgid   "%s"
-msgstr  "%s"
-
-#: ../DBTree.cpp:118
-#, c-format
-msgid   "%s - (%s) (%s)"
-msgstr  "%s - (%s) (%s)"
-
-#: ../PgmCtrl.cpp:104 ../PgmCtrl.cpp:107
-#, c-format
-msgid   "%s Functions"
-msgstr  "%s Funktionen"
-
-#: ../DBBrowser.cpp:201 ../DBBrowser.cpp:211
-#, c-format
-msgid   "%s has started !"
-msgstr  "%s wurde gestartet !"
-
-#: ../DBTree.cpp:169
-#, c-format
-msgid   "%s(%d)"
-msgstr  "%s(%d)"
-
-#: ../DBTree.cpp:162
-#, c-format
-msgid   "%s(%d) ; "
-msgstr  "%s(%d) ;"
-
-#: ../DBBrowser.cpp:193 ../DBBrowser.cpp:203 ../DBBrowser.cpp:289 ../DBBrowser.cpp:305
-msgid   "&About"
-msgstr  "&Info"
-
-#: ../DBBrowser.cpp:197 ../DBBrowser.cpp:207 ../DBBrowser.cpp:295 ../DBBrowser.cpp:311
-msgid   "&File"
-msgstr  "&Datei"
-
-#: ../DBBrowser.cpp:191 ../DBBrowser.cpp:198 ../DBBrowser.cpp:201 ../DBBrowser.cpp:208
-msgid   "&Help"
-msgstr  "&Hilfe"
-
-#: ../DBTree.cpp:328 ../DBTree.cpp:332
-#, c-format
-msgid   "(%d) Here is where a wxTable Class for >%s< will be made! "
-msgstr  "(%d) Hier ist wo eine wxTable Klasse für >%s< erstellt wird!"
-
-#: ../DBTree.cpp:328 ../DBTree.cpp:332
-#, c-format
-msgid   "Here is where all wxTable Classes in >%s< will be made!"
-msgstr  "Hier ist wo alle wxTable Klassen für >%s< erstellt wird!"
-
-#: ../DBTree.cpp:328 ../DBTree.cpp:332
-#, c-format
-msgid   "Here is where a wxDB Class for >%s< will be made!"
-msgstr  "Hier ist wo eine wxDB Klasse für >%s< erstellt wird!"
-
-#: ../BrowserDB.cpp:189
-msgid   "-E->"
-msgstr  "-E->"
-
-#: ../BrowserDB.cpp:346
-msgid   "-E-> BrowserDB::OnExecSql - ExecSql()"
-msgstr  "-E-> BrowserDB::OnExecSql - ExecSql()"
-
-#: ../BrowserDB.cpp:285
-#, c-format
-msgid   "-E-> BrowserDB::OnGetNext - DB_DATA_TYPE_?? (%d) in Col(%s)"
-msgstr  "-E-> BrowserDB::OnGetNext - DB_DATA_TYPE_?? (%d) in Spalte(%s)"
-
-#: ../BrowserDB.cpp:310
-msgid   "-E-> BrowserDB::OnSelect - GetData()"
-msgstr  "-E-> BrowserDB::OnSelect - GetData()"
-
-#: ../Doc.cpp:173 ../Doc.cpp:186
-msgid   "-E-> Fatal situation"
-msgstr  "-E-> Tötliche Situation"
-
-#: ../BrowserDB.cpp:261 ../BrowserDB.cpp:289
-#, c-format
-msgid   "-E-> unknown Format(%d) - sql(%d)"
-msgstr  "-E-> unbekannte Format(%d) - sql(%d)"
-
-#: ../PgmCtrl.cpp:162 ../PgmCtrl.cpp:165
-msgid   "-E-> wxConfigBase.p_ProgramCfg->DeleteAll() was not succesfull !"
-msgstr  "-E-> wxConfigBase.p_ProgramCfg->DeleteAll() war nicht Erfolgreich !"
-
-#: ../PgmCtrl.cpp:146 ../PgmCtrl.cpp:149
-msgid   "-I-> After a programm restart, the language will be changed to English."
-msgstr  "-I-> Nach ein Programm neustart, wird die Sprache ins Englische geändert."
-
-#: ../PgmCtrl.cpp:153 ../PgmCtrl.cpp:156
-msgid   "-I-> After a programm restart, the language will be changed to German."
-msgstr  "-I-> Nach ein Programm neustart, wird die Sprache ins Deutsche geändert."
-
-#: ../BrowserDB.cpp:148
-msgid   "-I-> BrowserDB::OnCloseDB() : Begin "
-msgstr  "-I-> BrowserDB::OnCloseDB() : Begin"
-
-#: ../BrowserDB.cpp:139
-#, c-format
-msgid   "-I-> BrowserDB::OnGetDataSourceODBC() - DatabaseName(%s) ; DataSource(%s)"
-msgstr  "-I-> BrowserDB::OnGetDataSourceODBC() - DatabaseName(%s) ; DataSource(%s)"
-
-#: ../BrowserDB.cpp:140
-#, c-format
-msgid   "-I-> BrowserDB::OnStartDB(%s) : End - Time needed : %ld ms"
-msgstr  "-I-> BrowserDB::OnStartDB(%s) : Ende - Dauer : %ld ms"
-
-#: ../DBGrid.cpp:114
-#, c-format
-msgid   "-I-> DBGrid::OnTableView(%s) - %6d Records have been read. - Time needed : %ld ms"
-msgstr  "-I-> DBGrid::OnTableView(%s) - %6d Sätze wurde insgesamt gelesen. - Dauer : %ld ms"
-
-#: ../DBGrid.cpp:110
-#, c-format
-msgid   "-I-> DBGrid::OnTableView(%s) - Record %6d has been read."
-msgstr  "-I-> DBGrid::OnTableView(%s) - Satz %6d wurde gelesen."
-
-#: ../DBTree.cpp:110
-#, c-format
-msgid   "-I-> DBTree::OnPopulate(%s) - %6d Tables have been read. - Time needed : %ld ms"
-msgstr  "-I-> DBTree::OnPopulate(%s) - %6d Tabellen wurde gelesen. - Dauer : %ld ms"
-
-#, c-format
-msgid   "-I-> DBTree::OnPopulate() - %6d Tables have been read. - Time needed : %ld ms"
-msgstr  "-I-> DBTree::OnPopulate() - %6d Tabellen wurde gelesen. - Dauer : %ld ms"
-
-#: ../DBTree.cpp:110
-#, c-format
-msgid   "-I-> DBTree::OnPopulate(%s) - Table %6d has been read."
-msgstr  "-I-> DBTree::OnPopulate(%s) - Tabelle %6d wurde gelesen."
-
-
-#: ../DBGrid.cpp:129
-msgid   "-I-> DBGrid::OnTableView() - End"
-msgstr  "-I-> DBGrid::OnTableView() - Ende"
-
-#: ../PgmCtrl.cpp:194
-#, c-format
-msgid   "-I-> PgmCtrl::OnSelChanged - %s"
-msgstr  "-I-> PgmCtrl::OnSelChanged - %s"
-
-#: ../Doc.cpp:126
-#, c-format
-msgid   "-I-> MainDoc::OnInitView() - End - %d DSN's found"
-msgstr  "-I-> MainDoc::OnInitView() - Ende - %d DSN's gefunden"
-
-#: ../PgmCtrl.cpp:160 ../PgmCtrl.cpp:163
-msgid   "-I-> wxConfigBase.p_ProgramCfg->DeleteAll() was succesfull."
-msgstr  "-I-> wxConfigBase.p_ProgramCfg->DeleteAll() war erfolgreich."
-
-#: ../DBBrowser.cpp:116 ../DBBrowser.cpp:170
-msgid   "/"
-msgstr  "/"
-
-#: ../DBBrowser.cpp:124 ../DBBrowser.cpp:131 ../PgmCtrl.cpp:111 ../PgmCtrl.cpp:148 ../PgmCtrl.cpp:155
-msgid   "/Local/langid"
-msgstr  ""
-
-#: ../DBBrowser.cpp:156 ../DBBrowser.cpp:161 ../PgmCtrl.cpp:111
-msgid   "/Local/language"
-msgstr  ""
-
-#: ../DBBrowser.cpp:167
-msgid   "/MainFrame/NONE"
-msgstr  ""
-
-#: ../DBBrowser.cpp:289 ../Doc.cpp:81
-msgid   "/MainFrame/Sash"
-msgstr  ""
-
-#: ../DBBrowser.cpp:182 ../DBBrowser.cpp:288
-msgid   "/MainFrame/h"
-msgstr  ""
-
-#: ../DBBrowser.cpp:182 ../DBBrowser.cpp:287
-msgid   "/MainFrame/w"
-msgstr  ""
-
-#: ../DBBrowser.cpp:181 ../DBBrowser.cpp:285
-msgid   "/MainFrame/x"
-msgstr  ""
-
-#: ../DBBrowser.cpp:181 ../DBBrowser.cpp:286
-msgid   "/MainFrame/y"
-msgstr  ""
-
-#: ../DBBrowser.cpp:165
-msgid   "/NONE"
-msgstr  ""
-
-#: ../DBBrowser.cpp:166
-msgid   "/Paths/NONE"
-msgstr  ""
-
-#: ../DBBrowser.cpp:169 ../PgmCtrl.cpp:114
-msgid   "/Paths/Work"
-msgstr  ""
-
-#: ../DBBrowser.cpp:311 ../DBBrowser.cpp:327
-msgid   "About DBBrowser"
-msgstr  "Info über DBBrowser"
-
-#: ../Doc.cpp:164
-msgid   "Adaptive S"
-msgstr  ""
-
-#: ../DBGrid.cpp:228 ../DBGrid.cpp:243 ../DBGrid.cpp:258 ../DBGrid.cpp:273 ../DBGrid.cpp:288
-msgid   "Cell at row "
-msgstr  ""
-
-#: ../PgmCtrl.cpp:113 ../PgmCtrl.cpp:116
-msgid   "Change the language to English"
-msgstr  "Sprache ins Englische ändern"
-
-#: ../PgmCtrl.cpp:114 ../PgmCtrl.cpp:117
-msgid   "Change the language to German"
-msgstr  "Sprache ins deutsch ändern"
-
-#: ../DBGrid.cpp:59 ../DBTree.cpp:61 ../Doc.cpp:105 ../PgmCtrl.cpp:63
-msgid   "Comic Sans MS"
-msgstr  ""
-
-#: ../DBBrowser.cpp:113
-msgid   "DBBrowser"
-msgstr  ""
-
-#: ../DBBrowser.cpp:326
-msgid   "DBBrowser\n"
-        "Mark Johnson\n"
-        "Berlin, Germany\n"
-        "mj10777@gmx.net\n"
-        " (c) 1999"
-msgstr  "DBBrowser\n"
-        "Mark Johnson\n"
-        "Berlin, Germany\n"
-        "mj10777@gmx.net\n"
-        " (c) 1999"
-
-#: ../DBBrowser.cpp:185
-msgid   "DBBrowser - mj10777"
-msgstr  "DBBrowser - mj10777"
-
-#: ../DBBrowser.cpp:185
-msgid   "Help: %s"
-msgstr  "Hilfe: %s"
-
-#: ../DBBrowser.cpp:185
-msgid   "noname"
-msgstr  "ohnename"
-
-#: ../DBGrid.cpp:287
-msgid   "DBGrid::OnCellChange : "
-msgstr  "DBGrid::OnCellChange :"
-
-#: ../DBGrid.cpp:227
-msgid   "DBGrid::OnCellLeftClick : "
-msgstr  "DBGrid::OnCellLeftClick :"
-
-#: ../DBGrid.cpp:257
-msgid   "DBGrid::OnCellLeftDClick : "
-msgstr  "DBGrid::OnCellLeftDClick :"
-
-#: ../DBGrid.cpp:242
-msgid   "DBGrid::OnCellRightClick : "
-msgstr  "DBGrid::OnCellRightClick :"
-
-#: ../DBGrid.cpp:272
-msgid   "DBGrid::OnCellRightDClick : "
-msgstr  "DBGrid::OnCellRightDClick :"
-
-#: ../DBGrid.cpp:312
-msgid   "DBGrid::OnColSize : "
-msgstr  "DBGrid::OnColSize :"
-
-#: ../DBGrid.cpp:135
-msgid   "DBGrid::OnLabelLeftClick : "
-msgstr  "DBGrid::OnLabelLeftClick :"
-
-#: ../DBGrid.cpp:181
-msgid   "DBGrid::OnLabelLeftDClick : "
-msgstr  "DBGrid::OnLabelLeftDClick :"
-
-#: ../DBGrid.cpp:158
-msgid   "DBGrid::OnLabelRightClick : "
-msgstr  "DBGrid::OnLabelRightClick :"
-
-#: ../DBGrid.cpp:204
-msgid   "DBGrid::OnLabelRightDClick : "
-msgstr  "DBGrid::OnLabelRightDClick :"
-
-#: ../DBGrid.cpp:323
-msgid   "DBGrid::OnRangeSelected : "
-msgstr  "DBGrid::OnRangeSelected :"
-
-#: ../DBGrid.cpp:302
-msgid   "DBGrid::OnRowSize : "
-msgstr  "DBGrid::OnRowSize :"
-
-#: ../DBTree.cpp:157
-#, c-format
-msgid   "DB_DATA_TYPE_???? (%d)"
-msgstr  "DB_DATA_TYPE_???? (%d)"
-
-#: ../BrowserDB.cpp:438
-msgid   "DB_DATA_TYPE_DATE"
-msgstr  "DB_DATA_TYPE_DATE"
-
-#: ../BrowserDB.cpp:437
-msgid   "DB_DATA_TYPE_FLOAT"
-msgstr  "DB_DATA_TYPE_FLOAT"
-
-#: ../BrowserDB.cpp:436
-msgid   "DB_DATA_TYPE_INTEGER"
-msgstr  "DB_DATA_TYPE_INTEGER"
-
-#: ../BrowserDB.cpp:435
-msgid   "DB_DATA_TYPE_VARCHAR"
-msgstr  "DB_DATA_TYPE_VARCHAR"
-
-#: ../PgmCtrl.cpp:115 ../PgmCtrl.cpp:118
-msgid   "Delete all wxConfigBase Entry's"
-msgstr  "Lösche alle wxConfigBase Eintragungen"
-
-#: ../Doc.cpp:150
-#, c-format
-msgid   "DsDesc(%s) - %s"
-msgstr  ""
-
-#: ../DBBrowser.cpp:194 ../DBBrowser.cpp:204 ../DBBrowser.cpp:291 ../DBBrowser.cpp:307
-msgid   "E&xit"
-msgstr  "&Beenden"
-
-#: ../DBTree.cpp:139
-#, c-format
-msgid   "FN(%s"
-msgstr  ""
-
-#: ../DBBrowser.cpp:230
-msgid   "Failed adding book helpfiles/DBBrowser.hhp"
-msgstr  "helpfiles/DBBrowser.hhp konnte nicht hinzugefügt"
-
-#: ../DBBrowser.cpp:234
-msgid   "Failed adding book helpfiles/another.hhp"
-msgstr  ""
-
-#: ../DBBrowser.cpp:232
-msgid   "Failed adding book helpfiles/testing.hhp"
-msgstr  ""
-
-#: ../BrowserDB.cpp:45
-msgid   "File: "
-msgstr  ""
-
-#: ../DBTree.cpp:45
-msgid   "Table-Name(%s) with (%d)Columns ; Remarks(%s)"
-msgstr  "Table-Name(%s) mit (%d)Spalten ; Bemerkungen(%s)"
-
-#: ../DBTree.cpp:45
-msgid   "View-Name(%s) with (%d)Columns ; Remarks(%s)"
-msgstr  "View-Name(%s) mit (%d)Spalten ; Bemerkungen(%s)"
-
-#: ../DBGrid.cpp:45
-msgid   "Edit Modus"
-msgstr  "Änderungs Modus"
-
-#: ../DBGrid.cpp:45
-msgid   "Browse Modus"
-msgstr  "Anzeige Modus"
-
-#: ../DBTree.cpp:45
-msgid   "Make all wxTable.cpp/h classes"
-msgstr  "Alle wxTable.cpp/h Klassen erstellen"
-
-#: ../PgmCtrl.cpp:186
-#, c-format
-msgid   "Item '%s': %sselected, %sexpanded, %sbold,%u children (%u immediately under this item)."
-msgstr  ""
-
-#: ../DBTree.cpp:145
-msgid   "KEY"
-msgstr  ""
-
-#: ../DBTree.cpp:152
-msgid   "KEYF"
-msgstr  ""
-
-#: ../PgmCtrl.cpp:116 ../PgmCtrl.cpp:145
-msgid   "Language English"
-msgstr  ""
-
-#: ../PgmCtrl.cpp:117 ../PgmCtrl.cpp:152
-msgid   "Language German"
-msgstr  ""
-
-#: ../Doc.cpp:113
-msgid   "LogBook"
-msgstr  "LogBuch"
-
-#: ../DBBrowser.cpp:334
-msgid   "Main page"
-msgstr  ""
-
-#: ../DBTree.cpp:199 ../DBTree.cpp:203
-msgid   "Make wxDB.cpp/h "
-msgstr  "wxDB.cpp/h Erstellen"
-
-#: ../DBTree.cpp:199 ../DBTree.cpp:203
-msgid   "Make all wxTable.cpp/h "
-msgstr  "Alle wxTable.cpp/h Erstellen"
-
-#: ../DBTree.cpp:199 ../DBTree.cpp:203
-msgid   "Make wxTable.cpp/h "
-msgstr  "wxTable.cpp/h Erstellen"
-
-#: ../DBBrowser.cpp:164
-msgid   "NONE"
-msgstr  ""
-
-#: ../Doc.cpp:171 ../Doc.cpp:184
-msgid   "No Dataset names found in ODBC!\n"
-        "            Program will exit!\n"
-        "\n"
-        "                       Ciao"
-msgstr  "Keine Datenquellen in ODBC gefunden\n"
-        "            Programm wird beendet!\n"
-        "\n"
-        "                       Ciao"
-
-#: ../PgmCtrl.cpp:119
-msgid   "ODBC DSN"
-msgstr  ""
-
-#: ../DBTree.cpp:217 ../PgmCtrl.cpp:170
-msgid   "ODBC-"
-msgstr  ""
-
-#: ../PgmCtrl.cpp:122
-#, c-format
-msgid   "ODBC-%s"
-msgstr  ""
-
-#: ../PgmCtrl.cpp:115
-msgid   "Path Work"
-msgstr  "Arbeitspfad"
-
-#: ../Doc.cpp:94 ../Doc.cpp:96
-msgid   "PgmCtrl"
-msgstr  ""
-
-#: ../DBBrowser.cpp:154
-msgid   "PgmText"
-msgstr  ""
-
-#: ../PgmCtrl.cpp:107 ../PgmCtrl.cpp:110
-msgid   "Program settings"
-msgstr  "Programm Einstellungen"
-
-#: ../DBGrid.cpp:313
-msgid   "Resized col "
-msgstr  ""
-
-#: ../DBGrid.cpp:303
-msgid   "Resized row "
-msgstr  ""
-
-#: ../DBTree.cpp:119 ../PgmCtrl.cpp:108
-msgid   "Root"
-msgstr  ""
-
-#: ../BrowserDB.cpp:304
-#, c-format
-msgid   "SELECT * FROM %s"
-msgstr  "SELECT * FROM %s"
-
-#: ../DBTree.cpp:156
-#, c-format
-msgid   "SQL_C_???? (%d)"
-msgstr  "SQL_C_???? (%d)"
-
-#: ../BrowserDB.cpp:407
-msgid   "SQL_C_BINARY"
-msgstr  "SQL_C_BINARY"
-
-#: ../BrowserDB.cpp:408
-msgid   "SQL_C_BIT"
-msgstr  "SQL_C_BIT"
-
-#: ../BrowserDB.cpp:409
-msgid   "SQL_C_BOOKMARK"
-msgstr  "SQL_C_BOOKMARK"
-
-#: ../BrowserDB.cpp:410
-msgid   "SQL_C_CHAR"
-msgstr  "SQL_C_CHAR"
-
-#: ../BrowserDB.cpp:411
-msgid   "SQL_C_DATE"
-msgstr  "SQL_C_DATE"
-
-#: ../BrowserDB.cpp:412
-msgid   "SQL_C_DEFAULT"
-msgstr  "SQL_C_DEFAULT"
-
-#: ../BrowserDB.cpp:413
-msgid   "SQL_C_DOUBLE"
-msgstr  "SQL_C_DOUBLE"
-
-#: ../BrowserDB.cpp:414
-msgid   "SQL_C_FLOAT"
-msgstr  "SQL_C_FLOAT"
-
-#: ../BrowserDB.cpp:415
-msgid   "SQL_C_LONG"
-msgstr  "SQL_C_LONG"
-
-#: ../BrowserDB.cpp:416
-msgid   "SQL_C_SHORT"
-msgstr  "SQL_C_SHORT"
-
-#: ../BrowserDB.cpp:417
-msgid   "SQL_C_SLONG"
-msgstr  "SQL_C_SLONG"
-
-#: ../BrowserDB.cpp:418
-msgid   "SQL_C_SSHORT"
-msgstr  "SQL_C_SSHORT"
-
-#: ../BrowserDB.cpp:419
-msgid   "SQL_C_STINYINT"
-msgstr  "SQL_C_STINYINT"
-
-#: ../BrowserDB.cpp:420
-msgid   "SQL_C_TIME"
-msgstr  "SQL_C_TIME"
-
-#: ../BrowserDB.cpp:421
-msgid   "SQL_C_TIMESTAMP"
-msgstr  "SQL_C_TIMESTAMP"
-
-#: ../BrowserDB.cpp:422
-msgid   "SQL_C_TINYINT"
-msgstr  "SQL_C_TINYINT"
-
-#: ../BrowserDB.cpp:423
-msgid   "SQL_C_ULONG"
-msgstr  "SQL_C_ULONG"
-
-#: ../BrowserDB.cpp:424
-msgid   "SQL_C_USHORT"
-msgstr  "SQL_C_USHORT"
-
-#: ../BrowserDB.cpp:425
-msgid   "SQL_C_UTINYINT"
-msgstr  "SQL_C_UTINYINT"
-
-#: ../BrowserDB.cpp:428
-msgid   "SQL_LONGVARCHAR"
-msgstr  "SQL_LONGVARCHAR"
-
-#: ../BrowserDB.cpp:427
-msgid   "SQL_NUMERIC"
-msgstr  "SQL_NUMERIC"
-
-#: ../BrowserDB.cpp:429
-msgid   "SQL_REAL"
-msgstr  "SQL_REAL"
-
-#: ../BrowserDB.cpp:426
-msgid   "SQL_VARCHAR"
-msgstr  "SQL_VARCHAR"
-
-#: ../DBGrid.cpp:324
-msgid   "Selected cells from row "
-msgstr  ""
-
-#: ../DBBrowser.cpp:153
-msgid   "SetLocale error"
-msgstr  ""
-
-#: ../PgmCtrl.cpp:110 ../PgmCtrl.cpp:113
+#: ../pgmctrl.cpp:108
 msgid   "Setting Language"
 msgstr  "Sprache setzen"
 
-#: ../PgmCtrl.cpp:110
+#: ../pgmctrl.cpp:105
 msgid   "Settings"
-msgstr  ""
+msgstr  "Einstellungen"
 
-#: ../DBTree.cpp:197 ../DBTree.cpp:201
+#: ../dbtree.cpp:235
 msgid   "Show Data"
 msgstr  "Daten Zeigen"
 
-#: ../DBTree.cpp:122
+#: ../dbtree.cpp:127
 msgid   "TABLE"
 msgstr  ""
 
-#: ../DBTree.cpp:127 ../DBTree.cpp:264 ../DBTree.cpp:303 ../DBTree.cpp:325
+#: ../dbtree.cpp:133 ../dbtree.cpp:307 ../dbtree.cpp:46 ../dbtree.cpp:381
 #, c-format
 msgid   "TN(%s"
 msgstr  ""
 
-#: ../DBTree.cpp:124 ../DBTree.cpp:133 ../DBTree.cpp:134
+#: ../dbtree.cpp:141
 #, c-format
-msgid   "Tablename(%s) with (%d)Columns ; Remarks(%s)"
+msgid   "Table-Name(%s) with (%d)Columns ; Remarks(%s)"
 msgstr  "Tablename(%s) mit (%d)Spalten ; Bemerkungen(%s)"
 
-#: ../DBTree.cpp:151 ../DBTree.cpp:152
+#: ../dbtree.cpp:171
 #, c-format
 msgid   "This Foreign Key comes from the following Table : %s"
 msgstr  "Diese Fremd-Schlüssel stammt aus der folgende Tabelle : %s"
 
-#: ../DBTree.cpp:144 ../DBTree.cpp:145
+#: ../dbtree.cpp:162
 #, c-format
 msgid   "This Primary Key is used in the following Tables : %s"
 msgstr  "Diese Primär-Schlüssel wird in folgende Tabellen Verwendet : %s"
 
-#: ../PgmCtrl.cpp:111 ../PgmCtrl.cpp:114
+#: ../dbtree.cpp:129
+msgid   "VIEW"
+msgstr  ""
+
+#: ../dbtree.cpp:147
+#, c-format
+msgid   "View-Name(%s) with (%d)Columns ; Remarks(%s)"
+msgstr  "Viewname(%s) mit (%d)Spalten ; Bemerkungen(%s)"
+
+#: ../doc.cpp:57
+msgid   "WHEAT"
+msgstr  ""
+
+#: ../pgmctrl.cpp:109
 #, c-format
 msgid   "Work Path : %s"
-msgstr  "Arbeits Pfad : %s"
+msgstr  "Arbeitspfad : %s"
 
-#: ../DBBrowser.cpp:136
+#: ../dbbrowse.cpp:131 ../dbbrowse.cpp:136 ../dbbrowse.cpp:139
 msgid   "a"
 msgstr  ""
 
-#: ../PgmCtrl.cpp:73
+#: ../pgmctrl.cpp:74
 msgid   "bitmap1"
 msgstr  ""
 
-#: ../PgmCtrl.cpp:74
+#: ../pgmctrl.cpp:75
 msgid   "bitmap2"
 msgstr  ""
 
-#: ../DBGrid.cpp:142 ../DBGrid.cpp:165 ../DBGrid.cpp:188 ../DBGrid.cpp:211
+#: ../dbgrid.cpp:175 ../dbgrid.cpp:204 ../dbgrid.cpp:227 ../dbgrid.cpp:250
 msgid   "col label "
 msgstr  ""
 
-#: ../DBGrid.cpp:146 ../DBGrid.cpp:169 ../DBGrid.cpp:192 ../DBGrid.cpp:215
+#: ../dbgrid.cpp:179 ../dbgrid.cpp:208 ../dbgrid.cpp:231 ../dbgrid.cpp:254
 msgid   "corner label"
 msgstr  ""
 
-#: ../DBBrowser.cpp:148
+#: ../dbbrowse.cpp:131 ../dbbrowse.cpp:134
 msgid   "cz"
-msgstr  "cz"
+msgstr  ""
 
-#: ../DBBrowser.cpp:150
+#: ../dbbrowse.cpp:135
 msgid   "czech"
-msgstr  "czech"
+msgstr  ""
 
-#: ../Doc.cpp:166
-msgid   "dba"
-msgstr  "dba"
-
-#: ../DBBrowser.cpp:136 ../PgmCtrl.cpp:154
+#: ../dbbrowse.cpp:131 ../dbbrowse.cpp:136 ../dbbrowse.cpp:140 ../pgmctrl.cpp:154
 msgid   "de"
-msgstr  "de"
+msgstr  ""
 
-#: ../DBBrowser.cpp:160
-msgid   "english"
-msgstr  "english"
-
-#: ../DBBrowser.cpp:140
+#: ../dbbrowse.cpp:132 ../dbbrowse.cpp:142
 msgid   "fr"
-msgstr  "fr"
+msgstr  ""
 
-#: ../DBBrowser.cpp:142
+#: ../dbbrowse.cpp:143
 msgid   "french"
-msgstr  "french"
+msgstr  ""
 
-#: ../DBBrowser.cpp:138
+#: ../dbbrowse.cpp:138
 msgid   "german"
-msgstr  "german"
-
-#: ../DBBrowser.cpp:239
-msgid   "helpfiles/DBBrowser.hhp"
 msgstr  ""
 
-#: ../DBBrowser.cpp:241
-msgid   "helpfiles/another.hhp"
+#: ../dbbrowse.cpp:167
+#, c-format
+msgid   "help.%s/%s.hhp"
 msgstr  ""
 
-#: ../DBBrowser.cpp:240
-msgid   "helpfiles/testing.hhp"
-msgstr  ""
-
-#: ../PgmCtrl.cpp:109 ../PgmCtrl.cpp:112
+#: ../pgmctrl.cpp:107
 #, c-format
 msgid   "locale (%s) ; Language (%s) ; Number(%2.2f)"
 msgstr  "locale (%s) ; Sprache  (%s) ; Nummer(%2.2f)"
 
-#: ../DBBrowser.cpp:112
+#: ../dbbrowse.cpp:99
 msgid   "mj10777"
-msgstr  "mj10777"
+msgstr  ""
 
-#: ../DBTree.cpp:40 ../PgmCtrl.cpp:45
+#: ../dbtree.cpp:40 ../pgmctrl.cpp:47
 msgid   "not "
-msgstr  "not"
+msgstr  "nicht"
 
-#: ../DBBrowser.cpp:144
+#: ../dbbrowse.cpp:132 ../dbbrowse.cpp:144
 msgid   "pl"
-msgstr  "pl"
+msgstr  ""
 
-#: ../DBBrowser.cpp:146
+#: ../dbbrowse.cpp:145
 msgid   "polish"
-msgstr  "polish"
+msgstr  ""
 
-#: ../DBGrid.cpp:138 ../DBGrid.cpp:161 ../DBGrid.cpp:184 ../DBGrid.cpp:207
+#: ../dbgrid.cpp:171 ../dbgrid.cpp:200 ../dbgrid.cpp:223 ../dbgrid.cpp:246
 msgid   "row label "
-msgstr  "row label"
+msgstr  ""
 
-#: ../Doc.cpp:167
-msgid   "sql"
-msgstr  "sql"
-
-#: ../DBBrowser.cpp:126 ../DBBrowser.cpp:134 ../DBBrowser.cpp:162 ../PgmCtrl.cpp:147
+#: ../dbbrowse.cpp:124 ../dbbrowse.cpp:149 ../dbbrowse.cpp:160 ../pgmctrl.cpp:147
 msgid   "std"
-msgstr  "std"
+msgstr  ""
 
-#: ../PgmCtrl.cpp:115 ../PgmCtrl.cpp:118 ../PgmCtrl.cpp:157 ../PgmCtrl.cpp:160
+#: ../doc.cpp:126
+msgid   "what is this?"
+msgstr  ""
+
+#: ../pgmctrl.cpp:113 ../pgmctrl.cpp:160
 msgid   "wxConfigBase Delete"
 msgstr  "wxConfigBase Löschen"

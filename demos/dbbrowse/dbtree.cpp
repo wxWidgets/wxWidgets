@@ -174,8 +174,8 @@ int  DBTree::OnPopulate()
         else
          Docu = AppendItem(Folder,((ct_BrowserDB->pTableInf+x)->pColInf+y)->colName,TreeIc_COL,TreeIc_COL,new DBTreeData(Temp1));
        }
-       SQL_TYPE.Printf(_("SQL_C_???? (%d)"),((ct_BrowserDB->pTableInf+x)->pColInf+y)->sqlDataType);
-       DB_TYPE.Printf(_("DB_DATA_TYPE_???? (%d)"),((ct_BrowserDB->pTableInf+x)->pColInf+y)->dbDataType);
+       SQL_TYPE.Printf("SQL_C_???? (%d)",((ct_BrowserDB->pTableInf+x)->pColInf+y)->sqlDataType);
+       DB_TYPE.Printf("DB_DATA_TYPE_???? (%d)",((ct_BrowserDB->pTableInf+x)->pColInf+y)->dbDataType);
        for (i=1;i<=(pDoc->db_Br+i_Which)->i_SqlTyp[0];i++)
        {
         if (((ct_BrowserDB->pTableInf+x)->pColInf+y)->sqlDataType == (pDoc->db_Br+i_Which)->i_SqlTyp[i])

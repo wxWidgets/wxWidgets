@@ -105,7 +105,7 @@ DlgUser::DlgUser(wxWindow *parent, MainDoc *p_Doc, const wxString& title) :
 //----------------------------------------------------------------------------------------
 void DlgUser::OnInit()
 {
- wxString Temp; Temp.Printf(_(">>> %s <<<"),s_DSN.c_str());
+ wxString Temp; Temp.Printf(">>> %s <<<",s_DSN.c_str());
  SetTitle(Temp);
  m_UserName->SetLabel(s_User);
  m_Password->SetLabel(s_Password);
