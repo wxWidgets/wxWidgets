@@ -2183,7 +2183,11 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
     wxTreeEvent te( wxEVT_COMMAND_TREE_KEY_DOWN, GetId() );
     te.m_code = (int)event.KeyCode();
     te.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( te );
+    if ( GetEventHandler()->ProcessEvent( te ) )
+    {
+        // intercepted by the user code
+        return;
+    }
 
     if ( (m_current == 0) || (m_key_current == 0) )
     {
