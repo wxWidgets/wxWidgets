@@ -59,6 +59,16 @@
 
 extern "C" {
 #ifdef __VISUALC__
+// include standard Windows headers
+#if defined(__WXMSW__) && !wxUSE_MFC
+    #ifndef STRICT
+        #define STRICT 1
+    #endif
+
+    #include <windows.h>
+    #include "wx/msw/winundef.h"
+#endif
+
 // If you use the wxDbCreateDataSource() function with MSW/VC6,
 // you cannot use the iODBC headers, you must use the VC headers,
 // plus the odbcinst.h header - gt Nov 2 2000
