@@ -3015,6 +3015,10 @@ else
     STATIC_FLAG="no"
 fi
 
+dnl default value is comment for makefile
+MACRESCOMP="#"
+MACSETFILE="#"
+MACRESWXCONFIG="#"
 if test "$wxUSE_MAC" = 1; then
     dnl add the resources target for wxMac
     LIBWXMACRES="\$(top_builddir)/lib/${WX_RESOURCES_MACOSX_ASCII}"
@@ -3022,14 +3026,16 @@ if test "$wxUSE_MAC" = 1; then
     WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall_res"
     AC_CHECK_PROG(RESCOMP, Rez, Rez, /Developer/Tools/Rez)
     AC_CHECK_PROG(DEREZ, DeRez, DeRez, /Developer/Tools/DeRez)
+    AC_CHECK_PROG(SETFILE, SetFile, SetFile, /Developer/Tools/SetFile)
     MACOSX_BUNDLE="bundle"
     dnl resources are bundled both with shared library and applications
     dnl since the carb resource *must* be included in the application
-    LIBWXMACRESCOMP="\$(RESCOMP) -t APPL Carbon.r ${LIBWXMACRES} -o \$(BIN_PROGRAM)"
-    LIBWXMACRESWXCONFIG="${RESCOMP} -t APPL Carbon.r \${prefix}/lib/${WX_RESOURCES_MACOSX_ASCII} -o"
+    MACRESCOMP="\$(RESCOMP) -d __DARWIN__ -t APPL Carbon.r ${LIBWXMACRES} -o"
+    MACSETFILE="\$(SETFILE)"
+    MACRESWXCONFIG="${RESCOMP} -d __DARWIN__ -t APPL Carbon.r \$(top_builddir)/lib/${WX_RESOURCES_MACOSX_ASCII}} -o"
 else
     if test "$wxUSE_PM" = 1; then
-        LIBWXMACRESCOMP="emxbind -ep \$(BIN_PROGRAM)"
+        MACRESCOMP="emxbind -ep"
     fi
 fi
 
@@ -5412,8 +5418,9 @@ dnl additional for Mac OS X
 AC_SUBST(DEREZ)
 AC_SUBST(MACOSX_BUNDLE)
 AC_SUBST(LIBWXMACRES)
-AC_SUBST(LIBWXMACRESCOMP)
-AC_SUBST(LIBWXMACRESWXCONFIG)
+AC_SUBST(MACRESCOMP)
+AC_SUBST(MACSETFILE)
+AC_SUBST(MACRESWXCONFIG)
 
 dnl other tools
 AC_SUBST(GCC)

@@ -18,6 +18,9 @@ PROGRAM=docview
 OBJECTS =$(PROGRAM).o doc.o view.o
 DEPFILES=$(PROGRAM).d doc.d view.d
 
+RESOPTIONS=-i $(top_srcdir)/$(program_dir) chart.r doc.r docview.r mondrian.r -c WXMA
+SETOPTIONS=-a C
+
 include ../../src/makeprog.env
 
 @IF_GNU_MAKE@-include $(DEPFILES)

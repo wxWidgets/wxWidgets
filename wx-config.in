@@ -147,7 +147,7 @@ while test $# -gt 0; do
       echo @LDFLAGS_EXE@
       ;;
     --rezflags)
-      echo @LIBWXMACRESWXCONFIG@
+      echo @MACRESWXCONFIG@
       ;;
     --libs)
       if test "@libdir@" != "/usr/lib" \
