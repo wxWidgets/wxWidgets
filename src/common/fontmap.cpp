@@ -501,6 +501,22 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
 {
     wxCHECK_MSG( info, FALSE, _T("bad pointer in GetAltForEncoding") );
 
+    if ( encoding == wxFONTENCODING_DEFAULT )
+    {
+        encoding = wxFont::GetDefaultEncoding();
+    }
+
+    // if we failed to load the system default encoding, something is really
+    // wrong and we'd better stop now - otherwise we will go into endless
+    // recursion trying to create the font in the msg box with the error
+    // message
+    if ( encoding == wxFONTENCODING_SYSTEM )
+    {
+        wxFatalError(_("can't load any font, aborting"));
+
+        // wxFatalError doesn't return
+    }
+
     wxString configEntry = GetEncodingName(encoding);
 
     // do we have a font spec for this encoding?
