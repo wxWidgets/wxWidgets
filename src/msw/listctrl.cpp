@@ -480,8 +480,6 @@ void wxListCtrl::FreeAllInternalData()
         m_ignoreChangeMessages = false;
 
         m_AnyInternalData = false;
-
-        m_count = 0;
     }
 }
 
@@ -497,9 +495,12 @@ wxListCtrl::~wxListCtrl()
         m_textCtrl = NULL;
     }
 
-    if (m_ownsImageListNormal) delete m_imageListNormal;
-    if (m_ownsImageListSmall) delete m_imageListSmall;
-    if (m_ownsImageListState) delete m_imageListState;
+    if (m_ownsImageListNormal)
+        delete m_imageListNormal;
+    if (m_ownsImageListSmall)
+        delete m_imageListSmall;
+    if (m_ownsImageListState)
+        delete m_imageListState;
 }
 
 // ----------------------------------------------------------------------------
@@ -1925,10 +1926,12 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
 
             case LVN_DELETEITEM:
-                if (m_count == 0)
-                    // this should be prevented by the post-processing code below,
-                    // but "just in case"
+                if ( m_count == 0 )
+                {
+                    // this should be prevented by the post-processing code
+                    // below, but "just in case"
                     return false;
+                }
 
                 eventType = wxEVT_COMMAND_LIST_DELETE_ITEM;
                 event.m_itemIndex = iItem;
@@ -2194,6 +2197,10 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // also, we may free all user data now (couldn't do it before as
             // the user should have access to it in OnDeleteAllItems() handler)
             FreeAllInternalData();
+
+            // the control is empty now, synchronize the cached number of items
+            // with the real one
+            m_count = 0;
             return true;
 
         case LVN_ENDLABELEDITA:
