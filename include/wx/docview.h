@@ -379,7 +379,7 @@ public:
 
     // Views or windows should inform the document manager
     // when a view is going in or out of focus
-    virtual void ActivateView(wxView *view, bool activate = TRUE, bool deleting = FALSE);
+    virtual void ActivateView(wxView *view, bool activate = TRUE);
     virtual wxView *GetCurrentView() const;
 
     wxList& GetDocuments() { return m_docs; }

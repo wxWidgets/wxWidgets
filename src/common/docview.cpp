@@ -568,16 +568,14 @@ void wxDocument::SetFilename(const wxString& filename, bool notifyViews)
 
 wxView::wxView()
 {
-    //  SetDocument(doc);
     m_viewDocument = (wxDocument*) NULL;
 
-    m_viewTypeName = wxT("");
     m_viewFrame = (wxFrame *) NULL;
 }
 
 wxView::~wxView()
 {
-//    GetDocumentManager()->ActivateView(this, FALSE, TRUE);
+    GetDocumentManager()->ActivateView(this, FALSE);
     m_viewDocument->RemoveView(this);
 }
 
@@ -586,8 +584,8 @@ bool wxView::ProcessEvent(wxEvent& event)
 {
     if ( !GetDocument() || !GetDocument()->ProcessEvent(event) )
         return wxEvtHandler::ProcessEvent(event);
-    else
-        return TRUE;
+
+    return TRUE;
 }
 
 void wxView::OnActivateView(bool WXUNUSED(activate), wxView *WXUNUSED(activeView), wxView *WXUNUSED(deactiveView))
@@ -1710,25 +1708,19 @@ void wxDocManager::RemoveDocument(wxDocument *doc)
 
 // Views or windows should inform the document manager
 // when a view is going in or out of focus
-void wxDocManager::ActivateView(wxView *view, bool activate, bool WXUNUSED(deleting))
+void wxDocManager::ActivateView(wxView *view, bool activate)
 {
-    // If we're deactiving, and if we're not actually deleting the view, then
-    // don't reset the current view because we may be going to
-    // a window without a view.
-    // WHAT DID I MEAN BY THAT EXACTLY?
-    /*
-       if (deleting)
-       {
-       if (m_currentView == view)
-       m_currentView = NULL;
-       }
-       else
-     */
+    if ( activate )
     {
-        if (activate)
-            m_currentView = view;
-        else
+        m_currentView = view;
+    }
+    else // deactivate
+    {
+        if ( m_currentView == view )
+        {
+            // don't keep stale pointer
             m_currentView = (wxView *) NULL;
+        }
     }
 }
 
