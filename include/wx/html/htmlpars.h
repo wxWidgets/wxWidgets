@@ -226,7 +226,7 @@ public:
     // (with respect to output encoding)
     wxString Parse(const wxString& input);
 
-    // Returns character for given entity
+    // Returns character for given entity or 0 if the enity is unknown
     wxChar GetEntityChar(const wxString& entity);
 
     // Returns character that represents given Unicode code
