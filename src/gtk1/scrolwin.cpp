@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        gtk/scrolwin.cpp
 // Purpose:     wxScrolledWindow implementation
-// Author:      Julian Smart
+// Author:      Robert Roebling
 // Modified by: Ron Lee
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -83,7 +83,7 @@ static void gtk_scrolled_window_vscroll_callback( GtkAdjustment *adjust,
     if (g_blockEventsOnDrag) return;
 
     if (!win->m_hasVMT) return;
-
+    
     win->GtkVScroll( adjust->value,
             GET_SCROLL_TYPE(GTK_SCROLLED_WINDOW(win->m_widget)->vscrollbar) );
 }
@@ -378,12 +378,14 @@ void wxScrolledWindow::AdjustScrollbars()
     if (m_xScrollPixelsPerLine == 0)
     {
         m_hAdjust->upper = 1.0;
+        m_hAdjust->page_increment = 1.0;
         m_hAdjust->page_size = 1.0;
     }
     else
     {
         m_hAdjust->upper = vw / m_xScrollPixelsPerLine;
-        m_hAdjust->page_size = (w / m_xScrollPixelsPerLine);
+        m_hAdjust->page_increment = (w / m_xScrollPixelsPerLine);
+        m_hAdjust->page_size = m_hAdjust->page_increment;
 
         // If the scrollbar hits the right side, move the window
         // right to keep it from over extending.
@@ -404,12 +406,14 @@ void wxScrolledWindow::AdjustScrollbars()
     if (m_yScrollPixelsPerLine == 0)
     {
         m_vAdjust->upper = 1.0;
+        m_vAdjust->page_increment = 1.0;
         m_vAdjust->page_size = 1.0;
     }
     else
     {
         m_vAdjust->upper = vh / m_yScrollPixelsPerLine;
-        m_vAdjust->page_size = (h / m_yScrollPixelsPerLine);
+        m_vAdjust->page_increment = (h / m_yScrollPixelsPerLine);
+        m_vAdjust->page_size = m_vAdjust->page_increment;
 
         if ((m_vAdjust->value != 0.0) && (m_vAdjust->value + m_vAdjust->page_size > m_vAdjust->upper))
         {
@@ -424,8 +428,8 @@ void wxScrolledWindow::AdjustScrollbars()
         }
     }
 
-    m_xScrollLinesPerPage = (int)(m_hAdjust->page_size + 0.5);
-    m_yScrollLinesPerPage = (int)(m_vAdjust->page_size + 0.5);
+    m_xScrollLinesPerPage = (int)(m_hAdjust->page_increment + 0.5);
+    m_yScrollLinesPerPage = (int)(m_vAdjust->page_increment + 0.5);
 
     gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "changed" );
     gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "changed" );
