@@ -335,21 +335,35 @@ public:
 
     // implement base class pure virtuals
     // ----------------------------------
+
+#if wxUSE_UNICODE && defined(__WXGTK20__)
+    virtual size_t GetFormatCount(Direction WXUNUSED(dir) = Get) const { return 2; }
+    virtual void GetAllFormats(wxDataFormat *formats,
+                               wxDataObjectBase::Direction WXUNUSED(dir) = Get) const;
+                               
+    virtual size_t GetDataSize() const { return GetDataSize(GetPreferredFormat()); }
+    virtual bool GetDataHere(void *buf) const { return GetDataHere(GetPreferredFormat(), buf); }
+    virtual bool SetData(size_t len, const void *buf) { return SetData(GetPreferredFormat(), len, buf); }
+
+    size_t GetDataSize(const wxDataFormat& format) const;
+    bool GetDataHere(const wxDataFormat& format, void *pBuf) const;
+    bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf);
+#else
     virtual size_t GetDataSize() const;
     virtual bool GetDataHere(void *buf) const;
     virtual bool SetData(size_t len, const void *buf);
 
-private:
-    wxString m_text;
-
-    // virtual function hiding supression
     size_t GetDataSize(const wxDataFormat& format) const
         { return(wxDataObjectSimple::GetDataSize(format)); }
     bool GetDataHere(const wxDataFormat& format, void *pBuf) const
         { return(wxDataObjectSimple::GetDataHere(format, pBuf)); }
     bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf)
         { return(wxDataObjectSimple::SetData(format, nLen, pBuf)); }
+#endif
 
+private:
+    wxString m_text;
+    
     DECLARE_NO_COPY_CLASS(wxTextDataObject)
 };
 

@@ -237,41 +237,73 @@ bool wxDataObjectComposite::SetData(const wxDataFormat& format,
 // wxTextDataObject
 // ----------------------------------------------------------------------------
 
+#if defined(__WXGTK20__) && wxUSE_UNICODE
+
+size_t wxTextDataObject::GetDataSize(const wxDataFormat& format) const
+{
+    if (format == wxDF_UNICODETEXT)
+    {
+        // Use UTF8 not UCS4
+        wxCharBuffer buffer = wxConvUTF8.cWX2MB( GetText().c_str() );
+        return strlen( (const char*) buffer ) + 1;
+    }
+    else  // == wxDF_TEXT
+    {
+        wxCharBuffer buffer = wxConvLibc.cWX2MB( GetText().c_str() );
+        return strlen( (const char*) buffer ) + 1;
+    }
+}
+
+bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
+{
+    if (format == wxDF_UNICODETEXT)
+    {
+        // Use UTF8 not UCS4
+        wxCharBuffer buffer = wxConvUTF8.cWX2MB( GetText().c_str() );
+        strcpy( (char*) buf, (const char*) buffer );
+    }
+    else
+    {
+        wxCharBuffer buffer = wxConvLibc.cWX2MB( GetText().c_str() );
+        strcpy( (char*) buf, (const char*) buffer );
+    }
+    
+    return TRUE;
+}
+
+bool wxTextDataObject::SetData(const wxDataFormat& format,
+                               size_t WXUNUSED(len), const void *buf)
+{
+    if (format == wxDF_UNICODETEXT)
+        SetText( wxConvUTF8.cMB2WX( (const char*) buf ) );
+    else
+        SetText( wxConvLibc.cMB2WX( (const char*) buf ) );
+ 
+    return TRUE;
+}
+
+#else
+
 size_t wxTextDataObject::GetDataSize() const
 {
-#if defined(__WXGTK20__) && wxUSE_UNICODE
-    // Use UTF8 not UCS4
-    wxCharBuffer buffer = wxConvUTF8.cWX2MB( GetText().c_str() );
-    return strlen( (const char*) buffer ) + 1;
-#else
     return GetTextLength() * sizeof(wxChar);
-#endif
 }
 
 bool wxTextDataObject::GetDataHere(void *buf) const
 {
-#if defined(__WXGTK20__) && wxUSE_UNICODE
-    // Use UTF8 not UCS4
-    wxCharBuffer buffer = wxConvUTF8.cWX2MB( GetText().c_str() );
-    strcpy( (char*) buf, (const char*) buffer );
-#else
     wxStrcpy((wxChar *)buf, GetText().c_str());
-#endif
 
     return TRUE;
 }
 
 bool wxTextDataObject::SetData(size_t WXUNUSED(len), const void *buf)
 {
-#if defined(__WXGTK20__) && wxUSE_UNICODE
-    // Use UTF8 not UCS4
-    SetText( wxConvUTF8.cMB2WX( (const char*) buf ) );
-#else
     SetText(wxString((const wxChar *)buf));
-#endif
 
     return TRUE;
 }
+
+#endif
 
 // ----------------------------------------------------------------------------
 // wxFileDataObjectBase

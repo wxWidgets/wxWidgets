@@ -28,6 +28,7 @@
 //-------------------------------------------------------------------------
 
 GdkAtom  g_textAtom        = 0;
+GdkAtom  g_altTextAtom     = 0;
 GdkAtom  g_pngAtom         = 0;
 GdkAtom  g_fileAtom        = 0;
 
@@ -77,12 +78,9 @@ void wxDataFormat::SetType( wxDataFormatId type )
 {
     PrepareFormats();
     
-    if (type == wxDF_UNICODETEXT)
-       type = wxDF_TEXT;
-
     m_type = type;
     
-    if (m_type == wxDF_TEXT)
+    if (m_type == wxDF_TEXT || m_type == wxDF_UNICODETEXT)
         m_format = g_textAtom;
     else
     if (m_type == wxDF_BITMAP)
@@ -144,6 +142,7 @@ void wxDataFormat::PrepareFormats()
     if (!g_textAtom)
 #if wxUSE_UNICODE
         g_textAtom = gdk_atom_intern( "UTF8_STRING", FALSE );
+        g_altTextAtom = gdk_atom_intern( "STRING", FALSE );
 #else
         g_textAtom = gdk_atom_intern( "STRING" /* "text/plain" */, FALSE );
 #endif
@@ -191,6 +190,18 @@ bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction dir) 
         return n < nFormatCount;
     }
 }
+
+// ----------------------------------------------------------------------------
+// wxTextDataObject
+// ----------------------------------------------------------------------------
+
+#if defined(__WXGTK20__) && wxUSE_UNICODE
+void wxTextDataObject::GetAllFormats(wxDataFormat *formats, wxDataObjectBase::Direction dir) const
+{
+    *formats++ = GetPreferredFormat();
+    *formats = g_altTextAtom;
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // wxFileDataObject

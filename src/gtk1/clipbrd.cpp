@@ -40,6 +40,10 @@
 GdkAtom  g_clipboardAtom   = 0;
 GdkAtom  g_targetsAtom     = 0;
 
+#if defined(__WXGTK20__) && wxUSE_UNICODE
+extern GdkAtom g_altTextAtom;
+#endif
+
 // the trace mask we use with wxLogTrace() - call
 // wxLog::AddTraceMask(TRACE_CLIPBOARD) to enable the trace messages from here
 // (there will be a *lot* of them!)
@@ -169,13 +173,16 @@ selection_received( GtkWidget *WXUNUSED(widget),
         return;
     }
 
-    /* make sure we got the data in the correct form (selection type).
-       if so, copy data to target object */
+#if 0
+    This seems to cause problems somehow
+    // make sure we got the data in the correct form (selection type).
+    // if so, copy data to target object
     if (selection_data->type != GDK_SELECTION_TYPE_STRING)
     {
         clipboard->m_waiting = FALSE;
         return;
     }
+#endif
 
     data_object->SetData( format, (size_t) selection_data->length, (const char*) selection_data->data );
 
@@ -498,6 +505,15 @@ bool wxClipboard::IsSupported( const wxDataFormat& format )
                            (guint32) GDK_CURRENT_TIME );
 
     while (m_waiting) gtk_main_iteration();
+
+#if defined(__WXGTK20__) && wxUSE_UNICODE
+    if (!m_formatSupported && format == wxDataFormat(wxDF_UNICODETEXT))
+    {
+        // Another try with plain STRING format
+        extern GdkAtom g_altTextAtom;
+        return IsSupported(g_altTextAtom);
+    }
+#endif
 
     if (!m_formatSupported) return FALSE;
 
