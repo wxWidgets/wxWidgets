@@ -55,7 +55,7 @@
 #endif // __TWIN32__
 
 #include "wx/msw/dib.h"
-#include "wx/tbar95.h"
+#include "wx/msw/tbar95.h"
 #include "wx/app.h"         // for GetComCtl32Version
 
 // ----------------------------------------------------------------------------
