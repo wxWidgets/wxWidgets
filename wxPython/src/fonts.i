@@ -328,6 +328,13 @@ public:
             wxFontEncoding encoding=wxFONTENCODING_DEFAULT);
 
     %name(wxFontFromNativeInfo)wxFont(const wxNativeFontInfo& info);
+    %addmethods {
+        %new wxFont* wxFontFromNativeInfoString(const wxString& info) {
+            wxNativeFontInfo nfi;
+            nfi.FromString(info);
+            return new wxFont(nfi);
+        }
+    }
 
     ~wxFont();
 
