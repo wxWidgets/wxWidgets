@@ -2297,16 +2297,16 @@ if test "$wxUSE_PROFILE" = "yes" ; then
 fi
 
 DEP_INFO_FLAGS=
+CODE_GEN_FLAGS=
 if test "$GCC" = yes ; then
     if test "$wxUSE_NO_RTTI" = "yes" ; then
-        WXDEBUG_DEFINE="$WXDEBUG_DEFINE -fno-rtti"
+        CODE_GEN_FLAGS="$CODE_GEN_FLAGS -fno-rtti"
     fi
     if test "$wxUSE_NO_EXCEPTIONS" = "yes" ; then
-        WXDEBUG_DEFINE="$WXDEBUG_DEFINE -fno-exceptions"
+        CODE_GEN_FLAGS="$CODE_GEN_FLAGS -fno-exceptions"
     fi
     if test "$wxUSE_PERMISSIVE" = "yes" ; then
-       CFLAGS="${CFLAGS} -fpermissive"
-       CXXFLAGS="${CXXFLAGS} -fpermissive"
+       CODE_GEN_FLAGS="$CODE_GEN_FLAGS -fpermissive"
     fi
     if test "$wxUSE_NO_DEPS" = "no" ; then
         DEP_INFO_FLAGS="-MMD"
@@ -3196,6 +3196,7 @@ AC_SUBST(WX_ALL_INSTALLED)
 AC_SUBST(SHARED_LD)
 AC_SUBST(PIC_FLAG)
 AC_SUBST(DEP_INFO_FLAGS)
+AC_SUBST(CODE_GEN_FLAGS)
 AC_SUBST(BURNT_LIBRARY_NAME)
 
 dnl debugging options
