@@ -171,7 +171,7 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 
 wxPrinterDC::~wxPrinterDC(void)
 {
-	OSStatus err ;
+//	OSStatus err ;
 	wxString message ;
 #if !TARGET_CARBON
 	if ( m_ok )
@@ -258,7 +258,7 @@ bool wxPrinterDC::StartDoc( const wxString& WXUNUSED(message) )
     if ( err != noErr || m_macPrintSessionPort == kPMNoReference )
   #endif
     {
-		message.Printf( "Print Error %d", err ) ;
+		message.Printf( "Print Error %ld", err ) ;
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		dialog.ShowModal();
   #if TARGET_CARBON && PM_USE_SESSION_APIS
@@ -280,7 +280,7 @@ bool wxPrinterDC::StartDoc( const wxString& WXUNUSED(message) )
 	err = PMGetAdjustedPaperRect((PMPageFormat)m_printData.m_macPageFormat, &rPaper);
     if ( err != noErr )
     {
-		message.Printf( "Print Error %d", err ) ;
+		message.Printf( "Print Error %ld", err ) ;
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		dialog.ShowModal();
   #if TARGET_CARBON && PM_USE_SESSION_APIS
@@ -291,8 +291,8 @@ bool wxPrinterDC::StartDoc( const wxString& WXUNUSED(message) )
 		m_ok = FALSE;
 		return m_ok;
     }
-	m_maxX = rPaper.right - rPaper.left ;
-	m_maxY = rPaper.bottom - rPaper.top ;
+	m_maxX = (wxCoord)(rPaper.right - rPaper.left) ;
+	m_maxY = (wxCoord)(rPaper.bottom - rPaper.top) ;
 #else
 	m_maxX = (**(THPrint)m_printData.m_macPrintSettings).rPaper.right - (**(THPrint)m_printData.m_macPrintSettings).rPaper.left ;
 	m_maxY = (**(THPrint)m_printData.m_macPrintSettings).rPaper.bottom - (**(THPrint)m_printData.m_macPrintSettings).rPaper.top ;
@@ -321,7 +321,7 @@ void wxPrinterDC::EndDoc(void)
   #endif
      	if ( err != noErr )
      	{
-			message.Printf( "Print Error %d", err ) ;
+			message.Printf( "Print Error %ld", err ) ;
 			wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		    dialog.ShowModal();
      	}
@@ -402,8 +402,8 @@ void wxPrinterDC::StartPage(void)
 	err = PMGetAdjustedPaperRect((PMPageFormat)m_printData.m_macPageFormat, &rPaper);
 	if ( !err )
 	{
-  		m_macLocalOrigin.x = rPaper.left ;
-  		m_macLocalOrigin.y = rPaper.top ;
+  		m_macLocalOrigin.x = (int) (rPaper.left) ;
+  		m_macLocalOrigin.y = (int) (rPaper.top) ;
   	}
 #endif
 }

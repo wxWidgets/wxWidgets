@@ -36,7 +36,7 @@
   #include <OpenTransportProviders.h>
   #include <OpenTptInternet.h>
 #endif
-#if TARGET_CARBON
+#if TARGET_CARBON && !defined(OTAssert)
   #define OTAssert( str , cond ) /* does not exists in Carbon */
 #endif
 

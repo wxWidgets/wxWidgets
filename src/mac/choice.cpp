@@ -244,7 +244,6 @@ wxSize wxChoice::DoGetBestSize() const
 #endif
 	{
 		wxMacPortStateHelper st( UMAGetWindowPort( (WindowRef) MacGetRootWindow() ) ) ; 
- 		Rect drawRect ;
 
 		wxFontRefData * font = (wxFontRefData*) m_font.GetRefData() ;
 
@@ -272,7 +271,6 @@ wxSize wxChoice::DoGetBestSize() const
 	    lbWidth += 2 * lbHeight ;
 
 	    // And just a bit more
-	    int cy = 12 ;
 	    int cx = ::TextWidth( "X" , 0 , 1 ) ;
 	    lbWidth += cx ;
 	    

@@ -383,7 +383,7 @@ void wxNotebook::MacSetupTabs()
         	ControlButtonContentInfo info ;
         	wxMacCreateBitmapButton( &info , *GetImageList()->GetBitmap( GetPageImage(ii ) ) , kControlContentPictHandle) ;
         	IconFamilyHandle iconFamily = (IconFamilyHandle) NewHandle(0) ;
-        	OSErr err = SetIconFamilyData( iconFamily, 'PICT' , (Handle) info.u.picture ) ;
+        	err = SetIconFamilyData( iconFamily, 'PICT' , (Handle) info.u.picture ) ;
             wxASSERT_MSG( err == noErr , "Error when adding bitmap" ) ;
          	IconRef iconRef ;
          	err = RegisterIconRefFromIconFamily( 'WXNG' , (OSType) 1 , iconFamily, &iconRef ) ;

@@ -527,6 +527,8 @@ pascal OSErr wxMacWindowDragTrackingHandler(DragTrackingMessage theMessage, Wind
                             				cursor.MacInstall() ;
                             			}
                             			break ;
+                            			default :
+                            			break ;
                             		}
                             	}
                             }

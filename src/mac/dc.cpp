@@ -82,7 +82,6 @@ wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win )
         SetClip( m_newClip ) ;
     	DisposeRgn( insidergn ) ;
 #endif
-        RgnHandle insidergn = NewRgn() ;
         int x = 0 , y = 0;
         win->MacWindowToRootWindow( &x,&y ) ;
         CopyRgn( (RgnHandle) ((wxWindow*)win)->MacGetVisibleRegion().GetWXHRGN() , m_newClip ) ;
@@ -1305,8 +1304,8 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
 	status = ::ATSUMeasureText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
 					&textBefore , &textAfter, &ascent , &descent );
 
-    drawX += sin(angle/RAD2DEG) * FixedToInt(ascent) ;
-    drawY += cos(angle/RAD2DEG) * FixedToInt(ascent) ;
+    drawX += (int)( sin(angle/RAD2DEG) * FixedToInt(ascent) ) ;
+    drawY += (int)( cos(angle/RAD2DEG) * FixedToInt(ascent) ) ;
     status = ::ATSUDrawText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
 				IntToFixed(drawX) , IntToFixed(drawY) );
 	wxASSERT_MSG( status == noErr , "couldn't draw the rotated text" );
@@ -1735,7 +1734,7 @@ void wxDC::MacInstallFont() const
     } ;
     Boolean kTrue = true ;
     Boolean kFalse = false ;
-    BslnBaselineClass kBaselineDefault = kBSLNHangingBaseline ;
+//    BslnBaselineClass kBaselineDefault = kBSLNHangingBaseline ;
     ATSUVerticalCharacterType kHorizontal = kATSUStronglyHorizontal;
 	ATSUAttributeValuePtr	atsuValues[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
 	{
