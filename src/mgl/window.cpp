@@ -535,13 +535,13 @@ wxWindowMGL::~wxWindowMGL()
 
     if (gs_activeFrame == this)
     {
+       gs_activeFrame = NULL;
        // activate next frame in Z-order:
        if ( m_wnd->prev )
        {
            wxWindowMGL *win = (wxWindowMGL*)m_wnd->prev->userData;
            win->SetFocus();
         }
-        gs_activeFrame = NULL;
     }
     
     if ( gs_focusedWindow == this )
