@@ -46,7 +46,7 @@
 //-----------------------------------------------------------------------------
 
 wxApp *wxTheApp = (wxApp *)  NULL;
-wxAppInitializerFunction wxApp::m_appInitFn = (wxAppInitializerFunction) NULL;
+wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NULL;
 
 #if wxUSE_THREADS
 extern wxList *wxPendingEvents;

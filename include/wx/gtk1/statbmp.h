@@ -75,6 +75,9 @@ public:
     }
 
 private:
+    // creates the new pixmap widget
+    void CreatePixmapWidget();
+
     wxBitmap   m_bitmap;
 };
 
