@@ -1248,7 +1248,7 @@ wxLayoutLine::Copy(wxLayoutList *llist,
    wxLOiterator last  = FindObject(to, &lastOffset);
 
    // Common special case: only one object
-   if( *first == *last )
+   if( first != NULLIT && last != NULLIT && *first == *last )
    {
       if( (**first).GetType() == WXLO_TYPE_TEXT )
       {
