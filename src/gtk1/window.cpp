@@ -700,6 +700,8 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
 
     if (gdk_event->count == 0)
     {
+        win->m_clipPaintRegion = TRUE;
+    
         wxEraseEvent eevent( win->GetId() );
         eevent.SetEventObject( win );
         win->GetEventHandler()->ProcessEvent(eevent);
@@ -709,6 +711,8 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
         win->GetEventHandler()->ProcessEvent( event );
         
         win->GetUpdateRegion().Clear();
+        
+        win->m_clipPaintRegion = FALSE;
     }
     
         /* The following code will result in all window-less widgets
@@ -774,9 +778,11 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    // this is supposed to take care of extra (and unneeded) frame repaints
-    if (win->GetChildren().GetCount() == 0)
-        return; 
+    if ((win->HasFlag(wxNO_FULL_REPAINT_ON_RESIZE)) &&
+        (win->GetChildren().GetCount() == 0))
+    {
+        return;
+    }
 
 /*
     if (win->GetName() == wxT("panel"))
@@ -817,22 +823,22 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
 
     win->m_clipPaintRegion = TRUE;
     
-        wxEraseEvent eevent( win->GetId() );
-        eevent.SetEventObject( win );
-        win->GetEventHandler()->ProcessEvent(eevent);
+    wxEraseEvent eevent( win->GetId() );
+    eevent.SetEventObject( win );
+    win->GetEventHandler()->ProcessEvent(eevent);
 
-        wxPaintEvent event( win->GetId() );
-        event.SetEventObject( win );
-        win->GetEventHandler()->ProcessEvent( event );
+    wxPaintEvent event( win->GetId() );
+    event.SetEventObject( win );
+    win->GetEventHandler()->ProcessEvent( event );
 
-        win->GetUpdateRegion().Clear();
+    win->GetUpdateRegion().Clear();
     
-        win->m_clipPaintRegion = FALSE;
+    win->m_clipPaintRegion = FALSE;
     
     
-        GList *children = pizza->children;
-        while (children)
-        {
+    GList *children = pizza->children;
+    while (children)
+    {
             GtkPizzaChild *child = (GtkPizzaChild*) children->data;
             children = children->next;
 
@@ -841,7 +847,7 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
             {
                 gtk_widget_draw (child->widget, &child_area /* (GdkRectangle*) NULL*/ );
             }
-        }
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -2394,14 +2400,17 @@ void wxWindow::PostCreation()
             
             gtk_pizza_set_external( GTK_PIZZA(m_wxwindow), TRUE );
 
-            gtk_signal_connect( GTK_OBJECT(m_wxwindow), "event",
-                GTK_SIGNAL_FUNC(gtk_window_event_event_callback), (gpointer)this );
-
             gtk_signal_connect( GTK_OBJECT(m_wxwindow), "expose_event",
                 GTK_SIGNAL_FUNC(gtk_window_expose_callback), (gpointer)this );
 
             gtk_signal_connect( GTK_OBJECT(m_wxwindow), "draw",
                 GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
+
+            if (HasFlag(wxNO_FULL_REPAINT_ON_RESIZE))
+            {
+                gtk_signal_connect( GTK_OBJECT(m_wxwindow), "event",
+                    GTK_SIGNAL_FUNC(gtk_window_event_event_callback), (gpointer)this );
+            }
         }
 
 #if (GTK_MINOR_VERSION > 0)
