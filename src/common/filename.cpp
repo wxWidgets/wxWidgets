@@ -743,11 +743,51 @@ bool wxFileName::Normalize(wxPathNormalize flags,
     return TRUE;
 }
 
+bool wxFileName::MakeRelativeTo(const wxString& pathBase, wxPathFormat format)
+{
+    wxFileName fnBase(pathBase, format);
+
+    // get cwd only once - small time saving
+    wxString cwd = wxGetCwd();
+    Normalize(wxPATH_NORM_ALL, cwd, format);
+    fnBase.Normalize(wxPATH_NORM_ALL, cwd, format);
+
+    bool withCase = IsCaseSensitive(format);
+
+    // we can't do anything if the files live on different volumes
+    if ( !GetVolume().IsSameAs(fnBase.GetVolume(), withCase) )
+    {
+        // nothing done
+        return FALSE;
+    }
+
+    // same drive, so we don't need our volume
+    m_volume.clear();
+
+    // remove common directories starting at the top
+    while ( !m_dirs.IsEmpty() && !fnBase.m_dirs.IsEmpty() &&
+                m_dirs[0u].IsSameAs(fnBase.m_dirs[0u], withCase) )
+    {
+        m_dirs.Remove(0u);
+        fnBase.m_dirs.Remove(0u);
+    }
+
+    // add as many ".." as needed
+    size_t count = fnBase.m_dirs.GetCount();
+    for ( size_t i = 0; i < count; i++ )
+    {
+        m_dirs.Insert(wxT(".."), 0u);
+    }
+
+    // we were modified
+    return TRUE;
+}
+
 // ----------------------------------------------------------------------------
 // filename kind tests
 // ----------------------------------------------------------------------------
 
-bool wxFileName::SameAs( const wxFileName &filepath, wxPathFormat format)
+bool wxFileName::SameAs(const wxFileName &filepath, wxPathFormat format)
 {
     wxFileName fn1 = *this,
                fn2 = filepath;

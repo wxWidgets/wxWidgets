@@ -884,6 +884,48 @@ static void TestFileNameTemp()
     }
 }
 
+static void TestFileNameMakeRelative()
+{
+    puts("*** testing wxFileName::MakeRelativeTo() ***");
+
+    for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
+    {
+        const FileNameInfo& fni = filenames[n];
+
+        wxFileName fn(fni.fullname, fni.format);
+
+        // choose the base dir of the same format
+        wxString base;
+        switch ( fni.format )
+        {
+            case wxPATH_UNIX:
+                base = "/usr/bin/";
+                break;
+
+            case wxPATH_DOS:
+                base = "c:\\";
+                break;
+
+            case wxPATH_MAC:
+            case wxPATH_VMS:
+                // TODO: I don't know how this is supposed to work there
+                continue;
+        }
+
+        printf("'%s' relative to '%s': ",
+               fn.GetFullPath(fni.format).c_str(), base.c_str());
+
+        if ( !fn.MakeRelativeTo(base, fni.format) )
+        {
+            puts("unchanged");
+        }
+        else
+        {
+            printf("'%s'\n", fn.GetFullPath(fni.format).c_str());
+        }
+    }
+}
+
 static void TestFileNameComparison()
 {
     // TODO!
@@ -5235,6 +5277,7 @@ int main(int argc, char **argv)
         DumpFileName(fn);
     }
 
+    TestFileNameMakeRelative();
     if ( 0 )
     {
     TestFileNameConstruction();

@@ -87,7 +87,10 @@ File names can be case-sensitive or not, the function\rtfsp
 The rules for determining if the file name is absolute or relative also depends
 on the file name format and the only portable way to answer to this question is
 to use \helpref{IsAbsolute}{wxfilenameisabsolute} method. To ensure that the
-filename is absolute you may use \helpref{Normalize}{wxfilenamenormalize}.
+filename is absolute you may use \helpref{Normalize}{wxfilenamenormalize}. There
+is also an inverse function \helpref{MakeRelativeTo}{wxfilenamemakerelativeto} 
+which undoes what \helpref{Normalize(wxPATH\_NORM\_DOTS}{wxfilenamenormalize} 
+does.
 
 Other functions returning information about the file format provided by this
 class are \helpref{GetVolumeSeparator}{wxfilenamegetvolumeseparator},\rtfsp
@@ -451,15 +454,13 @@ invalid state (the former only do it on failure).
 
 \func{bool}{IsPathSeparator}{\param{wxChar }{ch}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
-is the char a path separator for this format?
-
+Returns {\tt TRUE} if the char is a path separator for this format.
 
 \membersection{wxFileName::IsRelative}\label{wxfilenameisrelative}
 
 \func{bool}{IsRelative}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
-is this filename relative?
-
+Returns {\tt TRUE} if this filename is not absolute.
 
 \membersection{wxFileName::IsWild}\label{wxfilenameiswild}
 
@@ -467,6 +468,28 @@ is this filename relative?
 
 FIXME: what exactly does this do?
 
+\membersection{wxFileName::MakeRelativeTo}\label{wxfilenamemakerelativeto}
+
+\func{bool}{MakeRelativeTo}{\param{const wxString\& }{pathBase = ""}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
+
+This function tries to put this file name in a form relative to {\it pathBase}.
+In other words, it returns the file name which should be used to access this
+file if the current directory were {\it pathBase}.
+
+\docparam{pathBase}{the directory to use as root, current directory is used by
+default}
+
+\docparam{format}{the file name format, native by default}
+
+\wxheading{Return value}
+
+{\tt TRUE} if the file name has been changed, {\tt FALSE} if we failed to do
+anything with it (currently this only happens if the file name is on a volume
+different from the volume specified by {\it pathBase}).
+
+\wxheading{See also}
+
+\helpref{Normalize}{wxfilenamenormalize}
 
 \membersection{wxFileName::Mkdir}\label{wxfilenamemkdir}
 

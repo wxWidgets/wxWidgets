@@ -231,6 +231,18 @@ public:
                    const wxString& cwd = wxEmptyString,
                    wxPathFormat format = wxPATH_NATIVE);
 
+        // get a path path relative to the given base directory, i.e. opposite
+        // of Normalize
+        //
+        // pass an empty string to get a path relative to the working directory
+        //
+        // returns TRUE if the file name was modified, FALSE if we failed to do
+        // anything with it (happens when the file is on a different volume,
+        // for example)
+    bool MakeRelativeTo(const wxString& pathBase = _T(""),
+                        wxPathFormat format = wxPATH_NATIVE);
+
+
     // Comparison
 
         // compares with the rules of this platform
