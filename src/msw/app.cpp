@@ -922,16 +922,12 @@ bool wxApp::DoMessage()
             {
                 s_hadGuiLock = TRUE;
 
-                size_t count = s_aSavedMessages.Count();
+                size_t count = s_aSavedMessages.GetCount();
                 for ( size_t n = 0; n < count; n++ )
                 {
                     MSG& msg = s_aSavedMessages[n];
 
-                    if ( !ProcessMessage((WXMSG *)&msg) )
-                    {
-                        ::TranslateMessage(&msg);
-                        ::DispatchMessage(&msg);
-                    }
+                    DoMessage((WXMSG *)&msg);
                 }
 
                 s_aSavedMessages.Empty();
