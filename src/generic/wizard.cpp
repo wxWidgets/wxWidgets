@@ -532,11 +532,12 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     {
         // terminate successfully
         EndModal(wxID_OK);
-        if ( !IsModal() )
-         {
-           wxWizardEvent event(wxEVT_WIZARD_FINISHED, GetId(),FALSE, 0);
-           (void)GetEventHandler()->ProcessEvent(event);
-         }
+
+        // and notify the user code (this is especially useful for modeless
+        // wizards)
+        wxWizardEvent event(wxEVT_WIZARD_FINISHED, GetId(), FALSE, 0);
+        (void)GetEventHandler()->ProcessEvent(event);
+
         return TRUE;
     }
 
