@@ -337,6 +337,12 @@ void wxTextCtrl::SetValue( const wxString &value )
     {
         gtk_entry_set_text( GTK_ENTRY(m_text), tmp.mbc_str() );
     }
+
+    // GRG, Jun/2000: Changed this after a lot of discussion in
+    //   the lists. wxWindows 2.2 will have a set of flags to
+    //   customize this behaviour.
+    SetInsertionPoint(0);
+
     m_modified = FALSE;
 }
 

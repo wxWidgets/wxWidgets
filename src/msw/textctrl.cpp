@@ -427,7 +427,11 @@ void wxTextCtrl::SetValue(const wxString& value)
 
         // for compatibility with the GTK and because it is more logical, we
         // move the cursor to the end of the text after SetValue()
-        SetInsertionPointEnd();
+
+        // GRG, Jun/2000: Changed this back after a lot of discussion
+        //   in the lists. wxWindows 2.2 will have a set of flags to
+        //   customize this behaviour.
+        //SetInsertionPointEnd();
 
         AdjustSpaceLimit();
     }
