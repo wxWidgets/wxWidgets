@@ -5892,3 +5892,36 @@ IMPLEMENT_DYNAMIC_CLASS(wxIdleWakeUpModule, wxModule)
 
 #endif // __WXWINCE__
 
+#ifdef __WXWINCE__
+
+#if wxUSE_STATBOX
+static void wxAdjustZOrder(wxWindow* parent)
+{
+    if (parent->IsKindOf(CLASSINFO(wxStaticBox)))
+    {
+        // Set the z-order correctly
+        SetWindowPos((HWND) parent->GetHWND(), HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
+    }
+    
+    wxWindowList::compatibility_iterator current = parent->GetChildren().GetFirst();
+    while (current)
+    {
+        wxWindow *childWin = current->GetData();
+        wxAdjustZOrder(childWin);
+        current = current->GetNext();
+    }
+}
+#endif
+
+// We need to adjust the z-order of static boxes in WinCE, to
+// make 'contained' controls visible
+void wxWindowMSW::OnInitDialog( wxInitDialogEvent& event )
+{
+#if wxUSE_STATBOX
+    wxAdjustZOrder(this);
+#endif
+    
+    event.Skip();
+}
+#endif
+

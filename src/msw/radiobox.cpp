@@ -347,9 +347,7 @@ bool wxRadioBox::Create(wxWindow *parent,
 
 #ifdef __WXWINCE__
     // Set the z-order correctly
-    RECT rect;
-    GetWindowRect(GetHwnd(), & rect);
-    SetWindowPos(GetHwnd(), HWND_BOTTOM, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, 0);
+    SetWindowPos(GetHwnd(), HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
 #endif
 
     SetSelection(0);
