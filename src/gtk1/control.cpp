@@ -5,7 +5,7 @@
 // Created:     01/02/97
 // Id:
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -22,12 +22,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxControl,wxWindow)
 
 wxControl::wxControl(void)
 {
-  m_label = "";
   m_needParent = TRUE;
 };
 
-wxControl::wxControl( wxWindow *parent, wxWindowID id, 
-      const wxPoint &pos, const wxSize &size, 
+wxControl::wxControl( wxWindow *parent, wxWindowID id,
+      const wxPoint &pos, const wxSize &size,
       long style, const wxString &name ) :
   wxWindow( parent, id, pos, size, style, name )
 {
@@ -39,7 +38,17 @@ void wxControl::Command( wxCommandEvent &WXUNUSED(event) )
 
 void wxControl::SetLabel( const wxString &label )
 {
-  m_label = label;
+  for ( const char *pc = label; *pc != '\0'; pc++ ) {
+    if ( *pc == '&' ) {
+      pc++; // skip it
+#if 0 // it would be unused anyhow for now - kbd interface not done yet
+      if ( *pc != '&' )
+        m_chAccel = *pc;
+#endif
+    }
+
+    m_label << *pc;
+  }
 };
 
 wxString wxControl::GetLabel(void) const

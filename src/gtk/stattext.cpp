@@ -42,7 +42,9 @@ bool wxStaticText::Create( wxWindow *parent, wxWindowID id, const wxString &labe
   
   PreCreation( parent, id, pos, size, style, name );
   
-  m_widget = gtk_label_new( label );
+  wxControl::SetLabel(label);
+  m_widget = gtk_label_new( m_label );
+
   GtkJustification justify;
   if ( style & wxALIGN_CENTER )
     justify = GTK_JUSTIFY_CENTER;
@@ -73,5 +75,7 @@ wxString wxStaticText::GetLabel(void) const
 
 void wxStaticText::SetLabel( const wxString &label )
 {
-  gtk_label_set( GTK_LABEL(m_widget), label );
+  wxControl::SetLabel(label);
+
+  gtk_label_set( GTK_LABEL(m_widget), m_label );
 };

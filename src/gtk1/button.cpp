@@ -41,39 +41,39 @@ wxButton::wxButton(void)
 };
 
 wxButton::wxButton( wxWindow *parent, wxWindowID id, const wxString &label,
-      const wxPoint &pos, const wxSize &size, 
+      const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
   Create( parent, id, label, pos, size, style, name );
 };
 
 bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
-      const wxPoint &pos, const wxSize &size, 
+      const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
   m_needParent = TRUE;
-  
+
   wxSize newSize = size;
 
   PreCreation( parent, id, pos, newSize, style, name );
-  
-  m_label = label;
-  m_widget = gtk_button_new_with_label( label );
-  
+
+  SetLabel(label);
+  m_widget = gtk_button_new_with_label( m_label );
+
   if (newSize.x == -1) newSize.x = 15+gdk_string_measure( m_widget->style->font, label );
   if (newSize.y == -1) newSize.y = 26;
   SetSize( newSize.x, newSize.y );
-  
-  gtk_signal_connect( GTK_OBJECT(m_widget), "clicked", 
+
+  gtk_signal_connect( GTK_OBJECT(m_widget), "clicked",
     GTK_SIGNAL_FUNC(gtk_button_clicked_callback), (gpointer*)this );
 
   PostCreation();
-  
+
   Show( TRUE );
-    
+
   return TRUE;
 };
-      
+
 void wxButton::SetDefault(void)
 {
 };
