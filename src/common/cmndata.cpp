@@ -203,16 +203,9 @@ wxPrintData::wxPrintData(const wxPrintData& printData)
 wxPrintData::~wxPrintData()
 {
 #ifdef __WXMSW__
-    HGLOBAL hDevMode = (HGLOBAL) hDevMode;
+    HGLOBAL hDevMode = (HGLOBAL) m_devMode;
     if (hDevMode )
         GlobalFree(hDevMode);
-   /*
-        PRINTDLG *pd = (PRINTDLG *) m_printData;
-        if ( pd && pd->hDevMode )
-        GlobalFree(pd->hDevMode);
-        if ( pd )
-        delete pd;
-    */
 #endif
 }
 
