@@ -63,23 +63,31 @@ void wxPolygonShape::Create(wxList *the_points)
 {
   ClearPoints();
 
-  m_originalPoints = the_points;
-
-  // Duplicate the list of points
-  m_points = new wxList;
-
-  wxNode *node = the_points->GetFirst();
-  while (node)
+  if (!the_points)
   {
-    wxRealPoint *point = (wxRealPoint *)node->GetData();
-    wxRealPoint *new_point = new wxRealPoint(point->x, point->y);
-    m_points->Append((wxObject*) new_point);
-    node = node->GetNext();
+      m_originalPoints = new wxList;
+      m_points = new wxList;
   }
-  CalculateBoundingBox();
-  m_originalWidth = m_boundWidth;
-  m_originalHeight = m_boundHeight;
-  SetDefaultRegionSize();
+  else
+  {
+      m_originalPoints = the_points;
+      
+      // Duplicate the list of points
+      m_points = new wxList;
+      
+      wxNode *node = the_points->GetFirst();
+      while (node)
+      {
+          wxRealPoint *point = (wxRealPoint *)node->GetData();
+          wxRealPoint *new_point = new wxRealPoint(point->x, point->y);
+          m_points->Append((wxObject*) new_point);
+          node = node->GetNext();
+      }
+      CalculateBoundingBox();
+      m_originalWidth = m_boundWidth;
+      m_originalHeight = m_boundHeight;
+      SetDefaultRegionSize();
+  }
 }
 
 wxPolygonShape::~wxPolygonShape()

@@ -138,7 +138,7 @@ class WXDLLIMPEXP_OGL wxShapeRegion: public wxObject
 
   // Accessors
   inline void SetText(const wxString& s)
-    { m_regionText = s; m_formattedText.Append(new wxShapeTextLine(0,0,s));}
+    { m_regionText = s; }
   void SetFont(wxFont *f);
   void SetMinSize(double w, double h);
   void SetSize(double w, double h);

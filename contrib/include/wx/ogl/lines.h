@@ -248,6 +248,8 @@ class WXDLLIMPEXP_OGL wxLineShape: public wxShape
   void SetAlignmentType(bool isEnd, int alignType);
   bool GetAlignmentOrientation(bool isEnd);
   int GetAlignmentType(bool isEnd);
+  int GetAlignmentStart() const { return m_alignmentStart; }
+  int GetAlignmentEnd() const { return m_alignmentEnd; }
 
   // Find next control point in line after the start/end point
   // (depending on whether the node object is at start or end)

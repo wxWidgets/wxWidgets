@@ -400,6 +400,7 @@ class WXDLLIMPEXP_OGL wxShape: public wxShapeEvtHandler
                                      int nth = 0, int no_arcs = 1, wxLineShape *line = NULL);
   virtual int GetNumberOfAttachments() const;
   virtual bool AttachmentIsValid(int attachment) const;
+  virtual wxList& GetAttachments() { return m_attachmentPoints; }
 
   // Only get the attachment position at the _edge_ of the shape, ignoring
   // branching mode. This is used e.g. to indicate the edge of interest, not the point
@@ -506,7 +507,8 @@ class WXDLLIMPEXP_OGL wxShape: public wxShapeEvtHandler
 
   // Rotate about the given axis by the given amount in radians.
   virtual void Rotate(double x, double y, double theta);
-  virtual inline double GetRotation() const { return m_rotation; }
+  virtual double GetRotation() const { return m_rotation; }
+  virtual void SetRotation(double rotation) { m_rotation = rotation; }
 
   void ClearAttachments();
 
@@ -629,9 +631,16 @@ class WXDLLIMPEXP_OGL wxPolygonShape: public wxShape
   void Copy(wxShape& copy);
 
   inline wxList *GetPoints() { return m_points; }
+  inline wxList *GetOriginalPoints() { return m_originalPoints; }
 
   // Rotate about the given axis by the given amount in radians
   virtual void Rotate(double x, double y, double theta);
+
+  double GetOriginalWidth() const { return m_originalWidth; }
+  double GetOriginalHeight() const { return m_originalHeight; }
+
+  void SetOriginalWidth(double w) { m_originalWidth = w; }
+  void SetOriginalHeight(double h) { m_originalHeight = h; }
 
  private:
   wxList*       m_points;
@@ -654,6 +663,7 @@ class WXDLLIMPEXP_OGL wxRectangleShape: public wxShape
   void OnDraw(wxDC& dc);
   void SetSize(double x, double y, bool recursive = TRUE);
   void SetCornerRadius(double rad); // If > 0, rounded corners
+  double GetCornerRadius() const { return m_cornerRadius; }
 
 #if wxUSE_PROLOGIO
   void WriteAttributes(wxExpr *clause);
