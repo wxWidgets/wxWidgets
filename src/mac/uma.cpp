@@ -1,5 +1,8 @@
 #include "wx/defs.h"
 #include "wx/dc.h"
+#ifndef __DARWIN__
+#include <Scrap.h>
+#endif
 #include "wx/mac/uma.h"
 #include <MacTextEditor.h>
 
@@ -788,3 +791,18 @@ wxMacPortStateHelper::~wxMacPortStateHelper()
 	}
 }
 
+OSStatus UMAPutScrap( Size size , OSType type , void *data )
+{
+	OSStatus err = noErr ;
+#if !TARGET_CARBON
+    err = PutScrap( size , type , data ) ;
+#else
+    ScrapRef    scrap;
+    err = GetCurrentScrap (&scrap); 
+    if ( !err )
+    {
+        err = PutScrapFlavor (scrap, type , 0, size, data);
+    }
+#endif
+	return err ;
+}

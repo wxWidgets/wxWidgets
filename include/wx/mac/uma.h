@@ -214,6 +214,10 @@ OSStatus UMAGetHelpMenu(
 
 OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState ) ;
 
+// clipboard
+
+OSStatus UMAPutScrap( Size size , OSType type , void *data ) ;
+
 // accessor helpers
 
 #if !TARGET_CARBON
