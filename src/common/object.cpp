@@ -151,8 +151,22 @@ wxClassInfo *wxClassInfo::FindClass(const wxChar *className)
     }
 }
 
-    // Set pointers to base class(es) to speed up IsKindOf
+// a tiny InitializeClasses() helper
+/* static */
+inline wxClassInfo *wxClassInfo::GetBaseByName(const wxChar *name)
+{
+    if ( !name )
+        return NULL;
 
+    wxClassInfo *classInfo = (wxClassInfo *)sm_classTable->Get(name);
+
+    // this must be fixed, other things risk work wrongly later if you get this
+    wxASSERT_MSG( classInfo, _T("base class unknown to wxWindows RTTI") );
+
+    return classInfo;
+}
+
+// Set pointers to base class(es) to speed up IsKindOf
 void wxClassInfo::InitializeClasses()
 {
     // using IMPLEMENT_DYNAMIC_CLASS() macro twice (which may happen if you
@@ -185,10 +199,8 @@ void wxClassInfo::InitializeClasses()
 
     for(info = sm_first; info; info = info->m_next)
     {
-        if (info->GetBaseClassName1())
-            info->m_baseInfo1 = (wxClassInfo *)sm_classTable->Get(info->GetBaseClassName1());
-        if (info->GetBaseClassName2())
-            info->m_baseInfo2 = (wxClassInfo *)sm_classTable->Get(info->GetBaseClassName2());
+        info->m_baseInfo1 = GetBaseByName(info->GetBaseClassName1());
+        info->m_baseInfo2 = GetBaseByName(info->GetBaseClassName2());
     }
 }
 

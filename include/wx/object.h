@@ -122,11 +122,16 @@ public:
     static wxClassInfo      *sm_first;
     wxClassInfo             *m_next;
 
+    // FIXME: this should be private (currently used directly by way too
+    //        many clients)
     static wxHashTable      *sm_classTable;
+
+private:
+    // InitializeClasses() helper
+    static wxClassInfo *GetBaseByName(const wxChar *name);
 };
 
 WXDLLEXPORT wxObject *wxCreateDynamicObject(const wxChar *name);
-
 
 // ----------------------------------------------------------------------------
 // Dynamic class macros
