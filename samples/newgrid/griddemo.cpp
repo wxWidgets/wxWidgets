@@ -38,7 +38,7 @@ bool GridApp::OnInit()
 {
     GridFrame *frame = new GridFrame;
     frame->Show( TRUE );
-    
+
     return TRUE;
 }
 
@@ -46,21 +46,21 @@ bool GridApp::OnInit()
 
 BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_TOGGLEROWLABELS,  GridFrame::ToggleRowLabels )
-    EVT_MENU( ID_TOGGLECOLLABELS,  GridFrame::ToggleColLabels )    
+    EVT_MENU( ID_TOGGLECOLLABELS,  GridFrame::ToggleColLabels )
     EVT_MENU( ID_TOGGLEEDIT, GridFrame::ToggleEditing )
-    EVT_MENU( ID_SETLABELCOLOUR, GridFrame::SetLabelColour )    
-    EVT_MENU( ID_SETLABELTEXTCOLOUR, GridFrame::SetLabelTextColour )    
-    EVT_MENU( ID_ROWLABELHORIZALIGN, GridFrame::SetRowLabelHorizAlignment )    
-    EVT_MENU( ID_ROWLABELVERTALIGN, GridFrame::SetRowLabelVertAlignment )    
-    EVT_MENU( ID_COLLABELHORIZALIGN, GridFrame::SetColLabelHorizAlignment )    
-    EVT_MENU( ID_COLLABELVERTALIGN, GridFrame::SetColLabelVertAlignment )    
+    EVT_MENU( ID_SETLABELCOLOUR, GridFrame::SetLabelColour )
+    EVT_MENU( ID_SETLABELTEXTCOLOUR, GridFrame::SetLabelTextColour )
+    EVT_MENU( ID_ROWLABELHORIZALIGN, GridFrame::SetRowLabelHorizAlignment )
+    EVT_MENU( ID_ROWLABELVERTALIGN, GridFrame::SetRowLabelVertAlignment )
+    EVT_MENU( ID_COLLABELHORIZALIGN, GridFrame::SetColLabelHorizAlignment )
+    EVT_MENU( ID_COLLABELVERTALIGN, GridFrame::SetColLabelVertAlignment )
     EVT_MENU( ID_GRIDLINECOLOUR, GridFrame::SetGridLineColour )
     EVT_MENU( ID_INSERTROW, GridFrame::InsertRow )
     EVT_MENU( ID_INSERTCOL, GridFrame::InsertCol )
     EVT_MENU( ID_DELETEROW, GridFrame::DeleteSelectedRows )
     EVT_MENU( ID_DELETECOL, GridFrame::DeleteSelectedCols )
     EVT_MENU( ID_CLEARGRID, GridFrame::ClearGrid )
-    
+
     EVT_MENU( ID_ABOUT, GridFrame::About )
     EVT_MENU( wxID_EXIT, GridFrame::OnQuit )
 
@@ -71,10 +71,10 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_GRID_SELECT_CELL( GridFrame::OnSelectCell )
     EVT_GRID_RANGE_SELECT( GridFrame::OnRangeSelected )
     EVT_GRID_CELL_CHANGE( GridFrame::OnCellValueChanged )
-    
+
 END_EVENT_TABLE()
 
-    
+
 GridFrame::GridFrame()
         : wxFrame( (wxFrame *)NULL, -1, "wxWindows grid class demo",
                    wxDefaultPosition,
@@ -82,17 +82,17 @@ GridFrame::GridFrame()
 {
     int gridW = 600, gridH = 300;
     int logW = gridW, logH = 80;
-    
+
     wxMenu *fileMenu = new wxMenu;
-    fileMenu->Append( wxID_EXIT, "E&xit" );
-    
+    fileMenu->Append( wxID_EXIT, "E&xit\tAlt-X" );
+
     wxMenu *viewMenu = new wxMenu;
     viewMenu->Append( ID_TOGGLEROWLABELS,  "&Row labels", "", TRUE );
     viewMenu->Append( ID_TOGGLECOLLABELS,  "&Col labels", "", TRUE );
     viewMenu->Append( ID_TOGGLEEDIT,  "&Editable", "", TRUE );
     viewMenu->Append( ID_SETLABELCOLOUR, "Set &label colour" );
     viewMenu->Append( ID_SETLABELTEXTCOLOUR, "Set label &text colour" );
-    
+
     wxMenu *rowLabelMenu = new wxMenu;
 
     viewMenu->Append( ID_ROWLABELALIGN, "R&ow label alignment",
@@ -100,8 +100,8 @@ GridFrame::GridFrame()
                       "Change alignment of row labels" );
 
     rowLabelMenu->Append( ID_ROWLABELHORIZALIGN, "&Horizontal" );
-    rowLabelMenu->Append( ID_ROWLABELVERTALIGN, "&Vertical" );    
-    
+    rowLabelMenu->Append( ID_ROWLABELVERTALIGN, "&Vertical" );
+
     wxMenu *colLabelMenu = new wxMenu;
 
     viewMenu->Append( ID_COLLABELALIGN, "Col l&abel alignment",
@@ -119,10 +119,10 @@ GridFrame::GridFrame()
     editMenu->Append( ID_DELETEROW, "Delete selected ro&ws" );
     editMenu->Append( ID_DELETECOL, "Delete selected co&ls" );
     editMenu->Append( ID_CLEARGRID, "Cl&ear grid cell contents" );
-    
+
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append( ID_ABOUT, "&About wxGrid demo" );
-    
+
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( fileMenu, "&File" );
     menuBar->Append( viewMenu, "&View" );
@@ -135,14 +135,14 @@ GridFrame::GridFrame()
                        -1,
                        wxPoint( 0, 0 ),
                        wxSize( 400, 300 ) );
-            
+
     logWin = new wxTextCtrl( this,
                              -1,
                              wxEmptyString,
                              wxPoint( 0, gridH + 20 ),
                              wxSize( logW, logH ),
                              wxTE_MULTILINE );
-                             
+
     logger = new wxLogTextCtrl( logWin );
     logger->SetActiveTarget( logger );
     logger->SetTimestamp( NULL );
@@ -154,7 +154,7 @@ GridFrame::GridFrame()
 
     grid->SetRowSize( 0, 60 );
     grid->SetCellValue( 0, 0, "Ctrl+Home\nwill go to\nthis cell" );
-    
+
     grid->SetCellValue( 0, 1, "Blah" );
     grid->SetCellValue( 0, 2, "Blah" );
 
@@ -167,17 +167,17 @@ GridFrame::GridFrame()
     topSizer->Add( grid,
                    1,
                    wxEXPAND );
-                   
+
     topSizer->Add( logWin,
-                   0, 
+                   0,
                    wxEXPAND );
-                   
+
     SetAutoLayout( TRUE );
     SetSizer( topSizer );
-    
+
     topSizer->Fit( this );
     topSizer->SetSizeHints( this );
-    
+
     Centre();
     SetDefaults();
 }
@@ -261,13 +261,13 @@ void GridFrame::SetRowLabelHorizAlignment( wxCommandEvent& WXUNUSED(ev) )
 {
     int horiz, vert;
     grid->GetRowLabelAlignment( &horiz, &vert );
-    
+
     switch ( horiz )
     {
         case wxLEFT:
             horiz = wxCENTRE;
             break;
-            
+
         case wxCENTRE:
             horiz = wxRIGHT;
             break;
@@ -284,13 +284,13 @@ void GridFrame::SetRowLabelVertAlignment( wxCommandEvent& WXUNUSED(ev) )
 {
     int horiz, vert;
     grid->GetRowLabelAlignment( &horiz, &vert );
-    
+
     switch ( vert )
     {
         case wxTOP:
             vert = wxCENTRE;
             break;
-            
+
         case wxCENTRE:
             vert = wxBOTTOM;
             break;
@@ -308,13 +308,13 @@ void GridFrame::SetColLabelHorizAlignment( wxCommandEvent& WXUNUSED(ev) )
 {
     int horiz, vert;
     grid->GetColLabelAlignment( &horiz, &vert );
-    
+
     switch ( horiz )
     {
         case wxLEFT:
             horiz = wxCENTRE;
             break;
-            
+
         case wxCENTRE:
             horiz = wxRIGHT;
             break;
@@ -332,13 +332,13 @@ void GridFrame::SetColLabelVertAlignment( wxCommandEvent& WXUNUSED(ev) )
 {
     int horiz, vert;
     grid->GetColLabelAlignment( &horiz, &vert );
-    
+
     switch ( vert )
     {
         case wxTOP:
             vert = wxCENTRE;
             break;
-            
+
         case wxCENTRE:
             vert = wxBOTTOM;
             break;
@@ -424,7 +424,7 @@ void GridFrame::OnLabelLeftClick( wxGridEvent& ev )
 
     if ( ev.ShiftDown() ) logBuf << " (shift down)";
     wxLogMessage( "%s", logBuf.c_str() );
-    
+
     // you must call event skip if you want default grid processing
     //
     ev.Skip();
@@ -450,7 +450,7 @@ void GridFrame::OnRowSize( wxGridSizeEvent& ev )
     logBuf = "";
     logBuf << "Resized row " << ev.GetRowOrCol();
     wxLogMessage( "%s", logBuf.c_str() );
-    
+
     ev.Skip();
 }
 
@@ -460,7 +460,7 @@ void GridFrame::OnColSize( wxGridSizeEvent& ev )
     logBuf = "";
     logBuf << "Resized col " << ev.GetRowOrCol();
     wxLogMessage( "%s", logBuf.c_str() );
-    
+
     ev.Skip();
 }
 
@@ -471,7 +471,7 @@ void GridFrame::OnSelectCell( wxGridEvent& ev )
     logBuf << "Selected cell at row " << ev.GetRow()
            << " col " << ev.GetCol();
     wxLogMessage( "%s", logBuf.c_str() );
-    
+
     // you must call Skip() if you want the default processing
     // to occur in wxGrid
     ev.Skip();
@@ -484,9 +484,9 @@ void GridFrame::OnRangeSelected( wxGridRangeSelectEvent& ev )
             << " col " << ev.GetLeftCol()
             << " to row " << ev.GetBottomRow()
             << " col " << ev.GetRightCol();
-    
+
     wxLogMessage( "%s", logBuf.c_str() );
-    
+
     ev.Skip();
 }
 
@@ -494,11 +494,11 @@ void GridFrame::OnCellValueChanged( wxGridEvent& ev )
 {
     logBuf = "";
     logBuf  << "Value changed for cell at"
-            << " row " << ev.GetRow() 
+            << " row " << ev.GetRow()
             << " col " << ev.GetCol();
-    
+
     wxLogMessage( "%s", logBuf.c_str() );
-    
+
     ev.Skip();
 }
 

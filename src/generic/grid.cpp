@@ -36,7 +36,6 @@
 
 #include "wx/generic/grid.h"
 
-
 //////////////////////////////////////////////////////////////////////
 
 wxGridCellCoords wxGridNoCellCoords( -1, -1 );
@@ -47,6 +46,9 @@ wxRect           wxGridNoCellRect( -1, -1, -1, -1 );
 
 WX_DEFINE_OBJARRAY(wxGridCellCoordsArray)
 
+// scroll line size
+// TODO: fixed so far - make configurable later (and also different for x/y)
+static const size_t GRID_SCROLL_LINE = 10;
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -139,7 +141,7 @@ wxString wxGridTableBase::GetColLabelValue( int col )
     unsigned int i, n;
     for ( n = 1; ; n++ )
     {
-        s += ('A' + (char)( col%26 ));
+        s += (_T('A') + (wxChar)( col%26 ));
         col = col/26 - 1;
         if ( col < 0 ) break;
     }
@@ -639,7 +641,7 @@ void wxGridTextCtrl::OnKeyDown( wxKeyEvent& event )
                     // the other ports can handle a Return key press
                     //
                     event.Skip();
-#endif            
+#endif
                 }
             }
             break;
@@ -670,7 +672,7 @@ void wxGridTextCtrl::OnKeyDown( wxKeyEvent& event )
 void wxGridTextCtrl::SetStartValue( const wxString& s )
 {
     startValue = s;
-    wxTextCtrl::SetValue( s.c_str() );
+    wxTextCtrl::SetValue(s);
 }
 
 
@@ -912,7 +914,7 @@ wxGrid::~wxGrid()
 //
 
 void wxGrid::Create()
-{    
+{
     int colLblH = WXGRID_DEFAULT_COL_LABEL_HEIGHT;
     int rowLblW = WXGRID_DEFAULT_ROW_LABEL_WIDTH;
 
@@ -1104,8 +1106,8 @@ void wxGrid::CalcDimensions()
         //
         int x, y;
         GetViewStart( &x, &y );
-        SetScrollbars( 10, 10,
-                       right/10, bottom/10,
+        SetScrollbars( GRID_SCROLL_LINE, GRID_SCROLL_LINE,
+                       right/GRID_SCROLL_LINE, bottom/GRID_SCROLL_LINE,
                        x, y );
     }
 }
@@ -1864,10 +1866,10 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
         m_isDragging = TRUE;
         if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
         {
-	    // Hide the edit control, so it
-	    // won't interfer with drag-shrinking.
-	    if ( IsCellEditControlEnabled() )
-	        HideCellEditControl();
+            // Hide the edit control, so it
+            // won't interfer with drag-shrinking.
+            if ( IsCellEditControlEnabled() )
+                HideCellEditControl();
             if ( coords != wxGridNoCellCoords )
             {
                 if ( !IsSelection() )
@@ -1876,7 +1878,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 }
                 else
                 {
-		    SelectBlock( m_currentCellCoords, coords );
+                    SelectBlock( m_currentCellCoords, coords );
                 }
             }
         }
@@ -1931,10 +1933,10 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 }
             }
 
-	    // Show the edit control, if it has
-	    // been hidden for drag-shrinking.
-	    if ( IsCellEditControlEnabled() )
-	        ShowCellEditControl();
+            // Show the edit control, if it has
+            // been hidden for drag-shrinking.
+            if ( IsCellEditControlEnabled() )
+                ShowCellEditControl();
 
             m_dragLastPos = -1;
         }
@@ -3040,7 +3042,7 @@ void wxGrid::ShowCellEditControl()
             rect.SetRight( rect.GetRight() + 2*extra );
             rect.SetBottom( rect.GetBottom() + 2*extra );
 
-            
+
             m_cellEditCtrl->SetSize( rect );
             m_cellEditCtrl->Show( TRUE );
 
@@ -3354,6 +3356,11 @@ void wxGrid::MakeCellVisible( int row, int col )
                 h += m_rowHeights[i];
                 ypos -= m_rowHeights[i];
             }
+
+            // we divide it later by GRID_SCROLL_LINE, make sure that we don't
+            // have rounding errors (this is important, because if we do, we
+            // might not scroll at all and some cells won't be redrawn)
+            ypos += GRID_SCROLL_LINE / 2;
         }
 
         if ( left < 0 )
@@ -3371,12 +3378,15 @@ void wxGrid::MakeCellVisible( int row, int col )
                 w += m_colWidths[i];
                 xpos -= m_colWidths[i];
             }
+
+            // see comment for ypos above
+            xpos += GRID_SCROLL_LINE / 2;
         }
 
         if ( xpos != -1  ||  ypos != -1 )
         {
-            if ( xpos != -1 ) xpos = xpos/10;
-            if ( ypos != -1 ) ypos = ypos/10;
+            if ( xpos != -1 ) xpos /= GRID_SCROLL_LINE;
+            if ( ypos != -1 ) ypos /= GRID_SCROLL_LINE;
             Scroll( xpos, ypos );
             AdjustScrollbars();
         }
@@ -4305,41 +4315,41 @@ void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol )
         leftCol = rightCol;
         rightCol = temp;
     }
-    
+
     updateTopLeft = m_selectedTopLeft;
     if (m_selectedTopLeft != wxGridCellCoords( topRow, leftCol ) )
     {
         m_selectedTopLeft = wxGridCellCoords( topRow, leftCol );
-	if (updateTopLeft == wxGridNoCellCoords)
-	{
-	    updateTopLeft = m_selectedTopLeft;
-	}
-	else
-	{
-	     if(updateTopLeft.GetRow() > topRow)
-	        updateTopLeft.SetRow(topRow);
-	    if (updateTopLeft.GetCol() > leftCol)
-	      updateTopLeft.SetCol(leftCol);
-	}
-	changed = true;
+        if (updateTopLeft == wxGridNoCellCoords)
+        {
+            updateTopLeft = m_selectedTopLeft;
+        }
+        else
+        {
+             if(updateTopLeft.GetRow() > topRow)
+                updateTopLeft.SetRow(topRow);
+            if (updateTopLeft.GetCol() > leftCol)
+              updateTopLeft.SetCol(leftCol);
+        }
+        changed = true;
     }
 
     updateBottomRight = m_selectedBottomRight;
     if (m_selectedBottomRight != wxGridCellCoords( bottomRow, rightCol ) )
     {
         m_selectedBottomRight = wxGridCellCoords( bottomRow, rightCol );
-	if (updateBottomRight == wxGridNoCellCoords)
-	{
-	    updateBottomRight = m_selectedBottomRight;
-	}
-	else
-	{
-	    if (updateBottomRight.GetRow() < bottomRow)
-	        updateBottomRight.SetRow(bottomRow);
-	    if (updateBottomRight.GetCol() < rightCol)
-	        updateBottomRight.SetCol(rightCol);
-	}
-	changed = true;
+        if (updateBottomRight == wxGridNoCellCoords)
+        {
+            updateBottomRight = m_selectedBottomRight;
+        }
+        else
+        {
+            if (updateBottomRight.GetRow() < bottomRow)
+                updateBottomRight.SetRow(bottomRow);
+            if (updateBottomRight.GetCol() < rightCol)
+                updateBottomRight.SetCol(rightCol);
+        }
+        changed = true;
     }
 
     if (changed)
