@@ -163,6 +163,26 @@ Centres the dialog box on the display.
 Used for two-step dialog box construction. See \helpref{wxDialog::wxDialog}{wxdialogctor}\rtfsp
 for details.
 
+\membersection{wxDialog::CreateButtonSizer}\label{wxdialogcreatebuttonsizer}
+
+\func{wxSizer*}{CreateButtonSizer}{\param{long}{ flags}}
+
+Creates a sizer with standard buttons. {\it flags} is a bit list
+of the following flags: wxOK, wxCANCEL, wxYES, wxNO, wxHELP, wxNO\_DEFAULT.
+
+The sizer lays out the buttons in a manner appropriate to the platform.
+
+This function simply calls \helpref{CreateStdDialogButtonSizer}{wxdialogcreatestddialogbuttonsizer}.
+
+\membersection{wxDialog::CreateStdDialogButtonSizer}\label{wxdialogcreatestddialogbuttonsizer}
+
+\func{wxStdDialogButtonSizer*}{CreateStdDialogButtonSizer}{\param{long}{ flags}}
+
+Creates a \helpref{wxStdDialogButtonSizer}{wxstddialogbuttonsizer} with standard buttons. {\it flags} is a bit list
+of the following flags: wxOK, wxCANCEL, wxYES, wxNO, wxHELP, wxNO\_DEFAULT.
+
+The sizer lays out the buttons in a manner appropriate to the platform.
+
 \membersection{wxDialog::EndModal}\label{wxdialogendmodal}
 
 \func{void}{EndModal}{\param{int }{retCode}}
