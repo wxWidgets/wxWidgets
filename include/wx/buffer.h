@@ -16,8 +16,6 @@
 
 #include "wx/wxchar.h"
 
-#include <string.h> // strdup
-
 // ----------------------------------------------------------------------------
 // Special classes for (wide) character strings: they use malloc/free instead
 // of new/delete
@@ -95,32 +93,11 @@ private:                                                                    \
     chartype *m_str;                                                        \
 }
 
-#ifndef strdup
-inline char *strdup(const char *cs)
-{
-    size_t len = 0;
-    while (cs[len] != 0)
-        len++;
-    const size_t siz = (len + 1)*sizeof(char);
-    char *csCopy = (char *)malloc(siz);
-    memcpy(csCopy, cs, siz);
-    return csCopy;
-}
-#endif
-
-DEFINE_BUFFER(wxCharBuffer, char, strdup);
+DEFINE_BUFFER(wxCharBuffer, char, wxStrdupA);
 
 #if wxUSE_WCHAR_T
 
-inline wchar_t *wxWcsdupReplacement(const wchar_t *wcs)
-{
-    const size_t siz = (wxWcslen(wcs) + 1)*sizeof(wchar_t);
-    wchar_t *wcsCopy = (wchar_t *)malloc(siz);
-    memcpy(wcsCopy, wcs, siz);
-    return wcsCopy;
-}
-
-DEFINE_BUFFER(wxWCharBuffer, wchar_t, wxWcsdupReplacement);
+DEFINE_BUFFER(wxWCharBuffer, wchar_t, wxStrdupW);
 
 #endif // wxUSE_WCHAR_T
 
