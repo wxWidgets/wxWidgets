@@ -60,6 +60,10 @@ class PyOnDemandOutputWindow:
             wx.CallAfter(self.frame.Close)
 
 
+    def flush(self):
+        pass
+    
+
 
 #----------------------------------------------------------------------
 
