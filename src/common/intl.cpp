@@ -678,7 +678,7 @@ bool wxLocale::Init(int language, int flags)
     const wxChar *retloc;
 
     // Set the locale:
-#ifdef __UNIX__
+#if defined(__UNIX__) && !defined(__WXMAC__)
     if (language == wxLANGUAGE_DEFAULT)
         locale = wxEmptyString;
     else
@@ -789,7 +789,7 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
     size_t i = 0,
            count = ms_languagesDB->GetCount();
 
-#if defined(__UNIX__)
+#if defined(__UNIX__) && !defined(__WXMAC__)
     // first get the string identifying the language from the environment
     wxString langFull;
     if (!wxGetEnv(wxT("LC_ALL"), &langFull) &&
@@ -912,7 +912,7 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
         }
     }
 #elif defined(__WXMAC__)
-    char* lc = NULL ;
+    const char* lc = NULL ;
     long lang = GetScriptVariable( smSystemScript, smScriptLang) ;
     switch( GetScriptManagerVariable( smRegionCode ) ) {
       case verUS :
