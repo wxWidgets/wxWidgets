@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #----------------------------------------------------------------------
 
-import sys, os, string
+import sys, os, string, glob
 from distutils.core      import setup, Extension
 from distutils.file_util import copy_file
 from distutils.dir_util  import mkpath
@@ -832,6 +832,19 @@ if not GL_ONLY and BUILD_DLLWIDGET:
     wxpExtensions.append(ext)
 
 
+#----------------------------------------------------------------------
+# Tools and scripts
+#----------------------------------------------------------------------
+
+TOOLS = [("wxPython/tools",        glob.glob("tools/*.py")),
+         ("wxPython/tools/XRCed",  glob.glob("tools/XRCed/*.py") +
+                                   glob.glob("tools/XRCed/*.xrc") +
+                                   ["tools/XRCed/CHANGES",
+                                    "tools/XRCed/TODO",
+                                    "tools/XRCed/README"]),
+         ]
+
+
 
 
 #----------------------------------------------------------------------
@@ -858,6 +871,8 @@ if __name__ == "__main__":
 
               ext_package = PKGDIR,
               ext_modules = wxpExtensions,
+
+              ##data_files = TOOLS,
               )
 
     else:
@@ -874,6 +889,7 @@ if __name__ == "__main__":
 
               ext_package = PKGDIR,
               ext_modules = wxpExtensions,
+
               )
 
 
