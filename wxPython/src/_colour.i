@@ -23,13 +23,13 @@ intensity values, and is used to determine drawing colours, window colours,
 etc.  Valid RGB values are in the range 0 to 255.
 
 In wxPython there are typemaps that will automatically convert from a colour
-name, or from a \"#RRGGBB\" colour hex value string to a wx.Colour object when
+name, or from a '#RRGGBB' colour hex value string to a wx.Colour object when
 calling C++ methods that expect a wxColour.  This means that the following are
 all equivallent:
 
     win.SetBackgroundColour(wxColour(0,0,255))
-    win.SetBackgroundColour(\"BLUE\")
-    win.SetBackgroundColour(\"#0000FF\")
+    win.SetBackgroundColour('BLUE')
+    win.SetBackgroundColour('#0000FF')
 
 You can retrieve the various current system colour settings with
 wx.SystemSettings.GetColour.");
