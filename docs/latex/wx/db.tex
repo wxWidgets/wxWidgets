@@ -6,9 +6,11 @@ database connection allows function to be performed directly on the
 datasource, as well as allowing access to any tables/views defined in
 the datasource to which the user has sufficient privileges.
 
+
 \wxheading{Include files}
 
 <wx/db.h>
+
 
 \wxheading{Helper classes and data structures}
 
@@ -20,6 +22,7 @@ The following classes and structs are defined in db.cpp/.h for use with the wxDb
 \item \helpref{wxDbTableInf}{wxdbtableinf}
 \item \helpref{wxDbInf}{wxdbinf}
 \end{itemize}
+
 
 \wxheading{Constants}
 
@@ -56,6 +59,7 @@ NOTE: In a future release, all ODBC class constants will be prefaced with 'wx'
 
 
 \subsection{Enumerated types}\label{wxdbenumeratedtypes}
+\wxheading{Enumerated types}
 
 \docparam{enum {\bf wxDbSqlLogState}}{sqlLogOFF, sqlLogON}
 
@@ -80,6 +84,7 @@ These are the databases currently tested and working with the ODBC classes.  A c
 \end{verbatim}
 
 See the remarks in \helpref{wxDb::Dbms}{wxdbdbms} for exceptions/issues with each of these database engines.
+
 
 \wxheading{Public member variables}
 
@@ -327,7 +332,7 @@ finished using the connections and all wxDbTable instances that use any of
 the connections have been closed.
 
 This function performs a \helpref{wxDb::CommitTrans}{wxdbcommittrans} 
-on the connection before closing it to commit any changes tht are still 
+on the connection before closing it to commit any changes that are still 
 pending, as well as to avoid any function sequence errors upon closing 
 each connection.
 
@@ -499,7 +504,7 @@ wxDbTable instances commits any pending transactions on all three wxDbTable
 instances.
 
 Until a call to wxDb::CommitTrans() is made, no other user or cursor is able 
-to see any changes made to the row(s) that have been inserted/modifed/deleted.
+to see any changes made to the row(s) that have been inserted/modified/deleted.
 
 
 \wxheading{Special Note : {\it Cursors} }
@@ -545,7 +550,7 @@ table(s) will be used.}
 
 A 'view' is a logical table that derives columns from one or more other tables or views.  Once the view is created, it can be queried exactly like any other table in the database.
 
-NOTE: Views are not available with all datasources.  Oracle is one example of a datasouce which does support views.
+NOTE: Views are not available with all datasources.  Oracle is one example of a datasource which does support views.
 
 \wxheading{Example}
 
@@ -603,7 +608,7 @@ entry is also logged to the defined log file.
 
 \docparam{aHdbc}{Handle to the ODBC connection.  Pass this in if the ODBC function call that erred required a hdbc or hstmt argument.}
 
-\docparam{AHstmt}{Handle to the ODBC statement being executed against.  Pass this in if the ODBC function call  that erred out required a hstmt argument.}
+\docparam{aHstmt}{Handle to the ODBC statement being executed against.  Pass this in if the ODBC function call  that erred out required a hstmt argument.}
 
 \wxheading{Remarks}
 
