@@ -166,6 +166,7 @@ protected:
 #if wxUSE_CONFIG
     // config object and path (in it) to use
     wxConfigBase *m_config;
+    bool m_configIsDummy;
 #endif
 
     wxString  m_configRootPath;
