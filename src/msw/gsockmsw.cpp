@@ -83,6 +83,8 @@ extern HINSTANCE hInst;
 #define assert(x)
 #include <winsock.h>
 #include "wx/msw/wince/net.h"
+#include <wx/hashmap.h>
+WX_DECLARE_HASH_MAP(int,bool,wxIntegerHash,wxIntegerEqual,SocketHash);
 #endif
 
 #include <string.h>
@@ -140,9 +142,7 @@ static int firstAvailable;
 #ifndef __WXWINCE__
 static WSAAsyncSelectFunc gs_WSAAsyncSelect = NULL;
 #else
-/* Setup WinCE specific stuff
-*/
-static socket_running;
+static SocketHash socketHash;
 static unsigned int currSocket;
 HANDLE hThread[MAXSOCKETS];
 static WSACreateEventFunc gs_WSACreateEvent = NULL;
@@ -152,10 +152,10 @@ static WSAEnumNetworkEventsFunc gs_WSAEnumNetworkEvents = NULL;
 /* This structure will be used to pass data on to the thread that handles socket events.
 */
 typedef struct thread_data{
-    HWND hEvtWin;
-    unsigned long msgnumber;
-    unsigned long fd;
-    unsigned long lEvent;
+	HWND hEvtWin;
+	unsigned long msgnumber;
+	unsigned long fd;
+	unsigned long lEvent;
 }thread_data;
 #endif
 
@@ -169,43 +169,43 @@ static HMODULE gs_wsock32dll = 0;
 */
 DWORD WINAPI SocketThread(LPVOID data)
 {
-    WSANETWORKEVENTS NetworkEvents;
-    thread_data* d = (thread_data *)data;
+	WSANETWORKEVENTS NetworkEvents;
+	thread_data* d = (thread_data *)data;
 
-    HANDLE NetworkEvent = gs_WSACreateEvent();
-    gs_WSAEventSelect(d->fd, NetworkEvent, d->lEvent);
+	HANDLE	NetworkEvent = gs_WSACreateEvent();
+	gs_WSAEventSelect(d->fd, NetworkEvent, d->lEvent);
 
-    while(socket_running)
-    {
-        if ((gs_WSAWaitForMultipleEvents(1, &NetworkEvent, FALSE,INFINITE, FALSE)) == WAIT_FAILED)
-        {
-            printf("WSAWaitForMultipleEvents failed with error %d\n", WSAGetLastError());
-            return 0;
-        }
-        if (gs_WSAEnumNetworkEvents(d->fd ,NetworkEvent, &NetworkEvents) == SOCKET_ERROR)
-        {
-            printf("WSAEnumNetworkEvents failed with error %d\n", WSAGetLastError());
-            return 0;
-        }
-
-        long flags = NetworkEvents.lNetworkEvents;
-        if (flags & FD_READ)
-            ::PostMessage(d->hEvtWin, d->msgnumber,d->fd, FD_READ);
-        if (flags & FD_WRITE)
-            ::PostMessage(d->hEvtWin, d->msgnumber,d->fd, FD_WRITE);
-        if (flags & FD_OOB)
-            ::PostMessage(d->hEvtWin, d->msgnumber,d->fd, FD_OOB);
-        if (flags & FD_ACCEPT)
-            ::PostMessage(d->hEvtWin, d->msgnumber,d->fd, FD_ACCEPT);
-        if (flags & FD_CONNECT)
-            ::PostMessage(d->hEvtWin, d->msgnumber,d->fd, FD_CONNECT);
-        if (flags & FD_CLOSE)
-            ::PostMessage(d->hEvtWin, d->msgnumber,d->fd, FD_CLOSE);
-
-    }
-    gs_WSAEventSelect(d->fd, NetworkEvent, 0);
-    ExitThread(0);
-    return 0;
+	while(socketHash[d->fd] == true)
+	{
+		if ((gs_WSAWaitForMultipleEvents(1, &NetworkEvent, FALSE,INFINITE, FALSE)) == WAIT_FAILED)
+		{
+			 printf("WSAWaitForMultipleEvents failed with error %d\n", WSAGetLastError());
+      		 return 0;
+		}
+		if (gs_WSAEnumNetworkEvents(d->fd ,NetworkEvent, &NetworkEvents) == SOCKET_ERROR)
+		{
+			 printf("WSAEnumNetworkEvents failed with error %d\n", WSAGetLastError());
+  			 return 0;
+		}
+		
+		long flags = NetworkEvents.lNetworkEvents;
+		if (flags & FD_READ)
+			::PostMessage(d->hEvtWin, d->msgnumber,d->fd, FD_READ);
+		if (flags & FD_WRITE)
+			::PostMessage(d->hEvtWin, d->msgnumber,d->fd, FD_WRITE);
+		if (flags & FD_OOB)
+			::PostMessage(d->hEvtWin, d->msgnumber,d->fd, FD_OOB);
+		if (flags & FD_ACCEPT)
+			::PostMessage(d->hEvtWin, d->msgnumber,d->fd, FD_ACCEPT);
+		if (flags & FD_CONNECT)
+			::PostMessage(d->hEvtWin, d->msgnumber,d->fd, FD_CONNECT);
+		if (flags & FD_CLOSE)
+			::PostMessage(d->hEvtWin, d->msgnumber,d->fd, FD_CLOSE);
+		
+	}
+	gs_WSAEventSelect(d->fd, NetworkEvent, 0);
+	ExitThread(0);
+	return 0;
 }
 #endif
 
@@ -219,72 +219,72 @@ bool GSocketGUIFunctionsTableConcrete::CanUseEventLoop()
 
 bool GSocketGUIFunctionsTableConcrete::OnInit()
 {
-    static LPCTSTR pclassname = NULL;
-    int i;
+  static LPCTSTR pclassname = NULL;
+  int i;
 
-    /* Create internal window for event notifications */
-    hWin = wxCreateHiddenWindow(&pclassname, CLASSNAME, _GSocket_Internal_WinProc);
-    if (!hWin)
-        return false;
+  /* Create internal window for event notifications */
+  hWin = wxCreateHiddenWindow(&pclassname, CLASSNAME, _GSocket_Internal_WinProc);
+  if (!hWin)
+      return false;
 
-    /* Initialize socket list */
-    InitializeCriticalSection(&critical);
+  /* Initialize socket list */
+  InitializeCriticalSection(&critical);
 
-    for (i = 0; i < MAXSOCKETS; i++)
-    {
-        socketList[i] = NULL;
-    }
-    firstAvailable = 0;
+  for (i = 0; i < MAXSOCKETS; i++)
+  {
+    socketList[i] = NULL;
+  }
+  firstAvailable = 0;
 
-    /* Load WSAAsyncSelect from wsock32.dll (we don't link against it
-       statically to avoid dependency on wsock32.dll for apps that don't use
-       sockets): */
+  /* Load WSAAsyncSelect from wsock32.dll (we don't link against it
+     statically to avoid dependency on wsock32.dll for apps that don't use
+     sockets): */
 #ifndef __WXWINCE__
-    gs_wsock32dll = LoadLibrary(wxT("wsock32.dll"));
-    if (!gs_wsock32dll)
-        return false;
-    gs_WSAAsyncSelect =(WSAAsyncSelectFunc)GetProcAddress(gs_wsock32dll,
-                                                          "WSAAsyncSelect");
-    if (!gs_WSAAsyncSelect)
-        return false;
+  gs_wsock32dll = LoadLibrary(wxT("wsock32.dll"));
+  if (!gs_wsock32dll)
+      return false;
+  gs_WSAAsyncSelect =(WSAAsyncSelectFunc)GetProcAddress(gs_wsock32dll,
+                                                        wxT("WSAAsyncSelect"));
+  if (!gs_WSAAsyncSelect)
+      return false;
 #else
 /*  On WinCE we load ws2.dll which will provide the needed functions.
 */
-    gs_wsock32dll = LoadLibrary(wxT("ws2.dll"));
-    if (!gs_wsock32dll)
-        return false;
-    gs_WSAEventSelect =(WSAEventSelectFunc)GetProcAddress(gs_wsock32dll,
-                                                          wxT("WSAEventSelect"));
-    if (!gs_WSAEventSelect)
-        return false;
+	gs_wsock32dll = LoadLibrary(wxT("ws2.dll"));
+  if (!gs_wsock32dll)
+      return false;
+  gs_WSAEventSelect =(WSAEventSelectFunc)GetProcAddress(gs_wsock32dll,
+                                                        wxT("WSAEventSelect"));
+  if (!gs_WSAEventSelect)
+      return false;
 
-    gs_WSACreateEvent =(WSACreateEventFunc)GetProcAddress(gs_wsock32dll,
-                                                          wxT("WSACreateEvent"));
-    if (!gs_WSACreateEvent)
-        return false;
+  gs_WSACreateEvent =(WSACreateEventFunc)GetProcAddress(gs_wsock32dll,
+														wxT("WSACreateEvent"));
+  if (!gs_WSACreateEvent)
+      return false;
 
-    gs_WSAWaitForMultipleEvents =(WSAWaitForMultipleEventsFunc)GetProcAddress(gs_wsock32dll,
-                                                                              wxT("WSAWaitForMultipleEvents"));
-    if (!gs_WSAWaitForMultipleEvents)
-        return false;
+  gs_WSAWaitForMultipleEvents =(WSAWaitForMultipleEventsFunc)GetProcAddress(gs_wsock32dll,
+														wxT("WSAWaitForMultipleEvents"));
+  if (!gs_WSAWaitForMultipleEvents)
+      return false;
 
-    gs_WSAEnumNetworkEvents =(WSAEnumNetworkEventsFunc)GetProcAddress(gs_wsock32dll,
-                                                                      wxT("WSAEnumNetworkEvents"));
-    if (!gs_WSAEnumNetworkEvents)
-        return false;
+  gs_WSAEnumNetworkEvents =(WSAEnumNetworkEventsFunc)GetProcAddress(gs_wsock32dll,
+														wxT("WSAEnumNetworkEvents"));
+  if (!gs_WSAEnumNetworkEvents)
+      return false;
 
-    currSocket = 0;
+  currSocket = 0;
 #endif
-
-    return true;
+ 
+  return true;
 }
 
 void GSocketGUIFunctionsTableConcrete::OnExit()
 {
 #ifdef __WXWINCE__
 /* Delete the threads here */
-    for(unsigned int i=0; i < currSocket; i++)
-        CloseHandle(hThread[i]);
+	for(unsigned int i=0; i < currSocket; i++)
+		CloseHandle(hThread[i]);
 #endif
   /* Destroy internal window */
   DestroyWindow(hWin);
@@ -432,13 +432,14 @@ void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
 *  WinCE creates a thread for socket event handling.
 *  All needed parameters get passed through the thread_data structure.
 */
-    socket_running = true;
-    thread_data* d = new thread_data;
-    d->lEvent = lEvent;
-    d->hEvtWin = hWin;
-    d->msgnumber = socket->m_msgnumber;
-    d->fd = socket->m_fd;
-    hThread[currSocket++] = CreateThread(NULL, 0, &SocketThread,(LPVOID)d, 0, NULL);
+
+	thread_data* d = new thread_data;
+	d->lEvent = lEvent;
+	d->hEvtWin = hWin;
+	d->msgnumber = socket->m_msgnumber;
+	d->fd = socket->m_fd;
+	socketHash[socket->m_fd] = true;
+	hThread[currSocket++] = CreateThread(NULL, 0, &SocketThread,(LPVOID)d, 0, NULL);
 #endif
   }
 }
@@ -455,9 +456,8 @@ void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
 #ifndef __WXWINCE__
     gs_WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, 0);
 #else
-    //Destroy the thread
-    //TODO: This needs to be changed, maybe using another global event that could be triggered.
-    socket_running = false;
+	//Destroy the thread
+	socketHash[socket->m_fd] = false;
 #endif
   }
 }
