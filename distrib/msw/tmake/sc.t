@@ -89,7 +89,7 @@ HTMLOBJS = #$ ExpandList ("WXHTMLOBJS");
 MSWOBJS = #$ ExpandList("WXMSWOBJS");
 
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
-OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS) $(WINSOCKLIB)
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS) 
 
 all: MAKEARCHDIR MAKEWINSOCKLIB $(LIBTARGET) zlib png jpeg tiff regex
 
