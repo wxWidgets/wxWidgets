@@ -19,9 +19,30 @@
 
 #include "wx/settings.h"
 #include "wx/gdicmn.h"
+#include "wx/app.h"
+
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
+#include <Xm/Xm.h>
+#include <Xm/PushB.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
+
+// To correctly read the resources from the database, we create a
+// sample widget. This has the application shell as the parent and
+// so will be destroyed when the applicaion is closed.
+static Widget but_setting_wid = NULL;
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
+  if (NULL == but_setting_wid && wxTheApp && wxTheApp->GetTopLevelWidget())
+  {
+    but_setting_wid = XtVaCreateWidget("settings_button", xmPushButtonWidgetClass,
+	                                 (Widget)wxTheApp->GetTopLevelWidget(), NULL);
+  }
+
   switch (index)
   {
     case wxSYS_COLOUR_WINDOW:
@@ -34,6 +55,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     case wxSYS_COLOUR_ACTIVECAPTION:
     case wxSYS_COLOUR_INACTIVECAPTION:
     case wxSYS_COLOUR_MENU:
+    case wxSYS_COLOUR_MENUBAR:
     case wxSYS_COLOUR_WINDOWFRAME:
     case wxSYS_COLOUR_ACTIVEBORDER:
     case wxSYS_COLOUR_INACTIVEBORDER:
@@ -41,7 +63,18 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
       //    case wxSYS_COLOUR_3DFACE:           // Same as wxSYS_COLOUR_BTNFACE
     case wxSYS_COLOUR_GRAYTEXT:
     {
-        return wxColour("LIGHT GREY");
+        if (but_setting_wid)
+        {
+            XColor bg;
+            XtVaGetValues(but_setting_wid,
+                        XtVaTypedArg, XmNbackground, XtRColor, &bg, sizeof(bg),
+                        NULL);
+            return wxColor(bg.red >> 8, bg.green >> 8, bg.blue >> 8);
+        }
+        else
+        {
+            return wxColour("LIGHT GREY");
+        }
     }
     case wxSYS_COLOUR_BTNSHADOW:
       //    case wxSYS_COLOUR_3DSHADOW:         // Same as wxSYS_COLOUR_BTNSHADOW
@@ -73,7 +106,18 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     case wxSYS_COLOUR_BTNTEXT:
     case wxSYS_COLOUR_INFOTEXT:
     {
-        return *wxBLACK;
+        if (but_setting_wid)
+        {
+            XColor fg;
+            XtVaGetValues(but_setting_wid,
+                        XtVaTypedArg, XmNforeground, XtRColor, &fg, sizeof(fg),
+                        NULL);
+            return wxColor(fg.red >> 8, fg.green >> 8, fg.blue >> 8);
+        }
+        else
+        {
+            return *wxBLACK;
+        }
     }
     case wxSYS_COLOUR_HIGHLIGHTTEXT:
     {
@@ -82,14 +126,24 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     case wxSYS_COLOUR_INFOBK:
     case wxSYS_COLOUR_APPWORKSPACE:
     {
-        return wxColour("LIGHT GREY");
+        if (but_setting_wid)
+        {
+            XColor bg;
+            XtVaGetValues(but_setting_wid,
+                        XtVaTypedArg, XmNbackground, XtRColor, &bg, sizeof(bg),
+                        NULL);
+            return wxColor(bg.red >> 8, bg.green >> 8, bg.blue >> 8);
+        }
+        else
+        {
+            return wxColour("LIGHT GREY");
+        }
     }
 
     case wxSYS_COLOUR_HOTLIGHT:
     case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
     case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
     case wxSYS_COLOUR_MENUHILIGHT:
-    case wxSYS_COLOUR_MENUBAR:
         // TODO
         return wxColour("LIGHT GREY");
 

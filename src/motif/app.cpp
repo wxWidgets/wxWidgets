@@ -561,11 +561,21 @@ void wxApp::DeletePendingObjects()
     }
 }
 
+static char *fallbackResources[] = {
+    "*menuBar.marginHeight: 0",
+    "*menuBar.shadowThickness: 1",
+    "*background: #c0c0c0",
+    "*foreground: black",
+    NULL
+};
+
 // Create an application context
 bool wxApp::OnInitGui()
 {
     XtToolkitInitialize() ;
-    wxTheApp->m_appContext = (WXAppContext) XtCreateApplicationContext() ;
+    wxTheApp->m_appContext = (WXAppContext) XtCreateApplicationContext();
+    XtAppSetFallbackResources((XtAppContext) wxTheApp->m_appContext, fallbackResources);
+
     Display *dpy = XtOpenDisplay((XtAppContext) wxTheApp->m_appContext,(String)NULL,NULL,
         (const char*) wxTheApp->GetClassName(), NULL, 0,
 # if XtSpecificationRelease < 5
