@@ -19,7 +19,7 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// headers
+// wxWin headers
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
@@ -41,8 +41,19 @@
 #include "wx/timer.h"
 #include "wx/longlong.h"
 
+// ----------------------------------------------------------------------------
+// System headers
+// ----------------------------------------------------------------------------
+
 #if defined(__WIN32__)
     #include <windows.h>
+#endif
+
+#if defined(__WIN32__) && !defined(HAVE_FTIME)
+    #define HAVE_FTIME
+    #ifdef (__VISUALC__)
+        #define ftime _ftime
+    #endif
 #endif
 
 #include <time.h>
@@ -90,11 +101,11 @@ wxLongLong wxGetLocalTimeMillis();
 // implementation
 // ============================================================================
 
-#if wxUSE_GUI
-
 // ----------------------------------------------------------------------------
 // wxTimerBase
 // ----------------------------------------------------------------------------
+
+#if wxUSE_GUI
 
 void wxTimerBase::Notify()
 {
@@ -253,12 +264,16 @@ wxLongLong wxGetLocalTimeMillis()
         val *= tp.tv_sec;
         return (val + (tp.tv_usec / 1000));
     }
-    return 0;
+    else
+    {
+        wxLogError(_("wxGetTimeOfDay failed."));
+        return 0;
+    }
 #elif defined(HAVE_FTIME)
     struct timeb tp;
 
-    // ftime() is void and not int in some mingw32 headers, so don't test the
-    // return code (well, it shouldn't fail anyhow...)
+    // ftime() is void and not int in some mingw32 headers, so don't
+    // test the return code (well, it shouldn't fail anyhow...)
     (void)ftime(&tp);
     val *= tp.time;
     return (val + tp.millitm);
@@ -267,23 +282,27 @@ wxLongLong wxGetLocalTimeMillis()
     // 00:00:00 Jan 1st 1970 and then whatever is available
     // to get millisecond resolution.
     //
-    // TODO: This might lead to a problem if the clocks use
-    //       different sources.
+    // NOTE that this might lead to a problem if the clocks
+    // use different sources, so this approach should be
+    // avoided where possible.
 
     val *= wxGetLocalTime();
 
-#if defined (__WIN32__)
-    SYSTEMTIME st;
-    ::GetLocalTime(&st);
-    val += st.wMilliseconds;
-#elif defined(__VISAGECPP__)
+#if defined(__VISAGECPP__)
+#warning "Possible clock skew bug in wxStopWatch!"
     DATETIME dt;
     ::DosGetDateTime(&dt);
     val += (dt.hundredths*10);
+#elif defined (__WIN32__)
+#warning "Possible clock skew bug in wxStopWatch!"
+    SYSTEMTIME st;
+    ::GetLocalTime(&st);
+    val += st.wMilliseconds;
 #else
 #warning "wxStopWatch will be up to second resolution!"
 #endif
 
     return val;
+
 #endif
 }
