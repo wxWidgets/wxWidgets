@@ -33,6 +33,7 @@ OBJECTS = \
 		appcmn.obj,\
 		choiccmn.obj,\
 		clipcmn.obj,\
+		cmdline.obj,\
 		cmndata.obj,\
 		config.obj,\
 		ctrlcmn.obj,\
@@ -131,6 +132,7 @@ SOURCES = \
 		appcmn.cpp,\
 		choiccmn.cpp,\
 		clipcmn.cpp,\
+		cmdline.cpp,\
 		cmndata.cpp,\
 		config.cpp,\
 		ctrlcmn.cpp,\
@@ -254,6 +256,7 @@ appcmn.obj : appcmn.cpp
 choiccmn.obj : choiccmn.cpp
 clipcmn.obj : clipcmn.cpp
 cmndata.obj : cmndata.cpp
+cmdline.obj : cmdline.cpp
 config.obj : config.cpp
 ctrlcmn.obj : ctrlcmn.cpp
 ctrlsub.obj : ctrlsub.cpp

@@ -22,9 +22,9 @@ all : setup.h
 	$(MMS)$(MMSQUALIFIERS)
 	set default [-.motif]
 	$(MMS)$(MMSQUALIFIERS)
-	set default [--.samples.bombs]
+	set default [--.demos.bombs]
 	$(MMS)$(MMSQUALIFIERS)
-	set default [-.caret]
+	set default [--.samples.caret]
 	$(MMS)$(MMSQUALIFIERS)
 	set default [-.checklst]
 	$(MMS)$(MMSQUALIFIERS)

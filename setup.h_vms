@@ -326,7 +326,7 @@
  */
 #define wxUSE_TOOLBAR_SIMPLE 1
 
-#if defined(__WXWINE__) || defined(__GNUWIN32__)
+#if defined(__WXWINE__) || defined(__GNUWIN32__) || defined(__WXPM__)
 #define wxUSE_OWNER_DRAWN 1 
   #if wxUSE_TOOLBAR
     #define wxUSE_BUTTONBAR 1
