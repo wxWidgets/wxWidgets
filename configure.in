@@ -4,7 +4,7 @@ AC_REVISION($Id$)dnl
 dnl ---------------------------------------------------------------------------
 dnl
 dnl Top-level configure.in for wxWindows by Robert Roebling, Phil Blecker and
-dnl Vadim Zeitlin
+dnl Vadim Zeitlin and Ron Lee
 dnl
 dnl This script is under the wxWindows licence.
 dnl
@@ -468,7 +468,7 @@ dnl When the major or minor version numbers are incremented, all the above
 dnl variables should be reset to 0.
 dnl
 dnl The resulting library name will be of the form:
-dnl   libwx_$(TOOLKIT)-$(WX_RELEASE).so.$(WX_CURRENT).$(WX_REVISION).$(WX_AGE)
+dnl   libwx_$(TOOLKIT)-$(WX_RELEASE).${SO_SUFFIX}.$(WX_CURRENT).$(WX_REVISION).$(WX_AGE)
 
 WX_MAJOR_VERSION_NUMBER=2
 WX_MINOR_VERSION_NUMBER=2
@@ -537,6 +537,7 @@ DEFAULT_DEFAULT_wxUSE_WINE=0
 DEFAULT_DEFAULT_wxUSE_PM=0
 
 PROGRAM_EXT=
+SO_SUFFIX=so
 
 dnl to support a new system, you need to add its canonical name (as determined
 dnl by config.sub or specified by the configure command line) to this "case"
@@ -547,6 +548,7 @@ case "${host}" in
     USE_HPUX=1
     DEFAULT_DEFAULT_wxUSE_MOTIF=1
     NEEDS_D_REENTRANT_FOR_R_FUNCS=1
+    SO_SUFFIX=sl
     AC_DEFINE(__HPUX__)
   ;;
   *-*-linux* )
@@ -641,6 +643,7 @@ case "${host}" in
   *-*-cygwin* | *-*-mingw32* )
     USE_UNIX=0
     USE_WIN32=1
+    SO_SUFFIX=dll
     AC_DEFINE(__WIN32__)
     AC_DEFINE(__WIN95__)
     AC_DEFINE(__WINDOWS__)
@@ -648,6 +651,7 @@ case "${host}" in
     AC_DEFINE(STRICT)
     AC_DEFINE(WINVER, 0x0400)
     PROGRAM_EXT=".exe"
+    RESCOMP=windres
     DEFAULT_DEFAULT_wxUSE_MSW=1
   ;;
 
@@ -696,7 +700,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_THREADS=yes
 
   DEFAULT_wxUSE_SHARED=yes
-  DEFAULT_wxUSE_BURNT_NAME=no
+  DEFAULT_wxUSE_SONAME=no
   DEFAULT_wxUSE_OPTIMISE=yes
   DEFAULT_wxUSE_PROFILE=no
   DEFAULT_wxUSE_NO_DEPS=no
@@ -817,7 +821,7 @@ else
   DEFAULT_wxUSE_THREADS=yes
 
   DEFAULT_wxUSE_SHARED=yes
-  DEFAULT_wxUSE_BURNT_NAME=no
+  DEFAULT_wxUSE_SONAME=no
   DEFAULT_wxUSE_OPTIMISE=yes
   DEFAULT_wxUSE_PROFILE=no
   DEFAULT_wxUSE_NO_DEPS=no
@@ -1000,7 +1004,7 @@ dnl compile options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(shared,      [  --enable-shared         create shared library code], wxUSE_SHARED)
-WX_ARG_ENABLE(burnt_name,  [  --enable-burnt_name     create set name in shared library ], wxUSE_BURNT_NAME)
+WX_ARG_ENABLE(soname,      [  --enable-soname         set the DT_SONAME field in ELF shared libraries], wxUSE_SONAME)
 WX_ARG_ENABLE(optimise,    [  --enable-optimise       create optimised code], wxUSE_OPTIMISE)
 WX_ARG_ENABLE(debug,       [  --enable-debug          same as debug_flag and debug_info], wxUSE_DEBUG)
 
@@ -1334,15 +1338,19 @@ AC_CACHE_SAVE
 dnl cross-compiling support: we're cross compiling if the build system is
 dnl different from the target one (assume host and target be always the same)
 if test "$build" != "$host" ; then
-    CC=$host_alias-gcc
-    CXX=$host_alias-c++
-    AR=$host_alias-ar
-    RANLIB=$host_alias-ranlib
-    DLLTOOL=$host_alias-dlltool
-    RESCOMP=$host_alias-windres
-    LD=$host_alias-ld
-    NM=$host_alias-nm
-    STRIP=$host_alias-strip
+    if test "$USE_WIN32" = 1 ; then
+        CC=$host_alias-gcc
+        CXX=$host_alias-c++
+        AR=$host_alias-ar
+        RANLIB=$host_alias-ranlib
+        DLLTOOL=$host_alias-dlltool
+        RESCOMP=$host_alias-windres
+        LD=$host_alias-ld
+        NM=$host_alias-nm
+        STRIP=$host_alias-strip
+    else
+        AC_MSG_ERROR($build_alias -> $host_alias cross compilation not supported yet.)
+    fi
 fi
 
 dnl C-compiler checks
@@ -1543,42 +1551,49 @@ dnl are we building for a win32 target environment?
 dnl If so, setup common stuff needed for both GUI and Base libs.
 
 if test "$USE_WIN32" = 1 ; then
-    dnd cygwin-cross-mingw is detected as non-cross
-    dnl but it really is
-    if test "$cross_compiling" = "no" -a "$build" != "$host"; then
-        dnl mingw32 will find them even if they're not in one of standard paths
-        AC_MSG_WARN(skipping windows.h check for cross-compilation)        
-    elif test "$cross_compiling" = "yes" ; then
-        dnl mingw32 will find them even if they're not in one of standard paths
-        AC_MSG_WARN(skipping windows.h check for cross-compilation)
-    else
-        AC_MSG_CHECKING(for Windows headers)
-        WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, windows.h)
-        if test "$ac_find_includes" != "" ; then
-            AC_MSG_RESULT(found $ac_find_includes)
-            TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE -I$ac_find_includes"
-        else
-            AC_MSG_RESULT(no)
-            AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
-        fi
-    fi
+    AC_CHECK_HEADERS(w32api.h)
+    AC_CHECK_HEADER(windows.h, [],
+    [
+        AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
+    ])
+
+    dnl check if can use _WIN_IE macro
+    AC_CACHE_CHECK([if w32api has good enough MSIE support], wx_cv_w32api_win_ie,
+    [
+      AC_TRY_COMPILE([#include <w32api.h>],
+                     [
+                       #define wxCHECK_W32API_VERSION( major, minor ) \
+                       ( defined( __W32API_MAJOR_VERSION ) && defined( __W32API_MINOR_VERSION ) \
+                       && ( ( __W32API_MAJOR_VERSION > (major) ) \
+                       || ( __W32API_MAJOR_VERSION == (major) && __W32API_MINOR_VERSION >= (minor))))
+
+                       #if !wxCHECK_W32API_VERSION(1,1)
+                       #error You need w32api 1.1 or newer
+                       #endif
+                     ], [
+                        wx_cv_w32api_win_ie=yes
+                        CPPFLAGS="$CPPFLAGS -D_WIN_IE=0x400"
+                     ], [
+                        wx_cv_w32api_win_ie=no
+                     ])
+    ])
 
     dnl --- Quick & Dirty ; link against most/all libraries
     dnl --- This will bloat the executable, but it'll work for now...
     dnl --- FIXME: trim this list for wxBase
     LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -ladvapi32 -lwsock32"
 
-    # cygwin linker does not provide these
+    dnl cygwin linker does not provide these
     if test "$wxUSE_CYGWIN" = 1; then
         LIBS="$LIBS -lkernel32 -luser32 -lgdi32 -lcomdlg32"
     fi
 
-    # This is the original list of libs we were linking with.
-    # Some of them needed to be pruned, eg. -lcrtdll would cause
-    # a crash at startup on NT, and some appear to just not be
-    # required.  The latter is the reason for preserving this
-    # list for a little while longer.
-    # LIBS="$LIBS -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -lcrtdll -ladvapi32 -lwsock32"
+    dnl This is the original list of libs we were linking with.
+    dnl Some of them needed to be pruned, eg. -lcrtdll would cause
+    dnl a crash at startup on NT, and some appear to just not be
+    dnl required.  The latter is the reason for preserving this
+    dnl list for a little while longer.
+    dnl LIBS="$LIBS -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -lcrtdll -ladvapi32 -lwsock32"
 
     dnl add extra odbc libs if we have compiled in odbc
     if test "$wxUSE_ODBC" = "yes" ; then
@@ -1954,7 +1969,7 @@ fi
 
 dnl the symbol which allows conditional compilation for the given toolkit
 if test -n "$TOOLKIT" ; then
-    TOOLKIT_DEF="-D__WX${TOOLKIT}__"
+    TOOLCHAIN_DEFS="-D__WX${TOOLKIT}__"
 fi
 
 dnl the base name of the library and wxXXX-config files
@@ -1993,139 +2008,111 @@ WX_LIBRARY_NAME_STATIC="lib${WX_LIBRARY}.a"
 WX_LIBRARY_NAME_STATIC_GL="lib${WX_LIBRARY_GL}.a"
 
 dnl the name of the shared library
-WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}.so.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
-WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY_GL}.so.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
+WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}.${SO_SUFFIX}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
+WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
 
 dnl the name of the links to the shared library
-WX_LIBRARY_LINK1="lib${WX_LIBRARY}.so.${WX_CURRENT}"
-WX_LIBRARY_LINK2="lib${WX_LIBRARY}.so"
-WX_LIBRARY_LINK1_GL="lib${WX_LIBRARY_GL}.so.${WX_CURRENT}"
-WX_LIBRARY_LINK2_GL="lib${WX_LIBRARY_GL}.so"
+WX_LIBRARY_LINK1="lib${WX_LIBRARY}.${SO_SUFFIX}.${WX_CURRENT}"
+WX_LIBRARY_LINK2="lib${WX_LIBRARY}.${SO_SUFFIX}"
+WX_LIBRARY_LINK1_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}.${WX_CURRENT}"
+WX_LIBRARY_LINK2_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}"
 
-dnl shared library settings
-SHARED_LD=
-PIC_FLAG=
-WX_ALL=
-WX_ALL_INSTALLED=
-BURNT_LIBRARY_NAME=
-WX_TARGET_LIBRARY_SONAME=
 
 dnl --- the marker for quick search, leave it here: SHARED_LIB_SETUP ---
 
 if test "$wxUSE_SHARED" = "yes"; then
+
+    dnl build and install targets
+    if test "$wxUSE_OPENGL" = "yes"; then
+        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
+        WX_ALL="\$(build_libdir)/${WX_LIBRARY_LINK1} \$(build_libdir)/${WX_LIBRARY_LINK1_GL}"
+    else
+        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
+        WX_ALL="\$(build_libdir)/${WX_LIBRARY_LINK1}"
+    fi
+
+    dnl the extra compiler flags needed for compilation of shared library
+    if test "$GCC" = "yes"; then
+        dnl the switch for gcc is the same under all platforms
+        PIC_FLAG="-fPIC"
+    fi
+
+    dnl the command to use for creating the shared library
+    SHARED_LD="${CXX} -shared -o"
+
     case "${host}" in
       *-hp-hpux* )
-        if test "$GCC" = yes ; then
-            SHARED_LD="${CC} -shared -fPIC -o"
-            PIC_FLAG="-fPIC"
-        else
+        if test "$GCC" != yes ; then
             dnl no idea why it wants it, but it does
             LDFLAGS="-L/usr/lib"
 
             SHARED_LD="${CXX} -b -o"
             PIC_FLAG="+Z"
         fi
-        WX_LIBRARY_NAME_SHARED="libwx_${TOOLCHAIN_NAME}.sl"
-        WX_LIBRARY_NAME_SHARED_GL="libwx_${TOOLCHAIN_NAME}_gl.sl"
         if test "$wxUSE_OPENGL" = "yes"; then
             WX_ALL_INSTALLED="preinstall_gl"
-            WX_ALL="${WX_LIBRARY_NAME_SHARED} ${WX_LIBRARY_NAME_SHARED_GL}"
+            WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED} \$(build_libdir)/${WX_LIBRARY_NAME_SHARED_GL}"
         else
-            WX_ALL="${WX_LIBRARY_NAME_SHARED}"
+            WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED}"
         fi
       ;;
 
       dnl in fact, these settings are for any platform using gcc
       *-*-linux* )
-        SHARED_LD="${CC} -shared -o"
-        PIC_FLAG="-fPIC"
-        if test "$wxUSE_BURNT_NAME" = "yes" ; then
-            BURNT_LIBRARY_NAME="-Wl,-soname,${WX_LIBRARY_LINK1}"
-            BURNT_LIBRARY_NAME_GL="-Wl,-soname,${WX_LIBRARY_LINK1_GL}"
+        if test "$wxUSE_SONAME" = "yes" ; then
+            SONAME_FLAGS="-Wl,-soname,${WX_LIBRARY_LINK1}"
+            SONAME_FLAGS_GL="-Wl,-soname,${WX_LIBRARY_LINK1_GL}"
             dnl substitute this in makelib.env for the contrib libs
             WX_TARGET_LIBRARY_SONAME="-Wl,-soname,\$(TARGETLIB_LINK1)"
-        fi
-        if test "$wxUSE_OPENGL" = "yes"; then
-            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
-            WX_ALL="CREATE_LINKS CREATE_LINKS_GL"
-        else
-            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-            WX_ALL="CREATE_LINKS"
-        fi
-      ;;
-      *-*-irix5* | *-*-irix6* )
-        if test "$GCC" = yes ; then
-           SHARED_LD="${CC} -shared -o"
-           PIC_FLAG="-fPIC"
-        else
-           SHARED_LD="${CXX} -shared -o"
-        fi
-        if test "$wxUSE_OPENGL" = "yes"; then
-            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
-            WX_ALL="CREATE_LINKS CREATE_LINKS_GL"
-        else
-            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-            WX_ALL="CREATE_LINKS"
         fi
       ;;
       *-*-solaris2* )
         if test "$GCC" = yes ; then
-            SHARED_LD="${CC} -shared -o"
-            PIC_FLAG="-fPIC"
-
             dnl newer versions of gcc need -isystem to compile X headers on
             dnl Solaris (which use old style C syntax)
             CPPFLAGS="$CPPFLAGS -isystem /usr/openwin/include"
         else
             SHARED_LD="${CXX} -G -o"
             PIC_FLAG="-KPIC"
-        fi
-        if test "$wxUSE_OPENGL" = "yes"; then
-            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
-            WX_ALL="CREATE_LINKS CREATE_LINKS_GL"
-        else
-            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-            WX_ALL="CREATE_LINKS"
+            SONAME_FLAGS="-h ${WX_LIBRARY_NAME_SHARED}"
+            SONAME_FLAGS_GL="-h ${WX_LIBRARY_NAME_SHARED}"
         fi
       ;;
-      *-*-sunos4* | *-*-sysv5* | *-*-freebsd* | *-*-openbsd* | *-*-netbsd* )
-        SHARED_LD="${CC} -shared -o"
-        PIC_FLAG="-fPIC"
-        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-        WX_ALL="CREATE_LINKS"
-      ;;
-      *-*-osf* | *-*-dgux5* )
-        SHARED_LD="${CXX} -shared -o"
-        PIC_FLAG="-fPIC"
-        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-        WX_ALL="CREATE_LINKS"
+      *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | \
+      *-*-sunos4* | \
+      *-*-irix5* | *-*-irix6* | \
+      *-*-osf* | \
+      *-*-dgux5* | \
+      *-*-sysv5* | )
+        dnl defaults are ok
       ;;
       *-*-aix* )
         SHARED_LD="/usr/lpp/xlC/bin/makeC++SharedLib -p 0 -o"
-        WX_ALL=${WX_LIBRARY_NAME_SHARED}
       ;;
       *-*-cygwin* | *-*-mingw32* )
-        RESCOMP=${RESCOMP:-windres}
-        WX_LIBRARY_NAME_SHARED="${WX_LIBRARY}.dll"
-        WX_LIBRARY_NAME_SHARED_GL="${WX_LIBRARY_GL}.dll"
         SHARED_LD="${CC} -shared -Wl,--out-implib,lib/${WX_LIBRARY_NAME_STATIC} -o"
-        TOOLKIT_DEF="${TOOLKIT_DEF} -DWXUSINGDLL=1"
+        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -DWXUSINGDLL=1"
         WXMSW_DLL_DEFINES="-UWXUSINGDLL -DWXMAKINGDLL=1 -D_DLL=1 -D_WINDLL=1"
-        WX_ALL="${WX_LIBRARY_NAME_SHARED}"
-        WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall"
+
+        dnl install shared libs without symlinks
+        if test "$wxUSE_OPENGL" = "yes"; then
+            WX_ALL_INSTALLED="preinstall_gl"
+            WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED} \$(build_libdir)/${WX_LIBRARY_NAME_SHARED_GL}"
+        else
+            WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED}"
+        fi
+        dnl -fPIC is not required for mingw build -- all code is already
+        dnl position independent
+        PIC_FLAG=
       ;;
       *-pc-os2_emx )
         dnl only static for now
-        WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
-        WX_ALL="${WX_LIBRARY_NAME_STATIC}"
+        wxUSE_SHARED=no
       ;;
       *-*-beos* )
         dnl can't use gcc under BeOS for shared library creation because it
         dnl complains about missing 'main'
         SHARED_LD="${LD} -shared -o"
-        PIC_FLAG="-fPIC"
-        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-        WX_ALL="CREATE_LINKS"
       ;;
       *)
         AC_MSG_ERROR(unknown system type $host.)
@@ -2152,9 +2139,9 @@ if test "$wxUSE_SHARED" = "no"; then
 
     if test "$wxUSE_OPENGL" = "yes"; then
         WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall_gl"
-        WX_ALL="${WX_LIBRARY_NAME_STATIC} ${WX_LIBRARY_NAME_STATIC_GL}"
+        WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_STATIC} \$(build_libdir)/${WX_LIBRARY_NAME_STATIC_GL}"
     else
-        WX_ALL="${WX_LIBRARY_NAME_STATIC}"
+        WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_STATIC}"
     fi
 
     WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
@@ -2685,11 +2672,11 @@ if test "$WXGTK127" = 1 ; then
 fi
 
 if test "$WXWINE" = 1 ; then
-  TOOLKIT_DEF="${TOOLKIT_DEF} -D__WXWINE__"
+  TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXWINE__"
 fi
 
 if test "$wxUSE_CYGWIN" = 1 ; then
-  TOOLKIT_DEF="${TOOLKIT_DEF} -D__WIN95__"
+  TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WIN95__"
 fi
 
 WXDEBUG=
@@ -3810,8 +3797,9 @@ AC_SUBST(PIC_FLAG)
 AC_SUBST(DEP_INFO_FLAGS)
 AC_SUBST(CODE_GEN_FLAGS)
 AC_SUBST(CODE_GEN_FLAGS_CXX)
-AC_SUBST(BURNT_LIBRARY_NAME)
-AC_SUBST(BURNT_LIBRARY_NAME_GL)
+
+AC_SUBST(SONAME_FLAGS)
+AC_SUBST(SONAME_FLAGS_GL)
 AC_SUBST(WX_TARGET_LIBRARY_SONAME)
 AC_SUBST(WX_TARGET_LIBRARY_TYPE)
 
@@ -3822,7 +3810,7 @@ dnl toolkit options
 AC_SUBST(USE_GUI)
 AC_SUBST(AFMINSTALL)
 AC_SUBST(TOOLKIT)
-AC_SUBST(TOOLKIT_DEF)
+AC_SUBST(TOOLCHAIN_DEFS)
 AC_SUBST(TOOLKIT_DIR)
 AC_SUBST(TOOLCHAIN_NAME)
 AC_SUBST(TOOLKIT_VPATH)

@@ -195,7 +195,7 @@ build-wxbase-shared-stamp:
 		&& ../configure --prefix=/usr \
 				--cache-file=../config_deb.cache \
 				--disable-gui \
-				--enable-burnt_name \
+				--enable-soname \
 				--with-zlib=sys \
 		&& $(MAKE)
 	touch $@
@@ -220,7 +220,7 @@ build-wxbase-debug-stamp:
 				--cache-file=../config_deb.cache \
 				--disable-gui \
 				--enable-debug \
-				--enable-burnt_name \
+				--enable-soname \
 				--with-zlib=sys \
 		&& $(MAKE)
 	touch $@
@@ -233,7 +233,7 @@ build-gtk-shared-stamp:
 				--cache-file=../config_deb.cache \
 				--with-gtk \
 				--with-opengl \
-				--enable-burnt_name \
+				--enable-soname \
 				--with-zlib=sys \
 				--with-libjpeg=sys \
 				--with-libpng=sys \
@@ -266,7 +266,7 @@ build-gtk-debug-stamp:
 				--with-gtk \
 				--with-opengl \
 				--enable-debug \
-				--enable-burnt_name \
+				--enable-soname \
 				--with-zlib=sys \
 				--with-libjpeg=sys \
 				--with-libpng=sys \

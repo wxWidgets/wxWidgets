@@ -1,11 +1,12 @@
 #
 # File:     makefile.unx
-# Author:   Julian Smart, Robert Roebling, Vadim Zeitlin
+# Author:   Julian Smart, Robert Roebling, Vadim Zeitlin, Ron Lee
 # Created:  1993
-# Updated:  1999
+# Updated:  2001
 # Copyright:(c) 1993, AIAI, University of Edinburgh,
 # Copyright:(c) 1999, Vadim Zeitlin
 # Copyright:(c) 1999, Robert Roebling
+# Copyright:(c) 2001, Ron Lee
 #
 # Makefile for libwx_gtk.a, libwx_motif.a and libwx_msw.a
 
@@ -15,21 +16,19 @@ include ./src/make.env
 
 ############## override make.env for PIC ##########################
 
-# Clears all default suffixes
-.SUFFIXES:	.o .cpp .c .cxx
+%.o : %.c
+	$(CC) -c $(CFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
 
-.c.o :
-	$(CCC) -c @DEP_INFO_FLAGS@ $(CFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
+%.o : %.cpp
+	$(CXX) -c $(CXXFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
 
-.cpp.o :
-	$(CC) -c @DEP_INFO_FLAGS@ $(CPPFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
-
-.cxx.o :
-	$(CC) -c @DEP_INFO_FLAGS@ $(CPPFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
+%.o : %.cxx
+	$(CXX) -c $(CXXFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
 
 ########################### Paths #################################
 
 srcdir = @srcdir@
+top_srcdir = @top_srcdir@
 
 VP1 = @TOOLKIT_VPATH@
 VP2 = @top_srcdir@/src/common
@@ -68,48 +67,25 @@ VP14 = $(FTVP09)@PATH_IFS@$(FTVP10)@PATH_IFS@$(FTVP11)@PATH_IFS@$(FTVP12)@PATH_I
 # any VPATH assignment not containing ':'
 VPATH = $(VP1)@PATH_IFS@$(VP2)@PATH_IFS@$(VP3)@PATH_IFS@$(VP4)@PATH_IFS@$(VP5)@PATH_IFS@$(VP6)@PATH_IFS@$(VP7)@PATH_IFS@$(VP8)@PATH_IFS@$(VP9)@PATH_IFS@$(VP10)@PATH_IFS@$(VP11)@PATH_IFS@$(VP12)@PATH_IFS@$(VP13)@PATH_IFS@$(VP14) # ':' for autoconf
 
-top_srcdir = @top_srcdir@
 prefix = @prefix@
 exec_prefix = @exec_prefix@
 
 bindir = @bindir@
-sbindir = @sbindir@
-libexecdir = @libexecdir@
 datadir = @datadir@
-sysconfdir = @sysconfdir@
-sharedstatedir = @sharedstatedir@
-localstatedir = @localstatedir@
 libdir = @libdir@
-infodir = @infodir@
 mandir = @mandir@
 includedir = @includedir@
-oldincludedir = /usr/include
-
-DESTDIR =
 
 localedir = $(datadir)/locale
 
-pkgdatadir = $(datadir)/@PACKAGE@
-pkglibdir = $(libdir)/@PACKAGE@
-pkgincludedir = $(includedir)/@PACKAGE@
-
 top_builddir = .
+build_libdir = $(top_builddir)/lib
 
 INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
-# my autoconf doesn't set this
-#INSTALL_SCRIPT = @INSTALL_SCRIPT@
-# maybe do an additional chmod if needed?
 INSTALL_SCRIPT = @INSTALL@
-transform = @program_transform_name@
 
-NORMAL_INSTALL = :
-PRE_INSTALL = :
-POST_INSTALL = :
-NORMAL_UNINSTALL = :
-PRE_UNINSTALL = :
-POST_UNINSTALL = :
 build_alias = @build_alias@
 build_triplet = @build@
 host_alias = @host_alias@
@@ -182,7 +158,6 @@ HEADERS = $(ALL_HEADERS)
 # for the objects and depfiles, we might be bulding only part of them
 # depending on configure arguments, so select a subset of ALL
 OBJECTS = @ALL_OBJECTS@
-DEPFILES = @ALL_DEPFILES@
 
 # the object files of sublibraries (we assume that they don't change [often],
 # so we don't generate these lists with tmake but embed them here)
@@ -340,56 +315,42 @@ IODBCOBJS = \
         
 ############################## Rules ##################################
 
-BURNT_LIBRARY_NAME = @BURNT_LIBRARY_NAME@
-BURNT_LIBRARY_NAME_GL = @BURNT_LIBRARY_NAME_GL@
+SONAME_FLAGS = @SONAME_FLAGS@
+SONAME_FLAGS_GL = @SONAME_FLAGS_GL@
 
 all: @WX_ALL@
 
-@WX_LIBRARY_NAME_STATIC@:  $(OBJECTS)
-	@$(INSTALL) -d ./lib
-	$(AR) $(AROPTIONS) ./lib/$@ $(OBJECTS)
-	$(RANLIB) ./lib/$@
+$(build_libdir)/@WX_LIBRARY_NAME_STATIC@:  $(OBJECTS)
+	@$(INSTALL) -d $(build_libdir)
+	$(AR) $(AROPTIONS) $@ $(OBJECTS)
+	$(RANLIB) $@
 
-@WX_LIBRARY_NAME_STATIC_GL@:  glcanvas.o
-	@$(INSTALL) -d ./lib
-	$(AR) $(AROPTIONS) ./lib/$@ glcanvas.o
-	$(RANLIB) ./lib/$@
+$(build_libdir)/@WX_LIBRARY_NAME_STATIC_GL@:  glcanvas.o
+	@$(INSTALL) -d $(build_libdir)
+	$(AR) $(AROPTIONS) $@ glcanvas.o
+	$(RANLIB) $@
 
-@WX_LIBRARY_NAME_SHARED@:  $(OBJECTS)
-	@$(INSTALL) -d ./lib
-	$(SHARED_LD) ./lib/$@ $(BURNT_LIBRARY_NAME) $(OBJECTS) $(EXTRALIBS)
+$(build_libdir)/@WX_LIBRARY_NAME_SHARED@:  $(OBJECTS)
+	@$(INSTALL) -d $(build_libdir)
+	$(SHARED_LD) $@ $(SONAME_FLAGS) $(OBJECTS) $(EXTRALIBS)
 
-@WX_LIBRARY_NAME_SHARED_GL@:  glcanvas.o
-	@$(INSTALL) -d ./lib
-	$(SHARED_LD) ./lib/$@ $(BURNT_LIBRARY_NAME_GL) glcanvas.o $(EXTRALIBS)
+$(build_libdir)/@WX_LIBRARY_NAME_SHARED_GL@:  glcanvas.o $(build_libdir)/@WX_LIBRARY_NAME_SHARED@
+	@$(INSTALL) -d $(build_libdir)
+	$(SHARED_LD) $@ $(SONAME_FLAGS_GL) glcanvas.o -L$(build_libdir) @WXCONFIG_LIBS@ $(EXTRALIBS) $(OPENGLLIBS)
 
-CREATE_LINKS: @WX_LIBRARY_NAME_SHARED@
-	@$(RM) ./lib/@WX_LIBRARY_LINK1@
-	@$(RM) ./lib/@WX_LIBRARY_LINK2@
-	cd lib \
+$(build_libdir)/@WX_LIBRARY_LINK1@: $(build_libdir)/@WX_LIBRARY_NAME_SHARED@
+	@$(RM) $(build_libdir)/@WX_LIBRARY_LINK1@
+	@$(RM) $(build_libdir)/@WX_LIBRARY_LINK2@
+	cd $(build_libdir) \
 		&& $(LN_S) @WX_TARGET_LIBRARY@ @WX_LIBRARY_LINK1@ \
 		&& $(LN_S) @WX_TARGET_LIBRARY@ @WX_LIBRARY_LINK2@
 
-CREATE_LINKS_GL: @WX_LIBRARY_NAME_SHARED_GL@
-	@$(RM) ./lib/@WX_LIBRARY_LINK1_GL@
-	@$(RM) ./lib/@WX_LIBRARY_LINK2_GL@
-	cd lib \
+$(build_libdir)/@WX_LIBRARY_LINK1_GL@: $(build_libdir)/@WX_LIBRARY_NAME_SHARED_GL@
+	@$(RM) $(build_libdir)/@WX_LIBRARY_LINK1_GL@
+	@$(RM) $(build_libdir)/@WX_LIBRARY_LINK2_GL@
+	cd $(build_libdir) \
 		&& $(LN_S) @WX_TARGET_LIBRARY_GL@ @WX_LIBRARY_LINK1_GL@ \
 		&& $(LN_S) @WX_TARGET_LIBRARY_GL@ @WX_LIBRARY_LINK2_GL@
-
-CREATE_INSTALLED_LINKS: preinstall
-	$(RM) $(libdir)/@WX_LIBRARY_LINK1@
-	$(RM) $(libdir)/@WX_LIBRARY_LINK2@
-	cd $(libdir) \
-		&& $(LN_S) @WX_LIBRARY_NAME_SHARED@ @WX_LIBRARY_LINK1@ \
-		&& $(LN_S) @WX_LIBRARY_NAME_SHARED@ @WX_LIBRARY_LINK2@
-
-CREATE_INSTALLED_LINKS_GL: preinstall_gl
-	$(RM) $(libdir)/@WX_LIBRARY_LINK1_GL@
-	$(RM) $(libdir)/@WX_LIBRARY_LINK2_GL@
-	cd $(libdir) \
-		&& $(LN_S) @WX_LIBRARY_NAME_SHARED_GL@ @WX_LIBRARY_LINK1_GL@ \
-		&& $(LN_S) @WX_LIBRARY_NAME_SHARED_GL@ @WX_LIBRARY_LINK2_GL@
 
 $(OBJECTS):	$(WXDIR)/include/wx/defs.h $(WXDIR)/include/wx/object.h
 
@@ -414,7 +375,22 @@ lexer.c:	$(COMMDIR)/lexer.l
 	sed -e "s/unput/PROIO_unput/g"      > lexer.c
 	@$(RM) @LEX_STEM@.c
 
--include $(DEPFILES)
+-include $(OBJECTS:.o=.d)
+
+
+CREATE_INSTALLED_LINKS: preinstall
+	$(RM) $(libdir)/@WX_LIBRARY_LINK1@
+	$(RM) $(libdir)/@WX_LIBRARY_LINK2@
+	cd $(libdir) \
+		&& $(LN_S) @WX_LIBRARY_NAME_SHARED@ @WX_LIBRARY_LINK1@ \
+		&& $(LN_S) @WX_LIBRARY_NAME_SHARED@ @WX_LIBRARY_LINK2@
+
+CREATE_INSTALLED_LINKS_GL: preinstall_gl
+	$(RM) $(libdir)/@WX_LIBRARY_LINK1_GL@
+	$(RM) $(libdir)/@WX_LIBRARY_LINK2_GL@
+	cd $(libdir) \
+		&& $(LN_S) @WX_LIBRARY_NAME_SHARED_GL@ @WX_LIBRARY_LINK1_GL@ \
+		&& $(LN_S) @WX_LIBRARY_NAME_SHARED_GL@ @WX_LIBRARY_LINK2_GL@
 
 afminstall: preinstall
 	$(INSTALL) -d $(datadir)
