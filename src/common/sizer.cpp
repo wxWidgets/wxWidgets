@@ -105,13 +105,13 @@ wxSizerItem::wxSizerItem( wxWindow *window, int proportion, int flag, int border
     , m_show( true )
     , m_userData( userData )
 {
-    // aspect ratio calculated from initial size
-    SetRatio( m_minSize );
-
     if (flag & wxFIXED_MINSIZE)
         window->SetMinSize(window->GetSize());
     m_minSize = window->GetSize();
     
+    // aspect ratio calculated from initial size
+    SetRatio( m_minSize );
+
     // m_size is calculated later
 }
 
@@ -180,8 +180,6 @@ wxSize wxSizerItem::GetSize() const
 
 wxSize wxSizerItem::CalcMin()
 {
-    wxSize ret;
-    
     if (IsSizer())
     {
         m_minSize = m_sizer->GetMinSize();
@@ -189,7 +187,7 @@ wxSize wxSizerItem::CalcMin()
         // if we have to preserve aspect ratio _AND_ this is
         // the first-time calculation, consider ret to be initial size
         if ((m_flag & wxSHAPED) && !m_ratio)
-            SetRatio(ret);
+            SetRatio(m_minSize);
     }
     else if ( IsWindow() )
     {
