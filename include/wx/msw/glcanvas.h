@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        glcanvas.h
+// Name:        wx/msw/glcanvas.h
 // Purpose:     wxGLCanvas, for using OpenGL with wxWindows under Windows
 // Author:      Julian Smart
 // Modified by:
@@ -21,7 +21,7 @@
 
 #include <windows.h>
 
-#include "gl/gl.h"
+#include <GL/gl.h>
 
 //---------------------------------------------------------------------------
 // Constants for attriblist
