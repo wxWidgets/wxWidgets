@@ -141,7 +141,9 @@ wxDataObjectComposite::GetPreferredFormat(Direction WXUNUSED(dir)) const
 }
 
 #if defined(__WXMSW__)
-
+#ifdef __DIGITALMARS__
+extern "C"
+#endif
 size_t wxDataObjectComposite::GetBufferOffset( const wxDataFormat& format )
 {
     wxDataObjectSimple *dataObj = GetObject(format);
@@ -152,6 +154,9 @@ size_t wxDataObjectComposite::GetBufferOffset( const wxDataFormat& format )
     return dataObj->GetBufferOffset( format );
 }
 
+#ifdef __DIGITALMARS__
+extern "C"
+#endif
 const void* wxDataObjectComposite::GetSizeFromBuffer( const void* buffer,
                                                       size_t* size,
                                                       const wxDataFormat& format )
@@ -164,6 +169,9 @@ const void* wxDataObjectComposite::GetSizeFromBuffer( const void* buffer,
     return dataObj->GetSizeFromBuffer( buffer, size, format );
 }
 
+#ifdef __DIGITALMARS__
+extern "C"
+#endif
 void* wxDataObjectComposite::SetSizeInBuffer( void* buffer, size_t size,
                                               const wxDataFormat& format )
 {
