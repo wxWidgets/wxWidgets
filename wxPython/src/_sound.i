@@ -113,7 +113,8 @@ public:
     static void Stop();
 #else
     %extend {
-        static void Stop() {}
+        static void Stop()
+            { wxPyRaiseNotImplemented(); }
     }
 #endif
 
