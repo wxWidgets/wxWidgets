@@ -771,9 +771,9 @@ returned font. See \helpref{wxWindow::SetWindowVariant}{wxwindowsetwindowvariant
 for more about this.
 
 This static method is ``overridden'' in many derived classes and so calling,
-for example, \helpref{wxButton}::GetClassDefaultAttributes() will typically
+for example, \helpref{wxButton}{wxbutton}::GetClassDefaultAttributes() will typically
 return the values appropriate for a button which will be normally different
-from those returned by, say, \helpref{wxListCtrl}::GetClassDefaultAttributes().
+from those returned by, say, \helpref{wxListCtrl}{wxlistctrl}::GetClassDefaultAttributes().
 
 The \texttt{wxVisualAttributes} structure has at least the fields 
 \texttt{font}, \texttt{colFg} and \texttt{colBg}. All of them may be invalid
@@ -1240,7 +1240,7 @@ method. {\bf GetWindowStyle()} is another name for the same function.
 
 \membersection{wxWindow::GetWindowVariant}\label{wxwindowgetwindowvariant}
 
-\constructor{wxWindowVariant}{GetWindowVariant}{\void}
+\constfunc{wxWindowVariant}{GetWindowVariant}{\void}
 
 Returns the value previous passed to 
 \helpref{wxWindow::SetWindowVariant}{wxwindowsetwindowvariant}.
