@@ -1311,6 +1311,7 @@ PYTHON_DIST:
 	mkdir $(DISTDIR)/wxPython/contrib/glcanvas/gtk
 	mkdir $(DISTDIR)/wxPython/contrib/ogl
 	mkdir $(DISTDIR)/wxPython/contrib/stc
+	mkdir $(DISTDIR)/wxPython/contrib/stc/gtk
 	mkdir $(DISTDIR)/wxPython/contrib/xrc
 	mkdir $(DISTDIR)/wxPython/demo
 	mkdir $(DISTDIR)/wxPython/demo/bitmaps
@@ -1330,7 +1331,7 @@ PYTHON_DIST:
 	cp $(WXDIR)/wxPython/contrib/glcanvas/gtk/glcanvas.* $(DISTDIR)/wxPython/contrib/glcanvas/gtk
 	-cp $(WXDIR)/wxPython/contrib/ogl/* $(DISTDIR)/wxPython/contrib/ogl
 	-cp $(WXDIR)/wxPython/contrib/stc/* $(DISTDIR)/wxPython/contrib/stc
-	-cp $(WXDIR)/wxPython/contrib/stc/gtk/* $(DISTDIR)/wxPython/contrib/stc
+	-cp $(WXDIR)/wxPython/contrib/stc/gtk/* $(DISTDIR)/wxPython/contrib/stc/gtk
 	-cp $(WXDIR)/wxPython/contrib/xrc/xrc.* $(DISTDIR)/wxPython/contrib/xrc
 	-cp $(WXDIR)/wxPython/demo/* $(DISTDIR)/wxPython/demo
 	-cp $(WXDIR)/wxPython/demo/bitmaps/* $(DISTDIR)/wxPython/demo/bitmaps
