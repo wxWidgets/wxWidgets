@@ -41,6 +41,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxFontList, wxList)
 IMPLEMENT_DYNAMIC_CLASS(wxPenList, wxList)
 IMPLEMENT_DYNAMIC_CLASS(wxBrushList, wxList)
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapList, wxList)
+IMPLEMENT_DYNAMIC_CLASS(wxResourceCache, wxList)
 /*
 IMPLEMENT_DYNAMIC_CLASS(wxRect, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxPoint, wxObject)
@@ -319,14 +320,15 @@ wxString wxColourDatabase::FindName (const wxColour& colour) const
 
 }
 
-void 
-wxInitializeStockObjects ()
-{
+void wxInitializeStockLists () {
   wxTheBrushList = new wxBrushList;
   wxThePenList = new wxPenList;
   wxTheFontList = new wxFontList;
   wxTheBitmapList = new wxBitmapList;
+}
 
+void wxInitializeStockObjects ()
+{
 #ifdef __WXMOTIF__
 #endif
 #ifdef __X__
@@ -376,44 +378,52 @@ wxInitializeStockObjects ()
 void 
 wxDeleteStockObjects ()
 {
-  DELETEP(wxNORMAL_FONT);
-  DELETEP(wxSMALL_FONT);
-  DELETEP(wxITALIC_FONT);
-  DELETEP(wxSWISS_FONT);
 
-  DELETEP(wxRED_PEN);
-  DELETEP(wxCYAN_PEN);
-  DELETEP(wxGREEN_PEN);
-  DELETEP(wxBLACK_PEN);
-  DELETEP(wxWHITE_PEN);
-  DELETEP(wxTRANSPARENT_PEN);
-  DELETEP(wxBLACK_DASHED_PEN);
-  DELETEP(wxGREY_PEN);
-  DELETEP(wxMEDIUM_GREY_PEN);
-  DELETEP(wxLIGHT_GREY_PEN);
+  wxDELETE(wxNORMAL_FONT);
+  wxDELETE(wxSMALL_FONT);
+  wxDELETE(wxITALIC_FONT);
+  wxDELETE(wxSWISS_FONT);
 
-  DELETEP(wxBLUE_BRUSH);
-  DELETEP(wxGREEN_BRUSH);
-  DELETEP(wxWHITE_BRUSH);
-  DELETEP(wxBLACK_BRUSH);
-  DELETEP(wxTRANSPARENT_BRUSH);
-  DELETEP(wxCYAN_BRUSH);
-  DELETEP(wxRED_BRUSH);
-  DELETEP(wxGREY_BRUSH);
-  DELETEP(wxMEDIUM_GREY_BRUSH);
-  DELETEP(wxLIGHT_GREY_BRUSH);
+  wxDELETE(wxRED_PEN);
+  wxDELETE(wxCYAN_PEN);
+  wxDELETE(wxGREEN_PEN);
+  wxDELETE(wxBLACK_PEN);
+  wxDELETE(wxWHITE_PEN);
+  wxDELETE(wxTRANSPARENT_PEN);
+  wxDELETE(wxBLACK_DASHED_PEN);
+  wxDELETE(wxGREY_PEN);
+  wxDELETE(wxMEDIUM_GREY_PEN);
+  wxDELETE(wxLIGHT_GREY_PEN);
 
-  DELETEP(wxBLACK);
-  DELETEP(wxWHITE);
-  DELETEP(wxRED);
-  DELETEP(wxBLUE);
-  DELETEP(wxGREEN);
-  DELETEP(wxCYAN);
-  DELETEP(wxLIGHT_GREY);
+  wxDELETE(wxBLUE_BRUSH);
+  wxDELETE(wxGREEN_BRUSH);
+  wxDELETE(wxWHITE_BRUSH);
+  wxDELETE(wxBLACK_BRUSH);
+  wxDELETE(wxTRANSPARENT_BRUSH);
+  wxDELETE(wxCYAN_BRUSH);
+  wxDELETE(wxRED_BRUSH);
+  wxDELETE(wxGREY_BRUSH);
+  wxDELETE(wxMEDIUM_GREY_BRUSH);
+  wxDELETE(wxLIGHT_GREY_BRUSH);
 
-  DELETEP(wxSTANDARD_CURSOR);
-  DELETEP(wxHOURGLASS_CURSOR);
-  DELETEP(wxCROSS_CURSOR);
+  wxDELETE(wxBLACK);
+  wxDELETE(wxWHITE);
+  wxDELETE(wxRED);
+  wxDELETE(wxBLUE);
+  wxDELETE(wxGREEN);
+  wxDELETE(wxCYAN);
+  wxDELETE(wxLIGHT_GREY);
+
+  wxDELETE(wxSTANDARD_CURSOR);
+  wxDELETE(wxHOURGLASS_CURSOR);
+  wxDELETE(wxCROSS_CURSOR);
+}
+
+void wxDeleteStockLists() {
+  wxDELETE(wxTheBrushList);
+  wxDELETE(wxThePenList);
+  wxDELETE(wxTheFontList);
+  wxDELETE(wxTheBitmapList);
 }
 
 wxBitmapList::wxBitmapList ()
@@ -609,5 +619,40 @@ wxSize wxGetDisplaySize()
     int x, y;
     wxDisplaySize(& x, & y);
     return wxSize(x, y);
+}
+
+wxResourceCache::wxResourceCache () : wxList() {
+}
+
+wxResourceCache::wxResourceCache (const unsigned int the_key_type) : wxList(the_key_type) {
+}
+
+wxResourceCache::~wxResourceCache () {
+  wxNode *node = First ();
+  while (node) {
+    wxGDIObject *item = (wxGDIObject *)node->Data();
+    if (item->IsKindOf(CLASSINFO(wxBrush))) {
+      wxBrush *brush = (wxBrush *)item;
+      delete brush;
+    }
+
+    if (item->IsKindOf(CLASSINFO(wxFont))) {
+      wxFont *font = (wxFont *)item;
+      delete font;
+    }
+
+    if (item->IsKindOf(CLASSINFO(wxBitmap))) {
+      wxBitmap *bitmap = (wxBitmap *)item;
+      delete bitmap;
+    }
+
+    if (item->IsKindOf(CLASSINFO(wxColour))) {
+      wxColour *colour = (wxColour *)item;
+      delete colour;
+    }
+
+    wxNode *next = node->Next ();
+    node = next;
+  }
 }
 

@@ -1133,7 +1133,7 @@ void wxArrayString::Grow()
       memcpy(pNew, m_pItems, m_nCount*sizeof(char *));
 
       // delete old memory (but do not release the strings!)
-      DELETEA(m_pItems);
+      wxDELETEA(m_pItems);
 
       m_pItems = pNew;
     }
@@ -1163,8 +1163,7 @@ void wxArrayString::Clear()
   m_nSize  =
   m_nCount = 0;
 
-  DELETEA(m_pItems);
-  m_pItems = NULL;
+  wxDELETEA(m_pItems);
 }
 
 // dtor
@@ -1172,7 +1171,7 @@ wxArrayString::~wxArrayString()
 {
   Free();
 
-  DELETEA(m_pItems);
+  wxDELETEA(m_pItems);
 }
 
 // pre-allocates memory (frees the previous data!)
@@ -1183,7 +1182,7 @@ void wxArrayString::Alloc(size_t nSize)
   // only if old buffer was not big enough
   if ( nSize > m_nSize ) {
     Free();
-    DELETEA(m_pItems);
+    wxDELETEA(m_pItems);
     m_pItems = new char *[nSize];
     m_nSize  = nSize;
   }

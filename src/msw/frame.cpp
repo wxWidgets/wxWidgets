@@ -1011,4 +1011,3 @@ void wxFrame::PositionToolBar(void)
         }
     }
 }
-

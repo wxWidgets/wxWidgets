@@ -123,7 +123,7 @@ wxString wxDataInputStream::ReadString()
   wx_string = string;
   delete string;
 
-  return wx_string; 
+  return wx_string;
 }
 
 wxDataOutputStream::wxDataOutputStream(wxOutputStream& s)
@@ -187,7 +187,7 @@ void wxDataOutputStream::WriteDouble(double d)
 #if USE_APPLE_IEEE
   ConvertToIeeeExtended(d, (unsigned char *)buf);
 #else
-#	pragma warning "wxDataStream::WriteDouble() not using IeeeExtended - will not work!"
+#  pragma warning "wxDataStream::WriteDouble() not using IeeeExtended - will not work!"
  buf[0] = '\0';
 #endif
   Write(buf, 10);

@@ -205,31 +205,38 @@ wxString wxRadioBox::GetLabel(void) const
 
 void wxRadioBox::SetLabel( const wxString& WXUNUSED(label) )
 {
+  wxFAIL_MSG("wxRadioBox::SetLabel not implemented.");
 };
 
 void wxRadioBox::SetLabel( int WXUNUSED(item), const wxString& WXUNUSED(label) )
 {
+  wxFAIL_MSG("wxRadioBox::SetLabel not implemented.");
 };
 
 void wxRadioBox::SetLabel( int WXUNUSED(item), wxBitmap *WXUNUSED(bitmap) )
 {
+  wxFAIL_MSG("wxRadioBox::SetLabel not implemented.");
 };
 
 wxString wxRadioBox::GetLabel( int WXUNUSED(item) ) const
 {
+  wxFAIL_MSG("wxRadioBox::GetLabel not implemented.");
   return "";
 };
 
 void wxRadioBox::Enable( bool WXUNUSED(enable) )
 {
+  wxFAIL_MSG("wxRadioBox::Enable not implemented.");
 };
 
 void wxRadioBox::Enable( int WXUNUSED(item), bool WXUNUSED(enable) )
 {
+  wxFAIL_MSG("wxRadioBox::Enable not implemented.");
 };
 
 void wxRadioBox::Show( int WXUNUSED(item), bool WXUNUSED(show) )
 {
+  wxFAIL_MSG("wxRadioBox::Show not implemented.");
 };
 
 wxString wxRadioBox::GetStringSelection(void) const
@@ -275,5 +282,6 @@ int wxRadioBox::GetNumberOfRowsOrCols(void) const
 
 void wxRadioBox::SetNumberOfRowsOrCols( int WXUNUSED(n) )
 {
+  wxFAIL_MSG("wxRadioBox::SetNumberOfRowsOrCols not implemented.");
 };
 

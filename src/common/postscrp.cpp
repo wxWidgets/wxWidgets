@@ -1645,7 +1645,7 @@ void wxPostScriptDC::GetTextExtent (const wxString& string, long *x, long *y,
 	// Julian - we'll need to do this a different way now we've removed the
 	// font directory system. Must find Stefan's original code.
 
-    name = wxTheFontNameDirectory.GetAFMName(Family, Weight, Style);
+    name = wxTheFontNameDirectory->GetAFMName(Family, Weight, Style);
     if (!name)
       name = "unknown";
 

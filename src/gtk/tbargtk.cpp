@@ -4,9 +4,9 @@
 // Author:      Robert Roebling
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      
+// RCS-ID:
 // Copyright:   (c) Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -20,8 +20,8 @@
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxToolBarTool,wxObject)
-  
-wxToolBarTool::wxToolBarTool( wxToolBar *owner, int theIndex, 
+
+wxToolBarTool::wxToolBarTool( wxToolBar *owner, int theIndex,
       const wxBitmap& bitmap1, const  wxBitmap& bitmap2,
       bool toggle, wxObject *clientData,
       const wxString& shortHelpString, const wxString& longHelpString )
@@ -40,7 +40,7 @@ wxToolBarTool::wxToolBarTool( wxToolBar *owner, int theIndex,
   m_deleteSecondBitmap = FALSE;
 };
 
-wxToolBarTool::~wxToolBarTool(void)
+wxToolBarTool::~wxToolBarTool()
 {
 };
 
@@ -51,9 +51,9 @@ wxToolBarTool::~wxToolBarTool(void)
 static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget), wxToolBarTool *tool )
 {
   if (!tool->m_enabled) return;
-  
+
   if (tool->m_isToggle) tool->m_toggleState = !tool->m_toggleState;
-  
+
   tool->m_owner->OnLeftClick( tool->m_index, tool->m_toggleState );
 };
 
@@ -64,43 +64,43 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBar,wxControl)
 BEGIN_EVENT_TABLE(wxToolBar, wxControl)
 END_EVENT_TABLE()
 
-wxToolBar::wxToolBar(void)
+wxToolBar::wxToolBar()
 {
 };
 
-wxToolBar::wxToolBar( wxWindow *parent, wxWindowID id, 
+wxToolBar::wxToolBar( wxWindow *parent, wxWindowID id,
   const wxPoint& pos, const wxSize& size,
   long style, const wxString& name )
 {
   Create( parent, id, pos, size, style, name );
 };
 
-wxToolBar::~wxToolBar(void)
+wxToolBar::~wxToolBar()
 {
 };
 
-bool wxToolBar::Create( wxWindow *parent, wxWindowID id, 
+bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
   const wxPoint& pos, const wxSize& size,
   long style, const wxString& name )
 {
   m_needParent = TRUE;
-  
+
   PreCreation( parent, id, pos, size, style, name );
 
   m_tools.DeleteContents( TRUE );
-    
+
   m_widget = gtk_handle_box_new();
-  
+
   m_toolbar = GTK_TOOLBAR( gtk_toolbar_new( GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_ICONS ) );
-  
+
   gtk_container_add( GTK_CONTAINER(m_widget), GTK_WIDGET(m_toolbar) );
-  
+
   gtk_widget_show( GTK_WIDGET(m_toolbar) );
-  
+
   PostCreation();
-  
+
   Show( TRUE );
-    
+
   return TRUE;
 };
 
@@ -134,32 +134,32 @@ void wxToolBar::OnMouseEnter( int toolIndex )
   GetEventHandler()->ProcessEvent(event);
 };
 
-wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap, 
+wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
   const wxBitmap& pushedBitmap, bool toggle,
   float WXUNUSED(xPos), float WXUNUSED(yPos), wxObject *clientData,
   const wxString& helpString1, const wxString& helpString2 )
 {
   if (!bitmap.Ok()) return NULL;
-  
-  wxToolBarTool *tool = new wxToolBarTool( this, toolIndex, bitmap, pushedBitmap, toggle, 
+
+  wxToolBarTool *tool = new wxToolBarTool( this, toolIndex, bitmap, pushedBitmap, toggle,
   clientData, helpString1, helpString2 );
-  
+
   GdkPixmap *pixmap = bitmap.GetPixmap();
-  
+
   GdkBitmap *mask = NULL;
   if (bitmap.GetMask()) mask = bitmap.GetMask()->GetBitmap();
-  
+
   GtkWidget *tool_pixmap = gtk_pixmap_new( pixmap, mask );
   gtk_misc_set_alignment( GTK_MISC(tool_pixmap), 0.5, 0.5 );
-  
+
   GtkToolbarChildType ctype = GTK_TOOLBAR_CHILD_BUTTON;
   if (toggle) ctype = GTK_TOOLBAR_CHILD_TOGGLEBUTTON;
-  
-  gtk_toolbar_append_element( m_toolbar, 
+
+  gtk_toolbar_append_element( m_toolbar,
     ctype, NULL, NULL, helpString1, "", tool_pixmap, (GtkSignalFunc)gtk_toolbar_callback, (gpointer)tool );
-    
-  m_tools.Append( tool );    
-    
+
+  m_tools.Append( tool );
+
   return tool;
 };
 

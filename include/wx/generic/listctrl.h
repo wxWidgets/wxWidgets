@@ -69,7 +69,7 @@ typedef int (*wxListCtrlCompare)(long item1, long item2, long sortData);
 #define wxLC_NO_HEADER       0x0800  // not supported in wxGLC
 #define wxLC_NO_SORT_HEADER  0x1000  // not supported in wxGLC
 #define wxLC_SINGLE_SEL      0x2000
-#define wxLC_SORT_ASCENDING  0x4000  
+#define wxLC_SORT_ASCENDING  0x4000
 #define wxLC_SORT_DESCENDING 0x8000  // not supported in wxGLC
 
 #define wxLC_MASK_TYPE       (wxLC_ICON | wxLC_SMALL_ICON | wxLC_LIST | wxLC_REPORT)
@@ -95,7 +95,7 @@ typedef int (*wxListCtrlCompare)(long item1, long item2, long sortData);
 #define wxLIST_STATE_DONTCARE       0x0000
 #define wxLIST_STATE_DROPHILITED    0x0001  // not supported in wxGLC
 #define wxLIST_STATE_FOCUSED        0x0002
-#define wxLIST_STATE_SELECTED       0x0004  
+#define wxLIST_STATE_SELECTED       0x0004
 #define wxLIST_STATE_CUT            0x0008  // not supported in wxGLC
 
 // Hit test flags, used in HitTest // wxGLC suppots 20 and 80
@@ -119,7 +119,7 @@ enum {
     wxLIST_NEXT_ALL,            // Searches for subsequent item by index
     wxLIST_NEXT_BELOW,          // Searches for an item below the specified item
     wxLIST_NEXT_LEFT,           // Searches for an item to the left of the specified item
-    wxLIST_NEXT_RIGHT,          // Searches for an item to the right of the specified item
+    wxLIST_NEXT_RIGHT           // Searches for an item to the right of the specified item
 };
 
 // Alignment flags for Arrange  // always wxLIST_ALIGN_LEFT in wxGLC
@@ -238,7 +238,7 @@ class wxListItemData : public wxObject
     int        m_xpos,m_ypos;
     int        m_width,m_height;
     wxColour   *m_colour;
-    
+
   public:
     wxListItemData(void);
     wxListItemData( const wxListItem &info );
@@ -278,7 +278,7 @@ class wxListHeaderData : public wxObject
     int       m_width;
     int       m_xpos,m_ypos;
     int       m_height;
-    
+
   public:
     wxListHeaderData(void);
     wxListHeaderData( const wxListItem &info );
@@ -361,14 +361,14 @@ class wxListHeaderWindow : public wxWindow
 
   public:
     wxListHeaderWindow( void );
-    wxListHeaderWindow( wxWindow *win, wxWindowID id, wxListMainWindow *owner, 
+    wxListHeaderWindow( wxWindow *win, wxWindowID id, wxListMainWindow *owner,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
       long style = 0, const wxString &name = "columntitles" );
     void DoDrawRect( wxPaintDC *dc, int x, int y, int w, int h );
     void OnPaint( wxPaintEvent &event );
     void OnMouse( wxMouseEvent &event );
     void OnSetFocus( wxFocusEvent &event );
-    
+
   DECLARE_EVENT_TABLE()
 };
 
@@ -380,7 +380,7 @@ class wxListRenameTimer: public wxTimer
 {
  private:
    wxListMainWindow   *m_owner;
-   
+
  public:
    wxListRenameTimer( wxListMainWindow *owner );
    void Notify();
@@ -395,7 +395,7 @@ class wxListRenameTimer: public wxTimer
 class wxListTextCtrl: public wxTextCtrl
 {
   DECLARE_DYNAMIC_CLASS(wxListTextCtrl);
-  
+
   private:
     bool               *m_accept;
     wxString           *m_res;
@@ -403,10 +403,10 @@ class wxListTextCtrl: public wxTextCtrl
 
   public:
     wxListTextCtrl(void) : wxTextCtrl() {};
-    wxListTextCtrl(  wxWindow *parent, const char *value = "", 
+    wxListTextCtrl(  wxWindow *parent, const char *value = "",
       bool *accept, wxString *res, wxListMainWindow *owner,
       int x = -1, int y = -1, int w = -1, int h = -1, int style = 0, char *name = "rawtext" ) :
-      wxTextCtrl( parent, value, x, y, w, h, style, name ) 
+      wxTextCtrl( parent, value, x, y, w, h, style, name )
       {
         m_res = res;
         m_accept = accept;
@@ -455,7 +455,7 @@ class wxListMainWindow: public wxScrolledWindow
   public:
     long                 m_mode;
     wxList               m_lines;
-    wxList               m_columns; 
+    wxList               m_columns;
     wxListLineData      *m_current;
     int                  m_visibleLines;
     wxBrush             *m_hilightBrush;
@@ -478,8 +478,8 @@ class wxListMainWindow: public wxScrolledWindow
     int                  m_dragCount;
 
   public:
-    wxListMainWindow(void); 
-    wxListMainWindow( wxWindow *parent, wxWindowID id, 
+    wxListMainWindow(void);
+    wxListMainWindow( wxWindow *parent, wxWindowID id,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
       long style = 0, const wxString &name = "listctrl" );
     ~wxListMainWindow(void);
@@ -517,10 +517,10 @@ class wxListMainWindow: public wxScrolledWindow
     void GetColumn( int col, wxListItem &item );
     int GetColumnWidth( int vol );
     int GetColumnCount( void );
-    int GetCountPerPage( void );     
+    int GetCountPerPage( void );
     void SetItem( wxListItem &item );
     void GetItem( wxListItem &item );
-    void SetItemState( long item, long state, long stateMask ); 
+    void SetItemState( long item, long state, long stateMask );
     int GetItemState( long item, long stateMask );
     int GetItemCount( void );
     void GetItemRect( long index, wxRectangle &rect );
@@ -543,7 +543,7 @@ class wxListMainWindow: public wxScrolledWindow
     void InsertColumn( long col, wxListItem &item );
     void SortItems( wxListCtrlCompare fn, long data );
     virtual bool OnListNotify( wxListEvent &event );
-    
+
   DECLARE_EVENT_TABLE()
 };
 
@@ -554,15 +554,15 @@ class wxListMainWindow: public wxScrolledWindow
 class wxListCtrl: public wxControl
 {
   DECLARE_DYNAMIC_CLASS(wxListCtrl);
-  
+
   public:
-  
+
     wxListCtrl(void);
-    wxListCtrl( wxWindow *parent, wxWindowID id, 
+    wxListCtrl( wxWindow *parent, wxWindowID id,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
       long style = 0, const wxString &name = "listctrl" );
     ~wxListCtrl(void);
-    bool Create( wxWindow *parent, wxWindowID id, 
+    bool Create( wxWindow *parent, wxWindowID id,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
       long style = 0, const wxString &name = "listctrl" );
     void OnSize( wxSizeEvent &event );
@@ -583,7 +583,7 @@ class wxListCtrl: public wxControl
     void SetItemText( long item, const wxString& str );
     long GetItemData( long item );
     bool SetItemData( long item, long data );
-    bool GetItemRect( long item, wxRectangle& rect, int code = wxLIST_RECT_BOUNDS ); 
+    bool GetItemRect( long item, wxRectangle& rect, int code = wxLIST_RECT_BOUNDS );
     bool GetItemPosition( long item, wxPoint& pos );
     bool SetItemPosition( long item, const wxPoint& pos ); // not supported in wxGLC
     int GetItemCount(void);
@@ -624,18 +624,18 @@ class wxListCtrl: public wxControl
       { m_mainWin->SetDropTarget( dropTarget ); };
     wxDropTarget *GetDropTarget() const
       { return m_mainWin->GetDropTarget(); };
-      
+
     void OnIdle( wxIdleEvent &event );
 
   protected:
-  
+
 //  wxListTextCtrl       m_textCtrl;
-    wxImageList         *m_imageListNormal; 
-    wxImageList         *m_imageListSmall;  
+    wxImageList         *m_imageListNormal;
+    wxImageList         *m_imageListSmall;
     wxImageList         *m_imageListState;  // what's that ?
     wxListHeaderWindow  *m_headerWin;
     wxListMainWindow    *m_mainWin;
-    
+
   DECLARE_EVENT_TABLE()
 
 };

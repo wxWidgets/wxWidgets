@@ -203,7 +203,9 @@ class wxFrame;
 class WXDLLEXPORT wxLogWindow : public wxLog
 {
 public:
-  wxLogWindow(const char *szTitle, bool bShow = TRUE);
+  wxLogWindow(const char *szTitle,      // the title of the frame
+              bool bShow = TRUE,        // show window immediately?
+              bool bPassToOld = TRUE);  // pass log messages to the old target?
   ~wxLogWindow();
 
   // window operations
@@ -213,15 +215,24 @@ public:
   wxFrame *GetFrame() const;
 
   // accessors
+    // the previous log target (may be NULL)
   wxLog *GetOldLog() const { return m_pOldLog; }
+    // are we passing the messages to the previous log target?
+  bool IsPassingMessages() const { return m_bPassMessages; }
+
+  // we can pass the messages to the previous log target (we're in this mode by
+  // default: we collect all messages in the window, but also let the default
+  // processing take place)
+  void PassMessages(bool bDoPass) { m_bPassMessages = bDoPass; }
 
 protected:
   virtual void DoLog(wxLogLevel level, const char *szString);
   virtual void DoLogString(const char *szString);
 
 private:
-  wxLog      *m_pOldLog;    // previous log target
-  wxLogFrame *m_pLogFrame;  // the log frame
+  bool        m_bPassMessages;  // pass messages to m_pOldLog?
+  wxLog      *m_pOldLog;        // previous log target
+  wxLogFrame *m_pLogFrame;      // the log frame
 };
 
 // ----------------------------------------------------------------------------

@@ -646,10 +646,12 @@ void wxLogFrame::OnClear(wxCommandEvent& WXUNUSED(event))
   m_pTextCtrl->Clear();
 }
 
-wxLogWindow::wxLogWindow(const char *szTitle, bool bShow)
+wxLogWindow::wxLogWindow(const char *szTitle, bool bShow, bool bDoPass)
 {
-  m_pOldLog = wxLog::GetActiveTarget();
+  m_bPassMessages = bDoPass;
+
   m_pLogFrame = new wxLogFrame(szTitle);
+  m_pOldLog = wxLog::SetActiveTarget(this);
 
   if ( bShow )
     m_pLogFrame->Show(TRUE);
@@ -668,7 +670,7 @@ wxFrame *wxLogWindow::GetFrame() const
 void wxLogWindow::DoLog(wxLogLevel level, const char *szString)
 {
   // first let the previous logger show it
-  if ( m_pOldLog != NULL ) {
+  if ( m_pOldLog != NULL && m_bPassMessages ) {
     // @@@ why can't we access protected wxLog method from here (we derive
     // from wxLog)? gcc gives "DoLog is protected in this context", what
     // does this mean? Anyhow, the cast is harmless and let's us do what

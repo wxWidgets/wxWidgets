@@ -58,6 +58,16 @@ wxColour *g_systemBtnShadowColour    = NULL;
 wxColour *g_systemBtnHighlightColour = NULL;
 wxColour *g_systemHighlightColour    = NULL;
 
+wxFont *g_systemFont = NULL;
+
+void wxSystemSettings::Done() {
+  wxDELETE(g_systemBtnFaceColour);
+  wxDELETE(g_systemBtnShadowColour);
+  wxDELETE(g_systemBtnHighlightColour);
+  wxDELETE(g_systemHighlightColour);
+  wxDELETE(g_systemFont);
+}
+
 wxColour wxSystemSettings::GetSystemColour( int index )
 {
   switch (index)
@@ -140,8 +150,6 @@ wxColour wxSystemSettings::GetSystemColour( int index )
   };
   return *wxWHITE;
 };
-
-wxFont *g_systemFont = NULL;
 
 wxFont wxSystemSettings::GetSystemFont( int index ) 
 {

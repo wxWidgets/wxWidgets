@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __MENUH__
@@ -60,7 +60,7 @@ public:
   inline bool IsEnabled(int id) const { return Enabled(id); };
   void Check(int id, bool Flag);
   bool Checked(int id) const;
-  inline bool IsChecked(int id) const { return IsChecked(id); };
+  inline bool IsChecked(int id) const { return Checked(id); };
 
   // item properties
     // title
@@ -84,7 +84,7 @@ public:
 
   virtual void SetParent(wxEvtHandler *parent) { m_parent = parent; }
   inline void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
-  inline wxEvtHandler *GetEventHandler(void) { return m_eventHandler; }
+  inline wxEvtHandler *GetEventHandler() { return m_eventHandler; }
 
   inline wxList& GetItems() const { return (wxList&) m_menuItems; }
 
@@ -130,9 +130,10 @@ class WXDLLEXPORT wxMenuBar: public wxEvtHandler
 {
   DECLARE_DYNAMIC_CLASS(wxMenuBar)
 
-  wxMenuBar(void);
+public:
+  wxMenuBar();
   wxMenuBar(int n, wxMenu *menus[], const wxString titles[]);
-  ~wxMenuBar(void);
+  ~wxMenuBar();
 
   void Append(wxMenu *menu, const wxString& title);
   // Must only be used AFTER menu has been attached to frame,
@@ -161,8 +162,11 @@ class WXDLLEXPORT wxMenuBar: public wxEvtHandler
   // menu too if itemMenu is non-NULL.
   wxMenuItem *FindItemForId(int itemId, wxMenu **menuForItem = NULL) const ;
 
+  int     GetMenuCount() const { return m_menuCount; }
+  wxMenu *GetMenu(int n) const { return m_menus[n];  }
+
   inline void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
-  inline wxEvtHandler *GetEventHandler(void) { return m_eventHandler; }
+  inline wxEvtHandler *GetEventHandler() { return m_eventHandler; }
 
   inline int GetMenuCount() const { return m_menuCount; }
   inline wxMenu* GetMenu(int i) const { return m_menus[i]; }

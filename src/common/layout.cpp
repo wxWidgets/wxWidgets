@@ -88,13 +88,13 @@ int wxSizerMarginY(wxWindow *win)
 }
 
 
-wxIndividualLayoutConstraint::wxIndividualLayoutConstraint(void)
+wxIndividualLayoutConstraint::wxIndividualLayoutConstraint()
 {
   myEdge = wxTop; relationship = wxUnconstrained; margin = 0; value = 0; percent = 0; otherEdge = wxTop;
   done = FALSE; otherWin = NULL;
 }
 
-wxIndividualLayoutConstraint::~wxIndividualLayoutConstraint(void)
+wxIndividualLayoutConstraint::~wxIndividualLayoutConstraint()
 {
 }
 
@@ -722,7 +722,9 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
 
 // Get the value of this edge or dimension, or if this
 // is not determinable, -1.
-int wxIndividualLayoutConstraint::GetEdge(wxEdge which, wxWindow *thisWin, wxWindow *other)
+int wxIndividualLayoutConstraint::GetEdge(wxEdge which,
+                                          wxWindow *thisWin,
+                                          wxWindow *other) const
 {
   // If the edge or dimension belongs to the parent, then we
   // know the dimension is obtainable immediately.
@@ -942,7 +944,7 @@ int wxIndividualLayoutConstraint::GetEdge(wxEdge which, wxWindow *thisWin, wxWin
   return -1;
 }
 
-wxLayoutConstraints::wxLayoutConstraints(void)
+wxLayoutConstraints::wxLayoutConstraints()
 {
   left.SetEdge(wxLeft);
   top.SetEdge(wxTop);
@@ -954,7 +956,7 @@ wxLayoutConstraints::wxLayoutConstraints(void)
   height.SetEdge(wxHeight);
 }
 
-wxLayoutConstraints::~wxLayoutConstraints(void)
+wxLayoutConstraints::~wxLayoutConstraints()
 {
 }
 
@@ -1004,8 +1006,7 @@ bool wxLayoutConstraints::SatisfyConstraints(wxWindow *win, int *nChanges)
 
   *nChanges = noChanges;
 
-  return (left.GetDone() && top.GetDone() && right.GetDone() && bottom.GetDone() &&
-    centreX.GetDone() && centreY.GetDone());
+  return AreSatisfied();
 }
 
 /*
@@ -1085,7 +1086,7 @@ bool wxOldDoLayout(wxWindow *win)
       if (constr)
       {
         int tempNoChanges = 0;
-        (void) constr->SatisfyConstraints(child, &tempNoChanges);
+        (void)constr->SatisfyConstraints(child, &tempNoChanges);
         noChanges += tempNoChanges;
       }
       node = node->Next();
@@ -1136,7 +1137,7 @@ bool wxOldDoLayout(wxWindow *win)
   return TRUE;
 }
 
-wxSizer::wxSizer(void)
+wxSizer::wxSizer()
 {
   sizerBehaviour = wxSizerNone;
   borderX = 2;
@@ -1197,7 +1198,7 @@ bool wxSizer::Create(wxWindow *parent, wxSizerBehaviour behav)
   return TRUE;
 }
 
-wxSizer::~wxSizer(void)
+wxSizer::~wxSizer()
 {
   // Remove all children without deleting them,
   // or ~wxbWindow will delete proper windows _twice_
@@ -1488,7 +1489,7 @@ bool wxSizer::LayoutPhase2(int *noChanges)
  * wxRowColSizer
  */
  
-wxRowColSizer::wxRowColSizer(void)
+wxRowColSizer::wxRowColSizer()
 {
   rowOrCol = TRUE;
   rowOrColSize = 20;
@@ -1513,7 +1514,7 @@ bool wxRowColSizer::Create(wxWindow *parent, bool rc, int n, wxSizerBehaviour be
   return TRUE;
 }
 
-wxRowColSizer::~wxRowColSizer(void)
+wxRowColSizer::~wxRowColSizer()
 {
 }
 
@@ -1677,7 +1678,7 @@ bool wxRowColSizer::LayoutPhase2(int *noChanges)
  * wxSpacingSizer
  */
  
-wxSpacingSizer::wxSpacingSizer(void)
+wxSpacingSizer::wxSpacingSizer()
 {
 }
 
@@ -1738,7 +1739,7 @@ bool wxSpacingSizer::Create(wxWindow *parent, wxRelationship rel, wxWindow *othe
   return TRUE;
 }
 
-wxSpacingSizer::~wxSpacingSizer(void)
+wxSpacingSizer::~wxSpacingSizer()
 {
 }
 

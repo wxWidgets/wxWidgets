@@ -37,7 +37,7 @@ class wxFontNameDirectory;
 // global variables
 //-----------------------------------------------------------------------------
 
-// extern wxFontNameDirectory wxTheFontNameDirectory;  // defined below
+//extern wxFontNameDirectory *wxTheFontNameDirectory;  // defined below
 
 //-----------------------------------------------------------------------------
 // wxFont
@@ -115,6 +115,6 @@ class wxFontNameDirectory: public wxObject
     int   nextFontId;
 };
 
-extern wxFontNameDirectory wxTheFontNameDirectory;
+extern wxFontNameDirectory *wxTheFontNameDirectory;
 
 #endif // __GTKFONTH__

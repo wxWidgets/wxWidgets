@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -4600,3 +4600,5 @@ const char *wxGetMessageName(int message)
   }
 }
 #endif //WXDEBUG
+
+#include "../common/wincmn.cpp"

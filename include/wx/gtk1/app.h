@@ -5,7 +5,7 @@
 // Created:     01/02/97
 // Id:
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __GTKAPPH__
@@ -24,7 +24,6 @@
 
 class wxApp;
 class wxLog;
-class wxConfig; // it's not used #if !USE_WXCONFIG, but fwd decl doesn't harm
 
 //-----------------------------------------------------------------------------
 // global data
@@ -55,18 +54,18 @@ class wxApp: public wxEvtHandler
   DECLARE_DYNAMIC_CLASS(wxApp)
 
   public:
-  
+
     wxApp(void);
     ~wxApp(void);
-    
+
     static void SetInitializerFunction(wxAppInitializerFunction fn) { m_appInitFn = fn; }
     static wxAppInitializerFunction GetInitializerFunction(void) { return m_appInitFn; }
-    
+
     virtual bool OnInit(void);
     virtual bool OnInitGui(void);
     virtual int OnRun(void);
     virtual int OnExit(void);
-    
+
     wxWindow *GetTopWindow(void);
     void SetTopWindow( wxWindow *win );
     virtual int MainLoop(void);
@@ -78,10 +77,10 @@ class wxApp: public wxEvtHandler
     inline void SetWantDebugOutput(bool flag) { m_wantDebugOutput = flag; }
     inline bool GetWantDebugOutput(void) { return m_wantDebugOutput; }
 
-    void OnIdle( wxIdleEvent &event );    
+    void OnIdle( wxIdleEvent &event );
     bool SendIdleEvents(void);
     bool SendIdleEvents( wxWindow* win );
-        
+
     inline wxString GetAppName(void) const {
       if (m_appName != "")
         return m_appName;
@@ -95,38 +94,32 @@ class wxApp: public wxEvtHandler
 
     inline void SetExitOnFrameDelete(bool flag) { m_exitOnFrameDelete = flag; }
     inline bool GetExitOnFrameDelete(void) const { return m_exitOnFrameDelete; }
-  
-    void SetPrintMode(int WXUNUSED(mode) ) {}; 
+
+    void SetPrintMode(int WXUNUSED(mode) ) {};
     int GetPrintMode(void) const { return wxPRINT_POSTSCRIPT; };
-    
+
     // override this function to create default log target of arbitrary
     // user-defined classv (default implementation creates a wxLogGui object)
     virtual wxLog *CreateLogTarget();
-    
-#if USE_WXCONFIG
-    // override this function to create a global wxConfig object of different
-    // than default type (right now the default implementation returns NULL)
-    virtual wxConfig *CreateConfig() { return NULL; }
-#endif
-    
+
   // GTK implementation
 
     static void CommonInit(void);
-    static void CommonCleanUp(void);    
-    
+    static void CommonCleanUp(void);
+
     bool ProcessIdle(void);
     void DeletePendingObjects(void);
-    
+
     bool          m_initialized;
     bool          m_exitOnFrameDelete;
     bool          m_wantDebugOutput;
     wxWindow     *m_topWindow;
     
     gint          m_idleTag;
-    
+
     int         argc;
     char      **argv;
-    
+
     static wxAppInitializerFunction m_appInitFn;
     
 private:

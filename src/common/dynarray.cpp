@@ -72,7 +72,7 @@ wxBaseArray::wxBaseArray(const wxBaseArray& src)
 // assignment operator
 wxBaseArray& wxBaseArray::operator=(const wxBaseArray& src)
 {
-  DELETEA(m_pItems);
+  wxDELETEA(m_pItems);
 
   m_uiSize  = // not src.m_uiSize to save memory
   m_uiCount = src.m_uiCount;
@@ -117,7 +117,7 @@ void wxBaseArray::Grow()
 // dtor
 wxBaseArray::~wxBaseArray()
 {
-  DELETEA(m_pItems);
+  wxDELETEA(m_pItems);
 }
 
 // clears the list
@@ -126,8 +126,7 @@ void wxBaseArray::Clear()
   m_uiSize  =
   m_uiCount = 0;
 
-  DELETEA(m_pItems);
-  m_pItems = NULL;
+  wxDELETEA(m_pItems);
 }
 
 // pre-allocates memory (frees the previous data!)
@@ -137,7 +136,7 @@ void wxBaseArray::Alloc(uint uiSize)
 
   // only if old buffer was not big enough
   if ( uiSize > m_uiSize ) {
-    DELETEA(m_pItems);
+    wxDELETEA(m_pItems);
     m_pItems = new long[uiSize];
     m_uiSize  = uiSize;
   }

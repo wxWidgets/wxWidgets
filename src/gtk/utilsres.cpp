@@ -5,7 +5,7 @@
 // Created:     01/02/97
 // Id:
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:           wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -31,6 +31,7 @@
 #include <X11/Xutil.h>
 #include <X11/Xresource.h>
 
+#include "wx/log.h"
 
 //-----------------------------------------------------------------------------
 // constants
@@ -48,7 +49,7 @@
 // glabal data (data.cpp)
 //-----------------------------------------------------------------------------
 
-extern wxList wxResourceCache;
+extern wxResourceCache *wxTheResourceCache;
 extern XrmDatabase wxResourceDatabase;
 
 //-----------------------------------------------------------------------------
@@ -58,21 +59,21 @@ extern XrmDatabase wxResourceDatabase;
 static char *GetResourcePath(char *buf, char *name, bool create)
 {
     if (create && FileExists(name)) {
-	strcpy(buf, name);
-	return buf; // Exists so ...
+        strcpy(buf, name);
+        return buf; // Exists so ...
     }
     if (*name == '/')
-	strcpy(buf, name);
+        strcpy(buf, name);
     else {
-	// Put in standard place for resource files if not absolute
-	strcpy(buf, DEFAULT_XRESOURCE_DIR);
-	strcat(buf, "/");
-	strcat(buf, FileNameFromPath(name));
+        // Put in standard place for resource files if not absolute
+        strcpy(buf, DEFAULT_XRESOURCE_DIR);
+        strcat(buf, "/");
+        strcat(buf, FileNameFromPath(name));
     }
     if (create) {
-	// Touch the file to create it
-	FILE *fd = fopen(buf, "w");
-	if (fd) fclose(fd);
+        // Touch the file to create it
+        FILE *fd = fopen(buf, "w");
+        if (fd) fclose(fd);
     }
     return buf;
 }
@@ -83,27 +84,27 @@ static char *GetResourcePath(char *buf, char *name, bool create)
 static char *GetIniFile(char *dest, const char *filename)
 {
     char *home = NULL;
-    if (filename && wxIsAbsolutePath(filename)) 
+    if (filename && wxIsAbsolutePath(filename))
     {
       strcpy(dest, filename);
-    } 
+    }
     else
     {
-      if ((home = wxGetUserHome(wxString())) != NULL) 
+      if ((home = wxGetUserHome(wxString())) != NULL)
       {
-	strcpy(dest, home);
-	if (dest[strlen(dest) - 1] != '/') strcat(dest, "/");
-	if (filename == NULL) 
-	{
-	  if ((filename = getenv("XENVIRONMENT")) == NULL) filename = ".Xdefaults";
-	} 
-	else 
-	  if (*filename != '.') strcat(dest, ".");
-	strcat(dest, filename);
+        strcpy(dest, home);
+        if (dest[strlen(dest) - 1] != '/') strcat(dest, "/");
+        if (filename == NULL)
+        {
+          if ((filename = getenv("XENVIRONMENT")) == NULL) filename = ".Xdefaults";
+        }
+        else
+          if (*filename != '.') strcat(dest, ".");
+        strcat(dest, filename);
       }
-      else 
+      else
       {
-        dest[0] = '\0';    
+        dest[0] = '\0';
       }
     }
     return dest;
@@ -121,38 +122,38 @@ static void wxXMergeDatabases(void)
     (void)strcpy(name, "/usr/lib/X11/app-defaults/");
     (void)strcat(name, classname ? classname : "wxWindows");
 
-    // Get application defaults file, if any 
+    // Get application defaults file, if any
     if ((applicationDB = XrmGetFileDatabase(name)))
-	(void)XrmMergeDatabases(applicationDB, &wxResourceDatabase);
+        (void)XrmMergeDatabases(applicationDB, &wxResourceDatabase);
 
     // Merge server defaults, created by xrdb, loaded as a property of the root
     // window when the server initializes and loaded into the display
     // structure on XOpenDisplay;
     // if not defined, use .Xdefaults
     if (XResourceManagerString(GDK_DISPLAY()) != NULL) {
-	serverDB = XrmGetStringDatabase(XResourceManagerString(GDK_DISPLAY()));
+        serverDB = XrmGetStringDatabase(XResourceManagerString(GDK_DISPLAY()));
     } else {
-	(void)GetIniFile(filename, NULL);
-	serverDB = XrmGetFileDatabase(filename);
+        (void)GetIniFile(filename, NULL);
+        serverDB = XrmGetFileDatabase(filename);
     }
     if (serverDB)
-	XrmMergeDatabases(serverDB, &wxResourceDatabase);
+        XrmMergeDatabases(serverDB, &wxResourceDatabase);
 
     // Open XENVIRONMENT file, or if not defined, the .Xdefaults,
     // and merge into existing database
 
     if ((environment = getenv("XENVIRONMENT")) == NULL) {
-	size_t len;
-	environment = GetIniFile(filename, NULL);
-	len = strlen(environment);
+        size_t len;
+        environment = GetIniFile(filename, NULL);
+        len = strlen(environment);
 #if !defined(SVR4) || defined(__sgi)
-	(void)gethostname(environment + len, 1024 - len);
+        (void)gethostname(environment + len, 1024 - len);
 #else
-	(void)sysinfo(SI_HOSTNAME, environment + len, 1024 - len);
+        (void)sysinfo(SI_HOSTNAME, environment + len, 1024 - len);
 #endif
     }
     if ((homeDB = XrmGetFileDatabase(environment)))
-	XrmMergeDatabases(homeDB, &wxResourceDatabase);
+        XrmMergeDatabases(homeDB, &wxResourceDatabase);
 }
 
 //-----------------------------------------------------------------------------
@@ -163,31 +164,32 @@ void wxFlushResources(void)
 {
     char nameBuffer[512];
 
-    wxNode *node = wxResourceCache.First();
+    wxNode *node = wxTheResourceCache->First();
     while (node) {
-	char *file = node->key.string;
-	// If file doesn't exist, create it first.
-	(void)GetResourcePath(nameBuffer, file, TRUE);
+        char *file = node->key.string;
+        // If file doesn't exist, create it first.
+        (void)GetResourcePath(nameBuffer, file, TRUE);
 
-	XrmDatabase database = (XrmDatabase)node->Data();
-	XrmPutFileDatabase(database, nameBuffer);
-	XrmDestroyDatabase(database);
-	wxNode *next = node->Next();
-	delete node;
-	node = next;
+        XrmDatabase database = (XrmDatabase)node->Data();
+        XrmPutFileDatabase(database, nameBuffer);
+        XrmDestroyDatabase(database);
+        wxNode *next = node->Next();
+//        delete node;
+        node = next;
     }
 }
 
 void wxDeleteResources(const char *file)
 {
+    wxLogTrace(wxTraceResAlloc, "Delete: Number = %d", wxTheResourceCache->Number());
     char buffer[500];
     (void)GetIniFile(buffer, file);
 
-    wxNode *node = wxResourceCache.Find(buffer);
+    wxNode *node = wxTheResourceCache->Find(buffer);
     if (node) {
-	XrmDatabase database = (XrmDatabase)node->Data();
-	XrmDestroyDatabase(database);
-	delete node;
+        XrmDatabase database = (XrmDatabase)node->Data();
+        XrmDestroyDatabase(database);
+//        delete node;
     }
 }
 
@@ -204,12 +206,13 @@ bool wxWriteResource(const wxString& section, const wxString& entry, const wxStr
     (void)GetIniFile(buffer, file);
 
     XrmDatabase database;
-    wxNode *node = wxResourceCache.Find(buffer);
+    wxNode *node = wxTheResourceCache->Find(buffer);
     if (node)
-	database = (XrmDatabase)node->Data();
+        database = (XrmDatabase)node->Data();
     else {
-	database = XrmGetFileDatabase(buffer);
-	wxResourceCache.Append(buffer, (wxObject *)database);
+        database = XrmGetFileDatabase(buffer);
+        wxLogTrace(wxTraceResAlloc, "Write: Number = %d", wxTheResourceCache->Number());
+        wxTheResourceCache->Append(buffer, (wxObject *)database);
     }
     char resName[300];
     strcpy(resName, !section.IsNull() ? WXSTRINGCAST section : "wxWindows");
@@ -243,24 +246,25 @@ bool wxWriteResource(const wxString& section, const wxString& entry, int value, 
 bool wxGetResource(const wxString& section, const wxString& entry, char **value, const wxString& file )
 {
     if (!wxResourceDatabase)
-	wxXMergeDatabases();
+        wxXMergeDatabases();
 
     XrmDatabase database;
     if (file) {
-	char buffer[500];
-	// Is this right? Trying to get it to look in the user's
-	// home directory instead of current directory -- JACS
-	(void)GetIniFile(buffer, file);
+        char buffer[500];
+        // Is this right? Trying to get it to look in the user's
+        // home directory instead of current directory -- JACS
+        (void)GetIniFile(buffer, file);
 
-	wxNode *node = wxResourceCache.Find(buffer);
-	if (node)
-	    database = (XrmDatabase)node->Data();
-	else {
-	    database = XrmGetFileDatabase(buffer);
-	    wxResourceCache.Append(buffer, (wxObject *)database);
-	}
+        wxNode *node = wxTheResourceCache->Find(buffer);
+        if (node)
+            database = (XrmDatabase)node->Data();
+        else {
+            database = XrmGetFileDatabase(buffer);
+            wxLogTrace(wxTraceResAlloc, "Get: Number = %d", wxTheResourceCache->Number());
+            wxTheResourceCache->Append(buffer, (wxObject *)database);
+        }
     } else
-	database = wxResourceDatabase;
+        database = wxResourceDatabase;
 
     XrmValue xvalue;
     char *str_type[20];
@@ -272,15 +276,15 @@ bool wxGetResource(const wxString& section, const wxString& entry, char **value,
     bool success = XrmGetResource(database, buf, "*", str_type, &xvalue);
     // Try different combinations of upper/lower case, just in case...
     if (!success) {
-	buf[0] = (isupper(buf[0]) ? tolower(buf[0]) : toupper(buf[0]));
-	success = XrmGetResource(database, buf, "*", str_type,	&xvalue);
+        buf[0] = (isupper(buf[0]) ? tolower(buf[0]) : toupper(buf[0]));
+        success = XrmGetResource(database, buf, "*", str_type,        &xvalue);
     }
     if (success) {
-	if (*value)
-	    delete[] *value;
-	*value = new char[xvalue.size + 1];
-	strncpy(*value, xvalue.addr, (int)xvalue.size);
-	return TRUE;
+        if (*value)
+            delete[] *value;
+        *value = new char[xvalue.size + 1];
+        strncpy(*value, xvalue.addr, (int)xvalue.size);
+        return TRUE;
     }
     return FALSE;
 };
@@ -290,11 +294,11 @@ bool wxGetResource(const wxString& section, const wxString& entry, float *value,
     char *s = NULL;
     bool succ = wxGetResource(section, entry, &s, file);
     if (succ) {
-	*value = (float)strtod(s, NULL);
-	delete[]s;
-	return TRUE;
+        *value = (float)strtod(s, NULL);
+        delete[]s;
+        return TRUE;
     } else
-	return FALSE;
+        return FALSE;
 };
 
 bool wxGetResource(const wxString& section, const wxString& entry, long *value, const wxString& file )
@@ -302,11 +306,11 @@ bool wxGetResource(const wxString& section, const wxString& entry, long *value, 
     char *s = NULL;
     bool succ = wxGetResource(section, entry, &s, file);
     if (succ) {
-	*value = strtol(s, NULL, 10);
-	delete[]s;
-	return TRUE;
+        *value = strtol(s, NULL, 10);
+        delete[]s;
+        return TRUE;
     } else
-	return FALSE;
+        return FALSE;
 };
 
 bool wxGetResource(const wxString& section, const wxString& entry, int *value, const wxString& file )
@@ -314,19 +318,19 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
     char *s = NULL;
     bool succ = wxGetResource(section, entry, &s, file);
     if (succ) {
-	// Handle True, False here 
-	// True, Yes, Enables, Set or  Activated 
-	if (*s == 'T' || *s == 'Y' || *s == 'E' || *s == 'S' || *s == 'A')
-	    *value = TRUE;
-	// False, No, Disabled, Reset, Cleared, Deactivated
-	else if (*s == 'F' || *s == 'N' || *s == 'D' || *s == 'R' || *s == 'C')
-	    *value = FALSE;
-	// Handle as Integer
-	else
-	    *value = (int)strtol(s, NULL, 10);
-	delete[]s;
-	return TRUE;
+        // Handle True, False here
+        // True, Yes, Enables, Set or  Activated
+        if (*s == 'T' || *s == 'Y' || *s == 'E' || *s == 'S' || *s == 'A')
+            *value = TRUE;
+        // False, No, Disabled, Reset, Cleared, Deactivated
+        else if (*s == 'F' || *s == 'N' || *s == 'D' || *s == 'R' || *s == 'C')
+            *value = FALSE;
+        // Handle as Integer
+        else
+            *value = (int)strtol(s, NULL, 10);
+        delete[]s;
+        return TRUE;
     } else
-	return FALSE;
+        return FALSE;
 };
 

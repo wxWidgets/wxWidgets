@@ -5,7 +5,7 @@
 // Created:     01/02/97
 // Id:
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -23,7 +23,7 @@
 #include <X11/Xutil.h>
 #include <X11/Xresource.h>
 
-wxList wxResourceCache(wxKEY_STRING);
+wxResourceCache *wxTheResourceCache = NULL;
 XrmDatabase wxResourceDatabase;
 
 // Useful buffer, initialized in wxCommonInit
@@ -64,7 +64,7 @@ wxBitmapList   *wxTheBitmapList = NULL;
   
 
 // X only font names
-wxFontNameDirectory wxTheFontNameDirectory;
+wxFontNameDirectory *wxTheFontNameDirectory;
 
 // Stock objects
 wxFont *wxNORMAL_FONT;
@@ -398,7 +398,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBar95, wxToolBarBase)
 IMPLEMENT_DYNAMIC_CLASS(wxStatusBar, wxWindow)
 
 BEGIN_EVENT_TABLE(wxStatusBar, wxWindow)
-	EVT_PAINT(wxStatusBar::OnPaint)
+  EVT_PAINT(wxStatusBar::OnPaint)
     EVT_SYS_COLOUR_CHANGED(wxStatusBar::OnSysColourChanged)
 END_EVENT_TABLE()
 
@@ -548,17 +548,16 @@ IMPLEMENT_DYNAMIC_CLASS(wxGenericGrid, wxPanel)
 const wxEventTable *wxEvtHandler::GetEventTable() const { return &wxEvtHandler::sm_eventTable; }
 
 const wxEventTable wxEvtHandler::sm_eventTable =
-	{ NULL, &wxEvtHandler::sm_eventTableEntries[0] };
+  { NULL, &wxEvtHandler::sm_eventTableEntries[0] };
 
 const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] = { { 0, 0, 0, NULL } };
 
 BEGIN_EVENT_TABLE(wxFrame, wxWindow)
-	EVT_ACTIVATE(wxFrame::OnActivate)
-	EVT_SIZE(wxFrame::OnSize)
-	EVT_MENU_HIGHLIGHT_ALL(wxFrame::OnMenuHighlight)
-    EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
-    EVT_IDLE(wxFrame::OnIdle)
-    EVT_CLOSE(wxFrame::OnCloseWindow)
+  EVT_SIZE(wxFrame::OnSize)
+  EVT_MENU_HIGHLIGHT_ALL(wxFrame::OnMenuHighlight)
+  EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
+  EVT_IDLE(wxFrame::OnIdle)
+  EVT_CLOSE(wxFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxDialog, wxPanel)
@@ -589,9 +588,9 @@ BEGIN_EVENT_TABLE(wxPanel, wxWindow)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
-	EVT_CHAR(wxTextCtrl::OnChar)
-	EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
-	EVT_ERASE_BACKGROUND(wxTextCtrl::OnEraseBackground)
+  EVT_CHAR(wxTextCtrl::OnChar)
+  EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
+  EVT_ERASE_BACKGROUND(wxTextCtrl::OnEraseBackground)
 END_EVENT_TABLE()
 
 #ifdef wx_msw
@@ -613,32 +612,32 @@ BEGIN_EVENT_TABLE(wxToolBarBase, wxControl)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxToolBarSimple, wxToolBarBase)
-	EVT_SIZE(wxToolBarSimple::OnSize)
-	EVT_PAINT(wxToolBarSimple::OnPaint)
-	EVT_KILL_FOCUS(wxToolBarSimple::OnKillFocus)
-	EVT_MOUSE_EVENTS(wxToolBarSimple::OnMouseEvent)
+  EVT_SIZE(wxToolBarSimple::OnSize)
+  EVT_PAINT(wxToolBarSimple::OnPaint)
+  EVT_KILL_FOCUS(wxToolBarSimple::OnKillFocus)
+  EVT_MOUSE_EVENTS(wxToolBarSimple::OnMouseEvent)
 END_EVENT_TABLE()
 
 #ifdef wx_msw
 BEGIN_EVENT_TABLE(wxToolBarMSW, wxToolBarBase)
-	EVT_SIZE(wxToolBarMSW::OnSize)
-	EVT_PAINT(wxToolBarMSW::OnPaint)
-	EVT_MOUSE_EVENTS(wxToolBarMSW::OnMouseEvent)
+  EVT_SIZE(wxToolBarMSW::OnSize)
+  EVT_PAINT(wxToolBarMSW::OnPaint)
+  EVT_MOUSE_EVENTS(wxToolBarMSW::OnMouseEvent)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxToolBar95, wxToolBarBase)
-	EVT_SIZE(wxToolBar95::OnSize)
-	EVT_PAINT(wxToolBar95::OnPaint)
-	EVT_KILL_FOCUS(wxToolBar95::OnKillFocus)
-	EVT_MOUSE_EVENTS(wxToolBar95::OnMouseEvent)
+  EVT_SIZE(wxToolBar95::OnSize)
+  EVT_PAINT(wxToolBar95::OnPaint)
+  EVT_KILL_FOCUS(wxToolBar95::OnKillFocus)
+  EVT_MOUSE_EVENTS(wxToolBar95::OnMouseEvent)
     EVT_SYS_COLOUR_CHANGED(wxToolBar95::OnSysColourChanged)
 END_EVENT_TABLE()
 #endif
 
 BEGIN_EVENT_TABLE(wxGenericGrid, wxPanel)
-	EVT_SIZE(wxGenericGrid::OnSize)
-	EVT_PAINT(wxGenericGrid::OnPaint)
-	EVT_MOUSE_EVENTS(wxGenericGrid::OnMouseEvent)
+  EVT_SIZE(wxGenericGrid::OnSize)
+  EVT_PAINT(wxGenericGrid::OnPaint)
+  EVT_MOUSE_EVENTS(wxGenericGrid::OnMouseEvent)
     EVT_TEXT(wxGRID_TEXT_CTRL, wxGenericGrid::OnText)
     EVT_COMMAND_SCROLL(wxGRID_HSCROLL, wxGenericGrid::OnGridScroll)
     EVT_COMMAND_SCROLL(wxGRID_VSCROLL, wxGenericGrid::OnGridScroll)
@@ -650,28 +649,28 @@ END_EVENT_TABLE()
 
 #if !defined(wx_msw) || USE_GENERIC_DIALOGS_IN_MSW
 BEGIN_EVENT_TABLE(wxGenericMessageDialog, wxDialog)
-	EVT_BUTTON(wxID_YES, wxGenericMessageDialog::OnYes)
-	EVT_BUTTON(wxID_NO, wxGenericMessageDialog::OnNo)
-	EVT_BUTTON(wxID_CANCEL, wxGenericMessageDialog::OnCancel)
+  EVT_BUTTON(wxID_YES, wxGenericMessageDialog::OnYes)
+  EVT_BUTTON(wxID_NO, wxGenericMessageDialog::OnNo)
+  EVT_BUTTON(wxID_CANCEL, wxGenericMessageDialog::OnCancel)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxGenericColourDialog, wxDialog)
-	EVT_BUTTON(wxID_ADD_CUSTOM, wxGenericColourDialog::OnAddCustom)
-	EVT_SLIDER(wxID_RED_SLIDER, wxGenericColourDialog::OnRedSlider)
-	EVT_SLIDER(wxID_GREEN_SLIDER, wxGenericColourDialog::OnGreenSlider)
-	EVT_SLIDER(wxID_BLUE_SLIDER, wxGenericColourDialog::OnBlueSlider)
-	EVT_PAINT(wxGenericColourDialog::OnPaint)
-	EVT_MOUSE_EVENTS(wxGenericColourDialog::OnMouseEvent)
+  EVT_BUTTON(wxID_ADD_CUSTOM, wxGenericColourDialog::OnAddCustom)
+  EVT_SLIDER(wxID_RED_SLIDER, wxGenericColourDialog::OnRedSlider)
+  EVT_SLIDER(wxID_GREEN_SLIDER, wxGenericColourDialog::OnGreenSlider)
+  EVT_SLIDER(wxID_BLUE_SLIDER, wxGenericColourDialog::OnBlueSlider)
+  EVT_PAINT(wxGenericColourDialog::OnPaint)
+  EVT_MOUSE_EVENTS(wxGenericColourDialog::OnMouseEvent)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxGenericFontDialog, wxDialog)
-	EVT_CHECKBOX(wxID_FONT_UNDERLINE, wxGenericFontDialog::OnChangeFont)
-	EVT_CHOICE(wxID_FONT_STYLE, wxGenericFontDialog::OnChangeFont)
-	EVT_CHOICE(wxID_FONT_WEIGHT, wxGenericFontDialog::OnChangeFont)
-	EVT_CHOICE(wxID_FONT_FAMILY, wxGenericFontDialog::OnChangeFont)
-	EVT_CHOICE(wxID_FONT_COLOUR, wxGenericFontDialog::OnChangeFont)
-	EVT_CHOICE(wxID_FONT_SIZE, wxGenericFontDialog::OnChangeFont)
-	EVT_PAINT(wxGenericFontDialog::OnPaint)
+  EVT_CHECKBOX(wxID_FONT_UNDERLINE, wxGenericFontDialog::OnChangeFont)
+  EVT_CHOICE(wxID_FONT_STYLE, wxGenericFontDialog::OnChangeFont)
+  EVT_CHOICE(wxID_FONT_WEIGHT, wxGenericFontDialog::OnChangeFont)
+  EVT_CHOICE(wxID_FONT_FAMILY, wxGenericFontDialog::OnChangeFont)
+  EVT_CHOICE(wxID_FONT_COLOUR, wxGenericFontDialog::OnChangeFont)
+  EVT_CHOICE(wxID_FONT_SIZE, wxGenericFontDialog::OnChangeFont)
+  EVT_PAINT(wxGenericFontDialog::OnPaint)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxGenericPrintDialog, wxDialog)
@@ -683,25 +682,25 @@ END_EVENT_TABLE()
 #endif
 
 BEGIN_EVENT_TABLE(wxTextEntryDialog, wxDialog)
-	EVT_BUTTON(wxID_OK, wxTextEntryDialog::OnOK)
+  EVT_BUTTON(wxID_OK, wxTextEntryDialog::OnOK)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxSingleChoiceDialog, wxDialog)
-	EVT_BUTTON(wxID_OK, wxSingleChoiceDialog::OnOK)
+  EVT_BUTTON(wxID_OK, wxSingleChoiceDialog::OnOK)
 END_EVENT_TABLE()
 
 #include "wx/prntbase.h"
 
 BEGIN_EVENT_TABLE(wxPrintAbortDialog, wxDialog)
-	EVT_BUTTON(wxID_CANCEL, wxPrintAbortDialog::OnCancel)
+  EVT_BUTTON(wxID_CANCEL, wxPrintAbortDialog::OnCancel)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxPreviewControlBar, wxWindow)
-	EVT_BUTTON(wxID_PREVIEW_CLOSE, 		wxPreviewControlBar::OnClose)
-	EVT_BUTTON(wxID_PREVIEW_PRINT, 		wxPreviewControlBar::OnPrint)
-	EVT_BUTTON(wxID_PREVIEW_PREVIOUS, 	wxPreviewControlBar::OnPrevious)
-	EVT_BUTTON(wxID_PREVIEW_NEXT, 		wxPreviewControlBar::OnNext)
-	EVT_CHOICE(wxID_PREVIEW_ZOOM, 		wxPreviewControlBar::OnZoom)
+  EVT_BUTTON(wxID_PREVIEW_CLOSE,     wxPreviewControlBar::OnClose)
+  EVT_BUTTON(wxID_PREVIEW_PRINT,     wxPreviewControlBar::OnPrint)
+  EVT_BUTTON(wxID_PREVIEW_PREVIOUS,   wxPreviewControlBar::OnPrevious)
+  EVT_BUTTON(wxID_PREVIEW_NEXT,     wxPreviewControlBar::OnNext)
+  EVT_CHOICE(wxID_PREVIEW_ZOOM,     wxPreviewControlBar::OnZoom)
 END_EVENT_TABLE()
 
 #endif

@@ -315,7 +315,9 @@ WXDLLEXPORT_DATA(extern wxCursor*)		wxCROSS_CURSOR;
 
 WXDLLEXPORT_DATA(extern wxColourDatabase*)	wxTheColourDatabase;
 extern void WXDLLEXPORT wxInitializeStockObjects();
+extern void WXDLLEXPORT wxInitializeStockLists();
 extern void WXDLLEXPORT wxDeleteStockObjects();
+extern void WXDLLEXPORT wxDeleteStockLists();
 
 extern bool WXDLLEXPORT wxColourDisplay();
 
@@ -344,6 +346,15 @@ extern void WXDLLEXPORT wxSetCursor(const wxCursor& cursor);
  
   wxIcon *icon = new wxICON(wxbuild);
  */
+
+class WXDLLEXPORT wxResourceCache: public wxList
+{
+  DECLARE_DYNAMIC_CLASS(wxResourceCache)
+ public:
+   wxResourceCache();
+   wxResourceCache(const unsigned int the_key_type);
+   ~wxResourceCache();
+};
 
 #endif
     // __GDICMNH__

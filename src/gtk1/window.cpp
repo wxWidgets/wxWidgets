@@ -753,6 +753,7 @@ wxWindow::wxWindow( wxWindow *parent, wxWindowID id,
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
+  m_cursor = NULL;
   Create( parent, id, pos, size, style, name );
 };
 
@@ -864,7 +865,7 @@ wxWindow::~wxWindow(void)
     
   if (m_widget) gtk_widget_destroy( m_widget );
   
-//  delete m_cursor;
+  wxDELETE(m_cursor);
 
   DeleteRelatedConstraints();
   if (m_constraints)
@@ -918,7 +919,8 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
   m_windowValidator = NULL;
   m_windowId = id;
   m_sizeSet = FALSE;
-  m_cursor = new wxCursor( wxCURSOR_ARROW );
+  if (m_cursor == NULL)
+    m_cursor = new wxCursor( wxCURSOR_ARROW );
   m_font = *wxSWISS_FONT;
   m_backgroundColour = wxWHITE;
   m_foregroundColour = wxBLACK;
@@ -1561,7 +1563,11 @@ wxWindowID wxWindow::GetId(void)
 
 void wxWindow::SetCursor( const wxCursor &cursor )
 {
-  if (*m_cursor == cursor) return;
+  wxASSERT(m_cursor != NULL);
+
+  if (m_cursor != NULL)
+    if (*m_cursor == cursor)
+      return;
   (*m_cursor) = cursor;
   if (m_widget->window)
     gdk_window_set_cursor( m_widget->window, m_cursor->GetCursor() );

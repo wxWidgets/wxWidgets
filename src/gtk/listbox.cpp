@@ -5,7 +5,7 @@
 // Created:     01/02/97
 // Id:
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -51,6 +51,7 @@ static void gtk_listitem_select_callback( GtkWidget *WXUNUSED(widget), wxListBox
     }
 
   event.SetEventObject( listbox );
+
   listbox->GetEventHandler()->ProcessEvent( event );
   if (event.m_commandString) delete[] event.m_commandString ;
 };

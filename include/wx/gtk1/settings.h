@@ -26,6 +26,9 @@ class WXDLLEXPORT wxSystemSettings: public wxObject
 public:
     inline wxSystemSettings(void) {}
 
+    inline static void Init() {}
+    static void Done();
+
     // Get a system colour
     static wxColour    GetSystemColour(int index);
 

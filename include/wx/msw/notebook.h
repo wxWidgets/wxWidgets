@@ -5,7 +5,7 @@
 // Modified by: Vadim Zeitlin for Windows version
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _NOTEBOOK_H
@@ -62,7 +62,7 @@ private:
 // @@@ this class should really derive from wxTabCtrl, but the interface is not
 //     exactly the same, so I can't do it right now and instead we reimplement
 //     part of wxTabCtrl here
-class wxNotebook : public wxControl
+class WXDLLEXPORT wxNotebook : public wxControl
 {
 public:
   // ctors
@@ -156,6 +156,7 @@ public:
   void OnSetFocus(wxFocusEvent& event);
   void OnNavigationKey(wxNavigationKeyEvent& event);
   
+>>>>>>> 1.5
   // base class virtuals
   // -------------------
   virtual void Command(wxCommandEvent& event);

@@ -19,6 +19,8 @@
 #include "wx/intl.h"
 #include "wx/log.h"
 #include "wx/memory.h"
+#include "wx/font.h"
+#include "wx/settings.h"
 
 #include "unistd.h"
 
@@ -34,6 +36,7 @@ wxApp *wxTheApp = NULL;
 wxAppInitializerFunction wxApp::m_appInitFn = (wxAppInitializerFunction) NULL;
 
 extern wxList wxPendingDelete;
+extern wxResourceCache *wxTheResourceCache;
 
 //-----------------------------------------------------------------------------
 // local functions
@@ -242,9 +245,16 @@ void wxApp::CommonInit(void)
   (void) wxGetResource("wxWindows", "OsVersion", &wxOsVersion);
 #endif
 */
+  wxSystemSettings::Init();
+  wxTheResourceCache = new wxResourceCache(wxKEY_STRING);
+
+  wxTheFontNameDirectory =  new wxFontNameDirectory;
+  wxTheFontNameDirectory->Initialize();
 
   wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
   wxTheColourDatabase->Initialize();
+
+  wxInitializeStockLists();
   wxInitializeStockObjects();
 
   // For PostScript printing
@@ -261,14 +271,24 @@ void wxApp::CommonInit(void)
   g_globalCursor = new wxCursor;
 */
 
-  wxInitializeStockObjects();
+//  wxInitializeStockObjects();
 };
 
 void wxApp::CommonCleanUp(void)
 {
+  wxDELETE(wxTheColourDatabase);
+  wxDELETE(wxThePrintPaperDatabase);
+  wxDELETE(wxThePrintSetupData);
+  wxDELETE(wxTheFontNameDirectory);
   wxDeleteStockObjects();
   
   wxFlushResources();
+
+  wxDELETE(wxTheResourceCache);
+
+  wxDeleteStockLists();
+
+  wxSystemSettings::Done();
 };
     
 wxLog *wxApp::CreateLogTarget()
@@ -311,8 +331,6 @@ int wxEntry( int argc, char *argv[] )
     wxObject *test_app = app_ini();
     
     wxTheApp = (wxApp*) test_app;
-    
-//    wxTheApp = (wxApp*)( app_ini() );
   };
   
   if (!wxTheApp) 
@@ -321,8 +339,6 @@ int wxEntry( int argc, char *argv[] )
     return 0;
   };
 
-//  printf( "Programmstart.\n" );
-  
   wxTheApp->argc = argc;
   wxTheApp->argv = argv;
   
@@ -359,6 +375,8 @@ int wxEntry( int argc, char *argv[] )
   wxTheApp->OnExit();
   
   wxApp::CommonCleanUp();
+
+  wxDELETE(wxTheApp);
   
 #if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
   // At this point we want to check if there are any memory

@@ -31,7 +31,7 @@ static char *wx_font_weight [] = {
     "wxDEFAULT", "wxNORMAL", "wxBOLD", "wxLIGHT",
 };
 
-extern wxFontNameDirectory wxTheFontNameDirectory;
+extern wxFontNameDirectory *wxTheFontNameDirectory;
 
 //-----------------------------------------------------------------------------
 // wxFont
@@ -116,13 +116,13 @@ wxFont::wxFont(int PointSize, int FontIdOrFamily, int Style, int Weight,
   
   if ((M_FONTDATA->m_faceName = (Face) ? copystring(Face) : (char*)NULL) ) 
   {
-    M_FONTDATA->m_fontId = wxTheFontNameDirectory.FindOrCreateFontId( Face, FontIdOrFamily );
-    M_FONTDATA->m_family  = wxTheFontNameDirectory.GetFamily( FontIdOrFamily );
+    M_FONTDATA->m_fontId = wxTheFontNameDirectory->FindOrCreateFontId( Face, FontIdOrFamily );
+    M_FONTDATA->m_family  = wxTheFontNameDirectory->GetFamily( FontIdOrFamily );
   }
   else 
   {
     M_FONTDATA->m_fontId = FontIdOrFamily;
-    M_FONTDATA->m_family  = wxTheFontNameDirectory.GetFamily( FontIdOrFamily );
+    M_FONTDATA->m_family  = wxTheFontNameDirectory->GetFamily( FontIdOrFamily );
   };
   M_FONTDATA->m_style = Style;
   M_FONTDATA->m_weight = Weight;
@@ -137,9 +137,9 @@ wxFont::wxFont(int PointSize, const char *Face, int Family, int Style,
 {
   m_refData = new wxFontRefData();
 
-  M_FONTDATA->m_fontId = wxTheFontNameDirectory.FindOrCreateFontId( Face, Family );
+  M_FONTDATA->m_fontId = wxTheFontNameDirectory->FindOrCreateFontId( Face, Family );
   M_FONTDATA->m_faceName = (Face) ? copystring(Face) : (char*)NULL;
-  M_FONTDATA->m_family = wxTheFontNameDirectory.GetFamily( M_FONTDATA->m_fontId );
+  M_FONTDATA->m_family = wxTheFontNameDirectory->GetFamily( M_FONTDATA->m_fontId );
   M_FONTDATA->m_style = Style;
   M_FONTDATA->m_weight = Weight;
   M_FONTDATA->m_pointSize = PointSize;
@@ -193,13 +193,13 @@ int wxFont::GetPointSize(void) const
 
 wxString wxFont::GetFaceString(void) const
 {
-  wxString s = wxTheFontNameDirectory.GetFontName( M_FONTDATA->m_fontId );
+  wxString s = wxTheFontNameDirectory->GetFontName( M_FONTDATA->m_fontId );
   return s;
 };
 
 wxString wxFont::GetFaceName(void) const
 {
-  wxString s = wxTheFontNameDirectory.GetFontName( M_FONTDATA->m_fontId );
+  wxString s = wxTheFontNameDirectory->GetFontName( M_FONTDATA->m_fontId );
   return s; 
 };
 
@@ -288,7 +288,7 @@ static GdkFont *wxLoadQueryFont(int point_size, int fontid, int style,
 				    int weight, bool WXUNUSED(underlined))
 {
     char buffer[512];
-    char *name = wxTheFontNameDirectory.GetScreenName( fontid, weight, style );
+    char *name = wxTheFontNameDirectory->GetScreenName( fontid, weight, style );
 
     if (!name)
 	name = "-*-*-*-*-*-*-*-%d-*-*-*-*-*-*";
@@ -698,7 +698,6 @@ wxFontNameDirectory::wxFontNameDirectory(void)
 {
     table = new wxHashTable(wxKEY_INTEGER, 20);
     nextFontId = -1;
-    Initialize();
 }
 
 wxFontNameDirectory::~wxFontNameDirectory()

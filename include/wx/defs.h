@@ -210,10 +210,15 @@ enum  ErrCode
 /** @name Very common macros */
 // ----------------------------------------------------------------------------
 //@{
-/// delete pointer if it is not NULL
-#define DELETEP(p)      if ( (p) != NULL ) delete (p)
-/// delete array pointer if it is not NULL
-#define DELETEA(p)      if ( (p) != NULL ) delete [] (p)
+/// delete pointer if it is not NULL and NULL it afterwards
+// (checking that it's !NULL before passing it to delete is just a
+//  a question of style, because delete will do it itself anyhow, but it might
+//  be considered as an error by some overzealous debugging implementations of
+//  the library, so we do it ourselves)
+#define wxDELETE(p)      if ( (p) != NULL ) { delete (p); p = NULL; }
+
+// delete an array and NULL it (see comments above)
+#define wxDELETEA(p)      if ( (p) != NULL ) { delete [] (p); p = NULL; }
 
 /// size of statically declared array
 #define WXSIZEOF(array)   (sizeof(array)/sizeof(array[0]))

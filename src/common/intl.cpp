@@ -193,8 +193,8 @@ wxMsgCatalog::wxMsgCatalog()
 
 wxMsgCatalog::~wxMsgCatalog() 
 { 
-  DELETEA(m_pData); 
-  DELETEA(m_pszName); 
+  wxDELETEA(m_pData); 
+  wxDELETEA(m_pszName); 
 }
 
 class NoTransErr
@@ -268,8 +268,7 @@ bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
   // read the whole file in memory
   m_pData = new uint8[nSize];
   if ( fileMsg.Read(m_pData, nSize) != nSize ) {
-    DELETEA(m_pData);
-    m_pData = NULL;
+    wxDELETEA(m_pData);
     return FALSE;
   }
     
@@ -291,8 +290,7 @@ bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
     // it's either too short or has incorrect magic number
     wxLogWarning("'%s' is not a valid message catalog.", strFullName.c_str());
     
-    DELETEA(m_pData);
-    m_pData = NULL;
+    wxDELETEA(m_pData);
     return FALSE;
   }
       

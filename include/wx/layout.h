@@ -60,8 +60,8 @@ class WXDLLEXPORT wxIndividualLayoutConstraint: public wxObject
    bool done;
 
  public:
-   wxIndividualLayoutConstraint(void);
-   ~wxIndividualLayoutConstraint(void);
+   wxIndividualLayoutConstraint();
+   ~wxIndividualLayoutConstraint();
 
   void Set(wxRelationship rel, wxWindow *otherW, wxEdge otherE, int val = 0, int marg = wxLAYOUT_DEFAULT_MARGIN);
 
@@ -89,28 +89,28 @@ class WXDLLEXPORT wxIndividualLayoutConstraint: public wxObject
   //
   // Dimension is unconstrained
   //
-  inline void Unconstrained(void) { relationship = wxUnconstrained; }
+  inline void Unconstrained() { relationship = wxUnconstrained; }
 
   //
   // Dimension is 'as is' (use current size settings)
   //
-  inline void AsIs(void) { relationship = wxAsIs; }
+  inline void AsIs() { relationship = wxAsIs; }
 
   //
   // Accessors
   //
-  inline wxWindow *GetOtherWindow(void) { return otherWin; }
-  inline wxEdge GetMyEdge(void) { return myEdge; }
+  inline wxWindow *GetOtherWindow() { return otherWin; }
+  inline wxEdge GetMyEdge() const { return myEdge; }
   inline void SetEdge(wxEdge which) { myEdge = which; }
   inline void SetValue(int v) { value = v; }
-  inline int GetMargin(void) { return margin; }
+  inline int GetMargin() { return margin; }
   inline void SetMargin(int m) { margin = m; }
-  inline int GetValue(void) { return value; }
-  inline int GetPercent(void) { return percent; }
-  inline int GetOtherEdge(void) { return otherEdge; }
-  inline bool GetDone(void) { return done; }
+  inline int GetValue() const { return value; }
+  inline int GetPercent() const { return percent; }
+  inline int GetOtherEdge() const { return otherEdge; }
+  inline bool GetDone() const { return done; }
   inline void SetDone(bool d) { done = d; }
-  inline wxRelationship GetRelationship(void) { return relationship; }
+  inline wxRelationship GetRelationship() { return relationship; }
   inline void SetRelationship(wxRelationship r) { relationship = r; }
 
   // Reset constraint if it mentions otherWin
@@ -121,7 +121,7 @@ class WXDLLEXPORT wxIndividualLayoutConstraint: public wxObject
 
   // Get the value of this edge or dimension, or if this
   // is not determinable, -1.
-  int GetEdge(wxEdge which, wxWindow *thisWin, wxWindow *other);
+  int GetEdge(wxEdge which, wxWindow *thisWin, wxWindow *other) const;
 };
 
 class WXDLLEXPORT wxLayoutConstraints: public wxObject
@@ -141,10 +141,15 @@ class WXDLLEXPORT wxLayoutConstraints: public wxObject
   wxIndividualLayoutConstraint centreX;
   wxIndividualLayoutConstraint centreY;
 
-  wxLayoutConstraints(void);
-  ~wxLayoutConstraints(void);
+  wxLayoutConstraints();
+  ~wxLayoutConstraints();
 
   bool SatisfyConstraints(wxWindow *win, int *noChanges);
+  bool AreSatisfied() const
+  {
+    return left.GetDone() && top.GetDone() && right.GetDone() &&
+           bottom.GetDone() && centreX.GetDone() && centreY.GetDone();
+  }
 };
 
 bool WXDLLEXPORT wxOldDoLayout(wxWindow *win);
@@ -217,9 +222,9 @@ class WXDLLEXPORT wxSizer: public wxWindow
   int sizerX;
   int sizerY;
  public:
-  wxSizer(void);
+  wxSizer();
   wxSizer(wxWindow *parent, wxSizerBehaviour behav = wxSizerNone);
-  ~wxSizer(void);
+  ~wxSizer();
 
   bool Create(wxWindow *parent, wxSizerBehaviour behav = wxSizerNone);
   virtual void SetSize(int x, int y, int w, int h, int flags = wxSIZE_AUTO);
@@ -236,14 +241,14 @@ class WXDLLEXPORT wxSizer: public wxWindow
     { Move(x, y); }
 
   virtual void SetBorder(int w, int h);
-  inline int GetBorderX(void) { return borderX ; }
-  inline int GetBorderY(void) { return borderY ; }
+  inline int GetBorderX() { return borderX ; }
+  inline int GetBorderY() { return borderY ; }
 
   virtual void AddSizerChild(wxWindow *child);
   virtual void RemoveSizerChild(wxWindow *child);
 
   inline virtual void SetBehaviour(wxSizerBehaviour b) { sizerBehaviour = b; }
-  inline virtual wxSizerBehaviour GetBehaviour(void) { return sizerBehaviour; }
+  inline virtual wxSizerBehaviour GetBehaviour() { return sizerBehaviour; }
 
   virtual bool LayoutPhase1(int *);
   virtual bool LayoutPhase2(int *);
@@ -264,9 +269,9 @@ class WXDLLEXPORT wxRowColSizer: public wxSizer
   int ySpacing;
  public:
   // rowOrCol = TRUE to be laid out in rows, otherwise in columns.
-  wxRowColSizer(void);
+  wxRowColSizer();
   wxRowColSizer(wxWindow *parent, bool rowOrCol = wxSIZER_ROWS, int rowsOrColSize = 20, wxSizerBehaviour = wxSizerShrink);
-  ~wxRowColSizer(void);
+  ~wxRowColSizer();
 
   bool Create(wxWindow *parent, bool rowOrCol = wxSIZER_ROWS, int rowsOrColSize = 20, wxSizerBehaviour = wxSizerShrink);
   void SetSize(int x, int y, int w, int h, int flags = wxSIZE_AUTO);
@@ -274,9 +279,9 @@ class WXDLLEXPORT wxRowColSizer: public wxSizer
   void SetSize(int w, int h) { wxSizer::SetSize(w, h); }
 
   inline virtual void SetRowOrCol(bool rc) { rowOrCol = rc; }
-  inline virtual bool GetRowOrCol(void) { return rowOrCol; }
+  inline virtual bool GetRowOrCol() { return rowOrCol; }
   inline virtual void SetRowOrColSize(int n) { rowOrColSize = n; }
-  inline virtual int GetRowOrColSize(void) { return rowOrColSize; }
+  inline virtual int GetRowOrColSize() { return rowOrColSize; }
   inline virtual void SetSpacing(int x, int y) { xSpacing = x; ySpacing = y; }
   inline virtual void GetSpacing(int *x, int *y) { *x = xSpacing; *y = ySpacing; }
 
@@ -291,10 +296,10 @@ class WXDLLEXPORT wxSpacingSizer: public wxSizer
  private:
  protected:
  public:
-  wxSpacingSizer(void);
+  wxSpacingSizer();
   wxSpacingSizer(wxWindow *parent, wxRelationship rel, wxWindow *other, int spacing);
   wxSpacingSizer(wxWindow *parent);
-  ~wxSpacingSizer(void);
+  ~wxSpacingSizer();
 
   bool Create(wxWindow *parent, wxRelationship rel, wxWindow *other, int sp);
   bool Create(wxWindow *parent);
