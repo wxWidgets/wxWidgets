@@ -141,8 +141,11 @@ public:
     // doing this
     wxDllType Detach() { wxDllType h = m_handle; m_handle = 0; return h; }
 
+    // unload the given library handle (presumably returned by Detach() before)
+    static void Unload(wxDllType handle);
+
     // unload the library, also done automatically in dtor
-    void Unload();
+    void Unload() { if ( IsLoaded() ) { Unload(m_handle); m_handle = 0; } }
 
     // Return the raw handle from dlopen and friends.
     wxDllType GetLibHandle() const { return m_handle; }
@@ -168,8 +171,9 @@ public:
 
     // return name of wxWindows plugin (adds compiler and version info
     // to the filename):
-    static wxString CanonicalizePluginName(const wxString& name,
-                                           wxPluginCategory cat);
+    static wxString
+    CanonicalizePluginName(const wxString& name,
+                           wxPluginCategory cat = wxDL_PLUGIN_GUI);
 
     // return plugin directory on platforms where it makes sense and empty
     // string on others:
