@@ -41,7 +41,7 @@ public:
   wxDataInputStream& operator>>(double& i);
   wxDataInputStream& operator>>(float& f);
 
-  void BidEndianOrdered(bool be_order) { m_be_order = be_order; }
+  void BigEndianOrdered(bool be_order) { m_be_order = be_order; }
  protected:
   wxInputStream *m_input;
   bool m_be_order;
@@ -69,7 +69,7 @@ class WXDLLEXPORT wxDataOutputStream {
   wxDataOutputStream& operator<<(double f);
   wxDataOutputStream& operator<<(float f);
 
-  void BidEndianOrdered(bool be_order) { m_be_order = be_order; } 
+  void BigEndianOrdered(bool be_order) { m_be_order = be_order; } 
  protected:
   wxOutputStream *m_output;
   bool m_be_order;

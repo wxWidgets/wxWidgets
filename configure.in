@@ -1250,6 +1250,9 @@ WX_CPP_BOOL
 dnl check whether overloading on size_t/int parameter works
 WX_CPP_SIZE_T_IS_NOT_INT
 
+dnl check whether we should define _GNU_SOURCE
+WX_GNU_EXTENSIONS
+
 dnl ---------------------------------------------------------------------------
 dnl Check for functions
 dnl ---------------------------------------------------------------------------

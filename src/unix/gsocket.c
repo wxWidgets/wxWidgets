@@ -626,7 +626,7 @@ if (socket->m_iocalls[event] && \
   new_ival.it_interval.tv_sec = socket->m_timeout / 1000; \
   new_ival.it_interval.tv_usec = (socket->m_timeout % 1000) * 1000; \
   setitimer(ITIMER_REAL, &new_ival, &old_ival); \
-  old_timer_sig = signal(SIGALRM, _GSocket_Timer);
+  old_timer_sig = signal(SIGALRM, SIG_DFL);
 
 #define DISABLE_TIMEOUT(socket) \
   signal(SIGALRM, old_timer_sig); \

@@ -397,3 +397,27 @@ AC_DEFUN(WX_ARG_ENABLE,
           fi
         ])
 
+dnl -
+dnl - GNU libc extension (added by GL)
+dnl -
+
+AC_DEFUN(WX_GNU_EXTENSIONS,
+[
+AC_MSG_CHECKING([if you need GNU extensions])
+AC_CACHE_VAL(wx_cv_gnu_extensions,[
+   AC_TRY_COMPILE([#include <features.h>],[
+
+#ifndef __GNU_LIBRARY__
+ Compile error wanted
+#endif
+
+],
+  [wx_cv_gnu_extensions=yes],
+  [wx_cv_gnu_extensions=no])
+])
+
+AC_MSG_RESULT($wx_cv_gnu_extensions)
+if test "$wx_cv_gnu_extensions" = "yes"; then
+  AC_DEFINE_UNQUOTED(_GNU_SOURCE)
+fi
+])

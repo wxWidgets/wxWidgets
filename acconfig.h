@@ -53,6 +53,7 @@
 #undef __ULTRIX__
 #undef __DATA_GENERAL__
 #undef __EMX__
+#undef _GNU_SOURCE
 
 #undef __WINDOWS__
 #undef __WIN95__

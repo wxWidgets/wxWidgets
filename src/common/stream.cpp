@@ -574,12 +574,12 @@ wxInputStream& wxInputStream::Read(wxOutputStream& stream_out)
 
 off_t wxInputStream::SeekI(off_t pos, wxSeekMode mode)
 {
-  return wxInvalidOffset;
+  return OnSysSeek(pos, mode);
 }
 
 off_t wxInputStream::TellI() const
 {
-  return wxInvalidOffset;
+  return OnSysTell();
 }
 
 // --------------------
@@ -622,12 +622,12 @@ wxOutputStream& wxOutputStream::Write(wxInputStream& stream_in)
 
 off_t wxOutputStream::TellO() const
 {
-  return wxInvalidOffset;
+  return OnSysTell();
 }
 
 off_t wxOutputStream::SeekO(off_t pos, wxSeekMode mode)
 {
-  return wxInvalidOffset;
+  return OnSysSeek(pos, mode);
 }
 
 void wxOutputStream::Sync()
