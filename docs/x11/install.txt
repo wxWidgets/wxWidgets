@@ -1,4 +1,4 @@
-wxWindows 2.3 for Motif installation
+wxWindows 2.3 for X11 installation
 ------------------------------------
 
 IMPORTANT NOTE:
@@ -11,15 +11,12 @@ IMPORTANT NOTE:
   
   When sending bug reports tell us what version of wxWindows you are 
   using (including the beta) and what compiler on what system. One 
-  example: wxMotif 2.3.0, egcs 1.1.1, Redhat 5.0
+  example: wxX11 2.3.0, egcs 1.1.1, Redhat 5.0
 
 First steps
 -----------
 
-- Prerequisites: Motif 1.2 or above, or Lesstif
-  (not yet tested). Motif 2.0 and above may also be suitable.
-
-- Download wxMotif-x.y.z.tgz, where x.y.z is the version number.
+- Download wxX11-x.y.z.tgz, where x.y.z is the version number.
   Download documentation in a preferred format, such as
   wxWindows-HTML.zip or wxWindows-PDF.zip.
 
@@ -28,8 +25,7 @@ First steps
 
 - It is recommended that you install bison and flex; using yacc
   and lex may require tweaking of the makefiles. You also need
-  libXpm (see comments in the Notes section below) if you want to have
-  XPM support in wxWindows (recommended).
+  libXpm if you want to have XPM support in wxWindows (recommended).
 
 - You can now use configure to build wxWindows and the samples.
 
@@ -37,7 +33,6 @@ First steps
   work for you for whatever reason, please report it (together with detailed
   information about your platform and the (relevant part of) contents of
   config.log file) to wx-dev@lists.wxwindows.org.
-
 
 COMPILING USING CONFIGURE
 =========================
@@ -48,7 +43,7 @@ COMPILING USING CONFIGURE
 If you compile wxWindows on Linux for the first time and don't like to read 
 install instructions just do (in the base dir):
 
-> ./configure --with-motif
+> ./configure --with-x11 --with-universal
 > make
 > su <type root password>
 > make install
@@ -74,18 +69,18 @@ If you want to remove wxWindows on Unix you can do this:
 -----------------
 
 If you want to do some more serious cross-platform programming with wxWindows, 
-such as for GTK and Motif, you can now build two complete libraries and use 
+such as for GTK and X11, you can now build two complete libraries and use 
 them concurretly. For this end, you have to create a directory for each build 
 of wxWindows - you may also want to create different versions of wxWindows
 and test them concurrently. Most typically, this would be a version configured 
 with --enable-debug_flag and one without. Note, that only one build can currently 
 be installed, so you'd have to use local version of the library for that purpose.
-For building three versions (one GTK, one Motif and a debug version of the GTK 
+For building three versions (one GTK, one X11 and a debug version of the GTK 
 source) you'd do this:
 
-md buildmotif
-cd buildmotif
-../configure --with-motif
+md buildx11
+cd buildx11
+../configure --with-x11 --with-universal
 make
 cd ..
 
@@ -141,9 +136,9 @@ YOU USE AND WHAT ERROR WAS REPORTED. I know this has no effect, but I tried...
 * GUI libraries
 -----------------------
 
-wxWindows/Motif requires the Motif library to be installed on your system. As
+wxWindows/X11 requires the X11 library to be installed on your system. As
 an alternative, you may also use the free library "lesstif" which implements
-most of the Motif API without the licence restrictions of Motif.
+most of the X11 API without the licence restrictions of X11.
 
 You can get the newest version of the Lesstif from the lesstif homepage at:
 
@@ -152,7 +147,7 @@ You can get the newest version of the Lesstif from the lesstif homepage at:
 * Additional libraries
 -----------------------
 
-wxWindows/Motif requires a thread library and X libraries known to work with threads. 
+wxWindows/X11 requires a thread library and X libraries known to work with threads. 
 This is the case on all commercial Unix-Variants and all Linux-Versions that are 
 based on glibc 2 except RedHat 5.0 which is broken in many aspects. As of writing 
 this, these Linux distributions have correct glibc 2 support:
@@ -202,7 +197,7 @@ Notice you can choose whatever you want, if you don't like OS2X.
 Now, run autoconf in the main directory and in the samples, demos
 and utils subdirectory. This will generate the OS/2 specific
 versions of the configure scripts. Now run
-    configure --with-motif
+    configure --with-x11
 as described above.
 
 To verify Lesstif installation, configure will try to compile a
@@ -218,7 +213,7 @@ Note that configure assumes your flex will generate files named
 generate "lex.yy.c", you need to manually change the generated
 makefile.
 
-* Building wxMotif on SGI
+* Building wxX11 on SGI
 --------------------------
 
 Using the SGI native compilers, it is recommended that you
@@ -277,13 +272,14 @@ are enabled by default.
 Many of the confiugre options have been thoroughly tested
 in wxWindows snapshot 6, but not yet all (ODBC not).
 
-You have to add --with-motif on platforms, where Motif is
+You have to add --with-x11 on platforms, where X11 is
 not the default (on Linux, configure will deafult to GTK).
 
-        --without-gtk            Don't use the GIMP ToolKit (GTK)
+    --without-gtk            Don't use the GIMP ToolKit (GTK).
 	
-	--with-motif             Use either Motif or Lesstif
-	                         Configure will look for both. 
+	--with-x11               Use X11.
+
+	--with-universal         Needs to be specified with X11.
 
 The following options handle the kind of library you want to build.
 
@@ -455,15 +451,15 @@ and configure before you can type make.
 * Further notes by Julian Smart
 ---------------------------------
 
-- You may find the following script useful for compiling wxMotif,
+- You may find the following script useful for compiling wxX11,
   especially if installing from zips (which don't preserve file
   permissions). Make this script executable with the command
-  chmod a+x makewxmotif.
+  chmod a+x makewxx11.
 
   -------:x-----Cut here-----:x-----
-  # makewxmotif
-  # Sets permissions (in case we extracted wxMotif from zip files)
-  # and makes wxMotif.
+  # makewxx11
+  # Sets permissions (in case we extracted wxX11 from zip files)
+  # and makes wxX11.
   # Call from top-level wxWindows directory.
   # Note that this uses standard (but commonly-used) configure options;
   # if you're feeling brave, you may wish to compile with threads:
@@ -471,11 +467,11 @@ and configure before you can type make.
   # anyhow
   # -- Julian Smart
   chmod a+x configure config.sub config.guess
-  ./configure --with-shared --with-motif --without-gtk --with-debug_flag --with-debug_info --enable-debug --without-threads --without-sockets --without-odbc
+  ./configure --with-shared --with-x11 --with-universal --without-gtk --with-debug_flag --with-debug_info --enable-debug --without-threads --without-sockets --without-odbc
   make
   -------:x-----Cut here-----:x-----
 
-  This script will build wxMotif using shared libraries. If you want to build
+  This script will build wxX11 using shared libraries. If you want to build
   a static wxWindows library, use --disable-shared.
 
 Troubleshooting
@@ -491,12 +487,6 @@ Troubleshooting
 
 - If you get an internal compiler error in gcc, turn off optimisations.
 
-- Problems with XtDestroyWidget crashing in ~wxWindow have been
-  reported on SGI IRIX 6.4. This has not yet been resolved, so
-  any advice here would be very welcome. See bugs.txt for a
-  possible temporary workaround (comment out the final
-  XtDestroyWidget from ~wxWindow in window.cpp).
-
 - Some compilers, such as Sun C++, may give a lot of warnings about
   virtual functions being hidden. Please ignore these, it's correct C++ syntax.
   If you find any incorrect instances, though, such as a
@@ -511,7 +501,7 @@ Other Notes
   switches while developing your application. To compile in non-debug
   mode, remove the -D__WXDEBUG__ switch in make.env (or if using the
   configure system, change --with-debug_flag to --without_debug_flag
-  and --with-debug_info to --without-debug_info in the makewxmotif
+  and --with-debug_info to --without-debug_info in the makewxx11
   script).
 
 Bug reports
@@ -522,5 +512,5 @@ compiler and the error message(s) to the wxwin-developers mailing list at:
 
     wx-dev@lists.wxwindows.org
 
-Julian Smart, Robert Roebling and Vadim Zeitlin, November 1999.
+Julian Smart, Robert Roebling and Vadim Zeitlin, February 2002.
 
