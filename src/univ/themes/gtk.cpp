@@ -549,9 +549,9 @@ public:
     wxGTKTheme();
     virtual ~wxGTKTheme();
 
-    virtual wxRenderer *GetRenderer() { return m_renderer; }
+    virtual wxRenderer *GetRenderer();
     virtual wxInputHandler *GetInputHandler(const wxString& control);
-    virtual wxColourScheme *GetColourScheme() { return m_scheme; }
+    virtual wxColourScheme *GetColourScheme();
 
 private:
     // get the default input handler
@@ -583,8 +583,8 @@ WX_IMPLEMENT_THEME(wxGTKTheme, gtk, wxTRANSLATE("GTK+ theme"));
 
 wxGTKTheme::wxGTKTheme()
 {
-    m_scheme = new wxGTKColourScheme;
-    m_renderer = new wxGTKRenderer(m_scheme);
+    m_scheme = NULL;
+    m_renderer = NULL;
     m_handlerDefault = NULL;
 }
 
@@ -600,6 +600,25 @@ wxGTKTheme::~wxGTKTheme()
     delete m_handlerDefault;
     delete m_renderer;
     delete m_scheme;
+}
+
+wxRenderer *wxGTKTheme::GetRenderer()
+{
+    if ( !m_renderer )
+    {
+        m_renderer = new wxGTKRenderer(GetColourScheme());
+    }
+
+    return m_renderer;
+}
+
+wxColourScheme *wxGTKTheme::GetColourScheme()
+{
+    if ( !m_scheme )
+    {
+        m_scheme = new wxGTKColourScheme;
+    }
+    return m_scheme;
 }
 
 wxInputHandler *wxGTKTheme::GetDefaultInputHandler()

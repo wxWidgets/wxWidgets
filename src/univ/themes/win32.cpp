@@ -600,7 +600,7 @@ public:
     wxWin32Theme();
     virtual ~wxWin32Theme();
 
-    virtual wxRenderer *GetRenderer() { return m_renderer; }
+    virtual wxRenderer *GetRenderer();
     virtual wxInputHandler *GetInputHandler(const wxString& control);
     virtual wxColourScheme *GetColourScheme();
 
@@ -1111,8 +1111,8 @@ WX_IMPLEMENT_THEME(wxWin32Theme, win32, wxTRANSLATE("Win32 theme"));
 
 wxWin32Theme::wxWin32Theme()
 {
-    m_scheme = new wxWin32ColourScheme;
-    m_renderer = new wxWin32Renderer(m_scheme);
+    m_scheme = NULL;
+    m_renderer = NULL;
     m_handlerDefault = NULL;
 }
 
@@ -1129,6 +1129,16 @@ wxWin32Theme::~wxWin32Theme()
 
     delete m_renderer;
     delete m_scheme;
+}
+
+wxRenderer *wxWin32Theme::GetRenderer()
+{
+    if ( !m_renderer )
+    {
+        m_renderer = new wxWin32Renderer(GetColourScheme());
+    }
+
+    return m_renderer;
 }
 
 wxInputHandler *wxWin32Theme::GetDefaultInputHandler()
@@ -1209,6 +1219,10 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
 
 wxColourScheme *wxWin32Theme::GetColourScheme()
 {
+    if ( !m_scheme )
+    {
+        m_scheme = new wxWin32ColourScheme;
+    }
     return m_scheme;
 }
 
