@@ -10,6 +10,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
+#if wxUSE_BMPBUTTON
+
 #ifndef WX_PRECOMP
     #include "wx/defs.h"
     #include "wx/bmpbuttn.h"
@@ -66,3 +69,4 @@ void wxBitmapButton::Cocoa_wxNSButtonAction(void)
     Command(event);
 }
 
+#endif

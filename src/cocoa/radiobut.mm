@@ -10,6 +10,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
+#if wxUSE_RADIOBTN
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
@@ -158,3 +161,4 @@ void wxRadioButton::Cocoa_wxNSButtonAction(void)
     Command(event);
 }
 
+#endif

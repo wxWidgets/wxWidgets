@@ -10,6 +10,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
+#if wxUSE_CHECKLISTBOX
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
@@ -65,3 +68,4 @@ void wxCheckListBox::Check(size_t item, bool check)
 {
 }
 
+#endif

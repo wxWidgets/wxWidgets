@@ -10,6 +10,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
+#if wxUSE_CHECKBOX
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
@@ -133,3 +136,4 @@ void wxCheckBox::Cocoa_wxNSButtonAction(void)
     Command(event);
 }
 
+#endif

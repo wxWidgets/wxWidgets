@@ -10,6 +10,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
+#if wxUSE_LISTBOX
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
@@ -280,3 +283,4 @@ wxClientData* wxListBox::DoGetItemClientObject(int n) const
     return (wxClientData*) m_itemClientData[n];
 }
 
+#endif

@@ -10,6 +10,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
+#if wxUSE_MDI
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/mdi.h"
@@ -333,3 +336,4 @@ bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *parent, long style)
     return false;
 }
 
+#endif

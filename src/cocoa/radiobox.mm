@@ -10,6 +10,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
+#if wxUSE_RADIOBOX
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/radiobox.h"
@@ -111,4 +114,6 @@ wxSize wxRadioBox::DoGetBestSize() const
 {
     return wxSize(50,50);
 }
+
+#endif
 

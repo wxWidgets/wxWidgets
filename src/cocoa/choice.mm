@@ -10,6 +10,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
+#if wxUSE_CHOICE
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
@@ -240,3 +243,4 @@ void wxChoice::SetSelection(int n)
     [(NSPopUpButton*)m_cocoaNSView selectItemAtIndex:n];
 }
 
+#endif
