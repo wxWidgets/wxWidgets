@@ -16,6 +16,8 @@
     #pragma interface "menuitem.h"
 #endif
 
+#include "wx/bitmap.h"
+
 class WXDLLEXPORT wxMenuBar;
 
 // ----------------------------------------------------------------------------
@@ -38,6 +40,12 @@ public:
     virtual void SetText(const wxString& label);
     virtual void Enable(bool enable = TRUE);
     virtual void Check(bool check = TRUE);
+   // included SetBitmap and GetBitmap as copied from the GTK include file
+   // I'm not sure if this works but it silences the linker in the
+   // menu sample.
+   //     JJ
+    virtual void SetBitmap(const wxBitmap& bitmap) { m_bitmap = bitmap; }
+    virtual const wxBitmap& GetBitmap() const { return m_bitmap; }
 
     void DeleteSubMenu();
 
@@ -57,6 +65,7 @@ private:
     WXWidget    m_buttonWidget;
     wxMenuBar*  m_menuBar;
     wxMenu*     m_topMenu;        // Top-level menu e.g. popup-menu
+    wxBitmap  m_bitmap; // Bitmap for menuitem, if any
 
     DECLARE_DYNAMIC_CLASS(wxMenuItem)
 };
