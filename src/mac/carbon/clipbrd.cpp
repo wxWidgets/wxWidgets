@@ -363,11 +363,6 @@ bool wxClipboard::GetData( wxDataObject& data )
     /* get formats from wxDataObjects */
     if ( !transferred ) 
     {
-  #if !TARGET_CARBON
-  	OSErr err = noErr ;
-  #else
-  	OSStatus err = noErr ;
-  #endif
       for (size_t i = 0; !transferred && i < formatcount ; i++)
       {
           wxDataFormat format = array[i] ;

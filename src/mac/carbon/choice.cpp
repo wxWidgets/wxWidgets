@@ -13,7 +13,8 @@
 #pragma implementation "choice.h"
 #endif
 
-// For compilers that support precompilation, includes "wx.h".
+#include "wx/defs.h"
+
 #include "wx/choice.h"
 #include "wx/menu.h"
 #include "wx/mac/uma.h"

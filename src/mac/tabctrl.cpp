@@ -13,6 +13,8 @@
 #pragma implementation "tabctrl.h"
 #endif
 
+#include "wx/defs.h"
+
 #include "wx/control.h"
 #include "wx/tabctrl.h"
 #include "wx/mac/uma.h"

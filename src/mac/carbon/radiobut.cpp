@@ -13,10 +13,13 @@
 #pragma implementation "radiobut.h"
 #endif
 
+#include "wx/defs.h"
+
 #include "wx/radiobut.h"
 
-
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
+#endif
 
 #include <wx/mac/uma.h>
 

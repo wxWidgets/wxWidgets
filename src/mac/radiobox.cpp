@@ -17,6 +17,8 @@
 #pragma implementation "radiobox.h"
 #endif
 
+#include "wx/defs.h"
+
 #include "wx/radiobox.h"
 #include "wx/radiobut.h"
 #include "wx/mac/uma.h"

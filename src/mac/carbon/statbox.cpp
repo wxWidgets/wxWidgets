@@ -13,6 +13,8 @@
 #pragma implementation "statbox.h"
 #endif
 
+#include "wx/defs.h"
+
 #include "wx/statbox.h"
 #include "wx/mac/uma.h"
 
