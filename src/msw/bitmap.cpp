@@ -487,7 +487,6 @@ bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)
         hbmp = dib.Detach();
 
         GetBitmapData()->m_depth = d;
-        GetBitmapData()->m_hasAlpha = d == 32; // 32bpp DIBs have alpha channel
     }
     else // create a DDB
     {

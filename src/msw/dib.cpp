@@ -9,6 +9,13 @@
 // License:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+/*
+    TODO: support for palettes is very incomplete, several functions simply
+          ignore them (we should select and realize the palette, if any, before
+          caling GetDIBits() in the DC we use with it and we shouldn't use
+          GetBitmapBits() at all because we can't do it with it)
+ */
+
 // ============================================================================
 // declarations
 // ============================================================================
@@ -31,6 +38,7 @@
 
 #include "wx/bitmap.h"
 #include "wx/intl.h"
+#include "wx/file.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -120,6 +128,35 @@ bool wxDIB::Create(int width, int height, int depth)
     return true;
 }
 
+bool wxDIB::Create(const wxBitmap& bmp)
+{
+    wxCHECK_MSG( bmp.Ok(), false, _T("wxDIB::Create(): invalid bitmap") );
+
+    const int w = bmp.GetWidth();
+    const int h = bmp.GetHeight();
+    int d = bmp.GetDepth();
+    if ( d == -1 )
+        d = wxDisplayDepth();
+
+    if ( !Create(w, h, d) )
+        return false;
+
+    // we could have used GetDIBits() too but GetBitmapBits() is simpler
+    if ( !::GetBitmapBits
+            (
+                GetHbitmapOf(bmp),      // the source DDB
+                GetLineSize(w, d)*h,    // the number of bytes to copy
+                m_data                  // the pixels will be copied here
+            ) )
+    {
+        wxLogLastError(wxT("GetDIBits()"));
+
+        return 0;
+    }
+
+    return true;
+}
+
 // ----------------------------------------------------------------------------
 // Loading/saving the DIBs
 // ----------------------------------------------------------------------------
@@ -142,6 +179,48 @@ bool wxDIB::Load(const wxString& filename)
     }
 
     return true;
+}
+
+bool wxDIB::Save(const wxString& filename)
+{
+    wxCHECK_MSG( m_handle, false, _T("wxDIB::Save(): invalid object") );
+
+    wxFile file(filename, wxFile::write);
+    bool ok = file.IsOpened();
+    if ( ok )
+    {
+        DIBSECTION ds;
+        if ( !::GetObject(m_handle, sizeof(ds), &ds) )
+        {
+            wxLogLastError(_T("GetObject(hDIB)"));
+        }
+        else
+        {
+            BITMAPFILEHEADER bmpHdr;
+            wxZeroMemory(bmpHdr);
+
+            const size_t sizeHdr = ds.dsBmih.biSize;
+            const size_t sizeImage = ds.dsBmih.biSizeImage;
+
+            bmpHdr.bfType = 0x4d42;    // 'BM' in little endian
+            bmpHdr.bfOffBits = sizeof(BITMAPFILEHEADER) + ds.dsBmih.biSize;
+            bmpHdr.bfSize = bmpHdr.bfOffBits + sizeImage;
+
+            // first write the file header, then the bitmap header and finally the
+            // bitmap data itself
+            ok = file.Write(&bmpHdr, sizeof(bmpHdr)) == sizeof(bmpHdr) &&
+                    file.Write(&ds.dsBmih, sizeHdr) == sizeHdr &&
+                        file.Write(ds.dsBm.bmBits, sizeImage) == sizeImage;
+        }
+    }
+
+    if ( !ok )
+    {
+        wxLogError(_("Failed to save the bitmap image to file \"%s\"."),
+                   filename.c_str());
+    }
+
+    return ok;
 }
 
 // ----------------------------------------------------------------------------
@@ -254,16 +333,11 @@ size_t wxDIB::ConvertFromBitmap(BITMAPINFO *pbi, HBITMAP hbmp)
         return 0;
     }
 
-    // calculate the number of bits per pixel and the number of items in
-    // bmiColors array (whose meaning depends on the bitmap format)
-    WORD biBits = bm.bmPlanes * bm.bmBitsPixel;
-    WORD biColors = wxGetNumOfBitmapColors(biBits);
-
     // we need a BITMAPINFO anyhow and if we're not given a pointer to it we
     // use this one
     BITMAPINFO bi2;
 
-    bool wantSizeOnly = pbi == NULL;
+    const bool wantSizeOnly = pbi == NULL;
     if ( wantSizeOnly )
         pbi = &bi2;
 
@@ -277,34 +351,65 @@ size_t wxDIB::ConvertFromBitmap(BITMAPINFO *pbi, HBITMAP hbmp)
     bi.biWidth = bm.bmWidth;
     bi.biHeight = h;
     bi.biPlanes = 1;
-    bi.biBitCount = biBits;
+    bi.biBitCount = bm.bmBitsPixel;
 
     // memory we need for BITMAPINFO only
-    DWORD dwLen = bi.biSize + biColors * sizeof(RGBQUAD);
+    DWORD dwLen = bi.biSize + wxGetNumOfBitmapColors(bm.bmBitsPixel) * sizeof(RGBQUAD);
 
-    // first get the image size
-    ScreenHDC hdc;
-    if ( !::GetDIBits(hdc, hbmp, 0, h, NULL, pbi, DIB_RGB_COLORS) )
+    // get either just the image size or the image bits
+    if ( !::GetDIBits
+            (
+                ScreenHDC(),                        // the DC to use
+                hbmp,                               // the source DDB
+                0,                                  // first scan line
+                h,                                  // number of lines to copy
+                wantSizeOnly ? NULL                 // pointer to the buffer or
+                             : (char *)pbi + dwLen, // NULL if we don't have it
+                pbi,                                // bitmap header
+                DIB_RGB_COLORS                      // or DIB_PAL_COLORS
+            ) )
     {
-        wxLogLastError(wxT("GetDIBits(NULL)"));
+        wxLogLastError(wxT("GetDIBits()"));
 
         return 0;
     }
 
-    if ( !wantSizeOnly )
-    {
-        // and now copy the bits
-        void *image = (char *)pbi + dwLen;
-        if ( !::GetDIBits(hdc, hbmp, 0, h, image, pbi, DIB_RGB_COLORS) )
-        {
-            wxLogLastError(wxT("GetDIBits"));
-
-            return 0;
-        }
-    }
-
     // return the total size
     return dwLen + bi.biSizeImage;
+}
+
+/* static */
+HGLOBAL wxDIB::ConvertFromBitmap(HBITMAP hbmp)
+{
+    // first calculate the size needed
+    const size_t size = ConvertFromBitmap(NULL, hbmp);
+    if ( !size )
+    {
+        // conversion to DDB failed?
+        return NULL;
+    }
+
+    HGLOBAL hDIB = ::GlobalAlloc(GMEM_MOVEABLE, size);
+    if ( !hDIB )
+    {
+        // this is an error which does risk to happen especially under Win9x
+        // and which the user may understand so let him know about it
+        wxLogError(_("Failed to allocated %luKb of memory for bitmap data."),
+                   (unsigned long)(size / 1024));
+
+        return NULL;
+    }
+
+    if ( !ConvertFromBitmap((BITMAPINFO *)GlobalHandle(hDIB), hbmp) )
+    {
+        // this really shouldn't happen... it worked the first time, why not
+        // now?
+        wxFAIL_MSG( _T("wxDIB::ConvertFromBitmap() unexpectedly failed") );
+
+        return NULL;
+    }
+
+    return hDIB;
 }
 
 // ----------------------------------------------------------------------------
@@ -330,12 +435,12 @@ wxPalette *wxDIB::CreatePalette() const
     if ( !biClrUsed )
     {
         // biClrUsed field might not be set
-        biClrUsed = 1 << ds.dsBmih.biBitCount;
+        biClrUsed = wxGetNumOfBitmapColors(ds.dsBmih.biBitCount);
     }
 
-    if ( biClrUsed > 256 )
+    if ( !biClrUsed )
     {
-        // only 8bpp bitmaps (and less) have palettes, so we surely don't
+        // bitmaps of this depth don't have palettes at all
         //
         // NB: another possibility would be to return
         //     GetStockObject(DEFAULT_PALETTE) or even CreateHalftonePalette()?
@@ -439,647 +544,4 @@ bool wxDIB::Create(const wxImage& image)
 }
 
 #endif // wxUSE_IMAGE
-
-// ============================================================================
-// old DIB code, to be integrated in wxDIB class
-// ============================================================================
-
-/*
- *  Routines for dealing with Device Independent Bitmaps.
- *
- *                  wxReadDIB()           - Reads a DIB
- *                  wxWriteDIB()            - Writes a global handle in CF_DIB format
- *                                          to a file.
- *                  wxPaletteSize()       - Calculates the palette size in bytes
- *                                          of given DIB
- *                  wxDibNumColors()        - Determines the number of colors in DIB
- *                  wxDibFromBitmap()       - Creates a DIB repr. the DDB passed in.
- *                  lread()               - Private routine to read more than 64k
- *                  lwrite()              - Private routine to write more than 64k
- */
-
-#ifndef SEEK_CUR
-/* flags for _lseek */
-#define        SEEK_CUR 1
-#define        SEEK_END 2
-#define        SEEK_SET 0
-#endif
-
-#define MAXREAD  32768                                 /* Number of bytes to be read during */
-                                                 /* each read operation.                         */
-
-/* Header signatutes for various resources */
-#define BFT_ICON         0x4349         /* 'IC' */
-#define BFT_BITMAP 0x4d42         /* 'BM' */
-#define BFT_CURSOR 0x5450         /* 'PT(' */
-
-/* macro to determine if resource is a DIB */
-#define ISDIB(bft) ((bft) == BFT_BITMAP)
-
-/* Macro to align given value to the closest DWORD (unsigned long ) */
-#define ALIGNULONG(i)        ((i+3)/4*4)
-
-/* Macro to determine to round off the given value to the closest byte */
-#define WIDTHBYTES(i)        ((i+31)/32*4)
-
-#define PALVERSION                0x300
-#define MAXPALETTE        256          /* max. # supported palette entries */
-
-static DWORD lread(int fh, VOID FAR *pv, DWORD ul);
-static DWORD lwrite(int fh, VOID FAR *pv, DWORD ul);
-
-static bool wxWriteDIB (LPTSTR szFile,HANDLE hdib);
-WORD        wxPaletteSize (VOID FAR * pv); // This is non-static as some apps use it externally
-static WORD wxDibNumColors (VOID FAR * pv);
-static bool wxMakeBitmapAndPalette(HDC,HANDLE,HPALETTE *,HBITMAP *);
-
-/*
- *  FUNCTION   : wxWriteDIB(LPSTR szFile,HANDLE hdib)
- *  PURPOSE    : Write a global handle in CF_DIB format to a file.
- *  RETURNS    : TRUE  - if successful.
- *               FALSE - otherwise
- */
-
-static bool wxWriteDIB(LPTSTR szFile, HANDLE hdib)
-{
-    BITMAPFILEHEADER        hdr;
-    LPBITMAPINFOHEADER  lpbi;
-    int                 fh;
-    OFSTRUCT            of;
-
-    if (!hdib)
-        return FALSE;
-
-    fh = OpenFile(wxConvertWX2MB(szFile), &of, OF_CREATE | OF_READWRITE);
-    if (fh == -1)
-        return FALSE;
-
-    lpbi = (LPBITMAPINFOHEADER) GlobalLock(hdib);
-
-    /* Fill in the fields of the file header */
-    hdr.bfType = BFT_BITMAP;
-    hdr.bfSize = GlobalSize(hdib) + sizeof(BITMAPFILEHEADER);
-    hdr.bfReserved1 = 0;
-    hdr.bfReserved2 = 0;
-    hdr.bfOffBits = (DWORD) sizeof(BITMAPFILEHEADER) + lpbi->biSize +
-        wxPaletteSize(lpbi);
-
-    /* Write the file header */
-    _lwrite(fh, (LPSTR) &hdr, sizeof(BITMAPFILEHEADER));
-
-    /* Write the DIB header and the bits */
-    lwrite(fh, (LPSTR) lpbi, GlobalSize(hdib));
-
-    GlobalUnlock(hdib);
-    _lclose(fh);
-    return TRUE;
-}
-
-/*
- *  FUNCTION   :  wxPaletteSize(VOID FAR * pv)
- *  PURPOSE    :  Calculates the palette size in bytes. If the info. block
- *                is of the BITMAPCOREHEADER type, the number of colors is
- *                multiplied by 3 to give the palette size, otherwise the
- *                number of colors is multiplied by 4.
- *  RETURNS    :  Palette size in number of bytes.
- */
-
-WORD wxPaletteSize(VOID FAR * pv)
-{
-    LPBITMAPINFOHEADER lpbi;
-    WORD               NumColors;
-
-    lpbi = (LPBITMAPINFOHEADER) pv;
-    NumColors = wxDibNumColors(lpbi);
-
-    if (lpbi->biSize == sizeof(BITMAPCOREHEADER))
-        return (WORD)(NumColors * sizeof(RGBTRIPLE));
-    else
-        return (WORD)(NumColors * sizeof(RGBQUAD));
-}
-
-/*
- *  FUNCTION   : wxDibNumColors(VOID FAR * pv)
- *  PURPOSE    : Determines the number of colors in the DIB by looking at
- *               the BitCount filed in the info block.
- *  RETURNS    : The number of colors in the DIB.                            *
- */
-
-static WORD wxDibNumColors(VOID FAR *pv)
-{
-    int                 bits;
-    BITMAPINFOHEADER        *lpbi;
-    BITMAPCOREHEADER        *lpbc;
-
-    lpbi = ((BITMAPINFOHEADER*) pv);
-    lpbc = ((BITMAPCOREHEADER*) pv);
-
-    /*        With the BITMAPINFO format headers, the size of the palette
-     *        is in biClrUsed, whereas in the BITMAPCORE - style headers, it
-     *        is dependent on the bits per pixel ( = 2 raised to the power of
-     *        bits/pixel).
-     */
-    if (lpbi->biSize != sizeof(BITMAPCOREHEADER)) {
-        if (lpbi->biClrUsed != 0)
-            return (WORD) lpbi->biClrUsed;
-        bits = lpbi->biBitCount;
-    }
-    else
-        bits = lpbc->bcBitCount;
-
-    switch (bits) {
-    case 1:
-        return 2;
-    case 4:
-        return 16;
-    case 8:
-        return 256;
-    default:
-        /* A 24 bitcount DIB has no color table */
-        return 0;
-    }
-}
-
-/*
- *  FUNCTION   : lread(int fh, VOID FAR *pv, DWORD ul)
- *  PURPOSE    : Reads data in steps of 32k till all the data has been read.
- *  RETURNS    : 0 - If read did not proceed correctly.
- *               number of bytes read otherwise.
- */
-
-static DWORD lread(int fh, void far *pv, DWORD ul)
-{
-    DWORD     ulT = ul;
-#if defined(WINNT) || defined(__WIN32__) || defined(__WIN32__)
-    BYTE *hp = (BYTE *) pv;
-#else
-    BYTE huge *hp = (BYTE huge *) pv;
-#endif
-    while (ul > (DWORD) MAXREAD) {
-        if (_lread(fh, (LPSTR) hp, (WORD) MAXREAD) != MAXREAD)
-            return 0;
-        ul -= MAXREAD;
-        hp += MAXREAD;
-    }
-    if (_lread(fh, (LPSTR) hp, (WXUINT) ul) != (WXUINT) ul)
-        return 0;
-    return ulT;
-}
-
-/*
- *  FUNCTION   : lwrite(int fh, VOID FAR *pv, DWORD ul)
- *  PURPOSE    : Writes data in steps of 32k till all the data is written.
- *  RETURNS    : 0 - If write did not proceed correctly.
- *               number of bytes written otherwise.
- */
-
-static DWORD lwrite(int fh, VOID FAR *pv, DWORD ul)
-{
-    DWORD     ulT = ul;
-#if defined(WINNT) || defined(__WIN32__) || defined(__WIN32__)
-    BYTE *hp = (BYTE *) pv;
-#else
-    BYTE huge *hp = (BYTE huge *) pv;
-#endif
-    while (ul > MAXREAD) {
-        if (_lwrite(fh, (LPSTR) hp, (WORD) MAXREAD) != MAXREAD)
-            return 0;
-        ul -= MAXREAD;
-        hp += MAXREAD;
-    }
-    if (_lwrite(fh, (LPSTR) hp, (WXUINT) ul) != (WXUINT) ul)
-        return 0;
-    return ulT;
-}
-
-/*
- *  FUNCTION   : wxReadDIB(hWnd)
- *  PURPOSE    : Reads a DIB from a file, obtains a handle to its
- *               BITMAPINFO struct. and loads the DIB.  Once the DIB
- *               is loaded, the function also creates a bitmap and
- *               palette out of the DIB for a device-dependent form.
- *  RETURNS    : TRUE  - DIB loaded and bitmap/palette created
- *                       The DIBINIT structure pointed to by pInfo is
- *                       filled with the appropriate handles.
- *               FALSE - otherwise
- */
-
-bool wxReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
-{
-    int fh;
-    LPBITMAPINFOHEADER lpbi;
-    OFSTRUCT               of;
-    BITMAPFILEHEADER   bf;
-    WORD                nNumColors;
-    bool result = FALSE;
-    WORD offBits;
-    HDC hDC;
-    bool bCoreHead = FALSE;
-    HANDLE hDIB = 0;
-
-    /* Open the file and get a handle to it's BITMAPINFO */
-
-    fh = OpenFile (wxConvertWX2MB(lpFileName), &of, OF_READ);
-    if (fh == -1) {
-        wxLogError(_("Can't open file '%s'"), lpFileName);
-        return (0);
-    }
-
-    hDIB = GlobalAlloc(GHND, (DWORD)(sizeof(BITMAPINFOHEADER) +
-        256 * sizeof(RGBQUAD)));
-    if (!hDIB)
-        return(0);
-
-    lpbi = (LPBITMAPINFOHEADER)GlobalLock(hDIB);
-
-    /* read the BITMAPFILEHEADER */
-    if (sizeof (bf) != _lread (fh, (LPSTR)&bf, sizeof (bf)))
-        goto ErrExit;
-
-    if (bf.bfType != 0x4d42)        /* 'BM' */
-        goto ErrExit;
-
-    if (sizeof(BITMAPCOREHEADER) != _lread (fh, (LPSTR)lpbi, sizeof(BITMAPCOREHEADER)))
-        goto ErrExit;
-
-    if (lpbi->biSize == sizeof(BITMAPCOREHEADER))
-    {
-        lpbi->biSize = sizeof(BITMAPINFOHEADER);
-        lpbi->biBitCount = ((LPBITMAPCOREHEADER)lpbi)->bcBitCount;
-        lpbi->biPlanes = ((LPBITMAPCOREHEADER)lpbi)->bcPlanes;
-        lpbi->biHeight = ((LPBITMAPCOREHEADER)lpbi)->bcHeight;
-        lpbi->biWidth = ((LPBITMAPCOREHEADER)lpbi)->bcWidth;
-        bCoreHead = TRUE;
-    }
-    else
-    {
-        // get to the start of the header and read INFOHEADER
-        _llseek(fh,sizeof(BITMAPFILEHEADER),SEEK_SET);
-        if (sizeof(BITMAPINFOHEADER) != _lread (fh, (LPSTR)lpbi, sizeof(BITMAPINFOHEADER)))
-            goto ErrExit;
-    }
-
-    nNumColors = (WORD)lpbi->biClrUsed;
-    if ( nNumColors == 0 )
-    {
-        /* no color table for 24-bit, default size otherwise */
-        if (lpbi->biBitCount != 24)
-            nNumColors = 1 << lpbi->biBitCount;        /* standard size table */
-    }
-
-    /* fill in some default values if they are zero */
-    if (lpbi->biClrUsed == 0)
-        lpbi->biClrUsed = nNumColors;
-
-    if (lpbi->biSizeImage == 0)
-    {
-        lpbi->biSizeImage = ((((lpbi->biWidth * (DWORD)lpbi->biBitCount) + 31) & ~31) >> 3)
-            * lpbi->biHeight;
-    }
-
-    /* get a proper-sized buffer for header, color table and bits */
-    GlobalUnlock(hDIB);
-    hDIB = GlobalReAlloc(hDIB, lpbi->biSize +
-        nNumColors * sizeof(RGBQUAD) +
-        lpbi->biSizeImage, 0);
-    if (!hDIB)        /* can't resize buffer for loading */
-        goto ErrExit2;
-
-    lpbi = (LPBITMAPINFOHEADER)GlobalLock(hDIB);
-
-    /* read the color table */
-    if (!bCoreHead)
-        _lread(fh, (LPSTR)(lpbi) + lpbi->biSize, nNumColors * sizeof(RGBQUAD));
-    else
-    {
-        signed int i;
-        RGBQUAD FAR *pQuad;
-        RGBTRIPLE FAR *pTriple;
-
-        _lread(fh, (LPSTR)(lpbi) + lpbi->biSize, nNumColors * sizeof(RGBTRIPLE));
-
-        pQuad = (RGBQUAD FAR *)((LPSTR)lpbi + lpbi->biSize);
-        pTriple = (RGBTRIPLE FAR *) pQuad;
-        for (i = nNumColors - 1; i >= 0; i--)
-        {
-            pQuad[i].rgbRed = pTriple[i].rgbtRed;
-            pQuad[i].rgbBlue = pTriple[i].rgbtBlue;
-            pQuad[i].rgbGreen = pTriple[i].rgbtGreen;
-            pQuad[i].rgbReserved = 0;
-        }
-    }
-
-    /* offset to the bits from start of DIB header */
-    offBits = (WORD)(lpbi->biSize + nNumColors * sizeof(RGBQUAD));
-
-    if (bf.bfOffBits != 0L)
-    {
-        _llseek(fh,bf.bfOffBits,SEEK_SET);
-    }
-
-    if (lpbi->biSizeImage == lread(fh, (LPSTR)lpbi + offBits, lpbi->biSizeImage))
-    {
-        GlobalUnlock(hDIB);
-
-        hDC = GetDC(NULL);
-        if (!wxMakeBitmapAndPalette(hDC, hDIB, palette,
-            bitmap))
-        {
-            ReleaseDC(NULL,hDC);
-            goto ErrExit2;
-        }
-        else
-        {
-            ReleaseDC(NULL,hDC);
-            GlobalFree(hDIB);
-            result = TRUE;
-        }
-    }
-    else
-    {
-ErrExit:
-    GlobalUnlock(hDIB);
-ErrExit2:
-    GlobalFree(hDIB);
-    }
-
-    _lclose(fh);
-    return(result);
-}
-
-/*
- *  FUNCTION   : wxMakeBitmapAndPalette
- *  PURPOSE    : Given a DIB, creates a bitmap and corresponding palette
- *               to be used for a device-dependent representation of
- *               of the image.
- *  RETURNS    : TRUE  --> success. phPal and phBitmap are filled with
- *                         appropriate handles.  Caller is responsible
- *                         for freeing objects.
- *               FALSE --> unable to create objects.  both pointer are
- *                         not valid
- */
-
-static bool wxMakeBitmapAndPalette(HDC hDC, HANDLE hDIB,
-                        HPALETTE * phPal, HBITMAP * phBitmap)
-{
-    LPBITMAPINFOHEADER lpInfo;
-    bool result = FALSE;
-    HBITMAP hBitmap;
-    HPALETTE hPalette, hOldPal;
-    LPSTR lpBits;
-
-    lpInfo = (LPBITMAPINFOHEADER) GlobalLock(hDIB);
-
-    hPalette = wxMakeDIBPalette(lpInfo);
-    if ( hPalette )
-    {
-        // Need to realize palette for converting DIB to bitmap.
-        hOldPal = SelectPalette(hDC, hPalette, TRUE);
-        RealizePalette(hDC);
-
-        lpBits = (LPSTR)lpInfo + (WORD)lpInfo->biSize +
-            (WORD)lpInfo->biClrUsed * sizeof(RGBQUAD);
-        hBitmap = CreateDIBitmap(hDC, lpInfo, CBM_INIT, lpBits,
-            (LPBITMAPINFO)lpInfo, DIB_RGB_COLORS);
-
-        SelectPalette(hDC, hOldPal, TRUE);
-        RealizePalette(hDC);
-
-        if (!hBitmap)
-            DeleteObject(hPalette);
-        else
-        {
-            *phBitmap = hBitmap;
-            *phPal = hPalette;
-            result = TRUE;
-        }
-    }
-
-    GlobalUnlock (hDIB);  // glt
-
-    return(result);
-}
-
-/*
- *  FUNCTION   : wxMakeDIBPalette(lpInfo)
- *  PURPOSE    : Given a BITMAPINFOHEADER, create a palette based on
- *               the color table.
- *  RETURNS    : non-zero - handle of a corresponding palette
- *               zero - unable to create palette
- */
-
-HPALETTE wxMakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
-{
-    LPLOGPALETTE npPal;
-    RGBQUAD far *lpRGB;
-    HPALETTE hLogPal;
-    WORD i;
-
-    /* since biClrUsed field was filled during the loading of the DIB,
-     * we know it contains the number of colors in the color table.
-     */
-    if (lpInfo->biClrUsed)
-    {
-        npPal = (LPLOGPALETTE)malloc(sizeof(LOGPALETTE) +
-            (WORD)lpInfo->biClrUsed * sizeof(PALETTEENTRY));
-        if (!npPal)
-            return NULL;
-
-        npPal->palVersion = 0x300;
-        npPal->palNumEntries = (WORD)lpInfo->biClrUsed;
-
-        /* get pointer to the color table */
-        lpRGB = (RGBQUAD FAR *)((LPSTR)lpInfo + lpInfo->biSize);
-
-        /* copy colors from the color table to the LogPalette structure */
-        for (i = 0; (DWORD)i < lpInfo->biClrUsed; i++, lpRGB++)
-        {
-            npPal->palPalEntry[i].peRed = lpRGB->rgbRed;
-            npPal->palPalEntry[i].peGreen = lpRGB->rgbGreen;
-            npPal->palPalEntry[i].peBlue = lpRGB->rgbBlue;
-            npPal->palPalEntry[i].peFlags = 0;
-        }
-
-        hLogPal = CreatePalette((LPLOGPALETTE)npPal);
-        free(npPal);
-
-        return(hLogPal);
-    }
-
-    /* 24-bit DIB with no color table. Return default palette. Another
-     * option would be to create a 256 color "rainbow" palette to provide
-     * some good color choices.
-     */
-    else
-        return((HPALETTE) GetStockObject(DEFAULT_PALETTE));
-}
-
-/*
- *
- * Function:   InitBitmapInfoHeader
- *
- * Purpose:    Does a "standard" initialization of a BITMAPINFOHEADER,
- *             given the Width, Height, and Bits per Pixel for the
- *             DIB.
- *
- *             By standard, I mean that all the relevant fields are set
- *             to the specified values.  biSizeImage is computed, the
- *             biCompression field is set to "no compression," and all
- *             other fields are 0.
- *
- *             Note that DIBs only allow BitsPixel values of 1, 4, 8, or
- *             24.  This routine makes sure that one of these values is
- *             used (whichever is most appropriate for the specified
- *             nBPP).
- *
- * Parms:      lpBmInfoHdr == Far pointer to a BITMAPINFOHEADER structure
- *                            to be filled in.
- *             dwWidth     == Width of DIB (not in Win 3.0 & 3.1, high
- *                            word MUST be 0).
- *             dwHeight    == Height of DIB (not in Win 3.0 & 3.1, high
- *                            word MUST be 0).
- *             nBPP        == Bits per Pixel for the DIB.
- *
- */
-
-static void InitBitmapInfoHeader (LPBITMAPINFOHEADER lpBmInfoHdr,
-                                        DWORD dwWidth,
-                                        DWORD dwHeight,
-                                          int nBPP)
-{
-    //   _fmemset (lpBmInfoHdr, 0, sizeof (BITMAPINFOHEADER));
-    memset (lpBmInfoHdr, 0, sizeof (BITMAPINFOHEADER));
-
-    lpBmInfoHdr->biSize      = sizeof (BITMAPINFOHEADER);
-    lpBmInfoHdr->biWidth     = dwWidth;
-    lpBmInfoHdr->biHeight    = dwHeight;
-    lpBmInfoHdr->biPlanes    = 1;
-
-    if (nBPP <= 1)
-        nBPP = 1;
-    else if (nBPP <= 4)
-        nBPP = 4;
-    else if (nBPP <= 8)
-        nBPP = 8;
-   /* Doesn't work
-        else if (nBPP <= 16)
-        nBPP = 16;
-    */
-    else
-        nBPP = 24;
-
-    lpBmInfoHdr->biBitCount  = nBPP;
-    lpBmInfoHdr->biSizeImage = WIDTHBYTES (dwWidth * nBPP) * dwHeight;
-}
-
-LPSTR wxFindDIBBits (LPSTR lpbi)
-{
-    return (lpbi + *(LPDWORD)lpbi + wxPaletteSize (lpbi));
-}
-
-/*
- * Function:   BitmapToDIB
- *
- * Purpose:    Given a device dependent bitmap and a palette, returns
- *             a handle to global memory with a DIB spec in it.  The
- *             DIB is rendered using the colors of the palette passed in.
- *
- * Parms:      hBitmap == Handle to device dependent bitmap compatible
- *                        with default screen display device.
- *             hPal    == Palette to render the DDB with.  If it's NULL,
- *                        use the default palette.
- */
-
-HANDLE wxBitmapToDIB (HBITMAP hBitmap, HPALETTE hPal)
-{
-    BITMAP             Bitmap;
-    BITMAPINFOHEADER   bmInfoHdr;
-    LPBITMAPINFOHEADER lpbmInfoHdr;
-    LPSTR              lpBits;
-    HDC                hMemDC;
-    HANDLE             hDIB;
-    HPALETTE           hOldPal = NULL;
-
-    // Do some setup -- make sure the Bitmap passed in is valid,
-    //  get info on the bitmap (like its height, width, etc.),
-    //  then setup a BITMAPINFOHEADER.
-
-    if (!hBitmap)
-        return NULL;
-
-    if (!GetObject (hBitmap, sizeof (Bitmap), (LPSTR) &Bitmap))
-        return NULL;
-
-    InitBitmapInfoHeader (&bmInfoHdr,
-        Bitmap.bmWidth,
-        Bitmap.bmHeight,
-        Bitmap.bmPlanes * Bitmap.bmBitsPixel);
-
-    // Now allocate memory for the DIB.  Then, set the BITMAPINFOHEADER
-    //  into this memory, and find out where the bitmap bits go.
-
-    hDIB = GlobalAlloc (GHND, sizeof (BITMAPINFOHEADER) +
-        wxPaletteSize ((LPSTR) &bmInfoHdr) + bmInfoHdr.biSizeImage);
-
-    if (!hDIB)
-        return NULL;
-
-    lpbmInfoHdr  = (LPBITMAPINFOHEADER) GlobalLock (hDIB);
-
-    *lpbmInfoHdr = bmInfoHdr;
-    lpBits       = wxFindDIBBits ((LPSTR) lpbmInfoHdr);
-
-
-    // Now, we need a DC to hold our bitmap.  If the app passed us
-    //  a palette, it should be selected into the DC.
-
-    hMemDC = GetDC (NULL);
-
-    if (hPal)
-    {
-        hOldPal = SelectPalette (hMemDC, hPal, FALSE);
-        RealizePalette (hMemDC);
-    }
-
-    // We're finally ready to get the DIB.  Call the driver and let
-    // it party on our bitmap.  It will fill in the color table,
-    // and bitmap bits of our global memory block.
-
-    if (!GetDIBits (hMemDC, hBitmap, 0, Bitmap.bmHeight, lpBits,
-            (LPBITMAPINFO) lpbmInfoHdr, DIB_RGB_COLORS))
-    {
-        GlobalUnlock (hDIB);
-        GlobalFree (hDIB);
-        hDIB = NULL;
-    }
-    else
-        GlobalUnlock (hDIB);
-
-    // Finally, clean up and return.
-
-    if (hOldPal)
-        SelectPalette (hMemDC, hOldPal, FALSE);
-
-    ReleaseDC (NULL, hMemDC);
-
-    return hDIB;
-}
-
-bool wxSaveBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette *palette)
-{
-    HPALETTE hPalette = 0;
-#if wxUSE_PALETTE
-    if (palette)
-        hPalette = (HPALETTE) palette->GetHPALETTE();
-#endif // wxUSE_PALETTE
-
-    HANDLE dibHandle = wxBitmapToDIB((HBITMAP) bitmap->GetHBITMAP(), hPalette);
-    if (dibHandle)
-    {
-        bool success = (wxWriteDIB(filename, dibHandle) != 0);
-        GlobalFree(dibHandle);
-        return success;
-    }
-    else return FALSE;
-}
 

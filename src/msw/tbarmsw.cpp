@@ -1103,20 +1103,16 @@ WXHBITMAP wxToolBar::CreateMappedBitmap(WXHINSTANCE WXUNUSED(hInstance), void *i
 
 WXHBITMAP wxToolBar::CreateMappedBitmap(WXHINSTANCE hInstance, WXHBITMAP hBitmap)
 {
-  HANDLE hDIB = wxBitmapToDIB((HBITMAP) hBitmap, 0);
-  if (hDIB)
-  {
-#ifdef __WINDOWS_386__
-    LPBITMAPINFOHEADER lpbmInfoHdr = (LPBITMAPINFOHEADER)MK_FP32(GlobalLock(hDIB));
-#else
-    LPBITMAPINFOHEADER lpbmInfoHdr = (LPBITMAPINFOHEADER)GlobalLock(hDIB);
-#endif
-    HBITMAP newBitmap = (HBITMAP) CreateMappedBitmap((WXHINSTANCE) wxGetInstance(), lpbmInfoHdr);
-    GlobalUnlock(hDIB);
+    HANDLE hDIB = wxDIB::ConvertFromBitmap((HBITMAP) hBitmap);
+    if ( !hDIB )
+        return 0;
+
+    WXHBITMAP newBitmap = CreateMappedBitmap(hInstance, GlobalHandle(hDIB));
+
     GlobalFree(hDIB);
-    return (WXHBITMAP) newBitmap;
-  }
-  return 0;
+
+    return newBitmap;
 }
 
-#endif
+#endif // wxUSE_TOOLBAR
+

@@ -35,6 +35,10 @@ public:
     wxDIB(int width, int height, int depth)
         { Init(); (void)Create(width, height, depth); }
 
+    // create a DIB from the DDB
+    wxDIB(const wxBitmap& bmp)
+        { Init(); (void)Create(bmp); }
+
     // load a DIB from file (any depth is supoprted here unlike above)
     //
     // as above, use IsOk() to see if the bitmap was loaded successfully
@@ -43,6 +47,7 @@ public:
 
     // same as the corresponding ctors but with return value
     bool Create(int width, int height, int depth);
+    bool Create(const wxBitmap& bmp);
     bool Load(const wxString& filename);
 
     // dtor is not virtual, this class is not meant to be used polymorphically
@@ -65,6 +70,9 @@ public:
     // create a palette for this DIB (always a trivial/default one for 24bpp)
     wxPalette *CreatePalette() const;
 #endif // wxUSE_PALETTE
+
+    // save the DIB as a .BMP file to the file with the given name
+    bool Save(const wxString& filename);
 
 
     // accessors
@@ -92,8 +100,8 @@ public:
     // HBITMAP conversion
     // ------------------
 
-    // these functions are only used by wxBitmapDataObject implementation in
-    // src/msw/ole/dataobj.cpp, don't use them directly if possible
+    // these functions are only used by wxWindows internally right now, please
+    // don't use them directly if possible as they're subject to change
 
     // creates a DDB compatible with the given (or screen) DC from either
     // a plain DIB or a DIB section (in which case the last parameter must be
@@ -102,11 +110,17 @@ public:
                                    HDC hdc = 0,
                                    void *bits = NULL);
 
+    // create a plain DIB (not a DIB section) from a DDB, the caller is
+    // responsable for freeing it using ::GlobalFree()
+    static HGLOBAL ConvertFromBitmap(HBITMAP hbmp);
+
     // creates a DIB from the given DDB or calculates the space needed by it:
     // if pbi is NULL, only the space is calculated, otherwise pbi is supposed
     // to point at BITMAPINFO of the correct size which is filled by this
-    // function
+    // function (this overload is needed for wxBitmapDataObject code in
+    // src/msw/ole/dataobj.cpp)
     static size_t ConvertFromBitmap(BITMAPINFO *pbi, HBITMAP hbmp);
+
 
     // wxImage conversion
     // ------------------
@@ -198,17 +212,6 @@ inline wxDIB::~wxDIB()
 {
     Free();
 }
-
-// the rest is defined in dib.cpp
-
-// Save (device dependent) wxBitmap as a DIB
-bool wxSaveBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette *palette = NULL);
-
-HANDLE wxBitmapToDIB (HBITMAP hBitmap, HPALETTE hPal);
-bool   wxReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette);
-HANDLE wxReadDIB2(LPTSTR lpFileName);
-LPSTR wxFindDIBBits (LPSTR lpbi);
-HPALETTE wxMakeDIBPalette(LPBITMAPINFOHEADER lpInfo);
 
 #endif // _WX_MSW_DIB_H_
 

@@ -355,22 +355,13 @@ bool wxBMPFileHandler::LoadFile(wxBitmap *bitmap,
 bool wxBMPFileHandler::SaveFile(wxBitmap *bitmap,
                                 const wxString& name,
                                 int WXUNUSED(type),
-                                const wxPalette *pal)
+                                const wxPalette * WXUNUSED(pal))
 {
-#if wxUSE_IMAGE_LOADING_IN_MSW
+    wxCHECK_MSG( bitmap, false, _T("NULL bitmap in SaveFile") );
 
-#if wxUSE_PALETTE
-    wxPalette *actualPalette = (wxPalette *)pal;
-    if ( !actualPalette )
-        actualPalette = bitmap->GetPalette();
-#else
-    wxPalette *actualPalette = NULL;
-#endif // wxUSE_PALETTE
+    wxDIB dib(*bitmap);
 
-    return wxSaveBitmap(WXSTRINGCAST name, bitmap, actualPalette) != 0;
-#else
-    return false;
-#endif
+    return dib.Save(name);
 }
 
 // ----------------------------------------------------------------------------

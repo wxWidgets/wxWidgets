@@ -220,13 +220,13 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
 
         case wxDF_DIB:
             {
-#if wxUSE_IMAGE_LOADING_IN_MSW
                 wxBitmap *bitmap = (wxBitmap *)data;
-                HBITMAP hBitmap = (HBITMAP)bitmap->GetHBITMAP();
-                // NULL palette means to use the system one
-                HANDLE hDIB = wxBitmapToDIB(hBitmap, (HPALETTE)NULL);
-                handle = SetClipboardData(CF_DIB, hDIB);
-#endif // wxUSE_IMAGE_LOADING_IN_MSW
+
+                HGLOBAL hDIB = wxDIB::ConvertFromBitmap(GetHbitmapOf(*bitmap));
+                if ( hDIB )
+                {
+                    handle = ::SetClipboardData(CF_DIB, hDIB);
+                }
                 break;
             }
 
