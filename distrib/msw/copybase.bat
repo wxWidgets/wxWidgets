@@ -3,7 +3,7 @@
 rem VZ: this is quick and _very_ dirty, to be replaced by a script directly
 rem     parsing the files.txt and include/wx/version.h...
 
-set VER=2.3.4
+set VER=2.4.0
 set DEST=t:\wxBase-%VER%
 
 mkdir %DEST%
