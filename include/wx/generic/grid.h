@@ -311,6 +311,8 @@ public:
     virtual void SetAttr(wxGridCellAttr *attr, int row, int col);
     virtual void SetRowAttr(wxGridCellAttr *attr, int row);
     virtual void SetColAttr(wxGridCellAttr *attr, int col);
+    void UpdateAttrRows( size_t pos, int numRows );
+    void UpdateAttrCols( size_t pos, int numCols );
 
 private:
     void InitData();
@@ -365,6 +367,10 @@ public:
 
     // get the currently used attr provider (may be NULL)
     wxGridCellAttrProvider *GetAttrProvider() const { return m_attrProvider; }
+
+    // change row/col number in attribute if needed
+    void UpdateAttrRows( size_t pos, int numRows );
+    void UpdateAttrCols( size_t pos, int numCols );
 
     // by default forwarded to wxGridCellAttrProvider if any. May be
     // overridden to handle attributes directly in this class.

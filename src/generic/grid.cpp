@@ -208,6 +208,8 @@ class WXDLLEXPORT wxGridCellAttrData
 public:
     void SetAttr(wxGridCellAttr *attr, int row, int col);
     wxGridCellAttr *GetAttr(int row, int col) const;
+    void UpdateAttrRows( size_t pos, int numRows );
+    void UpdateAttrCols( size_t pos, int numCols );
 
 private:
     // searches for the attr for given cell, returns wxNOT_FOUND if not found
@@ -224,6 +226,7 @@ public:
 
     void SetAttr(wxGridCellAttr *attr, int rowOrCol);
     wxGridCellAttr *GetAttr(int rowOrCol) const;
+    void UpdateAttrRowsOrCols( size_t pos, int numRowsOrCols );
 
 private:
     wxArrayInt m_rowsOrCols;
@@ -640,6 +643,72 @@ wxGridCellAttr *wxGridCellAttrData::GetAttr(int row, int col) const
     return attr;
 }
 
+void wxGridCellAttrData::UpdateAttrRows( size_t pos, int numRows )
+{
+    size_t count = m_attrs.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        wxGridCellCoords& coords = m_attrs[n].coords;
+	wxCoord row = coords.GetRow();
+	if ((size_t)row >= pos)
+	{
+	    if (numRows > 0)
+	    {
+	        // If rows inserted, include row counter where necessary
+		coords.SetRow(row + numRows);
+	    }
+	    else if (numRows < 0)
+	    {
+		// If rows deleted ...
+	        if ((size_t)row >= pos - numRows)
+		{
+		    // ...either decrement row counter (if row still exists)...
+		    coords.SetRow(row + numRows);
+		}
+		else
+		{
+		    // ...or remove the attribute
+		    m_attrs.RemoveAt((size_t)n);
+		    n--; count--;
+		}
+	    }
+        }
+    }
+}
+
+void wxGridCellAttrData::UpdateAttrCols( size_t pos, int numCols )
+{
+    size_t count = m_attrs.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        wxGridCellCoords& coords = m_attrs[n].coords;
+	wxCoord col = coords.GetCol();
+	if ( (size_t)col >= pos )
+	{
+	    if ( numCols > 0 )
+	    {
+		// If rows inserted, include row counter where necessary
+		coords.SetCol(col + numCols);
+	    }
+	    else if (numCols < 0)
+	    {
+		// If rows deleted ...
+	        if ((size_t)col >= pos - numCols)
+		{
+		    // ...either decrement row counter (if row still exists)...
+	            coords.SetCol(col + numCols);
+		}
+		else
+		{
+		    // ...or remove the attribute
+		    m_attrs.RemoveAt((size_t)n);
+		    n--; count--;
+		}
+	    }
+        }
+    }
+}
+
 int wxGridCellAttrData::FindIndex(int row, int col) const
 {
     size_t count = m_attrs.GetCount();
@@ -704,6 +773,35 @@ void wxGridRowOrColAttrData::SetAttr(wxGridCellAttr *attr, int rowOrCol)
             m_attrs[(size_t)n]->DecRef();
             m_rowsOrCols.RemoveAt((size_t)n);
             m_attrs.RemoveAt((size_t)n);
+        }
+    }
+}
+
+void wxGridRowOrColAttrData::UpdateAttrRowsOrCols( size_t pos, int numRowsOrCols )
+{
+    size_t count = m_attrs.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        int & rowOrCol = m_rowsOrCols[n];
+	if ( (size_t)rowOrCol >= pos )
+	{
+	    if ( numRowsOrCols > 0 )
+	    {
+		// If rows inserted, include row counter where necessary
+		rowOrCol += numRowsOrCols;
+	    }
+	    else if ( numRowsOrCols < 0)
+	    {
+		// If rows deleted, either decrement row counter (if row still exists)
+		if ((size_t)rowOrCol >= pos - numRowsOrCols)
+		    rowOrCol += numRowsOrCols;
+		else
+		{
+		    m_rowsOrCols.RemoveAt((size_t)n);
+		    m_attrs.RemoveAt((size_t)n);
+		    n--; count--;
+		}
+	    }
         }
     }
 }
@@ -775,6 +873,26 @@ void wxGridCellAttrProvider::SetColAttr(wxGridCellAttr *attr, int col)
         InitData();
 
     m_data->m_colAttrs.SetAttr(attr, col);
+}
+
+void wxGridCellAttrProvider::UpdateAttrRows( size_t pos, int numRows )
+{
+    if ( m_data )
+    {
+        m_data->m_cellAttrs.UpdateAttrRows( pos, numRows );
+
+	m_data->m_rowAttrs.UpdateAttrRowsOrCols( pos, numRows );
+    }
+}
+
+void wxGridCellAttrProvider::UpdateAttrCols( size_t pos, int numCols )
+{
+    if ( m_data )
+    {
+        m_data->m_cellAttrs.UpdateAttrCols( pos, numCols );
+
+	m_data->m_colAttrs.UpdateAttrRowsOrCols( pos, numCols );
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -852,6 +970,22 @@ void wxGridTableBase::SetColAttr(wxGridCellAttr *attr, int col)
         // as we take ownership of the pointer and don't store it, we must
         // free it now
         attr->SafeDecRef();
+    }
+}
+
+void wxGridTableBase::UpdateAttrRows( size_t pos, int numRows )
+{
+    if ( m_attrProvider )
+    {
+        m_attrProvider->UpdateAttrRows( pos, numRows );
+    }
+}
+
+void wxGridTableBase::UpdateAttrCols( size_t pos, int numCols )
+{
+    if ( m_attrProvider )
+    {
+        m_attrProvider->UpdateAttrCols( pos, numCols );
     }
 }
 
@@ -1082,7 +1216,7 @@ bool wxGridStringTable::InsertRows( size_t pos, size_t numRows )
     {
         m_data.Insert( sa, row );
     }
-
+    UpdateAttrRows( pos, numRows );
     if ( GetView() )
     {
         wxGridTableMessage msg( this,
@@ -1162,7 +1296,7 @@ bool wxGridStringTable::DeleteRows( size_t pos, size_t numRows )
             m_data.Remove( pos );
         }
     }
-
+    UpdateAttrRows( pos, -numRows );
     if ( GetView() )
     {
         wxGridTableMessage msg( this,
@@ -1195,7 +1329,7 @@ bool wxGridStringTable::InsertCols( size_t pos, size_t numCols )
             m_data[row].Insert( wxEmptyString, col );
         }
     }
-
+    UpdateAttrCols( pos, numCols );
     if ( GetView() )
     {
         wxGridTableMessage msg( this,
@@ -1279,7 +1413,7 @@ bool wxGridStringTable::DeleteCols( size_t pos, size_t numCols )
             }
         }
     }
-
+    UpdateAttrCols( pos, -numCols );
     if ( GetView() )
     {
         wxGridTableMessage msg( this,
