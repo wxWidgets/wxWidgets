@@ -1057,7 +1057,7 @@ class SplitterWindow(_core.Window):
         """
         SetSashSize(self, int width)
 
-        Sets the sash size
+        Sets the sash size.  Currently a NOP.
         """
         return _windows_.SplitterWindow_SetSashSize(*args, **kwargs)
 
@@ -1065,7 +1065,7 @@ class SplitterWindow(_core.Window):
         """
         SetBorderSize(self, int width)
 
-        Sets the border size
+        Sets the border size. Currently a NOP.
         """
         return _windows_.SplitterWindow_SetBorderSize(*args, **kwargs)
 
@@ -4078,7 +4078,7 @@ class PageSetupDialogDataPtr(PageSetupDialogData):
         self.__class__ = PageSetupDialogData
 _windows_.PageSetupDialogData_swigregister(PageSetupDialogDataPtr)
 
-class PageSetupDialog(Dialog):
+class PageSetupDialog(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPageSetupDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4087,11 +4087,13 @@ class PageSetupDialog(Dialog):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-        self._setOORInfo(self)
-
     def GetPageSetupData(*args, **kwargs):
         """GetPageSetupData(self) -> PageSetupDialogData"""
         return _windows_.PageSetupDialog_GetPageSetupData(*args, **kwargs)
+
+    def GetPageSetupDialogData(*args, **kwargs):
+        """GetPageSetupDialogData(self) -> PageSetupDialogData"""
+        return _windows_.PageSetupDialog_GetPageSetupDialogData(*args, **kwargs)
 
     def ShowModal(*args, **kwargs):
         """ShowModal(self) -> int"""

@@ -10912,7 +10912,7 @@ def CallAfter(callable, *args, **kw):
 
 class FutureCall:
     """
-    A convenience class for wx.Timer, that calls the given callable
+    A convenience class for `wx.Timer`, that calls the given callable
     object once after the given amount of milliseconds, passing any
     positional or keyword args.  The return value of the callable is
     availbale after it has been run with the `GetResult` method.
