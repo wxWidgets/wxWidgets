@@ -98,6 +98,8 @@ bool wxTextCtrl::Create(
 , const wxString&                   rsName
 )
 {
+    HWND                            hParent;
+    int                             nTempy;
     //
     // Base initialization
     //
@@ -118,17 +120,33 @@ bool wxTextCtrl::Create(
     if (pParent )
     {
         pParent->AddChild(this);
+        hParent = GetWinHwnd(pParent);
         //
         // OS2 uses normal coordinates, no bassackwards Windows ones
         //
-//        vPos.y = pParent->GetSize().y - (vPos.y + rSize.y);
+        if (pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)) ||
+            pParent->IsKindOf(CLASSINFO(wxScrolledWindow))
+           )
+        {
+            wxWindow*               pGrandParent = NULL;
+
+            pGrandParent = pParent->GetParent();
+            if (pGrandParent)
+                nTempy = pGrandParent->GetSize().y - (vPos.y + rSize.y);
+            else
+                nTempy = pParent->GetSize().y - (vPos.y + rSize.y);
+        }
+        else
+            nTempy = pParent->GetSize().y - (vPos.y + rSize.y);
+        vPos.y = nTempy;
     }
     else
     {
         RECTL                   vRect;
 
         ::WinQueryWindowRect(HWND_DESKTOP, &vRect);
-//        vPos.y = vRect.yTop - (vPos.y + rSize.y);
+        hParent = HWND_DESKTOP;
+        vPos.y = vRect.yTop - (vPos.y + rSize.y);
     }
 
     m_windowStyle = lStyle;
@@ -161,6 +179,10 @@ bool wxTextCtrl::Create(
         if (m_windowStyle & wxTE_PASSWORD) // hidden input
             lSstyle |= ES_UNREADABLE;
     }
+    if ( pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)) ||
+         pParent->IsKindOf(CLASSINFO(wxScrolledWindow))
+       )
+        lSstyle |= WS_CLIPSIBLINGS;
     if (m_bIsMLE)
     {
         m_hWnd = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
@@ -221,8 +243,8 @@ bool wxTextCtrl::Create(
         SetValue(rsValue);
     }
     SetupColours();
-    SetSize( rPos.x
-            ,rPos.y
+    SetSize( vPos.x
+            ,vPos.y
             ,rSize.x
             ,rSize.y
            );
@@ -307,19 +329,6 @@ void wxTextCtrl::WriteText(
   const wxString&                   rsValue
 )
 {
-    if (m_defaultStyle.HasFont() || m_defaultStyle.HasTextColour())
-    {
-        long                        lStart;
-        long                        lEnd;
-
-        GetSelection( &lStart
-                     ,&lEnd
-                    );
-        SetStyle( lStart
-                 ,lEnd
-                 ,m_defaultStyle
-                );
-    }
     ::WinSetWindowText(GetHwnd(), rsValue.c_str());
     AdjustSpaceLimit();
 } // end of wxTextCtrl::WriteText
@@ -617,52 +626,6 @@ void wxTextCtrl::SetSelection(
     else
         ::WinSendMsg(hWnd, EM_SETSEL, MPFROM2SHORT((USHORT)lFromChar, (USHORT)lToChar), (MPARAM)0);
 } // end of wxTextCtrl::SetSelection
-
-bool wxTextCtrl::SetStyle(
-  long                              lStart
-, long                              lEnd
-, const wxTextAttr&                 rStyle
-)
-{
-    HWND                            hWnd = GetHwnd();
-    //
-    // Order the range if needed
-    //
-    if (lStart > lEnd)
-    {
-        long                        lTmp = lStart;
-
-        lStart = lEnd;
-        lEnd = lTmp;
-    }
-
-    //
-    // We can only change the format of the selection, so select the range we
-    // want and restore the old selection later
-    long                            lStartOld;
-    long                            lEndOld;
-
-    GetSelection( &lStartOld
-                 ,&lEndOld
-                );
-
-    //
-    // But do we really have to change the selection?
-    //
-    bool                            bChangeSel = lStart != lStartOld || lEnd != lEndOld;
-
-    if (bChangeSel)
-    {
-        if (m_bIsMLE)
-            ::WinSendMsg(hWnd, MLM_SETSEL, MPFROM2SHORT((USHORT)lStart, (USHORT)lEnd), 0);
-        else
-            ::WinSendMsg(hWnd, EM_SETSEL, MPFROM2SHORT((USHORT)lStart, (USHORT)lEnd), 0);
-    }
-    //
-    // TODO:: finish this by setting fonts and colors
-    //
-    return TRUE;
-} // end of wxTextCtrl::SetStyle
 
 bool wxTextCtrl::LoadFile(
   const wxString&                   rsFile
@@ -1267,4 +1230,51 @@ bool wxTextCtrl::SetForegroundColour(
         ::WinSendMsg(GetHwnd(), MLM_SETTEXTCOLOR, (MPARAM)rColour.GetPixel(), MLE_INDEX);
     return TRUE;
 } // end of wxTextCtrl::SetForegroundColour
+
+bool wxTextCtrl::SetStyle(
+  long                              lStart
+, long                              lEnd
+, const wxTextAttr&                 rStyle
+)
+{
+    HWND                            hWnd = GetHwnd();
+
+    if (lStart > lEnd)
+    {
+        long                        lTmp = lStart;
+
+        lStart = lEnd;
+        lEnd   = lTmp;
+    }
+
+    //
+    // We can only change the format of the selection, so select the range we
+    // want and restore the old selection later
+    //
+    long                            lStartOld;
+    long                            lEndOld;
+
+    GetSelection( &lStartOld
+                 ,&lEndOld
+                );
+
+    //
+    // But do we really have to change the selection?
+    //
+    bool                            bChangeSel = lStart != lStartOld ||
+                                                 lEnd != lEndOld;
+
+    if (bChangeSel)
+    {
+        if (m_bIsMLE)
+            ::WinSendMsg(hWnd, MLM_SETSEL, MPFROM2SHORT((USHORT)lStart, (USHORT)lEnd), 0);
+        else
+            ::WinSendMsg(hWnd, EM_SETSEL, MPFROM2SHORT((USHORT)lStart, (USHORT)lEnd), 0);
+    }
+
+    //
+    // TODO:: finish this part
+    //
+    return TRUE;
+} // end of wxTextCtrl::SetStyle
 

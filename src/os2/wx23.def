@@ -3915,8 +3915,6 @@ EXPORTS
       OnPrevious__19wxPreviewControlBarFv
       ;wxPreviewControlBar::GetEventTable() const
       GetEventTable__19wxPreviewControlBarCFv
-      ;wxPrinterBase::ReportError(wxWindow*,wxPrintout*,char*)
-      ReportError__13wxPrinterBaseFP8wxWindowP10wxPrintoutPc
       ;wxPreviewFrame::wxPreviewFrame(wxPrintPreviewBase*,wxFrame*,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
       __ct__14wxPreviewFrameFP18wxPrintPreviewBaseP7wxFrameRC8wxStringRC7wxPointRC6wxSizelT3
       ;wxPrintPreviewBase::PaintPage(wxWindow*,wxDC&)

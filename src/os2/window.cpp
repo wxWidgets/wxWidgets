@@ -314,7 +314,6 @@ wxWindow::~wxWindow()
         {
             if (pFrame->GetLastFocus() == this)
                 pFrame->SetLastFocus((wxWindow*)NULL);
-            break;
         }
     }
     if (m_parent)
@@ -1449,6 +1448,17 @@ void wxWindow::DoMoveWindow(
 , int                               nHeight
 )
 {
+    RECTL                           vRect;
+    HWND                            hParent;
+    wxWindow*                       pParent = GetParent();
+
+    if (pParent)
+        hParent = GetWinHwnd(pParent);
+    else
+        hParent = HWND_DESKTOP;
+    ::WinQueryWindowRect(hParent, &vRect);
+    nY = vRect.yTop - (nY + nHeight);
+
     if ( !::WinSetWindowPos( GetHwnd()
                             ,HWND_TOP
                             ,(LONG)nX
