@@ -29,6 +29,7 @@
 #include "wx/clipbrd.h"
 #include "wx/colordlg.h"
 #include "wx/sizer.h"
+#include "wx/dataobj.h"
 
 #if wxUSE_METAFILES
     #include "wx/metafile.h"
@@ -122,7 +123,7 @@ public:
 
 IMPLEMENT_APP(DnDApp);
 
-#if wxUSE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP || wxUSE_CLIPBOARD
 
 // ----------------------------------------------------------------------------
 // Define canvas class to show a bitmap
@@ -266,6 +267,8 @@ private:
 // via drag-and-drop or clipboard: in our case, we have different geometric
 // shapes, each one with its own colour and position
 // ----------------------------------------------------------------------------
+
+#if wxUSE_DRAG_AND_DROP
 
 class DnDShape
 {
@@ -760,6 +763,8 @@ private:
     DnDShapeFrame *m_frame;
 };
 
+#endif // wxUSE_DRAG_AND_DROP
+
 // ----------------------------------------------------------------------------
 // functions prototypes
 // ----------------------------------------------------------------------------
@@ -827,6 +832,8 @@ BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
     EVT_SIZE(                 DnDFrame::OnSize)
 END_EVENT_TABLE()
 
+#if wxUSE_DRAG_AND_DROP
+
 BEGIN_EVENT_TABLE(DnDShapeFrame, wxFrame)
     EVT_MENU(Menu_Shape_New,    DnDShapeFrame::OnNewShape)
     EVT_MENU(Menu_Shape_Edit,   DnDShapeFrame::OnEditShape)
@@ -847,6 +854,8 @@ BEGIN_EVENT_TABLE(DnDShapeDialog, wxDialog)
     EVT_BUTTON(Button_Colour, DnDShapeDialog::OnColour)
 END_EVENT_TABLE()
 
+#endif // wxUSE_DRAG_AND_DROP
+
 BEGIN_EVENT_TABLE(DnDCanvasBitmap, wxScrolledWindow)
     EVT_PAINT(DnDCanvasBitmap::OnPaint)
 END_EVENT_TABLE()
@@ -866,7 +875,7 @@ END_EVENT_TABLE()
 // `Main program' equivalent, creating windows and returning main app frame
 bool DnDApp::OnInit()
 {
-#if wxUSE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP || wxUSE_CLIPBOARD
     // switch on trace messages
 #if defined(__WXGTK__)
     wxLog::AddTraceMask(_T("clipboard"));
@@ -899,7 +908,7 @@ bool DnDApp::OnInit()
 #endif // wxUSE_DRAG_AND_DROP
 }
 
-#if wxUSE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP || wxUSE_CLIPBOARD
 
 DnDFrame::DnDFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h)
         : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h)),
@@ -966,10 +975,12 @@ DnDFrame::DnDFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h)
     m_pLog = new wxLogTextCtrl(m_ctrlLog);
     m_pLogPrev = wxLog::SetActiveTarget(m_pLog);
 
+#if wxUSE_DRAG_AND_DROP
     // associate drop targets with the controls
     m_ctrlFile->SetDropTarget(new DnDFile(m_ctrlFile));
     m_ctrlText->SetDropTarget(new DnDText(m_ctrlText));
     m_ctrlLog->SetDropTarget(new URLDropTarget);
+#endif // wxUSE_DRAG_AND_DROP
 
     wxBoxSizer *m_sizer_top = new wxBoxSizer( wxHORIZONTAL );
     m_sizer_top->Add(m_ctrlFile, 1, wxEXPAND );
@@ -1042,13 +1053,16 @@ void DnDFrame::OnUpdateUIPasteBitmap(wxUpdateUIEvent& event)
 
 void DnDFrame::OnNewFrame(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_DRAG_AND_DROP
     (new DnDShapeFrame(this))->Show(true);
 
     wxLogStatus(this, wxT("Double click the new frame to select a shape for it"));
+#endif // wxUSE_DRAG_AND_DROP
 }
 
 void DnDFrame::OnDrag(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_DRAG_AND_DROP
     wxString strText = wxGetTextFromUser
         (
             _T("After you enter text in this dialog, press any mouse\n")
@@ -1059,6 +1073,7 @@ void DnDFrame::OnDrag(wxCommandEvent& WXUNUSED(event))
         );
 
     m_strText = strText;
+#endif // wxUSE_DRAG_AND_DROP
 }
 
 void DnDFrame::OnDragMoveByDefault(wxCommandEvent& event)
@@ -1118,6 +1133,7 @@ void DnDFrame::OnLogClear(wxCommandEvent& /* event */ )
 
 void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
 {
+#if wxUSE_DRAG_AND_DROP
     if ( !m_strText.IsEmpty() )
     {
         // start drag operation
@@ -1151,6 +1167,7 @@ void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
 
         SetStatusText(wxString(_T("Drag result: ")) + pc);
     }
+#endif // wxUSE_DRAG_AND_DROP
 }
 
 void DnDFrame::OnRightDown(wxMouseEvent &event )
@@ -1424,6 +1441,8 @@ void DnDFrame::OnPaste(wxCommandEvent& WXUNUSED(event))
 
     wxTheClipboard->Close();
 }
+
+#if wxUSE_DRAG_AND_DROP
 
 // ----------------------------------------------------------------------------
 // Notifications called by the base class
@@ -1873,6 +1892,8 @@ void DnDShapeDataObject::CreateBitmap() const
     self->m_hasBitmap = true;
 }
 
+#endif // wxUSE_DRAG_AND_DROP
+
 // ----------------------------------------------------------------------------
 // global functions
 // ----------------------------------------------------------------------------
@@ -1911,4 +1932,4 @@ static void ShowMetaFile(const wxMetaFile& metafile)
 
 #endif // wxUSE_METAFILES
 
-#endif // wxUSE_DRAG_AND_DROP
+#endif // wxUSE_DRAG_AND_DROP || wxUSE_CLIPBOARD

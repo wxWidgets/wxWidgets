@@ -5021,7 +5021,6 @@ if test "$wxUSE_GUI" = "yes"; then
 fi
 
 
-
 dnl ---------------------------------------------------------------------------
 dnl String stuff
 dnl ---------------------------------------------------------------------------
@@ -5221,9 +5220,12 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
 
     if test "$wxUSE_DRAG_AND_DROP" = "yes"; then
         AC_DEFINE(wxUSE_DRAG_AND_DROP)
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dnd"
     fi
 
+fi
+
+if test "$wxUSE_DRAG_AND_DROP" = "yes" -o "$wxUSE_CLIPBOARD" = "yes"; then
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dnd"
 fi
 
 if test "$wxUSE_SPLINES" = "yes" ; then
