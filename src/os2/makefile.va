@@ -281,10 +281,30 @@ COMLIBOBJS2 = \
   fs_zip.obj
 
 OS2OBJS = \
+  ..\os2\$D\accel.obj \
+  ..\os2\$D\app.obj \
+  ..\os2\$D\bitmap.obj \
+  ..\os2\$D\bmpbuttn.obj \
+  ..\os2\$D\brush.obj \
+  ..\os2\$D\button.obj \
+  ..\os2\$D\caret.obj \
   ..\os2\$D\dc.obj \
   ..\os2\$D\dialog.obj \
   ..\os2\$D\frame.obj \
-  ..\os2\$D\window.obj \
+  ..\os2\$D\window.obj
+
+OS2LIBOBJS = \
+  accel.obj \
+  app.obj \
+  bitmap.obj \
+  bmpbuttn.obj \
+  brush.obj \
+  button.obj \
+  caret.obj \
+  dc.obj \
+  dialog.obj \
+  frame.obj \
+  window.obj
 
 HTMLOBJS = \
   ..\html\$D\htmlcell.obj \
@@ -429,6 +449,19 @@ $(GENLIBOBJS):
   copy ..\generic\$D\tipdlg.obj
   copy ..\generic\$D\busyinfo.obj
 
+$(OS2LIBOBJS):
+  copy ..\os2\$D\accel.obj
+  copy ..\os2\$D\app.obj
+  copy ..\os2\$D\bitmap.obj
+  copy ..\os2\$D\bmpbuttn.obj
+  copy ..\os2\$D\brush.obj
+  copy ..\os2\$D\button.obj
+  copy ..\os2\$D\caret.obj
+  copy ..\os2\$D\dc.obj
+  copy ..\os2\$D\dialog.obj
+  copy ..\os2\$D\frame.obj
+  copy ..\os2\$D\window.obj
+
 # wxWindows library as DLL
 dll:
         nmake -f makefile.va all FINAL=$(FINAL) DLL=1 WXMAKINGDLL=1 NEW_WXLIBNAME=$(NEW_WXLIBNAME)
@@ -484,7 +517,6 @@ $(WXDIR)\lib\wxgen.lib: $(GENLIBOBJS)
  ilib $(LIBFLAGS) $@ @<<
     $**;
 <<
- del *.obj
 
 $(WXDIR)\lib\wxnones.lib: $(NONESSENTIALOBJS)
  touch $(WXDIR)\lib\wxnones.lib
@@ -493,12 +525,13 @@ $(WXDIR)\lib\wxnones.lib: $(NONESSENTIALOBJS)
     $**;
 <<
 
-$(WXDIR)\lib\wxos2.lib: $(OS2OBJS)
+$(WXDIR)\lib\wxos2.lib: $(OS2LIBOBJS)
  touch $(WXDIR)\lib\wxos2.lib
  del $(WXDIR)\lib\wxos2.lib
  ilib $(LIBFLAGS) $@ @<<
     $**;
 <<
+ del *.obj
 
 $(WXDIR)\lib\wx.lib: \
   $D\dummy.obj \

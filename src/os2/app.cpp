@@ -57,15 +57,6 @@ bool wxApp::Initialize()
   wxBuffer = new char[BUFSIZ + 512];
 #endif
 
-/* No longer used
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-
-  streambuf* sBuf = new wxDebugStreamBuf;
-  ostream* oStr = new ostream(sBuf) ;
-  wxDebugContext::SetStream(oStr, sBuf);
-#endif
-*/
-  
   wxClassInfo::InitializeClasses();
 
   wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
@@ -122,7 +113,7 @@ void wxApp::CleanUp()
 
   delete wxTheApp;
   wxTheApp = NULL;
-  
+
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
   // At this point we want to check if there are any memory
   // blocks that aren't part of the wxDebugContext itself,
@@ -136,7 +127,7 @@ void wxApp::CleanUp()
   }
 //  wxDebugContext::SetStream(NULL, NULL);
 #endif
-  
+
   // do it as the very last thing because everything else can log messages
   wxLog::DontCreateOnDemand();
   // do it as the very last thing because everything else can log messages
@@ -154,11 +145,11 @@ int wxEntry( int argc, char *argv[] )
       printf( "wxWindows error: No initializer - use IMPLEMENT_APP macro.\n" );
       return 0;
     };
-    
+
   	wxTheApp = (wxApp*) (* wxApp::GetInitializerFunction()) ();
   };
-  
-  if (!wxTheApp) 
+
+  if (!wxTheApp)
   {
     printf( "wxWindows error: wxTheApp == NULL\n" );
     return 0;
@@ -173,11 +164,11 @@ int wxEntry( int argc, char *argv[] )
   // Here frames insert themselves automatically
   // into wxTopLevelWindows by getting created
   // in OnInit().
-  
+
   if (!wxTheApp->OnInit()) return 0;
 
   int retValue = 0;
-  
+
   if (wxTheApp->Initialized()) retValue = wxTheApp->OnRun();
 
   if (wxTheApp->GetTopWindow())
@@ -185,11 +176,11 @@ int wxEntry( int argc, char *argv[] )
     delete wxTheApp->GetTopWindow();
     wxTheApp->SetTopWindow(NULL);
   }
-  
-  wxTheApp->DeletePendingObjects();  
-  
+
+  wxTheApp->DeletePendingObjects();
+
   wxTheApp->OnExit();
-  
+
   wxApp::CleanUp();
 
   return retValue;
@@ -207,7 +198,7 @@ wxApp::wxApp()
   m_appName = "";
   argc = 0;
   argv = NULL;
-#ifdef __WXMSW__
+#ifdef __WXPM__
   m_printMode = wxPRINT_WINDOWS;
 #else
   m_printMode = wxPRINT_POSTSCRIPT;
@@ -344,7 +335,7 @@ void wxApp::DeletePendingObjects()
   while (node)
   {
     wxObject *obj = (wxObject *)node->Data();
-    
+
     delete obj;
 
     if (wxPendingDelete.Member(obj))
