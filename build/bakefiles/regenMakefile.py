@@ -141,10 +141,13 @@ cleanCmds = ''
 allK = all.keys()
 allK.sort()
 cleanList = []
+
+for f in allK:
+    all[f].sort()
+
 for f in allK:
     for i in all[f]:
         cleanList.append('\trm -f %s\n' % i)
-    cleanList.sort()
     cleanCmds = ''.join(cleanList)
 
 for f in allK:

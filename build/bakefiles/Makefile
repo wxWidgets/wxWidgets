@@ -8,8 +8,16 @@ CDEPS = config.bkl common.bkl common_contrib.bkl
 SDEPS = config.bkl common.bkl common_samples.bkl
 MDEPS = common.bkl config.bkl files.bkl monolithic.bkl multilib.bkl opengl.bkl wxwin.py
 AUTOCONF_ALL = \
-	../../configure \
 	../../Makefile.in \
+	../../configure \
+	../../contrib/samples/animate/Makefile.in \
+	../../contrib/samples/xrc/Makefile.in \
+	../../contrib/src/animate/Makefile.in \
+	../../contrib/src/fl/Makefile.in \
+	../../contrib/src/gizmos/Makefile.in \
+	../../contrib/src/ogl/Makefile.in \
+	../../contrib/src/stc/Makefile.in \
+	../../contrib/src/xrc/Makefile.in \
 	../../samples/Makefile.in \
 	../../samples/access/Makefile.in \
 	../../samples/artprov/Makefile.in \
@@ -66,6 +74,7 @@ AUTOCONF_ALL = \
 	../../samples/notebook/Makefile.in \
 	../../samples/oleauto/Makefile.in \
 	../../samples/opengl/Makefile.in \
+	../../samples/opengl/cube/Makefile.in \
 	../../samples/ownerdrw/Makefile.in \
 	../../samples/png/Makefile.in \
 	../../samples/printing/Makefile.in \
@@ -91,18 +100,16 @@ AUTOCONF_ALL = \
 	../../samples/vscroll/Makefile.in \
 	../../samples/widgets/Makefile.in \
 	../../samples/wizard/Makefile.in \
-	../../samples/wxtest/Makefile.in \
-	../../contrib/src/animate/Makefile.in \
-	../../contrib/src/fl/Makefile.in \
-	../../contrib/src/gizmos/Makefile.in \
-	../../contrib/src/ogl/Makefile.in \
-	../../contrib/src/stc/Makefile.in \
-	../../contrib/src/xrc/Makefile.in \
-	../../contrib/samples/animate/Makefile.in \
-	../../contrib/samples/xrc/Makefile.in
+	../../samples/wxtest/Makefile.in
 BORLAND_ALL = \
-	../makefile.bcc \
-	../../samples/makefile.bcc \
+	../../contrib/build/animate/makefile.bcc \
+	../../contrib/build/fl/makefile.bcc \
+	../../contrib/build/gizmos/makefile.bcc \
+	../../contrib/build/ogl/makefile.bcc \
+	../../contrib/build/stc/makefile.bcc \
+	../../contrib/build/xrc/makefile.bcc \
+	../../contrib/samples/animate/makefile.bcc \
+	../../contrib/samples/xrc/makefile.bcc \
 	../../samples/access/makefile.bcc \
 	../../samples/artprov/makefile.bcc \
 	../../samples/calendar/makefile.bcc \
@@ -128,10 +135,10 @@ BORLAND_ALL = \
 	../../samples/grid/makefile.bcc \
 	../../samples/help/makefile.bcc \
 	../../samples/htlbox/makefile.bcc \
-	../../samples/html/makefile.bcc \
 	../../samples/html/about/makefile.bcc \
 	../../samples/html/help/makefile.bcc \
 	../../samples/html/helpview/makefile.bcc \
+	../../samples/html/makefile.bcc \
 	../../samples/html/printing/makefile.bcc \
 	../../samples/html/test/makefile.bcc \
 	../../samples/html/virtual/makefile.bcc \
@@ -145,6 +152,7 @@ BORLAND_ALL = \
 	../../samples/layout/makefile.bcc \
 	../../samples/listbox/makefile.bcc \
 	../../samples/listctrl/makefile.bcc \
+	../../samples/makefile.bcc \
 	../../samples/mdi/makefile.bcc \
 	../../samples/memcheck/makefile.bcc \
 	../../samples/menu/makefile.bcc \
@@ -157,6 +165,7 @@ BORLAND_ALL = \
 	../../samples/newgrid/makefile.bcc \
 	../../samples/notebook/makefile.bcc \
 	../../samples/oleauto/makefile.bcc \
+	../../samples/opengl/cube/makefile.bcc \
 	../../samples/opengl/makefile.bcc \
 	../../samples/ownerdrw/makefile.bcc \
 	../../samples/png/makefile.bcc \
@@ -184,17 +193,16 @@ BORLAND_ALL = \
 	../../samples/widgets/makefile.bcc \
 	../../samples/wizard/makefile.bcc \
 	../../samples/wxtest/makefile.bcc \
-	../../contrib/build/animate/makefile.bcc \
-	../../contrib/build/fl/makefile.bcc \
-	../../contrib/build/gizmos/makefile.bcc \
-	../../contrib/build/ogl/makefile.bcc \
-	../../contrib/build/stc/makefile.bcc \
-	../../contrib/build/xrc/makefile.bcc \
-	../../contrib/samples/animate/makefile.bcc \
-	../../contrib/samples/xrc/makefile.bcc
+	../makefile.bcc
 MINGW_ALL = \
-	../makefile.gcc \
-	../../samples/makefile.gcc \
+	../../contrib/build/animate/makefile.gcc \
+	../../contrib/build/fl/makefile.gcc \
+	../../contrib/build/gizmos/makefile.gcc \
+	../../contrib/build/ogl/makefile.gcc \
+	../../contrib/build/stc/makefile.gcc \
+	../../contrib/build/xrc/makefile.gcc \
+	../../contrib/samples/animate/makefile.gcc \
+	../../contrib/samples/xrc/makefile.gcc \
 	../../samples/access/makefile.gcc \
 	../../samples/artprov/makefile.gcc \
 	../../samples/calendar/makefile.gcc \
@@ -220,10 +228,10 @@ MINGW_ALL = \
 	../../samples/grid/makefile.gcc \
 	../../samples/help/makefile.gcc \
 	../../samples/htlbox/makefile.gcc \
-	../../samples/html/makefile.gcc \
 	../../samples/html/about/makefile.gcc \
 	../../samples/html/help/makefile.gcc \
 	../../samples/html/helpview/makefile.gcc \
+	../../samples/html/makefile.gcc \
 	../../samples/html/printing/makefile.gcc \
 	../../samples/html/test/makefile.gcc \
 	../../samples/html/virtual/makefile.gcc \
@@ -237,6 +245,7 @@ MINGW_ALL = \
 	../../samples/layout/makefile.gcc \
 	../../samples/listbox/makefile.gcc \
 	../../samples/listctrl/makefile.gcc \
+	../../samples/makefile.gcc \
 	../../samples/mdi/makefile.gcc \
 	../../samples/memcheck/makefile.gcc \
 	../../samples/menu/makefile.gcc \
@@ -249,6 +258,7 @@ MINGW_ALL = \
 	../../samples/newgrid/makefile.gcc \
 	../../samples/notebook/makefile.gcc \
 	../../samples/oleauto/makefile.gcc \
+	../../samples/opengl/cube/makefile.gcc \
 	../../samples/opengl/makefile.gcc \
 	../../samples/ownerdrw/makefile.gcc \
 	../../samples/png/makefile.gcc \
@@ -276,17 +286,16 @@ MINGW_ALL = \
 	../../samples/widgets/makefile.gcc \
 	../../samples/wizard/makefile.gcc \
 	../../samples/wxtest/makefile.gcc \
-	../../contrib/build/animate/makefile.gcc \
-	../../contrib/build/fl/makefile.gcc \
-	../../contrib/build/gizmos/makefile.gcc \
-	../../contrib/build/ogl/makefile.gcc \
-	../../contrib/build/stc/makefile.gcc \
-	../../contrib/build/xrc/makefile.gcc \
-	../../contrib/samples/animate/makefile.gcc \
-	../../contrib/samples/xrc/makefile.gcc
+	../makefile.gcc
 MSVC_ALL = \
-	../makefile.vc \
-	../../samples/makefile.vc \
+	../../contrib/build/animate/makefile.vc \
+	../../contrib/build/fl/makefile.vc \
+	../../contrib/build/gizmos/makefile.vc \
+	../../contrib/build/ogl/makefile.vc \
+	../../contrib/build/stc/makefile.vc \
+	../../contrib/build/xrc/makefile.vc \
+	../../contrib/samples/animate/makefile.vc \
+	../../contrib/samples/xrc/makefile.vc \
 	../../samples/access/makefile.vc \
 	../../samples/artprov/makefile.vc \
 	../../samples/calendar/makefile.vc \
@@ -312,10 +321,10 @@ MSVC_ALL = \
 	../../samples/grid/makefile.vc \
 	../../samples/help/makefile.vc \
 	../../samples/htlbox/makefile.vc \
-	../../samples/html/makefile.vc \
 	../../samples/html/about/makefile.vc \
 	../../samples/html/help/makefile.vc \
 	../../samples/html/helpview/makefile.vc \
+	../../samples/html/makefile.vc \
 	../../samples/html/printing/makefile.vc \
 	../../samples/html/test/makefile.vc \
 	../../samples/html/virtual/makefile.vc \
@@ -329,6 +338,7 @@ MSVC_ALL = \
 	../../samples/layout/makefile.vc \
 	../../samples/listbox/makefile.vc \
 	../../samples/listctrl/makefile.vc \
+	../../samples/makefile.vc \
 	../../samples/mdi/makefile.vc \
 	../../samples/memcheck/makefile.vc \
 	../../samples/menu/makefile.vc \
@@ -341,6 +351,7 @@ MSVC_ALL = \
 	../../samples/newgrid/makefile.vc \
 	../../samples/notebook/makefile.vc \
 	../../samples/oleauto/makefile.vc \
+	../../samples/opengl/cube/makefile.vc \
 	../../samples/opengl/makefile.vc \
 	../../samples/ownerdrw/makefile.vc \
 	../../samples/png/makefile.vc \
@@ -368,17 +379,16 @@ MSVC_ALL = \
 	../../samples/widgets/makefile.vc \
 	../../samples/wizard/makefile.vc \
 	../../samples/wxtest/makefile.vc \
-	../../contrib/build/animate/makefile.vc \
-	../../contrib/build/fl/makefile.vc \
-	../../contrib/build/gizmos/makefile.vc \
-	../../contrib/build/ogl/makefile.vc \
-	../../contrib/build/stc/makefile.vc \
-	../../contrib/build/xrc/makefile.vc \
-	../../contrib/samples/animate/makefile.vc \
-	../../contrib/samples/xrc/makefile.vc
+	../makefile.vc
 WATCOM_ALL = \
-	../makefile.wat \
-	../../samples/makefile.wat \
+	../../contrib/build/animate/makefile.wat \
+	../../contrib/build/fl/makefile.wat \
+	../../contrib/build/gizmos/makefile.wat \
+	../../contrib/build/ogl/makefile.wat \
+	../../contrib/build/stc/makefile.wat \
+	../../contrib/build/xrc/makefile.wat \
+	../../contrib/samples/animate/makefile.wat \
+	../../contrib/samples/xrc/makefile.wat \
 	../../samples/access/makefile.wat \
 	../../samples/artprov/makefile.wat \
 	../../samples/calendar/makefile.wat \
@@ -404,10 +414,10 @@ WATCOM_ALL = \
 	../../samples/grid/makefile.wat \
 	../../samples/help/makefile.wat \
 	../../samples/htlbox/makefile.wat \
-	../../samples/html/makefile.wat \
 	../../samples/html/about/makefile.wat \
 	../../samples/html/help/makefile.wat \
 	../../samples/html/helpview/makefile.wat \
+	../../samples/html/makefile.wat \
 	../../samples/html/printing/makefile.wat \
 	../../samples/html/test/makefile.wat \
 	../../samples/html/virtual/makefile.wat \
@@ -421,6 +431,7 @@ WATCOM_ALL = \
 	../../samples/layout/makefile.wat \
 	../../samples/listbox/makefile.wat \
 	../../samples/listctrl/makefile.wat \
+	../../samples/makefile.wat \
 	../../samples/mdi/makefile.wat \
 	../../samples/memcheck/makefile.wat \
 	../../samples/menu/makefile.wat \
@@ -433,6 +444,7 @@ WATCOM_ALL = \
 	../../samples/newgrid/makefile.wat \
 	../../samples/notebook/makefile.wat \
 	../../samples/oleauto/makefile.wat \
+	../../samples/opengl/cube/makefile.wat \
 	../../samples/opengl/makefile.wat \
 	../../samples/ownerdrw/makefile.wat \
 	../../samples/png/makefile.wat \
@@ -460,14 +472,7 @@ WATCOM_ALL = \
 	../../samples/widgets/makefile.wat \
 	../../samples/wizard/makefile.wat \
 	../../samples/wxtest/makefile.wat \
-	../../contrib/build/animate/makefile.wat \
-	../../contrib/build/fl/makefile.wat \
-	../../contrib/build/gizmos/makefile.wat \
-	../../contrib/build/ogl/makefile.wat \
-	../../contrib/build/stc/makefile.wat \
-	../../contrib/build/xrc/makefile.wat \
-	../../contrib/samples/animate/makefile.wat \
-	../../contrib/samples/xrc/makefile.wat
+	../makefile.wat
 all: autoconf borland mingw msvc watcom
 
 autoconf: $(AUTOCONF_ALL)
@@ -480,40 +485,8 @@ clean:
 	rm -f ../../autoconf_inc.m4
 	rm -f ../../Makefile.in
 	rm -f ../../configure
-	rm -f ../../contrib/build/animate/makefile.bcc
-	rm -f ../../contrib/build/animate/makefile.gcc
-	rm -f ../../contrib/build/animate/makefile.vc
-	rm -f ../../contrib/build/animate/makefile.wat
-	rm -f ../../contrib/build/fl/makefile.bcc
-	rm -f ../../contrib/build/fl/makefile.gcc
-	rm -f ../../contrib/build/fl/makefile.vc
-	rm -f ../../contrib/build/fl/makefile.wat
-	rm -f ../../contrib/build/gizmos/makefile.bcc
-	rm -f ../../contrib/build/gizmos/makefile.gcc
-	rm -f ../../contrib/build/gizmos/makefile.vc
-	rm -f ../../contrib/build/gizmos/makefile.wat
-	rm -f ../../contrib/build/ogl/makefile.bcc
-	rm -f ../../contrib/build/ogl/makefile.gcc
-	rm -f ../../contrib/build/ogl/makefile.vc
-	rm -f ../../contrib/build/ogl/makefile.wat
-	rm -f ../../contrib/build/stc/makefile.bcc
-	rm -f ../../contrib/build/stc/makefile.gcc
-	rm -f ../../contrib/build/stc/makefile.vc
-	rm -f ../../contrib/build/stc/makefile.wat
-	rm -f ../../contrib/build/xrc/makefile.bcc
-	rm -f ../../contrib/build/xrc/makefile.gcc
-	rm -f ../../contrib/build/xrc/makefile.vc
-	rm -f ../../contrib/build/xrc/makefile.wat
 	rm -f ../../contrib/samples/animate/Makefile.in
-	rm -f ../../contrib/samples/animate/makefile.bcc
-	rm -f ../../contrib/samples/animate/makefile.gcc
-	rm -f ../../contrib/samples/animate/makefile.vc
-	rm -f ../../contrib/samples/animate/makefile.wat
 	rm -f ../../contrib/samples/xrc/Makefile.in
-	rm -f ../../contrib/samples/xrc/makefile.bcc
-	rm -f ../../contrib/samples/xrc/makefile.gcc
-	rm -f ../../contrib/samples/xrc/makefile.vc
-	rm -f ../../contrib/samples/xrc/makefile.wat
 	rm -f ../../contrib/src/animate/Makefile.in
 	rm -f ../../contrib/src/fl/Makefile.in
 	rm -f ../../contrib/src/gizmos/Makefile.in
@@ -522,417 +495,454 @@ clean:
 	rm -f ../../contrib/src/xrc/Makefile.in
 	rm -f ../../samples/Makefile.in
 	rm -f ../../samples/access/Makefile.in
-	rm -f ../../samples/access/makefile.bcc
-	rm -f ../../samples/access/makefile.gcc
-	rm -f ../../samples/access/makefile.vc
-	rm -f ../../samples/access/makefile.wat
 	rm -f ../../samples/artprov/Makefile.in
-	rm -f ../../samples/artprov/makefile.bcc
-	rm -f ../../samples/artprov/makefile.gcc
-	rm -f ../../samples/artprov/makefile.vc
-	rm -f ../../samples/artprov/makefile.wat
 	rm -f ../../samples/calendar/Makefile.in
-	rm -f ../../samples/calendar/makefile.bcc
-	rm -f ../../samples/calendar/makefile.gcc
-	rm -f ../../samples/calendar/makefile.vc
-	rm -f ../../samples/calendar/makefile.wat
 	rm -f ../../samples/caret/Makefile.in
-	rm -f ../../samples/caret/makefile.bcc
-	rm -f ../../samples/caret/makefile.gcc
-	rm -f ../../samples/caret/makefile.vc
-	rm -f ../../samples/caret/makefile.wat
 	rm -f ../../samples/checklst/Makefile.in
-	rm -f ../../samples/checklst/makefile.bcc
-	rm -f ../../samples/checklst/makefile.gcc
-	rm -f ../../samples/checklst/makefile.vc
-	rm -f ../../samples/checklst/makefile.wat
 	rm -f ../../samples/config/Makefile.in
-	rm -f ../../samples/config/makefile.bcc
-	rm -f ../../samples/config/makefile.gcc
-	rm -f ../../samples/config/makefile.vc
-	rm -f ../../samples/config/makefile.wat
 	rm -f ../../samples/console/Makefile.in
-	rm -f ../../samples/console/makefile.bcc
-	rm -f ../../samples/console/makefile.gcc
-	rm -f ../../samples/console/makefile.vc
-	rm -f ../../samples/console/makefile.wat
 	rm -f ../../samples/controls/Makefile.in
-	rm -f ../../samples/controls/makefile.bcc
-	rm -f ../../samples/controls/makefile.gcc
-	rm -f ../../samples/controls/makefile.vc
-	rm -f ../../samples/controls/makefile.wat
 	rm -f ../../samples/db/Makefile.in
-	rm -f ../../samples/db/makefile.bcc
-	rm -f ../../samples/db/makefile.gcc
-	rm -f ../../samples/db/makefile.vc
-	rm -f ../../samples/db/makefile.wat
 	rm -f ../../samples/dialogs/Makefile.in
-	rm -f ../../samples/dialogs/makefile.bcc
-	rm -f ../../samples/dialogs/makefile.gcc
-	rm -f ../../samples/dialogs/makefile.vc
-	rm -f ../../samples/dialogs/makefile.wat
 	rm -f ../../samples/dialup/Makefile.in
-	rm -f ../../samples/dialup/makefile.bcc
-	rm -f ../../samples/dialup/makefile.gcc
-	rm -f ../../samples/dialup/makefile.vc
-	rm -f ../../samples/dialup/makefile.wat
 	rm -f ../../samples/display/Makefile.in
-	rm -f ../../samples/display/makefile.bcc
-	rm -f ../../samples/display/makefile.gcc
-	rm -f ../../samples/display/makefile.vc
-	rm -f ../../samples/display/makefile.wat
 	rm -f ../../samples/dnd/Makefile.in
-	rm -f ../../samples/dnd/makefile.bcc
-	rm -f ../../samples/dnd/makefile.gcc
-	rm -f ../../samples/dnd/makefile.vc
-	rm -f ../../samples/dnd/makefile.wat
 	rm -f ../../samples/docview/Makefile.in
-	rm -f ../../samples/docview/makefile.bcc
-	rm -f ../../samples/docview/makefile.gcc
-	rm -f ../../samples/docview/makefile.vc
-	rm -f ../../samples/docview/makefile.wat
 	rm -f ../../samples/docvwmdi/Makefile.in
-	rm -f ../../samples/docvwmdi/makefile.bcc
-	rm -f ../../samples/docvwmdi/makefile.gcc
-	rm -f ../../samples/docvwmdi/makefile.vc
-	rm -f ../../samples/docvwmdi/makefile.wat
 	rm -f ../../samples/dragimag/Makefile.in
-	rm -f ../../samples/dragimag/makefile.bcc
-	rm -f ../../samples/dragimag/makefile.gcc
-	rm -f ../../samples/dragimag/makefile.vc
-	rm -f ../../samples/dragimag/makefile.wat
 	rm -f ../../samples/drawing/Makefile.in
-	rm -f ../../samples/drawing/makefile.bcc
-	rm -f ../../samples/drawing/makefile.gcc
-	rm -f ../../samples/drawing/makefile.vc
-	rm -f ../../samples/drawing/makefile.wat
 	rm -f ../../samples/dynamic/Makefile.in
-	rm -f ../../samples/dynamic/makefile.bcc
-	rm -f ../../samples/dynamic/makefile.gcc
-	rm -f ../../samples/dynamic/makefile.vc
-	rm -f ../../samples/dynamic/makefile.wat
 	rm -f ../../samples/erase/Makefile.in
-	rm -f ../../samples/erase/makefile.bcc
-	rm -f ../../samples/erase/makefile.gcc
-	rm -f ../../samples/erase/makefile.vc
-	rm -f ../../samples/erase/makefile.wat
 	rm -f ../../samples/event/Makefile.in
-	rm -f ../../samples/event/makefile.bcc
-	rm -f ../../samples/event/makefile.gcc
-	rm -f ../../samples/event/makefile.vc
-	rm -f ../../samples/event/makefile.wat
 	rm -f ../../samples/exec/Makefile.in
-	rm -f ../../samples/exec/makefile.bcc
-	rm -f ../../samples/exec/makefile.gcc
-	rm -f ../../samples/exec/makefile.vc
-	rm -f ../../samples/exec/makefile.wat
 	rm -f ../../samples/font/Makefile.in
-	rm -f ../../samples/font/makefile.bcc
-	rm -f ../../samples/font/makefile.gcc
-	rm -f ../../samples/font/makefile.vc
-	rm -f ../../samples/font/makefile.wat
 	rm -f ../../samples/grid/Makefile.in
-	rm -f ../../samples/grid/makefile.bcc
-	rm -f ../../samples/grid/makefile.gcc
-	rm -f ../../samples/grid/makefile.vc
-	rm -f ../../samples/grid/makefile.wat
 	rm -f ../../samples/help/Makefile.in
-	rm -f ../../samples/help/makefile.bcc
-	rm -f ../../samples/help/makefile.gcc
-	rm -f ../../samples/help/makefile.vc
-	rm -f ../../samples/help/makefile.wat
 	rm -f ../../samples/htlbox/Makefile.in
-	rm -f ../../samples/htlbox/makefile.bcc
-	rm -f ../../samples/htlbox/makefile.gcc
-	rm -f ../../samples/htlbox/makefile.vc
-	rm -f ../../samples/htlbox/makefile.wat
 	rm -f ../../samples/html/Makefile.in
 	rm -f ../../samples/html/about/Makefile.in
-	rm -f ../../samples/html/about/makefile.bcc
-	rm -f ../../samples/html/about/makefile.gcc
-	rm -f ../../samples/html/about/makefile.vc
-	rm -f ../../samples/html/about/makefile.wat
 	rm -f ../../samples/html/help/Makefile.in
-	rm -f ../../samples/html/help/makefile.bcc
-	rm -f ../../samples/html/help/makefile.gcc
-	rm -f ../../samples/html/help/makefile.vc
-	rm -f ../../samples/html/help/makefile.wat
 	rm -f ../../samples/html/helpview/Makefile.in
-	rm -f ../../samples/html/helpview/makefile.bcc
-	rm -f ../../samples/html/helpview/makefile.gcc
-	rm -f ../../samples/html/helpview/makefile.vc
-	rm -f ../../samples/html/helpview/makefile.wat
-	rm -f ../../samples/html/makefile.bcc
-	rm -f ../../samples/html/makefile.gcc
-	rm -f ../../samples/html/makefile.vc
-	rm -f ../../samples/html/makefile.wat
 	rm -f ../../samples/html/printing/Makefile.in
-	rm -f ../../samples/html/printing/makefile.bcc
-	rm -f ../../samples/html/printing/makefile.gcc
-	rm -f ../../samples/html/printing/makefile.vc
-	rm -f ../../samples/html/printing/makefile.wat
 	rm -f ../../samples/html/test/Makefile.in
-	rm -f ../../samples/html/test/makefile.bcc
-	rm -f ../../samples/html/test/makefile.gcc
-	rm -f ../../samples/html/test/makefile.vc
-	rm -f ../../samples/html/test/makefile.wat
 	rm -f ../../samples/html/virtual/Makefile.in
-	rm -f ../../samples/html/virtual/makefile.bcc
-	rm -f ../../samples/html/virtual/makefile.gcc
-	rm -f ../../samples/html/virtual/makefile.vc
-	rm -f ../../samples/html/virtual/makefile.wat
 	rm -f ../../samples/html/widget/Makefile.in
-	rm -f ../../samples/html/widget/makefile.bcc
-	rm -f ../../samples/html/widget/makefile.gcc
-	rm -f ../../samples/html/widget/makefile.vc
-	rm -f ../../samples/html/widget/makefile.wat
 	rm -f ../../samples/html/zip/Makefile.in
-	rm -f ../../samples/html/zip/makefile.bcc
-	rm -f ../../samples/html/zip/makefile.gcc
-	rm -f ../../samples/html/zip/makefile.vc
-	rm -f ../../samples/html/zip/makefile.wat
 	rm -f ../../samples/image/Makefile.in
-	rm -f ../../samples/image/makefile.bcc
-	rm -f ../../samples/image/makefile.gcc
-	rm -f ../../samples/image/makefile.vc
-	rm -f ../../samples/image/makefile.wat
 	rm -f ../../samples/internat/Makefile.in
-	rm -f ../../samples/internat/makefile.bcc
-	rm -f ../../samples/internat/makefile.gcc
-	rm -f ../../samples/internat/makefile.vc
-	rm -f ../../samples/internat/makefile.wat
 	rm -f ../../samples/ipc/Makefile.in
-	rm -f ../../samples/ipc/makefile.bcc
-	rm -f ../../samples/ipc/makefile.gcc
-	rm -f ../../samples/ipc/makefile.vc
-	rm -f ../../samples/ipc/makefile.wat
 	rm -f ../../samples/joytest/Makefile.in
-	rm -f ../../samples/joytest/makefile.bcc
-	rm -f ../../samples/joytest/makefile.gcc
-	rm -f ../../samples/joytest/makefile.vc
-	rm -f ../../samples/joytest/makefile.wat
 	rm -f ../../samples/keyboard/Makefile.in
-	rm -f ../../samples/keyboard/makefile.bcc
-	rm -f ../../samples/keyboard/makefile.gcc
-	rm -f ../../samples/keyboard/makefile.vc
-	rm -f ../../samples/keyboard/makefile.wat
 	rm -f ../../samples/layout/Makefile.in
-	rm -f ../../samples/layout/makefile.bcc
-	rm -f ../../samples/layout/makefile.gcc
-	rm -f ../../samples/layout/makefile.vc
-	rm -f ../../samples/layout/makefile.wat
 	rm -f ../../samples/listbox/Makefile.in
-	rm -f ../../samples/listbox/makefile.bcc
-	rm -f ../../samples/listbox/makefile.gcc
-	rm -f ../../samples/listbox/makefile.vc
-	rm -f ../../samples/listbox/makefile.wat
 	rm -f ../../samples/listctrl/Makefile.in
-	rm -f ../../samples/listctrl/makefile.bcc
-	rm -f ../../samples/listctrl/makefile.gcc
-	rm -f ../../samples/listctrl/makefile.vc
-	rm -f ../../samples/listctrl/makefile.wat
-	rm -f ../../samples/makefile.bcc
-	rm -f ../../samples/makefile.gcc
-	rm -f ../../samples/makefile.vc
-	rm -f ../../samples/makefile.wat
 	rm -f ../../samples/mdi/Makefile.in
-	rm -f ../../samples/mdi/makefile.bcc
-	rm -f ../../samples/mdi/makefile.gcc
-	rm -f ../../samples/mdi/makefile.vc
-	rm -f ../../samples/mdi/makefile.wat
 	rm -f ../../samples/memcheck/Makefile.in
-	rm -f ../../samples/memcheck/makefile.bcc
-	rm -f ../../samples/memcheck/makefile.gcc
-	rm -f ../../samples/memcheck/makefile.vc
-	rm -f ../../samples/memcheck/makefile.wat
 	rm -f ../../samples/menu/Makefile.in
-	rm -f ../../samples/menu/makefile.bcc
-	rm -f ../../samples/menu/makefile.gcc
-	rm -f ../../samples/menu/makefile.vc
-	rm -f ../../samples/menu/makefile.wat
 	rm -f ../../samples/mfc/Makefile.in
-	rm -f ../../samples/mfc/makefile.bcc
-	rm -f ../../samples/mfc/makefile.gcc
-	rm -f ../../samples/mfc/makefile.vc
-	rm -f ../../samples/mfc/makefile.wat
 	rm -f ../../samples/minifram/Makefile.in
-	rm -f ../../samples/minifram/makefile.bcc
-	rm -f ../../samples/minifram/makefile.gcc
-	rm -f ../../samples/minifram/makefile.vc
-	rm -f ../../samples/minifram/makefile.wat
 	rm -f ../../samples/minimal/Makefile.in
-	rm -f ../../samples/minimal/makefile.bcc
-	rm -f ../../samples/minimal/makefile.gcc
-	rm -f ../../samples/minimal/makefile.vc
-	rm -f ../../samples/minimal/makefile.wat
 	rm -f ../../samples/mobile/Makefile.in
-	rm -f ../../samples/mobile/makefile.bcc
-	rm -f ../../samples/mobile/makefile.gcc
-	rm -f ../../samples/mobile/makefile.vc
-	rm -f ../../samples/mobile/makefile.wat
 	rm -f ../../samples/multimon/Makefile.in
-	rm -f ../../samples/multimon/makefile.bcc
-	rm -f ../../samples/multimon/makefile.gcc
-	rm -f ../../samples/multimon/makefile.vc
-	rm -f ../../samples/multimon/makefile.wat
 	rm -f ../../samples/nativdlg/Makefile.in
-	rm -f ../../samples/nativdlg/makefile.bcc
-	rm -f ../../samples/nativdlg/makefile.gcc
-	rm -f ../../samples/nativdlg/makefile.vc
-	rm -f ../../samples/nativdlg/makefile.wat
 	rm -f ../../samples/newgrid/Makefile.in
-	rm -f ../../samples/newgrid/makefile.bcc
-	rm -f ../../samples/newgrid/makefile.gcc
-	rm -f ../../samples/newgrid/makefile.vc
-	rm -f ../../samples/newgrid/makefile.wat
 	rm -f ../../samples/notebook/Makefile.in
-	rm -f ../../samples/notebook/makefile.bcc
-	rm -f ../../samples/notebook/makefile.gcc
-	rm -f ../../samples/notebook/makefile.vc
-	rm -f ../../samples/notebook/makefile.wat
 	rm -f ../../samples/oleauto/Makefile.in
-	rm -f ../../samples/oleauto/makefile.bcc
-	rm -f ../../samples/oleauto/makefile.gcc
-	rm -f ../../samples/oleauto/makefile.vc
-	rm -f ../../samples/oleauto/makefile.wat
 	rm -f ../../samples/opengl/Makefile.in
-	rm -f ../../samples/opengl/makefile.bcc
-	rm -f ../../samples/opengl/makefile.gcc
-	rm -f ../../samples/opengl/makefile.vc
-	rm -f ../../samples/opengl/makefile.wat
+	rm -f ../../samples/opengl/cube/Makefile.in
 	rm -f ../../samples/ownerdrw/Makefile.in
-	rm -f ../../samples/ownerdrw/makefile.bcc
-	rm -f ../../samples/ownerdrw/makefile.gcc
-	rm -f ../../samples/ownerdrw/makefile.vc
-	rm -f ../../samples/ownerdrw/makefile.wat
 	rm -f ../../samples/png/Makefile.in
-	rm -f ../../samples/png/makefile.bcc
-	rm -f ../../samples/png/makefile.gcc
-	rm -f ../../samples/png/makefile.vc
-	rm -f ../../samples/png/makefile.wat
 	rm -f ../../samples/printing/Makefile.in
-	rm -f ../../samples/printing/makefile.bcc
-	rm -f ../../samples/printing/makefile.gcc
-	rm -f ../../samples/printing/makefile.vc
-	rm -f ../../samples/printing/makefile.wat
 	rm -f ../../samples/propsize/Makefile.in
-	rm -f ../../samples/propsize/makefile.bcc
-	rm -f ../../samples/propsize/makefile.gcc
-	rm -f ../../samples/propsize/makefile.vc
-	rm -f ../../samples/propsize/makefile.wat
 	rm -f ../../samples/regtest/Makefile.in
-	rm -f ../../samples/regtest/makefile.bcc
-	rm -f ../../samples/regtest/makefile.gcc
-	rm -f ../../samples/regtest/makefile.vc
-	rm -f ../../samples/regtest/makefile.wat
 	rm -f ../../samples/richedit/Makefile.in
-	rm -f ../../samples/richedit/makefile.bcc
-	rm -f ../../samples/richedit/makefile.gcc
-	rm -f ../../samples/richedit/makefile.vc
-	rm -f ../../samples/richedit/makefile.wat
 	rm -f ../../samples/rotate/Makefile.in
-	rm -f ../../samples/rotate/makefile.bcc
-	rm -f ../../samples/rotate/makefile.gcc
-	rm -f ../../samples/rotate/makefile.vc
-	rm -f ../../samples/rotate/makefile.wat
 	rm -f ../../samples/sashtest/Makefile.in
-	rm -f ../../samples/sashtest/makefile.bcc
-	rm -f ../../samples/sashtest/makefile.gcc
-	rm -f ../../samples/sashtest/makefile.vc
-	rm -f ../../samples/sashtest/makefile.wat
 	rm -f ../../samples/scroll/Makefile.in
-	rm -f ../../samples/scroll/makefile.bcc
-	rm -f ../../samples/scroll/makefile.gcc
-	rm -f ../../samples/scroll/makefile.vc
-	rm -f ../../samples/scroll/makefile.wat
 	rm -f ../../samples/scrollsub/Makefile.in
-	rm -f ../../samples/scrollsub/makefile.bcc
-	rm -f ../../samples/scrollsub/makefile.gcc
-	rm -f ../../samples/scrollsub/makefile.vc
-	rm -f ../../samples/scrollsub/makefile.wat
 	rm -f ../../samples/shaped/Makefile.in
-	rm -f ../../samples/shaped/makefile.bcc
-	rm -f ../../samples/shaped/makefile.gcc
-	rm -f ../../samples/shaped/makefile.vc
-	rm -f ../../samples/shaped/makefile.wat
 	rm -f ../../samples/sockets/Makefile.in
-	rm -f ../../samples/sockets/makefile.bcc
-	rm -f ../../samples/sockets/makefile.gcc
-	rm -f ../../samples/sockets/makefile.vc
-	rm -f ../../samples/sockets/makefile.wat
 	rm -f ../../samples/splitter/Makefile.in
-	rm -f ../../samples/splitter/makefile.bcc
-	rm -f ../../samples/splitter/makefile.gcc
-	rm -f ../../samples/splitter/makefile.vc
-	rm -f ../../samples/splitter/makefile.wat
 	rm -f ../../samples/statbar/Makefile.in
-	rm -f ../../samples/statbar/makefile.bcc
-	rm -f ../../samples/statbar/makefile.gcc
-	rm -f ../../samples/statbar/makefile.vc
-	rm -f ../../samples/statbar/makefile.wat
 	rm -f ../../samples/tab/Makefile.in
-	rm -f ../../samples/tab/makefile.bcc
-	rm -f ../../samples/tab/makefile.gcc
-	rm -f ../../samples/tab/makefile.vc
-	rm -f ../../samples/tab/makefile.wat
 	rm -f ../../samples/taskbar/Makefile.in
-	rm -f ../../samples/taskbar/makefile.bcc
-	rm -f ../../samples/taskbar/makefile.gcc
-	rm -f ../../samples/taskbar/makefile.vc
-	rm -f ../../samples/taskbar/makefile.wat
 	rm -f ../../samples/text/Makefile.in
-	rm -f ../../samples/text/makefile.bcc
-	rm -f ../../samples/text/makefile.gcc
-	rm -f ../../samples/text/makefile.vc
-	rm -f ../../samples/text/makefile.wat
 	rm -f ../../samples/thread/Makefile.in
-	rm -f ../../samples/thread/makefile.bcc
-	rm -f ../../samples/thread/makefile.gcc
-	rm -f ../../samples/thread/makefile.vc
-	rm -f ../../samples/thread/makefile.wat
 	rm -f ../../samples/toolbar/Makefile.in
-	rm -f ../../samples/toolbar/makefile.bcc
-	rm -f ../../samples/toolbar/makefile.gcc
-	rm -f ../../samples/toolbar/makefile.vc
-	rm -f ../../samples/toolbar/makefile.wat
 	rm -f ../../samples/treectrl/Makefile.in
-	rm -f ../../samples/treectrl/makefile.bcc
-	rm -f ../../samples/treectrl/makefile.gcc
-	rm -f ../../samples/treectrl/makefile.vc
-	rm -f ../../samples/treectrl/makefile.wat
 	rm -f ../../samples/typetest/Makefile.in
-	rm -f ../../samples/typetest/makefile.bcc
-	rm -f ../../samples/typetest/makefile.gcc
-	rm -f ../../samples/typetest/makefile.vc
-	rm -f ../../samples/typetest/makefile.wat
 	rm -f ../../samples/validate/Makefile.in
-	rm -f ../../samples/validate/makefile.bcc
-	rm -f ../../samples/validate/makefile.gcc
-	rm -f ../../samples/validate/makefile.vc
-	rm -f ../../samples/validate/makefile.wat
 	rm -f ../../samples/vscroll/Makefile.in
-	rm -f ../../samples/vscroll/makefile.bcc
-	rm -f ../../samples/vscroll/makefile.gcc
-	rm -f ../../samples/vscroll/makefile.vc
-	rm -f ../../samples/vscroll/makefile.wat
 	rm -f ../../samples/widgets/Makefile.in
-	rm -f ../../samples/widgets/makefile.bcc
-	rm -f ../../samples/widgets/makefile.gcc
-	rm -f ../../samples/widgets/makefile.vc
-	rm -f ../../samples/widgets/makefile.wat
 	rm -f ../../samples/wizard/Makefile.in
-	rm -f ../../samples/wizard/makefile.bcc
-	rm -f ../../samples/wizard/makefile.gcc
-	rm -f ../../samples/wizard/makefile.vc
-	rm -f ../../samples/wizard/makefile.wat
 	rm -f ../../samples/wxtest/Makefile.in
+	rm -f ../../contrib/build/animate/makefile.bcc
+	rm -f ../../contrib/build/fl/makefile.bcc
+	rm -f ../../contrib/build/gizmos/makefile.bcc
+	rm -f ../../contrib/build/ogl/makefile.bcc
+	rm -f ../../contrib/build/stc/makefile.bcc
+	rm -f ../../contrib/build/xrc/makefile.bcc
+	rm -f ../../contrib/samples/animate/makefile.bcc
+	rm -f ../../contrib/samples/xrc/makefile.bcc
+	rm -f ../../samples/access/makefile.bcc
+	rm -f ../../samples/artprov/makefile.bcc
+	rm -f ../../samples/calendar/makefile.bcc
+	rm -f ../../samples/caret/makefile.bcc
+	rm -f ../../samples/checklst/makefile.bcc
+	rm -f ../../samples/config/makefile.bcc
+	rm -f ../../samples/console/makefile.bcc
+	rm -f ../../samples/controls/makefile.bcc
+	rm -f ../../samples/db/makefile.bcc
+	rm -f ../../samples/dialogs/makefile.bcc
+	rm -f ../../samples/dialup/makefile.bcc
+	rm -f ../../samples/display/makefile.bcc
+	rm -f ../../samples/dnd/makefile.bcc
+	rm -f ../../samples/docview/makefile.bcc
+	rm -f ../../samples/docvwmdi/makefile.bcc
+	rm -f ../../samples/dragimag/makefile.bcc
+	rm -f ../../samples/drawing/makefile.bcc
+	rm -f ../../samples/dynamic/makefile.bcc
+	rm -f ../../samples/erase/makefile.bcc
+	rm -f ../../samples/event/makefile.bcc
+	rm -f ../../samples/exec/makefile.bcc
+	rm -f ../../samples/font/makefile.bcc
+	rm -f ../../samples/grid/makefile.bcc
+	rm -f ../../samples/help/makefile.bcc
+	rm -f ../../samples/htlbox/makefile.bcc
+	rm -f ../../samples/html/about/makefile.bcc
+	rm -f ../../samples/html/help/makefile.bcc
+	rm -f ../../samples/html/helpview/makefile.bcc
+	rm -f ../../samples/html/makefile.bcc
+	rm -f ../../samples/html/printing/makefile.bcc
+	rm -f ../../samples/html/test/makefile.bcc
+	rm -f ../../samples/html/virtual/makefile.bcc
+	rm -f ../../samples/html/widget/makefile.bcc
+	rm -f ../../samples/html/zip/makefile.bcc
+	rm -f ../../samples/image/makefile.bcc
+	rm -f ../../samples/internat/makefile.bcc
+	rm -f ../../samples/ipc/makefile.bcc
+	rm -f ../../samples/joytest/makefile.bcc
+	rm -f ../../samples/keyboard/makefile.bcc
+	rm -f ../../samples/layout/makefile.bcc
+	rm -f ../../samples/listbox/makefile.bcc
+	rm -f ../../samples/listctrl/makefile.bcc
+	rm -f ../../samples/makefile.bcc
+	rm -f ../../samples/mdi/makefile.bcc
+	rm -f ../../samples/memcheck/makefile.bcc
+	rm -f ../../samples/menu/makefile.bcc
+	rm -f ../../samples/mfc/makefile.bcc
+	rm -f ../../samples/minifram/makefile.bcc
+	rm -f ../../samples/minimal/makefile.bcc
+	rm -f ../../samples/mobile/makefile.bcc
+	rm -f ../../samples/multimon/makefile.bcc
+	rm -f ../../samples/nativdlg/makefile.bcc
+	rm -f ../../samples/newgrid/makefile.bcc
+	rm -f ../../samples/notebook/makefile.bcc
+	rm -f ../../samples/oleauto/makefile.bcc
+	rm -f ../../samples/opengl/cube/makefile.bcc
+	rm -f ../../samples/opengl/makefile.bcc
+	rm -f ../../samples/ownerdrw/makefile.bcc
+	rm -f ../../samples/png/makefile.bcc
+	rm -f ../../samples/printing/makefile.bcc
+	rm -f ../../samples/propsize/makefile.bcc
+	rm -f ../../samples/regtest/makefile.bcc
+	rm -f ../../samples/richedit/makefile.bcc
+	rm -f ../../samples/rotate/makefile.bcc
+	rm -f ../../samples/sashtest/makefile.bcc
+	rm -f ../../samples/scroll/makefile.bcc
+	rm -f ../../samples/scrollsub/makefile.bcc
+	rm -f ../../samples/shaped/makefile.bcc
+	rm -f ../../samples/sockets/makefile.bcc
+	rm -f ../../samples/splitter/makefile.bcc
+	rm -f ../../samples/statbar/makefile.bcc
+	rm -f ../../samples/tab/makefile.bcc
+	rm -f ../../samples/taskbar/makefile.bcc
+	rm -f ../../samples/text/makefile.bcc
+	rm -f ../../samples/thread/makefile.bcc
+	rm -f ../../samples/toolbar/makefile.bcc
+	rm -f ../../samples/treectrl/makefile.bcc
+	rm -f ../../samples/typetest/makefile.bcc
+	rm -f ../../samples/validate/makefile.bcc
+	rm -f ../../samples/vscroll/makefile.bcc
+	rm -f ../../samples/widgets/makefile.bcc
+	rm -f ../../samples/wizard/makefile.bcc
 	rm -f ../../samples/wxtest/makefile.bcc
-	rm -f ../../samples/wxtest/makefile.gcc
-	rm -f ../../samples/wxtest/makefile.vc
-	rm -f ../../samples/wxtest/makefile.wat
 	rm -f ../makefile.bcc
+	rm -f ../../contrib/build/animate/makefile.gcc
+	rm -f ../../contrib/build/fl/makefile.gcc
+	rm -f ../../contrib/build/gizmos/makefile.gcc
+	rm -f ../../contrib/build/ogl/makefile.gcc
+	rm -f ../../contrib/build/stc/makefile.gcc
+	rm -f ../../contrib/build/xrc/makefile.gcc
+	rm -f ../../contrib/samples/animate/makefile.gcc
+	rm -f ../../contrib/samples/xrc/makefile.gcc
+	rm -f ../../samples/access/makefile.gcc
+	rm -f ../../samples/artprov/makefile.gcc
+	rm -f ../../samples/calendar/makefile.gcc
+	rm -f ../../samples/caret/makefile.gcc
+	rm -f ../../samples/checklst/makefile.gcc
+	rm -f ../../samples/config/makefile.gcc
+	rm -f ../../samples/console/makefile.gcc
+	rm -f ../../samples/controls/makefile.gcc
+	rm -f ../../samples/db/makefile.gcc
+	rm -f ../../samples/dialogs/makefile.gcc
+	rm -f ../../samples/dialup/makefile.gcc
+	rm -f ../../samples/display/makefile.gcc
+	rm -f ../../samples/dnd/makefile.gcc
+	rm -f ../../samples/docview/makefile.gcc
+	rm -f ../../samples/docvwmdi/makefile.gcc
+	rm -f ../../samples/dragimag/makefile.gcc
+	rm -f ../../samples/drawing/makefile.gcc
+	rm -f ../../samples/dynamic/makefile.gcc
+	rm -f ../../samples/erase/makefile.gcc
+	rm -f ../../samples/event/makefile.gcc
+	rm -f ../../samples/exec/makefile.gcc
+	rm -f ../../samples/font/makefile.gcc
+	rm -f ../../samples/grid/makefile.gcc
+	rm -f ../../samples/help/makefile.gcc
+	rm -f ../../samples/htlbox/makefile.gcc
+	rm -f ../../samples/html/about/makefile.gcc
+	rm -f ../../samples/html/help/makefile.gcc
+	rm -f ../../samples/html/helpview/makefile.gcc
+	rm -f ../../samples/html/makefile.gcc
+	rm -f ../../samples/html/printing/makefile.gcc
+	rm -f ../../samples/html/test/makefile.gcc
+	rm -f ../../samples/html/virtual/makefile.gcc
+	rm -f ../../samples/html/widget/makefile.gcc
+	rm -f ../../samples/html/zip/makefile.gcc
+	rm -f ../../samples/image/makefile.gcc
+	rm -f ../../samples/internat/makefile.gcc
+	rm -f ../../samples/ipc/makefile.gcc
+	rm -f ../../samples/joytest/makefile.gcc
+	rm -f ../../samples/keyboard/makefile.gcc
+	rm -f ../../samples/layout/makefile.gcc
+	rm -f ../../samples/listbox/makefile.gcc
+	rm -f ../../samples/listctrl/makefile.gcc
+	rm -f ../../samples/makefile.gcc
+	rm -f ../../samples/mdi/makefile.gcc
+	rm -f ../../samples/memcheck/makefile.gcc
+	rm -f ../../samples/menu/makefile.gcc
+	rm -f ../../samples/mfc/makefile.gcc
+	rm -f ../../samples/minifram/makefile.gcc
+	rm -f ../../samples/minimal/makefile.gcc
+	rm -f ../../samples/mobile/makefile.gcc
+	rm -f ../../samples/multimon/makefile.gcc
+	rm -f ../../samples/nativdlg/makefile.gcc
+	rm -f ../../samples/newgrid/makefile.gcc
+	rm -f ../../samples/notebook/makefile.gcc
+	rm -f ../../samples/oleauto/makefile.gcc
+	rm -f ../../samples/opengl/cube/makefile.gcc
+	rm -f ../../samples/opengl/makefile.gcc
+	rm -f ../../samples/ownerdrw/makefile.gcc
+	rm -f ../../samples/png/makefile.gcc
+	rm -f ../../samples/printing/makefile.gcc
+	rm -f ../../samples/propsize/makefile.gcc
+	rm -f ../../samples/regtest/makefile.gcc
+	rm -f ../../samples/richedit/makefile.gcc
+	rm -f ../../samples/rotate/makefile.gcc
+	rm -f ../../samples/sashtest/makefile.gcc
+	rm -f ../../samples/scroll/makefile.gcc
+	rm -f ../../samples/scrollsub/makefile.gcc
+	rm -f ../../samples/shaped/makefile.gcc
+	rm -f ../../samples/sockets/makefile.gcc
+	rm -f ../../samples/splitter/makefile.gcc
+	rm -f ../../samples/statbar/makefile.gcc
+	rm -f ../../samples/tab/makefile.gcc
+	rm -f ../../samples/taskbar/makefile.gcc
+	rm -f ../../samples/text/makefile.gcc
+	rm -f ../../samples/thread/makefile.gcc
+	rm -f ../../samples/toolbar/makefile.gcc
+	rm -f ../../samples/treectrl/makefile.gcc
+	rm -f ../../samples/typetest/makefile.gcc
+	rm -f ../../samples/validate/makefile.gcc
+	rm -f ../../samples/vscroll/makefile.gcc
+	rm -f ../../samples/widgets/makefile.gcc
+	rm -f ../../samples/wizard/makefile.gcc
+	rm -f ../../samples/wxtest/makefile.gcc
 	rm -f ../makefile.gcc
+	rm -f ../../contrib/build/animate/makefile.vc
+	rm -f ../../contrib/build/fl/makefile.vc
+	rm -f ../../contrib/build/gizmos/makefile.vc
+	rm -f ../../contrib/build/ogl/makefile.vc
+	rm -f ../../contrib/build/stc/makefile.vc
+	rm -f ../../contrib/build/xrc/makefile.vc
+	rm -f ../../contrib/samples/animate/makefile.vc
+	rm -f ../../contrib/samples/xrc/makefile.vc
+	rm -f ../../samples/access/makefile.vc
+	rm -f ../../samples/artprov/makefile.vc
+	rm -f ../../samples/calendar/makefile.vc
+	rm -f ../../samples/caret/makefile.vc
+	rm -f ../../samples/checklst/makefile.vc
+	rm -f ../../samples/config/makefile.vc
+	rm -f ../../samples/console/makefile.vc
+	rm -f ../../samples/controls/makefile.vc
+	rm -f ../../samples/db/makefile.vc
+	rm -f ../../samples/dialogs/makefile.vc
+	rm -f ../../samples/dialup/makefile.vc
+	rm -f ../../samples/display/makefile.vc
+	rm -f ../../samples/dnd/makefile.vc
+	rm -f ../../samples/docview/makefile.vc
+	rm -f ../../samples/docvwmdi/makefile.vc
+	rm -f ../../samples/dragimag/makefile.vc
+	rm -f ../../samples/drawing/makefile.vc
+	rm -f ../../samples/dynamic/makefile.vc
+	rm -f ../../samples/erase/makefile.vc
+	rm -f ../../samples/event/makefile.vc
+	rm -f ../../samples/exec/makefile.vc
+	rm -f ../../samples/font/makefile.vc
+	rm -f ../../samples/grid/makefile.vc
+	rm -f ../../samples/help/makefile.vc
+	rm -f ../../samples/htlbox/makefile.vc
+	rm -f ../../samples/html/about/makefile.vc
+	rm -f ../../samples/html/help/makefile.vc
+	rm -f ../../samples/html/helpview/makefile.vc
+	rm -f ../../samples/html/makefile.vc
+	rm -f ../../samples/html/printing/makefile.vc
+	rm -f ../../samples/html/test/makefile.vc
+	rm -f ../../samples/html/virtual/makefile.vc
+	rm -f ../../samples/html/widget/makefile.vc
+	rm -f ../../samples/html/zip/makefile.vc
+	rm -f ../../samples/image/makefile.vc
+	rm -f ../../samples/internat/makefile.vc
+	rm -f ../../samples/ipc/makefile.vc
+	rm -f ../../samples/joytest/makefile.vc
+	rm -f ../../samples/keyboard/makefile.vc
+	rm -f ../../samples/layout/makefile.vc
+	rm -f ../../samples/listbox/makefile.vc
+	rm -f ../../samples/listctrl/makefile.vc
+	rm -f ../../samples/makefile.vc
+	rm -f ../../samples/mdi/makefile.vc
+	rm -f ../../samples/memcheck/makefile.vc
+	rm -f ../../samples/menu/makefile.vc
+	rm -f ../../samples/mfc/makefile.vc
+	rm -f ../../samples/minifram/makefile.vc
+	rm -f ../../samples/minimal/makefile.vc
+	rm -f ../../samples/mobile/makefile.vc
+	rm -f ../../samples/multimon/makefile.vc
+	rm -f ../../samples/nativdlg/makefile.vc
+	rm -f ../../samples/newgrid/makefile.vc
+	rm -f ../../samples/notebook/makefile.vc
+	rm -f ../../samples/oleauto/makefile.vc
+	rm -f ../../samples/opengl/cube/makefile.vc
+	rm -f ../../samples/opengl/makefile.vc
+	rm -f ../../samples/ownerdrw/makefile.vc
+	rm -f ../../samples/png/makefile.vc
+	rm -f ../../samples/printing/makefile.vc
+	rm -f ../../samples/propsize/makefile.vc
+	rm -f ../../samples/regtest/makefile.vc
+	rm -f ../../samples/richedit/makefile.vc
+	rm -f ../../samples/rotate/makefile.vc
+	rm -f ../../samples/sashtest/makefile.vc
+	rm -f ../../samples/scroll/makefile.vc
+	rm -f ../../samples/scrollsub/makefile.vc
+	rm -f ../../samples/shaped/makefile.vc
+	rm -f ../../samples/sockets/makefile.vc
+	rm -f ../../samples/splitter/makefile.vc
+	rm -f ../../samples/statbar/makefile.vc
+	rm -f ../../samples/tab/makefile.vc
+	rm -f ../../samples/taskbar/makefile.vc
+	rm -f ../../samples/text/makefile.vc
+	rm -f ../../samples/thread/makefile.vc
+	rm -f ../../samples/toolbar/makefile.vc
+	rm -f ../../samples/treectrl/makefile.vc
+	rm -f ../../samples/typetest/makefile.vc
+	rm -f ../../samples/validate/makefile.vc
+	rm -f ../../samples/vscroll/makefile.vc
+	rm -f ../../samples/widgets/makefile.vc
+	rm -f ../../samples/wizard/makefile.vc
+	rm -f ../../samples/wxtest/makefile.vc
 	rm -f ../makefile.vc
+	rm -f ../../contrib/build/animate/makefile.wat
+	rm -f ../../contrib/build/fl/makefile.wat
+	rm -f ../../contrib/build/gizmos/makefile.wat
+	rm -f ../../contrib/build/ogl/makefile.wat
+	rm -f ../../contrib/build/stc/makefile.wat
+	rm -f ../../contrib/build/xrc/makefile.wat
+	rm -f ../../contrib/samples/animate/makefile.wat
+	rm -f ../../contrib/samples/xrc/makefile.wat
+	rm -f ../../samples/access/makefile.wat
+	rm -f ../../samples/artprov/makefile.wat
+	rm -f ../../samples/calendar/makefile.wat
+	rm -f ../../samples/caret/makefile.wat
+	rm -f ../../samples/checklst/makefile.wat
+	rm -f ../../samples/config/makefile.wat
+	rm -f ../../samples/console/makefile.wat
+	rm -f ../../samples/controls/makefile.wat
+	rm -f ../../samples/db/makefile.wat
+	rm -f ../../samples/dialogs/makefile.wat
+	rm -f ../../samples/dialup/makefile.wat
+	rm -f ../../samples/display/makefile.wat
+	rm -f ../../samples/dnd/makefile.wat
+	rm -f ../../samples/docview/makefile.wat
+	rm -f ../../samples/docvwmdi/makefile.wat
+	rm -f ../../samples/dragimag/makefile.wat
+	rm -f ../../samples/drawing/makefile.wat
+	rm -f ../../samples/dynamic/makefile.wat
+	rm -f ../../samples/erase/makefile.wat
+	rm -f ../../samples/event/makefile.wat
+	rm -f ../../samples/exec/makefile.wat
+	rm -f ../../samples/font/makefile.wat
+	rm -f ../../samples/grid/makefile.wat
+	rm -f ../../samples/help/makefile.wat
+	rm -f ../../samples/htlbox/makefile.wat
+	rm -f ../../samples/html/about/makefile.wat
+	rm -f ../../samples/html/help/makefile.wat
+	rm -f ../../samples/html/helpview/makefile.wat
+	rm -f ../../samples/html/makefile.wat
+	rm -f ../../samples/html/printing/makefile.wat
+	rm -f ../../samples/html/test/makefile.wat
+	rm -f ../../samples/html/virtual/makefile.wat
+	rm -f ../../samples/html/widget/makefile.wat
+	rm -f ../../samples/html/zip/makefile.wat
+	rm -f ../../samples/image/makefile.wat
+	rm -f ../../samples/internat/makefile.wat
+	rm -f ../../samples/ipc/makefile.wat
+	rm -f ../../samples/joytest/makefile.wat
+	rm -f ../../samples/keyboard/makefile.wat
+	rm -f ../../samples/layout/makefile.wat
+	rm -f ../../samples/listbox/makefile.wat
+	rm -f ../../samples/listctrl/makefile.wat
+	rm -f ../../samples/makefile.wat
+	rm -f ../../samples/mdi/makefile.wat
+	rm -f ../../samples/memcheck/makefile.wat
+	rm -f ../../samples/menu/makefile.wat
+	rm -f ../../samples/mfc/makefile.wat
+	rm -f ../../samples/minifram/makefile.wat
+	rm -f ../../samples/minimal/makefile.wat
+	rm -f ../../samples/mobile/makefile.wat
+	rm -f ../../samples/multimon/makefile.wat
+	rm -f ../../samples/nativdlg/makefile.wat
+	rm -f ../../samples/newgrid/makefile.wat
+	rm -f ../../samples/notebook/makefile.wat
+	rm -f ../../samples/oleauto/makefile.wat
+	rm -f ../../samples/opengl/cube/makefile.wat
+	rm -f ../../samples/opengl/makefile.wat
+	rm -f ../../samples/ownerdrw/makefile.wat
+	rm -f ../../samples/png/makefile.wat
+	rm -f ../../samples/printing/makefile.wat
+	rm -f ../../samples/propsize/makefile.wat
+	rm -f ../../samples/regtest/makefile.wat
+	rm -f ../../samples/richedit/makefile.wat
+	rm -f ../../samples/rotate/makefile.wat
+	rm -f ../../samples/sashtest/makefile.wat
+	rm -f ../../samples/scroll/makefile.wat
+	rm -f ../../samples/scrollsub/makefile.wat
+	rm -f ../../samples/shaped/makefile.wat
+	rm -f ../../samples/sockets/makefile.wat
+	rm -f ../../samples/splitter/makefile.wat
+	rm -f ../../samples/statbar/makefile.wat
+	rm -f ../../samples/tab/makefile.wat
+	rm -f ../../samples/taskbar/makefile.wat
+	rm -f ../../samples/text/makefile.wat
+	rm -f ../../samples/thread/makefile.wat
+	rm -f ../../samples/toolbar/makefile.wat
+	rm -f ../../samples/treectrl/makefile.wat
+	rm -f ../../samples/typetest/makefile.wat
+	rm -f ../../samples/validate/makefile.wat
+	rm -f ../../samples/vscroll/makefile.wat
+	rm -f ../../samples/widgets/makefile.wat
+	rm -f ../../samples/wizard/makefile.wat
+	rm -f ../../samples/wxtest/makefile.wat
 	rm -f ../makefile.wat
 
 
@@ -2004,20 +2014,37 @@ Makefile: regenMakefile.py
 	touch $@
 
 
-../../samples/opengl/Makefile.in: $(SDEPS) ../../samples/opengl/opengl.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/opengl/opengl.bkl
+../../samples/opengl/cube/Makefile.in: $(SDEPS) ../../samples/opengl/cube/cube.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/opengl/cube/cube.bkl
 	touch $@
-../../samples/opengl/makefile.bcc: $(SDEPS) ../../samples/opengl/opengl.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/opengl/opengl.bkl
+../../samples/opengl/cube/makefile.bcc: $(SDEPS) ../../samples/opengl/cube/cube.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/opengl/cube/cube.bkl
 	touch $@
-../../samples/opengl/makefile.vc: $(SDEPS) ../../samples/opengl/opengl.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/opengl/opengl.bkl
+../../samples/opengl/cube/makefile.vc: $(SDEPS) ../../samples/opengl/cube/cube.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/opengl/cube/cube.bkl
 	touch $@
-../../samples/opengl/makefile.gcc: $(SDEPS) ../../samples/opengl/opengl.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/opengl/opengl.bkl
+../../samples/opengl/cube/makefile.gcc: $(SDEPS) ../../samples/opengl/cube/cube.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/opengl/cube/cube.bkl
 	touch $@
-../../samples/opengl/makefile.wat: $(SDEPS) ../../samples/opengl/opengl.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/opengl/opengl.bkl
+../../samples/opengl/cube/makefile.wat: $(SDEPS) ../../samples/opengl/cube/cube.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/opengl/cube/cube.bkl
+	touch $@
+
+
+../../samples/opengl/Makefile.in: $(SDEPS) ../../samples/opengl/opengl_samples.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/opengl/opengl_samples.bkl
+	touch $@
+../../samples/opengl/makefile.bcc: $(SDEPS) ../../samples/opengl/opengl_samples.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/opengl/opengl_samples.bkl
+	touch $@
+../../samples/opengl/makefile.vc: $(SDEPS) ../../samples/opengl/opengl_samples.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/opengl/opengl_samples.bkl
+	touch $@
+../../samples/opengl/makefile.gcc: $(SDEPS) ../../samples/opengl/opengl_samples.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/opengl/opengl_samples.bkl
+	touch $@
+../../samples/opengl/makefile.wat: $(SDEPS) ../../samples/opengl/opengl_samples.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/opengl/opengl_samples.bkl
 	touch $@
 
 
