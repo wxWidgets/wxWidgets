@@ -1141,6 +1141,11 @@ void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 
 #if wxUSE_RICHEDIT
 
+// Watcom C++ doesn't define this
+#ifndef SCF_ALL
+#define SCF_ALL 0x0004
+#endif
+
 bool wxTextCtrl::SetBackgroundColour(const wxColour& colour)
 {
     if ( !wxTextCtrlBase::SetBackgroundColour(colour) )
