@@ -248,7 +248,7 @@ static long map_to_unmodified_wx_keysym( KeySym keysym )
         case GDK_KP_Down:      key_code = WXK_NUMPAD_DOWN;  break;
         case GDK_KP_Prior:     key_code = WXK_NUMPAD_PRIOR; break;
 //      case GDK_KP_Page_Up:   key_code = WXK_NUMPAD_PAGEUP;   break;
-        case GDK_KP_Next:      key_code = WXK_NUMPAD_PRIOR; break;
+        case GDK_KP_Next:      key_code = WXK_NUMPAD_NEXT;  break;
 //      case GDK_KP_Page_Down: key_code = WXK_NUMPAD_PAGEDOWN; break;
         case GDK_KP_End:       key_code = WXK_NUMPAD_END;   break;
         case GDK_KP_Begin:     key_code = WXK_NUMPAD_BEGIN; break;
@@ -347,7 +347,7 @@ static long map_to_wx_keysym( KeySym keysym )
         case GDK_KP_Down:      key_code = WXK_DOWN;  break;
         case GDK_KP_Prior:     key_code = WXK_PRIOR; break;
 //      case GDK_KP_Page_Up:   key_code = WXK_PAGEUP; break;
-        case GDK_KP_Next:      key_code = WXK_PRIOR;  break;
+        case GDK_KP_Next:      key_code = WXK_NEXT;  break;
 //      case GDK_KP_Page_Down: key_code = WXK_PAGEDOWN; break;
         case GDK_KP_End:       key_code = WXK_END;    break;
         case GDK_KP_Begin:     key_code = WXK_HOME;   break;
