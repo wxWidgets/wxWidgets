@@ -790,7 +790,9 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc )
     HBITMAP hbitmap;
 
     // are we going to use DIB?
-    if ( wxShouldCreateDIB(w, h, depth, hdc) )
+    //
+    // NB: DDBs don't support alpha so if we have alpha channel we must use DIB
+    if ( image.HasAlpha() || wxShouldCreateDIB(w, h, depth, hdc) )
     {
         // don't delete the DIB section in dib object dtor
         hbitmap = dib.Detach();
