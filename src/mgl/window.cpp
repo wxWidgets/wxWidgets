@@ -132,6 +132,7 @@ static void wxWindowPainter(window_t *wnd, MGLDC *dc)
 static ibool wxWindowMouseHandler(window_t *wnd, event_t *e)
 {
     wxWindowMGL *win = (wxWindowMGL*)MGL_wmGetWindowUserData(wnd);
+    wxPoint orig(win->GetClientAreaOrigin());
     wxPoint where;
     
     MGL_wmCoordGlobalToLocal(win->GetHandle(), 
@@ -149,8 +150,8 @@ static ibool wxWindowMouseHandler(window_t *wnd, event_t *e)
     wxMouseEvent event;
     event.SetEventObject(win);
     event.SetTimestamp(e->when);
-    event.m_x = where.x;
-    event.m_y = where.y;
+    event.m_x = where.x - orig.x;
+    event.m_y = where.y - orig.y;
     event.m_shiftDown = e->modifiers & EVT_SHIFTKEY;
     event.m_controlDown = e->modifiers & EVT_CTRLSTATE;
     event.m_altDown = e->modifiers & EVT_LEFTALT;
@@ -193,6 +194,10 @@ static ibool wxWindowMouseHandler(window_t *wnd, event_t *e)
                         MGL_wmCoordGlobalToLocal(gs_windowUnderMouse->GetHandle(), 
                                                  e->where_x, e->where_y, 
                                                  &event2.m_x, &event2.m_y);
+
+                        wxPoint orig(gs_windowUnderMouse->GetClientAreaOrigin());
+                        event2.m_x -= orig.x;
+                        event2.m_y -= orig.y;
 
                         event2.SetEventObject(gs_windowUnderMouse);
                         event2.SetEventType(wxEVT_LEAVE_WINDOW);
@@ -469,7 +474,7 @@ void wxWindowMGL::Init()
     // First of all, make sure window manager is up and running. If it is
     // not the case, initialize it in default display mode
     if ( !g_winMng )
-        wxTheApp->SetDisplayMode(wxDisplayModeInfo(wxSize(640, 480), 16));
+        wxTheApp->SetDisplayMode(wxDisplayModeInfo(640, 480, 16));
 
     // generic:
     InitBase();

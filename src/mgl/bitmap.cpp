@@ -191,16 +191,9 @@ wxBitmapRefData::~wxBitmapRefData()
 IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandler,wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap,wxBitmapBase)
 
-wxBitmap::wxBitmap()
-{
-    if ( wxTheBitmapList ) wxTheBitmapList->AddBitmap(this);
-}
-
 wxBitmap::wxBitmap(int width, int height, int depth)
 {
     Create(width, height, depth);
-
-    if ( wxTheBitmapList ) wxTheBitmapList->AddBitmap(this);
 }
 
 
@@ -285,8 +278,6 @@ bool wxBitmap::CreateFromXpm(const char **bits)
     
     *this = wxBitmap(img);
     
-    if ( wxTheBitmapList ) wxTheBitmapList->AddBitmap(this);
-
     return TRUE;
 }
 
@@ -370,15 +361,11 @@ wxImage wxBitmap::ConvertToImage() const
 wxBitmap::wxBitmap(const wxBitmap& bmp)
 {
     Ref(bmp);
-
-    if ( wxTheBitmapList ) wxTheBitmapList->AddBitmap(this);
 }
 
 wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type)
 {
     LoadFile(filename, type);
-
-    if ( wxTheBitmapList ) wxTheBitmapList->AddBitmap(this);
 }
 
 wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
@@ -393,13 +380,6 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
     bdc->clearDevice();
     bdc->putMonoImage(0, 0, width, (width + 7) / 8, height, (void*)bits);
     delete bdc;
-
-    if ( wxTheBitmapList ) wxTheBitmapList->AddBitmap(this);
-}
-
-wxBitmap::~wxBitmap()
-{
-    if ( wxTheBitmapList ) wxTheBitmapList->DeleteObject(this);
 }
 
 wxBitmap& wxBitmap::operator = (const wxBitmap& bmp)

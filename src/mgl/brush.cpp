@@ -121,18 +121,11 @@ wxBrushRefData::wxBrushRefData(const wxBrushRefData& data)
 
 IMPLEMENT_DYNAMIC_CLASS(wxBrush,wxGDIObject)
 
-wxBrush::wxBrush()
-{
-    if (wxTheBrushList) wxTheBrushList->AddBrush(this);
-}
-
 wxBrush::wxBrush(const wxColour &colour, int style)
 {
     m_refData = new wxBrushRefData();
     M_BRUSHDATA->m_style = style;
     M_BRUSHDATA->m_colour = colour;
-
-    if (wxTheBrushList) wxTheBrushList->AddBrush(this);
 }
 
 wxBrush::wxBrush(const wxBitmap &stippleBitmap)
@@ -152,20 +145,11 @@ wxBrush::wxBrush(const wxBitmap &stippleBitmap)
 		M_BRUSHDATA->m_style = wxSTIPPLE_MASK_OPAQUE;
 	else
 		M_BRUSHDATA->m_style = wxSTIPPLE;
-
-    if (wxTheBrushList) wxTheBrushList->AddBrush(this);
 }
 
 wxBrush::wxBrush(const wxBrush &brush)
 {
     Ref(brush);
-
-    if (wxTheBrushList) wxTheBrushList->AddBrush(this);
-}
-
-wxBrush::~wxBrush()
-{
-    if (wxTheBrushList) wxTheBrushList->RemoveBrush(this);
 }
 
 wxBrush& wxBrush::operator = (const wxBrush& brush)

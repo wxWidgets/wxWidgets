@@ -37,12 +37,6 @@
 #include "wx/univ/colschem.h"
 #include "wx/mgl/private.h"
 
-#define MGL_DEBUG
-
-#if defined(MGL_DEBUG) && !defined(__WXDEBUG__)
-#undef MGL_DEBUG
-#endif
-
 //-----------------------------------------------------------------------------
 // Global data
 //-----------------------------------------------------------------------------
@@ -166,14 +160,14 @@ static bool wxCreateMGL_WM(const wxDisplayModeInfo& displayMode)
         refresh = wxSystemOptions::GetOptionInt(wxT("mgl.screen-refresh"));
 #endif
         
-    mode = MGL_findMode(displayMode.GetScreenSize().x, 
-                        displayMode.GetScreenSize().y, 
+    mode = MGL_findMode(displayMode.GetWidth(), 
+                        displayMode.GetHeight(), 
                         displayMode.GetDepth());
     if ( mode == -1 )
     {
         wxLogError(_("Mode %ix%i-%i not available."), 
-                     displayMode.GetScreenSize().x, 
-                     displayMode.GetScreenSize().y, 
+                     displayMode.GetWidth(),
+                     displayMode.GetHeight(),
                      displayMode.GetDepth());
         return FALSE;
     }
@@ -253,11 +247,15 @@ bool wxApp::OnInitGui()
     if ( !wxAppBase::OnInitGui() )
         return FALSE;
 
-#ifdef MGL_DEBUG
-    // That damn MGL redirects stdin and stdout to physical console
-    FILE *file = fopen("stderr", "wt");
-    wxLog::SetActiveTarget(new wxLogStderr(file));
+#ifdef __WXDEBUG__
+    // MGL redirects stdout and stderr to physical console, so lets redirect
+    // it to file. Do it only when WXDEBUG environment variable is set
+    if ( wxGetEnv(wxT("WXDEBUG"), NULL) )
+        freopen("output.err", "wt", stderr);
 #endif
+
+    wxLog *oldLog = wxLog::SetActiveTarget(new wxLogGui);
+    if ( oldLog ) delete oldLog;
 
     return TRUE;
 }
@@ -287,6 +285,11 @@ void wxApp::OnIdle(wxIdleEvent &event)
 
     // 'Garbage' collection of windows deleted with Close().
     DeletePendingObjects();
+
+#if wxUSE_LOG
+    // flush the logged messages if any
+    wxLog::FlushActive();
+#endif // wxUSE_LOG
 
     // Send OnIdle events to all windows
     if ( SendIdleEvents() )
@@ -432,14 +435,7 @@ wxIcon wxApp::GetStdIcon(int which) const
 
 void wxApp::CleanUp()
 {
-    delete gs_rootWindow;
-
 #if wxUSE_LOG
-    // flush the logged messages if any
-    wxLog *log = wxLog::GetActiveTarget();
-    if (log != NULL && log->HasPendingMessages())
-        log->Flush();
-
     // continuing to use user defined log target is unsafe from now on because
     // some resources may be already unavailable, so replace it by something
     // more safe
@@ -447,6 +443,8 @@ void wxApp::CleanUp()
     if ( oldlog )
         delete oldlog;
 #endif // wxUSE_LOG
+
+    delete gs_rootWindow;
 
     wxModule::CleanUpModules();
 
@@ -611,6 +609,12 @@ int wxEntry(int argc, char *argv[])
                 }
             }
 
+#if wxUSE_LOG
+            // flush the logged messages if any
+            wxLog *log = wxLog::GetActiveTarget();
+            if (log != NULL && log->HasPendingMessages())
+                log->Flush();
+#endif // wxUSE_LOG
             retValue = wxTheApp->OnExit();
         }
     }

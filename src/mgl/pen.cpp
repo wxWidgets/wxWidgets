@@ -79,21 +79,12 @@ wxPenRefData::wxPenRefData(const wxPenRefData& data)
 
 IMPLEMENT_DYNAMIC_CLASS(wxPen,wxGDIObject)
 
-wxPen::wxPen()
-{
-    if ( wxThePenList ) 
-        wxThePenList->AddPen(this);
-}
-
 wxPen::wxPen(const wxColour &colour, int width, int style)
 {
     m_refData = new wxPenRefData();
     M_PENDATA->m_width = width;
     M_PENDATA->m_style = style;
     M_PENDATA->m_colour = colour;
-
-    if ( wxThePenList )
-        wxThePenList->AddPen(this);
 }
 
 wxPen::wxPen(const wxBitmap& stipple, int width)
@@ -107,22 +98,11 @@ wxPen::wxPen(const wxBitmap& stipple, int width)
     M_PENDATA->m_style = wxSTIPPLE;
     M_PENDATA->m_stipple = stipple;
     wxBitmapToPixPattern(stipple, &(M_PENDATA->m_pixPattern), NULL);
-
-    if ( wxThePenList ) 
-        wxThePenList->AddPen(this);
 }
 
 wxPen::wxPen(const wxPen& pen)
 {
     Ref(pen);
-    if ( wxThePenList )
-        wxThePenList->AddPen(this);
-}
-
-wxPen::~wxPen()
-{
-    if ( wxThePenList )
-        wxThePenList->RemovePen(this);
 }
 
 wxPen& wxPen::operator = (const wxPen& pen)

@@ -150,12 +150,6 @@ wxFontRefData::~wxFontRefData()
 
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 
-void wxFont::Init()
-{
-    if (wxTheFontList)
-        wxTheFontList->Append(this);
-}
-
 bool wxFont::Create(const wxNativeFontInfo& info)
 {
     return Create(info.pointSize, info.family, info.style, info.weight,
@@ -204,12 +198,6 @@ void wxFont::Unshare()
         UnRef();
         m_refData = ref;
     }
-}
-
-wxFont::~wxFont()
-{
-    if (wxTheFontList)
-        wxTheFontList->DeleteObject(this);
 }
 
 // ----------------------------------------------------------------------------
