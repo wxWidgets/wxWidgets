@@ -479,13 +479,13 @@ void wxHtmlColourCell::DrawInvisible(wxDC& dc, int x, int y)
 
 void wxHtmlFontCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
 {
-    dc.SetFont(*m_Font);
+    dc.SetFont(m_Font);
     wxHtmlCell::Draw(dc, x, y, view_y1, view_y2);
 }
 
 void wxHtmlFontCell::DrawInvisible(wxDC& dc, int x, int y)
 {
-    dc.SetFont(*m_Font);
+    dc.SetFont(m_Font);
     wxHtmlCell::DrawInvisible(dc, x, y);
 }
 

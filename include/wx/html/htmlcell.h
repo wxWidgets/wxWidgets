@@ -261,9 +261,9 @@ class WXDLLEXPORT wxHtmlColourCell : public wxHtmlCell
 class WXDLLEXPORT wxHtmlFontCell : public wxHtmlCell
 {
     public:
-        wxFont *m_Font;
+        wxFont m_Font;
 
-        wxHtmlFontCell(wxFont *font) : wxHtmlCell() {m_Font = font;};
+        wxHtmlFontCell(wxFont *font) : wxHtmlCell() { m_Font = (*font); }
         virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
         virtual void DrawInvisible(wxDC& dc, int x, int y);
 };
