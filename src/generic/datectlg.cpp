@@ -78,6 +78,104 @@ enum
 // local classes
 // ----------------------------------------------------------------------------
 
+
+class wxDropdownButton : public wxBitmapButton
+{
+public:
+    wxDropdownButton() { Init(); }
+    wxDropdownButton(wxWindow *parent,
+                     wxWindowID id,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize,
+                     long style=0,
+                     const wxValidator& validator = wxDefaultValidator);
+
+    void Init()
+    {
+        m_borderX = -1;
+        m_borderY = -1;
+    }
+    void Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0, 
+                const wxValidator& validator = wxDefaultValidator);
+
+    void DoMoveWindow(int x, int y, int w, int h);
+
+protected:
+    int m_borderX, m_borderY;
+};
+
+
+wxDropdownButton::wxDropdownButton(wxWindow *parent,
+                                   wxWindowID id,
+                                   const wxPoint& pos,
+                                   const wxSize& size,
+                                   long style,
+                                   const wxValidator& validator)
+{
+    Init();
+    Create(parent, id, pos, size, style, validator);
+}
+
+
+void wxDropdownButton::Create(wxWindow *parent,
+                              wxWindowID id,
+                              const wxPoint& pos,
+                              const wxSize& size,
+                              long style,
+                              const wxValidator& validator)
+{
+    wxBitmap chkBmp(15,15);  // arbitrary
+    wxBitmapButton::Create(parent, id, chkBmp, pos, wxDefaultSize, wxBU_AUTODRAW, validator);
+
+    int w, h;
+
+    w=chkBmp.GetWidth();
+    h=chkBmp.GetHeight();
+    m_borderX = GetSize().x - m_marginX - w;
+    m_borderY = GetSize().y - m_marginY - h;
+
+    w = (size.x > 0 ? size.x : GetSize().x);
+    h = (size.y > 0 ? size.y : GetSize().y);
+
+    DoMoveWindow(pos.x, pos.y, w, h);
+}
+
+
+void wxDropdownButton::DoMoveWindow(int x, int y, int w, int h)
+{
+    if (m_borderX >= 0 && m_borderY >= 0 && (w >= 0 || h >= 0))
+    {
+        wxMemoryDC dc;
+        if (w < 0)
+              w = GetSize().x;
+#ifdef __WXGTK__
+        else
+            w = m_marginX + m_borderX + 15; // GTK magic size
+#endif
+        if (h < 0)
+            h = GetSize().y;
+
+        int bw = w - m_marginX - m_borderX;
+        int bh = h - m_marginY - m_borderY;
+        if (bh < 11) bh=11;
+        if (bw < 9)  bw=9;
+
+        wxBitmap bmp(bw, bh);
+        dc.SelectObject(bmp);
+
+        wxRendererNative::Get().DrawComboBoxDropButton(this, dc, wxRect(0,0,bw, bh));
+
+        SetBitmapLabel(bmp);
+    }
+
+    wxBitmapButton::DoMoveWindow(x, y, w, h);
+}
+
+
 #if wxUSE_POPUPWIN
 
 #include "wx/popupwin.h"
@@ -169,6 +267,7 @@ bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
     InheritAttributes();
 
     m_txt = new wxTextCtrl(this, CTRLID_TXT);
+
     m_txt->Connect(wxEVT_KEY_DOWN,
                    wxKeyEventHandler(wxDatePickerCtrlGeneric::OnEditKey),
                    NULL, this);
@@ -176,23 +275,10 @@ bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
                    wxFocusEventHandler(wxDatePickerCtrlGeneric::OnKillFocus),
                    NULL, this);
 
-    const int height = m_txt->GetBestSize().y - 4; // FIXME: fudge
-    wxBitmap bmp(height, height);
-    {
-        wxMemoryDC dc;
-        dc.SelectObject(bmp);
-        wxRendererNative::Get().DrawComboBoxDropButton
-                                (
-                                    this,
-                                    dc,
-                                    wxRect(0, 0, height, height)
-                                );
-    }
+    const int height = m_txt->GetBestSize().y;
 
-    wxBitmapButton *btn = new wxBitmapButton(this, CTRLID_BTN, bmp);
-    btn->SetMargins(0, 0);
-    m_btn = btn;
-
+    m_btn = new wxDropdownButton(this, CTRLID_BTN, wxDefaultPosition, wxSize(height, height));
+ 
     m_popup = new wxDatePopupInternal(this);
     m_popup->SetFont(GetFont());
 

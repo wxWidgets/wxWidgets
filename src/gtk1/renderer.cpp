@@ -73,6 +73,11 @@ public:
                                   wxOrientation orient,
                                   int flags = 0);
 
+    virtual void DrawComboBoxDropButton(wxWindow *win,
+                                        wxDC& dc,
+                                        const wxRect& rect,
+                                        int flags = 0);
+
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 };
 
@@ -104,19 +109,19 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
     if (s_button == NULL)
     {
         s_window = gtk_window_new( GTK_WINDOW_POPUP );
-    gtk_widget_realize( s_window );
-    s_button = gtk_button_new();
-    gtk_container_add( GTK_CONTAINER(s_window), s_button );
-    gtk_widget_realize( s_button );
+        gtk_widget_realize( s_window );
+        s_button = gtk_button_new();
+        gtk_container_add( GTK_CONTAINER(s_window), s_button );
+        gtk_widget_realize( s_button );
     }
 
     gtk_paint_box
     (
-    s_button->style,
+        s_button->style,
         GTK_PIZZA(win->m_wxwindow)->bin_window,
         flags & wxCONTROL_DISABLED ? GTK_STATE_INSENSITIVE : GTK_STATE_NORMAL,
         GTK_SHADOW_OUT,
-    NULL,
+        NULL,
         s_button,
         "button",
         dc.XLOG2DEV(rect.x) -1, rect.y -1, rect.width +2, rect.height +2
@@ -340,5 +345,33 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
         SASH_SIZE, SASH_SIZE
     );
 #endif // GTK+ 2.x/1.x
+}
+
+void wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
+                                            wxDC& dc,
+                                            const wxRect& rect,
+                                            int flags)
+{
+    dc.SetBrush(wxBrush(win->GetBackgroundColour()));
+    dc.SetPen(wxPen(win->GetBackgroundColour()));
+    dc.DrawRectangle(rect);
+
+    int x = (rect.GetWidth()-9)   / 2;
+    int y = (rect.GetHeight()-10) / 2;
+
+    wxPoint pt[] =
+    {
+        wxPoint(x+2, y+3),
+        wxPoint(x+6, y+3),
+        wxPoint(x+6, y+6),
+        wxPoint(x+8, y+6),
+        wxPoint(x+4, y+10),
+        wxPoint(x+0, y+6),
+        wxPoint(x+2, y+6)
+    };
+    dc.SetBrush(wxBrush(win->GetForegroundColour()));
+    dc.SetPen(wxPen(win->GetForegroundColour()));
+    dc.DrawLine(x, y, x+9, y);
+    dc.DrawPolygon(WXSIZEOF(pt), pt, rect.x, rect.y);
 }
 
