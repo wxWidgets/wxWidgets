@@ -2699,6 +2699,8 @@ void wxWindowMac::MacCreateScrollBars( long style )
 {
     wxASSERT_MSG( m_vScrollBar == NULL && m_hScrollBar == NULL , wxT("attempt to create window twice") ) ;
 
+#if 0
+
     bool hasBoth = ( style & wxVSCROLL ) && ( style & wxHSCROLL ) ;
     int adjust = hasBoth ? MAC_SCROLLBAR_SIZE - 1: 0 ;
     int width, height ;
@@ -2729,6 +2731,34 @@ void wxWindowMac::MacCreateScrollBars( long style )
     {
         m_hScrollBar->Show(false) ;
     }
+#else  
+    if ( style & ( wxVSCROLL | wxHSCROLL ) )
+    {
+        bool hasBoth = ( style & wxVSCROLL ) && ( style & wxHSCROLL ) ;
+        int adjust = hasBoth ? MAC_SCROLLBAR_SIZE - 1: 0 ;
+        int width, height ;
+        GetClientSize( &width , &height ) ;
+
+        wxPoint vPoint(width-MAC_SCROLLBAR_SIZE, 0) ;
+        wxSize vSize(MAC_SCROLLBAR_SIZE, height - adjust) ;
+        wxPoint hPoint(0 , height-MAC_SCROLLBAR_SIZE ) ;
+        wxSize hSize( width - adjust, MAC_SCROLLBAR_SIZE) ;
+
+
+        if ( style & wxVSCROLL )
+        {
+            m_vScrollBar = new wxScrollBar(this, wxWINDOW_VSCROLL, vPoint,
+                vSize , wxVERTICAL);
+        }
+
+        if ( style  & wxHSCROLL )
+        {
+            m_hScrollBar = new wxScrollBar(this, wxWINDOW_HSCROLL, hPoint,
+                hSize , wxHORIZONTAL);
+        }
+    }
+#endif
+
 
     // because the create does not take into account the client area origin
     MacRepositionScrollBars() ; // we might have a real position shift
@@ -2736,6 +2766,9 @@ void wxWindowMac::MacCreateScrollBars( long style )
 
 void wxWindowMac::MacRepositionScrollBars()
 {
+    if ( !m_hScrollBar && !m_vScrollBar )
+        return ;
+    
     bool hasBoth = ( m_hScrollBar && m_hScrollBar->IsShown()) && ( m_vScrollBar && m_vScrollBar->IsShown()) ;
     int adjust = hasBoth ? MAC_SCROLLBAR_SIZE - 1 : 0 ;
 
