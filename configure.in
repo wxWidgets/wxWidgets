@@ -2950,7 +2950,27 @@ equivalent variable and GTK+ is version 1.2.3 or above.
 
     if test "$wxUSE_PM" = 1; then
         TOOLKIT=PM
-        GUIDIST=GTK_DIST
+        GUIDIST=PM_DIST
+        AC_CACHE_CHECK([for type SPBCDATA],
+            wx_cv_spbcdata,
+            [
+                AC_TRY_COMPILE(
+                    [
+                        #define INCL_PM
+                        #include <os2.h>
+                    ],
+                    [
+                        SPBCDATA test;
+                    ],
+                    wx_cv_spbcdata=yes,
+                    wx_cv_spbcdata=no
+                )
+            ]
+        )
+
+        if test $wx_cv_spbcdata = "yes"; then
+            AC_DEFINE(HAVE_SPBCDATA)
+        fi
     fi
 
     dnl the name of the directory where the files for this toolkit live
