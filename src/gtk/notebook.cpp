@@ -34,6 +34,7 @@ public:
     m_page = (GtkNotebookPage *) NULL;
     m_client = (wxWindow *) NULL;
     m_parent = (GtkNotebook *) NULL;
+    m_box = (GtkWidget *) NULL;
   }
 
 //private:
@@ -44,6 +45,7 @@ public:
   GtkLabel          *m_label;
   wxWindow          *m_client;
   GtkNotebook       *m_parent;
+  GtkWidget         *m_box;     // in which the label and image are packed
 };
 
 //-----------------------------------------------------------------------------
@@ -370,7 +372,7 @@ bool wxNotebook::AddPage(wxWindow* win, const wxString& text,
   }
 
   wxCHECK_MSG(page != NULL, FALSE,
-              _("Can't add a page whose parent is not the notebook!"));
+              "Can't add a page whose parent is not the notebook!");
 
   // then set the attributes
   page->m_text = text;
@@ -378,6 +380,19 @@ bool wxNotebook::AddPage(wxWindow* win, const wxString& text,
     page->m_text = "";
   page->m_image = imageId;
   gtk_label_set(page->m_label, page->m_text);
+
+  // create the image if any
+  if ( imageId != -1 ) {
+    wxASSERT( m_imageList != NULL );
+
+    wxBitmap *bmp = m_imageList->GetBitmap(imageId);
+    GdkPixmap *pixmap = bmp->GetPixmap();
+    GtkWidget *pixmapwid = gtk_pixmap_new (pixmap, NULL /* @@@@ */);
+
+    gtk_box_pack_start(GTK_BOX(page->m_box), pixmapwid, FALSE, FALSE, 3);
+
+    gtk_widget_show(pixmapwid);
+  }
 
   if ( bSelect ) {
     SetSelection(GetPageCount());
@@ -402,10 +417,18 @@ void wxNotebook::AddChild( wxWindow *win )
   wxNotebookPage *page = new wxNotebookPage();
 
   page->m_id = GetPageCount();
-  page->m_label = (GtkLabel *)gtk_label_new(_("Handle"));
+
+  page->m_box = gtk_hbox_new (FALSE, 0);
+  gtk_container_border_width(GTK_CONTAINER(page->m_box), 2);
+
+  page->m_label = (GtkLabel *)gtk_label_new("");
+  gtk_box_pack_start(GTK_BOX(page->m_box), (GtkWidget *)page->m_label,
+                     FALSE, FALSE, 3);
+  gtk_widget_show((GtkWidget *)page->m_label);
+
   page->m_client = win;
   gtk_notebook_append_page( GTK_NOTEBOOK(m_widget), win->m_widget,
-                            (GtkWidget *)page->m_label);
+                            page->m_box );
   gtk_misc_set_alignment(GTK_MISC(page->m_label), 0.0, 0.5);
 
   page->m_page =
