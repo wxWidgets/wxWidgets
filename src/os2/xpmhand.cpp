@@ -69,7 +69,7 @@ static void XpmToBitmap(
     pRefData->m_nHeight    = vBm.cy;
     pRefData->m_nDepth     = vBm.cPlanes * vBm.cBitCount;
     pRefData->m_nNumColors = rXpmAttr.npixels;
-#if 0
+
     if (pXmask)
     {
         wxMask*                     pMask = new wxMask();
@@ -80,7 +80,6 @@ static void XpmToBitmap(
                                                      ));
         pBitmap->SetMask(pMask);
     }
-#endif
 } // end of XpmToBitmap
 
 IMPLEMENT_DYNAMIC_CLASS(wxXPMFileHandler, wxBitmapHandler)
@@ -114,6 +113,7 @@ bool wxXPMFileHandler::LoadFile(
                                                                       ,&vXpmAttr
                                                                      );
         ::GpiDestroyPS(hPS);
+        ::DevCloseDC(hDC);
         if (nErrorStatus == XpmSuccess)
         {
             XpmToBitmap( pBitmap
@@ -181,6 +181,7 @@ bool wxXPMFileHandler::SaveFile(
                                                                          ,(XpmAttributes *) NULL
                                                                         );
         ::GpiDestroyPS(hPS);
+        ::DevCloseDC(hDC);
         return (nErrorStatus == XpmSuccess);
     }
     return FALSE;
@@ -210,13 +211,15 @@ bool wxXPMDataHandler::Create(
     if (hPS)
     {
         vXpmAttr.valuemask = XpmReturnInfos | XpmColorTable;
+
         int                         nErrorStatus = XpmCreateImageFromData( &hPS
                                                                           ,(char **)pData
                                                                           ,&pXimage
                                                                           ,&pXmask
                                                                           ,&vXpmAttr
                                                                          );
-        GpiDestroyPS(hPS);
+        ::GpiDestroyPS(hPS);
+        ::DevCloseDC(hDC);
         if (nErrorStatus == XpmSuccess)
         {
             XpmToBitmap( pBitmap

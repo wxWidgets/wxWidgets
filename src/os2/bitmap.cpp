@@ -965,3 +965,73 @@ bool wxBitmapHandler::SaveFile(
     return(FALSE);
 }
 
+// ----------------------------------------------------------------------------
+// Utility functions
+// ----------------------------------------------------------------------------
+HBITMAP wxInvertMask(
+  HBITMAP                           hBmpMask
+, int                               nWidth
+, int                               nHeight
+)
+{
+    HBITMAP                         hBmpInvMask = 0;
+
+    wxCHECK_MSG( hBmpMask, 0, _T("invalid bitmap in wxInvertMask") );
+
+    //
+    // Get width/height from the bitmap if not given
+    //
+    if (!nWidth || !nHeight)
+    {
+        BITMAPINFOHEADER2           vBmhdr;
+
+        ::GpiQueryBitmapInfoHeader( hBmpMask
+                                   ,&vBmhdr
+                                  );
+        nWidth  = (int)vBmhdr.cx;
+        nHeight = (int)vBmhdr.cyt;
+    }
+
+    BITMAPINFOHEADER2               vBmih;
+    SIZEL                           vSize = {0, 0};
+    DEVOPENSTRUC                    vDop = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
+    HDC                             hDCSrc = ::DevOpenDC(ghAb, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
+    HDC                             hDCDst = ::DevOpenDC(ghAb, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
+    HPS                             hPSSrc = ::GpiCreatePS(ghAb, hDCSrc, &vSize, PU_PELS | GPIA_ASSOC);
+    HPS                             hPSDst = ::GpiCreatePS(ghAb, hDCDst, &vSize, PU_PELS | GPIA_ASSOC);
+    POINTL                          vPoint[4] = { 0 ,0, rBitmap.GetWidth(), rBitmap.GetHeight(),
+                                                  0, 0, rBitmap.GetWidth(), rBitmap.GetHeight()
+                                                };
+
+    memset(&vBmih, NULLC, sizeof(BITMAPINFOHEADER2));
+    vBmih.cbFix     =  sizeof(BITMAPINFOHEADER2);
+    vBmih.cx        = lWidth;
+    vBmih.cy        = lHeight;
+    vBmih.cPlanes   = 1;
+    vBmih.cBitCount = 1;
+
+    hBmpInvMask = ::GpiCreateBitmap( hPSDst
+                                    ,&vBmih
+                                    ,0L
+                                    ,NULL
+                                    ,NULL
+                                   );
+
+    ::GpiSetBitmap(hPSSrc, (HBITMAP) hBmpMask);
+    ::GpiSetBitmap(hPSDst, (HBITMAP) hBmpInvMask);
+
+    ::GpiBitBlt( hPSDst
+                ,hPSSrc
+                ,4L
+                ,&vPoint
+                ,ROP_SRCCOPY
+                ,BBO_IGNORE
+               );
+
+    ::GpiDestroyPS(hPSSrc);
+    ::GpiDestroyPS(hPSDst);
+    ::DevCloseDC(hDCSrc);
+    ::DevCloseDC(hDCDtl);
+
+    return hBmpInvMask;
+} // end of WxWinGdi_InvertMask
