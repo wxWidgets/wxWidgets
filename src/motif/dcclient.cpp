@@ -40,6 +40,9 @@
     #pragma implementation "dcclient.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #include "wx/dcclient.h"
 #include "wx/dcmemory.h"
 #include "wx/window.h"

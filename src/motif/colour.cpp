@@ -16,6 +16,9 @@
 #pragma implementation "colour.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #include "wx/gdicmn.h"
 #include "wx/colour.h"
 #include "wx/app.h"

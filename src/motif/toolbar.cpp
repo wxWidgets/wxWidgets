@@ -21,6 +21,9 @@
     #pragma implementation "toolbar.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
 #endif

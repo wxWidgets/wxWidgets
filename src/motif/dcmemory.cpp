@@ -13,6 +13,9 @@
 #pragma implementation "dcmemory.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #include "wx/dcmemory.h"
 #include "wx/settings.h"
 #include "wx/utils.h"

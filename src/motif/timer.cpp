@@ -13,6 +13,9 @@
 #pragma implementation "timer.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #include "wx/timer.h"
 #include "wx/app.h"
 #include "wx/hashmap.h"

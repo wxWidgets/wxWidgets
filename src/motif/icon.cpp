@@ -13,6 +13,9 @@
 #pragma implementation "icon.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #include "wx/icon.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxBitmap);

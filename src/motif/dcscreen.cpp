@@ -13,6 +13,9 @@
 #pragma implementation "dcscreen.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #include "wx/window.h"
 #include "wx/frame.h"
 #include "wx/dcscreen.h"

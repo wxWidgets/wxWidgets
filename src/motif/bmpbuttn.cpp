@@ -13,6 +13,9 @@
 #pragma implementation "bmpbuttn.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #ifdef __VMS
 #define XtScreen XTSCREEN
 #endif

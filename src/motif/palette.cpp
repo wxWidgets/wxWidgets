@@ -38,6 +38,9 @@ not the functionality that wxPalette::Create() aims to provide.
 #pragma implementation "palette.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #include "wx/palette.h"
 #include "wx/window.h"
 #include "wx/app.h"

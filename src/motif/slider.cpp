@@ -13,6 +13,9 @@
 #pragma implementation "slider.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #include "wx/slider.h"
 #include "wx/utils.h"
 

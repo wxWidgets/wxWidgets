@@ -17,9 +17,13 @@
 // headers
 // ----------------------------------------------------------------------------
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
 #endif
+
 #include "wx/setup.h"
 #include "wx/utils.h"
 #include "wx/apptrait.h"

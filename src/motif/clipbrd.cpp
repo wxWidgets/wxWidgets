@@ -14,6 +14,9 @@
 #pragma implementation "clipbrd.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #ifdef __VMS
 #include "wx/vms_x_fix.h"
 #define XtWindow XTWINDOW
