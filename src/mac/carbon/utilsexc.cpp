@@ -25,7 +25,7 @@
 #ifndef __DARWIN__
 #define wxEXECUTE_WIN_MESSAGE 10000
 
-long wxExecute(const wxString& command, bool sync, wxProcess *handler)
+long wxExecute(const wxString& command, int flags, wxProcess *handler)
 {
     // TODO
     return 0;

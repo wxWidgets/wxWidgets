@@ -132,7 +132,7 @@ MRESULT APIENTRY wxExecuteWindowCbk(
 
 long wxExecute(
   const wxString&                   rCommand
-, bool                              bSync
+, int                               flags
 , wxProcess*                        pHandler
 )
 {
@@ -153,7 +153,7 @@ long wxExecute(
     PFNWP                           pOldProc;
     TID                             vTID;
 
-    if (bSync)
+    if (flags & wxEXEC_SYNC)
         ulExecFlag = EXEC_SYNC;
     else
         ulExecFlag = EXEC_ASYNCRESULT;
@@ -177,8 +177,8 @@ long wxExecute(
 
     pData->vResultCodes = vResultCodes;
     pData->hWnd         = NULLHANDLE;
-    pData->bState       = bSync;
-    if (bSync)
+    pData->bState       = (flags & wxEXEC_SYNC) != 0;
+    if (flags & wxEXEC_SYNC)
     {
         wxASSERT_MSG(!pHandler, wxT("wxProcess param ignored for sync execution"));
         pData->pHandler = NULL;
@@ -203,7 +203,7 @@ long wxExecute(
         // the process still started up successfully...
         return vResultCodes.codeTerminate;
     }
-    if (!bSync)
+    if (!(flags & wxEXEC_SYNC))
     {
         // return the pid
         // warning: don't exit your app unless you actively
@@ -225,7 +225,7 @@ long wxExecute(
 
 long wxExecute(
   char**                            ppArgv
-, bool                              bSync
+, int                               flags
 , wxProcess*                        pHandler
 )
 {
@@ -237,7 +237,7 @@ long wxExecute(
     }
     sCommand.RemoveLast();
     return wxExecute( sCommand
-                     ,bSync
+                     ,flags
                      ,pHandler
                     );
 }
