@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        dbtable.h
-// Purpose:     Declaration of the wxTable class.
+// Purpose:     Declaration of the wxDbTable class.
 // Author:      Doug Card
 // Modified by: George Tasker
 // Created:     9.96
@@ -49,14 +49,14 @@ const bool  QUERY_ONLY      = TRUE;
 const bool  DISABLE_VIEW    = TRUE;
 
 // The following class is used to define a column of a table.
-// The wxTable constructor will dynamically allocate as many of
+// The wxDbTable constructor will dynamically allocate as many of
 // these as there are columns in the table.  The class derived
-// from wxTable must initialize these column definitions in it's
+// from wxDbTable must initialize these column definitions in it's
 // constructor.  These column definitions provide inf. to the
-// wxTable class which allows it to create a table in the data
+// wxDbTable class which allows it to create a table in the data
 // source, exchange data between the data source and the C++
 // object, and so on.
-class WXDLLEXPORT wxColDef
+class WXDLLEXPORT wxDbColDef
 {
 public:
     char    ColName[DB_MAX_COLUMN_NAME_LEN+1];  // Column Name
@@ -70,28 +70,28 @@ public:
     bool    DerivedCol;                         // Specifies whether this column is a derived value
     SDWORD  CbValue;                            // Internal use only!!!
     bool    Null;                               // NOT FULLY IMPLEMENTED - Allows NULL values in Inserts and Updates
-};  // wxColDef
+};  // wxDbColDef
 
 
-class WXDLLEXPORT wxColDataPtr
+class WXDLLEXPORT wxDbColDataPtr
 {
 public:
     void    *PtrDataObj;
     int      SzDataObj;
     int      SqlCtype;
-};  // wxColDataPtr
+};  // wxDbColDataPtr
 
 
 // This structure is used when creating secondary indexes.
-class WXDLLEXPORT wxIdxDef
+class WXDLLEXPORT wxDbIdxDef
 {
 public:
     char ColName[DB_MAX_COLUMN_NAME_LEN+1];
     bool Ascending;
-};  // wxIdxDef
+};  // wxDbIdxDef
 
 
-class WXDLLEXPORT wxTable
+class WXDLLEXPORT wxDbTable
 {
 private:
     ULONG    tableID;  // Used for debugging.  This can help to match up mismatched constructors/destructors
@@ -110,7 +110,7 @@ private:
 
 public:
     // Pointer to the database object this table belongs to
-    wxDB     *pDb;
+    wxDb     *pDb;
 
     // ODBC Handles
     HENV      henv;           // ODBC Environment handle
@@ -132,24 +132,24 @@ public:
     char      tablePath[DB_PATH_MAX];                    // needed for dBase tables
 
     // Column Definitions
-    wxColDef *colDefs;         // Array of wxColDef structures
+    wxDbColDef *colDefs;         // Array of wxDbColDef structures
 
     // Where, Order By and From clauses
     char     *where;               // Standard SQL where clause, minus the word WHERE
     char     *orderBy;             // Standard SQL order by clause, minus the ORDER BY
-    char     *from;                // Allows for joins in a wxTable::Query().  Format: ",tbl,tbl..."
+    char     *from;                // Allows for joins in a wxDbTable::Query().  Format: ",tbl,tbl..."
 
     // Flags
     bool      selectForUpdate;
 
     // Public member functions
-    wxTable(wxDB *pwxDB, const char *tblName, const int nCols,
+    wxDbTable(wxDb *pwxDb, const char *tblName, const int nCols,
             const char *qryTblName = 0, bool qryOnly = !QUERY_ONLY, const char *tblPath=NULL);
-    virtual ~wxTable();
+    virtual ~wxDbTable();
     bool    Open(void);
     bool    CreateTable(bool attemptDrop=TRUE);
     bool    DropTable(void);
-    bool    CreateIndex(const char * idxName, bool unique, int noIdxCols, wxIdxDef *pIdxDefs, bool attemptDrop=TRUE);
+    bool    CreateIndex(const char * idxName, bool unique, int noIdxCols, wxDbIdxDef *pIdxDefs, bool attemptDrop=TRUE);
     bool    DropIndex(const char * idxName);
     bool    CloseCursor(HSTMT cursor);
     int     Insert(void);
@@ -166,7 +166,7 @@ public:
     bool    GetNext(void)   { return(getRec(SQL_FETCH_NEXT));  }
     bool    operator++(int) { return(getRec(SQL_FETCH_NEXT));  }
 
-    /***** These four functions only work with wxDB instances that are defined  *****
+    /***** These four functions only work with wxDb instances that are defined  *****
      ***** as not being FwdOnlyCursors                                          *****/
     bool    GetPrev(void);
     bool    operator--(int);
@@ -187,7 +187,7 @@ public:
     void    SetColDefs (int index, const char *fieldName, int dataType, void *pData, int cType,
                         int size, bool keyField = FALSE, bool upd = TRUE,
                         bool insAllow = TRUE, bool derivedCol = FALSE);
-    wxColDataPtr*   SetColDefs (wxColInf *colInfs, ULONG numCols);
+    wxDbColDataPtr*   SetColDefs (wxDbColInf *colInfs, ULONG numCols);
 
     HSTMT  *NewCursor(bool setCursor = FALSE, bool bindColumns = TRUE);
     bool    DeleteCursor(HSTMT *hstmtDel);
@@ -203,7 +203,7 @@ public:
     ULONG   GetTableID() { return tableID; };
 #endif
 
-};  // wxTable
+};  // wxDbTable
 
 
 // Change this to 0 to remove use of all deprecated functions
@@ -213,9 +213,13 @@ public:
 //#################################################################################
 
 // Backward compability.  These will eventually go away
-typedef wxColDef        CcolDef;
-typedef wxColDataPtr    CcolDataPtr;
-typedef wxIdxDef        CidxDef;
+typedef wxDbTable       wxTable;
+typedef wxDbIdxDef      wxIdxDef;
+typedef wxDbIdxDef      CidxDef;
+typedef wxDbColDef      wxColDef;
+typedef wxDbColDef      CcolDef;
+typedef wxDbColDataPtr  wxColDataPtr;
+typedef wxDbColDataPtr  CcolDataPtr;
 
 #endif
 

@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        db.h
-// Purpose:     Header file wxDB class.  The wxDB class represents a connection
-//              to an ODBC data source.  The wxDB class allows operations on the data
+// Purpose:     Header file wxDb class.  The wxDb class represents a connection
+//              to an ODBC data source.  The wxDb class allows operations on the data
 //              source such as opening and closing the data source.
 // Author:      Doug Card
 // Modified by: George Tasker
@@ -246,7 +246,7 @@ struct wxDbConnectInf
     char defaultDir[DB_PATH_MAX];                      // Directory that db file resides in
 };
 
-struct wxSqlTypeInfo
+struct wxDbSqlTypeInfo
 {
     char    TypeName[DB_TYPE_NAME_LEN];
     int     FsqlType;
@@ -257,7 +257,7 @@ struct wxSqlTypeInfo
 };
 
 
-class WXDLLEXPORT wxColFor
+class WXDLLEXPORT wxDbColFor
 {
 public:
     wxString       s_Field;             // Formated String for Output
@@ -268,14 +268,14 @@ public:
     int            i_dbDataType;        // conversion of the 'sqlDataType' to the generic data type used by these classes
     SWORD          i_sqlDataType;
 
-    wxColFor();
-    ~wxColFor();
+    wxDbColFor();
+    ~wxDbColFor();
 
     int            Format(int Nation, int dbDataType, SWORD sqlDataType, short columnSize, short decimalDigits);
 };
 
 
-class WXDLLEXPORT wxColInf
+class WXDLLEXPORT wxDbColInf
 {
 public:
     char         catalog[128+1];
@@ -296,39 +296,39 @@ public:
     char         PkTableName[DB_MAX_TABLE_NAME_LEN+1]; // Tables that use this PKey as a FKey
     int          FkCol;       // Foreign key column       0=No; 1= First Key, 2 = Second Key etc.
     char         FkTableName[DB_MAX_TABLE_NAME_LEN+1]; // Foreign key table name
-    wxColFor    *pColFor;                              // How should this columns be formatted
+    wxDbColFor  *pColFor;                              // How should this columns be formatted
 };
 
 
-class WXDLLEXPORT wxTableInf        // Description of a Table
+class WXDLLEXPORT wxDbTableInf        // Description of a Table
 {
 public:
-    char      tableName[DB_MAX_TABLE_NAME_LEN+1];
-    char      tableType[254+1];           // "TABLE" or "SYSTEM TABLE" etc.
-    char      tableRemarks[254+1];
-    int       numCols;                    // How many Columns does this Table have: GetColumnCount(..);
-    wxColInf *pColInf;                    // pColInf = NULL ; User can later call GetColumns(..);
+    char        tableName[DB_MAX_TABLE_NAME_LEN+1];
+    char        tableType[254+1];           // "TABLE" or "SYSTEM TABLE" etc.
+    char        tableRemarks[254+1];
+    int         numCols;                    // How many Columns does this Table have: GetColumnCount(..);
+    wxDbColInf *pColInf;                    // pColInf = NULL ; User can later call GetColumns(..);
 };
 
 
 class WXDLLEXPORT wxDbInf     // Description of a Database
 {
 public:
-    char        catalog[128+1];
-    char        schema[128+1];
-    int         numTables;           // How many tables does this database have
-    wxTableInf *pTableInf;           // pTableInf = new wxTableInf[numTables];
+    char          catalog[128+1];
+    char          schema[128+1];
+    int           numTables;           // How many tables does this database have
+    wxDbTableInf *pTableInf;           // pTableInf = new wxDbTableInf[numTables];
 };
 
 
-enum wxSqlLogState
+enum wxDbSqlLogState
 {
     sqlLogOFF,
     sqlLogON
 };
 
 // These are the databases currently tested and working with these classes
-// See the comments in wxDB::Dbms() for exceptions/issues with
+// See the comments in wxDb::Dbms() for exceptions/issues with
 // each of these database engines
 enum wxDBMS
 {
@@ -345,17 +345,17 @@ enum wxDBMS
 };
 
 
-// The wxDB::errorList is copied to this variable when the wxDB object
+// The wxDb::errorList is copied to this variable when the wxDb object
 // is closed.  This way, the error list is still available after the
 // database object is closed.  This is necessary if the database
 // connection fails so the calling application can show the operator
-// why the connection failed.  Note: as each wxDB object is closed, it
-// will overwrite the errors of the previously destroyed wxDB object in
+// why the connection failed.  Note: as each wxDb object is closed, it
+// will overwrite the errors of the previously destroyed wxDb object in
 // this variable.
 extern char DBerrorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
 
 
-class WXDLLEXPORT wxDB
+class WXDLLEXPORT wxDb
 {
 private:
     bool             dbIsOpen;
@@ -363,14 +363,22 @@ private:
     char            *uid;             // User ID
     char            *authStr;         // Authorization string (password)
     FILE            *fpSqlLog;        // Sql Log file pointer
-    wxSqlLogState    sqlLogState;     // On or Off
+    wxDbSqlLogState  sqlLogState;     // On or Off
     bool             fwdOnlyCursors;
 
     // Private member functions
     bool             getDbInfo(void);
-    bool             getDataTypeInfo(SWORD fSqlType, wxSqlTypeInfo &structSQLTypeInfo);
+    bool             getDataTypeInfo(SWORD fSqlType, wxDbSqlTypeInfo &structSQLTypeInfo);
     bool             setConnectionOptions(void);
     void             logError(const char *errMsg, const char *SQLState);
+
+    // ODBC handles
+    HENV  henv;        // ODBC Environment handle
+    HDBC  hdbc;        // ODBC DB Connection handle
+    HSTMT hstmt;       // ODBC Statement handle
+
+    //Error reporting mode
+    bool silent;
 
 public:
     // The following structure contains database information gathered from the
@@ -409,34 +417,27 @@ public:
         UDWORD loginTimeout;                             // Number seconds to wait for a login request
     } dbInf;
 
-    // ODBC handles
-    HENV  henv;        // ODBC Environment handle
-    HDBC  hdbc;        // ODBC DB Connection handle
-    HSTMT hstmt;       // ODBC Statement handle
-
     // ODBC Error Inf.
-    wxChar sqlState[20];
-    SDWORD nativeError;
-    wxChar errorMsg[SQL_MAX_MESSAGE_LENGTH];
     SWORD  cbErrorMsg;
-    wxChar errorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
     int    DB_STATUS;
+    wxChar errorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
+    wxChar errorMsg[SQL_MAX_MESSAGE_LENGTH];
+    SDWORD nativeError;
+    wxChar sqlState[20];
 
-    //Error reporting mode
-    bool silent;
-
-    // Number of Ctable objects connected to this db object
+    // Number of Ctable objects connected to this db object.  FOR INTERNAL USE ONLY!!!
     unsigned int nTables;
 
-    // Inf. about logical data types VARCHAR, INTEGER, FLOAT and DATE.
-    // This inf. is obtained from the ODBC driver by use of the
-    // SQLGetTypeInfo() function.  The key piece of inf. is the
+    // Information about logical data types VARCHAR, INTEGER, FLOAT and DATE.
+	 //
+    // This information is obtained from the ODBC driver by use of the
+    // SQLGetTypeInfo() function.  The key piece of information is the
     // type name the data source uses for each logical data type.
     // e.g. VARCHAR; Oracle calls it VARCHAR2.
-    wxSqlTypeInfo typeInfVarchar, typeInfInteger, typeInfFloat, typeInfDate;
+    wxDbSqlTypeInfo typeInfVarchar, typeInfInteger, typeInfFloat, typeInfDate;
 
     // Public member functions
-    wxDB(HENV &aHenv, bool FwdOnlyCursors=(bool)TRUE);
+    wxDb(HENV &aHenv, bool FwdOnlyCursors=(bool)TRUE);
     bool         Open(char *Dsn, char *Uid, char *AuthStr);  // Data Source Name, User ID, Password
     void         Close(void);
     bool         CommitTrans(void);
@@ -450,12 +451,12 @@ public:
     bool         GetNext(void);
     bool         GetData(UWORD colNo, SWORD cType, PTR pData, SDWORD maxLen, SDWORD FAR *cbReturned);
     bool         Grant(int privileges, const char *tableName, const char *userList = "PUBLIC");
-    int          TranslateSqlState(const char *SQLState);
+    int          TranslateSqlState(const wxChar *SQLState);
     wxDbInf     *GetCatalog(char *userID);
     bool         Catalog(const char *userID=NULL, const char *fileName = SQL_CATALOG_FILENAME);
-    int          GetKeyFields(char *tableName, wxColInf* colInf,int nocols);
-    wxColInf    *GetColumns(char *tableName[], const char *userID=NULL);
-    wxColInf    *GetColumns(char *tableName, int *numCols, const char *userID=NULL);
+    int          GetKeyFields(char *tableName, wxDbColInf* colInf, int nocols);
+    wxDbColInf  *GetColumns(char *tableName[], const char *userID=NULL);
+    wxDbColInf  *GetColumns(char *tableName, int *numCols, const char *userID=NULL);
     int          GetColumnCount(char *tableName, const char *userID=NULL);
     char        *GetDatabaseName(void) {return dbInf.dbmsName;}
     char        *GetDataSource(void)   {return dsn;}
@@ -467,11 +468,11 @@ public:
     HSTMT        GetHSTMT(void)        {return hstmt;}
     bool         TableExists(const char *tableName, const char *userID=NULL, const char *path=NULL);  // Table name can refer to a table, view, alias or synonym
     void         LogError(const char *errMsg, const char *SQLState = 0) {logError(errMsg, SQLState);}
-    bool         SqlLog(wxSqlLogState state, const char *filename = SQL_LOG_FILENAME, bool append = FALSE);
-    bool         WriteSqlLog(const char *logMsg);
+    bool         SetSqlLogging(wxDbSqlLogState state, const wxChar *filename = SQL_LOG_FILENAME, bool append = FALSE);
+    bool         WriteSqlLog(const wxChar *logMsg);
     wxDBMS       Dbms(void);
     bool         FwdOnlyCursors(void) {return fwdOnlyCursors;}
-};  // wxDB
+};  // wxDb
 
 
 // This structure forms a node in a linked list.  The linked list of "DbList" objects
@@ -481,8 +482,8 @@ public:
 struct wxDbList
 {
     wxDbList *PtrPrev;                      // Pointer to previous item in the list
-    char      Dsn[SQL_MAX_DSN_LENGTH+1];    // Data Source Name
-    wxDB     *PtrDb;                        // Pointer to the wxDB object
+    wxChar    Dsn[SQL_MAX_DSN_LENGTH+1];    // Data Source Name
+    wxDb     *PtrDb;                        // Pointer to the wxDb object
     bool      Free;                         // Is item free or in use?
     wxDbList *PtrNext;                      // Pointer to next item in the list
 };
@@ -494,7 +495,7 @@ class wxTablesInUse : public wxObject
     public:
         const char    *tableName;
         ULONG          tableID;
-        class wxDB    *pDb;
+        class wxDb    *pDb;
 };  // wxTablesInUse
 #endif
 
@@ -502,14 +503,14 @@ class wxTablesInUse : public wxObject
 // The following routines allow a user to get new database connections, free them
 // for other code segments to use, or close all of them when the application has
 // completed.
-wxDB  WXDLLEXPORT *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
-bool  WXDLLEXPORT  wxDbFreeConnection(wxDB *pDb);
+wxDb  WXDLLEXPORT *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
+bool  WXDLLEXPORT  wxDbFreeConnection(wxDb *pDb);
 void  WXDLLEXPORT  wxDbCloseConnections(void);
 int   WXDLLEXPORT  wxDbConnectionsInUse(void);
 
 
-// This function sets the sql log state for all open wxDB objects
-bool wxDbSqlLog(wxSqlLogState state, const char *filename = SQL_LOG_FILENAME);
+// This function sets the sql log state for all open wxDb objects
+bool wxDbSqlLog(wxDbSqlLogState state, const wxChar *filename = SQL_LOG_FILENAME);
 
 
 #if 0
@@ -533,16 +534,22 @@ bool WXDLLEXPORT wxDbGetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsD
 //#################################################################################
 
 // Backward compability structures/classes.  This will eventually go away
-typedef wxColInf CcolInf;
-typedef wxSqlTypeInfo SqlTypeInfo;
-typedef enum wxSqlLogState sqlLog;
-typedef enum wxDBMS dbms;
-typedef enum wxDBMS DBMS;
-typedef wxODBC_ERRORS ODBC_ERRORS;
-typedef wxDbConnectInf DbStuff;
-typedef wxDbList DbList;
+typedef wxDb                 wxDB;
+typedef wxDbTableInf         wxTableInf;
+typedef wxDbColInf           wxColInf;
+typedef wxDbColInf           CcolInf;
+typedef wxDbColFor           wxColFor;
+typedef wxDbSqlTypeInfo      SqlTypeInfo;
+typedef wxDbSqlTypeInfo      wxSqlTypeInfo;
+typedef enum wxDbSqlLogState sqlLog;
+typedef enum wxDbSqlLogState wxSqlLogState;
+typedef enum wxDBMS          dbms;
+typedef enum wxDBMS          DBMS;
+typedef wxODBC_ERRORS        ODBC_ERRORS;
+typedef wxDbConnectInf       DbStuff;
+typedef wxDbList             DbList;
 #ifdef __WXDEBUG__
-typedef wxTablesInUse CstructTablesInUse;
+typedef wxTablesInUse        CstructTablesInUse;
 #endif
 
 // Deprecated function names that are replaced by the function names listed above
@@ -551,7 +558,7 @@ bool  WXDLLEXPORT  FreeDbConnection(wxDB *pDb);
 void  WXDLLEXPORT  CloseDbConnections(void);
 int   WXDLLEXPORT  NumberDbConnectionsInUse(void);
 
-bool SqlLog(sqlLog state, const char *filename = SQL_LOG_FILENAME);
+bool SqlLog(sqlLog state, const wxChar *filename = SQL_LOG_FILENAME);
 
 bool WXDLLEXPORT GetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD DsDescMax,
                                UWORD direction = SQL_FETCH_NEXT);
