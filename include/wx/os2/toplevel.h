@@ -173,10 +173,5 @@ protected:
     DECLARE_EVENT_TABLE()
 }; // end of CLASS wxTopLevelWindowOS2
 
-//
-// List of all frames and modeless dialogs
-//
-extern WXDLLEXPORT_DATA(wxWindowList) wxModelessWindows;
-
 #endif // _WX_MSW_TOPLEVEL_H_
 

@@ -52,9 +52,6 @@
 // globals
 // ----------------------------------------------------------------------------
 
-// list of all frames and modeless dialogs
-wxWindowList wxModelessWindows;
-
 // the name of the default wxWidgets class
 extern void          wxAssociateWinWithHandle( HWND         hWnd
                                               ,wxWindowOS2* pWin
@@ -643,9 +640,6 @@ bool wxTopLevelWindowOS2::Create(
 
 wxTopLevelWindowOS2::~wxTopLevelWindowOS2()
 {
-    if (wxModelessWindows.Find(this))
-        wxModelessWindows.DeleteObject(this);
-
     //
     // After destroying an owned window, Windows activates the next top level
     // window in Z order but it may be different from our owner (to reproduce
