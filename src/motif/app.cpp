@@ -247,6 +247,7 @@ wxApp::wxApp()
     m_appContext = (WXAppContext) NULL;
     m_topLevelWidget = (WXWidget) NULL;
     m_maxRequestSize = 0;
+    m_initialDisplay = (WXDisplay*) 0;
 }
 
 bool wxApp::Initialized()
@@ -460,6 +461,8 @@ bool wxApp::OnInitGui()
       cerr << "wxWindows could not open display for " << wxTheApp->GetClassName() << ": exiting.\n";
       exit(-1);
     }
+    m_initialDisplay = (WXDisplay*) dpy;
+
     wxTheApp->m_topLevelWidget = (WXWidget) XtAppCreateShell((String)NULL, (const char*) wxTheApp->GetClassName(),
                                      applicationShellWidgetClass,dpy,
                                      NULL,0) ;

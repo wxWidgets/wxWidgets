@@ -52,6 +52,8 @@ void wxCanvasRepaintProc (Widget, XtPointer, XmDrawingAreaCallbackStruct * cbs);
 void wxCanvasInputEvent (Widget drawingArea, XtPointer data, XmDrawingAreaCallbackStruct * cbs);
 void wxCanvasMotionEvent (Widget, XButtonEvent * event);
 void wxCanvasEnterLeave (Widget drawingArea, XtPointer clientData, XCrossingEvent * event);
+void wxScrollBarCallback(Widget widget, XtPointer clientData,
+                        XmScaleCallbackStruct *cbs);
 void wxPanelItemEventHandler (Widget    wid,
                               XtPointer client_data,
                               XEvent*   event,
@@ -121,8 +123,6 @@ wxWindow::wxWindow()
     m_drawingArea = (WXWidget) 0;
     m_hScroll = FALSE;
     m_vScroll = FALSE;
-    m_hScrollingEnabled = FALSE;
-    m_vScrollingEnabled = FALSE;
     m_backingPixmap = (WXPixmap) 0;
     m_pixmapWidth = 0;
     m_pixmapHeight = 0;
@@ -131,6 +131,8 @@ wxWindow::wxWindow()
     m_lastTS = 0;
     m_lastButton = 0;
     m_canAddEventHandler = FALSE;
+    m_scrollPosX = 0;
+    m_scrollPosY = 0;
     m_paintRegion = (WXRegion) 0;
 }
 
@@ -296,13 +298,13 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     m_drawingArea = (WXWidget) 0;
     m_hScroll = FALSE;
     m_vScroll = FALSE;
-    m_hScrollingEnabled = FALSE;
-    m_vScrollingEnabled = FALSE;
     m_backingPixmap = (WXPixmap) 0;
     m_pixmapWidth = 0;
     m_pixmapHeight = 0;
     m_pixmapOffsetX = 0;
     m_pixmapOffsetY = 0;
+    m_scrollPosX = 0;
+    m_scrollPosY = 0;
     m_paintRegion = (WXRegion) 0;
 
     if (!parent)
@@ -322,7 +324,6 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     // m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW) ; ;
     m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE) ;
     m_foregroundColour = *wxBLACK;
-    m_defaultForegroundColour = *wxBLACK ;
 
     m_windowStyle = style;
 
@@ -417,6 +418,62 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
 
   XtAddEventHandler ((Widget) m_drawingArea, PointerMotionHintMask | EnterWindowMask | LeaveWindowMask | FocusChangeMask,
     False, (XtEventHandler) wxCanvasEnterLeave, (XtPointer) this);
+
+  // Add scrollbars if required
+  if (m_windowStyle & wxHSCROLL)
+  {
+      Widget hScrollBar = XtVaCreateManagedWidget ("hsb",
+				     xmScrollBarWidgetClass, (Widget) m_scrolledWindow,
+						XmNorientation, XmHORIZONTAL,
+						NULL);
+      //	  XtAddCallback (hScrollBar, XmNvalueChangedCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
+	  XtAddCallback (hScrollBar, XmNdragCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
+	  XtAddCallback (hScrollBar, XmNincrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
+	  XtAddCallback (hScrollBar, XmNdecrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
+	  XtAddCallback (hScrollBar, XmNpageIncrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
+	  XtAddCallback (hScrollBar, XmNpageDecrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
+	  XtAddCallback (hScrollBar, XmNtoTopCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
+	  XtAddCallback (hScrollBar, XmNtoBottomCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
+
+      XtVaSetValues (hScrollBar,
+		     XmNincrement, 1,
+		     XmNvalue, 0,
+		     NULL);
+
+      m_hScrollBar = (WXWidget) hScrollBar;
+      m_hScroll = TRUE;
+  }
+  if (m_windowStyle & wxVSCROLL)
+  {
+      Widget vScrollBar = XtVaCreateManagedWidget ("vsb",
+				     xmScrollBarWidgetClass, (Widget) m_scrolledWindow,
+						XmNorientation, XmVERTICAL,
+						NULL);
+      //	  XtAddCallback (vScrollBar, XmNvalueChangedCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
+	  XtAddCallback (vScrollBar, XmNdragCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
+	  XtAddCallback (vScrollBar, XmNincrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
+	  XtAddCallback (vScrollBar, XmNdecrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
+	  XtAddCallback (vScrollBar, XmNpageIncrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
+	  XtAddCallback (vScrollBar, XmNpageDecrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
+	  XtAddCallback (vScrollBar, XmNtoTopCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
+	  XtAddCallback (vScrollBar, XmNtoBottomCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
+
+      XtVaSetValues (vScrollBar,
+		     XmNincrement, 1,
+		     XmNvalue, 0,
+		     NULL);
+
+      m_vScrollBar = (WXWidget) vScrollBar;
+      m_vScroll = TRUE;
+  }
+
+  if (m_hScrollBar || m_vScrollBar)
+    XmScrolledWindowSetAreas ((Widget) m_scrolledWindow, (Widget) m_hScrollBar, (Widget) m_vScrollBar, (Widget) m_drawingArea);
+
+  if (m_hScrollBar)
+	XtRealizeWidget ((Widget) m_hScrollBar);
+  if (m_vScrollBar)
+	XtRealizeWidget ((Widget) m_vScrollBar);
 
   SetSize(pos.x, pos.y, size.x, size.y);
 
@@ -540,7 +597,15 @@ void wxWindow::GetPosition(int *x, int *y) const
 
 void wxWindow::ScreenToClient(int *x, int *y) const
 {
-    // TODO
+  Widget widget = (Widget) GetClientWidget();
+  Display *display = XtDisplay((Widget) GetMainWidget());
+  Window rootWindow = RootWindowOfScreen(XtScreen(widget));
+  Window thisWindow = XtWindow(widget);
+
+  Window childWindow;
+  int xx = *x;
+  int yy = *y;
+  XTranslateCoordinates(display, rootWindow, thisWindow, xx, yy, x, y, &childWindow);
 }
 
 void wxWindow::ClientToScreen(int *x, int *y) const
@@ -548,15 +613,7 @@ void wxWindow::ClientToScreen(int *x, int *y) const
   Widget widget = (Widget) GetClientWidget();
   Display *display = XtDisplay(widget);
   Window rootWindow = RootWindowOfScreen(XtScreen(widget));
-  Window thisWindow;
-  if (this->IsKindOf(CLASSINFO(wxFrame)))
-  {
-    wxFrame *fr = (wxFrame *)this;
-    // TODO
-    //    thisWindow = XtWindow(fr->m_clientArea);
-  }
-  else
-    thisWindow = XtWindow((Widget)widget);
+  Window thisWindow = XtWindow(widget);
 
   Window childWindow;
   int xx = *x;
@@ -569,14 +626,12 @@ void wxWindow::SetCursor(const wxCursor& cursor)
   m_windowCursor = cursor;
   if (m_windowCursor.Ok())
   {
-    /* TODO when wxCursor implemented
     WXDisplay *dpy = GetXDisplay();
-    Cursor x_cursor = cursor.GetXCursor(dpy);
+    WXCursor x_cursor = ((wxCursor&)cursor).GetXCursor(dpy);
 
     Widget w = (Widget) GetMainWidget();
     Window win = XtWindow(w);
-    XDefineCursor((Display*) dpy, win, x_cursor);
-    */
+    XDefineCursor((Display*) dpy, win, (Cursor) x_cursor);
   }
 }
 
@@ -584,7 +639,7 @@ void wxWindow::SetCursor(const wxCursor& cursor)
 // Get size *available for subwindows* i.e. excluding menu bar etc.
 void wxWindow::GetClientSize(int *x, int *y) const
 {
-  Widget widget = (Widget) GetTopWidget();
+  Widget widget = (Widget) GetClientWidget();
   Dimension xx, yy;
   XtVaGetValues(widget, XmNwidth, &xx, XmNheight, &yy, NULL);
   *x = xx; *y = yy;
@@ -708,24 +763,77 @@ bool wxWindow::IsShown() const
 
 int wxWindow::GetCharHeight() const
 {
-    // TODO
+  if (!m_windowFont.Ok())
     return 0;
+
+  WXFontStructPtr pFontStruct = m_windowFont.GetFontStruct(1.0, GetXDisplay());
+
+  int direction, ascent, descent;
+  XCharStruct overall;
+  XTextExtents ((XFontStruct*) pFontStruct, "x", 1, &direction, &ascent,
+        &descent, &overall);
+//  return (overall.ascent + overall.descent);
+  return (ascent + descent);
 }
 
 int wxWindow::GetCharWidth() const
 {
-    // TODO
+  if (!m_windowFont.Ok())
     return 0;
+
+  WXFontStructPtr pFontStruct = m_windowFont.GetFontStruct(1.0, GetXDisplay());
+
+  int direction, ascent, descent;
+  XCharStruct overall;
+  XTextExtents ((XFontStruct*) pFontStruct, "x", 1, &direction, &ascent,
+        &descent, &overall);
+  return overall.width;
+}
+
+/* Helper function for 16-bit fonts */
+static int str16len(const char *s)
+{
+  int count = 0;
+
+  while (s[0] && s[1]) {
+    count++;
+    s += 2;
+  }
+
+  return count;
 }
 
 void wxWindow::GetTextExtent(const wxString& string, int *x, int *y,
-                           int *descent, int *externalLeading, const wxFont *theFont, bool) const
+                           int *descent, int *externalLeading, const wxFont *theFont, bool use16) const
 {
   wxFont *fontToUse = (wxFont *)theFont;
   if (!fontToUse)
     fontToUse = (wxFont *) & m_windowFont;
 
-    // TODO
+  if (!fontToUse->Ok())
+    return;
+
+  WXFontStructPtr pFontStruct = theFont->GetFontStruct(1.0, GetXDisplay());
+
+  int direction, ascent, descent2;
+  XCharStruct overall;
+  int slen;
+  
+  if (use16) slen = str16len(string); else slen = strlen(string);
+
+  if (use16)
+    XTextExtents16((XFontStruct*) pFontStruct, (XChar2b *) (char*) (const char*) string, slen, &direction,
+           &ascent, &descent2, &overall);
+  else
+     XTextExtents((XFontStruct*) pFontStruct, (char*) (const char*) string, slen, &direction,
+         &ascent, &descent2, &overall);
+
+  *x = (overall.width);
+  *y = (ascent + descent2);
+  if (descent)
+    *descent = descent2;
+  if (externalLeading)
+    *externalLeading = 0;
 }
 
 void wxWindow::Refresh(bool eraseBack, const wxRectangle *rect)
@@ -859,21 +967,20 @@ void wxWindow::SetSizeHints(int minW, int minH, int maxW, int maxH, int incW, in
       return;
 
     wxFrame *frame = (wxFrame *)this;
+    Widget widget = (Widget) frame->GetShellWidget();
 
-    /* Uncomment when wxFrame implemented
     if (minW > -1)
-      XtVaSetValues((Widget) frame->m_frameShell, XmNminWidth, minW, NULL);
+      XtVaSetValues(widget, XmNminWidth, minW, NULL);
     if (minH > -1)
-      XtVaSetValues((Widget) frame->m_frameShell, XmNminHeight, minH, NULL);
+      XtVaSetValues(widget, XmNminHeight, minH, NULL);
     if (maxW > -1)
-      XtVaSetValues((Widget) frame->m_frameShell, XmNmaxWidth, maxW, NULL);
+      XtVaSetValues(widget, XmNmaxWidth, maxW, NULL);
     if (maxH > -1)
-      XtVaSetValues((Widget) frame->m_frameShell, XmNmaxHeight, maxH, NULL);
+      XtVaSetValues(widget, XmNmaxHeight, maxH, NULL);
     if (incW > -1)
-      XtVaSetValues((Widget) frame->m_frameShell, XmNwidthInc, incW, NULL);
+      XtVaSetValues(widget, XmNwidthInc, incW, NULL);
     if (incH > -1)
-      XtVaSetValues((Widget) frame->m_frameShell, XmNheightInc, incH, NULL);
-      */
+      XtVaSetValues(widget, XmNheightInc, incH, NULL);
 }
 
 void wxWindow::Centre(int direction)
@@ -915,49 +1022,252 @@ void wxWindow::OnEraseBackground(wxEraseEvent& event)
 
 int wxWindow::GetScrollPos(int orient) const
 {
-    // TODO
-    return 0;
+    if (orient == wxHORIZONTAL)
+        return m_scrollPosX;
+    else
+        return m_scrollPosY;
+/*
+	Widget scrollBar = (Widget) ((orient == wxHORIZONTAL) ? m_hScrollBar : m_vScrollBar);
+	if (scrollBar)
+	{
+        int pos;
+        XtVaGetValues(scrollBar,
+            XmNvalue, &pos, NULL);
+        return pos;
+    }
+    else
+        return 0;
+*/
 }
 
 // This now returns the whole range, not just the number
 // of positions that we can scroll.
 int wxWindow::GetScrollRange(int orient) const
 {
-    // TODO
-    return 0;
+	Widget scrollBar = (Widget) ((orient == wxHORIZONTAL) ? m_hScrollBar : m_vScrollBar);
+	if (scrollBar)
+	{
+        int range;
+        XtVaGetValues(scrollBar,
+            XmNmaximum, &range, NULL);
+        return range;
+    }
+    else
+        return 0;
 }
 
 int wxWindow::GetScrollThumb(int orient) const
 {
-    // TODO
-    return 0;
+	Widget scrollBar = (Widget) ((orient == wxHORIZONTAL) ? m_hScrollBar : m_vScrollBar);
+	if (scrollBar)
+	{
+        int thumb;
+        XtVaGetValues(scrollBar,
+            XmNsliderSize, &thumb, NULL);
+        return thumb;
+    }
+    else
+        return 0;
 }
 
-void wxWindow::SetScrollPos(int orient, int pos, bool refresh)
+void wxWindow::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
 {
-    // TODO
-    return;
+	Widget scrollBar = (Widget) ((orient == wxHORIZONTAL) ? m_hScrollBar : m_vScrollBar);
+	if (scrollBar)
+	{
+		XtVaSetValues (scrollBar,
+				XmNvalue, pos,
+				NULL);
+	}
+        if (orient == wxHORIZONTAL)
+          m_scrollPosX = pos;
+        else
+          m_scrollPosY = pos;
+
 }
 
 // New function that will replace some of the above.
 void wxWindow::SetScrollbar(int orient, int pos, int thumbVisible,
-    int range, bool refresh)
+    int range, bool WXUNUSED(refresh))
 {
-    // TODO
+    Widget scrollBar = (Widget) ((orient == wxHORIZONTAL) ? m_hScrollBar : m_vScrollBar );
+    if (!scrollBar)
+        return;
+
+    if (range == 0)
+      range = 1;
+    if (thumbVisible == 0)
+      thumbVisible = 1;
+
+    XtVaSetValues(scrollBar,
+         XmNvalue, pos,
+         XmNminimum, 0,
+         XmNmaximum, range,
+         XmNsliderSize, thumbVisible,
+         NULL);
+
+    if (orient == wxHORIZONTAL)
+        m_scrollPosX = pos;
+    else
+        m_scrollPosY = pos;
 }
 
 // Does a physical scroll
 void wxWindow::ScrollWindow(int dx, int dy, const wxRectangle *rect)
 {
-    // TODO
-    return;
+//  cerr << "Scrolling. delta = " << dx << ", " << dy << endl;
+  int x, y, w, h;
+  if (rect)
+  {
+    // Use specified rectangle
+    x = rect->x; y = rect->y; w = rect->width; h = rect->height;
+  }
+  else
+  {
+    // Use whole client area
+    x = 0; y = 0;
+    GetClientSize(& w, & h);
+  }
+
+  int x1 = (dx >= 0) ? x : x - dx ;
+  int y1 = (dy >= 0) ? y : y - dy;
+  int w1 = w - abs(dx);
+  int h1 = h - abs(dy);
+  int x2 = (dx >= 0) ? x + dx : x;
+  int y2 = (dy >= 0) ? y + dy : y;
+
+  wxClientDC dc(this);
+
+  dc.SetLogicalFunction (wxCOPY);
+
+  Widget widget = (Widget) GetMainWidget();
+  Window window = XtWindow(widget);
+  Display* display = XtDisplay(widget);
+
+  XCopyArea(display, window,
+    window, (GC) dc.GetGC(),
+    x1, y1,
+    w1, h1,
+    x2, y2);
+
+  dc.SetAutoSetting(TRUE);
+  wxBrush brush(GetBackgroundColour(), wxSOLID);
+  dc.SetBrush(brush); // ??
+
+  // We'll add rectangles to the list of update rectangles
+  // according to which bits we've exposed.
+  wxList updateRects;
+	
+  if (dx > 0)
+  {
+    wxRect *rect = new wxRect;
+    rect->x = x;
+    rect->y = y;
+    rect->width = dx;
+    rect->height = h;
+
+    XFillRectangle(display, window,
+      (GC) dc.GetGC(), rect->x, rect->y, rect->width, rect->height);
+
+    rect->x = rect->x;
+    rect->y = rect->y;
+    rect->width = rect->width;
+    rect->height = rect->height;
+
+    updateRects.Append((wxObject*) rect);
+  }
+  else if (dx < 0)
+  {
+    wxRect *rect = new wxRect;
+
+    rect->x = x + w + dx;
+    rect->y = y;
+    rect->width = -dx;
+    rect->height = h;
+
+    XFillRectangle(display, window,
+      (GC) dc.GetGC(), rect->x, rect->y, rect->width,
+      rect->height);
+
+    rect->x = rect->x;
+    rect->y = rect->y;
+    rect->width = rect->width;
+    rect->height = rect->height;
+
+    updateRects.Append((wxObject*) rect);
+  }
+  if (dy > 0)
+  {
+    wxRect *rect = new wxRect;
+
+    rect->x = x;
+    rect->y = y;
+    rect->width = w;
+    rect->height = dy;
+
+    XFillRectangle(display, window,
+      (GC) dc.GetGC(), rect->x, rect->y, rect->width, rect->height);
+
+    rect->x = rect->x;
+    rect->y = rect->y;
+    rect->width = rect->width;
+    rect->height = rect->height;
+
+    updateRects.Append((wxObject*) rect);
+  }
+  else if (dy < 0)
+  {
+    wxRect *rect = new wxRect;
+
+    rect->x = x;
+    rect->y = y + h + dy;
+    rect->width = w;
+    rect->height = -dy;
+
+    XFillRectangle(display, window,
+      (GC) dc.GetGC(), rect->x, rect->y, rect->width, rect->height);
+
+    rect->x = rect->x;
+    rect->y = rect->y;
+    rect->width = rect->width;
+    rect->height = rect->height;
+
+    updateRects.Append((wxObject*) rect);
+  }
+  dc.SetBrush(wxNullBrush);
+
+  // Now send expose events
+
+  wxNode* node = updateRects.First();
+  while (node)
+  {
+    wxRect* rect = (wxRect*) node->Data();
+    XExposeEvent event;
+
+    event.type = Expose;
+    event.display = display;
+    event.send_event = True;
+    event.window = window;
+
+    event.x = rect->x;
+    event.y = rect->y;
+    event.width = rect->width;
+    event.height = rect->height;
+
+    event.count = 0;
+
+    XSendEvent(display, window, False, ExposureMask, (XEvent *)&event);
+
+    node = node->Next();
+
+  }
 }
 
 void wxWindow::SetFont(const wxFont& font)
 {
     m_windowFont = font;
 
-    Widget w = (Widget) GetMainWidget();
+    Widget w = (Widget) GetLabelWidget(); // Usually the main widget
     if (w && m_windowFont.Ok())
     {
         XtVaSetValues (w,
@@ -985,7 +1295,8 @@ void wxWindow::OnPaint(wxPaintEvent& event)
 
 bool wxWindow::IsEnabled() const
 {
-    // TODO
+    // TODO. Is this right?
+    // return XtGetSensitive((Widget) GetMainWidget());
     return FALSE;
 }
 
@@ -2420,6 +2731,74 @@ void wxPanelItemEventHandler (Widget    wid,
   *continueToDispatch = True;
 }
 
+void wxScrollBarCallback(Widget scrollbar, XtPointer clientData,
+                        XmScaleCallbackStruct *cbs)
+{
+    Widget scrolledWindow = XtParent (scrollbar);
+    wxWindow *win = (wxWindow *) wxWidgetHashTable->Get ((long) scrolledWindow);
+    int orientation = (int) clientData;
+
+    wxEventType eventType = wxEVT_NULL;
+    switch (cbs->reason)
+    {
+        case XmCR_INCREMENT:
+        {
+            eventType = wxEVT_SCROLL_LINEDOWN;
+            break;
+        }
+        case XmCR_DECREMENT:
+        {
+            eventType = wxEVT_SCROLL_LINEUP;
+            break;
+        }
+        case XmCR_DRAG:
+        {
+            eventType = wxEVT_SCROLL_THUMBTRACK;
+            break;
+        }
+        case XmCR_VALUE_CHANGED:
+        {
+            // TODO: Should this be intercepted too, or will it cause
+            // duplicate events?
+            eventType = wxEVT_SCROLL_THUMBTRACK;
+            break;
+        }
+        case XmCR_PAGE_INCREMENT:
+        {
+            eventType = wxEVT_SCROLL_PAGEDOWN;
+            break;
+        }
+        case XmCR_PAGE_DECREMENT:
+        {
+            eventType = wxEVT_SCROLL_PAGEUP;
+            break;
+        }
+        case XmCR_TO_TOP:
+        {
+            eventType = wxEVT_SCROLL_TOP;
+            break;
+        }
+        case XmCR_TO_BOTTOM:
+        {
+            eventType = wxEVT_SCROLL_BOTTOM;
+            break;
+        }
+        default:
+        {
+            // Should never get here
+            wxFAIL_MSG("Unknown scroll event.");
+            break;
+        }
+    }
+
+    wxScrollEvent event(eventType, win->GetId());
+    event.SetEventObject(win);
+    event.SetPosition(cbs->value);
+    event.SetOrientation( (orientation == XmHORIZONTAL) ? wxHORIZONTAL : wxVERTICAL );
+
+    win->GetEventHandler()->ProcessEvent(event);
+}
+
 bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Widget widget, XEvent *xevent)
 {
   switch (xevent->xany.type)
@@ -2670,10 +3049,12 @@ void wxWindow::ChangeColour(WXWidget widget)
 
 void wxWindow::ChangeFont(WXWidget widget)
 {
-  /* TODO
-  if (widget && GetFont() && GetFont()->IsOk())
-    XtVaSetValues ((Widget) widget,
-		   XmNfontList, GetFont()->GetInternalFont (),
+  if (widget && GetFont() && GetFont()->Ok())
+  {
+    XmFontList fontList = (XmFontList) GetFont()->GetFontList(1.0, GetXDisplay());
+    if (fontList)
+        XtVaSetValues ((Widget) widget,
+		   XmNfontList, fontList,
 		   NULL);
-  */
+  }
 }

@@ -677,7 +677,7 @@ bool wxVariantDataString::Write(ostream& str) const
 
 bool wxVariantDataString::Write(wxOutputStream& str) const
 {
-    str << m_value;
+    str << (const char*) m_value;
     return TRUE;
 }
 

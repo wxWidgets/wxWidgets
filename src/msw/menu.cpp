@@ -400,8 +400,9 @@ void wxMenu::SetLabel(int Id, const wxString& label)
   item->SetName(label);
 }
 
-wxString wxMenu::GetLabel(int Id) const
+wxString wxMenu::GetLabel(int id) const
 {
+/*
   static char tmp[128] ;
   int len;
   if (m_hMenu)
@@ -412,6 +413,13 @@ wxString wxMenu::GetLabel(int Id) const
     len = 0 ;
   tmp[len] = '\0' ;
   return wxString(tmp) ;
+
+*/
+    wxMenuItem *pItem = FindItemForId(id) ;
+    if (pItem)
+        return pItem->GetName() ;
+    else
+        return wxEmptyString;
 }
 
 bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id)

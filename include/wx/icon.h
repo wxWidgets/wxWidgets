@@ -1,15 +1,13 @@
 #ifndef _WX_ICON_H_BASE_
 #define _WX_ICON_H_BASE_
 
+/* Commenting out since duplicated in gdicmn.h
 // this is for Unix (i.e. now for anything other than MSW)
 #undef  wxICON
 #define wxICON(icon_name)   wxIcon(icon_name##_xpm)
+*/
 
 #if defined(__WXMSW__)
-  // under Windows, icon name is the ressource id (string)
-  #undef wxICON
-  #define wxICON(icon_name)   wxIcon(#icon_name)
-
   #include "wx/msw/icon.h"
 #elif defined(__WXMOTIF__)
   #include "wx/motif/icon.h"

@@ -465,6 +465,8 @@ public:
 
   // Get main widget for this window, e.g. a text widget
   virtual WXWidget GetMainWidget() const;
+  // Get the widget that supports font setting
+  virtual WXWidget GetLabelWidget() const { return GetMainWidget(); }
   // Get the client widget for this window (something we can
   // create other windows on)
   virtual WXWidget GetClientWidget() const;
@@ -561,13 +563,14 @@ protected:
   bool                  m_winCaptured;
   bool                  m_hScroll;
   bool                  m_vScroll;
-  bool                  m_hScrollingEnabled;
-  bool                  m_vScrollingEnabled;
   WXPixmap              m_backingPixmap;
   int                   m_pixmapWidth;
   int                   m_pixmapHeight;
   int                   m_pixmapOffsetX;
   int                   m_pixmapOffsetY;
+  int                   m_scrollPosX; // Store the last scroll pos,
+  int                   m_scrollPosY; // since in wxWin the pos isn't
+                                      // set automatically by system
 
 DECLARE_EVENT_TABLE()
 };

@@ -144,6 +144,7 @@ bool WXDLLEXPORT wxGetUserName(char *buf, int maxSize);
  * Strip out any menu codes
  */
 char* WXDLLEXPORT wxStripMenuCodes(char *in, char *out = (char *) NULL);
+wxString WXDLLEXPORT wxStripMenuCodes(const wxString& str);
 
 // Find the window/widget with the given title or label.
 // Pass a parent to begin the search from, or NULL to look through

@@ -26,7 +26,7 @@ class WXDLLEXPORT wxStaticBox: public wxControl
   DECLARE_DYNAMIC_CLASS(wxStaticBox)
 
  public:
-  inline wxStaticBox() {}
+  wxStaticBox();
   inline wxStaticBox(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
@@ -49,8 +49,18 @@ class WXDLLEXPORT wxStaticBox: public wxControl
 
   void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
   void SetLabel(const wxString& label);
+  wxString GetLabel() const;
+
+  // Motif-specific
+  WXWidget GetTopWidget() const { return m_formWidget; }
+  WXWidget GetLabelWidget() const { return m_labelWidget; }
 
 DECLARE_EVENT_TABLE()
+
+protected:
+  // Motif-specific
+  WXWidget  m_formWidget;
+  WXWidget  m_labelWidget;
 };
 
 #endif

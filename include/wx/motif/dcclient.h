@@ -96,6 +96,10 @@ class WXDLLEXPORT wxWindowDC: public wxDC
     // Motif-specific
     void SetDCClipping (); // Helper function for setting clipping
 
+    inline WXGC GetGC() const { return m_gc; }
+    inline bool GetAutoSetting() const { return m_autoSetting; }
+    inline void SetAutoSetting(bool flag) { m_autoSetting = flag; }
+
 protected:
     WXGC         m_gc;
     WXGC         m_gcBacking;

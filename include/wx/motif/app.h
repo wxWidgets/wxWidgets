@@ -138,6 +138,7 @@ public:
   inline WXAppContext   GetAppContext() const { return m_appContext; }
   inline WXWidget       GetTopLevelWidget() const { return m_topLevelWidget; }
   WXColormap            GetMainColormap(WXDisplay* display) ;
+  WXDisplay*            GetInitialDisplay() const { return m_initialDisplay; }
   inline long           GetMaxRequestSize() const { return m_maxRequestSize; }
 
   // This handler is called when a property change event occurs
@@ -154,6 +155,7 @@ protected:
   WXAppContext          m_appContext;
   WXWidget              m_topLevelWidget;
   WXColormap            m_mainColormap;
+  WXDisplay*            m_initialDisplay;
   long                  m_maxRequestSize;
 
 DECLARE_EVENT_TABLE()

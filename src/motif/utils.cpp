@@ -290,7 +290,12 @@ WXDisplay *wxGetDisplay()
   if (gs_currentDisplay)
     return gs_currentDisplay;
 
-  return XtDisplay ((Widget) wxTheApp->GetTopLevelWidget());
+  if (wxTheApp && wxTheApp->GetTopLevelWidget())
+    return XtDisplay ((Widget) wxTheApp->GetTopLevelWidget());
+  else if (wxTheApp)
+    return wxTheApp->GetInitialDisplay();
+  else
+    return (WXDisplay*) NULL;
 }
 
 bool wxSetDisplay(const wxString& display_name)

@@ -390,6 +390,14 @@ char *wxStripMenuCodes (char *in, char *out)
   return tmpOut;
 }
 
+wxString wxStripMenuCodes(const wxString& str)
+{
+    char *buf = new char[str.Length() + 1];
+    wxStripMenuCodes((char*) (const char*) str, buf);
+    wxString str1(buf);
+    delete[] buf;
+    return str1;
+}
 
 /*
  * Window search functions
