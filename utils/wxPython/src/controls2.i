@@ -466,6 +466,10 @@ public:
     bool IsBold(const wxTreeItemId& item) const;
     wxTreeItemId HitTest(const wxPoint& point);
 
+    void SetItemTextColour(const wxTreeItemId& item, const wxColour& col);
+    void SetItemBackgroundColour(const wxTreeItemId& item, const wxColour& col);
+    void SetItemFont(const wxTreeItemId& item, const wxFont& font);
+
 #ifdef __WXMSW__
     void SetItemDropHighlight(const wxTreeItemId& item, int highlight = TRUE);
 

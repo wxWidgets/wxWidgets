@@ -137,6 +137,7 @@ class wxPythonDemo(wxFrame):
             tID = wxNewId()
             self.treeMap = {}
             self.tree = wxTreeCtrl(splitter, tID)
+            #self.tree.SetBackgroundColour(wxNamedColour("Pink"))
             root = self.tree.AddRoot("Overview")
             firstChild = None
             for item in _treeList:

@@ -90,8 +90,8 @@ public:
 
 
     void AdjustScrollbars();
-    bool AppendCols(int n=1, bool updateLabels=TRUE);
-    bool AppendRows(int n=1, bool updateLabels=TRUE);
+    bool AppendCols(int n=1, int updateLabels=TRUE);
+    bool AppendRows(int n=1, int updateLabels=TRUE);
     void BeginBatch();
     bool CellHitTest(int x, int y, int *OUTPUT, int *OUTPUT);
 

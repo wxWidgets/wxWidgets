@@ -70,6 +70,7 @@ class wxFloatBar(wxToolBar):
 
 
     def SetTitle(self, title):
+        print 'SetTitle', title
         self.title = title
         if self.IsFloating():
             self.floatframe.SetTitle(self.title)
@@ -113,11 +114,12 @@ class wxFloatBar(wxToolBar):
         "Floats or docks the toolbar programmatically."
         if bool:
             self.parentframe = wxPyTypeCast(self.GetParent(), 'wxFrame')
+            print self.title
             if self.title:
                 useStyle = wxDEFAULT_FRAME_STYLE
             else:
-                useStyle = 0 #wxTHICK_FRAME
-            self.floatframe = wxMiniFrame(self.parentframe, -1, self.title,
+                useStyle = wxTHICK_FRAME
+            self.floatframe = wxFrame(self.parentframe, -1, self.title,
                                           style = useStyle)
 
             self.Reparent(self.floatframe)
@@ -180,13 +182,17 @@ class wxFloatBar(wxToolBar):
         if not self.IsFloatable():
             e.Skip()
             return
-        if e.ButtonDown() or e.ButtonUp() or e.ButtonDClick(1) or e.ButtonDClick(2) or e.ButtonDClick(3):
+
+        if e.ButtonDClick(1) or e.ButtonDClick(2) or e.ButtonDClick(3) or e.ButtonDown() or e.ButtonUp():
             e.Skip()
+
         if e.ButtonDown():
             self.CaptureMouse()
             self.oldpos = (e.GetX(), e.GetY())
+
         if e.Entering():
             self.oldpos = (e.GetX(), e.GetY())
+
         if e.ButtonUp():
             self.ReleaseMouse()
             if self.IsFloating():
@@ -196,16 +202,17 @@ class wxFloatBar(wxToolBar):
                     abs(homepos.y - floatpos.y) < _DOCKTHRESHOLD):
                     self.Float(0)
                     return
-        if self.IsFloatable():
-            if e.Dragging():
-                if not self.IsFloating():
-                    self.Float(true)
-                    self.oldpos = (e.GetX(), e.GetY())
-                else:
-                    if hasattr(self, 'oldpos'):
-                        loc = self.floatframe.GetPosition()
-                        pt = wxPoint(loc.x - (self.oldpos[0]-e.GetX()), loc.y - (self.oldpos[1]-e.GetY()))
-                        self.floatframe.SetPosition(pt)
+
+        if e.Dragging():
+            if not self.IsFloating():
+                self.Float(true)
+                self.oldpos = (e.GetX(), e.GetY())
+            else:
+                if hasattr(self, 'oldpos'):
+                    loc = self.floatframe.GetPosition()
+                    pt = wxPoint(loc.x - (self.oldpos[0]-e.GetX()), loc.y - (self.oldpos[1]-e.GetY()))
+                    self.floatframe.Move(pt)
+
 
 
     def _SetFauxBarVisible(self, vis):

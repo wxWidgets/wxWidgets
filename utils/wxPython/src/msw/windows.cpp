@@ -3112,6 +3112,42 @@ static PyObject *_wrap_wxWindow_ReleaseMouse(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+#define wxWindow_RemoveChild(_swigobj,_swigarg0)  (_swigobj->RemoveChild(_swigarg0))
+static PyObject *_wrap_wxWindow_RemoveChild(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    wxWindow * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","child", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxWindow_RemoveChild",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_RemoveChild. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_RemoveChild. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxWindow_RemoveChild(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxWindow_Reparent(_swigobj,_swigarg0)  (_swigobj->Reparent(_swigarg0))
 static PyObject *_wrap_wxWindow_Reparent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3803,7 +3839,7 @@ static PyObject *_wrap_wxWindow_SetSize(PyObject *self, PyObject *args, PyObject
 }
 
 static void  wxWindow_SetPosition(wxWindow *self,const wxPoint & pos) {
-            self->SetSize(pos.x, pos.y, -1, -1);
+            self->Move(pos);
         }
 static PyObject *_wrap_wxWindow_SetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -5377,6 +5413,34 @@ static PyObject *_wrap_wxScrolledWindow_EnableScrolling(PyObject *self, PyObject
     return _resultobj;
 }
 
+#define wxScrolledWindow_GetScrollPageSize(_swigobj,_swigarg0)  (_swigobj->GetScrollPageSize(_swigarg0))
+static PyObject *_wrap_wxScrolledWindow_GetScrollPageSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxScrolledWindow * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","orient", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxScrolledWindow_GetScrollPageSize",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxScrolledWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScrolledWindow_GetScrollPageSize. Expected _wxScrolledWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxScrolledWindow_GetScrollPageSize(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxScrolledWindow_GetScrollPixelsPerUnit(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetScrollPixelsPerUnit(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxScrolledWindow_GetScrollPixelsPerUnit(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -5421,6 +5485,40 @@ static PyObject *_wrap_wxScrolledWindow_GetScrollPixelsPerUnit(PyObject *self, P
     o = PyInt_FromLong((long) (*_arg2));
     _resultobj = t_output_helper(_resultobj, o);
 }
+    return _resultobj;
+}
+
+#define wxScrolledWindow_GetTargetWindow(_swigobj)  (_swigobj->GetTargetWindow())
+static PyObject *_wrap_wxScrolledWindow_GetTargetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _result;
+    wxScrolledWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxScrolledWindow_GetTargetWindow",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxScrolledWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScrolledWindow_GetTargetWindow. Expected _wxScrolledWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxWindow *)wxScrolledWindow_GetTargetWindow(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxWindow_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
     return _resultobj;
 }
 
@@ -5589,6 +5687,35 @@ static PyObject *_wrap_wxScrolledWindow_SetScrollbars(PyObject *self, PyObject *
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxScrolledWindow_SetScrollbars(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxScrolledWindow_SetScrollPageSize(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetScrollPageSize(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxScrolledWindow_SetScrollPageSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxScrolledWindow * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","orient","pageSize", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxScrolledWindow_SetScrollPageSize",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxScrolledWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScrolledWindow_SetScrollPageSize. Expected _wxScrolledWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxScrolledWindow_SetScrollPageSize(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -8642,12 +8769,15 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxScrolledWindow_CalcScrolledPosition", (PyCFunction) _wrap_wxScrolledWindow_CalcScrolledPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_ViewStart", (PyCFunction) _wrap_wxScrolledWindow_ViewStart, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_SetTargetWindow", (PyCFunction) _wrap_wxScrolledWindow_SetTargetWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxScrolledWindow_SetScrollPageSize", (PyCFunction) _wrap_wxScrolledWindow_SetScrollPageSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_SetScrollbars", (PyCFunction) _wrap_wxScrolledWindow_SetScrollbars, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_Scroll", (PyCFunction) _wrap_wxScrolledWindow_Scroll, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_PrepareDC", (PyCFunction) _wrap_wxScrolledWindow_PrepareDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_IsRetained", (PyCFunction) _wrap_wxScrolledWindow_IsRetained, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_GetVirtualSize", (PyCFunction) _wrap_wxScrolledWindow_GetVirtualSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxScrolledWindow_GetTargetWindow", (PyCFunction) _wrap_wxScrolledWindow_GetTargetWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_GetScrollPixelsPerUnit", (PyCFunction) _wrap_wxScrolledWindow_GetScrollPixelsPerUnit, METH_VARARGS | METH_KEYWORDS },
+	 { "wxScrolledWindow_GetScrollPageSize", (PyCFunction) _wrap_wxScrolledWindow_GetScrollPageSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_EnableScrolling", (PyCFunction) _wrap_wxScrolledWindow_EnableScrolling, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxScrolledWindow", (PyCFunction) _wrap_new_wxScrolledWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDialog_SetReturnCode", (PyCFunction) _wrap_wxDialog_SetReturnCode, METH_VARARGS | METH_KEYWORDS },
@@ -8714,6 +8844,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_ScreenToClient", (PyCFunction) _wrap_wxWindow_ScreenToClient, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_ScreenToClientXY", (PyCFunction) _wrap_wxWindow_ScreenToClientXY, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Reparent", (PyCFunction) _wrap_wxWindow_Reparent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_RemoveChild", (PyCFunction) _wrap_wxWindow_RemoveChild, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_ReleaseMouse", (PyCFunction) _wrap_wxWindow_ReleaseMouse, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Refresh", (PyCFunction) _wrap_wxWindow_Refresh, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Raise", (PyCFunction) _wrap_wxWindow_Raise, METH_VARARGS | METH_KEYWORDS },

@@ -719,13 +719,12 @@ static PyObject *_wrap_wxGrid_AppendCols(PyObject *self, PyObject *args, PyObjec
     bool  _result;
     wxGrid * _arg0;
     int  _arg1 = (int ) 1;
-    bool  _arg2 = (bool ) TRUE;
+    int  _arg2 = (int ) TRUE;
     PyObject * _argo0 = 0;
-    int tempbool2 = (int) TRUE;
     char *_kwnames[] = { "self","n","updateLabels", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|ii:wxGrid_AppendCols",_kwnames,&_argo0,&_arg1,&tempbool2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|ii:wxGrid_AppendCols",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -734,7 +733,6 @@ static PyObject *_wrap_wxGrid_AppendCols(PyObject *self, PyObject *args, PyObjec
         return NULL;
         }
     }
-    _arg2 = (bool ) tempbool2;
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (bool )wxGrid_AppendCols(_arg0,_arg1,_arg2);
@@ -750,13 +748,12 @@ static PyObject *_wrap_wxGrid_AppendRows(PyObject *self, PyObject *args, PyObjec
     bool  _result;
     wxGrid * _arg0;
     int  _arg1 = (int ) 1;
-    bool  _arg2 = (bool ) TRUE;
+    int  _arg2 = (int ) TRUE;
     PyObject * _argo0 = 0;
-    int tempbool2 = (int) TRUE;
     char *_kwnames[] = { "self","n","updateLabels", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|ii:wxGrid_AppendRows",_kwnames,&_argo0,&_arg1,&tempbool2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|ii:wxGrid_AppendRows",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -765,7 +762,6 @@ static PyObject *_wrap_wxGrid_AppendRows(PyObject *self, PyObject *args, PyObjec
         return NULL;
         }
     }
-    _arg2 = (bool ) tempbool2;
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (bool )wxGrid_AppendRows(_arg0,_arg1,_arg2);

@@ -10,7 +10,7 @@ class TestFloatBar(wxFrame):
         win = wxWindow(self, -1)
         win.SetBackgroundColour(wxNamedColour("WHITE"))
         wxStaticText(win, -1, "Drag the toolbar to float it,\n"
-                     "Toggle the last tool to remove the title.", wxPoint(15,15))
+                     "Toggle the last tool to remove\nthe title.", wxPoint(15,15))
 
         tb = wxFloatBar(self, -1)
         self.SetToolBar(tb)
@@ -57,6 +57,7 @@ class TestFloatBar(wxFrame):
     def OnToolClick(self, event):
         self.log.WriteText("tool %s clicked\n" % event.GetId())
         if event.GetId() == 60:
+            print event.GetExtraLong(), event.Checked(), event.GetInt(), self.tb.GetToolState(60)
             if event.GetExtraLong():
                 self.tb.SetTitle("")
             else:

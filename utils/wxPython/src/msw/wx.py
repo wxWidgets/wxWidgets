@@ -975,10 +975,10 @@ def EVT_QUERY_NEW_PALETTE(win, func):
     win.Connect(-1, -1, wxEVT_QUERY_NEW_PALETTE, func)
 
 def EVT_WINDOW_CREATE(win, func):
-    win.Connect(-1, -1, wxEVT_WINDOW_CREATE, func)
+    win.Connect(-1, -1, wxEVT_CREATE, func)
 
 def EVT_WINDOW_DESTROY(win, func):
-    win.Connect(-1, -1, wxEVT_WINDOW_DESTROY, func)
+    win.Connect(-1, -1, wxEVT_DESTROY, func)
 
 
 

@@ -255,6 +255,7 @@ public:
     void Raise();
     void Refresh(bool eraseBackground = TRUE, const wxRect* rect = NULL);
     void ReleaseMouse();
+    void RemoveChild(wxWindow* child);
     bool Reparent( wxWindow* newParent );
 
     // (uses apply'ed INOUT typemap, see above)
@@ -280,11 +281,11 @@ public:
     %name(SetDimensions) void SetSize(int x, int y, int width, int height, int sizeFlags=wxSIZE_AUTO);
     %addmethods {
         void SetSize(const wxSize& size) {
-            self->SetSize(size.x, size.y);
+            self->SetSize(size);
         }
 
         void SetPosition(const wxPoint& pos) {
-            self->SetSize(pos.x, pos.y, -1, -1);
+            self->Move(pos);
         }
     }
 
@@ -434,7 +435,9 @@ public:
     %pragma(python) addtomethod = "__init__:wx._StdOnScrollCallbacks(self)"
 
     void EnableScrolling(bool xScrolling, bool yScrolling);
+    int GetScrollPageSize(int orient);
     void GetScrollPixelsPerUnit(int* OUTPUT, int* OUTPUT);
+    wxWindow* GetTargetWindow();
     void GetVirtualSize(int* OUTPUT, int* OUTPUT);
     bool IsRetained();
     void PrepareDC(wxDC& dc);
@@ -442,6 +445,7 @@ public:
     void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                        int noUnitsX, int noUnitsY,
                        int xPos = 0, int yPos = 0);
+    void SetScrollPageSize(int orient, int pageSize);
     void SetTargetWindow(wxWindow* window);
     void ViewStart(int* OUTPUT, int* OUTPUT);
 

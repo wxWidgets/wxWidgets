@@ -329,6 +329,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def ReleaseMouse(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_ReleaseMouse,(self,) + _args, _kwargs)
         return val
+    def RemoveChild(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_RemoveChild,(self,) + _args, _kwargs)
+        return val
     def Reparent(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Reparent,(self,) + _args, _kwargs)
         return val
@@ -583,8 +586,15 @@ class wxScrolledWindowPtr(wxPanelPtr):
     def EnableScrolling(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_EnableScrolling,(self,) + _args, _kwargs)
         return val
+    def GetScrollPageSize(self, *_args, **_kwargs):
+        val = apply(windowsc.wxScrolledWindow_GetScrollPageSize,(self,) + _args, _kwargs)
+        return val
     def GetScrollPixelsPerUnit(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_GetScrollPixelsPerUnit,(self,) + _args, _kwargs)
+        return val
+    def GetTargetWindow(self, *_args, **_kwargs):
+        val = apply(windowsc.wxScrolledWindow_GetTargetWindow,(self,) + _args, _kwargs)
+        if val: val = wxWindowPtr(val) 
         return val
     def GetVirtualSize(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_GetVirtualSize,(self,) + _args, _kwargs)
@@ -600,6 +610,9 @@ class wxScrolledWindowPtr(wxPanelPtr):
         return val
     def SetScrollbars(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_SetScrollbars,(self,) + _args, _kwargs)
+        return val
+    def SetScrollPageSize(self, *_args, **_kwargs):
+        val = apply(windowsc.wxScrolledWindow_SetScrollPageSize,(self,) + _args, _kwargs)
         return val
     def SetTargetWindow(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_SetTargetWindow,(self,) + _args, _kwargs)

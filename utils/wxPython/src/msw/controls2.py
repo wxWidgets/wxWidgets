@@ -592,6 +592,15 @@ class wxTreeCtrlPtr(wxControlPtr):
         val = apply(controls2c.wxTreeCtrl_HitTest,(self,) + _args, _kwargs)
         if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
         return val
+    def SetItemTextColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_SetItemTextColour,(self,) + _args, _kwargs)
+        return val
+    def SetItemBackgroundColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_SetItemBackgroundColour,(self,) + _args, _kwargs)
+        return val
+    def SetItemFont(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_SetItemFont,(self,) + _args, _kwargs)
+        return val
     def SetItemDropHighlight(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_SetItemDropHighlight,(self,) + _args, _kwargs)
         return val

@@ -82,6 +82,9 @@ def main():
         validateFile(WXDIR + '/lib/ogl.lib')
         validateFile(WXDIR + '/lib/glcanvas.lib')
 
+        logSeparator("Cleaning wxPython build directory...")
+        os.chdir(WXDIR + '/utils/wxPython')
+        do("del /sxy *.*")
 
         logSeparator("Copying wxPython workspace to build directory...")
         do("copy /s %s %s" % ('e:\\projects\\wxPython\*.*', WXDIR+'\\utils\\wxPython'))
