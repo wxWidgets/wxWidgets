@@ -51,7 +51,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "wx"=.\wx.dsp - Package Owner=<4>
+Project: "wxWindows"=.\wxWindows.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

@@ -12,28 +12,13 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name wx
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name wxdll
+    Project_Dep_Name wxWindows
     End Project Dependency
 }}}
 
 ###############################################################################
 
-Project: "wx"=..\..\src\wx.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "wxdll"=..\..\src\wxdll.dsp - Package Owner=<4>
+Project: "wxWindows"=..\..\src\wxWindows.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

@@ -1,70 +1,102 @@
-# Microsoft Developer Studio Project File - Name="wxuniv" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="wxWindows" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
+# TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
-CFG=wxuniv - Win32 Debug
+CFG=wxWindows - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "wxuniv.mak".
+!MESSAGE NMAKE /f "wxWindows.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "wxuniv.mak" CFG="wxuniv - Win32 Debug"
+!MESSAGE NMAKE /f "wxWindows.mak" CFG="wxWindows - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "wxuniv - Win32 Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxuniv - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxWindows - Win32 Release DLL" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "wxWindows - Win32 Debug DLL" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "wxWindows - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxWindows - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
-# PROP Scc_ProjName "wxuniv"
+# PROP Scc_ProjName "wxWindows"
 # PROP Scc_LocalPath ".."
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "wxuniv - Win32 Release"
+!IF  "$(CFG)" == "wxWindows - Win32 Release DLL"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "../lib"
-# PROP BASE Intermediate_Dir "../UnivRelease"
+# PROP BASE Intermediate_Dir "../ReleaseDll"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
 # PROP Output_Dir "../lib"
-# PROP Intermediate_Dir "../UnivRelease"
+# PROP Intermediate_Dir "../ReleaseDLL"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MD /W4 /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MT" /YX /FD /c
-# ADD CPP /nologo /MD /W4 /O2 /I "../lib/univ" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "WIN32" /D "NDEBUG" /D WINVER=0x0400 /D "STRICT" /D "__WXUNIVERSAL__" /Yu"wx/wxprec.h" /FD /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
+# ADD BASE CPP /nologo /MD /W4 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WXWINDLL_EXPORTS" /YX /FD /c
+# ADD CPP /nologo /MD /W4 /O2 /I "../lib/mswdll" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_USRDLL" /D "WIN32" /D "NDEBUG" /D WINVER=0x0400 /D "STRICT" /D "_MT" /D "WXMAKINGDLL" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /i "../include" /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\lib\wxuniv.lib"
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /dll /machine:I386 /out:"../lib/wxmsw.dll"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /version:2.3 /dll /machine:I386 /out:"../lib/wxmsw.dll"
 
-!ELSEIF  "$(CFG)" == "wxuniv - Win32 Debug"
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug DLL"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "../lib"
-# PROP BASE Intermediate_Dir "../UnivDebug"
+# PROP BASE Intermediate_Dir "../DebugDll"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "../lib"
-# PROP Intermediate_Dir "../UnivDebug"
+# PROP Intermediate_Dir "../DebugDll"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MDd /W4 /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/univd" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "WIN32" /D "_DEBUG" /D "__WXDEBUG__" /D WINVER=0x0400 /D "STRICT" /D "__WXUNIVERSAL__" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE CPP /nologo /MDd /W4 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WXWINDLL_EXPORTS" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/mswdlld" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_USRDLL" /D "WIN32" /D "_DEBUG" /D WINVER=0x0400 /D "STRICT" /D "_MT" /D "WXMAKINGDLL" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
+# ADD BASE RSC /l 0x409 /d "_DEBUG"
+# ADD RSC /l 0x409 /i "../include" /d "_DEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxmswd.dll"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /nologo /version:2.3 /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxmswd.dll"
+
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Release"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "../Release"
+# PROP BASE Intermediate_Dir "../Release"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "../Release"
+# PROP Intermediate_Dir "../Release"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MD /W4 /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MT" /YX /FD /c
+# ADD CPP /nologo /MD /W4 /O2 /I "../lib/msw" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "WIN32" /D "NDEBUG" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -72,14 +104,39 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\lib\wxunivd.lib"
+# ADD LIB32 /nologo /out:"..\lib\wxmsw.lib"
+
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "../Debug"
+# PROP BASE Intermediate_Dir "../Debug"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "../Debug"
+# PROP Intermediate_Dir "../Debug"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MDd /W4 /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/mswd" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "WIN32" /D "_DEBUG" /D "__WXDEBUG__" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\lib\wxmswd.lib"
 
 !ENDIF 
 
 # Begin Target
 
-# Name "wxuniv - Win32 Release"
-# Name "wxuniv - Win32 Debug"
+# Name "wxWindows - Win32 Release DLL"
+# Name "wxWindows - Win32 Debug DLL"
+# Name "wxWindows - Win32 Release"
+# Name "wxWindows - Win32 Debug"
 # Begin Group "Common Files"
 
 # PROP Default_Filter ""
@@ -575,10 +632,6 @@ SOURCE=.\common\y_tab.c
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\generic\accel.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\generic\busyinfo.cpp
 # End Source File
 # Begin Source File
@@ -591,35 +644,11 @@ SOURCE=.\generic\choicdgg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\generic\colrdlgg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\generic\dcpsg.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\generic\dirctrlg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\generic\dirdlgg.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\generic\dragimgg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\generic\fdrepdlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\generic\filedlgg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\generic\fontdlgg.cpp
 # End Source File
 # Begin Source File
 
@@ -635,31 +664,11 @@ SOURCE=.\generic\gridsel.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\generic\helpext.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\generic\helphtml.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\generic\helpwxht.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\generic\laywin.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\generic\listctrl.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\generic\logg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\generic\msgdlgg.cpp
 # End Source File
 # Begin Source File
 
@@ -668,14 +677,6 @@ SOURCE=.\generic\numdlgg.cpp
 # Begin Source File
 
 SOURCE=.\generic\panelg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\generic\printps.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\generic\prntdlgg.cpp
 # End Source File
 # Begin Source File
 
@@ -716,10 +717,6 @@ SOURCE=.\generic\splitter.cpp
 # Begin Source File
 
 SOURCE=.\generic\statusbr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\generic\tabg.cpp
 # End Source File
 # Begin Source File
 
@@ -846,6 +843,10 @@ SOURCE=.\msw\dummy.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\accel.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\app.cpp
 # End Source File
 # Begin Source File
@@ -854,7 +855,15 @@ SOURCE=.\msw\bitmap.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\bmpbuttn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\brush.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\button.cpp
 # End Source File
 # Begin Source File
 
@@ -862,11 +871,39 @@ SOURCE=.\msw\caret.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\checkbox.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\checklst.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\choice.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\clipbrd.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\colordlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\colour.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\combobox.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\control.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\curico.cpp
 # End Source File
 # Begin Source File
 
@@ -902,7 +939,19 @@ SOURCE=.\msw\dde.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\dialog.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\dialup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\dib.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\dibutils.cpp
 # End Source File
 # Begin Source File
 
@@ -910,11 +959,35 @@ SOURCE=.\msw\dir.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\dirdlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\dragimag.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\enhmeta.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\evtloop.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\fdrepdlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\filedlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\font.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\fontdlg.cpp
 # End Source File
 # Begin Source File
 
@@ -930,11 +1003,31 @@ SOURCE=.\msw\frame.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\gauge95.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\gdiimage.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\msw\gdiobj.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\glcanvas.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\helpbest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\helpchm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\helpwin.cpp
 # End Source File
 # Begin Source File
 
@@ -946,11 +1039,59 @@ SOURCE=.\msw\imaglist.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\joystick.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\listbox.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\listctrl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\main.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\mdi.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\menu.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\menuitem.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\metafile.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\mimetype.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\minifram.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\msgdlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\nativdlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\notebook.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\ownerdrw.cpp
 # End Source File
 # Begin Source File
 
@@ -959,6 +1100,26 @@ SOURCE=.\msw\palette.cpp
 # Begin Source File
 
 SOURCE=.\msw\pen.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\penwin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\printdlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\printwin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\radiobox.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\radiobut.cpp
 # End Source File
 # Begin Source File
 
@@ -974,11 +1135,67 @@ SOURCE=.\msw\registry.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\scrolbar.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\settings.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\slider95.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\snglinst.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\spinbutt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\spinctrl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\statbmp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\statbox.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\statbr95.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\statline.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\stattext.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\tabctrl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\taskbar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\tbar95.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\textctrl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\tglbtn.cpp
 # End Source File
 # Begin Source File
 
@@ -990,7 +1207,15 @@ SOURCE=.\msw\timer.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\tooltip.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\toplevel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\treectrl.cpp
 # End Source File
 # Begin Source File
 
@@ -999,6 +1224,10 @@ SOURCE=.\msw\utils.cpp
 # Begin Source File
 
 SOURCE=.\msw\utilsexc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\wave.cpp
 # End Source File
 # Begin Source File
 
@@ -1017,147 +1246,34 @@ SOURCE=.\msw\gsockmsw.c
 # End Source File
 
 # End Group
-# Begin Group "Universal Files"
+# Begin Group "OLE Files"
 
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\univ\bmpbuttn.cpp
+SOURCE=.\msw\ole\automtn.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\univ\button.cpp
+SOURCE=.\msw\ole\dataobj.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\univ\checkbox.cpp
+SOURCE=.\msw\ole\dropsrc.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\univ\checklst.cpp
+SOURCE=.\msw\ole\droptgt.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\univ\colschem.cpp
+SOURCE=.\msw\ole\oleutils.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\univ\combobox.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\control.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\dialog.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\framuniv.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\gauge.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\inpcons.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\inphand.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\listbox.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\menu.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\notebook.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\radiobox.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\radiobut.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\renderer.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\scrarrow.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\scrolbar.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\scrthumb.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\slider.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\spinbutt.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\statbmp.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\statbox.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\statline.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\stattext.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\textctrl.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\theme.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\topluniv.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\winuniv.cpp
+SOURCE=.\msw\ole\uuid.cpp
 # End Source File
 
-# Begin Group "Theme Files"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\univ\themes\gtk.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\themes\win32.cpp
-# End Source File
-
-# End Group
 # End Group
 # Begin Group "Headers"
 
@@ -1167,21 +1283,37 @@ SOURCE=.\univ\themes\win32.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\include\wx\univ\setup.h
-!IF  "$(CFG)" == "wxuniv - Win32 Release"
+SOURCE=..\include\wx\msw\setup0.h
+!IF  "$(CFG)" == "wxWindows - Win32 Release DLL"
 # Begin Custom Build - Creating wx/setup.h from $(InputPath)
-InputPath=..\include\wx\univ\setup.h
+InputPath=..\include\wx\msw\setup0.h
 
-"../lib/univ/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\lib\univ\wx\setup.h
+"../lib/mswdll/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\lib\mswdll\wx\setup.h
 
 # End Custom Build
-!ELSEIF  "$(CFG)" == "wxuniv - Win32 Debug"
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug DLL"
 # Begin Custom Build - Creating wx/setup.h from $(InputPath)
-InputPath=..\include\wx\univ\setup.h
+InputPath=..\include\wx\msw\setup0.h
 
-"../lib/univd/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\lib\univd\wx\setup.h
+"../lib/mswdlld/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\lib\mswdlld\wx\setup.h
+
+# End Custom Build
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Release"
+# Begin Custom Build - Creating wx/setup.h from $(InputPath)
+InputPath=..\include\wx\msw\setup0.h
+
+"../lib/msw/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\lib\msw\wx\setup.h
+
+# End Custom Build
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug"
+# Begin Custom Build - Creating wx/setup.h from $(InputPath)
+InputPath=..\include\wx\msw\setup0.h
+
+"../lib/mswd/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\lib\mswd\wx\setup.h
 
 # End Custom Build
 !ENDIF 
@@ -2075,6 +2207,375 @@ SOURCE=..\include\wx\zstream.h
 # Begin Group "MSW"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\include\wx\msw\accel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\app.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\bitmap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\bmpbuttn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\brush.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\button.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\caret.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\checkbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\checklst.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\choice.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\clipbrd.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\colordlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\colour.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\combobox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\control.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\curico.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\curicop.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\cursor.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\dc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\dcclient.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\dcmemory.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\dcprint.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\dcscreen.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\dde.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\dialog.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\dib.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\dibutils.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\dirdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\dragimag.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\enhmeta.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\fdrepdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\filedlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\font.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\fontdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\frame.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\gauge.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\gauge95.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\gaugemsw.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\gdiimage.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\gdiobj.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\glcanvas.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\helpbest.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\helpchm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\helpwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\icon.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\imaglist.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\iniconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\joystick.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\listbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\listctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\mdi.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\menu.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\menuitem.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\metafile.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\mimetype.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\minifram.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\msgdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\msvcrt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\notebook.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\palette.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\pen.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\printdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\printwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\private.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\radiobox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\radiobut.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\regconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\region.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\registry.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\scrolbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\settings.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\slider.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\slider95.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\slidrmsw.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\spinbutt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\statbmp.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\statbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\statbr95.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\statline.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\stattext.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\tabctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\taskbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\tbar95.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\tbarmsw.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\textctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\tglbtn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\timer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\tooltip.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\treectrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\wave.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\window.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\winundef.h
+# End Source File
+
 # End Group
 # Begin Group "Generic"
 
@@ -2285,10 +2786,6 @@ SOURCE=..\include\wx\html\m_templ.h
 SOURCE=..\include\wx\html\winpars.h
 # End Source File
 
-# End Group
-# Begin Group "Universal"
-
-# PROP Default_Filter ""
 # End Group
 # End Group
 # End Target
