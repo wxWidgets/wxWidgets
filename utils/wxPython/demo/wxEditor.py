@@ -16,7 +16,8 @@ def runTest(frame, nb, log):
 
     ed.SetText(["",
                 "This is a simple text editor, the class name is",
-                "wxEditor.  Type a few lines and try it out."])
+                "wxEditor.  Type a few lines and try it out.",
+                ""])
 
     pyed.SetText(["# This one is a derived class named wxPyEditor.",
                   "# It adds syntax highlighting, folding (press",

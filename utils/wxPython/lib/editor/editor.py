@@ -10,6 +10,19 @@
 # Licence:     wxWindows license
 #----------------------------------------------------------------------
 
+
+# PLEASE NOTE:  This is experimental code.  It needs an overhall in the
+#               drawing and update code, and there is occasionally a
+#               mysteriously disappearing line...
+#
+#               I am working on a StyledTextEditor that will likely
+#               render this editor obsolete...  But this one is at
+#               least somewhat functional now while the other is still
+#               vapor.
+#
+#               - Robin
+
+
 from wxPython.wx import *
 from string import *
 from keyword import *
@@ -18,9 +31,6 @@ from tokenizer import *
 
 #---------------------------------------------------------------------------
 
-#EDITOR_STD_LINE = ("", [], (0,0,0))
-
-#---------
 
 class Line:
     def __init__(self, text=""):
@@ -67,14 +77,16 @@ class wxEditor(wxScrolledWindow):
         self.sy = 0
         self.sw = 0
         self.sh = 0
+        self.osx= 0
+        self.osy= 0
 
         # font
         dc = wxClientDC(self)
 
-        #if wxPlatform == "__WXMSW__":
-        self.font = wxFont(12, wxMODERN, wxNORMAL, wxNORMAL)
-        #else:
-        #    self.font = wxFont(12, wxMODERN, wxNORMAL, wxNORMAL, false)
+        if wxPlatform == "__WXMSW__":
+            self.font = wxFont(10, wxMODERN, wxNORMAL, wxNORMAL)
+        else:
+            self.font = wxFont(12, wxMODERN, wxNORMAL, wxNORMAL, false)
         dc.SetFont(self.font)
 
         # font weight, height
@@ -111,6 +123,8 @@ class wxEditor(wxScrolledWindow):
 
         self.update = true
         self.in_scroll =FALSE
+        self.inUpdate = FALSE
+
 
         bw,bh = self.GetSizeTuple()
         # double buffering
@@ -140,10 +154,12 @@ class wxEditor(wxScrolledWindow):
         self.len = len(self.lines)
         self.max_linelength =maxlen
 
+
     def SetFontTab(self, fonttab):
     ###############################################################
         """ Fonttabelle zum schnellen Zugriff """
         self.ftab = fonttab
+
 
     def SetText(self, text = [""]):
     ###############################################################
@@ -164,6 +180,7 @@ class wxEditor(wxScrolledWindow):
         self.update = true
         self.UpdateView(None, true)
 
+
     # show new text
     def GetText(self):
     ###############################################################
@@ -173,6 +190,7 @@ class wxEditor(wxScrolledWindow):
             text.append(line.text)
         return text
 
+
     def IsEmpty(self):
     ###############################################################
         """see if at least one text line is not empty"""
@@ -180,18 +198,22 @@ class wxEditor(wxScrolledWindow):
             if line.text: return 0
         return 1
 
+
     def IsLine(self, line):
     ###############################################################
         """ Schauen, ob alles im grünen Bereich ist """
         return (line>=0) and (line<self.len)
 
+
     def IsEditable(self, line):
     ###############################################################
         return self.text[self.GetLine(line)].editable
 
+
     def GetLine(self, line):
     ###############################################################
         return self.lines[line]
+
 
     def GetTextLine(self, line):
     ###############################################################
@@ -199,6 +221,7 @@ class wxEditor(wxScrolledWindow):
         if self.IsLine(line):
             return self.text[self.GetLine(line)].text
         return ""
+
 
     def SetTextLine(self, line, text):
     ###############################################################
@@ -269,40 +292,48 @@ class wxEditor(wxScrolledWindow):
         self.sco_x = xp
         self.sco_y = yp
 
+
     def OnScroll(self, event):
         dir =event.GetOrientation()
         evt =event.GetEventType()
         if dir ==wxHORIZONTAL:
-            if evt ==wxEVT_SCROLLWIN_LINEUP: self.sx =self.sx -1
+            if evt ==wxEVT_SCROLLWIN_LINEUP:     self.sx =self.sx -1
             elif evt ==wxEVT_SCROLLWIN_LINEDOWN: self.sx =self.sx +1
-            elif evt ==wxEVT_SCROLLWIN_PAGEUP: self.sx =self.sx -self.sw
+            elif evt ==wxEVT_SCROLLWIN_PAGEUP:   self.sx =self.sx -self.sw
             elif evt ==wxEVT_SCROLLWIN_PAGEDOWN: self.sx =self.sx +self.sw
-            elif evt ==wxEVT_SCROLLWIN_TOP: self.sx =self.cx =0
+            elif evt ==wxEVT_SCROLLWIN_TOP:      self.sx =self.cx =0
             elif evt ==wxEVT_SCROLLWIN_BOTTOM:
                 self.sx =self.max_linelength -self.sw
                 self.cx =self.max_linelength
-            else: self.sx =event.GetPosition()
+            else:
+                self.sx =event.GetPosition()
+
             if self.sx >(self.max_linelength -self.sw +1):
                 self.sx =self.max_linelength -self.sw +1
-            if self.sx <0: self.sx =0
+            if self.sx <0:   self.sx =0
             if self.cx >(self.sx +self.sw -1): self.cx =self.sx +self.sw -1
             if self.cx <self.sx: self.cx =self.sx
+
         else:
-            if evt ==wxEVT_SCROLLWIN_LINEUP: self.sy =self.sy -1
+            if evt ==wxEVT_SCROLLWIN_LINEUP:     self.sy =self.sy -1
             elif evt ==wxEVT_SCROLLWIN_LINEDOWN: self.sy =self.sy +1
-            elif evt ==wxEVT_SCROLLWIN_PAGEUP: self.sy =self.sy -self.sh
+            elif evt ==wxEVT_SCROLLWIN_PAGEUP:   self.sy =self.sy -self.sh
             elif evt ==wxEVT_SCROLLWIN_PAGEDOWN: self.sy =self.sy +self.sh
-            elif evt ==wxEVT_SCROLLWIN_TOP: self.sy =self.cy =0
+            elif evt ==wxEVT_SCROLLWIN_TOP:      self.sy =self.cy =0
             elif evt ==wxEVT_SCROLLWIN_BOTTOM:
                 self.sy =self.len -self.sh
                 self.cy =self.len
-            else: self.sy =event.GetPosition()
+            else:
+                self.sy =event.GetPosition()
+
             if self.sy >(self.len -self.sh +1):
                 self.sy =self.len -self.sh +1
             if self.sy <0: self.sy =0
             if self.cy >(self.sy +self.sh -1): self.cy =self.sy +self.sh -1
             if self.cy <self.sy: self.cy =self.sy
+
         self.UpdateView()
+
 
     def AdjustScrollbars(self):
         # there appears to be endless recursion:
@@ -316,7 +347,9 @@ class wxEditor(wxScrolledWindow):
                                # even if current position >0
                                max(self.len +1, self.sy +self.sh),
                                self.sx, self.sy)
+            self.osx, self.osy = self.sx, self.sy
             self.in_scroll =FALSE
+
 
     # adapts the output to what it should be
     def UpdateView(self, dc = None, doup=false):
@@ -325,6 +358,9 @@ class wxEditor(wxScrolledWindow):
         Diese Routine wird immer dann aufgerufen, wenn
         sich etwas verändert hat
         """
+        if self.inUpdate:
+            return
+        self.inUpdate = true
 
         self.CalcLines()
 
@@ -351,20 +387,25 @@ class wxEditor(wxScrolledWindow):
         self.ocy = self.cy
 
         # alles beim alten
-        self.AdjustScrollbars()
+        if self.osx != self.sx or self.osy != self.sy:
+            self.AdjustScrollbars()
+
         self.DrawSimpleCursor(0,0,dc, true)
         # [als] i don't really understand how the following condition works
-        if self.update or doup:
-            self.Draw(dc)
-            self.update = false
-        else:
-            self.DrawCursor(dc)
+        #if self.update or doup:
+        self.Draw(dc)
+        #    self.update = false
+        #else:
+        #    self.DrawCursor(dc)
 
         self.o_cx = self.cx
         self.o_cy = self.cy
         self.o_sx = self.sx
         self.o_sy = self.sy
         self.o_line = self.line
+        self.inUpdate = false
+
+
 
 
     def DrawEditText(self, t, x, y, dc = None):
@@ -375,6 +416,7 @@ class wxEditor(wxScrolledWindow):
             dc = wxClientDC(self)
         dc.SetFont(self.font)
         dc.DrawText(t, x * self.fw, y * self.fh)
+
 
     def DrawLine(self, line, dc=None):
     ###############################################################
@@ -419,6 +461,7 @@ class wxEditor(wxScrolledWindow):
                 dc.SetTextForeground(self.ftab[col])
             self.DrawEditText(t[pos:], (pos-ll), y, dc)
 
+
     def Draw(self, odc=None):
     ###############################################################
         """
@@ -456,6 +499,7 @@ class wxEditor(wxScrolledWindow):
         linelen =len(self.text[self.GetLine(cy)].text)
         if self.cx >linelen: self.cx =linelen
 
+
     def cHoriz(self, num):
     ###############################################################
         """ Horizontale Cursorverschiebung
@@ -468,6 +512,7 @@ class wxEditor(wxScrolledWindow):
         if cx >(self.sx +self.sw -2): self.sx =cx -self.sw +2
         elif cx <self.sx: self.sx =cx
         self.cx =cx
+
 
     def InsertText(self, text):
     ###############################################################
@@ -586,6 +631,7 @@ class wxEditor(wxScrolledWindow):
         self.bw,self.bh = self.GetSizeTuple()
         self.UpdateView(dc, true)
 
+
 #-----------------------------------------------------------------------------------------
 
     def GetIndent(self, line):
@@ -595,6 +641,7 @@ class wxEditor(wxScrolledWindow):
             elif c=="\t": p =(p /self.tabsize +1) *self.tabsize
             else: break
         return p
+
 
     def Goto(self, pos):
         self.cVert(pos-self.cy-1)
@@ -617,3 +664,4 @@ class wxEditor(wxScrolledWindow):
 
     def OnFold(self):
         pass
+
