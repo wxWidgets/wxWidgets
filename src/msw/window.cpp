@@ -1162,6 +1162,7 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
     // Windows XP. Instead we get the appropriate style for the theme.
 
     if (border == wxBORDER_DEFAULT && wxTheApp->GetAuto3D() && 
+        IsKindOf(CLASSINFO(wxControl)) &&
         GetParent() && (GetParent()->IsKindOf(CLASSINFO(wxPanel)) ||
                         GetParent()->IsKindOf(CLASSINFO(wxDialog))) &&
         ((GetParent()->GetWindowStyleFlag() & wxUSER_COLOURS) != wxUSER_COLOURS))
