@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        imagjpeg.cpp
 // Purpose:     wxImage JPEG handler
-// Author:      Robert Roebling
+// Author:      Vaclav Slavik
 // RCS-ID:      $Id$
-// Copyright:   (c) Robert Roebling
+// Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -40,6 +40,8 @@ extern "C" {
 
 // For memcpy
 #include <string.h>
+// For JPEG library error handling
+#include <setjmp.h>
 
 #ifdef __SALFORDC__
 #ifdef FAR
@@ -122,17 +124,59 @@ void jpeg_wxio_src( j_decompress_ptr cinfo, wxInputStream& infile )
 }
 
 
+// JPEG error manager:
+
+struct my_error_mgr {
+  struct jpeg_error_mgr pub;	/* "public" fields */
+
+  jmp_buf setjmp_buffer;	/* for return to caller */
+};
+
+typedef struct my_error_mgr * my_error_ptr;
+
+/*
+ * Here's the routine that will replace the standard error_exit method:
+ */
+
+METHODDEF(void)
+my_error_exit (j_common_ptr cinfo)
+{
+  /* cinfo->err really points to a my_error_mgr struct, so coerce pointer */
+  my_error_ptr myerr = (my_error_ptr) cinfo->err;
+
+  /* Always display the message. */
+  /* We could postpone this until after returning, if we chose. */
+  (*cinfo->err->output_message) (cinfo);
+
+  /* Return control to the setjmp point */
+  longjmp(myerr->setjmp_buffer, 1);
+}
+
+
 
 bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream )
 {
     struct jpeg_decompress_struct cinfo;
-    struct jpeg_error_mgr jerr;
+    struct my_error_mgr jerr;
     JSAMPARRAY tempbuf;
     unsigned char *ptr;
     unsigned stride;
     
     image->Destroy();
-    cinfo.err = jpeg_std_error( &jerr );
+    cinfo.err = jpeg_std_error( &jerr.pub );
+    jerr.pub.error_exit = my_error_exit;
+
+    /* Establish the setjmp return context for my_error_exit to use. */
+    if (setjmp(jerr.setjmp_buffer)) {
+      /* If we get here, the JPEG code has signaled an error.
+       * We need to clean up the JPEG object, close the input file, and return.
+       */
+      wxLogError(_("Couldn't load a JPEG image - probably file is corrupted."));
+      jpeg_destroy_decompress(&cinfo);
+      if (image->Ok()) image->Destroy();
+      return FALSE;
+    }
+
     jpeg_create_decompress( &cinfo );
     jpeg_wxio_src( &cinfo, stream );
     jpeg_read_header( &cinfo, TRUE );
@@ -227,12 +271,24 @@ GLOBAL(void) jpeg_wxio_dest (j_compress_ptr cinfo, wxOutputStream& outfile)
 bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream )
 {
     struct jpeg_compress_struct cinfo;
-    struct jpeg_error_mgr jerr;
+    struct my_error_mgr jerr;
     JSAMPROW row_pointer[1];	/* pointer to JSAMPLE row[s] */
     JSAMPLE *image_buffer;
     int stride;		        /* physical row width in image buffer */
     
-    cinfo.err = jpeg_std_error(&jerr);
+    cinfo.err = jpeg_std_error(&jerr.pub);
+    jerr.pub.error_exit = my_error_exit;
+
+    /* Establish the setjmp return context for my_error_exit to use. */
+    if (setjmp(jerr.setjmp_buffer)) {
+      /* If we get here, the JPEG code has signaled an error.
+       * We need to clean up the JPEG object, close the input file, and return.
+       */
+      wxLogError(_("Couldn't save a JPEG image - probably file is corrupted."));
+      jpeg_destroy_compress(&cinfo);
+      return FALSE;
+    }
+
     jpeg_create_compress(&cinfo);
     jpeg_wxio_dest(&cinfo, stream);
     
@@ -259,4 +315,10 @@ bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream )
 #endif
 
 // wxUSE_LIBJPEG
+
+
+
+
+
+
 
