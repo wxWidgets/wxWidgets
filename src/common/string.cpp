@@ -258,7 +258,7 @@ void wxString::CopyBeforeWrite()
     memcpy(m_pchData, pData->data(), nLen*sizeof(char));
   }
 
-  wxASSERT( !pData->IsShared() );  // we must be the only owner
+  wxASSERT( !GetStringData()->IsShared() );  // we must be the only owner
 }
 
 // must be called before replacing contents of this string
@@ -323,8 +323,14 @@ void wxString::Alloc(uint nLen)
 void wxString::Shrink()
 {
   wxStringData *pData = GetStringData();
-  void *p = realloc(pData, sizeof(wxStringData) +
-                    (pData->nDataLength + 1)*sizeof(char));
+
+  // this variable is unused in release build, so avoid the compiler warning by
+  // just not declaring it
+#ifdef __WXDEBUG__
+  void *p =
+#endif
+  realloc(pData, sizeof(wxStringData) + (pData->nDataLength + 1)*sizeof(char));
+
   wxASSERT( p != NULL );  // can't free memory?
   wxASSERT( p == pData ); // we're decrementing the size - block shouldn't move!
 }
@@ -1073,6 +1079,8 @@ wxArrayString::wxArrayString()
 // copy ctor
 wxArrayString::wxArrayString(const wxArrayString& src)
 {
+  m_nSize  =
+  m_nCount = 0;
   m_pItems = NULL;
 
   *this = src;
@@ -1081,7 +1089,7 @@ wxArrayString::wxArrayString(const wxArrayString& src)
 // assignment operator
 wxArrayString& wxArrayString::operator=(const wxArrayString& src)
 {
-  DELETEA(m_pItems);
+  Clear();
 
   m_nSize = 0;
   if ( src.m_nCount > ARRAY_DEFAULT_INITIAL_SIZE )
@@ -1091,6 +1099,9 @@ wxArrayString& wxArrayString::operator=(const wxArrayString& src)
   // the strings with another array
   for ( uint n = 0; n < src.m_nCount; n++ )
     Add(src[n]);
+
+  if ( m_nCount != 0 )
+    memcpy(m_pItems, src.m_pItems, m_nCount*sizeof(char *));
 
   return *this;
 }
@@ -1106,8 +1117,12 @@ void wxArrayString::Grow()
       m_pItems = new char *[m_nSize];
     }
     else {
+      // otherwise when it's called for the first time, nIncrement would be 0
+      // and the array would never be expanded
+      wxASSERT( ARRAY_DEFAULT_INITIAL_SIZE != 0 );
+
       // add 50% but not too much
-      size_t nIncrement = m_nSize < ARRAY_DEFAULT_INITIAL_SIZE 
+      size_t nIncrement = m_nSize < ARRAY_DEFAULT_INITIAL_SIZE
                           ? ARRAY_DEFAULT_INITIAL_SIZE : m_nSize >> 1;
       if ( nIncrement > ARRAY_MAXSIZE_INCREMENT )
         nIncrement = ARRAY_MAXSIZE_INCREMENT;
