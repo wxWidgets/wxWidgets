@@ -12,12 +12,12 @@
 #define __GTKSTATICLINEH__
 
 #ifdef __GNUG__
-    #pragma interface
+#pragma interface
 #endif
 
-#if !wxUSE_STATLINE
-    #error "This file should only be included if wxUSE_STATLINE == 1"
-#endif
+#include "wx/defs.h"
+
+#if wxUSE_STATLINE
 
 #include "wx/object.h"
 #include "wx/list.h"
@@ -47,4 +47,8 @@ public:
             long style = wxLI_HORIZONTAL, const wxString &name = wxStaticTextNameStr );
 };
 
-#endif // __GTKSTATICLINEH__
+#endif 
+  // wxUSE_STATLINE
+  
+#endif 
+  // __GTKSTATICLINEH__

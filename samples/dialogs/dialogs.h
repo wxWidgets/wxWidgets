@@ -27,8 +27,8 @@ class MyFrame: public wxFrame
     MyFrame(wxWindow *parent, const wxString& title, const wxPoint& pos,
 		const wxSize& size);
 
-	void ChooseColour(wxCommandEvent& event);
-	void ChooseFont(wxCommandEvent& event);
+    void ChooseColour(wxCommandEvent& event);
+    void ChooseFont(wxCommandEvent& event);
     void MessageBox(wxCommandEvent& event);
     void SingleChoice(wxCommandEvent& event);
     void TextEntry(wxCommandEvent& event);
@@ -36,13 +36,15 @@ class MyFrame: public wxFrame
     void FileSave(wxCommandEvent& event);
     void DirChoose(wxCommandEvent& event);
     void ShowTip(wxCommandEvent& event);
+    void ExtDialog(wxCommandEvent &event);
 
 #if !defined(__WXMSW__) || wxTEST_GENERIC_DIALOGS_IN_MSW
-	void ChooseColourGeneric(wxCommandEvent& event);
-	void ChooseFontGeneric(wxCommandEvent& event);
+    void ChooseColourGeneric(wxCommandEvent& event);
+    void ChooseFontGeneric(wxCommandEvent& event);
 #endif
-	void OnExit(wxCommandEvent& event);
-DECLARE_EVENT_TABLE()
+    void OnExit(wxCommandEvent& event);
+	
+  DECLARE_EVENT_TABLE()
 };
 
 class MyCanvas: public wxScrolledWindow
@@ -69,6 +71,7 @@ DECLARE_EVENT_TABLE()
 #define DIALOGS_FILE_SAVE                   9
 #define DIALOGS_DIR_CHOOSE                  10
 #define DIALOGS_TIP                         11
+#define DIALOGS_EXT_DIALOG                  12
 
 #endif
 

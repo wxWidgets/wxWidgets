@@ -25,12 +25,13 @@
 #include "wx/wx.h"
 #endif
 
-#include <wx/colordlg.h>
-#include <wx/filedlg.h>
-#include <wx/dirdlg.h>
-#include <wx/fontdlg.h>
-#include <wx/choicdlg.h>
-#include <wx/tipdlg.h>
+#include "wx/colordlg.h"
+#include "wx/filedlg.h"
+#include "wx/dirdlg.h"
+#include "wx/fontdlg.h"
+#include "wx/choicdlg.h"
+#include "wx/tipdlg.h"
+#include "wx/extdlg.h"
 
 #define wxTEST_GENERIC_DIALOGS_IN_MSW 0
 
@@ -78,6 +79,7 @@ bool MyApp::OnInit(void)
   file_menu->Append(DIALOGS_MESSAGE_BOX, "&Message box");
   file_menu->Append(DIALOGS_TEXT_ENTRY,  "Text &entry");
   file_menu->Append(DIALOGS_SINGLE_CHOICE,  "&Single choice");
+  file_menu->Append(DIALOGS_EXT_DIALOG,  "&Extended dialog");
   file_menu->AppendSeparator();
   file_menu->Append(DIALOGS_TIP,  "&Tip of the day");
   file_menu->AppendSeparator();
@@ -107,6 +109,42 @@ bool MyApp::OnInit(void)
 MyFrame::MyFrame(wxWindow *parent, const wxString& title, const wxPoint& pos, const wxSize& size):
   wxFrame(parent, -1, title, pos, size)
 {}
+
+void MyFrame::ExtDialog(wxCommandEvent& WXUNUSED(event) )
+{
+    // The standard flags causes this dialog to display a 
+    // wxStaticLine under wxMotif and wxGTK, but none under 
+    // other platforms. Also, it will not be resizable
+    // anywhere.
+    
+    wxExtDialog dialog( this, -1, "Test 1 for wxExtDialog", 
+      wxOK|wxFORWARD|wxBACKWARD );
+
+    dialog.SetClientWindow( new wxTextCtrl( &dialog, -1, "Test", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE ) );
+
+    // query minimal recommended size from the buttons
+    dialog.SetSize( dialog.GetButtonAreaSize().x, 170 );
+    
+    dialog.Centre( wxBOTH );
+    dialog.ShowModal();
+    
+    // This dialog uses the standard dialog styles but is also
+    // resizable on all platforms and shows a wxStaticLine on
+    // all platforms.
+    
+    wxExtDialog dialog2( this, -1, "Test 2 for wxExtDialog", 
+      wxOK|wxFORWARD|wxBACKWARD|wxCANCEL, wxDefaultPosition, wxSize(400,170),
+      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxED_BUTTONS_RIGHT | wxED_STATIC_LINE | wxED_CLIENT_MARGIN );
+
+    dialog2.SetClientWindow( new wxTextCtrl( &dialog2, -1, "Test", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE ) );
+
+    // query minimal recommended size from the buttons
+    wxSize min_size( dialog2.GetButtonAreaSize() );
+    dialog2.SetSizeHints( min_size.x + 200, min_size.y );
+    
+    dialog2.Centre( wxBOTH );
+    dialog2.ShowModal();
+}
 
 void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event) )
 {
@@ -326,6 +364,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_FILE_SAVE,                    MyFrame::FileSave)
     EVT_MENU(DIALOGS_DIR_CHOOSE,                MyFrame::DirChoose)
     EVT_MENU(DIALOGS_TIP,                        MyFrame::ShowTip)
+    EVT_MENU(DIALOGS_EXT_DIALOG,                 MyFrame::ExtDialog)
 #if defined(__WXMSW__) && wxTEST_GENERIC_DIALOGS_IN_MSW
     EVT_MENU(DIALOGS_CHOOSE_COLOUR_GENERIC,        MyFrame::ChooseColourGeneric)
     EVT_MENU(DIALOGS_CHOOSE_FONT_GENERIC,        MyFrame::ChooseFontGeneric)

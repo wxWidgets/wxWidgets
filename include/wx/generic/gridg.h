@@ -35,14 +35,6 @@
 #define wxGRID_DEFAULT_VERTICAL_LABEL_WIDTH 40
 #define wxGRID_DEFAULT_HORIZONAL_LABEL_HEIGHT 20
 
-#ifndef wxLEFT
-    #define wxLEFT 0x0400
-#endif
-
-#ifndef wxRIGHT
-    #define wxRIGHT 0x0800
-#endif
-
 #define WXGENERIC_GRID_VERSION  0.5
 
 class WXDLLEXPORT wxGridEvent;

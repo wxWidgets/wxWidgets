@@ -373,6 +373,39 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
 typedef void (*wxFunction) (wxObject&, wxEvent&);
 
 // ----------------------------------------------------------------------------
+// OS mnemonics -- Identify the running OS (useful for Windows)
+// ----------------------------------------------------------------------------
+
+// Not all platforms are currently available or supported
+enum
+{
+  wxUNKNOWN_PLATFORM,
+  wxCURSES,                 // Text-only CURSES
+  wxXVIEW_X,                // Sun's XView OpenLOOK toolkit
+  wxMOTIF_X,                // OSF Motif 1.x.x
+  wxCOSE_X,                 // OSF Common Desktop Environment
+  wxNEXTSTEP,               // NeXTStep
+  wxMACINTOSH,              // Apple System 7
+  wxGTK,                    // GTK on X
+  wxGTK_WIN32,              // GTK on Win32
+  wxGTK_OS2,                // GTK on OS/2
+  wxGTK_BEOS,               // GTK on BeOS
+  wxQT,                     // Qt
+  wxGEOS,                   // GEOS
+  wxOS2_PM,                 // OS/2 Workplace
+  wxWINDOWS,                // Windows or WfW
+  wxPENWINDOWS,             // Windows for Pen Computing
+  wxWINDOWS_NT,             // Windows NT
+  wxWIN32S,                 // Windows 32S API
+  wxWIN95,                  // Windows 95
+  wxWIN386,                 // Watcom 32-bit supervisor modus
+  wxMGL_UNIX,               // MGL with direct hardware access
+  wxMGL_X,                  // MGL on X 
+  wxMGL_WIN32,              // MGL on Win32
+  wxMGL_OS2,                // MGL on OS/2
+};
+
+// ----------------------------------------------------------------------------
 // machine specific settings
 // ----------------------------------------------------------------------------
 
@@ -411,10 +444,11 @@ typedef  int   unsigned  wxUint32;
 
 #if !defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXOS2__)
   #if defined(SIZEOF_INT)
-      typedef  short   signed  wxInt16;
-      typedef  short unsigned  wxUint16;
-      typedef  int     signed  wxInt32;
-      typedef  int   unsigned  wxUint32;
+    /* well, this shouldn't happen... */
+    typedef  short   signed  wxInt16;
+    typedef  short unsigned  wxUint16;
+    typedef  int     signed  wxInt32;
+    typedef  int   unsigned  wxUint32;
   #else
     typedef  short   signed  wxInt16;
     typedef  short unsigned  wxUint16;
@@ -506,27 +540,27 @@ typedef  wxUint16        wxWord;
 /*
  * Window (Frame/dialog/subwindow/panel item) style flags
  */
-#define wxVSCROLL           0x80000000
-#define wxHSCROLL           0x40000000
-#define wxCAPTION           0x20000000
+#define wxVSCROLL               0x80000000
+#define wxHSCROLL               0x40000000
+#define wxCAPTION               0x20000000
 
 // New styles
-#define wxDOUBLE_BORDER     0x10000000
-#define wxSUNKEN_BORDER     0x08000000
-#define wxRAISED_BORDER     0x04000000
-#define wxBORDER            0x02000000
-#define wxSIMPLE_BORDER     wxBORDER
-#define wxSTATIC_BORDER     0x01000000
-#define wxTRANSPARENT_WINDOW 0x00100000
-#define wxNO_BORDER         0x00200000
+#define wxDOUBLE_BORDER         0x10000000
+#define wxSUNKEN_BORDER         0x08000000
+#define wxRAISED_BORDER         0x04000000
+#define wxBORDER                0x02000000
+#define wxSIMPLE_BORDER         wxBORDER
+#define wxSTATIC_BORDER         0x01000000
+#define wxTRANSPARENT_WINDOW    0x00100000
+#define wxNO_BORDER             0x00200000
 
-#define wxUSER_COLOURS      0x00800000
+#define wxUSER_COLOURS          0x00800000
                                  // Override CTL3D etc. control colour processing to
                                  // allow own background colour
                                  // OBSOLETE - use wxNO_3D instead
-#define wxNO_3D             0x00800000
+#define wxNO_3D                 0x00800000
                                  // Override CTL3D or native 3D styles for children
-#define wxCLIP_CHILDREN     0x00400000
+#define wxCLIP_CHILDREN         0x00400000
                                  // Clip children when painting, which reduces flicker in
                                  // e.g. frames and splitter windows, but can't be used in
                                  // a panel where a static box must be 'transparent' (panel
@@ -534,24 +568,18 @@ typedef  wxUint16        wxWord;
 
 // Add this style to a panel to get tab traversal working
 // outside of dialogs.
-#define wxTAB_TRAVERSAL     0x00080000
+#define wxTAB_TRAVERSAL         0x00080000
 
 // Add this style if the control wants to get all keyboard messages (under
 // Windows, it won't normally get the dialog navigation key events)
-#define wxWANTS_CHARS       0x00040000
+#define wxWANTS_CHARS           0x00040000
 
-// Orientations
-enum wxOrientation
-{
-    wxHORIZONTAL = 0x01,
-    wxVERTICAL   = 0x02,
-    wxBOTH       = (wxVERTICAL | wxHORIZONTAL)
-};
-
-#define wxCENTER_FRAME   0x04  /* centering into frame rather than screen */
+// Make window retained (mostly Motif, I think)
+#define wxRETAINED              0x0002000
+#define wxBACKINGSTORE          wxRETAINED
 
 /*
- * Frame/dialog style flags
+ * wxFrame/wxDialog style flags
  */
 #define wxSTAY_ON_TOP           0x8000
 #define wxICONIZE               0x4000
@@ -567,7 +595,7 @@ enum wxOrientation
 #define wxRESIZE_BORDER         0x0040
 #define wxDIALOG_MODAL          0x0020
 #define wxDIALOG_MODELESS       0x0000
-/* Add for normal Windows frame behaviour */
+// Add for normal Windows frame behaviour
 #define wxFRAME_FLOAT_ON_PARENT 0x0020
 
 
@@ -575,7 +603,8 @@ enum wxOrientation
 #define wxDEFAULT_FRAME wxDEFAULT_FRAME_STYLE
 #endif
 
-#define wxDEFAULT_FRAME_STYLE    (wxSYSTEM_MENU|wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxTHICK_FRAME | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN)
+#define wxDEFAULT_FRAME_STYLE \
+  (wxSYSTEM_MENU | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxTHICK_FRAME | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN)
 
 #ifdef __WXMSW__
 #   define wxDEFAULT_DIALOG_STYLE  (wxSYSTEM_MENU|wxCAPTION|wxTHICK_FRAME)
@@ -585,25 +614,30 @@ enum wxOrientation
 #   define wxDEFAULT_DIALOG_STYLE  (wxCAPTION)
 #endif
 
-
 /*
- * Subwindow style flags
+ * wxExtDialog style flags
  */
-#define wxRETAINED          0x0001
-#define wxBACKINGSTORE      wxRETAINED
-// wxCanvas or wxPanel can optionally have a thick frame under MS Windows.
-// #define wxTHICK_FRAME       0x1000
+#define wxED_CLIENT_MARGIN      0x0004
+#define wxED_BUTTONS_BOTTOM     0x0000  // has no effect
+#define wxED_BUTTONS_RIGHT      0x0002
+#define wxED_STATIC_LINE        0x0001
+
+#if defined(__WXMSW__) || defined(__WXMAC__)
+#   define wxEXT_DIALOG_STYLE  (wxDEFAULT_DIALOG_STYLE|wxED_CLIENT_MARGIN)
+#else
+#   define wxEXT_DIALOG_STYLE  (wxDEFAULT_DIALOG_STYLE|wxED_CLIENT_MARGIN|wxED_STATIC_LINE)
+#endif
 
 /*
  * wxToolBar style flags
  */
-#define wxTB_3DBUTTONS      0x8000
-#define wxTB_HORIZONTAL     0x0002
-#define wxTB_VERTICAL       0x0004
+#define wxTB_3DBUTTONS          0x8000
+#define wxTB_HORIZONTAL         0x0002
+#define wxTB_VERTICAL           0x0004
 // Flatbar/Coolbar under Win98/ GTK 1.2
-#define wxTB_FLAT           0x0008
+#define wxTB_FLAT               0x0008
 // use native docking under GTK
-#define wxTB_DOCKABLE       0x0010
+#define wxTB_DOCKABLE           0x0010
 
 /*
  * wxMenuBar style flags
@@ -665,9 +699,8 @@ enum wxOrientation
 /*
  * wxRadioBox/wxRadioButton style flags
  */
-
+ 
 // New, more intuitive names to specify majorDim argument
-
 // Same as wxRA_HORIZONTAL
 #define wxRA_SPECIFY_COLS   0x0001
 // Same as wxRA_VERTICAL
@@ -684,7 +717,7 @@ enum wxOrientation
 #define wxGA_PROGRESSBAR     0x0004
 #define wxGA_HORIZONTAL      wxHORIZONTAL
 #define wxGA_VERTICAL        wxVERTICAL
-/* Windows only */
+// Windows only
 #define wxGA_SMOOTH          0x0008
 
 /*
@@ -759,7 +792,6 @@ enum wxOrientation
 /*
  * wxSpinButton flags
  */
-
 #define wxSP_VERTICAL       0x0004
 #define wxSP_HORIZONTAL     0x0008
 #define wxSP_ARROW_KEYS     0x0010
@@ -768,7 +800,6 @@ enum wxOrientation
 /*
  * wxSplitterWindow flags
  */
-
 #define wxSP_NOBORDER       0x0000
 #define wxSP_3D             0x0004
 #define wxSP_BORDER         0x0008
@@ -778,49 +809,181 @@ enum wxOrientation
 /*
  * wxFrame extra flags
  */
-
 // No title on taskbar
 #define wxFRAME_TOOL_WINDOW 0x0004
 
 /*
  * wxTabCtrl flags
  */
-
-#define wxTC_MULTILINE     0x0000
-#define wxTC_RIGHTJUSTIFY  0x0004
-#define wxTC_FIXEDWIDTH    0x0008
-#define wxTC_OWNERDRAW     0x0010
+#define wxTC_MULTILINE        0x0000
+#define wxTC_RIGHTJUSTIFY     0x0004
+#define wxTC_FIXEDWIDTH       0x0008
+#define wxTC_OWNERDRAW        0x0010
 
 /*
  * wxNotebook flags
  */
-#define wxNB_FIXEDWIDTH    0x0008
+#define wxNB_FIXEDWIDTH       0x0008
 
 /*
  * wxStatusBar95 flags
  */
-
-#define wxST_SIZEGRIP       0x0002
+#define wxST_SIZEGRIP         0x0002
 
 /*
  * wxStaticLine flags
  */
-#define wxLI_HORIZONTAL      wxHORIZONTAL
-#define wxLI_VERTICAL        wxVERTICAL
+#define wxLI_HORIZONTAL         wxHORIZONTAL
+#define wxLI_VERTICAL           wxVERTICAL
 
 /*
  * wxProgressDialog flags
  */
-#define wxPD_CAN_ABORT      0x0001
-#define wxPD_APP_MODAL      0x0002
-#define wxPD_AUTO_HIDE      0x0004
-#define wxPD_ELAPSED_TIME   0x0008
-#define wxPD_ESTIMATED_TIME 0x0010
-#define wxPD_REMAINING_TIME 0x0020
+#define wxPD_CAN_ABORT          0x0001
+#define wxPD_APP_MODAL          0x0002
+#define wxPD_AUTO_HIDE          0x0004
+#define wxPD_ELAPSED_TIME       0x0008
+#define wxPD_ESTIMATED_TIME     0x0010
+#define wxPD_REMAINING_TIME     0x0020
 
 /*
- * GDI descriptions
+ * extended dialog specifiers. these values are stored in a different 
+ * flag and thus do not overlap with other style flags. note that these
+ * values do not correspond to the return values of the dialogs (for
+ * those values, look at the wxID_XXX defines). 
  */
+#define wxOK                    0x00000001
+#define wxYES_NO                0x00000002
+#define wxCANCEL                0x00000004
+#define wxYES                   0x00000008
+#define wxNO                    0x00000010
+#define wxNO_DEFAULT            0x00000020
+#define wxYES_DEFAULT           0x00000000  // has no effect
+
+#define wxICON_EXCLAMATION      0x00000040
+#define wxICON_HAND             0x00000080
+#define wxICON_QUESTION         0x00000100
+#define wxICON_INFORMATION      0x00000200
+#define wxICON_STOP             wxICON_HAND
+#define wxICON_ASTERISK         wxICON_INFORMATION
+#define wxICON_MASK             (0x00000040|0x00000080|0x00000100|0x00000200)
+
+#define wxCENTRE                0x00000400
+#define wxCENTER                wxCENTRE
+
+#define  wxFORWARD              0x00000800
+#define  wxBACKWARD             0x00001000
+#define  wxRESET                0x00002000
+#define  wxHELP                 0x00004000
+#define  wxMORE                 0x00008000
+#define  wxSETUP                0x00010000
+
+// ----------------------------------------------------------------------------
+// standard IDs
+// ----------------------------------------------------------------------------
+
+// Standard menu IDs
+#define wxID_LOWEST             4999
+
+#define wxID_OPEN               5000
+#define wxID_CLOSE              5001
+#define wxID_NEW                5002
+#define wxID_SAVE               5003
+#define wxID_SAVEAS             5004
+#define wxID_REVERT             5005
+#define wxID_EXIT               5006
+#define wxID_UNDO               5007
+#define wxID_REDO               5008
+#define wxID_HELP               5009
+#define wxID_PRINT              5010
+#define wxID_PRINT_SETUP        5011
+#define wxID_PREVIEW            5012
+#define wxID_ABOUT              5013
+#define wxID_HELP_CONTENTS      5014
+#define wxID_HELP_COMMANDS      5015
+#define wxID_HELP_PROCEDURES    5016
+#define wxID_HELP_CONTEXT       5017
+
+#define wxID_CUT                5030
+#define wxID_COPY               5031
+#define wxID_PASTE              5032
+#define wxID_CLEAR              5033
+#define wxID_FIND               5034
+#define wxID_DUPLICATE          5035
+#define wxID_SELECTALL          5036
+
+#define wxID_FILE1              5050
+#define wxID_FILE2              5051
+#define wxID_FILE3              5052
+#define wxID_FILE4              5053
+#define wxID_FILE5              5054
+#define wxID_FILE6              5055
+#define wxID_FILE7              5056
+#define wxID_FILE8              5057
+#define wxID_FILE9              5058
+
+// Standard button IDs
+#define wxID_OK                 5100
+#define wxID_CANCEL             5101
+#define wxID_APPLY              5102
+#define wxID_YES                5103
+#define wxID_NO                 5104
+#define wxID_STATIC             5105
+#define wxID_FORWARD            5106
+#define wxID_BACKWARD           5107
+#define wxID_DEFAULT            5108
+#define wxID_MORE               5109
+#define wxID_SETUP              5110
+#define wxID_RESET              5111
+
+#define wxID_HIGHEST            5999
+
+// ----------------------------------------------------------------------------
+// Orientations and directions
+// ----------------------------------------------------------------------------
+
+enum wxOrientation
+{
+    wxHORIZONTAL              = 0x0001,
+    wxVERTICAL                = 0x0002,
+    wxBOTH                    = (wxVERTICAL | wxHORIZONTAL)
+};
+
+enum wxDirection
+{
+    wxLEFT                    = 0x0010,
+    wxRIGHT                   = 0x0020,
+    wxUP                      = 0x0040,
+    wxDOWN                    = 0x0080
+};
+
+// wxCENTRE                   = 0x0400 (defined above)
+
+// centering into frame rather than screen 
+#define wxCENTER_FRAME          0x0004  
+
+
+// ----------------------------------------------------------------------------
+// Possible SetSize flags
+// ----------------------------------------------------------------------------
+
+// Use internally-calculated width if -1
+#define wxSIZE_AUTO_WIDTH       0x0001
+// Use internally-calculated height if -1
+#define wxSIZE_AUTO_HEIGHT      0x0002
+// Use internally-calculated width and height if each is -1
+#define wxSIZE_AUTO             (wxSIZE_AUTO_WIDTH|wxSIZE_AUTO_HEIGHT)
+// Ignore missing (-1) dimensions (use existing).
+// For readability only: test for wxSIZE_AUTO_WIDTH/HEIGHT in code.
+#define wxSIZE_USE_EXISTING     0x0000
+// Allow -1 as a valid position
+#define wxSIZE_ALLOW_MINUS_ONE  0x0004
+// Don't do parent client adjustments (for implementation only)
+#define wxSIZE_NO_ADJUSTMENTS   0x0008
+
+// ----------------------------------------------------------------------------
+// GDI descriptions
+// ----------------------------------------------------------------------------
 
 enum {
 // Text font families
@@ -898,56 +1061,20 @@ typedef enum
   wxSRC_AND     // source _bitmap_ AND destination
 } form_ops_t;
 
-// Flood styles
+/* Flood styles */
 #define  wxFLOOD_SURFACE   1
 #define  wxFLOOD_BORDER    2
 
-// Polygon filling mode
+/* Polygon filling mode */
 #define  wxODDEVEN_RULE    1
 #define  wxWINDING_RULE    2
 
-// ToolPanel in wxFrame
+/* ToolPanel in wxFrame */
 #define    wxTOOL_TOP       1
 #define    wxTOOL_BOTTOM       2
 #define    wxTOOL_LEFT       3
 #define    wxTOOL_RIGHT       4
 
-// Dialog specifiers/return values
-
-#define wxOK                0x0001
-#define wxYES_NO            0x0002
-#define wxCANCEL            0x0004
-#define wxYES               0x0008
-#define wxNO                0x0010
-#define wxNO_DEFAULT        0x0020
-#define wxYES_DEFAULT       0x0000  // has no effect
-#define wxICON_EXCLAMATION  0x0040
-#define wxICON_HAND         0x0080
-#define wxICON_QUESTION     0x0100
-#define wxICON_INFORMATION  0x0200
-
-#define wxICON_STOP         wxICON_HAND
-#define wxICON_ASTERISK     wxICON_INFORMATION
-#define wxICON_MASK         (0x0040|0x0080|0x0100|0x0200)
-
-#define wxCENTRE            0x0200
-#define wxCENTER wxCENTRE
-
-// Possible SetSize flags
-
-// Use internally-calculated width if -1
-#define wxSIZE_AUTO_WIDTH       0x0001
-// Use internally-calculated height if -1
-#define wxSIZE_AUTO_HEIGHT      0x0002
-// Use internally-calculated width and height if each is -1
-#define wxSIZE_AUTO             (wxSIZE_AUTO_WIDTH|wxSIZE_AUTO_HEIGHT)
-// Ignore missing (-1) dimensions (use existing).
-// For readability only: test for wxSIZE_AUTO_WIDTH/HEIGHT in code.
-#define wxSIZE_USE_EXISTING     0x0000
-// Allow -1 as a valid position
-#define wxSIZE_ALLOW_MINUS_ONE  0x0004
-// Don't do parent client adjustments (for implementation only)
-#define wxSIZE_NO_ADJUSTMENTS   0x0008
 
 enum wxDataFormatId
 {
@@ -1083,78 +1210,6 @@ enum wxKeyCode
   WXK_NUMPAD_DIVIDE
 };
 
-/* OS mnemonics -- Identify the running OS (useful for Windows)
- * [Not all platforms are currently available or supported] */
-enum
-{
-  wxUNKNOWN_PLATFORM,
-  wxCURSES,                 // Text-only CURSES
-  wxXVIEW_X,                // Sun's XView OpenLOOK toolkit
-  wxMOTIF_X,                // OSF Motif 1.x.x
-  wxCOSE_X,                 // OSF Common Desktop Environment
-  wxNEXTSTEP,               // NeXTStep
-  wxMACINTOSH,              // Apple System 7
-  wxGTK,                    // GTK
-  wxQT,                     // Qt
-  wxGEOS,                   // GEOS
-  wxOS2_PM,                 // OS/2 Workplace
-  wxWINDOWS,                // Windows or WfW
-  wxPENWINDOWS,             // Windows for Pen Computing
-  wxWINDOWS_NT,             // Windows NT
-  wxWIN32S,                 // Windows 32S API
-  wxWIN95,                  // Windows 95
-  wxWIN386                  // Watcom 32-bit supervisor modus
-};
-
-/* Standard menu identifiers */
-#define wxID_LOWEST             4999
-
-#define wxID_OPEN               5000
-#define wxID_CLOSE              5001
-#define wxID_NEW                5002
-#define wxID_SAVE               5003
-#define wxID_SAVEAS             5004
-#define wxID_REVERT             5005
-#define wxID_EXIT               5006
-#define wxID_UNDO               5007
-#define wxID_REDO               5008
-#define wxID_HELP               5009
-#define wxID_PRINT              5010
-#define wxID_PRINT_SETUP        5011
-#define wxID_PREVIEW            5012
-#define wxID_ABOUT              5013
-#define wxID_HELP_CONTENTS      5014
-#define wxID_HELP_COMMANDS      5015
-#define wxID_HELP_PROCEDURES    5016
-#define wxID_HELP_CONTEXT       5017
-
-#define wxID_CUT                5030
-#define wxID_COPY               5031
-#define wxID_PASTE              5032
-#define wxID_CLEAR              5033
-#define wxID_FIND               5034
-#define wxID_DUPLICATE          5035
-#define wxID_SELECTALL          5036
-
-#define wxID_FILE1              5050
-#define wxID_FILE2              5051
-#define wxID_FILE3              5052
-#define wxID_FILE4              5053
-#define wxID_FILE5              5054
-#define wxID_FILE6              5055
-#define wxID_FILE7              5056
-#define wxID_FILE8              5057
-#define wxID_FILE9              5058
-
-#define wxID_OK                 5100
-#define wxID_CANCEL             5101
-#define wxID_APPLY              5102
-#define wxID_YES                5103
-#define wxID_NO                 5104
-#define wxID_STATIC             5105
-
-#define wxID_HIGHEST            5999
-
 // Mapping modes (as per Windows)
 #define wxMM_TEXT             1
 #define wxMM_LOMETRIC         2
@@ -1279,6 +1334,11 @@ typedef enum {
     wxPRINT_MODE_PRINTER = 3    // Send to printer
 } wxPrintMode;
 
+// ---------------------------------------------------------------------------
+// macros that enable wxWindows apps to be compiled in absence of the
+// sytem headers, although some platform specific types are used in the
+// platform specific (implementation) parts of the headers
+// ---------------------------------------------------------------------------
 
 #ifdef __WXMSW__
 // Stand-ins for Windows types, to avoid #including all of windows.h

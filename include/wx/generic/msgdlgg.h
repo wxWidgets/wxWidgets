@@ -38,7 +38,6 @@ public:
     void OnCancel(wxCommandEvent& event);
     
 private:
-    wxList  m_buttons;
     int     m_dialogStyle;
 
 DECLARE_EVENT_TABLE()

@@ -201,15 +201,15 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     file_output.SeekO( 0 );
     wxDataOutputStream data_output( file_output );
 
-    wxInt32 i32 = 0xFFFFFFFF;
-    tmp.Printf( "Signed int32: %d\n", i32 );
+    wxInt16 i16 = 0xFFFF;
+    tmp.Printf( "Signed int16: %d\n", (int)i16 );
     textCtrl.WriteText( tmp );
-    data_output.Write32( i32 );
+    data_output.Write16( i16 );
     
-    wxUint32 ui32 = 0xFFFFFFFF;
-    tmp.Printf( "Unsigned int32: %u\n", ui32 );
+    wxUint16 ui16 = 0xFFFF;
+    tmp.Printf( "Unsigned int16: %u\n", (unsigned int) ui16 );
     textCtrl.WriteText( tmp );
-    data_output.Write32( ui32 );
+    data_output.Write16( ui16 );
     
     d = 2.01234567890123456789;
     tmp.Printf( "Double: %f\n", d );
@@ -228,12 +228,12 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     file_input.SeekI( 0 );
     wxDataInputStream data_input( file_input );
 
-    i32 = data_input.Read32();
-    tmp.Printf( "Signed int32: %d\n", i32 );
+    i16 = data_input.Read16();
+    tmp.Printf( "Signed int16: %d\n", (int)i16 );
     textCtrl.WriteText( tmp );
     
-    ui32 = data_input.Read32();
-    tmp.Printf( "Unsigned int32: %u\n", ui32 );
+    ui16 = data_input.Read16();
+    tmp.Printf( "Unsigned int16: %u\n", (unsigned int) ui16 );
     textCtrl.WriteText( tmp );
 
     d = data_input.ReadDouble();

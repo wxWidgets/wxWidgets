@@ -11,6 +11,7 @@ wx_generic_include_HEADERS = \
  colrdlgg.h \
  dcpsg.h \
  dirdlgg.h \
+ extdlgg.h \
  fontdlgg.h \
  gridg.h \
  helpext.h \

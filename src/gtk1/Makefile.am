@@ -108,6 +108,7 @@ libwx_gtk_la_SOURCES = \
  colrdlgg.cpp \
  dcpsg.cpp \
  dirdlgg.cpp \
+ extdlgg.cpp \
  fontdlgg.cpp \
  gridg.cpp \
  helpext.cpp \
