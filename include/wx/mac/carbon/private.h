@@ -411,26 +411,12 @@ Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxS
 class wxMacControl
 {
 public :
-    wxMacControl(wxWindow* peer)
-    {
-        m_peer = peer ;
-        m_controlRef = NULL ;
-    }
+    wxMacControl( wxWindow* peer) ;    
+    wxMacControl( wxWindow* peer , ControlRef control ) ;
+    wxMacControl( wxWindow* peer , WXWidget control ) ;
+    virtual ~wxMacControl() ;
     
-    wxMacControl( wxWindow* peer , ControlRef control ) 
-    {
-        m_peer = peer ;
-        m_controlRef = control ;
-    }
-    wxMacControl( wxWindow* peer , WXWidget control )
-    {
-        m_peer = peer ;
-        m_controlRef = (ControlRef) control ;
-    }
-
-    virtual ~wxMacControl()
-    {
-    }
+    void Init() ;
     
     virtual void Dispose() ;
 
@@ -469,6 +455,7 @@ public :
     virtual OSStatus SetFocus( ControlFocusPart focusPart ) ;
     virtual bool HasFocus() const ;
     virtual bool NeedsFocusRect() const ;
+    virtual void SetNeedsFocusRect( bool needs ) ;
     
     // templated helpers
 
@@ -570,11 +557,14 @@ public :
     // to be moved into a tab control class
     
     virtual OSStatus SetTabEnabled( SInt16 tabNo , bool enable ) ;
+    bool    IsCompositing() { return m_isCompositing ; }
 protected :
     ControlRef  m_controlRef ;
     wxFont      m_font ;
     long        m_windowStyle ; 
     wxWindow*   m_peer ;
+    bool        m_needsFocusRect ;
+    bool        m_isCompositing ;
 } ;
 
 #if wxMAC_USE_CORE_GRAPHICS
@@ -750,7 +740,7 @@ wxString wxMacMakeStringFromPascal( ConstStringPtr from ) ;
 
 // toplevel.cpp
 
-ControlRef wxMacFindControlUnderMouse( Point location , WindowRef window , ControlPartCode *outPart ) ;
+ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow, Point location , WindowRef window , ControlPartCode *outPart ) ;
 
 // filefn.cpp
 

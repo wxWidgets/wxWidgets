@@ -784,6 +784,41 @@ OSStatus wxMacCarbonEvent::SetParameter(EventParamName inName, EventParamType in
 // Control Access Support
 // ----------------------------------------------------------------------------
 
+wxMacControl::wxMacControl(wxWindow* peer)
+{
+    Init() ;
+    m_peer = peer ;
+    m_isCompositing = peer->MacGetTopLevelWindow()->MacUsesCompositing() ;
+}
+
+wxMacControl::wxMacControl( wxWindow* peer , ControlRef control ) 
+{
+    Init() ;
+    m_peer = peer ;
+    m_isCompositing = peer->MacGetTopLevelWindow()->MacUsesCompositing() ;
+    m_controlRef = control ;
+}
+
+wxMacControl::wxMacControl( wxWindow* peer , WXWidget control )
+{
+    Init() ;
+    m_peer = peer ;
+    m_isCompositing = peer->MacGetTopLevelWindow()->MacUsesCompositing() ;
+    m_controlRef = (ControlRef) control ;
+}
+
+wxMacControl::~wxMacControl()
+{
+}
+
+void wxMacControl::Init()
+{
+    m_peer = NULL ;
+    m_controlRef = NULL ;
+    m_needsFocusRect = false ;
+    m_isCompositing = false ;
+}
+
 void wxMacControl::Dispose()
 {
     ::DisposeControl( m_controlRef ) ;
@@ -894,9 +929,14 @@ bool wxMacControl::HasFocus() const
     return control == m_controlRef ;
 }
 
+void wxMacControl::SetNeedsFocusRect( bool needs ) 
+{
+    m_needsFocusRect = needs ;
+}
+
 bool wxMacControl::NeedsFocusRect() const
 {
-    return false ;
+    return m_needsFocusRect ;
 }
 
 void wxMacControl::VisibilityChanged(bool shown)
@@ -1052,46 +1092,64 @@ void wxMacControl::SetNeedsDisplay( bool needsDisplay , RgnHandle where )
 void  wxMacControl::Convert( wxPoint *pt , wxMacControl *from , wxMacControl *to )
 {
 #if TARGET_API_MAC_OSX
-    HIPoint hiPoint ;
-    hiPoint.x = pt->x ;
-    hiPoint.y = pt->y ;
-    HIViewConvertPoint( &hiPoint , from->m_controlRef , to->m_controlRef  ) ;
-    pt->x = (int)hiPoint.x ;
-    pt->y = (int)hiPoint.y ;
-#else
-    Rect fromRect ;
-    Rect toRect ;
-    from->GetRect( &fromRect ) ;
-    to->GetRect( &toRect ) ;
-    
-    // correct the case of the root control 
-    if ( fromRect.left == -32768 && fromRect.top == -32768 && fromRect.bottom == 32767 && fromRect.right == 32767)
-        fromRect.left = fromRect.top = 0 ;
-
-    if ( toRect.left == -32768 && toRect.top == -32768 && toRect.bottom == 32767 && toRect.right == 32767  )
-        toRect.left = toRect.top = 0 ;
-        
-    pt->x = pt->x + fromRect.left - toRect.left ;
-    pt->y = pt->y + fromRect.top - toRect.top ;
+    if ( from->m_peer->MacGetTopLevelWindow()->MacUsesCompositing() )
+    {
+        HIPoint hiPoint ;
+        hiPoint.x = pt->x ;
+        hiPoint.y = pt->y ;
+        HIViewConvertPoint( &hiPoint , from->m_controlRef , to->m_controlRef  ) ;
+        pt->x = (int)hiPoint.x ;
+        pt->y = (int)hiPoint.y ;
+    }
+    else
 #endif
+    {
+        Rect fromRect ;
+        Rect toRect ;
+        from->GetRect( &fromRect ) ;
+        to->GetRect( &toRect ) ;
+                    
+        pt->x = pt->x + fromRect.left - toRect.left ;
+        pt->y = pt->y + fromRect.top - toRect.top ;
+    }
 }
 
 void wxMacControl::SetRect( Rect *r )
 {
 #if TARGET_API_MAC_OSX
-    //A HIRect is actually a CGRect on OSX - which consists of two structures -
-    //CGPoint and CGSize, which have two floats each
-    HIRect hir = { { r->left , r->top }, { r->right - r->left , r->bottom - r->top } } ;
-    HIViewSetFrame ( m_controlRef , &hir ) ;
-#else
-    SetControlBounds( m_controlRef , r ) ;
+    if ( m_isCompositing )
+    {
+        //A HIRect is actually a CGRect on OSX - which consists of two structures -
+        //CGPoint and CGSize, which have two floats each
+        HIRect hir = { { r->left , r->top }, { r->right - r->left , r->bottom - r->top } } ;
+        HIViewSetFrame ( m_controlRef , &hir ) ;
+        // eventuall we might have to do a SetVisibility( false , true ) ;
+        // before and a SetVisibility( true , true ) ; after
+    }
+    else
 #endif
-
+    {
+        Rect former ;
+        GetControlBounds( m_controlRef , &former ) ;
+        InvalWindowRect( GetControlOwner( m_controlRef ) , &former ) ;
+        SetControlBounds( m_controlRef , r ) ;
+        InvalWindowRect( GetControlOwner( m_controlRef ) , r ) ;
+    }
 }
 
 void wxMacControl::GetRect( Rect *r )
 {
     GetControlBounds( m_controlRef , r ) ;
+    // correct the case of the root control 
+    if ( r->left == -32768 && r->top == -32768 && r->bottom == 32767 && r->right == 32767)
+    {
+        WindowRef wr = GetControlOwner( m_controlRef ) ;
+        GetWindowBounds( wr , kWindowContentRgn , r ) ;
+        r->right -= r->left ;
+        r->bottom -= r->top ;
+        r->left = 0 ;
+        r->top = 0 ;
+    }
 }
 
 void wxMacControl::GetRectInWindowCoords( Rect *r )
