@@ -103,7 +103,6 @@ bool wxXmlResource::Load(const wxString& filemask)
         if (filemask.Lower().Matches(wxT("*.zip")) ||
             filemask.Lower().Matches(wxT("*.xrs")))
         {
-            rt = rt && Load(fnd + wxT("#zip:*.xmlbin"));
             rt = rt && Load(fnd + wxT("#zip:*.xrc"));
         }
         else
