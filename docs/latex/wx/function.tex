@@ -1079,7 +1079,7 @@ Returns true if the pattern contains wildcards. See \helpref{wxMatchWild}{wxmatc
 
 \func{bool}{wxMatchWild}{\param{const wxString\& }{pattern}, \param{const wxString\& }{text}, \param{bool}{ dot\_special}}
 
-Returns true if the {\it pattern}\/ matches the {\it text}\/; if {\it
+Returns true if the \arg{pattern}\/ matches the {\it text}\/; if {\it
 dot\_special}\/ is true, filenames beginning with a dot are not matched
 with wildcard characters. See \helpref{wxIsWild}{wxiswild}.
 
@@ -1088,7 +1088,7 @@ with wildcard characters. See \helpref{wxIsWild}{wxiswild}.
 
 \func{bool}{wxMkdir}{\param{const wxString\& }{dir}, \param{int }{perm = 0777}}
 
-Makes the directory {\it dir}, returning true if successful.
+Makes the directory \arg{dir}, returning true if successful.
 
 {\it perm} is the access mask for the directory for the systems on which it is
 supported (Unix) and doesn't have effect for the other ones.
@@ -1098,10 +1098,10 @@ supported (Unix) and doesn't have effect for the other ones.
 
 \func{int}{wxParseWildcard}{\param{const wxString\& }{wildCard}, \param{wxArrayString\& }{descriptions}, \param{wxArrayString\& }{filters}}
 
-Parses the {\it wildCard}, returning the number of filters.
+Parses the \arg{wildCard}, returning the number of filters.
 Returns 0 if none or if there's a problem.
 The arrays will contain an equal number of items found before the error.
-{\it wildCard} is in the form:
+\arg{wildCard} is in the form:
 \begin{verbatim}
  "All files (*)|*|Image Files (*.jpeg *.png)|*.jpg;*.png"
 \end{verbatim}
@@ -1110,14 +1110,14 @@ The arrays will contain an equal number of items found before the error.
 
 \func{bool}{wxRemoveFile}{\param{const wxString\& }{file}}
 
-Removes {\it file}, returning true if successful.
+Removes \arg{file}, returning true if successful.
 
 
 \membersection{::wxRenameFile}\label{wxrenamefile}
 
 \func{bool}{wxRenameFile}{\param{const wxString\& }{file1}, \param{const wxString\& }{file2}}
 
-Renames {\it file1} to {\it file2}, returning true if successful.
+Renames \arg{file1} to \arg{file2}, returning true if successful.
 
 
 \membersection{::wxRmdir}\label{wxrmdir}
