@@ -10,7 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-    #pragma interface "univslider.h"
+    #pragma interface "slider.h"
 #endif
 
 #ifndef _WX_UNIV_SLIDER_H_

@@ -18,8 +18,8 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "minimal.cpp"
-    #pragma interface "minimal.cpp"
+//    #pragma implementation "minimal.cpp"
+//    #pragma interface "minimal.cpp"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".

@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "gaugeuniv.h"
+    #pragma implementation "gauge.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".

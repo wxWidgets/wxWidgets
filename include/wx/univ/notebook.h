@@ -13,7 +13,7 @@
 #define _WX_UNIV_NOTEBOOK_H_
 
 #ifdef __GNUG__
-    #pragma interface "univnotebook.h"
+    #pragma interface "notebook.h"
 #endif
 
 class WXDLLEXPORT wxSpinButton;

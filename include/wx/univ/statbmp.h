@@ -13,7 +13,7 @@
 #define _WX_UNIV_STATBMP_H_
 
 #ifdef __GNUG__
-    #pragma interface "univstatbmp.h"
+    #pragma interface "statbmp.h"
 #endif
 
 #include "wx/bitmap.h"

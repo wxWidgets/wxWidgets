@@ -13,7 +13,7 @@
 #define _WX_UNIV_SCROLBAR_H_
 
 #ifdef __GNUG__
-    #pragma interface "univscrolbar.h"
+    #pragma interface "scrolbar.h"
 #endif
 
 class WXDLLEXPORT wxScrollTimer;

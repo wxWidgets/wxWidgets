@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "univstatbox.h"
+    #pragma implementation "statbox.h"
 #endif
 
 #include "wx/wxprec.h"

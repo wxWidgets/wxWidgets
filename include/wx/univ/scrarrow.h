@@ -13,7 +13,7 @@
 #define _WX_UNIV_SCRARROW_H_
 
 #ifdef __GNUG__
-    #pragma interface "univscrarrow.h"
+    #pragma interface "scrarrow.h"
 #endif
 
 // ----------------------------------------------------------------------------

@@ -15,7 +15,7 @@
 #define _WX_UNIV_WINDOW_H_
 
 #ifdef __GNUG__
-    #pragma interface "univwindow.h"
+    #pragma interface "window.h"
 #endif
 
 #include "wx/bitmap.h"      // for m_bitmapBg

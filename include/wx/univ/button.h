@@ -13,7 +13,7 @@
 #define _WX_UNIV_BUTTON_H_
 
 #ifdef __GNUG__
-    #pragma interface "univbutton.h"
+    #pragma interface "button.h"
 #endif
 
 class WXDLLEXPORT wxInputHandler;

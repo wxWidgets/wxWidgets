@@ -13,7 +13,7 @@
 #define _WX_UNIV_CHECKLST_H_
 
 #ifdef __GNUG__
-    #pragma interface "univchecklst.h"
+    #pragma interface "checklst.h"
 #endif
 
 // ----------------------------------------------------------------------------

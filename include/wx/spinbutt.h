@@ -14,7 +14,7 @@
 
 #ifdef __GNUG__
     #if !defined(__WXMOTIF__) && !defined(__WXMAC__) // because there is no matching .cpp
-        #pragma interface "spinbutbase.h"
+        #pragma interface "spinbutt.h"
     #endif
 #endif
 

@@ -13,7 +13,7 @@
 #define _WX_UNIV_FRAME_H_
 
 #ifdef __GNUG__
-    #pragma interface "univframe.h"
+    #pragma interface "frame.h"
 #endif
 
 // ----------------------------------------------------------------------------

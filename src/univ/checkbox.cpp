@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "univcheckbox.h"
+    #pragma implementation "checkbox.h"
 #endif
 
 #include "wx/wxprec.h"

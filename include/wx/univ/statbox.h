@@ -13,7 +13,7 @@
 #define _WX_UNIV_STATBOX_H_
 
 #ifdef __GNUG__
-    #pragma interface "univstatbox.h"
+    #pragma interface "statbox.h"
 #endif
 
 class WXDLLEXPORT wxStaticBox : public wxStaticBoxBase

@@ -13,7 +13,7 @@
 #define _WX_UNIV_RADIOBOX_H_
 
 #ifdef __GNUG__
-    #pragma interface "univradiobox.h"
+    #pragma interface "radiobox.h"
 #endif
 
 class WXDLLEXPORT wxRadioButton;

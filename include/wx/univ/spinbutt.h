@@ -13,7 +13,7 @@
 #define _WX_UNIV_SPINBUTT_H_
 
 #ifdef __GNUG__
-    #pragma interface "univspinbutt.h"
+    #pragma interface "spinbutt.h"
 #endif
 
 #include "wx/univ/scrarrow.h"

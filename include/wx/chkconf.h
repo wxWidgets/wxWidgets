@@ -229,13 +229,16 @@
 #   endif
 #endif /* !defined(wxUSE_LOGWINDOW) */
 
+/* For now... */
+#ifndef __WXGTK__
 #ifndef wxUSE_LOG_DIALOG
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_LOG_DIALOG must be defined."
 #   else
 #       define wxUSE_LOG_DIALOG 0
 #   endif
-#endif /* !defined(wxUSE_LOGWINDOW) */
+#endif /* !defined(wxUSE_LOG_DIALOG) */
+#endif
 
 #ifndef wxUSE_MDI_ARCHITECTURE
 #   ifdef wxABORT_ON_CONFIG_ERROR

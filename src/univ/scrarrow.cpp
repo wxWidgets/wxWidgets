@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "univscrarrow.h"
+    #pragma implementation "scrarrow.h"
 #endif
 
 #include "wx/wxprec.h"

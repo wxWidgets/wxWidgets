@@ -18,8 +18,8 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "spinbutbase.h"
-    #pragma implementation "univspinbutt.h"
+//    #pragma implementation "butbase.h"
+    #pragma implementation "spinbutt.h"
 #endif
 
 #include "wx/wxprec.h"

@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "univnotebook.h"
+    #pragma implementation "notebook.h"
 #endif
 
 #include "wx/wxprec.h"

@@ -328,6 +328,10 @@ cleanwx:
 	-$(RM) ../common/*.bak
 	-$(RM) ../generic/*.o
 	-$(RM) ../generic/*.bak
+	-$(RM) ../univ/*.o
+	-$(RM) ../univ/*.bak
+	-$(RM) ../unix/*.o
+	-$(RM) ../unix/*.bak
 	-$(RM) ../html/*.o
 	-$(RM) ../zlib/*.o
 	-$(RM) ../zlib/*.bak
