@@ -121,6 +121,24 @@ member to return a new view instance on demand.
 \item wxDEFAULT\_TEMPLATE\_FLAGS Defined as wxTEMPLATE\_VISIBLE.
 \end{itemize}
 
+\perlnote{In wxPerl {\tt docClassInfo} and {\tt viewClassInfo} can be
+either {\tt Wx::ClassInfo} objects or strings which contain the name
+of the perl packages which are to be used as {\tt Wx::Document} and
+{\tt Wx::View} classes (they must have a constructor named {\tt
+new}):\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{{\bf Wx::DocTemplate->new( docmgr, descr, filter, dir,
+ext, docTypeName, viewTypeName, docClassInfo, viewClassInfo, flags
+)}}{ will construct document and view objects from the class information}
+\twocolitem{{\bf Wx::DocTemplate->new( docmgr, descr, filter, dir,
+ext, docTypeName, viewTypeName, docClassName, viewClassName, flags
+)}}{ will construct document and view objects from perl packages}
+\twocolitem{{\bf Wx::DocTemplate->new( docmgr, descr, filter, dir,
+ext, docTypeName, viewTypeName )}}{
+{\tt Wx::DocTemplate::CreateDocument()} and
+{\tt Wx::DocTemplate::CreateView()} must be overridden}
+\end{twocollist}}}
+
 \membersection{wxDocTemplate::\destruct{wxDocTemplate}}
 
 \func{void}{\destruct{wxDocTemplate}}{\void}

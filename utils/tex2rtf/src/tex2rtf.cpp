@@ -330,7 +330,7 @@ bool MyApp::OnInit()
 
     if (InputFile)
     {
-      sprintf(buf, "Tex2RTF [%s]", FileNameFromPath(InputFile));
+      sprintf(buf, "Tex2RTF [%s]", wxFileNameFromPath(InputFile));
       frame->SetTitle(buf);
     }
 
@@ -967,7 +967,7 @@ bool Go(void)
 
   if (InputFile && OutputFile)
   {
-    if (!FileExists(InputFile))
+    if (!wxFileExists(InputFile))
     {
       OnError("Cannot open input file!");
       TexCleanUp();

@@ -13,7 +13,6 @@
 from wxPython.wx import *
 
 from CDate import *
-import string, time
 
 
 CalDays = [6, 0, 1, 2, 3, 4, 5]

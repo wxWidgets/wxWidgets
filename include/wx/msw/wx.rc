@@ -98,12 +98,7 @@ wxICON_SMALL_REMOVEABLE         ICON "wx/msw/removble.ico"
 // Bitmaps
 //
 
-#ifdef __SALFORDC__
-wxDISABLE_BUTTON_BITMAP         BITMAP  WXINCDIR"wx/msw/disable.bmp"
-#else
 wxDISABLE_BUTTON_BITMAP         BITMAP  "wx/msw/disable.bmp"
-#endif
-
 
 // For wxContextHelpButton
 csquery                 BITMAP "wx/msw/csquery.bmp"

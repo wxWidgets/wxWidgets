@@ -204,7 +204,8 @@ static const char *wxPostScriptHeaderColourImage = "\
   } ifelse          %% end of 'false' case\n\
 ";
 
-#ifndef __WXGTK20__
+#if wxUSE_PANGO
+#else
 static char wxPostScriptHeaderReencodeISO1[] =
     "\n/reencodeISO {\n"
 "dup dup findfont dup length dict begin\n"
@@ -886,7 +887,8 @@ void wxPostScriptDC::SetFont( const wxFont& font )
 
     m_font = font;
 
-#ifndef __WXGTK20__
+#if wxUSE_PANGO
+#else
     int Style = m_font.GetStyle();
     int Weight = m_font.GetWeight();
 
@@ -1117,13 +1119,18 @@ void wxPostScriptDC::SetBrush( const wxBrush& brush )
     }
 }
 
-#ifdef __WXGTK20__
+#if wxUSE_PANGO
 
 #define PANGO_ENABLE_ENGINE
 
+#ifdef __WXGTK20__
 #include "wx/gtk/private.h"
-#include "wx/fontutil.h"
 #include "gtk/gtk.h"
+#else
+#include "wx/x11/private.h"
+#endif
+
+#include "wx/fontutil.h"
 #include <pango/pangoft2.h>
 #include <freetype/ftglyph.h>
 
@@ -1233,7 +1240,7 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
 {
     wxCHECK_RET( m_ok && m_pstream, wxT("invalid postscript dc") );
 
-#ifdef __WXGTK20__
+#if wxUSE_PANGO
     int dpi = GetResolution();
     dpi = 300;
     PangoContext *context = pango_ft2_get_context ( dpi, dpi );
@@ -1699,9 +1706,9 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
 {
     wxCHECK_MSG( m_ok, FALSE, wxT("invalid postscript dc") );
 
-    if (m_printData.GetFilename() == "")
+    if (m_printData.GetFilename() == wxT(""))
     {
-        wxString filename = wxGetTempFileName("ps");
+        wxString filename = wxGetTempFileName( wxT("ps") );
         m_printData.SetFilename(filename);
     }
 
@@ -1754,7 +1761,8 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
     fprintf( m_pstream, wxPostScriptHeaderEllipse );
     fprintf( m_pstream, wxPostScriptHeaderEllipticArc );
     fprintf( m_pstream, wxPostScriptHeaderColourImage );
-#ifndef __WXGTK20__
+#if wxUSE_PANGO
+#else
     fprintf( m_pstream, wxPostScriptHeaderReencodeISO1 );
     fprintf( m_pstream, wxPostScriptHeaderReencodeISO2 );
 #endif
@@ -1972,7 +1980,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         return;
     }
     
-#ifdef __WXGTK20__
+#if wxUSE_PANGO
     int dpi = GetResolution();
     PangoContext *context = pango_ft2_get_context ( dpi, dpi );
     
@@ -2093,40 +2101,40 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         lastStyle =  Style;
         lastWeight = Weight;
 
-        const char *name = NULL;
+        const wxChar *name = NULL;
 
         switch (Family)
         {
             case wxMODERN:
             case wxTELETYPE:
             {
-                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "CourBoO.afm";
-                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "CourBo.afm";
-                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "CourO.afm";
-                else name = "Cour.afm";
+                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = wxT("CourBoO.afm");
+                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = wxT("CourBo.afm");
+                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = wxT("CourO.afm");
+                else name = wxT("Cour.afm");
                 break;
             }
             case wxROMAN:
             {
-                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "TimesBoO.afm";
-                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "TimesBo.afm";
-                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "TimesO.afm";
-                else name = "TimesRo.afm";
+                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = wxT("TimesBoO.afm");
+                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = wxT("TimesBo.afm");
+                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = wxT("TimesO.afm");
+                else name = wxT("TimesRo.afm");
                 break;
             }
             case wxSCRIPT:
             {
-                name = "Zapf.afm";
+                name = wxT("Zapf.afm");
                 Style = wxNORMAL;
                 Weight = wxNORMAL;
             }
             case wxSWISS:
             default:
             {
-                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "HelvBoO.afm";
-                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "HelvBo.afm";
-                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "HelvO.afm";
-                else name = "Helv.afm";
+                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = wxT("HelvBoO.afm");
+                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = wxT("HelvBo.afm");
+                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = wxT("HelvO.afm");
+                else name = wxT("Helv.afm");
                 break;
             }
         }

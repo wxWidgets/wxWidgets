@@ -5,6 +5,7 @@ import ColorPanel
 import GridSimple
 import wxListCtrl
 import wxScrolledWindow
+import images
 
 import sys
 
@@ -15,7 +16,6 @@ class TestNB(wxNotebook):
         wxNotebook.__init__(self, parent, id, style=wxNB_BOTTOM)
         self.log = log
 
-
         win = self.makeColorPanel(wxBLUE)
         self.AddPage(win, "Blue")
         st = wxStaticText(win.win, -1,
@@ -25,6 +25,16 @@ class TestNB(wxNotebook):
                           wxPoint(10, 10))
         st.SetForegroundColour(wxWHITE)
         st.SetBackgroundColour(wxBLUE)
+
+        # Show how to put an image on one of the notebook tabs,
+        # first make the image list:
+        il = wxImageList(16, 16)
+        idx1 = il.Add(images.getSmilesBitmap())
+        self.AssignImageList(il)
+
+        # now put an image on the first tab we just created:
+        self.SetPageImage(0, idx1)
+
 
         win = self.makeColorPanel(wxRED)
         self.AddPage(win, "Red")
@@ -94,28 +104,27 @@ def runTest(frame, nb, log):
 
 
 
-
-
-
-
-
-
-
-
 overview = """\
-This class represents a notebook control, which manages multiple windows with associated tabs.
-
-To use the class, create a wxNotebook object and call AddPage or InsertPage, passing a window to be used as the page. Do not explicitly delete the window for a page that is currently managed by wxNotebook.
+<html><body>
+<h2>wxNotebook</h2>
+<p>
+This class represents a notebook control, which manages multiple
+windows with associated tabs.
+<p>
+To use the class, create a wxNotebook object and call AddPage or
+InsertPage, passing a window to be used as the page. Do not explicitly
+delete the window for a page that is currently managed by wxNotebook.
 
 """
 
 
-if __name__ == "__main__":
-    app = wxPySimpleApp()
-    frame = wxFrame(None, -1, "Test Notebook", size=(600, 400))
-    win = TestNB(frame, -1, sys.stdout)
-    frame.Show(true)
-    app.MainLoop()
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+
+
 
 
 

@@ -4,6 +4,7 @@ import gdic
 from misc import *
 
 from fonts import *
+import wx
 class wxGDIObjectPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
@@ -250,11 +251,19 @@ class wxColourPtr(wxObjectPtr):
     def Get(self, *_args, **_kwargs):
         val = apply(gdic.wxColour_Get,(self,) + _args, _kwargs)
         return val
+    def __eq__(self, *_args, **_kwargs):
+        val = apply(gdic.wxColour___eq__,(self,) + _args, _kwargs)
+        return val
+    def __ne__(self, *_args, **_kwargs):
+        val = apply(gdic.wxColour___ne__,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxColour instance at %s>" % (self.this,)
     asTuple = Get
-    def __str__(self): return str(self.asTuple())
-    def __repr__(self): return str(self.asTuple())
+    def __str__(self):      return str(self.asTuple())
+    def __repr__(self):     return 'wxColour: ' + str(self.asTuple())
+    def __nonzero__(self):  return self.Ok()
+
 class wxColour(wxColourPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gdic.new_wxColour,_args,_kwargs)
@@ -615,6 +624,9 @@ class wxDCPtr(wxObjectPtr):
     def GetFullTextExtent(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_GetFullTextExtent,(self,) + _args, _kwargs)
         return val
+    def GetMultiLineTextExtent(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_GetMultiLineTextExtent,(self,) + _args, _kwargs)
+        return val
     def GetTextForeground(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_GetTextForeground,(self,) + _args, _kwargs)
         if val: val = wxColourPtr(val) ; val.thisown = 1
@@ -755,7 +767,7 @@ class wxDCPtr(wxObjectPtr):
     def DrawPointList(self, points, pens=None):
         if pens is None:
            pens = []
-        elif isinstance(pens, wxPenPtr):
+        elif wx.wxPy_isinstance(pens, (wxPen, wxPenPtr)):
            pens = [pens]
         elif len(pens) != len(points):
            raise ValueError('points and pens must have same length')
@@ -764,7 +776,7 @@ class wxDCPtr(wxObjectPtr):
     def DrawLineList(self, lines, pens=None):
         if pens is None:
            pens = []
-        elif isinstance(pens, wxPenPtr):
+        elif wx.wxPy_isinstance(pens, (wxPen, wxPenPtr)):
            pens = [pens]
         elif len(pens) != len(lines):
            raise ValueError('lines and pens must have same length')

@@ -430,9 +430,11 @@ int SurfaceImpl::WidthText(Font &font, const char *s, int len) {
 
 
 void SurfaceImpl::MeasureWidths(Font &font, const char *s, int len, int *positions) {
+
     wxString str = stc2wx(s, len);
     SetFont(font);
 
+#ifndef __WXMAC__
     // Calculate the position of each character based on the widths of
     // the previous characters
     int* tpos = new int[len];
@@ -444,9 +446,26 @@ void SurfaceImpl::MeasureWidths(Font &font, const char *s, int len, int *positio
         totalWidth += w;
         tpos[i] = totalWidth;
     }
+#else
+    // Instead of a running total, remeasure from the begining of the
+    // text for each character's position.  This is because with AA fonts
+    // on OS X widths can be fractions of pixels wide when more than one
+    // are drawn together, so the sum of all character widths is not necessariy
+    // (and probably not) the same as the whole string width.
+    int* tpos = new int[len];
+    size_t i;
+    for (i=0; i<str.Length(); i++) {
+        int w, h;
+        hdc->GetTextExtent(str.Left(i+1), &w, &h);
+        tpos[i] = w;
+    }
+#endif
+
 
 #if wxUSE_UNICODE
     // Map the widths for UCS-2 characters back to the UTF-8 input string
+    // NOTE:  I don't think this is right for when sizeof(wxChar) > 2, ie wxGTK2
+    // so figure it out and fix it!
     i = 0;
     size_t ui = 0;
     while (i < len) {
@@ -804,7 +823,7 @@ void ListBox::Clear() {
 }
 
 void ListBox::Append(char *s) {
-    GETLB(id)->Append(s);
+    GETLB(id)->Append(stc2wx(s));
 }
 
 int ListBox::Length() {
@@ -817,7 +836,7 @@ void ListBox::Select(int n) {
     if (n > 4)
         n = n - 4;
     else
-        n = 1;
+        n = 0;
     GETLB(id)->SetFirstItem(n);
 #endif
 }

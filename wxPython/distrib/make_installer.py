@@ -7,7 +7,7 @@ will be created.
 """
 
 
-import sys, os, string
+import sys, os, time
 
 KEEP_TEMPS = 0
 ISCC = r"%s\InnoSetup2Ex\ISCC.exe %s"
@@ -32,12 +32,12 @@ OutputDir = dist
 WizardStyle = modern
 UninstallStyle = modern
 DisableStartupPrompt = true
-CompressLevel = 9
+Compression = bzip
 DirExistsWarning = no
 DisableReadyMemo = true
 DisableReadyPage = true
 ;;DisableDirPage = true
-DisableProgramGroupPage = true
+DisableProgramGroupPage = no
 DisableAppendDir = true
 UsePreviousAppDir = no
 UsePreviousGroup = no
@@ -46,6 +46,8 @@ UninstallFilesDir = {app}\wxPython
 AppPublisherURL = http://wxPython.org/
 LicenseFile = licence\licence.txt
 CodeFile = %(IFSFILE)s
+
+;; WizardDebug = yes
 
 ;;------------------------------------------------------------
 
@@ -95,6 +97,7 @@ Source: "wxPython\lib\mixins\*.py";         DestDir: "{app}\wxPython\lib\mixins"
 Source: "wxPython\lib\PyCrust\*.py";        DestDir: "{app}\wxPython\lib\PyCrust"; Components: core
 Source: "wxPython\lib\PyCrust\*.txt";       DestDir: "{app}\wxPython\lib\PyCrust"; Components: core
 Source: "wxPython\lib\PyCrust\*.ico";       DestDir: "{app}\wxPython\lib\PyCrust"; Components: core
+Source: "wxPython\lib\colourchooser\*.py";  DestDir: "{app}\wxPython\lib\colourchooser"; Components: core
 
 Source: "demo\*.py";                        DestDir: "{app}\wxPython\demo"; Components: demo
 Source: "demo\*.xml";                       DestDir: "{app}\wxPython\demo"; Components: demo
@@ -142,6 +145,7 @@ Source: "wxPython\tools\*.py";              DestDir: "{app}\wxPython\tools"; Com
 Source: "wxPython\tools\XRCed\CHANGES";     DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
 Source: "wxPython\tools\XRCed\TODO";        DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
 Source: "wxPython\tools\XRCed\README";      DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
+Source: "wxPython\tools\XRCed\sawfishrc";   DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
 Source: "wxPython\tools\XRCed\*.py";        DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
 Source: "wxPython\tools\XRCed\*.xrc";       DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
 Source: "wxPython\tools\XRCed\*.ico";       DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
@@ -149,6 +153,7 @@ Source: "wxPython\tools\XRCed\*.sh";        DestDir: "{app}\wxPython\tools\XRCed
 
 Source: "scripts\*.bat";                    DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
 Source: "scripts\*.py";                     DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
+Source: "scripts\helpviewer";               DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
 Source: "scripts\img2png";                  DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
 Source: "scripts\img2py";                   DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
 Source: "scripts\img2xpm";                  DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
@@ -163,12 +168,6 @@ Source: "samples\doodle\superdoodle.iss";   DestDir: "{app}\wxPython\samples\doo
 
 Source: "samples\wxProject\*.txt";          DestDir: "{app}\wxPython\samples\wxProject"; Components: samples
 Source: "samples\wxProject\*.py";           DestDir: "{app}\wxPython\samples\wxProject"; Components: samples
-
-Source: "samples\stxview\*.py";                  DestDir: "{app}\wxPython\samples\stxview"; Components: samples
-Source: "samples\stxview\*.stx";                 DestDir: "{app}\wxPython\samples\stxview"; Components: samples
-Source: "samples\stxview\*.txt";                 DestDir: "{app}\wxPython\samples\stxview"; Components: samples
-Source: "samples\stxview\StructuredText\*.py";   DestDir: "{app}\wxPython\samples\stxview\StructuredText"; Components: samples
-Source: "samples\stxview\StructuredText\*.txt";   DestDir: "{app}\wxPython\samples\stxview\StructuredText"; Components: samples
 
 Source: "samples\StyleEditor\*.txt";           DestDir: "{app}\wxPython\samples\StyleEditor"; Components: samples
 Source: "samples\StyleEditor\*.py";            DestDir: "{app}\wxPython\samples\StyleEditor"; Components: samples
@@ -224,6 +223,8 @@ Type: files; Name: "{app}\wxPython\lib\mixins\*.pyc";
 Type: files; Name: "{app}\wxPython\lib\mixins\*.pyo";
 Type: files; Name: "{app}\wxPython\lib\PyCrust\*.pyc";
 Type: files; Name: "{app}\wxPython\lib\PyCrust\*.pyo";
+Type: files; Name: "{app}\wxPython\lib\colourchooser\*.pyc";
+Type: files; Name: "{app}\wxPython\lib\colourchooser\*.pyo";
 Type: files; Name: "{app}\wxPython\tools\*.pyc";
 Type: files; Name: "{app}\wxPython\tools\*.pyo";
 Type: files; Name: "{app}\wxPython\tools\XRCed\*.pyc";
@@ -241,10 +242,6 @@ Type: files; Name: "{app}\wxPython\samples\wxProject\*.pyc";
 Type: files; Name: "{app}\wxPython\samples\wxProject\*.pyo";
 Type: files; Name: "{app}\wxPython\samples\StyleEditor\*.pyc";
 Type: files; Name: "{app}\wxPython\samples\StyleEditor\*.pyo";
-Type: files; Name: "{app}\wxPython\samples\stxview\*.pyc";
-Type: files; Name: "{app}\wxPython\samples\stxview\*.pyo";
-Type: files; Name: "{app}\wxPython\samples\stxview\StructuredText\*.pyc";
-Type: files; Name: "{app}\wxPython\samples\stxview\StructuredText\*.pyo";
 Type: files; Name: "{app}\wxPython\samples\frogedit\*.pyc";
 Type: files; Name: "{app}\wxPython\samples\frogedit\*.pyo";
 Type: files; Name: "{app}\wxPython\demo\data\*.pyc";
@@ -269,6 +266,7 @@ var
     PythonDir : String;
     InstallDir : String;
 
+
 function InitializeSetup(): Boolean;
 begin
     if not RegQueryStringValue(HKEY_LOCAL_MACHINE,
@@ -279,7 +277,8 @@ begin
                                    'Software\Python\PythonCore\%(PYTHONVER)s\InstallPath',
                                    '', PythonDir) then begin
 
-            MsgBox('No installation of Python %(PYTHONVER)s found in registry.\nBe sure to enter a pathname that places wxPython\non the PYTHONPATH',
+            MsgBox('No installation of Python %(PYTHONVER)s found in registry.' + #13 +
+                   'Be sure to enter a pathname that places wxPython on the PYTHONPATH',
                    mbConfirmation, MB_OK);
             PythonDir := 'C:\Put a directory on PYTHONPATH here\';
         end;
@@ -300,11 +299,33 @@ begin
     Result := InstallDir;
 end;
 
+
+
+function NextButtonClick(CurPage: Integer): Boolean;
+var
+    FileName: string;
+    ResultCode: Integer;
+begin
+    Result := True;
+    if CurPage <> wpSelectDir then Exit;
+    FileName := WizardDirValue() + '\wxPython\unins000.exe';
+    if FileExists(FileName) then begin
+        ResultCode := MsgBox('A prior wxPython installation was found in this directory.  It' + #13 +
+                             'is recommended that it be uninstalled first.' + #13#13 +
+                             'Should I do it?',
+                             mbConfirmation, MB_YESNO);
+        if ResultCode = IDYES then begin
+            InstExec(FileName, '/SILENT', WizardDirValue()+'\wxPython', True, False, SW_SHOWNORMAL, ResultCode);
+
+        end;
+    end;
+end;
+
+
 begin
 end.
 
 """
-
 
 #----------------------------------------------------------------------
 
@@ -317,7 +338,7 @@ def find_DLLs():
     proc.close()
     for line in lines:
         if line[:6] == "    wx":
-            WXDLL =  string.strip(line)
+            WXDLL = line.strip()
 
         if line[:10] == "    python":
             PYTHONVER = line[10] + '.' + line[11]
@@ -352,7 +373,7 @@ def main():
 
     # Starting with 2.3.3 the hybrid build is the release build too, so
     # no need to label it that way.
-    ##if string.find(WXDLL, "h") != -1:
+    ##if WXDLL.find("h") != -1:
     ##    PYVER = PYVER + "-hybrid"
 
     MSLU=''
@@ -370,6 +391,7 @@ def main():
     os.system(ISCC % (os.environ['TOOLS'], ISSFILE))
 
     if not KEEP_TEMPS:
+        time.sleep(1)
         os.remove(ISSFILE)
         os.remove(IFSFILE)
 

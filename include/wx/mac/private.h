@@ -129,7 +129,7 @@ PicHandle 	    wxMacCreatePict( GWorldPtr gw , GWorldPtr mask = NULL ) ;
 CIconHandle     wxMacCreateCIcon(GWorldPtr image , GWorldPtr mask , short dstDepth , short iconSize  ) ;
 void 		        wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int green ,  int blue ) ;
 CTabHandle 	    wxMacCreateColorTable( int numColors ) ;
-void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap , bool forceColorIcon = false ) ;
+void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap , int forceType = 0 ) ;
 
 #define MAC_WXCOLORREF(a) (*((RGBColor*)&(a)))
 #define MAC_WXHBITMAP(a) (GWorldPtr(a))

@@ -72,7 +72,6 @@ from wxPython.wx import *
 import xmlrpcserver,xmlrpclib
 import threading
 import SocketServer
-import string
 import new
 import sys
 
@@ -305,7 +304,7 @@ class rpcMixin:
     event.rpcStatusLock.acquire()
     doQuit = 0
     try:
-      methsplit = string.split(event.method,'.')
+      methsplit = event.method.split('.')
       meth = self
       for piece in methsplit:
         meth = getattr(meth,piece)

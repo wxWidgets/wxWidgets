@@ -1,9 +1,7 @@
 TODO for XRCed
 ==============
 
-- Undo/Redo
-
-- menu - accel not displayed in preview
++ undo/redo
 
 + tree icons
 
@@ -13,7 +11,7 @@ TODO for XRCed
 
 + XML indents
 
-? select same notebook pages after update
++ select same notebook pages after update
 
 - put some default values in tree ctrl etc.
 
@@ -26,4 +24,4 @@ TODO for XRCed
 
 + disable some window creation when it's not valid
 
-- check for memory leaks from wx objects
+- selecting object by clicking in test window

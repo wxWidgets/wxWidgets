@@ -25,23 +25,23 @@
 
 class WXDLLEXPORT wxGIFHandler : public wxImageHandler
 {
-  DECLARE_DYNAMIC_CLASS(wxGIFHandler)
-
 public:
-
-  inline wxGIFHandler()
-  {
-      m_name = "GIF file";
-      m_extension = "gif";
-      m_type = wxBITMAP_TYPE_GIF;
-      m_mime = "image/gif";
-  };
+    inline wxGIFHandler()
+    {
+        m_name = wxT("GIF file");
+        m_extension = wxT("gif");
+        m_type = wxBITMAP_TYPE_GIF;
+        m_mime = wxT("image/gif");
+    }
 
 #if wxUSE_STREAMS
-  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=-1 );
-  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
-  virtual bool DoCanRead( wxInputStream& stream );
+    virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=-1 );
+    virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
+    virtual bool DoCanRead( wxInputStream& stream );
 #endif
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxGIFHandler)
 };
 #endif
 

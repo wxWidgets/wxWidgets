@@ -62,6 +62,15 @@ class, to provide multi-page document facilities.
 Note that to activate framework functionality, you need to use some or all of
 the wxWindows \helpref{predefined command identifiers}{predefinedids} in your menus.
 
+\perlnote{The document/view framework is available in wxPerl. To use it,
+you will need the following statements in your application code:\par
+{\small
+\begin{verbatim}
+use Wx::DocView;
+use Wx ':docview';   # import constants (optional)
+\end{verbatim}
+}}
+
 \subsection{wxDocument overview}\label{wxdocumentoverview}
 
 \overview{Document/view framework overview}{docviewoverview}

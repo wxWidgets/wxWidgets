@@ -1186,32 +1186,6 @@ def wxGetTopLevelParent(*_args, **_kwargs):
     val = apply(misc2c.wxGetTopLevelParent,_args,_kwargs)
     return val
 
-wxResourceAddIdentifier = misc2c.wxResourceAddIdentifier
-
-wxResourceClear = misc2c.wxResourceClear
-
-def wxResourceCreateBitmap(*_args, **_kwargs):
-    val = apply(misc2c.wxResourceCreateBitmap,_args,_kwargs)
-    if val: val = wxBitmapPtr(val); val.thisown = 1
-    return val
-
-def wxResourceCreateIcon(*_args, **_kwargs):
-    val = apply(misc2c.wxResourceCreateIcon,_args,_kwargs)
-    if val: val = wxIconPtr(val); val.thisown = 1
-    return val
-
-def wxResourceCreateMenuBar(*_args, **_kwargs):
-    val = apply(misc2c.wxResourceCreateMenuBar,_args,_kwargs)
-    return val
-
-wxResourceGetIdentifier = misc2c.wxResourceGetIdentifier
-
-wxResourceParseData = misc2c.wxResourceParseData
-
-wxResourceParseFile = misc2c.wxResourceParseFile
-
-wxResourceParseString = misc2c.wxResourceParseString
-
 wxCaret_GetBlinkTime = misc2c.wxCaret_GetBlinkTime
 
 wxCaret_SetBlinkTime = misc2c.wxCaret_SetBlinkTime
@@ -1248,6 +1222,8 @@ wxLogWarning = misc2c.wxLogWarning
 wxLogMessage = misc2c.wxLogMessage
 
 wxLogInfo = misc2c.wxLogInfo
+
+wxLogDebug = misc2c.wxLogDebug
 
 wxLogVerbose = misc2c.wxLogVerbose
 
@@ -1338,6 +1314,10 @@ wxLog_GetTraceMask = misc2c.wxLog_GetTraceMask
 
 wxLog_IsAllowedTraceMask = misc2c.wxLog_IsAllowedTraceMask
 
+wxLog_SetLogLevel = misc2c.wxLog_SetLogLevel
+
+wxLog_GetLogLevel = misc2c.wxLog_GetLogLevel
+
 wxProcess_Kill = misc2c.wxProcess_Kill
 
 wxProcess_Exists = misc2c.wxProcess_Exists
@@ -1366,8 +1346,6 @@ def wxArtProvider_GetIcon(*_args, **_kwargs):
     val = apply(misc2c.wxArtProvider_GetIcon,_args,_kwargs)
     if val: val = wxIconPtr(val); val.thisown = 1
     return val
-
-wxArtProvider_CleanUpProviders = misc2c.wxArtProvider_CleanUpProviders
 
 
 

@@ -47,7 +47,7 @@ MyApp::MyApp()
 bool MyApp::OnInit(void)
 {
   // Create the main frame window
-  frame = new MyFrame(NULL, -1, "wxWindows Native Dialog Sample", wxPoint(0, 0), wxSize(300, 250));
+  frame = new MyFrame(NULL, -1, _T("wxWindows Native Dialog Sample"), wxPoint(0, 0), wxSize(300, 250));
 
   // Give it a status line
   frame->CreateStatusBar(2);
@@ -55,18 +55,18 @@ bool MyApp::OnInit(void)
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
 
-  file_menu->Append(RESOURCE_TEST1, "&Dialog box test",                "Test dialog box resource");
-  file_menu->Append(RESOURCE_QUIT, "E&xit",                "Quit program");
+  file_menu->Append(RESOURCE_TEST1, _T("&Dialog box test"),                _T("Test dialog box resource"));
+  file_menu->Append(RESOURCE_QUIT, _T("E&xit"),                _T("Quit program"));
 
   wxMenuBar *menu_bar = new wxMenuBar;
 
-  menu_bar->Append(file_menu, "&File");
+  menu_bar->Append(file_menu, _T("&File"));
 
   // Associate the menu bar with the frame
   frame->SetMenuBar(menu_bar);
 
   // Make a panel
-  frame->panel = new wxWindow(frame, -1, wxPoint(0, 0), wxSize(400, 400), 0, "MyMainFrame");
+  frame->panel = new wxWindow(frame, -1, wxPoint(0, 0), wxSize(400, 400), 0, _T("MyMainFrame"));
   frame->Show(TRUE);
 
   // Return the main frame window
@@ -95,7 +95,7 @@ void MyFrame::OnQuit(wxCommandEvent& event)
 void MyFrame::OnTest1(wxCommandEvent& event)
 {
       MyDialog *dialog = new MyDialog;
-      if (dialog->LoadNativeDialog(this, "dialog1"))
+      if (dialog->LoadNativeDialog(this, _T("dialog1")))
       {
 /*
         wxTextCtrl *text = (wxTextCtrl *)wxFindWindowByName("multitext3", dialog);

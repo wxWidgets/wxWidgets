@@ -129,7 +129,8 @@ static void wxCaptureScreenshot(bool activeWindowOnly)
     g_displayDC->savePNGFromDC(screenshot.mb_str(), 
                                r.x, r. y, r.x+r.width, r.y+r.height);
     
-    wxMessageBox(_("Screenshot captured: ") + wxString(screenshot));
+    wxMessageBox(wxString::Format(_T("Screenshot captured: %s"),
+                                  screenshot.c_str()));
 }
 
 // ---------------------------------------------------------------------------

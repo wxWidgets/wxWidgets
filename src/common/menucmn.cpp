@@ -159,14 +159,39 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
                     else if ( current == wxT("INSERT") ) {
                         keyCode = WXK_INSERT;
                     }
-#if 0
+                    else if ( current == wxT("ENTER") || current == wxT("RETURN") ) {
+                        keyCode = WXK_RETURN;
+                    }
                     else if ( current == wxT("PGUP") ) {
-                        keyCode = VK_PRIOR;
+                        keyCode = WXK_PRIOR;
                     }
                     else if ( current == wxT("PGDN") ) {
-                        keyCode = VK_NEXT;
+                        keyCode = WXK_NEXT;
                     }
-#endif
+                    else if ( current == wxT("LEFT") ) {
+                        keyCode = WXK_LEFT;
+                    }
+                    else if ( current == wxT("RIGHT") ) {
+                        keyCode = WXK_RIGHT;
+                    }
+                    else if ( current == wxT("UP") ) {
+                        keyCode = WXK_UP;
+                    }
+                    else if ( current == wxT("DOWN") ) {
+                        keyCode = WXK_DOWN;
+                    }
+                    else if ( current == wxT("HOME") ) {
+                        keyCode = WXK_HOME;
+                    }
+                    else if ( current == wxT("END") ) {
+                        keyCode = WXK_END;
+                    }
+                    else if ( current == wxT("SPACE") ) {
+                        keyCode = WXK_SPACE;
+                    }
+                    else if ( current == wxT("TAB") ) {
+                        keyCode = WXK_TAB;
+                    }
                     else
                     {
                         wxLogDebug(wxT("Unrecognized accel key '%s', accel string ignored."),
@@ -789,7 +814,7 @@ int wxMenuBarBase::FindMenu(const wxString& title) const
              (wxMenuItem::GetLabelFromText(title2) == label) )
         {
             // found
-            return (int)i; 
+            return (int)i;
         }
     }
 

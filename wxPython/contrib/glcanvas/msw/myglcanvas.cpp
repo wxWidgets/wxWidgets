@@ -27,15 +27,17 @@
 #if wxUSE_GLCANVAS
 
 #ifndef WX_PRECOMP
-#include <wx/frame.h>
+    #include "wx/frame.h"
+    #include "wx/settings.h"
+    #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
-#include <wx/msw/private.h>
-#include <wx/settings.h>
-#include <wx/log.h>
+#include "wx/msw/private.h"
 
 #include "myglcanvas.h"
 
+const wxChar* wxGLCanvasName = wxT("GLcanvas");
 static const wxChar *wxGLCanvasClassName = wxT("wxGLCanvasClass");
 static const wxChar *wxGLCanvasClassNameNoRedraw = wxT("wxGLCanvasClassNR");
 
@@ -108,7 +110,7 @@ void wxGLContext::SetCurrent()
   */
 }
 
-void wxGLContext::SetColour(const char *colour)
+void wxGLContext::SetColour(const wxChar *colour)
 {
   float r = 0.0;
   float g = 0.0;
@@ -403,7 +405,6 @@ static void AdjustPFDForAttributes(PIXELFORMATDESCRIPTOR& pfd, int *attribList)
 
 void wxGLCanvas::SetupPixelFormat(int *attribList) // (HDC hDC)
 {
-  int pixelFormat;
   PIXELFORMATDESCRIPTOR pfd = {
         sizeof(PIXELFORMATDESCRIPTOR),    /* size */
         1,                /* version */
@@ -427,13 +428,13 @@ void wxGLCanvas::SetupPixelFormat(int *attribList) // (HDC hDC)
 
   AdjustPFDForAttributes(pfd, attribList);
 
-  pixelFormat = ChoosePixelFormat((HDC) m_hDC, &pfd);
+  int pixelFormat = ChoosePixelFormat((HDC) m_hDC, &pfd);
   if (pixelFormat == 0) {
-    wxLogWarning(_("ChoosePixelFormat failed."));
+    wxLogLastError(_T("ChoosePixelFormat"));
   }
   else {
-    if (SetPixelFormat((HDC) m_hDC, pixelFormat, &pfd) != TRUE) {
-      wxLogWarning(_("SetPixelFormat failed."));
+    if ( !::SetPixelFormat((HDC) m_hDC, pixelFormat, &pfd) ) {
+      wxLogLastError(_T("SetPixelFormat"));
     }
   }
 }
@@ -527,7 +528,7 @@ void wxGLCanvas::SetCurrent()
   }
 }
 
-void wxGLCanvas::SetColour(const char *colour)
+void wxGLCanvas::SetColour(const wxChar *colour)
 {
   if (m_glContext)
     m_glContext->SetColour(colour);
@@ -728,7 +729,7 @@ bool wxGLApp::InitGLVisual(int *attribList)
   AdjustPFDForAttributes(pfd, attribList);
 
   // use DC for whole (root) screen, since no windows have yet been created
-  pixelFormat = ChoosePixelFormat((HDC) ::GetDC(NULL), &pfd);
+  pixelFormat = ChoosePixelFormat(ScreenHDC(), &pfd);
 
   if (pixelFormat == 0) {
     wxLogError(_("Failed to initialize OpenGL"));

@@ -49,6 +49,9 @@ class wxPyAppPtr(wxEvtHandlerPtr):
     def __del__(self,wxc=wxc):
         if self.thisown == 1 :
             wxc.delete_wxPyApp(self)
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp__setCallbackInfo,(self,) + _args, _kwargs)
+        return val
     def GetAppName(self, *_args, **_kwargs):
         val = apply(wxc.wxPyApp_GetAppName,(self,) + _args, _kwargs)
         return val
@@ -112,12 +115,20 @@ class wxPyAppPtr(wxEvtHandlerPtr):
     def SetUseBestVisual(self, *_args, **_kwargs):
         val = apply(wxc.wxPyApp_SetUseBestVisual,(self,) + _args, _kwargs)
         return val
+    def GetAssertMode(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_GetAssertMode,(self,) + _args, _kwargs)
+        return val
+    def SetAssertMode(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_SetAssertMode,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxPyApp instance at %s>" % (self.this,)
 class wxPyApp(wxPyAppPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(wxc.new_wxPyApp,_args,_kwargs)
         self.thisown = 1
+        self._setCallbackInfo(self, wxPyApp)
+        self._setOORInfo(self)
 
 
 
@@ -271,6 +282,7 @@ wxRA_VERTICAL = wxc.wxRA_VERTICAL
 wxRA_SPECIFY_ROWS = wxc.wxRA_SPECIFY_ROWS
 wxRA_SPECIFY_COLS = wxc.wxRA_SPECIFY_COLS
 wxRB_GROUP = wxc.wxRB_GROUP
+wxRB_SINGLE = wxc.wxRB_SINGLE
 wxGA_PROGRESSBAR = wxc.wxGA_PROGRESSBAR
 wxGA_HORIZONTAL = wxc.wxGA_HORIZONTAL
 wxGA_VERTICAL = wxc.wxGA_VERTICAL
@@ -920,13 +932,16 @@ __version__ = wxc.__version__
 cvar = wxc.cvar
 wxDefaultPosition = wxPointPtr(wxc.cvar.wxDefaultPosition)
 wxDefaultSize = wxSizePtr(wxc.cvar.wxDefaultSize)
+wxPYAPP_ASSERT_SUPPRESS = wxc.wxPYAPP_ASSERT_SUPPRESS
+wxPYAPP_ASSERT_EXCEPTION = wxc.wxPYAPP_ASSERT_EXCEPTION
+wxPYAPP_ASSERT_DIALOG = wxc.wxPYAPP_ASSERT_DIALOG
 
 
 #-------------- USER INCLUDE -----------------------
 
 #----------------------------------------------------------------------------
 # Name:         _extra.py
-# Purpose:	This file is appended to the shadow class file generated
+# Purpose:      This file is appended to the shadow class file generated
 #               by SWIG.  We add some unSWIGable things here.
 #
 # Author:       Robin Dunn
@@ -1189,7 +1204,7 @@ def EVT_COMMAND_SCROLL(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_PAGEDOWN,  func)
     win.Connect(id, -1, wxEVT_SCROLL_THUMBTRACK,func)
     win.Connect(id, -1, wxEVT_SCROLL_THUMBRELEASE,func)
-    win.Connect(-1, -1, wxEVT_SCROLL_ENDSCROLL,   func)
+    win.Connect(id, -1, wxEVT_SCROLL_ENDSCROLL,   func)
 
 def EVT_COMMAND_SCROLL_TOP(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_TOP, func)
@@ -1513,7 +1528,7 @@ wxColor      = wxColour
 wxNamedColor = wxNamedColour
 wxPen        = wxPyPen
 wxScrollbar  = wxScrollBar
-
+wxPoint2D    = wxPoint2DDouble
 
 # backwards compatibility
 wxNoRefBitmap       = wxBitmap
@@ -1524,6 +1539,14 @@ wxSystemSettings_GetSystemColour = wxSystemSettings_GetColour
 wxSystemSettings_GetSystemFont   = wxSystemSettings_GetFont
 wxSystemSettings_GetSystemMetric = wxSystemSettings_GetMetric
 
+# workarounds for bad wxRTTI names
+wxGauge95    = wxGauge
+wxGauge95Ptr = wxGaugePtr
+
+
+wxPyAssertionError = wxc.wxPyAssertionError
+
+
 #----------------------------------------------------------------------
 # wxGTK sets the locale when initialized.  Doing this at the Python
 # level should set it up to match what GTK is doing at the C level.
@@ -1533,8 +1556,6 @@ if wxPlatform == "__WXGTK__":
         locale.setlocale(locale.LC_ALL, "")
     except:
         pass
-
-
 
 #----------------------------------------------------------------------
 # wxWindows version numbers.  wxPython version is in __version__.
@@ -1586,6 +1607,18 @@ def wxPyTypeCast(obj, typeStr):
         theObj.thisown = obj.thisown
     return theObj
 
+#----------------------------------------------------------------------------
+# An isinstance for Pythons < 2.2 that can check a sequence of class objects
+# like the one in 2.2 can.
+
+def wxPy_isinstance(obj, klasses):
+    import types
+    if sys.version[:3] < "2.2" and type(klasses) in [types.TupleType, types.ListType]:
+        for klass in klasses:
+            if isinstance(obj, klass): return true
+        return false
+    else:
+        return isinstance(obj, klasses)
 
 #----------------------------------------------------------------------------
 _wxCallAfterId = None
@@ -1610,6 +1643,9 @@ def wxCallAfter(callable, *args, **kw):
     evt.args = args
     evt.kw = kw
     wxPostEvent(app, evt)
+
+# an alias
+wxRunLater = wxCallAfter
 
 #----------------------------------------------------------------------
 
@@ -1691,12 +1727,17 @@ class wxApp(wxPyApp):
     error = 'wxApp.error'
     outputWindowClass = wxPyOnDemandOutputWindow
 
-    def __init__(self, redirect=_defRedirect, filename=None):
+    def __init__(self, redirect=_defRedirect, filename=None, useBestVisual=false):
         wxPyApp.__init__(self)
         self.stdioWin = None
         self.saveStdio = (sys.stdout, sys.stderr)
+
+        # This has to be done before OnInit
+        self.SetUseBestVisual(useBestVisual)
+
         if redirect:
             self.RedirectStdio(filename)
+
         # this initializes wxWindows and then calls our OnInit
         _wxStart(self.OnInit)
 
@@ -1723,7 +1764,7 @@ class wxApp(wxPyApp):
         if filename:
             sys.stdout = sys.stderr = open(filename, 'a')
         else:
-            self.stdioWin = self.outputWindowClass() # wxPyOnDemandOutputWindow
+            self.stdioWin = self.outputWindowClass()
             sys.stdout = sys.stderr = self.stdioWin
 
 

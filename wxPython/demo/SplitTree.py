@@ -76,8 +76,7 @@ class TestPanel(wxPanel):
                                               wxNO_BORDER )
         valueWindow = TestValueWindow(splitter, -1, style=wxNO_BORDER)
 
-        splitter.SplitVertically(tree, valueWindow)
-        splitter.SetSashPosition(150)
+        splitter.SplitVertically(tree, valueWindow, 150)
         scroller.SetTargetWindow(tree)
         scroller.EnableScrolling(FALSE, FALSE)
 
@@ -93,6 +92,10 @@ class TestPanel(wxPanel):
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
+    if wxPlatform == "__WXMAC__":
+        wxMessageBox("This demo currently fails on the Mac. The problem is being looked into...", "Sorry")
+        return
+
     win = TestPanel(nb, log)
     return win
 

@@ -17,6 +17,7 @@
 #include <wx/resource.h>
 #include <wx/tooltip.h>
 #include <wx/busyinfo.h>
+#include <wx/geometry.h>
 %}
 
 //----------------------------------------------------------------------
@@ -79,22 +80,33 @@ public:
             return tup;
         }
 
-        int __cmp__(const wxSize* sz) {
-            if (! sz) return 1;
-            if (*self == *sz) return 0;
-            return -1;
+        bool __eq__(PyObject* obj) {
+            wxSize  tmp;
+            wxSize* ptr = &tmp;
+            if (obj == Py_None)               return FALSE;
+            if (! wxSize_helper(obj, &ptr))   return FALSE;
+            return *self == *ptr;
         }
+        bool __ne__(PyObject* obj) {
+            wxSize  tmp;
+            wxSize* ptr = &tmp;
+            if (obj == Py_None)               return TRUE;
+            if (! wxSize_helper(obj, &ptr))   return TRUE;
+            return *self != *ptr;
+        }
+
     }
 
     %pragma(python) addtoclass = "
     def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return str(self.asTuple())
+    def __repr__(self):                  return 'wxSize'+str(self.asTuple())
     def __len__(self):                   return len(self.asTuple())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):
         if index == 0: self.width = val
         elif index == 1: self.height = val
         else: raise IndexError
+    def __nonzero__(self):      return self.asTuple() != (0,0)
 "
 
 };
@@ -122,31 +134,40 @@ public:
             return tup;
         }
 
-        wxRealPoint __add__(const wxRealPoint* p) {
-            if (! p) return *self;
-            return *self + *p;
+        wxRealPoint __add__(const wxRealPoint& p) {
+            return *self + p;
         }
 
-        wxRealPoint __sub__(const wxRealPoint* p) {
-            if (! p) return *self;
-            return *self - *p;
+        wxRealPoint __sub__(const wxRealPoint& p) {
+            return *self - p;
         }
 
-        int __cmp__(const wxRealPoint* p) {
-            if (! p) return 1;
-            if (*self == *p) return 0;
-            return -1;
+        bool __eq__(PyObject* obj) {
+            wxRealPoint  tmp;
+            wxRealPoint* ptr = &tmp;
+            if (obj == Py_None)                    return FALSE;
+            if (! wxRealPoint_helper(obj, &ptr))   return FALSE;
+            return *self == *ptr;
+        }
+        bool __ne__(PyObject* obj) {
+            wxRealPoint  tmp;
+            wxRealPoint* ptr = &tmp;
+            if (obj == Py_None)                    return TRUE;
+            if (! wxRealPoint_helper(obj, &ptr))   return TRUE;
+            return *self != *ptr;
         }
     }
+
     %pragma(python) addtoclass = "
     def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return str(self.asTuple())
+    def __repr__(self):                  return 'wxRealPoint'+str(self.asTuple())
     def __len__(self):                   return len(self.asTuple())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):
         if index == 0: self.width = val
         elif index == 1: self.height = val
         else: raise IndexError
+    def __nonzero__(self):      return self.asTuple() != (0.0, 0.0)
 "
 };
 
@@ -172,31 +193,40 @@ public:
             return tup;
         }
 
-        wxPoint __add__(const wxPoint* p) {
-            if (! p) return *self;
-            return *self + *p;
+        wxPoint __add__(const wxPoint& p) {
+            return *self + p;
         }
 
-        wxPoint __sub__(const wxPoint* p) {
-            if (! p) return *self;
-            return *self - *p;
+        wxPoint __sub__(const wxPoint& p) {
+            return *self - p;
         }
 
-        int __cmp__(const wxPoint* p) {
-            if (! p) return 1;
-            if (*self == *p) return 0;
-            return -1;
+        bool __eq__(PyObject* obj) {
+            wxPoint  tmp;
+            wxPoint* ptr = &tmp;
+            if (obj == Py_None)                return FALSE;
+            if (! wxPoint_helper(obj, &ptr))   return FALSE;
+            return *self == *ptr;
+        }
+        bool __ne__(PyObject* obj) {
+            wxPoint  tmp;
+            wxPoint* ptr = &tmp;
+            if (obj == Py_None)                return TRUE;
+            if (! wxPoint_helper(obj, &ptr))   return TRUE;
+            return *self != *ptr;
         }
     }
+
     %pragma(python) addtoclass = "
     def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return str(self.asTuple())
+    def __repr__(self):                  return 'wxPoint'+str(self.asTuple())
     def __len__(self):                   return len(self.asTuple())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):
         if index == 0: self.x = val
         elif index == 1: self.y = val
         else: raise IndexError
+    def __nonzero__(self):      return self.asTuple() != (0,0)
 "
 };
 
@@ -250,21 +280,29 @@ public:
             return tup;
         }
 
-        wxRect __add__(const wxRect* rect) {
-            if (! rect) return *self;
-            return *self + *rect;
+        wxRect __add__(const wxRect& rect) {
+            return *self + rect;
         }
 
-        int __cmp__(const wxRect* rect) {
-            if (! rect) return 1;
-            if (*self == *rect) return 0;
-            return -1;
+        bool __eq__(PyObject* obj) {
+            wxRect  tmp;
+            wxRect* ptr = &tmp;
+            if (obj == Py_None)                 return FALSE;
+            if (! wxRect_helper(obj, &ptr))     return FALSE;
+            return *self == *ptr;
+        }
+        bool __ne__(PyObject* obj) {
+            wxRect  tmp;
+            wxRect* ptr = &tmp;
+            if (obj == Py_None)                 return TRUE;
+            if (! wxRect_helper(obj, &ptr))     return TRUE;
+            return *self != *ptr;
         }
     }
 
     %pragma(python) addtoclass = "
     def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return str(self.asTuple())
+    def __repr__(self):                  return 'wxRect'+str(self.asTuple())
     def __len__(self):                   return len(self.asTuple())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):
@@ -273,6 +311,7 @@ public:
         elif index == 2: self.width = val
         elif index == 3: self.height = val
         else: raise IndexError
+    def __nonzero__(self):      return self.asTuple() != (0,0,0,0)
 
     # override the __getattr__ made by SWIG
     def __getattr__(self, name):
@@ -328,7 +367,7 @@ public:
         if (dest != wxRect(0,0,0,0)) {
             wxPyBeginBlockThreads();
             wxRect* newRect = new wxRect(dest);
-            obj = wxPyConstructObject((void*)newRect, "wxRect");
+            obj = wxPyConstructObject((void*)newRect, wxT("wxRect"));
             PyObject* one = PyInt_FromLong(1);
             PyObject_SetAttrString(obj, "thisown", one);
             Py_DECREF(one);
@@ -339,6 +378,100 @@ public:
         return Py_None;
     }
 %}
+
+
+
+//---------------------------------------------------------------------------
+// wxPoint2Ds represent a point or a vector in a 2d coordinate system
+
+class wxPoint2DDouble
+{
+public:
+    double m_x;
+    double m_y;
+
+    %name(x)double m_x;
+    %name(y)double m_y;
+
+    wxPoint2DDouble( double x=0 , double y=0 );
+    %name(wxPoint2DDoubleCopy)wxPoint2DDouble( const wxPoint2DDouble &pt );
+    %name(wxPoint2DDoubleFromPoint)wxPoint2DDouble( const wxPoint &pt );
+
+    // two different conversions to integers, floor and rounding
+    void GetFloor( int* OUTPUT , int* OUTPUT ) const;
+    void GetRounded( int* OUTPUT , int* OUTPUT ) const;
+
+    double GetVectorLength() const;
+    double GetVectorAngle() const ;
+    void SetVectorLength( double length );
+    void SetVectorAngle( double degrees );
+    // LinkError: void SetPolarCoordinates( double angle , double length );
+    // LinkError: void Normalize();
+    %pragma(python) addtoclass = "
+    def SetPolarCoordinates(self, angle, length):
+        self.SetVectorLength(length)
+        self.SetVectorAngle(angle)
+    def Normalize(self):
+        self.SetVectorLength(1.0)
+    "
+
+    double GetDistance( const wxPoint2DDouble &pt ) const;
+    double GetDistanceSquare( const wxPoint2DDouble &pt ) const;
+    double GetDotProduct( const wxPoint2DDouble &vec ) const;
+    double GetCrossProduct( const wxPoint2DDouble &vec ) const;
+
+    %addmethods {
+        // the reflection of this point
+        wxPoint2DDouble __neg__() { return -(*self); }
+
+        wxPoint2DDouble& __iadd__(const wxPoint2DDouble& pt) { return (*self) += pt; }
+        wxPoint2DDouble& __isub__(const wxPoint2DDouble& pt) { return (*self) -= pt; }
+        wxPoint2DDouble& __imul__(const wxPoint2DDouble& pt) { return (*self) *= pt; }
+        wxPoint2DDouble& __idiv__(const wxPoint2DDouble& pt) { return (*self) /= pt; }
+
+        // TODO:
+        //wxPoint2DDouble& operator*=(double n);
+        //wxPoint2DDouble& operator*=(int n);
+        //wxPoint2DDouble& operator/=(double n);
+        //wxPoint2DDouble& operator/=(int n);
+
+        bool __eq__(PyObject* obj) {
+            wxPoint2DDouble  tmp;
+            wxPoint2DDouble* ptr = &tmp;
+            if (obj == Py_None)                        return FALSE;
+            if (! wxPoint2DDouble_helper(obj, &ptr))   return FALSE;
+            return *self == *ptr;
+        }
+        bool __ne__(PyObject* obj) {
+            wxPoint2DDouble  tmp;
+            wxPoint2DDouble* ptr = &tmp;
+            if (obj == Py_None)                        return TRUE;
+            if (! wxPoint2DDouble_helper(obj, &ptr))   return TRUE;
+            return *self != *ptr;
+        }
+
+        PyObject* asTuple() {
+            wxPyBeginBlockThreads();
+            PyObject* tup = PyTuple_New(2);
+            PyTuple_SET_ITEM(tup, 0, PyFloat_FromDouble(self->m_x));
+            PyTuple_SET_ITEM(tup, 1, PyFloat_FromDouble(self->m_y));
+            wxPyEndBlockThreads();
+            return tup;
+        }
+    }
+
+    %pragma(python) addtoclass = "
+    def __str__(self):                   return str(self.asTuple())
+    def __repr__(self):                  return 'wxPoint2DDouble'+str(self.asTuple())
+    def __len__(self):                   return len(self.asTuple())
+    def __getitem__(self, index):        return self.asTuple()[index]
+    def __setitem__(self, index, val):
+        if index == 0: self.m_x = val
+        elif index == 1: self.m_yt = val
+        else: raise IndexError
+    def __nonzero__(self):      return self.asTuple() != (0.0, 0.0)
+"
+};
 
 
 //---------------------------------------------------------------------------
@@ -381,14 +514,16 @@ bool wxYield();
 bool wxYieldIfNeeded();
 void wxEnableTopLevelWindows(bool enable);
 
-%inline %{
+#ifdef wxUSE_RESOURCES
+inline %{
     wxString wxGetResource(const wxString& section, const wxString& entry,
                            const wxString& file = wxPyEmptyString) {
-        wxChar * retval;
+        wxChar* retval;
         wxGetResource(section, entry, &retval, file);
         return retval;
     }
 %}
+#endif
 
 wxString wxStripMenuCodes(const wxString& in);
 

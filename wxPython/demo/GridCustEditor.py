@@ -2,6 +2,7 @@
 from wxPython.wx import *
 from wxPython.grid import *
 
+import string
 #---------------------------------------------------------------------------
 class MyCellEditor(wxPyGridCellEditor):
     """
@@ -143,12 +144,13 @@ class MyCellEditor(wxPyGridCellEditor):
         elif key < 256 and key >= 0 and chr(key) in string.printable:
             ch = chr(key)
             if not evt.ShiftDown():
-                ch = string.lower(ch)
+                ch = ch.lower()
 
         if ch is not None:
             # For this example, replace the text.  Normally we would append it.
             #self._tc.AppendText(ch)
             self._tc.SetValue(ch)
+            self._tc.SetInsertionPointEnd()
         else:
             evt.Skip()
 

@@ -14,27 +14,13 @@
 #define __wxp_helpers__
 
 #include <wx/wx.h>
-
+#include <wx/geometry.h>
 
 //---------------------------------------------------------------------------
 
 typedef unsigned char byte;
 
-
-class wxPyApp: public wxApp
-{
-public:
-    wxPyApp();
-    ~wxPyApp();
-    bool OnInit();
-    int  MainLoop();
-};
-
-extern wxPyApp *wxPythonApp;
-
-//----------------------------------------------------------------------
-
-void      __wxPreStart();
+void      __wxPreStart(PyObject*);
 PyObject* __wxStart(PyObject*, PyObject* args);
 void      __wxCleanup();
 
@@ -101,6 +87,9 @@ bool wxRealPoint_helper(PyObject* source, wxRealPoint** obj);
 bool wxRect_helper(PyObject* source, wxRect** obj);
 bool wxColour_helper(PyObject* source, wxColour** obj);
 
+bool wxPoint2DDouble_helper(PyObject* source, wxPoint2DDouble** obj);
+
+
 //----------------------------------------------------------------------
 // Other helpful stuff
 
@@ -109,8 +98,8 @@ bool wxColour_helper(PyObject* source, wxColour** obj);
      (PyList_Check(o) ? PyList_GET_ITEM(o, i) : PyTuple_GET_ITEM(o, i))
 #endif
 
-bool _2int_seq_helper(PyObject* source, int* i1, int* i2);
-bool _4int_seq_helper(PyObject* source, int* i1, int* i2, int* i3, int* i4);
+bool wxPy2int_seq_helper(PyObject* source, int* i1, int* i2);
+bool wxPy4int_seq_helper(PyObject* source, int* i1, int* i2, int* i3, int* i4);
 
 
 PyObject* wxArrayString2PyList_helper(const wxArrayString& arr);
@@ -270,6 +259,7 @@ struct wxPyCoreAPI {
     bool        (*p_wxRealPoint_helper)(PyObject* source, wxRealPoint** obj);
     bool        (*p_wxRect_helper)(PyObject* source, wxRect** obj);
     bool        (*p_wxColour_helper)(PyObject* source, wxColour** obj);
+    bool        (*p_wxPoint2DDouble_helper)(PyObject* source, wxPoint2DDouble** obj);
 
     void        (*p_wxPyCBH_setCallbackInfo)(wxPyCallbackHelper& cbh, PyObject* self, PyObject* klass, int incref);
     bool        (*p_wxPyCBH_findCallback)(const wxPyCallbackHelper& cbh, const char* name);
@@ -404,17 +394,60 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh);
 
 
 //---------------------------------------------------------------------------
+
+// This is used in C++ classes that need to be able to make callback to
+// "overloaded" python methods
+
+#define PYPRIVATE                                                               \
+    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref=1) {     \
+        wxPyCBH_setCallbackInfo(m_myInst, self, _class, incref);                \
+    }                                                                           \
+    private: wxPyCallbackHelper m_myInst
+
+
+//---------------------------------------------------------------------------
+
+enum {
+    wxPYAPP_ASSERT_SUPPRESS  = 1,
+    wxPYAPP_ASSERT_EXCEPTION = 2,
+    wxPYAPP_ASSERT_DIALOG    = 4
+};
+
+class wxPyApp: public wxApp
+{
+    DECLARE_ABSTRACT_CLASS(wxPyApp);
+
+public:
+    wxPyApp();
+    ~wxPyApp();
+    bool OnInit();
+    int  MainLoop();
+
+    int  GetAssertMode() { return m_assertMode; }
+    void SetAssertMode(int mode) { m_assertMode = mode; }
+
+    virtual bool OnInitGui();
+    virtual int OnExit();
+#ifdef __WXDEBUG__
+    virtual void OnAssert(const wxChar *file,
+                          int line,
+                          const wxChar *cond,
+                          const wxChar *msg);
+#endif
+
+    // virtual int FilterEvent(wxEvent& event); // This one too????
+
+    PYPRIVATE;
+    int m_assertMode;
+};
+
+extern wxPyApp *wxPythonApp;
+
+
+//----------------------------------------------------------------------
 // These macros are used to implement the virtual methods that should
 // redirect to a Python method if one exists.  The names designate the
 // return type, if any, as well as any parameter types.
-//---------------------------------------------------------------------------
-
-#define PYPRIVATE                                                       \
-    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref=1) {     \
-        wxPyCBH_setCallbackInfo(m_myInst, self, _class, incref);                \
-    }                                                                   \
-    private: wxPyCallbackHelper m_myInst
-
 //---------------------------------------------------------------------------
 
 #define DEC_PYCALLBACK__(CBNAME)                        \
@@ -425,10 +458,10 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh);
 #define IMP_PYCALLBACK__(CLASS, PCLASS, CBNAME)                         \
     void CLASS::CBNAME() {                                              \
         bool found;                                                     \
-        wxPyBeginBlockThreads();                    \
+        wxPyBeginBlockThreads();                                        \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))          \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));        \
-        wxPyEndBlockThreads();                                     \
+        wxPyEndBlockThreads();                                          \
         if (! found)                                                    \
             PCLASS::CBNAME();                                           \
     }                                                                   \
@@ -1203,7 +1236,7 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh);
         bool rval=FALSE;                                                        \
         wxPyBeginBlockThreads();                                                \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                          \
-            PyObject* obj = wxPyConstructObject((void*)&a, "wxHtmlTag", 0);     \
+            PyObject* obj = wxPyConstructObject((void*)&a, wxT("wxHtmlTag"), 0);     \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));   \
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -1222,7 +1255,7 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh);
         bool found;                                                             \
         wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* obj = wxPyConstructObject((void*)cell, "wxHtmlCell", 0);  \
+            PyObject* obj = wxPyConstructObject((void*)cell, wxT("wxHtmlCell"), 0);  \
             wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(Oii)",obj,x,y));  \
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -1246,8 +1279,8 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh);
         bool found;                                                             \
         wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* obj = wxPyConstructObject((void*)cell, "wxHtmlCell", 0);  \
-            PyObject* o2  = wxPyConstructObject((void*)&e, "wxMouseEvent", 0);  \
+            PyObject* obj = wxPyConstructObject((void*)cell, wxT("wxHtmlCell"), 0);  \
+            PyObject* o2  = wxPyConstructObject((void*)&e, wxT("wxMouseEvent"), 0);  \
             wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(OiiO)",obj,x,y,o2));  \
             Py_DECREF(obj);                                                     \
             Py_DECREF(o2);                                                      \
@@ -1582,7 +1615,7 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh);
         bool found;                                                             \
         wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* obj = wxPyConstructObject((void*)&a, #Type, 0);           \
+            PyObject* obj = wxPyConstructObject((void*)&a, wxT(#Type), 0);           \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));          \
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -1607,7 +1640,7 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh);
         bool found;                                                             \
         wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* obj = wxPyConstructObject((void*)&a, #Type, 0);           \
+            PyObject* obj = wxPyConstructObject((void*)&a, wxT(#Type), 0);           \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));          \
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -1632,7 +1665,7 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh);
         bool found;                                                             \
         wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* obj = wxPyConstructObject((void*)&a, #Type, 0);           \
+            PyObject* obj = wxPyConstructObject((void*)&a, wxT(#Type), 0);           \
             rv = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));     \
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -1656,7 +1689,7 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh);
         bool rv=FALSE;                                                          \
         wxPyBeginBlockThreads();                                                \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                          \
-            PyObject* obj = wxPyConstructObject((void*)&a, #Type, 0);           \
+            PyObject* obj = wxPyConstructObject((void*)&a, wxT(#Type), 0);           \
             rv = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));     \
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -1766,7 +1799,7 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh);
         wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
             PyObject* ro;                                                       \
-            PyObject* obj  = wxPyConstructObject((void*)&e, "wxMouseEvent", 0); \
+            PyObject* obj  = wxPyConstructObject((void*)&e, wxT("wxMouseEvent"), 0); \
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(O)",obj));   \
             if (ro) {                                                           \
                 rval = PyInt_AsLong(ro);                                        \
@@ -1851,6 +1884,29 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh);
 
 //---------------------------------------------------------------------------
 
+#define DEC_PYCALLBACK_OBJECT_STRING_pure(CBNAME)                               \
+    wxObject* CBNAME(const wxString& a);
+
+#define IMP_PYCALLBACK_OBJECT_STRING_pure(CLASS, PCLASS, CBNAME)                \
+    wxObject* CLASS::CBNAME(const wxString& a) {                                \
+        wxObject* rv = NULL;                                                    \
+        wxPyBeginBlockThreads();                                                \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                          \
+            PyObject* so = wx2PyString(a);                                      \
+            PyObject* ro;                                                       \
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(O)", so));   \
+            if (ro) {                                                           \
+                SWIG_GetPtrObj(ro, (void **)&rv, "_wxObject_p");                \
+                Py_DECREF(ro);                                                  \
+            }                                                                   \
+            Py_DECREF(so);                                                      \
+        }                                                                       \
+        wxPyEndBlockThreads();                                                  \
+        return rv;                                                              \
+    }
+
+//---------------------------------------------------------------------------
+
 #define DEC_PYCALLBACK_BOOL_NODE_pure(CBNAME)                                   \
     bool CBNAME(wxXmlNode* a);
 
@@ -1860,7 +1916,7 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh);
         bool rv=FALSE;                                                          \
         wxPyBeginBlockThreads();                                                \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                          \
-            PyObject* obj = wxPyConstructObject((void*)a, "wxXmlNode", 0);      \
+            PyObject* obj = wxPyConstructObject((void*)a, wxT("wxXmlNode"), 0);      \
             rv = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));     \
             Py_DECREF(obj);                                                     \
         }                                                                       \

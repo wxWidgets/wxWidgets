@@ -191,7 +191,7 @@ class wxPyNonWindowingErrorHandler:
         self.file = file
     def write(self,s):
         import sys
-        if string.find(s,"Warning") <> 0\
+        if s.find("Warning") <> 0\
            and  self.this_exception is not sys.last_traceback:
             wxPyNonWindowingError("The Python interpreter encountered an error "
                               "not handled by any\nexception handler--this "
@@ -380,7 +380,7 @@ class wxPyNonFatalErrorDialogWithTraceback(wxDialog):
                 value = value[:-1]
             if _debug:
                 print "%s.SetTraceback(): ...SetValue('%s' (^M=\\r; ^J=\\n))"\
-                      % (self,string.replace(value,'\n',"^J"))
+                      % (self,value.replace('\n',"^J"))
             c.SetValue(value)
 
             # Despite using the wxADJUST_MINSIZE flag in the
@@ -399,7 +399,7 @@ class wxPyNonFatalErrorDialogWithTraceback(wxDialog):
                 print "%s.SetTraceback(): %s.GetBestSize() = (%s,%s)"\
                       % (self,c,size.width,size.height)
             w,h = 0,0
-            for v in string.split(value,"\n"):
+            for v in value.split("\n"):
                 pw,ph,d,e = t = c.GetFullTextExtent(v)
                 if _debug:
                     print v, t
@@ -669,7 +669,7 @@ def _startmailerwithhtml(mailto,subject,html,text=None,mailfrom=None):
         s = 'mailto:%s?subject=%s&body=%s' % (mailto,
                                                urllib.quote(subject),
                                                urllib.quote(
-            string.replace(text,'\n','\r\n'),
+            text.replace('\n','\r\n'),
             ""))
 
         # Note that RFC 2368 requires that line breaks in the body of
@@ -797,7 +797,7 @@ def wxPyResizeHTMLWindowToDispelScrollbar(window,
     # Will go no further than specified fraction of display size.
     w = 200
     if type(fraction) == type(''):
-        fraction = string.atoi(fraction[:-1]) / 100.
+        fraction = int(fraction[:-1]) / 100.
     ds = wxDisplaySize ()
     c = window.GetInternalRepresentation ()
     while w < ds[0] * fraction:
@@ -812,7 +812,7 @@ def wxPyResizeHTMLWindowToDispelScrollbar(window,
         w = w + 20
     else:
         if type(defaultfraction) == type(''):
-            defaultfraction = string.atoi(defaultfraction[:-1]) / 100.
+            defaultfraction = int(defaultfraction[:-1]) / 100.
         defaultsize = (defaultfraction * ds[0], defaultfraction * ds[1])
         if _debug:
             print 'defaultsize =',defaultsize

@@ -24,7 +24,6 @@
 import os, time
 
 from wxPython.wx import *
-from string import *
 
 import selection
 import images
@@ -650,7 +649,7 @@ class wxEditor(wxScrolledWindow):
 
     def CopyToClipboard(self, linesOfText):
         do = wxTextDataObject()
-        do.SetText(string.join(linesOfText, os.linesep))
+        do.SetText(os.linesep.join(linesOfText))
         wxTheClipboard.Open()
         wxTheClipboard.SetData(do)
         wxTheClipboard.Close()

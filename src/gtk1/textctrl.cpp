@@ -475,7 +475,7 @@ wxString wxTextCtrl::GetValue() const
         GtkTextIter end;
         gtk_text_buffer_get_end_iter( text_buffer, &end );
         gchar *text = gtk_text_buffer_get_text( text_buffer, &start, &end, TRUE );
-
+        
 #if wxUSE_UNICODE
         wxWCharBuffer buffer( wxConvUTF8.cMB2WX( text ) );
 #else
@@ -552,6 +552,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         wxCharBuffer buffer( wxConvUTF8.cWC2MB( wxConvLocal.cWX2WC( text ) ) );
 #endif
         GtkTextBuffer *text_buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
+        // TODO: call wahtever is needed to delete the selection
         gtk_text_buffer_insert_at_cursor( text_buffer, buffer, strlen(buffer) );
 
 #else // GTK 1.x
@@ -561,6 +562,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         // always use m_defaultStyle, even if it is empty as otherwise
         // resetting the style and appending some more text wouldn't work: if
         // we don't specify the style explicitly, the old style would be used
+        gtk_editable_delete_selection( GTK_EDITABLE(m_text) );
         wxGtkTextInsert(m_text, m_defaultStyle, text.c_str(), text.Len());
 
         // Bring editable's cursor back uptodate.
@@ -569,6 +571,9 @@ void wxTextCtrl::WriteText( const wxString &text )
     }
     else // single line
     {
+        // First remove the selection if there is one
+        gtk_editable_delete_selection( GTK_EDITABLE(m_text) );
+
         // This moves the cursor pos to behind the inserted text.
         gint len = GET_EDITABLE_POS(m_text);
 
@@ -584,9 +589,6 @@ void wxTextCtrl::WriteText( const wxString &text )
 #else
         gtk_editable_insert_text( GTK_EDITABLE(m_text), text.c_str(), text.Len(), &len );
 #endif
-
-        // Bring editable's cursor uptodate.
-        len += text.Len();
 
         // Bring entry's cursor uptodate.
         gtk_entry_set_position( GTK_ENTRY(m_text), len );
@@ -927,6 +929,12 @@ void wxTextCtrl::SetMaxLength(unsigned long len)
 void wxTextCtrl::SetSelection( long from, long to )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
+
+    if (from == -1 && to == -1)
+    {
+        from = 0;
+        to = GetValue().Length();
+    }
 
 #ifndef __WXGTK20__
     if ( (m_windowStyle & wxTE_MULTILINE) &&

@@ -435,7 +435,7 @@ void wxPrinterDC::DoDrawBitmap(const wxBitmap &bmp,
         memset( info, 0, sizeof( BITMAPINFOHEADER ) );
 
 #if wxUSE_DRAWBITMAP_24BITS
-        int iBitsSize = ((width + 3 ) & ~3 ) * height * 3;
+        int iBitsSize = (((width * 3) + 3 ) & ~3 ) * height;
 #else
         int iBitsSize = ((width + 3 ) & ~3 ) * height ;
 #endif

@@ -269,9 +269,6 @@ void wxHtmlPrintout::SetHtmlText(const wxString& html, const wxString &basepath,
     m_BasePathIsDir = isdir;
 }
 
-// defined in htmlfilt.cpp
-void wxPrivate_ReadString(wxString& str, wxInputStream* s);
-
 void wxHtmlPrintout::SetHtmlFile(const wxString& htmlfile)
 {
     wxFileSystem fs;
@@ -283,13 +280,11 @@ void wxHtmlPrintout::SetHtmlFile(const wxString& htmlfile)
         return;
     }
 
-    wxInputStream *st = ff->GetStream();
-    wxString doc;
-    wxPrivate_ReadString(doc, st);
-
-    delete ff;
-
+    wxHtmlFilterHTML filter;
+    wxString doc = filter.ReadFile(*ff);
+    
     SetHtmlText(doc, htmlfile, FALSE);
+    delete ff;
 }
 
 

@@ -16,6 +16,7 @@
 
 void UMAInitToolbox( UInt16 inMoreMastersCalls) ;
 void UMACleanupToolbox() ;
+long UMAGetSystemVersion() ;
 bool UMAHasAppearance() ;
 long UMAGetAppearanceVersion() ;
 bool UMAHasWindowManager() ;

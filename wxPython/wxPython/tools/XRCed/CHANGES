@@ -1,3 +1,43 @@
+0.0.9-1
+-------
+
+Changed program structure, reduced use of global variables (grouped in
+module 'globals', which creates an instanse 'g' of class Globals.
+
+First version of undo/redo working!
+
+Support for toolbars inside panels and frames.
+
+Added 'container' submenu for creating Panel, Notebook and ToolBar objects.
+
+wxMSW-only: added code to switch focus back to main window when test
+window is updated.
+
+0.0.8-2
+-------
+
+Fixed unicode problem for unicode build.
+
+0.0.8-1
+-------
+
+Using WX_2_4_BRANCH.
+
+Added new controls: wxSpinCtrl, wxGenericDirCtrl, unknown (custom
+control), improved wxXRC format suppor (menu styles, etc.).
+
+Some I18N support: parsing "encoding" attribute in XML header, later
+it can be modified in "properties" panel for "XML tree".
+
+UNIX note: currently XML writing for non-ascii chars works only if
+sys.getdefaultencoding() returns good value. To do this, one has to
+put following lines to "sitecustomize.py" file:
+
+# Start code segment
+import sys
+sys.setdefaultencoding('iso-8859-1')	# or whatever
+# End code segment
+
 0.0.7
 -----
 
@@ -26,6 +66,7 @@ contrib/src/xrc/xmlrsall.cpp
 >     AddHandler(new wxListCtrlXmlHandler);    
 > #if wxUSE_CHECKLISTBOX
 
+This is fixed in CVS.
 
 0.0.6
 -----

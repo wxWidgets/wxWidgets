@@ -135,6 +135,9 @@ class wxXmlResourcePtr(wxObjectPtr):
     def GetFlags(self, *_args, **_kwargs):
         val = apply(xrcc.wxXmlResource_GetFlags,(self,) + _args, _kwargs)
         return val
+    def SetFlags(self, *_args, **_kwargs):
+        val = apply(xrcc.wxXmlResource_SetFlags,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxXmlResource instance at %s>" % (self.this,)
 class wxXmlResource(wxXmlResourcePtr):
@@ -150,6 +153,24 @@ def wxEmptyXmlResource(*_args,**_kwargs):
     val.thisown = 1
     val.InitAllHandlers()
     return val
+
+
+class wxXmlSubclassFactoryPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(xrcc.wxXmlSubclassFactory__setCallbackInfo,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxXmlSubclassFactory instance at %s>" % (self.this,)
+class wxXmlSubclassFactory(wxXmlSubclassFactoryPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(xrcc.new_wxXmlSubclassFactory,_args,_kwargs)
+        self.thisown = 1
+        self._setCallbackInfo(self, wxXmlSubclassFactory)
+
+
 
 
 class wxXmlPropertyPtr :
@@ -321,6 +342,9 @@ class wxXmlDocumentPtr(wxObjectPtr):
     def GetEncoding(self, *_args, **_kwargs):
         val = apply(xrcc.wxXmlDocument_GetEncoding,(self,) + _args, _kwargs)
         return val
+    def SetEncoding(self, *_args, **_kwargs):
+        val = apply(xrcc.wxXmlDocument_SetEncoding,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxXmlDocument instance at %s>" % (self.this,)
 class wxXmlDocument(wxXmlDocumentPtr):
@@ -474,6 +498,8 @@ class wxXmlResourceHandler(wxXmlResourceHandlerPtr):
 
 #-------------- FUNCTION WRAPPERS ------------------
 
+wxXmlResource_AddSubclassFactory = xrcc.wxXmlResource_AddSubclassFactory
+
 wxXmlResource_GetXRCID = xrcc.wxXmlResource_GetXRCID
 
 def wxXmlResource_Get(*_args, **_kwargs):
@@ -515,3 +541,35 @@ wxXML_HTML_DOCUMENT_NODE = xrcc.wxXML_HTML_DOCUMENT_NODE
 wxTheXmlResource = wxXmlResource_Get()
 
 wx.wxXmlNodePtr = wxXmlNodePtr
+
+
+
+
+#----------------------------------------------------------------------
+#  Create a factory for handling the subclass property of the object tag.
+
+
+def _my_import(name):
+    mod = __import__(name)
+    components = name.split('.')
+    for comp in components[1:]:
+        mod = getattr(mod, comp)
+    return mod
+
+
+class wxXmlSubclassFactory_Python(wxXmlSubclassFactory):
+    def __init__(self):
+        wxXmlSubclassFactory.__init__(self)
+
+    def Create(self, className):
+        assert className.find('.') != -1, "Module name must be specified!"
+        mname = className[:className.rfind('.')]
+        cname = className[className.rfind('.')+1:]
+        module = _my_import(mname)
+        klass = getattr(module, cname)
+        inst = klass()
+        return inst
+
+
+wxXmlResource_AddSubclassFactory(wxXmlSubclassFactory_Python())
+

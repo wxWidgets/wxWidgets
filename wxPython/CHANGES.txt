@@ -2,8 +2,111 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
-2.3.3
------
+2.4.0.2
+-------
+
+Several bug fixes.
+
+Added wxIntCtrl from Will Sadkin.
+
+Added wxPyColourChooser by Michael Gilfix.
+
+
+
+
+2.4.0.1
+-------
+No major new features since 2.3.4.2, mostly bug fixes and minor
+enhancements.
+
+Added function wrappers for the common dialogs from Kevin Altis.  See
+wxPython/lib/dialogs.py for more details.
+
+
+
+2.3.4.2
+-------
+Various bug fixes.
+
+
+
+2.3.4.1
+-------
+Updated XRCed and wxTimeCtrl contribs.
+
+Show a couple new wxGrid features in the demo.
+
+Several bug fixes in wxWindows.
+
+Added wxHtmlFilter.
+
+wxASSERT and related C++ runtime diagnostics are now converted to
+Python exceptions.  When an assert happens a wxPyAssertionError
+(which derives from AssertionError) exception is created and when
+control returns back to the Python code that invoked the C++ API it
+will be raised.  The same exception restrictions are in place as
+before, namely that exceptions can't cross from one Python layer
+through C++ to another Python layer.  That simply means that if you
+want to catch wxPyAssertionError or any other exception that you need
+to do it before control returns to C++ at the end of your event
+handler or callback code.  There is some test code in demo/wxButton.py
+you can use to play with this new feature.
+
+Added some methods to wxApp (SetAssertMode and GetAssertMode) that let
+you control how C++ assertions are processed.  Valid modes are:
+wxPYAPP_ASSERT_SUPPRESS, wxPYAPP_ASSERT_EXCEPTION, and
+wxPYAPP_ASSERT_DIALOG.  Using _SUPPRESS will give you behavior like
+the old "final" builds and the assert will be ignored, _EXCEPTION is
+the new default described above, and _DIALOG is like the default in
+2.3.3.1 and prior "hybrid" builds.  You can also combine _EXCEPTION
+and _DIALOG if you wish, although I don't know why you would.
+
+You can now overload OnInitGui, OnExit and OnAssert in your classes
+derived from wxApp.
+
+Added GetSelectedCells, GetSelectionBlockTopLeft,
+GetSelectionBlockBottomRight, GetSelectedRows, GetSelectedCols nethods
+to wxGrid.
+
+Added Python == and != operators for some basic classes
+
+Fixed the Python wrappers for wxInputStream so they no longer block
+when reading from a wxProcess on wxGTK.  They now work more or less as
+they did before 2.3.3.1 but the dual meaning of eof() has been
+removed.  There is now a CanRead() method that lets you know if there
+is data waiting to be read from the pipe.
+
+Fixed method name clash in wxIEHtmlWin, renamed Refresh to RefreshPage.
+
+Added Throbber from Cliff Wells to the library and the demo.
+
+Windows installer prompts to uninstall old version first.
+
+Added wxPython.lib.evtmgr by Robb Shecter, which is an easier, more
+"Pythonic" and more OO method of registering handlers for wxWindows
+events using the Publish/Subscribe pattern.
+
+Added wxPython.lib.popupctl by Gerrit van Dyk which is a combobox-like
+gizmo for poping up arbitrary controls.  It is currently using
+wxDialog because of some issues with wxPopupWindow...
+
+Added wxPython.lib.gridmovers by Gerrit van Dyk which facilitates the
+dragging of columns and/or rows in a wxGrid.
+
+Added wxPython.lib.multisash by Gerrit van Dyk which is a nice
+implementation of allowing the user to split a window any number of
+times either horizontally or vertically, and to close the split off
+windows when desired.
+
+Added helpviewer tool that displays HTML books similarly to how MS
+HTMLHelp viewer does.  Changed how the wxPythonDocs tarball is built
+and added a script to launch the doc viewer.
+
+
+
+
+2.3.3.1
+-------
 Added wxSplashScreen.
 
 Added wxGenericDirCtrl.
@@ -174,6 +277,9 @@ Added wxXmlResourceHandler which allows you to create custom handlers
 for nonstandard class types in XRC resources.  See the demo for an
 example.
 
+Added wxPython.lib.mixins.rubberband module from Robb Shecter.
+
+Added wxTimeCtrl from Will Sadkin.
 
 
 

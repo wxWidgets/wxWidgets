@@ -1,7 +1,7 @@
 from wxPython.wx import wxLayoutConstraints,\
                 wxTop, wxLeft, wxBottom, wxRight, \
                 wxHeight, wxWidth, wxCentreX, wxCentreY
-import re,string
+import re
 
 class Layoutf(wxLayoutConstraints):
     """
@@ -130,8 +130,8 @@ time of this writing not documented.
             self.pack(pstr,winlist)
 
     def pack(self, pstr, winlist):
-        pstr = string.lower(pstr)
-        for item in string.split(pstr,';'):
+        pstr = pstr.lower()
+        for item in pstr.split(';'):
             m = self.rexp1.match(item)
             if m:
                 g = list(m.groups())
@@ -159,8 +159,8 @@ time of this writing not documented.
                 else: func(winlist[g[4]], cmp)
 
     def debug_pack(self, pstr, winlist):
-        pstr = string.lower(pstr)
-        for item in string.split(pstr,';'):
+        pstr = pstr.lower()
+        for item in pstr.split(';'):
             m = self.rexp1.match(item)
             if m:
                 g = list(m.groups())

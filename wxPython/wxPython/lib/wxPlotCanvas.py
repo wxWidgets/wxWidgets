@@ -20,7 +20,6 @@ Original comment follows below:
 """
 
 from wxPython import wx
-import string
 
 # Not everybody will have Numeric, so let's be cool about it...
 try:
@@ -32,7 +31,7 @@ imported.  It probably is not installed (it's not part of the standard
 Python distribution). See the Python site (http://www.python.org) for
 information on downloading source or binaries."""
 
-    if wxPlatform == '__WXMSW__':
+    if wx.wxPlatform == '__WXMSW__':
         d = wx.wxMessageDialog(wx.NULL, msg, "Numeric not found")
         if d.ShowModal() == wx.wxID_CANCEL:
             d = wx.wxMessageDialog(wx.NULL, "I kid you not! Pressing Cancel won't help you!", "Not a joke", wx.wxOK)

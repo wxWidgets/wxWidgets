@@ -70,7 +70,7 @@ PyObject* wxPyMake_##TYPE(TYPE* source) { \
         /* Otherwise make a new wrapper for it the old fashioned way and \
            give it the OOR treatment */ \
         if (! target) { \
-            target = wxPyConstructObject(source, #TYPE, FALSE); \
+            target = wxPyConstructObject(source, wxT(#TYPE), FALSE); \
             if (target) \
                 source->SetClientObject(new wxPyOORClientData(target)); \
         } \
@@ -571,7 +571,7 @@ public:
             PyObject* go = wxPyMake_wxObject(&grid);
             PyObject* dco = wxPyMake_wxObject(&dc);
             PyObject* ao = wxPyMake_wxGridCellAttr(&attr);
-            PyObject* ro = wxPyConstructObject((void*)&rect, "wxRect", 0);
+            PyObject* ro = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
 
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOOOiii)", go, ao, dco, ro,
                                                          row, col, isSelected));
@@ -747,6 +747,9 @@ public:
     wxControl* GetControl();
     void SetControl(wxControl* control);
 
+    wxGridCellAttr* GetCellAttr();
+    void SetCellAttr(wxGridCellAttr* attr);
+
     void SetParameters(const wxString& params);
     void IncRef();
     void DecRef();
@@ -856,7 +859,7 @@ public:
         wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "PaintBackground)"))) {
             PyObject* ao = wxPyMake_wxGridCellAttr(attr);
-            PyObject* ro = wxPyConstructObject((void*)&rectCell, "wxRect", 0);
+            PyObject* ro = wxPyConstructObject((void*)&rectCell, wxT("wxRect"), 0);
 
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OO)", ro, ao));
 
@@ -1403,8 +1406,17 @@ public:
             return *self != other;
         }
     }
-    %pragma(python) addtoclass = "def __str__(self): return str(self.asTuple())"
-    %pragma(python) addtoclass = "def __repr__(self): return str(self.asTuple())"
+    %pragma(python) addtoclass = "
+    def __str__(self):                   return str(self.asTuple())
+    def __repr__(self):                  return 'wxGridCellCoords'+str(self.asTuple())
+    def __len__(self):                   return len(self.asTuple())
+    def __getitem__(self, index):        return self.asTuple()[index]
+    def __setitem__(self, index, val):
+        if index == 0: self.SetRow(val)
+        elif index == 1: self.SetCol(val)
+        else: raise IndexError
+    "
+
 };
 
 // Typemap to allow conversion of sequence objects to wxGridCellCoords...
@@ -1437,6 +1449,32 @@ bool wxGridCellCoords_helper(PyObject* source, wxGridCellCoords** obj) {
  error:
     PyErr_SetString(PyExc_TypeError, "Expected a 2-tuple of integers or a wxGridCellCoords object.");
     return FALSE;
+}
+%}
+
+
+
+// Typemap to convert an array of cells coords to a list of tuples...
+%typemap(python, out) wxGridCellCoordsArray& {
+    $target = wxGridCellCoordsArray_helper($source);
+}
+
+
+// ...and the helper function for the above typemap.
+%{
+PyObject* wxGridCellCoordsArray_helper(const wxGridCellCoordsArray* source)
+{
+    PyObject* list = PyList_New(0);
+    size_t idx;
+    for (idx = 0; idx < source->GetCount(); idx += 1) {
+        wxGridCellCoords& coord = source->Item(idx);
+        PyObject* tup = PyTuple_New(2);
+        PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(coord.GetRow()));
+        PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(coord.GetCol()));
+        PyList_Append(list, tup);
+        Py_DECREF(tup);
+    }
+    return list;
 }
 %}
 
@@ -1763,12 +1801,11 @@ public:
     bool IsInSelection( int row, int col );
     // TODO: ??? bool IsInSelection( const wxGridCellCoords& coords )
 
-// TODO:  These need typemaps
-//     wxGridCellCoordsArray GetSelectedCells() const;
-//     wxGridCellCoordsArray GetSelectionBlockTopLeft() const;
-//     wxGridCellCoordsArray GetSelectionBlockBottomRight() const;
-//     wxArrayInt GetSelectedRows() const;
-//     wxArrayInt GetSelectedCols() const;
+    const wxGridCellCoordsArray& GetSelectedCells() const;
+    const wxGridCellCoordsArray& GetSelectionBlockTopLeft() const;
+    const wxGridCellCoordsArray& GetSelectionBlockBottomRight() const;
+    const wxArrayInt GetSelectedRows() const;
+    const wxArrayInt GetSelectedCols() const;
 
 
     // This function returns the rectangle that encloses the block of cells

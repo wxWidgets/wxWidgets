@@ -26,9 +26,7 @@ public:
              ,const wxPoint&     rPos = wxDefaultPosition
              ,const wxSize&      rSize = wxDefaultSize
              ,long               lStyle = 0
-#if wxUSE_VALIDATORS
              ,const wxValidator& rValidator = wxDefaultValidator
-#endif
              ,const wxString&    rsName = wxControlNameStr
             )
     {
@@ -48,9 +46,7 @@ public:
                 ,const wxPoint&     rPos = wxDefaultPosition
                 ,const wxSize&      rSize = wxDefaultSize
                 ,long               lStyle = 0
-#if wxUSE_VALIDATORS
                 ,const wxValidator& rValidator = wxDefaultValidator
-#endif
                 ,const wxString&    rsName = wxControlNameStr
                );
 

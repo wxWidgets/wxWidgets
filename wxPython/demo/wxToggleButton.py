@@ -15,7 +15,7 @@ class TestPanel(wxPanel):
         self.log = log
         panel = wxPanel(self, -1)
         buttons = wxBoxSizer(wxHORIZONTAL)
-        for word in string.split("These are toggle buttons"):
+        for word in "These are toggle buttons".split():
             b = wxToggleButton(panel, -1, word)
             EVT_TOGGLEBUTTON(self, b.GetId(), self.OnToggle)
             buttons.Add(b, flag=wxALL, border=5)

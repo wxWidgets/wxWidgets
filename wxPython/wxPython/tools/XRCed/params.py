@@ -4,17 +4,10 @@
 # Created:      22.08.2001
 # RCS-ID:       $Id$
 
-from wxPython.wx import *
-from wxPython.xrc import *
 import string
 import os.path
+from globals import *
 from types import *
-
-# Object which is currently processed
-currentXXX = None
-def SetCurrentXXX(xxx):
-    global currentXXX
-    currentXXX = xxx
 
 genericStyles = ['wxSIMPLE_BORDER', 'wxDOUBLE_BORDER',
                  'wxSUNKEN_BORDER', 'wxRAISED_BORDER',
@@ -36,14 +29,19 @@ class PPanel(wxPanel):
         wxPanel.Enable(self, value)
     def SetModified(self):
         self.modified = true
-        panel.SetModified(true)
+        g.panel.SetModified(true)
+    # Common method to set modified state
+    def OnChange(self, evt):
+        if self.freeze: return
+        self.SetModified()
+        evt.Skip()
 
 class ParamBinaryOr(PPanel):
     def __init__(self, parent, name):
         PPanel.__init__(self, parent, name)
         self.ID_TEXT_CTRL = wxNewId()
         self.ID_BUTTON_CHOICES = wxNewId()
-        self.SetBackgroundColour(panel.GetBackgroundColour())
+        self.SetBackgroundColour(g.panel.GetBackgroundColour())
         sizer = wxBoxSizer()
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(200,-1))
         sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
@@ -54,10 +52,6 @@ class ParamBinaryOr(PPanel):
         sizer.Fit(self)
         EVT_BUTTON(self, self.ID_BUTTON_CHOICES, self.OnButtonChoices)
         EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
-    def OnChange(self, evt):
-        if self.freeze: return
-        self.SetModified()
-        evt.Skip()
     def GetValue(self):
         return self.text.GetValue()
     def SetValue(self, value):
@@ -68,7 +62,7 @@ class ParamBinaryOr(PPanel):
         dlg = wxDialog(self, -1, 'Choices')
         topSizer = wxBoxSizer(wxVERTICAL)
         listBox = wxCheckListBox(dlg, -1, choices=self.values, size=(250,200))
-        value = map(string.strip, string.split(self.text.GetValue(), '|'))
+        value = map(string.strip, self.text.GetValue().split('|'))
         if value == ['']: value = []
         ignored = []
         for i in value:
@@ -109,7 +103,7 @@ class ParamBinaryOr(PPanel):
 
 class ParamFlag(ParamBinaryOr):
     values = ['wxTOP', 'wxBOTTOM', 'wxLEFT', 'wxRIGHT', 'wxALL',
-              'wxEXPAND', 'wxSHAPED', 'wxALIGN_CENTRE', 'wxALIGN_RIGHT',
+              'wxEXPAND', 'wxGROW', 'wxSHAPED', 'wxALIGN_CENTRE', 'wxALIGN_RIGHT',
               'wxALIGN_BOTTOM', 'wxALIGN_CENTRE_VERTICAL',
               'wxALIGN_CENTRE_HORIZONTAL']
     equal = {'wxALIGN_CENTER': 'wxALIGN_CENTRE',
@@ -121,18 +115,18 @@ class ParamFlag(ParamBinaryOr):
 class ParamStyle(ParamBinaryOr):
     equal = {'wxALIGN_CENTER': 'wxALIGN_CENTRE'}
     def __init__(self, parent, name):
-        self.values = currentXXX.winStyles + genericStyles
+        self.values = g.currentXXX.winStyles + genericStyles
         ParamBinaryOr.__init__(self, parent, name)
 
 class ParamNonGenericStyle(ParamBinaryOr):
     def __init__(self, parent, name):
-        self.values = currentXXX.winStyles
+        self.values = g.currentXXX.winStyles
         ParamBinaryOr.__init__(self, parent, name)
 
 class ParamExStyle(ParamBinaryOr):
     def __init__(self, parent, name):
-        if currentXXX:
-            self.values = currentXXX.exStyles # constant at the moment
+        if g.currentXXX:
+            self.values = g.currentXXX.exStyles # constant at the moment
         else:
             self.values = []
         ParamBinaryOr.__init__(self, parent, name)
@@ -142,7 +136,7 @@ class ParamColour(PPanel):
         PPanel.__init__(self, parent, name)
         self.ID_TEXT_CTRL = wxNewId()
         self.ID_BUTTON = wxNewId()
-        self.SetBackgroundColour(panel.GetBackgroundColour())
+        self.SetBackgroundColour(g.panel.GetBackgroundColour())
         sizer = wxBoxSizer()
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=(65,-1))
         sizer.Add(self.text, 0, wxRIGHT, 5)
@@ -165,10 +159,6 @@ class ParamColour(PPanel):
         self.button.SetBackgroundColour(colour)
         self.button.Refresh()
         self.freeze = false
-    def OnChange(self, evt):
-        if self.freeze: return
-        self.SetModified()
-        evt.Skip()
     def OnPaintButton(self, evt):
         dc = wxPaintDC(self.button)
         dc.SetBrush(wxTRANSPARENT_BRUSH)
@@ -206,7 +196,7 @@ class ParamFont(PPanel):
         PPanel.__init__(self, parent, name)
         self.ID_TEXT_CTRL = wxNewId()
         self.ID_BUTTON_SELECT = wxNewId()
-        self.SetBackgroundColour(panel.GetBackgroundColour())
+        self.SetBackgroundColour(g.panel.GetBackgroundColour())
         sizer = wxBoxSizer()
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(200,-1))
         sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
@@ -219,10 +209,8 @@ class ParamFont(PPanel):
         EVT_BUTTON(self, self.ID_BUTTON_SELECT, self.OnButtonSelect)
         EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
     def OnChange(self, evt):
-        if self.freeze: return
-        self.SetModified()
+        PPanel.OnChange(self, evt)
         self.textModified = true
-        evt.Skip()
     def _defaultValue(self):
         return ['12', 'default', 'normal', 'normal', '0', '', '']
     def GetValue(self):
@@ -302,7 +290,7 @@ class ParamInt(PPanel):
         self.ID_SPIN_CTRL = wxNewId()
         sizer = wxBoxSizer()
         self.spin = wxSpinCtrl(self, self.ID_SPIN_CTRL, size=wxSize(50,-1))
-        self.SetBackgroundColour(panel.GetBackgroundColour())
+        self.SetBackgroundColour(g.panel.GetBackgroundColour())
         sizer.Add(self.spin)
         self.SetAutoLayout(true)
         self.SetSizer(sizer)
@@ -315,10 +303,6 @@ class ParamInt(PPanel):
         if not value: value = 0
         self.spin.SetValue(int(value))
         self.freeze = false
-    def OnChange(self, evt):
-        if self.freeze: return
-        self.SetModified()
-        evt.Skip()
 
 class ParamText(PPanel):
     def __init__(self, parent, name, textWidth=200):
@@ -326,7 +310,7 @@ class ParamText(PPanel):
         self.ID_TEXT_CTRL = wxNewId()
         # We use sizer even here to have the same size of text control
         sizer = wxBoxSizer()
-        self.SetBackgroundColour(panel.GetBackgroundColour())
+        self.SetBackgroundColour(g.panel.GetBackgroundColour())
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(textWidth,-1))
         sizer.Add(self.text, 0, wxALIGN_CENTER_VERTICAL)
         self.SetAutoLayout(true)
@@ -339,10 +323,6 @@ class ParamText(PPanel):
         self.freeze = true              # disable other handlers
         self.text.SetValue(value)
         self.freeze = false             # disable other handlers
-    def OnChange(self, evt):
-        if self.freeze: return
-        self.SetModified()
-        evt.Skip()
 
 class ParamAccel(ParamText):
     def __init__(self, parent, name):
@@ -355,7 +335,7 @@ class ParamPosSize(ParamText):
 class ContentDialog(wxDialogPtr):
     def __init__(self, parent, value):
         # Is this normal???
-        w = frame.res.LoadDialog(parent, 'DIALOG_CONTENT')
+        w = g.frame.res.LoadDialog(parent, 'DIALOG_CONTENT')
         wxDialogPtr.__init__(self, w.this)
         self.thisown = 1
         self.Center()
@@ -406,7 +386,7 @@ class ContentDialog(wxDialogPtr):
 class ContentCheckListDialog(wxDialogPtr):
     def __init__(self, parent, value):
         # Is this normal???
-        w = frame.res.LoadDialog(parent, 'DIALOG_CONTENT_CHECK_LIST')
+        w = g.frame.res.LoadDialog(parent, 'DIALOG_CONTENT_CHECK_LIST')
         wxDialogPtr.__init__(self, w.this)
         self.thisown = 1
         self.Center()
@@ -468,7 +448,7 @@ class ParamContent(PPanel):
         PPanel.__init__(self, parent, name)
         self.ID_TEXT_CTRL = wxNewId()
         self.ID_BUTTON_EDIT = wxNewId()
-        self.SetBackgroundColour(panel.GetBackgroundColour())
+        self.SetBackgroundColour(g.panel.GetBackgroundColour())
         sizer = wxBoxSizer()
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(200,-1))
         sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
@@ -481,10 +461,8 @@ class ParamContent(PPanel):
         EVT_BUTTON(self, self.ID_BUTTON_EDIT, self.OnButtonEdit)
         EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
     def OnChange(self, evt):
-        if self.freeze: return
-        self.SetModified()
+        PPanel.OnChange(self, evt)
         self.textModified = true
-        evt.Skip()
     def GetValue(self):
         if self.textModified:           # text has newer value
             try:
@@ -542,7 +520,7 @@ class ParamContentCheckList(ParamContent):
 class IntListDialog(wxDialogPtr):
     def __init__(self, parent, value):
         # Is this normal???
-        w = frame.res.LoadDialog(parent, 'DIALOG_INTLIST')
+        w = g.frame.res.LoadDialog(parent, 'DIALOG_INTLIST')
         wxDialogPtr.__init__(self, w.this)
         self.thisown = 1
         self.Center()
@@ -613,7 +591,7 @@ class RadioBox(PPanel):
     def __init__(self, parent, id, choices,
                  pos=wxDefaultPosition, name='radiobox'):
         PPanel.__init__(self, parent, name)
-        self.SetBackgroundColour(panel.GetBackgroundColour())
+        self.SetBackgroundColour(g.panel.GetBackgroundColour())
         self.choices = choices
         topSizer = wxBoxSizer()
         for i in choices:
@@ -664,7 +642,7 @@ class ParamFile(PPanel):
         PPanel.__init__(self, parent, name)
         self.ID_TEXT_CTRL = wxNewId()
         self.ID_BUTTON_BROWSE = wxNewId()
-        self.SetBackgroundColour(panel.GetBackgroundColour())
+        self.SetBackgroundColour(g.panel.GetBackgroundColour())
         sizer = wxBoxSizer()
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(200,-1))
         sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
@@ -677,10 +655,8 @@ class ParamFile(PPanel):
         EVT_BUTTON(self, self.ID_BUTTON_BROWSE, self.OnButtonBrowse)
         EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
     def OnChange(self, evt):
-        if self.freeze: return
-        self.SetModified()
+        PPanel.OnChange(self, evt)
         self.textModified = true
-        evt.Skip()
     def GetValue(self):
         if self.textModified:           # text has newer value
             return self.text.GetValue()
@@ -698,7 +674,7 @@ class ParamFile(PPanel):
                            defaultFile = os.path.basename(self.value))
         if dlg.ShowModal() == wxID_OK:
             # Make relative
-            common = os.path.commonprefix([os.path.abspath(frame.dataFile),
+            common = os.path.commonprefix([os.path.abspath(g.frame.dataFile),
                                            dlg.GetPath()])
             self.SetValue(dlg.GetPath()[len(common):])
             self.SetModified()

@@ -1,7 +1,7 @@
 from wxPython.wx import *
 from wxPython.grid import *
 
-import string, random
+import random
 
 #---------------------------------------------------------------------------
 

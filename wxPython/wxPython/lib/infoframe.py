@@ -121,7 +121,7 @@ see the appropriate "stub" file in the wxPython demo.
 """
 
 from wxPython.wx import *
-import string, sys, types, tempfile, os
+import sys, tempfile, os
 
 class _MyStatusBar(wxStatusBar):
     def __init__(self, parent,callbacks=None,useopenbutton=0):

@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Name:         _extra.py
-# Purpose:	This file is appended to the shadow class file generated
+# Purpose:      This file is appended to the shadow class file generated
 #               by SWIG.  We add some unSWIGable things here.
 #
 # Author:       Robin Dunn
@@ -263,7 +263,7 @@ def EVT_COMMAND_SCROLL(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_PAGEDOWN,  func)
     win.Connect(id, -1, wxEVT_SCROLL_THUMBTRACK,func)
     win.Connect(id, -1, wxEVT_SCROLL_THUMBRELEASE,func)
-    win.Connect(-1, -1, wxEVT_SCROLL_ENDSCROLL,   func)
+    win.Connect(id, -1, wxEVT_SCROLL_ENDSCROLL,   func)
 
 def EVT_COMMAND_SCROLL_TOP(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_TOP, func)
@@ -587,7 +587,7 @@ wxColor      = wxColour
 wxNamedColor = wxNamedColour
 wxPen        = wxPyPen
 wxScrollbar  = wxScrollBar
-
+wxPoint2D    = wxPoint2DDouble
 
 # backwards compatibility
 wxNoRefBitmap       = wxBitmap
@@ -598,6 +598,14 @@ wxSystemSettings_GetSystemColour = wxSystemSettings_GetColour
 wxSystemSettings_GetSystemFont   = wxSystemSettings_GetFont
 wxSystemSettings_GetSystemMetric = wxSystemSettings_GetMetric
 
+# workarounds for bad wxRTTI names
+wxGauge95    = wxGauge
+wxGauge95Ptr = wxGaugePtr
+
+
+wxPyAssertionError = wxc.wxPyAssertionError
+
+
 #----------------------------------------------------------------------
 # wxGTK sets the locale when initialized.  Doing this at the Python
 # level should set it up to match what GTK is doing at the C level.
@@ -607,8 +615,6 @@ if wxPlatform == "__WXGTK__":
         locale.setlocale(locale.LC_ALL, "")
     except:
         pass
-
-
 
 #----------------------------------------------------------------------
 # wxWindows version numbers.  wxPython version is in __version__.
@@ -660,6 +666,18 @@ def wxPyTypeCast(obj, typeStr):
         theObj.thisown = obj.thisown
     return theObj
 
+#----------------------------------------------------------------------------
+# An isinstance for Pythons < 2.2 that can check a sequence of class objects
+# like the one in 2.2 can.
+
+def wxPy_isinstance(obj, klasses):
+    import types
+    if sys.version[:3] < "2.2" and type(klasses) in [types.TupleType, types.ListType]:
+        for klass in klasses:
+            if isinstance(obj, klass): return true
+        return false
+    else:
+        return isinstance(obj, klasses)
 
 #----------------------------------------------------------------------------
 _wxCallAfterId = None
@@ -684,6 +702,9 @@ def wxCallAfter(callable, *args, **kw):
     evt.args = args
     evt.kw = kw
     wxPostEvent(app, evt)
+
+# an alias
+wxRunLater = wxCallAfter
 
 #----------------------------------------------------------------------
 
@@ -765,12 +786,17 @@ class wxApp(wxPyApp):
     error = 'wxApp.error'
     outputWindowClass = wxPyOnDemandOutputWindow
 
-    def __init__(self, redirect=_defRedirect, filename=None):
+    def __init__(self, redirect=_defRedirect, filename=None, useBestVisual=false):
         wxPyApp.__init__(self)
         self.stdioWin = None
         self.saveStdio = (sys.stdout, sys.stderr)
+
+        # This has to be done before OnInit
+        self.SetUseBestVisual(useBestVisual)
+
         if redirect:
             self.RedirectStdio(filename)
+
         # this initializes wxWindows and then calls our OnInit
         _wxStart(self.OnInit)
 
@@ -797,7 +823,7 @@ class wxApp(wxPyApp):
         if filename:
             sys.stdout = sys.stderr = open(filename, 'a')
         else:
-            self.stdioWin = self.outputWindowClass() # wxPyOnDemandOutputWindow
+            self.stdioWin = self.outputWindowClass()
             sys.stdout = sys.stderr = self.stdioWin
 
 

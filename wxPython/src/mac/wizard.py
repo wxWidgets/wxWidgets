@@ -32,6 +32,9 @@ def EVT_WIZARD_CANCEL(win, id, func):
 def EVT_WIZARD_HELP(win, id, func):
     win.Connect(id, -1, wxEVT_WIZARD_HELP, func)
 
+def EVT_WIZARD_FINISHED(win, id, func):
+    win.Connect(id, -1, wxEVT_WIZARD_FINISHED, func)
+
 
 class wxWizardEventPtr(wxNotifyEventPtr):
     def __init__(self,this):
@@ -226,6 +229,12 @@ class wxWizardPtr(wxDialogPtr):
     def ShowPage(self, *_args, **_kwargs):
         val = apply(wizardc.wxWizard_ShowPage,(self,) + _args, _kwargs)
         return val
+    def HasNextPage(self, *_args, **_kwargs):
+        val = apply(wizardc.wxWizard_HasNextPage,(self,) + _args, _kwargs)
+        return val
+    def HasPrevPage(self, *_args, **_kwargs):
+        val = apply(wizardc.wxWizard_HasPrevPage,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxWizard instance at %s>" % (self.this,)
 class wxWizard(wxWizardPtr):
@@ -258,6 +267,7 @@ wxEVT_WIZARD_PAGE_CHANGED = wizardc.wxEVT_WIZARD_PAGE_CHANGED
 wxEVT_WIZARD_PAGE_CHANGING = wizardc.wxEVT_WIZARD_PAGE_CHANGING
 wxEVT_WIZARD_CANCEL = wizardc.wxEVT_WIZARD_CANCEL
 wxEVT_WIZARD_HELP = wizardc.wxEVT_WIZARD_HELP
+wxEVT_WIZARD_FINISHED = wizardc.wxEVT_WIZARD_FINISHED
 
 
 #-------------- USER INCLUDE -----------------------

@@ -47,11 +47,11 @@ class TablePanel(wxPanel):
         data = []
         while 1:
             text = file.readline()
-            text = string.strip(text)
+            text = text.strip()
             if not text:
                 break
 
-            list_val = string.splitfields(text,'\t')
+            list_val = text.split('\t')
             data.append(list_val)
         file.close()
 

@@ -1,7 +1,7 @@
 
 /* png.c - location for general purpose libpng functions
  *
- * libpng version 1.2.4 - July 8, 2002
+ * libpng version 1.2.5rc3 - September 18, 2002
  * Copyright (c) 1998-2002 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
@@ -13,14 +13,14 @@
 #include "png.h"
 
 /* Generate a compiler error if there is an old png.h in the search path. */
-typedef version_1_2_4 Your_png_h_is_not_version_1_2_4;
+typedef version_1_2_5rc3 Your_png_h_is_not_version_1_2_5rc3;
 
 /* Version information for C files.  This had better match the version
  * string defined in png.h.  */
 
 #ifdef PNG_USE_GLOBAL_ARRAYS
 /* png_libpng_ver was changed to a function in version 1.0.5c */
-const char png_libpng_ver[18] = "1.2.4";
+const char png_libpng_ver[18] = "1.2.5rc3";
 
 /* png_sig was changed to a function in version 1.0.5c */
 /* Place to hold the signature string for a PNG file. */
@@ -82,10 +82,6 @@ const int FARDATA png_pass_dsp_mask[]
 
 #endif
 
-#ifdef __VISAGECPP__
-const char png_libpng_ver[18] = "1.2.4";
-#endif
-
 /* Tells libpng that we have already handled the first "num_bytes" bytes
  * of the PNG file signature.  If the PNG data is embedded into another
  * stream we can set num_bytes = 8 so that libpng will not attempt to read
@@ -140,7 +136,7 @@ png_check_sig(png_bytep sig, int num)
 
 /* Function to allocate memory for zlib and clear it to 0. */
 #ifdef PNG_1_0_X
-void PNGAPI
+voidpf PNGAPI
 #else
 voidpf /* private */
 #endif
@@ -148,7 +144,7 @@ png_zalloc(voidpf png_ptr, uInt items, uInt size)
 {
    png_uint_32 num_bytes = (png_uint_32)items * size;
    png_voidp ptr;
-   png_structp p=(png_structp)png_ptr;
+   png_structp p=(png_struct*)png_ptr;
    png_uint_32 save_flags=p->flags;
 
    p->flags|=PNG_FLAG_MALLOC_NULL_MEM_OK;
@@ -675,7 +671,7 @@ png_charp PNGAPI
 png_get_copyright(png_structp png_ptr)
 {
    if (png_ptr != NULL || png_ptr == NULL)  /* silence compiler warning */
-   return ((png_charp) "\n libpng version 1.2.4 - July 8, 2002\n\
+   return ((png_charp) "\n libpng version 1.2.5rc3 - September 18, 2002\n\
    Copyright (c) 1998-2002 Glenn Randers-Pehrson\n\
    Copyright (c) 1996-1997 Andreas Dilger\n\
    Copyright (c) 1995-1996 Guy Eric Schalnat, Group 42, Inc.\n");
@@ -693,8 +689,8 @@ png_get_libpng_ver(png_structp png_ptr)
 {
    /* Version of *.c files used when building libpng */
    if(png_ptr != NULL) /* silence compiler warning about unused png_ptr */
-      return((png_charp) "1.2.4");
-   return((png_charp) "1.2.4");
+      return((png_charp) "1.2.5rc3");
+   return((png_charp) "1.2.5rc3");
 }
 
 png_charp PNGAPI
@@ -744,7 +740,7 @@ png_uint_32 PNGAPI
 png_access_version_number(void)
 {
    /* Version of *.c files used when building libpng */
-   return((png_uint_32) 10204L);
+   return((png_uint_32) 10205L);
 }
 
 
@@ -762,7 +758,7 @@ png_init_mmx_flags (png_structp png_ptr)
 
     png_ptr->asm_flags |= PNG_ASM_FLAG_MMX_SUPPORT_COMPILED;
 
-    if (png_mmx_support()) {
+    if (png_mmx_support() > 0) {
         png_ptr->asm_flags |= PNG_ASM_FLAG_MMX_SUPPORT_IN_CPU
 #    ifdef PNG_HAVE_ASSEMBLER_COMBINE_ROW
                               | PNG_ASM_FLAG_MMX_READ_COMBINE_ROW
