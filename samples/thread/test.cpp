@@ -35,8 +35,6 @@ class MyApp: public wxApp
     bool OnInit(void);
 };
 
-wxMutex text_mutex;
-
 WX_DEFINE_ARRAY(wxThread *,wxArrayThread);
 
 // Define a new frame type
@@ -51,6 +49,7 @@ class MyFrame: public wxFrame
     void OnStartThread(wxCommandEvent& event);
     void OnStopThread(wxCommandEvent& event);
     void OnPauseThread(wxCommandEvent& event);
+    void OnSize(wxSizeEvent &event);
     bool OnClose(void) { return TRUE; }
 
  public:
@@ -85,9 +84,9 @@ void *MyThread::Entry()
 
   while (1) {
     TestDestroy();
-    text_mutex.Lock();
+    wxMutexGuiEnter();
     m_frame->m_txtctrl->WriteText(text);
-    text_mutex.Unlock();
+    wxMutexGuiLeave();
     wxSleep(1);
   }
   
@@ -108,6 +107,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 	EVT_MENU(TEST_START_THREAD, MyFrame::OnStartThread)
 	EVT_MENU(TEST_STOP_THREAD, MyFrame::OnStopThread)
 	EVT_MENU(TEST_PAUSE_THREAD, MyFrame::OnPauseThread)
+	EVT_SIZE(MyFrame::OnSize)
 END_EVENT_TABLE()
 
 // Create a new application object
@@ -135,9 +135,12 @@ bool MyApp::OnInit(void)
   frame->SetMenuBar(menu_bar);
 
   // Make a panel with a message
-  wxPanel *panel = new wxPanel(frame, -1, wxPoint(0, 0), wxSize(400, 200), wxTAB_TRAVERSAL);
+  wxPanel *panel = new wxPanel( frame, -1, wxPoint(0, 0), wxSize(400, 200), wxTAB_TRAVERSAL );
+  
+  (void)new wxStaticText( panel, -1, "Log window", wxPoint(10,10) );
+  
 
-  frame->m_txtctrl = new wxTextCtrl(panel, -1, "", wxPoint(10, 10), wxSize(390, 190),
+  frame->m_txtctrl = new wxTextCtrl(panel, -1, "", wxPoint(10,30), wxSize(390, 190),
                            wxTE_MULTILINE);
 
   // Show the frame
@@ -174,7 +177,17 @@ void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
 }
 
 void MyFrame::OnPauseThread(wxCommandEvent& WXUNUSED(event) )
-{}
+{
+}
+
+void MyFrame::OnSize(wxSizeEvent& event )
+{
+  wxFrame::OnSize(event);
+
+  wxSize size( GetClientSize() );
+  
+  m_txtctrl->SetSize( 10, 30, size.x-20, size.y-40 );
+}
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 {

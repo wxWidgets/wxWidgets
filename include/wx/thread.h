@@ -132,8 +132,6 @@ public:
   // Called when thread exits.
   virtual void OnExit();
 
-  // Returns the wxThread object which corresponds to the ID.
-  static wxThread *GetThreadFromID(unsigned long id);
 protected:
   // In case, the DIFFER flag is true, enables another thread to kill this one.
   void TestDestroy();

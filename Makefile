@@ -3,6 +3,8 @@
 
 SHELL=/bin/sh
 
+DIRS=src
+
 #if DIRS are defind make only executes in these diretories
 all::
 	@if test "x$(DIRS)" = x; then \

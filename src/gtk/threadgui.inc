@@ -35,16 +35,22 @@ static void
 ThreadExitProc(gpointer WXUNUSED(client), gint fid,
                GdkInputCondition WXUNUSED(cond))
 {
-  wxThread* ptr;
+    wxThread* ptr;
+  
+    // printf( "thread exit proc.\n" );
 
-  if (fid != p_thrd_pipe[0])
-    return;
-  if (read(fid, &ptr, sizeof(ptr)) == sizeof(ptr)) {
-    //fprintf(stderr, "calling OnExit %p\n", ptr);
-    ptr->OnExit();
-  } else {
-    //fprintf(stderr, "this should never happen\n");
-  }
+    if (fid != p_thrd_pipe[0])
+        return;
+	
+    if (read(fid, &ptr, sizeof(ptr)) == sizeof(ptr)) 
+    {
+        // printf( "calling OnExit %p\n", ptr);
+        ptr->OnExit();
+    } 
+    else 
+    {
+        // printf( "this should never happen\n" );
+    }
 }
 
 // Global initialization
@@ -63,20 +69,6 @@ static void wxThreadGuiExit()
   close(p_thrd_pipe[1]);
 }
 
-#ifdef NO_DEFINE_GDK_1_1
-
-void wxMutexGuiEnter()
-{
-  gdk_mutex_enter();
-}
-
-void wxMutexGuiLeave()
-{
-  gdk_mutex_leave();
-}
-
-#else
-
 void wxMutexGuiEnter()
 {
   wxMainMutex->Lock();
@@ -87,4 +79,3 @@ void wxMutexGuiLeave()
   wxMainMutex->Unlock();
 }
 
-#endif

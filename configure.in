@@ -61,6 +61,8 @@ main ()
      exit(1);
    }
 
+   if (gtk_minor_version > 0) return FALSE;
+
    return !((gtk_major_version > major) ||
    	    ((gtk_major_version == major) && (gtk_minor_version > minor)) ||
  	    ((gtk_major_version == major) && (gtk_minor_version == minor) && (gtk_micro_version >= micro)));
@@ -266,6 +268,9 @@ SEARCH_INCLUDE="\
     /usr/XFree86/include/X11  \
                               \
     /usr/include              \
+    /usr/include/gtk          \
+    /usr/include/gdk          \
+    /usr/include/glib         \
     /usr/local/include        \
     /usr/unsupported/include  \
     /usr/athena/include       \
@@ -1022,7 +1027,7 @@ if test "$wxUSE_GTK" = 1; then
   AM_PATH_GTK(1.0.4, [
        GUI_TK_INCLUDE="$GTK_CFLAGS"
        GUI_TK_LIBRARY="$GTK_LIBS"
-  ], AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.0.4?))
+  ], AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.0.4 up-to 1.0.6?))
   TOOLKIT=GTK
   TOOLKIT_DEF=__WXGTK__
   WX_LINK=-lwx_gtk_1_0
@@ -1450,10 +1455,8 @@ if test "$wxUSE_THREADS" = "1"; then
        THREADS_LINK="-lpthread"
      ])
     ])
-    AC_CHECK_LIB(pthreads, pthread_setcanceltype, [
-      UNIX_THREAD="gtk/threadpsx.cpp"
-      THREADS_LINK="-lpthreads"
-    ])
+
+    dnl -lposix4 seems to be required on Solaris
 
     AC_CHECK_LIB(posix4, printf, [
       THREADS_LINK="$THREADS_LINK -lposix4"

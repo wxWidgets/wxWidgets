@@ -62,6 +62,8 @@ public:
   virtual void Centre( int direction = wxHORIZONTAL );
 
   virtual void GetClientSize( int *width, int *height ) const;
+  wxSize GetClientSize() const { int w, h; GetClientSize(& w, & h); return wxSize(w, h); }
+  
   virtual void SetClientSize( int const width, int const height );
 
   virtual void SetSize( int x, int y, int width, int height,

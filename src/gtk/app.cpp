@@ -22,6 +22,7 @@
 #include "wx/resource.h"
 #include "wx/module.h"
 #include "wx/image.h"
+#include "wx/thread.h"
 
 #include "unistd.h"
 
@@ -137,7 +138,9 @@ END_EVENT_TABLE()
 gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 {
     if (wxTheApp) while (wxTheApp->ProcessIdle()) {}
-    usleep( 10000 );
+    wxMutexGuiLeave();
+    usleep(10000);
+    wxMutexGuiEnter();
     return TRUE;
 }
 
@@ -213,8 +216,8 @@ bool wxApp::SendIdleEvents(void)
     wxNode* node = wxTopLevelWindows.First();
     while (node)
     {
-  wxWindow* win = (wxWindow*) node->Data();
-  if (SendIdleEvents(win))
+        wxWindow* win = (wxWindow*) node->Data();
+        if (SendIdleEvents(win))
             needMore = TRUE;
         node = node->Next();
     }
@@ -477,7 +480,4 @@ int wxEntry( int argc, char *argv[] )
 }
 
 //-----------------------------------------------------------------------------
-
-
-
 
