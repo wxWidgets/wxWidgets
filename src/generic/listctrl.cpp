@@ -1630,10 +1630,6 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
                                        const wxRect& rectHL,
                                        bool highlighted )
 {
-    // use our own flag if we maintain it
-    if ( !IsVirtual() )
-        highlighted = m_highlighted;
-
     // TODO: later we should support setting different attributes for
     //       different columns - to do it, just add "col" argument to
     //       GetAttr() and move these lines into the loop below
@@ -2555,7 +2551,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             GetLine(line)->DrawInReportMode( &dc,
                                              rectLine,
                                              GetLineHighlightRect(line),
-                                             IsHighlighted(line) );
+                                             m_hasFocus && IsHighlighted(line) );
         }
 
         if ( HasFlag(wxLC_HRULES) )
@@ -2612,15 +2608,18 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         }
     }
 
-    if ( HasCurrent() && m_hasFocus )
+    if ( HasCurrent() )
     {
+        // don't draw rect outline under Max if we already have the background
+        // color
 #ifdef __WXMAC__
-        // no rect outline, we already have the background color
-#else
-        dc.SetPen( *wxBLACK_PEN );
-        dc.SetBrush( *wxTRANSPARENT_BRUSH );
-        dc.DrawRectangle( GetLineHighlightRect(m_current) );
-#endif
+        if ( !m_hasFocus )
+#endif // !__WXMAC__
+        {
+            dc.SetPen( *wxBLACK_PEN );
+            dc.SetBrush( *wxTRANSPARENT_BRUSH );
+            dc.DrawRectangle( GetLineHighlightRect(m_current) );
+        }
     }
 
     dc.EndDrawing();
