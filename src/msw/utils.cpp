@@ -390,7 +390,7 @@ const wxChar* wxGetHomeDir(wxString *pstr)
         strDir = windowsPath;
     #endif
 #elif defined(__WXWINCE__)
-      // Nothing
+    strDir = wxT("\\");
 #else
     strDir.clear();
 
