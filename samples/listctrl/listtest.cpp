@@ -113,7 +113,7 @@ int wxCALLBACK MyCompareFunction(long item1, long item2, long sortData)
 bool MyApp::OnInit()
 {
   // Create the main frame window
-  MyFrame *frame = new MyFrame("wxListCtrl Test", 50, 50, 450, 340);
+  MyFrame *frame = new MyFrame(wxT("wxListCtrl Test"), 50, 50, 450, 340);
 
   // Show the frame
   frame->Show(TRUE);
@@ -483,10 +483,10 @@ void MyFrame::OnShowSelInfo(wxCommandEvent& event)
 void MyFrame::OnShowColInfo(wxCommandEvent& event)
 {
     int count = m_listCtrl->GetColumnCount();
-    wxLogMessage("%d columns:", count);
+    wxLogMessage(wxT("%d columns:"), count);
     for ( int c = 0; c < count; c++ )
     {
-        wxLogMessage("\tcolumn %d has width %d", c,
+        wxLogMessage(wxT("\tcolumn %d has width %d"), c,
                      m_listCtrl->GetColumnWidth(c));
     }
 }
@@ -504,7 +504,7 @@ void MyFrame::OnToggleMultiSel(wxCommandEvent& WXUNUSED(event))
     else
         flags |= wxLC_SINGLE_SEL;
 
-    m_logWindow->WriteText(wxString::Format("Current selection mode: %sle\n",
+    m_logWindow->WriteText(wxString::Format(wxT("Current selection mode: %sle\n"),
                            (flags & wxLC_SINGLE_SEL) ? "sing" : "multip"));
 
     RecreateList(flags);
@@ -554,35 +554,35 @@ void MyFrame::OnDeleteAll(wxCommandEvent& WXUNUSED(event))
 
 void MyListCtrl::OnCacheHint(wxListEvent& event)
 {
-    wxLogMessage( "OnCacheHint: cache items %ld..%ld",
+    wxLogMessage( wxT("OnCacheHint: cache items %ld..%ld"),
                   event.GetCacheFrom(), event.GetCacheTo() );
 }
 
 void MyListCtrl::OnColClick(wxListEvent& event)
 {
-    wxLogMessage( "OnColumnClick at %d.", event.GetColumn() );
+    wxLogMessage( wxT("OnColumnClick at %d."), event.GetColumn() );
 }
 
 void MyListCtrl::OnBeginDrag(wxListEvent& event)
 {
-    wxLogMessage( "OnBeginDrag at %d,%d.",
+    wxLogMessage( wxT("OnBeginDrag at %d,%d."),
                   event.m_pointDrag.x, event.m_pointDrag.y );
 }
 
 void MyListCtrl::OnBeginRDrag(wxListEvent& event)
 {
-    wxLogMessage( "OnBeginRDrag at %d,%d.",
+    wxLogMessage( wxT("OnBeginRDrag at %d,%d."),
                   event.m_pointDrag.x, event.m_pointDrag.y );
 }
 
 void MyListCtrl::OnBeginLabelEdit(wxListEvent& event)
 {
-    wxLogMessage("OnBeginLabelEdit: %s", event.m_item.m_text.c_str());
+    wxLogMessage( wxT("OnBeginLabelEdit: %s"), event.m_item.m_text.c_str());
 }
 
 void MyListCtrl::OnEndLabelEdit(wxListEvent& event)
 {
-    wxLogMessage("OnEndLabelEdit: %s", event.m_item.m_text.c_str());
+    wxLogMessage( wxT("OnEndLabelEdit: %s"), event.m_item.m_text.c_str());
 }
 
 void MyListCtrl::OnDeleteItem(wxListEvent& event)
@@ -640,12 +640,12 @@ void MyListCtrl::OnSelected(wxListEvent& event)
         info.m_mask = wxLIST_MASK_TEXT;
         if ( GetItem(info) )
         {
-            wxLogMessage("Value of the 2nd field of the selected item: %s",
+            wxLogMessage(wxT("Value of the 2nd field of the selected item: %s"),
                          info.m_text.c_str());
         }
         else
         {
-            wxFAIL_MSG("wxListCtrl::GetItem() failed");
+            wxFAIL_MSG(wxT("wxListCtrl::GetItem() failed"));
         }
     }
 }

@@ -284,7 +284,7 @@ private:
 // other
 //----------------------------------------------------------------------
 
-static void SetControlClientData(const char *name,
+static void SetControlClientData(const wxChar *name,
                                  wxControlWithItems *control);
 
 IMPLEMENT_APP(MyApp)
@@ -315,8 +315,8 @@ bool MyApp::OnInit()
         y = 50;
     if ( argc == 3 )
     {
-        wxSscanf(argv[1], "%d", &x);
-        wxSscanf(argv[2], "%d", &y);
+        //wxSscanf(argv[1], "%d", &x);
+        //wxSscanf(argv[2], "%d", &y);
     }
 
     // Create the main frame window
@@ -569,7 +569,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
         wxBitmap bmp(s_iconNames[n]);
         if ( !bmp.Ok() || (imagelist->Add(bmp) == -1) )
         {
-            wxLogWarning("Couldn't load the image '%s' for the notebook page %d.",
+            wxLogWarning(wxT("Couldn't load the image '%s' for the notebook page %d."),
                     s_iconNames[n], n);
         }
     }
@@ -596,8 +596,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                      wxPoint(10,90), wxSize(120,70),
                                      5, choices, wxLB_SORT );
 
-    SetControlClientData("listbox", m_listbox);
-    SetControlClientData("listbox", m_listboxSorted);
+    SetControlClientData(wxT("listbox"), m_listbox);
+    SetControlClientData(wxT("listbox"), m_listboxSorted);
 
     m_listbox->SetCursor(*wxCROSS_CURSOR);
 #if wxUSE_TOOLTIPS
@@ -634,8 +634,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_choiceSorted = new wxChoice( panel, ID_CHOICE_SORTED, wxPoint(10,70), wxSize(120,-1),
                                    5, choices, wxCB_SORT );
 
-    SetControlClientData("choice", m_choice);
-    SetControlClientData("choice", m_choiceSorted);
+    SetControlClientData(wxT("choice"), m_choice);
+    SetControlClientData(wxT("choice"), m_choiceSorted);
 
     m_choice->SetSelection(2);
     m_choice->SetBackgroundColour( "red" );
@@ -1504,14 +1504,14 @@ void MyComboBox::OnKeyUp(wxKeyEvent& event)
     event.Skip();
 }
 
-static void SetControlClientData(const char *name,
+static void SetControlClientData(const wxChar *name,
                                  wxControlWithItems *control)
 {
     size_t count = control->GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
         wxString s;
-        s.Printf("%s client data for '%s'",
+        s.Printf(wxT("%s client data for '%s'"),
                  name, control->GetString(n).c_str());
 
         control->SetClientObject(n, new wxStringClientData(s));
