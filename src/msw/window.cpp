@@ -1495,16 +1495,24 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 
                     hcursor = gs_wxBusyCursor;
                 }
-                else if ( m_windowCursor.Ok() )
-                {
-                    hcursor = (HCURSOR)m_windowCursor.GetHCURSOR();
-                }
                 else
                 {
-                    extern wxCursor *g_globalCursor; // from msw\data.cpp
+                    wxCursor *cursor = NULL;
 
-                    if ( g_globalCursor && g_globalCursor->Ok() )
-                        hcursor = (HCURSOR)g_globalCursor->GetHCURSOR();
+                    if ( m_windowCursor.Ok() )
+                    {
+                        cursor = &m_windowCursor;
+                    }
+                    else
+                    {
+                        extern wxCursor *g_globalCursor; // from msw\data.cpp
+
+                        if ( g_globalCursor && g_globalCursor->Ok() )
+                            cursor = g_globalCursor;
+                    }
+
+                    if ( cursor )
+                        hcursor = (HCURSOR)cursor->GetHCURSOR();
                 }
 
                 if ( hcursor )
@@ -1512,8 +1520,8 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                     ::SetCursor(hcursor);
 
                     // returning TRUE stops the DefWindowProc() from further
-                    // processing this message - exactly what we need because
-                    // we've just set the cursor
+                    // processing this message - exactly what we need because we've
+                    // just set the cursor.
                     return TRUE;
                 }
             }

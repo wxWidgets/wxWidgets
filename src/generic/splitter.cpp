@@ -6,23 +6,22 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:       wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "splitter.h"
-// #pragma interface
+    #pragma implementation "splitter.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/wx.h"
 #endif
 
 #include <math.h>
@@ -146,6 +145,9 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     long x, y;
     event.Position(&x, &y);
 
+    // reset the cursor
+    SetCursor(wxCursor());
+
     if (event.LeftDown())
     {
         if ( SashHitTest(x, y) )
@@ -153,11 +155,11 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
             CaptureMouse();
 
             m_dragMode = wxSPLIT_DRAG_DRAGGING;
-	    
+
             DrawSashTracker(x, y);
             m_oldX = x;
             m_oldY = y;
-	    return;
+            return;
         }
     }
     else if (event.LeftUp() && m_dragMode == wxSPLIT_DRAG_DRAGGING)
@@ -242,10 +244,6 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                 {
                     SetCursor(*m_sashCursorNS);
                 }
-        }
-        else
-        {
-            SetCursor(*wxSTANDARD_CURSOR);
         }
     }
     else if (event.Dragging() && (m_dragMode == wxSPLIT_DRAG_DRAGGING)) 

@@ -169,6 +169,7 @@ MyFrame::MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, cons
   m_leftCanvas = new MyCanvas(m_splitter, CANVAS1, 0, 0, 400, 400);
   m_leftCanvas->SetBackgroundColour(*wxRED);
   m_leftCanvas->SetScrollbars(20, 20, 50, 50);
+  m_leftCanvas->SetCursor(wxCursor(wxCURSOR_MAGNIFIER));
 
   m_rightCanvas = new MyCanvas(m_splitter, CANVAS2, 0, 0, 400, 400);
   m_rightCanvas->SetBackgroundColour(*wxCYAN);
