@@ -51,8 +51,6 @@ public:
     // -----------------------------------
     
     virtual int MainLoop();
-    virtual void ExitMainLoop();
-    virtual bool Initialized();
 
     virtual void Exit();
 

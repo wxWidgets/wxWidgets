@@ -48,7 +48,6 @@ public:
     // Implement wxAppBase pure virtuals
     virtual int MainLoop();
     virtual void ExitMainLoop();
-    virtual bool Initialized();
     virtual bool Pending();
     virtual bool Dispatch();
 

@@ -399,7 +399,6 @@ END_EVENT_TABLE()
 
 wxApp::wxApp()
 {
-    m_initialized = FALSE;
 #ifdef __WXDEBUG__
     m_isInAssert = FALSE;
 #endif // __WXDEBUG__
@@ -536,42 +535,6 @@ GdkVisual *wxApp::GetGdkVisual()
     wxASSERT( visual );
 
     return visual;
-}
-
-int wxApp::MainLoop()
-{
-    gtk_main();
-    return 0;
-}
-
-void wxApp::Exit()
-{
-    // VZ: no idea why is it different from ExitMainLoop() but this is what
-    //     wxExit() used to do
-    gtk_main_quit();
-}
-
-void wxApp::ExitMainLoop()
-{
-    if (gtk_main_level() > 0)
-        gtk_main_quit();
-}
-
-bool wxApp::Initialized()
-{
-    return m_initialized;
-}
-
-bool wxApp::Pending()
-{
-    return (gtk_events_pending() > 0);
-}
-
-bool wxApp::Dispatch()
-{
-    gtk_main_iteration();
-
-    return true;
 }
 
 bool wxApp::Initialize(int& argc, wxChar **argv)

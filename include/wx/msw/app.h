@@ -39,8 +39,6 @@ public:
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
 
-    virtual bool Initialized();
-
     virtual bool Yield(bool onlyIfNeeded = FALSE);
     virtual void WakeUpIdle();
 

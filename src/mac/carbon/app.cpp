@@ -1010,14 +1010,6 @@ wxApp::wxApp()
 #endif
 }
 
-bool wxApp::Initialized()
-{
-  if (GetTopWindow())
-    return TRUE;
-  else
-    return FALSE;
-}
-
 int wxApp::MainLoop()
 {
     m_keepGoing = TRUE;

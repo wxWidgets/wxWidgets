@@ -380,10 +380,6 @@ public:
         // stop the program immediately!)
     virtual void ExitMainLoop();
 
-        // returns true if the program is initialized, i.e. OnInit() has been
-        // completed successfully
-    virtual bool Initialized() = 0;
-
         // returns TRUE if there are unprocessed events in the event queue
     virtual bool Pending();
 
@@ -490,6 +486,11 @@ public:
     // focus) or not and also the last window which had focus before we were
     // deactivated
     virtual void SetActive(bool isActive, wxWindow *lastFocus);
+
+    // OBSOLETE: don't use, always returns true
+    //
+    // returns true if the program is successfully initialized
+    bool Initialized() { return true; }
 
 
 protected:

@@ -272,11 +272,6 @@ bool wxApp::OnInitGui()
     return TRUE;
 }
 
-bool wxApp::Initialized()
-{
-    return wxTopLevelWindows.GetCount() != 0;
-}
-
 bool wxApp::Initialize(int& argc, wxChar **argv)
 {
 #ifdef __DJGPP__

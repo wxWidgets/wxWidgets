@@ -144,14 +144,6 @@ wxApp::~wxApp()
     wxApp::SetInstance(NULL);
 }
 
-bool wxApp::Initialized()
-{
-    if (GetTopWindow())
-        return TRUE;
-    else
-        return FALSE;
-}
-
 int wxApp::MainLoop()
 {
     /*
@@ -168,12 +160,6 @@ int wxApp::MainLoop()
     m_eventLoop->Run();
 
     return 0;
-}
-
-void wxApp::ExitMainLoop()
-{
-    if( m_eventLoop->IsRunning() )
-        m_eventLoop->Exit();
 }
 
 // This should be redefined in a derived class for

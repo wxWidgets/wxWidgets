@@ -270,7 +270,7 @@ void wxAppBase::ExitMainLoop()
 #if wxUSE_EVTLOOP_IN_APP
     // we should exit from the main event loop, not just any currently active
     // (e.g. modal dialog) event loop
-    if ( m_mainLoop )
+    if ( m_mainLoop && m_mainLoop->IsRunning() )
     {
         m_mainLoop->Exit(0);
     }

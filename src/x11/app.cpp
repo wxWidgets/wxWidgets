@@ -243,14 +243,6 @@ wxApp::~wxApp()
 #endif
 }
 
-bool wxApp::Initialized()
-{
-    if (GetTopWindow())
-        return TRUE;
-    else
-        return FALSE;
-}
-
 #if !wxUSE_NANOX
 //-----------------------------------------------------------------------
 // X11 predicate function for exposure compression

@@ -42,8 +42,6 @@ public:
     virtual bool OnInitGui();
 
     // override base class (pure) virtuals
-    virtual bool Initialized();
-
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
     

@@ -196,17 +196,6 @@ You should normally exit the main loop (and the application) by deleting
 the top window.
 
 
-\membersection{wxApp::Initialized}\label{wxappinitialized}
-
-\func{bool}{Initialized}{\void}
-
-Returns true if the application has been initialized (i.e. if\rtfsp
-\helpref{wxApp::OnInit}{wxapponinit} has returned successfully).  This can be useful for error
-message routines to determine which method of output is best for the
-current state of the program (some windowing systems may not like
-dialogs to pop up before the main loop has been entered).
-
-
 \membersection{wxApp::MainLoop}\label{wxappmainloop}
 
 \func{int}{MainLoop}{\void}

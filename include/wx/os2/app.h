@@ -72,7 +72,6 @@ public:
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp(void);
 
-    virtual bool Initialized(void);
     virtual bool OnInitGui(void);
 
     virtual bool Yield(bool onlyIfNeeded = FALSE);

@@ -41,13 +41,7 @@ public:
     virtual bool OnInitGui();
 
     // override base class (pure) virtuals
-    virtual int MainLoop();
-    virtual void ExitMainLoop();
     virtual bool Initialized();
-    virtual bool Pending();
-    virtual bool Dispatch();
-
-    virtual void Exit();
 
     virtual bool Yield(bool onlyIfNeeded = FALSE);
     virtual void WakeUpIdle();
@@ -62,8 +56,6 @@ public:
 
     bool IsInAssert() const { return m_isInAssert; }
 #endif // __WXDEBUG__
-
-    bool            m_initialized;
 
     gint            m_idleTag;
 #if wxUSE_THREADS

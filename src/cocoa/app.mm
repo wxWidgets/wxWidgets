@@ -230,14 +230,6 @@ bool wxApp::OnInit()
     return TRUE;
 }
 
-bool wxApp::Initialized()
-{
-  if (GetTopWindow())
-    return TRUE;
-  else
-    return FALSE;
-}
-
 void wxApp::Exit()
 {
     wxApp::CleanUp();

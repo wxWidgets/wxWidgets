@@ -549,18 +549,6 @@ wxApp::~wxApp()
     delete [] argv;
 }
 
-bool wxApp::Initialized()
-{
-#ifndef _WINDLL
-    if (GetTopWindow())
-        return TRUE;
-    else
-        return FALSE;
-#else // Assume initialized if DLL (no way of telling)
-    return TRUE;
-#endif
-}
-
 void wxApp::OnIdle(wxIdleEvent& event)
 {
     wxAppBase::OnIdle(event);

@@ -49,8 +49,6 @@ public:
     // override base class (pure) virtuals
     // -----------------------------------
 
-    virtual bool Initialized();
-
     virtual void Exit();
 
     virtual bool Yield(bool onlyIfNeeded = FALSE);

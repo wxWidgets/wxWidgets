@@ -497,14 +497,6 @@ wxApp::~wxApp()
 #endif
 } // end of wxApp::~wxApp
 
-bool wxApp::Initialized()
-{
-    if (GetTopWindow())
-        return TRUE;
-    else
-        return FALSE;
-} // end of wxApp::Initialized
-
 bool                                gbInOnIdle = FALSE;
 
 void wxApp::OnIdle(
