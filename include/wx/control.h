@@ -74,8 +74,9 @@ protected:
                        const wxValidator& validator,
                        const wxString& name);
 
-    // inherit colour and font settings from the parent window
-    void InheritAttributes();
+    // this function is obsolete, it is only kept for backwards compatibility,
+    // do *not* use it
+    void InheritAttributes() { }
 
     // initialize the common fields of wxCommandEvent
     void InitCommandEvent(wxCommandEvent& event) const;

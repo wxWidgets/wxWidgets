@@ -89,20 +89,6 @@ bool wxControlBase::CreateControl(wxWindowBase *parent,
     return TRUE;
 }
 
-// inherit colour and font settings from the parent window
-void wxControlBase::InheritAttributes()
-{
-    if ( ShouldInheritColours() )
-    {
-        wxWindow *parent = GetParent();
-
-        wxCHECK_RET( parent, _T("a control without parent?") );
-
-        SetBackgroundColour(parent->GetBackgroundColour());
-        SetForegroundColour(parent->GetForegroundColour());
-    }
-}
-
 void wxControlBase::Command(wxCommandEvent& event)
 {
     (void)GetEventHandler()->ProcessEvent(event);
