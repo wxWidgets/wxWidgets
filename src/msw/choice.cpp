@@ -85,10 +85,12 @@ bool wxChoice::Create(wxWindow *parent,
     return TRUE;
 }
 
+/*
 wxChoice::~wxChoice()
 {
     Free();
 }
+*/
 
 // ----------------------------------------------------------------------------
 // adding/deleting items to/from the list
@@ -119,11 +121,12 @@ void wxChoice::Delete(int n)
 
 void wxChoice::Clear()
 {
-    Free();
+//    Free();
 
     SendMessage(GetHwnd(), CB_RESETCONTENT, 0, 0);
 }
 
+/*
 void wxChoice::Free()
 {
     if ( HasClientObjectData() )
@@ -135,6 +138,7 @@ void wxChoice::Free()
         }
     }
 }
+*/
 
 // ----------------------------------------------------------------------------
 // selection

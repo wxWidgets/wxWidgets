@@ -52,6 +52,18 @@ COMMDIR=$(WXDIR)\src\common
 OS2DIR=$(WXDIR)\src\os2
 HTMLDIR = $(WXDIR)\src\html
 
+!if [md $(COMMDIR)\$D]
+!endif
+
+!if [md $(OS2DIR)\$D]
+!endif
+
+!if [md $(GENDIR)\$D]
+!endif
+
+!if [md $(HTMLDIR)\$D]
+!endif
+
 {..\generic}.cpp{..\generic\$D}.obj:
     @echo $<
     icc @<<
@@ -549,28 +561,13 @@ HTMLLIBOBJS = \
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(NONESSENTIALOBJS) $(OS2OBJS)
 
 # Normal, static library
-all:    $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
+all:  $(OBJECTS) $(PERIPH_TARGET) png zlib xpm jpeg $(LIBTARGET)
 
 dirs: $(OS2DIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(HTMLDIR)\$D
 
 
 test:   $(OS2DIR)\$D\wave.obj
 test2:  ..\common\Debug\config.obj
-
-$D:
-    md $D
-
-$(COMMDIR)\$D:
-    md $(COMMDIR)\$D
-
-$(OS2DIR)\$D:
-    md $(OS2DIR)\$D
-
-$(GENDIR)\$D:
-    md $(GENDIR)\$D
-
-$(HTMLDIR)\$D:
-    md $(HTMLDIR)\$D
 
 $(COMLIBOBJS1):
   copy ..\common\$D\appcmn.obj
@@ -972,20 +969,60 @@ $(OBJECTS): $(WXDIR)/include/wx/setup.h
 $(CPPFLAGS2) /Fo$@ $(COMMDIR)\unzip.c
 <<
 
+png:
+    cd $(WXDIR)\src\png
+    nmake -f makefile.va FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL)
+    cd $(WXDIR)\src\os2
+
+clean_png:
+    cd $(WXDIR)\src\png
+    nmake -f makefile.va clean
+    cd $(WXDIR)\src\os2
+
+zlib:
+    cd $(WXDIR)\src\zlib
+    nmake -f makefile.va FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL)
+    cd $(WXDIR)\src\os2
+
+clean_zlib:
+    cd $(WXDIR)\src\zlib
+    nmake -f makefile.va clean
+    cd $(WXDIR)\src\os2
+
+jpeg:
+    cd $(WXDIR)\src\jpeg
+    nmake -f makefile.va FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL)
+    cd $(WXDIR)\src\os2
+
+clean_jpeg:
+    cd $(WXDIR)\src\jpeg
+    nmake -f makefile.va clean
+    cd $(WXDIR)\src\os2
+
+xpm:
+    cd $(WXDIR)\src\xpm
+    nmake -f makefile.va FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL)
+    cd $(WXDIR)\src\os2
+
+clean_xpm:
+    cd $(WXDIR)\src\xpm
+    nmake -f makefile.va clean
+    cd $(WXDIR)\src\os2
+
 clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_jpeg clean_xpm
-        -erase $(LIBTARGET)
-        -erase ..\..\lib\wx200.dll
-        -erase ..\..\lib\wx200.lib
-        -erase $(GENDIR)\$D\*.obj
-        -erase $(COMMDIR)\$D\*.obj
-        -erase $(COMMDIR)\\y_tab.c
-        -erase $(COMMDIR)\lex_yy.c
-        -erase $(OS2DIR)\$D\*.obj
-        -rmdir $(D)
-        -rmdir ..\generic\$(D)
-        -rmdir ..\common\$(D)
-        -rmdir ..\html\$(D)
-        -rmdir ..\os2\$(D)
+        del      $(LIBTARGET)
+        erase /N ..\..\lib\wx200.dll
+        erase /N ..\..\lib\wx200.lib
+        erase /N $(GENDIR)\$D\*.obj
+        erase /N $(COMMDIR)\$D\*.obj
+        erase /N $(COMMDIR)\\y_tab.c
+        erase /N $(COMMDIR)\lex_yy.c
+        erase /N $(OS2DIR)\$D\*.obj
+        rd       $(D)
+        rd      ..\generic\$(D)
+        rd      ..\common\$(D)
+        rd      ..\html\$(D)
+        rd      ..\os2\$(D)
 
 cleanall: clean
 

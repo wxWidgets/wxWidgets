@@ -57,6 +57,9 @@ LINK_DEBUG_FLAGS=/RELEASE
 CRTFLAG=/Gm /Gd
 !endif
 
+!if [md $(OS2ZLIBDIR)\$D]
+!endif
+
 CPPFLAGS=$(OS2FLAGS) $(DEBUG_FLAGS) $(PRECOMP) $(INC) $(OPT) $(CRTFLAG)
 
 {..\zlib}.c{..\zlib\$D}.obj:
@@ -81,10 +84,7 @@ OBJECTS = \
   ..\zlib\$D\uncompr.obj \
   ..\zlib\$D\zutil.obj
 
-all: $(OS2ZLIBDIR)\$D  $(OS2ZLIBLIB)
-
-$(OS2ZLIBDIR)\$D:
-       md $(OS2ZLIBDIR)\$D
+all: $(OS2ZLIBLIB)
 
 $(WXDIR)\lib\os2zlib.lib: $(OBJECTS)
  touch $(WXDIR)\lib\os2zlib.lib
@@ -94,9 +94,9 @@ $(WXDIR)\lib\os2zlib.lib: $(OBJECTS)
 <<
 
 clean:
-        del *.obj
-        del *.exe
-        del *.lib
+        del      $(OS2ZLIBLIB)
+        erase /N $(OS2ZLIBDIR)\$D
+        rd       $(OS2ZLIBDIR)\$D
 
 cleanall:     clean
 

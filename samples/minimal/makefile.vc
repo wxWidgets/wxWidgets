@@ -9,7 +9,7 @@
 # Use FINAL=1 argument to nmake to build final version with no debug info.
 
 # Set WXDIR for your system
-WXDIR = $(WXWIN)
+WXDIR = j:\dev\wx2\wxWindows
 
 PROGRAM=minimal
 OBJECTS = $(PROGRAM).obj

@@ -186,16 +186,16 @@ typedef unsigned int JDIMENSION;
  * or code profilers that require it.
  */
 
-//#if defined(__VISAGECPP__)
-///* a function called through method pointers: */
-//#define METHODDEF(type)		static type _Optlink
-///* a function used only in its module: */
-//#define LOCAL(type)		static type _Optlink
-///* a function referenced thru EXTERNs: */
-//#define GLOBAL(type)		type
-///* a reference to a GLOBAL function: */
-//#define EXTERN(type)		extern type _Optlink
-//#else
+#if defined(__VISAGECPP__) && !defined(JPEGLOCAL) /* need this for /common/imagjpeg.obj but not loclly */
+/* a function called through method pointers: */
+#define METHODDEF(type)		static type _Optlink
+/* a function used only in its module: */
+#define LOCAL(type)		static type _Optlink
+/* a function referenced thru EXTERNs: */
+#define GLOBAL(type)		type
+/* a reference to a GLOBAL function: */
+#define EXTERN(type)		extern type _Optlink
+#else
 /* a function called through method pointers: */
 #define METHODDEF(type)		static type
 /* a function used only in its module: */
@@ -204,9 +204,7 @@ typedef unsigned int JDIMENSION;
 #define GLOBAL(type)		type
 /* a reference to a GLOBAL function: */
 #define EXTERN(type)		extern type
-//#endif
-
-
+#endif
 
 /* This macro is used to declare a "method", that is, a function pointer.
  * We want to supply prototype parameters if the compiler can cope.

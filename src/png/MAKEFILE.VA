@@ -57,6 +57,9 @@ LINK_DEBUG_FLAGS=/RELEASE
 CRTFLAG=/Gm /Gd
 !endif
 
+!if [md $(OS2PNGDIR)\$D]
+!endif
+
 CPPFLAGS=$(OS2FLAGS) $(DEBUG_FLAGS) $(PRECOMP) $(INC) $(OPT) $(CRTFLAG)
 
 {..\png}.c{..\png\$D}.obj:
@@ -84,9 +87,6 @@ OBJECTS = \
 
 all:  $(OS2PNGLIB)
 
-$(OS2PNGDIR)\$D:
-       md $(OS2PNGDIR)\$D
-
 $(WXDIR)\lib\os2png.lib: $(OBJECTS)
  touch $(WXDIR)\lib\os2png.lib
  del $(WXDIR)\lib\os2png.lib
@@ -95,9 +95,9 @@ $(WXDIR)\lib\os2png.lib: $(OBJECTS)
 <<
 
 clean:
-        del *.obj
-        del *.exe
-        del *.lib
+        del      $(OS2PNGLIB)
+        erase /N $(OS2PNGDIR)\$D
+        rd       $(OS2PNGDIR)\$D
 
 cleanall:     clean
 
