@@ -10,17 +10,16 @@ that you know your way around a command line and that you know how to
 get things from various CVS repositories as needed.
 
 
-1. As of this writing the CVS version of Python (2.2b1+) is required.
-   You can get it via anonymous CVS from the Python project at
-   Sourceforge.  Build Python.app and install it as described in the
-   Mac/OSX/README file in the Python distribution.
+1. Python 2.2 is required.  Get the source from www.python.org and
+   build Python.app and install it as described in the Mac/OSX/README
+   file.
 
 2. You may want to make a symlink or two in /usr/local/bin so that
    this version of Python can be found from the command line.  For
    example:
 
         cd /usr/local/bin
-	sudo ln -s /Library/Frameworks/Python.framework/Versions/2.2/bin/python2.2.exe python2.2
+	sudo ln -s /Library/Frameworks/Python.framework/Versions/2.2/bin/python2.2 python2.2
         sudo ln -s python2.2 python
 
 3. In a wxWindows CVS tree make a build directory.
