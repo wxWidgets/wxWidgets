@@ -57,7 +57,7 @@ this has no effect, but I tried...
 -----------------------
 
 wxWindows/GTK requires the GTK+ library to be installed on your system.
-It has to be a stable version, preferebly version 1.2.1. You can use
+It has to be a stable version, preferebly version 1.2.3. You can use
 GTK 1.0.X in connection with wxWindows, but we don't support Drag'n'Drop
 for GTK 1.0.X so you have to "configure --without-dnd". wxWindows does 
 NOT work with the 1.1.X versions of the GTK+ library.

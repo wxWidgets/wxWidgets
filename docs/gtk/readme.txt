@@ -1,5 +1,5 @@
 
-  Welcome to wxWindows/Gtk 2.1 snapshot 4,
+  Welcome to wxWindows/Gtk 2.1 snapshot 5,
 
 you have downloaded version 2.1 of the GTK+ 1.2 port of 
 the wxWindows GUI library. This is a developers release
@@ -24,8 +24,8 @@ many systems (when using GTK 1.0 read the INSTALL.txt):
 ./configure
 make
 su <type root password>
-ldconfig
 make install
+ldconfig
 exit
 
 Type the following to make the samples
@@ -50,7 +50,7 @@ this has no effect, but I tried...
 The library produced by the install process will be called 
 libwx_gtk2.a (static) and libwx_gtk2.so.1.0 (shared) so that 
 once a binary incompatible version of wxWindows/Gtk comes out 
-we'll augment library version number to avoid linking problems.
+we'll augment the library version number to avoid linking problems.
 
 Please send problems concerning installation, feature requests, 
 bug reports or comments to the wxWindows users Information on 
@@ -58,7 +58,7 @@ how to subscribe is available from my homepage.
 
 wxWindows/Gtk doesn't come with any guarantee whatsoever. It might 
 crash your harddisk or destroy your monitor. It doesn't claim to be
-suitable for any special purpose.
+suitable for any special or general purpose.
 
   Regards,
 

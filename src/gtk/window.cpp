@@ -553,7 +553,6 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
       printf( "ControlUp.\n" );
     printf( "\n" );
 */
-
     int x = 0;
     int y = 0;
     GdkModifierType state;
@@ -656,11 +655,9 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
 		    if (node)
 		    {
                         wxMenu *firstMenu = (wxMenu*) node->Data();
-                        gtk_menu_shell_select_item(
-		          GTK_MENU_SHELL(menubar->m_menubar),
-		          firstMenu->m_owner );
-			  
-			ret = TRUE;
+			// doesn't work correctly
+			// gtk_menu_item_select( GTK_MENU_ITEM(firstMenu->m_owner) );
+			// ret = TRUE;
 			break;
 		    }
 		}
