@@ -37,6 +37,7 @@
 #include <glib.h>
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
+#include <gdk/gdkx.h>
 
 #include "wx/gtk/win_gtk.h"
 
@@ -335,6 +336,9 @@ wxApp::wxApp()
 #endif
 
     m_colorCube = (unsigned char*) NULL;
+    
+    // this is NULL for a "regular" wxApp, but is set (and freed) by a wxGLApp
+    m_glVisualInfo = (void *) NULL;
 }
 
 wxApp::~wxApp()
@@ -355,11 +359,29 @@ bool wxApp::OnInitGui()
 
     GdkVisual *visual = gdk_visual_get_system();
 
+    // if this is a wxGLApp (derived from wxApp), and we've already
+    // chosen a specific visual, then derive the GdkVisual from that
+    if (m_glVisualInfo != NULL) {
+#ifdef __WXGTK20__
+        /* seems gtk_widget_set_default_visual no longer exists? */
+        GdkVisual* vis = gtk_widget_get_default_visual();
+#else
+        GdkVisual* vis = gdkx_visual_get( 
+            ((XVisualInfo *) m_glVisualInfo) ->visualid );
+        gtk_widget_set_default_visual( vis );
+#endif
+
+        GdkColormap *colormap = gdk_colormap_new( vis, FALSE );
+        gtk_widget_set_default_colormap( colormap );
+
+        visual = vis;
+    }
+    
     /* on some machines, the default visual is just 256 colours, so
        we make sure we get the best. this can sometimes be wasteful,
        of course, but what do these guys pay $30.000 for? */
 
-    if ((gdk_visual_get_best() != gdk_visual_get_system()) &&
+    else if ((gdk_visual_get_best() != gdk_visual_get_system()) &&
         (m_useBestVisual))
     {
 #ifdef __WXGTK20__

@@ -32,7 +32,7 @@ class wxApp: public wxAppBase
 {
 public:
     wxApp();
-    ~wxApp();
+    virtual ~wxApp();
 
     /* override for altering the way wxGTK intializes the GUI
      * (palette/visual/colorcube). under wxMSW, OnInitGui() does nothing by
@@ -75,6 +75,10 @@ public:
 #endif
     unsigned char  *m_colorCube;
 
+    // used by the the wxGLApp and wxGLCanvas class for GL-based X visual 
+    // selection; this is actually an XVisualInfo*
+    void           *m_glVisualInfo;
+    
 private:
     // true if we're inside an assert modal dialog
 #ifdef __WXDEBUG__

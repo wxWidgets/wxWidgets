@@ -16,16 +16,17 @@
 #ifndef _WX_GLCANVAS_H_
 #define _WX_GLCANVAS_H_
 
-#include <wx/defs.h>
+#include "wx/defs.h"
 
 #if wxUSE_GLCANVAS
 
-#include <wx/scrolwin.h>
+#include "wx/scrolwin.h"
+#include "wx/app.h"
 
 extern "C" {
-#include "GL/gl.h"
-#include "GL/glx.h"
-#include "GL/glu.h"
+#include <GL/gl.h>
+#include <GL/glx.h>
+#include <GL/glu.h>
 }
 
 //---------------------------------------------------------------------------
@@ -100,7 +101,7 @@ private:
 };
 
 //---------------------------------------------------------------------------
-// wxGLContext
+// wxGLCanvas
 //---------------------------------------------------------------------------
 
 class WXDLLEXPORT wxGLCanvas: public wxScrolledWindow
@@ -161,14 +162,42 @@ public:
     wxGLContext      *m_glContext,
                      *m_sharedContext;
     wxGLCanvas       *m_sharedContextOf;
-    void             *m_vi;
+    void             *m_vi; // actually an XVisualInfo*
+    bool              m_canFreeVi;
     GtkWidget        *m_glWidget;
     bool              m_exposed;
+    
+    // returns an XVisualInfo* based on desired GL attributes;
+    // returns NULL if an appropriate visual is not found. The
+    // caller is reponsible for using XFree() to deallocate 
+    // the returned structure.
+    static void* ChooseGLVisual(int *attribList);
 
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxGLCanvas)
 };
+
+
+//---------------------------------------------------------------------------
+// wxGLApp
+//---------------------------------------------------------------------------
+
+class WXDLLEXPORT wxGLApp: public wxApp
+{
+public:
+    wxGLApp() : wxApp() { }
+    ~wxGLApp();
+    
+    // use this in the constructor of the user-derived wxGLApp class to select
+    // an appropriate X visual for GL. Returns TRUE if an appropriate visual
+    // is found - and sets m_glVisualInfo; FALSE otherwise.
+    bool InitGLVisual(int *attribList);
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxGLApp)
+};
+
 
 #endif
     // wxUSE_GLCANVAS

@@ -283,7 +283,6 @@ bool wxGLCanvas::Create( wxWindow *parent,
                          int *attribList, 
 			 const wxPalette& palette)
 {
-    int data[512];
     m_sharedContext = (wxGLContext*)shared;  // const_cast
     m_sharedContextOf = (wxGLCanvas*)shared_context_of;  // const_cast
     m_glContext = (wxGLContext*) NULL;
@@ -292,6 +291,68 @@ bool wxGLCanvas::Create( wxWindow *parent,
     m_noExpose = TRUE;
     m_nativeSizeEvent = TRUE;
     
+    XVisualInfo *vi = NULL;
+    if (wxTheApp->m_glVisualInfo != NULL) {
+        vi = (XVisualInfo *) wxTheApp->m_glVisualInfo; 
+        m_canFreeVi = FALSE; // owned by wxTheApp - don't free upon destruction
+    } else {
+        vi = (XVisualInfo *) ChooseGLVisual(attribList);
+        m_canFreeVi = TRUE;
+    }
+    m_vi = vi;  // save for later use
+    
+    wxCHECK_MSG( m_vi, FALSE, "required visual couldn't be found" );
+
+    GdkVisual *visual = gdkx_visual_get( vi->visualid );
+    GdkColormap *colormap = gdk_colormap_new( gdkx_visual_get(vi->visualid), TRUE );
+    
+    gtk_widget_push_colormap( colormap );
+    gtk_widget_push_visual( visual );
+
+    wxScrolledWindow::Create( parent, id, pos, size, style, name );
+
+    m_glWidget = m_wxwindow;
+    
+    gtk_pizza_set_clear( GTK_PIZZA(m_wxwindow), FALSE );
+    
+    gtk_signal_connect( GTK_OBJECT(m_wxwindow), "realize",
+                            GTK_SIGNAL_FUNC(gtk_glwindow_realized_callback), (gpointer) this );
+
+    gtk_signal_connect( GTK_OBJECT(m_wxwindow), "map",
+                            GTK_SIGNAL_FUNC(gtk_glwindow_map_callback), (gpointer) this );
+
+    gtk_signal_connect( GTK_OBJECT(m_wxwindow), "expose_event",
+        GTK_SIGNAL_FUNC(gtk_glwindow_expose_callback), (gpointer)this );
+
+    gtk_signal_connect( GTK_OBJECT(m_wxwindow), "draw",
+        GTK_SIGNAL_FUNC(gtk_glwindow_draw_callback), (gpointer)this );
+	
+    gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
+        GTK_SIGNAL_FUNC(gtk_glcanvas_size_callback), (gpointer)this );
+
+    gtk_widget_pop_visual();
+    gtk_widget_pop_colormap();
+    
+    if (GTK_WIDGET_REALIZED(m_wxwindow))
+        gtk_glwindow_realized_callback( m_wxwindow, this );
+    
+    if (GTK_WIDGET_MAPPED(m_wxwindow))
+        gtk_glwindow_map_callback( m_wxwindow, this );
+    
+    return TRUE;
+}
+
+wxGLCanvas::~wxGLCanvas()
+{
+    XVisualInfo *vi = (XVisualInfo *) m_vi;
+    
+    if (vi && m_canFreeVi) XFree( vi );
+    if (m_glContext) delete m_glContext;
+}
+
+void* wxGLCanvas::ChooseGLVisual(int *attribList)
+{
+    int data[512];
     if (!attribList)
     {
         // default settings if attriblist = 0
@@ -355,57 +416,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
     
     Display *dpy = GDK_DISPLAY();
     
-    XVisualInfo *vi = glXChooseVisual( dpy, DefaultScreen(dpy), attribList );
-    
-    m_vi = vi;  // safe for later use
-    
-    wxCHECK_MSG( m_vi, FALSE, "required visual couldn't be found" );
-
-    GdkVisual *visual = gdkx_visual_get( vi->visualid );
-    GdkColormap *colormap = gdk_colormap_new( gdkx_visual_get(vi->visualid), TRUE );
-    
-    gtk_widget_push_colormap( colormap );
-    gtk_widget_push_visual( visual );
-
-    wxScrolledWindow::Create( parent, id, pos, size, style, name );
-
-    m_glWidget = m_wxwindow;
-    
-    gtk_pizza_set_clear( GTK_PIZZA(m_wxwindow), FALSE );
-    
-    gtk_signal_connect( GTK_OBJECT(m_wxwindow), "realize",
-                            GTK_SIGNAL_FUNC(gtk_glwindow_realized_callback), (gpointer) this );
-
-    gtk_signal_connect( GTK_OBJECT(m_wxwindow), "map",
-                            GTK_SIGNAL_FUNC(gtk_glwindow_map_callback), (gpointer) this );
-
-    gtk_signal_connect( GTK_OBJECT(m_wxwindow), "expose_event",
-        GTK_SIGNAL_FUNC(gtk_glwindow_expose_callback), (gpointer)this );
-
-    gtk_signal_connect( GTK_OBJECT(m_wxwindow), "draw",
-        GTK_SIGNAL_FUNC(gtk_glwindow_draw_callback), (gpointer)this );
-	
-    gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
-        GTK_SIGNAL_FUNC(gtk_glcanvas_size_callback), (gpointer)this );
-
-    gtk_widget_pop_visual();
-    gtk_widget_pop_colormap();
-    
-    if (GTK_WIDGET_REALIZED(m_wxwindow))
-        gtk_glwindow_realized_callback( m_wxwindow, this );
-    
-    if (GTK_WIDGET_MAPPED(m_wxwindow))
-        gtk_glwindow_map_callback( m_wxwindow, this );
-    
-    return TRUE;
-}
-
-wxGLCanvas::~wxGLCanvas()
-{
-    XVisualInfo *vi = (XVisualInfo *) m_vi;
-    
-    if (vi) XFree( vi );
-    if (m_glContext) delete m_glContext;
+    return glXChooseVisual( dpy, DefaultScreen(dpy), attribList );
 }
 
 void wxGLCanvas::SwapBuffers()
@@ -453,6 +464,26 @@ void wxGLCanvas::OnInternalIdle()
     }
     
     wxWindow::OnInternalIdle();
+}
+
+
+
+//---------------------------------------------------------------------------
+// wxGLApp
+//---------------------------------------------------------------------------
+
+IMPLEMENT_CLASS(wxGLApp, wxApp)
+        
+wxGLApp::~wxGLApp()
+{
+    if (m_glVisualInfo) XFree(m_glVisualInfo);
+}
+
+bool wxGLApp::InitGLVisual(int *attribList)
+{
+    if (m_glVisualInfo) XFree(m_glVisualInfo);
+    m_glVisualInfo = wxGLCanvas::ChooseGLVisual(attribList);
+    return (m_glVisualInfo != NULL);
 }
 
 #endif
