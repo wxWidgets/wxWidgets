@@ -1871,7 +1871,11 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             break;
 
         case WM_DESTROY:
-            processed = HandleDestroy();
+            // never set processed to TRUE and *always* pass WM_DESTROY to
+            // DefWindowProc() as Windows may do some internal cleanup when
+            // processing it and failing to pass the message along may cause
+            // memory and resource leaks!
+            (void)HandleDestroy();
             break;
 
         case WM_MOVE:
