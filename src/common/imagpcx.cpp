@@ -168,8 +168,7 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
     int nplanes;                    // number of planes
     int encoding;                   // is the image RLE encoded?
     int format;                     // image format (8 bit, 24 bit)
-    unsigned int i;
-    off_t pos;
+    unsigned int i, j;
 
     // Read PCX header and check the version number (it must
     // be at least 5 or higher for 8 bit and 24 bit images).
@@ -199,23 +198,19 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
     else
         return wxPCX_INVFORMAT;
 
-    // If the image is of type wxPCX_8BIT, then there is a
-    // palette at the end of the file. Read it now before
-    // proceeding.
-    //
-    if (format == wxPCX_8BIT)
-    {
-        pos = stream.TellI();
-        stream.SeekI(-769, wxFromEnd);
+    // If the image is of type wxPCX_8BIT, then there is
+    // a palette at the end of the image data. If we were
+    // working with a file, we could seek at the end to the
+    // end (SeekI(-769, wxFromEnd) and read the palette
+    // before proceeding. Unfortunately, this would prevent
+    // loading several PCXs in a single stream, so we can't
+    // do it. Thus, 8-bit images will have to be decoded in
+    // two passes: one to read and decode the image data,
+    // and another to replace 'colour indexes' with RGB
+    // values.
 
-        if (stream.GetC() != 12)
-            return wxPCX_INVFORMAT;
 
-        stream.Read(pal, 768);
-        stream.SeekI(pos, wxFromStart);
-    }
-
-    // Allocate memory for a scanline and resize the image.
+    // Resize the image and allocate memory for a scanline.
     //
     image->Create(width, height);
 
@@ -230,7 +225,7 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
     //
     dst = image->GetData();
 
-    for (; height; height--)
+    for (j = height; j; j--)
     {
         if (encoding)
             RLEdecode(p, bytesperline * nplanes, stream);
@@ -243,9 +238,9 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
             {
                 for (i = 0; i < width; i++)
                 {
-                    *(dst++) = pal[ 3 * (p[i]) ];
-                    *(dst++) = pal[ 3 * (p[i]) + 1];
-                    *(dst++) = pal[ 3 * (p[i]) + 2];
+                    // first pass, just store the colour index
+                    *dst = p[i];
+                    dst += 3;
                 }
                 break;
             }
@@ -263,6 +258,28 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
     }
 
     free(p);
+
+    // For 8 bit images, we read the palette, and then do a second
+    // pass replacing indexes with their RGB values;
+    //
+    if (format == wxPCX_8BIT)
+    {
+        unsigned char index;
+
+        if (stream.GetC() != 12)
+            return wxPCX_INVFORMAT;
+
+        stream.Read(pal, 768);
+
+        p = image->GetData();
+        for (unsigned long k = height * width; k; k--)
+        {
+            index = *p;
+            *(p++) = pal[3 * index];
+            *(p++) = pal[3 * index + 1];
+            *(p++) = pal[3 * index + 2];
+        }
+    }
 
     return wxPCX_OK;
 }
