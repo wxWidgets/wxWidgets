@@ -59,7 +59,6 @@
 #define CFSTR_SHELLURL _T("UniformResourceLocator")
 #endif
 
-
 // ----------------------------------------------------------------------------
 // functions
 // ----------------------------------------------------------------------------
@@ -329,7 +328,9 @@ STDMETHODIMP wxIDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
             if ( !format.IsStandard() ) {
                 // for custom formats, put the size with the data - alloc the
                 // space for it
-                size += sizeof(size_t);
+                // MB: not completely sure this is correct,
+                //     even if I can't figure out what's wrong
+                size += m_pDataObject->GetBufferOffset( format );
             }
 
             HGLOBAL hGlobal = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, size);
@@ -391,14 +392,12 @@ STDMETHODIMP wxIDataObject::GetDataHere(FORMATETC *pformatetc,
                     return E_OUTOFMEMORY;
                 }
 
-                if ( !wxDataFormat(pformatetc->cfFormat).IsStandard() ) {
+                wxDataFormat format = pformatetc->cfFormat;
+                if ( !format.IsStandard() ) {
                     // for custom formats, put the size with the data
-                    size_t *p = (size_t *)pBuf;
-                    *p++ = GlobalSize(hGlobal);
-                    pBuf = p;
+                    pBuf = m_pDataObject->SetSizeInBuffer( pBuf, GlobalSize(hGlobal), format );
                 }
 
-                wxDataFormat format = pformatetc->cfFormat;
                 if ( !m_pDataObject->GetDataHere(format, pBuf) )
                     return E_UNEXPECTED;
 
@@ -448,7 +447,7 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                 }
 
                 // copy data
-                void *pBuf = GlobalLock(pmedium->hGlobal);
+                const void *pBuf = GlobalLock(pmedium->hGlobal);
                 if ( pBuf == NULL ) {
                     wxLogLastError(wxT("GlobalLock"));
 
@@ -470,9 +469,9 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
 #if !defined(__WATCOMC__) && ! (defined(__BORLANDC__) && (__BORLANDC__ < 0x500))
                     case CF_UNICODETEXT:
 #if (defined(__BORLANDC__) && (__BORLANDC__ > 0x530))
-                        size = std::wcslen((const wchar_t *)pBuf);
+                        size = std::wcslen((const wchar_t *)pBuf) * sizeof(wchar_t);
 #else
-                        size = ::wcslen((const wchar_t *)pBuf);
+                        size = ::wcslen((const wchar_t *)pBuf) * sizeof(wchar_t);
 #endif
                         break;
 #endif
@@ -496,12 +495,10 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                     default:
                         {
                             // we suppose that the size precedes the data
-                            size_t *p = (size_t *)pBuf;
-                            size = *p++;
-                            pBuf = p;
+                            pBuf = m_pDataObject->GetSizeFromBuffer( pBuf, &size, format );
                             if (! format.IsStandard() ) {
                                 // see GetData for coresponding increment
-                                size -= sizeof(size_t);
+                                size -= m_pDataObject->GetBufferOffset( format  );
                             }
                         }
                 }
@@ -685,6 +682,29 @@ void wxDataObject::SetAutoDelete()
 
     // so that the dtor doesnt' crash
     m_pIDataObject = NULL;
+}
+
+size_t wxDataObject::GetBufferOffset( const wxDataFormat& format )
+{
+    return sizeof(size_t);
+}
+
+const void* wxDataObject::GetSizeFromBuffer( const void* buffer, size_t* size,
+                                             const wxDataFormat& format )
+{
+    size_t* p = (size_t*)buffer;
+    *size = *p;
+
+    return p + 1;
+}
+
+void* wxDataObject::SetSizeInBuffer( void* buffer, size_t size,
+                                       const wxDataFormat& format )
+{
+    size_t* p = (size_t*)buffer;
+    *p = size;
+
+    return p + 1;
 }
 
 #ifdef __WXDEBUG__
@@ -1044,12 +1064,51 @@ bool wxFileDataObject::GetDataHere(void *pData) const
 // wxURLDataObject
 // ----------------------------------------------------------------------------
 
+class CFSTR_SHELLURLDataObject:public wxCustomDataObject
+{
+public:
+    CFSTR_SHELLURLDataObject() : wxCustomDataObject(CFSTR_SHELLURL) {}
+protected:
+    virtual size_t GetBufferOffset( const wxDataFormat& format )
+    {
+        return 0;
+    }
+
+    virtual const void* GetSizeFromBuffer( const void* buffer, size_t* size,
+                                           const wxDataFormat& format )
+    {
+        // CFSTR_SHELLURL is _always_ ANSI text
+        *size = strlen( (const char*)buffer );
+
+        return buffer;
+    }
+
+    virtual void* SetSizeInBuffer( void* buffer, size_t size,
+                                   const wxDataFormat& format )
+    {
+        return buffer;
+    }
+#if wxUSE_UNICODE
+    virtual bool GetDataHere( void* buffer ) const
+    {
+        // CFSTR_SHELLURL is _always_ ANSI!
+        wxCharBuffer char_buffer( GetDataSize() );
+        wxCustomDataObject::GetDataHere( (void*)char_buffer.data() );
+        wxString unicode_buffer( char_buffer );
+        memcpy( buffer, unicode_buffer.c_str(),
+                ( unicode_buffer.length() + 1 ) * sizeof(wxChar) );
+
+        return TRUE;
+    }
+#endif
+};
+
 wxURLDataObject::wxURLDataObject()
 {
     // we support CF_TEXT and CFSTR_SHELLURL formats which are basicly the same
-    // but it seems that some browsers only provideo ne of them so we have to
+    // but it seems that some browsers only provide one of them so we have to
     // support both
-    Add(new wxCustomDataObject(CFSTR_SHELLURL));
+    Add(new CFSTR_SHELLURLDataObject());
     Add(new wxTextDataObject);
 
     // we don't have any data yet

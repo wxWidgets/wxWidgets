@@ -133,6 +133,43 @@ wxDataObjectComposite::GetPreferredFormat(Direction WXUNUSED(dir)) const
     return dataObj->GetFormat();
 }
 
+#if defined(__WXMSW__)
+
+size_t wxDataObjectComposite::GetBufferOffset( const wxDataFormat& format )
+{
+    wxDataObjectSimple *dataObj = GetObject(format);
+
+    wxCHECK_MSG( dataObj, FALSE,
+                 wxT("unsupported format in wxDataObjectComposite"));
+
+    return dataObj->GetBufferOffset( format );
+}
+
+const void* wxDataObjectComposite::GetSizeFromBuffer( const void* buffer,
+                                                      size_t* size,
+                                                      const wxDataFormat& format )
+{
+    wxDataObjectSimple *dataObj = GetObject(format);
+
+    wxCHECK_MSG( dataObj, FALSE,
+                 wxT("unsupported format in wxDataObjectComposite"));
+
+    return dataObj->GetSizeFromBuffer( buffer, size, format );
+}
+
+void* wxDataObjectComposite::SetSizeInBuffer( void* buffer, size_t size,
+                                              const wxDataFormat& format )
+{
+    wxDataObjectSimple *dataObj = GetObject(format);
+
+    wxCHECK_MSG( dataObj, FALSE,
+                 wxT("unsupported format in wxDataObjectComposite"));
+
+    return dataObj->SetSizeInBuffer( buffer, size, format );
+}
+
+#endif
+
 size_t wxDataObjectComposite::GetFormatCount(Direction WXUNUSED(dir)) const
 {
     // TODO what about the Get/Set only formats?
@@ -190,19 +227,19 @@ bool wxDataObjectComposite::SetData(const wxDataFormat& format,
 
 size_t wxTextDataObject::GetDataSize() const
 {
-    return GetTextLength();
+    return GetTextLength() * sizeof(wxChar);
 }
 
 bool wxTextDataObject::GetDataHere(void *buf) const
 {
-    strcpy((char *)buf, GetText().mb_str());
+    wxStrcpy((wxChar *)buf, GetText().c_str());
 
     return TRUE;
 }
 
 bool wxTextDataObject::SetData(size_t WXUNUSED(len), const void *buf)
 {
-    SetText(wxString((const char *)buf));
+    SetText(wxString((const wxChar *)buf));
 
     return TRUE;
 }

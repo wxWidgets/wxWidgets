@@ -273,6 +273,13 @@ public:
 protected:
     // returns the pointer to the object which supports this format or NULL
     wxDataObjectSimple *GetObject(const wxDataFormat& format) const;
+#if defined(__WXMSW__)
+    virtual const void* GetSizeFromBuffer( const void* buffer, size_t* size,
+                                           const wxDataFormat& format );
+    virtual void* SetSizeInBuffer( void* buffer, size_t size,
+                                   const wxDataFormat& format );
+    virtual size_t GetBufferOffset( const wxDataFormat& format );
+#endif
 
 private:
     // the list of all (simple) data objects whose formats we support
@@ -301,7 +308,8 @@ public:
     // ctor: you can specify the text here or in SetText(), or override
     // GetText()
     wxTextDataObject(const wxString& text = wxEmptyString)
-        : wxDataObjectSimple(wxDF_TEXT), m_text(text)
+        : wxDataObjectSimple(wxUSE_UNICODE?wxDF_UNICODETEXT:wxDF_TEXT),
+          m_text(text)
         {
         }
 
