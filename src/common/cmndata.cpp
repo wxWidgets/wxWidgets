@@ -548,7 +548,11 @@ void wxPrintData::ConvertFromNative()
 #ifndef __WXWINE__
         //// Paper size
 
-        if (devMode->dmFields & DM_PAPERSIZE)
+        // We don't know size of user defined paper and some buggy drivers
+        // set both DM_PAPERSIZE and DM_PAPERWIDTH & DM_PAPERLENGTH. Since
+        // dmPaperSize >= DMPAPER_USER wouldn't be in wxWin's database, this
+        // code wouldn't set m_paperSize correctly.
+        if ((devMode->dmFields & DM_PAPERSIZE) && (devMode->dmPaperSize < DMPAPER_USER))
         {
             if (wxThePrintPaperDatabase)
             {
@@ -913,7 +917,7 @@ void wxPrintDialogData::ConvertToNative()
 
     if ( m_printAllPages )
         pd->Flags |= PD_ALLPAGES;
-    if ( m_printAllPages )
+    if ( m_printSelection )
         pd->Flags |= PD_SELECTION;
     if ( m_printCollate )
         pd->Flags |= PD_COLLATE;
