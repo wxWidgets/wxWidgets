@@ -581,14 +581,18 @@ ALL_GUI_DIST: ALL_DIST
 	cp $(INCDIR)/wx/*.inl $(DISTDIR)/include/wx
 	cp $(INCDIR)/wx/*.cpp $(DISTDIR)/include/wx
 	cp $(INCDIR)/wx/generic/*.h $(DISTDIR)/include/wx/generic
-	cp $(INCDIR)/wx/generic/*.xpm $(DISTDIR)/include/wx/generic
 	cp $(INCDIR)/wx/html/*.h $(DISTDIR)/include/wx/html
 	cp $(INCDIR)/wx/unix/*.h $(DISTDIR)/include/wx/unix
 	cp $(INCDIR)/wx/protocol/*.h $(DISTDIR)/include/wx/protocol
+	mkdir $(DISTDIR)/art
+	mkdir $(DISTDIR)/art/gtk
+	mkdir $(DISTDIR)/art/motif
+	cp $(WXDIR)/art/*.xpm $(DISTDIR)/art
+	cp $(WXDIR)/art/gtk/*.xpm $(DISTDIR)/art/gtk
+	cp $(WXDIR)/art/motif/*.xpm $(DISTDIR)/art/motif
 	mkdir $(DISTDIR)/src/common
 	mkdir $(DISTDIR)/src/generic
 	mkdir $(DISTDIR)/src/html
-	mkdir $(DISTDIR)/src/html/bitmaps
 	mkdir $(DISTDIR)/src/$(TOOLKITDIR)
 	mkdir $(DISTDIR)/src/png
 	mkdir $(DISTDIR)/src/jpeg
@@ -609,7 +613,6 @@ ALL_GUI_DIST: ALL_DIST
 	cp $(GENDIR)/*.cpp $(DISTDIR)/src/generic
 	cp $(GENDIR)/*.mms $(DISTDIR)/src/generic
 	cp $(HTMLDIR)/*.cpp $(DISTDIR)/src/html
-	cp $(HTMLDIR)/bitmaps/*.xpm $(DISTDIR)/src/html/bitmaps
 	cp $(PNGDIR)/*.h $(DISTDIR)/src/png
 	cp $(PNGDIR)/*.c $(DISTDIR)/src/png
 	cp $(PNGDIR)/README $(DISTDIR)/src/png
@@ -673,7 +676,6 @@ BASE_DIST: ALL_DIST
 GTK_DIST: ALL_GUI_DIST
 	cp $(WXDIR)/wxGTK.spec $(DISTDIR)
 	cp $(INCDIR)/wx/gtk/*.h $(DISTDIR)/include/wx/gtk
-	cp $(INCDIR)/wx/gtk/*.xpm $(DISTDIR)/include/wx/gtk
 	cp $(GTKDIR)/files.lst $(DISTDIR)/src/gtk
 	cp $(GTKDIR)/*.cpp $(DISTDIR)/src/gtk
 	cp $(GTKDIR)/*.c $(DISTDIR)/src/gtk
