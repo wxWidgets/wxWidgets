@@ -865,12 +865,14 @@ bool wxFileConfig::DoReadString(const wxString& key, wxString* pStr) const
 
 bool wxFileConfig::DoReadLong(const wxString& key, long *pl) const
 {
-  wxString str;
-  if ( !Read(key, & str) )
-  {
-    return FALSE;
-  }
-  return str.ToLong(pl) ;
+    wxString str;
+    if ( !Read(key, &str) )
+        return FALSE;
+
+    // extra spaces shouldn't prevent us from reading numeric values
+    str.Trim();
+
+    return str.ToLong(pl);
 }
 
 bool wxFileConfig::DoWriteString(const wxString& key, const wxString& szValue)
