@@ -27,6 +27,8 @@ ArtIDs = [ "wx.ART_ADD_BOOKMARK",
            "wx.ART_GO_TO_PARENT",
            "wx.ART_GO_HOME",
            "wx.ART_FILE_OPEN",
+           "wx.ART_FILE_SAVE",
+           "wx.ART_FILE_SAVE_AS",
            "wx.ART_PRINT",
            "wx.ART_HELP",
            "wx.ART_TIP",
@@ -48,6 +50,16 @@ ArtIDs = [ "wx.ART_ADD_BOOKMARK",
            "wx.ART_QUESTION",
            "wx.ART_WARNING",
            "wx.ART_INFORMATION",
+           "wx.ART_MISSING_IMAGE",
+           "wx.ART_COPY",
+           "wx.ART_CUT",
+           "wx.ART_PASTE",
+           "wx.ART_DELETE",
+           "wx.ART_UNDO",
+           "wx.ART_REDO",
+           "wx.ART_QUIT",
+           "wx.ART_FIND",
+           "wx.ART_FIND_AND_REPLACE",
            ]
 
 
@@ -197,24 +209,34 @@ class TestPanel(wx.Panel):
         bmp = wx.ArtProvider_GetBitmap(self.artid, self.client, (16,16))
 
         if not bmp.Ok():
-            bmp = wxEmptyBitmap(16,16)
+            bmp = wx.EmptyBitmap(16,16)
+            self.clearBmp(bmp)
 
         self.bmp16.SetBitmap(bmp)
 
         bmp = wx.ArtProvider_GetBitmap(self.artid, self.client, (32,32))
 
         if not bmp.Ok():
-            bmp = wxEmptyBitmap(32,32)
+            bmp = wx.EmptyBitmap(32,32)
+            self.clearBmp(bmp)
 
         self.bmp32.SetBitmap(bmp)
 
         bmp = wx.ArtProvider_GetBitmap(self.artid, self.client, (48,48))
 
         if not bmp.Ok():
-            bmp = wxEmptyBitmap(48,48)
+            bmp = wx.EmptyBitmap(48,48)
+            self.clearBmp(bmp)
 
         self.bmp48.SetBitmap(bmp)
 
+
+    def clearBmp(self, bmp):
+        dc = wx.MemoryDC()
+        dc.SelectObject(bmp)
+        dc.SetBackground(wx.Brush("white"))
+        dc.Clear()
+        
 
 #----------------------------------------------------------------------
 
