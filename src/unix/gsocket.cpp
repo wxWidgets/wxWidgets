@@ -791,27 +791,26 @@ int GSocketBSD::Read(char *buffer, int size)
 
   assert(this);
 
-  /* When using CFSocket we MUST NOT reenable events until we finish reading */
-#ifndef __DARWIN__
-  /* Reenable INPUT events */
-  Enable(GSOCK_INPUT);
-#endif
-
   if (m_fd == INVALID_SOCKET || m_server)
   {
     m_error = GSOCK_INVSOCK;
     return -1;
   }
 
+  /* Disable events during query of socket status */
+  Disable(GSOCK_INPUT);
+    
   /* If the socket is blocking, wait for data (with a timeout) */
   if (Input_Timeout() == GSOCK_TIMEDOUT)
-    return -1;
-
-  /* Read the data */
-  if (m_stream)
-    ret = Recv_Stream(buffer, size);
-  else
-    ret = Recv_Dgram(buffer, size);
+    /* We no longer return here immediately, otherwise socket events would not be re-enabled! */
+    ret = -1;
+  else {
+    /* Read the data */
+    if (m_stream)
+      ret = Recv_Stream(buffer, size);
+    else
+      ret = Recv_Dgram(buffer, size);
+  }
     
   if (ret == -1)
   {
@@ -821,10 +820,8 @@ int GSocketBSD::Read(char *buffer, int size)
       m_error = GSOCK_IOERR;
   }
   
-#ifdef __DARWIN__
-  /* Reenable INPUT events */
+  /* Enable events again now that we are done processing */
   Enable(GSOCK_INPUT);
-#endif
 
   return ret;
 }
@@ -904,17 +901,17 @@ GSocketEventFlags GSocketBSD::Select(GSocketEventFlags flags)
     fd_set exceptfds;
     struct timeval tv;
 
+    assert(this);
+
     /* Do not use a static struct, Linux can garble it */
     tv.tv_sec = m_timeout / 1000;
     tv.tv_usec = (m_timeout % 1000) / 1000;
-
-    assert(this);
 
     FD_ZERO(&readfds);
     FD_ZERO(&writefds);
     FD_ZERO(&exceptfds);
     FD_SET(m_fd, &readfds);
-    if (flags & GSOCK_OUTPUT_FLAG)
+    if (flags & GSOCK_OUTPUT_FLAG || flags & GSOCK_CONNECTION_FLAG)
       FD_SET(m_fd, &writefds);
     FD_SET(m_fd, &exceptfds);
 
@@ -1634,8 +1631,10 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   {
 #else
   /* Use gethostbyname by default */
+#ifndef __WXMAC__
   int val = 1;  //VA doesn't like constants in conditional expressions at all
   if (val)
+#endif
   {
 #endif
     struct in_addr *array_addr;
@@ -1669,7 +1668,7 @@ GSocketError GAddress_INET_SetHostAddress(GAddress *address,
   CHECK_ADDRESS(address, INET);
 
   addr = &(((struct sockaddr_in *)address->m_addr)->sin_addr);
-  addr->s_addr = hostaddr;
+  addr->s_addr = htonl(hostaddr);
 
   return GSOCK_NOERROR;
 }
@@ -1760,7 +1759,7 @@ unsigned long GAddress_INET_GetHostAddress(GAddress *address)
 
   addr = (struct sockaddr_in *)address->m_addr;
 
-  return addr->sin_addr.s_addr;
+  return ntohl(addr->sin_addr.s_addr);
 }
 
 unsigned short GAddress_INET_GetPort(GAddress *address)
