@@ -417,6 +417,12 @@ dnl ### begin block 1_COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0 ###
         COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0=""
     fi
     AC_SUBST(COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0)
+dnl ### begin block 1_COND_TOOLKIT_MAC_WXUNIV_0 ###
+    COND_TOOLKIT_MAC_WXUNIV_0="#"
+    if test "x$TOOLKIT" = "xMAC" -a "x$WXUNIV" = "x0" ; then
+        COND_TOOLKIT_MAC_WXUNIV_0=""
+    fi
+    AC_SUBST(COND_TOOLKIT_MAC_WXUNIV_0)
 dnl ### begin block 1_COND_TOOLKIT_MGL ###
     COND_TOOLKIT_MGL="#"
     if test "x$TOOLKIT" = "xMGL" ; then
@@ -465,6 +471,12 @@ dnl ### begin block 1_COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0 ###
         COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0=""
     fi
     AC_SUBST(COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0)
+dnl ### begin block 1_COND_TOOLKIT_MSW_WXUNIV_0 ###
+    COND_TOOLKIT_MSW_WXUNIV_0="#"
+    if test "x$TOOLKIT" = "xMSW" -a "x$WXUNIV" = "x0" ; then
+        COND_TOOLKIT_MSW_WXUNIV_0=""
+    fi
+    AC_SUBST(COND_TOOLKIT_MSW_WXUNIV_0)
 dnl ### begin block 1_COND_TOOLKIT_PM ###
     COND_TOOLKIT_PM="#"
     if test "x$TOOLKIT" = "xPM" ; then
@@ -483,6 +495,12 @@ dnl ### begin block 1_COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0 ###
         COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0=""
     fi
     AC_SUBST(COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0)
+dnl ### begin block 1_COND_TOOLKIT_PM_WXUNIV_0 ###
+    COND_TOOLKIT_PM_WXUNIV_0="#"
+    if test "x$TOOLKIT" = "xPM" -a "x$WXUNIV" = "x0" ; then
+        COND_TOOLKIT_PM_WXUNIV_0=""
+    fi
+    AC_SUBST(COND_TOOLKIT_PM_WXUNIV_0)
 dnl ### begin block 1_COND_TOOLKIT_WINCE ###
     COND_TOOLKIT_WINCE="#"
     if test "x$TOOLKIT" = "xWINCE" ; then
