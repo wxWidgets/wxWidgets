@@ -191,6 +191,7 @@ class WXDLLIMPEXP_SVG wxSVGFileDC : public wxDC
                 return (wxCoord)((double)(y) * m_scaleY - 0.5);
         }
 
+	void write(const wxString &s);
 
     public:
 
