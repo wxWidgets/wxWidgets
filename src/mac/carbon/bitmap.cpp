@@ -293,7 +293,7 @@ PicHandle wxMacCreatePict(GWorldPtr wp, GWorldPtr mask)
   return pict;                  
 }
 
-void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap , bool forceColorIcon ) 
+void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap , int forceType ) 
 {
     memset( info , 0 , sizeof(ControlButtonContentInfo) ) ;
     if ( bitmap.Ok() )
@@ -309,7 +309,7 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
         }
         else if ( bmap->m_bitmapType == kMacBitmapTypeGrafWorld )
         {
-            if ( (forceColorIcon || bmap->m_width == bmap->m_height) && ((bmap->m_width & 0x3) == 0) )
+            if ( (forceType == kControlContentCIconHandle || ( bmap->m_width == bmap->m_height && forceType != kControlContentPictHandle ) ) && ((bmap->m_width & 0x3) == 0) )
             {
                 info->contentType = kControlContentCIconHandle ;
                 if ( bitmap.GetMask() )
