@@ -12556,16 +12556,12 @@ EXPORTS
       DoSetItemClientData__9wxListBoxFiPv
       ;wxListBox::DoAppend(const wxString&)
       DoAppend__9wxListBoxFRC8wxString
-      ;wxListBox::SetHorizontalExtent(const wxString&)
-      SetHorizontalExtent__9wxListBoxFRC8wxString
       ;wxListBox::OS2Command(unsigned int,unsigned short)
       OS2Command__9wxListBoxFUiUs
       ;wxListBox::sm_classwxListBox
       sm_classwxListBox__9wxListBox
       ;wxListBox::DoSetFirstItem(int)
       DoSetFirstItem__9wxListBoxFi
-      ;wxListBox::OnCtlColor(unsigned long,unsigned long,unsigned int,unsigned int,void*,void*)
-      OnCtlColor__9wxListBoxFUlT1UiT3PvT5
       ;wxListBox::IsSelected(int) const
       IsSelected__9wxListBoxCFi
       ;wxListBox::SetString(int,const wxString&)
