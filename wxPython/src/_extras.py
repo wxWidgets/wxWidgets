@@ -706,11 +706,13 @@ def wxPyTypeCast(obj, typeStr):
 
 
 #----------------------------------------------------------------------
+#----------------------------------------------------------------------
 
 class wxPyOnDemandOutputWindow:
     def __init__(self, title = "wxPython: stdout/stderr"):
         self.frame  = None
         self.title  = title
+        self.parent = None
 
 
     def SetParent(self, parent):
@@ -724,7 +726,7 @@ class wxPyOnDemandOutputWindow:
         self.text  = None
 
 
-    # this provides the file-like behaviour
+    # this provides the file-like output behaviour
     def write(self, str):
         if not self.frame:
             self.frame = wxFrame(self.parent, -1, self.title)
@@ -738,9 +740,7 @@ class wxPyOnDemandOutputWindow:
 
     def close(self):
         if self.frame != None:
-            self.frame.Destroy()
-        self.frame = None
-        self.text  = None
+            self.frame.Close()
 
 
 
@@ -774,7 +774,6 @@ class wxApp(wxPyApp):
     def SetTopWindow(self, frame):
         if self.stdioWin:
             self.stdioWin.SetParent(frame)
-            sys.stderr = sys.stdout = self.stdioWin
         wxPyApp.SetTopWindow(self, frame)
 
 
@@ -788,12 +787,12 @@ class wxApp(wxPyApp):
             sys.stdout = sys.stderr = open(filename, 'a')
         else:
             self.stdioWin = self.outputWindowClass() # wxPyOnDemandOutputWindow
+            sys.stdout = sys.stderr = self.stdioWin
 
 
     def RestoreStdio(self):
         sys.stdout, sys.stderr = self.saveStdio
-        if self.stdioWin != None:
-            self.stdioWin.close()
+
 
 #----------------------------------------------------------------------------
 
