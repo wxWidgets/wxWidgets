@@ -934,6 +934,18 @@ SAMPLES_DIST:
 	cp $(SAMPDIR)/png/*.cpp $(DISTDIR)/samples/png
 	cp $(SAMPDIR)/png/*.h $(DISTDIR)/samples/png
 	cp $(SAMPDIR)/png/*.png $(DISTDIR)/samples/png
+	mkdir $(DISTDIR)/samples/resource
+	cp $(SAMPDIR)/resource/Makefile.in $(DISTDIR)/samples/resource
+	cp $(SAMPDIR)/resource/*.cpp $(DISTDIR)/samples/resource
+	cp $(SAMPDIR)/resource/*.h $(DISTDIR)/samples/resource
+	cp $(SAMPDIR)/resource/*.wxr $(DISTDIR)/samples/resource
+	mkdir $(DISTDIR)/samples/richedit
+	cp $(SAMPDIR)/richedit/Makefile.in $(DISTDIR)/samples/richedit
+	cp $(SAMPDIR)/richedit/*.cpp $(DISTDIR)/samples/richedit
+	cp $(SAMPDIR)/richedit/*.h $(DISTDIR)/samples/richedit
+	cp $(SAMPDIR)/richedit/*.xpm $(DISTDIR)/samples/richedit
+	cp $(SAMPDIR)/richedit/README $(DISTDIR)/samples/richedit
+	cp $(SAMPDIR)/richedit/TODO $(DISTDIR)/samples/richedit
 	mkdir $(DISTDIR)/samples/proplist
 	cp $(SAMPDIR)/proplist/Makefile.in $(DISTDIR)/samples/proplist
 	cp $(SAMPDIR)/proplist/*.cpp $(DISTDIR)/samples/proplist

@@ -2953,6 +2953,7 @@ AC_OUTPUT([
             samples/printing/Makefile
 	    samples/proplist/Makefile
             samples/richedit/Makefile
+            samples/resource/Makefile
             samples/sashtest/Makefile
             samples/scroll/Makefile
             samples/splitter/Makefile
