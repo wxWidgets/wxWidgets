@@ -9,10 +9,6 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-//#pragma implementation
-#endif
-
 #include "wx/wxprec.h"
 #ifndef WX_PRECOMP
     #include "wx/log.h"

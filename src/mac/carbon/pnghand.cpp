@@ -9,7 +9,7 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #  pragma implementation "pngread.h"
 #  pragma implementation "pnghand.h"
 #endif

@@ -9,13 +9,15 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "gauge.h"
 #endif
 
-#include "wx/gauge.h"
+#include "wx/wxprec.h"
 
 #if wxUSE_GAUGE 
+
+#include "wx/gauge.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)

@@ -9,9 +9,11 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "mdi.h"
 #endif
+
+#include "wx/wxprec.h"
 
 #include "wx/mdi.h"
 #include "wx/menu.h"

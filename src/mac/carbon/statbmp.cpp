@@ -9,11 +9,11 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
   #pragma implementation "statbmp.h"
 #endif
 
-#include "wx/defs.h"
+#include "wx/wxprec.h"
 
 #include "wx/statbmp.h"
 #include "wx/dcclient.h"

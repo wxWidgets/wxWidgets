@@ -13,6 +13,8 @@
 // headers & declarations
 // ============================================================================
 
+#include "wx/wxprec.h"
+
 #include "wx/app.h"
 #include "wx/menu.h"
 #include "wx/menuitem.h"

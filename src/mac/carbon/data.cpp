@@ -9,6 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#include "wx/wxprec.h"
+
 #include "wx/event.h"
 
 #if wxUSE_SHARED_LIBRARY

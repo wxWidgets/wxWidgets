@@ -11,8 +11,6 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
-
 #ifdef wxHAS_TASK_BAR_ICON
 
 #include "wx/mac/private.h"

@@ -12,7 +12,7 @@
 #pragma implementation "spinctrl.h"
 #endif
 
-#include "wx/defs.h"
+#include "wx/wxprec.h"
 
 #if wxUSE_SPINCTRL
 

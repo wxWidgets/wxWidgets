@@ -9,7 +9,7 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "notebook.h"
 #endif
 
@@ -20,6 +20,8 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
+#include "wx/wxprec.h"
+
 #include "wx/app.h"
 #include "wx/string.h"
 #include "wx/log.h"

@@ -9,9 +9,11 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "timer.h"
 #endif
+
+#include "wx/wxprec.h"
 
 #include "wx/timer.h"
 

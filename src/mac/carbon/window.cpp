@@ -9,11 +9,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "window.h"
 #endif
 
-#include "wx/setup.h"
+#include "wx/wxprec.h"
+
 #include "wx/menu.h"
 #include "wx/window.h"
 #include "wx/dc.h"

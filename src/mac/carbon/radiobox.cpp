@@ -9,7 +9,7 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "radioboxbase.h"
 #pragma implementation "radiobox.h"
 #endif
@@ -18,7 +18,8 @@
 //         headers
 //-------------------------------------------------------------------------------------
 
-#include "wx/defs.h"
+#include "wx/wxprec.h"
+
 #include "wx/arrstr.h"
 
 #include "wx/radiobox.h"

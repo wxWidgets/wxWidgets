@@ -9,7 +9,7 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "glcanvas.h"
 #endif
 
@@ -18,8 +18,6 @@
 #if defined(__BORLANDC__)
 #pragma hdrstop
 #endif
-
-#include "wx/setup.h"
 
 #if wxUSE_GLCANVAS
 

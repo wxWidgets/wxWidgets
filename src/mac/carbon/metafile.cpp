@@ -9,7 +9,7 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "metafile.h"
 #endif
 
@@ -18,10 +18,6 @@
 
 #ifdef __BORLANDC__
 #pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#include "wx/setup.h"
 #endif
 
 #if wxUSE_METAFILE

@@ -17,7 +17,7 @@
 // headers
 // ---------------------------------------------------------------------------
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "hid.h"
 #endif
 
@@ -27,11 +27,6 @@
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
-
-#ifndef WX_PRECOMP
-    #include "wx/defs.h"
-#endif
-
 
 //DARWIN _ONLY_
 #ifdef __DARWIN__

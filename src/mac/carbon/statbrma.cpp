@@ -9,13 +9,15 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "statbrma.h"
 #endif
 
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
+
+#include "wx/wxprec.h"
 
 #include "wx/statusbr.h"
 #include "wx/dc.h"

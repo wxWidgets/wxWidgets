@@ -17,7 +17,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
   #pragma implementation "dataobj.h"
 #endif
 
@@ -27,7 +27,6 @@
 #ifndef WX_PRECOMP
 #include "wx/intl.h"
 #endif
-#include "wx/defs.h"
 
 #include "wx/log.h"
 #include "wx/dataobj.h"

@@ -9,7 +9,7 @@
 // Licence:     wxWindows licence (part of wxExtra library)
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef    __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "mimetype.h"
 #endif
 
@@ -18,10 +18,6 @@
 
 #ifdef __BORLANDC__
   #pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-  #include "wx/defs.h"
 #endif
 
 #ifndef WX_PRECOMP
