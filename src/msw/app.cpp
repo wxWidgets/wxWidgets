@@ -54,6 +54,7 @@
 #include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/ole/oleutils.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -299,20 +300,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     InitCommonControls();
 #endif // __WIN95__
 
-#if wxUSE_OLE || wxUSE_DRAG_AND_DROP
-
-#if wxUSE_OLE
-    // we need to initialize OLE library
-#ifdef __WXWINCE__
-    if ( FAILED(::CoInitializeEx(NULL, COINIT_MULTITHREADED)) )
-        wxLogError(_("Cannot initialize OLE"));
-#else
-    if ( FAILED(::OleInitialize(NULL)) )
-        wxLogError(_("Cannot initialize OLE"));
-#endif
-#endif
-
-#endif // wxUSE_OLE
+    wxOleInitialize();
 
     RegisterWindowClasses();
 
@@ -489,13 +477,7 @@ void wxApp::CleanUp()
     wxCleanUpPenWin();
 #endif
 
-#if wxUSE_OLE
-#ifdef __WXWINCE__
-    ::CoUninitialize();
-#else
-    ::OleUninitialize();
-#endif
-#endif
+    wxOleUninitialize();
 
     // for an EXE the classes are unregistered when it terminates but DLL may
     // be loaded several times (load/unload/load) into the same process in
