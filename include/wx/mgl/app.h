@@ -51,14 +51,14 @@ public:
     virtual void WakeUpIdle();
     virtual bool Yield(bool onlyIfNeeded = FALSE);
 
-    virtual wxDisplayModeInfo GetDisplayMode() const { return m_displayMode; }
-    virtual bool SetDisplayMode(const wxDisplayModeInfo& mode);
+    virtual wxVideoMode GetDisplayMode() const { return m_displayMode; }
+    virtual bool SetDisplayMode(const wxVideoMode& mode);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxApp)
     DECLARE_EVENT_TABLE()
 
-    wxDisplayModeInfo m_displayMode;
+    wxVideoMode m_displayMode;
 };
 
 #endif // __WX_APP_H__

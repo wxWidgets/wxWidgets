@@ -19,59 +19,12 @@
 #endif
 
 #include "wx/dynarray.h"
+#include "wx/vidmode.h"
 
 class WXDLLEXPORT wxWindow;
 class WXDLLEXPORT wxPoint;
 class WXDLLEXPORT wxRect;
 class WXDLLEXPORT wxString; 
-
-// ----------------------------------------------------------------------------
-// wxVideoMode: contains video mode parameters for a display
-// ----------------------------------------------------------------------------
-
-struct WXDLLEXPORT wxVideoMode
-{
-    wxVideoMode(int width = 0, int height = 0, int depth = 0, int freq = 0)
-    {
-        w = width;
-        h = height;
-
-        bpp = depth;
-
-        refresh = freq;
-    }
-
-    // default copy ctor and assignment operator are ok
-
-    bool operator==(const wxVideoMode& m) const
-    {
-        return w == m.w && h == m.h && bpp == m.bpp && refresh == m.refresh;
-    }
-    bool operator!=(const wxVideoMode& mode) const
-    {
-        return !operator==(mode);
-    }
-
-    // returns true if this mode matches the other one in the sense that all
-    // non zero fields of the other mode have the same value in this one
-    // (except for refresh which is allowed to have a greater value)
-    bool Matches(const wxVideoMode& other) const
-    {
-        return (!other.w || w == other.w) &&
-                    (!other.h || h == other.h) &&
-                        (!other.bpp || bpp == other.bpp) &&
-                            (!other.refresh || refresh >= other.refresh);
-    }
-
-    // the screen size in pixels (e.g. 640*480), 0 means unspecified
-    int w, h;
-
-    // bits per pixel (e.g. 32), 1 is monochrome and 0 means unspecified/known
-    int bpp;
-
-    // refresh frequency in Hz, 0 means unspecified/unknown
-    int refresh;
-};
 
 WX_DECLARE_EXPORTED_OBJARRAY(wxVideoMode, wxArrayVideoModes);
 

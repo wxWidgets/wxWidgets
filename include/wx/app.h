@@ -21,6 +21,8 @@
 
 #if wxUSE_GUI
     #include "wx/window.h"  // for wxTopLevelWindows
+
+    #include "wx/vidmode.h"
 #endif // wxUSE_GUI
 
 #include "wx/build.h"
@@ -58,33 +60,6 @@ enum
     wxPRINT_WINDOWS = 1,
     wxPRINT_POSTSCRIPT = 2
 };
-
-// ----------------------------------------------------------------------------
-// support for framebuffer ports
-// ----------------------------------------------------------------------------
-
-#if wxUSE_GUI
-// VS: Fullscreen/framebuffer application needs to choose display mode prior
-//     to wxWindows initialization. This class holds information about display
-//     mode. It is used by  wxApp::Set/GetDisplayMode.
-class WXDLLIMPEXP_CORE wxDisplayModeInfo
-{
-public:
-    wxDisplayModeInfo() : m_ok(FALSE) {}
-    wxDisplayModeInfo(unsigned width, unsigned height, unsigned depth)
-        : m_width(width), m_height(height), m_depth(depth), m_ok(TRUE) {}
-
-    unsigned GetWidth() const { return m_width; }
-    unsigned GetHeight() const { return m_height; }
-    unsigned GetDepth() const { return m_depth; }
-    bool IsOk() const { return m_ok; }
-
-private:
-    unsigned m_width, m_height, m_depth;
-    bool     m_ok;
-};
-#endif // wxUSE_GUI
-
 
 // ----------------------------------------------------------------------------
 // wxAppConsole: wxApp for non-GUI applications
@@ -482,11 +457,11 @@ public:
 
         // Get display mode that is used use. This is only used in framebuffer
         // wxWin ports (such as wxMGL).
-    virtual wxDisplayModeInfo GetDisplayMode() const { return wxDisplayModeInfo(); }
+    virtual wxVideoMode GetDisplayMode() const { return wxVideoMode(); }
         // Set display mode to use. This is only used in framebuffer wxWin
         // ports (such as wxMGL). This method should be called from
         // wxApp::OnInitGui
-    virtual bool SetDisplayMode(const wxDisplayModeInfo& WXUNUSED(info)) { return TRUE; }
+    virtual bool SetDisplayMode(const wxVideoMode& WXUNUSED(info)) { return TRUE; }
 
         // set use of best visual flag (see below)
     void SetUseBestVisual( bool flag ) { m_useBestVisual = flag; }

@@ -147,7 +147,7 @@ static wxRootWindow *gs_rootWindow = NULL;
 // MGL initialization
 //-----------------------------------------------------------------------------
 
-static bool wxCreateMGL_WM(const wxDisplayModeInfo& displayMode)
+static bool wxCreateMGL_WM(const wxVideoMode& displayMode)
 {
     int mode;
     int refresh = MGL_DEFAULT_REFRESH;
@@ -216,7 +216,7 @@ wxApp::~wxApp()
 {
 }
 
-wxDisplayModeInfo wxGetDefaultDisplayMode()
+wxVideoMode wxGetDefaultDisplayMode()
 {
     wxString mode;
     unsigned w, h, bpp;
@@ -227,10 +227,10 @@ wxDisplayModeInfo wxGetDefaultDisplayMode()
         w = 640, h = 480, bpp = 16;
     }
 
-    return wxDisplayModeInfo(w, h, bpp);
+    return wxVideoMode(w, h, bpp);
 }
 
-bool wxApp::SetDisplayMode(const wxDisplayModeInfo& mode)
+bool wxApp::SetDisplayMode(const wxVideoMode& mode)
 {
     if ( !mode.IsOk() )
     {
