@@ -108,7 +108,8 @@ char const *SQL_CATALOG_FILENAME     = "catalog.txt";
 wxDbSqlLogState SQLLOGstate = sqlLogOFF;
 
 //char SQLLOGfn[wxDB_PATH_MAX+1] = SQL_LOG_FILENAME;
-wxChar *SQLLOGfn         = (wxChar*) SQL_LOG_FILENAME;
+//wxChar *SQLLOGfn         = (wxChar*) SQL_LOG_FILENAME;
+static wxString SQLLOGfn = SQL_LOG_FILENAME;
 
 // The wxDb::errorList is copied to this variable when the wxDb object
 // is closed.  This way, the error list is still available after the
@@ -116,9 +117,24 @@ wxChar *SQLLOGfn         = (wxChar*) SQL_LOG_FILENAME;
 // connection fails so the calling application can show the operator
 // why the connection failed.  Note: as each wxDb object is closed, it
 // will overwrite the errors of the previously destroyed wxDb object in
-// this variable.
+// this variable.  NOTE: This occurs during a CLOSE, not a FREEing of the
+// connection
 char DBerrorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
 
+#if EXPERIMENTAL_WXDB_FUNCTIONS  // will be added in 2.4
+// This type defines the return row-struct form 
+// SQLTablePrivileges, and is used by wxDB::TablePrivileges.
+typedef struct 
+{
+   char        tableQual[129];
+   char        tableOwner[129];
+   char        tableName[129];
+   char        grantor[129];
+   char        grantee[129];
+   char        privilege[129];
+   char        grantable[4];
+} wxDbTablePrivilegeInfo;
+#endif
 
 /********** wxDbColFor Constructor **********/
 wxDbColFor::wxDbColFor()
@@ -553,7 +569,10 @@ bool wxDb::getDbInfo(void)
 
     if (SQLGetInfo(hdbc, SQL_PROCEDURES, (UCHAR*) dbInf.procedureSupport, 2, &cb) != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc));
-
+#if EXPERIMENTAL_WXDB_FUNCTIONS  // will be added in 2.4
+    if (SQLGetInfo(hdbc, SQL_ACCESSIBLE_TABLES, (UCHAR*) dbInf.accessibleTables, 2, &cb) != SQL_SUCCESS)
+        return(DispAllErrors(henv, hdbc));
+#endif
     if (SQLGetInfo(hdbc, SQL_CURSOR_COMMIT_BEHAVIOR, (UCHAR*) &dbInf.cursorCommitBehavior, sizeof(dbInf.cursorCommitBehavior), &cb) != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc));
 
@@ -625,16 +644,18 @@ bool wxDb::getDbInfo(void)
     cout << "SQL Conf. Level: ";
     switch(dbInf.sqlConfLvl)
     {
-        case SQL_OSC_MINIMUM:     cout << "Minimum Grammer";     break;
-        case SQL_OSC_CORE:        cout << "Core Grammer";        break;
-        case SQL_OSC_EXTENDED:    cout << "Extended Grammer";    break;
+        case SQL_OSC_MINIMUM:     cout << "Minimum Grammar";     break;
+        case SQL_OSC_CORE:        cout << "Core Grammar";        break;
+        case SQL_OSC_EXTENDED:    cout << "Extended Grammar";    break;
     }
     cout << endl;
 
     cout << "Max. Connections: "       << dbInf.maxConnections   << endl;
     cout << "Outer Joins: "            << dbInf.outerJoins       << endl;
     cout << "Support for Procedures: " << dbInf.procedureSupport << endl;
-
+#if EXPERIMENTAL_WXDB_FUNCTIONS  // will be added in 2.4
+    cout << "All tables accessible : " << dbInf.accessibleTables << endl;
+#endif
     cout << "Cursor COMMIT Behavior: ";
     switch(dbInf.cursorCommitBehavior)
     {
@@ -1932,8 +1953,8 @@ wxDbColInf *wxDb::GetColumns(char *tableName, int *numCols, const char *userID)
 /*
 
 BJO 20000503
-
-These are tentative new GetColumns members:
+These are tentative new GetColumns members which should be more database independant and 
+which always returns the columns in the order they were created.
 
 - The first one (wxDbColInf *wxDb::GetColumns(char *tableName[], const char* userID)) calls
   the second implementation for each separate table before merging the results. This makes the
@@ -2683,9 +2704,9 @@ bool wxDb::TableExists(const char *tableName, const char *userID, const char *ta
     
       wxString dbName;
       if (tablePath && wxStrlen(tablePath))
- 	dbName.sprintf("%s\\%s.dbf",tablePath,tableName);      
+         dbName.sprintf("%s\\%s.dbf",tablePath,tableName);      
       else
- 	dbName.sprintf("%s.dbf",tableName);
+         dbName.sprintf("%s.dbf",tableName);
 	  
       bool exists;
       exists = wxFileExists(dbName.c_str());    
@@ -2751,6 +2772,95 @@ bool wxDb::TableExists(const char *tableName, const char *userID, const char *ta
 
 }  // wxDb::TableExists()
 
+#if EXPERIMENTAL_WXDB_FUNCTIONS  // will be added in 2.4
+/********** wxDB::TablePrivileges() **********/
+bool wxDB::TablePrivileges(const char *tableName, const char* priv,
+                      const char *userID, const char *tablePath)
+{
+   wxDbTablePrivilegeInfo  result;
+   SDWORD  cbRetVal;
+   RETCODE retcode;
+
+   //We probably need to be able to dynamically set this based on 
+   //the driver type, and state.
+   char curRole[]="public";
+
+   //Prologue here similar to db::TableExists()
+    wxString UserID;
+    wxString TableName;
+
+    assert(tableName && wxStrlen(tableName));
+
+    if (userID)
+    {
+        if (!wxStrlen(userID))
+            UserID = uid;
+        else
+            UserID = userID;
+    }
+    else
+        UserID = "";
+
+    // Oracle user names may only be in uppercase, so force 
+    // the name to uppercase
+    if (Dbms() == dbmsORACLE)
+        UserID = UserID.Upper();
+
+    TableName = tableName;
+    // Oracle table names are uppercase only, so force 
+    // the name to uppercase just in case programmer forgot to do this
+    if (Dbms() == dbmsORACLE)
+        TableName = TableName.Upper();
+
+    SQLFreeStmt(hstmt, SQL_CLOSE);
+
+    retcode = SQLTablePrivileges(hstmt,
+                                 NULL, 0,                                    // All qualifiers
+                                 NULL, 0,                                    // All owners
+                                 (UCHAR FAR *)TableName.GetData(), SQL_NTS);  
+       
+#ifdef DBDEBUG_CONSOLE 
+    fprintf(stderr ,"SQLTablePrivileges() returned %i \n",retcode);
+#endif
+    retcode = SQLBindCol (hstmt, 1, SQL_C_CHAR , &result.tableQual, 128, &cbRetVal);
+
+    retcode = SQLBindCol (hstmt, 2, SQL_C_CHAR , &result.tableOwner, 128, &cbRetVal);
+
+    retcode = SQLBindCol (hstmt, 3, SQL_C_CHAR , &result.tableName, 128, &cbRetVal);
+
+    retcode = SQLBindCol (hstmt, 4, SQL_C_CHAR , &result.grantor, 128, &cbRetVal);
+
+    retcode = SQLBindCol (hstmt, 5, SQL_C_CHAR , &result.grantee, 128, &cbRetVal);
+
+    retcode = SQLBindCol (hstmt, 6, SQL_C_CHAR , &result.privilege, 128, &cbRetVal);
+
+    retcode = SQLBindCol (hstmt, 7, SQL_C_CHAR , &result.grantable, 3, &cbRetVal);
+
+    retcode = SQLFetch(hstmt);
+    while (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO) 
+	 {
+#ifdef DBDEBUG_CONSOLE
+       fprintf(stderr,"Scanning %s privilege  on table %s.%s  granted by %s to %s\n",
+                       result.privilege,result.tabowner,result.tabname,
+                       result.grantor, result.grantee);
+#endif 
+       if (UserID.IsSameAs(result.tableOwner,false) )
+           return TRUE;
+
+       if (UserID.IsSameAs(result.grantee,false) &&
+             !strcmp(result.privilege,priv))
+           return TRUE;
+
+       if (!strcmp(result.grantee,curRole) &&
+           !strcmp(result.privilege,priv))
+           return TRUE;
+               
+       retcode = SQLFetch(hstmt);
+    } 
+
+    return FALSE;
+}  // wxDB::TablePrivileges
+#endif
 
 /********** wxDb::SetSqlLogging() **********/
 bool wxDb::SetSqlLogging(wxDbSqlLogState state, const char *filename, bool append)
@@ -2839,6 +2949,9 @@ wxDBMS wxDb::Dbms(void)
  * MY_SQL
  *        - If a column is part of the Primary Key, the column cannot be NULL
  *        - Cannot support selecting for update [::CanSelectForUpdate()].  Always returns FALSE
+ *        - Columns that are part of primary or secondary keys must be defined as being NOT NULL
+ *            when they are created.  Some code is added in ::CreateIndex to try to adjust the
+ *            column definition if it is not defined correctly, but it is experimental
  *
  * POSTGRES
  *        - Does not support the keywords 'ASC' or 'DESC' as of release v6.5.0
@@ -2969,8 +3082,8 @@ bool WXDLLEXPORT wxDbFreeConnection(wxDb *pDb)
     // Scan the linked list searching for the database connection
     for (pList = PtrBegDbList; pList; pList = pList->PtrNext)
     {
-        if (pList->PtrDb == pDb)        // Found it!!!
-            return(pList->Free = TRUE);
+        if (pList->PtrDb == pDb)        // Found it, now free it!!!
+            return (pList->Free = TRUE);
     }
 
     // Never found the database object, return failure
@@ -3032,14 +3145,15 @@ bool wxDbSqlLog(wxDbSqlLogState state, const wxChar *filename)
     }
 
     SQLLOGstate = state;
-    wxStrcpy(SQLLOGfn,filename);
+//    wxStrcpy(SQLLOGfn,filename);
+    SQLLOGfn = filename;
 
     return(TRUE);
 
 }  // wxDbSqlLog()
 
 
-#if 0
+#if EXPERIMENTAL_WXDB_FUNCTIONS  // will be added in 2.4
 /********** wxDbCreateDataSource() **********/
 int wxDbCreateDataSource(const char *driverName, const char *dsn, const char *description,
                          bool sysDSN, const char *defDir, wxWindow *parent)
@@ -3107,7 +3221,7 @@ int wxDbCreateDataSource(const char *driverName, const char *dsn, const char *de
     else
        result = TRUE;
 
-#else  // __WXMSW__
+#else  // using iODBC, so this function is not supported
 #ifdef __WXDEBUG__
     wxLogDebug("wxDbCreateDataSource() not available except under MSW","DEBUG MESSAGE");
 #endif
