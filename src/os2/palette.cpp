@@ -33,105 +33,201 @@ IMPLEMENT_DYNAMIC_CLASS(wxPalette, wxGDIObject)
 
 wxPaletteRefData::wxPaletteRefData()
 {
-    m_hPalette = 0;
-}
+    m_hPalette = NULLHANDLE;
+    m_hPS      = NULLHANDLE;
+} // end of wxPaletteRefData::wxPaletteRefData
 
 wxPaletteRefData::~wxPaletteRefData()
 {
     if ( m_hPalette )
         return;
-        // TODO: ::DeleteObject((HPALETTE) m_hPalette);
-}
+} // end of wxPaletteRefData::~wxPaletteRefData
 
 wxPalette::wxPalette()
 {
-}
+} // end of wxPalette::wxPalette
 
-wxPalette::wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
+wxPalette::wxPalette(
+  int                               n
+, const unsigned char*              pRed
+, const unsigned char*              pGreen
+, const unsigned char*              pBlue
+)
 {
-    Create(n, red, green, blue);
-}
+    Create( n
+           ,pRed
+           ,pGreen
+           ,pBlue
+          );
+} // end of wxPalette::wxPalette
 
 wxPalette::~wxPalette()
 {
-}
+} // end of wxPalette::~wxPalette
 
-bool wxPalette::FreeResource(bool force)
+bool wxPalette::FreeResource(
+  bool                              bForce
+)
 {
     if ( M_PALETTEDATA && M_PALETTEDATA->m_hPalette)
     {
-// TODO:   DeleteObject((HPALETTE)M_PALETTEDATA->m_hPalette);
+        ::GpiSelectPalette(M_PALETTEDATA->m_hPS, NULLHANDLE);
+        ::GpiDeletePalette((HPAL)M_PALETTEDATA->m_hPalette);
     }
     return TRUE;
-}
+} // end of wxPalette::FreeResource
 
-bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
+bool wxPalette::Create(
+  int                               n
+, const unsigned char*              pRed
+, const unsigned char*              pGreen
+, const unsigned char*              pBlue
+)
 {
-  UnRef();
+    PULONG                          pualTable;
 
-  m_refData = new wxPaletteRefData;
+    UnRef();
 
-  // TODO
-/*
-  NPLOGPALETTE npPal = (NPLOGPALETTE)LocalAlloc(LMEM_FIXED, sizeof(LOGPALETTE) +
-                        (WORD)n * sizeof(PALETTEENTRY));
-  if (!npPal)
-    return(FALSE);
+    m_refData = new wxPaletteRefData;
+    pualTable = new ULONG[n];
+    if (!pualTable)
+        return(FALSE);
 
-  npPal->palVersion = 0x300;
-  npPal->palNumEntries = n;
+    for (int i = 0; i < n; i ++)
+    {
+        pualTable[i] = (PC_RESERVED * 16777216) + ((int)pRed[i] * 65536) + ((int)pGreen[i] * 256) + (int)pBlue[i];
+    }
+    M_PALETTEDATA->m_hPalette = (WXHPALETTE)::GpiCreatePalette( vHabmain
+                                                               ,LCOL_PURECOLOR
+                                                               ,LCOLF_CONSECRGB
+                                                               ,(LONG)n
+                                                               ,pualTable
+                                                              );
+    delete [] pualTable;
+    return TRUE;
+} // end of wxPalette::Create
 
-  int i;
-  for (i = 0; i < n; i ++)
-  {
-    npPal->palPalEntry[i].peRed = red[i];
-    npPal->palPalEntry[i].peGreen = green[i];
-    npPal->palPalEntry[i].peBlue = blue[i];
-    npPal->palPalEntry[i].peFlags = 0;
-  }
-  M_PALETTEDATA->m_hPalette = (WXHPALETTE) CreatePalette((LPLOGPALETTE)npPal);
-  LocalFree((HANDLE)npPal);
-*/
-  return FALSE;
-}
-
-int wxPalette::GetPixel(const unsigned char red, const unsigned char green, const unsigned char blue) const
+int wxPalette::GetPixel(
+  const unsigned char               cRed
+, const unsigned char               cGreen
+, const unsigned char               cBlue
+) const
 {
-    if ( !m_refData )
-  	return FALSE;
+    bool                            bFound = FALSE;
+    PULONG                          pualTable = NULL;
+    ULONG                           ulNumEntries;
+    ULONG                           ulRGB = (PC_RESERVED * 16777216) +
+                                            ((int)cRed * 65536) +
+                                            ((int)cGreen * 256) +
+                                             (int)cBlue;
 
-    // TODO
-    return FALSE;
-}
-
-bool wxPalette::GetRGB(int index, unsigned char *red, unsigned char *green, unsigned char *blue) const
-{
-    if ( !m_refData )
-	    return FALSE;
-
-    if (index < 0 || index > 255)
+    if (!m_refData)
         return FALSE;
-// TODO
-/*
-  PALETTEENTRY entry;
-  if (::GetPaletteEntries((HPALETTE) M_PALETTEDATA->m_hPalette, index, 1, &entry))
-  {
-         *red = entry.peRed;
-         *green = entry.peGreen;
-         *blue = entry.peBlue;
-         return TRUE;
-  } else
-         return FALSE;
-*/
-  return FALSE;
-}
 
-void wxPalette::SetHPALETTE(WXHPALETTE pal)
+    //
+    // Get number of entries first
+    //
+    ulNumEntries = ::GpiQueryPaletteInfo( M_PALETTEDATA->m_hPalette
+                                         ,M_PALETTEDATA->m_hPS
+                                         ,0                    // No options
+                                         ,0                    // No start index
+                                         ,0                    // Force return of number entries
+                                         ,NULL                 // No array
+                                        );
+
+    pualTable = new ULONG[ulNumEntries];
+
+    //
+    // Now get the entries
+    //
+    ulNumEntries = ::GpiQueryPaletteInfo( M_PALETTEDATA->m_hPalette
+                                         ,M_PALETTEDATA->m_hPS
+                                         ,0                    // No options
+                                         ,0                    // start at 0
+                                         ,ulNumEntries         // Force return of number entries
+                                         ,pualTable            // Palette entry array with RGB values
+                                        );
+    //
+    // Now loop through and find the matching entry
+    //
+    for (int i = 0; i < ulNumEntries; i++)
+    {
+        if (pualTable[i] == ulRGB)
+        {
+            bFound = TRUE;
+            break;
+        }
+    }
+    if (!bFound)
+        return 0;
+    return (i + 1);
+} // end of wxPalette::GetPixel
+
+bool wxPalette::GetRGB(
+  int                               nIndex
+, unsigned char*                    pRed
+, unsigned char*                    pGreen
+, unsigned char*                    pBlue
+) const
 {
-	if ( !m_refData )
-		m_refData = new wxPaletteRefData;
+    PULONG                          pualTable = NULL;
+    RGB2                            vRGB;
+    ULONG                           ulNumEntries;
 
-    M_PALETTEDATA->m_hPalette = pal;
-}
+    if (!m_refData)
+        return FALSE;
 
+    if (nIndex < 0 || nIndex > 255)
+        return FALSE;
+    //
+    // Get number of entries first
+    //
+    ulNumEntries = ::GpiQueryPaletteInfo( M_PALETTEDATA->m_hPalette
+                                         ,M_PALETTEDATA->m_hPS
+                                         ,0                    // No options
+                                         ,0                    // No start index
+                                         ,0                    // Force return of number entries
+                                         ,NULL                 // No array
+                                        );
+
+    pualTable = new ULONG[ulNumEntries];
+
+    //
+    // Now get the entries
+    //
+    ulNumEntries = ::GpiQueryPaletteInfo( M_PALETTEDATA->m_hPalette
+                                         ,M_PALETTEDATA->m_hPS
+                                         ,0                    // No options
+                                         ,0                    // start at 0
+                                         ,ulNumEntries         // Force return of number entries
+                                         ,pualTable            // Palette entry array with RGB values
+                                        );
+
+    memcpy(&vRGB, &pualTable[nIndex], sizeof(RGB2));
+    *pBlue  = vRGB.bBlue;
+    *pGreen = vRGB.bGreen;
+    *pRed   = vRGB.bRed;
+    return TRUE;
+} // end of wxPalette::GetRGB
+
+void wxPalette::SetHPALETTE(
+  WXHPALETTE                        hPal
+)
+{
+    if ( !m_refData )
+        m_refData = new wxPaletteRefData;
+
+    M_PALETTEDATA->m_hPalette = hPal;
+} // end of wxPalette::SetHPALETTE
+
+void wxPalette::SetPS(
+  HPS                               hPS
+)
+{
+    if ( !m_refData )
+        m_refData = new wxPaletteRefData;
+
+    ::GpiSelectPalette(M_PALETTEDATA->m_hPS, M_PALETTEDATA->m_hPalette);
+    M_PALETTEDATA->m_hPS = hPS;
+} // end of wxPalette::SetHPALETTE
 
