@@ -427,57 +427,65 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacWindowEventHandler )
 static pascal void wxMacControlUserPaneDrawProc(ControlRef control, SInt16 part)
 {
     wxWindow * win = wxFindControlFromMacControl(control) ;
-    wxCHECK_RET( win , wxT("Callback from unkown control") ) ;
-    win->MacControlUserPaneDrawProc(part) ;
+    if ( win )
+        win->MacControlUserPaneDrawProc(part) ;
 }
 
 static pascal ControlPartCode wxMacControlUserPaneHitTestProc(ControlRef control, Point where)
 {
     wxWindow * win = wxFindControlFromMacControl(control) ;
-    wxCHECK_MSG( win , kControlNoPart , wxT("Callback from unkown control") ) ;
-    return win->MacControlUserPaneHitTestProc(where.h , where.v) ;
+    if ( win )
+        return win->MacControlUserPaneHitTestProc(where.h , where.v) ;
+    else
+        return kControlNoPart ;
 }
 
 static pascal ControlPartCode wxMacControlUserPaneTrackingProc(ControlRef control, Point startPt, ControlActionUPP actionProc)
 {
     wxWindow * win = wxFindControlFromMacControl(control) ;
-    wxCHECK_MSG( win , kControlNoPart , wxT("Callback from unkown control") ) ;
-    return win->MacControlUserPaneTrackingProc( startPt.h , startPt.v , (void*) actionProc) ;
+    if ( win )
+        return win->MacControlUserPaneTrackingProc( startPt.h , startPt.v , (void*) actionProc) ;
+    else
+        return kControlNoPart ;
 }
 
 static pascal void wxMacControlUserPaneIdleProc(ControlRef control)
 {
     wxWindow * win = wxFindControlFromMacControl(control) ;
-    wxCHECK_RET( win , wxT("Callback from unkown control") ) ;
-    win->MacControlUserPaneIdleProc() ;
+    if ( win )
+        win->MacControlUserPaneIdleProc() ;
 }
 
 static pascal ControlPartCode wxMacControlUserPaneKeyDownProc(ControlRef control, SInt16 keyCode, SInt16 charCode, SInt16 modifiers)
 {
     wxWindow * win = wxFindControlFromMacControl(control) ;
-    wxCHECK_MSG( win , kControlNoPart , wxT("Callback from unkown control") ) ;
-    return win->MacControlUserPaneKeyDownProc(keyCode,charCode,modifiers) ;
+    if ( win )
+        return win->MacControlUserPaneKeyDownProc(keyCode,charCode,modifiers) ;
+    else
+        return kControlNoPart ;
 }
 
 static pascal void wxMacControlUserPaneActivateProc(ControlRef control, Boolean activating)
 {
     wxWindow * win = wxFindControlFromMacControl(control) ;
-    wxCHECK_RET( win , wxT("Callback from unkown control") ) ;
-    win->MacControlUserPaneActivateProc(activating) ;
+    if ( win )
+        win->MacControlUserPaneActivateProc(activating) ;
 }
 
 static pascal ControlPartCode wxMacControlUserPaneFocusProc(ControlRef control, ControlFocusPart action)
 {
     wxWindow * win = wxFindControlFromMacControl(control) ;
-    wxCHECK_MSG( win , kControlNoPart , wxT("Callback from unkown control") ) ;
-    return win->MacControlUserPaneFocusProc(action) ;
+    if ( win )
+        return win->MacControlUserPaneFocusProc(action) ;
+    else
+        return kControlNoPart ;
 }
 
 static pascal void wxMacControlUserPaneBackgroundProc(ControlRef control, ControlBackgroundPtr info)
 {
     wxWindow * win = wxFindControlFromMacControl(control) ;
-    wxCHECK_RET( win , wxT("Callback from unkown control") ) ;
-    win->MacControlUserPaneBackgroundProc(info) ;
+    if ( win )
+        win->MacControlUserPaneBackgroundProc(info) ;
 }
 
 void wxWindowMac::MacControlUserPaneDrawProc(wxInt16 part)
@@ -1942,28 +1950,27 @@ wxString wxWindowMac::GetTitle() const
 
 bool wxWindowMac::Show(bool show)
 {
+    bool former = MacIsReallyShown() ;
     if ( !wxWindowBase::Show(show) )
         return FALSE;
 
     // TODO use visibilityChanged Carbon Event for OSX
     if ( m_peer )
     {
-        bool former = MacIsReallyShown() ;
-
         m_peer->SetVisibility( show , true ) ;
-        if ( former != MacIsReallyShown() )
-            MacPropagateVisibilityChanged() ;
     }
+    if ( former != MacIsReallyShown() )
+        MacPropagateVisibilityChanged() ;
     return TRUE;
 }
 
 bool wxWindowMac::Enable(bool enable)
 {
     wxASSERT( m_peer->Ok() ) ;
+    bool former = MacIsReallyEnabled() ;
     if ( !wxWindowBase::Enable(enable) )
         return FALSE;
 
-    bool former = MacIsReallyEnabled() ;
     m_peer->Enable( enable ) ;
 
     if ( former != MacIsReallyEnabled() )
