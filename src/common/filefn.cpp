@@ -1532,40 +1532,55 @@ void WXDLLEXPORT wxSplitPath(const char *pszFileName,
                              wxString *pstrName,
                              wxString *pstrExt)
 {
-  wxCHECK_RET( pszFileName, "NULL file name in wxSplitPath" );
+    // it can be empty, but it shouldn't be NULL
+    wxCHECK_RET( pszFileName, "NULL file name in wxSplitPath" );
 
-  const char *pDot = strrchr(pszFileName, wxFILE_SEP_EXT);
-  const char *pSepUnix = strrchr(pszFileName, wxFILE_SEP_PATH_UNIX);
-  const char *pSepDos = strrchr(pszFileName, wxFILE_SEP_PATH_DOS);
+    const char *pDot = strrchr(pszFileName, wxFILE_SEP_EXT);
 
-  // take the last of the two: nPosUnix containts the last slash in the
-  // filename
-  size_t nPosUnix = pSepUnix ? pSepUnix - pszFileName : 0;
-  size_t nPosDos = pSepDos ? pSepDos - pszFileName : 0;
-  if ( nPosDos > nPosUnix )
-    nPosUnix = nPosDos;
+#ifdef __WXMSW__
+    // under Windows we understand both separators
+    const char *pSepUnix = strrchr(pszFileName, wxFILE_SEP_PATH_UNIX);
+    const char *pSepDos = strrchr(pszFileName, wxFILE_SEP_PATH_DOS);
+    const char *pLastSeparator = pSepUnix > pSepDos ? pSepUnix : pSepDos;
+#else // assume Unix
+    const char *pLastSeparator = strrchr(pszFileName, wxFILE_SEP_PATH_UNIX);
 
-  if ( pstrPath )
-    *pstrPath = wxString(pszFileName, nPosUnix);
+    if ( pDot == pszFileName )
+    {
+        // under Unix files like .profile are treated in a special way
+        pDot = NULL;
+    }
+#endif // MSW/Unix
+    
+    if ( pDot < pLastSeparator )
+    {
+        // the dot is part of the path, not the start of the extension
+        pDot = NULL;
+    }
 
-  size_t nPosDot = 0;
-  if ( pDot )
-    nPosDot = pDot - pszFileName;
+    if ( pstrPath )
+    {
+        if ( pLastSeparator )    
+            *pstrPath = wxString(pszFileName, pLastSeparator - pszFileName);
+        else
+            pstrPath->Empty();
+    }
 
-  if ( nPosDot > nPosUnix ) {
-    // the file name looks like "path/name.ext"
     if ( pstrName )
-      *pstrName = wxString(pszFileName + nPosUnix + 1, nPosDot - nPosUnix - 1);
+    {
+        const char *start = pLastSeparator ? pLastSeparator + 1 : pszFileName;
+        const char *end = pDot ? pDot : pszFileName + strlen(pszFileName);
+
+        *pstrName = wxString(start, end - start);
+    }
+
     if ( pstrExt )
-      *pstrExt = wxString(pszFileName + nPosDot + 1);
-  }
-  else {
-    // there is either no dot at all or there is a '/' after it
-    if ( pstrName )
-      *pstrName = wxString(pszFileName + nPosUnix + 1);
-    if ( pstrExt )
-      pstrExt->Empty();
-  }
+    {
+        if ( pDot )
+            *pstrExt = wxString(pDot + 1);
+        else
+            pstrExt->Empty();
+    }
 }
 
 //------------------------------------------------------------------------

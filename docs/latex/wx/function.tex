@@ -239,6 +239,27 @@ The {\it flags} parameter is reserved for future use.
 Sets the current working directory, returning TRUE if the operation succeeded.
 Under MS Windows, the current drive is also changed if {\it dir} contains a drive specification.
 
+\membersection{::wxSplitPath}\label{wxsplitfunction}
+
+\func{void}{wxSplitPath}{\param{const char *}{ fullname}, \param{const wxString *}{ path}, \param{const wxString *}{ name}, \param{const wxString *}{ ext}}
+
+This function splits a full file name into components: the path (including possible disk/drive
+specification under Windows), the base name and the extension. Any of the output parameters
+({\it path}, {\it name} or {\it ext}) may be NULL if you are not interested in the value of
+a particular component.
+
+wxSplitPath() will correctly handle filenames with both DOS and Unix path separators under
+Windows, however it will not consider backslashes as path separators under Unix (where backslash
+is a valid character in a filename).
+
+On entry, {\it fullname} should be non NULL (it may be empty though).
+
+On return, {\it path} contains the file path (without the trailing separator), {\it name}
+contains the file name and {\it ext} contains the file extension without leading dot. All
+three of them may be empty if the corresponding component is. The old contents of the
+strings pointed to by these parameters will be overwritten in any case (if the pointers
+are not NULL).
+
 \section{String functions}
 
 \membersection{::copystring}
