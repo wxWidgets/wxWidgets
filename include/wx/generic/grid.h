@@ -73,6 +73,7 @@ public:
     // ctors
     wxGridCellAttr()
     {
+        Init();
         SetAlignment(0, 0);
     }
 
@@ -83,10 +84,18 @@ public:
                    int vAlign)
         : m_colText(colText), m_colBack(colBack), m_font(font)
     {
+        Init();
         SetAlignment(hAlign, vAlign);
     }
 
     // default copy ctor ok
+
+    // this class is ref counted: it is created with ref count of 1, so
+    // calling DecRef() once will delete it. Calling IncRef() allows to lock
+    // it until the matching DecRef() is called
+    void IncRef() { m_nRef++; }
+    void DecRef() { if ( !--m_nRef ) delete this; }
+    void SafeDecRef() { if ( this ) DecRef(); }
 
     // setters
     void SetTextColour(const wxColour& colText) { m_colText = colText; }
@@ -114,11 +123,24 @@ public:
     }
 
 private:
+    // the common part of all ctors
+    void Init() { m_nRef = 1; }
+
+    // the dtor is private because only DecRef() can delete us
+    ~wxGridCellAttr() { }
+
+    // the ref count - when it goes to 0, we die
+    size_t   m_nRef;
+
     wxColour m_colText,
              m_colBack;
     wxFont   m_font;
     int      m_hAlign,
              m_vAlign;
+
+    // suppress the stupid gcc warning about the class having private dtor and
+    // no friends
+    friend class wxGridCellAttrDummyFriend;
 };
 
 // ----------------------------------------------------------------------------
@@ -136,8 +158,11 @@ public:
     wxGridCellAttrProvider();
     virtual ~wxGridCellAttrProvider();
 
+    // DecRef() must be called on the returned pointer
     virtual wxGridCellAttr *GetAttr(int row, int col) const;
-    virtual void SetAttr(const wxGridCellAttr *attr, int row, int col);
+
+    // takes ownership of the pointer, don't call DecRef() on it
+    virtual void SetAttr(wxGridCellAttr *attr, int row, int col);
 
 private:
     void InitData();
@@ -198,7 +223,7 @@ public:
     virtual wxGridCellAttr *GetAttr( int row, int col );
 
     // takes ownership of the pointer
-    virtual void SetAttr(const wxGridCellAttr *attr, int row, int col );
+    virtual void SetAttr(wxGridCellAttr *attr, int row, int col );
 
 private:
     wxGrid * m_view;
@@ -939,6 +964,12 @@ protected:
 
     // do we have some place to store attributes in?
     bool CanHaveAttributes();
+
+    // returns the attribute we may modify in place: a new one if this cell
+    // doesn't have any yet or the existing one if it does
+    //
+    // DecRef() must be called on the returned pointer, as usual
+    wxGridCellAttr *GetCellAttr(int row, int col) const;
 
     wxGridCellCoordsArray  m_cellsExposed;
     wxArrayInt             m_rowsExposed;

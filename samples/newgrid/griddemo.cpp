@@ -165,9 +165,9 @@ GridFrame::GridFrame()
 
     grid->SetCellValue(2, 2, "red");
     grid->SetCellTextColour(2, 2, *wxRED);
-    grid->SetCellValue(3, 3, "green on white");
+    grid->SetCellValue(3, 3, "green on grey");
     grid->SetCellTextColour(3, 3, *wxGREEN);
-    grid->SetCellBackgroundColour(3, 3, *wxWHITE);
+    grid->SetCellBackgroundColour(3, 3, *wxLIGHT_GREY);
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
     topSizer->Add( grid,
