@@ -404,6 +404,8 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEn
 void UMAAppendMenuItem( MenuRef menu , const wxString& title, wxFontEncoding encoding , wxAcceleratorEntry *entry )
 {
     MacAppendMenu(menu, "\pA");
+    // don't attempt to interpret metacharacters like a '-' at the beginning (would become a separator otherwise) 
+    ChangeMenuItemAttributes( menu , ::CountMenuItems(menu), kMenuItemAttrIgnoreMeta , 0 ) ;
     UMASetMenuItemText(menu, (SInt16) ::CountMenuItems(menu), title , encoding );
     UMASetMenuItemShortcut( menu ,  (SInt16) ::CountMenuItems(menu), entry ) ;
 }
@@ -411,6 +413,8 @@ void UMAAppendMenuItem( MenuRef menu , const wxString& title, wxFontEncoding enc
 void UMAInsertMenuItem( MenuRef menu , const wxString& title, wxFontEncoding encoding , MenuItemIndex item , wxAcceleratorEntry *entry )
 {
     MacInsertMenuItem( menu , "\pA" , item) ;
+    // don't attempt to interpret metacharacters like a '-' at the beginning (would become a separator otherwise) 
+    ChangeMenuItemAttributes( menu , item+1, kMenuItemAttrIgnoreMeta , 0 ) ;
     UMASetMenuItemText(menu, item+1 , title , encoding );
     UMASetMenuItemShortcut( menu , item+1 , entry ) ;
 }
