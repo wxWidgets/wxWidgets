@@ -596,8 +596,16 @@ public:
                const char* name = "wxSpinCtrl");
 
 
+    int GetMax();
+    int GetMin();
+    int GetValue();
+    void SetRange(int min, int max);
+    void SetValue(int value);
+
 };
 
 
 //----------------------------------------------------------------------
+
+
 

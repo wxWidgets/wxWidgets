@@ -7327,7 +7327,150 @@ static PyObject *_wrap_new_wxSpinCtrl(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
+#define wxSpinCtrl_GetMax(_swigobj)  (_swigobj->GetMax())
+static PyObject *_wrap_wxSpinCtrl_GetMax(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxSpinCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSpinCtrl_GetMax",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSpinCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSpinCtrl_GetMax. Expected _wxSpinCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSpinCtrl_GetMax(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxSpinCtrl_GetMin(_swigobj)  (_swigobj->GetMin())
+static PyObject *_wrap_wxSpinCtrl_GetMin(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxSpinCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSpinCtrl_GetMin",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSpinCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSpinCtrl_GetMin. Expected _wxSpinCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSpinCtrl_GetMin(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxSpinCtrl_GetValue(_swigobj)  (_swigobj->GetValue())
+static PyObject *_wrap_wxSpinCtrl_GetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxSpinCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSpinCtrl_GetValue",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSpinCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSpinCtrl_GetValue. Expected _wxSpinCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSpinCtrl_GetValue(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxSpinCtrl_SetRange(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetRange(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxSpinCtrl_SetRange(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSpinCtrl * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","min","max", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxSpinCtrl_SetRange",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSpinCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSpinCtrl_SetRange. Expected _wxSpinCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSpinCtrl_SetRange(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSpinCtrl_SetValue(_swigobj,_swigarg0)  (_swigobj->SetValue(_swigarg0))
+static PyObject *_wrap_wxSpinCtrl_SetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSpinCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","value", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxSpinCtrl_SetValue",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSpinCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSpinCtrl_SetValue. Expected _wxSpinCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSpinCtrl_SetValue(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyMethodDef controlscMethods[] = {
+	 { "wxSpinCtrl_SetValue", (PyCFunction) _wrap_wxSpinCtrl_SetValue, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSpinCtrl_SetRange", (PyCFunction) _wrap_wxSpinCtrl_SetRange, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSpinCtrl_GetValue", (PyCFunction) _wrap_wxSpinCtrl_GetValue, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSpinCtrl_GetMin", (PyCFunction) _wrap_wxSpinCtrl_GetMin, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSpinCtrl_GetMax", (PyCFunction) _wrap_wxSpinCtrl_GetMax, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxSpinCtrl", (PyCFunction) _wrap_new_wxSpinCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSlider_SetValue", (PyCFunction) _wrap_wxSlider_SetValue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSlider_SetTick", (PyCFunction) _wrap_wxSlider_SetTick, METH_VARARGS | METH_KEYWORDS },
