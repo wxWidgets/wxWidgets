@@ -63,7 +63,7 @@ void wxHtmlListmarkCell::Draw(wxDC& dc, int x, int y,
                               wxHtmlRenderingInfo& WXUNUSED(info))
 {
     dc.SetBrush(m_Brush);
-    dc.DrawEllipse(x + m_PosX + m_Width / 3, y + m_PosY + m_Height / 3, 
+    dc.DrawEllipse(x + m_PosX + m_Width / 3, y + m_PosY + m_Height / 3,
                    (m_Width / 3), (m_Width / 3));
 }
 
@@ -95,7 +95,7 @@ class wxHtmlListCell : public wxHtmlContainerCell
         virtual ~wxHtmlListCell();
         void AddRow(wxHtmlContainerCell *mark, wxHtmlContainerCell *cont);
         virtual void Layout(int w);
-        
+
     DECLARE_NO_COPY_CLASS(wxHtmlListCell)
 };
 
@@ -153,7 +153,7 @@ void wxHtmlListCell::ReallocRows(int rows)
 void wxHtmlListCell::ComputeMinMaxWidths()
 {
     if (m_NumRows == 0) return;
-    
+
     m_MaxTotalWidth = 0;
     m_Width = 0;
 
@@ -183,7 +183,7 @@ class wxHtmlListcontentCell : public wxHtmlContainerCell
 {
 public:
     wxHtmlListcontentCell(wxHtmlContainerCell *p) : wxHtmlContainerCell(p) {}
-    virtual void Layout(int w) { 
+    virtual void Layout(int w) {
         // Reset top indentation, fixes <li><p>
         SetIndent(0, wxHTML_INDENT_TOP);
         wxHtmlContainerCell::Layout(w);
@@ -240,7 +240,7 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
             m_List->AddRow(mark, c);
             c = m_WParser->OpenContainer();
             m_WParser->SetContainer(new wxHtmlListcontentCell(c));
-            
+
             if (m_Numbering != 0) m_Numbering++;
         }
 
@@ -258,7 +258,7 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
             wxHtmlListCell *oldList = m_List;
             m_List = new wxHtmlListCell(c);
             m_List->SetIndent(2 * m_WParser->GetCharWidth(), wxHTML_INDENT_LEFT);
-            
+
             ParseInner(tag);
 
             m_WParser->SetContainer(oldcont);
@@ -266,7 +266,7 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
 
             m_Numbering = oldnum;
             m_List = oldList;
-            return TRUE;
+            return true;
         }
         return false;
 

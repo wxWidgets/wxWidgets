@@ -94,10 +94,10 @@ TAG_HANDLER_BEGIN(PRE, "PRE")
             fsize = m_WParser->GetFontSize();
 
         c = m_WParser->GetContainer();
-        m_WParser->SetFontUnderlined(FALSE);
-        m_WParser->SetFontBold(FALSE);
-        m_WParser->SetFontItalic(FALSE);
-        m_WParser->SetFontFixed(TRUE);
+        m_WParser->SetFontUnderlined(false);
+        m_WParser->SetFontBold(false);
+        m_WParser->SetFontItalic(false);
+        m_WParser->SetFontFixed(true);
         m_WParser->SetFontSize(3);
         c->InsertCell(new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
 
@@ -128,7 +128,7 @@ TAG_HANDLER_BEGIN(PRE, "PRE")
         m_WParser->SetFontSize(fsize);
         c->InsertCell(new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
 
-        return TRUE;
+        return true;
     }
 
 TAG_HANDLER_END(PRE)

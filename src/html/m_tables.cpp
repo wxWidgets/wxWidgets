@@ -350,7 +350,7 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
 
 void wxHtmlTableCell::ComputeMinMaxWidths()
 {
-    if (m_NumCols == 0 || m_ColsInfo[0].minWidth != -1) return;
+    if (m_NumCols == 0 || m_ColsInfo[0].minWidth != wxDefaultCoord) return;
 
     m_MaxTotalWidth = 0;
     int percentage = 0;
@@ -700,7 +700,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
             m_WParser->CloseContainer();
 
             m_Table = oldt;
-            return TRUE;
+            return true;
         }
 
 
@@ -744,7 +744,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
                 m_WParser->OpenContainer();
             }
         }
-        return FALSE;
+        return false;
     }
 
 TAG_HANDLER_END(TABLE)

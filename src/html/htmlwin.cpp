@@ -153,7 +153,7 @@ WX_DEFINE_LIST(wxHtmlProcessorList);
 
 void wxHtmlWindow::Init()
 {
-    m_tmpMouseMoved = FALSE;
+    m_tmpMouseMoved = false;
     m_tmpLastLink = NULL;
     m_tmpLastCell = NULL;
     m_tmpCanDrawLocks = 0;
@@ -168,7 +168,7 @@ void wxHtmlWindow::Init()
     m_Parser = new wxHtmlWinParser(this);
     m_Parser->SetFS(m_FS);
     m_HistoryPos = -1;
-    m_HistoryOn = TRUE;
+    m_HistoryOn = true;
     m_History = new wxHtmlHistoryArray;
     m_Processors = NULL;
     m_Style = 0;
@@ -189,11 +189,11 @@ bool wxHtmlWindow::Create(wxWindow *parent, wxWindowID id,
     if (!wxScrolledWindow::Create(parent, id, pos, size,
                                   style | wxVSCROLL | wxHSCROLL,
                                   name))
-        return FALSE;
+        return false;
 
     m_Style = style;
     SetPage(wxT("<html><body></body></html>"));
-    return TRUE;
+    return true;
 }
 
 
@@ -321,7 +321,7 @@ bool wxHtmlWindow::SetPage(const wxString& source)
     CreateLayout();
     if (m_tmpCanDrawLocks == 0)
         Refresh();
-    return TRUE;
+    return true;
 }
 
 bool wxHtmlWindow::AppendToPage(const wxString& source)
@@ -335,7 +335,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 
     wxFSFile *f;
     bool rt_val;
-    bool needs_refresh = FALSE;
+    bool needs_refresh = false;
 
     m_tmpCanDrawLocks++;
     if (m_HistoryOn && (m_HistoryPos != -1))
@@ -441,7 +441,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             delete f;
 
 #if wxUSE_STATUSBAR
-            if (m_RelatedStatusBar != -1) 
+            if (m_RelatedStatusBar != -1)
                 m_RelatedFrame->SetStatusText(_("Done"), m_RelatedStatusBar);
 #endif // wxUSE_STATUSBAR
         }
@@ -490,7 +490,7 @@ bool wxHtmlWindow::ScrollToAnchor(const wxString& anchor)
     if (!c)
     {
         wxLogWarning(_("HTML anchor %s does not exist."), anchor.c_str());
-        return FALSE;
+        return false;
     }
     else
     {
@@ -499,7 +499,7 @@ bool wxHtmlWindow::ScrollToAnchor(const wxString& anchor)
         for (y = 0; c != NULL; c = c->GetParent()) y += c->GetPosY();
         Scroll(-1, y / wxHTML_SCROLL_STEP);
         m_OpenedAnchor = anchor;
-        return TRUE;
+        return true;
     }
 }
 
@@ -613,7 +613,7 @@ bool wxHtmlWindow::HistoryBack()
 {
     wxString a, l;
 
-    if (m_HistoryPos < 1) return FALSE;
+    if (m_HistoryPos < 1) return false;
 
     // store scroll position into history item:
     int x, y;
@@ -625,21 +625,21 @@ bool wxHtmlWindow::HistoryBack()
 
     l = (*m_History)[m_HistoryPos].GetPage();
     a = (*m_History)[m_HistoryPos].GetAnchor();
-    m_HistoryOn = FALSE;
+    m_HistoryOn = false;
     m_tmpCanDrawLocks++;
     if (a == wxEmptyString) LoadPage(l);
     else LoadPage(l + wxT("#") + a);
-    m_HistoryOn = TRUE;
+    m_HistoryOn = true;
     m_tmpCanDrawLocks--;
     Scroll(0, (*m_History)[m_HistoryPos].GetPos());
     Refresh();
-    return TRUE;
+    return true;
 }
 
 bool wxHtmlWindow::HistoryCanBack()
 {
-    if (m_HistoryPos < 1) return FALSE;
-    return TRUE ;
+    if (m_HistoryPos < 1) return false;
+    return true ;
 }
 
 
@@ -647,30 +647,30 @@ bool wxHtmlWindow::HistoryForward()
 {
     wxString a, l;
 
-    if (m_HistoryPos == -1) return FALSE;
-    if (m_HistoryPos >= (int)m_History->GetCount() - 1)return FALSE;
+    if (m_HistoryPos == -1) return false;
+    if (m_HistoryPos >= (int)m_History->GetCount() - 1)return false;
 
     m_OpenedPage = wxEmptyString; // this will disable adding new entry into history in LoadPage()
 
     m_HistoryPos++;
     l = (*m_History)[m_HistoryPos].GetPage();
     a = (*m_History)[m_HistoryPos].GetAnchor();
-    m_HistoryOn = FALSE;
+    m_HistoryOn = false;
     m_tmpCanDrawLocks++;
     if (a == wxEmptyString) LoadPage(l);
     else LoadPage(l + wxT("#") + a);
-    m_HistoryOn = TRUE;
+    m_HistoryOn = true;
     m_tmpCanDrawLocks--;
     Scroll(0, (*m_History)[m_HistoryPos].GetPos());
     Refresh();
-    return TRUE;
+    return true;
 }
 
 bool wxHtmlWindow::HistoryCanForward()
 {
-    if (m_HistoryPos == -1) return FALSE;
-    if (m_HistoryPos >= (int)m_History->GetCount() - 1)return FALSE;
-    return TRUE ;
+    if (m_HistoryPos == -1) return false;
+    if (m_HistoryPos >= (int)m_History->GetCount() - 1)return false;
+    return true ;
 }
 
 
@@ -881,8 +881,8 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
                  y * wxHTML_SCROLL_STEP + rect.GetTop(),
                  y * wxHTML_SCROLL_STEP + rect.GetBottom(),
                  rinfo);
-             
-//#define DEBUG_HTML_SELECTION 
+
+//#define DEBUG_HTML_SELECTION
 #ifdef DEBUG_HTML_SELECTION
     {
     int xc, yc, x, y;
@@ -890,11 +890,11 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
     ScreenToClient(&xc, &yc);
     CalcUnscrolledPosition(xc, yc, &x, &y);
     wxHtmlCell *at = m_Cell->FindCellByPos(x, y);
-    wxHtmlCell *before = 
+    wxHtmlCell *before =
         m_Cell->FindCellByPos(x, y, wxHTML_FIND_NEAREST_BEFORE);
-    wxHtmlCell *after = 
+    wxHtmlCell *after =
         m_Cell->FindCellByPos(x, y, wxHTML_FIND_NEAREST_AFTER);
-    
+
     dcm.SetBrush(*wxTRANSPARENT_BRUSH);
     dcm.SetPen(*wxBLACK_PEN);
     if (at)
@@ -910,7 +910,7 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
                           after->GetWidth()-4,after->GetHeight()-4);
     }
 #endif
- 
+
     dcm.SetDeviceOrigin(0,0);
     dc.Blit(0, rect.GetTop(),
             sz.x, rect.GetBottom() - rect.GetTop() + 1,
@@ -1012,7 +1012,7 @@ void wxHtmlWindow::OnMouseUp(wxMouseEvent& event)
 void wxHtmlWindow::OnInternalIdle()
 {
     wxWindow::OnInternalIdle();
-    
+
     if (m_tmpMouseMoved && (m_Cell != NULL))
     {
 #ifdef DEBUG_HTML_SELECTION
@@ -1031,7 +1031,7 @@ void wxHtmlWindow::OnInternalIdle()
             if ( !m_tmpSelFromCell )
                 m_tmpSelFromCell = m_Cell->FindCellByPos(
                                          m_tmpSelFromPos.x,m_tmpSelFromPos.y);
-            
+
             // NB: a trick - we adjust selFromPos to be upper left or bottom
             //     right corner of the first cell of the selection depending
             //     on whether the mouse is moving to the right or to the left.
@@ -1053,7 +1053,7 @@ void wxHtmlWindow::OnInternalIdle()
                     dirFromPos.y += m_tmpSelFromCell->GetHeight();
                 }
             }
-            bool goingDown = dirFromPos.y < y || 
+            bool goingDown = dirFromPos.y < y ||
                              (dirFromPos.y == y && dirFromPos.x < x);
 
             // determine selection span:
@@ -1167,7 +1167,7 @@ void wxHtmlWindow::OnInternalIdle()
                 OnCellMouseHover(cell, x, y);
         }
 
-        m_tmpMouseMoved = FALSE;
+        m_tmpMouseMoved = false;
     }
 }
 
@@ -1374,18 +1374,18 @@ IMPLEMENT_DYNAMIC_CLASS_XTI(wxHtmlWindow, wxScrolledWindow,"wx/html/htmlwin.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxHtmlWindow)
 /*
-	TODO PROPERTIES
-		style , wxHW_SCROLLBAR_AUTO
-		borders , (dimension)
-		url , string
-		htmlcode , string
+    TODO PROPERTIES
+        style , wxHW_SCROLLBAR_AUTO
+        borders , (dimension)
+        url , string
+        htmlcode , string
 */
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxHtmlWindow)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_5( wxHtmlWindow , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+wxCONSTRUCTOR_5( wxHtmlWindow , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlWindow,wxScrolledWindow)
 #endif
@@ -1420,7 +1420,7 @@ class wxHtmlWinModule: public wxModule
 DECLARE_DYNAMIC_CLASS(wxHtmlWinModule)
 public:
     wxHtmlWinModule() : wxModule() {}
-    bool OnInit() { return TRUE; }
+    bool OnInit() { return true; }
     void OnExit() { wxHtmlWindow::CleanUpStatics(); }
 };
 

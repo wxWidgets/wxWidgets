@@ -86,7 +86,7 @@ wxHtmlImageMapAreaCell::wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::celltype
     wxString x = incoords, y;
 
     type = t;
-    while ((i = x.Find( ',' )) != -1)
+    while ((i = x.Find( ',' )) != wxNOT_FOUND)
     {
         coords.Add( (int)(pixel_scale * (double)wxAtoi( x.Left( i ).c_str())) );
         x = x.Mid( i + 1 );
@@ -291,7 +291,7 @@ class wxHtmlImageCell : public wxHtmlCell
 {
 public:
     wxHtmlImageCell(wxWindow *window,
-                    wxFSFile *input, int w = -1, int h = -1,
+                    wxFSFile *input, int w = wxDefaultCoord, int h = wxDefaultCoord,
                     double scale = 1.0, int align = wxHTML_ALIGN_BOTTOM,
                     const wxString& mapname = wxEmptyString);
     ~wxHtmlImageCell();
@@ -351,17 +351,17 @@ wxHtmlImageCell::wxHtmlImageCell(wxWindow *window, wxFSFile *input,
 {
     m_window = window ? wxStaticCast(window, wxScrolledWindow) : NULL;
     m_scale = scale;
-    m_showFrame = FALSE;
+    m_showFrame = false;
     m_bitmap = NULL;
     m_bmpW = w;
     m_bmpH = h;
     m_imageMap = NULL;
     m_mapName = mapname;
-    SetCanLiveOnPagebreak(FALSE);
+    SetCanLiveOnPagebreak(false);
 #if wxUSE_GIF && wxUSE_TIMER
     m_gifDecoder = NULL;
     m_gifTimer = NULL;
-    m_physX = m_physY = -1;
+    m_physX = m_physY = wxDefaultCoord;
 #endif
 
     if ( m_bmpW && m_bmpH )
@@ -372,25 +372,25 @@ wxHtmlImageCell::wxHtmlImageCell(wxWindow *window, wxFSFile *input,
 
             if ( s )
             {
-                bool readImg = TRUE;
+                bool readImg = true;
 
 #if wxUSE_GIF && wxUSE_TIMER
                 if ( (input->GetLocation().Matches(wxT("*.gif")) ||
                       input->GetLocation().Matches(wxT("*.GIF"))) && m_window )
                 {
-                    m_gifDecoder = new wxGIFDecoder(s, TRUE);
+                    m_gifDecoder = new wxGIFDecoder(s, true);
                     if ( m_gifDecoder->ReadGIF() == wxGIF_OK )
                     {
                         wxImage img;
                         if ( m_gifDecoder->ConvertToImage(&img) )
                             SetImage(img);
 
-                        readImg = FALSE;
+                        readImg = false;
 
                         if ( m_gifDecoder->IsAnimation() )
                         {
                             m_gifTimer = new wxGIFTimer(this);
-                            m_gifTimer->Start(m_gifDecoder->GetDelay(), TRUE);
+                            m_gifTimer->Start(m_gifDecoder->GetDelay(), true);
                         }
                         else
                         {
@@ -414,18 +414,18 @@ wxHtmlImageCell::wxHtmlImageCell(wxWindow *window, wxFSFile *input,
         }
         else // input==NULL, use "broken image" bitmap
         {
-            if ( m_bmpW == -1 && m_bmpH == -1 )
+            if ( m_bmpW == wxDefaultCoord && m_bmpH == wxDefaultCoord )
             {
                 m_bmpW = 29;
                 m_bmpH = 31;
             }
             else
             {
-                m_showFrame = TRUE;
-                if ( m_bmpW == -1 ) m_bmpW = 31;
-                if ( m_bmpH == -1 ) m_bmpH = 33;
+                m_showFrame = true;
+                if ( m_bmpW == wxDefaultCoord ) m_bmpW = 31;
+                if ( m_bmpH == wxDefaultCoord ) m_bmpH = 33;
             }
-            m_bitmap = 
+            m_bitmap =
                 new wxBitmap(wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
         }
     }
@@ -459,9 +459,9 @@ void wxHtmlImageCell::SetImage(const wxImage& img)
         ww = img.GetWidth();
         hh = img.GetHeight();
 
-        if ( m_bmpW == -1 )
+        if ( m_bmpW == wxDefaultCoord )
             m_bmpW = ww;
-        if ( m_bmpH == -1 )
+        if ( m_bmpH == wxDefaultCoord )
             m_bmpH = hh;
 
         // Only scale the bitmap at the rendering stage,
@@ -483,9 +483,9 @@ void wxHtmlImageCell::AdvanceAnimation(wxTimer *timer)
 {
     wxImage img;
 
-    m_gifDecoder->GoNextFrame(TRUE);
+    m_gifDecoder->GoNextFrame(true);
 
-    if ( m_physX == -1 )
+    if ( m_physX == wxDefaultCoord )
     {
         m_physX = m_physY = 0;
         for (wxHtmlCell *cell = this; cell; cell = cell->GetParent())
@@ -510,20 +510,20 @@ void wxHtmlImageCell::AdvanceAnimation(wxTimer *timer)
             wxMemoryDC dc;
             dc.SelectObject(*m_bitmap);
             dc.DrawBitmap(bmp, m_gifDecoder->GetLeft(), m_gifDecoder->GetTop(),
-                          TRUE /* use mask */);
+                          true /* use mask */);
         }
         else
             SetImage(img);
         m_window->Refresh(img.HasMask(), &rect);
     }
 
-    timer->Start(m_gifDecoder->GetDelay(), TRUE);
+    timer->Start(m_gifDecoder->GetDelay(), true);
 }
 
 void wxHtmlImageCell::Layout(int w)
 {
     wxHtmlCell::Layout(w);
-    m_physX = m_physY = -1;
+    m_physX = m_physY = wxDefaultCoord;
 }
 
 #endif
@@ -559,13 +559,13 @@ void wxHtmlImageCell::Draw(wxDC& dc, int x, int y,
             imageScaleX = (double) m_bmpW / (double) m_bitmap->GetWidth();
         if (m_bmpH != m_bitmap->GetHeight())
             imageScaleY = (double) m_bmpH / (double) m_bitmap->GetHeight();
-        
+
         double us_x, us_y;
         dc.GetUserScale(&us_x, &us_y);
         dc.SetUserScale(us_x * m_scale * imageScaleX, us_y * m_scale * imageScaleY);
 
         dc.DrawBitmap(*m_bitmap, (int) ((x + m_PosX) / (m_scale*imageScaleX)),
-                                 (int) ((y + m_PosY) / (m_scale*imageScaleY)), TRUE);
+                                 (int) ((y + m_PosY) / (m_scale*imageScaleY)), true);
         dc.SetUserScale(us_x, us_y);
     }
 }
@@ -615,7 +615,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
         {
             if (tag.HasParam(wxT("SRC")))
             {
-                int w = -1, h = -1;
+                int w = wxDefaultCoord, h = wxDefaultCoord;
                 int al;
                 wxFSFile *str;
                 wxString tmp = tag.GetParam(wxT("SRC"));
@@ -706,7 +706,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
             }
         }
 
-        return FALSE;
+        return false;
     }
 
 TAG_HANDLER_END(IMG)

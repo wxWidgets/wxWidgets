@@ -37,7 +37,7 @@ TAG_HANDLER_BEGIN(STYLE, "STYLE")
     {
         // VS: Ignore styles for now. We must have this handler present,
         //     because CSS style text would be rendered verbatim otherwise
-        return TRUE;
+        return true;
     }
 
 TAG_HANDLER_END(STYLE)

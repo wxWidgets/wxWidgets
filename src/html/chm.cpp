@@ -122,7 +122,7 @@ wxChmTools::wxChmTools(const wxFileName &archive)
     //     strdup() [libmspack-20030726], which would cause crashes in
     //     Unicode build when mb_str() returns temporary buffer
     m_chmFileNameANSI = strdup((const char*)m_chmFileName.mb_str(wxConvFile));
-    
+
     // Open the archive and store it in class:
     if ( (chmh = chmd->open(chmd, (char*)m_chmFileNameANSI)) )
     {
@@ -204,7 +204,7 @@ bool wxChmTools::Contains(const wxString& pattern)
  *
  * Finds the next file descibed by a pattern in the archive, starting
  * the file given by second parameter
- * 
+ *
  * @param pattern   The file-pattern to search for. May contain '*' and/or '?'
  * @param startfrom The filename which the search should start after
  * @returns         The full pathname of the found file

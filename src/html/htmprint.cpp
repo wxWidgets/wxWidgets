@@ -163,7 +163,7 @@ wxHtmlPrintout::wxHtmlPrintout(const wxString& title) : wxPrintout(title)
     m_Renderer = new wxHtmlDCRenderer;
     m_RendererHdr = new wxHtmlDCRenderer;
     m_NumPages = wxHTML_PRINT_MAX_PAGES;
-    m_Document = m_BasePath = wxEmptyString; m_BasePathIsDir = TRUE;
+    m_Document = m_BasePath = wxEmptyString; m_BasePathIsDir = true;
     m_Headers[0] = m_Headers[1] = wxEmptyString;
     m_Footers[0] = m_Footers[1] = wxEmptyString;
     m_HeaderHeight = m_FooterHeight = 0;
@@ -249,9 +249,9 @@ void wxHtmlPrintout::OnPreparePrinting()
 
 bool wxHtmlPrintout::OnBeginDocument(int startPage, int endPage)
 {
-    if (!wxPrintout::OnBeginDocument(startPage, endPage)) return FALSE;
+    if (!wxPrintout::OnBeginDocument(startPage, endPage)) return false;
 
-    return TRUE;
+    return true;
 }
 
 
@@ -262,9 +262,9 @@ bool wxHtmlPrintout::OnPrintPage(int page)
     {
         if (HasPage(page))
             RenderPage(dc, page);
-        return TRUE;
+        return true;
     }
-    else return FALSE;
+    else return false;
 }
 
 
@@ -296,7 +296,7 @@ void wxHtmlPrintout::SetHtmlFile(const wxString& htmlfile)
 {
     wxFileSystem fs;
     wxFSFile *ff;
-    
+
     if (wxFileExists(htmlfile))
         ff = fs.OpenFile(wxFileSystem::FileNameToURL(htmlfile));
     else
@@ -308,7 +308,7 @@ void wxHtmlPrintout::SetHtmlFile(const wxString& htmlfile)
         return;
     }
 
-    bool done = FALSE;
+    bool done = false;
     wxHtmlFilterHTML defaultFilter;
     wxString doc;
 
@@ -319,7 +319,7 @@ void wxHtmlPrintout::SetHtmlFile(const wxString& htmlfile)
         if (h->CanRead(*ff))
         {
             doc = h->ReadFile(*ff);
-            done = TRUE;
+            done = true;
             break;
         }
         node = node->GetNext();
@@ -327,8 +327,8 @@ void wxHtmlPrintout::SetHtmlFile(const wxString& htmlfile)
 
     if (!done)
         doc = defaultFilter.ReadFile(*ff);
-        
-    SetHtmlText(doc, htmlfile, FALSE);
+
+    SetHtmlText(doc, htmlfile, false);
     delete ff;
 }
 
@@ -374,7 +374,7 @@ void wxHtmlPrintout::CountPages()
     {
         pos = m_Renderer->Render((int)( ppmm_h * m_MarginLeft),
                                    (int) (ppmm_v * (m_MarginTop + (m_HeaderHeight == 0 ? 0 : m_MarginSpace)) + m_HeaderHeight),
-                                   pos, TRUE, INT_MAX, m_PageBreaks, m_NumPages);
+                                   pos, true, INT_MAX, m_PageBreaks, m_NumPages);
         m_PageBreaks[++m_NumPages] = pos;
     } while (pos < m_Renderer->GetTotalHeight());
 }
@@ -410,7 +410,7 @@ void wxHtmlPrintout::RenderPage(wxDC *dc, int page)
 
     m_Renderer->Render((int) (ppmm_h * m_MarginLeft),
                          (int) (ppmm_v * (m_MarginTop + (m_HeaderHeight == 0 ? 0 : m_MarginSpace)) + m_HeaderHeight),
-                         m_PageBreaks[page-1], FALSE, m_PageBreaks[page]-m_PageBreaks[page-1]);
+                         m_PageBreaks[page-1], false, m_PageBreaks[page]-m_PageBreaks[page-1]);
 
     m_RendererHdr->SetDC(dc, (double)ppiPrinterY / (double)ppiScreenY);
     if (m_Headers[page % 2] != wxEmptyString)
@@ -485,7 +485,7 @@ wxHtmlEasyPrinting::wxHtmlEasyPrinting(const wxString& name, wxWindow *parentWin
     m_PageSetupData = new wxPageSetupDialogData;
     m_Headers[0] = m_Headers[1] = m_Footers[0] = m_Footers[1] = wxEmptyString;
 
-    m_PageSetupData->EnableMargins(TRUE);
+    m_PageSetupData->EnableMargins(true);
     m_PageSetupData->SetMarginTopLeft(wxPoint(25, 25));
     m_PageSetupData->SetMarginBottomRight(wxPoint(25, 25));
 
@@ -523,9 +523,9 @@ bool wxHtmlEasyPrinting::PreviewFile(const wxString &htmlfile)
 bool wxHtmlEasyPrinting::PreviewText(const wxString &htmltext, const wxString &basepath)
 {
     wxHtmlPrintout *p1 = CreatePrintout();
-    p1->SetHtmlText(htmltext, basepath, TRUE);
+    p1->SetHtmlText(htmltext, basepath, true);
     wxHtmlPrintout *p2 = CreatePrintout();
-    p2->SetHtmlText(htmltext, basepath, TRUE);
+    p2->SetHtmlText(htmltext, basepath, true);
     return DoPreview(p1, p2);
 }
 
@@ -545,7 +545,7 @@ bool wxHtmlEasyPrinting::PrintFile(const wxString &htmlfile)
 bool wxHtmlEasyPrinting::PrintText(const wxString &htmltext, const wxString &basepath)
 {
     wxHtmlPrintout *p = CreatePrintout();
-    p->SetHtmlText(htmltext, basepath, TRUE);
+    p->SetHtmlText(htmltext, basepath, true);
     bool ret = DoPrint(p);
     delete p;
     return ret;
@@ -561,7 +561,7 @@ bool wxHtmlEasyPrinting::DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *pr
     if (!preview->Ok())
     {
         delete preview;
-        return FALSE;
+        return false;
     }
 
     wxPreviewFrame *frame = new wxPreviewFrame(preview, m_ParentWindow,
@@ -569,8 +569,8 @@ bool wxHtmlEasyPrinting::DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *pr
                                                wxPoint(100, 100), wxSize(650, 500));
     frame->Centre(wxBOTH);
     frame->Initialize();
-    frame->Show(TRUE);
-    return TRUE;
+    frame->Show(true);
+    return true;
 }
 
 
@@ -580,13 +580,13 @@ bool wxHtmlEasyPrinting::DoPrint(wxHtmlPrintout *printout)
     wxPrintDialogData printDialogData(*GetPrintData());
     wxPrinter printer(&printDialogData);
 
-    if (!printer.Print(m_ParentWindow, printout, TRUE))
+    if (!printer.Print(m_ParentWindow, printout, true))
     {
-        return FALSE;
+        return false;
     }
 
     (*GetPrintData()) = printer.GetPrintDialogData().GetPrintData();
-    return TRUE;
+    return true;
 }
 
 
@@ -596,7 +596,7 @@ void wxHtmlEasyPrinting::PrinterSetup()
     wxPrintDialogData printDialogData(*GetPrintData());
     wxPrintDialog printerDialog(m_ParentWindow, &printDialogData);
 
-    printerDialog.GetPrintDialogData().SetSetupDialog(TRUE);
+    printerDialog.GetPrintDialogData().SetSetupDialog(true);
 
     if (printerDialog.ShowModal() == wxID_OK)
         (*GetPrintData()) = printerDialog.GetPrintDialogData().GetPrintData();
@@ -706,7 +706,7 @@ class wxHtmlPrintingModule: public wxModule
 DECLARE_DYNAMIC_CLASS(wxHtmlPrintingModule)
 public:
     wxHtmlPrintingModule() : wxModule() {}
-    bool OnInit() { return TRUE; }
+    bool OnInit() { return true; }
     void OnExit() { wxHtmlPrintout::CleanUpStatics(); }
 };
 

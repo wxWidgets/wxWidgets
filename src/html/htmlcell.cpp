@@ -385,7 +385,7 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
 #endif
 
     bool drawSelectionAfterCell = false;
-    
+
     if ( info.GetState().GetSelectionState() == wxHTML_SEL_CHANGING )
     {
         // Selection changing, we must draw the word piecewise:
@@ -716,7 +716,7 @@ void wxHtmlContainerCell::Layout(int w)
             curLineWidth += cell->GetMaxTotalWidth();
 
         cell = cell->GetNext();
-            
+
         // compute length of the next word that would be added:
         nextWordWidth = 0;
         if (cell)
@@ -728,9 +728,9 @@ void wxHtmlContainerCell::Layout(int w)
                 nextCell = nextCell->GetNext();
             } while (nextCell && !nextCell->IsLinebreakAllowed());
         }
-        
+
         // force new line if occured:
-        if ((cell == NULL) || 
+        if ((cell == NULL) ||
             (xpos + nextWordWidth > s_width && cell->IsLinebreakAllowed()))
         {
             if (xpos > MaxLineWidth) MaxLineWidth = xpos;
@@ -799,7 +799,7 @@ void wxHtmlContainerCell::Layout(int w)
                         // first cell on line is not moved:
                         line->SetPos(line->GetPosX() + s_indent,
                                      line->GetPosY() + ypos);
-                        
+
                         line = line->GetNext();
                         for ( int n = 0; line != cell; line = line->GetNext() )
                         {
@@ -809,7 +809,7 @@ void wxHtmlContainerCell::Layout(int w)
                                 // thus increasing our size
                                 n++;
                             }
-                            
+
                             line->SetPos(line->GetPosX() + s_indent +
                                            ((n * step) / total),
                                            line->GetPosY() + ypos);
@@ -862,7 +862,7 @@ void wxHtmlContainerCell::Layout(int w)
 
     if (curLineWidth > m_MaxTotalWidth)
         m_MaxTotalWidth = curLineWidth;
-            
+
     m_MaxTotalWidth += s_indent + ((m_IndentRight < 0) ? (-m_IndentRight * m_Width / 100) : m_IndentRight);
     MaxLineWidth += s_indent + ((m_IndentRight < 0) ? (-m_IndentRight * m_Width / 100) : m_IndentRight);
     if (m_Width < MaxLineWidth) m_Width = MaxLineWidth;
@@ -1086,10 +1086,10 @@ wxHtmlCell *wxHtmlContainerCell::FindCellByPos(wxCoord x, wxCoord y,
             if ( cell->IsFormattingCell() )
                 continue;
             int cellY = cell->GetPosY();
-            if (!( y < cellY || (y < cellY + cell->GetHeight() && 
+            if (!( y < cellY || (y < cellY + cell->GetHeight() &&
                                  x < cell->GetPosX() + cell->GetWidth()) ))
                 continue;
-            
+
             c = cell->FindCellByPos(x - cell->GetPosX(), y - cellY, flags);
             if (c) return c;
         }
@@ -1175,7 +1175,7 @@ static bool IsEmptyContainer(wxHtmlContainerCell *cell)
 }
 
 void wxHtmlContainerCell::RemoveExtraSpacing(bool top, bool bottom)
-{   
+{
     if ( top )
         SetIndent(0, wxHTML_INDENT_TOP);
     if ( bottom )
@@ -1209,13 +1209,13 @@ void wxHtmlContainerCell::RemoveExtraSpacing(bool top, bool bottom)
                 }
             }
         }
-        
+
         if ( bottom )
         {
             wxArrayPtrVoid arr;
             for ( c = m_Cells; c; c = c->GetNext() )
                 arr.Add((void*)c);
-           
+
             for ( int i = arr.GetCount() - 1; i >= 0; i--)
             {
                 c = (wxHtmlCell*)arr[i];

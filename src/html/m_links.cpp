@@ -45,7 +45,7 @@ public:
 
     virtual const wxHtmlCell* Find(int condition, const void* param) const
     {
-        if ((condition == wxHTML_COND_ISANCHOR) && 
+        if ((condition == wxHTML_COND_ISANCHOR) &&
             (m_AnchorName == (*((const wxString*)param))))
         {
             return this;
@@ -81,7 +81,7 @@ TAG_HANDLER_BEGIN(A, "A")
             if (tag.HasParam( wxT("TARGET") )) target = tag.GetParam( wxT("TARGET") );
             m_WParser->SetActualColor(m_WParser->GetLinkColor());
             m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(m_WParser->GetLinkColor()));
-            m_WParser->SetFontUnderlined(TRUE);
+            m_WParser->SetFontUnderlined(true);
             m_WParser->GetContainer()->InsertCell(new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
             m_WParser->SetLink(wxHtmlLinkInfo(name, target));
 
@@ -93,9 +93,9 @@ TAG_HANDLER_BEGIN(A, "A")
             m_WParser->SetActualColor(oldclr);
             m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(oldclr));
 
-            return TRUE;
+            return true;
         }
-        else return FALSE;
+        else return false;
     }
 
 TAG_HANDLER_END(A)

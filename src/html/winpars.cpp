@@ -50,7 +50,7 @@ wxHtmlWinParser::wxHtmlWinParser(wxHtmlWindow *wnd) : wxHtmlParser()
     m_Container = NULL;
     m_DC = NULL;
     m_CharHeight = m_CharWidth = 0;
-    m_UseLink = FALSE;
+    m_UseLink = false;
 #if !wxUSE_UNICODE
     m_EncConv = NULL;
     m_InputEnc = wxFONTENCODING_ISO8859_1;
@@ -121,14 +121,14 @@ void wxHtmlWinParser::SetFonts(wxString normal_face, wxString fixed_face,
     static int default_sizes[7] =
         {
             wxHTML_FONT_SIZE_1,
-			wxHTML_FONT_SIZE_2,
-			wxHTML_FONT_SIZE_3,
-			wxHTML_FONT_SIZE_4,
-			wxHTML_FONT_SIZE_5,
-			wxHTML_FONT_SIZE_6,
-			wxHTML_FONT_SIZE_7
+            wxHTML_FONT_SIZE_2,
+            wxHTML_FONT_SIZE_3,
+            wxHTML_FONT_SIZE_4,
+            wxHTML_FONT_SIZE_5,
+            wxHTML_FONT_SIZE_6,
+            wxHTML_FONT_SIZE_7
         };
-    
+
     if (sizes == NULL) sizes = default_sizes;
 
     int i, j, k, l, m;
@@ -159,7 +159,7 @@ void wxHtmlWinParser::SetStandardFonts(int size,
                                        const wxString& fixed_face)
 {
     wxFont defaultFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-    
+
     int f_sizes[7];
     if (size == -1)
         size = defaultFont.GetPointSize();
@@ -172,9 +172,9 @@ void wxHtmlWinParser::SetStandardFonts(int size,
     f_sizes[5] = int(size * 1.6);
     f_sizes[6] = int(size * 1.8);
 
-    wxString normal = normal_face.empty() ? 
+    wxString normal = normal_face.empty() ?
                       defaultFont.GetFaceName() : normal_face;
-    
+
     SetFonts(normal, fixed_face, f_sizes);
 }
 
@@ -191,12 +191,12 @@ void wxHtmlWinParser::InitParser(const wxString& source)
                    of differences under X and win
                  */
 
-    m_UseLink = FALSE;
+    m_UseLink = false;
     m_Link = wxHtmlLinkInfo( wxT(""), wxT("") );
     m_LinkColor.Set(0, 0, 0xFF);
     m_ActualColor.Set(0, 0, 0);
     m_Align = wxHTML_ALIGN_LEFT;
-    m_tmpLastWasSpace = FALSE;
+    m_tmpLastWasSpace = false;
     m_lastWordCell = NULL;
 
     OpenContainer();
@@ -329,7 +329,7 @@ void wxHtmlWinParser::AddText(const wxChar* txt)
             m_Container->InsertCell(c);
             ((wxHtmlWordCell*)c)->SetPreviousWord(m_lastWordCell);
             m_lastWordCell = (wxHtmlWordCell*)c;
-            m_tmpLastWasSpace = TRUE;
+            m_tmpLastWasSpace = true;
         }
     }
 
@@ -350,7 +350,7 @@ void wxHtmlWinParser::AddText(const wxChar* txt)
         m_Container->InsertCell(c);
         ((wxHtmlWordCell*)c)->SetPreviousWord(m_lastWordCell);
         m_lastWordCell = (wxHtmlWordCell*)c;
-        m_tmpLastWasSpace = FALSE;
+        m_tmpLastWasSpace = false;
     }
 }
 
@@ -360,7 +360,7 @@ wxHtmlContainerCell* wxHtmlWinParser::OpenContainer()
 {
     m_Container = new wxHtmlContainerCell(m_Container);
     m_Container->SetAlignHor(m_Align);
-    m_tmpLastWasSpace = TRUE;
+    m_tmpLastWasSpace = true;
         /* to avoid space being first character in paragraph */
     return m_Container;
 }
@@ -369,7 +369,7 @@ wxHtmlContainerCell* wxHtmlWinParser::OpenContainer()
 
 wxHtmlContainerCell* wxHtmlWinParser::SetContainer(wxHtmlContainerCell *c)
 {
-    m_tmpLastWasSpace = TRUE;
+    m_tmpLastWasSpace = true;
         /* to avoid space being first character in paragraph */
     return m_Container = c;
 }
@@ -425,7 +425,7 @@ wxFont* wxHtmlWinParser::CreateCurrentFont()
                        ff ? wxMODERN : wxSWISS,
                        fi ? wxITALIC : wxNORMAL,
                        fb ? wxBOLD : wxNORMAL,
-                       fu ? TRUE : FALSE, face
+                       fu ? true : false, face
 #if wxUSE_UNICODE
                        );
 #else
@@ -481,15 +481,15 @@ void wxHtmlWinParser::SetInputEncoding(wxFontEncoding enc)
         m_OutputEnc = enc;
 
     // alternatives?
-    else if (wxFontMapper::Get()->GetAltForEncoding(enc, &altnorm, m_FontFaceNormal, FALSE) &&
-             wxFontMapper::Get()->GetAltForEncoding(enc, &altfix, m_FontFaceFixed, FALSE) &&
+    else if (wxFontMapper::Get()->GetAltForEncoding(enc, &altnorm, m_FontFaceNormal, false) &&
+             wxFontMapper::Get()->GetAltForEncoding(enc, &altfix, m_FontFaceFixed, false) &&
              altnorm == altfix)
         m_OutputEnc = altnorm;
 
     // at least normal face?
     else if (availnorm)
         m_OutputEnc = enc;
-    else if (wxFontMapper::Get()->GetAltForEncoding(enc, &altnorm, m_FontFaceNormal, FALSE))
+    else if (wxFontMapper::Get()->GetAltForEncoding(enc, &altnorm, m_FontFaceNormal, false))
         m_OutputEnc = altnorm;
 
     else
@@ -550,7 +550,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxHtmlTagsModule, wxModule)
 bool wxHtmlTagsModule::OnInit()
 {
     wxHtmlWinParser::AddModule(this);
-    return TRUE;
+    return true;
 }
 
 void wxHtmlTagsModule::OnExit()

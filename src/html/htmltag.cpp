@@ -127,7 +127,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
                             ++pos;
                         if (src[pos] == '<')
                             ++pos;
-                        
+
                         // see if it matches
                         int match_pos = 0;
                         while (pos < lng && match_pos < tag_len && src[pos] != '>' && src[pos] != '<') {
@@ -135,7 +135,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
                             // Unicode build
                             if ((wxChar)wxToupper(src[pos]) == tagBuffer[match_pos]) {
                                 ++match_pos;
-                            }  
+                            }
                             else if (src[pos] == wxT(' ') || src[pos] == wxT('\n') ||
                                 src[pos] == wxT('\r') || src[pos] == wxT('\t')) {
                                 // need to skip over these

@@ -98,7 +98,7 @@ TAG_HANDLER_BEGIN(HR, "HR")
         m_WParser->CloseContainer();
         m_WParser->OpenContainer();
 
-        return FALSE;
+        return false;
     }
 
 TAG_HANDLER_END(HR)

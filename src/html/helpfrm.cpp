@@ -159,12 +159,12 @@ void wxHtmlHelpFrame::UpdateMergedIndex()
     size_t len = items.size();
 
     wxHtmlHelpMergedIndexItem *history[128] = {NULL};
-    
+
     for (size_t i = 0; i < len; i++)
     {
         const wxHtmlHelpDataItem& item = items[i];
         wxASSERT_MSG( item.level < 128, _T("nested index entries too deep") );
-        
+
         if (history[item.level] &&
             history[item.level]->items[0]->name == item.name)
         {
@@ -180,10 +180,10 @@ void wxHtmlHelpFrame::UpdateMergedIndex()
             mi->parent = (item.level == 0) ? NULL : history[item.level - 1];
             history[item.level] = mi;
             merged.Add(mi);
-        }        
+        }
     }
 }
-    
+
 
 //---------------------------------------------------------------------------
 // wxHtmlHelpFrame
@@ -571,7 +571,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 wxHtmlHelpFrame::~wxHtmlHelpFrame()
 {
     delete m_mergedIndex;
-    
+
     // PopEventHandler(); // wxhtmlhelpcontroller (not any more!)
     if (m_DataCreated)
         delete m_Data;
@@ -619,26 +619,26 @@ void wxHtmlHelpFrame::AddToolbarButtons(wxToolBar *toolBar, int style)
 
 
     toolBar->AddTool(wxID_HTML_PANEL, wpanelBitmap, wxNullBitmap,
-                       false, -1, -1, (wxObject *) NULL,
+                       false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
                        _("Show/hide navigation panel"));
 
     toolBar->AddSeparator();
     toolBar->AddTool(wxID_HTML_BACK, wbackBitmap, wxNullBitmap,
-                       false, -1, -1, (wxObject *) NULL,
+                       false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
                        _("Go back"));
     toolBar->AddTool(wxID_HTML_FORWARD, wforwardBitmap, wxNullBitmap,
-                       false, -1, -1, (wxObject *) NULL,
+                       false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
                        _("Go forward"));
     toolBar->AddSeparator();
 
     toolBar->AddTool(wxID_HTML_UPNODE, wupnodeBitmap, wxNullBitmap,
-                       false, -1, -1, (wxObject *) NULL,
+                       false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
                        _("Go one level up in document hierarchy"));
     toolBar->AddTool(wxID_HTML_UP, wupBitmap, wxNullBitmap,
-                       false, -1, -1, (wxObject *) NULL,
+                       false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
                        _("Previous page"));
     toolBar->AddTool(wxID_HTML_DOWN, wdownBitmap, wxNullBitmap,
-                       false, -1, -1, (wxObject *) NULL,
+                       false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
                        _("Next page"));
 
     if ((style & wxHF_PRINT) || (style & wxHF_OPEN_FILES))
@@ -646,19 +646,19 @@ void wxHtmlHelpFrame::AddToolbarButtons(wxToolBar *toolBar, int style)
 
     if (style & wxHF_OPEN_FILES)
         toolBar->AddTool(wxID_HTML_OPENFILE, wopenBitmap, wxNullBitmap,
-                           false, -1, -1, (wxObject *) NULL,
+                           false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
                            _("Open HTML document"));
 
 #if wxUSE_PRINTING_ARCHITECTURE
     if (style & wxHF_PRINT)
         toolBar->AddTool(wxID_HTML_PRINT, wprintBitmap, wxNullBitmap,
-                           false, -1, -1, (wxObject *) NULL,
+                           false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
                            _("Print this page"));
 #endif
 
     toolBar->AddSeparator();
     toolBar->AddTool(wxID_HTML_OPTIONS, woptionsBitmap, wxNullBitmap,
-                       false, -1, -1, (wxObject *) NULL,
+                       false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
                        _("Display options dialog"));
 }
 #endif //wxUSE_TOOLBAR
@@ -909,7 +909,7 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword,
 
             case wxHELP_SEARCH_INDEX:
             {
-                wxHtmlHelpMergedIndexItem* it = 
+                wxHtmlHelpMergedIndexItem* it =
                     (wxHtmlHelpMergedIndexItem*) m_IndexList->GetClientData(0);
                 if (it)
                     DisplayIndexItem(it);
@@ -932,9 +932,9 @@ void wxHtmlHelpFrame::CreateContents()
         WX_CLEAR_HASH_TABLE(*m_PagesHash);
         delete m_PagesHash;
     }
-    
+
     const wxHtmlHelpDataItems& contents = m_Data->GetContentsArray();
-    
+
     size_t cnt = contents.size();
 
     m_PagesHash = new wxHashTable(wxKEY_STRING, 2 * cnt);
@@ -1197,11 +1197,11 @@ public:
         sizer->Add(new wxStaticText(this, wxID_ANY, _("Font size:")));
 
         sizer->Add(NormalFont = new wxComboBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                      wxSize(200, -1),
+                      wxSize(200, wxDefaultCoord),
                       0, NULL, wxCB_DROPDOWN | wxCB_READONLY));
 
         sizer->Add(FixedFont = new wxComboBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                      wxSize(200, -1),
+                      wxSize(200, wxDefaultCoord),
                       0, NULL, wxCB_DROPDOWN | wxCB_READONLY));
 
         sizer->Add(FontSize = new wxSpinCtrl(this, wxID_ANY));
@@ -1430,11 +1430,11 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
                     ha = (wxHtmlHelpHashData*) m_PagesHash->Get(m_HtmlWin->GetOpenedPage() + wxT("#") + an);
                 if (ha && ha->m_Index > 0)
                 {
-                    int level = 
+                    int level =
                         m_Data->GetContentsArray()[ha->m_Index].level - 1;
                     int ind = ha->m_Index - 1;
 
-                    const wxHtmlHelpDataItem *it = 
+                    const wxHtmlHelpDataItem *it =
                         &m_Data->GetContentsArray()[ind];
                     while (ind >= 0 && it->level != level)
                     {
@@ -1612,7 +1612,7 @@ void wxHtmlHelpFrame::OnContentsSel(wxTreeEvent& event)
 
 void wxHtmlHelpFrame::OnIndexSel(wxCommandEvent& WXUNUSED(event))
 {
-    wxHtmlHelpMergedIndexItem *it = (wxHtmlHelpMergedIndexItem*) 
+    wxHtmlHelpMergedIndexItem *it = (wxHtmlHelpMergedIndexItem*)
         m_IndexList->GetClientData(m_IndexList->GetSelection());
     if (it)
         DisplayIndexItem(it);
@@ -1660,7 +1660,7 @@ void wxHtmlHelpFrame::OnIndexFind(wxCommandEvent& event)
                 wxHtmlHelpMergedIndexItem *parent = index[i].parent;
                 while (parent)
                 {
-                    if (pos == 0 || 
+                    if (pos == 0 ||
                         (index.Index(*(wxHtmlHelpMergedIndexItem*)m_IndexList->GetClientData(pos-1))) < index.Index(*parent))
                     {
                         m_IndexList->Insert(parent->name,

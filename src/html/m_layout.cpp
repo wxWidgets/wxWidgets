@@ -97,16 +97,16 @@ bool wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak, int* known_pagebreaks,
     // When we are counting pages, 'known_pagebreaks' is non-NULL.
     // That's the only time we change 'pagebreak'. Otherwise, pages
     // were already counted, 'known_pagebreaks' is NULL, and we don't
-    // do anything except return FALSE.
+    // do anything except return false.
     //
-    // We also simply return FALSE if the 'pagebreak' argument is
+    // We also simply return false if the 'pagebreak' argument is
     // less than (vertically above) or the same as the current
     // vertical position. Otherwise we'd be setting a pagebreak above
     // the current cell, which is incorrect, or duplicating a
     // pagebreak that has already been set.
     if(NULL == known_pagebreaks || *pagebreak <= m_PosY)
         {
-        return FALSE;
+        return false;
         }
 
     // m_PosY is only the vertical offset from the parent. The pagebreak
@@ -126,12 +126,12 @@ bool wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak, int* known_pagebreaks,
     // Add a pagebreak only if there isn't one already set here.
     if(NULL != where)
         {
-        return FALSE;
+        return false;
         }
     else
         {
         *pagebreak = m_PosY;
-        return TRUE;
+        return true;
         }
 }
 
@@ -147,7 +147,7 @@ TAG_HANDLER_BEGIN(P, "P")
         }
         m_WParser->GetContainer()->SetIndent(m_WParser->GetCharHeight(), wxHTML_INDENT_TOP);
         m_WParser->GetContainer()->SetAlign(tag);
-        return FALSE;
+        return false;
     }
 
 TAG_HANDLER_END(P)
@@ -167,7 +167,7 @@ TAG_HANDLER_BEGIN(BR, "BR")
         c->SetAlignHor(al);
         c->SetAlign(tag);
         c->SetMinHeight(m_WParser->GetCharHeight());
-        return FALSE;
+        return false;
     }
 
 TAG_HANDLER_END(BR)
@@ -204,9 +204,9 @@ TAG_HANDLER_BEGIN(CENTER, "CENTER")
             else
                 c->SetAlignHor(old);
 
-            return TRUE;
+            return true;
         }
-        else return FALSE;
+        else return false;
     }
 
 TAG_HANDLER_END(CENTER)
@@ -220,18 +220,18 @@ TAG_HANDLER_BEGIN(DIV, "DIV")
     {
         if(tag.HasParam(wxT("STYLE")))
         {
-            if(tag.GetParam(wxT("STYLE")).IsSameAs(wxT("PAGE-BREAK-BEFORE:ALWAYS"), FALSE))
+            if(tag.GetParam(wxT("STYLE")).IsSameAs(wxT("PAGE-BREAK-BEFORE:ALWAYS"), false))
             {
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer()->InsertCell(new wxHtmlPageBreakCell);
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer();
-                return FALSE;
+                return false;
             }
             else
             {
                 // Treat other STYLE parameters here when they're supported.
-                return FALSE;
+                return false;
             }
         }
         else if(tag.HasParam(wxT("ALIGN")))
@@ -296,7 +296,7 @@ TAG_HANDLER_BEGIN(TITLE, "TITLE")
             if (wfr)
             {
                 wxString title = m_WParser->GetSource()->Mid(
-                                        tag.GetBeginPos(), 
+                                        tag.GetBeginPos(),
                                         tag.GetEndPos1()-tag.GetBeginPos());
 #if !wxUSE_UNICODE
                 wxCSConv conv(m_WParser->GetInputEncoding());
@@ -306,7 +306,7 @@ TAG_HANDLER_BEGIN(TITLE, "TITLE")
                 wfr->OnSetTitle(title);
             }
         }
-        return TRUE;
+        return true;
     }
 
 TAG_HANDLER_END(TITLE)
@@ -337,7 +337,7 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
             if (m_WParser->GetWindow() != NULL)
                 m_WParser->GetWindow()->SetBackgroundColour(clr);
         }
-        return FALSE;
+        return false;
     }
 
 TAG_HANDLER_END(BODY)
@@ -366,7 +366,7 @@ TAG_HANDLER_BEGIN(BLOCKQUOTE, "BLOCKQUOTE")
         c->SetIndent(m_WParser->GetCharHeight(), wxHTML_INDENT_BOTTOM);
         m_WParser->CloseContainer();
         m_WParser->OpenContainer();
-        return TRUE;
+        return true;
     }
 
 TAG_HANDLER_END(BLOCKQUOTE)
