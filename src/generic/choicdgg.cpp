@@ -340,7 +340,7 @@ bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent),
                    hButton +            // button(s)
                    LAYOUT_Y_MARGIN;     // bottom margin
 
-    long wDialog = wxMax(wTotalButtons, widthTextMax) +
+    long wDialog = wxMax(wListbox, wxMax(wTotalButtons, widthTextMax)) +
                    4*LAYOUT_X_MARGIN;   // 2 from each side
 
     // create the controls
