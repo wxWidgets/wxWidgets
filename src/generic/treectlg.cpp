@@ -3086,7 +3086,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
             // remember the old cursor because we will change it while
             // dragging
             m_oldCursor = m_cursor;
-
+            
             // in a single selection control, hide the selection temporarily
             if ( !(GetWindowStyleFlag() & wxTR_MULTIPLE) )
             {
@@ -3102,7 +3102,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
             CaptureMouse();
         }
     }
-    else if ( event.Moving() )
+    else if ( event.Dragging() )
     {
         if ( item != m_dropTarget )
         {
@@ -3114,7 +3114,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
             // highlight the current drop target if any
             DrawDropEffect(m_dropTarget);
 
-#if defined( __WXMSW__ ) || defined(__WXMAC__)
+#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXGTK20__)
             Update();
 #else
             wxYieldIfNeeded();
