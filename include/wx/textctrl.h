@@ -15,9 +15,10 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
     #pragma interface "textctrlbase.h"
-#endif   
+#endif
 
 #include "wx/defs.h"
 #include "wx/control.h"         // the base class
@@ -47,6 +48,40 @@ class WXDLLEXPORT wxTextCtrl;
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxTextCtrlNameStr;
 WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
+
+// ----------------------------------------------------------------------------
+// wxTextAttr: a structure containing the visual attributes of a text
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxTextAttr
+{
+public:
+    // ctors
+    wxTextAttr() { }
+    wxTextAttr(const wxColour& colText,
+               const wxColour& colBack = wxNullColour,
+               const wxFont& font = wxNullFont)
+        : m_colText(colText), m_colBack(colBack), m_font(font) { }
+
+    // setters
+    void SetTextColour(const wxColour& colText) { m_colText = colText; }
+    void SetBackgroundColour(const wxColour& colBack) { m_colBack = colBack; }
+    void SetFont(const wxFont& font) { m_font = font; }
+
+    // accessors
+    bool HasTextColour() const { return m_colText.Ok(); }
+    bool HasBackgroundColour() const { return m_colBack.Ok(); }
+    bool HasFont() const { return m_font.Ok(); }
+
+    const wxColour& GetTextColour() const { return m_colText; }
+    const wxColour& GetBackgroundColour() const { return m_colBack; }
+    const wxFont& GetFont() const { return m_font; }
+
+private:
+    wxColour m_colText,
+             m_colBack;
+    wxFont   m_font;
+};
 
 // ----------------------------------------------------------------------------
 // wxTextCtrl: a single or multiple line text zone where user can enter and
@@ -101,6 +136,13 @@ public:
     // inserts it at the end
     virtual void WriteText(const wxString& text) = 0;
     virtual void AppendText(const wxString& text) = 0;
+
+    // text control under some platforms supports the text styles: these
+    // methods allow to apply the given text style to the given selection or to
+    // set/get the style which will be used for all appended text
+    virtual bool SetStyle(long start, long end, const wxTextAttr& style);
+    virtual bool SetDefaultStyle(const wxTextAttr& style);
+    virtual const wxTextAttr& GetDefaultStyle() const;
 
     // translate between the position (which is just an index in the text ctrl
     // considering all its contents as a single strings) and (x, y) coordinates
@@ -160,6 +202,9 @@ protected:
     // the name of the last file loaded with LoadFile() which will be used by
     // SaveFile() by default
     wxString m_filename;
+
+    // the text style which will be used for any new text added to the control
+    wxTextAttr m_defaultStyle;
 
 private:
 #ifndef NO_TEXT_WINDOW_STREAM

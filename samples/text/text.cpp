@@ -645,8 +645,17 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                 "wxHSCROLL style",
                                 wxPoint(450, 10), wxSize(200, 230),
                                 wxTE_RICH | wxTE_MULTILINE | wxHSCROLL);
+#ifdef __WXMSW__
+    m_textrich->SetStyle(0, 10, *wxRED);
+    m_textrich->SetStyle(10, 20, *wxBLUE);
+    m_textrich->SetStyle(30, 40,
+                         wxTextAttr(*wxGREEN, wxNullColour, *wxITALIC_FONT));
+    m_textrich->SetDefaultStyle(*wxBLUE);
+    m_textrich->AppendText(_T("\nIs this text really in blue?"));
+#else
     m_textrich->SetForegroundColour(wxColour(0, 255, 255));
     m_textrich->SetBackgroundColour(*wxBLUE);
+#endif
 }
 
 void MyPanel::OnSize( wxSizeEvent &event )

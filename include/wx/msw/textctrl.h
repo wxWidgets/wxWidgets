@@ -77,6 +77,12 @@ public:
     virtual void WriteText(const wxString& text);
     virtual void AppendText(const wxString& text);
 
+#if wxUSE_RICHEDIT
+    // apply text attribute to the range of text (only works with richedit
+    // controls)
+    virtual bool SetStyle(long start, long end, const wxTextAttr& style);
+#endif // wxUSE_RICHEDIT
+
     // translate between the position (which is just an index in the text ctrl
     // considering all its contents as a single strings) and (x, y) coordinates
     // which represent column and line.

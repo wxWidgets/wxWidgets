@@ -253,13 +253,10 @@ MyFrame::MyFrame()
     wxMenu *fileMenu = new wxMenu;
     fileMenu->Append(Menu_File_Quit, "E&xit\tAlt-X", "Quit toolbar sample");
 
-    // not supported just yet
-#ifndef __WXUNIVERSAL__
     wxMenuItem *itemBitmap = new wxMenuItem(fileMenu, Menu_File_Quit,
                                             "Quit with &bitmap\tAlt-Q");
     itemBitmap->SetBitmap(wxBitmap(copy_xpm));
     fileMenu->Append(itemBitmap);
-#endif // __WXUNIVERSAL__
 
     wxMenu *menubarMenu = new wxMenu;
     menubarMenu->Append(Menu_MenuBar_Append, "&Append menu\tCtrl-A",

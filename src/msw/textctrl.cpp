@@ -126,7 +126,6 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
 #endif
 END_EVENT_TABLE()
 
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -450,6 +449,17 @@ void wxTextCtrl::WriteText(const wxString& value)
 {
     wxString valueDos = wxTextFile::Translate(value, wxTextFileType_Dos);
 
+#if wxUSE_RICHEDIT
+    // ensure that the new text will be in the default style
+    if ( IsRich() &&
+            (m_defaultStyle.HasFont() || m_defaultStyle.HasTextColour()) )
+    {
+        long start, end;
+        GetSelection(&start, &end);
+        SetStyle(start, end, m_defaultStyle );
+    }
+#endif // wxUSE_RICHEDIT
+
     SendMessage(GetHwnd(), EM_REPLACESEL, 0, (LPARAM)valueDos.c_str());
 
     AdjustSpaceLimit();
@@ -625,18 +635,19 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
 
         *from = charRange.cpMin;
         *to = charRange.cpMax;
-
-        return;
     }
-#endif
-    DWORD dwStart, dwEnd;
-    WPARAM wParam = (WPARAM) (DWORD*) & dwStart; // receives starting position
-    LPARAM lParam = (LPARAM) (DWORD*) & dwEnd;   // receives ending position
+    else
+#endif // rich/!rich
+    {
+        DWORD dwStart, dwEnd;
+        WPARAM wParam = (WPARAM) &dwStart; // receives starting position
+        LPARAM lParam = (LPARAM) &dwEnd;   // receives ending position
 
-    ::SendMessage(GetHwnd(), EM_GETSEL, wParam, lParam);
+        ::SendMessage(GetHwnd(), EM_GETSEL, wParam, lParam);
 
-    *from = dwStart;
-    *to = dwEnd;
+        *from = dwStart;
+        *to = dwEnd;
+    }
 }
 
 bool wxTextCtrl::IsEditable() const
@@ -1151,11 +1162,12 @@ void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
     event.Enable( CanRedo() );
 }
 
+// the rest of the file only deals with the rich edit controls
+#if wxUSE_RICHEDIT
+
 // ----------------------------------------------------------------------------
 // colour setting for the rich edit controls
 // ----------------------------------------------------------------------------
-
-#if wxUSE_RICHEDIT
 
 // Watcom C++ doesn't define this
 #ifndef SCF_ALL
@@ -1202,13 +1214,114 @@ bool wxTextCtrl::SetForegroundColour(const wxColour& colour)
     return TRUE;
 }
 
-#endif // wxUSE_RICHEDIT
+// ----------------------------------------------------------------------------
+// styling support for rich edit controls
+// ----------------------------------------------------------------------------
+
+bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
+{
+    if ( !IsRich() )
+    {
+        // can't do it with normal text control
+        return FALSE;
+    }
+
+    // the rich text control doesn't handle setting background colour, so don't
+    // even try if it's the only thing we want to change
+    if ( !style.HasFont() && !style.HasTextColour() )
+    {
+        // nothing to do: return TRUE if there was really nothing to doand
+        // FALSE fi we failed to set bg colour
+        return !style.HasBackgroundColour();
+    }
+
+    // order the range if needed
+    if ( start > end )
+    {
+        long tmp = start;
+        start = end;
+        end = tmp;
+    }
+
+    // we can only change the format of the selection, so select the range we
+    // want and restore the old selection later
+    long startOld, endOld;
+    GetSelection(&startOld, &endOld);
+
+    // but do we really have to change the selection?
+    bool changeSel = start != startOld || end != endOld;
+
+    if ( changeSel )
+        SendMessage(GetHwnd(), EM_SETSEL, (WPARAM) start, (LPARAM) end);
+
+    // initialize CHARFORMAT struct
+    CHARFORMAT cf;
+    wxZeroMemory(cf);
+    cf.cbSize = sizeof(cf);
+
+    if ( style.HasFont() )
+    {
+        cf.dwMask |= CFM_FACE | CFM_SIZE | CFM_CHARSET;
+
+        // fill in data from LOGFONT but recalculate lfHeight because we need
+        // the real height in twips and not the negative number which
+        // wxFillLogFont() returns (this is correct in general and works with
+        // the Windows font mapper, but not here)
+        LOGFONT lf;
+        wxFillLogFont(&lf, &style.GetFont());
+        cf.yHeight = 20*style.GetFont().GetPointSize(); // 1 pt = 20 twips
+        cf.bCharSet = lf.lfCharSet;
+        cf.bPitchAndFamily = lf.lfPitchAndFamily;
+        wxStrncpy( cf.szFaceName, lf.lfFaceName, WXSIZEOF(cf.szFaceName) );
+
+        // also deal with underline/italic/bold attributes
+        if ( lf.lfItalic )
+        {
+            cf.dwMask |= CFM_ITALIC;
+            cf.dwEffects |= CFE_ITALIC;
+        }
+
+        if ( lf.lfWeight == FW_BOLD )
+        {
+            cf.dwMask |= CFM_BOLD;
+            cf.dwEffects |= CFE_BOLD;
+        }
+
+        if ( lf.lfUnderline )
+        {
+            cf.dwMask |= CFM_UNDERLINE;
+            cf.dwEffects |= CFE_UNDERLINE;
+        }
+
+        // strikeout fonts are not supported by wxWindows
+    }
+
+    if ( style.HasTextColour() )
+    {
+        cf.dwMask |= CFM_COLOR;
+        cf.crTextColor = wxColourToRGB(style.GetTextColour());
+    }
+
+    // do format the selection
+    bool ok = ::SendMessage(GetHwnd(), EM_SETCHARFORMAT,
+                            SCF_SELECTION, (LPARAM)&cf) != 0;
+    if ( !ok )
+    {
+        wxLogDebug(_T("SendMessage(EM_SETCHARFORMAT, SCF_SELECTION) failed"));
+    }
+
+    if ( changeSel )
+    {
+        // restore the original selection
+        SendMessage(GetHwnd(), EM_SETSEL, (WPARAM)startOld, (LPARAM)endOld);
+    }
+
+    return ok;
+}
 
 // ----------------------------------------------------------------------------
 // wxRichEditModule
 // ----------------------------------------------------------------------------
-
-#if wxUSE_RICHEDIT
 
 bool wxRichEditModule::OnInit()
 {
