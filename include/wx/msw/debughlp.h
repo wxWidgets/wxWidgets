@@ -15,7 +15,9 @@
 #include "wx/dynlib.h"
 
 #include "wx/msw/wrapwin.h"
+#ifndef __WXWINCE__
 #include <imagehlp.h>
+#endif // __WXWINCE__
 #include "wx/msw/private.h"
 
 // we need to determine whether we have the declarations for the function in

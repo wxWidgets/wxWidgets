@@ -32,6 +32,7 @@
 #endif  //WX_PRECOMP
 
 #include "wx/apptrait.h"
+#include "wx/dynlib.h"
 #include "wx/dynload.h"
 
 #include "wx/confbase.h"        // for wxExpandEnvVars()
