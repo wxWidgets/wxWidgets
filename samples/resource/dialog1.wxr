@@ -5,7 +5,7 @@ static char *dialog1 = "dialog(name = 'dialog1',\
   x = 10, y = 10, width = 198, height = 147,\
   background_colour = 'D6D6D6',\
   use_dialog_units = 1,\
-  use_system_defaults = 0,\
+  use_system_defaults = 1,\
   font = [12, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'Swiss'],\
   control = [101, wxStaticBox, 'wxStaticBox', '0', 'group6', 5, 7, 184, 103,\
       [12, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'Swiss']],\
