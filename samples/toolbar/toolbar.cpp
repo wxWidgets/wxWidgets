@@ -257,7 +257,7 @@ bool MyApp::OnInit()
     MyFrame* frame = new MyFrame((wxFrame *) NULL, -1,
                                  _T("wxToolBar Sample"),
 #ifdef __WXWINCE__
-                                 wxPoint(0, 0), wxDefaultSize
+                                 wxDefaultPosition, wxDefaultSize
 #else
                                  wxPoint(100, 100), wxSize(550, 300)
 #endif
@@ -265,7 +265,9 @@ bool MyApp::OnInit()
 
     frame->Show(TRUE);
 
+#ifndef __SMARTPHONE__
     frame->SetStatusText(_T("Hello, wxWidgets"));
+#endif
 
     SetTopWindow(frame);
 
@@ -387,8 +389,10 @@ MyFrame::MyFrame(wxFrame* parent,
     m_rows = 1;
     m_nPrint = 1;
 
+#ifndef __SMARTPHONE__
     // Give it a status line
     CreateStatusBar();
+#endif
 
     // Give it an icon
     SetIcon(wxICON(mondrian));
@@ -707,6 +711,7 @@ void MyFrame::OnInsertPrint(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnToolEnter(wxCommandEvent& event)
 {
+#ifndef __SMARTPHONE__
     if (event.GetSelection() > -1)
     {
         wxString str;
@@ -715,6 +720,7 @@ void MyFrame::OnToolEnter(wxCommandEvent& event)
     }
     else
         SetStatusText(_T(""));
+#endif
 }
 
 void MyFrame::OnToggleRadioBtn(wxCommandEvent& event)
