@@ -17,11 +17,9 @@
 #pragma interface "file.h"
 #endif
 
-#ifndef WX_PRECOMP
-  #include  "wx/string.h"
-  #include  "wx/filefn.h"
-  #include  "wx/strconv.h"
-#endif
+#include  "wx/string.h"
+#include  "wx/filefn.h"
+#include  "wx/strconv.h"
 
 #if wxUSE_FILE
 
