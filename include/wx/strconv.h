@@ -124,8 +124,11 @@ class WXDLLEXPORT wxCSConv : public wxMBConv
 {
 public:
     wxCSConv(const wxChar *charset);
+    wxCSConv(const wxCSConv& conv);
     virtual ~wxCSConv();
 
+    wxCSConv& operator=(const wxCSConv& conv);
+    
     void LoadNow();
 
     virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;

@@ -920,6 +920,20 @@ wxCSConv::~wxCSConv()
     Clear();
 }
 
+wxCSConv::wxCSConv(const wxCSConv& conv)
+    : wxMBConv()
+{
+    Clear();
+    SetName(conv.m_name);
+}
+
+wxCSConv& wxCSConv::operator=(const wxCSConv& conv)
+{
+    Clear();
+    SetName(conv.m_name);
+    return *this;
+}
+
 void wxCSConv::Clear()
 {
     if (m_name)

@@ -44,10 +44,25 @@ class WXDLLEXPORT wxAcceleratorEntry
 public:
     wxAcceleratorEntry(int flags = 0, int keyCode = 0, int cmd = 0,
                        wxMenuItem *item = NULL)
-    {
-        Set(flags, keyCode, cmd, item);
-    }
+        : m_flags(flags)
+        , m_keyCode(keyCode)
+        , m_command(cmd)
+        , m_item(item)
+        { }
 
+    wxAcceleratorEntry(const wxAcceleratorEntry& entry)
+        : m_flags(entry.m_flags)
+        , m_keyCode(entry.m_keyCode)
+        , m_command(entry.m_command)
+        , m_item(entry.m_item)
+        { }
+
+    wxAcceleratorEntry& operator=(const wxAcceleratorEntry& entry)
+    {
+        Set(entry.m_flags, entry.m_keyCode, entry.m_command, entry.m_item);
+        return *this;
+    }
+    
     void Set(int flags, int keyCode, int cmd, wxMenuItem *item = NULL)
     {
         m_flags = flags;
