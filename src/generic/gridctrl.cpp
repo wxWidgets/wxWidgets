@@ -19,6 +19,11 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/textctrl.h"
+    #include "wx/dc.h"
+#endif // WX_PRECOMP
+
 #include "wx/generic/gridctrl.h"
 #include "wx/tokenzr.h"
 

@@ -132,9 +132,9 @@ bool wxConfigBase::Read(const wxString& key, long *pl, long defVal) const
 bool wxConfigBase::Read(const wxString& key, double* val) const
 {
     wxString str;
-    if (Read(key, & str))
+    if ( Read(key, &str) )
     {
-        return wxSscanf(str, _T("%g"), val) == 1;
+        return str.ToDouble(val);
     }
 
     return FALSE;
