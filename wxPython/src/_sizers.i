@@ -372,7 +372,8 @@ public:
 
     %extend {
         void _setOORInfo(PyObject* _self) {
-            self->SetClientObject(new wxPyOORClientData(_self));
+            if (!self->GetClientObject())
+                self->SetClientObject(new wxPyOORClientData(_self));
         }
 
         DocAStr(Add,

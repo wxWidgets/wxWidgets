@@ -69,7 +69,8 @@ public:
     %extend {
         void _setOORInfo(PyObject* _self) {
             if (_self && _self != Py_None) {
-                self->SetClientObject(new wxPyOORClientData(_self));
+                if (!self->GetClientObject())
+                    self->SetClientObject(new wxPyOORClientData(_self));
             }
             else {
                 wxPyOORClientData* data = (wxPyOORClientData*)self->GetClientObject();

@@ -14,6 +14,16 @@
 %rename(GRID_VALUE_DATETIME)                wxGRID_VALUE_DATETIME;
 %rename(GridNoCellCoords)                   wxGridNoCellCoords;
 %rename(GridNoCellRect)                     wxGridNoCellRect;
+%rename(GRID_DEFAULT_NUMBER_ROWS)           wxGRID_DEFAULT_NUMBER_ROWS;
+%rename(GRID_DEFAULT_NUMBER_COLS)           wxGRID_DEFAULT_NUMBER_COLS;
+%rename(GRID_DEFAULT_ROW_HEIGHT)            wxGRID_DEFAULT_ROW_HEIGHT;
+%rename(GRID_DEFAULT_COL_WIDTH)             wxGRID_DEFAULT_COL_WIDTH;
+%rename(GRID_DEFAULT_COL_LABEL_HEIGHT)      wxGRID_DEFAULT_COL_LABEL_HEIGHT;
+%rename(GRID_DEFAULT_ROW_LABEL_WIDTH)       wxGRID_DEFAULT_ROW_LABEL_WIDTH;
+%rename(GRID_LABEL_EDGE_ZONE)               wxGRID_LABEL_EDGE_ZONE;
+%rename(GRID_MIN_ROW_HEIGHT)                wxGRID_MIN_ROW_HEIGHT;
+%rename(GRID_MIN_COL_WIDTH)                 wxGRID_MIN_COL_WIDTH;
+%rename(GRID_DEFAULT_SCROLLBAR_WIDTH)       wxGRID_DEFAULT_SCROLLBAR_WIDTH;
 %rename(GridCellRenderer)                   wxGridCellRenderer;
 %rename(PyGridCellRenderer)                 wxPyGridCellRenderer;
 %rename(GridCellStringRenderer)             wxGridCellStringRenderer;

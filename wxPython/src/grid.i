@@ -63,7 +63,8 @@ PyObject* wxPyMake_##TYPE(TYPE* source, bool setThisOwn) { \
         wxPyOORClientData* data = (wxPyOORClientData*)source->GetClientObject(); \
         if (data) { \
             target = data->m_obj; \
-            Py_INCREF(target); \
+            if (target) \
+                Py_INCREF(target); \
         } \
         /* Otherwise make a new wrapper for it the old fashioned way and \
            give it the OOR treatment */ \
@@ -521,28 +522,30 @@ const wxRect           wxGridNoCellRect;
 %mutable;
 
 
-%rename(GRID_DEFAULT_NUMBER_ROWS) WXGRID_DEFAULT_NUMBER_ROWS;
-%rename(GRID_DEFAULT_NUMBER_COLS) WXGRID_DEFAULT_NUMBER_COLS;
-%rename(GRID_DEFAULT_ROW_HEIGHT) WXGRID_DEFAULT_ROW_HEIGHT;
-%rename(GRID_DEFAULT_COL_WIDTH) WXGRID_DEFAULT_COL_WIDTH;
-%rename(GRID_DEFAULT_COL_LABEL_HEIGHT) WXGRID_DEFAULT_COL_LABEL_HEIGHT;
-%rename(GRID_DEFAULT_ROW_LABEL_WIDTH) WXGRID_DEFAULT_ROW_LABEL_WIDTH;
-%rename(GRID_LABEL_EDGE_ZONE) WXGRID_LABEL_EDGE_ZONE;
-%rename(GRID_MIN_ROW_HEIGHT) WXGRID_MIN_ROW_HEIGHT;
-%rename(GRID_MIN_COL_WIDTH) WXGRID_MIN_COL_WIDTH;
-%rename(GRID_DEFAULT_SCROLLBAR_WIDTH) WXGRID_DEFAULT_SCROLLBAR_WIDTH;
+%{
+#define wxGRID_DEFAULT_NUMBER_ROWS        WXGRID_DEFAULT_NUMBER_ROWS
+#define wxGRID_DEFAULT_NUMBER_COLS        WXGRID_DEFAULT_NUMBER_COLS
+#define wxGRID_DEFAULT_ROW_HEIGHT         WXGRID_DEFAULT_ROW_HEIGHT
+#define wxGRID_DEFAULT_COL_WIDTH          WXGRID_DEFAULT_COL_WIDTH
+#define wxGRID_DEFAULT_COL_LABEL_HEIGHT   WXGRID_DEFAULT_COL_LABEL_HEIGHT
+#define wxGRID_DEFAULT_ROW_LABEL_WIDTH    WXGRID_DEFAULT_ROW_LABEL_WIDTH
+#define wxGRID_LABEL_EDGE_ZONE            WXGRID_LABEL_EDGE_ZONE
+#define wxGRID_MIN_ROW_HEIGHT             WXGRID_MIN_ROW_HEIGHT
+#define wxGRID_MIN_COL_WIDTH              WXGRID_MIN_COL_WIDTH
+#define wxGRID_DEFAULT_SCROLLBAR_WIDTH    WXGRID_DEFAULT_SCROLLBAR_WIDTH
+%}
 
 enum {
-    WXGRID_DEFAULT_NUMBER_ROWS,
-    WXGRID_DEFAULT_NUMBER_COLS,
-    WXGRID_DEFAULT_ROW_HEIGHT,
-    WXGRID_DEFAULT_COL_WIDTH,
-    WXGRID_DEFAULT_COL_LABEL_HEIGHT,
-    WXGRID_DEFAULT_ROW_LABEL_WIDTH,
-    WXGRID_LABEL_EDGE_ZONE,
-    WXGRID_MIN_ROW_HEIGHT,
-    WXGRID_MIN_COL_WIDTH,
-    WXGRID_DEFAULT_SCROLLBAR_WIDTH
+    wxGRID_DEFAULT_NUMBER_ROWS,
+    wxGRID_DEFAULT_NUMBER_COLS,
+    wxGRID_DEFAULT_ROW_HEIGHT,
+    wxGRID_DEFAULT_COL_WIDTH,
+    wxGRID_DEFAULT_COL_LABEL_HEIGHT,
+    wxGRID_DEFAULT_ROW_LABEL_WIDTH,
+    wxGRID_LABEL_EDGE_ZONE,
+    wxGRID_MIN_ROW_HEIGHT,
+    wxGRID_MIN_COL_WIDTH,
+    wxGRID_DEFAULT_SCROLLBAR_WIDTH
 };
 
 
@@ -556,7 +559,8 @@ class wxGridCellRenderer
 public:
     %extend {
         void _setOORInfo(PyObject* _self) {
-            self->SetClientObject(new wxPyOORClientData(_self));
+            if (!self->GetClientObject())
+                self->SetClientObject(new wxPyOORClientData(_self));
         }
     }
 
@@ -762,7 +766,8 @@ class  wxGridCellEditor
 public:
     %extend {
         void _setOORInfo(PyObject* _self) {
-            self->SetClientObject(new wxPyOORClientData(_self));
+            if (!self->GetClientObject())
+                self->SetClientObject(new wxPyOORClientData(_self));
         }
     }
 
@@ -1030,14 +1035,15 @@ public:
 
     %extend {
         void _setOORInfo(PyObject* _self) {
-            self->SetClientObject(new wxPyOORClientData(_self));
+            if (!self->GetClientObject())
+                self->SetClientObject(new wxPyOORClientData(_self));
         }
     }
 
     %pythonAppend wxGridCellAttr  "self._setOORInfo(self)"
 
     wxGridCellAttr(wxGridCellAttr *attrDefault = NULL);
-
+    
     wxGridCellAttr *Clone() const;
     void MergeWith(wxGridCellAttr *mergefrom);
     void IncRef();
@@ -1095,7 +1101,8 @@ public:
 
     %extend {
         void _setOORInfo(PyObject* _self) {
-            self->SetClientObject(new wxPyOORClientData(_self));
+            if (!self->GetClientObject())
+                self->SetClientObject(new wxPyOORClientData(_self));
         }
     }
 
@@ -1156,7 +1163,8 @@ public:
 
     %extend {
         void _setOORInfo(PyObject* _self) {
-            self->SetClientObject(new wxPyOORClientData(_self));
+            if (!self->GetClientObject())
+                self->SetClientObject(new wxPyOORClientData(_self));
         }
     }
 
