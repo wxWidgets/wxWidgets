@@ -338,6 +338,13 @@ public:
     }
 %}
 
+%new wxCursor* wxCursorFromImage(const wxImage& image);
+%{
+    wxCursor* wxCursorFromImage(const wxImage& image) {
+        return new wxCursor(image);
+    }
+%}
+
 //----------------------------------------------------------------------
 
 class wxColour : public wxObject {
