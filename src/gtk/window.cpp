@@ -2616,7 +2616,7 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     wxASSERT_MSG( (m_parent != NULL), wxT("wxWindow::SetSize requires parent.\n") );
 
 /*
-    printf( "name %s, x,y,w,h: %d,%d,%d,%d \n", GetName().c_str(), x,y,width,height );
+    printf( "DoSetSize: name %s, x,y,w,h: %d,%d,%d,%d \n", GetName().c_str(), x,y,width,height );
 */
 
     if (m_resizing) return; /* I don't like recursions */
@@ -2890,6 +2890,13 @@ void wxWindow::DoGetClientSize( int *width, int *height ) const
         if (width) (*width) = m_width - dw;
         if (height) (*height) = m_height - dh;
     }
+    
+/*
+    printf( "GetClientSize, name %s ", GetName().c_str() );
+    if (width) printf( " width = %d", (*width) );
+    if (height) printf( " height = %d", (*height) );
+    printf( "\n" );
+*/
 }
 
 void wxWindow::DoGetPosition( int *x, int *y ) const

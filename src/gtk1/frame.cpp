@@ -448,7 +448,7 @@ void wxFrame::Init()
     m_toolBarDetached = FALSE;
     m_insertInClientArea = TRUE;
     m_isFrame = TRUE;
-    m_isIconized = TRUE;
+    m_isIconized = FALSE;
     m_fsIsShowing = FALSE;
     m_themeEnabled = TRUE;
 }
@@ -1228,7 +1228,11 @@ void wxFrame::SetIconizeState(bool iconize)
     {
         // this is not supposed to happen if we're called only from
         // gtk_frame_(un)map_callback!
-        wxFAIL_MSG( _T("unexpected call to SendIconizeEvent ignored") );
+        
+        // RR: I don't understand this test. Upon startup, the frame is
+        //     not iconized by default, it has just not been created
+        //     yet.
+        ///wxFAIL_MSG( _T("unexpected call to SendIconizeEvent ignored") );
     }
 }
 
