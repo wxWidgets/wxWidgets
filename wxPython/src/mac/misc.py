@@ -91,7 +91,10 @@ class wxSizePtr :
         if index == 0: self.width = val
         elif index == 1: self.height = val
         else: raise IndexError
-    def __nonzero__(self):      return self.asTuple() != (0,0)
+    def __nonzero__(self):               return self.asTuple() != (0,0)
+    def __getinitargs__(self):           return ()
+    def __getstate__(self):              return self.asTuple()
+    def __setstate__(self, state):       self.Set(*state)
 
 class wxSize(wxSizePtr):
     def __init__(self,*_args,**_kwargs):
@@ -154,6 +157,9 @@ class wxRealPointPtr :
         elif index == 1: self.height = val
         else: raise IndexError
     def __nonzero__(self):      return self.asTuple() != (0.0, 0.0)
+    def __getinitargs__(self):           return ()
+    def __getstate__(self):              return self.asTuple()
+    def __setstate__(self, state):       self.Set(*state)
 
 class wxRealPoint(wxRealPointPtr):
     def __init__(self,*_args,**_kwargs):
@@ -216,6 +222,9 @@ class wxPointPtr :
         elif index == 1: self.y = val
         else: raise IndexError
     def __nonzero__(self):      return self.asTuple() != (0,0)
+    def __getinitargs__(self):           return ()
+    def __getstate__(self):              return self.asTuple()
+    def __setstate__(self, state):       self.Set(*state)
 
 class wxPoint(wxPointPtr):
     def __init__(self,*_args,**_kwargs):
@@ -300,6 +309,9 @@ class wxRectPtr :
     def Inside(self, *_args, **_kwargs):
         val = apply(miscc.wxRect_Inside,(self,) + _args, _kwargs)
         return val
+    def Set(self, *_args, **_kwargs):
+        val = apply(miscc.wxRect_Set,(self,) + _args, _kwargs)
+        return val
     def asTuple(self, *_args, **_kwargs):
         val = apply(miscc.wxRect_asTuple,(self,) + _args, _kwargs)
         return val
@@ -350,7 +362,10 @@ class wxRectPtr :
         elif index == 2: self.width = val
         elif index == 3: self.height = val
         else: raise IndexError
-    def __nonzero__(self):      return self.asTuple() != (0,0,0,0)
+    def __nonzero__(self):               return self.asTuple() != (0,0,0,0)
+    def __getinitargs__(self):           return ()
+    def __getstate__(self):              return self.asTuple()
+    def __setstate__(self, state):       self.Set(*state)
 
     # override the __getattr__ made by SWIG
     def __getattr__(self, name):
@@ -431,6 +446,9 @@ class wxPoint2DDoublePtr :
     def GetCrossProduct(self, *_args, **_kwargs):
         val = apply(miscc.wxPoint2DDouble_GetCrossProduct,(self,) + _args, _kwargs)
         return val
+    def Set(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint2DDouble_Set,(self,) + _args, _kwargs)
+        return val
     def __neg__(self, *_args, **_kwargs):
         val = apply(miscc.wxPoint2DDouble___neg__,(self,) + _args, _kwargs)
         if val: val = wxPoint2DDoublePtr(val) ; val.thisown = 1
@@ -502,7 +520,10 @@ class wxPoint2DDoublePtr :
         if index == 0: self.m_x = val
         elif index == 1: self.m_yt = val
         else: raise IndexError
-    def __nonzero__(self):      return self.asTuple() != (0.0, 0.0)
+    def __nonzero__(self):               return self.asTuple() != (0.0, 0.0)
+    def __getinitargs__(self):           return ()
+    def __getstate__(self):              return self.asTuple()
+    def __setstate__(self, state):       self.Set(*state)
 
 class wxPoint2DDouble(wxPoint2DDoublePtr):
     def __init__(self,*_args,**_kwargs):
