@@ -20,8 +20,11 @@ class Panel(wxNotebook):
         self.modified = False
 
         # Set common button size for parameter buttons
+        bTmp = wxButton(self, -1, '')
         import params
-        params.buttonSize = self.DLG_SZE(buttonSize)
+        params.buttonSize = (self.DLG_SZE(buttonSize)[0], bTmp.GetSize()[1])
+        bTmp.Destroy()
+        del bTmp
 
         # List of child windows
         self.pages = []

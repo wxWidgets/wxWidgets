@@ -16,7 +16,7 @@ genericStyles = ['wxSIMPLE_BORDER', 'wxDOUBLE_BORDER',
                  'wxTRANSPARENT_WINDOW', 'wxWANTS_CHARS',
                  'wxNO_FULL_REPAINT_ON_RESIZE']
 
-buttonSize = (30,-1)    # in dialog units, transformed to pixels in panel ctor
+buttonSize = (35,-1)    # in dialog units, transformed to pixels in panel ctor
 
 # Class that can properly disable children
 class PPanel(wxPanel):
@@ -274,8 +274,8 @@ class ParamFont(PPanel):
                      fontStylesWx2Xml.get(font.GetStyle(), "normal"),
                      fontWeightsWx2Xml.get(font.GetWeight(), "normal"),
                      str(font.GetUnderlined()),
-                     font.GetFaceName(),
-                     wxFontMapper_GetEncodingName(font.GetEncoding())
+                     font.GetFaceName().encode(),
+                     wxFontMapper_GetEncodingName(font.GetEncoding()).encode()
                      ]
             # Add ignored flags
             self.SetValue(value)
@@ -694,8 +694,8 @@ class RadioBox(PPanel):
         self.choices = choices
         topSizer = wxBoxSizer()
         for i in choices:
-            button = wxRadioButton(self, -1, i, name=i)
-            topSizer.Add(button)
+            button = wxRadioButton(self, -1, i, size=(-1,buttonSize[1]), name=i)
+            topSizer.Add(button, 0, wxRIGHT, 5)
             EVT_RADIOBUTTON(self, button.GetId(), self.OnRadioChoice)
         self.SetAutoLayout(True)
         self.SetSizer(topSizer)
@@ -815,10 +815,12 @@ class ParamBitmap(PPanel):
     def updateRadios(self):
         if self.value[0]:
             self.radio_std.SetValue(True)
+            self.radio_file.SetValue(False)
             self.text.Enable(False)
             self.button.Enable(False)
             self.combo.Enable(True)
         else:
+            self.radio_std.SetValue(False)
             self.radio_file.SetValue(True)
             self.text.Enable(True)
             self.button.Enable(True)

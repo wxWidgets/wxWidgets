@@ -169,7 +169,7 @@ class xxxParamBitmap(xxxParam):
         self.stock_id = value[0]
         if self.stock_id:
             self.node.setAttribute('stock_id', self.stock_id)
-        else:
+        elif self.node.hasAttribute('stock_id'):
             self.node.removeAttribute('stock_id')
         xxxParam.update(self, value[1])
 

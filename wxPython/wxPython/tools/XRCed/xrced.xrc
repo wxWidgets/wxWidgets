@@ -298,6 +298,7 @@
             <object class="wxRadioButton" name="RADIO_STD">
               <label>art:</label>
             </object>
+            <flag>wxALIGN_CENTRE_VERTICAL</flag>
           </object>
           <object class="sizeritem">
             <object class="wxComboBox" name="COMBO_STD">
@@ -342,6 +343,7 @@
             <object class="wxRadioButton" name="RADIO_FILE">
               <label>file:</label>
             </object>
+            <flag>wxALIGN_CENTRE_VERTICAL</flag>
           </object>
           <object class="sizeritem">
             <object class="wxBoxSizer">
@@ -355,7 +357,7 @@
               <object class="sizeritem">
                 <object class="wxButton" name="BUTTON_BROWSE">
                   <label>Browse...</label>
-                  <size>30,-1d</size>
+                  <size>40,-1d</size>
                 </object>
               </object>
             </object>
