@@ -175,7 +175,7 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
                 int bmp_w = bmp.GetWidth();
                 int bmp_h = bmp.GetHeight();
                 // want default size but it's smaller, paste into transparent image
-                if ((reqSize == wxDefaultSize) && 
+                if ((reqSize == wxDefaultSize) &&
                     (bmp_h < bestSize.x) && (bmp_w < bestSize.y))
                 {
                      wxPoint offset((bestSize.x - bmp_w)/2, (bestSize.y - bmp_h)/2);
@@ -215,12 +215,12 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
     return icon;
 }
 
-#ifdef __WXGTK__
+#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
     #include <gtk/gtk.h>
     extern GtkIconSize wxArtClientToIconSize(const wxArtClient& client);
 #endif // __WXGTK__
 
-/*static*/ wxSize wxArtProvider::GetSize(const wxArtClient& client, 
+/*static*/ wxSize wxArtProvider::GetSize(const wxArtClient& client,
                                          bool platform_dependent)
 {
     if (!platform_dependent)
@@ -228,16 +228,16 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
         wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
         if (node)
             return node->GetData()->DoGetSize(client);
-            
+
         // else return platform dependent size
-    }    
-    
-#ifdef __WXGTK__
+    }
+
+#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
     GtkIconSize gtk_size = wxArtClientToIconSize(client);
     gint width, height;
     gtk_icon_size_lookup( gtk_size, &width, &height);
     return wxSize(width, height);
-#else 
+#else // !GTK+ 2
     if (client == wxART_TOOLBAR)
         return wxSize(32, 32);
     else if (client == wxART_MENU)
@@ -247,8 +247,8 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
     else if (client == wxART_BUTTON)
         return wxSize(16, 15);
     else
-        return wxSize(16, 15); // this is arbitrary    
-#endif 
+        return wxSize(16, 15); // this is arbitrary
+#endif // GTK+ 2/else
 }
 
 
