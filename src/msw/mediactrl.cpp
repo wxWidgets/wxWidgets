@@ -64,10 +64,644 @@ extern WXDLLIMPEXP_CORE const wxChar *wxCanvasClassName;
 #if wxUSE_DIRECTSHOW
 
 //---------------------------------------------------------------------------
-//  DirectShow includes
+//  COM includes
 //---------------------------------------------------------------------------
-#include <dshow.h>
+#include "wx/msw/ole/oleutils.h" //wxBasicString, IID etc.
+#include "wx/msw/ole/uuid.h" //IID etc..
 
+//---------------------------------------------------------------------------
+//  IIDS - used by CoCreateInstance and IUnknown::QueryInterface
+//---------------------------------------------------------------------------
+const IID LIBID_QuartzTypeLib = {0x56A868B0,0x0AD4,0x11CE,{0xB0,0x3A,0x00,0x20,0xAF,0x0B,0xA7,0x70}};
+const IID IID_IAMCollection = {0x56A868B9,0x0AD4,0x11CE,{0xB0,0x3A,0x00,0x20,0xAF,0x0B,0xA7,0x70}};
+const IID IID_IMediaControl = {0x56A868B1,0x0AD4,0x11CE,{0xB0,0x3A,0x00,0x20,0xAF,0x0B,0xA7,0x70}};
+const IID IID_IMediaEvent = {0x56A868B6,0x0AD4,0x11CE,{0xB0,0x3A,0x00,0x20,0xAF,0x0B,0xA7,0x70}};
+const IID IID_IMediaEventEx = {0x56A868C0,0x0AD4,0x11CE,{0xB0,0x3A,0x00,0x20,0xAF,0x0B,0xA7,0x70}};
+const IID IID_IMediaPosition = {0x56A868B2,0x0AD4,0x11CE,{0xB0,0x3A,0x00,0x20,0xAF,0x0B,0xA7,0x70}};
+const IID IID_IBasicAudio = {0x56A868B3,0x0AD4,0x11CE,{0xB0,0x3A,0x00,0x20,0xAF,0x0B,0xA7,0x70}};
+const IID IID_IVideoWindow = {0x56A868B4,0x0AD4,0x11CE,{0xB0,0x3A,0x00,0x20,0xAF,0x0B,0xA7,0x70}};
+const IID IID_IBasicVideo = {0x56A868B5,0x0AD4,0x11CE,{0xB0,0x3A,0x00,0x20,0xAF,0x0B,0xA7,0x70}};
+const IID IID_IBasicVideo2 = {0x329BB360,0xF6EA,0x11D1,{0x90,0x38,0x00,0xA0,0xC9,0x69,0x72,0x98}};
+const IID IID_IDeferredCommand = {0x56A868B8,0x0AD4,0x11CE,{0xB0,0x3A,0x00,0x20,0xAF,0x0B,0xA7,0x70}};
+const IID IID_IQueueCommand = {0x56A868B7,0x0AD4,0x11CE,{0xB0,0x3A,0x00,0x20,0xAF,0x0B,0xA7,0x70}};
+const IID IID_IFilterInfo = {0x56A868BA,0x0AD4,0x11CE,{0xB0,0x3A,0x00,0x20,0xAF,0x0B,0xA7,0x70}};
+const IID IID_IRegFilterInfo = {0x56A868BB,0x0AD4,0x11CE,{0xB0,0x3A,0x00,0x20,0xAF,0x0B,0xA7,0x70}};
+const IID IID_IMediaTypeInfo = {0x56A868BC,0x0AD4,0x11CE,{0xB0,0x3A,0x00,0x20,0xAF,0x0B,0xA7,0x70}};
+const IID IID_IPinInfo = {0x56A868BD,0x0AD4,0x11CE,{0xB0,0x3A,0x00,0x20,0xAF,0x0B,0xA7,0x70}};
+const IID IID_IAMStats = {0xBC9BCF80,0xDCD2,0x11D2,{0xAB,0xF6,0x00,0xA0,0xC9,0x05,0xF3,0x75}};
+
+//TODO:  These 4 lines needed?
+#ifndef CLSID_DEFINED
+#define CLSID_DEFINED
+typedef IID CLSID;
+#endif // CLSID_DEFINED
+
+//COM Class Factory
+const CLSID CLSID_FilgraphManager = {0xE436EBB3,0x524F,0x11CE,{0x9F,0x53,0x00,0x20,0xAF,0x0B,0xA7,0x70}};
+
+//---------------------------------------------------------------------------
+//  COM INTERFACES (dumped from midl from quartz.idl from MSVC COM Browser)
+//---------------------------------------------------------------------------
+MIDL_INTERFACE("56A868B9-0AD4-11CE-B03A-0020AF0BA770")
+IAMCollection : public IDispatch
+{
+public:
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Count( 
+        /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE Item( 
+        /* [in] */ long lItem,
+        /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
+        /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+    
+};
+
+MIDL_INTERFACE("56A868B1-0AD4-11CE-B03A-0020AF0BA770")
+IMediaControl : public IDispatch
+{
+public:
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE Run( void) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE Pause( void) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE Stop( void) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetState( 
+        /* [in] */ long msTimeout,
+        /* [out] */ long __RPC_FAR *pfs) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE RenderFile( 
+        /* [in] */ BSTR strFilename) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddSourceFilter( 
+        /* [in] */ BSTR strFilename,
+        /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_FilterCollection( 
+        /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_RegFilterCollection( 
+        /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE StopWhenReady( void) = 0;
+    
+};
+
+MIDL_INTERFACE("56A868B6-0AD4-11CE-B03A-0020AF0BA770")
+IMediaEvent : public IDispatch
+{
+public:
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetEventHandle( 
+        /* [out] */ LONG_PTR __RPC_FAR *hEvent) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetEvent( 
+        /* [out] */ long __RPC_FAR *lEventCode,
+        /* [out] */ LONG_PTR __RPC_FAR *lParam1,
+        /* [out] */ LONG_PTR __RPC_FAR *lParam2,
+        /* [in] */ long msTimeout) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE WaitForCompletion( 
+        /* [in] */ long msTimeout,
+        /* [out] */ long __RPC_FAR *pEvCode) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE CancelDefaultHandling( 
+        /* [in] */ long lEvCode) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE RestoreDefaultHandling( 
+        /* [in] */ long lEvCode) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE FreeEventParams( 
+        /* [in] */ long lEvCode,
+        /* [in] */ LONG_PTR lParam1,
+        /* [in] */ LONG_PTR lParam2) = 0;
+    
+};
+
+MIDL_INTERFACE("56A868C0-0AD4-11CE-B03A-0020AF0BA770")
+IMediaEventEx : public IMediaEvent
+{
+public:
+    virtual HRESULT __stdcall SetNotifyWindow( 
+        /* [in] */ LONG_PTR hwnd,
+        /* [in] */ long lMsg,
+        /* [in] */ LONG_PTR lInstanceData) = 0;
+    
+    virtual HRESULT __stdcall SetNotifyFlags( 
+        /* [in] */ long lNoNotifyFlags) = 0;
+    
+    virtual HRESULT __stdcall GetNotifyFlags( 
+        /* [out] */ long __RPC_FAR *lplNoNotifyFlags) = 0;
+    
+};
+    
+MIDL_INTERFACE("56A868B2-0AD4-11CE-B03A-0020AF0BA770")
+IMediaPosition : public IDispatch
+{
+public:
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Duration( 
+        /* [retval][out] */ double __RPC_FAR *plength) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_CurrentPosition( 
+        /* [in] */ double pllTime) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_CurrentPosition( 
+        /* [retval][out] */ double __RPC_FAR *pllTime) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_StopTime( 
+        /* [retval][out] */ double __RPC_FAR *pllTime) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_StopTime( 
+        /* [in] */ double pllTime) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_PrerollTime( 
+        /* [retval][out] */ double __RPC_FAR *pllTime) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_PrerollTime( 
+        /* [in] */ double pllTime) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Rate( 
+        /* [in] */ double pdRate) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Rate( 
+        /* [retval][out] */ double __RPC_FAR *pdRate) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE CanSeekForward( 
+        /* [retval][out] */ long __RPC_FAR *pCanSeekForward) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE CanSeekBackward( 
+        /* [retval][out] */ long __RPC_FAR *pCanSeekBackward) = 0;
+    
+};
+
+MIDL_INTERFACE("56A868B3-0AD4-11CE-B03A-0020AF0BA770")
+IBasicAudio : public IDispatch
+{
+public:
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Volume( 
+        /* [in] */ long plVolume) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Volume( 
+        /* [retval][out] */ long __RPC_FAR *plVolume) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Balance( 
+        /* [in] */ long plBalance) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Balance( 
+        /* [retval][out] */ long __RPC_FAR *plBalance) = 0;
+    
+};
+    
+MIDL_INTERFACE("56A868B4-0AD4-11CE-B03A-0020AF0BA770")
+IVideoWindow : public IDispatch
+{
+public:
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Caption( 
+        /* [in] */ BSTR strCaption) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Caption( 
+        /* [retval][out] */ BSTR __RPC_FAR *strCaption) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_WindowStyle( 
+        /* [in] */ long WindowStyle) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_WindowStyle( 
+        /* [retval][out] */ long __RPC_FAR *WindowStyle) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_WindowStyleEx( 
+        /* [in] */ long WindowStyleEx) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_WindowStyleEx( 
+        /* [retval][out] */ long __RPC_FAR *WindowStyleEx) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_AutoShow( 
+        /* [in] */ long AutoShow) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_AutoShow( 
+        /* [retval][out] */ long __RPC_FAR *AutoShow) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_WindowState( 
+        /* [in] */ long WindowState) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_WindowState( 
+        /* [retval][out] */ long __RPC_FAR *WindowState) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_BackgroundPalette( 
+        /* [in] */ long pBackgroundPalette) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_BackgroundPalette( 
+        /* [retval][out] */ long __RPC_FAR *pBackgroundPalette) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Visible( 
+        /* [in] */ long pVisible) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Visible( 
+        /* [retval][out] */ long __RPC_FAR *pVisible) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Left( 
+        /* [in] */ long pLeft) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Left( 
+        /* [retval][out] */ long __RPC_FAR *pLeft) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Width( 
+        /* [in] */ long pWidth) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Width( 
+        /* [retval][out] */ long __RPC_FAR *pWidth) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Top( 
+        /* [in] */ long pTop) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Top( 
+        /* [retval][out] */ long __RPC_FAR *pTop) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Height( 
+        /* [in] */ long pHeight) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Height( 
+        /* [retval][out] */ long __RPC_FAR *pHeight) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Owner( 
+        /* [in] */ LONG_PTR Owner) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Owner( 
+        /* [retval][out] */ LONG_PTR __RPC_FAR *Owner) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_MessageDrain( 
+        /* [in] */ LONG_PTR Drain) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_MessageDrain( 
+        /* [retval][out] */ LONG_PTR __RPC_FAR *Drain) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_BorderColor( 
+        /* [retval][out] */ long __RPC_FAR *Color) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_BorderColor( 
+        /* [in] */ long Color) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_FullScreenMode( 
+        /* [retval][out] */ long __RPC_FAR *FullScreenMode) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_FullScreenMode( 
+        /* [in] */ long FullScreenMode) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetWindowForeground( 
+        /* [in] */ long Focus) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE NotifyOwnerMessage( 
+        /* [in] */ LONG_PTR hwnd,
+        /* [in] */ long uMsg,
+        /* [in] */ LONG_PTR wParam,
+        /* [in] */ LONG_PTR lParam) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetWindowPosition( 
+        /* [in] */ long Left,
+        /* [in] */ long Top,
+        /* [in] */ long Width,
+        /* [in] */ long Height) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetWindowPosition( 
+        /* [out] */ long __RPC_FAR *pLeft,
+        /* [out] */ long __RPC_FAR *pTop,
+        /* [out] */ long __RPC_FAR *pWidth,
+        /* [out] */ long __RPC_FAR *pHeight) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetMinIdealImageSize( 
+        /* [out] */ long __RPC_FAR *pWidth,
+        /* [out] */ long __RPC_FAR *pHeight) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetMaxIdealImageSize( 
+        /* [out] */ long __RPC_FAR *pWidth,
+        /* [out] */ long __RPC_FAR *pHeight) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetRestorePosition( 
+        /* [out] */ long __RPC_FAR *pLeft,
+        /* [out] */ long __RPC_FAR *pTop,
+        /* [out] */ long __RPC_FAR *pWidth,
+        /* [out] */ long __RPC_FAR *pHeight) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE HideCursor( 
+        /* [in] */ long HideCursor) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsCursorHidden( 
+        /* [out] */ long __RPC_FAR *CursorHidden) = 0;
+    
+};
+
+MIDL_INTERFACE("56A868B5-0AD4-11CE-B03A-0020AF0BA770")
+IBasicVideo : public IDispatch
+{
+public:
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_AvgTimePerFrame( 
+        /* [retval][out] */ double __RPC_FAR *pAvgTimePerFrame) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_BitRate( 
+        /* [retval][out] */ long __RPC_FAR *pBitRate) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_BitErrorRate( 
+        /* [retval][out] */ long __RPC_FAR *pBitErrorRate) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_VideoWidth( 
+        /* [retval][out] */ long __RPC_FAR *pVideoWidth) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_VideoHeight( 
+        /* [retval][out] */ long __RPC_FAR *pVideoHeight) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SourceLeft( 
+        /* [in] */ long pSourceLeft) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_SourceLeft( 
+        /* [retval][out] */ long __RPC_FAR *pSourceLeft) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SourceWidth( 
+        /* [in] */ long pSourceWidth) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_SourceWidth( 
+        /* [retval][out] */ long __RPC_FAR *pSourceWidth) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SourceTop( 
+        /* [in] */ long pSourceTop) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_SourceTop( 
+        /* [retval][out] */ long __RPC_FAR *pSourceTop) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SourceHeight( 
+        /* [in] */ long pSourceHeight) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_SourceHeight( 
+        /* [retval][out] */ long __RPC_FAR *pSourceHeight) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_DestinationLeft( 
+        /* [in] */ long pDestinationLeft) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_DestinationLeft( 
+        /* [retval][out] */ long __RPC_FAR *pDestinationLeft) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_DestinationWidth( 
+        /* [in] */ long pDestinationWidth) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_DestinationWidth( 
+        /* [retval][out] */ long __RPC_FAR *pDestinationWidth) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_DestinationTop( 
+        /* [in] */ long pDestinationTop) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_DestinationTop( 
+        /* [retval][out] */ long __RPC_FAR *pDestinationTop) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_DestinationHeight( 
+        /* [in] */ long pDestinationHeight) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_DestinationHeight( 
+        /* [retval][out] */ long __RPC_FAR *pDestinationHeight) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetSourcePosition( 
+        /* [in] */ long Left,
+        /* [in] */ long Top,
+        /* [in] */ long Width,
+        /* [in] */ long Height) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetSourcePosition( 
+        /* [out] */ long __RPC_FAR *pLeft,
+        /* [out] */ long __RPC_FAR *pTop,
+        /* [out] */ long __RPC_FAR *pWidth,
+        /* [out] */ long __RPC_FAR *pHeight) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetDefaultSourcePosition( void) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetDestinationPosition( 
+        /* [in] */ long Left,
+        /* [in] */ long Top,
+        /* [in] */ long Width,
+        /* [in] */ long Height) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetDestinationPosition( 
+        /* [out] */ long __RPC_FAR *pLeft,
+        /* [out] */ long __RPC_FAR *pTop,
+        /* [out] */ long __RPC_FAR *pWidth,
+        /* [out] */ long __RPC_FAR *pHeight) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetDefaultDestinationPosition( void) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetVideoSize( 
+        /* [out] */ long __RPC_FAR *pWidth,
+        /* [out] */ long __RPC_FAR *pHeight) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetVideoPaletteEntries( 
+        /* [in] */ long StartIndex,
+        /* [in] */ long Entries,
+        /* [out] */ long __RPC_FAR *pRetrieved,
+        /* [out] */ long __RPC_FAR *pPalette) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCurrentImage( 
+        /* [out][in] */ long __RPC_FAR *pBufferSize,
+        /* [out] */ long __RPC_FAR *pDIBImage) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsUsingDefaultSource( void) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsUsingDefaultDestination( void) = 0;
+    
+};
+    
+MIDL_INTERFACE("329BB360-F6EA-11D1-9038-00A0C9697298")
+IBasicVideo2 : public IBasicVideo
+{
+public:
+    virtual HRESULT __stdcall GetPreferredAspectRatio( 
+        /* [out] */ long __RPC_FAR *plAspectX,
+        /* [out] */ long __RPC_FAR *plAspectY) = 0;
+    
+};
+    
+MIDL_INTERFACE("56A868B8-0AD4-11CE-B03A-0020AF0BA770")
+IDeferredCommand : public IUnknown
+{
+public:
+    virtual HRESULT __stdcall Cancel( void) = 0;
+    
+    virtual HRESULT __stdcall Confidence( 
+        /* [out] */ long __RPC_FAR *pConfidence) = 0;
+    
+    virtual HRESULT __stdcall Postpone( 
+        /* [in] */ double newtime) = 0;
+    
+    virtual HRESULT __stdcall GetHResult( 
+        /* [out] */ HRESULT __RPC_FAR *phrResult) = 0;
+    
+};
+
+MIDL_INTERFACE("56A868B7-0AD4-11CE-B03A-0020AF0BA770")
+IQueueCommand : public IUnknown
+{
+public:
+    virtual HRESULT __stdcall InvokeAtStreamTime( 
+        /* [out] */ IDeferredCommand __RPC_FAR *__RPC_FAR *pCmd,
+        /* [in] */ double time,
+        /* [in] */ GUID __RPC_FAR *iid,
+        /* [in] */ long dispidMethod,
+        /* [in] */ short wFlags,
+        /* [in] */ long cArgs,
+        /* [in] */ VARIANT __RPC_FAR *pDispParams,
+        /* [out][in] */ VARIANT __RPC_FAR *pvarResult,
+        /* [out] */ short __RPC_FAR *puArgErr) = 0;
+    
+    virtual HRESULT __stdcall InvokeAtPresentationTime( 
+        /* [out] */ IDeferredCommand __RPC_FAR *__RPC_FAR *pCmd,
+        /* [in] */ double time,
+        /* [in] */ GUID __RPC_FAR *iid,
+        /* [in] */ long dispidMethod,
+        /* [in] */ short wFlags,
+        /* [in] */ long cArgs,
+        /* [in] */ VARIANT __RPC_FAR *pDispParams,
+        /* [out][in] */ VARIANT __RPC_FAR *pvarResult,
+        /* [out] */ short __RPC_FAR *puArgErr) = 0;
+    
+};
+    
+MIDL_INTERFACE("56A868BA-0AD4-11CE-B03A-0020AF0BA770")
+IFilterInfo : public IDispatch
+{
+public:
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE FindPin( 
+        /* [in] */ BSTR strPinID,
+        /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
+        /* [retval][out] */ BSTR __RPC_FAR *strName) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_VendorInfo( 
+        /* [retval][out] */ BSTR __RPC_FAR *strVendorInfo) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Filter( 
+        /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Pins( 
+        /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_IsFileSource( 
+        /* [retval][out] */ long __RPC_FAR *pbIsSource) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Filename( 
+        /* [retval][out] */ BSTR __RPC_FAR *pstrFilename) = 0;
+    
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Filename( 
+        /* [in] */ BSTR pstrFilename) = 0;
+    
+};
+    
+MIDL_INTERFACE("56A868BB-0AD4-11CE-B03A-0020AF0BA770")
+IRegFilterInfo : public IDispatch
+{
+public:
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
+        /* [retval][out] */ BSTR __RPC_FAR *strName) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE Filter( 
+        /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+    
+};
+    
+MIDL_INTERFACE("56A868BC-0AD4-11CE-B03A-0020AF0BA770")
+IMediaTypeInfo : public IDispatch
+{
+public:
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Type( 
+        /* [retval][out] */ BSTR __RPC_FAR *strType) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Subtype( 
+        /* [retval][out] */ BSTR __RPC_FAR *strType) = 0;
+    
+};
+    
+MIDL_INTERFACE("56A868BD-0AD4-11CE-B03A-0020AF0BA770")
+IPinInfo : public IDispatch
+{
+public:
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Pin( 
+        /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_ConnectedTo( 
+        /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_ConnectionMediaType( 
+        /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_FilterInfo( 
+        /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
+        /* [retval][out] */ BSTR __RPC_FAR *ppUnk) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Direction( 
+        /* [retval][out] */ long __RPC_FAR *ppDirection) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_PinID( 
+        /* [retval][out] */ BSTR __RPC_FAR *strPinID) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_MediaTypes( 
+        /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE Connect( 
+        /* [in] */ IUnknown __RPC_FAR *pPin) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE ConnectDirect( 
+        /* [in] */ IUnknown __RPC_FAR *pPin) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE ConnectWithType( 
+        /* [in] */ IUnknown __RPC_FAR *pPin,
+        /* [in] */ IDispatch __RPC_FAR *pMediaType) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE Disconnect( void) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE Render( void) = 0;
+    
+};
+
+MIDL_INTERFACE("BC9BCF80-DCD2-11D2-ABF6-00A0C905F375")
+IAMStats : public IDispatch
+{
+public:
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+    
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Count( 
+        /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetValueByIndex( 
+        /* [in] */ long lIndex,
+        /* [out] */ BSTR __RPC_FAR *szName,
+        /* [out] */ long __RPC_FAR *lCount,
+        /* [out] */ double __RPC_FAR *dLast,
+        /* [out] */ double __RPC_FAR *dAverage,
+        /* [out] */ double __RPC_FAR *dStdDev,
+        /* [out] */ double __RPC_FAR *dMin,
+        /* [out] */ double __RPC_FAR *dMax) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetValueByName( 
+        /* [in] */ BSTR szName,
+        /* [out] */ long __RPC_FAR *lIndex,
+        /* [out] */ long __RPC_FAR *lCount,
+        /* [out] */ double __RPC_FAR *dLast,
+        /* [out] */ double __RPC_FAR *dAverage,
+        /* [out] */ double __RPC_FAR *dStdDev,
+        /* [out] */ double __RPC_FAR *dMin,
+        /* [out] */ double __RPC_FAR *dMax) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetIndex( 
+        /* [in] */ BSTR szName,
+        /* [in] */ long lCreate,
+        /* [out] */ long __RPC_FAR *plIndex) = 0;
+    
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddValue( 
+        /* [in] */ long lIndex,
+        /* [in] */ double dValue) = 0;
+    
+};
+
+//------------------------------------------------------------------
+// wxAMMediaBackend (Active Movie)
+//------------------------------------------------------------------
 class WXDLLIMPEXP_MEDIA wxAMMediaBackend : public wxMediaBackend
 {
 public:
@@ -114,13 +748,12 @@ public:
 
     wxControl* m_ctrl;
 
-    IGraphBuilder* m_pGB;
-    IMediaControl* m_pMC;
-    IMediaEventEx* m_pME;
-    IVideoWindow* m_pVW;
     IBasicAudio* m_pBA;
     IBasicVideo* m_pBV;
-    IMediaSeeking* m_pMS;
+    IMediaControl* m_pMC;
+    IMediaEventEx* m_pME;
+    IMediaPosition* m_pMS;
+    IVideoWindow* m_pVW;
 
     HWND m_hNotifyWnd;
     wxSize m_bestSize;
@@ -348,17 +981,18 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
                                      const wxValidator& validator,
                                      const wxString& name)
 {
-    //create our filter graph
-    HRESULT hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
-                      IID_IGraphBuilder, (void**)&m_pGB);
+    //create our filter graph - the beuty of COM is that it loads
+    //quartz.dll for us :)
+    HRESULT hr = CoCreateInstance(CLSID_FilgraphManager, NULL, CLSCTX_INPROC_SERVER,
+                      IID_IMediaControl, (void**)&m_pMC);
 
    //directshow not installed?
     if ( FAILED(hr) )
         return false;
 
     //release the filter graph - we don't need it yet
-    m_pGB->Release();
-    m_pGB = NULL;
+    m_pMC->Release();
+    m_pMC = NULL;
 
     //
     // Create window
@@ -384,23 +1018,24 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 //---------------------------------------------------------------------------
 bool wxAMMediaBackend::Load(const wxString& fileName)
 {
+    //if previously loaded cleanup
     if(m_hNotifyWnd)
         Cleanup();
 
-    CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
-                      IID_IGraphBuilder, (void**)&m_pGB);
+    //We already checked for success in CreateControl
+    CoCreateInstance(CLSID_FilgraphManager, NULL, CLSCTX_INPROC_SERVER,
+                      IID_IMediaControl, (void**)&m_pMC);
 
     //load the graph & render
-    if( FAILED(m_pGB->RenderFile(fileName.wc_str(wxConvLocal), NULL)) )
+    if( FAILED(m_pMC->RenderFile(wxBasicString(fileName).Get())) )
         return false;
 
     //get the interfaces, all of them
-    wxAMVERIFY( m_pGB->QueryInterface(IID_IMediaControl, (void**)&m_pMC) );
-    wxAMVERIFY( m_pGB->QueryInterface(IID_IMediaEventEx, (void**)&m_pME) );
-    wxAMVERIFY( m_pGB->QueryInterface(IID_IMediaSeeking, (void**)&m_pMS) );
-    wxAMVERIFY( m_pGB->QueryInterface(IID_IVideoWindow, (void**)&m_pVW) );
-    wxAMVERIFY( m_pGB->QueryInterface(IID_IBasicAudio, (void**)&m_pBA) );
-    wxAMVERIFY( m_pGB->QueryInterface(IID_IBasicVideo, (void**)&m_pBV) );
+    wxAMVERIFY( m_pMC->QueryInterface(IID_IMediaEventEx, (void**)&m_pME) );
+    wxAMVERIFY( m_pMC->QueryInterface(IID_IMediaPosition, (void**)&m_pMS) );
+    wxAMVERIFY( m_pMC->QueryInterface(IID_IVideoWindow, (void**)&m_pVW) );
+    wxAMVERIFY( m_pMC->QueryInterface(IID_IBasicAudio, (void**)&m_pBA) );
+    wxAMVERIFY( m_pMC->QueryInterface(IID_IBasicVideo, (void**)&m_pBV) );
 
     //We could tell if the media has audio or not by
     //something like
@@ -430,9 +1065,9 @@ bool wxAMMediaBackend::Load(const wxString& fileName)
     //
     if (m_bVideo)
     {
-        wxAMVERIFY( m_pVW->put_Owner((OAHWND)m_ctrl->GetHandle()) );
+        wxAMVERIFY( m_pVW->put_Owner((LONG_PTR)m_ctrl->GetHandle()) );
         wxAMVERIFY( m_pVW->put_WindowStyle(WS_CHILD | WS_CLIPSIBLINGS) );
-        wxAMVERIFY( m_pVW->put_Visible(OATRUE) ); //OATRUE == -1
+        wxAMVERIFY( m_pVW->put_Visible(-1) ); //OATRUE == -1
     }
 
     //
@@ -467,13 +1102,8 @@ bool wxAMMediaBackend::Load(const wxString& fileName)
     ::SetWindowLong(m_hNotifyWnd, GWL_USERDATA,
                        (LONG) this);
 
-    wxAMVERIFY( m_pME->SetNotifyWindow((OAHWND)m_hNotifyWnd,
+    wxAMVERIFY( m_pME->SetNotifyWindow((LONG_PTR)m_hNotifyWnd,
                                        WM_GRAPHNOTIFY, 0) );
-
-    //
-    //set the time format
-    //
-    wxAMVERIFY( m_pMS->SetTimeFormat(&TIME_FORMAT_MEDIA_TIME) );
 
     //
     // Force the parent window of this control to recalculate
@@ -540,21 +1170,17 @@ bool wxAMMediaBackend::Stop()
 // wxAMMediaBackend::SetPosition
 //
 // 1) Translates the current position's time to directshow time,
-//    which is in a scale of 100 nanoseconds
+//    which is in a scale of 1 second (in a double)
 // 2) Sets the play position of the IMediaSeeking interface -
 //    passing NULL as the stop position means to keep the old
 //    stop position
 //---------------------------------------------------------------------------
 bool wxAMMediaBackend::SetPosition(wxLongLong where)
 {
-    LONGLONG pos = ((LONGLONG)where.GetValue()) * 10000;
-
-    return SUCCEEDED( m_pMS->SetPositions(
-                                &pos,
-                                AM_SEEKING_AbsolutePositioning,
-                                NULL,
-                                AM_SEEKING_NoPositioning
-                                    ) );
+    return SUCCEEDED( m_pMS->put_CurrentPosition(
+                        ((LONGLONG)where.GetValue()) / 1000
+                                                ) 
+                    );
 }
 
 //---------------------------------------------------------------------------
@@ -565,11 +1191,11 @@ bool wxAMMediaBackend::SetPosition(wxLongLong where)
 //---------------------------------------------------------------------------
 wxLongLong wxAMMediaBackend::GetPosition()
 {
-    LONGLONG outCur, outStop;
-    wxAMVERIFY( m_pMS->GetPositions(&outCur, &outStop) );
+    double outCur;
+    wxAMVERIFY( m_pMS->get_CurrentPosition(&outCur) );
 
-    //h,m,s,milli - outdur is in 100 nanos
-    return outCur/10000;
+    //h,m,s,milli - outdur is in 1 second (double)
+    return (outCur*1000);
 }
 
 //---------------------------------------------------------------------------
@@ -580,11 +1206,11 @@ wxLongLong wxAMMediaBackend::GetPosition()
 //---------------------------------------------------------------------------
 wxLongLong wxAMMediaBackend::GetDuration()
 {
-    LONGLONG outDuration;
-    wxAMVERIFY( m_pMS->GetDuration(&outDuration) );
+    double outDuration;
+    wxAMVERIFY( m_pMS->get_Duration(&outDuration) );
 
-    //h,m,s,milli - outdur is in 100 nanos
-    return outDuration/10000;
+    //h,m,s,milli - outdur is in 1 second (double)
+    return (outDuration*1000);
 }
 
 //---------------------------------------------------------------------------
@@ -599,7 +1225,7 @@ wxLongLong wxAMMediaBackend::GetDuration()
 wxMediaState wxAMMediaBackend::GetState()
 {
     HRESULT hr;
-    OAFilterState theState;
+    long theState; //OAFilterState
     hr = m_pMC->GetState(INFINITE, &theState);
 
     wxASSERT( SUCCEEDED(hr) );
@@ -621,7 +1247,7 @@ wxMediaState wxAMMediaBackend::GetState()
 double wxAMMediaBackend::GetPlaybackRate()
 {
     double dRate;
-    wxAMVERIFY( m_pMS->GetRate(&dRate) );
+    wxAMVERIFY( m_pMS->get_Rate(&dRate) );
     return dRate;
 }
 
@@ -633,7 +1259,7 @@ double wxAMMediaBackend::GetPlaybackRate()
 //---------------------------------------------------------------------------
 bool wxAMMediaBackend::SetPlaybackRate(double dRate)
 {
-    return SUCCEEDED( m_pMS->SetRate(dRate) );
+    return SUCCEEDED( m_pMS->put_Rate(dRate) );
 }
 
 //---------------------------------------------------------------------------
@@ -677,7 +1303,7 @@ LRESULT CALLBACK wxAMMediaBackend::OnNotifyWndProc(HWND hWnd, UINT nMsg,
             wxAMVERIFY( m_pME->FreeEventParams(evCode, evParam1, evParam2) );
 
             // If this is the end of the clip, notify handler
-            if(EC_COMPLETE == evCode)
+            if(1 == evCode) //EC_COMPLETE
             {
                 //send the event to our child
                 wxMediaEvent theEvent(wxEVT_MEDIA_STOP, m_ctrl->GetId());
@@ -707,7 +1333,7 @@ LRESULT CALLBACK wxAMMediaBackend::OnNotifyWndProc(HWND hWnd, UINT nMsg,
 // 1) Hide/disowns the video window (MS says bad things will happen if
 //    you don't)
 // 2) Releases all the directshow interfaces we use
-// TODO: Maybe there's a way to redirect the IGraphBuilder each time
+// TODO: Maybe there's a way to redirect the IMediaControl each time
 //       we load, rather then creating and destroying the interfaces
 //       each time?
 //---------------------------------------------------------------------------
@@ -716,18 +1342,17 @@ void wxAMMediaBackend::Cleanup()
     // Hide then disown the window
     if(m_pVW)
     {
-        m_pVW->put_Visible(OAFALSE); //OSFALSE == 0
+        m_pVW->put_Visible(0); //OSFALSE == 0
         m_pVW->put_Owner(NULL);
     }
 
     // Release and zero DirectShow interfaces
     SAFE_RELEASE(m_pME);
     SAFE_RELEASE(m_pMS);
-    SAFE_RELEASE(m_pMC);
     SAFE_RELEASE(m_pBA);
     SAFE_RELEASE(m_pBV);
     SAFE_RELEASE(m_pVW);
-    SAFE_RELEASE(m_pGB);
+    SAFE_RELEASE(m_pMC);
 
     // Get rid of our hidden Window
     DestroyWindow(m_hNotifyWnd);
@@ -750,7 +1375,7 @@ wxSize wxAMMediaBackend::GetVideoSize() const
 //
 // Resizes the IVideoWindow to the size of the control window
 //---------------------------------------------------------------------------
-void wxAMMediaBackend::Move(int x, int y, int w, int h)
+void wxAMMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y), int w, int h)
 {
     if(m_hNotifyWnd && m_bVideo)
     {
