@@ -463,36 +463,26 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 // Utility functions used within wxSTC
 
 #ifndef SWIG
+#if wxUSE_UNICODE
+
+wxString stc2wx(const char* str);
+wxString stc2wx(const char* str, size_t len);
+const wxWX2MBbuf wx2stc(const wxString& str);
+
+#else // not UNICODE
 
 inline wxString stc2wx(const char* str) {
-#if wxUSE_UNICODE
-    return wxString(str, wxConvUTF8);
-#else
     return wxString(str);
-#endif
 }
-
-#if wxUSE_UNICODE
-wxString stc2wx(const char* str, size_t len);
-#else
 inline wxString stc2wx(const char* str, size_t len) {
     return wxString(str, len);
 }
-#endif
-
-
-#if wxUSE_UNICODE
-inline const wxWX2MBbuf wx2stc(const wxString& str) {
-    return str.mb_str(wxConvUTF8);
-}
-#else
 inline const wxWX2MBbuf wx2stc(const wxString& str) {
     return str.mbc_str();
 }
-#endif
 
-#endif
-
+#endif // UNICODE
+#endif // SWIG
 
 //----------------------------------------------------------------------
 #endif
