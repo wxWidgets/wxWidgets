@@ -63,7 +63,7 @@ private:
 // wxBitmap
 //-----------------------------------------------------------------------------
 
-class wxBitmap: public wxGDIObject
+class wxBitmap: public wxBitmapBase
 {
 public:
     wxBitmap();
@@ -72,7 +72,7 @@ public:
     wxBitmap( const char **bits ) { (void)CreateFromXpm(bits); }
     wxBitmap( char **bits ) { (void)CreateFromXpm((const char **)bits); }
     wxBitmap( const wxBitmap& bmp );
-    wxBitmap( const wxString &filename, int type = wxBITMAP_TYPE_XPM );
+    wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM );
     wxBitmap( const wxImage& image, int depth = -1 ) { (void)CreateFromImage(image, depth); }
     ~wxBitmap();
     wxBitmap& operator = ( const wxBitmap& bmp );
@@ -96,14 +96,17 @@ public:
     
     wxBitmap GetSubBitmap( const wxRect& rect ) const;
 
-    bool SaveFile( const wxString &name, int type, wxPalette *palette = (wxPalette *) NULL );
-    bool LoadFile( const wxString &name, int type = wxBITMAP_TYPE_XPM );
+    bool SaveFile(const wxString &name, wxBitmapType type,
+                          const wxPalette *palette = (wxPalette *)NULL) const;
+    bool LoadFile(const wxString &name, wxBitmapType type = wxBITMAP_TYPE_XPM );
 
+#if wxUSE_PALETTE
     wxPalette *GetPalette() const;
+    void SetPalette(const wxPalette& palette);
     wxPalette *GetColourMap() const { return GetPalette(); };
+#endif // wxUSE_PALETTE
 
     static void InitStandardHandlers() { }
-    static void CleanUpHandlers() { }
 
     // implementation
     // --------------

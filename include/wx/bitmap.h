@@ -34,6 +34,7 @@ class WXDLLEXPORT wxPalette;
 
 #if defined(__WXMGL__) || \
     defined(__WXMAC__) || \
+    defined(__WXGTK__) || \
     defined(__WXCOCOA__) || \
     defined(__WXMOTIF__) || \
     defined(__WXX11__)

@@ -1153,12 +1153,12 @@ wxImage wxBitmap::ConvertToImage() const
 }
 
 wxBitmap::wxBitmap( const wxBitmap& bmp )
-        : wxGDIObject()
+        : wxBitmapBase()
 {
     Ref( bmp );
 }
 
-wxBitmap::wxBitmap( const wxString &filename, int type )
+wxBitmap::wxBitmap( const wxString &filename, wxBitmapType type )
 {
     LoadFile( filename, type );
 }
@@ -1324,7 +1324,7 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
     return ret;
 }
 
-bool wxBitmap::SaveFile( const wxString &name, int type, wxPalette *WXUNUSED(palette) )
+bool wxBitmap::SaveFile( const wxString &name, wxBitmapType type, const wxPalette *WXUNUSED(palette) ) const
 {
     wxCHECK_MSG( Ok(), FALSE, wxT("invalid bitmap") );
 
@@ -1337,7 +1337,7 @@ bool wxBitmap::SaveFile( const wxString &name, int type, wxPalette *WXUNUSED(pal
     return FALSE;
 }
 
-bool wxBitmap::LoadFile( const wxString &name, int type )
+bool wxBitmap::LoadFile( const wxString &name, wxBitmapType type )
 {
     UnRef();
 
@@ -1388,6 +1388,11 @@ wxPalette *wxBitmap::GetPalette() const
         return (wxPalette *) NULL;
 
     return M_BMPDATA->m_palette;
+}
+
+void wxBitmap::SetPalette(const wxPalette& WXUNUSED(palette))
+{
+    // TODO
 }
 
 void wxBitmap::SetHeight( int height )
