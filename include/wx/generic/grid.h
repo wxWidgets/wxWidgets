@@ -58,6 +58,7 @@
 #define wxGRID_VALUE_BOOL       _T("bool")
 #define wxGRID_VALUE_NUMBER     _T("long")
 #define wxGRID_VALUE_FLOAT      _T("double")
+#define wxGRID_VALUE_CHOICE     _T("choice")
 
 #define wxGRID_VALUE_TEXT wxGRID_VALUE_STRING
 #define wxGRID_VALUE_LONG wxGRID_VALUE_NUMBER
@@ -89,17 +90,17 @@ class WXDLLEXPORT wxSpinCtrl;
 #define wxSafeDecRef(p) if ( p ) (p)->DecRef()
 
 // ----------------------------------------------------------------------------
-// wxGridCellRenderer: this class is responsible for actually drawing the cell
-// in the grid. You may pass it to the wxGridCellAttr (below) to change the
-// format of one given cell or to wxGrid::SetDefaultRenderer() to change the
-// view of all cells. This is an ABC, you will normally use one of the
-// predefined derived classes or derive your own class from it.
+// wxGridCellWorker: common base class for wxGridCellRenderer and
+// wxGridCellEditor
+//
+// NB: this is more an implementation convenience than a design issue, so this
+//     class is not documented and is not public at all
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGridCellRenderer
+class WXDLLEXPORT wxGridCellWorker
 {
 public:
-    wxGridCellRenderer() { m_nRef = 1; }
+    wxGridCellWorker() { m_nRef = 1; }
 
     // this class is ref counted: it is created with ref count of 1, so
     // calling DecRef() once will delete it. Calling IncRef() allows to lock
@@ -107,6 +108,34 @@ public:
     void IncRef() { m_nRef++; }
     void DecRef() { if ( !--m_nRef ) delete this; }
 
+    // interpret renderer parameters: arbitrary string whose interpretatin is
+    // left to the derived classes
+    virtual void SetParameters(const wxString& params);
+
+protected:
+    // virtual dtor for any base class - private because only DecRef() can
+    // delete us
+    virtual ~wxGridCellWorker();
+
+private:
+    size_t m_nRef;
+
+    // suppress the stupid gcc warning about the class having private dtor and
+    // no friends
+    friend class wxGridCellWorkerDummyFriend;
+};
+
+// ----------------------------------------------------------------------------
+// wxGridCellRenderer: this class is responsible for actually drawing the cell
+// in the grid. You may pass it to the wxGridCellAttr (below) to change the
+// format of one given cell or to wxGrid::SetDefaultRenderer() to change the
+// view of all cells. This is an ABC, you will normally use one of the
+// predefined derived classes or derive your own class from it.
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxGridCellRenderer : public wxGridCellWorker
+{
+public:
     // draw the given cell on the provided DC inside the given rectangle
     // using the style specified by the attribute and the default or selected
     // state corresponding to the isSelected value.
@@ -127,24 +156,8 @@ public:
                                wxDC& dc,
                                int row, int col) = 0;
 
-    // interpret renderer parameters: arbitrary string whose interpretatin is
-    // left to the derived classes
-    virtual void SetParameters(const wxString& params);
-
     // create a new object which is the copy of this one
     virtual wxGridCellRenderer *Clone() const = 0;
-
-protected:
-    // virtual dtor for any base class - private because only DecRef() can
-    // delete us
-    virtual ~wxGridCellRenderer();
-
-private:
-    size_t m_nRef;
-
-    // suppress the stupid gcc warning about the class having private dtor and
-    // no friends
-    friend class wxGridCellRendererDummyFriend;
 };
 
 // the default renderer for the cells containing string data
@@ -278,16 +291,10 @@ private:
 // even for the entire grid.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGridCellEditor
+class WXDLLEXPORT wxGridCellEditor : public wxGridCellWorker
 {
 public:
     wxGridCellEditor();
-
-    // this class is ref counted: it is created with ref count of 1, so
-    // calling DecRef() once will delete it. Calling IncRef() allows to lock
-    // it until the matching DecRef() is called
-    void IncRef() { m_nRef++; }
-    void DecRef() { if ( !--m_nRef ) delete this; }
 
     bool IsCreated() { return m_control != NULL; }
 
@@ -334,12 +341,12 @@ public:
     // Final cleanup
     virtual void Destroy();
 
+    // create a new object which is the copy of this one
+    virtual wxGridCellEditor *Clone() const = 0;
+
 protected:
     // the dtor is private because only DecRef() can delete us
     virtual ~wxGridCellEditor();
-
-    // the ref count - when it goes to 0, we die
-    size_t m_nRef;
 
     // the control we show on screen
     wxControl*  m_control;
@@ -376,6 +383,12 @@ public:
     virtual void StartingKey(wxKeyEvent& event);
     virtual void HandleReturn(wxKeyEvent& event);
 
+    // parameters string format is "max_width"
+    virtual void SetParameters(const wxString& params);
+
+    virtual wxGridCellEditor *Clone() const
+        { return new wxGridCellTextEditor; }
+
 protected:
     wxTextCtrl *Text() const { return (wxTextCtrl *)m_control; }
 
@@ -384,6 +397,7 @@ protected:
     void DoReset(const wxString& startValue);
 
 private:
+    size_t   m_maxChars;        // max number of chars allowed
     wxString m_startValue;
 };
 
@@ -404,6 +418,12 @@ public:
 
     virtual void Reset();
     virtual void StartingKey(wxKeyEvent& event);
+
+    // parameters string format is "min,max"
+    virtual void SetParameters(const wxString& params);
+
+    virtual wxGridCellEditor *Clone() const
+        { return new wxGridCellNumberEditor(m_min, m_max); }
 
 protected:
     wxSpinCtrl *Spin() const { return (wxSpinCtrl *)m_control; }
@@ -436,6 +456,9 @@ public:
     virtual void Reset();
     virtual void StartingKey(wxKeyEvent& event);
 
+    virtual wxGridCellEditor *Clone() const
+        { return new wxGridCellFloatEditor; }
+
 protected:
     // string representation of m_valueOld
     wxString GetString() const
@@ -462,6 +485,9 @@ public:
     virtual void Reset();
     virtual void StartingClick();
 
+    virtual wxGridCellEditor *Clone() const
+        { return new wxGridCellBoolEditor; }
+
 protected:
     wxCheckBox *CBox() const { return (wxCheckBox *)m_control; }
 
@@ -474,7 +500,8 @@ class WXDLLEXPORT wxGridCellChoiceEditor : public wxGridCellEditor
 {
 public:
     // if !allowOthers, user can't type a string not in choices array
-    wxGridCellChoiceEditor(size_t count, const wxChar* choices[],
+    wxGridCellChoiceEditor(size_t count = 0,
+                           const wxChar* choices[] = NULL,
                            bool allowOthers = FALSE);
 
     virtual void Create(wxWindow* parent,
@@ -487,6 +514,11 @@ public:
     virtual bool EndEdit(int row, int col, wxGrid* grid);
 
     virtual void Reset();
+
+    // parameters string format is "item1[,item2[...,itemN]]"
+    virtual void SetParameters(const wxString& params);
+
+    virtual wxGridCellEditor *Clone() const;
 
 protected:
     wxComboBox *Combo() const { return (wxComboBox *)m_control; }

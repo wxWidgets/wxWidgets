@@ -669,9 +669,9 @@ void GridFrame::OnVTable(wxCommandEvent& )
     s = wxGetTextFromUser( "Size of the table to create",
                            "Size:",
                            s );
-    
+
     s.ToLong( &s_sizeGrid );
-    
+
 #else
     s_sizeGrid = wxGetNumberFromUser("Size of the table to create",
                                      "Size: ",
@@ -679,7 +679,7 @@ void GridFrame::OnVTable(wxCommandEvent& )
                                      s_sizeGrid,
                                      0, 32000, this);
 #endif
-    
+
     if ( s_sizeGrid != -1 )
     {
         BigGridFrame* win = new BigGridFrame(s_sizeGrid);
@@ -828,7 +828,7 @@ static struct BugsGridData
 
     Severity severity;
     int prio;
-    
+
 #ifndef __BORLANDC__
     wxString platform;
 #else
@@ -836,7 +836,7 @@ static struct BugsGridData
 #endif
 
     bool opened;
-} gs_dataBugsGrid [] = 
+} gs_dataBugsGrid [] =
 {
     { 18, _T("foo doesn't work"), Sev_Major, 1, _T("wxMSW"), TRUE },
     { 27, _T("bar crashes"), Sev_Critical, 1, _T("all"), FALSE },
@@ -870,8 +870,10 @@ wxString BugsGridTable::GetTypeName(int WXUNUSED(row), int col)
             // fall thorugh (TODO should be a list)
 
         case Col_Summary:
+            return wxString::Format(_T("%s:80"), wxGRID_VALUE_STRING);
+
         case Col_Platform:
-            return wxGRID_VALUE_STRING;
+            return wxString::Format(_T("%s:all,MSW,GTK,other"), wxGRID_VALUE_CHOICE);
 
         case Col_Opened:
             return wxGRID_VALUE_BOOL;
@@ -970,7 +972,7 @@ void BugsGridTable::SetValue( int row, int col, const wxString& value )
         case Col_Platform:
 #ifndef __BORLANDC__
             gd.platform = value;
-#else            
+#else
             // this generates a warning message if you are using the
             // memory tracing code but it should be ok :MB
             //

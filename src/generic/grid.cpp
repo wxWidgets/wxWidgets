@@ -47,6 +47,7 @@
 
 #include "wx/textfile.h"
 #include "wx/spinctrl.h"
+#include "wx/tokenzr.h"
 
 #include "wx/grid.h"
 
@@ -286,7 +287,19 @@ public:
     void RegisterDataType(const wxString& typeName,
                      wxGridCellRenderer* renderer,
                      wxGridCellEditor* editor);
+
+    // find one of already registered data types
+    int FindRegisteredDataType(const wxString& typeName);
+
+    // try to FindRegisteredDataType(), if this fails and typeName is one of
+    // standard typenames, register it and return its index
     int FindDataType(const wxString& typeName);
+
+    // try to FindDataType(), if it fails see if it is not one of already
+    // registered data types with some params in which case clone the
+    // registered data type and set params for it
+    int FindOrCloneDataType(const wxString& typeName);
+
     wxGridCellRenderer* GetRenderer(int index);
     wxGridCellEditor*   GetEditor(int index);
 
@@ -338,8 +351,6 @@ static const int GRID_HASH_SIZE = 100;
 wxGridCellEditor::wxGridCellEditor()
 {
     m_control = NULL;
-
-    m_nRef = 1;
 }
 
 
@@ -455,6 +466,7 @@ void wxGridCellEditor::StartingClick()
 
 wxGridCellTextEditor::wxGridCellTextEditor()
 {
+    m_maxChars = 0;
 }
 
 void wxGridCellTextEditor::Create(wxWindow* parent,
@@ -467,6 +479,8 @@ void wxGridCellTextEditor::Create(wxWindow* parent,
                                , wxTE_MULTILINE | wxTE_NO_VSCROLL // necessary ???
 #endif
                               );
+
+    // TODO: use m_maxChars
 
     wxGridCellEditor::Create(parent, id, evtHandler);
 }
@@ -604,6 +618,28 @@ void wxGridCellTextEditor::HandleReturn(wxKeyEvent& event)
 #endif
 }
 
+void wxGridCellTextEditor::SetParameters(const wxString& params)
+{
+    if ( !params )
+    {
+        // reset to default
+        m_maxChars = 0;
+    }
+    else
+    {
+        long tmp;
+        if ( !params.ToLong(&tmp) )
+        {
+            wxLogDebug(_T("Invalid wxGridCellTextEditor parameter string "
+                          "'%s' ignored"), params.c_str());
+        }
+        else
+        {
+            m_maxChars = (size_t)tmp;
+        }
+    }
+}
+
 // ----------------------------------------------------------------------------
 // wxGridCellNumberEditor
 // ----------------------------------------------------------------------------
@@ -721,6 +757,35 @@ void wxGridCellNumberEditor::StartingKey(wxKeyEvent& event)
     }
 
     event.Skip();
+}
+
+void wxGridCellNumberEditor::SetParameters(const wxString& params)
+{
+    if ( !params )
+    {
+        // reset to default
+        m_min =
+        m_max = -1;
+    }
+    else
+    {
+        long tmp;
+        if ( params.BeforeFirst(_T(',')).ToLong(&tmp) )
+        {
+            m_min = (int)tmp;
+
+            if ( params.AfterFirst(_T(',')).ToLong(&tmp) )
+            {
+                m_max = (int)tmp;
+
+                // skip the error message below
+                return;
+            }
+        }
+
+        wxLogDebug(_T("Invalid wxGridCellNumberEditor parameter string "
+                      "'%s' ignored"), params.c_str());
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -925,11 +990,23 @@ wxGridCellChoiceEditor::wxGridCellChoiceEditor(size_t count,
                                                bool allowOthers)
                       : m_allowOthers(allowOthers)
 {
-    m_choices.Alloc(count);
-    for ( size_t n = 0; n < count; n++ )
+    if ( count )
     {
-        m_choices.Add(choices[n]);
+        m_choices.Alloc(count);
+        for ( size_t n = 0; n < count; n++ )
+        {
+            m_choices.Add(choices[n]);
+        }
     }
+}
+
+wxGridCellEditor *wxGridCellChoiceEditor::Clone() const
+{
+    wxGridCellChoiceEditor *editor = new wxGridCellChoiceEditor;
+    editor->m_allowOthers = m_allowOthers;
+    editor->m_choices = m_choices;
+
+    return editor;
 }
 
 void wxGridCellChoiceEditor::Create(wxWindow* parent,
@@ -1007,6 +1084,23 @@ void wxGridCellChoiceEditor::Reset()
     Combo()->SetInsertionPointEnd();
 }
 
+void wxGridCellChoiceEditor::SetParameters(const wxString& params)
+{
+    if ( !params )
+    {
+        // what can we do?
+        return;
+    }
+
+    m_choices.Empty();
+
+    wxStringTokenizer tk(params, _T(','));
+    while ( tk.HasMoreTokens() )
+    {
+        m_choices.Add(tk.GetNextToken());
+    }
+}
+
 // ----------------------------------------------------------------------------
 // wxGridCellEditorEvtHandler
 // ----------------------------------------------------------------------------
@@ -1049,6 +1143,20 @@ void wxGridCellEditorEvtHandler::OnChar(wxKeyEvent& event)
     }
 }
 
+// ----------------------------------------------------------------------------
+// wxGridCellWorker is an (almost) empty common base class for
+// wxGridCellRenderer and wxGridCellEditor managing ref counting
+// ----------------------------------------------------------------------------
+
+void wxGridCellWorker::SetParameters(const wxString& WXUNUSED(params))
+{
+    // nothing to do
+}
+
+wxGridCellWorker::~wxGridCellWorker()
+{
+}
+
 // ============================================================================
 // renderer classes
 // ============================================================================
@@ -1077,15 +1185,6 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
 
     dc.SetPen( *wxTRANSPARENT_PEN );
     dc.DrawRectangle(rect);
-}
-
-void wxGridCellRenderer::SetParameters(const wxString& WXUNUSED(params))
-{
-    // nothing to do
-}
-
-wxGridCellRenderer::~wxGridCellRenderer()
-{
 }
 
 // ----------------------------------------------------------------------------
@@ -1917,7 +2016,7 @@ void wxGridTypeRegistry::RegisterDataType(const wxString& typeName,
     wxGridDataTypeInfo* info = new wxGridDataTypeInfo(typeName, renderer, editor);
 
     // is it already registered?
-    int loc = FindDataType(typeName);
+    int loc = FindRegisteredDataType(typeName);
     if ( loc != wxNOT_FOUND )
     {
         delete m_typeinfo[loc];
@@ -1929,18 +2028,108 @@ void wxGridTypeRegistry::RegisterDataType(const wxString& typeName,
     }
 }
 
-int wxGridTypeRegistry::FindDataType(const wxString& typeName)
+int wxGridTypeRegistry::FindRegisteredDataType(const wxString& typeName)
 {
-    int found = -1;
-
-    for (size_t i=0; i<m_typeinfo.Count(); i++) {
-        if (typeName == m_typeinfo[i]->m_typeName) {
-            found = i;
-            break;
+    size_t count = m_typeinfo.GetCount();
+    for ( size_t i = 0; i < count; i++ )
+    {
+        if ( typeName == m_typeinfo[i]->m_typeName )
+        {
+            return i;
         }
     }
 
-    return found;
+    return wxNOT_FOUND;
+}
+
+int wxGridTypeRegistry::FindDataType(const wxString& typeName)
+{
+    int index = FindRegisteredDataType(typeName);
+    if ( index == wxNOT_FOUND )
+    {
+        // check whether this is one of the standard ones, in which case
+        // register it "on the fly"
+        if ( typeName == wxGRID_VALUE_STRING )
+        {
+            RegisterDataType(wxGRID_VALUE_STRING,
+                             new wxGridCellStringRenderer,
+                             new wxGridCellTextEditor);
+        }
+        else if ( typeName == wxGRID_VALUE_BOOL )
+        {
+            RegisterDataType(wxGRID_VALUE_BOOL,
+                             new wxGridCellBoolRenderer,
+                             new wxGridCellBoolEditor);
+        }
+        else if ( typeName == wxGRID_VALUE_NUMBER )
+        {
+            RegisterDataType(wxGRID_VALUE_NUMBER,
+                             new wxGridCellNumberRenderer,
+                             new wxGridCellNumberEditor);
+        }
+        else if ( typeName == wxGRID_VALUE_FLOAT )
+        {
+            RegisterDataType(wxGRID_VALUE_FLOAT,
+                             new wxGridCellFloatRenderer,
+                             new wxGridCellFloatEditor);
+        }
+        else if ( typeName == wxGRID_VALUE_CHOICE )
+        {
+            RegisterDataType(wxGRID_VALUE_CHOICE,
+                             new wxGridCellStringRenderer,
+                             new wxGridCellChoiceEditor);
+        }
+        else
+        {
+            return wxNOT_FOUND;
+        }
+
+        // we get here only if just added the entry for this type, so return
+        // the last index
+        index = m_typeinfo.GetCount() - 1;
+    }
+
+    return index;
+}
+
+int wxGridTypeRegistry::FindOrCloneDataType(const wxString& typeName)
+{
+    int index = FindDataType(typeName);
+    if ( index == wxNOT_FOUND )
+    {
+        // the first part of the typename is the "real" type, anything after ':'
+        // are the parameters for the renderer
+        index = FindDataType(typeName.BeforeFirst(_T(':')));
+        if ( index == wxNOT_FOUND )
+        {
+            return wxNOT_FOUND;
+        }
+
+        wxGridCellRenderer *renderer = GetRenderer(index);
+        wxGridCellRenderer *rendererOld = renderer;
+        renderer = renderer->Clone();
+        rendererOld->DecRef();
+
+        wxGridCellEditor *editor = GetEditor(index);
+        wxGridCellEditor *editorOld = editor;
+        editor = editor->Clone();
+        editorOld->DecRef();
+
+        // do it even if there are no parameters to reset them to defaults
+        wxString params = typeName.AfterFirst(_T(':'));
+        renderer->SetParameters(params);
+        editor->SetParameters(params);
+
+        // register the new typename
+        renderer->IncRef();
+        editor->IncRef();
+        RegisterDataType(typeName, renderer, editor);
+
+        // we just registered it, it's the last one
+        index = m_typeinfo.GetCount() - 1;
+    }
+
+    return index;
 }
 
 wxGridCellRenderer* wxGridTypeRegistry::GetRenderer(int index)
@@ -2928,21 +3117,8 @@ void wxGrid::Create()
     m_rowLabelWidth = WXGRID_DEFAULT_ROW_LABEL_WIDTH;
     m_colLabelHeight = WXGRID_DEFAULT_COL_LABEL_HEIGHT;
 
-    // data type registration: register all standard data types
-    // TODO: may be allow the app to selectively disable some of them?
+    // create the type registry
     m_typeRegistry = new wxGridTypeRegistry;
-    RegisterDataType(wxGRID_VALUE_STRING,
-                     new wxGridCellStringRenderer,
-                     new wxGridCellTextEditor);
-    RegisterDataType(wxGRID_VALUE_BOOL,
-                     new wxGridCellBoolRenderer,
-                     new wxGridCellBoolEditor);
-    RegisterDataType(wxGRID_VALUE_NUMBER,
-                     new wxGridCellNumberRenderer,
-                     new wxGridCellNumberEditor);
-    RegisterDataType(wxGRID_VALUE_FLOAT,
-                     new wxGridCellFloatRenderer,
-                     new wxGridCellFloatEditor);
 
     // subwindow components that make up the wxGrid
     m_cornerLabelWin = new wxGridCornerLabelWindow( this,
@@ -6933,7 +7109,7 @@ wxGridCellRenderer* wxGrid::GetDefaultRendererForCell(int row, int col) const
 wxGridCellEditor*
 wxGrid::GetDefaultEditorForType(const wxString& typeName) const
 {
-    int index = m_typeRegistry->FindDataType(typeName);
+    int index = m_typeRegistry->FindOrCloneDataType(typeName);
     if ( index == wxNOT_FOUND )
     {
         wxFAIL_MSG(wxT("Unknown data type name"));
@@ -6947,41 +7123,15 @@ wxGrid::GetDefaultEditorForType(const wxString& typeName) const
 wxGridCellRenderer*
 wxGrid::GetDefaultRendererForType(const wxString& typeName) const
 {
-    // first try to find an exact match
-    wxGridCellRenderer *renderer;
-    int index = m_typeRegistry->FindDataType(typeName);
+    int index = m_typeRegistry->FindOrCloneDataType(typeName);
     if ( index == wxNOT_FOUND )
     {
-        // then try to construct a renderer from the base name and parameters
-        // following it
+        wxFAIL_MSG(wxT("Unknown data type name"));
 
-        // the first part of the typename is the "real" type, anything after ':'
-        // are the parameters for the renderer
-        index = m_typeRegistry->FindDataType(typeName.BeforeFirst(_T(':')));
-        if ( index == wxNOT_FOUND )
-        {
-            wxFAIL_MSG(wxT("Unknown data type name"));
-
-            return NULL;
-        }
-
-        renderer = m_typeRegistry->GetRenderer(index);
-        wxGridCellRenderer *rendererOld = renderer;
-        renderer = renderer->Clone();
-        rendererOld->DecRef();
-
-        // do it even if there are no parameters to reset them to defaults
-        renderer->SetParameters(typeName.AfterFirst(_T(':')));
-
-        // register the new typename
-        m_typeRegistry->RegisterDataType(typeName, renderer, NULL);
-    }
-    else
-    {
-        renderer = m_typeRegistry->GetRenderer(index);
+        return NULL;
     }
 
-    return renderer;
+    return m_typeRegistry->GetRenderer(index);
 }
 
 

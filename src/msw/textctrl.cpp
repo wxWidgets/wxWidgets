@@ -420,7 +420,7 @@ void wxTextCtrl::SetValue(const wxString& value)
     if ( (value.length() > 0x400) || (value != GetValue()) )
     {
         wxString valueDos = wxTextFile::Translate(value, wxTextFileType_Dos);
-                               
+
         SetWindowText(GetHwnd(), valueDos.c_str());
 
         AdjustSpaceLimit();
@@ -558,7 +558,7 @@ void wxTextCtrl::SetInsertionPoint(long pos)
     SendMessage(hWnd, EM_SETSEL, 0, MAKELPARAM(pos, pos));
 #endif // Win32/16
 
-    static const char *nothing = "";
+    static const wxChar *nothing = _T("");
     SendMessage(hWnd, EM_REPLACESEL, 0, (LPARAM)nothing);
 }
 

@@ -78,7 +78,7 @@ wxMenuBar::wxMenuBar( long style )
     }
 
     PostCreation();
-    
+
     ApplyWidgetStyle();
 }
 
@@ -110,7 +110,7 @@ wxMenuBar::wxMenuBar()
     m_widget = GTK_WIDGET(m_menubar);
 
     PostCreation();
-    
+
     ApplyWidgetStyle();
 }
 
@@ -351,25 +351,25 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     if ( !menu )
         return (wxMenu*) NULL;
 
-    GtkMenuShell *menu_shell = GTK_MENU_SHELL(m_factory->widget);
 /*
+    GtkMenuShell *menu_shell = GTK_MENU_SHELL(m_factory->widget);
 
     printf( "factory entries before %d\n", (int)g_slist_length(m_factory->items) );
     printf( "menu shell entries before %d\n", (int)g_list_length( menu_shell->children ) );
 */
-    
+
     // unparent calls unref() and that would delete the widget so we raise
     // the ref count to 2 artificially before invoking unparent.
     gtk_widget_ref( menu->m_menu );
     gtk_widget_unparent( menu->m_menu );
-    
+
     gtk_widget_destroy( menu->m_owner );
-    
+
 /*
     printf( "factory entries after %d\n", (int)g_slist_length(m_factory->items) );
     printf( "menu shell entries after %d\n", (int)g_list_length( menu_shell->children ) );
 */
-    
+
     return menu;
 }
 
@@ -489,7 +489,7 @@ void wxMenuBar::SetLabelTop( size_t pos, const wxString& label )
 static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 {
     if (g_isIdle) wxapp_install_idle_handler();
-    
+
     int id = menu->FindMenuIdByMenuItem(widget);
 
     /* should find it for normal (not popup) menu */
