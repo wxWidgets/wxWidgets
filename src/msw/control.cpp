@@ -359,6 +359,12 @@ WXHBRUSH wxControl::MSWControlColor(WXHDC pDC)
     {
         for ( wxWindow *win = this; win; win = win->GetParent() )
         {
+            if ( win->IsTopLevel() )
+            {
+                // don't go beyond the first top level parent
+                break;
+            }
+
             wxNotebook *nbook = wxDynamicCast(win, wxNotebook);
             if ( nbook )
             {
