@@ -166,7 +166,10 @@ void OwnerDrawnFrame::InitMenu()
     file_menu->Append(pItem);
 
     file_menu->AppendSeparator();
-    file_menu->Append(Menu_Quit, "&Quit", "Normal item");
+    pItem = new wxMenuItem(file_menu, Menu_Quit, "&Quit", "Normal item",
+                           wxITEM_NORMAL);
+    pItem->SetFont(*wxNORMAL_FONT);
+    file_menu->Append(pItem);
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
