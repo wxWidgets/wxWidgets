@@ -40,7 +40,7 @@ VER_MAJOR        = 2      # The first three must match wxWidgets
 VER_MINOR        = 5
 VER_RELEASE      = 3
 VER_SUBREL       = 1      # wxPython release num for x.y.z release of wxWidgets
-VER_FLAGS        = "rc1"     # release flags, such as prerelease num, unicode, etc.
+VER_FLAGS        = "rc2"     # release flags, such as prerelease num, unicode, etc.
 
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
