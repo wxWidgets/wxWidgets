@@ -169,6 +169,8 @@ public:
     wxCalendarEvent(wxCalendarCtrl *cal, wxEventType type);
 
     const wxDateTime& GetDate() const { return m_date; }
+    void SetDate(const wxDateTime &date) { m_date = date; }
+    void SetWeekDay(const wxDateTime::WeekDay wd) { m_wday = wd; }
     wxDateTime::WeekDay GetWeekDay() const { return m_wday; }
 
 protected:
