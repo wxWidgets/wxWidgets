@@ -2360,10 +2360,14 @@ bool wxWindow::MSWCreate(int id,
         height1 = parent_rect.bottom - parent_rect.top;
     }
 
-    if ( x > -1 ) x1 = x;
-    if ( y > -1 ) y1 = y;
-    if ( width > -1 ) width1 = width;
-    if ( height > -1 ) height1 = height;
+    if ( x != -1 )
+        x1 = x;
+    if ( y != -1 )
+        y1 = y;
+    if ( width != -1 )
+        width1 = width;
+    if ( height != -1 )
+        height1 = height;
 
     // unfortunately, setting WS_EX_CONTROLPARENT only for some windows in the
     // hierarchy with several embedded panels (and not all of them) causes the
