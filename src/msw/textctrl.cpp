@@ -245,11 +245,8 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 #endif
 
     // base initialization
-    if ( !CreateBase(parent, id, pos, size, style, validator, name) )
+    if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return FALSE;
-
-    if ( parent )
-        parent->AddChild(this);
 
     // translate wxWin style flags to MSW ones
     WXDWORD msStyle = MSWGetCreateWindowFlags();
