@@ -57,7 +57,6 @@
     src/msw/basemsw.cpp
     src/msw/dde.cpp
     src/msw/dir.cpp
-    src/msw/main.cpp
     src/msw/mimetype.cpp
     src/msw/regconf.cpp
     src/msw/registry.cpp
@@ -67,6 +66,7 @@
     src/msw/utilsexc.cpp
 </set>
 <set var="BASE_AND_GUI_WIN32_SRC">
+    src/msw/main.cpp
     src/msw/mslu.cpp
     src/msw/volume.cpp
 </set>
