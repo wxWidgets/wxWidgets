@@ -199,7 +199,7 @@ wxWindow *wxFindControlFromMacControl(ControlRef inControl ) ;
 wxTopLevelWindowMac* wxFindWinFromMacWindow( WindowRef inWindow ) ;
 extern wxWindow* g_MacLastWindow ;
 pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , EventRef event , void *data ) ;
-Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size ) ;
+Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin = true ) ;
 
 template<typename T> EventParamType wxMacGetEventParamType() { wxFAIL_MSG( wxT("Unknown Param Type") ) ; return 0 ; }
 template<> inline EventParamType wxMacGetEventParamType<RgnHandle>() { return typeQDRgnHandle ; }
