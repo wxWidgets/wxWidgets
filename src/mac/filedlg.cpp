@@ -491,38 +491,17 @@ int wxFileDialog::ShowModal()
 				if (specDesc.dataHandle != nil) {
 					::AEDisposeDesc(&specDesc);
 				}
-#ifdef __DARWIN__
-        FSRef fsr ;
-        err = FSpMakeFSRef( &outFileSpec , &fsr ) ;
-        if ( err == fnfErr )
-        {
-          FSSpec fss ;
-          err = FSMakeFSSpec( outFileSpec.vRefNum , outFileSpec.parID, "\p" , &fss ) ;
-          err = FSpMakeFSRef( &fss , &fsr ) ;
-          char path[256] ;
-          err = FSRefMakePath( &fsr , (unsigned char*) path , sizeof(path) ) ;
-          strcat( path , "/" ) ;
-          p2cstr( outFileSpec.name ) ;
-          strcat( path , (char*) outFileSpec.name ) ;
-          m_path = path ;
-        }
-        else
-        {
-				  m_path = wxMacFSSpec2MacFilename( &outFileSpec ) ;
-        }
-#else
 				m_path = wxMacFSSpec2MacFilename( &outFileSpec ) ;
-#endif
 				m_paths.Add( m_path ) ;
-        m_fileName = wxFileNameFromPath(m_path);
-	      m_fileNames.Add(m_fileName);
-	    }
-       // set these to the first hit
-       m_path = m_paths[ 0 ] ;
-       m_fileName = wxFileNameFromPath(m_path);
-       m_dir = wxPathOnly(m_path);
-       NavDisposeReply( &mNavReply ) ;
-			return wxID_OK ;
+                m_fileName = wxFileNameFromPath(m_path);
+	            m_fileNames.Add(m_fileName);
+	        }
+            // set these to the first hit
+            m_path = m_paths[ 0 ] ;
+            m_fileName = wxFileNameFromPath(m_path);
+            m_dir = wxPathOnly(m_path);
+            NavDisposeReply( &mNavReply ) ;
+    	    return wxID_OK ;
 		}
 		return wxID_CANCEL;
 }
