@@ -45,6 +45,7 @@ OBJECTS = \
 		cmdline.obj,\
 		cmndata.obj,\
 		config.obj,\
+		cshelp.obj,\
 		ctrlcmn.obj,\
 		ctrlsub.obj,\
 		datetime.obj,\
@@ -145,6 +146,7 @@ SOURCES = \
 		cmdline.cpp,\
 		cmndata.cpp,\
 		config.cpp,\
+		cshelp.cpp,\
 		ctrlcmn.cpp,\
 		ctrlsub.cpp,\
 		datetime.cpp,\
@@ -274,6 +276,7 @@ clipcmn.obj : clipcmn.cpp
 cmndata.obj : cmndata.cpp
 cmdline.obj : cmdline.cpp
 config.obj : config.cpp
+cshelp.obj : cshelp.cpp
 ctrlcmn.obj : ctrlcmn.cpp
 ctrlsub.obj : ctrlsub.cpp
 datetime.obj : datetime.cpp

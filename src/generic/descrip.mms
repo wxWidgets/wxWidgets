@@ -67,6 +67,7 @@ OBJECTS = \
 		tabg.obj,\
 		textdlgg.obj,\
 		tipdlg.obj,\
+		tipwin.obj,\
 		treectlg.obj,\
 		wizard.obj
 
@@ -110,6 +111,7 @@ SOURCES = \
 		tabg.cpp,\
 		textdlgg.cpp,\
 		tipdlg.cpp,\
+		tipwin.cpp,\
 		treectlg.cpp,\
 		wizard.cpp
 
@@ -170,5 +172,6 @@ tbarsmpl.obj : tbarsmpl.cpp
 tabg.obj : tabg.cpp
 textdlgg.obj : textdlgg.cpp
 tipdlg.obj : tipdlg.cpp
+tipwin.obj : tipwin.cpp
 treectlg.obj : treectlg.cpp
 wizard.obj : wizard.cpp
