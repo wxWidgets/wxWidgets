@@ -92,6 +92,7 @@ public:
     virtual void* DoGetItemClientData(int n) const;
     virtual void DoSetItemClientObject(int n, wxClientData* clientData);
     virtual wxClientData* DoGetItemClientObject(int n) const;
+	  virtual void  	 DoSetSize(int x, int y,int width, int height,int sizeFlags = wxSIZE_AUTO ) ;
 
     // wxCheckListBox support
 #if wxUSE_OWNER_DRAWN
