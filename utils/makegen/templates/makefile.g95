@@ -1,0 +1,10 @@
+# Purpose: makefile for #NAME example (Cygwin/Mingw32)
+# Created: #03.01.00
+
+WXDIR = ../..
+
+TARGET=#NAME
+OBJECTS = $(TARGET).o
+
+include $(WXDIR)\src\makeprog.g95
+
