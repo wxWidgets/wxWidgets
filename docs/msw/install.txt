@@ -392,10 +392,12 @@ There are several makefile variables which may be modified:
 
 - OUTPUTDIR may be set to the name of the directory where you want all the
   object files to be generated (the library files are always created in
-  %WXWIN\lib). You may set it to nothing to create them in the same directory
-  as the sourcse, however using a separate directory is preferable if you use
-  several different compilers. If you change OUTPUTDIR, make sure that it is
-  either empty or has a trailing backslash!
+  %WXWIN\lib). Compilation will fail if you set it to an empty string 
+  to create them in the same directory as the source. If you change OUTPUTDIR, 
+  make sure that it does not have a trailing backslash!
+
+- In the samples, you may use EXEDIR=adir to build the samples in adir. Setting
+  EXEDIR=. will build in the current directory,
 
 
 Note (1): if your installation of Watcom doesn't have odbc32.lib file and
