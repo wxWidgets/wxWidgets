@@ -178,6 +178,8 @@ FIXME: this template has (at least) the following bugs:
     <define-tag name="__wx-libs-point" rules="exe,dll,module"/>
     <tag-info name="wx-lib"
               position="before:__wx-libs-point"/>
+    <tag-info name="__wx-syslibs"
+              position="after:__wx-libs-point"/>
     
 
     <!-- template for static wx libraries: -->
@@ -196,15 +198,11 @@ FIXME: this template has (at least) the following bugs:
         <include>$(WX_DIR)/include</include>
     </template>
     
-   
-    <!-- template for wx executables/dlls: -->
-    <template id="wx" template="wx-lib">
-        <lib-path>$(WX_DIR)$(WXLIBPATH)</lib-path>
-
-        <!-- wx libs must come before 3rd party and sys libs, this is
-             the place where the hack explained above is carried on: -->
-        <__wx-libs-point/>
-
+    
+    <!-- this ugly tag contains all sys-lib tags used by "wx" template,
+         in order to make sure they are not reorder when wx-lib is moved
+         after __wx-libs-point: -->
+    <define-tag name="__wx-syslibs" rules="exe,dll,module">
         <!-- wx 3rd party libs, always use them: -->
         <sys-lib>wxtiff$(WX3RDPARTLIBPOSTFIX)</sys-lib> 
         <sys-lib>wxjpeg$(WX3RDPARTLIBPOSTFIX)</sys-lib> 
@@ -245,6 +243,16 @@ FIXME: this template has (at least) the following bugs:
         <if cond="FORMAT=='msvc' or FORMAT=='msvc6prj' or FORMAT=='borland'">
             <sys-lib>oleacc</sys-lib>
         </if>
+    </define-tag>
+   
+    <!-- template for wx executables/dlls: -->
+    <template id="wx" template="wx-lib">
+        <lib-path>$(WX_DIR)$(WXLIBPATH)</lib-path>
+
+        <!-- wx libs must come before 3rd party and sys libs, this is
+             the place where the hack explained above is carried on: -->
+        <__wx-libs-point/>
+        <__wx-syslibs/>
     </template>
 
 </makefile>
