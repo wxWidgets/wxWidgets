@@ -1252,21 +1252,30 @@ static gint gtk_window_key_release_callback( GtkWidget *widget,
 // ----------------------------------------------------------------------------
 
 // init wxMouseEvent with the info from gdk_event
-#define InitMouseEvent(win, event, gdk_event) \
-    { \
-    event.SetTimestamp( gdk_event->time ); \
-    event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK); \
-    event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK); \
-    event.m_altDown = (gdk_event->state & GDK_MOD1_MASK); \
-    event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK); \
-    event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK); \
-    event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK); \
-    event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK); \
-\
-    wxPoint pt = win->GetClientAreaOrigin(); \
-    event.m_x = (wxCoord)gdk_event->x - pt.x; \
-    event.m_y = (wxCoord)gdk_event->y - pt.y; \
-    }
+//
+// NB: this has to be a macro as gdk_event type is different for different
+//     events we're used with
+#define InitMouseEvent(/* wxWindowGTK * */ win,                               \
+                       /* wxMouseEvent& */ event,                             \
+                       /* GdkEventXXX * */ gdk_event)                         \
+{                                                                             \
+    event.SetTimestamp( gdk_event->time );                                    \
+    event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);                  \
+    event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);              \
+    event.m_altDown = (gdk_event->state & GDK_MOD1_MASK);                     \
+    event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK);                    \
+    event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK);                 \
+    event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK);               \
+    event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK);                \
+                                                                              \
+    wxPoint pt = win->GetClientAreaOrigin();                                  \
+    event.m_x = (wxCoord)gdk_event->x - pt.x;                                 \
+    event.m_y = (wxCoord)gdk_event->y - pt.y;                                 \
+                                                                              \
+    event.SetEventObject( win );                                              \
+    event.SetId( win->GetId() );                                              \
+    event.SetTimestamp( gdk_event->time );                                    \
+}                                                                             \
 
 static void AdjustEventButtonState(wxMouseEvent& event)
 {
@@ -1453,8 +1462,6 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
     if ( !g_captureWindow )
         win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
 
-    event.SetEventObject( win );
-
     gs_timeLastClick = gdk_event->time;
 
 /*
@@ -1517,8 +1524,6 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
 
     if ( !g_captureWindow )
         win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
-
-    event.SetEventObject( win );
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
@@ -1589,8 +1594,6 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget,
     {
         win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
     }
-
-    event.SetEventObject( win );
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
@@ -1784,7 +1787,10 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk
 // "enter_notify_event"
 //-----------------------------------------------------------------------------
 
-static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindowGTK *win )
+static
+gint gtk_window_enter_callback( GtkWidget *widget,
+                                GdkEventCrossing *gdk_event,
+                                wxWindowGTK *win )
 {
     DEBUG_MAIN_THREAD
 
@@ -1796,16 +1802,13 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
     if (!win->IsOwnGtkWindow( gdk_event->window )) return FALSE;
 
-    wxMouseEvent event( wxEVT_ENTER_WINDOW );
-    event.SetTimestamp( gdk_event->time );
-    event.SetEventObject( win );
-
     int x = 0;
     int y = 0;
     GdkModifierType state = (GdkModifierType)0;
 
     gdk_window_get_pointer( widget->window, &x, &y, &state );
 
+    wxMouseEvent event( wxEVT_ENTER_WINDOW );
     InitMouseEvent(win, event, gdk_event);
     wxPoint pt = win->GetClientAreaOrigin();
     event.m_x = x + pt.x;
