@@ -48,6 +48,7 @@ class MyFrame: public wxFrame
   DECLARE_CLASS(MyFrame)
 public:
   MyClient *sock;
+  int m_good;
 
   MyFrame(void);
   virtual ~MyFrame();
@@ -57,6 +58,7 @@ public:
   void OnQuitApp(wxCommandEvent& evt);
   void OnExecOpenConnection(wxCommandEvent& evt);
   void OnExecCloseConnection(wxCommandEvent& evt);
+  void OnSocketEvent(wxSocketEvent& evt);
   void UpdateStatus();
 
   void Download(wxInputStream *input);
@@ -86,6 +88,7 @@ const int SKDEMO_TEST2   = 104;
 const int SKDEMO_CLOSE   = 105;
 const int SKDEMO_TEST3   = 106;
 const int ID_TEST_CLOSE  = 107;
+const int SKDEMO_SCK     = 108;
 
 IMPLEMENT_APP(MyApp)
 
@@ -188,7 +191,22 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(SKDEMO_QUIT, MyFrame::OnQuitApp)
   EVT_MENU(SKDEMO_CONNECT, MyFrame::OnExecOpenConnection)
   EVT_MENU(SKDEMO_CLOSE, MyFrame::OnExecCloseConnection)
+  EVT_SOCKET(SKDEMO_SCK, MyFrame::OnSocketEvent)
 END_EVENT_TABLE()
+
+class MyFrameSocketTimer: public wxTimer {
+ public:
+  void Notify() {
+    *m_var = 0;
+  }
+
+  int *m_var;
+};
+
+void MyFrame::OnSocketEvent(wxSocketEvent& evt)
+{
+  m_good = 1;
+}
 
 void MyFrame::OnCloseTest(wxCommandEvent& evt)
 {
@@ -259,7 +277,37 @@ void MyFrame::OnExecTest1(wxCommandEvent& WXUNUSED(evt))
     sock->Close();
     UpdateStatus();
   } else
-    text_win->WriteText("done\nTest 1 passed !\n");
+    text_win->WriteText("done\nTest 1A passed !\n");
+
+  /* No 2 */
+  sock->SetEventHandler(*this, SKDEMO_SCK);
+  sock->SetNotify(GSOCK_INPUT | GSOCK_LOST);
+  sock->Notify(TRUE);
+
+  text_win->WriteText("Test 1B: sending bytes to the server\n");
+  wxYield();
+  sock->Write((char *)buf, wxStrlen(buf)+1);
+  text_win->WriteText("Waiting for incoming bytes (timeout = 2 sec) ...");
+  wxYield();
+  
+  m_good = 2;
+
+  MyFrameSocketTimer timer;
+
+  timer.m_var = &m_good; 
+  timer.Start(2000, TRUE);
+
+  while (m_good == 2)
+   wxYield();
+
+  if (!m_good) {
+    text_win->WriteText("Timeout ! Failed.\n");
+    sock->Close();
+    UpdateStatus();
+  } else
+    text_win->WriteText("Success.");
+
+  sock->Read((char *)buf2, wxStrlen(buf)+1);
 
   dlgbox->Layout();
   dlgbox->ShowModal();

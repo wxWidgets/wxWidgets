@@ -197,6 +197,10 @@ void MyFrame::ExecTest1(wxSocketBase *sock_o)
 
   l = sock_o->Read(buf, 50).LastCount();
   sock_o->Write(buf, l);
+  l = sock_o->Read(buf, 50).LastCount();
+  sock_o->Write(buf, l);
+
+  delete[] buf;
 }
 
 void MyFrame::UpdateStatus(int incr)
