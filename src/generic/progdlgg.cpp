@@ -66,7 +66,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
       height += 35;
    wxFrame::Create(m_parent, -1, title,
                    wxPoint(0, 0), wxSize(220, height),
-                   wxDEFAULT_DIALOG_STYLE);
+                   wxDEFAULT_DIALOG_STYLE | style );
 
    wxLayoutConstraints *c;
 
@@ -127,8 +127,10 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
    wxASSERT_MSG( value == -1 || m_gauge, _T("can't update non existent dialog") );
    wxASSERT_MSG( value < m_maximum, _T("invalid progress value") );
 
+
    if( m_gauge )
       m_gauge->SetValue(value + 1);
+      
    if( !newmsg.IsEmpty() )
       m_msg->SetLabel(newmsg);
 

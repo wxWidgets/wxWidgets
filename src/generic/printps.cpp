@@ -222,6 +222,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
                   keepGoing = false;
                }
             }
+	    wxYield();
         }
         printout->OnEndDocument();
     }

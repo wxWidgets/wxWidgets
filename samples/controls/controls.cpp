@@ -776,6 +776,7 @@ void MyPanel::OnShowProgress( wxCommandEvent& WXUNUSED(event) )
         {
             cont = dialog.Update(i);
         }
+	wxYield();
     }
 
     if ( !cont )
