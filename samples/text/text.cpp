@@ -643,9 +643,6 @@ void MyFrame::OnQuit (wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 {
-    SetSize(40, 40, 200, 200);
-    return;
-
     wxBeginBusyCursor();
 
     wxMessageDialog dialog(this,

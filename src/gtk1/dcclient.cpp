@@ -830,8 +830,8 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
 
     wxCHECK_RET( font, wxT("invalid font") );
 
-    x = XLOG2DEV(x);
-    y = YLOG2DEV(y);
+//    x = XLOG2DEV(x);
+//    y = YLOG2DEV(y);
 
     int cx = gdk_string_width( font, text.mbc_str() );
     int cy = font->ascent + font->descent;
