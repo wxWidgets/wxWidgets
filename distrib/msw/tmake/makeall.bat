@@ -4,6 +4,7 @@ rem Purpose:   create wxWindows makefiles for all compilers
 rem Author:    Vadim Zeitlin
 rem Created:   14.07.99
 rem Copyright: (c) 1999 Vadim Zeitlin
+rem Licence:   wxWindows Licence
 rem Version:   $Id$
 rem
 rem Makefile to create the makefiles for all compilers from the templates using
