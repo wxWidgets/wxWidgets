@@ -42,6 +42,9 @@
   #include  "wx/ownerdrw.h"
 #endif
 
+#include "wx/dynarray.h"
+#include "wx/log.h"
+
 #if !USE_SHARED_LIBRARY
   IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 #endif
@@ -89,11 +92,11 @@ bool wxListBox::MSWCommand(const WXUINT param, const WXWORD WXUNUSED(id))
   if (param == LBN_SELCHANGE)
   {
     wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, m_windowId);
-    int *liste = NULL;
-    int count = GetSelections(&liste) ;
-    if (count && liste)
+    wxArrayInt aSelections;
+    int count = GetSelections(aSelections);
+    if ( count > 0 )
     {
-      event.m_commandInt = liste[0] ;
+      event.m_commandInt = aSelections[0] ;
       event.m_clientData = GetClientData(event.m_commandInt);
       wxString str(GetString(event.m_commandInt));
       if (str != "")
@@ -133,7 +136,6 @@ wxListBox::wxListBox(void)
 {
   m_noItems = 0;
   m_selected = 0;
-  m_selections = NULL;
 }
 
 bool wxListBox::Create(wxWindow *parent, const wxWindowID id,
@@ -147,7 +149,6 @@ bool wxListBox::Create(wxWindow *parent, const wxWindowID id,
   m_noItems = n;
   m_hWnd = 0;
   m_selected = 0;
-  m_selections = NULL;
 
   SetName(name);
   SetValidator(validator);
@@ -256,8 +257,6 @@ wxListBox::~wxListBox(void)
       delete m_aItems[uiCount];
     }
   #endif
-
-  DELETEA(m_selections);
 }
 
 void wxListBox::SetupColours(void)
@@ -408,63 +407,51 @@ char *wxListBox::GetClientData(const int N) const
 
 void wxListBox::SetClientData(const int N, char *Client_data)
 {
-  (void)SendMessage(hwnd, LB_SETITEMDATA, N, (LONG)Client_data);
-/*
-  if (result == LB_ERR)
-      return -1;
-  else
-      return 0;
- */
+  if ( ListBox_SetItemData(hwnd, N, Client_data) == LB_ERR )
+    wxLogDebug("LB_SETITEMDATA failed");
 }
 
 // Return number of selections and an array of selected integers
-// Use selections field to store data, which will be cleaned up
-// by destructor if necessary.
-int wxListBox::GetSelections(int **list_selections) const
+int wxListBox::GetSelections(wxArrayInt& aSelections) const
 {
-  wxListBox *nonConst = (wxListBox *)this; // const is a white lie!
-  if (nonConst->m_selections)
-    { delete[] nonConst->m_selections; nonConst->m_selections = NULL; };
+  aSelections.Empty();
+
   if ((m_windowStyle & wxLB_MULTIPLE) || (m_windowStyle & wxLB_EXTENDED))
   {
-    int no_sel = (int)SendMessage(hwnd, LB_GETSELCOUNT, 0, 0);
-    if (no_sel == 0)
-      return 0;
-    nonConst->m_selections = new int[no_sel];
-    SendMessage(hwnd, LB_GETSELITEMS, no_sel, (LONG)m_selections);
-    *list_selections = m_selections;
+    int no_sel = ListBox_GetSelCount(hwnd);
+    if (no_sel != 0) {
+      int *selections = new int[no_sel];
+      if ( ListBox_GetSelItems(hwnd, no_sel, selections) == LB_ERR ) {
+        wxFAIL_MSG("This listbox can't have single-selection style!");
+      }
+
+      aSelections.Alloc(no_sel);
+      for ( int n = 0; n < no_sel; n++ )
+        aSelections.Add(selections[n]);
+
+      delete [] selections;
+    }
+
     return no_sel;
   }
-  else
+  else  // single-selection listbox
   {
-    int sel = (int)SendMessage(hwnd, LB_GETCURSEL, 0, 0);
-    if (sel == LB_ERR)
-      return 0;
-    nonConst->m_selections = new int[1];
-    nonConst->m_selections[0] = sel;
-    *list_selections = m_selections;
+    aSelections.Add(ListBox_GetCurSel(hwnd));
+
     return 1;
   }
 }
 
 // Get single selection, for single choice list items
-int wxListBox::GetSelection(void) const
+int wxListBox::GetSelection() const
 {
-  wxListBox *nonConst = (wxListBox *)this; // const is a white lie!
-  if (nonConst->m_selections)
-    { delete[] nonConst->m_selections; nonConst->m_selections = NULL; };
-  if ((m_windowStyle & wxLB_MULTIPLE) || (m_windowStyle & wxLB_EXTENDED))
-    return -1;
-  else
-  {
-    int sel = (int)SendMessage(hwnd, LB_GETCURSEL, 0, 0);
-    if (sel == LB_ERR)
-      return -1;
-    else
-    {
-      return sel;
-    }
-  }
+  wxCHECK_MSG( !(m_windowStyle & wxLB_MULTIPLE) && 
+               !(m_windowStyle & wxLB_EXTENDED), 
+               -1,
+               "GetSelection() can't be used with multiple-selection "
+               "listboxes, use GetSelections() instead." );
+
+  return ListBox_GetCurSel(hwnd);
 }
 
 // Find string for position
@@ -794,7 +781,7 @@ long wxListBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 bool wxListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
 {
   // only owner-drawn control should receive this message
-  wxCHECK_RET( ((m_windowStyle & wxLB_OWNERDRAW) == wxLB_OWNERDRAW), FALSE );
+  wxCHECK( ((m_windowStyle & wxLB_OWNERDRAW) == wxLB_OWNERDRAW), FALSE );
 
   MEASUREITEMSTRUCT *pStruct = (MEASUREITEMSTRUCT *)item;
 
@@ -812,13 +799,13 @@ bool wxListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
 bool wxListBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 {
   // only owner-drawn control should receive this message
-  wxCHECK_RET( ((m_windowStyle & wxLB_OWNERDRAW) == wxLB_OWNERDRAW), FALSE );
+  wxCHECK( ((m_windowStyle & wxLB_OWNERDRAW) == wxLB_OWNERDRAW), FALSE );
 
   DRAWITEMSTRUCT *pStruct = (DRAWITEMSTRUCT *)item;
   wxListBoxItem *pItem = (wxListBoxItem *)SendMessage(hwnd, LB_GETITEMDATA, 
                                                       pStruct->itemID, 0);
 
-  wxCHECK_RET( (int)pItem != LB_ERR, FALSE );
+  wxCHECK( (int)pItem != LB_ERR, FALSE );
 
   wxDC dc;
   dc.SetHDC((WXHDC)pStruct->hDC, FALSE);
