@@ -80,10 +80,14 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
 #endif
 		
 #ifndef __UNIX__
+#if TARGET_CARBON
+// Call currently implicitely done :		InitFloatingWindows() ;
+#else
 	if ( sUMAHasWindowManager )
 		InitFloatingWindows() ;
 	else
 		InitWindows();
+#endif
 #endif
 
 	if ( NavServicesAvailable() )
