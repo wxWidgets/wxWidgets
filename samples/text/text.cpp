@@ -831,7 +831,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                 wxPoint(450, 10), wxSize(230, 230),
                                 wxTE_RICH |
                                 wxTE_MULTILINE |
-                                wxTE_AUTO_URL |
+                                // wxTE_AUTO_URL |
                                 wxHSCROLL);
 
 #if 1
