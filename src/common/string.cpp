@@ -1,11 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        string.cpp
 // Purpose:     wxString class
-// Author:      Vadim Zeitlin
+// Author:      Vadim Zeitlin, Ryan Norton
 // Modified by:
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+//              (c) 2004 Ryan Norton <wxprojects@comcast.net>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -1322,7 +1323,7 @@ static inline int wxDoCmpNoCase(const wxChar* s1, size_t l1,
             if(wxTolower(s1[i]) != wxTolower(s2[i]))
                 break;
         }
-        return i == l1 ? 0 : s1[i] < s2[i] ? -1 : 1;
+        return i == l1 ? 0 : wxTolower(s1[i]) < wxTolower(s2[i]) ? -1 : 1;
     }
     else if( l1 < l2 )
     {
@@ -1331,7 +1332,7 @@ static inline int wxDoCmpNoCase(const wxChar* s1, size_t l1,
             if(wxTolower(s1[i]) != wxTolower(s2[i]))
                 break;
         }
-        return i == l1 ? -1 : s1[i] < s2[i] ? -1 : 1;
+        return i == l1 ? -1 : wxTolower(s1[i]) < wxTolower(s2[i]) ? -1 : 1;
     }
     else if( l1 > l2 )
     {
@@ -1407,22 +1408,19 @@ const wxCharBuffer wxString::ToAscii() const
     // this will allocate enough space for the terminating NUL too
     wxCharBuffer buffer(length());
 
-    #define LOCAL_DEST_TYPE signed char
 
-    LOCAL_DEST_TYPE *dest = (LOCAL_DEST_TYPE *)buffer.data();
+    wxInt8 *dest = buffer.data();
 
     const wchar_t *pwc = c_str();
     for ( ;; )
     {
-        *dest++ = (LOCAL_DEST_TYPE)(*pwc > SCHAR_MAX ? wxT('_') : *pwc);
+        *dest++ = (wxInt8)(*pwc > SCHAR_MAX ? wxT('_') : *pwc);
 
         // the output string can't have embedded NULs anyhow, so we can safely
         // stop at first of them even if we do have any
         if ( !*pwc++ )
             break;
     }
-
-    #undef LOCAL_DEST_TYPE
 
     return buffer;
 }
