@@ -931,7 +931,7 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
 
     // we don't need to subclass the window of our own class (in the Windows
     // sense of the word)
-    if ( !wxCheckWindowWndProc(hWnd, (WXFARPROC)wxWndProc) )
+	if ( !wxCheckWindowWndProc(hWnd, (WXFARPROC)wxWndProc) )
     {
         ::SetWindowLong(hwnd, GWL_WNDPROC, (LONG) wxWndProc);
     }
@@ -977,6 +977,28 @@ bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc)
     // unicows.dll, we can override unicows hooks by setting
     // Unicows_{Set,Get}WindowLong and Unicows_RegisterClass to our own
     // versions that keep track of fake<->real wnd proc mapping.
+
+	// On WinCE (at least), the wndproc comparison doesn't work,
+	// so have to use something like this.
+#ifdef __WXWINCE__
+	extern const wxChar *wxCanvasClassName;
+	extern const wxChar *wxCanvasClassNameNR;
+	extern const wxChar *wxMDIFrameClassName;
+	extern const wxChar *wxMDIFrameClassNameNoRedraw;
+	extern const wxChar *wxMDIChildFrameClassName;
+	extern const wxChar *wxMDIChildFrameClassNameNoRedraw;
+	wxString str(wxGetWindowClass(hWnd));
+	if (str == wxCanvasClassName ||
+		str == wxCanvasClassNameNR ||
+		str == wxMDIFrameClassName || 
+		str == wxMDIFrameClassNameNoRedraw || 
+		str == wxMDIChildFrameClassName || 
+		str == wxMDIChildFrameClassNameNoRedraw || 
+		str == _T("wxTLWHiddenParent"))
+		return TRUE; // Effectively means don't subclass
+	else
+		return FALSE;
+#else
     WNDCLASS cls;
     if ( !::GetClassInfo(wxGetInstance(), wxGetWindowClass(hWnd), &cls) )
     {
@@ -986,6 +1008,7 @@ bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc)
     }
 
     return wndProc == (WXFARPROC)cls.lpfnWndProc;
+#endif
 }
 
 // ----------------------------------------------------------------------------
