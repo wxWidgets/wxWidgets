@@ -64,6 +64,9 @@ public:
     // Operators
     wxTextInputStream& operator>>(wxString& word);
     wxTextInputStream& operator>>(char& c);
+#if wxUSE_UNICODE && wxWCHAR_T_IS_REAL_TYPE
+    wxTextInputStream& operator>>(wchar_t& wc);
+#endif // wxUSE_UNICODE
     wxTextInputStream& operator>>(wxInt16& i);
     wxTextInputStream& operator>>(wxInt32& i);
     wxTextInputStream& operator>>(wxUint16& i);

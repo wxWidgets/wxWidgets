@@ -206,6 +206,7 @@ All:
 
 - Norwegian (Bokmål) translation added (Hans F. Nordhaug)
 - wxDynamicLibrary::HasSymbol() added
+- added wxTextInputStream::operator>>(wchar_t) for compilers which support this
 
 All (GUI):
 
