@@ -108,8 +108,9 @@ bool wxCHMHelpController::DisplayContextPopup(int contextId)
 
     wxString str = GetValidFilename(m_helpFile);
 
-    // TODO: what should this be?
-    //HtmlHelp(GetSuitableHWND(), (const wxChar*) str, HH_HELP_CONTEXT, (DWORD)contextId);
+    // We also have to specify the popups file (default is cshelp.txt).
+    // str += wxT("::/cshelp.txt");
+
     HH_POPUP popup;
     popup.cbStruct = sizeof(popup);
     popup.hinst = (HINSTANCE) wxGetInstance();

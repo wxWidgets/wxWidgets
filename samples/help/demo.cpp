@@ -319,8 +319,9 @@ bool MyApp::OnInit()
     }
 #endif
 
-#if wxUSE_MS_HTML_HELP
-    if ( !frame->GetMSHtmlHelpController().Initialize("doc") )
+#if defined(__WXMSW__) && wxUSE_MS_HTML_HELP
+    wxString path(wxGetCwd());
+    if ( !frame->GetMSHtmlHelpController().Initialize(path + "\\doc.chm") )
     {
         wxLogError("Cannot initialize the MS HTML help system, aborting.");
 
