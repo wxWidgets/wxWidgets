@@ -257,17 +257,24 @@ void wxWebKitCtrl::SetPageSource(wxString& source, const wxString& baseUrl){
 void wxWebKitCtrl::OnSize(wxSizeEvent &event){
     wxWindow* parent = GetParent();
     bool inNotebook = false;
-    int x, y; 
+    int x = 0;
+    int y = 18; 
     while(parent != NULL)
     {
+        x += parent->GetPosition().x;
+        y += parent->GetPosition().y;
         if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ){
-            NSRect bounds = [m_webView frame];
-            bounds.origin.x += parent->GetPosition().x;
-            bounds.origin.y += 18;
-            [m_webView setFrame:bounds];
+            inNotebook = true;
             break;
             }
         parent = parent->GetParent();
+    }
+    
+    if (inNotebook){
+        NSRect bounds = [m_webView frame];
+        bounds.origin.x += x;
+        bounds.origin.y += y;
+        [m_webView setFrame:bounds];
     }
     
     [m_webView display];
