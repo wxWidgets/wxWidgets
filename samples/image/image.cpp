@@ -20,9 +20,12 @@
 
 #include "wx/image.h"
 #include "wx/file.h"
+#include "wx/mstream.h"
+#include "wx/wfstream.h"
 
 #include "smile.xbm"
 #include "smile.xpm"
+
 
 // derived classes
 
@@ -167,7 +170,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     else
         wxLogWarning("Can't find image files in either '.' or '..'!");
 
-    wxImage image( bitmap );
+    wxImage image = bitmap.ConvertToImage();
 
 #if wxUSE_LIBPNG
     if ( !image.SaveFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG ))
@@ -176,14 +179,14 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     image.Destroy();
 
     image.LoadFile( dir + wxString("test.png") );
-    my_square = new wxBitmap( image.ConvertToBitmap() );
+    my_square = new wxBitmap( image );
 
     image.Destroy();
 
     if ( !image.LoadFile( dir + wxString("horse.png")) )
         wxLogError("Can't load PNG image");
     else
-        my_horse_png = new wxBitmap( image.ConvertToBitmap() );
+        my_horse_png = new wxBitmap( image );
 #endif // wxUSE_LIBPNG
 
 #if wxUSE_LIBJPEG
@@ -220,6 +223,11 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     else
         my_horse_bmp = new wxBitmap( image.ConvertToBitmap() );
 
+#if wxUSE_XPM
+    if ( !image.SaveFile( dir + wxString("test.xpm"), wxBITMAP_TYPE_XPM ))
+        wxLogError("Can't save file");
+#endif
+
 #if wxUSE_PNM
     image.Destroy();
 
@@ -243,12 +251,10 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     my_smile_xbm = new wxBitmap( (const char*)smile_bits, smile_width,
                                  smile_height, 1 );
 
-#ifndef __WXGTK__
 #if !defined(__WINDOWS__) || wxUSE_XPM_IN_MSW
     // demonstrates XPM automatically using the mask when saving
     if ( m_bmpSmileXpm.Ok() )
         m_bmpSmileXpm.SaveFile("saved.xpm", wxBITMAP_TYPE_XPM);
-#endif
 #endif
 }
 
@@ -330,7 +336,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.DrawText( "After wxImage conversion", 150, 1745 );
         dc.DrawText( "(red on white)", 150, 1760 );
         dc.SetTextForeground( "RED" );
-        wxImage i( *my_smile_xbm );
+        wxImage i = my_smile_xbm->ConvertToImage();
         i.SetMaskColour( 255, 255, 255 );
         i.Replace( 0, 0, 0,
                wxRED_PEN->GetColour().Red(),
@@ -367,7 +373,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.DrawText( "After wxImage conversion", 150, 1865 );
         dc.DrawText( "(red on white)", 150, 1880 );
         dc.SetTextForeground( "RED" );
-        wxImage i( mono );
+        wxImage i = mono.ConvertToImage();
         i.SetMaskColour( 255,255,255 );
         i.Replace( 0,0,0,
                wxRED_PEN->GetColour().Red(),
@@ -409,7 +415,7 @@ void MyCanvas::CreateAntiAliasedBitmap()
   dc.SetPen( *wxTRANSPARENT_PEN );
   dc.DrawRoundedRectangle( 20, 100, 200, 180, 20 );
 
-  wxImage original( bitmap );
+  wxImage original= bitmap.ConvertToImage();
   wxImage anti( 150, 150 );
 
   /* This is quite slow, but safe. Use wxImage::GetData() for speed instead. */
@@ -536,6 +542,10 @@ bool MyApp::OnInit()
 
 #if wxUSE_PNM
   wxImage::AddHandler( new wxPNMHandler );
+#endif
+
+#if wxUSE_XPM
+  wxImage::AddHandler( new wxXPMHandler );
 #endif
 
   wxFrame *frame = new MyFrame();
