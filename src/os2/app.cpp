@@ -281,7 +281,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     // wxSetKeyboardHook(TRUE);
 
-    RegisterWindowClasses(vHab);
+    RegisterWindowClasses(vHabmain);
 
     return TRUE;
 } // end of wxApp::Initialize
@@ -452,13 +452,6 @@ void wxApp::CleanUp()
     if (wxWinHandleList)
         delete wxWinHandleList;
 
-    delete wxPendingEvents;
-#if wxUSE_THREADS
-    delete wxPendingEventsLocker;
-    // If we don't do the following, we get an apparent memory leak.
-    ((wxEvtHandler&) wxDefaultValidator).ClearEventLocker();
-#endif
-
     // Delete Message queue
     if (wxTheApp->m_hMq)
         ::WinDestroyMsgQueue(wxTheApp->m_hMq);
@@ -488,9 +481,6 @@ bool wxApp::OnInitGui()
 
 wxApp::wxApp()
 {
-    m_topWindow = NULL;
-    wxTheApp = this;
-
     argc = 0;
     argv = NULL;
     m_nPrintMode = wxPRINT_WINDOWS;
@@ -774,7 +764,7 @@ void wxApp::OnIdle(
 
     gbInOnIdle = TRUE;
     
-    wxAppBase::OnIdle(event);
+    wxAppBase::OnIdle(rEvent);
 
 #if wxUSE_DC_CACHEING
     // automated DC cache management: clear the cached DCs and bitmap
