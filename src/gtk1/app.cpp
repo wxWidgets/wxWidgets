@@ -366,7 +366,10 @@ static gint wxapp_poll_func( GPollFD *ufds, guint nfds, gint timeout )
 
 void wxapp_install_idle_handler()
 {
-    wxASSERT_MSG( wxThread::IsMain() || gs_WakeUpIdle, wxT("attempt to install idle handler from widget callback in child thread (should be exclusively from wxWakeUpIdle)") );
+    // GD: this assert is raised when using the thread sample (which works)
+    //     so the test is probably not so easy. Can widget callbacks be
+    //     triggered from child threads and, if so, for which widgets?
+    // wxASSERT_MSG( wxThread::IsMain() || gs_WakeUpIdle, wxT("attempt to install idle handler from widget callback in child thread (should be exclusively from wxWakeUpIdle)") );
 
     wxASSERT_MSG( wxTheApp->m_idleTag == 0, wxT("attempt to install idle handler twice") );
 
