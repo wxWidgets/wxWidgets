@@ -304,48 +304,35 @@ void wxNotebook::SetTabSize(const wxSize& sz)
 // wxNotebook operations
 // ----------------------------------------------------------------------------
 
-// remove one page from the notebook
-bool wxNotebook::DeletePage(int nPage)
-{
-  wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, wxT("notebook page out of range") );
-
-  if ( m_nSelection == nPage ) {
-      // advance selection backwards - the page being deleted shouldn't be left
-      // selected
-      AdvanceSelection(FALSE);
-  }
-
-  TabCtrl_DeleteItem(m_hwnd, nPage);
-
-  delete m_pages[nPage];
-  m_pages.RemoveAt(nPage);
-
-  if ( m_pages.IsEmpty() ) {
-      // no selection if the notebook became empty
-      m_nSelection = -1;
-  }
-  else
-      m_nSelection = TabCtrl_GetCurSel(m_hwnd);
-
-
-  return TRUE;
-}
-
 // remove one page from the notebook, without deleting
 wxNotebookPage *wxNotebook::DoRemovePage(int nPage)
 {
-  wxNotebookPage *pageRemoved = wxNotebookBase::DoRemovePage(nPage);
-  if ( !pageRemoved )
-      return NULL;
+    wxNotebookPage *pageRemoved = wxNotebookBase::DoRemovePage(nPage);
+    if ( !pageRemoved )
+        return NULL;
 
-  TabCtrl_DeleteItem(m_hwnd, nPage);
+    TabCtrl_DeleteItem(m_hwnd, nPage);
 
-  if ( m_pages.IsEmpty() )
-    m_nSelection = -1;
-  else
-    m_nSelection = TabCtrl_GetCurSel(m_hwnd);
+    if ( m_pages.IsEmpty() )
+    {
+        // no selection any more, the notebook becamse empty
+        m_nSelection = -1;
+    }
+    else // notebook still not empty
+    {
+        // refresh the selected page and change it if it became invalid
+        if ( m_nSelection == GetPageCount() )
+        {
+            m_nSelection--;
+        }
 
-  return pageRemoved;
+        // force ChangePage() to really do something
+        int sel = m_nSelection;
+        m_nSelection = -1;
+        SetSelection(sel);
+    }
+
+    return pageRemoved;
 }
 
 // remove all pages
