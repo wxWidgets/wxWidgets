@@ -1116,6 +1116,10 @@ SOURCE=.\msw\control.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\crashrpt.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\cursor.cpp
 # End Source File
 # Begin Source File
