@@ -503,7 +503,6 @@ USE_SUN=
 USE_SOLARIS=
 USE_SUNOS=
 USE_ALPHA=
-USE_IA64=
 USE_OSF=
 USE_BSD=
 USE_DARWIN=
@@ -563,10 +562,6 @@ case "${host}" in
     if test "x$TMP" = "xalpha"; then
       USE_ALPHA=1
       AC_DEFINE(__ALPHA__)
-    fi
-    if test "x$TMP" = "xia64"; then
-      USE_IA64=1
-      AC_DEFINE(__IA64__)
     fi
     DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
@@ -2395,6 +2390,56 @@ dnl   defines size_t if not already defined
 AC_TYPE_SIZE_T
 dnl   defines uid_t and gid_t if not already defined
 AC_TYPE_UID_T
+
+dnl check what exactly size_t is on this machine - this is necessary to avoid
+dnl ambiguos overloads in several places, notably wx/string.h and wx/array.h
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+AC_CACHE_CHECK([if size_t is unsigned int],
+    wx_cv_size_t_is_uint,
+    dnl an obvious check like AC_TRY_COMPILE[struct Foo { ... };] doesn't work
+    dnl with egcs (at least) up to 1.1.1 as it allows you to compile duplicate
+    dnl methods in a local class (i.e. class inside a function) declaration
+    dnl without any objections!!
+    dnl
+    dnl hence the hack below: we must have Foo at global scope!
+    AC_TRY_COMPILE([#include <stddef.h>],
+        [
+            return 0; }
+
+            struct Foo { void foo(size_t); void foo(unsigned int); };
+
+            int bar() {
+        ],
+        wx_cv_size_t_is_uint=no,
+        wx_cv_size_t_is_uint=yes
+    )
+)
+
+if test "$wx_cv_size_t_is_uint" = "yes"; then
+    AC_DEFINE(wxSIZE_T_IS_UINT)
+else
+    AC_CACHE_CHECK([if size_t is unsigned long],
+        wx_cv_size_t_is_ulong,
+        AC_TRY_COMPILE([#include <stddef.h>],
+            [
+                return 0; }
+
+                struct Foo { void foo(size_t); void foo(unsigned long); };
+
+                int bar() {
+            ],
+            wx_cv_size_t_is_ulong=no,
+            wx_cv_size_t_is_ulong=yes
+        )
+    )
+
+    if test "$wx_cv_size_t_is_ulong" = "yes"; then
+        AC_DEFINE(wxSIZE_T_IS_ULONG)
+    fi
+fi
+
+AC_LANG_RESTORE
 
 dnl ---------------------------------------------------------------------------
 dnl Checks for structures

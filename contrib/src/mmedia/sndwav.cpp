@@ -313,12 +313,9 @@ FAIL_WITH(s->Write(&signature, 4).LastWrite() != 4, wxSOUND_INVSTRM);
         delete frmt;
     }
 
-#if defined(__ALPHA__) || defined(__IA64__)
-    // FIXME:
-    // Linux Alpha spits passing size_t to a wxDataOutputStream, since it
-    // appears to be an unsigned long type there.
-    // This is a bandaid for 2.2 to get it to build there until we fix it
-    // more sensibly.
+#ifdef wxSIZE_T_IS_ULONG
+    // FIXME (maybe):
+    // This is a bandaid for 2.2 to avoid changing the API for wxString
 
     data << (unsigned int)( fmt_data.GetSize() +
                             m_sndformat->GetBytesFromTime(time) );
