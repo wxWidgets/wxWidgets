@@ -3294,8 +3294,11 @@ void wxWin32Renderer::DrawFrameIcon(wxDC& dc,
                                     const wxIcon& icon,
                                     int flags)
 {
-    wxRect r = GetFrameClientArea(rect, flags & ~wxTOPLEVEL_TITLEBAR);
-    dc.DrawIcon(icon, r.x, r.y);
+    if ( icon.Ok() )
+    {
+        wxRect r = GetFrameClientArea(rect, flags & ~wxTOPLEVEL_TITLEBAR);
+        dc.DrawIcon(icon, r.x, r.y);
+    }
 }
 
 void wxWin32Renderer::DrawFrameButton(wxDC& dc,
