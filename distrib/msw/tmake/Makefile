@@ -14,7 +14,10 @@ all: $(MSW_MAKEFILES_DIR)/makefile.vc \
      $(MSW_MAKEFILES_DIR)/makefile.wat \
      $(MSW_MAKEFILES_DIR)/makefile.g95 \
      $(MSW_MAKEFILES_DIR)/makefile.g295 \
-     $(WXDIR)/Makefile.in
+     $(WXDIR)/Makefile.in \
+     $(WXDIR)/src/gtk/files.lst \
+     $(WXDIR)/src/motif/files.lst \
+     $(WXDIR)/src/os2/files.lst \
 
 $(MSW_MAKEFILES_DIR)/makefile.vc: filelist.txt wxwin.pro
 	$(TMAKE) -t vc wxwin.pro -o $@
