@@ -382,12 +382,13 @@ void wxToolTip::SetWindow(wxWindow *win)
     wxComboBox *combo = wxDynamicCast(control, wxComboBox);
     if ( combo )
     {
-        WXHWND hwndComboEdit = combo->GetEditHWND();
+        WXHWND hwndComboEdit = combo->GetWindowStyle() & wxCB_READONLY
+                                ? combo->GetHWND()
+                                : combo->GetEditHWND();
         if ( hwndComboEdit )
         {
             Add(hwndComboEdit);
         }
-        //else: it's ok for a combo to be read only, of course
     }
 }
 
