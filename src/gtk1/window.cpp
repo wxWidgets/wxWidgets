@@ -3454,6 +3454,14 @@ void wxWindowGTK::GtkSendPaintEvents()
     else
     // if (!m_clearRegion.IsEmpty())   // always send an erase event
     {
+        // If the clear region is empty, and the update region isn't,
+        // then we're going to clear more than we repaint,
+        // so let's make sure the two regions are in sync.
+        if (m_clearRegion.IsEmpty() && !m_updateRegion.IsEmpty())
+        {
+            m_clearRegion = m_updateRegion ;
+        }
+        
         wxWindowDC dc( (wxWindow*)this );
         dc.SetClippingRegion( m_clearRegion );
 
