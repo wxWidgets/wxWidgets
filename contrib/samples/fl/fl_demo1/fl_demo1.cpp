@@ -174,9 +174,9 @@ MyFrame::MyFrame(wxFrame *frame)
                       4       // horizontal gap (bar border)
                     ); 
     
-    cbDimInfo sizes2( 175,45, // when docked horizontally      
-                      175,37, // when docked vertically        
-                      170,35, // when floated                  
+    cbDimInfo sizes2( 195,35, // when docked horizontally      
+                      185,37, // when docked vertically        
+                      195,35, // when floated                  
                       TRUE,   // the bar is not fixed-size
                       4,      // vertical gap (bar border)
                       4,      // horizontal gap (bar border)
@@ -212,11 +212,12 @@ MyFrame::MyFrame(wxFrame *frame)
     pToolBar->Create( this, -1 );
     
     // 1001-1006 ids of command events fired by added tool-buttons
-    
+
     pToolBar->AddTool( 1001, BMP_DIR "new.bmp" );
+    pToolBar->AddSeparator();
     pToolBar->AddTool( 1002, BMP_DIR "open.bmp" );
     pToolBar->AddTool( 1003, BMP_DIR "save.bmp" );
-    
+    pToolBar->AddSeparator(new wxMySeparatorLine(pToolBar, -1));    
     pToolBar->AddTool( 1004, BMP_DIR "cut.bmp" );
     pToolBar->AddTool( 1005, BMP_DIR "copy.bmp" );
     pToolBar->AddTool( 1006, BMP_DIR "paste.bmp" );
@@ -239,3 +240,21 @@ MyFrame::~MyFrame()
         delete mpLayout; // should be destroyed manually
 }
 
+#define LINE_SIZE 3
+void wxMySeparatorLine::DoSetSize( int x, int y,
+                                   int width, int height,
+                                   int sizeFlags)
+{
+    if (width < height)
+    {
+        x += (width - LINE_SIZE) / 2;
+        width = LINE_SIZE;
+    }
+    else
+    {
+        y += (height - LINE_SIZE) / 2;
+        height = LINE_SIZE;
+    }
+    
+    wxStaticLine::DoSetSize(x, y, width, height, sizeFlags);
+}

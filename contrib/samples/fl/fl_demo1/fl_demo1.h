@@ -21,6 +21,7 @@
 #define NEW_TEST_EXIT 1103
 
 #include "wx/panel.h"
+#include "wx/statline.h"    
 
 // Define a new application type
 class MyApp: public wxApp
@@ -49,6 +50,24 @@ public:
     void OnExit( wxCommandEvent& event );
     
     DECLARE_EVENT_TABLE()
+};
+
+/*
+ * Quick example of your own Separator class...
+ */
+class wxMySeparatorLine : public wxStaticLine
+{
+public:
+    wxMySeparatorLine() 
+    {}
+    wxMySeparatorLine( wxWindow *parent, wxWindowID id) 
+        : wxStaticLine( parent, id)
+    {}
+
+protected:
+   virtual void DoSetSize( int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
 };
 
 #endif

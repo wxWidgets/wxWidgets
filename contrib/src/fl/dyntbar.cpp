@@ -229,11 +229,14 @@ void wxDynamicToolBar::AddSeparator( wxWindow* pSepartorWnd )
 
     pInfo->mpToolWnd    = pSepartorWnd;
     pInfo->mIndex       = -1;
-    pInfo->mIsSeparator    = TRUE;
+    pInfo->mIsSeparator = TRUE;
 
+    // Do we draw a separator or is a other object?
     if ( pSepartorWnd )
     {
-        pSepartorWnd->Create( this, -1 );
+        // hvl => Is there a way to know if it was already created?
+        // hvl => shouldn't the pSepartorWnd be created? (like one should expect?)
+        // pSepartorWnd->Create( this, -1 );
 
         int x,y;
         pSepartorWnd->GetSize( &x, &y );
@@ -245,11 +248,13 @@ void wxDynamicToolBar::AddSeparator( wxWindow* pSepartorWnd )
     }
     else
     {
-        pInfo->mRealSize.x = mSepartorSize;
+        // Init x and y to the default.
+        pInfo->mRealSize.x = 0;
         pInfo->mRealSize.y = 0;
 
+        // Init height and width to the normal size of a separator.
         pInfo->mRect.width  = mSepartorSize;
-        pInfo->mRect.height = 0;
+        pInfo->mRect.height = mSepartorSize;
     }
 
     mTools.Add( pInfo );
@@ -299,21 +304,19 @@ void wxDynamicToolBar::DrawSeparator( wxDynToolInfo& info, wxDC& dc )
 void wxDynamicToolBar::OnPaint( wxPaintEvent& event )
 {
     // draw separators if any
-
     wxPaintDC dc(this);
 
     size_t i;
     for( i = 0; i != mTools.Count(); ++i )
-    
+    {
         if ( mTools[i]->mIsSeparator ) 
         {
             // check if separator doesn't have it's own window
             // if so, then draw it using built-in drawing method
-
             if ( !mTools[i]->mpToolWnd )
-
                 DrawSeparator( *mTools[i], dc );
         }
+    }
 }
 
 // FOR NOW:: quick fix
@@ -321,6 +324,11 @@ void wxDynamicToolBar::OnPaint( wxPaintEvent& event )
 
 void wxDynamicToolBar::SizeToolWindows()
 {
+    bool bStateCheckDone = FALSE;
+    bool bHorzSeparator  = FALSE;
+    int maxWidth         = 0;
+    int maxHeight        = 0;
+
     size_t i;
     for( i = 0; i != mTools.Count(); ++i )
     {
@@ -328,7 +336,6 @@ void wxDynamicToolBar::SizeToolWindows()
 
         if ( !info.mIsSeparator ) 
         {
-
             // center real rectangle within the rectangle 
             // provided by the layout manager
 
@@ -338,38 +345,114 @@ void wxDynamicToolBar::SizeToolWindows()
             // FOR NOW FOR NOW:: quick & dirty fix
             if ( info.mpToolWnd->IsKindOf( CLASSINFO( wxChoice ) ) )
             {
-                info.mpToolWnd->SetSize( x,y, 
-                                        info.mRealSize.x - 3, 
-                                        info.mRealSize.y);
+                info.mpToolWnd->SetSize( x, y, 
+                                         info.mRealSize.x - 3, 
+                                         info.mRealSize.y);
             }
             else
-                info.mpToolWnd->SetSize( x,y, 
-                                        info.mRealSize.x, 
-                                        info.mRealSize.y );
+            {
+                info.mpToolWnd->SetSize( x, y, 
+                                         info.mRealSize.x, 
+                                         info.mRealSize.y );
+            }
         }
+        else
+        {
+            // We performer this code here, so we only execute it when we have 
+            // separators and we do it only once (all to do with performance...)
+            if (!bStateCheckDone)
+            {
+                bStateCheckDone = TRUE;
+                
+                size_t j;
+                wxDynToolInfo *pInfo = NULL;
+                wxDynToolInfo *pPrevInfo = NULL;
+                int nVertSeparators = 0;
 
-        // TBD:: size separator window if present
+                for( j = 0; j != mTools.Count(); ++j )
+                {
+                    pInfo = mTools[j];
+                    
+                    // Count all Vert Separators.
+                    if ( pInfo->mIsSeparator ) 
+                        nVertSeparators++;
+
+                    // Check if the new row starts with a Separator.
+                    if ( pPrevInfo && pInfo->mIsSeparator &&
+                         // pPrevInfo->mRect.x >= pInfo->mRect.x &&
+                         pPrevInfo->mRect.y < pInfo->mRect.y)
+                    {
+                        // If the Separator is shown on the next row and it's 
+                        // the only object on the row it would mean that the 
+                        // Separator should be shown as Horizontal one.
+                        if (j+1 != mTools.Count())
+                        {
+                            if (pInfo->mRect.y < mTools[j+1]->mRect.y)
+                                nVertSeparators--;
+                        }
+                        else
+                        {
+                            nVertSeparators--;
+                        }
+                    }
+
+                    pPrevInfo = pInfo;
+
+                    maxWidth = wxMax(pInfo->mRect.width, maxWidth);
+                    maxHeight = wxMax(pInfo->mRect.height, maxHeight);
+                }
+                
+                bHorzSeparator = nVertSeparators == 0;
+            }
+            
+            // Check if we should draw Horz or Vert...
+            if ( !bHorzSeparator )
+            {
+                info.mRect.width = mSepartorSize;
+                info.mRect.height = maxHeight;
+            }
+            else
+            {
+                info.mRect.width = maxWidth;
+                info.mRect.height = mSepartorSize;
+            }
+
+            // Do we need to set a new size to a seperator object?
+            if ( info.mpToolWnd )
+            {
+                info.mpToolWnd->SetSize( info.mRect.x,
+                                         info.mRect.y, 
+                                         info.mRect.width, 
+                                         info.mRect.height);
+            }
+
+        }
     }
 }
 
 bool wxDynamicToolBar::Layout()
 {
-    if ( !mpLayoutMan )
-        mpLayoutMan = CreateDefaultLayout();
-
     int x,y;
     GetSize( &x, &y );
     wxSize wndDim(x,y);
     wxSize result;
-
-    wxLayoutItemArrayT items;
-
-    // safe conversion
     size_t i;
-    for( i = 0; i != mTools.Count(); ++i )
-        items.Add( mTools[i] );
+    wxDynToolInfo *pInfo;
 
-    mpLayoutMan->Layout( wndDim, result, items, mVertGap, mHorizGap );;
+    // Reset the size of separators...
+    for( i = 0; i != mTools.Count(); ++i )
+    {
+        pInfo = mTools[i];
+        
+        if ( pInfo->mIsSeparator ) 
+        {
+            pInfo->mRect.width  = mSepartorSize;
+            pInfo->mRect.height = mSepartorSize;
+        }
+    }
+
+    // Calc and set the best layout
+    GetPreferredDim( wndDim, result );
 
     SizeToolWindows();
     return TRUE;
@@ -387,7 +470,7 @@ void wxDynamicToolBar::GetPreferredDim( const wxSize& givenDim, wxSize& prefDim 
     for( i = 0; i != mTools.Count(); ++i )
         items.Add( mTools[i] );
 
-    mpLayoutMan->Layout( givenDim, prefDim, items, mVertGap, mHorizGap );;
+    mpLayoutMan->Layout( givenDim, prefDim, items, mVertGap, mHorizGap );
 }
 
 void wxDynamicToolBar::SetLayout( LayoutManagerBase* pLayout )
@@ -419,7 +502,7 @@ void BagLayout::Layout(  const wxSize&       parentDim,
                          wxSize&             resultingDim,
                          wxLayoutItemArrayT& items,
                          int                 horizGap,
-                          int                 vertGap  
+                         int                 vertGap  
                       )
 {
     int maxWidth = 0;
