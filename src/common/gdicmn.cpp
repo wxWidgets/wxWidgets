@@ -240,17 +240,17 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
 {
     // VZ: make the comparaison case insensitive and also match both grey and
     //     gray
-    wxString col = colour;
-    col.MakeUpper();
-    wxString col2 = col;
-    if ( !col2.Replace(_T("GRAY"), _T("GREY")) )
-        col2.clear();
+    wxString colName = colour;
+    colName.MakeUpper();
+    wxString colName2 = colName;
+    if ( !colName2.Replace(_T("GRAY"), _T("GREY")) )
+        colName2.clear();
 
     wxNode *node = First();
     while ( node )
     {
         const wxChar *key = node->GetKeyString();
-        if ( col == key || col2 == key )
+        if ( colName == key || colName2 == key )
         {
             return (wxColour *)node->Data();
         }
@@ -276,7 +276,7 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
 
 #ifdef __WXGTK__
   wxColour *col = new wxColour( colour );
-  
+
   if (!(col->Ok())) {
       delete col;
       return (wxColour *) NULL;
