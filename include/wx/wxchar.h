@@ -637,7 +637,7 @@
     #ifdef HAVE_WCSLEN
         #define wxWcslen wcslen
     #else
-        inline size_t wxWcslen(const wchar_t *s)
+        static inline size_t wxWcslen(const wchar_t *s)
         {
             size_t n = 0;
             while ( *s++ )
