@@ -88,8 +88,7 @@ wxMSW:
   make/project files.
 
 - child frames appear in the taskbar by default now, use wxFRAME_NO_TASKBAR
-  style to avoid it, wxFRAME_FLOAT_ON_PARENT style is now obsolete and has no
-  effect
+  style to avoid it
 
 - all overloads of wxDC::SetClippingRegion() combine the given region with the
   previously selected one instead of replacing it

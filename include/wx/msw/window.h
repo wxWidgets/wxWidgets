@@ -240,6 +240,9 @@ public:
                                   int& x, int& y,
                                   int& w, int& h) const;
 
+    // get the HWND to be used as parent of this window with CreateWindow()
+    virtual WXHWND MSWGetParent() const;
+
     // creates the window of specified Windows class with given style, extended
     // style, title and geometry (default values
     //

@@ -70,6 +70,9 @@ wxWindowList wxModelessWindows;
 // the name of the default wxWindows class
 extern const wxChar *wxCanvasClassName;
 
+// the hidden parent for wxFRAME_NO_TASKBAR unowned frames
+wxWindow *wxTopLevelWindowMSW::ms_hiddenParent = NULL;
+
 // ============================================================================
 // wxTopLevelWindowMSW implementation
 // ============================================================================
@@ -175,14 +178,30 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
 #if !defined(__WIN16__) && !defined(__SC__)
         if ( !(GetExtraStyle() & wxTOPLEVEL_EX_DIALOG) )
         {
-            // make all frames appear in the win9x shell taskbar unless
-            // wxFRAME_TOOL_WINDOW or wxFRAME_NO_TASKBAR is given - without
-            // giving them WS_EX_APPWINDOW style, the child (i.e. owned) frames
-            // wouldn't appear in it
-            if ( (style & wxFRAME_TOOL_WINDOW) || (style & wxFRAME_NO_TASKBAR) )
+            if ( style & wxFRAME_TOOL_WINDOW )
+            {
+                // create the palette-like window
                 *exflags |= WS_EX_TOOLWINDOW;
-            else if ( !(style & wxFRAME_NO_TASKBAR) )
+            }
+
+            // We have to solve 2 different problems here:
+            //
+            // 1. frames with wxFRAME_NO_TASKBAR flag shouldn't appear in the
+            //    taskbar even if they don't have a parent
+            //
+            // 2. frames without this style should appear in the taskbar even
+            //    if they're owned (Windows only puts non owned windows into
+            //    the taskbar normally)
+            //
+            // The second one is solved here by using WS_EX_APPWINDOW flag, the
+            // first one is dealt with in our MSWGetParent() method
+            // implementation
+            if ( !(style & wxFRAME_NO_TASKBAR) && GetParent() )
+            {
+                // need to force the frame to appear in the taskbar
                 *exflags |= WS_EX_APPWINDOW;
+            }
+            //else: nothing to do [here]
         }
 #endif // !Win16
 
@@ -196,6 +215,46 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
     }
 
     return msflags;
+}
+
+WXHWND wxTopLevelWindowMSW::MSWGetParent() const
+{
+    // for the frames without wxFRAME_FLOAT_ON_PARENT style we should use NULL
+    // parent HWND or it would be always on top of its parent which is not what
+    // we usually want (in fact, we only want it for frames with the
+    // wxFRAME_FLOAT_ON_PARENT flag)
+    wxWindow *parent;
+    if ( HasFlag(wxFRAME_FLOAT_ON_PARENT) )
+    {
+        parent = GetParent();
+
+        // this flag doesn't make sense then and will be ignored
+        wxASSERT_MSG( parent,
+                      _T("wxFRAME_FLOAT_ON_PARENT but no parent?") );
+    }
+    else // don't float on parent, must not be owned
+    {
+        parent = NULL;
+    }
+
+    // now deal with the 2nd taskbar-related problem (see comments above in
+    // MSWGetStyle())
+    if ( HasFlag(wxFRAME_NO_TASKBAR) && !parent )
+    {
+        if ( !ms_hiddenParent )
+        {
+            ms_hiddenParent = new wxTopLevelWindowMSW(NULL, -1, _T(""));
+
+            // we shouldn't leave it in wxTopLevelWindows or we wouldn't
+            // terminate the app when the last user-created frame is deleted --
+            // see ~wxTopLevelWindowMSW
+            wxTopLevelWindows.DeleteObject(ms_hiddenParent);
+        }
+
+        parent = ms_hiddenParent;
+    }
+
+    return parent ? parent->GetHWND() : NULL;
 }
 
 bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
@@ -402,6 +461,13 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
 
 wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
 {
+    if ( this == ms_hiddenParent )
+    {
+        // stop [infinite] recursion which would otherwise happen when we do
+        // "delete ms_hiddenParent" below
+        return;
+    }
+
     wxTopLevelWindows.DeleteObject(this);
 
     if ( wxModelessWindows.Find(this) )
@@ -410,6 +476,12 @@ wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
     // If this is the last top-level window, exit.
     if ( wxTheApp && (wxTopLevelWindows.Number() == 0) )
     {
+        if ( ms_hiddenParent )
+        {
+            delete ms_hiddenParent;
+            ms_hiddenParent = NULL;
+        }
+
         wxTheApp->SetTopWindow(NULL);
 
         if ( wxTheApp->GetExitOnFrameDelete() )

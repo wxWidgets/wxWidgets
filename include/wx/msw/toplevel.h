@@ -96,6 +96,9 @@ protected:
     // translate wxWindows flags to Windows ones
     virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const;
 
+    // choose the right parent to use with CreateWindow()
+    virtual WXHWND MSWGetParent() const;
+
     // we handle WM_NCACTIVATE specially here
     virtual long MSWWindowProc(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam);
 
@@ -112,6 +115,10 @@ protected:
     long                  m_fsOldWindowStyle;
     bool                  m_fsIsMaximized;
     bool                  m_fsIsShowing;
+
+    // the hidden parent window for the frames which shouldn't appear in the
+    // taskbar
+    static wxWindow *ms_hiddenParent;
 };
 
 // list of all frames and modeless dialogs

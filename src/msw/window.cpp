@@ -2903,6 +2903,11 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
     return nonDefault;
 }
 
+WXHWND wxWindowMSW::MSWGetParent() const
+{
+    return m_parent ? m_parent->GetHWND() : NULL;
+}
+
 bool wxWindowMSW::MSWCreate(const wxChar *wclass,
                             const wxChar *title,
                             const wxPoint& pos,
@@ -2914,29 +2919,10 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     int x, y, w, h;
     (void)MSWGetCreateWindowCoords(pos, size, x, y, w, h);
 
-    // find the correct parent HWND
-    wxWindow *parent = GetParent();
-    bool isChild = (style & WS_CHILD) != 0;
-    HWND hParent;
-    if ( (isChild || HasFlag(wxPOPUP_WINDOW) || HasFlag(wxFRAME_TOOL_WINDOW)) )
-    {
-        // this is either a normal child window, a popup window or a top level
-        // window with wxFRAME_TOOL_WINDOW style (see below)
-        hParent = parent ? GetHwndOf(parent) : NULL;
-    }
-    else
-    {
-        // this is a frame without wxFRAME_TOOL_WINDOW style: we should use
-        // NULL parent HWND for it or it would be always on top of its parent
-        // which is not what we usually want (in fact, we only want it for
-        // frames with the special wxFRAME_TOOL_WINDOW as above)
-        hParent = NULL;
-    }
-
     // controlId is menu handle for the top level windows, so set it to 0
     // unless we're creating a child window
     int controlId;
-    if ( isChild )
+    if ( style & WS_CHILD )
     {
         controlId = GetId();
 
@@ -2963,17 +2949,17 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     wxWindowCreationHook hook(this);
 
     m_hWnd = (WXHWND)::CreateWindowEx
-             (
-                extendedStyle,
-                className,
-                title ? title : wxT(""),
-                style,
-                x, y, w, h,
-                hParent,
-                (HMENU)controlId,
-                wxGetInstance(),
-                NULL                        // no extra data
-             );
+                       (
+                            extendedStyle,
+                            className,
+                            title ? title : wxT(""),
+                            style,
+                            x, y, w, h,
+                            (HWND)MSWGetParent(),
+                            (HMENU)controlId,
+                            wxGetInstance(),
+                            NULL                        // no extra data
+                       );
 
     if ( !m_hWnd )
     {
