@@ -17,6 +17,53 @@
 #import <Appkit/NSView.h>
 #import <AppKit/NSEvent.h>
 
+// ========================================================================
+// wxWindowCocoaHider
+// ========================================================================
+class wxWindowCocoaHider: protected wxCocoaNSView
+{
+    DECLARE_NO_COPY_CLASS(wxWindowCocoaHider)
+public:
+    wxWindowCocoaHider(wxWindow *owner);
+    virtual ~wxWindowCocoaHider();
+    inline WX_NSView GetNSView() { return m_dummyNSView; }
+protected:
+    wxWindowCocoa *m_owner;
+    WX_NSView m_dummyNSView;
+    virtual void Cocoa_FrameChanged(void);
+private:
+    wxWindowCocoaHider();
+};
+
+// ========================================================================
+// wxWindowCocoaHider
+// ========================================================================
+wxWindowCocoaHider::wxWindowCocoaHider(wxWindow *owner)
+:   m_owner(owner)
+{
+    wxASSERT(owner);
+    wxASSERT(owner->GetNSViewForHiding());
+    m_dummyNSView = [[NSView alloc]
+        initWithFrame:[owner->GetNSViewForHiding() frame]];
+    AssociateNSView(m_dummyNSView);
+}
+
+wxWindowCocoaHider::~wxWindowCocoaHider()
+{
+    DisassociateNSView(m_dummyNSView);
+    [m_dummyNSView release];
+}
+
+void wxWindowCocoaHider::Cocoa_FrameChanged(void)
+{
+    // Keep the real window in synch with the dummy
+    wxASSERT(m_dummyNSView);
+    [m_owner->GetNSViewForHiding() setFrame:[m_dummyNSView frame]];
+}
+
+// ========================================================================
+// wxWindowCocoa
+// ========================================================================
 // normally the base classes aren't included, but wxWindow is special
 #ifdef __WXUNIVERSAL__
 IMPLEMENT_ABSTRACT_CLASS(wxWindowCocoa, wxWindowBase)
@@ -35,7 +82,7 @@ void wxWindowCocoa::Init()
     InitBase();
 
     m_cocoaNSView = NULL;
-    m_dummyNSView = NULL;
+    m_cocoaHider = NULL;
     m_isBeingDeleted = FALSE;
     m_isInPaint = FALSE;
 }
@@ -75,31 +122,22 @@ wxWindow::~wxWindow()
         m_parent->RemoveChild(this);
 
     CocoaRemoveFromParent();
+    delete m_cocoaHider;
     SetNSView(NULL);
 }
 
 void wxWindowCocoa::CocoaAddChild(wxWindowCocoa *child)
 {
-    [m_cocoaNSView addSubview: child->m_cocoaNSView];
-    wxASSERT(!child->m_dummyNSView);
-    child->m_isShown = true;
+    NSView *childView = child->GetNSViewForSuperview();
+
+    wxASSERT(childView);
+    [m_cocoaNSView addSubview: childView];
+    child->m_isShown = !m_cocoaHider;
 }
 
 void wxWindowCocoa::CocoaRemoveFromParent(void)
 {
-    if(m_dummyNSView)
-    {
-        wxASSERT(m_cocoaNSView);
-        // balances the replaceSubView:with:
-        [m_dummyNSView removeFromSuperview];
-        // But since we were the ones to alloc it
-        [m_dummyNSView release];
-        m_dummyNSView = nil;
-        // m_cocoaNSView has of course already been removed by virtue of
-        // replaceSubview: m_cocoaNSView with: m_dummyNSView
-    }
-    else
-        [m_cocoaNSView removeFromSuperview];
+    [GetNSViewForSuperview() removeFromSuperview];
 }
 
 void wxWindowCocoa::SetNSView(WX_NSView cocoaNSView)
@@ -112,6 +150,18 @@ void wxWindowCocoa::SetNSView(WX_NSView cocoaNSView)
     m_cocoaNSView = cocoaNSView;
     AssociateNSView(m_cocoaNSView);
     if(need_debug) wxLogDebug("wxWindowCocoa=%p::SetNSView [cocoaNSView=%p retainCount]=%d",this,cocoaNSView,[cocoaNSView retainCount]);
+}
+
+WX_NSView wxWindowCocoa::GetNSViewForSuperview() const
+{
+    return m_cocoaHider
+        ?   m_cocoaHider->GetNSView()
+        :   m_cocoaNSView;
+}
+
+WX_NSView wxWindowCocoa::GetNSViewForHiding() const
+{
+    return m_cocoaNSView;
 }
 
 bool wxWindowCocoa::Cocoa_drawRect(const NSRect &rect)
@@ -136,10 +186,9 @@ bool wxWindowCocoa::Cocoa_drawRect(const NSRect &rect)
 
 void wxWindowCocoa::InitMouseEvent(wxMouseEvent& event, WX_NSEvent cocoaEvent)
 {
-    NSView *nsview = m_dummyNSView?m_dummyNSView:m_cocoaNSView;
-    wxASSERT_MSG([nsview window]==[cocoaEvent window],"Mouse event for different NSWindow");
-    NSPoint cocoaPoint = [nsview convertPoint:[(NSEvent*)cocoaEvent locationInWindow] fromView:nil];
-    NSRect cocoaRect = [nsview frame];
+    wxASSERT_MSG([m_cocoaNSView window]==[cocoaEvent window],"Mouse event for different NSWindow");
+    NSPoint cocoaPoint = [m_cocoaNSView convertPoint:[(NSEvent*)cocoaEvent locationInWindow] fromView:nil];
+    NSRect cocoaRect = [m_cocoaNSView frame];
     const wxPoint &clientorigin = GetClientAreaOrigin();
     event.m_x = (wxCoord)cocoaPoint.x - clientorigin.x;
     event.m_y = (wxCoord)(cocoaRect.size.height - cocoaPoint.y) - clientorigin.y;
@@ -240,6 +289,11 @@ bool wxWindow::Close(bool force)
     return false;
 }
 
+void wxWindow::CocoaReplaceView(WX_NSView oldView, WX_NSView newView)
+{
+    [[oldView superview] replaceSubview:oldView with:newView];
+}
+
 bool wxWindow::Show(bool show)
 {
     wxAutoNSAutoreleasePool pool;
@@ -248,34 +302,32 @@ bool wxWindow::Show(bool show)
     // wxSpinCtrl (generic) abuses m_isShown, don't use it for any logic
 //    wxASSERT_MSG( (m_isShown && !m_dummyNSView) || (!m_isShown && m_dummyNSView),"wxWindow: m_isShown does not agree with m_dummyNSView");
     // Return false if there isn't a window to show or hide
-    if(!m_cocoaNSView)
+    NSView *cocoaView = GetNSViewForHiding();
+    if(!cocoaView)
         return false;
     if(show)
     {
         // If state isn't changing, return false
-        if(!m_dummyNSView)
+        if(!m_cocoaHider)
             return false;
-        // replaceSubView:with: releases m_dummyNSView, balancing the
-        // previous replaceSubView:with
-        [[m_dummyNSView superview] replaceSubview:m_dummyNSView with:m_cocoaNSView];
-        wxASSERT(![m_dummyNSView superview]);
-        // But since we were the ones to alloc it
-        [m_dummyNSView release];
-        m_dummyNSView = nil;
-        wxASSERT([m_cocoaNSView superview]);
+        CocoaReplaceView(m_cocoaHider->GetNSView(), cocoaView);
+        wxASSERT(![m_cocoaHider->GetNSView() superview]);
+        delete m_cocoaHider;
+        m_cocoaHider = NULL;
+        wxASSERT([cocoaView superview]);
     }
     else
     {
         // If state isn't changing, return false
-        if(m_dummyNSView)
+        if(m_cocoaHider)
             return false;
-        m_dummyNSView = [[NSView alloc] initWithFrame: [m_cocoaNSView frame]];
-        // NOTE: replaceSubView will cause m_cocaNSView to be (auto)released
-        // which balances out addSubView
-        [[m_cocoaNSView superview] replaceSubview:m_cocoaNSView with:m_dummyNSView];
+        m_cocoaHider = new wxWindowCocoaHider(this);
+        // NOTE: replaceSubview:with will cause m_cocaNSView to be
+        // (auto)released which balances out addSubview
+        CocoaReplaceView(cocoaView, m_cocoaHider->GetNSView());
         // m_coocaNSView is now only retained by us
-        wxASSERT([m_dummyNSView superview]);
-        wxASSERT(![m_cocoaNSView superview]);
+        wxASSERT([m_cocoaHider->GetNSView() superview]);
+        wxASSERT(![cocoaView superview]);
     }
     m_isShown = show;
     return true;
@@ -325,22 +377,19 @@ void wxWindowCocoa::DoMoveWindow(int x, int y, int width, int height)
 {
 //    wxLogDebug("wxWindow=%p::DoMoveWindow(%d,%d,%d,%d)",this,x,y,width,height);
 
-    NSView *nsview = m_dummyNSView?m_dummyNSView:m_cocoaNSView;
+    NSView *nsview = GetNSViewForSuperview();
     NSView *superview = [nsview superview];
     wxCHECK_RET(superview,"NSView does not have a superview");
     NSRect parentRect = [superview frame];
 
     NSRect cocoaRect = NSMakeRect(x,parentRect.size.height-(y+height),width,height);
-    [m_cocoaNSView setFrame: cocoaRect];
-    // Also change the dummy's size
-    if(m_dummyNSView)
-        [m_dummyNSView setFrame: cocoaRect];
+    [nsview setFrame: cocoaRect];
 }
 
 // Get total size
 void wxWindow::DoGetSize(int *w, int *h) const
 {
-    NSRect cocoaRect = [m_cocoaNSView frame];
+    NSRect cocoaRect = [GetNSViewForSuperview() frame];
     if(w)
         *w=(int)cocoaRect.size.width;
     if(h)
@@ -350,7 +399,7 @@ void wxWindow::DoGetSize(int *w, int *h) const
 
 void wxWindow::DoGetPosition(int *x, int *y) const
 {
-    NSView *nsview = m_dummyNSView?m_dummyNSView:m_cocoaNSView;
+    NSView *nsview = GetNSViewForSuperview();
     NSView *superview = [nsview superview];
     wxCHECK_RET(superview,"NSView does not have a superview");
     NSRect parentRect = [superview frame];
@@ -491,7 +540,7 @@ void wxWindow::Clear()
 void wxWindow::Raise()
 {
     wxAutoNSAutoreleasePool pool;
-    NSView *nsview = m_dummyNSView?m_dummyNSView:m_cocoaNSView;
+    NSView *nsview = GetNSViewForSuperview();
     NSView *superview = [nsview superview];
     [nsview removeFromSuperview];
     [superview addSubview:nsview];

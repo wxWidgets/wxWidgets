@@ -14,6 +14,8 @@
 
 #include "wx/cocoa/NSView.h"
 
+class wxWindowCocoaHider;
+
 // ========================================================================
 // wxWindowCocoa
 // ========================================================================
@@ -51,7 +53,12 @@ protected:
 // Cocoa specifics
 // ------------------------------------------------------------------------
 public:
+    // Returns the content NSView (where children are added, drawing performed)
     inline WX_NSView GetNSView() { return m_cocoaNSView; }
+    // Returns the NSView suitable for use as a subview
+    WX_NSView GetNSViewForSuperview() const;
+    // Returns the NSView that may be hidden/is being hidden
+    WX_NSView GetNSViewForHiding() const;
     void CocoaAddChild(wxWindowCocoa *child);
     void CocoaRemoveFromParent(void);
 protected:
@@ -72,9 +79,10 @@ protected:
     virtual bool Cocoa_otherMouseUp(WX_NSEvent theEvent);
     void SetNSView(WX_NSView cocoaNSView);
     WX_NSView m_cocoaNSView;
-    WX_NSView m_dummyNSView;
+    wxWindowCocoaHider *m_cocoaHider;
     bool m_isInPaint;
     static wxWindow *sm_capturedWindow;
+    virtual void CocoaReplaceView(WX_NSView oldView, WX_NSView newView);
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
