@@ -93,6 +93,9 @@ static void SetDefaultMenuItem(HMENU hmenu, UINT id)
     {
         wxLogLastError(wxT("SetMenuItemInfo"));
     }
+#else
+    wxUnusedVar(hmenu);
+    wxUnusedVar(id);
 #endif
 }
 
@@ -135,7 +138,7 @@ template<> void wxCollectionToVariantArray( wxMenuItemList const &theList, wxxVa
 }
 
 wxBEGIN_PROPERTIES_TABLE(wxMenu)
-	wxEVENT_PROPERTY( Select , wxEVT_COMMAND_MENU_SELECTED , wxCommandEvent)
+    wxEVENT_PROPERTY( Select , wxEVT_COMMAND_MENU_SELECTED , wxCommandEvent)
     wxPROPERTY( Title, wxString , SetTitle, GetTitle, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
     wxREADONLY_PROPERTY_FLAGS( MenuStyle , wxMenuStyle , long , GetStyle , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
     wxPROPERTY_COLLECTION( MenuItems , wxMenuItemList , wxMenuItem* , Append , GetMenuItems , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))

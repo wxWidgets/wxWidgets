@@ -37,14 +37,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxWinceHelpController, wxHelpControllerBase)
 bool wxWinceHelpController::Initialize(const wxString& filename)
 {
     m_helpFile = filename;
-    return TRUE;
+    return true;
 }
 
 bool wxWinceHelpController::LoadFile(const wxString& file)
 {
     if (!file.IsEmpty())
         m_helpFile = file;
-    return TRUE;
+    return true;
 }
 
 bool wxWinceHelpController::DisplayContents()
@@ -59,30 +59,30 @@ bool wxWinceHelpController::DisplaySection(const wxString& section)
 }
 
 // Use context number
-bool wxWinceHelpController::DisplaySection(int section)
+bool wxWinceHelpController::DisplaySection(int WXUNUSED(section))
 {
-    return TRUE;
+    return true;
 }
 
-bool wxWinceHelpController::DisplayContextPopup(int contextId)
+bool wxWinceHelpController::DisplayContextPopup(int WXUNUSED(contextId))
 {
-    return TRUE;
+    return true;
 }
 
-bool wxWinceHelpController::DisplayTextPopup(const wxString& text, const wxPoint& pos)
+bool wxWinceHelpController::DisplayTextPopup(const wxString& WXUNUSED(text), const wxPoint& WXUNUSED(pos))
 {
-    return TRUE;
+    return true;
 }
 
-bool wxWinceHelpController::DisplayBlock(long block)
+bool wxWinceHelpController::DisplayBlock(long WXUNUSED(block))
 {
-    return TRUE;
+    return true;
 }
 
-bool wxWinceHelpController::KeywordSearch(const wxString& k,
-                               wxHelpSearchMode mode)
+bool wxWinceHelpController::KeywordSearch(const wxString& WXUNUSED(k),
+                               wxHelpSearchMode WXUNUSED(mode))
 {
-    return TRUE;
+    return true;
 }
 
 bool wxWinceHelpController::Quit()

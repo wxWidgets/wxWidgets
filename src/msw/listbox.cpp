@@ -91,12 +91,12 @@ wxEND_FLAGS( wxListBoxStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxListBox, wxControl,"wx/listbox.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxListBox)
-	wxEVENT_PROPERTY( Select , wxEVT_COMMAND_LISTBOX_SELECTED , wxCommandEvent )
-	wxEVENT_PROPERTY( DoubleClick , wxEVT_COMMAND_LISTBOX_DOUBLECLICKED , wxCommandEvent )
+    wxEVENT_PROPERTY( Select , wxEVT_COMMAND_LISTBOX_SELECTED , wxCommandEvent )
+    wxEVENT_PROPERTY( DoubleClick , wxEVT_COMMAND_LISTBOX_DOUBLECLICKED , wxCommandEvent )
 
     wxPROPERTY( Font , wxFont , SetFont , GetFont  , EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
     wxPROPERTY_COLLECTION( Choices , wxArrayString , wxString , AppendString , GetStrings, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-	wxPROPERTY( Selection ,int, SetSelection, GetSelection, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+    wxPROPERTY( Selection ,int, SetSelection, GetSelection, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
     wxPROPERTY_FLAGS( WindowStyle , wxListBoxStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
@@ -110,9 +110,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 
 /*
 TODO PROPERTIES
-	selection
-	content
-		item
+    selection
+    content
+        item
 */
 
 // ============================================================================
@@ -537,6 +537,8 @@ wxListBox::DoInsertItems(const wxArrayString& items, int pos)
 
             ListBox_SetItemData(GetHwnd(), idx, pNewItem);
         }
+#else
+        wxUnusedVar(idx);
 #endif // wxUSE_OWNER_DRAWN
     }
 

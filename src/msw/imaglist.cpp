@@ -85,10 +85,11 @@ bool wxImageList::Create(int width, int height, bool mask, int initial)
     UINT flags = 0;
 
     // set appropriate color depth
-    int dd = wxDisplayDepth();
 #ifdef __WXWINCE__
     flags |= ILC_COLOR;
 #else
+    int dd = wxDisplayDepth();
+
     if (dd <= 4)       flags |= ILC_COLOR;	// 16 color
     else if (dd <= 8)  flags |= ILC_COLOR8;	// 256 color
     else if (dd <= 16) flags |= ILC_COLOR16;	// 64k hi-color
