@@ -88,9 +88,9 @@ public:
     virtual bool MSWOnScroll(int orientation, WXWORD wParam,
                              WXWORD pos, WXHWND control);
 
-    void DoGetPosition(int *x, int *y) const;
-
-    bool Show(bool show = true);
+    virtual bool Show(bool show = true);
+    virtual bool Enable(bool show = true);
+    virtual bool SetFont(const wxFont& font);
 
 protected:
     // common part of all ctors
@@ -107,6 +107,7 @@ protected:
 
 
     // overridden base class virtuals
+    virtual void DoGetPosition(int *x, int *y) const;
     virtual void DoGetSize(int *width, int *height) const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual wxSize DoGetBestSize() const;
@@ -114,7 +115,6 @@ protected:
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
     virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
-    virtual bool MSWAlwaysDrawBg() const { return true; }
 
 
     // the labels windows, if any
