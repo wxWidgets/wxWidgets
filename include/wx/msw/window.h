@@ -109,7 +109,9 @@ public:
                                const wxFont *theFont = (const wxFont *) NULL)
                                const;
 
+#if wxUSE_MENUS
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
+#endif // wxUSE_MENUS
 
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
                                int range, bool refresh = TRUE );
@@ -154,12 +156,14 @@ public:
     void GetCaretPos(int *x, int *y) const;
 #endif // wxUSE_CARET
 
+#ifndef __WXUNIVERSAL__
     // Native resource loading (implemented in src/msw/nativdlg.cpp)
     // FIXME: should they really be all virtual?
     virtual bool LoadNativeDialog(wxWindow* parent, wxWindowID& id);
     virtual bool LoadNativeDialog(wxWindow* parent, const wxString& name);
     wxWindow* GetWindowChild1(wxWindowID id);
     wxWindow* GetWindowChild(wxWindowID id);
+#endif // __WXUNIVERSAL__
 
     // a MSW only function which sends a size event to the window using its
     // current size - this has an effect of refreshing the window layout
@@ -232,11 +236,13 @@ public:
     virtual void MSWDeviceToLogical(float *x, float *y) const;
 #endif // WXWIN_COMPATIBILITY
 
+#ifndef __WXUNIVERSAL__
     // Create an appropriate wxWindow from a HWND
     virtual wxWindow* CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd);
 
     // Make sure the window style reflects the HWND style (roughly)
     virtual void AdoptAttributesFromHWND();
+#endif // __WXUNIVERSAL__
 
     // Setup background and foreground colours correctly
     virtual void SetupColours();

@@ -2968,6 +2968,10 @@ if test "$wxUSE_APPLE_IEEE" = "yes"; then
   AC_DEFINE(wxUSE_APPLE_IEEE)
 fi
 
+if test "$wxUSE_TIMER" = "yes"; then
+  AC_DEFINE(wxUSE_TIMER)
+fi
+
 if test "$wxUSE_WAVE" = "yes"; then
   AC_DEFINE(wxUSE_WAVE)
 fi

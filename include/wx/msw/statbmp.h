@@ -16,6 +16,8 @@
     #pragma interface "statbmp.h"
 #endif
 
+#if wxUSE_STATBMP
+
 #include "wx/control.h"
 #include "wx/icon.h"
 #include "wx/bitmap.h"
@@ -85,6 +87,8 @@ protected:
     bool m_isIcon;
     wxGDIImage *m_image;
 };
+
+#endif // wxUSE_STATBMP
 
 #endif
     // _WX_STATBMP_H_

@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_CHECKBOX
+
 #ifndef WX_PRECOMP
     #include "wx/checkbox.h"
     #include "wx/brush.h"
@@ -269,3 +271,5 @@ void wxBitmapCheckBox::SetLabel(const wxBitmap& bitmap)
 {
     wxFAIL_MSG(wxT("not implemented"));
 }
+
+#endif // wxUSE_CHECKBOX

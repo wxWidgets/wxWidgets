@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        checkbox.h
+// Name:        wx/msw/checkbox.h
 // Purpose:     wxCheckBox class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_CHECKBOX_H_
@@ -15,6 +15,8 @@
 #ifdef __GNUG__
 #pragma interface "checkbox.h"
 #endif
+
+#if wxUSE_CHECKBOX
 
 #include "wx/control.h"
 
@@ -80,5 +82,8 @@ public:
 
     virtual void SetLabel(const wxBitmap& bitmap);
 };
+
+#endif // wxUSE_CHECKBOX
+
 #endif
     // _WX_CHECKBOX_H_

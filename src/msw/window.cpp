@@ -110,7 +110,10 @@
 // the last Windows message we got (MT-UNSAFE)
 extern MSG s_currentMsg;
 
+#if wxUSE_MENUS
 wxMenu *wxCurrentPopupMenu = NULL;
+#endif // wxUSE_MENUS
+
 extern wxList WXDLLEXPORT wxPendingDelete;
 extern const wxChar *wxCanvasClassName;
 
@@ -162,6 +165,7 @@ END_EVENT_TABLE()
 // Find an item given the MS Windows id
 wxWindow *wxWindow::FindItem(long id) const
 {
+#if wxUSE_CONTROLS
     wxControl *item = wxDynamicCast(this, wxControl);
     if ( item )
     {
@@ -172,6 +176,7 @@ wxWindow *wxWindow::FindItem(long id) const
             return item;
         }
     }
+#endif // wxUSE_CONTROLS
 
     wxWindowList::Node *current = GetChildren().GetFirst();
     while (current)
@@ -201,7 +206,11 @@ wxWindow *wxWindow::FindItemByHWND(WXHWND hWnd, bool controlOnly) const
         if ( wnd )
             return wnd;
 
-        if ( !controlOnly || parent->IsKindOf(CLASSINFO(wxControl)) )
+        if ( !controlOnly
+#if wxUSE_CONTROLS
+                || parent->IsKindOf(CLASSINFO(wxControl))
+#endif // wxUSE_CONTROLS
+           )
         {
             wxWindow *item = current->GetData();
             if ( item->GetHWND() == hWnd )
@@ -881,7 +890,11 @@ WXDWORD wxWindow::Determine3DEffects(WXDWORD defaultBorderStyle,
 {
     // If matches certain criteria, then assume no 3D effects
     // unless specifically requested (dealt with in MakeExtendedStyle)
-    if ( !GetParent() || !IsKindOf(CLASSINFO(wxControl)) || (m_windowStyle & wxNO_BORDER) )
+    if ( !GetParent()
+#if wxUSE_CONTROLS
+            || !IsKindOf(CLASSINFO(wxControl))
+#endif // wxUSE_CONTROLS
+            || (m_windowStyle & wxNO_BORDER) )
     {
         *want3D = FALSE;
         return MakeExtendedStyle(m_windowStyle, FALSE);
@@ -1447,6 +1460,8 @@ void wxWindow::GetCaretPos(int *x, int *y) const
 // popup menu
 // ---------------------------------------------------------------------------
 
+#if wxUSE_MENUS
+
 bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 {
     menu->SetInvokingWindow(this);
@@ -1467,6 +1482,8 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 
     return TRUE;
 }
+
+#endif // wxUSE_MENUS
 
 // ===========================================================================
 // pre/post message processing
@@ -1558,6 +1575,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
                             // buttons want process Enter themselevs
                             bProcess = FALSE;
                         }
+#if wxUSE_BUTTON
                         else
                         {
                             wxPanel *panel = wxDynamicCast(this, wxPanel);
@@ -1580,6 +1598,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
                             //       it work like a TAB - and that's what we do.
                             //       Note that Ctrl-Enter always works this way.
                         }
+#endif // wxUSE_BUTTON
                     }
                     break;
 
@@ -1596,12 +1615,14 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
 
                 if ( GetEventHandler()->ProcessEvent(event) )
                 {
+#if wxUSE_BUTTON
                     wxButton *btn = wxDynamicCast(FindFocus(), wxButton);
                     if ( btn )
                     {
                         // the button which has focus should be default
                         btn->SetDefault();
                     }
+#endif // wxUSE_BUTTON
 
                     return TRUE;
                 }
@@ -1659,7 +1680,11 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
 
 bool wxWindow::MSWTranslateMessage(WXMSG* pMsg)
 {
+#if wxUSE_ACCEL
     return m_acceleratorTable.Translate(this, pMsg);
+#else
+    return FALSE;
+#endif // wxUSE_ACCEL
 }
 
 // ---------------------------------------------------------------------------
@@ -2778,6 +2803,8 @@ bool wxWindow::HandleSetCursor(WXHWND hWnd,
 bool wxWindow::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
 {
 #if wxUSE_OWNER_DRAWN
+
+#if wxUSE_MENUS
     // is it a menu item?
     if ( id == 0 )
     {
@@ -2800,12 +2827,16 @@ bool wxWindow::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
                             (wxOwnerDrawn::wxODStatus)pDrawStruct->itemState
                           );
     }
+#endif // wxUSE_MENUS
 
+#if wxUSE_CONTROLS
     wxWindow *item = FindItem(id);
     if ( item && item->IsKindOf(CLASSINFO(wxControl)) )
     {
         return ((wxControl *)item)->MSWOnDraw(itemStruct);
     }
+#endif // wxUSE_CONTROLS
+
 #endif // USE_OWNER_DRAWN
 
     return FALSE;
@@ -2861,12 +2892,14 @@ bool wxWindow::HandleCtlColor(WXHBRUSH *brush,
     {
         hBrush = OnCtlColor(pDC, pWnd, nCtlColor, message, wParam, lParam);
     }
+#if wxUSE_CONTROLS
     else
     {
         wxControl *item = (wxControl *)FindItemByHWND(pWnd, TRUE);
         if ( item )
             hBrush = item->OnCtlColor(pDC, pWnd, nCtlColor, message, wParam, lParam);
     }
+#endif // wxUSE_CONTROLS
 
     if ( hBrush )
         *brush = hBrush;
@@ -3096,6 +3129,7 @@ void wxWindow::SendSizeEvent()
 
 bool wxWindow::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 {
+#if wxUSE_MENUS
     if ( wxCurrentPopupMenu )
     {
         wxMenu *popupMenu = wxCurrentPopupMenu;
@@ -3103,6 +3137,7 @@ bool wxWindow::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 
         return popupMenu->MSWCommand(cmd, id);
     }
+#endif // wxUSE_MENUS
 
     wxWindow *win = (wxWindow*) NULL;
     if ( cmd == 0 || cmd == 1 ) // menu or accel - use id

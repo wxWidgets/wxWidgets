@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        listbox.cpp
+// Name:        src/msw/listbox.cpp
 // Purpose:     wxListBox
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin (owner drawn stuff)
@@ -20,8 +20,7 @@
     #pragma hdrstop
 #endif
 
-#include "wx/window.h"
-#include "wx/msw/private.h"
+#if wxUSE_LISTBOX
 
 #ifndef WX_PRECOMP
 #include "wx/listbox.h"
@@ -31,6 +30,9 @@
 #include "wx/dc.h"
 #include "wx/utils.h"
 #endif
+
+#include "wx/window.h"
+#include "wx/msw/private.h"
 
 #include <windowsx.h>
 
@@ -771,5 +773,6 @@ bool wxListBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
             (wxOwnerDrawn::wxODStatus)pStruct->itemState);
 }
 
-#endif
-    // wxUSE_OWNER_DRAWN
+#endif // wxUSE_OWNER_DRAWN
+
+#endif // wxUSE_LISTBOX

@@ -18,7 +18,7 @@
 
 #ifdef __GNUG__
     #pragma interface "textctrlbase.h"
-#endif   
+#endif
 
 #include "wx/defs.h"
 

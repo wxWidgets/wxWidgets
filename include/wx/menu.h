@@ -16,6 +16,8 @@
     #pragma interface "menubase.h"
 #endif
 
+#if wxUSE_MENUS
+
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
@@ -418,6 +420,8 @@ protected:
     #include "wx/stubs/menu.h"
 #endif
 #endif // wxUSE_BASE_CLASSES_ONLY/!wxUSE_BASE_CLASSES_ONLY
+
+#endif // wxUSE_MENUS
 
 #endif
     // _WX_MENU_H_BASE_

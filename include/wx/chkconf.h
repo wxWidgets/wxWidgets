@@ -47,24 +47,50 @@
     wxUSE_TOOLBAR || \
     wxUSE_TOOLTIPS || \
     wxUSE_TREECTRL
-    #if !wxUSE_CONTROLS
-        #if wxABORT_ON_CONFIG_ERROR
-            #error "wxUSE_CONTROLS unset but some controls used"
-        #else
-            #undef wxUSE_CONTROLS
-            #define wxUSE_CONTROLS 1
-        #endif
-    #endif
+#    if !wxUSE_CONTROLS
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_CONTROLS unset but some controls used"
+#        else
+#            undef wxUSE_CONTROLS
+#            define wxUSE_CONTROLS 1
+#        endif
+#    endif
 #endif /* controls */
 
 #if wxUSE_STOPWATCH
-    #if !wxUSE_LONGLONG
-        #if wxABORT_ON_CONFIG_ERROR
-            #error "wxUSE_STOPWATCH requires wxUSE_LONGLONG"
-        #else
-            #undef wxUSE_LONGLONG
-            #define wxUSE_LONGLONG 1
-        #endif
-    #endif
+#    if !wxUSE_LONGLONG
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_STOPWATCH requires wxUSE_LONGLONG"
+#        else
+#            undef wxUSE_LONGLONG
+#            define wxUSE_LONGLONG 1
+#        endif
+#    endif
 #endif /* wxUSE_STOPWATCH */
 
+#if !defined(wxUSE_DYNAMIC_CLASSES) || !wxUSE_DYNAMIC_CLASSES
+#   if wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_DYNAMIC_CLASSES must be defined as 1"
+#   else
+#       undef wxUSE_DYNAMIC_CLASSES
+#       define wxUSE_DYNAMIC_CLASSES
+#   endif
+#endif /* wxUSE_DYNAMIC_CLASSES */
+
+#if wxUSE_MIMETYPE && !wxUSE_TEXTFILE
+#   if wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_MIMETYPE requires wxUSE_TEXTFILE"
+#   else
+#       undef wxUSE_TEXTFILE
+#       define wxUSE_TEXTFILE 1
+#   endif
+#endif /* wxUSE_MIMETYPE */
+
+#if wxUSE_TEXTFILE && !wxUSE_FILE
+#   if wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_TEXTFILE requires wxUSE_FILE"
+#   else
+#       undef wxUSE_FILE
+#       define wxUSE_FILE 1
+#   endif
+#endif /* wxUSE_TEXTFILE */

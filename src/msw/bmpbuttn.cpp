@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        bmpbuttn.cpp
+// Name:        src/msw/bmpbuttn.cpp
 // Purpose:     wxBitmapButton
 // Author:      Julian Smart
 // Modified by:
@@ -17,8 +17,10 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#if wxUSE_BMPBUTTN
 
 #ifndef WX_PRECOMP
     #include "wx/bmpbuttn.h"
@@ -384,3 +386,5 @@ void wxBitmapButton::SetDefault()
 {
     wxButton::SetDefault();
 }
+
+#endif // wxUSE_BMPBUTTN

@@ -13,8 +13,10 @@
 #define _WX_LISTCTRL_H_
 
 #ifdef __GNUG__
-#pragma interface "listctrl.h"
+    #pragma interface "listctrl.h"
 #endif
+
+#if wxUSE_LISTCTRL
 
 #include "wx/control.h"
 #include "wx/event.h"
@@ -357,6 +359,8 @@ private:
 
     DECLARE_DYNAMIC_CLASS(wxListCtrl)
 };
+
+#endif // wxUSE_LISTCTRL
 
 #endif
     // _WX_LISTCTRL_H_

@@ -20,6 +20,8 @@
   #pragma hdrstop
 #endif
 
+#if wxUSE_MIMETYPE
+
 // Doesn't compile in WIN16 mode
 #ifndef __WIN16__
 
@@ -443,3 +445,5 @@ size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
 
 #endif
   // __WIN16__
+
+#endif // wxUSE_MIMETYPE

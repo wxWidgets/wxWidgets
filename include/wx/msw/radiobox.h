@@ -16,6 +16,8 @@
     #pragma interface "radiobox.h"
 #endif
 
+#if wxUSE_RADIOBOX
+
 #include "wx/control.h"
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxRadioBoxNameStr;
@@ -123,6 +125,8 @@ protected:
                            int sizeFlags = wxSIZE_AUTO);
     virtual wxSize DoGetBestSize() const;
 };
+
+#endif // wxUSE_RADIOBOX
 
 #endif
     // _WX_RADIOBOX_H_

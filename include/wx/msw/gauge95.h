@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _GAUGE95_H_
@@ -15,6 +15,8 @@
 #ifdef __GNUG__
 #pragma interface "gauge95.h"
 #endif
+
+#if wxUSE_SLIDER
 
 #include "wx/control.h"
 
@@ -74,6 +76,8 @@ protected:
     int      m_rangeMax;
     int      m_gaugePos;
 };
+
+#endif // wxUSE_GAUGE
 
 #endif
     // _GAUGEMSW_H_

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        scrolbar.cpp
+// Name:        msw/scrolbar.cpp
 // Purpose:     wxScrollBar
 // Author:      Julian Smart
 // Modified by:
@@ -10,19 +10,20 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "scrolbar.h"
+    #pragma implementation "scrolbar.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
+#if wxUSE_SCROLLBAR
+
 #ifndef WX_PRECOMP
-#include "wx/defs.h"
-#include "wx/utils.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/scrolbar.h"
@@ -352,3 +353,5 @@ void wxScrollBar::OnScroll(wxScrollEvent& event)
     }
 }
 #endif
+
+#endif // wxUSE_SCROLLBAR

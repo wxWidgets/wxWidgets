@@ -20,8 +20,9 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_SLIDER
+
 #ifndef WX_PRECOMP
-#include <stdio.h>
 #include "wx/utils.h"
 #include "wx/brush.h"
 #endif
@@ -637,3 +638,4 @@ bool wxSlider95::Show(bool show)
 #endif
   // __WIN95__
 
+#endif // wxUSE_SLIDER

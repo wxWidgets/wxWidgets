@@ -62,7 +62,10 @@
 extern wxWindowList wxModelessWindows;
 extern wxList WXDLLEXPORT wxPendingDelete;
 extern const wxChar *wxFrameClassName;
+
+#if wxUSE_MENUS
 extern wxMenu *wxCurrentPopupMenu;
+#endif // wxUSE_MENUS
 
 // ----------------------------------------------------------------------------
 // event tables
@@ -83,11 +86,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
 // static class members
 // ----------------------------------------------------------------------------
 
-#if wxUSE_NATIVE_STATUSBAR
-    bool wxFrame::m_useNativeStatusBar = TRUE;
-#else
-    bool wxFrame::m_useNativeStatusBar = FALSE;
-#endif
+#if wxUSE_STATUSBAR
+    #if wxUSE_NATIVE_STATUSBAR
+        bool wxFrame::m_useNativeStatusBar = TRUE;
+    #else
+        bool wxFrame::m_useNativeStatusBar = FALSE;
+    #endif
+#endif // wxUSE_NATIVE_STATUSBAR
 
 // ----------------------------------------------------------------------------
 // creation/destruction
@@ -127,9 +132,15 @@ bool wxFrame::Create(wxWindow *parent,
 {
   SetName(name);
   m_windowStyle = style;
+#if wxUSE_MENUS
   m_frameMenuBar = NULL;
+#endif // wxUSE_MENUS
+#if wxUSE_TOOLBAR
   m_frameToolBar = NULL;
+#endif // wxUSE_TOOLBAR
+#if wxUSE_STATUSBAR
   m_frameStatusBar = NULL;
+#endif // wxUSE_STATUSBAR
 
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
 
@@ -417,15 +428,18 @@ void wxFrame::PositionStatusBar()
 
 void wxFrame::DetachMenuBar()
 {
+#if wxUSE_MENUS
     if ( m_frameMenuBar )
     {
         m_frameMenuBar->Detach();
         m_frameMenuBar = NULL;
     }
+#endif // wxUSE_MENUS
 }
 
 void wxFrame::SetMenuBar(wxMenuBar *menubar)
 {
+#if wxUSE_MENUS
     if ( !menubar )
     {
         DetachMenuBar();
@@ -461,6 +475,7 @@ void wxFrame::SetMenuBar(wxMenuBar *menubar)
         m_frameMenuBar = menubar;
         menubar->Attach(this);
     }
+#endif // wxUSE_MENUS
 }
 
 void wxFrame::InternalSetMenuBar()
@@ -477,12 +492,14 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
     Refresh();
 
+#if wxUSE_STATUSBAR
     if ( m_frameStatusBar )
     {
         wxSysColourChangedEvent event2;
         event2.SetEventObject( m_frameStatusBar );
         m_frameStatusBar->GetEventHandler()->ProcessEvent(event2);
     }
+#endif // wxUSE_STATUSBAR
 
     // Propagate the event to the non-top-level children
     wxWindow::OnSysColourChanged(event);
@@ -499,15 +516,10 @@ bool wxFrame::ShowFullScreen(bool show, long style)
         m_fsIsShowing = TRUE;
         m_fsStyle = style;
 
+#if wxUSE_TOOLBAR
         wxToolBar *theToolBar = GetToolBar();
-        wxStatusBar *theStatusBar = GetStatusBar();
-
-        int dummyWidth;
-
         if (theToolBar)
-            theToolBar->GetSize(&dummyWidth, &m_fsToolBarHeight);
-        if (theStatusBar)
-            theStatusBar->GetSize(&dummyWidth, &m_fsStatusBarHeight);
+            theToolBar->GetSize(NULL, &m_fsToolBarHeight);
 
         // zap the toolbar, menubar, and statusbar
 
@@ -516,9 +528,15 @@ bool wxFrame::ShowFullScreen(bool show, long style)
             theToolBar->SetSize(-1,0);
             theToolBar->Show(FALSE);
         }
+#endif // wxUSE_TOOLBAR
 
         if (style & wxFULLSCREEN_NOMENUBAR)
             SetMenu((HWND)GetHWND(), (HMENU) NULL);
+
+#if wxUSE_STATUSBAR
+        wxStatusBar *theStatusBar = GetStatusBar();
+        if (theStatusBar)
+            theStatusBar->GetSize(NULL, &m_fsStatusBarHeight);
 
         // Save the number of fields in the statusbar
         if ((style & wxFULLSCREEN_NOSTATUSBAR) && theStatusBar)
@@ -529,6 +547,7 @@ bool wxFrame::ShowFullScreen(bool show, long style)
         }
         else
             m_fsStatusBarFields = 0;
+#endif // wxUSE_STATUSBAR
 
         // zap the frame borders
 
@@ -578,6 +597,7 @@ bool wxFrame::ShowFullScreen(bool show, long style)
 
         m_fsIsShowing = FALSE;
 
+#if wxUSE_TOOLBAR
         wxToolBar *theToolBar = GetToolBar();
 
         // restore the toolbar, menubar, and statusbar
@@ -586,12 +606,15 @@ bool wxFrame::ShowFullScreen(bool show, long style)
             theToolBar->SetSize(-1, m_fsToolBarHeight);
             theToolBar->Show(TRUE);
         }
+#endif // wxUSE_TOOLBAR
 
+#if wxUSE_STATUSBAR
         if ((m_fsStyle & wxFULLSCREEN_NOSTATUSBAR) && (m_fsStatusBarFields > 0))
         {
             CreateStatusBar(m_fsStatusBarFields);
             PositionStatusBar();
         }
+#endif // wxUSE_STATUSBAR
 
         if ((m_fsStyle & wxFULLSCREEN_NOMENUBAR) && (m_hMenu != 0))
             SetMenu((HWND)GetHWND(), (HMENU)m_hMenu);
@@ -799,7 +822,11 @@ void wxFrame::IconizeChildFrames(bool bIconize)
         // the child MDI frames are a special case and should not be touched by
         // the parent frame - instead, they are managed by the user
         wxFrame *frame = wxDynamicCast(win, wxFrame);
-        if ( frame && !wxDynamicCast(frame, wxMDIChildFrame) )
+        if ( frame
+#if wxUSE_MDI_ARCHITECTURE
+                && !wxDynamicCast(frame, wxMDIChildFrame)
+#endif // wxUSE_MDI_ARCHITECTURE
+           )
         {
             frame->Iconize(bIconize);
         }
@@ -819,6 +846,7 @@ bool wxFrame::MSWTranslateMessage(WXMSG* pMsg)
     if ( wxWindow::MSWTranslateMessage(pMsg) )
         return TRUE;
 
+#if wxUSE_MENUS
     // try the menu bar accels
     wxMenuBar *menuBar = GetMenuBar();
     if ( !menuBar )
@@ -826,6 +854,9 @@ bool wxFrame::MSWTranslateMessage(WXMSG* pMsg)
 
     const wxAcceleratorTable& acceleratorTable = menuBar->GetAccelTable();
     return acceleratorTable.Translate(this, pMsg);
+#else
+    return FALSE;
+#endif // wxUSE_MENUS
 }
 
 // ---------------------------------------------------------------------------
@@ -913,8 +944,13 @@ bool wxFrame::HandleSize(int x, int y, WXUINT id)
 
     if ( !m_iconized )
     {
+#if wxUSE_STATUSBAR
         PositionStatusBar();
+#endif // wxUSE_STATUSBAR
+
+#if wxUSE_TOOLBAR
         PositionToolBar();
+#endif // wxUSE_TOOLBAR
 
         wxSizeEvent event(wxSize(x, y), m_windowId);
         event.SetEventObject( this );
@@ -937,6 +973,7 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
     // handle here commands from menus and accelerators
     if ( cmd == 0 || cmd == 1 )
     {
+#if wxUSE_MENUS
         if ( wxCurrentPopupMenu )
         {
             wxMenu *popupMenu = wxCurrentPopupMenu;
@@ -944,6 +981,7 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 
             return popupMenu->MSWCommand(cmd, id);
         }
+#endif // wxUSE_MENUS
 
         if ( ProcessCommand(id) )
         {
@@ -968,6 +1006,7 @@ bool wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
     }
     else
     {
+#if wxUSE_STATUSBAR
         // don't give hints for separators (doesn't make sense) nor for the
         // items opening popup menus (they don't have them anyhow) but do clear
         // the status line - otherwise, we would be left with the help message
@@ -977,6 +1016,7 @@ bool wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
         {
             statbar->SetStatusText(wxEmptyString);
         }
+#endif // wxUSE_STATUSBAR
 
         return FALSE;
     }

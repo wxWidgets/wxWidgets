@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SCROLBAR_H_
@@ -15,6 +15,8 @@
 #ifdef __GNUG__
 #pragma interface "scrolbar.h"
 #endif
+
+#if wxUSE_SCROLLBAR
 
 #include "wx/control.h"
 
@@ -86,6 +88,8 @@ protected:
 
     DECLARE_EVENT_TABLE()
 };
+
+#endif // wxUSE_SCROLLBAR
 
 #endif
     // _WX_SCROLBAR_H_

@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_CHOICE
+
 #ifndef WX_PRECOMP
     #include "wx/choice.h"
     #include "wx/utils.h"
@@ -370,4 +372,4 @@ WXHBRUSH wxChoice::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
     return (WXHBRUSH)brush->GetResourceHandle();
 }
 
-
+#endif // wxUSE_CHOICE

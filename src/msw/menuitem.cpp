@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_MENUS
+
 #ifndef WX_PRECOMP
     #include "wx/font.h"
     #include "wx/bitmap.h"
@@ -272,3 +274,5 @@ wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
 {
     return new wxMenuItem(parentMenu, id, name, help, isCheckable, subMenu);
 }
+
+#endif // wxUSE_MENUS

@@ -16,6 +16,8 @@
 #pragma interface "bmpbuttn.h"
 #endif
 
+#if wxUSE_BMPBUTTON
+
 #include "wx/button.h"
 #include "wx/bitmap.h"
 
@@ -83,6 +85,8 @@ protected:
     int      m_marginX;
     int      m_marginY;
 };
+
+#endif // wxUSE_BMPBUTTON
 
 #endif
     // _WX_BMPBUTTN_H_

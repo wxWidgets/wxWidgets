@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        radiobut.cpp
+// Name:        msw/radiobut.cpp
 // Purpose:     wxRadioButton
 // Author:      Julian Smart
 // Modified by:
@@ -10,22 +10,22 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "radiobut.h"
+    #pragma implementation "radiobut.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
+#if wxUSE_RADIOBTN
+
 #ifndef WX_PRECOMP
-#include <stdio.h>
-#include "wx/setup.h"
-#include "wx/radiobut.h"
-#include "wx/settings.h"
-#include "wx/brush.h"
+    #include "wx/radiobut.h"
+    #include "wx/settings.h"
+    #include "wx/brush.h"
 #endif
 
 #include "wx/msw/private.h"
@@ -270,3 +270,5 @@ bool wxBitmapRadioButton::GetValue(void) const
 }
 
 #endif
+
+#endif // wxUSE_RADIOBTN

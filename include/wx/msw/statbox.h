@@ -16,6 +16,8 @@
     #pragma interface "statbox.h"
 #endif
 
+#if wxUSE_STATBOX
+
 #include "wx/control.h"
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxStaticBoxNameStr;
@@ -56,6 +58,8 @@ public:
 protected:
     virtual wxSize DoGetBestSize() const;
 };
+
+#endif // wxUSE_STATBOX
 
 #endif
     // _WX_STATBOX_H_

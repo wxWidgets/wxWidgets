@@ -16,6 +16,8 @@
     #pragma interface "listbox.h"
 #endif
 
+#if wxUSE_LISTBOX
+
 // ----------------------------------------------------------------------------
 // simple types
 // ----------------------------------------------------------------------------
@@ -132,6 +134,8 @@ protected:
 private:
     DECLARE_DYNAMIC_CLASS(wxListBox)
 };
+
+#endif // wxUSE_LISTBOX
 
 #endif
     // _WX_LISTBOX_H_

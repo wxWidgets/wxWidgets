@@ -15,17 +15,16 @@
 
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-#include "wx/module.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#if wxUSE_MIMETYPE
 
 #ifndef WX_PRECOMP
-  #include "wx/defs.h"
+    #include "wx/module.h"
 #endif
-
-#if (wxUSE_FILE && wxUSE_TEXTFILE) || defined(__WXMSW__)
 
 #ifndef WX_PRECOMP
   #include "wx/string.h"
@@ -33,9 +32,6 @@
     #include "wx/icon.h"
   #endif
 #endif //WX_PRECOMP
-
-// Doesn't compile in WIN16 mode
-#ifndef __WIN16__
 
 #include "wx/log.h"
 #include "wx/file.h"
@@ -361,19 +357,13 @@ public:
     void OnExit() 
     {   // this avoids false memory leak allerts:
         if (gs_mimeTypesManager.m_impl != NULL)
-	{
-	    delete gs_mimeTypesManager.m_impl;
-	    gs_mimeTypesManager.m_impl = NULL;
-	}
+        {
+            delete gs_mimeTypesManager.m_impl;
+            gs_mimeTypesManager.m_impl = NULL;
+        }
     }
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxMimeTypeCmnModule, wxModule)
 
-
-
-#endif
-  // wxUSE_FILE && wxUSE_TEXTFILE
-
-#endif
-  // __WIN16__
+#endif // wxUSE_MIMETYPE

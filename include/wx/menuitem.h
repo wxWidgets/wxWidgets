@@ -12,6 +12,8 @@
 #ifndef _WX_MENUITEM_H_BASE_
 #define _WX_MENUITEM_H_BASE_
 
+#if wxUSE_MENUS
+
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
@@ -142,6 +144,8 @@ private:
     #include "wx/stubs/menuitem.h"
 #endif
 #endif // wxUSE_BASE_CLASSES_ONLY/!wxUSE_BASE_CLASSES_ONLY
+
+#endif // wxUSE_MENUS
 
 #endif
     // _WX_MENUITEM_H_BASE_
