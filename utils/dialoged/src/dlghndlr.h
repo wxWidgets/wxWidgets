@@ -57,8 +57,10 @@ DECLARE_CLASS(wxResourceEditorDialogHandler)
   virtual void OnItemLeftClick(wxControl *item, int x, int y, int keys);
   virtual void OnItemRightClick(wxControl *item, int x, int y, int keys);
   virtual void OnItemSelect(wxControl *item, bool select);
-  virtual void OnItemMove(wxControl *item, int x, int y) {};
-  virtual void OnItemSize(wxControl *item, int w, int h) {};
+  virtual void OnItemMove(
+    wxControl *WXUNUSED(item), int WXUNUSED(x), int WXUNUSED(y) ) {};
+  virtual void OnItemSize(
+    wxControl *WXUNUSED(item), int WXUNUSED(w), int WXUNUSED(h) ) {};
 
   void AddChildHandlers(void);
   void PaintSelectionHandles(wxDC& dc);

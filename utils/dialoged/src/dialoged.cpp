@@ -1,4 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////
 // Name:        dialoged.cpp
 // Purpose:     Main Dialog Editor implementation file
 // Author:      Julian Smart

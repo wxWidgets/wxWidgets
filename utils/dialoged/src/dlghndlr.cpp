@@ -89,7 +89,7 @@ void wxResourceEditorDialogHandler::OnItemSelect(wxControl *item, bool select)
     resourceManager->RemoveSelection(item);
 }
 
-void wxResourceEditorDialogHandler::OnPaint(wxPaintEvent& event)
+void wxResourceEditorDialogHandler::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
 	wxPaintDC dc(handlerDialog);
 
@@ -207,7 +207,7 @@ void wxResourceEditorDialogHandler::OnLeftClick(int x, int y, int keys)
   }
 }
 
-void wxResourceEditorDialogHandler::OnRightClick(int x, int y, int keys)
+void wxResourceEditorDialogHandler::OnRightClick(int x, int y, int WXUNUSED(keys))
 {
   wxMenu *menu = resourceManager->GetPopupMenu();
   menu->SetClientData((char *)handlerDialog);
@@ -279,7 +279,7 @@ void wxResourceEditorDialogHandler::OnItemLeftClick(wxControl *item, int x, int 
   }
 }
 
-void wxResourceEditorDialogHandler::OnItemRightClick(wxControl *item, int x, int y, int keys)
+void wxResourceEditorDialogHandler::OnItemRightClick(wxControl *item, int x, int y, int WXUNUSED(keys))
 {
 /*
   if (keys & wxKEY_CTRL)

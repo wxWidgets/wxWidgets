@@ -32,6 +32,8 @@
 #include "wx/gauge.h"
 #include "wx/slider.h"
 #include "wx/textctrl.h"
+#include "wx/menu.h"
+#include "wx/toolbar.h"
 #endif
 
 #include "wx/scrolbar.h"
@@ -51,7 +53,9 @@
 #include <windows.h>
 #endif
 
+#ifndef __WXGTK__
 #include "wx/help.h"
+#endif
 
 #include "reseditr.h"
 #include "winprop.h"
@@ -62,10 +66,10 @@
 static void ObjectMenuProc(wxMenu& menu, wxCommandEvent& event);
 wxResourceManager *wxResourceManager::sm_currentResourceManager = NULL;
 
-#ifdef __X__
-#include "bitmaps/load.xbm"
-#include "bitmaps/save.xbm"
-#include "bitmaps/new.xbm"
+#ifdef __WXGTK__
+#include "bitmaps/load.xpm"
+#include "bitmaps/save.xpm"
+#include "bitmaps/new.xpm"
 #include "bitmaps/vert.xbm"
 #include "bitmaps/alignt.xbm"
 #include "bitmaps/alignb.xbm"
@@ -109,7 +113,9 @@ wxResourceManager::wxResourceManager():
   m_propertyWindowSize.width = 300;
   m_propertyWindowSize.height = 300;
 
+#ifndef __WXGTK__
   m_helpController = NULL;
+#endif
 
   m_bitmapImage = NULL;
   m_rootDialogItem = 0;
@@ -120,12 +126,15 @@ wxResourceManager::~wxResourceManager()
   sm_currentResourceManager = NULL;
   SaveOptions();
 
+#ifndef __WXGTK__
   if (m_helpController)
   {
     m_helpController->Quit();
     delete m_helpController;
     m_helpController = NULL;
   }
+#endif  
+  
   delete m_bitmapImage;
   delete m_popupMenu;
 }
@@ -139,7 +148,7 @@ bool wxResourceManager::Initialize()
   GetWindowsDirectory(buf, 256);
   strcat(buf, "\\dialoged.ini");
   m_optionsResourceFilename = buf;
-#elif defined(__X__)
+#elif defined(__WXGTK__)
   char buf[500];
   wxGetHomeDir(buf);
   strcat(buf, "/.dialogedrc");
@@ -150,8 +159,10 @@ bool wxResourceManager::Initialize()
 
   LoadOptions();
 
+#ifndef __WXGTK__
   m_helpController = new wxHelpController;
   m_helpController->Initialize("dialoged");
+#endif
 
   m_popupMenu = new wxMenu("", (wxFunction)ObjectMenuProc);
   m_popupMenu->Append(OBJECT_MENU_EDIT, "Edit properties");
@@ -162,7 +173,7 @@ bool wxResourceManager::Initialize()
 #ifdef __WXMSW__
     m_bitmapImage = new wxBitmap("WXWINBMP", wxBITMAP_TYPE_BMP_RESOURCE);
 #endif
-#ifdef __X__
+#ifdef __WXGTK__
     m_bitmapImage = new wxBitmap(wxwin_bits, wxwin_width, wxwin_height);
 #endif
   }
@@ -214,7 +225,7 @@ bool wxResourceManager::SaveOptions()
 
 // Show or hide the resource editor frame, which displays a list
 // of resources with ability to edit them.
-bool wxResourceManager::ShowResourceEditor(bool show, wxWindow *parent, const char *title)
+bool wxResourceManager::ShowResourceEditor(bool show, wxWindow *WXUNUSED(parent), const char *title)
 {
   if (show)
   {
@@ -273,7 +284,12 @@ bool wxResourceManager::ShowResourceEditor(bool show, wxWindow *parent, const ch
     c->right.SameAs      (m_editorFrame, wxRight, 0);
     c->bottom.SameAs     (m_editorFrame, wxBottom, 0);
     c->width.Unconstrained();
+#ifdef __WXGTK__
+    c->height.Absolute(70);
+#else
     c->height.Absolute(60);
+#endif
+
     m_editorControlList->SetConstraints(c);
 
     m_editorFrame->SetAutoLayout(TRUE);
@@ -413,7 +429,7 @@ bool wxResourceManager::New(bool loadFromFile, const wxString& filename)
         str += m_symbolFilename;
         str += ".\nDialog Editor maintains a header file containing id symbols to be used in the application.\n";
         str += "The next time this .wxr file is saved, a header file will be saved also.";
-        wxMessageBox(str, "Dialog Editor Warning", MB_OK);
+        wxMessageBox(str, "Dialog Editor Warning", wxOK );
 
         m_symbolIdCounter = 99;
     }
@@ -428,7 +444,8 @@ bool wxResourceManager::New(bool loadFromFile, const wxString& filename)
     bool altered = RepairResourceIds();
     if (altered)
     {
-        wxMessageBox("Some resources have had new identifiers associated with them, since they were missing.", "Dialog Editor Warning", MB_OK);
+        wxMessageBox("Some resources have had new identifiers associated with them, since they were missing.", 
+	             "Dialog Editor Warning", wxOK );
         Modify(TRUE);
     }
     else
@@ -446,7 +463,7 @@ bool wxResourceManager::New(bool loadFromFile, const wxString& filename)
   return TRUE;
 }
 
-bool wxResourceManager::Clear(bool deleteWindows, bool force)
+bool wxResourceManager::Clear(bool WXUNUSED(deleteWindows), bool force)
 {
   if (!force && Modified())
   {
@@ -652,7 +669,7 @@ wxFrame *wxResourceManager::OnCreateEditorFrame(const char *title)
   return frame;
 }
 
-wxMenuBar *wxResourceManager::OnCreateEditorMenuBar(wxFrame *parent)
+wxMenuBar *wxResourceManager::OnCreateEditorMenuBar(wxFrame *WXUNUSED(parent))
 {
   wxMenuBar *menuBar = new wxMenuBar;
 
@@ -713,10 +730,10 @@ wxToolBar *wxResourceManager::OnCreateToolBar(wxFrame *parent)
   wxBitmap ToolbarToFrontBitmap("TOFRONTTOOL");
   wxBitmap ToolbarHelpBitmap("HELPTOOL");
 #endif
-#ifdef __X__
-  wxBitmap ToolbarLoadBitmap(load_bits, load_width, load_height);
-  wxBitmap ToolbarSaveBitmap(save_bits, save_width, save_height);
-  wxBitmap ToolbarNewBitmap(new_bits, save_width, save_height);
+#ifdef __WXGTK__
+  wxBitmap ToolbarLoadBitmap( load_xpm );
+  wxBitmap ToolbarSaveBitmap( save_xpm);
+  wxBitmap ToolbarNewBitmap( new_xpm );
   wxBitmap ToolbarVertBitmap(vert_bits, vert_width, vert_height);
   wxBitmap ToolbarAlignTBitmap(alignt_bits, alignt_width, alignt_height);
   wxBitmap ToolbarAlignBBitmap(alignb_bits, alignb_width, alignb_height);
@@ -738,7 +755,7 @@ wxToolBar *wxResourceManager::OnCreateToolBar(wxFrame *parent)
   int dx = 2;
   int gap = 6;
 #else
-  int width = ToolbarLoadBitmap->GetWidth();
+  int width = 24; // ToolbarLoadBitmap->GetWidth();  ???
   int dx = 2;
   int gap = 6;
 #endif
@@ -1980,68 +1997,70 @@ wxResourceEditorFrame::~wxResourceEditorFrame()
 {
 }
 
-void wxResourceEditorFrame::OnNew(wxCommandEvent& event)
+void wxResourceEditorFrame::OnNew(wxCommandEvent& WXUNUSED(event))
 {
       manager->New(FALSE);
 }
 
-void wxResourceEditorFrame::OnNewDialog(wxCommandEvent& event)
+void wxResourceEditorFrame::OnNewDialog(wxCommandEvent& WXUNUSED(event))
 {
       manager->CreateNewPanel();
 }
 
-void wxResourceEditorFrame::OnOpen(wxCommandEvent& event)
+void wxResourceEditorFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
       manager->New(TRUE);
 }
 
-void wxResourceEditorFrame::OnClear(wxCommandEvent& event)
+void wxResourceEditorFrame::OnClear(wxCommandEvent& WXUNUSED(event))
 {
       manager->Clear(TRUE, FALSE);
 }
 
-void wxResourceEditorFrame::OnSave(wxCommandEvent& event)
+void wxResourceEditorFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 {
       manager->Save();
 }
 
-void wxResourceEditorFrame::OnSaveAs(wxCommandEvent& event)
+void wxResourceEditorFrame::OnSaveAs(wxCommandEvent& WXUNUSED(event))
 {
       manager->SaveAs();
 }
 
-void wxResourceEditorFrame::OnExit(wxCommandEvent& event)
+void wxResourceEditorFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 {
 	  manager->Clear(TRUE, FALSE) ;
       this->Close();
 }
 
-void wxResourceEditorFrame::OnAbout(wxCommandEvent& event)
+void wxResourceEditorFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
       char buf[300];
       sprintf(buf, "wxWindows Dialog Editor %.1f\nAuthor: Julian Smart J.Smart@ed.ac.uk\nJulian Smart (c) 1996", wxDIALOG_EDITOR_VERSION);
       wxMessageBox(buf, "About Dialog Editor", wxOK|wxCENTRE);
 }
 
-void wxResourceEditorFrame::OnTest(wxCommandEvent& event)
+void wxResourceEditorFrame::OnTest(wxCommandEvent& WXUNUSED(event))
 {
     manager->TestCurrentDialog(this);
 }
 
-void wxResourceEditorFrame::OnContents(wxCommandEvent& event)
+void wxResourceEditorFrame::OnContents(wxCommandEvent& WXUNUSED(event))
 {
+#ifndef __WXGTK__
       wxBeginBusyCursor();
       manager->GetHelpController()->LoadFile();
       manager->GetHelpController()->DisplayContents();
       wxEndBusyCursor();
+#endif
 }
 
-void wxResourceEditorFrame::OnDeleteSelection(wxCommandEvent& event)
+void wxResourceEditorFrame::OnDeleteSelection(wxCommandEvent& WXUNUSED(event))
 {
       manager->DeleteSelection();
 }
 
-void wxResourceEditorFrame::OnRecreateSelection(wxCommandEvent& event)
+void wxResourceEditorFrame::OnRecreateSelection(wxCommandEvent& WXUNUSED(event))
 {
       manager->RecreateSelection();
 }
@@ -2106,7 +2125,7 @@ void wxResourceEditorScrolledWindow::OnScroll(wxScrollEvent& event)
         m_childWindow->Move(m_marginX + (- x * 10), m_marginY + (- y * 10));
 }
 
-void wxResourceEditorScrolledWindow::OnPaint(wxPaintEvent& event)
+void wxResourceEditorScrolledWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
 
@@ -2201,10 +2220,12 @@ bool EditorToolBar::OnLeftClick(int toolIndex, bool toggled)
     }
     case TOOLBAR_HELP:
     {
+#ifndef __WXGTK__
       wxBeginBusyCursor();
       manager->GetHelpController()->LoadFile();
       manager->GetHelpController()->DisplayContents();
       wxEndBusyCursor();
+#endif
       break;
     }
     case TOOLBAR_FORMAT_HORIZ:
@@ -2316,6 +2337,7 @@ void EditorToolBar::OnMouseEnter(int toolIndex)
 
 void EditorToolBar::OnPaint(wxPaintEvent& event)
 {
+#ifndef __WXGTK__
   wxToolBar::OnPaint(event);
 
   wxPaintDC dc(this);
@@ -2324,6 +2346,7 @@ void EditorToolBar::OnPaint(wxPaintEvent& event)
   dc.SetPen(wxBLACK_PEN);
   dc.SetBrush(wxTRANSPARENT_BRUSH);
   dc.DrawLine(0, h-1, w, h-1);
+#endif
 }
 
 

@@ -76,7 +76,7 @@ class wxResourceEditorControlList;
 #ifdef __WXMSW__
 #define wxHelpController wxWinHelpController
 #else
-#define wxHelpController wxXLPHelpController;
+#define wxHelpController wxHTMLHelpController;
 #endif
 
 class wxHelpController;
@@ -286,7 +286,7 @@ public:
    inline wxResourceEditorControlList *GetEditorControlList() const { return m_editorControlList; }
    inline wxList& GetSelections() { return m_selections; }
    inline wxMenu *GetPopupMenu() const { return m_popupMenu; }
-   inline wxHelpController *GetHelpController() const { return m_helpController; }
+//   inline wxHelpController *GetHelpController() const { return m_helpController; }
 
    inline void Modify(bool mod = TRUE) { m_modified = mod; }
    inline bool Modified() const { return m_modified; }
@@ -310,7 +310,7 @@ public:
 
 // Member variables
  protected:
-   wxHelpController*                m_helpController;
+//   wxHelpController*                m_helpController;
    wxResourceTableWithSaving        m_resourceTable;
    wxFrame*                         m_editorFrame;
    wxResourceEditorScrolledWindow*  m_editorPanel;
