@@ -63,6 +63,7 @@ AC_OUTPUT([
             samples/xrc/Makefile
             samples/plot/Makefile
             samples/applet/Makefile
+            samples/fl/Makefile
             samples/fl/fl_demo1/Makefile
             samples/fl/fl_demo2/Makefile
             samples/fl/fl_sample1/Makefile

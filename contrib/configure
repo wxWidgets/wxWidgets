@@ -838,11 +838,12 @@ trap 'rm -fr `echo "
             samples/xrc/Makefile
             samples/plot/Makefile
             samples/applet/Makefile
-            samples/fl/fl_demo1
-            samples/fl/fl_demo2
-            samples/fl/fl_sample1
-            samples/fl/fl_sample2
-            samples/fl/fl_sample3
+            samples/fl/Makefile
+            samples/fl/fl_demo1/Makefile
+            samples/fl/fl_demo2/Makefile
+            samples/fl/fl_sample1/Makefile
+            samples/fl/fl_sample2/Makefile
+            samples/fl/fl_sample3/Makefile
             utils/Makefile
             utils/wxrc/Makefile
             utils/wxrcedit/Makefile
@@ -925,8 +926,7 @@ EOF
 
 cat >> $CONFIG_STATUS <<EOF
 
-CONFIG_FILES=\${CONFIG_FILES-"Makefile
-            src/Makefile
+CONFIG_FILES=\${CONFIG_FILES-"src/Makefile
             src/ogl/Makefile
             src/mmedia/Makefile
             src/stc/Makefile
@@ -952,11 +952,12 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             samples/xrc/Makefile
             samples/plot/Makefile
             samples/applet/Makefile
-            samples/fl/fl_demo1
-            samples/fl/fl_demo2
-            samples/fl/fl_sample1
-            samples/fl/fl_sample2
-            samples/fl/fl_sample3
+            samples/fl/Makefile
+            samples/fl/fl_demo1/Makefile
+            samples/fl/fl_demo2/Makefile
+            samples/fl/fl_sample1/Makefile
+            samples/fl/fl_sample2/Makefile
+            samples/fl/fl_sample3/Makefile
             utils/Makefile
             utils/wxrc/Makefile
             utils/wxrcedit/Makefile
