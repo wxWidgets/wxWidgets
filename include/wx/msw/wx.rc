@@ -25,14 +25,14 @@
 // LOSS OF USE, DATA OR PROFITS, WHETHER OR NOT ADVISED OF THE POSSIBILITY OF
 // DAMAGE, AND ON ANY THEORY OF LIABILITY, ARISING OUT OF OR IN CONNECTION WITH
 // THE USE OR PERFORMANCE OF THIS SOFTWARE.
+//
+// Version: $Id$
 /////////////////////////////////////////////////////////////////////////////
-//
-//
 
 #if (defined( __GNUWIN32__ ) && !defined(__TWIN32__)) || defined(__MWERKS__)
-#include <wx/msw/gnuwin32/winresrc.h>
+	#include <wx/msw/gnuwin32/winresrc.h>
 #else
-#include <windows.h>
+	#include <windows.h>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -108,6 +108,12 @@ WXCURSOR_BLANK          CURSOR  DISCARDABLE     "wx/msw/blank.cur"
 //wxDEFAULT_FRAME               ICON "wx/msw/std.ico"
 //wxDEFAULT_MDIPARENTFRAME      ICON "wx/msw/mdi.ico"
 //wxDEFAULT_MDICHILDFRAME       ICON "wx/msw/child.ico"
+
+// Standard icons
+wxICON_QUESTION		ICON "wx/msw/question.ico"
+wxICON_WARNING		ICON "wx/msw/warning.ico"
+wxICON_ERROR		ICON "wx/msw/error.ico"
+wxICON_INFO		ICON "wx/msw/info.ico"
 
 //////////////////////////////////////////////////////////////////////////////
 //
