@@ -52,7 +52,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxGenericMDIParentFrame, wxFrame)
 
 BEGIN_EVENT_TABLE(wxGenericMDIParentFrame, wxFrame)
 #if wxUSE_MENUS
-    EVT_MENU (-1, wxGenericMDIParentFrame::DoHandleMenu)
+    EVT_MENU (wxID_ANY, wxGenericMDIParentFrame::DoHandleMenu)
 #endif
 END_EVENT_TABLE()
 
@@ -123,7 +123,7 @@ bool wxGenericMDIParentFrame::Create(wxWindow *parent,
 
   OnCreateClient();
 
-  return TRUE;
+  return true;
 }
 
 #if wxUSE_MENUS
@@ -192,12 +192,12 @@ bool wxGenericMDIParentFrame::ProcessEvent(wxEvent& event)
     // Stops the same event being processed repeatedly
     static wxEventType inEvent = wxEVT_NULL;
     if (inEvent == event.GetEventType())
-        return FALSE;
+        return false;
 
     inEvent = event.GetEventType();
 
     // Let the active child (if any) process the event first.
-    bool res = FALSE;
+    bool res = false;
     if (m_pActiveChild && event.IsKindOf(CLASSINFO(wxCommandEvent))
 #if 0
         /* This is sure to not give problems... */
@@ -408,12 +408,12 @@ wxGenericMDIChildFrame::~wxGenericMDIChildFrame()
 
     if (pParentFrame != NULL)
     {
-        bool bActive = FALSE;
+        bool bActive = false;
         if (pParentFrame->GetActiveChild() == this)
         {
             pParentFrame->SetActiveChild((wxGenericMDIChildFrame*) NULL);
             pParentFrame->SetChildMenuBar((wxGenericMDIChildFrame*) NULL);
-            bActive = TRUE;
+            bActive = true;
         }
 
         wxGenericMDIClientWindow *pClientWindow = pParentFrame->GetClientWindow();
@@ -468,11 +468,11 @@ bool wxGenericMDIChildFrame::Create( wxGenericMDIParentFrame *parent,
 
     m_Title = title;
 
-    pClientWindow->AddPage(this, title, TRUE);
+    pClientWindow->AddPage(this, title, true);
     ApplyMDIChildFrameRect();   // Ok confirme the size change!
     pClientWindow->Refresh();
 
-    return TRUE;
+    return true;
 }
 
 #if wxUSE_MENUS
@@ -708,10 +708,10 @@ bool wxGenericMDIClientWindow::CreateClient( wxGenericMDIParentFrame *parent, lo
         GetTabView()->SetTabSize(120, 18);
         GetTabView()->SetTabSelectionHeight(20);
         */
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 int wxGenericMDIClientWindow::SetSelection(size_t nPage)
@@ -747,7 +747,7 @@ void wxGenericMDIClientWindow::PageChanged(int OldSelection, int newSelection)
         wxGenericMDIChildFrame* oldChild = (wxGenericMDIChildFrame *)GetPage(OldSelection);
         if (oldChild)
         {
-            wxActivateEvent event(wxEVT_ACTIVATE, FALSE, oldChild->GetId());
+            wxActivateEvent event(wxEVT_ACTIVATE, false, oldChild->GetId());
             event.SetEventObject( oldChild );
             oldChild->GetEventHandler()->ProcessEvent(event);
         }
@@ -759,7 +759,7 @@ void wxGenericMDIClientWindow::PageChanged(int OldSelection, int newSelection)
         wxGenericMDIChildFrame* activeChild = (wxGenericMDIChildFrame *)GetPage(newSelection);
         if (activeChild)
         {
-            wxActivateEvent event(wxEVT_ACTIVATE, TRUE, activeChild->GetId());
+            wxActivateEvent event(wxEVT_ACTIVATE, true, activeChild->GetId());
             event.SetEventObject( activeChild );
             activeChild->GetEventHandler()->ProcessEvent(event);
 

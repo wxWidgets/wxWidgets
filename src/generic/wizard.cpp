@@ -60,10 +60,10 @@ public:
 
     wxSize GetMaxChildSize();
     int Border() const;
-    
+
 private:
     wxSize SiblingSize(wxSizerItem *child);
-    
+
     wxWizard *m_owner;
     bool m_childSizeValid;
     wxSize m_childSize;
@@ -85,20 +85,20 @@ BEGIN_EVENT_TABLE(wxWizard, wxDialog)
     EVT_BUTTON(wxID_FORWARD, wxWizard::OnBackOrNext)
     EVT_BUTTON(wxID_HELP, wxWizard::OnHelp)
 
-    EVT_WIZARD_PAGE_CHANGED(-1, wxWizard::OnWizEvent)
-    EVT_WIZARD_PAGE_CHANGING(-1, wxWizard::OnWizEvent)
-    EVT_WIZARD_CANCEL(-1, wxWizard::OnWizEvent)
-    EVT_WIZARD_FINISHED(-1, wxWizard::OnWizEvent)
-    EVT_WIZARD_HELP(-1, wxWizard::OnWizEvent)
+    EVT_WIZARD_PAGE_CHANGED(wxID_ANY, wxWizard::OnWizEvent)
+    EVT_WIZARD_PAGE_CHANGING(wxID_ANY, wxWizard::OnWizEvent)
+    EVT_WIZARD_CANCEL(wxID_ANY, wxWizard::OnWizEvent)
+    EVT_WIZARD_FINISHED(wxID_ANY, wxWizard::OnWizEvent)
+    EVT_WIZARD_HELP(wxID_ANY, wxWizard::OnWizEvent)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxWizard, wxDialog)
 
 /*
-	TODO PROPERTIES :
-	wxWizard
-		extstyle
-		title
+    TODO PROPERTIES :
+    wxWizard
+        extstyle
+        title
 */
 
 IMPLEMENT_ABSTRACT_CLASS(wxWizardPage, wxPanel)
@@ -129,8 +129,8 @@ bool wxWizardPage::Create(wxWizard *parent,
                           const wxBitmap& bitmap,
                           const wxChar *resource)
 {
-    if ( !wxPanel::Create(parent, -1) )
-        return FALSE;
+    if ( !wxPanel::Create(parent, wxID_ANY) )
+        return false;
 
     if ( resource != NULL )
     {
@@ -149,7 +149,7 @@ bool wxWizardPage::Create(wxWizard *parent,
     // initially the page is hidden, it's shown only when it becomes current
     Hide();
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -226,7 +226,7 @@ wxSize wxWizardSizer::GetMaxChildSize()
         m_childSizeValid = true;
         m_childSize = maxOfMin;
     }
-    
+
     return maxOfMin;
 }
 
@@ -241,7 +241,7 @@ int wxWizardSizer::Border() const
 wxSize wxWizardSizer::SiblingSize(wxSizerItem *child)
 {
     wxSize maxSibling;
-    
+
     if ( child->IsWindow() )
     {
         wxWizardPage *page = wxDynamicCast(child->GetWindow(), wxWizardPage);
@@ -258,7 +258,7 @@ wxSize wxWizardSizer::SiblingSize(wxSizerItem *child)
             }
         }
     }
-    
+
     return maxSibling;
 }
 
@@ -287,12 +287,12 @@ bool wxWizard::Create(wxWindow *parent,
                       long style)
 {
     bool result = wxDialog::Create(parent,id,title,pos,wxDefaultSize,style);
-    
+
     m_posWizard = pos;
     m_bitmap = bitmap ;
 
     DoCreateControls();
-    
+
     return result;
 }
 
@@ -312,7 +312,7 @@ void wxWizard::AddBitmapRow(wxBoxSizer *mainColumn)
 #if wxUSE_STATBMP
     if ( m_bitmap.Ok() )
     {
-        m_statbmp = new wxStaticBitmap(this, -1, m_bitmap);
+        m_statbmp = new wxStaticBitmap(this, wxID_ANY, m_bitmap);
         m_sizerBmpAndPage->Add(
             m_statbmp,
             0, // No horizontal stretching
@@ -335,7 +335,7 @@ void wxWizard::AddStaticLine(wxBoxSizer *mainColumn)
 {
 #if wxUSE_STATLINE
     mainColumn->Add(
-        new wxStaticLine(this, -1),
+        new wxStaticLine(this, wxID_ANY),
         0, // Vertically unstretchable
         wxEXPAND | wxALL, // Border all around, horizontally stretchable
         5 // Border width
@@ -369,7 +369,7 @@ void wxWizard::AddBackNextPair(wxBoxSizer *buttonRow)
         wxALL, // Border all around
         5 // Border width
     );
-    
+
     backNextPair->Add(m_btnPrev);
     backNextPair->Add(BACKNEXT_MARGIN,0,
         0, // No horizontal stretching
@@ -415,7 +415,7 @@ void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
         );
 
     AddBackNextPair(buttonRow);
-    
+
     buttonRow->Add(
         btnCancel,
         0, // Horizontally unstretchable
@@ -429,10 +429,10 @@ void wxWizard::DoCreateControls()
     // do nothing if the controls were already created
     if ( WasCreated() )
         return;
-    
+
     // wxWindow::SetSizer will be called at end
     wxBoxSizer *windowSizer = new wxBoxSizer(wxVERTICAL);
-    
+
     wxBoxSizer *mainColumn = new wxBoxSizer(wxVERTICAL);
     windowSizer->Add(
         mainColumn,
@@ -440,11 +440,11 @@ void wxWizard::DoCreateControls()
         wxALL | wxEXPAND, // Border all around, horizontal stretching
         5 // Border width
     );
-    
+
     AddBitmapRow(mainColumn);
     AddStaticLine(mainColumn);
     AddButtonRow(mainColumn);
-    
+
     // wxWindow::SetSizer should be followed by wxWindow::Fit, but
     // this is done in FinishLayout anyway so why duplicate it
     SetSizer(windowSizer);
@@ -464,7 +464,7 @@ void wxWizard::FinishLayout()
         wxEXPAND | wxALL, // Vertically stretchable
         m_sizerPage->Border()
     );
-    
+
     GetSizer()->SetSizeHints(this);
     if ( m_posWizard == wxDefaultPosition )
         CentreOnScreen();
@@ -473,7 +473,7 @@ void wxWizard::FinishLayout()
 void wxWizard::FitToPage(const wxWizardPage *page)
 {
     wxCHECK_RET(!m_started,wxT("wxWizard::FitToPage after RunWizard"));
-    
+
     while ( page )
     {
         wxSize size = page->GetBestSize();
@@ -490,14 +490,14 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
 
     // we'll use this to decide whether we have to change the label of this
     // button or not (initially the label is "Next")
-    bool btnLabelWasNext = TRUE;
+    bool btnLabelWasNext = true;
 
     // Modified 10-20-2001 Robert Cavanaugh.
     // Fixed bug for displaying a new bitmap
     // in each *consecutive* page
 
     // flag to indicate if this page uses a new bitmap
-    bool bmpIsDefault = TRUE;
+    bool bmpIsDefault = true;
 
     // use these labels to determine if we need to change the bitmap
     // for this page
@@ -512,7 +512,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
              !event.IsAllowed() )
         {
             // vetoed by the page
-            return FALSE;
+            return false;
         }
 
         m_page->Hide();
@@ -537,15 +537,15 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
 
         // and notify the user code (this is especially useful for modeless
         // wizards)
-        wxWizardEvent event(wxEVT_WIZARD_FINISHED, GetId(), FALSE, 0);
+        wxWizardEvent event(wxEVT_WIZARD_FINISHED, GetId(), false, 0);
         (void)GetEventHandler()->ProcessEvent(event);
 
-        return TRUE;
+        return true;
     }
 
     // position and show the new page
     (void)m_page->TransferDataToWindow();
-    
+
     // wxWizardSizer::RecalcSizes wants to be called when m_page changes
     m_sizerPage->RecalcSizes();
 
@@ -554,7 +554,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     if ( m_page->GetBitmap().Ok() )
     {
         bmpCur = m_page->GetBitmap();
-        bmpIsDefault = FALSE;
+        bmpIsDefault = false;
     }
 
 #if wxUSE_STATBMP
@@ -596,22 +596,22 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     m_page->Show();
     m_page->SetFocus();
 
-    return TRUE;
+    return true;
 }
 
 bool wxWizard::RunWizard(wxWizardPage *firstPage)
 {
-    wxCHECK_MSG( firstPage, FALSE, wxT("can't run empty wizard") );
-    
+    wxCHECK_MSG( firstPage, false, wxT("can't run empty wizard") );
+
     // Set before FinishLayout to enable wxWizardSizer::GetMaxChildSize
     m_started = true;
-    
+
     // This cannot be done sooner, because user can change layout options
     // up to this moment
     FinishLayout();
-    
-    // can't return FALSE here because there is no old page
-    (void)ShowPage(firstPage, TRUE /* forward */);
+
+    // can't return false here because there is no old page
+    (void)ShowPage(firstPage, true /* forward */);
 
     return ShowModal() == wxID_OK;
 }
@@ -648,14 +648,14 @@ wxSize wxWizard::GetManualPageSize() const
     static const int DEFAULT_PAGE_HEIGHT = 290;
 
     wxSize totalPageSize(DEFAULT_PAGE_WIDTH,DEFAULT_PAGE_HEIGHT);
-    
+
     totalPageSize.IncTo(m_sizePage);
-    
+
     if ( m_statbmp )
     {
         totalPageSize.IncTo(wxSize(0, m_bitmap.GetHeight()));
     }
-    
+
     return totalPageSize;
 }
 
@@ -665,7 +665,7 @@ void wxWizard::OnCancel(wxCommandEvent& WXUNUSED(eventUnused))
     // page, but a small extra check won't hurt
     wxWindow *win = m_page ? (wxWindow *)m_page : (wxWindow *)this;
 
-    wxWizardEvent event(wxEVT_WIZARD_CANCEL, GetId(), FALSE, m_page);
+    wxWizardEvent event(wxEVT_WIZARD_CANCEL, GetId(), false, m_page);
     if ( !win->GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
     {
         // no objections - close the dialog
@@ -716,7 +716,7 @@ void wxWizard::OnHelp(wxCommandEvent& WXUNUSED(event))
         // Create and send the help event to the specific page handler
         // event data contains the active page so that context-sensitive
         // help is possible
-        wxWizardEvent eventHelp(wxEVT_WIZARD_HELP, GetId(), TRUE, m_page);
+        wxWizardEvent eventHelp(wxEVT_WIZARD_HELP, GetId(), true, m_page);
         (void)m_page->GetEventHandler()->ProcessEvent(eventHelp);
     }
 }

@@ -32,7 +32,7 @@ class WXDLLIMPEXP_ADV wxExtHelpMapList;
 /// Default browser name.
 #   define WXEXTHELP_DEFAULTBROWSER _T("netscape")
 /// Is default browse a variant of netscape?
-#   define WXEXTHELP_DEFAULTBROWSER_IS_NETSCAPE TRUE
+#   define WXEXTHELP_DEFAULTBROWSER_IS_NETSCAPE true
 #endif
 
 /**
@@ -55,7 +55,7 @@ class WXDLLIMPEXP_ADV wxExtHelpMapList;
 */
 
 class WXDLLIMPEXP_ADV wxExtHelpController : public wxHelpControllerBase
-{      
+{
 DECLARE_CLASS(wxExtHelpController)
    public:
    wxExtHelpController();
@@ -65,9 +65,9 @@ DECLARE_CLASS(wxExtHelpController)
        The Netscape support will check whether Netscape is already
        running (by looking at the .netscape/lock file in the user's
        home directory) and tell it to load the page into the existing
-       window. 
+       window.
        @param browsername The command to call a browser/html viewer.
-       @param isNetscape Set this to TRUE if the browser is some variant of Netscape.
+       @param isNetscape Set this to true if the browser is some variant of Netscape.
    */
    // Obsolete form
    void SetBrowser(const wxString & browsername = WXEXTHELP_DEFAULTBROWSER,
@@ -106,7 +106,7 @@ DECLARE_CLASS(wxExtHelpController)
        @file Name of help directory.
        @return true on success
    */
-   virtual bool LoadFile(const wxString& file = wxT(""));
+   virtual bool LoadFile(const wxString& file = wxEmptyString);
 
    /** Display list of all help entries.
        @return true on success
@@ -144,11 +144,11 @@ DECLARE_CLASS(wxExtHelpController)
    virtual void SetFrameParameters(const wxString& WXUNUSED(title),
                                    const wxSize& WXUNUSED(size),
                                    const wxPoint& WXUNUSED(pos) = wxDefaultPosition,
-                                   bool WXUNUSED(newFrameEachTime) = FALSE)
+                                   bool WXUNUSED(newFrameEachTime) = false)
       {
          // does nothing by default
       }
-   /// Obtains the latest settings used by the help frame and the help 
+   /// Obtains the latest settings used by the help frame and the help
    /// frame.
    virtual wxFrame *GetFrameParameters(wxSize *WXUNUSED(size) = NULL,
                                    wxPoint *WXUNUSED(pos) = NULL,

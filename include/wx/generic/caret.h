@@ -68,7 +68,7 @@ protected:
 
     // draw the caret on the given DC
     void DoDraw(wxDC *dc);
-    
+
 private:
     // GTK specific initialization
     void InitGeneric();
@@ -80,8 +80,8 @@ private:
                   m_yOld;
 
     wxCaretTimer  m_timer;
-    bool          m_blinkedOut,     // TRUE => caret hidden right now
-                  m_hasFocus;       // TRUE => our window has focus
+    bool          m_blinkedOut,     // true => caret hidden right now
+                  m_hasFocus;       // true => our window has focus
 };
 
 #endif // _WX_CARET_H_

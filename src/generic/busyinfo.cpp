@@ -25,7 +25,7 @@
 
 
 wxInfoFrame::wxInfoFrame(wxWindow *parent, const wxString& message)
-           : wxFrame(parent, -1, wxT("Busy"),
+           : wxFrame(parent, wxID_ANY, wxT("Busy"),
                      wxDefaultPosition, wxDefaultSize,
 #if defined(__WXX11__)
                      wxTHICK_FRAME
@@ -35,7 +35,7 @@ wxInfoFrame::wxInfoFrame(wxWindow *parent, const wxString& message)
                      | wxFRAME_TOOL_WINDOW)
 {
     wxPanel *panel = new wxPanel( this );
-    wxStaticText *text = new wxStaticText(panel, -1, message);
+    wxStaticText *text = new wxStaticText(panel, wxID_ANY, message);
 
     panel->SetCursor(*wxHOURGLASS_CURSOR);
     text->SetCursor(*wxHOURGLASS_CURSOR);
@@ -104,9 +104,9 @@ wxInfoFrame::wxInfoFrame(wxWindow *parent, const wxString& message)
 wxBusyInfo::wxBusyInfo(const wxString& message, wxWindow *parent)
 {
     m_InfoFrame = new wxInfoFrame( parent, message);
-    m_InfoFrame->Show(TRUE);
+    m_InfoFrame->Show(true);
 #ifdef __WXMAC__
-	m_InfoFrame->Update() ;
+    m_InfoFrame->Update() ;
 #else
     wxYield();
     m_InfoFrame->Refresh();
@@ -116,7 +116,7 @@ wxBusyInfo::wxBusyInfo(const wxString& message, wxWindow *parent)
 
 wxBusyInfo::~wxBusyInfo()
 {
-    m_InfoFrame->Show(FALSE);
+    m_InfoFrame->Show(false);
     m_InfoFrame->Close();
     wxYield();
 }

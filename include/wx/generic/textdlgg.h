@@ -78,9 +78,9 @@ wxGetTextFromUser(const wxString& message,
                   const wxString& caption = wxGetTextFromUserPromptStr,
                   const wxString& default_value = wxEmptyString,
                   wxWindow *parent = (wxWindow *) NULL,
-                  int x = -1,
-                  int y = -1,
-                  bool centre = TRUE);
+                  int x = wxDefaultPosition.x,
+                  int y = wxDefaultPosition.y,
+                  bool centre = true);
 
 wxString WXDLLEXPORT
 wxGetPasswordFromUser(const wxString& message,

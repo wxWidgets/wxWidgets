@@ -51,16 +51,16 @@ bool wxStaticLine::Create( wxWindow *parent,
     m_statbox = NULL;
 
     if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
-        return FALSE;
+        return false;
 
     // ok, this is ugly but it's better than nothing: use a thin static box to
     // emulate static line
 
     wxSize sizeReal = AdjustSize(size);
 
-    m_statbox = new wxStaticBox(parent, id, wxT(""), pos, sizeReal, style, name);
+    m_statbox = new wxStaticBox(parent, id, wxEmptyString, pos, sizeReal, style, name);
 
-    return TRUE;
+    return true;
 }
 
 wxStaticLine::~wxStaticLine()

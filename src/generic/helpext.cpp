@@ -137,7 +137,7 @@ wxExtHelpController::DisplayHelp(const wxString &relativeURL)
 //      return false;
 //   }
 //   else
-      return TRUE;
+      return true;
 
 #elif defined(__DOS__)
 
@@ -173,7 +173,7 @@ wxExtHelpController::DisplayHelp(const wxString &relativeURL)
                  << WXEXTHELP_SEPARATOR << relativeURL << wxT(")");
          success = wxExecute(command);
          if(success != 0 ) // returns PID on success
-            return TRUE;
+            return true;
       }
    }
 #endif
@@ -273,7 +273,7 @@ bool wxExtHelpController::LoadFile(const wxString& ifile)
 #endif
 
       if(! wxDirExists(file))
-         return FALSE;
+         return false;
 
       mapFile << file << WXEXTHELP_SEPARATOR << WXEXTHELP_MAPFILE;
    }
@@ -281,7 +281,7 @@ bool wxExtHelpController::LoadFile(const wxString& ifile)
       mapFile = m_MapFile;
 
    if(! wxFileExists(mapFile))
-      return FALSE;
+      return false;
 
    DeleteList();
    m_MapList = new wxList;
@@ -289,7 +289,7 @@ bool wxExtHelpController::LoadFile(const wxString& ifile)
 
    FILE *input = wxFopen(mapFile,wxT("rt"));
    if(! input)
-      return FALSE;
+      return false;
    do
    {
       if(fgets(buffer,WXEXTHELP_BUFLEN,input) && *buffer != WXEXTHELP_COMMENTCHAR)
@@ -301,13 +301,13 @@ bool wxExtHelpController::LoadFile(const wxString& ifile)
             break; // error
          for(i=0; isdigit(buffer[i])||isspace(buffer[i])||buffer[i]=='-'; i++)
             ; // find begin of URL
-         url = wxT("");
+         url = wxEmptyString;
          while(buffer[i] && ! isspace(buffer[i]) && buffer[i] !=
                WXEXTHELP_COMMENTCHAR)
             url << (wxChar) buffer[i++];
          while(buffer[i] && buffer[i] != WXEXTHELP_COMMENTCHAR)
             i++;
-         doc = wxT("");
+         doc = wxEmptyString;
          if(buffer[i])
             doc = wxString::FromAscii( (buffer + i + 1) ); // skip the comment character
          m_MapList->Append(new wxExtHelpMapEntry(id,url,doc));
@@ -317,7 +317,7 @@ bool wxExtHelpController::LoadFile(const wxString& ifile)
    fclose(input);
 
    m_MapFile = file; // now it's valid
-   return TRUE;
+   return true;
 }
 
 
@@ -325,7 +325,7 @@ bool
 wxExtHelpController::DisplayContents()
 {
    if(! m_NumOfEntries)
-      return FALSE;
+      return false;
 
    wxString contents;
    wxList::compatibility_iterator node = m_MapList->GetFirst();
@@ -341,7 +341,7 @@ wxExtHelpController::DisplayContents()
       node = node->GetNext();
    }
 
-   bool rc = FALSE;
+   bool rc = false;
    wxString file;
    file << m_MapFile << WXEXTHELP_SEPARATOR << contents;
    if(file.Contains(wxT('#')))
@@ -350,14 +350,14 @@ wxExtHelpController::DisplayContents()
       rc = DisplaySection(CONTENTS_ID);
 
    // if not found, open homemade toc:
-   return rc ? TRUE : KeywordSearch(wxT(""));
+   return rc ? true : KeywordSearch(wxEmptyString);
 }
 
 bool
 wxExtHelpController::DisplaySection(int sectionNo)
 {
    if(! m_NumOfEntries)
-      return FALSE;
+      return false;
 
    wxBusyCursor b; // display a busy cursor
    wxList::compatibility_iterator node = m_MapList->GetFirst();
@@ -369,7 +369,7 @@ wxExtHelpController::DisplaySection(int sectionNo)
          return DisplayHelp(entry->url);
       node = node->GetNext();
    }
-   return FALSE;
+   return false;
 }
 
 bool wxExtHelpController::DisplaySection(const wxString& section)
@@ -393,7 +393,7 @@ wxExtHelpController::KeywordSearch(const wxString& k,
                                    wxHelpSearchMode WXUNUSED(mode))
 {
    if(! m_NumOfEntries)
-      return FALSE;
+      return false;
 
    wxString     *choices = new wxString[m_NumOfEntries];
    wxString     *urls = new wxString[m_NumOfEntries];
@@ -419,7 +419,7 @@ wxExtHelpController::KeywordSearch(const wxString& k,
             // choices[idx] = (**i).doc.Contains((**i).doc.Before(WXEXTHELP_COMMENTCHAR));
             //if(choices[idx].IsEmpty()) // didn't contain the ';'
             //   choices[idx] = (**i).doc;
-            choices[idx] = wxT("");
+            choices[idx] = wxEmptyString;
             for(j=0;entry->doc.c_str()[j]
                    && entry->doc.c_str()[j] != WXEXTHELP_COMMENTCHAR; j++)
                choices[idx] << entry->doc.c_str()[j];
@@ -434,7 +434,7 @@ wxExtHelpController::KeywordSearch(const wxString& k,
    else if(idx == 0)
    {
       wxMessageBox(_("No entries found."));
-      rc = FALSE;
+      rc = false;
    }
    else
    {
@@ -444,7 +444,7 @@ wxExtHelpController::KeywordSearch(const wxString& k,
       if(idx != -1)
          rc = DisplayHelp(urls[idx]);
       else
-         rc = FALSE;
+         rc = false;
    }
    delete[] urls;
    delete[] choices;
@@ -455,7 +455,7 @@ wxExtHelpController::KeywordSearch(const wxString& k,
 
 bool wxExtHelpController::Quit()
 {
-   return TRUE;
+   return true;
 }
 
 void wxExtHelpController::OnQuit()

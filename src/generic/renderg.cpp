@@ -125,7 +125,7 @@ void wxRendererGeneric::Cleanup()
 {
     if (sm_rendererGeneric)
         delete sm_rendererGeneric;
-    
+
     sm_rendererGeneric = NULL;
 }
 
@@ -304,7 +304,7 @@ wxRendererGeneric::DrawSplitterSash(wxWindow *win,
 
     const wxCoord h = size.y;
     wxCoord offset = 0;
-    
+
     // If we're drawing the border, draw the sash 3d lines shorter
     if ( win->HasFlag(wxSP_3DBORDER) )
     {
@@ -312,8 +312,8 @@ wxRendererGeneric::DrawSplitterSash(wxWindow *win,
     }
 
     dc.SetPen(*wxTRANSPARENT_PEN);
-    dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE)));    
-    
+    dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE)));
+
     if ( win->HasFlag(wxSP_3DSASH) )
     {
         // Draw the 3D sash

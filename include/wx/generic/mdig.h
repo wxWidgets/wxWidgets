@@ -160,10 +160,10 @@ public:
     // no size hints
     virtual void SetSizeHints( int WXUNUSED(minW),
                                int WXUNUSED(minH),
-                               int WXUNUSED(maxW) = -1,
-                               int WXUNUSED(maxH) = -1,
-                               int WXUNUSED(incW) = -1,
-                               int WXUNUSED(incH) = -1) {}
+                               int WXUNUSED(maxW) = wxDefaultSize.x,
+                               int WXUNUSED(maxH) = wxDefaultSize.y,
+                               int WXUNUSED(incW) = wxDefaultSize.x,
+                               int WXUNUSED(incH) = wxDefaultSize.y) {}
 
 #if wxUSE_TOOLBAR
     // no toolbar bars
@@ -179,15 +179,15 @@ public:
     void SetIcons( const wxIconBundle& WXUNUSED(icons) ) { }
 
     // no maximize etc
-    virtual void Maximize( bool WXUNUSED(maximize) = TRUE) { /* Has no effect */ }
+    virtual void Maximize( bool WXUNUSED(maximize) = true) { /* Has no effect */ }
     virtual void Restore() { /* Has no effect */ }
-    virtual void Iconize(bool WXUNUSED(iconize)  = TRUE) { /* Has no effect */ }
-    virtual bool IsMaximized() const { return TRUE; }
-    virtual bool IsIconized() const { return FALSE; }
-    virtual bool ShowFullScreen(bool WXUNUSED(show), long WXUNUSED(style)) { return FALSE; }
-    virtual bool IsFullScreen() const { return FALSE; }
+    virtual void Iconize(bool WXUNUSED(iconize)  = true) { /* Has no effect */ }
+    virtual bool IsMaximized() const { return true; }
+    virtual bool IsIconized() const { return false; }
+    virtual bool ShowFullScreen(bool WXUNUSED(show), long WXUNUSED(style)) { return false; }
+    virtual bool IsFullScreen() const { return false; }
 
-    virtual bool IsTopLevel() const { return FALSE; }
+    virtual bool IsTopLevel() const { return false; }
 
     void OnMenuHighlight(wxMenuEvent& event);
     void OnActivate(wxActivateEvent& event);
@@ -287,8 +287,8 @@ public:
      }
 
     wxMDIChildFrame * GetActiveChild() const ;
-    
-    
+
+
 private:
     DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
 };

@@ -80,10 +80,10 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
   if ( !wxWindow::Create(parent, id,
                          wxDefaultPosition, wxDefaultSize,
                          style | wxTAB_TRAVERSAL, name) )
-      return FALSE;
+      return false;
 
   // The status bar should have a themed background
-  SetThemeEnabled( TRUE );
+  SetThemeEnabled( true );
 
   // Don't wish this to be found as a child
 #ifndef __WXMAC__
@@ -102,11 +102,11 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
 
   int height = (int)( (11*y)/10 + 2*GetBorderY());
 
-  SetSize(-1, -1, -1, height);
+  SetSize(wxDefaultPosition.x, wxDefaultPosition.y, wxDefaultSize.x, height);
 
   SetFieldsCount(1);
 
-  return TRUE;
+  return true;
 }
 
 
@@ -125,7 +125,7 @@ wxSize wxStatusBarGeneric::DoGetBestSize() const
     height = (int)( (11*y)/10 + 2*GetBorderY());
 
     return wxSize(width, height);
-}    
+}
 
 void wxStatusBarGeneric::SetFieldsCount(int number, const int *widths)
 {
@@ -159,7 +159,7 @@ void wxStatusBarGeneric::SetStatusText(const wxString& text, int number)
         wxRect rect;
         GetFieldRect(number, rect);
 
-        Refresh( TRUE, &rect );
+        Refresh( true, &rect );
     }
 }
 
@@ -311,7 +311,7 @@ void wxStatusBarGeneric::DrawField(wxDC& dc, int i)
   // Get the position and size of the field's internal bounding rectangle
 bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
 {
-    wxCHECK_MSG( (n >= 0) && (n < m_nFields), FALSE,
+    wxCHECK_MSG( (n >= 0) && (n < m_nFields), false,
                  _T("invalid status bar field index") );
 
     // FIXME: workarounds for OS/2 bugs have nothing to do here (VZ)
@@ -345,7 +345,7 @@ bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
     rect.width = m_widthsAbs[n] - 2*m_borderX;
     rect.height = height - 2*m_borderY;
 
-    return TRUE;
+    return true;
 }
 
 // Initialize colours
@@ -400,7 +400,7 @@ void wxStatusBarGeneric::SetMinHeight(int height)
 
     if ( height > (11*y)/10 )
     {
-        SetSize(-1, -1, -1, height + 2*m_borderY);
+        SetSize(wxDefaultPosition.x, wxDefaultPosition.y, wxDefaultSize.x, height + 2*m_borderY);
     }
 }
 
@@ -432,10 +432,10 @@ void wxStatusBarGeneric::OnLeftDown(wxMouseEvent& event)
     }
     else
     {
-        event.Skip( TRUE );
+        event.Skip( true );
     }
 #else
-    event.Skip( TRUE );
+    event.Skip( true );
 #endif
 }
 
@@ -466,10 +466,10 @@ void wxStatusBarGeneric::OnRightDown(wxMouseEvent& event)
     }
     else
     {
-        event.Skip( TRUE );
+        event.Skip( true );
     }
 #else
-    event.Skip( TRUE );
+    event.Skip( true );
 #endif
 }
 

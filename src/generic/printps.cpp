@@ -39,7 +39,7 @@
     #include "wx/msgdlg.h"
     #include "wx/intl.h"
     #include "wx/progdlg.h"
-    #include "wx/log.h"									  
+    #include "wx/log.h"
 #endif
 
 #include "wx/generic/printps.h"
@@ -57,7 +57,7 @@
 
     IMPLEMENT_DYNAMIC_CLASS(wxPostScriptPrinter, wxPrinterBase)
     IMPLEMENT_CLASS(wxPostScriptPrintPreview, wxPrintPreviewBase)
-    
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -77,18 +77,18 @@ wxPostScriptPrinter::~wxPostScriptPrinter()
 
 bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 {
-    sm_abortIt = FALSE;
+    sm_abortIt = false;
     sm_abortWindow = (wxWindow *) NULL;
 
     if (!printout)
     {
         sm_lastError = wxPRINTER_ERROR;
-        return FALSE;
+        return false;
     }
 
-    printout->SetIsPreview(FALSE);
+    printout->SetIsPreview(false);
 
-#if 0    
+#if 0
     // 4/9/99, JACS: this is a silly place to allow preparation, considering
     // the DC and no parameters have been set in the printout object.
     // Moved further down.
@@ -103,7 +103,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
     if (maxPage == 0)
     {
         sm_lastError = wxPRINTER_ERROR;
-        return FALSE;
+        return false;
     }
 
     m_printDialogData.SetMinPage(minPage);
@@ -115,7 +115,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
 
     if (minPage != 0)
     {
-        m_printDialogData.EnablePageNumbers(TRUE);
+        m_printDialogData.EnablePageNumbers(true);
         if (m_printDialogData.GetFromPage() < m_printDialogData.GetMinPage())
             m_printDialogData.SetFromPage(m_printDialogData.GetMinPage());
         else if (m_printDialogData.GetFromPage() > m_printDialogData.GetMaxPage())
@@ -126,7 +126,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
             m_printDialogData.SetToPage(m_printDialogData.GetMinPage());
     }
     else
-        m_printDialogData.EnablePageNumbers(FALSE);
+        m_printDialogData.EnablePageNumbers(false);
 #endif
 
     if (m_printDialogData.GetMinPage() < 1)
@@ -140,7 +140,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
     {
         dc = PrintDialog(parent);
         if (!dc)
-            return FALSE;
+            return false;
     }
     else
     {
@@ -152,7 +152,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
     {
         if (dc) delete dc;
         sm_lastError = wxPRINTER_ERROR;
-        return FALSE;
+        return false;
     }
 
     wxSize ScreenPixels = wxGetDisplaySize();
@@ -186,14 +186,14 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
     {
         sm_lastError = wxPRINTER_ERROR;
         wxEndBusyCursor();
-        return FALSE;
+        return false;
     }
 
     // Only set min and max, because from and to have been
     // set by the user
     m_printDialogData.SetMinPage(minPage);
     m_printDialogData.SetMaxPage(maxPage);
-    
+
     int
        pagesPerCopy = m_printDialogData.GetToPage()-m_printDialogData.GetFromPage()+1,
        totalPages = pagesPerCopy * m_printDialogData.GetNoCopies(),
@@ -210,7 +210,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
 
     sm_lastError = wxPRINTER_NO_ERROR;
 
-    bool keepGoing = TRUE;
+    bool keepGoing = true;
 
     int copyCount;
     for (copyCount = 1; copyCount <= m_printDialogData.GetNoCopies(); copyCount ++)
@@ -234,7 +234,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
         {
             if (sm_abortIt)
             {
-                keepGoing = FALSE;
+                keepGoing = false;
                 sm_lastError = wxPRINTER_CANCELLED;
                 break;
             }
@@ -250,12 +250,12 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
                }
                else
                {
-                  sm_abortIt = TRUE;
+                  sm_abortIt = true;
                   sm_lastError = wxPRINTER_CANCELLED;
-                  keepGoing = FALSE;
+                  keepGoing = false;
                }
             }
-	    wxYield();
+            wxYield();
         }
         printout->OnEndDocument();
     }
@@ -295,7 +295,7 @@ wxDC* wxPostScriptPrinter::PrintDialog(wxWindow *parent)
 bool wxPostScriptPrinter::Setup(wxWindow *parent)
 {
     wxGenericPrintDialog* dialog = new wxGenericPrintDialog(parent, & m_printDialogData);
-    dialog->GetPrintDialogData().SetSetupDialog(TRUE);
+    dialog->GetPrintDialogData().SetSetupDialog(true);
 
     int ret = dialog->ShowModal();
 
@@ -343,7 +343,7 @@ wxPostScriptPrintPreview::~wxPostScriptPrintPreview()
 bool wxPostScriptPrintPreview::Print(bool interactive)
 {
     if (!m_printPrintout)
-        return FALSE;
+        return false;
     wxPostScriptPrinter printer(& m_printDialogData);
     return printer.Print(m_previewFrame, m_printPrintout, interactive);
 }
@@ -365,7 +365,7 @@ void wxPostScriptPrintPreview::DetermineScaling()
 
         m_previewPrintout->SetPPIScreen( (int) ((ScreenPixels.GetWidth() * 25.4) / ScreenMM.GetWidth()),
                                          (int) ((ScreenPixels.GetHeight() * 25.4) / ScreenMM.GetHeight()) );
-        m_previewPrintout->SetPPIPrinter(wxPostScriptDC::GetResolution(), wxPostScriptDC::GetResolution()); 
+        m_previewPrintout->SetPPIPrinter(wxPostScriptDC::GetResolution(), wxPostScriptDC::GetResolution());
 
         wxSize sizeDevUnits(paper->GetSizeDeviceUnits());
         sizeDevUnits.x = (wxCoord)((float)sizeDevUnits.x * wxPostScriptDC::GetResolution() / 72.0);

@@ -43,7 +43,7 @@ enum wxSashEdgePosition {
 class WXDLLIMPEXP_ADV wxSashEdge
 {
 public:
-    wxSashEdge() { m_show = FALSE; m_border = FALSE; m_margin = 0; }
+    wxSashEdge() { m_show = false; m_border = false; m_margin = 0; }
 
     bool    m_show;     // Is the sash showing?
     bool    m_border;   // Do we draw a border?
@@ -77,7 +77,7 @@ public:
     }
 
     // Normal constructor
-    wxSashWindow(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
+    wxSashWindow(wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = wxSW_3D|wxCLIP_CHILDREN, const wxString& name = wxT("sashWindow"))
     {
         Init();
@@ -86,7 +86,7 @@ public:
 
     ~wxSashWindow();
 
-    bool Create(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
+    bool Create(wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = wxSW_3D|wxCLIP_CHILDREN, const wxString& name = wxT("sashWindow"));
 
     // Set whether there's a sash in this position
@@ -226,7 +226,7 @@ public:
     //// dragging the top below the bottom)
     inline void SetDragStatus(wxSashDragStatus status) { m_dragStatus = status; }
     inline wxSashDragStatus GetDragStatus() const { return m_dragStatus; }
-    
+
 private:
     wxSashEdgePosition  m_edge;
     wxRect              m_dragRect;
@@ -239,7 +239,7 @@ private:
 typedef void (wxEvtHandler::*wxSashEventFunction)(wxSashEvent&);
 
 #define EVT_SASH_DRAGGED(id, fn) \
-    DECLARE_EVENT_TABLE_ENTRY( wxEVT_SASH_DRAGGED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxSashEventFunction, & fn ), NULL ),
+    DECLARE_EVENT_TABLE_ENTRY( wxEVT_SASH_DRAGGED, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxSashEventFunction, & fn ), NULL ),
 #define EVT_SASH_DRAGGED_RANGE(id1, id2, fn) \
     DECLARE_EVENT_TABLE_ENTRY( wxEVT_SASH_DRAGGED, id1, id2, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxSashEventFunction, & fn ), NULL ),
 

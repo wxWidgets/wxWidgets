@@ -49,7 +49,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxTabControl, wxObject)
 wxTabControl::wxTabControl(wxTabView *v)
 {
   m_view = v;
-  m_isSelected = FALSE;
+  m_isSelected = false;
   m_offsetX = 0;
   m_offsetY = 0;
   m_width = 0;
@@ -502,9 +502,9 @@ bool wxTabControl::HitTest(int x, int y) const
   int tabY2 = tabY1 + GetHeight();
 
   if (x >= tabX1 && y >= tabY1 && x <= tabX2 && y <= tabY2)
-    return TRUE;
+    return true;
   else
-    return FALSE;
+    return false;
 }
 
 IMPLEMENT_DYNAMIC_CLASS(wxTabView, wxObject)
@@ -540,7 +540,7 @@ wxTabView::wxTabView(long style)
 
 wxTabView::~wxTabView()
 {
-  ClearTabs(TRUE);
+  ClearTabs(true);
 }
 
 // Automatically positions tabs
@@ -631,22 +631,22 @@ bool wxTabView::RemoveTab(int id)
 
         // The layout has changed
         LayoutTabs();
-        return TRUE;
+        return true;
       }
       tabNode = tabNode->GetNext();
     }
     layerNode = layerNode->GetNext();
   }
-  return FALSE;
+  return false;
 }
 
 bool wxTabView::SetTabText(int id, const wxString& label)
 {
     wxTabControl* control = FindTabControlForId(id);
     if (!control)
-      return FALSE;
+      return false;
     control->SetLabel(label);
-    return TRUE;
+    return true;
 }
 
 wxString wxTabView::GetTabText(int id) const
@@ -877,11 +877,11 @@ void wxTabView::Draw(wxDC& dc)
 #endif
 }
 
-// Process mouse event, return FALSE if we didn't process it
+// Process mouse event, return false if we didn't process it
 bool wxTabView::OnEvent(wxMouseEvent& event)
 {
   if (!event.LeftDown())
-    return FALSE;
+    return false;
 
   wxCoord x, y;
   event.GetPosition(&x, &y);
@@ -911,16 +911,16 @@ bool wxTabView::OnEvent(wxMouseEvent& event)
   }
 
   if (!hitControl)
-    return FALSE;
+    return false;
 
   wxTabControl *currentTab = FindTabControlForId(m_tabSelection);
 
   if (hitControl == currentTab)
-    return FALSE;
+    return false;
 
   ChangeTab(hitControl);
 
-  return TRUE;
+  return true;
 }
 
 bool wxTabView::ChangeTab(wxTabControl *control)
@@ -931,28 +931,28 @@ bool wxTabView::ChangeTab(wxTabControl *control)
     oldTab = currentTab->GetId();
 
   if (control == currentTab)
-    return TRUE;
+    return true;
 
   if (m_layers.GetCount() == 0)
-    return FALSE;
+    return false;
 
   if (!OnTabPreActivate(control->GetId(), oldTab))
-    return FALSE;
+    return false;
 
   // Move the tab to the bottom
   MoveSelectionTab(control);
 
   if (currentTab)
-    currentTab->SetSelected(FALSE);
+    currentTab->SetSelected(false);
 
-  control->SetSelected(TRUE);
+  control->SetSelected(true);
   m_tabSelection = control->GetId();
 
   OnTabActivate(control->GetId(), oldTab);
 
   // Leave window refresh for the implementing window
 
-  return TRUE;
+  return true;
 }
 
 // Move the selected tab to the bottom layer, if necessary,
@@ -960,7 +960,7 @@ bool wxTabView::ChangeTab(wxTabControl *control)
 bool wxTabView::MoveSelectionTab(wxTabControl *control)
 {
   if (m_layers.GetCount() == 0)
-    return FALSE;
+    return false;
 
   wxTabLayer *firstLayer = (wxTabLayer *)m_layers.GetFirst()->GetData();
 
@@ -972,14 +972,14 @@ bool wxTabView::MoveSelectionTab(wxTabControl *control)
     int col = 0;
     wxList::compatibility_iterator thisNode = FindTabNodeAndColumn(control, &col);
     if (!thisNode)
-      return FALSE;
+      return false;
     wxList::compatibility_iterator otherNode = firstLayer->Item(col);
     if (!otherNode)
-      return FALSE;
+      return false;
 
     // If this is already in the bottom layer, return now
     if (otherNode == thisNode)
-      return TRUE;
+      return true;
 
     wxTabControl *otherTab = (wxTabControl *)otherNode->GetData();
 
@@ -1003,7 +1003,7 @@ bool wxTabView::MoveSelectionTab(wxTabControl *control)
     thisNode->SetData(otherTab);
     otherNode->SetData(control);
   }
-  return TRUE;
+  return true;
 }
 
 // Called when a tab is activated
@@ -1051,7 +1051,7 @@ void wxTabView::SetTabSelection(int sel, bool activateTool)
   }
 
   if (oldControl)
-    oldControl->SetSelected(FALSE);
+    oldControl->SetSelected(false);
 
   m_tabSelection = sel;
 
@@ -1233,7 +1233,7 @@ wxPanelTabView::wxPanelTabView(wxPanel *pan, long style)
 
 wxPanelTabView::~wxPanelTabView(void)
 {
-  ClearWindows(TRUE);
+  ClearWindows(true);
 }
 
 // Called when a tab is activated
@@ -1246,9 +1246,9 @@ void wxPanelTabView::OnTabActivate(int activateId, int deactivateId)
   wxWindow *newWindow = GetTabWindow(activateId);
 
   if (oldWindow)
-    oldWindow->Show(FALSE);
+    oldWindow->Show(false);
   if (newWindow)
-    newWindow->Show(TRUE);
+    newWindow->Show(true);
 
   m_panel->Refresh();
 }
@@ -1258,7 +1258,7 @@ void wxPanelTabView::AddTabWindow(int id, wxWindow *window)
 {
   wxASSERT(m_tabWindows.find(id) == m_tabWindows.end());
   m_tabWindows[id] = window;
-  window->Show(FALSE);
+  window->Show(false);
 }
 
 wxWindow *wxPanelTabView::GetTabWindow(int id) const
@@ -1280,8 +1280,8 @@ void wxPanelTabView::ShowWindowForTab(int id)
   if (newWindow == m_currentWindow)
     return;
   if (m_currentWindow)
-    m_currentWindow->Show(FALSE);
-  newWindow->Show(TRUE);
+    m_currentWindow->Show(false);
+  newWindow->Show(true);
   newWindow->Refresh();
 }
 

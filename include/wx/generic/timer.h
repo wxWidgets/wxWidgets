@@ -29,7 +29,7 @@ public:
         { Init(); }
     ~wxTimer();
 
-    virtual bool Start(int millisecs = -1, bool oneShot = FALSE);
+    virtual bool Start(int millisecs = -1, bool oneShot = false);
     virtual void Stop();
 
     virtual bool IsRunning() const;
@@ -42,7 +42,7 @@ protected:
 
 private:
     wxTimerDesc *m_desc;
-    
+
     DECLARE_ABSTRACT_CLASS(wxTimer)
 };
 

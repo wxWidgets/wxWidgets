@@ -407,7 +407,7 @@ void wxVScrolledWindow::OnScroll(wxScrollWinEvent& event)
     {
         lineFirstNew = event.GetPosition();
     }
-        
+
     else // unknown scroll event?
     {
         wxFAIL_MSG( _T("unknown scroll event type?") );

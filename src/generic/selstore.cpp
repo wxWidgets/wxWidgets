@@ -60,7 +60,7 @@ bool wxSelectionStore::SelectItem(size_t item, bool select)
         {
             m_itemsSel.AddAt(item, index);
 
-            return TRUE;
+            return true;
         }
     }
     else // reset to default state
@@ -68,11 +68,11 @@ bool wxSelectionStore::SelectItem(size_t item, bool select)
         if ( isSel )
         {
             m_itemsSel.RemoveAt(index);
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool wxSelectionStore::SelectRange(size_t itemFrom, size_t itemTo,

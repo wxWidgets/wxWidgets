@@ -63,7 +63,7 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
                                                 const wxString& caption,
                                                 long style,
                                                 const wxPoint& pos)
-                      : wxDialog( parent, -1, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE )
+                      : wxDialog( parent, wxID_ANY, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE )
 {
     m_dialogStyle = style;
 
@@ -99,7 +99,7 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
                 bitmap = wxArtProvider::GetIcon(wxART_QUESTION, wxART_MESSAGE_BOX);
                 break;
         }
-        wxStaticBitmap *icon = new wxStaticBitmap(this, -1, bitmap);
+        wxStaticBitmap *icon = new wxStaticBitmap(this, wxID_ANY, bitmap);
         if (is_pda)
             topsizer->Add( icon, 0, wxTOP|wxLEFT|wxRIGHT | wxALIGN_LEFT, 10 );
         else
@@ -112,13 +112,13 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
     topsizer->Add( icon_text, 1, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
 
     // 3) static line
-    topsizer->Add( new wxStaticLine( this, -1 ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
+    topsizer->Add( new wxStaticLine( this, wxID_ANY ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
 
     // 4) buttons
     topsizer->Add( CreateButtonSizer( style & (wxOK|wxCANCEL|wxYES_NO|wxYES_DEFAULT|wxNO_DEFAULT) ),
                    0, wxCENTRE | wxALL, 10 );
 
-    SetAutoLayout( TRUE );
+    SetAutoLayout( true );
     SetSizer( topsizer );
 
     topsizer->SetSizeHints( this );

@@ -209,13 +209,13 @@ void wxFileData::ReadData()
     // try to get a better icon
     if (m_image == wxFileIconsTable::file)
     {
-        if (m_fileName.Find(wxT('.'), TRUE) != wxNOT_FOUND)
-	{
+        if (m_fileName.Find(wxT('.'), true) != wxNOT_FOUND)
+        {
             m_image = wxTheFileIconsTable->GetIconID( m_fileName.AfterLast(wxT('.')));
-	} else if (IsExe())
-	{
+        } else if (IsExe())
+        {
             m_image = wxFileIconsTable::executable;
-	}
+        }
     }
 
     m_size = buff.st_size;
@@ -254,7 +254,7 @@ wxString wxFileData::GetFileType() const
         return _("<LINK>");
     else if (IsDrive())
         return _("<DRIVE>");
-   else if (m_fileName.Find(wxT('.'), TRUE) != wxNOT_FOUND)
+   else if (m_fileName.Find(wxT('.'), true) != wxNOT_FOUND)
         return m_fileName.AfterLast(wxT('.'));
 
     return wxEmptyString;
@@ -361,16 +361,16 @@ void wxFileData::MakeItem( wxListItem &item )
 IMPLEMENT_DYNAMIC_CLASS(wxFileCtrl,wxListCtrl)
 
 BEGIN_EVENT_TABLE(wxFileCtrl,wxListCtrl)
-    EVT_LIST_DELETE_ITEM(-1, wxFileCtrl::OnListDeleteItem)
-    EVT_LIST_DELETE_ALL_ITEMS(-1, wxFileCtrl::OnListDeleteAllItems)
-    EVT_LIST_END_LABEL_EDIT(-1, wxFileCtrl::OnListEndLabelEdit)
-    EVT_LIST_COL_CLICK(-1, wxFileCtrl::OnListColClick)
+    EVT_LIST_DELETE_ITEM(wxID_ANY, wxFileCtrl::OnListDeleteItem)
+    EVT_LIST_DELETE_ALL_ITEMS(wxID_ANY, wxFileCtrl::OnListDeleteAllItems)
+    EVT_LIST_END_LABEL_EDIT(wxID_ANY, wxFileCtrl::OnListEndLabelEdit)
+    EVT_LIST_COL_CLICK(wxID_ANY, wxFileCtrl::OnListColClick)
 END_EVENT_TABLE()
 
 
 wxFileCtrl::wxFileCtrl()
 {
-    m_showHidden = FALSE;
+    m_showHidden = false;
     m_sort_foward = 1;
     m_sort_field = wxFileData::FileList_Name;
 }
@@ -657,7 +657,7 @@ void wxFileCtrl::GoToParentDir()
         if (!m_dirName.IsEmpty())
         {
             if (m_dirName.Last() == wxT('.'))
-                m_dirName = wxT("");
+                m_dirName = wxEmptyString;
         }
 #elif defined(__UNIX__)
         if (m_dirName.IsEmpty())
@@ -858,7 +858,7 @@ BEGIN_EVENT_TABLE(wxGenericFileDialog,wxDialog)
 END_EVENT_TABLE()
 
 long wxGenericFileDialog::ms_lastViewStyle = wxLC_LIST;
-bool wxGenericFileDialog::ms_lastShowHidden = FALSE;
+bool wxGenericFileDialog::ms_lastShowHidden = false;
 
 wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
                            const wxString& message,
@@ -869,10 +869,10 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
                            const wxPoint& pos )
                     :wxFileDialogBase(parent, message, defaultDir, defaultFile, wildCard, style, pos)
 {
-    wxDialog::Create( parent, -1, message, pos, wxDefaultSize,
+    wxDialog::Create( parent, wxID_ANY, message, pos, wxDefaultSize,
                       wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER );
 
-    if (wxConfig::Get(FALSE))
+    if (wxConfig::Get(false))
     {
         wxConfig::Get()->Read(wxT("/wxWindows/wxFileDialog/ViewStyle"),
                               &ms_lastViewStyle);
@@ -964,8 +964,8 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
 
     wxBoxSizer *staticsizer = new wxBoxSizer( wxHORIZONTAL );
     if (is_pda)
-        staticsizer->Add( new wxStaticText( this, -1, _("Current directory:") ), 0, wxRIGHT, 10 );
-    m_static = new wxStaticText( this, -1, m_dir );
+        staticsizer->Add( new wxStaticText( this, wxID_ANY, _("Current directory:") ), 0, wxRIGHT, 10 );
+    m_static = new wxStaticText( this, wxID_ANY, m_dir );
     staticsizer->Add( m_static, 1 );
     mainsizer->Add( staticsizer, 0, wxEXPAND | wxLEFT|wxRIGHT|wxBOTTOM, 10 );
 
@@ -1023,7 +1023,7 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
     }
     SetFilterIndex( 0 );
 
-    SetAutoLayout( TRUE );
+    SetAutoLayout( true );
     SetSizer( mainsizer );
 
     mainsizer->Fit( this );
@@ -1036,7 +1036,7 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
 
 wxGenericFileDialog::~wxGenericFileDialog()
 {
-    if (wxConfig::Get(FALSE))
+    if (wxConfig::Get(false))
     {
         wxConfig::Get()->Write(wxT("/wxWindows/wxFileDialog/ViewStyle"),
                                ms_lastViewStyle);
@@ -1118,7 +1118,7 @@ void wxGenericFileDialog::OnTextEnter( wxCommandEvent &WXUNUSED(event) )
     GetEventHandler()->ProcessEvent( cevent );
 }
 
-static bool ignoreChanges = FALSE;
+static bool ignoreChanges = false;
 
 void wxGenericFileDialog::OnTextChange( wxCommandEvent &WXUNUSED(event) )
 {
@@ -1150,9 +1150,9 @@ void wxGenericFileDialog::OnSelected( wxListEvent &event )
     dir += filename;
     if (wxDirExists(dir)) return;
 
-    ignoreChanges = TRUE;
+    ignoreChanges = true;
     m_text->SetValue( filename );
-    ignoreChanges = FALSE;
+    ignoreChanges = false;
 }
 
 void wxGenericFileDialog::HandleAction( const wxString &fn )

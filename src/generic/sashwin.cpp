@@ -80,7 +80,7 @@ void wxSashWindow::Init()
     m_maximumPaneSizeY = 10000;
     m_sashCursorWE = new wxCursor(wxCURSOR_SIZEWE);
     m_sashCursorNS = new wxCursor(wxCURSOR_SIZENS);
-    m_mouseCaptured = FALSE;
+    m_mouseCaptured = false;
     m_currentCursor = NULL;
 
     // Eventually, we'll respond to colour change messages
@@ -105,7 +105,7 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
     if (event.LeftDown())
     {
         CaptureMouse();
-        m_mouseCaptured = TRUE;
+        m_mouseCaptured = true;
 
         if ( sashHit != wxSASH_NONE )
         {
@@ -154,7 +154,7 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
         // Wasn't a proper drag
         if (m_mouseCaptured)
             ReleaseMouse();
-        m_mouseCaptured = FALSE;
+        m_mouseCaptured = false;
 
         wxScreenDC::EndDrawingOnTop();
         m_dragMode = wxSASH_DRAG_NONE;
@@ -166,7 +166,7 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
         m_dragMode = wxSASH_DRAG_NONE;
         if (m_mouseCaptured)
             ReleaseMouse();
-        m_mouseCaptured = FALSE;
+        m_mouseCaptured = false;
 
         // Erase old tracker
         DrawSashTracker(m_draggingEdge, m_oldX, m_oldY);
@@ -187,8 +187,8 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
         wxSashDragStatus status = wxSASH_STATUS_OK;
 
         // the new height and width of the window - if -1, it didn't change
-        int newHeight = -1,
-            newWidth = -1;
+        int newHeight = wxDefaultSize.y,
+            newWidth = wxDefaultSize.x;
 
         // NB: x and y may be negative and they're relative to the sash window
         //     upper left corner, while xp and yp are expressed in the parent
@@ -253,7 +253,7 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
                 break;
         }
 
-        if ( newHeight == -1 )
+        if ( newHeight == wxDefaultSize.y )
         {
             // didn't change
             newHeight = h;
@@ -265,7 +265,7 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
             newHeight = wxMin(newHeight, m_maximumPaneSizeY);
         }
 
-        if ( newWidth == -1 )
+        if ( newWidth == wxDefaultSize.x )
         {
             // didn't change
             newWidth = w;
@@ -289,7 +289,7 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
     {
         if (m_mouseCaptured)
            ReleaseMouse();
-        m_mouseCaptured = FALSE;
+        m_mouseCaptured = false;
     }
     else if (event.Moving() && !event.Dragging())
     {

@@ -60,7 +60,7 @@ public:
         : wxTextCtrl(spin->GetParent(), wxID_ANY, value)
     {
         m_spin = spin;
-        
+
         // remove the default minsize, the spinctrl will have one instead
         SetSizeHints(wxDefaultSize.x,wxDefaultSize.y);
     }
@@ -184,11 +184,11 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
     m_text = new wxSpinCtrlText(this, value);
     m_btn = new wxSpinCtrlButton(this, style);
-        
+
     m_btn->SetRange(min, max);
     m_btn->SetValue(initial);
     SetBestSize(size);
-    
+
     // have to disable this window to avoid interfering it with message
     // processing to the text and the button... but pretend it is enabled to
     // make IsEnabled() return true

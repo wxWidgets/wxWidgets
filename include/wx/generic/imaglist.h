@@ -57,9 +57,9 @@ class WXDLLEXPORT wxGenericImageList: public wxObject
 {
 public:
     wxGenericImageList() { m_width = m_height = 0; }
-    wxGenericImageList( int width, int height, bool mask = TRUE, int initialCount = 1 );
+    wxGenericImageList( int width, int height, bool mask = true, int initialCount = 1 );
     ~wxGenericImageList();
-    bool Create( int width, int height, bool mask = TRUE, int initialCount = 1 );
+    bool Create( int width, int height, bool mask = true, int initialCount = 1 );
     bool Create();
 
     virtual int GetImageCount() const;
@@ -75,7 +75,7 @@ public:
 
     virtual bool Draw(int index, wxDC& dc, int x, int y,
               int flags = wxIMAGELIST_DRAW_NORMAL,
-              bool solidBackground = FALSE);
+              bool solidBackground = false);
 
 private:
     wxList  m_images;
@@ -99,7 +99,7 @@ class WXDLLEXPORT wxImageList: public wxGenericImageList
 public:
     wxImageList() {}
 
-    wxImageList( int width, int height, bool mask = TRUE, int initialCount = 1 )
+    wxImageList( int width, int height, bool mask = true, int initialCount = 1 )
         : wxGenericImageList(width, height, mask, initialCount)
     {
     }

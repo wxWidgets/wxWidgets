@@ -117,7 +117,7 @@ wxListbook::Create(wxWindow *parent,
     m_line = new wxStaticLine
                  (
                     this,
-                    -1,
+                    wxID_ANY,
                     wxDefaultPosition,
                     wxDefaultSize,
                     IsVertical() ? wxLI_HORIZONTAL : wxLI_VERTICAL

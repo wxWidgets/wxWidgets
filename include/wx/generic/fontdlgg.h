@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_GENERIC_FONTDLGG_H
@@ -25,7 +25,7 @@
 /*
  * FONT DIALOG
  */
- 
+
 class WXDLLEXPORT wxChoice;
 class WXDLLEXPORT wxText;
 class WXDLLEXPORT wxCheckBox;

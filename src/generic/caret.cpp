@@ -53,14 +53,14 @@ static int gs_blinkTime = 500;  // in milliseconds
 // timer stuff
 // ----------------------------------------------------------------------------
 
-wxCaretTimer::wxCaretTimer(wxCaret *caret) 
-{ 
-    m_caret = caret; 
+wxCaretTimer::wxCaretTimer(wxCaret *caret)
+{
+    m_caret = caret;
 }
 
-void wxCaretTimer::Notify() 
-{ 
-    m_caret->OnTimer(); 
+void wxCaretTimer::Notify()
+{
+    m_caret->OnTimer();
 }
 
 void wxCaret::OnTimer()
@@ -90,8 +90,8 @@ void wxCaretBase::SetBlinkTime(int milliseconds)
 
 void wxCaret::InitGeneric()
 {
-    m_hasFocus = TRUE;
-    m_blinkedOut = TRUE;
+    m_hasFocus = true;
+    m_blinkedOut = true;
 
     m_xOld =
     m_yOld = -1;
@@ -156,7 +156,7 @@ void wxCaret::DoMove()
 
 void wxCaret::OnSetFocus()
 {
-    m_hasFocus = TRUE;
+    m_hasFocus = true;
 
     if ( IsVisible() )
         Refresh();
@@ -164,7 +164,7 @@ void wxCaret::OnSetFocus()
 
 void wxCaret::OnKillFocus()
 {
-    m_hasFocus = FALSE;
+    m_hasFocus = false;
 
     if ( IsVisible() )
     {

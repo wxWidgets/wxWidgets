@@ -329,7 +329,7 @@ public:
     // Reset the value in the control back to its starting value
     virtual void Reset() = 0;
 
-    // return TRUE to allow the given key to start editing: the base class
+    // return true to allow the given key to start editing: the base class
     // version only checks that the event has no modifiers. The derived
     // classes are supposed to do "if ( base::IsAcceptedKey() && ... )" in
     // their IsAcceptedKey() implementation, although, of course, it is not a
@@ -373,7 +373,7 @@ protected:
 
     // if we change the colours/font of the control from the default ones, we
     // must restore the default later and we save them here between calls to
-    // Show(TRUE) and Show(FALSE)
+    // Show(true) and Show(false)
     wxColour m_colFgOld,
              m_colBgOld;
     wxFont m_fontOld;
@@ -563,9 +563,9 @@ public:
     // if !allowOthers, user can't type a string not in choices array
     wxGridCellChoiceEditor(size_t count = 0,
                            const wxString choices[] = NULL,
-                           bool allowOthers = FALSE);
+                           bool allowOthers = false);
     wxGridCellChoiceEditor(const wxArrayString& choices,
-                           bool allowOthers = FALSE);
+                           bool allowOthers = false);
 
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
@@ -662,9 +662,9 @@ public:
         m_vAlign = vAlign;
     }
     void SetSize(int num_rows, int num_cols);
-    void SetOverflow(bool allow = TRUE)
+    void SetOverflow(bool allow = true)
         { m_overflow = allow ? Overflow : SingleCell; }
-    void SetReadOnly(bool isReadOnly = TRUE)
+    void SetReadOnly(bool isReadOnly = true)
         { m_isReadOnly = isReadOnly ? ReadOnly : ReadWrite; }
 
     // takes ownership of the pointer
@@ -1116,17 +1116,17 @@ public:
     void DoEndDragResizeCol();
 
     wxGridTableBase * GetTable() const { return m_table; }
-    bool SetTable( wxGridTableBase *table, bool takeOwnership=FALSE,
+    bool SetTable( wxGridTableBase *table, bool takeOwnership = false,
                    wxGrid::wxGridSelectionModes selmode =
                    wxGrid::wxGridSelectCells );
 
     void ClearGrid();
-    bool InsertRows( int pos = 0, int numRows = 1, bool updateLabels=TRUE );
-    bool AppendRows( int numRows = 1, bool updateLabels=TRUE );
-    bool DeleteRows( int pos = 0, int numRows = 1, bool updateLabels=TRUE );
-    bool InsertCols( int pos = 0, int numCols = 1, bool updateLabels=TRUE );
-    bool AppendCols( int numCols = 1, bool updateLabels=TRUE );
-    bool DeleteCols( int pos = 0, int numCols = 1, bool updateLabels=TRUE );
+    bool InsertRows( int pos = 0, int numRows = 1, bool updateLabels = true );
+    bool AppendRows( int numRows = 1, bool updateLabels = true );
+    bool DeleteRows( int pos = 0, int numRows = 1, bool updateLabels = true );
+    bool InsertCols( int pos = 0, int numCols = 1, bool updateLabels = true );
+    bool AppendCols( int numCols = 1, bool updateLabels = true );
+    bool DeleteCols( int pos = 0, int numCols = 1, bool updateLabels = true );
 
     void DrawGridCellArea( wxDC& dc , const wxGridCellCoordsArray& cells );
     void DrawGridSpace( wxDC& dc );
@@ -1179,7 +1179,7 @@ public:
 
     int      GetBatchCount() { return m_batchCount; }
 
-    virtual void Refresh(bool eraseb = TRUE,
+    virtual void Refresh(bool eraseb = true,
                          const wxRect* rect = (const wxRect *)  NULL);
 
     // Use this, rather than wxWindow::Refresh(), to force an
@@ -1197,8 +1197,8 @@ public:
     bool IsEditable() const { return m_editable; }
     void EnableEditing( bool edit );
 
-    void EnableCellEditControl( bool enable = TRUE );
-    void DisableCellEditControl() { EnableCellEditControl(FALSE); }
+    void EnableCellEditControl( bool enable = true );
+    void DisableCellEditControl() { EnableCellEditControl(false); }
     bool CanEnableCellControl() const;
     bool IsCellEditControlEnabled() const;
     bool IsCellEditControlShown() const;
@@ -1232,8 +1232,8 @@ public:
     // check to see if a cell is either wholly visible (the default arg) or
     // at least partially visible in the grid window
     //
-    bool IsVisible( int row, int col, bool wholeCellVisible = TRUE );
-    bool IsVisible( const wxGridCellCoords& coords, bool wholeCellVisible = TRUE )
+    bool IsVisible( int row, int col, bool wholeCellVisible = true );
+    bool IsVisible( const wxGridCellCoords& coords, bool wholeCellVisible = true )
         { return IsVisible( coords.GetRow(), coords.GetCol(), wholeCellVisible ); }
     void MakeCellVisible( int row, int col );
     void MakeCellVisible( const wxGridCellCoords& coords )
@@ -1291,14 +1291,14 @@ public:
     void     SetCellHighlightPenWidth(int width);
     void     SetCellHighlightROPenWidth(int width);
 
-    void     EnableDragRowSize( bool enable = TRUE );
-    void     DisableDragRowSize() { EnableDragRowSize( FALSE ); }
+    void     EnableDragRowSize( bool enable = true );
+    void     DisableDragRowSize() { EnableDragRowSize( false ); }
     bool     CanDragRowSize() { return m_canDragRowSize; }
-    void     EnableDragColSize( bool enable = TRUE );
-    void     DisableDragColSize() { EnableDragColSize( FALSE ); }
+    void     EnableDragColSize( bool enable = true );
+    void     DisableDragColSize() { EnableDragColSize( false ); }
     bool     CanDragColSize() { return m_canDragColSize; }
-    void     EnableDragGridSize(bool enable = TRUE);
-    void     DisableDragGridSize() { EnableDragGridSize(FALSE); }
+    void     EnableDragGridSize(bool enable = true);
+    void     DisableDragGridSize() { EnableDragGridSize(false); }
     bool     CanDragGridSize() { return m_canDragGridSize; }
 
     // this sets the specified attribute for this cell or in this row/col
@@ -1314,7 +1314,7 @@ public:
     void     SetColFormatFloat(int col, int width = -1, int precision = -1);
     void     SetColFormatCustom(int col, const wxString& typeName);
 
-    void     EnableGridLines( bool enable = TRUE );
+    void     EnableGridLines( bool enable = true );
     bool     GridLinesEnabled() { return m_gridLinesEnabled; }
 
     // ------ row and col formatting
@@ -1335,26 +1335,26 @@ public:
     bool     GetCellOverflow( int row, int col );
     void     GetCellSize( int row, int col, int *num_rows, int *num_cols );
 
-    void     SetDefaultRowSize( int height, bool resizeExistingRows = FALSE );
+    void     SetDefaultRowSize( int height, bool resizeExistingRows = false );
     void     SetRowSize( int row, int height );
-    void     SetDefaultColSize( int width, bool resizeExistingCols = FALSE );
+    void     SetDefaultColSize( int width, bool resizeExistingCols = false );
 
     void     SetColSize( int col, int width );
 
     // automatically size the column or row to fit to its contents, if
-    // setAsMin is TRUE, this optimal width will also be set as minimal width
+    // setAsMin is true, this optimal width will also be set as minimal width
     // for this column
-    void     AutoSizeColumn( int col, bool setAsMin = TRUE )
-        { AutoSizeColOrRow(col, setAsMin, TRUE); }
-    void     AutoSizeRow( int row, bool setAsMin = TRUE )
-        { AutoSizeColOrRow(row, setAsMin, FALSE); }
+    void     AutoSizeColumn( int col, bool setAsMin = true )
+        { AutoSizeColOrRow(col, setAsMin, true); }
+    void     AutoSizeRow( int row, bool setAsMin = true )
+        { AutoSizeColOrRow(row, setAsMin, false); }
 
     // auto size all columns (very ineffective for big grids!)
-    void     AutoSizeColumns( bool setAsMin = TRUE )
-        { (void)SetOrCalcColumnSizes(FALSE, setAsMin); }
+    void     AutoSizeColumns( bool setAsMin = true )
+        { (void)SetOrCalcColumnSizes(false, setAsMin); }
 
-    void     AutoSizeRows( bool setAsMin = TRUE )
-        { (void)SetOrCalcRowSizes(FALSE, setAsMin); }
+    void     AutoSizeRows( bool setAsMin = true )
+        { (void)SetOrCalcRowSizes(false, setAsMin); }
 
     // auto size the grid, that is make the columns/rows of the "right" size
     // and also set the grid size to just fit its contents
@@ -1432,23 +1432,23 @@ public:
     void SetCellValue( const wxGridCellCoords& coords, const wxString& s )
         { SetCellValue( coords.GetRow(), coords.GetCol(), s ); }
 
-    // returns TRUE if the cell can't be edited
+    // returns true if the cell can't be edited
     bool IsReadOnly(int row, int col) const;
 
     // make the cell editable/readonly
-    void SetReadOnly(int row, int col, bool isReadOnly = TRUE);
+    void SetReadOnly(int row, int col, bool isReadOnly = true);
 
     // ------ select blocks of cells
     //
-    void SelectRow( int row, bool addToSelected = FALSE );
-    void SelectCol( int col, bool addToSelected = FALSE );
+    void SelectRow( int row, bool addToSelected = false );
+    void SelectCol( int col, bool addToSelected = false );
 
     void SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol,
-                      bool addToSelected = FALSE );
+                      bool addToSelected = false );
 
     void SelectBlock( const wxGridCellCoords& topLeft,
                       const wxGridCellCoords& bottomRight,
-                      bool addToSelected = FALSE )
+                      bool addToSelected = false )
         { SelectBlock( topLeft.GetRow(), topLeft.GetCol(),
                        bottomRight.GetRow(), bottomRight.GetCol(),
                        addToSelected ); }
@@ -1533,10 +1533,10 @@ public:
     //
 
     wxGrid( wxWindow *parent,
-            int x, int y, int w = -1, int h = -1,
+            int x, int y, int w = wxDefaultSize.x, int h = wxDefaultSize.y,
             long style = wxWANTS_CHARS,
             const wxString& name = wxPanelNameStr )
-        : wxScrolledWindow( parent, -1, wxPoint(x,y), wxSize(w,h),
+        : wxScrolledWindow( parent, wxID_ANY, wxPoint(x,y), wxSize(w,h),
                             (style|wxWANTS_CHARS), name )
         {
             Create();
@@ -1656,10 +1656,10 @@ public:
         { SetCellBackgroundColour( row, col, colour ); }
 
     bool GetEditable() { return IsEditable(); }
-    void SetEditable( bool edit = TRUE ) { EnableEditing( edit ); }
+    void SetEditable( bool edit = true ) { EnableEditing( edit ); }
     bool GetEditInPlace() { return IsCellEditControlEnabled(); }
 
-    void SetEditInPlace(bool WXUNUSED(edit) = TRUE) { }
+    void SetEditInPlace(bool WXUNUSED(edit) = true) { }
 
     void SetCellAlignment( int align, int row, int col)
     { SetCellAlignment(row, col, align, wxALIGN_CENTER); }
@@ -1772,8 +1772,8 @@ protected:
 
 
     // common part of AutoSizeColumn/Row() and GetBestSize()
-    int SetOrCalcColumnSizes(bool calcOnly, bool setAsMin = TRUE);
-    int SetOrCalcRowSizes(bool calcOnly, bool setAsMin = TRUE);
+    int SetOrCalcColumnSizes(bool calcOnly, bool setAsMin = true);
+    int SetOrCalcRowSizes(bool calcOnly, bool setAsMin = true);
 
     // common part of AutoSizeColumn/Row()
     void AutoSizeColOrRow(int n, bool setAsMin, bool column /* or row? */);
@@ -1810,7 +1810,7 @@ protected:
     // adds an attribute to cache
     void CacheAttr(int row, int col, wxGridCellAttr *attr) const;
 
-    // looks for an attr in cache, returns TRUE if found
+    // looks for an attr in cache, returns true if found
     bool LookupAttr(int row, int col, wxGridCellAttr **attr) const;
 
     // looks for the attr in cache, if not found asks the table and caches the
@@ -1839,14 +1839,14 @@ protected:
     };
 
     // this method not only sets m_cursorMode but also sets the correct cursor
-    // for the given mode and, if captureMouse is not FALSE releases the mouse
+    // for the given mode and, if captureMouse is not false releases the mouse
     // if it was captured and captures it if it must be captured
     //
     // for this to work, you should always use it and not set m_cursorMode
     // directly!
     void ChangeCursorMode(CursorMode mode,
                           wxWindow *win = (wxWindow *)NULL,
-                          bool captureMouse = TRUE);
+                          bool captureMouse = true);
 
     wxWindow *m_winCapture;     // the window which captured the mouse
     CursorMode m_cursorMode;
@@ -1931,8 +1931,8 @@ public:
         }
 
     wxGridEvent(int id, wxEventType type, wxObject* obj,
-                int row=-1, int col=-1, int x=-1, int y=-1, bool sel = TRUE,
-                bool control=FALSE, bool shift=FALSE, bool alt=FALSE, bool meta=FALSE);
+                int row=-1, int col=-1, int x=-1, int y=-1, bool sel = true,
+                bool control = false, bool shift = false, bool alt = false, bool meta = false);
 
     virtual int GetRow() { return m_row; }
     virtual int GetCol() { return m_col; }
@@ -1968,7 +1968,7 @@ public:
 
     wxGridSizeEvent(int id, wxEventType type, wxObject* obj,
                 int rowOrCol=-1, int x=-1, int y=-1,
-                bool control=FALSE, bool shift=FALSE, bool alt=FALSE, bool meta=FALSE);
+                bool control = false, bool shift = false, bool alt = false, bool meta = false);
 
     int         GetRowOrCol() { return m_rowOrCol; }
     wxPoint     GetPosition() { return wxPoint( m_x, m_y ); }
@@ -1998,19 +1998,19 @@ public:
         {
             m_topLeft     = wxGridNoCellCoords;
             m_bottomRight = wxGridNoCellCoords;
-            m_selecting   = FALSE;
-            m_control     = FALSE;
-            m_meta        = FALSE;
-            m_shift       = FALSE;
-            m_alt         = FALSE;
+            m_selecting   = false;
+            m_control     = false;
+            m_meta        = false;
+            m_shift       = false;
+            m_alt         = false;
         }
 
     wxGridRangeSelectEvent(int id, wxEventType type, wxObject* obj,
                            const wxGridCellCoords& topLeft,
                            const wxGridCellCoords& bottomRight,
-                           bool sel = TRUE,
-                           bool control=FALSE, bool shift=FALSE,
-                           bool alt=FALSE, bool meta=FALSE);
+                           bool sel = true,
+                           bool control = false, bool shift = false,
+                           bool alt = false, bool meta = false);
 
     wxGridCellCoords GetTopLeftCoords() { return m_topLeft; }
     wxGridCellCoords GetBottomRightCoords() { return m_bottomRight; }
@@ -2092,40 +2092,40 @@ typedef void (wxEvtHandler::*wxGridSizeEventFunction)(wxGridSizeEvent&);
 typedef void (wxEvtHandler::*wxGridRangeSelectEventFunction)(wxGridRangeSelectEvent&);
 typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreatedEvent&);
 
-#define EVT_GRID_CELL_LEFT_CLICK(fn)     DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_LEFT_CLICK,    -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_CELL_RIGHT_CLICK(fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_RIGHT_CLICK,   -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_CELL_LEFT_DCLICK(fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_LEFT_DCLICK,   -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_CELL_RIGHT_DCLICK(fn)   DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_RIGHT_DCLICK,  -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_LABEL_LEFT_CLICK(fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_LABEL_LEFT_CLICK,   -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_LABEL_RIGHT_CLICK(fn)   DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_LABEL_RIGHT_CLICK,  -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_LABEL_LEFT_DCLICK(fn)   DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_LABEL_LEFT_DCLICK,  -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_LABEL_RIGHT_DCLICK(fn)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_LABEL_RIGHT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_ROW_SIZE(fn)            DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_ROW_SIZE,           -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridSizeEventFunction, &fn ), NULL ),
-#define EVT_GRID_COL_SIZE(fn)            DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_COL_SIZE,           -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridSizeEventFunction, &fn ), NULL ),
-#define EVT_GRID_RANGE_SELECT(fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_RANGE_SELECT,       -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridRangeSelectEventFunction, &fn ), NULL ),
-#define EVT_GRID_CELL_CHANGE(fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_CHANGE,        -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_SELECT_CELL(fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_SELECT_CELL,        -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_EDITOR_SHOWN(fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_EDITOR_SHOWN,       -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_EDITOR_HIDDEN(fn)       DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_EDITOR_HIDDEN,      -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_EDITOR_CREATED(fn)      DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_EDITOR_CREATED,     -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEditorCreatedEventFunction, &fn ), NULL ),
+#define EVT_GRID_CELL_LEFT_CLICK(fn)     DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_LEFT_CLICK,    wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_CELL_RIGHT_CLICK(fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_RIGHT_CLICK,   wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_CELL_LEFT_DCLICK(fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_LEFT_DCLICK,   wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_CELL_RIGHT_DCLICK(fn)   DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_RIGHT_DCLICK,  wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_LABEL_LEFT_CLICK(fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_LABEL_LEFT_CLICK,   wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_LABEL_RIGHT_CLICK(fn)   DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_LABEL_RIGHT_CLICK,  wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_LABEL_LEFT_DCLICK(fn)   DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_LABEL_LEFT_DCLICK,  wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_LABEL_RIGHT_DCLICK(fn)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_LABEL_RIGHT_DCLICK, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_ROW_SIZE(fn)            DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_ROW_SIZE,           wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridSizeEventFunction, &fn ), NULL ),
+#define EVT_GRID_COL_SIZE(fn)            DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_COL_SIZE,           wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridSizeEventFunction, &fn ), NULL ),
+#define EVT_GRID_RANGE_SELECT(fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_RANGE_SELECT,       wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridRangeSelectEventFunction, &fn ), NULL ),
+#define EVT_GRID_CELL_CHANGE(fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_CHANGE,        wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_SELECT_CELL(fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_SELECT_CELL,        wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_EDITOR_SHOWN(fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_EDITOR_SHOWN,       wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_EDITOR_HIDDEN(fn)       DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_EDITOR_HIDDEN,      wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_EDITOR_CREATED(fn)      DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_EDITOR_CREATED,     wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEditorCreatedEventFunction, &fn ), NULL ),
 
 // The same as above but with the ability to specify an identifier
-#define EVT_GRID_CMD_CELL_LEFT_CLICK(id, fn)     DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_LEFT_CLICK,    id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_CMD_CELL_RIGHT_CLICK(id, fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_RIGHT_CLICK,   id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_CMD_CELL_LEFT_DCLICK(id, fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_LEFT_DCLICK,   id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_CMD_CELL_RIGHT_DCLICK(id, fn)   DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_RIGHT_DCLICK,  id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_CMD_LABEL_LEFT_CLICK(id, fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_LABEL_LEFT_CLICK,   id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_CMD_LABEL_RIGHT_CLICK(id, fn)   DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_LABEL_RIGHT_CLICK,  id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_CMD_LABEL_LEFT_DCLICK(id, fn)   DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_LABEL_LEFT_DCLICK,  id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_CMD_LABEL_RIGHT_DCLICK(id, fn)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_LABEL_RIGHT_DCLICK, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_CMD_ROW_SIZE(id, fn)            DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_ROW_SIZE,           id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridSizeEventFunction, &fn ), NULL ),
-#define EVT_GRID_CMD_COL_SIZE(id, fn)            DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_COL_SIZE,           id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridSizeEventFunction, &fn ), NULL ),
-#define EVT_GRID_CMD_RANGE_SELECT(id, fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_RANGE_SELECT,       id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridRangeSelectEventFunction, &fn ), NULL ),
-#define EVT_GRID_CMD_CELL_CHANGE(id, fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_CHANGE,        id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_CMD_SELECT_CELL(id, fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_SELECT_CELL,        id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_CMD_EDITOR_SHOWN(id, fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_EDITOR_SHOWN,       id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_CMD_EDITOR_HIDDEN(id, fn)       DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_EDITOR_HIDDEN,      id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_CMD_EDITOR_CREATED(id, fn)      DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_EDITOR_CREATED,     id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEditorCreatedEventFunction, &fn ), NULL ),
+#define EVT_GRID_CMD_CELL_LEFT_CLICK(id, fn)     DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_LEFT_CLICK,    id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_CMD_CELL_RIGHT_CLICK(id, fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_RIGHT_CLICK,   id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_CMD_CELL_LEFT_DCLICK(id, fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_LEFT_DCLICK,   id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_CMD_CELL_RIGHT_DCLICK(id, fn)   DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_RIGHT_DCLICK,  id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_CMD_LABEL_LEFT_CLICK(id, fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_LABEL_LEFT_CLICK,   id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_CMD_LABEL_RIGHT_CLICK(id, fn)   DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_LABEL_RIGHT_CLICK,  id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_CMD_LABEL_LEFT_DCLICK(id, fn)   DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_LABEL_LEFT_DCLICK,  id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_CMD_LABEL_RIGHT_DCLICK(id, fn)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_LABEL_RIGHT_DCLICK, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_CMD_ROW_SIZE(id, fn)            DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_ROW_SIZE,           id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridSizeEventFunction, &fn ), NULL ),
+#define EVT_GRID_CMD_COL_SIZE(id, fn)            DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_COL_SIZE,           id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridSizeEventFunction, &fn ), NULL ),
+#define EVT_GRID_CMD_RANGE_SELECT(id, fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_RANGE_SELECT,       id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridRangeSelectEventFunction, &fn ), NULL ),
+#define EVT_GRID_CMD_CELL_CHANGE(id, fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_CHANGE,        id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_CMD_SELECT_CELL(id, fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_SELECT_CELL,        id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_CMD_EDITOR_SHOWN(id, fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_EDITOR_SHOWN,       id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_CMD_EDITOR_HIDDEN(id, fn)       DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_EDITOR_HIDDEN,      id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_CMD_EDITOR_CREATED(id, fn)      DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_EDITOR_CREATED,     id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEditorCreatedEventFunction, &fn ), NULL ),
 
 #if 0  // TODO: implement these ?  others ?
 
@@ -2133,9 +2133,9 @@ extern const int wxEVT_GRID_CREATE_CELL;
 extern const int wxEVT_GRID_CHANGE_LABELS;
 extern const int wxEVT_GRID_CHANGE_SEL_LABEL;
 
-#define EVT_GRID_CREATE_CELL(fn)      DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CREATE_CELL,      -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_CHANGE_LABELS(fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CHANGE_LABELS,    -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_CHANGE_SEL_LABEL(fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CHANGE_SEL_LABEL, -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_CREATE_CELL(fn)      DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CREATE_CELL,      wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_CHANGE_LABELS(fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CHANGE_LABELS,    wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_CHANGE_SEL_LABEL(fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CHANGE_SEL_LABEL, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
 
 #endif
 

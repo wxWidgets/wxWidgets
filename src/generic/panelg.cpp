@@ -55,7 +55,7 @@ wxBEGIN_FLAGS( wxPanelStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -86,7 +86,7 @@ wxEND_PROPERTIES_TABLE()
 wxBEGIN_HANDLERS_TABLE(wxPanel)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_5( wxPanel , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+wxCONSTRUCTOR_5( wxPanel , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxPanel, wxWindow)
@@ -126,7 +126,7 @@ bool wxPanel::Create(wxWindow *parent, wxWindowID id,
 
     // so that non-solid background renders correctly under GTK+:
     SetThemeEnabled(true);
-    
+
 #ifdef __WXMSW__
     // panels don't have the same colour as normal windows under Windows
     SetDefaultBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
@@ -177,8 +177,8 @@ void wxPanel::OnSize(wxSizeEvent& event)
             // Uninitialized
 
             ::WinQueryWindowPos(GetHWND(), pWinSwp);
-	}
-	else
+        }
+        else
         {
             SWP                     vSwp;
             int                     nYDiff;

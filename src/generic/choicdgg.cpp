@@ -246,8 +246,8 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
                                const wxPoint& pos,
                                long styleLbox)
 {
-    if ( !wxDialog::Create(parent, -1, caption, pos, wxDefaultSize, styleDlg) )
-        return FALSE;
+    if ( !wxDialog::Create(parent, wxID_ANY, caption, pos, wxDefaultSize, styleDlg) )
+        return false;
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
@@ -266,13 +266,13 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
 
 #if wxUSE_STATLINE
     // 3) static line
-    topsizer->Add( new wxStaticLine( this, -1 ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
+    topsizer->Add( new wxStaticLine( this, wxID_ANY ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
 #endif
 
     // 4) buttons
     topsizer->Add( CreateButtonSizer( styleDlg & (wxOK|wxCANCEL) ), 0, wxCENTRE | wxALL, 10 );
 
-    SetAutoLayout( TRUE );
+    SetAutoLayout( true );
     SetSizer( topsizer );
 
     topsizer->SetSizeHints( this );
@@ -282,7 +282,7 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
 
     m_listbox->SetFocus();
 
-    return TRUE;
+    return true;
 }
 
 bool wxAnyChoiceDialog::Create(wxWindow *parent,
@@ -344,7 +344,7 @@ bool wxSingleChoiceDialog::Create( wxWindow *parent,
     if ( !wxAnyChoiceDialog::Create(parent, message, caption,
                                     n, choices,
                                     style, pos) )
-        return FALSE;
+        return false;
 
     m_selection = n > 0 ? 0 : -1;
 
@@ -354,7 +354,7 @@ bool wxSingleChoiceDialog::Create( wxWindow *parent,
             m_listbox->SetClientData(i, clientData[i]);
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxSingleChoiceDialog::Create( wxWindow *parent,
@@ -415,9 +415,9 @@ bool wxMultiChoiceDialog::Create( wxWindow *parent,
                                     n, choices,
                                     style, pos,
                                     wxLB_ALWAYS_SB | wxLB_EXTENDED) )
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 bool wxMultiChoiceDialog::Create( wxWindow *parent,
@@ -451,7 +451,7 @@ bool wxMultiChoiceDialog::TransferDataFromWindow()
             m_selections.Add(n);
     }
 
-    return TRUE;
+    return true;
 }
 
 #endif // wxUSE_CHOICEDLG

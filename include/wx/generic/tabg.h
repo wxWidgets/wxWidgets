@@ -114,14 +114,14 @@ public:
 
   inline void SetWindow(wxWindow* wnd) { m_window = wnd; }
   inline wxWindow* GetWindow(void) const { return m_window; }
-  
+
   // Automatically positions tabs
   wxTabControl *AddTab(int id, const wxString& label, wxTabControl *existingTab = (wxTabControl *) NULL);
 
   // Remove the tab without deleting the window
   bool RemoveTab(int id);
-  
-  void ClearTabs(bool deleteTabs = TRUE);
+
+  void ClearTabs(bool deleteTabs = true);
 
   bool SetTabText(int id, const wxString& label);
   wxString GetTabText(int id) const;
@@ -131,14 +131,14 @@ public:
 
   // Draw all tabs
   virtual void Draw(wxDC& dc);
-  
-  // Process mouse event, return FALSE if we didn't process it
+
+  // Process mouse event, return false if we didn't process it
   virtual bool OnEvent(wxMouseEvent& event);
 
   // Called when a tab is activated
   virtual void OnTabActivate(int activateId, int deactivateId);
   // Allows vetoing
-  virtual bool OnTabPreActivate(int WXUNUSED(activateId), int WXUNUSED(deactivateId) ) { return TRUE; };
+  virtual bool OnTabPreActivate(int WXUNUSED(activateId), int WXUNUSED(deactivateId) ) { return true; };
 
   // Allows use of application-supplied wxTabControl classes.
   virtual wxTabControl *OnCreateTabControl(void) { return new wxTabControl(this); }
@@ -147,7 +147,7 @@ public:
   void SetShadowColour(const wxColour& col);
   void SetBackgroundColour(const wxColour& col);
   inline void SetTextColour(const wxColour& col) { m_textColour = col; }
-  
+
   inline wxColour GetHighlightColour(void) const { return m_highlightColour; }
   inline wxColour GetShadowColour(void) const { return m_shadowColour; }
   inline wxColour GetBackgroundColour(void) const { return m_backgroundColour; }
@@ -156,17 +156,17 @@ public:
   inline wxPen *GetShadowPen(void) const { return m_shadowPen; }
   inline wxPen *GetBackgroundPen(void) const { return m_backgroundPen; }
   inline wxBrush *GetBackgroundBrush(void) const { return m_backgroundBrush; }
-  
+
   inline void SetViewRect(const wxRect& rect) { m_tabViewRect = rect; }
   inline wxRect GetViewRect(void) const { return m_tabViewRect; }
-  
+
   // Calculate tab width to fit to view, and optionally adjust the view
   // to fit the tabs exactly.
-  int CalculateTabWidth(int noTabs, bool adjustView = FALSE);
+  int CalculateTabWidth(int noTabs, bool adjustView = false);
 
   inline void SetTabStyle(long style) { m_tabStyle = style; }
   inline long GetTabStyle(void) const { return m_tabStyle; }
-  
+
   inline void SetTabSize(int w, int h) { m_tabWidth = w; m_tabHeight = h; }
   inline int GetTabWidth(void) const { return m_tabWidth; }
   inline int GetTabHeight(void) const { return m_tabHeight; }
@@ -176,27 +176,27 @@ public:
   // Returns the total height of the tabs component -- this may be several
   // times the height of a tab, if there are several tab layers (rows).
   int GetTotalTabHeight();
-  
+
   inline int GetTopMargin(void) const { return m_topMargin; }
   inline void SetTopMargin(int margin) { m_topMargin = margin; }
-  
-  void SetTabSelection(int sel, bool activateTool = TRUE);
+
+  void SetTabSelection(int sel, bool activateTool = true);
   inline int GetTabSelection() const { return m_tabSelection; }
-  
+
   // Find tab control for id
   wxTabControl *FindTabControlForId(int id) const ;
 
   // Find tab control for layer, position (starting from zero)
   wxTabControl *FindTabControlForPosition(int layer, int position) const ;
-  
+
   inline int GetHorizontalTabOffset() const { return m_tabHorizontalOffset; }
   inline int GetHorizontalTabSpacing() const { return m_tabHorizontalSpacing; }
   inline void SetHorizontalTabOffset(int sp) { m_tabHorizontalOffset = sp; }
   inline void SetHorizontalTabSpacing(int sp) { m_tabHorizontalSpacing = sp; }
-  
+
   inline void SetVerticalTabTextSpacing(int s) { m_tabVerticalTextSpacing = s; }
   inline int GetVerticalTabTextSpacing() const { return m_tabVerticalTextSpacing; }
-  
+
   inline wxFont *GetTabFont() const { return (wxFont*) & m_tabFont; }
   inline void SetTabFont(const wxFont& f) { m_tabFont = f; }
 
@@ -204,7 +204,7 @@ public:
   inline void SetSelectedTabFont(const wxFont& f) { m_tabSelectedFont = f; }
   // Find the node and the column at which this control is positioned.
   wxList::compatibility_iterator FindTabNodeAndColumn(wxTabControl *control, int *col) const ;
-  
+
   // Do the necessary to change to this tab
   virtual bool ChangeTab(wxTabControl *control);
 
@@ -217,7 +217,7 @@ public:
 protected:
    // List of layers, from front to back.
    wxTabLayerList   m_layers;
-   
+
    // Selected tab
    int              m_tabSelection;
 
@@ -229,13 +229,13 @@ protected:
 
    // Usual tab width
    int              m_tabWidth;
-   
+
    // Space between tabs
    int              m_tabHorizontalSpacing;
-   
+
    // Space between top of normal tab and text
    int              m_tabVerticalTextSpacing;
-   
+
    // Horizontal offset of each tab row above the first
    int              m_tabHorizontalOffset;
 
@@ -246,7 +246,7 @@ protected:
    // The position and size of the view above which the tabs are placed.
    // I.e., the internal client area of the sheet.
    wxRect           m_tabViewRect;
-   
+
    // Bitlist of styles
    long             m_tabStyle;
 
@@ -255,16 +255,16 @@ protected:
    wxColour         m_shadowColour;
    wxColour         m_backgroundColour;
    wxColour         m_textColour;
-   
+
    // Pen and brush cache
    wxPen*           m_highlightPen;
    wxPen*           m_shadowPen;
    wxPen*           m_backgroundPen;
    wxBrush*         m_backgroundBrush;
-   
+
    wxFont           m_tabFont;
    wxFont           m_tabSelectedFont;
-   
+
    int              m_noTabs;
 
    wxWindow*        m_window;
@@ -273,11 +273,11 @@ protected:
 /*
  * A dialog box class that is tab-friendly
  */
- 
+
 class WXDLLEXPORT wxTabbedDialog: public wxDialog
 {
 DECLARE_DYNAMIC_CLASS(wxTabbedDialog)
- 
+
 public:
 
    wxTabbedDialog(wxWindow *parent, wxWindowID id, const wxString& title,
@@ -285,7 +285,7 @@ public:
     const wxSize& size = wxDefaultSize,
      long windowStyle = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxDialogNameStr);
    ~wxTabbedDialog(void);
- 
+
    inline wxTabView *GetTabView() const { return m_tabView; }
    inline void SetTabView(wxTabView *v) { m_tabView = v; }
 
@@ -295,7 +295,7 @@ public:
 
 protected:
    wxTabView*   m_tabView;
-   
+
 DECLARE_EVENT_TABLE()
 };
 
@@ -306,7 +306,7 @@ DECLARE_EVENT_TABLE()
 class WXDLLEXPORT wxTabbedPanel: public wxPanel
 {
 DECLARE_DYNAMIC_CLASS(wxTabbedPanel)
- 
+
 public:
 
    wxTabbedPanel(wxWindow *parent, wxWindowID id,
@@ -314,16 +314,16 @@ public:
     const wxSize& size = wxDefaultSize,
     long windowStyle = 0, const wxString& name = wxPanelNameStr);
    ~wxTabbedPanel(void);
- 
+
    inline wxTabView *GetTabView() const { return m_tabView; }
    inline void SetTabView(wxTabView *v) { m_tabView = v; }
-  
+
    void OnMouseEvent(wxMouseEvent& event);
    void OnPaint(wxPaintEvent& event);
 
 protected:
    wxTabView*   m_tabView;
-   
+
 DECLARE_EVENT_TABLE()
 };
 
@@ -343,9 +343,9 @@ public:
   // Specific to this class
    void AddTabWindow(int id, wxWindow *window);
    wxWindow *GetTabWindow(int id) const ;
-   void ClearWindows(bool deleteWindows = TRUE);
+   void ClearWindows(bool deleteWindows = true);
    inline wxWindow *GetCurrentWindow() const { return m_currentWindow; }
-   
+
    void ShowWindowForTab(int id);
    // inline wxList& GetWindows() const { return (wxList&) m_tabWindows; }
 

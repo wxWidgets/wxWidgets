@@ -120,8 +120,8 @@ public:
 
     wxFileDialog(wxWindow *parent,
                  const wxString& message = wxFileSelectorPromptStr,
-                 const wxString& defaultDir = _T(""),
-                 const wxString& defaultFile = _T(""),
+                 const wxString& defaultDir = wxEmptyString,
+                 const wxString& defaultFile = wxEmptyString,
                  const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
                  long style = 0,
                  const wxPoint& pos = wxDefaultPosition)
@@ -245,7 +245,7 @@ public:
     virtual void ChangeToListMode();
     virtual void ChangeToReportMode();
     virtual void ChangeToSmallIconMode();
-    virtual void ShowHidden( bool show = TRUE );
+    virtual void ShowHidden( bool show = true );
     bool GetShowHidden() const { return m_showHidden; }
 
     virtual long Add( wxFileData *fd, wxListItem &item );

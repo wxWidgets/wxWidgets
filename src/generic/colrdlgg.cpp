@@ -143,9 +143,9 @@ void wxGenericColourDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
 bool wxGenericColourDialog::Create(wxWindow *parent, wxColourData *data)
 {
-    if ( !wxDialog::Create(parent, -1, _("Choose colour"),
+    if ( !wxDialog::Create(parent, wxID_ANY, _("Choose colour"),
                            wxPoint(0, 0), wxSize(900, 900)) )
-        return FALSE;
+        return false;
 
     dialogParent = parent;
 
@@ -156,7 +156,7 @@ bool wxGenericColourDialog::Create(wxWindow *parent, wxColourData *data)
     CalculateMeasurements();
     CreateWidgets();
 
-    return TRUE;
+    return true;
 }
 
 int wxGenericColourDialog::ShowModal()
@@ -214,7 +214,7 @@ void wxGenericColourDialog::OnPaint(wxPaintEvent& event)
   PaintBasicColours(dc);
   PaintCustomColours(dc);
   PaintCustomColour(dc);
-  PaintHighlight(dc, TRUE);
+  PaintHighlight(dc, true);
 }
 
 void wxGenericColourDialog::CalculateMeasurements()
@@ -265,11 +265,11 @@ void wxGenericColourDialog::CreateWidgets()
 #endif
 
     redSlider = new wxSlider(this, wxID_RED_SLIDER, singleCustomColour.Red(), 0, 255,
-        wxPoint(sliderX, 10), wxSize(-1, sliderHeight), wxVERTICAL|wxSL_LABELS);
+        wxPoint(sliderX, 10), wxSize(wxDefaultSize.x, sliderHeight), wxVERTICAL|wxSL_LABELS);
     greenSlider = new wxSlider(this, wxID_GREEN_SLIDER, singleCustomColour.Green(), 0, 255,
-        wxPoint(sliderX + sliderSpacing, 10), wxSize(-1, sliderHeight), wxVERTICAL|wxSL_LABELS);
+        wxPoint(sliderX + sliderSpacing, 10), wxSize(wxDefaultSize.x, sliderHeight), wxVERTICAL|wxSL_LABELS);
     blueSlider = new wxSlider(this, wxID_BLUE_SLIDER, singleCustomColour.Blue(), 0, 255,
-        wxPoint(sliderX + 2*sliderSpacing, 10), wxSize(-1, sliderHeight), wxVERTICAL|wxSL_LABELS);
+        wxPoint(sliderX + 2*sliderSpacing, 10), wxSize(wxDefaultSize.x, sliderHeight), wxVERTICAL|wxSL_LABELS);
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
@@ -278,7 +278,7 @@ void wxGenericColourDialog::CreateWidgets()
 
 #if wxUSE_STATLINE
     // 2) static line
-    topsizer->Add( new wxStaticLine( this, -1 ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
+    topsizer->Add( new wxStaticLine( this, wxID_ANY ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
 #endif
 
     // 3) buttons
@@ -286,7 +286,7 @@ void wxGenericColourDialog::CreateWidgets()
     buttonsizer->Add( new wxButton(this, wxID_ADD_CUSTOM, _("Add to custom colours") ), 0, wxLEFT|wxRIGHT, 10 );
     topsizer->Add( buttonsizer, 0, wxCENTRE | wxALL, 10 );
 
-    SetAutoLayout( TRUE );
+    SetAutoLayout( true );
     SetSizer( topsizer );
 
     topsizer->SetSizeHints( this );
@@ -322,7 +322,7 @@ void wxGenericColourDialog::InitializeColours(void)
     wxColour curr = colourData.GetColour();
     if ( curr.Ok() )
     {
-        bool initColourFound = FALSE;
+        bool initColourFound = false;
 
         for (i = 0; i < WXSIZEOF(wxColourDialogNames); i++)
         {
@@ -330,7 +330,7 @@ void wxGenericColourDialog::InitializeColours(void)
             {
                 whichKind = 1;
                 colourSelection = i;
-                initColourFound = TRUE;
+                initColourFound = true;
                 break;
             }
         }
@@ -477,46 +477,46 @@ void wxGenericColourDialog::PaintCustomColour(wxDC& dc)
 
 void wxGenericColourDialog::OnBasicColourClick(int which)
 {
-  wxClientDC dc(this);
+    wxClientDC dc(this);
 
-  PaintHighlight(dc, FALSE);
-  whichKind = 1;
-  colourSelection = which;
-  colourData.SetColour(standardColours[colourSelection]);
-  redSlider->SetValue( standardColours[colourSelection].Red() );
+    PaintHighlight(dc, false);
+    whichKind = 1;
+    colourSelection = which;
+    colourData.SetColour(standardColours[colourSelection]);
+    redSlider->SetValue( standardColours[colourSelection].Red() );
     greenSlider->SetValue( standardColours[colourSelection].Green() );
     blueSlider->SetValue( standardColours[colourSelection].Blue() );
-  singleCustomColour.Set(standardColours[colourSelection].Red(), standardColours[colourSelection].Green(), standardColours[colourSelection].Blue());
+    singleCustomColour.Set(standardColours[colourSelection].Red(), standardColours[colourSelection].Green(), standardColours[colourSelection].Blue());
 
-  PaintCustomColour(dc);
-    PaintHighlight(dc, TRUE);
+    PaintCustomColour(dc);
+    PaintHighlight(dc, true);
 }
 
 void wxGenericColourDialog::OnCustomColourClick(int which)
 {
-  wxClientDC dc(this);
-  PaintHighlight(dc, FALSE);
-  whichKind = 2;
-  colourSelection = which;
-  colourData.SetColour(customColours[colourSelection]);
-  redSlider->SetValue( customColours[colourSelection].Red() );
+    wxClientDC dc(this);
+    PaintHighlight(dc, false);
+    whichKind = 2;
+    colourSelection = which;
+    colourData.SetColour(customColours[colourSelection]);
+    redSlider->SetValue( customColours[colourSelection].Red() );
     greenSlider->SetValue( customColours[colourSelection].Green() );
     blueSlider->SetValue( customColours[colourSelection].Blue() );
-  singleCustomColour.Set(customColours[colourSelection].Red(), customColours[colourSelection].Green(), customColours[colourSelection].Blue());
-  PaintCustomColour(dc);
-  PaintHighlight(dc, TRUE);
+    singleCustomColour.Set(customColours[colourSelection].Red(), customColours[colourSelection].Green(), customColours[colourSelection].Blue());
+    PaintCustomColour(dc);
+    PaintHighlight(dc, true);
 }
 
 /*
 void wxGenericColourDialog::OnOk(void)
 {
-  Show(FALSE);
+  Show(false);
 }
 
 void wxGenericColourDialog::OnCancel(void)
 {
-  colourDialogCancelled = TRUE;
-  Show(FALSE);
+  colourDialogCancelled = true;
+  Show(false);
 }
 */
 
@@ -525,10 +525,10 @@ void wxGenericColourDialog::OnAddCustom(wxCommandEvent& WXUNUSED(event))
   wxClientDC dc(this);
   if (whichKind != 2)
   {
-    PaintHighlight(dc, FALSE);
+    PaintHighlight(dc, false);
     whichKind = 2;
     colourSelection = 0;
-    PaintHighlight(dc, TRUE);
+    PaintHighlight(dc, true);
   }
 
   customColours[colourSelection].Set(singleCustomColour.Red(), singleCustomColour.Green(), singleCustomColour.Blue());

@@ -67,7 +67,7 @@ class WXDLLEXPORT wxGenericListCtrl: public wxControl
 public:
     wxGenericListCtrl();
     wxGenericListCtrl( wxWindow *parent,
-                wxWindowID winid = -1,
+                wxWindowID winid = wxID_ANY,
                 const wxPoint &pos = wxDefaultPosition,
                 const wxSize &size = wxDefaultSize,
                 long style = wxLC_ICON,
@@ -79,7 +79,7 @@ public:
     ~wxGenericListCtrl();
 
     bool Create( wxWindow *parent,
-                 wxWindowID winid = -1,
+                 wxWindowID winid = wxID_ANY,
                  const wxPoint &pos = wxDefaultPosition,
                  const wxSize &size = wxDefaultSize,
                  long style = wxLC_ICON,
@@ -108,7 +108,7 @@ public:
     bool SetItemPosition( long item, const wxPoint& pos ); // not supported in wxGLC
     int GetItemCount() const;
     int GetColumnCount() const;
-    void SetItemSpacing( int spacing, bool isSmall = FALSE );
+    void SetItemSpacing( int spacing, bool isSmall = false );
     wxSize GetItemSpacing() const;
     void SetItemTextColour( long item, const wxColour& col);
     wxColour GetItemTextColour( long item ) const;
@@ -119,7 +119,7 @@ public:
     void SetTextColour(const wxColour& col);
     long GetTopItem() const;
 
-    void SetSingleStyle( long style, bool add = TRUE ) ;
+    void SetSingleStyle( long style, bool add = true ) ;
     void SetWindowStyleFlag( long style );
     void RecreateWindow() {}
     long GetNextItem( long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE ) const;
@@ -140,7 +140,7 @@ public:
     void Edit( long item );
 
     bool EnsureVisible( long item );
-    long FindItem( long start, const wxString& str, bool partial = FALSE );
+    long FindItem( long start, const wxString& str, bool partial = false );
     long FindItem( long start, long data );
     long FindItem( long start, const wxPoint& pt, int direction ); // not supported in wxGLC
     long HitTest( const wxPoint& point, int& flags);
@@ -188,7 +188,7 @@ public:
     void OnSize( wxSizeEvent &event );
 
     // We have to hand down a few functions
-    virtual void Refresh(bool eraseBackground = TRUE,
+    virtual void Refresh(bool eraseBackground = true,
                          const wxRect *rect = NULL);
 
     virtual void Freeze();
@@ -268,7 +268,7 @@ class WXDLLEXPORT wxListCtrl: public wxGenericListCtrl
 public:
     wxListCtrl() {}
 
-    wxListCtrl(wxWindow *parent, wxWindowID winid = -1,
+    wxListCtrl(wxWindow *parent, wxWindowID winid = wxID_ANY,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxLC_ICON,

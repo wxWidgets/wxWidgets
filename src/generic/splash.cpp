@@ -54,7 +54,7 @@ wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int mil
     m_splashStyle = splashStyle;
     m_milliseconds = milliseconds;
 
-    m_window = new wxSplashScreenWindow(bitmap, this, -1, pos, size, wxNO_BORDER);
+    m_window = new wxSplashScreenWindow(bitmap, this, wxID_ANY, pos, size, wxNO_BORDER);
 
     SetClientSize(bitmap.GetWidth(), bitmap.GetHeight());
 
@@ -66,10 +66,10 @@ wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int mil
     if (m_splashStyle & wxSPLASH_TIMEOUT)
     {
         m_timer.SetOwner(this, wxSPLASH_TIMER_ID);
-        m_timer.Start(milliseconds, TRUE);
+        m_timer.Start(milliseconds, true);
     }
 
-    Show(TRUE);
+    Show(true);
     m_window->SetFocus();
 #if defined( __WXMSW__ ) || defined(__WXMAC__)
     Update(); // Without this, you see a blank screen for an instant
@@ -85,7 +85,7 @@ wxSplashScreen::~wxSplashScreen()
 
 void wxSplashScreen::OnNotify(wxTimerEvent& WXUNUSED(event))
 {
-    Close(TRUE);
+    Close(true);
 }
 
 void wxSplashScreen::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
@@ -182,12 +182,12 @@ void wxSplashScreenWindow::OnEraseBackground(wxEraseEvent& event)
 void wxSplashScreenWindow::OnMouseEvent(wxMouseEvent& event)
 {
     if (event.LeftDown() || event.RightDown())
-        GetParent()->Close(TRUE);
+        GetParent()->Close(true);
 }
 
 void wxSplashScreenWindow::OnChar(wxKeyEvent& WXUNUSED(event))
 {
-    GetParent()->Close(TRUE);
+    GetParent()->Close(true);
 }
 
 #endif // wxUSE_SPLASH

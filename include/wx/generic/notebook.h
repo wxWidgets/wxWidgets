@@ -68,7 +68,7 @@ public:
     // NB: this function will _not_ generate wxEVT_NOTEBOOK_PAGE_xxx events
   int SetSelection(size_t nPage);
     // cycle thru the tabs
-  //  void AdvanceSelection(bool bForward = TRUE);
+  //  void AdvanceSelection(bool bForward = true);
     // get the currently selected page
   int GetSelection() const { return m_nSelection; }
 
@@ -109,7 +109,7 @@ public:
   bool InsertPage(size_t nPage,
                   wxNotebookPage *pPage,
                   const wxString& strText,
-                  bool bSelect = FALSE,
+                  bool bSelect = false,
                   int imageId = -1);
 
   // callbacks
@@ -123,7 +123,7 @@ public:
   // base class virtuals
   // -------------------
   virtual void Command(wxCommandEvent& event);
-  virtual void SetConstraintSizes(bool recurse = TRUE);
+  virtual void SetConstraintSizes(bool recurse = true);
   virtual bool DoPhase(int nPhase);
 
   // Implementation
@@ -139,7 +139,7 @@ public:
 
   // Implementation: calculate the layout of the view rect
   // and resize the children if required
-  bool RefreshLayout(bool force = TRUE);
+  bool RefreshLayout(bool force = true);
 
 protected:
   // common part of all ctors

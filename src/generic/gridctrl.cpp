@@ -60,7 +60,7 @@ wxString wxGridCellDateTimeRenderer::GetString(wxGrid& grid, int row, int col)
 {
     wxGridTableBase *table = grid.GetTable();
 
-    bool hasDatetime = FALSE;
+    bool hasDatetime = false;
     wxDateTime val;
     wxString text;
     if ( table->CanGetValueAs(row, col, wxGRID_VALUE_DATETIME) )
@@ -69,7 +69,7 @@ wxString wxGridCellDateTimeRenderer::GetString(wxGrid& grid, int row, int col)
 
         if (tempval){
             val = *((wxDateTime *)tempval);
-            hasDatetime = TRUE;
+            hasDatetime = true;
             delete (wxDateTime *)tempval;
         }
 
@@ -344,7 +344,7 @@ wxGridCellAutoWrapStringRenderer::GetTextLines(wxGrid& grid,
 
     dc.SetFont(attr.GetFont());
     wxStringTokenizer tk(data , _T(" \n\t\r"));
-    wxString thisline(wxT(""));
+    wxString thisline = wxEmptyString;
 
     while ( tk.HasMoreTokens() )
     {

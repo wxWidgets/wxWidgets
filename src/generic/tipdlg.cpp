@@ -217,7 +217,7 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
 
     wxButton *btnNext = new wxButton(this, wxID_NEXT_TIP, _("&Next Tip"));
 
-    wxStaticText *text = new wxStaticText(this, wxID_ANY, _("Did you know..."), wxDefaultPosition, wxSize(-1,30) );
+    wxStaticText *text = new wxStaticText(this, wxID_ANY, _("Did you know..."), wxDefaultPosition, wxSize(wxDefaultSize.x,30) );
 #if defined(__WXMSW__) || defined(__WXPM__)
     text->SetFont(wxFont(16, wxSWISS, wxNORMAL, wxBOLD));
 #else

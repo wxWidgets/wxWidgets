@@ -126,7 +126,7 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
 #if wxUSE_POPUPWIN
            : wxPopupTransientWindow(parent)
 #else
-           : wxFrame(parent, -1, _T(""),
+           : wxFrame(parent, wxID_ANY, wxEmptyString,
                      wxDefaultPosition, wxDefaultSize,
                      wxNO_BORDER | wxFRAME_NO_TASKBAR )
 #endif
@@ -162,10 +162,10 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
     #ifdef __WXGTK__
         if (!GTK_WIDGET_HAS_GRAB(m_widget))
             gtk_grab_add( m_widget );
-    #endif   
+    #endif
 #else
     Move(x, y);
-    Show(TRUE);
+    Show(true);
 #endif
 }
 
@@ -229,11 +229,11 @@ void wxTipWindow::Close()
     }
 
 #if wxUSE_POPUPWIN
-    Show(FALSE);
+    Show(false);
     #ifdef __WXGTK__
         if (GTK_WIDGET_HAS_GRAB(m_widget))
             gtk_grab_remove( m_widget );
-    #endif   
+    #endif
     Destroy();
 #else
     wxFrame::Close();
@@ -245,7 +245,7 @@ void wxTipWindow::Close()
 // ----------------------------------------------------------------------------
 
 wxTipWindowView::wxTipWindowView(wxWindow *parent)
-               : wxWindow(parent, -1,
+               : wxWindow(parent, wxID_ANY,
                           wxDefaultPosition, wxDefaultSize,
                           wxNO_BORDER)
 {
@@ -272,7 +272,7 @@ void wxTipWindowView::Adjust(const wxString& text, wxCoord maxLength)
             widthMax = 0;
     m_parent->m_heightLine = 0;
 
-    bool breakLine = FALSE;
+    bool breakLine = false;
     for ( const wxChar *p = text.c_str(); ; p++ )
     {
         if ( *p == _T('\n') || *p == _T('\0') )
@@ -293,21 +293,21 @@ void wxTipWindowView::Adjust(const wxString& text, wxCoord maxLength)
             }
 
             current.clear();
-            breakLine = FALSE;
+            breakLine = false;
         }
         else if ( breakLine && (*p == _T(' ') || *p == _T('\t')) )
         {
             // word boundary - break the line here
             m_parent->m_textLines.Add(current);
             current.clear();
-            breakLine = FALSE;
+            breakLine = false;
         }
         else // line goes on
         {
             current += *p;
             dc.GetTextExtent(current, &width, &height);
             if ( width > maxLength )
-                breakLine = TRUE;
+                breakLine = true;
 
             if ( width > widthMax )
                 widthMax = width;

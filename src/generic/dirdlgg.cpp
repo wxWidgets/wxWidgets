@@ -60,15 +60,15 @@ BEGIN_EVENT_TABLE(wxGenericDirDialog, wxDialog)
     EVT_BUTTON               (wxID_OK,        wxGenericDirDialog::OnOK)
     EVT_BUTTON               (ID_NEW,         wxGenericDirDialog::OnNew)
     EVT_BUTTON               (ID_GO_HOME,     wxGenericDirDialog::OnGoHome)
-    EVT_TREE_KEY_DOWN        (-1,             wxGenericDirDialog::OnTreeKeyDown)
-    EVT_TREE_SEL_CHANGED     (-1,             wxGenericDirDialog::OnTreeSelected)
+    EVT_TREE_KEY_DOWN        (wxID_ANY,       wxGenericDirDialog::OnTreeKeyDown)
+    EVT_TREE_SEL_CHANGED     (wxID_ANY,       wxGenericDirDialog::OnTreeSelected)
     EVT_TEXT_ENTER           (ID_TEXTCTRL,    wxGenericDirDialog::OnOK)
     EVT_CHECKBOX             (ID_SHOW_HIDDEN, wxGenericDirDialog::OnShowHidden)
 END_EVENT_TABLE()
 
 wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
                                        const wxString& defaultPath, long style,
-                                       const wxPoint& pos, const wxSize& sz, 
+                                       const wxPoint& pos, const wxSize& sz,
                                        const wxString& name):
                 wxDialog(parent, ID_DIRCTRL, title, pos, sz, style, name)
 {
@@ -87,23 +87,23 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
 
     // VS: 'Home directory' concept is unknown to MS-DOS
 #ifndef __DOS__
-    wxBitmapButton* homeButton = 
+    wxBitmapButton* homeButton =
         new wxBitmapButton(this, ID_GO_HOME,
                            wxArtProvider::GetBitmap(wxART_GO_HOME, wxART_CMN_DIALOG));
     buttonsizer->Add( homeButton, 0, wxLEFT|wxRIGHT, 10 );
 #endif
-    
+
     // I'm not convinced we need a New button, and we tend to get annoying
     // accidental-editing with label editing enabled.
     if (style & wxDD_NEW_DIR_BUTTON)
     {
-        wxBitmapButton* newButton = 
+        wxBitmapButton* newButton =
             new wxBitmapButton(this, ID_NEW,
                             wxArtProvider::GetBitmap(wxART_NEW_DIR, wxART_CMN_DIALOG));
         buttonsizer->Add( newButton, 0, wxRIGHT, 10 );
 #if wxUSE_TOOLTIPS
         newButton->SetToolTip(_("Create new directory"));
-#endif    
+#endif
     }
 
 #if wxUSE_TOOLTIPS
@@ -113,10 +113,10 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     topsizer->Add( buttonsizer, 0, wxTOP | wxALIGN_RIGHT, 10 );
 
     // 1) dir ctrl
-    m_dirCtrl = NULL; // this is neccessary, event handler called from 
+    m_dirCtrl = NULL; // this is neccessary, event handler called from
                       // wxGenericDirCtrl would crash otherwise!
     long dirStyle = wxDIRCTRL_DIR_ONLY|wxSUNKEN_BORDER;
-    
+
 #ifdef __WXMSW__
     if (style & wxDD_NEW_DIR_BUTTON)
     {
@@ -124,11 +124,11 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
         // before we can call EditLabel (required for "New directory")
         dirStyle |= wxDIRCTRL_EDIT_LABELS;
     }
-#endif    
+#endif
 
     m_dirCtrl = new wxGenericDirCtrl(this, ID_DIRCTRL,
                                      m_path, wxPoint(5, 5),
-                                     wxSize(300, 200), 
+                                     wxSize(300, 200),
                                      dirStyle);
 
     topsizer->Add( m_dirCtrl, 1, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, 10 );
@@ -143,12 +143,12 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
 
 #if wxUSE_STATLINE
     // 3) Static line
-    topsizer->Add( new wxStaticLine( this, -1 ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
+    topsizer->Add( new wxStaticLine( this, wxID_ANY ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
 #endif
 
     // 4) Buttons
     buttonsizer = new wxBoxSizer( wxHORIZONTAL );
-    
+
     // OK and Cancel button should be at the right bottom
     wxButton* okButton = new wxButton(this, wxID_OK, _("OK"));
     buttonsizer->Add( okButton, 0, wxLEFT|wxRIGHT, 10 );
@@ -160,7 +160,7 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     okButton->SetDefault();
     m_dirCtrl->SetFocus();
 
-    SetAutoLayout( TRUE );
+    SetAutoLayout( true );
     SetSizer( topsizer );
 
     topsizer->SetSizeHints( this );
@@ -185,9 +185,9 @@ void wxGenericDirDialog::OnOK(wxCommandEvent& WXUNUSED(event))
     }
     // Interact with user, find out if the dir is a typo or to be created
     wxString msg;
-    msg.Printf(_("The directory '%s' does not exist\nCreate it now?"), 
+    msg.Printf(_("The directory '%s' does not exist\nCreate it now?"),
                m_path.c_str());
-    wxMessageDialog dialog(this, msg, _("Directory does not exist"), 
+    wxMessageDialog dialog(this, msg, _("Directory does not exist"),
                            wxYES_NO | wxICON_WARNING);
 
     if ( dialog.ShowModal() == wxID_YES ) {
@@ -200,7 +200,7 @@ void wxGenericDirDialog::OnOK(wxCommandEvent& WXUNUSED(event))
         }
         else {
             // Trouble...
-            msg.Printf(_("Failed to create directory '%s'\n(Do you have the required permissions?)"), 
+            msg.Printf(_("Failed to create directory '%s'\n(Do you have the required permissions?)"),
                        m_path.c_str());
             wxMessageDialog errmsg(this, msg, _("Error creating directory"), wxOK | wxICON_ERROR);
             errmsg.ShowModal();
@@ -302,7 +302,7 @@ void wxGenericDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )
         return;
     }
 
-    wxDirItemData *new_data = new wxDirItemData( path, new_name, TRUE );
+    wxDirItemData *new_data = new wxDirItemData( path, new_name, true );
 
     // TODO: THIS CODE DOESN'T WORK YET. We need to avoid duplication of the first child
     // of the parent.

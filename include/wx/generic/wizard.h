@@ -29,7 +29,7 @@ public:
     // ctor
     wxWizard() { Init(); }
     wxWizard(wxWindow *parent,
-             int id = -1,
+             int id = wxID_ANY,
              const wxString& title = wxEmptyString,
              const wxBitmap& bitmap = wxNullBitmap,
              const wxPoint& pos = wxDefaultPosition,
@@ -39,7 +39,7 @@ public:
         Create(parent, id, title, bitmap, pos, style);
     }
     bool Create(wxWindow *parent,
-             int id = -1,
+             int id = wxID_ANY,
              const wxString& title = wxEmptyString,
              const wxBitmap& bitmap = wxNullBitmap,
              const wxPoint& pos = wxDefaultPosition,
@@ -62,9 +62,9 @@ public:
     bool IsRunning() const { return m_page != NULL; }
 
     // show the prev/next page, but call TransferDataFromWindow on the current
-    // page first and return FALSE without changing the page if
-    // TransferDataFromWindow() returns FALSE - otherwise, returns TRUE
-    bool ShowPage(wxWizardPage *page, bool goingForward = TRUE);
+    // page first and return false without changing the page if
+    // TransferDataFromWindow() returns false - otherwise, returns true
+    bool ShowPage(wxWizardPage *page, bool goingForward = true);
 
     // do fill the dialog with controls
     // this is app-overridable to, for example, set help and tooltip text
@@ -87,9 +87,9 @@ private:
     void AddButtonRow(wxBoxSizer *mainColumn);
 
     void FinishLayout();
-    
+
     wxSize GetManualPageSize() const;
-    
+
     // the page size requested by user
     wxSize m_sizePage;
 
@@ -109,18 +109,18 @@ private:
     bool m_calledSetBorder;
     // Border around page area sizer requested using SetBorder()
     int m_border;
-    
+
     // Whether RunWizard() was called
     bool m_started;
-    
+
     // Page area sizer will be inserted here with padding
     wxBoxSizer *m_sizerBmpAndPage;
-    
+
     // Actual position and size of pages
     wxWizardSizer *m_sizerPage;
-    
+
     friend class wxWizardSizer;
-    
+
     DECLARE_DYNAMIC_CLASS(wxWizard)
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxWizard)

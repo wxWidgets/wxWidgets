@@ -65,8 +65,8 @@
 IMPLEMENT_CLASS(wxScrolledWindow, wxGenericScrolledWindow)
 
 /*
-	TODO PROPERTIES
-		style wxHSCROLL | wxVSCROLL
+    TODO PROPERTIES
+        style wxHSCROLL | wxVSCROLL
 */
 
 // ----------------------------------------------------------------------------
@@ -84,7 +84,7 @@ public:
 
     virtual bool ProcessEvent(wxEvent& event);
 
-    void ResetDrawnFlag() { m_hasDrawnWindow = FALSE; }
+    void ResetDrawnFlag() { m_hasDrawnWindow = false; }
 
 private:
     wxScrollHelper *m_scrollHelper;
@@ -205,7 +205,7 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     // anything in the window. We set it to true here but reset it to false in
     // wxScrolledWindow::OnPaint() handler (which wouldn't be called if the
     // user code defined OnPaint() in the derived class)
-    m_hasDrawnWindow = TRUE;
+    m_hasDrawnWindow = true;
 
     // pass it on to the real handler
     bool processed = wxEvtHandler::ProcessEvent(event);
@@ -221,7 +221,7 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     {
         m_scrollHelper->HandleOnSize((wxSizeEvent &)event);
 
-        return TRUE;
+        return true;
     }
 
     if ( processed )
@@ -231,18 +231,18 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
         // OnDraw() below (from HandleOnPaint)
         if ( m_hasDrawnWindow )
         {
-            return TRUE;
+            return true;
         }
     }
 
-    // reset the skipped flag to FALSE as it might have been set to TRUE in
+    // reset the skipped flag to false as it might have been set to true in
     // ProcessEvent() above
-    event.Skip(FALSE);
+    event.Skip(false);
 
     if ( evType == wxEVT_PAINT )
     {
         m_scrollHelper->HandleOnPaint((wxPaintEvent &)event);
-        return TRUE;
+        return true;
     }
 
     if ( evType == wxEVT_SCROLLWIN_TOP ||
@@ -278,7 +278,7 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
         return !event.GetSkipped();
     }
 
-    return FALSE;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -297,7 +297,7 @@ wxScrollHelper::wxScrollHelper(wxWindow *win)
     m_yScrollLinesPerPage = 0;
 
     m_xScrollingEnabled =
-    m_yScrollingEnabled = TRUE;
+    m_yScrollingEnabled = true;
 
     m_scaleX =
     m_scaleY = 1.0;
@@ -368,7 +368,7 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX,
     m_targetWindow->SetVirtualSize( w, h );
 
     if (do_refresh && !noRefresh)
-        m_targetWindow->Refresh(TRUE, GetScrollRect());
+        m_targetWindow->Refresh(true, GetScrollRect());
 
 #ifndef __WXUNIVERSAL__
     // If the target is not the same as the window with the scrollbars,
@@ -476,7 +476,7 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
         m_win->SetScrollPos(wxVERTICAL, m_yScrollPosition);
     }
 
-    bool needsRefresh = FALSE;
+    bool needsRefresh = false;
     int dx = 0,
         dy = 0;
     if (orient == wxHORIZONTAL)
@@ -487,7 +487,7 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
        }
        else
        {
-           needsRefresh = TRUE;
+           needsRefresh = true;
        }
     }
     else
@@ -498,13 +498,13 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
         }
         else
         {
-            needsRefresh = TRUE;
+            needsRefresh = true;
         }
     }
 
     if ( needsRefresh )
     {
-        m_targetWindow->Refresh(TRUE, GetScrollRect());
+        m_targetWindow->Refresh(true, GetScrollRect());
     }
     else
     {
@@ -581,7 +581,7 @@ int wxScrollHelper::CalcScrollInc(wxScrollWinEvent& event)
                 nScrollInc = noPositions - m_xScrollPosition; // As +ve as we can go
         }
         else
-            m_targetWindow->Refresh(TRUE, GetScrollRect());
+            m_targetWindow->Refresh(true, GetScrollRect());
     }
     else
     {
@@ -605,7 +605,7 @@ int wxScrollHelper::CalcScrollInc(wxScrollWinEvent& event)
         else
         {
             // VZ: why do we do this? (FIXME)
-            m_targetWindow->Refresh(TRUE, GetScrollRect());
+            m_targetWindow->Refresh(true, GetScrollRect());
         }
     }
 
@@ -648,7 +648,7 @@ void wxScrollHelper::AdjustScrollbars()
         {
             m_xScrollLines = 0;
             m_xScrollPosition = 0;
-            m_win->SetScrollbar (wxHORIZONTAL, 0, 0, 0, FALSE);
+            m_win->SetScrollbar (wxHORIZONTAL, 0, 0, 0, false);
         }
         else
         {
@@ -766,7 +766,7 @@ void wxScrollHelper::AdjustScrollbars()
             m_targetWindow->ScrollWindow( m_xScrollPixelsPerLine * (oldXScroll - m_xScrollPosition), 0,
                                           GetScrollRect() );
        else
-            m_targetWindow->Refresh(TRUE, GetScrollRect());
+            m_targetWindow->Refresh(true, GetScrollRect());
     }
 
     if (oldYScroll != m_yScrollPosition)
@@ -775,7 +775,7 @@ void wxScrollHelper::AdjustScrollbars()
             m_targetWindow->ScrollWindow( 0, m_yScrollPixelsPerLine * (oldYScroll-m_yScrollPosition),
                                           GetScrollRect() );
         else
-            m_targetWindow->Refresh(TRUE, GetScrollRect());
+            m_targetWindow->Refresh(true, GetScrollRect());
     }
 }
 
@@ -1231,7 +1231,7 @@ bool wxGenericScrolledWindow::Layout()
         CalcScrolledPosition(0,0, &x,&y);
         GetVirtualSize(&w, &h);
         GetSizer()->SetDimension(x, y, w, h);
-        return TRUE;
+        return true;
     }
 
     // fall back to default for LayoutConstraints

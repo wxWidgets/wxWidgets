@@ -934,7 +934,7 @@ void wxLogDialog::CreateDetailsControls()
     heightMax *= 9;
     heightMax /= 10;
 
-    m_listctrl->SetSize(-1, wxMin(height, heightMax));
+    m_listctrl->SetSize(wxDefaultSize.x, wxMin(height, heightMax));
 }
 
 void wxLogDialog::OnListSelect(wxListEvent& event)
@@ -1070,7 +1070,7 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
     SetSizeHints(size.x, size.y, m_maxWidth, m_maxHeight);
 
     // don't change the width when expanding/collapsing
-    SetSize(-1, size.y);
+    SetSize(wxDefaultSize.x, size.y);
 
 #ifdef __WXGTK__
     // VS: this is neccessary in order to force frame redraw under

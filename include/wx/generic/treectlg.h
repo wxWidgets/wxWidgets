@@ -46,7 +46,7 @@ public:
     // --------
     wxGenericTreeCtrl() { Init(); }
 
-    wxGenericTreeCtrl(wxWindow *parent, wxWindowID id = -1,
+    wxGenericTreeCtrl(wxWindow *parent, wxWindowID id = wxID_ANY,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxTR_DEFAULT_STYLE,
@@ -59,7 +59,7 @@ public:
 
     virtual ~wxGenericTreeCtrl();
 
-    bool Create(wxWindow *parent, wxWindowID id = -1,
+    bool Create(wxWindow *parent, wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxTR_DEFAULT_STYLE,
@@ -142,10 +142,10 @@ public:
         // allow the user to expand the items which don't have any children now
         // - but instead add them only when needed, thus minimizing memory
         // usage and loading time.
-    void SetItemHasChildren(const wxTreeItemId& item, bool has = TRUE);
+    void SetItemHasChildren(const wxTreeItemId& item, bool has = true);
 
         // the item will be shown in bold
-    void SetItemBold(const wxTreeItemId& item, bool bold = TRUE);
+    void SetItemBold(const wxTreeItemId& item, bool bold = true);
 
         // set the item's text colour
     void SetItemTextColour(const wxTreeItemId& item, const wxColour& col);
@@ -183,15 +183,15 @@ public:
     // number of children
     // ------------------
 
-        // if 'recursively' is FALSE, only immediate children count, otherwise
+        // if 'recursively' is false, only immediate children count, otherwise
         // the returned number is the number of all items in this branch
     size_t GetChildrenCount(const wxTreeItemId& item,
-                            bool recursively = TRUE) const;
+                            bool recursively = true) const;
 
     // navigation
     // ----------
 
-    // wxTreeItemId.IsOk() will return FALSE if there is no such item
+    // wxTreeItemId.IsOk() will return false if there is no such item
 
         // get the root tree item
     wxTreeItemId GetRootItem() const { return m_anchor; }
@@ -330,7 +330,7 @@ public:
         // get the bounding rectangle of the item (or of its label only)
     bool GetBoundingRect(const wxTreeItemId& item,
                          wxRect& rect,
-                         bool textOnly = FALSE) const;
+                         bool textOnly = false) const;
 
         // Start editing the item label: this (temporarily) replaces the item
         // with a one line edit control. The item will be selected if it hadn't
@@ -381,7 +381,7 @@ public:
 
     virtual void Freeze();
     virtual void Thaw();
- 
+
     // callbacks
     void OnPaint( wxPaintEvent &event );
     void OnSetFocus( wxFocusEvent &event );
@@ -398,7 +398,7 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-    
+
     // implementation helpers
 protected:
     friend class wxGenericTreeItem;
@@ -431,7 +431,7 @@ protected:
                         *m_imageListState,
                         *m_imageListButtons;
 
-    int                  m_freezeCount; 
+    int                  m_freezeCount;
     int                  m_dragCount;
     wxPoint              m_dragStart;
     wxGenericTreeItem   *m_dropTarget;
@@ -457,8 +457,8 @@ protected:
     void DrawDropEffect(wxGenericTreeItem *item);
 
     void DoSelectItem(const wxTreeItemId& id,
-                      bool unselect_others = TRUE,
-                      bool extended_select = FALSE);
+                      bool unselect_others = true,
+                      bool extended_select = false);
 
     wxTreeItemId DoInsertItem(const wxTreeItemId& parent,
                               size_t previous,
@@ -521,7 +521,7 @@ class WXDLLEXPORT wxTreeCtrl: public wxGenericTreeCtrl
 public:
     wxTreeCtrl() {}
 
-    wxTreeCtrl(wxWindow *parent, wxWindowID id = -1,
+    wxTreeCtrl(wxWindow *parent, wxWindowID id = wxID_ANY,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxTR_DEFAULT_STYLE,

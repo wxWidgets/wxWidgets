@@ -167,7 +167,7 @@ void wxSashLayoutWindow::OnCalculateLayout(wxCalculateLayoutEvent& event)
         // Make sure the sash is erased when the window is resized
         if ((pos.x != thisRect.x || pos.y != thisRect.y || sz.x != thisRect.width || sz.y != thisRect.height) &&
             (GetSashVisible(wxSASH_TOP) || GetSashVisible(wxSASH_RIGHT) || GetSashVisible(wxSASH_BOTTOM) || GetSashVisible(wxSASH_LEFT)))
-            Refresh(TRUE);
+            Refresh(true);
 
     }
 
@@ -215,7 +215,7 @@ bool wxLayoutAlgorithm::LayoutMDIFrame(wxMDIParentFrame* frame, wxRect* r)
 
     clientWindow->SetSize(rect.x, rect.y, rect.width, rect.height);
 
-    return TRUE;
+    return true;
 }
 
 #endif // wxUSE_MDI_ARCHITECTURE
@@ -263,7 +263,7 @@ bool wxLayoutAlgorithm::LayoutWindow(wxWindow* parent, wxWindow* mainWindow)
 
     // Find the last layout-aware window, so we can make it fill all remaining
     // space.
-    wxWindow		*lastAwareWindow = NULL;
+    wxWindow *lastAwareWindow = NULL;
     wxWindowList::compatibility_iterator node = parent->GetChildren().GetFirst();
 
     while (node)
@@ -304,7 +304,7 @@ bool wxLayoutAlgorithm::LayoutWindow(wxWindow* parent, wxWindow* mainWindow)
     }
 
     if (event.GetRect().GetWidth() < 0 || event.GetRect().GetHeight() < 0)
-        return FALSE;
+        return false;
 
     event.SetRect(rect);
 
@@ -337,6 +337,6 @@ bool wxLayoutAlgorithm::LayoutWindow(wxWindow* parent, wxWindow* mainWindow)
         lastAwareWindow->SetSize(rect.x, rect.y, wxMax(0, rect.width), wxMax(0, rect.height));
     }
 
-    return TRUE;
+    return true;
 }
 

@@ -81,13 +81,13 @@ public:
     // should be used instead for them
 
     // corresponds to wxCAL_NO_YEAR_CHANGE bit
-    void EnableYearChange(bool enable = TRUE);
+    void EnableYearChange(bool enable = true);
 
     // corresponds to wxCAL_NO_MONTH_CHANGE bit
-    void EnableMonthChange(bool enable = TRUE);
+    void EnableMonthChange(bool enable = true);
 
     // corresponds to wxCAL_SHOW_HOLIDAYS bit
-    void EnableHolidayDisplay(bool display = TRUE);
+    void EnableHolidayDisplay(bool display = true);
 
     // customization
     // -------------
@@ -159,8 +159,8 @@ public:
     // -------------------------------
 
     // forward these functions to all subcontrols
-    virtual bool Enable(bool enable = TRUE);
-    virtual bool Show(bool show = TRUE);
+    virtual bool Enable(bool enable = true);
+    virtual bool Show(bool show = true);
 
 private:
     // common part of all ctors
@@ -260,7 +260,7 @@ private:
 
     // Set the flag for SetDate(): otherwise it would overwrite the year
     // typed in by the user
-    void SetUserChangedYear() { m_userChangedYear = TRUE; }
+    void SetUserChangedYear() { m_userChangedYear = true; }
 
     // the subcontrols
     wxStaticText *m_staticMonth;
@@ -298,7 +298,7 @@ private:
     // the week day names
     wxString m_weekdays[7];
 
-    // TRUE if SetDate() is being called as the result of changing the year in
+    // true if SetDate() is being called as the result of changing the year in
     // the year control
     bool m_userChangedYear;
 

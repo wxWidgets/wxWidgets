@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __MSGDLGH_G__
@@ -47,5 +47,4 @@ private:
 #define wxMessageDialog wxGenericMessageDialog
 #endif
 
-#endif
-	// __MSGDLGH_G__
+#endif // __MSGDLGH_G__

@@ -50,12 +50,12 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_SPLITTER_UNSPLIT)
 IMPLEMENT_DYNAMIC_CLASS(wxSplitterWindow, wxWindow)
 
 /*
-	TODO PROPERTIES
-		style wxSP_3D
-		sashpos (long , 0 )
-		minsize (long -1 )
-		object, object_ref
-		orientation
+    TODO PROPERTIES
+        style wxSP_3D
+        sashpos (long , 0 )
+        minsize (long -1 )
+        object, object_ref
+        orientation
 */
 
 IMPLEMENT_DYNAMIC_CLASS(wxSplitterEvent, wxNotifyEvent)
@@ -183,7 +183,7 @@ void wxSplitterWindow::OnInternalIdle()
         SizeWindows();
         return; // it won't needUpdating in this case
     }
-    
+
     if (m_needUpdating)
         SizeWindows();
 }
@@ -208,7 +208,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         {
             // Start the drag now
             m_dragMode = wxSPLIT_DRAG_DRAGGING;
-            
+
             // Capture mouse and set the cursor
             CaptureMouse();
             SetResizeCursor();
@@ -233,7 +233,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     {
         // We can stop dragging now and see what we've got.
         m_dragMode = wxSPLIT_DRAG_NONE;
-        
+
         // Release mouse and unset the cursor
         ReleaseMouse();
         SetCursor(* wxSTANDARD_CURSOR);
@@ -423,7 +423,7 @@ bool wxSplitterWindow::SashHitTest(int x, int y, int tolerance)
     int z = m_splitMode == wxSPLIT_VERTICAL ? x : y;
     int hitMin = m_sashPosition - tolerance;
     int hitMax = m_sashPosition + GetSashSize() + tolerance;
-    
+
     return z >=  hitMin && z <= hitMax;
 }
 
@@ -694,7 +694,7 @@ bool wxSplitterWindow::DoSplit(wxSplitMode mode,
     // right now (e.g. because the window is too small)
     m_requestedSashPosition = sashPosition;
     m_checkRequestedSashPosition = false;
-    
+
     DoSetSashPosition(ConvertSashPosition(sashPosition));
 
     SizeWindows();
@@ -792,7 +792,7 @@ void wxSplitterWindow::SetSashPosition(int position, bool redraw)
     // right now (e.g. because the window is too small)
     m_requestedSashPosition = position;
     m_checkRequestedSashPosition = false;
-    
+
     DoSetSashPosition(ConvertSashPosition(position));
 
     if ( redraw )

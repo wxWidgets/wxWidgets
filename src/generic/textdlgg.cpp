@@ -72,7 +72,7 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
                                      const wxString& value,
                                      long style,
                                      const wxPoint& pos)
-                 : wxDialog(parent, -1, caption, pos, wxDefaultSize,
+                 : wxDialog(parent, wxID_ANY, caption, pos, wxDefaultSize,
                             wxDEFAULT_DIALOG_STYLE | wxDIALOG_MODAL),
                    m_value(value)
 {
@@ -88,7 +88,7 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
 
     // 2) text ctrl
     m_textctrl = new wxTextCtrl(this, wxID_TEXT, value,
-                                wxDefaultPosition, wxSize(300, -1),
+                                wxDefaultPosition, wxSize(300, wxDefaultSize.y),
                                 style & ~wxTextEntryDialogStyle);
     topsizer->Add( m_textctrl, 1, wxEXPAND | wxLEFT|wxRIGHT, 15 );
 
@@ -100,13 +100,13 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
 
 #if wxUSE_STATLINE
     // 3) static line
-    topsizer->Add( new wxStaticLine( this, -1 ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
+    topsizer->Add( new wxStaticLine( this, wxID_ANY ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
 #endif
 
     // 4) buttons
     topsizer->Add( CreateButtonSizer( style ), 0, wxCENTRE | wxALL, 10 );
 
-    SetAutoLayout( TRUE );
+    SetAutoLayout( true );
     SetSizer( topsizer );
 
     topsizer->SetSizeHints( this );
@@ -123,7 +123,7 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
 void wxTextEntryDialog::OnOK(wxCommandEvent& WXUNUSED(event) )
 {
 #if wxUSE_VALIDATORS
-    if( Validate() && TransferDataFromWindow() ) 
+    if( Validate() && TransferDataFromWindow() )
     {
         EndModal( wxID_OK );
     }

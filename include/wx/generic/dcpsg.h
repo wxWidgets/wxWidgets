@@ -42,14 +42,14 @@ public:
 
     // Recommended constructor
     wxPostScriptDC(const wxPrintData& printData);
-  
+
     // Recommended destructor :-)
     ~wxPostScriptDC();
 
 #if WXWIN_COMPATIBILITY_2_2
-    wxPostScriptDC( const wxString &output, bool interactive = FALSE, wxWindow *parent = NULL )
+    wxPostScriptDC( const wxString &output, bool interactive = false, wxWindow *parent = NULL )
         { Create( output, interactive, parent ); }
-    bool Create ( const wxString &output, bool interactive = FALSE, wxWindow *parent = NULL );
+    bool Create ( const wxString &output, bool interactive = false, wxWindow *parent = NULL );
 #endif
 
   virtual bool Ok() const;
@@ -75,12 +75,12 @@ public:
   void DoDrawSpline(wxList *points);
 
   bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-            wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop = wxCOPY, bool useMask = FALSE,
-            wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
-  bool CanDrawBitmap() const { return TRUE; }
+            wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop = wxCOPY, bool useMask = false,
+            wxCoord xsrcMask = wxDefaultPosition.x, wxCoord ysrcMask = wxDefaultPosition.y);
+  bool CanDrawBitmap() const { return true; }
 
   void DoDrawIcon( const wxIcon& icon, wxCoord x, wxCoord y );
-  void DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, bool useMask=FALSE );
+  void DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, bool useMask = false );
 
   void DoDrawText(const wxString& text, wxCoord x, wxCoord y );
   void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle);
@@ -104,7 +104,7 @@ public:
 
   wxCoord GetCharHeight() const;
   wxCoord GetCharWidth() const;
-  bool CanGetTextExtent() const { return TRUE; }
+  bool CanGetTextExtent() const { return true; }
   void DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
                      wxCoord *descent = (wxCoord *) NULL,
                      wxCoord *externalLeading = (wxCoord *) NULL,
@@ -126,7 +126,7 @@ public:
   void SetPrintData(const wxPrintData& data) { m_printData = data; }
 
   virtual int GetDepth() const { return 24; }
-  
+
   static void SetResolution(int ppi);
   static int GetResolution();
 
@@ -138,7 +138,7 @@ public:
   void PsPrint( const wxChar* psdata ) { PsPrint( wxConvUTF8.cWX2MB( psdata ) ); }
 #endif
 
-private:  
+private:
     static float ms_PSScaleFactor;
 
 protected:
@@ -158,7 +158,7 @@ protected:
     double            m_underlinePosition;
     double            m_underlineThickness;
     wxPrintData       m_printData;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxPostScriptDC)
 };
@@ -180,30 +180,30 @@ enum
     PS_FILE = wxPRINT_MODE_FILE,
     PS_PRINTER = wxPRINT_MODE_PRINTER
 };
-    
+
 class wxPrintSetupData: public wxPrintData
 {
 public:
     wxPrintSetupData() {}
-    
-    void SetPrinterOrientation( int orient ) 
+
+    void SetPrinterOrientation( int orient )
         { SetOrientation( orient ); }
-    void SetPrinterMode( wxPrintMode mode ) 
+    void SetPrinterMode( wxPrintMode mode )
         { SetPrintMode( mode ); }
-    void SetAFMPath( const wxString &path ) 
+    void SetAFMPath( const wxString &path )
         { SetFontMetricPath( path ); }
-    
+
     void SetPaperName(const wxString& paper) { m_paperName = paper; }
     void SetPrinterFile(const wxString& file) { m_printerFile = file; }
     wxString GetPaperName() const { return m_paperName; }
     wxString GetPrinterFile() const { return m_printerFile; };
-    
+
     wxString        m_paperName;
     wxString        m_printerFile;
 };
 
 WXDLLEXPORT_DATA(extern wxPrintSetupData*) wxThePrintSetupData;
-WXDLLEXPORT extern void wxInitializePrintSetupData(bool init = TRUE);
+WXDLLEXPORT extern void wxInitializePrintSetupData(bool init = true);
 #endif
 
 

@@ -31,24 +31,24 @@ public:
     void SetSelectionMode(wxGrid::wxGridSelectionModes selmode);
     wxGrid::wxGridSelectionModes GetSelectionMode() { return m_selectionMode; }
     void SelectRow( int row,
-                    bool ControlDown = FALSE,  bool ShiftDown = FALSE,
-                    bool AltDown = FALSE, bool MetaDown = FALSE );
+                    bool ControlDown = false,  bool ShiftDown = false,
+                    bool AltDown = false, bool MetaDown = false );
     void SelectCol( int col,
-                    bool ControlDown = FALSE,  bool ShiftDown = FALSE,
-                    bool AltDown = FALSE, bool MetaDown = FALSE );
+                    bool ControlDown = false,  bool ShiftDown = false,
+                    bool AltDown = false, bool MetaDown = false );
     void SelectBlock( int topRow, int leftCol,
                       int bottomRow, int rightCol,
-                      bool ControlDown = FALSE,  bool ShiftDown = FALSE,
-                      bool AltDown = FALSE, bool MetaDown = FALSE,
-                      bool sendEvent = TRUE );
+                      bool ControlDown = false,  bool ShiftDown = false,
+                      bool AltDown = false, bool MetaDown = false,
+                      bool sendEvent = true );
     void SelectCell( int row, int col,
-                     bool ControlDown = FALSE,  bool ShiftDown = FALSE,
-                     bool AltDown = FALSE, bool MetaDown = FALSE,
-                     bool sendEvent = TRUE );
+                     bool ControlDown = false,  bool ShiftDown = false,
+                     bool AltDown = false, bool MetaDown = false,
+                     bool sendEvent = true );
     void ToggleCellSelection( int row, int col,
-                              bool ControlDown = FALSE, 
-                              bool ShiftDown = FALSE,
-                              bool AltDown = FALSE, bool MetaDown = FALSE );
+                              bool ControlDown = false,
+                              bool ShiftDown = false,
+                              bool AltDown = false, bool MetaDown = false );
     void ClearSelection();
 
     void UpdateRows( size_t pos, int numRows );
