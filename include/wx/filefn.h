@@ -167,7 +167,7 @@ WXDLLEXPORT void wxDos2UnixFilename(wxChar *s);
 WXDLLEXPORT void wxUnix2DosFilename(wxChar *s);
 #define Unix2DosFilename wxUnix2DosFilename
 
-#ifdef __WXMAC__
+#if defined(__WXMAC__) && !defined(__UNIX__)
   WXDLLEXPORT wxString wxMacFSSpec2MacFilename( const FSSpec *spec ) ;
   WXDLLEXPORT wxString wxMacFSSpec2UnixFilename( const FSSpec *spec ) ;
   WXDLLEXPORT void wxUnixFilename2FSSpec( const char *path , FSSpec *spec ) ;
