@@ -1626,6 +1626,13 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     if (m_mode & wxLC_REPORT)
     {
+        wxPen pen(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
+        dc.SetPen(pen);
+        dc.SetBrush(* wxTRANSPARENT_BRUSH);
+
+        wxSize clientSize = GetClientSize();
+        wxRect itemRect;
+
         int lineSpacing = 0;
         wxListLineData *line = &m_lines[0];
         int dummy = 0;
@@ -1636,10 +1643,35 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
         size_t i_to = y_s / lineSpacing + m_visibleLines+2;
         if (i_to >= m_lines.GetCount()) i_to = m_lines.GetCount();
-        for (size_t i = y_s / lineSpacing; i < i_to; i++)
+        size_t i;
+        for (i = y_s / lineSpacing; i < i_to; i++)
         {
             m_lines[i].Draw( &dc );
+            // Draw horizontal rule if required
+            if (GetWindowStyle() & wxLC_HRULES)
+                dc.DrawLine(0, i*lineSpacing, clientSize.x, i*lineSpacing);
         }
+
+        // Draw last horizontal rule
+        if ((i > (size_t) (y_s / lineSpacing)) && (GetWindowStyle() & wxLC_HRULES))
+            dc.DrawLine(0, i*lineSpacing, clientSize.x, i*lineSpacing);
+
+        // Draw vertical rules if required
+        if ((GetWindowStyle() & wxLC_VRULES) && (GetItemCount() > 0))
+        {
+            int col = 0;
+            wxRect firstItemRect;
+            wxRect lastItemRect;
+            GetItemRect(0, firstItemRect);
+            GetItemRect(GetItemCount() - 1, lastItemRect);
+            int x = firstItemRect.GetX();
+            for (col = 0; col < GetColumnCount(); col++)
+            {
+                int colWidth = GetColumnWidth(col);
+                x += colWidth ;
+                dc.DrawLine(x, firstItemRect.GetY() - 1, x, lastItemRect.GetBottom() + 1);
+            }
+	}
     }
     else
     {
