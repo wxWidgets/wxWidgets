@@ -116,7 +116,7 @@ public:
 #endif
 %}
 
-// Now define it for SWIG, usign either the real class or the dummy above.
+// Now define it for SWIG, using either the real class or the dummy above.
 
 MustHaveApp(wxWebKitCtrl);
 
