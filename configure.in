@@ -558,7 +558,7 @@ case "${host}" in
     DEFAULT_DEFAULT_wxUSE_MSW=1
   ;;
 
-  *-pc-os2_emx )
+  *-pc-os2_emx | *-pc-os2-emx )
     AC_DEFINE(__EMX__)
     PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_PM=1
@@ -1354,7 +1354,7 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl Path separator; ':' for unix.
     dnl Stem for flex output; lexyy for OS/2, lex.yy otherwise
     case "${host}" in
-      *-pc-os2_emx )
+      *-pc-os2_emx | *-pc-os2-emx )
         # PATH_IFS is autodetected by OS/2's configure (usually ';')
         NUM_TOOLKITS=`expr ${NUM_TOOLKITS} + ${wxUSE_PM:-0}`
         LEX_STEM="lexyy"
@@ -2252,7 +2252,7 @@ if test "$wxUSE_SHARED" = "yes"; then
         PIC_FLAG=
       ;;
 
-      *-pc-os2_emx )
+      *-pc-os2_emx | *-pc-os2-emx )
         dnl only static for now
         wxUSE_SHARED=no
       ;;
