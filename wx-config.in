@@ -28,8 +28,14 @@ decho() { echo "$*" 1>&2; }
 
 # usage _exitcode
 # Outputs a usage message to stderr and exits with _exitcode.
-# Try to keep this to a single page.  We can add alternate help
-# targets if people want more detail from interactive help.
+# Try to keep this to a single page (ie. < 25 lines).  We can add
+# alternate or interactive help targets if people want more detail.
+#
+# Exit codes are now subject to a more strict interpretation.
+# wx-config should return 0 upon successful operation, 1 if the
+# reqested operation could not be completed successfully, and 2
+# if the requested operation is not supported by this version of
+# wx-config.
 usage()
 {
     cat 1>&2 <<EOF
@@ -39,6 +45,7 @@ usage()
            [--unicode[=yes|no]] [--debug[=yes|no]] [--static[=yes|no]]
            [--version[=VERSION]] [--basename] [--cppflags] [--cflags]
            [--cxxflags] [--rezflags] [--libs] [--cc] [--cxx] [--ld] [LIB ...]
+           [--utility=UTIL]
 
    wx-config returns  information about  the wxWidgets libraries available
    on your system.  It may be used to retrieve the information you require
@@ -49,7 +56,8 @@ usage()
   --version and --universal, to select from them.  Use the --list option to
   show alternatives available which match specified criteria.   The unicode,
   debug, and universal options  take an  optional yes or no  argument, while
-  host and version accept posix extended regex.
+  host and version  accept posix extended regex.   The --utility option will
+  return the correct version of UTIL to use with the selected library build.
 
     Optional LIB arguments (comma or space separated) may be used to specify
   the wxWidgets libraries that  you wish  to use.  The magic "std" label may
@@ -106,7 +114,7 @@ wxconfig_output_options="prefix exec_prefix                     \
 
 # Options that permit the user to supply hints that may affect the output.
 # These options all accept arbitrary values, to interpret as they please.
-wxconfig_input_options="prefix exec_prefix $wxconfig_schema" 
+wxconfig_input_options="prefix exec_prefix utility $wxconfig_schema"
 
 # Input options that accept only a yes or no argument.
 wxconfig_yesno_options="universal unicode debug static"
@@ -258,7 +266,7 @@ for arg; do
   esac
   decho "  *** Error: Unrecognised option: '$arg'"
   decho "Use wx-config --help for information on command line options."
-  exit 1
+  exit 2
 done
 
 # validate_arg only checks and decomposes form.  Sanity check the yes/no
@@ -839,10 +847,11 @@ libdir="@libdir@"
 [ -z "$output_option_version"      ] || echo "@WX_VERSION@"
 [ -z "$output_option_version_full" ] || echo "@WX_SUBVERSION@"
 [ -z "$output_option_basename"     ] || echo "@WX_LIBRARY_BASENAME_GUI@"
-[ -z "$output_option_rezflags"     ] || echo $(eval echo @MACRESWXCONFIG@)
+[ -z "$output_option_rezflags"     ] || echo $(eval echo "@MACRESWXCONFIG@")
 [ -z "$output_option_cc"           ] || echo "@CC@"
 [ -z "$output_option_cxx"          ] || echo "@CXX@"
 [ -z "$output_option_ld"           ] || echo "@EXE_LINKER@"
+[ -z "$input_option_utility"       ] || echo "${input_option_utility}-@WX_RELEASE@@WX_FLAVOUR@"
 
 
 # The rest are going to need a little more work.
