@@ -43,13 +43,17 @@ Constructor, taking a style and optional pointer to a wxString variable.
 \twocolitem{{\bf wxFILTER\_ALPHANUMERIC}}{Non-alphanumeric characters are filtered out.}
 \twocolitem{{\bf wxFILTER\_NUMERIC}}{Non-numeric characters are filtered out.}
 \twocolitem{{\bf wxFILTER\_INCLUDE\_LIST}}{Use an include list. The validator
-checks if the user input is on the list, complaining if not.}
+checks if the user input is on the list, complaining if not. See 
+\helpref{wxTextValidator::SetIncludeList}{wxtextvalidatorsetincludelist}.}
 \twocolitem{{\bf wxFILTER\_EXCLUDE\_LIST}}{Use an exclude list. The validator
-checks if the user input is on the list, complaining if it is.}
+checks if the user input is on the list, complaining if it is. See 
+\helpref{wxTextValidator::SetExcludeList}{wxtextvalidatorsetexcludelist}.}
 \twocolitem{{\bf wxFILTER\_INCLUDE\_CHAR\_LIST}}{Use an include list. The validator
-checks if each input character is in the list (one character per list element), complaining if not.}
+checks if each input character is in the list (one character per list element), complaining if not.
+See \helpref{wxTextValidator::SetIncludeList}{wxtextvalidatorsetincludelist}.}
 \twocolitem{{\bf wxFILTER\_EXCLUDE\_CHAR\_LIST}}{Use an include list. The validator
-checks if each input character is in the list (one character per list element), complaining if it is.}
+checks if each input character is in the list (one character per list element), complaining if it is.
+See \helpref{wxTextValidator::SetExcludeList}{wxtextvalidatorsetexcludelist}.}
 \end{twocollist}
 }
 

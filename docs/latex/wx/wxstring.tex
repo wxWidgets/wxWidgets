@@ -644,6 +644,8 @@ Returns a reference to the character at position {\it n}.
 \func{wxChar*}{GetWriteBuf}{\param{size\_t}{ len}}
 
 Returns a writable buffer of at least {\it len} bytes.
+It returns a pointer to a new memory block, and the
+existing data will not be copied.
 
 Call \helpref{wxString::UngetWriteBuf}{wxstringungetwritebuf} as soon as possible
 to put the string back into a reasonable state.

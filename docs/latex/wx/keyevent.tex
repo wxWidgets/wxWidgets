@@ -170,13 +170,13 @@ platform-dependent and should only be used in advanced applications.
 
 \constfunc{long}{GetX}{\void}
 
-Returns the X position of the event.
+Returns the X position (in client coordinates) of the event.
 
 \membersection{wxKeyEvent::GetY}
 
 \constfunc{long}{GetY}{\void}
 
-Returns the Y position of the event.
+Returns the Y (in client coordinates) position of the event.
 
 \membersection{wxKeyEvent::MetaDown}
 
@@ -190,7 +190,7 @@ Returns true if the Meta key was down at the time of the key event.
 
 \constfunc{void}{GetPosition}{\param{long *}{x}, \param{long *}{y}}
 
-Obtains the position at which the key was pressed.
+Obtains the position (in client coordinates) at which the key was pressed.
 
 \membersection{wxKeyEvent::HasModifiers}
 
