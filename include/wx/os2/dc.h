@@ -179,7 +179,6 @@ public:
     HPS             GetHPS(void) const { return m_hPS; }
     void            SetHPS(HPS hPS)
     {
-        HDC                         hDC = ::GpiQueryDevice(hPS);
         m_hPS = hPS;
     }
     const wxBitmap& GetSelectedBitmap(void) const { return m_vSelectedBitmap; }
