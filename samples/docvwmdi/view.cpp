@@ -24,7 +24,7 @@
 #include "wx/wx.h"
 #endif
 
-#if !USE_DOC_VIEW_ARCHITECTURE
+#if !wxUSE_DOC_VIEW_ARCHITECTURE
 #error You must set wxUSE_DOC_VIEW_ARCHITECTURE to 1 in wx_setup.h!
 #endif
 

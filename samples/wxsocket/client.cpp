@@ -275,7 +275,6 @@ void MyFrame::OnExecUrlTest(wxCommandEvent& WXUNUSED(evt))
     wxMessageBox("Error in getting data from the URL.", "Alert !");
   else {
     wxMessageBox("Success !! Click on OK to see the text.", "OK");
-    wxMessageBox(
     delete datas;
   }
 }

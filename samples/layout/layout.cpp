@@ -20,7 +20,7 @@
 #include "wx/wx.h"
 #endif
 
-#if !USE_CONSTRAINTS
+#if !wxUSE_CONSTRAINTS
 #error You must set wxUSE_CONSTRAINTS to 1 in wx_setup.h!
 #endif
 

@@ -25,7 +25,7 @@
 #include "wx/postscrp.h"
 #endif
 
-#if !USE_PRINTING_ARCHITECTURE
+#if !wxUSE_PRINTING_ARCHITECTURE
 #error You must set wxUSE_PRINTING_ARCHITECTURE to 1 in wx_setup.h to compile this demo.
 #endif
 
