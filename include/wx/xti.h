@@ -492,17 +492,22 @@ private :
 class WXDLLIMPEXP_BASE wxCollectionTypeInfo : public wxTypeInfo
 {
 public :
-    wxCollectionTypeInfo( wxTypeInfo *elementType , converterToString_t to , converterFromString_t from  , const wxString &name) :
+    wxCollectionTypeInfo( const wxString &elementName , converterToString_t to , converterFromString_t from  , const wxString &name) :
        wxTypeInfo( wxT_COLLECTION , to , from , name )
-       { m_elementType = elementType ;}
+       { m_elementTypeName = elementName ; m_elementType = NULL ;}
 #if wxUSE_UNICODE
-    wxCollectionTypeInfo( wxTypeInfo *elementType , converterToString_t to , converterFromString_t from  , const char *name ) :
+    wxCollectionTypeInfo( const char *elementName , converterToString_t to , converterFromString_t from  , const char *name ) :
        wxTypeInfo( wxT_COLLECTION , to , from , name )
-       { m_elementType = elementType ;}
+       { m_elementTypeName = wxString::FromAscii( elementName ) ; m_elementType = NULL ;}
 #endif
-       const wxTypeInfo* GetElementType() const { return m_elementType ; }
+       const wxTypeInfo* GetElementType() const 
+       { 
+           if ( m_elementType == NULL )
+               m_elementType = wxTypeInfo::FindType( m_elementTypeName ) ;
+           return m_elementType ; }
 private :
-    wxTypeInfo * m_elementType ;
+    mutable wxTypeInfo * m_elementType ;
+    wxString    m_elementTypeName ;
 } ;
 
 // a delegate is an exposed event source
@@ -525,7 +530,7 @@ template<typename T> const wxTypeInfo* wxGetTypeInfo( T * ) { return wxTypeInfo:
     wxCustomTypeInfo s_typeInfo##e(typeid(e).name() , &toString , &fromString) ;
 
 #define WX_COLLECTION_TYPE_INFO( element , collection ) \
-    wxCollectionTypeInfo s_typeInfo##collection( (wxTypeInfo*) wxGetTypeInfo( (element *) NULL) , NULL , NULL , typeid(collection).name() ) ;
+    wxCollectionTypeInfo s_typeInfo##collection( typeid(element).name() , NULL , NULL , typeid(collection).name() ) ;
 
 // sometimes a compiler invents specializations that are nowhere called, use this macro to satisfy the refs
 
