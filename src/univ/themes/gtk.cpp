@@ -186,6 +186,7 @@ public:
         // we don't have the ticks in GTK version
     }
 
+#if wxUSE_MENUS
     virtual void DrawMenuBarItem(wxDC& dc,
                                  const wxRect& rect,
                                  const wxString& label,
@@ -202,7 +203,7 @@ public:
     virtual void DrawMenuSeparator(wxDC& dc,
                                    wxCoord y,
                                    const wxMenuGeometryInfo& geomInfo);
-
+#endif
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
                                  wxBitmap *bmpDisabled);
@@ -248,11 +249,12 @@ public:
     virtual wxSize GetSliderThumbSize(const wxRect& rect,
                                       wxOrientation orient) const;
     virtual wxSize GetProgressBarStep() const { return wxSize(16, 32); }
+#if wxUSE_MENUS
 
     virtual wxSize GetMenuBarItemSize(const wxSize& sizeText) const;
     virtual wxMenuGeometryInfo *GetMenuGeometry(wxWindow *win,
                                                 const wxMenu& menu) const;
-
+#endif
     // helpers for "wxBitmap wxColourScheme::Get()"
     void DrawCheckBitmap(wxDC& dc, const wxRect& rect);
     void DrawUncheckBitmap(wxDC& dc, const wxRect& rect, bool isPressed);
@@ -1745,6 +1747,7 @@ void wxGTKRenderer::DrawSliderThumb(wxDC& dc,
     DrawShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
 }
 
+#if wxUSE_MENUS
 // ----------------------------------------------------------------------------
 // menu and menubar
 // ----------------------------------------------------------------------------
@@ -1789,7 +1792,7 @@ wxMenuGeometryInfo *wxGTKRenderer::GetMenuGeometry(wxWindow *win,
 
     return NULL;
 }
-
+#endif
 // ----------------------------------------------------------------------------
 // combobox
 // ----------------------------------------------------------------------------

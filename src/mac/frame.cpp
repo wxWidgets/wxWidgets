@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        frame.cpp
-// Purpose:     wxFrame
+// Purpose:     wxFrameMac
 // Author:      AUTHOR
 // Modified by:
 // Created:     ??/??/98
@@ -29,22 +29,25 @@ extern wxList wxModelessWindows;
 extern wxList wxPendingDelete;
 
 #if !USE_SHARED_LIBRARY
-BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
-//  EVT_SIZE(wxFrame::OnSize)
-  EVT_ACTIVATE(wxFrame::OnActivate)
- // EVT_MENU_HIGHLIGHT_ALL(wxFrame::OnMenuHighlight)
-  EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
-//  EVT_IDLE(wxFrame::OnIdle)
-//  EVT_CLOSE(wxFrame::OnCloseWindow)
+BEGIN_EVENT_TABLE(wxFrameMac, wxFrameBase)
+//  EVT_SIZE(wxFrameMac::OnSize)
+  EVT_ACTIVATE(wxFrameMac::OnActivate)
+ // EVT_MENU_HIGHLIGHT_ALL(wxFrameMac::OnMenuHighlight)
+  EVT_SYS_COLOUR_CHANGED(wxFrameMac::OnSysColourChanged)
+//  EVT_IDLE(wxFrameMac::OnIdle)
+//  EVT_CLOSE(wxFrameMac::OnCloseWindow)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
+IMPLEMENT_DYNAMIC_CLASS(wxFrameMac, wxWindow)
+#endif
+#ifndef __WXUNIVERSAL__
+IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxFrameMac)
 #endif
 
 #if wxUSE_NATIVE_STATUSBAR
-bool wxFrame::m_useNativeStatusBar = TRUE;
+bool wxFrameMac::m_useNativeStatusBar = TRUE;
 #else
-bool wxFrame::m_useNativeStatusBar = FALSE;
+bool wxFrameMac::m_useNativeStatusBar = FALSE;
 #endif
 
 #define WX_MAC_STATUSBAR_HEIGHT 15 
@@ -52,7 +55,7 @@ bool wxFrame::m_useNativeStatusBar = FALSE;
 // creation/destruction
 // ----------------------------------------------------------------------------
 
-void wxFrame::Init()
+void wxFrameMac::Init()
 {
   m_frameMenuBar = NULL;
 
@@ -69,7 +72,7 @@ void wxFrame::Init()
 #endif
 }
 
-wxPoint wxFrame::GetClientAreaOrigin() const
+wxPoint wxFrameMac::GetClientAreaOrigin() const
 {
 	// on mac we are at position -1,-1 with the control
     wxPoint pt(0, 0);
@@ -94,7 +97,7 @@ wxPoint wxFrame::GetClientAreaOrigin() const
     return pt;
 }
 
-bool wxFrame::Create(wxWindow *parent,
+bool wxFrameMac::Create(wxWindow *parent,
            wxWindowID id,
            const wxString& title,
            const wxPoint& pos,
@@ -123,7 +126,7 @@ bool wxFrame::Create(wxWindow *parent,
   return TRUE;
 }
 
-wxFrame::~wxFrame()
+wxFrameMac::~wxFrameMac()
 {
   m_isBeingDeleted = TRUE;
   wxTopLevelWindows.DeleteObject(this);
@@ -146,7 +149,7 @@ wxFrame::~wxFrame()
 }
 
 
-bool wxFrame::Enable(bool enable)
+bool wxFrameMac::Enable(bool enable)
 {
     if ( !wxWindow::Enable(enable) )
         return FALSE;
@@ -162,40 +165,40 @@ bool wxFrame::Enable(bool enable)
     return TRUE;
 }
 // Equivalent to maximize/restore in Windows
-void wxFrame::Maximize(bool maximize)
+void wxFrameMac::Maximize(bool maximize)
 {
     // TODO
 }
 
-bool wxFrame::IsIconized() const
+bool wxFrameMac::IsIconized() const
 {
     // TODO
     return FALSE;
 }
 
-void wxFrame::Iconize(bool iconize)
+void wxFrameMac::Iconize(bool iconize)
 {
     // TODO
 }
 
 // Is the frame maximized?
-bool wxFrame::IsMaximized(void) const
+bool wxFrameMac::IsMaximized(void) const
 {
     // TODO
     return FALSE;
 }
 
-void wxFrame::Restore()
+void wxFrameMac::Restore()
 {
     // TODO
 }
 
-void wxFrame::SetIcon(const wxIcon& icon)
+void wxFrameMac::SetIcon(const wxIcon& icon)
 {
    wxFrameBase::SetIcon(icon);
 }
 
-wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,
+wxStatusBar *wxFrameMac::OnCreateStatusBar(int number, long style, wxWindowID id,
     const wxString& name)
 {
     wxStatusBar *statusBar = NULL;
@@ -207,7 +210,7 @@ wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,
     return statusBar;
 }
 
-void wxFrame::PositionStatusBar()
+void wxFrameMac::PositionStatusBar()
 {
   if (m_frameStatusBar )
   {
@@ -222,7 +225,7 @@ void wxFrame::PositionStatusBar()
    }
 }
 
-void wxFrame::SetMenuBar(wxMenuBar *menuBar)
+void wxFrameMac::SetMenuBar(wxMenuBar *menuBar)
 {
     if (!menuBar)
     {
@@ -231,12 +234,12 @@ void wxFrame::SetMenuBar(wxMenuBar *menuBar)
   
     m_frameMenuBar = menuBar;
 //    m_frameMenuBar->MacInstallMenuBar() ;
-    m_frameMenuBar->Attach(this);
+    m_frameMenuBar->Attach((wxFrame *)this);
 }
 
 
 // Responds to colour changes, and passes event on to children.
-void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
+void wxFrameMac::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
     Refresh();
@@ -255,7 +258,7 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 
 // Default activation behaviour - set the focus for the first child
 // subwindow found.
-void wxFrame::OnActivate(wxActivateEvent& event)
+void wxFrameMac::OnActivate(wxActivateEvent& event)
 {
     if ( !event.GetActive() )
     {
@@ -307,7 +310,7 @@ void wxFrame::OnActivate(wxActivateEvent& event)
 	}
 }
 
-void wxFrame::DoGetClientSize(int *x, int *y) const
+void wxFrameMac::DoGetClientSize(int *x, int *y) const
 {
 	wxWindow::DoGetClientSize( x , y ) ;
 
@@ -325,7 +328,7 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
   *x -= pt.x;
 }
 
-void wxFrame::DoSetClientSize(int clientwidth, int clientheight)
+void wxFrameMac::DoSetClientSize(int clientwidth, int clientheight)
 {
 	int currentclientwidth , currentclientheight ;
 	int currentwidth , currentheight ;
@@ -345,7 +348,7 @@ void wxFrame::DoSetClientSize(int clientwidth, int clientheight)
 
 
 #if wxUSE_TOOLBAR
-wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& name)
+wxToolBar* wxFrameMac::CreateToolBar(long style, wxWindowID id, const wxString& name)
 {
     if ( wxFrameBase::CreateToolBar(style, id, name) )
     {
@@ -355,7 +358,7 @@ wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& nam
     return m_frameToolBar;
 }
 
-void wxFrame::PositionToolBar()
+void wxFrameMac::PositionToolBar()
 {
     int cw, ch;
 

@@ -142,8 +142,11 @@ private:
 #endif // wxUSE_ACCEL
 
     // it calls out OnDismiss()
+#ifdef __WXMAC__
+    friend class wxPopupMenuWindow;
+#else
     friend wxPopupMenuWindow;
-
+#endif
     DECLARE_DYNAMIC_CLASS(wxMenu)
 };
 
@@ -275,7 +278,11 @@ private:
     bool m_shouldShowMenu;
 
     // it calls out ProcessMouseEvent()
+#ifdef __WXMAC__
+    friend class wxPopupMenuWindow;
+#else
     friend wxPopupMenuWindow;
+#endif
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxMenuBar)

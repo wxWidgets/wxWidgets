@@ -61,6 +61,8 @@ enum
 #define wxWindowNative wxWindowGTK
 #elif defined(__WXMGL__)
 #define wxWindowNative wxWindowMGL
+#elif defined(__WXMAC__)
+#define wxWindowNative wxWindowMac
 #endif
 
 class WXDLLEXPORT wxWindow : public wxWindowNative

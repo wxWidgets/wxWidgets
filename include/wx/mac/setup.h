@@ -183,7 +183,7 @@
 
 // Recommended setting: 1 (always)
 #define wxUSE_LOGWINDOW 1
-
+#define wxUSE_LOG_DIALOG 0
 // Recommended setting: 1 (always)
 #define wxUSE_LOGGUI 1
 
@@ -701,7 +701,7 @@
                                 // 0 for no interprocess comms
 #define wxUSE_HELP        1
                                 // 0 for no help facility
-#define wxUSE_MS_HTML_HELP 0
+#define wxUSE_WXHTML_HELP 1
                                 // 0 for no MS HTML Help
 #define wxUSE_RESOURCES   1
                                 // 0 for no wxGetResource/wxWriteResource

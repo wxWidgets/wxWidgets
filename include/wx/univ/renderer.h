@@ -220,6 +220,7 @@ public:
                                  int step = 1,
                                  int flags = 0) = 0;
 
+#if wxUSE_MENUS
     // draw a menu bar item
     virtual void DrawMenuBarItem(wxDC& dc,
                                  const wxRect& rect,
@@ -243,7 +244,7 @@ public:
     virtual void DrawMenuSeparator(wxDC& dc,
                                    wxCoord y,
                                    const wxMenuGeometryInfo& geomInfo) = 0;
-
+#endif
     // misc functions
     // --------------
 
@@ -334,6 +335,7 @@ public:
     // get the size of one progress bar step (in horz and vertical directions)
     virtual wxSize GetProgressBarStep() const = 0;
 
+#if wxUSE_MENUS
     // get the size of rectangle to use in the menubar for the given text rect
     virtual wxSize GetMenuBarItemSize(const wxSize& sizeText) const = 0;
 
@@ -344,7 +346,7 @@ public:
     // the returned pointer must be deleted by the caller
     virtual wxMenuGeometryInfo *GetMenuGeometry(wxWindow *win,
                                                 const wxMenu& menu) const = 0;
-
+#endif
     // virtual dtor for any base class
     virtual ~wxRenderer();
 
@@ -546,6 +548,7 @@ public:
                                  int flags = 0)
         { m_renderer->DrawSliderTicks(dc, rect, sizeThumb, orient,
                                       start, end, start, flags); }
+#if wxUSE_MENUS
 
     virtual void DrawMenuBarItem(wxDC& dc,
                                  const wxRect& rect,
@@ -567,7 +570,7 @@ public:
                                    wxCoord y,
                                    const wxMenuGeometryInfo& geomInfo)
         { m_renderer->DrawMenuSeparator(dc, y, geomInfo); }
-
+#endif
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
                                  wxBitmap *bmpDisabled)
@@ -628,12 +631,13 @@ public:
         { return m_renderer->GetSliderThumbSize(rect, orient); }
     virtual wxSize GetProgressBarStep() const
         { return m_renderer->GetProgressBarStep(); }
+#if wxUSE_MENUS
     virtual wxSize GetMenuBarItemSize(const wxSize& sizeText) const
         { return m_renderer->GetMenuBarItemSize(sizeText); }
     virtual wxMenuGeometryInfo *GetMenuGeometry(wxWindow *win,
                                                 const wxMenu& menu) const
         { return m_renderer->GetMenuGeometry(win, menu); }
-
+#endif
 protected:
     wxRenderer *m_renderer;
 };

@@ -75,13 +75,21 @@ void wxFrame::OnSize(wxSizeEvent& event)
 {
 #if wxUSE_MENUS
     PositionMenuBar();
+<<<<<<< framuniv.cpp
+#endif
+=======
 #endif // wxUSE_WAVE
 
+>>>>>>> 1.4
     event.Skip();
 }
 
+<<<<<<< framuniv.cpp
+#if wxUSE_MENUS
+=======
 #if wxUSE_MENUS
 
+>>>>>>> 1.4
 void wxFrame::PositionMenuBar()
 {
     if ( m_frameMenuBar )
@@ -92,9 +100,14 @@ void wxFrame::PositionMenuBar()
                                 GetClientSize().x, -1);
     }
 }
+<<<<<<< framuniv.cpp
+#endif // wxUSE_MENUS
+
+=======
 
 #endif // wxUSE_MENUS
 
+>>>>>>> 1.4
 wxPoint wxFrame::GetClientAreaOrigin() const
 {
     wxPoint pt = wxFrameNative::GetClientAreaOrigin();

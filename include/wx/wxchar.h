@@ -568,6 +568,10 @@ WXDLLEXPORT wxChar * wxStrdup(const wxChar *psz);
 WXDLLEXPORT int      wxStricmp(const wxChar *psz1, const wxChar *psz2);
 #endif
 
+#ifndef wxStrnicmp
+WXDLLEXPORT int      wxStrnicmp(const wxChar *psz1, const wxChar *psz2, size_t len);
+#endif
+
 #ifndef wxStrtok
 WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_ptr);
 #endif

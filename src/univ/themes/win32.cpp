@@ -236,6 +236,7 @@ public:
                                  int end,
                                  int step = 1,
                                  int flags = 0);
+#if wxUSE_MENUS
 
     virtual void DrawMenuBarItem(wxDC& dc,
                                  const wxRect& rect,
@@ -253,7 +254,7 @@ public:
     virtual void DrawMenuSeparator(wxDC& dc,
                                    wxCoord y,
                                    const wxMenuGeometryInfo& geomInfo);
-
+#endif
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
                                  wxBitmap *bmpDisabled);
@@ -299,10 +300,11 @@ public:
                                       wxOrientation orient) const;
     virtual wxSize GetProgressBarStep() const { return wxSize(16, 32); }
 
+#if wxUSE_MENUS
     virtual wxSize GetMenuBarItemSize(const wxSize& sizeText) const;
     virtual wxMenuGeometryInfo *GetMenuGeometry(wxWindow *win,
                                                 const wxMenu& menu) const;
-
+#endif
 protected:
     // helper of DrawLabel() and DrawCheckOrRadioButton()
     void DoDrawLabel(wxDC& dc,
@@ -2408,6 +2410,7 @@ void wxWin32Renderer::DrawSliderTicks(wxDC& dc,
     DrawLine(dc, x2, y1, x2, y2, orient == wxVERTICAL);
 }
 
+#if wxUSE_MENUS
 // ----------------------------------------------------------------------------
 // menu and menubar
 // ----------------------------------------------------------------------------
@@ -2677,6 +2680,9 @@ wxMenuGeometryInfo *wxWin32Renderer::GetMenuGeometry(wxWindow *win,
 
     return gi;
 }
+<<<<<<< win32.cpp
+#endif
+=======
 
 #else // !wxUSE_MENUS
 
@@ -2719,6 +2725,7 @@ wxWin32Renderer::GetMenuGeometry(wxWindow *WXUNUSED(win),
 
 #endif // wxUSE_MENUS/!wxUSE_MENUS
 
+>>>>>>> 1.5
 // ----------------------------------------------------------------------------
 // combobox
 // ----------------------------------------------------------------------------

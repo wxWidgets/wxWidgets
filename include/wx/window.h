@@ -973,6 +973,12 @@ private:
 #elif defined(__WXQT__)
     #include "wx/qt/window.h"
 #elif defined(__WXMAC__)
+    #ifdef __WXUNIVERSAL__
+        #define wxWindowNative wxWindowMac
+    #else // !wxUniv
+        #define wxWindowMac wxWindow
+        #define sm_classwxWindowMac sm_classwxWindow
+    #endif // wxUniv
     #include "wx/mac/window.h"
 #elif defined(__WXPM__)
     #include "wx/os2/window.h"

@@ -22,7 +22,7 @@
 #include "wx/event.h"
 
 class WXDLLEXPORT wxFrame;
-class WXDLLEXPORT wxWindow;
+class WXDLLEXPORT wxWindowMac;
 class WXDLLEXPORT wxApp ;
 class WXDLLEXPORT wxKeyEvent;
 class WXDLLEXPORT wxLog;
@@ -67,7 +67,7 @@ class WXDLLEXPORT wxApp: public wxAppBase
 
   // Send idle event to window and all subwindows
   // Returns TRUE if more idle time is requested.
-  bool SendIdleEvents(wxWindow* win);
+  bool SendIdleEvents(wxWindowMac* win);
 
   // Windows only, but for compatibility...
   inline void SetAuto3D(bool flag) { m_auto3D = flag; }

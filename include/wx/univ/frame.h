@@ -26,6 +26,8 @@
 #define wxFrameNative wxFrameGTK
 #elif defined(__WXMGL__)
 #define wxFrameNative wxFrameMGL
+#elif defined(__WXMAC__)
+#define wxFrameNative wxFrameMac
 #endif
 
 class wxFrame : public wxFrameNative

@@ -168,6 +168,19 @@ int WXDLLEXPORT wxStricmp(const wxChar *psz1, const wxChar *psz2)
 }
 #endif
 
+#ifndef wxStricmp
+int WXDLLEXPORT wxStrnicmp(const wxChar *s1, const wxChar *s2, size_t n)
+{
+  register wxChar c1, c2;
+  while (n && ((c1 = wxTolower(*s1)) == (c2 = wxTolower(*s2)) ) && c1) n--, s1++, s2++;
+  if (n) {
+    if (c1 < c2) return -1;
+    if (c1 > c2) return 1;
+  }
+  return 0;
+}
+#endif
+
 #ifndef wxStrtok
 WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_ptr)
 {

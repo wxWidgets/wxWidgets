@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        frame.h
-// Purpose:     wxFrame class
+// Purpose:     wxFrameMac class
 // Author:      AUTHOR
 // Modified by:
 // Created:     ??/??/98
@@ -28,14 +28,14 @@ class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxStatusBar;
 class WXDLLEXPORT wxMacToolTip ;
 
-class WXDLLEXPORT wxFrame: public wxFrameBase {
+class WXDLLEXPORT wxFrameMac: public wxFrameBase {
 
-  DECLARE_DYNAMIC_CLASS(wxFrame)
+  DECLARE_DYNAMIC_CLASS(wxFrameMac)
 
 public:
     // construction
-    wxFrame() { Init(); }
-    wxFrame(wxWindow *parent,
+    wxFrameMac() { Init(); }
+    wxFrameMac(wxWindow *parent,
             wxWindowID id,
             const wxString& title,
             const wxPoint& pos = wxDefaultPosition,
@@ -56,7 +56,7 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    virtual ~wxFrame();
+    virtual ~wxFrameMac();
 
     // implement base class pure virtuals
     virtual void Maximize(bool maximize = TRUE);
