@@ -225,14 +225,14 @@ bool wxResourceManager::SaveOptions()
 {
   wxConfig config("DialogEd", "wxWindows");
 
-  config.Write("editorWindowX", m_resourceEditorWindowSize.x);
-  config.Write("editorWindowY", m_resourceEditorWindowSize.y);
-  config.Write("editorWindowWidth", m_resourceEditorWindowSize.width);
-  config.Write("editorWindowHeight", m_resourceEditorWindowSize.height);
-  config.Write("propertyWindowX", m_propertyWindowSize.x);
-  config.Write("propertyWindowY", m_propertyWindowSize.y);
-  config.Write("propertyWindowWidth", m_propertyWindowSize.width);
-  config.Write("propertyWindowHeight", m_propertyWindowSize.height);
+  config.Write("editorWindowX", (long) m_resourceEditorWindowSize.x);
+  config.Write("editorWindowY", (long) m_resourceEditorWindowSize.y);
+  config.Write("editorWindowWidth", (long) m_resourceEditorWindowSize.width);
+  config.Write("editorWindowHeight", (long) m_resourceEditorWindowSize.height);
+  config.Write("propertyWindowX", (long) m_propertyWindowSize.x);
+  config.Write("propertyWindowY", (long) m_propertyWindowSize.y);
+  config.Write("propertyWindowWidth", (long) m_propertyWindowSize.width);
+  config.Write("propertyWindowHeight", (long) m_propertyWindowSize.height);
   /*
   wxWriteResource("DialogEd", "editorWindowX", m_resourceEditorWindowSize.x, m_optionsResourceFilename.GetData());
   wxWriteResource("DialogEd", "editorWindowY", m_resourceEditorWindowSize.y, m_optionsResourceFilename.GetData());
