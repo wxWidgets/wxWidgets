@@ -39,7 +39,9 @@ private:
     long m_dialogStyle;
 };
 
-#if defined(__WXUNIVERSAL__) || defined(__WXGPE__)
+#if defined(__WX_COMPILING_MSGDLGG_CPP__)
+#include "wx/generic/msgdlgg.h"
+#elif defined(__WXUNIVERSAL__) || defined(__WXGPE__)
 #include "wx/generic/msgdlgg.h"
 #elif defined(__WXPALMOS__)
 #include "wx/palmos/msgdlg.h"

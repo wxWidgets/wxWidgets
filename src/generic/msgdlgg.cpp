@@ -38,7 +38,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "wx/generic/msgdlgg.h"
+#define __WX_COMPILING_MSGDLGG_CPP__ 1
+#include "wx/msgdlg.h"
 #include "wx/artprov.h"
 #include "wx/settings.h"
 
