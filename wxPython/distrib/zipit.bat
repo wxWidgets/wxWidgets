@@ -1,28 +1,43 @@
-
 @echo off
 
-copy %WXWIN%\docs\gpl.txt wxPython
-copy %WXWIN%\docs\lgpl.txt wxPython
-copy %WXWIN%\docs\licence.txt wxPython
-copy %WXWIN%\docs\licendoc.txt wxPython
-copy %WXWIN%\docs\preamble.txt wxPython
+rem **** Make a directory to build up a distribution tree
+md _distrib_zip
+md _distrib_zip\wxPython-%1
 
-zip -@ -r wxPython\wxPython-src-%1.zip < wxPython\distrib\wxPython.rsp
+rem **** Copy the license files
+copy %WXWIN%\docs\gpl.txt _distrib_zip\wxPython-%1
+copy %WXWIN%\docs\lgpl.txt _distrib_zip\wxPython-%1
+copy %WXWIN%\docs\licence.txt _distrib_zip\wxPython-%1
+copy %WXWIN%\docs\licendoc.txt _distrib_zip\wxPython-%1
+copy %WXWIN%\docs\preamble.txt _distrib_zip\wxPython-%1
 
-mkdir wxPython\docs
-mkdir wxPython\docs\wx
-copy %WXWIN%\docs\html\wx\*.gif wxPython\docs\wx
-copy %WXWIN%\docs\html\wx\*.htm wxPython\docs\wx
-copy wxPython\docs\wx\wx.htm wxPython\docs\wx\index.htm
+rem **** Make a zip fron the live files
+zip -@ -r _distrib_zip\temp.zip < distrib\wxPython.rsp
 
-mkdir wxPython\docs\ogl
-copy %WXWIN%\docs\html\ogl\*.gif wxPython\docs\ogl
-copy %WXWIN%\docs\html\ogl\*.htm wxPython\docs\ogl
-copy wxPython\docs\ogl\ogl.htm wxPython\docs\ogl\index.htm
+rem **** Unzip it in our build dir
+cd _distrib_zip\wxPython-%1
+unzip ..\temp.zip
+
+rem **** zip up the build dir
+cd ..
+zip -r ..\distrib\wxPython-src-%1.zip wxPython-%1
 
 
-zip -r wxPython\wxPython-docs-%1.zip wxPython\docs
+rem **** copy the docs into the tree
+md wxPython-%1\docs
+md wxPython-%1\docs\wx
+md wxPython-%1\docs\ogl
+copy %WXWIN%\docs\html\wx\*.gif wxPython-%1\docs\wx
+copy %WXWIN%\docs\html\wx\*.htm wxPython-%1\docs\wx
+copy wxPython-%1\docs\wx\wx.htm wxPython-%1\docs\wx\index.htm
+copy %WXWIN%\docs\html\ogl\*.gif wxPython-%1\docs\ogl
+copy %WXWIN%\docs\html\ogl\*.htm wxPython-%1\docs\ogl
+copy wxPython-%1\docs\ogl\ogl.htm wxPython-%1\docs\ogl\index.htm
 
-del /sxzy wxPython\docs
+rem **** zip up the docs
+zip -r ..\distrib\wxPython-docs-%1.zip wxPython-%1\docs
 
-move /R wxPython\*.zip wxPython\distrib
+
+rem **** Cleanup
+cd ..
+del /sxzy _distrib_zip

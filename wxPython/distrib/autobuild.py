@@ -7,9 +7,13 @@ cwd = os.getcwd()
 
 logfile = 'c:\\temp\\autobuild.log'
 WXDIR   = os.environ['WXWIN']
-dllVer  = '21_15'
-wxpVer  = '2.1.15'
+dllVer  = '21_16'
+wxpVer  = '2.1.16'
 dateSt  = time.strftime("%Y%m%d", time.localtime(time.time()))
+
+base = os.path.split(sys.argv[0])[0]
+base = os.path.join(base, '..')
+WXPYDIR = os.path.abspath(base)
 
 #----------------------------------------------------------------------
 
@@ -58,73 +62,58 @@ def main():
     logTruncate()
 
     try:
-        logSeparator("Cleanup")
-        os.chdir(WXDIR + '/src/msw')
-        do('make cleandll FINAL=1')
-        do('makeaddons clean FINAL=1')
+##         logSeparator("Cleanup")
+##         os.chdir(WXDIR + '/src/msw')
+##         do('make cleandll FINAL=1')
 
-        logSeparator("Building Documentation...")
-        os.chdir(WXDIR + '/src/msw')
-        do('make touchmanual htmlhelp')
-        validateFile(WXDIR + '/docs/htmlhelp/wx.chm')
+##         logSeparator("Building Documentation...")
+##         os.chdir(WXDIR + '/src/msw')
+##         do('make touchmanual htmlhelp')
+##         validateFile(WXDIR + '/docs/htmlhelp/wx.chm')
 
-        logSeparator("Building wxWindows and other libraries...")
-        os.chdir(WXDIR + '/src/msw')
-        do('make dll pch FINAL=1')
-        validateFile(WXDIR + '/lib/wx'+dllVer+'.dll')
-        ## do("upx -9 " + WXDIR + '/lib/wx'+dllVer+'.dll')
+##         logSeparator("Building wxWindows and other libraries...")
+##         os.chdir(WXDIR + '/src/msw')
+##         do('make dll pch FINAL=1')
+##         validateFile(WXDIR + '/lib/wx'+dllVer+'.dll')
 
-        do('makeaddons FINAL=1')
-        validateFile(WXDIR + '/contrib/lib/ogl.lib')
-        validateFile(WXDIR + '/contrib/lib/stc.lib')
 
-        logSeparator("Cleaning wxPython build directory...")
-        os.chdir(WXDIR + '/utils/wxPython')
-        do("del /sxy *.*")
 
-        logSeparator("Copying wxPython workspace to build directory...")
-        do("copy /s %s %s" % ('c:\\projects\\wxPython\\*.*', WXDIR+'\\utils\\wxPython'))
-        os.chdir(WXDIR + '/utils/wxPython')
+##         logSeparator("Cleaning wxPython build directory...")
+##         os.chdir(WXPYDIR)
+##         do('buildall.bat -c')
+        os.rename('build.local', 'build.local.save')
         f = open("build.local", "w")
         f.write("""
-TARGETDIR = 'c:\\projects\\wx\\utils\\wxPython'
-WXPSRCDIR = 'c:\\projects\\wx\\utils\\wxPython\\src'
 CRTFLAG='/MD'
 FINAL=1
 """)
         f.close()
 
 
-        logSeparator("Cleaning wxPython...")
-        os.chdir(WXDIR+'\\utils\\wxPython')
-        do("buildall -cu")
-        do("ll")
-
-
         logSeparator("Building core wxPython...")
-        os.chdir(WXDIR+'\\utils\\wxPython\\src')
-        do("build -bi")
-        validateFile(WXDIR+'\\utils\\wxPython\\wxc.pyd')
-
+        os.chdir(WXPYDIR + '\\src')
+        do("build -b")
+        validateFile(WXPYDIR+'\\wxPython\\wxc.pyd')
 
 
         logSeparator("Building wxPython addon modules...")
-        os.chdir(WXDIR+'\\utils\\wxPython\\modules')
-        do("buildall -bi")
-        validateFile(WXDIR+'\\utils\\wxPython\\utilsc.pyd')
-        validateFile(WXDIR+'\\utils\\wxPython\\htmlc.pyd')
-        validateFile(WXDIR+'\\utils\\wxPython\\glcanvasc.pyd')
-        validateFile(WXDIR+'\\utils\\wxPython\\oglc.pyd')
-        validateFile(WXDIR+'\\utils\\wxPython\\stc_c.pyd')
+        os.chdir(WXPYDIR+'\\contrib')
+        do("buildall -b")
+        validateFile(WXPYDIR+'\\wxPython\\glcanvasc.pyd')
+        validateFile(WXPYDIR+'\\wxPython\\oglc.pyd')
+        validateFile(WXPYDIR+'\\wxPython\\stc_c.pyd')
 
-        ## os.chdir(WXDIR+'\\utils\\wxPython')
-        ## do("upx -9 *.pyd")
+
+        os.chdir(WXPYDIR)
+        os.unlink('build.local')
+        os.rename('build.local.save', 'build.local')
+
 
         logSeparator("Building installer executable...")
-        os.chdir(WXDIR+'\\utils\\wxPython\\distrib')
+        os.chdir(WXPYDIR+'\\distrib')
         do("autoit2 wise.aut")
-        srcName = WXDIR+'\\utils\\wxPython\\distrib\\wxPython-'+wxpVer+'.EXE'
-        destName = WXDIR+'\\utils\\wxPython\\distrib\\wxPython-'+wxpVer+'-'+dateSt+'.EXE'
+        srcName =  WXPYDIR+'\\distrib\\wxPython-'+wxpVer+'.EXE'
+        destName = WXPYDIR+'\\distrib\\wxPython-'+wxpVer+'-'+dateSt+'.EXE'
         validateFile(srcName)
         try:
             time.sleep(5)
@@ -135,29 +124,23 @@ FINAL=1
 
 
         logSeparator("Building source and docs zip files...")
-        os.chdir(WXDIR+'\\utils')
-        do("wxPython\\distrib\\zipit.bat %s" % wxpVer)
-        srcZName = WXDIR+'\\utils\\wxPython\\distrib\\wxPython-src-'+wxpVer+'.zip'
-        destZName = WXDIR+'\\utils\\wxPython\\distrib\\wxPython-src-'+wxpVer+'-'+dateSt+'.zip'
+        os.chdir(WXPYDIR)
+        do("distrib\\zipit.bat %s" % wxpVer)
+        srcZName =  WXPYDIR+'\\distrib\\wxPython-src-'+wxpVer+'.zip'
+        destZName = WXPYDIR+'\\distrib\\wxPython-src-'+wxpVer+'-'+dateSt+'.zip'
         validateFile(srcZName)
         try:
             os.rename(srcZName, destZName)
         except:
             pass
 
-        srcDName = WXDIR+'\\utils\\wxPython\\distrib\\wxPython-docs-'+wxpVer+'.zip'
-        destDName = WXDIR+'\\utils\\wxPython\\distrib\\wxPython-docs-'+wxpVer+'-'+dateSt+'.zip'
+        srcDName  = WXPYDIR+'\\distrib\\wxPython-docs-'+wxpVer+'.zip'
+        destDName = WXPYDIR+'\\distrib\\wxPython-docs-'+wxpVer+'-'+dateSt+'.zip'
         validateFile(srcDName)
         try:
             os.rename(srcDName, destDName)
         except:
             pass
-
-
-        logSeparator("Copying built files...")
-        do("copy %s %s" % (destName, cwd))
-        do("copy %s %s" % (destZName, cwd))
-        do("copy %s %s" % (destDName, cwd))
 
 
 
@@ -168,8 +151,6 @@ FINAL=1
         do('python c:\\utils\\sendwxp.py %s' % destName)
         do('python c:\\utils\\sendwxp.py %s' % destZName)
         do('python c:\\utils\\sendwxp.py %s' % destDName)
-        os.unlink(destName)
-        os.unlink(destZName)
 
 
         logSeparator("Finished!!!")
