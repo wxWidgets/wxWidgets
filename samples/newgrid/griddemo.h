@@ -207,7 +207,8 @@ public:
     MyGridCellAttrProvider();
     virtual ~MyGridCellAttrProvider();
 
-    virtual wxGridCellAttr *GetAttr(int row, int col) const;
+    virtual wxGridCellAttr *GetAttr(int row, int col,
+                   wxGridCellAttr::wxAttrKind  kind /* = wxGridCellAttr::Any */) const;
 
 private:
     wxGridCellAttr *m_attrForOddRows;
@@ -246,6 +247,7 @@ class BugsGridFrame : public wxFrame
 public:
     BugsGridFrame();
 };
+
 
 #endif // griddemo_h
 

@@ -1664,8 +1664,15 @@ wxString wxGridCellFloatRenderer::GetString(wxGrid& grid, int row, int col)
         {
             if ( m_width == -1 )
             {
+                if ( m_precision == -1 )
+                {
                 // default width/precision
                 m_format = _T("%f");
+            }
+                else
+                {
+                    m_format.Printf(_T("%%.%df"), m_precision);
+                }
             }
             else if ( m_precision == -1 )
             {
@@ -1679,6 +1686,7 @@ wxString wxGridCellFloatRenderer::GetString(wxGrid& grid, int row, int col)
         }
 
         text.Printf(m_format, val);
+
     }
     //else: text already contains the string
 
@@ -1717,8 +1725,6 @@ wxSize wxGridCellFloatRenderer::GetBestSize(wxGrid& grid,
 
 void wxGridCellFloatRenderer::SetParameters(const wxString& params)
 {
-    bool ok = TRUE;
-
     if ( !params )
     {
         // reset to defaults
@@ -1731,36 +1737,33 @@ void wxGridCellFloatRenderer::SetParameters(const wxString& params)
         if ( !!tmp )
         {
             long width;
-            if ( !tmp.ToLong(&width) )
+            if ( tmp.ToLong(&width) )
             {
-                ok = FALSE;
+                SetWidth((int)width);
             }
             else
             {
-                SetWidth((int)width);
+                wxLogDebug(_T("Invalid wxGridCellFloatRenderer width parameter string '%s ignored"), params.c_str());
+            }
 
+        }
                 tmp = params.AfterFirst(_T(','));
                 if ( !!tmp )
                 {
                     long precision;
-                    if ( !tmp.ToLong(&precision) )
+            if ( tmp.ToLong(&precision) )
                     {
-                        ok = FALSE;
+                SetPrecision((int)precision);
                     }
                     else
                     {
-                        SetPrecision((int)precision);
-                    }
-                }
-            }
+                wxLogDebug(_T("Invalid wxGridCellFloatRenderer precision parameter string '%s ignored"), params.c_str());
         }
 
-        if ( !ok )
-        {
-            wxLogDebug(_T("Invalid wxGridCellFloatRenderer parameter string '%s ignored"), params.c_str());
         }
     }
 }
+
 
 // ----------------------------------------------------------------------------
 // wxGridCellBoolRenderer
@@ -1888,9 +1891,45 @@ wxGridCellAttr *wxGridCellAttr::Clone() const
     if ( IsReadOnly() )
         attr->SetReadOnly();
 
+    attr->SetKind( m_attrkind );
+
     attr->SetDefAttr(m_defGridAttr);
 
     return attr;
+}
+
+void wxGridCellAttr::MergeWith(wxGridCellAttr *mergefrom)
+{
+    if ( !HasTextColour() && mergefrom->HasTextColour() )
+        SetTextColour(mergefrom->GetTextColour());
+    if ( !HasBackgroundColour() && mergefrom->HasBackgroundColour() )
+        SetBackgroundColour(mergefrom->GetBackgroundColour());
+    if ( !HasFont() && mergefrom->HasFont() )
+        SetFont(mergefrom->GetFont());
+    if ( !!HasAlignment() && mergefrom->HasAlignment() ){
+        int hAlign, vAlign;
+        mergefrom->GetAlignment( &hAlign, &vAlign);
+        SetAlignment(hAlign, vAlign);
+    }
+
+    // Directly access member functions as GetRender/Editor don't just return
+    // m_renderer/m_editor
+    //
+    // Maybe add support for merge of Render and Editor?
+    if (!HasRenderer() && mergefrom->HasRenderer() )
+    {   
+        m_renderer = mergefrom->m_renderer;
+        m_renderer->IncRef();
+    }
+    if ( !HasEditor() && mergefrom->HasEditor() )
+    {
+        m_editor =  mergefrom->m_editor;
+        m_editor->IncRef();
+    }
+    if ( !HasReadWriteMode()  && mergefrom->HasReadWriteMode() )
+        SetReadOnly(mergefrom->IsReadOnly());
+
+    SetDefAttr(mergefrom->m_defGridAttr);
 }
 
 const wxColour& wxGridCellAttr::GetTextColour() const
@@ -2245,28 +2284,77 @@ void wxGridCellAttrProvider::InitData()
     m_data = new wxGridCellAttrProviderData;
 }
 
-wxGridCellAttr *wxGridCellAttrProvider::GetAttr(int row, int col) const
+wxGridCellAttr *wxGridCellAttrProvider::GetAttr(int row, int col,
+                                                wxGridCellAttr::wxAttrKind  kind ) const
 {
     wxGridCellAttr *attr = (wxGridCellAttr *)NULL;
     if ( m_data )
     {
-        // first look for the attribute of this specific cell
-        attr = m_data->m_cellAttrs.GetAttr(row, col);
-
-        if ( !attr )
+        switch(kind)
         {
-            // then look for the col attr (col attributes are more common than
-            // the row ones, hence they have priority)
-            attr = m_data->m_colAttrs.GetAttr(col);
-        }
+            case (wxGridCellAttr::Any):
+                //Get cached merge attributes.
+                // Currenlty not used as no cache implemented as not mutiable
+                // attr = m_data->m_mergeAttr.GetAttr(row, col);
+                if(!attr)
+                {
+                    //Basicaly implement old version.
+                    //Also check merge cache, so we don't have to re-merge every time..
+                    wxGridCellAttr *attrcell = (wxGridCellAttr *)NULL,
+                                   *attrrow = (wxGridCellAttr *)NULL,
+                                   *attrcol = (wxGridCellAttr *)NULL; 
+                
+                    attrcell = m_data->m_cellAttrs.GetAttr(row, col);
+                    attrcol = m_data->m_colAttrs.GetAttr(col);
+                    attrrow = m_data->m_rowAttrs.GetAttr(row);
 
-        if ( !attr )
+                    if((attrcell != attrrow) && (attrrow !=attrcol) && (attrcell != attrcol)){    
+                        // Two or move are non NULL
+                        attr = new wxGridCellAttr;
+                        attr->SetKind(wxGridCellAttr::Merged);
+
+                        //Order important.. 
+                        if(attrcell){
+                            attr->MergeWith(attrcell);
+                            attrcell->DecRef();
+                        }
+                        if(attrcol){
+                            attr->MergeWith(attrcol);
+                            attrcol->DecRef();
+                        }
+                        if(attrrow){
+                            attr->MergeWith(attrrow);
+                            attrrow->DecRef();
+                        }
+                        //store merge attr if cache implemented
+                        //attr->IncRef();
+                        //m_data->m_mergeAttr.SetAttr(attr, row, col);
+                    }
+                    else
         {
-            // finally try the row attributes
+                        // one or none is non null return it or null.
+                        if(attrrow) attr = attrrow;
+                        if(attrcol) attr = attrcol;
+                        if(attrcell) attr = attrcell;                            
+                    }
+                }
+            break;
+            case (wxGridCellAttr::Cell):
+                attr = m_data->m_cellAttrs.GetAttr(row, col);
+            break;
+            case (wxGridCellAttr::Col):
+                 attr = m_data->m_colAttrs.GetAttr(col);
+            break;
+            case (wxGridCellAttr::Row):
             attr = m_data->m_rowAttrs.GetAttr(row);
+            break;
+            default:
+                // unused as yet...
+                // (wxGridCellAttr::Default):
+                // (wxGridCellAttr::Merged):
+            break;
         }
     }
-
     return attr;
 }
 
@@ -2498,10 +2586,10 @@ bool wxGridTableBase::CanHaveAttributes()
     return TRUE;
 }
 
-wxGridCellAttr *wxGridTableBase::GetAttr(int row, int col)
+wxGridCellAttr *wxGridTableBase::GetAttr(int row, int col, wxGridCellAttr::wxAttrKind  kind)
 {
     if ( m_attrProvider )
-        return m_attrProvider->GetAttr(row, col);
+        return m_attrProvider->GetAttr(row, col, kind);
     else
         return (wxGridCellAttr *)NULL;
 }
@@ -2510,6 +2598,7 @@ void wxGridTableBase::SetAttr(wxGridCellAttr* attr, int row, int col)
 {
     if ( m_attrProvider )
     {
+        attr->SetKind(wxGridCellAttr::Cell);
         m_attrProvider->SetAttr(attr, row, col);
     }
     else
@@ -2524,6 +2613,7 @@ void wxGridTableBase::SetRowAttr(wxGridCellAttr *attr, int row)
 {
     if ( m_attrProvider )
     {
+        attr->SetKind(wxGridCellAttr::Row);
         m_attrProvider->SetRowAttr(attr, row);
     }
     else
@@ -2538,6 +2628,7 @@ void wxGridTableBase::SetColAttr(wxGridCellAttr *attr, int col)
 {
     if ( m_attrProvider )
     {
+        attr->SetKind(wxGridCellAttr::Col);
         m_attrProvider->SetColAttr(attr, col);
     }
     else
@@ -3447,6 +3538,7 @@ void wxGrid::Create()
     m_defaultCellAttr->SetDefAttr(m_defaultCellAttr);
 
     // Set default cell attributes
+    m_defaultCellAttr->SetKind(wxGridCellAttr::Default);
     m_defaultCellAttr->SetFont(GetFont());
     m_defaultCellAttr->SetAlignment(wxALIGN_LEFT, wxALIGN_TOP);
     m_defaultCellAttr->SetTextColour(
@@ -7801,6 +7893,7 @@ void wxGrid::ClearAttrCache()
     if ( m_attrCache.row != -1 )
     {
         wxSafeDecRef(m_attrCache.attr);
+        m_attrCache.attr = NULL;
         m_attrCache.row = -1;
     }
 }
@@ -7843,7 +7936,7 @@ wxGridCellAttr *wxGrid::GetCellAttr(int row, int col) const
     wxGridCellAttr *attr;
     if ( !LookupAttr(row, col, &attr) )
     {
-        attr = m_table ? m_table->GetAttr(row, col) : (wxGridCellAttr *)NULL;
+        attr = m_table ? m_table->GetAttr(row, col , wxGridCellAttr::Any) : (wxGridCellAttr *)NULL;
         CacheAttr(row, col, attr);
     }
     if (attr)
@@ -7861,25 +7954,19 @@ wxGridCellAttr *wxGrid::GetCellAttr(int row, int col) const
 
 wxGridCellAttr *wxGrid::GetOrCreateCellAttr(int row, int col) const
 {
-    wxGridCellAttr *attr;
-    if ( !LookupAttr(row, col, &attr) || !attr )
-    {
+    wxGridCellAttr *attr = (wxGridCellAttr *)NULL;
         wxASSERT_MSG( m_table,
                       _T("we may only be called if CanHaveAttributes() returned TRUE and then m_table should be !NULL") );
 
-        attr = m_table->GetAttr(row, col);
+    attr = m_table->GetAttr(row, col, wxGridCellAttr::Cell );
         if ( !attr )
         {
             attr = new wxGridCellAttr;
 
             // artificially inc the ref count to match DecRef() in caller
             attr->IncRef();
-
             m_table->SetAttr(attr, row, col);
         }
-
-        CacheAttr(row, col, attr);
-    }
     attr->SetDefAttr(m_defaultCellAttr);
     return attr;
 }
@@ -7911,11 +7998,16 @@ void wxGrid::SetColFormatFloat(int col, int width, int precision)
 
 void wxGrid::SetColFormatCustom(int col, const wxString& typeName)
 {
-    wxGridCellAttr *attr = new wxGridCellAttr;
+    wxGridCellAttr *attr = (wxGridCellAttr *)NULL;
+
+    attr = m_table->GetAttr(-1, col, wxGridCellAttr::Col );
+    if(!attr)
+        attr = new wxGridCellAttr;
     wxGridCellRenderer *renderer = GetDefaultRendererForType(typeName);
     attr->SetRenderer(renderer);
 
     SetColAttr(col, attr);
+
 }
 
 // ----------------------------------------------------------------------------
@@ -7927,6 +8019,7 @@ void wxGrid::SetRowAttr(int row, wxGridCellAttr *attr)
     if ( CanHaveAttributes() )
     {
         m_table->SetRowAttr(attr, row);
+        ClearAttrCache();
     }
     else
     {
@@ -7939,6 +8032,7 @@ void wxGrid::SetColAttr(int col, wxGridCellAttr *attr)
     if ( CanHaveAttributes() )
     {
         m_table->SetColAttr(attr, col);
+        ClearAttrCache();
     }
     else
     {

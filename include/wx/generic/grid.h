@@ -560,6 +560,16 @@ private:
 class WXDLLEXPORT wxGridCellAttr
 {
 public:
+    enum wxAttrKind
+    {
+        Any,
+        Default,
+        Cell,
+        Row,
+        Col,
+        Merged
+    };
+
     // ctors
     wxGridCellAttr()
     {
@@ -583,6 +593,7 @@ public:
 
     // creates a new copy of this object
     wxGridCellAttr *Clone() const;
+    void MergeWith(wxGridCellAttr *mergefrom);
 
     // this class is ref counted: it is created with ref count of 1, so
     // calling DecRef() once will delete it. Calling IncRef() allows to lock
@@ -599,13 +610,16 @@ public:
         m_hAlign = hAlign;
         m_vAlign = vAlign;
     }
-    void SetReadOnly(bool isReadOnly = TRUE) { m_isReadOnly = isReadOnly; }
+    void SetReadOnly(bool isReadOnly = TRUE)
+        { m_isReadOnly = isReadOnly ? ReadOnly : ReadWrite; }
 
     // takes ownership of the pointer
     void SetRenderer(wxGridCellRenderer *renderer)
         { wxSafeDecRef(m_renderer); m_renderer = renderer; }
     void SetEditor(wxGridCellEditor* editor)
         { wxSafeDecRef(m_editor); m_editor = editor; }
+
+    void SetKind(wxAttrKind kind) { m_attrkind = kind; }
 
     // accessors
     bool HasTextColour() const { return m_colText.Ok(); }
@@ -614,6 +628,7 @@ public:
     bool HasAlignment() const { return (m_hAlign != -1 || m_vAlign != -1); }
     bool HasRenderer() const { return m_renderer != NULL; }
     bool HasEditor() const { return m_editor != NULL; }
+    bool HasReadWriteMode() const { return m_isReadOnly != Unset; }
 
     const wxColour& GetTextColour() const;
     const wxColour& GetBackgroundColour() const;
@@ -622,20 +637,31 @@ public:
     wxGridCellRenderer *GetRenderer(wxGrid* grid, int row, int col) const;
     wxGridCellEditor *GetEditor(wxGrid* grid, int row, int col) const;
 
-    bool IsReadOnly() const { return m_isReadOnly; }
+    bool IsReadOnly() const { return m_isReadOnly == wxGridCellAttr::ReadOnly; }
+
+    wxAttrKind GetKind() { return m_attrkind; }
 
     void SetDefAttr(wxGridCellAttr* defAttr) { m_defGridAttr = defAttr; }
 
 private:
+    enum wxAttrReadMode
+    {
+        Unset = -1,
+        ReadWrite,
+        ReadOnly
+    }; 
+
     // the common part of all ctors
     void Init()
     {
         m_nRef = 1;
 
-        m_isReadOnly = FALSE;
+        m_isReadOnly = Unset;
 
         m_renderer = NULL;
         m_editor = NULL;
+
+        m_attrkind = wxGridCellAttr::Cell;
     }
 
     // the dtor is private because only DecRef() can delete us
@@ -658,7 +684,9 @@ private:
     wxGridCellEditor*   m_editor;
     wxGridCellAttr*     m_defGridAttr;
 
-    bool m_isReadOnly;
+    wxAttrReadMode m_isReadOnly;
+
+    wxAttrKind m_attrkind;
 
     // use Clone() instead
     DECLARE_NO_COPY_CLASS(wxGridCellAttr);
@@ -687,7 +715,8 @@ public:
     virtual ~wxGridCellAttrProvider();
 
     // DecRef() must be called on the returned pointer
-    virtual wxGridCellAttr *GetAttr(int row, int col) const;
+    virtual wxGridCellAttr *GetAttr(int row, int col,
+                                    wxGridCellAttr::wxAttrKind  kind ) const;
 
     // all these functions take ownership of the pointer, don't call DecRef()
     // on it
@@ -778,7 +807,9 @@ public:
 
     // by default forwarded to wxGridCellAttrProvider if any. May be
     // overridden to handle attributes directly in the table.
-    virtual wxGridCellAttr *GetAttr( int row, int col );
+    virtual wxGridCellAttr *GetAttr( int row, int col,
+                                     wxGridCellAttr::wxAttrKind  kind );
+
 
     // these functions take ownership of the pointer
     virtual void SetAttr(wxGridCellAttr* attr, int row, int col);

@@ -262,7 +262,7 @@ GridFrame::GridFrame()
     grid->SetCellAlignment(4, 4, wxALIGN_CENTRE, wxALIGN_CENTRE);
     grid->SetCellRenderer(4, 4, new MyGridCellRenderer);
 
-    grid->SetCellValue(3, 0, "1");
+    grid->SetCellValue(3, 0, "0");
     grid->SetCellRenderer(3, 0, new wxGridCellBoolRenderer);
     grid->SetCellEditor(3, 0, new wxGridCellBoolEditor);
 
@@ -271,22 +271,26 @@ GridFrame::GridFrame()
     attr->SetTextColour(*wxBLUE);
     grid->SetColAttr(5, attr);
     attr = new wxGridCellAttr;
-    attr->SetBackgroundColour(*wxBLUE);
+    attr->SetBackgroundColour(*wxRED);
     grid->SetRowAttr(5, attr);
 
     grid->SetCellValue(2, 4, "a wider column");
     grid->SetColSize(4, 120);
     grid->SetColMinimalWidth(4, 120);
 
-    grid->SetColFormatFloat(5);
-    grid->SetCellValue(0, 5, "3.1415");
-    grid->SetCellValue(1, 5, "1415");
-    grid->SetCellValue(2, 5, "12345.67890");
+    grid->SetCellTextColour(5, 8, *wxGREEN);
+    grid->SetCellValue(5, 8, "Bg from row attr\nText col from cell attr");
+    grid->SetCellValue(5, 5, "Bg from row attr\nText col from col attr");
 
-    grid->SetColFormatFloat(6, 6, 2);
+    grid->SetColFormatFloat(6);
     grid->SetCellValue(0, 6, "3.1415");
     grid->SetCellValue(1, 6, "1415");
     grid->SetCellValue(2, 6, "12345.67890");
+
+    grid->SetColFormatFloat(7, 6, 2);
+    grid->SetCellValue(0, 7, "3.1415");
+    grid->SetCellValue(1, 7, "1415");
+    grid->SetCellValue(2, 7, "12345.67890");
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
     topSizer->Add( grid,
@@ -833,6 +837,7 @@ void GridFrame::OnBugsTable(wxCommandEvent& )
     frame->Show(TRUE);
 }
 
+
 void GridFrame::OnVTable(wxCommandEvent& )
 {
     static long s_sizeGrid = 10000;
@@ -898,9 +903,10 @@ MyGridCellAttrProvider::~MyGridCellAttrProvider()
     m_attrForOddRows->DecRef();
 }
 
-wxGridCellAttr *MyGridCellAttrProvider::GetAttr(int row, int col) const
+wxGridCellAttr *MyGridCellAttrProvider::GetAttr(int row, int col,
+                           wxGridCellAttr::wxAttrKind  kind /* = wxGridCellAttr::Any */) const
 {
-    wxGridCellAttr *attr = wxGridCellAttrProvider::GetAttr(row, col);
+    wxGridCellAttr *attr = wxGridCellAttrProvider::GetAttr(row, col, kind);
 
     if ( row % 2 )
     {
@@ -1256,3 +1262,5 @@ BugsGridFrame::BugsGridFrame()
     size.y += 10;
     SetClientSize(size);
 }
+
+
