@@ -580,7 +580,7 @@ wxTreeItemId wxTreeCtrl::GetNextSibling(const wxTreeItemId& item) const
   wxASSERT( index != NOT_FOUND ); // I'm not a child of my parent?
 
   size_t n = (size_t)(index + 1);
-  return n == siblings.Count() ? wxTreeItemId() : (wxTreeItemId) siblings[n];
+  return n == siblings.Count() ? wxTreeItemId() : wxTreeItemId(siblings[n]);
 }
 
 wxTreeItemId wxTreeCtrl::GetPrevSibling(const wxTreeItemId& item) const
@@ -599,7 +599,8 @@ wxTreeItemId wxTreeCtrl::GetPrevSibling(const wxTreeItemId& item) const
   int index = siblings.Index(i);
   wxASSERT( index != NOT_FOUND ); // I'm not a child of my parent?
 
-  return index == 0 ? wxTreeItemId() : (wxTreeItemId) siblings[(size_t)(index - 1)];
+  return index == 0 ? wxTreeItemId()
+                    : wxTreeItemId(siblings[(size_t)(index - 1)]);
 }
 
 wxTreeItemId wxTreeCtrl::GetFirstVisibleItem() const
@@ -1198,7 +1199,6 @@ void wxTreeCtrl::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxPaintDC dc(this);
     PrepareDC( dc );
 
-//    dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_SYSTEM_FONT ) );
     dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT ) );
 
     dc.SetPen( m_dottedPen );
@@ -1448,8 +1448,7 @@ void wxTreeCtrl::CalculatePositions()
   wxClientDC dc(this);
   PrepareDC( dc );
 
-//    dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_SYSTEM_FONT ) );
-    dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT ) );
+  dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT ) );
 
   dc.SetPen( m_dottedPen );
   m_lineHeight = (int)(dc.GetCharHeight() + 4);

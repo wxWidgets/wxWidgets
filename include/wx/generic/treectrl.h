@@ -37,7 +37,7 @@ static const int wxTREE_HITTEST_ONITEMLABEL      = 0x0080;
     // anywhere on the item
 static const int wxTREE_HITTEST_ONITEM  = wxTREE_HITTEST_ONITEMICON |
                                           wxTREE_HITTEST_ONITEMLABEL;
-					  
+
 // -----------------------------------------------------------------------------
 // forward declaration
 // -----------------------------------------------------------------------------
