@@ -67,7 +67,7 @@ public:
     // returns the number of bytes written
   size_t Write(const void *pBuf, size_t nCount);
     // returns true on success
-  bool Write(const wxString& s, wxMBConv& conv = wxConvLibc)
+  bool Write(const wxString& s, wxMBConv& conv = wxConvUTF8)
   {
       const wxWX2MBbuf buf = s.mb_str(conv);
       size_t size = strlen(buf);

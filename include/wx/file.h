@@ -100,7 +100,7 @@ public:
     // returns the number of bytes written
   size_t Write(const void *pBuf, size_t nCount);
     // returns true on success
-  bool Write(const wxString& s, wxMBConv& conv = wxConvLocal)
+  bool Write(const wxString& s, wxMBConv& conv = wxConvUTF8)
   {
       const wxWX2MBbuf buf = s.mb_str(conv);
       size_t size = strlen(buf);
@@ -165,7 +165,8 @@ public:
 
   // I/O (both functions return true on success, false on failure)
   bool Write(const void *p, size_t n) { return m_file.Write(p, n) != 0; }
-  bool Write(const wxString& str, wxMBConv& conv = wxConvLibc) { return m_file.Write(str, conv); }
+  bool Write(const wxString& str, wxMBConv& conv = wxConvUTF8)
+    { return m_file.Write(str, conv); }
 
   // different ways to close the file
     // validate changes and delete the old file of name m_strName

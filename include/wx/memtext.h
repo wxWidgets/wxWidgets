@@ -41,7 +41,7 @@ protected:
         { return TRUE; }
 
     virtual bool OnWrite(wxTextFileType WXUNUSED(typeNew),
-                         wxMBConv& WXUNUSED(conv) = wxConvLibc)
+                         wxMBConv& WXUNUSED(conv) = wxConvUTF8)
         { return TRUE; }
 };
 

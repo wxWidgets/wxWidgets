@@ -81,10 +81,10 @@ public:
     bool Create(const wxString& strBufferName);
 
     // Open() also loads buffer in memory on success
-    bool Open(wxMBConv& conv = wxConvISO8859_1);
+    bool Open(wxMBConv& conv = wxConvUTF8);
 
     // same as Open() but with (another) buffer name
-    bool Open(const wxString& strBufferName, wxMBConv& conv = wxConvISO8859_1);
+    bool Open(const wxString& strBufferName, wxMBConv& conv = wxConvUTF8);
 
     // closes the buffer and frees memory, losing all changes
     bool Close();
@@ -148,7 +148,7 @@ public:
     // change the buffer (default argument means "don't change type")
     // possibly in another format
     bool Write(wxTextFileType typeNew = wxTextFileType_None,
-               wxMBConv& conv = wxConvISO8859_1);
+               wxMBConv& conv = wxConvUTF8);
 
     // dtor
     virtual ~wxTextBuffer();
