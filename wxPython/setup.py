@@ -828,15 +828,19 @@ if BUILD_STC:
                      '%s/scintilla/src/UniConversion.cxx' % STCLOC,
                      '%s/scintilla/src/ViewStyle.cxx' % STCLOC,
                      '%s/scintilla/src/WindowAccessor.cxx' % STCLOC,
+                     '%s/scintilla/src/XPM.cxx' % STCLOC,
 
                      '%s/scintilla/src/LexAda.cxx' % STCLOC,
+                     '%s/scintilla/src/LexAsm.cxx' % STCLOC,
                      '%s/scintilla/src/LexAVE.cxx' % STCLOC,
                      '%s/scintilla/src/LexBaan.cxx' % STCLOC,
                      '%s/scintilla/src/LexBullant.cxx' % STCLOC,
                      '%s/scintilla/src/LexCPP.cxx' % STCLOC,
                      '%s/scintilla/src/LexConf.cxx' % STCLOC,
                      '%s/scintilla/src/LexCrontab.cxx' % STCLOC,
+                     '%s/scintilla/src/LexCSS.cxx' % STCLOC,
                      '%s/scintilla/src/LexEiffel.cxx' % STCLOC,
+                     '%s/scintilla/src/LexFortran.cxx' % STCLOC,
                      '%s/scintilla/src/LexHTML.cxx' % STCLOC,
                      '%s/scintilla/src/LexLisp.cxx' % STCLOC,
                      '%s/scintilla/src/LexLua.cxx' % STCLOC,
@@ -1204,6 +1208,8 @@ DATA_FILES.append( ('wxPython/lib/PyCrust', glob.glob('wxPython/lib/PyCrust/*.tx
                                             glob.glob('wxPython/lib/PyCrust/*.ico')))
 
 
+# TODO:  get datafiles under the new wx pacakge
+
 #----------------------------------------------------------------------
 # Do the Setup/Build/Install/Whatever
 #----------------------------------------------------------------------
@@ -1228,6 +1234,19 @@ if __name__ == "__main__":
                           PKGDIR+'.lib.PyCrust.wxd',
                           PKGDIR+'.tools',
                           PKGDIR+'.tools.XRCed',
+
+                          'wx',
+                          'wx.examples',
+                          'wx.examples.basic',
+                          'wx.examples.hello',
+                          'wx.lib',
+                          'wx.lib.PyCrust',
+                          #'wx.lib.PyCrust.wxd',  ???
+                          'wx.lib.colourchooser',
+                          'wx.lib.editor',
+                          'wx.lib.mixins',
+                          #'wx.tools',            ???
+                          #'wx.tools.XRCed',      ???
                           ],
 
               ext_package = PKGDIR,

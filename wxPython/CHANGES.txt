@@ -18,6 +18,13 @@ Made the version number information more robust and uh, informative.
 Also added asserts to check that the major.minor versions of wxPython
 and wxWindows match.
 
+Added the new wx "renamer" package that will dynamically import from
+the wxPython package and rename wxFooBar --> FooBar.  That means that
+people can do imports without "import *" and can use names like
+wx.Frame instead of wx.wxFrame.  This is phase 1 of a full transition
+to the new namespace.
+
+
 
 
 2.4.0.7
