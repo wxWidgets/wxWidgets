@@ -26,7 +26,8 @@ If path is ``", the current directory will be used. If filename is ``",
 no default filename will be supplied. The wildcard determines what files
 are displayed in the file selector, and file extension supplies a type
 extension for the required filename. Flags may be a combination of wxOPEN,
-wxSAVE, wxOVERWRITE\_PROMPT, wxFILE\_MUST\_EXIST, wxMULTIPLE or 0.
+wxSAVE, wxOVERWRITE\_PROMPT, wxHIDE\_READONLY, wxFILE\_MUST\_EXIST,
+wxMULTIPLE, wxCHANGE\_DIR or 0.
 
 Both the X and Windows versions implement a wildcard filter. Typing a
 filename containing wildcards (*, ?) in the filename text item, and
@@ -77,6 +78,8 @@ wildcards; see the Remarks section above.}
 \twocolitem{{\bf wxOPEN}}{This is an open dialog.}
 \twocolitem{{\bf wxSAVE}}{This is a save dialog.}
 \twocolitem{{\bf wxOVERWRITE\_PROMPT}}{For save dialog only: prompt for a confirmation if a file will be overwritten.}
+\twocolitem{{\bf wxHIDE\_READONLY}}{Do not display read-only files.}
+\twocolitem{{\bf wxFILE\_MUST\_EXIST}}{The user may only select files that actually exist.}
 \twocolitem{{\bf wxMULTIPLE}}{For open dialog only: allows selecting multiple files.}
 \twocolitem{{\bf wxCHANGE\_DIR}}{Change the current working directory to the directory where the file(s) chosen by the user are.}
 \end{twocollist}%
