@@ -32,6 +32,7 @@
 #include "wx/bitmap.h"
 #include "wx/image.h"
 #include "wx/fontmap.h"
+#include "wx/artprov.h"
 
 #include "wx/xrc/xml.h"
 #include "wx/xrc/xmlres.h"
@@ -690,6 +691,7 @@ long wxXmlResourceHandler::GetLong(const wxString& param, long defaultv)
 }
 
 
+
 int wxXmlResourceHandler::GetID()
 {
     wxString sid = GetName();
@@ -714,6 +716,68 @@ int wxXmlResourceHandler::GetID()
 #undef stdID
     else return wxXmlResource::GetXRCID(sid);
 }
+
+
+
+wxArtID wxXmlResourceHandler::GetStockID(const wxString& param)
+{
+    wxXmlNode *stockIDNode = GetParamNode(param);
+    if (stockIDNode == NULL)    
+        return wxEmptyString;
+    
+    wxXmlNode *oldnode = m_node;
+    m_node = stockIDNode;
+    
+    wxArtID sid = m_node->GetPropVal(wxT("stock_id"), wxT(""));      
+   
+    m_node = oldnode;
+
+    if (sid.IsEmpty()) return wxEmptyString;
+#define stdID(id) else if (sid == wxT(#id)) return id
+    stdID(wxART_ADD_BOOKMARK); stdID(wxART_DEL_BOOKMARK);
+    stdID(wxART_HELP_SIDE_PANEL); stdID(wxART_HELP_SETTINGS);
+    stdID(wxART_HELP_BOOK); stdID(wxART_HELP_FOLDER);
+    stdID(wxART_HELP_PAGE); stdID(wxART_GO_BACK);
+    stdID(wxART_GO_FORWARD); stdID(wxART_GO_UP);
+    stdID(wxART_GO_DOWN); stdID(wxART_GO_TO_PARENT);
+    stdID(wxART_GO_HOME); stdID(wxART_FILE_OPEN);
+    stdID(wxART_PRINT); stdID(wxART_HELP); stdID(wxART_TIP);
+    stdID(wxART_REPORT_VIEW); stdID(wxART_LIST_VIEW);
+    stdID(wxART_NEW_DIR); stdID(wxART_FOLDER); 
+    stdID(wxART_GO_DIR_UP); stdID(wxART_EXECUTABLE_FILE);
+    stdID(wxART_NORMAL_FILE); stdID(wxART_TICK_MARK);
+    stdID(wxART_CROSS_MARK); stdID(wxART_ERROR);
+    stdID(wxART_QUESTION);   stdID(wxART_WARNING);
+    stdID(wxART_INFORMATION);
+#undef stdID
+    else return sid;
+}
+
+
+
+wxArtClient wxXmlResourceHandler::GetStockClient(const wxString& param)
+{
+    wxXmlNode *stockClientNode = GetParamNode(param);
+    if (stockClientNode == NULL)
+        return wxEmptyString;
+    
+    wxXmlNode *oldnode = m_node;
+    m_node = stockClientNode;
+
+    wxArtClient sid = m_node->GetPropVal(wxT("stock_client"), wxT("wxART_OTHER"));
+
+    m_node = oldnode;
+
+    if (sid.IsEmpty()) return wxEmptyString;
+#define stdID(id) else if (sid == wxT(#id)) return id
+    stdID(wxART_TOOLBAR); stdID(wxART_MENU);
+    stdID(wxART_FRAME_ICON); stdID(wxART_CMN_DIALOG); 
+    stdID(wxART_HELP_BROWSER); stdID(wxART_MESSAGE_BOX);
+    stdID(wxART_OTHER); 
+#undef stdID
+    else return sid;
+}
+
 
 
 wxString wxXmlResourceHandler::GetName()
@@ -755,8 +819,17 @@ wxColour wxXmlResourceHandler::GetColour(const wxString& param)
 
 wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param, wxSize size)
 {
+    wxString stk = param;
+    if (!GetStockID(stk).IsEmpty())
+    {
+        wxBitmap stockArt = wxArtProvider::GetBitmap(GetStockID(stk),
+                                                     GetStockClient(stk), size);
+        if (stockArt != wxNullBitmap)
+            return stockArt;
+    }
+
     wxString name = GetParamValue(param);
-    if (name.IsEmpty()) return wxNullBitmap;
+    if (name.IsEmpty()) return wxNullBitmap;        
 #if wxUSE_FILESYSTEM
     wxFSFile *fsfile = GetCurFileSystem().OpenFile(name);
     if (fsfile == NULL)
@@ -769,6 +842,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param, wxSize size)
 #else
     wxImage img(GetParamValue(wxT("bitmap")));
 #endif
+
     if (!img.Ok())
     {
         wxLogError(_("XRC resource: Cannot create bitmap from '%s'."), param.c_str());
@@ -776,6 +850,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param, wxSize size)
     }
     if (!(size == wxDefaultSize)) img.Rescale(size.x, size.y);
     return wxBitmap(img);
+
 }
 
 

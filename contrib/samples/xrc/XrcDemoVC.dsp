@@ -148,6 +148,30 @@ LINK32=link.exe
 # Name "XrcDemoVC - Win32 Release DLL"
 # Begin Source File
 
+SOURCE=.\custclas.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\custclas.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\derivdlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\derivdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\myframe.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\myframe.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\xrcdemo.cpp
 
 !IF  "$(CFG)" == "XrcDemoVC - Win32 Release"

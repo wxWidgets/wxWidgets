@@ -6,9 +6,13 @@
 WXDIR = ../../..
 
 TARGET = xrcdemo
-OBJECTS = $(TARGET).o
+OBJECTS = $(TARGET).o \
+	myframe.o \
+        derivdlg.o \
+	custclas.o
 EXTRAINC = -I$(WXDIR)/contrib/include
 EXTRALIBS = -lwxxrc
 
 include $(WXDIR)/src/makeprog.g95
+
 

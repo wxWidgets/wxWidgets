@@ -11,13 +11,35 @@ program_dir = contrib/samples/xrc
 
 PROGRAM=xrcdemo
 
-OBJECTS=$(PROGRAM).o
+OBJECTS=$(PROGRAM).o \
+	myframe.o \
+        derivdlg.o \
+	custclas.o
 
 APPEXTRALIBS=$(top_builddir)/lib/libwxxrc.@WX_TARGET_LIBRARY_TYPE@
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 DATADIRS = rc
-DATAFILES = rc/resource.xrc rc/fileopen.gif rc/filesave.gif rc/fuzzy.gif \
-            rc/quotes.gif rc/scanning.gif rc/update.gif
+DATAFILES = rc/artprov.xrc \
+	rc/basicdlg.xrc \
+	rc/controls.xrc \
+	rc/custclas.xrc \
+	rc/derivdlg.xrc \
+  	rc/frame.xrc \
+	rc/menu.xrc \
+	rc/platform.xrc \
+	rc/toolbar.xrc \
+	rc/uncenter.xrc \
+	rc/variable.xrc \
+	rc/artprov.xpm \
+	rc/basicdlg.xpm \
+	rc/controls.xpm \
+	rc/custclas.xpm \
+	rc/derivdlg.xpm \
+	rc/platform.xpm \
+	rc/uncenter.xpm \
+	rc/variable.xpm
 
 include $(top_builddir)/src/makeprog.env
+
+

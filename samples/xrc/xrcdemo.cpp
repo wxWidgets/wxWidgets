@@ -1,23 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        xmldemo.cpp
-// Purpose:     XML resources sample
-// Author:      Vaclav Slavik
+//-----------------------------------------------------------------------------
+// Name:        xrcdemo.cpp
+// Purpose:     XML resources sample: Main application file
+// Author:      Robert O'Connor (rob@medicalmnemonics.com), Vaclav Slavik
 // RCS-ID:      $Id$
-// Copyright:   (c) Vaclav Slavik
+// Copyright:   (c) Robert O'Connor and Vaclav Slavik
 // Licence:     wxWindows licence
-/////////////////////////////////////////////////////////////////////////////
+//-----------------------------------------------------------------------------
 
-// ============================================================================
-// declarations
-// ============================================================================
+//-----------------------------------------------------------------------------
+// GCC implementation
+//-----------------------------------------------------------------------------
 
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
 #ifdef __GNUG__
-    #pragma implementation "xrcdemo.cpp"
-    #pragma interface "xrcdemo.cpp"
+    #pragma implementation "xrcdemo.h"
 #endif
+
+//-----------------------------------------------------------------------------
+// Standard wxWindows headers
+//-----------------------------------------------------------------------------
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
@@ -26,143 +26,99 @@
     #pragma hdrstop
 #endif
 
-// for all others, include the necessary headers (this file is usually all you
+// For all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWindows headers)
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
 
-#include "wx/image.h"
-#include "wx/xrc/xmlres.h"
+//-----------------------------------------------------------------------------
+// Header of this .cpp file
+//-----------------------------------------------------------------------------
 
-// ----------------------------------------------------------------------------
-// resources
-// ----------------------------------------------------------------------------
-// the application icon
-#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__)
-    #include "rc/appicon.xpm"
-#endif
+#include "xrcdemo.h"
 
-// ----------------------------------------------------------------------------
-// private classes
-// ----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+// Remaining headers: Needed wx headers, then wx/contrib headers, then application headers
+//-----------------------------------------------------------------------------
 
-// Define a new application type, each program should derive a class from wxApp
-class MyApp : public wxApp
-{
-public:
-    // override base class virtuals
-    // ----------------------------
+#include "wx/image.h"               // wxImage
 
-    // this one is called on application startup and is a good place for the app
-    // initialization (doing it here and not in the ctor allows to have an error
-    // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit();
-};
+//-----------------------------------------------------------------------------
 
-// Define a new frame type: this is going to be our main frame
-class MyFrame : public wxFrame
-{
-public:
-    // ctor(s)
-    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
+#include "wx/xrc/xmlres.h"          // XRC XML resouces
 
-    // event handlers (these functions should _not_ be virtual)
-    void OnQuit(wxCommandEvent& event);
-    void OnAbout(wxCommandEvent& event);
-    void OnDlg1(wxCommandEvent& event);
-    void OnDlg2(wxCommandEvent& event);
+//-----------------------------------------------------------------------------
 
-private:
-    // any class wishing to process wxWindows events must use this macro
-    DECLARE_EVENT_TABLE()
-};
+#include "myframe.h"
 
-// ----------------------------------------------------------------------------
-// event tables and other macros for wxWindows
-// ----------------------------------------------------------------------------
-
-// the event tables connect the wxWindows events with the functions (event
-// handlers) which process them. It can be also done at run-time, but for the
-// simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(XRCID("menu_quit"),  MyFrame::OnQuit)
-    EVT_MENU(XRCID("menu_about"), MyFrame::OnAbout)
-    EVT_MENU(XRCID("menu_dlg1"), MyFrame::OnDlg1)
-    EVT_MENU(XRCID("menu_dlg2"), MyFrame::OnDlg2)
-END_EVENT_TABLE()
+//-----------------------------------------------------------------------------
+// wxWindows macro: Declare the application.
+//-----------------------------------------------------------------------------
 
 // Create a new application object: this macro will allow wxWindows to create
 // the application object during program execution (it's better than using a
 // static object for many reasons) and also declares the accessor function
-// wxGetApp() which will return the reference of the right type (i.e. MyApp and
-// not wxApp)
+// wxGetApp() which will return the reference of the right type (i.e. the_app and
+// not wxApp).
 IMPLEMENT_APP(MyApp)
 
-// ============================================================================
-// implementation
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// the application class
-// ----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+// Public methods
+//-----------------------------------------------------------------------------
 
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
-    wxImage::AddHandler(new wxGIFHandler);
-    wxXmlResource::Get()->InitAllHandlers();
-    wxXmlResource::Get()->Load("rc/resource.xrc");
+    // If there is any of a certain format of image in the xrcs, then first
+    // load a handler for that image type. This example uses XPMs, but if
+    // you want PNGs, then add a PNG handler, etc. See wxImage::AddHandler()
+    // documentation for the types of image handlers available.
+    wxImage::AddHandler(new wxXPMHandler);
+    
+    // Initialize all the XRC handlers. Always required (unless you feel like
+    // going through and initializing a handler of each control type you will
+    // be using (ie initialize the spinctrl handler, initialize the textctrl
+    // handler). However, if you are only using a few control types, it will
+    // save some space to only initialize the ones you will be using. See
+    // wxXRC docs for details.
+    wxXmlResource::Get()->InitAllHandlers();    
+      
+    // Load all of the XRC files that will be used. You can put everything
+    // into one giant XRC file if you wanted, but then they become more 
+    // diffcult to manage, and harder to reuse in later projects.   
+    // The menubar
+    wxXmlResource::Get()->Load("rc/menu.xrc");
+    // The toolbar
+    wxXmlResource::Get()->Load("rc/toolbar.xrc");
+    // Non-derived dialog example
+    wxXmlResource::Get()->Load("rc/basicdlg.xrc");
+    // Derived dialog example
+    wxXmlResource::Get()->Load("rc/derivdlg.xrc");
+    // Controls property example
+    wxXmlResource::Get()->Load("rc/controls.xrc");
+    // Frame example
+    wxXmlResource::Get()->Load("rc/frame.xrc");
+    // Uncentered example
+    wxXmlResource::Get()->Load("rc/uncenter.xrc");    
+    // Custom class example
+    wxXmlResource::Get()->Load("rc/custclas.xrc");
+    // wxArtProvider example
+    wxXmlResource::Get()->Load("rc/artprov.xrc");
+    // Platform property example
+    wxXmlResource::Get()->Load("rc/platform.xrc");
+    // Variable expansion example
+    wxXmlResource::Get()->Load("rc/variable.xrc");
 
-    MyFrame *frame = new MyFrame("XML resources demo",
-                                 wxPoint(50, 50), wxSize(450, 340));
+    // Make an instance of your derived frame. Passing NULL (the default value 
+    // of MyFrame's constructor is NULL) as the frame doesn't have a frame
+    // since it is the first window. 
+    MyFrame *frame = new MyFrame();
+    
+    // Show the frame.
     frame->Show(TRUE);
+    
+    // Return TRUE to tell program to continue (FALSE would terminate).
     return TRUE;
 }
 
-// ----------------------------------------------------------------------------
-// main frame
-// ----------------------------------------------------------------------------
-
-// frame constructor
-MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, -1, title, pos, size)
-{
-    SetIcon(wxICON(appicon));
-
-    SetMenuBar(wxXmlResource::Get()->LoadMenuBar("mainmenu"));
-    SetToolBar(wxXmlResource::Get()->LoadToolBar(this, "toolbar"));
-}
-
-
-// event handlers
-
-void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
-{
-    // TRUE is to force the frame to close
-    Close(TRUE);
-}
-
-void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
-{
-    wxString msg;
-    msg.Printf( _T("This is the about dialog of XML resources demo.\n")
-                _T("Welcome to %s"), wxVERSION_STRING);
-
-    wxMessageBox(msg, "About XML resources demo", wxOK | wxICON_INFORMATION, this);
-}
-
-void MyFrame::OnDlg1(wxCommandEvent& WXUNUSED(event))
-{
-    wxDialog dlg;
-    wxXmlResource::Get()->LoadDialog(&dlg, this, "dlg1");
-    dlg.ShowModal();
-}
-
-
-void MyFrame::OnDlg2(wxCommandEvent& WXUNUSED(event))
-{
-    wxDialog dlg;
-    wxXmlResource::Get()->LoadDialog(&dlg, this, "dlg2");
-    dlg.ShowModal();
-}

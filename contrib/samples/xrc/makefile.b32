@@ -12,7 +12,11 @@ WXDIR = $(WXWIN)
 TARGET=xrcdemo
 
 EXTRALIBS=$(WXDIR)\lib\wxxrc.lib
-OBJECTS = $(TARGET).obj
+OBJECTS = $(TARGET).obj \
+	myframe.obj \
+        derivdlg.obj \
+	custclas.obj
 
 !include $(WXDIR)\src\makeprog.b32
+
 

@@ -24,6 +24,7 @@
 #include "wx/filesys.h"
 #include "wx/bitmap.h"
 #include "wx/icon.h"
+#include "wx/artprov.h"
 
 #include "wx/xrc/xml.h"
 
@@ -350,6 +351,12 @@ protected:
 
     // Returns the XRCID.
     int GetID();
+
+    // Returns the wxArtID for a wxArtProvider-managed bitmap.
+    wxArtID GetStockID(const wxString& param);
+    
+    // Returns the wxArtClient for a wxArtProvider-managed bitmap.
+    wxArtClient GetStockClient(const wxString& param);
 
     // Returns the resource name.
     wxString GetName();

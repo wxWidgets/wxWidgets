@@ -6,9 +6,11 @@
 WXDIR = $(WXWIN)
 PROGRAM = xrcdemo
 
-OBJECTS = $(PROGRAM).obj
+OBJECTS = $(PROGRAM).obj myframe.obj derivdlg.obj custclas.obj
+
 EXTRALIBS = $(WXDIR)\lib\wxxrc$(LIBEXT).lib
 EXTRAINC = -I$(WXDIR)\contrib\include
 
 !include $(WXDIR)\src\makeprog.vc
+
 
