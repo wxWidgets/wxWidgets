@@ -110,13 +110,11 @@ const char *wxStockItemToGTK(wxStockItemID item)
 {
     #define STOCKITEM(stockid)            \
         case wx##stockid:                 \
-            return GTK_##stockid;         \
-            break;
+            return GTK_##stockid;
     
     #define STOCKITEM_MISSING(stockid)    \
         case wx##stockid:                 \
-            return NULL;                  \
-            break;
+            return NULL;
 
     #if GTK_CHECK_VERSION(2,4,0)
         #define STOCKITEM_24(stockid) STOCKITEM(stockid)
