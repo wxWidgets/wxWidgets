@@ -133,14 +133,14 @@ bool wxNotebook::Create(wxWindow *parent,
 // wxNotebook page titles and images
 // ----------------------------------------------------------------------------
 
-wxString wxNotebook::GetPageText(int nPage) const
+wxString wxNotebook::GetPageText(size_t nPage) const
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), _T(""), _T("invalid notebook page") );
 
     return m_titles[nPage];
 }
 
-bool wxNotebook::SetPageText(int nPage, const wxString& strText)
+bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, _T("invalid notebook page") );
 
@@ -163,14 +163,14 @@ bool wxNotebook::SetPageText(int nPage, const wxString& strText)
     return TRUE;
 }
 
-int wxNotebook::GetPageImage(int nPage) const
+int wxNotebook::GetPageImage(size_t nPage) const
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, _T("invalid notebook page") );
 
     return m_images[nPage];
 }
 
-bool wxNotebook::SetPageImage(int nPage, int nImage)
+bool wxNotebook::SetPageImage(size_t nPage, int nImage)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, _T("invalid notebook page") );
 
@@ -202,7 +202,7 @@ wxNotebook::~wxNotebook()
 // wxNotebook page switching
 // ----------------------------------------------------------------------------
 
-int wxNotebook::SetSelection(int nPage)
+int wxNotebook::SetSelection(size_t nPage)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, _T("invalid notebook page") );
 
@@ -277,13 +277,13 @@ int wxNotebook::SetSelection(int nPage)
 // wxNotebook pages adding/deleting
 // ----------------------------------------------------------------------------
 
-bool wxNotebook::InsertPage(int nPage,
+bool wxNotebook::InsertPage(size_t nPage,
                             wxNotebookPage *pPage,
                             const wxString& strText,
                             bool bSelect,
                             int imageId)
 {
-    int nPages = GetPageCount();
+    size_t nPages = GetPageCount();
     wxCHECK_MSG( nPage == nPages || IS_VALID_PAGE(nPage), FALSE,
                  _T("invalid notebook page in InsertPage()") );
 
@@ -360,7 +360,7 @@ bool wxNotebook::DeleteAllPages()
     return TRUE;
 }
 
-wxNotebookPage *wxNotebook::DoRemovePage(int nPage)
+wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), NULL, _T("invalid notebook page") );
 

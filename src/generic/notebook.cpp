@@ -155,7 +155,7 @@ int wxNotebook::GetRowCount() const
     return 0;
 }
 
-int wxNotebook::SetSelection(int nPage)
+int wxNotebook::SetSelection(size_t nPage)
 {
     if (nPage == -1)
       return 0;
@@ -185,7 +185,7 @@ void wxNotebook::AdvanceSelection(bool bForward)
 }
 #endif
 
-bool wxNotebook::SetPageText(int nPage, const wxString& strText)
+bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
 {
     wxASSERT( IS_VALID_PAGE(nPage) );
 #if defined (__WIN16__)
@@ -204,7 +204,7 @@ bool wxNotebook::SetPageText(int nPage, const wxString& strText)
     return FALSE;
 }
 
-wxString wxNotebook::GetPageText(int nPage) const
+wxString wxNotebook::GetPageText(size_t nPage) const
 {
     wxASSERT( IS_VALID_PAGE(nPage) );
 
@@ -219,7 +219,7 @@ wxString wxNotebook::GetPageText(int nPage) const
 #endif
 }
 
-int wxNotebook::GetPageImage(int nPage) const
+int wxNotebook::GetPageImage(size_t nPage) const
 {
     wxASSERT( IS_VALID_PAGE(nPage) );
 
@@ -227,7 +227,7 @@ int wxNotebook::GetPageImage(int nPage) const
     return 0;
 }
 
-bool wxNotebook::SetPageImage(int nPage, int nImage)
+bool wxNotebook::SetPageImage(size_t nPage, int nImage)
 {
     wxASSERT( IS_VALID_PAGE(nPage) );
 
@@ -258,7 +258,7 @@ void wxNotebook::SetTabSize(const wxSize& sz)
 // ----------------------------------------------------------------------------
 
 // remove one page from the notebook and delete it
-bool wxNotebook::DeletePage(int nPage)
+bool wxNotebook::DeletePage(size_t nPage)
 {
     wxCHECK( IS_VALID_PAGE(nPage), FALSE );
 
@@ -310,7 +310,7 @@ bool wxNotebook::DeletePage(wxNotebookPage* page)
 }
 
 // remove one page from the notebook
-bool wxNotebook::RemovePage(int nPage)
+bool wxNotebook::RemovePage(size_t nPage)
 {
     wxCHECK( IS_VALID_PAGE(nPage), FALSE );
 
@@ -368,8 +368,8 @@ bool wxNotebook::RemovePage(wxNotebookPage* page)
 // Find the position of the wxNotebookPage, -1 if not found.
 int wxNotebook::FindPagePosition(wxNotebookPage* page) const
 {
-    int nPageCount = GetPageCount();
-    int nPage;
+    size_t nPageCount = GetPageCount();
+    size_t nPage;
     for ( nPage = 0; nPage < nPageCount; nPage++ )
         if (m_pages[nPage] == page)
             return nPage;
@@ -381,8 +381,8 @@ bool wxNotebook::DeleteAllPages()
 {
     m_tabView->ClearTabs(TRUE);
 
-    int nPageCount = GetPageCount();
-    int nPage;
+    size_t nPageCount = GetPageCount();
+    size_t nPage;
     for ( nPage = 0; nPage < nPageCount; nPage++ )
         delete m_pages[nPage];
 
@@ -392,7 +392,7 @@ bool wxNotebook::DeleteAllPages()
 }
 
 // same as AddPage() but does it at given position
-bool wxNotebook::InsertPage(int nPage,
+bool wxNotebook::InsertPage(size_t nPage,
                             wxNotebookPage *pPage,
                             const wxString& strText,
                             bool bSelect,
@@ -523,8 +523,8 @@ bool wxNotebook::RefreshLayout(bool force)
 
         // fit the notebook page to the tab control's display area
 
-        unsigned int nCount = m_pages.Count();
-        for ( unsigned int nPage = 0; nPage < nCount; nPage++ ) {
+        size_t nCount = m_pages.Count();
+        for ( size_t nPage = 0; nPage < nCount; nPage++ ) {
             wxNotebookPage *pPage = m_pages[nPage];
             wxRect clientRect = GetAvailableClientSize();
             if (pPage->IsShown())

@@ -67,14 +67,14 @@ public:
     // implement wxNotebookBase pure virtuals
     // --------------------------------------
 
-    virtual int SetSelection(int nPage);
+    virtual int SetSelection(size_t nPage);
     virtual int GetSelection() const { return m_sel; }
 
-    virtual bool SetPageText(int nPage, const wxString& strText);
-    virtual wxString GetPageText(int nPage) const;
+    virtual bool SetPageText(size_t nPage, const wxString& strText);
+    virtual wxString GetPageText(size_t nPage) const;
 
-    virtual int GetPageImage(int nPage) const;
-    virtual bool SetPageImage(int nPage, int nImage);
+    virtual int GetPageImage(size_t nPage) const;
+    virtual bool SetPageImage(size_t nPage, int nImage);
 
     virtual void SetPageSize(const wxSize& size);
     virtual void SetPadding(const wxSize& padding);
@@ -84,7 +84,7 @@ public:
 
     virtual bool DeleteAllPages();
 
-    virtual bool InsertPage(int nPage,
+    virtual bool InsertPage(size_t nPage,
                             wxNotebookPage *pPage,
                             const wxString& strText,
                             bool bSelect = FALSE,
@@ -120,7 +120,7 @@ public:
     void RefreshCurrent();
 
 protected:
-    virtual wxNotebookPage *DoRemovePage(int nPage);
+    virtual wxNotebookPage *DoRemovePage(size_t nPage);
 
     // drawing
     virtual void DoDraw(wxControlRenderer *renderer);

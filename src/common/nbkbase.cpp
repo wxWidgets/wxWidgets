@@ -33,84 +33,11 @@
 #ifndef WX_PRECOMP
 #endif //WX_PRECOMP
 
-#include "wx/imaglist.h"
 #include "wx/notebook.h"
-
-#ifdef __GNUWIN32_OLD__
-    #include "wx/msw/gnuwin32/extra.h"
-#endif
-
-#if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__))
-#include "wx/msw/private.h"
-#include <commctrl.h>
-#include "wx/msw/winundef.h"
-#endif
 
 // ============================================================================
 // implementation
 // ============================================================================
-
-// ----------------------------------------------------------------------------
-// constructors and destructors
-// ----------------------------------------------------------------------------
-
-void wxNotebookBase::Init()
-{
-    m_imageList = NULL;
-    m_ownsImageList = FALSE;
-}
-
-bool
-wxNotebookBase::Create(wxWindow *parent,
-                       wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name)
-{
-    return wxControl::Create
-                     (
-                        parent,
-                        id,
-                        pos,
-                        size,
-                        style,
-                        wxDefaultValidator,
-                        name
-                     );
-}
-
-wxNotebookBase::~wxNotebookBase()
-{
-    if ( m_ownsImageList )
-    {
-        // may be NULL, ok
-        delete m_imageList;
-    }
-}
-
-// ----------------------------------------------------------------------------
-// image list
-// ----------------------------------------------------------------------------
-
-void wxNotebookBase::SetImageList(wxImageList* imageList)
-{
-    if ( m_ownsImageList )
-    {
-        // may be NULL, ok
-        delete m_imageList;
-
-        m_ownsImageList = FALSE;
-    }
-
-    m_imageList = imageList;
-}
-
-void wxNotebookBase::AssignImageList(wxImageList* imageList)
-{
-    SetImageList(imageList);
-    m_ownsImageList = TRUE;
-}
 
 // ----------------------------------------------------------------------------
 // geometry
@@ -134,78 +61,6 @@ wxSize wxNotebookBase::CalcSizeFromPage(const wxSize& sizePage) const
     }
 
     return sizeTotal;
-}
-
-wxSize wxNotebookBase::DoGetBestSize() const
-{
-    wxSize bestSize;
-
-    // iterate over all pages, get the largest width and height
-    const size_t nCount = m_pages.Count();
-    for ( size_t nPage = 0; nPage < nCount; nPage++ )
-    {
-        wxNotebookPage *pPage = m_pages[nPage];
-        wxSize childBestSize(pPage->GetBestSize());
-
-        if ( childBestSize.x > bestSize.x )
-            bestSize.x = childBestSize.x;
-
-        if ( childBestSize.y > bestSize.y )
-            bestSize.y = childBestSize.y;
-    }
-
-    // convert display area to window area, adding the size neccessary for the
-    // tabs
-    return CalcSizeFromPage(bestSize);
-}
-
-// ----------------------------------------------------------------------------
-// pages management
-// ----------------------------------------------------------------------------
-
-bool wxNotebookBase::DeletePage(int nPage)
-{
-    wxNotebookPage *page = DoRemovePage(nPage);
-    if ( !page )
-        return FALSE;
-
-    delete page;
-
-    return TRUE;
-}
-
-wxNotebookPage *wxNotebookBase::DoRemovePage(int nPage)
-{
-    wxCHECK_MSG( nPage >= 0 && (size_t)nPage < m_pages.GetCount(), NULL,
-                 _T("invalid page index in wxNotebookBase::DoRemovePage()") );
-
-    wxNotebookPage *pageRemoved = m_pages[nPage];
-    m_pages.RemoveAt(nPage);
-
-    return pageRemoved;
-}
-
-int wxNotebookBase::GetNextPage(bool forward) const
-{
-    int nPage;
-
-    int nMax = GetPageCount();
-    if ( nMax-- ) // decrement it to get the last valid index
-    {
-        int nSel = GetSelection();
-
-        // change selection wrapping if it becomes invalid
-        nPage = forward ? nSel == nMax ? 0
-                                       : nSel + 1
-                        : nSel == 0 ? nMax
-                                    : nSel - 1;
-    }
-    else // notebook is empty, no next page
-    {
-        nPage = -1;
-    }
-
-    return nPage;
 }
 
 #endif // wxUSE_NOTEBOOK

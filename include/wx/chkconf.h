@@ -891,6 +891,20 @@
 #    endif
 #endif /* controls */
 
+#if defined(wxUSE_NOTEBOOK)
+#   if defined(wxUSE_BOOKCTRL) && !wxUSE_BOOKCTRL
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_BOOKCTRL must be set."
+#       else
+#           undef wxUSE_BOOKCTRL
+#       endif
+#   endif
+
+#   ifndef wxUSE_BOOKCTRL
+#       define wxUSE_BOOKCTRL 1
+#   endif
+#endif /* wxUSE_NOTEBOOK */
+
 /* wxUniv-specific dependencies */
 #if defined(__WXUNIVERSAL__)
 #   if (wxUSE_COMBOBOX || wxUSE_MENUS) && !wxUSE_POPUPWIN

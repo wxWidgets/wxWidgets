@@ -66,23 +66,23 @@ public:
     // set the currently selected page, return the index of the previously
     // selected one (or -1 on error)
     // NB: this function will _not_ generate wxEVT_NOTEBOOK_PAGE_xxx events
-  int SetSelection(int nPage);
+  int SetSelection(size_t nPage);
     // cycle thru the tabs
   //  void AdvanceSelection(bool bForward = TRUE);
     // get the currently selected page
   int GetSelection() const { return m_nSelection; }
 
     // set/get the title of a page
-  bool SetPageText(int nPage, const wxString& strText);
-  wxString GetPageText(int nPage) const;
+  bool SetPageText(size_t nPage, const wxString& strText);
+  wxString GetPageText(size_t nPage) const;
 
   // get the number of rows for a control with wxNB_MULTILINE style (not all
   // versions support it - they will always return 1 then)
   virtual int GetRowCount() const ;
 
     // sets/returns item's image index in the current image list
-  int  GetPageImage(int nPage) const;
-  bool SetPageImage(int nPage, int nImage);
+  int  GetPageImage(size_t nPage) const;
+  bool SetPageImage(size_t nPage, int nImage);
 
   // control the appearance of the notebook pages
     // set the size (the same for all pages)
@@ -96,15 +96,15 @@ public:
   // operations
   // ----------
     // remove one page from the notebook, and delete the page.
-  bool DeletePage(int nPage);
+  bool DeletePage(size_t nPage);
   bool DeletePage(wxNotebookPage* page);
     // remove one page from the notebook, without deleting the page.
-  bool RemovePage(int nPage);
+  bool RemovePage(size_t nPage);
   bool RemovePage(wxNotebookPage* page);
     // remove all pages
   bool DeleteAllPages();
     // the same as AddPage(), but adds it at the specified position
-  bool InsertPage(int nPage,
+  bool InsertPage(size_t nPage,
                   wxNotebookPage *pPage,
                   const wxString& strText,
                   bool bSelect = FALSE,

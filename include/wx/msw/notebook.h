@@ -83,13 +83,13 @@ public:
     // set the currently selected page, return the index of the previously
     // selected one (or -1 on error)
     // NB: this function will _not_ generate wxEVT_NOTEBOOK_PAGE_xxx events
-  int SetSelection(int nPage);
+  int SetSelection(size_t nPage);
     // get the currently selected page
   int GetSelection() const { return m_nSelection; }
 
     // set/get the title of a page
-  bool SetPageText(int nPage, const wxString& strText);
-  wxString GetPageText(int nPage) const;
+  bool SetPageText(size_t nPage, const wxString& strText);
+  wxString GetPageText(size_t nPage) const;
 
   // image list stuff: each page may have an image associated with it. All
   // the images belong to an image list, so you have to
@@ -100,8 +100,8 @@ public:
   void SetImageList(wxImageList* imageList);
 
     // sets/returns item's image index in the current image list
-  int  GetPageImage(int nPage) const;
-  bool SetPageImage(int nPage, int nImage);
+  int  GetPageImage(size_t nPage) const;
+  bool SetPageImage(size_t nPage, int nImage);
 
     // currently it's always 1 because wxGTK doesn't support multi-row
     // tab controls
@@ -123,7 +123,7 @@ public:
 
     // inserts a new page to the notebook (it will be deleted ny the notebook,
     // don't delete it yourself). If bSelect, this page becomes active.
-  bool InsertPage(int nPage,
+  bool InsertPage(size_t nPage,
                   wxNotebookPage *pPage,
                   const wxString& strText,
                   bool bSelect = FALSE,
@@ -172,7 +172,7 @@ protected:
   virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
 
   // remove one page from the notebook, without deleting
-  virtual wxNotebookPage *DoRemovePage(int nPage);
+  virtual wxNotebookPage *DoRemovePage(size_t nPage);
 
   // set the size of the given page to fit in the notebook
   void AdjustPageSize(wxNotebookPage *page);
