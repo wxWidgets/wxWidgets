@@ -18,6 +18,7 @@
 
 #include "wx/button.h"
 #include "wx/bitmap.h"
+#include "wx/brush.h"
 
 #define wxDEFAULT_BUTTON_MARGIN 4
 
