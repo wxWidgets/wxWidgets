@@ -1933,6 +1933,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/taskbar.mm
     src/cocoa/textctrl.mm
     src/cocoa/toolbar.mm
+    src/cocoa/tooltip.mm
     src/cocoa/toplevel.mm
     src/cocoa/utils.cpp
     src/cocoa/utilsexc.mm
