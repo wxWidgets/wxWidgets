@@ -444,10 +444,11 @@ void MyFrame::MultiChoice(wxCommandEvent& WXUNUSED(event) )
     if ( count )
     {
         wxString msg;
-        msg.Printf(wxT("You selected %u items:\n"), count);
+        msg.Printf(wxT("You selected %u items:\n"), (unsigned)count);
         for ( size_t n = 0; n < count; n++ )
         {
-            msg += wxString::Format(wxT("\t%u: %u (%s)\n"), n, selections[n],
+            msg += wxString::Format(wxT("\t%u: %u (%s)\n"),
+                                    (unsigned)n, (unsigned)selections[n],
                                     choices[selections[n]].c_str());
         }
         wxLogMessage(msg);
@@ -529,7 +530,7 @@ void MyFrame::FilesOpen(wxCommandEvent& WXUNUSED(event) )
         for ( size_t n = 0; n < count; n++ )
         {
             s.Printf(_T("File %d: %s (%s)\n"),
-                     n, paths[n].c_str(), filenames[n].c_str());
+                     (int)n, paths[n].c_str(), filenames[n].c_str());
 
             msg += s;
         }
