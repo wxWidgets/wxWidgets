@@ -1183,8 +1183,8 @@ BEGIN_EVENT_TABLE(wxGenericDirDialog, wxDialog)
     EVT_BUTTON(wxID_OK,  wxGenericDirDialog::OnOK)
     EVT_BUTTON               (wxID_NEW,     wxGenericDirDialog::OnNew)
     EVT_CLOSE(wxGenericDirDialog::OnCloseWindow)
-    EVT_TREE_KEY_DOWN        (ID_DIRCTRL,   wxGenericDirDialog::OnTreeKeyDown)
-    EVT_TREE_SEL_CHANGED     (ID_DIRCTRL,   wxGenericDirDialog::OnTreeSelected)
+    EVT_TREE_KEY_DOWN        (-1,   wxGenericDirDialog::OnTreeKeyDown)
+    EVT_TREE_SEL_CHANGED     (-1,   wxGenericDirDialog::OnTreeSelected)
     EVT_TEXT_ENTER           (ID_TEXTCTRL,  wxGenericDirDialog::OnOK)
 END_EVENT_TABLE()
 
@@ -1192,6 +1192,9 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
         const wxString& defaultPath, long style, const wxPoint& pos, const wxSize& sz, const wxString& name):
    wxDialog(parent, ID_DIRCTRL, title, pos, sz, style, name)
 {
+    m_dirCtrl = NULL;
+    m_path = defaultPath;
+
     wxBusyCursor cursor;
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
@@ -1204,7 +1207,7 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     topsizer->Add( m_dirCtrl, 1, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, 10 );
 
     // 2) text ctrl
-    m_input = new wxTextCtrl( this, ID_TEXTCTRL, wxEmptyString, wxDefaultPosition );
+    m_input = new wxTextCtrl( this, ID_TEXTCTRL, m_path, wxDefaultPosition );
     topsizer->Add( m_input, 0, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, 10 );
 
 #if wxUSE_STATLINE
@@ -1227,8 +1230,6 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
 
     okButton->SetDefault();
     m_dirCtrl->SetFocus();
-
-    m_input->SetValue(defaultPath);
 
     SetAutoLayout( TRUE );
     SetSizer( topsizer );
@@ -1281,21 +1282,25 @@ void wxGenericDirDialog::OnOK(wxCommandEvent& event)
 void wxGenericDirDialog::SetPath(const wxString& path)
 {
     m_dirCtrl->SetPath(path);
+    m_path = path;
 }
 
 wxString wxGenericDirDialog::GetPath(void) const
 {
-    return m_dirCtrl->GetPath();
+    return m_path;
 }
 
 int wxGenericDirDialog::ShowModal()
 {
-    m_input->SetValue( m_path );
+    //m_input->SetValue( m_path );
     return wxDialog::ShowModal();
 }
 
 void wxGenericDirDialog::OnTreeSelected( wxTreeEvent &event )
 {
+    if (!m_dirCtrl)
+        return;
+
     wxDirItemDataEx *data = (wxDirItemDataEx*)m_dirCtrl->GetTreeCtrl()->GetItemData(event.GetItem());
     if (data)
        m_input->SetValue( data->m_path );
@@ -1303,6 +1308,9 @@ void wxGenericDirDialog::OnTreeSelected( wxTreeEvent &event )
 
 void wxGenericDirDialog::OnTreeKeyDown( wxTreeEvent &WXUNUSED(event) )
 {
+    if (!m_dirCtrl)
+        return;
+
     wxDirItemDataEx *data = (wxDirItemDataEx*)m_dirCtrl->GetTreeCtrl()->GetItemData(m_dirCtrl->GetTreeCtrl()->GetSelection());
     if (data)
         m_input->SetValue( data->m_path );
