@@ -968,7 +968,7 @@ inline WORD wxMSW_ctype(wxChar ch)
 
 WXDLLEXPORT int wxIsalnum(wxChar ch) { return IsCharAlphaNumeric(ch); }
 WXDLLEXPORT int wxIsalpha(wxChar ch) { return IsCharAlpha(ch); }
-WXDLLEXPORT int wxIsctrl(wxChar ch) { return wxMSW_ctype(ch) & C1_CNTRL; }
+WXDLLEXPORT int wxIscntrl(wxChar ch) { return wxMSW_ctype(ch) & C1_CNTRL; }
 WXDLLEXPORT int wxIsdigit(wxChar ch) { return wxMSW_ctype(ch) & C1_DIGIT; }
 WXDLLEXPORT int wxIsgraph(wxChar ch) { return wxMSW_ctype(ch) & (C1_DIGIT|C1_PUNCT|C1_ALPHA); }
 WXDLLEXPORT int wxIslower(wxChar ch) { return IsCharLower(ch); }
