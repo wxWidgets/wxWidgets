@@ -8,6 +8,16 @@ wxPython.  These have been submitted to SWIG's SourceForge patch
 tracker, so hopefully they will get incorporated into the main SWIG
 source tree soon.
 
+wxPython currently uses the 20-Feb-2004 version of SWIG.  You can get
+that version from their CVS using these commands::
+
+
+    cvs -d :pserver:anonymous@cvs.sourceforge.net:/cvsroot/swig login
+    <press ENTER for empty password>
+
+    cvs -d :pserver:anonymous@cvs.sourceforge.net:/cvsroot/swig \
+	checkout -D 20-FEB-2004 SWIG
+
 
 ------------------------------------------------------------------------
 
