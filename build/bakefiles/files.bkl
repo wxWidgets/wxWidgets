@@ -1207,6 +1207,45 @@
     wx/msw/ole/oleutils.h
     wx/msw/ole/uuid.h
     wx/msw/helpbest.h
+
+    <!-- Resources must be installed together with headers: -->
+    wx/msw/wx.rc
+    wx/msw/wx.manifest
+    wx/msw/gnuwin32/winresrc.h
+    wx/msw/colours.bmp
+    wx/msw/csquery.bmp
+    wx/msw/disable.bmp
+    wx/msw/blank.cur
+    wx/msw/bullseye.cur
+    wx/msw/clock.cur
+    wx/msw/hand.cur
+    wx/msw/heart.cur
+    wx/msw/magnif1.cur
+    wx/msw/noentry.cur
+    wx/msw/pbrush.cur
+    wx/msw/pencil.cur
+    wx/msw/pntleft.cur
+    wx/msw/pntright.cur
+    wx/msw/query.cur
+    wx/msw/rightarr.cur
+    wx/msw/roller.cur
+    wx/msw/size.cur
+    wx/msw/watch1.cur
+    wx/msw/cdrom.ico
+    wx/msw/child.ico
+    wx/msw/computer.ico
+    wx/msw/drive.ico
+    wx/msw/error.ico
+    wx/msw/file1.ico
+    wx/msw/floppy.ico
+    wx/msw/folder1.ico
+    wx/msw/folder2.ico
+    wx/msw/info.ico
+    wx/msw/mdi.ico
+    wx/msw/question.ico
+    wx/msw/removble.ico
+    wx/msw/std.ico
+    wx/msw/warning.ico
 </set>
 
 

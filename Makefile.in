@@ -433,7 +433,19 @@ XMLLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 @COND_TOOLKIT_MSW@	wx/msw/ole/dataobj.h wx/msw/ole/dataobj2.h \
 @COND_TOOLKIT_MSW@	wx/msw/ole/dropsrc.h wx/msw/ole/droptgt.h \
 @COND_TOOLKIT_MSW@	wx/msw/ole/oleutils.h wx/msw/ole/uuid.h \
-@COND_TOOLKIT_MSW@	wx/msw/helpbest.h
+@COND_TOOLKIT_MSW@	wx/msw/helpbest.h wx/msw/wx.rc wx/msw/wx.manifest \
+@COND_TOOLKIT_MSW@	wx/msw/gnuwin32/winresrc.h wx/msw/colours.bmp \
+@COND_TOOLKIT_MSW@	wx/msw/csquery.bmp wx/msw/disable.bmp wx/msw/blank.cur \
+@COND_TOOLKIT_MSW@	wx/msw/bullseye.cur wx/msw/clock.cur wx/msw/hand.cur \
+@COND_TOOLKIT_MSW@	wx/msw/heart.cur wx/msw/magnif1.cur wx/msw/noentry.cur \
+@COND_TOOLKIT_MSW@	wx/msw/pbrush.cur wx/msw/pencil.cur wx/msw/pntleft.cur \
+@COND_TOOLKIT_MSW@	wx/msw/pntright.cur wx/msw/query.cur wx/msw/rightarr.cur \
+@COND_TOOLKIT_MSW@	wx/msw/roller.cur wx/msw/size.cur wx/msw/watch1.cur \
+@COND_TOOLKIT_MSW@	wx/msw/cdrom.ico wx/msw/child.ico wx/msw/computer.ico \
+@COND_TOOLKIT_MSW@	wx/msw/drive.ico wx/msw/error.ico wx/msw/file1.ico \
+@COND_TOOLKIT_MSW@	wx/msw/floppy.ico wx/msw/folder1.ico wx/msw/folder2.ico \
+@COND_TOOLKIT_MSW@	wx/msw/info.ico wx/msw/mdi.ico wx/msw/question.ico \
+@COND_TOOLKIT_MSW@	wx/msw/removble.ico wx/msw/std.ico wx/msw/warning.ico
 @COND_TOOLKIT_OS2@GUI_HDR = wx/os2/accel.h wx/os2/dataobj.h \
 @COND_TOOLKIT_OS2@	wx/os2/helpwin.h wx/os2/pngread.h wx/os2/statline.h \
 @COND_TOOLKIT_OS2@	wx/os2/app.h wx/os2/dataobj2.h wx/os2/icon.h \
