@@ -15,6 +15,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_STATTEXT
+
 #include "wx/app.h"
 #include "wx/stattext.h"
 #include "wx/notebook.h"
@@ -119,3 +121,6 @@ bool wxStaticText::SetFont(const wxFont& font)
 
     return ret;
 }
+
+#endif //if wxUSE_STATTEXT
+
