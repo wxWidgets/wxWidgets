@@ -1,2 +1,5 @@
-makemac?Data
-PPC?Debug*
+ConfigM*Data
+*Classic?Debug*
+*Classic?Release*
+*Carbon?Debug*
+*Carbon?Release*

@@ -1,2 +1,5 @@
-makemac?Data
-PPC?Debug*
+NewGridM*Data
+*Classic?Debug*
+*Classic?Release*
+*Carbon?Debug*
+*Carbon?Release*

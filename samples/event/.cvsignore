@@ -1,2 +1,5 @@
-makemac?Data
-PPC?Debug*
+EventM*Data
+*Classic?Debug*
+*Classic?Release*
+*Carbon?Debug*
+*Carbon?Release*

@@ -1,2 +1,6 @@
 database.cfg
-makemac?Data
+DbM*Data
+*Classic?Debug*
+*Classic?Release*
+*Carbon?Debug*
+*Carbon?Release*

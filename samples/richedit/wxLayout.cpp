@@ -469,7 +469,7 @@ void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
 #endif
    wxPageSetupData data;
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMAC__)
    wxPageSetupDialog pageSetupDialog(this, & data);
 #else
    wxGenericPageSetupDialog pageSetupDialog(this, & data);
@@ -485,7 +485,7 @@ void MyFrame::OnPrintSetupPS(wxCommandEvent& WXUNUSED(event))
 
    wxPrintData data;
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMAC__)
    wxPrintDialog printerDialog(this, & data);
 #else
    wxGenericPrintDialog printerDialog(this, & data);
@@ -498,7 +498,7 @@ void MyFrame::OnPageSetupPS(wxCommandEvent& WXUNUSED(event))
    wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
 
    wxPageSetupData data;
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMAC__)
    wxPageSetupDialog pageSetupDialog(this, & data);
 #else
    wxGenericPageSetupDialog pageSetupDialog(this, & data);

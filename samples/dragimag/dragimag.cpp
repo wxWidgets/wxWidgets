@@ -183,7 +183,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
                 }
                 case SHAPE_DRAG_TEXT:
                 {
-                    m_dragImage = new wxDragImage("Dragging some test text", wxCursor(wxCURSOR_HAND));
+                    m_dragImage = new wxDragImage(wxString("Dragging some test text"), wxCursor(wxCURSOR_HAND));
                     break;
                 }
                 case SHAPE_DRAG_ICON:
