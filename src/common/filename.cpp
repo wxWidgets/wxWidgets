@@ -990,16 +990,33 @@ bool wxFileName::Normalize(int flags,
 // get the shortcut target
 // ----------------------------------------------------------------------------
 
+// WinCE (3) doesn't have CLSID_ShellLink, IID_IShellLink definitions.
+// The .lnk file is a plain text file so it should be easy to
+// make it work. Hint from Google Groups:
+// "If you open up a lnk file, you'll see a
+// number, followed by a pound sign (#), followed by more text. The
+// number is the number of characters that follows the pound sign. The
+// characters after the pound sign are the command line (which _can_
+// include arguments) to be executed. Any path (e.g. \windows\program
+// files\myapp.exe) that includes spaces needs to be enclosed in
+// quotation marks."
+
 #if defined(__WIN32__) && !defined(__WXWINCE__)
+// The following lines are necessary under WinCE
+// #include "wx/msw/private.h"
+// #include <ole2.h>
 #include <shlobj.h>
+#if defined(__WXWINCE__)
+#include <shlguid.h>
+#endif
 #endif
 
 #ifdef __WIN32__
 bool wxFileName::GetShortcutTarget(const wxString& shortcutPath, wxString& targetFilename, wxString* arguments)
 {
 #ifdef __WXWINCE__
-    // Not tested on WinCE, so don't compile yet
-    return shortcutPath;
+    // Doesn't compile on WinCE yet
+    return FALSE;
 #else
     wxString path, file, ext;
     wxSplitPath(shortcutPath, & path, & file, & ext);
