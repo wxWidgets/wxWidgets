@@ -92,7 +92,7 @@ public:
         "    Point pos=DefaultPosition, Size size=DefaultSize,\n" 
         "    List choices=[], long style=0, Validator validator=DefaultValidator,\n"
         "    String name=ChoiceNameStr) -> bool",
-        "Actually create the GUI Choice control for 2-phase creation");
+        "Actually create the GUI wxComboBox control for 2-phase creation");
     
 
     DocDeclStr(
