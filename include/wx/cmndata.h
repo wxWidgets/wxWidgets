@@ -217,6 +217,11 @@ public:
     
     void operator=(const wxPrintData& data);
 
+    char* GetPrivData() const { return m_privData; }
+    int GetPrivDataLen() const { return m_privDataLen; }
+    void SetPrivData( char *privData, int len );
+   
+
 #if WXWIN_COMPATIBILITY_2_4
     // PostScript-specific data
     wxString GetPrinterCommand() const;
@@ -267,6 +272,9 @@ private:
     wxSize          m_paperSize;
     
     wxString        m_filename;
+    
+    char* m_privData;
+    int   m_privDataLen;
     
     wxPrintNativeDataBase  *m_nativeData;
 

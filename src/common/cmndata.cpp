@@ -185,6 +185,9 @@ wxPrintData::wxPrintData()
     m_paperId = wxPAPER_A4;
     m_paperSize = wxSize(210, 297);
 
+    m_privData = NULL;
+    m_privDataLen = 0;
+    
     m_nativeData = wxPrintFactory::GetFactory()->CreatePrintNativeData();
 }
 
@@ -195,11 +198,29 @@ wxPrintData::wxPrintData(const wxPrintData& printData)
     (*this) = printData;
 }
 
+void wxPrintData::SetPrivData( char *privData, int len )
+{
+    if (m_privData)
+    {
+        delete [] m_privData;
+        m_privData = NULL;
+    }
+    m_privDataLen = len;
+    if (m_privDataLen > 0)
+    {
+        m_privData = new char[m_privDataLen];
+        memcpy( m_privData, privData, m_privDataLen );
+    }
+}
+
 wxPrintData::~wxPrintData()
 {
     m_nativeData->m_ref--;
     if (m_nativeData->m_ref == 0)
         delete m_nativeData;
+        
+    if (m_privData)
+        delete [] m_privData;
 
 #ifdef __WXMAC__
     delete m_nativePrintData ;
@@ -249,6 +270,18 @@ void wxPrintData::operator=(const wxPrintData& data)
     // Set Ref new one
     m_nativeData = data.GetNativeData();
     m_nativeData->m_ref++;
+
+    if (m_privData)
+    {
+        delete [] m_privData;
+        m_privData = NULL;
+    }
+    m_privDataLen = data.GetPrivDataLen();
+    if (m_privDataLen > 0)
+    {
+        m_privData = new char[m_privDataLen];
+        memcpy( m_privData, data.GetPrivData(), m_privDataLen );
+    }
 
 #ifdef __WXMAC__
     m_nativePrintData->CopyFrom( data.m_nativePrintData ) ;

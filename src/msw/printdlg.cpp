@@ -279,6 +279,11 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
         else
             data.SetQuality( wxPRINT_QUALITY_HIGH );
 
+        if (devMode->dmDriverExtra > 0)
+            data.SetPrivData( (char *)devMode+devMode->dmSize, devMode->dmDriverExtra );
+        else
+            data.SetPrivData( NULL, 0 );
+
         GlobalUnlock(hDevMode);
     }
 
@@ -469,6 +474,12 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
         }
         devMode->dmPrintQuality = quality;
         devMode->dmFields |= DM_PRINTQUALITY;
+        
+        if (data.GetPrivDataLen() > 0)
+        {
+            memcpy( (char *)devMode+devMode->dmSize, data.GetPrivData(), data.GetPrivDataLen() );
+            devMode->dmDriverExtra = data.GetPrivDataLen();
+        }
 
         if (data.GetBin() != wxPRINTBIN_DEFAULT)
         {
