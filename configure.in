@@ -1354,6 +1354,7 @@ dnl default CFLAGS (something like "-g -O2") -- we don't need this as we add
 dnl -g and -O flags ourselves below
 CFLAGS=${CFLAGS:=}
 AC_PROG_CC
+AC_BAKEFILE_PROG_MWCC
 
 dnl is -traditional needed for correct compilations
 dnl   adds -traditional for gcc if needed
@@ -1371,6 +1372,7 @@ dnl
 dnl see CFLAGS line above
 CXXFLAGS=${CXXFLAGS:=}
 AC_PROG_CXX
+AC_BAKEFILE_PROG_MWCXX
 
 AC_LANG_RESTORE
 
@@ -6138,6 +6140,21 @@ CPPFLAGS=`echo $WXDEBUG_DEFINE $INCLUDES $CPPFLAGS`
 CFLAGS=`echo $CODE_GEN_FLAGS $EXTRA_CFLAGS $CFLAGS $CWARNINGS`
 CXXFLAGS=`echo $CODE_GEN_FLAGS $CODE_GEN_FLAGS_CXX $EXTRA_CFLAGS $CXXFLAGS $CXXWARNINGS`
     
+if test "x$MWCC" = "xyes"; then
+    dnl Correct MW 8.3 to be more similar to GCC.  In particular we
+    dnl must use <regex.h> from system not our local copy on OS X,
+    dnl but must use local not system on OS 9.
+    dnl The following should make all -I paths usable for <> includes
+    dnl while first checking in real system paths.  With 8.3 using
+    dnl -gccincludes it will actually check local paths before system
+    dnl even for <> which is totally wrong.
+
+    dnl Note that because this absolutely needs to be before any -I
+    dnl that we have to tack it on to the end of the compiler commandline.
+    CC="$CC -cwd source -I-"
+    CXX="$CXX -cwd source -I-"
+fi
+
 
 LIBS=`echo $LIBS`
 EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
