@@ -1381,59 +1381,47 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 wxString WXDLLEXPORT wxGetWindowText(WXHWND hWnd)
 {
     wxString str;
-    int len = GetWindowTextLength((HWND)hWnd) + 1;
-    GetWindowText((HWND)hWnd, str.GetWriteBuf(len), len);
-    str.UngetWriteBuf();
+
+    if ( hWnd )
+    {
+        int len = GetWindowTextLength((HWND)hWnd) + 1;
+        ::GetWindowText((HWND)hWnd, str.GetWriteBuf(len), len);
+        str.UngetWriteBuf();
+    }
 
     return str;
 }
 
 wxString WXDLLEXPORT wxGetWindowClass(WXHWND hWnd)
 {
-#ifdef __WXMICROWIN__
-    // MICROWIN_TODO
-    return wxEmptyString;
-#else
     wxString str;
 
-    int len = 256; // some starting value
-
-    for ( ;; )
+    // MICROWIN_TODO
+#ifndef __WXMICROWIN__
+    if ( hWnd )
     {
-        // as we've #undefined GetClassName we must now manually choose the
-        // right function to call
-        int count =
+        int len = 256; // some starting value
 
-        #ifndef __WIN32__
-            GetClassName
-        #else // Win32
-            #ifdef UNICODE
-                GetClassNameW
-            #else // !Unicode
-                #ifdef __TWIN32__
-                    GetClassName
-                #else // !Twin32
-                    GetClassNameA
-                #endif // Twin32/!Twin32
-            #endif // Unicode/ANSI
-        #endif // Win16/32
-                                    ((HWND)hWnd, str.GetWriteBuf(len), len);
+        for ( ;; )
+        {
+            int count = ::GetClassName((HWND)hWnd, str.GetWriteBuf(len), len);
 
-        str.UngetWriteBuf();
-        if ( count == len )
-        {
-            // the class name might have been truncated, retry with larger
-            // buffer
-            len *= 2;
-        }
-        else
-        {
-            break;
+            str.UngetWriteBuf();
+            if ( count == len )
+            {
+                // the class name might have been truncated, retry with larger
+                // buffer
+                len *= 2;
+            }
+            else
+            {
+                break;
+            }
         }
     }
+#endif // !__WXMICROWIN__
 
     return str;
-#endif
 }
 
 WXWORD WXDLLEXPORT wxGetWindowId(WXHWND hWnd)
