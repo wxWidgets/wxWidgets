@@ -61,6 +61,11 @@ class TestPanel(wxPanel):
         self.nfi.SetFont(font)
         fgs.Add(self.nfi, 0, wxADJUST_MINSIZE)
 
+        fgs.Add(wxStaticText(self, -1, "IsFixedWidth:"))
+        self.ifw = wxStaticText(self, -1, "")
+        self.ifw.SetFont(font)
+        fgs.Add(self.ifw, 0, wxADJUST_MINSIZE)
+
         # give it some border space
         sizer = wxBoxSizer(wxVERTICAL)
         sizer.Add(fgs, 0, wxGROW|wxADJUST_MINSIZE|wxALL, 25)
@@ -77,6 +82,7 @@ class TestPanel(wxPanel):
         self.weight.SetLabel(self.curFont.GetWeightString())
         self.face.SetLabel(self.curFont.GetFaceName())
         self.nfi.SetLabel(self.curFont.GetNativeFontInfo().ToString())
+        self.ifw.SetLabel(str(self.curFont.IsFixedWidth()))
         self.Layout()
 
 

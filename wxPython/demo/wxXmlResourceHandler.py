@@ -40,6 +40,9 @@ class PreMyBluePanel(wxPanel):
     def __init__(self):
         p = wxPrePanel()
         self.this = p.this
+        self.thisown = p.thisown
+        self._setOORInfo(self)
+
 
     def Create(self, parent, id, pos, size, style, name):
         wxPanel.Create(self, parent, id, pos, size, style, name)

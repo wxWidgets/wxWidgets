@@ -16,7 +16,17 @@ class HugeTable(wxPyGridTableBase):
         wxPyGridTableBase.__init__(self)
         self.log = log
 
-    def GetNumberRows(self):
+        self.odd=wxGridCellAttr()
+        self.odd.SetBackgroundColour("sky blue")
+        self.even=wxGridCellAttr()
+        self.even.SetBackgroundColour("sea green")
+
+     def GetAttr(self, row, col, kind):
+        attr = [self.even,self.odd][row%2]
+        attr.IncRef()
+        return attr
+
+   def GetNumberRows(self):
         return 10000
 
     def GetNumberCols(self):

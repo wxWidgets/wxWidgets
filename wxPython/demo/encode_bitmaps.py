@@ -38,6 +38,7 @@ command_lines = [
     "-a -u -n New   -m #C0C0C0 bmp_source/new.bmp images.py",
     "-a -u -n Open  -m #C0C0C0 bmp_source/open.bmp images.py",
     "-a -u -n Copy  -m #C0C0C0 bmp_source/copy.bmp images.py",
+    "-a -u -n Copy2  -m #C0C0C0 bmp_source/copy2.bmp images.py",
     "-a -u -n Paste -m #C0C0C0 bmp_source/paste.bmp images.py",
     "-a -u -n Tog1  -m #C0C0C0 bmp_source/tog1.bmp images.py",
     "-a -u -n Tog2  -m #C0C0C0 bmp_source/tog2.bmp images.py",

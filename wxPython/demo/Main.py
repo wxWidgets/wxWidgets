@@ -19,6 +19,13 @@ import wx.html
 import images
 
 
+# Use Python's bool constants if available, make aliases if not
+try:
+    True
+except NameError:
+    True = 1==1
+    False = 1==0
+
 #---------------------------------------------------------------------------
 
 
@@ -27,6 +34,7 @@ _treeList = [
     ('Recent Additions', [
         'wxMaskedNumCtrl',
         'FloatCanvas',
+        'wxXmlResourceSubclass',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -146,6 +154,7 @@ _treeList = [
         'wxScrolledPanel',
         'wxXmlResource',
         'wxXmlResourceHandler',
+        'wxXmlResourceSubclass',
         ]),
 
     # ditto
@@ -183,7 +192,9 @@ _treeList = [
         'DialogUnits',
         'DrawXXXList',
         'FontEnumerator',
+        'NewNamespace',
         'PrintFramework',
+        'ShapedWindow',
         'Throbber',
         'Unicode',
         'wxFileHistory',
