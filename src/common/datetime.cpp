@@ -839,14 +839,29 @@ void wxDateTime::GetAmPmStrings(wxString *am, wxString *pm)
 {
     tm tm;
     InitTm(tm);
+    char buffer[64];
+    // @Note: Do not call 'CallStrftime' here! CallStrftime checks the return code
+    // and causes an assertion failed if the buffer is to small (which is good) - OR -
+    // if strftime does not return anything because the format string is invalid - OR -
+    // if there are no 'am' / 'pm' tokens defined for the current locale (which is not good).
+    // wxDateTime::ParseTime will try several different formats to parse the time.
+    // As a result, GetAmPmStrings might get called, even if the current locale
+    // does not define any 'am' / 'pm' tokens. In this case, wxStrftime would
+    // assert, even though it is a perfectly legal use.
     if ( am )
     {
-        *am = CallStrftime(_T("%p"), &tm);
+        if (wxStrftime(buffer, sizeof buffer, _T("%p"), &tm) > 0)
+            *am = wxString(buffer);
+        else
+            *am = wxString();
     }
     if ( pm )
     {
         tm.tm_hour = 13;
-        *pm = CallStrftime(_T("%p"), &tm);
+        if (wxStrftime(buffer, sizeof buffer, _T("%p"), &tm) > 0)
+            *pm = wxString(buffer);
+        else
+            *pm = wxString();
     }
 }
 
@@ -2865,6 +2880,8 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                     wxString am, pm, token = GetAlphaToken(input);
 
                     GetAmPmStrings(&am, &pm);
+                    if (am.IsEmpty() && pm.IsEmpty())
+                        return (wxChar *)NULL;  // no am/pm strings defined
                     if ( token.CmpNoCase(pm) == 0 )
                     {
                         isPM = TRUE;
