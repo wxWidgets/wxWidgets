@@ -1911,12 +1911,18 @@ wxString* wxString_in_helper(PyObject* source) {
     if (PyString_Check(source))
         Py_DECREF(uni);
 #else
-    char* tmpPtr; int tmpSize;
-    if (PyString_AsStringAndSize(source, &tmpPtr, &tmpSize) == -1) {
-        PyErr_SetString(PyExc_TypeError, "Unable to convert string");
-        return NULL;
+    // Convert to a string object if it isn't already, then to wxString
+    PyObject* str = source;
+    if (!PyString_Check(source)) {
+        str = PyObject_Str(source);
+        if (PyErr_Occurred()) return NULL;
     }
+    char* tmpPtr; int tmpSize;
+    PyString_AsStringAndSize(str, &tmpPtr, &tmpSize);
     target = new wxString(tmpPtr, tmpSize);
+    
+    if (!PyString_Check(source))
+        Py_DECREF(str);
 #endif // wxUSE_UNICODE
     
     return target;
