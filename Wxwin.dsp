@@ -1,26 +1,24 @@
 # Microsoft Developer Studio Project File - Name="wxWin" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 5.00
-# ** NICHT BEARBEITEN **
+# ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
 CFG=wxWin - Win32 Release
-!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit\
- NMAKE
-!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den\
- Befehl
+!MESSAGE This is not a valid makefile. To build this project using NMAKE,
+!MESSAGE use the Export Makefile command and run
 !MESSAGE 
 !MESSAGE NMAKE /f "Wxwin.mak".
 !MESSAGE 
-!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
-!MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
 !MESSAGE NMAKE /f "Wxwin.mak" CFG="wxWin - Win32 Release"
 !MESSAGE 
-!MESSAGE Für die Konfiguration stehen zur Auswahl:
+!MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "wxWin - Win32 Release" (basierend auf  "Win32 (x86) Static Library")
-!MESSAGE "wxWin - Win32 Debug" (basierend auf  "Win32 (x86) Static Library")
+!MESSAGE "wxWin - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxWin - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -41,7 +39,7 @@ CPP=cl.exe
 # PROP Intermediate_Dir ".\Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /w /W0 /GX /O2 /I ".\include" /I ".\include\wx\msw" /I ".\include\wx\generic" /I ".\include\wx\other" /I ".\src\png" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D "__WINDOWS__" /YX /FD /c
+# ADD CPP /nologo /G5 /MD /w /W0 /GX /O2 /I ".\include" /I ".\include\wx\msw" /I ".\include\wx\generic" /I ".\include\wx\other" /I ".\src\png" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D "__WINDOWS__" /YX"wx\wxprec.h" /FD /c
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -62,7 +60,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir ".\Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /w /W0 /GX /Z7 /Od /I ".\include" /I ".\include\wx\msw" /I ".\include\wx\generic" /I ".\include\wx\other" /I ".\src\png" /D "__WXDEBUG__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WXDEBUG=1 /D "__WINDOWS__" /YX /FD /c
+# ADD CPP /nologo /G5 /MDd /w /W0 /GX /Z7 /Od /Gf /Gy /I ".\include" /I ".\include\wx\msw" /I ".\include\wx\generic" /I ".\include\wx\other" /I ".\src\png" /D "__WXDEBUG__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WXDEBUG=1 /D "__WINDOWS__" /YX"wx\wxprec.h" /FD /c
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -432,19 +430,6 @@ SOURCE=.\src\msw\dirdlg.cpp
 # Begin Source File
 
 SOURCE=.\src\msw\dummy.cpp
-
-!IF  "$(CFG)" == "wxWin - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "wxWin - Win32 Debug"
-
-# ADD CPP /D "STRICT"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\msw\dummydll.cpp
 
 !IF  "$(CFG)" == "wxWin - Win32 Release"
 
@@ -1800,7 +1785,16 @@ SOURCE=.\src\common\wxexpr.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\common\y_tab.c
+SOURCE=.\src\common\Y_tab.c
+
+!IF  "$(CFG)" == "wxWin - Win32 Release"
+
+# ADD CPP /D "USE_DEFINE" /D "YY_USE_PROTOS"
+
+!ELSEIF  "$(CFG)" == "wxWin - Win32 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
