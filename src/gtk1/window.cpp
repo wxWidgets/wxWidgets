@@ -680,7 +680,8 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
 */
                                 
     GtkPizza *pizza = GTK_PIZZA (widget);
-        
+
+/*        
     if (win->IsTopLevel())
     {
         gtk_paint_flat_box (win->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
@@ -692,6 +693,18 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
     {
         while (!parent->IsTopLevel())
             parent = parent->GetParent();
+        gtk_paint_flat_box (parent->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
+		    GTK_SHADOW_NONE, &gdk_event->area, parent->m_widget, "base", 0, 0, -1, -1);
+    }
+*/
+    if (win->GetThemeEnabled())
+    {
+        wxWindow *parent = win->GetParent();
+        while (parent && !parent->IsTopLevel())
+            parent = parent->GetParent();
+        if (!parent)
+            parent = win;
+
         gtk_paint_flat_box (parent->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
 		    GTK_SHADOW_NONE, &gdk_event->area, parent->m_widget, "base", 0, 0, -1, -1);
     }

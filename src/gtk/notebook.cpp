@@ -216,6 +216,7 @@ void wxNotebook::Init()
     m_imageList = (wxImageList *) NULL;
     m_pages.DeleteContents( TRUE );
     m_lastSelection = -1;
+    m_themeEnabled = TRUE;
 }
 
 wxNotebook::wxNotebook()
@@ -560,6 +561,9 @@ bool wxNotebook::InsertPage( int position, wxNotebookPage* win, const wxString& 
     /* don't receive switch page during addition */
     gtk_signal_disconnect_by_func( GTK_OBJECT(m_widget),
       GTK_SIGNAL_FUNC(gtk_notebook_page_change_callback), (gpointer) this );
+
+    if (m_themeEnabled)
+        win->SetThemeEnabled(TRUE);
 
     GtkNotebook *notebook = GTK_NOTEBOOK(m_widget);
 

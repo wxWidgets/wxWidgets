@@ -449,6 +449,7 @@ void wxFrame::Init()
     m_insertInClientArea = TRUE;
     m_isIconized = FALSE;
     m_fsIsShowing = FALSE;
+    m_themeEnabled = TRUE;
 }
 
 bool wxFrame::Create( wxWindow *parent,
@@ -1177,8 +1178,9 @@ void wxFrame::Maximize(bool WXUNUSED(maximize))
 
 bool wxFrame::IsMaximized() const
 {
-    wxFAIL_MSG( _T("not implemented") );
+  //    wxFAIL_MSG( _T("not implemented") );
 
+    // This is an approximation
     return FALSE;
 }
 

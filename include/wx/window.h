@@ -333,6 +333,9 @@ public:
         // make the window modal (all other windows unresponsive)
     virtual void MakeModal(bool modal = TRUE);
 
+    virtual void SetThemeEnabled(bool enableTheme) { m_themeEnabled = enableTheme; }
+    virtual bool GetThemeEnabled() const { return m_themeEnabled; }
+
     // focus handling
     // --------------
 
@@ -773,6 +776,7 @@ protected:
     long                 m_windowStyle,
                          m_exStyle;
     wxString             m_windowName;
+    bool                 m_themeEnabled;
 
 protected:
     // common part of all ctors: it is not virtual because it is called from

@@ -162,6 +162,9 @@ void wxWindowBase::InitBase()
 #if wxUSE_CARET
     m_caret = (wxCaret *)NULL;
 #endif // wxUSE_CARET
+
+    // Whether we're using the current theme for this window (wxGTK only for now)
+    m_themeEnabled = FALSE;
 }
 
 // common part of window creation process

@@ -80,6 +80,7 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
   m_nFields = 0;
   m_borderX = wxTHICK_LINE_BORDER;
   m_borderY = wxTHICK_LINE_BORDER;
+  m_themeEnabled = TRUE;
 
   bool success = wxWindow::Create(parent, id,
                                   wxDefaultPosition, wxDefaultSize,
