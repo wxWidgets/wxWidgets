@@ -113,8 +113,8 @@ public:
                      long *externalLeading = (long *) NULL,
                      wxFont *theFont = (wxFont *) NULL ) const;
 
-  void GetSize(int* width, int* height) const;
-  void GetSizeMM(int *width, int *height) const;
+  void DoGetSize(int* width, int* height) const;
+  void DoGetSizeMM(int *width, int *height) const;
 
   // Resolution in pixels per logical inch
   wxSize GetPPI(void) const;

@@ -1230,7 +1230,7 @@ void wxPostScriptDC::SetDeviceOrigin( long x, long y )
     wxDC::SetDeviceOrigin( x, h-y );
 }
 
-void wxPostScriptDC::GetSize(int* width, int* height) const
+void wxPostScriptDC::DoGetSize(int* width, int* height) const
 {
     wxPaperSize id = m_printData.GetPaperId();
 
@@ -1250,7 +1250,7 @@ void wxPostScriptDC::GetSize(int* width, int* height) const
     }
 }
 
-void wxPostScriptDC::GetSizeMM(int *width, int *height) const
+void wxPostScriptDC::DoGetSizeMM(int *width, int *height) const
 {
     wxPaperSize id = m_printData.GetPaperId();
 

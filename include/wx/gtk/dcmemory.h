@@ -37,7 +37,7 @@ public:
   wxMemoryDC( wxDC *dc ); // Create compatible DC
   ~wxMemoryDC();
   virtual void SelectObject( const wxBitmap& bitmap );
-  void GetSize( int *width, int *height ) const;
+  void DoGetSize( int *width, int *height ) const;
 
   // implementation
 
