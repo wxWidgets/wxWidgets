@@ -35,11 +35,11 @@ public:
 
     void SetChooseFull(bool flag) { chooseFull = flag; }
     bool GetChooseFull() const { return chooseFull; }
-    void SetColour(wxColour& colour) { dataColour = colour; }
+    void SetColour(const wxColour& colour) { dataColour = colour; }
     wxColour &GetColour() { return dataColour; }
 
     // Array of 16 custom colours
-    void SetCustomColour(int i, wxColour& colour);
+    void SetCustomColour(int i, const wxColour& colour);
     wxColour GetCustomColour(int i);
 
     void operator=(const wxColourData& data);

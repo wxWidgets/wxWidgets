@@ -129,7 +129,7 @@ wxColourData::~wxColourData()
 {
 }
 
-void wxColourData::SetCustomColour(int i, wxColour& colour)
+void wxColourData::SetCustomColour(int i, const wxColour& colour)
 {
     if (i > 15 || i < 0)
         return;
