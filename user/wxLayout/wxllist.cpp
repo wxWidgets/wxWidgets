@@ -369,6 +369,8 @@ wxLayoutLine::Insert(CoordType xpos, wxString text)
       wxLayoutObjectText *tobj = (wxLayoutObjectText *) *i;
       tobj->GetText().insert(offset, text);
       m_Length += text.Length();
+
+      return true;
    }
    else
       return Insert(xpos, new wxLayoutObjectText(text));

@@ -228,7 +228,8 @@ void MyFrame::OnCommand( wxCommandEvent &event )
       wxLayoutExportObject *export;
       wxLayoutExportStatus status(m_lwin->GetLayoutList());
 
-      while((export = wxLayoutExport( &status, WXLO_EXPORT_AS_HTML)) != NULL)
+      while((export = wxLayoutExport( &status,
+                                      WXLO_EXPORT_AS_HTML)) != NULL)
       {
          if(export->type == WXLO_EXPORT_HTML)
             cout << *(export->content.text);
@@ -275,9 +276,11 @@ void MyFrame::OnPrintPS(wxCommandEvent& WXUNUSED(event))
 {
    wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
 
+#ifdef OS_UNIX
    wxPostScriptPrinter printer;
    wxLayoutPrintout printout( m_lwin->GetLayoutList(),"My printout");
    printer.Print(this, &printout, TRUE);
+#endif
 }
 
 void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
@@ -371,7 +374,11 @@ void MyFrame::OnPrintSetupPS(wxCommandEvent& WXUNUSED(event))
    wxPrintData data;
    data.SetOrientation(orientation);
 
+#ifdef __WXMSW__
+   wxPrintDialog printerDialog(this, & data);
+#else
    wxGenericPrintDialog printerDialog(this, & data);
+#endif
    printerDialog.GetPrintData().SetSetupDialog(TRUE);
    printerDialog.ShowModal();
 
@@ -385,7 +392,11 @@ void MyFrame::OnPageSetupPS(wxCommandEvent& WXUNUSED(event))
    wxPageSetupData data;
    data.SetOrientation(orientation);
 
+#ifdef __WXMSW__
+   wxPageSetupDialog pageSetupDialog(this, & data);
+#else
    wxGenericPageSetupDialog pageSetupDialog(this, & data);
+#endif
    pageSetupDialog.ShowModal();
 
    orientation = pageSetupDialog.GetPageSetupData().GetOrientation();

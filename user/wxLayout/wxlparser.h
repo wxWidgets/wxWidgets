@@ -71,7 +71,7 @@ struct wxLayoutExportStatus
 void wxLayoutImportText(wxLayoutList &list, wxString const &str,
                         int withflag = WXLO_EXPORT_WITH_CRLF);
 
-wxLayoutExportObject *wxLayoutExport(wxLayoutList &list,
+wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
                                int mode = WXLO_EXPORT_AS_TEXT|WXLO_EXPORT_WITH_CRLF); 
 #else
 /// import text into a wxLayoutList (including linefeeds):
