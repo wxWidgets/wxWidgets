@@ -375,12 +375,15 @@ class wxTreeListCtrlPtr(wxControlPtr):
         return val
     def AssignImageList(self, *_args, **_kwargs):
         val = gizmosc.wxTreeListCtrl_AssignImageList(self, *_args, **_kwargs)
+        _args[0].thisown = 0
         return val
     def AssignStateImageList(self, *_args, **_kwargs):
         val = gizmosc.wxTreeListCtrl_AssignStateImageList(self, *_args, **_kwargs)
+        _args[0].thisown = 0
         return val
     def AssignButtonsImageList(self, *_args, **_kwargs):
         val = gizmosc.wxTreeListCtrl_AssignButtonsImageList(self, *_args, **_kwargs)
+        _args[0].thisown = 0
         return val
     def AddColumn(self, *_args, **_kwargs):
         val = gizmosc.wxTreeListCtrl_AddColumn(self, *_args, **_kwargs)
