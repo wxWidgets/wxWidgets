@@ -908,8 +908,11 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
         // I wonder if this shouldn´t be done after the LOG2DEV() conversions. RR.
         if ( m_pen.GetStyle() == wxTRANSPARENT )
         {
+            // Apparently not needed for WinCE (see e.g. Life! demo)
+#ifndef __WXWINCE__
             x2++;
             y2++;
+#endif
         }
 
         (void)Rectangle(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2));
