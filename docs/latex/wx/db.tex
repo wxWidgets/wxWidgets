@@ -3110,7 +3110,7 @@ wxDbTable instance that would modify (insert/delete/update) the table's data.
 
 \membersection{wxDbTable::Open}\label{wxdbtableopen}
 
-\func{bool }{Open}{\param{bool }{checkPrivileges=FALSE}}
+\func{bool }{Open}{\param{bool }{checkPrivileges=FALSE}, \param{bool }{checkTableExists=TRUE}}
 
 Every wxDbTable instance must be opened before it can be used.  This function 
 checks for the existence of the requested table, binds columns, creates required 
@@ -3123,6 +3123,9 @@ row in the datasource.
 \docparam{checkPrivileges}{Indicates whether the Open() function should check 
 whether the current connected user has at least SELECT privileges to access the 
 table to which they are trying to open.  Default is FALSE.}
+
+\docparam{checkTableExists}{Indicates whether the Open() function should check 
+whether the table exists in the database or not before opening it.  Default is TRUE.}
 
 \wxheading{Remarks}
 

@@ -205,7 +205,7 @@ public:
 
     virtual ~wxDbTable();
 
-    bool            Open(bool checkPrivileges=FALSE);
+    bool            Open(bool checkPrivileges=FALSE, bool checkTableExists=TRUE);
     bool            CreateTable(bool attemptDrop=TRUE);
     bool            DropTable(void);
     bool            CreateIndex(const wxString &idxName, bool unique, int noIdxCols, 
@@ -215,7 +215,7 @@ public:
     // Accessors
 
     // The member variables returned by these accessors are all
-    // set when the wxDbTable instance is createand cannot be 
+    // set when the wxDbTable instance is created and cannot be 
     // changed, hence there is no corresponding SetXxxx function
     wxDb           *GetDb()              { return pDb; }
     const wxString &GetTableName()       { return tableName; }
@@ -223,7 +223,6 @@ public:
     const wxString &GetTablePath()       { return tablePath; }
 
     int             GetNumberOfColumns() { return noCols; }  // number of "defined" columns for this wxDbTable instance
-       
 
     const wxString &GetFromClause()      { return from; }
     const wxString &GetOrderByClause()   { return orderBy; }

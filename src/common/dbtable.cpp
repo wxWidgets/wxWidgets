@@ -694,7 +694,7 @@ bool wxDbTable::query(int queryType, bool forUpdate, bool distinct, const wxStri
 
 
 /********** wxDbTable::Open() **********/
-bool wxDbTable::Open(bool checkPrivileges)
+bool wxDbTable::Open(bool checkPrivileges, bool checkTableExists)
 {
     if (!pDb)
         return FALSE;   
@@ -705,7 +705,7 @@ bool wxDbTable::Open(bool checkPrivileges)
 
     s.Empty();
     // Verify that the table exists in the database
-    if (!pDb->TableExists(tableName,/*pDb->GetUsername()*/NULL,tablePath))
+    if (checkTableExists && !pDb->TableExists(tableName,/*pDb->GetUsername()*/NULL,tablePath))
     {
         s = wxT("Table/view does not exist in the database");
         if ( *(pDb->dbInf.accessibleTables) == wxT('Y'))
