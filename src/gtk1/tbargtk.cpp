@@ -243,36 +243,6 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
     return TRUE;
 }
 
-bool wxToolBar::OnLeftClick( int toolIndex, bool toggleDown )
-{
-    wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED, toolIndex );
-    event.SetEventObject(this);
-    event.SetInt( toolIndex );
-    event.SetExtraLong((long) toggleDown);
-
-    GetEventHandler()->ProcessEvent(event);
-
-    return TRUE;
-}
-
-void wxToolBar::OnRightClick( int toolIndex, float WXUNUSED(x), float WXUNUSED(y) )
-{
-    wxCommandEvent event( wxEVT_COMMAND_TOOL_RCLICKED, toolIndex );
-    event.SetEventObject( this );
-    event.SetInt( toolIndex );
-
-    GetEventHandler()->ProcessEvent(event);
-}
-
-void wxToolBar::OnMouseEnter( int toolIndex )
-{
-    wxCommandEvent event( wxEVT_COMMAND_TOOL_ENTER, GetId() );
-    event.SetEventObject(this);
-    event.SetInt( toolIndex );
-  
-    GetEventHandler()->ProcessEvent(event);
-}
-
 wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
   const wxBitmap& pushedBitmap, bool toggle,
   wxCoord WXUNUSED(xPos), wxCoord WXUNUSED(yPos), wxObject *clientData,
@@ -393,122 +363,43 @@ bool wxToolBar::DeleteTool(int toolIndex)
     return FALSE;
 }
 
-void wxToolBar::ClearTools()
+void wxToolBar::DoEnableTool(wxToolBarTool *tool, bool enable)
 {
-    wxFAIL_MSG( wxT("wxToolBar::ClearTools not implemented") );
-}
-
-bool wxToolBar::Realize()
-{
-    return TRUE;
-}
-
-void wxToolBar::EnableTool(int toolIndex, bool enable)
-{
-    wxNode *node = m_tools.First();
-    while (node)
-    {
-        wxToolBarTool *tool = (wxToolBarTool*)node->Data();
-        if (tool->m_index == toolIndex)
-        {
-            tool->m_enabled = enable;
-            
 #if (GTK_MINOR_VERSION > 0)
-            /* we don't disable the tools for GTK 1.0 as the bitmaps don't get
-               greyed anyway and this also disables tooltips */
-            if (tool->m_item)
-                gtk_widget_set_sensitive( tool->m_item, enable );
+    /* we don't disable the tools for GTK 1.0 as the bitmaps don't get
+       greyed anyway and this also disables tooltips */
+    if (tool->m_item)
+        gtk_widget_set_sensitive( tool->m_item, enable );
 #endif
-                
-            return;
+}
+
+void wxToolBar::DoToggleTool( wxToolBarTool *tool, bool toggle ) 
+{
+    GtkWidget *item = tool->m_item;
+    if ( item && GTK_IS_TOGGLE_BUTTON(item) )
+    {
+        wxBitmap bitmap = tool->GetBitmap();
+        if ( bitmap.Ok() )
+        {
+            GtkPixmap *pixmap = GTK_PIXMAP( tool->m_pixmap );
+
+            GdkBitmap *mask = bitmap.GetMask() ? bitmap.GetMask()->GetBitmap()
+                                               : (GdkBitmap *)NULL;
+
+            gtk_pixmap_set( pixmap, bitmap.GetPixmap(), mask );
         }
-        node = node->Next();
+
+        m_blockNextEvent = TRUE;  // we cannot use gtk_signal_disconnect here
+
+        gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(item), toggle );
     }
-  
-    wxFAIL_MSG( wxT("wrong toolbar index") );
 }
 
-void wxToolBar::ToggleTool( int toolIndex, bool toggle ) 
+void wxToolBar::DoSetToggle(wxToolBarTool * WXUNUSED(tool),
+                            bool WXUNUSED(toggle))
 {
-    wxNode *node = m_tools.First();
-    while (node)
-    {
-        wxToolBarTool *tool = (wxToolBarTool*)node->Data();
-        if (tool->m_index == toolIndex)
-        { 
-            if ((tool->m_item) && (GTK_IS_TOGGLE_BUTTON(tool->m_item)))
-	    {
-                tool->m_toggleState = toggle;
-		
-	        if (tool->m_bitmap2.Ok())
-	        {
-	            wxBitmap bitmap = tool->m_bitmap1;
-	            if (tool->m_toggleState) bitmap = tool->m_bitmap2;
-	    
-                    GtkPixmap *pixmap = GTK_PIXMAP( tool->m_pixmap );
-	    
-                    GdkBitmap *mask = (GdkBitmap *) NULL;
-                    if (bitmap.GetMask()) mask = bitmap.GetMask()->GetBitmap();
-  
-                    gtk_pixmap_set( pixmap, bitmap.GetPixmap(), mask );
-	        }
-		
-                m_blockNextEvent = TRUE;  // we cannot use gtk_signal_disconnect here
-		
-                gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(tool->m_item), toggle );
-	    }
-
-            return;
-        }
-        node = node->Next();
-    }
-  
-    wxFAIL_MSG( wxT("wrong toolbar index") );
-}
-
-wxObject *wxToolBar::GetToolClientData( int index ) const
-{
-    wxNode *node = m_tools.First();
-    while (node)
-    {
-        wxToolBarTool *tool = (wxToolBarTool*)node->Data();
-        if (tool->m_index == index) return tool->m_clientData;;
-        node = node->Next();
-    }
-  
-    wxFAIL_MSG( wxT("wrong toolbar index") );
-  
-    return (wxObject*)NULL;
-}
-
-bool wxToolBar::GetToolState(int toolIndex) const
-{
-    wxNode *node = m_tools.First();
-    while (node)
-    {
-        wxToolBarTool *tool = (wxToolBarTool*)node->Data();
-        if (tool->m_index == toolIndex) return tool->m_toggleState;
-        node = node->Next();
-    }
-  
-    wxFAIL_MSG( wxT("wrong toolbar index") );
-  
-    return FALSE;
-}
-
-bool wxToolBar::GetToolEnabled(int toolIndex) const
-{
-    wxNode *node = m_tools.First();
-    while (node)
-    {
-        wxToolBarTool *tool = (wxToolBarTool*)node->Data();
-        if (tool->m_index == toolIndex) return tool->m_enabled;
-        node = node->Next();
-    }
-  
-    wxFAIL_MSG( wxT("wrong toolbar index") );
-  
-    return FALSE;
+    // VZ: absolutely no idea about how to do it
+    wxFAIL_MSG( _T("not implemented") );
 }
 
 void wxToolBar::SetMargins( int x, int y )
@@ -540,108 +431,6 @@ int wxToolBar::GetToolPacking()
 int wxToolBar::GetToolSeparation()
 {
     return m_separation;
-}
-
-wxString wxToolBar::GetToolLongHelp(int toolIndex)
-{
-    wxNode *node = m_tools.First();
-    while (node)
-    {
-        wxToolBarTool *tool = (wxToolBarTool*)node->Data();
-        if (tool->m_index == toolIndex)
-        { 
-            return tool->m_longHelpString;
-        }
-        node = node->Next();
-    }
-  
-    wxFAIL_MSG( wxT("wrong toolbar index") );
-    
-    return wxT("");
-}
-
-wxString wxToolBar::GetToolShortHelp(int toolIndex)
-{
-    wxNode *node = m_tools.First();
-    while (node)
-    {
-        wxToolBarTool *tool = (wxToolBarTool*)node->Data();
-        if (tool->m_index == toolIndex)
-        { 
-            return tool->m_shortHelpString;
-        }
-        node = node->Next();
-    }
-  
-    wxFAIL_MSG( wxT("wrong toolbar index") );
-    
-    return wxT("");
-}
-
-void wxToolBar::SetToolLongHelp(int toolIndex, const wxString& helpString)
-{
-    wxNode *node = m_tools.First();
-    while (node)
-    {
-        wxToolBarTool *tool = (wxToolBarTool*)node->Data();
-        if (tool->m_index == toolIndex)
-        { 
-            tool->m_longHelpString = helpString;
-            return;
-        }
-        node = node->Next();
-    }
-  
-    wxFAIL_MSG( wxT("wrong toolbar index") );
-    
-    return;
-}
-
-void wxToolBar::SetToolShortHelp(int toolIndex, const wxString& helpString)
-{
-    wxNode *node = m_tools.First();
-    while (node)
-    {
-        wxToolBarTool *tool = (wxToolBarTool*)node->Data();
-        if (tool->m_index == toolIndex)
-        { 
-            tool->m_shortHelpString = helpString;
-            return;
-        }
-        node = node->Next();
-    }
-  
-    wxFAIL_MSG( wxT("wrong toolbar index") );
-    
-    return;
-}
-
-void wxToolBar::OnIdle( wxIdleEvent &WXUNUSED(ievent) )
-{
-    wxEvtHandler* evtHandler = GetEventHandler();
-
-    wxNode* node = m_tools.First();
-    while (node)
-    {
-        wxToolBarTool* tool = (wxToolBarTool*) node->Data();
-
-        wxUpdateUIEvent event( tool->m_index );
-        event.SetEventObject(this);
-
-        if (evtHandler->ProcessEvent( event ))
-        {
-            if (event.GetSetEnabled())
-                EnableTool(tool->m_index, event.GetEnabled());
-            if (event.GetSetChecked())
-                ToggleTool(tool->m_index, event.GetChecked());
-/*
-            if (event.GetSetText())
-                // Set tooltip?
-*/
-        }
-
-        node = node->Next();
-    }
 }
 
 void wxToolBar::OnInternalIdle()
