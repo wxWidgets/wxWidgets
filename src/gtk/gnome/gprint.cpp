@@ -212,11 +212,20 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     wxGnomePrintNativeData *data = 
         (wxGnomePrintNativeData*) printdata.GetNativeData();
 
+    // The GnomePrintJob is temporarily stored in the 
+    // native print data as the native print setup dialog
+    // needs to access it.
     GnomePrintJob *job = data->GetPrintJob();
     m_gpc = gnome_print_job_get_context (job);
+
+    printout->SetIsPreview(false);
+
+    if (m_printDialogData.GetMinPage() < 1)
+        m_printDialogData.SetMinPage(1);
+    if (m_printDialogData.GetMaxPage() < 1)
+        m_printDialogData.SetMaxPage(9999);
     
     wxDC *dc;
-    
     if (prompt)
         dc = PrintDialog( parent );
     else
@@ -225,11 +234,26 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     if (!dc)
     {
         gnome_print_job_close( job );
+        sm_lastError = wxPRINTER_ERROR;
         return false;
     }
 
+    wxSize ScreenPixels = wxGetDisplaySize();
+    wxSize ScreenMM = wxGetDisplaySizeMM();
+
+    printout->SetPPIScreen( (int) ((ScreenPixels.GetWidth() * 25.4) / ScreenMM.GetWidth()),
+                            (int) ((ScreenPixels.GetHeight() * 25.4) / ScreenMM.GetHeight()) );
+    printout->SetPPIPrinter( wxPostScriptDC::GetResolution(),
+                             wxPostScriptDC::GetResolution() );
+                             
     printout->SetDC(dc);
 
+    int w, h;
+    dc->GetSize(&w, &h);
+    printout->SetPageSizePixels((int)w, (int)h);
+    dc->GetSizeMM(&w, &h);
+    printout->SetPageSizeMM((int)w, (int)h);
+    
     printout->OnPreparePrinting();
     printout->OnBeginPrinting();
 
@@ -447,8 +471,6 @@ void wxGnomePrintDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y )
     x = XLOG2DEV(x);
     y = YLOG2DEV(y);
     
-    wxPrintf( wxT("x,y: %d,%d\n"), x, y );
-
     bool underlined = m_font.Ok() && m_font.GetUnderlined();
 
 #if wxUSE_UNICODE
@@ -589,11 +611,71 @@ wxCoord wxGnomePrintDC::GetCharWidth() const
     return 0;
 }
 
-void wxGnomePrintDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
+void wxGnomePrintDC::DoGetTextExtent(const wxString& string, wxCoord *width, wxCoord *height,
                      wxCoord *descent,
                      wxCoord *externalLeading,
                      wxFont *theFont ) const
 {
+    if ( width )
+        *width = 0;
+    if ( height )
+        *height = 0;
+    if ( descent )
+        *descent = 0;
+    if ( externalLeading )
+        *externalLeading = 0;
+
+    if (string.IsEmpty())
+    {
+        return;
+    }
+    
+    // Set new font description
+    if (theFont)
+        pango_layout_set_font_description( m_layout, theFont->GetNativeFontInfo()->description );
+        
+    // Set layout's text
+#if wxUSE_UNICODE
+    const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
+    const char *dataUTF8 = (const char *)data;
+#else
+    const wxWCharBuffer wdata = wxConvLocal.cMB2WC( string );
+    if ( !wdata )
+    {
+        if (width) (*width) = 0;
+        if (height) (*height) = 0;
+        return;
+    }
+    const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
+    const char *dataUTF8 = (const char *)data;
+#endif
+
+    if ( !dataUTF8 )
+    {
+        // hardly ideal, but what else can we do if conversion failed?
+        return;
+    }
+
+    pango_layout_set_text( m_layout, dataUTF8, strlen(dataUTF8) );
+ 
+    int w,h;
+    pango_layout_get_pixel_size( m_layout, &w, &h );
+    
+    if (width)
+        *width = (wxCoord) w; 
+    if (height)
+        *height = (wxCoord) h;
+    if (descent)
+    {
+        PangoLayoutIter *iter = pango_layout_get_iter(m_layout);
+        int baseline = pango_layout_iter_get_baseline(iter);
+        pango_layout_iter_free(iter);
+        *descent = h - PANGO_PIXELS(baseline);
+    }
+    
+    // Reset old font description
+    if (theFont)
+        pango_layout_set_font_description( m_layout, m_fontdesc );
 }
 
 void wxGnomePrintDC::DoGetSize(int* width, int* height) const
@@ -615,8 +697,6 @@ void wxGnomePrintDC::DoGetSize(int* width, int* height) const
         *width = (int) w;
     if (height)
         *height = (int) h;
-        
-    wxPrintf( wxT("size %d,%d\n"), *width, *height );
 }
 
 void wxGnomePrintDC::DoGetSizeMM(int *width, int *height) const
