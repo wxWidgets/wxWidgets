@@ -75,6 +75,10 @@
 
 #include "wx/datetime.h"
 
+#ifndef WX_TIMEZONE
+    #define WX_TIMEZONE timezone
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -151,7 +155,7 @@ static int GetTimeZone()
         s_timezoneSet = TRUE;
     }
 
-    return (int)timezone;
+    return (int)WX_TIMEZONE;
 }
 
 // return the integral part of the JDN for the midnight of the given date (to
