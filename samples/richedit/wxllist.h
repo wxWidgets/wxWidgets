@@ -1053,11 +1053,11 @@ public:
    /// adds the cursor position to the update rectangle
    void AddCursorPosToUpdateRect()
    {
-      #ifndef WXLAYOUT_USE_CARET
-         SetUpdateRect(m_CursorScreenPos);
-         SetUpdateRect(m_CursorScreenPos+m_CursorSize);
+#ifndef WXLAYOUT_USE_CARET
+      SetUpdateRect(m_CursorScreenPos);
+      SetUpdateRect(m_CursorScreenPos+m_CursorSize);
       //#else - the caret will take care of refreshing itself
-      #endif // !WXLAYOUT_USE_CARET
+#endif // !WXLAYOUT_USE_CARET
    }
    /// Invalidates the update rectangle.
    void InvalidateUpdateRect(void) { m_UpdateRectValid = false; }

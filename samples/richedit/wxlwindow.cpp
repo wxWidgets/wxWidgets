@@ -118,15 +118,6 @@ static bool IsDirectionKey(long keyCode);
 // implementation
 // ============================================================================
 
-/* LEAVE IT HERE UNTIL WXGTK WORKS AGAIN!!! */
-#ifdef __WXGTK__
-/// allows me to compare to wxPoints
-static bool operator != (wxPoint const &p1, wxPoint const &p2)
-{
-   return p1.x != p2.x || p1.y != p2.y;
-}
-#endif // __WXGTK__
-
 #ifndef wxWANTS_CHARS
    #define wxWANTS_CHARS 0
 #endif
@@ -177,11 +168,7 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
    SetDirty();
 
    // at least under Windows, this should be the default behaviour
-#ifdef __WXMSW__
    m_AutoDeleteSelection = TRUE;
-#else // !Windows
-   m_AutoDeleteSelection = FALSE;
-#endif // Win/!Win
 }
 
 wxLayoutWindow::~wxLayoutWindow()
@@ -209,6 +196,9 @@ wxLayoutWindow::Clear(int family,
    SetDirty();
    SetModified(false);
 
+   if ( m_Editable )
+      m_CursorVisibility = 1;
+
 #ifdef WXLAYOUT_USE_CARET
    if ( m_CursorVisibility == 1 )
       GetCaret()->Show();
@@ -230,7 +220,9 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
 {
    wxClientDC dc( this );
    PrepareDC( dc );
+#ifdef __WXMSW__
    if ( eventId != WXLOWIN_MENU_MOUSEMOVE )
+#endif
    {
       // moving the mouse in a window shouldn't give it the focus!
       // Oh yes! wxGTK's focus handling is so broken, that this is the 
@@ -262,28 +254,41 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
    switch ( eventId )
    {
       case WXLOWIN_MENU_MOUSEMOVE:
-         // found is only true if we are really over an object, not just
-         // behind it
-         if(found && u && ! m_Selecting)
          {
-            if(!m_HandCursor)
-               SetCursor(wxCURSOR_HAND);
-            m_HandCursor = TRUE;
-            if(m_StatusBar && m_StatusFieldLabel != -1)
+            // this variables is used to only erase the message in the status
+            // bar if we had put it there previously - otherwise empting status
+            // bar might be undesirable
+            static bool s_hasPutMessageInStatusBar = false;
+
+            // found is only true if we are really over an object, not just
+            // behind it
+            if(found && u && ! m_Selecting)
             {
-               const wxString &label = u->GetLabel();
-               if(label.Length())
-                  m_StatusBar->SetStatusText(label,
-                                             m_StatusFieldLabel);
+               if(!m_HandCursor)
+                  SetCursor(wxCURSOR_HAND);
+               m_HandCursor = TRUE;
+               if(m_StatusBar && m_StatusFieldLabel != -1)
+               {
+                  const wxString &label = u->GetLabel();
+                  if(label.Length())
+                  {
+                     m_StatusBar->SetStatusText(label,
+                                                m_StatusFieldLabel);
+                     s_hasPutMessageInStatusBar = true;
+                  }
+               }
             }
-         }
-         else
-         {
-            if(m_HandCursor)
-               SetCursor(wxCURSOR_IBEAM);
-            m_HandCursor = FALSE;
-            if(m_StatusBar && m_StatusFieldLabel != -1)
-               m_StatusBar->SetStatusText("", m_StatusFieldLabel);
+            else
+            {
+               if(m_HandCursor)
+                  SetCursor(wxCURSOR_IBEAM);
+               m_HandCursor = FALSE;
+               if( m_StatusBar && m_StatusFieldLabel != -1 &&
+                   s_hasPutMessageInStatusBar )
+               {
+                  m_StatusBar->SetStatusText("", m_StatusFieldLabel);
+               }
+            }
          }
 
          // selecting?
@@ -291,7 +296,7 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
          {
             // m_Selecting might not be set if the button got pressed
             // outside this window, so check for it:
-            if(m_Selecting)
+            if( m_Selecting )
             {
                m_llist->ContinueSelection(cursorPos, m_ClickPosition);
                DoPaint();  // TODO: we don't have to redraw everything!
@@ -338,8 +343,12 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
 
              if(m_CursorVisibility == -1)
                 m_CursorVisibility = 1;
+#ifdef WXLAYOUT_USE_CARET
+             if ( m_CursorVisibility == 1 )
+                GetCaret()->Show();
+#endif // WXLAYOUT_USE_CARET
 
-             if(m_CursorVisibility != 0)
+             if(m_CursorVisibility)
              {
                 // draw a thick cursor for editable windows with focus
                 m_llist->DrawCursor(dc, m_HaveFocus && IsEditable(), offset);
@@ -404,8 +413,7 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
       }
    }
 
-   if( u )
-      u->DecRef();
+   if( u ) u->DecRef();
 }
 
 // ----------------------------------------------------------------------------
@@ -426,7 +434,6 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    }
 #endif
 
-#if 0
    // Force m_Selecting to be false if shift is no longer
    // pressed. OnKeyUp() cannot catch all Shift-Up events.
    if(m_Selecting && !event.ShiftDown())
@@ -434,7 +441,6 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       m_Selecting = false;
       m_llist->EndSelection();
    }
-#endif
    
    // If we deleted the selection here, we must not execute the
    // deletion in Delete/Backspace handling.
@@ -610,6 +616,7 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                break;
 
             case WXK_TAB:
+               if ( !event.ShiftDown() )
                {
                    // TODO should be configurable
                    static const int tabSize = 8;
@@ -914,9 +921,9 @@ wxLayoutWindow::ResizeScrollbars(bool exact)
 
    // in the absence of scrollbars we should compare with the client size
    if ( !m_hasHScrollbar )
-      m_maxx = size.x - WXLO_ROFFSET;
+      m_maxx = size.x;// - WXLO_ROFFSET;
    if ( !m_hasVScrollbar )
-      m_maxy = size.y - WXLO_BOFFSET;
+      m_maxy = size.y;// - WXLO_BOFFSET;
 
    // check if the text hasn't become too big
    // TODO why do we set both at once? they're independent...
@@ -943,18 +950,27 @@ wxLayoutWindow::ResizeScrollbars(bool exact)
       m_maxy = max.y + Y_SCROLL_PAGE;
    }
 #if 0
+   //FIXME: this code is pretty broken, producing "arithmetic
+   //exception" crashes (div by 0??)
    else
    {
       // check if the window hasn't become too big, thus making the scrollbars
       // unnecessary
-      if ( m_hasHScrollbar && (max.x < size.x) )
+      if ( !exact )
+      {
+         // add an extra bit to the sizes to avoid future updates
+         max.x -= WXLO_ROFFSET;
+         max.y -= WXLO_BOFFSET;
+      }
+
+      if ( m_hasHScrollbar && (max.x < m_maxx) )
       {
          // remove the horizontal scrollbar
          SetScrollbars(0, -1, 0, -1, 0, -1, true);
          m_hasHScrollbar = false;
       }
 
-      if ( m_hasVScrollbar && (max.y < size.y) )
+      if ( m_hasVScrollbar && (max.y < m_maxy) )
       {
          // remove the vertical scrollbar
          SetScrollbars(-1, 0, -1, 0, -1, 0, true);
