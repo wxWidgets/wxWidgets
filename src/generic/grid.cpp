@@ -1003,7 +1003,7 @@ void wxGridCellBoolEditor::StartingClick()
 // ----------------------------------------------------------------------------
 
 wxGridCellChoiceEditor::wxGridCellChoiceEditor(size_t count,
-                                               const wxChar* choices[],
+                                               const wxString choices[],
                                                bool allowOthers)
                       : m_allowOthers(allowOthers)
 {
@@ -1235,12 +1235,18 @@ wxSize wxGridCellStringRenderer::DoGetBestSize(wxGridCellAttr& attr,
                                                wxDC& dc,
                                                const wxString& text)
 {
-    wxCoord x, y;
+    wxCoord x = 0, y = 0, max_x = 0;
     dc.SetFont(attr.GetFont());
-    dc.GetTextExtent(text, &x, &y);
-    y *= 1 + text.Freq('\n');       // multiply by the number of lines.
+    wxStringTokenizer tk(text, _T('\n'));
+    while ( tk.HasMoreTokens() )
+    {
+        dc.GetTextExtent(tk.GetNextToken(), &x, &y);
+        max_x = wxMax(max_x, x);
+    }
 
-    return wxSize(x, y);
+    y *= 1 + text.Freq(wxT('\n')); // multiply by the number of lines.
+
+    return wxSize(max_x, y);
 }
 
 wxSize wxGridCellStringRenderer::GetBestSize(wxGrid& grid,
@@ -3434,6 +3440,7 @@ void wxGrid::CalcWindowSizes()
 bool wxGrid::Redimension( wxGridTableMessage& msg )
 {
     int i;
+    bool result = FALSE;
 
 #if 0
     // if we were using the default widths/heights so far, we must change them
@@ -3477,7 +3484,8 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             }
             CalcDimensions();
         }
-        return TRUE;
+        result = TRUE;
+        break;
 
         case wxGRIDTABLE_NOTIFY_ROWS_APPENDED:
         {
@@ -3504,7 +3512,8 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             }
             CalcDimensions();
         }
-        return TRUE;
+        result = TRUE;
+        break;
 
         case wxGRIDTABLE_NOTIFY_ROWS_DELETED:
         {
@@ -3544,7 +3553,8 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             }
             CalcDimensions();
         }
-        return TRUE;
+        result = TRUE;
+        break;
 
         case wxGRIDTABLE_NOTIFY_COLS_INSERTED:
         {
@@ -3571,7 +3581,8 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             }
             CalcDimensions();
         }
-        return TRUE;
+        result = TRUE;
+        break;
 
         case wxGRIDTABLE_NOTIFY_COLS_APPENDED:
         {
@@ -3597,7 +3608,8 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             }
             CalcDimensions();
         }
-        return TRUE;
+        result = TRUE;
+        break;
 
         case wxGRIDTABLE_NOTIFY_COLS_DELETED:
         {
@@ -3637,10 +3649,13 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             }
             CalcDimensions();
         }
-        return TRUE;
+        result = TRUE;
+        break;
     }
 
-    return FALSE;
+    if (result && !GetBatchCount() )
+        Refresh(TRUE);
+    return result;
 }
 
 
