@@ -784,6 +784,11 @@ static inline bool wxPointFromObjects(PyObject* o1, PyObject* o2, wxPoint* point
 }
 
 
+#if PYTHON_API_VERSION < 1009
+#define PySequence_Fast_GET_ITEM(o, i)\
+     (PyList_Check(o) ? PyList_GET_ITEM(o, i) : PyTuple_GET_ITEM(o, i))
+#endif
+
 wxPoint* wxPoint_LIST_helper(PyObject* source, int *count) {
     // Putting all of the declarations here allows
     // us to put the error handling all in one place.
