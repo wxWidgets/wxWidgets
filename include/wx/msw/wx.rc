@@ -101,8 +101,6 @@ wxICON_SMALL_REMOVEABLE         ICON "wx/msw/removble.ico"
 // Bitmaps
 //
 
-wxDISABLE_BUTTON_BITMAP         BITMAP  "wx/msw/disable.bmp"
-
 // For wxContextHelpButton
 csquery                 BITMAP "wx/msw/csquery.bmp"
 

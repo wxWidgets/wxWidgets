@@ -1269,7 +1269,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- bitmaps -->
     wx/msw/colours.bmp
     wx/msw/csquery.bmp
-    wx/msw/disable.bmp
     <!-- cursors -->
     wx/msw/blank.cur
     wx/msw/bullseye.cur
