@@ -11,6 +11,14 @@
  * PLEASE don't put C++ comments here - this is a C source file.
  */
 
+/* including rasasync.h (included from windows.h itself included from
+ * wx/setup.h and/or winsock.h results in this warning for
+ * RPCNOTIFICATION_ROUTINE
+ */
+#ifdef _MSC_VER
+#  pragma warning(disable:4115) /* named type definition in parentheses */
+#endif
+
 #ifndef __GSOCKET_STANDALONE__
 #include "wx/setup.h"
 #endif
@@ -40,7 +48,12 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <ctype.h>
+
 #include <winsock.h>
+
+#ifdef _MSC_VER
+#  pragma warning(default:4115) /* named type definition in parentheses */
+#endif
 
 /* if we use configure for MSW SOCKLEN_T will be already defined */
 #ifndef SOCKLEN_T
@@ -1061,6 +1074,7 @@ void GAddress_destroy(GAddress *address)
 {
   assert(address != NULL);
 
+  free(address->m_addr);
   free(address);
 }
 

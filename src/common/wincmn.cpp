@@ -586,16 +586,15 @@ bool wxWindowBase::SetForegroundColour( const wxColour &colour )
 
 bool wxWindowBase::SetCursor(const wxCursor& cursor)
 {
-    // don't try to set invalid cursor, always fall back to the default
-    const wxCursor& cursorOk = cursor.Ok() ? cursor : *wxSTANDARD_CURSOR;
-
-    if ( (wxCursor&)cursorOk == m_cursor )
+    // setting an invalid cursor is ok, it means that we don't have any special
+    // cursor
+    if ( cursor == m_cursor )
     {
         // no change
         return FALSE;
     }
 
-    m_cursor = cursorOk;
+    m_cursor = cursor;
 
     return TRUE;
 }

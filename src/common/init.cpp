@@ -219,9 +219,8 @@ static void DoCleanUp()
     // continuing to use user defined log target is unsafe from now on because
     // some resources may be already unavailable, so replace it by something
     // more safe
-    wxLog *oldlog = wxLog::SetActiveTarget(new wxLogStderr);
-    if ( oldlog )
-        delete oldlog;
+    wxLog::DontCreateOnDemand();
+    delete wxLog::SetActiveTarget(new wxLogStderr);
 #endif // wxUSE_LOG
 
     wxModule::CleanUpModules();
@@ -231,4 +230,9 @@ static void DoCleanUp()
     // delete the application object
     delete wxTheApp;
     wxTheApp = (wxApp *)NULL;
+
+#if wxUSE_LOG
+    // and now delete the last logger as well
+    delete wxLog::SetActiveTarget(NULL);
+#endif // wxUSE_LOG
 }

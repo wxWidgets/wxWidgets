@@ -469,20 +469,20 @@ bool wxWindow::SetCursor(const wxCursor& cursor)
         return FALSE;
     }
 
-    wxASSERT_MSG( m_cursor.Ok(),
-                  wxT("cursor must be valid after call to the base version"));
+    if ( m_cursor.Ok() )
+    {
+        HWND hWnd = GetHwnd();
 
-    HWND hWnd = GetHwnd();
+        // Change the cursor NOW if we're within the correct window
+        POINT point;
+        ::GetCursorPos(&point);
 
-    // Change the cursor NOW if we're within the correct window
-    POINT point;
-    ::GetCursorPos(&point);
+        RECT rect;
+        ::GetWindowRect(hWnd, &rect);
 
-    RECT rect;
-    ::GetWindowRect(hWnd, &rect);
-
-    if ( ::PtInRect(&rect, point) && !wxIsBusy() )
-        ::SetCursor(GetHcursorOf(m_cursor));
+        if ( ::PtInRect(&rect, point) && !wxIsBusy() )
+            ::SetCursor(GetHcursorOf(m_cursor));
+    }
 
     return TRUE;
 }

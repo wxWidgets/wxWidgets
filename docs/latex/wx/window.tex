@@ -1832,9 +1832,13 @@ implements the following methods:\par
 
 \func{virtual void}{SetCursor}{\param{const wxCursor\&}{cursor}}
 
-Sets the window's cursor. Notice that setting the cursor for this window does
-not set it for its children so you'll need to explicitly call SetCursor() for
-them too if you need it.
+% VZ: the docs are correct, if the code doesn't behave like this, it must be
+%     changed
+Sets the window's cursor. Notice that the window cursor also sets it for the
+children of the window implicitly.
+
+The {\it cursor} may be {\tt wxNullCursor} in which case the window cursor will
+be reset back to default.
 
 \wxheading{Parameters}
 

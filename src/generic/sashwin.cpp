@@ -115,7 +115,7 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
     SetCursor(* wxSTANDARD_CURSOR);
 #endif
 #ifdef __WXMSW__
-    SetCursor(wxCursor());
+    SetCursor(wxNullCursor);
 #endif
 
     if (event.LeftDown())
@@ -306,7 +306,7 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
         }
         else
         {
-            SetCursor(* wxSTANDARD_CURSOR);
+            SetCursor(wxNullCursor);
         }
     }
     else if ( event.Dragging() &&
