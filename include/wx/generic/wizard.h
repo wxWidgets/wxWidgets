@@ -62,7 +62,7 @@ public:
 
     // do fill the dialog with controls
     // this is app-overridable to, for example, set help and tooltip text
-    void DoCreateControls();
+    virtual void DoCreateControls();
 
 private:
     // was the dialog really created?
