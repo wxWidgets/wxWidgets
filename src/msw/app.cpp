@@ -386,6 +386,7 @@ void wxApp::CommonCleanUp()
 
 //  wxDefaultResourceTable->ClearTable();
 #endif
+
   // Indicate that the cursor can be freed,
   // so that cursor won't be deleted by deleting
   // the bitmap list before g_globalCursor goes out
@@ -396,17 +397,7 @@ void wxApp::CommonCleanUp()
   wxDeleteStockObjects() ;
 
   // Destroy all GDI lists, etc.
-  delete wxTheBrushList;
-  wxTheBrushList = NULL;
-
-  delete wxThePenList;
-  wxThePenList = NULL;
-
-  delete wxTheFontList;
-  wxTheFontList = NULL;
-
-  delete wxTheBitmapList;
-  wxTheBitmapList = NULL;
+  wxDeleteStockLists();
 
   delete wxTheColourDatabase;
   wxTheColourDatabase = NULL;
