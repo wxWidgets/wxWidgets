@@ -42,6 +42,11 @@
 #include "wx/cocoa/NSApplication.h"
 #include "wx/cocoa/autorelease.h"
 
+// A category for methods that are only present in Panther's SDK
+@interface NSStatusItem(wxNSStatusItemPrePantherCompatibility)
+- (void)popUpStatusItemMenu:(NSMenu *)menu;
+@end
+
 class wxTaskBarIconWindow;
 
 // ============================================================================
@@ -215,7 +220,7 @@ wxTaskBarIconDockImpl::wxTaskBarIconDockImpl(wxTaskBarIcon *taskBarIcon)
 :   wxTaskBarIconCocoaImpl(taskBarIcon)
 {
     m_originalDockIcon = nil;
-    wxASSERT_MSG(!sm_dockIcon,"You should never have more than one dock icon!");
+    wxASSERT_MSG(!sm_dockIcon, wxT("You should never have more than one dock icon!"));
     sm_dockIcon = this;
 }
 
