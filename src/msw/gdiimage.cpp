@@ -151,6 +151,7 @@ public:
     {
     }
 
+protected:
     virtual bool LoadIcon(wxIcon *icon,
                           const wxString& name, long flags,
                           int desiredWidth = -1, int desiredHeight = -1);
@@ -168,6 +169,7 @@ public:
     {
     }
 
+protected:
     virtual bool LoadIcon(wxIcon *icon,
                           const wxString& name, long flags,
                           int desiredWidth = -1, int desiredHeight = -1);
@@ -265,7 +267,7 @@ wxGDIImageHandler *wxGDIImage::FindHandler(const wxString& extension,
     while ( node )
     {
         wxGDIImageHandler *handler = node->GetData();
-        if ( (handler->GetExtension() = extension) &&
+        if ( (handler->GetExtension() == extension) &&
              (type == -1 || handler->GetType() == type) )
         {
             return handler;
