@@ -152,7 +152,7 @@ wxString wxFileTipProvider::GetTip()
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxTipDialog, wxDialog)
-    EVT_BUTTON(wxID_NEXT_TIP, OnNextTip)
+    EVT_BUTTON(wxID_NEXT_TIP, wxTipDialog::OnNextTip)
 END_EVENT_TABLE()
 
 wxTipDialog::wxTipDialog(wxWindow *parent,

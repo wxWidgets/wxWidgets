@@ -47,10 +47,12 @@
 #include "wx/treectrl.h"
 
 #ifdef __GNUWIN32__
+#ifndef wxUSE_NORLANDER_HEADERS
 #include "wx/msw/gnuwin32/extra.h"
 #endif
+#endif
 
-#if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__)
+#if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__) || defined(wxUSE_NORLANDER_HEADERS)
     #include <commctrl.h>
 #endif
 
@@ -195,7 +197,7 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     if ( m_windowStyle & wxTR_LINES_AT_ROOT )
         wstyle |= TVS_LINESATROOT;
 
-#ifndef __GNUWIN32__
+#if !defined( __GNUWIN32__ ) && !defined(wxUSE_NORLANDER_HEADERS)
     // we emulate the multiple selection tree controls by using checkboxes: set
     // up the image list we need for this if we do have multiple selections
     if ( m_windowStyle & wxTR_MULTIPLE )

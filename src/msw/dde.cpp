@@ -39,8 +39,10 @@
 #include <ddeml.h>
 
 #ifndef __TWIN32__
+#if !wxUSE_NORLANDER_HEADERS
 #ifdef __GNUWIN32__
 #include "wx/msw/gnuwin32/extra.h"
+#endif
 #endif
 #endif
 

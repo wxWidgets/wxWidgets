@@ -24,7 +24,7 @@
 #include "wx/window.h"
 #include "wx/msw/private.h"
 
-#ifndef __GNUWIN32__
+#if !defined( __GNUWIN32__ ) || defined(wxUSE_NORLANDER_HEADERS)
 #include <mmsystem.h>
 #endif
 
@@ -34,7 +34,9 @@ typedef UINT MMRESULT;
 
 #ifndef __TWIN32__
 #ifdef __GNUWIN32__
+#ifndef wxUSE_NORLANDER_HEADERS
 #include <wx/msw/gnuwin32/extra.h>
+#endif
 #endif
 #endif
 

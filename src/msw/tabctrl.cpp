@@ -32,13 +32,15 @@
 
 #include <windows.h>
 
-#if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__)
+#if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__) || defined(wxUSE_NORLANDER_HEADERS)
 #include <commctrl.h>
 #endif
 
 #ifndef __TWIN32__
 #ifdef __GNUWIN32__
+#ifndef wxUSE_NORLANDER_HEADERS
 #include "wx/msw/gnuwin32/extra.h"
+#endif
 #endif
 #endif
 

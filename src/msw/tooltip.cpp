@@ -32,7 +32,7 @@
 #include "wx/tooltip.h"
 #include "wx/msw/private.h"
 
-#if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__)
+#if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__) || defined(wxUSE_NORLANDER_HEADERS)
 #include <commctrl.h>
 #endif
 
@@ -47,7 +47,7 @@ public:
     wxToolInfo(wxWindow *win)
     {
         // initialize all members
-#ifdef __GNUWIN32__
+#if defined( __GNUWIN32__ ) && !defined(wxUSE_NORLANDER_HEADERS)
         memset(this, 0, sizeof(TOOLINFO));
 #else
         ::ZeroMemory(this, sizeof(TOOLINFO));

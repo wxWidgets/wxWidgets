@@ -57,7 +57,7 @@
 #   include <fstream>
 #endif
 
-#if wxUSE_RICHEDIT && !defined(__GNUWIN32__)
+#if wxUSE_RICHEDIT && (!defined(__GNUWIN32__) || defined(wxUSE_NORLANDER_HEADERS))
     #include <richedit.h>
 #endif
 

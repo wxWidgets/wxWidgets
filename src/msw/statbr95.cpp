@@ -36,7 +36,7 @@
 #include "wx/msw/private.h"
 #include <windowsx.h>
 
-#if !defined(__GNUWIN32__) || defined(__TWIN32__)
+#if !defined(__GNUWIN32__) || defined(__TWIN32__) || defined(wxUSE_NORLANDER_HEADERS)
 #include <commctrl.h>
 #endif
 

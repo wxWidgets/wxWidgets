@@ -45,7 +45,7 @@
 #include <windows.h>
 #include <windowsx.h>
 
-#ifdef __GNUWIN32__
+#if defined(__GNUWIN32__) && !defined(wxUSE_NORLANDER_HEADERS)
 #include "wx/msw/gnuwin32/extra.h"
 #endif
 

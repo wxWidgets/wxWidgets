@@ -38,7 +38,7 @@
 #include "wx/msw/dragimag.h"
 #include "wx/msw/private.h"
 
-#if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__)
+#if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__) || defined(wxUSE_NORLANDER_HEADERS)
 #include <commctrl.h>
 #endif
 

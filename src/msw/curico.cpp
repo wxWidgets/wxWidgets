@@ -25,7 +25,7 @@
 #endif
 
 #ifndef __TWIN32__
-#ifdef __GNUWIN32__
+#if defined (__GNUWIN32__) && !defined(wxUSE_NORLANDER_HEADERS)
 #include "wx/msw/gnuwin32/extra.h"
 #endif
 #endif

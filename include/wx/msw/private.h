@@ -56,7 +56,7 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 // window proc
 // ---------------------------------------------------------------------------
 
-#if defined(__GNUWIN32__) 
+#if defined(__GNUWIN32__) && !defined(wxUSE_NORLANDER_HEADERS)
 #  define CASTWNDPROC (long unsigned)
 #else
 #  ifdef __BORLANDC__
@@ -69,7 +69,7 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 #  endif
 
 #  else
-#    if defined (__WIN32__) && defined(STRICT)
+#    if defined (__WIN32__) && defined(STRICT) 
        typedef long (_stdcall * WndProcCast) (HWND, unsigned int, unsigned int, long);
 #      define CASTWNDPROC (WndProcCast)
 #    elif defined(__WIN16__)

@@ -167,7 +167,7 @@ int DibWriteFile(LPTSTR szFile, LPBITMAPINFOHEADER lpbi)
   bmf.bfReserved1 = 0;
   bmf.bfReserved2 = 0;
   bmf.bfOffBits = sizeof(bmf) + (char FAR*)(DibPtr(lpbi)) - (char FAR*)lpbi;
-#if defined( __WATCOMC__) || defined(__VISUALC__) || defined(__SC__) || defined(__SALFORDC__) || defined(__MWERKS__)
+#if defined( __WATCOMC__) || defined(__VISUALC__) || defined(__SC__) || defined(__SALFORDC__) || defined(__MWERKS__) || defined(wxUSE_NORLANDER_HEADERS)
   if (_hwrite(fh, (LPCSTR)(&bmf), sizeof(bmf))<0 ||
   _hwrite(fh, (LPCSTR)lpbi, size)<0) {
     _lclose(fh);

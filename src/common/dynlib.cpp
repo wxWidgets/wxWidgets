@@ -276,7 +276,7 @@ wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name)
 // wxLibraries (only one instance should normally exist)
 // ---------------------------------------------------------------------------
 
-wxLibraries::wxLibraries()
+wxLibraries::wxLibraries():m_loaded(wxKEY_STRING)
 {
 }
 

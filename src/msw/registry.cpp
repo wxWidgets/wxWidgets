@@ -302,7 +302,7 @@ wxString wxRegKey::GetName(bool bShortPrefix) const
   return str;
 }
 
-#ifdef __GNUWIN32__
+#if defined( __GNUWIN32__ ) && !defined(wxUSE_NORLANDER_HEADERS)
 bool wxRegKey::GetKeyInfo(size_t* pnSubKeys,
                           size_t* pnMaxKeyLen,
                           size_t* pnValues,

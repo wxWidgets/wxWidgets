@@ -129,6 +129,14 @@
 #if defined(__HPUX__) && defined(__GNUG__)
     #define va_list __gnuc_va_list
 #endif // HP-UX
+    
+// Mingw32 gcc-2.95 uses new windows headers which are more ms-like
+// we are setting this define because of the complex check
+// using NORLANDER as Cygwin may follow. (header author is Anders Norlander)
+#if defined(__MINGW32__) && (__GNUC__>=2) && (__GNUC_MINOR__>=95)
+#   define wxUSE_NORLANDER_HEADERS 1
+#endif
+
 
 //////////////////////////////////////////////////////////////////////////////////
 // Currently Only MS-Windows/NT, XView and Motif are supported

@@ -49,8 +49,10 @@
 #include "wx/msw/dib.h"
 
 #ifndef __TWIN32__
+#ifndef wxUSE_NORLANDER_HEADERS
 #ifdef __GNUWIN32__
 #include "wx/msw/gnuwin32/extra.h"
+#endif
 #endif
 #endif
 
