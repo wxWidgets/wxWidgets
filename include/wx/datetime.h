@@ -1400,12 +1400,10 @@ inline wxDateTime wxDateTime::Now()
 /* static */
 inline wxDateTime wxDateTime::Today()
 {
-    struct tm *time = GetTmNow();
-    time->tm_hour = 0;
-    time->tm_min = 0;
-    time->tm_sec = 0;
+    wxDateTime dt(Now());
+    dt.ResetTime();
 
-    return wxDateTime(*time);
+    return dt;
 }
 
 #if (!(defined(__VISAGECPP__) && __IBMCPP__ >= 400))
