@@ -218,38 +218,47 @@ public:
     wxPrintDialogData();
     ~wxPrintDialogData();
 
-    void EnableHelp(bool flag);
-    void EnablePageNumbers(bool flag);
+    int GetFromPage() const;
+    int GetToPage() const;
+    int GetMinPage() const;
+    int GetMaxPage() const;
+    int GetNoCopies() const;
+    bool GetAllPages() const;
+    bool GetSelection() const;
+    bool GetCollate() const;
+    bool GetPrintToFile() const;
+    bool GetSetupDialog() const;
+
+    void SetFromPage(int v);
+    void SetToPage(int v);
+    void SetMinPage(int v);
+    void SetMaxPage(int v);
+    void SetNoCopies(int v);
+    void SetAllPages(bool flag);
+    void SetSelection(bool flag);
+    void SetCollate(bool flag);
+    void SetPrintToFile(bool flag);
+    void SetSetupDialog(bool flag);
+
     void EnablePrintToFile(bool flag);
     void EnableSelection(bool flag);
-    bool GetAllPages();
-    bool GetCollate();
-    int GetFromPage();
-    int GetMaxPage();
-    int GetMinPage();
-    int GetNoCopies();
-    bool GetSelection();
+    void EnablePageNumbers(bool flag);
+    void EnableHelp(bool flag);
+
+    bool GetEnablePrintToFile() const;
+    bool GetEnableSelection() const;
+    bool GetEnablePageNumbers() const;
+    bool GetEnableHelp() const;
+
+    // Is this data OK for showing the print dialog?
+    bool Ok() const;
+
     %addmethods {
         %new wxPrintData* GetPrintData() {
             return new wxPrintData(self->GetPrintData());  // force a copy
         }
     }
-    bool GetPrintToFile();
-    int GetToPage();
-
-    bool Ok();
-
-    void SetCollate(bool flag);
-    void SetAllPages(bool flag);
-    void SetFromPage(int page);
-    void SetMaxPage(int page);
-    void SetMinPage(int page);
-    void SetNoCopies(int n);
     void SetPrintData(const wxPrintData& printData);
-    void SetPrintToFile(bool flag);
-    void SetSelection(bool flag);
-    void SetSetupDialog(bool flag);
-    void SetToPage(int page);
 
     %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
