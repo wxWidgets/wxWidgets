@@ -89,6 +89,7 @@ OBJECTS1=framecmn.obj,\
 		imagpng.obj,\
 		imagpnm.obj,\
 		imagtiff.obj,\
+		imagxpm.obj,\
 		intl.obj,\
 		ipcbase.obj,\
 		layout.obj,\
@@ -136,6 +137,7 @@ OBJECTS1=framecmn.obj,\
 		wincmn.obj,\
 		wxchar.obj,\
 		wxexpr.obj,\
+		xpmdecod.obj,\
 		zipstrm.obj,\
 		zstream.obj
 
@@ -190,6 +192,7 @@ SOURCES = \
 		imagpng.cpp,\
 		imagpnm.cpp,\
 		imagtiff.cpp,\
+		imagxpm.cpp,\
 		intl.cpp,\
 		ipcbase.cpp,\
 		layout.cpp,\
@@ -237,6 +240,7 @@ SOURCES = \
 		wincmn.cpp,\
 		wxchar.cpp,\
 		wxexpr.cpp,\
+		xpmdecod.cpp,\
 		zipstrm.cpp,\
 		zstream.cpp
 
@@ -321,6 +325,7 @@ imagpcx.obj : imagpcx.cpp
 imagpng.obj : imagpng.cpp
 imagpnm.obj : imagpnm.cpp
 imagtiff.obj : imagtiff.cpp
+imagxpm.obj : imagxpm.cpp
 intl.obj : intl.cpp
 ipcbase.obj : ipcbase.cpp
 layout.obj : layout.cpp
@@ -368,5 +373,6 @@ wfstream.obj : wfstream.cpp
 wincmn.obj : wincmn.cpp
 wxchar.obj : wxchar.cpp
 wxexpr.obj : wxexpr.cpp
+xpmdecod.obj : xpmdecod.cpp
 zipstrm.obj : zipstrm.cpp
 zstream.obj : zstream.cpp

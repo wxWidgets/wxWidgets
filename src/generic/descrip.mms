@@ -93,6 +93,7 @@ SOURCES = \
 		msgdlgg.cpp,\
 		notebook.cpp,\
 		numdlgg.cpp,\
+		paletteg.cpp,\
 		panelg.cpp,\
 		printps.cpp,\
 		prntdlgg.cpp,\
@@ -117,8 +118,7 @@ SOURCES = \
 OBJECTS0=,statline.obj,\
 		notebook.obj
 .else
-OBJECTS0=,filedlgg.obj
-
+OBJECTS0=,filedlgg.obj,paletteg.obj
 .endif
 
 all : $(SOURCES)
@@ -153,6 +153,7 @@ logg.obj : logg.cpp
 msgdlgg.obj : msgdlgg.cpp
 notebook.obj : notebook.cpp
 numdlgg.obj : numdlgg.cpp
+paletteg.obj : paletteg.cpp
 panelg.obj : panelg.cpp
 printps.obj : printps.cpp
 prntdlgg.obj : prntdlgg.cpp

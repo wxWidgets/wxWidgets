@@ -351,7 +351,7 @@ size_t wxFileType::GetAllCommands(wxArrayString *verbs,
     if ( commands )
         commands->Clear();
 
-#if defined (__WXMSW__)  || (__UNIX__)
+#if defined (__WXMSW__)  || defined(__UNIX__)
     return m_impl->GetAllCommands(verbs, commands, params);
 #else // !__WXMSW__ || Unix
     // we don't know how to retrieve all commands, so just try the 2 we know
@@ -385,21 +385,19 @@ bool wxFileType::Unassociate()
 {
 #if defined(__WXMSW__)
     return m_impl->Unassociate();
-#endif
-
-#if defined(__UNIX__)
+#elif defined(__UNIX__)
     return m_impl->Unassociate(this);
-#endif
+#else
 
     wxFAIL_MSG( _T("not implemented") ); // TODO
     return FALSE;
-
+#endif
 }
 
 bool wxFileType::SetCommand(const wxString& cmd, const wxString& verb,
 bool overwriteprompt)
 {
-#if defined (__WXMSW__)  || (__UNIX__)
+#if defined (__WXMSW__)  || defined(__UNIX__)
     return m_impl->SetCommand(cmd, verb, overwriteprompt);
 #else
     wxFAIL_MSG(_T("not implemented"));
@@ -419,7 +417,7 @@ bool wxFileType::SetDefaultIcon(const wxString& cmd, int index)
 #endif
     wxCHECK_MSG( !sTmp.empty(), FALSE, _T("need the icon file") );
 
-#if defined (__WXMSW__) || (__UNIX__)
+#if defined (__WXMSW__) || defined(__UNIX__)
     return m_impl->SetDefaultIcon (cmd, index);
 #else
     wxFAIL_MSG(_T("not implemented"));

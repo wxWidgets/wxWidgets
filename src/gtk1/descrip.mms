@@ -56,12 +56,12 @@ OBJECTS = \
 	menu.obj,\
 	minifram.obj,\
 	notebook.obj,\
-	palette.obj,\
 	pen.obj,\
 	radiobox.obj,\
 	radiobut.obj,\
 	region.obj,\
 	scrolbar.obj,\
+	scrolwin.obj,\
 	settings.obj,\
 	slider.obj,\
         spinbutt.obj,\
@@ -117,12 +117,12 @@ SOURCES =\
 	menu.cpp,\
 	minifram.cpp,\
 	notebook.cpp,\
-	palette.cpp,\
 	pen.cpp,\
 	radiobox.cpp,\
 	radiobut.cpp,\
 	region.cpp,\
 	scrolbar.cpp,\
+	scrolwin.cpp,\
 	settings.cpp,\
 	slider.cpp,\
         spinbutt.cpp,\
@@ -181,12 +181,12 @@ mdi.obj : mdi.cpp
 menu.obj : menu.cpp
 minifram.obj : minifram.cpp
 notebook.obj : notebook.cpp
-palette.obj : palette.cpp
 pen.obj : pen.cpp
 radiobox.obj : radiobox.cpp
 radiobut.obj : radiobut.cpp
 region.obj : region.cpp
 scrolbar.obj : scrolbar.cpp
+scrolwin.obj : scrolwin.cpp
 settings.obj : settings.cpp
 slider.obj : slider.cpp
 spinbutt.obj : spinbutt.cpp

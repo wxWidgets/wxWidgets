@@ -79,6 +79,11 @@
 // other standard headers
 #include <ctype.h>
 
+#ifdef __VMS
+/* silence warnings for comparing unsigned int's <0 */
+# pragma message disable unscomzer
+#endif
+
 // this is a class to extend wxArrayString...
 class wxMimeArrayString : public wxArrayString
 {
