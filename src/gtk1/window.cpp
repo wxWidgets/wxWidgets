@@ -385,34 +385,34 @@ static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
 
     if (win->m_hasScrolling)
     {
-            GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(widget);
+        GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(widget);
 
-            GtkRequisition vscroll_req;
-            vscroll_req.width = 2;
-            vscroll_req.height = 2;
-            (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(scroll_window->vscrollbar) )->size_request )
-                (scroll_window->vscrollbar, &vscroll_req );
+        GtkRequisition vscroll_req;
+        vscroll_req.width = 2;
+        vscroll_req.height = 2;
+        (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(scroll_window->vscrollbar) )->size_request )
+            (scroll_window->vscrollbar, &vscroll_req );
 
-            GtkRequisition hscroll_req;
-            hscroll_req.width = 2;
-            hscroll_req.height = 2;
-            (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(scroll_window->hscrollbar) )->size_request )
-                (scroll_window->hscrollbar, &hscroll_req );
+        GtkRequisition hscroll_req;
+        hscroll_req.width = 2;
+        hscroll_req.height = 2;
+        (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(scroll_window->hscrollbar) )->size_request )
+            (scroll_window->hscrollbar, &hscroll_req );
 
-            GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT_GET_CLASS(widget) );
+        GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT_GET_CLASS(widget) );
 
-            if (scroll_window->vscrollbar_visible)
-            {
-                dw += vscroll_req.width;
-                dw += scroll_class->scrollbar_spacing;
-            }
+        if (scroll_window->vscrollbar_visible)
+        {
+            dw += vscroll_req.width;
+            dw += scroll_class->scrollbar_spacing;
+        }
 
-            if (scroll_window->hscrollbar_visible)
-            {
-                dh += hscroll_req.height;
-                dh += scroll_class->scrollbar_spacing;
-            }
-    }
+        if (scroll_window->hscrollbar_visible)
+        {
+            dh += hscroll_req.height;
+            dh += scroll_class->scrollbar_spacing;
+        }
+}
 
     int dx = 0;
     int dy = 0;
@@ -800,49 +800,15 @@ static int gtk_window_expose_callback( GtkWidget *widget,
                                   gdk_event->area.width,
                                   gdk_event->area.height );
 
+    // Actually send the various events based on the
+    // current update region.
     if (gdk_event->count == 0)
-    {
-        win->m_clipPaintRegion = TRUE;
+        win->GtkSendPaintEvents();
 
-        wxWindowDC dc(win);
-        dc.SetClippingRegion(win->GetUpdateRegion());
-        wxEraseEvent eevent( win->GetId(), &dc );
-        eevent.SetEventObject( win );
-#if 1
-        (void)win->GetEventHandler()->ProcessEvent(eevent);
-#else // 0
-        if (!win->GetEventHandler()->ProcessEvent(eevent))
-        {
-            wxClientDC dc( win );
-            dc.SetBrush( wxBrush( win->GetBackgroundColour(), wxSOLID ) );
-            dc.SetPen( *wxTRANSPARENT_PEN );
-
-            wxRegionIterator upd( win->GetUpdateRegion() );
-            while (upd)
-            {
-                dc.DrawRectangle( upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
-                upd ++;
-            }
-        }
-#endif // 1/0
-
-        wxNcPaintEvent eventNc( win->GetId() );
-        eventNc.SetEventObject( win );
-        win->GetEventHandler()->ProcessEvent( eventNc );
-
-        wxPaintEvent event( win->GetId() );
-        event.SetEventObject( win );
-        win->GetEventHandler()->ProcessEvent( event );
-
-        win->GetUpdateRegion().Clear();
-
-        win->m_clipPaintRegion = FALSE;
-    }
-
-    /* The following code will result in all window-less widgets
-       being redrawn if the wxWindows class is given a chance to
-       paint *anything* because it will then be allowed to paint
-       over the window-less widgets */
+    // The following code will result in all window-less widgets
+    // being redrawn if the wxWindows class is given a chance to
+    // paint *anything* because it will then be allowed to paint
+    // over the window-less widgets.
     GList *children = pizza->children;
     while (children)
     {
@@ -870,11 +836,11 @@ static int gtk_window_expose_callback( GtkWidget *widget,
 // "event" of m_wxwindow
 //-----------------------------------------------------------------------------
 
-/* GTK thinks it is clever and filters out a certain amount of "unneeded"
-   expose events. We need them, of course, so we override the main event
-   procedure in GtkWidget by giving our own handler for all system events.
-   There, we look for expose events ourselves whereas all other events are
-   handled normally. */
+// GTK thinks it is clever and filters out a certain amount of "unneeded"
+// expose events. We need them, of course, so we override the main event
+// procedure in GtkWidget by giving our own handler for all system events.
+// There, we look for expose events ourselves whereas all other events are
+// handled normally.
 
 gint gtk_window_event_event_callback( GtkWidget *widget,
                                       GdkEventExpose *event,
@@ -893,8 +859,8 @@ gint gtk_window_event_event_callback( GtkWidget *widget,
 // "draw" of m_wxwindow
 //-----------------------------------------------------------------------------
 
-/* This callback is a complete replacement of the gtk_pizza_draw() function,
-   which disabled. */
+// This callback is a complete replacement of the gtk_pizza_draw() function,
+// which disabled.
 
 static void gtk_window_draw_callback( GtkWidget *widget,
                                       GdkRectangle *rect,
@@ -905,6 +871,8 @@ static void gtk_window_draw_callback( GtkWidget *widget,
     if (g_isIdle)
         wxapp_install_idle_handler();
 
+    // The wxNO_FULL_REPAINT_ON_RESIZE flag only works if
+    // there are no child windows.
     if ((win->HasFlag(wxNO_FULL_REPAINT_ON_RESIZE)) &&
         (win->GetChildren().GetCount() == 0))
     {
@@ -954,58 +922,22 @@ static void gtk_window_draw_callback( GtkWidget *widget,
 
     win->GetUpdateRegion().Union( rect->x, rect->y, rect->width, rect->height );
 
-    win->m_clipPaintRegion = TRUE;
+    // Actually send the various events based on the
+    // current update region.
+    win->GtkSendPaintEvents();
 
-    wxWindowDC dc(win);
-    dc.SetClippingRegion(win->GetUpdateRegion());
-    wxEraseEvent eevent( win->GetId(), &dc );
-    eevent.SetEventObject( win );
-
-#if 1
-    (void)win->GetEventHandler()->ProcessEvent(eevent);
-#else
-    if (!win->GetEventHandler()->ProcessEvent(eevent))
-    {
-        if (!win->GetEventHandler()->ProcessEvent(eevent))
-        {
-            wxClientDC dc( win );
-            dc.SetBrush( wxBrush( win->GetBackgroundColour(), wxSOLID ) );
-            dc.SetPen( *wxTRANSPARENT_PEN );
-
-            wxRegionIterator upd( win->GetUpdateRegion() );
-            while (upd)
-            {
-                dc.DrawRectangle( upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
-                upd ++;
-            }
-        }
-    }
-#endif
-
-    wxNcPaintEvent eventNc( win->GetId() );
-    eventNc.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( eventNc );
-
-    wxPaintEvent event( win->GetId() );
-    event.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( event );
-
-    win->GetUpdateRegion().Clear();
-
-    win->m_clipPaintRegion = FALSE;
-
-
+    // Redraw child widgets
     GList *children = pizza->children;
     while (children)
     {
-            GtkPizzaChild *child = (GtkPizzaChild*) children->data;
-            children = children->next;
+        GtkPizzaChild *child = (GtkPizzaChild*) children->data;
+        children = children->next;
 
-            GdkRectangle child_area;
-            if (gtk_widget_intersect (child->widget, rect, &child_area))
-            {
-                gtk_widget_draw (child->widget, &child_area /* (GdkRectangle*) NULL*/ );
-            }
+        GdkRectangle child_area;
+        if (gtk_widget_intersect (child->widget, rect, &child_area))
+        {
+            gtk_widget_draw (child->widget, &child_area /* (GdkRectangle*) NULL*/ );
+        }
     }
 }
 
@@ -2872,6 +2804,10 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
 
 void wxWindowGTK::OnInternalIdle()
 {
+    // Update invalidated regions.
+    Update();
+    
+    // Synthetize activate events.
     if ( g_sendActivateEvent != -1 )
     {
         bool activate = g_sendActivateEvent != 0;
@@ -3492,6 +3428,57 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
             gtk_widget_draw( m_widget, &gdk_rect );
         }
     }
+}
+
+void wxWindowGTK::Update()
+{
+    if (!m_updateRegion.IsEmpty())
+    {
+        printf( "never gets called\n" );
+    }
+}
+
+void wxWindowGTK::GtkSendPaintEvents()
+{
+    m_clipPaintRegion = TRUE;
+
+    wxWindowDC dc( this );
+    dc.SetClippingRegion( m_updateRegion );
+    wxEraseEvent erase_event( GetId(), &dc );
+    erase_event.SetEventObject( this );
+
+#if 1
+    GetEventHandler()->ProcessEvent( erase_event );
+#else
+    if (!GetEventHandler()->ProcessEvent(erase_event))
+    {
+        if (!GetEventHandler()->ProcessEvent(erase_event))
+        {
+            wxClientDC dc( this );
+            dc.SetBrush( wxBrush( GetBackgroundColour(), wxSOLID ) );
+            dc.SetPen( *wxTRANSPARENT_PEN );
+
+            wxRegionIterator upd( m_updateRegion );
+            while (upd)
+            {
+                dc.DrawRectangle( upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
+                upd ++;
+            }
+        }
+    }
+#endif
+
+    wxNcPaintEvent nc_paint_event( GetId() );
+    nc_paint_event.SetEventObject( this );
+    GetEventHandler()->ProcessEvent( nc_paint_event );
+
+    wxPaintEvent paint_event( GetId() );
+    paint_event.SetEventObject( this );
+    GetEventHandler()->ProcessEvent( paint_event );
+
+    m_updateRegion.Clear();
+
+    m_clipPaintRegion = FALSE;
 }
 
 void wxWindowGTK::Clear()

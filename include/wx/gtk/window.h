@@ -68,6 +68,7 @@ public:
 
     virtual void Refresh( bool eraseBackground = TRUE,
                           const wxRect *rect = (const wxRect *) NULL );
+    virtual void Update();
     virtual void Clear();
 
     virtual bool SetBackgroundColour( const wxColour &colour );
@@ -106,54 +107,60 @@ public:
 
     virtual WXWidget GetHandle() const { return m_widget; }
 
-    /* I don't want users to override what's done in idle so everything that
-       has to be done in idle time in order for wxGTK to work is done in
-       OnInternalIdle */
+    // I don't want users to override what's done in idle so everything that
+    // has to be done in idle time in order for wxGTK to work is done in
+    // OnInternalIdle
     virtual void OnInternalIdle();
 
-    /* For compatibility across platforms (not in event table) */
-    void OnIdle(wxIdleEvent& WXUNUSED(event)) {};
+    // For compatibility across platforms (not in event table)
+    void OnIdle(wxIdleEvent& WXUNUSED(event)) {}
 
     // wxGTK-specific: called recursively by Enable,
     // to give widgets an oppprtunity to correct their colours after they
     // have been changed by Enable
-    virtual void OnParentEnable( bool WXUNUSED(enable) ) {};
+    virtual void OnParentEnable( bool WXUNUSED(enable) ) {}
 
-    /* used by all window classes in the widget creation process */
+    // Used by all window classes in the widget creation process.
     bool PreCreation( wxWindowGTK *parent, const wxPoint &pos, const wxSize &size );
     void PostCreation();
 
-    /* internal addition of child windows. differs from class
-       to class not by using virtual functions but by using
-       the m_insertCallback */
+    // Internal addition of child windows. differs from class
+    // to class not by using virtual functions but by using
+    // the m_insertCallback.
     void DoAddChild(wxWindowGTK *child);
+    
+    // This methods sends wxPaintEvents to the window. It reads the
+    // update region, breaks it up into rects and sends an event
+    // for each rect. It is also responsible for background erase
+    // events and NC paint events. It is called from "draw" and
+    // "expose" handlers as well as from ::Update()
+    void GtkSendPaintEvents();
 
-    /* the methods below are required because many native widgets
-       are composed of several subwidgets and setting a style for
-       the widget means setting it for all subwidgets as well.
-       also, it is nor clear, which native widget is the top
-       widget where (most of) the input goes. even tooltips have
-       to be applied to all subwidgets. */
-
+    // The methods below are required because many native widgets
+    // are composed of several subwidgets and setting a style for
+    // the widget means setting it for all subwidgets as well.
+    // also, it is nor clear, which native widget is the top
+    // widget where (most of) the input goes. even tooltips have
+    // to be applied to all subwidgets.
     virtual GtkWidget* GetConnectWidget();
     virtual bool IsOwnGtkWindow( GdkWindow *window );
     void ConnectWidget( GtkWidget *widget );
 
-    /* creates a new widget style if none is there
-       and sets m_widgetStyle to this value. */
+    // Creates a new widget style if none is there
+    // and sets m_widgetStyle to this value.
     GtkStyle *GetWidgetStyle();
 
-    /* called by SetFont() and SetXXXColour etc */
+    // Called by SetFont() and SetXXXColour etc
     void SetWidgetStyle();
 
-    /* overridden in many GTK widgets */
+    // Overridden in many GTK widgets who have to handle subwidgets
     virtual void ApplyWidgetStyle();
 
 #if wxUSE_TOOLTIPS
     virtual void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );
 #endif // wxUSE_TOOLTIPS
 
-    // called from GTK signales handlers. it indicates that
+    // Called from GTK signales handlers. it indicates that
     // the layouting functions have to be called later on
     // (i.e. in idle time, implemented in OnInternalIdle() ).
     void GtkUpdateSize() { m_sizeSet = FALSE; }
@@ -198,13 +205,13 @@ public:
     bool                 m_clipPaintRegion;     // TRUE after ScrollWindow()
     bool                 m_queuedFullRedraw;    // TRUE after DoMoveWindow
 
-    // these are true if the style were set before the widget was realized
+    // These are true if the style were set before the widget was realized
     // (typcally in the constructor) but the actual GTK style must not be set
     // before the widget has been "realized"
     bool                 m_delayedForegroundColour:1;
     bool                 m_delayedBackgroundColour:1;
 
-    // contains GTK's widgets internal information about non-default widget
+    // Contains GTK's widgets internal information about non-default widget
     // font and colours. we create one for each widget that gets any
     // non-default attribute set via SetFont() or SetForegroundColour() /
     // SetBackgroundColour().
