@@ -1106,7 +1106,8 @@ if not GL_ONLY and BUILD_ART2D:
 if NO_SCRIPTS:
     SCRIPTS = None
 else:
-    SCRIPTS = [opj('scripts/img2png'),
+    SCRIPTS = [opj('scripts/helpviewer'),
+               opj('scripts/img2png'),
                opj('scripts/img2xpm'),
                opj('scripts/img2py'),
                opj('scripts/xrced'),
