@@ -24609,6 +24609,64 @@ static PyObject *_wrap_Window_Navigate(PyObject *self, PyObject *args, PyObject 
 }
 
 
+static PyObject *_wrap_Window_MoveAfterInTabOrder(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    wxWindow *arg2 = (wxWindow *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "win", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_MoveAfterInTabOrder",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->MoveAfterInTabOrder(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_MoveBeforeInTabOrder(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    wxWindow *arg2 = (wxWindow *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "win", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_MoveBeforeInTabOrder",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->MoveBeforeInTabOrder(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Window_GetChildren(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -40824,6 +40882,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_SetDefaultItem", (PyCFunction) _wrap_Window_SetDefaultItem, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetTmpDefaultItem", (PyCFunction) _wrap_Window_SetTmpDefaultItem, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_Navigate", (PyCFunction) _wrap_Window_Navigate, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_MoveAfterInTabOrder", (PyCFunction) _wrap_Window_MoveAfterInTabOrder, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_MoveBeforeInTabOrder", (PyCFunction) _wrap_Window_MoveBeforeInTabOrder, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetChildren", (PyCFunction) _wrap_Window_GetChildren, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetParent", (PyCFunction) _wrap_Window_GetParent, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetGrandParent", (PyCFunction) _wrap_Window_GetGrandParent, METH_VARARGS | METH_KEYWORDS },

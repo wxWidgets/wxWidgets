@@ -593,6 +593,9 @@ class Dialog(TopLevelWindow):
         return _windows_.Dialog_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    def SendSizeEvent(self):
+        self.ProcessEvent(wx.SizeEvent((-1,-1)))
+
 
 class DialogPtr(Dialog):
     def __init__(self, this):

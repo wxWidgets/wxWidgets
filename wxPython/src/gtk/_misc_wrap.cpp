@@ -2537,7 +2537,7 @@ static PyObject *_wrap_Sleep(PyObject *self, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_Usleep(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MilliSleep(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     unsigned long arg1 ;
     PyObject * obj0 = 0 ;
@@ -2545,12 +2545,37 @@ static PyObject *_wrap_Usleep(PyObject *self, PyObject *args, PyObject *kwargs) 
         (char *) "milliseconds", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Usleep",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MilliSleep",kwnames,&obj0)) goto fail;
     arg1 = (unsigned long) SWIG_AsUnsignedLong(obj0); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxUsleep(arg1);
+        wxMilliSleep(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MicroSleep(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    unsigned long arg1 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "microseconds", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MicroSleep",kwnames,&obj0)) goto fail;
+    arg1 = (unsigned long) SWIG_AsUnsignedLong(obj0); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxMicroSleep(arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -28218,7 +28243,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GetFreeMemory", (PyCFunction) _wrap_GetFreeMemory, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Shutdown", (PyCFunction) _wrap_Shutdown, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Sleep", (PyCFunction) _wrap_Sleep, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Usleep", (PyCFunction) _wrap_Usleep, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MilliSleep", (PyCFunction) _wrap_MilliSleep, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"MicroSleep", (PyCFunction) _wrap_MicroSleep, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"EnableTopLevelWindows", (PyCFunction) _wrap_EnableTopLevelWindows, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StripMenuCodes", (PyCFunction) _wrap_StripMenuCodes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GetEmailAddress", (PyCFunction) _wrap_GetEmailAddress, METH_VARARGS | METH_KEYWORDS },
