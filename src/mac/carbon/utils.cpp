@@ -523,7 +523,7 @@ wxString wxMacFindFolder( short        vol,
     wxString strDir ;
 
     if ( FSFindFolder( vol, folderType, createFolder, &fsRef) == noErr)
-        strDir = wxMacFSRefToPath( &fsRef ) ;
+        strDir = wxMacFSRefToPath( &fsRef ) + wxFILE_SEP_PATH ;
 
     return strDir ;
 }
