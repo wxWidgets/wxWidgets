@@ -160,6 +160,10 @@ SOURCE=.\xh_text.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xh_listb.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xml.cpp
 # End Source File
 # Begin Source File

@@ -63,4 +63,7 @@ void wxXmlResource::InitAllHandlers()
     AddHandler(new wxNotebookXmlHandler);
 #endif
     AddHandler(new wxTextCtrlXmlHandler);
+#if wxUSE_LISTBOX
+    AddHandler(new wxListBoxXmlHandler);
+#endif
 }
