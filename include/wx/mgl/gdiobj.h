@@ -36,7 +36,7 @@ class WXDLLEXPORT wxGDIRefData : public wxObjectRefData
 class WXDLLEXPORT wxGDIObject : public wxObject
 {
 public:
-    wxGDIObject() {}
+    wxGDIObject() { m_visible = FALSE; }
 
     virtual bool GetVisible() { return m_visible; }
     virtual void SetVisible( bool visible ) { m_visible = visible; }
@@ -51,5 +51,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxGDIObject)
 };
 
-#endif
-    // _WX_GDIOBJ_H_
+#endif // _WX_GDIOBJ_H_
