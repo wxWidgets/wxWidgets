@@ -859,9 +859,10 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
 void wxWindowMac::MacUpdateControlFont() 
 {
 	ControlFontStyleRec	fontStyle;
-	if ( m_font.MacGetThemeFontID() != kThemeCurrentPortFont )
+        wxFont myfont = GetFont();
+	if ( myfont.MacGetThemeFontID() != kThemeCurrentPortFont )
 	{
-	    switch( m_font.MacGetThemeFontID() )
+	    switch( myfont.MacGetThemeFontID() )
 	    {
 	        case kThemeSmallSystemFont :    fontStyle.font = kControlFontSmallSystemFont ;  break ;
 	        case 109 /*mini font */ :       fontStyle.font = -5 ;                           break ;
@@ -872,9 +873,9 @@ void wxWindowMac::MacUpdateControlFont()
 	}
 	else
 	{
-	    fontStyle.font = m_font.MacGetFontNum() ;
-	    fontStyle.style = m_font.MacGetFontStyle() ;
-	    fontStyle.size = m_font.MacGetFontSize() ;
+	    fontStyle.font = myfont.MacGetFontNum() ;
+	    fontStyle.style = myfont.MacGetFontStyle() ;
+	    fontStyle.size = myfont.MacGetFontSize() ;
 	    fontStyle.flags = kControlUseFontMask | kControlUseFaceMask | kControlUseSizeMask ;
 	}
 
