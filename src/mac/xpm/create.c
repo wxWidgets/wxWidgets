@@ -1067,12 +1067,12 @@ ParseAndPutPixels(
 					}
 					#elif macintosh
 					SetCPixel( x, y, &image_pixels[colidx[c] - 1]);
-					/*
-					if (shapedc) 
+					if (shapeimage) 
 					{
-					    SetPixel(shapedc, x, y, shape_pixels[colidx[c] - 1]);
+						SetGWorld( shapeimage->gworldptr , NULL ) ;
+					    SetCPixel( x, y, &shape_pixels[colidx[c] - 1]);
+						SetGWorld( image->gworldptr , NULL ) ;
 					}
-					*/
 					#endif
 				} 
 				else

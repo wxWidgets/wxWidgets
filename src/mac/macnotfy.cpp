@@ -24,7 +24,7 @@ struct wxMacNotificationEvents
 typedef struct wxMacNotificationEvents wxMacNotificationEvents ;
 wxMacNotificationEvents gMacNotificationEvents ;
 
-ProcessSerialNumber gSocketProcess ;
+ProcessSerialNumber gAppProcess ;
 
 void wxMacWakeUp()
 {
@@ -32,20 +32,20 @@ void wxMacWakeUp()
 	Boolean isSame ;
 	psn.highLongOfPSN = 0 ;
 	psn.lowLongOfPSN = kCurrentProcess ;
-	SameProcess( &gSocketProcess , &psn , &isSame ) ;
+	SameProcess( &gAppProcess , &psn , &isSame ) ;
 	if ( isSame )
 	{
 		PostEvent( nullEvent , 0 ) ;
 	}
 	else
 	{
-		WakeUpProcess( &gSocketProcess ) ;
+		WakeUpProcess( &gAppProcess ) ;
 	}
 }
 
 void wxMacCreateNotifierTable()
 {
-  	GetCurrentProcess(&gSocketProcess);
+  	GetCurrentProcess(&gAppProcess);
 	gMacNotificationEvents.top = 0 ;
 	gMacNotificationEvents.bottom = 0 ;
 	for ( int i = 0 ; i < kMaxEvents ; ++i )

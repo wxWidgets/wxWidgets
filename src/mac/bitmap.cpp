@@ -752,13 +752,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxXPMDataHandler, wxBitmapHandler)
 
 bool wxXPMDataHandler::Create(wxBitmap *bitmap, void *data, long flags, int width, int height, int depth)
 {
- 		XImage *		ximage;
+ 	XImage *		ximage = NULL ;
+ 	XImage *		xshapeimage = NULL ;
   	int     		ErrorStatus;
   	XpmAttributes 	xpmAttr;
 
     xpmAttr.valuemask = XpmReturnInfos; // get infos back
     ErrorStatus = XpmCreateImageFromData( GetMainDevice() , (char **)data,
-         &ximage, (XImage **) NULL, &xpmAttr);
+         &ximage, &xshapeimage, &xpmAttr);
 
     if (ErrorStatus == XpmSuccess)
     {
@@ -776,7 +777,12 @@ bool wxXPMDataHandler::Create(wxBitmap *bitmap, void *data, long flags, int widt
 			XImageFree(ximage); // releases the malloc, but does not detroy
 		                  // the bitmap
 			M_BITMAPHANDLERDATA->m_bitmapType = kMacBitmapTypeGrafWorld ;
-		
+			if ( xshapeimage != NULL )
+			{
+				wxMask* m = new wxMask() ;
+				m->SetMaskBitmap( xshapeimage->gworldptr ) ;
+				M_BITMAPHANDLERDATA->m_bitmapMask = m ;
+			}
 			return TRUE;
     } 
     else
