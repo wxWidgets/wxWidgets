@@ -1,8 +1,0 @@
-binary:: binary1
-
-depend_binary:: depend_binary1
-
-clean_binary:: clean_binary1
-
-include $(RULES_GENERIC)/bin1gen
-
