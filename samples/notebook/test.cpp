@@ -13,20 +13,22 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/wx.h"
 #endif
 
 #include "test.h"
 
 // If 1, use a dialog. Otherwise use a frame.
 #define USE_TABBED_DIALOG 0
-
+#if USE_TABBED_DIALOG
 MyDialog* dialog = (MyDialog *) NULL;
+#else // !USE_TABBED_DIALOG
 MyFrame*  frame = (MyFrame *) NULL;
+#endif // USE_TABBED_DIALOG
 
 IMPLEMENT_APP(MyApp)
 
@@ -55,7 +57,7 @@ bool MyApp::OnInit(void)
 #endif
 }
 
-void MyApp::InitTabView(wxNotebook* notebook, wxWindow* window)
+void MyApp::InitTabView(wxNotebook* notebook, wxPanel* window)
 {
   m_okButton = new wxButton(window, wxID_OK, "Close", wxPoint(-1, -1), wxSize(80, 25));
   m_cancelButton = new wxButton(window, ID_DELETE_PAGE, "Delete page", wxPoint(-1, -1), wxSize(80, 25));
@@ -135,6 +137,8 @@ void MyApp::InitTabView(wxNotebook* notebook, wxWindow* window)
   notebook->SetSelection(2);
 }
 
+#if USE_TABBED_DIALOG
+
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
     EVT_BUTTON(wxID_OK, MyDialog::OnOK)
     EVT_BUTTON(wxID_CANCEL, MyDialog::OnOK)
@@ -177,11 +181,12 @@ void MyDialog::Init(void)
   Centre(wxBOTH);
 }
 
+#else // USE_TABBED_DIALOG
+
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON(wxID_OK, MyFrame::OnOK)
     EVT_BUTTON(ID_DELETE_PAGE, MyFrame::OnDeletePage)
     EVT_BUTTON(ID_ADD_PAGE, MyFrame::OnAddPage)
-    EVT_SIZE(MyFrame::OnSize)
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
 
@@ -221,11 +226,18 @@ void MyFrame::Init(void)
 {
   m_panel = new wxPanel(this, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL|wxCLIP_CHILDREN);
 
+  wxLayoutConstraints* c = new wxLayoutConstraints;
+  c->left.SameAs(this, wxLeft);
+  c->right.SameAs(this, wxRight);
+  c->top.SameAs(this, wxTop);
+  c->bottom.SameAs(this, wxBottom);
+  m_panel->SetConstraints(c);
+
   // Note, omit the wxTAB_STYLE_COLOUR_INTERIOR, so we will guarantee a match
   // with the panel background, and save a bit of time.
   m_notebook = new wxNotebook(m_panel, ID_NOTEBOOK);
 
-  wxLayoutConstraints* c = new wxLayoutConstraints;
+  c = new wxLayoutConstraints;
   c->left.SameAs(m_panel, wxLeft, 4);
   c->right.SameAs(m_panel, wxRight, 4);
   c->top.SameAs(m_panel, wxTop, 4);
@@ -236,18 +248,11 @@ void MyFrame::Init(void)
   wxGetApp().InitTabView(m_notebook, m_panel);
 
   m_panel->SetAutoLayout(TRUE);
+  SetAutoLayout(TRUE);
 
-  m_panel->Layout();
-
-  this->Centre(wxBOTH);
+  Centre(wxBOTH);
 
   Show(TRUE);
-}
-
-void MyFrame::OnSize(wxSizeEvent& event)
-{
-    wxFrame::OnSize(event);
-    m_panel->Layout();
 }
 
 void MyFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
@@ -268,3 +273,5 @@ void MyFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
         SetTitle(title);
     }
 }
+
+#endif // USE_TABBED_DIALOG

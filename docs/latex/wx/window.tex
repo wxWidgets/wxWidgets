@@ -137,15 +137,15 @@ Centres the window.
 \wxheading{Parameters}
 
 \docparam{direction}{Specifies the direction for the centering. May be {\tt wxHORIZONTAL}, {\tt wxVERTICAL}\rtfsp
-or {\tt wxBOTH}. It may also include {\tt wxCENTER\_FRAME} flag if you want to center the window
-on its parent and not on the screen (actually, this flag is added automatically for all controls
-because it makes no sense to center them on the screen)}
+or {\tt wxBOTH}. It may also include {\tt wxCENTRE\_ON\_SCREEN} flag if you
+want to center the window on the entire screen and not on its parent window. 
+
+The flag {\tt wxCENTRE\_FRAME} is obsolete and should not be used any longer.
 
 \wxheading{Remarks}
 
-The actual behaviour depends on the derived window. For a frame or dialog box,
-centring is relative to the whole display. For a panel item, centring is
-relative to the panel.
+If the window is a top level one (i.e. doesn't have a parent), it will be
+centered relative to the screen anyhow.
 
 \wxheading{See also}
 

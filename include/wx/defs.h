@@ -13,21 +13,8 @@
 #define _WX_DEFS_H_
 
 #ifdef __GNUG__
-#pragma interface "defs.h"
+    #pragma interface "defs.h"
 #endif
-
-#include <stddef.h>
-
-#include "wx/setup.h"
-
-#ifdef PACKAGE
-  #undef PACKAGE
-#endif
-#ifdef VERSION
-  #undef VERSION
-#endif
-
-#include "wx/version.h"
 
 // ----------------------------------------------------------------------------
 // compiler and OS identification
@@ -190,6 +177,20 @@
       !defined(__WXMAC__) && !defined(__X__) && !defined(__WXQT__) && !defined(__WXSTUBS__)
     #error "No Target! Use -D[__WXMOTIF__|__WXGTK__|__WXMSW__|__WXMAC__|__WXQT__|__WXPM__|__WXSTUBS__]"
 #endif
+
+// ----------------------------------------------------------------------------
+// wxWindows options
+// ----------------------------------------------------------------------------
+
+#include <stddef.h>
+
+#include "wx/setup.h"
+
+// just in case they were defined in setup.h
+#undef PACKAGE
+#undef VERSION
+
+#include "wx/version.h"
 
 // ============================================================================
 // non portable C++ features

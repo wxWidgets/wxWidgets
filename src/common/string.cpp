@@ -13,12 +13,6 @@
   #pragma implementation "string.h"
 #endif
 
-#ifdef __WXPM__
-#define LINKAGECPP _Optlink
-#else
-#define LINKAGECPP
-#endif
-
 /*
  * About ref counting:
  *  1) all empty strings use g_strEmpty, nRefs = -1 (set in Init())

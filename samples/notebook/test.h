@@ -6,7 +6,7 @@
 // Created:     25/10/98
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include <wx/notebook.h>
@@ -16,7 +16,7 @@ class MyApp: public wxApp
 {
 public:
     bool OnInit(void);
-    void InitTabView(wxNotebook* notebook, wxWindow* window);
+    void InitTabView(wxNotebook* notebook, wxPanel* window);
 
     wxButton*   m_okButton;
     wxButton*   m_cancelButton;
@@ -24,6 +24,8 @@ public:
 };
 
 DECLARE_APP(MyApp)
+
+#if USE_TABBED_DIALOG
 
 class MyDialog: public wxDialog
 {
@@ -38,8 +40,10 @@ public:
 protected:
     wxNotebook* m_notebook;
 
-DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
+
+#else // USE_TABBED_DIALOG
 
 class MyFrame: public wxFrame
 {
@@ -51,7 +55,6 @@ public:
     void OnCloseWindow(wxCloseEvent& event);
     void OnAddPage(wxCommandEvent& event);
     void OnDeletePage(wxCommandEvent& event);
-    void OnSize(wxSizeEvent& event);
     void OnIdle(wxIdleEvent& event);
 
     void Init();
@@ -60,8 +63,10 @@ protected:
     wxNotebook*     m_notebook;
     wxPanel*        m_panel; // Panel containing notebook and OK/Cancel/Help
 
-DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
+
+#endif // USE_TABBED_DIALOG
 
 // File ids
 #define TEST_ABOUT          2
