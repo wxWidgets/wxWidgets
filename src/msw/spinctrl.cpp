@@ -372,7 +372,8 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
     // set up fonts and colours  (This is nomally done in MSWCreateControl)
     InheritAttributes();
-    SetFont(GetDefaultAttributes().font);
+    if (!m_hasFont)
+        SetFont(GetDefaultAttributes().font);
 
     // set the size of the text window - can do it only now, because we
     // couldn't call DoGetBestSize() before as font wasn't set

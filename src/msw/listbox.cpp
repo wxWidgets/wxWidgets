@@ -773,7 +773,7 @@ bool wxListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
 
     wxDC dc;
     dc.SetHDC((WXHDC)hdc);
-    dc.SetFont(wxSystemSettings::GetFont(wxSYS_ANSI_VAR_FONT));
+    dc.SetFont(GetFont());
 
     pStruct->itemHeight = dc.GetCharHeight() + 2*OWNER_DRAWN_LISTBOX_EXTRA_SPACE;
     pStruct->itemWidth  = dc.GetCharWidth();

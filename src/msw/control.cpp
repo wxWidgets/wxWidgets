@@ -168,7 +168,8 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
 
     // set up fonts and colours
     InheritAttributes();
-    SetFont(GetDefaultAttributes().font);
+    if (!m_hasFont)
+        SetFont(GetDefaultAttributes().font);
 
     // set the size now if no initial size specified
     SetInitialBestSize(size);
