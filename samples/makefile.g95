@@ -15,6 +15,7 @@
 WXDIR = ..
 
 THISDIR=$(WXDIR)/samples
+MAKEFILE=makefile.g95
 
 # Mingw make may not have a shell to use, so can't use a loop here. Sigh.
 # Please add new sample directories alphabetically to make it easier to
@@ -46,7 +47,6 @@ all clean:
 	-$(MAKE) -C mdi -f $(MAKEFILE) $@
 	-$(MAKE) -C memcheck -f $(MAKEFILE) $@
 	-$(MAKE) -C menu -f $(MAKEFILE) $@
-	-$(MAKE) -C mfc -f $(MAKEFILE) $@
 	-$(MAKE) -C minifram -f $(MAKEFILE) $@
 	-$(MAKE) -C minimal -f $(MAKEFILE) $@
 	-$(MAKE) -C nativdlg -f $(MAKEFILE) $@
@@ -77,4 +77,9 @@ all clean:
 	-$(MAKE) -C validate -f $(MAKEFILE) $@
 	-$(MAKE) -C wizard -f $(MAKEFILE) $@
 	-$(MAKE) -C sockets -f $(MAKEFILE) $@
+
+# MFC still not available for mingw32
+#
+#	-$(MAKE) -C mfc -f $(MAKEFILE) $@
+
 
