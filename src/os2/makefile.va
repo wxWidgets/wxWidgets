@@ -101,7 +101,10 @@ GENERICOBJS= \
   ..\generic\$D\choicdgg.obj \
   ..\generic\$D\colrdlgg.obj \
   ..\generic\$D\dcpsg.obj \
+  ..\generic\$D\dragimgg.obj \
+  ..\generic\$D\fontdlgg.obj \
   ..\generic\$D\grid.obj \
+  ..\generic\$D\gridsel.obj \
   ..\generic\$D\helpext.obj \
   ..\generic\$D\helphtml.obj \
   ..\generic\$D\helpwxht.obj \
@@ -124,9 +127,12 @@ GENERICOBJS= \
   ..\generic\$D\splitter.obj \
   ..\generic\$D\statusbr.obj \
   ..\generic\$D\tabg.obj \
+  ..\generic\$D\tbarsmpl.obj \
   ..\generic\$D\textdlgg.obj \
   ..\generic\$D\tipdlg.obj \
-  ..\generic\$D\treectrl.obj
+  ..\generic\$D\treectrl.obj \
+  ..\generic\$D\treelay.obj \
+  ..\generic\$D\wizard.obj
 
 #  ..\generic\$D\gridg.obj \
 #  ..\generic\$D\notebook.obj \
@@ -138,7 +144,10 @@ GENLIBOBJS= \
   choicdgg.obj \
   colrdlgg.obj \
   dcpsg.obj \
+  dragimgg.obj \
+  fontdlgg.obj \
   grid.obj \
+  gridsel.obj \
   helpext.obj \
   helphtml.obj \
   helpwxht.obj \
@@ -161,30 +170,37 @@ GENLIBOBJS= \
   splitter.obj \
   statusbr.obj \
   tabg.obj \
+  tbarsmpl.obj \
   textdlgg.obj \
   tipdlg.obj \
-  treectrl.obj
+  treectrl.obj \
+  treelay.obj \
+  wizard.obj
 
 # These are generic things that don't need to be compiled on PM,
 # but sometimes it's useful to do so for testing purposes.
 NONESSENTIALOBJS= \
-  ..\generic\$D\msgdlgg.obj \
-  ..\generic\$D\fontdlgg.obj
+  ..\generic\$D\msgdlgg.obj
 
 COMMONOBJS = \
   ..\common\$D\appcmn.obj \
   ..\common\$D\choiccmn.obj \
   ..\common\$D\clipcmn.obj \
+  ..\common\$D\cmdline.obj \
   ..\common\$D\cmndata.obj \
   ..\common\$D\config.obj \
   ..\common\$D\ctrlcmn.obj \
   ..\common\$D\ctrlsub.obj \
   ..\common\$D\datetime.obj \
   ..\common\$D\datstrm.obj \
+!if "$(WXMAKINGDLL)" != "1"
+# don't have an ODBC database
   ..\common\$D\db.obj \
   ..\common\$D\dbtable.obj \
+!endif
   ..\common\$D\dcbase.obj \
   ..\common\$D\dlgcmn.obj \
+  ..\common\$D\dndcmn.obj \
   ..\common\$D\dobjcmn.obj \
   ..\common\$D\docmdi.obj \
   ..\common\$D\docview.obj \
@@ -202,9 +218,11 @@ COMMONOBJS = \
   ..\common\$D\fontmap.obj \
   ..\common\$D\framecmn.obj \
   ..\common\$D\fs_inet.obj \
+  ..\common\$D\fs_mem.obj \
   ..\common\$D\fs_zip.obj \
   ..\common\$D\ftp.obj \
   ..\common\$D\gdicmn.obj \
+  ..\common\$D\geometry.obj \
   ..\common\$D\gifdecod.obj \
   ..\common\$D\hash.obj \
   ..\common\$D\helpbase.obj \
@@ -217,6 +235,7 @@ COMMONOBJS = \
   ..\common\$D\imagpcx.obj \
   ..\common\$D\imagpng.obj \
   ..\common\$D\imagpnm.obj \
+  ..\common\$D\imagtiff.obj \
   ..\common\$D\intl.obj \
   ..\common\$D\ipcbase.obj \
   ..\common\$D\layout.obj \
@@ -232,6 +251,10 @@ COMMONOBJS = \
   ..\common\$D\mstream.obj \
   ..\common\$D\object.obj \
   ..\common\$D\objstrm.obj \
+!if "$(WXMAKINGDLL)" != "1"
+# don't have an ODBC database
+  ..\common\$D\odbc.obj \
+!endif
   ..\common\$D\paper.obj \
   ..\common\$D\prntbase.obj \
   ..\common\$D\process.obj \
@@ -272,6 +295,7 @@ COMLIBOBJS1 = \
   appcmn.obj \
   choiccmn.obj \
   clipcmn.obj \
+  cmdline.obj \
   cmndata.obj \
   config.obj \
   ctrlcmn.obj \
@@ -281,6 +305,7 @@ COMLIBOBJS1 = \
   db.obj \
   dbtable.obj \
   dcbase.obj \
+  dndcmn.obj \
   dlgcmn.obj \
   dobjcmn.obj \
   docmdi.obj \
@@ -299,23 +324,26 @@ COMLIBOBJS1 = \
   fontmap.obj \
   framecmn.obj \
   fs_inet.obj \
+  fs_mem.obj \
   fs_zip.obj \
   ftp.obj \
   gdicmn.obj \
+  geometry.obj \
   gifdecod.obj \
   hash.obj \
   helpbase.obj \
   http.obj \
   imagall.obj \
   imagbmp.obj \
-  image.obj \
+  image.obj
+
+COMLIBOBJS2 = \
   imaggif.obj \
   imagjpeg.obj \
   imagpcx.obj \
-  imagpng.obj
-
-COMLIBOBJS2 = \
+  imagpng.obj \
   imagpnm.obj \
+  imagtiff.obj \
   intl.obj \
   ipcbase.obj \
   layout.obj \
@@ -331,6 +359,7 @@ COMLIBOBJS2 = \
   mstream.obj \
   object.obj \
   objstrm.obj \
+  odbc.obj \
   paper.obj \
   prntbase.obj \
   process.obj \
@@ -350,15 +379,15 @@ COMLIBOBJS2 = \
   textcmn.obj \
   textfile.obj \
   timercmn.obj \
-  tokenzr.obj \
+  tokenzr.obj
+
+COMLIBOBJS3 = \
   txtstrm.obj \
   unzip.obj \
   url.obj \
   utilscmn.obj \
   valgen.obj \
-  validate.obj
-
-COMLIBOBJS3 = \
+  validate.obj \
   valtext.obj \
   variant.obj \
   wfstream.obj \
@@ -539,12 +568,14 @@ HTMLOBJS = \
   ..\html\$D\htmltag.obj \
   ..\html\$D\htmlwin.obj \
   ..\html\$D\htmprint.obj \
+  ..\html\$D\m_dflist.obj \
   ..\html\$D\m_fonts.obj \
   ..\html\$D\m_hline.obj \
   ..\html\$D\m_image.obj \
   ..\html\$D\m_layout.obj \
   ..\html\$D\m_links.obj \
   ..\html\$D\m_list.obj \
+  ..\html\$D\m_meta.obj \
   ..\html\$D\m_pre.obj \
   ..\html\$D\m_tables.obj \
   ..\html\$D\winpars.obj
@@ -559,12 +590,14 @@ HTMLLIBOBJS = \
   htmltag.obj \
   htmlwin.obj \
   htmprint.obj \
+  m_dflist.obj \
   m_fonts.obj \
   m_hline.obj \
   m_image.obj \
   m_layout.obj \
   m_links.obj \
   m_list.obj \
+  m_meta.obj \
   m_pre.obj \
   m_tables.obj \
   winpars.obj
@@ -585,14 +618,13 @@ $D\dummy.obj: dummy.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(WXDIR)\include\wx\os2\
         icc $(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummy.obj /Tp dummy.cpp
 
 $D\dummydll.obj: dummydll.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(WXDIR)\include\wx\os2\setup.h
-        icc @<<
-$(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummydll.obj /c /Tp dummydll.cpp
-<<
+        icc $(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummydll.obj /Tp dummydll.cpp
 
 $(COMLIBOBJS1):
   copy ..\common\$D\appcmn.obj
   copy ..\common\$D\choiccmn.obj
   copy ..\common\$D\clipcmn.obj
+  copy ..\common\$D\cmdline.obj
   copy ..\common\$D\cmndata.obj
   copy ..\common\$D\config.obj
   copy ..\common\$D\ctrlcmn.obj
@@ -603,6 +635,7 @@ $(COMLIBOBJS1):
   copy ..\common\$D\dbtable.obj
   copy ..\common\$D\dcbase.obj
   copy ..\common\$D\dlgcmn.obj
+  copy ..\common\$D\dndcmn.obj
   copy ..\common\$D\dobjcmn.obj
   copy ..\common\$D\docmdi.obj
   copy ..\common\$D\docview.obj
@@ -620,9 +653,11 @@ $(COMLIBOBJS1):
   copy ..\common\$D\fontmap.obj
   copy ..\common\$D\framecmn.obj
   copy ..\common\$D\fs_inet.obj
+  copy ..\common\$D\fs_mem.obj
   copy ..\common\$D\fs_zip.obj
   copy ..\common\$D\ftp.obj
   copy ..\common\$D\gdicmn.obj
+  copy ..\common\$D\geometry.obj
   copy ..\common\$D\gifdecod.obj
   copy ..\common\$D\hash.obj
   copy ..\common\$D\helpbase.obj
@@ -630,13 +665,14 @@ $(COMLIBOBJS1):
   copy ..\common\$D\imagall.obj
   copy ..\common\$D\imagbmp.obj
   copy ..\common\$D\image.obj
+
+$(COMLIBOBJS2):
   copy ..\common\$D\imaggif.obj
   copy ..\common\$D\imagjpeg.obj
   copy ..\common\$D\imagpcx.obj
   copy ..\common\$D\imagpng.obj
-
-$(COMLIBOBJS2):
   copy ..\common\$D\imagpnm.obj
+  copy ..\common\$D\imagtiff.obj
   copy ..\common\$D\intl.obj
   copy ..\common\$D\ipcbase.obj
   copy ..\common\$D\layout.obj
@@ -652,6 +688,7 @@ $(COMLIBOBJS2):
   copy ..\common\$D\mstream.obj
   copy ..\common\$D\object.obj
   copy ..\common\$D\objstrm.obj
+  copy ..\common\$D\odbc.obj
   copy ..\common\$D\paper.obj
   copy ..\common\$D\prntbase.obj
   copy ..\common\$D\process.obj
@@ -672,14 +709,14 @@ $(COMLIBOBJS2):
   copy ..\common\$D\textfile.obj
   copy ..\common\$D\timercmn.obj
   copy ..\common\$D\tokenzr.obj
+
+$(COMLIBOBJS3):
   copy ..\common\$D\txtstrm.obj
   copy ..\common\$D\unzip.obj
   copy ..\common\$D\url.obj
   copy ..\common\$D\utilscmn.obj
   copy ..\common\$D\valgen.obj
   copy ..\common\$D\validate.obj
-
-$(COMLIBOBJS3):
   copy ..\common\$D\valtext.obj
   copy ..\common\$D\variant.obj
   copy ..\common\$D\wfstream.obj
@@ -696,8 +733,11 @@ $(GENLIBOBJS):
   copy ..\generic\$D\caret.obj
   copy ..\generic\$D\choicdgg.obj
   copy ..\generic\$D\colrdlgg.obj
+  copy ..\generic\$D\dragimgg.obj
   copy ..\generic\$D\dcpsg.obj
+  copy ..\generic\$D\fontdlgg.obj
   copy ..\generic\$D\grid.obj
+  copy ..\generic\$D\gridsel.obj
   copy ..\generic\$D\helpext.obj
   copy ..\generic\$D\helphtml.obj
   copy ..\generic\$D\helpwxht.obj
@@ -720,9 +760,12 @@ $(GENLIBOBJS):
   copy ..\generic\$D\splitter.obj
   copy ..\generic\$D\statusbr.obj
   copy ..\generic\$D\tabg.obj
+  copy ..\generic\$D\tbarsmpl.obj
   copy ..\generic\$D\textdlgg.obj
   copy ..\generic\$D\tipdlg.obj
   copy ..\generic\$D\treectrl.obj
+  copy ..\generic\$D\treelay.obj
+  copy ..\generic\$D\wizard.obj
 
 $(HTMLLIBOBJS):
   copy ..\html\$D\helpctrl.obj
@@ -734,12 +777,14 @@ $(HTMLLIBOBJS):
   copy ..\html\$D\htmltag.obj
   copy ..\html\$D\htmlwin.obj
   copy ..\html\$D\htmprint.obj
+  copy ..\html\$D\m_dflist.obj
   copy ..\html\$D\m_fonts.obj
   copy ..\html\$D\m_hline.obj
   copy ..\html\$D\m_image.obj
   copy ..\html\$D\m_layout.obj
   copy ..\html\$D\m_links.obj
   copy ..\html\$D\m_list.obj
+  copy ..\html\$D\m_meta.obj
   copy ..\html\$D\m_pre.obj
   copy ..\html\$D\m_tables.obj
   copy ..\html\$D\winpars.obj
@@ -949,13 +994,15 @@ $(WXDIR)\lib\wx214.lib: $(OBJECTS)
     implib $(WXDIR)\lib\wx214.lib $(WXDIR)\lib\wx214.def
 
 # Update the dynamic link library
-$(WXDIR)\lib\wx214.dll: $(OBJECTS) $(WXDIR)\lib\wx214.lib
+$(WXDIR)\lib\wx214.dll: $(OBJECTS)
     icc @<<
     /B" $(LINKFLAGS)" /Fe$@
     $(LIBS)
+    $(DUMMYOBJ)
     $(OBJECTS)
     $(WXDIR)\lib\wx214.def
 <<
+    implib $(WXDIR)\lib\wx214.lib $(WXDIR)\lib\wx214.def
 
 !endif
 
@@ -1037,11 +1084,7 @@ clean_tiff:
     nmake -f makefile.va clean
     cd $(WXDIR)\src\os2
 
-clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_jpeg clean_xpm clean_tiff
-        del      $(LIBTARGET)
-!if "$(WXMAKINGDLL)" == "1"
-        erase /N ..\..\lib\wx214.lib
-!endif
+clean:  $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_jpeg clean_xpm clean_tiff
         erase /N $(GENDIR)\$D\*.obj
         erase /N $(COMMDIR)\$D\*.obj
         erase /N $(HTMLDIR)\$D\*.obj
@@ -1053,6 +1096,10 @@ clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_jpeg clean_xpm clean_ti
         rd      ..\common\$D
         rd      ..\html\$D
         rd      ..\os2\$D
+        del      $(LIBTARGET)
+!if "$(WXMAKINGDLL)" == "1"
+        erase /N ..\..\lib\wx214.lib
+!endif
 
 cleanall: clean
 

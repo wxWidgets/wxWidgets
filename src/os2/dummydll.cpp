@@ -17,6 +17,9 @@
 
 #include "wx/wxprec.h"
 
+#define INCL_OS2
+#include <os2.h>
+
 #if defined(__VISAGECPP__)
     char wxDummyChar=0;
 #endif

@@ -118,9 +118,6 @@ GSocket *GSocket_new()
                                 /* 10 minutes * 60 sec * 1000 millisec */
   socket->m_establishing        = FALSE;
 
-  /* We initialize the GUI specific entries here */
-  _GSocket_GUI_Init(socket);
-
   return socket;
 }
 
@@ -131,9 +128,6 @@ void GSocket_destroy(GSocket *socket)
   /* First, we check that the socket is really shutdowned */
   if (socket->m_fd != -1)
     GSocket_Shutdown(socket);
-
-  /* We destroy GUI specific variables */
-  _GSocket_GUI_Destroy(socket);
 
   /* We destroy private addresses */
   if (socket->m_local)
@@ -165,7 +159,7 @@ void GSocket_Shutdown(GSocket *socket)
     socket->m_cbacks[evt] = NULL;
 
   socket->m_detected = 0;
-  _GSocket_Disable_Events(socket);
+  (socket);
 }
 
 /* Address handling */
@@ -296,7 +290,6 @@ GSocketError GSocket_SetServer(GSocket *sck)
   }
 
   ioctl(sck->m_fd, FIONBIO, (char*)&arg, sizeof(int));
-  _GSocket_Enable_Events(sck);
 
   /* Bind the socket to the LOCAL address */
   if (bind(sck->m_fd, sck->m_local->m_addr, sck->m_local->m_len) < 0) {
@@ -372,8 +365,6 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
   connection->m_oriented = TRUE;
 
   ioctl(connection->m_fd, FIONBIO, (char*)&arg, sizeof(int));
-  _GSocket_Enable_Events(connection);
-
   return connection;
 }
 
@@ -408,7 +399,6 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
   }
 
   ioctl(sck->m_fd, FIONBIO, (char*)&arg, sizeof(int));
-  _GSocket_Enable_Events(sck);
 
   /* Bind it to the LOCAL address */
   if (bind(sck->m_fd, sck->m_local->m_addr, sck->m_local->m_len) < 0) {
@@ -474,7 +464,6 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
   }
 
   ioctl(sck->m_fd, FIONBIO, (char*)&arg, sizeof(int));
-  _GSocket_Enable_Events(sck);
 
   /* Connect it to the PEER address */
   ret = connect(sck->m_fd, sck->m_peer->m_addr, sck->m_peer->m_len);
@@ -732,13 +721,12 @@ void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags flags)
 void _GSocket_Enable(GSocket *socket, GSocketEvent event)
 {
   socket->m_detected &= ~(1 << event);
-  _GSocket_Install_Callback(socket, event);
+  (socket, event);
 }
 
 void _GSocket_Disable(GSocket *socket, GSocketEvent event)
 {
   socket->m_detected |= (1 << event);
-  _GSocket_Uninstall_Callback(socket, event);
 }
 
 /* _GSocket_Input_Timeout:

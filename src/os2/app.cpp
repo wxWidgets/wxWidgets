@@ -321,13 +321,19 @@ void wxApp::CleanUp()
     wxLog::DontCreateOnDemand();
 
     // this will flush the old messages if any
+#if (!(defined(__VISAGECPP__) && __IBMCPP__ < 400))
+    // another VA 3.0 memory problem here
     delete wxLog::SetActiveTarget(new wxLogStderr);
+#endif
 #endif // wxUSE_LOG
 
     // One last chance for pending objects to be cleaned up
     wxTheApp->DeletePendingObjects();
 
+#if (!(defined(__VISAGECPP__) && __IBMCPP__ < 400))
+    // another VA 3.0 memory problem here
     wxModule::CleanUpModules();
+#endif
 
 #if wxUSE_WX_RESOURCES
     wxCleanUpResourceSystem();
@@ -339,7 +345,10 @@ void wxApp::CleanUp()
     // by deleting the bitmap list before g_globalCursor goes out of scope
     // (double deletion of the cursor).
     wxSetCursor(wxNullCursor);
+#if (!(defined(__VISAGECPP__) && __IBMCPP__ < 400))
+    // another VA 3.0 memory problem here
     delete g_globalCursor;
+#endif
     g_globalCursor = NULL;
 
     wxDeleteStockObjects();
@@ -430,17 +439,14 @@ int wxEntry(
     //
     if (!wxTheApp)
     {
-        wxCHECK_MSG( wxApp::GetInitializerFunction()
-                    ,-1
-                    ,wxT("wxWindows error: No initializer - use IMPLEMENT_APP macro.\n")
-                   );
-
-        wxAppInitializerFunction    fnAppIni = wxApp::GetInitializerFunction();
-        wxObject*                   pTest_app = fnAppIni();
-
-        wxTheApp = (wxApp*)pTest_app;
+        // The app may have declared a global application object, but we recommend
+        // the IMPLEMENT_APP macro is used instead, which sets an initializer
+        // function for delayed, dynamic app object construction.
+        wxCHECK_MSG( wxApp::GetInitializerFunction(), 0,
+                     wxT("No initializer - use IMPLEMENT_APP macro.") );
+        wxTheApp = (*wxApp::GetInitializerFunction()) ();
     }
-    wxCHECK_MSG( wxTheApp, -1, wxT("wxWindows error: no application object") );
+    wxCHECK_MSG( wxTheApp, 0, wxT("You have to define an instance of wxApp!") );
     wxTheApp->argc = argc;
 
 #if wxUSE_UNICODE

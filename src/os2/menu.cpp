@@ -278,12 +278,17 @@ bool wxMenu::DoInsertOrAppend(
     //
     if (nPos == (size_t)-1)
     {
-        HWND                        hSubMenu = ::WinCreateWindow( GetWinHwnd(m_menuBar) // parent
+        HWND                        hMenuBar;
+        if (m_menuBar)
+            hMenuBar = GetWinHwnd(m_menuBar);
+        else
+            hMenuBar = HWND_DESKTOP;
+        HWND                        hSubMenu = ::WinCreateWindow( hMenuBar              // parent
                                                                  ,WC_MENU               // type
                                                                  ,"Menu"                // a generic name
                                                                  ,0L                    // no style flag
                                                                  ,0L,0L,0L,0L           // no position
-                                                                 ,GetWinHwnd(m_menuBar) // no owner
+                                                                 ,hMenuBar              // no owner
                                                                  ,HWND_TOP              // always on top
                                                                  ,0L                    // no ID needed for dynamic creation
                                                                  ,NULL                  // no control data

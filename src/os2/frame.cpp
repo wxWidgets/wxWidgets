@@ -339,30 +339,37 @@ void wxFrame::DoGetPosition(
 // ----------------------------------------------------------------------------
 
 void wxFrame::DoShowWindow(
-  int                               nShowCmd
+  int                               bShowCmd
 )
 {
-    ::WinShowWindow(GetHwnd(), nShowCmd);
-    m_bIconized = nShowCmd == SWP_MINIMIZE;
+    HWND                            hClient;
+
+    hClient = ::WinWindowFromID(GetHwnd(), FID_CLIENT);
+    ::WinShowWindow(GetHwnd(), (BOOL)bShowCmd);
+    ::WinShowWindow(hClient, (BOOL)bShowCmd);
 } // end of wxFrame::DoShowWindow
 
 bool wxFrame::Show(
   bool                              bShow
 )
 {
-    DoShowWindow(bShow ? SWP_SHOW : SWP_HIDE);
+    SWP                             vSwp;
+
+    DoShowWindow((int)bShow);
 
     if (bShow)
     {
         wxActivateEvent             vEvent(wxEVT_ACTIVATE, TRUE, m_windowId);
 
+        ::WinQueryWindowPos(GetHwnd(), &vSwp);
+        m_bIconized = vSwp & SWP_MINIMIZE;
         ::WinSetWindowPos( (HWND) GetHWND()
                           ,HWND_TOP
-                          ,0
-                          ,0
-                          ,0
-                          ,0
-                          ,SWP_ZORDER
+                          ,vSwp.x
+                          ,vSwp.y
+                          ,vSwp.cx
+                          ,vSwp.cy
+                          ,SWP_ZORDER | SWP_ACTIVATE | SWP_SHOW | SWP_MOVE
                          );
         vEvent.SetEventObject(this);
         GetEventHandler()->ProcessEvent(vEvent);
@@ -376,14 +383,16 @@ bool wxFrame::Show(
         {
             HWND                    hWndParent = GetHwndOf(GetParent());
 
+            ::WinQueryWindowPos(hWndParent, &vSwp);
+            m_bIconized = vSwp & SWP_MINIMIZE;
             if (hWndParent)
                 ::WinSetWindowPos( hWndParent
                                   ,HWND_TOP
-                                  ,0
-                                  ,0
-                                  ,0
-                                  ,0
-                                  ,SWP_ZORDER
+                                  ,vSwp.x
+                                  ,vSwp.y
+                                  ,vSwp.cx
+                                  ,vSwp.cy
+                                  ,SWP_ZORDER | SWP_ACTIVATE | SWP_SHOW | SWP_MOVE
                                  );
         }
     }
@@ -438,11 +447,11 @@ void wxFrame::SetIcon(
 {
     wxFrameBase::SetIcon(rIcon);
 
-    if (m_icon.Ok())
+    if ((m_icon.GetHICON()) != NULLHANDLE)
     {
         ::WinSendMsg( GetHwnd()
                      ,WM_SETICON
-                     ,(MPARAM)((HICON)m_icon.GetHICON())
+                     ,(MPARAM)((HPOINTER)m_icon.GetHICON())
                      ,NULL
                     );
         ::WinSendMsg( GetHwnd()
