@@ -25,8 +25,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
 // Create a DC representing the whole screen
 wxScreenDC::wxScreenDC()
 {
-#if wxMAC_USE_CORE_GRAPHICS
-#else
     m_macPort = CreateNewPort() ;
     GrafPtr port ;
     GetPort( &port ) ;
@@ -37,28 +35,35 @@ wxScreenDC::wxScreenDC()
     m_macLocalOrigin.x = -pt.h ;
     m_macLocalOrigin.y = -pt.v ;
 
-     m_ok = TRUE ;
     BitMap screenBits;
     GetQDGlobalsScreenBits( &screenBits );
-     m_minX = screenBits.bounds.left ;
+    m_minX = screenBits.bounds.left ;
 
-     SInt16 height ;
-     GetThemeMenuBarHeight( &height ) ;
-     m_minY = screenBits.bounds.top + height ;
+    SInt16 height ;
+    GetThemeMenuBarHeight( &height ) ;
+    m_minY = screenBits.bounds.top + height ;
 
     m_maxX = screenBits.bounds.right  ;
     m_maxY = screenBits.bounds.bottom ;
+
+#if wxMAC_USE_CORE_GRAPHICS
+    m_graphicContext = new wxMacCGContext( port ) ;    
+#else
     MacSetRectRgn( (RgnHandle) m_macBoundaryClipRgn , m_minX , m_minY , m_maxX , m_maxY ) ;
     OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_macLocalOrigin.x , m_macLocalOrigin.y ) ;
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
 #endif
+    m_ok = TRUE ;    
 }
 
 wxScreenDC::~wxScreenDC()
 {   
 #if wxMAC_USE_CORE_GRAPHICS
-#else
-    DisposePort( (CGrafPtr) m_macPort ) ;
+    delete m_graphicContext ;
+    m_graphicContext = NULL ;
 #endif
+
+    if ( m_macPort )
+        DisposePort( (CGrafPtr) m_macPort ) ;
 }
 
