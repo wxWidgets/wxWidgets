@@ -765,7 +765,7 @@ KeySym wxCharCodeWXToX(int id)
 bool wxGetKeyState(wxKeyCode key)
 {
 #if defined(__WXX11__)
-    Display *pDisplay = wxApp::GetDisplay();
+    Display *pDisplay = (Display*) wxApp::GetDisplay();
 #elif defined(__WXGTK__)
     Display *pDisplay = GDK_DISPLAY();
 #elif defined(__WXMOTIF__)
