@@ -25,11 +25,6 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxDC;
-class wxPaintDC;
-class wxMemoryDC;
-class wxToolBarGTK;
-
 class wxMask;
 class wxBitmap;
 
@@ -49,13 +44,8 @@ class wxMask: public wxObject
     wxMask( const wxBitmap& bitmap );
     ~wxMask(void);
 
-  private:
+  public:
   
-    friend wxBitmap;
-    friend wxDC;
-    friend wxPaintDC;
-    friend wxToolBarGTK;
-    
     GdkBitmap *GetBitmap(void) const;
     
   protected:
@@ -103,12 +93,7 @@ class wxBitmap: public wxObject
     wxPalette *GetColourMap(void) const
       { return GetPalette(); };
 
-  private:
-  
-    friend wxDC;
-    friend wxPaintDC;
-    friend wxMemoryDC;
-    friend wxToolBarGTK;
+  public:
 
     GdkPixmap *GetPixmap(void) const;
     

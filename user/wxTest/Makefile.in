@@ -10,11 +10,11 @@ RULE=bin
 BIN_TARGET=wxTest
 # define library sources
 BIN_SRC=\
-wxTest.cpp
+wxTest.cpp stream.cpp
 
 #define library objects
 BIN_OBJ=\
-wxTest.o
+wxTest.o stream.o
 
 # additional things needed to link
 BIN_LINK=

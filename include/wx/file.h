@@ -21,7 +21,8 @@
 // simple types
 // ----------------------------------------------------------------------------
 
-#include  <wx/filefn.h>
+#include  "wx/string.h"
+#include  "wx/filefn.h"
 
 // define off_t
 #include  <sys/types.h>

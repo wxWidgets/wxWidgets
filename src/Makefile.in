@@ -58,6 +58,7 @@ LIB_CPP_SRC=\
 \
  gtk/app.cpp \
  gtk/bitmap.cpp \
+ gtk/bmpbuttn.cpp \
  gtk/brush.cpp \
  gtk/button.cpp \
  gtk/checkbox.cpp \
