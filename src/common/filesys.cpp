@@ -25,6 +25,7 @@
 #include "wx/filesys.h"
 #include "wx/mimetype.h"
 #include "wx/filename.h"
+#include "wx/log.h"
 
 
 
@@ -127,13 +128,11 @@ wxString wxFileSystemHandler::GetRightLocation(const wxString& location) const
 {
     int i, l = location.Length();
     int l2 = l + 1;
-//    for (i = l-1; (i >= 0) && ((location[i] != wxT(':')) || (i == 1) || (location[i-2] == wxT(':'))); i--)
-    for (i = l-1;
-        (i >= 0) &&
-            (((location[i] != wxT(':')) || ((i >= 2) && (location[i-2] == wxT('/')))) || // Ignore e.g. /c:/ component
-            (i == 1) ||
-            (location[i-2] == wxT(':'))
-            ); i--)
+
+    for (i = l-1; 
+         (i >= 0) && 
+         ((location[i] != wxT(':')) || (i == 1) || (location[i-2] == wxT(':')));
+         i--)
     {
         if (location[i] == wxT('#')) l2 = i + 1;
     }
@@ -181,25 +180,24 @@ bool wxLocalFSHandler::CanOpen(const wxString& location)
 wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
 {
     // location has Unix path separators
-    wxString right = ms_root + GetRightLocation(location);
+    wxString right = GetRightLocation(location);
     wxFileName fn = wxFileSystem::URLToFileName(right);
+    wxString fullpath = ms_root + fn.GetFullPath();
 
-    if (!wxFileExists(fn.GetFullPath()))
+    if (!wxFileExists(fullpath))
         return (wxFSFile*) NULL;
 
-    return new wxFSFile(new wxFFileInputStream(fn.GetFullPath()),
+    return new wxFSFile(new wxFFileInputStream(fullpath),
                         right,
                         GetMimeTypeFromExt(location),
                         GetAnchor(location),
-                        wxDateTime(wxFileModificationTime(fn.GetFullPath())));
-
+                        wxDateTime(wxFileModificationTime(fullpath)));
 }
 
 wxString wxLocalFSHandler::FindFirst(const wxString& spec, int flags)
 {
-    wxString right = ms_root + GetRightLocation(spec);
-    return wxFindFirstFile(wxFileSystem::URLToFileName(right).GetFullPath(),
-                           flags);
+    wxFileName fn = wxFileSystem::URLToFileName(GetRightLocation(spec));
+    return wxFindFirstFile(ms_root + fn.GetFullPath(), flags);
 }
 
 wxString wxLocalFSHandler::FindNext()
@@ -439,6 +437,13 @@ wxFileName wxFileSystem::URLToFileName(const wxString& url)
 	{
 		path = path.Mid(7);
 	}
+    else if ( path.Find(wxT("file:")) == 0 )
+	{
+		path = path.Mid(5);
+	}
+    
+    path.Replace(wxT("%25"), wxT("%"));
+    path.Replace(wxT("%3A"), wxT(":"));
 
 #ifdef __WXMSW__
 	// file urls either start with a forward slash (local harddisk),
@@ -481,7 +486,9 @@ wxString wxFileSystem::FileNameToURL(const wxFileName& filename)
 #endif
 
     url.Replace(g_nativePathString, g_unixPathString);
-    url = wxT("file://") + url;
+    url.Replace(wxT("%"), wxT("%25"));
+    url.Replace(wxT(":"), wxT("%3A"));
+    url = wxT("file:") + url;
     return url;
 }
 
