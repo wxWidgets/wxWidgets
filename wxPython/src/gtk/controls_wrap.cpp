@@ -13660,6 +13660,70 @@ static PyObject *_wrap_ToolBarBase_DoInsertTool(PyObject *self, PyObject *args, 
 }
 
 
+static PyObject *_wrap_ToolBarBase_AddToolItem(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxToolBarBase *arg1 = (wxToolBarBase *) 0 ;
+    wxToolBarToolBase *arg2 = (wxToolBarToolBase *) 0 ;
+    wxToolBarToolBase *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "tool", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ToolBarBase_AddToolItem",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxToolBarBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxToolBarToolBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxToolBarToolBase *)(arg1)->AddTool(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = wxPyMake_wxObject(result); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ToolBarBase_InsertToolItem(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxToolBarBase *arg1 = (wxToolBarBase *) 0 ;
+    size_t arg2 ;
+    wxToolBarToolBase *arg3 = (wxToolBarToolBase *) 0 ;
+    wxToolBarToolBase *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "pos",(char *) "tool", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:ToolBarBase_InsertToolItem",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxToolBarBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    arg2 = (size_t) PyInt_AsLong(obj1);
+    if (PyErr_Occurred()) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj2,(void **) &arg3, SWIGTYPE_p_wxToolBarToolBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxToolBarToolBase *)(arg1)->InsertTool(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = wxPyMake_wxObject(result); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_ToolBarBase_AddControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxToolBarBase *arg1 = (wxToolBarBase *) 0 ;
@@ -14728,6 +14792,34 @@ static PyObject *_wrap_ToolBarBase_FindToolForPosition(PyObject *self, PyObject 
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxToolBarToolBase *)(arg1)->FindToolForPosition(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = wxPyMake_wxObject(result); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ToolBarBase_FindById(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxToolBarBase *arg1 = (wxToolBarBase *) 0 ;
+    int arg2 ;
+    wxToolBarToolBase *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "toolid", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:ToolBarBase_FindById",kwnames,&obj0,&arg2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxToolBarBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxToolBarToolBase *)((wxToolBarBase const *)arg1)->FindById(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -26215,6 +26307,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ToolBarToolBase_swigregister", ToolBarToolBase_swigregister, METH_VARARGS },
 	 { (char *)"ToolBarBase_DoAddTool", (PyCFunction) _wrap_ToolBarBase_DoAddTool, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ToolBarBase_DoInsertTool", (PyCFunction) _wrap_ToolBarBase_DoInsertTool, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ToolBarBase_AddToolItem", (PyCFunction) _wrap_ToolBarBase_AddToolItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ToolBarBase_InsertToolItem", (PyCFunction) _wrap_ToolBarBase_InsertToolItem, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ToolBarBase_AddControl", (PyCFunction) _wrap_ToolBarBase_AddControl, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ToolBarBase_InsertControl", (PyCFunction) _wrap_ToolBarBase_InsertControl, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ToolBarBase_FindControl", (PyCFunction) _wrap_ToolBarBase_FindControl, METH_VARARGS | METH_KEYWORDS },
@@ -26253,6 +26347,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ToolBarBase_GetToolBitmapSize", (PyCFunction) _wrap_ToolBarBase_GetToolBitmapSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ToolBarBase_GetToolSize", (PyCFunction) _wrap_ToolBarBase_GetToolSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ToolBarBase_FindToolForPosition", (PyCFunction) _wrap_ToolBarBase_FindToolForPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ToolBarBase_FindById", (PyCFunction) _wrap_ToolBarBase_FindById, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ToolBarBase_IsVertical", (PyCFunction) _wrap_ToolBarBase_IsVertical, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ToolBarBase_swigregister", ToolBarBase_swigregister, METH_VARARGS },
 	 { (char *)"new_ToolBar", (PyCFunction) _wrap_new_ToolBar, METH_VARARGS | METH_KEYWORDS },

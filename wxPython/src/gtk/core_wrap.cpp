@@ -35468,6 +35468,7 @@ static PyObject * LayoutConstraints_swigregister(PyObject *self, PyObject *args)
 }
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"_wxPySetDictionary", __wxPySetDictionary, METH_VARARGS },
+	 { (char *)"_wxPyFixStockObjects", __wxPyFixStockObjects, METH_VARARGS },
 	 { (char *)"Object_GetClassName", (PyCFunction) _wrap_Object_GetClassName, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Object_Destroy", (PyCFunction) _wrap_Object_Destroy, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Object_swigregister", Object_swigregister, METH_VARARGS },

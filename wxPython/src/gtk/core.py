@@ -585,6 +585,8 @@ class ObjectPtr(Object):
 _core.Object_swigregister(ObjectPtr)
 _wxPySetDictionary = _core._wxPySetDictionary
 
+_wxPyFixStockObjects = _core._wxPyFixStockObjects
+
 
 #---------------------------------------------------------------------------
 
@@ -7974,7 +7976,6 @@ if RELEASE_VERSION != _core.RELEASE_VERSION:
 class PyDeadObjectError(AttributeError):
     pass
 
-
 class _wxPyDeadObject(object):
     """
     Instances of wx objects that are OOR capable will have their __class__
@@ -7984,15 +7985,46 @@ class _wxPyDeadObject(object):
     reprStr = "wxPython wrapper for DELETED %s object! (The C++ object no longer exists.)"
     attrStr = "The C++ part of the %s object has been deleted, attribute access no longer allowed."
 
-    def __repr__( self ):
+    def __repr__(self):
         if not hasattr(self, "_name"):
             self._name = "[unknown]"
         return self.reprStr % self._name
 
-    def __getattr__( self, *args ):
+    def __getattr__(self, *args):
         if not hasattr(self, "_name"):
             self._name = "[unknown]"
-        raise PyDeadObjectError( self.attrStr % self._name )
+        raise PyDeadObjectError(self.attrStr % self._name)
+
+    def __nonzero__(self):
+        return 0
+
+
+
+class PyUnbornObjectError(AttributeError):
+    pass
+
+class _wxPyUnbornObject(object):
+    """
+    Some stock objects are created when the wx.core module is
+    imported, but their C++ instance is not created until the wx.App
+    object is created and initialized.  These object instances will
+    temporarily have their __class__ changed to this class so an
+    exception will be raised if they are used before the C++ instance
+    is ready.
+    """
+
+    reprStr = "wxPython wrapper for UNBORN object! (The C++ object is not initialized yet.)"
+    attrStr = "The C++ part of this object has not been initialized, attribute access not allowed."
+
+    def __repr__(self):
+        #if not hasattr(self, "_name"):
+        #    self._name = "[unknown]"
+        return self.reprStr #% self._name
+
+    def __getattr__(self, *args):
+        #if not hasattr(self, "_name"):
+        #    self._name = "[unknown]"
+        raise PyUnbornObjectError(self.attrStr) # % self._name )
 
     def __nonzero__(self):
         return 0
@@ -8126,6 +8158,11 @@ from gdi import *
 from windows import *
 from controls import *
 from misc import *
+
+
+# Fixup the stock objects since they can't be used yet.  (They will be
+# restored in wx.PyApp.OnInit.)
+_core._wxPyFixStockObjects()
 
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------

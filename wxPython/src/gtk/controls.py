@@ -2543,6 +2543,14 @@ class ToolBarBase(core.Control):
         return self.DoAddTool(id, '', bitmap, bmpDisabled, wx.ITEM_RADIO,
                               shortHelp, longHelp, clientData)
 
+    def AddToolItem(*args, **kwargs):
+        """AddToolItem(ToolBarToolBase tool) -> ToolBarToolBase"""
+        return _controls.ToolBarBase_AddToolItem(*args, **kwargs)
+
+    def InsertToolItem(*args, **kwargs):
+        """InsertToolItem(size_t pos, ToolBarToolBase tool) -> ToolBarToolBase"""
+        return _controls.ToolBarBase_InsertToolItem(*args, **kwargs)
+
     def AddControl(*args, **kwargs):
         """AddControl(Control control) -> ToolBarToolBase"""
         return _controls.ToolBarBase_AddControl(*args, **kwargs)
@@ -2694,6 +2702,10 @@ class ToolBarBase(core.Control):
     def FindToolForPosition(*args, **kwargs):
         """FindToolForPosition(int x, int y) -> ToolBarToolBase"""
         return _controls.ToolBarBase_FindToolForPosition(*args, **kwargs)
+
+    def FindById(*args, **kwargs):
+        """FindById(int toolid) -> ToolBarToolBase"""
+        return _controls.ToolBarBase_FindById(*args, **kwargs)
 
     def IsVertical(*args, **kwargs):
         """IsVertical() -> bool"""
