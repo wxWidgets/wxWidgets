@@ -401,8 +401,11 @@ void wxControl::MacPostControlCreate()
 	    wxMacControlActionUPP = NewControlDefUPP( wxMacControlDefintion ) ;
 	}
 #if TARGET_CARBON
+/*
+    only working under classic carbon
     m_macControlAction = *(**(ControlHandle)m_macControl).contrlDefProc ;
     (**(ControlHandle)m_macControl).contrlDefProc = (Handle) &wxMacControlActionUPP ;
+*/
 #else
     m_macControlAction = *(**(ControlHandle)m_macControl).contrlDefProc ;
 
