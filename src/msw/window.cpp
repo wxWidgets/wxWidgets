@@ -3371,16 +3371,31 @@ bool wxWindow::HandleMouseWheel(WXWPARAM wParam, WXLPARAM lParam)
                    GET_X_LPARAM(lParam),
                    GET_Y_LPARAM(lParam),
                    LOWORD(wParam));
-
     event.m_wheelRotation = (short)HIWORD(wParam);
     event.m_wheelDelta = WHEEL_DELTA;
 
-    int linesPer;
-    if (!SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &linesPer, 0))
-        linesPer = 1;
-    event.m_linesPerAction = linesPer;
+#ifdef __WIN32__
+    static int s_linesPerRotation = -1;
+    if ( s_linesPerRotation == -1 )
+    {
+        if ( !::SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0,
+                                     &s_linesPerRotation, 0))
+        {
+            // this is not supposed to happen
+            wxLogLastError(_T("SystemParametersInfo(GETWHEELSCROLLLINES)"));
 
+            // the default is 3, so use it if SystemParametersInfo() failed
+            s_linesPerRotation = 3;
+        }
+    }
+#else // Win16
+    // no SystemParametersInfo() under Win16
+    static const int s_linesPerRotation = 3;
+#endif
+
+    event.m_linesPerAction = s_linesPerRotation;
     return GetEventHandler()->ProcessEvent(event);
+
 #else
     return FALSE;
 #endif
