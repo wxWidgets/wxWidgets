@@ -81,7 +81,7 @@ public:
     /// May not be needed in this application.
     wxString& GetLastFilename() { return m_lastFilename; }
 
-    /// Returns TRUE if this is the first time the application
+    /// Returns true if this is the first time the application
     /// has been run.
     bool GetFirstTimeRun() const { return m_firstTimeRun; }
 

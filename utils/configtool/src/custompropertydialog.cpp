@@ -77,7 +77,7 @@ void ctCustomPropertyDialog::CreateControls()
 
     wxBoxSizer* item2 = new wxBoxSizer(wxVERTICAL);
     item1->SetSizer(item2);
-    item1->SetAutoLayout(TRUE);
+    item1->SetAutoLayout(true);
 
     wxBoxSizer* item3 = new wxBoxSizer(wxVERTICAL);
     item2->Add(item3, 1, wxGROW|wxALL, 5);
@@ -128,7 +128,7 @@ void ctCustomPropertyDialog::CreateControls()
     item13->SetStringSelection(_("string"));
     item11->Add(item13, 1, wxGROW|wxALL, 5);
 
-    wxStaticBox* item14Static = new wxStaticBox(item1, -1, _("Choices"));
+    wxStaticBox* item14Static = new wxStaticBox(item1, wxID_ANY, _("Choices"));
     wxStaticBoxSizer* item14 = new wxStaticBoxSizer(item14Static, wxHORIZONTAL);
     item3->Add(item14, 0, wxGROW|wxALL, 5);
 
@@ -183,7 +183,7 @@ void ctCustomPropertyDialog::CreateControls()
 
 bool ctCustomPropertyDialog::ShowToolTips()
 {
-  return TRUE;
+  return true;
 }
 
 /*!

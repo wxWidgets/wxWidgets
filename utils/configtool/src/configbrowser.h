@@ -54,7 +54,7 @@ class ctConfigurationBrowserWindow: public wxPanel
 
 public:
     /// Constructor
-    ctConfigurationBrowserWindow( wxWindow* parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN  );
+    ctConfigurationBrowserWindow( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN  );
 
     /// Creates the controls and sizers
     void CreateControls();

@@ -81,7 +81,7 @@ void ctConfigItemsSelector::CreateControls()
 
     wxBoxSizer* item2 = new wxBoxSizer(wxVERTICAL);
     item1->SetSizer(item2);
-    item1->SetAutoLayout(TRUE);
+    item1->SetAutoLayout(true);
 
     wxBoxSizer* item3 = new wxBoxSizer(wxVERTICAL);
     item2->Add(item3, 1, wxGROW|wxALL, 5);
@@ -93,7 +93,7 @@ void ctConfigItemsSelector::CreateControls()
     item3->Add(item5, 0, wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE, 5);
 
     wxString* item6Strings = NULL;
-    wxListBox* item6 = new wxListBox(item1, ID_AVAILABLE_CONFIG_ITEMS, wxDefaultPosition, wxSize(-1, 150), 0, item6Strings, wxLB_SINGLE|wxLB_SORT);
+    wxListBox* item6 = new wxListBox(item1, ID_AVAILABLE_CONFIG_ITEMS, wxDefaultPosition, wxSize(wxDefaultSize.x, 150), 0, item6Strings, wxLB_SINGLE|wxLB_SORT);
     item3->Add(item6, 1, wxGROW|wxALL, 5);
 
     wxStaticText* item7 = new wxStaticText(item1, wxID_STATIC, _("&List of configuration items:"), wxDefaultPosition, wxDefaultSize, 0);
@@ -103,7 +103,7 @@ void ctConfigItemsSelector::CreateControls()
     item3->Add(item8, 0, wxGROW, 5);
 
     wxString* item9Strings = NULL;
-    wxListBox* item9 = new wxListBox(item1, ID_CONFIG_ITEMS, wxDefaultPosition, wxSize(-1, 100), 0, item9Strings, wxLB_SINGLE);
+    wxListBox* item9 = new wxListBox(item1, ID_CONFIG_ITEMS, wxDefaultPosition, wxSize(wxDefaultSize.x, 100), 0, item9Strings, wxLB_SINGLE);
     item8->Add(item9, 1, wxGROW|wxALL, 5);
 
     wxBoxSizer* item10 = new wxBoxSizer(wxVERTICAL);
@@ -189,7 +189,7 @@ void ctConfigItemsSelector::OnOk( wxCommandEvent& event )
 
 bool ctConfigItemsSelector::ShowToolTips()
 {
-  return TRUE;
+  return true;
 }
 /*!
  * Update event handler for ID_CONFIG_ADD
@@ -221,22 +221,22 @@ void ctConfigItemsSelector::InitSourceConfigList(ctConfigItem* item)
     if (!item)
         return;
 
-    bool addIt = FALSE;
+    bool addIt = false;
 
     if (item->GetType() == ctTypeGroup)
-        addIt = FALSE;
+        addIt = false;
     else if (item->GetType() == ctTypeCheckGroup)
-        addIt = TRUE;
+        addIt = true;
     else if (item->GetType() == ctTypeRadioGroup)
-        addIt = TRUE;
+        addIt = true;
     else if (item->GetType() == ctTypeString)
-        addIt = TRUE;
+        addIt = true;
     else if (item->GetType() == ctTypeBoolCheck)
-        addIt = TRUE;
+        addIt = true;
     else if (item->GetType() == ctTypeBoolRadio)
-        addIt = TRUE;
+        addIt = true;
     else if (item->GetType() == ctTypeInteger)
-        addIt = TRUE;
+        addIt = true;
     if (addIt)
     {
         masterList->Append(item->GetName());

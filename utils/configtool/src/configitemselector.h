@@ -52,7 +52,7 @@ class ctConfigItemsSelector: public wxDialog
 {    
 public:
     /// Constructor
-    ctConfigItemsSelector( wxWindow* parent, wxWindowID id = -1, const wxString& caption = _("Configuration Items Selector"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU );
+    ctConfigItemsSelector( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& caption = _("Configuration Items Selector"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU );
 
     /// Creates the controls and sizers
     void CreateControls();

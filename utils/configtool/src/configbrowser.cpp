@@ -65,7 +65,7 @@ void ctConfigurationBrowserWindow::CreateControls()
 
     wxBoxSizer* item2 = new wxBoxSizer(wxVERTICAL);
     item1->SetSizer(item2);
-    item1->SetAutoLayout(TRUE);
+    item1->SetAutoLayout(true);
 
     wxSplitterWindow* item3 = new wxSplitterWindow(item1, ID_CONFIGBROWSER_SPLITTERWINDOW, wxDefaultPosition, wxSize(400, 400), wxSP_3DBORDER|wxSP_3DSASH|wxNO_BORDER|wxNO_FULL_REPAINT_ON_RESIZE);
     wxTreeCtrl* item4 = new wxTreeCtrl(item3, ID_CONFIGURATION_BROWSER_TREECTRL, wxDefaultPosition, wxSize(100, 100), wxTR_SINGLE|wxNO_BORDER);
@@ -92,7 +92,7 @@ void ctConfigurationBrowserWindow::OnConfigurationBrowserTreectrl( wxTreeEvent& 
 
 bool ctConfigurationBrowserWindow::ShowToolTips()
 {
-  return TRUE;
+  return true;
 }
 
 /*!
@@ -149,7 +149,7 @@ void ctConfigurationBrowserControlPanel::CreateControls()
 
     wxBoxSizer* item6 = new wxBoxSizer(wxVERTICAL);
     item5->SetSizer(item6);
-    item5->SetAutoLayout(TRUE);
+    item5->SetAutoLayout(true);
 
     wxStaticText* item7 = new wxStaticText(item5, wxID_STATIC, _("Browse, add and remove configurations"), wxDefaultPosition, wxDefaultSize, 0);
     item6->Add(item7, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxADJUST_MINSIZE, 5);
@@ -242,5 +242,5 @@ void ctConfigurationBrowserControlPanel::OnUpdateRenameConfiguration( wxUpdateUI
 
 bool ctConfigurationBrowserControlPanel::ShowToolTips()
 {
-  return TRUE;
+  return true;
 }

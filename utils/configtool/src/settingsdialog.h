@@ -57,7 +57,7 @@ class ctSettingsDialog: public wxDialog
 {    
 public:
     /// Constructor
-    ctSettingsDialog( wxWindow* parent, wxWindowID id = -1,
+    ctSettingsDialog( wxWindow* parent, wxWindowID id = wxID_ANY,
         const wxString& caption = _("Configuration Settings"),
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
@@ -98,7 +98,7 @@ class ctGeneralSettingsDialog: public wxPanel
 {    
 public:
     /// Constructor
-    ctGeneralSettingsDialog( wxWindow* parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER|wxTAB_TRAVERSAL );
+    ctGeneralSettingsDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER|wxTAB_TRAVERSAL );
 
     /// Creates the controls and sizers
     void CreateControls();
@@ -126,7 +126,7 @@ class ctLocationSettingsDialog: public wxPanel
 {    
 public:
     /// Constructor
-    ctLocationSettingsDialog( wxWindow* parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER|wxTAB_TRAVERSAL );
+    ctLocationSettingsDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER|wxTAB_TRAVERSAL );
 
     /// Creates the controls and sizers
     void CreateControls();

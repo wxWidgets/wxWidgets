@@ -1086,9 +1086,9 @@ void OnInform(const wxChar *msg)
     (*frame->textWindow) << msg << _T("\n");
 /* This whole block of code is just wrong I think.  It would behave
    completely wrong under anything other than MSW due to the ELSE
-	with no statement, and the cout calls would fail under MSW, as
-	the code in this block is compiled if !NO_GUI This code has been 
-	here since v1.1 of this file too. - gt
+   with no statement, and the cout calls would fail under MSW, as
+   the code in this block is compiled if !NO_GUI This code has been 
+   here since v1.1 of this file too. - gt
   else
 #ifdef __WXMSW__
   {

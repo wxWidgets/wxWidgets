@@ -109,7 +109,7 @@ int             subsectionFont = 12; // largeFont1;
 int             titleFont = LARGEFont3;
 int             authorFont = LargeFont2;
 int             mirrorMargins = true;
-bool            winHelp = false;  // Output in Windows Help format if TRUE, linear otherwise
+bool            winHelp = false;  // Output in Windows Help format if true, linear otherwise
 bool            isInteractive = false;
 bool            runTwice = false;
 int             convertMode = TEX_RTF;
@@ -117,7 +117,7 @@ bool            checkCurleyBraces = false;
 bool            checkSyntax = false;
 bool            headerRule = false;
 bool            footerRule = false;
-bool            compatibilityMode = false; // If TRUE, maximum Latex compatibility
+bool            compatibilityMode = false; // If true, maximum Latex compatibility
                                 // (Quality of RTF generation deteriorate)
 bool            generateHPJ; // Generate WinHelp Help Project file
 wxChar         *winHelpTitle = NULL; // Windows Help title
@@ -151,7 +151,7 @@ wxChar         *followedLinkColourString = NULL;
 bool            combineSubSections = false;
 bool            htmlWorkshopFiles = false;
 bool            ignoreBadRefs = false;
-wxChar			*htmlFaceName = NULL;
+wxChar         *htmlFaceName = NULL;
 
 extern int passNumber;
 
@@ -204,12 +204,12 @@ int CurrentInputIndex = 0;
 wxChar *TexFileRoot = NULL;
 wxChar *TexBibName = NULL;         // Bibliography output file name
 wxChar *TexTmpBibName = NULL;      // Temporary bibliography output file name
-bool isSync = false;             // If TRUE, should not yield to other processes.
-bool stopRunning = false;        // If TRUE, should abort.
+bool isSync = false;             // If true, should not yield to other processes.
+bool stopRunning = false;        // If true, should abort.
 
 static int currentColumn = 0;
 wxChar *currentArgData = NULL;
-bool haveArgData = false; // If TRUE, we're simulating the data.
+bool haveArgData = false; // If true, we're simulating the data.
 TexChunk *currentArgument = NULL;
 TexChunk *nextChunk = NULL;
 bool isArgOptional = false;
@@ -227,7 +227,7 @@ TexMacroDef *VerbatimMacroDef = NULL;
 
 
 TexRef::TexRef(const wxChar *label, const wxChar *file,
-	       const wxChar *section, const wxChar *sectionN)
+               const wxChar *section, const wxChar *sectionN)
 {
     refLabel = copystring(label);
     refFile = file ? copystring(file) : (wxChar*) NULL;
@@ -967,7 +967,7 @@ void MacroError(wxChar *buffer)
  * Parse an argument.
  * 'environment' specifies the name of the macro IFF if we're looking for the end
  * of an environment, e.g. \end{itemize}. Otherwise it's NULL.
- * 'parseToBrace' is TRUE if the argument should extend to the next right brace,
+ * 'parseToBrace' is true if the argument should extend to the next right brace,
  * e.g. in {\bf an argument} as opposed to \vskip 30pt
  *
  */

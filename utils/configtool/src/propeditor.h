@@ -75,7 +75,7 @@ class ctPropertyEditor: public wxPanel
     void UpdateItem();
 
     /// Display attribute at given row
-    bool DisplayProperty(int row, ctProperty* prop, bool valueOnly = FALSE);
+    bool DisplayProperty(int row, ctProperty* prop, bool valueOnly = false);
 
     /// Display attribute value
     bool DisplayProperty(ctProperty* prop);

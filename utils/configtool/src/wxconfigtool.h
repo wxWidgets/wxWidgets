@@ -62,7 +62,7 @@ public:
     /// Returns the notebook window.
     wxNotebook* GetNotebookWindow() { return m_notebookWindow; }
 
-    /// Returns TRUE if the application should show tooltips.
+    /// Returns true if the application should show tooltips.
     virtual bool UsingTooltips();
 
     /// Returns the help controller object for the manual.

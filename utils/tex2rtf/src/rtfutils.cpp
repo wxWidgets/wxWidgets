@@ -242,22 +242,22 @@ void WriteWinHelpContentsFileLine(wxChar *topicName, wxChar *xitle, int level)
   int d=0;
   while ( (xitle[s]!=0)&&(d<255) )
   {
-	  wxChar ch=xitle[s]&0xff;
-	  if (ch==0x5c) {
-		  wxChar ch1=xitle[s+1]&0xff;
-		  wxChar ch2=xitle[s+2]&0xff;
-		  wxChar ch3=xitle[s+3]&0xff;
-		  s+=4; // next character		  
-		  if ((ch1==0x27)&&(ch2==0x66)&&(ch3==0x36)) { title[d++]='ö';  }
-		  if ((ch1==0x27)&&(ch2==0x65)&&(ch3==0x34)) { title[d++]='ä';  }
-		  if ((ch1==0x27)&&(ch2==0x66)&&(ch3==0x63)) { title[d++]='ü';  }
-		  if ((ch1==0x27)&&(ch2==0x64)&&(ch3==0x36)) { title[d++]='Ö';  }
-		  if ((ch1==0x27)&&(ch2==0x63)&&(ch3==0x34)) { title[d++]='Ä';  }
-		  if ((ch1==0x27)&&(ch2==0x64)&&(ch3==0x63)) { title[d++]='Ü';  }
-	  } else {
-		title[d++]=ch;
-		s++;
-	  }	  
+    wxChar ch=xitle[s]&0xff;
+    if (ch==0x5c) {
+      wxChar ch1=xitle[s+1]&0xff;
+      wxChar ch2=xitle[s+2]&0xff;
+      wxChar ch3=xitle[s+3]&0xff;
+      s+=4; // next character  
+      if ((ch1==0x27)&&(ch2==0x66)&&(ch3==0x36)) { title[d++]='ö';  }
+      if ((ch1==0x27)&&(ch2==0x65)&&(ch3==0x34)) { title[d++]='ä';  }
+      if ((ch1==0x27)&&(ch2==0x66)&&(ch3==0x63)) { title[d++]='ü';  }
+      if ((ch1==0x27)&&(ch2==0x64)&&(ch3==0x36)) { title[d++]='Ö';  }
+      if ((ch1==0x27)&&(ch2==0x63)&&(ch3==0x34)) { title[d++]='Ä';  }
+      if ((ch1==0x27)&&(ch2==0x64)&&(ch3==0x63)) { title[d++]='Ü';  }
+    } else {
+      title[d++]=ch;
+      s++;
+    }  
   }
   title[d]=0;
 
@@ -1637,7 +1637,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
           }
           else
             SetCurrentOutput(NULL); // Don't write it into the contents, or anywhere else
-	}
+        }
         else
           SetCurrentOutput(NULL); // Don't write it into the contents, or anywhere else
       }
@@ -2187,9 +2187,9 @@ void RTFOnMacro(int macroId, int no_args, bool start)
               TraverseChildrenFromChunk(descriptionItemArg);
               TexOutput(_T("}\\tab"));
               descriptionItemArg = NULL;
-	    }
-	    else
-	    {
+            }
+            else
+            {
               wxSnprintf(indentBuf, sizeof(indentBuf), _T("\\tab{\\b %d.}\\tab"), struc->currentItem);
               TexOutput(indentBuf);
             }
@@ -2203,9 +2203,9 @@ void RTFOnMacro(int macroId, int no_args, bool start)
               TraverseChildrenFromChunk(descriptionItemArg);
               TexOutput(_T("}\\tab"));
               descriptionItemArg = NULL;
-	    }
-	    else
-	    {
+            }
+          else
+            {
               if (bulletFile && winHelp)
               {
                 if (winHelpVersion > 3) // Transparent bitmap
@@ -2233,7 +2233,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
             }
             break;
           }
-	}
+        }
       }
     }
     break;
@@ -2581,8 +2581,8 @@ void RTFOnMacro(int macroId, int no_args, bool start)
   {
     if (start)
     {
-		if ( issuedNewParagraph == 0 )
-		{
+      if ( issuedNewParagraph == 0 )
+      {
           TexOutput(_T("\\par\\pard"));
           issuedNewParagraph ++;
           
@@ -2591,29 +2591,29 @@ void RTFOnMacro(int macroId, int no_args, bool start)
           // we have a suitable set of styles.
 #if 0
           if (winHelp && !inTabular && (ParSkip > 0))
-		  {
+          {
             TexOutput(_T("\\par"));
             issuedNewParagraph ++;
-		  }
+          }
 #endif          
           WriteEnvironmentStyles();
-		}
-		// 1 is a whole paragraph if ParSkip == 0,
-		// half a paragraph if ParSkip > 0
-		else if ( issuedNewParagraph == 1 )
-		{
-		  // Don't need a par at all if we've already had one,
-		  // and ParSkip == 0.
+      }
+      // 1 is a whole paragraph if ParSkip == 0,
+      // half a paragraph if ParSkip > 0
+      else if ( issuedNewParagraph == 1 )
+      {
+        // Don't need a par at all if we've already had one,
+        // and ParSkip == 0.
 #if 0
           // Extra par if parskip is more than zero (usually looks best.)
           if (winHelp && !inTabular && (ParSkip > 0))
-		  {
+          {
             TexOutput(_T("\\par"));
             issuedNewParagraph ++;
-		  }
+          }
 #endif          
           WriteEnvironmentStyles();
-		}
+      }
 /*
       if (!issuedNewParagraph || (issuedNewParagraph > 1))
       {
@@ -4221,11 +4221,11 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
           wxFprintf(Popups, _T("+{\\footnote %s}\n"), GetBrowseString());
           savedOutput = CurrentOutput1;
           SetCurrentOutput(Popups);
-	}
-	else
-	{
+      }
+      else
+      {
           SetCurrentOutput(savedOutput);
-	}
+      }
         return true;
       }
       return true;
@@ -4254,7 +4254,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
         if (start)
         {
           TexOutput(_T("{\\ul "));
-	}
+      }
         else
         {
           TexOutput(_T("}"));
@@ -5015,11 +5015,11 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
             wxSnprintf(buf, sizeof(buf), _T("{%s%d "), ((macroId == ltFCOL) ? _T("\\cf") : _T("\\cb")), pos);
             TexOutput(buf);
           }
-		  else
-		  {
-			wxSnprintf(buf, sizeof(buf), _T("Could not find colour name %s"), name);
+          else
+          {
+            wxSnprintf(buf, sizeof(buf), _T("Could not find colour name %s"), name);
             OnError(buf);
-		  }
+          }
           break;
         }
         case 2:

@@ -41,7 +41,7 @@ public:
     bool OnCreate(wxDocument *doc, long flags);
     void OnDraw(wxDC *dc);
     void OnUpdate(wxView *sender, wxObject *hint = (wxObject *) NULL);
-    bool OnClose(bool deleteWindow = TRUE);
+    bool OnClose(bool deleteWindow = true);
     void OnChangeFilename();
 
 //// Operations
@@ -252,9 +252,9 @@ public:
     void OnFind(wxFindDialogEvent& event);
     void OnClose(wxFindDialogEvent& event);
 
-    // If wrap is TRUE, go back to the beginning if at the end of the
+    // If wrap is true, go back to the beginning if at the end of the
     // document.
-    bool DoFind(const wxString& textToFind, bool matchCase, bool wholeWord, bool wrap = TRUE);
+    bool DoFind(const wxString& textToFind, bool matchCase, bool wholeWord, bool wrap = true);
 
     ctConfigItem* FindNextItem(ctConfigToolDoc* doc,
                                                       ctConfigItem* item,

@@ -6,7 +6,7 @@
 // Created:     2002-09-04
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	
+// Licence:
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -51,8 +51,8 @@ IMPLEMENT_DYNAMIC_CLASS(ctSettings, wxObject)
 ctSettings::ctSettings()
 {
     m_noUses = 0;
-    m_showToolBar = TRUE;
-    m_showWelcomeDialog = TRUE;
+    m_showToolBar = true;
+    m_showWelcomeDialog = true;
     m_exportDir = wxEmptyString;
 
     m_frameSize = wxRect(10, 10, 600, 500);
@@ -61,20 +61,20 @@ ctSettings::ctSettings()
 
     m_appName = wxT("wxWidgets Configuration Tool");
     m_appNameShort = wxT("Configuration Tool");
-    m_showSplashScreen = FALSE;
+    m_showSplashScreen = false;
     m_userName = wxEmptyString;
     m_frameStatus = ctSHOW_STATUS_NORMAL;
-    m_loadLastDocument = TRUE;
-    m_firstTimeRun = TRUE;
-    m_smallToolbar = TRUE;
+    m_loadLastDocument = true;
+    m_firstTimeRun = true;
+    m_smallToolbar = true;
     m_mainSashSize = 200;
-    m_useToolTips = TRUE;
-    m_showTrayIcon = TRUE;
-    m_trayIconIsShown = FALSE;
-    m_useEnvironmentVariable = TRUE;
+    m_useToolTips = true;
+    m_showTrayIcon = true;
+    m_trayIconIsShown = false;
+    m_useEnvironmentVariable = true;
     m_frameworkDir = wxEmptyString;
-    m_matchWholeWord = FALSE;
-    m_matchCase = FALSE;
+    m_matchWholeWord = false;
+    m_matchCase = false;
     m_defaultFileKind = wxT("Setup file");
 }
 
@@ -129,7 +129,7 @@ bool ctSettings::Init()
     if (m_userName.IsEmpty())
         m_userName = wxGetUserName();
 
-    return TRUE;
+    return true;
 }
 
 // Create new filename
@@ -212,13 +212,13 @@ bool ctSettings::LoadConfig()
     // facility just in case it's trying to load a damaged file.
     if (runningProgram != 0)
     {
-        m_loadLastDocument = FALSE;
+        m_loadLastDocument = false;
     }
 #endif
 
     config.Write(wxT("Misc/RunningProgram"), (long) 1);
 
-    return TRUE;
+    return true;
 }
 
 // Save config info
@@ -270,7 +270,7 @@ bool ctSettings::SaveConfig()
         wxGetApp().GetDocManager()->FileHistorySave(config);
     }
 
-    return TRUE;
+    return true;
 }
 
 void ctSettings::ShowSettingsDialog(const wxString& WXUNUSED(page))

@@ -33,21 +33,21 @@ IMPLEMENT_CLASS(ctConfigItem, wxObject)
 
 ctConfigItem::ctConfigItem()
 {
-    m_modified = FALSE;
+    m_modified = false;
     m_type = ctTypeBoolCheck;
     m_treeItemId = wxTreeItemId();
-    m_enabled = TRUE;
+    m_enabled = true;
     m_parent = NULL;
-    m_active = TRUE;
+    m_active = true;
 }
 
 ctConfigItem::ctConfigItem(ctConfigItem* parent, ctConfigType type, const wxString& name)
 {
-    m_modified = FALSE;
+    m_modified = false;
     m_type = type;
     m_treeItemId = wxTreeItemId();
-    m_enabled = FALSE;
-    m_active = TRUE;
+    m_enabled = false;
+    m_active = true;
     SetName(name);
     m_parent = parent;
     if (parent)
@@ -82,7 +82,7 @@ bool ctConfigItem::CanEditProperty(const wxString& propName) const
     if (prop)
         return !prop->GetReadOnly();
     else
-        return FALSE;
+        return false;
 }
 
 /// Assignment operator.
@@ -165,7 +165,7 @@ void ctConfigItem::InitProperties()
         m_properties.AddProperty(prop);
     }
     prop->SetDescription(_("<B>Name</B><P> The name of the configuration setting."));
-    prop->SetReadOnly(TRUE);
+    prop->SetReadOnly(true);
 
     m_properties.AddProperty(
         new ctProperty(
@@ -176,7 +176,7 @@ void ctConfigItem::InitProperties()
     m_properties.AddProperty(
         new ctProperty(
         wxT("<B>Default-state</B><P> The default state."),
-        wxVariant((bool) TRUE, wxT("default-state")),
+        wxVariant(true, wxT("default-state")),
         wxT("bool")));
 
     if (GetType() == ctTypeString)
@@ -184,7 +184,7 @@ void ctConfigItem::InitProperties()
         m_properties.AddProperty(
             new ctProperty(
             wxT("<B>Default-value</B><P> The default value."),
-            wxVariant((bool) TRUE, wxT("default-value")),
+            wxVariant(true, wxT("default-value")),
             wxT("")));
     }
     else if (GetType() == ctTypeInteger)
@@ -265,7 +265,7 @@ void ctConfigItem::ApplyProperty(ctProperty* prop, const wxVariant& WXUNUSED(old
 {
     ctConfigToolDoc* doc = GetDocument();
     bool oldModified = doc->IsModified();
-    doc->Modify(TRUE);
+    doc->Modify(true);
 
     wxString name = prop->GetName();
     if (name == wxT("requires") ||
@@ -469,7 +469,7 @@ bool ctConfigItem::IsInActiveContext()
 {
     wxString context = GetPropertyString(wxT("context"));
     if (context.IsEmpty())
-        return TRUE;
+        return true;
 
     wxList contextItems;
     StringToItems(GetDocument()->GetTopItem(), context, contextItems);
@@ -478,9 +478,9 @@ bool ctConfigItem::IsInActiveContext()
     {
         ctConfigItem* otherItem = (ctConfigItem*) node->GetData();
         if (otherItem->IsEnabled())
-            return TRUE;
+            return true;
     }
-    return FALSE;
+    return false;
 }
 
 /// Evaluate the requires properties:
@@ -497,12 +497,12 @@ void ctConfigItem::EvaluateDependencies()
     wxString enabledIfNot = GetPropertyString(wxT("enabled-if-not"));
     wxString indeterminateIf = GetPropertyString(wxT("indeterminate-if"));
 
-    bool active = TRUE;
+    bool active = true;
     bool enabled = IsEnabled();
     bool oldEnabled = enabled;
     bool oldActive = IsActive();
-    bool explicitlyEnabled = FALSE;
-    bool explicitlyDisabled = FALSE;
+    bool explicitlyEnabled = false;
+    bool explicitlyDisabled = false;
     bool inActiveContext = IsInActiveContext();
 
     // Add the parent to the list of dependencies, if the
@@ -543,9 +543,9 @@ void ctConfigItem::EvaluateDependencies()
         if (items.GetCount() > 0 && enabledCount == 0)
         {
             // None of the items were enabled
-            enabled = FALSE;
-            active = FALSE;
-            explicitlyDisabled = TRUE;
+            enabled = false;
+            active = false;
+            explicitlyDisabled = true;
         }
     }
     
@@ -575,9 +575,9 @@ void ctConfigItem::EvaluateDependencies()
         // Enable if there were no related items that were enabled
         if (inContextCount > 0 && (disabledCount == inContextCount) && !explicitlyDisabled)
         {
-            explicitlyEnabled = TRUE;
-            enabled = TRUE;
-            active = FALSE;
+            explicitlyEnabled = true;
+            enabled = true;
+            active = false;
         }
     }
 
@@ -608,9 +608,9 @@ void ctConfigItem::EvaluateDependencies()
         // Enable if there were no related items that were disabled
         if (inContextCount > 0 && (enabledCount > 0) && !explicitlyDisabled)
         {
-            explicitlyEnabled = TRUE;
-            enabled = TRUE;
-            active = FALSE;
+            explicitlyEnabled = true;
+            enabled = true;
+            active = false;
         }
     }
 
@@ -644,9 +644,9 @@ void ctConfigItem::EvaluateDependencies()
         if (inContextCount > 0 && (enabledCount > 0) && !explicitlyEnabled)
 //        if (inContextCount > 0 && (disabledCount > 0) && !explicitlyEnabled)
         {
-            enabled = FALSE;
-            active = FALSE;
-            explicitlyDisabled = TRUE;
+            enabled = false;
+            active = false;
+            explicitlyDisabled = true;
         }
     }
 
@@ -674,22 +674,22 @@ void ctConfigItem::EvaluateDependencies()
         }
         if (inContextCount > 0 && enabledCount > 0)
         {
-            active = TRUE;
-            explicitlyEnabled = FALSE;
-            explicitlyDisabled = FALSE;
+            active = true;
+            explicitlyEnabled = false;
+            explicitlyDisabled = false;
         }
     }
 
     // Finally check a sort of dependency: whether our
     // context is active. If not, make this inactive.
     if (!IsInActiveContext())
-        active = FALSE;
+        active = false;
     else
     {        
         // If we didn't explicitly enable or disable it,
         // then we should make it active.
         if (!explicitlyEnabled && !explicitlyDisabled)
-            active = TRUE;
+            active = true;
     }
 
     SetActive(active);
@@ -798,7 +798,7 @@ void ctConfigItem::PropagateRadioButton(wxList& considered)
             ctConfigItem* child = (ctConfigItem*) node->GetData();
             if (child->IsEnabled() && child != this)
             {
-                child->Enable(FALSE);
+                child->Enable(false);
                 child->Sync();
 
                 if (!considered.Member(child))

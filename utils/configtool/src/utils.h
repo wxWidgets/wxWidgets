@@ -113,15 +113,15 @@ and has a convenient API. For example, the following adds
 icons for a checkbox item that can be: on/enabled, off/enabled,
 on/disabled,off/disabled.
 
-    m_iconTable.AddInfo("Checkbox", wxICON(checked), 0, TRUE);
-    m_iconTable.AddInfo("Checkbox", wxICON(checked_dis), 0, FALSE);
-    m_iconTable.AddInfo("Checkbox", wxICON(unchecked), 1, TRUE);
-    m_iconTable.AddInfo("Checkbox", wxICON(unchecked_dis), 1, FALSE);
+    m_iconTable.AddInfo("Checkbox", wxICON(checked), 0, true);
+    m_iconTable.AddInfo("Checkbox", wxICON(checked_dis), 0, false);
+    m_iconTable.AddInfo("Checkbox", wxICON(unchecked), 1, true);
+    m_iconTable.AddInfo("Checkbox", wxICON(unchecked_dis), 1, false);
 
 When you update the item image in response to (e.g.) user interaction,
 you can say something like this:
 
-    int iconId = m_iconTable.GetIconId("Checkbox", 0, FALSE);
+    int iconId = m_iconTable.GetIconId("Checkbox", 0, false);
 
     treeCtrl.SetItemImage(itemId, iconId, wxTreeItemIcon_Normal);
     treeCtrl.SetItemImage(itemId, iconId, wxTreeItemIcon_Selected);
@@ -145,7 +145,7 @@ public:
     int GetStateCount() const { return m_maxStates; };
 
     void SetStateCount(int count) { m_maxStates = count; }
-    int GetIconId(int state, bool enabled = TRUE) const;
+    int GetIconId(int state, bool enabled = true) const;
     void SetIconId(int state, bool enabled, int iconId);
 
     const wxString& GetName() const { return m_name; }
@@ -178,7 +178,7 @@ public:
     
     wxIconInfo* FindInfo(const wxString& name) const;
     
-    int GetIconId(const wxString& name, int state, bool enabled = TRUE) const;
+    int GetIconId(const wxString& name, int state, bool enabled = true) const;
     bool SetIconId(const wxString& name, int state, bool enabled, int iconId) ;
     
     void SetImageList(wxImageList* imageList) { m_imageList = imageList; }

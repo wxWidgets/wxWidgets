@@ -39,7 +39,7 @@ public:
     virtual bool OnCreate(const wxString& path, long flags);
     virtual bool OnOpenDocument(const wxString& filename);
     virtual bool OnSaveDocument(const wxString& filename);
-    virtual bool OnNewDocument() { return TRUE; }
+    virtual bool OnNewDocument() { return true; }
     virtual bool OnCloseDocument() ;
     virtual bool Save(); // Overridden only to correct bug in wxWidgets, docview.cpp
 
@@ -260,10 +260,10 @@ public:
     ctConfigCommand(const wxString& name, int cmdId,
         ctConfigItem* activeState, ctConfigItem* savedState,
         ctConfigItem* parent = NULL, ctConfigItem* insertBefore = NULL,
-        bool ignoreFirstTime = FALSE);
+        bool ignoreFirstTime = false);
     ctConfigCommand(const wxString& name, int cmdId,
         ctConfigItem* activeState, ctProperties* properties,
-        bool ignoreFirstTime = FALSE);
+        bool ignoreFirstTime = false);
     ~ctConfigCommand();
 
     bool Do();

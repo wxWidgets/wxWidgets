@@ -36,8 +36,8 @@ static unsigned long getint(FILE *fp)
   c = getc(fp);  c1 = getc(fp);  c2 = getc(fp);  c3 = getc(fp);
   return (long)((long) c) +
          (((long) c1) << 8) + 
-	 (((long) c2) << 16) +
-	 (((long) c3) << 24);
+         (((long) c2) << 16) +
+         (((long) c3) << 24);
 }
 
 bool GetBMPHeader(FILE *fp, int *Width, int *Height, int *Planes, int *BitsPerPixel)
@@ -149,12 +149,12 @@ bool OutputBitmapData(FILE *fd)
 
 #ifdef __WXMSW__
 struct mfPLACEABLEHEADER {
-	DWORD	key;
-	HANDLE	hmf;
-	RECT	bbox;
-	WORD	inch;
-	DWORD	reserved;
-	WORD	checksum;
+    DWORD key;
+    HANDLE hmf;
+    RECT bbox;
+    WORD inch;
+    DWORD reserved;
+    WORD checksum;
 };
 
 // Returns size in TWIPS

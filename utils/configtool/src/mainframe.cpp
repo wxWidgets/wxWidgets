@@ -90,8 +90,7 @@ BEGIN_EVENT_TABLE(ctMainFrame, wxDocParentFrame)
 END_EVENT_TABLE()
 
 // Define my frame constructor
-ctMainFrame::ctMainFrame(wxDocManager *manager, wxFrame *parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size,
-	long style):
+ctMainFrame::ctMainFrame(wxDocManager *manager, wxFrame *parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style):
   wxDocParentFrame(manager, parent, id, title, pos, size, style)
 {
     m_document = NULL;
@@ -104,24 +103,24 @@ ctMainFrame::ctMainFrame(wxDocManager *manager, wxFrame *parent, wxWindowID id, 
     m_mainNotebook = NULL;
     m_findDialog = NULL;
 
-    m_treeSplitterWindow = new wxSplitterWindow(this, -1, wxDefaultPosition, wxSize(400, 300),
+    m_treeSplitterWindow = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxSize(400, 300),
         wxSP_3DSASH|wxSP_3DBORDER|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
 
-    m_configTreeCtrl = new ctConfigTreeCtrl(m_treeSplitterWindow, -1, wxDefaultPosition, wxDefaultSize,
+    m_configTreeCtrl = new ctConfigTreeCtrl(m_treeSplitterWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize,
         wxTR_HAS_BUTTONS|wxNO_BORDER|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
 
-    m_mainNotebook = new wxNotebook(m_treeSplitterWindow, -1, wxDefaultPosition, wxSize(300, 300),
+    m_mainNotebook = new wxNotebook(m_treeSplitterWindow, wxID_ANY, wxDefaultPosition, wxSize(300, 300),
         wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
 
-    m_propertyEditor = new ctPropertyEditor(m_mainNotebook, -1, wxDefaultPosition, wxSize(300, 200),
+    m_propertyEditor = new ctPropertyEditor(m_mainNotebook, wxID_ANY, wxDefaultPosition, wxSize(300, 200),
         wxNO_BORDER|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
-    m_setupPage = new ctOutputWindow(m_mainNotebook, -1, wxDefaultPosition, wxSize(300, 200),
+    m_setupPage = new ctOutputWindow(m_mainNotebook, wxID_ANY, wxDefaultPosition, wxSize(300, 200),
         wxNO_BORDER|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
-    m_configurePage = new ctOutputWindow(m_mainNotebook, -1, wxDefaultPosition, wxSize(300, 200),
+    m_configurePage = new ctOutputWindow(m_mainNotebook, wxID_ANY, wxDefaultPosition, wxSize(300, 200),
         wxNO_BORDER|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
 
 #ifdef USE_CONFIG_BROWSER_PAGE
-    m_configBrowserPage = new ctConfigurationBrowserWindow(m_mainNotebook, -1, wxDefaultPosition, wxSize(300, 200),
+    m_configBrowserPage = new ctConfigurationBrowserWindow(m_mainNotebook, wxID_ANY, wxDefaultPosition, wxSize(300, 200),
         wxNO_BORDER|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
 #endif
 
@@ -151,12 +150,12 @@ ctMainFrame::ctMainFrame(wxDocManager *manager, wxFrame *parent, wxWindowID id, 
 
     if (wxGetApp().GetSettings().m_showToolBar)
     {
-        menuBar->Check(ctID_SHOW_TOOLBAR, TRUE);
+        menuBar->Check(ctID_SHOW_TOOLBAR, true);
     }
     else
     {
-        menuBar->Check(ctID_SHOW_TOOLBAR, FALSE);
-        GetToolBar()->Show(FALSE);
+        menuBar->Check(ctID_SHOW_TOOLBAR, false);
+        GetToolBar()->Show(false);
         ResizeFrame();
     }
 }
@@ -178,7 +177,7 @@ void ctMainFrame::OnCloseWindow(wxCloseEvent& event)
         m_findDialog = NULL;
     }
 
-    Show(FALSE);
+    Show(false);
 
     if (IsMaximized())
         wxGetApp().GetSettings().m_frameStatus = ctSHOW_STATUS_MAXIMIZED ;
@@ -247,22 +246,22 @@ void ctMainFrame::InitToolBar(wxToolBar* toolBar)
     toolBarBitmaps[12] = wxBitmap(help_xpm);
     toolBarBitmaps[13] = wxBitmap(helpcs_xpm);
 
-    toolBar->AddTool(wxID_NEW, toolBarBitmaps[0], wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, wxT("New project"));
-    toolBar->AddTool(wxID_OPEN, toolBarBitmaps[1], wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, wxT("Open project"));
-    toolBar->AddTool(wxID_SAVE, toolBarBitmaps[2], wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, wxT("Save project"));
+    toolBar->AddTool(wxID_NEW, toolBarBitmaps[0], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("New project"));
+    toolBar->AddTool(wxID_OPEN, toolBarBitmaps[1], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("Open project"));
+    toolBar->AddTool(wxID_SAVE, toolBarBitmaps[2], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("Save project"));
 
     toolBar->AddSeparator();
-    toolBar->AddTool(wxID_CUT, toolBarBitmaps[4], wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, wxT("Cut"));
-    toolBar->AddTool(wxID_COPY, toolBarBitmaps[3], wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, wxT("Copy"));
-    toolBar->AddTool(wxID_PASTE, toolBarBitmaps[5], wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, wxT("Paste"));
+    toolBar->AddTool(wxID_CUT, toolBarBitmaps[4], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("Cut"));
+    toolBar->AddTool(wxID_COPY, toolBarBitmaps[3], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("Copy"));
+    toolBar->AddTool(wxID_PASTE, toolBarBitmaps[5], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("Paste"));
     toolBar->AddSeparator();
-    toolBar->AddTool(wxID_UNDO, toolBarBitmaps[10], wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, wxT("Undo"));
-    toolBar->AddTool(wxID_REDO, toolBarBitmaps[11], wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, wxT("Redo"));
+    toolBar->AddTool(wxID_UNDO, toolBarBitmaps[10], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("Undo"));
+    toolBar->AddTool(wxID_REDO, toolBarBitmaps[11], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("Redo"));
     toolBar->AddSeparator();
-    toolBar->AddTool(ctID_GO, toolBarBitmaps[6], wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, wxT("Save setup.h or configurewx.sh"));
+    toolBar->AddTool(ctID_GO, toolBarBitmaps[6], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("Save setup.h or configurewx.sh"));
     toolBar->AddSeparator();
-    toolBar->AddTool(ctID_ITEM_HELP, toolBarBitmaps[12], wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, wxT("Show help for this option"));
-    toolBar->AddTool(wxID_HELP_CONTEXT, toolBarBitmaps[13], wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, wxT("Show help on the clicked item"));
+    toolBar->AddTool(ctID_ITEM_HELP, toolBarBitmaps[12], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("Show help for this option"));
+    toolBar->AddTool(wxID_HELP_CONTEXT, toolBarBitmaps[13], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("Show help on the clicked item"));
 
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
@@ -404,7 +403,7 @@ void ctMainFrame::UpdateFrameTitle()
 // General disabler
 void ctMainFrame::OnUpdateDisable(wxUpdateUIEvent& event)
 {
-    event.Enable( FALSE );
+    event.Enable( false );
 }
 
 /*!
@@ -453,7 +452,7 @@ void ctOutputWindow::CreateWindows()
     item5->SetHelpText(_("Regenerates the code."));
 
 #if 0
-    m_filenameCtrl = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTE_READONLY);
+    m_filenameCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTE_READONLY);
     item2->Add( m_filenameCtrl, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
     m_filenameCtrl->SetHelpText(_("Shows the filename where the code is being saved."));
 #else
@@ -461,10 +460,10 @@ void ctOutputWindow::CreateWindows()
 #endif
 
     // The code editor
-    m_codeCtrl = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(100, 100), wxTE_RICH|wxTE_MULTILINE|wxSUNKEN_BORDER);
+    m_codeCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(100, 100), wxTE_RICH|wxTE_MULTILINE|wxSUNKEN_BORDER);
     item0->Add( m_codeCtrl, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxBOTTOM, 5 );
 
-    SetAutoLayout( TRUE );
+    SetAutoLayout( true );
     SetSizer( item0 );
 }
 

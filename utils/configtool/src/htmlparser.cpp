@@ -106,7 +106,7 @@ bool wxSimpleHtmlParser::ParseFile(const wxString& filename)
         return ParseString(text);
     }
     else
-        return FALSE;
+        return false;
 }
 
 bool wxSimpleHtmlParser::ParseString(const wxString& str)
@@ -131,7 +131,7 @@ bool wxSimpleHtmlParser::ParseString(const wxString& str)
 bool wxSimpleHtmlParser::ParseHtml(wxSimpleHtmlTag* parent)
 {
     if (!parent)
-        return FALSE;
+        return false;
 
     while (!Eof())
     {
@@ -160,9 +160,9 @@ bool wxSimpleHtmlParser::ParseHtml(wxSimpleHtmlTag* parent)
                 if (IsCloseTagNeeded(tag->GetName()))
                 {
                     if (!parent->GetParent())
-                        return FALSE;
+                        return false;
                     parent->GetParent()->AppendTag(tag);
-                    return TRUE;
+                    return true;
                 }
                 else
                     parent->AppendTag(tag);
@@ -177,7 +177,7 @@ bool wxSimpleHtmlParser::ParseHtml(wxSimpleHtmlTag* parent)
             if (IsCloseTagNeeded(tag->GetName()))
             {
                 if (!ParseHtml(tag))
-                    return FALSE;   // Something didn't go ok, so don't continue.
+                    return false;   // Something didn't go ok, so don't continue.
             }
         }
         else
@@ -195,7 +195,7 @@ bool wxSimpleHtmlParser::ParseHtml(wxSimpleHtmlTag* parent)
                                         // empty lines at the end of the file...
         }
     }
-    return TRUE;
+    return true;
 }
 
 // Plain text, up until an angled bracket
@@ -207,7 +207,7 @@ bool wxSimpleHtmlParser::ParseText(wxString& text)
         m_pos ++;
     }
     DecodeSpecialChars(text);
-    return TRUE;
+    return true;
 }
 
 wxSimpleHtmlTag* wxSimpleHtmlParser::ParseTagHeader()
@@ -218,7 +218,7 @@ wxSimpleHtmlTag* wxSimpleHtmlParser::ParseTagHeader()
         EatWhitespace();
 
         wxString word;
-        ReadWord(word, TRUE);
+        ReadWord(word, true);
 
         EatWhitespace();
 
@@ -239,12 +239,12 @@ wxSimpleHtmlTag* wxSimpleHtmlParser::ParseTagHeader()
 
 wxSimpleHtmlTag* wxSimpleHtmlParser::ParseTagClose()
 {
-    Matches(wxT("</"), TRUE);
+    Matches(wxT("</"), true);
 
     EatWhitespace();
 
     wxString word;
-    ReadWord(word, TRUE);
+    ReadWord(word, true);
 
     EatWhitespace();
     m_pos ++;
@@ -264,19 +264,19 @@ bool wxSimpleHtmlParser::ParseAttributes(wxSimpleHtmlTag* tag)
 
         if (IsString())
         {
-            ReadString(attrName, TRUE);
+            ReadString(attrName, true);
             tag->AppendAttribute(attrName, wxEmptyString);
         }
         else if (IsNumeric(GetChar(m_pos)))
         {
-            ReadNumber(attrName, TRUE);
+            ReadNumber(attrName, true);
             tag->AppendAttribute(attrName, wxEmptyString);
         }
         else
         {
             // Try to read an attribute name/value pair, or at least a name
             // without the value
-            ReadLiteral(attrName, TRUE);
+            ReadLiteral(attrName, true);
             EatWhitespace();
 
             if (GetChar(m_pos) == wxT('='))
@@ -285,26 +285,26 @@ bool wxSimpleHtmlParser::ParseAttributes(wxSimpleHtmlTag* tag)
                 EatWhitespace();
 
                 if (IsString())
-                    ReadString(attrValue, TRUE);
+                    ReadString(attrValue, true);
                 else if (!Eof() && !IsTagEndBracket(GetChar(m_pos)))
-                    ReadLiteral(attrValue, TRUE);
+                    ReadLiteral(attrValue, true);
             }
             if (!attrName.IsEmpty())
                 tag->AppendAttribute(attrName, attrValue);
         }
     }
-    return TRUE;
+    return true;
 }
 
 // e.g. <!DOCTYPE ....>
 wxSimpleHtmlTag* wxSimpleHtmlParser::ParseDirective()
 {
-    Matches(wxT("<!"), TRUE);
+    Matches(wxT("<!"), true);
 
     EatWhitespace();
 
     wxString word;
-    ReadWord(word, TRUE);
+    ReadWord(word, true);
 
     EatWhitespace();
 
@@ -323,12 +323,12 @@ wxSimpleHtmlTag* wxSimpleHtmlParser::ParseDirective()
 // e.g. <?xml .... ?>
 wxSimpleHtmlTag* wxSimpleHtmlParser::ParseXMLDeclaration()
 {
-    Matches(wxT("<?"), TRUE);
+    Matches(wxT("<?"), true);
 
     EatWhitespace();
 
     wxString word;
-    ReadWord(word, TRUE);
+    ReadWord(word, true);
 
     EatWhitespace();
 
@@ -347,28 +347,28 @@ wxSimpleHtmlTag* wxSimpleHtmlParser::ParseXMLDeclaration()
 bool wxSimpleHtmlParser::ParseComment()
 {
     // Eat the comment tag start
-    Matches(wxT("<!--"), TRUE);
+    Matches(wxT("<!--"), true);
 
-    while (!Eof() && !Matches(wxT("-->"), TRUE))
+    while (!Eof() && !Matches(wxT("-->"), true))
     {
         m_pos ++;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxSimpleHtmlParser::EatWhitespace()
 {
     while (!Eof() && IsWhitespace(GetChar(m_pos)))
         m_pos ++;
-    return TRUE;
+    return true;
 }
 
 bool wxSimpleHtmlParser::EatWhitespace(int& pos)
 {
     while (!Eof(pos) && IsWhitespace(GetChar(pos)))
         pos ++;
-    return TRUE;
+    return true;
 }
 
 bool wxSimpleHtmlParser::ReadString(wxString& str, bool eatIt)
@@ -388,10 +388,10 @@ bool wxSimpleHtmlParser::ReadString(wxString& str, bool eatIt)
         if (eatIt)
             m_pos = pos;
         DecodeSpecialChars(str);
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 bool wxSimpleHtmlParser::ReadWord(wxString& str, bool eatIt)
@@ -399,7 +399,7 @@ bool wxSimpleHtmlParser::ReadWord(wxString& str, bool eatIt)
     int pos = m_pos;
 
     if (!IsAlpha(GetChar(pos)))
-        return FALSE;
+        return false;
 
     str += (wxChar) GetChar(pos) ;
     pos ++;
@@ -412,7 +412,7 @@ bool wxSimpleHtmlParser::ReadWord(wxString& str, bool eatIt)
     if (eatIt)
         m_pos = pos;
     DecodeSpecialChars(str);
-    return TRUE;
+    return true;
 }
 
 bool wxSimpleHtmlParser::ReadNumber(wxString& str, bool eatIt)
@@ -420,7 +420,7 @@ bool wxSimpleHtmlParser::ReadNumber(wxString& str, bool eatIt)
     int pos = m_pos;
 
     if (!IsNumeric(GetChar(pos)))
-        return FALSE;
+        return false;
 
     str += (wxChar) GetChar(pos) ;
     pos ++;
@@ -433,7 +433,7 @@ bool wxSimpleHtmlParser::ReadNumber(wxString& str, bool eatIt)
     if (eatIt)
         m_pos = pos;
     DecodeSpecialChars(str);
-    return TRUE;
+    return true;
 }
 
 // Could be number, string, whatever, but read up until whitespace or end of tag (but not a quoted string)
@@ -449,7 +449,7 @@ bool wxSimpleHtmlParser::ReadLiteral(wxString& str, bool eatIt)
     if (eatIt)
         m_pos = pos;
     DecodeSpecialChars(str);
-    return TRUE;
+    return true;
 }
 
 bool wxSimpleHtmlParser::IsComment()
@@ -514,12 +514,12 @@ bool wxSimpleHtmlParser::IsNumeric(int ch)
 
 bool wxSimpleHtmlParser::IsCloseTagNeeded(const wxString &name)
 {
-    if (name.IsSameAs(wxT("P"), FALSE)) // e.g <P>
-        return FALSE;
+    if (name.IsSameAs(wxT("P"), false)) // e.g <P>
+        return false;
 
     // ToDo add more items here.
 
-    return TRUE;
+    return true;
 }
 
 // Encode/Decode Special Characters.
@@ -527,11 +527,11 @@ bool wxSimpleHtmlParser::IsCloseTagNeeded(const wxString &name)
 /* static */ void wxSimpleHtmlParser::DecodeSpecialChars(wxString &value)
 {
     // XML translation      
-    value.Replace(wxT("&gt;"),   wxT(">"),  TRUE);
-    value.Replace(wxT("&lt;"),   wxT("<"),  TRUE);
-    value.Replace(wxT("&quot;"), wxT("\""), TRUE);
-    value.Replace(wxT("&apos;"), wxT("'"),  TRUE);
-    value.Replace(wxT("&amp;"),  wxT("&"),  TRUE);    // Note: do this as last to prevent replace problems.
+    value.Replace(wxT("&gt;"),   wxT(">"),  true);
+    value.Replace(wxT("&lt;"),   wxT("<"),  true);
+    value.Replace(wxT("&quot;"), wxT("\""), true);
+    value.Replace(wxT("&apos;"), wxT("'"),  true);
+    value.Replace(wxT("&amp;"),  wxT("&"),  true);    // Note: do this as last to prevent replace problems.
 }
 
 /* static */ wxString wxSimpleHtmlParser::EncodeSpecialChars(const wxString &value)
@@ -539,11 +539,11 @@ bool wxSimpleHtmlParser::IsCloseTagNeeded(const wxString &name)
     wxString newvalue = value;
 
     // XML translation      
-    newvalue.Replace(wxT("&"), wxT("&amp;"),  TRUE);    // Note: do this as first to prevent replace problems.
-    newvalue.Replace(wxT(">"), wxT("&gt;"),   TRUE);
-    newvalue.Replace(wxT("<"), wxT("&lt;"),   TRUE);
-    newvalue.Replace(wxT("\""),wxT("&quot;"), TRUE);
-    newvalue.Replace(wxT("'"), wxT("&apos;"), TRUE);
+    newvalue.Replace(wxT("&"), wxT("&amp;"),  true);    // Note: do this as first to prevent replace problems.
+    newvalue.Replace(wxT(">"), wxT("&gt;"),   true);
+    newvalue.Replace(wxT("<"), wxT("&lt;"),   true);
+    newvalue.Replace(wxT("\""),wxT("&quot;"), true);
+    newvalue.Replace(wxT("'"), wxT("&apos;"), true);
     
     return newvalue;
 }
@@ -591,10 +591,10 @@ bool wxSimpleHtmlParser::WriteFile(wxString& filename)
     if (fstream.Ok())
     {
         Write(fstream);
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 /*
@@ -819,10 +819,10 @@ bool wxSimpleHtmlTag::GetAttributeValue(wxString& value, const wxString& attrNam
     if (attr)
     {
         value = attr->GetValue();
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 // Search forward from this tag until we find a tag with this name & attribute 
@@ -845,14 +845,14 @@ bool wxSimpleHtmlTag::FindTextUntilTagClose(wxString& text, const wxString& tagN
     while (tag)
     {
         if (tag->GetType() == wxSimpleHtmlTag_Close && tag->NameIs(tagName))
-            return TRUE;
+            return true;
 
         if (tag->GetType() == wxSimpleHtmlTag_Text)
             text += tag->GetText();
 
         tag = tag->m_next;
     }
-    return TRUE;
+    return true;
 }
 
 
@@ -874,7 +874,7 @@ wxSimpleHtmlTag* wxSimpleHtmlTag::GetChild(int i) const
 void wxSimpleHtmlTag::Write(wxOutputStream& stream)
 {
     // Some helpers to layout the open and close tags.
-    static bool sbUseTab = TRUE;
+    static bool sbUseTab = true;
     static size_t snTabLevel = 0;
 
 #if 0 // Enable if no tabs should be used to align the tags.
@@ -907,13 +907,13 @@ void wxSimpleHtmlTag::Write(wxOutputStream& stream)
             }            
             if(!m_children)
             {
-                sbUseTab = FALSE;   // We're putting the open a close tag on the same line, 
+                sbUseTab = false;   // We're putting the open a close tag on the same line, 
                                     // so we don't wan't any tabs
                 stream << wxT(">");
             }
             else
             {
-                // sbUseTab = TRUE;
+                // sbUseTab = true;
                 stream << wxT(">\n");
             }
             snTabLevel++;
@@ -958,7 +958,7 @@ void wxSimpleHtmlTag::Write(wxOutputStream& stream)
                     stream << wxT("\t");
             }
             stream << wxT("</") << wxSimpleHtmlParser::EncodeSpecialChars(m_name) << wxT(">\n");
-            sbUseTab = TRUE;
+            sbUseTab = true;
             break;
         }
     default:

@@ -21,7 +21,7 @@ struct ColumnData
   int spacing;        // Space between columns in twips
   bool leftBorder;
   bool rightBorder;
-  bool absWidth;      // If FALSE (the default), don't use an absolute width if you can help it.
+  bool absWidth;      // If false (the default), don't use an absolute width if you can help it.
 };
 
 extern ColumnData TableData[];

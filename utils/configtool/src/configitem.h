@@ -179,19 +179,19 @@ public:
     bool IsModified() const { return m_modified; }
 
     /// Mark this as modified.
-    void Modify(bool modified = TRUE) { m_modified = modified; }
+    void Modify(bool modified = true) { m_modified = modified; }
 
     /// Is this item enabled? (checked/unchecked)
     bool IsEnabled() const { return m_enabled; }
 
     /// Enable or disable (check/uncheck)
-    void Enable(bool enable = TRUE) { m_enabled = enable; }
+    void Enable(bool enable = true) { m_enabled = enable; }
 
     /// Is this item active? (sensitive to user input)
     bool IsActive() const { return m_active; }
 
     /// Make this (in)active
-    void SetActive(bool active = TRUE) { m_active = active; }
+    void SetActive(bool active = true) { m_active = active; }
 
     /// Set the type
     void SetType(ctConfigType type) { m_type = type; }

@@ -121,7 +121,7 @@ bool ctApp::OnInit(void)
     wxString helpFilePath(GetFullAppPath(_("configtool")));
     m_helpController->Initialize(helpFilePath);
     
-    ctMainFrame* frame = new ctMainFrame(m_docManager, NULL, -1, wxGetApp().GetSettings().GetAppName(),
+    ctMainFrame* frame = new ctMainFrame(m_docManager, NULL, wxID_ANY, wxGetApp().GetSettings().GetAppName(),
         GetSettings().m_frameSize.GetPosition(), GetSettings().m_frameSize.GetSize(),
         wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
     SetTopWindow(frame);
@@ -130,12 +130,12 @@ bool ctApp::OnInit(void)
     {
     case ctSHOW_STATUS_MAXIMIZED:
         {
-            frame->Maximize(TRUE);
+            frame->Maximize(true);
             break;
         }
     case ctSHOW_STATUS_MINIMIZED:
         {
-            frame->Iconize(TRUE);
+            frame->Iconize(true);
             break;
         }
     default:
@@ -172,7 +172,7 @@ bool ctApp::OnInit(void)
         // Load the file
         wxDocument* doc = m_docManager->CreateDocument(arg, wxDOC_SILENT);
         if (doc)
-            doc->SetDocumentSaved(TRUE);
+            doc->SetDocumentSaved(true);
     }
     else
     {
@@ -181,13 +181,13 @@ bool ctApp::OnInit(void)
             // Load the file that was last loaded
             wxDocument* doc = m_docManager->CreateDocument(GetSettings().m_lastFilename, wxDOC_SILENT);
             if (doc)
-                doc->SetDocumentSaved(TRUE);
+                doc->SetDocumentSaved(true);
         }
     }
     
-    GetTopWindow()->Show(TRUE);
+    GetTopWindow()->Show(true);
     
-    return TRUE;
+    return true;
 }
 
 int ctApp::OnExit(void)

@@ -910,7 +910,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
             if (htmlWorkshopFiles) HTMLWorkshopAddToContents(2, topicName, SubsectionsName);
             SetCurrentOutput(Subsections);
 
-	    HTMLHead();
+            HTMLHead();
             TexOutput(_T("<title>"));
             OutputCurrentSection();
             TexOutput(_T("</title></head>\n"));
@@ -991,7 +991,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
             if (htmlWorkshopFiles) HTMLWorkshopAddToContents(3, topicName, SubsubsectionsName);
 
             SetCurrentOutput(Subsubsections);
-	    HTMLHead();
+            HTMLHead();
             TexOutput(_T("<title>"));
             OutputCurrentSection();
             TexOutput(_T("</title></head>\n"));
@@ -1133,7 +1133,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
         else
           wxSnprintf(buf, sizeof(buf), _T("\n<TD ALIGN=LEFT>"));
         TexOutput(buf);
-		OutputFont();
+        OutputFont();
       }
       else
         TexOutput(_T("&amp;"));
@@ -1182,7 +1182,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
       else
         wxSnprintf(buf, sizeof(buf), _T("<TR>\n<TD ALIGN=LEFT>"));
       TexOutput(buf);
-	  OutputFont();
+      OutputFont();
     }
     else
     {
@@ -1971,15 +1971,15 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
             // If a filename is supplied, use it, otherwise try to
             // use the filename associated with the reference (from this document).
             if (helpRefFilename)
-	        {
+            {
               TraverseChildrenFromChunk(helpRefFilename);
               TexOutput(_T("#"));
-	        }
+            }
             else if (refFilename)
-	        {
+            {
               TexOutput(ConvertCase(refFilename));
               TexOutput(_T("#"));
-	        }
+            }
             TexOutput(refName);
             TexOutput(_T("\">"));
             if (helpRefText)
@@ -2059,7 +2059,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
           // If we have found the existing filename, make the inline
           // image point to the original file (could be PS, for example)
           if (originalFilename && (wxStrcmp(inlineFilename, originalFilename) != 0))
-	  {
+          {
             TexOutput(_T("<A HREF=\""));
             TexOutput(ConvertCase(originalFilename));
             TexOutput(_T("\">"));
@@ -2068,17 +2068,17 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
             TexOutput(_T("\""));
             TexOutput(alignment); 
             TexOutput(_T("></A>"));
-	  }
+          }
           else
 #endif
-	  {
+          {
             TexOutput(_T("<img src=\""));
             TexOutput(ConvertCase(wxFileNameFromPath(inlineFilename)));
             TexOutput(_T("\""));
             TexOutput(alignment); 
             TexOutput(_T(">"));
             delete[] inlineFilename;
-	  }
+          }
         }
         else
         {
@@ -2195,27 +2195,36 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
     {
       if ( start ) {
         // DHS
-	if (TwoColWidthA > -1) {
+        if (TwoColWidthA > -1)
+        {
           wxChar buf[100];
           wxSnprintf(buf, sizeof(buf), _T("\n<TR><TD VALIGN=TOP WIDTH=%d>\n"),TwoColWidthA);
           TexOutput(buf);
-        } else
+        }
+        else
+        {
           TexOutput(_T("\n<TR><TD VALIGN=TOP>\n"));
-		OutputFont();
+        }
+        OutputFont();
       }  else
             TexOutput(_T("\n</FONT></TD>\n"));
     }
     if (arg_no == 2)
     {
       // DHS
-      if ( start ) {
-	if (TwoColWidthB > -1) {
+      if ( start )
+      {
+        if (TwoColWidthB > -1)
+        {
           wxChar buf[100];
           wxSnprintf(buf, sizeof(buf), _T("\n<TD VALIGN=TOP WIDTH=%d>\n"),TwoColWidthB);
           TexOutput(buf);
-        } else 
-           TexOutput(_T("\n<TD VALIGN=TOP>\n"));
-		OutputFont();
+        }
+        else 
+        {
+          TexOutput(_T("\n<TD VALIGN=TOP>\n"));
+        }
+        OutputFont();
       }  else
            TexOutput(_T("\n</FONT></TD></TR>\n"));
     }
@@ -2701,7 +2710,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         if (compatibilityMode)
         {
           TexOutput(_T("<TR>\n<TD>"));
-		  OutputFont();
+          OutputFont();
 /*
           for (int i = 0; i < noColumns; i++)
           {
@@ -2797,7 +2806,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
           {
             wxStrcpy(buf2, _T("#000000"));
             wxChar buf[100];
-			wxSnprintf(buf, sizeof(buf), _T("Could not find colour name %s"), name);
+            wxSnprintf(buf, sizeof(buf), _T("Could not find colour name %s"), name);
             OnError(buf);
           }
           TexOutput(_T("<FONT COLOR=\""));
@@ -3014,7 +3023,7 @@ bool HTMLGo(void)
       if (DocumentTitle)
       {
         SetCurrentOutput(tmpTitle);
-	HTMLHead();
+        HTMLHead();
         TexOutput(_T("\n<HEAD><TITLE>"));
         TraverseChildrenFromChunk(DocumentTitle);
         TexOutput(_T("</TITLE></HEAD>\n"));
@@ -3022,7 +3031,7 @@ bool HTMLGo(void)
       else
       {
         SetCurrentOutput(tmpTitle);
-	HTMLHeadTo(tmpTitle);
+        HTMLHeadTo(tmpTitle);
         if (contentsString)
           wxFprintf(tmpTitle, _T("<TITLE>%s</TITLE></HEAD>\n\n"), contentsString);
         else
@@ -3239,7 +3248,7 @@ void GenerateHTMLWorkshopFiles(wxChar *fname)
             _T("  <param name=\"Local\" value=\"%s#%s\">\n")
             _T("  <param name=\"Name\" value=\"%s\">\n")
             _T("  </OBJECT>\n"),
-	    texTopic->filename, topicName, s);
+        texTopic->filename, topicName, s);
         node1 = node1->GetNext();
       }
     }
@@ -3271,10 +3280,10 @@ void HTMLWorkshopAddToContents(int level, wxChar *s, wxChar *file)
             _T(" <LI> <OBJECT type=\"text/sitemap\">\n")
             _T("  <param name=\"Local\" value=\"%s#%s\">\n")
             _T("  <param name=\"Name\" value=\""),
-	    file, s);
+            file, s);
   OutputCurrentSection();
   wxFprintf(HTMLWorkshopContents,
-	          _T("\">\n")
+            _T("\">\n")
             _T("  </OBJECT>\n"));
   HTMLWorkshopLastLevel = level;
 }

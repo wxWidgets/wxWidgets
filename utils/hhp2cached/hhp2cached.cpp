@@ -38,5 +38,5 @@ bool MyApp::OnInit()
         data.AddBook(argv[i]);
     }
 
-    return FALSE;
+    return false;
 }

@@ -76,7 +76,7 @@ void ctSettingsDialog::CreateControls()
 
     wxBoxSizer* item2 = new wxBoxSizer(wxVERTICAL);
     item1->SetSizer(item2);
-    item1->SetAutoLayout(TRUE);
+    item1->SetAutoLayout(true);
 
     wxNotebook* item3 = new wxNotebook(item1, ID_NOTEBOOK, wxDefaultPosition, wxSize(200, 200), wxNB_TOP);
     wxNotebookSizer* item3Sizer = new wxNotebookSizer(item3);
@@ -102,7 +102,7 @@ void ctSettingsDialog::CreateControls()
     item21->Add(item25, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 #if defined(__WXGTK__) || defined(__WXMAC__)
-    wxContextHelpButton* item26 = new wxContextHelpButton(item1, wxID_CONTEXT_HELP, wxDefaultPosition, wxSize(20, -1), wxBU_AUTODRAW);
+    wxContextHelpButton* item26 = new wxContextHelpButton(item1, wxID_CONTEXT_HELP, wxDefaultPosition, wxSize(20, wxDefaultSize.y), wxBU_AUTODRAW);
     item21->Add(item26, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 #endif
 
@@ -168,7 +168,7 @@ void ctSettingsDialog::OnHelp( wxCommandEvent& WXUNUSED(event) )
 
 bool ctSettingsDialog::ShowToolTips()
 {
-  return TRUE;
+  return true;
 }
 
 /*!
@@ -211,14 +211,14 @@ void ctGeneralSettingsDialog::CreateControls()
 
     wxBoxSizer* item5 = new wxBoxSizer(wxVERTICAL);
     item4->SetSizer(item5);
-    item4->SetAutoLayout(TRUE);
+    item4->SetAutoLayout(true);
 
-    wxStaticBox* item6Static = new wxStaticBox(item4, -1, _("General settings"));
+    wxStaticBox* item6Static = new wxStaticBox(item4, wxID_ANY, _("General settings"));
     wxStaticBoxSizer* item6 = new wxStaticBoxSizer(item6Static, wxVERTICAL);
     item5->Add(item6, 1, wxGROW|wxALL, 5);
 
     wxCheckBox* item7 = new wxCheckBox(item4, ID_LOAD_LAST_DOCUMENT, _("&Load last document"), wxDefaultPosition, wxDefaultSize, 0);
-    item7->SetValue(FALSE);
+    item7->SetValue(false);
     item7->SetHelpText(_("Check to load the last document on startup"));
 #if wxUSE_TOOLTIPS
     if (ShowToolTips())
@@ -227,7 +227,7 @@ void ctGeneralSettingsDialog::CreateControls()
     item6->Add(item7, 0, wxALIGN_LEFT|wxALL, 5);
 
     wxCheckBox* item8 = new wxCheckBox(item4, ID_SHOW_TOOLTIPS, _("&Show tooltips"), wxDefaultPosition, wxDefaultSize, 0);
-    item8->SetValue(FALSE);
+    item8->SetValue(false);
     item8->SetHelpText(_("Check to show tooltips"));
 #if wxUSE_TOOLTIPS
     if (ShowToolTips())
@@ -242,7 +242,7 @@ void ctGeneralSettingsDialog::CreateControls()
         _("Setup file"),
         _("Configure script")
     };
-    wxChoice* item10 = new wxChoice(item4, ID_DEFAULT_FILE_KIND, wxDefaultPosition, wxSize(200, -1), 2, item10Strings, 0);
+    wxChoice* item10 = new wxChoice(item4, ID_DEFAULT_FILE_KIND, wxDefaultPosition, wxSize(200, wxDefaultSize.y), 2, item10Strings, 0);
     item10->SetStringSelection(_("Setup file"));
     item10->SetHelpText(_("Select the default kind of file to save using Go"));
 #if wxUSE_TOOLTIPS
@@ -265,7 +265,7 @@ void ctGeneralSettingsDialog::CreateControls()
 
 bool ctGeneralSettingsDialog::ShowToolTips()
 {
-  return TRUE;
+  return true;
 }
 
 /*!
@@ -313,9 +313,9 @@ void ctLocationSettingsDialog::CreateControls()
 
     wxBoxSizer* item12 = new wxBoxSizer(wxVERTICAL);
     item11->SetSizer(item12);
-    item11->SetAutoLayout(TRUE);
+    item11->SetAutoLayout(true);
 
-    wxStaticBox* item13Static = new wxStaticBox(item11, -1, _("Locations"));
+    wxStaticBox* item13Static = new wxStaticBox(item11, wxID_ANY, _("Locations"));
     wxStaticBoxSizer* item13 = new wxStaticBoxSizer(item13Static, wxVERTICAL);
     item12->Add(item13, 1, wxGROW|wxALL, 5);
 
@@ -325,7 +325,7 @@ void ctLocationSettingsDialog::CreateControls()
     wxBoxSizer* item15 = new wxBoxSizer(wxHORIZONTAL);
     item13->Add(item15, 0, wxGROW, 5);
 
-    wxTextCtrl* item16 = new wxTextCtrl(item11, ID_WXWIN_HIERARCHY, _(""), wxDefaultPosition, wxSize(200, -1), 0);
+    wxTextCtrl* item16 = new wxTextCtrl(item11, ID_WXWIN_HIERARCHY, _(""), wxDefaultPosition, wxSize(200, wxDefaultSize.y), 0);
     item16->SetHelpText(_("Enter the root path of the wxWidgets hierarchy"));
 #if wxUSE_TOOLTIPS
     if (ShowToolTips())
@@ -347,7 +347,7 @@ void ctLocationSettingsDialog::CreateControls()
     item18->Add(60, 5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxCheckBox* item20 = new wxCheckBox(item11, ID_USE_WXWIN, _("&Use WXWIN environment variable"), wxDefaultPosition, wxDefaultSize, 0);
-    item20->SetValue(FALSE);
+    item20->SetValue(false);
     item20->SetHelpText(_("Check to use the value of WXWIN instead"));
 #if wxUSE_TOOLTIPS
     if (ShowToolTips())

@@ -449,7 +449,7 @@ void ReadTexReferences(wxChar *filename)
     if (!istr.eof())
     {
       istr >> file;
-	  istr >> sectionName;
+      istr >> sectionName;
       char ch;
       istr.get(ch); // Read past space
       istr.get(ch);
@@ -1627,15 +1627,15 @@ void Tex2RTFYield(bool force)
     static int yieldCount = 0;
     
     if (isSync)
-	return;
+        return;
     
     if (force)
-	yieldCount = 0;
+    yieldCount = 0;
     if (yieldCount == 0)
     {
-	if (wxTheApp)
-	    wxYield();
-	yieldCount = 10;
+        if (wxTheApp)
+            wxYield();
+        yieldCount = 10;
     }
     yieldCount --;
 #endif
@@ -1713,7 +1713,7 @@ wxChar *ConvertCase(wxChar *s)
 }
 
 #if !WXWIN_COMPATIBILITY_2
-// if substring is TRUE, search for str1 in str2
+// if substring is true, search for str1 in str2
 bool StringMatch(const wxChar *str1, const wxChar *str2, bool subString, 
                  bool exact)
 {

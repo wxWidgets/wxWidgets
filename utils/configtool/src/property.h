@@ -7,7 +7,7 @@
 // Created:     2003-06-03
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	
+// Licence:
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _CT_PROPERTY_H_
@@ -30,30 +30,30 @@ class ctProperty: public wxObject
 public:
     ctProperty()
     {
-        m_readOnly = FALSE;
-        m_custom = FALSE;
-        m_show = TRUE;
+        m_readOnly = false;
+        m_custom = false;
+        m_show = true;
     }
     ctProperty(const ctProperty& property) { Copy(property); }
     ctProperty(const wxString& descr, const wxVariant& variant,
         const wxString& editorType = wxEmptyString,
-        bool readOnly = FALSE)
+        bool readOnly = false)
     {
         m_description = descr;
         m_variant = variant;
         m_editorType = editorType;
-        m_show = TRUE;
+        m_show = true;
         m_readOnly = readOnly;
-        m_custom = FALSE;
+        m_custom = false;
     }
 
     ctProperty(const wxString& name, const wxString& value = wxEmptyString)
     {
         m_variant.SetName(name);
         m_variant = value;
-        m_readOnly = FALSE;
-        m_custom = FALSE;
-        m_show = TRUE;
+        m_readOnly = false;
+        m_custom = false;
+        m_show = true;
     }
 
     void operator= (const ctProperty& property) { Copy(property); }

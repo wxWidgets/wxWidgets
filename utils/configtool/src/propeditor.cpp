@@ -65,7 +65,7 @@ ctPropertyEditor::~ctPropertyEditor()
 
 void ctPropertyEditor::CreateControls(wxWindow* parent)
 {
-    m_elementTitleTextCtrl = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+    m_elementTitleTextCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
     wxBitmap detailsIcon(ellipsis_xpm);
 
     wxBoxSizer *item0 = new wxBoxSizer( wxVERTICAL );
@@ -75,7 +75,7 @@ void ctPropertyEditor::CreateControls(wxWindow* parent)
     wxTextCtrl *item2 = m_elementTitleTextCtrl;
     item1->Add( item2, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-    wxButton *item3a = new wxButton( parent, ctID_ATTRIBUTE_EDITOR_EDIT_DETAILS, wxT("Edit..."), wxDefaultPosition, wxSize(-1, -1));
+    wxButton *item3a = new wxButton( parent, ctID_ATTRIBUTE_EDITOR_EDIT_DETAILS, wxT("Edit..."));
     item1->Add( item3a, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 );
 
     item0->Add( item1, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5 );
@@ -95,11 +95,11 @@ void ctPropertyEditor::CreateControls(wxWindow* parent)
 
     // TODO: show or hide description window
 //    if (some-setting)
-//        ShowDescriptionWindow(FALSE);
+//        ShowDescriptionWindow(false);
 
     item0->Add( m_splitterWindow, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxBOTTOM, 5 );
 
-    this->SetAutoLayout( TRUE );
+    this->SetAutoLayout(true);
     this->SetSizer( item0 );
 
     /// Add help text
@@ -146,7 +146,7 @@ void ctPropertyEditor::ShowDescriptionWindow(bool show)
     {
         // TODO
         int pos = 100;
-        m_propertyDescriptionWindow->Show(TRUE);
+        m_propertyDescriptionWindow->Show(true);
         if (!m_splitterWindow->IsSplit())
         {
             m_splitterWindow->SplitHorizontally(m_propertyDescriptionWindow, m_attributeEditorGrid, pos);
@@ -182,13 +182,13 @@ void ctPropertyEditor::OnUpdateEditDetails(wxUpdateUIEvent& event)
 bool ctPropertyEditor::CanEditDetails()
 {
     if (!m_item)
-        return FALSE;
+        return false;
 
     int row;
     ctProperty* prop = FindSelectedProperty(row);
     if (!prop || prop->GetEditorType().IsEmpty())
-        return FALSE;
-    return TRUE;
+        return false;
+    return true;
 }
 
 /// Shows the item
@@ -261,7 +261,7 @@ void ctPropertyEditor::UpdateItem()
         while (node)
         {
             ctProperty* prop = (ctProperty*) node->GetData();
-            DisplayProperty(i, prop, TRUE);
+            DisplayProperty(i, prop, true);
 
             i ++;
             node = node->GetNext();
@@ -300,7 +300,7 @@ bool ctPropertyEditor::DisplayProperty(int row, ctProperty* prop, bool valueOnly
     }
     else
     {
-        m_attributeEditorGrid->SetReadOnly(row, 1, FALSE);        
+        m_attributeEditorGrid->SetReadOnly(row, 1, false);        
         m_attributeEditorGrid->SetCellTextColour(row, 1, * wxBLACK);
     }
 
@@ -308,7 +308,7 @@ bool ctPropertyEditor::DisplayProperty(int row, ctProperty* prop, bool valueOnly
     m_attributeEditorGrid->SetCellValue(row, 1, ctConvertToSingleText(prop->GetValue()));
 
     if (valueOnly)
-        return TRUE;
+        return true;
 
     // Set the value type
     if (prop->GetEditorType() == _T("choice"))
@@ -347,24 +347,24 @@ bool ctPropertyEditor::DisplayProperty(int row, ctProperty* prop, bool valueOnly
                 new ctGridCellTextEditor);
     }
     
-    return TRUE;
+    return true;
 }
 
 /// Display attribute value
 bool ctPropertyEditor::DisplayProperty(ctProperty* prop)
 {
     if (!m_item)
-        return FALSE;
+        return false;
 
     int index = m_item->GetProperties().GetList().IndexOf(prop);
-    return DisplayProperty(index, prop, TRUE);
+    return DisplayProperty(index, prop, true);
 }
 
 /// Display the default property
 bool ctPropertyEditor::DisplayDefaultProperty()
 {
     if (!m_item)
-        return FALSE;
+        return false;
 
     wxString str = m_item->GetDefaultProperty();
 
@@ -375,7 +375,7 @@ bool ctPropertyEditor::DisplayDefaultProperty()
         this->m_attributeEditorGrid->SelectRow(index);
         this->m_attributeEditorGrid->SetGridCursor(index, 1);
     }
-    return TRUE;
+    return true;
 }
 
 /// Edit the default property
@@ -393,12 +393,12 @@ bool ctPropertyEditor::EditDefaultProperty(ctConfigItem* item)
                 this->m_attributeEditorGrid->SelectRow(index);
                 this->m_attributeEditorGrid->SetGridCursor(index, 1);
                 EditDetails(wxTheApp->GetTopWindow());
-                return TRUE;
+                return true;
             }
         }
 
     }
-    return FALSE;
+    return false;
 }
 
 /// Find the selected property
@@ -446,7 +446,7 @@ bool ctPropertyEditor::EditDetails(wxWindow* WXUNUSED(parent))
         int row;
         ctProperty* prop = FindSelectedProperty(row);
         if (!prop)
-            return FALSE;
+            return false;
 
         wxString type(prop->GetEditorType());
         wxString value = m_attributeEditorGrid->GetCellValue(row, 1);
@@ -457,16 +457,16 @@ bool ctPropertyEditor::EditDetails(wxWindow* WXUNUSED(parent))
             wxString msg;
             msg.Printf(wxT("Edit %s:"), (const wxChar*) prop->GetName());
             ctMultiLineTextEditor dialog(wxTheApp->GetTopWindow(),
-                -1, wxT("Edit Text Property"), msg, value);
+                wxID_ANY, wxT("Edit Text Property"), msg, value);
             if (dialog.ShowModal() == wxID_OK)
             {
                 value = ctConvertToSingleText(dialog.GetText());
                 m_attributeEditorGrid->SetCellValue(row, 1, value);
                 ApplyCellValueToProperty(row, 1);
-                return TRUE;
+                return true;
             }
             else
-                return FALSE;
+                return false;
         }
         else if (type == _T("filename"))
         {
@@ -486,10 +486,10 @@ bool ctPropertyEditor::EditDetails(wxWindow* WXUNUSED(parent))
 
                 m_attributeEditorGrid->SetCellValue(row, 1, value);
                 ApplyCellValueToProperty(row, 1);
-                return TRUE;
+                return true;
             }
             else
-                return FALSE;
+                return false;
         }
         else if (type == _T("configitems"))
         {
@@ -497,7 +497,7 @@ bool ctPropertyEditor::EditDetails(wxWindow* WXUNUSED(parent))
             ctConfigItem::StringToArray(value, items);
 
             ctConfigItemsSelector dialog(wxTheApp->GetTopWindow(),
-                    -1, wxT("Select Configuration Items"));
+                    wxID_ANY, wxT("Select Configuration Items"));
             dialog.SetConfigList(items);
             if (dialog.ShowModal() == wxID_OK)
             {
@@ -507,14 +507,14 @@ bool ctPropertyEditor::EditDetails(wxWindow* WXUNUSED(parent))
 
                 m_attributeEditorGrid->SetCellValue(row, 1, newValue);
                 ApplyCellValueToProperty(row, 1);
-                return TRUE;
+                return true;
             }
             else
-                return FALSE;
+                return false;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 /// Intercept selection event.
@@ -589,12 +589,12 @@ void ctPropertyEditor::OnDClickCell(wxGridEvent& WXUNUSED(event))
 /// item object.
 void ctPropertyEditor::ApplyCellValueToProperty(int row, int col)
 {
-    static bool s_Applying = FALSE;
+    static bool s_Applying = false;
 
     if (s_Applying)
         return;
 
-    s_Applying = TRUE;
+    s_Applying = true;
     if (col == 1 && m_item)
     {
         ctProperty* prop = m_item->GetProperties().GetNth(row);
@@ -608,9 +608,9 @@ void ctPropertyEditor::ApplyCellValueToProperty(int row, int col)
         if (prop->GetVariant().GetType() == _T("bool"))
         {
             if (value == _T("1"))
-                variant = (bool) TRUE;
+                variant = true;
             else
-                variant = (bool) FALSE;
+                variant = false;
         }
         else if (prop->GetVariant().GetType() == _T("long"))
         {
@@ -634,19 +634,19 @@ void ctPropertyEditor::ApplyCellValueToProperty(int row, int col)
         if (prop->GetName() == _T("description"))
             UpdateDescription(row);
     }
-    s_Applying = FALSE;
+    s_Applying = false;
 }
 
 /// Apply the cell value to the property, and notify the
 /// item object.
 void ctPropertyEditor::ApplyPropertyValue(ctConfigItem* item, ctProperty* property, const wxVariant& variant)
 {
-    static bool s_Applying = FALSE;
+    static bool s_Applying = false;
 
     if (s_Applying)
         return;
 
-    s_Applying = TRUE;
+    s_Applying = true;
 
     // Save the old values
     ctProperties* oldProperties = new ctProperties(item->GetProperties());
@@ -667,9 +667,9 @@ void ctPropertyEditor::ApplyPropertyValue(ctConfigItem* item, ctProperty* proper
     // But when we Undo or Redo, the changed properties will be applied.
     item->GetDocument()->GetCommandProcessor()->Submit(
         new ctConfigCommand(menuLabel, ctCMD_APPLY_PROPERTY,
-        item, oldProperties, TRUE));
+        item, oldProperties, true));
 
-    s_Applying = FALSE;
+    s_Applying = false;
 }
 
 /*!
@@ -734,7 +734,7 @@ bool ctPropertyEditorGrid::ClearAttributes()
 {
     if (GetNumberRows() > 0)
         DeleteRows(0, GetNumberRows());
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -801,7 +801,7 @@ bool ctMultiLineTextEditor::AddControls(wxWindow* parent, const wxString& msg)
     wxStaticText *item2 = new wxStaticText( parent, wxID_STATIC, msg, wxDefaultPosition, wxDefaultSize, 0 );
     item1->Add( item2, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5 );
 
-    wxTextCtrl *item3 = new wxTextCtrl( parent, -1, wxT(""), wxDefaultPosition, wxSize(330,180), wxTE_MULTILINE|wxTE_RICH );
+    wxTextCtrl *item3 = new wxTextCtrl( parent, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(330,180), wxTE_MULTILINE|wxTE_RICH );
     item1->Add( item3, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
     wxBoxSizer *item4 = new wxBoxSizer( wxHORIZONTAL );
@@ -826,11 +826,11 @@ bool ctMultiLineTextEditor::AddControls(wxWindow* parent, const wxString& msg)
     item3->SetFocus();
     ((wxButton*) FindWindow(wxID_OK))->SetDefault();
 
-    parent->SetAutoLayout( TRUE );
+    parent->SetAutoLayout( true );
     parent->SetSizer(item0);
     item0->Fit(parent);
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -839,14 +839,14 @@ bool ctMultiLineTextEditor::AddControls(wxWindow* parent, const wxString& msg)
  */
 
 BEGIN_EVENT_TABLE(ctSplitterWindow, wxSplitterWindow)
-    EVT_SPLITTER_SASH_POS_CHANGED(-1, ctSplitterWindow::OnChangeSash)
+    EVT_SPLITTER_SASH_POS_CHANGED(wxID_ANY, ctSplitterWindow::OnChangeSash)
 END_EVENT_TABLE()
 
 ctSplitterWindow::ctSplitterWindow(wxWindow* parent, wxWindowID id,
         const wxPoint& pos, const wxSize& size, long style):
       wxSplitterWindow(parent, id, pos, size, style)
 {
-    m_updateSettings = FALSE;
+    m_updateSettings = false;
     m_position = 0;
 }
 

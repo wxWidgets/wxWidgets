@@ -62,8 +62,8 @@ IMPLEMENT_CLASS(ctConfigTreeCtrl, wxTreeCtrl)
 BEGIN_EVENT_TABLE(ctConfigTreeCtrl, wxTreeCtrl)
     EVT_MOUSE_EVENTS(ctConfigTreeCtrl::OnMouseEvent)
     EVT_CHAR(ctConfigTreeCtrl::OnKeyDown)
-    EVT_TREE_SEL_CHANGED(-1, ctConfigTreeCtrl::OnSelChanged)
-    EVT_HELP(-1, ctConfigTreeCtrl::OnHelp)
+    EVT_TREE_SEL_CHANGED(wxID_ANY, ctConfigTreeCtrl::OnSelChanged)
+    EVT_HELP(wxID_ANY, ctConfigTreeCtrl::OnHelp)
 END_EVENT_TABLE()
 
 ctConfigTreeCtrl::ctConfigTreeCtrl(wxWindow* parent, wxWindowID id, const wxPoint& pt,
@@ -88,32 +88,32 @@ wxTreeCtrl(parent, id, pt, sz, style)
 // Load the icons and initialize the tree
 void ctConfigTreeCtrl::LoadIcons()
 {
-    m_imageList = new wxImageList(16, 16, TRUE);
+    m_imageList = new wxImageList(16, 16, true);
     m_iconTable.SetImageList(m_imageList);
     SetImageList(m_imageList);
     
-    m_iconTable.AddInfo(_T("Group"), wxIcon(closedfolder_xpm), 0, TRUE);
-    m_iconTable.AddInfo(_T("Group"), wxIcon(closedfolder_dis_xpm), 0, FALSE);
+    m_iconTable.AddInfo(_T("Group"), wxIcon(closedfolder_xpm), 0, true);
+    m_iconTable.AddInfo(_T("Group"), wxIcon(closedfolder_dis_xpm), 0, false);
     
-    m_iconTable.AddInfo(_T("Checkbox"), wxIcon(checked_xpm), 0, TRUE);
-    m_iconTable.AddInfo(_T("Checkbox"), wxIcon(checked_dis_xpm), 0, FALSE);
-    m_iconTable.AddInfo(_T("Checkbox"), wxIcon(unchecked_xpm), 1, TRUE);
-    m_iconTable.AddInfo(_T("Checkbox"), wxIcon(unchecked_dis_xpm), 1, FALSE);
+    m_iconTable.AddInfo(_T("Checkbox"), wxIcon(checked_xpm), 0, true);
+    m_iconTable.AddInfo(_T("Checkbox"), wxIcon(checked_dis_xpm), 0, false);
+    m_iconTable.AddInfo(_T("Checkbox"), wxIcon(unchecked_xpm), 1, true);
+    m_iconTable.AddInfo(_T("Checkbox"), wxIcon(unchecked_dis_xpm), 1, false);
     
-    m_iconTable.AddInfo(_T("CheckGroup"), wxIcon(checkedfolder_xpm), 0, TRUE);
-    m_iconTable.AddInfo(_T("CheckGroup"), wxIcon(checkedfolder_dis_xpm), 0, FALSE);
-    m_iconTable.AddInfo(_T("CheckGroup"), wxIcon(uncheckedfolder_xpm), 1, TRUE);
-    m_iconTable.AddInfo(_T("CheckGroup"), wxIcon(uncheckedfolder_dis_xpm), 1, FALSE);
+    m_iconTable.AddInfo(_T("CheckGroup"), wxIcon(checkedfolder_xpm), 0, true);
+    m_iconTable.AddInfo(_T("CheckGroup"), wxIcon(checkedfolder_dis_xpm), 0, false);
+    m_iconTable.AddInfo(_T("CheckGroup"), wxIcon(uncheckedfolder_xpm), 1, true);
+    m_iconTable.AddInfo(_T("CheckGroup"), wxIcon(uncheckedfolder_dis_xpm), 1, false);
     
-    m_iconTable.AddInfo(_T("RadioGroup"), wxIcon(radiofolderon_xpm), 0, TRUE);
-    m_iconTable.AddInfo(_T("RadioGroup"), wxIcon(radiofolderon_dis_xpm), 0, FALSE);
-    m_iconTable.AddInfo(_T("RadioGroup"), wxIcon(radiofolderoff_xpm), 1, TRUE);
-    m_iconTable.AddInfo(_T("RadioGroup"), wxIcon(radiofolderoff_dis_xpm), 1, FALSE);
+    m_iconTable.AddInfo(_T("RadioGroup"), wxIcon(radiofolderon_xpm), 0, true);
+    m_iconTable.AddInfo(_T("RadioGroup"), wxIcon(radiofolderon_dis_xpm), 0, false);
+    m_iconTable.AddInfo(_T("RadioGroup"), wxIcon(radiofolderoff_xpm), 1, true);
+    m_iconTable.AddInfo(_T("RadioGroup"), wxIcon(radiofolderoff_dis_xpm), 1, false);
     
-    m_iconTable.AddInfo(_T("Radiobutton"), wxIcon(radioon_xpm), 0, TRUE);
-    m_iconTable.AddInfo(_T("Radiobutton"), wxIcon(radioon_dis_xpm), 0, FALSE);
-    m_iconTable.AddInfo(_T("Radiobutton"), wxIcon(radiooff_xpm), 1, TRUE);
-    m_iconTable.AddInfo(_T("Radiobutton"), wxIcon(radiooff_dis_xpm), 1, FALSE);
+    m_iconTable.AddInfo(_T("Radiobutton"), wxIcon(radioon_xpm), 0, true);
+    m_iconTable.AddInfo(_T("Radiobutton"), wxIcon(radioon_dis_xpm), 0, false);
+    m_iconTable.AddInfo(_T("Radiobutton"), wxIcon(radiooff_xpm), 1, true);
+    m_iconTable.AddInfo(_T("Radiobutton"), wxIcon(radiooff_dis_xpm), 1, false);
 }
 
 ctConfigTreeCtrl::~ctConfigTreeCtrl()
@@ -214,7 +214,7 @@ void ctConfigTreeCtrl::OnHelp(wxHelpEvent& event)
                 wxGetApp().GetReferenceHelpController().DisplaySection(helpTopic);
                 return;
             }
-	    }
+        }
     }
 
     event.Skip();

@@ -81,7 +81,7 @@ BEGIN_EVENT_TABLE(ctConfigToolView, wxView)
     EVT_UPDATE_UI(ctID_EDIT_CUSTOM_PROPERTY, ctConfigToolView::OnUpdateEditCustomProperty)
     EVT_UPDATE_UI(ctID_DELETE_CUSTOM_PROPERTY, ctConfigToolView::OnUpdateDeleteCustomProperty)
 
-    EVT_NOTEBOOK_PAGE_CHANGED(-1, ctConfigToolView::OnTabSelect)
+    EVT_NOTEBOOK_PAGE_CHANGED(wxID_ANY, ctConfigToolView::OnTabSelect)
 
     EVT_MENU(ctID_SAVE_SETUP_FILE, ctConfigToolView::OnSaveSetupFile)
     EVT_MENU(ctID_SAVE_CONFIGURE_COMMAND, ctConfigToolView::OnSaveConfigureCommand)
@@ -104,12 +104,12 @@ ctConfigToolView::ctConfigToolView()
 // windows for displaying the view.
 bool ctConfigToolView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
 {
-    wxGetApp().GetDocManager()->ActivateView(this, TRUE);
+    wxGetApp().GetDocManager()->ActivateView(this, true);
     wxGetApp().GetMainFrame()->SetDocument((ctConfigToolDoc*) doc);
     wxGetApp().GetMainFrame()->GetSetupPage()->SetDocument((ctConfigToolDoc*) doc) ;
     wxGetApp().GetMainFrame()->GetConfigurePage()->SetDocument((ctConfigToolDoc*) doc) ;
 
-    return TRUE;
+    return true;
 }
 
 void ctConfigToolView::OnDraw(wxDC *WXUNUSED(dc))
@@ -181,7 +181,7 @@ void ctConfigToolView::OnUpdate(wxView *WXUNUSED(sender), wxObject *hintObj)
         {
             // ctConfigItem& ti = *(ctConfigItem *)hint->m_item;
             wxGetApp().GetMainFrame()->GetPropertyEditor()->ShowItem(selItem);
-        }		        
+        }        
         break;
         
     default:
@@ -193,20 +193,20 @@ void ctConfigToolView::OnUpdate(wxView *WXUNUSED(sender), wxObject *hintObj)
 bool ctConfigToolView::OnClose(bool WXUNUSED(deleteWindow))
 {
     if (!GetDocument()->Close())
-        return FALSE;
+        return false;
 
     ctConfigToolHint hint(NULL, ctClear);
     GetDocument()->UpdateAllViews (NULL, & hint);
 
-    wxGetApp().GetDocManager()->ActivateView(this, FALSE);
+    wxGetApp().GetDocManager()->ActivateView(this, false);
 
-    Activate(FALSE);
+    Activate(false);
     
     wxGetApp().GetMainFrame()->SetDocument(NULL);
     wxGetApp().GetMainFrame()->GetSetupPage()->SetDocument(NULL) ;
     wxGetApp().GetMainFrame()->GetConfigurePage()->SetDocument(NULL) ;
 
-    return TRUE;
+    return true;
 }
 
 void ctConfigToolView::OnChangeFilename()
@@ -235,12 +235,12 @@ void ctConfigToolView::OnChangeFilename()
 // General disabler
 void ctConfigToolView::OnUpdateDisable(wxUpdateUIEvent& event)
 {
-    event.Enable( FALSE );
+    event.Enable( false );
 }
 
 void ctConfigToolView::OnUpdateAddItem(wxUpdateUIEvent& event)
 {
-    event.Enable( TRUE );
+    event.Enable( true );
 }
 
 /// Add item and its children to the tree
@@ -349,7 +349,7 @@ void ctConfigToolView::OnIconLeftDown(ctConfigTreeCtrl* treeControl, ctConfigIte
 
         item->Enable(!item->IsEnabled());
 
-        GetDocument()->Modify(TRUE);
+        GetDocument()->Modify(true);
         OnChangeFilename();
 
         SyncItem(treeControl, item);
@@ -714,7 +714,7 @@ void ctConfigToolView::OnAddCustomProperty(wxCommandEvent& WXUNUSED(event))
     if (doc && sel && editor)
     {
         ctCustomPropertyDialog dialog(wxGetApp().GetMainFrame(),
-            -1, _("Add a custom property"));
+            wxID_ANY, _("Add a custom property"));
         if (dialog.ShowModal() == wxID_OK)
         {
             wxString name = dialog.GetPropertyName();
@@ -731,14 +731,14 @@ void ctConfigToolView::OnAddCustomProperty(wxCommandEvent& WXUNUSED(event))
             }
             ctProperty* property = new ctProperty;
             if (type == wxT("bool"))
-                property->GetVariant() = wxVariant((bool) FALSE, name);
+                property->GetVariant() = wxVariant(false, name);
             else if (type == wxT("double"))
                 property->GetVariant() = wxVariant((double) 0.0, name);
             else if (type == wxT("long"))
                 property->GetVariant() = wxVariant((long) 0, name);
             else
                 property->GetVariant() = wxVariant(wxT(""), name);
-            property->SetCustom(TRUE);
+            property->SetCustom(true);
             property->SetDescription(descr);
             property->SetChoices(choices);
             property->SetEditorType(editorType);
@@ -769,7 +769,7 @@ void ctConfigToolView::OnEditCustomProperty(wxCommandEvent& WXUNUSED(event))
             wxArrayString oldChoices = property->GetChoices();
             
             ctCustomPropertyDialog dialog(wxGetApp().GetMainFrame(),
-                -1, _("Edit custom property"));
+                wxID_ANY, _("Edit custom property"));
             dialog.SetPropertyName(oldName);
             dialog.SetPropertyType(oldType);
             dialog.SetPropertyDescription(oldDescription);
@@ -790,7 +790,7 @@ void ctConfigToolView::OnEditCustomProperty(wxCommandEvent& WXUNUSED(event))
                 if (type != oldType)
                 {
                     if (type == wxT("bool"))
-                        property->GetVariant() = wxVariant((bool) FALSE, name);
+                        property->GetVariant() = wxVariant(false, name);
                     else if (type == wxT("double"))
                         property->GetVariant() = wxVariant((double) 0.0, name);
                     else if (type == wxT("long"))
@@ -810,7 +810,7 @@ void ctConfigToolView::OnEditCustomProperty(wxCommandEvent& WXUNUSED(event))
                 if (name != oldName)
                     property->GetVariant().SetName(name);
 
-                property->SetCustom(TRUE);
+                property->SetCustom(true);
 
                 if (descr != oldDescription)
                     property->SetDescription(descr);
@@ -916,7 +916,7 @@ void ctConfigToolView::OnSaveSetupFile(wxCommandEvent& WXUNUSED(event))
     wxString filename = _T("setup.h");
     wxString path = wxGetApp().GetSettings().m_lastSetupSaveDir;
     if (path.IsEmpty())
-        path = doc->GetFrameworkDir(FALSE);
+        path = doc->GetFrameworkDir(false);
     wxString wildcard = _T("Header files (*.h)|*.h|All files (*.*)|*.*");
     
     wxFileDialog dialog(wxTheApp->GetTopWindow(),
@@ -948,7 +948,7 @@ void ctConfigToolView::OnSaveConfigureCommand(wxCommandEvent& WXUNUSED(event))
     wxString filename = _T("configurewx.sh");
     wxString path = wxGetApp().GetSettings().m_lastSetupSaveDir;
     if (path.IsEmpty())
-        path = doc->GetFrameworkDir(FALSE);
+        path = doc->GetFrameworkDir(false);
     wxString wildcard = _T("Shell script files (*.sh)|*.sh|All files (*.*)|*.*");
     
     wxFileDialog dialog(wxTheApp->GetTopWindow(),
@@ -974,12 +974,12 @@ void ctConfigToolView::OnSaveConfigureCommand(wxCommandEvent& WXUNUSED(event))
 
 void ctConfigToolView::OnUpdateSaveSetupFile(wxUpdateUIEvent& event)
 {
-    event.Enable(TRUE);
+    event.Enable(true);
 }
 
 void ctConfigToolView::OnUpdateSaveConfigureCommand(wxUpdateUIEvent& event)
 {
-    event.Enable(TRUE);
+    event.Enable(true);
 }
 
 /// Find text
@@ -1004,14 +1004,14 @@ void ctConfigToolView::OnFind(wxCommandEvent& WXUNUSED(event))
         ctFindReplaceDialog::sm_findData.SetFlags(flags);
 
         dialog = new ctFindReplaceDialog(wxGetApp().GetMainFrame(), caption, style);
-        dialog->Show(TRUE);
+        dialog->Show(true);
     }
 }
 
 /// Update find text
 void ctConfigToolView::OnUpdateFind(wxUpdateUIEvent& event)
 {
-    event.Enable(TRUE);
+    event.Enable(true);
 }
 
 /// Save default file type
@@ -1088,9 +1088,9 @@ void ctConfigToolView::OnUpdateGo(wxUpdateUIEvent& event)
 //----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(ctFindReplaceDialog, wxFindReplaceDialog)
-    EVT_FIND(-1, ctFindReplaceDialog::OnFind)
-    EVT_FIND_NEXT(-1, ctFindReplaceDialog::OnFind)
-    EVT_FIND_CLOSE(-1, ctFindReplaceDialog::OnClose)
+    EVT_FIND(wxID_ANY, ctFindReplaceDialog::OnFind)
+    EVT_FIND_NEXT(wxID_ANY, ctFindReplaceDialog::OnFind)
+    EVT_FIND_CLOSE(wxID_ANY, ctFindReplaceDialog::OnClose)
 END_EVENT_TABLE()
 
 wxFindReplaceData ctFindReplaceDialog::sm_findData;
@@ -1125,7 +1125,7 @@ bool ctFindReplaceDialog::DoFind(const wxString& textToFind, bool matchCase, boo
 {
     ctConfigToolDoc* doc = wxGetApp().GetMainFrame()->GetDocument();
     if (!doc)
-        return FALSE;
+        return false;
     ctConfigToolView* view = (ctConfigToolView*) doc->GetFirstView();
 
     ctConfigItem* currentItem = NULL;
@@ -1134,7 +1134,7 @@ bool ctFindReplaceDialog::DoFind(const wxString& textToFind, bool matchCase, boo
     {
         focusItem = doc->GetTopItem();
         if (!focusItem)
-            return FALSE;
+            return false;
     }
 
     if (!sm_currentItem.IsEmpty())
@@ -1151,14 +1151,14 @@ bool ctFindReplaceDialog::DoFind(const wxString& textToFind, bool matchCase, boo
     {
         sm_currentItem = currentItem->GetName();
         wxGetApp().GetMainFrame()->GetConfigTreeCtrl()->SelectItem(currentItem->GetTreeItemId());
-        return TRUE;
+        return true;
     }
     else
     {
         sm_currentItem = wxEmptyString;
     }
 
-    return FALSE;
+    return false;
 }
 
 ctConfigItem* ctFindReplaceDialog::FindNextItem(ctConfigToolDoc* doc,

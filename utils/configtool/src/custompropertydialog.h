@@ -53,7 +53,7 @@ class ctCustomPropertyDialog: public wxDialog
 {    
 public:
     /// Constructor
-    ctCustomPropertyDialog( wxWindow* parent, wxWindowID id = -1, const wxString& caption = _("Edit Custom Property"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU );
+    ctCustomPropertyDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& caption = _("Edit Custom Property"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU );
 
     /// Creates the controls and sizers
     void CreateControls();

@@ -7,7 +7,7 @@
 // Created:     2003-06-03
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	
+// Licence:
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -111,9 +111,9 @@ ctProperty* ctProperties::FindOrCreateProperty(const wxString& name)
 
 void ctProperties::Clear()
 {
-    m_list.DeleteContents(TRUE);
+    m_list.DeleteContents(true);
     m_list.Clear();
-    m_list.DeleteContents(FALSE);
+    m_list.DeleteContents(false);
 }
 
 void ctProperties::Copy(const ctProperties& properties)
@@ -144,7 +144,7 @@ void ctProperties::SetProperty(const wxString& name, long value)
 void ctProperties::SetProperty(const wxString& name, bool value)
 {
     ctProperty* prop = FindOrCreateProperty(name);
-    prop->GetVariant() = (bool) value;
+    prop->GetVariant() = value;
 }
 
 void ctProperties::SetProperty(const wxString& name, const wxVariant& value)

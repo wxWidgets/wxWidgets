@@ -90,24 +90,24 @@ bool ctConfigToolDoc::OnCloseDocument()
         UpdateAllViews (NULL, & hint);
 
         DeleteItems();
-        return TRUE;
+        return true;
     }
     else
     {
-        return FALSE;
+        return false;
     }
 }
 
 // Saves the doc
 bool ctConfigToolDoc::Save()
 {
-    if (!IsModified() && m_savedYet) return TRUE;
+    if (!IsModified() && m_savedYet) return true;
 
     bool ret = (m_documentFile == wxT("") || !m_savedYet) ?
                  SaveAs() :
                  OnSaveDocument(m_documentFile);
     if ( ret )
-        SetDocumentSaved(TRUE);
+        SetDocumentSaved(true);
     return ret;
 }
 
@@ -136,8 +136,8 @@ bool ctConfigToolDoc::OnCreate(const wxString& path, long flags)
 
         SetTopItem(rootItem);
 
-        Modify(FALSE);
-        SetDocumentSaved(FALSE);
+        Modify(false);
+        SetDocumentSaved(false);
 
         wxString rootName(wxT("untitled"));
         wxStripExtension(rootName);
@@ -156,7 +156,7 @@ bool ctConfigToolDoc::OnCreate(const wxString& path, long flags)
             ctConfigToolHint hint(NULL, ctInitialUpdate);
             UpdateAllViews (NULL, & hint);
 
-            SetFilename(GetFilename(), TRUE);
+            SetFilename(GetFilename(), true);
         }
     }
     return success;
@@ -181,7 +181,7 @@ bool ctConfigToolDoc::OnSaveDocument(const wxString& filename)
     if (wxFileExists(tempFilename))
         wxRemoveFile(tempFilename);
 
-    bool leaveBackup = TRUE;
+    bool leaveBackup = true;
 
     bool saved = DoSave(tempFilename);
 
@@ -219,9 +219,9 @@ bool ctConfigToolDoc::OnSaveDocument(const wxString& filename)
             wxRemoveFile(tempFilename);
         }        
 
-        Modify(FALSE);
+        Modify(false);
         ((ctConfigToolView*)GetFirstView())->OnChangeFilename();
-        SetDocumentSaved(TRUE);
+        SetDocumentSaved(true);
         SetFilename(filename);
         wxGetApp().GetSettings().m_lastFilename = filename;
     } else
@@ -253,7 +253,7 @@ bool ctConfigToolDoc::OnOpenDocument(const wxString& filename)
         UpdateAllViews (NULL, & hint);
     }
 
-    SetDocumentSaved(TRUE); // Necessary or it will pop up the Save As dialog
+    SetDocumentSaved(true); // Necessary or it will pop up the Save As dialog
 
     return opened;
 }
@@ -263,7 +263,7 @@ bool ctConfigToolDoc::DoSave(const wxString& filename)
 {
     wxFileOutputStream stream(filename);
     if (!stream.Ok())
-        return FALSE;
+        return false;
 
     stream << wxT("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
     stream << wxT("<settings xmlns=\"http://www.wxwidgets.org/wxs\" version=\"2.5.0.1\">");
@@ -272,7 +272,7 @@ bool ctConfigToolDoc::DoSave(const wxString& filename)
 
     stream << wxT("\n</settings>\n");
 
-    return TRUE;
+    return true;
 }
 
 inline static void OutputIndentation(wxOutputStream& stream, int indent)
@@ -368,7 +368,7 @@ bool ctConfigToolDoc::DoSave(ctConfigItem* item, wxOutputStream& stream, int ind
     OutputIndentation(stream, indent*2);
     stream << wxT("</setting>");
 
-    return TRUE;
+    return true;
 }
 
 /// Open the settings file
@@ -389,20 +389,20 @@ bool ctConfigToolDoc::DoOpen(const wxString& filename)
                 wxSimpleHtmlTag* firstSettingTag = settingsTag->GetChildren();
                 if (firstSettingTag)
                     DoOpen(firstSettingTag, NULL);
-                return TRUE;
+                return true;
             }
-            return TRUE;
+            return true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 static bool GetHtmlBoolValue(const wxString& value)
 {
     if (value == wxT("true") || value == wxT("TRUE") || value == wxT("1"))
-        return TRUE;
+        return true;
      else
-         return FALSE;
+         return false;
 }
 
 static int GetHtmlIntegerValue(const wxString& value)
@@ -506,7 +506,7 @@ bool ctConfigToolDoc::DoOpen(wxSimpleHtmlTag* tag, ctConfigItem* parent)
                             childTag->GetAttributeValue(description, wxT("description"));
 
                             if (type == wxT("bool"))
-                                prop->GetVariant() = wxVariant((bool) FALSE, name);
+                                prop->GetVariant() = wxVariant(false, name);
                             else if (type == wxT("double"))
                                 prop->GetVariant() = wxVariant((double) 0.0, name);
                             else if (type == wxT("long"))
@@ -514,7 +514,7 @@ bool ctConfigToolDoc::DoOpen(wxSimpleHtmlTag* tag, ctConfigItem* parent)
                             else
                                 prop->GetVariant() = wxVariant(wxT(""), name);
                             prop->SetDescription(description);
-                            prop->SetCustom(TRUE);
+                            prop->SetCustom(true);
                             prop->SetEditorType(editorType);
                             if (!choices.IsEmpty())
                             {
@@ -532,7 +532,7 @@ bool ctConfigToolDoc::DoOpen(wxSimpleHtmlTag* tag, ctConfigItem* parent)
                         else if (prop->GetVariant().GetType() == wxT("long"))
                             prop->GetVariant() = (long) GetHtmlIntegerValue(childTag->GetNext()->GetTagText());
                         else if (prop->GetVariant().GetType() == wxT("bool"))
-                            prop->GetVariant() = (bool) GetHtmlBoolValue(childTag->GetNext()->GetTagText());
+                            prop->GetVariant() = GetHtmlBoolValue(childTag->GetNext()->GetTagText());
                         else if (prop->GetVariant().GetType() == wxT("double"))
                             prop->GetVariant() = (double) GetHtmlDoubleValue(childTag->GetNext()->GetTagText());
                     }
@@ -541,7 +541,7 @@ bool ctConfigToolDoc::DoOpen(wxSimpleHtmlTag* tag, ctConfigItem* parent)
         }
         childTag = childTag->GetNext();
     }
-    return TRUE;
+    return true;
 }
 
 /// Clear dependencies
@@ -679,8 +679,8 @@ wxString ctConfigToolDoc::GenerateConfigureCommand()
     wxString str;
     str << wxT("# configurewx\n# Generated by wxConfigTool\n\n");
 
-    wxString path = GetFrameworkDir(TRUE);
-    bool makeUnix = TRUE;
+    wxString path = GetFrameworkDir(true);
+    bool makeUnix = true;
     if (!path.IsEmpty())
     {
         if (makeUnix)
@@ -846,7 +846,7 @@ ctConfigItem* ctConfigToolDoc::FindNextSibling(ctConfigItem* item)
 ctConfigCommand::ctConfigCommand(const wxString& name, int cmdId,
         ctConfigItem* activeState, ctConfigItem* savedState,
         ctConfigItem* parent, ctConfigItem* insertBefore,
-        bool ignoreFirstTime): wxCommand(TRUE, name)
+        bool ignoreFirstTime): wxCommand(true, name)
 {
     m_activeState = activeState;
     m_savedState = savedState;
@@ -859,7 +859,7 @@ ctConfigCommand::ctConfigCommand(const wxString& name, int cmdId,
 
 ctConfigCommand::ctConfigCommand(const wxString& name, int cmdId,
         ctConfigItem* activeState,  ctProperties* properties,
-        bool ignoreFirstTime): wxCommand(TRUE, name)
+        bool ignoreFirstTime): wxCommand(true, name)
 {
     m_activeState = activeState;
     m_savedState = NULL;
@@ -881,12 +881,12 @@ ctConfigCommand::~ctConfigCommand()
 
 bool ctConfigCommand::Do()
 {
-    return DoAndUndo(TRUE);
+    return DoAndUndo(true);
 }
 
 bool ctConfigCommand::Undo()
 {
-    return DoAndUndo(FALSE);
+    return DoAndUndo(false);
 }
 
 // Combine Do and Undo into one
@@ -914,7 +914,7 @@ bool ctConfigCommand::DoAndUndo(bool doCmd)
                 m_savedState = m_activeState;
                 m_activeState = NULL;
 
-                m_savedState->GetDocument()->Modify(TRUE);
+                m_savedState->GetDocument()->Modify(true);
                 ctConfigToolView* view = (ctConfigToolView*) m_savedState->GetDocument()->GetFirstView();
                 view->OnChangeFilename();
             }
@@ -923,7 +923,7 @@ bool ctConfigCommand::DoAndUndo(bool doCmd)
                 wxASSERT(m_savedState != NULL);
                 wxASSERT(m_activeState == NULL);
 
-                m_savedState->GetDocument()->Modify(TRUE);
+                m_savedState->GetDocument()->Modify(true);
                 m_savedState->Attach(m_parent, m_insertBefore);
                 ctConfigToolView* view = (ctConfigToolView*) m_savedState->GetDocument()->GetFirstView();
                 view->AddItems(wxGetApp().GetMainFrame()->GetConfigTreeCtrl(), m_savedState);
@@ -942,7 +942,7 @@ bool ctConfigCommand::DoAndUndo(bool doCmd)
                 wxASSERT(m_savedState != NULL);
                 wxASSERT(m_activeState == NULL);
 
-                m_savedState->GetDocument()->Modify(TRUE);
+                m_savedState->GetDocument()->Modify(true);
                 m_savedState->Attach(m_parent, m_insertBefore);
                 ctConfigToolView* view = (ctConfigToolView*) m_savedState->GetDocument()->GetFirstView();
                 view->AddItems(wxGetApp().GetMainFrame()->GetConfigTreeCtrl(), m_savedState);
@@ -956,7 +956,7 @@ bool ctConfigCommand::DoAndUndo(bool doCmd)
                 wxASSERT(m_savedState == NULL);
                 wxASSERT(m_activeState != NULL);
 
-                m_activeState->GetDocument()->Modify(TRUE);
+                m_activeState->GetDocument()->Modify(true);
                 ctConfigToolView* view = (ctConfigToolView*) m_activeState->GetDocument()->GetFirstView();
                 m_activeState->Detach();
                 m_savedState = m_activeState;
@@ -972,7 +972,7 @@ bool ctConfigCommand::DoAndUndo(bool doCmd)
                 wxASSERT(m_savedState != NULL);
                 wxASSERT(m_activeState == NULL);
 
-                m_savedState->GetDocument()->Modify(TRUE);
+                m_savedState->GetDocument()->Modify(true);
                 m_savedState->Attach(m_parent, m_insertBefore);
                 ctConfigToolView* view = (ctConfigToolView*) m_savedState->GetDocument()->GetFirstView();
                 view->AddItems(wxGetApp().GetMainFrame()->GetConfigTreeCtrl(), m_savedState);
@@ -986,7 +986,7 @@ bool ctConfigCommand::DoAndUndo(bool doCmd)
                 wxASSERT(m_savedState == NULL);
                 wxASSERT(m_activeState != NULL);
 
-                m_activeState->GetDocument()->Modify(TRUE);
+                m_activeState->GetDocument()->Modify(true);
                 m_activeState->Detach();
                 m_savedState = m_activeState;
                 m_activeState = NULL;
@@ -1021,7 +1021,7 @@ bool ctConfigCommand::DoAndUndo(bool doCmd)
                     }
                     node = node->GetNext();
                 }
-                m_activeState->GetDocument()->Modify(TRUE);
+                m_activeState->GetDocument()->Modify(true);
                 ctConfigToolView* view = (ctConfigToolView*) m_activeState->GetDocument()->GetFirstView();
                 if (view)
                 {
@@ -1029,12 +1029,12 @@ bool ctConfigCommand::DoAndUndo(bool doCmd)
                     m_activeState->GetDocument()->UpdateAllViews (NULL, & hint);
                 }
             }
-            m_ignoreThis = FALSE;
+            m_ignoreThis = false;
 
             break;
         }
     }
-    return TRUE;
+    return true;
 }
 
 IMPLEMENT_CLASS(ctConfiguration, wxObject)

@@ -6,7 +6,7 @@
 // Created:     2002-09-04
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	
+// Licence:
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -182,7 +182,7 @@ void apViewHTMLFile(const wxString& url)
         STARTUPINFO          siStartInfo;
         memset(&siStartInfo, 0, sizeof(STARTUPINFO));
         siStartInfo.cb = sizeof(STARTUPINFO);
-        CreateProcess(NULL, szCmdName, NULL, NULL, FALSE, 0, NULL,
+        CreateProcess(NULL, szCmdName, NULL, NULL, false, 0, NULL,
             NULL, &siStartInfo, &piProcInfo );
     }
     if(lRes == ERROR_SUCCESS)
@@ -204,11 +204,11 @@ void apViewHTMLFile(const wxString& url)
     {
         // TODO: some kind of configuration dialog here.
         wxMessageBox(_("Could not determine the command for running the browser."),
-		   wxT("Browsing problem"), wxOK|wxICON_EXCLAMATION);
+                     wxT("Browsing problem"), wxOK|wxICON_EXCLAMATION);
         return ;
     }
 
-    ok = (wxExecute(cmd, FALSE) != 0);
+    ok = (wxExecute(cmd, false) != 0);
 #endif
 }
 
@@ -251,14 +251,14 @@ bool apInvokeAppForFile(const wxString& filename)
         msg.Printf(wxT("Sorry, could not determine what application to invoke for extension %s\nYou may need to edit your MIME types."),
             ext.c_str());
         wxMessageBox(msg, wxT("Application Invocation"), wxICON_EXCLAMATION|wxOK);
-        return FALSE;
+        return false;
     }
 
     wxString cmd;
     ft->GetOpenCommand(&cmd, wxFileType::MessageParameters(filename, _T("")));
     delete ft;
 
-    return (wxExecute(cmd, FALSE) != 0);
+    return (wxExecute(cmd, false) != 0);
 }
 
 // Find the absolute path where this application has been run from.
@@ -337,7 +337,7 @@ void apAddContextHelpButton(wxWindow*
 #ifdef __WXMAC__
     wxSize buttonSize(20, 20);
 #else
-    wxSize buttonSize(-1, -1);
+    wxSize buttonSize = wxDefaultSize;
 #endif
     wxButton *contextButton = new wxContextHelpButton( parent, wxID_CONTEXT_HELP,
         wxDefaultPosition, buttonSize);
@@ -408,7 +408,7 @@ void wxIconInfo::SetIconId(int state, bool enabled, int iconId)
 wxIconTable::wxIconTable(wxImageList* imageList)
 {
     m_imageList = imageList;
-    DeleteContents(TRUE);
+    DeleteContents(true);
 }
 
 void wxIconTable::AppendInfo(wxIconInfo* info)
@@ -429,7 +429,7 @@ bool wxIconTable::AddInfo(const wxString& name, const wxIcon& icon, int state, b
         Append(info);
     }
     info->SetIconId(state, enabled, m_imageList->Add(icon));
-    return TRUE;
+    return true;
 }
 
 wxIconInfo* wxIconTable::FindInfo(const wxString& name) const
@@ -457,9 +457,9 @@ bool wxIconTable::SetIconId(const wxString& name, int state, bool enabled, int i
 {
     wxIconInfo* info = FindInfo(name);
     if (!info)
-        return FALSE;
+        return false;
     info->SetIconId(state, enabled, iconId);
-    return TRUE;
+    return true;
 }
 
 // Output stream operators
@@ -511,27 +511,27 @@ bool ctMatchString(const wxString& matchAgainst, const wxString& matchText, bool
 {
     // Fast operation if not matching against whole words only
     if (!wholeWordOnly)
-        return (matchAgainst.Find(matchText) != -1);
+        return (matchAgainst.Find(matchText) != wxNOT_FOUND);
 
     wxString left(matchAgainst);
-    bool success = FALSE;
+    bool success = false;
     int matchTextLen = (int) matchText.Length();
     while (!success && !matchAgainst.IsEmpty())
     {
         int pos = left.Find(matchText);
-        if (pos == -1)
-            return FALSE;
+        if (pos == wxNOT_FOUND)
+            return false;
 
-        bool firstCharOK = FALSE;
-        bool lastCharOK = FALSE;
+        bool firstCharOK = false;
+        bool lastCharOK = false;
         if (pos == 0 || !wxIsalnum(left[(size_t) (pos-1)]))
-            firstCharOK = TRUE;
+            firstCharOK = true;
 
         if (((pos + matchTextLen) == (int) left.Length()) || !wxIsalnum(left[(size_t) (pos + matchTextLen)]))
-            lastCharOK = TRUE;
+            lastCharOK = true;
 
         if (firstCharOK && lastCharOK)
-            success = TRUE;
+            success = true;
 
         left = left.Mid(pos+1);
     }

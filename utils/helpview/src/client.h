@@ -15,11 +15,11 @@ class MyApp: public wxApp
 public:
     virtual bool OnInit();
     virtual int OnExit();
-	
+
 #if defined(USE_REMOTE)
-	wxRemoteHtmlHelpController *m_help;
+    wxRemoteHtmlHelpController *m_help;
 #else
-	wxHtmlHelpController *m_help;
+    wxHtmlHelpController *m_help;
 #endif
 };
 
@@ -30,26 +30,25 @@ class MyFrame: public wxFrame
 {
 public:
     MyFrame(wxFrame *frame, const wxString& title);
-	
+
 private:
     void OnExit(wxCommandEvent& event);
-	
-	void OnHelp_Main(wxCommandEvent& event);
-	void OnHelp_Book1(wxCommandEvent& event);
-	void OnHelp_Book2(wxCommandEvent& event);
-	void OnHelp_Index(wxCommandEvent& event);
-	void OnHelp_Contents(wxCommandEvent& event);
-	void OnHelp_Search(wxCommandEvent& event);
-	void OnHelp_Title(wxCommandEvent& event);
-	void OnHelp_Addbook(wxCommandEvent& event);
-	void OnHelp_Tempdir(wxCommandEvent& event);
-	void OnHelp_Quitserver(wxCommandEvent& event);
-	
-	void ModalDlg(wxCommandEvent& event);
-	
+    void OnHelp_Main(wxCommandEvent& event);
+    void OnHelp_Book1(wxCommandEvent& event);
+    void OnHelp_Book2(wxCommandEvent& event);
+    void OnHelp_Index(wxCommandEvent& event);
+    void OnHelp_Contents(wxCommandEvent& event);
+    void OnHelp_Search(wxCommandEvent& event);
+    void OnHelp_Title(wxCommandEvent& event);
+    void OnHelp_Addbook(wxCommandEvent& event);
+    void OnHelp_Tempdir(wxCommandEvent& event);
+    void OnHelp_Quitserver(wxCommandEvent& event);
+
+    void ModalDlg(wxCommandEvent& event);
+
     wxPanel *m_panel;
-	wxButton *m_modalbutton;
-	
+    wxButton *m_modalbutton;
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -57,14 +56,14 @@ class MyModalDialog : public wxDialog
 {
 public:
     MyModalDialog(wxWindow *parent);
-	
+
 private:
     void OnButton(wxCommandEvent& event);
-	
+
     wxButton *m_main;
     wxButton *m_book1;
     wxButton *m_book2;
-	
+
     DECLARE_EVENT_TABLE()
 };
 

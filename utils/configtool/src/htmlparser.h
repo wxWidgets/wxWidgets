@@ -172,11 +172,11 @@ public:
 
     bool EatWhitespace(); // Throw away whitespace
     bool EatWhitespace(int& pos); // Throw away whitespace: using 'pos'
-    bool ReadString(wxString& str, bool eatIt = FALSE);
-    bool ReadWord(wxString& str, bool eatIt = FALSE);
-    bool ReadNumber(wxString& str, bool eatIt = FALSE);
+    bool ReadString(wxString& str, bool eatIt = false);
+    bool ReadWord(wxString& str, bool eatIt = false);
+    bool ReadNumber(wxString& str, bool eatIt = false);
     // Could be number, string, whatever, but read up until whitespace.
-    bool ReadLiteral(wxString& str, bool eatIt = FALSE);
+    bool ReadLiteral(wxString& str, bool eatIt = false);
 
     bool IsComment();
     bool IsDirective();
@@ -190,9 +190,9 @@ public:
     bool IsAlpha(int ch);
     bool IsWordChar(int ch);
     bool IsNumeric(int ch);
-    // Check if a specific tag needs a close tag. If not this function should return FALSE.
+    // Check if a specific tag needs a close tag. If not this function should return false.
     // If no close tag is needed the result will be that the tag will be insert in a none 
-    // hierarchical way. i.e. if the function would return FALSE all the time we would get
+    // hierarchical way. i.e. if the function would return false all the time we would get
     // a flat list of all tags (like it used to be previously).
     virtual bool IsCloseTagNeeded(const wxString &name);
     
@@ -206,7 +206,7 @@ public:
     static wxString EncodeSpecialChars(const wxString &value);
 
     // Matches this string (case insensitive)
-    bool Matches(const wxString& tok, bool eatIt = FALSE) ;
+    bool Matches(const wxString& tok, bool eatIt = false) ;
     bool Eof() const { return (m_pos >= m_length); }
     bool Eof(int pos) const { return (pos >= m_length); }
 

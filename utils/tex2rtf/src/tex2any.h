@@ -217,7 +217,7 @@ extern int sectionFont;
 extern int subsectionFont;
 extern int titleFont;
 extern int authorFont;
-extern bool winHelp;  // Output in Windows Help format if TRUE, linear otherwise
+extern bool winHelp;  // Output in Windows Help format if true, linear otherwise
 extern bool isInteractive;
 extern bool runTwice;
 extern int convertMode;
@@ -332,7 +332,7 @@ extern void FakeCurrentSection(wxChar *fakeSection, bool addToContents = true);
  */
  
 extern wxChar *currentArgData;
-extern bool haveArgData; // If TRUE, we're simulating the data.
+extern bool haveArgData; // If true, we're simulating the data.
 void StartSimulateArgument(wxChar *data);
 void EndSimulateArgument(void);
 
@@ -345,7 +345,7 @@ void EndSimulateArgument(void);
 void OnMacro(int macroId, int no_args, bool start);
 
 // Called on start/end of argument examination.
-// Return TRUE at the start of an argument to traverse
+// Return true at the start of an argument to traverse
 // (output) the argument.
 bool OnArgument(int macroId, int arg_no, bool start);
 

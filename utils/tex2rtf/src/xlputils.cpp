@@ -399,7 +399,7 @@ void XLPOnMacro(int macroId, int no_args, bool start)
             }
             break;
           }
-	}
+        }
       }
     }
     break;
