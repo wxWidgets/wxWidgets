@@ -312,12 +312,14 @@ bool wxStringBase::AllocBeforeWrite(size_t nLen)
       pData->nAllocLength = nLen;
       m_pchData = pData->data();
     }
-
-    // now we have enough space, just update the string length
-    pData->nDataLength = nLen;
   }
 
   wxASSERT( !GetStringData()->IsShared() );  // we must be the only owner
+
+  // it doesn't really matter what the string length is as it's going to be
+  // overwritten later but, for extra safety, set it to 0 for now as we may
+  // have some junk in m_pchData
+  pData->nDataLength = 0;
 
   return true;
 }
