@@ -31,6 +31,10 @@ from myxml import *
 # Globals
 testWin = None
 testWinPos = wxDefaultPosition
+if __name__ == '__main__':
+    basePath = sys.argv[0]
+else:
+    basePath = os.path.dirname(__file__)
 
 # 1 adds CMD command to Help menu
 debug = 0
@@ -748,7 +752,7 @@ class XML_Tree(wxTreeCtrl):
             # but it's first child possibly can...
             child = tree.GetFirstChild(item, 0)[0]
             if child.IsOk() and tree.GetPyData(child).__class__ == xxxPanel:
-                # Clean-up before recurcive call or error
+                # Clean-up before recursive call or error
                 wxMemoryFSHandler_RemoveFile('xxx.xrc')
                 wxEndBusyCursor()
                 self.CreateTestWin(child)
@@ -1599,7 +1603,7 @@ class Frame(wxFrame):
         dlg.Destroy()
 
     def OnReadme(self, evt):
-        text = open(os.path.join(sys.path[0], 'README'), 'r').read()
+        text = open(os.path.join(basePath, 'README'), 'r').read()
         dlg = ScrolledMessageDialog(self, text, "XRCed README")
         dlg.ShowModal()
         dlg.Destroy()
@@ -1922,7 +1926,7 @@ class App(wxApp):
         import params
         params.frame = frame
         frame.res = wxXmlResource('')
-        frame.res.Load(os.path.join(sys.path[0], 'xrced.xrc'))
+        frame.res.Load(os.path.join(basePath, 'xrced.xrc'))
 
         # Load file after showing
         if args:
