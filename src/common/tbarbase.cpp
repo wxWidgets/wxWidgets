@@ -25,7 +25,7 @@
 #endif
 
 // For ::UpdateWindow
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #include <windows.h>
 #endif
 
@@ -500,7 +500,7 @@ void wxToolBarBase::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
     }
 	AdjustScrollbars();
     Refresh();
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
     ::UpdateWindow ((HWND) GetHWND());
 #endif
 }
@@ -755,7 +755,7 @@ void wxToolBarBase::Scroll (int x_pos, int y_pos)
       SetScrollPos (wxVERTICAL, y_pos, TRUE);
     }
   Refresh();
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   UpdateWindow ((HWND) GetHWND());
 #endif
 }
@@ -827,7 +827,7 @@ void wxToolBarBase::DoToolbarUpdates(void)
 	}
 }
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 // Circumvent wxControl::MSWOnMouseMove which doesn't set the cursor.
 void wxToolBarBase::MSWOnMouseMove(int x, int y, const WXUINT flags)
 {

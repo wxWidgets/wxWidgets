@@ -52,7 +52,7 @@ bool MyApp::OnInit(void)
   frame->CreateStatusBar(2);
 
   // Load icon and bitmap
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   frame->SetIcon(wxIcon("aiai_icn"));
 #endif
 #ifdef __X__
@@ -186,7 +186,7 @@ void MyFrame::LoadFile(wxCommandEvent& event)
       char *s = wxFileSelector("Load text file", NULL, NULL, NULL, "*.txt");
       if (s)
       {
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
         frame->text_window->LoadFile(s);
 #endif
       }

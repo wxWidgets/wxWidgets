@@ -64,7 +64,7 @@ class WXDLLEXPORT wxPostScriptDC: public wxDC
 
   // RR: I define these in wxDC, after all they all do the same everywhere
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   // Splines
   // 3-point spline
   void DrawSpline(long x1, long y1, long x2, long y2, long x3, long y3);

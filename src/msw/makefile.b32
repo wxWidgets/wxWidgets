@@ -553,7 +553,7 @@ $(CFG): makefile.b32
 
 -L$(BCCDIR)\lib
 -D__WXWIN__
--D__WINDOWS__
+-D__WXMSW__
 -DWIN32
 $(OPT)
 $(DEBUG_FLAGS)

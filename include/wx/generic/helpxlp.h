@@ -25,7 +25,7 @@
 
 #include "wx/helpbase.h"
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #include "wx/dde.h"
 #else
 // Or whatever it'll be called
@@ -38,7 +38,7 @@ class WXDLLEXPORT wxXLPHelpController;
 // wxHelp process and the application
 class WXDLLEXPORT wxXLPHelpConnection: public
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
  wxDDEConnection
 #else
  wxTCPConnection
@@ -62,7 +62,7 @@ class WXDLLEXPORT wxXLPHelpConnection: public
 // controlling the wxHelp process
 class WXDLLEXPORT wxXLPHelpClient: public
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
  wxDDEClient
 #else
  wxTCPClient

@@ -42,7 +42,7 @@
 // the TEXT resource, for some reason, so either run-time file loading
 // or file inclusion should be used.
 
-#if defined(__WINDOWS__) && !defined(__BORLANDC__) && !defined(__GNUWIN32__)
+#if defined(__WXMSW__) && !defined(__BORLANDC__) && !defined(__GNUWIN32__)
 // Under Windows, some compilers can't include
 // a whole .wxr file. So we use a .rc user-defined resource
 // instead. dialog1 will point to the whole .wxr 'file'.
@@ -69,7 +69,7 @@ MyApp::MyApp()
 // main frame
 bool MyApp::OnInit(void)
 {
-#if defined(__WINDOWS__)  && !defined(__BORLANDC__)
+#if defined(__WXMSW__)  && !defined(__BORLANDC__)
   // Load the .wxr 'file' from a .rc resource, under Windows.
   dialog1 = wxLoadUserResource("dialog1");
   menu1 = wxLoadUserResource("menu1");

@@ -173,7 +173,7 @@ void wxDataStream::Write8(unsigned char i)
 
 void wxDataStream::WriteLine(const wxString& line)
 {
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   wxString tmp_string = line + "\r\n";
 #else
   wxString tmp_string = line + '\n';

@@ -1,11 +1,11 @@
 #ifndef __BMPBUTTONH_BASE__
 #define __BMPBUTTONH_BASE__
 
-#if defined(__WINDOWS__)
+#if defined(__WXMSW__)
 #include "wx/msw/bmpbuttn.h"
-#elif defined(__MOTIF__)
+#elif defined(__WXMOTIF__)
 #include "wx/xt/bmpbuttn.h"
-#elif defined(__GTK__)
+#elif defined(__WXGTK__)
 #include "wx/gtk/bmpbuttn.h"
 #endif
 

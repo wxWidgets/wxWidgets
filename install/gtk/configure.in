@@ -593,7 +593,7 @@ USE_GTK=1
 USE_UNIX=1
 
 TOOLKIT=GTK
-TOOLKIT_DEF=__GTK__
+TOOLKIT_DEF=__WXGTK__
 
 USE_LINUX=
 USE_SGI=
@@ -1180,7 +1180,7 @@ if test "$USE_GTK" = 1; then
        GUI_TK_INCLUDE="$GTK_CFLAGS"
        GUI_TK_LIBRARY="$GTK_LIBS"
   ], AC_MSG_ERROR(Are gtk-config and the GTK in path and up-to-date?))
-  AC_DEFINE(__GTK__)
+  AC_DEFINE(__WXGTK__)
 fi
 AC_SUBST(GUI_TK_INCLUDE)
 AC_SUBST(GUI_TK_LIBRARY)

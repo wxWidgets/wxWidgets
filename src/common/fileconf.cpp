@@ -40,8 +40,8 @@
 #include  <wx/fileconf.h>
 
 // _WINDOWS_ is defined when windows.h is included,
-// __WINDOWS__ is defined for MS Windows compilation
-#if       defined(__WINDOWS__) && !defined(_WINDOWS_)
+// __WXMSW__ is defined for MS Windows compilation
+#if       defined(__WXMSW__) && !defined(_WINDOWS_)
   #include  <windows.h>
 #endif  //windows.h
 

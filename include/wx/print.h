@@ -1,7 +1,7 @@
 #ifndef __PRINTH_BASE__
 #define __PRINTH_BASE__
 
-#if defined(__WINDOWS__)
+#if defined(__WXMSW__)
 #include "wx/msw/printwin.h"
 
 #ifndef wxPrinter

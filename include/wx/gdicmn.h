@@ -21,11 +21,11 @@
 #include "wx/hash.h"
 #include "wx/setup.h"
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #include "wx/msw/colour.h"
-#elif defined(__MOTIF__)
+#elif defined(__WXMOTIF__)
 #include "wx/xt/colour.h"
-#elif defined(__GTK__)
+#elif defined(__WXGTK__)
 #include "wx/gtk/colour.h"
 #endif
 
@@ -98,7 +98,7 @@ class WXDLLEXPORT wxRealPoint
 class WXDLLEXPORT wxPoint
 {
  public:
-#if defined(__WINDOWS__) && !defined(__WIN32__)
+#if defined(__WXMSW__) && !defined(__WIN32__)
   int x;
   int y;
 #else
@@ -330,7 +330,7 @@ extern void WXDLLEXPORT wxSetCursor(const wxCursor& cursor);
 
 // Useful macro for create icons portably
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 # define wxICON(X) wxIcon(X##_icon);
 #elif defined(__X__)
 # define wxICON(X) wxIcon(X##_bits, X##_width, X##_height);

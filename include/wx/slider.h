@@ -1,11 +1,11 @@
 #ifndef __SLIDERH_BASE__
 #define __SLIDERH_BASE__
 
-#if defined(__WINDOWS__)
+#if defined(__WXMSW__)
 #include "wx/msw/slider.h"
-#elif defined(__MOTIF__)
+#elif defined(__WXMOTIF__)
 #include "wx/xt/slider.h"
-#elif defined(__GTK__)
+#elif defined(__WXGTK__)
 #include "wx/gtk/slider.h"
 #endif
 

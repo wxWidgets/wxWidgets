@@ -45,7 +45,7 @@
 #include <dirent.h>
 #endif
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #ifndef __GNUWIN32__
 #include <direct.h>
 #include <dos.h>
@@ -69,7 +69,7 @@
 #include <dir.h>
 #endif
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #include "windows.h"
 #endif
 
@@ -90,7 +90,7 @@ void wxPathList::Add (const wxString& path)
 void wxPathList::AddEnvList (const wxString& envVariable)
 {
   static const char PATH_TOKS[] =
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 	" ;"; // Don't seperate with colon in DOS (used for drive)
 #else
 	" :;";
@@ -135,7 +135,7 @@ bool wxPathList::Member (const wxString& path)
   {
       wxString path2((char *) node->Data ());
       if (
-#if defined(__WINDOWS__) || defined(__VMS__)
+#if defined(__WXMSW__) || defined(__VMS__)
       // Case INDEPENDENT
 	  path.CompareTo (path2, wxString::ignoreCase) == 0
 #else
@@ -166,7 +166,7 @@ wxString wxPathList::FindValidPath (const wxString& file)
       if (ch != '\\' && ch != '/')
         strcat (wxBuffer, "/");
       strcat (wxBuffer, filename);
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
       Unix2DosFilename (wxBuffer);
 #endif
       if (wxFileExists (wxBuffer))
@@ -193,7 +193,7 @@ wxString wxPathList::FindAbsoluteValidPath (const wxString& file)
       lastCh = buf[len-1];
     if (lastCh != '/' && lastCh != '\\')
     {
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
       strcat(buf, "\\");
 #else
       strcat(buf, "/");
@@ -236,7 +236,7 @@ wxIsAbsolutePath (const wxString& filename)
 #ifdef __VMS__
       || (filename[0] == '[' && filename[1] != '.')
 #endif
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
       /* MSDOS */
       || filename[0] == '\\' || (isalpha (filename[0]) && filename[1] == ':')
 #endif
@@ -270,7 +270,7 @@ void wxStripExtension(char *buffer)
 // Destructive removal of /./ and /../ stuff
 char *wxRealPath (char *path)
 {
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   static const char SEP = '\\';
   Unix2DosFilename(path);
 #else
@@ -300,7 +300,7 @@ char *wxRealPath (char *path)
 			path[0] = SEP;
 			path[1] = '\0';
 		      }
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 		    /* Check that path[2] is NULL! */
 		    else if (path[1] == ':' && !path[2])
 		      {
@@ -330,7 +330,7 @@ char *wxCopyAbsolutePath(const wxString& filename)
     buf[0] = '\0';
     wxGetWorkingDirectory(buf, sizeof(buf)/sizeof(char));
     char ch = buf[strlen(buf) - 1];
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
     if (ch != '\\' && ch != '/')
 	strcat(buf, "\\");
 #else
@@ -381,7 +381,7 @@ char *wxExpandPath(char *buf, const char *name)
     trimchars[2] = '\t';
     trimchars[3] = 0;
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
      const char     SEP = '\\';
 #else
      const char     SEP = '/';
@@ -402,7 +402,7 @@ char *wxExpandPath(char *buf, const char *name)
 
     s = nm;
     d = lnm;
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
     q = FALSE;
 #else
     q = nm[0] == '\\' && nm[1] == '~';
@@ -410,7 +410,7 @@ char *wxExpandPath(char *buf, const char *name)
 
     /* Expand inline environment variables */
     while ((*d++ = *s)) {
-#ifndef __WINDOWS__
+#ifndef __WXMSW__
 	if (*s == '\\') {
 	    if ((*(d - 1) = *++s)) {
 		s++;
@@ -419,7 +419,7 @@ char *wxExpandPath(char *buf, const char *name)
 		break;
 	} else
 #endif
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 	if (*s++ == '$' && (*s == '{' || *s == ')'))
 #else
 	if (*s++ == '$')
@@ -510,7 +510,7 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
     return NULL;
 
   strcpy (dest, WXSTRINGCAST filename);
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   Unix2DosFilename(dest);
 #endif
 
@@ -537,7 +537,7 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
       strcpy(wxBuffer, "~");
       if (user && *user)
 	strcat(wxBuffer, user);
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 //      strcat(wxBuffer, "\\");
 #else
 //      strcat(wxBuffer, "/");
@@ -568,7 +568,7 @@ char *wxFileNameFromPath (char *path)
 #endif
 	    return tcp + 1;
 	}			/* while */
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
       if (isalpha (*path) && *(path + 1) == ':')
 	return path + 2;
 #endif
@@ -595,7 +595,7 @@ wxString wxFileNameFromPath (const wxString& path1)
 #endif
 	        return wxString(tcp + 1);
 	    }			/* while */
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
       if (isalpha (*path) && *(path + 1) == ':')
 	    return wxString(path + 2);
 #endif
@@ -637,7 +637,7 @@ wxPathOnly (char *path)
         else i --;
       }
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
       // Try Drive specifier
       if (isalpha (buf[0]) && buf[1] == ':')
 	{
@@ -685,7 +685,7 @@ wxString wxPathOnly (const wxString& path)
         else i --;
       }
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
       // Try Drive specifier
       if (isalpha (buf[0]) && buf[1] == ':')
 	{
@@ -712,7 +712,7 @@ wxDos2UnixFilename (char *s)
       {
 	if (*s == '\\')
 	  *s = '/';
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 	else
 	  *s = wxToLower (*s);	// Case INDEPENDENT
 #endif
@@ -724,7 +724,7 @@ void
 wxUnix2DosFilename (char *s)
 {
 // Yes, I really mean this to happen under DOS only! JACS
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   if (s)
     while (*s)
       {
@@ -826,7 +826,7 @@ bool wxMkdir(const wxString& dir)
 {
 #ifdef __VMS__
 	return FALSE;
-#elif (defined(__GNUWIN32__) && !defined(__MINGW32__)) || !defined(__WINDOWS__)
+#elif (defined(__GNUWIN32__) && !defined(__MINGW32__)) || !defined(__WXMSW__)
   return (mkdir (WXSTRINGCAST dir, S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH) == 0);
 #else
   return (mkdir(WXSTRINGCAST dir) == 0);
@@ -847,7 +847,7 @@ bool wxDirExists(const wxString& dir)
 {
 #ifdef __VMS__
   return FALSE;
-#elif !defined(__WINDOWS__)
+#elif !defined(__WXMSW__)
   struct stat sbuf;
   return (stat(dir, &sbuf) != -1) && S_ISDIR(sbuf.st_mode) ? TRUE : FALSE;
 #else
@@ -904,7 +904,7 @@ bool wxPathExists(const char *pszPathName)
 // Get a temporary filename, opening and closing the file.
 char *wxGetTempFileName(const wxString& prefix, char *buf)
 {
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 
 #ifndef	__WIN32__
   char tmp[144];
@@ -1051,7 +1051,7 @@ char *wxFindNextFile(void)
   return NULL;
 }
 
-#elif defined(__WINDOWS__)
+#elif defined(__WXMSW__)
 
 #ifdef __WIN32__
 HANDLE wxFileStrucHandle = INVALID_HANDLE_VALUE;
@@ -1216,7 +1216,7 @@ char *wxFindNextFile(void)
 }
 
 #endif
- // __WINDOWS__
+ // __WXMSW__
 
 // Get current working directory.
 // If buf is NULL, allocates space using new, else
@@ -1240,7 +1240,7 @@ bool wxSetWorkingDirectory(const wxString& d)
 {
 #ifdef __UNIX__
   return (chdir(d) == 0);
-#elif defined(__WINDOWS__)
+#elif defined(__WXMSW__)
 
 #ifdef __WIN32__
   return (bool)(SetCurrentDirectory(d) != 0);

@@ -93,7 +93,7 @@ void wxPanel::OnNavigationKey(wxNavigationKeyEvent& event)
   wxWindow *winFocus = event.GetCurrentFocus();
   
   // @@@ no FindFocus() in wxGTK
-  #ifndef __GTK__
+  #ifndef __WXGTK__
     if ( winFocus == NULL )
       winFocus = wxWindow::FindFocus();
   #endif

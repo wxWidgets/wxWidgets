@@ -29,7 +29,7 @@
 #include <math.h>
 #include <string.h>
 
-#if defined(__WINDOWS__) && !defined(__GNUWIN32__)
+#if defined(__WXMSW__) && !defined(__GNUWIN32__)
 #include <strstrea.h>
 #else
 #include <strstream.h>
@@ -165,7 +165,7 @@ bool wxPropertyListView::UpdatePropertyDisplayInList(wxProperty *property)
     return FALSE;
 
   int currentlySelected = propertyScrollingList->GetSelection();
-// #ifdef __WINDOWS__
+// #ifdef __WXMSW__
   wxString stringValueRepr(property->GetValue().GetStringRepresentation());
   wxString paddedString(MakeNameValueString(property->GetName(), stringValueRepr));
   int sel = FindListIndexForProperty(property);
@@ -496,7 +496,7 @@ bool wxPropertyListView::CreateControls(void)
 /*
     if (!tickBitmap)
     {
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
       tickBitmap = new wxBitmap("tick_bmp", wxBITMAP_TYPE_RESOURCE);
       crossBitmap =  new wxBitmap("cross_bmp", wxBITMAP_TYPE_RESOURCE);
       if (!tickBitmap || !crossBitmap || !tickBitmap->Ok() || !crossBitmap->Ok())

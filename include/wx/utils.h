@@ -266,7 +266,7 @@ void WXDLLEXPORT wxGetMousePosition( int* x, int* y );
 
 // MSW only: get user-defined resource from the .res file.
 // Returns NULL or newly-allocated memory, so use delete[] to clean up.
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 extern const char* WXDLLEXPORT wxUserResourceStr;
 char* WXDLLEXPORT wxLoadUserResource(const wxString& resourceName, const wxString& resourceType = wxUserResourceStr);
 #endif

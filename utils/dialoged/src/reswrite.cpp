@@ -29,7 +29,7 @@
 #include <math.h>
 #include <string.h>
 
-#if defined(__WINDOWS__) && !defined(__GNUWIN32__)
+#if defined(__WXMSW__) && !defined(__GNUWIN32__)
 #include <strstrea.h>
 #else
 #include <strstream.h>
@@ -401,7 +401,7 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
         
         char buf[400];
         strcpy(buf, child->GetName());
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
         wxDos2UnixFilename(buf);
 #endif
 

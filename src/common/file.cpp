@@ -27,7 +27,7 @@
 #endif
 
 // standard
-#if 	defined(__WINDOWS__) && !defined(__GNUWIN32__)
+#if 	defined(__WXMSW__) && !defined(__GNUWIN32__)
   #include  <io.h>
 #elif (defined(__UNIX__) || defined(__GNUWIN32__))
   #include  <unistd.h>

@@ -12,22 +12,22 @@
 #ifndef __APPH_BASE__
 #define __APPH_BASE__
 
-#ifndef __GTK__
+#ifndef __WXGTK__
 class WXDLLEXPORT wxApp;
 typedef wxApp* (*wxAppInitializerFunction) (void);
 #endif
 
 #include "wx/object.h"
 
-#ifdef __GTK__
+#ifdef __WXGTK__
 typedef wxObject* (*wxAppInitializerFunction) (void);  // returning wxApp* won't work with gcc
 #endif
 
-#if defined(__WINDOWS__)
+#if defined(__WXMSW__)
 #include "wx/msw/app.h"
-#elif defined(__MOTIF__)
+#elif defined(__WXMOTIF__)
 #include "wx/xt/app.h"
-#elif defined(__GTK__)
+#elif defined(__WXGTK__)
 #include "wx/gtk/app.h"
 #endif
 

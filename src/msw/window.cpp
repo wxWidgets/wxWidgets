@@ -4355,7 +4355,7 @@ void wxWindow::OnChar(wxKeyEvent& event)
   if (vert_units)
 	 y_pages = (int)(v_height/vert_units) - y_page;
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   int y = 0;
 #else
   int y = y_page-1;

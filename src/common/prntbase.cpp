@@ -22,7 +22,7 @@
 
 #include "wx/defs.h"
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #define __GOOD_COMPILER__
 #endif
 
@@ -47,7 +47,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #include <windows.h>
 #include <commdlg.h>
 
@@ -77,7 +77,7 @@ typedef signed short int SHORT ;
 
 LONG APIENTRY _EXPORT wxAbortProc(HDC hPr, int Code);
 #endif
- // End __WINDOWS__
+ // End __WXMSW__
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxPrinterBase, wxObject)
@@ -337,7 +337,7 @@ void wxPreviewControlBar::CreateButtons(void)
 
   SetSize(0, 0, 400, 40);
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   int fontSize = 9;
 #else
   int fontSize = 10;
@@ -484,7 +484,7 @@ void wxPreviewFrame::Initialize(void)
 //  int w, h;
 //  controlBar->GetSize(&w, &h);
   int h;
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   h = 40;
 #else
   h = 60;

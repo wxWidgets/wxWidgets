@@ -907,7 +907,7 @@ int wxString::Scanf(const char *pszFormat, ...) const
 
 int wxString::ScanfV(const char *pszFormat, va_list argptr) const
 {
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   wxMessageBox("ScanfV not implemented");
   return 0;
 #else

@@ -45,7 +45,7 @@ wxOwnerDrawn::wxOwnerDrawn(const wxTString& str,
   m_nMarginWidth = ms_nLastMarginWidth;
 }
 
-#if defined(__WINDOWS__) && defined(__WIN32__)
+#if defined(__WXMSW__) && defined(__WIN32__)
   uint wxOwnerDrawn::ms_nDefaultMarginWidth = GetSystemMetrics(SM_CXMENUCHECK);
 #else   // # what is the reasonable default?
   uint wxOwnerDrawn::ms_nDefaultMarginWidth = 15;

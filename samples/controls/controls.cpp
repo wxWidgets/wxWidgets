@@ -91,7 +91,7 @@ bool MyApp::OnInit(void)
   MyFrame *frame = new MyFrame(NULL, "Controls wxWindows App", 50, 50, 500, 420 );
   
   // Give it an icon
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   frame->SetIcon(wxIcon("mondrian"));
 #endif
 #ifdef __X__

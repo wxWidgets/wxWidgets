@@ -144,7 +144,7 @@ bool wxGetLocalTime(long *timeZone, int *dstObserved)
   *dstObserved = tp->tm_isdst;
 #else
 
-#if (((defined(__SYSV__) && !defined(__HPUX__)) || defined(__MSDOS__) || defined(__WINDOWS__)) && !defined(__GNUWIN32__))
+#if (((defined(__SYSV__) && !defined(__HPUX__)) || defined(__MSDOS__) || defined(__WXMSW__)) && !defined(__GNUWIN32__))
 #ifdef __BORLANDC__
   /* Borland uses underscores */
   *timeZone = _timezone;

@@ -559,7 +559,7 @@ bool wxCheckForInterrupt(wxWindow *wnd)
 // MSW only: get user-defined resource from the .res file.
 // Returns NULL or newly-allocated memory, so use delete[] to clean up.
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 char *wxLoadUserResource(const wxString& resourceName, const wxString& resourceType)
 {
   char *s = NULL;

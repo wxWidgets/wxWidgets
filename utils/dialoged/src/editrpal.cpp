@@ -29,7 +29,7 @@
 #include <math.h>
 #include <string.h>
 
-#if defined(__WINDOWS__) && !defined(__GNUWIN32__)
+#if defined(__WXMSW__) && !defined(__GNUWIN32__)
 #include <strstrea.h>
 #else
 #include <strstream.h>
@@ -194,7 +194,7 @@ void EditorToolPalette::OnPaint(wxPaintEvent& event)
 EditorToolPalette *wxResourceManager::OnCreatePalette(wxFrame *parent)
 {
   // Load palette bitmaps
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   wxBitmap PaletteMessageBitmap("MESSAGETOOL");
   wxBitmap PaletteButtonBitmap("BUTTONTOOL");
   wxBitmap PaletteCheckBoxBitmap("CHECKBOXTOOL");
@@ -234,7 +234,7 @@ EditorToolPalette *wxResourceManager::OnCreatePalette(wxFrame *parent)
   
   palette->SetMargins(2, 2);
 /*
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   if (palette->IsKindOf(CLASSINFO(wxToolBarMSW)))
     ((wxToolBarMSW *)palette)->SetDefaultSize(22, 22);
 #endif

@@ -20,7 +20,7 @@
 #include "wx/utils.h"
 #include "wx/dcclient.h"
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #include "windows.h"
 #endif
 
@@ -103,7 +103,7 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
    
    if (do_refresh && !noRefresh) Refresh();
    
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
     UpdateWindow ((HWND) GetHWND());
 #endif
 }
@@ -403,7 +403,7 @@ void wxScrolledWindow::Scroll (int x_pos, int y_pos)
       SetScrollPos (wxVERTICAL, y_pos, TRUE);
     }
   Refresh();
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   ::UpdateWindow ((HWND) GetHWND());
 #endif
 }

@@ -1,11 +1,11 @@
 #ifndef __TBARMSWH_BASE__
 #define __TBARMSWH_BASE__
 
-#if defined(__WINDOWS__)
+#if defined(__WXMSW__)
 #include "wx/msw/tbarmsw.h"
-#elif defined(__MOTIF__)
+#elif defined(__WXMOTIF__)
 #include "wx/xt/tbarmsw.h"
-#elif defined(__GTK__)
+#elif defined(__WXGTK__)
 #include "wx/gtk/tbarmsw.h"
 #endif
 

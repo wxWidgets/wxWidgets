@@ -44,7 +44,7 @@ bool MyApp::OnInit(void)
   MyFrame *frame = new MyFrame(NULL, "Validation Test", 50, 50, 300, 250);
 
   // Give it an icon
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   frame->SetIcon(wxIcon("mondrian"));
 #endif
 #ifdef __X__

@@ -29,7 +29,7 @@
 
 #include "wx/generic/statusbr.h"
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #include <windows.h>
 
 #ifdef DrawText
@@ -123,7 +123,7 @@ void wxStatusBar::SetStatusText(const wxString& text, int number)
 
   Refresh();
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   // For some reason, this can cause major GDI problems - graphics
   // all over the place. E.g. in print previewing.
 //  ::UpdateWindow((HWND) GetHWND());

@@ -55,7 +55,7 @@ bool MyApp::OnInit(void)
    wxDEFAULT_FRAME | wxHSCROLL | wxVSCROLL);
 
   // Give it an icon (this is ignored in MDI mode: uses resources)
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   frame->SetIcon(wxIcon("joyicon"));
 #endif
 #ifdef __X__

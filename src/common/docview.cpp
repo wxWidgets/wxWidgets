@@ -44,7 +44,7 @@
 #include "wx/generic/printps.h"
 
 /*
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #include "wx/mdi.h"
 #endif
 */
@@ -491,7 +491,7 @@ void wxView::OnChangeFilename(void)
     // If the frame is an MDI child, just set the title
     // to the name.
     // Otherwise, append the document name to the name of the application
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
     if (GetFrame()->IsKindOf(CLASSINFO(wxMDIChildFrame)))
 #else
     if (FALSE)
@@ -753,7 +753,7 @@ void wxDocManager::OnPrint(wxCommandEvent& WXUNUSED(event))
   {
     // TODO: trouble about this is that it pulls in the postscript
     // code unecessarily
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
     if ( wxTheApp->GetPrintMode() == wxPRINT_WINDOWS )
     {
       wxWindowsPrinter printer;
@@ -779,7 +779,7 @@ void wxDocManager::OnPrintSetup(wxCommandEvent& WXUNUSED(event))
 
   wxPrintData data;
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   if ( wxTheApp->GetPrintMode() == wxPRINT_WINDOWS )
   {
     wxPrintDialog printerDialog(parentWin, & data);
@@ -806,7 +806,7 @@ void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
   {
     // Pass two printout objects: for preview, and possible printing.
     wxPrintPreviewBase *preview = NULL;
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
     if ( wxTheApp->GetPrintMode() == wxPRINT_WINDOWS )
         preview = new wxWindowsPrintPreview(printout, view->OnCreatePrintout());
     else
@@ -1126,7 +1126,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
     int noTemplates, wxString& path, long WXUNUSED(flags), bool WXUNUSED(save))
 {
   // We can only have multiple filters in Windows
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   char *descrBuf = new char[1000];
   descrBuf[0] = 0;
   int i;

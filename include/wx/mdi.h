@@ -1,11 +1,11 @@
 #ifndef __MDIH_BASE__
 #define __MDIH_BASE__
 
-#if defined(__WINDOWS__)
+#if defined(__WXMSW__)
 #include "wx/msw/mdi.h"
-#elif defined(__MOTIF__)
+#elif defined(__WXMOTIF__)
 #include "wx/xt/mdi.h"
-#elif defined(__GTK__)
+#elif defined(__WXGTK__)
 #include "wx/gtk/mdi.h"
 #endif
 

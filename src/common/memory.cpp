@@ -51,7 +51,7 @@
 #include <stdarg.h>
 #include <string.h>
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #include <windows.h>
 
 #ifdef GetClassInfo
@@ -1021,7 +1021,7 @@ void wxTrace(const char *fmt ...)
 
   va_start(ap, fmt);
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   wvsprintf(buffer,fmt,ap) ;
 #else
   vsprintf(buffer,fmt,ap) ;
@@ -1035,7 +1035,7 @@ void wxTrace(const char *fmt ...)
     wxDebugContext::GetStream().flush();
   }
   else
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
     OutputDebugString((LPCSTR)buffer) ;
 #else
     fprintf(stderr, buffer);
@@ -1053,7 +1053,7 @@ void wxTraceLevel(int level, const char *fmt ...)
 
   va_start(ap, fmt);
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   wvsprintf(buffer,fmt,ap) ;
 #else
   vsprintf(buffer,fmt,ap) ;
@@ -1067,7 +1067,7 @@ void wxTraceLevel(int level, const char *fmt ...)
     wxDebugContext::GetStream().flush();
   }
   else
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
     OutputDebugString((LPCSTR)buffer) ;
 #else
     fprintf(stderr, buffer);

@@ -136,7 +136,7 @@ wxString ExpandEnvVars(const wxString& str)
     Bracket_None, 
     Bracket_Normal  = ')', 
     Bracket_Curly   = '}',
-#ifdef  __WINDOWS__
+#ifdef  __WXMSW__
     Bracket_Windows = '%'     // yeah, Windows people are a bit strange ;-)
 #endif
   };
@@ -144,13 +144,13 @@ wxString ExpandEnvVars(const wxString& str)
   uint m;
   for ( uint n = 0; n < str.Len(); n++ ) {
     switch ( str[n] ) {
-#ifdef  __WINDOWS__
+#ifdef  __WXMSW__
       case '%':
 #endif  //WINDOWS
       case '$':
         {
           Bracket bracket;
-          #ifdef  __WINDOWS__
+          #ifdef  __WXMSW__
             if ( str[n] == '%' )
               bracket = Bracket_Windows;
             else
@@ -188,7 +188,7 @@ wxString ExpandEnvVars(const wxString& str)
           }
           else {
             // variable doesn't exist => don't change anything
-            #ifdef  __WINDOWS__
+            #ifdef  __WXMSW__
               if ( bracket != Bracket_Windows )
             #endif
                 if ( bracket != Bracket_None )

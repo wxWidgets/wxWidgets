@@ -29,7 +29,7 @@
 #include "wx/gdicmn.h"
 #include "wx/cmndata.h"
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #include <windows.h>
 
 #ifndef __WIN32__
@@ -127,7 +127,7 @@ void wxFontData::operator=(const wxFontData& data)
 
 wxPrintData::wxPrintData(void)
 {
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
     printData = NULL;
 #endif
     printOrientation = wxPORTRAIT;
@@ -148,7 +148,7 @@ wxPrintData::wxPrintData(void)
 
 wxPrintData::~wxPrintData(void)
 {
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
     PRINTDLG *pd = (PRINTDLG *)printData;
     if ( pd && pd->hDevMode )
         GlobalFree(pd->hDevMode);
@@ -157,7 +157,7 @@ wxPrintData::~wxPrintData(void)
 #endif
 }
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 void wxPrintData::ConvertToNative(void)
 {
     PRINTDLG *pd = (PRINTDLG*) printData;

@@ -32,7 +32,7 @@
 #include "wx/settings.h"
 
 // Set to zero to use no double-buffering
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #define USE_DOUBLE_BUFFERING 1
 #else
 #define USE_DOUBLE_BUFFERING 0
@@ -840,7 +840,7 @@ void wxGenericGrid::DrawCellBackground(wxDC *dc, wxRectangle *rect, int row, int
   {
     dc->SetBrush(*cell->GetBackgroundBrush());
     dc->SetPen(*wxTRANSPARENT_PEN);
-#ifdef __MOTIF__
+#ifdef __WXMOTIF__
     dc->DrawRectangle(rect->x+1, rect->y+1, rect->width-1, rect->height-1);
 #else
     dc->DrawRectangle(rect->x+1, rect->y+1, rect->width, rect->height);
@@ -1371,7 +1371,7 @@ void wxGenericGrid::OnSelectCellImplementation(wxDC *dc, int row, int col)
 
   // Why isn't this needed for Windows??
   // Probably because of the SetValue??
-#ifndef __WINDOWS__
+#ifndef __WXMSW__
   HighlightCell(dc);
 #endif
   dc->DestroyClippingRegion();
@@ -1751,7 +1751,7 @@ void wxGenericGrid::RefreshCell(int row, int col, bool setText)
         currentPos = TRUE;
       }
       // Gets refreshed anyway in MSW
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
       if (!currentPos)
 #endif
       {

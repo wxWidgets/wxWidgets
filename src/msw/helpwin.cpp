@@ -29,7 +29,7 @@
 #if USE_HELP
 #include <time.h>
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #include <wx/msw/private.h>
 #endif
 

@@ -148,7 +148,7 @@ const char *wxFatalErrorStr = "wxWindows Fatal Error";
 const char *wxFloatToStringStr = "%.2f";
 const char *wxDoubleToStringStr = "%.2f";
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 const char *wxUserResourceStr = "TEXT";
 #endif
 
@@ -201,7 +201,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxDC)
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
 IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
 
-#if defined(__WINDOWS__)
+#if defined(__WXMSW__)
 #include "wx/dcprint.h"
 IMPLEMENT_CLASS(wxPrinterDC, wxDC)
 #endif
@@ -225,7 +225,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPrintData, wxObject)
 #include "wx/colordlg.h"
 #include "wx/fontdlg.h"
 
-#if !defined(__WINDOWS__) || USE_GENERIC_DIALOGS_IN_MSW
+#if !defined(__WXMSW__) || USE_GENERIC_DIALOGS_IN_MSW
 #include "wx/generic/colordlg.h"
 #include "wx/generic/fontdlg.h"
 IMPLEMENT_DYNAMIC_CLASS(wxGenericColourDialog, wxDialog)
@@ -268,7 +268,7 @@ IMPLEMENT_CLASS(wxHelpControllerBase, wxObject)
 
 #if USE_HELP
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #include "wx/msw/helpwin.h"
 IMPLEMENT_DYNAMIC_CLASS(wxWinHelpController, wxHelpControllerBase)
 #endif
@@ -276,7 +276,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxWinHelpController, wxHelpControllerBase)
 // Generic wxHelp controller
 IMPLEMENT_CLASS(wxXLPHelpController, wxHelpControllerBase)
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 IMPLEMENT_CLASS(wxXLPHelpClient, wxDDEClient)
 IMPLEMENT_CLASS(wxXLPHelpConnection, wxDDEConnection)
 #else
@@ -397,7 +397,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBarBase, wxControl)
 #include "wx/tbarsmpl.h"
 IMPLEMENT_DYNAMIC_CLASS(wxToolBarSimple, wxToolBarBase)
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #include "wx/tbarmsw.h"
 IMPLEMENT_DYNAMIC_CLASS(wxToolBarMSW, wxToolBarBase)
 
@@ -426,7 +426,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxTime, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxString, wxObject)
 #endif
 
-#ifdef __MOTIF__
+#ifdef __WXMOTIF__
 IMPLEMENT_DYNAMIC_CLASS(wxXColormap, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxXFont, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxXCursor, wxObject)
@@ -441,7 +441,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
 IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
 
 // This will presumably be implemented on other platforms too
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxBMPResourceHandler, wxBitmapHandler)
 IMPLEMENT_DYNAMIC_CLASS(wxBMPFileHandler, wxBitmapHandler)
@@ -537,7 +537,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPanel, wxWindow)
 #include "wx/dirdlg.h"
 #include "wx/choicdlg.h"
 
-#if !defined(__WINDOWS__) || USE_GENERIC_DIALOGS_IN_MSW
+#if !defined(__WXMSW__) || USE_GENERIC_DIALOGS_IN_MSW
 #include "wx/generic/msgdlgg.h"
 IMPLEMENT_CLASS(wxGenericMessageDialog, wxDialog)
 #endif
@@ -547,12 +547,12 @@ IMPLEMENT_CLASS(wxSingleChoiceDialog, wxDialog)
 IMPLEMENT_CLASS(wxFileDialog, wxDialog)
 IMPLEMENT_CLASS(wxDirDialog, wxDialog)
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 IMPLEMENT_CLASS(wxMessageDialog)
 #endif
 
 #if USE_GAUGE
-#ifdef __MOTIF__
+#ifdef __WXMOTIF__
 #include "../../contrib/xmgauge/gauge.h"
 #endif
 #include "wx_gauge.h"
@@ -615,7 +615,7 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
 	EVT_ERASE_BACKGROUND(wxTextCtrl::OnEraseBackground)
 END_EVENT_TABLE()
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 BEGIN_EVENT_TABLE(wxMDIParentWindow, wxFrame)
   EVT_SIZE(wxMDIParentWindow::OnSize)
   EVT_ACTIVATE(wxMDIParentWindow::OnActivate)
@@ -640,7 +640,7 @@ BEGIN_EVENT_TABLE(wxToolBarSimple, wxToolBarBase)
 	EVT_MOUSE_EVENTS(wxToolBarSimple::OnMouseEvent)
 END_EVENT_TABLE()
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 BEGIN_EVENT_TABLE(wxToolBarMSW, wxToolBarBase)
 	EVT_SIZE(wxToolBarMSW::OnSize)
 	EVT_PAINT(wxToolBarMSW::OnPaint)
@@ -669,7 +669,7 @@ BEGIN_EVENT_TABLE(wxControl, wxWindow)
   EVT_ERASE_BACKGROUND(wxControl::OnEraseBackground)
 END_EVENT_TABLE()
 
-#if !defined(__WINDOWS__) || USE_GENERIC_DIALOGS_IN_MSW
+#if !defined(__WXMSW__) || USE_GENERIC_DIALOGS_IN_MSW
 BEGIN_EVENT_TABLE(wxGenericMessageDialog, wxDialog)
 	EVT_BUTTON(wxID_YES, wxGenericMessageDialog::OnYes)
 	EVT_BUTTON(wxID_NO, wxGenericMessageDialog::OnNo)

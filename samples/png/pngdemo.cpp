@@ -20,7 +20,7 @@
 #pragma hdrstop
 #endif
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #include <wx/pnghand.h>
 #endif
 
@@ -37,7 +37,7 @@ MyApp::MyApp()
 
 bool MyApp::OnInit(void)
 {
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   wxBitmap::AddHandler(new wxPNGFileHandler);
 #endif
 

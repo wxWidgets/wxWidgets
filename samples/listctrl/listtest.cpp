@@ -66,7 +66,7 @@ bool MyApp::OnInit(void)
   frame->SetBackgroundColour(wxColour(255, 255, 255));
 
   // Give it an icon
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   frame->SetIcon(wxIcon("mondrian"));
 #endif
 #ifdef __X__

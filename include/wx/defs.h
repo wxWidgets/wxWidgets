@@ -16,7 +16,7 @@
 #pragma interface "defs.h"
 #endif
 
-#ifdef __GTK__
+#ifdef __WXGTK__
 
 #include "glib.h"
 #include "gdk/gdk.h"
@@ -43,14 +43,14 @@
 //////////////////////////////////////////////////////////////////////////////////
 // Currently Only MS-Windows/NT, XView and Motif are supported
 //
-#if defined(__HPUX__) && !defined(__MOTIF__)
-# define __MOTIF__
+#if defined(__HPUX__) && !defined(__WXMOTIF__)
+# define __WXMOTIF__
 #endif
-#if defined(__MOTIF__)
+#if defined(__WXMOTIF__)
 # define __X__
-#elif defined(__WINDOWS__) || defined(__WINDOWS_386__) || defined(__NT__) || defined(__MSDOS__) 
-# ifndef __WINDOWS__
-#  define __WINDOWS__
+#elif defined(__WXMSW__) || defined(__WINDOWS_386__) || defined(__NT__) || defined(__MSDOS__) 
+# ifndef __WXMSW__
+#  define __WXMSW__
 # endif
 #endif
 
@@ -68,13 +68,13 @@
 #endif
 
 // Make sure the environment is set correctly
-#if defined(__WINDOWS__) && defined(__X__)
+#if defined(__WXMSW__) && defined(__X__)
 # error "Target can't be both X and Windows"
-#elif !defined(__MOTIF__) && !defined(__WINDOWS__) && !defined(__GTK__) && !defined(__MAC__) && !defined(__X__)
-#error "No Target! Use -D[__MOTIF__|__GTK__|__WINDOWS__|__MAC__]"
+#elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && !defined(__MAC__) && !defined(__X__)
+#error "No Target! Use -D[__WXMOTIF__|__WXGTK__|__WXMSW__|__MAC__]"
 #endif
 
-#if defined(__MOTIF__) || defined(__GTK__)
+#if defined(__WXMOTIF__) || defined(__WXGTK__)
 
 // Bool is now obsolete, use bool instead
 // typedef int Bool;
@@ -85,7 +85,7 @@
 # define Bool_DEFINED
 #endif
 
-#elif defined(__WINDOWS__)
+#elif defined(__WXMSW__)
 
 #ifndef TRUE
 # define TRUE  1
@@ -119,7 +119,7 @@ typedef int wxWindowID;
  * Making or using wxWindows as a Windows DLL
  */
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 
 #ifdef __BORLANDC__
 
@@ -230,8 +230,8 @@ enum  ErrCode
 #endif
 
 #ifndef __UNIX__                     // Windows
-  #ifndef __WINDOWS__
-    #define __WINDOWS__
+  #ifndef __WXMSW__
+    #define __WXMSW__
   #endif
 
   #if   defined(_MSC_VER)
@@ -248,7 +248,7 @@ enum  ErrCode
 
 #if     defined(__UNIX__)
   #define FILE_PATH_SEPARATOR   ('/')
-#elif   defined(__WINDOWS__)
+#elif   defined(__WXMSW__)
   #define FILE_PATH_SEPARATOR   ('\\')
 #else
   #error "don't know path separator for this platform"
@@ -833,7 +833,7 @@ enum {
 #define wxID_YES                5103
 #define wxID_NO                 5104
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 // Stand-ins for Windows types, to avoid
 // #including all of windows.h
 

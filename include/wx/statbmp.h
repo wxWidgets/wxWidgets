@@ -1,11 +1,11 @@
 #ifndef __STATBMPH_BASE__
 #define __STATBMPH_BASE__
 
-#if defined(__WINDOWS__)
+#if defined(__WXMSW__)
 #include "wx/msw/statbmp.h"
-#elif defined(__MOTIF__)
+#elif defined(__WXMOTIF__)
 #include "wx/xt/statbmp.h"
-#elif defined(__GTK__)
+#elif defined(__WXGTK__)
 #include "wx/gtk/statbmp.h"
 #endif
 

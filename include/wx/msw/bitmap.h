@@ -79,7 +79,7 @@ public:
   wxPalette     m_bitmapPalette;
   int           m_quality;
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   WXHBITMAP     m_hBitmap;
   wxDC *        m_selectedInto; // So bitmap knows whether it's been selected into
                       // a device context (for error checking)

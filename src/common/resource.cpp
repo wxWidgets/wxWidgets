@@ -2090,7 +2090,7 @@ wxBitmap *wxResourceCreateBitmap(char *resource, wxResourceTable *table)
           }
           break;
         }
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
         case RESOURCE_PLATFORM_WINDOWS:
         {
           if (!optResource && ((noColours == 0) || (noColours <= thisNoColours)))
@@ -2165,7 +2165,7 @@ wxBitmap *wxResourceCreateBitmap(char *resource, wxResourceTable *table)
       }
       case wxBITMAP_TYPE_XPM_DATA:
       {
-#if (defined(__X__) && USE_XPM_IN_X) || (defined(__WINDOWS__) && USE_XPM_IN_MSW)
+#if (defined(__X__) && USE_XPM_IN_X) || (defined(__WXMSW__) && USE_XPM_IN_MSW)
         wxItemResource *item = table->FindResource(name);
         if (!item)
         {
@@ -2263,7 +2263,7 @@ wxIcon *wxResourceCreateIcon(char *resource, wxResourceTable *table)
           }
           break;
         }
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
         case RESOURCE_PLATFORM_WINDOWS:
         {
           if (!optResource && ((noColours == 0) || (noColours <= thisNoColours)))
@@ -2340,7 +2340,7 @@ wxIcon *wxResourceCreateIcon(char *resource, wxResourceTable *table)
       {
       // *** XPM ICON NOT YET IMPLEMENTED IN WXWINDOWS ***
 /*
-#if (defined(__X__) && USE_XPM_IN_X) || (defined(__WINDOWS__) && USE_XPM_IN_MSW)
+#if (defined(__X__) && USE_XPM_IN_X) || (defined(__WXMSW__) && USE_XPM_IN_MSW)
         wxItemResource *item = table->FindResource(name);
         if (!item)
         {

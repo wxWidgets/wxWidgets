@@ -60,7 +60,7 @@ bool MyApp::OnInit(void)
   frame->Connect( MINIMAL_ABOUT, -1, wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)MyFrame::OnAbout );
   
   // Give it an icon
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   frame->SetIcon(wxIcon("mondrian"));
 #endif
 #ifdef __X__

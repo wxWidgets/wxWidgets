@@ -91,7 +91,7 @@ bool MyApp::OnInit(void)
   frame = new MyFrame(m_docManager, NULL, "DocView Demo", wxPoint(0, 0), wxSize(500, 400), wxDEFAULT_FRAME_STYLE);
 
   //// Give it an icon (this is ignored in MDI mode: uses resources)
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   frame->SetIcon(wxIcon("doc_icn"));
 #endif
 #ifdef __X__
@@ -171,7 +171,7 @@ wxFrame *MyApp::CreateChildFrame(wxDocument *doc, wxView *view, bool isCanvas)
   wxDocChildFrame *subframe = new wxDocChildFrame(doc, view, GetMainFrame(), "Child Frame",
         wxPoint(10, 10), wxSize(300, 300), wxDEFAULT_FRAME_STYLE);
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   subframe->SetIcon(wxString(isCanvas ? "chrt_icn" : "notepad_icn"));
 #endif
 #ifdef __X__

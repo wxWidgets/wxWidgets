@@ -466,7 +466,7 @@ bool wxDate::IsLeapYear( void ) const
 
 wxDate& wxDate::Set()
 {
-//#ifdef __WINDOWS__
+//#ifdef __WXMSW__
 #if 0
     struct _dosdate_t sDate;
     _dos_getdate(&sDate);

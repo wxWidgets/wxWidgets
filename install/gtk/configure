@@ -4232,7 +4232,7 @@ USE_GTK=1
 USE_UNIX=1
 
 TOOLKIT=GTK
-TOOLKIT_DEF=__GTK__
+TOOLKIT_DEF=__WXGTK__
 
 USE_LINUX=
 USE_SGI=
@@ -6111,7 +6111,7 @@ fi
   
 
   cat >> confdefs.h <<\EOF
-#define __GTK__ 1
+#define __WXGTK__ 1
 EOF
 
 fi

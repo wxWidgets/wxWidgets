@@ -20,7 +20,7 @@
 #ifndef __ODBCH__
 #define __ODBCH__
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #include <windows.h>
 #endif
 

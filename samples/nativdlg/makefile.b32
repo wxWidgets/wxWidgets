@@ -52,7 +52,7 @@ $(TARGET).def
 nativdlg.obj:	nativdlg.$(SRCSUFF) nativdlg.h # dialog1.wxr
 
 $(TARGET).res :      $(TARGET).rc $(WXDIR)\include\wx\msw\wx.rc
-    brc32 -r /D__WINDOWS__ /i$(BCCDIR)\include /i$(WXDIR)\include $(TARGET)
+    brc32 -r /D__WXMSW__ /i$(BCCDIR)\include /i$(WXDIR)\include $(TARGET)
 
 clean:
         -erase *.obj

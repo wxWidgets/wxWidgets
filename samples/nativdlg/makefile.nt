@@ -50,7 +50,7 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
 $(PROGRAM).res :      $(PROGRAM).rc $(WXDIR)\include\wx\msw\wx.rc dialog1.rc
-    $(rc) -r /i$(WXDIR)\include /D__WINDOWS__ -fo$@ $(PROGRAM).rc
+    $(rc) -r /i$(WXDIR)\include /D__WXMSW__ -fo$@ $(PROGRAM).rc
 
 
 clean:

@@ -39,7 +39,7 @@
   
 // default type is the native one
 const wxTextFile::Type wxTextFile::typeDefault = wxTextFile::
-#if   defined(__WINDOWS__)
+#if   defined(__WXMSW__)
   Type_Dos;
 #elif defined(__UNIX__)
   Type_Unix;

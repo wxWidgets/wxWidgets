@@ -42,7 +42,7 @@ enum
 #define wxTraceResAlloc 0x0004  // trace GDI resource allocation
 #define wxTraceRefCount 0x0008  // trace various ref counting operations
 
-#ifdef  __WINDOWS__
+#ifdef  __WXMSW__
   #define wxTraceOleCalls 0x0100  // OLE interface calls
 #endif
 

@@ -47,7 +47,7 @@
 #include  <stdlib.h>
 #include  <time.h>
 
-#ifdef  __WINDOWS__
+#ifdef  __WXMSW__
   #include  <windows.h>
 #else   //Unix
   #include  <signal.h>
@@ -359,7 +359,7 @@ void wxLogStream::DoLogString(const char *szString)
 // ----------------------------------------------------------------------------
 wxLogTextCtrl::wxLogTextCtrl(wxTextCtrl *pTextCtrl)
 // @@@ TODO: in wxGTK wxTextCtrl doesn't derive from streambuf
-#ifndef __GTK__
+#ifndef __WXGTK__
              : wxLogStream(new ostream(pTextCtrl))
 #endif //GTK
 {
@@ -367,7 +367,7 @@ wxLogTextCtrl::wxLogTextCtrl(wxTextCtrl *pTextCtrl)
 
 wxLogTextCtrl::~wxLogTextCtrl()
 {
-  #ifndef __GTK__
+  #ifndef __WXGTK__
     delete m_ostr;
   #endif //GTK
 }
@@ -619,7 +619,7 @@ void wxLogFrame::OnSave(wxCommandEvent& event)
   // retrieve text and save it
   // -------------------------
   
-#ifdef __GTK__
+#ifdef __WXGTK__
   // @@@@ TODO: no GetNumberOfLines and GetLineText in wxGTK yet
   wxLogError("Sorry, this function is not implemented under GTK");
 #else
@@ -678,7 +678,7 @@ void wxLogWindow::DoLogString(const char *szString)
   wxTextCtrl *pText = m_pLogFrame->TextCtrl();
 
   // remove selection (WriteText is in fact ReplaceSelection)
-  #ifdef __WINDOWS__
+  #ifdef __WXMSW__
     long nLen = pText->GetLastPosition();
     pText->SetSelection(nLen, nLen);
   #endif // Windows
@@ -751,7 +751,7 @@ static void wxLogWrap(FILE *f, const char *pszPrefix, const char *psz)
 // get error code from syste
 unsigned long wxSysErrorCode()
 {
-  #ifdef  __WINDOWS__
+  #ifdef  __WXMSW__
     #ifdef  __WIN32__
       return ::GetLastError();
     #else   //WIN16
@@ -769,7 +769,7 @@ const char *wxSysErrorMsg(unsigned long nErrCode)
   if ( nErrCode == 0 )
     nErrCode = wxSysErrorCode();
 
-  #ifdef  __WINDOWS__
+  #ifdef  __WXMSW__
     #ifdef  __WIN32__
       static char s_szBuf[LOG_BUFFER_SIZE / 2];
 
@@ -838,7 +838,7 @@ void wxOnAssert(const char *szFile, int nLine, const char *szMsg)
     switch ( wxMessageBox(szBuf, _("Debug"),
                           wxYES_NO | wxCANCEL | wxICON_STOP ) ) {
       case wxYES:
-        #ifdef __WINDOWS__
+        #ifdef __WXMSW__
           DebugBreak();
         #else // Unix
           raise(SIGTRAP);

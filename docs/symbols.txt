@@ -4,17 +4,21 @@ GUIs:
 -----
 
 __X__           any X, but not GTK
-__MOTIF__       Motif
+__WXMOTIF__       Motif
 __XT__          Xt; mutually exclusive with WX_MOTIF (?)
-__GTK__         GTK
+__WXGTK__         GTK
 __XVIEW__       Obsolete!
-__WINDOWS__     Any Windows
+__WXMSW__     Any Windows
 __MAC__         MacOS
 __UNIX__        any Unix
 __WIN95__       GUI for Windows 95 and above; NT 4.0 and above.
 __WIN32__       WIN32 API
 __NT__          Windows NT
 __CURSES__      CURSES
+
+In fact, they should better all start with __WX instead of __ only. 
+The only GUIs implemented for 2.0 are __WXGTK__, __WXMSW__ and __WXMOTIF__
+yet. Any new ones, please start the define with __WX.
 
 OSes/machines:
 

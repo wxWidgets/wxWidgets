@@ -21,7 +21,7 @@
 #include "wx/mdi.h"
 #endif
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #ifdef __WIN95__
 #include <wx/tbar95.h>
 #else
@@ -51,7 +51,7 @@ bool MyApp::OnInit(void)
    wxDEFAULT_FRAME | wxHSCROLL | wxVSCROLL);
 
   // Give it an icon (this is ignored in MDI mode: uses resources)
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   frame->SetIcon(wxIcon("mdi_icn"));
 #endif
 #ifdef __X__
@@ -100,7 +100,7 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, c
         wxTE_MULTILINE|wxSUNKEN_BORDER);
     textWindow->SetValue("A help window");
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
     toolBar = new TestRibbon(this, 0, 0, 100, 30, wxNO_BORDER, wxVERTICAL, 1);
     SetToolBar(toolBar);
 #endif
@@ -128,7 +128,7 @@ void MyFrame::OnNewWindow(wxCommandEvent& event)
       winNumber ++;
 
       // Give it an icon (this is ignored in MDI mode: uses resources)
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
       subframe->SetIcon(wxIcon("chrt_icn"));
 #endif
 #ifdef __X__
@@ -252,7 +252,7 @@ void MyFrame::OnSize(wxSizeEvent& event)
     int tw = 0;
     int th = 0;
     
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
     wxWindow* tbar = GetToolBar();
     if (tbar)
     {
@@ -302,7 +302,7 @@ bool MyChild::OnClose(void)
   return TRUE;
 }
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 
 BEGIN_EVENT_TABLE(TestRibbon, wxToolBar)
     EVT_PAINT(TestRibbon::OnPaint)
@@ -323,7 +323,7 @@ TestRibbon::TestRibbon(wxFrame *frame, int x, int y, int w, int h,
     bitmaps[6] = new wxBitmap("icon7", wxBITMAP_TYPE_RESOURCE);
     bitmaps[7] = new wxBitmap("icon8", wxBITMAP_TYPE_RESOURCE);
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   int width = 24;
 #else
   int width = 16;

@@ -104,11 +104,11 @@
 #define wxSYS_SHOW_SOUNDS             36
 #define wxSYS_SWAP_BUTTONS            37
 
-#if defined(__WINDOWS__)
+#if defined(__WXMSW__)
 #include "wx/msw/settings.h"
-#elif defined(__MOTIF__)
+#elif defined(__WXMOTIF__)
 #include "wx/xt/settings.h"
-#elif defined(__GTK__)
+#elif defined(__WXGTK__)
 #include "wx/gtk/settings.h"
 #endif
 

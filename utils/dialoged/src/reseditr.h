@@ -72,7 +72,7 @@ class wxWindowPropertyInfo;
 class wxResourceEditorProjectTree;
 class wxResourceEditorControlList;
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #define wxHelpController wxWinHelpController
 #else
 #define wxHelpController wxXLPHelpController;

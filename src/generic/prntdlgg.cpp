@@ -425,7 +425,7 @@ void wxGenericPageSetupDialog::OnPrinter(wxCommandEvent& WXUNUSED(event))
 
     genericPrintSetupDialog->Close(TRUE);
   }
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   else
   {
     wxPrintData data;

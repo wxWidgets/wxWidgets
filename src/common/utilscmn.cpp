@@ -56,7 +56,7 @@
 #include "../common/glob.inc"
 #endif
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #include "windows.h"
 #endif
 
@@ -109,7 +109,7 @@ int strncasecmp(const char *str_1, const char *str_2, size_t maxchar)
 }
 #endif
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 
 #ifndef __GNUWIN32__
 #define strcasecmp stricmp
@@ -134,7 +134,7 @@ extern "C"
   int strncasecmp (const char *, const char *, size_t);
 }
 #endif
-#endif				/* __WINDOWS__ */
+#endif				/* __WXMSW__ */
 
 
 char *
@@ -519,7 +519,7 @@ int wxDebugStreamBuf::overflow(int WXUNUSED(i))
   char *txt = new char[len+1];
   strncpy(txt, pbase(), len);
   txt[len] = '\0';
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   OutputDebugString((LPCSTR)txt);
 #else
   fprintf(stderr, txt);
@@ -535,7 +535,7 @@ int wxDebugStreamBuf::sync(void)
   char *txt = new char[len+1];
   strncpy(txt, pbase(), len);
   txt[len] = '\0';
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   OutputDebugString((LPCSTR)txt);
 #else
   fprintf(stderr, txt);

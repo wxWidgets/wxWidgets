@@ -41,13 +41,13 @@
 #include <math.h>
 #include <string.h>
 
-#if defined(__WINDOWS__) && !defined(__GNUWIN32__)
+#if defined(__WXMSW__) && !defined(__GNUWIN32__)
 #include <strstrea.h>
 #else
 #include <strstream.h>
 #endif
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #include <windows.h>
 #endif
 
@@ -133,7 +133,7 @@ wxResourceManager::~wxResourceManager()
 bool wxResourceManager::Initialize()
 {
   // Set up the resource filename for each platform.
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   // dialoged.ini in the Windows directory
   char buf[256];
   GetWindowsDirectory(buf, 256);
@@ -159,7 +159,7 @@ bool wxResourceManager::Initialize()
 
   if (!m_bitmapImage)
   {
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
     m_bitmapImage = new wxBitmap("WXWINBMP", wxBITMAP_TYPE_BMP_RESOURCE);
 #endif
 #ifdef __X__
@@ -168,7 +168,7 @@ bool wxResourceManager::Initialize()
   }
 
   // Initialize the image list icons
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   wxIcon icon1("DIALOG_ICON", wxBITMAP_TYPE_ICO_RESOURCE, 16, 16);
   wxIcon icon2("FOLDER1_ICON", wxBITMAP_TYPE_ICO_RESOURCE, 16, 16);
   wxIcon icon3("FOLDER2_ICON", wxBITMAP_TYPE_ICO_RESOURCE, 16, 16);
@@ -598,7 +598,7 @@ wxFrame *wxResourceManager::OnCreateEditorFrame(const char *title)
   frame->CreateStatusBar(1);
 
   frame->SetAutoLayout(TRUE);
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   wxIcon *icon = new wxIcon("DIALOGEDICON");
   frame->SetIcon(icon);
 #endif
@@ -651,7 +651,7 @@ wxResourceEditorScrolledWindow *wxResourceManager::OnCreateEditorPanel(wxFrame *
 wxToolBarBase *wxResourceManager::OnCreateToolBar(wxFrame *parent)
 {
   // Load palette bitmaps
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   wxBitmap ToolbarLoadBitmap("LOADTOOL");
   wxBitmap ToolbarSaveBitmap("SAVETOOL");
   wxBitmap ToolbarNewBitmap("NEWTOOL");
@@ -688,7 +688,7 @@ wxToolBarBase *wxResourceManager::OnCreateToolBar(wxFrame *parent)
   toolbar->SetMargins(2, 2);
 //  toolbar->GetDC()->SetBackground(wxLIGHT_GREY_BRUSH);
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   int width = 24;
   int dx = 2;
   int gap = 6;
@@ -759,7 +759,7 @@ void wxResourceManager::UpdateResourceList()
   m_editorResourceTree->DeleteAllItems();
 
   long id = m_editorResourceTree->InsertItem(0, "Dialogs"
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
      , 1, 2
 #endif
    );
@@ -792,7 +792,7 @@ void wxResourceManager::AddItemsRecursively(long parent, wxItemResource *resourc
     imageId = 3;
   
   long id = m_editorResourceTree->InsertItem(parent, theString
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
      , imageId
 #endif
    );

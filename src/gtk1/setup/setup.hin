@@ -21,7 +21,7 @@
 #endif
 
 /* define the system to compile */
-#undef __GTK__
+#undef __WXGTK__
 #undef __UNIX__
 #undef __LINUX__
 #undef __SGI__

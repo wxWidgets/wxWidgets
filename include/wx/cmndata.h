@@ -82,7 +82,7 @@ class WXDLLEXPORT wxPrintData: public wxObject
   DECLARE_DYNAMIC_CLASS(wxPrintData)
 
  public:
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   void *printData;
 #endif
   int printFromPage;
@@ -137,7 +137,7 @@ class WXDLLEXPORT wxPrintData: public wxObject
 
   void operator=(const wxPrintData& data);
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   // Convert to/from the PRINTDLG structure
   void ConvertToNative(void);
   void ConvertFromNative(void);

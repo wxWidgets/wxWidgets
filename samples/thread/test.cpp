@@ -116,7 +116,7 @@ bool MyApp::OnInit(void)
   MyFrame *frame = new MyFrame(NULL, "Minimal wxWindows App", 50, 50, 450, 340);
 
   // Give it an icon
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   frame->SetIcon(wxIcon("AIAI"));
 #endif
 #ifdef __X__

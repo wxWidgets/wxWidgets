@@ -1,11 +1,11 @@
 #ifndef __SPINBUTTH_BASE__
 #define __SPINBUTTH_BASE__
 
-#if defined(__WINDOWS__)
+#if defined(__WXMSW__)
 #include "wx/msw/spinbutt.h"
-#elif defined(__MOTIF__)
+#elif defined(__WXMOTIF__)
 #include "wx/xt/spinbutt.h"
-#elif defined(__GTK__)
+#elif defined(__WXGTK__)
 #include "wx/gtk/spinbutt.h"
 #endif
 

@@ -55,7 +55,7 @@
 
 #if !USE_SHARED_LIBRARY
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 IMPLEMENT_CLASS(wxXLPHelpClient, wxDDEClient)
 IMPLEMENT_CLASS(wxXLPHelpConnection, wxDDEConnection)
 #else
@@ -189,7 +189,7 @@ bool wxXLPHelpController::Run(void)
   if (!helpFile || !helpHost || helpRunning)
     return FALSE;
 #endif
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   if (!helpFile || helpRunning)
     return FALSE;
 #endif
@@ -208,7 +208,7 @@ bool wxXLPHelpController::Run(void)
 
   char server[32];
   sprintf(server, "%d", helpServer);
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   // Only one instance of wxHelp under Windows.
   // See if there's already an instance of wxHelp
   if ((helpConnection = (wxXLPHelpConnection *)helpClient.MakeConnection(helpHost, server, "WXHELP")))

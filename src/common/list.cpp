@@ -174,7 +174,7 @@ wxList::wxList (wxObject * first_one...)
     {
       wxObject *object = va_arg (ap, wxObject *);
 //    if (object == NULL) // Doesn't work in Windows -- segment is non-zero for NULL!
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
       if ((int) object == 0)
 #else
       if ((long) object == 0)
@@ -525,7 +525,7 @@ wxStringList::wxStringList (const char *first...)
     {
       char *s = va_arg (ap, char *);
 //    if (s == NULL)
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
       if ((int) s == 0)
 #else
       if ((long) s == 0)

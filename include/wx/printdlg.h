@@ -1,11 +1,11 @@
 #ifndef __PRINTDLGH_BASE__
 #define __PRINTDLGH_BASE__
 
-#if defined(__WINDOWS__)
+#if defined(__WXMSW__)
 #include "wx/msw/printdlg.h"
-#elif defined(__MOTIF__)
+#elif defined(__WXMOTIF__)
 #include "wx/generic/prntdlgg.h"
-#elif defined(__GTK__)
+#elif defined(__WXGTK__)
 #include "wx/generic/prntdlgg.h"
 #endif
 

@@ -146,7 +146,7 @@ bool wxFont::RealizeResource(void)
     else if (M_FONTDATA->m_weight == wxBOLD)
       ff_weight = FW_BOLD;
 
-#if defined(__X__) || (defined(__WINDOWS__) && USE_PORTABLE_FONTS_IN_MSW)
+#if defined(__X__) || (defined(__WXMSW__) && USE_PORTABLE_FONTS_IN_MSW)
     ff_face = wxTheFontNameDirectory.GetScreenName(M_FONTDATA->m_family, M_FONTDATA->m_weight, M_FONTDATA->m_style);
 #else
     ff_face = M_FONTDATA->m_faceName;

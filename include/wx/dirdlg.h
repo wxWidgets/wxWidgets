@@ -1,11 +1,11 @@
 #ifndef __DIRDLGH_BASE__
 #define __DIRDLGH_BASE__
 
-#if defined(__WINDOWS__)
+#if defined(__WXMSW__)
 #include "wx/msw/dirdlg.h"
-#elif defined(__MOTIF__)
+#elif defined(__WXMOTIF__)
 #include "wx/xt/dirdlg.h"
-#elif defined(__GTK__)
+#elif defined(__WXGTK__)
 #include "wx/gtk/dirdlg.h"
 #endif
 

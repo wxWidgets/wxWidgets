@@ -9,7 +9,7 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #ifdef __WIN95__
 #define wxToolBar wxToolBar95
 #else
@@ -34,7 +34,7 @@ class MyCanvas: public wxScrolledWindow
     DECLARE_EVENT_TABLE()
 };
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 
 class TestRibbon: public wxToolBar
 {
@@ -56,7 +56,7 @@ class MyFrame: public wxMDIParentFrame
   public:
     wxTextCtrl *textWindow;
     
-#ifdef __WINDOWS__    
+#ifdef __WXMSW__    
     TestRibbon* toolBar;
 #endif
 

@@ -88,7 +88,7 @@ IMPLEMENT_APP(MyApp)
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit(void)
 {
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   cellBitmap1 = new wxBitmap("bitmap1");
   cellBitmap2 = new wxBitmap("bitmap2");
 #endif
@@ -97,7 +97,7 @@ bool MyApp::OnInit(void)
   MyFrame *frame = new MyFrame(NULL, "wxGrid Sample", wxPoint(50, 50), wxSize(450, 300));
   
   // Give it an icon
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   frame->SetIcon(wxIcon("mondrian"));
 #endif
 #ifdef __X__

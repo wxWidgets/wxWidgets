@@ -1,8 +1,8 @@
 //Microsoft Developer Studio generated resource script.
 //
 
-#ifndef __WINDOWS__
-#define __WINDOWS__
+#ifndef __WXMSW__
+#define __WXMSW__
 #endif
 
 #ifndef __WIN32__

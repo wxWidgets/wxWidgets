@@ -1,10 +1,10 @@
 #ifndef __JOYSTICKH_BASE__
 #define __JOYSTICKH_BASE__
 
-#if defined(__WINDOWS__)
+#if defined(__WXMSW__)
 #include "wx/msw/joystick.h"
-#elif defined(__MOTIF__)
-#elif defined(__GTK__)
+#elif defined(__WXMOTIF__)
+#elif defined(__WXGTK__)
 #include "wx/gtk/joystick.h"
 #endif
 

@@ -1,11 +1,11 @@
 #ifndef __GDIOBJH_BASE__
 #define __GDIOBJH_BASE__
 
-#if defined(__WINDOWS__)
+#if defined(__WXMSW__)
 #include "wx/msw/gdiobj.h"
-#elif defined(__MOTIF__)
+#elif defined(__WXMOTIF__)
 #include "wx/xt/gdiobj.h"
-#elif defined(__GTK__)
+#elif defined(__WXGTK__)
 #include "wx/gtk/gdiobj.h"
 #endif
 

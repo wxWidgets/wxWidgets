@@ -105,7 +105,7 @@ void DrawingView::OnUpdate(wxView *sender, wxObject *hint)
     canvas->Refresh();
 
 /* Is the following necessary?
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   if (canvas)
     canvas->Refresh();
 #else

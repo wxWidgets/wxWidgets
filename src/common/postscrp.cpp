@@ -44,7 +44,7 @@
 
 #include "wx/dcmemory.h"
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #include "wx/msw/private.h"
 #endif
 
@@ -62,7 +62,7 @@
 #include <limits.h>
 #include <assert.h>
 
-#ifdef __GTK__
+#ifdef __WXGTK__
 
 #include "gdk/gdkx.h"        // GDK_DISPLAY
 #include "gdk/gdkprivate.h"  // XImage
@@ -71,7 +71,7 @@
 
 #endif
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 
 #ifdef DrawText
 #undef DrawText
@@ -105,7 +105,7 @@
 // SGI's Display Postscript Previewer
 //# define PS_VIEWER_PROG "dps"
 # define PS_VIEWER_PROG "xpsview"
-#elif defined(__X__) || defined(__GTK__)
+#elif defined(__X__) || defined(__WXGTK__)
 // Front-end to ghostscript
 # define PS_VIEWER_PROG "ghostview"
 #else
@@ -175,7 +175,7 @@ wxPostScriptDC::wxPostScriptDC (void)
 
   m_pstream = NULL;
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   // Can only send to file in Windows
   wxThePrintSetupData->SetPrinterMode(PS_FILE);
 #endif
@@ -205,7 +205,7 @@ bool wxPostScriptDC::Create(const wxString& file, bool interactive, wxWindow *pa
   m_filename = file;
   m_pstream = NULL;
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   // Can only send to file in Windows
   wxThePrintSetupData->SetPrinterMode(PS_FILE);
 #endif
@@ -669,7 +669,7 @@ void wxPostScriptDC::DrawEllipse (long x, long y, long width, long height)
 
 void wxPostScriptDC::DrawIcon (const wxIcon& icon, long x, long y)
 {
-#if defined(__X__) || defined(__GTK__)
+#if defined(__X__) || defined(__WXGTK__)
   wxMemoryDC memDC;
   memDC.SelectObject(icon);
   Blit(x, y, icon.GetWidth(), icon.GetHeight(), &memDC, 0, 0);
@@ -1272,7 +1272,7 @@ void wxPostScriptDC::EndDoc (void)
   wxRemoveFile (wxThePrintSetupData->GetPrinterFile());
   wxRenameFile(tmp_file, wxThePrintSetupData->GetPrinterFile());
 
-#if defined(__X__) || defined(__GTK__)
+#if defined(__X__) || defined(__WXGTK__)
   if (m_ok)
     {
       switch (wxThePrintSetupData->GetPrinterMode()) {
@@ -1406,7 +1406,7 @@ Blit (long xdest, long ydest, long fwidth, long fheight,
 {
   long width, height, x, y;
 
-#if !defined(__X__) && !defined(__GTK__)
+#if !defined(__X__) && !defined(__WXGTK__)
   return FALSE;
 #endif
 
@@ -1428,7 +1428,7 @@ Blit (long xdest, long ydest, long fwidth, long fheight,
   *m_pstream << "  currentfile DataString readhexstring pop\n";
   *m_pstream << "} bind image\n";
 
-#if defined(__X__) || defined(__GTK__)
+#if defined(__X__) || defined(__WXGTK__)
 
   /* Output data as hex digits: */
   Display *d;
@@ -1437,7 +1437,7 @@ Blit (long xdest, long ydest, long fwidth, long fheight,
   long j, i;
   char s[3];
   
-#ifdef __GTK__
+#ifdef __WXGTK__
 
   d = gdk_display;
   cm = ((GdkColormapPrivate*)gdk_colormap_get_system())->xcolormap;
@@ -1446,7 +1446,7 @@ Blit (long xdest, long ydest, long fwidth, long fheight,
 
 #else  
 
-#ifdef __MOTIF__
+#ifdef __WXMOTIF__
   d = source->display;
 #else
   d = wxGetDisplay();
@@ -2082,7 +2082,7 @@ wxDialog(parent, -1, title, pos, size, style)
   wxRadioBox *radio1 = new wxRadioBox(this, wxID_PRINTER_MODES, "PostScript:",
     wxPoint(150, yPos), wxSize(-1,-1), features, print_modes, features, 0);
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   radio1->Enable(0, FALSE);
   if (wxThePrintSetupData->GetPrintPreviewCommand() && *wxThePrintSetupData->GetPrintPreviewCommand())
     radio1->Enable(2, FALSE);
@@ -2491,12 +2491,12 @@ void wxInitializePrintSetupData(bool init)
     wxThePrintSetupData->SetPrinterOptions("/nonotify/queue=psqueue");
     wxThePrintSetupData->SetAFMPath("sys$ps_font_metrics:");
 #endif
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
     wxThePrintSetupData->SetPrinterCommand("print");
     wxThePrintSetupData->SetAFMPath("c:\\windows\\system\\");
     wxThePrintSetupData->SetPrinterOptions(NULL);
 #endif
-#if !defined(__VMS__) && !defined(__WINDOWS__)
+#if !defined(__VMS__) && !defined(__WXMSW__)
     wxThePrintSetupData->SetPrinterCommand("lpr");
     wxThePrintSetupData->SetPrinterOptions(NULL);
     wxThePrintSetupData->SetAFMPath(NULL);

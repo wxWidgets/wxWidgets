@@ -337,7 +337,7 @@ void wxApp::CleanUp()
 
 void wxApp::CommonInit()
 {
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   wxBuffer = new char[1500];
 #else
   wxBuffer = new char[BUFSIZ + 512];
@@ -648,7 +648,7 @@ wxApp::wxApp()
   m_appName = "";
   argc = 0;
   argv = NULL;
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   m_printMode = wxPRINT_WINDOWS;
 #else
   m_printMode = wxPRINT_POSTSCRIPT;

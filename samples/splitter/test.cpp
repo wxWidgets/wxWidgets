@@ -113,7 +113,7 @@ MyFrame::MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, cons
 	wxFrame(frame, -1, title, pos, size)
 {
 	// set the icon
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 	SetIcon(wxIcon("mondrian"));
 #endif
 #ifdef __X__

@@ -29,7 +29,7 @@
 #include <math.h>
 #include <string.h>
 
-#if defined(__WINDOWS__) && !defined(__GNUWIN32__)
+#if defined(__WXMSW__) && !defined(__GNUWIN32__)
 #include <strstrea.h>
 #else
 #include <strstream.h>

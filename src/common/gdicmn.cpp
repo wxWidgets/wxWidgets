@@ -31,7 +31,7 @@
 
 #include <string.h>
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 #include <windows.h>
 #endif
 
@@ -146,7 +146,7 @@ void wxColourDatabase::Initialize ()
   cdef cc;
   static cdef table[]={
   
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
    {"AQUAMARINE",112, 219, 147},
    {"BLACK",0, 0, 0},
    {"BLUE", 0, 0, 255},
@@ -220,7 +220,7 @@ void wxColourDatabase::Initialize ()
    {"YELLOW GREEN", 153, 204, 50},
 #endif
 
-#if defined(__GTK__) || defined(__X__)
+#if defined(__WXGTK__) || defined(__X__)
    {"MEDIUM GOLDENROD", 234, 234, 173},
    {"MEDIUM FOREST GREEN", 107, 142, 35},
    {"LIGHT MAGENTA", 255, 0, 255},
@@ -252,11 +252,11 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
   if (node)
     return (wxColour *)node->Data();
     
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   else return NULL;
 #endif
 
-#ifdef __GTK__
+#ifdef __WXGTK__
   else {
     wxColour *col = new wxColour( colour );
     
@@ -273,7 +273,7 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
   else {
     XColor xcolour;
 
-#ifdef __MOTIF__
+#ifdef __WXMOTIF__
     Display *display = XtDisplay(wxTheApp->topLevel) ;
 #endif
 #ifdef __XVIEW__
@@ -326,7 +326,7 @@ wxInitializeStockObjects ()
   wxTheFontList = new wxFontList;
   wxTheBitmapList = new wxBitmapList;
 
-#ifdef __MOTIF__
+#ifdef __WXMOTIF__
 #endif
 #ifdef __X__
   wxFontPool = new XFontPool;
@@ -542,7 +542,7 @@ void wxBrushList::RemoveBrush (wxBrush * brush)
 
 wxFontList::~wxFontList ()
 {
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   wxNode *node = First ();
   while (node)
     {
@@ -585,7 +585,7 @@ wxFont *wxFontList::
 	  each_font->GetStyle () == Style &&
 	  each_font->GetWeight () == Weight &&
 	  each_font->GetUnderlined () == underline &&
-#if defined(__X__) || (defined(__WINDOWS__) && USE_PORTABLE_FONTS_IN_MSW)
+#if defined(__X__) || (defined(__WXMSW__) && USE_PORTABLE_FONTS_IN_MSW)
 	  each_font->GetFontId () == FamilyOrFontId) /* New font system */
 #else
 	  each_font->GetFamily () == FamilyOrFontId &&

@@ -81,7 +81,7 @@ bool MyApp::OnInit(void)
   frame->CreateStatusBar(2);
 
   // Load icon and bitmap
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   frame->SetIcon(wxIcon("aiai_icn"));
 #endif
 #ifdef __X__
@@ -96,7 +96,7 @@ bool MyApp::OnInit(void)
   file_menu->Append(WXPRINT_PAGE_SETUP, "Page Set&up...",              "Page setup");
   file_menu->Append(WXPRINT_PREVIEW, "Print Pre&view",              "Preview");
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   file_menu->AppendSeparator();
   file_menu->Append(WXPRINT_PRINT_PS, "Print PostScript...",              "Print (PostScript)");
   file_menu->Append(WXPRINT_PRINT_SETUP_PS, "Print Setup PostScript...",              "Setup printer properties (PostScript)");
@@ -166,7 +166,7 @@ void MyFrame::OnExit(wxCommandEvent& event)
 
 void MyFrame::OnPrint(wxCommandEvent& event)
 {
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
       wxGetApp().SetPrintMode(wxPRINT_WINDOWS);
 #else
       wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
@@ -188,7 +188,7 @@ void MyFrame::OnPrintPS(wxCommandEvent& event)
 
 void MyFrame::OnPrintPreview(wxCommandEvent& event)
 {
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
       wxGetApp().SetPrintMode(wxPRINT_WINDOWS);
 #else
       wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
@@ -228,7 +228,7 @@ void MyFrame::OnPrintPreviewPS(wxCommandEvent& event)
 
 void MyFrame::OnPrintSetup(wxCommandEvent& event)
 {
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
       wxGetApp().SetPrintMode(wxPRINT_WINDOWS);
 #else
       wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
@@ -236,7 +236,7 @@ void MyFrame::OnPrintSetup(wxCommandEvent& event)
       wxPrintData data;
       data.SetOrientation(orientation);
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
       wxPrintDialog printerDialog(this, & data);
 #else
       wxGenericPrintDialog printerDialog(this, & data);
@@ -249,7 +249,7 @@ void MyFrame::OnPrintSetup(wxCommandEvent& event)
 
 void MyFrame::OnPageSetup(wxCommandEvent& event)
 {
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
       wxGetApp().SetPrintMode(wxPRINT_WINDOWS);
 #else
       wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
@@ -257,7 +257,7 @@ void MyFrame::OnPageSetup(wxCommandEvent& event)
       wxPageSetupData data;
       data.SetOrientation(orientation);
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
       wxPageSetupDialog pageSetupDialog(this, & data);
 #else
       wxGenericPageSetupDialog pageSetupDialog(this, & data);

@@ -1,11 +1,11 @@
 #ifndef __FRAMEH_BASE__
 #define __FRAMEH_BASE__
 
-#if defined(__WINDOWS__)
+#if defined(__WXMSW__)
 #include "wx/msw/frame.h"
-#elif defined(__MOTIF__)
+#elif defined(__WXMOTIF__)
 #include "wx/xt/frame.h"
-#elif defined(__GTK__)
+#elif defined(__WXGTK__)
 #include "wx/gtk/frame.h"
 #endif
 

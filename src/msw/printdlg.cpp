@@ -79,7 +79,7 @@ bool wxPrintDialog::Create(wxWindow *p, wxPrintData* data)
   if ( data )
     printData = *data;
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
   printData.SetOwnerWindow(p);
 #endif
 

@@ -36,7 +36,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-#if defined(__WINDOWS__) && !defined(__WIN32__)
+#if defined(__WXMSW__) && !defined(__WIN32__)
 #include <print.h>
 #endif
 
