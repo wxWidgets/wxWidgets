@@ -1584,8 +1584,30 @@ bool wxWindow::Validate()
 // Get the window with the focus
 wxWindow *wxWindow::FindFocus()
 {
-    // TODO
-    return NULL;
+    // TODO Problems:
+    // (1) Can there be multiple focussed widgets in an application?
+    // In which case we need to find the top-level window that's
+    // currently active.
+    // (2) The widget with the focus may not be in the widget table
+    // depending on which widgets I put in the table
+
+    wxNode *node = wxTopLevelWindows.First();
+    while (node)
+    {
+        wxWindow *win = (wxWindow *)node->Data();
+
+        Widget w = XmGetFocusWidget ((Widget) win->GetTopWidget()) ;
+
+        if (w != (Widget) NULL)
+        {
+            wxWindow* focusWin = wxGetWindowFromTable(w);
+            if (focusWin)
+                return focusWin;
+        }
+
+        node = node->Next();
+    }
+    return (wxWindow*) NULL;
 }
 
 void wxWindow::AddChild(wxWindow *child)
