@@ -939,17 +939,15 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 
 long wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
+/*
     switch (nMsg)
     {
-/*
       case WM_GETDLGCODE:
       {
         if (GetWindowStyleFlag() & wxPROCESS_ENTER)
           return DLGC_WANTALLKEYS;
         break;
       }
-*/
-/*
       case WM_CHAR: // Always an ASCII character
       {
         if (wParam == VK_RETURN)
@@ -962,10 +960,10 @@ long wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         }
         break;
       }
-*/
     default:
         break;
     }
+*/
 
   return wxWindow::MSWWindowProc(nMsg, wParam, lParam);
 }
