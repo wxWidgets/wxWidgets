@@ -1742,7 +1742,7 @@ if test "$wxUSE_REGEX" != "no"; then
     if test "$wxUSE_REGEX" = "sys" -o "$wxUSE_REGEX" = "yes" ; then
         dnl according to Unix 98 specs, regcomp() is in libc but I believe that
         dnl on some old systems it may be in libregex - check for it too?
-        AC_CHECK_HEADER(regex.h, AC_CHECK_FUNCS(regcomp))
+        AC_CHECK_HEADER(regex.h, [AC_CHECK_FUNCS(regcomp)])
 
         if test "x$ac_cv_func_regcomp" != "xyes"; then
             if test "$wxUSE_REGEX" = "sys" ; then
@@ -1787,14 +1787,12 @@ if test "$wxUSE_ZLIB" != "no" ; then
             dnl has anything more ancient (1.1.3 was released in July 1998)
             dnl anyhow
             AC_CACHE_CHECK([for zlib.h >= 1.1.4], ac_cv_header_zlib_h,
-                AC_TRY_RUN(
+                [AC_TRY_RUN(
+                    dnl zlib.h defines ZLIB_VERSION="x.y.z"
                     [
-                        dnl zlib.h defines ZLIB_VERSION="x.y.z"
                         #include <zlib.h>
                         #include <stdio.h>
 
-                        dnl don't use the brackets as quotes, we need them
-                        changequote(,)
                         int main()
                         {
                             FILE *f=fopen("conftestval", "w");
@@ -1806,13 +1804,12 @@ if test "$wxUSE_ZLIB" != "no" ; then
                                      ZLIB_VERSION[4] >= '4')) ? "yes" : "no");
                             exit(0);
                         }
-                        changequote([,])
                     ],
                     ac_cv_header_zlib_h=`cat conftestval`,
                     ac_cv_header_zlib_h=no,
                     dnl cross-compiling: don't have an answer, try later
                     unset ac_cv_header_zlib_h
-                )
+                )]
             )
             dnl If the test above did not come up with a value (e.g. cross
             dnl compiling) then this should give a definitive answer
@@ -1871,9 +1868,9 @@ if test "$wxUSE_LIBPNG" != "no" ; then
             dnl libpng version 0.9 is known to not work, if an even newer
             dnl version is required, just bump it up in the test below
             AC_CACHE_CHECK([for png.h > 0.90], ac_cv_header_png_h,
-                AC_TRY_RUN(
+                [AC_TRY_RUN(
+                    dnl png.h defines PNG_LIBPNG_VER=number
                     [
-                        dnl png.h defines PNG_LIBPNG_VER=number
                         #include <png.h>
                         #include <stdio.h>
 
@@ -1890,7 +1887,7 @@ if test "$wxUSE_LIBPNG" != "no" ; then
                     ac_cv_header_png_h=no,
                     dnl cross-compiling: test (later) if we have any png.h
                     unset ac_cv_header_png_h
-                )
+                )]
             )
             AC_CHECK_HEADER(png.h)
 
@@ -3196,11 +3193,12 @@ dnl   defines uid_t and gid_t if not already defined
 AC_TYPE_UID_T
 
 dnl check what exactly size_t is on this machine - this is necessary to avoid
-dnl ambiguos overloads in several places, notably wx/string.h and wx/array.h
+dnl ambiguous overloads in several places, notably wx/string.h and wx/array.h
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_CACHE_CHECK([if size_t is unsigned int],
     wx_cv_size_t_is_uint,
+    [
     dnl an obvious check like AC_TRY_COMPILE[struct Foo { ... };] doesn't work
     dnl with egcs (at least) up to 1.1.1 as it allows you to compile duplicate
     dnl methods in a local class (i.e. class inside a function) declaration
@@ -3218,6 +3216,7 @@ AC_CACHE_CHECK([if size_t is unsigned int],
         wx_cv_size_t_is_uint=no,
         wx_cv_size_t_is_uint=yes
     )
+    ]
 )
 
 if test "$wx_cv_size_t_is_uint" = "yes"; then
@@ -3840,17 +3839,17 @@ if test "$TOOLKIT" != "MSW"; then
       dnl   3. pthread_attr_getschedparam and pthread_attr_setschedparam
       HAVE_PRIOR_FUNCS=0
       AC_CHECK_FUNC(pthread_attr_getschedpolicy,
-                     AC_CHECK_FUNC(pthread_attr_setschedparam,
-                       AC_CHECK_FUNC(sched_get_priority_max,
+                     [AC_CHECK_FUNC(pthread_attr_setschedparam,
+                       [AC_CHECK_FUNC(sched_get_priority_max,
                            HAVE_PRIOR_FUNCS=1,
-                           AC_CHECK_LIB([posix4], sched_get_priority_max,
+                           [AC_CHECK_LIB([posix4], sched_get_priority_max,
                              [
                                 HAVE_PRIOR_FUNCS=1
                                 POSIX4_LINK=" -lposix4"
                              ],
-                           )
-                       )
-                     )
+                           )]
+                       )]
+                     )]
                    )
 
       if test "$HAVE_PRIOR_FUNCS" = 1; then
