@@ -673,12 +673,15 @@ public:
     // check if the string contents matches a mask containing '*' and '?'
   bool Matches(const wxChar *szMask) const;
 
-    // conversion to numbers: all functions return TRUE only if the whole string
-    // is a number and put the value of this number into the pointer provided
+    // conversion to numbers: all functions return TRUE only if the whole
+    // string is a number and put the value of this number into the pointer
+    // provided, the base is the numeric base in which the conversion should be
+    // done and must be comprised between 2 and 36 or be 0 in which case the
+    // standard C rules apply (leading '0' => octal, "0x" => hex)
         // convert to a signed integer
-    bool ToLong(long *val, int base = 0) const;
+    bool ToLong(long *val, int base = 10) const;
         // convert to an unsigned integer
-    bool ToULong(unsigned long *val, int base = 0) const;
+    bool ToULong(unsigned long *val, int base = 10) const;
         // convert to a double
     bool ToDouble(double *val) const;
 

@@ -1097,6 +1097,7 @@ int wxString::Find(const wxChar *pszSub) const
 bool wxString::ToLong(long *val, int base) const
 {
     wxCHECK_MSG( val, FALSE, _T("NULL pointer in wxString::ToLong") );
+    wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
 
     const wxChar *start = c_str();
     wxChar *end;
@@ -1110,6 +1111,7 @@ bool wxString::ToLong(long *val, int base) const
 bool wxString::ToULong(unsigned long *val, int base) const
 {
     wxCHECK_MSG( val, FALSE, _T("NULL pointer in wxString::ToULong") );
+    wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
 
     const wxChar *start = c_str();
     wxChar *end;
