@@ -204,6 +204,10 @@ private:
     // destroy the thread data and the thread itself
     void CleanUpThreadData();
 
+    // number of times EnableAutoCheckOnlineStatus() had been called minus the
+    // number of times DisableAutoCheckOnlineStatus() had been called
+    int m_autoCheckLevel;
+
     // timer used for polling RAS status
     class WXDLLEXPORT RasTimer : public wxTimer
     {
@@ -339,6 +343,7 @@ wxDialUpManagerMSW::wxDialUpManagerMSW()
                     m_dllRas(_T("RASAPI32"))
 {
     // initialize our data
+    m_autoCheckLevel = 0;
     m_hThread = 0;
 
     if ( !m_dllRas.IsLoaded() )
@@ -990,6 +995,12 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
 {
     wxCHECK_MSG( IsOk(), FALSE, wxT("using uninitialized wxDialUpManager") );
 
+    if ( m_autoCheckLevel++ )
+    {
+        // already checking
+        return TRUE;
+    }
+
     bool ok = ms_pfnRasConnectionNotification != 0;
 
     if ( ok )
@@ -1000,22 +1011,13 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
         // first, see if we don't have this thread already running
         if ( m_hThread != 0 )
         {
-            DWORD dwSuspendCount = 2;
-            while ( dwSuspendCount > 1 )
-            {
-                dwSuspendCount = ResumeThread(m_hThread);
-                if ( dwSuspendCount == (DWORD)-1 )
-                {
-                    wxLogLastError(wxT("ResumeThread(RasThread)"));
-
-                    ok = FALSE;
-                }
-            }
-
-            if ( ok )
-            {
+            if ( ::ResumeThread(m_hThread) != (DWORD)-1 )
                 return TRUE;
-            }
+
+            // we're leaving a zombie thread... but what else can we do?
+            wxLogLastError(wxT("ResumeThread(RasThread)"));
+
+            ok = FALSE;
         }
     }
 
@@ -1141,6 +1143,12 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
 void wxDialUpManagerMSW::DisableAutoCheckOnlineStatus()
 {
     wxCHECK_RET( IsOk(), wxT("using uninitialized wxDialUpManager") );
+
+    if ( --m_autoCheckLevel )
+    {
+        // still checking
+        return;
+    }
 
     if ( m_hThread )
     {
