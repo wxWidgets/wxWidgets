@@ -48,6 +48,19 @@
 #include "wx/msw/winundef.h"
 #endif
 
+// at least some of these are required for file mod time
+#ifdef __WXGTK__
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <dirent.h>
+#include <pwd.h>
+#ifndef __VMS
+# include <grp.h>
+#endif
+# include <time.h>
+#include <unistd.h>
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -150,6 +163,29 @@ bool wxFileName::DirExists()
 bool wxFileName::DirExists( const wxString &dir )
 {
     return ::wxDirExists( dir );
+}
+
+wxDateTime wxFileName::GetModificationTime()
+{
+#ifdef __WXGTK__
+    struct stat buff;
+    stat( GetFullName().fn_str(), &buff );
+
+#if !defined( __EMX__ ) && !defined(__VMS)
+    struct stat lbuff;
+    lstat( GetFullName().fn_str(), &lbuff );
+    struct tm *t = localtime( &lbuff.st_mtime );
+#else
+    struct tm *t = localtime( &buff.st_mtime );
+#endif
+
+    wxDateTime ret( t->tm_mday, (wxDateTime::Month)t->tm_mon, t->tm_year+1900, t->tm_hour, t->tm_min, t->tm_sec );
+#else
+    
+    wxDateTime ret = wxDateTime::Now();
+
+#endif
+    return ret;
 }
 
 // ----------------------------------------------------------------------------

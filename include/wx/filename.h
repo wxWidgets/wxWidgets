@@ -36,6 +36,7 @@
 
 // ridiculously enough, this will replace DirExists with wxDirExists etc
 #include "wx/filefn.h"
+#include "wx/datetime.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -147,6 +148,9 @@ public:
     bool DirExists();
     static bool DirExists( const wxString &dir );
 
+        // Well, get modification time with sec resolution
+    wxDateTime GetModificationTime();
+    
         // VZ: also need: IsDirWritable(), IsFileExecutable() &c (TODO)
 
     // various file/dir operations

@@ -327,10 +327,6 @@ bool wxTextCtrl::Create( wxWindow *parent,
     if (multi_line)
         gtk_widget_show(m_text);
 
-    /* we want to be notified about text changes */
-    gtk_signal_connect( GTK_OBJECT(m_text), "changed",
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
-
     if (multi_line)
     {
         gtk_signal_connect(GTK_OBJECT(GTK_TEXT(m_text)->vadj), "changed",
@@ -392,6 +388,10 @@ bool wxTextCtrl::Create( wxWindow *parent,
         if (multi_line)
             gtk_text_set_editable( GTK_TEXT(m_text), 1 );
     }
+
+    /* we want to be notified about text changes */
+    gtk_signal_connect( GTK_OBJECT(m_text), "changed",
+      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 
     SetBackgroundColour( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW) );
     SetForegroundColour( parent->GetForegroundColour() );
