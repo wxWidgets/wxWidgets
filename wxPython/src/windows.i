@@ -222,6 +222,10 @@ public:
     %name(FindWindowByName) wxWindow* FindWindow(const wxString& name);
 
     void Fit();
+
+    // set virtual size to satisfy children
+    void FitInside();
+
     wxColour GetBackgroundColour();
     wxBorder GetBorder() const;
 
@@ -291,7 +295,9 @@ public:
     bool IsShown();
     bool IsTopLevel();
     void Layout();
+#ifdef INCLUDE_DEPRECATED
     bool LoadFromResource(wxWindow* parent, const wxString& resourceName, const wxResourceTable* resourceTable = NULL);
+#endif
     void Lower();
     void MakeModal(bool flag=TRUE);
     %name(MoveXY)void Move(int x, int y, int flags = wxSIZE_USE_EXISTING);
@@ -364,6 +370,8 @@ public:
 
     wxSize GetVirtualSize() const;
     %name(GetVirtualSizeTuple)void GetVirtualSize( int *OUTPUT, int *OUTPUT ) const;
+
+    wxSize GetBestVirtualSize();
 
     %name(SetClientSizeWH)void SetClientSize(int width, int height);
     void SetClientSize(const wxSize& size);

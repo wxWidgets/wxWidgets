@@ -161,7 +161,9 @@ public:
     void InitParser(const wxString& source);
     void DoneParser();
     void DoParsing(int begin_pos, int end_pos);
+    void StopParsing();
     // wxObject* GetProduct();
+
     void AddTagHandler(wxHtmlTagHandler *handler);
     wxString* GetSource();
     void PushTagHandler(wxHtmlTagHandler* handler, wxString tags);
@@ -509,6 +511,8 @@ public:
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxHtmlFilter)"
 };
 
+
+// TODO: wxHtmlFilterHTML
 
 
 //---------------------------------------------------------------------------
