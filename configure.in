@@ -1274,6 +1274,54 @@ AC_PROG_LEX
 dnl needed for making link to setup.h
 AC_PROG_LN_S
 
+dnl ------------------------------------------------------------------------
+dnl Check for headers
+dnl ------------------------------------------------------------------------
+
+dnl test for strings.h needed under AIX, but do not check for it wxMac as
+dnl it exists but is only a simple redirection to string.h and it is in
+dnl conflict with Strings.h in FlatCarbon headers
+if test "$wxUSE_MAC" != 1; then
+  dnl defines HAVE_STRINGS_H
+  AC_CHECK_HEADERS(strings.h)
+fi
+
+dnl defines HAVE_STDLIB_H
+AC_CHECK_HEADERS(stdlib.h)
+dnl defines HAVE_MALLOC_H
+AC_CHECK_HEADERS(malloc.h)
+dnl defines HAVE_UNISTD_H
+AC_CHECK_HEADERS(unistd.h)
+dnl defines HAVE_WCHAR_H
+AC_CHECK_HEADERS(wchar.h)
+
+dnl maybe wchar_t is in wcstr.h if we don't have wchar.h?
+if test "$ac_cv_header_wchar_h" != "yes"; then
+    dnl defines HAVE_WCSTR_H
+    AC_CHECK_HEADERS(wcstr.h)
+fi
+
+dnl checking for wctype.h is useless as we need wcslen(), not just wchar_t and
+dnl this function is never provided by it
+dnl AC_CHECK_HEADERS(wctype.h)
+
+dnl defines HAVE_FNMATCH_H
+AC_CHECK_HEADERS(fnmatch.h)
+
+if test "x$ac_cv_header_fnmatch_h" = "xyes"; then
+    AC_CHECK_FUNCS(fnmatch)
+fi
+
+dnl defines HAVE_LANGINFO_H (GNU libc locale parameters)
+AC_CHECK_HEADERS(langinfo.h)
+
+if test "$wxUSE_GUI" = "yes"; then
+    if test "$wxUSE_UNIX" = "yes"; then
+        dnl defines HAVE_X11_XKBLIB_H
+        AC_CHECK_HEADERS(X11/XKBlib.h)
+    fi
+fi
+
 dnl ---------------------------------------------------------------------------
 dnl Checks for compiler characteristics
 dnl ---------------------------------------------------------------------------
@@ -1299,7 +1347,6 @@ case "${host}" in
     * )
         AC_CHECK_SIZEOF(long long, 0)
 esac
-
 
 dnl we have to do it ourselves because SGI/Irix's stdio.h does not include
 dnl wchar_t and AC_CHECK_SIZEOF only includes stdio.h
@@ -2605,54 +2652,6 @@ if test "$wxUSE_MAC" = 1; then
 else
     if test "$wxUSE_PM" = 1; then
         LIBWXMACRESCOMP="emxbind -ep \$(BIN_PROGRAM)"
-    fi
-fi
-
-dnl ------------------------------------------------------------------------
-dnl Check for headers
-dnl ------------------------------------------------------------------------
-
-dnl test for strings.h needed under AIX, but do not check for it wxMac as
-dnl it exists but is only a simple redirection to string.h and it is in
-dnl conflict with Strings.h in FlatCarbon headers
-if test "$wxUSE_MAC" != 1; then
-  dnl defines HAVE_STRINGS_H
-  AC_CHECK_HEADERS(strings.h)
-fi
-
-dnl defines HAVE_STDLIB_H
-AC_CHECK_HEADERS(stdlib.h)
-dnl defines HAVE_MALLOC_H
-AC_CHECK_HEADERS(malloc.h)
-dnl defines HAVE_UNISTD_H
-AC_CHECK_HEADERS(unistd.h)
-dnl defines HAVE_WCHAR_H
-AC_CHECK_HEADERS(wchar.h)
-
-dnl maybe wchar_t is in wcstr.h if we don't have wchar.h?
-if test "$ac_cv_header_wchar_h" != "yes"; then
-    dnl defines HAVE_WCSTR_H
-    AC_CHECK_HEADERS(wcstr.h)
-fi
-
-dnl checking for wctype.h is useless as we need wcslen(), not just wchar_t and
-dnl this function is never provided by it
-dnl AC_CHECK_HEADERS(wctype.h)
-
-dnl defines HAVE_FNMATCH_H
-AC_CHECK_HEADERS(fnmatch.h)
-
-if test "x$ac_cv_header_fnmatch_h" = "xyes"; then
-    AC_CHECK_FUNCS(fnmatch)
-fi
-
-dnl defines HAVE_LANGINFO_H (GNU libc locale parameters)
-AC_CHECK_HEADERS(langinfo.h)
-
-if test "$wxUSE_GUI" = "yes"; then
-    if test "$wxUSE_UNIX" = "yes"; then
-        dnl defines HAVE_X11_XKBLIB_H
-        AC_CHECK_HEADERS(X11/XKBlib.h)
     fi
 fi
 
