@@ -28,7 +28,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkprivate.h>
 #include <wx/gtk/win_gtk.h>
-#define GetXWindow(wxwin)   GDK_WINDOW_XWINDOW((wxwin)->m_widget->window)
+#define GetXWindow(wxwin) GDK_WINDOW_XWINDOW(GTK_PIZZA((wxwin)->m_wxwindow)->bin_window)
 #include <locale.h>
 #endif
 
