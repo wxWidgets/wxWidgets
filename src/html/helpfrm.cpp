@@ -282,6 +282,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 
     CreateStatusBar();
 
+#if wxUSE_TOOLBAR
     // toolbar?
     if (style & (wxHF_TOOLBAR | wxHF_FLAT_TOOLBAR))
     {
@@ -292,6 +293,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
         AddToolbarButtons(toolBar, style);
         toolBar->Realize();
     }
+#endif //wxUSE_TOOLBAR
 
     wxSizer *navigSizer = NULL;
 
@@ -507,6 +509,7 @@ wxHtmlHelpFrame::~wxHtmlHelpFrame()
 }
 
 
+#if wxUSE_TOOLBAR
 void wxHtmlHelpFrame::AddToolbarButtons(wxToolBar *toolBar, int style)
 {
     wxBitmap wpanelBitmap = 
@@ -579,6 +582,7 @@ void wxHtmlHelpFrame::AddToolbarButtons(wxToolBar *toolBar, int style)
                        FALSE, -1, -1, (wxObject *) NULL,
                        _("Display options dialog"));
 }
+#endif //wxUSE_TOOLBAR
 
 
 void wxHtmlHelpFrame::SetTitleFormat(const wxString& format)
