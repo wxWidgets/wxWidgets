@@ -82,6 +82,10 @@ const int FARDATA png_pass_dsp_mask[]
 
 #endif
 
+#ifdef __VISAGECPP__
+const char png_libpng_ver[18] = "1.2.4";
+#endif
+
 /* Tells libpng that we have already handled the first "num_bytes" bytes
  * of the PNG file signature.  If the PNG data is embedded into another
  * stream we can set num_bytes = 8 so that libpng will not attempt to read
@@ -144,7 +148,7 @@ png_zalloc(voidpf png_ptr, uInt items, uInt size)
 {
    png_uint_32 num_bytes = (png_uint_32)items * size;
    png_voidp ptr;
-   png_structp p=png_ptr;
+   png_structp p=(png_structp)png_ptr;
    png_uint_32 save_flags=p->flags;
 
    p->flags|=PNG_FLAG_MALLOC_NULL_MEM_OK;
