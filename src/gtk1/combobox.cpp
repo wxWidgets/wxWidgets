@@ -38,7 +38,7 @@ extern bool g_isIdle;
 //-----------------------------------------------------------------------------
 
 extern bool   g_blockEventsOnDrag;
-
+static int    g_SelectionBeforePopup = -1;
 //-----------------------------------------------------------------------------
 //  "changed" - typing and list item matches get changed, select-child
 //              if it doesn't match an item then just get a single changed
@@ -66,6 +66,32 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 static void
 gtk_dummy_callback(GtkEntry *WXUNUSED(entry), GtkCombo *WXUNUSED(combo))
 {
+}
+
+static void
+gtk_popup_hide_callback(GtkCombo *WXUNUSED(gtk_combo), wxComboBox *combo)
+{  
+    // when the popup is hidden, throw a SELECTED event only if the combobox
+    // selection changed.
+    int curSelection = combo->GetSelection();
+    if (g_SelectionBeforePopup != curSelection)
+    {
+        wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId() );
+        event.SetInt( curSelection );
+        event.SetString( combo->GetStringSelection() );
+        event.SetEventObject( combo );
+        combo->GetEventHandler()->ProcessEvent( event );
+    }
+    
+    // reset the selection flag to an identifiable value
+    g_SelectionBeforePopup = -1;
+}
+
+static void
+gtk_popup_show_callback(GtkCombo *WXUNUSED(gtk_combo), wxComboBox *combo)
+{
+    // store the combobox selection value before the popup is shown
+    g_SelectionBeforePopup = combo->GetSelection();
 }
 
 //-----------------------------------------------------------------------------
@@ -99,12 +125,19 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
     gtk_signal_connect( GTK_OBJECT(GTK_COMBO(combo->GetHandle())->entry), "changed",
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)combo );
 
-    wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId() );
-    event.SetInt( curSelection );
-    event.SetString( combo->GetStringSelection() );
-    event.SetEventObject( combo );
-
-    combo->GetEventHandler()->ProcessEvent( event );
+    // throw a SELECTED event only if the combobox popup is hidden
+    // because when combobox popup is shown, gtk_combo_select_child_callback is
+    // called each times the mouse is over an item with a pressed button so a lot
+    // of SELECTED event could be generated if the user keep the mouse button down
+    // and select other items ...
+    if (g_SelectionBeforePopup == -1)
+    {
+        wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId() );
+        event.SetInt( curSelection );
+        event.SetString( combo->GetStringSelection() );
+        event.SetEventObject( combo );
+        combo->GetEventHandler()->ProcessEvent( event );
+      }
 
     // Now send the event ourselves
     wxCommandEvent event2( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
@@ -218,6 +251,13 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
     if (style & wxCB_READONLY)
         gtk_entry_set_editable( GTK_ENTRY( combo->entry ), FALSE );
+
+    // "show" and "hide" events are generated when user click on the combobox button which popups a list
+    // this list is the "popwin" gtk widget
+    gtk_signal_connect( GTK_OBJECT(GTK_COMBO(combo)->popwin), "hide",
+			GTK_SIGNAL_FUNC(gtk_popup_hide_callback), (gpointer)this );
+    gtk_signal_connect( GTK_OBJECT(GTK_COMBO(combo)->popwin), "show",
+			GTK_SIGNAL_FUNC(gtk_popup_show_callback), (gpointer)this );
 
     gtk_signal_connect( GTK_OBJECT(combo->entry), "changed",
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this );

@@ -38,7 +38,8 @@ struct wxSystemObjects
              m_colHighlight,
              m_colHighlightText,
              m_colListBox,
-             m_colBtnText;
+             m_colBtnText,
+             m_colMenuItemHighlight;
 
     wxFont m_fontSystem;
 };
@@ -53,7 +54,8 @@ static wxSystemObjects gs_objects;
 enum wxGtkWidgetType
 {
     wxGTK_BUTTON,
-    wxGTK_LIST
+    wxGTK_LIST,
+    wxGTK_MENUITEM
 };
 
 // the colour we need
@@ -84,6 +86,9 @@ static bool GetColourFromGTKWidget(int& red, int& green, int& blue,
 
         case wxGTK_LIST:
             widget = gtk_list_new();
+	
+        case wxGTK_MENUITEM:
+            widget = gtk_menu_item_new();
     }
 
     GtkStyle *def = gtk_rc_get_style( widget );
@@ -135,7 +140,6 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
     {
         case wxSYS_COLOUR_SCROLLBAR:
         case wxSYS_COLOUR_BACKGROUND:
-        case wxSYS_COLOUR_ACTIVECAPTION:
         case wxSYS_COLOUR_INACTIVECAPTION:
         case wxSYS_COLOUR_MENU:
         case wxSYS_COLOUR_WINDOWFRAME:
@@ -268,10 +272,30 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_APPWORKSPACE:
             return *wxWHITE;    // ?
 
+        case wxSYS_COLOUR_ACTIVECAPTION:
+        case wxSYS_COLOUR_MENUHILIGHT:
+            if (!gs_objects.m_colMenuItemHighlight.Ok())
+            {
+                int red, green, blue;
+                if ( !GetColourFromGTKWidget(red, green, blue,
+                                             wxGTK_MENUITEM,
+                                             GTK_STATE_SELECTED,
+                                             wxGTK_BG) )
+                {
+                    red =
+                    green =
+                    blue = 0;
+                }
+
+                gs_objects.m_colMenuItemHighlight = wxColour( red  >> SHIFT,
+                                                              green >> SHIFT,
+                                                              blue  >> SHIFT );
+            }
+            return gs_objects.m_colMenuItemHighlight;
+
         case wxSYS_COLOUR_HOTLIGHT:
         case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
         case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
-        case wxSYS_COLOUR_MENUHILIGHT:
             // TODO
             return *wxBLACK;
 
