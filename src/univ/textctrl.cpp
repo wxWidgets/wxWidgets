@@ -129,6 +129,8 @@
 
 #if wxUSE_TEXTCTRL
 
+#include <ctype.h>
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
 
