@@ -72,7 +72,7 @@ void wxStatusBarMac::DrawFieldText(wxDC& dc, int i)
     dc.GetTextExtent(text, &x, &y);
     
     int xpos = rect.x + leftMargin + 1 ;
-    int ypos = 2 ;
+    int ypos = 1 ;
     
     dc.SetClippingRegion(rect.x, 0, rect.width, m_height);
     
@@ -97,6 +97,7 @@ void wxStatusBarMac::SetStatusText(const wxString& text, int number)
     rect.y=0;
     rect.height = m_height ;
     Refresh( TRUE , &rect ) ;
+    Update();
 }
 
 void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event) )
