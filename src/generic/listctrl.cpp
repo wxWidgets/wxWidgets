@@ -872,7 +872,7 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
     m_minX = 0;
     bool hit_border = FALSE;
     int xpos = 0;
-    for (int j = 0; j < m_owner->GetColumnCount(); j++)
+    for (int j = 0; j < m_owner->GetColumnCount()-1; j++)
     {
         xpos += m_owner->GetColumnWidth( j );
         m_column = j;

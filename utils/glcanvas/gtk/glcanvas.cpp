@@ -50,11 +50,14 @@ IMPLEMENT_CLASS(wxGLContext,wxObject)
 wxGLContext::wxGLContext( bool WXUNUSED(isRGB), wxWindow *win, const wxPalette& WXUNUSED(palette) )
 {
     m_window = win;
-    m_widget = ((wxGLCanvas*)win)->m_glWidget;
-  
-    wxCHECK_RET( g_vi, "invalid visual for OpenGl" );
+    m_widget = win->m_wxwindow;
+
+    wxGLCanvas *gc = (wxGLCanvas*) win;
+    XVisualInfo *vi = (XVisualInfo *) gc->m_vi;
     
-    m_glContext = glXCreateContext( GDK_DISPLAY(), g_vi, None, GL_TRUE );
+    wxCHECK_RET( vi, "invalid visual for OpenGl" );
+    
+    m_glContext = glXCreateContext( GDK_DISPLAY(), vi, None, GL_TRUE );
   
     wxCHECK_RET( m_glContext, "Couldn't create OpenGl context" );
 }
@@ -66,15 +69,17 @@ wxGLContext::wxGLContext(
 )
 {
     m_window = win;
-    m_widget = ((wxGLCanvas*)win)->m_glWidget;
-  
-    wxCHECK_RET( g_vi, "invalid visual for OpenGl" );
+    m_widget = win->m_wxwindow;
+
+    wxGLCanvas *gc = (wxGLCanvas*) win;
+    XVisualInfo *vi = (XVisualInfo *) gc->m_vi;
+    
+    wxCHECK_RET( vi, "invalid visual for OpenGl" );
     
     if( other != 0 )
-      m_glContext = glXCreateContext( GDK_DISPLAY(), g_vi, other->m_glContext,
-                                      GL_TRUE );
+        m_glContext = glXCreateContext( GDK_DISPLAY(), vi, other->m_glContext, GL_TRUE );
     else
-      m_glContext = glXCreateContext( GDK_DISPLAY(), g_vi, None, GL_TRUE );
+        m_glContext = glXCreateContext( GDK_DISPLAY(), vi, None, GL_TRUE );
     
     wxCHECK_RET( m_glContext, "Couldn't create OpenGl context" );
 }
@@ -145,9 +150,6 @@ static gint
 gtk_glwindow_realized_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
 {
     win->m_glContext = new wxGLContext( TRUE, win, wxNullPalette, win->m_sharedContext );
-
-    XFree( g_vi );
-    g_vi = (XVisualInfo*) NULL;
 
     return FALSE;
 }
@@ -243,6 +245,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
 			 const wxPalette& palette)
 {
     m_sharedContext = (wxGLContext*)shared;  // const_cast
+    m_glContext = (wxGLContext*) NULL;
     
     m_exposed = FALSE;
     m_noExpose = TRUE;
@@ -290,12 +293,14 @@ bool wxGLCanvas::Create( wxWindow *parent,
     
     Display *dpy = GDK_DISPLAY();
     
-    g_vi = glXChooseVisual( dpy, DefaultScreen(dpy), attribList );
+    XVisualInfo *vi = glXChooseVisual( dpy, DefaultScreen(dpy), attribList );
     
-    wxCHECK_MSG( g_vi, FALSE, "required visual couldn't be found" );
+    m_vi = vi;  // safe for later use
+    
+    wxCHECK_MSG( m_vi, FALSE, "required visual couldn't be found" );
 
-    GdkVisual *visual = gdkx_visual_get( g_vi->visualid );
-    GdkColormap *colormap = gdk_colormap_new( gdkx_visual_get(g_vi->visualid), TRUE );
+    GdkVisual *visual = gdkx_visual_get( vi->visualid );
+    GdkColormap *colormap = gdk_colormap_new( gdkx_visual_get(vi->visualid), TRUE );
     
     gtk_widget_push_colormap( colormap );
     gtk_widget_push_visual( visual );
@@ -326,6 +331,11 @@ bool wxGLCanvas::Create( wxWindow *parent,
 
 wxGLCanvas::~wxGLCanvas()
 {
+    XVisualInfo *vi = (XVisualInfo *) m_vi;
+    
+    if (vi)
+        XFree( vi );
+    
     if (m_glContext) delete m_glContext;
 }
 

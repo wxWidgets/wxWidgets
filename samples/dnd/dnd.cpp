@@ -804,6 +804,7 @@ void DnDFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
 void DnDFrame::OnUpdateUIPasteText(wxUpdateUIEvent& event)
 {
     event.Enable( wxTheClipboard->IsSupported(wxDF_TEXT) );
+//    event.Enable( TRUE );
 }
 
 void DnDFrame::OnUpdateUIPasteBitmap(wxUpdateUIEvent& event)
