@@ -43,7 +43,7 @@ class RunDemoApp(wx.App):
         wx.InitAllImageHandlers()
         wx.Log_SetActiveTarget(wx.LogStderr())
 
-        #self.SetAssertMode(wx.PYAPP_ASSERT_DIALOG)
+        self.SetAssertMode(wx.PYAPP_ASSERT_DIALOG)
 
         frame = wx.Frame(None, -1, "RunDemo: " + self.name, pos=(50,50), size=(0,0),
                         style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.DEFAULT_FRAME_STYLE)
