@@ -59,8 +59,7 @@ from wxPython.stc import *
 
 settingsIdNames = {-1: 'Selection', -2: 'Caret', -3: 'Edge'}
 
-commonPropDefs = {'fore': '#888888', 'size': 8,
-  'face': wxSystemSettings_GetSystemFont(wxSYS_DEFAULT_GUI_FONT).GetFaceName()}
+commonPropDefs = {}
 
 styleCategoryDescriptions = {
  '----Language----': 'Styles spesific to the language',
@@ -370,6 +369,11 @@ class STCStyleEditDlg(wxDialog):
               pos=wxPoint(88, 0), size=wxSize(16, 16), style=0)
 
     def __init__(self, parent, langTitle, lang, configFile, STCsToUpdate=()):
+        global commonPropDefs
+        commonPropDefs = {'fore': '#888888',
+                          'size': 8,
+                          'face': wxSystemSettings_GetSystemFont(wxSYS_DEFAULT_GUI_FONT).GetFaceName()}
+
         self.stc_title = 'wxStyledTextCtrl Style Editor'
         self.stc_title = 'wxStyledTextCtrl Style Editor - %s' % langTitle
         if wxPlatform == '__WXMSW__':
