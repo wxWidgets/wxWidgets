@@ -16,7 +16,7 @@ class DragShape:
 
     def HitTest(self, pt):
         rect = self.GetRect()
-        return rect.Inside(pt.x, pt.y)
+        return rect.InsideXY(pt.x, pt.y)
 
 
     def GetRect(self):
@@ -274,3 +274,10 @@ def runTest(frame, nb, log):
 
 overview = """\
 """
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

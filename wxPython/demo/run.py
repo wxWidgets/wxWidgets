@@ -52,6 +52,8 @@ class RunDemoApp(wxApp):
         menuBar.Append(menu, "&File")
         frame.SetMenuBar(menuBar)
         frame.Show(true)
+        EVT_CLOSE(frame, self.OnCloseFrame)
+
         win = self.demoModule.runTest(frame, frame, Log())
 
         # a window will be returned if the demo does not create
@@ -60,6 +62,7 @@ class RunDemoApp(wxApp):
             # so set the frame to a good size for showing stuff
             frame.SetSize((640, 480))
             win.SetFocus()
+            self.window = win
 
         else:
             # otherwise the demo made its own frame, so just put a
@@ -83,6 +86,13 @@ class RunDemoApp(wxApp):
 
     def OnButton(self, evt):
         self.frame.Close(true)
+
+
+    def OnCloseFrame(self, evt):
+        if hasattr(self, "window") and hasattr(self.window, "ShutdownDemo"):
+            self.window.ShutdownDemo()
+        evt.Skip()
+
 
 #----------------------------------------------------------------------------
 

@@ -126,7 +126,7 @@ class TestPanel(wxPanel):
         EVT_WINDOW_DESTROY(self, self.OnDestroy)
 
     def OnDestroy(self, event):
-        self.log.write("got it")
+        self.log.write("got destroy event")
         event.Skip()
 
     def OnStartAnimation(self, event):
@@ -155,7 +155,7 @@ class TestPanel(wxPanel):
 
 def runTest(frame, nb, log):
     if wxPlatform == "__WXMAC__":
-        wxMessageBox("This demo currently fails on the Mac, I think because of the lack of EVT_WINDOW_DESTROY...",
+        wxMessageBox("This demo currently fails on the Mac.",
                      "Sorry")
         return
     else:

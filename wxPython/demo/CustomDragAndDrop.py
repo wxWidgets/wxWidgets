@@ -304,6 +304,7 @@ if __name__ == '__main__':
 
     class TestApp(wxApp):
         def OnInit(self):
+            wxInitAllImageHandlers()
             self.MakeFrame()
             return true
 
