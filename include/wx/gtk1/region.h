@@ -52,10 +52,11 @@ enum wxRegionOp
 class wxRegion : public wxGDIObject
 {
 public:
+    wxRegion();
     wxRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h );
     wxRegion( const wxPoint& topLeft, const wxPoint& bottomRight );
     wxRegion( const wxRect& rect );
-    wxRegion();
+    wxRegion(size_t n, const wxPoint *points, int fillStyle = wxODDEVEN_RULE );
     virtual ~wxRegion();
 
     wxRegion( const wxRegion& r ) { Ref(r); }

@@ -186,6 +186,30 @@ wxRegion::wxRegion( const wxRect& rect )
 #endif
 }
 
+wxRegion::wxRegion( size_t n, const wxPoint *points, int fillStyle )
+{
+    GdkPoint *gdkpoints = new GdkPoint[n];
+    for ( size_t i = 0 ; i < n ; i++ )
+    {
+        gdkpoints[i].x = points[i].x;
+        gdkpoints[i].y = points[i].y;
+    }
+
+    m_refData = new wxRegionRefData();
+
+    GdkRegion* reg = gdk_region_polygon
+                     (
+                        gdkpoints,
+                        n,
+                        fillStyle == wxWINDING_RULE ? GDK_WINDING_RULE
+                                                    : GDK_EVEN_ODD_RULE
+                     );
+
+    M_REGIONDATA->m_region = reg;
+
+    delete [] gdkpoints;
+}
+
 wxRegion::~wxRegion()
 {
 }

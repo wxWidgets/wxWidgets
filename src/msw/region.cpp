@@ -103,6 +103,17 @@ wxRegion::wxRegion(const wxRect& rect)
     M_REGION = ::CreateRectRgn(rect.x, rect.y, rect.x + rect.width, rect.y + rect.height);
 }
 
+wxRegion::wxRegion(size_t n, const wxPoint *points, int fillStyle)
+{
+    m_refData = new wxRegionRefData;
+    M_REGION = ::CreatePolygonRgn
+               (
+                    (POINT*)points,
+                    n,
+                    fillStyle == wxODDEVEN_RULE ? ALTERNATE : WINDING
+               );
+}
+
 /*
  * Destroy the region.
  */

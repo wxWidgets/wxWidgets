@@ -40,6 +40,14 @@ Constructs a rectangular region a wxRect object.
 
 Constructs a region by copying another region.
 
+\func{}{wxRegion}{\param{size\_t}{ n}, \param{const wxPoint }{*points}, \param{int }{fillStyle = wxWINDING\_RULE}}
+
+Constructs a region corresponding to the polygon made of {\it n} points in the
+provided array. {\it fillStyle} parameter may have values 
+{\tt wxWINDING\_RULE} or {\tt wxODDEVEN\_RULE}.
+
+{\bf NB:} This constructor is only implemented for Win32 and GTK+ wxWindows ports.
+
 \membersection{wxRegion::\destruct{wxRegion}}
 
 \func{}{\destruct{wxRegion}}{\void}
