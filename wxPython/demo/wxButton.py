@@ -29,10 +29,6 @@ class TestPanel(wxPanel):
                        wxSize(bmp.GetWidth()+10, bmp.GetHeight()+10))
         EVT_BUTTON(self, 30, self.OnClick)
 
-        if wxUSE_UNICODE:
-            label = unichr(21514) + unichr(26984) + unichr(8307) + unichr(29545)
-            wxButton(self, -1, label+" (I have no idea what that says...)", (20, 150))
-
     def OnClick(self, event):
         self.log.WriteText("Click! (%d)\n" % event.GetId())
 
