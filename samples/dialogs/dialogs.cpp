@@ -376,10 +376,12 @@ void MyFrame::TextEntry(wxCommandEvent& WXUNUSED(event))
 void MyFrame::SingleChoice(wxCommandEvent& WXUNUSED(event) )
 {
     const wxString choices[] = { "One", "Two", "Three", "Four", "Five" } ;
-    int n = 5;
 
-    wxSingleChoiceDialog dialog(this, "This is a small sample\nA single-choice convenience dialog",
-        "Please select a value", n, (const wxString *)choices);
+    wxSingleChoiceDialog dialog(this,
+                                "This is a small sample\n"
+                                "A single-choice convenience dialog",
+                                "Please select a value",
+                                WXSIZEOF(choices), choices);
 
     dialog.SetSelection(2);
 
@@ -392,15 +394,19 @@ void MyFrame::SingleChoice(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::MultiChoice(wxCommandEvent& WXUNUSED(event) )
 {
-    const wxString choices[] = { "One", "Two", "Three", "Four", "Five" } ;
-    int n = 5;
+    const wxString choices[] =
+    {
+        "One", "Two", "Three", "Four", "Five",
+        "Six", "Seven", "Eight", "Nine", "Ten",
+        "Eleven", "Twelve", "Seventeen",
+    };
 
     wxArrayInt selections;
     size_t count = wxGetMultipleChoices(selections,
                                         "This is a small sample\n"
                                         "A multi-choice convenience dialog",
                                         "Please select a value",
-                                        n, (const wxString *)choices,
+                                        WXSIZEOF(choices), choices,
                                         this);
     if ( count )
     {
