@@ -350,6 +350,50 @@ class ParamUnit(PPanel):
     def OnSpinDown(self, evt):
         self.Change(-1)
 
+# Dialog for editing multi-line text
+class TextDialog(wxDialogPtr):
+    def __init__(self, parent, value):
+        # Is this normal???
+        w = g.frame.res.LoadDialog(parent, 'DIALOG_TEXT')
+        wxDialogPtr.__init__(self, w.this)
+        self.thisown = 1
+        self.text = self.FindWindowByName('TEXT')
+        self.text.SetValue(value)
+        self.SetAutoLayout(True)
+        self.SetSize((300,200))
+    def GetValue(self):
+        return self.text.GetValue()
+
+class ParamMultilineText(PPanel):
+    def __init__(self, parent, name, textWidth=-1):
+        PPanel.__init__(self, parent, name)
+        self.ID_TEXT_CTRL = wxNewId()
+        self.ID_BUTTON_EDIT = wxNewId()
+        self.SetBackgroundColour(g.panel.GetBackgroundColour())
+        sizer = wxBoxSizer()
+        self.SetBackgroundColour(g.panel.GetBackgroundColour())
+        self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(200,-1))
+        sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
+        self.button = wxButton(self, self.ID_BUTTON_EDIT, 'Edit...', size=buttonSize)
+        sizer.Add(self.button, 0, wxALIGN_CENTER_VERTICAL)
+        self.SetAutoLayout(True)
+        self.SetSizer(sizer)
+        sizer.Fit(self)
+        EVT_BUTTON(self, self.ID_BUTTON_EDIT, self.OnButtonEdit)
+        EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
+    def GetValue(self):
+        return self.text.GetValue()
+    def SetValue(self, value):
+        self.freeze = True              # disable other handlers
+        self.text.SetValue(value)
+        self.freeze = False             # disable other handlers
+    def OnButtonEdit(self, evt):
+        dlg = TextDialog(self, self.text.GetValue())
+        if dlg.ShowModal() == wxID_OK:
+            self.text.SetValue(dlg.GetValue())
+            self.SetModified()
+        dlg.Destroy()
+
 class ParamText(PPanel):
     def __init__(self, parent, name, textWidth=-1):
         PPanel.__init__(self, parent, name)
@@ -395,7 +439,6 @@ class ContentDialog(wxDialogPtr):
         # Perform initialization with class pointer
         wxDialogPtr.__init__(self, w.this)
         self.thisown = 1
-        self.Center()
         self.list = self.FindWindowByName('LIST')
         # Set list items
         for v in value:
@@ -445,7 +488,6 @@ class ContentCheckListDialog(wxDialogPtr):
         w = g.frame.res.LoadDialog(parent, 'DIALOG_CONTENT_CHECK_LIST')
         wxDialogPtr.__init__(self, w.this)
         self.thisown = 1
-        self.Center()
         self.list = self.FindWindowByName('CHECK_LIST')
         # Set list items
         i = 0
@@ -579,7 +621,6 @@ class IntListDialog(wxDialogPtr):
         w = g.frame.res.LoadDialog(parent, 'DIALOG_INTLIST')
         wxDialogPtr.__init__(self, w.this)
         self.thisown = 1
-        self.Center()
         self.list = self.FindWindowByName('LIST')
         # Set list items
         value.sort()
@@ -598,6 +639,7 @@ class IntListDialog(wxDialogPtr):
         EVT_UPDATE_UI(self, self.ID_BUTTON_REMOVE, self.OnUpdateUI)
     def OnButtonAppend(self, evt):
         s = wxGetTextFromUser('Enter new number:', 'Add', '', self)
+        if not s: return
         # Check that it's unique
         try:
             v = int(s)
@@ -827,11 +869,11 @@ paramDict = {
     'vgap': ParamUnit, 'hgap': ParamUnit,
     'checkable': ParamBool, 'checked': ParamBool, 'radio': ParamBool,
     'accel': ParamAccel,
-    'label': ParamText, 'title': ParamText, 'value': ParamText,
+    'label': ParamMultilineText, 'title': ParamText, 'value': ParamText,
     'content': ParamContent, 'selection': ParamInt,
     'min': ParamInt, 'max': ParamInt,
     'fg': ParamColour, 'bg': ParamColour, 'font': ParamFont,
     'enabled': ParamBool, 'focused': ParamBool, 'hidden': ParamBool,
     'tooltip': ParamText, 'bitmap': ParamBitmap, 'icon': ParamBitmap,
-    'label': ParamLabel, 'encoding': ParamEncoding
+    'encoding': ParamEncoding
     }

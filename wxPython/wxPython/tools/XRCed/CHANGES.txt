@@ -1,3 +1,18 @@
+0.1.1-2
+-------
+
+Bugs with currentEncoding and frame testing fixed.
+
+Some required parameters are set to default if missing.
+
+Unsupported classes are tolerated, with warning message.
+
+wxScrolledWindow added (to 'control' pulldown menu, not yet to the
+tool palette).
+
+Multi-line editing for labels and some values (wxTextCtrl,
+wxHtmlWindow).
+
 0.1.1-1
 -------
 
@@ -23,6 +38,7 @@ Changed some sizes in panel to better work with different fonts.
 Fixed double-refreshing after Ctrl+R.
 
 Maybe something else that I've forgot. It's been a looong day... :)
+
 
 0.0.9-6
 -------

@@ -68,6 +68,7 @@ class ID_NEW:
     LIST_CTRL = wxNewId()
     CHECK_LIST = wxNewId()
     NOTEBOOK = wxNewId()
+    SCROLLED_WINDOW = wxNewId()
     HTML_WINDOW = wxNewId()
     CALENDAR_CTRL = wxNewId()
     GENERIC_DIR_CTRL = wxNewId()
@@ -137,6 +138,7 @@ class PullDownMenu:
             ID_NEW.LIST_CTRL: 'wxListCtrl',
             ID_NEW.CHECK_LIST: 'wxCheckList',
             ID_NEW.NOTEBOOK: 'wxNotebook',
+            ID_NEW.SCROLLED_WINDOW: 'wxScrolledWindow',
             ID_NEW.HTML_WINDOW: 'wxHtmlWindow',
             ID_NEW.CALENDAR_CTRL: 'wxCalendarCtrl',
             ID_NEW.GENERIC_DIR_CTRL: 'wxGenericDirCtrl',
@@ -186,6 +188,7 @@ class PullDownMenu:
              (ID_NEW.TREE_CTRL, 'TreeCtrl', 'Create tree'),
              (ID_NEW.LIST_CTRL, 'ListCtrl', 'Create list'),
              (ID_NEW.CHECK_LIST, 'CheckList', 'Create check list'),
+             (ID_NEW.SCROLLED_WINDOW, 'ScrolledWindow', 'Create scrolled window'),
              (ID_NEW.HTML_WINDOW, 'HtmlWindow', 'Create HTML window'),
              (ID_NEW.CALENDAR_CTRL, 'CalendarCtrl', 'Create calendar control'),
              (ID_NEW.GENERIC_DIR_CTRL, 'GenericDirCtrl', 'Create generic dir control'),
@@ -680,7 +683,7 @@ class XML_Tree(wxTreeCtrl):
         memFile.close()                 # write to wxMemoryFS
         xmlFlags = wxXRC_NO_SUBCLASSING
         # Use translations if encoding is not specified
-        if xxx.currentEncoding == 'ascii':
+        if g.currentEncoding == 'ascii':
             xmlFlags != wxXRC_USE_LOCALE
         res = wxXmlResource('', xmlFlags)
         res.Load('memory:xxx.xrc')

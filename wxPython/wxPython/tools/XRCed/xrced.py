@@ -714,10 +714,10 @@ Homepage: http://xrced.sourceforge.net\
 
         #undoMan.RegisterUndo(UndoPasteCreate(parentLeaf, parent, newItem, selected))
         # Update view?
-        if g.testWin and tree.IsHighlatable(newItem):
+        if g.testWin and tree.IsHighlatable(selected):
             if conf.autoRefresh:
                 tree.needUpdate = True
-                tree.pendingHighLight = newItem
+                tree.pendingHighLight = selected
             else:
                 tree.pendingHighLight = None
         tree.SetFocus()
@@ -821,13 +821,12 @@ Homepage: http://xrced.sourceforge.net\
             f.seek(0)
             dom = minidom.parse(f)
             # Set encoding global variable and document encoding property
-            import xxx
             if mo:
-                dom.encoding = xxx.currentEncoding = mo.group('encd')
+                dom.encoding = g.currentEncoding = mo.group('encd')
                 if dom.encoding not in ['ascii', sys.getdefaultencoding()]:
                     wxLogWarning('Encoding is different from system default')
             else:
-                xxx.currentEncoding = 'ascii'
+                g.currentEncoding = 'ascii'
                 dom.encoding = ''
             f.close()
             # Change dir
