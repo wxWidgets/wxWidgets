@@ -191,18 +191,21 @@ public:
 #endif
     // Public member functions
     wxDbTable(wxDb *pwxDb, const wxString &tblName, const int nCols,
-              const wxString &qryTblName = "", bool qryOnly = !wxDB_QUERY_ONLY, const wxString &tblPath="");
+              const wxString &qryTblName="", bool qryOnly = !wxDB_QUERY_ONLY, 
+              const wxString &tblPath="");
 
     // DEPRECATED
     wxDbTable(wxDb *pwxDb, const wxString &tblName, const int nCols,
-              const wxChar *qryTblName = "", bool qryOnly = !wxDB_QUERY_ONLY, const wxString &tblPath="");
+              const wxChar *qryTblName="", bool qryOnly = !wxDB_QUERY_ONLY, 
+              const wxString &tblPath="");
 
     virtual ~wxDbTable();
 
     bool            Open(bool checkPrivileges=FALSE);
     bool            CreateTable(bool attemptDrop=TRUE);
     bool            DropTable(void);
-    bool            CreateIndex(const wxString &idxName, bool unique, int noIdxCols, wxDbIdxDef *pIdxDefs, bool attemptDrop=TRUE);
+    bool            CreateIndex(const wxString &idxName, bool unique, int noIdxCols, 
+                                wxDbIdxDef *pIdxDefs, bool attemptDrop=TRUE);
     bool            DropIndex(const wxString &idxName);
 
     // Accessors
@@ -228,13 +231,13 @@ public:
     void            SetOrderByClause(const char *OrderBy) { orderBy = (char *)OrderBy; }
     void            SetWhereClause(const char *Where) { where = (char *)Where; }
 #else
-    void            SetFromClause(const wxString& From) { from = From; }
-    void            SetOrderByClause(const wxString& OrderBy) { orderBy = OrderBy; }
+    void            SetFromClause(const wxString &From) { from = From; }
+    void            SetOrderByClause(const wxString &OrderBy) { orderBy = OrderBy; }
     bool            SetOrderByColNums(int first, ...);
-    void            SetWhereClause(const wxString& Where) { where = Where; }
-    void            From(const wxString& From) { from = From; }
-    void            OrderBy(const wxString& OrderBy) { orderBy = OrderBy; }
-    void            Where(const wxString& Where) { where = Where; }
+    void            SetWhereClause(const wxString &Where) { where = Where; }
+    void            From(const wxString &From) { from = From; }
+    void            OrderBy(const wxString &OrderBy) { orderBy = OrderBy; }
+    void            Where(const wxString &Where) { where = Where; }
     const wxString &Where()   { return where; }
     const wxString &OrderBy() { return orderBy; }
     const wxString &From()    { return from; }
@@ -295,7 +298,8 @@ public:
     bool            SetQueryTimeout(UDWORD nSeconds);
 
     wxDbColDef     *GetColDefs() { return colDefs; }
-    void            SetColDefs(int index, const wxString &fieldName, int dataType, void *pData, int cType,
+    void            SetColDefs(int index, const wxString &fieldName, int dataType, 
+                               void *pData, int cType,
                                int size, bool keyField = FALSE, bool upd = TRUE,
                                bool insAllow = TRUE, bool derivedCol = FALSE);
     wxDbColDataPtr *SetColDefs(wxDbColInf *colInfs, ULONG numCols);
