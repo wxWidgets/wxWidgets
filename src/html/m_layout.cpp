@@ -154,11 +154,9 @@ TAG_HANDLER_BEGIN(TITLE, "TITLE")
             wxHtmlWindow *wfr = (wxHtmlWindow*)(m_WParser->GetWindow());
             if (wfr)
             {
-                wxString title = "";
-                wxString *src = m_WParser->GetSource();
-
-                for (int i = tag.GetBeginPos(); i < tag.GetEndPos1(); i++) title += (*src)[(unsigned int) i];
-                wfr->OnSetTitle(title);
+                const wxString& src = *m_WParser->GetSource();
+                wfr->OnSetTitle(src.Mid(tag.GetBeginPos(), 
+                                        tag.GetEndPos1()-tag.GetBeginPos()));
             }
         }
         return TRUE;
