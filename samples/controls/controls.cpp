@@ -483,9 +483,35 @@ END_EVENT_TABLE()
 // ============================================================================
 
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
-       : wxPanel( frame, -1, wxPoint(x, y), wxSize(w, h) ),
-         m_text(NULL), m_notebook(NULL)
+       : wxPanel( frame, -1, wxPoint(x, y), wxSize(w, h) )
 {
+    m_listbox = NULL;
+    m_listboxSorted = NULL;
+#if wxUSE_CHOICE
+    m_choice = NULL;
+    m_choiceSorted = NULL;
+#endif
+    m_combo = NULL;
+    m_radio = NULL;
+    m_gauge = NULL;
+    m_gaugeVert = NULL;
+    m_slider = NULL;
+    m_fontButton = NULL;
+    m_lbSelectNum = NULL;
+    m_lbSelectThis = NULL;
+#if wxUSE_SPINBTN
+    m_spinbutton = NULL;
+    m_btnProgress = NULL;
+#endif // wxUSE_SPINBTN
+#if wxUSE_SPINCTRL
+    m_spinctrl = NULL;
+#endif // wxUSE_SPINCTRL
+    m_spintext = NULL;
+    m_checkbox = NULL;
+    m_text = NULL;
+    m_notebook = NULL;
+    m_label = NULL;
+
     m_text = new wxTextCtrl(this, -1, "This is the log window.\n",
                             wxPoint(0, 250), wxSize(100, 50), wxTE_MULTILINE);
     m_text->SetBackgroundColour(wxT("wheat"));
@@ -1218,6 +1244,8 @@ void MyPanel::OnSliderUpdate( wxCommandEvent &WXUNUSED(event) )
 
 void MyPanel::OnSpinCtrl(wxSpinEvent& event)
 {
+    if (!m_spinctrl)
+        return ;
     wxString s;
     s.Printf(_T("Spin ctrl changed: now %d (from event: %d)\n"),
              m_spinctrl->GetValue(), event.GetInt());
