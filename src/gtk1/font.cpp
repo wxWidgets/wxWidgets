@@ -510,7 +510,11 @@ static char *font_defaults[] = {
     "ScreenItalic", "i",
     "ScreenSlant", "o",
 
+/*
     "ScreenDefaultBase", "misc-fixed",
+*/
+    "ScreenDefaultBase", "*-times",
+    
     "ScreenRomanBase", "*-times",
     "ScreenDecorativeBase", "*-helvetica",
     "ScreenModernBase", "*-courier",
@@ -628,7 +632,8 @@ static void SearchResource(const char *prefix, const char **names, int count, ch
     
     if (internal)
     {
-        if (strcmp(internal,"-${ScreenDefaultBase}${ScreenStdSuffix}") == 0)
+        if ((strcmp(internal,"-${ScreenDefaultBase}${ScreenStdSuffix}") == 0) &&
+	    (strcmp(names[0], "Default") != 0))
 	{
 	    /* we did not find any font name in the standard list.
 	       this can (hopefully does) mean that someone supplied
