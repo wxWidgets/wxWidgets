@@ -256,10 +256,10 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id, const wxString& fileNa
     {
         delete m_imp;
 #endif
-        m_imp = new wxWMMEMediaCtrlImpl;
-        if(!m_imp->Create(this))
+//        m_imp = new wxWMMEMediaCtrlImpl;
+//        if(!m_imp->Create(this))
         {
-            delete m_imp;
+//            delete m_imp;
             m_imp = NULL;
             return false;
         }
@@ -294,10 +294,10 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id, const wxURI& location,
     {
         delete m_imp;
 #endif
-        m_imp = new wxWMMEMediaCtrlImpl;
-        if(!m_imp->Create(this))
+//        m_imp = new wxWMMEMediaCtrlImpl;
+//        if(!m_imp->Create(this))
         {
-            delete m_imp;
+//            delete m_imp;
             m_imp = NULL;
             return false;
         }
