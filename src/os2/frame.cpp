@@ -175,7 +175,7 @@ wxFrame::~wxFrame()
 
         if (wxTheApp->GetExitOnFrameDelete())
         {
-            ::WinPostMsg(GetHWND(), WM_QUIT, 0, 0);
+            ::WinPostMsg(NULL, WM_QUIT, 0, 0);
         }
     }
     wxModelessWindows.DeleteObject(this);

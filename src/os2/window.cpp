@@ -1881,7 +1881,6 @@ MRESULT wxWindow::OS2WindowProc(
         case WM_DESTROY:
              HandleDestroy();
              bProcessed = TRUE;
-             delete this;
              break;
 
         case WM_MOVE:
@@ -2426,7 +2425,7 @@ bool wxWindow::OS2Create(
     wxAssociateWinWithHandle((HWND)m_hWnd
                              ,this
                             );
-    // 
+    //
     // Now need to subclass window.
     //
 
