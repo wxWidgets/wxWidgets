@@ -13,9 +13,9 @@ LIBVERSION_AGE=0
 HEADER_PATH=$(top_srcdir)/contrib/include/wx
 HEADER_SUBDIR=gizmos
 
-HEADERS=multicell.h gizmos.h
+HEADERS=multicell.h splittree.h
 
-OBJECTS=multicell.o gizmos.o
+OBJECTS=multicell.o splittree.o
 
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
