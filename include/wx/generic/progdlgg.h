@@ -80,6 +80,8 @@ private:
    class wxStaticText *m_msg;
    // disable all or parent window only
    bool m_disableParentOnly;
+   // auto-hide?
+   bool m_AutoHide;
    // displayed elapsed, estimated, remaining time
    class wxStaticText *m_elapsed,
                       *m_estimated,

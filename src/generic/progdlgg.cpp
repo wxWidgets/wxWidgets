@@ -86,11 +86,12 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
                                    int maximum,
                                    wxWindow *parent,
                                    int style)
-                : wxDialog(m_parent, -1, title)
+                : wxDialog(parent, -1, title)
 {
     bool hasAbortButton = (style & wxPD_CAN_ABORT) != 0;
     m_state = hasAbortButton ? Continue : Uncancelable;
     m_disableParentOnly = (style & wxPD_APP_MODAL) == 0;
+    m_AutoHide = (style & wxPD_AUTO_HIDE) != 0;
     m_parent = parent;
     m_maximum = maximum;
 
@@ -275,7 +276,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
       SetTimeLabel(remaining, m_remaining);
    }
 
-   if ( (value == m_maximum - 1) && !(GetWindowStyleFlag() & wxPD_AUTO_HIDE) )
+   if ( (value == m_maximum ) && !m_AutoHide )
    {
        if ( m_btnAbort )
        {
