@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        sound.cpp
 // Purpose:     wxSound class implementation: optional
-// Author:      Ryan Norton, Stefan Csomor
+// Author:      Ryan Norton
 // Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
@@ -72,34 +72,41 @@
 class wxQTTimer : public wxTimer
 {
 public:
-    wxQTTimer(Movie movie, bool bLoop) :
-        m_movie(movie), m_bLoop(bLoop)
+    wxQTTimer(Movie movie, bool bLoop, bool& playing) :
+        m_movie(movie), m_bLoop(bLoop), m_pbPlaying(&playing)
     {
     }
 
     ~wxQTTimer()
     {
-        Shutdown();
-    }
+        if(m_pbPlaying)
+            *m_pbPlaying = false;
 
-    void Shutdown()
-    {
         StopMovie(m_movie);
         DisposeMovie(m_movie);
-        m_movie = NULL ;
         Stop();
 
         //Note that ExitMovies() is not neccessary, but
         //the docs are fuzzy on whether or not TerminateQTML is
         ExitMovies();
 
-     #ifndef __WXMAC__
+#ifndef __WXMAC__
         TerminateQTML();
-     #endif
+#endif
+    }
+
+    void Shutdown()
+    {
+        delete this;
     }
 
     void Notify()
     {
+        if (m_pbPlaying && !*m_pbPlaying)
+        {
+            Shutdown();
+        }
+
         if(IsMovieDone(m_movie))
         {
             if (!m_bLoop)
@@ -107,9 +114,9 @@ public:
             else
             {
                 StopMovie(m_movie);
-                GoToBeginningOfMovie(m_movie);            
+                GoToBeginningOfMovie(m_movie);
                 StartMovie(m_movie);
-        }
+            }
         }
         else
             MoviesTask(m_movie, MOVIE_DELAY); //Give QT time to play movie
@@ -117,61 +124,80 @@ public:
 
 
     Movie& GetMovie() {return m_movie;}
+
 protected:
     Movie m_movie;
     bool m_bLoop;
+
+public:
+    bool* m_pbPlaying;
+
 };
 
 
 class wxSMTimer : public wxTimer
 {
 public:
-    wxSMTimer(void* hSnd, void* pSndChannel, const bool& bLoop)
-	: m_hSnd(hSnd), m_pSndChannel(pSndChannel), m_bLoop(bLoop)
-     {
-     }
+    wxSMTimer(void* hSnd, void* pSndChannel, const bool& bLoop, bool& playing)
+        : m_hSnd(hSnd), m_pSndChannel(pSndChannel), m_bLoop(bLoop), m_pbPlaying(&playing)
+    {
+    }
 
     ~wxSMTimer()
-        {
-	    Shutdown();
-        }
+    {
+        if(m_pbPlaying)
+            *m_pbPlaying = false;
+        SndDisposeChannel((SndChannelPtr)m_pSndChannel, TRUE);
+        Stop();
+    }
 
     void Notify()
+    {
+        if (m_pbPlaying && !*m_pbPlaying)
         {
-    	SCStatus stat;
+            Shutdown();
+        }
+
+        SCStatus stat;
 
         if (SndChannelStatus((SndChannelPtr)m_pSndChannel, sizeof(SCStatus), &stat) != 0)
-    	    Shutdown();
-	
-	    //if the sound isn't playing anymore, see if it's looped,
-	    //and if so play it again, otherwise close things up
-	    if (stat.scChannelBusy == FALSE)
-	    {
-	        if (m_bLoop)
-	        {
-		        if(SndPlay((SndChannelPtr)m_pSndChannel, (SndListHandle) m_hSnd, true) != noErr)
-		            Shutdown();
-	        }
-	        else
-    		    Shutdown();
+            Shutdown();
+
+        //if the sound isn't playing anymore, see if it's looped,
+        //and if so play it again, otherwise close things up
+        if (stat.scChannelBusy == FALSE)
+        {
+            if (m_bLoop)
+            {
+                if(SndPlay((SndChannelPtr)m_pSndChannel, (SndListHandle) m_hSnd, true) != noErr)
+                    Shutdown();
+            }
+            else
+                Shutdown();
         }
     }
 
     void Shutdown()
     {
-        SndDisposeChannel((SndChannelPtr)m_pSndChannel, TRUE);
-    	Stop();
+        delete this;
     }
- 
+
+    void* GetChannel() {return m_pSndChannel;}
+
 protected:
     void* m_hSnd;
     void* m_pSndChannel;
     bool m_bLoop;
+
+public:
+    bool* m_pbPlaying;
 };
 
 // ------------------------------------------------------------------
 //          wxSound
 // ------------------------------------------------------------------
+wxTimer* lastSoundTimer=NULL;
+bool lastSoundIsPlaying=false;
 
 //Determines whether version 4 of QT is installed
 Boolean wxIsQuickTime4Installed (void)
@@ -196,15 +222,15 @@ inline bool wxInitQT ()
         //-2093 no dll
             if ((nError = InitializeQTML(0)) != noErr)
                 wxLogSysError(wxString::Format("Couldn't Initialize Quicktime-%i", nError));
-        #endif 
+        #endif
         EnterMovies();
         return true;
     }
     else
-        {
+    {
         wxLogSysError("Quicktime is not installed, or Your Version of Quicktime is <= 4.");
-            return false;
-        }
+        return false;
+    }
 }
 
 wxSound::wxSound()
@@ -221,20 +247,22 @@ wxSound::wxSound(const wxString& sFileName, bool isResource)
 wxSound::wxSound(int size, const wxByte* data)
 : m_hSnd((char*)data), m_waveLength(size), m_pTimer(NULL), m_type(wxSound_MEMORY)
 {
-    if (!wxInitQT())
-        m_type = wxSound_NONE;
 }
 
 wxSound::~wxSound()
 {
+    if(lastSoundIsPlaying)
+    {
+        if(m_type == wxSound_RESOURCE)
+            ((wxSMTimer*)lastSoundTimer)->m_pbPlaying = NULL;
+        else
+            ((wxQTTimer*)lastSoundTimer)->m_pbPlaying = NULL;
+    }
 }
 
 bool wxSound::Create(const wxString& fileName, bool isResource)
 {
-    if(!wxInitQT())
-        return false;
-
-    FreeData();
+    Stop();
 
     if (isResource)
     {
@@ -245,14 +273,14 @@ bool wxSound::Create(const wxString& fileName, bool isResource)
 
         wxMacStringToPascal( fileName , lpSnd ) ;
 
-		m_sndname = lpSnd;
+        m_sndname = lpSnd;
         m_hSnd = (char*) GetNamedResource('snd ', (const unsigned char *) lpSnd);
 #else
         return false;
 #endif
-        }
-        else
-        {
+    }
+    else
+    {
         m_type = wxSound_FILE;
         m_sndname = fileName;
     }
@@ -262,8 +290,7 @@ bool wxSound::Create(const wxString& fileName, bool isResource)
 
 bool wxSound::DoPlay(unsigned flags) const
 {
-//    wxASSERT(m_pTimer == NULL || !((wxTimer*)m_pTimer)->IsRunning() );
-    FreeData();
+    Stop();
 
     Movie movie;
 
@@ -271,8 +298,10 @@ bool wxSound::DoPlay(unsigned flags) const
     {
     case wxSound_MEMORY:
         {
+            if (!wxInitQT())
+                return false;
             Handle myHandle, dataRef = nil;
-            MovieImportComponent miComponent; 
+            MovieImportComponent miComponent;
             Track targetTrack = nil;
             TimeValue addedDuration = 0;
             long outFlags = 0;
@@ -280,7 +309,7 @@ bool wxSound::DoPlay(unsigned flags) const
             ComponentResult result;
 
             myHandle = NewHandleClear((Size)m_waveLength);
-            
+
             BlockMove(m_hSnd, *myHandle, m_waveLength);
 
             err = PtrToHand(&myHandle, &dataRef, sizeof(Handle));
@@ -292,7 +321,7 @@ bool wxSound::DoPlay(unsigned flags) const
             else if (memcmp(&m_hSnd[8], "AIFC", 4) == 0)
                 miComponent = OpenDefaultComponent(MovieImportType, kQTFileTypeAIFC);
             else
-    {
+            {
                 wxLogSysError("wxSound - Location in memory does not contain valid data");
                 return false;
             }
@@ -308,7 +337,7 @@ bool wxSound::DoPlay(unsigned flags) const
             if (result != noErr)
             {
                 wxLogSysError(wxString::Format(wxT("Couldn't import movie data\nError:%i"), (int)result));
-    }
+            }
 
             SetMovieVolume(movie, kFullVolume);
             GoToBeginningOfMovie(movie);
@@ -326,19 +355,21 @@ bool wxSound::DoPlay(unsigned flags) const
 
             SndChannelPtr pSndChannel;
             SndNewChannel(&pSndChannel, sampledSynth,
-			            initNoInterp + 
-                        (data.numChannels == 1 ? initMono : initStereo), NULL);
+                initNoInterp
+                + (data.numChannels == 1 ? initMono : initStereo), NULL);
 
             if(SndPlay(pSndChannel, (SndListHandle) m_hSnd, flags & wxSOUND_ASYNC ? 1 : 0) != noErr)
-	            return false;
+                return false;
 
             if (flags & wxSOUND_ASYNC)
-    {
-                ((wxSMTimer*&)m_pTimer) = new wxSMTimer(pSndChannel, m_hSnd, flags & wxSOUND_LOOP ? 1 : 0);
- 
-	            ((wxTimer*)m_pTimer)->Start(MOVIE_DELAY, wxTIMER_CONTINUOUS); 
-    }
-    else
+            {
+                lastSoundTimer = ((wxSMTimer*&)m_pTimer)
+                    = new wxSMTimer(pSndChannel, m_hSnd, flags & wxSOUND_LOOP ? 1 : 0,
+                        lastSoundIsPlaying=true);
+
+                ((wxTimer*)m_pTimer)->Start(MOVIE_DELAY, wxTIMER_CONTINUOUS);
+            }
+            else
                 SndDisposeChannel(pSndChannel, TRUE);
 
             return true;
@@ -346,6 +377,9 @@ bool wxSound::DoPlay(unsigned flags) const
         break;
     case wxSound_FILE:
         {
+            if (!wxInitQT())
+                return false;
+
             short movieResFile;
             FSSpec sfFile;
 
@@ -354,11 +388,11 @@ bool wxSound::DoPlay(unsigned flags) const
 #else
             int nError;
             if ((nError = NativePathNameToFSSpec ((char*) m_sndname.c_str(), &sfFile, 0)) != noErr)
-    {
-                wxLogSysError(wxString::Format(wxT("File:%s does not exist\nError:%i"), 
+            {
+                wxLogSysError(wxString::Format(wxT("File:%s does not exist\nError:%i"),
                                 m_sndname.c_str(), nError));
                 return false;
-    }
+            }
 #endif
 
             if (OpenMovieFile (&sfFile, &movieResFile, fsRdPerm) != noErr)
@@ -383,12 +417,12 @@ bool wxSound::DoPlay(unsigned flags) const
             CloseMovieFile (movieResFile);
 
             if (err != noErr)
-    {
+            {
                 wxLogSysError(
                     wxString::Format(wxT("wxSound - Could not open file: %s\nError:%i"), m_sndname.c_str(), err )
                     );
                 return false;
-    }
+            }
         }
         break;
     default:
@@ -399,13 +433,7 @@ bool wxSound::DoPlay(unsigned flags) const
     //Start the movie!
     StartMovie(movie);
 
-    if (flags & wxSOUND_ASYNC)
-    {
-        //Start timer and play movie asyncronously
-        ((wxQTTimer*&)m_pTimer) = new wxQTTimer(movie, flags & wxSOUND_LOOP ? 1 : 0);
-        ((wxQTTimer*)m_pTimer)->Start(MOVIE_DELAY, wxTIMER_CONTINUOUS);
-    }
-    else
+    if (flags & wxSOUND_SYNC)
     {
         wxASSERT_MSG(!(flags & wxSOUND_LOOP), "Can't loop and play syncronously at the same time");
 
@@ -415,26 +443,36 @@ bool wxSound::DoPlay(unsigned flags) const
 
         DisposeMovie(movie);
     }
-
-    return true;
-}
-
-void* wxSound::GetHandle() 
-{
-    return (void*) ((wxQTTimer*) m_pTimer)->GetMovie();
-}
-
-bool wxSound::FreeData()
-{
-    if (m_pTimer != NULL)
+    else
     {
-        delete (wxQTTimer*) m_pTimer;
-        m_pTimer = NULL;
+        //Start timer and play movie asyncronously
+        lastSoundTimer = ((wxQTTimer*&)m_pTimer) = new wxQTTimer(movie, flags & wxSOUND_LOOP ? 1 : 0,lastSoundIsPlaying=true);
+        ((wxQTTimer*)m_pTimer)->Start(MOVIE_DELAY, wxTIMER_CONTINUOUS);
     }
 
     return true;
 }
+
+bool wxSound::IsPlaying()
+{
+    return lastSoundIsPlaying;
+}
+
+void wxSound::Stop()
+{
+    if(lastSoundIsPlaying)
+    {
+        delete (wxTimer*&) lastSoundTimer;
+        lastSoundIsPlaying = false;
+    }
+}
+
+void* wxSound::GetHandle()
+{
+    if(m_type == wxSound_RESOURCE)
+        return (void*)  ((wxSMTimer*)m_pTimer)->GetChannel();
+
+    return (void*) ((wxQTTimer*) m_pTimer)->GetMovie();
+}
+
 #endif //wxUSE_SOUND
-
-
-

@@ -2,11 +2,11 @@
 // Name:        sound.h
 // Purpose:     wxSound class (loads and plays short Windows .wav files).
 //              Optional on non-Windows platforms.
-// Author:      Stefan Csomor
+// Author:      Ryan Norton, Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
-// Copyright:   (c) Stefan Csomor
+// Copyright:   (c) Ryan Norton, Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -32,12 +32,11 @@ public:
 public:
   bool  Create(const wxString& fileName, bool isResource = FALSE);
   bool  IsOk() const { return !m_sndname.IsEmpty(); }
+  static void  Stop();
+  static bool IsPlaying();
 
   void* GetHandle();
-protected:
-  // prevent collision with some BSD definitions of macro Free()
-  bool  FreeData();
-  
+protected:  
   bool  DoPlay(unsigned flags) const;
 
 private:
