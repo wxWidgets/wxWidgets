@@ -90,10 +90,16 @@ public:
     bool operator != (const wxIcon& icon) const
         { return m_refData != icon.m_refData; }
 
+    // implementation only from now on
     wxIconRefData *GetIconData() const { return (wxIconRefData *)m_refData; }
 
     void SetHICON(WXHICON icon) { SetHandle((WXHANDLE)icon); }
     WXHICON GetHICON() const { return (WXHICON)GetHandle(); }
+
+    // create from bitmap (which should have a mask unless it's monochrome):
+    // there shouldn't be any implicit bitmap -> icon conversion (i.e. no
+    // ctors, assignment operators...), but it's ok to have such function
+    void CopyFromBitmap(const wxBitmap& bmp);
 
 protected:
     virtual wxGDIImageRefData *CreateData() const
@@ -103,9 +109,6 @@ protected:
 
     // create from XPM data
     void CreateIconFromXpm(const char **data);
-
-    // create from bitmap (which should have a mask unless it's monochrome)
-    void CopyFromBitmap(const wxBitmap& bmp);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxIcon)

@@ -51,8 +51,8 @@ public:
 
     virtual ~wxStaticBitmap() { Free(); }
 
-    void SetIcon(const wxIcon& icon) { SetImage(icon); }
-    void SetBitmap(const wxBitmap& bitmap) { SetImage(bitmap); }
+    void SetIcon(const wxIcon& icon) { SetImage(&icon); }
+    void SetBitmap(const wxBitmap& bitmap) { SetImage(&bitmap); }
 
     // assert failure is provoked by an attempt to get an icon from bitmap or
     // vice versa
@@ -79,7 +79,7 @@ protected:
     // TRUE if icon/bitmap is valid
     bool ImageIsOk() const;
 
-    void SetImage(const wxGDIImage& image);
+    void SetImage(const wxGDIImage* image);
 
     // we can have either an icon or a bitmap
     bool m_isIcon;

@@ -42,7 +42,7 @@
 // macors
 // ---------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
 
 // ===========================================================================
 // implementation
@@ -80,7 +80,23 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
 
     m_windowStyle = style;
 
+    // we may have either bitmap or icon: if a bitmap with mask is passed, we
+    // will transform it to an icon ourselves because otherwise the mask will
+    // be ignored by Windows
+    wxIcon *icon = (wxIcon *)NULL;
     m_isIcon = bitmap.IsKindOf(CLASSINFO(wxIcon));
+    if ( !m_isIcon )
+    {
+        const wxBitmap& bmp = (const wxBitmap&)bitmap;
+        wxMask *mask = bmp.GetMask();
+        if ( mask && mask->GetMaskBitmap() )
+        {
+            icon = new wxIcon;
+            icon->CopyFromBitmap(bmp);
+
+            m_isIcon = TRUE;
+        }
+    }
 
 #ifdef __WIN32__
     // create a static control with either SS_BITMAP or SS_ICON style depending
@@ -96,7 +112,7 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
                        (
                         classname,
                         wxT(""),
-                        winstyle | WS_CHILD | WS_VISIBLE,
+                        winstyle | WS_CHILD | WS_VISIBLE | WS_DISABLED,
                         0, 0, 0, 0,
                         (HWND)parent->GetHWND(),
                         (HMENU)m_windowId,
@@ -106,7 +122,8 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
 
     wxCHECK_MSG( m_hWnd, FALSE, wxT("Failed to create static bitmap") );
 
-    SetImage(bitmap);
+    SetImage(icon ? icon : &bitmap);
+    delete icon; // may be NULL, ok
 
     // Subclass again for purposes of dialog editing mode
     SubclassWin(m_hWnd);
@@ -137,15 +154,25 @@ wxSize wxStaticBitmap::DoGetBestSize() const
     return wxWindow::DoGetBestSize();
 }
 
-void wxStaticBitmap::SetImage(const wxGDIImage& bitmap)
+void wxStaticBitmap::SetImage(const wxGDIImage* image)
 {
     Free();
 
-    m_isIcon = bitmap.IsKindOf(CLASSINFO(wxIcon));
+    const wxIcon *icon = wxDynamicCast(image, wxIcon);
+    m_isIcon = icon != NULL;
     if ( m_isIcon )
-        m_image = new wxIcon((const wxIcon&)bitmap);
+    {
+        m_image = new wxIcon(*icon);
+    }
     else
-        m_image = new wxBitmap((const wxBitmap &)bitmap);
+    {
+        wxASSERT_MSG( wxDynamicCast(image, wxBitmap),
+                      _T("not an icon and not a bitmap?") );
+
+        const wxBitmap *bitmap = (wxBitmap *)image;
+
+        m_image = new wxBitmap(*bitmap);
+    }
 
     int x, y;
     int w, h;
@@ -160,8 +187,8 @@ void wxStaticBitmap::SetImage(const wxGDIImage& bitmap)
 
     if ( ImageIsOk() )
     {
-        int width = bitmap.GetWidth(),
-            height = bitmap.GetHeight();
+        int width = image->GetWidth(),
+            height = image->GetHeight();
         if ( width && height )
         {
             w = width;

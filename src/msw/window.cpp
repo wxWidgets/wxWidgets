@@ -1956,6 +1956,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             //else: get the dlg code from the DefWindowProc()
             break;
 
+        case WM_SYSKEYDOWN:
         case WM_KEYDOWN:
             // If this has been processed by an event handler,
             // return 0 now (we've handled it).
@@ -2024,6 +2025,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             }
             break;
 
+        case WM_SYSKEYUP:
         case WM_KEYUP:
             processed = HandleKeyUp((WORD) wParam, lParam);
             break;
