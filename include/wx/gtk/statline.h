@@ -47,6 +47,4 @@ public:
             long style = wxLI_HORIZONTAL, const wxString &name = wxStaticTextNameStr );
 };
 
-#endif // wxUSE_STATLINE
-
 #endif // __GTKSTATICLINEH__

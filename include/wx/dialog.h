@@ -1,6 +1,9 @@
 #ifndef _WX_DIALOG_H_BASE_
 #define _WX_DIALOG_H_BASE_
 
+#include "wx/defs.h"
+#include "wx/panel.h"
+
 class WXDLLEXPORT wxDialogBase : public wxPanel
 {
 protected:

@@ -33,7 +33,9 @@
 #ifndef WX_PRECOMP
     #include "wx/dialog.h"
     #include "wx/dcclient.h"
+    #include "wx/intl.h"
     #include "wx/settings.h"
+    #include "wx/stattext.h"
 #endif
 
 // ----------------------------------------------------------------------------
