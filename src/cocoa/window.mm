@@ -250,15 +250,16 @@ bool wxWindow::Show(bool show)
     wxAutoNSAutoreleasePool pool;
     // If the window is marked as visible, then it shouldn't have a dummy view
     // If the window is marked hidden, then it should have a dummy view
-    wxASSERT_MSG( (m_isShown && !m_dummyNSView) || (!m_isShown && m_dummyNSView),"wxWindow: m_isShown does not agree with m_dummyNSView");
+    // wxSpinCtrl (generic) abuses m_isShown, don't use it for any logic
+//    wxASSERT_MSG( (m_isShown && !m_dummyNSView) || (!m_isShown && m_dummyNSView),"wxWindow: m_isShown does not agree with m_dummyNSView");
     // Return false if there isn't a window to show or hide
     if(!m_cocoaNSView)
         return false;
-    // Return false if the state isn't changing
-    if( show == m_isShown )
-        return false;
     if(show)
     {
+        // If state isn't changing, return false
+        if(!m_dummyNSView)
+            return false;
         // replaceSubView releases m_dummyNSView, balancing the alloc
         [m_cocoaNSView retain];
         [[m_dummyNSView superview] replaceSubview:m_dummyNSView with:m_cocoaNSView];
@@ -270,6 +271,9 @@ bool wxWindow::Show(bool show)
     }
     else
     {
+        // If state isn't changing, return false
+        if(m_dummyNSView)
+            return false;
         m_dummyNSView = [[NSView alloc] initWithFrame: [m_cocoaNSView frame]];
         [m_dummyNSView retain];
         // NOTE: replaceSubView will cause m_cocaNSView to be released
