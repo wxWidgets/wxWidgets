@@ -3,7 +3,7 @@
 #
 
 
-WXDIR = $(%WXWIN)
+WXDIR = $(WXWIN)
 
 EXTRACPPFLAGS = -I$(WXDIR)\contrib\include
 THISDIR = $(WXDIR)\contrib\samples\stc
