@@ -30,27 +30,32 @@ PNGLIB  = $(WXDIR)/lib/libpng.a
 JPEGLIB = $(WXDIR)/lib/libjpeg.a
 TIFFLIB = $(WXDIR)/lib/libtiff.a
 
-GENERICOBJS_ORIG = \
-                $(GENDIR)/busyinfo.$(OBJSUFF) \
+GENERICOBJS = \
+        $(GENDIR)/accel.$(OBJSUFF) \
+        $(GENDIR)/busyinfo.$(OBJSUFF) \
 		$(GENDIR)/calctrl.$(OBJSUFF) \
 		$(GENDIR)/choicdgg.$(OBJSUFF) \
+		$(GENDIR)/colrdlgg.$(OBJSUFF) \
 		$(GENDIR)/dirctrlg.$(OBJSUFF) \
 		$(GENDIR)/dragimgg.$(OBJSUFF) \
+		$(GENDIR)/fontdlgg.$(OBJSUFF) \
 		$(GENDIR)/grid.$(OBJSUFF) \
+		$(GENDIR)/gridctrl.$(OBJSUFF) \
 		$(GENDIR)/gridsel.$(OBJSUFF) \
 		$(GENDIR)/laywin.$(OBJSUFF) \
+		$(GENDIR)/listctrl.$(OBJSUFF) \
 		$(GENDIR)/logg.$(OBJSUFF) \
+		$(GENDIR)/msgdlgg.$(OBJSUFF) \
 		$(GENDIR)/numdlgg.$(OBJSUFF) \
 		$(GENDIR)/panelg.$(OBJSUFF) \
 		$(GENDIR)/progdlgg.$(OBJSUFF) \
-		$(GENDIR)/prop.$(OBJSUFF) \
-		$(GENDIR)/propform.$(OBJSUFF) \
-		$(GENDIR)/proplist.$(OBJSUFF) \
 		$(GENDIR)/sashwin.$(OBJSUFF) \
 		$(GENDIR)/scrolwin.$(OBJSUFF) \
+		$(GENDIR)/spinctlg.$(OBJSUFF) \
 		$(GENDIR)/splash.$(OBJSUFF) \
 		$(GENDIR)/splitter.$(OBJSUFF) \
 		$(GENDIR)/statusbr.$(OBJSUFF) \
+		$(GENDIR)/tabg.$(OBJSUFF) \
 		$(GENDIR)/tbarsmpl.$(OBJSUFF) \
 		$(GENDIR)/textdlgg.$(OBJSUFF) \
 		$(GENDIR)/tipdlg.$(OBJSUFF) \
@@ -59,37 +64,24 @@ GENERICOBJS_ORIG = \
 		$(GENDIR)/treelay.$(OBJSUFF) \
 		$(GENDIR)/wizard.$(OBJSUFF)
 
-GENERICOBJS = \
-		$(GENDIR)/laywin.$(OBJSUFF) \
-		$(GENDIR)/logg.$(OBJSUFF) \
-		$(GENDIR)/panelg.$(OBJSUFF) \
-		$(GENDIR)/sashwin.$(OBJSUFF) \
-		$(GENDIR)/scrolwin.$(OBJSUFF) \
-		$(GENDIR)/splash.$(OBJSUFF) \
-		$(GENDIR)/splitter.$(OBJSUFF) \
-		$(GENDIR)/statusbr.$(OBJSUFF) \
-		$(GENDIR)/tbarsmpl.$(OBJSUFF) \
-		$(GENDIR)/tipwin.$(OBJSUFF)
-
-COMMONOBJS_OTHER=\
-		$(COMMDIR)/choiccmn.$(OBJSUFF) \
-		$(COMMDIR)/ctrlsub.$(OBJSUFF) \
-		$(COMMDIR)/dobjcmn.$(OBJSUFF) \
-		$(COMMDIR)/lboxcmn.$(OBJSUFF) \
-		$(COMMDIR)/textcmn.$(OBJSUFF) \
-
 COMMONOBJS  = \
 		$(COMMDIR)/appcmn.$(OBJSUFF) \
+		$(COMMDIR)/choiccmn.$(OBJSUFF) \
 		$(COMMDIR)/clipcmn.$(OBJSUFF) \
 		$(COMMDIR)/cmdline.$(OBJSUFF) \
+		$(COMMDIR)/cmdproc.$(OBJSUFF) \
 		$(COMMDIR)/cmndata.$(OBJSUFF) \
 		$(COMMDIR)/config.$(OBJSUFF) \
 		$(COMMDIR)/cshelp.$(OBJSUFF) \
 		$(COMMDIR)/ctrlcmn.$(OBJSUFF) \
+		$(COMMDIR)/ctrlsub.$(OBJSUFF) \
 		$(COMMDIR)/datetime.$(OBJSUFF) \
 		$(COMMDIR)/datstrm.$(OBJSUFF) \
 		$(COMMDIR)/dcbase.$(OBJSUFF) \
+		$(COMMDIR)/dircmn.$(OBJSUFF) \
 		$(COMMDIR)/dlgcmn.$(OBJSUFF) \
+		$(COMMDIR)/dobjcmn.$(OBJSUFF) \
+		$(COMMDIR)/docview.$(OBJSUFF) \
 		$(COMMDIR)/dynarray.$(OBJSUFF) \
 		$(COMMDIR)/dynlib.$(OBJSUFF) \
 		$(COMMDIR)/effects.$(OBJSUFF) \
@@ -105,6 +97,7 @@ COMMONOBJS  = \
 		$(COMMDIR)/fontcmn.$(OBJSUFF) \
 		$(COMMDIR)/fontmap.$(OBJSUFF) \
 		$(COMMDIR)/framecmn.$(OBJSUFF) \
+		$(COMMDIR)/gaugecmn.$(OBJSUFF) \
 		$(COMMDIR)/gdicmn.$(OBJSUFF) \
 		$(COMMDIR)/geometry.$(OBJSUFF) \
 		$(COMMDIR)/gifdecod.$(OBJSUFF) \
@@ -121,27 +114,33 @@ COMMONOBJS  = \
 		$(COMMDIR)/imagtiff.$(OBJSUFF) \
 		$(COMMDIR)/imagxpm.$(OBJSUFF) \
 		$(COMMDIR)/intl.$(OBJSUFF) \
+		$(COMMDIR)/ipcbase.$(OBJSUFF) \
 		$(COMMDIR)/layout.$(OBJSUFF) \
+		$(COMMDIR)/lboxcmn.$(OBJSUFF) \
 		$(COMMDIR)/list.$(OBJSUFF) \
 		$(COMMDIR)/log.$(OBJSUFF) \
 		$(COMMDIR)/longlong.$(OBJSUFF) \
 		$(COMMDIR)/matrix.$(OBJSUFF) \
 		$(COMMDIR)/memory.$(OBJSUFF) \
 		$(COMMDIR)/menucmn.$(OBJSUFF) \
+		$(COMMDIR)/mimecmn.$(OBJSUFF) \
 		$(COMMDIR)/module.$(OBJSUFF) \
 		$(COMMDIR)/mstream.$(OBJSUFF) \
 		$(COMMDIR)/object.$(OBJSUFF) \
 		$(COMMDIR)/objstrm.$(OBJSUFF) \
 		$(COMMDIR)/paper.$(OBJSUFF) \
+		$(COMMDIR)/popupcmn.$(OBJSUFF) \
 		$(COMMDIR)/prntbase.$(OBJSUFF) \
 		$(COMMDIR)/process.$(OBJSUFF) \
 		$(COMMDIR)/quantize.$(OBJSUFF) \
+		$(COMMDIR)/radiocmn.$(OBJSUFF) \
 		$(COMMDIR)/resource.$(OBJSUFF) \
 		$(COMMDIR)/sizer.$(OBJSUFF) \
 		$(COMMDIR)/strconv.$(OBJSUFF) \
 		$(COMMDIR)/stream.$(OBJSUFF) \
 		$(COMMDIR)/string.$(OBJSUFF) \
 		$(COMMDIR)/tbarbase.$(OBJSUFF) \
+		$(COMMDIR)/textcmn.$(OBJSUFF) \
 		$(COMMDIR)/textfile.$(OBJSUFF) \
 		$(COMMDIR)/timercmn.$(OBJSUFF) \
 		$(COMMDIR)/tokenzr.$(OBJSUFF) \
@@ -181,7 +180,6 @@ HTMLOBJS = \
 		$(HTMLDIR)/winpars.$(OBJSUFF)
 
 MSWOBJS     = \
-		$(MICROWINDIR)/accel.$(OBJSUFF) \
 		$(MICROWINDIR)/app.$(OBJSUFF) \
 		$(MICROWINDIR)/bitmap.$(OBJSUFF) \
 		$(MICROWINDIR)/brush.$(OBJSUFF) \
@@ -199,6 +197,7 @@ MSWOBJS     = \
 		$(MICROWINDIR)/dialog.$(OBJSUFF) \
 		$(MICROWINDIR)/dialup.$(OBJSUFF) \
 		$(UNIXDIR)/dir.$(OBJSUFF) \
+		$(MICROWINDIR)/evtloop.$(OBJSUFF) \
 		$(MICROWINDIR)/font.$(OBJSUFF) \
 		$(MICROWINDIR)/fontenum.$(OBJSUFF) \
 		$(MICROWINDIR)/fontutil.$(OBJSUFF) \
@@ -216,19 +215,24 @@ MSWOBJS     = \
 		$(MICROWINDIR)/regconf.$(OBJSUFF) \
 		$(MICROWINDIR)/region.$(OBJSUFF) \
 		$(MICROWINDIR)/settings.$(OBJSUFF) \
+		$(MICROWINDIR)/snglinst.$(OBJSUFF) \
 		$(MICROWINDIR)/thread.$(OBJSUFF) \
 		$(MICROWINDIR)/timer.$(OBJSUFF) \
 		$(MICROWINDIR)/utils.$(OBJSUFF) \
 		$(MICROWINDIR)/window.$(OBJSUFF)
+		$(OLEDIR)/dataobj.$(OBJSUFF)
+
+UNIVOBJS_TODO = $(UNIVDIR)/choice.$(OBJSUFF) \
+		$(UNIVDIR)/colordlg.$(OBJSUFF) \
+
 
 UNIVOBJS     = \
 		$(UNIVDIR)/bmpbuttn.$(OBJSUFF) \
 		$(UNIVDIR)/button.$(OBJSUFF) \
 		$(UNIVDIR)/checkbox.$(OBJSUFF) \
 		$(UNIVDIR)/checklst.$(OBJSUFF) \
-		$(UNIVDIR)/choice.$(OBJSUFF) \
-		$(UNIVDIR)/colordlg.$(OBJSUFF) \
 		$(UNIVDIR)/colschem.$(OBJSUFF) \
+		$(UNIVDIR)/combobox.$(OBJSUFF) \
 		$(UNIVDIR)/control.$(OBJSUFF) \
 		$(UNIVDIR)/frameuniv.$(OBJSUFF) \
 		$(UNIVDIR)/gauge.$(OBJSUFF) \
@@ -282,7 +286,7 @@ LIBNAME =
 include $(TOP)/Makefile.rules
 
 # List of objects to compile
-OBJS = $(COMMONOBJS) $(MSWOBJS) $(GENERICOBJS)
+OBJS = $(COMMONOBJS) $(MSWOBJS) $(GENERICOBJS) $(UNIVOBJS)
 
 all: $(WXLIB)
 
