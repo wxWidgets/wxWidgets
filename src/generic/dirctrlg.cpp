@@ -1184,6 +1184,14 @@ void wxGenericDirCtrl::DoResize()
         wxSize filterSz ;
         if (m_filterListCtrl)
         {
+#ifdef __WXMSW__
+            // For some reason, this is required in order for the
+            // correct control height to always be returned, rather
+            // than the drop-down list height which is sometimes returned.
+            wxSize oldSize = m_filterListCtrl->GetSize();
+            m_filterListCtrl->SetSize(-1, -1, oldSize.x+10, -1, wxSIZE_USE_EXISTING);
+            m_filterListCtrl->SetSize(-1, -1, oldSize.x, -1, wxSIZE_USE_EXISTING);
+#endif
             filterSz = m_filterListCtrl->GetSize();
             sz.y -= (filterSz.y + verticalSpacing);
         }
