@@ -50,6 +50,11 @@
 // this is where wxGetNumberFromUser() is declared
 #include "wx/generic/textdlgg.h"
 
+#if !wxUSE_SPINCTRL
+    // wxTextCtrl will do instead of wxSpinCtrl if we don't have it
+    #define wxSpinCtrl wxTextCtrl
+#endif
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -151,7 +156,14 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
 
 void wxNumberEntryDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
+#if !wxUSE_SPINCTRL
+    wxString tmp = m_spinctrl->GetValue();
+    if ( wxSscanf(tmp, _T("%ld"), &m_value) != 1 )
+        m_value = -1;
+    else
+#else
     m_value = m_spinctrl->GetValue();
+#endif
     if ( m_value < m_min || m_value > m_max )
     {
         // not a number or out of range
