@@ -120,6 +120,7 @@ enum wxTreeItemIcon
 #define wxTR_NO_LINES        0x0004     // don't generate level connectors
 #define wxTR_LINES_AT_ROOT   0x0008     // connect top-level nodes
 #define wxTR_MAC_BUTTONS     wxTR_TWIST_BUTTONS  // backward compatibility
+#define wxTR_AQUA_BUTTONS    0x0010     // used internally
 
 #define wxTR_SINGLE          0x0000     // for convenience
 #define wxTR_MULTIPLE        0x0020     // can select multiple items

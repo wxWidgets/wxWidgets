@@ -675,7 +675,10 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
     style |= wxTR_NO_LINES;
     if (major < 10)
         style |= wxTR_ROW_LINES;
+    if (major >= 10)
+        style |= wxTR_AQUA_BUTTONS;
 #endif
+
 
     wxScrolledWindow::Create( parent, id, pos, size,
                               style|wxHSCROLL|wxVSCROLL, name );
@@ -1989,28 +1992,55 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
             else if (HasFlag(wxTR_TWIST_BUTTONS))
             {
                 // draw the twisty button here
-                dc.SetPen(*wxBLACK_PEN);
-                dc.SetBrush(*m_hilightBrush);
-
+                
                 wxPoint button[3];
-
-                if (item->IsExpanded())
+                dc.SetBrush(*m_hilightBrush);
+                
+                if (HasFlag(wxTR_AQUA_BUTTONS))
                 {
-                    button[0].x = x-5;
-                    button[0].y = y_mid-2;
-                    button[1].x = x+5;
-                    button[1].y = y_mid-2;
-                    button[2].x = x;
-                    button[2].y = y_mid+3;
+                    dc.SetPen(*wxTRANSPARENT_PEN);
+                    
+                    if (item->IsExpanded())
+                    {
+                        button[0].x = x-6;
+                        button[0].y = y_mid-2;
+                        button[1].x = x+6;
+                        button[1].y = y_mid-2;
+                        button[2].x = x;
+                        button[2].y = y_mid+7;
+                    }
+                    else
+                    {
+                        button[0].y = y_mid-6;
+                        button[0].x = x-2;
+                        button[1].y = y_mid+6;
+                        button[1].x = x-2;
+                        button[2].y = y_mid;
+                        button[2].x = x+7;
+                    }
                 }
                 else
                 {
-                    button[0].y = y_mid-5;
-                    button[0].x = x-2;
-                    button[1].y = y_mid+5;
-                    button[1].x = x-2;
-                    button[2].y = y_mid;
-                    button[2].x = x+3;
+                    dc.SetPen(*wxBLACK_PEN);
+
+                    if (item->IsExpanded())
+                    {
+                        button[0].x = x-5;
+                        button[0].y = y_mid-2;
+                        button[1].x = x+5;
+                        button[1].y = y_mid-2;
+                        button[2].x = x;
+                        button[2].y = y_mid+3;
+                    }
+                    else
+                    {
+                        button[0].y = y_mid-5;
+                        button[0].x = x-2;
+                        button[1].y = y_mid+5;
+                        button[1].x = x-2;
+                        button[2].y = y_mid;
+                        button[2].x = x+3;
+                    }
                 }
                 dc.DrawPolygon(3, button);
 
