@@ -47,8 +47,6 @@
             $wxOS2PM{$fields[0]} = $fields[2];
         } elsif ( $fields[1] eq "H" ) {
             $wxHTML{$fields[0]} = $fields[2];
-        } elsif ( $fields[1] eq "J" ) {
-            $wxOGL{$fields[0]} = $fields[2];
         } elsif ( $fields[1] eq "U" ) {
             $wxUNIX{$fields[0]} = $fields[2];
         } elsif ( $fields[1] eq "B" ) {
@@ -59,8 +57,6 @@
             $wxPROTOCOLINCLUDE{$fields[0]} = $fields[2];
         } elsif ( $fields[1] eq "L" ) {
             $wxHTMLINCLUDE{$fields[0]} = $fields[2];
-        } elsif ( $fields[1] eq "Z" ) {
-            $wxOGLINCLUDE{$fields[0]} = $fields[2];
         } elsif ( $fields[1] eq "F" ) {
             $wxMOTIFINCLUDE{$fields[0]} = $fields[2];
         } elsif ( $fields[1] eq "9" ) {

@@ -16,7 +16,6 @@
 #  R	/src/gtk     R for Robert
 #  O	/src/os2
 #  H	/src/html
-#  J	/src/ogl
 #  W	/include/wx
 #  K	/include/wx/gtk        K for gtK
 #  F	/include/wx/motif      F for motiF
@@ -24,7 +23,6 @@
 #  2	/include/wx/os2        2 for os2
 #  N	/include/wx/generic    N for geNeric
 #  L	/include/wx/html       L for htmL
-#  Z	/include/wx/ogl
 #  P	/include/wx/protocol
 #  S	/include/wx/unix       S for poSix
 #
@@ -531,19 +529,6 @@ m_pre.cpp	H
 m_tables.cpp	H
 m_meta.cpp	H
 htmprint.cpp	H
-
-basic.cpp	J
-basic2.cpp	J
-bmpshape.cpp	J
-canvas.cpp	J
-composit.cpp	J
-constrnt.cpp	J
-divided.cpp	J
-drawn.cpp	J
-lines.cpp	J
-mfutils.cpp	J
-oglmisc.cpp	J
-ogldiag.cpp	J
 
 arrimpl.cpp	W	B
 listimpl.cpp	W	B
@@ -1086,22 +1071,6 @@ htmlwin.h	L
 winpars.h	L
 m_templ.h	L
 htmprint.h	L
-
-basic.h	Z
-basicp.h	Z
-bmpshape.h	Z
-canvas.h	Z
-composit.h	Z
-constrnt.h	Z
-divided.h	Z
-drawn.h	Z
-drawnp.h	Z
-lines.h	Z
-linesp.h	Z
-mfutils.h	Z
-misc.h	Z
-ogl.h	Z
-ogldiag.h	Z
 
 calctrl.h	N
 caret.h	N
