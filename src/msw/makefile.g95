@@ -176,6 +176,7 @@ MSWOBJS = \
   radiobut.$(OBJSUFF) \
   region.$(OBJSUFF) \
   registry.$(OBJSUFF) \
+  regconf.$(OBJSUFF) \
   scrolbar.$(OBJSUFF) \
   settings.$(OBJSUFF) \
   slidrmsw.$(OBJSUFF) \

@@ -45,12 +45,24 @@
 #include "wx/app.h"
 #include "wx/msw/private.h"
 
+// Styles
 #ifndef TBSTYLE_FLAT
 #define TBSTYLE_LIST            0x1000
 #define TBSTYLE_FLAT            0x0800
 #define TBSTYLE_TRANSPARENT     0x8000
 #endif
  // use TBSTYLE_TRANSPARENT if you use TBSTYLE_FLAT
+
+// Messages
+#ifndef TB_GETSTYLE
+#define TB_GETSTYLE             (WM_USER + 57)
+#define TB_SETSTYLE             (WM_USER + 56)
+#endif
+
+/* Hint from a newsgroup for custom flatbar drawing:
+Set the TBSTYLE_CUSTOMERASE style, then handle the
+NM_CUSTOMDRAW message and do your custom drawing.
+*/
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxToolBar95, wxToolBarBase)

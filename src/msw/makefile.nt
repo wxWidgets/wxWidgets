@@ -176,6 +176,7 @@ MSWOBJS = \
   $(MSWDIR)\radiobut.obj \
   $(MSWDIR)\region.obj \
   $(MSWDIR)\registry.obj \
+  $(MSWDIR)\regconf.obj \
   $(MSWDIR)\scrolbar.obj \
   $(MSWDIR)\settings.obj \
   $(MSWDIR)\slidrmsw.obj \
@@ -558,6 +559,11 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
 $(MSWDIR)/registry.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/regconf.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<

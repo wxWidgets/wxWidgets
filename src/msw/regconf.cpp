@@ -140,13 +140,13 @@ void wxRegConfig::SetPath(const wxString& strPath)
 #define LOCAL_MASK        0x8000
 #define IS_LOCAL_INDEX(l) (((l) & LOCAL_MASK) != 0)
 
-bool wxRegConfig::GetFirstGroup(wxString& str, long& lIndex) const
+bool wxRegConfig::GetFirstGroup(wxString& str, long& lIndex)
 {
   lIndex = 0;
   return GetNextGroup(str, lIndex);
 }
 
-bool wxRegConfig::GetNextGroup(wxString& str, long& lIndex) const
+bool wxRegConfig::GetNextGroup(wxString& str, long& lIndex)
 {
   // are we already enumerating local entries?
   if ( m_keyGlobal.IsOpened() && !IS_LOCAL_INDEX(lIndex) ) {
@@ -169,13 +169,13 @@ bool wxRegConfig::GetNextGroup(wxString& str, long& lIndex) const
   return bOk;
 }
 
-bool wxRegConfig::GetFirstEntry(wxString& str, long& lIndex) const
+bool wxRegConfig::GetFirstEntry(wxString& str, long& lIndex)
 {
   lIndex = 0;
   return GetNextEntry(str, lIndex);
 }
 
-bool wxRegConfig::GetNextEntry(wxString& str, long& lIndex) const
+bool wxRegConfig::GetNextEntry(wxString& str, long& lIndex)
 {
   // are we already enumerating local entries?
   if ( m_keyGlobal.IsOpened() && !IS_LOCAL_INDEX(lIndex) ) {
@@ -198,35 +198,35 @@ bool wxRegConfig::GetNextEntry(wxString& str, long& lIndex) const
   return bOk;
 }
 
-uint wxRegConfig::GetNumberOfEntries() const
+uint wxRegConfig::GetNumberOfEntries(bool bRecursive) const
 {
   uint nEntries = 0;
 
   // dummy vars
   wxString str;
   long l;
-  bool bCont = GetFirstEntry(str, l);
+  bool bCont = ((wxRegConfig*)this)->GetFirstEntry(str, l);
   while ( bCont ) {
     nEntries++;
 
-    bCont = GetNextEntry(str, l);
+    bCont = ((wxRegConfig*)this)->GetNextEntry(str, l);
   }
 
   return nEntries;
 }
 
-uint wxRegConfig::GetNumberOfGroups() const
+uint wxRegConfig::GetNumberOfGroups(bool bRecursive) const
 {
   uint nGroups = 0;
 
   // dummy vars
   wxString str;
   long l;
-  bool bCont = GetFirstGroup(str, l);
+  bool bCont = ((wxRegConfig*)this)->GetFirstGroup(str, l);
   while ( bCont ) {
     nGroups++;
 
-    bCont = GetNextGroup(str, l);
+    bCont = ((wxRegConfig*)this)->GetNextGroup(str, l);
   }
 
   return nGroups;

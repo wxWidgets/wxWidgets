@@ -172,6 +172,7 @@ MSWOBJS = \
   $(MSWDIR)\radiobut.obj \
   $(MSWDIR)\region.obj \
   $(MSWDIR)\registry.obj \
+  $(MSWDIR)\regconf.obj \
   $(MSWDIR)\scrolbar.obj \
   $(MSWDIR)\settings.obj \
   $(MSWDIR)\slidrmsw.obj \
@@ -341,6 +342,8 @@ $(MSWDIR)\radiobut.obj:     $(MSWDIR)\radiobut.$(SRCSUFF)
 $(MSWDIR)\region.obj:     $(MSWDIR)\region.$(SRCSUFF)
 
 $(MSWDIR)\registry.obj:     $(MSWDIR)\registry.$(SRCSUFF)
+
+$(MSWDIR)\regconf.obj:     $(MSWDIR)\regconf.$(SRCSUFF)
 
 $(MSWDIR)\scrolbar.obj:     $(MSWDIR)\scrolbar.$(SRCSUFF)
 
