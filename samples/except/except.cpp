@@ -220,7 +220,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
        : wxFrame(NULL, wxID_ANY, title, pos, size, style)
 {
     // set the frame icon
-    SetIcon(wxICON(mondrian));
+    SetIcon(wxICON(sample));
 
 #if wxUSE_MENUS
     // create a menu bar
