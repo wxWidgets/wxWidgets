@@ -447,7 +447,7 @@ DEFINE_EVENT_TYPE(wxEVT_MY_EVENT)
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU    (wxID_EXIT, MyFrame::OnExit)
   // ....
-  EVT_COMMAND  (wxEVT_MY_EVENT, ID_MY_WINDOW,  MyFrame::OnMyEvent)
+  EVT_COMMAND  (ID_MY_WINDOW, wxEVT_MY_EVENT, MyFrame::OnMyEvent)
 END_EVENT_TABLE()
 
 void MyFrame::OnMyEvent( wxCommandEvent &event )
