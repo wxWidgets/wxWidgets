@@ -1109,7 +1109,7 @@ void wxXmlResourceHandler::CreateChildren(wxObject *parent, bool this_hnd_only)
     while (n)
     {
         if (n->GetType() == wxXML_ELEMENT_NODE &&
-            n->GetName() == wxT("object"))
+           (n->GetName() == wxT("object") || n->GetName() == wxT("object_ref")))
         {
             if (this_hnd_only && CanHandle(n))
                 CreateResource(n, parent, NULL);

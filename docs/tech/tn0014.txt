@@ -120,7 +120,7 @@ Example:
     </object>
     <object_ref name="bar" ref="foo">
         <value>bar</value>               <!-- override! -->
-    </object>
+    </object_ref>
 
 is identical to:    
 
