@@ -68,7 +68,8 @@ int wxImageList::Add( const wxBitmap &bitmap )
 int wxImageList::Add( const wxBitmap& bitmap, const wxBitmap& mask )
 {
     wxBitmap bmp(bitmap);
-    bmp.SetMask(new wxMask(mask));
+    if (mask.Ok())
+        bmp.SetMask(new wxMask(mask));
     return Add(bmp);
 }
 
