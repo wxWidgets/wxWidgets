@@ -624,10 +624,10 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
 	    	
 	    	for (int j = i; j < actualsize; j++)
 	    	{
-	    	    tmp += wxBuffer[j];
-	    	    
 	    	    if (wxBuffer[j] == '\r')
 	    	        return tmp;
+	    	        
+	    	    tmp += wxBuffer[j];
 	    	}
 	    	
 	    	return tmp;
