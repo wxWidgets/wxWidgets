@@ -186,30 +186,32 @@ wxPrintData::wxPrintData()
     PMPrintSession macPrintSession = kPMNoReference;
     OSStatus       err;
     
-	err = ::UMAPrOpen(&macPrintSession) ;
-	if ( err == noErr )
-	{  
-		err = PMCreatePageFormat(&m_macPageFormat);
-		
-		//  Note that PMPageFormat is not session-specific, but calling
-		//  PMSessionDefaultPageFormat assigns values specific to the printer
-		//  associated with the current printing session.
-		if ((err == noErr) && (m_macPageFormat != kPMNoPageFormat))
-		{
-	    	err = PMSessionDefaultPageFormat(macPrintSession, m_macPageFormat);
-		}
-
-		err = PMCreatePrintSettings(&m_macPrintSettings);
-
-		//  Note that PMPrintSettings is not session-specific, but calling
-		//  PMSessionDefaultPrintSettings assigns values specific to the printer
-		//  associated with the current printing session.
-		if ((err == noErr) && (m_macPrintSettings != kPMNoPrintSettings))
-		{
-	    	err = PMSessionDefaultPrintSettings(macPrintSession, m_macPrintSettings);
-		}
-	}
-	::UMAPrClose(&macPrintSession) ;
+    err = ::UMAPrOpen(&macPrintSession) ;
+    if ( err == noErr )
+    {  
+        err = PMCreatePageFormat((PMPageFormat *)&m_macPageFormat);
+        
+        //  Note that PMPageFormat is not session-specific, but calling
+        //  PMSessionDefaultPageFormat assigns values specific to the printer
+        //  associated with the current printing session.
+        if ((err == noErr) && (m_macPageFormat != kPMNoPageFormat))
+        {
+            err = PMSessionDefaultPageFormat((PMPrintSession)macPrintSession,
+                                             (PMPageFormat)m_macPageFormat);
+        }
+        
+        err = PMCreatePrintSettings((PMPrintSettings *)&m_macPrintSettings);
+        
+        //  Note that PMPrintSettings is not session-specific, but calling
+        //  PMSessionDefaultPrintSettings assigns values specific to the printer
+        //  associated with the current printing session.
+        if ((err == noErr) && (m_macPrintSettings != kPMNoPrintSettings))
+        {
+            err = PMSessionDefaultPrintSettings((PMPrintSession)macPrintSession,
+                                                (PMPrintSettings)m_macPrintSettings);
+        }
+    }
+    ::UMAPrClose(&macPrintSession) ;
   #endif
 #else
     m_macPrintInfo = (THPrint) NewHandleClear( sizeof( TPrint ) );

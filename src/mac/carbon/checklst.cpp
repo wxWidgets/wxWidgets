@@ -52,7 +52,6 @@ static pascal void wxMacCheckListDefinition( short message, Boolean isSelected, 
                                      Cell cell, short dataOffset, short dataLength,
                                      ListHandle listHandle )
 {
-    FontInfo fontInfo;
     GrafPtr savePort;
     GrafPtr grafPtr;
     RgnHandle savedClipRegion;
@@ -180,8 +179,8 @@ bool wxCheckListBox::Create(wxWindow *parent,
     Size asize;
 
 
-    CreateListBoxControl( parent->MacGetRootWindow(), &bounds, false, 0, 1, false, true,
-                          14, 14, false, &listDef, &m_macControl );
+    CreateListBoxControl( MAC_WXHWND(parent->MacGetRootWindow()), &bounds, false, 0, 1, false, true,
+                          14, 14, false, &listDef, (ControlRef *)&m_macControl );
 
     GetControlData( (ControlHandle) m_macControl, kControlNoPart, kControlListBoxListHandleTag,
                    sizeof(ListHandle), (Ptr) &m_macList, &asize);
@@ -352,10 +351,10 @@ void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
     int topcell ;
 #if TARGET_CARBON
     Point pt ;
-    GetListCellSize( m_macList , &pt ) ;
+    GetListCellSize( (ListHandle)m_macList , &pt ) ;
     lineheight = pt.v ;
     ListBounds visible ;
-    GetListVisibleCells( m_macList , &visible ) ;
+    GetListVisibleCells( (ListHandle)m_macList , &visible ) ;
     topcell = visible.top ;
 #else
     lineheight =  (**(ListHandle)m_macList).cellSize.v ;

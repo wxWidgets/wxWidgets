@@ -168,8 +168,8 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     Size asize;
 
 
-    CreateListBoxControl( parent->MacGetRootWindow(), &bounds, false, 0, 1, false, true,
-                          kwxMacListItemHeight, kwxMacListItemHeight, false, &listDef, &m_macControl );
+    CreateListBoxControl( MAC_WXHWND(parent->MacGetRootWindow()), &bounds, false, 0, 1, false, true,
+                          kwxMacListItemHeight, kwxMacListItemHeight, false, &listDef, (ControlRef *)&m_macControl );
 
     GetControlData( (ControlHandle) m_macControl, kControlNoPart, kControlListBoxListHandleTag,
                    sizeof(ListHandle), (Ptr) &m_macList, &asize);
@@ -273,7 +273,7 @@ void  wxListBox::DoSetSize(int x, int y,
 #if TARGET_CARBON
     Rect bounds ;
     GetControlBounds( (ControlHandle) m_macControl , &bounds ) ;
-    ControlRef control = GetListVerticalScrollBar( m_macList ) ;
+    ControlRef control = GetListVerticalScrollBar( (ListHandle)m_macList ) ;
     if ( control )
     {
         Rect scrollbounds ;
@@ -737,7 +737,7 @@ void wxListBox::OnSize( const wxSizeEvent &event)
     Point pt;
 
 #if TARGET_CARBON
-    GetListCellSize(m_macList, &pt);
+    GetListCellSize((ListHandle)m_macList, &pt);
 #else
     pt = (**(ListHandle)m_macList).cellSize ;
 #endif
