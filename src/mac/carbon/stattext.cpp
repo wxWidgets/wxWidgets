@@ -61,7 +61,7 @@ void wxStaticText::OnDraw( wxDC &dc )
         return;
 
     PrepareDC(dc);
-//    dc.Clear() ; this eventually draws in the wrong background colour (appearance panels)
+    dc.Clear() ;
     
     int x = 0 ;
     int y = 0 ;
