@@ -1340,7 +1340,7 @@ AC_DEFUN([AC_BAKEFILE],
     AC_BAKEFILE_DEPS
     AC_BAKEFILE_RES_COMPILERS
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.1.6"
+    BAKEFILE_BAKEFILE_M4_VERSION="0.1.7"
    
     dnl includes autoconf_inc.m4:
     $1
@@ -2579,8 +2579,10 @@ AC_ARG_ENABLE(sdltest, [  --disable-sdltest       Do not try to compile and run 
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
     if test "x$enable_sdltest" = "xyes" ; then
       ac_save_CFLAGS="$CFLAGS"
+      ac_save_CXXFLAGS="$CXXFLAGS"
       ac_save_LIBS="$LIBS"
       CFLAGS="$CFLAGS $SDL_CFLAGS"
+      CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
       LIBS="$LIBS $SDL_LIBS"
 dnl
 dnl Now check if the installed SDL is sufficiently new. (Also sanity
@@ -2646,6 +2648,7 @@ int main (int argc, char *argv[])
 
 ],, no_sdl=yes,[echo $ac_n "cross compiling; assumed OK... $ac_c"])
        CFLAGS="$ac_save_CFLAGS"
+       CXXFLAGS="$ac_save_CXXFLAGS"
        LIBS="$ac_save_LIBS"
      fi
   fi
@@ -2665,6 +2668,7 @@ int main (int argc, char *argv[])
        else
           echo "*** Could not run SDL test program, checking why..."
           CFLAGS="$CFLAGS $SDL_CFLAGS"
+          CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
           LIBS="$LIBS $SDL_LIBS"
           AC_TRY_LINK([
 #include <stdio.h>
@@ -2689,6 +2693,7 @@ int main(int argc, char *argv[])
           echo "*** or that you have moved SDL since it was installed. In the latter case, you"
           echo "*** may want to edit the sdl-config script: $SDL_CONFIG" ])
           CFLAGS="$ac_save_CFLAGS"
+          CXXFLAGS="$ac_save_CXXFLAGS"
           LIBS="$ac_save_LIBS"
        fi
      fi
@@ -2703,13 +2708,16 @@ int main(int argc, char *argv[])
 
 dnl Perform a check for a GStreamer element using gst-inspect
 dnl Thomas Vander Stichele <thomas at apestaart dot org>
-dnl Last modification: 23/10/2002
+dnl Last modification: 25/01/2005
 
 dnl AM_GST_ELEMENT_CHECK(ELEMENT-NAME, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)
 
 AC_DEFUN([AM_GST_ELEMENT_CHECK],
 [
-  AC_CHECK_PROG(GST_INSPECT, gst-inspect, gst-inspect, [])
+  if test "x$GST_INSPECT" == "x"; then
+    AC_CHECK_PROG(GST_INSPECT, gst-inspect, gst-inspect, [])
+  fi
+
   if test "x$GST_INSPECT" != "x"; then
     AC_MSG_CHECKING(GStreamer element $1)
     if [ $GST_INSPECT $1 > /dev/null 2> /dev/null ]; then

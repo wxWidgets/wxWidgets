@@ -12779,6 +12779,11 @@ echo "${ECHO_T}$wx_cv_gccversion" >&6
               LIBS="$LIBS -lstdc++"
           fi
       fi
+      if test "$wxUSE_SHARED" = "yes" -a "$wxUSE_OMF" = "no"; then
+        { echo "$as_me:$LINENO: WARNING: Building DLLs requires OMF mode, enabled" >&5
+echo "$as_me: WARNING: Building DLLs requires OMF mode, enabled" >&2;}
+        wxUSE_OMF=yes
+      fi
       if test "$wxUSE_OMF" = "yes"; then
         LDFLAGS="$LDFLAGS -Zomf -Zlinker /PMTYPE:PM -Zlinker /EXEPACK"
       fi
@@ -35043,8 +35048,10 @@ echo $ECHO_N "checking for SDL - version >= $min_sdl_version... $ECHO_C" >&6
            sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
     if test "x$enable_sdltest" = "xyes" ; then
       ac_save_CFLAGS="$CFLAGS"
+      ac_save_CXXFLAGS="$CXXFLAGS"
       ac_save_LIBS="$LIBS"
       CFLAGS="$CFLAGS $SDL_CFLAGS"
+      CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
       LIBS="$LIBS $SDL_LIBS"
       rm -f conf.sdltest
       if test "$cross_compiling" = yes; then
@@ -35138,6 +35145,7 @@ fi
 rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
        CFLAGS="$ac_save_CFLAGS"
+       CXXFLAGS="$ac_save_CXXFLAGS"
        LIBS="$ac_save_LIBS"
      fi
   fi
@@ -35166,6 +35174,7 @@ echo "${ECHO_T}no" >&6
        else
           echo "*** Could not run SDL test program, checking why..."
           CFLAGS="$CFLAGS $SDL_CFLAGS"
+          CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
           LIBS="$LIBS $SDL_LIBS"
           cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -35233,6 +35242,7 @@ fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
           CFLAGS="$ac_save_CFLAGS"
+          CXXFLAGS="$ac_save_CXXFLAGS"
           LIBS="$ac_save_LIBS"
        fi
      fi
@@ -41273,10 +41283,10 @@ fi
 
 
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.1.6"
+    BAKEFILE_BAKEFILE_M4_VERSION="0.1.7"
 
 
-BAKEFILE_AUTOCONF_INC_M4_VERSION="0.1.6"
+BAKEFILE_AUTOCONF_INC_M4_VERSION="0.1.7"
 
 
 
