@@ -43,7 +43,7 @@
 
 //#define TEST_ARRAYS
 //#define TEST_CHARSET
-#define TEST_CMDLINE
+//#define TEST_CMDLINE
 //#define TEST_DATETIME
 //#define TEST_DIR
 //#define TEST_DLLLOADER
@@ -52,6 +52,7 @@
 //#define TEST_FILE
 //#define TEST_FILECONF
 //#define TEST_FILENAME
+#define TEST_FILETIME
 //#define TEST_FTP
 //#define TEST_HASH
 //#define TEST_INFO_FUNCTIONS
@@ -64,7 +65,7 @@
 //#define TEST_REGCONF
 //#define TEST_REGEX
 //#define TEST_REGISTRY
-#define TEST_SNGLINST
+//#define TEST_SNGLINST
 //#define TEST_SOCKETS
 //#define TEST_STREAMS
 //#define TEST_STRINGS
@@ -787,6 +788,48 @@ static void TestFileNameCwd()
 }
 
 #endif // TEST_FILENAME
+
+// ----------------------------------------------------------------------------
+// wxFileName time functions
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_FILETIME
+
+#include <wx/filename.h>
+#include <wx/datetime.h>
+
+static void TestFileGetTimes()
+{
+    wxFileName fn(_T("testdata.fc"));
+
+    wxDateTime dtAccess, dtMod, dtChange;
+    if ( !fn.GetTimes(&dtAccess, &dtMod, &dtChange) )
+    {
+        wxPrintf(_T("ERROR: GetTimes() failed.\n"));
+    }
+    else
+    {
+        static const wxChar *fmt = _T("%Y-%b-%d %H:%M:%S");
+
+        wxPrintf(_T("File times for '%s':\n"), fn.GetFullPath().c_str());
+        wxPrintf(_T("Access:      \t%s\n"), dtAccess.Format(fmt).c_str());
+        wxPrintf(_T("Mod/creation:\t%s\n"), dtMod.Format(fmt).c_str());
+        wxPrintf(_T("Change:      \t%s\n"), dtChange.Format(fmt).c_str());
+    }
+}
+
+static void TestFileSetTimes()
+{
+    wxFileName fn(_T("testdata.fc"));
+
+    wxDateTime dtAccess, dtMod, dtChange;
+    if ( !fn.Touch() )
+    {
+        wxPrintf(_T("ERROR: Touch() failed.\n"));
+    }
+}
+
+#endif // TEST_FILETIME
 
 // ----------------------------------------------------------------------------
 // wxHashTable
@@ -5077,6 +5120,11 @@ int main(int argc, char **argv)
         TestFileNameOperations();
     }
 #endif // TEST_FILENAME
+
+#ifdef TEST_FILETIME
+    TestFileGetTimes();
+    TestFileSetTimes();
+#endif // TEST_FILETIME
 
 #ifdef TEST_FTP
     wxLog::AddTraceMask(FTP_TRACE_MASK);

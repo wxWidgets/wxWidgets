@@ -120,14 +120,32 @@ private:
 // convert between wxDateTime and FILETIME which is a 64-bit value representing
 // the number of 100-nanosecond intervals since January 1, 1601.
 
-static void ConvertWxToFileTime(FILETIME *ft, const wxDateTime& dt)
-{
-    // TODO
-}
+// the number of milliseconds between the Unix Epoch (January 1, 1970) and the
+// FILETIME reference point (January 1, 1601)
+static const wxLongLong FILETIME_EPOCH_OFFSET = wxLongLong(0xa97, 0x30b66800);
 
 static void ConvertFileTimeToWx(wxDateTime *dt, const FILETIME &ft)
 {
-    // TODO
+    wxLongLong ll(ft.dwHighDateTime, ft.dwLowDateTime);
+
+    // convert 100ns to ms
+    ll /= 10000;
+
+    // move it to our Epoch
+    ll -= FILETIME_EPOCH_OFFSET;
+
+    *dt = wxDateTime(ll);
+}
+
+static void ConvertWxToFileTime(FILETIME *ft, const wxDateTime& dt)
+{
+    // do the reverse of ConvertFileTimeToWx()
+    wxLongLong ll = dt.GetValue();
+    ll *= 10000;
+    ll += FILETIME_EPOCH_OFFSET;
+
+    ft->dwHighDateTime = ll.GetHi();
+    ft->dwLowDateTime = ll.GetLo();
 }
 
 #endif // __WIN32__
