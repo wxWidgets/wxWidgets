@@ -1,9 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        missing.h
+// Name:        wx/msw/missing.h
 // Purpose:     Declarations for parts of the Win32 SDK that are missing in
-//              the version that comes with some compilers
+//              the versions that come with some compilers
 // Created:     2002/04/23
 // RCS-ID:      $Id$
+// Copyright:   (c) 2002 Mattia Barbon
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -392,6 +393,31 @@ typedef struct {
 #endif // !defined(TBIF_SIZE)
 
 #endif // wxUSE_TOOLBAR
+
+// ----------------------------------------------------------------------------
+// Tree control
+// ----------------------------------------------------------------------------
+
+#ifndef TVIS_FOCUSED
+    #define TVIS_FOCUSED            0x0001
+#endif
+
+#ifndef TV_FIRST
+    #define TV_FIRST                0x1100
+#endif
+
+#ifndef TVS_CHECKBOXES
+    #define TVS_CHECKBOXES          0x0100
+#endif
+
+#ifndef TVS_FULLROWSELECT
+    #define TVS_FULLROWSELECT       0x1000
+#endif
+
+#ifndef TVM_SETBKCOLOR
+    #define TVM_SETBKCOLOR          (TV_FIRST + 29)
+    #define TVM_SETTEXTCOLOR        (TV_FIRST + 30)
+#endif
 
 // ----------------------------------------------------------------------------
 // Misc stuff
