@@ -226,10 +226,24 @@ void wxCheckListBoxItem::Check(bool check)
         m_nIndex = (size_t)index;
     }
 
-    size_t nHeight = m_pParent->GetItemHeight();
-    size_t y = m_nIndex * nHeight;
-    RECT rcUpdate = { 0, y, GetDefaultMarginWidth(), y + nHeight};
-    InvalidateRect((HWND)m_pParent->GetHWND(), &rcUpdate, FALSE);
+    HWND hwndListbox = (HWND)m_pParent->GetHWND();
+
+    #ifdef __WIN32__
+        RECT rcUpdate;
+        
+        if ( ::SendMessage(hwndListbox, LB_GETITEMRECT,
+                           m_nIndex, (LPARAM)&rcUpdate) == LB_ERR )
+        {
+            wxLogDebug("LB_GETITEMRECT failed");
+        }
+    #else // Win16
+        // FIXME this doesn't work if the listbox is scrolled!
+        size_t nHeight = m_pParent->GetItemHeight();
+        size_t y = m_nIndex * nHeight;
+        RECT rcUpdate = { 0, y, GetDefaultMarginWidth(), y + nHeight};
+    #endif  // Win32/16
+
+    InvalidateRect(hwndListbox, &rcUpdate, FALSE);
     
     wxCommandEvent event(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, m_pParent->GetId());
     event.SetInt(m_nIndex);
@@ -357,8 +371,19 @@ void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
 {
   // clicking on the item selects it, clicking on the checkmark toggles
   if ( event.GetX() <= wxOwnerDrawn::GetDefaultMarginWidth() ) {
-    // FIXME better use LB_ITEMFROMPOINT perhaps?
-    size_t nItem = ((size_t)event.GetY()) / m_nItemHeight;
+    #ifdef __WIN32__
+      size_t nItem = (size_t)::SendMessage
+                               (
+                                (HWND)GetHWND(),
+                                LB_ITEMFROMPOINT,
+                                0,
+                                MAKELPARAM(event.GetX(), event.GetY())
+                               );
+    #else // Win16
+        // FIXME this doesn't work when the listbox is scrolled!
+        size_t nItem = ((size_t)event.GetY()) / m_nItemHeight;
+    #endif // Win32/16
+
     if ( nItem < (size_t)m_noItems )
       GetItem(nItem)->Toggle();
     //else: it's not an error, just click outside of client zone
