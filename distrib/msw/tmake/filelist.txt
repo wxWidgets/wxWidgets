@@ -1197,6 +1197,7 @@ NSPanel.h	CocoaH
 NSTextField.h	CocoaH
 NSView.h	CocoaH
 NSWindow.h	CocoaH
+ObjcAssociate.h	CocoaH
 ObjcPose.h	CocoaH
 # wx implementations
 app.h	CocoaH

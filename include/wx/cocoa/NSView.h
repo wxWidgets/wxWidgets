@@ -13,7 +13,7 @@
 #define __WX_COCOA_NSVIEW_H__
 
 #include "wx/hashmap.h"
-#include "wx/cocoa/ObjcPose.h"
+#include "wx/cocoa/ObjcAssociate.h"
 
 typedef struct _NSRect NSRect;
 

@@ -13,7 +13,7 @@
 #define __WX_COCOA_NSBOX_H__
 
 #include "wx/hashmap.h"
-#include "wx/cocoa/ObjcPose.h"
+#include "wx/cocoa/ObjcAssociate.h"
 
 WX_DECLARE_OBJC_HASHMAP(NSBox);
 class wxCocoaNSBox
