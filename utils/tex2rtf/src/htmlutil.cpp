@@ -874,6 +874,8 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
 
           if ( combineSubSections && !subsectionStarted )
           {
+            fflush(Sections);
+              
             // Read old .con file in at this point
             wxChar buf[256];
             wxStrcpy(buf, CurrentSectionFile);
@@ -1649,6 +1651,11 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
   {
     if (start)
     {
+      // NB: if this is uncommented, the table of contents
+      // completely disappears. If left commented, it's in the wrong
+      // place.
+      //fflush(Titlepage);
+
       FILE *fd = wxFopen(ContentsName, _T("r"));
       if (fd)
       {
@@ -1659,6 +1666,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
           ch = getc(fd);
         }
         fclose(fd);
+        fflush(Titlepage);
       }
       else
       {
@@ -3024,7 +3032,7 @@ bool HTMLGo(void)
       {
         SetCurrentOutput(tmpTitle);
         HTMLHead();
-        TexOutput(_T("\n<HEAD><TITLE>"));
+        TexOutput(_T("\n<TITLE>"));
         TraverseChildrenFromChunk(DocumentTitle);
         TexOutput(_T("</TITLE></HEAD>\n"));
       }
@@ -3058,6 +3066,7 @@ bool HTMLGo(void)
 
       // Output <BODY...> to temporary title page
       OutputBodyStart();
+      fflush(tmpTitle);
 
       // Concat titlepage
       FILE *fd = wxFopen(TitlepageName, _T("r"));
