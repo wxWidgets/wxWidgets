@@ -6,7 +6,7 @@ LIBRARY
 DESCRIPTION "PNG image compression library for Windows"
 
 EXPORTS
-;Version 1.2.6
+;Version 1.2.7
   png_build_grayscale_palette  @1
   png_check_sig        @2
   png_chunk_error      @3
@@ -191,3 +191,37 @@ EXPORTS
   png_write_init_3    @176
   png_info_init_3 @177
   png_destroy_struct  @178
+; Added at version 1.2.0
+; For use with PNG_USER_MEM_SUPPORTED
+  png_destroy_struct_2  @179
+  png_create_read_struct_2 @180
+  png_create_write_struct_2 @181
+  png_malloc_default @182
+  png_free_default @183
+; MNG features
+  png_permit_mng_features  @184
+; MMX support
+  png_mmx_support  @185
+  png_get_mmx_flagmask  @186
+  png_get_asm_flagmask  @187
+  png_get_asm_flags  @188
+  png_get_mmx_bitdepth_threshold  @189
+  png_get_mmx_rowbytes_threshold  @190
+  png_set_asm_flags  @191
+  png_init_mmx_flags  @192
+; Strip error numbers
+  png_set_strip_error_numbers @193
+; Added at version 1.2.2
+  png_handle_as_unknown @194
+; Added at version 1.2.2 and deleted from 1.2.3
+; png_zalloc @195
+; png_zfree @196
+; Added at version 1.2.4
+  png_malloc_warn @195
+; Added at version 1.2.6
+  png_malloc_warn @195
+  png_get_user_height_max @196
+  png_get_user_width_max @197
+  png_set_user_limits @198
+; Added at version 1.2.7
+  png_set_add_alpha @199
