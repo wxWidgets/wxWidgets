@@ -1185,7 +1185,7 @@ if test "$wxUSE_MOTIF" = 1; then
         AC_MSG_WARN(library will be compiled without support for images in XPM format)
     fi
 
-    GUI_TK_LINK="-lXm " $XPM_LINK "-lXmu -lXt -lX11 -lm"
+    GUI_TK_LINK="-lXm $(XPM_LINK)-lXmu -lXt -lX11 -lm"
     GUI_TK_LIBRARY="$CHECK_LIB $GUI_TK_LINK"
     TOOLKIT=MOTIF
     TOOLKIT_DEF=__WXMOTIF__

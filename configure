@@ -7028,7 +7028,7 @@ EOF
         echo "configure: warning: library will be compiled without support for images in XPM format" 1>&2
     fi
 
-    GUI_TK_LINK="-lXm " $XPM_LINK "-lXmu -lXt -lX11 -lm"
+    GUI_TK_LINK="-lXm $(XPM_LINK)-lXmu -lXt -lX11 -lm"
     GUI_TK_LIBRARY="$CHECK_LIB $GUI_TK_LINK"
     TOOLKIT=MOTIF
     TOOLKIT_DEF=__WXMOTIF__
@@ -7262,8 +7262,8 @@ fi
 
 
 if test "$wxUSE_SOCKETS" = "1"; then
-        echo $ac_n "checking what is the type of third argument of getsockname""... $ac_c" 1>&6
-echo "configure:7267: checking what is the type of third argument of getsockname" >&5
+        echo $ac_n "checking the type of the third argument of getsockname""... $ac_c" 1>&6
+echo "configure:7267: checking the type of the third argument of getsockname" >&5
     cat > conftest.$ac_ext <<EOF
 #line 7269 "configure"
 #include "confdefs.h"
