@@ -11,9 +11,10 @@ import utils
 # register a substitution function for it that provides additional knowledge
 # about the option (in this case that it does not contain dir separators and
 # so utils.nativePaths() doesn't have to do anything with it):
-def __noopSubst(func, opt):
-    return '$(%s)' % opt.name
+def __noopSubst(func, name):
+    return '$(%s)' % name
 utils.addSubstituteCallback('CFG', __noopSubst)
+utils.addSubstituteCallback('LIBDIRNAME', __noopSubst)
 
 
 def mk_wxid(id):
