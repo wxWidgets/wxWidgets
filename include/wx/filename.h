@@ -135,7 +135,7 @@ public:
     static wxFileName FileName(const wxString& file);
     static wxFileName DirName(const wxString& dir);
 
-    // test for existence
+    // file tests
 
         // is the filename valid at all?
     bool IsOk() const { return !m_dirs.IsEmpty() || !m_name.IsEmpty(); }
@@ -148,10 +148,32 @@ public:
     bool DirExists();
     static bool DirExists( const wxString &dir );
 
-        // Well, get modification time with sec resolution
-    wxDateTime GetModificationTime();
-    
         // VZ: also need: IsDirWritable(), IsFileExecutable() &c (TODO)
+
+    // time functions
+
+        // set the file creation and last access/mod times
+        // (any of the pointers may be NULL)
+    bool SetTimes(const wxDateTime *dtCreate,
+                  const wxDateTime *dtAccess,
+                  const wxDateTime *dtMod);
+
+        // set the access and modification times to the current moment
+    bool Touch();
+
+        // return the last access, last modification and last change times
+        // (any of the pointers may be NULL)
+    bool GetTimes(wxDateTime *dtAccess,
+                  wxDateTime *dtMod,
+                  wxDateTime *dtChange) const;
+
+        // convenience wrapper: get just the last mod time of the file
+    wxDateTime GetModificationTime() const
+    {
+        wxDateTime dtMod;
+        (void)GetTimes(NULL, &dtMod, NULL);
+        return dtMod;
+    }
 
     // various file/dir operations
 

@@ -39,14 +39,96 @@
 #include "wx/utils.h"
 
 #if wxUSE_DYNLIB_CLASS
-#include "wx/dynlib.h"
+    #include "wx/dynlib.h"
 #endif
 
 // For GetShort/LongPathName
 #ifdef __WIN32__
-#include <windows.h>
-#include "wx/msw/winundef.h"
+    #include <windows.h>
+
+    #include "wx/msw/winundef.h"
 #endif
+
+// utime() is POSIX so should normally be available on all Unices
+#ifdef __UNIX_LIKE__
+    #include <sys/types.h>
+    #include <utime.h>
+#endif
+
+// ----------------------------------------------------------------------------
+// private classes
+// ----------------------------------------------------------------------------
+
+// small helper class which opens and closes the file - we use it just to get
+// a file handle for the given file name to pass it to some Win32 API function
+#ifdef __WIN32__
+
+class wxFileHandle
+{
+public:
+    wxFileHandle(const wxString& filename)
+    {
+        m_hFile = ::CreateFile
+                    (
+                     filename,          // name
+                     GENERIC_READ,      // access mask
+                     0,                 // no sharing
+                     NULL,              // no secutity attr
+                     OPEN_EXISTING,     // creation disposition
+                     0,                 // no flags
+                     NULL               // no template file
+                    );
+
+        if ( m_hFile == INVALID_HANDLE_VALUE )
+        {
+            wxLogSysError(_("Failed to open '%s' for reading"),
+                          filename.c_str());
+        }
+    }
+
+    ~wxFileHandle()
+    {
+        if ( m_hFile != INVALID_HANDLE_VALUE )
+        {
+            if ( !::CloseHandle(m_hFile) )
+            {
+                wxLogSysError(_("Failed to close file handle"));
+            }
+        }
+    }
+
+    // return TRUE only if the file could be opened successfully
+    bool IsOk() const { return m_hFile != INVALID_HANDLE_VALUE; }
+
+    // get the handle
+    operator HANDLE() const { return m_hFile; }
+
+private:
+    HANDLE m_hFile;
+};
+
+#endif // __WIN32__
+
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+#ifdef __WIN32__
+
+// convert between wxDateTime and FILETIME which is a 64-bit value representing
+// the number of 100-nanosecond intervals since January 1, 1601.
+
+static void ConvertWxToFileTime(FILETIME *ft, const wxDateTime& dt)
+{
+    // TODO
+}
+
+static void ConvertFileTimeToWx(wxDateTime *dt, const FILETIME &ft)
+{
+    // TODO
+}
+
+#endif // __WIN32__
 
 // ============================================================================
 // implementation
@@ -150,13 +232,6 @@ bool wxFileName::DirExists()
 bool wxFileName::DirExists( const wxString &dir )
 {
     return ::wxDirExists( dir );
-}
-
-wxDateTime wxFileName::GetModificationTime()
-{
-    wxDateTime ret( wxFileModificationTime( GetFullPath() ) );
-
-    return ret;
 }
 
 // ----------------------------------------------------------------------------
@@ -814,3 +889,116 @@ void wxFileName::SplitPath(const wxString& fullpath,
         }
     }
 }
+
+// ----------------------------------------------------------------------------
+// time functions
+// ----------------------------------------------------------------------------
+
+bool wxFileName::SetTimes(const wxDateTime *dtCreate,
+                          const wxDateTime *dtAccess,
+                          const wxDateTime *dtMod)
+{
+#if defined(__UNIX_LIKE__)
+    utimbuf utm;
+    utm.actime = dtAccess ? dtAccess : dtAccess->GetTicks();
+    utm.modtime = dtMod ? dtMod : dtMod->GetTicks();
+    if ( utime(GetFullPath(), &utm) == 0 )
+    {
+        return TRUE;
+    }
+#elif defined(__WIN32__)
+    wxFileHandle fh(GetFullPath());
+    if ( fh.IsOk() )
+    {
+        FILETIME ftAccess, ftCreate, ftWrite;
+
+        if ( dtCreate )
+            ConvertWxToFileTime(&ftCreate, *dtCreate);
+        if ( dtAccess )
+            ConvertWxToFileTime(&ftAccess, *dtAccess);
+        if ( dtMod )
+            ConvertWxToFileTime(&ftWrite, *dtMod);
+
+        if ( ::SetFileTime(fh,
+                           dtCreate ? &ftCreate : NULL,
+                           dtAccess ? &ftAccess : NULL,
+                           dtMod ? &ftWrite : NULL) )
+        {
+            return TRUE;
+        }
+    }
+#else // other platform
+#endif // platforms
+
+    wxLogSysError(_("Failed to modify file times for '%s'"),
+                  GetFullPath().c_str());
+
+    return FALSE;
+}
+
+bool wxFileName::Touch()
+{
+#if defined(__UNIX_LIKE__)
+    // under Unix touching file is simple: just pass NULL to utime()
+    if ( utime(GetFullPath(), NULL) == 0 )
+    {
+        return TRUE;
+    }
+
+    wxLogSysError(_("Failed to touch the file '%s'"), GetFullPath().c_str());
+
+    return FALSE;
+#else // other platform
+    wxDateTime dtNow = wxDateTime::Now();
+
+    return SetTimes(NULL /* don't change create time */, &dtNow, &dtNow);
+#endif // platforms
+}
+
+bool wxFileName::GetTimes(wxDateTime *dtAccess,
+                          wxDateTime *dtMod,
+                          wxDateTime *dtChange) const
+{
+#if defined(__UNIX_LIKE__)
+    wxStructStat stBuf;
+    if ( wxStat(GetFullPath(), &stBuf) == 0 )
+    {
+        if ( dtAccess )
+            dtAccess->Set(stBuf.st_atime);
+        if ( dtMod )
+            dtMod->Set(stBuf.st_mtime);
+        if ( dtChange )
+            dtChange->Set(stBuf.st_ctime);
+
+        return TRUE;
+    }
+#elif defined(__WIN32__)
+    wxFileHandle fh(GetFullPath());
+    if ( fh.IsOk() )
+    {
+        FILETIME ftAccess, ftCreate, ftWrite;
+
+        if ( ::GetFileTime(fh,
+                           dtMod ? &ftCreate : NULL,
+                           dtAccess ? &ftAccess : NULL,
+                           dtChange ? &ftWrite : NULL) )
+        {
+            if ( dtMod )
+                ConvertFileTimeToWx(dtMod, ftCreate);
+            if ( dtAccess )
+                ConvertFileTimeToWx(dtAccess, ftAccess);
+            if ( dtChange )
+                ConvertFileTimeToWx(dtChange, ftWrite);
+
+            return TRUE;
+        }
+    }
+#else // other platform
+#endif // platforms
+
+    wxLogSysError(_("Failed to retrieve file times for '%s'"),
+                  GetFullPath().c_str());
+
+    return FALSE;
+}
+
