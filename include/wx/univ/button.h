@@ -73,7 +73,8 @@ public:
 
 protected:
     virtual wxInputHandler *CreateInputHandler() const;
-    virtual bool PerformAction(const wxControlAction& action);
+    virtual bool PerformAction(const wxControlAction& action,
+                               const wxEvent& event);
     virtual wxSize DoGetBestSize() const;
     virtual void DoDraw(wxControlRenderer *renderer);
 

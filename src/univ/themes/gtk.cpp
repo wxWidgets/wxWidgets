@@ -112,8 +112,8 @@ private:
 class wxGTKInputHandler : public wxInputHandler
 {
 public:
-    virtual wxControlAction Map(const wxKeyEvent& event, bool pressed);
-    virtual wxControlAction Map(const wxMouseEvent& event);
+    virtual wxControlActions Map(const wxKeyEvent& event, bool pressed);
+    virtual wxControlActions Map(const wxMouseEvent& event);
 };
 
 class wxGTKButtonInputHandler : public wxGTKInputHandler
@@ -121,11 +121,12 @@ class wxGTKButtonInputHandler : public wxGTKInputHandler
 public:
     wxGTKButtonInputHandler();
 
-    virtual wxControlAction Map(const wxKeyEvent& event, bool pressed);
-    virtual wxControlAction Map(const wxMouseEvent& event);
+    virtual wxControlActions Map(const wxKeyEvent& event, bool pressed);
+    virtual wxControlActions Map(const wxMouseEvent& event);
 
 private:
     wxWindow *m_winCapture;
+    bool      m_winHasMouse;
 };
 
 // ----------------------------------------------------------------------------
@@ -442,6 +443,11 @@ void wxGTKRenderer::DrawButtonBorder(wxDC& dc,
 
         if ( flags & wxRENDER_DEFAULT )
         {
+            // TODO
+        }
+
+        if ( flags & wxRENDER_FOCUSED )
+        {
             // button is currently default: add an extra border around it
             DrawRect(dc, &rect, m_penBlack);
         }
@@ -449,8 +455,8 @@ void wxGTKRenderer::DrawButtonBorder(wxDC& dc,
         // now draw a normal button
         DrawShadedRect(dc, &rect, m_penHighlight, m_penBlack);
         DrawAntiShadedRect(dc, &rect,
-                           flags & wxRENDER_HIGHLIGHT ? m_penHighlight
-                                                      : m_penLightGrey,
+                           flags & wxRENDER_CURRENT ? m_penHighlight
+                                                    : m_penLightGrey,
                            m_penDarkGrey);
     }
 
@@ -551,7 +557,7 @@ void wxGTKRenderer::DrawBackground(wxDC& dc,
     {
         colBg = wxColour(0x7f7f7f);
     }
-    else if ( flags & wxRENDER_HIGHLIGHT )
+    else if ( flags & wxRENDER_CURRENT )
     {
         colBg = wxColour(0xe0e0e0);
     }
@@ -620,12 +626,12 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
 // wxGTKInputHandler
 // ----------------------------------------------------------------------------
 
-wxControlAction wxGTKInputHandler::Map(const wxKeyEvent& event, bool pressed)
+wxControlActions wxGTKInputHandler::Map(const wxKeyEvent& event, bool pressed)
 {
     return wxACTION_NONE;
 }
 
-wxControlAction wxGTKInputHandler::Map(const wxMouseEvent& event)
+wxControlActions wxGTKInputHandler::Map(const wxMouseEvent& event)
 {
     if ( event.Entering() )
         return wxACTION_HIGHLIGHT;
@@ -644,8 +650,8 @@ wxGTKButtonInputHandler::wxGTKButtonInputHandler()
     m_winCapture = NULL;
 }
 
-wxControlAction wxGTKButtonInputHandler::Map(const wxKeyEvent& event,
-                                               bool pressed)
+wxControlActions wxGTKButtonInputHandler::Map(const wxKeyEvent& event,
+                                              bool pressed)
 {
     int keycode = event.GetKeyCode();
     if ( keycode == WXK_SPACE || keycode == WXK_RETURN )
@@ -656,18 +662,67 @@ wxControlAction wxGTKButtonInputHandler::Map(const wxKeyEvent& event,
     return wxGTKInputHandler::Map(event, pressed);
 }
 
-wxControlAction wxGTKButtonInputHandler::Map(const wxMouseEvent& event)
+wxControlActions wxGTKButtonInputHandler::Map(const wxMouseEvent& event)
 {
     if ( event.IsButton() )
     {
+        if ( event.ButtonDown() )
+        {
+            m_winCapture = wxWindow::FindFocus();
+            m_winCapture->CaptureMouse();
+            m_winHasMouse = TRUE;
+        }
+        else // up
+        {
+            m_winCapture->ReleaseMouse();
+            m_winCapture = NULL;
+
+            if ( !m_winHasMouse )
+            {
+                // the mouse was released outside the window, this doesn't
+                // count as a click
+                return wxGTKInputHandler::Map(event);
+            }
+        }
+
         return wxACTION_BUTTON_TOGGLE;
     }
-#if 0 // TODO
-    else if ( event.Leaving() )
+
+    // leaving the button should remove its pressed state
+    if ( event.Leaving() )
     {
-        return wxACTION_BUTTON_RELEASE;
+        wxControlActions actions;
+        if ( m_winCapture )
+        {
+            // we do have a pressed button
+            actions.Add(wxACTION_BUTTON_RELEASE);
+
+            // remember that the mouse is now outside
+            m_winHasMouse = FALSE;
+        }
+
+        actions.Add(wxGTKInputHandler::Map(event));
+
+        return actions;
     }
-#endif // 0
+
+    // entering it back should make it pressed again if it had been pressed
+    if ( event.Entering() )
+    {
+        wxControlActions actions;
+        if ( m_winCapture )
+        {
+            // we do have a pressed button
+            actions.Add(wxACTION_BUTTON_PRESS);
+
+            // and the mouse is (back) inside it
+            m_winHasMouse = TRUE;
+        }
+
+        actions.Add(wxGTKInputHandler::Map(event));
+
+        return actions;
+    }
 
     return wxGTKInputHandler::Map(event);
 }

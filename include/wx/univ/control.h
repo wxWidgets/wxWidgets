@@ -21,10 +21,32 @@ class WXDLLEXPORT wxInputHandler;
 
 // ----------------------------------------------------------------------------
 // wxControlAction: the action is currently just a string which identifies it,
-// later it might become an atom (i.e. an opaque handler to string)
+// later it might become an atom (i.e. an opaque handler to string). As one
+// input event may result in several control actions (e.g. a macro expansion
+// in the text control) we define an array of actions as well.
 // ----------------------------------------------------------------------------
 
 typedef wxString wxControlAction;
+class WXDLLEXPORT wxControlActions : public wxArrayString
+{
+public:
+    wxControlActions() { }
+    wxControlActions(const wxControlAction& action)
+        { wxArrayString::Add(action); }
+    wxControlActions(const wxChar *action)
+        { wxArrayString::Add(action); }
+
+    wxControlActions& Add(const wxControlActions& other)
+    {
+        size_t count = other.GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            wxArrayString::Add(other[n]);
+        }
+
+        return *this;
+    }
+};
 
 // the list of actions which apply to all controls (other actions are defined
 // in the controls headers)
@@ -68,12 +90,12 @@ public:
 
     // get the state information
     virtual bool IsFocused() const;
-    virtual bool IsHighlighted() const;
+    virtual bool IsCurrent() const;
     virtual bool IsPressed() const;
     virtual bool IsDefault() const;
 
     // operations
-    void Highlight(bool doit = TRUE);
+    void SetCurrent(bool doit = TRUE);
 
     // implementation only from now on
 
@@ -94,18 +116,25 @@ protected:
     // draw the controls contents
     virtual void DoDraw(wxControlRenderer *renderer);
 
-    // perform the action, return TRUE if the control must be updated
-    virtual bool PerformAction(const wxControlAction& action);
+    // perform the action which resulted from the translation of the event
+    // (the exact event type depends on the action), return TRUE if the
+    // control must be updated
+    virtual bool PerformAction(const wxControlAction& action,
+                               const wxEvent& event);
 
     // event handlers
     void OnMouse(wxMouseEvent& event);
     void OnKeyDown(wxKeyEvent& event);
     void OnKeyUp(wxKeyEvent& event);
+    void OnFocus(wxFocusEvent& event);
     void OnPaint(wxPaintEvent& event);
 
 private:
     // common part of all ctors
     void Init();
+
+    // common part of OnMouse/OnKeyDown/Up
+    void PerformActions(const wxControlActions& actions, const wxEvent& event);
 
     // input processor
     wxInputHandler *m_handler;
@@ -115,7 +144,7 @@ private:
     int        m_indexAccel;
 
     // state
-    bool m_isHighlighted;
+    bool m_isCurrent;
 
     DECLARE_DYNAMIC_CLASS(wxControl)
     DECLARE_EVENT_TABLE()

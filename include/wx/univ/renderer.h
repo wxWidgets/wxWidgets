@@ -37,10 +37,10 @@ class WXDLLEXPORT wxWindow;
 enum
 {
     wxRENDER_ENABLED    = 0x00000001,
-    wxRENDER_FOCUSED    = 0x00000002,
+    wxRENDER_FOCUSED    = 0x00000002,   // control currently has keyboard focus
     wxRENDER_PRESSED    = 0x00000004,
-    wxRENDER_DEFAULT    = 0x00000008,      // button...
-    wxRENDER_HIGHLIGHT  = 0x00000010,
+    wxRENDER_DEFAULT    = 0x00000008,   // only applies to the buttons
+    wxRENDER_CURRENT    = 0x00000010,   // mouse is currently over the control
 
     wxRENDER_FLAGS_MASK = 0x0000001f
 };

@@ -151,7 +151,8 @@ void wxButton::Click()
     Command(event);
 }
 
-bool wxButton::PerformAction(const wxControlAction& action)
+bool wxButton::PerformAction(const wxControlAction& action,
+                             const wxEvent& event)
 {
     bool wasPressed = IsPressed();
 
@@ -164,7 +165,7 @@ bool wxButton::PerformAction(const wxControlAction& action)
     else if ( action == wxACTION_BUTTON_RELEASE )
         Release();
     else
-        return wxControl::PerformAction(action);
+        return wxControl::PerformAction(action, event);
 
     return wasPressed != IsPressed();
 }

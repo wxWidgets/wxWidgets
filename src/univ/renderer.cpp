@@ -73,8 +73,8 @@ int wxControlRenderer::GetStateFlags() const
     // it is not, even our default/focused controls shouldn't appear as such
     if ( wxTheApp->IsActive() )
     {
-        if ( m_ctrl->IsHighlighted() )
-            flags |= wxRENDER_HIGHLIGHT;
+        if ( m_ctrl->IsCurrent() )
+            flags |= wxRENDER_CURRENT;
         if ( m_ctrl->IsFocused() )
             flags |= wxRENDER_FOCUSED;
         if ( m_ctrl->IsPressed() )

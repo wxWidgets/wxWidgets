@@ -195,7 +195,11 @@ extern wxList     wxPendingDelete;
 extern bool       g_blockEventsOnDrag;
 extern bool       g_blockEventsOnScroll;
 extern wxCursor   g_globalCursor;
+
+// mouse capture state: the window which has it and if the mouse is currently
+// inside it
 static wxWindow  *g_captureWindow = (wxWindow*) NULL;
+static bool g_captureWindowHasMouse = FALSE;
 
 /* extern */ wxWindow  *g_focusWindow = (wxWindow*) NULL;
 
@@ -1366,11 +1370,31 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
     return FALSE;
 }
 
+// ============================================================================
+// the mouse events
+// ============================================================================
+
+// init wxMouseEvent with the info from gdk_event
+#define InitMouseEvent(event, gdk_event) \
+    event.SetTimestamp( gdk_event->time ); \
+    event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK); \
+    event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK); \
+    event.m_altDown = (gdk_event->state & GDK_MOD1_MASK); \
+    event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK); \
+    event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK); \
+    event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK); \
+    event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK); \
+\
+    event.m_x = (wxCoord)gdk_event->x; \
+    event.m_y = (wxCoord)gdk_event->y \
+
 //-----------------------------------------------------------------------------
 // "motion_notify_event"
 //-----------------------------------------------------------------------------
 
-static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event, wxWindow *win )
+static gint gtk_window_motion_notify_callback( GtkWidget *widget,
+                                               GdkEventMotion *gdk_event,
+                                               wxWindow *win )
 {
     DEBUG_MAIN_THREAD
 
@@ -1401,23 +1425,31 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
 */
 
     wxMouseEvent event( wxEVT_MOTION );
-    event.SetTimestamp( gdk_event->time );
-    event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
-    event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
-    event.m_altDown = (gdk_event->state & GDK_MOD1_MASK);
-    event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK);
-    event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK);
-    event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK);
-    event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK);
+    InitMouseEvent(event, gdk_event);
 
-    event.m_x = (wxCoord)gdk_event->x;
-    event.m_y = (wxCoord)gdk_event->y;
-
-    // Some control don't have their own X window and thus cannot get
-    // any events.
-
-    if (!g_captureWindow)
+    if ( g_captureWindow )
     {
+        // synthetize a mouse enter or leave event if needed
+        GdkWindow *winUnderMouse = gdk_window_at_pointer(NULL, NULL);
+        bool hasMouse = winUnderMouse == gdk_event->window;
+        if ( hasMouse != g_captureWindowHasMouse )
+        {
+            // the mouse changed window
+            g_captureWindowHasMouse = hasMouse;
+
+            printf("Generating mouse %s event.\n",
+                   g_captureWindowHasMouse ? "enter" : "leave");
+            wxMouseEvent event(g_captureWindowHasMouse ? wxEVT_ENTER_WINDOW
+                                                       : wxEVT_LEAVE_WINDOW);
+            InitMouseEvent(event, gdk_event);
+            win->GetEventHandler()->ProcessEvent(event);
+        }
+    }
+    else // no capture
+    {
+        // Some control don't have their own X window and thus cannot get
+        // any events.
+
         wxCoord x = event.m_x;
         wxCoord y = event.m_y;
         if (win->m_wxwindow)
@@ -1646,16 +1678,7 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
     gdk_window_get_pointer( widget->window, &x, &y, &state );
 
-    event.m_shiftDown = (state & GDK_SHIFT_MASK);
-    event.m_controlDown = (state & GDK_CONTROL_MASK);
-    event.m_altDown = (state & GDK_MOD1_MASK);
-    event.m_metaDown = (state & GDK_MOD2_MASK);
-    event.m_leftDown = (state & GDK_BUTTON1_MASK);
-    event.m_middleDown = (state & GDK_BUTTON2_MASK);
-    event.m_rightDown = (state & GDK_BUTTON3_MASK);
-
-    event.m_x = x;
-    event.m_y = y;
+    InitMouseEvent(event, gdk_event);
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
@@ -3528,6 +3551,7 @@ void wxWindow::CaptureMouse()
                       cursor->GetCursor(),
                       (guint32)GDK_CURRENT_TIME );
     g_captureWindow = this;
+    g_captureWindowHasMouse = TRUE;
 }
 
 void wxWindow::ReleaseMouse()

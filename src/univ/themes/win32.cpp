@@ -107,8 +107,8 @@ private:
 class wxWin32InputHandler : public wxInputHandler
 {
 public:
-    virtual wxControlAction Map(const wxKeyEvent& event, bool pressed);
-    virtual wxControlAction Map(const wxMouseEvent& event);
+    virtual wxControlActions Map(const wxKeyEvent& event, bool pressed);
+    virtual wxControlActions Map(const wxMouseEvent& event);
 };
 
 class wxWin32ButtonInputHandler : public wxWin32InputHandler
@@ -116,8 +116,8 @@ class wxWin32ButtonInputHandler : public wxWin32InputHandler
 public:
     wxWin32ButtonInputHandler();
 
-    virtual wxControlAction Map(const wxKeyEvent& event, bool pressed);
-    virtual wxControlAction Map(const wxMouseEvent& event);
+    virtual wxControlActions Map(const wxKeyEvent& event, bool pressed);
+    virtual wxControlActions Map(const wxMouseEvent& event);
 
 private:
     wxWindow *m_winCapture;
@@ -617,12 +617,12 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
 // wxWin32InputHandler
 // ----------------------------------------------------------------------------
 
-wxControlAction wxWin32InputHandler::Map(const wxKeyEvent& event, bool pressed)
+wxControlActions wxWin32InputHandler::Map(const wxKeyEvent& event, bool pressed)
 {
     return wxACTION_NONE;
 }
 
-wxControlAction wxWin32InputHandler::Map(const wxMouseEvent& event)
+wxControlActions wxWin32InputHandler::Map(const wxMouseEvent& event)
 {
     return wxACTION_NONE;
 }
@@ -636,8 +636,8 @@ wxWin32ButtonInputHandler::wxWin32ButtonInputHandler()
     m_winCapture = NULL;
 }
 
-wxControlAction wxWin32ButtonInputHandler::Map(const wxKeyEvent& event,
-                                               bool pressed)
+wxControlActions wxWin32ButtonInputHandler::Map(const wxKeyEvent& event,
+                                                bool pressed)
 {
     int keycode = event.GetKeyCode();
     if ( keycode == WXK_SPACE || keycode == WXK_RETURN )
@@ -648,7 +648,7 @@ wxControlAction wxWin32ButtonInputHandler::Map(const wxKeyEvent& event,
     return wxWin32InputHandler::Map(event, pressed);
 }
 
-wxControlAction wxWin32ButtonInputHandler::Map(const wxMouseEvent& event)
+wxControlActions wxWin32ButtonInputHandler::Map(const wxMouseEvent& event)
 {
     if ( event.IsButton() )
     {

@@ -57,6 +57,9 @@ BEGIN_EVENT_TABLE(wxControl, wxControlBase)
     EVT_LEAVE_WINDOW(wxControl::OnMouse)
     EVT_ENTER_WINDOW(wxControl::OnMouse)
 
+    EVT_SET_FOCUS(wxControl::OnFocus)
+    EVT_KILL_FOCUS(wxControl::OnFocus)
+
     EVT_PAINT(wxControl::OnPaint)
 END_EVENT_TABLE()
 
@@ -67,7 +70,7 @@ END_EVENT_TABLE()
 void wxControl::Init()
 {
     m_indexAccel = -1;
-    m_isHighlighted = FALSE;
+    m_isCurrent = FALSE;
 }
 
 bool wxControl::Create(wxWindow *parent,
@@ -108,14 +111,14 @@ bool wxControl::IsDefault() const
     return FALSE;
 }
 
-bool wxControl::IsHighlighted() const
+bool wxControl::IsCurrent() const
 {
-    return m_isHighlighted;
+    return m_isCurrent;
 }
 
-void wxControl::Highlight(bool doit)
+void wxControl::SetCurrent(bool doit)
 {
-    m_isHighlighted = doit;
+    m_isCurrent = doit;
 }
 
 // ----------------------------------------------------------------------------
@@ -186,6 +189,15 @@ void wxControl::DoDraw(wxControlRenderer *renderer)
 }
 
 // ----------------------------------------------------------------------------
+// focus handling
+// ----------------------------------------------------------------------------
+
+void wxControl::OnFocus(wxFocusEvent& event)
+{
+    Refresh();
+}
+
+// ----------------------------------------------------------------------------
 // input processing
 // ----------------------------------------------------------------------------
 
@@ -196,37 +208,48 @@ wxInputHandler *wxControl::CreateInputHandler() const
 
 void wxControl::OnKeyDown(wxKeyEvent& event)
 {
-    if ( PerformAction(m_handler->Map(event, TRUE)) )
-    {
-        Refresh();
-    }
+    PerformActions(m_handler->Map(event, TRUE), event);
 }
 
 void wxControl::OnKeyUp(wxKeyEvent& event)
 {
-    if ( PerformAction(m_handler->Map(event, FALSE)) )
-    {
-        Refresh();
-    }
+    PerformActions(m_handler->Map(event, FALSE), event);
 }
 
 void wxControl::OnMouse(wxMouseEvent& event)
 {
-    if ( PerformAction(m_handler->Map(event)) )
-    {
-        Refresh();
-    }
+    PerformActions(m_handler->Map(event), event);
 }
 
-bool wxControl::PerformAction(const wxControlAction& action)
+// ----------------------------------------------------------------------------
+// the actions
+// ----------------------------------------------------------------------------
+
+void wxControl::PerformActions(const wxControlActions& actions,
+                               const wxEvent& event)
+{
+    bool needsRefresh = FALSE;
+    size_t count = actions.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        if ( PerformAction(actions[n], event) )
+            needsRefresh = TRUE;
+    }
+
+    if ( needsRefresh )
+        Refresh();
+}
+
+bool wxControl::PerformAction(const wxControlAction& action,
+                              const wxEvent& event)
 {
     if ( (action == wxACTION_NONE) || !AcceptsFocus() )
         return FALSE;
 
     if ( action == wxACTION_HIGHLIGHT )
-        Highlight(TRUE);
+        SetCurrent(TRUE);
     else if ( action == wxACTION_UNHIGHLIGHT )
-        Highlight(FALSE);
+        SetCurrent(FALSE);
     else
         return FALSE;
 

@@ -17,7 +17,7 @@
     #pragma interface "inphand.h"
 #endif
 
-#include "wx/control.h" // for wxControlAction
+#include "wx/control.h" // for wxControlAction(s)
 
 // ----------------------------------------------------------------------------
 // wxInputHandler: maps the events to the actions
@@ -26,12 +26,12 @@
 class WXDLLEXPORT wxInputHandler
 {
 public:
-    // map a keyboard event to an action (pressed == TRUE if the key was
-    // pressed, FALSE if released)
-    virtual wxControlAction Map(const wxKeyEvent& event, bool pressed) = 0;
+    // map a keyboard event to one or more actions (pressed == TRUE if the key
+    // was pressed, FALSE if released)
+    virtual wxControlActions Map(const wxKeyEvent& event, bool pressed) = 0;
 
-    // map a mouse event to an action
-    virtual wxControlAction Map(const wxMouseEvent& event) = 0;
+    // map a mouse event to one or more actions
+    virtual wxControlActions Map(const wxMouseEvent& event) = 0;
 
     // virtual dtor for any base class
     virtual ~wxInputHandler();

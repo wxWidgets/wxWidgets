@@ -39,6 +39,21 @@
     #include "wx/stattext.h"
 #endif
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// control ids
+enum
+{
+    Univ_Button1,
+    Univ_Button2
+};
+
+// ----------------------------------------------------------------------------
+// our classes
+// ----------------------------------------------------------------------------
+
 // Define a new application type, each program should derive a class from wxApp
 class MyUnivApp : public wxApp
 {
@@ -61,6 +76,7 @@ public:
 
 protected:
     // event handlers
+    void OnButton(wxCommandEvent& event);
     void OnLeftUp(wxMouseEvent& event);
 
 private:
@@ -75,6 +91,8 @@ private:
 IMPLEMENT_APP(MyUnivApp)
 
 BEGIN_EVENT_TABLE(MyUnivFrame, wxFrame)
+    EVT_BUTTON(-1, MyUnivFrame::OnButton)
+
     EVT_LEFT_UP(MyUnivFrame::OnLeftUp)
 END_EVENT_TABLE()
 
@@ -152,7 +170,14 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 
     #undef CREATE_STATIC_ALIGN_DEMO
 
-    new wxButton(this, -1, _T("&Press me"), wxPoint(10, 300));
+    new wxButton(this, Univ_Button1, _T("&Press me"), wxPoint(10, 300));
+    new wxButton(this, Univ_Button2, _T("&And me"), wxPoint(100, 300));
+}
+
+void MyUnivFrame::OnButton(wxCommandEvent& event)
+{
+    wxLogDebug(_T("Button %d pressed."),
+               event.GetId() == Univ_Button1 ? 1 : 2);
 }
 
 void MyUnivFrame::OnLeftUp(wxMouseEvent& event)
