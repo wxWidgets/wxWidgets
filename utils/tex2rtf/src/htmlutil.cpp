@@ -202,9 +202,10 @@ void ReopenFile(FILE **fd, wxChar **fileName, const wxChar *label)
   }
   else
   {
+    if (fileId == 1)
+      gs_filenames.Add(wxEmptyString);
     wxSprintf(buf, _T("%s_%s.html"), FileRoot, label);
-    gs_filenames.SetCount(fileId + 1);
-    gs_filenames[fileId] = buf;
+    gs_filenames.Add(buf);
   }
   if (*fileName) delete[] *fileName;
   *fileName = copystring(wxFileNameFromPath(buf));
