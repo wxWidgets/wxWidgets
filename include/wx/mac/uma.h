@@ -116,7 +116,7 @@ ControlHandle ::NewControl(WindowPtr 				owningWindow,
 //void UMAHiliteControl	(ControlHandle 			theControl,
 //								 ControlPartCode 		hiliteState)	;
 void UMAShowControl						(ControlHandle 			theControl)	;
-//void UMAHideControl						(ControlHandle 			theControl);
+void UMAHideControl						(ControlHandle 			theControl);
 //void UMASetControlVisibility			(ControlHandle 			inControl,
 //								 Boolean 				inIsVisible,
 //								 Boolean 				inDoDraw);
