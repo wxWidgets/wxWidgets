@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
-<resource xmlns="http://www.wxwindows.org/wxxrc">
+<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
   <object class="wxMenuBar" name="mainmenu">
     <style>wxMB_DOCKABLE</style>
     <object class="wxMenu" name="menu_file">
-      <label>$File</label>
+      <label>_File</label>
       <style>wxMENU_TEAROFF</style>
       <object class="wxMenuItem" name="menu_about">
-        <label>$About...</label>
+        <label>_About...</label>
         <bitmap>filesave.gif</bitmap>
       </object>
       <object class="separator"/>
@@ -18,7 +18,7 @@
       </object>
       <object class="separator"/>
       <object class="wxMenuItem" name="menu_quit">
-        <label>E$xit\tAlt-X</label>
+        <label>E_xit\tAlt-X</label>
       </object>
     </object>
   </object>
