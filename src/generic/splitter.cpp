@@ -173,6 +173,9 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         m_dragMode = wxSPLIT_DRAG_NONE;
         ReleaseMouse();
 
+#ifdef __WXGTK__
+        SetCursor(* wxSTANDARD_CURSOR);
+#endif
         // Erase old tracker
         DrawSashTracker(m_oldX, m_oldY);
 

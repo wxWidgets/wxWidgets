@@ -107,7 +107,30 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
         m_widget = gtk_hscale_new( (GtkAdjustment *) NULL );
     
     if (style & wxSL_LABELS)
+    {
         gtk_scale_set_draw_value( GTK_SCALE( m_widget ), TRUE );
+	
+	/* labels need more space and too small window will
+	   cause junk to appear on the dialog */
+        if (style & wxSL_VERTICAL)
+	{
+	    wxSize sz( size );
+	    if (sz.x < 35)
+	    {
+	        sz.x = 35;
+		SetSize( sz );
+	    }
+	}
+        else
+	{
+	    wxSize sz( size );
+	    if (sz.y < 35)
+	    {
+	        sz.y = 35;
+		SetSize( sz );
+	    }
+	}
+    }
     else
         gtk_scale_set_draw_value( GTK_SCALE( m_widget ), FALSE );
 

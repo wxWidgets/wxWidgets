@@ -162,6 +162,9 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
         m_widget = gtk_handle_box_new();
 	gtk_container_add( GTK_CONTAINER(m_widget), GTK_WIDGET(m_toolbar) );
 	gtk_widget_show( GTK_WIDGET(m_toolbar) );
+	
+	if (style & wxTB_FLAT)
+            gtk_handle_box_set_shadow_type( GTK_HANDLE_BOX(m_widget), GTK_SHADOW_NONE );
     }
     else
     {     
@@ -169,6 +172,11 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
     }
 					    
     gtk_toolbar_set_tooltips( GTK_TOOLBAR(m_toolbar), TRUE );
+    
+#if (GTK_MINOR_VERSION > 0)
+    if (style & wxTB_FLAT)
+        gtk_toolbar_set_button_relief( GTK_TOOLBAR(m_toolbar), GTK_RELIEF_NONE );
+#endif
 
     m_fg = new GdkColor;
     m_fg->red = 0;

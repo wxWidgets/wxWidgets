@@ -420,9 +420,9 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 #define wxTB_3DBUTTONS      0x8000
 #define wxTB_HORIZONTAL     0x0002
 #define wxTB_VERTICAL       0x0004
-// Flatbar/Coolbar under Win98
+// Flatbar/Coolbar under Win98/ GTK 1.2
 #define wxTB_FLAT           0x0008
-// use native docking
+// use native docking under GTK
 #define wxTB_DOCKABLE       0x0010
 
 /*

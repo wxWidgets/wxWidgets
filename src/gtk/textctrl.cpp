@@ -960,6 +960,8 @@ void wxTextCtrl::SetBackgroundColour( const wxColour &colour )
     wxCHECK_RET( m_text != NULL, _T("invalid text ctrl") );
 
     wxControl::SetBackgroundColour( colour );
+    
+    if (!m_widget->window) return;
 
     wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
     if (sysbg.Red() == colour.Red() &&
@@ -974,6 +976,7 @@ void wxTextCtrl::SetBackgroundColour( const wxColour &colour )
     if (m_windowStyle & wxTE_MULTILINE)
     {
         GdkWindow *window = GTK_TEXT(m_text)->text_area;
+	if (!window) return;
         m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
         gdk_window_set_background( window, m_backgroundColour.GetColor() );
         gdk_window_clear( window );
