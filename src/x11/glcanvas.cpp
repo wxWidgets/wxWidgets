@@ -61,7 +61,7 @@ wxGLContext::wxGLContext( bool WXUNUSED(isRGB), wxWindow *win,
     
     wxCHECK_RET( vi, "invalid visual for OpenGl" );
     
-    m_glContext = glXCreateContext( (Display *)m_window->GetXDisplay(), vi,
+    m_glContext = glXCreateContext( (Display *)wxGetDisplay(), vi,
                                     None, GL_TRUE);
   
     wxCHECK_RET( m_glContext, "Couldn't create OpenGl context" );
@@ -82,10 +82,10 @@ wxGLContext::wxGLContext(
     wxCHECK_RET( vi, "invalid visual for OpenGl" );
     
     if( other != 0 )
-        m_glContext = glXCreateContext( (Display *)m_window->GetXDisplay(), vi, 
+        m_glContext = glXCreateContext( (Display *)wxGetDisplay(), vi, 
                                         other->m_glContext, GL_TRUE );
     else
-        m_glContext = glXCreateContext( (Display *)m_window->GetXDisplay(), vi,
+        m_glContext = glXCreateContext( (Display *)wxGetDisplay(), vi,
                                         None, GL_TRUE );
     
     wxCHECK_RET( m_glContext, "Couldn't create OpenGl context" );
@@ -97,18 +97,18 @@ wxGLContext::~wxGLContext()
     
     if (m_glContext == glXGetCurrentContext())
     {
-        glXMakeCurrent( (Display*) m_window->GetXDisplay(), None, NULL);
+        glXMakeCurrent( (Display*) wxGetDisplay(), None, NULL);
     }
 	
-    glXDestroyContext( (Display*) m_window->GetXDisplay(), m_glContext );
+    glXDestroyContext( (Display*) wxGetDisplay(), m_glContext );
 }
 
 void wxGLContext::SwapBuffers()
 {
     if (m_glContext)
     {
-        Display* display = (Display*) m_window->GetXDisplay();
-        glXSwapBuffers(display, (Window) m_window->GetXWindow());
+        Display* display = (Display*) wxGetDisplay();
+        glXSwapBuffers(display, (Window) m_window->GetClientWindow());
     }
 }
 
@@ -116,8 +116,8 @@ void wxGLContext::SetCurrent()
 {
     if (m_glContext) 
     { 
-        Display* display = (Display*) m_window->GetXDisplay();
-        glXMakeCurrent(display, (Window) m_window->GetXWindow(), 
+        Display* display = (Display*) wxGetDisplay();
+        glXMakeCurrent(display, (Window) m_window->GetClientWindow(), 
                        m_glContext );;
     }
 }
@@ -133,7 +133,7 @@ void wxGLContext::SetColour(const char *colour)
 		       the_colour->Green(),
 		       the_colour->Blue());
 	} else {
-            the_colour->CalcPixel(wxTheApp->GetMainColormap(m_window->GetXDisplay()));
+            the_colour->CalcPixel(wxTheApp->GetMainColormap(wxGetDisplay()));
 	    GLint pix = (GLint)the_colour->GetPixel();
 	    if(pix == -1)
             {
@@ -233,7 +233,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
     m_sharedContextOf = (wxGLCanvas*)shared_context_of;  // const_cast
     m_glContext = (wxGLContext*) NULL;
 
-    Display* display = (Display*) GetXDisplay();
+    Display* display = (Display*) wxGetDisplay();
 
     // Check for the presence of the GLX extension
     if(!glXQueryExtension(display, NULL, NULL)) {
@@ -294,7 +294,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
     } else {
 	// By default, we use the visual of xwindow
         // NI: is this really senseful ? opengl in e.g. color index mode ?
-	XGetWindowAttributes(display, (Window) GetXWindow(), &xwa);
+	XGetWindowAttributes(display, (Window) GetClientWindow(), &xwa);
 	vi_templ.visualid = XVisualIDFromVisual(xwa.visual);
 	vi = XGetVisualInfo(display, VisualIDMask, &vi_templ, &n);
 	if(!vi) return false;
@@ -366,7 +366,7 @@ void wxGLCanvas::SwapBuffers()
     if( m_glContext ) m_glContext->SwapBuffers();
 
     // Display* display = (Display*) GetXDisplay();
-    // if(glx_cx) glXSwapBuffers(display, (Window) GetXWindow());
+    // if(glx_cx) glXSwapBuffers(display, (Window) GetClientWindow());
 }
 
 void wxGLCanvas::SetCurrent()
@@ -374,7 +374,7 @@ void wxGLCanvas::SetCurrent()
     if( m_glContext ) m_glContext->SetCurrent();
 
     // Display* display = (Display*) GetXDisplay();
-    // if(glx_cx) glXMakeCurrent(display, (Window) GetXWindow(), glx_cx);
+    // if(glx_cx) glXMakeCurrent(display, (Window) GetClientWindow(), glx_cx);
 }
 
 void wxGLCanvas::SetColour(const char *col)
