@@ -768,6 +768,11 @@ wxLogChain::wxLogChain(wxLog *logger)
     m_logOld = wxLog::SetActiveTarget(this);
 }
 
+wxLogChain::~wxLogChain()
+{
+    delete m_logNew;
+}
+
 void wxLogChain::SetLog(wxLog *logger)
 {
     if ( m_logNew != this )
