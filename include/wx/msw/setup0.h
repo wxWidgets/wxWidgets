@@ -768,7 +768,15 @@
 // smaller library.
 #define wxUSE_HTML          1
 
-// OpenGL canvas
+// Setting wxUSE_GLCANVAS to 1 enables OpenGL support. You need to have OpenGL
+// headers and libraries to be able to compile the library with wxUSE_GLCANVAS
+// set to 1. Note that for some compilers (notably Microsoft Visual C++) you
+// will need to manually add opengl32.lib and glu32.lib to the list of
+// libraries linked with your program if you use OpenGL.
+//
+// Default is 0.
+//
+// Recommended setting: 1 if you intend to use OpenGL, 0 otherwise
 #define wxUSE_GLCANVAS       0
 
 // wxTreeLayout class
