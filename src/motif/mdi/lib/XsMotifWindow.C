@@ -7,7 +7,7 @@
    XsMotifWindow.C
 
    History
-      03-Mar-96 1.0; Scott W. Sadler (sws@iti-oh.com)
+      03-Mar-96 1.0; Scott W. Sadler (ssadler@cisco.com)
                      Created         
 */
 
@@ -2880,12 +2880,6 @@ void XsMotifWindow::restore ( )
 
       setPosition (_savedX, _savedY);
       setSize (_savedWidth, _savedHeight);
-
-      _maximized = False;
-
-// Redraw the maximize button
-
-      _buttons[_XsMotifButton::Maximize]->redraw ( );
    }
 }
    
@@ -2972,6 +2966,17 @@ void XsMotifWindow::setSize (Dimension w, Dimension h)
       
       if (_minimized == False)
          XtVaSetValues (_base, XmNwidth, w, XmNheight, h, NULL);
+
+// If window was maximized, change the window state back to normal
+
+      if (_maximized == True)
+      {
+         _maximized = False;
+
+// Redraw the maximize button
+
+         _buttons[_XsMotifButton::Maximize]->redraw ( );
+      }
    }
    else
       XsMDIWindow::setSize (w, h);     // Cache the points

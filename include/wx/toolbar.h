@@ -12,9 +12,7 @@
 #   define wxToolBar wxToolBarMSW
 #   define sm_classwxToolBar sm_classwxToolBarMSW
 #elif defined(__WXMOTIF__)
-#   include "wx/tbarsmpl.h"
-#   define wxToolBar wxToolBarSimple
-#   define sm_classwxToolBar sm_classwxToolBarSimple
+#   include "wx/motif/toolbar.h"
 #elif defined(__WXGTK__)
 #   include "wx/gtk/tbargtk.h"
 #elif defined(__WXQT__)

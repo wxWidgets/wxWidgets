@@ -365,3 +365,18 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
     m_nSelection = nSel;
 }
 
+void wxNotebook::ChangeFont()
+{
+    // TODO
+}
+
+void wxNotebook::ChangeBackgroundColour()
+{
+    // TODO
+}
+
+void wxNotebook::ChangeForegroundColour()
+{
+    // TODO
+}
+

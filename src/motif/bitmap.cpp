@@ -619,8 +619,17 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long fla
             M_BITMAPHANDLERDATA->m_bitmapMask->SetPixmap((WXPixmap) mask);
         }
 
+        unsigned int depthRet;
+        int xRet, yRet;
+        unsigned int widthRet, heightRet, borderWidthRet;
+        Window rootWindowRet;
+        XGetGeometry(dpy, pixmap, &rootWindowRet, &xRet, &yRet,
+            &widthRet, &heightRet, &borderWidthRet, &depthRet);
+
         M_BITMAPHANDLERDATA->m_width = xpmAttr.width;
         M_BITMAPHANDLERDATA->m_height = xpmAttr.height;
+
+	/*
         if ( xpmAttr.npixels > 2 )
         {
             M_BITMAPHANDLERDATA->m_depth = 8;	// TODO: next time not just a guess :-) ...
@@ -628,6 +637,9 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long fla
         {
             M_BITMAPHANDLERDATA->m_depth = 1;	// mono
         }
+	*/
+
+        M_BITMAPHANDLERDATA->m_depth = depthRet;
 
     	M_BITMAPHANDLERDATA->m_numColors = xpmAttr.npixels;
 
@@ -714,6 +726,15 @@ bool wxXPMDataHandler::Create(wxBitmap *bitmap, void *data, long flags, int widt
         // Set attributes
         M_BITMAPHANDLERDATA->m_width = xpmAttr.width;
         M_BITMAPHANDLERDATA->m_height = xpmAttr.height;
+
+        unsigned int depthRet;
+        int xRet, yRet;
+        unsigned int widthRet, heightRet, borderWidthRet;
+        Window rootWindowRet;
+        XGetGeometry(dpy, pixmap, &rootWindowRet, &xRet, &yRet,
+            &widthRet, &heightRet, &borderWidthRet, &depthRet);
+
+	/*
         if ( xpmAttr.npixels > 2 )
         {
             M_BITMAPHANDLERDATA->m_depth = 8;    // next time not just a guess :-) ...
@@ -721,6 +742,10 @@ bool wxXPMDataHandler::Create(wxBitmap *bitmap, void *data, long flags, int widt
         {
             M_BITMAPHANDLERDATA->m_depth = 1;    // mono
         }
+	*/
+
+        M_BITMAPHANDLERDATA->m_depth = depthRet;
+
         M_BITMAPHANDLERDATA->m_numColors = xpmAttr.npixels;
         XpmFreeAttributes(&xpmAttr);
         M_BITMAPHANDLERDATA->m_ok = TRUE;
@@ -845,6 +870,18 @@ WXPixmap wxBitmap::GetArmPixmap (WXWidget w)
 WXPixmap wxBitmap::GetInsensPixmap (WXWidget w)
 {
   Display *dpy = (Display*) M_BITMAPDATA->m_display;
+
+  if (M_BITMAPDATA->m_insensPixmap)
+    return M_BITMAPDATA->m_insensPixmap;
+
+  if (!w)
+  {
+    M_BITMAPDATA->m_insensPixmap = (WXPixmap) XCreateInsensitivePixmap(dpy, (Pixmap) M_BITMAPDATA->m_pixmap);
+    if (M_BITMAPDATA->m_insensPixmap)
+      return M_BITMAPDATA->m_insensPixmap;
+    else
+      return M_BITMAPDATA->m_pixmap;
+  }
 
   if (M_BITMAPDATA->m_insensImage == (WXPixmap) 0)
     return M_BITMAPDATA->m_pixmap;

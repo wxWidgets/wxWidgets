@@ -64,6 +64,9 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
     else
 	    m_windowId = id;
 
+    m_backgroundColour = parent->GetBackgroundColour();
+    m_foregroundColour = parent->GetForegroundColour();
+
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
     m_formWidget = (WXWidget) XtVaCreateManagedWidget ((char*) (const char*) name,
@@ -125,7 +128,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
     AttachWidget (parent, m_buttonWidget, m_formWidget, pos.x, pos.y, size.x, size.y);
 
     SetFont(* parent->GetFont());
-    ChangeColour(m_mainWidget);
+    ChangeBackgroundColour();
 
     return TRUE;
 }
@@ -413,5 +416,20 @@ void wxChoiceCallback (Widget w, XtPointer clientData,
             item->ProcessCommand (event);
         }
     }
+}
+
+void wxChoice::ChangeFont()
+{
+    // TODO
+}
+
+void wxChoice::ChangeBackgroundColour()
+{
+    // TODO
+}
+
+void wxChoice::ChangeForegroundColour()
+{
+    // TODO
 }
 

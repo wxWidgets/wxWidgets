@@ -124,11 +124,12 @@ public:
   void OnChar(wxKeyEvent& event);
 //  void OnEraseBackground(wxEraseEvent& event);
   
-  // Implementation
-  // --------------
   virtual void Command(wxCommandEvent& event);
 
-  //// Motif-specific
+// Implementation
+  virtual void ChangeFont();
+  virtual void ChangeBackgroundColour();
+  virtual void ChangeForegroundColour();
   inline void SetModified(bool mod) { m_modified = mod; }
   virtual WXWidget GetTopWidget() const;
 

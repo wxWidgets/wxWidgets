@@ -127,6 +127,7 @@ LIB_CPP_SRC=\
  textctrl.cpp \
  thread.cpp \
  timer.cpp \
+ toolbar.cpp \
  utils.cpp \
  utilsexc.cpp \
  wave.cpp \
@@ -157,7 +158,6 @@ LIB_CPP_SRC=\
 # listctrl.cpp \
 # imaglist.cpp \
 # statusbr.cpp \
-# toolbar.cpp \
  
 LIB_C_SRC=\
 \

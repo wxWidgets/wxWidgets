@@ -40,6 +40,8 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     SetName(name);
     SetValidator(validator);
     m_windowStyle = style;
+    m_backgroundColour = parent->GetBackgroundColour();
+    m_foregroundColour = parent->GetForegroundColour();
 
     if (parent) parent->AddChild(this);
 
@@ -67,7 +69,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
 
-    ChangeColour(m_mainWidget);
+    ChangeBackgroundColour();
     SetFont(* parent->GetFont());
 
     return TRUE;
@@ -148,3 +150,19 @@ void wxCheckBoxCallback (Widget w, XtPointer clientData,
   event.SetEventObject(item);
   item->ProcessCommand (event);
 }
+
+void wxCheckBox::ChangeFont()
+{
+    // TODO
+}
+
+void wxCheckBox::ChangeBackgroundColour()
+{
+    // TODO
+}
+
+void wxCheckBox::ChangeForegroundColour()
+{
+    // TODO
+}
+

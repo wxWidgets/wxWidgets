@@ -7,7 +7,7 @@
    XsMDICanvas.h
 
    History
-      03-Mar-96 1.0; Scott W. Sadler (sws@iti-oh.com)
+      03-Mar-96 1.0; Scott W. Sadler (ssadler@cisco.com)
                      Created         
 */
 
@@ -38,13 +38,11 @@ class XsMDICanvas : public XsComponent {
       virtual void add (XsMDIWindow *win);      // Add an MDI window
       virtual void remove (XsMDIWindow *win);   // Remove an MDI window
       void removeAll ( );                       // Remove all MDI windows
-
-// Added JACS 19/10/98
-     inline Widget GetDrawingArea() const { return _drawArea; }
       
 // Utilities
 
       int   numWindows ( ) const;            // Number of MDI windows
+      Widget GetDrawingArea() const { return _drawArea; }
 
 // Component methods
 

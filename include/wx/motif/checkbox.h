@@ -45,6 +45,11 @@ class WXDLLEXPORT wxCheckBox: public wxControl
   virtual void SetValue(bool);
   virtual bool GetValue() const ;
   virtual void Command(wxCommandEvent& event);
+
+// Implementation
+  virtual void ChangeFont();
+  virtual void ChangeBackgroundColour();
+  virtual void ChangeForegroundColour();
 };
 
 class WXDLLEXPORT wxBitmapCheckBox: public wxCheckBox

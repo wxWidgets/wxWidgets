@@ -56,6 +56,11 @@ class WXDLLEXPORT wxStaticBitmap: public wxControl
   // overriden base class virtuals
   virtual bool AcceptsFocus() const { return FALSE; }
 
+// Implementation
+  virtual void ChangeFont();
+  virtual void ChangeBackgroundColour();
+  virtual void ChangeForegroundColour();
+
  protected:
   wxBitmap m_messageBitmap;
 

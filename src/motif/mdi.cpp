@@ -88,7 +88,7 @@ public:
 
       // Generate wxSizeEvent here, I think. Maybe also restore, maximize
       // Probably don't need to generate size event here since work area
-      // is used
+      // is used (???)
       wxSizeEvent event(wxSize(w, h), m_childFrame->GetId());
       event.SetEventObject(m_childFrame);
       m_childFrame->ProcessEvent(event);
@@ -97,6 +97,16 @@ public:
   {
       XsMotifWindow::close();
       m_childFrame->Close();
+  }
+  virtual void raise()
+  {
+      XsMotifWindow::raise();
+      m_childFrame->OnRaise();
+  }
+  virtual void lower()
+  {
+      XsMotifWindow::lower();
+      m_childFrame->OnLower();
   }
   virtual void _buildClientArea(Widget parent)
   {
@@ -204,7 +214,8 @@ public:
 
 wxMDIParentFrame::wxMDIParentFrame()
 {
-    m_clientWindow = NULL;
+    m_clientWindow = (wxMDIClientWindow*) NULL;
+    m_activeChild = (wxMDIChildFrame*) NULL;
 }
 
 bool wxMDIParentFrame::Create(wxWindow *parent,
@@ -215,7 +226,8 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
            long style,
            const wxString& name)
 {
-    m_clientWindow = NULL;
+    m_clientWindow = (wxMDIClientWindow*) NULL;
+    m_activeChild = (wxMDIChildFrame*) NULL;
 
     bool success = wxFrame::Create(parent, id, title, pos, size, style, name);
     if (success)
@@ -273,8 +285,7 @@ void wxMDIParentFrame::OnActivate(wxActivateEvent& event)
 // Returns the active MDI child window
 wxMDIChildFrame *wxMDIParentFrame::GetActiveChild() const
 {
-    // TODO
-    return NULL;
+    return m_activeChild;
 }
 
 // Create the client window class (don't Create the window,
@@ -344,14 +355,32 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 
     int x = pos.x; int y = pos.y;
     int width = size.x; int height = size.y;
+    if (width == -1)
+        width = 200; // TODO: give reasonable default
+    if (height == -1)
+        height = 200; // TODO: give reasonable default
 
     wxMDIClientWindow* clientWindow = parent->GetClientWindow();
     if (!clientWindow)
         return FALSE;
 
+    // We're deactivating the old child
+    wxMDIChildFrame* oldActiveChild = parent->GetActiveChild();
+    if (oldActiveChild)
+    {
+        wxActivateEvent event(wxEVT_ACTIVATE, FALSE, oldActiveChild->GetId());
+        event.SetEventObject( oldActiveChild );
+        oldActiveChild->GetEventHandler()->ProcessEvent(event);
+    }
+
     m_mdiWindow = new wxXsMDIWindow("mdiChildWindow", this);
     clientWindow->GetMDICanvas()->add(m_mdiWindow);
+
+    // This is the currently active child
+    parent->SetActiveChild((wxMDIChildFrame*) this);
+
     m_mdiWindow->Show();
+
 #if 0
     m_mainWidget = (WXWidget) (Widget) (*m_mdiWindow);
 
@@ -411,10 +440,7 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 
     PreResize();
 
-    wxSizeEvent sizeEvent(wxSize(width, height), GetId());
-    sizeEvent.SetEventObject(this);
-
-    GetEventHandler()->ProcessEvent(sizeEvent);
+    m_mdiWindow->setSize(width, height);
 
     wxModelessWindows.Append(this);
     return TRUE;
@@ -490,9 +516,48 @@ void wxMDIChildFrame::BuildClientArea(WXWidget parent)
 
 wxMDIChildFrame::~wxMDIChildFrame()
 {
-    wxMDIClientWindow* clientWindow = ((wxMDIParentFrame*)GetParent())->GetClientWindow();
+    wxMDIParentFrame* parentFrame = (wxMDIParentFrame*) GetParent() ;
+    if (parentFrame->GetActiveChild() == this)
+        parentFrame->SetActiveChild((wxMDIChildFrame*) NULL);
+
+    wxMDIClientWindow* clientWindow = parentFrame->GetClientWindow();
     clientWindow->GetMDICanvas()->remove(m_mdiWindow);
     m_mainWidget = (WXWidget) 0;
+}
+
+// Implementation: intercept and act upon raise and lower commands.
+void wxMDIChildFrame::OnRaise()
+{
+    wxMDIParentFrame* parentFrame = (wxMDIParentFrame*) GetParent() ;
+    wxMDIChildFrame* oldActiveChild = parentFrame->GetActiveChild();
+    parentFrame->SetActiveChild(this);
+
+    if (oldActiveChild)
+    {
+        wxActivateEvent event(wxEVT_ACTIVATE, FALSE, oldActiveChild->GetId());
+        event.SetEventObject( oldActiveChild );
+        oldActiveChild->GetEventHandler()->ProcessEvent(event);
+    }
+
+    wxActivateEvent event(wxEVT_ACTIVATE, TRUE, this->GetId());
+    event.SetEventObject( this );
+    this->GetEventHandler()->ProcessEvent(event);
+}
+
+void wxMDIChildFrame::OnLower()
+{
+    wxMDIParentFrame* parentFrame = (wxMDIParentFrame*) GetParent() ;
+    wxMDIChildFrame* oldActiveChild = parentFrame->GetActiveChild();
+
+    if (oldActiveChild == this)
+    {
+        wxActivateEvent event(wxEVT_ACTIVATE, FALSE, oldActiveChild->GetId());
+        event.SetEventObject( oldActiveChild );
+        oldActiveChild->GetEventHandler()->ProcessEvent(event);
+    }
+    // TODO: unfortunately we don't now know which is the top-most child,
+    // so make the active child NULL.
+    parentFrame->SetActiveChild((wxMDIChildFrame*) NULL);
 }
 
 // Set the client size (i.e. leave the calculation of borders etc.

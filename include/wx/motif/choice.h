@@ -67,6 +67,10 @@ class WXDLLEXPORT wxChoice: public wxControl
 
   void SetFocus();
 
+// Implementation
+  virtual void ChangeFont();
+  virtual void ChangeBackgroundColour();
+  virtual void ChangeForegroundColour();
   WXWidget GetTopWidget() const { return m_formWidget; }
   WXWidget GetMainWidget() const { return m_buttonWidget; }
 

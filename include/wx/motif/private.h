@@ -35,6 +35,8 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Widget widget, 
 bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Widget widget, XEvent *xevent);
 int wxGetBestMatchingPixel(Display *display, XColor *desiredColor, Colormap cmap);
 Pixmap XCreateInsensitivePixmap( Display *display, Pixmap pixmap );
+extern XColor g_itemColors[];
+extern int wxComputeColours (Display *display, wxColour * back, wxColour * fore);
 
 #define	wxNO_COLORS   0x00
 #define wxBACK_COLORS 0x01

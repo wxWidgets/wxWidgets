@@ -24,7 +24,14 @@ High Priority
 
 - Colour setting in widgets.
 
-- Implementation of OnEraseBackground.
+- Implementation of OnEraseBackground. How? Call OnEraseBackground
+  just before OnPaint? Will duplicate Xlib's own erase of the background.
+  However, this is usually OK, because the default wxWindow::OnEraseBackground
+  can do nothing (SetBackgroundColour will make the background look OK).
+  And if a custom OnEraseBackground uses the same colour as the window
+  background, no flicker will be seen. If it does something else, such as
+  painting a tiled bitmap, then a slight flicker might be seen unless
+  X can be persuaded not to repaint the window background by default.
 
 - wxBitmapCheckBox, wxBitmapRadioButton
 
@@ -48,9 +55,11 @@ High Priority
   http://www.motifzone.com/tmd/articles/Kurt_Huhner/jun96.html.
   This article also explains how to implement tooltips.
 
-- wxSystemSettings
+- Find out why modal dialogs give a grab warning.
 
-- wxTimer
+- Find out why UI updates aren't working (probably an OnIdle failure).
+
+- wxSystemSettings
 
 - wxThread (hopefully, similar to wxGTK)
 

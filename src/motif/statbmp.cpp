@@ -39,6 +39,8 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
 {
     m_messageBitmap = bitmap;
     SetName(name);
+    m_backgroundColour = parent->GetBackgroundColour();
+    m_foregroundColour = parent->GetForegroundColour();
     if (parent) parent->AddChild(this);
 
     if ( id == -1 )
@@ -69,7 +71,7 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
 
     SetFont(* parent->GetFont());
 
-    ChangeColour (m_mainWidget);
+    ChangeBackgroundColour ();
 
     return TRUE;
 }
@@ -115,5 +117,20 @@ void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
             XmNlabelPixmap, NULL, // TODO: Does this work?
             NULL);
     }
+}
+
+void wxStaticBitmap::ChangeFont()
+{
+    // TODO
+}
+
+void wxStaticBitmap::ChangeBackgroundColour()
+{
+    // TODO
+}
+
+void wxStaticBitmap::ChangeForegroundColour()
+{
+    // TODO
 }
 

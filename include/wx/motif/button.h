@@ -44,6 +44,11 @@ class WXDLLEXPORT wxButton: public wxControl
 
   virtual void SetDefault();
   virtual void Command(wxCommandEvent& event);
+
+// Implementation
+  virtual void ChangeFont();
+  virtual void ChangeBackgroundColour();
+  virtual void ChangeForegroundColour();
 };
 
 #endif

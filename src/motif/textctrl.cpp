@@ -80,6 +80,8 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     m_modified = FALSE;
     m_processedDefault = FALSE;
     m_fileName = "";
+    m_backgroundColour = parent->GetBackgroundColour();
+    m_foregroundColour = parent->GetForegroundColour();
 
     SetName(name);
     SetValidator(validator);
@@ -145,7 +147,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
 
     SetFont(* parent->GetFont());
-    ChangeColour(m_mainWidget);
+    ChangeBackgroundColour();
 
     return TRUE;
 }
@@ -615,6 +617,21 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
       textStruct->text->ptr[0] = ((event.m_keyCode == WXK_RETURN) ? 10 : event.m_keyCode);
     }
   }
+}
+
+void wxTextCtrl::ChangeFont()
+{
+    // TODO
+}
+
+void wxTextCtrl::ChangeBackgroundColour()
+{
+    // TODO
+}
+
+void wxTextCtrl::ChangeForegroundColour()
+{
+    // TODO
 }
 
 static void wxTextWindowChangedProc (Widget w, XtPointer clientData, XtPointer ptr)

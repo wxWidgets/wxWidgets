@@ -93,7 +93,10 @@ public:
   // Responds to colour changes
   void OnSysColourChanged(wxSysColourChangedEvent& event);
 
-  //// Motif-specific
+// Implementation
+  virtual void ChangeFont();
+  virtual void ChangeBackgroundColour();
+  virtual void ChangeForegroundColour();
   inline WXWidget GetTopWidget() const { return m_mainWidget; }
   inline WXWidget GetClientWidget() const { return m_mainWidget; }
 

@@ -162,6 +162,11 @@ public:
   virtual void SetConstraintSizes(bool recurse = TRUE);
   virtual bool DoPhase(int nPhase);
 
+// Implementation
+  virtual void ChangeFont();
+  virtual void ChangeBackgroundColour();
+  virtual void ChangeForegroundColour();
+
 protected:
   // common part of all ctors
   void Init();

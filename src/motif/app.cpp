@@ -302,7 +302,7 @@ int wxApp::MainLoop()
 
         XtDispatchEvent(&event);
 
-        DeletePendingObjects();
+	ProcessIdle();
       }
     }
 

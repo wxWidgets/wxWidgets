@@ -7,7 +7,7 @@
    XsComponent.C
 
    History
-      03-Mar-96 1.0; Scott W. Sadler (sws@iti-oh.com)
+      03-Mar-96 1.0; Scott W. Sadler (ssadler@cisco.com)
                      Created         
 */
 
@@ -62,8 +62,8 @@ void XsComponent::show ( )
 {
 
 #ifndef NDEBUG
-   if (XtIsManaged (_base))
-      cout << "Re-managing a widget:" << _name << endl;
+  //   if (XtIsManaged (_base))
+  //      cout << "Re-managing a widget:" << _name << endl;
 #endif
 
 // Make sure the _destroyHandler was installed
@@ -80,8 +80,8 @@ void XsComponent::hide ( )
 {
 
 #ifndef NDEBUG
-   if (!XtIsManaged (_base)) 
-      cout << "Re-unmanaging a widget:" << _name << endl;
+  //   if (!XtIsManaged (_base)) 
+  //      cout << "Re-unmanaging a widget:" << _name << endl;
 #endif
 
    assert (_base != 0);

@@ -80,7 +80,7 @@ END_EVENT_TABLE()
 wxDialog::wxDialog()
 {
     m_modalShowing = FALSE;
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
 }
 
 bool wxDialog::Create(wxWindow *parent, wxWindowID id,
@@ -94,7 +94,9 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     m_modalShowing = FALSE;
     m_dialogTitle = title;
 
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+    m_foregroundColour = *wxBLACK;
+
     SetName(name);
   
     if (!parent)
@@ -232,6 +234,8 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
        FALSE,
        wxDialogBoxEventHandler,
        (XtPointer)this);
+
+    ChangeBackgroundColour();
 
     return TRUE;
 }
@@ -739,3 +743,19 @@ static void wxUnmapBulletinBoard(Widget dialog, wxDialog *client,XtPointer call)
   client->m_isShown = FALSE;
   */
 }
+
+void wxDialog::ChangeFont()
+{
+    // TODO
+}
+
+void wxDialog::ChangeBackgroundColour()
+{
+    // TODO
+}
+
+void wxDialog::ChangeForegroundColour()
+{
+    // TODO
+}
+

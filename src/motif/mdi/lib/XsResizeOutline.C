@@ -7,7 +7,7 @@
    XsResizeOutline.C
 
    History
-      03-Mar-96 1.0; Scott W. Sadler (sws@iti-oh.com)
+      03-Mar-96 1.0; Scott W. Sadler (ssadler@cisco.com)
                      Created         
 */
 

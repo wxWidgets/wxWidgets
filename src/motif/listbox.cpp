@@ -53,6 +53,8 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     m_windowStyle = style;
     m_noItems = n;
     m_selected = 0;
+    m_backgroundColour = parent->GetBackgroundColour();
+    m_foregroundColour = parent->GetForegroundColour();
 
     SetName(name);
     SetValidator(validator);
@@ -107,11 +109,10 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, width, height);
 
-    wxSystemSettings settings;
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW);
 
     SetFont(* parent->GetFont());
-    ChangeColour(m_mainWidget);
+    ChangeBackgroundColour();
 
     return TRUE;
 }
@@ -739,3 +740,19 @@ WXWidget wxListBox::GetTopWidget() const
 {
   return (WXWidget) XtParent( (Widget) m_mainWidget );
 }
+
+void wxListBox::ChangeFont()
+{
+    // TODO
+}
+
+void wxListBox::ChangeBackgroundColour()
+{
+    // TODO
+}
+
+void wxListBox::ChangeForegroundColour()
+{
+    // TODO
+}
+

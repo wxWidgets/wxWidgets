@@ -116,7 +116,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 
     SetFont(* parent->GetFont());
 
-    ChangeColour (m_mainWidget);
+    ChangeBackgroundColour ();
 
 
     return TRUE;

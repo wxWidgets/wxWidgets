@@ -51,6 +51,8 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
 {
     m_formWidget = (WXWidget) 0;
     m_labelWidget = (WXWidget) 0;
+    m_backgroundColour = parent->GetBackgroundColour();
+    m_foregroundColour = parent->GetForegroundColour();
 
     SetName(name);
 
@@ -112,7 +114,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
 
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) frameWidget, pos.x, pos.y, size.x, size.y);
-    ChangeColour(m_mainWidget);
+    ChangeBackgroundColour();
 
     return TRUE;
 }
@@ -177,5 +179,20 @@ void wxStaticBox::SetSize(int x, int y, int width, int height, int sizeFlags)
             XtVaSetValues ((Widget) m_mainWidget, XmNheight, height - yy,
 		    NULL);
     }
+}
+
+void wxStaticBox::ChangeFont()
+{
+    // TODO
+}
+
+void wxStaticBox::ChangeBackgroundColour()
+{
+    // TODO
+}
+
+void wxStaticBox::ChangeForegroundColour()
+{
+    // TODO
 }
 

@@ -68,6 +68,10 @@ public:
   inline int GetNumberOfRowsOrCols() const { return m_noRowsOrCols; }
   inline void SetNumberOfRowsOrCols(int n) { m_noRowsOrCols = n; }
 
+// Implementation
+  virtual void ChangeFont();
+  virtual void ChangeBackgroundColour();
+  virtual void ChangeForegroundColour();
   WXWidget GetTopWidget() const { return m_formWidget; }
   WXWidget GetLabelWidget() const { return m_labelWidget; }
   inline WXWidget* GetRadioButtons() const { return m_radioButtons; }

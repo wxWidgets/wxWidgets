@@ -69,7 +69,7 @@ public:
   // toolbar(s), don't call SetToolBar.
   void GetClientSize(int *width, int *height) const;
 
-  // Get the active MDI child window (Windows only)
+  // Get the active MDI child window
   wxMDIChildFrame *GetActiveChild() const ;
 
   // Get the client window
@@ -86,9 +86,13 @@ public:
   virtual void ActivateNext();
   virtual void ActivatePrevious();
 
+// Implementation
+  inline void SetActiveChild(wxMDIChildFrame* child) { m_activeChild = child; }
+
 protected:
 
-  wxMDIClientWindow     *m_clientWindow;
+  wxMDIClientWindow*    m_clientWindow;
+  wxMDIChildFrame*      m_activeChild;
 
 DECLARE_EVENT_TABLE()
 };
@@ -144,6 +148,8 @@ public:
   void BuildClientArea(WXWidget parent);
   inline WXWidget GetTopWidget() const { return m_mainWidget; };
   inline wxXsMDIWindow *GetMDIWindow() const { return m_mdiWindow; };
+  virtual void OnRaise();
+  virtual void OnLower();
 
 protected:
   wxXsMDIWindow*    m_mdiWindow ;

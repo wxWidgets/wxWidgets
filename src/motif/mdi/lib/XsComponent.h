@@ -7,7 +7,7 @@
    XsComponent.h
 
    History
-      03-Mar-96 1.0; Scott W. Sadler (sws@iti-oh.com)
+      03-Mar-96 1.0; Scott W. Sadler (ssadler@cisco.com)
                      Created         
 */
 
@@ -32,9 +32,6 @@ class XsComponent {
 
       virtual  void show ( );             // Show the component
       virtual  void hide ( );             // Hide the component
-      
-// Added JACS 19/10/98
-     inline Widget GetBase() const { return _base; }
       
 // Component name
 

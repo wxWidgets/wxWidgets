@@ -38,6 +38,8 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     SetName(name);
     SetValidator(validator);
     m_windowStyle = style;
+    m_backgroundColour = parent->GetBackgroundColour();
+    m_foregroundColour = parent->GetForegroundColour();
 
     parent->AddChild((wxButton *)this);
 
@@ -77,7 +79,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
 
     SetFont(* parent->GetFont());
-    ChangeColour(m_mainWidget);
+    ChangeBackgroundColour();
 
     return TRUE;
 }
@@ -132,3 +134,19 @@ void wxButtonCallback (Widget w, XtPointer clientData, XtPointer ptr)
   event.SetEventObject(item);
   item->ProcessCommand (event);
 }
+
+void wxButton::ChangeFont()
+{
+    // TODO
+}
+
+void wxButton::ChangeBackgroundColour()
+{
+    // TODO
+}
+
+void wxButton::ChangeForegroundColour()
+{
+    // TODO
+}
+

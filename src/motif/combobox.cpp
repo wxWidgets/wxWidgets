@@ -40,6 +40,8 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     SetValidator(validator);
     m_noStrings = n;
     m_windowStyle = style;
+    m_backgroundColour = parent->GetBackgroundColour();
+    m_foregroundColour = parent->GetForegroundColour();
 
     if (parent) parent->AddChild(this);
 
@@ -85,7 +87,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
 
     SetFont(* parent->GetFont());
-    ChangeColour(m_mainWidget);
+    ChangeBackgroundColour();
 
     return TRUE;
 }
@@ -203,6 +205,21 @@ void  wxComboBoxCallback (Widget w, XtPointer clientData,
         default:
             break;
     }
+}
+
+void wxComboBox::ChangeFont()
+{
+    // TODO
+}
+
+void wxComboBox::ChangeBackgroundColour()
+{
+    // TODO
+}
+
+void wxComboBox::ChangeForegroundColour()
+{
+    // TODO
 }
 
 #endif

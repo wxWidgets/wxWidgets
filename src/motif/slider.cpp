@@ -54,6 +54,8 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
 {
     SetName(name);
     SetValidator(validator);
+    m_backgroundColour = parent->GetBackgroundColour();
+    m_foregroundColour = parent->GetForegroundColour();
 
     if (parent) parent->AddChild(this);
 
@@ -101,7 +103,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
 
     SetFont(* parent->GetFont());
-    ChangeColour(m_mainWidget);
+    ChangeBackgroundColour();
 
     return TRUE;
 }
@@ -243,6 +245,21 @@ void wxSlider::Command (wxCommandEvent & event)
 {
   SetValue (event.GetInt());
   ProcessCommand (event);
+}
+
+void wxSlider::ChangeFont()
+{
+    // TODO
+}
+
+void wxSlider::ChangeBackgroundColour()
+{
+    // TODO
+}
+
+void wxSlider::ChangeForegroundColour()
+{
+    // TODO
 }
 
 void wxSliderCallback (Widget widget, XtPointer clientData, XmScaleCallbackStruct * cbs)

@@ -32,7 +32,9 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
 
   inline wxToolBar(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
             long style = wxNO_BORDER|wxTB_HORIZONTAL,
-            const wxString& name = wxToolBarNameStr)
+		   const wxString& name = wxToolBarNameStr):
+  m_widgets(wxKEY_INTEGER)
+
   {
     Create(parent, id, pos, size, style, name);
   }
@@ -69,6 +71,8 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
   bool Realize() { return CreateTools(); };
 
 protected:
+  // List of widgets in the toolbar, indexed by tool index
+  wxList    m_widgets;
 
 DECLARE_EVENT_TABLE()
 };

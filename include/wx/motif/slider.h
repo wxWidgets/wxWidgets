@@ -76,6 +76,12 @@ public:
   void SetTick(int tickPos) ;
 
   void Command(wxCommandEvent& event);
+
+// Implementation
+  virtual void ChangeFont();
+  virtual void ChangeBackgroundColour();
+  virtual void ChangeForegroundColour();
+
  protected:
   int           m_rangeMin;
   int           m_rangeMax;

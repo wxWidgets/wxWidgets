@@ -144,8 +144,10 @@ public:
   virtual void CaptureMouse();
   virtual void ReleaseMouse();
 
-  //// Motif-specific
-
+// Implementation
+  virtual void ChangeFont();
+  virtual void ChangeBackgroundColour();
+  virtual void ChangeForegroundColour();
   WXWidget GetMenuBarWidget() const ;
   inline WXWidget GetShellWidget() const { return m_frameShell; }
   inline WXWidget GetWorkAreaWidget() const { return m_workArea; }

@@ -22,6 +22,8 @@ class WXDLLEXPORT wxTimer: public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxTimer)
 
+ friend void wxTimerCallback (wxTimer * timer);
+
  public:
   wxTimer();
   ~wxTimer();

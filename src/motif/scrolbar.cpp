@@ -40,7 +40,9 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
         return FALSE;
     parent->AddChild(this);
     SetName(name);
-	SetValidator(validator);
+    m_backgroundColour = parent->GetBackgroundColour();
+    m_foregroundColour = parent->GetForegroundColour();
+    SetValidator(validator);
     
     m_windowStyle = style;
 
@@ -91,7 +93,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
 
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, x, y, width, height);
-    ChangeColour(m_mainWidget);
+    ChangeBackgroundColour();
 
     return TRUE;
 }
@@ -148,6 +150,21 @@ void wxScrollBar::Command(wxCommandEvent& event)
 {
     SetPosition(event.m_commandInt);
     ProcessCommand(event);
+}
+
+void wxScrollBar::ChangeFont()
+{
+    // TODO
+}
+
+void wxScrollBar::ChangeBackgroundColour()
+{
+    // TODO
+}
+
+void wxScrollBar::ChangeForegroundColour()
+{
+    // TODO
 }
 
 void wxScrollBarCallback(Widget widget, XtPointer clientData,

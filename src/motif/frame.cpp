@@ -126,7 +126,8 @@ bool wxFrame::Create(wxWindow *parent,
   m_visibleStatus = TRUE;
   m_title = "";
 
-  SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
+  m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE);
+  m_foregroundColour = *wxBLACK;
 
   if ( id > -1 )
     m_windowId = id;
@@ -263,6 +264,8 @@ bool wxFrame::Create(wxWindow *parent,
   XmAddWMProtocolCallback((Widget) m_frameShell, WM_DELETE_WINDOW, (void (*)())wxCloseFrameCallback, (caddr_t)this);
 #endif
 #endif
+
+  ChangeBackgroundColour();
 
   PreResize();
 
@@ -1037,6 +1040,21 @@ WXWidget wxFrame::GetClientWidget() const
   return m_clientArea;
 }
 
+void wxFrame::ChangeFont()
+{
+    // TODO
+}
+
+void wxFrame::ChangeBackgroundColour()
+{
+    // TODO
+}
+
+void wxFrame::ChangeForegroundColour()
+{
+    // TODO
+}
+
 void wxCloseFrameCallback(Widget widget, XtPointer client_data, XmAnyCallbackStruct *cbs)
 {
   wxFrame *frame = (wxFrame *)client_data;
@@ -1047,3 +1065,4 @@ void wxCloseFrameCallback(Widget widget, XtPointer client_data, XmAnyCallbackStr
   // May delete the frame (with delayed deletion)
   frame->GetEventHandler()->ProcessEvent(closeEvent);
 }
+

@@ -57,6 +57,8 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     m_labelWidget = (WXWidget) 0;
     m_radioButtons = (WXWidget*) NULL;
     m_radioButtonLabels = (wxString*) NULL;
+    m_backgroundColour = parent->GetBackgroundColour();
+    m_foregroundColour = parent->GetForegroundColour();
 
     SetName(name);
     SetValidator(val);
@@ -176,7 +178,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     AttachWidget (parent, m_mainWidget, m_formWidget, pos.x, pos.y, size.x, size.y);
 
     SetFont(* parent->GetFont());
-    ChangeColour(m_mainWidget);
+    ChangeBackgroundColour();
 
     return TRUE;
 }
@@ -387,6 +389,21 @@ void wxRadioBox::Command (wxCommandEvent & event)
 {
     SetSelection (event.m_commandInt);
     ProcessCommand (event);
+}
+
+void wxRadioBox::ChangeFont()
+{
+    // TODO
+}
+
+void wxRadioBox::ChangeBackgroundColour()
+{
+    // TODO
+}
+
+void wxRadioBox::ChangeForegroundColour()
+{
+    // TODO
 }
 
 void wxRadioBoxCallback (Widget w, XtPointer clientData,

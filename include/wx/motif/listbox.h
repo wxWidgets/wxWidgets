@@ -89,6 +89,10 @@ class WXDLLEXPORT wxListBox: public wxControl
 
   void Command(wxCommandEvent& event);
 
+// Implementation
+  virtual void ChangeFont();
+  virtual void ChangeBackgroundColour();
+  virtual void ChangeForegroundColour();
   WXWidget GetTopWidget() const;
 
 protected:

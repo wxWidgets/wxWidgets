@@ -51,7 +51,10 @@ class WXDLLEXPORT wxStaticBox: public wxControl
   void SetLabel(const wxString& label);
   wxString GetLabel() const;
 
-  // Motif-specific
+// Implementation
+  virtual void ChangeFont();
+  virtual void ChangeBackgroundColour();
+  virtual void ChangeForegroundColour();
   WXWidget GetTopWidget() const { return m_formWidget; }
   WXWidget GetLabelWidget() const { return m_labelWidget; }
 

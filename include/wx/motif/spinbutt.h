@@ -64,6 +64,11 @@ class WXDLLEXPORT wxSpinButton: public wxControl
 
   void Command(wxCommandEvent& event) { ProcessCommand(event); };
 
+// Implementation
+  virtual void ChangeFont();
+  virtual void ChangeBackgroundColour();
+  virtual void ChangeForegroundColour();
+
 protected:
   int   m_min;
   int   m_max;

@@ -1280,33 +1280,6 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRectangle *rect)
   }
 }
 
-void wxWindow::SetFont(const wxFont& font)
-{
-    m_windowFont = font;
-
-    // Note that this causes the widget to be resized back
-    // to its original size! We therefore have to set the size
-    // back again. TODO: a better way in Motif?
-    /*
-    Widget w = (Widget) GetLabelWidget(); // Usually the main widget
-    if (w && m_windowFont.Ok())
-    {
-        int width, height, width1, height1;
-        GetSize(& width, & height);
-
-        XtVaSetValues (w,
-		   XmNfontList, (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay(w)),
-		   NULL);
-
-        GetSize(& width1, & height1);
-        if (width != width1 || height != height1)
-        {
-            SetSize(-1, -1, width, height);
-        }
-    }
-    */
-}
-
 void wxWindow::OnChar(wxKeyEvent& event)
 {
     if ( event.KeyCode() == WXK_TAB ) {
@@ -1977,26 +1950,9 @@ wxWindow *wxWindow::FindWindow(const wxString& name)
 
 void wxWindow::OnIdle(wxIdleEvent& event)
 {
-/* TODO: you may need to do something like this
- * if your GUI doesn't generate enter/leave events
-
-    // Check if we need to send a LEAVE event
-    if (m_mouseInWindow)
-    {
-        POINT pt;
-        ::GetCursorPos(&pt);
-        if (::WindowFromPoint(pt) != (HWND) GetHWND())
-        {
-            // Generate a LEAVE event
-            m_mouseInWindow = FALSE;
-            MSWOnMouseLeave(pt.x, pt.y, 0);
-        }
-    }
-*/
-
     // This calls the UI-update mechanism (querying windows for
     // menu/toolbar/control state information)
-	UpdateWindowUI();
+    UpdateWindowUI();
 }
 
 // Raise the window to the top of the Z order
@@ -2990,11 +2946,9 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Widget widget, XEve
   return FALSE;
 }
 
-// TODO From wxWin 1.68. What does it do exactly?
 #define YAllocColor XAllocColor
-
-XColor itemColors[5];
-int wxComputeColors (Display *display, wxColour * back, wxColour * fore)
+XColor g_itemColors[5];
+int wxComputeColours (Display *display, wxColour * back, wxColour * fore)
 {
   int result;
   static XmColorProc colorProc;
@@ -3003,10 +2957,10 @@ int wxComputeColors (Display *display, wxColour * back, wxColour * fore)
 
   if (back)
     {
-      itemColors[0].red = (((long) back->Red ()) << 8);
-      itemColors[0].green = (((long) back->Green ()) << 8);
-      itemColors[0].blue = (((long) back->Blue ()) << 8);
-      itemColors[0].flags = DoRed | DoGreen | DoBlue;
+      g_itemColors[0].red = (((long) back->Red ()) << 8);
+      g_itemColors[0].green = (((long) back->Green ()) << 8);
+      g_itemColors[0].blue = (((long) back->Blue ()) << 8);
+      g_itemColors[0].flags = DoRed | DoGreen | DoBlue;
       if (colorProc == (XmColorProc) NULL)
 	{
 	  // Get a ptr to the actual function
@@ -3014,19 +2968,19 @@ int wxComputeColors (Display *display, wxColour * back, wxColour * fore)
 	  // And set it back to motif.
 	  XmSetColorCalculation (colorProc);
 	}
-      (*colorProc) (&itemColors[wxBACK_INDEX],
-		    &itemColors[wxFORE_INDEX],
-		    &itemColors[wxSELE_INDEX],
-		    &itemColors[wxTOPS_INDEX],
-		    &itemColors[wxBOTS_INDEX]);
+      (*colorProc) (&g_itemColors[wxBACK_INDEX],
+		    &g_itemColors[wxFORE_INDEX],
+		    &g_itemColors[wxSELE_INDEX],
+		    &g_itemColors[wxTOPS_INDEX],
+		    &g_itemColors[wxBOTS_INDEX]);
       result = wxBACK_COLORS;
     }
   if (fore)
     {
-      itemColors[wxFORE_INDEX].red = (((long) fore->Red ()) << 8);
-      itemColors[wxFORE_INDEX].green = (((long) fore->Green ()) << 8);
-      itemColors[wxFORE_INDEX].blue = (((long) fore->Blue ()) << 8);
-      itemColors[wxFORE_INDEX].flags = DoRed | DoGreen | DoBlue;
+      g_itemColors[wxFORE_INDEX].red = (((long) fore->Red ()) << 8);
+      g_itemColors[wxFORE_INDEX].green = (((long) fore->Green ()) << 8);
+      g_itemColors[wxFORE_INDEX].blue = (((long) fore->Blue ()) << 8);
+      g_itemColors[wxFORE_INDEX].flags = DoRed | DoGreen | DoBlue;
       if (result == wxNO_COLORS)
 	result = wxFORE_COLORS;
     }
@@ -3038,13 +2992,13 @@ int wxComputeColors (Display *display, wxColour * back, wxColour * fore)
     {
       /* 5 Colours to allocate */
       for (int i = 0; i < 5; i++)
-	if (!YAllocColor (dpy, cmap, &itemColors[i]))
+	if (!YAllocColor (dpy, cmap, &g_itemColors[i]))
 	  result = wxNO_COLORS;
     }
   else if (fore)
     {
       /* Only 1 colour to allocate */
-      if (!YAllocColor (dpy, cmap, &itemColors[wxFORE_INDEX]))
+      if (!YAllocColor (dpy, cmap, &g_itemColors[wxFORE_INDEX]))
 	result = wxNO_COLORS;
     }
 
@@ -3052,58 +3006,101 @@ int wxComputeColors (Display *display, wxColour * back, wxColour * fore)
 
 }
 
-void wxWindow::ChangeColour(WXWidget widget)
+// Changes the foreground and background colours to be derived
+// from the current background colour.
+// To change the foreground colour, you must call SetForegroundColour
+// explicitly.
+void wxWindow::ChangeBackgroundColour()
 {
-  // TODO
-#if 0
-  int change;
+    if (GetMainWidget())
+        DoChangeBackgroundColour(GetMainWidget(), m_backgroundColour);
+}
 
-  // TODO: how to determine whether we can change this item's colours?
-  // We used to have wxUSER_COLOURS. Now perhaps we assume we always
-  // can change it.
-  //  if (!(parent->GetWindowStyleFlag() & wxUSER_COLOURS))
-  //    return;
+void wxWindow::ChangeForegroundColour()
+{
+    if (GetMainWidget())
+        DoChangeForegroundColour(GetMainWidget(), m_foregroundColour);
+}
 
-  change = wxComputeColors (XtDisplay((Widget)widget), panel->GetBackgroundColour(),
-			    panel->GetLabelColour());
-  if (change == wxBACK_COLORS)
+// Change a widget's foreground and background colours.
+
+// TODO: make this 2 functions, ChangeForegroundColour and ChangeBackgroundColour.
+
+void wxWindow::DoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour)
+{
+  // When should we specify the foreground, if it's calculated
+  // by wxComputeColours?
+  // Solution: say we start with the default (computed) foreground colour.
+  // If we call SetForegroundColour explicitly for a control or window,
+  // then the foreground is changed.
+  // Therefore SetBackgroundColour computes the foreground colour, and
+  // SetForegroundColour changes the foreground colour. The ordering is
+  // important.
+
+  XtVaSetValues ((Widget) widget,
+		   XmNforeground, foregroundColour.AllocColour(XtDisplay((Widget) widget)),
+		   NULL);
+}
+
+void wxWindow::DoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, bool changeArmColour)
+{
+  wxComputeColours (XtDisplay((Widget) widget), & backgroundColour,
+			    (wxColour*) NULL);
+
+  XtVaSetValues ((Widget) widget,
+		   XmNbackground, g_itemColors[wxBACK_INDEX].pixel,
+		   XmNtopShadowColor, g_itemColors[wxTOPS_INDEX].pixel,
+		   XmNbottomShadowColor, g_itemColors[wxBOTS_INDEX].pixel,
+		   XmNforeground, g_itemColors[wxFORE_INDEX].pixel,
+		   NULL);
+
+  if (changeArmColour)
     XtVaSetValues ((Widget) widget,
-		   XmNbackground, itemColors[wxBACK_INDEX].pixel,
-		   XmNtopShadowColor, itemColors[wxTOPS_INDEX].pixel,
-		   XmNbottomShadowColor, itemColors[wxBOTS_INDEX].pixel,
-		   XmNforeground, itemColors[wxFORE_INDEX].pixel,
-		   NULL);
-  else if (change == wxFORE_COLORS)
-    XtVaSetValues (formWidget,
-		   XmNforeground, itemColors[wxFORE_INDEX].pixel,
-		   NULL);
-
-  change = wxComputeColors (XtDisplay((Widget)formWidget), GetBackgroundColour(), GetLabelColour());
-  if (change == wxBACK_COLORS)
-    XtVaSetValues (labelWidget,
-		   XmNbackground, itemColors[wxBACK_INDEX].pixel,
-		   XmNtopShadowColor, itemColors[wxTOPS_INDEX].pixel,
-		   XmNbottomShadowColor, itemColors[wxBOTS_INDEX].pixel,
-		   XmNarmColor, itemColors[wxSELE_INDEX].pixel,
-		   XmNforeground, itemColors[wxFORE_INDEX].pixel,
-		   NULL);
-  else if (change == wxFORE_COLORS)
-    XtVaSetValues (labelWidget,
-		   XmNforeground, itemColors[wxFORE_INDEX].pixel,
-		   NULL);
-#endif
+    		   XmNarmColor, g_itemColors[wxSELE_INDEX].pixel,
+               NULL);
 }
 
-void wxWindow::ChangeFont(WXWidget widget)
+void wxWindow::SetBackgroundColour(const wxColour& col)
 {
-  /*
-  if (widget && GetFont() && GetFont()->Ok())
-  {
-    XmFontList fontList = (XmFontList) GetFont()->GetFontList(1.0, GetXDisplay());
-    if (fontList)
-        XtVaSetValues ((Widget) widget,
-		   XmNfontList, fontList,
-		   NULL);
-  }
-  */
+    m_backgroundColour = col;
+    ChangeBackgroundColour();
 }
+
+void wxWindow::SetForegroundColour(const wxColour& col)
+{
+    m_foregroundColour = col;
+    ChangeForegroundColour();
+}
+
+void wxWindow::ChangeFont()
+{
+    // Note that this causes the widget to be resized back
+    // to its original size! We therefore have to set the size
+    // back again. TODO: a better way in Motif?
+    /*
+    Widget w = (Widget) GetLabelWidget(); // Usually the main widget
+    if (w && m_windowFont.Ok())
+    {
+        int width, height, width1, height1;
+        GetSize(& width, & height);
+
+        XtVaSetValues (w,
+		   XmNfontList, (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay(w)),
+		   NULL);
+
+        GetSize(& width1, & height1);
+        if (width != width1 || height != height1)
+        {
+            SetSize(-1, -1, width, height);
+        }
+    }
+    */
+}
+
+void wxWindow::SetFont(const wxFont& font)
+{
+    m_windowFont = font;
+    ChangeFont();
+}
+
+

@@ -85,6 +85,8 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
     SetValidator(validator);
     m_rangeMax = range;
     m_windowStyle = style;
+    m_backgroundColour = parent->GetBackgroundColour();
+    m_foregroundColour = parent->GetForegroundColour();
 
     if (parent) parent->AddChild(this);
 
@@ -125,7 +127,7 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, x, y, width, height);
 
     SetFont(* parent->GetFont());
-    ChangeColour(m_mainWidget);
+    ChangeBackgroundColour();
 
     return TRUE;
 }
@@ -184,6 +186,21 @@ int wxGauge::GetValue() const
   XtVaGetValues((Widget) m_mainWidget, XmNvalue, &pos, NULL);
   return pos;
 //    return m_gaugePos;
+}
+
+void wxGauge::ChangeFont()
+{
+    // TODO
+}
+
+void wxGauge::ChangeBackgroundColour()
+{
+    // TODO
+}
+
+void wxGauge::ChangeForegroundColour()
+{
+    // TODO
 }
 
 //// PRIVATE DECLARATIONS FOR XMGAUGE

@@ -60,6 +60,11 @@ class WXDLLEXPORT wxGauge: public wxControl
 
   virtual void Command(wxCommandEvent& WXUNUSED(event)) {} ;
 
+// Implementation
+  virtual void ChangeFont();
+  virtual void ChangeBackgroundColour();
+  virtual void ChangeForegroundColour();
+
  protected:
    int      m_rangeMax;
    int      m_gaugePos;

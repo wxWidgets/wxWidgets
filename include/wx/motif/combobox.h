@@ -72,6 +72,11 @@ class WXDLLEXPORT wxComboBox: public wxChoice
   }
   virtual void SetSelection(long from, long to);
   virtual void SetEditable(bool editable);
+
+// Implementation
+  virtual void ChangeFont();
+  virtual void ChangeBackgroundColour();
+  virtual void ChangeForegroundColour();
 };
 
 #endif

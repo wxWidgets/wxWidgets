@@ -198,7 +198,7 @@ public:
   inline WXDisplay* GetPixmap() const { return M_BITMAPDATA->m_pixmap; }
   virtual WXPixmap GetLabelPixmap(WXWidget w) ;
   virtual WXPixmap GetArmPixmap(WXWidget w) ;
-  virtual WXPixmap GetInsensPixmap(WXWidget w) ;
+  virtual WXPixmap GetInsensPixmap(WXWidget w = (WXWidget) 0) ;
 
 protected:
   static wxList sm_handlers;

@@ -46,6 +46,11 @@ class WXDLLEXPORT wxStaticText: public wxControl
   // operations
   virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
   virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
+
+// Implementation
+  virtual void ChangeFont();
+  virtual void ChangeBackgroundColour();
+  virtual void ChangeForegroundColour();
 };
 
 #endif

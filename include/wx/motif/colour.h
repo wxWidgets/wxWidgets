@@ -22,6 +22,7 @@
 // Colour
 class WXDLLEXPORT wxColour : public wxObject
 {
+DECLARE_DYNAMIC_CLASS(wxColour)
 public:
   // ctors
     // default
@@ -53,9 +54,16 @@ public:
 
   // accessors
   bool Ok() const {return m_isInit; }
+  unsigned char Red() const { return m_red; }
+  unsigned char Green() const { return m_green; }
+  unsigned char Blue() const { return m_blue; }
 
   int GetPixel() const { return m_pixel; };
   void SetPixel(int pixel) { m_pixel = pixel; m_isInit = TRUE; };
+
+  inline bool operator == (const wxColour& colour) { return (m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue); }
+
+  inline bool operator != (const wxColour& colour) { return (!(m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue)); }
 
   // Allocate a colour, or nearest colour, using the given display.
   // If realloc is TRUE, ignore the existing pixel, otherwise just return
@@ -66,6 +74,8 @@ public:
   // flag to specify whether this should be black or white by default.
 
   int AllocColour(WXDisplay* display, bool realloc = FALSE);
+
+  void InitFromName(const wxString& col);
 
 private:
   bool          m_isInit;

@@ -311,11 +311,11 @@ public:
   void SetConstraints(wxLayoutConstraints *c);
 
   // Set/get window background colour
-  inline virtual void SetBackgroundColour(const wxColour& col);
+  virtual void SetBackgroundColour(const wxColour& col);
   inline virtual wxColour GetBackgroundColour() const;
 
   // Set/get window foreground colour
-  inline virtual void SetForegroundColour(const wxColour& col);
+  virtual void SetForegroundColour(const wxColour& col);
   inline virtual wxColour GetForegroundColour() const;
 
   // Get the default button, if there is one
@@ -488,8 +488,15 @@ public:
   virtual WXRegion GetPaintRegion() const { return m_paintRegion; }
 
   // Change properties
-  virtual void ChangeColour(WXWidget widget);
-  virtual void ChangeFont(WXWidget widget);
+  virtual void ChangeFont();             // Change to the current font (often overridden)
+  virtual void DoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour);
+  virtual void DoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, bool changeArmColour = FALSE);
+  // These to be overridden as needed (may change several widgets)
+  virtual void ChangeBackgroundColour(); // Change background and foreground colour using current
+                                         // background colour setting (Motif generates
+                                         // foreground based on background)
+  virtual void ChangeForegroundColour(); // Change foreground colour using current
+                                         // foreground colour setting
 
   // Adds the widget to the hash table and adds event handlers.
   bool AttachWidget (wxWindow* parent, WXWidget mainWidget,
@@ -595,9 +602,7 @@ inline wxEvtHandler *wxWindow::GetEventHandler() const { return m_windowEventHan
 inline void wxWindow::SetAutoLayout(bool a) { m_autoLayout = a; }
 inline bool wxWindow::GetAutoLayout() const { return m_autoLayout; }
 inline wxLayoutConstraints *wxWindow::GetConstraints() const { return m_constraints; }
-inline void wxWindow::SetBackgroundColour(const wxColour& col) { m_backgroundColour = col; };
 inline wxColour wxWindow::GetBackgroundColour() const { return m_backgroundColour; };
-inline void wxWindow::SetForegroundColour(const wxColour& col) { m_foregroundColour = col; };
 inline wxColour wxWindow::GetForegroundColour() const { return m_foregroundColour; };
 
 inline wxButton *wxWindow::GetDefaultItem() const { return m_defaultItem; }

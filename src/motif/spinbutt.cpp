@@ -68,6 +68,21 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
 	// TODO
 }
 
+void wxSpinButton::ChangeFont()
+{
+    // TODO
+}
+
+void wxSpinButton::ChangeBackgroundColour()
+{
+    // TODO
+}
+
+void wxSpinButton::ChangeForegroundColour()
+{
+    // TODO
+}
+
 // Spin event
 IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent)
 

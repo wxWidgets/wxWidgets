@@ -1855,7 +1855,9 @@ void wxWindowDC::SetBackground( const wxBrush &brush )
 
   int pixel = m_backgroundBrush.GetColour().AllocColour(m_display);
 
-  XSetWindowBackground ((Display*) m_display, (Pixmap) m_pixmap, pixel);
+  // XSetWindowBackground doesn't work for non-Window pixmaps
+  if (!this->IsKindOf(CLASSINFO(wxMemoryDC)))
+      XSetWindowBackground ((Display*) m_display, (Pixmap) m_pixmap, pixel);
 
   // Necessary for ::DrawIcon, which use fg/bg pixel or the GC.
   // And Blit,... (Any fct that use XCopyPlane, in fact.)

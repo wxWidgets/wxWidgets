@@ -56,6 +56,11 @@ public:
 
   void Command(wxCommandEvent& event);
 
+// Implementation
+  virtual void ChangeFont();
+  virtual void ChangeBackgroundColour();
+  virtual void ChangeForegroundColour();
+
 protected:
     int m_pageSize;
     int m_viewSize;

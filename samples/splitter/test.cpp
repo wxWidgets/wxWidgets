@@ -66,7 +66,7 @@ DECLARE_EVENT_TABLE()
 class MyCanvas: public wxScrolledWindow
 {
 public:
-	MyCanvas(wxWindow* parent, int x, int y, int w, int h);
+	MyCanvas(wxWindow* parent, wxWindowID id, int x, int y, int w, int h);
 	virtual ~MyCanvas();
 
 	virtual void OnDraw(wxDC& dc);
@@ -82,6 +82,12 @@ END_EVENT_TABLE()
 #define SPLIT_HORIZONTAL    2
 #define SPLIT_VERTICAL      3
 #define SPLIT_UNSPLIT       4
+
+// Window ids
+#define SPLITTER_WINDOW     100
+#define SPLITTER_FRAME      101
+#define CANVAS1             102
+#define CANVAS2             103
 
 IMPLEMENT_APP(MyApp)
 
@@ -110,7 +116,7 @@ END_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, const wxSize& size):
-	wxFrame(frame, -1, title, pos, size)
+	wxFrame(frame, SPLITTER_FRAME, title, pos, size)
 {
 	// set the icon
 #ifdef __WXMSW__
@@ -131,16 +137,16 @@ MyFrame::MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, cons
 
 	SetMenuBar(menuBar);
 
-    splitter = new wxSplitterWindow(this, -1, wxPoint(0, 0), wxSize(400, 400),
+    splitter = new wxSplitterWindow(this, SPLITTER_WINDOW, wxPoint(0, 0), wxSize(400, 400),
 //            wxSP_BORDER);
             wxSP_3D);
 //            wxSP_NOBORDER);
 
-	leftCanvas = new MyCanvas(splitter, 0, 0, 400, 400);
+    leftCanvas = new MyCanvas(splitter, CANVAS1, 0, 0, 400, 400);
     leftCanvas->SetBackgroundColour(*wxRED);
     leftCanvas->SetScrollbars(20, 20, 50, 50);
 
-	rightCanvas = new MyCanvas(splitter, 0, 0, 400, 400);
+    rightCanvas = new MyCanvas(splitter, CANVAS2, 0, 0, 400, 400);
     rightCanvas->SetBackgroundColour(*wxCYAN);
     rightCanvas->SetScrollbars(20, 20, 50, 50);
     rightCanvas->Show(FALSE);
@@ -212,8 +218,8 @@ void MyFrame::OnIdle(wxIdleEvent& event)
 	wxFrame::OnIdle(event);
 }
 
-MyCanvas::MyCanvas(wxWindow* parent, int x, int y, int w, int h) :
-	wxScrolledWindow(parent, -1, wxPoint(x, y), wxSize(w, h))
+MyCanvas::MyCanvas(wxWindow* parent, wxWindowID id, int x, int y, int w, int h) :
+	wxScrolledWindow(parent, id, wxPoint(x, y), wxSize(w, h))
 {
 }
 
