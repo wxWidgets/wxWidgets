@@ -262,7 +262,7 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
                 ESCSEQ("Uuml", "\334"/* Ü */),
     
                 ESCSEQ("szlig", "\247"/* § */),
-                ESCSEQ("agrave;","à"),
+                ESCSEQ("agrave","à"),
                 ESCSEQ("aacute", "\341"/* á */),
                 ESCSEQ("acirc", "\342"/* â */),
                 ESCSEQ("atilde", "\343"/* ã */),
