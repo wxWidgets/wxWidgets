@@ -475,7 +475,7 @@ void wxStyledTextCtrl::MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp)
         buff[len] = 0;
         SendMsg(2049, markerNumber, (long)buff);
         delete [] buff;
-        
+
 }
 
 // Set a margin to be either numeric or symbolic.
@@ -858,7 +858,7 @@ void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp) {
         buff[len] = 0;
         SendMsg(2405, type, (long)buff);
         delete [] buff;
-     
+
 }
 
 // Clear all the registered images.
@@ -2037,6 +2037,11 @@ void wxStyledTextCtrl::StyleSetSpec(int styleNum, const wxString& spec) {
 // Set style size, face, bold, italic, and underline attributes from
 // a wxFont's attributes.
 void wxStyledTextCtrl::StyleSetFont(int styleNum, wxFont& font) {
+#ifdef __WXGTK__
+    // Ensure that the native font is initialized
+    int x, y;
+    GetTextExtent(wxT("X"), &x, &y, NULL, NULL, &font);
+#endif
     int      size     = font.GetPointSize();
     wxString faceName = font.GetFaceName();
     bool     bold     = font.GetWeight() == wxBOLD;
