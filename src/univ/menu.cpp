@@ -978,7 +978,7 @@ bool wxPopupMenuWindow::ProcessKeyDown(int key)
                 bool notUnique = false;
 
                 // translate everything to lower case before comparing
-                wxChar chAccel = wxTolower(key);
+                wxChar chAccel = (wxChar)wxTolower(key);
 
                 // loop through all items searching for the item with this
                 // accel
@@ -2304,7 +2304,7 @@ int wxMenuBar::FindNextItemForAccel(int idxStart, int key, bool *unique) const
         *unique = true;
 
     // translate everything to lower case before comparing
-    wxChar chAccel = wxTolower(key);
+    wxChar chAccel = (wxChar)wxTolower(key);
 
     // the index of the item with this accel
     int idxFound = -1;
