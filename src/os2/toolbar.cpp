@@ -1439,7 +1439,7 @@ void wxToolBar::OnTimer (
   wxTimerEvent&                     rEvent
 )
 {
-    if (rEvent.GetId() == (int)m_vToolTimer.GetTimerId())
+    if (rEvent.GetId() == m_vToolTimer.GetTimerId())
     {
         wxPoint                     vPos( m_vXMouse
                                          ,m_vYMouse
@@ -1449,7 +1449,7 @@ void wxToolBar::OnTimer (
         m_vToolTimer.Stop();
         m_vToolExpTimer.Start(3000L, TRUE);
     }
-    else if (rEvent.GetId() == (int)m_vToolExpTimer.GetTimerId())
+    else if (rEvent.GetId() == m_vToolExpTimer.GetTimerId())
     {
         m_pToolTip->HideToolTipWindow();
         GetParent()->Refresh();

@@ -98,7 +98,7 @@ void wxToolTip::DisplayToolTipWindow(
     LONG                            lWidth = 0L;
     LONG                            lHeight = 0L;
 
-    lWidth = m_sText.Length() * 13;
+    lWidth = m_sText.Length() * 8;
     lHeight = 15;
     ::WinSetWindowPos( m_hWnd
                       ,HWND_TOP

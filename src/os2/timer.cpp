@@ -65,7 +65,7 @@ void wxTimer::Notify()
     //
     wxCHECK_RET( m_owner, _T("wxTimer::Notify() should be overridden.") );
 
-    wxTimerEvent                    vEvent( m_ulId
+    wxTimerEvent                    vEvent( m_idTimer
                                            ,m_milli
                                           );
 
@@ -85,14 +85,23 @@ bool wxTimer::Start(
 
     wxTimerList.DeleteObject(this);
 
-    //
-    // Create a windowless timer
-    //
-    m_ulId = ::WinStartTimer( m_Hab
-                             ,NULLHANDLE
-                             ,0
-                             ,(ULONG)nMilliseconds
-                            );
+    wxWindow*                       pWin = NULL;
+
+    if (m_owner)
+    {
+        pWin = (wxWindow*)m_owner;
+        m_ulId = ::WinStartTimer( m_Hab
+                                 ,pWin->GetHWND()
+                                 ,m_idTimer
+                                 ,(ULONG)nMilliseconds
+                                );
+    }
+    else
+        m_ulId = ::WinStartTimer( m_Hab
+                                 ,NULLHANDLE
+                                 ,0
+                                 ,(ULONG)nMilliseconds
+                                );
     if (m_ulId > 0L)
     {
         wxTimerList.Append( m_ulId
@@ -112,9 +121,17 @@ void wxTimer::Stop()
 {
     if ( m_ulId )
     {
-        ::WinStopTimer(m_Hab, NULL, m_ulId);
+        if (m_owner)
+        {
+            wxWindow*                   pWin = (wxWindow*)m_owner;
+
+            ::WinStopTimer(m_Hab, pWin->GetHWND(), m_ulId);
+        }
+        else
+            ::WinStopTimer(m_Hab, NULLHANDLE, m_ulId);
         wxTimerList.DeleteObject(this);
     }
+    m_ulId = 0L;
 }
 
 // ----------------------------------------------------------------------------
