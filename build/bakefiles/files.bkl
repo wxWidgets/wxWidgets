@@ -2511,6 +2511,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_chckb.cpp
     src/xrc/xh_chckl.cpp
     src/xrc/xh_choic.cpp
+    src/xrc/xh_choicbk.cpp
     src/xrc/xh_combo.cpp
     src/xrc/xh_datectrl.cpp
     src/xrc/xh_dlg.cpp
@@ -2519,6 +2520,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_gdctl.cpp
     src/xrc/xh_html.cpp
     src/xrc/xh_listb.cpp
+    src/xrc/xh_listbk.cpp
     src/xrc/xh_listc.cpp
     src/xrc/xh_menu.cpp
     src/xrc/xh_notbk.cpp
@@ -2554,6 +2556,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_chckb.h
     wx/xrc/xh_chckl.h
     wx/xrc/xh_choic.h
+    wx/xrc/xh_choicbk.h
     wx/xrc/xh_combo.h
     wx/xrc/xh_datectrl.h
     wx/xrc/xh_dlg.h
@@ -2562,6 +2565,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_gdctl.h
     wx/xrc/xh_html.h
     wx/xrc/xh_listb.h
+    wx/xrc/xh_listbk.h
     wx/xrc/xh_listc.h
     wx/xrc/xh_menu.h
     wx/xrc/xh_notbk.h
@@ -2678,7 +2682,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='X11'">$(BASE_DARWIN_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(BASE_DARWIN_SRC)</if>
         <!-- FIXME: TOOLKIT!='MAC' is what we really want -->
-        
+
         <!-- FIXME: a hack because there are two wxBase versions on
                     Mac; once fixed, this would no longer be needed -->
         <if cond="TOOLKIT==''">$(BASE_DARWIN_SRC)</if>

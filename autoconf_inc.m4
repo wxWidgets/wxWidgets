@@ -656,6 +656,18 @@ dnl ### begin block 20_COND_USE_PLUGINS_0[../../contrib/build/animate/animate.bk
         COND_USE_PLUGINS_0=""
     fi
     AC_SUBST(COND_USE_PLUGINS_0)
+dnl ### begin block 20_COND_USE_RTTI_0[wx.bkl] ###
+    COND_USE_RTTI_0="#"
+    if test "x$USE_RTTI" = "x0" ; then
+        COND_USE_RTTI_0=""
+    fi
+    AC_SUBST(COND_USE_RTTI_0)
+dnl ### begin block 20_COND_USE_RTTI_1[wx.bkl] ###
+    COND_USE_RTTI_1="#"
+    if test "x$USE_RTTI" = "x1" ; then
+        COND_USE_RTTI_1=""
+    fi
+    AC_SUBST(COND_USE_RTTI_1)
 dnl ### begin block 20_COND_USE_SOSYMLINKS_1[../../contrib/build/animate/animate.bkl,../../contrib/build/deprecated/deprecated.bkl,../../contrib/build/fl/fl.bkl,../../contrib/build/foldbar/foldbar.bkl,../../contrib/build/gizmos/gizmos.bkl,../../contrib/build/mmedia/mmedia.bkl,../../contrib/build/net/net.bkl,../../contrib/build/ogl/ogl.bkl,../../contrib/build/plot/plot.bkl,../../contrib/build/stc/stc.bkl,../../contrib/build/svg/svg.bkl,wx.bkl] ###
     COND_USE_SOSYMLINKS_1="#"
     if test "x$USE_SOSYMLINKS" = "x1" ; then
@@ -680,6 +692,18 @@ dnl ### begin block 20_COND_USE_SOVERSOLARIS_1[../../contrib/build/animate/anima
         COND_USE_SOVERSOLARIS_1=""
     fi
     AC_SUBST(COND_USE_SOVERSOLARIS_1)
+dnl ### begin block 20_COND_USE_THREADS_0[wx.bkl] ###
+    COND_USE_THREADS_0="#"
+    if test "x$USE_THREADS" = "x0" ; then
+        COND_USE_THREADS_0=""
+    fi
+    AC_SUBST(COND_USE_THREADS_0)
+dnl ### begin block 20_COND_USE_THREADS_1[wx.bkl] ###
+    COND_USE_THREADS_1="#"
+    if test "x$USE_THREADS" = "x1" ; then
+        COND_USE_THREADS_1=""
+    fi
+    AC_SUBST(COND_USE_THREADS_1)
 dnl ### begin block 20_COND_USE_XRC_1[../../utils/wxrc/wxrc.bkl,wx.bkl] ###
     COND_USE_XRC_1="#"
     if test "x$USE_XRC" = "x1" ; then

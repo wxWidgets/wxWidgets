@@ -34,6 +34,8 @@
 #include "wx/xrc/xh_sizer.h"
 #include "wx/xrc/xh_stbmp.h"
 #include "wx/xrc/xh_notbk.h"
+#include "wx/xrc/xh_listbk.h"
+#include "wx/xrc/xh_choicbk.h"
 #include "wx/xrc/xh_text.h"
 #include "wx/xrc/xh_listb.h"
 #include "wx/xrc/xh_toolb.h"
@@ -53,4 +55,4 @@
 #include "wx/xrc/xh_wizrd.h"
 #include "wx/xrc/xh_statbar.h"
 
-#endif // _WX_XMLRES_H_
+#endif // _WX_XH_ALL_H_
