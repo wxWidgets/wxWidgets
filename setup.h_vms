@@ -68,7 +68,7 @@
 #undef YYTEXT_POINTER
 
 /* Define this if your version of GTK+ is greater than 1.2 */
-#undef __WXGTK12__
+#define __WXGTK12__ 1
 
 /* Define this if your version of GTK+ is greater than 1.3 */
 #undef __WXGTK13__

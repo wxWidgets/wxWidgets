@@ -11,7 +11,11 @@
 .ifdef __WXMOTIF__
 CXX_DEFINE = /define=(__WXMOTIF__=1)
 .else
+.ifdef __WXGTK__
+CXX_DEFINE = /define=(__WXGTK__=1)
+.else
 CXX_DEFINE =
+.endif
 .endif
 
 .suffixes : .cpp
@@ -45,6 +49,10 @@ all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
 .ifdef __WXMOTIF__
 	library [--.lib]libwx_motif.olb $(OBJECTS)
+.else
+.ifdef __WXGTK__
+	library [--.lib]libwx_gtk.olb $(OBJECTS)
+.endif
 .endif
 
 dialup.obj : dialup.cpp

@@ -1452,13 +1452,14 @@ void wxWindowDC::SetPen( const wxPen &pen )
         {
             for (int i = 0; i < req_nb_dash; i++)
                 real_req_dash[i] = req_dash[i] * width;
-            gdk_gc_set_dashes( m_penGC, 0, real_req_dash, req_nb_dash );
+            gdk_gc_set_dashes( m_penGC, 0, (gint8*) real_req_dash,
+			      req_nb_dash );
             delete[] real_req_dash;
         }
         else
         {
             // No Memory. We use non-scaled dash pattern...
-            gdk_gc_set_dashes( m_penGC, 0, (char*)req_dash, req_nb_dash );
+            gdk_gc_set_dashes( m_penGC, 0, (gint8*)req_dash, req_nb_dash );
         }
     }
 #endif

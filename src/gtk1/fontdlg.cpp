@@ -17,6 +17,11 @@
 #include "wx/debug.h"
 #include "wx/msgdlg.h"
 
+#ifdef __VMS__
+#define gtk_font_selection_dialog_get_type gtk_font_selection_dialog_get_t
+#define gtk_font_selection_dialog_get_font gtk_font_selection_dialog_get_f
+#define gtk_font_selection_dialog_get_font_name gtk_font_selection_dialog_getnf
+#endif
 #include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------

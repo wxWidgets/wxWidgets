@@ -16,6 +16,10 @@
 #include "wx/intl.h"
 #include "wx/generic/msgdlgg.h"
 
+
+#ifdef __VMS__
+#define gtk_file_selection_hide_fileop_buttons gtk_file_selection_hide_fileop_
+#endif
 #include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------

@@ -30,7 +30,14 @@
 #include "wx/fontenum.h"
 #include "wx/fontutil.h"
 
+#ifdef __VMS__ // Xlib.h for VMS is not (yet) compatible with C++
+               // The resulting warnings are switched off here
+#pragma message disable nosimpint
+#endif
 #include <X11/Xlib.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 
 // ----------------------------------------------------------------------------
 // private functions

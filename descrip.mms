@@ -13,35 +13,56 @@
 	define/job/trans=(concealed) wx_root "''wx_fuldir'"
 	set def [.wxwindows]
 
-all : setup.h
+all :
+	make gtk
+	purge [...]
+	delete [...]*.obj;
+	make motif
+	purge [...]
+	delete [...]*.obj;
+
+gtk : setup.h
 	set default [.src.generic]
-	$(MMS)$(MMSQUALIFIERS)
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.common]
-	$(MMS)$(MMSQUALIFIERS)
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.unix]
-	$(MMS)$(MMSQUALIFIERS)
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [-.gtk]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [--.samples.minimal]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+
+motif : setup.h
+	set default [.src.generic]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
+	set default [-.common]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
+	set default [-.unix]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.motif]
-	$(MMS)$(MMSQUALIFIERS)
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [--.demos.bombs]
-	$(MMS)$(MMSQUALIFIERS)
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [--.samples.caret]
-	$(MMS)$(MMSQUALIFIERS)
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.checklst]
-	$(MMS)$(MMSQUALIFIERS)
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.config]
-	$(MMS)$(MMSQUALIFIERS)
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.controls]
-	$(MMS)$(MMSQUALIFIERS)
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.dialogs]
-	$(MMS)$(MMSQUALIFIERS)
-	set default [-.image]
-	$(MMS)$(MMSQUALIFIERS)
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
+#	set default [-.image]
+#	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.menu]
-	$(MMS)$(MMSQUALIFIERS)
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.minimal]
-	$(MMS)$(MMSQUALIFIERS)
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [--.utils.dialoged.src]
-	$(MMS)$(MMSQUALIFIERS)
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
+	set default [--]
 
 setup.h : setup.h_vms
 	copy setup.h_vms setup.h

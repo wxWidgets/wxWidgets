@@ -11,7 +11,11 @@
 .ifdef __WXMOTIF__
 CXX_DEFINE = /define=(__WXMOTIF__=1)
 .else
+.ifdef __WXGTK__
+CXX_DEFINE = /define=(__WXGTK__=1)
+.else
 CXX_DEFINE =
+.endif
 .endif
 
 .suffixes : .cpp
@@ -38,7 +42,6 @@ OBJECTS = \
 		listctrl.obj,\
 		logg.obj,\
 		msgdlgg.obj,\
-		notebook.obj,\
 		numdlgg.obj,\
 		panelg.obj,\
 		plot.obj,\
@@ -51,7 +54,6 @@ OBJECTS = \
 		sashwin.obj,\
 		scrolwin.obj,\
 		splitter.obj,\
-		statline.obj,\
 		statusbr.obj,\
 		tbarsmpl.obj,\
 		tabg.obj,\
@@ -101,11 +103,21 @@ SOURCES = \
 		treectrl.cpp,\
 		wizard.cpp
 
+.ifdef __WXMOTIF__
+OBJECTS0=,statline.obj,\
+		notebook.obj
+.else
+OBJECTS0=
+.endif
 
 all : $(SOURCES)
-	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
+	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)$(OBJECTS0)
 .ifdef __WXMOTIF__
-	library/crea [--.lib]libwx_motif.olb $(OBJECTS)
+	library/crea [--.lib]libwx_motif.olb $(OBJECTS)$(OBJECTS0)
+.else
+.ifdef __WXGTK__
+	library/crea [--.lib]libwx_gtk.olb $(OBJECTS)
+.endif
 .endif
 
 busyinfo.obj : busyinfo.cpp

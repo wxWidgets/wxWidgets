@@ -1,0 +1,11 @@
+wx_root:[wxwindows.lib]libwx_gtk.olb/lib
+sys$library:libjpeg.olb/lib
+sys$library:libpng.olb/lib
+sys$library:libz.olb/lib
+sys$library:libtiff.olb/lib
+X11:libxpm.olb/lib
+sys$common:[mozilla]libgtk.so/share
+sys$common:[mozilla]libgdk.so/share
+sys$common:[mozilla]libglib.so/share
+sys$common:[mozilla]vms_jackets.so/share
+sys$library:decw$xlibshr.exe/share
