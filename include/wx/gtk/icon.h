@@ -40,7 +40,8 @@ public:
   wxIcon(const wxIcon& icon);
   wxIcon(const wxIcon* icon);
   wxIcon( char **bits, int width=-1, int height=-1 );
-  
+
+  wxIcon& operator = (const wxIcon& icon);
   inline bool operator == (const wxIcon& icon) { return m_refData == icon.m_refData; }
   inline bool operator != (const wxIcon& icon) { return m_refData != icon.m_refData; }
 };
