@@ -114,7 +114,11 @@ public:
   inline void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
   inline wxEvtHandler *GetEventHandler() { return m_eventHandler; }
   
-public:
+  inline void SetClientData( void* clientData ) { m_clientData = clientData; }
+  inline void* GetClientData() const { return m_clientData; }
+  
+// implementation
+  
   int FindMenuIdByMenuItem( GtkWidget *menuItem ) const;
   void SetInvokingWindow( wxWindow *win );
   wxWindow *GetInvokingWindow();
@@ -124,6 +128,7 @@ public:
   wxWindow      *m_invokingWindow;
   wxFunction     m_callback;
   wxEvtHandler  *m_eventHandler;
+  void          *m_clientData;
 
   GtkWidget     *m_menu;  // GtkMenu
 };

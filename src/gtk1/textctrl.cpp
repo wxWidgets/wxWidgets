@@ -84,7 +84,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
     // ... and put into the upper left hand corner of the table
     m_widget = gtk_table_new(bHasHScrollbar ? 2 : 1, 2, FALSE);
     gtk_table_attach( GTK_TABLE(m_widget), m_text, 0, 1, 0, 1,
-                      (GtkAttachOptions)(GTK_FILL | GTK_EXPAND),
+                      (GtkAttachOptions)(GTK_FILL | GTK_EXPAND | GTK_SHRINK),
                       (GtkAttachOptions)(GTK_FILL | GTK_EXPAND | GTK_SHRINK),
                        0, 0);
 

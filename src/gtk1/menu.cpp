@@ -262,8 +262,11 @@ wxMenu::wxMenu( const wxString& title, const wxFunction func )
   m_items.DeleteContents( TRUE );
   m_invokingWindow = (wxWindow *) NULL;
   m_menu = gtk_menu_new();  // Do not show!
+  
   m_callback = func;
   m_eventHandler = this;
+  m_clientData = (void*) NULL;
+  
   if (m_title.IsNull()) m_title = "";
   if (m_title != "")
   {
