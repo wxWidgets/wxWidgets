@@ -51,7 +51,7 @@
     #include <windowsx.h>
     #include "wx/msw/private.h"
 
-    #ifndef __SMARTPHONE__
+    #ifndef __SMARTPHONE__ /* of WinCE */
         #include <commdlg.h>
     #endif
 
