@@ -160,6 +160,10 @@ wxMac:
 - fix for long file names (longer than 32 characters) in file dialogs
 - use unix sockets for Mach-o builds
 
+wxMotif:
+
+- look for Motif 2.1 headers before Motif 1.2 ones in configure
+
 wxHTML:
 
 - wxHtmlHelpController now supports compressed MS HTML Help files (*.chm)

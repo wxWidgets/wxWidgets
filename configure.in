@@ -1745,18 +1745,19 @@ dnl headers are included instead of the "fixed" (ANSI-fied) gcc ones.
 dnl
 dnl Also try to put all directories which may contain X11R6 before those which
 dnl may contain X11R5/4 - we want to use R6 on machines which have both!
+dnl
+dnl In the same vein. Motif 2.1 should be tried before Motif 1.2 for the
+dnl systems which have both (AIX 4.x does)
 SEARCH_INCLUDE="\
     /usr/local/include        \
                               \
-    /usr/Motif-1.2/include    \
     /usr/Motif-2.1/include    \
-                              \
+    /usr/Motif-1.2/include    \
     /usr/include/Motif1.2     \
     /opt/xpm/include/X11      \
     /opt/GBxpm/include/       \
     /opt/GBxpm/X11/include/   \
                               \
-    /usr/Motif1.2/include     \
     /usr/dt/include           \
     /usr/openwin/include      \
                               \
