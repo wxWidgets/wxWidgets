@@ -442,17 +442,31 @@ void wxInitializeStockObjects ()
 #else
 #endif
 */
-#if defined(__WXMAC__) || defined(__WXPM__)
+#if defined(__WXMAC__)
   static const int sizeFont = 12;
   wxNORMAL_FONT = new wxFont (sizeFont, wxMODERN, wxNORMAL, wxNORMAL);
+<<<<<<< gdicmn.cpp
+#elif defined(__WXPM__)
+  static const int sizeFont = 12;
 #else
   wxNORMAL_FONT = new wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
   static const int sizeFont = wxNORMAL_FONT->GetPointSize();
 #endif
 
+#if defined(__WXPM__)
+  /*
+  // Basic OS/2 has a fairly limited number of fonts and these are as good
+  // as I can do to get something that looks halfway "wx" normal
+  */
+  wxNORMAL_FONT = new wxFont (sizeFont, wxMODERN, wxNORMAL, wxNORMAL); /* System VIO */
+  wxSMALL_FONT = new wxFont (sizeFont - 4, wxMODERN, wxNORMAL, wxNORMAL); /* System VIO */
+  wxITALIC_FONT = new wxFont (sizeFont, wxROMAN, wxITALIC, wxNORMAL);
+  wxSWISS_FONT = new wxFont (sizeFont, wxSWISS, wxNORMAL, wxNORMAL); /* Helv */
+#else
   wxSMALL_FONT = new wxFont (sizeFont - 2, wxSWISS, wxNORMAL, wxNORMAL);
   wxITALIC_FONT = new wxFont (sizeFont, wxROMAN, wxITALIC, wxNORMAL);
   wxSWISS_FONT = new wxFont (sizeFont, wxSWISS, wxNORMAL, wxNORMAL);
+#endif
 
   wxRED_PEN = new wxPen (wxT("RED"), 1, wxSOLID);
   wxCYAN_PEN = new wxPen (wxT("CYAN"), 1, wxSOLID);
