@@ -47,7 +47,7 @@ public:
     int GetCommand( wxKeyEvent &event );
 };
 
-WXDLLEXPORT_DATA(extern wxAcceleratorTable) wxNullAcceleratorTable;
+// WXDLLEXPORT_DATA(extern wxAcceleratorTable) wxNullAcceleratorTable;
 
 #endif
     // _WX_ACCEL_H_
