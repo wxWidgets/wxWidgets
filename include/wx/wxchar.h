@@ -69,7 +69,9 @@
         #include <string.h>
         #include <ctype.h>
     #elif defined(__CYGWIN__)
-        #define HAVE_WCSLEN
+        #ifndef HAVE_WCSLEN
+            #define HAVE_WCSLEN
+        #endif // !HAVE_WCSLEN
         #include <stddef.h>
         #include <wchar.h>
     #endif
