@@ -332,16 +332,12 @@ void GSocket_SetNonBlocking(GSocket *socket, int non_block);
  */
 void GSocket_SetTimeout(GSocket *socket, unsigned long millisec);
 
-#endif /* ndef wxUSE_GSOCKET_CPLUSPLUS */
-
 /* GSocket_GetError:
  *  Returns the last error occured for this socket. Note that successful
  *  operations do not clear this back to GSOCK_NOERROR, so use it only
  *  after an error.
  */
 GSocketError WXDLLIMPEXP_NET GSocket_GetError(GSocket *socket);
-
-#ifndef wxUSE_GSOCKET_CPLUSPLUS
 
 /* Callbacks */
 

@@ -83,6 +83,32 @@
 
 static class GSocketGUIFunctionsTable *gs_gui_functions;
 
+class GSocketGUIFunctionsTableNull: public GSocketGUIFunctionsTable
+{
+public:
+    virtual bool OnInit();
+    virtual void OnExit();
+    virtual bool CanUseEventLoop();
+    virtual bool Init_Socket(GSocket *socket);
+    virtual void Destroy_Socket(GSocket *socket);
+    virtual void Enable_Events(GSocket *socket);
+    virtual void Disable_Events(GSocket *socket);
+};
+
+bool GSocketGUIFunctionsTableNull::OnInit()
+{   return true; }
+void GSocketGUIFunctionsTableNull::OnExit()
+{}
+bool GSocketGUIFunctionsTableNull::CanUseEventLoop()
+{   return false; }
+bool GSocketGUIFunctionsTableNull::Init_Socket(GSocket *socket)
+{   return true; }
+void GSocketGUIFunctionsTableNull::Destroy_Socket(GSocket *socket)
+{}
+void GSocketGUIFunctionsTableNull::Enable_Events(GSocket *socket)
+{}
+void GSocketGUIFunctionsTableNull::Disable_Events(GSocket *socket)
+{}
 /* Global initialisers */
 
 void GSocket_SetGUIFunctions(struct GSocketGUIFunctionsTable *guifunc)
@@ -94,12 +120,14 @@ int GSocket_Init(void)
 {
   WSADATA wsaData;
 
-  if (gs_gui_functions)
+  if (!gs_gui_functions)
   {
-      if ( !gs_gui_functions->OnInit() )
-      {
-        return 0;
-      }
+    static class GSocketGUIFunctionsTableNull table;
+    gs_gui_functions = &table;
+  }
+  if ( !gs_gui_functions->OnInit() )
+  {
+    return 0;
   }
 
   /* Initialize WinSocket */
@@ -902,7 +930,7 @@ void GSocket::SetTimeout(unsigned long millis)
  *  operations do not clear this back to GSOCK_NOERROR, so use it only
  *  after an error.
  */
-GSocketError GSocket::GetError()
+GSocketError WXDLLIMPEXP_NET GSocket::GetError()
 {
   assert(this);
 

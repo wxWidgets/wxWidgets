@@ -82,7 +82,7 @@ public:
   GSocketEventFlags Select(GSocketEventFlags flags);
   void SetNonBlocking(bool non_block);
   void SetTimeout(unsigned long millis);
-  GSocketError GetError();
+  GSocketError WXDLLIMPEXP_NET GetError();
   void SetCallback(GSocketEventFlags flags,
     GSocketCallback callback, char *cdata);
   void UnsetCallback(GSocketEventFlags flags);
@@ -155,6 +155,8 @@ inline void GSocket_SetNonBlocking(GSocket *socket, int non_block)
 {   socket->SetNonBlocking(non_block); }
 inline void GSocket_SetTimeout(GSocket *socket, unsigned long millisec)
 {   socket->SetTimeout(millisec); }
+inline GSocketError GSocket_GetError(GSocket *socket)
+{   return socket->GetError(); }
 inline void GSocket_SetCallback(GSocket *socket, GSocketEventFlags flags,
                          GSocketCallback fallback, char *cdata)
 {   socket->SetCallback(flags,fallback,cdata); }
