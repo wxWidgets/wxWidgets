@@ -2396,7 +2396,9 @@ wxMBConv *wxCSConv::DoCreate() const
 #endif // wxHAVE_WIN32_MB2WC
 #if defined(__WXMAC__)
     {
-        if ( m_name || ( m_encoding < wxFONTENCODING_UTF16BE ) )
+        // leave UTF16 and UTF32 to the built-ins of wx
+        if ( m_name || ( m_encoding < wxFONTENCODING_UTF16BE || 
+            ( m_encoding >= wxFONTENCODING_MACMIN && m_encoding <= wxFONTENCODING_MACMAX ) ) )
         {
 
 #if wxUSE_FONTMAP
