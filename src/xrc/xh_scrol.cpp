@@ -49,6 +49,7 @@ wxObject *wxScrollBarXmlHandler::DoCreateResource()
                           GetLong( wxT("pagesize"),1));
 
     SetupWindow(control);
+    CreateChildren(control);
     
     return control;
 }
