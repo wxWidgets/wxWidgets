@@ -145,9 +145,9 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
     m_ok = TRUE ;
     m_minY = m_minX = 0 ;
 #if TARGET_CARBON
-    PMRect rPaper;
+    PMRect rPage;
     
-    err = PMGetAdjustedPaperRect((PMPageFormat)m_printData.m_macPageFormat, &rPaper);
+    err = PMGetAdjustedPageRect((PMPageFormat)m_printData.m_macPageFormat, &rPage);
     if ( err != noErr )
     {
         message.Printf( wxT("Print Error %ld"), err ) ;
@@ -161,11 +161,11 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
         m_ok = FALSE;
         return;
     }
-    m_maxX = wxCoord(rPaper.right - rPaper.left) ;
-    m_maxY = wxCoord(rPaper.bottom - rPaper.top);
+    m_maxX = wxCoord(rPage.right - rPage.left) ;
+    m_maxY = wxCoord(rPage.bottom - rPage.top);
 #else
-    m_maxX = (**(THPrint)m_printData.m_macPrintSettings).rPaper.right - (**(THPrint)m_printData.m_macPrintSettings).rPaper.left ;
-    m_maxY = (**(THPrint)m_printData.m_macPrintSettings).rPaper.bottom - (**(THPrint)m_printData.m_macPrintSettings).rPaper.top ;
+    m_maxX = (**(THPrint)m_printData.m_macPrintSettings).rPage.right - (**(THPrint)m_printData.m_macPrintSettings).rPage.left ;
+    m_maxY = (**(THPrint)m_printData.m_macPrintSettings).rPage.bottom - (**(THPrint)m_printData.m_macPrintSettings).rPage.top ;
 #endif
 }
 
@@ -275,9 +275,9 @@ bool wxPrinterDC::StartDoc( const wxString& WXUNUSED(message) )
     m_ok = TRUE ;
     m_minY = m_minX = 0 ;
 #if TARGET_CARBON
-    PMRect rPaper;
+    PMRect rPage;
     
-    err = PMGetAdjustedPaperRect((PMPageFormat)m_printData.m_macPageFormat, &rPaper);
+    err = PMGetAdjustedPageRect((PMPageFormat)m_printData.m_macPageFormat, &rPage);
     if ( err != noErr )
     {
         message.Printf( wxT("Print Error %d"), err ) ;
@@ -291,11 +291,11 @@ bool wxPrinterDC::StartDoc( const wxString& WXUNUSED(message) )
         m_ok = FALSE;
         return m_ok;
     }
-    m_maxX = rPaper.right - rPaper.left ;
-    m_maxY = rPaper.bottom - rPaper.top ;
+    m_maxX = rPage.right - rPage.left ;
+    m_maxY = rPage.bottom - rPage.top ;
 #else
-    m_maxX = (**(THPrint)m_printData.m_macPrintSettings).rPaper.right - (**(THPrint)m_printData.m_macPrintSettings).rPaper.left ;
-    m_maxY = (**(THPrint)m_printData.m_macPrintSettings).rPaper.bottom - (**(THPrint)m_printData.m_macPrintSettings).rPaper.top ;
+    m_maxX = (**(THPrint)m_printData.m_macPrintSettings).rPage.right - (**(THPrint)m_printData.m_macPrintSettings).rPage.left ;
+    m_maxY = (**(THPrint)m_printData.m_macPrintSettings).rPage.bottom - (**(THPrint)m_printData.m_macPrintSettings).rPage.top ;
 #endif
     return m_ok ;
 }
@@ -397,13 +397,13 @@ void wxPrinterDC::StartPage(void)
            ::SetPort( macPrintFormerPort ) ;
            m_ok = FALSE ;
     }
-    PMRect rPaper;
+    PMRect rPage;
     
-    err = PMGetAdjustedPaperRect((PMPageFormat)m_printData.m_macPageFormat, &rPaper);
+    err = PMGetAdjustedPageRect((PMPageFormat)m_printData.m_macPageFormat, &rPage);
     if ( !err )
     {
-        m_macLocalOrigin.x = rPaper.left ;
-        m_macLocalOrigin.y = rPaper.top ;
+        m_macLocalOrigin.x = rPage.left ;
+        m_macLocalOrigin.y = rPage.top ;
     }
 #endif
 }
