@@ -454,7 +454,9 @@ unsigned long wxPyGetCurrentThreadId() {
     return (unsigned long)pthread_self();
 #endif
 #ifdef __WXMAC__
-#error Fix this!
+    ThreadID current ;
+    MacGetCurrentThread( &current ) ;
+    return (unsigned long)current;
 #endif
 }
 
