@@ -315,11 +315,13 @@ all: @WX_ALL@
 
 $(build_libdir)/@WX_LIBRARY_NAME_STATIC@:  $(OBJECTS)
 	@$(INSTALL) -d $(build_libdir)
+	@$(RM) $@
 	$(AR) $(AROPTIONS) $@ $(OBJECTS)
 	$(RANLIB) $@
 
 $(build_libdir)/@WX_LIBRARY_NAME_STATIC_GL@:  glcanvas.o
 	@$(INSTALL) -d $(build_libdir)
+	@$(RM) $@
 	$(AR) $(AROPTIONS) $@ glcanvas.o
 	$(RANLIB) $@
 
