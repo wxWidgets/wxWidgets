@@ -78,10 +78,8 @@ THISDIR=$(WXWIN)\src\msw
 
 !if "$(WXMAKINGDLL)" == "1"
 LIBTARGET=$(WXDIR)\lib\$(WXLIBNAME).dll
-DUMMYOBJ=$D\dummydll.obj
 !else
 LIBTARGET=$(WXLIB)
-DUMMYOBJ=$D\dummy.obj
 !endif
 
 # This one overrides the others, to be consistent with the settings in setup.h
@@ -176,6 +174,11 @@ $(ARCHINCDIR)\wx:
     mkdir $(ARCHINCDIR)
     mkdir $(ARCHINCDIR)\wx
 
+$(WXDIR)\include\wx\msw\setup.h:
+    cd $(WXDIR)\include\wx\msw
+    if not exist setup.h copy setup0.h setup.h
+    cd $(WXDIR)\src\msw
+
 $(SETUP_H): $(WXDIR)\include\wx\msw\setup.h
     copy $(WXDIR)\include\wx\msw\setup.h $@
 
@@ -247,12 +250,12 @@ pch1:   dirs $(DUMMYOBJ)
 
 ### Static library
 
-$(WXDIR)\lib\$(WXLIBNAME).lib:      $D\dummy.obj $(OBJECTS) $(PERIPH_LIBS)
+$(WXDIR)\lib\$(WXLIBNAME).lib:      $(DUMMYOBJ) $(OBJECTS) $(PERIPH_LIBS)
 	-erase $(LIBTARGET)
 	$(implib) @<<
 -out:$@
 -machine:$(CPU)
-$(OBJECTS) $D\dummy.obj $(PERIPH_LIBS)
+$(OBJECTS) $(DUMMYOBJ) $(PERIPH_LIBS)
 <<
 
 !else
@@ -301,13 +304,8 @@ $(WXDIR)\lib\$(WXLIBNAME).dll: $(DUMMYOBJ) $(OBJECTS)
 ########################################################
 # Windows-specific objects
 
-$D\dummy.obj: dummy.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(SETUP_H)
-        cl $(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummy.obj /c /Tp dummy.cpp
-
-$D\dummydll.obj: dummydll.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(SETUP_H)
-        cl @<<
-$(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummydll.obj /c /Tp dummydll.cpp
-<<
+$(DUMMYOBJ): $(DUMMY).$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(SETUP_H)
+        cl $(CPPFLAGS) $(MAKEPRECOMP) /Fo$(DUMMYOBJ) /c /Tp $(DUMMY).cpp
 
 # Compile certain files with no optimization (some files cause a
 # compiler crash for buggy versions of VC++, e.g. 4.0).

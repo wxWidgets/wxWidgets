@@ -23,7 +23,6 @@ wxUSE_GUI = 0
 THISDIR=$(WXWIN)\src\msw
 
 LIBTARGET=$(WXLIB)
-DUMMYOBJ=$D/dummy.obj
 
 # This one overrides the others, to be consistent with the settings in setup.h
 MINIMAL_WXWINDOWS_SETUP=0
@@ -140,14 +139,21 @@ MSWOBJS = ..\msw\$D\dde.obj \
 
 OBJECTS = $(COMMONOBJS) $(MSWOBJS) 
 
-# Normal, static library
-#all:    setuph dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib xpm jpeg tiff $(LIBTARGET)
-all:    setuph dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) zlib $(LIBTARGET)
+ARCHINCDIR=$(WXDIR)\lib\base$(INCEXT)
+SETUP_H=$(ARCHINCDIR)\wx\setup.h
 
-setuph:
+# Normal, static library
+#all:    dirs $(SETUP_H) $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib xpm jpeg tiff $(LIBTARGET)
+all:    dirs $(SETUP_H) $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) zlib $(LIBTARGET)
+
+
+$(WXDIR)\include\wx\msw\setup.h:
     cd $(WXDIR)\include\wx\msw
     if not exist setup.h copy setup0.h setup.h
     cd $(WXDIR)\src\msw
+
+$(SETUP_H): $(WXDIR)\include\wx\msw\setup.h
+    copy $(WXDIR)\include\wx\msw\setup.h $@
 
 dirs: $(MSWDIR)\$D $(COMMDIR)\$D 
 
@@ -162,16 +168,16 @@ $(MSWDIR)\$D:
 
 ### Static library
 
-$(WXDIR)\lib\$(WXLIBNAME).lib:      $D\dummy.obj $(OBJECTS) 
+$(WXDIR)\lib\$(WXLIBNAME).lib:      $(DUMMYOBJ) $(OBJECTS) 
   -erase $(LIBTARGET)
   $(implib) @<<
 -out:$@
 -machine:$(CPU)
-$(OBJECTS) $D\dummy.obj $(PERIPH_LIBS)
+$(OBJECTS) $(DUMMYOBJ) $(PERIPH_LIBS)
 <<
 
-$D\dummy.obj: dummy.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(WXDIR)\include\wx\msw\setup.h
-        cl $(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummy.obj /c /Tp dummy.cpp
+$(DUMMYOBJ): $(DUMMY).$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(SETUP_H)
+        cl $(CPPFLAGS) $(MAKEPRECOMP) /Fo$(DUMMYOBJ) /c /Tp $(DUMMY).cpp
 ########################################################
 
 ..\common\$D\y_tab.obj:     ..\common\y_tab.c ..\common\lex_yy.c
@@ -185,7 +191,7 @@ $(CPPFLAGS2) /c ..\common\y_tab.c -DUSE_DEFINE -DYY_USE_PROTOS /Fo$@
 ..\common\lex_yy.c:    ..\common\doslex.c
     copy "..\common"\doslex.c "..\common"\lex_yy.c
 
-$(OBJECTS): $(WXDIR)/include/wx/setup.h
+$(OBJECTS): $(SETUP_H)
 
 ..\common\$D\unzip.obj:     ..\common\unzip.c
         cl @<<
