@@ -219,6 +219,10 @@ SOURCE=.\common\fs_inet.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\fs_mem.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\fs_zip.cpp
 # ADD CPP /I "zlib"
 # End Source File

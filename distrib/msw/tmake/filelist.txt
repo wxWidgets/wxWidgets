@@ -133,6 +133,7 @@ fontmap.cpp	C
 framecmn.cpp	C
 fs_inet.cpp	C
 fs_zip.cpp	C
+fs_mem.cpp	C
 ftp.cpp	C	S
 gdicmn.cpp	C
 geometry.cpp	C
@@ -596,6 +597,7 @@ fontutil.h	W
 frame.h	W
 fs_inet.h	W
 fs_zip.h	W
+fs_mem.h	W
 gauge.h	W
 gdicmn.h	W
 gdiobj.h	W
