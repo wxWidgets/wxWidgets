@@ -116,8 +116,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
     SetName(name);
 
-    if (!parent)
-        wxTopLevelWindows.Append(this);
+    wxTopLevelWindows.Append(this);
 
     //  windowFont = wxTheFontList->FindOrCreateFont(11, wxSWISS, wxNORMAL, wxNORMAL);
 
@@ -324,47 +323,45 @@ bool wxDialog::IsModalShowing() const
 void wxDialog::DoShowModal()
 {
     wxCHECK_RET( !IsModalShowing(), _T("DoShowModal() called twice") );
+    wxCHECK_RET( IsModal(), _T("can't DoShowModal() modeless dialog") );
 
     wxModalDialogs.Append(this);
 
     wxWindow *parent = GetParent();
 
-    // remember where the focus was
-    if ( !m_oldFocus )
+    // inside this block, all app windows are disabled
     {
-        m_oldFocus = parent;
-    }
-    if ( !m_oldFocus )
-    {
-        m_oldFocus = wxTheApp->GetTopWindow();
-    }
+        wxWindowDisabler wd(this);
 
-    // disable the parent window first
-    HWND hwndParent = parent ? GetHwndOf(parent) : (HWND)NULL;
-    if ( hwndParent )
-    {
-        ::EnableWindow(hwndParent, FALSE);
-    }
+        // remember where the focus was
+        if ( !m_oldFocus )
+        {
+            m_oldFocus = parent;
+        }
+        if ( !m_oldFocus )
+        {
+            m_oldFocus = wxTheApp->GetTopWindow();
+        }
 
-    // enter the modal loop
-    while ( IsModalShowing() )
-    {
+        // enter the modal loop
+        while ( IsModalShowing() )
+        {
 #if wxUSE_THREADS
-        wxMutexGuiLeaveOrEnter();
+            wxMutexGuiLeaveOrEnter();
 #endif // wxUSE_THREADS
 
-        while ( !wxTheApp->Pending() && wxTheApp->ProcessIdle() )
-            ;
+            while ( !wxTheApp->Pending() && wxTheApp->ProcessIdle() )
+                ;
 
-        // a message came or no more idle processing to do
-        wxTheApp->DoMessage();
+            // a message came or no more idle processing to do
+            wxTheApp->DoMessage();
+        }
     }
 
-    // reenable the parent window if any
-    if ( hwndParent )
-    {
-        ::EnableWindow(hwndParent, TRUE);
-    }
+#ifdef __WIN32__
+    if ( parent )
+        ::SetActiveWindow(GetHwndOf(parent));
+#endif // __WIN32__
 
     // and restore focus
     if ( m_oldFocus && (m_oldFocus != this) )
@@ -405,6 +402,17 @@ bool wxDialog::Show(bool show)
     {
         if ( show )
         {
+            // modal dialog needs a parent window, so try to find one
+            if ( !GetParent() )
+            {
+                wxWindow *parent = wxTheApp->GetTopWindow();
+                if ( parent && parent != this )
+                {
+                    // use it
+                    m_parent = parent;
+                }
+            }
+
             DoShowModal();
         }
         else // end of modal dialog
@@ -418,31 +426,15 @@ bool wxDialog::Show(bool show)
     return TRUE;
 }
 
-// Replacement for Show(TRUE) for modal dialogs - returns return code
+// a special version for Show(TRUE) for modal dialogs which returns return code
 int wxDialog::ShowModal()
 {
-    // modal dialog needs a parent window, so try to find one
-    if ( !GetParent() )
+    if ( !IsModal() )
     {
-        wxWindow *parent = wxTheApp->GetTopWindow();
-        if ( parent && parent != this )
-        {
-            // use it
-            m_parent = parent;
-        }
+        SetModal(TRUE);
     }
 
-    wxWindowDisabler *wd = (wxWindowDisabler *)NULL;
-    if ( !GetParent() )
-    {
-        // still no parent? make the dialog app modal by disabling all windows
-        wd = new wxWindowDisabler(this);
-    }
-
-    m_windowStyle |= wxDIALOG_MODAL;
     Show(TRUE);
-
-    delete wd;
 
     return GetReturnCode();
 }

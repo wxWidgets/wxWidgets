@@ -163,6 +163,9 @@ wxFrame::~wxFrame()
   m_isBeingDeleted = TRUE;
   wxTopLevelWindows.DeleteObject(this);
 
+  // the ~wxToolBar() code relies on the previous line to be executed before
+  // this one, i.e. the frame should remove itself from wxTopLevelWindows
+  // before destorying its toolbar
   DeleteAllBars();
 
   if (wxTheApp && (wxTopLevelWindows.Number() == 0))

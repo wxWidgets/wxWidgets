@@ -108,6 +108,10 @@
 // private function prototypes
 // ----------------------------------------------------------------------------
 
+// send a dummy WM_SIZE to the given window: this is used to relayout the frame
+// which contains us
+static void SendResizeMessage(HWND hwnd);
+
 static void wxMapBitmap(HBITMAP hBitmap, int width, int height);
 
 // ----------------------------------------------------------------------------
@@ -258,7 +262,18 @@ bool wxToolBar::Create(wxWindow *parent,
 
 wxToolBar::~wxToolBar()
 {
-    if (m_hBitmap)
+    // we must refresh the frame size when the toolbar is deleted but the frame
+    // is not - otherwise toolbar leaves a hole in the place it used to occupy
+    //
+    // NB: a frame is being deleted only if it is not any longer in
+    //     wxTopLevelWindows list
+    wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
+    if ( frame && wxTopLevelWindows.Find(frame) )
+    {
+        SendResizeMessage(GetHwndOf(frame));
+    }
+
+    if ( m_hBitmap )
     {
         ::DeleteObject((HBITMAP) m_hBitmap);
     }
@@ -880,15 +895,7 @@ void wxToolBar::UpdateSize()
     wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
     if ( frame )
     {
-        // don't change the size, we just need to generate a WM_SIZE
-        RECT r;
-        if ( !GetWindowRect(GetHwndOf(frame), &r) )
-        {
-            wxLogLastError(_T("GetWindowRect"));
-        }
-
-        (void)::SendMessage(GetHwndOf(frame), WM_SIZE, SIZE_RESTORED,
-                            MAKELPARAM(r.right - r.left, r.bottom - r.top));
+        SendResizeMessage(GetHwndOf(frame));
     }
 }
 
@@ -997,6 +1004,19 @@ long wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
+
+static void SendResizeMessage(HWND hwnd)
+{
+    // don't change the size, we just need to generate a WM_SIZE
+    RECT r;
+    if ( !::GetWindowRect(hwnd, &r) )
+    {
+        wxLogLastError(_T("GetWindowRect"));
+    }
+
+    (void)::PostMessage(hwnd, WM_SIZE, SIZE_RESTORED,
+                        MAKELPARAM(r.right - r.left, r.bottom - r.top));
+}
 
 // These are the default colors used to map the bitmap colors to the current
 // system colors. Note that they are in BGR format because this is what Windows
