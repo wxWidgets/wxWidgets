@@ -216,9 +216,9 @@ public:
     SurfaceImpl();
     ~SurfaceImpl();
 
-    virtual void Init();
-    virtual void Init(SurfaceID sid);
-    virtual void InitPixMap(int width, int height, Surface *surface_);
+    virtual void Init(WindowID wid);
+    virtual void Init(SurfaceID sid, WindowID wid);
+    virtual void InitPixMap(int width, int height, Surface *surface_, WindowID wid);
 
     virtual void Release();
     virtual bool Initialised();
@@ -270,7 +270,7 @@ SurfaceImpl::~SurfaceImpl() {
     Release();
 }
 
-void SurfaceImpl::Init() {
+void SurfaceImpl::Init(WindowID wid) {
 #if 0
     Release();
     hdc = new wxMemoryDC();
@@ -279,16 +279,16 @@ void SurfaceImpl::Init() {
     // On Mac and GTK the DC is not really valid until it has a bitmap
     // selected into it.  So instead of just creating the DC with no bitmap,
     // go ahead and give it one.
-    InitPixMap(1,1,NULL);
+    InitPixMap(1,1,NULL,wid);
 #endif
 }
 
-void SurfaceImpl::Init(SurfaceID hdc_) {
+void SurfaceImpl::Init(SurfaceID hdc_, WindowID) {
     Release();
     hdc = (wxDC*)hdc_;
 }
 
-void SurfaceImpl::InitPixMap(int width, int height, Surface *surface_) {
+void SurfaceImpl::InitPixMap(int width, int height, Surface *surface_, WindowID) {
     Release();
     hdc = new wxMemoryDC();
     hdcOwned = true;
@@ -615,6 +615,7 @@ bool Window::HasFocus() {
 }
 
 PRectangle Window::GetPosition() {
+    if (! id) return PRectangle();
     wxRect rc(GETWIN(id)->GetPosition(), GETWIN(id)->GetSize());
     return PRectangleFromwxRect(rc);
 }
@@ -629,6 +630,7 @@ void Window::SetPositionRelative(PRectangle rc, Window) {
 }
 
 PRectangle Window::GetClientPosition() {
+    if (! id) return PRectangle();
     wxSize sz = GETWIN(id)->GetClientSize();
     return  PRectangle(0, 0, sz.x, sz.y);
 }
@@ -677,6 +679,8 @@ void Window::SetCursor(Cursor curs) {
     case cursorReverseArrow:
         cursorId = wxCURSOR_RIGHT_ARROW;
         break;
+    case cursorHand:
+        cursorId = wxCURSOR_HAND;
     default:
         cursorId = wxCURSOR_ARROW;
         break;
@@ -736,7 +740,7 @@ public:
         wxWindow(parent, id, wxDefaultPosition, wxSize(0,0), wxNO_BORDER )
     {
 
-        SetBackgroundColour(*wxBLUE);
+        SetBackgroundColour(*wxBLACK);
         lv = new wxSTCListBox(this, id, wxDefaultPosition, wxDefaultSize,
                               wxLC_REPORT | wxLC_SINGLE_SEL | wxLC_NO_HEADER | wxNO_BORDER);
         lv->SetCursor(wxCursor(wxCURSOR_ARROW));
@@ -768,9 +772,10 @@ public:
     }
 
     void OnSize(wxSizeEvent& event) {
-        // reset the column widths
+        // resize the child, leaving a 1 pixel border
         wxSize sz = GetClientSize();
         lv->SetSize(1, 1, sz.x-2, sz.y-2);
+        // reset the column widths
         lv->SetColumnWidth(0, IconWidth()+4);
         lv->SetColumnWidth(1, sz.x - 2 - lv->GetColumnWidth(0) -
                            wxSystemSettings::GetMetric(wxSYS_VSCROLL_X));
@@ -1090,6 +1095,9 @@ unsigned int Platform::DoubleClickTime() {
     return 500;   // **** ::GetDoubleClickTime();
 }
 
+bool Platform::MouseButtonBounce() {
+	return FALSE;
+}
 void Platform::DebugDisplay(const char *s) {
     wxLogDebug(stc2wx(s));
 }
