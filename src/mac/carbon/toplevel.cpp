@@ -42,6 +42,9 @@
 #include "wx/app.h"
 #include "wx/tooltip.h"
 #include "wx/dnd.h"
+#if wxUSE_SYSTEM_OPTIONS
+    #include "wx/sysopt.h"
+#endif
 
 #include "ToolUtils.h"
 
@@ -493,6 +496,7 @@ void wxRemoveMacWindowAssociation(wxTopLevelWindowMac *win)
 
 WXHWND wxTopLevelWindowMac::s_macWindowInUpdate = NULL;
 wxTopLevelWindowMac *wxTopLevelWindowMac::s_macDeactivateWindow = NULL;
+bool wxTopLevelWindowMac::s_macWindowCompositing = FALSE;
 
 void wxTopLevelWindowMac::Init()
 {
@@ -501,6 +505,7 @@ void wxTopLevelWindowMac::Init()
     m_macNoEraseUpdateRgn = NewRgn() ;
     m_macNeedsErasing = false ;
     m_macWindow = NULL ;
+    m_macUsesCompositing = FALSE ;
 #if TARGET_CARBON
     m_macEventHandler = NULL ;
  #endif
@@ -577,6 +582,8 @@ wxTopLevelWindowMac::~wxTopLevelWindowMac()
 
 void wxTopLevelWindowMac::Maximize(bool maximize)
 {
+    wxMacPortStateHelper help( (GrafPtr) GetWindowPort( (WindowRef) m_macWindow) ) ;
+    wxMacWindowClipper clip (this);
     ZoomWindow( (WindowRef)m_macWindow , maximize ? inZoomOut : inZoomIn , false ) ;
 
     Rect tempRect ;
@@ -720,6 +727,8 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
         attr |= kWindowCloseBoxAttribute ;
     }
 
+    attr |= kWindowLiveResizeAttribute; //turn on live resizing
+    
 #if TARGET_CARBON
 #if 0 //  having problems right now with that
     if (HasFlag(wxSTAY_ON_TOP))
@@ -727,6 +736,19 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
 #endif
 #endif
 
+    //this setup lets us have compositing and non-compositing 
+    //windows in the same application. 
+    
+    if ( wxTopLevelWindowMac::s_macWindowCompositing )
+    {
+        attr |= kWindowCompositingAttribute;
+        m_macUsesCompositing = TRUE;
+    }
+    else
+    {
+        m_macUsesCompositing = FALSE;
+    }
+    
 #if TARGET_CARBON
     if ( HasFlag(wxFRAME_SHAPED) )
     {
@@ -747,7 +769,14 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     wxCHECK_RET( err == noErr, wxT("Mac OS error when trying to create new window") );
     wxAssociateWinWithMacWindow( m_macWindow , this ) ;
     UMASetWTitle( (WindowRef)m_macWindow , title ) ;
-    ::CreateRootControl( (WindowRef)m_macWindow , (ControlHandle*)&m_macRootControl ) ;
+    if ( wxTopLevelWindowMac::s_macWindowCompositing )
+    {
+        ::GetRootControl( (WindowRef)m_macWindow, (ControlHandle*)&m_macRootControl ) ;
+    }
+    else
+    {
+        ::CreateRootControl( (WindowRef)m_macWindow , (ControlHandle*)&m_macRootControl ) ;
+    }
 #if TARGET_CARBON
     InstallStandardEventHandler( GetWindowEventTarget(MAC_WXHWND(m_macWindow)) ) ;
     InstallWindowEventHandler(MAC_WXHWND(m_macWindow), GetwxMacWindowEventHandlerUPP(),
@@ -767,6 +796,13 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
 
     wxWindowCreateEvent event(this);
     GetEventHandler()->ProcessEvent(event);
+}
+
+bool wxTopLevelWindowMac::MacEnableCompositing( bool useCompositing )
+{
+    bool oldval = s_macWindowCompositing;
+    s_macWindowCompositing = useCompositing; 
+    return oldval; 
 }
 
 void wxTopLevelWindowMac::MacGetPortParams(WXPOINTPTR localOrigin, WXRECTPTR clipRect, WXHWND *window  , wxWindowMac** rootwin)
@@ -1050,18 +1086,36 @@ bool wxTopLevelWindowMac::Show(bool show)
 
     if (show)
     {
-      ::TransitionWindow((WindowRef)m_macWindow,kWindowZoomTransitionEffect,kWindowShowTransitionAction,nil);
-      ::SelectWindow( (WindowRef)m_macWindow ) ;
-      // no need to generate events here, they will get them triggered by macos
-      // actually they should be , but apparently they are not
-      wxSize size(m_width, m_height);
-      wxSizeEvent event(size, m_windowId);
-      event.SetEventObject(this);
-      GetEventHandler()->ProcessEvent(event);
+        #if wxUSE_SYSTEM_OPTIONS	//code contributed by Ryan Wilcox December 18, 2003
+        if ( (wxSystemOptions::HasOption(wxMAC_WINDOW_PLAIN_TRANSITION) ) && ( wxSystemOptions::GetOptionInt( wxMAC_WINDOW_PLAIN_TRANSITION ) == 1) )
+        {
+           ::ShowWindow( (WindowRef)m_macWindow );
+        }
+        else
+        #endif
+        {
+           ::TransitionWindow((WindowRef)m_macWindow,kWindowZoomTransitionEffect,kWindowShowTransitionAction,nil);
+        }
+        ::SelectWindow( (WindowRef)m_macWindow ) ;
+        // no need to generate events here, they will get them triggered by macos
+        // actually they should be , but apparently they are not
+        wxSize size(m_width, m_height);
+        wxSizeEvent event(size, m_windowId);
+        event.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(event);
     }
     else
     {
-      ::TransitionWindow((WindowRef)m_macWindow,kWindowZoomTransitionEffect,kWindowHideTransitionAction,nil);
+        #if wxUSE_SYSTEM_OPTIONS
+        if ( (wxSystemOptions::HasOption(wxMAC_WINDOW_PLAIN_TRANSITION) ) && ( wxSystemOptions::GetOptionInt( wxMAC_WINDOW_PLAIN_TRANSITION ) == 1) )
+        {
+           ::HideWindow((WindowRef) m_macWindow );
+        }
+        else
+        #endif
+        {
+           ::TransitionWindow((WindowRef)m_macWindow,kWindowZoomTransitionEffect,kWindowHideTransitionAction,nil);
+        }
     }
 
     if ( !show )
@@ -1077,6 +1131,9 @@ bool wxTopLevelWindowMac::Show(bool show)
 
 void wxTopLevelWindowMac::DoMoveWindow(int x, int y, int width, int height)
 {
+    wxMacPortStateHelper help( (GrafPtr) GetWindowPort( (WindowRef) m_macWindow) ) ;
+    wxMacWindowClipper clip (this);
+
     int former_x = m_x ;
     int former_y = m_y ;
     int former_w = m_width ;
