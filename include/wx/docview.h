@@ -399,7 +399,7 @@ public:
     // File history management
     virtual void AddFileToHistory(const wxString& file);
     virtual void RemoveFileFromHistory(size_t i);
-    virtual size_t GetNoHistoryFiles() const;
+    virtual size_t GetHistoryFilesCount() const;
     virtual wxString GetHistoryFile(size_t i) const;
     virtual void FileHistoryUseMenu(wxMenu *menu);
     virtual void FileHistoryRemoveMenu(wxMenu *menu);
@@ -411,11 +411,14 @@ public:
     virtual void FileHistoryAddFilesToMenu();
     virtual void FileHistoryAddFilesToMenu(wxMenu* menu);
 
-    inline wxString GetLastDirectory() const { return m_lastDirectory; }
-    inline void SetLastDirectory(const wxString& dir) { m_lastDirectory = dir; }
+    wxString GetLastDirectory() const { return m_lastDirectory; }
+    void SetLastDirectory(const wxString& dir) { m_lastDirectory = dir; }
 
     // Get the current document manager
     static wxDocManager* GetDocumentManager() { return sm_docManager; }
+
+    // deprecated, don't use
+    virtual size_t GetNoHistoryFiles() const;
 
 protected:
     long              m_flags;
@@ -560,12 +563,12 @@ public:
 
     // Accessors
     virtual wxString GetHistoryFile(size_t i) const;
-
-    // A synonym for GetNoHistoryFiles
     virtual size_t GetCount() const { return m_fileHistoryN; }
-    size_t GetNoHistoryFiles() const { return m_fileHistoryN; }
 
     wxList& GetMenus() const { return (wxList&) m_fileMenus; }
+
+    // deprecated, don't use
+    size_t GetNoHistoryFiles() const { return m_fileHistoryN; }
 
 protected:
     // Last n files

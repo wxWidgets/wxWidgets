@@ -5,6 +5,8 @@ wxWindows 2.5/2.6 Change Log
 INCOMPATIBLE CHANGES SINCE 2.4.x
 ================================
 
+- wxDocManager::GetNoHistoryFiles() renamed to GetHistoryFilesCount()
+
 OTHER CHANGES
 =============
 

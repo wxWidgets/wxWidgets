@@ -1374,12 +1374,9 @@ void wxDocManager::FileHistoryAddFilesToMenu()
         m_fileHistory->AddFilesToMenu();
 }
 
-size_t wxDocManager::GetNoHistoryFiles() const
+size_t wxDocManager::GetHistoryFilesCount() const
 {
-    if (m_fileHistory)
-        return m_fileHistory->GetNoHistoryFiles();
-    else
-        return 0;
+    return m_fileHistory ? m_fileHistory->GetCount() : 0;
 }
 
 
