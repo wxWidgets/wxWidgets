@@ -57,41 +57,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxStatusBar, wxStatusBar95)
 #define StatusBar_GetTextLen(h, n)  LOWORD(SendMessage(h, SB_GETTEXTLENGTH, (WPARAM)n, 0))
 #define StatusBar_GetText(h, n, s)  LOWORD(SendMessage(h, SB_GETTEXT, (WPARAM)n, (LPARAM)(LPTSTR)s))
 
-// ----------------------------------------------------------------------------
-//
-// ----------------------------------------------------------------------------
-
-// static WNDPROC gs_wndprocStatBar = NULL;
-static WXFARPROC gs_wndprocStatBar = (WXFARPROC) NULL;
-
-LRESULT APIENTRY wxStatusBarProc(HWND hwnd,
-                                 UINT message,
-                                 WPARAM wParam,
-                                 LPARAM lParam)
-{
-    switch (message) {
-        case WM_COMMAND:
-        case WM_DRAWITEM:
-        case WM_MEASUREITEM:
-        case WM_SIZE:
-        case WM_MOVE:
-        case WM_MOUSEMOVE:
-        case WM_LBUTTONUP:
-        case WM_LBUTTONDBLCLK:
-        case WM_RBUTTONDOWN:
-        case WM_RBUTTONUP:
-        case WM_RBUTTONDBLCLK:
-        case WM_MBUTTONDOWN:
-        case WM_MBUTTONUP:
-        case WM_MBUTTONDBLCLK:
-            wxStatusBar95 *sb = (wxStatusBar95 *)GetWindowLong(hwnd, GWL_USERDATA);
-            sb->MSWWindowProc(message, wParam, lParam);
-            break;
-    }
-
-    return ::CallWindowProc(CASTWNDPROC gs_wndprocStatBar, hwnd, message, wParam, lParam);
-}
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -102,9 +67,9 @@ LRESULT APIENTRY wxStatusBarProc(HWND hwnd,
 
 wxStatusBar95::wxStatusBar95()
 {
-  SetParent(NULL);
-  m_hWnd = 0;
-  m_windowId = 0;
+    SetParent(NULL);
+    m_hWnd = 0;
+    m_windowId = 0;
 }
 
 bool wxStatusBar95::Create(wxWindow *parent,
@@ -126,7 +91,6 @@ bool wxStatusBar95::Create(wxWindow *parent,
 
     if ( style & wxCLIP_SIBLINGS )
         wstyle |= WS_CLIPSIBLINGS;
-
 
     // setting SBARS_SIZEGRIP is perfectly useless: it's always on by default
     // (at least in the version of comctl32.dll I'm using), and the only way to
@@ -156,16 +120,7 @@ bool wxStatusBar95::Create(wxWindow *parent,
     }
 
     SetFieldsCount(1);
-
-    // we can't subclass this window as usual because the status bar window
-    // proc processes WM_SIZE and WM_PAINT specially
-    //  SubclassWin(m_hWnd);
-
-    // but we want to process the messages from it still, so do custom
-    // subclassing here
-    gs_wndprocStatBar = (WXFARPROC)GetWindowLong(GetHwnd(), GWL_WNDPROC);
-    SetWindowLong(GetHwnd(), GWL_WNDPROC, (LONG)wxStatusBarProc);
-    SetWindowLong(GetHwnd(), GWL_USERDATA, (LONG)this);
+    SubclassWin(m_hWnd);
 
     return TRUE;
 }
@@ -177,17 +132,19 @@ wxStatusBar95::~wxStatusBar95()
 
 void wxStatusBar95::CopyFieldsWidth(const int widths[])
 {
-  if (widths && !m_statusWidths)
-    m_statusWidths = new int[m_nFields];
+    if (widths && !m_statusWidths)
+        m_statusWidths = new int[m_nFields];
 
-  if ( widths != NULL ) {
-    for ( int i = 0; i < m_nFields; i++ )
-      m_statusWidths[i] = widths[i];
-  }
-  else {
-    delete [] m_statusWidths;
-    m_statusWidths = NULL;
-  }
+    if ( widths != NULL )
+    {
+        for ( int i = 0; i < m_nFields; i++ )
+            m_statusWidths[i] = widths[i];
+    }
+    else // no widths
+    {
+        delete [] m_statusWidths;
+        m_statusWidths = NULL;
+    }
 }
 
 void wxStatusBar95::SetFieldsCount(int nFields, const int *widths)
@@ -273,9 +230,10 @@ void wxStatusBar95::SetStatusText(const wxString& strText, int nField)
     wxCHECK_RET( (nField >= 0) && (nField < m_nFields),
                  _T("invalid statusbar field index") );
 
-  if ( !StatusBar_SetText(GetHwnd(), nField, strText) ) {
-    wxLogLastError(wxT("StatusBar_SetText"));
-  }
+    if ( !StatusBar_SetText(GetHwnd(), nField, strText) )
+    {
+        wxLogLastError(wxT("StatusBar_SetText"));
+    }
 }
 
 wxString wxStatusBar95::GetStatusText(int nField) const
@@ -283,14 +241,15 @@ wxString wxStatusBar95::GetStatusText(int nField) const
     wxCHECK_MSG( (nField >= 0) && (nField < m_nFields), wxEmptyString,
                  _T("invalid statusbar field index") );
 
-  wxString str;
-  int len = StatusBar_GetTextLen(GetHwnd(), nField);
-  if (len > 0)
-  {
-    StatusBar_GetText(GetHwnd(), nField, str.GetWriteBuf(len));
-    str.UngetWriteBuf();
-  }
-  return str;
+    wxString str;
+    int len = StatusBar_GetTextLen(GetHwnd(), nField);
+    if ( len > 0 )
+    {
+        StatusBar_GetText(GetHwnd(), nField, str.GetWriteBuf(len));
+        str.UngetWriteBuf();
+    }
+
+    return str;
 }
 
 int wxStatusBar95::GetBorderX() const
