@@ -29,6 +29,10 @@
 
 #if wxUSE_IMAGE
 
+// on some systems (Unixware 7.x) index is defined as a macro in the headers
+// which breaks the compilation below
+#undef index
+
 #define wxIMAGE_OPTION_FILENAME wxString(_T("FileName"))
 
 //-----------------------------------------------------------------------------
@@ -93,7 +97,7 @@ private:
 class WXDLLEXPORT wxImageHistogramEntry
 {
 public:
-    wxImageHistogramEntry() : index(0), value(0) {}
+    wxImageHistogramEntry() { index = value = 0; }
     unsigned long index;
     unsigned long value;
 };
