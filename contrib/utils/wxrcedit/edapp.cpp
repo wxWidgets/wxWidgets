@@ -47,6 +47,8 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
 {
+    SetVendorName(wxT("wxWindows"));
+    SetAppName(wxT("wxrcedit"));
     wxString arg = (argc >= 1) ? argv[1] : "";
     wxInitAllImageHandlers();
     wxFrame *frame = new EditorFrame(NULL, arg);
