@@ -810,6 +810,7 @@ zipstrm.h	W	B
 zstream.h	W	B
 
 accel.h	K
+accel.h	N
 app.h	K
 bitmap.h	K
 bmpbuttn.h	K
