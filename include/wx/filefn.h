@@ -359,6 +359,9 @@ enum wxFileKind
 #       include <io.h> // for get_osfhandle()
         inline HANDLE wxGetOSFHandle(int fd) { return (HANDLE) get_osfhandle(fd); }
 #   else
+#       ifdef __BORLANDC__
+#           include "wx/msw/private.h" // for HANDLE
+#       endif
         inline HANDLE wxGetOSFHandle(int fd) { return (HANDLE) _get_osfhandle(fd); }
 #   endif
 #endif
