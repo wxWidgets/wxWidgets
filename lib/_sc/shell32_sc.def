@@ -1,0 +1,7 @@
+LIBRARY shell32
+EXETYPE NT
+SUBSYSTEM WINDOWS
+EXPORTS
+    _ExtractIconA@12 = ExtractIconA
+    _ExtractIconExA@20 = ExtractIconExA
+

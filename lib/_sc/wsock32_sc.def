@@ -1,0 +1,11 @@
+LIBRARY wsock32
+EXETYPE NT
+SUBSYSTEM WINDOWS
+EXPORTS
+    _WSACleanup@0 = WSACleanup
+    _gethostbyaddr@12 = gethostbyaddr
+    _gethostbyname@4 = gethostbyname
+    _gethostname@8 = gethostname
+    _WSAStartup@8 = WSAStartup
+
+
