@@ -1,10 +1,5 @@
 build/wince/wx.vcw
-build/wince/wx_gl.vcp
-build/wince/wx_mono.vcp
-build/wince/wx_wxexpat.vcp
-build/wince/wx_wxjpeg.vcp
-build/wince/wx_wxpng.vcp
-build/wince/wx_wxzlib.vcp
+build/wince/wx_*.vcp
 
 samples/access/access.vcp
 samples/access/access.vcw
@@ -72,6 +67,9 @@ samples/event/event.vcw
 samples/exec/exec.vcp
 samples/exec/exec.vcw
 
+samples/except/except.vcp
+samples/except/except.vcw
+
 samples/font/font.vcp
 samples/font/font.vcw
 
@@ -92,6 +90,8 @@ samples/html/helpview/helpview.vcp
 samples/html/helpview/helpview.vcw
 samples/html/printing/printing.vcp
 samples/html/printing/printing.vcw
+samples/html/htmlctrl/helpctrl.vcp
+samples/html/htmlctrl/helpctrl.vcw
 samples/html/test/test.vcp
 samples/html/test/test.vcw
 samples/html/virtual/virtual.vcp
@@ -110,10 +110,10 @@ samples/internat/internat.vcw
 samples/keyboard/keyboard.vcp
 samples/keyboard/keyboard.vcw
 
-samples/ipc/client.vcp
-samples/ipc/client.vcw
-samples/ipc/server.vcp
-samples/ipc/server.vcw
+samples/ipc/ipc_client.vcp
+samples/ipc/ipc_client.vcw
+samples/ipc/ipc_server.vcp
+samples/ipc/ipc_server.vcw
 
 samples/joytest/joytest.vcp
 samples/joytest/joytest.vcw
@@ -121,8 +121,8 @@ samples/joytest/joytest.vcw
 samples/layout/layout.vcp
 samples/layout/layout.vcw
 
-samples/listbox/lboxtest.vcp
-samples/listbox/lboxtest.vcw
+samples/listbox/listbox.vcp
+samples/listbox/listbox.vcw
 
 samples/listctrl/listctrl.vcp
 samples/listctrl/listctrl.vcw
@@ -177,8 +177,10 @@ samples/propsize/propsize.vcw
 samples/regtest/regtest.vcp
 samples/regtest/regtest.vcw
 
-samples/render/render.vcp
-samples/render/render.vcw
+samples/render/render_renddll.vcp
+samples/render/render_renddll.vcw
+samples/render/render_render.vcp
+samples/render/render_render.vcw
 
 samples/rotate/rotate.vcp
 samples/rotate/rotate.vcw
@@ -209,6 +211,9 @@ samples/splitter/splitter.vcw
 samples/statbar/statbar.vcp
 samples/statbar/statbar.vcw
 
+samples/tab/tab.vcp
+samples/tab/tab.vcw
+
 samples/taskbar/taskbar.vcp
 samples/taskbar/taskbar.vcw
 
@@ -221,8 +226,8 @@ samples/thread/thread.vcw
 samples/toolbar/toolbar.vcp
 samples/toolbar/toolbar.vcw
 
-samples/treectrl/treetest.vcp
-samples/treectrl/treetest.vcw
+samples/treectrl/treectrl.vcp
+samples/treectrl/treectrl.vcw
 
 samples/typetest/typetest.vcp
 samples/typetest/typetest.vcw
@@ -278,8 +283,8 @@ utils/helpview/src/helpview.vcw
 utils/helpview/src/client.vcp
 utils/helpview/src/client.vcw
 
-contrib/src/ogl/ogl.vcp
-contrib/src/ogl/ogl.vcw
+contrib/build/ogl/ogl.vcp
+contrib/build/ogl/ogl.vcw
 
 contrib/samples/ogl/ogledit/ogledit.vcp
 contrib/samples/ogl/ogledit/ogledit.vcw
@@ -292,14 +297,14 @@ src/xrc/xrc.vcw
 samples/xrc/xrcdemo.vcp
 samples/xrc/xrcdemo.vcw
 
-contrib/src/mmedia/mmedia.vcp
-contrib/src/mmedia/mmedia.vcw
+contrib/build/mmedia/mmedia.vcp
+contrib/build/mmedia/mmedia.vcw
 
 contrib/samples/mmedia/mmboard.vcp
 contrib/samples/mmedia/mmboard.vcw
 
-contrib/src/stc/stc.vcp
-contrib/src/stc/stc.vcw
+contrib/build/stc/stc.vcp
+contrib/build/stc/stc.vcw
 
 contrib/samples/stc/stctest.vcp
 contrib/samples/stc/stctest.vcw
@@ -307,19 +312,19 @@ contrib/samples/stc/stctest.vcw
 contrib/utils/wxrc/wxrc.vcp
 contrib/utils/wxrc/wxrc.vcw
 
-contrib/utils/convertrc/convert.vcp
-contrib/utils/convertrc/convert.vcw
+contrib/utils/convertrc/convertrc.vcp
+contrib/utils/convertrc/convertrc.vcw
 
 contrib/utils/wxrcedit/wxrcedit.vcp
 contrib/utils/wxrcedit/wxrcedit.vcw
 
-contrib/src/plot/plot.vcp
-contrib/src/plot/plot.vcw
+contrib/build/plot/plot.vcp
+contrib/build/plot/plot.vcw
 contrib/samples/plot/plot.vcp
 contrib/samples/plot/plot.vcw
 
-contrib/src/gizmos/gizmos.vcp
-contrib/src/gizmos/gizmos.vcw
+contrib/build/gizmos/gizmos.vcp
+contrib/build/gizmos/gizmos.vcw
 contrib/samples/gizmos/dynsash/dynsash.vcp
 contrib/samples/gizmos/dynsash/dynsash.vcw
 contrib/samples/gizmos/dynsash_switch/dynsash_switch.vcp
@@ -330,29 +335,31 @@ contrib/samples/gizmos/multicell/multicell.vcp
 contrib/samples/gizmos/multicell/multicell.vcw
 contrib/samples/gizmos/splittree/splittree.vcp
 contrib/samples/gizmos/splittree/splittree.vcw
+contrib/samples/gizmos/led/led.vcp
+contrib/samples/gizmos/led/led.vcw
 
-contrib/src/animate/animate.vcp
-contrib/src/animate/animate.vcw
+contrib/build/animate/animate.vcp
+contrib/build/animate/animate.vcw
 contrib/samples/animate/anitest.vcp
 contrib/samples/animate/anitest.vcw
 
-contrib/src/fl/fl.vcp
-contrib/src/fl/fl.vcw
-contrib/samples/fl/fl_demo1/fl_demo.vcp
-contrib/samples/fl/fl_demo1/fl_demo.vcw
-contrib/samples/fl/fl_demo2/fl_demo.vcp
-contrib/samples/fl/fl_demo2/fl_demo.vcw
-contrib/samples/fl/fl_sample1/fl_demo.vcp
-contrib/samples/fl/fl_sample1/fl_demo.vcw
-contrib/samples/fl/fl_sample2/fl_demo.vcp
-contrib/samples/fl/fl_sample2/fl_demo.vcw
-contrib/samples/fl/fl_sample3/fl_demo.vcp
-contrib/samples/fl/fl_sample3/fl_demo.vcw
+contrib/build/fl/fl.vcp
+contrib/build/fl/fl.vcw
+contrib/samples/fl/fl_fl_demo1.vcp
+contrib/samples/fl/fl_fl_demo1.vcw
+contrib/samples/fl/fl_fl_demo2.vcp
+contrib/samples/fl/fl_fl_demo2.vcw
+contrib/samples/fl/fl_fl_sample1.vcp
+contrib/samples/fl/fl_fl_sample1.vcw
+contrib/samples/fl/fl_fl_sample2.vcp
+contrib/samples/fl/fl_fl_sample2.vcw
+contrib/samples/fl/fl_fl_sample3.vcp
+contrib/samples/fl/fl_fl_sample3.vcw
 
-contrib/src/net/net.vcp
-contrib/src/net/net.vcw
+contrib/build/net/net.vcp
+contrib/build/net/net.vcw
 
-contrib/src/deprecated/deprecated.vcp
+contrib/build/deprecated/deprecated.vcp
 
 contrib/samples/deprecated/proplist/proplist.vcp
 contrib/samples/deprecated/proplist/proplist.vcw
@@ -363,10 +370,18 @@ contrib/samples/deprecated/resource/resource.vcw
 contrib/samples/deprecated/treelay/treelay.vcp
 contrib/samples/deprecated/treelay/treelay.vcw
 
-contrib/src/foldbar/foldbar.vcp
-contrib/src/foldbar/foldbar.vcw
+contrib/build/foldbar/foldbar.vcp
+contrib/build/foldbar/foldbar.vcw
 contrib/samples/foldbar/extended/extended.vcp
 contrib/samples/foldbar/extended/extended.vcw
-contrib/samples/foldbar/foldpanelbar/foldpanelbar.vcp
-contrib/samples/foldbar/foldpanelbar/foldpanelbar.vcw
+contrib/samples/foldbar/foldpanelbar/foldtest.vcp
+contrib/samples/foldbar/foldpanelbar/foldtest.vcw
+
+contrib/build/svg/svg.vcp
+contrib/build/svg/svg.vcw
+contrib/samples/svg/svgtest.vcp
+contrib/samples/svg/svgtest.vcw
+
+utils/configtool/src/configtool.vcp
+utils/configtool/src/configtool.vcw
 

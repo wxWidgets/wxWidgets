@@ -19,7 +19,7 @@ contrib/docs/latex/mmedia/*.wmf
 
 contrib/include/wx/mmedia/*.h
 contrib/include/wx/mmedia/internal/*.h
-contrib/src/mmedia/makefile*
+contrib/build/mmedia/makefile*
 contrib/src/mmedia/README
 contrib/src/mmedia/*.h
 contrib/src/mmedia/*.cpp

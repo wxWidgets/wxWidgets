@@ -33,6 +33,7 @@ samples/ipc/Makefile.in
 samples/html/Makefile.in
 samples/html/about/Makefile.in
 samples/html/help/Makefile.in
+samples/html/htmlctrl/Makefile.in
 samples/html/helpview/Makefile.in
 samples/html/printing/Makefile.in
 samples/html/test/Makefile.in
