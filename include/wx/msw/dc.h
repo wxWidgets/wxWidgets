@@ -118,6 +118,13 @@ public:
     {
         m_hDC = dc;
         m_bOwnsDC = bOwnsDC;
+
+        // we might have a pre existing clipping region, make sure that we
+        // return it if asked -- but avoid calling ::GetClipBox() right now as
+        // it could be unnecessary wasteful
+        m_clipping = true;
+        m_clipX1 =
+        m_clipX2 = 0;
     }
 
     const wxBitmap& GetSelectedBitmap() const { return m_selectedBitmap; }
@@ -182,6 +189,8 @@ protected:
     {
         GetClippingBox(x, y, width, height);
     }
+    virtual void DoGetClippingBox(wxCoord *x, wxCoord *y,
+                                  wxCoord *w, wxCoord *h) const;
 
     virtual void DoGetSize(int *width, int *height) const;
     virtual void DoGetSizeMM(int* width, int* height) const;

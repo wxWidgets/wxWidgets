@@ -383,6 +383,23 @@ void wxDC::UpdateClipBox()
     m_clipY2 = (wxCoord) YDEV2LOG(rect.bottom);
 }
 
+void
+wxDC::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
+{
+    // check if we should try to retrieve the clipping region possibly not set
+    // by our SetClippingRegion() but preset by Windows:this can only happen
+    // when we're associated with an existing HDC usign SetHDC(), see there
+    if ( m_clipping && !m_clipX1 && !m_clipX2 )
+    {
+        UpdateClipBox();
+
+        if ( !m_clipX1 && !m_clipX2 )
+            m_clipping = false;
+    }
+
+    return wxDCBase::DoGetClippingBox(x, y, w, h);
+}
+
 // common part of DoSetClippingRegion() and DoSetClippingRegionAsRegion()
 void wxDC::SetClippingHrgn(WXHRGN hrgn)
 {
@@ -465,7 +482,7 @@ void wxDC::DestroyClippingRegion()
         ::DeleteObject(rgn);
     }
 
-    m_clipping = false;
+    wxDCBase::DestroyClippingRegion();
 }
 
 // ---------------------------------------------------------------------------
