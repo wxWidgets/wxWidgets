@@ -56,12 +56,12 @@ public:
     virtual void OnDismiss();
     virtual bool ProcessLeftDown(wxMouseEvent& event);
     virtual bool Show( bool show = true );
-    
+
     wxScrolledWindow* GetChild() { return m_panel; }
-    
+
 private:
     wxScrolledWindow *m_panel;
-    
+
 private:
     void OnMouse( wxMouseEvent &event );
     void OnSize( wxSizeEvent &event );
@@ -88,9 +88,9 @@ END_EVENT_TABLE()
 SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent ) :
     wxPopupTransientWindow( parent )
 {
-    m_panel = new wxScrolledWindow( this, -1 );
+    m_panel = new wxScrolledWindow( this, wxID_ANY );
     m_panel->SetBackgroundColour( *wxLIGHT_GREY );
-    wxStaticText *text = new wxStaticText( m_panel, -1, 
+    wxStaticText *text = new wxStaticText( m_panel, wxID_ANY,
                           wxT("wx.PopupTransientWindow is a\n")
                           wxT("wx.PopupWindow which disappears\n")
                           wxT("automatically when the user\n")
@@ -164,18 +164,18 @@ void SimpleTransientPopup::OnMouse(wxMouseEvent &event)
 
 class ComplexTransientPopup : public SimpleTransientPopup
 {
-public:    
+public:
     ComplexTransientPopup(wxWindow *parent) : SimpleTransientPopup(parent)
     {
         Init();
     }
     virtual ~ComplexTransientPopup();
-    
+
     virtual void Popup(wxWindow *focus = NULL);
     virtual void Dismiss();
     virtual bool ProcessLeftDown(wxMouseEvent& event);
-    
-protected:    
+
+protected:
 
     // safely push and pop the event handler of the child
     void PushPopupHandler(wxWindow* child);
@@ -183,7 +183,7 @@ protected:
 
     void OnMouse( wxMouseEvent& event );
     void OnKeyDown( wxKeyEvent &event );
-    
+
 #if USE_TIMER_TO_PUSHPOP
     // start/stop timer that pushes and pops handler when the mouse goes over
     //  the scrollbars (if any) of the child window
@@ -194,7 +194,7 @@ protected:
 #else // !USE_TIMER_TO_PUSHPOP
     void OnIdle( wxIdleEvent& event );
 #endif // USE_TIMER_TO_PUSHPOP
-    
+
     wxPoint       m_mouse;           // last/current mouse position
     bool          m_popped_handler;  // state of the event handler
 
@@ -234,47 +234,47 @@ void ComplexTransientPopup::PushPopupHandler(wxWindow* child)
     if (child && m_handlerPopup && m_popped_handler)
     {
         m_popped_handler = false;
-        
+
         if (child->GetEventHandler() != (wxEvtHandler*)m_handlerPopup)
             child->PushEventHandler((wxEvtHandler*)m_handlerPopup);
         if (!child->HasCapture())
             child->CaptureMouse();
-        
+
         child->SetFocus();
-    }        
+    }
 }
 void ComplexTransientPopup::PopPopupHandler(wxWindow* child)
 {
     if (child && m_handlerPopup && !m_popped_handler)
     {
         m_popped_handler = true;
-        
+
         if (child->GetEventHandler() == (wxEvtHandler*)m_handlerPopup)
-            child->PopEventHandler(false);         
+            child->PopEventHandler(false);
         if (child->HasCapture())
             child->ReleaseMouse();
-            
-        child->SetFocus();            
-    }    
+
+        child->SetFocus();
+    }
 }
 
 #if USE_TIMER_TO_PUSHPOP
 void ComplexTransientPopup::OnTimer( wxTimerEvent &WXUNUSED(event) )
-{   
+{
     if (!IsShown()) return;
-   
+
     m_mouse = ScreenToClient(wxGetMousePosition());
 
     wxWindow *child = GetChild();
     if (!child) return; // nothing to do
-    
+
     wxRect clientRect(wxPoint(0,0), GetClientSize());
     wxLogMessage(wxT("CTW::OnTimer mouse(%d, %d), popped %d, m_handlerPopup %d"), m_mouse.x, m_mouse.y, m_popped_handler, m_handlerPopup);
-    // pop the event handler if inside the child window or 
+    // pop the event handler if inside the child window or
     // restore the event handler if not in the child window
     if (clientRect.Inside(m_mouse))
         PopPopupHandler(child);
-    else 
+    else
         PushPopupHandler(child);
 }
 
@@ -282,19 +282,19 @@ void ComplexTransientPopup::StartTimer()
 {
     if (!m_timer)
         m_timer = new wxTimer(this, wxID_ANY);
-    
-    m_timer->Start(200, false);    
+
+    m_timer->Start(200, false);
 }
 
 void ComplexTransientPopup::StopTimer()
 {
-    if (m_timer) 
+    if (m_timer)
     {
-        if (m_timer->IsRunning()) 
+        if (m_timer->IsRunning())
             m_timer->Stop();
         delete m_timer;
         m_timer = NULL;
-    }        
+    }
 }
 
 #else // USE_TIMER_TO_PUSHPOP
@@ -304,17 +304,17 @@ void ComplexTransientPopup::OnIdle( wxIdleEvent& event )
     {
         m_mouse = ScreenToClient(wxGetMousePosition());
         wxLogMessage(wxT("CTW::OnIdle mouse(%d, %d), popped %d, m_handlerPopup %d"), m_mouse.x, m_mouse.y, m_popped_handler, m_handlerPopup);
-        
+
         wxWindow *child = GetChild();
         if (!child) return; // nothing to do
-    
-        wxRect clientRect(wxPoint(0,0), GetClientSize());
+
+        wxRect clientRect(GetClientSize());
         //wxPrintf(wxT("**DropDownPopup::OnIdle mouse %d %d -- %d %d %d\n"), m_mouse.x, m_mouse.y, m_popped_handler, m_child, m_handlerPopup); fflush(stdout);
-        // pop the event handler if inside the child window or 
+        // pop the event handler if inside the child window or
         // restore the event handler if not in the child window
         if (clientRect.Inside(m_mouse))
             PopPopupHandler(child);
-        else 
+        else
             PushPopupHandler(child);
     }
     event.Skip();
@@ -328,7 +328,7 @@ void ComplexTransientPopup::OnMouse( wxMouseEvent& event )
 }
 
 void ComplexTransientPopup::OnKeyDown( wxKeyEvent &event )
-{    
+{
     if (GetChild() && GetChild()->ProcessEvent(event))
         event.Skip(false);
     else
@@ -338,12 +338,12 @@ void ComplexTransientPopup::OnKeyDown( wxKeyEvent &event )
 void ComplexTransientPopup::Popup(wxWindow *focus)
 {
     SimpleTransientPopup::Popup(focus);
-    
+
 #if USE_TIMER_TO_PUSHPOP
     // start the timer to track the mouse position
     // note: idle function not used in this case
     StartTimer();
-#else              
+#else
     // note: all timer related functions aren't used in this case
     Connect(wxID_ANY, wxEVT_IDLE,
            (wxObjectEventFunction)(wxEventFunction)(wxIdleEventFunction)
@@ -354,13 +354,13 @@ void ComplexTransientPopup::Popup(wxWindow *focus)
 void ComplexTransientPopup::Dismiss()
 {
 #if USE_TIMER_TO_PUSHPOP
-    StopTimer();    
+    StopTimer();
 #else // USE_TIMER_TO_PUSHPOP
-    Disconnect(wxID_ANY, wxEVT_IDLE, 
+    Disconnect(wxID_ANY, wxEVT_IDLE,
                (wxObjectEventFunction)(wxEventFunction)(wxIdleEventFunction)
                &ComplexTransientPopup::OnIdle, 0, this);
 #endif // USE_TIMER_TO_PUSHPOP
-    
+
     // restore the event handler if necessary for the base class Dismiss
     wxWindow *child = GetChild();
     if (child) PushPopupHandler(child);
@@ -374,18 +374,18 @@ bool ComplexTransientPopup::ProcessLeftDown( wxMouseEvent &event )
 {
     m_mouse = event.GetPosition();
     //wxPrintf(wxT("DropDownPopup::ProcessLeftDown %d %d\n"), m_mouse.x, m_mouse.y); fflush(stdout);
-    
+
     if (m_popped_handler) return true; // shouldn't ever get here, but just in case
 
 #if USE_TIMER_TO_PUSHPOP
-    StopTimer();    
+    StopTimer();
 #endif // USE_TIMER_TO_PUSHPOP
-    
+
     // don't let the click on the dropdown button actually press it
     // *** Here's where we stick code to ensure that if we click on a combobox
-    //     dropdown box we don't try to reshow this dialog because they intend 
+    //     dropdown box we don't try to reshow this dialog because they intend
     //     hide it.
-    
+
     if (wxRect(wxPoint(0,0), GetSize()).Inside(m_mouse))
         return false;
 
@@ -516,12 +516,12 @@ MyFrame::MyFrame(const wxString& title)
     wxButton *button2 = new wxButton( this, Minimal_StartScrolledPopup, wxT("Show scrolled popup"), wxPoint(20,70) );
     wxButton *button3 = new wxButton( this, Minimal_StartComplexPopup, wxT("Show complex popup"), wxPoint(20,120) );
 
-    wxTextCtrl* logWin = new wxTextCtrl( this, -1, wxEmptyString, wxDefaultPosition,
+    wxTextCtrl* logWin = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                              wxDefaultSize, wxTE_MULTILINE );
     wxLogTextCtrl* logger = new wxLogTextCtrl( logWin );
     m_logOld = logger->SetActiveTarget( logger );
     logger->SetTimestamp( NULL );
-    
+
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
     topSizer->Add( button1, 0 );
     topSizer->Add( button2, 0 );
@@ -538,10 +538,10 @@ MyFrame::MyFrame(const wxString& title)
 #endif // wxUSE_STATUSBAR
 }
 
-MyFrame::~MyFrame() 
-{ 
-    delete wxLog::SetActiveTarget(m_logOld); 
-} 
+MyFrame::~MyFrame()
+{
+    delete wxLog::SetActiveTarget(m_logOld);
+}
 
 
 // event handlers
