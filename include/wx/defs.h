@@ -174,12 +174,6 @@
 
 #ifdef __WXMSW__
 
-// size_t is the same as unsigned int for all Windows compilers we know,
-// so define it if it hadn't been done by configure yet
-#if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
-    #define wxSIZE_T_IS_UINT
-#endif
-
 #if defined(_WIN32) || defined(WIN32) || defined(__NT__)
     #ifndef __WIN32__
         #define __WIN32__
@@ -233,16 +227,22 @@
 #undef PACKAGE
 #undef VERSION
 
+// size_t is the same as unsigned int for all Windows compilers we know,
+// so define it if it hadn't been done by configure yet
+#if defined(__WXMSW__) && !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
+#define wxSIZE_T_IS_UINT
+#endif
+
 // this has to be done after including setup.h which might
 // define __HPUX__ 1 itself
 #if defined(__hpux) && !defined(__HPUX__)
-    #define __HPUX__
+#define __HPUX__
 #endif // HP-UX
 
 // if we're on a Unix system but didn't use configure (so that setup.h didn't
 // define __UNIX__), do define __UNIX__ now
 #if !defined(__UNIX__) && defined(__UNIX_LIKE__)
-    #define __UNIX__
+#define __UNIX__
 #endif // Unix
 
 #include "wx/version.h"
