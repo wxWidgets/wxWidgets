@@ -1,0 +1,35 @@
+# WXXT base directory
+WXBASEDIR=@WXBASEDIR@
+
+# set the OS type for compilation
+OS=@OS@
+# compile a binary only
+RULE=bin
+
+# define exexutable name
+BIN_TARGET=studio
+# define binary sources
+BIN_CPP_SRC=\
+  cspalette.cpp\
+  csprint.cpp\
+  dialogs.cpp\
+  doc.cpp\
+  mainfrm.cpp\
+  project.cpp\
+  shapes.cpp\
+  studio.cpp\
+  symbols.cpp\
+  view.cpp
+	
+#define binary objects
+BIN_OBJ=\
+ $(BIN_CPP_SRC:.cpp=.o)
+
+# additional things needed to link
+BIN_LINK=-lwx_ogl_gtk
+
+# additional things needed to compile
+ADD_COMPILE=-I$(WXBASEDIR)/utils/ogl/src -I../bitmaps
+
+# include the definitions now
+include ../../../../../template.mak

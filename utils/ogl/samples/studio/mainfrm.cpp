@@ -150,8 +150,10 @@ void csFrame::OnSize(wxSizeEvent& event)
 // Make sure the correct toolbars are showing for the active view
 void csFrame::OnIdle(wxIdleEvent& event)
 {
-    wxFrame::OnIdle(event);
-
+/* HH: gtk's wxFrame nor wxWindow have an OnIdle method. Is this a bug? */
+#ifndef __WXGTK__    
+    wxDocMDIParentFrame::OnIdle(event);
+#endif
     wxSashLayoutWindow* paletteWin = wxGetApp().GetDiagramPaletteSashWindow();
     wxSashLayoutWindow* diagramToolBarWin = wxGetApp().GetDiagramToolBarSashWindow();
     if (!paletteWin || !diagramToolBarWin)

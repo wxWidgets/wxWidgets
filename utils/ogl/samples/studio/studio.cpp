@@ -25,10 +25,6 @@
 #include "wx/config.h"
 #include "wx/laywin.h"
 
-#ifdef __WXGTK__
-#include "folder.xpm"
-#endif
-
 #include "studio.h"
 #include "view.h"
 #include "doc.h"
