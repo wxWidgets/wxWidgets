@@ -58,6 +58,17 @@
     #include "wx/dnd.h"
 #endif
 
+#if wxUSE_ACCESSIBILITY
+    #include "wx/access.h"
+    #include <oleacc.h>
+    #ifndef WM_GETOBJECT
+        #define WM_GETOBJECT 0x003D
+    #endif
+    #ifndef OBJID_CLIENT
+        #define OBJID_CLIENT 0xFFFFFFFC
+    #endif
+#endif
+
 #include "wx/menuitem.h"
 #include "wx/log.h"
 
@@ -2826,6 +2837,20 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 rc.result = TRUE;
             }
             break;
+
+#if wxUSE_ACCESSIBILITY
+        case WM_GETOBJECT:
+            {
+                //WPARAM dwFlags = (WPARAM) (DWORD) wParam;
+                LPARAM dwObjId = (LPARAM) (DWORD) lParam;
+
+                if (dwObjId == OBJID_CLIENT && GetOrCreateAccessible())
+                {
+                    return LresultFromObject(IID_IAccessible, wParam, (IUnknown*) GetAccessible()->GetIAccessible());
+                }
+                break;
+            }
+#endif
 
 #if defined(__WIN32__) && defined(WM_HELP)
         case WM_HELP:

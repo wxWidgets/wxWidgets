@@ -28,6 +28,7 @@
 
 #define _FORCENAMELESSUNION
 #include "wx/log.h"
+#include "wx/msw/ole/oleutils.h"
 #include "wx/msw/ole/automtn.h"
 #include "wx/msw/private.h"
 
@@ -40,39 +41,6 @@
 #define _huge
 #include <ole2ver.h>
 #include <oleauto.h>
-
-// wrapper around BSTR type (by Vadim Zeitlin)
-
-class WXDLLEXPORT BasicString
-{
-public:
-  // ctors & dtor
-  BasicString(const char *sz);
- ~BasicString();
-
-  // accessors
-    // just get the string
-  operator BSTR() const { return m_wzBuf; }
-    // retrieve a copy of our string - caller must SysFreeString() it later!
-  BSTR Get() const { return SysAllocString(m_wzBuf); }
-
-private:
-  // @@@ not implemented (but should be)
-  BasicString(const BasicString&);
-  BasicString& operator=(const BasicString&);
-
-  OLECHAR *m_wzBuf;     // actual string
-};
-
-// Convert variants
-static bool ConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant) ;
-static bool ConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant) ;
-
-// Convert string to Unicode
-static BSTR ConvertStringToOle(const wxString& str);
-
-// Convert string from BSTR to wxString
-static wxString ConvertStringFromOle(BSTR bStr);
 
 // Verifies will fail if the needed buffer size is too large
 #define MAX_TIME_BUFFER_SIZE    128         // matches that in timecore.cpp
@@ -154,7 +122,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
 
 	int namedArgStringCount = namedArgCount + 1;
 	BSTR* argNames = new BSTR[namedArgStringCount];
-	argNames[0] = ConvertStringToOle(member);
+	argNames[0] = wxConvertStringToOle(member);
 
 	// Note that arguments are specified in reverse order
 	// (all totally logical; hey, we're dealing with OLE here.)
@@ -164,7 +132,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
 	{	
 		if (!INVOKEARG(i).GetName().IsNull())
 		{
-			argNames[(namedArgCount-j)] = ConvertStringToOle(INVOKEARG(i).GetName());
+			argNames[(namedArgCount-j)] = wxConvertStringToOle(INVOKEARG(i).GetName());
 			j ++;
 		}
 	}
@@ -203,7 +171,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
 	for (i = 0; i < noArgs; i++)
 	{
 		// Again, reverse args
-		if (!ConvertVariantToOle(INVOKEARG((noArgs-1) - i), oleArgs[i]))
+		if (!wxConvertVariantToOle(INVOKEARG((noArgs-1) - i), oleArgs[i]))
         {
 	        delete[] argNames;
 	        delete[] dispIds;
@@ -252,7 +220,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
 		if (vReturnPtr)
 		{
 			// Convert result to wxVariant form
-			ConvertOleToVariant(vReturn, retValue);
+			wxConvertOleToVariant(vReturn, retValue);
 			// Mustn't release the dispatch pointer
 			if (vReturn.vt == VT_DISPATCH)
 			{
@@ -534,7 +502,7 @@ bool wxAutomationObject::GetInstance(const wxString& classId) const
 	CLSID clsId;
 	IUnknown * pUnk = NULL;
 
-	BasicString unicodeName(classId.mb_str());
+	wxBasicString unicodeName(classId.mb_str());
 	
 	if (FAILED(CLSIDFromProgID((BSTR) unicodeName, &clsId))) 
 	{
@@ -566,7 +534,7 @@ bool wxAutomationObject::CreateInstance(const wxString& classId) const
 
 	CLSID clsId;
 
-	BasicString unicodeName(classId.mb_str());
+	wxBasicString unicodeName(classId.mb_str());
 	
 	if (FAILED(CLSIDFromProgID((BSTR) unicodeName, &clsId))) 
 	{
@@ -585,7 +553,7 @@ bool wxAutomationObject::CreateInstance(const wxString& classId) const
 }
 
 
-bool ConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
+bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
 {
 	ClearVariant(&oleVariant);
 	if (variant.IsNull())
@@ -629,7 +597,7 @@ bool ConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
     {
         wxString str( variant.GetString() );
         oleVariant.vt = VT_BSTR;
-        oleVariant.bstrVal = ConvertStringToOle(str);
+        oleVariant.bstrVal = wxConvertStringToOle(str);
     }
 // For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
 #if wxUSE_TIMEDATE && !defined(__WATCOMC__)
@@ -683,7 +651,7 @@ bool ConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
 	    {
 		    // copy each string in the list of strings
             wxVariant eachVariant(variant[i]);
-            if (!ConvertVariantToOle(eachVariant, * pvarg))
+            if (!wxConvertVariantToOle(eachVariant, * pvarg))
             {
 			    // memory failure:  back out and free strings alloc'ed up to
 			    // now, and then the array itself.
@@ -715,13 +683,13 @@ bool ConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
 #define VT_TYPEMASK 0xfff
 #endif
 
-bool ConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
+bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
 {
 	switch (oleVariant.vt & VT_TYPEMASK)
 	{
 	case VT_BSTR:
 		{
-			wxString str(ConvertStringFromOle(oleVariant.bstrVal));
+			wxString str(wxConvertStringFromOle(oleVariant.bstrVal));
 			variant = str;
 			break;
 		}
@@ -794,7 +762,7 @@ bool ConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
 			{
 				VARIANTARG& oleElement = pvdata[i];
 				wxVariant vElement;
-				if (!ConvertOleToVariant(oleElement, vElement))
+				if (!wxConvertOleToVariant(oleElement, vElement))
 					return FALSE;
 				
 				variant.Append(vElement);
@@ -825,7 +793,7 @@ bool ConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
     return TRUE;
 }
 
-static BSTR ConvertStringToOle(const wxString& str)
+BSTR wxConvertStringToOle(const wxString& str)
 {
 /*
 	unsigned int len = strlen((const char*) str);
@@ -835,11 +803,11 @@ static BSTR ConvertStringToOle(const wxString& str)
 	for (i=0; i < len; i++)
 		s[i*2] = str[i];
 */
-	BasicString bstr(str.mb_str());
+	wxBasicString bstr(str.mb_str());
 	return bstr.Get();
 }
 
-static wxString ConvertStringFromOle(BSTR bStr)
+wxString wxConvertStringFromOle(BSTR bStr)
 {
 #if wxUSE_UNICODE
     wxString str(bStr);
@@ -854,32 +822,50 @@ static wxString ConvertStringFromOle(BSTR bStr)
 }
 
 // ----------------------------------------------------------------------------
-// BasicString
+// wxBasicString
 // ----------------------------------------------------------------------------
 
 // ctor takes an ANSI string and transforms it to Unicode
-BasicString::BasicString(const char *sz)
+wxBasicString::wxBasicString(const char *sz)
 {
-  // get the size of required buffer
-  UINT lenAnsi = strlen(sz);
-  #ifdef __MWERKS__
-  UINT lenWide = lenAnsi * 2 ;
-  #else
-  UINT lenWide = mbstowcs(NULL, sz, lenAnsi);
-  #endif
+    Init(sz);
+}
 
-  if ( lenWide > 0 ) {
-    m_wzBuf = new OLECHAR[lenWide + 1];
-    mbstowcs(m_wzBuf, sz, lenAnsi);
-    m_wzBuf[lenWide] = L'\0';
-  }
-  else {
-    m_wzBuf = NULL;
-  }
+// ctor takes an ANSI or Unicode string and transforms it to Unicode
+wxBasicString::wxBasicString(const wxString& str)
+{
+#if wxUSE_UNICODE
+    m_wzBuf = new OLECHAR[str.Length() + 1];
+    memcpy(m_wzBuf, str.c_str(), str.Length()*2);
+    m_wzBuf[str.Length()] = L'\0';
+#else
+    Init(str.c_str());
+#endif
+}
+
+// Takes an ANSI string and transforms it to Unicode
+void wxBasicString::Init(const char *sz)
+{
+    // get the size of required buffer
+    UINT lenAnsi = strlen(sz);
+#ifdef __MWERKS__
+    UINT lenWide = lenAnsi * 2 ;
+#else
+    UINT lenWide = mbstowcs(NULL, sz, lenAnsi);
+#endif
+    
+    if ( lenWide > 0 ) {
+        m_wzBuf = new OLECHAR[lenWide + 1];
+        mbstowcs(m_wzBuf, sz, lenAnsi);
+        m_wzBuf[lenWide] = L'\0';
+    }
+    else {
+        m_wzBuf = NULL;
+    }
 }
 
 // dtor frees memory
-BasicString::~BasicString()
+wxBasicString::~wxBasicString()
 {
   delete [] m_wzBuf;
 }
