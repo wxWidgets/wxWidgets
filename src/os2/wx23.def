@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\Dev\wx2\wxwindows\lib\wx.lib
+;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -62,6 +62,20 @@ EXPORTS
       ;wxConstructorForwxClipboardModule()
       wxConstructorForwxClipboardModule__Fv
   ;From object file:  ..\common\clntdata.cpp
+    ;PUBDEFs (Symbols available from object file):
+      __vft21wxClientDataContainer
+      ;wxClientDataContainer::DoSetClientObject(wxClientData*)
+      DoSetClientObject__21wxClientDataContainerFP12wxClientData
+      ;wxClientDataContainer::DoGetClientObject() const
+      DoGetClientObject__21wxClientDataContainerCFv
+      ;wxClientDataContainer::DoGetClientData() const
+      DoGetClientData__21wxClientDataContainerCFv
+      ;wxClientDataContainer::~wxClientDataContainer()
+      __dt__21wxClientDataContainerFv
+      ;wxClientDataContainer::DoSetClientData(void*)
+      DoSetClientData__21wxClientDataContainerFPv
+      ;wxClientDataContainer::wxClientDataContainer()
+      __ct__21wxClientDataContainerFv
   ;From object file:  ..\common\cmdline.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxCmdLineParser::EnableLongOptions(unsigned long)
@@ -1354,20 +1368,14 @@ EXPORTS
       GetAllEquivalents__19wxEncodingConverterF14wxFontEncoding
       ;wxEncodingConverter::wxEncodingConverter()
       __ct__19wxEncodingConverterFv
-      ;wxEncodingConverter::Convert(const char*,wchar_t*)
-      Convert__19wxEncodingConverterFPCcPw
       ;wxEncodingConverter::Init(wxFontEncoding,wxFontEncoding,int)
       Init__19wxEncodingConverterF14wxFontEncodingT1i
-      ;wxEncodingConverter::Convert(const wchar_t*,char*)
-      Convert__19wxEncodingConverterFPCwPc
       ;wxEncodingConverter::Convert(const wxString&)
       Convert__19wxEncodingConverterFRC8wxString
       ;wxEncodingConverter::GetPlatformEquivalents(wxFontEncoding,int)
       GetPlatformEquivalents__19wxEncodingConverterF14wxFontEncodingi
       ;wxEncodingConverter::Convert(const char*,char*)
       Convert__19wxEncodingConverterFPCcPc
-      ;wxEncodingConverter::Convert(const wchar_t*,wchar_t*)
-      Convert__19wxEncodingConverterFPCwPw
   ;From object file:  ..\common\event.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxEvent::CopyObject(wxObject&) const
@@ -4576,6 +4584,8 @@ EXPORTS
       sm_classwxStaticBoxSizer__16wxStaticBoxSizer
       ;wxGridSizer::sm_classwxGridSizer
       sm_classwxGridSizer__11wxGridSizer
+      __vft7wxSizer21wxClientDataContainer
+      __vft15wxNotebookSizer21wxClientDataContainer
       ;wxNotebookSizer::RecalcSizes()
       RecalcSizes__15wxNotebookSizerFv
       ;wxFlexGridSizer::RecalcSizes()
@@ -4614,6 +4624,8 @@ EXPORTS
       __dt__7wxSizerFv
       ;wxSizer::sm_classwxSizer
       sm_classwxSizer__7wxSizer
+      __vft11wxGridSizer21wxClientDataContainer
+      __vft10wxBoxSizer21wxClientDataContainer
       ;wxSizerItem::~wxSizerItem()
       __dt__11wxSizerItemFv
       ;wxStaticBoxSizer::RecalcSizes()
@@ -4636,6 +4648,7 @@ EXPORTS
       Remove__7wxSizerFi
       ;wxSizer::GetMinSize()
       GetMinSize__7wxSizerFv
+      __vft16wxStaticBoxSizer21wxClientDataContainer
       ;wxFlexGridSizer::~wxFlexGridSizer()
       __dt__15wxFlexGridSizerFv
       ;wxSizer::wxSizer()
@@ -4666,6 +4679,7 @@ EXPORTS
       sm_classwxFlexGridSizer__15wxFlexGridSizer
       ;wxBoxSizer::sm_classwxBoxSizer
       sm_classwxBoxSizer__10wxBoxSizer
+      __vft15wxFlexGridSizer21wxClientDataContainer
       ;wxSizer::Remove(wxSizer*)
       Remove__7wxSizerFP7wxSizer
       ;wxSizer::DoSetItemMinSize(wxSizer*,int,int)
@@ -4807,51 +4821,32 @@ EXPORTS
       __dt__12wxSocketBaseFv
       ;wxSocketBase::GetLocal(wxSockAddress&) const
       GetLocal__12wxSocketBaseCFR13wxSockAddress
+  ;From object file:  ..\common\statbar.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxStatusBarBase::FreeWidths()
+      FreeWidths__15wxStatusBarBaseFv
+      __vft15wxStatusBarBase8wxObject
+      ;wxStatusBarBase::InitWidths()
+      InitWidths__15wxStatusBarBaseFv
+      ;wxStatusBar::sm_classwxStatusBar
+      sm_classwxStatusBar__11wxStatusBar
+      ;wxStatusBarBase::~wxStatusBarBase()
+      __dt__15wxStatusBarBaseFv
+      ;wxStatusBarBase::SetStatusWidths(int,const int*)
+      SetStatusWidths__15wxStatusBarBaseFiPCi
+      ;wxStatusBarBase::CalculateAbsWidths(int) const
+      CalculateAbsWidths__15wxStatusBarBaseCFi
+      ;wxStatusBarBase::wxStatusBarBase()
+      __ct__15wxStatusBarBaseFv
+      ;wxStatusBarBase::SetFieldsCount(int,const int*)
+      SetFieldsCount__15wxStatusBarBaseFiPCi
+      ;wxConstructorForwxStatusBar()
+      wxConstructorForwxStatusBar__Fv
   ;From object file:  ..\common\strconv.cpp
     ;PUBDEFs (Symbols available from object file):
-      __vft12wxMBConvUTF78wxMBConv
-      __vft8wxCSConv8wxMBConv
-      ;wxMBConv::cMB2WC(const char*) const
-      cMB2WC__8wxMBConvCFPCc
-      ;wxCSConv::SetName(const char*)
-      SetName__8wxCSConvFPCc
-      ;wxMBConvUTF7::MB2WC(wchar_t*,const char*,unsigned int) const
-      MB2WC__12wxMBConvUTF7CFPwPCcUi
-      ;wxMBConvUTF8::WC2MB(char*,const wchar_t*,unsigned int) const
-      WC2MB__12wxMBConvUTF8CFPcPCwUi
-      ;wxMBConvUTF8::MB2WC(wchar_t*,const char*,unsigned int) const
-      MB2WC__12wxMBConvUTF8CFPwPCcUi
-      __vft12wxMBConvFile8wxMBConv
-      __vft12wxMBConvUTF88wxMBConv
       wxConvCurrent
-      ;wxMBConv::WC2MB(char*,const wchar_t*,unsigned int) const
-      WC2MB__8wxMBConvCFPcPCwUi
-      ;wxCSConv::~wxCSConv()
-      __dt__8wxCSConvFv
-      wxConvUTF7
-      wxConvUTF8
-      wxConvLocal
-      ;wxMBConvFile::MB2WC(wchar_t*,const char*,unsigned int) const
-      MB2WC__12wxMBConvFileCFPwPCcUi
       wxConvFile
-      ;wxCSConv::WC2MB(char*,const wchar_t*,unsigned int) const
-      WC2MB__8wxCSConvCFPcPCwUi
-      ;wxMBConvUTF7::WC2MB(char*,const wchar_t*,unsigned int) const
-      WC2MB__12wxMBConvUTF7CFPcPCwUi
-      ;wxMBConvFile::WC2MB(char*,const wchar_t*,unsigned int) const
-      WC2MB__12wxMBConvFileCFPcPCwUi
-      ;wxCSConv::MB2WC(wchar_t*,const char*,unsigned int) const
-      MB2WC__8wxCSConvCFPwPCcUi
-      ;wxCSConv::LoadNow()
-      LoadNow__8wxCSConvFv
-      ;wxCSConv::wxCSConv(const char*)
-      __ct__8wxCSConvFPCc
       wxConvLibc
-      ;wxMBConv::MB2WC(wchar_t*,const char*,unsigned int) const
-      MB2WC__8wxMBConvCFPwPCcUi
-      __vft8wxMBConv
-      ;wxMBConv::cWC2MB(const wchar_t*) const
-      cWC2MB__8wxMBConvCFPCw
   ;From object file:  ..\common\stream.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxStreamBuffer::SetBufferIO(void*,unsigned int,unsigned long)
@@ -5051,20 +5046,22 @@ EXPORTS
       Trim__8wxStringFUl
       ;wxArrayString::Sort(unsigned long)
       Sort__13wxArrayStringFUl
-      ;operator+(const wxString&,const wxString&)
-      __pl__FRC8wxStringT1
+      ;wxString::Truncate(unsigned int)
+      Truncate__8wxStringFUi
       ;wxString::rfind(char,unsigned int) const
       rfind__8wxStringCFcUi
       ;wxString::find_last_not_of(char,unsigned int) const
       find_last_not_of__8wxStringCFcUi
       ;wxString::find_first_of(const char*,unsigned int) const
       find_first_of__8wxStringCFPCcUi
+      ;operator+(const wxString&,const wxString&)
+      __pl__FRC8wxStringT1
       ;wxString::wxString(const void*,const void*)
       __ct__8wxStringFPCvT1
-      ;wxString::Truncate(unsigned int)
-      Truncate__8wxStringFUi
       ;wxArrayString::Sort(int(*)(const wxString&,const wxString&))
       Sort__13wxArrayStringFPFRC8wxStringT1_i
+      ;wxArrayString::SetCount(unsigned int)
+      SetCount__13wxArrayStringFUi
       ;wxArrayString::Remove(unsigned int)
       Remove__13wxArrayStringFUi
       ;wxString::Format(const char*,...)
@@ -5091,8 +5088,6 @@ EXPORTS
       FormatV__8wxStringFPCcPc
       ;wxString::Find(char,unsigned long) const
       Find__8wxStringCFcUl
-      ;wxString::ToLong(long*) const
-      ToLong__8wxStringCFPl
       ;wxString::Replace(const char*,const char*,unsigned long)
       Replace__8wxStringFPCcT1Ul
       ;wxString::Mid(unsigned int,unsigned int) const
@@ -5147,6 +5142,8 @@ EXPORTS
       find__8wxStringCFRC8wxStringUi
       ;wxString::UngetWriteBuf(unsigned int)
       UngetWriteBuf__8wxStringFUi
+      ;wxString::ToLong(long*,int) const
+      ToLong__8wxStringCFPli
       ;wxArrayString::Insert(const wxString&,unsigned int)
       Insert__13wxArrayStringFRC8wxStringUi
       ;wxString::GetWriteBuf(unsigned int)
@@ -5173,8 +5170,6 @@ EXPORTS
       __pl__FRC8wxStringPCc
       ;wxArrayString::operator==(const wxArrayString&) const
       __eq__13wxArrayStringCFRC13wxArrayString
-      ;wxString::operator=(const wchar_t*)
-      __as__8wxStringFPCw
       ;wxString::StartsWith(const char*,wxString*) const
       StartsWith__8wxStringCFPCcP8wxString
       ;wxArrayString::Remove(const char*)
@@ -5183,8 +5178,6 @@ EXPORTS
       ConcatSelf__8wxStringFiPCc
       ;wxArrayString::Add(const wxString&)
       Add__13wxArrayStringFRC8wxString
-      ;wxString::ToULong(unsigned long*) const
-      ToULong__8wxStringCFPUl
       ;wxString::erase(unsigned int,unsigned int)
       erase__8wxStringFUiT1
       ;wxString::sprintf(const char*,...)
@@ -5217,6 +5210,8 @@ EXPORTS
       __ct__8wxStringFcUi
       ;wxSnprintf(char*,unsigned int,const char*,...)
       wxSnprintf__FPcUiPCce
+      ;wxString::ToULong(unsigned long*,int) const
+      ToULong__8wxStringCFPUli
       ;wxString::Right(unsigned int) const
       Right__8wxStringCFUi
       ;wxString::CopyBeforeWrite()
@@ -5225,8 +5220,6 @@ EXPORTS
       rfind__8wxStringCFPCcUiT2
       ;wxArrayString::~wxArrayString()
       __dt__13wxArrayStringFv
-      ;wxString::wxString(const wchar_t*,wxMBConv&)
-      __ct__8wxStringFPCwR8wxMBConv
       ;wxString::Lower() const
       Lower__8wxStringCFv
       ;wxArrayString::Free()
@@ -5688,6 +5681,8 @@ EXPORTS
       wxMessageBox__FRC8wxStringT1lP8wxWindowiT5
       ;wxNewId()
       wxNewId__Fv
+      ;wxYieldIfNeeded()
+      wxYieldIfNeeded__Fv
       ;wxExecute(const wxString&,wxArrayString&,wxArrayString&)
       wxExecute__FRC8wxStringR13wxArrayStringT2
       ;wxHexToDec(const wxString&)
@@ -5700,6 +5695,8 @@ EXPORTS
       LongToString__Fl
       ;wxGetCurrentId()
       wxGetCurrentId__Fv
+      ;wxYield()
+      wxYield__Fv
       ;wxGetHostName()
       wxGetHostName__Fv
       ;wxGetHomeDir()
@@ -6477,13 +6474,10 @@ EXPORTS
       SetHelpText__12wxWindowBaseFRC8wxString
   ;From object file:  ..\common\wxchar.cpp
     ;PUBDEFs (Symbols available from object file):
-      wcslen
-      ;wxMB2WC(wchar_t*,const char*,unsigned int)
-      wxMB2WC__FPwPCcUi
-      ;wxWC2MB(char*,const wchar_t*,unsigned int)
-      wxWC2MB__FPcPCwUi
       ;wxOKlibc()
       wxOKlibc__Fv
+      ;wcslen(const wchar_t*)
+      wcslen__FPCw
   ;From object file:  ..\common\wxexpr.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxExpr::GetAttributeValue(const wxString&,long&) const
@@ -9139,6 +9133,8 @@ EXPORTS
       __vft7wxPanel8wxObject
       ;wxPanel::GetEventTable() const
       GetEventTable__7wxPanelCFv
+      ;wxPanel::InitDialog()
+      InitDialog__7wxPanelFv
       ;wxPanel::OnChildFocus(wxChildFocusEvent&)
       OnChildFocus__7wxPanelFR17wxChildFocusEvent
       ;wxPanel::sm_eventTable
@@ -9511,49 +9507,41 @@ EXPORTS
       Unsplit__16wxSplitterWindowFP8wxWindow
   ;From object file:  ..\generic\statusbr.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxStatusBarGeneric::SetMinHeight(int)
-      SetMinHeight__18wxStatusBarGenericFi
-      ;wxStatusBarGeneric::sm_eventTableEntries
-      sm_eventTableEntries__18wxStatusBarGeneric
-      ;wxStatusBarGeneric::OnPaint(wxPaintEvent&)
-      OnPaint__18wxStatusBarGenericFR12wxPaintEvent
-      ;wxStatusBarGeneric::SetStatusText(const wxString&,int)
-      SetStatusText__18wxStatusBarGenericFRC8wxStringi
-      ;wxStatusBarGeneric::GetEventTable() const
-      GetEventTable__18wxStatusBarGenericCFv
-      ;wxStatusBar::sm_classwxStatusBar
-      sm_classwxStatusBar__11wxStatusBar
-      ;wxStatusBarGeneric::sm_eventTable
-      sm_eventTable__18wxStatusBarGeneric
-      ;wxStatusBarGeneric::SetFieldsCount(int,const int*)
-      SetFieldsCount__18wxStatusBarGenericFiPCi
-      ;wxStatusBarGeneric::DrawFieldText(wxDC&,int)
-      DrawFieldText__18wxStatusBarGenericFR4wxDCi
-      ;wxStatusBarGeneric::wxStatusBarGeneric()
-      __ct__18wxStatusBarGenericFv
-      ;wxStatusBarGeneric::~wxStatusBarGeneric()
-      __dt__18wxStatusBarGenericFv
-      ;wxStatusBarGeneric::InitColours()
-      InitColours__18wxStatusBarGenericFv
-      ;wxStatusBarGeneric::GetStatusText(int) const
-      GetStatusText__18wxStatusBarGenericCFi
-      ;wxConstructorForwxStatusBarGeneric()
-      wxConstructorForwxStatusBarGeneric__Fv
-      ;wxConstructorForwxStatusBar()
-      wxConstructorForwxStatusBar__Fv
-      ;wxStatusBarGeneric::Create(wxWindow*,int,long,const wxString&)
-      Create__18wxStatusBarGenericFP8wxWindowilRC8wxString
-      ;wxStatusBarGeneric::sm_classwxStatusBarGeneric
-      sm_classwxStatusBarGeneric__18wxStatusBarGeneric
-      ;wxStatusBarGeneric::GetFieldRect(int,wxRect&) const
-      GetFieldRect__18wxStatusBarGenericCFiR6wxRect
-      __vft18wxStatusBarGeneric8wxObject
-      ;wxStatusBarGeneric::OnSysColourChanged(wxSysColourChangedEvent&)
-      OnSysColourChanged__18wxStatusBarGenericFR23wxSysColourChangedEvent
-      ;wxStatusBarGeneric::SetStatusWidths(int,const int*)
-      SetStatusWidths__18wxStatusBarGenericFiPCi
-      ;wxStatusBarGeneric::DrawField(wxDC&,int)
-      DrawField__18wxStatusBarGenericFR4wxDCi
+      ;wxStatusBar::GetFieldRect(int,wxRect&) const
+      GetFieldRect__11wxStatusBarCFiR6wxRect
+      ;wxStatusBar::SetStatusWidths(int,const int*)
+      SetStatusWidths__11wxStatusBarFiPCi
+      ;wxStatusBar::DrawField(wxDC&,int)
+      DrawField__11wxStatusBarFR4wxDCi
+      ;wxStatusBar::DrawFieldText(wxDC&,int)
+      DrawFieldText__11wxStatusBarFR4wxDCi
+      ;wxStatusBar::InitColours()
+      InitColours__11wxStatusBarFv
+      ;wxStatusBar::Create(wxWindow*,int,long,const wxString&)
+      Create__11wxStatusBarFP8wxWindowilRC8wxString
+      ;wxStatusBar::OnPaint(wxPaintEvent&)
+      OnPaint__11wxStatusBarFR12wxPaintEvent
+      ;wxStatusBar::GetStatusText(int) const
+      GetStatusText__11wxStatusBarCFi
+      ;wxStatusBar::SetFieldsCount(int,const int*)
+      SetFieldsCount__11wxStatusBarFiPCi
+      ;wxStatusBar::SetStatusText(const wxString&,int)
+      SetStatusText__11wxStatusBarFRC8wxStringi
+      ;wxStatusBar::SetMinHeight(int)
+      SetMinHeight__11wxStatusBarFi
+      ;wxStatusBar::~wxStatusBar()
+      __dt__11wxStatusBarFv
+      ;wxStatusBar::OnSysColourChanged(wxSysColourChangedEvent&)
+      OnSysColourChanged__11wxStatusBarFR23wxSysColourChangedEvent
+      __vft11wxStatusBar8wxObject
+      ;wxStatusBar::GetEventTable() const
+      GetEventTable__11wxStatusBarCFv
+      ;wxStatusBar::sm_eventTable
+      sm_eventTable__11wxStatusBar
+      ;wxStatusBar::sm_eventTableEntries
+      sm_eventTableEntries__11wxStatusBar
+      ;wxStatusBar::wxStatusBar()
+      __ct__11wxStatusBarFv
   ;From object file:  ..\generic\tabg.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxTabControl::OnDraw(wxDC&,unsigned long)
@@ -10516,6 +10504,8 @@ EXPORTS
       WriteCustomization__12wxHtmlWindowFP12wxConfigBase8wxString
       ;wxHtmlWindow::SetRelatedFrame(wxFrame*,const wxString&)
       SetRelatedFrame__12wxHtmlWindowFP7wxFrameRC8wxString
+      ;wxHtmlWindow::AppendToPage(const wxString&)
+      AppendToPage__12wxHtmlWindowFRC8wxString
   ;From object file:  ..\html\htmprint.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxHtmlDCRenderer::SetDC(wxDC*,double)
@@ -10866,6 +10856,8 @@ EXPORTS
       RegisterWindowClasses__5wxAppFUl
       ;wxApp::sm_eventTableEntries
       sm_eventTableEntries__5wxApp
+      ;wxApp::Yield(unsigned long)
+      Yield__5wxAppFUl
       ;wxApp::OnIdle(wxIdleEvent&)
       OnIdle__5wxAppFR11wxIdleEvent
       ;wxMsgArray::wxMsgArray(const wxMsgArray&)
@@ -10876,8 +10868,6 @@ EXPORTS
       Insert__10wxMsgArrayFRC5_QMSGUi
       ;wxApp::HandleSockets()
       HandleSockets__5wxAppFv
-      ;wxYieldIfNeeded()
-      wxYieldIfNeeded__Fv
       wxDEFAULT_MDIPARENTFRAME_ICON
       ;wxApp::wxApp()
       __ct__5wxAppFv
@@ -10900,8 +10890,6 @@ EXPORTS
       RemoveSocketHandler__5wxAppFi
       ;wxMsgArray::DoEmpty()
       DoEmpty__10wxMsgArrayFv
-      ;wxYield()
-      wxYield__Fv
       wxSTD_FRAME_ICON
       wxDEFAULT_FRAME_ICON
       ;wxApp::ProcessIdle()
@@ -11116,6 +11104,10 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxButton::Command(wxCommandEvent&)
       Command__8wxButtonFR14wxCommandEvent
+      ;wxButton::MakeOwnerDrawn()
+      MakeOwnerDrawn__8wxButtonFv
+      ;wxButton::WindowProc(unsigned int,void*,void*)
+      WindowProc__8wxButtonFUiPvT2
       ;wxButton::OnCtlColor(unsigned long,unsigned long,unsigned int,unsigned int,void*,void*)
       OnCtlColor__8wxButtonFUlT1UiT3PvT5
       ;wxButton::~wxButton()
@@ -12038,6 +12030,8 @@ EXPORTS
       GetPointSize__6wxFontCFv
       ;wxFont::Create(int,int,int,int,unsigned long,const wxString&,wxFontEncoding)
       Create__6wxFontFiN31UlRC8wxString14wxFontEncoding
+      ;wxFont::wxFont(const wxNativeFontInfo&)
+      __ct__6wxFontFRC16wxNativeFontInfo
   ;From object file:  ..\os2\fontdlg.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxConstructorForwxFontDialog()
@@ -12086,97 +12080,99 @@ EXPORTS
       FromString__20wxNativeEncodingInfoFRC8wxString
   ;From object file:  ..\os2\frame.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxFrameOS2::OS2Create(int,wxWindow*,const char*,wxWindow*,const char*,int,int,int,int,long)
-      OS2Create__10wxFrameOS2FiP8wxWindowPCcT2T3N41l
-      ;wxFrameOS2::OnActivate(wxActivateEvent&)
-      OnActivate__10wxFrameOS2FR15wxActivateEvent
-      ;wxFrameOS2::Iconize(unsigned long)
-      Iconize__10wxFrameOS2FUl
-      ;wxFrameOS2::DoSetClientSize(int,int)
-      DoSetClientSize__10wxFrameOS2FiT1
-      ;wxFrameOS2::HandleSize(int,int,unsigned int)
-      HandleSize__10wxFrameOS2FiT1Ui
-      ;wxFrameOS2::Restore()
-      Restore__10wxFrameOS2Fv
-      ;wxFrameOS2::sm_eventTableEntries
-      sm_eventTableEntries__10wxFrameOS2
-      ;wxFrameOS2::m_bUseNativeStatusBar
-      m_bUseNativeStatusBar__10wxFrameOS2
-      ;wxFrameOS2::IsIconized() const
-      IsIconized__10wxFrameOS2CFv
-      ;wxFrameOS2::HandlePaint()
-      HandlePaint__10wxFrameOS2Fv
-      ;wxFrameOS2::DetachMenuBar()
-      DetachMenuBar__10wxFrameOS2Fv
-      ;wxFrameOS2::CreateToolBar(long,int,const wxString&)
-      CreateToolBar__10wxFrameOS2FliRC8wxString
-      ;wxFrameOS2::Maximize(unsigned long)
-      Maximize__10wxFrameOS2FUl
-      ;wxFrameOS2::OnSysColourChanged(wxSysColourChangedEvent&)
-      OnSysColourChanged__10wxFrameOS2FR23wxSysColourChangedEvent
-      ;wxFrameOS2::HandleMenuSelect(unsigned short,unsigned short,unsigned long)
-      HandleMenuSelect__10wxFrameOS2FUsT1Ul
-      ;wxFrameOS2::HandleCommand(unsigned short,unsigned short,unsigned long)
-      HandleCommand__10wxFrameOS2FUsT1Ul
-      ;wxFrameOS2::DoGetClientSize(int*,int*) const
-      DoGetClientSize__10wxFrameOS2CFPiT1
-      ;wxFrameOS2::DoGetSize(int*,int*) const
-      DoGetSize__10wxFrameOS2CFPiT1
-      ;wxFrameOS2::~wxFrameOS2()
-      __dt__10wxFrameOS2Fv
+      ;wxFrame::Show(unsigned long)
+      Show__7wxFrameFUl
+      ;wxFrame::Iconize(unsigned long)
+      Iconize__7wxFrameFUl
+      ;wxFrame::HandleMenuSelect(unsigned short,unsigned short,unsigned long)
+      HandleMenuSelect__7wxFrameFUsT1Ul
+      ;wxFrame::OS2TranslateMessage(void**)
+      OS2TranslateMessage__7wxFrameFPPv
+      ;wxFrame::HandlePaint()
+      HandlePaint__7wxFrameFv
+      ;wxFrame::OnCreateStatusBar(int,long,int,const wxString&)
+      OnCreateStatusBar__7wxFrameFilT1RC8wxString
+      ;wxFrame::OnActivate(wxActivateEvent&)
+      OnActivate__7wxFrameFR15wxActivateEvent
+      __vft7wxFrame8wxObject
+      ;wxFrame::DoSetClientSize(int,int)
+      DoSetClientSize__7wxFrameFiT1
+      ;wxFrame::HandleSize(int,int,unsigned int)
+      HandleSize__7wxFrameFiT1Ui
       ;wxConstructorForwxFrame()
       wxConstructorForwxFrame__Fv
-      ;wxFrameOS2::InternalSetMenuBar()
-      InternalSetMenuBar__10wxFrameOS2Fv
-      ;wxFrameOS2::GetClient()
-      GetClient__10wxFrameOS2Fv
-      ;wxFrameOS2::AttachMenuBar(wxMenuBar*)
-      AttachMenuBar__10wxFrameOS2FP9wxMenuBar
-      ;wxFrameOS2::SetClient(wxWindow*)
-      SetClient__10wxFrameOS2FP8wxWindow
-      ;wxFrameOS2::ShowFullScreen(unsigned long,long)
-      ShowFullScreen__10wxFrameOS2FUll
-      ;wxFrameOS2::SetClient(unsigned long)
-      SetClient__10wxFrameOS2FUl
-      ;wxFrameOS2::IconizeChildFrames(unsigned long)
-      IconizeChildFrames__10wxFrameOS2FUl
+      ;wxFrame::SetIcon(const wxIcon&)
+      SetIcon__7wxFrameFRC6wxIcon
+      ;wxFrame::Restore()
+      Restore__7wxFrameFv
+      ;wxFrame::IsMaximized() const
+      IsMaximized__7wxFrameCFv
+      ;wxFrame::IsIconized() const
+      IsIconized__7wxFrameCFv
+      ;wxFrame::GetClientAreaOrigin() const
+      GetClientAreaOrigin__7wxFrameCFv
+      ;wxFrame::AttachMenuBar(wxMenuBar*)
+      AttachMenuBar__7wxFrameFP9wxMenuBar
+      ;wxFrame::Create(wxWindow*,int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
+      Create__7wxFrameFP8wxWindowiRC8wxStringRC7wxPointRC6wxSizelT3
+      ;wxFrame::OnSysColourChanged(wxSysColourChangedEvent&)
+      OnSysColourChanged__7wxFrameFR23wxSysColourChangedEvent
+      ;wxFrame::ShowFullScreen(unsigned long,long)
+      ShowFullScreen__7wxFrameFUll
+      ;wxFrame::DoShowWindow(int)
+      DoShowWindow__7wxFrameFi
+      ;wxFrame::sm_eventTable
+      sm_eventTable__7wxFrame
+      ;wxFrame::sm_eventTableEntries
+      sm_eventTableEntries__7wxFrame
       ;wxFrame::sm_classwxFrame
       sm_classwxFrame__7wxFrame
-      ;wxFrameOS2::GetEventTable() const
-      GetEventTable__10wxFrameOS2CFv
-      ;wxFrameOS2::SetMenuBar(wxMenuBar*)
-      SetMenuBar__10wxFrameOS2FP9wxMenuBar
-      ;wxFrameOS2::PositionStatusBar()
-      PositionStatusBar__10wxFrameOS2Fv
-      ;wxFrameOS2::OS2WindowProc(unsigned int,void*,void*)
-      OS2WindowProc__10wxFrameOS2FUiPvT2
-      ;wxFrameOS2::OS2TranslateMessage(void**)
-      OS2TranslateMessage__10wxFrameOS2FPPv
-      ;wxFrameOS2::Create(wxWindow*,int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
-      Create__10wxFrameOS2FP8wxWindowiRC8wxStringRC7wxPointRC6wxSizelT3
-      ;wxFrameOS2::Show(unsigned long)
-      Show__10wxFrameOS2FUl
-      __vft10wxFrameOS28wxObject
-      ;wxFrameOS2::DoShowWindow(int)
-      DoShowWindow__10wxFrameOS2Fi
-      ;wxFrameOS2::Init()
-      Init__10wxFrameOS2Fv
-      ;wxFrameOS2::sm_eventTable
-      sm_eventTable__10wxFrameOS2
-      ;wxFrameOS2::DoGetPosition(int*,int*) const
-      DoGetPosition__10wxFrameOS2CFPiT1
-      ;wxFrameOS2::IsMaximized() const
-      IsMaximized__10wxFrameOS2CFv
-      ;wxFrameOS2::SetIcon(const wxIcon&)
-      SetIcon__10wxFrameOS2FRC6wxIcon
-      ;wxFrameOS2::PositionToolBar()
-      PositionToolBar__10wxFrameOS2Fv
-      ;wxFrameOS2::GetClientAreaOrigin() const
-      GetClientAreaOrigin__10wxFrameOS2CFv
-      ;wxFrameOS2::OnCreateStatusBar(int,long,int,const wxString&)
-      OnCreateStatusBar__10wxFrameOS2FilT1RC8wxString
-      wxFrameWndProc
+      ;wxFrame::m_bUseNativeStatusBar
+      m_bUseNativeStatusBar__7wxFrame
+      ;wxFrame::~wxFrame()
+      __dt__7wxFrameFv
+      ;wxFrame::GetClient()
+      GetClient__7wxFrameFv
+      ;wxFrame::OS2Create(int,wxWindow*,const char*,wxWindow*,const char*,int,int,int,int,long)
+      OS2Create__7wxFrameFiP8wxWindowPCcT2T3N41l
+      ;wxFrame::HandleCommand(unsigned short,unsigned short,unsigned long)
+      HandleCommand__7wxFrameFUsT1Ul
+      ;wxFrame::DoGetSize(int*,int*) const
+      DoGetSize__7wxFrameCFPiT1
+      ;wxFrame::DoGetPosition(int*,int*) const
+      DoGetPosition__7wxFrameCFPiT1
+      ;wxFrame::PositionStatusBar()
+      PositionStatusBar__7wxFrameFv
+      ;wxFrame::PositionToolBar()
+      PositionToolBar__7wxFrameFv
+      ;wxFrame::OS2WindowProc(unsigned int,void*,void*)
+      OS2WindowProc__7wxFrameFUiPvT2
+      ;wxFrame::InternalSetMenuBar()
+      InternalSetMenuBar__7wxFrameFv
+      ;wxFrame::CreateToolBar(long,int,const wxString&)
+      CreateToolBar__7wxFrameFliRC8wxString
+      ;wxFrame::Maximize(unsigned long)
+      Maximize__7wxFrameFUl
+      ;wxFrame::SetClient(unsigned long)
+      SetClient__7wxFrameFUl
+      ;wxFrame::IconizeChildFrames(unsigned long)
+      IconizeChildFrames__7wxFrameFUl
+      ;wxFrame::DoGetClientSize(int*,int*) const
+      DoGetClientSize__7wxFrameCFPiT1
+      ;wxFrame::Init()
+      Init__7wxFrameFv
+      ;wxFrame::SetMenuBar(wxMenuBar*)
+      SetMenuBar__7wxFrameFP9wxMenuBar
+      ;wxFrame::GetEventTable() const
+      GetEventTable__7wxFrameCFv
+      ;wxFrame::DetachMenuBar()
+      DetachMenuBar__7wxFrameFv
+      ;wxFrame::AlterChildPos()
+      AlterChildPos__7wxFrameFv
       wxFrameMainWndProc
+      wxFrameWndProc
+      ;wxFrame::SetClient(wxWindow*)
+      SetClient__7wxFrameFP8wxWindow
   ;From object file:  ..\os2\gauge.cpp
     ;PUBDEFs (Symbols available from object file):
       __vft7wxGauge8wxObject
@@ -13261,6 +13257,8 @@ EXPORTS
       __pp__16wxRegionIteratorFv
       ;wxRegion::Combine(const wxRegion&,wxRegionOp)
       Combine__8wxRegionFRC8wxRegion10wxRegionOp
+      ;wxRegion::wxRegion(unsigned long,unsigned long)
+      __ct__8wxRegionFUlT1
       ;wxRegion::wxRegion(const wxPoint&,const wxPoint&)
       __ct__8wxRegionFRC7wxPointT1
       ;wxRegion::Contains(int,int) const
@@ -13310,11 +13308,9 @@ EXPORTS
       __ct__16wxRegionIteratorFRC8wxRegion
       ;wxRegionIterator::GetH() const
       GetH__16wxRegionIteratorCFv
-      ;wxRegion::wxRegion(unsigned long)
-      __ct__8wxRegionFUl
-      __vft16wxRegionIterator8wxObject
       ;wxRegion::SetPS(unsigned long)
       SetPS__8wxRegionFUl
+      __vft16wxRegionIterator8wxObject
       ;wxRegion::wxRegion(int,int,int,int)
       __ct__8wxRegionFiN31
       ;wxRegion::Empty() const
@@ -14221,10 +14217,8 @@ EXPORTS
       OS2OnMeasureItem__8wxWindowFiPPv
       ;wxWindow::OS2DestroyWindow()
       OS2DestroyWindow__8wxWindowFv
-      ;wxWindow::HandleWindowParams(_WNDPARAMS*,void*)
-      HandleWindowParams__8wxWindowFP10_WNDPARAMSPv
-      ;wxWindow::HandlePresParamChanged(void*)
-      HandlePresParamChanged__8wxWindowFPv
+      ;wxWindow::HandleKeyUp(unsigned long,void*)
+      HandleKeyUp__8wxWindowFUlPv
       ;wxWindow::HandleKeyDown(unsigned short,void*)
       HandleKeyDown__8wxWindowFUsPv
       ;wxWindow::Clear()
@@ -14361,14 +14355,14 @@ EXPORTS
       ScrollWindow__8wxWindowFiT1PC6wxRect
       ;wxWindow::OnIdle(wxIdleEvent&)
       OnIdle__8wxWindowFR11wxIdleEvent
-      ;wxWindow::HandleChar(unsigned short,void*,unsigned long)
-      HandleChar__8wxWindowFUsPvUl
       ;wxWindow::HandleActivate(int,unsigned long)
       HandleActivate__8wxWindowFiUl
       ;wxWindow::FindItemByHWND(unsigned long,unsigned long) const
       FindItemByHWND__8wxWindowCFUlT1
       ;wxWindow::OS2Create(unsigned long,char*,const char*,unsigned long,long,long,long,long,unsigned long,unsigned long,unsigned long,void*,void*,unsigned long)
       OS2Create__8wxWindowFUlPcPCcT1lN35N31PvT12_T1
+      ;wxWindow::HandleChar(unsigned long,void*,unsigned long)
+      HandleChar__8wxWindowFUlPvT1
       ;wxWindow::DoMoveWindow(int,int,int,int)
       DoMoveWindow__8wxWindowFiN31
       ;wxWindow::DoClientToScreen(int*,int*) const
@@ -14377,8 +14371,6 @@ EXPORTS
       OS2DetachWindowMenu__8wxWindowFv
       ;wxWindow::OS2OnDrawItem(int,void**)
       OS2OnDrawItem__8wxWindowFiPPv
-      ;wxWindow::HandleKeyUp(unsigned short,void*)
-      HandleKeyUp__8wxWindowFUsPv
       ;wxWindow::GetCharWidth() const
       GetCharWidth__8wxWindowCFv
       ;wxWindowBase::FindFocus()
