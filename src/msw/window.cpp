@@ -3951,6 +3951,7 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
 
     event.SetTimestamp(s_currentMsg.time);
     event.m_eventObject = this;
+    event.SetId(GetId());
 
 #if wxUSE_MOUSEEVENT_HACK
     m_lastMouseX = x;
