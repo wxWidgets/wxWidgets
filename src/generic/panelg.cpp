@@ -142,7 +142,6 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
             node = event.GetDirection() ? GetChildren().First()
                                         : GetChildren().Last();
 
-            continue;
         }
 
         wxWindow *child = (wxWindow *)node->Data();

@@ -244,6 +244,8 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     switch (gdk_event->keyval)
     {
         case GDK_BackSpace:     key_code = WXK_BACK;        break;
+	case GDK_ISO_Left_Tab:
+        case GDK_KP_Tab:
         case GDK_Tab:           key_code = WXK_TAB;         break;
         case GDK_Linefeed:      key_code = WXK_RETURN;      break;
         case GDK_Clear:         key_code = WXK_CLEAR;       break;
@@ -268,7 +270,6 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
         case GDK_Execute:       key_code = WXK_EXECUTE;     break;
         case GDK_Insert:        key_code = WXK_INSERT;      break;
         case GDK_Num_Lock:      key_code = WXK_NUMLOCK;     break;
-        case GDK_KP_Tab:        key_code = WXK_TAB;         break;
         case GDK_KP_Enter:      key_code = WXK_RETURN;      break;
         case GDK_KP_Home:       key_code = WXK_HOME;        break;
         case GDK_KP_Left:       key_code = WXK_LEFT;        break;
@@ -349,10 +350,12 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     }
 
     // win is a control: tab can be propagated up
-    if ((!ret) && (gdk_event->keyval == GDK_Tab) && ((win->m_windowStyle & wxTE_PROCESS_TAB) == 0))
+    if ( (!ret) && 
+         ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab)) &&
+         ((win->m_windowStyle & wxTE_PROCESS_TAB) == 0))
     {
         wxNavigationKeyEvent new_event;
-        new_event.SetDirection( !(gdk_event->state & GDK_SHIFT_MASK) );
+        new_event.SetDirection( (gdk_event->keyval == GDK_Tab) );
         new_event.SetWindowChange( FALSE );
         new_event.SetCurrentFocus( win );
         ret = win->GetEventHandler()->ProcessEvent( new_event );
@@ -407,6 +410,8 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
     switch (gdk_event->keyval)
     {
         case GDK_BackSpace:     key_code = WXK_BACK;        break;
+	case GDK_ISO_Left_Tab:
+        case GDK_KP_Tab:
         case GDK_Tab:           key_code = WXK_TAB;         break;
         case GDK_Linefeed:      key_code = WXK_RETURN;      break;
         case GDK_Clear:         key_code = WXK_CLEAR;       break;
@@ -431,7 +436,6 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
         case GDK_Execute:       key_code = WXK_EXECUTE;     break;
         case GDK_Insert:        key_code = WXK_INSERT;      break;
         case GDK_Num_Lock:      key_code = WXK_NUMLOCK;     break;
-        case GDK_KP_Tab:        key_code = WXK_TAB;         break;
         case GDK_KP_Enter:      key_code = WXK_RETURN;      break;
         case GDK_KP_Home:       key_code = WXK_HOME;        break;
         case GDK_KP_Left:       key_code = WXK_LEFT;        break;
