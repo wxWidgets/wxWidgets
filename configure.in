@@ -294,8 +294,6 @@ case "${host}" in
     DEFAULT_DEFAULT_wxUSE_PM=1
     dnl "c++" wrapper is not always available, so always use plain gcc.
     CXX=gcc
-    dnl Explicitly link -lstdcpp, since we are using "gcc" not "g++"/"c++".
-    LIBS="$LIBS -lstdcpp"
     LDFLAGS="$LDFLAGS -Zcrtdll -Zsysv-signals"
     dnl
     dnl Some special code that's automatically added by autoconf-2.57 for OS/2
@@ -1451,6 +1449,8 @@ AC_PROG_LN_S
 dnl ---------------------------------------------------------------------------
 dnl When we are using gcc on OS/2, we want to be either using resources (PM)
 dnl or a more complete POSIX emulation for Motif/GTK+/X11
+dnl Moreover we need to link explicitly against either stdcpp.a or stdcxx.a
+dnl (depending on compiler version), since we are using "gcc", not "g++/c++".
 dnl ---------------------------------------------------------------------------
 dnl (OS/2-only piece)
 case "${host}" in
@@ -1462,6 +1462,26 @@ case "${host}" in
       else
           dnl Include resources for the "native" port (wxPM).
           RESPROGRAMOBJ="\${top_srcdir}/include/wx/os2/wx.res"
+      fi
+      AC_CACHE_CHECK([for gcc 3 or later], wx_cv_gcc3,[
+          AC_TRY_COMPILE([#include <features.h>],
+              [
+                  #if (__GNUC__ < 3)
+                      #error old gcc
+                  #endif
+              ],
+              [
+                  wx_cv_gcc3=yes
+              ],
+              [
+                  wx_cv_gcc3=no
+              ]
+          )
+      ])
+      if test "$wx_cv_gcc3" = "no"; then
+          LIBS="$LIBS -lstdcpp"
+      else
+          LIBS="$LIBS -lstdcxx"
       fi
   ;;
 esac
@@ -1528,7 +1548,7 @@ case "${host}" in
 esac
 
 if test "$wxUSE_GUI" = "yes"; then
-    if test "$wxUSE_UNIX" = "yes"; then
+    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_PM" != 1; then
         dnl defines HAVE_X11_XKBLIB_H
         AC_CHECK_HEADERS(X11/Xlib.h)
         AC_CHECK_HEADERS([X11/XKBlib.h], [], [], 
@@ -4074,8 +4094,8 @@ else
             fi
         ;;
         *-pc-os2*emx )
-            CFLAGS="$CFLAGS -Zmt"
-            CXXFLAGS="$CXXFLAGS -Zmt"
+            CFLAGS="$CFLAGS -Zmt -D__ST_MT_ERRNO__"
+            CXXFLAGS="$CXXFLAGS -Zmt -D__ST_MT_ERRNO__"
             LDFLAGS="$LDFLAGS -Zmt"
         ;;
       esac
@@ -4708,7 +4728,7 @@ dnl DLL support
 dnl ------------------------------------------------------------------------
 
 dnl under MSW we always have LoadLibrary/GetProcAddress
-if test "$TOOLKIT" != "MSW"; then
+if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
 
     HAVE_DL_FUNCS=0
     HAVE_SHL_FUNCS=0
