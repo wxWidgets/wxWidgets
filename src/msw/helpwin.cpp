@@ -55,7 +55,8 @@ bool wxWinHelpController::Initialize(const wxString& filename)
 
 bool wxWinHelpController::LoadFile(const wxString& file)
 {
-    m_helpFile = file;
+    if (!file.IsEmpty())
+        m_helpFile = file;
     return TRUE;
 }
 

@@ -59,7 +59,8 @@ bool wxCHMHelpController::Initialize(const wxString& filename)
 
 bool wxCHMHelpController::LoadFile(const wxString& file)
 {
-    m_helpFile = file;
+    if (!file.IsEmpty())
+        m_helpFile = file;
     return TRUE;
 }
 

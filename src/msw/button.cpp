@@ -74,13 +74,25 @@ bool wxButton::Create(wxWindow *parent,
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
 
+	long msStyle = WS_VISIBLE | WS_TABSTOP | WS_CHILD;
+
+#ifdef __WIN32__
+    if(m_windowStyle & wxBU_LEFT)
+        msStyle |= BS_LEFT;
+    if(m_windowStyle & wxBU_RIGHT)
+        msStyle |= BS_RIGHT;
+    if(m_windowStyle & wxBU_TOP)
+        msStyle |= BS_TOP;
+    if(m_windowStyle & wxBU_BOTTOM)
+        msStyle |= BS_BOTTOM;
+#endif
 
     m_hWnd = (WXHWND)CreateWindowEx
                      (
                       MakeExtendedStyle(m_windowStyle),
                       wxT("BUTTON"),
                       label,
-                      WS_VISIBLE | WS_TABSTOP | WS_CHILD,
+                      msStyle,
                       0, 0, 0, 0,
                       GetWinHwnd(parent),
                       (HMENU)m_windowId,
