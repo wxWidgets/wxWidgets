@@ -352,7 +352,9 @@ checkbox.cpp	Univ
 checklst.cpp	Univ
 colschem.cpp	Univ
 control.cpp	Univ
+dialog.cpp	Univ
 framuniv.cpp	Univ
+topluniv.cpp	Univ
 gauge.cpp	Univ
 inphand.cpp	Univ
 listbox.cpp	Univ
@@ -398,12 +400,12 @@ dc.cpp	GTK	LowLevel
 dcclient.cpp	GTK	LowLevel
 dcmemory.cpp	GTK	LowLevel
 dcscreen.cpp	GTK	LowLevel
-dialog.cpp	GTK	LowLevel
+dialog.cpp	GTK
 dnd.cpp	GTK	LowLevel
 evtloop.cpp	GTK	LowLevel
 font.cpp	GTK	LowLevel
 fontdlg.cpp	GTK
-frame.cpp	GTK	LowLevel
+frame.cpp	GTK
 toplevel.cpp	GTK	LowLevel
 gauge.cpp	GTK
 gdiobj.cpp	GTK	LowLevel
@@ -1253,8 +1255,6 @@ cursor.cpp	MGL	LowLevel
 dcclient.cpp	MGL	LowLevel
 dcmemory.cpp	MGL	LowLevel
 dcscreen.cpp	MGL	LowLevel
-dialog.cpp	MGL	LowLevel
-frame.cpp	MGL	LowLevel
 toplevel.cpp	MGL	LowLevel
 icon.cpp	MGL	LowLevel
 settings.cpp	MGL	LowLevel
