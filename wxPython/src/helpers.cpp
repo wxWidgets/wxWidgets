@@ -1059,15 +1059,14 @@ bool wxPyBeginBlockThreads() {
     // This works in for 2.3, maybe a good alternative to find the needed tstate?
     // PyThreadState *check = PyGILState_GetThisThreadState();  
 
-    // get the currect tstate by swapping in NULL and then putting it back.
-    PyThreadState *current = PyThreadState_Swap(NULL);
-    PyThreadState_Swap(current);
+    PyThreadState *current = _PyThreadState_Current;
 
-    // Only block if there wasn't alrady a tstate.  This cen happen with
-    // nested calls to wxPyBeginBlockThreads
+    // Only block if there wasn't already a tstate, or if the current one is
+    // not the one we are wanting to change to.  This should prevent deadlock
+    // if there are nested calls to wxPyBeginBlockThreads
     bool blocked = false;
-    if (current == NULL) {
-        wxPyThreadState* tstate = wxPyGetThreadState();
+    wxPyThreadState* tstate = wxPyGetThreadState();
+    if (current != tstate->tstate) {
         PyEval_RestoreThread(tstate->tstate);
         blocked = true;
     }

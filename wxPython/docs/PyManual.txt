@@ -67,15 +67,15 @@ Python shells any more.
 
 Around that same time, the wxPython folks asked me if I'd be willing
 to move all my wxPython-related projects into the `wxPython CVS
-repository`_, and become part of the wxPython_/wxWindows_ developer team.
+repository`_, and become part of the wxPython_/wxWidgets_ developer team.
 I decided the time was right to restructure the PyCrust project.
 During the move, the PyCrust package was renamed to "py" (lowercase
 "p") and the collection of programs and modules as a whole became
 known as "Py" (with a capital "P").
 
-.. _wxPython CVS repository: http://cvs.wxwindows.org
+.. _wxPython CVS repository: http://cvs.wxWidgets.org
 .. _SourceForge: http://www.sf.net/projects/pycrust/
-.. _wxWindows: http://www.wxwindows.org/
+.. _wxWidgets: http://www.wxWidgets.org/
 
 The original goal of PyCrust was to be the best interactive, graphical
 Python shell (of course, I claimed it was the "flakiest" Python
@@ -155,9 +155,9 @@ PyShell is an interactive, Python shell.  It shares the same base code
 as PyCrust, but doesn't have any of the extra features that appear in
 the PyCrust notebook interface.
 
-.. figure:: /screenshots/PyShell.png
+.. figure:: screenshots/PyShell.png
 
-   PyShell running on Mandrake Linux 9.1.
+   PyShell running on Mandrake Linux.
 
 
 PyWrap

@@ -104,7 +104,7 @@ the application needs more control, additional bitmaps for the selected state,
 unpressed focused state, and greyed-out state may be supplied.
 ");
 
-RefDoc(wxButton,  "
+RefDoc(wxBitmapButton,  "
  Styles
     wx.BU_AUTODRAW: If this is specified, the button will be drawn
                     automatically using the label bitmap only, providing a
@@ -129,6 +129,8 @@ public:
     %pythonAppend wxBitmapButton()       ""
 
     DocStr(wxBitmapButton, "Create and show a button with a bitmap for the label.")
+    RefDoc(wxBitmapButton, ""); // turn it off for the ctors
+    
     wxBitmapButton(wxWindow* parent, wxWindowID id, const wxBitmap& bitmap,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,

@@ -105,6 +105,7 @@
 %rename(MDIClientWindow)                    wxMDIClientWindow;
 %rename(PyWindow)                           wxPyWindow;
 %rename(PyPanel)                            wxPyPanel;
+%rename(PyScrolledWindow)                   wxPyScrolledWindow;
 %rename(PRINT_MODE_NONE)                    wxPRINT_MODE_NONE;
 %rename(PRINT_MODE_PREVIEW)                 wxPRINT_MODE_PREVIEW;
 %rename(PRINT_MODE_FILE)                    wxPRINT_MODE_FILE;

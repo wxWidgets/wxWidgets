@@ -229,7 +229,7 @@ class NotifyTimer(wx.Timer):
         self.log = log
         
     def Notify(self):
-        log.write("got NotifyTimer event\n")
+        self.log.write("got NotifyTimer event\n")
 
 
 

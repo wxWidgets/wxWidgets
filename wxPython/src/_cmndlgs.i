@@ -106,6 +106,8 @@ class wxDirDialog : public wxDialog {
 public:
     %pythonAppend wxDirDialog   "self._setOORInfo(self)"
     
+    RefDoc(wxDirDialog, ""); // turn it off for the ctors
+    
     DocCtorStr(
         wxDirDialog(wxWindow* parent,
                     const wxString& message = wxPyDirSelectorPromptStr,
@@ -185,6 +187,8 @@ class wxFileDialog : public wxDialog {
 public:
     %pythonAppend wxFileDialog   "self._setOORInfo(self)"
 
+    RefDoc(wxFileDialog, ""); // turn it off for the ctors
+    
     DocCtorStr(
         wxFileDialog(wxWindow* parent,
                      const wxString& message = wxPyFileSelectorPromptStr,
@@ -553,6 +557,8 @@ class wxMessageDialog : public wxDialog {
 public:
     %pythonAppend wxMessageDialog   "self._setOORInfo(self)"
     
+    RefDoc(wxMessageDialog, ""); // turn it off for the ctors
+    
     wxMessageDialog(wxWindow* parent,
                     const wxString& message,
                     const wxString& caption = wxPyMessageBoxCaptionStr,
@@ -600,6 +606,8 @@ class wxProgressDialog : public wxFrame {
 public:
     %pythonAppend wxProgressDialog   "self._setOORInfo(self)"
 
+    RefDoc(wxProgressDialog, ""); // turn it off for the ctors
+    
     DocCtorStr(
         wxProgressDialog(const wxString& title,
                          const wxString& message,
@@ -806,6 +814,8 @@ public:
     %pythonAppend wxFindReplaceDialog     "self._setOORInfo(self)"
     %pythonAppend wxFindReplaceDialog()   ""
 
+    RefDoc(wxFindReplaceDialog, ""); // turn it off for the ctors
+    
     DocCtorStr(
         wxFindReplaceDialog(wxWindow *parent,
                             wxFindReplaceData *data,

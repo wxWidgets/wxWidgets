@@ -24,7 +24,7 @@ MAKE_CONST_WXSTRING(RadioButtonNameStr);
 class wxRadioBox : public wxControl
 {
 public:
-    %pythonPrepend wxRadioBox         "if kwargs.has_key('point'): kwargs['pos'] = kwargs['point']"
+    %pythonPrepend wxRadioBox         "if kwargs.has_key('point'): kwargs['pos'] = kwargs['point'];del kwargs['point']"
     %pythonPrepend wxRadioBox()       ""
     %pythonAppend  wxRadioBox         "self._setOORInfo(self)"
     %pythonAppend  wxRadioBox()       ""

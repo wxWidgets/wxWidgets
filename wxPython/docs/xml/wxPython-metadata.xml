@@ -3746,122 +3746,6 @@ appear on screen themselves.
         <autodoc>__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
     long style=0, String name=PanelNameStr) -&gt; Window</autodoc>
         <docstring>Construct and show a generic Window.</docstring>
-        <refdoc>
-  Styles
-
-    wx.SIMPLE_BORDER:          Displays a thin border around the window.
-
-    wx.DOUBLE_BORDER:          Displays a double border. Windows and Mac only.
-
-    wx.SUNKEN_BORDER:          Displays a sunken border.
-
-    wx.RAISED_BORDER:          Displays a raised border.
-
-    wx.STATIC_BORDER:           Displays a border suitable for a static
-                                control. Windows only.
-
-    wx.NO_BORDER:               Displays no border, overriding the default
-                                border style for the window.
-
-    wx.TRANSPARENT_WINDOW:      The window is transparent, that is, it
-                                will not receive paint events. Windows only.
-
-    wx.TAB_TRAVERSAL:           Use this to enable tab traversal for
-                                non-dialog windows.
-
-    wx.WANTS_CHARS:             Use this to indicate that the window
-                                wants to get all char/key events for
-                                all keys - even for keys like TAB or
-                                ENTER which are usually used for
-                                dialog navigation and which wouldn't
-                                be generated without this style. If
-                                you need to use this style in order to
-                                get the arrows or etc., but would
-                                still like to have normal keyboard
-                                navigation take place, you should
-                                create and send a wxNavigationKeyEvent
-                                in response to the key events for Tab
-                                and Shift-Tab.
-
-    wx.NO_FULL_REPAINT_ON_RESIZE: Disables repainting the window
-                                  completely when its size is changed
-                                  - you will have to repaint the new
-                                  window area manually if you use this
-                                  style. As of version 2.5.1 this
-                                  style is on by default.  Use
-                                  wx.FULL_REPAINT_ON_RESIZE to
-                                  deactivate it.
-
-    wx.VSCROLL:          Use this style to enable a vertical scrollbar.
-
-    wx.HSCROLL:          Use this style to enable a horizontal scrollbar.
-
-    wx.ALWAYS_SHOW_SB:          If a window has scrollbars, disable them
-                                instead of hiding them when they are
-                                not needed (i.e. when the size of the
-                                window is big enough to not require
-                                the scrollbars to navigate it). This
-                                style is currently only implemented
-                                for wxMSW and wxUniversal and does
-                                nothing on the other platforms.
-
-    wx.CLIP_CHILDREN:           Use this style to eliminate flicker caused by
-                                the background being repainted, then
-                                children being painted over
-                                them. Windows only.
-
-    wx.FULL_REPAINT_ON_RESIZE:  Use this style to force a complete
-                                redraw of the window whenever it is
-                                resized instead of redrawing just the
-                                part of the window affected by
-                                resizing. Note that this was the
-                                behaviour by default before 2.5.1
-                                release and that if you experience
-                                redraw problems with the code which
-                                previously used to work you may want
-                                to try this.
-
-  Extra Styles
-
-    wx.WS_EX_VALIDATE_RECURSIVELY:  By default,
-                                    Validate/TransferDataTo/FromWindow()
-                                    only work on direct children of
-                                    the window (compatible
-                                    behaviour). Set this flag to make
-                                    them recursively descend into all
-                                    subwindows.
-
-    wx.WS_EX_BLOCK_EVENTS:          wx.CommandEvents and the objects of the
-                                    derived classes are forwarded to
-                                    the parent window and so on
-                                    recursively by default. Using this
-                                    flag for the given window allows
-                                    to block this propagation at this
-                                    window, i.e. prevent the events
-                                    from being propagated further
-                                    upwards. Dialogs have this flag on
-                                    by default.
-
-    wx.WS_EX_TRANSIENT              Don't use this window as an implicit parent for
-                                    the other windows: this must be
-                                    used with transient windows as
-                                    otherwise there is the risk of
-                                    creating a dialog/frame with this
-                                    window as a parent which would
-                                    lead to a crash if the parent is
-                                    destroyed before the child.
-
-    wx.WS_EX_PROCESS_IDLE:          This window should always process idle
-                                    events, even if the mode set by
-                                    wx.IdleEvent.SetMode is
-                                    wx.IDLE_PROCESS_SPECIFIED.
-
-    wx.WS_EX_PROCESS_UI_UPDATES     This window should always process UI
-                                    update events, even if the mode
-                                    set by wxUpdateUIEvent::SetMode is
-                                    wxUPDATE_UI_PROCESS_SPECIFIED.
-
-</refdoc>
         <paramlist>
           <param name="parent" type="Window" default=""/>
           <param name="id" type="int" default=""/>
@@ -3874,122 +3758,6 @@ appear on screen themselves.
       <constructor name="PreWindow" overloaded="no">
         <autodoc>PreWindow() -&gt; Window</autodoc>
         <docstring>Precreate a Window for 2-phase creation.</docstring>
-        <refdoc>
-  Styles
-
-    wx.SIMPLE_BORDER:          Displays a thin border around the window.
-
-    wx.DOUBLE_BORDER:          Displays a double border. Windows and Mac only.
-
-    wx.SUNKEN_BORDER:          Displays a sunken border.
-
-    wx.RAISED_BORDER:          Displays a raised border.
-
-    wx.STATIC_BORDER:           Displays a border suitable for a static
-                                control. Windows only.
-
-    wx.NO_BORDER:               Displays no border, overriding the default
-                                border style for the window.
-
-    wx.TRANSPARENT_WINDOW:      The window is transparent, that is, it
-                                will not receive paint events. Windows only.
-
-    wx.TAB_TRAVERSAL:           Use this to enable tab traversal for
-                                non-dialog windows.
-
-    wx.WANTS_CHARS:             Use this to indicate that the window
-                                wants to get all char/key events for
-                                all keys - even for keys like TAB or
-                                ENTER which are usually used for
-                                dialog navigation and which wouldn't
-                                be generated without this style. If
-                                you need to use this style in order to
-                                get the arrows or etc., but would
-                                still like to have normal keyboard
-                                navigation take place, you should
-                                create and send a wxNavigationKeyEvent
-                                in response to the key events for Tab
-                                and Shift-Tab.
-
-    wx.NO_FULL_REPAINT_ON_RESIZE: Disables repainting the window
-                                  completely when its size is changed
-                                  - you will have to repaint the new
-                                  window area manually if you use this
-                                  style. As of version 2.5.1 this
-                                  style is on by default.  Use
-                                  wx.FULL_REPAINT_ON_RESIZE to
-                                  deactivate it.
-
-    wx.VSCROLL:          Use this style to enable a vertical scrollbar.
-
-    wx.HSCROLL:          Use this style to enable a horizontal scrollbar.
-
-    wx.ALWAYS_SHOW_SB:          If a window has scrollbars, disable them
-                                instead of hiding them when they are
-                                not needed (i.e. when the size of the
-                                window is big enough to not require
-                                the scrollbars to navigate it). This
-                                style is currently only implemented
-                                for wxMSW and wxUniversal and does
-                                nothing on the other platforms.
-
-    wx.CLIP_CHILDREN:           Use this style to eliminate flicker caused by
-                                the background being repainted, then
-                                children being painted over
-                                them. Windows only.
-
-    wx.FULL_REPAINT_ON_RESIZE:  Use this style to force a complete
-                                redraw of the window whenever it is
-                                resized instead of redrawing just the
-                                part of the window affected by
-                                resizing. Note that this was the
-                                behaviour by default before 2.5.1
-                                release and that if you experience
-                                redraw problems with the code which
-                                previously used to work you may want
-                                to try this.
-
-  Extra Styles
-
-    wx.WS_EX_VALIDATE_RECURSIVELY:  By default,
-                                    Validate/TransferDataTo/FromWindow()
-                                    only work on direct children of
-                                    the window (compatible
-                                    behaviour). Set this flag to make
-                                    them recursively descend into all
-                                    subwindows.
-
-    wx.WS_EX_BLOCK_EVENTS:          wx.CommandEvents and the objects of the
-                                    derived classes are forwarded to
-                                    the parent window and so on
-                                    recursively by default. Using this
-                                    flag for the given window allows
-                                    to block this propagation at this
-                                    window, i.e. prevent the events
-                                    from being propagated further
-                                    upwards. Dialogs have this flag on
-                                    by default.
-
-    wx.WS_EX_TRANSIENT              Don't use this window as an implicit parent for
-                                    the other windows: this must be
-                                    used with transient windows as
-                                    otherwise there is the risk of
-                                    creating a dialog/frame with this
-                                    window as a parent which would
-                                    lead to a crash if the parent is
-                                    destroyed before the child.
-
-    wx.WS_EX_PROCESS_IDLE:          This window should always process idle
-                                    events, even if the mode set by
-                                    wx.IdleEvent.SetMode is
-                                    wx.IDLE_PROCESS_SPECIFIED.
-
-    wx.WS_EX_PROCESS_UI_UPDATES     This window should always process UI
-                                    update events, even if the mode
-                                    set by wxUpdateUIEvent::SetMode is
-                                    wxUPDATE_UI_PROCESS_SPECIFIED.
-
-</refdoc>
       </constructor>
       <method name="Create" type="bool" overloaded="no">
         <autodoc>Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
@@ -7551,6 +7319,8 @@ try:
 except NameError:
     __builtins__.True = 1==1
     __builtins__.False = 1==0
+    def bool(value): return not not value
+    __builtins__.bool = bool
 
 
 
@@ -11635,10 +11405,60 @@ the borders, scrollbars, other decorations...)</docstring>
 #---------------------------------------------------------------------------
 </pythoncode>
     <class name="SplitterWindow" oldname="wxSplitterWindow" module="windows">
+      <docstring>wx.SplitterWindow manages up to two subwindows or panes,
+with an optional vertical or horizontal split which can be
+used with the mouse or programmatically.
+</docstring>
+      <refdoc>
+ Styles
+    wx.SP_3D               Draws a 3D effect border and sash.
+    wx.SP_3DSASH           Draws a 3D effect sash.
+    wx.SP_3DBORDER         Synonym for wxSP_BORDER.
+    wx.SP_BORDER           Draws a standard border.
+    wx.SP_NOBORDER         No border (default).
+    wx.SP_NO_XP_THEME      Under Windows XP, switches off the
+                           attempt to draw the splitter
+                           using Windows XP theming, so the
+                           borders and sash will take on the
+                           pre-XP look.
+    wx.SP_PERMIT_UNSPLIT   Always allow to unsplit, even with
+                           the minimum pane size other than zero.
+    wx.SP_LIVE_UPDATE      Don't draw XOR line but resize the
+                           child windows immediately.
+
+ Events
+
+    EVT_SPLITTER_SASH_POS_CHANGING
+                           The sash position is in the
+                           process of being changed. May be
+                           used to modify the position of
+                           the tracking bar to properly
+                           reflect the position that would
+                           be set if the drag were to be
+                           completed at this point.
+
+    EVT_SPLITTER_SASH_POS_CHANGED
+                           The sash position was
+                           changed. May be used to modify
+                           the sash position before it is
+                           set, or to prevent the change
+                           from taking place. 
+
+    EVT_SPLITTER_UNSPLIT   The splitter has been just unsplit.
+
+    EVT_SPLITTER_DCLICK    The sash was double clicked. The
+                           default behaviour is to unsplit
+                           the window when this happens
+                           (unless the minimum pane size has
+                           been set to a value greater than
+                           zero.)
+
+</refdoc>
       <baseclass name="Window"/>
       <constructor name="SplitterWindow" overloaded="no">
         <autodoc>__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
     long style=SP_3D, String name=SplitterNameStr) -&gt; SplitterWindow</autodoc>
+        <docstring>Constructor.  Creates and shows a SplitterWindow.</docstring>
         <paramlist>
           <param name="parent" type="Window" default=""/>
           <param name="id" type="int" default=""/>
@@ -11650,10 +11470,12 @@ the borders, scrollbars, other decorations...)</docstring>
       </constructor>
       <constructor name="PreSplitterWindow" overloaded="no">
         <autodoc>PreSplitterWindow() -&gt; SplitterWindow</autodoc>
+        <docstring>Precreate a SplitterWindow for 2-phase creation.</docstring>
       </constructor>
       <method name="Create" type="bool" overloaded="no">
         <autodoc>Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
     long style=SP_3D, String name=SplitterNameStr) -&gt; bool</autodoc>
+        <docstring>Create the GUI part of the SplitterWindow for the 2-phase create.</docstring>
         <paramlist>
           <param name="parent" type="Window" default=""/>
           <param name="id" type="int" default=""/>
@@ -11665,27 +11487,55 @@ the borders, scrollbars, other decorations...)</docstring>
       </method>
       <method name="GetWindow1" type="Window" overloaded="no">
         <autodoc>GetWindow1() -&gt; Window</autodoc>
+        <docstring>Gets the only or left/top pane.</docstring>
       </method>
       <method name="GetWindow2" type="Window" overloaded="no">
         <autodoc>GetWindow2() -&gt; Window</autodoc>
+        <docstring>Gets the right/bottom pane.</docstring>
       </method>
       <method name="SetSplitMode" type="" overloaded="no">
         <autodoc>SetSplitMode(int mode)</autodoc>
+        <docstring>Sets the split mode.  The mode can be wx.SPLIT_VERTICAL or
+wx.SPLIT_HORIZONTAL.  This only sets the internal variable;
+does not update the display.</docstring>
         <paramlist>
           <param name="mode" type="int" default=""/>
         </paramlist>
       </method>
       <method name="GetSplitMode" type="wxSplitMode" overloaded="no">
         <autodoc>GetSplitMode() -&gt; int</autodoc>
+        <docstring>Gets the split mode</docstring>
       </method>
       <method name="Initialize" type="" overloaded="no">
         <autodoc>Initialize(Window window)</autodoc>
+        <docstring>Initializes the splitter window to have one pane.  This
+should be called if you wish to initially view only a single
+pane in the splitter window.</docstring>
         <paramlist>
           <param name="window" type="Window" default=""/>
         </paramlist>
       </method>
       <method name="SplitVertically" type="bool" overloaded="no">
         <autodoc>SplitVertically(Window window1, Window window2, int sashPosition=0) -&gt; bool</autodoc>
+        <docstring>Initializes the left and right panes of the splitter window.
+
+    window1       The left pane.
+    window2       The right pane.
+    sashPosition  The initial position of the sash. If this
+                  value is positive, it specifies the size
+                  of the left pane. If it is negative, it is
+                  absolute value gives the size of the right
+                  pane. Finally, specify 0 (default) to
+                  choose the default position (half of the
+                  total window width).
+
+Returns True if successful, False otherwise (the window was
+already split).
+
+SplitVertically should be called if you wish to initially
+view two panes. It can also be called at any subsequent
+time, but the application should check that the window is
+not currently split using IsSplit.</docstring>
         <paramlist>
           <param name="window1" type="Window" default=""/>
           <param name="window2" type="Window" default=""/>
@@ -11694,6 +11544,25 @@ the borders, scrollbars, other decorations...)</docstring>
       </method>
       <method name="SplitHorizontally" type="bool" overloaded="no">
         <autodoc>SplitHorizontally(Window window1, Window window2, int sashPosition=0) -&gt; bool</autodoc>
+        <docstring>Initializes the top and bottom panes of the splitter window.
+
+    window1       The top pane.
+    window2       The bottom pane.
+    sashPosition  The initial position of the sash. If this
+                  value is positive, it specifies the size
+                  of the upper pane. If it is negative, it
+                  is absolute value gives the size of the
+                  lower pane. Finally, specify 0 (default)
+                  to choose the default position (half of
+                  the total window height).
+
+Returns True if successful, False otherwise (the window was
+already split).
+
+SplitHorizontally should be called if you wish to initially
+view two panes. It can also be called at any subsequent
+time, but the application should check that the window is
+not currently split using IsSplit.</docstring>
         <paramlist>
           <param name="window1" type="Window" default=""/>
           <param name="window2" type="Window" default=""/>
@@ -11702,40 +11571,81 @@ the borders, scrollbars, other decorations...)</docstring>
       </method>
       <method name="Unsplit" type="bool" overloaded="no">
         <autodoc>Unsplit(Window toRemove=None) -&gt; bool</autodoc>
+        <docstring>Unsplits the window.  Pass the pane to remove, or None to
+remove the right or bottom pane.  Returns True if
+successful, False otherwise (the window was not split).
+
+This function will not actually delete the pane being
+removed; it sends EVT_SPLITTER_UNSPLIT which can be handled
+for the desired behaviour. By default, the pane being
+removed is only hidden.</docstring>
         <paramlist>
           <param name="toRemove" type="Window" default="NULL"/>
         </paramlist>
       </method>
       <method name="ReplaceWindow" type="bool" overloaded="no">
         <autodoc>ReplaceWindow(Window winOld, Window winNew) -&gt; bool</autodoc>
+        <docstring>This function replaces one of the windows managed by the
+SplitterWindow with another one. It is in general better to
+use it instead of calling Unsplit() and then resplitting the
+window back because it will provoke much less flicker. It is
+valid to call this function whether the splitter has two
+windows or only one.
+
+Both parameters should be non-None and winOld must specify
+one of the windows managed by the splitter. If the
+parameters are incorrect or the window couldn't be replaced,
+False is returned. Otherwise the function will return True,
+but please notice that it will not Destroy the replaced
+window and you may wish to do it yourself.</docstring>
         <paramlist>
           <param name="winOld" type="Window" default=""/>
           <param name="winNew" type="Window" default=""/>
         </paramlist>
       </method>
+      <method name="UpdateSize" type="" overloaded="no">
+        <autodoc>UpdateSize()</autodoc>
+        <docstring>Causes any pending sizing of the sash and child panes to
+take place immediately.
+
+Such resizing normally takes place in idle time, in order to
+wait for layout to be completed. However, this can cause
+unacceptable flicker as the panes are resized after the
+window has been shown. To work around this, you can perform
+window layout (for example by sending a size event to the
+parent window), and then call this function, before showing
+the top-level window.</docstring>
+      </method>
       <method name="IsSplit" type="bool" overloaded="no">
         <autodoc>IsSplit() -&gt; bool</autodoc>
+        <docstring>Is the window split?</docstring>
       </method>
       <method name="SetSashSize" type="" overloaded="no">
         <autodoc>SetSashSize(int width)</autodoc>
+        <docstring>Sets the sash size</docstring>
         <paramlist>
           <param name="width" type="int" default=""/>
         </paramlist>
       </method>
       <method name="SetBorderSize" type="" overloaded="no">
         <autodoc>SetBorderSize(int width)</autodoc>
+        <docstring>Sets the border size</docstring>
         <paramlist>
           <param name="width" type="int" default=""/>
         </paramlist>
       </method>
       <method name="GetSashSize" type="int" overloaded="no">
         <autodoc>GetSashSize() -&gt; int</autodoc>
+        <docstring>Gets the sash size</docstring>
       </method>
       <method name="GetBorderSize" type="int" overloaded="no">
         <autodoc>GetBorderSize() -&gt; int</autodoc>
+        <docstring>Gets the border size</docstring>
       </method>
       <method name="SetSashPosition" type="" overloaded="no">
         <autodoc>SetSashPosition(int position, bool redraw=True)</autodoc>
+        <docstring>Sets the sash position, in pixels.  If redraw is Ttrue then
+the panes are resized and the sash and border are redrawn.</docstring>
         <paramlist>
           <param name="position" type="int" default=""/>
           <param name="redraw" type="bool" default="True"/>
@@ -11743,18 +11653,30 @@ the borders, scrollbars, other decorations...)</docstring>
       </method>
       <method name="GetSashPosition" type="int" overloaded="no">
         <autodoc>GetSashPosition() -&gt; int</autodoc>
+        <docstring>Returns the surrent sash position.</docstring>
       </method>
       <method name="SetMinimumPaneSize" type="" overloaded="no">
         <autodoc>SetMinimumPaneSize(int min)</autodoc>
+        <docstring>Sets the minimum pane size in pixels.
+
+The default minimum pane size is zero, which means that
+either pane can be reduced to zero by dragging the sash,
+thus removing one of the panes. To prevent this behaviour (and
+veto out-of-range sash dragging), set a minimum size,
+for example 20 pixels. If the wx.SP_PERMIT_UNSPLIT style is
+used when a splitter window is created, the window may be
+unsplit even if minimum size is non-zero.</docstring>
         <paramlist>
           <param name="min" type="int" default=""/>
         </paramlist>
       </method>
       <method name="GetMinimumPaneSize" type="int" overloaded="no">
         <autodoc>GetMinimumPaneSize() -&gt; int</autodoc>
+        <docstring>Gets the minimum pane size in pixels.</docstring>
       </method>
       <method name="SashHitTest" type="bool" overloaded="no">
         <autodoc>SashHitTest(int x, int y, int tolerance=5) -&gt; bool</autodoc>
+        <docstring>Tests for x, y over the sash</docstring>
         <paramlist>
           <param name="x" type="int" default=""/>
           <param name="y" type="int" default=""/>
@@ -11763,6 +11685,7 @@ the borders, scrollbars, other decorations...)</docstring>
       </method>
       <method name="SizeWindows" type="" overloaded="no">
         <autodoc>SizeWindows()</autodoc>
+        <docstring>Resizes subwindows</docstring>
       </method>
       <method name="SetNeedUpdating" type="" overloaded="no">
         <autodoc>SetNeedUpdating(bool needUpdating)</autodoc>
@@ -11775,9 +11698,11 @@ the borders, scrollbars, other decorations...)</docstring>
       </method>
     </class>
     <class name="SplitterEvent" oldname="wxSplitterEvent" module="windows">
+      <docstring>This class represents the events generated by a splitter control.</docstring>
       <baseclass name="NotifyEvent"/>
       <constructor name="SplitterEvent" overloaded="no">
         <autodoc>__init__(wxEventType type=wxEVT_NULL, SplitterWindow splitter=(wxSplitterWindow *) NULL) -&gt; SplitterEvent</autodoc>
+        <docstring>This class represents the events generated by a splitter control.</docstring>
         <paramlist>
           <param name="type" type="wxEventType" default="wxEVT_NULL"/>
           <param name="splitter" type="SplitterWindow" default="(wxSplitterWindow *) NULL"/>
@@ -11785,21 +11710,38 @@ the borders, scrollbars, other decorations...)</docstring>
       </constructor>
       <method name="SetSashPosition" type="" overloaded="no">
         <autodoc>SetSashPosition(int pos)</autodoc>
+        <docstring>This funciton is only meaningful during
+EVT_SPLITTER_SASH_POS_CHANGING and
+EVT_SPLITTER_SASH_POS_CHANGED events.  In the case of
+_CHANGED events, sets the the new sash position. In the case
+of _CHANGING events, sets the new tracking bar position so
+visual feedback during dragging will represent that change
+that will actually take place. Set to -1 from the event
+handler code to prevent repositioning.</docstring>
         <paramlist>
           <param name="pos" type="int" default=""/>
         </paramlist>
       </method>
       <method name="GetSashPosition" type="int" overloaded="no">
         <autodoc>GetSashPosition() -&gt; int</autodoc>
+        <docstring>Returns the new sash position while in
+EVT_SPLITTER_SASH_POS_CHANGING and
+EVT_SPLITTER_SASH_POS_CHANGED events.</docstring>
       </method>
       <method name="GetWindowBeingRemoved" type="Window" overloaded="no">
         <autodoc>GetWindowBeingRemoved() -&gt; Window</autodoc>
+        <docstring>Returns a pointer to the window being removed when a
+splitter window is unsplit.</docstring>
       </method>
       <method name="GetX" type="int" overloaded="no">
         <autodoc>GetX() -&gt; int</autodoc>
+        <docstring>Returns the x coordinate of the double-click point in a
+EVT_SPLITTER_DCLICK event.</docstring>
       </method>
       <method name="GetY" type="int" overloaded="no">
         <autodoc>GetY() -&gt; int</autodoc>
+        <docstring>Returns the y coordinate of the double-click point in a
+EVT_SPLITTER_DCLICK event.</docstring>
       </method>
     </class>
     <pythoncode>
@@ -11807,6 +11749,7 @@ EVT_SPLITTER_SASH_POS_CHANGED = wx.PyEventBinder( wxEVT_COMMAND_SPLITTER_SASH_PO
 EVT_SPLITTER_SASH_POS_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING, 1 )
 EVT_SPLITTER_DOUBLECLICKED = wx.PyEventBinder( wxEVT_COMMAND_SPLITTER_DOUBLECLICKED, 1 )
 EVT_SPLITTER_UNSPLIT = wx.PyEventBinder( wxEVT_COMMAND_SPLITTER_UNSPLIT, 1 )
+EVT_SPLITTER_DCLICK = EVT_SPLITTER_DOUBLECLICKED
 </pythoncode>
     <pythoncode>
 #---------------------------------------------------------------------------
@@ -12686,12 +12629,6 @@ will be copied to the colour dialog's internal ColourData instance.</docstring>
     Point pos=DefaultPosition, Size size=DefaultSize, 
     String name=DirDialogNameStr) -&gt; DirDialog</autodoc>
         <docstring>Constructor.  Use ShowModal method to show the dialog.</docstring>
-        <refdoc>
- Styles
-    wxDD_NEW_DIR_BUTTON     Add "Create new directory" button and allow
-                            directory names to be editable. On Windows the new
-                            directory button is only available with recent
-                            versions of the common dialogs.</refdoc>
         <paramlist>
           <param name="parent" type="Window" default=""/>
           <param name="message" type="String" default="wxPyDirSelectorPromptStr"/>
@@ -12771,39 +12708,6 @@ for each, such as:
     String wildcard=FileSelectorDefaultWildcardStr, 
     long style=0, Point pos=DefaultPosition) -&gt; FileDialog</autodoc>
         <docstring>Constructor.  Use ShowModal method to show the dialog.</docstring>
-        <refdoc>
-In Windows, this is the common file selector dialog. In X, this is a file
-selector box with somewhat less functionality. The path and filename are
-distinct elements of a full file pathname. If path is "", the current
-directory will be used. If filename is "", no default filename will be
-supplied. The wildcard determines what files are displayed in the file
-selector, and file extension supplies a type extension for the required
-filename.
-
-Both the X and Windows versions implement a wildcard filter. Typing a filename
-containing wildcards (*, ?) in the filename text item, and clicking on Ok,
-will result in only those files matching the pattern being displayed. The
-wildcard may be a specification for multiple types of file with a description
-for each, such as:
-
-   "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
-
- Styles
-    wx.OPEN              This is an open dialog.
-
-    wx.SAVE              This is a save dialog.
-
-    wx.HIDE_READONLY     For open dialog only: hide the checkbox allowing to
-                         open the file in read-only mode.
-
-    wx.OVERWRITE_PROMPT  For save dialog only: prompt for a confirmation if a
-                         file will be overwritten.
-
-    wx.MULTIPLE          For open dialog only: allows selecting multiple files.
-
-    wx.CHANGE_DIR        Change the current working directory to the directory
-                         where the file(s) chosen by the user are.
-</refdoc>
         <paramlist>
           <param name="parent" type="Window" default=""/>
           <param name="message" type="String" default="wxPyFileSelectorPromptStr"/>
@@ -13148,30 +13052,6 @@ a choice of OK, Yes, No and Cancel buttons.</docstring>
     Point pos=DefaultPosition) -&gt; MessageDialog</autodoc>
         <docstring>This class provides a dialog that shows a single or multi-line message, with
 a choice of OK, Yes, No and Cancel buttons.</docstring>
-        <refdoc>
-  Styles
-    wx.OK:                Show an OK button.
-
-    wx.CANCEL:            Show a Cancel button.
-
-    wx.YES_NO:            Show Yes and No buttons.
-
-    wx.YES_DEFAULT:       Used with wxYES_NO, makes Yes button the default - which is the default behaviour.
-
-    wx.NO_DEFAULT:        Used with wxYES_NO, makes No button the default.
-
-    wx.ICON_EXCLAMATION:  Shows an exclamation mark icon.
-
-    wx.ICON_HAND:         Shows an error icon.
-
-    wx.ICON_ERROR:        Shows an error icon - the same as wxICON_HAND.
-
-    wx.ICON_QUESTION:     Shows a question mark icon.
-
-    wx.ICON_INFORMATION:  Shows an information (i) icon.
-
-    wx.STAY_ON_TOP:       The message box stays on top of all other window, even those of the other applications (Windows only).
-</refdoc>
         <paramlist>
           <param name="parent" type="Window" default=""/>
           <param name="message" type="String" default=""/>
@@ -13216,32 +13096,6 @@ display an ABORT button.</docstring>
     int style=wxPD_AUTO_HIDE|wxPD_APP_MODAL) -&gt; ProgressDialog</autodoc>
         <docstring>Constructor. Creates the dialog, displays it and disables user input for other
 windows, or, if wxPD_APP_MODAL flag is not given, for its parent window only.</docstring>
-        <refdoc>
-  Styles
-
-    wx.PD_APP_MODAL:            Make the progress dialog modal. If this flag is
-                                not given, it is only "locally" modal - that is
-                                the input to the parent window is disabled,
-                                but not to the other ones.
-
-    wx.PD_AUTO_HIDE:            Causes the progress dialog to disappear from screen 
-                                as soon as the maximum value of the progress
-                                meter has been reached.
-
-    wx.PD_CAN_ABORT:            This flag tells the dialog that it should have
-                                a "Cancel" button which the user may press. If
-                                this happens, the next call to Update() will
-                                return false.
-
-    wx.PD_ELAPSED_TIME:         This flag tells the dialog that it should show
-                                elapsed time (since creating the dialog).
-
-    wx.PD_ESTIMATED_TIME:  This flag tells the dialog that it should show
-                                estimated time.
-
-    wx.PD_REMAINING_TIME:  This flag tells the dialog that it should show
-                                remaining time.
-</refdoc>
         <paramlist>
           <param name="title" type="String" default=""/>
           <param name="message" type="String" default=""/>
@@ -13418,16 +13272,6 @@ implementation, modeless.</docstring>
     int style=0) -&gt; FindReplaceDialog</autodoc>
         <docstring>Create a FindReplaceDialog.  The parent and data parameters must be
 non-None.  Use Show to display the dialog.</docstring>
-        <refdoc>
- Styles
-    wx.FR_REPLACEDIALOG:        replace dialog (otherwise find dialog)
-
-    wx.FR_NOUPDOWN:             don't allow changing the search direction
-
-    wx.FR_NOMATCHCASE:          don't allow case sensitive searching
-
-    wx.FR_NOWHOLEWORD:          don't allow whole word searching
-</refdoc>
         <paramlist>
           <param name="parent" type="Window" default=""/>
           <param name="data" type="FindReplaceData" default=""/>
@@ -13438,16 +13282,6 @@ non-None.  Use Show to display the dialog.</docstring>
       <constructor name="PreFindReplaceDialog" overloaded="no">
         <autodoc>PreFindReplaceDialog() -&gt; FindReplaceDialog</autodoc>
         <docstring>Precreate a FindReplaceDialog for 2-phase creation</docstring>
-        <refdoc>
- Styles
-    wx.FR_REPLACEDIALOG:        replace dialog (otherwise find dialog)
-
-    wx.FR_NOUPDOWN:             don't allow changing the search direction
-
-    wx.FR_NOMATCHCASE:          don't allow case sensitive searching
-
-    wx.FR_NOWHOLEWORD:          don't allow whole word searching
-</refdoc>
       </constructor>
       <method name="Create" type="bool" overloaded="no">
         <autodoc>Create(Window parent, FindReplaceData data, String title, 
@@ -14983,6 +14817,23 @@ single bitmap, and wxWindows will draw all button states using this bitmap. If
 the application needs more control, additional bitmaps for the selected state,
 unpressed focused state, and greyed-out state may be supplied.
 </docstring>
+      <refdoc>
+ Styles
+    wx.BU_AUTODRAW: If this is specified, the button will be drawn
+                    automatically using the label bitmap only, providing a
+                    3D-look border. If this style is not specified, the button
+                    will be drawn without borders and using all provided
+                    bitmaps. WIN32 only.
+    wx.BU_LEFT:     Left-justifies the label. WIN32 only.
+    wx.BU_TOP:      Aligns the label to the top of the button. WIN32 only.
+    wx.BU_RIGHT:    Right-justifies the bitmap label. WIN32 only.
+    wx.BU_BOTTOM:   Aligns the label to the bottom of the button. WIN32 only.
+    wx.BU_EXACTFIT: Creates the button as small as possible instead of making
+                    it of the standard size (which is the default behaviour.)
+
+ Events
+     EVT_BUTTON:    Sent when the button is clicked.
+</refdoc>
       <baseclass name="Button"/>
       <constructor name="BitmapButton" overloaded="no">
         <autodoc>__init__(Window parent, int id, Bitmap bitmap, Point pos=DefaultPosition, 
@@ -15109,20 +14960,6 @@ state. Often this is used as a "Does Not Apply" state.</docstring>
     Size size=DefaultSize, long style=0, 
     Validator validator=DefaultValidator, String name=CheckBoxNameStr) -&gt; CheckBox</autodoc>
         <docstring>Creates and shows a CheckBox control</docstring>
-        <refdoc>
- Styles
-    wx.CHK_2STATE:  Create a 2-state checkbox. This is the default.
-    wx.CHK_3STATE:  Create a 3-state checkbox.
-    wx.CHK_ALLOW_3RD_STATE_FOR_USER: By default a user can't set a 3-state
-                                     checkbox to the third state. It can only
-                                     be done from code. Using this flags
-                                     allows the user to set the checkbox to
-                                     the third state by clicking.
-    wx.ALIGN_RIGHT:  Makes the text appear on the left of the checkbox.
-
- Events
-    EVT_CHECKBOX:       Sent when checkbox is clicked.
-</refdoc>
         <paramlist>
           <param name="parent" type="Window" default=""/>
           <param name="id" type="int" default=""/>
@@ -15137,20 +14974,6 @@ state. Often this is used as a "Does Not Apply" state.</docstring>
       <constructor name="PreCheckBox" overloaded="no">
         <autodoc>PreCheckBox() -&gt; CheckBox</autodoc>
         <docstring>Precreate a CheckBox for 2-phase creation.</docstring>
-        <refdoc>
- Styles
-    wx.CHK_2STATE:  Create a 2-state checkbox. This is the default.
-    wx.CHK_3STATE:  Create a 3-state checkbox.
-    wx.CHK_ALLOW_3RD_STATE_FOR_USER: By default a user can't set a 3-state
-                                     checkbox to the third state. It can only
-                                     be done from code. Using this flags
-                                     allows the user to set the checkbox to
-                                     the third state by clicking.
-    wx.ALIGN_RIGHT:  Makes the text appear on the left of the checkbox.
-
- Events
-    EVT_CHECKBOX:       Sent when checkbox is clicked.
-</refdoc>
       </constructor>
       <method name="Create" type="bool" overloaded="no">
         <autodoc>Create(Window parent, int id, String label, Point pos=DefaultPosition, 
@@ -15227,10 +15050,6 @@ only the selection is visible until the user pulls down the menu of choices.</do
     List choices=[], long style=0, Validator validator=DefaultValidator,
     String name=ChoiceNameStr) -&gt; Choice</autodoc>
         <docstring>Create and show a Choice control</docstring>
-        <refdoc>
- Events
-    EVT_CHOICE:         Sent when an item in the list is selected.
-</refdoc>
         <paramlist>
           <param name="parent" type="Window" default=""/>
           <param name="id" type="int" default=""/>
@@ -15245,10 +15064,6 @@ only the selection is visible until the user pulls down the menu of choices.</do
       <constructor name="PreChoice" overloaded="no">
         <autodoc>PreChoice() -&gt; Choice</autodoc>
         <docstring>Precreate a Choice control for 2-phase creation.</docstring>
-        <refdoc>
- Events
-    EVT_CHOICE:         Sent when an item in the list is selected.
-</refdoc>
       </constructor>
       <method name="Create" type="bool" overloaded="no">
         <autodoc>Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize,
@@ -15323,25 +15138,6 @@ list with text field.</docstring>
      List choices=[], long style=0, Validator validator=DefaultValidator,
      String name=ComboBoxNameStr) -&gt; ComboBox</autodoc>
         <docstring>Constructor, creates and shows a ComboBox control.</docstring>
-        <refdoc>
- Styles
-    wx.CB_SIMPLE:  Creates a combobox with a permanently displayed list.
-                        Windows only.
-
-    wx.CB_DROPDOWN:  Creates a combobox with a drop-down list.
-
-    wx.CB_READONLY:  Same as wxCB_DROPDOWN but only the strings specified as
-                        the combobox choices can be selected, it is impossible
-                        to select (even from a program) a string which is not in
-                        the choices list.
-
-    wx.CB_SORT:  Sorts the entries in the list alphabetically.
-
- Events
-
-    EVT_COMBOBOX:  Sent when an item on the list is selected.
-    EVT_TEXT:          Sent when the combobox text changes.
-</refdoc>
         <paramlist>
           <param name="parent" type="Window" default=""/>
           <param name="id" type="int" default=""/>
@@ -15357,25 +15153,6 @@ list with text field.</docstring>
       <constructor name="PreComboBox" overloaded="no">
         <autodoc>PreComboBox() -&gt; ComboBox</autodoc>
         <docstring>Precreate a ComboBox control for 2-phase creation.</docstring>
-        <refdoc>
- Styles
-    wx.CB_SIMPLE:  Creates a combobox with a permanently displayed list.
-                        Windows only.
-
-    wx.CB_DROPDOWN:  Creates a combobox with a drop-down list.
-
-    wx.CB_READONLY:  Same as wxCB_DROPDOWN but only the strings specified as
-                        the combobox choices can be selected, it is impossible
-                        to select (even from a program) a string which is not in
-                        the choices list.
-
-    wx.CB_SORT:  Sorts the entries in the list alphabetically.
-
- Events
-
-    EVT_COMBOBOX:  Sent when an item on the list is selected.
-    EVT_TEXT:          Sent when the combobox text changes.
-</refdoc>
       </constructor>
       <method name="Create" type="bool" overloaded="no">
         <autodoc>Create(Window parent, int id, String value=EmptyString,
@@ -17165,11 +16942,11 @@ EVT_SPINCTRL  = wx.PyEventBinder( wxEVT_COMMAND_SPINCTRL_UPDATED, 1)
     <class name="Notebook" oldname="wxNotebook" module="controls">
       <baseclass name="BookCtrl"/>
       <constructor name="Notebook" overloaded="no">
-        <autodoc>__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=0, String name=NOTEBOOK_NAME) -&gt; Notebook</autodoc>
+        <autodoc>__init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+    Size size=DefaultSize, long style=0, String name=NOTEBOOK_NAME) -&gt; Notebook</autodoc>
         <paramlist>
           <param name="parent" type="Window" default=""/>
-          <param name="id" type="int" default=""/>
+          <param name="id" type="int" default="-1"/>
           <param name="pos" type="Point" default="wxDefaultPosition"/>
           <param name="size" type="Size" default="wxDefaultSize"/>
           <param name="style" type="long" default="0"/>
@@ -17276,11 +17053,11 @@ class NotebookPage(wx.Panel):
     <class name="Listbook" oldname="wxListbook" module="controls">
       <baseclass name="BookCtrl"/>
       <constructor name="Listbook" overloaded="no">
-        <autodoc>__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=0, String name=EmptyString) -&gt; Listbook</autodoc>
+        <autodoc>__init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+    Size size=DefaultSize, long style=0, String name=EmptyString) -&gt; Listbook</autodoc>
         <paramlist>
           <param name="parent" type="Window" default=""/>
-          <param name="id" type="int" default=""/>
+          <param name="id" type="int" default="-1"/>
           <param name="pos" type="Point" default="wxDefaultPosition"/>
           <param name="size" type="Size" default="wxDefaultSize"/>
           <param name="style" type="long" default="0"/>
@@ -18123,29 +17900,12 @@ EVT_LIST_ITEM_FOCUSED      = wx.PyEventBinder(wxEVT_COMMAND_LIST_ITEM_FOCUSED   
       </method>
       <method name="SetForegroundColour" type="bool" overloaded="no">
         <autodoc>SetForegroundColour(Colour col) -&gt; bool</autodoc>
-        <docstring>Sets the foreground colour of the window.  Returns True is the colour
-was changed.  The interpretation of foreground colour is dependent on
-the window class; it may be the text colour or other colour, or it may
-not be used at all.</docstring>
         <paramlist>
           <param name="col" type="Colour" default=""/>
         </paramlist>
       </method>
       <method name="SetBackgroundColour" type="bool" overloaded="no">
         <autodoc>SetBackgroundColour(Colour col) -&gt; bool</autodoc>
-        <docstring>Sets the background colour of the window.  Returns True if the colour
-was changed.  The background colour is usually painted by the default
-EVT_ERASE_BACKGROUND event handler function under Windows and
-automatically under GTK.
-
-Note that setting the background colour does not cause an immediate
-refresh, so you may wish to call ClearBackground or Refresh after
-calling this function.
-
-Use this function with care under GTK+ as the new appearance of the
-window might not look equally well when used with themes, i.e GTK+'s
-ability to change its look as the user wishes with run-time loadable
-modules.</docstring>
         <paramlist>
           <param name="col" type="Colour" default=""/>
         </paramlist>
@@ -22069,13 +21829,13 @@ and will be a wx.FileConfig on other platforms.</docstring>
       <constructor name="Config" overloaded="no">
         <autodoc>__init__(String appName=EmptyString, String vendorName=EmptyString, 
     String localFilename=EmptyString, String globalFilename=EmptyString, 
-    long style=0) -&gt; Config</autodoc>
+    long style=wxCONFIG_USE_LOCAL_FILE|wxCONFIG_USE_GLOBAL_FILE) -&gt; Config</autodoc>
         <paramlist>
           <param name="appName" type="String" default="wxPyEmptyString"/>
           <param name="vendorName" type="String" default="wxPyEmptyString"/>
           <param name="localFilename" type="String" default="wxPyEmptyString"/>
           <param name="globalFilename" type="String" default="wxPyEmptyString"/>
-          <param name="style" type="long" default="0"/>
+          <param name="style" type="long" default="wxCONFIG_USE_LOCAL_FILE|wxCONFIG_USE_GLOBAL_FILE"/>
         </paramlist>
       </constructor>
       <destructor name="~wxConfig" overloaded="no">
@@ -24179,52 +23939,6 @@ EVT_CALENDAR_DAY, MONTH or YEAR events and an EVT_CALENDAR_SEL_CHANGED event.
     long style=wxCAL_SHOW_HOLIDAYS|wxWANTS_CHARS, 
     String name=CalendarNameStr) -&gt; CalendarCtrl</autodoc>
         <docstring>Create and show a calendar control.</docstring>
-        <refdoc>The CalendarCtrl displays a window containing several parts: the control to
-pick the month and the year at the top (either or both of them may be
-disabled) and a month area below them which shows all the days in the
-month. The user can move the current selection using the keyboard and select
-the date (generating EVT_CALENDAR event) by pressing &lt;Return&gt; or double
-clicking it.
-
-It has advanced possibilities for the customization of its display. All global
-settings (such as colours and fonts used) can, of course, be changed. But
-also, the display style for each day in the month can be set independently
-using CalendarDateAttr class.
-
-An item without custom attributes is drawn with the default colours and font
-and without border, but setting custom attributes with SetAttr allows to
-modify its appearance. Just create a custom attribute object and set it for
-the day you want to be displayed specially A day may be marked as being a
-holiday, (even if it is not recognized as one by wx.DateTime) by using the
-SetHoliday method.
-
-As the attributes are specified for each day, they may change when the month
-is changed, so you will often want to update them in an EVT_CALENDAR_MONTH
-event handler.
-
- Styles
-    CAL_SUNDAY_FIRST:         Show Sunday as the first day in the week
-    CAL_MONDAY_FIRST:         Show Monday as the first day in the week
-    CAL_SHOW_HOLIDAYS:         Highlight holidays in the calendar
-    CAL_NO_YEAR_CHANGE:         Disable the year changing
-    CAL_NO_MONTH_CHANGE: Disable the month (and, implicitly, the year) changing
-    CAL_SHOW_SURROUNDING_WEEKS: Show the neighbouring weeks in the previous and next months
-    CAL_SEQUENTIAL_MONTH_SELECTION: Use alternative, more compact, style for the month and year selection controls.
-
-The default calendar style is wxCAL_SHOW_HOLIDAYS.
-
- Events
-    EVT_CALENDAR:        A day was double clicked in the calendar.
-    EVT_CALENDAR_SEL_CHANGED: The selected date changed.
-    EVT_CALENDAR_DAY:     The selected day changed.
-    EVT_CALENDAR_MONTH:  The selected month changed.
-    EVT_CALENDAR_YEAR:    The selected year changed.
-    EVT_CALENDAR_WEEKDAY_CLICKED:  User clicked on the week day header
-
-Note that changing the selected date will result in either of
-EVT_CALENDAR_DAY, MONTH or YEAR events and an EVT_CALENDAR_SEL_CHANGED event.
-    
-</refdoc>
         <paramlist>
           <param name="parent" type="Window" default=""/>
           <param name="id" type="int" default=""/>
@@ -24238,52 +23952,6 @@ EVT_CALENDAR_DAY, MONTH or YEAR events and an EVT_CALENDAR_SEL_CHANGED event.
       <constructor name="PreCalendarCtrl" overloaded="no">
         <autodoc>PreCalendarCtrl() -&gt; CalendarCtrl</autodoc>
         <docstring>Precreate a CalendarCtrl for 2-phase creation.</docstring>
-        <refdoc>The CalendarCtrl displays a window containing several parts: the control to
-pick the month and the year at the top (either or both of them may be
-disabled) and a month area below them which shows all the days in the
-month. The user can move the current selection using the keyboard and select
-the date (generating EVT_CALENDAR event) by pressing &lt;Return&gt; or double
-clicking it.
-
-It has advanced possibilities for the customization of its display. All global
-settings (such as colours and fonts used) can, of course, be changed. But
-also, the display style for each day in the month can be set independently
-using CalendarDateAttr class.
-
-An item without custom attributes is drawn with the default colours and font
-and without border, but setting custom attributes with SetAttr allows to
-modify its appearance. Just create a custom attribute object and set it for
-the day you want to be displayed specially A day may be marked as being a
-holiday, (even if it is not recognized as one by wx.DateTime) by using the
-SetHoliday method.
-
-As the attributes are specified for each day, they may change when the month
-is changed, so you will often want to update them in an EVT_CALENDAR_MONTH
-event handler.
-
- Styles
-    CAL_SUNDAY_FIRST:         Show Sunday as the first day in the week
-    CAL_MONDAY_FIRST:         Show Monday as the first day in the week
-    CAL_SHOW_HOLIDAYS:         Highlight holidays in the calendar
-    CAL_NO_YEAR_CHANGE:         Disable the year changing
-    CAL_NO_MONTH_CHANGE: Disable the month (and, implicitly, the year) changing
-    CAL_SHOW_SURROUNDING_WEEKS: Show the neighbouring weeks in the previous and next months
-    CAL_SEQUENTIAL_MONTH_SELECTION: Use alternative, more compact, style for the month and year selection controls.
-
-The default calendar style is wxCAL_SHOW_HOLIDAYS.
-
- Events
-    EVT_CALENDAR:        A day was double clicked in the calendar.
-    EVT_CALENDAR_SEL_CHANGED: The selected date changed.
-    EVT_CALENDAR_DAY:     The selected day changed.
-    EVT_CALENDAR_MONTH:  The selected month changed.
-    EVT_CALENDAR_YEAR:    The selected year changed.
-    EVT_CALENDAR_WEEKDAY_CLICKED:  User clicked on the week day header
-
-Note that changing the selected date will result in either of
-EVT_CALENDAR_DAY, MONTH or YEAR events and an EVT_CALENDAR_SEL_CHANGED event.
-    
-</refdoc>
       </constructor>
       <method name="Create" type="bool" overloaded="no">
         <autodoc>Create(Window parent, int id, DateTime date=DefaultDateTime, 
@@ -27354,6 +27022,9 @@ EVT_GRID_EDITOR_CREATED = wx.PyEventBinder( wxEVT_GRID_EDITOR_CREATED )
       </method>
       <method name="GetDescent" type="int" overloaded="no">
         <autodoc>GetDescent() -&gt; int</autodoc>
+      </method>
+      <method name="GetMaxTotalWidth" type="int" overloaded="no">
+        <autodoc>GetMaxTotalWidth() -&gt; int</autodoc>
       </method>
       <method name="GetId" type="String" overloaded="no">
         <autodoc>GetId() -&gt; String</autodoc>

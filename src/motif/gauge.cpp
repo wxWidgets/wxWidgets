@@ -13,13 +13,8 @@
 #pragma implementation "gauge.h"
 #endif
 
-#ifdef __VMS
+#ifdef __VMS__
 #include <wx/vms_x_fix.h>
-#undef XtDisplay
-#undef XtScreen
-#undef XtWindow
-#undef XtIsRealized
-#undef XtParent
 #endif
 
 # include "wx/gauge.h"

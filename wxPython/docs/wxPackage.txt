@@ -157,10 +157,12 @@ replace.
 Where can I find example programs using the new wx syntax?
 ==========================================================
 
-Example programs are included in the wxPython/samples/wx_examples
-directory, and are documented in the wxPythonExamples_ documentation
-file.  Also, all the code in the py package uses the new wx syntax.
-You can learn more about these in the PyManual_.
+The wxPython demo application and most of the sample apps have been
+converted to use the new ``import wx`` style of programming with
+wxPython, so there are lots of examples to look at and to play with.
+Here is one of them, it is the ``simple`` sample.
 
-.. _wxPythonExamples: wxPythonExamples.html
-.. _PyManual: PyManual.html
+
+.. include:: ../samples/simple/simple.py
+   :literal:
+

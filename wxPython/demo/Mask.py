@@ -58,6 +58,7 @@ class TestMaskWindow(wx.ScrolledWindow):
 
 
     def OnPaint (self, e):
+        self.SetBackgroundColour(wx.Colour(0,128,0))
         dc = wx.PaintDC(self)
         self.PrepareDC(dc)
         dc.SetTextForeground(wx.WHITE)

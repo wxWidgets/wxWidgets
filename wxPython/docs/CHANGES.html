@@ -4,15 +4,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
-<title>CHANGES.txt for wxPython</title>
+<title>Recent Changes for wxPython</title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
-<div class="document" id="changes-txt-for-wxpython">
-<h1 class="title">CHANGES.txt for wxPython</h1>
+<div class="document" id="recent-changes-for-wxpython">
+<h1 class="title">Recent Changes for wxPython</h1>
 <div class="section" id="id1">
-<h1><a name="id1">2.5.1.1</a></h1>
-<p>(See also the MigrationGuide.txt file for details about some of the
+<h1><a name="id1">2.5.1.4</a></h1>
+<p>(See also the <a class="reference" href="MigrationGuide.html">MigrationGuide</a> file for details about some of the
 big changes that have happened in this release and how you should
 adapt your code.)</p>
 <p>The wxWindows project and library is now known as wxWidgets.  Please
@@ -73,6 +73,24 @@ MacPrintFile, MacNewFile, and MacReopenApp.</p>
 <p>Added wx.PlatformInfo which is a tuple containing strings that
 describe the platform and build options of wxPython.  See the
 MigrationGuide for more details.</p>
+<p>Created a new extension module &quot;activex&quot; from Lindsay Mathieson's
+newest <a class="reference" href="http://members.optusnet.com.au/~blackpaw1/wxactivex.html">wxActiveX</a> class.  (The existing iewin module used an older
+version of this code, but only exposed the wxIEHtmlWin class.)  This
+new module will (in theory ;-) ) allow you to host arbitrary ActiveX
+controls in a wx.Window, <strong>without</strong> requiring the use of the win32com
+and other PyWin32 modules!  This should eliminate the cronic problems
+that have resulted from minor mismatches in how PyWin32 handles the
+GIL and tstate when making callbacks, etc.  The older iewin module
+will be left in this release as the new stuff is not fully backwards
+compatible, but you should migrate your code to the new IEHtmlWindow
+in wx.lib.iewin, so the old one can be eventually removed.
+Additionally, I've always considered that the wx.lib.activexwrapper
+module is an ugly hack that I only included in the lib because I
+couldn't figure out anything better.  Well now we have something that,
+if it isn't already, has the potential to be better.  So consider
+migrating away from using activexwrapper as well.  Please see the
+MigrationGuide for more details on using the new module.</p>
+<p>Floats are allowed again as function parameters where ints are expected.</p>
 </div>
 <div class="section" id="id2">
 <h1><a name="id2">2.4.2.4</a></h1>
@@ -1224,10 +1242,6 @@ version segfault shortly after starting up.</p>
 <li>Varioius bug fixes, enhancements, etc.</li>
 </ol>
 </div>
-</div>
-<hr class="footer" />
-<div class="footer">
-Generated on: 2004-03-12 19:55 UTC.
 </div>
 </body>
 </html>

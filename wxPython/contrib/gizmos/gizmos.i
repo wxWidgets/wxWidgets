@@ -748,10 +748,10 @@ public:
         // order to continue the search.
         PyObject* GetFirstChild(const wxTreeItemId& item) {
             long cookie = 0;
-            wxTreeItemId ritem = self->GetFirstChild(item, cookie);
+            wxTreeItemId* ritem = new wxTreeItemId(self->GetFirstChild(item, cookie));
             bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
-            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(&ritem, wxT("wxTreeItemId"), true));
+            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(ritem, wxT("wxTreeItemId"), true));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(cookie));
             wxPyEndBlockThreads(blocked);
             return tup;
@@ -763,10 +763,10 @@ public:
         // Returns a wxTreeItemId and an opaque "cookie" value that should be
         // passed to GetNextChild in order to continue the search.
         PyObject* GetNextChild(const wxTreeItemId& item, long cookie) {
-            wxTreeItemId ritem = self->GetNextChild(item, cookie);
+            wxTreeItemId* ritem = new wxTreeItemId(self->GetNextChild(item, cookie));
             bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
-            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(&ritem, wxT("wxTreeItemId"), true));
+            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(ritem, wxT("wxTreeItemId"), true));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(cookie));
             wxPyEndBlockThreads(blocked);
             return tup;
