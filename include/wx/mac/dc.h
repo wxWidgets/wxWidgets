@@ -498,7 +498,7 @@ protected:
 	mutable AGAPortHelper	m_macPortHelper ;
 	void					MacSetupPort() const ;
 	void					MacVerifySetup() const { if ( m_macPortId != m_macCurrentPortId ) MacSetupPort() ; } 
-
+	static void				MacInvalidateSetup() { m_macCurrentPortId++ ; }
 	static long m_macCurrentPortId ;
 };
 
