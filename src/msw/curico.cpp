@@ -32,6 +32,8 @@
 
 #include "wx/msw/curicop.h"
 #include "wx/msw/curico.h"
+#include "wx/wxchar.h"
+#include "wx/string.h"
 
 //*****************************************************************************
 //* Function : ReadIconFile()                                                 *

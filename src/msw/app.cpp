@@ -19,6 +19,7 @@
 
 #ifdef __GNUG__
     #pragma implementation "app.h"
+    #pragma implementation "appbase.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".

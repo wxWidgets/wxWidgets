@@ -30,6 +30,7 @@
 #ifndef WX_PRECOMP
     #include "wx/button.h"
     #include "wx/brush.h"
+    #include "wx/panel.h"
 #endif
 
 #include "wx/msw/private.h"

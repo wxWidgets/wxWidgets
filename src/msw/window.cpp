@@ -31,6 +31,7 @@
 #ifndef WX_PRECOMP
     #include <windows.h>
     #include "wx/msw/winundef.h"
+    #include "wx/window.h"
     #include "wx/accel.h"
     #include "wx/setup.h"
     #include "wx/menu.h"
