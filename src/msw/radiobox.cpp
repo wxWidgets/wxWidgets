@@ -378,6 +378,11 @@ void wxRadioBox::SetSelection(int N)
 {
     wxCHECK_RET( (N >= 0) && (N < GetCount()), wxT("invalid radiobox index") );
 
+    // unselect the old button
+    if ( m_selectedButton != wxNOT_FOUND )
+        ::SendMessage((*m_radioButtons)[m_selectedButton], BM_SETCHECK, 0, 0L);
+
+    // and select the new one
     ::SendMessage((*m_radioButtons)[N], BM_SETCHECK, 1, 0L);
 
     m_selectedButton = N;
