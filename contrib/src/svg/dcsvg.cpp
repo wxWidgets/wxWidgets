@@ -373,14 +373,14 @@ void wxSVGFileDC::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCo
         write(s);
     }
 
-    double theta1 = atan2(yc-y1,x1-xc);
+    double theta1 = atan2((double)(yc-y1),(double)(x1-xc));
     if ( theta1 < 0 ) theta1 = theta1 + 3.14 * 2;
-    double theta2 = atan2(yc-y2, x2-xc);
+    double theta2 = atan2((double)(yc-y2), (double)(x2-xc));
     if ( theta2 < 0 ) theta2 = theta2 + 3.14 * 2;
     if ( theta2 < theta1 ) theta2 = theta2 + 3.14 *2 ;
 
     int fArc  ;                  // flag for large or small arc 0 means less than 180 degrees
-    if (  fabs((theta2 - theta1) > 3.14 )) fArc = 1; else fArc = 0 ;
+    if ( fabs(theta2 - theta1) > 3.14 ) fArc = 1; else fArc = 0 ;
 
     int fSweep = 0 ;             // flag for sweep always 0
 
@@ -446,7 +446,7 @@ void wxSVGFileDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,doub
     if ( (theta2 - theta1) > 0 ) fArc = 1; else fArc = 0 ;
 
     int fSweep ;
-    if ( fabs( (theta2 - theta1) > 3.14)) fSweep = 1; else fSweep = 0 ;
+    if ( fabs(theta2 - theta1) > 3.14) fSweep = 1; else fSweep = 0 ;
 
     s.Printf ( wxT("<path d=\"M%d %d A%d %d 0.0 %d %d  %d %d L %d %d z "),
         int(xs), int(ys), int(rx), int(ry),
