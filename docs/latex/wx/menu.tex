@@ -372,7 +372,9 @@ Returns the title of the menu.
 
 \wxheading{Remarks}
 
-This is relevant only to popup menus.
+This is relevant only to popup menus, use 
+\helpref{wxMenuBar::GetLabelTop}{wxmenubargetlabeltop} for the menus in the
+menubar.
 
 \wxheading{See also}
 
@@ -580,11 +582,13 @@ Sets the title of the menu.
 
 \wxheading{Remarks}
 
-This is relevant only to popup menus.
+This is relevant only to popup menus, use 
+\helpref{wxMenuBar::SetLabelTop}{wxmenubarsetlabeltop} for the menus in the
+menubar.
 
 \wxheading{See also}
 
-\helpref{wxMenu::SetTitle}{wxmenusettitle}
+\helpref{wxMenu::GetTitle}{wxmenugettitle}
 
 \membersection{wxMenu::UpdateUI}\label{wxmenuupdateui}
 
@@ -826,7 +830,9 @@ Use only after the menubar has been associated with a frame.
 
 \constfunc{wxString}{GetLabelTop}{\param{int}{ pos}}
 
-Returns the label of a top-level menu.
+Returns the label of a top-level menu. Note that the returned string does not
+include the accelerator characters which could have been specified in the menu
+title string during its construction.
 
 \wxheading{Parameters}
 
