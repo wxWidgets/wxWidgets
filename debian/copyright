@@ -29,7 +29,8 @@ alters the actual terms of the authorative licence detailed below, it is
 intended to be purely informative of the fact that the Debian binary packages
 will be built primarily with features useful to Free Software developers and
 may not be suitable "as is" for compiling software for distribution that is
-licenced incompatibly with the LGPL.
+licenced incompatibly with the LGPL.  See /usr/share/common-licenses for
+the full text of the LGPL.
 
 Modifications and additions to the Library itself are encouraged to be
 placed under the wxWindows Library Licence.  We hope you find it useful.

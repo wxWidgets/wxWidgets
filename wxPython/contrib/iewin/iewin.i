@@ -117,7 +117,7 @@ public:
     bool GoForward();
     bool GoHome();
     bool GoSearch();
-    bool Refresh(wxIEHtmlRefreshLevel level);
+    %name(RefreshPage)bool Refresh(wxIEHtmlRefreshLevel level);
     bool Stop();
 
 };

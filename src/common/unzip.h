@@ -52,17 +52,37 @@ $Id$
 extern "C" {
 #endif
 
+/* include zlib.h if not done yet */
 #ifndef _ZLIB_H
-//#include "zlib.h"
-// normally, the compiler options should contain -I../zlib, but it is
-// apparently not the case for all MSW makefiles and so, unless we use
-// configure (which defines __WX_SETUP_H__) or it is explicitly overridden by
-// the user (who can define wxUSE_ZLIB_H_IN_PATH), we hardcode the path here
-#if defined(__WXMSW__) && !defined(__WX_SETUP_H__) && !defined(wxUSE_ZLIB_H_IN_PATH)
-   #include "../zlib/zlib.h"
-#else
-   #include "zlib.h"
+    /*
+       normally, the compiler options should contain -I../zlib, but it is
+       apparently not the case for all MSW makefiles and so, unless we use
+       configure (which defines __WX_SETUP_H__) or it is explicitly overridden
+       by the user (who can define wxUSE_ZLIB_H_IN_PATH), we hardcode the path
+       here
+     */
+#   if defined(__WXMSW__) && !defined(__WX_SETUP_H__) && !defined(wxUSE_ZLIB_H_IN_PATH)
+#       include "../zlib/zlib.h"
+#   else
+#       include "zlib.h"
+#   endif
+#endif /* _ZLIB_H */
+
+/*
+   Some system zlib.h headers are modified to not define the OF() macro but use
+   the (standard) __P() instead (example: NetBSD 1.6), work around this if
+   needed assuming that we deal with an ANSI C compiler (which is a natural
+   assumption in 21st century!)
+ */
+#ifndef OF
+#   define OF(args) args
 #endif
+
+/*
+   And on some systems ZEXPORT is not defined neither -- work around this too
+ */
+#ifndef ZEXPORT
+#   define ZEXPORT
 #endif
 
 #if defined(STRICTUNZIP) || defined(STRICTZIPUNZIP)

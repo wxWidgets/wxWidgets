@@ -154,6 +154,7 @@ COMMONOBJS = \
 		$(COMMDIR)\radiocmn.obj \
 		$(COMMDIR)\regex.obj \
 		$(COMMDIR)\resource.obj \
+		$(COMMDIR)\rgncmn.obj \
 		$(COMMDIR)\sckaddr.obj \
 		$(COMMDIR)\sckfile.obj \
 		$(COMMDIR)\sckipc.obj \

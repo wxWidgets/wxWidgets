@@ -189,6 +189,6 @@ void wxCaret::DoSize()
         m_hasCaret = FALSE;
         CALL_CARET_API(DestroyCaret, ());
         MSWCreateCaret();
-        DoMove();
+        OnSetFocus();
     }
 }

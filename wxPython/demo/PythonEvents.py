@@ -83,3 +83,10 @@ This demo is a contrived example of defining an event class in wxPython and send
 
 
 
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

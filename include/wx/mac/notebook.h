@@ -143,8 +143,8 @@ protected:
   void ChangePage(int nOldSel, int nSel); // change pages
   void MacSetupTabs();
 
-//  wxImageList  *m_pImageList; // we can have an associated image list
-//  wxArrayPages  m_aPages;     // array of pages
+  // the icon indices
+  wxArrayInt m_images;
 
   int m_nSelection;           // the current selection (-1 if none)
 

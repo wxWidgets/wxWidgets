@@ -212,7 +212,7 @@ public:
 	int GetMark(int line);
 	void DeleteAllMarks(int markerNum);
 	int LineFromHandle(int markerHandle);
- 
+
 	/// Actions without undo
 	void BasicInsertString(int position, char *s, int insertLength);
 	void BasicDeleteChars(int position, int deleteLength);

@@ -43,6 +43,7 @@ public:
     }
 
     virtual void AddChild(wxWindowBase *child);
+    virtual void RemoveChild(wxWindowBase *child);
 
 protected:
     wxString m_controlName;
@@ -68,7 +69,12 @@ void wxUnknownControlContainer::AddChild(wxWindowBase *child)
     Layout();
 }
 
-
+void wxUnknownControlContainer::RemoveChild(wxWindowBase *child)
+{
+    wxPanel::RemoveChild(child);
+    m_controlAdded = FALSE;
+    GetSizer()->Remove((wxWindow*)child);
+}
 
 wxUnknownWidgetXmlHandler::wxUnknownWidgetXmlHandler()
 : wxXmlResourceHandler()

@@ -43,12 +43,12 @@ wxZipInputStream::wxZipInputStream(const wxString& archive, const wxString& file
     m_Archive = (void*) unzOpen(archive.mb_str());
     if (m_Archive == NULL)
     {
-        m_lasterror = wxStream_READ_ERR;
+        m_lasterror = wxSTREAM_READ_ERROR;
         return;
     }
     if (unzLocateFile((unzFile)m_Archive, file.mb_str(), 0) != UNZ_OK)
     {
-        m_lasterror = wxStream_READ_ERR;
+        m_lasterror = wxSTREAM_READ_ERROR;
         return;
     }
 
@@ -56,7 +56,7 @@ wxZipInputStream::wxZipInputStream(const wxString& archive, const wxString& file
 
     if (unzOpenCurrentFile((unzFile)m_Archive) != UNZ_OK)
     {
-        m_lasterror = wxStream_READ_ERR;
+        m_lasterror = wxSTREAM_READ_ERROR;
         return;
     }
     m_Size = (size_t)zinfo.uncompressed_size;
@@ -90,7 +90,7 @@ size_t wxZipInputStream::OnSysRead(void *buffer, size_t bufsize)
 
     if ( m_Pos >= (off_t)m_Size )
     {
-        m_lasterror = wxStream_EOF;
+        m_lasterror = wxSTREAM_EOF;
         return 0;
     }
 
@@ -132,7 +132,7 @@ off_t wxZipInputStream::OnSysSeek(off_t seek, wxSeekMode mode)
         unzCloseCurrentFile((unzFile)m_Archive);
         if (unzOpenCurrentFile((unzFile)m_Archive) != UNZ_OK)
         {
-            m_lasterror = wxStream_READ_ERR;
+            m_lasterror = wxSTREAM_READ_ERROR;
             return m_Pos;
         }
         toskip = nextpos;

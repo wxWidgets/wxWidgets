@@ -595,14 +595,15 @@ bool wxTreeCtrl::Create(wxWindow *parent,
 {
     Init();
 
+    if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
+        style |= wxBORDER_SUNKEN;
+
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP |
-                   TVS_SHOWSELALWAYS;
-
-    if ( m_windowStyle & wxCLIP_SIBLINGS )
-        wstyle |= WS_CLIPSIBLINGS;
+    DWORD exStyle = 0;
+    DWORD wstyle = MSWGetStyle(m_windowStyle, & exStyle);
+    wstyle |= WS_TABSTOP | TVS_SHOWSELALWAYS;
 
     if ((m_windowStyle & wxTR_NO_LINES) == 0)
         wstyle |= TVS_HASLINES;
@@ -1181,6 +1182,42 @@ void wxTreeCtrl::RefreshItem(const wxTreeItemId& item)
     }
 }
 
+wxColour wxTreeCtrl::GetItemTextColour(const wxTreeItemId& item) const
+{
+    long id = (long)(WXHTREEITEM)item;
+    wxTreeItemAttr *attr = (wxTreeItemAttr *)m_attrs.Get(id);
+    if ( !attr )
+    {
+        return wxNullColour;
+    }
+
+    return attr->GetTextColour();
+}
+
+wxColour wxTreeCtrl::GetItemBackgroundColour(const wxTreeItemId& item) const
+{
+    long id = (long)(WXHTREEITEM)item;
+    wxTreeItemAttr *attr = (wxTreeItemAttr *)m_attrs.Get(id);
+    if ( !attr )
+    {
+        return wxNullColour;
+    }
+
+    return attr->GetBackgroundColour();
+}
+
+wxFont wxTreeCtrl::GetItemFont(const wxTreeItemId& item) const
+{
+    long id = (long)(WXHTREEITEM)item;
+    wxTreeItemAttr *attr = (wxTreeItemAttr *)m_attrs.Get(id);
+    if ( !attr )
+    {
+        return wxNullFont;
+    }
+
+    return attr->GetFont();
+}
+
 void wxTreeCtrl::SetItemTextColour(const wxTreeItemId& item,
                                    const wxColour& col)
 {
@@ -1240,6 +1277,12 @@ void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
 
 bool wxTreeCtrl::IsVisible(const wxTreeItemId& item) const
 {
+    if ( item == wxTreeItemId(TVI_ROOT) )
+    {
+        // virtual (hidden) root is never visible
+        return FALSE;
+    }
+
     // Bug in Gnu-Win32 headers, so don't use the macro TreeView_GetItemRect
     RECT rect;
 
@@ -1307,7 +1350,7 @@ wxTreeItemId wxTreeCtrl::GetSelection() const
     return wxTreeItemId((WXHTREEITEM) TreeView_GetSelection(GetHwnd()));
 }
 
-wxTreeItemId wxTreeCtrl::GetParent(const wxTreeItemId& item) const
+wxTreeItemId wxTreeCtrl::GetItemParent(const wxTreeItemId& item) const
 {
     HTREEITEM hItem;
 
@@ -1617,9 +1660,14 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
 
 void wxTreeCtrl::DeleteAllItems()
 {
-    // delete stored root item.
-    delete GET_VIRTUAL_ROOT();
+    // delete the "virtual" root item.
+    if ( GET_VIRTUAL_ROOT() )
+    {
+        delete GET_VIRTUAL_ROOT();
+        m_pVirtualRoot = NULL;
+    }
 
+    // and all the real items
     if ( !TreeView_DeleteAllItems(GetHwnd()) )
     {
         wxLogLastError(wxT("TreeView_DeleteAllItems"));
@@ -2044,13 +2092,23 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                     }
                     else // normal click
                     {
-                        // clear the selection and then let the default handler
-                        // do the job
+                        // avoid doing anything if we click on the only
+                        // currently selected item
+                        wxArrayTreeItemIds selections;
+                        size_t count = GetSelections(selections);
+                        if ( count == 0 ||
+                                count > 1 ||
+                                    HITEM(selections[0]) != htItem )
+                        {
+                            // clear the previously selected items
                         UnselectAll();
 
                         // prevent the click from starting in-place editing
-                        // when there was no selection in the control
+                            // which should only happen if we click on the
+                            // already selected item (and nothing else is
+                            // selected)
                         TreeView_SelectItem(GetHwnd(), 0);
+                        }
 
                         // reset on any click without Shift
                         m_htSelStart = 0;
@@ -2302,8 +2360,8 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         break;
                 }
 
-                int how = (int)hdr->code == TVN_ITEMEXPANDING ? IDX_DOING
-                                                              : IDX_DONE;
+                int how = hdr->code == TVN_ITEMEXPANDING ? IDX_DOING
+                                                         : IDX_DONE;
 
                 eventType = gs_expandEvents[what][how];
 
@@ -2355,20 +2413,34 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             }
             break;
 
-        case TVN_SELCHANGED:
+        // NB: MSLU is broken and sends TVN_SELCHANGEDA instead of 
+        //     TVN_SELCHANGEDW in Unicode mode under Win98. Therefore
+        //     we have to handle both messages:
+        case TVN_SELCHANGEDA:
+        case TVN_SELCHANGEDW:
             eventType = wxEVT_COMMAND_TREE_SEL_CHANGED;
             // fall through
 
-        case TVN_SELCHANGING:
+        case TVN_SELCHANGINGA:
+        case TVN_SELCHANGINGW:
             {
                 if ( eventType == wxEVT_NULL )
                     eventType = wxEVT_COMMAND_TREE_SEL_CHANGING;
                 //else: already set above
 
-                NM_TREEVIEW* tv = (NM_TREEVIEW *)lParam;
-
-                event.m_item = (WXHTREEITEM) tv->itemNew.hItem;
-                event.m_itemOld = (WXHTREEITEM) tv->itemOld.hItem;
+                if (hdr->code == TVN_SELCHANGINGW || 
+                    hdr->code == TVN_SELCHANGEDW)
+                {
+                    NM_TREEVIEWW* tv = (NM_TREEVIEWW *)lParam;
+                    event.m_item = (WXHTREEITEM) tv->itemNew.hItem;
+                    event.m_itemOld = (WXHTREEITEM) tv->itemOld.hItem;
+                }
+                else
+                {
+                    NM_TREEVIEWA* tv = (NM_TREEVIEWA *)lParam;
+                    event.m_item = (WXHTREEITEM) tv->itemNew.hItem;
+                    event.m_itemOld = (WXHTREEITEM) tv->itemOld.hItem;
+                }
             }
             break;
 

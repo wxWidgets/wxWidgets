@@ -19,6 +19,8 @@
 /* Implementation : PYTHON */
 
 #define SWIGPYTHON
+#include "Python.h"
+
 #include <string.h>
 #include <stdlib.h>
 /* Definitions for Windows/Unix exporting */
@@ -36,12 +38,9 @@
 #   define SWIGEXPORT(a) a
 #endif
 
-#include "Python.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -247,7 +246,7 @@ static PyObject *_wrap_wxHelpEvent_GetLink(PyObject *self, PyObject *args, PyObj
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -321,7 +320,7 @@ static PyObject *_wrap_wxHelpEvent_GetTarget(PyObject *self, PyObject *args, PyO
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -704,7 +703,7 @@ static PyObject *_wrap_wxHelpProvider_GetHelp(PyObject *self, PyObject *args, Py
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -720,7 +719,7 @@ static PyObject *_wrap_wxHelpProvider_ShowHelp(PyObject *self, PyObject *args, P
     PyObject * _resultobj;
     bool  _result;
     wxHelpProvider * _arg0;
-    wxWindowBase * _arg1;
+    wxWindow * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     char *_kwnames[] = { "self","window", NULL };
@@ -737,8 +736,8 @@ static PyObject *_wrap_wxHelpProvider_ShowHelp(PyObject *self, PyObject *args, P
     }
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindowBase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHelpProvider_ShowHelp. Expected _wxWindowBase_p.");
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHelpProvider_ShowHelp. Expected _wxWindow_p.");
         return NULL;
         }
     }
@@ -756,7 +755,7 @@ static PyObject *_wrap_wxHelpProvider_ShowHelp(PyObject *self, PyObject *args, P
 static PyObject *_wrap_wxHelpProvider_AddHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxHelpProvider * _arg0;
-    wxWindowBase * _arg1;
+    wxWindow * _arg1;
     wxString * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
@@ -775,8 +774,8 @@ static PyObject *_wrap_wxHelpProvider_AddHelp(PyObject *self, PyObject *args, Py
     }
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindowBase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHelpProvider_AddHelp. Expected _wxWindowBase_p.");
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHelpProvider_AddHelp. Expected _wxWindow_p.");
         return NULL;
         }
     }

@@ -1,12 +1,19 @@
-\section{\class{wxNodeBase}}\label{wxnode}
+\section{\class{wxNode}}\label{wxnode}
 
-A node structure used in linked lists (see \helpref{wxList}{wxlist}) and
-derived classes. You should never use wxNodeBase class directly because it
-works with untyped (void *) data and this is unsafe. Use wxNode-derived classes
-which are defined by WX\_DECLARE\_LIST and WX\_DEFINE\_LIST macros instead as
-described in \helpref{wxList}{wxlist} documentation (see example there). wxNode
-is defined for compatibility as wxNodeBase containing "wxObject *" pointer, but
-usage of this class is deprecated.
+wxNodeBase is the node structure used in linked lists (see 
+\helpref{wxList}{wxlist}) and derived classes. You should never use wxNodeBase
+class directly, however, because it works with untyped ({\tt void *}) data and
+this is unsafe. Use wxNodeBase-derived classes which are automatically defined
+by WX\_DECLARE\_LIST and WX\_DEFINE\_LIST macros instead as described in
+\helpref{wxList}{wxlist} documentation (see example there). Also note that
+although there is a class called wxNode, it is defined for backwards
+compatibility only and usage of this class is strongly deprecated.
+
+In the documentation below, the type {\tt T} should be thought of as a
+``template'' parameter: this is the type of data stored in the linked list or,
+in other words, the first argument of WX\_DECLARE\_LIST macro. Also, wxNode is
+written as wxNode<T> even though it isn't really a template class -- but it
+helps to think of it as if it were.
 
 \wxheading{Derived from}
 
@@ -22,32 +29,32 @@ None.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxNodeBase::GetData}
+\membersection{wxNode<T>::GetData}
 
-\func{void *}{Data}{\void}
+\constfunc{T *}{GetData}{\void}
 
 Retrieves the client data pointer associated with the node.
 
-\membersection{wxNodeBase::GetNext}
+\membersection{wxNode<T>::GetNext}
 
-\func{wxNodeBase *}{Next}{\void}
+\constfunc{wxNode<T> *}{GetNext}{\void}
 
-Retrieves the next node (NULL if at end of list).
+Retrieves the next node or NULL if this node is the last one.
 
-\membersection{wxNodeBase::GetPrevious}
+\membersection{wxNode<T>::GetPrevious}
 
-\func{wxNodeBase *}{GetPrevious}{\void}
+\func{wxNode<T> *}{GetPrevious}{\void}
 
-Retrieves the previous node (NULL if at start of list).
+Retrieves the previous node or NULL if this node is the first one in the list.
 
-\membersection{wxNodeBase::SetData}
+\membersection{wxNode<T>::SetData}
 
-\func{void}{SetData}{\param{void *}{data}}
+\func{void}{SetData}{\param{T *}{data}}
 
 Sets the data associated with the node (usually the pointer will have been
 set when the node was created).
 
-\membersection{wxNodeBase::IndexOf}
+\membersection{wxNode<T>::IndexOf}
 
 \func{int}{IndexOf}{\void}
 

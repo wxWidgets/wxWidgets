@@ -238,7 +238,7 @@ public:
 		return append(sOther, static_cast<lenpos_t>(measure_length));
 	}
 	SString &operator+=(const SString &sOther) {
-		return append(sOther.s, sOther.sSize);
+		return append(sOther.s, sOther.sLen);
 	}
 	SString &operator+=(char ch) {
 		return append(&ch, 1);

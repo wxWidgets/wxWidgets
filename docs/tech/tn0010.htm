@@ -24,7 +24,7 @@ Compiling wxWindows applications in the VC++ IDE
 <P>
 
 <CENTER>
-<a href="#wxwin2">Settings for wxWindows 2</a> / <a href="#wxwin1">Settings for wxWindows 1.68</a>
+<a href="#wxwin2">Settings for wxWindows 2.2</a> / <a href="#wxwin1">Settings for wxWindows 1.68</a>
 </CENTER>
 
 <P>
@@ -44,9 +44,10 @@ installation path.
 
 <P>
 
-<H2><a name="wxwin2">Settings for wxWindows 2</a></H2>
+<H2><a name="wxwin2">Settings for wxWindows 2.2</a></H2>
 
-These settings apply to wxWindows 2.1.14 and above.<P>
+These settings apply to wxWindows 2.1.14 and above but most of them are not
+necessary any longer for wxWindows 2.3+.<P>
 
 <DL>
 <DT><B>General</B><DD>
@@ -205,77 +206,6 @@ Select your .rc file. The <B>Additional resource include directories</B> field s
 </PRE>
 
 </DL>
-
-<P>
-
-<!--
-<PRE>
-From: "Chris Breeze" <chris@hel.co.uk>
-To: <wxwin-users@wx.dent.med.uni-muenchen.de>
-Subject: Re: Compiling 2.0 wxWin Apps in the VC IDE
-Date: Wed, 20 May 1998 14:18:02 +0100
-
-First the apology: the description below is for wx1.68
-not for wx2.0 - sorry if I confused everybody.
-
-Anyway, third time lucky I hope! The settings for
-VC++ 5.0, wx2.0 beta 8, NT Workstation 4.0 sp3
-are:
-
-In project / settings / C/C++:
-Add "__WINDOWS__" to the pre-processor definitions
-Add "{wx}\include" to the additional include directories
-where {wx} is the directory in which wx is installed
-
-In project / settings / Resources:
-add "{wx}\include" to the additional resource include directories
-
-In project / settings / Link:
-Add "wx.lib comctl32.lib dummy.obj" to the Object/Library modules
-
-Add "libcd.lib,libcid.lib" to ignore libraries (under the "input" category)
-
-Add "{wx}\lib,{wx}\src\msw" to the additional library path
-
-I have tested these settings on samples/minimal and can
-build exes which can be debugged using Developer Studio.
-
-I hope I've finally answered the original question. (Next time
-I'll read the question more carefully!).
-
-Regards,
-Chris
-
-Original message (settings for wx1.68c):
-) Try the following (tested with VC++ 5 on NT4):
-) 
-) Create a new Win32 Application project and insert the source files
-) (including .rc files).
-) 
-) In project / settings / C/C++:
-) Add wx_msw to the pre-processor definitions
-) add {wx}\include\base,{wx}\include\msw to the additional include
-directories
-) where {wx} is the directory in which wx is installed
-) 
-) In project / settings / Resources:
-) add {wx}\include\msw;{wx}\contrib\fafa to the additional resource include
-) directories
-) 
-) In project / settings / Link:
-) Add comctl32.lib wx.lib dummy.obj ctl3d32.lib to the Object/Library modules
-) 
-) Add libc to ignore libraries (under the "input" category)
-) 
-) Add {wx}\lib,{wx}\src\msw to the additional library path
-) 
-) These settings are for a debug build. You can use the same settings for
-) a release build apart from ignoring libc.
-
-</PRE>
--->
-
-</font>
 
 </BODY>
 

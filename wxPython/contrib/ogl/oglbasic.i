@@ -303,7 +303,7 @@ public:
     void ClearText(int regionId = 0);
     void RemoveLine(wxPyLineShape *line);
 
-#ifdef PROLOGIO
+#ifdef wxUSE_PROLOGIO
     void WriteAttributes(wxExpr *clause);
     void ReadAttributes(wxExpr *clause);
     void ReadConstraints(wxExpr *clause, wxExprDatabase *database);

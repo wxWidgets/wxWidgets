@@ -121,7 +121,6 @@ transdecode_master_selection (j_decompress_ptr cinfo)
 
   /* Initialize input side of decompressor to consume first scan. */
   (*cinfo->inputctl->start_input_pass) (cinfo);
-
   /* Initialize progress monitoring. */
   if (cinfo->progress != NULL) {
     int nscans;
@@ -141,3 +140,4 @@ transdecode_master_selection (j_decompress_ptr cinfo)
     cinfo->progress->total_passes = 1;
   }
 }
+

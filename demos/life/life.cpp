@@ -194,9 +194,9 @@ LifeFrame::LifeFrame() : wxFrame((wxFrame *)0, -1, _("Life!"), wxPoint(200, 200)
     SetIcon(wxICON(mondrian));
 
     // menu bar
-    wxMenu *menuFile = new wxMenu("", wxMENU_TEAROFF);
-    wxMenu *menuView = new wxMenu("", wxMENU_TEAROFF);
-    wxMenu *menuGame = new wxMenu("", wxMENU_TEAROFF);
+    wxMenu *menuFile = new wxMenu(_T(""), wxMENU_TEAROFF);
+    wxMenu *menuView = new wxMenu(_T(""), wxMENU_TEAROFF);
+    wxMenu *menuGame = new wxMenu(_T(""), wxMENU_TEAROFF);
 
     menuFile->Append(ID_NEW, _("&New"), _("Start a new game"));
     menuFile->Append(ID_OPEN, _("&Open..."), _("Open an existing Life pattern"));
@@ -1057,7 +1057,7 @@ void LifeCanvas::OnScroll(wxScrollWinEvent& event)
     else
     if (type == wxEVT_SCROLLWIN_PAGEDOWN)
     {
-        scrollinc = -10;
+        scrollinc = +10;
     }
     else
     if (type == wxEVT_SCROLLWIN_THUMBTRACK)

@@ -13,12 +13,12 @@
  * The following defines are not meant to be changeable.
  * They are for readability only.
  */
-#define MAXCHR	128
+#define MAXCHR	256
 #define CHRBIT	8
 #define BITBLK	MAXCHR/CHRBIT
 
 class CharacterIndexer {
-public: 
+public:
 	virtual char CharAt(int index)=0;
 };
 
@@ -32,7 +32,7 @@ public:
 	bool GrabMatches(CharacterIndexer &ci);
 	void ChSet(char c);
 	void ChSetWithCase(char c, bool caseSensitive);
-	const char *Compile(const char *pat, int length, bool caseSensitive);
+	const char *Compile(const char *pat, int length, bool caseSensitive, bool posix);
 	int Execute(CharacterIndexer &ci, int lp, int endp);
 	void ModifyWord(char *s);
 	int Substitute(CharacterIndexer &ci, char *src, char *dst);

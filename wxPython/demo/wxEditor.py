@@ -10,7 +10,7 @@ def runTest(frame, nb, log):
     box = wxBoxSizer(wxVERTICAL)
     box.Add(ed, 1, wxALL|wxGROW, 1)
     win.SetSizer(box)
-    win.SetAutoLayout(true)
+    win.SetAutoLayout(True)
 
     ed.SetText(["",
                 "This is a simple text editor, the class name is",

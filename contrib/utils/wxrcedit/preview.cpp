@@ -140,8 +140,10 @@ void PreviewFrame::MakeDirty()
 
 
 
-void PreviewFrame::Preview(wxXmlNode *node,const wxString &version)
+void PreviewFrame::Preview(wxXmlNode *node, wxXmlDocument *orig_doc)
 {
+   wxString version = orig_doc->GetRoot()->GetPropVal(wxT("version"), wxT("0.0.0.0"));
+
    while (node->GetParent()->GetParent() != NULL) node = node->GetParent();
 
    {
@@ -150,6 +152,7 @@ void PreviewFrame::Preview(wxXmlNode *node,const wxString &version)
        root->AddProperty(new wxXmlProperty(wxT("version"),version,NULL));
        doc.SetRoot(root);
        doc.GetRoot()->AddChild(new wxXmlNode(*node));
+       doc.SetFileEncoding(orig_doc->GetFileEncoding());
 
        if (XmlGetClass(doc.GetRoot()->GetChildren()) == _T("wxDialog")) 
            XmlSetClass(doc.GetRoot()->GetChildren(), _T("wxPanel"));   
@@ -168,7 +171,7 @@ void PreviewFrame::Preview(wxXmlNode *node,const wxString &version)
    }
 
    m_Node = node;
-   m_Version = version;
+   m_Doc = orig_doc;
 
    m_LogCtrl->Clear();
    wxLogTextCtrl mylog(m_LogCtrl);
@@ -237,5 +240,5 @@ END_EVENT_TABLE()
 
 void PreviewFrame::OnMouseEnter(wxMouseEvent& event)
 {
-    if (m_Dirty) Preview(m_Node,m_Version);
+    if (m_Dirty) Preview(m_Node,m_Doc);
 }

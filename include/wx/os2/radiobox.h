@@ -29,9 +29,7 @@ public:
                       ,const wxString     asChoices[] = NULL
                       ,int                nMajorDim = 0
                       ,long               lStyle = wxRA_HORIZONTAL
-#if wxUSE_VALIDATORS
                       ,const wxValidator& rVal = wxDefaultValidator
-#endif
                       ,const wxString&    rsName = wxRadioBoxNameStr
                      )
     {
@@ -44,9 +42,7 @@ public:
                ,asChoices
                ,nMajorDim
                ,lStyle
-#if wxUSE_VALIDATORS
                ,rVal
-#endif
                ,rsName
               );
     }
@@ -62,9 +58,7 @@ public:
                 ,const wxString     asChoices[] = NULL
                 ,int                nMajorDim = 0
                 ,long               lStyle = wxRA_HORIZONTAL
-#if wxUSE_VALIDATORS
                 ,const wxValidator& rVal = wxDefaultValidator
-#endif
                 ,const wxString&    rsName = wxRadioBoxNameStr
                );
 

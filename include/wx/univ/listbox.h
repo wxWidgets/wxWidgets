@@ -129,10 +129,10 @@ public:
     void Activate(int item = -1);
 
     // select or unselect the specified or current (if -1) item
-    void Select(bool sel = TRUE, int item = -1);
+    void DoSelect(int item = -1, bool sel = TRUE);
 
     // more readable wrapper
-    void Unselect(int item) { Select(FALSE, item); }
+    void DoUnselect(int item) { DoSelect(item, FALSE); }
 
     // select an item and send a notification about it
     void SelectAndNotify(int item);

@@ -41,6 +41,8 @@ wxDialogXmlHandler::wxDialogXmlHandler() : wxXmlResourceHandler()
     XRC_ADD_STYLE(wxTAB_TRAVERSAL);
     XRC_ADD_STYLE(wxWS_EX_VALIDATE_RECURSIVELY);
     XRC_ADD_STYLE(wxCLIP_CHILDREN);
+    XRC_ADD_STYLE(wxMAXIMIZE_BOX);
+    XRC_ADD_STYLE(wxMINIMIZE_BOX);
 
     AddWindowStyles();
 }

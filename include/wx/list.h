@@ -193,7 +193,7 @@ private:
 
 class WXDLLEXPORT wxListBase : public wxObject
 {
-friend class wxNodeBase;        // should be able to call DetachNode()
+friend class WXDLLEXPORT wxNodeBase; // should be able to call DetachNode()
 friend class wxHashTableBase;   // should be able to call untyped Find()
 private:
         // common part of all ctors
@@ -235,7 +235,7 @@ public:
     int Number() const { return GetCount(); }
     wxNode *First() const { return (wxNode *)GetFirst(); }
     wxNode *Last() const { return (wxNode *)GetLast(); }
-    wxNode *Nth(size_t index) const { return (wxNode *)Item(index); }
+    wxNode *Nth(size_t n) const { return (wxNode *)Item(n); }
 #endif // wxLIST_COMPATIBILITY
 
 protected:
@@ -274,8 +274,12 @@ protected:
     wxNodeBase *Item(size_t index) const;
 
         // get the list item's data
-    void *operator[](size_t index) const
-        { wxNodeBase *node = Item(index); return node ? node->GetData() : (wxNodeBase*)NULL; }
+    void *operator[](size_t n) const
+    {
+        wxNodeBase *node = Item(n);
+
+        return node ? node->GetData() : (wxNodeBase *)NULL;
+    }
 
     // operations
         // append to end of list

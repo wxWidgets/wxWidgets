@@ -15,10 +15,10 @@
 #include <wx/ipc.h>
 
 // the default service name
-#define IPC_SERVICE "4242"
+#define IPC_SERVICE _T("4242")
 
 // the IPC topic
-#define IPC_TOPIC "IPC TEST"
+#define IPC_TOPIC _T("IPC TEST")
 
 // the name of the item we're being advised about
-#define IPC_ADVISE_NAME "Item"
+#define IPC_ADVISE_NAME _T("Item")

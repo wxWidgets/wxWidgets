@@ -14,7 +14,12 @@ without consuming much memory. To use virtual list control you must use
 \helpref{OnGetItemText}{wxlistctrlongetitemtext} (and optionally 
 \helpref{OnGetItemImage}{wxlistctrlongetitemimage} and 
 \helpref{OnGetItemAttr}{wxlistctrlongetitemattr}) to return the information
-about the items when the control requests it.
+about the items when the control requests it. Virtual list control can be used
+as a normal one except that no operations which can take time proportional to
+the number of items in the control happen -- this is required to allow having a
+practically infinite number of items. For example, in a multiple selection
+virtual list control, the selections won't be sent when many items are selected
+at once because this could mean iterating over all the items.
 
 Using many of wxListCtrl features is shown in the
 \helpref{corresponding sample}{samplelistctrl}.
@@ -606,12 +611,12 @@ the given {\it column} for the specified {\tt item}.
 
 \func{bool}{ScrollList}{\param{int }{dx}, \param{int }{dy}}
 
-Scrolls the list control. If in icon, small icon or report view mode,
-dx specifies the number of pixels to scroll. If in list view mode, dx
-specifies the number of columns to scroll.
+Scrolls the list control. If in icon, small icon or report view mode, 
+{\it dx} specifies the number of pixels to scroll. If in list view mode, 
+{\it dx} specifies the number of columns to scroll. {\it dy} always specifies
+the number of pixels to scroll vertically.
 
-If in icon, small icon or list view mode, dy specifies the number of pixels
-to scroll. If in report view mode, dy specifies the number of lines to scroll.
+{\bf NB:} This method is currently only implemented in the Windows version.
 
 \membersection{wxListCtrl::SetBackgroundColour}\label{wxlistctrlsetbackgroundcolour}
 

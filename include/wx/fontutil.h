@@ -72,7 +72,9 @@ enum wxXLFDField
 //     further it might make sense to make it a real class with virtual methods
 struct WXDLLEXPORT wxNativeFontInfo
 {
-#if defined(_WX_X_FONTLIKE)
+#if wxUSE_PANGO
+    PangoFontDescription *description;
+#elif defined(_WX_X_FONTLIKE)
     // the members can't be accessed directly as we only parse the
     // xFontName on demand
 private:
@@ -113,8 +115,6 @@ public:
     FATTRS       fa;
     FONTMETRICS  fm;
     FACENAMEDESC fn;
-#elif defined(__WXGTK20__)
-    PangoFontDescription *description;
 #else // other platforms
     //
     //  This is a generic implementation that should work on all ports

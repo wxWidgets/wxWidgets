@@ -18,6 +18,8 @@
 
 #include "wx/string.h"
 
+#include <stddef.h>             // for ptrdiff_t
+
 // private
 struct WXDLLEXPORT _wxHashTable_NodeBase
 {
@@ -25,6 +27,10 @@ struct WXDLLEXPORT _wxHashTable_NodeBase
 
     _wxHashTable_NodeBase* m_nxt;
 };
+
+#ifdef __BORLANDC__
+#   pragma option -w-inl
+#endif
 
 // private
 class WXDLLEXPORT _wxHashTableBase2
@@ -62,11 +68,15 @@ protected:
                                _wxHashTable_NodeBase** dstTable,
                                BucketFromNode func, ProcessNode proc );
 
-    static void** AllocTable( size_t size )
+    static void** AllocTable( size_t sz )
     {
-        return (void **)calloc(size, sizeof(void*));
+        return (void **)calloc(sz, sizeof(void*));
     }
 };
+
+#ifdef __BORLANDC__
+#   pragma option -w.inl
+#endif
 
 #define _WX_DECLARE_HASHTABLE( VALUE_T, KEY_T, HASH_T, KEY_EX_T, KEY_EQ_T, CLASSNAME, CLASSEXP, SHOULD_GROW, SHOULD_SHRINK ) \
 CLASSEXP CLASSNAME : protected _wxHashTableBase2 \
@@ -172,10 +182,10 @@ public: \
         const_pointer operator ->() const { return &(m_node->m_value); } \
     }; \
  \
-    CLASSNAME( size_type size = 10, const hasher& hfun = hasher(), \
+    CLASSNAME( size_type sz = 10, const hasher& hfun = hasher(), \
                const key_equal& k_eq = key_equal(), \
                const key_extractor& k_ex = key_extractor() ) \
-        : m_tableBuckets( GetNextPrime( size ) ), \
+        : m_tableBuckets( GetNextPrime( sz ) ), \
           m_items( 0 ), \
           m_hasher( hfun ), \
           m_equals( k_eq ), \
@@ -218,7 +228,12 @@ public: \
  \
     /* removes all elements from the hash table, but does not */ \
     /* shrink it ( perhaps it should ) */ \
-    void clear() { DeleteNodes( m_tableBuckets, (_wxHashTable_NodeBase**)m_table, DeleteNode ); } \
+    void clear() \
+    { \
+        DeleteNodes( m_tableBuckets, (_wxHashTable_NodeBase**)m_table, \
+                     DeleteNode ); \
+        m_items = 0; \
+    } \
  \
     size_type size() const { return m_items; } \
     size_type max_size() const { return size_type(-1); } \
@@ -323,7 +338,7 @@ protected: \
  \
         CopyHashTable( (_wxHashTable_NodeBase**)srcTable, srcBuckets, \
                        this, (_wxHashTable_NodeBase**)m_table, \
-                       (BucketFromNode)&GetBucketForNode,\
+                       (BucketFromNode)GetBucketForNode,\
                        (ProcessNode)&DummyProcessNode ); \
         free(srcTable); \
     } \
@@ -335,8 +350,8 @@ protected: \
         CopyHashTable( (_wxHashTable_NodeBase**)ht.m_table, ht.m_tableBuckets,\
                        (_wxHashTableBase2*)this, \
                        (_wxHashTable_NodeBase**)m_table, \
-                       (BucketFromNode)&GetBucketForNode, \
-                       (ProcessNode)&CopyNode ); \
+                       (BucketFromNode)GetBucketForNode, \
+                       (ProcessNode)CopyNode ); \
     } \
 };
 
@@ -518,7 +533,7 @@ public: \
     /* count() == 0 | 1 */ \
     size_type count( const const_key_type& key ) \
         { return GetNode( key ) ? 1 : 0; } \
-};
+}
 
 // these macros are to be used in the user code
 #define WX_DECLARE_HASH_MAP( KEY_T, VALUE_T, HASH_T, KEY_EQ_T, CLASSNAME) \
@@ -526,11 +541,11 @@ public: \
 
 #define WX_DECLARE_STRING_HASH_MAP( VALUE_T, CLASSNAME ) \
     _WX_DECLARE_HASH_MAP( wxString, VALUE_T, wxStringHash, wxStringEqual, \
-                          CLASSNAME, class );
+                          CLASSNAME, class )
 
 #define WX_DECLARE_VOIDPTR_HASH_MAP( VALUE_T, CLASSNAME ) \
     _WX_DECLARE_HASH_MAP( void*, VALUE_T, wxPointerHash, wxPointerEqual, \
-                          CLASSNAME, class );
+                          CLASSNAME, class )
 
 // and these do exactly the same thing but should be used inside the
 // library
@@ -539,11 +554,11 @@ public: \
 
 #define WX_DECLARE_EXPORTED_STRING_HASH_MAP( VALUE_T, CLASSNAME ) \
     _WX_DECLARE_HASH_MAP( wxString, VALUE_T, wxStringHash, wxStringEqual, \
-                          CLASSNAME, class WXDLLEXPORT );
+                          CLASSNAME, class WXDLLEXPORT )
 
 #define WX_DECLARE_EXPORTED_VOIDPTR_HASH_MAP( VALUE_T, CLASSNAME ) \
     _WX_DECLARE_HASH_MAP( void*, VALUE_T, wxPointerHash, wxPointerEqual, \
-                          CLASSNAME, class WXDLLEXPORT );
+                          CLASSNAME, class WXDLLEXPORT )
 
 #endif // _WX_HASHMAP_H_
 

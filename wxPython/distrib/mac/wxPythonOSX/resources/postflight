@@ -1,0 +1,18 @@
+#!/bin/sh -e
+# Compile the .py files in the wxPython pacakge
+/usr/local/bin/python $2/Library/Frameworks/Python.framework/Versions/2.3/lib/python2.3/site-packages/../compileall.py $2/Library/Frameworks/Python.framework/Versions/2.3/lib/python2.3/site-packages/wxPython
+/usr/local/bin/python -O $2/Library/Frameworks/Python.framework/Versions/2.3/lib/python2.3/site-packages/../compileall.py $2/Library/Frameworks/Python.framework/Versions/2.3/lib/python2.3/site-packages/wxPython
+
+# and in the demo
+/usr/local/bin/python $2/Library/Frameworks/Python.framework/Versions/2.3/lib/python2.3/site-packages/../compileall.py /Applications/wxPythonOSX-2.4.0.7/demo
+
+# Make the demo/data dir writable
+chmod a+w /Applications/wxPythonOSX-2.4.0.7/demo/data
+
+# and the wxPython pacakge should be group writable
+chgrp -R admin $2/Library/Frameworks/Python.framework/Versions/2.3/lib/python2.3/site-packages/wxPython
+chgrp -R admin /Applications/wxPythonOSX-2.4.0.7
+chmod -R g+w $2/Library/Frameworks/Python.framework/Versions/2.3/lib/python2.3/site-packages/wxPython
+chmod -R g+w /Applications/wxPythonOSX-2.4.0.7
+
+exit 0

@@ -92,7 +92,7 @@ PERIPH_CLEAN_TARGET=
 # Set to 0 if not using GLCanvas (only affects DLL build)
 USE_GLCANVAS=1
 
-# Set to 0 if you are using MSVC 5
+# Set to 1 if you are using MSVC 5
 USE_MSVC_5=0
 
 # These are absolute paths, so that the compiler
@@ -294,7 +294,7 @@ $(WXDIR)\lib\$(WXLIBNAME).dll: $(DUMMYOBJ) $(OBJECTS)
     $(link) @<<
     $(LINKFLAGS) $(INCREMENTAL)
     -out:$(WXDIR)\lib\$(WXLIBNAME).dll
-    $(DUMMYOBJ) $(OBJECTS) $(MSLU_LIBS) $(guilibsdll) shell32.lib comctl32.lib ctl3d32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib odbc32.lib advapi32.lib winmm.lib $(GL_LIBS) $(WXDIR)\lib\png$(LIBEXT).lib $(WXDIR)\lib\zlib$(LIBEXT).lib $(WXDIR)\lib\jpeg$(LIBEXT).lib $(WXDIR)\lib\tiff$(LIBEXT).lib $(WXDIR)\lib\regex$(LIBEXT).lib $(DELAY_LOAD)
+    $(DUMMYOBJ) $(OBJECTS) $(MSLU_LIBS) $(guilibsdll) shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib odbc32.lib advapi32.lib winmm.lib $(GL_LIBS) $(WXDIR)\lib\png$(LIBEXT).lib $(WXDIR)\lib\zlib$(LIBEXT).lib $(WXDIR)\lib\jpeg$(LIBEXT).lib $(WXDIR)\lib\tiff$(LIBEXT).lib $(WXDIR)\lib\regex$(LIBEXT).lib $(DELAY_LOAD)
 <<
 
 !endif
@@ -589,23 +589,30 @@ $(DOCDIR)/pdf/wx.rtf:         $(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/latex/wx/
         -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/wx/manual.tex $(DOCDIR)/pdf/wx.rtf -twice -rtf
         cd $(THISDIR)
 
+# This target does two sets of HTML: one using a style sheet, for
+# the purposes of the CHM file, and one without.
 $(DOCDIR)\html\wx\wx.htm:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex\wx\body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)\latex\wx\manual.tex
         cd $(DOCDIR)\latex\wx
         -mkdir $(DOCDIR)\html\wx
         copy *.gif $(DOCDIR)\html\wx
         -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\html\wx\wx.htm -twice -html
+        -mkdir $(DOCDIR)\mshtml
+        -mkdir $(DOCDIR)\mshtml\wx
+        copy *.gif $(DOCDIR)\mshtml\wx
+        -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\mshtml\wx\wx.htm -twice -html -macros $(DOCDIR)\latex\wx\tex2rtf_css.ini
         -erase $(DOCDIR)\html\wx\*.con
         -erase $(DOCDIR)\html\wx\*.ref
         -erase $(DOCDIR)\latex\wx\*.con
         -erase $(DOCDIR)\latex\wx\*.ref
          cd $(THISDIR)
 
-$(DOCDIR)\htmlhelp\wx.chm : $(DOCDIR)\html\wx\wx.htm $(DOCDIR)\html\wx\wx.hhp
-	cd $(DOCDIR)\html\wx
+$(DOCDIR)\htmlhelp\wx.chm : $(DOCDIR)\html\wx\wx.htm $(DOCDIR)\mshtml\wx\wx.htm $(DOCDIR)\mshtml\wx\wx.hhp
+	cd $(DOCDIR)\mshtml\wx
+	copy $(DOCDIR)\latex\wx\wx.css .
 	-hhc wx.hhp
-    -mkdir ..\..\htmlhelp
-    -erase $(DOCDIR)\htmlhelp\wx.chm
-    move wx.chm ..\..\htmlhelp
+	-mkdir ..\..\htmlhelp
+	-erase $(DOCDIR)\htmlhelp\wx.chm
+	move wx.chm ..\..\htmlhelp
 	cd $(THISDIR)
 
 $(WXDIR)\docs\latex\wx\manual.dvi:	$(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/manual.tex

@@ -3,58 +3,34 @@ wxPython README
 
 Welcome to the wonderful world of wxPython!
 
-Once you have installed the wxPython extension module, you can try it
-out by going to the [install dir]\wxPython\demo directory and typing:
+So where do you go from here?  The best thing to do is to run the demo
+and use its source code to help you learn how to use wxPython.  Most
+of the classes available are demonstrated there, and you can view the
+sources directly in the demo so it is designed to help you learn.  If
+you are on Windows or OS X then you can run the demo just by double
+clicking it's icon.  If you are on Linux/Unix then change to the
+directory containing the demo and type:
 
     python demo.py
 
-There are also some other sample files there for you to play with and
-learn from.
+There are also some sample mini applications available for you to run
+and to play with as a learning exercise.
 
-If you selected to install the documentation then point your browser
-to [install dir]\wxPython\docs\index.htm and you will then be looking
-at the docs for wxWindows.  For the most part you can use the C++ docs
-as most classes and methods are used identically.  Where there are
-differences they are documented with a "wxPython Note."
+The next thing you should do is join the wxPython-users maillist where
+you can interact with a community of other users and developers who
+are willing to help you learn, answer questions and solve problems.
+To join the mail list just send an email message to the following
+address from the account you want to receive the mail messages from
+the list:
 
-On Win32 systems the binary self-installer creates a program group on
-the Start Menu that contains a link to running the demo and a link to
-the help file.  To help you save disk space I'm now using Microsoft's
-HTML Help format.  If your system doesn't know what to do with the help
-file, you can install the HTML Help Viewer as part of IE 4+, NT
-Service Pack 4+, or the HTML Workshop at
+    wxPython-users-subscribe@lists.wxwindows.org
 
-http://msdn.microsoft.com/library/default.asp?url=/library/en-us/htmlhelp/html/hwMicrosoftHTMLHelpDownloads.asp
-
-For some features, the latest common controls library from microsoft
-is required.  You can get this by installing IE 5.0 or Office 2000.
-You can also get it independently from here:
-
-http://download.microsoft.com/download/platformsdk/Comctl32/5.80.2614.3600/W9XNT4/EN-US/50comupd.exe
-
-Windows 95 users may also need the WinSock 2.0 and OpenGL libraries.
-These can be found at these sites:
-
-
-http://www.microsoft.com/windows95/downloads/contents/wuadmintools/s_wunetworkingtools/w95sockets2/default.asp
-
-http://www.opengl.org/Downloads/Downloads.html
-
-
-
-Getting Help
-------------
-
-Since wxPython is a blending of multiple technologies, help comes from
-multiple sources.  See the http://wxPython.org/ for details on various
-sources of help, but probably the best source is the wxPython-users
-mail list.  You can view the archive or subscribe by going to
-
-       http://lists.wxwindows.org/mailman/listinfo/wxpython-users
-
-Or you can send mail directly to the list using this address:
-
-       wxpython-users@lists.wxwindows.org
+There is also a good set of class reference documentation available
+for wxPython, but currently it is geared for the C++ user.  This may
+be a little daunting at first, but with a little practice you'll
+easily be able to "translate" from the C++ shown there to Python.  Not
+all classes documented are available in Python, but most of the GUI
+related classes are.
 
 
 Other Info
@@ -62,17 +38,21 @@ Other Info
 
 Please also see the following files in this directory:
 
-       CHANGES.txt     Information about new features, fixes, etc. in
-                       each release.
+       CHANGES.txt         Information about new features, fixes,
+                           etc. in each release.
 
-       BUILD.unix.txt  Instructions for building wxPython on various
-		       Unix-like platforms.
+       ../README.1st.txt   Instructions for building wxGTK and
+                           wxPython on Unix-like platforms the
+			   "new way."
 
-       BUILD.win32.txt Instructions for building wxPython on Windows.
+       BUILD.unix.txt	   Instructions for building wxPython on
+			   various Unix-like platforms the "old way."
 
-       BUILD.osx.txt   Instructions for building wxPython on Mac OS X.
+       BUILD.win32.txt     Instructions for building wxPython on Windows.
 
-       licence/*       Text of the wxWindows license.
+       BUILD.osx.txt       Instructions for building wxPython on Mac OS X.
+
+       licence/*           Text of the wxWindows license.
 
 
 

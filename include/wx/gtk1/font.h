@@ -96,6 +96,9 @@ public:
     virtual void SetEncoding(wxFontEncoding encoding);
     virtual void SetNativeFontInfo( const wxNativeFontInfo& info );
 
+    virtual void SetNoAntiAliasing( bool no = TRUE );
+    virtual bool GetNoAntiAliasing();
+    
     // implementation from now on
     void Unshare();
 

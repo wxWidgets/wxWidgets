@@ -81,17 +81,27 @@ all other sections (sections, subsections, ...) have a folder icon.}
 
 \membersection{wxHtmlHelpController::AddBook}\label{wxhtmlhelpcontrolleraddbook}
 
-\func{bool}{AddBook}{\param{const wxString\& }{book}, \param{bool }{show\_wait\_msg}}
+\func{bool}{AddBook}{\param{const wxFileName\& }{book\_file}, \param{bool }{show\_wait\_msg}}
+
+\func{bool}{AddBook}{\param{const wxString\& }{book\_url}, \param{bool }{show\_wait\_msg}}
 
 Adds book (\helpref{.hhp file}{helpformat} - HTML Help Workshop project file) into the list of loaded books.
 This must be called at least once before displaying  any help.
 
-{\it book} may be either .hhp file or ZIP archive that contains arbitrary number of .hhp files in 
+{\it book\_file} or {\it book\_url}  may be either .hhp file or ZIP archive
+that contains arbitrary number of .hhp files in 
 top-level directory. This ZIP archive must have .zip or .htb extension
-(the latter stands for "HTML book"). In other words, {\tt AddBook("help.zip")} is possible and, in fact,
-recommended way.
+(the latter stands for "HTML book"). In other words,
+{\tt AddBook(wxFileName("help.zip"))}
+is possible and, in fact, recommended way.
 
-If {\it show\_wait\_msg} is TRUE then a decoration-less window with progress message is displayed.
+\wxheading{Parameters}
+
+\docparam{show\_wait\_msg}{If TRUE then a decoration-less window with progress message is displayed.}
+\docparam{book\_file}{Help book filename. It is recommended to use this prototype
+instead of the one taking URL, because it is less error-prone.}
+\docparam{book\_url}{Help book URL (note that syntax of filename and URL is 
+different on most platforms)}
 
 \wxheading{Note}
 

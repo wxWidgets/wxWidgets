@@ -18,18 +18,16 @@ version of the graphic which appears on the main window.
 
 See \helpref{wxMemoryDC}{wxmemorydc} for an example of drawing onto a bitmap.
 
-The following shows the conditional compilation required to load a
-bitmap under Unix and in Windows. The alternative is to use the string
-version of the bitmap constructor, which loads a file under Unix and a
-resource or file under Windows, but has the disadvantage of requiring the
-XPM icon file to be available at run-time.
+All wxWindows platforms support XPMs for small bitmaps and icons.
+You may include the XPM inline as below, since it's C code, or you
+can load it at run-time.
 
 \begin{verbatim}
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
 #include "mondrian.xpm"
-#endif
 \end{verbatim}
 
+Sometimes you wish to use a .ico resource on Windows, and XPMs on
+other platforms (for example to take advantage of Windows' support for multiple icon resolutions).
 A macro, \helpref{wxICON}{wxiconmacro}, is available which creates an icon using an XPM
 on the appropriate platform, or an icon resource on Windows.
 
@@ -68,8 +66,9 @@ wxBitmap bmp(wxBITMAP(bmpname));
 \end{verbatim}
 
 You should always use wxICON and wxBITMAP macros because they work for any
-platform (unlike the code above which doesn't deal with wxMac, wxBe, ...) and
-are more short and clear than versions with {\tt \#ifdef}s.
+platform (unlike the code above which doesn't deal with wxMac, wxX11, ...) and
+are more short and clear than versions with {\tt \#ifdef}s. Even better,
+use the same XPMs on all platforms.
 
 \subsection{Supported bitmap file formats}\label{supportedbitmapformats}
 
@@ -101,7 +100,7 @@ Under wxGTK, wxBitmap may load the following formats:
 \item All formats that are supported by the \helpref{wxImage}{wximage} class.
 \end{itemize}
 
-Under wxMotif, wxBitmap may load the following formats:
+Under wxMotif and wxX11, wxBitmap may load the following formats:
 
 \begin{itemize}\itemsep=0pt
 \item XBM data and file (wxBITMAP\_TYPE\_XBM)
@@ -126,12 +125,12 @@ Under wxGTK, wxIcon may load the following formats:
 \item All formats that are supported by the \helpref{wxImage}{wximage} class.
 \end{itemize}
 
-Under wxMotif, wxIcon may load the following formats:
+Under wxMotif and wxX11, wxIcon may load the following formats:
 
 \begin{itemize}\itemsep=0pt
 \item XBM data and file (wxBITMAP\_TYPE\_XBM)
 \item XPM data and file (wxBITMAP\_TYPE\_XPM)
-\item All formats that are supported by the \helpref{wxImage}{wximage} class (?).
+\item All formats that are supported by the \helpref{wxImage}{wximage} class.
 \end{itemize}
 
 \wxheading{wxCursor}
@@ -152,7 +151,7 @@ to stock cursors):
 \item None (stock cursors only).
 \end{itemize}
 
-Under wxMotif, wxCursor may load the following formats:
+Under wxMotif and wxX11, wxCursor may load the following formats:
 
 \begin{itemize}\itemsep=0pt
 \item XBM data and file (wxBITMAP\_TYPE\_XBM)
@@ -168,27 +167,8 @@ have special requirements, you may wish to initialise the wxBitmap class with
 some extra handlers which you write yourself or receive from a third party.
 
 To add a handler object to wxBitmap, your application needs to include the header which implements it, and
-then call the static function \helpref{wxBitmap::AddHandler}{wxbitmapaddhandler}. For example:
+then call the static function \helpref{wxBitmap::AddHandler}{wxbitmapaddhandler}.
 
-{\small
-\begin{verbatim}
-  #include <wx/xpmhand.h>
-  ...
-  // Initialisation
-  wxBitmap::AddHandler(new wxXPMFileHandler);
-  wxBitmap::AddHandler(new wxXPMDataHandler);
-  ...
-\end{verbatim}
-}
-
-Assuming the handlers have been written correctly, you should now be able to load and save
-XPM files using the usual wxBitmap API.
-
-{\bf Note:} bitmap handlers are not implemented on all platforms. Currently, the above is only necessary on
-Windows, to save the extra overhead of formats that may not be necessary (if you don't use them, they
-are not linked into the executable). Unix platforms have XPM capability built-in (where supported).
-
-Also, just because a handler (such as a PNG handler) is not present does not mean that
-wxBitmap does not support that file format. If wxBitmap fails to find a suitable handler,
-the file-loading capabilities of wxImage are used instead.
+{\bf Note:} bitmap handlers are not implemented on all platforms, and new ones rarely need
+to be implemented since wxImage can be used for loading most formats, as noted earlier.
 

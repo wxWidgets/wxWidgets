@@ -24,6 +24,30 @@
 #include <wx/wx.h>
 #include <wx/dnd.h>
 
+#ifndef SWIG
+/*
+ * If we're using wx in Dynamic Library format do we
+ * want wxStyledTextCtrl to be in DLL form as well?
+ */
+#if defined(WXUSINGDLL) && \
+    (defined(WXMAKING_STC_DLL) || defined(WXUSING_STC_DLL))
+
+#if defined(WXMAKING_STC_DLL)
+    // When building the DLL WXSTC_DECLSPEC exports classes
+#   define WXSTC_DECLSPEC            WXEXPORT
+#elif defined(WXUSING_STC_DLL)
+    // When using the DLL WXSTC_DECLSPEC imports classes
+#   define WXSTC_DECLSPEC            WXIMPORT
+#endif // defined(WXBUILD_STC_DLL)
+
+#else
+// When building the static library nullify the effect of WXSTC_DECLSPEC
+#define WXSTC_DECLSPEC
+#endif // WXUSINGDLL && (WXMAKING_STC_DLL || WXUSING_STC_DLL)
+
+#endif // SWIG
+
+
 //----------------------------------------------------------------------
 
 // Should a wxPopupWindow be used for the call tips and autocomplete windows?
@@ -38,6 +62,12 @@
 
 %(VALUES)s
 
+
+//-----------------------------------------
+// Commands that can be bound to keystrokes
+%(CMDS)s
+
+
 // END of generated section
 //----------------------------------------------------------------------
 
@@ -45,8 +75,11 @@ class  ScintillaWX;                      // forward declare
 class  WordList;
 struct SCNotification;
 
-
-extern const wxChar* wxSTCNameStr;
+#ifndef SWIG
+extern WXSTC_DECLSPEC const wxChar* wxSTCNameStr;
+class WXSTC_DECLSPEC wxStyledTextCtrl;
+class WXSTC_DECLSPEC wxStyledTextEvent;
+#endif
 
 //----------------------------------------------------------------------
 
@@ -160,6 +193,12 @@ public:
     bool GetLastKeydownProcessed() { return m_lastKeyDownConsumed; }
     void SetLastKeydownProcessed(bool val) { m_lastKeyDownConsumed = val; }
 
+    // Write the contents of the editor to filename
+    bool SaveFile(const wxString& filename);
+
+    // Load the contents of filename into the editor
+    bool LoadFile(const wxString& filename);
+
 
 //----------------------------------------------------------------------
 
@@ -175,6 +214,7 @@ private:
     void OnMouseMove(wxMouseEvent& evt);
     void OnMouseLeftUp(wxMouseEvent& evt);
     void OnMouseRightUp(wxMouseEvent& evt);
+    void OnMouseMiddleUp(wxMouseEvent& evt);
     void OnContextMenu(wxContextMenuEvent& evt);
     void OnMouseWheel(wxMouseEvent& evt);
     void OnChar(wxKeyEvent& evt);
@@ -191,10 +231,10 @@ private:
     void NotifyChange();
     void NotifyParent(SCNotification* scn);
 
-
-private:
     DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxStyledTextCtrl)
+
+protected:
 
     ScintillaWX*        m_swx;
     wxStopWatch         m_stopWatch;
@@ -210,7 +250,7 @@ private:
 
 //----------------------------------------------------------------------
 
-// SWIG can't handle "#if" type of conditionals, onlu "#ifdef"
+// SWIG can't handle "#if" type of conditionals, only "#ifdef"
 #ifdef SWIG
 #define STC_USE_DND 1
 #else
@@ -314,6 +354,8 @@ private:
 #endif
 };
 
+
+
 #ifndef SWIG
 BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_CHANGE,                  1650)
@@ -339,6 +381,9 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_DRAG_OVER,               1670)
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_DO_DROP,                 1671)
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_ZOOM,                    1672)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_HOTSPOT_CLICK,           1673)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_HOTSPOT_DCLICK,          1674)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_CALLTIP_CLICK,           1675)
 END_DECLARE_EVENT_TYPES()
 #else
     enum {
@@ -365,6 +410,9 @@ END_DECLARE_EVENT_TYPES()
         wxEVT_STC_DRAG_OVER,
         wxEVT_STC_DO_DROP,
         wxEVT_STC_ZOOM,
+        wxEVT_STC_HOTSPOT_CLICK,
+        wxEVT_STC_HOTSPOT_DCLICK,
+        wxEVT_STC_CALLTIP_CLICK
     };
 #endif
 
@@ -396,6 +444,10 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_DRAG_OVER(id, fn)               DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DRAG_OVER,             id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_STC_DO_DROP(id, fn)                 DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DO_DROP,               id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_STC_ZOOM(id, fn)                    DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_ZOOM,                  id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_HOTSPOT_CLICK(id, fn)           DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_CLICK,         id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_HOTSPOT_DCLICK(id, fn)          DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_DCLICK,        id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_CALLTIP_CLICK(id, fn))          DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CALLTIP_CLICK          id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+
 #endif
 
 //----------------------------------------------------------------------

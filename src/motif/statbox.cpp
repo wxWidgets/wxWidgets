@@ -48,7 +48,6 @@ END_EVENT_TABLE()
 
 wxStaticBox::wxStaticBox()
 {
-    m_formWidget = (WXWidget) 0;
     m_labelWidget = (WXWidget) 0;
 }
 
@@ -59,8 +58,6 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
            long style,
            const wxString& name)
 {
-    m_formWidget = (WXWidget) 0;
-    m_labelWidget = (WXWidget) 0;
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
     m_font = parent->GetFont();
@@ -76,59 +73,35 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
 
     m_windowStyle = style;
 
-    bool hasLabel = (!label.IsNull() && !label.IsEmpty()) ;
-
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
-    Widget formWidget = XtVaCreateManagedWidget ((char*) (const char*) name,
-            xmFormWidgetClass, parentWidget,
-            XmNmarginHeight, 0,
-            XmNmarginWidth, 0,
-            NULL);
-
-
-    if (hasLabel)
-    {
-        XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay(parentWidget));
-
-        wxString label1(wxStripMenuCodes(label));
-        XmString text = XmStringCreateSimple ((char*) (const char*) label1);
-        m_labelWidget = (WXWidget) XtVaCreateManagedWidget ((char*) (const char*) label1,
-                xmLabelWidgetClass, formWidget,
-                XmNfontList, fontList,
-                XmNlabelString, text,
-                NULL);
-        XmStringFree (text);
-    }
-
-    Widget frameWidget = XtVaCreateManagedWidget ("frame",
-            xmFrameWidgetClass, formWidget,
+    m_mainWidget = XtVaCreateManagedWidget ("staticboxframe",
+            xmFrameWidgetClass, parentWidget,
             XmNshadowType, XmSHADOW_IN,
             //XmNmarginHeight, 0,
             //XmNmarginWidth, 0,
             NULL);
 
+    bool hasLabel = (!label.IsNull() && !label.IsEmpty()) ;
     if (hasLabel)
-        XtVaSetValues ((Widget) m_labelWidget,
-                XmNtopAttachment, XmATTACH_FORM,
-                XmNleftAttachment, XmATTACH_FORM,
-                XmNrightAttachment, XmATTACH_FORM,
-                XmNalignment, XmALIGNMENT_BEGINNING,
+    {
+        XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay(parentWidget));
+        wxString label1(wxStripMenuCodes(label));
+        wxXmString text(label1);
+        m_labelWidget = (WXWidget) XtVaCreateManagedWidget (label1.c_str(),
+                xmLabelWidgetClass, (Widget)m_mainWidget,
+                XmNfontList, fontList,
+                XmNlabelString, text(),
+#if (XmVersion > 1200)
+                XmNframeChildType, XmFRAME_TITLE_CHILD,
+#else
+                XmNchildType, XmFRAME_TITLE_CHILD,          
+#endif
                 NULL);
-
-    XtVaSetValues (frameWidget,
-            XmNtopAttachment, hasLabel ? XmATTACH_WIDGET : XmATTACH_FORM,
-            XmNtopWidget, hasLabel ? (Widget) m_labelWidget : formWidget,
-            XmNbottomAttachment, XmATTACH_FORM,
-            XmNleftAttachment, XmATTACH_FORM,
-            XmNrightAttachment, XmATTACH_FORM,
-            NULL);
-
-    m_mainWidget = (WXWidget) frameWidget;
-    m_formWidget = (WXWidget) formWidget;
-
+    }
+    
     SetCanAddEventHandler(TRUE);
-    AttachWidget (parent, (WXWidget) frameWidget, (WXWidget) formWidget, pos.x, pos.y, size.x, size.y);
+    AttachWidget (parent, m_mainWidget, NULL, pos.x, pos.y, size.x, size.y);
     ChangeBackgroundColour();
 
     return TRUE;
@@ -136,16 +109,11 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
 
 wxStaticBox::~wxStaticBox()
 {
-   DetachWidget(m_formWidget);
    DetachWidget(m_mainWidget);
    XtDestroyWidget((Widget) m_mainWidget);
-   if (m_labelWidget)
-     XtDestroyWidget((Widget) m_labelWidget);
-   XtDestroyWidget((Widget) m_formWidget);
 
    m_mainWidget = (WXWidget) 0;
    m_labelWidget = (WXWidget) 0;
-   m_formWidget = (WXWidget) 0;
 }
 
 void wxStaticBox::SetLabel(const wxString& label)
@@ -157,12 +125,11 @@ void wxStaticBox::SetLabel(const wxString& label)
     {
         wxString label1(wxStripMenuCodes(label));
 
-        XmString text = XmStringCreateSimple ((char*) (const char*) label1);
+        wxXmString text(label1);
         XtVaSetValues ((Widget) m_labelWidget,
-                XmNlabelString, text,
+                XmNlabelString, text(),
                 XmNlabelType, XmSTRING,
                 NULL);
-        XmStringFree (text);
     }
 }
 
@@ -192,40 +159,9 @@ wxString wxStaticBox::GetLabel() const
     }
 }
 
-void wxStaticBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    wxControl::DoSetSize (x, y, width, height, sizeFlags);
-
-    if (m_labelWidget)
-    {
-        Dimension xx, yy;
-        XtVaGetValues ((Widget) m_labelWidget, XmNwidth, &xx, XmNheight, &yy, NULL);
-
-        if (width > -1)
-            XtVaSetValues ((Widget) m_mainWidget, XmNwidth, width,
-                    NULL);
-        if (height > -1)
-            XtVaSetValues ((Widget) m_mainWidget, XmNheight, height - yy,
-                    NULL);
-    }
-}
-
 void wxStaticBox::ChangeFont(bool keepOriginalSize)
 {
     wxWindow::ChangeFont(keepOriginalSize);
 }
 
-void wxStaticBox::ChangeBackgroundColour()
-{
-    wxWindow::ChangeBackgroundColour();
-    if (m_labelWidget)
-        DoChangeBackgroundColour(m_labelWidget, m_backgroundColour);
-}
-
-void wxStaticBox::ChangeForegroundColour()
-{
-    wxWindow::ChangeForegroundColour();
-    if (m_labelWidget)
-        DoChangeForegroundColour(m_labelWidget, m_foregroundColour);
-}
 

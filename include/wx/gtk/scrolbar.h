@@ -12,7 +12,7 @@
 #define __GTKSCROLLBARH__
 
 #if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface
+#pragma interface "scrolbar.h"
 #endif
 
 #include "wx/defs.h"

@@ -12,10 +12,10 @@
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
 /*
-   this global setting determintes what should we do if the setting FOO
+   this global setting determines what should we do if the setting FOO
    requires BAR and BAR is not set: we can either silently define BAR
    (default, recommended) or give an error and abort (mainly useful for
-   developpers only)
+   developers only)
  */
 #define wxABORT_ON_CONFIG_ERROR
 
@@ -94,6 +94,14 @@
 #       define wxUSE_MIMETYPE 0
 #   endif
 #endif /* !defined(wxUSE_MIMETYPE) */
+
+#ifndef wxUSE_PROLOGIO
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_PROLOGIO must be defined."
+#   else
+#       define wxUSE_PROLOGIO 0
+#   endif
+#endif /* !defined(wxUSE_PROLOGIO) */
 
 #ifndef wxUSE_PROTOCOL
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -675,6 +683,14 @@
 #   endif
 #endif /* !defined(wxUSE_TREECTRL) */
 
+#ifndef wxUSE_WX_RESOURCES
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_WX_RESOURCES must be defined."
+#   else
+#       define wxUSE_WX_RESOURCES 0
+#   endif
+#endif /* !defined(wxUSE_WX_RESOURCES) */
+
 #ifndef wxUSE_WXHTML_HELP
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_WXHTML_HELP must be defined."
@@ -1045,7 +1061,7 @@
 #endif /* wxUSE_RADIOBTN */
 
 #if wxUSE_WXHTML_HELP
-#   if !wxUSE_HELP || !wxUSE_HTML || !wxUSE_COMBOBOX
+#   if !wxUSE_HELP || !wxUSE_HTML || !wxUSE_COMBOBOX || !wxUSE_NOTEBOOK
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "Built in help controller can't be compiled"
 #       else
@@ -1055,6 +1071,8 @@
 #           define wxUSE_HTML 1
 #           undef wxUSE_COMBOBOX
 #           define wxUSE_COMBOBOX 1
+#           undef wxUSE_NOTEBOOK
+#           define wxUSE_NOTEBOOK 1
 #       endif
 #   endif
 #endif /* wxUSE_WXHTML_HELP */
@@ -1167,6 +1185,15 @@
 #       define wxUSE_DATAOBJ 1
 #   endif
 #endif /* wxUSE_CLIPBOARD */
+
+#if wxUSE_WX_RESOURCES && !wxUSE_PROLOGIO
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxr resources require PrologIO"
+#   else
+#       undef wxUSE_PROLOGIO
+#       define wxUSE_PROLOGIO 1
+#   endif
+#endif /* wxUSE_WX_RESOURCES */
 
 #endif /* wxUSE_GUI */
 

@@ -123,7 +123,7 @@ long wxTreeCtrl::GetChild(long item) const
     return 0;
 }
 
-long wxTreeCtrl::GetParent(long item) const
+long wxTreeCtrl::GetItemParent(long item) const
 {
     // TODO
     return 0;

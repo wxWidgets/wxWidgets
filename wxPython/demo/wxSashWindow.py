@@ -31,7 +31,7 @@ class TestSashWindow(wxPanel):
         win.SetOrientation(wxLAYOUT_HORIZONTAL)
         win.SetAlignment(wxLAYOUT_TOP)
         win.SetBackgroundColour(wxColour(255, 0, 0))
-        win.SetSashVisible(wxSASH_BOTTOM, true)
+        win.SetSashVisible(wxSASH_BOTTOM, True)
 
         self.topWindow = win
 
@@ -44,7 +44,7 @@ class TestSashWindow(wxPanel):
         win.SetOrientation(wxLAYOUT_HORIZONTAL)
         win.SetAlignment(wxLAYOUT_BOTTOM)
         win.SetBackgroundColour(wxColour(0, 0, 255))
-        win.SetSashVisible(wxSASH_TOP, true)
+        win.SetSashVisible(wxSASH_TOP, True)
 
         self.bottomWindow = win
 
@@ -57,7 +57,7 @@ class TestSashWindow(wxPanel):
         win.SetOrientation(wxLAYOUT_VERTICAL)
         win.SetAlignment(wxLAYOUT_LEFT)
         win.SetBackgroundColour(wxColour(0, 255, 0))
-        win.SetSashVisible(wxSASH_RIGHT, TRUE)
+        win.SetSashVisible(wxSASH_RIGHT, True)
         win.SetExtraBorderSize(10)
         textWindow = wxTextCtrl(win, -1, "", wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE|wxSUNKEN_BORDER)
@@ -74,7 +74,7 @@ class TestSashWindow(wxPanel):
         win.SetOrientation(wxLAYOUT_VERTICAL)
         win.SetAlignment(wxLAYOUT_LEFT)
         win.SetBackgroundColour(wxColour(0, 255, 255))
-        win.SetSashVisible(wxSASH_RIGHT, TRUE)
+        win.SetSashVisible(wxSASH_RIGHT, True)
 
         self.leftWindow2 = win
 
@@ -114,17 +114,13 @@ def runTest(frame, nb, log):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 overview = """\
 """
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])

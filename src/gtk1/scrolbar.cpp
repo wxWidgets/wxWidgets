@@ -180,6 +180,8 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
 
     PostCreation();
 
+    SetBestSize(size);
+
     SetBackgroundColour( parent->GetBackgroundColour() );
 
     Show( TRUE );

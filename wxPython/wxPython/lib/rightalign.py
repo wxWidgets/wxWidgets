@@ -28,6 +28,9 @@ Hope this can help someone, as much as this list helps me.
 
 Josu Oyanguren
 Ubera Servicios Informáticos.
+
+
+P.S.  This only works well on wxMSW.
 """
 
 from wxPython.wx import *

@@ -68,6 +68,7 @@ public:
            virtual void SendSizeEvent(void);
            virtual void SetIcon(const wxIcon& rIcon);
            virtual void SetIcons(const wxIconBundle& rIcons);
+                   bool SetShape(const wxRegion& rRegion);
 
            virtual bool Show(bool bShow = TRUE);
            virtual bool ShowFullScreen( bool bShow

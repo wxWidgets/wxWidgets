@@ -34,7 +34,7 @@ static void getRange(unsigned int start,
 }
 
 static bool IsStreamCommentStyle(int style) {
-	return style == SCE_C_COMMENT || 
+	return style == SCE_C_COMMENT ||
 		style == SCE_C_COMMENTDOC ||
 		style == SCE_C_COMMENTDOCKEYWORD ||
 		style == SCE_C_COMMENTDOCKEYWORDERROR;
@@ -50,7 +50,7 @@ static int classifyWordPascal(unsigned int start, unsigned int end, /*WordList &
 
 	WordList& keywords = *keywordlists[0];
 	WordList& classwords = *keywordlists[1];
-	
+
 	char s[100];
 	getRange(start, end, styler, s, sizeof(s));
 
@@ -119,7 +119,7 @@ static void ColourisePascalDoc(unsigned int startPos, int length, int initStyle,
 	styler.StartSegment(startPos);
 	for (unsigned int i = startPos; i < lengthDoc; i++) {
 		char ch = chNext;
-		
+
 		chNext = styler.SafeGetCharAt(i + 1);
 
 		if ((ch == '\r' && chNext != '\n') || (ch == '\n')) {
@@ -329,7 +329,7 @@ static void FoldPascalDoc(unsigned int startPos, int length, int initStyle, Word
 			levelPrev = levelCurrent;
 			visibleChars = 0;
 		}
-		
+
 		if (!isspacechar(ch))
 			visibleChars++;
 	}
@@ -339,4 +339,10 @@ static void FoldPascalDoc(unsigned int startPos, int length, int initStyle, Word
 	styler.SetLevel(lineCurrent, levelPrev | flagsNext);
 }
 
-LexerModule lmPascal(SCLEX_PASCAL, ColourisePascalDoc, "pascal", FoldPascalDoc);
+static const char * const pascalWordListDesc[] = {
+	"Keywords",
+	"Classwords",
+	0
+};
+
+LexerModule lmPascal(SCLEX_PASCAL, ColourisePascalDoc, "pascal", FoldPascalDoc, pascalWordListDesc);

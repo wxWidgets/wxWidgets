@@ -15,18 +15,18 @@
  */
 class SVector {
 	enum { allocSize = 4000 };
-	
+
 	int *v;				///< The vector
 	unsigned int size;	///< Number of elements allocated
 	unsigned int len;	///< Number of elements used in vector
 	bool allocFailure;	///< A memory allocation call has failed
-	
+
 	/** Internally allocate more elements than the user wants
 	 * to avoid thrashing the memory allocator. */
 	void SizeTo(int newSize) {
 		if (newSize < allocSize)
 			newSize += allocSize;
-		else 
+		else
 			newSize = (newSize * 3) / 2;
 		int* newv = new int[newSize];
 		if (!newv) {
@@ -44,7 +44,7 @@ class SVector {
 		delete []v;
 		v = newv;
 	}
-	
+
 public:
 	SVector() {
 		allocFailure = false;

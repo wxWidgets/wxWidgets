@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /subsystem:console /machine:I386 ..\..\lib\wxbase232u.lib
+# ADD LINK32 kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib /nologo /subsystem:console /machine:I386 ..\..\lib\wxbase233u.lib
 
 !IF "$(CFG)" == "console - Win32 Debug Unicode DLL"
 
@@ -76,7 +76,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept ..\..\lib\wxbase232ud.lib
+# ADD LINK32 kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept ..\..\lib\wxbase233ud.lib
 
 !IF "$(CFG)" == "console - Win32 Release Unicode"
 
@@ -99,7 +99,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /subsystem:console /machine:I386 ..\..\lib\zlib.lib ..\..\lib\regex.lib ..\..\lib\wxbaseu.lib
+# ADD LINK32 kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib /nologo /subsystem:console /machine:I386 ..\..\lib\zlib.lib ..\..\lib\regex.lib ..\..\lib\wxbaseu.lib
 
 !IF "$(CFG)" == "console - Win32 Debug Unicode"
 
@@ -122,7 +122,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept ..\..\lib\zlibd.lib ..\..\lib\regexd.lib ..\..\lib\wxbaseud.lib
+# ADD LINK32 kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept ..\..\lib\zlibd.lib ..\..\lib\regexd.lib ..\..\lib\wxbaseud.lib
 
 !IF "$(CFG)" == "console - Win32 Release DLL"
 
@@ -145,7 +145,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /subsystem:console /machine:I386 ..\..\lib\wxbase232.lib
+# ADD LINK32 kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib /nologo /subsystem:console /machine:I386 ..\..\lib\wxbase233.lib
 
 !IF "$(CFG)" == "console - Win32 Debug DLL"
 
@@ -168,7 +168,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept ..\..\lib\wxbase232d.lib
+# ADD LINK32 kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept ..\..\lib\wxbase233d.lib
 
 !IF "$(CFG)" == "console - Win32 Release"
 
@@ -191,7 +191,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /subsystem:console /machine:I386 ..\..\lib\zlib.lib ..\..\lib\regex.lib ..\..\lib\wxbase.lib
+# ADD LINK32 kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib /nologo /subsystem:console /machine:I386 ..\..\lib\zlib.lib ..\..\lib\regex.lib ..\..\lib\wxbase.lib
 
 !IF "$(CFG)" == "console - Win32 Debug"
 
@@ -214,7 +214,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept ..\..\lib\zlibd.lib ..\..\lib\regexd.lib ..\..\lib\wxbased.lib
+# ADD LINK32 kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept ..\..\lib\zlibd.lib ..\..\lib\regexd.lib ..\..\lib\wxbased.lib
 
 !ENDIF 
 

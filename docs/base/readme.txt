@@ -25,20 +25,22 @@ threads, sockets and much more. Some of the other utility classes allow you to
 parse the command line, limit the number of instances of your program
 executing simultaneously (portably!) and so on.
 
+
 1. Requirements and supported platforms
 --------------------------------------
 
  wxBase can be compiled and used under Win32, mostly any modern Unix system
-(probably including Mac OS X but it wasn't tested there), VMS and BeOS (this
-release couldn't be tested under these platforms neither so you might
-encounter some problems but they should be easy to solve - please contact us
-in this case!)
+(including Mac OS X), VMS and BeOS (this release couldn't be tested under
+these platforms so you might encounter some problems but they should be easy
+to solve -- please contact us in this case!)
 
  It is written without using any modern C++ features (such as templates,
 exceptions, namespaces) for maximal portability and so you shouldn't have
 problems compiling it with any C++ compiler at all. However, we only provide
-the project files for Microsoft Visual C++ 6.0 for Win32 (any contributions
-are welcome!) - but our Unix makefiles will work with any compiler.
+the project files for Microsoft Visual C++ 6.0 and make files for Borland C++
+for Win32 (any contributions are welcome!) -- but our Unix makefiles should
+work with any compiler.
+
 
 2. Installing under Win32
 -------------------------
@@ -49,23 +51,26 @@ or Unicode mode for a total of 8 possibilities.
 
 a) Using Visual C++ 6.0
 
-   Simply open the src/wxBase.dsw file in MSDEV and build it. When it is
-done you can also open samples/console/console.dsp project and build it as
-well.
+   Simply open the src/wxBase.dsw file in MSDEV and build it (you may need to
+right click on wxBase in the project tree to make it the active project). When
+it is done you can also open samples/console/console.dsp project and build it
+as well.
 
 b) Cygwin
 
    Please refer to the Unix section below
 
 c) Borland
-   Please refer to the docs/msw/install.txt. The console sample compiles and runs
-   but does not pass all tests (04 sept 02)
+
+   Please refer to the docs/msw/install.txt. The console sample compiles and
+   runs but does not pass all tests (as of Sep 4, 2002)
 
 d) Other compilers
 
    Unfortunately we don't have the makefiles for any other compilers yet.
 Please contact us if you would like to help us with creating one for the
 compiler you use.
+
 
 3. Installing under Unix/BeOS
 -----------------------------
@@ -74,12 +79,13 @@ NB: If you're building wxBase from the wxWindows distribution and not from a
     separate wxBase one you will need to add "--disable-gui" to configure
     arguments below!
 
-Please note that GNU make is required to build wxBase!
+Please note that GNU make may be required to build wxBase, please use it if
+you get any errors from the native Unix make.
 
 The recommended way to build wxBase is:
 
 	% cd ..../wxWindows
-	% mkdir base-release
+	% mkdir base-release # or any other directory of your liking
 	% cd base-release
 	% ../configure
 	# ignore the error messages about missing samples
@@ -120,6 +126,6 @@ namely:
 								 Vadim Zeitlin
 
 
-This file is accurate for the version 2.3.2 of wxBase. It was last modified on
-Dec 11, 2001.
+This file is accurate for the version 2.4.1 of wxBase. It was last modified on
+June 13, 2003.
 

@@ -19,30 +19,29 @@ varaibles and PATH entries.
 Continue with item c) below.
 
 
-b) If using the GNU Mingw32 or GNU Cygwin32 compilers
+b) If using the MinGW or Cygwin compilers
 
-You can get Mingw32 from  http://www.mingw.org
+You can get MinGW from  http://www.mingw.org/
 
-Cygwin32 is available at  http://www.cygwin.com
+Cygwin is available at  http://sources.redhat.com/cygwin/
 
 The makefile might have small problems with Cygwin's tools
-so it is recommended to use Mingw32 and its toolchain instead
+so it is recommended to use MinGW and its toolchain instead
 if possible.
 
 -> Set your path so that it includes the directory
    where your compiler and tools reside
 
--> If your are using an old Mingw32 version (gcc-2.95 or older),
+-> If your are using an old MinGW version (gcc-2.95 or older),
    you might need to fix some headers with the patches contained
    in the wxWin\Mingw32-gcc295.patches file. PLEASE APPLY THESE
    PATCHES BY HAND! There are apparently a few different versions
    of the headers floating around. Note that these patches are
-   not needed if you are using Mingw32 gcc-2.95.2 or newer.
+   not needed if you are using MinGW gcc-2.95.2 or newer.
   
 -> Edit wx/src/makeg95.env and set the MINGW32 variable at the top of
-   the file to either 1 (you have Mingw32) or 0 (you have Cygwin32).
-   If using MINGW32, also set the MINGW32VERSION variable
-   appropiately.
+   the file to either 1 (you have MinGW) or 0 (you have Cygwin).
+   Also set the MINGW32VERSION variable appropiately.
 
 
 c) Build instructions
@@ -51,19 +50,8 @@ c) Build instructions
    into c:\wxWin
 -> Copy c:\wxWin\include\wx\msw\setup0.h
    to   c:\wxWin\include\wx\msw\setup.h
--> Edit c:\wxWin\include\wx\msw\setup.h so that
-   most features are enabled (i.e. defined to 1), for example:
-   #define wxUSE_ODBC          0
-   #define wxUSE_SOCKETS       1
-   #define wxUSE_HTML          1
-   #define wxUSE_THREADS       1
-   #define wxUSE_FS_INET       0
-   #define wxUSE_FS_ZIP        1
-   #define wxUSE_BUSYINFO      1
-   #define wxUSE_DYNLIB_CLASS  1
-   #define wxUSE_ZIPSTREAM     1
-   #define wxUSE_LIBJPEG       1
-   #define wxUSE_LIBPNG        1
+-> Edit c:\wxWin\include\wx\msw\setup.h to choose
+   the features you would like to compile wxWindows with[out].
 
    and std iostreams are disabled with
    #define wxUSE_STD_IOSTREAM   0
@@ -71,6 +59,8 @@ c) Build instructions
 -> type: cd c:\wxWin\src\msw
 -> type: make -f makefile.g95  (if using GNU tools)
 or type: nmake -f makefile.vc   (if using MS VC++)
+
+   See also docs/msw/install.txt for additional compilation options.
 
 d) Borland (including free command line tools)
    Download tools from http://www.borland.com/downloads/
@@ -117,11 +107,10 @@ yet complete).
 III) Windows using configure
 ----------------------------------------
 
-Take a look at Unix->Windows cross compiling. With minor
-modifications, this should work in Windows if you've got the cygnus
-utilities (bash, GNU make, etc) and either mingw32 or cygwin32 installed.
-See http://www.cygnus.com for these programs, or go straight to their
-ftp server at ftp://sourceware.cygnus.com/pub/cygwin/.
+wxWindows can be built on Windows using MSYS (see
+http://www.mingw.org/), which is a POSIX build environment
+for Windows. With MSYS you can just ./configure && make (see also VII,
+Unix->Windows cross-compiling using configure).
 
 Of course, you can also build the library using plain makefiles (see
 section I).
@@ -168,17 +157,17 @@ VI) OS/2
 VII) Unix->Windows cross-compiling using configure
 --------------------------------------------------
 
-First you'll need a cross-compiler; linux glibc binaries of mingw32 and
-cygwin32 (both based on egcs) can be found at
+First you'll need a cross-compiler; linux glibc binaries of MinGW and
+Cygwin (both based on egcs) can be found at
 ftp://ftp.objsw.com/pub/crossgcc/linux-x-win32. Alternative binaries,
 based on the latest MinGW release can be found at
-http://members.telering.at/jessich/mingw/mingwcross/mingw_cross.html 
+http://members.telering.at/jessich/mingw/mingwcross/mingw_cross.html
 Otherwise you can compile one yourself.
 
-[ A Note about cygwin32 and mingw32: the main difference is that cygwin32
+[ A Note about Cygwin and MinGW: the main difference is that Cygwin
 binaries are always linked against cygwin.dll. This dll encapsulates most
 standard Unix C extensions, which is very handy if you're porting unix
-software to windows. However, wxMSW doesn't need this, so mingw32 is
+software to windows. However, wxMSW doesn't need this, so MinGW is
 preferable if you write portable C(++). ]
 
 You might want to build both Unix and Windows binaries in the same source
@@ -203,7 +192,7 @@ yourself:
    DLLTOOL=i586-mingw32-dlltool LD=i586-mingw32-ld NM=i586-mingw32-nm \
    ../configure --host=i586-mingw32 --with-mingw
 
-(all assuming you're using mingw32)
+(all assuming you're using MinGW)
 By default this will compile a DLL, if you want a static library,
 specify --disable-shared.
 
@@ -215,7 +204,7 @@ will be a compile error :-)
 NB: if you are using a very old compiler you risk to get quite a few warnings
     about "ANSI C++ forbids implicit conversion from 'void *'" in all places
     where va_arg macro is used. This is due to a bug in (some versions of)
-    mingw32 headers which may be corrected by upgrading your compier,
+    MinGW headers which may be corrected by upgrading your compier,
     otherwise you might edit the file
 
     ${install_prefix}/lib/gcc-lib/i586-mingw32/egcs-2.91.57/include/stdarg.h
@@ -238,7 +227,7 @@ typedef void *__gnuc_va_list;
     __gnuc_va_list is char *.
 
 If this is successful, you end up with a wx23_2.dll/libwx23_2.a in win32/lib
-( or just libwx_msw.a if you opted for a static build ).
+(or just libwx_msw.a if you opted for a static build).
 Now try building the minimal sample:
 
 -> cd samples/minimal

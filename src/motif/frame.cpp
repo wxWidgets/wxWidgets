@@ -383,6 +383,12 @@ wxFrame::~wxFrame()
         m_frameStatusBar = NULL;
     }
 
+    if (m_frameToolBar)
+    {
+        delete m_frameToolBar;
+        m_frameToolBar = NULL;
+    }
+
     DestroyChildren();
 
     if (m_workArea)
@@ -391,6 +397,11 @@ wxFrame::~wxFrame()
 
         XtDestroyWidget ((Widget) m_workArea);
     }
+
+    // We need to destroy the base class icons here before we stop
+    // the event loop. This is a hack until we have a real top level
+    // window (which would be responsible for killing the event loop).
+    m_icons.m_icons.Empty();
 
     if (m_frameWidget)
     {

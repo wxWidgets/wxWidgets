@@ -212,7 +212,7 @@ bool wxAnimationPlayer::GetTransparentColour(wxColour& col) const
 }
 
 // Play the frame
-bool wxAnimationPlayer::PlayFrame(int frame, wxWindow& window, wxPoint& pos)
+bool wxAnimationPlayer::PlayFrame(int frame, wxWindow& window, const wxPoint& pos)
 {
     wxMemoryDC dc;
     dc.SelectObject(m_backingStore);

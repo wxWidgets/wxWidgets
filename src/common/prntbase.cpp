@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:       wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -37,7 +37,8 @@
 #include "wx/stattext.h"
 #include "wx/intl.h"
 #include "wx/textdlg.h"
-#endif
+#include "wx/sizer.h"
+#endif // !WX_PRECOMP
 
 #include "wx/prntbase.h"
 #include "wx/dcprint.h"
@@ -47,8 +48,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <wx/sizer.h>
-                                         
 #ifdef __WXMSW__
     #include "wx/msw/private.h"
     #include <commdlg.h>
@@ -371,9 +370,9 @@ void wxPreviewControlBar::OnGoto(void)
             wxString strPrompt;
             wxString strPage;
 
-            strPrompt.Printf( _("%d...%d"),
+            strPrompt.Printf( wxT("%d...%d"),
                 preview->GetMinPage(), preview->GetMaxPage());
-            strPage.Printf( _("%d"), preview->GetCurrentPage() );
+            strPage.Printf( wxT("%d"), preview->GetCurrentPage() );
 
             strPage =
                 wxGetTextFromUser( strPrompt, _("Goto Page"), strPage);
@@ -398,6 +397,7 @@ void wxPreviewControlBar::CreateButtons()
 {
     SetSize(0, 0, 400, 40);
 
+#if wxUSE_CONSTRAINTS
     /*
     #ifdef __WXMSW__
     int fontSize = 9;
@@ -468,18 +468,18 @@ void wxPreviewControlBar::CreateButtons()
 
     if (m_buttonFlags & wxPREVIEW_GOTO)
     {
-        m_gotoPageButton = new wxButton(this, wxID_PREVIEW_GOTO, wxT("Goto..."), wxPoint(x, y),
+        m_gotoPageButton = new wxButton(this, wxID_PREVIEW_GOTO, _("Goto..."), wxPoint(x, y),
             wxSize(buttonWidth, buttonHeight));
         x += gap + buttonWidth;
     }
 
     if (m_buttonFlags & wxPREVIEW_ZOOM)
     {
-        static const char *choices[] =
+        static const wxChar *choices[] =
         {
-            "10%", "15%", "20%", "25%", "30%", "35%", "40%", "45%", "50%", "55%",
-            "60%", "65%", "70%", "75%", "80%", "85%", "90%", "95%", "100%", "110%",
-            "120%", "150%", "200%"
+            wxT("10%"), wxT("15%"), wxT("20%"), wxT("25%"), wxT("30%"), wxT("35%"), wxT("40%"), wxT("45%"), wxT("50%"), wxT("55%"),
+            wxT("60%"), wxT("65%"), wxT("70%"), wxT("75%"), wxT("80%"), wxT("85%"), wxT("90%"), wxT("95%"), wxT("100%"), wxT("110%"),
+            wxT("120%"), wxT("150%"), wxT("200%")
         };
 
         int n = WXSIZEOF(choices);
@@ -500,14 +500,77 @@ void wxPreviewControlBar::CreateButtons()
         SetZoomControl(m_printPreview->GetZoom());
     }
 
-    //  m_closeButton->SetDefault();
+#else
+
+    // Use sizers (backported from wxWindows CVS head).
+    wxBoxSizer *item0 = new wxBoxSizer( wxHORIZONTAL );
+    
+    int smallButtonWidth = 45;
+    
+    m_closeButton = new wxButton( this, wxID_PREVIEW_CLOSE, _("&Close"), wxDefaultPosition, wxDefaultSize, 0 );
+    item0->Add( m_closeButton, 0, wxALIGN_CENTRE|wxALL, 5 );
+    
+    if (m_buttonFlags & wxPREVIEW_PRINT)
+    {
+        m_printButton = new wxButton( this, wxID_PREVIEW_PRINT, _("&Print..."), wxDefaultPosition, wxDefaultSize, 0 );
+        item0->Add( m_printButton, 0, wxALIGN_CENTRE|wxALL, 5 );
+    }
+    
+    if (m_buttonFlags & wxPREVIEW_FIRST)
+    {
+        m_firstPageButton = new wxButton( this, wxID_PREVIEW_FIRST, _("|<<"), wxDefaultPosition, wxSize(smallButtonWidth,-1), 0 );
+        item0->Add( m_firstPageButton, 0, wxALIGN_CENTRE|wxALL, 5 );
+    }
+    
+    if (m_buttonFlags & wxPREVIEW_PREVIOUS)
+    {
+        m_previousPageButton = new wxButton( this, wxID_PREVIEW_PREVIOUS, _("<<"), wxDefaultPosition, wxSize(smallButtonWidth,-1), 0 );
+        item0->Add( m_previousPageButton, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 );
+    }
+    
+    if (m_buttonFlags & wxPREVIEW_NEXT)
+    {
+        m_nextPageButton = new wxButton( this, wxID_PREVIEW_NEXT, _(">>"), wxDefaultPosition, wxSize(smallButtonWidth,-1), 0 );
+        item0->Add( m_nextPageButton, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 );
+    }
+    
+    if (m_buttonFlags & wxPREVIEW_LAST)
+    {
+        m_lastPageButton = new wxButton( this, wxID_PREVIEW_LAST, _(">>|"), wxDefaultPosition, wxSize(smallButtonWidth,-1), 0 );
+        item0->Add( m_lastPageButton, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 );
+    }
+    
+    if (m_buttonFlags & wxPREVIEW_GOTO)
+    {
+        m_gotoPageButton = new wxButton( this, wxID_PREVIEW_GOTO, _("&Goto..."), wxDefaultPosition, wxDefaultSize, 0 );
+        item0->Add( m_gotoPageButton, 0, wxALIGN_CENTRE|wxALL, 5 );
+    }
+    
+    if (m_buttonFlags & wxPREVIEW_ZOOM)
+    {
+        wxString choices[] = 
+        {
+            wxT("10%"), wxT("15%"), wxT("20%"), wxT("25%"), wxT("30%"), wxT("35%"), wxT("40%"), wxT("45%"), wxT("50%"), wxT("55%"),
+                wxT("60%"), wxT("65%"), wxT("70%"), wxT("75%"), wxT("80%"), wxT("85%"), wxT("90%"), wxT("95%"), wxT("100%"), wxT("110%"),
+                wxT("120%"), wxT("150%"), wxT("200%")
+        };
+        int n = WXSIZEOF(choices);
+        
+        m_zoomControl = new wxChoice( this, wxID_PREVIEW_ZOOM, wxDefaultPosition, wxSize(70,-1), n, choices, 0 );
+        item0->Add( m_zoomControl, 0, wxALIGN_CENTRE|wxALL, 5 );
+        SetZoomControl(m_printPreview->GetZoom());
+    }
+
+    SetSizer(item0);
+    item0->Fit(this);
+#endif
 }
 
 void wxPreviewControlBar::SetZoomControl(int zoom)
 {
-    char buf[20];
-    sprintf(buf, "%d%%", zoom);
-// Someone is calling methods that do no exist in wxChoice!! So I'll just comment out for VA for now
+    wxChar buf[20];
+    wxSprintf( buf, wxT("%d%%"), zoom );
+
     if (m_zoomControl)
         m_zoomControl->SetStringSelection(buf);
 }

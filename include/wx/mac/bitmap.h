@@ -203,7 +203,7 @@ public:
   inline WXHICON GetHICON() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_hIcon : 0); }
   
   WXHMETAFILE GetPict() const;
-
+  void SetPict(WXHMETAFILE pict) ;
   bool FreeResource(bool force = FALSE);
 };
 #endif

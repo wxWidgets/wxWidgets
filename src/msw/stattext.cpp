@@ -41,6 +41,10 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
            long style,
            const wxString& name)
 {
+    // By default, a static text should have no border.
+    if ((style & wxBORDER_MASK) == wxBORDER_DEFAULT)
+        style |= wxBORDER_NONE;
+
   SetName(name);
   if (parent) parent->AddChild(this);
 
@@ -59,10 +63,9 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
   m_windowStyle = style;
 
-  long msStyle = WS_CHILD | WS_VISIBLE;
+  WXDWORD exStyle = 0;
+  WXDWORD msStyle = MSWGetStyle(GetWindowStyle(), & exStyle) ;
 
-  if ( m_windowStyle & wxCLIP_SIBLINGS )
-    msStyle |= WS_CLIPSIBLINGS;
   if (m_windowStyle & wxALIGN_CENTRE)
     msStyle |= SS_CENTER;
   else if (m_windowStyle & wxALIGN_RIGHT)
@@ -70,12 +73,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
   else
     msStyle |= SS_LEFT;
 
-  // Even with extended styles, need to combine with WS_BORDER
-  // for them to look right.
-  if ( wxStyleHasBorder(m_windowStyle) )
-    msStyle |= WS_BORDER;
-
-  m_hWnd = (WXHWND)::CreateWindowEx(MakeExtendedStyle(m_windowStyle), wxT("STATIC"), (const wxChar *)label,
+  m_hWnd = (WXHWND)::CreateWindowEx(exStyle, wxT("STATIC"), (const wxChar *)label,
                          msStyle,
                          0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                          wxGetInstance(), NULL);
@@ -97,10 +95,15 @@ wxSize wxStaticText::DoGetBestSize() const
     int widthTextMax = 0, widthLine,
         heightTextTotal = 0, heightLineDefault = 0, heightLine = 0;
 
+    bool lastWasAmpersand = FALSE;
+
     wxString curLine;
-    for ( const wxChar *pc = text; ; pc++ ) {
-        if ( *pc == wxT('\n') || *pc == wxT('\0') ) {
-            if ( !curLine ) {
+    for ( const wxChar *pc = text; ; pc++ )
+    {
+        if ( *pc == wxT('\n') || *pc == wxT('\0') )
+        {
+            if ( !curLine )
+            {
                 // we can't use GetTextExtent - it will return 0 for both width
                 // and height and an empty line should count in height
                 // calculation
@@ -111,22 +114,44 @@ wxSize wxStaticText::DoGetBestSize() const
 
                 heightTextTotal += heightLineDefault;
             }
-            else {
+            else
+            {
                 GetTextExtent(curLine, &widthLine, &heightLine);
                 if ( widthLine > widthTextMax )
                     widthTextMax = widthLine;
                 heightTextTotal += heightLine;
             }
 
-            if ( *pc == wxT('\n') ) {
+            if ( *pc == wxT('\n') )
+            {
                curLine.Empty();
             }
-            else {
+            else
+            {
                // the end of string
                break;
             }
         }
-        else {
+        else
+        {
+            // we shouldn't take into account the '&' which just introduces the
+            // mnemonic characters and so are not shown on the screen -- except
+            // when it is preceded by another '&' in which case it stands for a
+            // literal ampersand
+            if ( *pc == _T('&') )
+            {
+                if ( !lastWasAmpersand )
+                {
+                    lastWasAmpersand = TRUE;
+
+                    // skip the statement adding pc to curLine below
+                    continue;
+                }
+
+                // it is a literal ampersand
+                lastWasAmpersand = FALSE;
+            }
+
             curLine += *pc;
         }
     }
@@ -170,16 +195,4 @@ bool wxStaticText::SetFont(const wxFont& font)
     return ret;
 }
 
-long wxStaticText::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
-{
-    // Ensure that static items get messages. Some controls don't like this
-    // message to be intercepted (e.g. RichEdit), hence the tests.
-    // Messes up display with Windows XP, apparently, so have to
-    // do explicit hit-testing in wxWindowMSW.
-#if 0
-    if (nMsg == WM_NCHITTEST)
-        return (long)HTCLIENT;
-#endif
-    return wxWindow::MSWWindowProc(nMsg, wParam, lParam);
-}
 #endif // wxUSE_STATTEXT

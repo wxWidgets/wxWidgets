@@ -104,6 +104,7 @@ static wxFontEncoding gs_encodings[] =
     wxFONTENCODING_CP437,
     wxFONTENCODING_UTF7,
     wxFONTENCODING_UTF8,
+    wxFONTENCODING_EUC_JP,
 };
 
 // the descriptions for them
@@ -140,6 +141,7 @@ static const wxChar* gs_encodingDescs[] =
     wxTRANSLATE( "Windows/DOS OEM (CP 437)" ),
     wxTRANSLATE( "Unicode 7 bit (UTF-7)" ),
     wxTRANSLATE( "Unicode 8 bit (UTF-8)" ),
+    wxTRANSLATE( "Extended Unix Codepage for Japanese (EUC-JP)" ),
 };
 
 // and the internal names (these are not translated on purpose!)
@@ -176,8 +178,12 @@ static const wxChar* gs_encodingNames[] =
     wxT( "windows-437" ),
     wxT( "utf-7" ),
     wxT( "utf-8" ),
+    wxT( "euc-jp" ),
 };
 
+wxCOMPILE_TIME_ASSERT( WXSIZEOF(gs_encodingDescs) == WXSIZEOF(gs_encodings) &&
+                       WXSIZEOF(gs_encodingNames) == WXSIZEOF(gs_encodings),
+                       EncodingsArraysNotInSync );
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -386,10 +392,7 @@ wxString wxFontMapper::GetEncodingDescription(wxFontEncoding encoding)
         return _("Default encoding");
     }
 
-    size_t count = WXSIZEOF(gs_encodingDescs);
-
-    wxASSERT_MSG( count == WXSIZEOF(gs_encodings),
-                  wxT("inconsitency detected - forgot to update one of the arrays?") );
+    const size_t count = WXSIZEOF(gs_encodingDescs);
 
     for ( size_t i = 0; i < count; i++ )
     {
@@ -413,10 +416,7 @@ wxString wxFontMapper::GetEncodingName(wxFontEncoding encoding)
         return _("default");
     }
 
-    size_t count = WXSIZEOF(gs_encodingNames);
-
-    wxASSERT_MSG( count == WXSIZEOF(gs_encodings),
-                  wxT("inconsistency detected - forgot to update one of the arrays?") );
+    const size_t count = WXSIZEOF(gs_encodingNames);
 
     for ( size_t i = 0; i < count; i++ )
     {
@@ -521,6 +521,25 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
         {
             encoding = wxFONTENCODING_UTF8;
         }
+        else if ( cs == wxT("GB2312") )
+        {
+            encoding = wxFONTENCODING_GB2312;
+        }
+        else if ( cs == wxT("BIG5") )
+        {
+            encoding = wxFONTENCODING_BIG5;
+        }
+        else if ( cs == wxT("SJIS") ||
+                  cs == wxT("SHIFT_JIS") ||
+                  cs == wxT("SHIFT-JIS") )
+        {
+            encoding = wxFONTENCODING_SHIFT_JIS;
+        }
+        else if ( cs == wxT("EUC-JP") ||
+                  cs == wxT("EUC_JP") )
+        {
+            encoding = wxFONTENCODING_EUC_JP;
+        }
         else if ( cs == wxT("KOI8-R") ||
                   cs == wxT("KOI8-U") ||
                   cs == wxT("KOI8-RU") )
@@ -537,10 +556,35 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
             const wxChar *p = cs.c_str() + 3;
             if ( *p == wxT('-') )
                 p++;
+                
+            // printf( "iso %s\n", (const char*) cs.ToAscii() );
 
             unsigned int value;
             if ( wxSscanf(p, wxT("8859-%u"), &value) == 1 )
             {
+                // printf( "value %d\n", (int)value );
+   
+                // make it 0 based and check that it is strictly positive in
+                // the process (no such thing as iso8859-0 encoding)
+                if ( (value-- > 0) &&
+                     (value < wxFONTENCODING_ISO8859_MAX -
+                              wxFONTENCODING_ISO8859_1) )
+                {
+                    // it's a valid ISO8859 encoding
+                    value += wxFONTENCODING_ISO8859_1;
+                    encoding = (wxFontEncoding)value;
+                }
+            }
+        }
+        else if ( cs.Left(4) == wxT("8859") )
+        {
+            const wxChar *p = cs.c_str();
+            
+            unsigned int value;
+            if ( wxSscanf(p, wxT("8859-%u"), &value) == 1 )
+            {
+                // printf( "value %d\n", (int)value );
+   
                 // make it 0 based and check that it is strictly positive in
                 // the process (no such thing as iso8859-0 encoding)
                 if ( (value-- > 0) &&
@@ -630,10 +674,7 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
         msg.Printf(_("The charset '%s' is unknown. You may select\nanother charset to replace it with or choose\n[Cancel] if it cannot be replaced"), charset.c_str());
 
         // the list of choices
-        size_t count = WXSIZEOF(gs_encodingDescs);
-
-        wxASSERT_MSG( count == WXSIZEOF(gs_encodings),
-                      wxT("inconsitency detected - forgot to update one of the arrays?") );
+        const size_t count = WXSIZEOF(gs_encodingDescs);
 
         wxString *encodingNamesTranslated = new wxString[count];
 

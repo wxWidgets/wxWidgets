@@ -157,7 +157,7 @@ private:
     bool GetOrCreateTheme()
     {
         if ( !m_win32Theme )
-            m_win32Theme = wxTheme::Create("win32");
+            m_win32Theme = wxTheme::Create( wxT("win32") );
         return m_win32Theme != NULL;
     }
 private:

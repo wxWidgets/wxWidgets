@@ -47,9 +47,9 @@
 IMPLEMENT_CLASS(wxExtHelpController, wxHTMLHelpControllerBase)
 
 /// Name of environment variable to set help browser.
-#define   WXEXTHELP_ENVVAR_BROWSER   "WX_HELPBROWSER"
+#define   WXEXTHELP_ENVVAR_BROWSER   wxT("WX_HELPBROWSER")
 /// Is browser a netscape browser?
-#define   WXEXTHELP_ENVVAR_BROWSERISNETSCAPE "WX_HELPBROWSER_NS"
+#define   WXEXTHELP_ENVVAR_BROWSERISNETSCAPE wxT("WX_HELPBROWSER_NS")
 
 /**
    This class implements help via an external browser.
@@ -62,18 +62,17 @@ wxExtHelpController::wxExtHelpController(void)
    m_BrowserName = WXEXTHELP_DEFAULTBROWSER;
    m_BrowserIsNetscape = WXEXTHELP_DEFAULTBROWSER_IS_NETSCAPE;
 
-   char *browser = getenv(WXEXTHELP_ENVVAR_BROWSER);
+   wxChar *browser = wxGetenv(WXEXTHELP_ENVVAR_BROWSER);
    if(browser)
    {
       m_BrowserName = browser;
-      browser = getenv(WXEXTHELP_ENVVAR_BROWSERISNETSCAPE);
-      m_BrowserIsNetscape = browser && (atoi(browser) != 0);
+      browser = wxGetenv(WXEXTHELP_ENVVAR_BROWSERISNETSCAPE);
+      m_BrowserIsNetscape = browser && (wxAtoi(browser) != 0);
    }
 }
 
 
-void
-wxExtHelpController::SetBrowser(wxString const & browsername, bool isNetscape)
+void wxExtHelpController::SetBrowser(wxString const & browsername, bool isNetscape)
 {
    m_BrowserName = browsername;
    m_BrowserIsNetscape = isNetscape;
