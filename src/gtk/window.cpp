@@ -3743,15 +3743,13 @@ void wxWindowGTK::CaptureMouse()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
 
-    wxCHECK_RET( g_captureWindow == NULL, wxT("CaptureMouse called twice") );
-
     GdkWindow *window = (GdkWindow*) NULL;
     if (m_wxwindow)
         window = GTK_PIZZA(m_wxwindow)->bin_window;
     else
         window = GetConnectWidget()->window;
 
-    if (!window) return;
+    wxCHECK_RET( window, _T("CaptureMouse() failed") );
 
     wxCursor* cursor = & m_cursor;
     if (!cursor->Ok())
@@ -3774,7 +3772,7 @@ void wxWindowGTK::ReleaseMouse()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
 
-    wxCHECK_RET( g_captureWindow, wxT("ReleaseMouse called twice") );
+    wxCHECK_RET( g_captureWindow, wxT("can't release mouse - not captured") );
 
     GdkWindow *window = (GdkWindow*) NULL;
     if (m_wxwindow)

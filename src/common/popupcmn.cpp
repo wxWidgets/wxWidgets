@@ -187,10 +187,17 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
         m_child = this;
     }
 
+    // we can't capture mouse before the window is shown in wxGTL
+#ifdef __WXGTK__
+    Show();
+#endif
+
     m_child->CaptureMouse();
     m_child->PushEventHandler(new wxPopupWindowHandler(this));
 
+#ifndef __WXGTK__
     Show();
+#endif
 
     m_focus = winFocus ? winFocus : this;
     m_focus->PushEventHandler(new wxPopupFocusHandler(this));

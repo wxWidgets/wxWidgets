@@ -152,7 +152,11 @@ wxSize wxButton::DoGetBestClientSize() const
 
 void wxButton::DoDraw(wxControlRenderer *renderer)
 {
-    renderer->DrawButtonBorder();
+    if ( !(GetWindowStyle() & wxBORDER_NONE) )
+    {
+        renderer->DrawButtonBorder();
+    }
+
     renderer->DrawLabel(m_bitmap, m_marginBmpX, m_marginBmpY);
 }
 

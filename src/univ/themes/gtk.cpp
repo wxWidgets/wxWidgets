@@ -30,6 +30,7 @@
     #include "wx/dcmemory.h"
     #include "wx/window.h"
 
+    #include "wx/bmpbuttn.h"
     #include "wx/button.h"
     #include "wx/checkbox.h"
     #include "wx/listbox.h"
@@ -52,7 +53,7 @@
 // constants (to be removed, for testing only)
 // ----------------------------------------------------------------------------
 
-static const size_t BORDER_THICKNESS = 10;
+static const size_t BORDER_THICKNESS = 2;
 
 // ----------------------------------------------------------------------------
 // wxGTKRenderer: draw the GUI elements in GTK style
@@ -857,7 +858,7 @@ void wxGTKRenderer::DrawBorder(wxDC& dc,
     switch ( border )
     {
         case wxBORDER_SUNKEN:
-            for ( width = 0; width < BORDER_THICKNESS; width++ )
+            for ( width = 0; width < BORDER_THICKNESS / 2; width++ )
             {
                 DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
                 DrawShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
@@ -865,24 +866,33 @@ void wxGTKRenderer::DrawBorder(wxDC& dc,
             break;
 
         case wxBORDER_STATIC:
-            DrawShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
+            for ( width = 0; width < BORDER_THICKNESS / 2; width++ )
+            {
+                DrawShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
+            }
             break;
 
         case wxBORDER_RAISED:
-            for ( width = 0; width < BORDER_THICKNESS; width++ )
+            for ( width = 0; width < BORDER_THICKNESS / 2; width++ )
             {
                 DrawRaisedBorder(dc, &rect);
             }
             break;
 
         case wxBORDER_DOUBLE:
-            DrawShadedRect(dc, &rect, m_penLightGrey, m_penBlack);
-            DrawShadedRect(dc, &rect, m_penHighlight, m_penDarkGrey);
-            DrawRect(dc, &rect, m_penLightGrey);
+            for ( width = 0; width < BORDER_THICKNESS / 3; width++ )
+            {
+                DrawShadedRect(dc, &rect, m_penLightGrey, m_penBlack);
+                DrawShadedRect(dc, &rect, m_penHighlight, m_penDarkGrey);
+                DrawRect(dc, &rect, m_penLightGrey);
+            }
             break;
 
         case wxBORDER_SIMPLE:
-            DrawRect(dc, &rect, m_penBlack);
+            for ( width = 0; width < BORDER_THICKNESS; width++ )
+            {
+                DrawRect(dc, &rect, m_penBlack);
+            }
             break;
 
         default:
@@ -910,11 +920,11 @@ wxRect wxGTKRenderer::GetBorderDimensions(wxBorder border) const
 
         case wxBORDER_SIMPLE:
         case wxBORDER_STATIC:
-            width = 1;
+            width = BORDER_THICKNESS;
             break;
 
         case wxBORDER_DOUBLE:
-            width = 3;
+            width = 3*BORDER_THICKNESS;
             break;
 
         default:
@@ -954,15 +964,18 @@ void wxGTKRenderer::DrawTextBorder(wxDC& dc,
 {
     wxRect rect = rectOrig;
 
-    if ( flags & wxCONTROL_FOCUSED )
+    for ( size_t width = 0; width < BORDER_THICKNESS / 2; width++ )
     {
-        DrawRect(dc, &rect, m_penBlack);
-        DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
-    }
-    else // !focused
-    {
-        DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
-        DrawAntiShadedRect(dc, &rect, m_penBlack, m_penHighlight);
+        if ( flags & wxCONTROL_FOCUSED )
+        {
+            DrawRect(dc, &rect, m_penBlack);
+            DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
+        }
+        else // !focused
+        {
+            DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
+            DrawAntiShadedRect(dc, &rect, m_penBlack, m_penHighlight);
+        }
     }
 
     if ( rectIn )
@@ -980,8 +993,12 @@ void wxGTKRenderer::DrawButtonBorder(wxDC& dc,
     {
         // button pressed: draw a black border around it and an inward shade
         DrawRect(dc, &rect, m_penBlack);
-        DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
-        DrawAntiShadedRect(dc, &rect, m_penBlack, m_penDarkGrey);
+
+        for ( size_t width = 0; width < BORDER_THICKNESS / 2; width++ )
+        {
+            DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
+            DrawAntiShadedRect(dc, &rect, m_penBlack, m_penDarkGrey);
+        }
     }
     else
     {
@@ -999,10 +1016,13 @@ void wxGTKRenderer::DrawButtonBorder(wxDC& dc,
         }
 
         // now draw a normal button
-        DrawShadedRect(dc, &rect, m_penHighlight, m_penBlack);
-        DrawAntiShadedRect(dc, &rect,
-                           wxPen(GetBackgroundColour(flags), 0, wxSOLID),
-                           m_penDarkGrey);
+        for ( size_t width = 0; width < BORDER_THICKNESS / 2; width++ )
+        {
+            DrawShadedRect(dc, &rect, m_penHighlight, m_penBlack);
+            DrawAntiShadedRect(dc, &rect,
+                               wxPen(GetBackgroundColour(flags), 0, wxSOLID),
+                               m_penDarkGrey);
+        }
     }
 
     if ( rectIn )
@@ -2280,6 +2300,14 @@ int wxGTKRenderer::PixelToScrollbar(const wxScrollBar *scrollbar,
 
 void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
 {
+#if wxUSE_BMPBUTTON
+    if ( wxDynamicCast(window, wxBitmapButton) )
+    {
+        size->x += 4;
+        size->y += 4;
+    } else
+#endif // wxUSE_BMPBUTTON
+#if wxUSE_BUTTON
     if ( wxDynamicCast(window, wxButton) )
     {
         if ( !(window->GetWindowStyle() & wxBU_EXACTFIT) )
@@ -2293,8 +2321,9 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
             // button border width
             size->y += 4;
         }
-    }
-    else if ( wxDynamicCast(window, wxScrollBar) )
+    } else
+#endif wxUSE_BUTTON
+    if ( wxDynamicCast(window, wxScrollBar) )
     {
         // we only set the width of vert scrollbars and height of the
         // horizontal ones

@@ -76,25 +76,35 @@ public:
     wxComboButton(wxComboControl *combo)
         : wxBitmapButton(combo->GetParent(), -1, wxNullBitmap,
                          wxDefaultPosition, wxDefaultSize,
-                         wxBORDER_NONE)
+                         wxBORDER_NONE | wxBU_EXACTFIT)
     {
         m_combo = combo;
 
-        wxBitmap bmpNormal, bmpPressed, bmpDisabled;
+        wxBitmap bmpNormal, bmpFocus, bmpPressed, bmpDisabled;
 
-        GetRenderer()->GetComboBitmaps(&bmpNormal, &bmpPressed, &bmpDisabled);
+        GetRenderer()->GetComboBitmaps(&bmpNormal,
+                                       &bmpFocus,
+                                       &bmpPressed,
+                                       &bmpDisabled);
+
         SetBitmapLabel(bmpNormal);
-        SetBitmapFocus(bmpNormal);
-        SetBitmapSelected(bmpPressed);
-        SetBitmapDisabled(bmpDisabled);
+        SetBitmapFocus(bmpFocus.Ok() ? bmpFocus : bmpNormal);
+        SetBitmapSelected(bmpPressed.Ok() ? bmpPressed : bmpNormal);
+        SetBitmapDisabled(bmpDisabled.Ok() ? bmpDisabled : bmpNormal);
 
-        SetSize(bmpNormal.GetWidth(), bmpNormal.GetHeight());
+        SetBestSize(wxDefaultSize);
     }
 
 protected:
     void OnButton(wxCommandEvent& event) { m_combo->ShowPopup(); }
 
-    virtual wxSize DoGetBestSize() const { return GetSize(); }
+    virtual wxSize DoGetBestClientSize() const
+    {
+        const wxBitmap& bmp = GetBitmapLabel();
+
+        return wxSize(bmp.GetWidth(), bmp.GetHeight());
+
+    }
 
 private:
     wxComboControl *m_combo;
@@ -241,7 +251,8 @@ bool wxComboControl::Create(wxWindow *parent,
         m_heightPopup = size.y - DoGetBestSize().y;
     }
 
-    DoSetSize(pos.x, pos.y, size.x, size.y);
+    SetBestSize(size);
+    Move(pos);
 
     // create the popup window immediately here to allow creating the controls
     // with parent == GetPopupWindow() from the derived class ctor
@@ -300,7 +311,7 @@ void wxComboControl::DoMoveWindow(int x, int y, int width, int height)
     width -= rectBorders.x + rectBorders.width;
     height -= rectBorders.y + rectBorders.height;
 
-    wxSize sizeBtn = m_btn->GetSize();
+    wxSize sizeBtn = m_btn->GetBestSize();
 
     wxCoord wText = width - sizeBtn.x;
     m_text->SetSize(x, y, wText, height);

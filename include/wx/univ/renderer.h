@@ -250,6 +250,7 @@ public:
 
     // return the bitmaps to use for combobox button
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
+                                 wxBitmap *bmpFocus,
                                  wxBitmap *bmpPressed,
                                  wxBitmap *bmpDisabled) = 0;
 
@@ -572,9 +573,11 @@ public:
         { m_renderer->DrawMenuSeparator(dc, y, geomInfo); }
 #endif
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
+                                 wxBitmap *bmpFocus,
                                  wxBitmap *bmpPressed,
                                  wxBitmap *bmpDisabled)
-        { m_renderer->GetComboBitmaps(bmpNormal, bmpPressed, bmpDisabled); }
+        { m_renderer->GetComboBitmaps(bmpNormal, bmpFocus,
+                                      bmpPressed, bmpDisabled); }
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window)
         { m_renderer->AdjustSize(size, window); }
