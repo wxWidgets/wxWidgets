@@ -769,6 +769,11 @@
 #define wxUSE_ZIPSTREAM 1
 
 /*
+ * wxPalette class
+ */
+#define wxUSE_PALETTE 1
+
+/*
  * wxImage support
  */
 #define wxUSE_IMAGE 1
@@ -996,7 +1001,28 @@
  */
 #define wxUSE_MS_HTML_HELP 0
 
+/* Define if you have wcsrtombs() function */
+#define HAVE_WCSRTOMBS 1
+
 /* Define this if you are using gtk and gdk contains support for X11R6 XIM */
 #undef HAVE_XIM
+
+/* --------------------------------------------------------*
+ *  This stuff is static, it doesn't get modified directly
+ *  by configure.
+ */
+
+#include "wx/chkconf.h"
+
+/*
+    define some constants identifying wxWindows version in more details t
+    just the version number
+*/
+
+/* wxLogChain class available */
+#define wxHAS_LOG_CHAIN 1
+
+/* define this when wxDC::Blit() respects SetDeviceOrigin() in wxGTK */
+#define wxHAS_WORKING_GTK_DC_BLIT 1
 
 #endif /* __WX_SETUP_H__ */
