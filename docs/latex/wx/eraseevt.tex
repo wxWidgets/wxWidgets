@@ -23,7 +23,8 @@ function that takes a wxEraseEvent argument.
 
 \wxheading{Remarks}
 
-If the {\bf m\_DC} member is non-NULL, draw into this device context.
+Use the {\bf m\_DC} device context to draw into, don't create wxPaintDC in 
+the event handler.
 
 \wxheading{See also}
 
@@ -41,12 +42,11 @@ Constructor.
 
 \member{wxDC*}{m\_dc}
 
-The device context associated with the erase event (may be NULL).
+The device context associated with the erase event.
 
 \membersection{wxEraseEvent::GetDC}\label{wxeraseeventgetdc}
 
 \constfunc{wxDC*}{GetDC}{\void}
 
-Returns the device context to draw into. If this is non-NULL, you should draw
-into it to perform the erase operation.
+Returns the device context to draw into.
 
