@@ -15,7 +15,7 @@ program_dir = samples/dragimag
 
 PROGRAM=test
 
-DATAFILES = backgrnd.png shape1.png shape2.png shape3.png
+DATAFILES = backgrnd.png shape01.png shape02.png shape03.png
 
 OBJECTS=$(PROGRAM).o
 

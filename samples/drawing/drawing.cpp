@@ -60,7 +60,8 @@ enum ScreenToShow
     Show_Lines,
     Show_Polygons,
     Show_Mask,
-    Show_Ops
+    Show_Ops,
+    Show_Regions
 };
 
 // ----------------------------------------------------------------------------
@@ -148,6 +149,7 @@ protected:
     void DrawText(wxDC& dc);
     void DrawImages(wxDC& dc);
     void DrawWithLogicalOps(wxDC& dc);
+    void DrawRegions(wxDC& dc);
     void DrawDefault(wxDC& dc);
 
 private:
@@ -178,7 +180,8 @@ enum
     File_ShowPolygons,
     File_ShowMask,
     File_ShowOps,
-    MenuShow_Last = File_ShowOps,
+    File_ShowRegions,
+    MenuShow_Last = File_ShowRegions,
 
     MenuOption_First,
 
@@ -891,6 +894,25 @@ void MyCanvas::DrawWithLogicalOps(wxDC& dc)
     }
 }
 
+void MyCanvas::DrawRegions(wxDC& dc)
+{
+    dc.SetBrush( *wxWHITE_BRUSH );
+    dc.SetPen( *wxTRANSPARENT_PEN );
+    dc.DrawRectangle( 10,10,310,310 );
+    
+    wxRegion region( 20,20,100,270 );
+    dc.SetClippingRegion( region );
+    
+    dc.SetBrush( *wxRED_BRUSH );
+    dc.DrawRectangle( 10,10,310,310 );
+    
+    region = wxRegion( 120,30,100,270 );
+    dc.SetClippingRegion( region );
+    
+    dc.SetBrush( *wxGREY_BRUSH );
+    dc.DrawRectangle( 10,10,310,310 );
+}
+
 void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 {
     wxPaintDC dc(this);
@@ -912,7 +934,7 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
         }
     }
 
-    dc.Clear();
+//    dc.Clear();
 
     if ( m_owner->m_textureBackground) {
         dc.SetPen(*wxMEDIUM_GREY_PEN);
@@ -924,6 +946,10 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
     {
         case Show_Default:
             DrawDefault(dc);
+            break;
+
+        case Show_Regions:
+            DrawRegions(dc);
             break;
 
         case Show_Text:
@@ -997,6 +1023,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(File_ShowPolygons, "&Polygons screen\tF4");
     menuFile->Append(File_ShowMask, "wx&Mask screen\tF5");
     menuFile->Append(File_ShowOps, "&ROP screen\tF6");
+    menuFile->Append(File_ShowRegions, "Re&gions screen\tF6");
     menuFile->AppendSeparator();
     menuFile->Append(File_About, "&About...\tCtrl-A", "Show about dialog");
     menuFile->AppendSeparator();
