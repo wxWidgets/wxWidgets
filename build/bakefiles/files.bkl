@@ -978,7 +978,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="X11_LOWLEVEL_HDR" hints="files">
     $(XWIN_LOWLEVEL_HDR)
-    src/generic/timer.h
     wx/x11/app.h
     wx/x11/bitmap.h
     wx/x11/brush.h
