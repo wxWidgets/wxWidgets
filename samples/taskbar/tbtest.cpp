@@ -103,12 +103,12 @@ BEGIN_EVENT_TABLE(MyTaskBarIcon, wxTaskBarIcon)
     EVT_MENU(PU_EXIT,    MyTaskBarIcon::OnMenuExit)
 END_EVENT_TABLE()
 
-void MyTaskBarIcon::OnMenuRestore(wxEvent& )
+void MyTaskBarIcon::OnMenuRestore(wxCommandEvent& )
 {
     dialog->Show(TRUE);
 }
 
-void MyTaskBarIcon::OnMenuExit(wxEvent& )
+void MyTaskBarIcon::OnMenuExit(wxCommandEvent& )
 {
     dialog->Close(TRUE);
 }

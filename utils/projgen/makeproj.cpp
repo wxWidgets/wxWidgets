@@ -391,6 +391,24 @@ void MyApp::GenerateSamples(const wxString& dir)
         wxMessageBox(msg);
     }
 
+    // hhp2cached
+    project.SetIncludeDirs(wxStringList("../../include", 0));
+    project.SetResourceIncludeDirs(wxStringList("../../include", 0));
+    project.SetLibDirs(wxStringList("../../lib", 0));
+    project.SetDebugLibDirs(wxStringList("../../src/Debug", "../../src/jpeg/Debug", "../../src/tiff/Debug", 0));
+    project.SetReleaseLibDirs(wxStringList("../../src/Release", "../../src/jpeg/Release", "../../src/tiff/Release", 0));
+
+    project.SetProjectName("hhp2cachedVC");
+    project.SetTargetName("hhp2cached");
+    project.SetProjectPath(dir + wxString("/utils/hhp2cached"));
+    project.SetSourceFiles(wxStringList("hhp2cached.cpp", 0));
+
+    if (!project.GenerateVCProject())
+    {
+        wxString msg("Could not generate hhp2cached project");
+        wxMessageBox(msg);
+    }
+
     // wxTreeLayout sample
 
     project.SetIncludeDirs(wxStringList("../../../include", 0));

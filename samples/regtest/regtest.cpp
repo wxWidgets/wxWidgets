@@ -269,11 +269,11 @@ bool RegApp::OnInit()
 {
   // create the main frame window and show it
   RegFrame *frame = new RegFrame(NULL, "wxRegKey Test", 50, 50, 600, 350);
-  frame->Show(true);
+  frame->Show(TRUE);
   
   SetTopWindow(frame);
 
-  return true;
+  return TRUE;
 }
 
 // ----------------------------------------------------------------------------
@@ -589,7 +589,7 @@ bool RegTreeCtrl::TreeNode::OnExpand()
   if ( IsRoot() ) {
     // we're the root key
     m_pTree->AddStdKeys();
-    return true;
+    return TRUE;
   }
 
   if ( Parent()->IsRoot() ) {
@@ -603,7 +603,7 @@ bool RegTreeCtrl::TreeNode::OnExpand()
 
   if ( !m_pKey->Open() ) {
     wxLogError("The key '%s' can't be opened.", FullName());
-    return false;
+    return FALSE;
   }
 
   // enumeration variables
@@ -666,7 +666,7 @@ bool RegTreeCtrl::TreeNode::OnExpand()
     bCont = m_pKey->GetNextValue(str, l);
   }
 
-  return true;
+  return TRUE;
 }
 
 void RegTreeCtrl::TreeNode::OnCollapse()
@@ -834,7 +834,7 @@ bool RegTreeCtrl::IsKeySelected() const
   long lCurrent = GetSelection();
   TreeNode *pCurrent = (TreeNode *)GetItemData(lCurrent);
 
-  wxCHECK( pCurrent != NULL, false );
+  wxCHECK( pCurrent != NULL, FALSE );
 
   return pCurrent->IsKey();
 }

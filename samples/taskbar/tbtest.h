@@ -22,8 +22,8 @@ public:
     virtual void OnLButtonDClick(wxEvent&);
     virtual void OnRButtonDClick(wxEvent&);
 
-    void OnMenuRestore(wxEvent&);
-    void OnMenuExit(wxEvent&);
+    void OnMenuRestore(wxCommandEvent&);
+    void OnMenuExit(wxCommandEvent&);
 
 DECLARE_EVENT_TABLE()
 };

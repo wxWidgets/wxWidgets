@@ -152,25 +152,8 @@ misc/gs_afm/*.afm
 
 utils/*.txt
 utils/make*
-
-utils/xpmshow/src/makefile*
-utils/xpmshow/src/*.cpp
-utils/xpmshow/src/*.h
-utils/xpmshow/src/*.def
-utils/xpmshow/src/*.rc
-utils/xpmshow/src/*.xpm
-utils/xpmshow/src/*.bmp
-utils/xpmshow/src/*.ico
-
-utils/wxhelp/src/*.cpp
-utils/wxhelp/src/*.h
-utils/wxhelp/src/makefile*
-utils/wxhelp/src/*.xbm
-utils/wxhelp/src/*.xpm
-utils/wxhelp/src/*.txt
-utils/wxhelp/src/*.ico
-utils/wxhelp/src/*.def
-utils/wxhelp/src/*.rc
+utils/configure
+utils/configure.in
 
 utils/wxgraph/src/*.cpp
 utils/wxgraph/src/*.c
@@ -212,6 +195,25 @@ utils/serialize/makefile*
 utils/serialize/*.xbm
 utils/serialize/*.xpm
 utils/serialize/*.txt
+
+utils/hhp2cache/*.h
+utils/hhp2cache/*.cpp
+utils/hhp2cache/*.def
+utils/hhp2cache/*.rc
+utils/hhp2cache/makefile*
+utils/hhp2cache/*.xbm
+utils/hhp2cache/*.xpm
+utils/hhp2cache/*.txt
+
+utils/makegen/*.h
+utils/makegen/*.cpp
+utils/makegen/*.def
+utils/makegen/*.rc
+utils/makegen/makefile*
+utils/makegen/*.xbm
+utils/makegen/*.xpm
+utils/makegen/*.txt
+utils/makegen/templates/make*
 
 utils/dialoged/Makefile
 utils/dialoged/src/bitmaps/*.xbm
@@ -256,6 +258,8 @@ utils/wxMMedia2/sample/*.txt
 
 samples/*.txt
 samples/makefile*
+samples/configure
+samples/configure.in
 
 samples/config/*.cpp
 samples/config/*.h
@@ -1003,6 +1007,10 @@ samples/exec/*.ico
 samples/exec/*.xpm
 samples/exec/*.txt
 
+samples/makefile*
+samples/configure
+samples/configure.in
+
 demos/bombs/*.cpp
 demos/bombs/*.h
 demos/bombs/*.def
@@ -1058,4 +1066,37 @@ demos/poem/*.xpm
 demos/poem/*.ico
 demos/poem/*.bmp
 demos/poem/*.dat
+
+demos/dbbrowse/*.cpp
+demos/dbbrowse/*.h
+demos/dbbrowse/*.def
+demos/dbbrowse/*.rc
+demos/dbbrowse/*.inf
+demos/dbbrowse/*.txt
+demos/dbbrowse/makefile*
+demos/dbbrowse/*.xbm
+demos/dbbrowse/*.xpm
+demos/dbbrowse/*.ico
+demos/dbbrowse/*.bmp
+demos/dbbrowse/bitmaps/*.bmp
+demos/dbbrowse/bitmaps/*.ico
+demos/dbbrowse/bitmaps/*.xpm
+demos/dbbrowse/de/*.po
+demos/dbbrowse/de/*.mo
+demos/dbbrowse/de/*.cmd
+demos/dbbrowse/de/*.cfg
+demos/dbbrowse/fr/*.po
+demos/dbbrowse/fr/*.mo
+demos/dbbrowse/fr/*.cmd
+demos/dbbrowse/fr/*.cfg
+demos/dbbrowse/help.cz/*.mo
+demos/dbbrowse/help.de/*.htm
+demos/dbbrowse/help.de/*.hhc
+demos/dbbrowse/help.de/*.hhp
+demos/dbbrowse/help.de/*.hhk
+demos/dbbrowse/help.png/*.png
+demos/dbbrowse/help.std/*.htm
+demos/dbbrowse/help.std/*.hhc
+demos/dbbrowse/help.std/*.hhp
+demos/dbbrowse/help.std/*.hhk
 

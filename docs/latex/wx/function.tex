@@ -260,7 +260,7 @@ Under MS Windows, the current drive is also changed if {\it dir} contains a driv
 
 \membersection{::wxSplitPath}\label{wxsplitfunction}
 
-\func{void}{wxSplitPath}{\param{const char *}{ fullname}, \param{const wxString *}{ path}, \param{const wxString *}{ name}, \param{const wxString *}{ ext}}
+\func{void}{wxSplitPath}{\param{const char *}{ fullname}, \param{wxString *}{ path}, \param{wxString *}{ name}, \param{wxString *}{ ext}}
 
 This function splits a full file name into components: the path (including possible disk/drive
 specification under Windows), the base name and the extension. Any of the output parameters
