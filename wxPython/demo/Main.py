@@ -600,7 +600,7 @@ class wxPythonDemo(wx.Frame):
         splitter2.SetMinimumPaneSize(20)
 
 
-        # Make the splitter on the right expand the top wind when resized
+        # Make the splitter on the right expand the top window when resized
         def SplitterOnSize(evt):
             splitter = evt.GetEventObject()
             sz = splitter.GetSize()
