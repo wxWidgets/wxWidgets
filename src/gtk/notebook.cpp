@@ -374,13 +374,6 @@ bool wxNotebook::AddPage(wxWindow* win, const wxString& text,
   wxCHECK_MSG(page != NULL, FALSE,
               "Can't add a page whose parent is not the notebook!");
 
-  // then set the attributes
-  page->m_text = text;
-  if ( page->m_text.IsEmpty() )
-    page->m_text = "";
-  page->m_image = imageId;
-  gtk_label_set(page->m_label, page->m_text);
-
   // create the image if any
   if ( imageId != -1 ) {
     wxASSERT( m_imageList != NULL );
@@ -393,6 +386,20 @@ bool wxNotebook::AddPage(wxWindow* win, const wxString& text,
 
     gtk_widget_show(pixmapwid);
   }
+
+  // then set the attributes
+  page->m_text = text;
+  if ( page->m_text.IsEmpty() )
+    page->m_text = "";
+  page->m_image = imageId;
+  page->m_label = (GtkLabel *)gtk_label_new(page->m_text);
+  gtk_box_pack_start(GTK_BOX(page->m_box), (GtkWidget *)page->m_label,
+                     FALSE, FALSE, 3);
+
+  // @@@: what does this do? do we still need it?
+  // gtk_misc_set_alignment(GTK_MISC(page->m_label), 0.0, 0.5);
+
+  gtk_widget_show((GtkWidget *)page->m_label);
 
   if ( bSelect ) {
     SetSelection(GetPageCount());
@@ -421,15 +428,9 @@ void wxNotebook::AddChild( wxWindow *win )
   page->m_box = gtk_hbox_new (FALSE, 0);
   gtk_container_border_width(GTK_CONTAINER(page->m_box), 2);
 
-  page->m_label = (GtkLabel *)gtk_label_new("");
-  gtk_box_pack_start(GTK_BOX(page->m_box), (GtkWidget *)page->m_label,
-                     FALSE, FALSE, 3);
-  gtk_widget_show((GtkWidget *)page->m_label);
-
   page->m_client = win;
   gtk_notebook_append_page( GTK_NOTEBOOK(m_widget), win->m_widget,
                             page->m_box );
-  gtk_misc_set_alignment(GTK_MISC(page->m_label), 0.0, 0.5);
 
   page->m_page =
     (GtkNotebookPage*) (g_list_last(GTK_NOTEBOOK(m_widget)->children)->data);
