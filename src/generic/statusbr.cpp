@@ -184,7 +184,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 #ifdef __WXPM__
   wxColour                          vColor;
 
-  vColor.InitFromName("DIM GREY");
+  vColor.InitFromName("GREY");
   ::WinFillRect(dc.m_hPS, &dc.m_vRclPaint, vColor.GetPixel());
 #endif
 
@@ -264,21 +264,21 @@ void wxStatusBarGeneric::DrawField(wxDC& dc, int i)
         rect.x + rect.width, rect.y);
 #else
     // Right
-    dc.DrawLine(rect.x + rect.width, rect.y - 3,
-                rect.x + rect.width, rect.y + rect.height);
+    dc.DrawLine(rect.x + rect.width, rect.y,
+                rect.x + rect.width, rect.y + rect.height + 2);
     dc.SetPen(m_mediumShadowPen);
-    dc.DrawLine(rect.x + rect.width + 1, rect.y - 3,
-                rect.x + rect.width + 1, rect.y + rect.height);
-    dc.DrawLine(rect.x + rect.width + 2, rect.y - 3,
-                rect.x + rect.width + 2, rect.y + rect.height);
+    dc.DrawLine(rect.x + rect.width + 1, rect.y,
+                rect.x + rect.width + 1, rect.y + rect.height + 2);
+    dc.DrawLine(rect.x + rect.width + 2, rect.y,
+                rect.x + rect.width + 2, rect.y + rect.height + 2);
     // Top
-    dc.DrawLine(rect.x + rect.width + 2, rect.y + rect.height + 2,
-                rect.x - 2, rect.y + rect.height + 2);
-    dc.DrawLine(rect.x + rect.width + 1, rect.y + rect.height + 1,
-                rect.x - 2, rect.y + rect.height + 1);
+    dc.DrawLine(rect.x + rect.width + 2, rect.y,
+                rect.x - 2, rect.y);
+    dc.DrawLine(rect.x + rect.width + 1, rect.y - 1,
+                rect.x - 2, rect.y - 1);
     dc.SetPen(m_hilightPen);
-    dc.DrawLine(rect.x + rect.width, rect.y + rect.height,
-                rect.x - 2, rect.y + rect.height);
+    dc.DrawLine(rect.x + rect.width, rect.y - 2,
+                rect.x - 2, rect.y - 2);
 
 #endif
 
