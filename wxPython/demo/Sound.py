@@ -22,9 +22,9 @@ class TestPanel(wx.Panel):
 
     def OnButton1(self, evt):
         try:
-            self.sound = wx.Sound(opj('data/anykey.wav'))
+            sound = wx.Sound(opj('data/anykey.wav'))
             self.log.write("before Play...\n")
-            self.sound.Play(wx.SOUND_SYNC)
+            sound.Play(wx.SOUND_SYNC)
             self.log.write("...after Play\n")
         except NotImplementedError, v:
             wx.MessageBox(str(v), "Exception Message")
@@ -33,14 +33,14 @@ class TestPanel(wx.Panel):
     def OnButton2(self, evt):
         try:
             if True:
-                self.sound = wx.Sound(opj('data/plan.wav'))
+                sound = wx.Sound(opj('data/plan.wav'))
             else:
                 # sounds can also be loaded from a buffer object
                 data = open(opj('data/plan.wav'), 'rb').read()
-                self.sound = wx.SoundFromData(data)
+                sound = wx.SoundFromData(data)
                 
             self.log.write("before Play...\n")
-            self.sound.Play(wx.SOUND_ASYNC)
+            sound.Play(wx.SOUND_ASYNC)
             wx.YieldIfNeeded()
             self.log.write("...after Play\n")
         except NotImplementedError, v:
@@ -54,9 +54,12 @@ class TestPanel(wx.Panel):
                             style=wx.OPEN)
         if dlg.ShowModal() == wx.ID_OK:
             try:
-                #self.sound = wx.Sound(dlg.GetPath())
-                #self.sound.Play()
+                #sound = wx.Sound(dlg.GetPath())
+                #sound.Play()
+
+                # another way to do it.
                 wx.Sound.PlaySound(dlg.GetPath())
+                
             except NotImplementedError, v:
                 wx.MessageBox(str(v), "Exception Message")
         dlg.Destroy()
