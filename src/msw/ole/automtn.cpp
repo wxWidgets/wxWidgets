@@ -200,7 +200,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     excep.pfnDeferredFillIn = NULL;
 
     hr = ((IDispatch*)m_dispatchPtr)->Invoke(dispIds[0], IID_NULL, LOCALE_SYSTEM_DEFAULT,
-                        action, &dispparams, vReturnPtr, &excep, &uiArgErr);
+                        (WORD)action, &dispparams, vReturnPtr, &excep, &uiArgErr);
 
     for (i = 0; i < namedArgStringCount; i++)
     {
@@ -617,7 +617,7 @@ bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
         wxDateTime date( variant.GetDateTime() );
         oleVariant.vt = VT_DATE;
 
-        if (!OleDateFromTm(date.GetYear(), date.GetMonth(), date.GetDay(),
+        if (!OleDateFromTm((WORD)date.GetYear(), date.GetMonth(), date.GetDay(),
                 date.GetHour(), date.GetMinute(), date.GetSecond(), oleVariant.date))
             return false;
     }
@@ -702,7 +702,12 @@ bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
             if (!TmFromOleDate(oleVariant.date, tmTemp))
                 return false;
 
-            wxDateTime date(tmTemp.tm_yday, (wxDateTime::Month) tmTemp.tm_mon, tmTemp.tm_year, tmTemp.tm_hour, tmTemp.tm_min, tmTemp.tm_sec);
+            wxDateTime date((wxDateTime::wxDateTime_t) tmTemp.tm_yday,
+                            (wxDateTime::Month) tmTemp.tm_mon,
+                            tmTemp.tm_year,
+                            (wxDateTime::wxDateTime_t) tmTemp.tm_hour,
+                            (wxDateTime::wxDateTime_t) tmTemp.tm_min,
+                            (wxDateTime::wxDateTime_t) tmTemp.tm_sec);
 
             variant = date;
 #endif
@@ -1108,7 +1113,7 @@ static void ReleaseVariant(VARIANTARG *pvarg)
     VARIANTARG _huge *pvargArray;
     long lLBound, lUBound, l;
 
-    vt = pvarg->vt & 0xfff;        // mask off flags
+    vt = (VARTYPE)(pvarg->vt & 0xfff);        // mask off flags
 
     // check if an array.  If so, free its contents, then the array itself.
     if (V_ISARRAY(pvarg))

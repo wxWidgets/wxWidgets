@@ -255,7 +255,7 @@ void wxColourDatabase::Initialize()
     static const struct wxColourDesc
     {
         const wxChar *name;
-        int r,g,b;
+        unsigned char r,g,b;
     }
     wxColourTable[] =
     {

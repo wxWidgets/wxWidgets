@@ -178,7 +178,7 @@ void wxFindReplaceDialogImpl::InitString(const wxString& str,
 
     *ppStr = new wxChar[len];
     wxStrcpy(*ppStr, str);
-    *pLen = len;
+    *pLen = (WORD)len;
 }
 
 void wxFindReplaceDialogImpl::InitFindWhat(const wxString& str)

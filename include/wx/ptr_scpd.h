@@ -40,26 +40,27 @@
 */
 
 #ifdef __WATCOMC__
-    #define wxPRE_NO_WARNING_SCOPE  for(int i=0;i<1;i++)
-    #define wxPOST_NO_WARNING_SCOPE
+    #define wxFOR_ONCE(name)              for(int name=0; name<1; name++)
+    #define wxPRE_NO_WARNING_SCOPE(name)  wxFOR_ONCE(wxMAKE_UNIQUE_NAME(name))
+    #define wxPOST_NO_WARNING_SCOPE(name)
 #else
-    #define wxPRE_NO_WARNING_SCOPE  do
-    #define wxPOST_NO_WARNING_SCOPE while ( 0 )
+    #define wxPRE_NO_WARNING_SCOPE(name)  do
+    #define wxPOST_NO_WARNING_SCOPE(name) while ( 0 )
 #endif
 
 #define wxCHECKED_DELETE(ptr)                                                 \
-    wxPRE_NO_WARNING_SCOPE                                                    \
+    wxPRE_NO_WARNING_SCOPE(scope_var1)                                        \
     {                                                                         \
         typedef char complete[sizeof(*ptr)];                                  \
         delete ptr;                                                           \
-    } wxPOST_NO_WARNING_SCOPE
+    } wxPOST_NO_WARNING_SCOPE(scope_var1)
 
 #define wxCHECKED_DELETE_ARRAY(ptr)                                           \
-    wxPRE_NO_WARNING_SCOPE                                                    \
+    wxPRE_NO_WARNING_SCOPE(scope_var2)                                        \
     {                                                                         \
         typedef char complete[sizeof(*ptr)];                                  \
         delete [] ptr;                                                        \
-    } wxPOST_NO_WARNING_SCOPE
+    } wxPOST_NO_WARNING_SCOPE(scope_var2)
 
 /* These scoped pointers are *not* assignable and cannot be used
    within a container.  Look for wxDECLARE_SHARED_PTR for this

@@ -871,7 +871,7 @@ bool wxToolBar::Realize()
             TBBUTTONINFO tbbi;
             tbbi.cbSize = sizeof(tbbi);
             tbbi.dwMask = TBIF_SIZE;
-            tbbi.cx = size.x;
+            tbbi.cx = (WORD)size.x;
             if ( !::SendMessage(GetHwnd(), TB_SETBUTTONINFO,
                                 tool->GetId(), (LPARAM)&tbbi) )
             {

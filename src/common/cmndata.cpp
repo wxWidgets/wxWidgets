@@ -383,7 +383,7 @@ void wxPrintData::ConvertToNative()
 
         //// Orientation
 
-        devMode->dmOrientation = m_printOrientation;
+        devMode->dmOrientation = (short)m_printOrientation;
 
         //// Collation
 
@@ -392,7 +392,7 @@ void wxPrintData::ConvertToNative()
 
         //// Number of copies
 
-        devMode->dmCopies = m_printNoCopies;
+        devMode->dmCopies = (short)m_printNoCopies;
         devMode->dmFields |= DM_COPIES;
 
         //// Printer name
@@ -418,8 +418,8 @@ void wxPrintData::ConvertToNative()
         if (m_paperId == wxPAPER_NONE)
         {
             // DEVMODE is in tenths of a milimeter
-            devMode->dmPaperWidth = m_paperSize.x * 10;
-            devMode->dmPaperLength = m_paperSize.y * 10;
+            devMode->dmPaperWidth = (short)(m_paperSize.x * 10);
+            devMode->dmPaperLength = (short)(m_paperSize.y * 10);
             devMode->dmPaperSize = DMPAPER_USER;
             devMode->dmFields |= DM_PAPERWIDTH;
             devMode->dmFields |= DM_PAPERLENGTH;
@@ -431,7 +431,7 @@ void wxPrintData::ConvertToNative()
                 wxPrintPaperType* paper = wxThePrintPaperDatabase->FindPaperType(m_paperId);
                 if (paper)
                 {
-                    devMode->dmPaperSize = paper->GetPlatformId();
+                    devMode->dmPaperSize = (short)paper->GetPlatformId();
                     devMode->dmFields |= DM_PAPERSIZE;
                 }
             }
@@ -439,43 +439,43 @@ void wxPrintData::ConvertToNative()
 
         //// Duplex
 
-        int duplex;
+        short duplex;
         switch (m_duplexMode)
         {
-        case wxDUPLEX_HORIZONTAL: {
-            duplex = DMDUP_HORIZONTAL; break;
-                                  }
-        case wxDUPLEX_VERTICAL: {
-            duplex = DMDUP_VERTICAL; break;
-                                }
-        default:
-        case wxDUPLEX_SIMPLEX: {
-            duplex = DMDUP_SIMPLEX; break;
-                               }
+            case wxDUPLEX_HORIZONTAL:
+                duplex = DMDUP_HORIZONTAL;
+                break;
+            case wxDUPLEX_VERTICAL:
+                duplex = DMDUP_VERTICAL;
+                break;
+            default:
+            // in fact case wxDUPLEX_SIMPLEX:
+                duplex = DMDUP_SIMPLEX;
+                break;
         }
         devMode->dmDuplex = duplex;
         devMode->dmFields |= DM_DUPLEX;
 
         //// Quality
 
-        int quality;
+        short quality;
         switch (m_printQuality)
         {
-        case wxPRINT_QUALITY_MEDIUM: {
-            quality = DMRES_MEDIUM; break;
-                                     }
-        case wxPRINT_QUALITY_LOW: {
-            quality = DMRES_LOW; break;
-                                  }
-        case wxPRINT_QUALITY_DRAFT: {
-            quality = DMRES_DRAFT; break;
-                                    }
-        case wxPRINT_QUALITY_HIGH: {
-            quality = DMRES_HIGH; break;
-                                   }
-        default: {
-            quality = m_printQuality; break;
-                 }
+            case wxPRINT_QUALITY_MEDIUM:
+                quality = DMRES_MEDIUM;
+                break;
+            case wxPRINT_QUALITY_LOW:
+                quality = DMRES_LOW;
+                break;
+            case wxPRINT_QUALITY_DRAFT:
+                quality = DMRES_DRAFT;
+                break;
+            case wxPRINT_QUALITY_HIGH:
+                quality = DMRES_HIGH;
+                break;
+            default:
+                quality = (short)m_printQuality;
+                break;
         }
         devMode->dmPrintQuality = quality;
         devMode->dmFields |= DM_PRINTQUALITY;
@@ -499,7 +499,7 @@ void wxPrintData::ConvertToNative()
                 case wxPRINTBIN_FORMSOURCE:     devMode->dmDefaultSource = DMBIN_FORMSOURCE;    break;
 
                 default:
-                    devMode->dmDefaultSource = DMBIN_USER + m_bin - wxPRINTBIN_USER;
+                    devMode->dmDefaultSource = (short)(DMBIN_USER + m_bin - wxPRINTBIN_USER);
                     break;
             }
 

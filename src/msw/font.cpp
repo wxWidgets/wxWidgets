@@ -615,7 +615,7 @@ void wxNativeFontInfo::SetFamily(wxFontFamily family)
             facename = _T("MS Sans Serif");
     }
 
-    lf.lfPitchAndFamily = DEFAULT_PITCH | ff_family;
+    lf.lfPitchAndFamily = (BYTE)(DEFAULT_PITCH) | ff_family;
 
     if ( !wxStrlen(lf.lfFaceName) )
     {

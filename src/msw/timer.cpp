@@ -150,7 +150,7 @@ wxTimerProc(HWND WXUNUSED(hwnd),
             UINT idTimer,
             DWORD WXUNUSED(dwTime))
 {
-    wxTimerMap::iterator node = g_timerMap.find(idTimer);
+    wxTimerMap::iterator node = g_timerMap.find((unsigned long)idTimer);
 
     wxCHECK_RET( node != g_timerMap.end(), wxT("bogus timer id in wxTimerProc") );
 

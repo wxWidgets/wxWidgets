@@ -817,7 +817,8 @@ void wxMDIChildFrame::DoSetClientSize(int width, int height)
 
   MoveWindow(hWnd, point.x, point.y, actual_width, actual_height, (BOOL)true);
 
-  wxSizeEvent event(wxSize(width, height), m_windowId);
+  wxSize size(width, height);
+  wxSizeEvent event(size, m_windowId);
   event.SetEventObject( this );
   GetEventHandler()->ProcessEvent(event);
 }
@@ -1318,7 +1319,7 @@ void wxMDIChildFrame::OnIdle(wxIdleEvent& event)
     {
         Show(true);
     }
-    
+
     // MDI child frames get their WM_SIZE when they're constructed but at this
     // moment they don't have any children yet so all child windows will be
     // positioned incorrectly when they are added later - to fix this, we
