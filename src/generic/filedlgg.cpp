@@ -109,15 +109,21 @@ wxFileData::wxFileData( const wxString &name, const wxString &fname )
 
     struct stat buff;
     stat( m_fileName.fn_str(), &buff );
+    
+#ifndef __EMX__
     struct stat lbuff;
     lstat( m_fileName.fn_str(), &lbuff );
-
+    m_isLink = S_ISLNK( lbuff.st_mode );
     struct tm *t = localtime( &lbuff.st_mtime );
+#else
+    m_isLink = FALSE;
+    struct tm *t = localtime( &buff.st_mtime );
+#endif
+
 //  struct passwd *user = getpwuid( buff.st_uid );
 //  struct group *grp = getgrgid( buff.st_gid );
 
     m_isDir = S_ISDIR( buff.st_mode );
-    m_isLink = S_ISLNK( lbuff.st_mode );
     m_isExe = ((buff.st_mode & S_IXUSR ) == S_IXUSR );
 
     m_size = buff.st_size;

@@ -64,7 +64,7 @@
         #ifdef __SUN__
             int usleep(unsigned int usec);
         #else // !Sun
-        #ifdef __EMX
+        #ifdef __EMX__
             /* I copied this from the XFree86 diffs. AV. */
             #define INCL_DOSPROCESS
             #include <os2.h>

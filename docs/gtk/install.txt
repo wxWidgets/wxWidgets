@@ -151,11 +151,11 @@ START-UP! Just always use egcs and be happy.
 
 Please send comments and question about the OS/2 installation
 to Andrea Venturoli <a.ventu@flashnet.it> and patches to
-make the installation work (better) to me (Robert Roebling).
+make to me (Robert Roebling) or the wxWindows mailing list.
 
-You'll need OS/2 Warp (4.00FP#6), X-Free86/2 (3.3.3), 
-gtk+ (?), emx (0.9d fix 1), flex (2.5.4), yacc (1.8), 
-korn shell (5.2.13), Autoconf (?),  GNU file utilities (3.6), 
+You'll need OS/2 Warp (4.00FP#6), X-Free86/2 (3.3.3 or newer), 
+GTK+ (1.2.1 or newer), emx (0.9d fix 1), flex (2.5.4), yacc (1.8), 
+korn shell (5.2.13), Autoconf (2.13),  GNU file utilities (3.6), 
 GNU text utilities (1.3), GNU shell utilites (1.12), m4 (1.4), 
 sed (2.05), grep (2.0), Awk (3.0.3), GNU Make (3.76.1).
 
@@ -163,10 +163,16 @@ Open an OS/2 prompt and switch to the directory above.
 First set some global environment variables we need:
 
 SET CXXFLAGS=-Zmtd -D__ST_MT_ERRNO__
+SET CFLAGS=-Zmtd -D__ST_MT_ERRNO__
 SET OSTYPE=OS2X              
 SET COMSPEC=sh
 
 Notice you can choose whatever you want, if you don't like OS2X.
+
+After running configure, you'll have to apply to modifications manually
+to the created Makefile:
+- Replace all ":" with ";" in the VPATH variable
+- Replace "ley.yy.c" with "lexyy.c"
 
 * Building wxGTK on SGI
 --------------------------
