@@ -58,8 +58,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /dll /machine:I386 /out:"../lib/wxmsw232u.dll"
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /version:2.3 /dll /machine:I386 /out:"../lib/wxmsw232u.dll"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /dll /machine:I386 /out:"../lib/wxmsw233u.dll"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /version:2.3 /dll /machine:I386 /out:"../lib/wxmsw233u.dll"
 
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug Unicode DLL"
 
@@ -84,8 +84,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxmsw232ud.dll"
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /nologo /version:2.3 /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxmsw232ud.dll"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxmsw233ud.dll"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /nologo /version:2.3 /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxmsw233ud.dll"
 
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Release Unicode"
 
@@ -156,8 +156,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /dll /machine:I386 /out:"../lib/wxmsw232.dll"
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /version:2.3 /dll /machine:I386 /out:"../lib/wxmsw232.dll"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /dll /machine:I386 /out:"../lib/wxmsw233.dll"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /version:2.3 /dll /machine:I386 /out:"../lib/wxmsw233.dll"
 
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug DLL"
 
@@ -182,8 +182,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxmsw232d.dll"
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /nologo /version:2.3 /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxmsw232d.dll"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxmsw233d.dll"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /nologo /version:2.3 /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxmsw233d.dll"
 
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Release"
 
@@ -456,6 +456,10 @@ SOURCE=.\common\http.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\iffdecod.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\imagall.cpp
 # End Source File
 # Begin Source File
@@ -469,6 +473,10 @@ SOURCE=.\common\image.cpp
 # Begin Source File
 
 SOURCE=.\common\imaggif.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\imagiff.cpp
 # End Source File
 # Begin Source File
 
@@ -1682,6 +1690,10 @@ SOURCE=..\include\wx\dir.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\dirctrl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\dirdlg.h
 # End Source File
 # Begin Source File
@@ -1854,6 +1866,10 @@ SOURCE=..\include\wx\icon.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\iffdecod.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\imagbmp.h
 # End Source File
 # Begin Source File
@@ -1863,6 +1879,10 @@ SOURCE=..\include\wx\image.h
 # Begin Source File
 
 SOURCE=..\include\wx\imaggif.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\imagiff.h
 # End Source File
 # Begin Source File
 
@@ -2279,6 +2299,10 @@ SOURCE=..\include\wx\txtstrm.h
 # Begin Source File
 
 SOURCE=..\include\wx\types.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\unzip.h
 # End Source File
 # Begin Source File
 

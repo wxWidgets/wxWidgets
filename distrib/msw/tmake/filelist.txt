@@ -750,6 +750,7 @@ defs.h	WXH	Base
 dialog.h	WXH
 dialup.h	WXH
 dir.h	WXH	Base
+dirctrl.h	WXH
 dirdlg.h	WXH
 dnd.h	WXH
 docmdi.h	WXH

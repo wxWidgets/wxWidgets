@@ -297,6 +297,10 @@ SOURCE=.\common\http.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\iffdecod.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\imagall.cpp
 # End Source File
 # Begin Source File
@@ -310,6 +314,10 @@ SOURCE=.\common\image.cpp
 # Begin Source File
 
 SOURCE=.\common\imaggif.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\imagiff.cpp
 # End Source File
 # Begin Source File
 
@@ -1406,6 +1414,10 @@ SOURCE=..\include\wx\dir.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\dirctrl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\dirdlg.h
 # End Source File
 # Begin Source File
@@ -1578,6 +1590,10 @@ SOURCE=..\include\wx\icon.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\iffdecod.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\imagbmp.h
 # End Source File
 # Begin Source File
@@ -1587,6 +1603,10 @@ SOURCE=..\include\wx\image.h
 # Begin Source File
 
 SOURCE=..\include\wx\imaggif.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\imagiff.h
 # End Source File
 # Begin Source File
 
@@ -2003,6 +2023,10 @@ SOURCE=..\include\wx\txtstrm.h
 # Begin Source File
 
 SOURCE=..\include\wx\types.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\unzip.h
 # End Source File
 # Begin Source File
 
