@@ -187,15 +187,15 @@ case "${host}" in
   *-*-openbsd*)
     USE_BSD=1
     USE_OPENBSD=1
-    AC_DEFINE(__FREEBSD__)
     AC_DEFINE(__OPENBSD__)
+    AC_DEFINE(__BSD__)
     DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-netbsd*)
     USE_BSD=1
     USE_NETBSD=1
-    AC_DEFINE(__FREEBSD__)
     AC_DEFINE(__NETBSD__)
+    AC_DEFINE(__BSD__)
     DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-osf* )

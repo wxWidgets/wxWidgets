@@ -1239,11 +1239,11 @@ EOF
     USE_BSD=1
     USE_OPENBSD=1
     cat >> confdefs.h <<\EOF
-#define __FREEBSD__ 1
+#define __OPENBSD__ 1
 EOF
 
     cat >> confdefs.h <<\EOF
-#define __OPENBSD__ 1
+#define __BSD__ 1
 EOF
 
     DEFAULT_DEFAULT_wxUSE_GTK=1
@@ -1252,11 +1252,11 @@ EOF
     USE_BSD=1
     USE_NETBSD=1
     cat >> confdefs.h <<\EOF
-#define __FREEBSD__ 1
+#define __NETBSD__ 1
 EOF
 
     cat >> confdefs.h <<\EOF
-#define __NETBSD__ 1
+#define __BSD__ 1
 EOF
 
     DEFAULT_DEFAULT_wxUSE_GTK=1
