@@ -416,13 +416,12 @@ static Boolean CheckFile( ConstStr255Param name , OSType type , OpenUserDataRecP
 {
 	  Str255 			filename ;
 		PLstrcpy( filename , name ) ;
-
+    p2cstr( filename ) ;
+    wxString file(filename) ;
+    file.MakeUpper() ;
+    
 		if ( data->numfilters > 0 )
 		{
-  		for( int j = 1 ; j <= filename[0] ; j++ )
-  		{
-  			filename[j] = toupper( filename[j] ) ;
-  		}
   		//for ( int i = 0 ; i < data->numfilters ; ++i )
   		int i = data->currentfilter ;
   		if ( data->extensions[i].Right(2) == ".*" )
@@ -436,7 +435,7 @@ static Boolean CheckFile( ConstStr255Param name , OSType type , OpenUserDataRecP
         if ( extension.GetChar(0) == '*' )
           extension = extension.Mid(1) ;
 
-  			if ( filename[0] >= extension.Len() && extension == (char*) filename + 1 + filename[0] - extension.Len() )
+  			if ( file.Len() >= extension.Len() && extension == file.Right(extension.Len() ) )
   					return true ;
   		}
   		return false ;
