@@ -48,6 +48,8 @@ public:
 
 #if wxUSE_GUI
     bool OnInit();
+    int OnRun() { return 0; }
+    int OnExit() { return retCode; }
 #else
     virtual int OnRun();
 #endif
@@ -119,7 +121,7 @@ int XmlResApp::OnRun()
             else
                 CompileRes();
 #if wxUSE_GUI
-            return FALSE;
+            return TRUE;
 #else
             return retCode;
 #endif
