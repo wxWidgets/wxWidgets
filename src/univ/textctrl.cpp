@@ -60,20 +60,23 @@
    The same example for a control with line wrap assuming "Universe" is too
    long to fit on the same line with "Hello,":
 
-   pos:    0 1 2 3 4 5 6
+   pos:    0 1 2 3 4 5
             H e l l o ,                             line 0 (row 0)
    col:     0 1 2 3 4 5
 
-                 1 1 1 1 1 1 1
-   pos:    7 8 9 0 1 2 3 4 5 6
-            U n i v e r s e !                       line 0 (row 1)
-   col:     6 7 8 9 1 1 1 1 1
-                    0 1 2 3 4
+                   1 1 1 1 1 1 1
+   pos:    6 7 8 9 0 1 2 3 4 5 6
+              U n i v e r s e !                     line 0 (row 1)
+   col:     6 7 8 9 1 1 1 1 1 1
+                    0 1 2 3 4 5
 
-    (line 1 == row 2 same as above)
+   (line 1 == row 2 same as above)
 
-    Note that now columns are offset relative to positions as the positions 6
-    and 7 correspond to the same character.
+   Note that there is still the same number of columns and positions and that
+   there is no (logical) position at the end of the first ROW. This position
+   is identified with the preceding one (which is not how Windows does it: it
+   identifies it with the next one, i.e. the first position of the next line,
+   but much more logical IMHO).
  */
 
 // ============================================================================
@@ -1862,6 +1865,25 @@ wxRect wxTextCtrl::GetRealTextArea() const
     return rectText;
 }
 
+size_t wxTextCtrl::GetPartOfWrappedLine(const wxChar* text,
+                                        wxCoord width) const
+{
+    wxTextCtrl *self = wxConstCast(this, wxTextCtrl);
+    wxClientDC dc(self);
+    dc.SetFont(GetFont());
+    self->DoPrepareDC(dc);
+
+    // the text which we can keep in this ROW
+    wxString str;
+    for ( wxCoord w = 0; w < width; )
+    {
+        str += *text++;
+        dc.GetTextExtent(str, &w, NULL);
+    }
+
+    return str.length();
+}
+
 wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
                                                 wxCoord x,
                                                 long *colOut) const
@@ -2018,63 +2040,80 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTest(const wxPoint& pos,
     // calculate the row
     int row;
 
-    if ( IsSingleLine() )
-    {
-        // there is only one row anyhow
-        row = 0;
-    }
-    else // multi line
-    {
-        int rowMax = GetNumberOfLines() - 1;
-        int hLine = GetCharHeight();
+    size_t ofsLineStart = 0; // used only for WrapLines() case
 
-        if ( WrapLines() )
+    int hLine = GetCharHeight();
+    int rowMax = GetNumberOfLines() - 1;
+    if ( IsSingleLine() || !WrapLines() )
+    {
+        // in this case row calculation is simple as all lines have the
+        // same height
+        row = y / hLine;
+        if ( row > rowMax )
         {
-            // one line can take several rows in this case, so we need to
-            // rescan the text
+            // clicking below the text is the same as clicking on the last
+            // line
+            row = rowMax;
 
-            // OPT: as for horz hit testing we might approximate the result
-            //      with y / hLine first and then scan from there, this is
-            //      probably much more efficient when there is a lot of text
-
-            int yCur = 0;
-            wxCoord wLine = m_rectText.w;
-            for ( row = 0; (yCur < y) && (row <= rowMax); row++ )
-            {
-                wxCoord widthLineTotal = GetTextWidth(GetLineText(row));
-                int nRowsPerLine = widthLineTotal == 0
-                                    ? 1
-                                    : (widthLineTotal + wLine - 1) / wLine;
-                yCur += nRowsPerLine*hLine;
-            }
-
-            if ( row > rowMax )
-            {
-                row = rowMax;
-
-                res = wxTE_HT_AFTER;
-            }
+            res = wxTE_HT_AFTER;
         }
-        else // no line wrap
+        else if ( row < 0 )
         {
-            // in this case row calculation is simple as we all lines have the
-            // same height
-            row = y / hLine;
-            if ( row > rowMax )
-            {
-                // clicking below the text is the same as clicking on the last
-                // line
-                row = rowMax;
+            // and clicking before it is the same as clicking on the first
+            // one
+            row = 0;
 
-                res = wxTE_HT_AFTER;
+            res = wxTE_HT_BEFORE;
+        }
+    }
+    else // multline control with line wrap
+    {
+        // one line can take several rows in this case, so we need to
+        // rescan the text
+
+        // OPT: as for horz hit testing we might approximate the result
+        //      with y / hLine first and then scan from there, this is
+        //      probably much more efficient when there is a lot of text
+
+        wxString textLine;
+        row = 0;
+        int nRowInLine = 0,
+            nRowsPerLine = 0;
+        wxCoord wLine = m_rectText.width;
+        for ( int yCur = 0; yCur < y; yCur += hLine )
+        {
+            if ( nRowInLine == nRowsPerLine )
+            {
+                // pass to the next line
+                row++;
+                if ( row > rowMax )
+                {
+                    // no next line
+                    row = rowMax;
+
+                    res = wxTE_HT_AFTER;
+                    break;
+                }
+
+                textLine = GetLineText(row);
+                wxCoord widthLineTotal = GetTextWidth(textLine);
+                nRowsPerLine = widthLineTotal == 0
+                                ? 1
+                                : (widthLineTotal + wLine - 1) / wLine;
+
+                // the offset of the start of the ROW in which y is from the
+                // start of this LINE
+                ofsLineStart = 0;
             }
-            else if ( row < 0 )
+            else
             {
-                // and clicking before it is the same as clicking on the first
-                // one
-                row = 0;
-
-                res = wxTE_HT_BEFORE;
+                // pass to the next row in this line
+                ofsLineStart += GetPartOfWrappedLine
+                                (
+                                 textLine.c_str() + ofsLineStart,
+                                 wLine
+                                );
+                nRowInLine++;
             }
         }
     }
@@ -2082,10 +2121,17 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTest(const wxPoint& pos,
     if ( res == wxTE_HT_ON_TEXT )
     {
         // now find the position in the line
-        wxString line = GetLineText(row);
+        wxString line;
         if ( ofsLineStart )
         {
-            // 
+            // look in this row only, not in whole line (well, we leave the
+            // tail unchanged, but it shouldn't hurt)
+            line = GetLineText(row).c_str() + ofsLineStart;
+        }
+        else
+        {
+            // just take the whole string
+            line = GetLineText(row);
         }
 
         res = HitTestLine(GetTextToShow(line), x, colOut);
@@ -2114,6 +2160,44 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTest(const wxPoint& pos,
         *rowOut = row;
 
     return res;
+}
+
+// TODO: implement HitTest() via HitTest2(), not the other way round!
+
+wxTextCtrlHitTestResult wxTextCtrl::HitTest2(wxCoord y,
+                                             wxCoord x1,
+                                             wxCoord x2,
+                                             long *row,
+                                             long *colStart,
+                                             long *colEnd,
+                                             wxCoord *ofsStart) const
+{
+    wxTextCtrlHitTestResult htr = HitTest(wxPoint(x1, y), colStart, row);
+    if ( htr == wxTE_HT_AFTER )
+    {
+        // if the start is after the text, the end is too
+        return wxTE_HT_AFTER;
+    }
+
+    if ( colEnd )
+    {
+        (void)HitTest(wxPoint(x2, y), colEnd, NULL);
+    }
+
+    if ( ofsStart )
+    {
+        long colStartRow;
+        (void)HitTest(wxPoint(GetRealTextArea().x + GetClientAreaOrigin().x, y),
+                      &colStartRow, NULL);
+        wxASSERT_MSG( colStartRow <= *colStart, _T("are they on same line?") );
+
+        wxString s = GetLineText(*row);
+
+        *ofsStart = GetTextWidth(s.Mid((size_t)colStartRow,
+                                       (size_t)(*colStart - colStartRow)));
+    }
+
+    return htr;
 }
 
 // ----------------------------------------------------------------------------
@@ -2371,7 +2455,7 @@ void wxTextCtrl::UpdateScrollbars()
     // is our width enough to show the longest line?
     wxCoord charWidth, maxWidth;
     bool showScrollbarX;
-    if ( GetWindowStyle() && wxHSCROLL )
+    if ( !WrapLines() )
     {
         charWidth = GetCharWidth();
         maxWidth = GetMaxWidth();
@@ -2636,47 +2720,55 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
     }
 #endif // WXDEBUG_TEXT
 
-    // calculate the range of lines to refresh
-    wxPoint pt1 = rectUpdate.GetPosition();
-    long colStart, lineStart;
-    (void)HitTest(pt1, &colStart, &lineStart);
+    // calculate the range lineStart..lineEnd of lines to redraw
+    wxPoint pt = rectUpdate.GetPosition();
+    long lineStart;
+    (void)HitTest(pt, NULL, &lineStart);
 
-    wxPoint pt2 = pt1;
-    pt2.x += rectUpdate.width;
-    pt2.y += rectUpdate.height;
-    long colEnd, lineEnd;
-    (void)HitTest(pt2, &colEnd, &lineEnd);
-
-    // pt1 and pt2 will run along the left and right update rect borders
-    // respectively from top to bottom (NB: they're in device coords)
-    pt2.y = pt1.y;
+    pt.y += rectUpdate.height;
+    long lineEnd;
+    (void)HitTest(pt, NULL, &lineEnd);
 
     // prepare for drawing
+    wxCoord hLine = GetCharHeight();
     wxRect rectText;
-    rectText.height = GetCharHeight();
+    rectText.height = hLine;
     rectText.y = m_rectText.y + lineStart*rectText.height;
 
-    // do draw the invalidated parts of each line
+    // these vars will be used for hit testing of the current row
+    wxCoord y = rectUpdate.y;
+    const wxCoord x1 = rectUpdate.x;
+    const wxCoord x2 = rectUpdate.x + rectUpdate.width;
+
+    // do draw the invalidated parts of each line: note that we iterate here
+    // over ROWs, not over LINEs
     for ( long line = lineStart;
           line <= lineEnd;
-          line++,
-          rectText.y += rectText.height,
-          pt1.y += rectText.height,
-          pt2.y += rectText.height )
+          rectText.y += hLine,
+          y += hLine )
     {
         // calculate the update rect in text positions for this line
-        if ( HitTest(pt1, &colStart, NULL) == wxTE_HT_AFTER )
+        long colStart, colEnd;
+        wxCoord ofsStart;
+        if ( HitTest2(y, x1, x2,
+                      &line, &colStart, &colEnd, &ofsStart) == wxTE_HT_AFTER )
         {
+            wxASSERT_MSG( line <= lineEnd, _T("how did we get that far?") );
+
+            if ( line == lineEnd )
+            {
+                // we redrew everything
+                break;
+            }
+
             // the update rect is beyond the end of line, no need to redraw
-            // anything
+            // anything on this line - but continue with the remaining ones
             continue;
         }
 
         // don't show the columns which are scrolled out to the left
         if ( colStart < m_colStart )
             colStart = m_colStart;
-
-        (void)HitTest(pt2, &colEnd, NULL);
 
         // colEnd may be less than colStart if colStart was changed by the
         // assignment above
@@ -2735,7 +2827,7 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
         }
 
         // calculate the logical text coords
-        rectText.x = m_rectText.x + GetTextWidth(textLine.Left(colStart));
+        rectText.x = m_rectText.x + ofsStart;
         rectText.width = GetTextWidth(text);
 
         // do draw the text

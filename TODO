@@ -16,7 +16,6 @@ wxTextCtrl
 
 *!  display corrupted when typing text in quickly (caret problem?)
 *   caret leaves traces under wxGTK
-*   scrollbars don't disappear after deleting long line
 ?   text ctrl display pb when text is truncated
 *   too much is refreshed when double clicking (word select)
 
@@ -52,6 +51,7 @@ All
 +   DoDraw should iterate over update region instead of using bounding box
 +   listbox: horz scrollbar doesn't appear
 +   wxTextCtrl update rect overlaps with horz scrollbar
++   scrollbars don't disappear after deleting long line
 
 MSW
 

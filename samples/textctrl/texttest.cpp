@@ -68,29 +68,28 @@ enum
     TextTest_Insert,
     TextTest_Clear,
 
-#if 0
-    TextTest_AddText,
-    TextTest_AddSeveral,
-    TextTest_AddMany,
-    TextTest_Change,
-    TextTest_ChangeText,
-    TextTest_Delete,
-    TextTest_DeleteText,
-    TextTest_DeleteSel,
-#endif // 0
-
     TextTest_Password,
-    TextTest_HScroll,
+    TextTest_WrapLines,
     TextTest_Textctrl,
     TextTest_Quit
 };
 
 // textctrl line number radiobox values
-enum
+enum TextLines
 {
     TextLines_Single,
     TextLines_Multi
 };
+
+// default values for the controls
+static const struct ControlValues
+{
+    TextLines textLines;
+    bool password;
+    bool wraplines;
+    bool readonly;
+} DEFAULTS =
+    { TextLines_Multi, FALSE, TRUE, FALSE };
 
 // ----------------------------------------------------------------------------
 // our classes
@@ -135,14 +134,6 @@ protected:
     void OnButtonAdd(wxCommandEvent& event);
     void OnButtonClear(wxCommandEvent& event);
 
-#if 0
-    void OnButtonChange(wxCommandEvent& event);
-    void OnButtonDelete(wxCommandEvent& event);
-    void OnButtonDeleteSel(wxCommandEvent& event);
-    void OnButtonAddSeveral(wxCommandEvent& event);
-    void OnButtonAddMany(wxCommandEvent& event);
-#endif // 0
-
     void OnButtonQuit(wxCommandEvent& event);
 
     void OnText(wxCommandEvent& event);
@@ -152,14 +143,8 @@ protected:
 
     void OnUpdateUIClearButton(wxUpdateUIEvent& event);
 
-#if 0
-    void OnUpdateUIAddSeveral(wxUpdateUIEvent& event);
-    void OnUpdateUIDeleteButton(wxUpdateUIEvent& event);
-    void OnUpdateUIDeleteSelButton(wxUpdateUIEvent& event);
-#endif
-
     void OnUpdateUIPasswordCheckbox(wxUpdateUIEvent& event);
-    void OnUpdateUIHScrollCheckbox(wxUpdateUIEvent& event);
+    void OnUpdateUIWrapLinesCheckbox(wxUpdateUIEvent& event);
 
     void OnUpdateUIResetButton(wxUpdateUIEvent& event);
 
@@ -188,7 +173,7 @@ protected:
 
     // the checkboxes controlling text ctrl styles
     wxCheckBox *m_chkPassword,
-               *m_chkHScroll,
+               *m_chkWrapLines,
                *m_chkReadonly;
 
     // the textctrl itself and the sizer it is in
@@ -200,6 +185,8 @@ protected:
 
     // the information text zones
     wxTextCtrl *m_textPosCur,
+               *m_textRowCur,
+               *m_textColCur,
                *m_textPosLast,
                *m_textSelFrom,
                *m_textSelTo;
@@ -244,30 +231,10 @@ BEGIN_EVENT_TABLE(TextTestFrame, wxFrame)
     EVT_BUTTON(TextTest_Add, TextTestFrame::OnButtonAdd)
     EVT_BUTTON(TextTest_Insert, TextTestFrame::OnButtonInsert)
 
-#if 0
-    EVT_BUTTON(TextTest_Change, TextTestFrame::OnButtonChange)
-    EVT_BUTTON(TextTest_Delete, TextTestFrame::OnButtonDelete)
-    EVT_BUTTON(TextTest_DeleteSel, TextTestFrame::OnButtonDeleteSel)
-    EVT_BUTTON(TextTest_AddSeveral, TextTestFrame::OnButtonAddSeveral)
-    EVT_BUTTON(TextTest_AddMany, TextTestFrame::OnButtonAddMany)
-
-    EVT_TEXT_ENTER(TextTest_AddText, TextTestFrame::OnButtonAdd)
-    EVT_TEXT_ENTER(TextTest_DeleteText, TextTestFrame::OnButtonDelete)
-#endif // 0
-
     EVT_UPDATE_UI(TextTest_Clear, TextTestFrame::OnUpdateUIClearButton)
 
-#if 0
-    EVT_UPDATE_UI(TextTest_AddSeveral, TextTestFrame::OnUpdateUIAddSeveral)
-    EVT_UPDATE_UI(TextTest_DeleteText, TextTestFrame::OnUpdateUIClearButton)
-    EVT_UPDATE_UI(TextTest_Delete, TextTestFrame::OnUpdateUIDeleteButton)
-    EVT_UPDATE_UI(TextTest_Change, TextTestFrame::OnUpdateUIDeleteSelButton)
-    EVT_UPDATE_UI(TextTest_ChangeText, TextTestFrame::OnUpdateUIDeleteSelButton)
-    EVT_UPDATE_UI(TextTest_DeleteSel, TextTestFrame::OnUpdateUIDeleteSelButton)
-#endif // 0
-
     EVT_UPDATE_UI(TextTest_Password, TextTestFrame::OnUpdateUIPasswordCheckbox)
-    EVT_UPDATE_UI(TextTest_HScroll, TextTestFrame::OnUpdateUIHScrollCheckbox)
+    EVT_UPDATE_UI(TextTest_WrapLines, TextTestFrame::OnUpdateUIWrapLinesCheckbox)
 
     EVT_UPDATE_UI(TextTest_Reset, TextTestFrame::OnUpdateUIResetButton)
 
@@ -308,12 +275,14 @@ TextTestFrame::TextTestFrame(const wxString& title)
     m_radioTextLines = (wxRadioBox *)NULL;
 
     m_chkPassword =
-    m_chkHScroll =
+    m_chkWrapLines =
     m_chkReadonly = (wxCheckBox *)NULL;
 
     m_text =
     m_textLog =
     m_textPosCur =
+    m_textRowCur =
+    m_textColCur =
     m_textPosLast =
     m_textSelFrom =
     m_textSelTo = (wxTextCtrl *)NULL;
@@ -352,7 +321,7 @@ TextTestFrame::TextTestFrame(const wxString& title)
                                       1, wxRA_SPECIFY_COLS);
 
     m_chkPassword = new wxCheckBox(m_panel, TextTest_Password, _T("&Password control"));
-    m_chkHScroll = new wxCheckBox(m_panel, TextTest_HScroll, _T("&Horz scrollbar"));
+    m_chkWrapLines = new wxCheckBox(m_panel, TextTest_WrapLines, _T("&Horz scrollbar"));
     m_chkReadonly = new wxCheckBox(m_panel, -1, _T("&Read-only mode"));
 
     sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
@@ -360,7 +329,7 @@ TextTestFrame::TextTestFrame(const wxString& title)
     sizerLeft->Add(m_radioTextLines, 0, wxGROW | wxALL, 5);
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
     sizerLeft->Add(m_chkPassword, 0, wxLEFT | wxRIGHT, 5);
-    sizerLeft->Add(m_chkHScroll, 0, wxLEFT | wxRIGHT, 5);
+    sizerLeft->Add(m_chkWrapLines, 0, wxLEFT | wxRIGHT, 5);
     sizerLeft->Add(m_chkReadonly, 0, wxLEFT | wxRIGHT, 5);
 
     wxButton *btn = new wxButton(m_panel, TextTest_Reset, _T("&Reset"));
@@ -379,44 +348,32 @@ TextTestFrame::TextTestFrame(const wxString& title)
     btn = new wxButton(m_panel, TextTest_Clear, _T("&Clear"));
     sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 5);
 
-#if 0
-    btn = new wxButton(m_panel, TextTest_AddSeveral, _T("&Insert a few strings"));
-    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
-
-    btn = new wxButton(m_panel, TextTest_AddMany, _T("Add &many strings"));
-    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
-
-    sizerRow = new wxBoxSizer(wxHORIZONTAL);
-    btn = new wxButton(m_panel, TextTest_Change, _T("C&hange current"));
-    m_textChange = new wxTextCtrl(m_panel, TextTest_ChangeText, _T(""));
-    sizerRow->Add(btn, 0, wxRIGHT, 5);
-    sizerRow->Add(m_textChange, 1, wxLEFT, 5);
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
-
-    sizerRow = new wxBoxSizer(wxHORIZONTAL);
-    btn = new wxButton(m_panel, TextTest_Delete, _T("&Delete this item"));
-    m_textDelete = new wxTextCtrl(m_panel, TextTest_DeleteText, _T(""));
-    sizerRow->Add(btn, 0, wxRIGHT, 5);
-    sizerRow->Add(m_textDelete, 1, wxLEFT, 5);
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
-
-    btn = new wxButton(m_panel, TextTest_DeleteSel, _T("Delete &selection"));
-    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
-#endif // 0
-
     wxStaticBox *box4 = new wxStaticBox(m_panel, -1, _T("&Info:"));
     wxSizer *sizerMiddleDown = new wxStaticBoxSizer(box4, wxVERTICAL);
 
     m_textPosCur = CreateInfoText();
-    sizerMiddleDown->Add
-                     (
-                        CreateTextWithLabelSizer
-                        (
-                          _T("Current position:"),
-                          m_textPosCur
-                        ),
-                        0, wxALL | wxGROW, 5
-                     );
+    m_textRowCur = CreateInfoText();
+    m_textColCur = CreateInfoText();
+    wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
+    sizerRow->Add(CreateTextWithLabelSizer
+                  (
+                    _T("Current pos:"),
+                    m_textPosCur
+                  ),
+                  0, wxRIGHT | wxGROW, 5);
+    sizerRow->Add(CreateTextWithLabelSizer
+                  (
+                    _T("Col:"),
+                    m_textColCur
+                  ),
+                  0, wxRIGHT | wxLEFT | wxGROW, 5);
+    sizerRow->Add(CreateTextWithLabelSizer
+                  (
+                    _T("Row:"),
+                    m_textRowCur
+                  ),
+                  0, wxLEFT | wxGROW, 5);
+    sizerMiddleDown->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     m_textPosLast = CreateInfoText();
     sizerMiddleDown->Add
@@ -449,9 +406,15 @@ TextTestFrame::TextTestFrame(const wxString& title)
     // right pane
     wxStaticBox *box3 = new wxStaticBox(m_panel, -1, _T("&Text:"));
     m_sizerText = new wxStaticBoxSizer(box3, wxHORIZONTAL);
-    m_text = new wxTextCtrl(m_panel, TextTest_Textctrl, _T("Hello, world!"));
-    m_sizerText->Add(m_text, 1, wxALL | wxALIGN_CENTRE_VERTICAL, 5);
-    m_sizerText->SetMinSize(250, 300);
+    Reset();
+    CreateText();
+    m_sizerText->SetMinSize(250,
+#ifdef __WXGTK__
+                            300
+#else
+                            0
+#endif
+                           );
 
     // the 3 panes panes compose the upper part of the window
     sizerUp->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
@@ -486,9 +449,6 @@ TextTestFrame::TextTestFrame(const wxString& title)
     sizerTop->Add(sizerUp, 1, wxGROW | (wxALL & ~(wxTOP | wxBOTTOM)), 10);
     sizerTop->Add(0, 5, 0, wxGROW); // spacer in between
     sizerTop->Add(sizerDown, 0,  wxGROW | (wxALL & ~wxTOP), 10);
-
-    // final initialization
-    Reset();
 
     m_panel->SetAutoLayout(TRUE);
     m_panel->SetSizer(sizerTop);
@@ -551,10 +511,10 @@ wxSizer *TextTestFrame::CreateTextWithLabelSizer(const wxString& label,
 
 void TextTestFrame::Reset()
 {
-    m_radioTextLines->SetSelection(TextLines_Single);
-    m_chkPassword->SetValue(FALSE);
-    m_chkHScroll->SetValue(TRUE);
-    m_chkReadonly->SetValue(FALSE);
+    m_radioTextLines->SetSelection(DEFAULTS.textLines);
+    m_chkPassword->SetValue(DEFAULTS.password);
+    m_chkWrapLines->SetValue(DEFAULTS.wraplines);
+    m_chkReadonly->SetValue(DEFAULTS.readonly);
 }
 
 void TextTestFrame::CreateText()
@@ -578,7 +538,7 @@ void TextTestFrame::CreateText()
         flags |= wxTE_PASSWORD;
     if ( m_chkReadonly->GetValue() )
         flags |= wxTE_READONLY;
-    if ( m_chkHScroll->GetValue() )
+    if ( !m_chkWrapLines->GetValue() )
         flags |= wxHSCROLL;
 
     wxString valueOld;
@@ -588,6 +548,10 @@ void TextTestFrame::CreateText()
 
         m_sizerText->Remove(m_text);
         delete m_text;
+    }
+    else
+    {
+        valueOld = _T("Hello, Universe!");
     }
 
     m_text = new wxTextCtrl(m_panel, TextTest_Textctrl,
@@ -614,7 +578,15 @@ void TextTestFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
         if ( posCur != m_posCur )
         {
             m_textPosCur->Clear();
+            m_textRowCur->Clear();
+            m_textColCur->Clear();
+
+            long col, row;
+            m_text->PositionToXY(posCur, &col, &row);
+
             *m_textPosCur << posCur;
+            *m_textRowCur << row;
+            *m_textColCur << col;
 
             m_posCur = posCur;
         }
@@ -689,98 +661,12 @@ void TextTestFrame::OnButtonClear(wxCommandEvent& WXUNUSED(event))
     m_text->SetFocus();
 }
 
-#if 0
-void TextTestFrame::OnButtonChange(wxCommandEvent& WXUNUSED(event))
-{
-    wxArrayInt selections;
-    int count = m_text->GetSelections(selections);
-    wxString s = m_textChange->GetValue();
-    for ( int n = 0; n < count; n++ )
-    {
-        m_text->SetString(selections[n], s);
-    }
-}
-
-void TextTestFrame::OnButtonDelete(wxCommandEvent& WXUNUSED(event))
-{
-    unsigned long n;
-    if ( !m_textDelete->GetValue().ToULong(&n) ||
-            (n >= (unsigned)m_text->GetCount()) )
-    {
-        return;
-    }
-
-    m_text->Delete(n);
-}
-
-void TextTestFrame::OnButtonDeleteSel(wxCommandEvent& WXUNUSED(event))
-{
-    wxArrayInt selections;
-    int n = m_text->GetSelections(selections);
-    while ( n > 0 )
-    {
-        m_text->Delete(selections[--n]);
-    }
-}
-
-void TextTestFrame::OnButtonAdd(wxCommandEvent& event)
-{
-    static size_t s_item = 0;
-
-    wxString s = m_textAdd->GetValue();
-    if ( !m_textAdd->IsModified() )
-    {
-        // update the default string
-        m_textAdd->SetValue(wxString::Format(_T("test item %u"), ++s_item));
-    }
-
-    m_text->Append(s);
-}
-
-void TextTestFrame::OnButtonAddMany(wxCommandEvent& WXUNUSED(event))
-{
-    // "many" means 1000 here
-    for ( size_t n = 0; n < 1000; n++ )
-    {
-        m_text->Append(wxString::Format(_T("item #%u"), n));
-    }
-}
-
-void TextTestFrame::OnButtonAddSeveral(wxCommandEvent& event)
-{
-    wxArrayString items;
-    items.Add(_T("First"));
-    items.Add(_T("another one"));
-    items.Add(_T("and the last (very very very very very very very very very very long) one"));
-    m_text->InsertItems(items, 0);
-}
-
-void TextTestFrame::OnUpdateUIDeleteButton(wxUpdateUIEvent& event)
-{
-    unsigned long n;
-    event.Enable(m_textDelete->GetValue().ToULong(&n) &&
-                    (n < (unsigned)m_text->GetCount()));
-}
-
-void TextTestFrame::OnUpdateUIDeleteSelButton(wxUpdateUIEvent& event)
-{
-    wxArrayInt selections;
-    event.Enable(m_text->GetSelections(selections) != 0);
-}
-
-void TextTestFrame::OnUpdateUIAddSeveral(wxUpdateUIEvent& event)
-{
-    event.Enable(!(m_text->GetWindowStyle() & wxLB_SORT));
-}
-
-#endif // 0
-
 void TextTestFrame::OnUpdateUIClearButton(wxUpdateUIEvent& event)
 {
     event.Enable(!m_text->GetValue().empty());
 }
 
-void TextTestFrame::OnUpdateUIHScrollCheckbox(wxUpdateUIEvent& event)
+void TextTestFrame::OnUpdateUIWrapLinesCheckbox(wxUpdateUIEvent& event)
 {
     event.Enable( !IsSingleLine() );
 }
@@ -793,14 +679,24 @@ void TextTestFrame::OnUpdateUIPasswordCheckbox(wxUpdateUIEvent& event)
 
 void TextTestFrame::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 {
-    event.Enable( (m_radioTextLines->GetSelection() != TextLines_Single) ||
-                  m_chkReadonly->GetValue() ||
-                  m_chkPassword->GetValue() ||
-                  !m_chkHScroll->GetValue() );
+    event.Enable( (m_radioTextLines->GetSelection() != DEFAULTS.textLines) ||
+                  (m_chkReadonly->GetValue() != DEFAULTS.readonly) ||
+                  (m_chkPassword->GetValue() != DEFAULTS.password) ||
+                  (m_chkWrapLines->GetValue() != DEFAULTS.wraplines) );
 }
 
 void TextTestFrame::OnText(wxCommandEvent& event)
 {
+    // small hack to suppress the very first message: by then the logging is
+    // not yet redirected and so initial setting of the text value results in
+    // an annoying message box
+    static bool s_firstTime = TRUE;
+    if ( s_firstTime )
+    {
+        s_firstTime = FALSE;
+        return;
+    }
+
     wxLogMessage(_T("Text ctrl value changed"));
 }
 

@@ -300,6 +300,9 @@ protected:
     // starts for wxTE_PASSWORD control
     wxString GetTextToShow(const wxString& text) const;
 
+    // find the number of characters of a line before it wraps at given width
+    size_t GetPartOfWrappedLine(const wxChar* text, wxCoord width) const;
+
     // get the start and end of the selection for this line: if the line is
     // outside the selection, both will be -1 and FALSE will be returned
     bool GetSelectedPartOfLine(long line, int *start, int *end) const;
@@ -330,6 +333,15 @@ protected:
 
     // update the max width after the given line was modified
     void UpdateMaxWidth(long line);
+
+    // HitTest2() is more efficient than 2 consecutive HitTest()s with the same
+    // line (i.e. y) and it also returns the offset of the starting position in
+    // pixels
+    wxTextCtrlHitTestResult HitTest2(wxCoord y,
+                                     wxCoord x1, wxCoord x2,
+                                     long *row,
+                                     long *colStart, long *colEnd,
+                                     wxCoord *ofsStart) const;
 
     // event handlers
     void OnIdle(wxIdleEvent& event);

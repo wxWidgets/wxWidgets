@@ -701,7 +701,7 @@ wxColour wxWin32ColourScheme::GetBackground(wxWindow *win) const
         wxTextCtrl *text = wxDynamicCast(win, wxTextCtrl);
         if ( text )
         {
-            if ( !text->IsEditable() )
+            if ( !text->IsEnabled() ) // not IsEditable()
                 col = Get(CONTROL);
             //else: execute code below
         }
@@ -1736,7 +1736,7 @@ wxRect wxWin32Renderer::GetTextTotalArea(const wxTextCtrl *text,
 {
     // this is what Windows does
     wxRect rectTotal = rect;
-    rectTotal.Inflate(10);
+    rectTotal.Inflate(1);
     rectTotal.height++;
 
     return rectTotal;
@@ -1748,7 +1748,7 @@ wxRect wxWin32Renderer::GetTextClientArea(const wxTextCtrl *text,
     // undo GetTextTotalArea()
     wxRect rectText = rect;
     rectText.height--;
-    rectText.Inflate(-10);
+    rectText.Inflate(-1);
 
     return rectText;
 }
