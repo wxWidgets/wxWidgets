@@ -605,7 +605,7 @@ void wxGridCellTextEditor::StartingKey(wxKeyEvent& event)
     {
         // insert the key in the control
         int keycode = (int)event.KeyCode();
-        if ( isprint(keycode) )
+        if ( isprint(keycode) && keycode < 256 && keycode >= 0 )
         {
             // FIXME this is not going to work for non letters...
             if ( !event.ShiftDown() )
@@ -3482,7 +3482,23 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                     m_rowBottoms[i] = bottom;
                 }
             }
-            CalcDimensions();
+            if ( m_currentCellCoords == wxGridNoCellCoords )
+            {
+                // if we have just inserted cols into an empty grid the current
+                // cell will be undefined...
+                //
+                SetCurrentCell( 0, 0 );
+            }
+            m_selection->UpdateRows( pos, numRows );
+            wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
+            if (attrProvider)
+                attrProvider->UpdateAttrRows( pos, numRows );
+
+            if ( !GetBatchCount() )
+            {
+                CalcDimensions();
+                m_rowLabelWin->Refresh();
+            }
         }
         result = TRUE;
         break;
@@ -3510,7 +3526,18 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                     m_rowBottoms[i] = bottom;
                 }
             }
-            CalcDimensions();
+            if ( m_currentCellCoords == wxGridNoCellCoords )
+            {
+                // if we have just inserted cols into an empty grid the current
+                // cell will be undefined...
+                //
+                SetCurrentCell( 0, 0 );
+            }
+            if ( !GetBatchCount() )
+            {
+                CalcDimensions();
+                m_rowLabelWin->Refresh();
+            }
         }
         result = TRUE;
         break;
@@ -3529,29 +3556,39 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                     m_rowBottoms.Remove( pos );
                 }
 
-                if ( !m_numRows )
+                int h = 0;
+                for ( i = 0;  i < m_numRows;  i++ )
                 {
-#if 0
-                    m_numCols = 0;
-                    m_colWidths.Clear();
-                    m_colRights.Clear();
-#endif
-                    m_currentCellCoords = wxGridNoCellCoords;
-                }
-                else
-                {
-                    if ( m_currentCellCoords.GetRow() >= m_numRows )
-                        m_currentCellCoords.Set( 0, 0 );
-
-                    int h = 0;
-                    for ( i = 0;  i < m_numRows;  i++ )
-                    {
-                        h += m_rowHeights[i];
-                        m_rowBottoms[i] = h;
-                    }
+                    h += m_rowHeights[i];
+                    m_rowBottoms[i] = h;
                 }
             }
-            CalcDimensions();
+            if ( !m_numRows )
+            {
+                m_currentCellCoords = wxGridNoCellCoords;
+            }
+            else
+            {
+                if ( m_currentCellCoords.GetRow() >= m_numRows )
+                    m_currentCellCoords.Set( 0, 0 );
+            }
+            m_selection->UpdateRows( pos, -((int)numRows) );
+            wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
+            if (attrProvider) {
+                attrProvider->UpdateAttrRows( pos, -((int)numRows) );
+                // No need to touch column attributes, unless we
+                // removed _all_ rows, in this case, we remove
+                // all column attributes.
+                // I hate to do this here, but the
+                // needed data is not available inside UpdateAttrRows.
+                if ( !GetNumberRows() )
+                    attrProvider->UpdateAttrCols( 0, -GetNumberCols() );
+            }
+            if ( !GetBatchCount() )
+            {
+                CalcDimensions();
+                m_rowLabelWin->Refresh();
+            }
         }
         result = TRUE;
         break;
@@ -3579,7 +3616,23 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                     m_colRights[i] = right;
                 }
             }
-            CalcDimensions();
+            if ( m_currentCellCoords == wxGridNoCellCoords )
+            {
+                // if we have just inserted cols into an empty grid the current
+                // cell will be undefined...
+                //
+                SetCurrentCell( 0, 0 );
+            }
+            m_selection->UpdateCols( pos, numCols );
+            wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
+            if (attrProvider)
+                attrProvider->UpdateAttrCols( pos, numCols );
+            if ( !GetBatchCount() )
+            {
+                CalcDimensions();
+                m_colLabelWin->Refresh();
+            }
+
         }
         result = TRUE;
         break;
@@ -3606,7 +3659,18 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                     m_colRights[i] = right;
                 }
             }
-            CalcDimensions();
+            if ( m_currentCellCoords == wxGridNoCellCoords )
+            {
+                // if we have just inserted cols into an empty grid the current
+                // cell will be undefined...
+                //
+                SetCurrentCell( 0, 0 );
+            }
+            if ( !GetBatchCount() )
+            {
+                CalcDimensions();
+                m_colLabelWin->Refresh();
+            }
         }
         result = TRUE;
         break;
@@ -3625,36 +3689,47 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                     m_colRights.Remove( pos );
                 }
 
-                if ( !m_numCols )
+                int w = 0;
+                for ( i = 0;  i < m_numCols;  i++ )
                 {
-#if 0  // leave the row alone here so that AppendCols will work subsequently
-                    m_numRows = 0;
-                    m_rowHeights.Clear();
-                    m_rowBottoms.Clear();
-#endif
-                    m_currentCellCoords = wxGridNoCellCoords;
-                }
-                else
-                {
-                    if ( m_currentCellCoords.GetCol() >= m_numCols )
-                        m_currentCellCoords.Set( 0, 0 );
-
-                    int w = 0;
-                    for ( i = 0;  i < m_numCols;  i++ )
-                    {
-                        w += m_colWidths[i];
-                        m_colRights[i] = w;
-                    }
+                    w += m_colWidths[i];
+                    m_colRights[i] = w;
                 }
             }
-            CalcDimensions();
+            if ( !m_numCols )
+            {
+                m_currentCellCoords = wxGridNoCellCoords;
+            }
+            else
+            {
+                if ( m_currentCellCoords.GetCol() >= m_numCols )
+                  m_currentCellCoords.Set( 0, 0 );
+            }
+            m_selection->UpdateCols( pos, -((int)numCols) );
+            wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
+            if (attrProvider) {
+                attrProvider->UpdateAttrCols( pos, -((int)numCols) );
+                // No need to touch row attributes, unless we
+                // removed _all_ columns, in this case, we remove
+                // all row attributes.
+                // I hate to do this here, but the
+                // needed data is not available inside UpdateAttrCols.
+                if ( !GetNumberCols() )
+                    attrProvider->UpdateAttrRows( 0, -GetNumberRows() );
+            }
+            if ( !GetBatchCount() )
+            {
+                CalcDimensions();
+                m_colLabelWin->Refresh();
+            }
+            return TRUE;
         }
         result = TRUE;
         break;
     }
 
     if (result && !GetBatchCount() )
-        Refresh(TRUE);
+        m_gridWin->Refresh();
     return result;
 }
 
@@ -4791,40 +4866,12 @@ bool wxGrid::InsertRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
         if (IsCellEditControlEnabled())
             DisableCellEditControl();
 
-        bool ok = m_table->InsertRows( pos, numRows );
+        return m_table->InsertRows( pos, numRows );
 
         // the table will have sent the results of the insert row
         // operation to this view object as a grid table message
-        //
-        if ( ok )
-        {
-            if ( m_currentCellCoords == wxGridNoCellCoords )
-            {
-                // if we have just inserted cols into an empty grid the current
-                // cell will be undefined...
-                //
-                SetCurrentCell( 0, 0 );
-            }
-
-            m_selection->UpdateRows( pos, numRows );
-            wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
-            if (attrProvider)
-                attrProvider->UpdateAttrRows( pos, numRows );
-
-            if ( !GetBatchCount() )
-            {
-                CalcDimensions();
-                m_rowLabelWin->Refresh();
-                m_gridWin->Refresh();
-            }
-        }
-
-        return ok;
     }
-    else
-    {
-        return FALSE;
-    }
+    return FALSE;
 }
 
 
@@ -4838,31 +4885,9 @@ bool wxGrid::AppendRows( int numRows, bool WXUNUSED(updateLabels) )
         return FALSE;
     }
 
-    if ( m_table && m_table->AppendRows( numRows ) )
-    {
-        if ( m_currentCellCoords == wxGridNoCellCoords )
-        {
-            // if we have just inserted cols into an empty grid the current
-            // cell will be undefined...
-            //
-            SetCurrentCell( 0, 0 );
-        }
-
-        // the table will have sent the results of the append row
-        // operation to this view object as a grid table message
-        //
-        if ( !GetBatchCount() )
-        {
-            CalcDimensions();
-            m_rowLabelWin->Refresh();
-            m_gridWin->Refresh();
-        }
-        return TRUE;
-    }
-    else
-    {
-        return FALSE;
-    }
+    return ( m_table && m_table->AppendRows( numRows ) );
+    // the table will have sent the results of the append row
+    // operation to this view object as a grid table message
 }
 
 
@@ -4881,32 +4906,9 @@ bool wxGrid::DeleteRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
         if (IsCellEditControlEnabled())
             DisableCellEditControl();
 
-        if (m_table->DeleteRows( pos, numRows ))
-        {
-
-            // the table will have sent the results of the delete row
-            // operation to this view object as a grid table message
-            //
-            m_selection->UpdateRows( pos, -((int)numRows) );
-            wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
-            if (attrProvider) {
-                attrProvider->UpdateAttrRows( pos, -((int)numRows) );
-                // No need to touch column attributes, unless we
-                // removed _all_ rows, in this case, we remove
-                // all column attributes.
-                // I hate to do this here, but the
-                // needed data is not available inside UpdateAttrRows.
-                if ( !GetNumberRows() )
-                    attrProvider->UpdateAttrCols( 0, -GetNumberCols() );
-            }
-            if ( !GetBatchCount() )
-            {
-                CalcDimensions();
-                m_rowLabelWin->Refresh();
-                m_gridWin->Refresh();
-            }
-            return TRUE;
-        }
+        return (m_table->DeleteRows( pos, numRows ));
+        // the table will have sent the results of the delete row
+        // operation to this view object as a grid table message
     }
     return FALSE;
 }
@@ -4927,39 +4929,11 @@ bool wxGrid::InsertCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
         if (IsCellEditControlEnabled())
             DisableCellEditControl();
 
-        bool ok = m_table->InsertCols( pos, numCols );
-
+        return m_table->InsertCols( pos, numCols );
         // the table will have sent the results of the insert col
         // operation to this view object as a grid table message
-        //
-        if ( ok )
-        {
-            if ( m_currentCellCoords == wxGridNoCellCoords )
-            {
-                // if we have just inserted cols into an empty grid the current
-                // cell will be undefined...
-                //
-                SetCurrentCell( 0, 0 );
-            }
-
-            m_selection->UpdateCols( pos, numCols );
-            wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
-            if (attrProvider)
-                attrProvider->UpdateAttrCols( pos, numCols );
-            if ( !GetBatchCount() )
-            {
-                CalcDimensions();
-                m_colLabelWin->Refresh();
-                m_gridWin->Refresh();
-            }
-        }
-
-        return ok;
     }
-    else
-    {
-        return FALSE;
-    }
+    return FALSE;
 }
 
 
@@ -4973,31 +4947,9 @@ bool wxGrid::AppendCols( int numCols, bool WXUNUSED(updateLabels) )
         return FALSE;
     }
 
-    if ( m_table && m_table->AppendCols( numCols ) )
-    {
-        // the table will have sent the results of the append col
-        // operation to this view object as a grid table message
-        //
-        if ( m_currentCellCoords == wxGridNoCellCoords )
-        {
-            // if we have just inserted cols into an empty grid the current
-            // cell will be undefined...
-            //
-            SetCurrentCell( 0, 0 );
-        }
-
-        if ( !GetBatchCount() )
-        {
-            CalcDimensions();
-            m_colLabelWin->Refresh();
-            m_gridWin->Refresh();
-        }
-        return TRUE;
-    }
-    else
-    {
-        return FALSE;
-    }
+    return ( m_table && m_table->AppendCols( numCols ) );
+    // the table will have sent the results of the append col
+    // operation to this view object as a grid table message
 }
 
 
@@ -5016,31 +4968,9 @@ bool wxGrid::DeleteCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
         if (IsCellEditControlEnabled())
             DisableCellEditControl();
 
-        if ( m_table->DeleteCols( pos, numCols ) )
-        {
-            // the table will have sent the results of the delete col
-            // operation to this view object as a grid table message
-            //
-            m_selection->UpdateCols( pos, -((int)numCols) );
-            wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
-            if (attrProvider) {
-                attrProvider->UpdateAttrCols( pos, -((int)numCols) );
-                // No need to touch row attributes, unless we
-                // removed _all_ columns, in this case, we remove
-                // all row attributes.
-                // I hate to do this here, but the
-                // needed data is not available inside UpdateAttrCols.
-                if ( !GetNumberCols() )
-                    attrProvider->UpdateAttrRows( 0, -GetNumberRows() );
-            }
-            if ( !GetBatchCount() )
-            {
-                CalcDimensions();
-                m_colLabelWin->Refresh();
-                m_gridWin->Refresh();
-            }
-            return TRUE;
-        }
+        return ( m_table->DeleteCols( pos, numCols ) );
+        // the table will have sent the results of the delete col
+        // operation to this view object as a grid table message
     }
     return FALSE;
 }
@@ -5141,6 +5071,7 @@ void wxGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);  // needed to prevent zillions of paint events on MSW
 
+    CalcDimensions();
     m_rowLabelWin->Refresh();
     m_colLabelWin->Refresh();
     m_cornerLabelWin->Refresh();
