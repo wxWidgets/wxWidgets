@@ -102,6 +102,7 @@ void wxWindowX11::Init()
     m_mainWindow = (WXWindow) 0;
     m_clientWindow = (WXWindow) 0;
     m_insertIntoMain = FALSE;
+    m_updateNcArea = FALSE;
     
     m_winCaptured = FALSE;
     m_needsInputFocus = FALSE;
@@ -212,7 +213,26 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
             xattributes.bit_gravity = StaticGravity;
         }
 
-        xwindow = XCreateWindow( xdisplay, xwindow, 0, 0, size2.x, size2.y, 
+        if (HasFlag( wxSUNKEN_BORDER) || HasFlag( wxRAISED_BORDER))
+        {
+            pos2.x = 2;
+            pos2.y = 2;
+            size2.x -= 4;
+            size2.y -= 4;
+        } else
+        if (HasFlag( wxSIMPLE_BORDER ))
+        {
+            pos2.x = 1;
+            pos2.y = 1;
+            size2.x -= 2;
+            size2.y -= 2;
+        } else
+        {
+            pos2.x = 0;
+            pos2.y = 0;
+        }
+        
+        xwindow = XCreateWindow( xdisplay, xwindow, pos2.x, pos2.y, size2.x, size2.y, 
             0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
     
         XSetWindowBackgroundPixmap( xdisplay, xwindow, None );
@@ -235,7 +255,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
         if (HasFlag( wxNO_FULL_REPAINT_ON_RESIZE ))
         {
             xattributes_mask |= CWBitGravity;
-            xattributes.bit_gravity = StaticGravity;
+            xattributes.bit_gravity = NorthWestGravity;
         }
 
         Window xwindow = XCreateWindow( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
@@ -1051,6 +1071,7 @@ void wxWindowX11::Update()
 {
     if (m_updateNcArea)
     {
+        // wxLogDebug("wxWindowX11::UpdateNC: %s", GetClassInfo()->GetClassName());
         // Send nc paint events.
         SendNcPaintEvents();
     }
@@ -1124,6 +1145,8 @@ void wxWindowX11::SendNcPaintEvents()
     wxNcPaintEvent nc_paint_event( GetId() );
     nc_paint_event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( nc_paint_event );
+    
+    m_updateNcArea = FALSE;
 }
 
 // ----------------------------------------------------------------------------

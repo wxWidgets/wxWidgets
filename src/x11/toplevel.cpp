@@ -132,7 +132,7 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     if (HasFlag( wxNO_FULL_REPAINT_ON_RESIZE ))
     {
         xattributes_mask |= CWBitGravity;
-        xattributes.bit_gravity = StaticGravity;
+        xattributes.bit_gravity = NorthWestGravity;
     }
     
     xattributes_mask |= CWEventMask;
@@ -199,11 +199,12 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
         }
     }
 
-    size_hints.flags = PSize | PPosition;
+    size_hints.flags = PSize | PPosition | PWinGravity;
     size_hints.x = pos2.x;
     size_hints.y = pos2.y;
     size_hints.width = size2.x;
     size_hints.height = size2.y;
+    size_hints.win_gravity = NorthWestGravity;
     XSetWMNormalHints( xdisplay, xwindow, &size_hints);
     
     XWMHints wm_hints;

@@ -530,7 +530,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 
                 // Only erase background, paint in idle time.
                 win->SendEraseEvents();
-                //win->Update();
+                // win->Update();
             }
 
             return TRUE;
