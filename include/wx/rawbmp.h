@@ -101,15 +101,9 @@
         - type which can contain the full pixel value (all channels)
  */
 
-#ifdef __DIGITALMARS__
 template <class Channel,
           size_t Bpp, int R, int G, int B, int A = -1,
           class Pixel = wxUint32>
-#else
-template <typename Channel,
-          size_t Bpp, int R, int G, int B, int A = -1,
-          typename Pixel = wxUint32>
-#endif
           
 struct WXDLLEXPORT wxPixelFormat
 {
@@ -629,49 +623,28 @@ struct WXDLLEXPORT wxPixelDataOut<wxBitmap>
     };
 };
 
-#ifdef __DIGITALMARS__
+
 template <class Image, class PixelFormat = wxPixelFormatFor<Image> >
 class wxPixelData :
-    public wxPixelDataOut<Image>:: wxPixelDataIn<PixelFormat>
+    public wxPixelDataOut<Image>::wxPixelDataIn<PixelFormat>
 {
 public:
     wxPixelData(Image& image)
-        : wxPixelDataOut<Image>:: wxPixelDataIn<PixelFormat>(image)
+        : wxPixelDataOut<Image>::wxPixelDataIn<PixelFormat>(image)
         {
         }
 
     wxPixelData(Image& i, const wxPoint& pt, const wxSize& sz)
-        : wxPixelDataOut<Image>:: wxPixelDataIn<PixelFormat>(i, pt, sz)
+        : wxPixelDataOut<Image>::wxPixelDataIn<PixelFormat>(i, pt, sz)
         {
         }
 
     wxPixelData(Image& i, const wxRect& rect)
-        : wxPixelDataOut<Image>:: wxPixelDataIn<PixelFormat>(i, rect)
+        : wxPixelDataOut<Image>::wxPixelDataIn<PixelFormat>(i, rect)
         {
         }
 };
-#else // not __DIGITALMARS__
-template <class Image, class PixelFormat = wxPixelFormatFor<Image> >
-class wxPixelData :
-    public wxPixelDataOut<Image>::template wxPixelDataIn<PixelFormat>
-{
-public:
-    wxPixelData(Image& image)
-        : wxPixelDataOut<Image>::template wxPixelDataIn<PixelFormat>(image)
-        {
-        }
 
-    wxPixelData(Image& i, const wxPoint& pt, const wxSize& sz)
-        : wxPixelDataOut<Image>::template wxPixelDataIn<PixelFormat>(i, pt, sz)
-        {
-        }
-
-    wxPixelData(Image& i, const wxRect& rect)
-        : wxPixelDataOut<Image>::template wxPixelDataIn<PixelFormat>(i, rect)
-        {
-        }
-};
-#endif // __DIGITALMARS__
 
 // some "predefined" pixel data classes
 typedef wxPixelData<wxImage> wxImagePixelData;
