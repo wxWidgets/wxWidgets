@@ -91,6 +91,7 @@ COMMONOBJS = \
   $(COMMDIR)/framecmn.$(OBJSUFF) \
   $(COMMDIR)/gdicmn.$(OBJSUFF) \
   $(COMMDIR)/helpbase.$(OBJSUFF) \
+  $(COMMDIR)/image.$(OBJSUFF) \
   $(COMMDIR)/intl.$(OBJSUFF) \
   $(COMMDIR)/layout.$(OBJSUFF) \
   $(COMMDIR)/log.$(OBJSUFF) \

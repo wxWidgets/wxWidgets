@@ -81,6 +81,7 @@ COMMONOBJS = \
   $(COMMDIR)\filefn.obj \
   $(COMMDIR)\framecmn.obj \
   $(COMMDIR)\gdicmn.obj \
+  $(COMMDIR)\image.obj \
   $(COMMDIR)\intl.obj \
   $(COMMDIR)\helpbase.obj \
   $(COMMDIR)\ipcbase.obj \

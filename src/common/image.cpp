@@ -668,7 +668,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
    unsigned char      *data, *ptr;
    int                 done, i, bpp, planes, comp, ncolors, line, column,
                        linesize, linepos, rshift = 0, gshift = 0, bshift = 0;
-   unsigned char       byte;
+   unsigned char       aByte;
    short int           word;
    long int            dbuf[4], dword, rmask = 0, gmask = 0, bmask = 0, offset,
                        size;
@@ -862,14 +862,14 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 		  int                 index;
 
 		  linepos++;
-		  byte = getc(file);
+		  aByte = getc(file);
 		  if (bpp == 1)
 		    {
 		       int                 bit = 0;
 
 		       for (bit = 0; bit < 8; bit++)
 			 {
-			    index = ((byte & (0x80 >> bit)) ? 1 : 0);
+			    index = ((aByte & (0x80 >> bit)) ? 1 : 0);
 			    ptr[poffset] = cmap[index].r;
 			    ptr[poffset + 1] = cmap[index].g;
 			    ptr[poffset + 2] = cmap[index].b;
@@ -891,7 +891,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 
 			    for (nibble = 0; nibble < 2; nibble++)
 			      {
-				 index = ((byte & (0xF0 >> nibble * 4)) >> (!nibble * 4));
+				 index = ((aByte & (0xF0 >> nibble * 4)) >> (!nibble * 4));
 				 if (index >= 16)
 				    index = 15;
 				 ptr[poffset] = cmap[index].r;
@@ -907,51 +907,51 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 			 {
 			    unsigned char       first;
 
-			    first = byte;
-			    byte = getc(file);
+			    first = aByte;
+			    aByte = getc(file);
 			    if (first == 0)
 			      {
-				 if (byte == 0)
+				 if (aByte == 0)
 				   {
 /*                                    column = width; */
 				   }
-				 else if (byte == 1)
+				 else if (aByte == 1)
 				   {
 				      column = width;
 				      line = -1;
 				   }
-				 else if (byte == 2)
+				 else if (aByte == 2)
 				   {
-				      byte = getc(file);
-				      column += byte;
+				      aByte = getc(file);
+				      column += aByte;
 				      linepos = column * bpp / 8;
-				      byte = getc(file);
-				      line += byte;
+				      aByte = getc(file);
+				      line += aByte;
 				   }
 				 else
 				   {
-				      int                 absolute = byte;
+				      int                 absolute = aByte;
 
 				      for (i = 0; i < absolute; i++)
 					{
 					   linepos++;
-					   byte = getc(file);
-					   ptr[poffset] = cmap[byte].r;
-					   ptr[poffset + 1] = cmap[byte].g;
-					   ptr[poffset + 2] = cmap[byte].b;
+					   aByte = getc(file);
+					   ptr[poffset] = cmap[aByte].r;
+					   ptr[poffset + 1] = cmap[aByte].g;
+					   ptr[poffset + 2] = cmap[aByte].b;
 					   column++;
 					}
 				      if (absolute & 0x01)
-					 byte = getc(file);
+					 aByte = getc(file);
 				   }
 			      }
 			    else
 			      {
 				 for (i = 0; i < first; i++)
 				   {
-				      ptr[poffset] = cmap[byte].r;
-				      ptr[poffset + 1] = cmap[byte].g;
-				      ptr[poffset + 2] = cmap[byte].b;
+				      ptr[poffset] = cmap[aByte].r;
+				      ptr[poffset + 1] = cmap[aByte].g;
+				      ptr[poffset + 2] = cmap[aByte].b;
 				      column++;
 				      linepos++;
 				   }
@@ -959,9 +959,9 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 			 }
 		       else
 			 {
-			    ptr[poffset] = cmap[byte].r;
-			    ptr[poffset + 1] = cmap[byte].g;
-			    ptr[poffset + 2] = cmap[byte].b;
+			    ptr[poffset] = cmap[aByte].r;
+			    ptr[poffset + 1] = cmap[aByte].g;
+			    ptr[poffset + 2] = cmap[aByte].b;
 			    column++;
 			    linepos += size;
 			 }
@@ -1004,7 +1004,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 	  }
 	while ((linepos < linesize) && (comp != 1) && (comp != 2))
 	  {
-	     int                 temp = fread(&byte, 1, 1, file);
+	     int                 temp = fread(&aByte, 1, 1, file);
 
 	     linepos += temp;
 	     if (!temp)
@@ -1018,4 +1018,221 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
    fclose(file);
    return TRUE;
 }
+
+#ifdef __WXMSW__
+
+wxBitmap wxImage::ConvertToBitmap() const
+{
+  
+  wxBitmap bitmap;
+  wxCHECK_MSG( Ok(), bitmap, "invalid image" );
+  int width = GetWidth();
+  int height = GetHeight();
+  bitmap.SetWidth( width );
+  bitmap.SetHeight( height );
+  bitmap.SetDepth( wxDisplayDepth() );
+
+  int headersize = sizeof(BITMAPINFOHEADER);
+  LPBITMAPINFO lpDIBh = (BITMAPINFO *) malloc( headersize );
+  wxCHECK_MSG( lpDIBh, bitmap, "could not allocate memory for DIB header" );
+
+// Fill in the DIB header
+  lpDIBh->bmiHeader.biSize = headersize;
+  lpDIBh->bmiHeader.biWidth = width;
+  lpDIBh->bmiHeader.biHeight = -height;
+  lpDIBh->bmiHeader.biSizeImage = width * height * 3;
+
+  lpDIBh->bmiHeader.biPlanes = 1;
+  lpDIBh->bmiHeader.biBitCount = 24;
+  lpDIBh->bmiHeader.biCompression = BI_RGB;
+  lpDIBh->bmiHeader.biClrUsed = 0;
+
+// These seem not needed for our purpose here.
+//  lpDIBh->bmiHeader.biClrImportant = 0;
+//  lpDIBh->bmiHeader.biXPelsPerMeter = 0;
+//  lpDIBh->bmiHeader.biYPelsPerMeter = 0;
+
+  unsigned char *lpBits = (unsigned char *) malloc( width*height*3 );
+  if( !lpBits )
+  {
+      wxFAIL_MSG( "could not allocate memory for DIB" );
+      free( lpDIBh );
+      return bitmap;
+  }
+
+  unsigned char *data = GetData();
+
+  unsigned char *ptdata = data, *ptbits = lpBits;
+  for( int i=0; i<width*height; i++ )
+  {
+    *(ptbits++) = *(ptdata+2);
+    *(ptbits++) = *(ptdata+1);
+    *(ptbits++) = *(ptdata  );
+    ptdata += 3;
+  }
+ 
+  HDC hdc = ::GetDC(NULL);
+
+  HBITMAP hbitmap;
+  hbitmap = CreateDIBitmap( hdc, &(lpDIBh->bmiHeader), CBM_INIT, lpBits, lpDIBh, DIB_RGB_COLORS );
+    
+// The above line is equivalent to the following two lines.
+//    hbitmap = ::CreateCompatibleBitmap( hdc, width, height );
+//    ::SetDIBits( hdc, hbitmap, 0, height, lpBits, lpDIBh, DIB_RGB_COLORS);
+// or the following lines
+//    hbitmap = ::CreateCompatibleBitmap( hdc, width, height );
+//    HDC memdc = ::CreateCompatibleDC( hdc );
+//    ::SelectObject( memdc, hbitmap); 
+//    ::SetDIBitsToDevice( memdc, 0, 0, width, height,
+//	    0, 0, 0, height, (void *)lpBits, lpDIBh, DIB_RGB_COLORS);
+//    ::SelectObject( memdc, 0 ); 
+//    ::DeleteDC( memdc ); 
+
+  bitmap.SetHBITMAP( (WXHBITMAP) hbitmap );
+
+  if( HasMask() )
+  {
+    unsigned char r = GetMaskRed();
+    unsigned char g = GetMaskGreen();
+    unsigned char b = GetMaskBlue();
+    unsigned char zero = 0, one = 255;
+    ptdata = data;
+    ptbits = lpBits;
+    for( int i=0; i<width*height; i++ )
+    {
+      if( (*(ptdata++)!=r) | (*(ptdata++)!=g) | (*(ptdata++)!=b) )
+      {
+        *(ptbits++) = zero;
+        *(ptbits++) = zero;
+        *(ptbits++) = zero;
+      }
+      else
+      {
+        *(ptbits++) = one;
+        *(ptbits++) = one;
+        *(ptbits++) = one;
+      }
+    }
+    hbitmap = ::CreateBitmap( (WORD)width, (WORD)height, 1, 1, NULL );
+    ::SetDIBits( hdc, hbitmap, 0, (WORD)height, lpBits, lpDIBh, DIB_RGB_COLORS);
+    wxMask bmpmask;
+    bmpmask.SetMaskBitmap( (WXHBITMAP) hbitmap );
+    bitmap.SetMask( &bmpmask );
+
+/* The following can also be used but is slow to run
+    wxColour colour( GetMaskRed(), GetMaskGreen(), GetMaskBlue());
+    wxMask bmpmask( bitmap, colour );
+    bitmap.SetMask( &bmpmask );
+*/
+  }
+
+  ::ReleaseDC(NULL, hdc);   
+  free(lpDIBh);
+  free(lpBits);
+
+  if( bitmap.GetHBITMAP() )
+    bitmap.SetOk( TRUE );
+  else
+    bitmap.SetOk( FALSE );
+   
+  return bitmap;
+}
+
+
+wxImage::wxImage( const wxBitmap &bitmap )
+{
+  if( !bitmap.Ok() )
+  {
+      wxFAIL_MSG( "invalid bitmap" );
+      return;
+  }
+
+  int width = bitmap.GetWidth();
+  int height = bitmap.GetHeight();
+  Create( width, height ); 
+  unsigned char *data = GetData();
+  if( !data )
+  {
+      wxFAIL_MSG( "could not allocate data for image" );
+      return;
+  }
+    
+  int headersize = sizeof(BITMAPINFOHEADER);
+  LPBITMAPINFO lpDIBh = (BITMAPINFO *) malloc( headersize );
+  if( !lpDIBh )
+  {
+      wxFAIL_MSG( "could not allocate data for DIB header" );
+      free( data );
+      return;
+  }
+
+// Fill in the DIB header
+  lpDIBh->bmiHeader.biSize = headersize;
+  lpDIBh->bmiHeader.biWidth = width;
+  lpDIBh->bmiHeader.biHeight = -height;
+  lpDIBh->bmiHeader.biSizeImage = width * height * 3;
+
+  lpDIBh->bmiHeader.biPlanes = 1;
+  lpDIBh->bmiHeader.biBitCount = 24;
+  lpDIBh->bmiHeader.biCompression = BI_RGB;
+  lpDIBh->bmiHeader.biClrUsed = 0;
+
+// These seem not needed for our purpose here.
+//    lpDIBh->bmiHeader.biClrImportant = 0;
+//    lpDIBh->bmiHeader.biXPelsPerMeter = 0;
+//    lpDIBh->bmiHeader.biYPelsPerMeter = 0;
+
+  unsigned char *lpBits = (unsigned char *) malloc( width*height*3 );
+  if( !lpBits )
+  {
+      wxFAIL_MSG( "could not allocate data for DIB" );
+      free( data );
+      free( lpDIBh );
+      return;
+  }
+    
+  HBITMAP hbitmap;
+  hbitmap = (HBITMAP) bitmap.GetHBITMAP();
+  HDC hdc = ::GetDC(NULL);
+  ::GetDIBits( hdc, hbitmap, 0, height, lpBits, lpDIBh, DIB_RGB_COLORS );
+	
+  unsigned char *ptdata = data, *ptbits = lpBits;
+  for( int i=0; i<width*height; i++ )
+  {
+    *(ptdata++) = *(ptbits+2);
+    *(ptdata++) = *(ptbits+1);
+    *(ptdata++) = *(ptbits  );
+    ptbits += 3;
+  }	
+      
+  if( bitmap.GetMask() && bitmap.GetMask()->GetMaskBitmap() )
+  {
+    hbitmap = (HBITMAP) bitmap.GetMask()->GetMaskBitmap();
+    HDC memdc = ::CreateCompatibleDC( hdc );
+    ::SetTextColor( memdc, RGB( 0, 0, 0 ) );
+    ::SetBkColor( memdc, RGB( 255, 255, 255 ) );
+    ::GetDIBits( memdc, hbitmap, 0, height, lpBits, lpDIBh, DIB_RGB_COLORS );
+    ::DeleteDC( memdc ); 
+    unsigned char r=16, g=16, b=16;  // background set to RGB(16,16,16)
+    ptdata = data;
+    ptbits = lpBits;
+    for( int i=0; i<width*height; i++ )
+    {
+      if( *ptbits != 0 )
+      {
+        *(ptdata++)  = r;
+        *(ptdata++)  = g;
+        *(ptdata++)  = b;
+      }
+      ptbits += 3;
+    }       
+    SetMaskColour( r, g, b );
+  }	
+      
+  ::ReleaseDC(NULL, hdc);   
+  free(lpDIBh);
+  free(lpBits);
+}
+
+#endif
 

@@ -102,6 +102,7 @@ COMMONOBJS = \
   $(MSWDIR)\framecmn.obj \
   $(MSWDIR)\gdicmn.obj \
   $(MSWDIR)\helpbase.obj \
+  $(MSWDIR)\image.obj \
   $(MSWDIR)\intl.obj \
   $(MSWDIR)\ipcbase.obj \
   $(MSWDIR)\log.obj \
@@ -487,6 +488,8 @@ $(MSWDIR)\filefn.obj:     $(COMMDIR)\filefn.$(SRCSUFF)
 $(MSWDIR)\framecmn.obj:     $(COMMDIR)\framecmn.$(SRCSUFF)
 
 $(MSWDIR)\gdicmn.obj:     $(COMMDIR)\gdicmn.$(SRCSUFF)
+
+$(MSWDIR)\image.obj:     $(COMMDIR)\image.$(SRCSUFF)
 
 $(MSWDIR)\intl.obj:     $(COMMDIR)\intl.$(SRCSUFF)
 

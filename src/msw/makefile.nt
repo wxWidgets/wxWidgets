@@ -86,6 +86,7 @@ COMMONOBJS = \
   $(COMMDIR)\fileconf.obj \
   $(COMMDIR)\framecmn.obj \
   $(COMMDIR)\gdicmn.obj \
+  $(COMMDIR)\image.obj \
   $(COMMDIR)\intl.obj \
   $(COMMDIR)\ipcbase.obj \
   $(COMMDIR)\helpbase.obj \
@@ -823,7 +824,7 @@ $(COMMDIR)/gdicmn.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
-$(COMMDIR)/iniconf.obj:     $*.$(SRCSUFF)
+$(COMMDIR)/image.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
