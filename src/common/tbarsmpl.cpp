@@ -39,12 +39,6 @@ BEGIN_EVENT_TABLE(wxToolBarSimple, wxToolBarBase)
 END_EVENT_TABLE()
 #endif
 
-// TODO: eliminate these; use system colours
-static wxPen * white_pen = NULL,
-             * dark_grey_pen = NULL,
-             * black_pen = NULL,
-             * thick_black_pen;
-
 wxToolBarSimple::wxToolBarSimple(void)
 {
     m_currentRowsOrColumns = 0;
@@ -63,25 +57,6 @@ bool wxToolBarSimple::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos
   SetBackgroundColour(settings.GetSystemColour(wxSYS_COLOUR_3DFACE));
   SetDefaultBackgroundColour(settings.GetSystemColour(wxSYS_COLOUR_3DFACE));
 
-  if ( white_pen == 0 )
-  {
-    white_pen = new wxPen;
-    white_pen->SetColour( "WHITE" );
-  }
-  if ( dark_grey_pen == 0 )
-  {
-    dark_grey_pen = new wxPen;
-    dark_grey_pen->SetColour( 85,85,85 );
-  }
-  if ( black_pen == 0 )
-  {
-    black_pen = new wxPen;
-    black_pen->SetColour( "BLACK" );
-  }
-  if ( thick_black_pen == 0 )
-  {
-    thick_black_pen = new wxPen("BLACK", 3, wxSOLID);
-  }
   if ( GetWindowStyleFlag() & wxTB_VERTICAL )
     { m_lastX = 7; m_lastY = 3; }
   else
@@ -139,6 +114,15 @@ void wxToolBarSimple::OnMouseEvent ( wxMouseEvent & event )
     event.Position(&x, &y);
     wxToolBarTool *tool = FindToolForPosition(x, y);
 
+    if (event.LeftDown())
+    {
+        CaptureMouse();
+    }
+    if (event.LeftUp())
+    {
+        ReleaseMouse();
+    }
+
     if (!tool)
       {
 	  if (m_currentTool > -1)
@@ -157,16 +141,17 @@ void wxToolBarSimple::OnMouseEvent ( wxMouseEvent & event )
 	    {
 		// If the left button is kept down and moved over buttons,
 		// press those buttons.
-		if (event.LeftIsDown() && tool->m_enabled) {
-		    SpringUpButton(m_currentTool);
-		    tool->m_toggleState = !tool->m_toggleState;
-		    wxMemoryDC *dc2 = new wxMemoryDC;
-			wxClientDC dc(this);
-		    DrawTool(dc, *dc2, tool);
-		    delete dc2;
+		if (event.LeftIsDown() && tool->m_enabled)
+        {
+            SpringUpButton(m_currentTool);
+            tool->m_toggleState = !tool->m_toggleState;
+            wxMemoryDC *dc2 = new wxMemoryDC;
+            wxClientDC dc(this);
+            DrawTool(dc, *dc2, tool);
+            delete dc2;
 		}
-		OnMouseEnter(tool->m_index);
-		m_currentTool = tool->m_index;
+        m_currentTool = tool->m_index;
+        OnMouseEnter(tool->m_index);
 	    }
 	  return;
       }
@@ -174,39 +159,54 @@ void wxToolBarSimple::OnMouseEvent ( wxMouseEvent & event )
   // Left button pressed.
   if (event.LeftDown() && tool->m_enabled)
   {
-      tool->m_toggleState = !tool->m_toggleState;
+      if (tool->m_isToggle)
+      {
+        tool->m_toggleState = !tool->m_toggleState;
+      }
+
       wxMemoryDC *dc2 = new wxMemoryDC;
 	  wxClientDC dc(this);
       DrawTool(dc, *dc2, tool);
       delete dc2;
+
   }
   else if (event.RightDown())
   {
     OnRightClick(tool->m_index, x, y);
   }
+
   // Left Button Released.  Only this action confirms selection.
   // If the button is enabled and it is not a toggle tool and it is
   // in the pressed state, then raise the button and call OnLeftClick.
   //
   if (event.LeftUp() && tool->m_enabled &&
-      (tool->m_toggleState || tool->m_isToggle)){
-      if (!tool->m_isToggle)
-	tool->m_toggleState = FALSE;
-      // Pass the OnLeftClick event to tool
-      if (!OnLeftClick(tool->m_index, tool->m_toggleState) && tool->m_isToggle)
-	// If it was a toggle, and OnLeftClick says No Toggle allowed,
-	// then change it back
-	tool->m_toggleState = !tool->m_toggleState;
+      (tool->m_toggleState || tool->m_isToggle))
+  {
+    if (!tool->m_isToggle)
+        tool->m_toggleState = FALSE;
+
+    // Pass the OnLeftClick event to tool
+    if (!OnLeftClick(tool->m_index, tool->m_toggleState) && tool->m_isToggle)
+    {
+        // If it was a toggle, and OnLeftClick says No Toggle allowed,
+        // then change it back
+        tool->m_toggleState = !tool->m_toggleState;
+    }
+
     wxClientDC dc(this);
-      wxMemoryDC *dc2 = new wxMemoryDC;
-      DrawTool(dc, *dc2, tool);
-      delete dc2;
+    wxMemoryDC *dc2 = new wxMemoryDC;
+    DrawTool(dc, *dc2, tool);
+    delete dc2;
   }
 }
 
 void wxToolBarSimple::DrawTool(wxDC& dc, wxMemoryDC& memDC, wxToolBarTool *tool)
 {
   PrepareDC(dc);
+
+  wxPen dark_grey_pen(wxColour( 85,85,85 ), 1, wxSOLID);
+  wxPen white_pen("WHITE", 1, wxSOLID);
+  wxPen black_pen("BLACK", 1, wxSOLID);
 
   wxBitmap *bitmap = tool->m_toggleState ? (& tool->m_bitmap2) : (& tool->m_bitmap1);
 
@@ -226,13 +226,13 @@ void wxToolBarSimple::DrawTool(wxDC& dc, wxMemoryDC& memDC, wxToolBarTool *tool)
       dc.SetClippingRegion(ax, ay, (bx-ax+1), (by-ay+1));
       dc.Blit((ax+1), (ay+1), (bx-ax-2), (by-ay-2), &memDC, 0, 0);
       wxPen * old_pen = dc.GetPen();
-      dc.SetPen( *white_pen );
+      dc.SetPen( white_pen );
       dc.DrawLine(ax,(by-1),ax,ay);
       dc.DrawLine(ax,ay,(bx-1),ay);
-      dc.SetPen( *dark_grey_pen );
+      dc.SetPen( dark_grey_pen );
       dc.DrawLine((bx-1),(ay+1),(bx-1),(by-1));
       dc.DrawLine((bx-1),(by-1),(ax+1),(by-1));
-      dc.SetPen( *black_pen );
+      dc.SetPen( black_pen );
       dc.DrawLine(bx,ay,bx,by);
       dc.DrawLine(bx,by,ax,by);
       dc.SetPen( *old_pen );
@@ -278,13 +278,13 @@ void wxToolBarSimple::DrawTool(wxDC& dc, wxMemoryDC& memDC, wxToolBarTool *tool)
         dc.SetClippingRegion(ax, ay, (bx-ax+1), (by-ay+1));
         dc.Blit((ax+2), (ay+2), (bx-ax-2), (by-ay-2), &memDC, 0, 0);
         wxPen * old_pen = dc.GetPen();
-        dc.SetPen( *black_pen );
+        dc.SetPen( black_pen );
         dc.DrawLine(ax,(by-1),ax,ay);
         dc.DrawLine(ax,ay,(bx-1),ay);
-        dc.SetPen( *dark_grey_pen );
+        dc.SetPen( dark_grey_pen );
         dc.DrawLine((ax+1),(by-2),(ax+1),(ay+1));
         dc.DrawLine((ax+1),(ay+1),(bx-2),(ay+1));
-        dc.SetPen( *white_pen );
+        dc.SetPen( white_pen );
         dc.DrawLine(bx,ay,bx,by);
         dc.DrawLine(bx,by,ax,by);
         dc.SetPen( *old_pen );
@@ -297,12 +297,13 @@ void wxToolBarSimple::DrawTool(wxDC& dc, wxMemoryDC& memDC, wxToolBarTool *tool)
         long y = tool->m_y;
         long w = tool->m_bitmap1.GetWidth();
         long h = tool->m_bitmap1.GetHeight();
+        wxPen thick_black_pen("BLACK", 3, wxSOLID);
 
         memDC.SelectObject(tool->m_bitmap1);
         dc.SetClippingRegion(tool->m_x, tool->m_y, w, h);
         dc.Blit(tool->m_x, tool->m_y, w, h,
                  &memDC, 0, 0);
-        dc.SetPen(*thick_black_pen);
+        dc.SetPen(thick_black_pen);
         dc.SetBrush(*wxTRANSPARENT_BRUSH);
         dc.DrawRectangle(x, y, w-1, h-1);
         dc.DestroyClippingRegion();

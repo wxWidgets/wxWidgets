@@ -351,7 +351,12 @@ bool wxDialog::Show(bool show)
       // a message before the deletion.
       while (wxModalDialogs.Member(this) && m_modalShowing && GetMessage(&msg, NULL, 0, 0))
       {
-        if (!IsDialogMessage((HWND) GetHWND(), &msg))
+        if (m_acceleratorTable.Ok() &&
+          ::TranslateAccelerator((HWND) GetHWND(), (HACCEL) m_acceleratorTable.GetHACCEL(), &msg))
+        {
+            // Have processed the message
+        }
+        else if (!IsDialogMessage((HWND) GetHWND(), &msg))
         {
           TranslateMessage(&msg);
           DispatchMessage(&msg);

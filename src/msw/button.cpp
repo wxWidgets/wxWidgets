@@ -36,7 +36,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 
 bool wxButton::MSWCommand(WXUINT param, WXWORD id)
 {
-  if (param == BN_CLICKED)
+  if (param == BN_CLICKED || (param == 1)) // 1 for accelerator
   {
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, id);
     event.SetEventObject(this);

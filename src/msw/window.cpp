@@ -4381,7 +4381,18 @@ void wxWindow::OnIdle(wxIdleEvent& event)
         {
             // Generate a LEAVE event
             m_mouseInWindow = FALSE;
-            MSWOnMouseLeave(pt.x, pt.y, 0);
+
+            int state;
+            if (::GetKeyState(VK_SHIFT) != 0)
+                state |= MK_SHIFT;
+            if (::GetKeyState(VK_CONTROL) != 0)
+                state |= MK_CONTROL;
+
+            // Unfortunately the mouse button and keyboard state may have changed
+            // by the time the OnIdle function is called, so 'state' may be
+            // meaningless.
+
+            MSWOnMouseLeave(pt.x, pt.y, state);
         }
     }
     UpdateWindowUI();
