@@ -1767,15 +1767,6 @@ dnl ---------------------------------------------------------------------------
 dnl AC_BAKEFILE
 dnl
 dnl To be used in configure.in of any project using Bakefile-generated mks
-dnl
-dnl *** Please note that currently due to a workaround in configure.in to allow
-dnl configuration in WINE mode, the contents of this macro is repeated
-dnl in configure.in instead of using AC_BAKEFILE. This allows an override
-dnl of PLATFORM_UNIX and PLATFORM_WIN32. Perhaps the code that generates
-dnl AC_BAKEFILE_PLATFORM can be changed to take this case into account.
-dnl Meanwhile, alterations in this macro need to be reflected in configure.in
-dnl also (search for e.g. AC_BAKEFILE_GNUMAKE). The patch to configure.in was
-dnl contributed by Dimitrie O. Paun <dpaun@rogers.com> and applied by Julian.
 dnl ---------------------------------------------------------------------------
 
 AC_DEFUN(AC_BAKEFILE,
