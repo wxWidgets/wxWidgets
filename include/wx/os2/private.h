@@ -21,6 +21,8 @@
 #define INCL_SHLERRORS
 #include <os2.h>
 
+#include "wx/fontenc.h"
+
 class WXDLLEXPORT wxFont;
 class WXDLLEXPORT wxWindow;
 
