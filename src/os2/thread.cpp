@@ -170,7 +170,7 @@ wxMutexError wxMutex::Unlock()
 class wxConditionInternal
 {
 public:
-    inline wxConditionInternal ()
+    inline wxConditionInternal (wxMutex& rMutex) : m_vMutex(rMutex)
     {
         ::DosCreateEventSem(NULL, &m_vEvent, DC_SEM_SHARED, FALSE);
         if (!m_vEvent)
@@ -208,14 +208,15 @@ public:
 
     HEV                             m_vEvent;
     int                             m_nWaiters;
+    wxMutex&                        m_vMutex;
 };
 
-wxCondition::wxCondition()
+wxCondition::wxCondition(wxMutex& rMutex)
 {
     APIRET                          ulrc;
     ULONG                           ulCount;
 
-    m_internal = new wxConditionInternal;
+    m_internal = new wxConditionInternal(rMutex);
     ulrc = ::DosCreateEventSem(NULL, &m_internal->m_vEvent, 0L, FALSE);
     if (ulrc != 0)
     {
@@ -239,10 +240,10 @@ void wxCondition::Wait()
 }
 
 bool wxCondition::Wait(
-  unsigned long                     lSec
-, unsigned long                     lNsec)
+  unsigned long                     lMilliSec
+)
 {
-    return m_internal->Wait(lSec*1000 + lNsec/1000000);
+    return m_internal->Wait(lMilliSec);
 }
 
 void wxCondition::Signal()

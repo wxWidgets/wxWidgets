@@ -923,9 +923,10 @@ bool wxFrame::HandlePaint()
             //
             // Icons in PM are the same as "pointers"
             //
+            const wxIcon&           vIcon = GetIcon();
             HPOINTER                hIcon;
 
-            if (m_icon.Ok())
+            if (vIcon.Ok())
                 hIcon = (HPOINTER)::WinSendMsg(m_hFrame, WM_QUERYICON, 0L, 0L);
             else
                 hIcon = (HPOINTER)m_hDefaultIcon;
@@ -1379,9 +1380,10 @@ MRESULT wxFrame::OS2WindowProc(
 
         case CM_QUERYDRAGIMAGE:
             {
+                const wxIcon&           vIcon = GetIcon();
                 HPOINTER                hIcon;
 
-                if (m_icon.Ok())
+                if (vIcon.Ok())
                     hIcon = (HPOINTER)::WinSendMsg(GetHWND(), WM_QUERYICON, 0L, 0L);
                 else
                     hIcon = (HPOINTER)m_hDefaultIcon;

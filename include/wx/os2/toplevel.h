@@ -67,7 +67,7 @@ public:
            virtual void Restore(void);
            virtual void SendSizeEvent(void);
            virtual void SetIcon(const wxIcon& rIcon);
-    inline virtual void SetIcons(const wxIconBundle& icons) { SetIcon( icons.GetIcon( -1 ) ); }
+           virtual void SetIcons(const wxIconBundle& rIcons);
 
            virtual bool Show(bool bShow = TRUE);
            virtual bool ShowFullScreen( bool bShow

@@ -823,16 +823,25 @@ void wxTopLevelWindowOS2::SetIcon(
   const wxIcon&                     rIcon
 )
 {
+    SetIcons(wxIconBundle(rIcon));
+} // end of wxTopLevelWindowOS2::SetIcon
+
+void wxTopLevelWindowOS2::SetIcons(
+  const wxIconBundle&               rIcons
+)
+{
     //
     // This sets m_icon
     //
-    wxTopLevelWindowBase::SetIcon(rIcon);
+    wxTopLevelWindowBase::SetIcons(rIcons);
 
-    if (m_icon.Ok())
+    const wxIcon&                   vIcon = rIcons.GetIcon(wxSize(32, 32));
+
+    if (vIcon.Ok() && vIcon.GetWidth() == 32 && vIcon.GetHeight() == 32)
     {
         ::WinSendMsg( m_hFrame
                      ,WM_SETICON
-                     ,(MPARAM)((HPOINTER)m_icon.GetHICON())
+                     ,(MPARAM)((HPOINTER)vIcon.GetHICON())
                      ,NULL
                     );
         ::WinSendMsg( m_hFrame

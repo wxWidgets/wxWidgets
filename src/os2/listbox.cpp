@@ -281,7 +281,7 @@ int wxListBox::DoAppend(
         wxOwnerDrawn*               pNewItem = CreateItem(nIndex); // dummy argument
 
         pNewItem->SetName(rsItem);
-        m_aItems.Add(pNewItem);
+        m_aItems.Insert(pNewItem, nIndex);
         ::WinSendMsg(GetHwnd(), LM_SETITEMHANDLE, (MPARAM)((SHORT)nIndex), MPFROMP(pNewItem));
         pNewItem->SetFont(GetFont());
     }
@@ -331,24 +331,18 @@ void wxListBox::DoSetItems(
         //
         // First delete old items
         //
-        size_t                      lUi = m_aItems.Count();
-
-        while (lUi-- != 0)
-        {
-            delete m_aItems[lUi];
-        }
-        m_aItems.Empty();
+        WX_CLEAR_ARRAY(m_aItems);
 
         //
         // Then create new ones
         //
-        for (lUi = 0; lUi < (size_t)m_nNumItems; lUi++)
+        for (size_t ui = 0; ui < (size_t)m_nNumItems; ui++)
         {
-            wxOwnerDrawn*           pNewItem = CreateItem(lUi);
+            wxOwnerDrawn*           pNewItem = CreateItem(ui);
 
-            pNewItem->SetName(raChoices[lUi]);
+            pNewItem->SetName(raChoices[ui]);
             m_aItems.Add(pNewItem);
-            ::WinSendMsg(GetHwnd(), LM_SETITEMHANDLE, MPFROMLONG(lUi), MPFROMP(pNewItem));
+            ::WinSendMsg(GetHwnd(), LM_SETITEMHANDLE, MPFROMLONG(ui), MPFROMP(pNewItem));
         }
     }
 #endif // wxUSE_OWNER_DRAWN
@@ -596,8 +590,25 @@ void wxListBox::DoInsertItems(
     int                             nItems = asItems.GetCount();
 
     for (int i = 0; i < nItems; i++)
-        ::WinSendMsg(GetHwnd(), LM_INSERTITEM, MPFROMLONG((LONG)(i + nPos)), (MPARAM)asItems[i].c_str());
-    m_nNumItems += nItems;
+    {
+        int                         nIndex = (int)::WinSendMsg( GetHwnd()
+                                                               ,LM_INSERTITEM
+                                                               ,MPFROMLONG((LONG)(i + nPos))
+                                                               ,(MPARAM)asItems[i].c_str()
+                                                              );
+
+        wxOwnerDrawn*               pNewItem = CreateItem(nIndex);
+
+        pNewItem->SetName(asItems[i]);
+        pNewItem->SetFont(GetFont());
+        m_aItems.Insert(pNewItem, nIndex);
+        ::WinSendMsg( GetHwnd()
+                     ,LM_SETITEMHANDLE
+                     ,(MPARAM)((SHORT)nIndex)
+                     ,MPFROMP(pNewItem)
+                    );
+        m_nNumItems += nItems;
+    }
 } // end of wxListBox::DoInsertItems
 
 void wxListBox::SetString(

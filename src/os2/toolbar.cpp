@@ -84,17 +84,19 @@ class wxToolBarTool : public wxToolBarToolBase
 public:
     inline wxToolBarTool( wxToolBar*      pTbar
                          ,int             vId
+                         ,const wxString& rsLabel
                          ,const wxBitmap& rBitmap1
                          ,const wxBitmap& rBitmap2
-                         ,bool            bToggle
+                         ,wxItemKind      vKind
                          ,wxObject*       pClientData
                          ,const wxString& rShortHelpString
                          ,const wxString& rLongHelpString
                         ) : wxToolBarToolBase( pTbar
                                               ,vId
+                                              ,rsLabel
                                               ,rBitmap1
                                               ,rBitmap2
-                                              ,bToggle
+                                              ,vKind
                                               ,pClientData
                                               ,rShortHelpString
                                               ,rLongHelpString
@@ -132,9 +134,10 @@ private:
 
 wxToolBarToolBase* wxToolBar::CreateTool(
   int                               nId
+, const wxString&                   rsLabel
 , const wxBitmap&                   rBitmap1
 , const wxBitmap&                   rBitmap2
-, bool                              bToggle
+, wxItemKind                        vKind
 , wxObject*                         pClientData
 , const wxString&                   rShortHelpString
 , const wxString&                   rLongHelpString
@@ -142,9 +145,10 @@ wxToolBarToolBase* wxToolBar::CreateTool(
 {
     return(new wxToolBarTool( this
                              ,nId
+                             ,rsLabel
                              ,rBitmap1
                              ,rBitmap2
-                             ,bToggle
+                             ,vKind
                              ,pClientData
                              ,rShortHelpString
                              ,rLongHelpString

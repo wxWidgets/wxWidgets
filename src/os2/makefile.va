@@ -250,9 +250,11 @@ COMMONOBJS = \
   ..\common\$D\hashmap.obj \
   ..\common\$D\helpbase.obj \
   ..\common\$D\http.obj \
+  ..\common\$D\iconbndl.obj \
   ..\common\$D\imagall.obj \
   ..\common\$D\imagbmp.obj \
   ..\common\$D\image.obj \
+  ..\common\$D\imagfill.obj \
   ..\common\$D\imaggif.obj \
   ..\common\$D\imagiff.obj \
   ..\common\$D\imagjpeg.obj \
@@ -384,9 +386,11 @@ COMLIBOBJS2 = \
   hashmap.obj \
   helpbase.obj \
   http.obj \
+  iconbndl.obj \
   imagall.obj \
   imagbmp.obj \
   image.obj \
+  imagfill.obj \
   imaggif.obj \
   imagiff.obj \
   imagjpeg.obj \
@@ -410,11 +414,11 @@ COMLIBOBJS2 = \
   mstream.obj \
   nbkbase.obj \
   object.obj \
-  odbc.obj \
-  paper.obj \
-  popupcmn.obj
+  odbc.obj
 
 COMLIBOBJS3 = \
+  paper.obj \
+  popupcmn.obj \
   prntbase.obj \
   process.obj \
   protocol.obj \
@@ -752,9 +756,11 @@ $(COMLIBOBJS2):
   copy ..\common\$D\hashmap.obj
   copy ..\common\$D\helpbase.obj
   copy ..\common\$D\http.obj
+  copy ..\common\$D\iconbndl.obj
   copy ..\common\$D\imagall.obj
   copy ..\common\$D\imagbmp.obj
   copy ..\common\$D\image.obj
+  copy ..\common\$D\imagfill.obj
   copy ..\common\$D\imaggif.obj
   copy ..\common\$D\imagiff.obj
   copy ..\common\$D\imagjpeg.obj
@@ -779,10 +785,10 @@ $(COMLIBOBJS2):
   copy ..\common\$D\nbkbase.obj
   copy ..\common\$D\object.obj
   copy ..\common\$D\odbc.obj
-  copy ..\common\$D\paper.obj
-  copy ..\common\$D\popupcmn.obj
 
 $(COMLIBOBJS3):
+  copy ..\common\$D\paper.obj
+  copy ..\common\$D\popupcmn.obj
   copy ..\common\$D\prntbase.obj
   copy ..\common\$D\process.obj
   copy ..\common\$D\protocol.obj

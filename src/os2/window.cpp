@@ -278,10 +278,11 @@ void wxWindowOS2::Init()
     m_bDoubleClickAllowed = 0;
     m_bWinCaptured = FALSE;
 
-    m_isBeingDeleted = FALSE;
-    m_fnOldWndProc = 0;
-    m_bUseCtl3D = FALSE;
-    m_bMouseInWindow = FALSE;
+    m_isBeingDeleted        = FALSE;
+    m_fnOldWndProc          = 0;
+    m_bUseCtl3D             = FALSE;
+    m_bMouseInWindow        = FALSE;
+    m_bLastKeydownProcessed = FALSE;
 
     //
     // wxWnd
@@ -2705,12 +2706,14 @@ MRESULT wxWindowOS2::OS2WindowProc(
                 }
                 else // keydown event
                 {
+                    m_bLastKeydownProcessed = FALSE;
                     //
                     // If this has been processed by an event handler,
                     // return 0 now (we've handled it). DON't RETURN
                     // we still need to process further
                     //
                     HandleKeyDown((WXDWORD)wParam, lParam);
+                    m_bLastKeydownProcessed = TRUE;
                     if (uKeyFlags & KC_VIRTUALKEY)
                     {
                         USHORT          uVk = SHORT2FROMMP((MPARAM)lParam);
@@ -4014,6 +4017,16 @@ bool wxWindowOS2::HandleChar(
     bool                            bCtrlDown = FALSE;
     int                             vId;
 
+    if (m_bLastKeydownProcessed)
+    {
+        //
+        // The key was handled in the EVT_KEY_DOWN.  Handling a key in an
+        // EVT_KEY_DOWN handler is meant, by design, to prevent EVT_CHARs
+        // from happening, so just bail out at this point.
+        //
+        m_bLastKeydownProcessed = FALSE;
+        return TRUE;
+    }
     if (isASCII)
     {
         //

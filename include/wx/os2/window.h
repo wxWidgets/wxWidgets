@@ -496,6 +496,7 @@ protected:
     bool                            m_bBackgroundTransparent:1;
     bool                            m_bMouseInWindow:1;
     bool                            m_bDoubleClickAllowed:1;
+    bool                            m_bLastKeydownProcessed:1;
     bool                            m_bWinCaptured:1;
     WXDWORD                         m_dwExStyle;
 
