@@ -681,11 +681,14 @@ void wxHashTable::DeleteContents (bool flag)
 
 void wxHashTable::Clear ()
 {
-  int i;
-  for (i = 0; i < n; i++)
+    int i;
+    if (hash_table)
     {
-      if (hash_table[i])
-        hash_table[i]->Clear ();
+        for (i = 0; i < n; i++)
+        {
+            if (hash_table[i])
+                hash_table[i]->Clear ();
+        }
     }
   m_count = 0;
 }

@@ -1376,10 +1376,73 @@ bool wxListCtrl::ScrollList(int dx, int dy)
 // or zero if the two items are equivalent.
 
 // data is arbitrary data to be passed to the sort function.
+
+// FIXME: this is horrible and MT-unsafe and everything else but I don't have
+//        time for anything better right now (VZ)
+static long gs_sortData = 0;
+static wxListCtrl *gs_sortCtrl = NULL;
+static wxListCtrlCompare gs_sortFunction = NULL;
+
+int wxCMPFUNC_CONV wxListCtrlCompareFn(const void *arg1, const void *arg2)
+{
+    int n1 = *(const int *)arg1,
+        n2 = *(const int *)arg2;
+
+    return gs_sortFunction(gs_sortCtrl->GetItemData(n1),
+                           gs_sortCtrl->GetItemData(n2),
+                           gs_sortData);
+}
+
 bool wxListCtrl::SortItems(wxListCtrlCompare fn, long data)
 {
-    return (ListView_SortItems(GetHwnd(), (PFNLVCOMPARE) fn, data) != 0);
+    // sort the attributes too
+    if ( m_hasAnyAttr )
+    {
+        int n,
+            count = GetItemCount();
+        int *aItems = new int[count];
+        for ( n = 0; n < count; n++ )
+        {
+            aItems[n] = n;
+        }
+
+        gs_sortData = data;
+        gs_sortCtrl = this;
+        gs_sortFunction = fn;
+
+        qsort(aItems, count, sizeof(int), wxListCtrlCompareFn);
+
+        gs_sortData = 0;
+        gs_sortCtrl = NULL;
+        gs_sortFunction = NULL;
+
+        wxHashTable attrsNew(wxKEY_INTEGER, 1000);
+        for ( n = 0; n < count; n++ )
+        {
+            wxObject *attr = m_attrs.Delete(n);
+            if ( attr )
+            {
+                attrsNew.Put(aItems[n], attr);
+            }
+        }
+
+        m_attrs.Destroy();
+        m_attrs = attrsNew;
+
+        delete [] aItems;
+    }
+
+    if ( !ListView_SortItems(GetHwnd(), (PFNLVCOMPARE)fn, data) )
+    {
+        wxLogDebug(_T("ListView_SortItems() failed"));
+
+        return FALSE;
+    }
+
+    return TRUE;
 }
+
+
 
 // ----------------------------------------------------------------------------
 // message processing
