@@ -83,6 +83,22 @@ int wxIcon::GetHeight() const
    return M_ICONDATA->GetHeight();
 }
 
+int wxIcon::GetDepth() const{
+	return 32; 
+}
+
+void wxIcon::SetDepth(int depth){
+	
+}
+
+void wxIcon::SetWidth(int width){
+	
+}
+
+void wxIcon::SetHeight(int height){
+	
+}
+
 bool wxIcon::Ok() const
 {
     return m_refData != NULL ;
