@@ -13,7 +13,7 @@
 
 """
 
-In this module you will find wxGridSizer and wxFlexgridSizer.
+In this module you will find wxGridSizer and wxFlexGridSizer.
 wxGridSizer arrainges its items in a grid in which all the widths and
 heights are the same.  wxFlexgridSizer allows different widths and
 heights, and you can also specify rows and/or columns that are

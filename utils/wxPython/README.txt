@@ -60,6 +60,8 @@ Added wxPython.lib.spashscreen from Mike Fletcher.
 
 Added wxPython.lib.filebrowsebutton also from Mike Fletcher.
 
+Renamed wxTreeCtrl.GetParent to GetItemParent to avoid a name clash
+with wxWindow.GetParent.
 
 
 

@@ -1,6 +1,6 @@
 
 from wxPython.wx import *
-from wxPython.lib.filebrowsebtn import FileBrowseButton
+from wxPython.lib.filebrowsebutton import FileBrowseButton
 
 
 #----------------------------------------------------------------------

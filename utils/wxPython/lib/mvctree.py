@@ -90,7 +90,7 @@ class LayoutEngine:
     """
     def __init__(self, tree):
         self.tree = tree
-    def layout(self, node):
+    def Layout(self, node):
         raise NotImplementedError
     def GetNodeList(self):
         raise NotImplementedError
@@ -101,7 +101,7 @@ class Transform:
     """
     def __init__(self, tree):
         self.tree = tree
-    def transform(self, node, offset, rotation):
+    def Transform(self, node, offset, rotation):
         """
         This method should only change the projx and projy attributes of
         the node. These represent the position of the node as it should
@@ -141,7 +141,7 @@ class Painter:
         return self.bmp
     def ClearBuffer(self):
         self.bmp = None
-    def paint(self, dc, node, doubleBuffered=1, paintBackground=1):
+    def Paint(self, dc, node, doubleBuffered=1, paintBackground=1):
         raise NotImplementedError
     def GetTextColour(self):
         return self.textcolor
@@ -187,18 +187,18 @@ class Painter:
         if evt.LeftDClick():
             x, y = self.tree.CalcUnscrolledPosition(evt.GetX(), evt.GetY())
             for item in self.rectangles:
-                if item[1].contains((x,y)):
+                if item[1].Contains((x,y)):
                     self.tree.Edit(item[0].data)
                     self.tree.OnNodeClick(item[0], evt)
                     return
         elif evt.ButtonDown():
             x, y = self.tree.CalcUnscrolledPosition(evt.GetX(), evt.GetY())
             for item in self.rectangles:
-                if item[1].contains((x, y)):
+                if item[1].Contains((x, y)):
                     self.tree.OnNodeClick(item[0], evt)
                     return
             for item in self.knobs:
-                if item[1].contains((x, y)):
+                if item[1].Contains((x, y)):
                     self.tree.OnKnobClick(item[0])
                     return
         evt.Skip()
@@ -242,7 +242,7 @@ class NodePainter:
     """
     def __init__(self, painter):
         self.painter = painter
-    def paint(self, node, dc, location = None):
+    def Paint(self, node, dc, location = None):
         """
         location should be provided only to draw in an unusual position
         (not the node's normal position), otherwise the node's projected x and y
@@ -256,7 +256,7 @@ class LinePainter:
     """
     def __init__(self, painter):
         self.painter = painter
-    def paint(self, parent, child, dc):
+    def Paint(self, parent, child, dc):
         raise NotImplementedError
 
 class TextConverter:
@@ -265,7 +265,7 @@ class TextConverter:
     """
     def __init__(self, painter):
         self.painter = painter
-    def convert(node):
+    def Convert(node):
         """
         Should return a string. The node argument will be an
         MVCTreeNode.
@@ -450,14 +450,14 @@ class LateFSTreeModel(FSTreeModel):
         return not os.path.isdir(node.path + os.sep + node.fileName)
 
 class StrTextConverter(TextConverter):
-    def convert(self, node):
+    def Convert(self, node):
         return str(node.data)
 
 class NullTransform(Transform):
     def GetSize(self):
         return tuple(self.size)
 
-    def transform(self, node, offset, rotation):
+    def Transform(self, node, offset, rotation):
         self.size = [0,0]
         list = self.tree.GetLayoutEngine().GetNodeList()
         for node in list:
@@ -481,7 +481,7 @@ class Rect:
         name = ['x', 'y', 'width', 'height'][index]
         setattr(self, name, value)
 
-    def contains(self, other):
+    def Contains(self, other):
         if type(other) == type(()):
             other = Rect(other[0], other[1], 0, 0)
         if other.x >= self.x:
@@ -504,7 +504,7 @@ class TreeLayout(LayoutEngine):
         self.NODE_HEIGHT = 20
         self.nodelist = []
 
-    def layout(self, node):
+    def Layout(self, node):
         self.nodelist = []
         self.NODE_HEIGHT = self.tree.GetFont().GetPointSize() * 2
         self.layoutwalk(node)
@@ -543,7 +543,7 @@ class TreePainter(Painter):
         self.textConverter = textConverter
         self.charWidths = []
 
-    def paint(self, dc, node, doubleBuffered=1, paintBackground=1):
+    def Paint(self, dc, node, doubleBuffered=1, paintBackground=1):
         if not self.charWidths:
             self.charWidths = []
             for i in range(25):
@@ -603,8 +603,8 @@ class TreePainter(Painter):
         self.dashpen = wxPen(pen.GetColour(), 1, wxDOT)
 
     def paintWalk(self, node, dc, paintRects=0):
-        self.linePainter.paint(node.parent, node, dc)
-        self.nodePainter.paint(node, dc, drawRects = paintRects)
+        self.linePainter.Paint(node.parent, node, dc)
+        self.nodePainter.Paint(node, dc, drawRects = paintRects)
         if node.expanded:
             for kid in node.kids:
                 if not self.paintWalk(kid, dc, paintRects):
@@ -638,8 +638,8 @@ class TreePainter(Painter):
         Painter.OnMouse(self, evt)
 
 class TreeNodePainter(NodePainter):
-    def paint(self, node, dc, location = None, drawRects = 0):
-        text = self.painter.textConverter.convert(node)
+    def Paint(self, node, dc, location = None, drawRects = 0):
+        text = self.painter.textConverter.Convert(node)
         extent = dc.GetTextExtent(text)
         node.width = extent[0]
         node.height = extent[1]
@@ -658,7 +658,7 @@ class TreeNodePainter(NodePainter):
         self.painter.rectangles.append((node, Rect(node.projx, node.projy, node.width, node.height)))
 
 class TreeLinePainter(LinePainter):
-    def paint(self, parent, child, dc):
+    def Paint(self, parent, child, dc):
         dc.SetPen(self.painter.GetDashPen())
         px = py = cx = cy = 0
         if parent is None or child == self.painter.tree.currentRoot:
@@ -836,7 +836,7 @@ class wxMVCTree(wxScrolledWindow):
 
     def GetDisplayText(self, node):
         treenode = self.nodemap[node]
-        return self.painter.textConverter.convert(treenode)
+        return self.painter.textConverter.Convert(treenode)
 
     def IsDoubleBuffered(self):
         return self.doubleBuffered
@@ -975,8 +975,8 @@ class wxMVCTree(wxScrolledWindow):
         else:
             e = wxMVCTreeEvent(wxEVT_MVCTREE_ITEM_COLLAPSED, self.GetId(), node)
         self.GetEventHandler().ProcessEvent(e)
-        self.layout.layout(self.currentRoot)
-        self.transform.transform(self.currentRoot, self.offset, self.rotation)
+        self.layout.Layout(self.currentRoot)
+        self.transform.Transform(self.currentRoot, self.offset, self.rotation)
         self.Refresh()
 
     def IsExpanded(self, node):
@@ -1033,7 +1033,7 @@ class wxMVCTree(wxScrolledWindow):
         self.PrepareDC(dc)
         for node in changeparents:
             if node:
-                self.painter.paint(dc, node, doubleBuffered = 0, paintBackground = 0)
+                self.painter.Paint(dc, node, doubleBuffered = 0, paintBackground = 0)
         self.painter.ClearBuffer()
 
     def RemoveFromSelection(self, nodeTuple):
@@ -1051,7 +1051,7 @@ class wxMVCTree(wxScrolledWindow):
         self.PrepareDC(dc)
         for node in changeparents:
             if node:
-                self.painter.paint(dc, node, doubleBuffered = 0, paintBackground = 0)
+                self.painter.Paint(dc, node, doubleBuffered = 0, paintBackground = 0)
         self.painter.ClearBuffer()
 
 
@@ -1090,11 +1090,11 @@ class wxMVCTree(wxScrolledWindow):
         try:
             self.EnableScrolling(false, false)
             if not self.laidOut:
-                self.layout.layout(self.currentRoot)
+                self.layout.Layout(self.currentRoot)
                 self.laidOut = true
                 self.transformed = false
             if not self.transformed:
-                self.transform.transform(self.currentRoot, self.offset, self.rotation)
+                self.transform.Transform(self.currentRoot, self.offset, self.rotation)
                 self.transformed = true
             tsize = None
             tsize = list(self.transform.GetSize())
@@ -1111,7 +1111,7 @@ class wxMVCTree(wxScrolledWindow):
             dc = wxPaintDC(self)
             self.PrepareDC(dc)
             dc.SetFont(self.GetFont())
-            self.painter.paint(dc, self.currentRoot, self.doubleBuffered)
+            self.painter.Paint(dc, self.currentRoot, self.doubleBuffered)
         except:
             traceback.print_exc()
 
