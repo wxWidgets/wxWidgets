@@ -350,7 +350,7 @@ void wxGLCanvas::DoSetSize( int x, int y, int width, int height, int sizeFlags )
         int old_width = m_width;
         int old_height = m_height;
 
-        if ((sizeFlags & wxSIZE_USE_EXISTING) == wxSIZE_USE_EXISTING)
+        if ((sizeFlags & wxSIZE_ALLOW_MINUS_ONE) == 0)
         {
             if (x != -1) m_x = x;
             if (y != -1) m_y = y;

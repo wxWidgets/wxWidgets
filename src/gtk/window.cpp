@@ -1983,7 +1983,7 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     }
     else
     {
-        if ((sizeFlags & wxSIZE_USE_EXISTING) == wxSIZE_USE_EXISTING)
+        if ((sizeFlags & wxSIZE_ALLOW_MINUS_ONE) == 0)
         {
             if (x != -1) m_x = x;
             if (y != -1) m_y = y;
@@ -2994,7 +2994,10 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
     while (node)
     {
         wxWindow *child = (wxWindow*) node->Data();
-	child->Move( child->m_x + dx, child->m_y + dy );
+	int sx = 0;
+	int sy = 0;
+	child->GetSize( &sx, &sy );
+	child->SetSize( child->m_x + dx, child->m_y + dy, sx, sy, wxSIZE_ALLOW_MINUS_ONE );
 	node = node->Next();
     }
 
