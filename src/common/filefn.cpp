@@ -1952,7 +1952,8 @@ wxFileKind wxGetFileKind(int fd)
 
 wxFileKind wxGetFileKind(FILE *fp)
 {
-#ifndef wxFILEKIND_STUB
+    // note: the watcom rtl dll doesn't have fileno (the static lib does)
+#if !defined wxFILEKIND_STUB && !(defined __WATCOMC__ && defined __SW_BR)
     return wxGetFileKind(fileno(fp));
 #else
     (void)fp;
