@@ -1313,7 +1313,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 void wxListMainWindow::MoveToFocus( void )
 {
   if (!m_current) return;
-/*
+  
   int x = 0;
   int y = 0;
   int w = 0;
@@ -1328,7 +1328,8 @@ void wxListMainWindow::MoveToFocus( void )
     int y_s = m_yScroll*GetScrollPos( wxVERTICAL );
     if ((y > y_s) && (y+h < y_s+h_p)) return;
     if (y-y_s < 5) SetScrollPos( wxVERTICAL, (y-5)/m_yScroll );
-    if (y+h+5 > y_s+h_p) SetScrollPos( wxVERTICAL, (y+h-h_p+h+5)/m_yScroll );
+    if (y+h+5 > y_s+h_p) SetScrollPos( wxVERTICAL, (y+h-h_p+h+15)/m_yScroll );
+    m_dirty = TRUE;
   }
   else
   {
@@ -1336,9 +1337,9 @@ void wxListMainWindow::MoveToFocus( void )
     int x_s = m_xScroll*GetScrollPos( wxHORIZONTAL );
     if ((x > x_s) && (x+w < x_s+w_p)) return;
     if (x-x_s < 5) SetScrollPos( wxHORIZONTAL, (x-5)/m_xScroll );
-    if (x+w > x_s+w_p)  SetScrollPos( wxHORIZONTAL, (x+w-w_p+5)/m_xScroll );
+    if (x+w-5 > x_s+w_p) SetScrollPos( wxHORIZONTAL, (x+w-w_p+15)/m_xScroll );
+    m_dirty = TRUE;
   }
-*/
 }
 
 void wxListMainWindow::OnArrowChar( wxListLineData *newCurrent, bool shiftDown )
@@ -1859,37 +1860,28 @@ long wxListMainWindow::GetMode( void ) const
 
 void wxListMainWindow::CalculatePositions( void )
 {
+  if (!m_lines.First()) return;
+
   wxPaintDC dc( this );
   dc.SetFont( *GetFont() );
 
   int iconSpacing = 0;
   if (m_mode & wxLC_ICON) iconSpacing = m_normal_spacing;
   if (m_mode & wxLC_SMALL_ICON) iconSpacing = m_small_spacing;
-  wxNode *node = m_lines.First();
-  while (node)
-  {
-    wxListLineData *line = (wxListLineData*)node->Data();
-    line->CalculateSize( &dc, iconSpacing );
-    node = node->Next();
-  }
-
+  
+  // we take the first line (which also can be an icon or
+  // an a text item in wxLC_ICON and wxLC_LIST modes) to
+  // measure the size of the line
+  
   int lineWidth = 0;
   int lineHeight = 0;
   int lineSpacing = 0;
 
-  node = m_lines.First();
-  if (node)
-  {
-    wxListLineData *line = (wxListLineData*)node->Data();
-    int dummy = 0;
-    line->GetSize( dummy, lineSpacing );
-    lineSpacing += 4;
-  }
-  else
-  {
-    // just in case
-    lineSpacing = 4 + (int)dc.GetCharHeight();
-  }
+  wxListLineData *line = (wxListLineData*)m_lines.First()->Data();
+  line->CalculateSize( &dc, iconSpacing );
+  int dummy = 0;
+  line->GetSize( dummy, lineSpacing );
+  lineSpacing += 4;
 
   int clientWidth = 0;
   int clientHeight = 0;
@@ -1897,15 +1889,17 @@ void wxListMainWindow::CalculatePositions( void )
   if (m_mode & wxLC_REPORT)
   {
     int x = 4;
-    int y = 3;
+    int y = 1;
     int entireHeight = m_lines.Number() * lineSpacing + 10;
-    SetScrollbars( m_xScroll, m_yScroll, 0, (entireHeight+10) / m_yScroll, 0, 0, TRUE );
+    int scroll_pos = GetScrollPos( wxVERTICAL );
+    SetScrollbars( m_xScroll, m_yScroll, 0, (entireHeight+10) / m_yScroll, 0, scroll_pos, TRUE );
     GetClientSize( &clientWidth, &clientHeight );
 
-    node = m_lines.First();
+    wxNode* node = m_lines.First();
     while (node)
     {
       wxListLineData *line = (wxListLineData*)node->Data();
+      line->CalculateSize( &dc, iconSpacing );
       line->SetPosition( &dc, x, y, clientWidth );
       int col_x = 2;
       for (int i = 0; i < GetColumnCount(); i++)
@@ -1919,7 +1913,10 @@ void wxListMainWindow::CalculatePositions( void )
   }
   else
   {
-    // At first, we try without any scrollbar
+    // at first we try without any scrollbar. if the items don't
+    // fit into the window, we recalculate after subtracting an
+    // approximated 15 pt for the horizontal scrollbar
+    
     GetSize( &clientWidth, &clientHeight );
 
     int entireWidth = 0;
@@ -1928,34 +1925,36 @@ void wxListMainWindow::CalculatePositions( void )
     {
       entireWidth = 0;
       int x = 5;
-      int y = 6;
+      int y = 3;
       int maxWidth = 0;
-      node = m_lines.First();
+      wxNode *node = m_lines.First();
       while (node)
       {
         wxListLineData *line = (wxListLineData*)node->Data();
+        line->CalculateSize( &dc, iconSpacing );
         line->SetPosition( &dc, x, y, clientWidth );
         line->GetSize( lineWidth, lineHeight );
         if (lineWidth > maxWidth) maxWidth = lineWidth;
         y += lineSpacing;
-        if (y+lineHeight > clientHeight-4)
+        if (y+lineSpacing-8 > clientHeight-6)
         {
-          y = 6;
+          y = 3;
           x += maxWidth+13;
           entireWidth += maxWidth+13;
           maxWidth = 0;
         }
         node = node->Next();
-  if (!node) entireWidth += maxWidth;
-  if ((tries == 0) && (entireWidth > clientWidth))
-  {
-    clientHeight -= 14; // scrollbar height
-    break;
-  }
-  if (!node) tries = 1;
+        if (!node) entireWidth += maxWidth;
+        if ((tries == 0) && (entireWidth > clientWidth))
+        {
+           clientHeight -= 15; // scrollbar height
+           break;
+        }
+        if (!node) tries = 1;  // everything fits, no second try required
       }
     }
-    SetScrollbars( m_xScroll, m_yScroll, (entireWidth+15) / m_xScroll, 0, 0, 0, TRUE );
+    int scroll_pos = GetScrollPos( wxHORIZONTAL );
+    SetScrollbars( m_xScroll, m_yScroll, (entireWidth+15) / m_xScroll, 0, scroll_pos, 0, TRUE );
   }
   m_visibleLines = (clientHeight-4) / (lineSpacing);
 }
@@ -2346,7 +2345,7 @@ void wxListCtrl::SetWindowStyleFlag( long flag )
   wxWindow::SetWindowStyleFlag( flag );
 }
 
-bool wxListCtrl::GetColumn(int col, wxListItem &item)
+bool wxListCtrl::GetColumn(int col, wxListItem &item) const
 {
   m_mainWin->GetColumn( col, item );
   return TRUE;
@@ -2358,7 +2357,7 @@ bool wxListCtrl::SetColumn( int col, wxListItem& item )
   return TRUE;
 }
 
-int wxListCtrl::GetColumnWidth( int col )
+int wxListCtrl::GetColumnWidth( int col ) const
 {
   return m_mainWin->GetColumnWidth( col );
 }
@@ -2369,7 +2368,7 @@ bool wxListCtrl::SetColumnWidth( int col, int width )
   return TRUE;
 }
 
-int wxListCtrl::GetCountPerPage(void)
+int wxListCtrl::GetCountPerPage(void) const
 {
   return m_mainWin->GetCountPerPage();  // different from Windows ?
 }
@@ -2380,7 +2379,7 @@ wxText& wxListCtrl::GetEditControl(void) const
 }
 */
 
-bool wxListCtrl::GetItem( wxListItem &info )
+bool wxListCtrl::GetItem( wxListItem &info ) const
 {
   m_mainWin->GetItem( info );
   return TRUE;
@@ -2409,7 +2408,7 @@ long wxListCtrl::SetItem( long index, int col, const wxString& label, int imageI
   return TRUE;
 }
 
-int wxListCtrl::GetItemState( long item, long stateMask )
+int wxListCtrl::GetItemState( long item, long stateMask ) const
 {
   return m_mainWin->GetItemState( item, stateMask );
 }
@@ -2430,7 +2429,7 @@ bool wxListCtrl::SetItemImage( long item, int image, int WXUNUSED(selImage) )
   return TRUE;
 }
 
-wxString wxListCtrl::GetItemText( long item )
+wxString wxListCtrl::GetItemText( long item ) const
 {
   wxListItem info;
   info.m_itemId = item;
@@ -2447,7 +2446,7 @@ void wxListCtrl::SetItemText( long item, const wxString &str )
   m_mainWin->SetItem( info );
 }
 
-long wxListCtrl::GetItemData( long item )
+long wxListCtrl::GetItemData( long item ) const
 {
   wxListItem info;
   info.m_itemId = item;
@@ -2465,13 +2464,13 @@ bool wxListCtrl::SetItemData( long item, long data )
   return TRUE;
 }
 
-bool wxListCtrl::GetItemRect( long item, wxRectangle &rect,  int WXUNUSED(code) )
+bool wxListCtrl::GetItemRect( long item, wxRectangle &rect,  int WXUNUSED(code) ) const
 {
   m_mainWin->GetItemRect( item, rect );
   return TRUE;
 }
 
-bool wxListCtrl::GetItemPosition( long item, wxPoint& pos )
+bool wxListCtrl::GetItemPosition( long item, wxPoint& pos ) const
 {
   m_mainWin->GetItemPosition( item, pos );
   return TRUE;
@@ -2482,7 +2481,7 @@ bool wxListCtrl::SetItemPosition( long WXUNUSED(item), const wxPoint& WXUNUSED(p
   return 0;
 }
 
-int wxListCtrl::GetItemCount(void)
+int wxListCtrl::GetItemCount(void) const
 {
   return m_mainWin->GetItemCount();
 }
@@ -2492,12 +2491,12 @@ void wxListCtrl::SetItemSpacing( int spacing, bool isSmall )
   m_mainWin->SetItemSpacing( spacing, isSmall );
 }
 
-int wxListCtrl::GetItemSpacing( bool isSmall )
+int wxListCtrl::GetItemSpacing( bool isSmall ) const
 {
   return m_mainWin->GetItemSpacing( isSmall );
 }
 
-int wxListCtrl::GetSelectedItemCount(void)
+int wxListCtrl::GetSelectedItemCount(void) const
 {
   return m_mainWin->GetSelectedItemCount();
 }
@@ -2512,7 +2511,7 @@ void wxListCtrl::SetTextColour(const wxColour& WXUNUSED(col))
 }
 */
 
-long wxListCtrl::GetTopItem(void)
+long wxListCtrl::GetTopItem(void) const
 {
   return 0;
 }
@@ -2522,7 +2521,7 @@ long wxListCtrl::GetNextItem( long item, int geom, int state ) const
   return m_mainWin->GetNextItem( item, geom, state );
 }
 
-wxImageList *wxListCtrl::GetImageList(int which)
+wxImageList *wxListCtrl::GetImageList(int which) const
 {
   if (which == wxIMAGE_LIST_NORMAL)
   {

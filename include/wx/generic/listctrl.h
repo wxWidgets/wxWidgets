@@ -548,37 +548,37 @@ class wxListCtrl: public wxControl
       long style = wxLC_ICON, const wxValidator& validator = wxDefaultValidator,
        const wxString &name = "listctrl" );
     void OnSize( wxSizeEvent &event );
-    bool GetColumn( int col, wxListItem& item );
+    bool GetColumn( int col, wxListItem& item ) const;
     bool SetColumn( int col, wxListItem& item );
-    int GetColumnWidth( int col );
+    int GetColumnWidth( int col ) const;
     bool SetColumnWidth( int col, int width);
-    int GetCountPerPage(void); // not the same in wxGLC as in Windows, I think
+    int GetCountPerPage(void) const; // not the same in wxGLC as in Windows, I think
 //  wxText& GetEditControl(void) const; // not supported in wxGLC
-    bool GetItem( wxListItem& info );
+    bool GetItem( wxListItem& info ) const;
     bool SetItem( wxListItem& info ) ;
     long SetItem( long index, int col, const wxString& label, int imageId = -1 );
-    int  GetItemState( long item, long stateMask );
+    int  GetItemState( long item, long stateMask ) const;
     bool SetItemState( long item, long state, long stateMask);
     bool SetItemImage( long item, int image, int selImage);
-    wxString GetItemText( long item );
+    wxString GetItemText( long item ) const;
     void SetItemText( long item, const wxString& str );
-    long GetItemData( long item );
+    long GetItemData( long item ) const;
     bool SetItemData( long item, long data );
-    bool GetItemRect( long item, wxRectangle& rect, int code = wxLIST_RECT_BOUNDS );
-    bool GetItemPosition( long item, wxPoint& pos );
+    bool GetItemRect( long item, wxRectangle& rect, int code = wxLIST_RECT_BOUNDS ) const;
+    bool GetItemPosition( long item, wxPoint& pos ) const;
     bool SetItemPosition( long item, const wxPoint& pos ); // not supported in wxGLC
-    int GetItemCount(void);
+    int GetItemCount(void) const;
     void SetItemSpacing( int spacing, bool isSmall = FALSE );
-    int GetItemSpacing( bool isSmall );
-    int GetSelectedItemCount(void);
+    int GetItemSpacing( bool isSmall ) const;
+    int GetSelectedItemCount(void) const;
 //  wxColour GetTextColour(void) const; // wxGLC has colours for every Item (see wxListItem)
 //  void SetTextColour(const wxColour& col);
-    long GetTopItem(void);
+    long GetTopItem(void) const;
     void SetSingleStyle( long style, bool add = TRUE ) ;
     void SetWindowStyleFlag(long style);
     void RecreateWindow(void) {};
     long GetNextItem(long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE) const;
-    wxImageList *GetImageList(int which);
+    wxImageList *GetImageList(int which) const;
     void SetImageList(wxImageList *imageList, int which) ;
     bool Arrange( int flag = wxLIST_ALIGN_DEFAULT ); // always wxLIST_ALIGN_LEFT in wxGLC
     bool DeleteItem( long item );
