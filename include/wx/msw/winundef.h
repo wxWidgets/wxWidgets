@@ -161,6 +161,11 @@
    }
 #endif
 
+// For WINE
+
+#if defined(GetWindowStyle) || defined(__WXWINE__)
+  #undef GetWindowStyle
+#endif
 
 // For ming and cygwin
 

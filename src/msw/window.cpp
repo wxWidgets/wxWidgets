@@ -903,7 +903,7 @@ WXDWORD wxWindow::Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D)
     return exStyle;
 }
 
-#if WXWIN_COMPATIBILITY_2
+#if WXWIN_COMPATIBILITY
 // If nothing defined for this, try the parent.
 // E.g. we may be a button loaded from a resource, with no callback function
 // defined.
@@ -1309,7 +1309,7 @@ void wxWindow::GetTextExtent(const wxString& string,
     if ( externalLeading ) *externalLeading = tm.tmExternalLeading;
 }
 
-#if wxUSE_CARET
+#if wxUSE_CARET && WXWIN_COMPATIBILITY
 // ---------------------------------------------------------------------------
 // Caret manipulation
 // ---------------------------------------------------------------------------
@@ -2087,7 +2087,11 @@ bool wxWindow::MSWCreate(int id,
     if ( width > -1 ) width1 = width;
     if ( height > -1 ) height1 = height;
 
+#ifdef __WXWINE__
+    HWND hParent = (HWND)NULL;
+#else
     HWND hParent = NULL;
+#endif
     if ( parent )
         hParent = (HWND) parent->GetHWND();
 

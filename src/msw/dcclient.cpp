@@ -143,8 +143,10 @@ wxPaintDC::wxPaintDC()
 wxPaintDC::wxPaintDC(wxWindow *canvas)
 {
   wxCHECK_RET( canvas, "NULL canvas in wxPaintDC ctor" );
-  wxCHECK_RET( g_isPainting,
-               _T("wxPaintDC may be created only in EVT_PAINT handler!") );
+  
+#ifdef __WXDEBUG__
+  wxCHECK_RET( g_isPainting, _T("wxPaintDC may be created only in EVT_PAINT handler!") );
+#endif
 
   m_canvas = canvas;
 

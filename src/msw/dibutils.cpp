@@ -32,6 +32,10 @@
 
 #include "wx/msw/dibutils.h"
 
+#ifdef __WXWINE__
+  #include <module.h>
+#endif
+
 #if defined(__WIN32__)
 #if !defined(__MWERKS__) && !defined(__SALFORDC__)
     #include <memory.h>             // for _fmemcpy()
@@ -78,7 +82,7 @@ void ClearSystemPalette(void)
   BOOL bOK = FALSE;
   int  nOK = 0;
   
-  //*** Reset everything in the system palette to black
+  // *** Reset everything in the system palette to black
   for(Counter = 0; Counter < 256; Counter++)
   {
     Palette.aEntries[Counter].peRed = 0;
@@ -87,8 +91,12 @@ void ClearSystemPalette(void)
     Palette.aEntries[Counter].peFlags = PC_NOCOLLAPSE;
   }
 
-  //*** Create, select, realize, deselect, and delete the palette
+  // *** Create, select, realize, deselect, and delete the palette
+#ifdef __WXWINE__
+  ScreenDC = GetDC((HWND)NULL);
+#else
   ScreenDC = GetDC(NULL);
+#endif
   ScreenPalette = CreatePalette((LOGPALETTE *)&Palette);
 
   if (ScreenPalette)
@@ -99,7 +107,11 @@ void ClearSystemPalette(void)
     bOK = DeleteObject(ScreenPalette);
   }
 
+#ifdef __WXWINE__
+  nOK = ReleaseDC((HWND)NULL, ScreenDC);
+#else
   nOK = ReleaseDC(NULL, ScreenDC);
+#endif
 
   return;
 }

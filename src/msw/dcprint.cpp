@@ -30,7 +30,7 @@
 #include "wx/dcprint.h"
 #include "math.h"
 
-#if wxUSE_COMMON_DIALOGS
+#if wxUSE_COMMON_DIALOGS || defined(__WXWINE__)
 #include <commdlg.h>
 #endif
 

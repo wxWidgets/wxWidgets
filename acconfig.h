@@ -15,8 +15,10 @@
 /* wxWindows version (not used but required by autoheader)                  */
 /* ------------------------------------------------------------------------ */
 
+#if 0
 #undef PACKAGE
 #undef VERSION
+#endif
 
 /* needed for older automake? */
 #undef WITH_SYMBOL_UNDERSCORE

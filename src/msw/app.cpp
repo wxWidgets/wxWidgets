@@ -1117,7 +1117,11 @@ bool wxYield()
     MSG msg;
     // We want to go back to the main message loop
     // if we see a WM_QUIT. (?)
+#ifdef __WXWINE__
+    while (PeekMessage(&msg, (HWND)NULL, 0, 0, PM_NOREMOVE) && msg.message != WM_QUIT)
+#else
     while (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE) && msg.message != WM_QUIT)
+#endif
     {
         if ( !wxTheApp->DoMessage() )
             break;

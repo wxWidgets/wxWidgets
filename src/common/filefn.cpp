@@ -994,7 +994,7 @@ bool wxMkdir(const wxString& dir, int perm)
 
     // assume mkdir() has 2 args on non Windows platforms and on Windows too
     // for the GNU compiler
-#if !defined(__WXMSW__) || (defined(__GNUWIN32__) && !defined(__MINGW32__))
+#if !defined(__WXMSW__) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) || defined(__WXWINE__)
     if ( mkdir(wxFNCONV(dirname), perm) != 0 )
 #else  // MSW
     if ( mkdir(wxFNCONV(dirname)) != 0 )

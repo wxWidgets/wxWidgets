@@ -22,10 +22,86 @@ libwx_msw_la_SOURCES = \
  extended.c \
  parser.c \
 \
+ cmndata.cpp \
+ dynarray.cpp \
+ filefn.cpp \
+ hash.cpp \
  list.cpp \
+ matrix.cpp \
+ memory.cpp \
+ module.cpp \
  object.cpp \
+ string.cpp \
+ timercmn.cpp \
+ utilscmn.cpp \
+ tokenzr.cpp \
+ variant.cpp \
+ wxchar.cpp \
 \
  wincmn.cpp \
+\
+ accel.cpp \
+ app.cpp \
+ bitmap.cpp \
+ bmpbuttn.cpp \
+ brush.cpp \
+ button.cpp \
+ caret.cpp \
+ checkbox.cpp \
+ checklst.cpp \
+ choice.cpp \
+ clipbrd.cpp \
+ colour.cpp \
+ combobox.cpp \
+ control.cpp \
+ cursor.cpp \
+ data.cpp \
+ dc.cpp \
+ dcclient.cpp \
+ dcmemory.cpp \
+ dcscreen.cpp \
+ dcprint.cpp \
+ dialog.cpp \
+ dirdlg \
+ filedlg.cpp \
+ font.cpp \
+ frame.cpp \
+ gaugemsw.cpp \
+ gdiobj.cpp \
+ icon.cpp \
+ imaglist.cpp \
+ listbox.cpp \
+ listctrlc.cpp \
+ main.cpp \
+ mdi.cpp \
+ menu.cpp \
+ menuitem.cpp \
+ minifram.cpp \
+ notebook.cpp \
+ ownerdrw.cpp \
+ palette.cpp \
+ pen.cpp \
+ radiobox.cpp \
+ radiobut.cpp \
+ regconf.cpp \
+ region.cpp \
+ registry.cpp \
+ scrolbar.cpp \
+ settings.cpp \
+ slidermsw.cpp \
+ spinbutt.cpp \
+ statbmp.cpp \
+ statbox.cpp \
+ stattext.cpp \
+ tbarmsw.cpp \
+ textctrl.cpp \
+ thread.cpp \
+ timer.cpp \
+ tooltip.cpp \
+ treectrl.cpp \
+ utils.cpp \
+ utilsexc.cpp \
+ wave.cpp \
  window.cpp
 
 # these are the sources which we build by our own rules
