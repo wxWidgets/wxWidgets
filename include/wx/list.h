@@ -247,7 +247,7 @@ public:
 protected:
         // copy ctor and assignment operator
     wxListBase(const wxListBase& list)
-        { DoCopy(list); }
+        { Init(); DoCopy(list); }
     wxListBase& operator=(const wxListBase& list)
         { Clear(); DoCopy(list); return *this; }
 
