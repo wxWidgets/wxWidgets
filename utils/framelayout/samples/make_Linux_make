@@ -1,0 +1,29 @@
+#!/bin/sh
+
+cat <<EOF 
+
+This script will create Linux build dirs in each of the sample subdirs and
+create the makefile.
+
+Make sure you execute the samples in the bitmaps dir, otherwise they 
+won't find their bitmaps! This will probably result in a crash.
+
+Until I find a more elegant method for this...
+
+EOF
+
+for DIR in demo sample test ; do
+
+cd $DIR
+echo Entering $DIR ...
+if [ ! -d Linux ] ; then
+   echo "Making Linux dir"
+   mkdir Linux 
+fi
+echo "Creating Makefile"
+sed -f ../../../../setup/Linux/substit Makefile.in > Linux/Makefile
+cd ..
+
+done
+
+

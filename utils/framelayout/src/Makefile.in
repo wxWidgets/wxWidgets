@@ -1,0 +1,88 @@
+#
+#  wxFrameLayout source makefile for Unix
+#
+#  Copyright 1999, Harm van der Heijden
+#
+
+# wxWindows base directory
+WXBASEDIR=@WXBASEDIR@
+
+# set the OS type for compilation
+OS=@OS@
+
+# compile a library only
+RULE=gslib
+
+# needed for unactivated
+NONE=
+
+# define library name
+LIB_TARGET=wx_fl_gtk
+LIB_MAJOR=0
+LIB_MINOR=1
+
+# define library sources
+
+LIB_CPP_SRC= \
+antiflickpl.cpp \
+bardragpl.cpp \
+barhintspl.cpp \
+cbcustom.cpp \
+cbstore.cpp \
+controlarea.cpp \
+controlbar.cpp \
+dyntbar.cpp \
+dyntbarhnd.cpp \
+frmview.cpp \
+garbagec.cpp \
+gcupdatesmgr.cpp \
+hintanimpl.cpp \
+newbmpbtn.cpp \
+objstore.cpp \
+panedrawpl.cpp \
+pf_sample.cpp \
+rowdragpl.cpp \
+rowlayoutpl.cpp \
+settingsdlg.cpp \
+toolwnd.cpp \
+updatesmgr.cpp \
+wxinfo.cpp
+
+#define library objects
+LIB_OBJ= \
+\
+ $(LIB_CPP_SRC:.cpp=.o)
+
+all::
+
+clean::
+
+#additional things needed for compile
+ADD_COMPILE=
+
+# include the definitions now
+include ../../../../template.mak
+
+install::
+	@echo "Installing library files and headers for libwx_gl_gtk.."
+	@echo "  Creating directory.."
+	@$(WXBASEDIR)/mkinstalldirs /usr/local/include/wx_fl
+	@echo "  Copying headers from framelayout/src"
+	@cd $(WXBASEDIR)/utils/framelayout/src ; \
+	for f in *.h ; do \
+	  rm -f /usr/local/include/wx_fl/$$f ; \
+	  $(INSTALL_DATA) $$f /usr/local/include/wx_fl/$$f ; \
+	done
+	@echo "  Copying static library files to /usr/local/lib"
+	@cd $(WXBASEDIR)/lib/$(OS) ; \
+	for f in libwx_fl_gtk.a ; do \
+	  rm -f /usr/local/lib/$$f ; \
+	  $(INSTALL_DATA) $$f /usr/local/lib/$$f ; \
+	done
+	@echo "  Copying shared libraries to /usr/local/lib"
+	@cd $(WXBASEDIR)/lib/$(OS) ; \
+	for f in libwx_fl_gtk.so* ; do \
+	  rm -f /usr/local/lib/$$f ; \
+	  $(INSTALL_PROGRAM) $$f /usr/local/lib/$$f ; \
+	done
+
