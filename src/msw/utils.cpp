@@ -32,6 +32,7 @@
 #endif  //WX_PRECOMP
 
 #include "wx/apptrait.h"
+#include "wx/dynload.h"
 
 #include "wx/msw/private.h"     // includes <windows.h>
 #include "wx/msw/missing.h"     // CHARSET_HANGUL
@@ -143,52 +144,80 @@ bool wxGetHostName(wxChar *buf, int maxSize)
 // get full hostname (with domain name if possible)
 bool wxGetFullHostName(wxChar *buf, int maxSize)
 {
-#if defined(__WIN32__) && !defined(__WXMICROWIN__) && ! (defined(__GNUWIN32__) && !defined(__MINGW32__))
+#ifndef __WXMICROWIN__
     // TODO should use GetComputerNameEx() when available
 
-    // the idea is that if someone had set wxUSE_SOCKETS to 0 the code
-    // shouldn't use winsock.dll (a.k.a. ws2_32.dll) at all so only use this
-    // code if we link with it anyhow
-#if wxUSE_SOCKETS
-    WSADATA wsa;
-    if ( WSAStartup(MAKEWORD(1, 1), &wsa) == 0 )
+    // we don't want to always link with Winsock DLL as we might not use it at
+    // all, so load it dynamically here if needed
+    wxDynamicLibrary dllWinsock(_T("ws2_32.dll"), wxDL_VERBATIM);
+    if ( dllWinsock.IsLoaded() )
     {
-        wxString host;
-        char bufA[256];
-        if ( gethostname(bufA, WXSIZEOF(bufA)) == 0 )
+        typedef int (PASCAL *WSAStartup_t)(WORD, WSADATA *);
+        typedef int (PASCAL *gethostname_t)(char *, int);
+        typedef hostent* (PASCAL *gethostbyname_t)(const char *);
+        typedef hostent* (PASCAL *gethostbyaddr_t)(const char *, int , int);
+        typedef int (PASCAL *WSACleanup_t)(void);
+
+        #define LOAD_WINSOCK_FUNC(func)                                       \
+            func ## _t                                                        \
+                pfn ## func = (func ## _t)dllWinsock.GetSymbol(_T(#func))
+
+        LOAD_WINSOCK_FUNC(WSAStartup);
+
+        WSADATA wsa;
+        if ( pfnWSAStartup && pfnWSAStartup(MAKEWORD(1, 1), &wsa) == 0 )
         {
-            // gethostname() won't usually include the DNS domain name, for
-            // this we need to work a bit more
-            if ( !strchr(bufA, '.') )
+            LOAD_WINSOCK_FUNC(gethostname);
+
+            wxString host;
+            if ( pfngethostname )
             {
-                struct hostent *pHostEnt =  gethostbyname(bufA);
-
-                if ( pHostEnt )
+                char bufA[256];
+                if ( pfngethostname(bufA, WXSIZEOF(bufA)) == 0 )
                 {
-                    // Windows will use DNS internally now
-                    pHostEnt = gethostbyaddr(pHostEnt->h_addr, 4, AF_INET);
-                }
+                    // gethostname() won't usually include the DNS domain name,
+                    // for this we need to work a bit more
+                    if ( !strchr(bufA, '.') )
+                    {
+                        LOAD_WINSOCK_FUNC(gethostbyname);
 
-                if ( pHostEnt )
-                {
-                    host = wxString::FromAscii(pHostEnt->h_name);
+                        struct hostent *pHostEnt = pfngethostbyname
+                                                    ? pfngethostbyname(bufA)
+                                                    : NULL;
+
+                        if ( pHostEnt )
+                        {
+                            // Windows will use DNS internally now
+                            LOAD_WINSOCK_FUNC(gethostbyaddr);
+
+                            pHostEnt = pfngethostbyaddr
+                                        ? pfngethostbyaddr(pHostEnt->h_addr,
+                                                           4, AF_INET)
+                                        : NULL;
+                        }
+
+                        if ( pHostEnt )
+                        {
+                            host = wxString::FromAscii(pHostEnt->h_name);
+                        }
+                    }
                 }
             }
-        }
 
-        WSACleanup();
+            LOAD_WINSOCK_FUNC(WSACleanup);
+            if ( pfnWSACleanup )
+                pfnWSACleanup();
 
-        if ( !host.empty() )
-        {
-            wxStrncpy(buf, host, maxSize);
 
-            return TRUE;
+            if ( !host.empty() )
+            {
+                wxStrncpy(buf, host, maxSize);
+
+                return TRUE;
+            }
         }
     }
-
-#endif // wxUSE_SOCKETS
-
-#endif // Win32
+#endif // !__WXMICROWIN__
 
     return wxGetHostName(buf, maxSize);
 }
