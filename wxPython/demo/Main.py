@@ -810,35 +810,6 @@ class DemoModules:
 
 
 #---------------------------------------------------------------------------
-class ReloadDemoPanel(wx.Panel):
-    """
-    Panel put into the demo tab when the demo just shows some
-    top-level window.  Enables the demo to be reloaded after being
-    closed.
-    """
-
-    infoText = "This demo runs outside the main window"
-    
-    def __init__(self, parent, codePanel, log):
-        wx.Panel.__init__(self, parent, -1)
-        self.codePanel = codePanel
-        self.log = log
-
-        self.label = wx.StaticText(self, -1, self.infoText)
-        self.btnReload = wx.Button(self, -1, "Reload Demo")
-        self.btnReload.Bind(wx.EVT_BUTTON, self.OnReload)
-
-        self.box = wx.BoxSizer(wx.VERTICAL)
-        self.box.Add(self.label, 0, wx.ALIGN_CENTER | wx.ALL, 10)
-        self.box.Add(self.btnReload, 0, wx.ALIGN_CENTER | wx.ALL, 10)
-
-        self.box.Fit(self)
-        self.SetSizer(self.box)
-        
-    def OnReload(self, event):
-        self.codePanel.ReloadDemo()
-
-#---------------------------------------------------------------------------
 
 class DemoError:
     """Wraps and stores information about the current exception"""
@@ -1293,11 +1264,12 @@ class wxPythonDemo(wx.Frame):
 
             try:
                 self.demoPage = module.runTest(self, self.nb, self)
-                if self.demoPage is None:
-                    self.demoPage = ReloadDemoPanel(self.nb, self.codePage, self)
             except:
                 self.demoPage = DemoErrorPanel(self.nb, self.codePage,
-                                               DemoError(sys.exc_info()), self)                
+                                               DemoError(sys.exc_info()), self)
+
+            assert self.demoPage is not None, "runTest must return a window!"
+            
         else:
             # There was a previous error in compiling or exec-ing
             self.demoPage = DemoErrorPanel(self.nb, self.codePage,
