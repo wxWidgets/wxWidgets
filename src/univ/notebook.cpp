@@ -745,8 +745,16 @@ wxRect wxNotebook::GetTabsPart() const
     const wxSize indent = GetRenderer()->GetTabIndent();
     if ( IsVertical() )
     {
-        rect.x += indent.y;
         rect.y += indent.x;
+        if ( dir == wxLEFT )
+        {
+            rect.x += indent.y;
+            rect.width -= indent.y;
+        }
+        else // wxRIGHT
+        {
+            rect.width -= indent.y;
+        }
     }
     else // horz
     {
