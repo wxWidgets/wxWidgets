@@ -78,10 +78,15 @@
 #endif // __WINDOWS__
 #endif // native Win compiler
 
-#if defined(__DOS__) && defined(__WATCOMC__)
-    #include <direct.h>
-    #include <dos.h>
-    #include <io.h>
+#if defined(__DOS__)
+    #ifdef __WATCOMC__
+        #include <direct.h>
+        #include <dos.h>
+        #include <io.h>
+    #endif
+    #ifdef __DJGPP__
+        #include <unistd.h>
+    #endif
 #endif
 
 #ifdef __GNUWIN32__
@@ -1197,7 +1202,16 @@ bool wxMkdir(const wxString& dir, int perm)
     if ( mkdir(wxFNCONV(dirname), perm) != 0 )
 #elif defined(__WXPM__)
     if (::DosCreateDir((PSZ)dirname, NULL) != 0) // enhance for EAB's??
-#else  // !MSW and !OS/2 VAC++
+#elif defined(__DOS__)
+  #if defined(__WATCOMC__)
+    (void)perm;
+    if ( wxMkDir(wxFNSTRINGCAST wxFNCONV(dirname)) != 0 )
+  #elif defined(__DJGPP__)
+    if ( mkdir(wxFNCONV(dirname), perm) != 0 )
+  #else
+    #error "Unsupported DOS compiler!"
+  #endif
+#else  // !MSW, !DOS and !OS/2 VAC++
     (void)perm;
     if ( wxMkDir(wxFNSTRINGCAST wxFNCONV(dirname)) != 0 )
 #endif // !MSW/MSW
