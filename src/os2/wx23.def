@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\dev\wx2\wxwindows\lib\wx.lib
+;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1621,6 +1621,8 @@ EXPORTS
       wxConstructorForwxPaintEvent__Fv
       ;wxConstructorForwxNotifyEvent()
       wxConstructorForwxNotifyEvent__Fv
+      ;wxConstructorForwxDisplayChangedEvent()
+      wxConstructorForwxDisplayChangedEvent__Fv
       ;wxConstructorForwxContextMenuEvent()
       wxConstructorForwxContextMenuEvent__Fv
       ;wxConstructorForwxCloseEvent()
@@ -1722,6 +1724,7 @@ EXPORTS
       wxEVT_MENU_HIGHLIGHT
       wxEVT_KEY_UP
       wxEVT_JOY_BUTTON_UP
+      wxEVT_DISPLAY_CHANGED
       wxEVT_COMMAND_SCROLLBAR_UPDATED
       wxEVT_COMMAND_RADIOBUTTON_SELECTED
       ;wxWindowCreateEvent::sm_classwxWindowCreateEvent
@@ -1736,6 +1739,8 @@ EXPORTS
       sm_classwxIdleEvent__11wxIdleEvent
       ;wxDropFilesEvent::sm_classwxDropFilesEvent
       sm_classwxDropFilesEvent__16wxDropFilesEvent
+      ;wxDisplayChangedEvent::sm_classwxDisplayChangedEvent
+      sm_classwxDisplayChangedEvent__21wxDisplayChangedEvent
       ;wxContextMenuEvent::sm_classwxContextMenuEvent
       sm_classwxContextMenuEvent__18wxContextMenuEvent
       ;wxActivateEvent::sm_classwxActivateEvent
@@ -2895,8 +2900,6 @@ EXPORTS
       FindHandler__7wxImageFl
       ;wxImage::FindHandler(const wxString&,long)
       FindHandler__7wxImageFRC8wxStringl
-      ;wxImage::CountColours(unsigned long)
-      CountColours__7wxImageFUl
       ;wxImage::wxImage(int,int)
       __ct__7wxImageFiT1
       ;wxImageModule::sm_classwxImageModule
@@ -2925,6 +2928,8 @@ EXPORTS
       Copy__7wxImageCFv
       ;wxImage::GetOptionInt(const wxString&) const
       GetOptionInt__7wxImageCFRC8wxString
+      ;wxImage::SaveFile(wxOutputStream&,const wxString&) const
+      SaveFile__7wxImageCFR14wxOutputStreamRC8wxString
       ;wxImage::FindHandlerMime(const wxString&)
       FindHandlerMime__7wxImageFRC8wxString
       ;wxImage::Mirror(unsigned long) const
@@ -2932,6 +2937,8 @@ EXPORTS
       __vft14wxImageHandler8wxObject
       ;wxImage::GetImageCount(wxInputStream&,long)
       GetImageCount__7wxImageFR13wxInputStreaml
+      ;wxImage::FindFirstUnusedColour(unsigned char*,unsigned char*,unsigned char*,unsigned char,unsigned char,unsigned char) const
+      FindFirstUnusedColour__7wxImageCFPUcN21UcN24
       ;wxImage::Scale(int,int) const
       Scale__7wxImageCFiT1
       ;wxImage::sm_handlers
@@ -2942,12 +2949,12 @@ EXPORTS
       __ct__7wxImageFR13wxInputStreamRC8wxStringi
       ;wxImage::SetPalette(const wxPalette&)
       SetPalette__7wxImageFRC9wxPalette
-      ;wxImage::SaveFile(wxOutputStream&,int)
-      SaveFile__7wxImageFR14wxOutputStreami
       ;wxImage::LoadFile(const wxString&,long,int)
       LoadFile__7wxImageFRC8wxStringli
       ;wxImageHandler::LoadFile(wxImage*,wxInputStream&,unsigned long,int)
       LoadFile__14wxImageHandlerFP7wxImageR13wxInputStreamUli
+      ;wxImage::ComputeHistogram(wxImageHistogram&) const
+      ComputeHistogram__7wxImageCFR16wxImageHistogram
       ;wxImageRefData::~wxImageRefData()
       __dt__14wxImageRefDataFv
       ;wxImage::HasPalette() const
@@ -2956,8 +2963,6 @@ EXPORTS
       GetMaskGreen__7wxImageCFv
       ;wxImage::SetRGB(int,int,unsigned char,unsigned char,unsigned char)
       SetRGB__7wxImageFiT1UcN23
-      ;wxImage::SaveFile(wxOutputStream&,const wxString&)
-      SaveFile__7wxImageFR14wxOutputStreamRC8wxString
       ;wxImage::CanRead(const wxString&)
       CanRead__7wxImageFRC8wxString
       ;wxImage::GetImageCount(const wxString&,long)
@@ -2968,8 +2973,8 @@ EXPORTS
       ;wxImage::Replace(unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char)
       Replace__7wxImageFUcN51
       wxNullImage
-      ;wxImage::SaveFile(const wxString&,int)
-      SaveFile__7wxImageFRC8wxStringi
+      ;wxImage::SaveFile(const wxString&,const wxString&) const
+      SaveFile__7wxImageCFRC8wxStringT1
       ;wxImage::LoadFile(const wxString&,const wxString&,int)
       LoadFile__7wxImageFRC8wxStringT1i
       ;wxImageRefData::wxImageRefData()
@@ -2998,8 +3003,6 @@ EXPORTS
       SetMask__7wxImageFUl
       ;wxImage::Rotate90(unsigned long) const
       Rotate90__7wxImageCFUl
-      ;wxImage::FindFirstUnusedColour(unsigned char*,unsigned char*,unsigned char*,unsigned char,unsigned char,unsigned char)
-      FindFirstUnusedColour__7wxImageFPUcN21UcN24
       ;wxImage::Create(int,int)
       Create__7wxImageFiT1
       __vft14wxImageRefData15wxObjectRefData
@@ -3011,6 +3014,8 @@ EXPORTS
       SetOption__7wxImageFRC8wxStringT1
       ;wxImage::SetMaskColour(unsigned char,unsigned char,unsigned char)
       SetMaskColour__7wxImageFUcN21
+      ;wxImage::SaveFile(wxOutputStream&,int) const
+      SaveFile__7wxImageCFR14wxOutputStreami
       ;wxImageHandler::GetImageCount(wxInputStream&)
       GetImageCount__14wxImageHandlerFR13wxInputStream
       ;wxImage::ConvertToMono(unsigned char,unsigned char,unsigned char) const
@@ -3031,6 +3036,8 @@ EXPORTS
       SaveFile__14wxImageHandlerFP7wxImageR14wxOutputStreamUl
       ;wxImage::wxImage(const wxBitmap&)
       __ct__7wxImageFRC8wxBitmap
+      ;wxImage::CountColours(unsigned long) const
+      CountColours__7wxImageCFUl
       ;wxImage::wxImage(const wxString&,long,int)
       __ct__7wxImageFRC8wxStringli
       ;wxImage::sm_classwxImage
@@ -3039,16 +3046,14 @@ EXPORTS
       __ct__7wxImageFR13wxInputStreamli
       ;wxImage::SetOption(const wxString&,int)
       SetOption__7wxImageFRC8wxStringi
-      ;wxImage::SaveFile(const wxString&,const wxString&)
-      SaveFile__7wxImageFRC8wxStringT1
+      ;wxImage::SaveFile(const wxString&,int) const
+      SaveFile__7wxImageCFRC8wxStringi
       ;wxImage::LoadFile(wxInputStream&,long,int)
       LoadFile__7wxImageFR13wxInputStreamli
       ;wxImage::LoadFile(wxInputStream&,const wxString&,int)
       LoadFile__7wxImageFR13wxInputStreamRC8wxStringi
       ;wxImage::GetBlue(int,int) const
       GetBlue__7wxImageCFiT1
-      ;wxImage::ComputeHistogram(wxHashTable&)
-      ComputeHistogram__7wxImageFR11wxHashTable
       ;wxImage::CanRead(wxInputStream&)
       CanRead__7wxImageFR13wxInputStream
       ;wxImage::SetMaskFromImage(const wxImage&,unsigned char,unsigned char,unsigned char)
@@ -3379,11 +3384,15 @@ EXPORTS
   ;From object file:  ..\common\list.cpp
     ;PUBDEFs (Symbols available from object file):
       __vft10wxListBase8wxObject
+      ;wxList::sm_classwxList
+      sm_classwxList__6wxList
       ;wxListBase::LastThat(int(*)(void*))
       LastThat__10wxListBaseFPFPv_i
       __vft16wxStringListNode10wxNodeBase
       ;wxListBase::Clear()
       Clear__10wxListBaseFv
+      ;wxConstructorForwxStringList()
+      wxConstructorForwxStringList__Fv
       ;wxListBase::DeleteObject(void*)
       DeleteObject__10wxListBaseFPv
       ;wxObjectListNode::DeleteData()
@@ -3412,6 +3421,8 @@ EXPORTS
       FirstThat__10wxListBaseFPFPv_i
       ;wxNodeBase::~wxNodeBase()
       __dt__10wxNodeBaseFv
+      ;wxConstructorForwxList()
+      wxConstructorForwxList__Fv
       ;wxStringList::Sort()
       Sort__12wxStringListFv
       ;wxListBase::Find(void*) const
@@ -3420,6 +3431,8 @@ EXPORTS
       Delete__12wxStringListFPCc
       ;wxStringList::Member(const char*) const
       Member__12wxStringListCFPCc
+      ;wxStringList::sm_classwxStringList
+      sm_classwxStringList__12wxStringList
       ;wxNodeBase::wxNodeBase(wxListBase*,wxNodeBase*,wxNodeBase*,void*,const wxListKey&)
       __ct__10wxNodeBaseFP10wxListBaseP10wxNodeBaseT2PvRC9wxListKey
       __vft10wxNodeBase
@@ -6614,6 +6627,8 @@ EXPORTS
       ms_winCaptureNext__12wxWindowBase
       ;wxWindowBase::ms_lastControlId
       ms_lastControlId__12wxWindowBase
+      ;wxWindowBase::SetPalette(const wxPalette&)
+      SetPalette__12wxWindowBaseFRC9wxPalette
       ;wxWindowBase::RemoveConstraintReference(wxWindowBase*)
       RemoveConstraintReference__12wxWindowBaseFP12wxWindowBase
       ;wxWindowBase::LayoutPhase2(int*)
@@ -6697,6 +6712,8 @@ EXPORTS
       GetUpdateClientRect__12wxWindowBaseCFv
       ;wxWindowBase::GetHelpText() const
       GetHelpText__12wxWindowBaseCFv
+      ;wxWindowBase::GetAncestorWithCustomPalette() const
+      GetAncestorWithCustomPalette__12wxWindowBaseCFv
       ;wxWindowBase::SetFont(const wxFont&)
       SetFont__12wxWindowBaseFRC6wxFont
       ;wxWindowBase::MakeModal(unsigned long)
@@ -11557,12 +11574,12 @@ EXPORTS
       __vft8wxColour8wxObject
       ;wxColour::wxColour(unsigned char,unsigned char,unsigned char)
       __ct__8wxColourFUcN21
-      ;wxColour::wxColour(const wxColour&)
-      __ct__8wxColourFRC8wxColour
-      ;wxColour::sm_classwxColour
-      sm_classwxColour__8wxColour
       ;wxColour::~wxColour()
       __dt__8wxColourFv
+      ;wxColour::sm_classwxColour
+      sm_classwxColour__8wxColour
+      ;wxColour::wxColour(const wxColour&)
+      __ct__8wxColourFRC8wxColour
   ;From object file:  ..\os2\combobox.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxComboBox::sm_classwxComboBox
@@ -14332,8 +14349,6 @@ EXPORTS
       CreateFrame__19wxTopLevelWindowOS2FRC8wxStringRC7wxPointRC6wxSize
       ;wxTopLevelWindowOS2::~wxTopLevelWindowOS2()
       __dt__19wxTopLevelWindowOS2Fv
-      ;wxTopLevelWindowOS2::UpdateInternalSize(wxWindow*,int,int)
-      UpdateInternalSize__19wxTopLevelWindowOS2FP8wxWindowiT2
       ;wxTopLevelWindowOS2::ShowFullScreen(unsigned long,long)
       ShowFullScreen__19wxTopLevelWindowOS2FUll
       ;wxTopLevelWindowOS2::CreateDialog(unsigned long,const wxString&,const wxPoint&,const wxSize&)
@@ -14350,14 +14365,12 @@ EXPORTS
       Iconize__19wxTopLevelWindowOS2FUl
       ;wxTopLevelWindowOS2::DoSetClientSize(int,int)
       DoSetClientSize__19wxTopLevelWindowOS2FiT1
-      ;wxTopLevelWindowOS2::AlterChildPos()
-      AlterChildPos__19wxTopLevelWindowOS2Fv
+      ;wxTopLevelWindowOS2::IsMaximized() const
+      IsMaximized__19wxTopLevelWindowOS2CFv
       ;wxTopLevelWindowOS2::SetIcon(const wxIcon&)
       SetIcon__19wxTopLevelWindowOS2FRC6wxIcon
       ;wxTopLevelWindowOS2::Restore()
       Restore__19wxTopLevelWindowOS2Fv
-      ;wxTopLevelWindowOS2::IsMaximized() const
-      IsMaximized__19wxTopLevelWindowOS2CFv
       ;wxTopLevelWindowOS2::Maximize(unsigned long)
       Maximize__19wxTopLevelWindowOS2FUl
       ;wxTopLevelWindowOS2::EnableCloseButton(unsigned long)
@@ -14670,8 +14683,6 @@ EXPORTS
       ;wxWindow::WarpPointer(int,int)
       WarpPointer__8wxWindowFiT1
       wxCurrentPopupMenu
-      ;wxWindow::OS2Layout(int,int)
-      OS2Layout__8wxWindowFiT1
       ;wxWindow::MoveChildren(int)
       MoveChildren__8wxWindowFi
       ;wxWindow::HandleShow(unsigned long,int)
