@@ -22,7 +22,7 @@ $(PROGRAM): $(PROGRAM).o
 	$(PROGRAM).o `wx-config --libs`
 
 $(PROGRAM).o: $(PROGRAM).cpp
-	$(CC) `wx-config --cflags` -c $(PROGRAM).cpp
+	$(CC) `wx-config --cxxflags` -c $(PROGRAM).cpp
 
 clean: 
 	rm -f *.o $(PROGRAM)

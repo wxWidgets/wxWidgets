@@ -13,7 +13,7 @@ EXTRAINC=-I../include
 .SUFFIXES:	.o .cpp
 
 .cpp.o :
-	$(CC) -c `wx-config --cflags` -o $@ $<
+	$(CC) -c `wx-config --cxxflags` -o $@ $<
 
 all:    $(PROGRAM)
 

@@ -11,7 +11,7 @@ PROGRAMS = client server
 .SUFFIXES:	.o .cpp
 
 .cpp.o :
-	$(CC) -c `wx-config --cflags` -o $@ $<
+	$(CC) -c `wx-config --cxxflags` -o $@ $<
 
 all: $(PROGRAMS)
 

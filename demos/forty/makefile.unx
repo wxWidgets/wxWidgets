@@ -24,7 +24,7 @@ OBJECTS = $(PROGRAM).o canvas.o card.o game.o pile.o playerdg.o scoredg.o scoref
 .SUFFIXES:	.o .cpp
 
 .cpp.o :
-	$(CC) -c `wx-config --cflags` -o $@ $<
+	$(CC) -c `wx-config --cxxflags` -o $@ $<
 
 all:    $(PROGRAM)
 

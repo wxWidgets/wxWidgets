@@ -13,7 +13,7 @@ OBJECTS = $(PROGRAM).o kbList.o wxllist.o wxlparser.o wxlwindow.o
 .SUFFIXES:	.o .cpp
 
 .cpp.o :
-	$(CC) -c `wx-config --cflags` -o $@ $<
+	$(CC) -c `wx-config --cxxflags` -o $@ $<
 
 $(PROGRAM): $(OBJECTS)
 	$(CC) -o $(PROGRAM) $(OBJECTS) `wx-config --libs`

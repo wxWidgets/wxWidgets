@@ -11,7 +11,7 @@ OBJECTS = tex2rtf.o tex2any.o texutils.o rtfutils.o xlputils.o htmlutil.o readsh
 .SUFFIXES:	.o .cpp
 
 .cpp.o :
-	$(CC) -c `wx-config --cflags` -o $@ $<
+	$(CC) -c `wx-config --cxxflags` -o $@ $<
 
 all:    $(PROGRAM)
 

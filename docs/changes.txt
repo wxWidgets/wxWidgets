@@ -53,6 +53,13 @@ wxMSW:
   style to avoid it, wxFRAME_FLOAT_ON_PARENT style is now obsolete and has no
   effect
 
+Unix ports:
+
+- You should use `wx-config --cxxflags` in your makefiles instead of
+  `wx-config --cflags` for compiling C++ files. CXXFLAGS contains CFLAGS
+  and the compiler flags for C++ files only, CFLAGS should still be used
+  to compile pure C files.
+
 2.3.2
 -----
 

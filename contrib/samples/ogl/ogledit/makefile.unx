@@ -24,16 +24,16 @@ ogledit: $(OBJECTS)
 	$(CPP) -o ogledit $(OBJECTS) `$(WXCONFIG) --libs` $(WXLIB) -logl
 
 ogledit.o: ogledit.cpp
-	$(CPP) `$(WXCONFIG) --cflags` -I../../src $(WXINCLUDE) -c ogledit.cpp
+	$(CPP) `$(WXCONFIG) --cxxflags` -I../../src $(WXINCLUDE) -c ogledit.cpp
 
 palette.o: palette.cpp
-	$(CPP) `$(WXCONFIG) --cflags` -I../../src $(WXINCLUDE) -c palette.cpp
+	$(CPP) `$(WXCONFIG) --cxxflags` -I../../src $(WXINCLUDE) -c palette.cpp
 
 doc.o: doc.cpp
-	$(CPP) `$(WXCONFIG) --cflags` -I../../src $(WXINCLUDE) -c doc.cpp
+	$(CPP) `$(WXCONFIG) --cxxflags` -I../../src $(WXINCLUDE) -c doc.cpp
 
 view.o: view.cpp
-	$(CPP) `$(WXCONFIG) --cflags` -I../../src $(WXINCLUDE) -c view.cpp
+	$(CPP) `$(WXCONFIG) --cxxflags` -I../../src $(WXINCLUDE) -c view.cpp
 
 clean: 
 	rm -f *.o ogledit
