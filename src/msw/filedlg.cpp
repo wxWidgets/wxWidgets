@@ -326,6 +326,7 @@ int wxFileDialog::ShowModal(void)
 
         m_path = fileNameBuffer;
         m_fileName = wxFileNameFromPath(fileNameBuffer);
+        m_dir = wxPathOnly(fileNameBuffer);
 
 
         //=== Simulating the wxOVERWRITE_PROMPT >>============================
