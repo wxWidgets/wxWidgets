@@ -45,7 +45,7 @@
 
 #include <unistd.h>
 #if defined(__DARWIN__)
-// FIXME: select must be used instead of poll (GD)
+# warning "FIXME: select must be used instead of poll (GD)"
 #elif defined(__VMS)
 # include <poll.h>
 #else
