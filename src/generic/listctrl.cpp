@@ -3772,6 +3772,14 @@ void wxListMainWindow::SetItemState( long litem, long state, long stateMask )
             {
                 ResetCurrent();
 
+                if ( IsSingleSel() )
+                {
+                    // we must unselect the old current item as well or we
+                    // might end up with more than one selected item in a
+                    // single selection control
+                    HighlightLine(oldCurrent, FALSE);
+                }
+
                 RefreshLine( oldCurrent );
             }
         }
