@@ -29746,13 +29746,6 @@ _ACEOF
 
 fi
 
-if test "$wxUSE_FS_INET" = "yes"; then
-  cat >>confdefs.h <<\_ACEOF
-#define wxUSE_FS_INET 1
-_ACEOF
-
-fi
-
 if test "$wxUSE_FS_ZIP" = "yes"; then
   cat >>confdefs.h <<\_ACEOF
 #define wxUSE_FS_ZIP 1
@@ -30512,6 +30505,11 @@ if test "$wxUSE_SOCKETS" = "yes"; then
 echo "$as_me: WARNING: wxSocket not yet supported under MGL... disabled" >&2;}
         wxUSE_SOCKETS="no"
     fi
+    if test "$wxUSE_COCOA" = "1"; then
+        { echo "$as_me:$LINENO: WARNING: wxSocket not yet supported under Cocoa... disabled" >&5
+echo "$as_me: WARNING: wxSocket not yet supported under Cocoa... disabled" >&2;}
+        wxUSE_SOCKETS="no"
+    fi
 fi
 
 if test "$wxUSE_SOCKETS" = "yes"; then
@@ -30832,6 +30830,67 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
 _ACEOF
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sockets"
+fi
+
+if test "$wxUSE_PROTOCOL" = "yes"; then
+    if test "$wxUSE_SOCKETS" != "yes"; then
+        { echo "$as_me:$LINENO: WARNING: Protocol classes require sockets... disabled" >&5
+echo "$as_me: WARNING: Protocol classes require sockets... disabled" >&2;}
+        wxUSE_PROTOCOL=no
+    fi
+fi
+
+if test "$wxUSE_PROTOCOL" = "yes"; then
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_PROTOCOL 1
+_ACEOF
+
+
+    if test "$wxUSE_PROTOCOL_HTTP" = "yes"; then
+        cat >>confdefs.h <<\_ACEOF
+#define wxUSE_PROTOCOL_HTTP 1
+_ACEOF
+
+    fi
+    if test "$wxUSE_PROTOCOL_FTP" = "yes"; then
+        cat >>confdefs.h <<\_ACEOF
+#define wxUSE_PROTOCOL_FTP 1
+_ACEOF
+
+    fi
+    if test "$wxUSE_PROTOCOL_FILE" = "yes"; then
+        cat >>confdefs.h <<\_ACEOF
+#define wxUSE_PROTOCOL_FILE 1
+_ACEOF
+
+    fi
+else
+    if test "$wxUSE_FS_INET" = "yes"; then
+        { echo "$as_me:$LINENO: WARNING: HTTP filesystem require protocol classes... disabled" >&5
+echo "$as_me: WARNING: HTTP filesystem require protocol classes... disabled" >&2;}
+        wxUSE_FS_INET="no"
+    fi
+fi
+
+if test "$wxUSE_URL" = "yes"; then
+    if test "$wxUSE_PROTOCOL" != "yes"; then
+        { echo "$as_me:$LINENO: WARNING: wxURL class requires wxProtocol... disabled" >&5
+echo "$as_me: WARNING: wxURL class requires wxProtocol... disabled" >&2;}
+        wxUSE_URL=no
+    fi
+    if test "$wxUSE_URL" = "yes"; then
+        cat >>confdefs.h <<\_ACEOF
+#define wxUSE_URL 1
+_ACEOF
+
+    fi
+fi
+
+if test "$wxUSE_FS_INET" = "yes"; then
+  cat >>confdefs.h <<\_ACEOF
+#define wxUSE_FS_INET 1
+_ACEOF
+
 fi
 
 
@@ -31639,6 +31698,13 @@ if test "$wxUSE_CONSTRAINTS" = "yes"; then
 _ACEOF
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS layout"
+fi
+
+if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
+    if test "$wxUSE_COCOA" = "1"; then
+        { echo "$as_me:$LINENO: WARNING: MDI not yet supported under Cocoa... disabled" >&5
+echo "$as_me: WARNING: MDI not yet supported under Cocoa... disabled" >&2;}
+    fi
 fi
 
 if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
@@ -32476,54 +32542,6 @@ if test "$TOOLKIT" = "MSW"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS taskbar"
 fi
 
-fi
-
-if test "$wxUSE_PROTOCOL" = "yes"; then
-    if test "$wxUSE_SOCKETS" != "yes"; then
-        { echo "$as_me:$LINENO: WARNING: Protocol classes require sockets... disabled" >&5
-echo "$as_me: WARNING: Protocol classes require sockets... disabled" >&2;}
-        wxUSE_PROTOCOL=no
-    fi
-
-    if test "$wxUSE_PROTOCOL" = "yes"; then
-        cat >>confdefs.h <<\_ACEOF
-#define wxUSE_PROTOCOL 1
-_ACEOF
-
-
-        if test "$wxUSE_PROTOCOL_HTTP" = "yes"; then
-            cat >>confdefs.h <<\_ACEOF
-#define wxUSE_PROTOCOL_HTTP 1
-_ACEOF
-
-        fi
-        if test "$wxUSE_PROTOCOL_FTP" = "yes"; then
-            cat >>confdefs.h <<\_ACEOF
-#define wxUSE_PROTOCOL_FTP 1
-_ACEOF
-
-        fi
-        if test "$wxUSE_PROTOCOL_FILE" = "yes"; then
-            cat >>confdefs.h <<\_ACEOF
-#define wxUSE_PROTOCOL_FILE 1
-_ACEOF
-
-        fi
-    fi
-fi
-
-if test "$wxUSE_URL" = "yes"; then
-    if test "$wxUSE_PROTOCOL" != "yes"; then
-        { echo "$as_me:$LINENO: WARNING: wxURL class requires wxProtocol... disabled" >&5
-echo "$as_me: WARNING: wxURL class requires wxProtocol... disabled" >&2;}
-        wxUSE_URL=no
-    fi
-    if test "$wxUSE_URL" = "yes"; then
-        cat >>confdefs.h <<\_ACEOF
-#define wxUSE_URL 1
-_ACEOF
-
-    fi
 fi
 
 if test "$wxUSE_MINIFRAME" = "yes"; then

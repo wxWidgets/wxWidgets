@@ -4111,10 +4111,6 @@ if test "$wxUSE_FILESYSTEM" = "yes"; then
   AC_DEFINE(wxUSE_FILESYSTEM)
 fi
 
-if test "$wxUSE_FS_INET" = "yes"; then
-  AC_DEFINE(wxUSE_FS_INET)
-fi
-
 if test "$wxUSE_FS_ZIP" = "yes"; then
   AC_DEFINE(wxUSE_FS_ZIP)
 fi
@@ -4349,10 +4345,14 @@ dnl ------------------------------------------------------------------------
 dnl wxSocket
 dnl ------------------------------------------------------------------------
 
-dnl VZ: the GUI hooks wxSocket needs are not implemented yet in wxMGL
+dnl VZ: the GUI hooks wxSocket needs are not implemented yet in some toolkits
 if test "$wxUSE_SOCKETS" = "yes"; then
     if test "$wxUSE_MGL" = "1"; then
         AC_MSG_WARN([wxSocket not yet supported under MGL... disabled])
+        wxUSE_SOCKETS="no"
+    fi
+    if test "$wxUSE_COCOA" = "1"; then
+        AC_MSG_WARN([wxSocket not yet supported under Cocoa... disabled])
         wxUSE_SOCKETS="no"
     fi
 fi
@@ -4447,6 +4447,46 @@ fi
 if test "$wxUSE_SOCKETS" = "yes" ; then
     AC_DEFINE(wxUSE_SOCKETS)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sockets"
+fi
+
+if test "$wxUSE_PROTOCOL" = "yes"; then
+    if test "$wxUSE_SOCKETS" != "yes"; then
+        AC_MSG_WARN(Protocol classes require sockets... disabled)
+        wxUSE_PROTOCOL=no
+    fi
+fi
+
+if test "$wxUSE_PROTOCOL" = "yes"; then
+    AC_DEFINE(wxUSE_PROTOCOL)
+
+    if test "$wxUSE_PROTOCOL_HTTP" = "yes"; then
+        AC_DEFINE(wxUSE_PROTOCOL_HTTP)
+    fi
+    if test "$wxUSE_PROTOCOL_FTP" = "yes"; then
+        AC_DEFINE(wxUSE_PROTOCOL_FTP)
+    fi
+    if test "$wxUSE_PROTOCOL_FILE" = "yes"; then
+        AC_DEFINE(wxUSE_PROTOCOL_FILE)
+    fi
+else
+    if test "$wxUSE_FS_INET" = "yes"; then
+        AC_MSG_WARN([HTTP filesystem require protocol classes... disabled])   
+        wxUSE_FS_INET="no"
+    fi
+fi
+
+if test "$wxUSE_URL" = "yes"; then
+    if test "$wxUSE_PROTOCOL" != "yes"; then
+        AC_MSG_WARN(wxURL class requires wxProtocol... disabled)
+        wxUSE_URL=no
+    fi
+    if test "$wxUSE_URL" = "yes"; then
+        AC_DEFINE(wxUSE_URL)
+    fi
+fi
+
+if test "$wxUSE_FS_INET" = "yes"; then
+  AC_DEFINE(wxUSE_FS_INET)
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -4610,6 +4650,12 @@ dnl ---------------------------------------------------------------------------
 if test "$wxUSE_CONSTRAINTS" = "yes"; then
     AC_DEFINE(wxUSE_CONSTRAINTS)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS layout"
+fi
+
+if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
+    if test "$wxUSE_COCOA" = "1"; then
+        AC_MSG_WARN([MDI not yet supported under Cocoa... disabled])
+    fi
 fi
 
 if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
@@ -5085,37 +5131,6 @@ if test "$TOOLKIT" = "MSW"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS taskbar"
 fi
 
-fi
-
-if test "$wxUSE_PROTOCOL" = "yes"; then
-    if test "$wxUSE_SOCKETS" != "yes"; then
-        AC_MSG_WARN(Protocol classes require sockets... disabled)
-        wxUSE_PROTOCOL=no
-    fi
-
-    if test "$wxUSE_PROTOCOL" = "yes"; then
-        AC_DEFINE(wxUSE_PROTOCOL)
-
-        if test "$wxUSE_PROTOCOL_HTTP" = "yes"; then
-            AC_DEFINE(wxUSE_PROTOCOL_HTTP)
-        fi
-        if test "$wxUSE_PROTOCOL_FTP" = "yes"; then
-            AC_DEFINE(wxUSE_PROTOCOL_FTP)
-        fi
-        if test "$wxUSE_PROTOCOL_FILE" = "yes"; then
-            AC_DEFINE(wxUSE_PROTOCOL_FILE)
-        fi
-    fi
-fi
-
-if test "$wxUSE_URL" = "yes"; then
-    if test "$wxUSE_PROTOCOL" != "yes"; then
-        AC_MSG_WARN(wxURL class requires wxProtocol... disabled)
-        wxUSE_URL=no
-    fi
-    if test "$wxUSE_URL" = "yes"; then
-        AC_DEFINE(wxUSE_URL)
-    fi
 fi
 
 if test "$wxUSE_MINIFRAME" = "yes"; then
