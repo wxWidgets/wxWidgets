@@ -104,6 +104,33 @@
 #include "wx/chkconf.h"
 
 /*
+   adjust the Unicode setting: wxUSE_UNICODE should be defined as 0 or 1
+   and is used by wxWindows, _UNICODE and/or UNICODE may be defined or used by
+   the system headers so bring these settings in sync
+ */
+
+/* set wxUSE_UNICODE to 1 if UNICODE or _UNICODE is defined */
+#if defined(_UNICODE) || defined(UNICODE)
+#   undef wxUSE_UNICODE
+#   define wxUSE_UNICODE 1
+#else /* !UNICODE */
+#   ifndef wxUSE_UNICODE
+#       define wxUSE_UNICODE 0
+#   endif
+#endif /* UNICODE/!UNICODE */
+
+/* and vice versa: define UNICODE and _UNICODE if wxUSE_UNICODE is 1 */
+#if wxUSE_UNICODE
+#   ifndef _UNICODE
+#       define _UNICODE
+#   endif
+#   ifndef UNICODE
+#       define UNICODE
+#   endif
+#endif /* wxUSE_UNICODE */
+
+
+/*
    some compilers don't support iostream.h any longer, so override the users
    setting here in such case.
  */

@@ -16,33 +16,12 @@
     #pragma interface "wxchar.h"
 #endif
 
+#include "wx/defs.h"        // for wxUSE_UNICODE
+
 // ----------------------------------------------------------------------------
-// first deal with Unicode setting: wxUSE_UNICODE should be defined as 0 or 1
-// and is used by wxWindows, _UNICODE and/or UNICODE may be defined or used by
-// the system headers so bring these settings in sync
+// check whether we have wchar_t and which size it is if we do
 // ----------------------------------------------------------------------------
 
-// set wxUSE_UNICODE to 1 if UNICODE or _UNICODE is defined
-#if defined(_UNICODE) || defined(UNICODE)
-    #undef wxUSE_UNICODE
-    #define wxUSE_UNICODE 1
-#else
-    #ifndef wxUSE_UNICODE
-        #define wxUSE_UNICODE 0
-    #endif
-#endif // Unicode
-
-// and vice versa: define UNICODE and _UNICODE if wxUSE_UNICODE is 1...
-#if wxUSE_UNICODE
-    #ifndef _UNICODE
-        #define _UNICODE
-    #endif
-    #ifndef UNICODE
-        #define UNICODE
-    #endif
-#endif // Unicode
-
-// check whether we have wchar_t
 #if !defined(wxUSE_WCHAR_T)
     #if defined(__WIN16__)
         // no wchar_t under Win16 regadrless of compiler used
