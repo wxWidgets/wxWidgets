@@ -33,6 +33,10 @@
 
 #include "wx/msw/private.h"
 
+#ifndef SPI_GETFLATMENU
+#define SPI_GETFLATMENU                     0x1022
+#endif
+
 #include "wx/module.h"
 #include "wx/fontutil.h"
 
@@ -156,7 +160,17 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         {
             // 5.1 is Windows XP
             useDefault = FALSE;
-        }
+ 			// Determine if we are using flat menus, only then allow wxSYS_COLOUR_MENUBAR
+			if ( index == wxSYS_COLOUR_MENUBAR )
+			{
+				BOOL isFlat ;
+				if ( SystemParametersInfo( SPI_GETFLATMENU , 0 ,&isFlat, 0 ) )
+				{
+					if ( !isFlat )
+						index = wxSYS_COLOUR_MENU ;
+				}
+			}
+       }
 #else
         useDefault = TRUE;
 #endif // __WIN32__
