@@ -28,6 +28,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/toplevel.h"
     #include "wx/dcclient.h"
 #endif // WX_PRECOMP
