@@ -1975,6 +1975,9 @@ if test "$USE_UNIX" = 1; then
 dnl check for vfork() (even if it's the same as fork() in modern Unices)
 AC_CHECK_FUNCS(vfork)
 
+dnl check for timegm() used by datetime.cpp
+AC_CHECK_FUNCS(timegm)
+
 POSIX4_LINK=
 AC_CHECK_FUNCS(nanosleep, AC_DEFINE(HAVE_NANOSLEEP), [
     AC_CHECK_LIB(posix4, nanosleep, [
@@ -2000,7 +2003,7 @@ AC_CHECK_FUNCS(inet_addr,
     AC_DEFINE(HAVE_INET_ADDR),
     [
         AC_CHECK_LIB(nsl, inet_addr,
-            INET_LINK="nsl",          
+            INET_LINK="nsl",
             AC_CHECK_LIB(resolv, inet_addr,
                 INET_LINK="resolv"
             )
