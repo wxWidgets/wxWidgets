@@ -362,6 +362,10 @@ enum wxFontEncoding
     wxFONTENCODING_CP866,           // and another one
         // and for Windows
     wxFONTENCODING_CP874,           // WinThai
+    wxFONTENCODING_CP932,           // Japanese (shift-JIS)
+    wxFONTENCODING_CP936,           // Chiniese simplified (GB)
+    wxFONTENCODING_CP949,           // Korean (Hangul charset)
+    wxFONTENCODING_CP950,           // Chinese (traditional - Big5)
     wxFONTENCODING_CP1250,          // WinLatin2
     wxFONTENCODING_CP1251,          // WinCyrillic
     wxFONTENCODING_CP1252,          // WinLatin1

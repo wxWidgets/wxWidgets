@@ -19,7 +19,7 @@ and much more.
                     this command to build the .exe and collect the
                     other needed files:
 
-		        python setup.py py2exe
+		        python setup.py py2exe -w
 
 
     superdoodle.iss  An InnoSetup script to build a self-installer of

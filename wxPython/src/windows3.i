@@ -219,6 +219,7 @@ public:
 
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
 
+    // the point must be given in screen coordinates!
     void Position(const wxPoint& ptOrigin,
                   const wxSize& size);
 };

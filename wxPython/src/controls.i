@@ -520,6 +520,9 @@ public:
     const wxColour& GetTextColour() const;
     const wxColour& GetBackgroundColour() const;
     const wxFont& GetFont() const;
+
+    // returns false if we have any attributes set, true otherwise
+    bool IsDefault();
 };
 
 
@@ -544,48 +547,80 @@ public:
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreTextCtrl:val._setOORInfo(val)"
 
-    void Clear();
-    void Copy();
-    void Cut();
-    void DiscardEdits();
-    long GetInsertionPoint();
-    long GetLastPosition();
-    int GetLineLength(long lineNo);
-    wxString GetLineText(long lineNo);
-    int GetNumberOfLines();
-    wxString GetValue();
-    bool IsModified();
-    bool LoadFile(const wxString& filename);
-    void Paste();
-    void PositionToXY(long pos, long *OUTPUT, long *OUTPUT);
-    void Remove(long from, long to);
-    void Replace(long from, long to, const wxString& value);
-    bool SaveFile(const wxString& filename);
-    void SetEditable(bool editable);
-    void SetInsertionPoint(long pos);
-    void SetInsertionPointEnd();
-    void SetSelection(long from, long to);
+
+    wxString GetValue() const;
     void SetValue(const wxString& value);
-    void ShowPosition(long pos);
+
+    int GetLineLength(long lineNo) const;
+    wxString GetLineText(long lineNo) const;
+    int GetNumberOfLines() const;
+
+    bool IsModified() const;
+    bool IsEditable() const;
+
+    // If the return values from and to are the same, there is no selection.
+    void GetSelection(long* OUTPUT, long* OUTPUT) const;
+
+    void Clear();
+    void Replace(long from, long to, const wxString& value);
+    void Remove(long from, long to);
+
+    // load/save the controls contents from/to the file
+    bool LoadFile(const wxString& file);
+    bool SaveFile(const wxString& file = wxEmptyString);
+
+    // clears the dirty flag
+    void DiscardEdits();
+
+    // set the max number of characters which may be entered in a single line
+    // text control
+    void SetMaxLength(unsigned long len);
+
+    // writing text inserts it at the current position, appending always
+    // inserts it at the end
     void WriteText(const wxString& text);
     void AppendText(const wxString& text);
-    long XYToPosition(long x, long y);
 
-    bool CanCopy();
-    bool CanCut();
-    bool CanPaste();
-    bool CanRedo();
-    bool CanUndo();
-    void GetSelection(long* OUTPUT, long* OUTPUT);
-    bool IsEditable();
-    void Undo();
-    void Redo();
-
+    // text control under some platforms supports the text styles: these
+    // methods allow to apply the given text style to the given selection or to
+    // set/get the style which will be used for all appended text
     bool SetStyle(long start, long end, const wxTextAttr& style);
     bool SetDefaultStyle(const wxTextAttr& style);
     const wxTextAttr& GetDefaultStyle() const;
 
-    void SetMaxLength(unsigned long len);
+    // translate between the position (which is just an index in the text ctrl
+    // considering all its contents as a single strings) and (x, y) coordinates
+    // which represent column and line.
+    long XYToPosition(long x, long y) const;
+    bool PositionToXY(long pos, long *OUTPUT, long *OUTPUT) const;
+
+    void ShowPosition(long pos);
+
+    // Clipboard operations
+    void Copy();
+    void Cut();
+    void Paste();
+
+    bool CanCopy() const;
+    bool CanCut() const;
+    bool CanPaste() const;
+
+    // Undo/redo
+    void Undo();
+    void Redo();
+
+    bool CanUndo() const;
+    bool CanRedo() const;
+
+    // Insertion point
+    void SetInsertionPoint(long pos);
+    void SetInsertionPointEnd();
+    long GetInsertionPoint() const;
+    long GetLastPosition() const;
+
+    void SetSelection(long from, long to);
+    void SelectAll();
+    void SetEditable(bool editable);
 
     %addmethods {
         void write(const wxString& text) {
