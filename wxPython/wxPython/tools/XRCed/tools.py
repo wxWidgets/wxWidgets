@@ -178,6 +178,7 @@ class Tools(wxPanel):
 
     # Update interface
     def UpdateUI(self):
+        if not self.IsShown(): return
         # Update status bar
         pullDownMenu = g.pullDownMenu
         tree = g.tree
