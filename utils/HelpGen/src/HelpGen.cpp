@@ -51,6 +51,10 @@
 // wxWindows
 #include "wx/wxprec.h"
 
+#if wxUSE_GUI
+    #error "This is a console program and can be only compiled using wxBase"
+#endif
+
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/log.h"
@@ -1977,6 +1981,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.16  2001/11/28 19:27:33  VZ
+   HelpGen doesn't work in GUI mode
+
    Revision 1.15  2001/11/22 21:59:58  GD
    use "..." instead of <...> for wx headers
 
