@@ -490,7 +490,7 @@ void WXDLLEXPORT wxGetMousePosition( int* x, int* y );
 
 // Format a message on the standard error (UNIX) or the debugging
 // stream (Windows)
-WXDLLEXPORT void wxDebugMsg(const wxChar *fmt ...);
+WXDLLEXPORT void wxDebugMsg(const wxChar *fmt ...) ATTRIBUTE_PRINTF_1;
 
 // Non-fatal error (continues)
 WXDLLEXPORT_DATA(extern const wxChar*) wxInternalErrorStr;

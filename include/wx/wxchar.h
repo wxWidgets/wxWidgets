@@ -632,13 +632,13 @@ WXDLLEXPORT FILE *   wxFopen(const wxChar *path, const wxChar *mode);
 WXDLLEXPORT FILE *   wxFreopen(const wxChar *path, const wxChar *mode, FILE *stream);
 WXDLLEXPORT int      wxRemove(const wxChar *path);
 WXDLLEXPORT int      wxRename(const wxChar *oldpath, const wxChar *newpath);
-WXDLLEXPORT int      wxPrintf(const wxChar *fmt, ...);
+WXDLLEXPORT int      wxPrintf(const wxChar *fmt, ...) ATTRIBUTE_PRINTF_1;
 WXDLLEXPORT int      wxVprintf(const wxChar *fmt, va_list argptr);
-WXDLLEXPORT int      wxFprintf(FILE *stream, const wxChar *fmt, ...);
+WXDLLEXPORT int      wxFprintf(FILE *stream, const wxChar *fmt, ...) ATTRIBUTE_PRINTF_2;
 WXDLLEXPORT int      wxVfprintf(FILE *stream, const wxChar *fmt, va_list argptr);
-WXDLLEXPORT int      wxSprintf(wxChar *buf, const wxChar *fmt, ...);
+WXDLLEXPORT int      wxSprintf(wxChar *buf, const wxChar *fmt, ...) ATTRIBUTE_PRINTF_2;
 WXDLLEXPORT int      wxVsprintf(wxChar *buf, const wxChar *fmt, va_list argptr);
-WXDLLEXPORT int      wxSscanf(const wxChar *buf, const wxChar *fmt, ...);
+WXDLLEXPORT int      wxSscanf(const wxChar *buf, const wxChar *fmt, ...) ATTRIBUTE_PRINTF_2;
 WXDLLEXPORT int      wxVsscanf(const wxChar *buf, const wxChar *fmt, va_list argptr);
 #endif
 
