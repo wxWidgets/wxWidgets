@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Easy generation of new events classes and binder functions"""
+"""Easy generation of new events classes and binder objects"""
 
 __author__ = "Miki Tebeka <tebeka@cs.bgu.ac.il>"
 
@@ -19,10 +19,7 @@ def NewEvent():
             self.SetEventType(evttype)
             self.__dict__.update(kw)
 
-    def Binder(win, func):
-        win.Connect(-1, -1, evttype, func)
-
-    return _Event, Binder
+    return _Event, wx.PyEventBinder(evttype)
 
 
 
@@ -37,10 +34,7 @@ def NewCommandEvent():
             wx.PyCommandEvent.__init__(self, evttype, id)
             self.__dict__.update(kw)
     
-    def Binder(win, id, func):
-        win.Connect(id, -1, evttype, func)
-
-    return _Event, Binder
+    return _Event, wx.PyEventBinder(evttype, 1)
 
 
 #---------------------------------------------------------------------------
