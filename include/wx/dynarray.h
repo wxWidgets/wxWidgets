@@ -19,8 +19,6 @@
 #include "wx/defs.h"
 #include "wx/utils.h"
 
-typedef   bool Bool;
-
 /** @name Dynamic arrays and lists 
     @memo Arrays which grow on demand and do range checking (only in debug)
   */
@@ -100,7 +98,7 @@ public:
     /// number of elements in the array
   uint  Count() const   { return m_uiCount;      }
     /// is it empty?
-  Bool  IsEmpty() const { return m_uiCount == 0; }
+  bool  IsEmpty() const { return m_uiCount == 0; }
   //@}
 
 protected:
@@ -125,7 +123,7 @@ protected:
       @return index of the first item matched or NOT_FOUND
       @see NOT_FOUND
      */
-  int  Index (long lItem, Bool bFromEnd = FALSE) const;
+  int  Index (long lItem, bool bFromEnd = FALSE) const;
     /// add new element at the end
   void Add   (long lItem);
     /// add new element at given position
@@ -175,7 +173,7 @@ public:                                                             \
   T& Item(uint uiIndex) const                                       \
     { return (T&)(wxBaseArray::Item(uiIndex)); }                    \
                                                                     \
-  int Index(T Item, Bool bFromEnd = FALSE) const                    \
+  int Index(T Item, bool bFromEnd = FALSE) const                    \
     { return wxBaseArray::Index((long)Item, bFromEnd); }            \
                                                                     \
   void Add(T Item)                                                  \
@@ -211,7 +209,7 @@ public:                                                             \
   T& Item(uint uiIndex) const                                       \
     { return *(T*)wxBaseArray::Item(uiIndex); }                     \
                                                                     \
-  int Index(const T& Item, Bool bFromEnd = FALSE) const;            \
+  int Index(const T& Item, bool bFromEnd = FALSE) const;            \
                                                                     \
   void Add(const T& Item);                                          \
   void Add(const T* pItem)                                          \
