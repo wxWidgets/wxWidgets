@@ -92,7 +92,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_EXECUTE
+    #define TEST_DATETIME
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -316,7 +316,7 @@ static void TestDirEnum()
         return;
     }
 
-    wxDir dir(_T("s:/tmp/foo"));
+    wxDir dir(cwd);
     if ( !dir.IsOpened() )
     {
         wxPrintf(_T("ERROR: failed to open current directory '%s'.\n"), cwd.c_str());
@@ -330,7 +330,7 @@ static void TestDirEnum()
     TestDirEnumHelper(dir, wxDIR_DEFAULT | wxDIR_DOTDOT);
 
     wxPuts(_T("Enumerating object files in current directory:"));
-    TestDirEnumHelper(dir, wxDIR_DEFAULT, "*.o");
+    TestDirEnumHelper(dir, wxDIR_DEFAULT, "*.o*");
 
     wxPuts(_T("Enumerating directories in current directory:"));
     TestDirEnumHelper(dir, wxDIR_DIRS);
@@ -2194,13 +2194,19 @@ static void TestLongLongPrint()
 
 #ifdef TEST_PATHLIST
 
+#ifdef __UNIX__
+    #define CMD_IN_PATH _T("ls")
+#else
+    #define CMD_IN_PATH _T("command.com")
+#endif
+
 static void TestPathList()
 {
     wxPuts(_T("*** Testing wxPathList ***\n"));
 
     wxPathList pathlist;
-    pathlist.AddEnvList("PATH");
-    wxString path = pathlist.FindValidPath("ls");
+    pathlist.AddEnvList(_T("PATH"));
+    wxString path = pathlist.FindValidPath(CMD_IN_PATH);
     if ( path.empty() )
     {
         wxPrintf(_T("ERROR: command not found in the path.\n"));
@@ -4367,7 +4373,7 @@ static void TestTimeFormat()
        { CompareBoth, _T("Date is %x, time is %X") },
        { CompareTime, _T("Time is %H:%M:%S or %I:%M:%S %p") },
        { CompareNone, _T("The day of year: %j, the week of year: %W") },
-       { CompareDate, _T("ISO date without separators: %4Y%2m%2d") },
+       { CompareDate, _T("ISO date without separators: %Y%m%d") },
     };
 
     static const Date formatTestDates[] =
@@ -6150,6 +6156,7 @@ int main(int argc, char **argv)
 
         TestTimeZoneBug();
     }
+        TestTimeFormat();
 
     if ( TEST_INTERACTIVE )
         TestDateTimeInteractive();
