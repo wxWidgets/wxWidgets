@@ -186,7 +186,6 @@ private:
     WXHWND                m_hwndToolTip;
 #endif // tooltips
 
-    DECLARE_DYNAMIC_CLASS(wxFrameMSW)
     DECLARE_EVENT_TABLE()
 };
 

@@ -136,9 +136,6 @@ protected:
 
     // is the frame currently iconized?
     bool          m_isIconized;
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxFrameGTK)
 };
 
 #endif // __GTKFRAMEH__
