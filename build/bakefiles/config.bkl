@@ -8,7 +8,8 @@
 
     <option name="UNICODE">
         <values>0 1</values>
-        <default-value>0</default-value>
+        <values-description>Ansi Unicode</values-description>
+        <default-value>0</default-value>        
         <description>
             Compile Unicode build of wxWindows?
         </description>
@@ -16,6 +17,7 @@
 
     <option name="SHARED">
         <values>0 1</values>
+        <values-description>Static DLL</values-description>
         <default-value>1</default-value>
         <description>
             What type of library to build?
@@ -24,6 +26,7 @@
     
     <option name="MONOLITHIC">
         <values>0 1</values>
+        <values-description>Multilib Monolithic</values-description>
         <default-value>1</default-value>
         <description>
             Multiple libraries or single huge monolithic one?
@@ -32,6 +35,7 @@
     
     <option name="USE_GUI">
         <values>0 1</values>
+        <values-description>Base GUI</values-description>
         <default-value>1</default-value>
         <description>
             Build GUI libraries?
@@ -56,6 +60,7 @@
     
     <option name="WXUNIV">
         <values>0 1</values>
+        <values-description>Native wxUniv</values-description>
         <default-value>0</default-value>
         <description>
             Build wxUniversal instead of native port?
@@ -84,7 +89,6 @@
             compiled .lib files and setup.h under the lib/ toplevel directory.
         </description>
     </option>
-        
 
 
     <!-- ================================================================== -->
