@@ -669,7 +669,8 @@ bool wxListCtrl::GetItem(wxListItem& info) const
     }
     else
     {
-        wxConvertFromMSWListItem(GetHwnd(), info, lvItem);
+        // give NULL as hwnd as we already have everything we need
+        wxConvertFromMSWListItem(NULL, info, lvItem);
     }
 
     if (lvItem.pszText)
