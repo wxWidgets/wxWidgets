@@ -102,14 +102,14 @@ wxSize wxStaticText::DoGetBestSize()
         heightTextTotal = 0, heightLine;
 
     wxString curLine;
-    for ( const char *pc = text; ; pc++ ) {
-        if ( *pc == '\n' || *pc == '\0' ) {
+    for ( const wxChar *pc = text; ; pc++ ) {
+        if ( *pc == _T('\n') || *pc == _T('\0') ) {
             GetTextExtent(curLine, &widthLine, &heightLine);
             if ( widthLine > widthTextMax )
                 widthTextMax = widthLine;
             heightTextTotal += heightLine;
 
-            if ( *pc == '\n' ) {
+            if ( *pc == _T('\n') ) {
                curLine.Empty();
             }
             else {

@@ -156,7 +156,7 @@ bool wxGetUserId(wxChar *buf, int maxSize)
     if ( ::GetUserName(buf, &nSize) == 0 )
     {
         // actually, it does happen on Win9x if the user didn't log on
-        DWORD res = ::GetEnvironmentVariable("username", buf, maxSize);
+        DWORD res = ::GetEnvironmentVariable(_T("username"), buf, maxSize);
         if ( res == 0 )
         {
             // not found

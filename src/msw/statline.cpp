@@ -65,7 +65,7 @@ bool wxStaticLine::Create( wxWindow *parent,
     m_hWnd = (WXHWND)::CreateWindow
                        (
                         _T("STATIC"),
-                        "",
+                        _T(""),
                         WS_VISIBLE | WS_CHILD |
                         SS_GRAYRECT | SS_SUNKEN, // | SS_ETCHEDFRAME,
                         pos.x, pos.y, sizeReal.x, sizeReal.y,
