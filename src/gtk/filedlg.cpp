@@ -42,32 +42,31 @@ bool gtk_filedialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUN
 //-----------------------------------------------------------------------------
 
 static
-void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), gpointer data )
+void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFileDialog *dialog )
 {
-    wxFileDialog *dialog = (wxFileDialog*)data;
-    wxCommandEvent event(wxEVT_NULL);
-    int style;
+    int style = dialog->GetStyle();
 
-    style = dialog->GetStyle();
-
-    if( (style & wxSAVE ) && ( style&wxOVERWRITE_PROMPT ) )
+    if ((style&wxSAVE)&&(style&wxOVERWRITE_PROMPT))
     {
         char *filename = gtk_file_selection_get_filename(
-                            GTK_FILE_SELECTION(dialog->m_widget)
-                         );
+                            GTK_FILE_SELECTION(dialog->m_widget) );
 
-        if(wxFileExists( filename ))
+        if (wxFileExists( filename ))
         {
             wxString msg;
-            msg.Printf(_("File '%s' already exists, do you really want to "
+            msg.Printf( _("File '%s' already exists, do you really want to "
                          "overwrite it?"), filename);
 
-            if( wxMessageBox(msg, _("Confirm"), wxYES_NO) != wxYES)
+            if (wxMessageBox(msg, _("Confirm"), wxYES_NO) != wxYES)
                 return;
         }
     }
 
-    dialog->OnOK( event );
+    dialog->SetPath( gtk_file_selection_get_filename( GTK_FILE_SELECTION(dialog->m_widget) ) );
+    
+    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_OK);
+    event.SetEventObject( dialog );
+    dialog->GetEventHandler()->ProcessEvent( event );
 }
 
 //-----------------------------------------------------------------------------
@@ -77,9 +76,9 @@ void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), gpointer data )
 static
 void gtk_filedialog_cancel_callback( GtkWidget *WXUNUSED(widget), gpointer data )
 {
-    wxFileDialog *dialog = (wxFileDialog*)data;
-    wxCommandEvent event(wxEVT_NULL);
-    dialog->OnCancel( event );
+    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
+    event.SetEventObject( dialog );
+    dialog->GetEventHandler()->ProcessEvent( event );
 }
 
 //-----------------------------------------------------------------------------
@@ -126,21 +125,7 @@ wxFileDialog::wxFileDialog( wxWindow *parent, const wxString& message,
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
         GTK_SIGNAL_FUNC(gtk_filedialog_delete_callback), (gpointer)this );
-
 }
-
-int wxFileDialog::ShowModal(void)
-{
-    int ret = wxDialog::ShowModal();
-
-    if (ret == wxID_OK)
-    {
-        m_fileName = gtk_file_selection_get_filename( GTK_FILE_SELECTION(m_widget) );
-        m_path = gtk_file_selection_get_filename( GTK_FILE_SELECTION(m_widget) );
-    }
-    return ret;
-}
-
 
 wxString wxFileSelector( const char *title,
                       const char *defaultDir, const char *defaultFileName,

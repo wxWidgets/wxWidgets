@@ -444,16 +444,13 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
   new MyTextCtrl( panel, -1, "This one is with wxTE_PROCESS_TAB style.",
                              wxPoint(10,120), wxSize(320,70), wxTE_MULTILINE | wxTE_PROCESS_TAB);
 
-  (void)new wxStaticBox( panel, -1, "&Move cursor to the end of:",
-                         wxPoint(345, 0), wxSize(160, 100) );
-  (void)new wxButton(panel, ID_MOVE_END_ENTRY, "Text &entry",
-                     wxPoint(370, 20), wxSize(110, 30));
-  (void)new wxButton(panel, ID_MOVE_END_ZONE, "Text &zone",
-                     wxPoint(370, 60), wxSize(110, 30));
-  (void)new wxStaticBox( panel, -1, "wx&Clipboard", wxPoint(338,120), wxSize(160,100) );
-  (void)new wxButton( panel, ID_COPY_TEXT, "C&opy line 1", wxPoint(362,140), wxSize(110,30) );
-  (void)new wxButton( panel, ID_PASTE_TEXT, "&Paste text", wxPoint(362,180), wxSize(110,30) );
-  m_notebook->AddPage(panel, "wxTextCtrl" , FALSE, Image_Text);
+  (void)new wxStaticBox( panel, -1, "&Move cursor to the end of:", wxPoint(345, 0), wxSize(160, 100) );
+  (void)new wxButton( panel, ID_MOVE_END_ENTRY, "Text &entry", wxPoint(370, 20), wxSize(110, 30) );
+  (void)new wxButton( panel, ID_MOVE_END_ZONE, "Text &zone", wxPoint(370, 60), wxSize(110, 30) );
+  (void)new wxStaticBox( panel, -1, "wx&Clipboard", wxPoint(345,110), wxSize(160,100) );
+  (void)new wxButton( panel, ID_COPY_TEXT, "C&opy line 1", wxPoint(375,130), wxSize(110,30) );
+  (void)new wxButton( panel, ID_PASTE_TEXT, "&Paste text", wxPoint(375,170), wxSize(110,30) );
+  m_notebook->AddPage( panel, "wxTextCtrl" , FALSE, Image_Text );
 
   wxString choices2[] =
   {

@@ -54,11 +54,9 @@ public:
     wxString GetWildcard() const { return m_wildCard; }
     long GetStyle() const { return m_dialogStyle; }
     int GetFilterIndex() const { return m_filterIndex ; }
-
-    int ShowModal();
-
-    protected:
-
+    
+protected:    
+    
     wxString    m_message;
     long        m_dialogStyle;
     wxWindow *  m_parent;
