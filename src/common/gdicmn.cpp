@@ -30,6 +30,7 @@
 #include "wx/font.h"
 #include "wx/palette.h"
 #include "wx/app.h"
+#include "wx/dc.h"
 
 #include "wx/log.h"
 #include <string.h>

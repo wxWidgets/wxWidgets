@@ -38,9 +38,6 @@ wxDC::wxDC()
 {
     m_ok = FALSE;
 
-    m_optimize = FALSE;
-    m_autoSetting = FALSE;
-
     m_mm_to_pix_x = 1.0;
     m_mm_to_pix_y = 1.0;
 
@@ -196,41 +193,41 @@ void wxDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
 
 long wxDCBase::DeviceToLogicalX(long x) const
 {
-    return XDEV2LOG(x);
+    return ((wxDC *)this)->XDEV2LOG(x);
 }
 
 long wxDCBase::DeviceToLogicalY(long y) const
 {
-    return YDEV2LOG(y);
+    return ((wxDC *)this)->YDEV2LOG(y);
 }
 
 long wxDCBase::DeviceToLogicalXRel(long x) const
 {
-    return XDEV2LOGREL(x);
+    return ((wxDC *)this)->XDEV2LOGREL(x);
 }
 
 long wxDCBase::DeviceToLogicalYRel(long y) const
 {
-    return YDEV2LOGREL(y);
+    return ((wxDC *)this)->YDEV2LOGREL(y);
 }
 
 long wxDCBase::LogicalToDeviceX(long x) const
 {
-    return XLOG2DEV(x);
+    return ((wxDC *)this)->XLOG2DEV(x);
 }
 
 long wxDCBase::LogicalToDeviceY(long y) const
 {
-    return YLOG2DEV(y);
+    return ((wxDC *)this)->YLOG2DEV(y);
 }
 
 long wxDCBase::LogicalToDeviceXRel(long x) const
 {
-    return XLOG2DEVREL(x);
+    return ((wxDC *)this)->XLOG2DEVREL(x);
 }
 
 long wxDCBase::LogicalToDeviceYRel(long y) const
 {
-    return YLOG2DEVREL(y);
+    return ((wxDC *)this)->YLOG2DEVREL(y);
 }
 

@@ -7,7 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef __GTKDCCLIENTH__
 #define __GTKDCCLIENTH__
 
@@ -30,85 +29,94 @@ class wxClientDC;
 // wxWindowDC
 //-----------------------------------------------------------------------------
 
-class wxWindowDC: public wxDC
+class wxWindowDC : public wxDC
 {
-  DECLARE_DYNAMIC_CLASS(wxWindowDC)
+    DECLARE_DYNAMIC_CLASS(wxWindowDC)
 
 public:
-  wxWindowDC();
-  wxWindowDC( wxWindow *win );
+    wxWindowDC();
+    wxWindowDC( wxWindow *win );
 
-  ~wxWindowDC();
+    ~wxWindowDC();
 
-  virtual void FloodFill( long x, long y, const wxColour& col, int style=wxFLOOD_SURFACE );
-  virtual bool GetPixel( long x1, long y1, wxColour *col ) const;
+    virtual bool CanDrawBitmap() const { return TRUE; }
+    virtual bool CanGetTextExtent() const { return TRUE; }
 
-  virtual void DrawLine( long x1, long y1, long x2, long y2 );
-  virtual void CrossHair( long x, long y );
-  virtual void DrawArc( long x1, long y1, long x2, long y2, long xc, long yc );
-  virtual void DrawEllipticArc( long x, long y, long width, long height, double sa, double ea );
-  virtual void DrawPoint( long x, long y );
+    virtual void DoFloodFill( long x, long y, const wxColour& col, int style=wxFLOOD_SURFACE );
+    virtual bool DoGetPixel( long x1, long y1, wxColour *col ) const;
 
-  virtual void DrawLines( int n, wxPoint points[], long xoffset = 0, long yoffset = 0 );
-  virtual void DrawLines( wxList *points, long xoffset = 0, long yoffset = 0 );
-  virtual void DrawPolygon( int n, wxPoint points[], long xoffset = 0, long yoffset = 0,
-                            int fillStyle=wxODDEVEN_RULE );
-  virtual void DrawPolygon( wxList *lines, long xoffset = 0, long yoffset = 0,
-                            int fillStyle=wxODDEVEN_RULE );
+    virtual void DoDrawLine( long x1, long y1, long x2, long y2 );
+    virtual void DoCrossHair( long x, long y );
+    virtual void DoDrawArc( long x1, long y1, long x2, long y2,
+                            long xc, long yc );
+    virtual void DoDrawEllipticArc( long x, long y, long width, long height,
+                                    double sa, double ea );
+    virtual void DoDrawPoint( long x, long y );
 
-  virtual void DrawRectangle( long x, long y, long width, long height );
-  virtual void DrawRoundedRectangle( long x, long y, long width, long height, double radius = 20.0 );
-  virtual void DrawEllipse( long x, long y, long width, long height );
+    virtual void DoDrawLines(int n, wxPoint points[],
+                             long xoffset, long yoffset);
+    virtual void DoDrawPolygon(int n, wxPoint points[],
+                               long xoffset, long yoffset,
+                               int fillStyle = wxODDEVEN_RULE);
 
-  virtual bool CanDrawBitmap() const;
-  virtual void DrawIcon( const wxIcon &icon, long x, long y );
-  virtual void DrawBitmap( const wxBitmap &bitmap, long x, long y, bool useMask=FALSE );
-  virtual bool Blit( long xdest, long ydest, long width, long height,
-                      wxDC *source, long xsrc, long ysrc, int logical_func = wxCOPY, bool useMask=FALSE );
+    virtual void DoDrawRectangle( long x, long y, long width, long height );
+    virtual void DoDrawRoundedRectangle( long x, long y, long width, long height, double radius = 20.0 );
+    virtual void DoDrawEllipse( long x, long y, long width, long height );
 
-  virtual void DrawText( const wxString &text, long x, long y, bool use16 = FALSE );
-  virtual bool CanGetTextExtent() const;
-  virtual void GetTextExtent( const wxString &string, long *width, long *height,
-                     long *descent = (long *) NULL, long *externalLeading = (long *) NULL,
-                     wxFont *theFont = (wxFont *) NULL, bool use16 = FALSE );
-  virtual long GetCharWidth();
-  virtual long GetCharHeight();
+    virtual void DoDrawIcon( const wxIcon &icon, long x, long y );
+    virtual void DoDrawBitmap( const wxBitmap &bitmap, long x, long y,
+                               bool useMask = FALSE );
 
-  virtual void Clear();
+    virtual bool DoBlit( long xdest, long ydest, long width, long height,
+                         wxDC *source, long xsrc, long ysrc,
+                         int logical_func = wxCOPY, bool useMask = FALSE );
 
-  virtual void SetFont( const wxFont &font );
-  virtual void SetPen( const wxPen &pen );
-  virtual void SetBrush( const wxBrush &brush );
-  virtual void SetBackground( const wxBrush &brush );
-  virtual void SetLogicalFunction( int function );
-  virtual void SetTextForeground( const wxColour &col );
-  virtual void SetTextBackground( const wxColour &col );
-  virtual void SetBackgroundMode( int mode );
-  virtual void SetPalette( const wxPalette& palette );
+    virtual void DoDrawText( const wxString &text, long x, long y );
+    virtual void GetTextExtent( const wxString &string,
+                                long *width, long *height,
+                                long *descent = (long *) NULL,
+                                long *externalLeading = (long *) NULL,
+                                wxFont *theFont = (wxFont *) NULL) const;
+    virtual long GetCharWidth() const;
+    virtual long GetCharHeight() const;
 
-  virtual void SetClippingRegion( long x, long y, long width, long height );
-  virtual void DestroyClippingRegion();
-  virtual void SetClippingRegion( const wxRegion &region  );
+    virtual void Clear();
 
-  virtual void DrawSpline( wxList *points );
+    virtual void SetFont( const wxFont &font );
+    virtual void SetPen( const wxPen &pen );
+    virtual void SetBrush( const wxBrush &brush );
+    virtual void SetBackground( const wxBrush &brush );
+    virtual void SetLogicalFunction( int function );
+    virtual void SetTextForeground( const wxColour &col );
+    virtual void SetTextBackground( const wxColour &col );
+    virtual void SetBackgroundMode( int mode );
+    virtual void SetPalette( const wxPalette& palette );
 
-  // Resolution in pixels per logical inch
-  wxSize GetPPI(void) const;
+    virtual void DoSetClippingRegion( long x, long y, long width, long height );
+    virtual void DestroyClippingRegion();
+    virtual void DoSetClippingRegionAsRegion( const wxRegion &region  );
 
-  // implementation
+    virtual void DoDrawSpline( wxList *points );
 
-  GdkWindow    *m_window;
-  GdkGC        *m_penGC;
-  GdkGC        *m_brushGC;
-  GdkGC        *m_textGC;
-  GdkGC        *m_bgGC;
-  GdkColormap  *m_cmap;
-  bool          m_isMemDC;
-  wxWindow     *m_owner;
+    // Resolution in pixels per logical inch
+    virtual wxSize GetPPI() const;
+    virtual int GetDepth() const;
 
-  void SetUpDC();
-  void Destroy();
-  GdkWindow *GetWindow();
+    // implementation
+    // --------------
+
+    GdkWindow    *m_window;
+    GdkGC        *m_penGC;
+    GdkGC        *m_brushGC;
+    GdkGC        *m_textGC;
+    GdkGC        *m_bgGC;
+    GdkColormap  *m_cmap;
+    bool          m_isMemDC;
+    wxWindow     *m_owner;
+
+    void SetUpDC();
+    void Destroy();
+    GdkWindow *GetWindow() { return m_window; }
 };
 
 //-----------------------------------------------------------------------------
@@ -117,11 +125,11 @@ public:
 
 class wxPaintDC : public wxWindowDC
 {
-  DECLARE_DYNAMIC_CLASS(wxPaintDC)
+    DECLARE_DYNAMIC_CLASS(wxPaintDC)
 
 public:
-  wxPaintDC();
-  wxPaintDC( wxWindow *win );
+    wxPaintDC();
+    wxPaintDC( wxWindow *win );
 };
 
 //-----------------------------------------------------------------------------
@@ -130,11 +138,11 @@ public:
 
 class wxClientDC : public wxWindowDC
 {
-  DECLARE_DYNAMIC_CLASS(wxClientDC)
+    DECLARE_DYNAMIC_CLASS(wxClientDC)
 
 public:
-  wxClientDC();
-  wxClientDC( wxWindow *win );
+    wxClientDC();
+    wxClientDC( wxWindow *win );
 };
 
 

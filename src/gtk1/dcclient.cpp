@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling, Markus Holzem, Chris Breeze
-// Licence:   	wxWindows licence
+// Licence:           wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -43,16 +43,18 @@ static GdkPixmap **hatch_bitmap = (GdkPixmap **) NULL;
 //-----------------------------------------------------------------------------
 // temporary implementation of the missing GDK function
 //-----------------------------------------------------------------------------
+
 #include "gdk/gdkprivate.h"
-void gdk_draw_bitmap	 (GdkDrawable  *drawable,
-			  GdkGC	       *gc,
-			  GdkDrawable  *src,
-			  gint		xsrc,
-			  gint		ysrc,
-			  gint		xdest,
-			  gint		ydest,
-			  gint		width,
-			  gint		height)
+
+void gdk_draw_bitmap     (GdkDrawable  *drawable,
+                          GdkGC               *gc,
+                          GdkDrawable  *src,
+                          gint                xsrc,
+                          gint                ysrc,
+                          gint                xdest,
+                          gint                ydest,
+                          gint                width,
+                          gint                height)
 {
     GdkWindowPrivate *drawable_private;
     GdkWindowPrivate *src_private;
@@ -66,27 +68,27 @@ void gdk_draw_bitmap	 (GdkDrawable  *drawable,
     src_private = (GdkWindowPrivate*) src;
     if (drawable_private->destroyed || src_private->destroyed)
         return;
-	
+        
     gc_private = (GdkGCPrivate*) gc;
 
     if (width == -1) width = src_private->width;
     if (height == -1) height = src_private->height;
 
     XCopyPlane( drawable_private->xdisplay,
-	        src_private->xwindow,
-	        drawable_private->xwindow,
-	        gc_private->xgc,
-	        xsrc, ysrc,
-	        width, height,
-	        xdest, ydest,
-	        1 );
+                src_private->xwindow,
+                drawable_private->xwindow,
+                gc_private->xgc,
+                xsrc, ysrc,
+                width, height,
+                xdest, ydest,
+                1 );
 }
 
 //-----------------------------------------------------------------------------
 // wxWindowDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxWindowDC,wxDC)
+IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
 
 wxWindowDC::wxWindowDC()
 {
@@ -108,7 +110,8 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     m_cmap = (GdkColormap *) NULL;
     m_owner = (wxWindow *)NULL;
   
-    if (!window) return;
+    if (!window)
+        return;
     
     GtkWidget *widget = window->m_wxwindow;
     if (!widget)
@@ -125,7 +128,8 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     }
     
     /* still not realized ? */
-    if (!m_window) return;
+    if (!m_window)
+        return;
     
     if (window->m_wxwindow)
         m_cmap = gtk_widget_get_colormap( window->m_wxwindow );
@@ -151,19 +155,19 @@ wxWindowDC::~wxWindowDC()
     Destroy();
 }
 
-void wxWindowDC::FloodFill( long WXUNUSED(x), long WXUNUSED(y), 
+void wxWindowDC::DoFloodFill( long WXUNUSED(x), long WXUNUSED(y), 
                            const wxColour &WXUNUSED(col), int WXUNUSED(style) )
 {
-    wxFAIL_MSG( _T("wxWindowDC::FloodFill not implemented") );
+    wxFAIL_MSG( _T("wxWindowDC::DoFloodFill not implemented") );
 }
 
-bool wxWindowDC::GetPixel( long WXUNUSED(x1), long WXUNUSED(y1), wxColour *WXUNUSED(col) ) const
+bool wxWindowDC::DoGetPixel( long WXUNUSED(x1), long WXUNUSED(y1), wxColour *WXUNUSED(col) ) const
 {
-    wxFAIL_MSG( _T("wxWindowDC::GetPixel not implemented") );
+    wxFAIL_MSG( _T("wxWindowDC::DoGetPixel not implemented") );
     return FALSE;
 }
 
-void wxWindowDC::DrawLine( long x1, long y1, long x2, long y2 )
+void wxWindowDC::DoDrawLine( long x1, long y1, long x2, long y2 )
 {
     wxCHECK_RET( Ok(), _T("invalid window dc") );
   
@@ -171,13 +175,13 @@ void wxWindowDC::DrawLine( long x1, long y1, long x2, long y2 )
     {
         gdk_draw_line( m_window, m_penGC, 
                        XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2) );
-		       
+                       
         CalcBoundingBox(x1, y1);
         CalcBoundingBox(x2, y2);
     }
 }
 
-void wxWindowDC::CrossHair( long x, long y )
+void wxWindowDC::DoCrossHair( long x, long y )
 {
     wxCHECK_RET( Ok(), _T("invalid window dc") );
   
@@ -193,7 +197,8 @@ void wxWindowDC::CrossHair( long x, long y )
     }
 }
 
-void wxWindowDC::DrawArc( long x1, long y1, long x2, long y2, long xc, long yc )
+void wxWindowDC::DoDrawArc( long x1, long y1, long x2, long y2,
+                            long xc, long yc )
 {
     wxCHECK_RET( Ok(), _T("invalid window dc") );
   
@@ -222,11 +227,11 @@ void wxWindowDC::DrawArc( long x1, long y1, long x2, long y2, long xc, long yc )
     else 
     {
         radius1 = (xx1 - xxc == 0) ?
-	    (yy1 - yyc < 0) ? 90.0 : -90.0 :
-	    -atan2(double(yy1-yyc), double(xx1-xxc)) * RAD2DEG;
+            (yy1 - yyc < 0) ? 90.0 : -90.0 :
+            -atan2(double(yy1-yyc), double(xx1-xxc)) * RAD2DEG;
         radius2 = (xx2 - xxc == 0) ?
-	    (yy2 - yyc < 0) ? 90.0 : -90.0 :
-	    -atan2(double(yy2-yyc), double(xx2-xxc)) * RAD2DEG;
+            (yy2 - yyc < 0) ? 90.0 : -90.0 :
+            -atan2(double(yy2-yyc), double(xx2-xxc)) * RAD2DEG;
     }
     long alpha1 = long(radius1 * 64.0);
     long alpha2 = long((radius2 - radius1) * 64.0);
@@ -243,7 +248,7 @@ void wxWindowDC::DrawArc( long x1, long y1, long x2, long y2, long xc, long yc )
     CalcBoundingBox (x2, y2);
 }
 
-void wxWindowDC::DrawEllipticArc( long x, long y, long width, long height, double sa, double ea )
+void wxWindowDC::DoDrawEllipticArc( long x, long y, long width, long height, double sa, double ea )
 {
     wxCHECK_RET( Ok(), _T("invalid window dc") );
   
@@ -263,22 +268,22 @@ void wxWindowDC::DrawEllipticArc( long x, long y, long width, long height, doubl
   
     if (m_pen.GetStyle() != wxTRANSPARENT)
         gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy, ww, hh, start, end );
-	
+        
     CalcBoundingBox (x, y);
     CalcBoundingBox (x + width, y + height);
 }
 
-void wxWindowDC::DrawPoint( long x, long y )
+void wxWindowDC::DoDrawPoint( long x, long y )
 {
     wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     if (m_pen.GetStyle() != wxTRANSPARENT)
         gdk_draw_point( m_window, m_penGC, XLOG2DEV(x), YLOG2DEV(y) );
-	
+        
     CalcBoundingBox (x, y);
 }
 
-void wxWindowDC::DrawLines( int n, wxPoint points[], long xoffset, long yoffset )
+void wxWindowDC::DoDrawLines( int n, wxPoint points[], long xoffset, long yoffset )
 {
     wxCHECK_RET( Ok(), _T("invalid window dc") );
   
@@ -294,39 +299,12 @@ void wxWindowDC::DrawLines( int n, wxPoint points[], long xoffset, long yoffset 
         long y1 = YLOG2DEV(points[i].y + yoffset);     // oh, what a waste
         long y2 = YLOG2DEV(points[i+1].y + yoffset);
         gdk_draw_line( m_window, m_penGC, x1, y1, x2, y2 );
-	
+        
         CalcBoundingBox( points[i+1].x + xoffset, points[i+1].y + yoffset );
     }
 }
 
-void wxWindowDC::DrawLines( wxList *points, long xoffset, long yoffset )
-{
-    wxCHECK_RET( Ok(), _T("invalid window dc") );
-  
-    if (m_pen.GetStyle() == wxTRANSPARENT) return;
-  
-    wxNode *node = points->First();
-    if (!node) return;
-    
-    wxPoint *pt = (wxPoint*)node->Data();
-    CalcBoundingBox( pt->x + xoffset, pt->y + yoffset );
-	
-    while (node->Next())
-    {
-        wxPoint *point = (wxPoint*)node->Data();
-        wxPoint *npoint = (wxPoint*)node->Next()->Data();
-        long x1 = XLOG2DEV(point->x + xoffset);
-        long x2 = XLOG2DEV(npoint->x + xoffset);
-        long y1 = YLOG2DEV(point->y + yoffset);    // and a waste again...
-        long y2 = YLOG2DEV(npoint->y + yoffset);
-        gdk_draw_line( m_window, m_penGC, x1, y1, x2, y2 );
-        node = node->Next();
-	
-        CalcBoundingBox( npoint->x + xoffset, npoint->y + yoffset );
-    }
-}
-
-void wxWindowDC::DrawPolygon( int n, wxPoint points[], long xoffset, long yoffset, int WXUNUSED(fillStyle) )
+void wxWindowDC::DoDrawPolygon( int n, wxPoint points[], long xoffset, long yoffset, int WXUNUSED(fillStyle) )
 {
     wxCHECK_RET( Ok(), _T("invalid window dc") );
   
@@ -338,7 +316,7 @@ void wxWindowDC::DrawPolygon( int n, wxPoint points[], long xoffset, long yoffse
     {
         gdkpoints[i].x = XLOG2DEV(points[i].x + xoffset);
         gdkpoints[i].y = YLOG2DEV(points[i].y + yoffset);
-	
+        
         CalcBoundingBox( points[i].x + xoffset, points[i].y + yoffset );
     }
     
@@ -349,59 +327,18 @@ void wxWindowDC::DrawPolygon( int n, wxPoint points[], long xoffset, long yoffse
    
     if (m_pen.GetStyle() != wxTRANSPARENT)
         for (i = 0 ; i < n ; i++)
-	{
+        {
             gdk_draw_line( m_window, m_penGC, 
- 		           gdkpoints[i%n].x,
- 		           gdkpoints[i%n].y,
- 		           gdkpoints[(i+1)%n].x,
- 		           gdkpoints[(i+1)%n].y);
+                           gdkpoints[i%n].x,
+                           gdkpoints[i%n].y,
+                           gdkpoints[(i+1)%n].x,
+                           gdkpoints[(i+1)%n].y);
         }
-	
+        
     delete[] gdkpoints;
 }
 
-void wxWindowDC::DrawPolygon( wxList *lines, long xoffset, long yoffset, int WXUNUSED(fillStyle))
-{
-    wxCHECK_RET( Ok(), _T("invalid window dc") );
-  
-    int n = lines->Number();
-    if (n <= 0) return;
-    
-    GdkPoint *gdkpoints = new GdkPoint[n];
-    wxNode *node = lines->First();
-    int cnt = 0;
-    while (node)
-    {
-        wxPoint *p = (wxPoint *) node->Data();
-        gdkpoints[cnt].x = XLOG2DEV(p->x + xoffset);
-        gdkpoints[cnt].y = YLOG2DEV(p->y + yoffset);
-        node = node->Next();
-        cnt++;
-	
-        CalcBoundingBox( p->x + xoffset, p->y + yoffset );
-    }
-    
-    if (m_brush.GetStyle() != wxTRANSPARENT)
-        gdk_draw_polygon (m_window, m_brushGC, TRUE, gdkpoints, n);
-	
-    // To do: Fillstyle
-    
-    if (m_pen.GetStyle() != wxTRANSPARENT)
-    {
-        int i;
-        for (i = 0 ; i < n ; i++)
-	{
- 	    gdk_draw_line( m_window, m_penGC, 
- 		           gdkpoints[i%n].x,
- 		           gdkpoints[i%n].y,
- 		           gdkpoints[(i+1)%n].x,
- 		           gdkpoints[(i+1)%n].y );
-        }
-    }
-    delete[] gdkpoints;
-}
-
-void wxWindowDC::DrawRectangle( long x, long y, long width, long height )
+void wxWindowDC::DoDrawRectangle( long x, long y, long width, long height )
 {
     wxCHECK_RET( Ok(), _T("invalid window dc") );
 
@@ -427,7 +364,7 @@ void wxWindowDC::DrawRectangle( long x, long y, long width, long height )
     CalcBoundingBox( x + width, y + height );
 }
 
-void wxWindowDC::DrawRoundedRectangle( long x, long y, long width, long height, double radius )
+void wxWindowDC::DoDrawRoundedRectangle( long x, long y, long width, long height, double radius )
 {
     wxCHECK_RET( Ok(), _T("invalid window dc") );
   
@@ -496,7 +433,7 @@ void wxWindowDC::DrawRoundedRectangle( long x, long y, long width, long height, 
     CalcBoundingBox( x + width, y + height );
 }
 
-void wxWindowDC::DrawEllipse( long x, long y, long width, long height )
+void wxWindowDC::DoDrawEllipse( long x, long y, long width, long height )
 {
     wxCHECK_RET( Ok(), _T("invalid window dc") );
   
@@ -514,26 +451,24 @@ void wxWindowDC::DrawEllipse( long x, long y, long width, long height )
   
     if (m_pen.GetStyle() != wxTRANSPARENT)
         gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy, ww, hh, 0, 360*64 );
-	
+        
     CalcBoundingBox( x - width, y - height );
     CalcBoundingBox( x + width, y + height );
 }
 
-bool wxWindowDC::CanDrawBitmap() const
+void wxWindowDC::DoDrawIcon( const wxIcon &icon, long x, long y )
 {
-    return TRUE;
+    // VZ: egcs 1.0.3 refuses to compile this without cast, no idea why
+    DoDrawBitmap( (const wxBitmap&)icon, x, y, (bool)TRUE );
 }
 
-void wxWindowDC::DrawIcon( const wxIcon &icon, long x, long y )
-{
-    DrawBitmap( icon, x, y, TRUE );
-}
-
-void wxWindowDC::DrawBitmap( const wxBitmap &bitmap, long x, long y, bool useMask )
+void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
+                               long x, long y,
+                               bool useMask )
 {
     wxCHECK_RET( Ok(), _T("invalid window dc") );
   
-    if (!bitmap.Ok()) return;
+    wxCHECK_RET( bitmap.Ok(), _T("invalid bitmap") );
     
     /* scale/translate size and position */
   
@@ -553,9 +488,9 @@ void wxWindowDC::DrawBitmap( const wxBitmap &bitmap, long x, long y, bool useMas
     if ((w != ww) || (h != hh))
     {
         wxImage image( bitmap );
-	image = image.Scale( ww, hh );
-	
-	use_bitmap = image.ConvertToBitmap();
+        image = image.Scale( ww, hh );
+        
+        use_bitmap = image.ConvertToBitmap();
     }
     else
     {
@@ -586,7 +521,7 @@ void wxWindowDC::DrawBitmap( const wxBitmap &bitmap, long x, long y, bool useMas
         if (bm)
         {
             gdk_draw_bitmap( m_window, m_penGC, bm, 0, 0, xx, yy, -1, -1 );
-	}
+        }
     }
     
     /* remove mask again if any */
@@ -601,8 +536,9 @@ void wxWindowDC::DrawBitmap( const wxBitmap &bitmap, long x, long y, bool useMas
     CalcBoundingBox( x + w, y + h );
 }
 
-bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
-       wxDC *source, long xsrc, long ysrc, int logical_func, bool useMask )
+bool wxWindowDC::DoBlit( long xdest, long ydest, long width, long height,
+                         wxDC *source, long xsrc, long ysrc,
+                         int logical_func, bool useMask )
 {
    /* this is the nth try to get this utterly useless function to
       work. it now completely ignores the scaling or translation
@@ -620,42 +556,42 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
   
     if (srcDC->m_isMemDC)
     {
-	if (!memDC->m_selected.Ok()) return FALSE;
-	
+        if (!memDC->m_selected.Ok()) return FALSE;
+        
         /* we use the "XCopyArea" way to copy a memory dc into
-	   y different window if the memory dc BOTH
-	   a) doesn't have any mask or its mask isn't used
-	   b) it is clipped
-	   c) is not 1-bit */
+           y different window if the memory dc BOTH
+           a) doesn't have any mask or its mask isn't used
+           b) it is clipped
+           c) is not 1-bit */
     
         if (useMask && (memDC->m_selected.GetMask()))
-	{
-	   /* we HAVE TO use the direct way for memory dcs
-	      that have mask since the XCopyArea doesn't know
-	      about masks */
-	    use_bitmap_method = TRUE;
-	}
-	else if (memDC->m_selected.GetDepth() == 1)
-	{
-	   /* we HAVE TO use the direct way for memory dcs
-	      that are bitmaps because XCopyArea doesn't cope
-	      with different bit depths */
-	    use_bitmap_method = TRUE;
-	}
-	else if ((xsrc == 0) && (ysrc == 0) &&
-		 (width == memDC->m_selected.GetWidth()) &&
-		 (height == memDC->m_selected.GetHeight()))
-	{
-	   /* we SHOULD use the direct way if all of the bitmap 
-	      in the memory dc is copied in which case XCopyArea 
-	      wouldn't be able able to boost performace by reducing 
-	      the area to be scaled */
-	    use_bitmap_method = TRUE;
-	}
-	else
-	{
-	    use_bitmap_method = FALSE;
-	}
+        {
+           /* we HAVE TO use the direct way for memory dcs
+              that have mask since the XCopyArea doesn't know
+              about masks */
+            use_bitmap_method = TRUE;
+        }
+        else if (memDC->m_selected.GetDepth() == 1)
+        {
+           /* we HAVE TO use the direct way for memory dcs
+              that are bitmaps because XCopyArea doesn't cope
+              with different bit depths */
+            use_bitmap_method = TRUE;
+        }
+        else if ((xsrc == 0) && (ysrc == 0) &&
+                 (width == memDC->m_selected.GetWidth()) &&
+                 (height == memDC->m_selected.GetHeight()))
+        {
+           /* we SHOULD use the direct way if all of the bitmap 
+              in the memory dc is copied in which case XCopyArea 
+              wouldn't be able able to boost performace by reducing 
+              the area to be scaled */
+            use_bitmap_method = TRUE;
+        }
+        else
+        {
+            use_bitmap_method = FALSE;
+        }
     }
     
     CalcBoundingBox( xdest, ydest );
@@ -668,12 +604,12 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
     {
         /* scale/translate bitmap size */
   
-	long bm_width = memDC->m_selected.GetWidth();
-	long bm_height = memDC->m_selected.GetHeight();
-	
-	long bm_ww = XLOG2DEVREL( bm_width );
-	long bm_hh = YLOG2DEVREL( bm_height );
-	
+        long bm_width = memDC->m_selected.GetWidth();
+        long bm_height = memDC->m_selected.GetHeight();
+        
+        long bm_ww = XLOG2DEVREL( bm_width );
+        long bm_hh = YLOG2DEVREL( bm_height );
+        
         /* scale bitmap if required */
     
         wxBitmap use_bitmap;
@@ -681,23 +617,23 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
         if ((bm_width != bm_ww) || (bm_height != bm_hh))
         {
             wxImage image( memDC->m_selected );
-	    image = image.Scale( bm_ww, bm_hh );
-	
-	    use_bitmap = image.ConvertToBitmap();
+            image = image.Scale( bm_ww, bm_hh );
+        
+            use_bitmap = image.ConvertToBitmap();
         }
         else
         {
             use_bitmap = memDC->m_selected;
         }
-	
+        
         /* scale/translate size and position */
   
         long xx = XLOG2DEV(xdest);
         long yy = YLOG2DEV(ydest);
-	
-	long ww = XLOG2DEVREL(width);
-	long hh = YLOG2DEVREL(height);
-	
+        
+        long ww = XLOG2DEVREL(width);
+        long hh = YLOG2DEVREL(height);
+        
         /* apply mask if any */
     
         GdkBitmap *mask = (GdkBitmap *) NULL;
@@ -708,7 +644,7 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
             gdk_gc_set_clip_mask( m_penGC, mask );
             gdk_gc_set_clip_origin( m_penGC, xx, yy );
         }
-	
+        
         /* draw XPixmap or XBitmap, depending on what the wxBitmap contains */
     
         GdkPixmap *pm = use_bitmap.GetPixmap();
@@ -721,10 +657,10 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
             GdkBitmap *bm = use_bitmap.GetBitmap();
             if (bm)
             {
-	        /* we use the textGC here because blitting a bitmap is done
-		   using the current text colour */
+                /* we use the textGC here because blitting a bitmap is done
+                   using the current text colour */
                 gdk_draw_bitmap( m_window, m_textGC, bm, xsrc, ysrc, xx, yy, ww, hh );
-	    }
+            }
         }
     
         /* remove mask again if any */
@@ -741,59 +677,59 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
   
         long xx = XLOG2DEV(xdest);
         long yy = YLOG2DEV(ydest);
-	
-	long ww = XLOG2DEVREL(width);
-	long hh = YLOG2DEVREL(height);
-	
+        
+        long ww = XLOG2DEVREL(width);
+        long hh = YLOG2DEVREL(height);
+        
         if ((width != ww) || (height != hh))
-	{
-	    /* draw source window into a bitmap as we cannot scale
-	       a window in contrast to a bitmap. this would actually
-	       work with memory dcs as well, but we'd lose the mask
-	       information and waste one step in this process since
-	       a memory already has a bitmap. all this is slightly
-	       inefficient as we could take an XImage directly from
-	       an X window, but we'd then also have to care that
-	       the window is not outside the screen (in which case
-	       we'd get a BadMatch or what not).
-	       Is a double XGetImage and combined XGetPixel and
-	       XPutPixel really faster? I'm not sure. look at wxXt
-	       for a different implementation of the same problem. */
+        {
+            /* draw source window into a bitmap as we cannot scale
+               a window in contrast to a bitmap. this would actually
+               work with memory dcs as well, but we'd lose the mask
+               information and waste one step in this process since
+               a memory already has a bitmap. all this is slightly
+               inefficient as we could take an XImage directly from
+               an X window, but we'd then also have to care that
+               the window is not outside the screen (in which case
+               we'd get a BadMatch or what not).
+               Is a double XGetImage and combined XGetPixel and
+               XPutPixel really faster? I'm not sure. look at wxXt
+               for a different implementation of the same problem. */
    
-	    wxBitmap bitmap( width, height );
-	    gdk_window_copy_area( bitmap.GetPixmap(), m_penGC, 0, 0, 
+            wxBitmap bitmap( width, height );
+            gdk_window_copy_area( bitmap.GetPixmap(), m_penGC, 0, 0, 
                                   srcDC->GetWindow(),
-	                          xsrc, ysrc, width, height );
-	    
-	    /* scale image */
-	    
+                                  xsrc, ysrc, width, height );
+            
+            /* scale image */
+            
             wxImage image( bitmap );
-	    image = image.Scale( ww, hh );
-	    
-	    /* convert to bitmap */
-	    
-	    bitmap = image.ConvertToBitmap();
-	    
-	    /* draw scaled bitmap */
-	    
+            image = image.Scale( ww, hh );
+            
+            /* convert to bitmap */
+            
+            bitmap = image.ConvertToBitmap();
+            
+            /* draw scaled bitmap */
+            
             gdk_draw_pixmap( m_window, m_penGC, bitmap.GetPixmap(), 0, 0, xx, yy, -1, -1 );
-	    
-	}
-	else
-	{
-	    /* no scaling and not a memory dc with a mask either */
-	
+            
+        }
+        else
+        {
+            /* no scaling and not a memory dc with a mask either */
+        
             gdk_window_copy_area( m_window, m_penGC, xx, yy,
                                   srcDC->GetWindow(),
                                   xsrc, ysrc, width, height );
-	}
+        }
     }
 
     SetLogicalFunction( old_logical_func );
     return TRUE;
 }
 
-void wxWindowDC::DrawText( const wxString &text, long x, long y, bool WXUNUSED(use16) )
+void wxWindowDC::DoDrawText( const wxString &text, long x, long y )
 {
     wxCHECK_RET( Ok(), _T("invalid window dc") );
 
@@ -830,14 +766,9 @@ void wxWindowDC::DrawText( const wxString &text, long x, long y, bool WXUNUSED(u
     CalcBoundingBox (x, y);
 }
 
-bool wxWindowDC::CanGetTextExtent() const
-{
-    return TRUE;
-}
-
 void wxWindowDC::GetTextExtent( const wxString &string, long *width, long *height,
-                     long *descent, long *externalLeading,
-                     wxFont *theFont, bool WXUNUSED(use16) )
+                                long *descent, long *externalLeading,
+                                wxFont *theFont ) const
 {
     wxFont fontToUse = m_font;
     if (theFont) fontToUse = *theFont;
@@ -849,13 +780,13 @@ void wxWindowDC::GetTextExtent( const wxString &string, long *width, long *heigh
     if (externalLeading) (*externalLeading) = 0;  // ??
 }
 
-long wxWindowDC::GetCharWidth()
+long wxWindowDC::GetCharWidth() const
 {
     GdkFont *font = m_font.GetInternalFont( m_scaleY );
     return long(gdk_string_width( font, "H" ) / m_scaleX);
 }
 
-long wxWindowDC::GetCharHeight()
+long wxWindowDC::GetCharHeight() const
 {
     GdkFont *font = m_font.GetInternalFont( m_scaleY );
     return long((font->ascent + font->descent) / m_scaleY);
@@ -877,7 +808,7 @@ void wxWindowDC::Clear()
         int width,height;
         m_owner->GetSize( &width, &height );
         gdk_draw_rectangle( m_window, m_bgGC, TRUE, 0, 0, width, height );
-	return;
+        return;
     }
 
     if (m_isMemDC)
@@ -885,7 +816,7 @@ void wxWindowDC::Clear()
         int width,height;
         GetSize( &width, &height );
         gdk_draw_rectangle( m_window, m_bgGC, TRUE, 0, 0, width, height );
-	return;
+        return;
     }
 }
 
@@ -979,7 +910,7 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
     {
         if (m_brush.GetStipple()->GetPixmap())
             gdk_gc_set_stipple( m_brushGC, m_brush.GetStipple()->GetPixmap() );
-	else
+        else
             gdk_gc_set_stipple( m_brushGC, m_brush.GetStipple()->GetBitmap() );
     }
   
@@ -1113,7 +1044,7 @@ void wxWindowDC::SetPalette( const wxPalette& WXUNUSED(palette) )
     wxFAIL_MSG( _T("wxWindowDC::SetPalette not implemented") );
 }
 
-void wxWindowDC::SetClippingRegion( long x, long y, long width, long height )
+void wxWindowDC::DoSetClippingRegion( long x, long y, long width, long height )
 {
     wxCHECK_RET( Ok(), _T("invalid window dc") );
   
@@ -1130,7 +1061,7 @@ void wxWindowDC::SetClippingRegion( long x, long y, long width, long height )
     gdk_gc_set_clip_rectangle( m_bgGC, &rect );
 }
 
-void wxWindowDC::SetClippingRegion( const wxRegion &region  )
+void wxWindowDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
 {
     wxCHECK_RET( Ok(), _T("invalid window dc") );
   
@@ -1215,11 +1146,20 @@ void wxWindowDC::Destroy()
     m_bgGC = (GdkGC*) NULL;
 }
 
-GdkWindow *wxWindowDC::GetWindow()
+// Resolution in pixels per logical inch
+wxSize wxWindowDC::GetPPI() const
 {
-    return m_window;
+    return wxSize(100, 100);
 }
 
+int wxWindowDC::GetDepth() const
+{
+    wxFAIL_MSG(_T("not implemented"));
+
+    return -1;
+}
+
+#if wxUSE_SPLINE
 // ----------------------------------- spline code ----------------------------------------
 
 void wx_quadratic_spline(double a1, double b1, double a2, double b2,
@@ -1234,8 +1174,8 @@ static void wx_spline_draw_point_array(wxDC *dc);
 
 wxList wx_spline_point_list;
 
-#define		half(z1, z2)	((z1+z2)/2.0)
-#define		THRESHOLD	5
+#define                half(z1, z2)        ((z1+z2)/2.0)
+#define                THRESHOLD        5
 
 /* iterative version */
 
@@ -1251,16 +1191,16 @@ void wx_quadratic_spline(double a1, double b1, double a2, double b2, double a3, 
     while (wx_spline_pop(&x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4)) {
         xmid = (double)half(x2, x3);
         ymid = (double)half(y2, y3);
-	if (fabs(x1 - xmid) < THRESHOLD && fabs(y1 - ymid) < THRESHOLD &&
-	    fabs(xmid - x4) < THRESHOLD && fabs(ymid - y4) < THRESHOLD) {
+        if (fabs(x1 - xmid) < THRESHOLD && fabs(y1 - ymid) < THRESHOLD &&
+            fabs(xmid - x4) < THRESHOLD && fabs(ymid - y4) < THRESHOLD) {
             wx_spline_add_point( x1, y1 );
             wx_spline_add_point( xmid, ymid );
-	} else {
+        } else {
             wx_spline_push(xmid, ymid, (double)half(xmid, x3), (double)half(ymid, y3),
                  (double)half(x3, x4), (double)half(y3, y4), x4, y4);
             wx_spline_push(x1, y1, (double)half(x1, x2), (double)half(y1, y2),
                  (double)half(x2, xmid), (double)half(y2, ymid), xmid, ymid);
-	}
+        }
     }
 }
 
@@ -1299,7 +1239,7 @@ int wx_spline_pop(double *x1, double *y1, double *x2, double *y2,
                   double *x3, double *y3, double *x4, double *y4)
 {
     if (wx_stack_count == 0)
-	return (0);
+        return (0);
     wx_stack_top--;
     wx_stack_count--;
     *x1 = wx_stack_top->x1;
@@ -1335,7 +1275,7 @@ static void wx_spline_draw_point_array(wxDC *dc)
   }
 }
 
-void wxWindowDC::DrawSpline( wxList *points )
+void wxWindowDC::DoDrawSpline( wxList *points )
 {
     wxCHECK_RET( Ok(), _T("invalid window dc") );
   
@@ -1364,10 +1304,10 @@ void wxWindowDC::DrawSpline( wxList *points )
     while ((node = node->Next()) != NULL)
     {
         p = (wxPoint *)node->Data();
-	x1 = x2;
-	y1 = y2;
-	x2 = p->x;
-	y2 = p->y;
+        x1 = x2;
+        y1 = y2;
+        x2 = p->x;
+        y2 = p->y;
         cx4 = (double)(x1 + x2) / 2;
         cy4 = (double)(y1 + y2) / 2;
         cx3 = (double)(x1 + cx4) / 2;
@@ -1375,8 +1315,8 @@ void wxWindowDC::DrawSpline( wxList *points )
 
         wx_quadratic_spline(cx1, cy1, cx2, cy2, cx3, cy3, cx4, cy4);
 
-	cx1 = cx4;
-	cy1 = cy4;
+        cx1 = cx4;
+        cy1 = cy4;
         cx2 = (double)(cx1 + x2) / 2;
         cy2 = (double)(cy1 + y2) / 2;
     }
@@ -1387,11 +1327,7 @@ void wxWindowDC::DrawSpline( wxList *points )
     wx_spline_draw_point_array( this );
 }
 
-// Resolution in pixels per logical inch
-wxSize wxWindowDC::GetPPI(void) const
-{
-    return wxSize(100, 100);
-}
+#endif // wxUSE_SPLINE
 
 //-----------------------------------------------------------------------------
 // wxPaintDC

@@ -142,8 +142,6 @@ protected:
 public:
     // GTK-specific member variables
 
-    int          m_textAlignment;    // gone in wxWin 2.0 ?
-
     // not sure what for, but what is a mm on a screen you don't know the size
     // of?
     double       m_mm_to_pix_x,

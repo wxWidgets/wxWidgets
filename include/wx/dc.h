@@ -395,9 +395,9 @@ public:
         if ( x ) *x = m_userScaleX;
         if ( y ) *y = m_userScaleY;
     }
+    void SetSystemScale(double x, double y)
+        { SetUserScale(x, y); }
     virtual void SetUserScale(double x, double y) = 0;
-
-    virtual void SetSystemScale(double x, double y) = 0;
 
     virtual void GetLogicalScale(double *x, double *y)
     {
@@ -509,8 +509,11 @@ protected:
     virtual void DoSetClippingRegionAsRegion(const wxRegion& region) = 0;
     virtual void DoSetClippingRegion(long x, long y,
                                      long width, long height) = 0;
+
+    // FIXME are these functions really different?
     virtual void DoGetClippingRegion(long *x, long *y,
-                                     long *width, long *height) = 0;
+                                     long *w, long *h)
+        { DoGetClippingBox(x, y, w, h); }
     virtual void DoGetClippingBox(long *x, long *y,
                                   long *w, long *h) const
     {
