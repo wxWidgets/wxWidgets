@@ -1,0 +1,3 @@
+node calendarctrl
+var style of flags wxCAL_SUNDAY_FIRST,wxCAL_MONDAY_FIRST,wxCAL_SHOW_HOLIDAYS,wxCAL_NO_YEAR_CHANGE,wxCAL_NO_MONTH_CHANGE
+derived from control

@@ -1,0 +1,3 @@
+node treectrl
+var style of flags wxTR_HAS_BUTTONS,wxTR_EDIT_LABELS,wxTR_MULTIPLE
+derived from control

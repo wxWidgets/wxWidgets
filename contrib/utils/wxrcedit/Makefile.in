@@ -46,9 +46,16 @@ DATAFILES = \
           df/statictext.df \
           df/textctrl.df \
           df/toolbar_item.df \
+          df/tool.df \
+          df/toolbar.df \
           df/window.df \
-          df/listbox.df
-
+          df/listbox.df \
+          df/bitmapbutton.df \
+          df/calendarctrl.df \
+          df/listctrl.df \
+          df/scrollbar.df \
+          df/staticbox.df \
+          df/treectrl.df
 
 APPEXTRALIBS=$(top_builddir)/lib/libwxxml.@WX_TARGET_LIBRARY_TYPE@
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include

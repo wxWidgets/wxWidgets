@@ -1,0 +1,5 @@
+node bitmapbutton
+var bitmap of text
+var default of bool
+var style of flags wxBU_AUTODRAW,wxBU_LEFT,wxBU_RIGHT,wxBU_TOP,wxBU_BOTTOM
+derived from control
