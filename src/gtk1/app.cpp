@@ -42,7 +42,9 @@
 #endif
 
 #include <unistd.h>
-#ifdef __VMS
+#if defined(__DARWIN__)
+// FIXME: select must be used instead of poll (GD)
+#elif defined(__VMS)
 # include <poll.h>
 #else
 # include <sys/poll.h>
@@ -245,7 +247,14 @@ static gint wxapp_poll_func( GPollFD *ufds, guint nfds, gint timeout )
     wxMutexGuiLeave();
     g_mainThreadLocked = TRUE;
 
+#ifdef __DARWIN__
+    // FIXME: poll is not available under Darwin/Mac OS X and this needs
+    //        to be implemented using select instead (GD)
+    //        what about other BSD derived systems?
+    res = -1;
+#else
     res = poll( (struct pollfd*) ufds, nfds, timeout );
+#endif
 
     wxMutexGuiEnter();
     g_mainThreadLocked = FALSE;
