@@ -288,11 +288,11 @@ typedef  _TUCHAR     wxUChar;
 #    ifdef HAVE_WCSTR_H
 #      include <wcstr.h>
 #    else
-#      ifndef __FreeBSD__
-#        include <wchar.h>
-#      else
+#      if defined(__FreeBSD__) || (defined(__APPLE__) && defined(__UNIX__))
 #        include <stdlib.h>
 #        define wxNEED_WCSLEN
+#      else
+#        include <wchar.h>
 #      endif
 #    endif
 #  endif
