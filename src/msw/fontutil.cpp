@@ -414,7 +414,10 @@ wxFont wxCreateFontFromLogFont(const LOGFONT *logFont)
     switch ( logFont->lfCharSet )
     {
         default:
-            wxFAIL_MSG(wxT("unsupported charset"));
+            // JACS: Silently using ANSI_CHARSET
+            // apparently works for Chinese Windows. Assume it works
+            // for all/most other languages.
+            //wxFAIL_MSG(wxT("unsupported charset"));
             // fall through
 
         case ANSI_CHARSET:
