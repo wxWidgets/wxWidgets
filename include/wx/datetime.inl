@@ -149,7 +149,7 @@ inline time_t wxDateTime::GetTicks() const
     return (time_t)((m_time / (long)TIME_T_FACTOR).GetLo())+WX_TIME_BASE_OFFSET ;
 }
 
-bool wxDateTime::SetToLastWeekDay(WeekDay weekday,
+inline bool wxDateTime::SetToLastWeekDay(WeekDay weekday,
                                          Month month,
                                          int year)
 {
