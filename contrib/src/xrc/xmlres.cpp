@@ -146,6 +146,16 @@ void wxXmlResource::ClearHandlers()
 }
 
 
+wxXmlNode  *wxXmlResource::GetFirstRoot()
+{
+    UpdateResources(); //ensure everything is up-to-date
+    
+    if (m_data.GetCount() == 0) return NULL;
+    
+    if (m_data[0].Doc == NULL) return NULL;
+       
+    return m_data[0].Doc->GetRoot();
+}
 
 wxMenu *wxXmlResource::LoadMenu(const wxString& name)
 {
