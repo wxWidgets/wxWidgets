@@ -102,8 +102,8 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
                                    wxWindow *parent,
                                    int style)
                 : wxDialog(parent, wxID_ANY, title),
-                  m_delay(3),
-                  m_skip(false)
+                  m_skip(false),
+                  m_delay(3)
 {
     // we may disappear at any moment, let the others know about it
     SetExtraStyle(GetExtraStyle() | wxWS_EX_TRANSIENT);
@@ -223,7 +223,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     bool sizeDlgModified = false;
     wxBoxSizer *buttonSizer = new wxBoxSizer(wxHORIZONTAL);
 
-    const int sizerFlags = 
+    const int sizerFlags =
 #if defined(__WXMSW__) || defined(__WXPM__)
                            wxALIGN_RIGHT | wxALL
 #else // !MSW
