@@ -878,7 +878,7 @@ the \helpref{wxGrid overview}{gridoverview} for more information about cell edit
 
 \membersection{wxGrid::SetCellFont}\label{wxgridsetcellfont}
 
-\func{void}{SetCellFont}{\param{int }{row}, \param{int }{col}, \param{const }{wxFont\&}}
+\func{void}{SetCellFont}{\param{int }{row}, \param{int }{col}, \param{const wxFont\&}{ font}}
 
 Sets the font for text in the grid cell at the specified location.
 
@@ -894,11 +894,11 @@ the \helpref{wxGrid overview}{gridoverview} for more information about cell edit
 
 \membersection{wxGrid::SetCellTextColour}\label{wxgridsetcelltextcolour}
 
-\func{void}{SetCellTextColour}{\param{int }{row}, \param{int }{col}, \param{const }{wxColour\&}}
+\func{void}{SetCellTextColour}{\param{int }{row}, \param{int }{col}, \param{const wxColour\&}}{ colour}}
 
 \func{void}{SetCellTextColour}{\param{const wxColour\& }{val}, \param{int }{row}, \param{int }{col}}
 
-\func{void}{SetCellTextColour}{\param{const wxColour\& }{col}}
+\func{void}{SetCellTextColour}{\param{const wxColour\& }{colour}}
 
 Sets the text colour for the grid cell at the specified location.
 
@@ -965,7 +965,8 @@ with custom data types.
 
 Sets the horizontal and vertical alignment of column label text.
 
-Horizontal alignment should be one of wxALIGN_LEFT, wxALIGN_CENTRE or wxALIGN_RIGHT. \\
+Horizontal alignment should be one of wxALIGN_LEFT, wxALIGN_CENTRE or wxALIGN_RIGHT.
+
 Vertical alignment should be one of wxALIGN_TOP, wxALIGN_CENTRE or wxALIGN_BOTTOM.
 
 \membersection{wxGrid::SetColLabelSize}\label{wxgridsetcollabelsize}
@@ -976,7 +977,7 @@ Sets the height of the column labels.
 
 \membersection{wxGrid::SetColLabelValue}\label{wxgridsetcollabelvalue}
 
-\func{void}{SetColLabelValue}{\param{int }{col}, \param{const }{wxString\&}}
+\func{void}{SetColLabelValue}{\param{int }{col}, \param{const wxString\&}{ value}}
 
 Set the value for the given column label. If you are using a derived grid table you must 
 override \helpref{wxGridTableBase::SetColLabelValue}{wxgridtablebasesetcollabelvalue}
@@ -1011,18 +1012,19 @@ The memory requirements for this could become prohibitive if your grid is very l
 
 Sets the default horizontal and vertial alignment for grid cell text.
 
-Horizontal alignment should be one of wxALIGN_LEFT, wxALIGN_CENTRE or wxALIGN_RIGHT. \\
+Horizontal alignment should be one of wxALIGN_LEFT, wxALIGN_CENTRE or wxALIGN_RIGHT.
+
 Vertical alignment should be one of wxALIGN_TOP, wxALIGN_CENTRE or wxALIGN_BOTTOM.
 
 \membersection{wxGrid::SetDefaultCellBackgroundColour}\label{wxgridsetdefaultcellbackgroundcolour}
 
-\func{void}{SetDefaultCellBackgroundColour}{\param{const }{wxColour\&}}
+\func{void}{SetDefaultCellBackgroundColour}{\param{const wxColour\&}{ colour}}
 
 Sets the default background colour for grid cells.
 
 \membersection{wxGrid::SetDefaultCellFont}\label{wxgridsetdefaultcellfont}
 
-\func{void}{SetDefaultCellFont}{\param{const }{wxFont\&}}
+\func{void}{SetDefaultCellFont}{\param{const wxFont\&}{ font}}
 
 Sets the default font to be used for grid cell text.
 
@@ -1067,25 +1069,25 @@ This function calls \helpref{wxGrid::MakeCellVisible}{wxgridmakecellvisible}.
 
 \membersection{wxGrid::SetGridLineColour}\label{wxgridsetgridlinecolour}
 
-\func{void}{SetGridLineColour}{\param{const }{wxColour\&}}
+\func{void}{SetGridLineColour}{\param{const wxColour\&}{colour}}
 
 Sets the colour used to draw grid lines.
 
 \membersection{wxGrid::SetLabelBackgroundColour}\label{wxgridsetlabelbackgroundcolour}
 
-\func{void}{SetLabelBackgroundColour}{\param{const }{wxColour\&}}
+\func{void}{SetLabelBackgroundColour}{\param{const wxColour\&}{ colour}}
 
 Sets the background colour for row and column labels.
 
 \membersection{wxGrid::SetLabelFont}\label{wxgridsetlabelfont}
 
-\func{void}{SetLabelFont}{\param{const }{wxFont\&}}
+\func{void}{SetLabelFont}{\param{const wxFont\&}{ font}}
 
 Sets the font for row and column labels.
 
 \membersection{wxGrid::SetLabelTextColour}\label{wxgridsetlabeltextcolour}
 
-\func{void}{SetLabelTextColour}{\param{const }{wxColour\&}}
+\func{void}{SetLabelTextColour}{\param{const wxColour\&}{ colour}}
 
 Sets the colour for row and column label text.
 
@@ -1110,7 +1112,8 @@ about controlling cell attributes.
 
 Sets the horizontal and vertical alignment of row label text.
 
-Horizontal alignment should be one of wxALIGN_LEFT, wxALIGN_CENTRE or wxALIGN_RIGHT. \\
+Horizontal alignment should be one of wxALIGN_LEFT, wxALIGN_CENTRE or wxALIGN_RIGHT.
+
 Vertical alignment should be one of wxALIGN_TOP, wxALIGN_CENTRE or wxALIGN_BOTTOM.
 
 \membersection{wxGrid::SetRowLabelSize}\label{wxgridsetrowlabelsize}
@@ -1121,10 +1124,10 @@ Sets the width of the row labels.
 
 \membersection{wxGrid::SetRowLabelValue}\label{wxgridsetrowlabelvalue}
 
-\func{void}{SetRowLabelValue}{\param{int }{row}, \param{const }{wxString\&}}
+\func{void}{SetRowLabelValue}{\param{int }{row}, \param{const wxString\&}{ value}}
 
 Set the value for the given row label. If you are using a derived grid table you must 
-override \helpref{wxGridTableBase::SetRowLabelValue}{wxgridtablebasesetrowlabelvalue}
+override \helpref{wxGridTableBase::SetRowLabelValue}{wxgridtablebasesetrowlabelvalue} 
 for this to have any effect.
 
 \membersection{wxGrid::SetRowMinimalHeight}\label{wxgridsetrowminimalheight}
@@ -1146,13 +1149,14 @@ block you can use \helpref{wxGrid::ForceRefresh}{wxgridforcerefresh} to see the 
 Automatically sizes the column to fit its contents. If setAsMin is TRUE the calculated width will
 also be set as the minimal width for the column.
 
-\wxheading{Note}\\
+\wxheading{Note}
+
 wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used.
 The memory requirements for this could become prohibitive if your grid is very large. 
 
 \membersection{wxGrid::SetSelectionMode}\label{wxgridsetselectionmode}
 
-\func{void}{SetSelectionMode}{\param{wxGrid::wxGridSelectionModes}{selmode}}
+\func{void}{SetSelectionMode}{\param{wxGrid::wxGridSelectionModes}{ selmode}}
 
 Set the selection behaviour of the grid.
 
@@ -1160,7 +1164,7 @@ Set the selection behaviour of the grid.
 
 \docparam{wxGrid::wxGridSelectCells}{The default mode where individual cells are selected.}
 
-\docparam(wxGrid::wxGridSelectRows}{Selections will consist of whole rows.}
+\docparam{wxGrid::wxGridSelectRows}{Selections will consist of whole rows.}
 
 \docparam{wxGrid::wxGridSelectionColumns}{Selections will consist of whole columns.}
 
@@ -1264,7 +1268,6 @@ Access or update the selection fore/back colours
 
 Methods for a registry for mapping data types to Renderers/Editors
 
-
 \membersection{wxGrid::GetDefaultEditorForCell}\label{wxgridgetdefaulteditorforcell}
 
 \constfunc{wxGridCellEditor*}{GetDefaultEditorForCell}{\param{int }{row}, \param{int }{col}}
@@ -1291,7 +1294,7 @@ Methods for a registry for mapping data types to Renderers/Editors
 
 \func{void}{SetMargins}{\param{int }{extraWidth}, \param{int }{extraHeight}}
 
-grid may occupy more space than needed for its rows/columns, this
+A grid may occupy more space than needed for its rows/columns. This
 function allows to set how big this extra space is
 
 \membersection{wxGrid::wxGrid}\label{wxgridwxgrid}
@@ -1378,9 +1381,6 @@ Backward compatibility.
 
 Backward compatibility.
 
-GetRowHeight() is below
-returned num whole rows visible.
-
 \membersection{wxGrid::GetViewWidth}\label{wxgridgetviewwidth}
 
 \func{int}{GetViewWidth}{\void}
@@ -1435,7 +1435,7 @@ Returned number of whole cols visible.
 
 \func{void}{SetCellBackgroundColour}{\param{const wxColour\& }{col}}
 
-\func{void}{SetCellBackgroundColour}{\param{int }{row}, \param{int }{col}, \param{const }{wxColour\&}}
+\func{void}{SetCellBackgroundColour}{\param{int }{row}, \param{int }{col}, \param{const wxColour\&}{ colour}}
 
 \func{void}{SetCellBackgroundColour}{\param{const wxColour\& }{colour}, \param{int }{row}, \param{int }{col}}
 
@@ -1573,3 +1573,4 @@ Do we have some place to store attributes in?
 \membersection{wxGrid::GetOrCreateCellAttr}\label{wxgridgetorcreatecellattr}
 
 \constfunc{wxGridCellAttr*}{GetOrCreateCellAttr}{\param{int }{row}, \param{int }{col}}
+
