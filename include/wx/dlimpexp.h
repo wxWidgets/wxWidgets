@@ -77,6 +77,7 @@
 #    define WXMAKINGDLL_ODBC
 #    define WXMAKINGDLL_DBGRID
 #    define WXMAKINGDLL_HTML
+#    define WXMAKINGDLL_GL
 #    define WXMAKINGDLL_XML
 #    define WXMAKINGDLL_XRC
 #    define WXMAKINGDLL_MEDIA
