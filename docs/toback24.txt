@@ -166,8 +166,5 @@ Checking in docs/changes.txt;
 /pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
 new revision: 1.235; previous revision: 1.234
 done
-Checking in src/msw/stattext.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/stattext.cpp,v  <--  stattext.cpp
-new revision: 1.34; previous revision: 1.33
-done
 
+src/msw/stattext.cpp: 1.33 -> 1.35
