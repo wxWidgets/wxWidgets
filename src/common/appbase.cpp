@@ -392,7 +392,7 @@ void wxAppConsole::OnAssert(const wxChar *file,
                             const wxChar *cond,
                             const wxChar *msg)
 {
-    ShowAssertDialog(file, line, cond, msg, m_traits);
+    ShowAssertDialog(file, line, cond, msg, GetTraits());
 }
 
 #endif // __WXDEBUG__
