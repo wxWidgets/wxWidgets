@@ -44,6 +44,11 @@
     // the leak
     #define _CRTDBG_MAP_ALLOC
     #include <stdlib.h>
+    #ifndef _CRTBLD
+        // Need when builded with pure MS SDK
+        #define _CRTBLD
+    #endif
+
     #include <crtdbg.h>
 
     // this define works around a bug with inline declarations of new, see
