@@ -769,7 +769,8 @@ public:
 
     // for double click logic
     size_t m_lineLastClicked,
-           m_lineBeforeLastClicked;
+           m_lineBeforeLastClicked,
+           m_lineSelectSingleOnUp;
 
 protected:
     // the total count of items in a virtual list control
@@ -2175,6 +2176,7 @@ void wxListMainWindow::Init()
 
     m_current =
     m_lineLastClicked =
+    m_lineSelectSingleOnUp =
     m_lineBeforeLastClicked = (size_t)-1;
 
     m_freezeCount = 0;
@@ -2938,7 +2940,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 
         wxListEvent le( command, GetParent()->GetId() );
         le.SetEventObject( GetParent() );
-        le.m_itemIndex = current;
+        le.m_itemIndex = m_lineLastClicked;
         le.m_pointDrag = m_dragStart;
         GetParent()->GetEventHandler()->ProcessEvent( le );
 
@@ -2969,24 +2971,44 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         }
         else
         {
-            // the first click was on another item, so don't interpret this as
+            // The first click was on another item, so don't interpret this as
             // a double click, but as a simple click instead
             forceClick = true;
         }
     }
 
-    if (event.LeftUp() && m_lastOnSame)
+    if (event.LeftUp())
     {
-        if ((current == m_current) &&
-            (hitResult == wxLIST_HITTEST_ONITEMLABEL) &&
-            HasFlag(wxLC_EDIT_LABELS)  )
+        if(m_lineSelectSingleOnUp != (size_t) -1)
         {
-            m_renameTimer->Start( 100, true );
+            // select single line
+            HighlightAll( false );
+            ReverseHighlight(m_lineSelectSingleOnUp);
+        }
+        else if (m_lastOnSame)
+        {
+            if ((current == m_current) &&
+                (hitResult == wxLIST_HITTEST_ONITEMLABEL) &&
+                HasFlag(wxLC_EDIT_LABELS)  )
+            {
+                m_renameTimer->Start( 100, true );
+            }
         }
         m_lastOnSame = false;
+        m_lineSelectSingleOnUp = (size_t) -1;
     }
-    else if (event.RightDown())
+    else
     {
+        // This is neccessary , because after a DnD operation in
+        // from and to ourself, the up event is swallowed by the 
+        // DnD code. So on next non-up event (which means here and
+        // now) m_lineSelectSingleOnUp should be reset.
+        m_lineSelectSingleOnUp = (size_t) -1;  
+    }
+    if (event.RightDown())
+    {
+        m_lineBeforeLastClicked = m_lineLastClicked;
+        m_lineLastClicked = current;
         // If the item is already selected, do not update the selection.
         // Multi-selections should not be cleared if a selected item is clicked.
         if (!IsHighlighted(current))
@@ -2995,7 +3017,6 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             ChangeCurrent(current);
             ReverseHighlight(m_current);
         }
-
         SendNotify( current, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK,
                     event.GetPosition() );
     }
@@ -3010,13 +3031,21 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 
         size_t oldCurrent = m_current;
         bool cmdModifierDown = event.CmdDown();
-        if ( IsSingleSel() || !(cmdModifierDown || event.ShiftDown()) )
+        if ( !(cmdModifierDown || event.ShiftDown()) )
+        {
+            if( IsSingleSel() || !IsHighlighted(current) )
         {
             HighlightAll( false );
 
             ChangeCurrent(current);
 
             ReverseHighlight(m_current);
+        }
+	     else // multi sel & current is highlighted & no mod keys
+            {
+                m_lineSelectSingleOnUp = current;	
+                ChangeCurrent(current); // change focus
+            }
         }
         else // multi sel & either ctrl or shift is down
         {
