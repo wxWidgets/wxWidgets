@@ -13,8 +13,10 @@ fi
 #----------------------------------------------------------------------
 # Initialization
 
-distdir=`pwd`/dist
-builddir=`pwd`/_build_rpm
+wxpdir=`pwd`
+wxdir=${wxpdir}/..
+distdir=${wxpdir}/dist
+builddir=${wxpdir}/_build_rpm
 rpmtop=${builddir}/rpmtop
 cvsroot=:pserver:anoncvs@cvs.wxwindows.org:/pack/cvsroots/wxwindows
 pythonbin=/usr/bin/python
@@ -28,14 +30,13 @@ rpmflag=-ba
 # Check parameters
 
 function useage {
-    echo "Usage: $0 cvs_tag wx_version py_version [command flags...]"
-    echo "   cvs_tag        Tag to use for CVS export"
+    echo "Usage: $0 wx_version py_version [command flags...]"
     echo "   wx_version     String to use for version in filenames, etc."
     echo "   py_version     String to append to $pythonbin (which python"
     echo "                  version to use.)"
     echo ""
     echo "command flags:"
-    echo "   skipcvs        Don't do the CVS export"
+    echo "   skipcopy       Don't copy the files for the tarball from the workspace"
     echo "   skiptar        Don't build the tarball"
     echo "   skiprpm        Don't build the RPM (but why?)"
     echo "   skipclean      Don't do the cleanup at the end"
@@ -46,19 +47,17 @@ function useage {
 #    echo "   smp            Add SMP=2 to the envivonment to speed wxGTK build"
 }
 
-if [ $# -lt 3 ]; then
+if [ $# -lt 2 ]; then
     useage
     exit 1
 fi
 
-cvs_tag=$1
-version=$2
-pyver=$3
-shift;shift;shift
+version=$1
+pyver=$2
+shift;shift
 
 ver2=`echo ${version} | cut -c 1,2,3`
 tarver=${tarname}-${version}
-
 
 python=${pythonbin}${pyver}
 if [ ! -e ${python} ]; then
@@ -85,7 +84,7 @@ function makespec {
 
 for flag in $*; do
     case ${flag} in
-	skipcvs)   skipcvs=1                           ;;
+	skipcopy)  skipcopy=1                          ;;
 	skipclean) skipclean=1                         ;;
 	skiptar)   skiptar=1                           ;;
 	skiprpm)   skiprpm=1                           ;;
@@ -123,39 +122,46 @@ done
 
 
 #----------------------------------------------------------------------
-# Get the sources from CVS
+# Copy the sources from my CVS workspace
 
-if [ -z "${skipcvs}" ]; then
-    echo "*** Exporting CVS archive..."
+if [ -z "${skipcopy}" ]; then
+    echo "*** Copying CVS tree"
     pushd ${builddir} > /dev/null
     if [ -e ${tarver} ]; then
-	rm -rf ${tarver}
+ 	rm -rf ${tarver}
     fi
-    echo cvs -d ${cvsroot} export -r ${cvs_tag} -d ${tarver} wxWindows
-    cvs -d ${cvsroot} export -r ${cvs_tag} -d ${tarver} wxWindows > /dev/null 2>&1
-    if [ "$?" != "0" ]; then
-	echo "*** CVS failure, exiting."
-	exit 1
-    fi
+    mkdir -p ${tarver}
 
-    echo "*** Removing uneeded stuff from CVS tree"
+    # copy root dir contents
+    cp -pf --link ${wxdir}/* ${tarver} > /dev/null 2>&1
+
+    # copy all top dirs except CVS, build, demos, utils, and wxPython
+    for d in art contrib debian distrib docs include lib locale misc samples src; do
+	cp -Rpf --link ${wxdir}/$d ${tarver} #> /dev/null 2>&1
+    done
+
+    # now do the same thing for wxPython, skipping it's build dirs and such
+    mkdir ${tarver}/wxPython
+    cp -pf --link ${wxdir}/wxPython/* ${tarver}/wxPython > /dev/null 2>&1
+    for d in contrib demo distrib distutils samples scripts src wxPython; do
+	cp -Rpf --link ${wxdir}/wxPython/$d ${tarver}/wxPython #> /dev/null 2>&1
+    done
+
+
+    echo "*** Removing uneeded stuff from copy of CVS tree"
     pushd ${tarver} > /dev/null
     rm `find . -name .cvsignore`
+    rm -rf `find . -name CVS`
     rm *.spec
-    rm -rf demos
-#    rm -rf docs
     rm -rf docs/html
     rm -rf docs/latex
-    rm -rf samples
-    rm -rf utils
-#     rm -rf include/wx/mgl
-#     rm -rf include/wx/motif
-#     rm -rf include/wx/os2
-#     rm -rf src/mgl
-#     rm -rf src/motif
-#     rm -rf src/os2
-    rm -rf wxPython/wxSWIG
-    rm -rf wxPython/tests
+    rm locale/*.mo
+    rm -f wxPython/wxPython/*  > /dev/null 2>&1
+    rm `find . -name ".#*"`
+    rm `find . -name "*~"`
+    rm `find . -name "*.pyc"`
+    rm `find . -name "core*"`
+    rm wxPython/demo/.setup.sh
 
     popd > /dev/null
     popd > /dev/null
