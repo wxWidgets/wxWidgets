@@ -956,14 +956,15 @@ void MyPanel::OnChangeColour(wxCommandEvent& WXUNUSED(event))
 {
     static wxColour s_colOld;
 
+    SetThemeEnabled(false);
     // test panel colour changing and propagation to the subcontrols
     if ( s_colOld.Ok() )
     {
         SetBackgroundColour(s_colOld);
         s_colOld = wxNullColour;
 
-        m_lbSelectThis->SetForegroundColour(wxT("red"));
-        m_lbSelectThis->SetBackgroundColour(wxT("white"));
+        m_lbSelectThis->SetForegroundColour(wxNullColour);
+        m_lbSelectThis->SetBackgroundColour(wxNullColour);
     }
     else
     {
