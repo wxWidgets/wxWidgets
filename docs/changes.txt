@@ -15,6 +15,7 @@ wxBase:
 - wxLog functions are now (more) MT-safe
 - wxStopWatch class, timer functions have more chances to return correct
   results for your platform (use ANSI functions where available)
+- wxString::ToLong, ToULong, ToDouble methods added
 - buffer overflows in wxString and wxLog classes fixed (if snprintf() function
   is available)
 - wxArray::RemoveAt() replaces deprectaed wxArray::Remove(index)
@@ -23,6 +24,7 @@ all (GUI):
 - wxMenu(Bar)::Insert() and Remove() functions for dynamic menu menagament
 - wxToolBar supports arbitrary controls (not only buttons) and can be
   dynamically changed (Delete/Insert functions)
+- vertical toolbars supported by MSW and GTK native wxToolBar classes
 - wxTreeCtrl and wxListCtrl allow setting colour/fonts for individual items
 - "file open" dialog allows selecting multiple files at once (contributed by
   John Norris)

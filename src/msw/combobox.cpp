@@ -34,30 +34,32 @@ IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 
 bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
-  if (param == CBN_SELCHANGE)
-  {
-    if (GetSelection() > -1)
+    switch ( param )
     {
-        wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId);
-        event.SetInt(GetSelection());
-        event.SetEventObject(this);
-        event.SetString(GetStringSelection());
-        ProcessCommand(event);
+        case CBN_SELCHANGE:
+            if (GetSelection() > -1)
+            {
+                wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, GetId());
+                event.SetInt(GetSelection());
+                event.SetEventObject(this);
+                event.SetString(GetStringSelection());
+                ProcessCommand(event);
+            }
+            break;
+
+        case CBN_EDITCHANGE:
+            {
+                wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
+                event.SetString(GetValue());
+                event.SetEventObject(this);
+                ProcessCommand(event);
+            }
+            break;
     }
 
-    return TRUE;
-  }
-  else if (param == CBN_EDITCHANGE)
-  {
-    wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
-    event.SetString(GetValue());
-    event.SetEventObject(this);
-    ProcessCommand(event);
-
-    return TRUE;
-  }
-  else
-      return FALSE;
+    // there is no return value for the CBN_ notifications, so always return
+    // FALSE from here to pass the message to DefWindowProc()
+    return FALSE;
 }
 
 bool wxComboBox::Create(wxWindow *parent, wxWindowID id,

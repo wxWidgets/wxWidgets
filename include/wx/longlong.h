@@ -39,10 +39,7 @@
 #if defined(SIZEOF_LONG) && (SIZEOF_LONG == 8)
     #define wxLongLong_t long
     #define wxLongLongIsLong
-#elif defined(__WIN16__)
-    #define wxLongLong_t long
-    #define wxLongLongIsLong
-#elif defined(__VISUALC__) || defined( __VMS__ )
+#elif (defined(__VISUALC__) && defined(__WIN32__)) || defined( __VMS__ )
     #define wxLongLong_t __int64
 #elif defined(__GNUG__)
     #define wxLongLong_t long long
@@ -53,12 +50,14 @@
         #error "The 64 bit integer support in CodeWarrior has been disabled."
         #error "See the documentation on the 'longlong' pragma."
     #endif
-#else
-    #if !defined(__VISAGECPP__)
-    // Visualage does not support this pragma
-    #warning "Your compiler does not appear to support 64 bit integers, "\
-             "using emulation class instead."
-    #endif
+#else // no native long long type
+    // we don't give warnings for the compilers we know about that they don't
+    // have any 64 bit integer type
+    #if !defined(__VISAGECPP__) && !defined(__VISUALC__)
+        #warning "Your compiler does not appear to support 64 bit integers, "\
+                 "using emulation class instead."
+    #endif // known compilers without long long
+
     #define wxUSE_LONGLONG_WX 1
 #endif // compiler
 
@@ -119,6 +118,12 @@ public:
         // from native 64 bit integer
     wxLongLongNative& operator=(wxLongLong_t ll)
         { m_ll = ll; return *this; }
+
+        // from double: this one has an explicit name because otherwise we
+        // would have ambiguity with "ll = int" and also because we don't want
+        // to have implicit conversions between doubles and wxLongLongs
+    wxLongLongNative& Assign(double d)
+        { m_ll = (wxLongLong_t)d; return *this; }
 
     // assignment operators from wxLongLongNative is ok
 
@@ -309,6 +314,8 @@ public:
         // from long
     wxLongLongWx& operator=(long l)
         { m_lo = l; m_hi = (l < 0 ? -1l : 0l); return *this; }
+        // from double
+    wxLongLongWx& Assign(double d);
         // can't have assignment operator from 2 longs
 
     // accessors
@@ -316,6 +323,18 @@ public:
     long GetHi() const { return m_hi; }
         // get low part
     unsigned long GetLo() const { return m_lo; }
+
+        // get absolute value
+    wxLongLongWx& Abs() { if ( m_hi < 0 ) m_hi = -m_hi; return *this; }
+
+        // convert to long with range checking in the debug mode (only!)
+    long ToLong() const
+    {
+        wxASSERT_MSG( m_hi == 0l,
+                      _T("wxLongLong to long conversion loss of precision") );
+
+        return (long)m_lo;
+    }
 
     // operations
         // addition
@@ -372,17 +391,23 @@ public:
     // multiplication
     wxLongLongWx operator*(const wxLongLongWx& ll) const;
     wxLongLongWx& operator*=(const wxLongLongWx& ll);
-    void *asArray(void) const;
 
     // division
+    wxLongLongWx operator/(const wxLongLongWx& ll) const;
+    wxLongLongWx& operator/=(const wxLongLongWx& ll);
+
+    wxLongLongWx operator%(const wxLongLongWx& ll) const;
+
     void Divide(const wxLongLongWx& divisor,
                 wxLongLongWx& quotient,
                 wxLongLongWx& remainder) const;
 
-#if wxUSE_STD_IOSTREAM
     // input/output
+#if wxUSE_STD_IOSTREAM
     friend ostream& operator<<(ostream&, const wxLongLongWx&);
 #endif // wxUSE_STD_IOSTREAM
+
+    void *asArray(void) const;
 
 private:
     // long is at least 32 bits, so represent our 64bit number as 2 longs

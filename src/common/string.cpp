@@ -1028,6 +1028,49 @@ int wxString::Find(const wxChar *pszSub) const
   return (psz == NULL) ? wxNOT_FOUND : psz - (const wxChar*) m_pchData;
 }
 
+// ----------------------------------------------------------------------------
+// conversion to numbers
+// ----------------------------------------------------------------------------
+
+bool wxString::ToLong(long *val) const
+{
+    wxCHECK_MSG( val, FALSE, _T("NULL pointer in wxString::ToLong") );
+
+    const wxChar *start = c_str();
+    wxChar *end;
+    *val = wxStrtol(start, &end, 10);
+
+    // return TRUE only if scan was stopped by the terminating NUL and if the
+    // string was not empty to start with
+    return !*end && (end != start);
+}
+
+bool wxString::ToULong(unsigned long *val) const
+{
+    wxCHECK_MSG( val, FALSE, _T("NULL pointer in wxString::ToULong") );
+
+    const wxChar *start = c_str();
+    wxChar *end;
+    *val = wxStrtoul(start, &end, 10);
+
+    // return TRUE only if scan was stopped by the terminating NUL and if the
+    // string was not empty to start with
+    return !*end && (end != start);
+}
+
+bool wxString::ToDouble(double *val) const
+{
+    wxCHECK_MSG( val, FALSE, _T("NULL pointer in wxString::ToDouble") );
+
+    const wxChar *start = c_str();
+    wxChar *end;
+    *val = wxStrtod(start, &end);
+
+    // return TRUE only if scan was stopped by the terminating NUL and if the
+    // string was not empty to start with
+    return !*end && (end != start);
+}
+
 // ---------------------------------------------------------------------------
 // stream-like operators
 // ---------------------------------------------------------------------------

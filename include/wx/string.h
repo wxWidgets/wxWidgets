@@ -400,7 +400,7 @@ public:
     wxChar  operator[](unsigned int n) const
       { ASSERT_VALID_INDEX( n ); return m_pchData[n]; }
 #endif
-    
+
     // operator version of GetWriteableChar
     wxChar& operator[](size_t n)
       { ASSERT_VALID_INDEX( n ); CopyBeforeWrite(); return m_pchData[n]; }
@@ -614,6 +614,15 @@ public:
 
     // check if the string contents matches a mask containing '*' and '?'
   bool Matches(const wxChar *szMask) const;
+
+    // conversion to numbers: all functions return TRUE only if the whole string
+    // is a number and put the value of this number into the pointer provided
+        // convert to a signed integer
+    bool ToLong(long *val) const;
+        // convert to an unsigned integer
+    bool ToULong(unsigned long *val) const;
+        // convert to a double
+    bool ToDouble(double *val) const;
 
   // formated input/output
     // as sprintf(), returns the number of characters written or < 0 on error

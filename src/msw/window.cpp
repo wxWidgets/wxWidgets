@@ -2670,10 +2670,9 @@ bool wxWindow::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
     {
         return ((wxControl *)item)->MSWOnDraw(itemStruct);
     }
-    else
-#endif
-        return FALSE;
+#endif // USE_OWNER_DRAWN
 
+    return FALSE;
 }
 
 bool wxWindow::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)

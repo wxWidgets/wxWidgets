@@ -138,6 +138,17 @@ functions.
 \helpref{Find}{wxstringfind}\\
 \helpref{Replace}{wxstringreplace}
 
+\membersection{Conversion to numbers}
+
+The string provides functions for conversion to signed and unsigned integer and
+floating point numbers. All three functions take a pointer to the variable to
+put the numeric value in and return TRUE if the {\bf entire} string could be
+converted to a number.
+
+\helpref{ToLong}{wxstringtolong}\\
+\helpref{ToULong}{wxstringtoulong}\\
+\helpref{ToDouble}{wxstringtodouble}
+
 \membersection{Writing values into the string}
 
 Both formatted versions (\helpref{Printf}{wxstringprintf}) and stream-like
@@ -831,6 +842,30 @@ doesn't change this string.
 \constfunc{wxString}{SubString}{\param{size\_t}{ to}, \param{size\_t}{ from}}
 
 Same as \helpref{Mid}{wxstringmid}.
+
+\membersection{wxString::ToDouble}\label{wxstringtodouble}
+
+\cosntfunc{bool}{To}{\param{double}{ *val}}
+
+Attempts to convert the string to a floating point number. Returns TRUE on
+suceess (the number is stored in the location pointed to by {\it val}) or FALSE
+if the string does not represent such number.
+
+\membersection{wxString::ToLong}\label{wxstringtolong}
+
+\cosntfunc{bool}{To}{\param{long}{ *val}}
+
+Attempts to convert the string to a signed integer. Returns TRUE on suceess
+(the number is stored in the location pointed to by {\it val}) or FALSE if the
+string does not represent such number.
+
+\membersection{wxString::ToULong}\label{wxstringtoulong}
+
+\cosntfunc{bool}{To}{\param{unsigned long}{ *val}}
+
+Attempts to convert the string to an unsigned integer. Returns TRUE on suceess
+(the number is stored in the location pointed to by {\it val}) or FALSE if the
+string does not represent such number.
 
 \membersection{wxString::Trim}\label{wxstringtrim}
 

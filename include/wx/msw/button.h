@@ -56,6 +56,17 @@ public:
     virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
     virtual bool MSWCommand(WXUINT param, WXWORD id);
 
+#ifdef __WIN32__
+    // coloured buttons support
+    virtual bool SetBackgroundColour(const wxColour &colour);
+    virtual bool SetForegroundColour(const wxColour &colour);
+
+    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
+
+private:
+    void MakeOwnerDrawn();
+#endif // __WIN32__
+
 protected:
     // send a notification event, return TRUE if processed
     bool SendClickEvent();

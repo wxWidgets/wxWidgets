@@ -343,7 +343,7 @@ wxTextOutputStream::~wxTextOutputStream()
 {
 }
 
-void wxTextOutputStream::SetMode( wxEOL mode = wxEOL_NATIVE )
+void wxTextOutputStream::SetMode(wxEOL mode)
 {
     m_mode = mode;
     if (m_mode == wxEOL_NATIVE)

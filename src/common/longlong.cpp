@@ -423,7 +423,9 @@ wxLongLongWx& wxLongLongWx::operator*=(const wxLongLongWx& ll)
 
 // division
 
-void wxLongLongWx::Divide(const wxLongLongWx& divisor, wxLongLongWx& quotient, wxLongLongWx& remainder) const
+void wxLongLongWx::Divide(const wxLongLongWx& divisor,
+                          wxLongLongWx& quotient,
+                          wxLongLongWx& remainder) const
 {
     if ((divisor.m_lo == 0) && (divisor.m_hi == 0))
     {

@@ -103,7 +103,7 @@ long wxStopWatch::GetElapsedTime() const
 // old timer functions superceded by wxStopWatch
 // ----------------------------------------------------------------------------
 
-static wxLongLong wxStartTime = 0;
+static wxLongLong wxStartTime = 0l;
 
 // starts the global timer
 void wxStartTimer()
@@ -211,7 +211,8 @@ wxLongLong wxGetLocalTimeMillis()
     // 00:00:00 Jan 1st 1970 and then whatever is available
     // to get millisecond resolution.
     //
-    wxLongLong val = 1000 * wxGetLocalTime();
+    wxLongLong val = 1000l;
+    val *= wxGetLocalTime();
 
     // If we got here, do not fail even if we can't get
     // millisecond resolution.

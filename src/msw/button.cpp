@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        button.cpp
+// Name:        msw/button.cpp
 // Purpose:     wxButton
 // Author:      Julian Smart
 // Modified by:
@@ -16,6 +16,7 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
     #pragma implementation "button.h"
 #endif
@@ -42,7 +43,7 @@
 // macros
 // ----------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 
 // this macro tries to adjust the default button height to a reasonable value
 // using the char height as the base
@@ -70,8 +71,9 @@ bool wxButton::Create(wxWindow *parent,
 
     parent->AddChild((wxButton *)this);
 
-    m_backgroundColour = parent->GetBackgroundColour() ;
-    m_foregroundColour = parent->GetForegroundColour() ;
+    m_backgroundColour = parent->GetBackgroundColour();
+    m_foregroundColour = parent->GetForegroundColour();
+
 
     m_hWnd = (WXHWND)CreateWindowEx
                      (
@@ -189,14 +191,18 @@ void wxButton::SetDefault()
         SendMessage(GetWinHwnd(parent), DM_SETDEFID, m_windowId, 0L);
     }
 
-    // this doesn't work with bitmap buttons because it also removes the
-    // "ownerdrawn" style...
-    if ( btnOldDefault && !wxDynamicCast(btnOldDefault, wxBitmapButton) )
+    if ( btnOldDefault )
     {
         // remove the BS_DEFPUSHBUTTON style from the other button
         long style = GetWindowLong(GetHwndOf(btnOldDefault), GWL_STYLE);
-        style &= ~BS_DEFPUSHBUTTON;
-        SendMessage(GetHwndOf(btnOldDefault), BM_SETSTYLE, style, 1L);
+
+        // don't do it with the owner drawn buttons because it will reset
+        // BS_OWNERDRAW style bit too (BS_OWNERDRAW & BS_DEFPUSHBUTTON != 0)!
+        if ( !(style & BS_OWNERDRAW) )
+        {
+            style &= ~BS_DEFPUSHBUTTON;
+            SendMessage(GetHwndOf(btnOldDefault), BM_SETSTYLE, style, 1L);
+        }
     }
 
     // set this button as the default
@@ -265,3 +271,230 @@ long wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     // let the base class do all real processing
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
+
+// ----------------------------------------------------------------------------
+// owner-drawn buttons support
+// ----------------------------------------------------------------------------
+
+#ifdef __WIN32__
+
+// drawing helpers
+
+static void DrawButtonText(HDC hdc,
+                           RECT *pRect,
+                           const wxString& text,
+                           COLORREF col)
+{
+    COLORREF colOld = SetTextColor(hdc, col);
+    int modeOld = SetBkMode(hdc, TRANSPARENT);
+
+    DrawText(hdc, text, text.length(), pRect,
+             DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+    SetBkMode(hdc, modeOld);
+    SetTextColor(hdc, colOld);
+}
+
+static void DrawRect(HDC hdc, const RECT& r)
+{
+    MoveToEx(hdc, r.left, r.top, NULL);
+    LineTo(hdc, r.right, r.top);
+    LineTo(hdc, r.right, r.bottom);
+    LineTo(hdc, r.left, r.bottom);
+    LineTo(hdc, r.left, r.top);
+}
+
+void wxButton::MakeOwnerDrawn()
+{
+    long style = GetWindowLong(GetHwnd(), GWL_STYLE);
+    if ( !(style & BS_OWNERDRAW) )
+    {
+        // make it so
+        style |= BS_OWNERDRAW;
+        SetWindowLong(GetHwnd(), GWL_STYLE, style);
+    }
+}
+
+bool wxButton::SetBackgroundColour(const wxColour &colour)
+{
+    if ( !wxControl::SetBackgroundColour(colour) )
+    {
+        // nothing to do
+        return FALSE;
+    }
+
+    MakeOwnerDrawn();
+
+    Refresh();
+
+    return TRUE;
+}
+
+bool wxButton::SetForegroundColour(const wxColour &colour)
+{
+    if ( !wxControl::SetForegroundColour(colour) )
+    {
+        // nothing to do
+        return FALSE;
+    }
+
+    MakeOwnerDrawn();
+
+    Refresh();
+
+    return TRUE;
+}
+
+/*
+   The button frame looks like this normally:
+
+   WWWWWWWWWWWWWWWWWWB
+   W                GB
+   W                GB
+   W                GB  where W, G, B are white, grey and black pixels
+   W                GB
+   WGGGGGGGGGGGGGGGGGB
+   BBBBBBBBBBBBBBBBBBB
+
+   When the button is selected, the button becomes like this (the total button
+   size doesn't change):
+
+   BBBBBBBBBBBBBBBBBBB
+   BWWWWWWWWWWWWWWWWBB
+   BW              GBB
+   BW              GBB
+   BWGGGGGGGGGGGGGGGBB
+   BBBBBBBBBBBBBBBBBBB
+   BBBBBBBBBBBBBBBBBBB
+
+   When the button is pushed (while selected) it is like:
+
+   BBBBBBBBBBBBBBBBBBB
+   BGGGGGGGGGGGGGGGGGB
+   BG               GB
+   BG               GB
+   BG               GB
+   BGGGGGGGGGGGGGGGGGB
+   BBBBBBBBBBBBBBBBBBB
+*/
+
+static void DrawButtonFrame(HDC hdc, const RECT& rectBtn,
+                            bool selected, bool pushed)
+{
+    RECT r;
+    CopyRect(&r, &rectBtn);
+
+    HPEN hpenBlack = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_3DDKSHADOW)),
+         hpenGrey = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_3DSHADOW)),
+         hpenWhite = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_3DHILIGHT));
+
+    HPEN hpenOld = (HPEN)SelectObject(hdc, hpenBlack);
+
+    r.right--;
+    r.bottom--;
+
+    if ( pushed )
+    {
+        DrawRect(hdc, r);
+
+        (void)SelectObject(hdc, hpenGrey);
+        InflateRect(&r, -1, -1);
+
+        DrawRect(hdc, r);
+    }
+    else // !pushed
+    {
+        if ( selected )
+        {
+            DrawRect(hdc, r);
+
+            InflateRect(&r, -1, -1);
+        }
+
+        MoveToEx(hdc, r.left, r.bottom, NULL);
+        LineTo(hdc, r.right, r.bottom);
+        LineTo(hdc, r.right, r.top - 1);
+
+        (void)SelectObject(hdc, hpenWhite);
+        MoveToEx(hdc, r.left, r.bottom - 1, NULL);
+        LineTo(hdc, r.left, r.top);
+        LineTo(hdc, r.right, r.top);
+
+        (void)SelectObject(hdc, hpenGrey);
+        MoveToEx(hdc, r.left + 1, r.bottom - 1, NULL);
+        LineTo(hdc, r.right - 1, r.bottom - 1);
+        LineTo(hdc, r.right - 1, r.top);
+    }
+
+    (void)SelectObject(hdc, hpenOld);
+    DeleteObject(hpenWhite);
+    DeleteObject(hpenGrey);
+    DeleteObject(hpenBlack);
+}
+
+bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
+{
+    LPDRAWITEMSTRUCT lpDIS = (LPDRAWITEMSTRUCT)wxdis;
+
+    RECT rectBtn;
+    CopyRect(&rectBtn, &lpDIS->rcItem);
+
+    COLORREF colBg = wxColourToRGB(GetBackgroundColour()),
+             colFg = wxColourToRGB(GetForegroundColour());
+
+    HDC hdc = lpDIS->hDC;
+    UINT state = lpDIS->itemState;
+
+    // first, draw the background
+    HBRUSH hbrushBackground = ::CreateSolidBrush(colBg);
+
+    FillRect(hdc, &rectBtn, hbrushBackground);
+
+    // draw the border for the current state
+    bool selected = (state & ODS_SELECTED) != 0;
+    if ( !selected )
+    {
+        wxPanel *panel = wxDynamicCast(GetParent(), wxPanel);
+        if ( panel )
+        {
+            selected = panel->GetDefaultItem() == this;
+        }
+    }
+    bool pushed = (SendMessage(GetHwnd(), BM_GETSTATE, 0, 0) & BST_PUSHED) != 0;
+
+    DrawButtonFrame(hdc, rectBtn, selected, pushed);
+
+    // draw the focus rect if needed
+    if ( state & ODS_FOCUS )
+    {
+        RECT rectFocus;
+        CopyRect(&rectFocus, &rectBtn);
+
+        // I don't know where does this constant come from, but this is how
+        // Windows draws them
+        InflateRect(&rectFocus, -4, -4);
+
+        DrawFocusRect(hdc, &rectFocus);
+    }
+
+    DrawButtonText(hdc, &rectBtn, GetLabel(),
+                   state & ODS_DISABLED ? GetSysColor(COLOR_GRAYTEXT)
+                                        : colFg);
+
+    ::DeleteObject(hbrushBackground);
+
+#if 0
+    wxString s = "button state: ";
+    if ( selected )
+        s += "selected ";
+    if ( pushed )
+        s += "pushed ";
+    if ( state & ODS_FOCUS )
+        s += "focused ";
+    wxLogStatus(s);
+#endif
+
+    return TRUE;
+}
+
+#endif // __WIN32__
