@@ -210,7 +210,7 @@ wxPrintData::~wxPrintData()
 #endif
 }
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && defined(__WIN32__)
 
 static wxString wxGetPrintDlgError()
 {
@@ -282,7 +282,8 @@ void wxPrintData::ConvertToNative()
                 GlobalFree(pd->hDevNames);
             pd->hDevMode = NULL;
             pd->hDevNames = NULL;
-#ifdef __WXDEBUG__
+
+#if defined(__WXDEBUG__) && defined(__WIN32__)
             wxString str("Printing error: ");
             str += wxGetPrintDlgError();
             wxLogDebug(str);

@@ -301,7 +301,23 @@ static wxTimer *wxTheSleepTimer = NULL;
 
 void wxUsleep(unsigned long milliseconds)
 {
+#ifdef __WIN32__
     ::Sleep(milliseconds);
+#else
+  if (inTimer)
+    return;
+
+  wxTheSleepTimer = new wxSleepTimer;
+  inTimer = TRUE;
+  wxTheSleepTimer->Start(milliseconds);
+  while (inTimer)
+  {
+    if (wxTheApp->Pending())
+      wxTheApp->Dispatch();
+  }
+  delete wxTheSleepTimer;
+  wxTheSleepTimer = NULL;
+#endif
 }
 
 void wxSleep(int nSecs)

@@ -88,7 +88,7 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
     int winstyle = m_isIcon ? SS_ICON : SS_BITMAP;
 #else // Win16
     const char *classname = "BUTTON";
-    int winstyle = BS_OWNERDRAWN;
+    int winstyle = BS_OWNERDRAW;
 #endif // Win32
 
     m_hWnd = (WXHWND)::CreateWindow

@@ -101,15 +101,15 @@ public:
     wxDC *GetPrintDC();
 
 public:
-    wxStaticText*       m_printerMessage;
+//    wxStaticText*       m_printerMessage;
     wxButton*           m_setupButton;
-    wxButton*           m_helpButton;
+//    wxButton*           m_helpButton;
     wxRadioBox*         m_rangeRadioBox;
     wxTextCtrl*         m_fromText;
     wxTextCtrl*         m_toText;
     wxTextCtrl*         m_noCopiesText;
     wxCheckBox*         m_printToFileCheckBox;
-    wxCheckBox*         m_collateCopiesCheckBox;
+//    wxCheckBox*         m_collateCopiesCheckBox;
 
     wxPrintDialogData   m_printDialogData;
 
