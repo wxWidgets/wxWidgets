@@ -773,14 +773,13 @@ bool wxListBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 
     wxListBoxItem *pItem = (wxListBoxItem *)data;
 
-    wxDC dc;
-    dc.SetHDC((WXHDC)pStruct->hDC, FALSE);
+    wxDCTemp dc((WXHDC)pStruct->hDC);
     wxRect rect(wxPoint(pStruct->rcItem.left, pStruct->rcItem.top),
                 wxPoint(pStruct->rcItem.right, pStruct->rcItem.bottom));
 
     return pItem->OnDrawItem(dc, rect,
-            (wxOwnerDrawn::wxODAction)pStruct->itemAction,
-            (wxOwnerDrawn::wxODStatus)pStruct->itemState);
+                             (wxOwnerDrawn::wxODAction)pStruct->itemAction,
+                             (wxOwnerDrawn::wxODStatus)pStruct->itemState);
 }
 
 #endif

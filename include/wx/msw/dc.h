@@ -73,8 +73,6 @@
 
 class WXDLLEXPORT wxDC : public wxDCBase
 {
-    DECLARE_DYNAMIC_CLASS(wxDC)
-
 public:
     wxDC();
     ~wxDC();
@@ -224,6 +222,20 @@ protected:
     WXHBRUSH          m_oldBrush;
     WXHFONT           m_oldFont;
     WXHPALETTE        m_oldPalette;
+
+    DECLARE_DYNAMIC_CLASS(wxDC)
+};
+
+// ----------------------------------------------------------------------------
+// wxDCTemp: a wxDC which doesn't free the given HDC (used by wxWindows
+// only/mainly)
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxDCTemp : public wxDC
+{
+public:
+    wxDCTemp(WXHDC hdc) { SetHDC(hdc); }
+    virtual ~wxDCTemp() { SetHDC((WXHDC)NULL); }
 };
 
 #endif

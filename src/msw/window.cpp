@@ -2923,19 +2923,20 @@ bool wxWindow::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
 
         wxCHECK( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );
 
-        // prepare to call OnDrawItem()
-        wxDC dc;
-        dc.SetHDC((WXHDC)pDrawStruct->hDC, FALSE);
+        // prepare to call OnDrawItem(): notice using of wxDCTemp to prevent
+        // the DC from being released
+        wxDCTemp dc((WXHDC)pDrawStruct->hDC);
         wxRect rect(pDrawStruct->rcItem.left, pDrawStruct->rcItem.top,
                     pDrawStruct->rcItem.right - pDrawStruct->rcItem.left,
                     pDrawStruct->rcItem.bottom - pDrawStruct->rcItem.top);
 
         return pMenuItem->OnDrawItem
-                          (
-                            dc, rect,
-                            (wxOwnerDrawn::wxODAction)pDrawStruct->itemAction,
-                            (wxOwnerDrawn::wxODStatus)pDrawStruct->itemState
-                          );
+               (
+                dc,
+                rect,
+                (wxOwnerDrawn::wxODAction)pDrawStruct->itemAction,
+                (wxOwnerDrawn::wxODStatus)pDrawStruct->itemState
+               );
     }
 
     wxWindow *item = FindItem(id);
@@ -3103,9 +3104,8 @@ bool wxWindow::HandleEraseBkgnd(WXHDC hdc)
     if ( ::IsIconic(GetHwnd()) )
         return TRUE;
 
-    wxDC dc;
+    wxDCTemp dc(hdc);
 
-    dc.SetHDC(hdc);
     dc.SetWindow(this);
     dc.BeginDrawing();
 
@@ -3114,8 +3114,9 @@ bool wxWindow::HandleEraseBkgnd(WXHDC hdc)
     bool rc = GetEventHandler()->ProcessEvent(event);
 
     dc.EndDrawing();
+
+    // must be called manually as ~wxDC doesn't do anything for wxDCTemp
     dc.SelectOldObjects(hdc);
-    dc.SetHDC((WXHDC) NULL);
 
     return rc;
 }
