@@ -301,18 +301,30 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     {
         case CBN_SELCHANGE:
             sel = GetSelection();
-            if ( sel > -1 )
+
+            // somehow we get 2 CBN_SELCHANGE events with the same index when
+            // the user selects an item in the combobox -- ignore duplicates
+            if ( sel > -1 && sel != m_selectionOld )
             {
-                value = GetString(sel);
+                m_selectionOld = sel;
+
+                // GetValue() would still return the old value from here but
+                // according to the docs we should return the new value if the
+                // user calls it in his event handler, so update internal
+                // m_value
+                m_value = GetString(sel);
 
                 wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, GetId());
                 event.SetInt(sel);
                 event.SetEventObject(this);
-                event.SetString(value);
+                event.SetString(m_value);
                 ProcessCommand(event);
             }
-            else
+            else // no valid selection
             {
+                m_selectionOld = sel;
+
+                // hence no EVT_TEXT neither
                 break;
             }
 
@@ -329,25 +341,21 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
                 // want the new one)
                 if ( sel == -1 )
                 {
-                    value = GetValue();
+                    m_value = GetValue();
                 }
                 else // we're synthesizing text updated event from sel change
                 {
-                    // We need to retrieve the current selection because the user
-                    // may have changed it in the previous handler (for CBN_SELCHANGE
-                    // above).
+                    // We need to retrieve the current selection because the
+                    // user may have changed it in the previous handler (for
+                    // CBN_SELCHANGE above).
                     sel = GetSelection();
                     if ( sel > -1 )
                     {
-                        value = GetString(sel);
+                        m_value = GetString(sel);
                     }
-                    // we need to do this because the user code expects
-                    // wxComboBox::GetValue() to return the new value from
-                    // "text updated" handler but it hadn't been updated yet
-                    SetValue(value);
                 }
 
-                event.SetString(value);
+                event.SetString(m_value);
                 event.SetEventObject(this);
                 ProcessCommand(event);
             }
@@ -472,6 +480,8 @@ void wxComboBox::SetValue(const wxString& value)
         SetStringSelection(value);
     else
         SetWindowText(GetHwnd(), value.c_str());
+
+    m_selectionOld = GetSelection();
 }
 
 // Clipboard operations

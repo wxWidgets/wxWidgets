@@ -27,7 +27,7 @@
 class WXDLLEXPORT wxComboBox: public wxChoice
 {
 public:
-    wxComboBox() { }
+    wxComboBox() { Init(); }
 
     wxComboBox(wxWindow *parent, wxWindowID id,
             const wxString& value = wxEmptyString,
@@ -38,6 +38,8 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxComboBoxNameStr)
     {
+        Init();
+
         Create(parent, id, value, pos, size, n, choices, style, validator, name);
     }
     wxComboBox(wxWindow *parent, wxWindowID id,
@@ -49,6 +51,8 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxComboBoxNameStr)
     {
+        Init();
+
         Create(parent, id, value, pos, size, choices, style, validator, name);
     }
 
@@ -75,7 +79,7 @@ public:
     // List functions: see wxChoice
 
     // Text field functions
-    wxString GetValue() const { return GetLabel(); }
+    wxString GetValue() const { return m_value; }
     virtual void SetValue(const wxString& value);
 
     // Clipboard operations
@@ -104,6 +108,16 @@ public:
 
 protected:
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+
+    // common part of all ctors
+    void Init() { m_selectionOld = -1; }
+
+
+    // the previous selection (see MSWCommand() to see why it is needed)
+    int m_selectionOld;
+
+    // the current selection (also see MSWCommand())
+    wxString m_value;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxComboBox)

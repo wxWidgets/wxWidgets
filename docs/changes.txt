@@ -273,6 +273,7 @@ wxMSW:
 - fixed truncation of transferred data in wxConnection under unicode build
 - wxChoice and wxComboBox dropdown background can be set now too (Adrian Lupei)
 - fixed wxMaximizeEvent generation in wxFrame
+- don't send duplicate EVT_COMBOBOX events whenever selection changes any more
 
 wxUniv/X11:
 
