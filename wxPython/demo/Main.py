@@ -25,11 +25,8 @@ import images
 _treeList = [
     # new stuff
     ('New since last release', [
-        'wxRadioButton',
-        'Throbber',
-        'wxPopupControl',
-        'wxMultiSash',
-        'EventManager',
+        'wxIntCtrl',
+
         ]),
 
     # managed windows == things with a caption you can close
@@ -102,6 +99,7 @@ _treeList = [
     ('More Windows/Controls', [
         #'wxFloatBar',          deprecated
         #'wxMVCTree',           deprecated
+        #'wxRightTextCtrl',    deprecated as we have wxTE_RIGHT now.
         'ColourSelect',
         'ContextHelp',
         'FancyText',
@@ -119,11 +117,11 @@ _treeList = [
         'wxEditor',
         'wxHtmlWindow',
         'wxIEHtmlWin',
+        'wxIntCtrl',
         'wxLEDNumberCtrl',
         'wxMimeTypesManager',
         'wxMultiSash',
         'wxPopupControl',
-        'wxRightTextCtrl',
         'wxStyledTextCtrl_1',
         'wxStyledTextCtrl_2',
         'wxTimeCtrl',
@@ -148,9 +146,9 @@ _treeList = [
         'OOR',
         'PythonEvents',
         'Threads',
+        'wxKeyEvents',
         'wxProcess',
         'wxTimer',
-        'wxKeyEvents',
         ]),
 
     # Clipboard and DnD
@@ -163,11 +161,11 @@ _treeList = [
     # Images
     ('Using Images', [
         'Throbber',
+        'wxArtProvider',
         'wxDragImage',
         'wxImage',
         'wxImageFromStream',
         'wxMask',
-        'wxArtProvider',
         ]),
 
     # Other stuff

@@ -5,6 +5,10 @@ CHANGES.txt for wxPython
 2.4.0.2
 -------
 
+Mostly bug fixes.
+
+Added wxIntCtrl from Will Sadkin.
+
 
 
 
