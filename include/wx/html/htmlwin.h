@@ -190,6 +190,13 @@ public:
                                              const wxString& WXUNUSED(url),
                                              wxString *WXUNUSED(redirect)) const
         { return wxHTML_OPEN; }
+   
+#if wxUSE_CLIPBOARD
+    // Helper functions to select parts of page:
+    void SelectWord(const wxPoint& pos);
+    void SelectLine(const wxPoint& pos);
+    void SelectAll();
+#endif
 
 protected:
     void Init();
@@ -244,10 +251,6 @@ protected:
 #if wxUSE_CLIPBOARD
     // Convert selection to text:
     wxString SelectionToText();
-
-    // Helper functions to select parts of page:
-    void SelectWord(const wxPoint& pos);
-    void SelectLine(const wxPoint& pos);
 
     // Automatic scrolling during selection:
     void StopAutoScrolling();
