@@ -1091,6 +1091,37 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col) const
     {
         case WINDOW:            return *wxWHITE;
 
+        // use the system colours under Windows
+#if defined(__WXMSW__)
+        case WINDOW:            return wxColour(GetSysColor(COLOR_WINDOW));
+
+        case CONTROL_PRESSED:
+        case CONTROL_CURRENT:
+        case CONTROL:           return wxColour(GetSysColor(COLOR_BTNFACE));
+
+        case CONTROL_TEXT:      return wxColour(GetSysColor(COLOR_BTNTEXT));
+
+        case SCROLLBAR:         return wxColour(GetSysColor(COLOR_SCROLLBAR));
+        case SCROLLBAR_PRESSED: return wxColour(GetSysColor(COLOR_HIGHLIGHT));
+
+        case HIGHLIGHT:         return wxColour(GetSysColor(COLOR_HIGHLIGHT));
+        case HIGHLIGHT_TEXT:    return wxColour(GetSysColor(COLOR_HIGHLIGHTTEXT));
+
+#if defined(COLOR_3DDKSHADOW)
+        case SHADOW_DARK:       return wxColour(GetSysColor(COLOR_3DDKSHADOW));
+#else
+        case SHADOW_DARK:       return *wxBLACK;
+#endif
+
+        case CONTROL_TEXT_DISABLED:
+        case SHADOW_HIGHLIGHT:  return wxColour(GetSysColor(COLOR_BTNHIGHLIGHT));
+
+        case SHADOW_IN:         return wxColour(GetSysColor(COLOR_BTNFACE));
+
+        case CONTROL_TEXT_DISABLED_SHADOW:
+        case SHADOW_OUT:        return wxColour(GetSysColor(COLOR_BTNSHADOW));
+#else // !__WXMSW__
+        // use the standard Windows colours elsewhere
         case CONTROL_PRESSED:
         case CONTROL_CURRENT:
         case CONTROL:           return wxColour(0xc0c0c0);
@@ -1112,6 +1143,7 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col) const
 
         case CONTROL_TEXT_DISABLED_SHADOW:
         case SHADOW_OUT:        return wxColour(0x7f7f7f);
+#endif // __WXMSW__
 
         case MAX:
         default:
