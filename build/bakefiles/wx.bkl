@@ -17,7 +17,7 @@
     <!-- wxWindows variant where everything is in one library: -->
     <include file="monolithic.bkl"/>
     <!-- ...and when there are multiple libraries: -->
-    <!-- <include file="multilib.bkl"/> -->
+    <include file="multilib.bkl"/>
     
     
     <!-- Samples target (not dependency of 'all'): -->

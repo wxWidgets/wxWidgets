@@ -60,7 +60,7 @@ def addMakefile(bake, makedirs, deps=[], args={}):
 # main makefile:
 addMakefile('wx.bkl', {'all':'..','autoconf':'../..'},
             ['common.bkl', 'config.bkl', 'files.bkl', 'monolithic.bkl',
-             'wxwin.py'])
+             'multilib.bkl', 'wxwin.py'])
 
 # samples main makefile:
 addMakefile('../../samples/samples.bkl', {'all':'../../samples'})
@@ -83,11 +83,13 @@ def onSubmakefile(type, dirname, names):
     for bake in bakes:
         if type==CONTRIB_DIR:
             acdir = '../../contrib/src/%s' % dirname.split('/')[-1]
+            ruledep = 'common_contrib.bkl'
         else:
             acdir = dirname
+            ruledep = 'common_samples.bkl'
         addMakefile('%s/%s' % (dirname, bake),
                     {'all':dirname,'autoconf':acdir},
-                    deps=['common.bkl','common_samples.bkl','config.bkl'],
+                    deps=['common.bkl',ruledep,'config.bkl'],
                     args=args)
 
 os.path.walk('../../samples', onSubmakefile, None)

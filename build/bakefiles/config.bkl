@@ -19,7 +19,6 @@
         </description>
     </option>
     
-    <!-- FIXME - to be option, not hardcoded value!! -->
     <option name="MONOLITHIC">
         <values>0 1</values>
         <default-value>0</default-value>

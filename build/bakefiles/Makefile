@@ -104,7 +104,7 @@ Makefile: regenMakefile.py
 	@exit 1
 
 # from wx.bkl
-../../Makefile.in: common.bkl config.bkl files.bkl monolithic.bkl wxwin.py wx.bkl
+../../Makefile.in: common.bkl config.bkl files.bkl monolithic.bkl multilib.bkl wxwin.py wx.bkl
 	$(BAKEFILE) $(BAKEARGS) -fautoconf -o../../Makefile.in wx.bkl
 	touch ../../Makefile.in
 
@@ -474,6 +474,6 @@ Makefile: regenMakefile.py
 	touch ../../samples/internat/Makefile.in
 
 # from ../../contrib/build/xrc/xrc.bkl
-../../contrib/src/xrc/Makefile.in: common.bkl common_samples.bkl config.bkl ../../contrib/build/xrc/xrc.bkl
+../../contrib/src/xrc/Makefile.in: common.bkl common_contrib.bkl config.bkl ../../contrib/build/xrc/xrc.bkl
 	$(BAKEFILE) $(BAKEARGS) -fautoconf -o../../contrib/src/xrc/Makefile.in -DWXTOPDIR=/../../.. -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/build/xrc/xrc.bkl
 	touch ../../contrib/src/xrc/Makefile.in

@@ -4,19 +4,20 @@
     
     <set var="MONOLIB_SRC">
         <if cond="USE_GUI=='0'">
-            src/common/init.cpp $(BASE_SRC)
+            src/common/init.cpp $(BASE_SRC) $(BASE_AND_GUI_SRC)
         </if>
         <if cond="USE_GUI=='1'">
-            $(BASE_SRC) $(CORE_SRC) $(HTML_SRC)
+            $(BASE_SRC) $(BASE_AND_GUI_SRC) $(CORE_SRC) $(HTML_SRC)
         </if>
     </set>
 
     <dll id="monodll" template="wx_dll"
          cond="SHARED=='1' and MONOLITHIC=='1'">
-        <define>wxUSE_BASE</define> 
+        <define>__WXBASE__</define> 
+        <define>wxUSE_BASE=1</define> 
         <define>WXMAKINGDLL</define>
         <sources>$(MONOLIB_SRC)</sources>
-      
+
         <library>$(LIB_ZLIB)</library>
         <library>$(LIB_REGEX)</library>
         <library>$(LIB_PNG)</library>
@@ -27,7 +28,8 @@
     
     <lib id="monolib" template="wx_lib"
          cond="SHARED=='0' and MONOLITHIC=='1'">
-        <define>wxUSE_BASE</define> 
+        <define>__WXBASE__</define> 
+        <define>wxUSE_BASE=1</define> 
         <sources>$(MONOLIB_SRC)</sources>
     </lib>
 

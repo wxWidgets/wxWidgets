@@ -10,15 +10,19 @@
        respectively
      * file groups are:
 
-       BASE_CMN                common base files (all platforms)
-       GUICMN                  common GUI files (all platforms)
+       BASE_CMN                      common base files (all platforms)
+       GUI_CMN                       common GUI files (all platforms)
+       BASE_AND_GUI_CMN_SRC          files that must be compiled both into GUI
+                                     and base library (all platforms)
 
-       BASE_$(platform)        base files used on platform
-       $(port)LOWLEVEL         low-level GUI classes
-       $(port)                 high-level files for a port
-       XWIN_LOWLEVEL           low-level classes for X Window System port
+       BASE_$(platform)              base files used on platform
+       BASE_AND_GUI_$(platform)_SRC  base & gui files used on platform
+                               
+       $(port)LOWLEVEL               low-level GUI classes
+       $(port)                       high-level files for a port
+       XWIN_LOWLEVEL                 low-level classes for X Window System port
 
-       HTML                    wxHTML files
+       HTML                          wxHTML files
   
      * one file may be listed in several groups
     
@@ -33,18 +37,20 @@
 
 <set var="BASE_UNIX_SRC">
     src/unix/baseunix.cpp
-    src/unix/dialup.cpp
     src/unix/dir.cpp
     src/unix/gsocket.c
     src/unix/mimetype.cpp
     src/unix/snglinst.cpp
     src/unix/threadpsx.cpp
+</set>
+<set var="BASE_AND_GUI_UNIX_SRC">
     src/unix/utilsunx.cpp
 </set>
 <set var="BASE_UNIX_HDR">
     wx/unix/gsockunx.h    
     wx/unix/mimetype.h
 </set>
+
 <set var="BASE_WIN32_SRC">
     src/msw/gsocket.c
     src/msw/gsockmsw.c
@@ -59,6 +65,9 @@
     src/msw/thread.cpp
     src/msw/utils.cpp
     src/msw/utilsexc.cpp
+</set>
+<set var="BASE_AND_GUI_WIN32_SRC">
+    src/msw/mslu.cpp
     src/msw/volume.cpp
 </set>
 <set var="BASE_WIN32_HDR">
@@ -67,17 +76,24 @@
     wx/msw/mimetype.h
     wx/msw/winundef.h
 </set>
+
 <set var="BASE_MAC_SRC">
+</set>
+<set var="BASE_AND_GUI_MAC_SRC">
 </set>
 <set var="BASE_MAC_HDR">
 </set>
+
 <set var="BASE_OS2_SRC">
     src/os2/dir.cpp
     src/os2/utils.cpp
     src/os2/utilsexc.cpp
 </set>
+<set var="BASE_AND_GUI_OS2_SRC">
+</set>
 <set var="BASE_OS2_HDR">
 </set>
+
 <set var="BASE_CMN_SRC">
     src/common/appbase.cpp
     src/common/clntdata.cpp
@@ -92,7 +108,6 @@
     src/common/dynlib.cpp
     src/common/dynload.cpp
     src/common/encconv.cpp
-    src/common/event.cpp
     src/common/extended.c
     src/common/ffile.cpp
     src/common/file.cpp
@@ -102,7 +117,6 @@
     src/common/filesys.cpp
     src/common/fmapbase.cpp
     src/common/fs_inet.cpp
-    src/common/fs_mem.cpp
     src/common/fs_zip.cpp
     src/common/ftp.cpp
     src/common/hash.cpp
@@ -116,7 +130,6 @@
     src/common/memory.cpp
     src/common/mimecmn.cpp
     src/common/module.cpp
-    src/common/msgout.cpp
     src/common/mstream.cpp
     src/common/object.cpp
     src/common/process.cpp
@@ -138,12 +151,16 @@
     src/common/txtstrm.cpp
     src/common/unzip.c
     src/common/url.cpp
-    src/common/utilscmn.cpp
     src/common/variant.cpp
     src/common/wfstream.cpp
     src/common/wxchar.cpp
     src/common/zipstrm.cpp
     src/common/zstream.cpp
+</set>
+<set var="BASE_AND_GUI_CMN_SRC">
+    src/common/fs_mem.cpp
+    src/common/msgout.cpp
+    src/common/utilscmn.cpp
 </set>
 <set var="BASE_CMN_HDR">
     wx/arrimpl.cpp
@@ -244,7 +261,7 @@
 <!--                            Common GUI files                            -->
 <!-- ====================================================================== -->
 
-<set var="GUICMN_SRC">
+<set var="GUI_CMN_SRC">
     src/generic/selstore.cpp
     src/generic/busyinfo.cpp
     src/generic/calctrl.cpp
@@ -272,6 +289,7 @@
     src/generic/treectlg.cpp
     src/generic/wizard.cpp
     src/common/appcmn.cpp
+    src/common/event.cpp
     src/common/fontmap.cpp
     src/common/accesscmn.cpp
     src/common/artprov.cpp
@@ -311,7 +329,6 @@
     src/common/imagall.cpp
     src/common/imagbmp.cpp
     src/common/image.cpp
-    src/common/imagfill.cpp
     src/common/imaggif.cpp
     src/common/imagiff.cpp
     src/common/imagjpeg.cpp
@@ -320,6 +337,7 @@
     src/common/imagpnm.cpp
     src/common/imagtiff.cpp
     src/common/imagxpm.cpp
+    src/common/imagfill.cpp
     src/common/layout.cpp
     src/common/lboxcmn.cpp
     src/common/matrix.cpp
@@ -343,7 +361,7 @@
     src/common/wincmn.cpp
     src/common/xpmdecod.cpp
 </set>
-<set var="GUICMN_HDR">
+<set var="GUI_CMN_HDR">
     wx/selstore.h
     wx/generic/accel.h
     wx/generic/calctrl.h
@@ -358,6 +376,7 @@
     wx/generic/gridctrl.h
     wx/generic/grid.h
     wx/generic/helpext.h
+    wx/generic/logg.h
     wx/helphtml.h
     wx/generic/imaglist.h
     wx/generic/laywin.h
@@ -389,6 +408,7 @@
     src/common/taskbarcmn.cpp
     src/unix/taskbarx11.cpp
     src/generic/printps.cpp
+    src/unix/dialup.cpp
 </set>
 <set var="XWIN_LOWLEVEL_HDR">
     wx/unix/fontutil.h
@@ -873,7 +893,6 @@
     src/msw/menuitem.cpp
     src/msw/metafile.cpp
     src/msw/msgdlg.cpp
-    src/msw/mslu.cpp
     src/msw/nativdlg.cpp
     src/msw/notebook.cpp
     src/msw/ownerdrw.cpp
@@ -1671,15 +1690,22 @@
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_MAC_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_SRC)</if>
     </set>
+    <set var="BASE_AND_GUI_PLATFORM_SRC">
+        <if cond="PLATFORM_UNIX=='1'">$(BASE_AND_GUI_UNIX_SRC)</if>
+        <if cond="PLATFORM_MACOSX=='1'">$(BASE_AND_GUI_MAC_SRC)</if>
+        <if cond="PLATFORM_WIN32=='1'">$(BASE_AND_GUI_WIN32_SRC)</if>
+    </set>
     <set var="BASE_PLATFORM_HDR">
         <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_HDR)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_MAC_HDR)</if>
         <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_HDR)</if>
     </set>
-
     
     <set var="BASE_SRC">
         $(BASE_CMN_SRC) $(BASE_PLATFORM_SRC)
+    </set>
+    <set var="BASE_AND_GUI_SRC">
+        $(BASE_AND_GUI_CMN_SRC) $(BASE_AND_GUI_PLATFORM_SRC)
     </set>
     
     
@@ -1727,16 +1753,16 @@
             src/common/init.cpp
         </if>
         <if cond="USE_GUI=='1' and WXUNIV=='0'">
-            $(LOWLEVEL_SRC) $(GUI_SRC) $(GUICMN_SRC)
+            $(LOWLEVEL_SRC) $(GUI_SRC) $(GUI_CMN_SRC)
         </if>
         <if cond="USE_GUI=='1' and WXUNIV=='1'">
-            $(LOWLEVEL_SRC) $(UNIV_SRC) $(UNIV_THEMES_SRC) $(GUICMN_SRC)
+            $(LOWLEVEL_SRC) $(UNIV_SRC) $(UNIV_THEMES_SRC) $(GUI_CMN_SRC)
         </if>
     </set>
 
     <set var="ALL_HEADERS">
         $(BASE_CMN_HDR) $(BASE_PLATFORM_HDR)
-        $(GUICMN_HDR) $(GUI_HDR) $(LOWLEVEL_HDR)
+        $(GUI_CMN_HDR) $(GUI_HDR) $(LOWLEVEL_HDR)
         $(HTML_HDR)
     </set>
 

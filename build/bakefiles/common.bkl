@@ -74,11 +74,14 @@
     <!--                    Names of component libraries:                -->
     <!-- =============================================================== -->
 
+    <set var="WXLIB_BASE">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('base')))</if>
+    </set>
     <set var="WXLIB_CORE">
         <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('core')))</if>
     </set>
     <set var="WXLIB_HTML">
-        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('core')))</if>
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('html')))</if>
     </set>
 
     <set var="WXLIB_MONO">

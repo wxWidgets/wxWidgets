@@ -1,26 +1,50 @@
 <?xml version="1.0" ?>
 <makefile>
+    
+    <!-- ================================================================= -->
+    <!--                            wxBase library                         -->
+    <!-- ================================================================= -->
+    
+    <dll id="basedll" template="wx_dll"
+         cond="SHARED=='1' and MONOLITHIC=='0'">
+        <define>WXMAKINGDLL</define>
+        <define>__WXBASE__</define> 
+        <define>wxUSE_BASE=1</define>
+        <define>wxUSE_GUI=0</define> 
+        <sources>$(BASE_SRC) $(BASE_AND_GUI_SRC)</sources>
+        
+        <library>$(LIB_ZLIB)</library>
+        <library>$(LIB_REGEX)</library>
+        <library>$(LIB_PNG)</library>
+        <library>$(LIB_JPEG)</library>
+        <library>$(LIB_TIFF)</library>
+    </dll>
+    
+    <lib id="baselib" template="wx_lib"
+         cond="SHARED=='0' and MONOLITHIC=='0'">
+        <define>__WXBASE__</define> 
+        <define>wxUSE_BASE=1</define> 
+        <define>wxUSE_GUI=0</define> 
+        <sources>$(BASE_SRC) $(BASE_AND_GUI_SRC)</sources>
+    </lib>
 
     <!-- ================================================================= -->
     <!--                           Main GUI library                        -->
     <!-- ================================================================= -->
     
     <dll id="coredll" template="wx_dll"
-         cond="SHARED=='1' and MONOLITHIC=='0'">
+         cond="SHARED=='1' and USE_GUI=='1' and MONOLITHIC=='0'">
         <define>WXMAKINGDLL</define>
-        <sources>$(BASE_SRC) $(CORE_SRC)</sources>
+        <sources>$(BASE_AND_GUI_SRC) $(CORE_SRC)</sources>
+        
+        <wx-lib>base</wx-lib>
       
-        <library>$(LIB_ZLIB)</library>
-        <library>$(LIB_REGEX)</library>
-        <library>$(LIB_PNG)</library>
-        <library>$(LIB_JPEG)</library>
-        <library>$(LIB_TIFF)</library>
-        <library>$(LIB_ODBC)</library>
+        <library>$(LIB_ODBC)</library>        
     </dll>
     
     <lib id="corelib" template="wx_lib"
-         cond="SHARED=='0' and MONOLITHIC=='0'">
-        <sources>$(BASE_SRC) $(CORE_SRC)</sources>
+         cond="SHARED=='0' and USE_GUI=='1' and MONOLITHIC=='0'">
+        <sources>$(BASE_AND_GUI_SRC) $(CORE_SRC)</sources>
     </lib>
 
     
@@ -29,14 +53,15 @@
     <!-- ================================================================ -->
     
     <dll id="htmldll" template="wx_dll"
-         cond="SHARED=='1' and MONOLITHIC=='0'">
+         cond="SHARED=='1' and USE_GUI=='1' and MONOLITHIC=='0'">
         <define>WXMAKINGDLL</define>
         <sources>$(HTML_SRC)</sources>
         <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
     </dll>
     
     <lib id="htmllib" template="wx_lib"
-         cond="SHARED=='0' and MONOLITHIC=='0'">
+         cond="SHARED=='0' and USE_GUI=='1' and MONOLITHIC=='0'">
         <sources>$(HTML_SRC)</sources>
     </lib>
 
