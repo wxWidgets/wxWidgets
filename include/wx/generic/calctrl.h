@@ -17,7 +17,7 @@
 #define _WX_GENERIC_CALCTRL_H
 
 #include "wx/control.h"         // the base class
-
+#include "wx/dcclient.h"        // for wxPaintDC
 #include "wx/spinctrl.h"        // for wxSpinEvent
 
 class WXDLLEXPORT wxComboBox;
