@@ -79,35 +79,35 @@ static gint gtk_radiobox_keypress_callback( GtkWidget *widget, GdkEventKey *gdk_
     {
         return FALSE;
     }
-    
+
     wxNode *node = rb->m_boxes.Find( (wxObject*) widget );
     if (!node)
     {
         return FALSE;
     }
-    
+
     gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
-    
+
     if ((gdk_event->keyval == GDK_Up) ||
         (gdk_event->keyval == GDK_Left))
     {
         if (node == rb->m_boxes.First())
-	    node = rb->m_boxes.Last();
-	else
-	    node = node->Previous();
+            node = rb->m_boxes.Last();
+        else
+            node = node->Previous();
     }
     else
     {
         if (node == rb->m_boxes.Last())
-	    node = rb->m_boxes.First();
-	else
-	    node = node->Next();
+            node = rb->m_boxes.First();
+        else
+            node = node->Next();
     }
-    
+
     GtkWidget *button = (GtkWidget*) node->Data();
-	
+
     gtk_widget_grab_focus( button );
-    
+
     return TRUE;
 }
 
@@ -206,7 +206,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
         gtk_signal_connect( GTK_OBJECT(m_radio), "key_press_event",
            GTK_SIGNAL_FUNC(gtk_radiobox_keypress_callback), (gpointer)this );
-	   
+
         m_boxes.Append( (wxObject*) m_radio );
 
         ConnectWidget( GTK_WIDGET(m_radio) );
@@ -230,7 +230,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     m_parent->DoAddChild( this );
 
     PostCreation();
-    
+
     ApplyWidgetStyle();
 
     SetLabel( title );
@@ -244,7 +244,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     req.height = 2;
     (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(m_widget) )->size_request ) (m_widget, &req );
     if (req.width > ls.x) ls.x = req.width;
-    
+
     wxSize newSize = size;
     if (newSize.x == -1) newSize.x = ls.x;
     if (newSize.y == -1) newSize.y = ls.y;
@@ -272,7 +272,7 @@ wxRadioBox::~wxRadioBox()
 void wxRadioBox::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
     wxWindow::DoSetSize( x, y, width, height, sizeFlags );
-    
+
     LayoutItems();
 }
 
@@ -305,7 +305,7 @@ wxSize wxRadioBox::LayoutItems()
         num_of_cols = num_per_major;
         num_of_rows = m_majorDim;
     }
-	
+
     if ( HasFlag(wxRA_SPECIFY_COLS) ||
          (HasFlag(wxRA_SPECIFY_ROWS) && (num_of_cols > 1)) )
     {
@@ -318,13 +318,13 @@ wxSize wxRadioBox::LayoutItems()
             for (int i1 = 0; i1< num_of_rows; i1++)
             {
                 GtkWidget *button = GTK_WIDGET( node->Data() );
-		
+
                 GtkRequisition req;
                 req.width = 2;
                 req.height = 2;
                 (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(button) )->size_request )
                       (button, &req );
-		
+
                 if (req.width > max_len) max_len = req.width;
 
                 gtk_pizza_move( GTK_PIZZA(m_parent->m_wxwindow), button, m_x+x, m_y+y );
@@ -470,9 +470,9 @@ void wxRadioBox::SetSelection( int n )
     GtkToggleButton *button = GTK_TOGGLE_BUTTON( node->Data() );
 
     GtkDisableEvents();
-    
+
     gtk_toggle_button_set_active( button, 1 );
-    
+
     GtkEnableEvents();
 }
 
@@ -526,7 +526,7 @@ void wxRadioBox::SetLabel( const wxString& label )
     gtk_frame_set_label( GTK_FRAME(m_widget), wxControl::GetLabel().mbc_str() );
 }
 
-void wxRadioBox::SetLabel( int item, const wxString& label )
+void wxRadioBox::SetString( int item, const wxString& label )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid radiobox") );
 
@@ -538,11 +538,6 @@ void wxRadioBox::SetLabel( int item, const wxString& label )
     GtkLabel *g_label = GTK_LABEL( button->child );
 
     gtk_label_set( g_label, label.mbc_str() );
-}
-
-void wxRadioBox::SetLabel( int WXUNUSED(item), wxBitmap *WXUNUSED(bitmap) )
-{
-    wxFAIL_MSG(wxT("wxRadioBox::SetLabel not implemented."));
 }
 
 bool wxRadioBox::Enable( bool enable )
@@ -624,7 +619,7 @@ bool wxRadioBox::SetStringSelection( const wxString &s )
     return TRUE;
 }
 
-int wxRadioBox::Number() const
+int wxRadioBox::GetCount() const
 {
     return m_boxes.Number();
 }
@@ -647,7 +642,7 @@ void wxRadioBox::GtkDisableEvents()
         gtk_signal_disconnect_by_func( GTK_OBJECT(node->Data()),
            GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
 
-	node = node->Next();
+        node = node->Next();
     }
 }
 
@@ -659,7 +654,7 @@ void wxRadioBox::GtkEnableEvents()
         gtk_signal_connect( GTK_OBJECT(node->Data()), "clicked",
            GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
 
-	node = node->Next();
+        node = node->Next();
     }
 }
 
