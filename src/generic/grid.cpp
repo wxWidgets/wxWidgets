@@ -3479,7 +3479,7 @@ END_EVENT_TABLE()
 wxGridRowLabelWindow::wxGridRowLabelWindow( wxGrid *parent,
                                             wxWindowID id,
                                             const wxPoint &pos, const wxSize &size )
-  : wxWindow( parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE )
+  : wxWindow( parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE|wxFULL_REPAINT_ON_RESIZE )
 {
     m_owner = parent;
 }
@@ -3545,7 +3545,7 @@ END_EVENT_TABLE()
 wxGridColLabelWindow::wxGridColLabelWindow( wxGrid *parent,
                                             wxWindowID id,
                                             const wxPoint &pos, const wxSize &size )
-  : wxWindow( parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE )
+  : wxWindow( parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE|wxFULL_REPAINT_ON_RESIZE )
 {
     m_owner = parent;
 }
@@ -3610,7 +3610,7 @@ END_EVENT_TABLE()
 wxGridCornerLabelWindow::wxGridCornerLabelWindow( wxGrid *parent,
                                                   wxWindowID id,
                                                   const wxPoint &pos, const wxSize &size )
-  : wxWindow( parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE )
+  : wxWindow( parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE|wxFULL_REPAINT_ON_RESIZE )
 {
     m_owner = parent;
 }
@@ -3682,7 +3682,7 @@ wxGridWindow::wxGridWindow( wxGrid *parent,
                             wxWindowID id,
                             const wxPoint &pos,
                             const wxSize &size )
-            : wxWindow( parent, id, pos, size, wxWANTS_CHARS | wxBORDER_NONE | wxCLIP_CHILDREN,
+            : wxWindow( parent, id, pos, size, wxWANTS_CHARS | wxBORDER_NONE | wxCLIP_CHILDREN|wxFULL_REPAINT_ON_RESIZE,
                         wxT("grid window") )
 
 {

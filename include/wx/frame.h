@@ -89,7 +89,7 @@ public:
 #if wxUSE_STATUSBAR
     // create the main status bar by calling OnCreateStatusBar()
     virtual wxStatusBar* CreateStatusBar(int number = 1,
-                                         long style = wxST_SIZEGRIP,
+                                         long style = wxST_SIZEGRIP|wxFULL_REPAINT_ON_RESIZE,
                                          wxWindowID winid = 0,
                                          const wxString& name =
                                             wxStatusLineNameStr);

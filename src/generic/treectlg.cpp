@@ -674,6 +674,7 @@ BEGIN_EVENT_TABLE(wxGenericTreeCtrl,wxScrolledWindow)
     EVT_CHAR           (wxGenericTreeCtrl::OnChar)
     EVT_SET_FOCUS      (wxGenericTreeCtrl::OnSetFocus)
     EVT_KILL_FOCUS     (wxGenericTreeCtrl::OnKillFocus)
+    EVT_TREE_ITEM_GETTOOLTIP(-1, wxGenericTreeCtrl::OnGetToolTip)
 END_EVENT_TABLE()
 
 #if !defined(__WXMSW__) || defined(__WIN16__) || defined(__WXUNIVERSAL__)
@@ -2882,7 +2883,10 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
     
     // Is the mouse over a tree item button?
     int flags = 0;
-    wxGenericTreeItem *underMouse = m_anchor->HitTest(pt, this, flags, 0);
+    wxGenericTreeItem *thisItem = m_anchor->HitTest(pt, this, flags, 0);
+    wxGenericTreeItem *underMouse = thisItem;
+    bool underMouseChanged = (underMouse != m_underMouse) ;
+
     if ((underMouse) &&
         (flags & wxTREE_HITTEST_ONITEMBUTTON) &&
         (!event.LeftIsDown()) &&
@@ -2912,10 +2916,10 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
 
 #if wxUSE_TOOLTIPS
     // Determines what item we are hovering over and need a tooltip for
-    wxTreeItemId hoverItem = HitTest(ScreenToClient(wxGetMousePosition()));
+    wxTreeItemId hoverItem = thisItem;
 
     // We do not want a tooltip if we are dragging, or if the rename timer is running
-    if (hoverItem.IsOk() && !m_isDragging  && (!m_renameTimer || !m_renameTimer->IsRunning()))
+    if (underMouseChanged && hoverItem.IsOk() && !m_isDragging && (!m_renameTimer || !m_renameTimer->IsRunning()))
     {
         // Ask the tree control what tooltip (if any) should be shown
         wxTreeEvent hevent(wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP, GetId());
@@ -3363,6 +3367,13 @@ bool wxGenericTreeCtrl::SetForegroundColour(const wxColour& colour)
     Refresh();
 
     return TRUE;
+}
+
+// Process the tooltip event, to speed up event processing.
+// Doesn't actually get a tooltip.
+void wxGenericTreeCtrl::OnGetToolTip( wxTreeEvent &event )
+{
+    event.Veto();
 }
 
 #endif // wxUSE_TREECTRL

@@ -384,6 +384,7 @@ public:
     void OnKillFocus( wxFocusEvent &event );
     void OnChar( wxKeyEvent &event );
     void OnMouse( wxMouseEvent &event );
+    void OnGetToolTip( wxTreeEvent &event );
     void OnInternalIdle( );
 
     // implementation helpers

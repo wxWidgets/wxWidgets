@@ -31,7 +31,7 @@ public:
               wxWindowID winid,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
-              long style = 0,
+              long style = wxFULL_REPAINT_ON_RESIZE,
               const wxString& name = wxPanelNameStr)
   {
       Init();
@@ -53,7 +53,7 @@ public:
   bool Create(wxWindow *parent, wxWindowID winid,
               const wxPoint& WXUNUSED(pos) = wxDefaultPosition,
               const wxSize& WXUNUSED(size) = wxDefaultSize,
-              long style = 0,
+              long style = wxFULL_REPAINT_ON_RESIZE,
               const wxString& name = wxPanelNameStr)
   {
       return Create(parent, winid, style, name);
