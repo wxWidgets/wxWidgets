@@ -36,20 +36,20 @@ rem 4nt.exe, so I preferred to unroll it.
 rem for %%c in (b32 bcc dos g95 sc vc wat) %TM% -t %c% wxwin.pro -o %WXDIR%\src\msw\makefile.%c%
 
 echo Generating for Visual C++ 4.0...
-E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t vc wxwin.pro -o makefile.vc
+E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t vc wxwin.pro -o %WXDIR%\src\msw\makefile.vc
 echo Generating for Borland C++ (32 bits)...
-E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t b32 wxwin.pro -o makefile.b32
+E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t b32 wxwin.pro -o %WXDIR%\src\msw\makefile.b32
 echo Generating for Visual C++ 1.52...
-E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t dos wxwin.pro -o makefile.dos
+E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t dos wxwin.pro -o %WXDIR%\src\msw\makefile.dos
 echo Generating for Borland C++ (16 bits)...
-E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t bcc wxwin.pro -o makefile.bcc
+E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t bcc wxwin.pro -o %WXDIR%\src\msw\makefile.bcc
 echo Generating for Cygwin/Mingw32
-E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t g95 wxwin.pro -o makefile.g95
+E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t g95 wxwin.pro -o %WXDIR%\src\msw\makefile.g95
 echo Generating for Symantec C++...
-E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t sc wxwin.pro -o makefile.sc
+E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t sc wxwin.pro -o %WXDIR%\src\msw\makefile.sc
 echo Generating for Watcom C++...
-E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t wat wxwin.pro -o makefile.wat
+E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t wat wxwin.pro -o %WXDIR%\src\msw\makefile.wat
 echo Generating for Unix and Configure...
-E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t unx wxwin.pro -o makefile.unx.in
+E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake -t unx wxwin.pro -o %WXDIR%\Makefile.in
 
 :end
