@@ -340,7 +340,7 @@ private:
     friend class wxUxThemeModule;
 #endif // wxUSE_UXTHEME
 
-    DECLARE_NO_COPY_CLASS(wxUxThemeEngine);
+    DECLARE_NO_COPY_CLASS(wxUxThemeEngine)
 };
 
 #if !wxUSE_UXTHEME
