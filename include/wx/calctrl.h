@@ -23,7 +23,7 @@
 
 #if wxUSE_CALENDARCTRL
 
-#include "wx/datetime.h"
+#include "wx/dateevt.h"
 #include "wx/colour.h"
 #include "wx/font.h"
 
@@ -161,23 +161,23 @@ private:
 
 class WXDLLIMPEXP_ADV wxCalendarCtrl;
 
-class WXDLLIMPEXP_ADV wxCalendarEvent : public wxCommandEvent
+class WXDLLIMPEXP_ADV wxCalendarEvent : public wxDateEvent
 {
 friend class wxCalendarCtrl;
 public:
     wxCalendarEvent() { Init(); }
     wxCalendarEvent(wxCalendarCtrl *cal, wxEventType type);
 
-    const wxDateTime& GetDate() const { return m_date; }
-    void SetDate(const wxDateTime &date) { m_date = date; }
     void SetWeekDay(const wxDateTime::WeekDay wd) { m_wday = wd; }
     wxDateTime::WeekDay GetWeekDay() const { return m_wday; }
 
 protected:
-    void Init();
+    void Init()
+    {
+        m_wday = wxDateTime::Inv_WeekDay;
+    }
 
 private:
-    wxDateTime m_date;
     wxDateTime::WeekDay m_wday;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxCalendarEvent)
@@ -189,6 +189,14 @@ private:
 
 // so far we only have a generic version, so keep it simple
 #include "wx/generic/calctrl.h"
+
+
+// now we can define the inline ctor using wxCalendarCtrl
+inline
+wxCalendarEvent::wxCalendarEvent(wxCalendarCtrl *cal, wxEventType type)
+               : wxDateEvent(cal, cal->GetDate(), type)
+{
+}
 
 // ----------------------------------------------------------------------------
 // calendar event types and macros for handling them

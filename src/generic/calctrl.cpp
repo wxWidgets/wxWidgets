@@ -42,6 +42,7 @@
 
 #include "wx/spinctrl.h"
 
+#define _WX_DEFINE_DATE_EVENTS_
 #include "wx/calctrl.h"
 
 #define DEBUG_PAINT 0
@@ -162,7 +163,7 @@ wxCONSTRUCTOR_6( wxCalendarCtrl , wxWindow* , Parent , wxWindowID , Id , wxDateT
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxCalendarCtrl, wxControl)
 #endif
-IMPLEMENT_DYNAMIC_CLASS(wxCalendarEvent, wxCommandEvent)
+IMPLEMENT_DYNAMIC_CLASS(wxCalendarEvent, wxDateEvent)
 
 // ----------------------------------------------------------------------------
 // events
@@ -1818,23 +1819,6 @@ wxCalendarCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
 {
     // Use the same color scheme as wxListBox
     return wxListBox::GetClassDefaultAttributes(variant);
-}
-
-
-// ----------------------------------------------------------------------------
-// wxCalendarEvent
-// ----------------------------------------------------------------------------
-
-void wxCalendarEvent::Init()
-{
-    m_wday = wxDateTime::Inv_WeekDay;
-}
-
-wxCalendarEvent::wxCalendarEvent(wxCalendarCtrl *cal, wxEventType type)
-               : wxCommandEvent(type, cal->GetId())
-{
-    m_date = cal->GetDate();
-    SetEventObject(cal);
 }
 
 #endif // wxUSE_CALENDARCTRL

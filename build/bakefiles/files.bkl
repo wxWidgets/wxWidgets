@@ -2256,6 +2256,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_CMN_HDR" hints="files">
     wx/calctrl.h
+    wx/dateevt.h
+    wx/datectrl.h
     wx/dcbuffer.h
     wx/generic/calctrl.h
     wx/generic/grid.h
@@ -2280,10 +2282,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_MSW_SRC" hints="files">
     src/common/taskbarcmn.cpp
+    src/msw/datectrl.cpp
     src/msw/sound.cpp
     src/msw/taskbar.cpp
 </set>
 <set var="ADVANCED_MSW_HDR" hints="files">
+    wx/msw/datectrl.h
     wx/msw/sound.h
     wx/msw/taskbar.h
 </set>

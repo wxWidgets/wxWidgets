@@ -36,6 +36,7 @@ All:
 
 All (GUI):
 
+- added wxDatePickerCtrl
 - wxSplitterWindow now supports gravity parameter (Zbigniew Zagórski)
 - recursive wxSizer::GetItem returns item of given window, sizer or nth index
 - wxLayoutConstraints now use best size, not current size, for AsIs() condition
