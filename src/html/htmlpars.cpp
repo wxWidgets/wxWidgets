@@ -872,7 +872,7 @@ bool wxMetaTagHandler::HandleTag(const wxHtmlTag& tag)
     }
 
     if (tag.HasParam(_T("HTTP-EQUIV")) &&
-        tag.GetParam(_T("HTTP-EQUIV")) == _T("Content-Type") &&
+        tag.GetParam(_T("HTTP-EQUIV")).IsSameAs(_T("Content-Type"), FALSE) &&
         tag.HasParam(_T("CONTENT")))
     {
         wxString content = tag.GetParam(_T("CONTENT"));
