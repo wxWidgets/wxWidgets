@@ -85,6 +85,11 @@
 #   pragma suppress 571             // Virtual function hiding
 #endif // __SALFORDC__
 
+// suppress some Borland C++ warnings
+#ifdef __BORLANDC__
+#   pragma warn -inl                // Functions containing reserved words and certain constructs are not expanded inline
+#endif // __BORLANDC__
+
 // ----------------------------------------------------------------------------
 // wxWindows version and compatibility defines
 // ----------------------------------------------------------------------------
@@ -160,7 +165,7 @@
     #elif defined(__WATCOMC__) && (__WATCOMC__ >= 1100)
         // Watcom 11+ supports bool
         #define HAVE_BOOL
-    #elif defined(__DIGITALMARS__) 
+    #elif defined(__DIGITALMARS__)
         // DigitalMars supports bool
         #define HAVE_BOOL
     #elif defined(__GNUWIN32__) || defined(__MINGW32__) || defined(__CYGWIN__)
@@ -291,7 +296,7 @@ typedef int wxWindowID;
         #define HAVE_STD_STRING_COMPARE
     #elif ( defined(__MINGW32__) || defined(__CYGWIN32__) ) \
           && wxCHECK_GCC_VERSION(3, 1)
-        // GCC 3.1 has std::string::compare; 
+        // GCC 3.1 has std::string::compare;
         // 3.0 never was in MinGW, 2.95 hasn't it
         #define HAVE_STD_STRING_COMPARE
     #endif
