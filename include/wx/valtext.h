@@ -20,6 +20,7 @@
 
 #if wxUSE_VALIDATORS
 
+#include "wx/textctrl.h"
 #include "wx/validate.h"
 
 #define wxFILTER_NONE           0x0000
