@@ -15,16 +15,18 @@
 #define _WX_PRIVATE_H_
 
 #include "wx/defs.h"
-#include "wx/window.h"
 
 #if defined(__POWERPC__) && defined(__DARWIN__)
-        #include <Carbon/Carbon.h>
+#    include <Carbon/Carbon.h>
+#    define TARGET_CARBON 1
 #else
-    #include "MacHeaders.c"
+#    include "MacHeaders.c"
 #endif
 #if UNIVERSAL_INTERFACES_VERSION < 0x0340
     #error "please update to Apple's lastest universal headers from http://developer.apple.com/sdk/"
 #endif
+
+#include "wx/window.h"
 
 class wxMacPortStateHelper 
 {
