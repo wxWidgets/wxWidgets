@@ -444,7 +444,6 @@ void MakeProgram(char Title[], char Program[], char Icon[], char dest[], char id
 		strcat(startpath, ".lnk");
 
 		CoInitialize(NULL);
-        mesg("CreateLink(\"%s\",\"%s\",\"%s\"", Program, startpath, Title);
 		CreateLink(Program, startpath, Title);
 		CoUninitialize();
 	}
