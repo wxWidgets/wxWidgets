@@ -87,8 +87,9 @@ methodOverrideMap = {
                        '''wxString %s(int startPos, int endPos) {
                           wxString text;
                           int len = endPos - startPos;
+                          if (!len) return "";
                           TextRange tr;
-                          tr.lpstrText = text.GetWriteBuf(len*2+1);
+                          tr.lpstrText = text.GetWriteBuf(len*2);
                           tr.chrg.cpMin = startPos;
                           tr.chrg.cpMax = endPos;
                           SendMsg(%s, 0, (long)&tr);
@@ -112,10 +113,11 @@ methodOverrideMap = {
                     '''wxString %s(int* linePos) {
                        wxString text;
                        int len = LineLength(GetCurrentLine());
+                       if (!len) return "";
                        char* buf = text.GetWriteBuf(len);
 
                        int pos = SendMsg(%s, len, (long)buf);
-                       text.UngetWriteBuf();
+                       text.UngetWriteBuf(len);
                        if (linePos)  *linePos = pos;
 
                        return text;''',
@@ -280,10 +282,11 @@ methodOverrideMap = {
                     '''wxString %s(int line) {
                        wxString text;
                        int len = LineLength(line);
+                       if (!len) return "";
                        char* buf = text.GetWriteBuf(len);
 
                        int pos = SendMsg(%s, line, (long)buf);
-                       text.UngetWriteBuf();
+                       text.UngetWriteBuf(len);
 
                        return text;''',
 
@@ -300,10 +303,11 @@ methodOverrideMap = {
 
                             GetSelection(&start, &end);
                             int   len  = end - start;
-                            char* buff = text.GetWriteBuf(len+1);
+                            if (!len) return "";
+                            char* buff = text.GetWriteBuf(len);
 
                             SendMsg(%s, 0, (long)buff);
-                            text.UngetWriteBuf();
+                            text.UngetWriteBuf(len);
                             return text;''',
 
                     ('Retrieve the selected text.',)),
@@ -314,14 +318,15 @@ methodOverrideMap = {
                       '''wxString %s(int startPos, int endPos) {
                             wxString text;
                             int   len  = endPos - startPos;
-                            char* buff = text.GetWriteBuf(len+1);
+                            if (!len) return "";
+                            char* buff = text.GetWriteBuf(len);
                             TextRange tr;
                             tr.lpstrText = buff;
                             tr.chrg.cpMin = startPos;
                             tr.chrg.cpMax = endPos;
 
                             SendMsg(%s, 0, (long)&tr);
-                            text.UngetWriteBuf();
+                            text.UngetWriteBuf(len);
                             return text;''',
 
                        ('Retrieve a range of text.',)),
@@ -339,11 +344,10 @@ methodOverrideMap = {
                  '''wxString %s() {
                         wxString text;
                         int   len  = GetTextLength()+1;
-                        char* buff = text.GetWriteBuf(len+1);
+                        char* buff = text.GetWriteBuf(len);
 
                         SendMsg(%s, len, (long)buff);
-                        buff[len] = 0;
-                        text.UngetWriteBuf();
+                        text.UngetWriteBuf(len-1);
                         return text;''',
 
                  ('Retrieve all the text in the document.', )),

@@ -253,8 +253,9 @@ void wxStyledTextCtrl::SetSavePoint() {
 wxString wxStyledTextCtrl::GetStyledText(int startPos, int endPos) {
                           wxString text;
                           int len = endPos - startPos;
+                          if (!len) return "";
                           TextRange tr;
-                          tr.lpstrText = text.GetWriteBuf(len*2+1);
+                          tr.lpstrText = text.GetWriteBuf(len*2);
                           tr.chrg.cpMin = startPos;
                           tr.chrg.cpMax = endPos;
                           SendMsg(2015, 0, (long)&tr);
@@ -319,10 +320,11 @@ void wxStyledTextCtrl::SetAnchor(int posAnchor) {
 wxString wxStyledTextCtrl::GetCurLine(int* linePos) {
                        wxString text;
                        int len = LineLength(GetCurrentLine());
+                       if (!len) return "";
                        char* buf = text.GetWriteBuf(len);
 
                        int pos = SendMsg(2027, len, (long)buf);
-                       text.UngetWriteBuf();
+                       text.UngetWriteBuf(len);
                        if (linePos)  *linePos = pos;
 
                        return text;
@@ -921,10 +923,11 @@ int wxStyledTextCtrl::GetFirstVisibleLine() {
 wxString wxStyledTextCtrl::GetLine(int line) {
                        wxString text;
                        int len = LineLength(line);
+                       if (!len) return "";
                        char* buf = text.GetWriteBuf(len);
 
                        int pos = SendMsg(2153, line, (long)buf);
-                       text.UngetWriteBuf();
+                       text.UngetWriteBuf(len);
 
                        return text;
 }
@@ -972,10 +975,11 @@ wxString wxStyledTextCtrl::GetSelectedText() {
 
                             GetSelection(&start, &end);
                             int   len  = end - start;
-                            char* buff = text.GetWriteBuf(len+1);
+                            if (!len) return "";
+                            char* buff = text.GetWriteBuf(len);
 
                             SendMsg(2161, 0, (long)buff);
-                            text.UngetWriteBuf();
+                            text.UngetWriteBuf(len);
                             return text;
 }
 
@@ -983,14 +987,15 @@ wxString wxStyledTextCtrl::GetSelectedText() {
 wxString wxStyledTextCtrl::GetTextRange(int startPos, int endPos) {
                             wxString text;
                             int   len  = endPos - startPos;
-                            char* buff = text.GetWriteBuf(len+1);
+                            if (!len) return "";
+                            char* buff = text.GetWriteBuf(len);
                             TextRange tr;
                             tr.lpstrText = buff;
                             tr.chrg.cpMin = startPos;
                             tr.chrg.cpMax = endPos;
 
                             SendMsg(2162, 0, (long)&tr);
-                            text.UngetWriteBuf();
+                            text.UngetWriteBuf(len);
                             return text;
 }
 
@@ -1078,11 +1083,10 @@ void wxStyledTextCtrl::SetText(const wxString& text) {
 wxString wxStyledTextCtrl::GetText() {
                         wxString text;
                         int   len  = GetTextLength()+1;
-                        char* buff = text.GetWriteBuf(len+1);
+                        char* buff = text.GetWriteBuf(len);
 
                         SendMsg(2182, len, (long)buff);
-                        buff[len] = 0;
-                        text.UngetWriteBuf();
+                        text.UngetWriteBuf(len-1);
                         return text;
 }
 
