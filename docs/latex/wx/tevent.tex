@@ -26,47 +26,61 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 END_EVENT_TABLE()
 \end{verbatim}
 
-The first two entries map menu commands to two different member functions. The EVT\_SIZE macro
-doesn't need a window identifier, since normally you are only interested in the
-current window's size events. (In fact you could intercept a particular window's size event
-by using EVT\_CUSTOM(wxEVT\_SIZE, id, func).)
+The first two entries map menu commands to two different member functions. The
+EVT\_SIZE macro doesn't need a window identifier, since normally you are only
+interested in the current window's size events.
 
-The EVT\_BUTTON macro demonstrates that the originating event does not have to come from
-the window class implementing the event table - if the event source is a button within a panel within a frame, this will still
-work, because event tables are searched up through the hierarchy of windows. In this
-case, the button's event table will be searched, then the parent panel's, then the frame's.
+The EVT\_BUTTON macro demonstrates that the originating event does not have to
+come from the window class implementing the event table -- if the event source
+is a button within a panel within a frame, this will still work, because event
+tables are searched up through the hierarchy of windows for the command events.
+In this case, the button's event table will be searched, then the parent
+panel's, then the frame's.
 
-As mentioned before, the member functions that handle events do not have to be virtual.
-Indeed, the member functions should not be virtual as the event handler ignores that
-the functions are virtual, i.e. overriding a virtual member function in a derived class
-will not have any effect.
-These member functions take an event argument, and the class of event differs according
-to the type of event and the class of the originating window. For size
-events, \helpref{wxSizeEvent}{wxsizeevent} is used. For menu commands and most control
-commands (such as button presses), \helpref{wxCommandEvent}{wxcommandevent} is used.
-When controls get more complicated, then specific event classes are used, such
-as \helpref{wxTreeEvent}{wxtreeevent} for events from \helpref{wxTreeCtrl}{wxtreectrl} windows.
+As mentioned before, the member functions that handle events do not have to be
+virtual. Indeed, the member functions should not be virtual as the event
+handler ignores that the functions are virtual, i.e. overriding a virtual
+member function in a derived class will not have any effect. These member
+functions take an event argument, and the class of event differs according to
+the type of event and the class of the originating window. For size events, 
+\helpref{wxSizeEvent}{wxsizeevent} is used. For menu commands and most
+control commands (such as button presses), 
+\helpref{wxCommandEvent}{wxcommandevent} is used. When controls get more
+complicated, then specific event classes are used, such as 
+\helpref{wxTreeEvent}{wxtreeevent} for events from 
+\helpref{wxTreeCtrl}{wxtreectrl} windows.
 
-As well as the event table in the implementation file, there must be a DECLARE\_EVENT\_TABLE
-macro in the class definition. For example:
+As well as the event table in the implementation file, there must also be a
+DECLARE\_EVENT\_TABLE macro somewhere in the class declaration. For example:
 
 {\small%
 \begin{verbatim}
-class MyFrame: public wxFrame {
-
-  DECLARE_DYNAMIC_CLASS(MyFrame)
-
+class MyFrame : public wxFrame
+{
 public:
   ...
   void OnExit(wxCommandEvent& event);
   void OnSize(wxSizeEvent& event);
+
 protected:
   int       m_count;
   ...
+
   DECLARE_EVENT_TABLE()
 };
 \end{verbatim}
 }%
+
+Note that this macro may occur in any section of the class (public, protected
+or private) but that it is probably better to insert it at the end, as shown,
+because this macro implicitly changes the access to protected which may be
+quite unexpected if there is anything following it.
+
+Finally, if you don't like using macros for static initialization of the event
+tables you may also use \helpref{wxEvtHandler::Connect}{wxevthandlerconnect} to
+connect the events to the handlers dynamically, during run-time. See the
+\helpref{event sample}{sampleevent} for an example of doing it.
+
 
 \subsection{How events are processed}\label{eventprocessing}
 
@@ -249,22 +263,31 @@ range of events independently from the other handlers.
 
 \subsection{Window identifiers}\label{windowids}
 
-\index{identifiers}\index{wxID}Window identifiers are integers, and are used to uniquely determine window identity in the
-event system (though you can use it for other purposes). In fact, identifiers do not need
-to be unique across your entire application just so long as they are unique within a particular context you're interested
-in, such as a frame and its children. You may use the wxID\_OK identifier, for example, on
-any number of dialogs so long as you don't have several within the same dialog.
+\index{identifiers}\index{wxID}Window identifiers are integers, and are used to
+uniquely determine window identity in the event system (though you can use it
+for other purposes). In fact, identifiers do not need to be unique
+across your entire application just so long as they are unique within a
+particular context you're interested in, such as a frame and its children. You
+may use the {\tt wxID\_OK} identifier, for example, on any number of dialogs so
+long as you don't have several within the same dialog.
 
-If you pass -1 to a window constructor, an identifier will be generated for you, but beware:
-if things don't respond in the way they should, it could be because of an id conflict. It is safer
-to supply window ids at all times. Automatic generation of identifiers starts at 1 so may well conflict
-with your own identifiers.
+If you pass {\tt wxID\_ANY} to a window constructor, an identifier will be
+generated for you automatically by wxWindows. This is useful when you don't
+care about the exact identifier either because you're not going to process the
+events from the control being created at all or because you process the events
+from all controls in one place (in which case you should specify {\tt wxID\_ANY} 
+in the event table or \helpref{wxEvtHandler::Connect}{wxevthandlerconnect} call
+as well. The automatically generated identifiers are always negative and so
+will never conflict with the user-specified identifiers which must be always
+positive.
 
-The following standard identifiers are supplied. You can use wxID\_HIGHEST to determine the
-number above which it is safe to define your own identifiers. Or, you can use identifiers below
-wxID\_LOWEST.
+The following standard identifiers are supplied. You can use wxID\_HIGHEST to
+determine the number above which it is safe to define your own identifiers. Or,
+you can use identifiers below wxID\_LOWEST.
 
 \begin{verbatim}
+#define wxID_ANY                -1
+
 #define wxID_LOWEST             4999
 
 #define wxID_OPEN               5000
