@@ -2731,7 +2731,7 @@ msgstr "Nachrichtenkatalog für Sprachbereich '%s' nicht gefunden."
 
 #: ../src/common/utilscmn.cpp:464
 msgid "ctrl"
-msgstr "Ctrl"
+msgstr "ctrl"
 
 #: ../src/common/cmdline.cpp:912
 msgid "date"
