@@ -489,6 +489,11 @@ bool wxDbTable::bindParams(bool forUpdate)
                 if (colDefs[i].Null)
                     colDefs[i].CbValue = SQL_NULL_DATA;
                 else
+                    if (colDefs[i].SqlCtype == SQL_C_BINARY)
+                        colDefs[i].CbValue = 0;
+                    else if (colDefs[i].SqlCtype == SQL_C_CHAR)
+                        colDefs[i].CbValue = SQL_LEN_DATA_AT_EXEC(0);
+                    else
                     colDefs[i].CbValue = SQL_LEN_DATA_AT_EXEC(colDefs[i].SzDataObj);
                 break;
         }
