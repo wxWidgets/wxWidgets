@@ -395,6 +395,10 @@ class Shape(ShapeEvtHandler):
         else:
             self._shadowMode = mode
 
+    def GetShadowMode(self):
+        """Return the current shadow mode setting"""
+        return self._shadowMode
+
     def SetCanvas(self, theCanvas):
         """Identical to Shape.Attach."""
         self._canvas = theCanvas
@@ -644,7 +648,7 @@ class Shape(ShapeEvtHandler):
         """Get the colour for the specified text region."""
         if regionId >= len(self._regions):
             return ""
-        return self._regions[regionId].GetTextColour()
+        return self._regions[regionId].GetColour()
 
     def SetRegionName(self, name, regionId = 0):
         """Set the name for this region.

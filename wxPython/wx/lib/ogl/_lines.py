@@ -1375,7 +1375,7 @@ class LineShape(Shape):
         """
         for arrow in self._arcArrows:
             if (position == -1 or position == arrow.GetArrowEnd()) and arrow.GetName() == name:
-                return arow
+                return arrow
 
         return None
 
