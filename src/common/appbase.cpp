@@ -62,6 +62,12 @@
     #endif
 #endif // __WXMAC__
 
+#ifdef __WXDEBUG__
+    #ifdef wxUSE_STACKWALKER
+        #include "wx/stackwalk.h"
+    #endif // wxUSE_STACKWALKER
+#endif // __WXDEBUG__
+
 // ----------------------------------------------------------------------------
 // private functions prototypes
 // ----------------------------------------------------------------------------
@@ -715,6 +721,58 @@ void ShowAssertDialog(const wxChar *szFile,
         msg << _T('.');
     }
 
+#if wxUSE_STACKWALKER
+    class StackDump : public wxStackWalker
+    {
+    public:
+        StackDump() { }
+
+        const wxString& GetStackTrace() const { return m_stackTrace; }
+
+    protected:
+        virtual void OnStackFrame(const wxStackFrame& frame)
+        {
+            m_stackTrace << wxString::Format(_T("[%02d] "), frame.GetLevel());
+
+            wxString name = frame.GetName();
+            if ( !name.empty() )
+            {
+                m_stackTrace << wxString::Format(_T("%-40s"), name.c_str());
+            }
+            else
+            {
+                m_stackTrace << wxString::Format
+                                (
+                                    _T("0x%08lx"),
+                                    (unsigned long)frame.GetAddress()
+                                );
+            }
+
+            if ( frame.HasSourceLocation() )
+            {
+                m_stackTrace << _T('\t')
+                             << frame.GetFileName()
+                             << _T(':')
+                             << frame.GetLine();
+            }
+
+            m_stackTrace << _T('\n');
+        }
+
+    private:
+        wxString m_stackTrace;
+    };
+
+    StackDump dump;
+    dump.Walk(5); // don't show OnAssert() call itself
+    const wxString& stackTrace = dump.GetStackTrace();
+    if ( !stackTrace.empty() )
+    {
+        msg << _T("\n\nCall stack:\n")
+            << stackTrace;
+    }
+#endif // wxUSE_STACKWALKER
+
 #if wxUSE_THREADS
     // if we are not in the main thread, output the assert directly and trap
     // since dialogs cannot be displayed
@@ -733,6 +791,7 @@ void ShowAssertDialog(const wxChar *szFile,
         // He-e-e-e-elp!! we're asserting in a child thread
         wxTrap();
     }
+    else
 #endif // wxUSE_THREADS
 
     if ( !s_bNoAsserts )
