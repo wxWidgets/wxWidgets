@@ -75,15 +75,19 @@
 	#include <sqlext.h>
 #endif
 
-#ifdef __UNIX__
-#   ifndef strnicmp 
-#      define strnicmp strncasecmp 
-#   endif 
-#   ifndef stricmp 
-#      define stricmp strcasecmp 
-#   endif 
-#else 
-#   include <io.h> 
+#if wxMAJOR_VERSION == 2
+	#include "utils.h"
+#else
+	#ifdef __UNIX__
+	#   ifndef strnicmp 
+	#      define strnicmp strncasecmp 
+	#   endif 
+	#   ifndef stricmp 
+	#      define stricmp strcasecmp 
+	#   endif 
+	#else 
+	#   include <io.h> 
+	#endif
 #endif
 
 enum		enumDummy		{enumDum1};
