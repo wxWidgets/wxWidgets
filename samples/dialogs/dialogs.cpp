@@ -193,7 +193,7 @@ void MyFrame::ChooseFontGeneric(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
 {
-  wxMessageDialog dialog(NULL, "This is a message box\nA long, long string to test out the message box properly",
+  wxMessageDialog dialog( this, "This is a message box\nA long, long string to test out the message box properly",
       "Message box text", wxYES_NO|wxCANCEL|wxICON_INFORMATION);
 
   dialog.ShowModal();

@@ -261,6 +261,9 @@ bool wxDialog::Create( wxWindow *parent,
     
     m_widget = gtk_window_new( GTK_WINDOW_DIALOG );
     
+    if ((m_parent) && (GTK_IS_WINDOW(m_parent->m_widget)))
+        gtk_window_set_transient_for( GTK_WINDOW(m_widget), GTK_WINDOW(m_parent->m_widget) );
+    
     if (!name.IsEmpty())
         gtk_window_set_wmclass( GTK_WINDOW(m_widget), name.mb_str(), name.mb_str() );
     
