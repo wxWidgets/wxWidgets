@@ -726,21 +726,25 @@ wxMenuItem::~wxMenuItem()
 wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
 {
     wxString label;
-#if (GTK_MINOR_VERSION > 0)
+    
     for ( const wxChar *pc = text.c_str(); *pc; pc++ )
     {
-        if ( *pc == wxT('_') || *pc == wxT('&') )
+        if ( *pc == wxT('_')  )
         {
-            // '_' is the escape character for GTK+ and '&' is the one for
-            // wxWindows - skip both of them
+            // wxGTK escapes "xxx_xxx" to "xxx__xxx"
+            pc++;
+            label += *pc;
+            continue;
+        }
+        
+        if ( *pc == wxT('&') )
+        {
+            // wxMSW escapes &
             continue;
         }
 
         label += *pc;
     }
-#else // GTK+ 1.0
-    label = text;
-#endif // GTK+ 1.2/1.0
 
     return label;
 }
@@ -855,11 +859,21 @@ bool wxMenuItem::IsChecked() const
 
 wxString wxMenuItem::GetFactoryPath() const
 {
-    /* in order to get the pointer to the item we need the item text _without_
-       underscores */
+    /* in order to get the pointer to the item we need the item text
+       _without_ underscores */
     wxString path( wxT("<main>/") );
-    path += GetLabel();
 
+    for ( const wxChar *pc = m_text.c_str(); *pc; pc++ )
+    {
+        if ( *pc == wxT('_') || *pc == wxT('&') )
+        {
+            // remove '_' and '&' unconditionally
+            continue;
+        }
+        
+        path += *pc;
+    }
+    
     return path;
 }
 
