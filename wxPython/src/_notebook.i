@@ -432,4 +432,9 @@ public:
     wxNotebook *GetNotebook();
 };
 
+
+%pythoncode { NotebookSizer = wx._deprecated(NotebookSizer, "NotebookSizer is no longer needed.") }
+%pythoncode { BookCtrlSizer = wx._deprecated(BookCtrlSizer, "BookCtrlSizer is no longer needed.") }
+
+
 //---------------------------------------------------------------------------
