@@ -94,24 +94,30 @@ on the text to convert in the other).
 
 \membersection{wxEncodingConverter::Convert}\label{wxencodingconverterconvert}
 
-\constfunc{void}{Convert}{\param{const char* }{input}, \param{char* }{output}}
+\constfunc{bool}{Convert}{\param{const char* }{input}, \param{char* }{output}}
 
-\constfunc{void}{Convert}{\param{const wchar\_t* }{input}, \param{wchar\_t* }{output}}
+\constfunc{bool}{Convert}{\param{const wchar\_t* }{input}, \param{wchar\_t* }{output}}
 
-\constfunc{void}{Convert}{\param{const char* }{input}, \param{wchar\_t* }{output}}
+\constfunc{bool}{Convert}{\param{const char* }{input}, \param{wchar\_t* }{output}}
 
-\constfunc{void}{Convert}{\param{const wchar\_t* }{input}, \param{char* }{output}}
+\constfunc{bool}{Convert}{\param{const wchar\_t* }{input}, \param{char* }{output}}
 
 Convert input string according to settings passed to
 \helpref{Init}{wxencodingconverterinit} and writes the result to {\it output}.
 
-\constfunc{void}{Convert}{\param{char* }{str}}
+\constfunc{bool}{Convert}{\param{char* }{str}}
 
-\constfunc{void}{Convert}{\param{wchar\_t* }{str}}
+\constfunc{bool}{Convert}{\param{wchar\_t* }{str}}
 
 Convert input string according to settings passed to
 \helpref{Init}{wxencodingconverterinit} in-place, i.e. write the result to the
 same memory area.
+
+All of the versions above return \true if the conversion was lossless and
+\false if at least one of the characters couldn't be converted and was replaced
+with {\tt '?'} in the output. Note that if {\tt wxCONVERT\_SUBSTITUTE} was
+passed to \helpref{Init}{wxencodingconverterinit}, substitution is considered
+lossless operation.
 
 \constfunc{wxString}{Convert}{\param{const wxString\& }{input}}
 
