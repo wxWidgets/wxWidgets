@@ -1727,7 +1727,7 @@ public :
     m_type = from.m_type ;
     m_creator = from.m_creator ;
   }
-  MacDefaultExtensionRecord( char * extension , OSType type , OSType creator )
+  MacDefaultExtensionRecord( const char * extension , OSType type , OSType creator )
   {
     strncpy( m_ext , extension , kMacExtensionMaxLength ) ;
     m_ext[kMacExtensionMaxLength] = 0 ;
