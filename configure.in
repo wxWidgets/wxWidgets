@@ -4313,8 +4313,18 @@ if test "$wxUSE_MSW" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
 
     if test "$ac_cv_header_ole2_h" = "yes" ; then
         if test "$GCC" = yes ; then
+            AC_LANG_SAVE
+            AC_LANG_CPLUSPLUS
+
+            AC_MSG_CHECKING([if g++ requires -fvtable-thunks])
+            AC_TRY_COMPILE([#include <windows.h>
+                            #include <ole2.h>],
+                           [],
+                           [AC_MSG_RESULT(no)],
+                           [AC_MSG_RESULT(yes)
+                            CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fvtable-thunks"])
+            AC_LANG_RESTORE
             ALL_OBJECTS="$ALL_OBJECTS \$(OLEOBJS)"
-            CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fvtable-thunks"
             LIBS=" -lrpcrt4 -loleaut32 -lole32 -luuid$LIBS"
             AC_DEFINE(wxUSE_OLE)
 
