@@ -173,7 +173,7 @@ dnd.app/Contents/PkgInfo: dnd$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.i
 
 data: 
 	@mkdir -p .
-	@for f in wxwin.png dnd.wxr; do \
+	@for f in wxwin.png; do \
 	if test ! -e ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \

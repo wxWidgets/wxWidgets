@@ -11,7 +11,7 @@
     </exe>
 
     <wx-data id="data">
-        <files>wxwin.png dnd.wxr</files>
+        <files>wxwin.png</files>
     </wx-data>
 
 </makefile>

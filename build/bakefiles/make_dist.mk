@@ -488,7 +488,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples/dnd
 	cp $(SAMPDIR)/dnd/Makefile.in $(DISTDIR)/samples/dnd
 	cp $(SAMPDIR)/dnd/makefile.unx $(DISTDIR)/samples/dnd
-	cp $(SAMPDIR)/dnd/*.wxr $(DISTDIR)/samples/dnd
 	cp $(SAMPDIR)/dnd/*.cpp $(DISTDIR)/samples/dnd
 	cp $(SAMPDIR)/dnd/*.xpm $(DISTDIR)/samples/dnd
 	cp $(SAMPDIR)/dnd/*.txt $(DISTDIR)/samples/dnd

@@ -246,7 +246,7 @@ $(OBJS)\dnd.exe :  $(DND_OBJECTS) $(OBJS)\dnd_dnd.res
 
 data : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (wxwin.png dnd.wxr) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (wxwin.png) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\dnd_dnd.obj :  .AUTODEPEND .\dnd.cpp
 	$(CXX) -zq -fo=$^@ $(DND_CXXFLAGS) $<
