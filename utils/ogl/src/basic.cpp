@@ -2002,6 +2002,7 @@ void wxShape::ReadRegions(wxExpr *clause)
 
 void wxShape::Copy(wxShape& copy)
 {
+  copy.m_id = m_id;
   copy.m_xpos = m_xpos;
   copy.m_ypos = m_ypos;
   copy.m_pen = m_pen;

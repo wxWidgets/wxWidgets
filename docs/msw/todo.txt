@@ -45,6 +45,7 @@ Update manual.
     wxString            PARTLY DONE
     Drag and drop (change API if required, e.g. const).
     wxCheckListBox
+    wxAcceleratorTable
     wxBaseArray, other arrays
     (wxOwnerDrawn)
     Document the include file for each class

@@ -186,7 +186,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   {
     "This",
     "is a",
-    "wonderfull",
+    "wonderful",
     "example.",
   };
   

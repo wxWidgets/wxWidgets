@@ -228,7 +228,7 @@ wxDropSource::DragResult wxDropSource::DoDragDrop(bool bAllowMove)
 // Notes   : here we just leave this stuff for default implementation
 bool wxDropSource::GiveFeedback(DragResult effect, bool bScrolling)
 {
-  return false;
+  return FALSE;
 }
 
 #endif  //USE_DRAG_AND_DROP

@@ -1,4 +1,5 @@
 docs/msw/*.txt
+docs/licence.txt
 
 src/makeb32.env
 src/makebcc.env

@@ -68,6 +68,10 @@ class WXDLLEXPORT wxComboBox: public wxChoice
   virtual long GetLastPosition(void) const ;
   virtual void Replace(long from, long to, const wxString& value);
   virtual void Remove(long from, long to);
+  virtual void SetSelection(int n)
+  {
+    wxChoice::SetSelection(n);
+  }
   virtual void SetSelection(long from, long to);
   virtual void SetEditable(bool editable);
 

@@ -11,7 +11,7 @@ This licence is intended to protect wxWindows, its developers,
 and its users, so that the considerable investment it represents
 is not abused.
 
-Unlike the wxWindows licence, you as a user are not obliged to
+Unlike the L-GPL licence, you as a user are not obliged to
 distribute wxWindows source code with your products. However,
 you are prevented from selling the code without permission from
 the authors, or denying others the rights to use or distribute

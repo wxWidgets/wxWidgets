@@ -2,6 +2,19 @@
 wxWindows 2.0 for Windows Change Log
 ------------------------------------
 
+Alpha 14, July 31st 1998
+------------------------
+
+- Toolbar API has been simplified, and now
+  wxFrame::GetClientArea returns the available client
+  area when toolbar, status bar etc. have been accounted for.
+  wxFrame::CreateToolBar added in line with CreateStatusBar.
+- Documentation updates, incl. for wxToolBar.
+- New wxAcceleratorTable class plus wxFrame::SetAcceleratorTable.
+- Various additions from other folk, e.g. streams, wxConfig
+  changes, wxNotebook.
+- Added wxDocMDIParentFrame, wxDocMDIChildFrame for doc/view.
+
 Alpha 13, July 8th 1998
 -----------------------
 
