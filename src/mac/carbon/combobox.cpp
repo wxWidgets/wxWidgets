@@ -68,40 +68,30 @@ public:
 protected:
     void OnChar( wxKeyEvent& event )
     {
+	// Allows processing the tab key to go to the next control
+ 	if (event.GetKeyCode() == WXK_TAB)
+ 	{
+ 		wxNavigationKeyEvent NavEvent;
+ 		NavEvent.SetEventObject(this);
+ 		NavEvent.SetDirection(true);
+ 		NavEvent.SetWindowChange(false);
+ 		
+                // Get the parent of the combo and have it process the navigation?
+ 		if (m_cb->GetParent()->GetEventHandler()->ProcessEvent(NavEvent))
+                    return;
+ 	}
         if ( event.GetKeyCode() == WXK_RETURN )
         {
-            wxString value = GetValue();
+            wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_cb->GetId());
+            event.SetString( GetValue() );
+            event.SetInt( m_cb->GetSelection() );
+            event.SetEventObject( m_cb );
 
-            if ( m_cb->GetCount() == 0 )
+            // This will invoke the dialog default action, such
+            // as the clicking the default button.
+
+            if (!m_cb->GetEventHandler()->ProcessEvent( event ))
             {
-                // make Enter generate "selected" event if there is only one item
-                // in the combobox - without it, it's impossible to select it at
-                // all!
-                wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, m_cb->GetId() );
-                event.SetInt( 0 );
-                event.SetString( value );
-                event.SetEventObject( m_cb );
-                m_cb->GetEventHandler()->ProcessEvent( event );
-            }
-            else
-            {
-                // add the item to the list if it's not there yet
-                if ( m_cb->FindString(value) == wxNOT_FOUND )
-                {
-                    m_cb->Append(value);
-                    m_cb->SetStringSelection(value);
-
-                    // and generate the selected event for it
-                    wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, m_cb->GetId() );
-                    event.SetInt( m_cb->GetCount() - 1 );
-                    event.SetString( value );
-                    event.SetEventObject( m_cb );
-                    m_cb->GetEventHandler()->ProcessEvent( event );
-                }
-
-                // This will invoke the dialog default action, such
-                // as the clicking the default button.
-
                 wxWindow *parent = GetParent();
                 while( parent && !parent->IsTopLevel() && parent->GetDefaultItem() == NULL ) {
                     parent = parent->GetParent() ;
@@ -115,7 +105,6 @@ protected:
                         wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
                         event.SetEventObject(def);
                         def->Command(event);
-                        return ;
                    }
                 }
 
@@ -126,6 +115,18 @@ protected:
         event.Skip();
     }
 
+    // Use the KeyUp as a naive approximation for TEXT_UPDATED, even though it is somewhat delayed
+    // but this is less complicated than dealing with idle-ness, and is much better than nothing
+    void OnKeyUp( wxKeyEvent& event )
+    {
+        if ( event.GetKeyCode() != WXK_RETURN )
+        {
+            wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_cb->GetId());
+            event.SetString( GetValue() );
+            event.SetEventObject( m_cb );
+            m_cb->GetEventHandler()->ProcessEvent(event);            
+        }
+    }
 private:
     wxComboBox *m_cb;
 
@@ -134,6 +135,7 @@ private:
 
 BEGIN_EVENT_TABLE(wxComboBoxText, wxTextCtrl)
     EVT_CHAR( wxComboBoxText::OnChar)
+    EVT_KEY_UP( wxComboBoxText::OnKeyUp)
 END_EVENT_TABLE()
 
 class wxComboBoxChoice : public wxChoice
@@ -167,6 +169,13 @@ protected:
         event2.SetEventObject(m_cb);
         event2.SetString(m_cb->GetStringSelection());
         m_cb->ProcessCommand(event2);
+
+        // For consistency with MSW and GTK, also send a text updated event
+        // After all, the text is updated when a selection is made
+        wxCommandEvent TextEvent( wxEVT_COMMAND_TEXT_UPDATED, m_cb->GetId() );
+        TextEvent.SetString( m_cb->GetStringSelection() );
+        TextEvent.SetEventObject( m_cb );
+        m_cb->ProcessCommand( TextEvent );
     }
     virtual wxSize DoGetBestSize() const
     {
@@ -574,11 +583,12 @@ void wxComboBox::SetString(int n, const wxString& s)
 
 wxInt32 wxComboBox::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
 {
+    /* For consistency with other platforms, clicking in the text area does not constitute a selection
     wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId );
     event.SetInt(GetSelection());
     event.SetEventObject(this);
     event.SetString(GetStringSelection());
     ProcessCommand(event);
-    return noErr ;
+    return noErr ; */
 }
 
