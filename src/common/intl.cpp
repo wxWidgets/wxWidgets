@@ -420,7 +420,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash, bool convertEncoding) cons
     if ( !!charset )
         csConv = new wxCSConv(charset);
 
-    wxMBConv& inputConv = csConv ? *csConv : *wxConvCurrent;
+    wxMBConv& inputConv = csConv ? *((wxMBConv*)csConv) : *wxConvCurrent;
 
     for (size_t i = 0; i < m_numStrings; i++)
     {
@@ -539,8 +539,8 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName,
         file.FillHash(m_messages, bConvertEncoding);
         return TRUE;
     }
-    else
-        return FALSE;
+
+    return FALSE;
 }
 
 const wxChar *wxMsgCatalog::GetString(const wxChar *sz) const
