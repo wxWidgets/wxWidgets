@@ -370,8 +370,8 @@ LboxTestFrame::LboxTestFrame(const wxString& title)
     wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
 
     wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
-    btn = new wxButton(panel, LboxTest_Add, _T("&Add panel string"));
-    m_textAdd = new wxTextCtrl(panel, LboxTest_AddText, _T("test string 0"));
+    btn = new wxButton(panel, LboxTest_Add, _T("&Add this string"));
+    m_textAdd = new wxTextCtrl(panel, LboxTest_AddText, _T("test item 0"));
     sizerRow->Add(btn, 0, wxRIGHT, 5);
     sizerRow->Add(m_textAdd, 1, wxLEFT, 5);
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);

@@ -48,6 +48,8 @@
 IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 
 BEGIN_EVENT_TABLE(wxListBox, wxListBoxBase)
+    EVT_CHAR(wxListBox::OnChar)
+
     EVT_SIZE(wxListBox::OnSize)
 
     EVT_IDLE(wxListBox::OnIdle)
@@ -64,6 +66,7 @@ void wxListBox::Init()
     m_itemsPerPage = 0;
     m_maxWidth = 0;
     m_scrollRangeY = 0;
+    m_maxWidthItem = -1;
 
     // no items hence no current item
     m_current = -1;
@@ -138,6 +141,7 @@ int wxListBox::DoAppend(const wxString& item)
         if ( width > m_maxWidth )
         {
             m_maxWidth = width;
+            m_maxWidthItem = index;
             m_updateScrollbarX = TRUE;
         }
     }
@@ -166,8 +170,7 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
     // the max width also might have changed - just recalculate it instead of
     // keeping track of it here, this is probably more efficient for a typical
     // use pattern
-    m_maxWidth = 0;
-    m_updateScrollbarX = TRUE;
+    RefreshHorzScrollbar();
 
     // note that we have to refresh all the items after the ones we inserted,
     // not just these items
@@ -201,25 +204,21 @@ void wxListBox::SetString(int n, const wxString& s)
     {
         // we need to update m_maxWidth as changing the string may cause the
         // horz scrollbar [dis]appear
-        wxCoord widthOld;
-        GetTextExtent(m_strings[n], &widthOld, NULL);
-        m_strings[n] = s;
-
-        // has the max length changed?
         wxCoord width;
+        m_strings[n] = s;
         GetTextExtent(s, &width, NULL);
 
         // it might have increased if the new string is long
         if ( width > m_maxWidth )
         {
             m_maxWidth = width;
+            m_maxWidthItem = n;
             m_updateScrollbarX = TRUE;
         }
         // or also decreased if the old string was the longest one
-        else if ( (width < m_maxWidth) && (widthOld == m_maxWidth) )
+        else if ( n == m_maxWidthItem )
         {
-            m_maxWidth = 0;
-            m_updateScrollbarX = TRUE;
+            RefreshHorzScrollbar();
         }
     }
     else // no horz scrollbar
@@ -255,6 +254,8 @@ void wxListBox::Clear()
     DoClear();
 
     m_updateScrollbarY = TRUE;
+
+    RefreshHorzScrollbar();
 
     RefreshAll();
 }
@@ -313,6 +314,12 @@ void wxListBox::Delete(int n)
 
     // the number of items has changed, hence the scrollbar may disappear
     m_updateScrollbarY = TRUE;
+
+    // finally, if the longest item was deleted the scrollbar may disappear
+    if ( n == m_maxWidthItem )
+    {
+        RefreshHorzScrollbar();
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -476,6 +483,12 @@ void wxListBox::RefreshItem(int n)
 void wxListBox::RefreshAll()
 {
     m_updateCount = -1;
+}
+
+void wxListBox::RefreshHorzScrollbar()
+{
+    m_maxWidth = 0; // recalculate it
+    m_updateScrollbarX = TRUE;
 }
 
 void wxListBox::UpdateScrollbars()
@@ -681,14 +694,16 @@ wxCoord wxListBox::GetMaxWidth() const
 {
     if ( m_maxWidth == 0 )
     {
+        wxListBox *self = wxConstCast(this, wxListBox);
         wxCoord width;
         size_t count = m_strings.GetCount();
-        for ( size_t n =0; n < count; n++ )
+        for ( size_t n = 0; n < count; n++ )
         {
             GetTextExtent(m_strings[n], &width, NULL);
             if ( width > m_maxWidth )
             {
-                wxConstCast(this, wxListBox)->m_maxWidth = width;
+                self->m_maxWidth = width;
+                self->m_maxWidthItem = n;
             }
         }
     }
@@ -936,6 +951,35 @@ void wxListBox::Activate(int item)
 
         SendEvent(m_current, wxEVT_COMMAND_LISTBOX_DOUBLECLICKED);
     }
+}
+
+// ----------------------------------------------------------------------------
+// built-in keyboard interface (should it be implemented in the inp handler?)
+// ----------------------------------------------------------------------------
+
+void wxListBox::OnChar(wxKeyEvent& event)
+{
+    int keycode = event.GetKeyCode();
+    if ( isalnum(keycode) )
+    {
+        // find the next item after this one which starts with this letter
+        int count = GetCount();
+        int last = m_current == -1 ? count : m_current;
+        for ( int n = m_current + 1; n != last; n++ )
+        {
+            if ( n == count )
+                n = 0;
+
+            wxString str = m_strings[n];
+            if ( !str.empty() && (str[0u] == (wxChar)keycode) )
+            {
+                SetCurrentItem(n);
+                return;
+            }
+        }
+    }
+
+    event.Skip();
 }
 
 // ----------------------------------------------------------------------------

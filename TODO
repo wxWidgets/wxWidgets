@@ -27,8 +27,6 @@ GTK
 
 *   listbox scrolling leaves unpainted areas
 
-+   wxCheckListBox::HitTest doesn't work (clicking the check)
-
 ----------------------------------------------------------------------------
 DONE
 ----------------------------------------------------------------------------
@@ -46,3 +44,4 @@ MSW
 GTK
 
 +   check/radio box remains pressed in win32 mode
++   wxCheckListBox::HitTest doesn't work (clicking the check)

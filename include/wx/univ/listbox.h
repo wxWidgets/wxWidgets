@@ -175,6 +175,7 @@ protected:
     void Init();
 
     // event handlers
+    void OnChar(wxKeyEvent& event);
     void OnIdle(wxIdleEvent& event);
     void OnSize(wxSizeEvent& event);
 
@@ -200,6 +201,9 @@ protected:
     // redraw the items in the given range only: called from DoDraw()
     virtual void DoDrawRange(wxControlRenderer *renderer,
                              int itemFirst, int itemLast);
+
+    // mark horz scrollbar for updating
+    void RefreshHorzScrollbar();
 
     // update (show/hide/adjust) the scrollbars
     void UpdateScrollbars();
@@ -232,8 +236,9 @@ private:
     // the height of one line in the listbox (all lines have the same height)
     wxCoord m_lineHeight;
 
-    // the maximal width of a listbox item
+    // the maximal width of a listbox item and the item which has it
     wxCoord m_maxWidth;
+    int m_maxWidthItem;
 
     // the extents of horz and vert scrollbars
     int m_scrollRangeX,
