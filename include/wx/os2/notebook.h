@@ -57,14 +57,14 @@ public:
     // ---------
     // Get number of pages in the dialog
     //
-    size_t GetPageCount(void) const;
+    virtual size_t GetPageCount(void) const;
 
     //
     // Set the currently selected page, return the index of the previously
     // selected one (or -1 on error)
     // NB: this function will _not_ generate wxEVT_NOTEBOOK_PAGE_xxx events
     //
-           int      SetSelection(int nPage);
+    int      SetSelection(size_t nPage);
 
     //
     // Get the currently selected page
@@ -74,10 +74,10 @@ public:
     //
     // Set/Get the title of a page
     //
-           bool     SetPageText( int             nPage
-                                ,const wxString& sStrText
-                               );
-           wxString GetPageText(int nPage) const;
+    bool     SetPageText( size_t             nPage
+                         ,const wxString& sStrText
+                        );
+    wxString GetPageText(size_t nPage) const;
 
     //
     // Image list stuff: each page may have an image associated with it. All
@@ -92,10 +92,10 @@ public:
     //
     // Sets/returns item's image index in the current image list
     //
-           int      GetPageImage(int nPage) const;
-           bool     SetPageImage( int nPage
-                                 ,int nImage
-                                );
+    int      GetPageImage(size_t nPage) const;
+    bool     SetPageImage( size_t nPage
+                          ,int nImage
+                         );
 
     //
     // Currently it's always 1 because wxGTK doesn't support multi-row
@@ -134,12 +134,12 @@ public:
     //
     // The same as AddPage(), but adds it at the specified position
     //
-           bool     InsertPage( int nPage
-                               ,wxNotebookPage* pPage
-                               ,const wxString& rsStrText
-                               ,bool            bSelect = FALSE
-                               ,int             nImageId = -1
-                              );
+    bool     InsertPage( size_t nPage
+                        ,wxNotebookPage* pPage
+                        ,const wxString& rsStrText
+                        ,bool            bSelect = FALSE
+                        ,int             nImageId = -1
+                       );
 
     //
     // Windows-only at present. Also, you must use the wxNB_FIXEDWIDTH
@@ -184,7 +184,7 @@ protected:
     //
     // Remove one page from the notebook, without deleting
     //
-    virtual wxNotebookPage* DoRemovePage(int nPage);
+    virtual wxNotebookPage* DoRemovePage(size_t nPage);
 
     //
     // Helper functions
@@ -203,4 +203,3 @@ private:
 #endif // wxUSE_NOTEBOOK
 
 #endif // _NOTEBOOK_H
-
