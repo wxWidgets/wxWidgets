@@ -91,7 +91,7 @@ public:
     void SetQuickEditMode(bool mode);
     void SetSnapToGrid(bool snap);
     void ShowAll(bool show);
-    void Snap(double *x, double *y);
+    void Snap(double *OUTPUT, double *OUTPUT);
 
 };
 
@@ -125,10 +125,10 @@ public:
     void AddShape(wxPyShape *shape, wxPyShape *addAfter = NULL);
 
     // ****  Need a typemap for wxClassInfo, or implement wxObject, etc.....
-    wxPyShape* FindShape(double x1, double y, int *attachment,
+    wxPyShape* FindShape(double x1, double y, int *OUTPUT,
                        wxClassInfo *info = NULL, wxPyShape* notImage = NULL);
 
-    wxPyShape * FindFirstSensitiveShape(double x1, double y, int *attachment, int op);
+    wxPyShape * FindFirstSensitiveShape(double x1, double y, int *OUTPUT, int op);
     wxDiagram* GetDiagram();
 
     bool GetQuickEditMode();
@@ -147,7 +147,7 @@ public:
     void Redraw(wxDC& dc);
     void RemoveShape(wxPyShape *shape);
     void SetDiagram(wxDiagram *diagram);
-    void Snap(double *x, double *y);
+    void Snap(double *OUTPUT, double *OUTPUT);
 
 };
 

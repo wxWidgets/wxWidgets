@@ -153,11 +153,9 @@ class wxPyShapeCanvasPtr(wxScrolledWindowPtr):
         return val
     def FindShape(self, *_args, **_kwargs):
         val = apply(oglcanvasc.wxPyShapeCanvas_FindShape,(self,) + _args, _kwargs)
-        if val: val = wxPyShapePtr(val) 
         return val
     def FindFirstSensitiveShape(self, *_args, **_kwargs):
         val = apply(oglcanvasc.wxPyShapeCanvas_FindFirstSensitiveShape,(self,) + _args, _kwargs)
-        if val: val = wxPyShapePtr(val) 
         return val
     def GetDiagram(self, *_args, **_kwargs):
         val = apply(oglcanvasc.wxPyShapeCanvas_GetDiagram,(self,) + _args, _kwargs)
