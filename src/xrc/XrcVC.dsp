@@ -9,17 +9,17 @@ CFG=XrcVC - Win32 Debug
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
 !MESSAGE NMAKE /f "XrcVC.mak".
-!MESSAGE
+!MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
 !MESSAGE NMAKE /f "XrcVC.mak" CFG="XrcVC - Win32 Debug"
-!MESSAGE
+!MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
 !MESSAGE "XrcVC - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "XrcVC - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE
+!MESSAGE 
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
@@ -50,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\lib\wxxrc.lib"
+# ADD LIB32 /nologo /out:"..\..\..\lib\wxxrc.lib"
 
 !ELSEIF  "$(CFG)" == "XrcVC - Win32 Debug"
 
@@ -74,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\lib\wxxrcd.lib"
+# ADD LIB32 /nologo /out:"..\..\..\lib\wxxrcd.lib"
 
 !ENDIF 
 
