@@ -208,7 +208,6 @@ bool wxURL::FetchProtocol()
 
       m_protoinfo = info;
       m_protocol = (wxProtocol *)m_protoinfo->m_cinfo->CreateObject();
-      wxSocketHandler::Master().Register(m_protocol);
       return TRUE;
     }
     info = info->next;
@@ -323,7 +322,7 @@ wxString wxURL::ConvertToValidURI(const wxString& uri)
 
     if (!isalpha(c) && c != _T('.') && c != _T('+') && c != _T('.') && 
                        c != _T('/')) {
-      hexa_code.Printf(_T("%02X"), c);
+      hexa_code.Printf(_T("%%%02X"), c);
       out_str += hexa_code;
     } else
       out_str += c;

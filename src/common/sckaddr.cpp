@@ -22,9 +22,6 @@
 
 #if wxUSE_SOCKETS
 
-#ifndef WX_PRECOMP
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -33,43 +30,10 @@
 #include <memory.h>
 #endif
 
-#include "wx/defs.h"
-#include "wx/object.h"
-
-#if defined(__WXMAC__)
-#include "/wx/mac/macsock.h"
-#endif
-
-#if defined(__WINDOWS__)
-#include <winsock.h>
-#endif // __WINDOWS__
-
-#if defined(__UNIX__)
-#ifdef VMS
-#include <socket.h>
-#include <in.h>
-#else
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#endif
-#include <unistd.h>
-#include <netdb.h>
-
-#ifdef __SUN__
-extern "C"
-{
-   struct hostent *gethostbyname(const char *name); 
-   int gethostname(char *name, int namelen); 
-};
-#endif
-
-#endif // __UNIX__
-
-#include "wx/sckaddr.h"
-
-#define CHECK_ADDRTYPE(var, type)
+#include <wx/defs.h>
+#include <wx/object.h>
+#include <wx/gsocket.h>
+#include <wx/sckaddr.h>
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxSockAddress, wxObject)
@@ -82,343 +46,178 @@ IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
 #endif
 #endif
 
-wxIPV4address::wxIPV4address()
+// ---------------------------------------------------------------------------
+// wxIPV4address
+// ---------------------------------------------------------------------------
+
+wxSockAddress::wxSockAddress()
 {
-  m_addr = new sockaddr_in;
-  Clear();
+  m_address = GAddress_new();
+}
+
+wxSockAddress::~wxSockAddress()
+{
+  GAddress_destroy(m_address);
+}
+
+void wxSockAddress::SetAddress(GAddress *address)
+{
+  GAddress_destroy(m_address);
+  m_address = GAddress_copy(address);
+}
+
+const wxSockAddress& wxSockAddress::operator=(const wxSockAddress& addr)
+{
+  SetAddress(addr.GetAddress());
+  return *this;
+}
+
+void wxSockAddress::CopyObject(wxObject& dest) const
+{
+  wxSockAddress *addr = (wxSockAddress *)&dest;
+
+  wxObject::CopyObject(dest);
+  addr->SetAddress(GetAddress());
+}
+
+void wxSockAddress::Clear()
+{ 
+  GAddress_destroy(m_address);
+  m_address = GAddress_new();
+}
+
+// ---------------------------------------------------------------------------
+// wxIPV4address
+// ---------------------------------------------------------------------------
+
+wxIPV4address::wxIPV4address()
+  : wxSockAddress()
+{
 }
 
 wxIPV4address::~wxIPV4address()
 {
 }
 
-int wxIPV4address::SockAddrLen()
-{
-  return sizeof(*m_addr);
-}
-
-int wxIPV4address::GetFamily()
-{
-  return AF_INET;
-}
-
-void wxIPV4address::Clear()
-{
-  memset(m_addr, 0, sizeof(*m_addr));
-  m_addr->sin_family = AF_INET;
-  m_addr->sin_addr.s_addr = INADDR_ANY;
-}
-
-/*
-const wxSockAddress& wxIPV4address::operator =(const wxSockAddress& addr)
-{
-  wxIPV4address *ip_addr = (wxIPV4address *)&addr;
-  CHECK_ADDRTYPE(addr, wxIPV4address);
-  m_addr = ip_addr->m_addr;
-  return *this;
-}
-*/
-
 bool wxIPV4address::Hostname(const wxString& name)
 {
-  struct hostent *theHostent;
-  struct in_addr *addr;
-  
-  if (name.IsNull())
-    return FALSE;
-  
-  if (!name.IsNumber()) {
-    if ((theHostent = gethostbyname(name.fn_str())) == 0) {
-      return FALSE;
-    }
-  } else {
-#ifdef __WXMAC__
-    long len_addr = inet_addr(name.fn_str()).s_addr ;
-#else
-    long len_addr = inet_addr(name.fn_str());
-#endif
-    if (len_addr == -1)
-      return FALSE;
-    m_addr->sin_addr.s_addr = len_addr;
-    return TRUE;
-  }
-
-  addr = (struct in_addr *) *(theHostent->h_addr_list);
-
-  m_addr->sin_addr.s_addr = addr[0].s_addr;
-  return TRUE;
+  return (GAddress_INET_SetHostName(m_address, name.fn_str()) == GSOCK_NOERROR);
 }
 
 bool wxIPV4address::Hostname(unsigned long addr)
 {
-  m_addr->sin_addr.s_addr = htonl(addr);
-  return TRUE; 
+  /* Need API */
+  return TRUE;
 }
 
 bool wxIPV4address::Service(const wxString& name)
 {
-  struct servent *theServent;
-  
-  if (name.IsNull())
-    return FALSE;
-  
-  if (!name.IsNumber()) {
-    if ((theServent = getservbyname(name.fn_str(), "tcp")) == 0)
-      return FALSE;
-  } else {
-    if ((theServent = getservbyport(wxAtoi(name), "tcp")) == 0) {
-      m_addr->sin_port = htons(wxAtoi(name));
-      return TRUE;
-    }
-  }
-  
-  m_addr->sin_port = theServent->s_port;
-  return TRUE;
+  return (GAddress_INET_SetPortName(m_address, name.fn_str()) == GSOCK_NOERROR);
 }
 
 bool wxIPV4address::Service(unsigned short port)
 {
-  m_addr->sin_port = htons(port);
-  return TRUE;
+  return (GAddress_INET_SetPort(m_address, port) == GSOCK_NOERROR);
 }
 
 bool wxIPV4address::LocalHost()
 {
-  static char buf[256];
-  
-  if (gethostname(buf, sizeof(buf)) < 0)
-    return Hostname("localhost");
-  else
-    return Hostname(buf);
+  return (GAddress_INET_SetHostName(m_address, "localhost") == GSOCK_NOERROR);
 }
 
 wxString wxIPV4address::Hostname()
 {
-  struct hostent *h_ent;
+   char hostname[1024];
 
-  h_ent = gethostbyaddr((char *)&(m_addr->sin_addr), sizeof(m_addr->sin_addr),
-			GetFamily());
-			
-  if (!h_ent)
-     return wxString("");
-  else
-     return wxString(h_ent->h_name);
+   hostname[0] = 0;
+   GAddress_INET_GetHostName(m_address, hostname, 1024);
+   return wxString(hostname);
 }
 
 unsigned short wxIPV4address::Service()
 {
-  return ntohs(m_addr->sin_port); 
-}
-
-void wxIPV4address::Build(struct sockaddr *&addr, size_t& len)
-{
-  addr = (struct sockaddr *)m_addr;
-  len = sizeof(*m_addr);
-}
-
-void wxIPV4address::Disassemble(struct sockaddr *addr, size_t len)
-{
-  if (len != sizeof(*m_addr))
-    return;
-  *m_addr = *(struct sockaddr_in *)addr;
+  return GAddress_INET_GetPort(m_address); 
 }
 
 #ifdef IPV6_ENABLE
+// ---------------------------------------------------------------------------
+// wxIPV6address
+// ---------------------------------------------------------------------------
 
 wxIPV6address::wxIPV6address()
+  : wxSockAddress()
 {
-  m_addr = new sockaddr_in6;
-  Clear();
 }
 
 wxIPV6address::~wxIPV6address()
 {
 }
 
-int wxIPV6address::SockAddrLen()
-{
-  return sizeof(*m_addr);
-}
-
-int wxIPV6address::GetFamily()
-{
-  return AF_INET6;
-}
-
-void wxIPV6address::Clear()
-{ 
-  memset(m_addr, 0, sizeof(*m_addr));
-  m_addr->sin6_family = AF_INET6;
-  m_addr->sin6_addr.s_addr = INADDR_ANY;
-}
-
-/*
-const wxSockAddress& wxIPV6address::operator =(const wxSockAddress& addr)
-{
-  wxIPV6address *ip_addr = (wxIPV6address *)&addr;
-
-  CHECK_ADDRTYPE(addr, wxIPV6address);
-  m_addr = ip_addr->m_addr;
-  return *this;
-}
-*/
-
 bool wxIPV6address::Hostname(const wxString& name)
 {
-  struct hostent *theHostent;
-  struct in_addr *addr;
-  
-  if (name.IsNull())
-    return FALSE;
-  
-  if (!name.IsNumber()) {
-    hostent = gethostbyname2((char*) name, AF_INET6);
-    if (!theHostent)
-      return FALSE;
-  } else {
-    // Don't how to do
-    return FALSE;
-  }
-
-  addr = (struct in6_addr *) *(theHostent->h_addr_list);
-
-  m_addr->sin6_addr.s6_addr = addr[0].s6_addr;
-  return TRUE;
+  return (GAddress_INET_SetHostName(m_address, name.fn_str()) == GSOCK_NOERROR);
 }
 
 bool wxIPV6address::Hostname(unsigned char addr[16])
 {
-  m_addr->sin6_addr.s6_addr = addr;
   return TRUE;
 }
 
 bool wxIPV6address::Service(const char *name)
 {
-  struct servent *theServent;
-  
-  if (!name || !strlen(name))
-    return FALSE;
-  
-  if (!isdigit(*name)) {
-    if ((theServent = getservbyname((char*) name, "tcp")) == 0)
-      return FALSE;
-  } else {
-    if ((theServent = getservbyport(atoi(name), "tcp")) == 0) {
-      m_addr->sin_port = htons(atoi(name));
-      return TRUE;
-    }
-  }
-  
-  m_addr->sin_port = theServent->s_port;
-  return TRUE;
+  return (GAddress_INET_SetPortName(m_address, name.fn_str()) == GSOCK_NOERROR);
 }
 
 bool wxIPV6address::Service(unsigned short port)
 {
-  m_addr->sin_port = htons(port);
-  return TRUE;
+  return (GAddress_INET_SetPort(m_address, port) == GSOCK_NOERROR);
 }
 
 bool wxIPV6address::LocalHost()
 {
-  static char buf[256];
-  
-  if (gethostname(buf, sizeof(buf)) < 0)
-    return Hostname("localhost");
-  else
-    return Hostname(buf);
+  return (GAddress_INET_SetHostName(m_address, "localhost") == GSOCK_NOERROR);
 }
 
 const wxString& wxIPV6address::Hostname()
 {
-  struct hostent *h_ent;
-
-  h_ent = gethostbyaddr((char *)&(m_addr->sin_addr), sizeof(m_addr->sin_addr),
-			GetFamily());
-  return wxString(h_ent->h_name);
+  return wxString(GAddress_INET_GetHostName(m_address));
 }
 
 unsigned short wxIPV6address::Service()
 {
-  return ntohs(m_addr->sin_port); 
-}
-
-void wxIPV6address::Build(struct sockaddr& *addr, size_t& len)
-{
-  len = sizeof(*m_addr);
-  addr = m_addr;
-}
-
-void wxIPV6address::Disassemble(struct sockaddr& *addr, size_t len)
-{
-  if (len != sizeof(*m_addr))
-    return;
-  *m_addr = *(struct sockaddr_in6 *)addr;
+  return GAddress_INET_GetPort(m_address); 
 }
 
 #endif
 
 #ifdef __UNIX__
-#include <sys/un.h>
+// ---------------------------------------------------------------------------
+// wxUNIXaddress
+// ---------------------------------------------------------------------------
 
 wxUNIXaddress::wxUNIXaddress()
+  : wxSockAddress()
 {
-  m_addr = new sockaddr_un;
-  Clear();
 }
 
 wxUNIXaddress::~wxUNIXaddress()
 {
 }
 
-int wxUNIXaddress::SockAddrLen()
-{
-  return sizeof(*m_addr);
-}
-
-int wxUNIXaddress::GetFamily()
-{
-  return AF_UNIX;
-}
-
-void wxUNIXaddress::Clear()
-{
-  memset(m_addr, 0, sizeof(m_addr));
-  m_addr->sun_family = AF_UNIX;
-}
-
-/*
-const wxSockAddress& wxUNIXaddress::operator =(const wxSockAddress& addr)
-{
-  wxUNIXaddress *unx_addr = (wxUNIXaddress *)&addr;
-  CHECK_ADDRTYPE(addr, wxUNIXaddress);
-  m_addr = unx_addr->m_addr;
-  return *this;
-}
-*/
-
 void wxUNIXaddress::Filename(const wxString& fname)
 {
-  sprintf(m_addr->sun_path, "%s", MBSTRINGCAST fname.mb_str());
+  GAddress_UNIX_SetPath(m_address, fname.fn_str());
 }
 
 wxString wxUNIXaddress::Filename()
 {
-  return wxString(m_addr->sun_path);
+  char path[1024];
+
+  path[0] = 0;
+  GAddress_UNIX_GetPath(m_address, path, 1024);
+  return wxString(path);
 }
 
-void wxUNIXaddress::Build(struct sockaddr*& addr, size_t& len)
-{
-  addr = (struct sockaddr *)m_addr;
-  len = sizeof(*m_addr);
-}
-
-void wxUNIXaddress::Disassemble(struct sockaddr *addr, size_t len)
-{
-  if (len != sizeof(*m_addr))
-    return;
-  *m_addr = *(struct sockaddr_un *)addr;
-}
 #endif
 
 #endif 

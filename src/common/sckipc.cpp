@@ -60,10 +60,10 @@ enum {
 #endif
 
 void Server_OnRequest(wxSocketServer& server,
-		      wxSocketBase::wxRequestEvent evt,
+		      GSocketEvent evt,
 		      char *cdata);
 void Client_OnRequest(wxSocketBase& sock,
-		      wxSocketBase::wxRequestEvent evt,
+		      GSocketEvent evt,
 		      char *cdata);
 
 // ---------------------------------------------------------------------------
@@ -91,13 +91,12 @@ wxConnectionBase *wxTCPClient::MakeConnection (const wxString& host,
                                                const wxString& topic)
 {
   wxIPV4address addr;
-  wxSocketHandler *hsock = &wxSocketHandler::Master();
-  wxSocketClient *client = hsock->CreateClient();
+  wxSocketClient *client = new wxSocketClient();
   wxSocketStream *stream = new wxSocketStream(*client);
   wxDataInputStream data_is(*stream);
   wxDataOutputStream data_os(*stream);
   
-  client->SetNotify(wxSocketBase::REQ_READ | wxSocketBase::REQ_LOST);
+  client->SetNotify(GSOCK_INPUT_FLAG | GSOCK_LOST_FLAG);
   addr.Service(server_name);
   addr.Hostname(host);
 
@@ -156,15 +155,14 @@ wxTCPServer::wxTCPServer (void)
 bool wxTCPServer::Create(const wxString& server_name)
 {
   wxIPV4address addr;
-  wxSocketHandler *hsock = &wxSocketHandler::Master();
   wxSocketServer *server;
 
   addr.Service(server_name);
 
   // Create a socket listening on specified port
-  server = hsock->CreateServer(addr);
+  server = new wxSocketServer(addr);
   server->Callback((wxSocketBase::wxSockCbk)Server_OnRequest);
-  server->SetNotify(wxSocketBase::REQ_ACCEPT);
+  server->SetNotify(GSOCK_CONNECTION_FLAG);
 
   server->CallbackData((char *)this);
 
@@ -338,7 +336,7 @@ bool wxTCPConnection::Advise (const wxString& item,
   return TRUE;
 }
 
-void Client_OnRequest(wxSocketBase& sock, wxSocketBase::wxRequestEvent evt,
+void Client_OnRequest(wxSocketBase& sock, GSocketEvent evt,
 		      char *cdata)
 {
   int msg = 0;
@@ -350,7 +348,7 @@ void Client_OnRequest(wxSocketBase& sock, wxSocketBase::wxRequestEvent evt,
   wxString item;
 
   // The socket handler signals us that we lost the connection: destroy all.
-  if (evt == wxSocketBase::EVT_LOST) {
+  if (evt == GSOCK_LOST) {
     sock.Close();
     connection->OnDisconnect();
     return;
@@ -466,20 +464,20 @@ void Client_OnRequest(wxSocketBase& sock, wxSocketBase::wxRequestEvent evt,
 }
 
 void Server_OnRequest(wxSocketServer& server,
-		      wxSocketBase::wxRequestEvent evt, char *cdata)
+		      GSocketEvent evt, char *cdata)
 {
   wxTCPServer *ipcserv = (wxTCPServer *)cdata;
   wxSocketStream *stream;
   wxDataInputStream *codeci;
   wxDataOutputStream *codeco;
 
-  if (evt != wxSocketBase::EVT_ACCEPT)
+  if (evt != GSOCK_CONNECTION)
     return;
 
   /* Accept the connection, getting a new socket */
   wxSocketBase *sock = server.Accept();
   sock->Notify(FALSE);
-  sock->SetNotify(wxSocketBase::REQ_READ | wxSocketBase::REQ_LOST);
+  sock->SetNotify(GSOCK_INPUT_FLAG | GSOCK_LOST_FLAG);
 
   stream = new wxSocketStream(*sock);
   codeci = new wxDataInputStream(*stream);

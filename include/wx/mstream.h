@@ -45,6 +45,8 @@ class wxMemoryOutputStream:  public wxOutputStream {
 
   wxStreamBuffer *OutputStreamBuffer() const { return m_o_streambuf; }
 
+  size_t CopyTo(char *buffer, size_t len) const;
+
  protected:
   wxStreamBuffer *m_o_streambuf;
 

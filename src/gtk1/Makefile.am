@@ -29,6 +29,8 @@ libwx_gtk_la_SOURCES = \
  win_gtk.c \
  extended.c \
  parser.c \
+ gsocket.c \
+ gsockgtk.c \
 \
  cmndata.cpp \
  config.cpp \
@@ -80,7 +82,6 @@ libwx_gtk_la_SOURCES = \
  resource.cpp \
  sckaddr.cpp \
  sckfile.cpp \
- sckint.cpp \
  sckipc.cpp \
  sckstrm.cpp \
  serbase.cpp \

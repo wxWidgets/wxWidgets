@@ -99,5 +99,16 @@ off_t wxMemoryOutputStream::OnSysTell() const
   return m_o_streambuf->Tell();
 }
 
+size_t wxMemoryOutputStream::CopyTo(char *buffer, size_t len) const
+{
+  if (!buffer)
+    return 0;
+
+  if (len > StreamSize())
+    len = StreamSize();
+
+  memcpy(buffer, m_o_streambuf->GetBufferStart(), len);
+  return len;
+}
 
 #endif

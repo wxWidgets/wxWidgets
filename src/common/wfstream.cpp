@@ -138,7 +138,10 @@ wxFileOutputStream::~wxFileOutputStream()
 size_t wxFileOutputStream::OnSysWrite(const void *buffer, size_t size)
 {
   size_t ret = m_file->Write(buffer, size);
-  m_lasterror = wxStream_EOF; // TODO
+  if (m_file->Error())
+    m_lasterror = wxStream_WRITE_ERR;
+  else
+    m_lasterror = wxStream_NOERROR;
   return ret;
 }
 

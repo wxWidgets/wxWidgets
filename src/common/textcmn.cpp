@@ -148,7 +148,7 @@ wxTextCtrl& wxTextCtrlBase::operator<<(long i)
     return *TEXTCTRL(this);
 }
 
-wxTextCtrl& wxTextCtrlBase::operator<<(const char c)
+wxTextCtrl& wxTextCtrlBase::operator<<(const wxChar c)
 {
     return operator<<(wxString(c));
 }

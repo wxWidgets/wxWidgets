@@ -69,6 +69,7 @@ wxFTP::wxFTP()
   m_passwd += wxGetHostName();
 
   SetNotify(0);
+  SetFlags(NONE);
 }
 
 wxFTP::~wxFTP()
@@ -81,11 +82,6 @@ wxFTP::~wxFTP()
 ////////////////////////////////////////////////////////////////
 bool wxFTP::Connect(wxSockAddress& addr, bool WXUNUSED(wait))
 {
-  if (!m_handler) {
-    m_lastError = wxPROTO_NOHNDLR;
-    return FALSE;
-  }
-
   if (!wxProtocol::Connect(addr)) {
     m_lastError = wxPROTO_NETERR;
     return FALSE;
@@ -256,7 +252,7 @@ public:
   size_t StreamSize() const { return m_ftpsize; }
   virtual ~wxInputFTPStream(void)
   { 
-     if (LastError() != wxStream_NOERROR)
+     if (LastError() == wxStream_NOERROR)
        m_ftp->GetResult('2');
      else
        m_ftp->Abort();
@@ -284,15 +280,15 @@ wxSocketClient *wxFTP::GetPort()
 {
   wxIPV4address addr;
   wxSocketClient *client;
-  struct sockaddr sin;
   int a[6];
   wxString straddr;
   int addr_pos;
+  wxUint16 port;
+  wxUint32 hostaddr;
 
   if (!SendCommand(_T("PASV"), '2'))
     return NULL;
 
-  sin.sa_family = AF_INET;
   addr_pos = m_lastResult.Find(_T('('));
   if (addr_pos == -1) {
     m_lastError = wxPROTO_PROTERR;
@@ -300,16 +296,15 @@ wxSocketClient *wxFTP::GetPort()
   }
   straddr = m_lastResult(addr_pos+1, m_lastResult.Length());
   wxSscanf((const wxChar *)straddr,_T("%d,%d,%d,%d,%d,%d"),&a[2],&a[3],&a[4],&a[5],&a[0],&a[1]);
-  sin.sa_data[2] = (char)a[2];
-  sin.sa_data[3] = (char)a[3];
-  sin.sa_data[4] = (char)a[4];
-  sin.sa_data[5] = (char)a[5];
-  sin.sa_data[0] = (char)a[0];
-  sin.sa_data[1] = (char)a[1];
 
-  addr.Disassemble(&sin, sizeof(sin));
+  hostaddr = (wxUint16)a[5] << 24 | (wxUint16)a[4] << 16 |
+             (wxUint16)a[3] << 8 | a[2]; 
+  addr.Hostname(hostaddr);
 
-  client = m_handler->CreateClient();
+  port = (wxUint16)a[0] << 8 | a[1];
+  addr.Service(port);
+
+  client = new wxSocketClient();
   if (!client->Connect(addr)) {
     delete client;
     return NULL;

@@ -47,6 +47,7 @@
 #include  "wx/file.h"
 #include  "wx/textfile.h"
 #include  "wx/utils.h"
+#include  "wx/wxchar.h"
 #include  "wx/log.h"
 
 // other standard headers
@@ -322,7 +323,7 @@ void wxLog::TimeStamp(wxString *str)
         wxChar buf[256];
         time_t timeNow;
         (void)time(&timeNow);
-        wxStrftime(buf, WXSIZEOF(buf), ms_timestamp, localtime(&timeNow));
+//        wxStrftime(buf, WXSIZEOF(buf), ms_timestamp, localtime(&timeNow));
 
         str->Empty();
         *str << buf << _T(": ");
@@ -896,7 +897,7 @@ wxLog          *wxLog::ms_pLogger      = (wxLog *)NULL;
 bool            wxLog::ms_doLog        = TRUE;
 bool            wxLog::ms_bAutoCreate  = TRUE;
 
-const wxChar   *wxLog::ms_timestamp    = "%X";  // time only, no date
+const wxChar   *wxLog::ms_timestamp    = _T("%X");  // time only, no date
 
 wxTraceMask     wxLog::ms_ulTraceMask  = (wxTraceMask)0;
 wxArrayString   wxLog::ms_aTraceMasks;

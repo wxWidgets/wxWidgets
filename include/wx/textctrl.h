@@ -145,7 +145,7 @@ public:
     wxTextCtrl& operator<<(long i);
     wxTextCtrl& operator<<(float f);
     wxTextCtrl& operator<<(double d);
-    wxTextCtrl& operator<<(const char c);
+    wxTextCtrl& operator<<(const wxChar c);
 
     // obsolete functions
 #if WXWIN_COMPATIBILITY

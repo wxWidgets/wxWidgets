@@ -56,7 +56,21 @@ bool wxFFile::Open(const wxChar *filename, const char *mode)
 {
     wxASSERT_MSG( !m_fp, _T("should close or detach the old file first") );
 
+#if wxUSE_UNICODE
+    char *tmp_fname;
+    size_t fname_len;
+
+    fname_len = wxStrlen(filename)+1;
+    tmp_fname = new char[fname_len];
+    wxWX2MB(tmp_fname, filename, fname_len);
+
+    m_fp = fopen(tmp_fname, mode);
+
+    delete tmp_fname;
+#else
     m_fp = fopen(filename, mode);
+#endif
+
 
     if ( !m_fp )
     {

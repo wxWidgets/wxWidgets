@@ -480,6 +480,9 @@ size_t wxInputStream::GetWBack(char *buf, size_t bsize)
 {
   size_t s_toget = m_wbacksize-m_wbackcur;
 
+  if (!m_wback)
+    return 0;
+
   if (bsize < s_toget)
     s_toget = bsize;
 
@@ -697,8 +700,8 @@ wxInputStream& wxBufferedInputStream::Read(void *buffer, size_t size)
   char *buf = (char *)buffer;
 
   retsize = GetWBack(buf, size);
+  m_lastcount = retsize;
   if (retsize == size) {
-    m_lastcount = size;
     m_lasterror = wxStream_NOERROR;
     return *this;
   }
@@ -753,6 +756,7 @@ wxBufferedOutputStream::~wxBufferedOutputStream()
 
 wxOutputStream& wxBufferedOutputStream::Write(const void *buffer, size_t size)
 {
+  m_lastcount = 0;
   m_o_streambuf->Write(buffer, size);
   return *this;
 }

@@ -28,6 +28,7 @@
 #include "wx/url.h"
 #include "wx/protocol/http.h"
 #include "wx/thread.h"
+#include "wx/progdlg.h"
 
 #if defined(__WXMOTIF__) || defined(__WXGTK__)
 #include "mondrian.xpm"
@@ -58,6 +59,8 @@ public:
   void OnExecCloseConnection(wxCommandEvent& evt);
   void UpdateStatus();
 
+  void Download(wxInputStream *input);
+
   DECLARE_EVENT_TABLE()
 };
 
@@ -72,7 +75,7 @@ class MyClient: public wxSocketClient
 public:
   MyFrame *frame;
 
-  void OnNotify(wxRequestNotify WXUNUSED(flags)) { frame->UpdateStatus(); }
+  void OnNotify(GSocketEventFlags WXUNUSED(flags)) { frame->UpdateStatus(); }
 };
 
 // ID for the menu quit command
@@ -134,14 +137,10 @@ MyFrame::MyFrame():
   wxFrame(NULL, -1, "wxSocket client demo",
           wxDefaultPosition, wxSize(300, 200), wxDEFAULT_FRAME_STYLE)
 {
-  // Init all
-  wxSocketHandler::Master();
-
   sock = new MyClient();
   sock->SetFlags((wxSocketBase::wxSockFlags) (wxSocketBase::WAITALL | wxSocketBase::SPEED));
-  wxSocketHandler::Master().Register(sock);
   sock->frame = this;
-  sock->SetNotify(wxSocketBase::REQ_LOST);
+  sock->SetNotify(GSOCK_LOST_FLAG);
   CreateStatusBar(2);
   UpdateStatus();
 }
@@ -169,6 +168,7 @@ void MyFrame::OnExecOpenConnection(wxCommandEvent& WXUNUSED(evt))
   addr.Service(3000);
   sock->SetNotify(0);
   sock->Connect(addr, TRUE);
+  sock->SetFlags(wxSocketBase::NONE);
   if (!sock->IsConnected())
     wxMessageBox("Can't connect to the specified host", "Alert !");
 
@@ -177,8 +177,7 @@ void MyFrame::OnExecOpenConnection(wxCommandEvent& WXUNUSED(evt))
 
 void MyFrame::OnExecCloseConnection(wxCommandEvent& WXUNUSED(evt))
 {
-  if (sock)
-    sock->Close();
+  sock->Close();
   UpdateStatus();
 }
 
@@ -271,6 +270,43 @@ void MyFrame::OnExecTest1(wxCommandEvent& WXUNUSED(evt))
   delete dlgbox;
 }
 
+
+void MyFrame::Download(wxInputStream *input)
+{
+  wxProgressDialog progress("Downloading ...", "0% downloaded");
+  wxBufferedInputStream buf_in(*input);
+  wxFileOutputStream f_out("test.url");
+
+  size_t file_size = input->StreamSize();
+  size_t downloaded;
+  int BUFSIZE = (file_size > 100) ? (file_size / 100) : file_size;
+  int bytes_read = BUFSIZE;
+  wxString message;
+  int percents;
+
+  char *buf;
+
+// TODO: Support for streams which don't support StreamSize
+
+  buf = new char[BUFSIZE];
+
+  downloaded = 0;
+  bytes_read = BUFSIZE;
+  while (downloaded < file_size && bytes_read != 0) {
+    bytes_read = buf_in.Read(buf, BUFSIZE).LastRead();
+    f_out.Write(buf, bytes_read);
+    downloaded += bytes_read;
+
+    percents = downloaded * 100 / file_size;
+
+    message = _T("");
+    message << percents << _T("% downloaded");
+    progress.Update(percents, message);
+  }
+
+  delete[] buf;   
+}
+
 void MyFrame::OnExecUrlTest(wxCommandEvent& WXUNUSED(evt))
 {
   wxString urlname = wxGetTextFromUser("Enter an URL to get",
@@ -284,11 +320,8 @@ void MyFrame::OnExecUrlTest(wxCommandEvent& WXUNUSED(evt))
     error.Printf(_T("Error in getting data from the URL. (error = %d)"), url.GetError());
     wxMessageBox(error, "Alert !");
   } else {
-    wxFileOutputStream *str_out = new wxFileOutputStream("test.url");
-    str_out->Write(*datas);
+    Download(datas);
 
-    wxMessageBox(_T("Success !! Click on OK to see the text."), "OK");
     delete datas;
-    delete str_out;
   }
 }

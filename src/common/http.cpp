@@ -46,7 +46,7 @@ wxHTTP::wxHTTP()
   m_addr = NULL;
   m_read = FALSE;
 
-  SetNotify(REQ_LOST);
+  SetNotify(GSOCK_LOST_FLAG);
 }
 
 wxHTTP::~wxHTTP()
@@ -120,8 +120,8 @@ bool wxHTTP::ParseHeaders()
   m_read = TRUE;
 
   while (1) {
-    m_error = GetLine(this, line);
-    if (m_error != wxPROTO_NOERR)
+    m_perr = GetLine(this, line);
+    if (m_perr != wxPROTO_NOERR)
       return FALSE;
 
     if (line.Length() == 0)
@@ -154,7 +154,7 @@ bool wxHTTP::Connect(const wxString& host)
   if (!addr->Hostname(host)) {
     delete m_addr;
     m_addr = NULL;
-    m_error = wxPROTO_NETERR;
+    m_perr = wxPROTO_NETERR;
     return FALSE;
   }
 
@@ -166,22 +166,25 @@ bool wxHTTP::Connect(const wxString& host)
 
 bool wxHTTP::Connect(wxSockAddress& addr, bool WXUNUSED(wait))
 {
-  struct sockaddr *raw_addr;
-  size_t len;
+  if (m_addr) {
+    delete m_addr;
+    m_addr = NULL;
+    Close();
+  }
 
-  m_addr = (wxSockAddress *)(addr.GetClassInfo()->CreateObject());
-
-  addr.Build(raw_addr, len);
-  m_addr->Disassemble(raw_addr, len);
-
+  m_addr = (wxSockAddress *) addr.Clone();
   return TRUE;
 }
 
 bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
 {
   wxChar *tmp_buf;
-  wxChar buf[200];
-  wxWX2MBbuf pathbuf(200);
+  wxChar buf[200]; // 200 is arbitrary.
+#if wxUNICODE
+  wxWX2MBbuf pathbuf((size_t)200);
+#else
+  const wxWX2MBbuf pathbuf;
+#endif
   wxString tmp_str;
 
   switch (req) {
@@ -197,14 +200,14 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   Notify(FALSE);
 
   tmp_str = wxURL::ConvertToValidURI(path);
-  wxSprintf(buf, _T("%s %s\n\r"), tmp_buf, tmp_str.GetData());
+  wxSprintf(buf, _T("%s %s HTTP/1.0\n\r"), tmp_buf, tmp_str.GetData());
   pathbuf = wxConvLibc.cWX2MB(buf);
-  Write(pathbuf, strlen(pathbuf));
+  Write(pathbuf, strlen(MBSTRINGCAST pathbuf));
   SendHeaders();
   Write("\n\r", 2);
 
-  m_error = GetLine(this, tmp_str);
-  if (m_error != wxPROTO_NOERR) {
+  m_perr = GetLine(this, tmp_str);
+  if (m_perr != wxPROTO_NOERR) {
     RestoreState();
     return FALSE;
   }
@@ -228,7 +231,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   case 200:
     break;
   default:
-    m_error = wxPROTO_NOFILE;
+    m_perr = wxPROTO_NOFILE;
     RestoreState();
     return FALSE;
   }
@@ -242,11 +245,28 @@ class wxHTTPStream : public wxSocketInputStream {
 public:
   wxHTTP *m_http;
   size_t m_httpsize;
+  unsigned long m_read_bytes;
 
   wxHTTPStream(wxHTTP *http) : wxSocketInputStream(*http), m_http(http) {}
   size_t StreamSize() const { return m_httpsize; }
   virtual ~wxHTTPStream(void) { m_http->Abort(); }
+
+protected:
+  size_t OnSysRead(void *buffer, size_t bufsize);
 };
+
+size_t wxHTTPStream::OnSysRead(void *buffer, size_t bufsize)
+{
+  size_t ret;
+
+  if (m_httpsize > 0 && m_read_bytes >= m_httpsize)
+    return 0;
+
+  ret = wxSocketInputStream::OnSysRead(buffer, bufsize);
+  m_read_bytes += ret;
+
+  return ret;
+}
 
 bool wxHTTP::Abort(void)
 {
@@ -258,7 +278,7 @@ wxInputStream *wxHTTP::GetInputStream(const wxString& path)
   wxHTTPStream *inp_stream = new wxHTTPStream(this);
 
   if (!m_addr || m_connected) {
-    m_error = wxPROTO_CONNERR;
+    m_perr = wxPROTO_CONNERR;
     return NULL;
   }
 
@@ -268,11 +288,15 @@ wxInputStream *wxHTTP::GetInputStream(const wxString& path)
   if (!BuildRequest(path, wxHTTP_GET))
     return NULL;
 
-  wxPrintf(_T("Len = %s\n"), WXSTRINGCAST GetHeader(_T("Content-Length")));
   if (!GetHeader(_T("Content-Length")).IsEmpty())
     inp_stream->m_httpsize = wxAtoi(WXSTRINGCAST GetHeader(_T("Content-Length")));
+  else
+    inp_stream->m_httpsize = (size_t)-1;
 
-  SetFlags(WAITALL);
+  inp_stream->m_read_bytes = 0;
+
+  Notify(FALSE);
+
   return inp_stream;
 }
 

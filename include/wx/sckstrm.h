@@ -27,7 +27,6 @@ class WXDLLEXPORT wxSocketOutputStream : public wxOutputStream
   wxSocketOutputStream(wxSocketBase& s);
   ~wxSocketOutputStream();
 
-  wxOutputStream& Write(const void *buffer, size_t size);
   off_t SeekO( off_t WXUNUSED(pos), wxSeekMode WXUNUSED(mode) ) 
     { return -1; }
   off_t TellO() 
@@ -45,7 +44,6 @@ class WXDLLEXPORT wxSocketInputStream : public wxInputStream
   wxSocketInputStream(wxSocketBase& s);
   ~wxSocketInputStream();
 
-  wxInputStream& Read(void *buffer, size_t size);
   off_t SeekI( off_t WXUNUSED(pos), wxSeekMode WXUNUSED(mode) ) 
     { return -1; }
   off_t TellI() 
