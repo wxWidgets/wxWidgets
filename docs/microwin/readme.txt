@@ -83,8 +83,12 @@ they are one and the same binary.
 Status
 ======
 
-The minimal sample is almost fully-functional, apart from minor
-menu presentation issues (no borders, for example).
+The minimal sample is almost fully-functional, apart from some
+presentation issues (no menu borders and status bar in the wrong
+place.
+
+The widgets sample is crashing in DeleteObject (see notes below).
+
 
 Implementation Notes
 ====================
@@ -102,6 +106,7 @@ are important, some less so. They will need to be implemented
 in due course. But implementing missing functionality in this way
 is preferably to proliferating many #ifdefs in the
 wxMSW/wxMicroWindows port itself.
+
 
 Things missing from MicroWindows that need to be worked around
 ==============================================================
@@ -131,6 +136,13 @@ So how can we convert from wxImage to wxBitmap in MicroWindows?
 Well, a simple-minded way would be to use CreateCompatibleBitmap
 which returns an HBITMAP, select it into an HDC, and draw
 the pixels from the wxImage to the HDC one by one with SetPixel.
+This is now implemented, but without any mask handling, which will
+be needed.
+
+Unfortunately, there's a crash in malloc, within DeleteObject, when
+passed a bitmap created by CreateCompatibleBitmap, but only after a few
+deletions. This has yet to be tracked down, maybe by trying to create/delete
+some wxBitmaps from XPMs, from within e.g. the minimal sample.
 
 
 Other missing features

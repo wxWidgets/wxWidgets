@@ -2195,7 +2195,13 @@ wxBitmap wxWin32Renderer::GetIndicator(IndicatorType indType, int flags)
                                     : IndicatorStatus_Unchecked;
 
     const char **xpm = bmpIndicators[indType][indState][indStatus];
-    return xpm ? wxBitmap(xpm) : wxNullBitmap;
+    if (xpm)
+    {
+        wxBitmap bmp(xpm);
+	return bmp;
+    }
+    else
+	return wxNullBitmap;
 }
 
 void wxWin32Renderer::DrawCheckOrRadioButton(wxDC& dc,
@@ -2254,10 +2260,19 @@ void wxWin32Renderer::DrawRadioButton(wxDC& dc,
                                       wxAlignment align,
                                       int indexAccel)
 {
-    DrawCheckOrRadioButton(dc, label,
-                           bitmap.Ok() ? bitmap : GetRadioBitmap(flags),
+    if (bitmap.Ok())
+        DrawCheckOrRadioButton(dc, label,
+			       bitmap,
                            rect, flags, align, indexAccel,
-                           FOCUS_RECT_OFFSET_Y); // default focus rect offset
+			     FOCUS_RECT_OFFSET_Y); // default focus rect offset
+    else
+    {
+	wxBitmap rbitmap(GetRadioBitmap(flags));
+        DrawCheckOrRadioButton(dc, label,
+			       rbitmap,
+                           rect, flags, align, indexAccel,
+			       FOCUS_RECT_OFFSET_Y); // default focus rect offset
+    }
 }
 
 void wxWin32Renderer::DrawCheckButton(wxDC& dc,
@@ -2268,10 +2283,19 @@ void wxWin32Renderer::DrawCheckButton(wxDC& dc,
                                       wxAlignment align,
                                       int indexAccel)
 {
-    DrawCheckOrRadioButton(dc, label,
-                           bitmap.Ok() ? bitmap : GetCheckBitmap(flags),
-                           rect, flags, align, indexAccel,
-                           0); // no focus rect offset for checkboxes
+    if (bitmap.Ok())
+        DrawCheckOrRadioButton(dc, label,
+			       bitmap,
+                             rect, flags, align, indexAccel,
+                             0); // no focus rect offset for checkboxes
+    else
+    {
+	wxBitmap cbitmap(GetCheckBitmap(flags));
+        DrawCheckOrRadioButton(dc, label,
+                             cbitmap,
+                             rect, flags, align, indexAccel,
+			       0); // no focus rect offset for checkboxes
+    }
 }
 
 // ----------------------------------------------------------------------------

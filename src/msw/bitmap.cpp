@@ -88,6 +88,7 @@ void wxBitmapRefData::Free()
 
     if ( m_hBitmap)
     {
+	//	printf("About to delete bitmap %d\n", (int) (HBITMAP) m_hBitmap);
         if ( !::DeleteObject((HBITMAP)m_hBitmap) )
         {
             wxLogLastError(wxT("DeleteObject(hbitmap)"));
@@ -380,6 +381,7 @@ bool wxBitmap::Create(int w, int h, int d)
 bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 {
 #ifdef __WXMICROWIN__
+    m_refData = new wxBitmapRefData();
 
     // Initial attempt at a simple-minded implementation.
     // The bitmap will always be created at the screen depth,
@@ -390,6 +392,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     int screenDepth = ::GetDeviceCaps(hScreenDC, BITSPIXEL);
 
     HBITMAP hBitmap = ::CreateCompatibleBitmap(hScreenDC, image.GetWidth(), image.GetHeight());
+    //    printf("Created bitmap %d\n", (int) hBitmap);
     if (hBitmap == NULL)
     {
         ::ReleaseDC(NULL, hScreenDC);
@@ -416,8 +419,6 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     ::SelectObject(hMemDC, hOldBitmap);
     ::DeleteDC(hMemDC);
     
-    m_refData = new wxBitmapRefData();
-
     SetWidth(image.GetWidth());
     SetHeight(image.GetHeight());
     SetDepth(screenDepth);
@@ -427,6 +428,11 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     // Copy the palette from the source image
     SetPalette(image.GetPalette());
 #endif // wxUSE_PALETTE
+
+#if WXWIN_COMPATIBILITY_2
+    // check the wxBitmap object
+    GetBitmapData()->SetOk();
+#endif // WXWIN_COMPATIBILITY_2
 
     return TRUE;
 
@@ -1020,7 +1026,7 @@ void wxBitmap::SetMask(wxMask *mask)
 wxBitmap wxBitmap::GetBitmapForDC(wxDC& dc) const
 {
 #ifdef __WXMICROWIN__
-    return wxBitmap();
+    return *this;
 #else
     wxMemoryDC      memDC;
     wxBitmap        tmpBitmap(GetWidth(), GetHeight(), dc.GetDepth());
