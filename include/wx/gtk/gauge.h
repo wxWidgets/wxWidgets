@@ -41,10 +41,9 @@ class wxGauge: public wxControl
   DECLARE_DYNAMIC_CLASS(wxGauge)
   
   public:
-    inline wxGauge(void) { m_rangeMax = 0; m_gaugePos = 0; m_useProgressBar = TRUE; }
+    inline wxGauge() { m_rangeMax = 0; m_gaugePos = 0; m_useProgressBar = TRUE; }
 
-    inline wxGauge( wxWindow *parent, wxWindowID id,
-           int range,
+    inline wxGauge( wxWindow *parent, wxWindowID id, int range,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = wxGA_HORIZONTAL,
@@ -53,8 +52,7 @@ class wxGauge: public wxControl
     {
       Create(parent, id, range, pos, size, style, validator, name);
     }
-    bool Create( wxWindow *parent, wxWindowID id,
-           int range,
+    bool Create( wxWindow *parent, wxWindowID id, int range,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = wxGA_HORIZONTAL,
@@ -64,13 +62,13 @@ class wxGauge: public wxControl
     void SetBezelFace( int WXUNUSED(w) ) {};
     void SetRange( int r );
     void SetValue( int pos );
-    int GetShadowWidth(void) const { return 0; };
-    int GetBezelFace(void) const { return 0; };
-    int GetRange(void) const;
-    int GetValue(void) const;
+    int GetShadowWidth() const { return 0; };
+    int GetBezelFace() const { return 0; };
+    int GetRange() const;
+    int GetValue() const;
 
     // Are we a Win95/GTK progress bar, or a normal gauge?
-    inline bool GetProgressBar(void) const { return m_useProgressBar; }
+    inline bool GetProgressBar() const { return m_useProgressBar; }
     
   // implementation
     

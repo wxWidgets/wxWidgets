@@ -74,13 +74,14 @@ class wxApp: public wxEvtHandler
 
     wxWindow *GetTopWindow();
     void SetTopWindow( wxWindow *win );
+    
     virtual int MainLoop();
     void ExitMainLoop();
     bool Initialized();
     virtual bool Pending();
     virtual void Dispatch();
 
-    inline void SetWantDebugOutput(bool flag) { m_wantDebugOutput = flag; }
+    inline void SetWantDebugOutput( bool flag ) { m_wantDebugOutput = flag; }
     inline bool GetWantDebugOutput() { return m_wantDebugOutput; }
 
     void OnIdle( wxIdleEvent &event );
@@ -88,29 +89,26 @@ class wxApp: public wxEvtHandler
     bool SendIdleEvents( wxWindow* win );
 
     inline wxString GetAppName() const 
-    {
-      if (m_appName != "")
-        return m_appName;
-      else return m_className;
-    }
+      { if (m_appName != "") return m_appName; else return m_className; }
+    inline void SetAppName( const wxString& name ) { m_appName = name; }
     
-    inline void SetAppName(const wxString& name) { m_appName = name; };
     inline wxString GetClassName() const { return m_className; }
-    inline void SetClassName(const wxString& name) { m_className = name; }
+    inline void SetClassName( const wxString& name ) { m_className = name; }
+    
     const wxString& GetVendorName() const { return m_vendorName; }
-    void SetVendorName(const wxString& name) { m_vendorName = name; }
+    void SetVendorName( const wxString& name ) { m_vendorName = name; }
 
-    inline void SetExitOnFrameDelete(bool flag) { m_exitOnFrameDelete = flag; }
+    inline void SetExitOnFrameDelete( bool flag ) { m_exitOnFrameDelete = flag; }
     inline bool GetExitOnFrameDelete() const { return m_exitOnFrameDelete; }
 
-    void SetPrintMode(int WXUNUSED(mode) ) {};
-    int GetPrintMode() const { return wxPRINT_POSTSCRIPT; };
+    void SetPrintMode( int WXUNUSED(mode) ) {}
+    int GetPrintMode() const { return wxPRINT_POSTSCRIPT; }
 
     /* override this function to create default log target of arbitrary
      * user-defined classv (default implementation creates a wxLogGui object) */
     virtual wxLog *CreateLogTarget();
 
-  /* GTK implementation */
+  // implementation 
 
     static bool Initialize();
     static bool InitialzeVisual();
@@ -130,13 +128,12 @@ class wxApp: public wxEvtHandler
     int             argc;
     char          **argv;
 
+    wxString        m_vendorName;
+    wxString        m_appName;
+    wxString        m_className;
+
     static wxAppInitializerFunction m_appInitFn;
     
-private:
-  wxString m_vendorName,
-           m_appName,
-           m_className;
-
   DECLARE_EVENT_TABLE()
 };
 

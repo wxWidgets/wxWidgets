@@ -44,11 +44,6 @@
 
 #include <math.h>
 
-#ifdef __WXGTK__
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
-#endif
-
 #ifdef __WXMSW__
 
 #ifdef DrawText
@@ -759,7 +754,7 @@ void wxPostScriptDC::DrawEllipse (long x, long y, long width, long height)
     }
 }
 
-void wxPostScriptDC::DrawIcon (const wxIcon& icon, long x, long y)
+void wxPostScriptDC::DrawIcon( const wxIcon& icon, long x, long y )
 {
     DrawBitmap( icon, x, y, TRUE );
 }
@@ -818,7 +813,7 @@ void wxPostScriptDC::DrawBitmap( const wxBitmap& bitmap, long x, long y, bool WX
     
 }
 
-void wxPostScriptDC::SetFont (const wxFont& font)
+void wxPostScriptDC::SetFont( const wxFont& font )
 {
     wxCHECK_RET( m_ok && m_pstream, "invalid postscript dc" );
     
@@ -826,94 +821,85 @@ void wxPostScriptDC::SetFont (const wxFont& font)
     
     m_font = font;
 
-#ifdef __WXGTK__    
-    char *name = wxTheFontNameDirectory->GetPostScriptName( m_font.GetFamily(),
-                                m_font.GetWeight(),
-                                m_font.GetStyle() );
-    if (!name) name = "Times-Roman";
+    const char *name;
+    const char *style = "";
+    int Style = m_font.GetStyle();
+    int Weight = m_font.GetWeight();
 
-    *m_pstream << "/" << name << " reencodeISO def\n"
-           << "/" << name << " findfont\n"
-           << YLOG2DEVREL(font.GetPointSize())
-           << " scalefont setfont\n";
-#else
-  char buf[100];
-  const char *name;
-  const char *style = "";
-  int Style = m_font.GetStyle ();
-  int Weight = m_font.GetWeight ();
-
-  switch (m_font.GetFamily ())
+    switch (m_font.GetFamily ())
     {
-    case wxTELETYPE:
-    case wxMODERN:
-      name = "/Courier";
-      break;
-    case wxSWISS:
-      name = "/Helvetica";
-      break;
-    case wxROMAN:
-//      name = "/Times-Roman";
-      name = "/Times"; // Altered by EDZ
-      break;
-    case wxSCRIPT:
-      name = "/Zapf-Chancery-MediumItalic";
-      Style  = wxNORMAL;
-      Weight = wxNORMAL;
-      break;
-    default:
-    case wxDEFAULT: // Sans Serif Font
-      name = "/LucidaSans";
+        case wxTELETYPE:
+        case wxMODERN:
+            name = "/Courier";
+            break;
+        case wxSWISS:
+            name = "/Helvetica";
+            break;
+        case wxROMAN:
+//          name = "/Times-Roman";
+            name = "/Times"; // Altered by EDZ
+            break;
+        case wxSCRIPT:
+            name = "/Zapf-Chancery-MediumItalic";
+            Style  = wxNORMAL;
+            Weight = wxNORMAL;
+            break;
+        default:
+        case wxDEFAULT: // Sans Serif Font
+            name = "/LucidaSans";
     }
 
-  if (Style == wxNORMAL && (Weight == wxNORMAL || Weight == wxLIGHT))
+    if (Style == wxNORMAL && (Weight == wxNORMAL || Weight == wxLIGHT))
     {
       if (m_font.GetFamily () == wxROMAN)
     style = "-Roman";
       else
     style = "";
     }
-  else if (Style == wxNORMAL && Weight == wxBOLD)
-    style = "-Bold";
-
-  else if (Style == wxITALIC && (Weight == wxNORMAL || Weight == wxLIGHT))
+    else if (Style == wxNORMAL && Weight == wxBOLD)
+    {
+      style = "-Bold";
+    }
+    else if (Style == wxITALIC && (Weight == wxNORMAL || Weight == wxLIGHT))
     {
       if (m_font.GetFamily () == wxROMAN)
     style = "-Italic";
       else
     style = "-Oblique";
     }
-  else if (Style == wxITALIC && Weight == wxBOLD)
+    else if (Style == wxITALIC && Weight == wxBOLD)
     {
       if (m_font.GetFamily () == wxROMAN)
     style = "-BoldItalic";
       else
     style = "-BoldOblique";
     }
-  else if (Style == wxSLANT && (Weight == wxNORMAL || Weight == wxLIGHT))
+    else if (Style == wxSLANT && (Weight == wxNORMAL || Weight == wxLIGHT))
     {
       if (m_font.GetFamily () == wxROMAN)
     style = "-Italic";
       else
     style = "-Oblique";
     }
-  else if (Style == wxSLANT && Weight == wxBOLD)
+    else if (Style == wxSLANT && Weight == wxBOLD)
     {
       if (m_font.GetFamily () == wxROMAN)
     style = "-BoldItalic";
       else
     style = "-BoldOblique";
     }
-  else
-    style = "";
+    else
+    {
+      style = "";
+    }
 
-  strcpy (buf, name);
-  strcat (buf, style);
-  *m_pstream << buf << " findfont\n";
-  //  *m_pstream << (m_font.GetPointSize() * m_scaleFactor) << " scalefont setfont\n";
-  // No scale factor in this implementation?
-  *m_pstream << (m_font.GetPointSize()) << " scalefont setfont\n";
-#endif
+    char buf[100];
+    strcpy (buf, name);
+    strcat (buf, style);
+    
+    *m_pstream << buf << " reencodeISO def\n";
+    *m_pstream << buf << " findfont\n";
+    *m_pstream << YLOG2DEVREL(m_font.GetPointSize()) << " scalefont setfont\n";
 }
 
 void wxPostScriptDC::SetPen( const wxPen& pen )
@@ -1455,21 +1441,20 @@ void wxPostScriptDC::StartPage ()
     m_logicalOriginX = 0;
     m_logicalOriginY = 0;
 */
+	// Output scaling
+	long translate_x, translate_y;
+	double scale_x, scale_y;
+	wxThePrintSetupData->GetPrinterTranslation(&translate_x, &translate_y);
+	wxThePrintSetupData->GetPrinterScaling(&scale_x, &scale_y);
 
-    // Output scaling
-    long translate_x, translate_y;
-    double scale_x, scale_y;
-    wxThePrintSetupData->GetPrinterTranslation(&translate_x, &translate_y);
-    wxThePrintSetupData->GetPrinterScaling(&scale_x, &scale_y);
+	if (wxThePrintSetupData->GetPrinterOrientation() == PS_LANDSCAPE)
+	{
+		translate_y -= m_maxY;
+		*m_pstream << "90 rotate\n";
+	}
 
-    if (wxThePrintSetupData->GetPrinterOrientation() == PS_LANDSCAPE)
-    {
-        translate_y -= m_maxY;
-        *m_pstream << "90 rotate\n";
-    }
-
-    *m_pstream << scale_x << " " << scale_y << " scale\n";
-    *m_pstream << translate_x << " " << translate_y << " translate\n";
+	*m_pstream << scale_x << " " << scale_y << " scale\n";
+	*m_pstream << translate_x << " " << translate_y << " translate\n";
 }
 
 void wxPostScriptDC::EndPage ()
@@ -1504,269 +1489,294 @@ void wxPostScriptDC::GetTextExtent (const wxString& string, long *x, long *y,
            long *descent, long *externalLeading, wxFont *theFont,
                     bool WXUNUSED(use16))
 {
-//  if (!m_pstream) return;
+    wxFont *fontToUse = theFont;
   
-  wxFont *fontToUse = theFont;
-  
-  if (!fontToUse) fontToUse = (wxFont*) &m_font;
+    if (!fontToUse) fontToUse = (wxFont*) &m_font;
+
+    wxCHECK_RET( fontToUse, "GetTextExtent: no font defined" );
+    wxCHECK_RET( x, "GetTextExtent: x == NULL" );
+    wxCHECK_RET( y, "GetTextExtent: y == NULL" );
 
 #if !USE_AFM_FOR_POSTSCRIPT
-  // Provide a VERY rough estimate (avoid using it)
-    // Chris Breeze 5/11/97: produces accurate results for mono-spaced
-    // font such as Courier (aka wxMODERN)
+    /* Provide a VERY rough estimate (avoid using it).
+     * Produces accurate results for mono-spaced font
+     * such as Courier (aka wxMODERN) */
+     
     int height = 12;
     if (fontToUse)
     {
-        height = fontToUse->GetPointSize();
+	height = fontToUse->GetPointSize();
     }
     *x = strlen (string) * height * 72 / 120;
-    *y = (long) (height * 1.32);    // allow for descender
-
-  if (descent)
-    *descent = 0;
-  if (externalLeading)
-    *externalLeading = 0;
+    *y = (long) (height * 1.32);	/* allow for descender */
+    if (descent) *descent = 0;
+    if (externalLeading) *externalLeading = 0;
 #else
-  // +++++ start of contributed code +++++
 
-  // ************************************************************
-  // method for calculating string widths in postscript:
-  // read in the AFM (adobe font metrics) file for the
-  // actual font, parse it and extract the character widths
-  // and also the descender. this may be improved, but for now
-  // it works well. the AFM file is only read in if the
-  // font is changed. this may be chached in the future.
-  // calls to GetTextExtent with the font unchanged are rather
-  // efficient!!!
-  //
-  // for each font and style used there is an AFM file necessary.
-  // currently i have only files for the roman font family.
-  // i try to get files for the other ones!
-  //
-  // CAVE: the size of the string is currently always calculated
-  //       in 'points' (1/72 of an inch). this should later on be
-  //       changed to depend on the mapping mode.
-  // CAVE: the path to the AFM files must be set before calling this
-  //       function. this is usually done by a call like the following:
-  //       wxSetAFMPath("d:\\wxw161\\afm\\");
-  //
-  // example:
-  //
-  //    wxPostScriptDC dc(NULL, TRUE);
-  //    if (dc.Ok()){
-  //      wxSetAFMPath("d:\\wxw161\\afm\\");
-  //      dc.StartDoc("Test");
-  //      dc.StartPage();
-  //      long w,h;
-  //      dc.SetFont(new wxFont(10, wxROMAN, wxNORMAL, wxNORMAL));
-  //      dc.GetTextExtent("Hallo",&w,&h);
-  //      dc.EndPage();
-  //      dc.EndDoc();
-  //    }
-  //
-  // by steve (stefan.hammes@urz.uni-heidelberg.de)
-  // created: 10.09.94
-  // updated: 14.05.95
+   /* method for calculating string widths in postscript:
+   /  read in the AFM (adobe font metrics) file for the
+   /  actual font, parse it and extract the character widths
+   /  and also the descender. this may be improved, but for now
+   /  it works well. the AFM file is only read in if the
+   /  font is changed. this may be chached in the future.
+   /  calls to GetTextExtent with the font unchanged are rather
+   /  efficient!!!
+   /
+   /  for each font and style used there is an AFM file necessary.
+   /  currently i have only files for the roman font family.
+   /  I try to get files for the other ones!
+   /
+   /  CAVE: the size of the string is currently always calculated
+   /        in 'points' (1/72 of an inch). this should later on be
+   /        changed to depend on the mapping mode.
+   /  CAVE: the path to the AFM files must be set before calling this
+   /        function. this is usually done by a call like the following:
+   /        wxSetAFMPath("d:\\wxw161\\afm\\");
+   /
+   /  example:
+   /
+   /    wxPostScriptDC dc(NULL, TRUE);
+   /    if (dc.Ok()){
+   /      wxSetAFMPath("d:\\wxw161\\afm\\");
+   /      dc.StartDoc("Test");
+   /      dc.StartPage();
+   /      long w,h;
+   /      dc.SetFont(new wxFont(10, wxROMAN, wxNORMAL, wxNORMAL));
+   /      dc.GetTextExtent("Hallo",&w,&h);
+   /      dc.EndPage();
+   /      dc.EndDoc();
+   /    }
+   /
+   /  by steve (stefan.hammes@urz.uni-heidelberg.de)
+   /  created: 10.09.94
+   /  updated: 14.05.95 */
 
-  assert(fontToUse && "void wxPostScriptDC::GetTextExtent: no font defined");
-  assert(x && "void wxPostScriptDC::GetTextExtent: x == NULL");
-  assert(y && "void wxPostScriptDC::GetTextExtent: y == NULL");
+    /* these static vars are for storing the state between calls */
+    static int lastFamily= INT_MIN;
+    static int lastSize= INT_MIN;
+    static int lastStyle= INT_MIN;
+    static int lastWeight= INT_MIN;
+    static int lastDescender = INT_MIN;
+    static int lastWidths[256]; /* widths of the characters */
 
-  // these static vars are for storing the state between calls
-  static int lastFamily= INT_MIN;
-  static int lastSize= INT_MIN;
-  static int lastStyle= INT_MIN;
-  static int lastWeight= INT_MIN;
-  static int lastDescender = INT_MIN;
-  static int lastWidths[256]; // widths of the characters
+    /* get actual parameters */
+    const int Family = fontToUse->GetFamily();
+    const int Size =   fontToUse->GetPointSize();
+    const int Style =  fontToUse->GetStyle();
+    const int Weight = fontToUse->GetWeight();
 
-  // get actual parameters
-  const int Family = fontToUse->GetFamily();
-  const int Size =   fontToUse->GetPointSize();
-  const int Style =  fontToUse->GetStyle();
-  const int Weight = fontToUse->GetWeight();
+    /* if we have another font, read the font-metrics */
+    if (Family!=lastFamily || Size!=lastSize || Style!=lastStyle || Weight!=lastWeight)
+    {
+        /* store actual values */
+        lastFamily = Family;
+        lastSize =   Size;
+        lastStyle =  Style;
+        lastWeight = Weight;
 
-  // if we have another font, read the font-metrics
-  if(Family!=lastFamily||Size!=lastSize||Style!=lastStyle||Weight!=lastWeight){
-    // store actual values
-    lastFamily = Family;
-    lastSize =   Size;
-    lastStyle =  Style;
-    lastWeight = Weight;
+        char *name = (char*) NULL;
 
-    // read in new font metrics **************************************
+        switch (Family)
+	{
+	    case wxMODERN:
+	    {
+		     if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "CourBoO";
+		else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "CourBo";
+		else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "Cour0";
+		else name = "Cour";
+	    }
+	    break;
+	    case wxROMAN:
+	    {
+		     if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "TimesBoO";
+		else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "TimesBo";
+	        else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "TimesO";
+		else if name = "TimesRo";  /* no typo */
+	    }
+	    break;
+	    default:
+	    {
+		     if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "HelvBoO";
+		else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "HelvBo";
+		else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "Helv0";
+		else if ((Style != wxITALIC) && (Weight != wxBOLD)) name = "Helv";
+	    }
+	    break;
+	}
 
-    // 1. construct filename ******************************************
-    /* MATTHEW: [2] Use wxTheFontNameDirectory */
-    const char *name;
+        /* get the directory of the AFM files */
+        char afmName[256];
+        afmName[0] = 0;
+        if (wxGetAFMPath()) strcpy( afmName, wxGetAFMPath() );
 
-    // Julian - we'll need to do this a different way now we've removed the
-    // font directory system. Must find Stefan's original code.
+    /* 2. open and process the file
+    /  a short explanation of the AFM format:
+    /  we have for each character a line, which gives its size
+    /  e.g.:
+    / 
+    /    C 63 ; WX 444 ; N question ; B 49 -14 395 676 ;
+    / 
+    /  that means, we have a character with ascii code 63, and width
+    /  (444/1000 * fontSize) points.
+    /  the other data is ignored for now!
+    / 
+    /  when the font has changed, we read in the right AFM file and store the
+    /  character widths in an array, which is processed below (see point 3.). */
 
-    name = wxTheFontNameDirectory->GetAFMName(Family, Weight, Style);
-    if (!name)
-      name = "unknown";
+        /* new elements JC Sun Aug 25 23:21:44 MET DST 1996 */
 
-    // get the directory of the AFM files
-    char afmName[256];
-    afmName[0] = 0;
-    if (wxGetAFMPath())
-      strcpy(afmName,wxGetAFMPath());
-
-    // 2. open and process the file **********************************
-
-    // a short explanation of the AFM format:
-    // we have for each character a line, which gives its size
-    // e.g.:
-    //
-    //   C 63 ; WX 444 ; N question ; B 49 -14 395 676 ;
-    //
-    // that means, we have a character with ascii code 63, and width
-    // (444/1000 * fontSize) points.
-    // the other data is ignored for now!
-    //
-    // when the font has changed, we read in the right AFM file and store the
-    // character widths in an array, which is processed below (see point 3.).
-
-        // new elements JC Sun Aug 25 23:21:44 MET DST 1996
-
-
-    strcat(afmName,name);
-    strcat(afmName,".afm");
-    FILE *afmFile = fopen(afmName,"r");
-    if(afmFile==NULL){
-      wxLogDebug("GetTextExtent: can't open AFM file '%s'\n",afmName);
-      wxLogDebug("               using approximate values\n");
-      int i;
-      for (i=0; i<256; i++) lastWidths[i] = 500; // an approximate value
-      lastDescender = -150; // dito.
-    }else{
-      int i;
-      // init the widths array
-      for(i=0; i<256; i++) lastWidths[i]= INT_MIN;
-      // some variables for holding parts of a line
-      char cString[10],semiString[10],WXString[10],descString[20];
-      char upString[30], utString[30], encString[50];
-      char line[256];
-      int ascii,cWidth;
-      // read in the file and parse it
-      while(fgets(line,sizeof(line),afmFile)!=NULL){
-        // A.) check for descender definition
-        if(strncmp(line,"Descender",9)==0){
-          if((sscanf(line,"%s%d",descString,&lastDescender)!=2)
-         || (strcmp(descString,"Descender")!=0)) {
-        wxLogDebug("AFM-file '%s': line '%s' has error (bad descender)\n",
-               afmName,line);
-          }
+        strcat(afmName,name);
+        strcat(afmName,".afm");
+        FILE *afmFile = fopen(afmName,"r");
+        if ( afmFile==NULL )
+        {
+            wxLogDebug( "GetTextExtent: can't open AFM file '%s'\n", afmName );
+            wxLogDebug( "               using approximate values\n");
+            for (int i=0; i<256; i++) lastWidths[i] = 500; /* an approximate value */
+            lastDescender = -150; /* dito. */
         }
-            // JC 1.) check for UnderlinePosition
-        else if(strncmp(line,"UnderlinePosition",17)==0){
-          if((sscanf(line,"%s%lf",upString,&UnderlinePosition)!=2)
-         || (strcmp(upString,"UnderlinePosition")!=0)) {
-        wxLogDebug("AFM-file '%s': line '%s' has error (bad UnderlinePosition)\n",
-               afmName,line);
-          }
+	else
+	{
+            /* init the widths array */
+            for(int i=0; i<256; i++) lastWidths[i] = INT_MIN;
+            /* some variables for holding parts of a line */
+            char cString[10],semiString[10],WXString[10],descString[20];
+            char upString[30], utString[30], encString[50];
+            char line[256];
+            int ascii,cWidth;
+            /* read in the file and parse it */
+            while(fgets(line,sizeof(line),afmFile)!=NULL)
+	    {
+                /* A.) check for descender definition */
+                if (strncmp(line,"Descender",9)==0)
+		{
+                    if ((sscanf(line,"%s%d",descString,&lastDescender)!=2) ||
+	                (strcmp(descString,"Descender")!=0)) 
+		    {
+	                wxLogDebug( "AFM-file '%s': line '%s' has error (bad descender)\n", afmName,line );
+                    }
+                }
+                /* JC 1.) check for UnderlinePosition */
+                else if(strncmp(line,"UnderlinePosition",17)==0)
+		{
+                    if ((sscanf(line,"%s%lf",upString,&UnderlinePosition)!=2) ||
+	                (strcmp(upString,"UnderlinePosition")!=0)) 
+		    {
+	                wxLogDebug( "AFM-file '%s': line '%s' has error (bad UnderlinePosition)\n", afmName, line );
+                    }
+                }
+	        /* JC 2.) check for UnderlineThickness */
+                else if(strncmp(line,"UnderlineThickness",18)==0)
+	        {
+                    if ((sscanf(line,"%s%lf",utString,&UnderlineThickness)!=2) ||
+	                (strcmp(utString,"UnderlineThickness")!=0)) 
+		    {
+	                wxLogDebug( "AFM-file '%s': line '%s' has error (bad UnderlineThickness)\n", afmName, line );
+                    }
+                }
+		/* JC 3.) check for EncodingScheme */
+                else if(strncmp(line,"EncodingScheme",14)==0)
+	        {
+                    if ((sscanf(line,"%s%s",utString,encString)!=2) ||
+	                (strcmp(utString,"EncodingScheme")!=0)) 
+		    {
+	                wxLogDebug("AFM-file '%s': line '%s' has error (bad EncodingScheme)\n", afmName, line );
+                    }
+                    else if (strncmp(encString, "AdobeStandardEncoding", 21))
+                    {
+	                wxLogDebug( "AFM-file '%s': line '%s' has error (unsupported EncodingScheme %s)\n",
+			            afmName,line, encString);
+                    }
+                }
+                /* B.) check for char-width */
+                else if(strncmp(line,"C ",2)==0)
+		{
+                    if (sscanf(line,"%s%d%s%s%d",cString,&ascii,semiString,WXString,&cWidth)!=5)
+	            {
+                        wxLogDebug("AFM-file '%s': line '%s' has an error (bad character width)\n",afmName,line);
+                    }
+                    if(strcmp(cString,"C")!=0 || strcmp(semiString,";")!=0 || strcmp(WXString,"WX")!=0)
+	            {
+                        wxLogDebug("AFM-file '%s': line '%s' has a format error\n",afmName,line);
+                    }
+                    /* printf("            char '%c'=%d has width '%d'\n",ascii,ascii,cWidth); */
+                    if (ascii>=0 && ascii<256)
+		    {
+                        lastWidths[ascii] = cWidth; /* store width */
+                    }
+		    else
+		    {
+	                /* MATTHEW: this happens a lot; don't print an error */
+                        /* wxLogDebug("AFM-file '%s': ASCII value %d out of range\n",afmName,ascii); */
+                    }
+                }
+                /* C.) ignore other entries. */
+            }
+            fclose(afmFile);
         }
-    // JC 2.) check for UnderlineThickness
-        else if(strncmp(line,"UnderlineThickness",18)==0){
-           if((sscanf(line,"%s%lf",utString,&UnderlineThickness)!=2)
-         || (strcmp(utString,"UnderlineThickness")!=0)) {
-        wxLogDebug("AFM-file '%s': line '%s' has error (bad UnderlineThickness)\n",
-               afmName,line);
-          }
-        }
-    // JC 3.) check for EncodingScheme
-        else if(strncmp(line,"EncodingScheme",14)==0){
-          if((sscanf(line,"%s%s",utString,encString)!=2)
-         || (strcmp(utString,"EncodingScheme")!=0)) {
-        wxLogDebug("AFM-file '%s': line '%s' has error (bad EncodingScheme)\n",
-               afmName,line);
-          }
-          else if (strncmp(encString, "AdobeStandardEncoding", 21))
-          {
-        wxLogDebug("AFM-file '%s': line '%s' has error (unsupported EncodingScheme %s)\n",
-               afmName,line, encString);
-          }
-        }
-            // B.) check for char-width
-        else if(strncmp(line,"C ",2)==0){
-          if(sscanf(line,"%s%d%s%s%d",
-              cString,&ascii,semiString,WXString,&cWidth)!=5){
-             wxLogDebug("AFM-file '%s': line '%s' has an error (bad character width)\n",afmName,line);
-          }
-          if(strcmp(cString,"C")!=0 || strcmp(semiString,";")!=0 ||
-             strcmp(WXString,"WX")!=0){
-             wxLogDebug("AFM-file '%s': line '%s' has a format error\n",afmName,line);
-          }
-          //printf("            char '%c'=%d has width '%d'\n",ascii,ascii,cWidth);
-          if(ascii>=0 && ascii<256){
-            lastWidths[ascii] = cWidth; // store width
-          }else{
-        /* MATTHEW: this happens a lot; don't print an error */
-            // wxLogDebug("AFM-file '%s': ASCII value %d out of range\n",afmName,ascii);
-          }
-        }
-        // C.) ignore other entries.
-      }
-      fclose(afmFile);
+        /* hack to compute correct values for german 'Umlaute'
+        /  the correct way would be to map the character names
+        /  like 'adieresis' to corresp. positions of ISOEnc and read
+        /  these values from AFM files, too. Maybe later ... */
+        lastWidths[196] = lastWidths['A'];  // Ä
+        lastWidths[228] = lastWidths['a'];  // ä
+        lastWidths[214] = lastWidths['O'];  // Ö
+        lastWidths[246] = lastWidths['o'];  // ö
+        lastWidths[220] = lastWidths['U'];  // Ü
+        lastWidths[252] = lastWidths['u'];  // ü
+        lastWidths[223] = lastWidths[251];  // ß
     }
-        // hack to compute correct values for german 'Umlaute'
-        // the correct way would be to map the character names
-        // like 'adieresis' to corresp. positions of ISOEnc and read
-        // these values from AFM files, too. Maybe later ...
-    lastWidths[196] = lastWidths['A'];  // Ä
-    lastWidths[228] = lastWidths['a'];  // ä
-    lastWidths[214] = lastWidths['O'];  // Ö
-    lastWidths[246] = lastWidths['o'];  // ö
-    lastWidths[220] = lastWidths['U'];  // Ü
-    lastWidths[252] = lastWidths['u'];  // ü
-    lastWidths[223] = lastWidths[251];  // ß
-  }
 
-      // JC: calculate UnderlineThickness/UnderlinePosition
-  m_underlinePosition = m_underlinePosition * fontToUse->GetPointSize() / 1000.0f;
-  m_underlineThickness = m_underlineThickness * fontToUse->GetPointSize() / 1000.0f * m_scaleFactor;
+    /* JC: calculate UnderlineThickness/UnderlinePosition */
+    m_underlinePosition = m_underlinePosition * fontToUse->GetPointSize() / 1000.0f;
+    m_underlineThickness = m_underlineThickness * fontToUse->GetPointSize() / 1000.0f * m_scaleFactor;
 
-  // 3. now the font metrics are read in, calc size *******************
-  // this is done by adding the widths of the characters in the
-  // string. they are given in 1/1000 of the size!
+    /* 3. now the font metrics are read in, calc size this
+    /  is done by adding the widths of the characters in the
+    /  string. they are given in 1/1000 of the size! */
 
-  long widthSum=0;
-  long height=Size; // by default
-  unsigned char *p;
-  for(p=(unsigned char *)(const char *)string; *p; p++){
-    if(lastWidths[*p]== INT_MIN){
-      wxLogDebug("GetTextExtent: undefined width for character '%c' (%d)\n",
-                 *p,*p);
-      widthSum += (long)(lastWidths[' ']/1000.0F * Size); // assume space
-    }else{
-      widthSum += (long)((lastWidths[*p]/1000.0F)*Size);
+    long widthSum=0;
+    long height=Size; /* by default */
+    unsigned char *p;
+    for(p=(unsigned char *)(const char *)string; *p; p++)
+    {
+        if(lastWidths[*p]== INT_MIN)
+	{
+            wxLogDebug("GetTextExtent: undefined width for character '%c' (%d)\n", *p,*p);
+            widthSum += (long)(lastWidths[' ']/1000.0F * Size); /* assume space */
+        }
+	else
+	{
+            widthSum += (long)((lastWidths[*p]/1000.0F)*Size);
+        }
     }
-  }
-  // add descender to height (it is usually a negative value)
-  if(lastDescender!=INT_MIN){
-    height += (long)(((-lastDescender)/1000.0F) * Size); /* MATTHEW: forgot scale */
-  }
-
-  // return size values
-  *x = widthSum;
-  *y = height;
-
-  // return other parameters
-  if (descent){
-    if(lastDescender!=INT_MIN){
-      *descent = (long)(((-lastDescender)/1000.0F) * Size); /* MATTHEW: forgot scale */
-    }else{
-      *descent = 0;
+    
+    /* add descender to height (it is usually a negative value) */
+    if (lastDescender!=INT_MIN)
+    {
+        height += (long)(((-lastDescender)/1000.0F) * Size); /* MATTHEW: forgot scale */
     }
-  }
 
-  // currently no idea how to calculate this!
-  // if (externalLeading) *externalLeading = 0;
-  if (externalLeading)
-    *externalLeading = 0;
+    /* return size values */
+    *x = widthSum;
+    *y = height;
 
-  // ----- end of contributed code -----
+    /* return other parameters */
+    if (descent)
+    {
+        if(lastDescender!=INT_MIN)
+	{
+            *descent = (long)(((-lastDescender)/1000.0F) * Size); /* MATTHEW: forgot scale */
+        }
+	else
+	{
+           *descent = 0;
+        }
+    }
+
+    /* currently no idea how to calculate this! */
+    if (externalLeading) *externalLeading = 0;
+
 #endif
 }
 

@@ -384,8 +384,10 @@ bool wxApp::Initialize(void)
     
     wxSystemSettings::Init();
   
+/*
     wxTheFontNameDirectory =  new wxFontNameDirectory;
     wxTheFontNameDirectory->Initialize();
+*/
 
     wxTheColourDatabase = new wxColourDatabase( wxKEY_STRING );
     wxTheColourDatabase->Initialize();
@@ -426,8 +428,10 @@ void wxApp::CleanUp(void)
     if (wxTheColourDatabase) delete wxTheColourDatabase;
     wxTheColourDatabase = (wxColourDatabase*) NULL;
     
+/*
     if (wxTheFontNameDirectory) delete wxTheFontNameDirectory;
     wxTheFontNameDirectory = (wxFontNameDirectory*) NULL;
+*/
     
     wxDeleteStockObjects();
 

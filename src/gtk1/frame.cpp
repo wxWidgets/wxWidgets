@@ -91,6 +91,10 @@ static gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventC
     win->m_x = event->x;
     win->m_y = event->y;
 
+    wxMoveEvent mevent( wxPoint(win->m_x,win->m_y), win->GetId() );
+    mevent.SetEventObject( win );
+    win->GetEventHandler()->ProcessEvent( mevent );
+
     return FALSE;
 }
 

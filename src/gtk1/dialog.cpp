@@ -60,6 +60,24 @@ static void gtk_dialog_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation
 }
 
 //-----------------------------------------------------------------------------
+// "configure_event"
+//-----------------------------------------------------------------------------
+
+static gint gtk_dialog_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *event, wxDialog *win )
+{
+    if (!win->HasVMT()) return FALSE;
+
+    win->m_x = event->x;
+    win->m_y = event->y;
+
+    wxMoveEvent mevent( wxPoint(win->m_x,win->m_y), win->GetId() );
+    mevent.SetEventObject( win );
+    win->GetEventHandler()->ProcessEvent( mevent );
+
+    return FALSE;
+}
+
+//-----------------------------------------------------------------------------
 // wxDialog
 //-----------------------------------------------------------------------------
 
@@ -107,9 +125,6 @@ bool wxDialog::Create( wxWindow *parent,
     gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event", 
         GTK_SIGNAL_FUNC(gtk_dialog_delete_callback), (gpointer)this );
     
-    gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate", 
-        GTK_SIGNAL_FUNC(gtk_dialog_size_callback), (gpointer)this );
-    
     m_wxwindow = gtk_myfixed_new();
     gtk_widget_show( m_wxwindow );
     GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
@@ -123,8 +138,13 @@ bool wxDialog::Create( wxWindow *parent,
      
     gtk_widget_set_usize( m_widget, m_width, m_height );
      
+    gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate", 
+        GTK_SIGNAL_FUNC(gtk_dialog_size_callback), (gpointer)this );
+    
+    gtk_signal_connect( GTK_OBJECT(m_widget), "configure_event",
+        GTK_SIGNAL_FUNC(gtk_dialog_configure_callback), (gpointer)this );
+
     if (m_parent) m_parent->AddChild( this );
-  
   
     PostCreation();
   

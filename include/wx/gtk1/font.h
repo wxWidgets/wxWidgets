@@ -30,13 +30,17 @@ class wxPaintDC;
 class wxWindow;
 
 class wxFont;
+/*
 class wxFontNameDirectory;
+*/
 
 //-----------------------------------------------------------------------------
 // global variables
 //-----------------------------------------------------------------------------
 
+/*
 extern wxFontNameDirectory *wxTheFontNameDirectory;
+*/
 extern const char* wxEmptyString;
 
 //-----------------------------------------------------------------------------
@@ -60,7 +64,6 @@ public:
 
   int GetPointSize() const;
   int GetFamily() const;
-  int GetFontId() const;
   int GetStyle() const;
   int GetWeight() const;
   bool GetUnderlined() const;
@@ -87,6 +90,7 @@ public:
   // no data :-)
 };
 
+/*
 //-----------------------------------------------------------------------------
 // wxFontDirectory
 //-----------------------------------------------------------------------------
@@ -114,5 +118,6 @@ class wxFontNameDirectory: public wxObject
     class wxHashTable *table;
     int   nextFontId;
 };
+*/
 
 #endif // __GTKFONTH__

@@ -83,7 +83,7 @@ public:
   virtual wxToolBar* CreateToolBar( long style = wxNO_BORDER|wxTB_HORIZONTAL, wxWindowID id = -1,
                                     const wxString& name = wxToolBarNameStr);
   virtual wxToolBar *OnCreateToolBar( long style, wxWindowID id, const wxString& name );
-  virtual wxToolBar *GetToolBar(void) const;
+  virtual wxToolBar *GetToolBar() const;
   inline void SetToolBar(wxToolBar *toolbar) { m_frameToolBar = toolbar; }
 
   virtual void SetMenuBar( wxMenuBar *menuBar );
@@ -94,10 +94,10 @@ public:
 
   virtual void SetIcon( const wxIcon &icon );
   virtual void Iconize( bool WXUNUSED(iconize)) { }
-  virtual bool IsIconized(void) const { return FALSE; }
-  bool Iconized(void) const { return IsIconized(); }
+  virtual bool IsIconized() const { return FALSE; }
+  bool Iconized() const { return IsIconized(); }
   virtual void Maximize(bool WXUNUSED(maximize)) {}
-  virtual void Restore(void) {}
+  virtual void Restore() {}
 
   void OnActivate( wxActivateEvent &WXUNUSED(event) ) { } // called from docview.cpp
   void OnSize( wxSizeEvent &event );
@@ -109,7 +109,6 @@ public:
   virtual wxPoint GetClientAreaOrigin() const;
   void DoMenuUpdates();
   void DoMenuUpdates(wxMenu* menu);
-
   virtual void OnInternalIdle();
 
   wxMenuBar    *m_frameMenuBar;

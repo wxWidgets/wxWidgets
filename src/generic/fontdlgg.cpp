@@ -204,7 +204,7 @@ void wxGenericFontDialog::CreateWidgets(void)
   */
   
   wxString
-     *families = new wxString[5],
+     *families = new wxString[6],
      *styles = new wxString[3],
      *weights = new wxString[3];
   families[0] =  _("Roman");
@@ -212,6 +212,7 @@ void wxGenericFontDialog::CreateWidgets(void)
   families[2] = _("Modern");
   families[3] = _("Script");
   families[4] = _("Swiss" );
+  families[5] = _("Teletype" );
   styles[0] = _("Normal");
   styles[1] = _("Italic");
   styles[2] = _("Slant");
@@ -401,6 +402,8 @@ char *wxFontFamilyIntToString(int family)
       return "Modern";
     case wxSCRIPT:
       return "Script";
+    case wxTELETYPE:
+      return "Teletype";
     case wxSWISS:
     default:
       return "Swiss";
@@ -421,6 +424,8 @@ int wxFontFamilyStringToInt(char *family)
     return wxMODERN;
   else if (strcmp(family, "Script") == 0)
     return wxSCRIPT;
+  else if (strcmp(family, "Teletype") == 0)
+    return wxTELETYPE;
   else return wxSWISS;
 }
 

@@ -87,7 +87,6 @@ LIB_CPP_SRC=\
  motif/dcmemory.cpp \
  motif/dcscreen.cpp \
  motif/dialog.cpp \
- motif/dirdlg.cpp \
  motif/dnd.cpp \
  motif/filedlg.cpp \
  motif/font.cpp \
@@ -132,6 +131,7 @@ LIB_CPP_SRC=\
  generic/choicdgg.cpp \
  generic/colrdlgg.cpp \
  generic/dcpsg.cpp \
+ generic/dirdlgg.cpp \
  generic/fontdlgg.cpp \
  generic/gridg.cpp \
  generic/helpext.cpp \

@@ -77,8 +77,8 @@ extern const wxPoint wxDefaultPosition;
 class wxClientData
 {
 public:
-    wxClientData() { }
-    virtual ~wxClientData() { }
+  wxClientData() { }
+  virtual ~wxClientData() { }
 };
 
 //-----------------------------------------------------------------------------
@@ -168,13 +168,13 @@ public:
 
   virtual void SetSizeHints( int minW, int minH, int maxW = -1, int maxH = -1, int incW = -1, int incH = -1 );
 
-  // Dialog units translations. Implemented in wincmn.cpp.
-  wxPoint ConvertPixelsToDialog(const wxPoint& pt) ;
-  wxPoint ConvertDialogToPixels(const wxPoint& pt) ;
-  inline wxSize ConvertPixelsToDialog(const wxSize& sz)
-  { wxPoint pt(ConvertPixelsToDialog(wxPoint(sz.x, sz.y))); return wxSize(pt.x, pt.y); }
-  inline wxSize ConvertDialogToPixels(const wxSize& sz)
-  { wxPoint pt(ConvertDialogToPixels(wxPoint(sz.x, sz.y))); return wxSize(pt.x, pt.y); }
+  /* Dialog units translations. Implemented in wincmn.cpp. */
+  wxPoint ConvertPixelsToDialog( const wxPoint& pt );
+  wxPoint ConvertDialogToPixels( const wxPoint& pt );
+  inline wxSize ConvertPixelsToDialog( const wxSize& sz )
+      { wxPoint pt(ConvertPixelsToDialog(wxPoint(sz.x, sz.y))); return wxSize(pt.x, pt.y); }
+  inline wxSize ConvertDialogToPixels( const wxSize& sz )
+      { wxPoint pt(ConvertDialogToPixels(wxPoint(sz.x, sz.y))); return wxSize(pt.x, pt.y); }
 
   void OnSize( wxSizeEvent &event );
 
@@ -198,8 +198,8 @@ public:
     { return m_parent; }
   wxWindow *GetGrandParent() const
     { return (m_parent ? m_parent->m_parent : (wxWindow*)NULL); }
-  void SetParent( wxWindow *p )
-    { m_parent = p; }
+  void SetParent( wxWindow *parent )
+    { m_parent = parent; }
   virtual wxWindow *ReParent( wxWindow *newParent );
 
   wxEvtHandler *GetEventHandler() const;

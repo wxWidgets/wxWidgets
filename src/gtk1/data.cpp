@@ -69,7 +69,9 @@ wxColourDatabase *wxTheColourDatabase = (wxColourDatabase *) NULL;
 wxBitmapList     *wxTheBitmapList = (wxBitmapList *) NULL;
   
 /* X only font names */
+/*
 wxFontNameDirectory *wxTheFontNameDirectory;
+*/
 
 /* Stock objects */
 wxFont *wxNORMAL_FONT;
