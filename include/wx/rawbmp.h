@@ -176,6 +176,7 @@ typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
 // used as default value for the pixel format in wxPixelIterator template
 template <class T> struct wxPixelFormatFor;
 
+#if wxUSE_IMAGE
 // wxPixelFormatFor is only defined for wxImage, attempt to use it with other
 // classes (wxBitmap...) will result in compile errors which is exactly what we
 // want
@@ -184,6 +185,7 @@ struct WXDLLEXPORT wxPixelFormatFor<wxImage>
 {
     typedef wxImagePixelFormat Format;
 };
+#endif //wxUSE_IMAGE
 
 // ----------------------------------------------------------------------------
 // wxPixelData
@@ -271,6 +273,7 @@ struct WXDLLEXPORT wxPixelDataOut
     };
 };
 
+#if wxUSE_IMAGE
 // wxPixelData specialization for wxImage: this is the simplest case as we
 // don't have to care about different pixel formats here
 template <>
@@ -455,7 +458,9 @@ struct WXDLLEXPORT wxPixelDataOut<wxImage>
         Iterator m_pixels;
     };
 };
+#endif //wxUSE_IMAGE
 
+#if wxUSE_GUI
 // wxPixelData specialization for wxBitmap: here things are more interesting as
 // we also have to support different pixel formats
 template <>
@@ -637,6 +642,7 @@ struct WXDLLEXPORT wxPixelDataOut<wxBitmap>
         }
     };
 };
+#endif //wxUSE_GUI
 
 #ifdef __VISUALC__
     // typedef-name 'foo' used as synonym for class-name 'bar'
@@ -667,9 +673,13 @@ public:
 
 
 // some "predefined" pixel data classes
+#if wxUSE_IMAGE
 typedef wxPixelData<wxImage> wxImagePixelData;
+#endif //wxUSE_IMAGE
+#if wxUSE_GUI
 typedef wxPixelData<wxBitmap, wxNativePixelFormat> wxNativePixelData;
 typedef wxPixelData<wxBitmap, wxAlphaPixelFormat> wxAlphaPixelData;
+#endif //wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // wxPixelIterator
