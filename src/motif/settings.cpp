@@ -24,13 +24,16 @@ wxColour wxSystemSettings::GetSystemColour(int index)
 {
   switch (index)
   {
+    case wxSYS_COLOUR_WINDOW:
+    {
+        return *wxWHITE;
+    }
     case wxSYS_COLOUR_SCROLLBAR:
       //    case wxSYS_COLOUR_DESKTOP:          // Same as wxSYS_COLOUR_BACKGROUND
     case wxSYS_COLOUR_BACKGROUND:
     case wxSYS_COLOUR_ACTIVECAPTION:
     case wxSYS_COLOUR_INACTIVECAPTION:
     case wxSYS_COLOUR_MENU:
-    case wxSYS_COLOUR_WINDOW:
     case wxSYS_COLOUR_WINDOWFRAME:
     case wxSYS_COLOUR_ACTIVEBORDER:
     case wxSYS_COLOUR_INACTIVEBORDER:
@@ -50,6 +53,9 @@ wxColour wxSystemSettings::GetSystemColour(int index)
         return *wxBLACK;
     }
     case wxSYS_COLOUR_HIGHLIGHT:
+    {
+        return *wxBLUE;
+    }
     case wxSYS_COLOUR_BTNHIGHLIGHT:
 	case wxSYS_COLOUR_LISTBOX:
       //    case wxSYS_COLOUR_3DHIGHLIGHT:      // Same as wxSYS_COLOUR_BTNHIGHLIGHT
@@ -66,11 +72,11 @@ wxColour wxSystemSettings::GetSystemColour(int index)
     case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
     case wxSYS_COLOUR_INFOTEXT:
     {
-      return *wxBLACK;
+        return *wxBLACK;
     }
     case wxSYS_COLOUR_HIGHLIGHTTEXT:
     {
-      return *wxBLUE;
+        return *wxWHITE;
     }
     case wxSYS_COLOUR_INFOBK:
     case wxSYS_COLOUR_APPWORKSPACE:
