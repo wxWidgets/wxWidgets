@@ -86,8 +86,12 @@ wxBrush::wxBrush(const wxBitmap& stipple)
 {
   m_refData = new wxBrushRefData;
 
-  M_BRUSHDATA->m_style = wxSTIPPLE;
   M_BRUSHDATA->m_stipple = stipple;
+  if (M_BRUSHDATA->m_stipple.GetMask())
+	  M_BRUSHDATA->m_style = wxSTIPPLE_MASK_OPAQUE;
+  else
+	  M_BRUSHDATA->m_style = wxSTIPPLE;
+
   M_BRUSHDATA->m_hBrush = 0;
 
   RealizeResource();
@@ -96,7 +100,7 @@ wxBrush::wxBrush(const wxBitmap& stipple)
     wxTheBrushList->AddBrush(this);
 }
 
-bool wxBrush::RealizeResource(void) 
+bool wxBrush::RealizeResource(void)
 {
   if (M_BRUSHDATA && (M_BRUSHDATA->m_hBrush == 0))
   {
@@ -144,6 +148,12 @@ bool wxBrush::RealizeResource(void)
       case wxSTIPPLE:
         if (M_BRUSHDATA->m_stipple.Ok())
           M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreatePatternBrush((HBITMAP) M_BRUSHDATA->m_stipple.GetHBITMAP()) ;
+        else
+          M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreateSolidBrush(ms_colour) ;
+        break ;
+      case wxSTIPPLE_MASK_OPAQUE:
+        if (M_BRUSHDATA->m_stipple.Ok() && M_BRUSHDATA->m_stipple.GetMask())
+          M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreatePatternBrush((HBITMAP) M_BRUSHDATA->m_stipple.GetMask()->GetMaskBitmap());
         else
           M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreateSolidBrush(ms_colour) ;
         break ;
@@ -230,6 +240,10 @@ void wxBrush::SetStipple(const wxBitmap& Stipple)
     Unshare();
 
     M_BRUSHDATA->m_stipple = Stipple;
+    if (M_BRUSHDATA->m_stipple.GetMask())
+    	M_BRUSHDATA->m_style = wxSTIPPLE_MASK_OPAQUE;
+    else
+    	M_BRUSHDATA->m_style = wxSTIPPLE;
 
     RealizeResource();
 }

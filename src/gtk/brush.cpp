@@ -65,9 +65,16 @@ wxBrush::wxBrush( const wxColour &colour, int style )
 wxBrush::wxBrush( const wxBitmap &stippleBitmap )
 {
     m_refData = new wxBrushRefData();
-    M_BRUSHDATA->m_style = wxSTIPPLE;
     M_BRUSHDATA->m_colour = *wxBLACK;
     M_BRUSHDATA->m_stipple = stippleBitmap;
+    if (M_BRUSHDATA->m_stipple.GetMask())
+    {
+		   M_BRUSHDATA->m_style = wxSTIPPLE_MASK_OPAQUE;
+	 }
+	 else
+	 {		
+		   M_BRUSHDATA->m_style = wxSTIPPLE;
+	 }		
 
     if (wxTheBrushList) wxTheBrushList->AddBrush( this );
 }
@@ -161,6 +168,14 @@ void wxBrush::SetStipple( const wxBitmap& stipple )
 {
     Unshare();
     M_BRUSHDATA->m_stipple = stipple;
+    if (M_BRUSHDATA->m_stipple.GetMask())
+    {
+		   M_BRUSHDATA->m_style = wxSTIPPLE_MASK_OPAQUE;
+	 }
+	 else
+	 {		
+		   M_BRUSHDATA->m_style = wxSTIPPLE;
+	 }		
 }
 
 void wxBrush::Unshare()

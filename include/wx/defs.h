@@ -1316,6 +1316,8 @@ enum {
 
 // Brush & Pen Stippling. Note that a stippled pen cannot be dashed!!
 // Note also that stippling a Pen IS meaningfull, because a Line is
+  wxSTIPPLE_MASK_OPAQUE, //mask is used for blitting monochrome using text fore and back ground colors
+  wxSTIPPLE_MASK,        //mask is used for masking areas in the stipple bitmap (TO DO)
 // drawn with a Pen, and without any Brush -- and it can be stippled.
   wxSTIPPLE =          110,
   wxBDIAGONAL_HATCH,

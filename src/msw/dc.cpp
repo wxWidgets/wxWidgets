@@ -405,6 +405,28 @@ void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
 
 void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset,int fillStyle)
 {
+    COLORREF old_textground = ::GetTextColor(GetHdc());
+    COLORREF old_background = ::GetBkColor(GetHdc());
+    if (m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE)
+    {
+
+       if (m_textForegroundColour.Ok())
+       {   //just the oposite from what is expected see help on pattern brush
+           // 1 in mask becomes bk color
+           ::SetBkColor(GetHdc(), m_textForegroundColour.GetPixel() );
+       }
+       if (m_textBackgroundColour.Ok())
+       {   //just the oposite from what is expected
+           // 0 in mask becomes text color
+           ::SetTextColor(GetHdc(), m_textBackgroundColour.GetPixel() );
+       }
+
+       if (m_backgroundMode == wxTRANSPARENT)
+           SetBkMode(GetHdc(), TRANSPARENT);
+       else
+           SetBkMode(GetHdc(), OPAQUE);
+    }
+
     // Do things less efficiently if we have offsets
     if (xoffset != 0 || yoffset != 0)
     {
@@ -431,6 +453,13 @@ void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffs
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
         (void)Polygon(GetHdc(), (POINT*) points, n);
         SetPolyFillMode(GetHdc(),prev);
+    }
+
+    if (m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE)
+    {
+       ::SetBkMode(GetHdc(), TRANSPARENT);
+       ::SetTextColor(GetHdc(), old_textground);
+       ::SetBkColor(GetHdc(), old_background);
     }
 }
 
@@ -463,6 +492,28 @@ void wxDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset
 
 void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
+    COLORREF old_textground = ::GetTextColor(GetHdc());
+    COLORREF old_background = ::GetBkColor(GetHdc());
+    if (m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE)
+    {
+
+       if (m_textForegroundColour.Ok())
+       {   //just the oposite from what is expected see help on pattern brush
+           // 1 in mask becomes bk color
+           ::SetBkColor(GetHdc(), m_textForegroundColour.GetPixel() );
+       }
+       if (m_textBackgroundColour.Ok())
+       {   //just the oposite from what is expected
+           // 0 in mask becomes text color
+           ::SetTextColor(GetHdc(), m_textBackgroundColour.GetPixel() );
+       }
+
+       if (m_backgroundMode == wxTRANSPARENT)
+           SetBkMode(GetHdc(), TRANSPARENT);
+       else
+           SetBkMode(GetHdc(), OPAQUE);
+    }
+
     wxCoord x2 = x + width;
     wxCoord y2 = y + height;
 
@@ -503,6 +554,13 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 
     CalcBoundingBox(x, y);
     CalcBoundingBox(x2, y2);
+
+    if (m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE)
+    {
+       ::SetBkMode(GetHdc(), TRANSPARENT);
+       ::SetTextColor(GetHdc(), old_textground);
+       ::SetBkColor(GetHdc(), old_background);
+    }
 }
 
 void wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)

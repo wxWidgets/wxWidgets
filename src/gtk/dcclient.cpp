@@ -339,8 +339,16 @@ void wxWindowDC::DoDrawPolygon( int n, wxPoint points[], wxCoord xoffset, wxCoor
         CalcBoundingBox( points[i].x + xoffset, points[i].y + yoffset );
     }
 
-    if ((m_brush.GetStyle() != wxTRANSPARENT) && m_window)
-        gdk_draw_polygon (m_window, m_brushGC, TRUE, gdkpoints, n);
+    if (m_window)
+	{
+		if 	((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))		
+        	gdk_draw_polygon (m_window, m_textGC, TRUE, gdkpoints, n);
+		else
+		{ 
+   			if ((m_brush.GetStyle() != wxTRANSPARENT))
+        		gdk_draw_polygon (m_window, m_brushGC, TRUE, gdkpoints, n);
+		}		
+	}
 
     // To do: Fillstyle
 
@@ -377,11 +385,19 @@ void wxWindowDC::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord h
 
     if (m_window)
     {
-        if (m_brush.GetStyle() != wxTRANSPARENT)
-            gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx, yy, ww, hh );
+   	  if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
+   	  {
+             gdk_draw_rectangle( m_window, m_textGC, TRUE, xx, yy, ww, hh );
+           	 gdk_draw_rectangle( m_window, m_penGC, FALSE, xx, yy, ww-1, hh-1 );
+	  }
+	  else
+	  {
+      	if (m_brush.GetStyle() != wxTRANSPARENT)
+             gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx, yy, ww, hh );
 
-        if (m_pen.GetStyle() != wxTRANSPARENT)
-            gdk_draw_rectangle( m_window, m_penGC, FALSE, xx, yy, ww-1, hh-1 );
+      	if (m_pen.GetStyle() != wxTRANSPARENT)
+             gdk_draw_rectangle( m_window, m_penGC, FALSE, xx, yy, ww-1, hh-1 );
+	  }
     }
 
     CalcBoundingBox( x, y );
@@ -1083,6 +1099,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
         }
 
         case wxTRANSPARENT:
+		case wxSTIPPLE_MASK_OPAQUE:
         case wxSTIPPLE:
         case wxSOLID:
         default:
@@ -1164,6 +1181,12 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
             gdk_gc_set_fill( m_brushGC, GDK_STIPPLED );
             gdk_gc_set_stipple( m_brushGC, m_brush.GetStipple()->GetBitmap() );
         }
+    }
+
+    if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
+    {
+            gdk_gc_set_fill( m_textGC, GDK_OPAQUE_STIPPLED);
+            gdk_gc_set_stipple( m_textGC, m_brush.GetStipple()->GetMask()->GetBitmap() );
     }
 
     if (IS_HATCH(m_brush.GetStyle()))
