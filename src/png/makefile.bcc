@@ -1,107 +1,92 @@
-# This file is special for Widows because setjmp 
-# is incompatible with the DOS version.
-# Alejandro Aguilar, 1995
-
 #
-# Borland C++ tools
+# File:		makefile.bcc
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:
 #
-IMPLIB  = Implib
-BCC     = Bcc +BccW16.cfg
-TLINK   = TLink
-TLIB    = TLib
-BRC     = Brc
-TASM    = Tasm
-
-
+# "%W% %G%"
 #
-# Options
-#   
-IDE_LFLAGS =  -LC:\BC4\LIB
-IDE_RFLAGS =  -IC:\BC4\INCLUDE;..\zlib;
-LLATW16_winpngdlib =  -Twe
-RLATW16_winpngdlib =  -31
-BLATW16_winpngdlib = 
-LEAT_winpngdlib = $(LLATW16_winpngdlib)
-REAT_winpngdlib = $(RLATW16_winpngdlib)
-BEAT_winpngdlib = $(BLATW16_winpngdlib)
-ZLIB=..\..\lib\zlib.lib
-LOBJECTS = png.obj pngrcb.obj pngread.obj pngrtran.obj pngrutil.obj pngstub.obj\
-	pngtrans.obj pngwrite.obj pngwtran.obj pngwutil.obj
+# Makefile : Builds PNG library (BC++ 16-bit) 
 
-#
-# Dependency List
-#
-Dep_winpng = \
-	..\..\lib\winpng.lib
+# WXWIN and BCCDIR are set by parent make
 
-winpng : BccW16.cfg $(Dep_winpng)
-  echo MakeNode winpng
+WXDIR = $(WXWIN)
+!include $(WXDIR)\src\makebcc.env
 
-Dep_winpngdlib = \
-	png.obj\
-	pngrcb.obj\
-	pngread.obj\
-	pngrtran.obj\
-	pngrutil.obj\
-	pngstub.obj\
-	pngtrans.obj\
-	pngwrite.obj\
-	pngwtran.obj\
-	pngwutil.obj
+WINPNGLIB = ..\..\lib\winpng.lib
 
-$(ZLIB): 
-	cd ..\zlib
-	make -fmakefile.bcc
-	cd ..\png
-	
-winpng.lib : $(Dep_winpngdlib) $(ZLIB)  
-  copy /b $(ZLIB) winpng.lib
-  $(TLIB) $< $(IDE_BFLAGS) $(BEAT_winpngdlib) @&&|    
-+$(LOBJECTS:.obj =.obj +)
-|
+WXLIBDIR = $(WXDIR)\lib
+WXINC = $(WXDIR)\include\msw
+WXLIB = $(WXLIBDIR)\wx.lib 
 
-png.obj :  png.c
-  $(BCC)   -P- -c $(CEAT_winpngdlib) -o$@ png.c
+!if "$(FINAL)" == "0"
+OPT = -Od
+DEBUG_FLAGS= -v
+!else
+OPT = -Od
+DEBUG_FLAGS =
+!endif
+CPPFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG)
 
-pngrcb.obj :  pngrcb.c
-  $(BCC)   -P- -c $(CEAT_winpngdlib) -o$@ pngrcb.c
+OBJECTS = png.obj pngread.obj pngrtran.obj pngrutil.obj \
+ pngpread.obj pngtrans.obj pngwrite.obj pngwtran.obj pngwutil.obj \
+ pngerror.obj pngmem.obj pngwio.obj pngrio.obj pngget.obj pngset.obj
 
-pngread.obj :  pngread.c
-  $(BCC)   -P- -c $(CEAT_winpngdlib) -o$@ pngread.c
+all: $(WINPNGLIB)
 
-pngrtran.obj :  pngrtran.c
-  $(BCC)   -P- -c $(CEAT_winpngdlib) -o$@ pngrtran.c
+$(WINPNGLIB): $(OBJECTS) 
+        erase $(WINPNGLIB)
+	tlib $(WINPNGLIB) /P512 @&&!
+-+$(OBJECTS:.obj =.obj -+) 
+!
 
-pngrutil.obj :  pngrutil.c
-  $(BCC)   -P- -c $(CEAT_winpngdlib) -o$@ pngrutil.c
+.$(SRCSUFF).obj:
+	bcc $(CPPFLAGS) -c {$< }
 
-pngstub.obj :  pngstub.c
-  $(BCC)   -P- -c $(CEAT_winpngdlib) -o$@ pngstub.c
+.c.obj:
+	bcc $(CPPFLAGS) -P- -c {$< }
 
-pngtrans.obj :  pngtrans.c
-  $(BCC)   -P- -c $(CEAT_winpngdlib) -o$@ pngtrans.c
-
-pngwrite.obj :  pngwrite.c
-  $(BCC)   -P- -c $(CEAT_winpngdlib) -o$@ pngwrite.c
-
-pngwtran.obj :  pngwtran.c
-  $(BCC)   -P- -c $(CEAT_winpngdlib) -o$@ pngwtran.c
-
-pngwutil.obj :  pngwutil.c
-  $(BCC)   -P- -c $(CEAT_winpngdlib) -o$@ pngwutil.c
-
-# Compiler configuration file
-BccW16.cfg :
-	Copy &&|
--v
--vi
--X-
--H
--IC:\BC4\INCLUDE
--H=winpng.csm
+$(CFG): makefile.bcc
+	copy &&!
+-H=$(WXDIR)\src\msw\borland.pch
+-2
+-P
+-d
+-w-hid
+-w-par
+-w-pia
+-w-aus
+-w-rch
 -ml
--WS
--3
--Ff
-| $@
+-Od
+-WE
+-Fs-
+-Vf
+-Ff=4
+-I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/png;$(WXDIR)/src/zlib;$(WXDIR)/src/xpm
+-I$(WXDIR)\include\wx\msw\gnuwin32
+-L$(BCCDIR)\lib
+-D__WXWIN__
+-D__WXMSW__
+-D__WINDOWS__
+-D__WIN16__
+! $(CFG)
+!if "$(BOR_VER)" == "3.1"
+	echo -Ff=4 >>$(CFG)
+!elif "$(BOR_VER)" == "4"
+	echo -Ff=512 >>$(CFG)
+	echo -dc >>$(CFG)
+!else
+	echo -Ff=512 >>$(CFG)
+	echo -dc >>$(CFG)
+!endif
+
+clean:
+        -erase *.obj
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.rws
+        -erase $(WINPNGLIB)
 

@@ -14,7 +14,7 @@ WXDIR = $(WXWIN)
 WXLIB = $(WXDIR)\lib\wx.lib
 WXINC = $(WXDIR)\include
 
-WINPNGDIR = $(WXDIR)\utils\imatest\png
+WINPNGDIR = $(WXDIR)\src\png
 WINPNGINC = $(WINPNGDIR)
 WINPNGLIB = ..\..\lib\winpng.lib
 
@@ -33,19 +33,20 @@ PRECOMP=/YuWX.H
 
 !if "$(FINAL)" == "0"
 OPT = /Od
-CPPFLAGS= /AL /W4 /Gt4 /Zi $(ZOPTION) /G2sw $(OPT) /Dwx_msw $(INC) # $(PRECOMP) /Fp$(WXDIR)\src\msw\wx.pch
-CFLAGS= /AL /W4 /Gt4 /Zi /G2sw /Od /Dwx_msw $(INC)
+CPPFLAGS= /AL /W4 /Gt4 /Zi $(ZOPTION) /G2sw $(OPT) /D__WXMSW__ $(INC)
+CFLAGS= /AL /W4 /Gt4 /Zi /G2sw /Od /D__WXMSW__ $(INC)
 LINKFLAGS=/NOD /CO /ONERROR:NOEXE
 !else
 # /Ox for real FINAL version
 OPT = /Ox
-CPPFLAGS= /AL /W4 /Gt4 /Zi /Os /G2sw $(OPT) /Dwx_msw $(INC) # $(PRECOMP) /Fp$(WXDIR)\src\msw\wx.pch
-CFLAGS= /AL /W4 /Gt4 /Zi /Os /G2sw /Dwx_msw $(INC)
+CPPFLAGS= /AL /W4 /Gt4 /Zi /Os /G2sw $(OPT) /D__WXMSW__ $(INC)
+CFLAGS= /AL /W4 /Gt4 /Zi /Os /G2sw /D__WXMSW__ $(INC)
 LINKFLAGS=/NOD /ONERROR:NOEXE
 !endif
 
-OBJECTS = png.obj pngrcb.obj pngread.obj pngrtran.obj pngrutil.obj pngstub.obj \
- pngtrans.obj pngwrite.obj pngwtran.obj pngwutil.obj
+OBJECTS = png.obj pngread.obj pngrtran.obj pngrutil.obj \
+ pngpread.obj pngtrans.obj pngwrite.obj pngwtran.obj pngwutil.obj \
+ pngerror.obj pngmem.obj pngwio.obj pngrio.obj pngget.obj pngset.obj
 
 all:    $(WINPNGLIB)
 

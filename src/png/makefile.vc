@@ -31,14 +31,14 @@ PRECOMP=/YuWX.H
 
 !if "$(FINAL)" == "0"
 OPT = /Od
-CPPFLAGS= /W4 /Zi /MD /GX $(ZOPTION) $(OPT) /Dwx_msw $(INC) # $(PRECOMP) /Fp$(WXDIR)\src\msw\wx.pch
-CFLAGS= /W4 /Zi /MD /GX /Od /Dwx_msw $(INC)
+CPPFLAGS= /W4 /Zi /MD /GX $(ZOPTION) $(OPT) /D__WXMSW__ $(INC)
+CFLAGS= /W4 /Zi /MD /GX /Od /D__WXMSW__ $(INC)
 LINKFLAGS=/NOD /CO /ONERROR:NOEXE
 !else
 # /Ox for real FINAL version
 OPT = /O2
-CPPFLAGS= /W4 /MD /GX /Dwx_msw $(INC) # $(PRECOMP) /Fp$(WXDIR)\src\msw\wx.pch
-CFLAGS= /W4 /MD /GX /Dwx_msw $(INC)
+CPPFLAGS= /W4 /MD /GX /D__WXMSW__ $(INC)
+CFLAGS= /W4 /MD /GX /D__WXMSW__ $(INC)
 LINKFLAGS=/NOD /ONERROR:NOEXE
 !endif
 

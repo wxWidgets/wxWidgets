@@ -43,12 +43,13 @@ to a stream. \it{mode} specifies the type of the buffer (read, write, read\_writ
 work only on memory buffers but it is still compatible with the rest of the
 wxStream classes. You can write, read to this special stream and it will
 grow (if it is allowed by the user) its internal buffer. Briefly, it has all
-functionnalities of a ``normal'' stream.
+functionality of a ``normal'' stream.
 
 \wxheading{Warning}
 
 The "read\_write" mode may not work: it isn't completely finished.
 You can create "memory" streams by this way:
+
 \begin{verbatim}
   wxStreamBuffer *sb = new wxStreamBuffer(wxStreamBuffer::read)
   wxInputStream *input = new wxInputStream(sb);
@@ -57,13 +58,10 @@ You can create "memory" streams by this way:
 
   // input is now a read-only memory stream.
 \end{verbatim}
-But you should care about destroying the stream buffer \it{YOURSELF}.
 
-\wxheading{See also}
+But you should take care when destroying the stream buffer yourself.
 
-\helpref{wxStreamBuffer:SetBufferIO}{wxstreambuffersetbufferio}
-
-\func{}{wxStreamBuffer}{\param{const wxStreamBuffer &}{buffer}}
+\func{}{wxStreamBuffer}{\param{const wxStreamBuffer\&}{buffer}}
 
 Constructor. It initializes the stream buffer with the data of the specified
 stream buffer. The new stream buffer is nearly exactly the same as the
@@ -77,6 +75,10 @@ The fact that the two stream buffers shared the same buffer could generate
 segmentation violation if the parent is destroyed and the children continues
 operating. It is advised to use this feature only in very local area of the
 program.
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer:SetBufferIO}{wxstreambuffersetbufferio}
 
 \membersection{wxStreamBuffer::\destruct{wxStreamBuffer}}
 

@@ -4,7 +4,7 @@
 !include $(WXDIR)\src\makebcc.env
 
 WXLIB = $(WXDIR)\lib\wx.lib
-LIBS=$(WXLIB) $(EXTRALIBS) mathwl cwl import ole2w16
+LIBS=$(WXLIB) $(EXTRALIBS) mathwl cwl import ole2w16 winpng zlib
 
 all:    $(TARGET).exe $(EXTRATARGETS)
 

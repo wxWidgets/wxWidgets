@@ -45,6 +45,10 @@ PERIPH_TARGET=xpm $(PERIPH_TARGET)
 PERIPH_CLEAN_TARGET=clean_xpm $(PERIPH_CLEAN_TARGET)
 !endif
 
+# PNG and Zlib
+PERIPH_TARGET=png zlib $(PERIPH_TARGET)
+PERIPH_CLEAN_TARGET=clean_png clean_zlib $(PERIPH_CLEAN_TARGET)
+
 GENDIR=..\generic
 COMMDIR=..\common
 OLEDIR=.\ole
@@ -1059,12 +1063,32 @@ $(OBJECTS):	$(WXDIR)/include/wx/setup.h
 # Peripheral components
 
 xpm:
-    cd $(WXDIR)\contrib\wxxpm
+    cd $(WXDIR)\src\xpm
     nmake -f makefile.dos FINAL=$(FINAL)
     cd $(WXDIR)\src\msw
 
 clean_xpm:
-    cd $(WXDIR)\contrib\wxxpm
+    cd $(WXDIR)\src\xpm
+    nmake -f makefile.dos clean
+    cd $(WXDIR)\src\msw
+
+zlib:
+    cd $(WXDIR)\src\zlib
+    nmake -f makefile.dos FINAL=$(FINAL)
+    cd $(WXDIR)\src\msw
+
+clean_zlib:
+    cd $(WXDIR)\src\zlib
+    nmake -f makefile.dos clean
+    cd $(WXDIR)\src\msw
+
+png:
+    cd $(WXDIR)\src\png
+    nmake -f makefile.dos FINAL=$(FINAL)
+    cd $(WXDIR)\src\msw
+
+clean_png:
+    cd $(WXDIR)\src\png
     nmake -f makefile.dos clean
     cd $(WXDIR)\src\msw
 

@@ -53,8 +53,8 @@ PERIPH_CLEAN_TARGET=clean_xpm $(PERIPH_CLEAN_TARGET)
 
 # TODO: add these libraries
 # PERIPH_LIBS=$(WXDIR)\lib\zlib.lib $(WXDIR)\lib\winpng.lib $(PERIPH_LIBS)
-# PERIPH_TARGET=zlib png $(PERIPH_TARGET)
-# PERIPH_CLEAN_TARGET=clean_zlib clean_png $(PERIPH_CLEAN_TARGET)
+PERIPH_TARGET=zlib png $(PERIPH_TARGET)
+PERIPH_CLEAN_TARGET=clean_zlib clean_png $(PERIPH_CLEAN_TARGET)
 
 CPPFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG)
 
@@ -635,57 +635,57 @@ $(MSWDIR)\notebook.obj:     $(GENDIR)\notebook.$(SRCSUFF)
 
 all_utils:
     cd $(WXDIR)\utils
-    make -f makefile.b32
+    make -f makefile.bcc
     cd $(WXDIR)\src\msw
 
 all_samples:
     cd $(WXDIR)\samples
-    make -f makefile.b32
+    make -f makefile.bcc
     cd $(WXDIR)\src\msw
 
 all_execs:
     cd $(WXDIR)\utils
-    make -f makefile.b32 all_execs
+    make -f makefile.bcc all_execs
     cd $(WXDIR)\src\msw
 
 all_libs:
     cd $(WXDIR)\src\msw
-    make -f makefile.b32 ctl3d dib fafa gauge hytext itsy prologio rcparser wx wxgraph\
+    make -f makefile.bcc ctl3d dib fafa gauge hytext itsy prologio rcparser wx wxgraph\
           wxstring wxtree mfutils # wxxpm
 
 all_contribs:
     cd $(WXDIR)\src\msw
-    make -f makefile.b32 ctl3d fafa wxstring itsy gauge # wxxpm
+    make -f makefile.bcc ctl3d fafa wxstring itsy gauge # wxxpm
 
 # CONTRIB
 ctl3d:  $(CFG)
         cd $(WXDIR)\src\msw\ctl3d\borland
-        make -f makefile.b32 -DCFG=$(CFG)
+        make -f makefile.bcc -DCFG=$(CFG)
         cd $(WXDIR)\src\msw
 
 wxxpm:	$(CFG)
 	cd $(WXDIR)\src\xpm
-	make -f makefile.b32 -DCFG=$(CFG) -DFINAL=$(FINAL) -DWXWIN=$(WXDIR) -DDEBUG=$(DEBUG)
+	make -f makefile.bcc -DCFG=$(CFG) -DFINAL=$(FINAL) -DWXWIN=$(WXDIR) -DDEBUG=$(DEBUG)
 	cd $(WXDIR)\src\msw
 
 png:    $(CFG)
         cd $(WXDIR)\src\png
-        make -f makefile.b32 
+        make -f makefile.bcc 
         cd $(WXDIR)\src\msw
 
 clean_png:
         cd $(WXDIR)\src\png
-        make -f makefile.b32 clean
+        make -f makefile.bcc clean
         cd $(WXDIR)\src\msw
 
 zlib:   $(CFG)
         cd $(WXDIR)\src\zlib
-        make -f makefile.b32 lib
+        make -f makefile.bcc
         cd $(WXDIR)\src\msw
 
 clean_zlib:
         cd $(WXDIR)\src\zlib
-        make -f makefile.b32 clean
+        make -f makefile.bcc clean
         cd $(WXDIR)\src\msw
 
 $(CFG): makefile.bcc

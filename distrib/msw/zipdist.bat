@@ -54,6 +54,8 @@ copy %src\docs\msw\install.txt %dest\install_msw.txt
 copy %src\docs\motif\install.txt %dest\install_motif.txt
 copy %src\docs\gtk\install.txt %dest\install_gtk.txt
 copy %src\docs\readme.txt %dest
+copy %src\docs\motif\makewxmotif %dest
+copy %src\docs\gtk\makewxgtk %dest
 
 cd %dest
 

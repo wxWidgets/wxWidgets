@@ -7,7 +7,7 @@
 #
 # "%W% %G%"
 #
-# Makefile : Builds minimal example
+# Makefile : Builds PNG library (BC++ 32-bit)
 
 # WXWIN and BCCDIR are set by parent make
 
@@ -19,14 +19,11 @@ WINPNGLIB = ..\..\lib\winpng.lib
 WXLIBDIR = $(WXDIR)\lib
 WXINC = $(WXDIR)\include\msw
 WXLIB = $(WXLIBDIR)\wx32.lib 
-LIBS=$(WXLIB) $(WXDIR)\lib\winpng.lib $(WXDIR)\lib\zlib.lib cw32 import32 ole2w32
 
 !if "$(FINAL)" == "0"
-LINKFLAGS=/v /Tpe /L$(WXLIBDIR);$(BCCDIR)\lib
 OPT = -Od
 DEBUG_FLAGS= -v
 !else
-LINKFLAGS=/Tpe /L$(WXLIBDIR);$(BCCDIR)\lib
 OPT = -Od
 DEBUG_FLAGS =
 !endif
