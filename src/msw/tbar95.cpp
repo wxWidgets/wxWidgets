@@ -836,8 +836,9 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
             //     this case
 
             size_t lenAnsi = help.Len();
-            #ifdef __MWERKS__
+            #if defined( __MWERKS__ ) || defined( __CYGWIN__ )
                 // MetroWerks doesn't like calling mbstowcs with NULL argument
+                // neither Cygwin does
                 size_t lenUnicode = 2*lenAnsi;
             #else
                 size_t lenUnicode = mbstowcs(NULL, help, lenAnsi);
