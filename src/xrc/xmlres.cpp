@@ -40,6 +40,22 @@
 WX_DEFINE_OBJARRAY(wxXmlResourceDataRecords);
 
 
+wxXmlResource *wxXmlResource::ms_instance = NULL;
+
+/*static*/ wxXmlResource *wxXmlResource::Get()
+{
+    if ( !ms_instance )
+        ms_instance = new wxXmlResource;
+    return ms_instance;
+}
+
+/*static*/ wxXmlResource *wxXmlResource::Set(wxXmlResource *res)
+{
+    wxXmlResource *old = ms_instance;
+    ms_instance = res;
+    return old;
+}
+
 wxXmlResource::wxXmlResource(int flags)
 {
     m_handlers.DeleteContents(TRUE);
@@ -1085,21 +1101,18 @@ static void CleanXMLID_Records()
 
 // --------------- module and globals -----------------------------
 
-
-static wxXmlResource gs_XmlResource;
-
-wxXmlResource *wxTheXmlResource = &gs_XmlResource;
-
-
 class wxXmlResourceModule: public wxModule
 {
 DECLARE_DYNAMIC_CLASS(wxXmlResourceModule)
 public:
     wxXmlResourceModule() {}
-    bool OnInit() {return TRUE;}
+    bool OnInit()
+    {
+        return TRUE;
+    }
     void OnExit()
     {
-        wxTheXmlResource->ClearHandlers();
+        delete wxXmlResource::Get();
         CleanXMLID_Records();
     }
 };

@@ -392,7 +392,7 @@ void " + parFuncname + "()\n\
     {
         wxString name, ext, path;
         wxSplitPath(parFiles[i], &path, &name, &ext);
-        file.Write("    wxTheXmlResource->Load(\"memory:xml_resource/" + 
+        file.Write("    wxXmlResource::Get()->Load(\"memory:xml_resource/" + 
                    name + ".xrc" + "\");\n");
     }
     

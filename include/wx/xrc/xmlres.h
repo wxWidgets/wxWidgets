@@ -101,7 +101,7 @@ public:
     wxXmlResource(int flags = wxXRC_USE_LOCALE);
     wxXmlResource(const wxString& filemask, int flags = wxXRC_USE_LOCALE);
     ~wxXmlResource();
-
+    
     // Loads resources from XML files that match given filemask.
     // This method understands VFS (see filesys.h).
     bool Load(const wxString& filemask);
@@ -172,6 +172,13 @@ public:
     int CompareVersion(int major, int minor, int release, int revision) const
         { return GetVersion() -
                  (major*256*256*256 + minor*256*256 + release*256 + revision); }
+                 
+    // Singleton accessors:
+    
+    // Gets global resources object or create one if none exists
+    static wxXmlResource *Get();
+    // Sets global resources object and returns pointer to previous one (may be NULL).
+    static wxXmlResource *Set(wxXmlResource *res);
 
 protected:
     // Scans resources list for unloaded files and loads them. Also reloads
@@ -199,11 +206,14 @@ private:
 #endif
 
     friend class wxXmlResourceHandler;
+    
+    // singleton instance:
+    static wxXmlResource *ms_instance;
 };
 
 
-// Global instance of resource class. For your convenience.
-extern WXXMLDLLEXPORT wxXmlResource *wxTheXmlResource;
+// This is here only for backward compatibility. Do NOT use!!
+#define wxTheXmlResource  wxXmlResource::Get()
 
 // This macro translates string identifier (as used in XML resource,
 // e.g. <menuitem id="my_menu">...</menuitem>) to integer id that is needed by

@@ -111,8 +111,8 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     wxImage::AddHandler(new wxGIFHandler);
-    wxTheXmlResource->InitAllHandlers();
-    wxTheXmlResource->Load("rc/resource.xrc");
+    wxXmlResource::Get()->InitAllHandlers();
+    wxXmlResource::Get()->Load("rc/resource.xrc");
 
     MyFrame *frame = new MyFrame("XML resources demo",
                                  wxPoint(50, 50), wxSize(450, 340));
@@ -130,8 +130,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 {
     SetIcon(wxICON(appicon));
 
-    SetMenuBar(wxTheXmlResource->LoadMenuBar("mainmenu"));
-    SetToolBar(wxTheXmlResource->LoadToolBar(this, "toolbar"));
+    SetMenuBar(wxXmlResource::Get()->LoadMenuBar("mainmenu"));
+    SetToolBar(wxXmlResource::Get()->LoadToolBar(this, "toolbar"));
 }
 
 
@@ -155,7 +155,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnDlg1(wxCommandEvent& WXUNUSED(event))
 {
     wxDialog dlg;
-    wxTheXmlResource->LoadDialog(&dlg, this, "dlg1");
+    wxXmlResource::Get()->LoadDialog(&dlg, this, "dlg1");
     dlg.ShowModal();
 }
 
@@ -163,6 +163,6 @@ void MyFrame::OnDlg1(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnDlg2(wxCommandEvent& WXUNUSED(event))
 {
     wxDialog dlg;
-    wxTheXmlResource->LoadDialog(&dlg, this, "dlg2");
+    wxXmlResource::Get()->LoadDialog(&dlg, this, "dlg2");
     dlg.ShowModal();
 }
