@@ -282,6 +282,16 @@ public:
 // wxImage
 //-----------------------------------------------------------------------------
 
+
+// GRG: Dic/99
+class WXDLLEXPORT wxHNode
+{
+public:
+    unsigned long index;
+    unsigned long value;
+};
+
+
 class WXDLLEXPORT wxImage: public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxImage)
@@ -378,6 +388,10 @@ public:
 
   static void CleanUpHandlers();
   static void InitStandardHandlers();
+
+  // GRG: Dic/99
+  unsigned long ComputeHistogram( wxHashTable &h );
+
 
 protected:
 

@@ -2297,3 +2297,49 @@ public:
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxImageModule, wxModule)
+
+
+//-----------------------------------------------------------------------------
+
+// GRG, Dic/99
+// Computes the histogram of the image and fills a hash table, indexed
+// with integer keys built as 0xRRGGBB, containing wxHNode objects. Each
+// wxHNode contains an 'index' (useful to build a palette with the image
+// colours) and a 'value', which is the number of pixels in the image with
+// that colour.
+
+unsigned long wxImage::ComputeHistogram( wxHashTable &h )
+{
+    unsigned char r, g, b, *p;
+    unsigned long size, nentries, key;
+    wxHNode *hnode;
+
+    p = GetData();
+    size = GetWidth() * GetHeight();
+    nentries = 0;
+
+    for (unsigned long j = 0; j < size; j++)
+    {
+        r = *(p++);
+        g = *(p++);
+        b = *(p++);
+        key = (r << 16) | (g << 8) | b;
+
+        hnode = (wxHNode *) h.Get(key);
+
+        if (hnode)
+            hnode->value++;
+        else
+        {
+            hnode = new wxHNode();
+            hnode->index = nentries++;  
+            hnode->value = 1;
+
+            h.Put(key, (wxObject *)hnode);
+        }
+    }
+
+    return nentries;
+}
+
+
