@@ -60,7 +60,6 @@
     <subproject id="png" template="sub"/>
     <subproject id="printing" template="sub"/>
     <subproject id="propsize" template="sub"/>
-    <subproject id="regextest" template="sub"/>
     <subproject id="regtest" template="sub"/>
     <subproject id="render" template="sub"/>
     <subproject id="richedit" template="sub"/>
