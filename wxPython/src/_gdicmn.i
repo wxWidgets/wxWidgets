@@ -485,13 +485,13 @@ public:
     DocDeclStr(
         wxRect&, Inflate(wxCoord dx, wxCoord dy),
         "Increase the rectangle size by dx in x direction and dy in y
-direction. Both or one of) parameters may be negative to decrease the
+direction. Both (or one of) parameters may be negative to decrease the
 rectangle size.", "");
 
     DocDeclStr(
         wxRect&, Deflate(wxCoord dx, wxCoord dy),
         "Decrease the rectangle size by dx in x direction and dy in y
-direction. Both or one of) parameters may be negative to increase the
+direction. Both (or one of) parameters may be negative to increase the
 rectngle size. This method is the opposite of Inflate.", "");
 
     DocDeclStrName(
@@ -506,9 +506,14 @@ bottom, otherwise it is moved to the left or top respectively.", "",
         "Same as OffsetXY but uses dx,dy from Point", "");
 
     DocDeclStr(
-        wxRect&, Intersect(const wxRect& rect),
-        "Return the intersectsion of this rectangle and rect.", "");
+        wxRect, Intersect(const wxRect& rect),
+        "Returns the intersectsion of this rectangle and rect.", "");
 
+    DocDeclStr(
+        wxRect , Union(const wxRect& rect),
+        "Returns the union of this rectangle and rect.", "");
+    
+    
     DocDeclStr(
         wxRect, operator+(const wxRect& rect) const,
         "Add the properties of rect to this rectangle and return the result.", "");
