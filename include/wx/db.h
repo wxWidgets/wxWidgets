@@ -39,7 +39,7 @@
 #define DB_DOT_H
 
 
-// BJO 20000503: introduce new GetColumns members which are  database independant and 
+// BJO 20000503: introduce new GetColumns members which are more database independant and 
 //               return columns in the order they were created
 #define OLD_GETCOLUMNS 1
 
