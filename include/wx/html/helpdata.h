@@ -77,7 +77,8 @@ protected:
 };
 
 
-WX_DECLARE_EXPORTED_OBJARRAY(wxHtmlBookRecord, wxHtmlBookRecArray);
+WX_DECLARE_USER_EXPORTED_OBJARRAY(wxHtmlBookRecord, wxHtmlBookRecArray,
+                                  WXDLLIMPEXP_HTML);
 
 
 struct wxHtmlContentsItem

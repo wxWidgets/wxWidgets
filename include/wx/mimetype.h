@@ -149,7 +149,8 @@ private:
 #endif // 0
 };
 
-WX_DECLARE_EXPORTED_OBJARRAY(wxFileTypeInfo, wxArrayFileTypeInfo);
+WX_DECLARE_USER_EXPORTED_OBJARRAY(wxFileTypeInfo, wxArrayFileTypeInfo,
+                                  WXDLLIMPEXP_BASE);
 
 // ----------------------------------------------------------------------------
 // wxFileType: gives access to all information about the files of given type.
