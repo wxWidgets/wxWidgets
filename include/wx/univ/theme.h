@@ -69,7 +69,7 @@ private:
 
     // the current theme
     static wxTheme *ms_theme;
-    friend class wxThemeInfo;
+    friend struct WXDLLEXPORT wxThemeInfo;
 };
 
 // ----------------------------------------------------------------------------
