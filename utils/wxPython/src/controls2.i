@@ -447,6 +447,7 @@ public:
     bool IsBold(const wxTreeItemId& item) const;
     wxTreeItemId HitTest(const wxPoint& point);
 
+#ifdef __WXMSW__
     //bool GetBoundingRect(const wxTreeItemId& item, wxRect& rect, int textOnly = FALSE)
     %addmethods {
         PyObject* GetBoundingRect(const wxTreeItemId& item, int textOnly = FALSE) {
@@ -459,6 +460,7 @@ public:
             }
         }
     }
+#endif
 
 %pragma(python) addtoclass = "
     # Redefine a couple methods that SWIG gets a bit confused on...
