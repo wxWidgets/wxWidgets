@@ -208,7 +208,7 @@ public:
 
     // Make a Windows extended style from the given wxWindows window style
     static WXDWORD MakeExtendedStyle(long style,
-                                     bool eliminateBorders = TRUE);
+                                     bool eliminateBorders = FALSE);
     // Determine whether 3D effects are wanted
     WXDWORD Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D) const;
 
