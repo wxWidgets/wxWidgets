@@ -108,6 +108,14 @@ public:
         int *attribList = (int*) NULL, 
         const wxPalette& palette = wxNullPalette );
 
+   inline wxGLCanvas() {
+      m_glContext = (wxGLContext*) NULL;
+      m_sharedContext = (wxGLContext*) NULL;
+      m_glWidget = (GtkWidget*) NULL;
+      m_vi = (void*) NULL;
+      m_exposed = FALSE;
+   }
+
    bool Create( wxWindow *parent, const wxGLContext *shared = (wxGLContext *)NULL,
         wxWindowID id = -1, 
         const wxPoint& pos = wxDefaultPosition,
