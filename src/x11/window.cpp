@@ -386,18 +386,15 @@ void wxWindowX11::SetFocus()
     
     if (wxWindowIsVisible(xwindow))
     {
-        XSetInputFocus( wxGlobalDisplay(), xwindow, RevertToParent, CurrentTime );
+        wxLogTrace( _T("focus"), _T("wxWindowX11::SetFocus: %s"), GetClassInfo()->GetClassName());
+        //        XSetInputFocus( wxGlobalDisplay(), xwindow, RevertToParent, CurrentTime );
+        XSetInputFocus( wxGlobalDisplay(), xwindow, RevertToNone, CurrentTime );
         m_needsInputFocus = FALSE;
     }
     else
     {
         m_needsInputFocus = TRUE;
     }
-#if 0
-    wxString msg;
-    msg.Printf("SetFocus: %s\n", GetClassInfo()->GetClassName());
-    printf(msg.c_str());
-#endif
 }
 
 // Get the window with the focus
@@ -1225,6 +1222,9 @@ void wxWindowX11::OnSysColourChanged(wxSysColourChangedEvent& event)
     }
 }
 
+// See handler for InFocus case in app.cpp for details.
+wxWindow* g_GettingFocus = NULL;
+
 void wxWindowX11::OnInternalIdle()
 {
     // Update invalidated regions.
@@ -1247,6 +1247,7 @@ void wxWindowX11::OnInternalIdle()
         // no point in trying again.
         m_needsInputFocus = FALSE;
     }
+    g_GettingFocus = NULL;
 }
 
 // ----------------------------------------------------------------------------

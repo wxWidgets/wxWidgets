@@ -188,12 +188,13 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
                             wxDefaultPosition, wxSize(200, 160),
                             wxTE_MULTILINE |
                             wxTE_READONLY |
+                            wxTE_NO_VSCROLL |
                             wxTE_RICH | // a hack to get rid of vert scrollbar
                             wxSUNKEN_BORDER);
 #if defined(__WXMSW__)
-    m_text->SetFont(wxFont(12, wxROMAN, wxNORMAL, wxNORMAL));
+    m_text->SetFont(wxFont(12, wxSWISS, wxNORMAL, wxNORMAL));
 #else
-    m_text->SetFont(wxFont(14, wxROMAN, wxNORMAL, wxNORMAL));
+    m_text->SetFont(wxFont(14, wxSWISS, wxNORMAL, wxNORMAL));
 #endif
 
     wxIcon icon = wxArtProvider::GetIcon(wxART_TIP, wxART_CMN_DIALOG);

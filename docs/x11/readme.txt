@@ -55,9 +55,11 @@ Many of the samples are running.
 Some remaining issues:
 
 - some refresh efficiency issues
-- progress dialog not working (see dialogs sample)
 - clipboard implementation missing
 - drag and drop implementation missing
+- wxX11's wxTextCtrl (separate from wxUniv version)
+  needs some work, for example to remove vertical scrollbar,
+  and to provide wordwrap
 - wxToggleButton implementation missing
 - wxSpinCtrl implementation missing
 - tooltips implementation missing

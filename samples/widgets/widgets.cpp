@@ -218,6 +218,7 @@ bool WidgetsApp::OnInit()
 
     //wxLog::AddTraceMask(_T("listbox"));
     //wxLog::AddTraceMask(_T("scrollbar"));
+    //wxLog::AddTraceMask(_T("focus"));
 
     return TRUE;
 }
