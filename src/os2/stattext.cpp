@@ -45,7 +45,7 @@ bool wxStaticText::Create(
     SetBackgroundColour(pParent->GetBackgroundColour()) ;
     SetForegroundColour(pParent->GetForegroundColour()) ;
 
-    if ( id == -1 )
+    if ( vId == -1 )
         m_windowId = (int)NewControlId();
     else
         m_windowId = vId;

@@ -3580,23 +3580,21 @@ EXPORTS
       OnSysTell__20wxMemoryOutputStreamCFv
   ;From object file:  ..\common\object.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxObject::Nid
-      Nid__8wxObject
       __vft8wxObject
       ;wxCreateStoredObject(wxInputStream&)
       wxCreateStoredObject__FR13wxInputStream
       __vft15wxObjectRefData
       ;wxCreateDynamicObject(const char*)
       wxCreateDynamicObject__FPCc
-      ;wxObject::N
-      N__8wxObject
+      ;wxClassInfo::wxClassInfo(const char*,const char*,const char*,int,wxObject*(*)())
+      __ct__11wxClassInfoFPCcN21iPFv_P8wxObject
       ;wxObject::Dump(ostream&)
       Dump__8wxObjectFR7ostream
       wxTrue
       ;wxObject::LoadObject(wxObjectInputStream&)
       LoadObject__8wxObjectFR19wxObjectInputStream
-      ;wxClassInfo::FindClass(char*)
-      FindClass__11wxClassInfoFPc
+      ;wxClassInfo::IsKindOf(const wxClassInfo*) const
+      IsKindOf__11wxClassInfoCFPC11wxClassInfo
       ;wxClassInfo::sm_classTable
       sm_classTable__11wxClassInfo
       ;wxObject::CopyObject(wxObject&) const
@@ -3611,8 +3609,6 @@ EXPORTS
       sm_first__11wxClassInfo
       ;wxObject::Ref(const wxObject&)
       Ref__8wxObjectFRC8wxObject
-      ;wxClassInfo::wxClassInfo(char*,char*,char*,int,wxObject*(*)())
-      __ct__11wxClassInfoFPcN21iPFv_P8wxObject
       wxFalse
       ;wxObjectRefData::wxObjectRefData()
       __ct__15wxObjectRefDataFv
@@ -3624,6 +3620,8 @@ EXPORTS
       CleanUpClasses__11wxClassInfoFv
       ;wxObject::IsKindOf(wxClassInfo*) const
       IsKindOf__8wxObjectCFP11wxClassInfo
+      ;wxClassInfo::FindClass(const char*)
+      FindClass__11wxClassInfoFPCc
       ;wxObject::sm_classwxObject
       sm_classwxObject__8wxObject
       ;wxObject::operator new(unsigned int,char*,int)
@@ -3634,8 +3632,6 @@ EXPORTS
       __dt__8wxObjectFv
       ;wxClassInfo::InitializeClasses()
       InitializeClasses__11wxClassInfoFv
-      ;wxClassInfo::IsKindOf(wxClassInfo*) const
-      IsKindOf__11wxClassInfoCFP11wxClassInfo
   ;From object file:  ..\common\objstrm.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxObjectOutputStream::AddChild(wxObject*)

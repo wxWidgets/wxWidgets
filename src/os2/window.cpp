@@ -2848,7 +2848,7 @@ bool wxWindow::OS2OnMeasureItem(
             return FALSE;
         }
     }
-    wxWindow*                      pItem = FindItem(id);
+    wxWindow*                      pItem = FindItem(lId);
 
     if (pItem && pItem->IsKindOf(CLASSINFO(wxControl)))
     {
