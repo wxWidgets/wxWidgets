@@ -226,6 +226,19 @@ Checking in changes.txt;
 new revision: 1.297; previous revision: 1.296
 done
 
+25. wxGenericListCtrl::Refresh() (didn't work at all before)
+
+Checking in include//wx/generic/listctrl.h;
+/pack/cvsroots/wxwindows/wxWindows/include/wx/generic/listctrl.h,v  <--  listctrl.h
+new revision: 1.77; previous revision: 1.76
+Checking in src/generic/listctrl.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/generic/listctrl.cpp,v  <--  listctrl.cpp
+new revision: 1.284; previous revision: 1.283
+cvs diff: [13:19:09] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/include/wx/generic
+Checking in docs/changes.txt;
+/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
+new revision: 1.299; previous revision: 1.298
+
 
 TODO for 2.4 (items that are not backports)
 ===========================================
