@@ -55,8 +55,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxBMPHandler,wxImageHandler)
 #if wxUSE_STREAMS
 
 #ifndef BI_RGB
-#define BI_RGB       0
+    #define BI_RGB       0
+#endif
+
+#ifndef BI_RLE8
 #define BI_RLE8      1
+#endif
+
+#ifndef BI_RLE4
 #define BI_RLE4      2
 #endif
 
