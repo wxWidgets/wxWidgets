@@ -73,7 +73,6 @@ DOCDIR = $(WXDIR)\docs
 GENERICOBJS= \
   $(MSWDIR)\choicdgg.obj \
   $(MSWDIR)\gridg.obj \
-  $(MSWDIR)\imaglist.obj \
   $(MSWDIR)\laywin.obj \
   $(MSWDIR)\panelg.obj \
   $(MSWDIR)\prop.obj \
@@ -540,7 +539,7 @@ $(MSWDIR)\utilscmn.obj:     $(COMMDIR)\utilscmn.$(SRCSUFF)
 
 $(MSWDIR)\validate.obj:     $(COMMDIR)\validate.$(SRCSUFF)
 
-$(MSWDIR)\valgen.obj:     $(COMMDIR)\valtext.$(SRCSUFF)
+$(MSWDIR)\valgen.obj:     $(COMMDIR)\valgen.$(SRCSUFF)
 
 $(MSWDIR)\valtext.obj:     $(COMMDIR)\valtext.$(SRCSUFF)
 
