@@ -9,7 +9,7 @@
 
 WXDIR = $(WXWIN)
 
-LIBTARGET=$(WXDIR)\contrib\lib\mmedia.lib
+LIBTARGET=$(WXDIR)\lib\mmedia.lib
 
 OBJECTS = cdbase.obj cdwin.obj g711.obj g721.obj g723_24.obj \
   g723_40.obj g72x.obj sndaiff.obj sndbase.obj sndcodec.obj \
