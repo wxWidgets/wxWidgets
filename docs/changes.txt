@@ -183,14 +183,14 @@ All:
 - wxStopWatch::Start() didn't resume it contrary to the docs
 - accept '\r' as delimiter when parsing dates
 - fixed duplicate wxFontEncoding values
-- wxrc fixes: fixed compilation of wxBitmap, wxIcon toplevel
-  nodes; fixed wxrc when using -o dirname/filename
+- wxFileConfig now always uses UTF-8 to store settings in Unicode build;
+  it will be possible to set different charset in wxWindows >= 2.5.0
 
 Unix (GUI):
 
 - fixed the "close" button of dialogs under KDE 3.1
 - fixed memory leak in wxMimeTypesManager
-- Use GNOME2's /usr/share/pixmaps/document-icons in wxMimeTypesManager
+- use GNOME2's /usr/share/pixmaps/document-icons in wxMimeTypesManager
 
 wxBase
 
@@ -222,9 +222,10 @@ wxMSW:
 - use ES_DISABLENOSCROLL to work around the vertical scrollbar bug in
   wxTE_RICH2 text control
 - fixes for wxLocale::Init and Borland C++
-- Fix for bug whereby owner-drawn buttons didn't draw multiline labels correctly
-- Alt-letter didn't switch focus to a spin ctrl following static control with hotkey
-- Fix for multiple consecutive groups of radiobuttons
+- fix for bug whereby owner-drawn buttons didn't draw multiline labels correctly
+- Alt-letter didn't switch focus to a spin ctrl following static control with
+  hotkey
+- fix for multiple consecutive groups of radiobuttons
 
 wxMotif:
 
@@ -237,6 +238,23 @@ wxUniv:
 wxMac:
 
 - implement wxExecute with proper callback on Mac OS X
+
+wxHTML:
+
+- fixed parsing of CDATA tags (Bill Nalen)
+- content of <script> tags is not displayed anymore
+- added wxHtmlWindow::LoadFile
+- added SetFonts methods to wxHtmlDCRenderer and wxHtmlPrintout classes
+- 'sizes' argument to SetFonts can now be NULL to use default font sizes
+  (both by Adrian Philip Look)
+
+wxXRC:
+
+- wxrc fixes: fixed compilation of wxBitmap, wxIcon toplevel
+  nodes; fixed wxrc when using -o dirname/filename
+- wxToolBar handler now supports all wxToolBar's features
+- <object_ref> handling was fixed
+- loading of resources specified using relative file names was fixed
 
 2.4.0
 -----
