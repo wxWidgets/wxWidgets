@@ -18,26 +18,27 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-  #pragma implementation "dataobj.h"
+    #pragma implementation "dataobj.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #if defined(__BORLANDC__)
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#if defined(__WIN32__) && !defined(__GNUWIN32_OLD__)
+
 #ifndef WX_PRECOMP
-#include "wx/intl.h"
+    #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
-#include "wx/defs.h"
 
-#if defined(__WIN32__) && !defined(__GNUWIN32__) || defined(wxUSE_NORLANDER_HEADERS)
-
-#include "wx/log.h"
 #include "wx/dataobj.h"
 
-#include <windows.h>
+#include "wx/msw/private.h"         // includes <windows.h>
+
 #ifdef wxUSE_NORLANDER_HEADERS
   #include <ole2.h>
 #endif
@@ -50,7 +51,9 @@
 
 #include <shlobj.h>
 
-#include  "wx/msw/ole/oleutils.h"
+#include "wx/msw/ole/oleutils.h"
+
+#include "wx/msw/dib.h"
 
 // ----------------------------------------------------------------------------
 // functions
@@ -61,10 +64,6 @@
 #else // !Debug
     #define GetTymedName(tymed) ""
 #endif // Debug/!Debug
-
-// to be moved into wx/msw/bitmap.h
-extern size_t wxConvertBitmapToDIB(BITMAPINFO *pbi, const wxBitmap& bitmap);
-extern wxBitmap wxConvertDIBToBitmap(const BITMAPINFO *bmi);
 
 // ----------------------------------------------------------------------------
 // wxIEnumFORMATETC interface implementation
@@ -122,22 +121,6 @@ private:
     wxDataObject *m_pDataObject;      // pointer to C++ class we belong to
 
     bool m_mustDelete;
-};
-
-// ----------------------------------------------------------------------------
-// small helper class for getting screen DC (we're working with bitmaps and
-// DIBs here)
-// ----------------------------------------------------------------------------
-
-class ScreenHDC
-{
-public:
-    ScreenHDC() { m_hdc = GetDC(NULL);    }
-   ~ScreenHDC() { ReleaseDC(NULL, m_hdc); }
-    operator HDC() const { return m_hdc;  }
-
-private:
-    HDC m_hdc;
 };
 
 // ============================================================================
@@ -736,12 +719,12 @@ size_t wxBitmapDataObject::GetDataSize() const
 
 bool wxBitmapDataObject::GetDataHere(void *buf) const
 {
-    return wxConvertBitmapToDIB((BITMAPINFO *)buf, GetBitmap()) != 0;
+    return wxConvertBitmapToDIB((LPBITMAPINFO)buf, GetBitmap()) != 0;
 }
 
 bool wxBitmapDataObject::SetData(size_t len, const void *buf)
 {
-    wxBitmap bitmap(wxConvertDIBToBitmap((const BITMAPINFO *)buf));
+    wxBitmap bitmap(wxConvertDIBToBitmap((const LPBITMAPINFO)buf));
 
     if ( !bitmap.Ok() ) {
         wxFAIL_MSG(wxT("pasting/dropping invalid bitmap"));
@@ -1065,7 +1048,7 @@ static size_t wxGetNumOfBitmapColors(size_t bitsPerPixel)
     }
 }
 
-size_t wxConvertBitmapToDIB(BITMAPINFO *pbi, const wxBitmap& bitmap)
+size_t wxConvertBitmapToDIB(LPBITMAPINFO pbi, const wxBitmap& bitmap)
 {
     wxASSERT_MSG( bitmap.Ok(), wxT("invalid bmp can't be converted to DIB") );
 
@@ -1139,7 +1122,7 @@ size_t wxConvertBitmapToDIB(BITMAPINFO *pbi, const wxBitmap& bitmap)
     return dwLen + bi.biSizeImage;
 }
 
-wxBitmap wxConvertDIBToBitmap(const BITMAPINFO *pbmi)
+wxBitmap wxConvertDIBToBitmap(const LPBITMAPINFO pbmi)
 {
     // here we get BITMAPINFO struct followed by the actual bitmap bits and
     // BITMAPINFO starts with BITMAPINFOHEADER followed by colour info

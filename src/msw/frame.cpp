@@ -357,6 +357,8 @@ wxStatusBar *wxFrame::OnCreateStatusBar(int number,
     if ( UsesNativeStatusBar() )
     {
         statusBar = new wxStatusBar95(this, id, style);
+
+        statusBar->SetFieldsCount(number);
     }
     else
 #endif

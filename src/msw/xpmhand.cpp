@@ -45,6 +45,25 @@
 #include "wx/xpmhand.h"
 #include "wx/msw/dib.h"
 
+static void XpmToBitmap(wxBitmap *bitmap,
+                        const XImage *ximage,
+                        const XpmAttributes& xpmAttr)
+{
+    wxBitmapRefData *refData = bitmap->GetBitmapData();
+    refData->m_hBitmap = (WXHBITMAP)ximage->bitmap;
+
+    BITMAP bm;
+    if ( !::GetObject(GetHbitmapOf(*bitmap), sizeof(bm), (LPSTR) & bm) )
+    {
+        wxLogLastError("GetObject(bitmap)");
+    }
+
+    refData->m_width = bm.bmWidth;
+    refData->m_height = bm.bmHeight;
+    refData->m_depth = bm.bmPlanes * bm.bmBitsPixel;
+    refData->m_numColors = xpmAttr.npixels;
+}
+
 IMPLEMENT_DYNAMIC_CLASS(wxXPMFileHandler, wxBitmapHandler)
 
 bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
@@ -55,7 +74,6 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long fla
     XpmAttributes xpmAttr;
     HDC     dc;
 
-    M_BITMAPHANDLERDATA->m_ok = FALSE;
     dc = CreateCompatibleDC(NULL);
     if (dc)
     {
@@ -64,26 +82,17 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long fla
       DeleteDC(dc);
       if (errorStatus == XpmSuccess)
       {
-        M_BITMAPHANDLERDATA->m_hBitmap = (WXHBITMAP) ximage->bitmap;
+        XpmToBitmap(bitmap, ximage, xpmAttr);
 
-        BITMAP  bm;
-        GetObject((HBITMAP)M_BITMAPHANDLERDATA->m_hBitmap, sizeof(bm), (LPSTR) & bm);
-
-        M_BITMAPHANDLERDATA->m_width = (bm.bmWidth);
-        M_BITMAPHANDLERDATA->m_height = (bm.bmHeight);
-        M_BITMAPHANDLERDATA->m_depth = (bm.bmPlanes * bm.bmBitsPixel);
-        M_BITMAPHANDLERDATA->m_numColors = xpmAttr.npixels;
         XpmFreeAttributes(&xpmAttr);
         XImageFree(ximage);
+      }
 
-        M_BITMAPHANDLERDATA->m_ok = TRUE;
-        return TRUE;
-      }
-      else
-      {
-        M_BITMAPHANDLERDATA->m_ok = FALSE;
-        return FALSE;
-      }
+#if WXWIN_COMPATIBILITY_2
+      bitmap->SetOk(errorStatus == XpmSuccess);
+#endif // WXWIN_COMPATIBILITY_2
+
+      return bitmap->Ok();
     }
 #endif
 
@@ -94,26 +103,28 @@ bool wxXPMFileHandler::SaveFile(wxBitmap *bitmap, const wxString& name, int type
 {
 #if wxUSE_XPM_IN_MSW
     HDC     dc = NULL;
-    
+
     XImage  ximage;
-    
+
     dc = CreateCompatibleDC(NULL);
     if (dc)
     {
-        if (SelectObject(dc, (HBITMAP) M_BITMAPHANDLERDATA->m_hBitmap))
+        if ( SelectObject(dc, GetHbitmapOf(*bitmap)) )
         {
             /* for following SetPixel */
             /* fill the XImage struct 'by hand' */
-            ximage.width = M_BITMAPHANDLERDATA->m_width; 
-            ximage.height = M_BITMAPHANDLERDATA->m_height;
-            ximage.depth = M_BITMAPHANDLERDATA->m_depth; 
-            ximage.bitmap = (HBITMAP)M_BITMAPHANDLERDATA->m_hBitmap;
+            wxBitmapRefData *refData = bitmap->GetBitmapData();
+            ximage.width = refData->m_width;
+            ximage.height = refData->m_height;
+            ximage.depth = refData->m_depth;
+            ximage.bitmap = (HBITMAP)refData->m_hBitmap;
             int errorStatus = XpmWriteFileFromImage(&dc, wxMBSTRINGCAST name.fn_str(),
-                &ximage, (XImage *) NULL, (XpmAttributes *) NULL);
-            
+                                                    &ximage, (XImage *) NULL,
+                                                    (XpmAttributes *) NULL);
+
             if (dc)
                 DeleteDC(dc);
-            
+
             if (errorStatus == XpmSuccess)
                 return TRUE;    /* no error */
             else
@@ -135,45 +146,35 @@ bool wxXPMDataHandler::Create(wxBitmap *bitmap, void *data, long flags, int widt
   XpmAttributes xpmAttr;
   HDC     dc;
 
-  M_BITMAPHANDLERDATA->m_ok = FALSE;
-  M_BITMAPHANDLERDATA->m_numColors = 0;
-
   dc = CreateCompatibleDC(NULL);  /* memory DC */
 
   if (dc)
   {
     xpmAttr.valuemask = XpmReturnInfos; /* get infos back */
     ErrorStatus = XpmCreateImageFromData(&dc, (char **)data,
-         &ximage, (XImage **) NULL, &xpmAttr);
+                                         &ximage, (XImage **) NULL, &xpmAttr);
 
     if (ErrorStatus == XpmSuccess)
     {
-      /* ximage is malloced and contains bitmap and attributes */
-      M_BITMAPHANDLERDATA->m_hBitmap = (WXHBITMAP) ximage->bitmap;
+        XpmToBitmap(bitmap, ximage, xpmAttr);
 
-      BITMAP  bm;
-      GetObject((HBITMAP) M_BITMAPHANDLERDATA->m_hBitmap, sizeof(bm), (LPSTR) & bm);
-
-      M_BITMAPHANDLERDATA->m_width = (bm.bmWidth);
-      M_BITMAPHANDLERDATA->m_height = (bm.bmHeight);
-      M_BITMAPHANDLERDATA->m_depth = (bm.bmPlanes * bm.bmBitsPixel);
-      M_BITMAPHANDLERDATA->m_numColors = xpmAttr.npixels;
       XpmFreeAttributes(&xpmAttr);
 
       XImageFree(ximage); // releases the malloc, but does not detroy
                           // the bitmap
-      M_BITMAPHANDLERDATA->m_ok = TRUE;
-      DeleteDC(dc);
-
-      return TRUE;
-    } 
+    }
     else
     {
-      M_BITMAPHANDLERDATA->m_ok = FALSE;
-//    XpmDebugError(ErrorStatus, NULL);
-      DeleteDC(dc);
-      return FALSE;
+      //    XpmDebugError(ErrorStatus, NULL);
     }
+
+    DeleteDC(dc);
+
+#if WXWIN_COMPATIBILITY_2
+      bitmap->SetOk(errorStatus == XpmSuccess);
+#endif // WXWIN_COMPATIBILITY_2
+
+    return bitmap->Ok();
   }
 #endif
 

@@ -1,189 +1,111 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        icon.cpp
+// Name:        msw/icon.cpp
 // Purpose:     wxIcon class
 // Author:      Julian Smart
-// Modified by:
+// Modified by: 20.11.99 (VZ): don't derive from wxBitmap any more
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "icon.h"
+    #pragma implementation "icon.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include <stdio.h>
-#include "wx/setup.h"
-#include "wx/list.h"
-#include "wx/utils.h"
-#include "wx/app.h"
-#include "wx/icon.h"
+    #include "wx/defs.h"
+    #include "wx/list.h"
+    #include "wx/utils.h"
+    #include "wx/app.h"
+    #include "wx/icon.h"
 #endif
 
 #include "wx/msw/private.h"
-#include "assert.h"
 
 #if wxUSE_RESOURCE_LOADING_IN_MSW
-#include "wx/msw/curico.h"
-#include "wx/msw/curicop.h"
+    #include "wx/msw/curico.h"
+    #include "wx/msw/curicop.h"
 #endif
+
+// ----------------------------------------------------------------------------
+// wxWin macros
+// ----------------------------------------------------------------------------
 
 #if !USE_SHARED_LIBRARIES
-IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxBitmap)
-IMPLEMENT_DYNAMIC_CLASS(wxICOFileHandler, wxBitmapHandler)
-IMPLEMENT_DYNAMIC_CLASS(wxICOResourceHandler, wxBitmapHandler)
+    IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxIconBase)
 #endif
 
-/*
- * Icons
- */
+// ============================================================================
+// implementation
+// ============================================================================
 
+// ----------------------------------------------------------------------------
+// wxIconRefData
+// ----------------------------------------------------------------------------
 
-wxIconRefData::wxIconRefData(void)
+void wxIconRefData::Free()
 {
-  m_hIcon = (WXHICON) NULL ;
+    if ( m_hIcon )
+        ::DestroyIcon((HICON) m_hIcon);
 }
 
-wxIconRefData::~wxIconRefData(void)
-{
-  if ( m_hIcon )
-    ::DestroyIcon((HICON) m_hIcon);
-}
+// ----------------------------------------------------------------------------
+// wxIcon
+// ----------------------------------------------------------------------------
 
-wxIcon::wxIcon(void)
-{
-}
-
-wxIcon::wxIcon(const char WXUNUSED(bits)[], int WXUNUSED(width), int WXUNUSED(height))
-{
-}
-
-wxIcon::wxIcon(const wxString& icon_file, long flags,
-    int desiredWidth, int desiredHeight)
-
-{
-  LoadFile(icon_file, flags, desiredWidth, desiredHeight);
-}
-
-wxIcon::~wxIcon(void)
+wxIcon::wxIcon()
 {
 }
 
-bool wxIcon::FreeResource(bool force)
+wxIcon::wxIcon(const char WXUNUSED(bits)[],
+               int WXUNUSED(width),
+               int WXUNUSED(height))
 {
-  if (M_ICONDATA && M_ICONDATA->m_hIcon)
-  {
-    DestroyIcon((HICON) M_ICONDATA->m_hIcon);
-  M_ICONDATA->m_hIcon = (WXHICON) NULL;
-  }
-  return TRUE;
 }
 
-bool wxIcon::LoadFile(const wxString& filename, long type,
-    int desiredWidth, int desiredHeight)
+wxIcon::wxIcon(const wxString& iconfile,
+               long flags,
+               int desiredWidth,
+               int desiredHeight)
+
 {
-  UnRef();
-
-  m_refData = new wxIconRefData;
-
-  wxBitmapHandler *handler = FindHandler(type);
-
-  if ( handler )
-  return handler->LoadFile(this, filename, type, desiredWidth, desiredHeight);
-  else
-  return FALSE;
+    LoadFile(iconfile, flags, desiredWidth, desiredHeight);
 }
 
-void wxIcon::SetHICON(WXHICON ico)
+wxIcon::~wxIcon()
 {
-  if ( !M_ICONDATA )
-  m_refData = new wxIconRefData;
-
-  M_ICONDATA->m_hIcon = ico;
 }
 
-bool wxICOFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-    int desiredWidth, int desiredHeight)
+bool wxIcon::LoadFile(const wxString& filename,
+                      long type,
+                      int desiredWidth, int desiredHeight)
 {
-#if wxUSE_RESOURCE_LOADING_IN_MSW
-  if ( bitmap->IsKindOf(CLASSINFO(wxIcon)) )
-  {
-    wxIcon *icon = (wxIcon *)bitmap;
-    wxIconRefData *data = (wxIconRefData *)icon->GetRefData();
-    data->m_hIcon = (WXHICON)ReadIconFile((wxChar *)name.c_str(), wxGetInstance(),
-                                          &data->m_width, &data->m_height);
+    UnRef();
 
-    data->m_ok = data->m_hIcon != 0;
-    return data->m_ok;
-  }
-  else
-    return FALSE;
-#else
-  return FALSE;
-#endif
-}
+    wxGDIImageHandler *handler = FindHandler(type);
 
-bool wxICOResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-    int desiredWidth, int desiredHeight)
-{
-  if ( bitmap->IsKindOf(CLASSINFO(wxIcon)) )
-  {
-#if defined(__WIN32__) && !defined(__SC__)
-    if (desiredWidth > -1 && desiredHeight > -1)
+    if ( !handler )
     {
-        M_ICONHANDLERDATA->m_hIcon = (WXHICON) ::LoadImage(wxGetInstance(), name, IMAGE_ICON, desiredWidth, desiredHeight, LR_DEFAULTCOLOR);
-    }
-    else
-#endif
-    {
-      M_ICONHANDLERDATA->m_hIcon = (WXHICON) ::LoadIcon(wxGetInstance(), name);
+        // say something?
+        return FALSE;
     }
 
-#ifdef __WIN32__
-      // Win32s doesn't have GetIconInfo function...
-      if (M_ICONHANDLERDATA->m_hIcon && wxGetOsVersion()!=wxWIN32S)
-      {
-          ICONINFO info ;
-          if (::GetIconInfo((HICON) M_ICONHANDLERDATA->m_hIcon, &info))
-          {
-            HBITMAP ms_bitmap = info.hbmMask ;
-            if (ms_bitmap)
-            {
-                BITMAP bm;
-                ::GetObject(ms_bitmap, sizeof(BITMAP), (LPSTR) &bm);
-                M_ICONHANDLERDATA->m_width = bm.bmWidth;
-                M_ICONHANDLERDATA->m_height = bm.bmHeight;
-            }
-            if (info.hbmMask)
-                ::DeleteObject(info.hbmMask) ;
-            if (info.hbmColor)
-                ::DeleteObject(info.hbmColor) ;
-          }
-      }
-#else
-      M_ICONHANDLERDATA->m_width = 32;
-      M_ICONHANDLERDATA->m_height = 32;
-#endif
-      // Override the found values with desired values
-      if (desiredWidth > -1 && desiredHeight > -1)
-      {
-          M_ICONHANDLERDATA->m_width = desiredWidth;
-          M_ICONHANDLERDATA->m_height = desiredHeight;
-      }
-
-      M_ICONHANDLERDATA->m_ok = (M_ICONHANDLERDATA->m_hIcon != 0);
-      return M_ICONHANDLERDATA->m_ok;
-  }
-  else
-      return FALSE;
+    return handler->Load(this, filename, type, desiredWidth, desiredHeight);
 }
 

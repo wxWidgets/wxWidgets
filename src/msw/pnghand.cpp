@@ -313,8 +313,9 @@ bool wxPNGReader::InstantiateBitmap(wxBitmap *bitmap)
           bitmap->SetDepth(GetDepth());
           if ( GetDepth() > 1 && Palette )
             bitmap->SetPalette(*Palette);
+#if WXWIN_COMPATIBILITY_2
           bitmap->SetOk(TRUE);
-
+#endif // WXWIN_COMPATIBILITY_2
 
           // Make a mask if appropriate
           if ( bgindex > -1 )

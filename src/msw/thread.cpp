@@ -31,9 +31,7 @@
 
 #if wxUSE_THREADS
 
-#include <stdio.h>
-
-#include <windows.h>
+#include "wx/msw/private.h"
 
 #include "wx/module.h"
 #include "wx/thread.h"
@@ -84,6 +82,7 @@ static bool s_waitingForThread = FALSE;
 // ----------------------------------------------------------------------------
 // wxMutex implementation
 // ----------------------------------------------------------------------------
+
 class wxMutexInternal
 {
 public:
@@ -237,42 +236,27 @@ void wxCondition::Broadcast()
 // wxCriticalSection implementation
 // ----------------------------------------------------------------------------
 
-class wxCriticalSectionInternal
-{
-public:
-    // init the critical section object
-    wxCriticalSectionInternal()
-        { ::InitializeCriticalSection(&m_data); }
-
-    // implicit cast to the associated data
-    operator CRITICAL_SECTION *() { return &m_data; }
-
-    // free the associated ressources
-    ~wxCriticalSectionInternal()
-        { ::DeleteCriticalSection(&m_data); }
-
-private:
-    CRITICAL_SECTION m_data;
-};
-
 wxCriticalSection::wxCriticalSection()
 {
-    m_critsect = new wxCriticalSectionInternal;
+    wxASSERT_MSG( sizeof(CRITICAL_SECTION) == sizeof(m_buffer),
+                  _T("must increase buffer size in wx/thread.h") );
+
+    ::InitializeCriticalSection((CRITICAL_SECTION *)m_buffer);
 }
 
 wxCriticalSection::~wxCriticalSection()
 {
-    delete m_critsect;
+    ::DeleteCriticalSection((CRITICAL_SECTION *)m_buffer);
 }
 
 void wxCriticalSection::Enter()
 {
-    ::EnterCriticalSection(*m_critsect);
+    ::EnterCriticalSection((CRITICAL_SECTION *)m_buffer);
 }
 
 void wxCriticalSection::Leave()
 {
-    ::LeaveCriticalSection(*m_critsect);
+    ::LeaveCriticalSection((CRITICAL_SECTION *)m_buffer);
 }
 
 // ----------------------------------------------------------------------------

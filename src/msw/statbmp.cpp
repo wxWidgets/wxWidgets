@@ -55,7 +55,7 @@
 // ---------------------------------------------------------------------------
 
 bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
-                            const wxBitmap& bitmap,
+                            const wxGDIImage& bitmap,
                             const wxPoint& pos,
                             const wxSize& size,
                             long style,
@@ -108,7 +108,7 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
 
     wxCHECK_MSG( m_hWnd, FALSE, wxT("Failed to create static bitmap") );
 
-    SetBitmap(bitmap);
+    SetImage(bitmap);
 
     // Subclass again for purposes of dialog editing mode
     SubclassWin(m_hWnd);
@@ -122,22 +122,14 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
 
 bool wxStaticBitmap::ImageIsOk() const
 {
-    if ( m_isIcon && m_image.icon )
-        return m_image.icon->Ok();
-    else if ( m_image.bitmap )
-        return m_image.bitmap->Ok();
-    else
-        return FALSE;
+    return m_image && m_image->Ok();
 }
 
 void wxStaticBitmap::Free()
 {
-    if ( m_isIcon )
-        delete m_image.icon;
-    else
-        delete m_image.bitmap;
+    delete m_image;
 
-    m_image.icon = NULL;
+    m_image = NULL;
 }
 
 wxSize wxStaticBitmap::DoGetBestSize() const
@@ -147,15 +139,15 @@ wxSize wxStaticBitmap::DoGetBestSize() const
     return wxWindow::DoGetBestSize();
 }
 
-void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
+void wxStaticBitmap::SetImage(const wxGDIImage& bitmap)
 {
     Free();
 
     m_isIcon = bitmap.IsKindOf(CLASSINFO(wxIcon));
     if ( m_isIcon )
-        m_image.icon = new wxIcon((const wxIcon&)bitmap);
+        m_image = new wxIcon((const wxIcon&)bitmap);
     else
-        m_image.bitmap = new wxBitmap(bitmap);
+        m_image = new wxBitmap((const wxBitmap &)bitmap);
 
     int x, y;
     int w, h;
@@ -163,9 +155,8 @@ void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
     GetSize(&w, &h);
 
 #ifdef __WIN32__
-    HANDLE handle = m_isIcon ? (HANDLE)m_image.icon->GetHICON()
-                             : (HANDLE)m_image.bitmap->GetHBITMAP();
-    ::SendMessage((HWND)m_hWnd, STM_SETIMAGE,
+    HANDLE handle = (HANDLE)m_image->GetHandle();
+    ::SendMessage(GetHwnd(), STM_SETIMAGE,
                   m_isIcon ? IMAGE_ICON : IMAGE_BITMAP, (LPARAM)handle);
 #endif // Win32
 
@@ -178,16 +169,16 @@ void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
             w = width;
             h = height;
 
-            ::MoveWindow((HWND)GetHWND(), x, y, width, height, FALSE);
+            ::MoveWindow(GetHwnd(), x, y, width, height, FALSE);
         }
     }
 
-    RECT rect ;
-    rect.left   = x ;
-    rect.top    = y ;
-    rect.right  = x + w ;
-    rect.bottom = y + h ;
-    InvalidateRect((HWND)GetParent()->GetHWND(), &rect, TRUE);
+    RECT rect;
+    rect.left   = x;
+    rect.top    = y;
+    rect.right  = x + w;
+    rect.bottom = y + h;
+    InvalidateRect(GetHwndOf(GetParent()), &rect, TRUE);
 }
 
 // under Win32 we use the standard static control style for this

@@ -731,7 +731,9 @@ bool wxLoadIntoBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette **pal)
     bitmap->SetWidth(bm.bmWidth);
     bitmap->SetHeight(bm.bmHeight);
     bitmap->SetDepth(bm.bmPlanes * bm.bmBitsPixel);
+#if WXWIN_COMPATIBILITY_2
     bitmap->SetOk(TRUE);
+#endif // WXWIN_COMPATIBILITY_2
     return TRUE;
   }
   else return FALSE;

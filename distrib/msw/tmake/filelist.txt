@@ -230,6 +230,7 @@ fontutil.cpp	M
 frame.cpp	M
 gauge95.cpp	M	32
 gaugemsw.cpp	M	16
+gdiimage.cpp	M
 gdiobj.cpp	M
 helpwin.cpp	M
 icon.cpp	M
@@ -772,6 +773,7 @@ frame.h	9
 gauge.h	9
 gauge95.h	9
 gaugemsw.h	9
+gdiimage.h	9
 gdiobj.h	9
 helpwin.h	9
 icon.h	9

@@ -57,7 +57,7 @@
 #   include <fstream>
 #endif
 
-#if wxUSE_RICHEDIT && (!defined(__GNUWIN32__) || defined(wxUSE_NORLANDER_HEADERS))
+#if wxUSE_RICHEDIT
     #include <richedit.h>
 #endif
 
@@ -115,8 +115,6 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     if ( !CreateBase(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    // Validator was set in CreateBase
-    //SetValidator(validator);
     if ( parent )
         parent->AddChild(this);
 
@@ -130,7 +128,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     {
         wxASSERT_MSG( !(m_windowStyle & wxTE_PROCESS_ENTER),
                       wxT("wxTE_PROCESS_ENTER style is ignored for multiline "
-                         "text controls (they always process it)") );
+                          "text controls (they always process it)") );
 
         msStyle |= ES_MULTILINE | ES_WANTRETURN;
         if ((m_windowStyle & wxTE_NO_VSCROLL) == 0)
@@ -172,9 +170,32 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 #if wxUSE_RICHEDIT
     if ( m_windowStyle & wxTE_RICH )
     {
-        msStyle |= ES_AUTOVSCROLL;
-        m_isRich = TRUE;
-        windowClass = wxT("RICHEDIT");
+        static bool s_errorGiven = FALSE;   // MT-FIXME
+
+        // only give the error msg once if the DLL can't be loaded
+        if ( !s_errorGiven )
+        {
+            // first try to load the RichEdit DLL (will do nothing if already
+            // done)
+            if ( !wxTheApp->InitRichEdit() )
+            {
+                wxLogError(_("Impossible to create a rich edit control, "
+                             "using simple text control instead."));
+
+                s_errorGiven = TRUE;
+            }
+        }
+
+        if ( s_errorGiven )
+        {
+            m_isRich = FALSE;
+        }
+        else
+        {
+            msStyle |= ES_AUTOVSCROLL;
+            m_isRich = TRUE;
+            windowClass = wxT("RICHEDIT");
+        }
     }
     else
         m_isRich = FALSE;
