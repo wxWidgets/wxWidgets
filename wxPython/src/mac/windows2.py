@@ -245,6 +245,146 @@ def wxPreSplitterWindow(*_args,**_kwargs):
     return val
 
 
+class wxPyWindowPtr(wxWindowPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyWindow__setCallbackInfo,(self,) + _args, _kwargs)
+        return val
+    def base_DoMoveWindow(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyWindow_base_DoMoveWindow,(self,) + _args, _kwargs)
+        return val
+    def base_DoSetSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyWindow_base_DoSetSize,(self,) + _args, _kwargs)
+        return val
+    def base_DoSetClientSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyWindow_base_DoSetClientSize,(self,) + _args, _kwargs)
+        return val
+    def base_DoSetVirtualSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyWindow_base_DoSetVirtualSize,(self,) + _args, _kwargs)
+        return val
+    def base_DoGetSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyWindow_base_DoGetSize,(self,) + _args, _kwargs)
+        return val
+    def base_DoGetClientSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyWindow_base_DoGetClientSize,(self,) + _args, _kwargs)
+        return val
+    def base_DoGetPosition(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyWindow_base_DoGetPosition,(self,) + _args, _kwargs)
+        return val
+    def base_DoGetVirtualSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyWindow_base_DoGetVirtualSize,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
+    def base_DoGetBestSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyWindow_base_DoGetBestSize,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
+    def base_InitDialog(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyWindow_base_InitDialog,(self,) + _args, _kwargs)
+        return val
+    def base_TransferDataToWindow(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyWindow_base_TransferDataToWindow,(self,) + _args, _kwargs)
+        return val
+    def base_TransferDataFromWindow(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyWindow_base_TransferDataFromWindow,(self,) + _args, _kwargs)
+        return val
+    def base_Validate(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyWindow_base_Validate,(self,) + _args, _kwargs)
+        return val
+    def base_AcceptsFocus(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyWindow_base_AcceptsFocus,(self,) + _args, _kwargs)
+        return val
+    def base_AcceptsFocusFromKeyboard(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyWindow_base_AcceptsFocusFromKeyboard,(self,) + _args, _kwargs)
+        return val
+    def base_GetMaxSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyWindow_base_GetMaxSize,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
+    def __repr__(self):
+        return "<C wxPyWindow instance at %s>" % (self.this,)
+class wxPyWindow(wxPyWindowPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(windows2c.new_wxPyWindow,_args,_kwargs)
+        self.thisown = 1
+        self._setCallbackInfo(self, wxPyWindow)
+        self._setOORInfo(self)
+
+
+
+
+class wxPyControlPtr(wxControlPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyControl__setCallbackInfo,(self,) + _args, _kwargs)
+        return val
+    def base_DoMoveWindow(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyControl_base_DoMoveWindow,(self,) + _args, _kwargs)
+        return val
+    def base_DoSetSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyControl_base_DoSetSize,(self,) + _args, _kwargs)
+        return val
+    def base_DoSetClientSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyControl_base_DoSetClientSize,(self,) + _args, _kwargs)
+        return val
+    def base_DoSetVirtualSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyControl_base_DoSetVirtualSize,(self,) + _args, _kwargs)
+        return val
+    def base_DoGetSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyControl_base_DoGetSize,(self,) + _args, _kwargs)
+        return val
+    def base_DoGetClientSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyControl_base_DoGetClientSize,(self,) + _args, _kwargs)
+        return val
+    def base_DoGetPosition(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyControl_base_DoGetPosition,(self,) + _args, _kwargs)
+        return val
+    def base_DoGetVirtualSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyControl_base_DoGetVirtualSize,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
+    def base_DoGetBestSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyControl_base_DoGetBestSize,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
+    def base_InitDialog(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyControl_base_InitDialog,(self,) + _args, _kwargs)
+        return val
+    def base_TransferDataToWindow(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyControl_base_TransferDataToWindow,(self,) + _args, _kwargs)
+        return val
+    def base_TransferDataFromWindow(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyControl_base_TransferDataFromWindow,(self,) + _args, _kwargs)
+        return val
+    def base_Validate(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyControl_base_Validate,(self,) + _args, _kwargs)
+        return val
+    def base_AcceptsFocus(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyControl_base_AcceptsFocus,(self,) + _args, _kwargs)
+        return val
+    def base_AcceptsFocusFromKeyboard(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyControl_base_AcceptsFocusFromKeyboard,(self,) + _args, _kwargs)
+        return val
+    def base_GetMaxSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxPyControl_base_GetMaxSize,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
+    def __repr__(self):
+        return "<C wxPyControl instance at %s>" % (self.this,)
+class wxPyControl(wxPyControlPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(windows2c.new_wxPyControl,_args,_kwargs)
+        self.thisown = 1
+        self._setCallbackInfo(self, wxPyControl)
+        self._setOORInfo(self)
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------

@@ -18,7 +18,9 @@ defSrcPath="/projects/wx"
 defDstPath="/projects/wx/wxPython/dist"
 
 pkgName="wxMacPython"
-version=`date +"%Y-%m-%d"`
+#version=`date +"%Y-%m-%d"`
+version=`cd $defSrcPath/wxPython; python$PYVER -c 'import setup;print setup.VERSION'`
+
 dmgRoot="dmg-root"
 pkgRoot="pkg-root"
 wxWindowsInst="$pkgRoot/usr/local"
