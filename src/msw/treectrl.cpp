@@ -1336,8 +1336,18 @@ bool wxTreeCtrl::IsVisible(const wxTreeItemId& item) const
     // the HTREEITEM with TVM_GETITEMRECT
     *(HTREEITEM *)&rect = HITEM(item);
 
-    // false means get item rect for the whole item, not only text
-    return SendMessage(GetHwnd(), TVM_GETITEMRECT, false, (LPARAM)&rect) != 0;
+    // true means to get rect for just the text, not the whole line
+    if ( !::SendMessage(GetHwnd(), TVM_GETITEMRECT, true, (LPARAM)&rect) )
+    {
+        // if TVM_GETITEMRECT returned false, then the item is definitely not
+        // visible (because its parent is not expanded)
+        return false;
+    }
+
+    // however if it returned true, the item might still be outside the
+    // currently visible part of the tree, test for it (notice that partly
+    // visible means visible here)
+    return rect.bottom > 0 && rect.top < GetClientSize().y;
 }
 
 bool wxTreeCtrl::ItemHasChildren(const wxTreeItemId& item) const
