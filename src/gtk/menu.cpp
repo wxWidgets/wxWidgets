@@ -23,6 +23,7 @@
 #endif // wxUSE_ACCEL
 
 #include <gdk/gdk.h>
+#include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
@@ -36,15 +37,17 @@ extern bool g_isIdle;
 static wxString GetHotKey( const wxMenuItem& item );
 #endif
 
-////// BEGIN CODE ADAPTED FROM GTKPIXMAPMENUITEM.C IN LIBGNOMEUI //////
+//-----------------------------------------------------------------------------
+// substitute for missing GtkPixmapMenuItem
+//-----------------------------------------------------------------------------
 
-#define GTK_TYPE_PIXMAP_MENU_ITEM	     (gtk_pixmap_menu_item_get_type ())
-#define GTK_PIXMAP_MENU_ITEM(obj)	     (GTK_CHECK_CAST ((obj), GTK_TYPE_PIXMAP_MENU_ITEM, GtkPixmapMenuItem))
+#define GTK_TYPE_PIXMAP_MENU_ITEM            (gtk_pixmap_menu_item_get_type ())
+#define GTK_PIXMAP_MENU_ITEM(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_PIXMAP_MENU_ITEM, GtkPixmapMenuItem))
 #define GTK_PIXMAP_MENU_ITEM_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_PIXMAP_MENU_ITEM, GtkPixmapMenuItemClass))
-#define GTK_IS_PIXMAP_MENU_ITEM(obj)	     (GTK_CHECK_TYPE ((obj), GTK_TYPE_PIXMAP_MENU_ITEM))
+#define GTK_IS_PIXMAP_MENU_ITEM(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_PIXMAP_MENU_ITEM))
 #define GTK_IS_PIXMAP_MENU_ITEM_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PIXMAP_MENU_ITEM))
 //#define GTK_PIXMAP_MENU_ITEM_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_PIXMAP_MENU_ITEM))
-#define GTK_PIXMAP_MENU_ITEM_GET_CLASS(obj) (GTK_PIXMAP_MENU_ITEM_CLASS( GTK_OBJECT_GET_CLASS(obj)))
+#define GTK_PIXMAP_MENU_ITEM_GET_CLASS(obj)  (GTK_PIXMAP_MENU_ITEM_CLASS( GTK_OBJECT_GET_CLASS(obj)))
 
 #ifndef GTK_MENU_ITEM_GET_CLASS
 #define GTK_MENU_ITEM_GET_CLASS(obj) (GTK_MENU_ITEM_CLASS( GTK_OBJECT_GET_CLASS(obj)))
@@ -55,29 +58,24 @@ typedef struct _GtkPixmapMenuItemClass  GtkPixmapMenuItemClass;
 
 struct _GtkPixmapMenuItem
 {
-  GtkMenuItem menu_item;
+    GtkMenuItem menu_item;
 
-  GtkWidget *pixmap;
+    GtkWidget *pixmap;
 };
 
 struct _GtkPixmapMenuItemClass
 {
-  GtkMenuItemClass parent_class;
+    GtkMenuItemClass parent_class;
 
-  guint orig_toggle_size;
-  guint have_pixmap_count;
+    guint orig_toggle_size;
+    guint have_pixmap_count;
 };
 
 
-GtkType	   gtk_pixmap_menu_item_get_type      (void);
-GtkWidget* gtk_pixmap_menu_item_new	      (void);
-void       gtk_pixmap_menu_item_set_pixmap    (GtkPixmapMenuItem *menu_item,
-					       GtkWidget *pixmap);
-/* Added by JACS */
-
-GtkWidget* gtk_pixmap_menu_item_new_with_label (const gchar *label, GtkWidget** labelWidget);
-
-////// END CODE ADAPTED FROM GTKPIXMAPMENUITEM.C IN LIBGNOMEUI //////
+GtkType	   gtk_pixmap_menu_item_get_type       (void);
+GtkWidget* gtk_pixmap_menu_item_new            (void);
+void       gtk_pixmap_menu_item_set_pixmap     (GtkPixmapMenuItem *menu_item,
+					                            GtkWidget *pixmap);
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -977,27 +975,36 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
     }
     else if (mitem->GetBitmap().Ok()) // An item with bitmap
     {
-        //// UNFINISHED, because I don't know how to handle hotkeys and
-        //// accelerators :-(
+        wxString text( mitem->GetText() );
+        const wxBitmap *bitmap = &mitem->GetBitmap();
+    
+        menuItem = gtk_pixmap_menu_item_new ();
+        GtkWidget *label = gtk_accel_label_new (text.mb_str());
+        gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+        gtk_container_add (GTK_CONTAINER (menuItem), label);
+        guint accel_key = gtk_label_parse_uline (GTK_LABEL(label), text.mb_str() );
+        gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (label), menuItem);
+        if (accel_key != GDK_VoidSymbol)
+	    {
+            gtk_widget_add_accelerator (menuItem,
+					"activate_item",
+					gtk_menu_ensure_uline_accel_group (GTK_MENU (m_menu)),
+					accel_key, 0,
+					GTK_ACCEL_LOCKED);
+        }
+        gtk_widget_show (label);
 
-        GtkWidget* labelWidget;
-        menuItem = gtk_pixmap_menu_item_new_with_label(mitem->GetText().mb_str(), &labelWidget);
-        //menuItem = gtk_pixmap_menu_item_new_with_label("", &labelWidget);
-        mitem->SetLabelWidget(labelWidget);
+        mitem->SetLabelWidget(label);
 
-        //// TODO: should we store the widget somewhere to avoid a memory leak?
-        GtkWidget* w = gtk_pixmap_new(mitem->GetBitmap().GetPixmap(), mitem->GetBitmap().GetMask() ? mitem->GetBitmap().GetMask()->GetBitmap() : (GdkBitmap* )NULL);
-        gtk_widget_show(w);
-        gtk_pixmap_menu_item_set_pixmap(GTK_PIXMAP_MENU_ITEM( menuItem ), w);
+        GtkWidget* pixmap = gtk_pixmap_new( bitmap->GetPixmap(), bitmap->GetMask() ? bitmap->GetMask()->GetBitmap() : (GdkBitmap* )NULL);
+        gtk_widget_show(pixmap);
+        gtk_pixmap_menu_item_set_pixmap(GTK_PIXMAP_MENU_ITEM( menuItem ), pixmap);
 
         gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
                             GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
                             (gpointer)this );
         gtk_menu_append( GTK_MENU(m_menu), menuItem );
         gtk_widget_show( menuItem );
-
-        //mitem->SetMenuItem(menuItem);
-        //mitem->SetText(mitem->GetText());
 
         appended = TRUE; // We've done this, don't do it again
     }
@@ -1209,7 +1216,9 @@ static wxString GetHotKey( const wxMenuItem& item )
 #endif // wxUSE_ACCEL
 
 
-////// BEGIN CODE ADAPTED FROM GTKPIXMAPMENUITEM.C IN LIBGNOMEUI //////
+//-----------------------------------------------------------------------------
+// substitute for missing GtkPixmapMenuItem
+//-----------------------------------------------------------------------------
 
 /*
  * Copyright (C) 1998, 1999, 2000 Free Software Foundation
@@ -1238,7 +1247,6 @@ static wxString GetHotKey( const wxMenuItem& item )
 
 /* Author: Dietmar Maurer <dm@vlsivie.tuwien.ac.at> */
 
-//#include "gtkpixmapmenuitem.h"
 #include <gtk/gtkaccellabel.h>
 #include <gtk/gtksignal.h>
 #include <gtk/gtkmenuitem.h>
@@ -1577,26 +1585,4 @@ changed_have_pixmap_status (GtkPixmapMenuItem *menu_item)
     gtk_widget_queue_resize(GTK_WIDGET(menu_item));
 }
 
-/* Added by JACS */
-
-GtkWidget*
-gtk_pixmap_menu_item_new_with_label (const gchar *label, GtkWidget** labelWidget)
-{
-  GtkWidget *menu_item;
-  GtkWidget *accel_label;
-
-  menu_item = gtk_pixmap_menu_item_new ();
-  accel_label = gtk_accel_label_new (label);
-  if (labelWidget)
-      *labelWidget = accel_label;
-  gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
-
-  gtk_container_add (GTK_CONTAINER (menu_item), accel_label);
-  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (accel_label), menu_item);
-  gtk_widget_show (accel_label);
-
-  return menu_item;
-}
-
-////// END CODE ADAPTED FROM GTKPIXMAPMENUITEM.C IN LIBGNOMEUI //////
 
