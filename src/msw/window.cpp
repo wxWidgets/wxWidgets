@@ -1021,14 +1021,14 @@ void wxWindowMSW::UnsubclassWin()
     }
 }
 
-void wxWindowMSW::AssociateHandle(WXWidget handle) 
+void wxWindowMSW::AssociateHandle(WXWidget handle)
 {
     if ( m_hWnd )
     {
       if ( !::DestroyWindow(GetHwnd()) )
         wxLogLastError(wxT("DestroyWindow"));
     }
-    
+
     WXHWND wxhwnd = (WXHWND)handle;
 
     SetHWND(wxhwnd);
@@ -1036,9 +1036,9 @@ void wxWindowMSW::AssociateHandle(WXWidget handle)
 }
 
 void wxWindowMSW::DissociateHandle()
-{ 
+{
     // this also calls SetHWND(0) for us
-    UnsubclassWin(); 
+    UnsubclassWin();
 }
 
 
@@ -4183,7 +4183,7 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
             break;
 
         case SIZE_MAXIMIZED:
-            processed = HandleMaximize();
+            /* processed = */ HandleMaximize();
             // fall through to send a normal size event as well
 
         case SIZE_RESTORED:
