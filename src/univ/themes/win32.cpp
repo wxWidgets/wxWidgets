@@ -1338,8 +1338,12 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col) const
 
         case CONTROL_TEXT:      return wxColour(GetSysColor(COLOR_BTNTEXT));
 
-        case SCROLLBAR:         return wxColour(GetSysColor(COLOR_SCROLLBAR));
-        case SCROLLBAR_PRESSED: return wxColour(GetSysColor(COLOR_HIGHLIGHT));
+#if defined(COLOR_3DLIGHT)
+        case SCROLLBAR:         return wxColour(GetSysColor(COLOR_3DLIGHT));
+#else
+        case SCROLLBAR:         return wxColour(0xe0e0e0);
+#endif
+        case SCROLLBAR_PRESSED: return wxColour(GetSysColor(COLOR_BTNTEXT));
 
         case HIGHLIGHT:         return wxColour(GetSysColor(COLOR_HIGHLIGHT));
         case HIGHLIGHT_TEXT:    return wxColour(GetSysColor(COLOR_HIGHLIGHTTEXT));
