@@ -332,7 +332,7 @@ bool wxBitmap::SaveFile( const wxString &name, int type, wxPalette *WXUNUSED(pal
 {
     wxCHECK_MSG( Ok(), FALSE, wxT("invalid bitmap") );
 
-    if (type == wxBITMAP_TYPE_PNG)
+    // Try to save the bitmap via wxImage handlers:
     {
         wxImage image( *this );
         if (image.Ok()) return image.SaveFile( name, type );
@@ -365,20 +365,13 @@ bool wxBitmap::LoadFile( const wxString &name, int type )
         gdk_window_get_size( M_BMPDATA->m_pixmap, &(M_BMPDATA->m_width), &(M_BMPDATA->m_height) );
         M_BMPDATA->m_bpp = gdk_window_get_visual( parent )->depth;
     }
-    else if (type == wxBITMAP_TYPE_PNG)
+    else // try if wxImage can load it
     {
         wxImage image;
-        image.LoadFile( name, type );
+        if (!image.LoadFile( name, type )) return FALSE;
         if (image.Ok()) *this = image.ConvertToBitmap();
+        else return FALSE;
     }
-    else if (type == wxBITMAP_TYPE_BMP)
-    {
-        wxImage image;
-        image.LoadFile( name, type );
-        if (image.Ok()) *this = image.ConvertToBitmap();
-    }
-    else
-        return FALSE;
 
     return TRUE;
 }

@@ -21,6 +21,7 @@
 #include "wx/log.h"
 #include "wx/control.h"
 #include "wx/dcmemory.h"
+#include "wx/image.h"
 
 #include <Xm/Xm.h>
 
@@ -197,9 +198,14 @@ bool wxBitmap::LoadFile(const wxString& filename, long type)
     wxBitmapHandler *handler = FindHandler(type);
 
     if ( handler == NULL ) {
-        wxLogWarning("%s: no bitmap handler for type %d defined.", (const char*) filename, type);
-
-        return FALSE;
+        wxImage image;
+        if (!image.LoadFile( filename, type )) return FALSE;
+        if (image.Ok()) 
+        {
+            *this = image.ConvertToBitmap();
+            return TRUE;
+        }
+        else return FALSE;
     }
 
     return handler->LoadFile(this, filename, type, -1, -1);
@@ -226,10 +232,10 @@ bool wxBitmap::SaveFile(const wxString& filename, int type, const wxPalette *pal
 {
     wxBitmapHandler *handler = FindHandler(type);
 
-    if ( handler == NULL ) {
-        wxLogWarning("no bitmap handler for type %d defined.", type);
-
-        return FALSE;
+    if ( handler == NULL ) { // try wxImage
+        wxImage image( *this );
+        if (image.Ok()) return image.SaveFile( filename, type );
+        else return FALSE;
     }
 
     return handler->SaveFile(this, filename, type, palette);

@@ -96,7 +96,11 @@ Its meaning is determined by the {\it type} parameter.}
 The validity of these flags depends on the platform and wxWindows configuration.
 If all possible wxWindows settings are used, the Windows platform supports BMP file, BMP resource,
 XPM data, and XPM. Under wxGTK, the available formats are BMP file, XPM data, XPM file, and PNG file.
-Under wxMotif, the available formats are XBM data, XBM file, XPM data, XPM file.}
+Under wxMotif, the available formats are XBM data, XBM file, XPM data, XPM file.
+
+In addition, wxBitmap can read all formats that \helpref{wxImage}{wximage} can 
+(wxBITMAP\_TYPE\_JPEG, wxBITMAP\_TYPE\_PNG, wxBITMAP\_TYPE\_GIF, wxBITMAP\_TYPE\_PCX, wxBITMAP\_TYPE\_PNM).
+(Of course you must have wxImage handlers loaded.) }
 
 \wxheading{Remarks}
 
@@ -356,7 +360,11 @@ The meaning of {\it name} is determined by the {\it type} parameter.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_XPM}}{Load an XPM bitmap file.}
 \end{twocollist}
 
-The validity of these flags depends on the platform and wxWindows configuration.}
+The validity of these flags depends on the platform and wxWindows configuration.
+
+In addition, wxBitmap can read all formats that \helpref{wxImage}{wximage} can 
+(wxBITMAP\_TYPE\_JPEG, wxBITMAP\_TYPE\_PNG, wxBITMAP\_TYPE\_GIF, wxBITMAP\_TYPE\_PCX, wxBITMAP\_TYPE\_PNM).
+(Of course you must have wxImage handlers loaded.) }
 
 \wxheading{Return value}
 
@@ -415,7 +423,11 @@ Saves a bitmap in the named file.
 \twocolitem{{\bf wxBITMAP\_TYPE\_XPM}}{Save an XPM bitmap file.}
 \end{twocollist}
 
-The validity of these flags depends on the platform and wxWindows configuration.}
+The validity of these flags depends on the platform and wxWindows configuration.
+
+In addition, wxBitmap can save all formats that \helpref{wxImage}{wximage} can 
+(wxBITMAP\_TYPE\_JPEG, wxBITMAP\_TYPE\_PNG).
+(Of course you must have wxImage handlers loaded.) }
 
 \docparam{palette}{An optional palette used for saving the bitmap.}
 % TODO: this parameter should
