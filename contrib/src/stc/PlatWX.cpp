@@ -632,8 +632,12 @@ void Window::SetCursor(Cursor curs) {
         cursorId = wxCURSOR_ARROW;
         break;
     }
-
-    GETWIN(id)->SetCursor(wxCursor(cursorId));
+#ifdef __WXMOTIF__
+       wxCursor wc = wxStockCursor(cursorId) ;
+#else
+       wxCursor wc = wxCursor(cursorId) ;
+#endif
+       GETWIN(id)->SetCursor(wc);   
 }
 
 
