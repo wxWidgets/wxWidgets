@@ -24,7 +24,7 @@
 
 #if wxUSE_BUSYINFO
 
-class wxInfoFrame : public wxFrame
+class WXDLLEXPORT wxInfoFrame : public wxFrame
 {
     public:
         wxInfoFrame(wxWindow *parent, const wxString& message);
@@ -37,7 +37,7 @@ class wxInfoFrame : public wxFrame
 //                  Can be used in exactly same way as wxBusyCursor
 //--------------------------------------------------------------------------------
 
-class wxBusyInfo : public wxObject
+class WXDLLEXPORT wxBusyInfo : public wxObject
 {
     public:
         wxBusyInfo(const wxString& message);

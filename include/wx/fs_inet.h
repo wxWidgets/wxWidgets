@@ -43,7 +43,7 @@ limitation)
 // wxInternetFSHandler
 //--------------------------------------------------------------------------------
 
-class wxInternetFSHandler : public wxFileSystemHandler
+class WXDLLEXPORT wxInternetFSHandler : public wxFileSystemHandler
 {
     private:
         wxHashTable m_Cache;

@@ -32,7 +32,7 @@
 // wxZipFSHandler
 //--------------------------------------------------------------------------------
 
-class wxZipFSHandler : public wxFileSystemHandler
+class WXDLLEXPORT wxZipFSHandler : public wxFileSystemHandler
 {
     public:
         virtual bool CanOpen(const wxString& location);
