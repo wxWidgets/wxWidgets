@@ -55,6 +55,12 @@
 
 #include <winsock.h>
 
+/* don't use C++ TRUE/FALSE definition which we get from wx/defs.h */
+#undef TRUE
+#undef FALSE
+#define TRUE 1
+#define FALSE 0
+
 #ifdef _MSC_VER
 #  pragma warning(default:4115) /* named type definition in parentheses */
 #endif
