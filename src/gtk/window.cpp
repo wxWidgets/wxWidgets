@@ -2352,6 +2352,9 @@ bool wxWindowGTK::Create( wxWindow *parent,
     }
 
     m_insertCallback = wxInsertChildInWindow;
+    
+    // always needed for background clearing
+    m_delayedBackgroundColour = TRUE; 
 
     m_widget = gtk_scrolled_window_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
@@ -3394,6 +3397,11 @@ void wxWindowGTK::GtkSendPaintEvents()
 
         if (!GetEventHandler()->ProcessEvent(erase_event))
         {
+            if (!g_eraseGC)
+            {
+                g_eraseGC = gdk_gc_new( GTK_PIZZA(m_wxwindow)->bin_window );
+                gdk_gc_set_fill( g_eraseGC, GDK_SOLID );
+            }
             gdk_gc_set_foreground( g_eraseGC, m_backgroundColour.GetColor() );
 
             wxRegionIterator upd( m_clearRegion );
@@ -3474,7 +3482,7 @@ void wxWindowGTK::Clear()
 
     if (m_wxwindow && m_wxwindow->window)
     {
-//        gdk_window_clear( m_wxwindow->window );
+        gdk_window_clear( m_wxwindow->window );
     }
 }
 
@@ -3518,6 +3526,12 @@ bool wxWindowGTK::SetBackgroundColour( const wxColour &colour )
         m_delayedBackgroundColour = TRUE;
     }
 
+    if (window)
+    {
+        // We need the pixel value e.g. for background clearing.
+        m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
+    }
+    
     if ((m_wxwindow) &&
         (m_wxwindow->window) &&
         (m_backgroundColour != wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE)))
@@ -3525,7 +3539,6 @@ bool wxWindowGTK::SetBackgroundColour( const wxColour &colour )
         /* wxMSW doesn't clear the window here. I don't do that either to
           provide compatibility. call Clear() to do the job. */
 
-        m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
         gdk_window_set_background( window, m_backgroundColour.GetColor() );
     }
 
@@ -4162,14 +4175,15 @@ IMPLEMENT_DYNAMIC_CLASS(wxWinModule, wxModule)
 
 bool wxWinModule::OnInit()
 {
-    g_eraseGC = gdk_gc_new( GDK_ROOT_PARENT() );
-    gdk_gc_set_fill( g_eraseGC, GDK_SOLID );
+    // g_eraseGC = gdk_gc_new( GDK_ROOT_PARENT() );
+    // gdk_gc_set_fill( g_eraseGC, GDK_SOLID );
 
     return TRUE;
 }
 
 void wxWinModule::OnExit()
 {
-    gdk_gc_unref( g_eraseGC );
+    if (g_eraseGC)
+        gdk_gc_unref( g_eraseGC );
 }
 
