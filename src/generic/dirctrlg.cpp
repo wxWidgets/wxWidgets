@@ -70,7 +70,9 @@
 
 #define INCL_BASE
 #include <os2.h>
+#ifndef __EMX__
 #include <direct.h>
+#endif
 #include <stdlib.h>
 #include <ctype.h>
 
