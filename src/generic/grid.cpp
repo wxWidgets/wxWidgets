@@ -4239,28 +4239,11 @@ void wxGrid::CalcDimensions()
     int x, y;
     GetViewStart( &x, &y );
 
-    // maybe we don't need scrollbars at all?
-    //
-    // also adjust the position to be valid for the new scroll rangs
-    if ( w <= cw )
-    {
-        w = x = 0;
-    }
-    else
-    {
+    // ensure the position is valid for the new scroll ranges
         if ( x >= w )
-            x = w - 1;
-    }
-
-    if ( h <= ch )
-    {
-        h = y = 0;
-    }
-    else
-    {
+        x = wxMax( w - 1, 0 );
         if ( y >= h )
-            y = h - 1;
-    }
+        y = wxMax( h - 1, 0 );
 
     // do set scrollbar parameters
     SetScrollbars( GRID_SCROLL_LINE_X, GRID_SCROLL_LINE_Y,

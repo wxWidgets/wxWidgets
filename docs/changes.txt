@@ -107,6 +107,9 @@ All (GUI):
 - added resolution option to JPEG image handler (Jeff Burton)
 - added wxCalendarEvent::SetDate, wxCalendarEvent::SetWeekDay
 - wxGenericDirCtrl now accepts multiple wildcards
+- added focus event forwarding to wxGrid (Peter Laufenberg)
+- fixed scrollbar problem in wxGrid (not showing scrollbars
+  when sizing smaller) (Shane Harper)
 
 wxMSW:
 

@@ -238,6 +238,17 @@ Checking in src/generic/dirctrlg.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/generic/dirctrlg.cpp,v  <--  dirctrlg.cpp
 new revision: 1.81; previous revision: 1.80
 
+33. Apply patch [ 873021 ] Bug fix for MSW wxComboBox
+
+wxComboBox::GetValue within a wxEVT_COMMAND_TEXT_UPDATED event
+should now pass the correct value even if the handler for
+wxEVT_COMMAND_COMBOBOX_SELECTED changed the selection.
+
+Checking in src/msw/combobox.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/combobox.cpp,v  <--  combobox.cpp
+new revision: 1.72; previous revision: 1.71
+done
+
 
 TODO for 2.4 (items that are not backports)
 ===========================================
