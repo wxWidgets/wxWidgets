@@ -141,6 +141,7 @@ static inline wxString ExtractNotLang(const wxString& langFull)
 #endif // __UNIX__
 
 
+
 // ----------------------------------------------------------------------------
 // wxMsgCatalogFile corresponds to one disk-file message catalog.
 //
@@ -644,6 +645,23 @@ bool wxLocale::Init(const wxChar *szName,
   return bOk;
 }
 
+
+#if defined(__UNIX__) && wxUSE_UNICODE
+static wxWCharBuffer wxSetlocaleTryUTF(int c, const wxChar *lc)
+{
+    wxMB2WXbuf l = wxSetlocale(c, lc);
+    if ( lc && lc[0] != 0 && !l )
+    {
+    	wxString buf(lc);
+    	buf += wxT(".utf8");
+    	l = wxSetlocale(c, buf.c_str());
+    }
+    return l;
+}
+#else
+#define wxSetlocaleTryUTF(c, lc)  wxSetlocale(c, lc)
+#endif
+
 bool wxLocale::Init(int language, int flags)
 {
     int lang = language;
@@ -679,12 +697,12 @@ bool wxLocale::Init(int language, int flags)
     else
         locale = info->CanonicalName;
 
-    wxMB2WXbuf retloc = wxSetlocale(LC_ALL, locale);
+    wxMB2WXbuf retloc = wxSetlocaleTryUTF(LC_ALL, locale);
 
     if ( !retloc )
     {
         // Some C libraries don't like xx_YY form and require xx only
-        retloc = wxSetlocale(LC_ALL, locale.Mid(0,2));
+        retloc = wxSetlocaleTryUTF(LC_ALL, locale.Mid(0,2));
     }
     if ( !retloc )
     {
@@ -702,13 +720,13 @@ bool wxLocale::Init(int language, int flags)
         else if (mid == wxT("nn"))
             locale = wxT("no_NY");
 
-        retloc = wxSetlocale(LC_ALL, locale);
+        retloc = wxSetlocaleTryUTF(LC_ALL, locale);
     }
     if ( !retloc )
     {
         // (This time, we changed locale in previous if-branch, so try again.)
         // Some C libraries don't like xx_YY form and require xx only
-        retloc = wxSetlocale(LC_ALL, locale.Mid(0,2));
+        retloc = wxSetlocaleTryUTF(LC_ALL, locale.Mid(0,2));
     }
     if ( !retloc )
     {

@@ -105,6 +105,7 @@ Unix:
 - fixed compilation on Solaris 7 with large files support enabled
 - added wxTaskBarIcon implementation for X11
 - added support for GNU/Hurd in configure
+- wxLocale::Init now tries to set .utf8 locale in Unicode mode (Andreas Pflug)
 
 wxGTK:
 
