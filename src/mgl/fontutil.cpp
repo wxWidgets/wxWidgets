@@ -414,7 +414,7 @@ wxMGLFontLibrary *wxFontsManager::GetFontLibrary(wxFont *font)
     return family->GetLibrary(type);
 }
 
-static ibool enum_callback(const font_info_t *info, void *cookie)
+static ibool MGLAPI enum_callback(const font_info_t *info, void *cookie)
 {
     wxFontsManager *db = (wxFontsManager*)cookie;
     db->AddFamily(info);
