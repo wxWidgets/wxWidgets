@@ -2480,8 +2480,6 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 continue;
             }
 
-            printf("Redrawing line %u\n", line);
-
             GetLine(line)->DrawInReportMode( &dc,
                                              rectLine,
                                              GetLineHighlightRect(line),
