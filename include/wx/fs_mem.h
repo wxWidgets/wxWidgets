@@ -69,15 +69,26 @@ class WXDLLIMPEXP_CORE wxMemoryFSHandler : public wxMemoryFSHandlerBase
 public:
     // bring the base class versions into the scope, otherwise they would be
     // inaccessible in wxMemoryFSHandler
-#if !defined(__GNUG__) || (__GNUG__ > 2)
-    using wxMemoryFSHandlerBase::AddFile;
-#endif
+    // (unfortunately "using" can't be used as gcc 2.95 doesn't have it...)
+    static void AddFile(const wxString& filename, const wxString& textdata)
+    {
+        wxMemoryFSHandlerBase::AddFile(filename, textdata);
+    }
+
+    static void AddFile(const wxString& filename,
+                        const void *binarydata,
+                        size_t size)
+    {
+        wxMemoryFSHandlerBase::AddFile(filename, binarydata, size);
+    }
 
 #if wxUSE_IMAGE
     static void AddFile(const wxString& filename, wxImage& image, long type);
 #endif // wxUSE_IMAGE
 
-    static void AddFile(const wxString& filename, const wxBitmap& bitmap, long type);
+    static void AddFile(const wxString& filename,
+                        const wxBitmap& bitmap,
+                        long type);
 };
 
 #else // !wxUSE_GUI
