@@ -366,25 +366,31 @@ void wxComboBox::SetEditable(bool editable)
 
 void wxComboBox::SetInsertionPoint(long pos)
 {
+    if ( GetWindowStyle() & wxCB_READONLY )
+        return;
+
 #ifdef __WIN32__
-  HWND hWnd = GetHwnd();
-  SendMessage(hWnd, CB_SETEDITSEL, 0, MAKELPARAM(pos, pos));
-  HWND hEditWnd = (HWND) GetEditHWND() ;
-  if (hEditWnd)
-  {
-    // Scroll insertion point into view
-    SendMessage(hEditWnd, EM_SCROLLCARET, (WPARAM)0, (LPARAM)0);
-    // Why is this necessary? (Copied from wxTextCtrl::SetInsertionPoint)
-    static const wxChar *nothing = _T("");
-    SendMessage(hEditWnd, EM_REPLACESEL, 0, (LPARAM)nothing);
-  }
-#endif
+    HWND hWnd = GetHwnd();
+    ::SendMessage(hWnd, CB_SETEDITSEL, 0, MAKELPARAM(pos, pos));
+    HWND hEditWnd = (HWND) GetEditHWND() ;
+    if ( hEditWnd )
+    {
+        // Scroll insertion point into view
+        SendMessage(hEditWnd, EM_SCROLLCARET, (WPARAM)0, (LPARAM)0);
+        // Why is this necessary? (Copied from wxTextCtrl::SetInsertionPoint)
+        SendMessage(hEditWnd, EM_REPLACESEL, 0, (LPARAM)_T(""));
+    }
+#endif // __WIN32__
 }
 
 void wxComboBox::SetInsertionPointEnd()
 {
-  long pos = GetLastPosition();
-  SetInsertionPoint(pos);
+    // setting insertion point doesn't make sense for read only comboboxes
+    if ( !(GetWindowStyle() & wxCB_READONLY) )
+    {
+        long pos = GetLastPosition();
+        SetInsertionPoint(pos);
+    }
 }
 
 long wxComboBox::GetInsertionPoint() const
