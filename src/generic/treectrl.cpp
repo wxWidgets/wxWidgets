@@ -1307,14 +1307,15 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
                 }
                 if (prev)
                 {
-                    while (IsExpanded(prev))
+                    while ( IsExpanded(prev) && HasChildren(prev) )
                     {
-                        int c = (int)GetChildrenCount( prev, FALSE );
-                        long cockie = 0;
-                        prev = GetFirstChild( prev, cockie );
-                        for (int i = 0; i < c-1; i++)
-                            prev = GetNextSibling( prev );
+                        wxTreeItemId child = GetLastChild(prev);
+                        if ( child )
+                        {
+                            prev = child;
+                        }
                     }
+
                     SelectItem( prev );
                     EnsureVisible( prev );
                 }
@@ -1341,7 +1342,7 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
 
         case WXK_DOWN:
             {
-                if (IsExpanded(m_current))
+                if (IsExpanded(m_current) && HasChildren(m_current))
                 {
                     long cookie = 0;
                     wxTreeItemId child = GetFirstChild( m_current, cookie );
