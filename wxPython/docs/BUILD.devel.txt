@@ -4,10 +4,9 @@ Building wxPython 2.5 for Development and Testing
 This file describes how I build wxWindows and wxPython while doing
 development and testing, and is meant to help other people that want
 to do the same thing.  I'll assume that you are using either a CVS
-snapshot or a checkout from CVS.  (Currently you need to use the
-wxPy_newswig branch of the wwxPython subtree of CVS.)  I'll also
-assume that you know what you are doing and so I may not be as
-detailed here as I am in other BUILD docs.
+snapshot or a checkout from CVS.  I'll also assume that you know what
+you are doing and so I may not be as detailed here as I am in other
+BUILD docs.
 
 If you want to make changes to any of the *.i files, or regenerate the
 extension sources or renamer modules, then you will need an up to date
