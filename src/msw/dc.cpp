@@ -1115,6 +1115,7 @@ void wxDC::SetBackgroundMode(int mode)
         ::SetBkMode(GetHdc(), TRANSPARENT);
     else
         ::SetBkMode(GetHdc(), OPAQUE);
+	Last change:  AC   29 Jan 101    8:54 pm
 */
 }
 
@@ -1440,7 +1441,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
         // of the mask which is also contrary to the Windows one)
         success = ::MaskBlt(GetHdc(), xdest, ydest, width, height,
                             GetHdcOf(*source), xsrc, ysrc,
-                            (HBITMAP)mask->GetMaskBitmap(), 0, 0,
+                            (HBITMAP)mask->GetMaskBitmap(), xsrc, ysrc,
                             MAKEROP4(dwRop, DSTCOPY)) != 0;
 
         if ( !success )
