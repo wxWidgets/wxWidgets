@@ -23,18 +23,6 @@
     if ( Config("wx") && !Config("wxbase") ) {
 	Project('CONFIG += windows');
     }
-    if ( Config("wx") ) {
-	if ( Config("wxnodir") ) {
-	    #! hard code relative paths
-	    $WXDIR = "..\\..";
-	}
-	else {
-	    #! VC 6.0 supports env vars in include path
-	    $WXDIR = "\$(WXWIN)";
-	}
-
-	AddIncludePath("$WXDIR\\include");
-    }
 
     #! let's be smart: if no extension is given, add .lib (this allows for
     #! LIBS=libname in project files which map either to -l libname.lib under
@@ -80,6 +68,12 @@
     }
 
     if ( Config("wx") ) {
+	#! default rel path works for all the demos and most of the samples
+	#! if no explicit path given
+	$WXDIR = Project("WXDIR") || "..\\..";
+
+	AddIncludePath("$WXDIR\\include");
+
 	if ( !Project('WXCONFIGS') ) {
 	    #! default value
 	    Project('WXCONFIGS = Debug Release DebugDll ReleaseDll');
