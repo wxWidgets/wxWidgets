@@ -61,10 +61,10 @@ class wxApp: public wxEvtHandler
     
     static void SetInitializerFunction(wxAppInitializerFunction fn) { m_appInitFn = fn; }
     static wxAppInitializerFunction GetInitializerFunction(void) { return m_appInitFn; }
+    
     virtual bool OnInit(void);
     virtual bool OnInitGui(void);
     virtual int OnRun(void);
-    virtual bool OnIdle(void);
     virtual int OnExit(void);
     
     wxWindow *GetTopWindow(void);
@@ -74,8 +74,14 @@ class wxApp: public wxEvtHandler
     bool Initialized(void);
     virtual bool Pending(void);
     virtual void Dispatch(void);
-    void DeletePendingObjects(void);
-    
+
+    inline void SetWantDebugOutput(bool flag) { m_wantDebugOutput = flag; }
+    inline bool GetWantDebugOutput(void) { return m_wantDebugOutput; }
+
+    void OnIdle( wxIdleEvent &event );    
+    bool SendIdleEvents(void);
+    bool SendIdleEvents( wxWindow* win );
+        
     inline wxString GetAppName(void) const {
       if (m_appName != "")
         return m_appName;
@@ -90,9 +96,6 @@ class wxApp: public wxEvtHandler
   
     void SetPrintMode(int WXUNUSED(mode) ) {}; 
     int GetPrintMode(void) const { return wxPRINT_POSTSCRIPT; };
-  
-    static void CommonInit(void);
-    static void CommonCleanUp(void);    
     
     // override this function to create default log target of arbitrary
     // user-defined classv (default implementation creates a wxLogGui object)
@@ -104,17 +107,29 @@ class wxApp: public wxEvtHandler
     virtual wxConfig *CreateConfig() { return NULL; }
 #endif
     
+  // GTK implementation
+
+    static void CommonInit(void);
+    static void CommonCleanUp(void);    
+    
+    bool ProcessIdle(void);
+    void DeletePendingObjects(void);
+    
     bool          m_initialized;
     bool          m_exitOnFrameDelete;
-    gint          m_idleTag;
+    bool          m_wantDebugOutput;
     wxWindow     *m_topWindow;
     wxString      m_appName;
     wxString      m_className;
+    
+    gint          m_idleTag;
     
     int         argc;
     char      **argv;
     
     static wxAppInitializerFunction m_appInitFn;
+    
+  DECLARE_EVENT_TABLE()
 };
 
 #endif // __GTKAPPH__

@@ -64,6 +64,7 @@ LIB_CPP_SRC=\
  gtk/checkbox.cpp \
  gtk/choice.cpp \
  gtk/colour.cpp \
+ gtk/combobox.cpp \
  gtk/control.cpp \
  gtk/cursor.cpp \
  gtk/data.cpp \
@@ -181,7 +182,10 @@ clean::
 
 #additional things needed for compile
 ADD_COMPILE= \
-   -DHAVE_LIBPNG -DDJPEG_PROG=\"\" -DCJPEG_PROG=\"\"
+   -DHAVE_LIBPNG -DDJPEG_PROG=\"\" -DCJPEG_PROG=\"\" \
+   -I$(WXBASEDIR)/src/png \
+   -I$(WXBASEDIR)/src/zlib \
+   -I$(WXBASEDIR)/src/gdk_imlib
 
 # include the definitions now
 include ../../template.mak

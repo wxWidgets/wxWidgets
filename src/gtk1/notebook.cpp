@@ -314,10 +314,13 @@ bool wxNotebook::DeletePage( const int page )
     page_num++;
     child = child->next;
   };
-   
-  if (!child) wxFatalError( "Notebook delete error" );;
+
+  wxASSERT( child );
+        
+  delete nb_page->m_clientPanel;
   
-  gtk_notebook_remove_page( GTK_NOTEBOOK(m_widget), page_num );
+//  Amazingly, this is not necessary
+//  gtk_notebook_remove_page( GTK_NOTEBOOK(m_widget), page_num );
   
   m_pages.DeleteObject( nb_page );
     
@@ -341,7 +344,9 @@ wxPanel *wxNotebook::CreatePage( const int item, const wxString &text, const int
     
   m_frame = NULL;
   
-  page->m_page = GTK_NOTEBOOK(m_widget)->cur_page;
+  page->m_page = (GtkNotebookPage*)( g_list_last( GTK_NOTEBOOK(m_widget)->children )->data );
+  
+  if (!page->m_page) wxFatalError( "Notebook page creation error" );
   
   m_pages.Append( page );
 

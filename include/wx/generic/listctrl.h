@@ -602,7 +602,6 @@ class wxListCtrl: public wxControl
     void SetSingleStyle( const long style, const bool add = TRUE ) ;
     void SetWindowStyleFlag(const long style);
     void RecreateWindow(void) {};
-    void RealizeChanges( void );  // whereas this is much needed in wxGLC
     long GetNextItem(const long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE);
     wxImageList *GetImageList(const int which);
     void SetImageList(wxImageList *imageList, const int which) ;
@@ -631,6 +630,8 @@ class wxListCtrl: public wxControl
       { m_mainWin->SetDropTarget( dropTarget ); };
     wxDropTarget *GetDropTarget() const
       { return m_mainWin->GetDropTarget(); };
+      
+    void OnIdle( wxIdleEvent &event );
 
   protected:
   

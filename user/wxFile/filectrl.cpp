@@ -321,7 +321,6 @@ void wxFileCtrl::Update( void )
     f = wxFindNextFile();
   };
   SortItems( ListCompare, 0 );
-  RealizeChanges();
 };
 
 

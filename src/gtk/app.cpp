@@ -61,9 +61,13 @@ bool wxYield(void)
 
 IMPLEMENT_DYNAMIC_CLASS(wxApp,wxEvtHandler)
 
+BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
+    EVT_IDLE(wxApp::OnIdle)
+END_EVENT_TABLE()
+
 gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 {
-  if (wxTheApp) wxTheApp->OnIdle();
+  if (wxTheApp) while (wxTheApp->ProcessIdle()) {};
   usleep( 10000 );
   return TRUE;
 };
@@ -96,10 +100,78 @@ int wxApp::OnRun(void)
   return MainLoop(); 
 };
 
-bool wxApp::OnIdle(void)
+bool wxApp::ProcessIdle(void)
 {
+  wxIdleEvent event;
+  event.SetEventObject( this );
+  ProcessEvent( event );
+  
+  return event.MoreRequested();
+};
+
+void wxApp::OnIdle( wxIdleEvent &event )
+{
+  static bool inOnIdle = FALSE;
+
+  // Avoid recursion (via ProcessEvent default case)
+  if (inOnIdle)
+    return;
+
+  inOnIdle = TRUE;
+
+  // 'Garbage' collection of windows deleted with Close().
   DeletePendingObjects();
-  return FALSE;
+
+  // flush the logged messages if any
+  wxLog *pLog = wxLog::GetActiveTarget();
+  if ( pLog != NULL && pLog->HasPendingMessages() )
+    pLog->Flush();
+
+  // Send OnIdle events to all windows
+  bool needMore = SendIdleEvents();
+
+  if (needMore)
+    event.RequestMore(TRUE);
+
+  inOnIdle = FALSE;
+};
+
+bool wxApp::SendIdleEvents(void)
+{
+    bool needMore = FALSE;
+	wxNode* node = wxTopLevelWindows.First();
+	while (node)
+	{
+		wxWindow* win = (wxWindow*) node->Data();
+		if (SendIdleEvents(win))
+            needMore = TRUE;
+
+		node = node->Next();
+	}
+    return needMore;
+};
+
+bool wxApp::SendIdleEvents( wxWindow* win )
+{
+    bool needMore = FALSE;
+
+	wxIdleEvent event;
+	event.SetEventObject(win);
+	win->ProcessEvent(event);
+
+    if (event.MoreRequested())
+        needMore = TRUE;
+
+	wxNode* node = win->GetChildren()->First();
+	while (node)
+	{
+		wxWindow* win = (wxWindow*) node->Data();
+		if (SendIdleEvents(win))
+            needMore = TRUE;
+
+		node = node->Next();
+	}
+    return needMore ;
 };
 
 int wxApp::OnExit(void)

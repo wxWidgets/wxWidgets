@@ -75,7 +75,7 @@ class wxComboBox: public wxControl
   wxString GetString( const int n ) const;
   wxString GetStringSelection(void) const;
   int Number(void) const;
-  void SetSelection( const int n, const bool select = TRUE );
+  void SetSelection( const int n );
   
   // Text field functions
   wxString GetValue(void) const ;

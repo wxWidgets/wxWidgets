@@ -47,6 +47,8 @@ class MyPanel: public wxPanel
     void OnListBoxButtons( wxCommandEvent &event );
     
     wxListBox   *m_listbox;
+    wxChoice    *m_choice;
+    wxComboBox  *m_combo;
     
     wxTextCtrl  *m_text;
     wxNotebook  *m_notebook;    
@@ -123,6 +125,14 @@ const  ID_LISTBOX_SEL_STR   = 132;
 const  ID_LISTBOX_CLEAR     = 133;
 const  ID_LISTBOX_APPEND    = 134;
 
+const  ID_CHOICE            = 120;
+const  ID_CHOICE_SEL_NUM    = 121;
+const  ID_CHOICE_SEL_STR    = 122;
+const  ID_CHOICE_CLEAR      = 123;
+const  ID_CHOICE_APPEND     = 124;
+
+const  ID_COMBO             = 140;
+
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
   EVT_SIZE      (                       MyPanel::OnSize)
   EVT_LISTBOX   (ID_LISTBOX,            MyPanel::OnListBox)
@@ -139,23 +149,34 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   
   m_notebook = new wxNotebook( this, ID_NOTEBOOK, wxPoint(0,0), wxSize(200,150) );
   
-  wxString choices[4] =
+  wxString choices[] =
   {
     "This",
     "is",
     "a",
-    "wonderfull example."
+    "wonderfull example.",
+    "Or",
+    "what",
+    "do",
+    "you",
+    "think?"
   };
   
   wxPanel *panel = m_notebook->CreatePage( 0, "wxList" );
   
-  m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 4, choices );
-  (void)new wxButton( panel, ID_LISTBOX_SEL_NUM, "Select #2", wxPoint(140,30), wxSize(100,30) );
-  (void)new wxButton( panel, ID_LISTBOX_SEL_STR, "Select 'This'", wxPoint(260,30), wxSize(100,30) );
-  (void)new wxButton( panel, ID_LISTBOX_CLEAR, "Clear", wxPoint(140,80), wxSize(100,30) );
-  (void)new wxButton( panel, ID_LISTBOX_APPEND, "Append 'Hi!'", wxPoint(260,80), wxSize(100,30) );
+  m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 9, choices );
+  (void)new wxButton( panel, ID_LISTBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(100,30) );
+  (void)new wxButton( panel, ID_LISTBOX_SEL_STR, "Select 'This'", wxPoint(300,30), wxSize(100,30) );
+  (void)new wxButton( panel, ID_LISTBOX_CLEAR, "Clear", wxPoint(180,80), wxSize(100,30) );
+  (void)new wxButton( panel, ID_LISTBOX_APPEND, "Append 'Hi!'", wxPoint(300,80), wxSize(100,30) );
   
-  m_notebook->CreatePage( 1, "wxChoice" );
+  panel = m_notebook->CreatePage( 1, "wxChoice" );
+  
+  m_choice = new wxChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,-1), 9, choices );
+  
+  panel = m_notebook->CreatePage( 2, "wxComboBox" );
+  
+  m_combo = new wxComboBox( panel, ID_COMBO, "This", wxPoint(10,10), wxSize(120,-1), 9, choices );
 }
 
 void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )
@@ -178,6 +199,7 @@ void MyPanel::OnListBox( wxCommandEvent &event )
 
 void MyPanel::OnListBoxButtons( wxCommandEvent &WXUNUSED(event) )
 {
+  m_notebook->DeletePage( 1 );
 }
 
 //----------------------------------------------------------------------

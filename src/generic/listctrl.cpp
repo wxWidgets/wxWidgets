@@ -1948,6 +1948,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxListCtrl,wxControl)
   EVT_SIZE          (wxListCtrl::OnSize)
+  EVT_IDLE          (wxListCtrl::OnIdle)
 END_EVENT_TABLE()
 
 wxListCtrl::wxListCtrl(void)
@@ -1998,24 +1999,9 @@ bool wxListCtrl::Create( wxWindow *parent, const wxWindowID id,
 
 void wxListCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
-  RealizeChanges();
-/*
-  wxWindow::OnSize( event );
-
-  int cw = 0;
-  int ch = 0;
-  GetClientSize( &cw, &ch );
+  // handled in OnIdle
   
-  if (GetWindowStyleFlag() & wxLC_REPORT)
-  {
-    m_headerWin->SetSize( 0, 0, cw, 23 );
-    m_mainWin->SetSize( 0, 24, cw, ch-24 );
-  }
-  else
-  {
-    m_mainWin->SetSize( 0, 0, cw, ch );
-  };
-*/
+  if (m_mainWin) m_mainWin->m_dirty = TRUE;
 };
 
 void wxListCtrl::SetSingleStyle( const long style, const bool add )
@@ -2077,45 +2063,6 @@ void wxListCtrl::SetWindowStyleFlag( const long flag )
   };   
   
   wxWindow::SetWindowStyleFlag( flag );
-};
-
-void wxListCtrl::RealizeChanges( void )
-{ 
-  m_mainWin->m_dirty = TRUE;
-
-  int cw = 0;
-  int ch = 0;
-  GetClientSize( &cw, &ch );
-  
-  int x = 0;
-  int y = 0;
-  int w = 0;
-  int h = 0;
-  
-  if (GetWindowStyleFlag() & wxLC_REPORT)
-  {
-    m_headerWin->GetPosition( &x, &y );
-    m_headerWin->GetSize( &w, &h );
-    if ((x != 0) || (y != 0) || (w != cw) || (h != 23))
-      m_headerWin->SetSize( 0, 0, cw, 23 );
-      
-    m_mainWin->GetPosition( &x, &y );
-    m_mainWin->GetSize( &w, &h );
-    if ((x != 0) || (y != 24) || (w != cw) || (h != ch-24))
-      m_mainWin->SetSize( 0, 24, cw, ch-24 );
-  }
-  else
-  {
-    m_mainWin->GetPosition( &x, &y );
-    m_mainWin->GetSize( &w, &h );
-    if ((x != 0) || (y != 24) || (w != cw) || (h != ch))
-      m_mainWin->SetSize( 0, 0, cw, ch );
-  };
-  
-  m_mainWin->CalculatePositions();
-  m_mainWin->RealizeChanges();
-  m_mainWin->m_dirty = FALSE;
-  m_mainWin->Refresh();
 };
 
 void wxListCtrl::SetBackgroundColour(const wxColour& col)
@@ -2449,6 +2396,44 @@ bool wxListCtrl::SortItems( wxListCtrlCompare fn, long data )
 {
   m_mainWin->SortItems( fn, data );
   return TRUE;
+};
+
+void wxListCtrl::OnIdle( wxIdleEvent &event )
+{
+  if (!m_mainWin->m_dirty) return;
+
+  int cw = 0;
+  int ch = 0;
+  GetClientSize( &cw, &ch );
+  
+  int x = 0;
+  int y = 0;
+  int w = 0;
+  int h = 0;
+  
+  if (GetWindowStyleFlag() & wxLC_REPORT)
+  {
+    m_headerWin->GetPosition( &x, &y );
+    m_headerWin->GetSize( &w, &h );
+    if ((x != 0) || (y != 0) || (w != cw) || (h != 23))
+      m_headerWin->SetSize( 0, 0, cw, 23 );
+      
+    m_mainWin->GetPosition( &x, &y );
+    m_mainWin->GetSize( &w, &h );
+    if ((x != 0) || (y != 24) || (w != cw) || (h != ch-24))
+      m_mainWin->SetSize( 0, 24, cw, ch-24 );
+  }
+  else
+  {
+    m_mainWin->GetPosition( &x, &y );
+    m_mainWin->GetSize( &w, &h );
+    if ((x != 0) || (y != 24) || (w != cw) || (h != ch))
+      m_mainWin->SetSize( 0, 0, cw, ch );
+  };
+  
+  m_mainWin->CalculatePositions();
+  m_mainWin->RealizeChanges();
+  m_mainWin->Refresh();
 };
 
 
