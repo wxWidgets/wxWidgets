@@ -224,14 +224,10 @@ void MyFrame::SetMinSize(wxCommandEvent& WXUNUSED(event) )
   if ( str.IsEmpty() )
     return;
 
-/*
-  What is atoi in Unicode?
-  
-  int minsize = atoi(str);
+  int minsize = wxStrtol( str, (wxChar**)NULL, 10 );
   m_splitter->SetMinimumPaneSize(minsize);
   str.Printf( _T("Min pane size = %d"), minsize);
   SetStatusText(str, 1);
-*/
 }
 
 void MyFrame::UpdateUIHorizontal(wxUpdateUIEvent& event)

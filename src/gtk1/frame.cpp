@@ -197,18 +197,6 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
 }
     
 //-----------------------------------------------------------------------------
-// "map" from m_widget
-//-----------------------------------------------------------------------------
-
-static gint
-gtk_frame_map_callback( GtkWidget *widget, wxFrame *win )
-{
-    gtk_widget_set_uposition( widget, win->m_x, win->m_y );
-    
-    return FALSE;
-}
-    
-//-----------------------------------------------------------------------------
 // InsertChild for wxFrame
 //-----------------------------------------------------------------------------
 
@@ -358,11 +346,6 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
 			GTK_SIGNAL_FUNC(gtk_frame_realized_callback), (gpointer) this );
     
-    /* we set the position of the window after the map event. setting it
-       before has no effect (with KWM) */
-    gtk_signal_connect( GTK_OBJECT(m_widget), "map",
-			GTK_SIGNAL_FUNC(gtk_frame_map_callback), (gpointer) this );
-
     /* the user resized the frame by dragging etc. */
     gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
         GTK_SIGNAL_FUNC(gtk_frame_size_callback), (gpointer)this );
@@ -708,7 +691,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
 
 void wxFrame::OnInternalIdle()
 {
-    if (!m_sizeSet)
+    if (!m_sizeSet && GTK_WIDGET_REALIZED(m_wxwindow))
         GtkOnSize( m_x, m_y, m_width, m_height );
 
     DoMenuUpdates();

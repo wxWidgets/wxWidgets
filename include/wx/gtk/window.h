@@ -452,7 +452,7 @@ public:
     wxDropTarget        *m_dropTarget;
 #endif
     wxWindowID           m_windowId;
-    wxCursor            *m_cursor;
+    wxCursor             m_cursor;
     wxFont               m_font;
     wxColour             m_backgroundColour;
     wxColour             m_foregroundColour;

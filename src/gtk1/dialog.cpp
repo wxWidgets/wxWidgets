@@ -465,7 +465,7 @@ void wxDialog::Centre( int direction )
 
 void wxDialog::OnInternalIdle()
 {
-    if (!m_sizeSet)
+    if (!m_sizeSet && GTK_WIDGET_REALIZED(m_wxwindow))
         GtkOnSize( m_x, m_y, m_width, m_height );
 }
 

@@ -1033,8 +1033,8 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
     
     if (widget->window != gdk_event->window) return FALSE;
 
-    if ((widget->window) && (win->m_cursor))
-        gdk_window_set_cursor( widget->window, win->m_cursor->GetCursor() );
+    if ((widget->window) && (win->m_cursor.Ok()))
+        gdk_window_set_cursor( widget->window, win->m_cursor.GetCursor() );
 
 /*
     printf( "OnEnter from " );
@@ -1083,7 +1083,7 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
     if (widget->window != gdk_event->window) return FALSE;
     
-    if ((widget->window) && (win->m_cursor))
+    if (widget->window)
         gdk_window_set_cursor( widget->window, wxSTANDARD_CURSOR->GetCursor() );
 
 /*
@@ -1345,6 +1345,10 @@ gtk_window_realized_callback( GtkWidget *widget, wxWindow *win )
 	win->SetForegroundColour( fg );
     }
     
+    wxCursor cursor( win->m_cursor );
+    win->m_cursor = wxNullCursor;
+    win->SetCursor( cursor );
+    
     return FALSE;
 }
     
@@ -1425,7 +1429,7 @@ void wxWindow::Init()
 
     m_windowId = -1;
 
-    m_cursor = (wxCursor *) NULL;
+    m_cursor = *wxSTANDARD_CURSOR;
     m_font = *wxSWISS_FONT;
     m_windowStyle = 0;
     m_windowName = "noname";
@@ -1658,8 +1662,6 @@ wxWindow::~wxWindow()
 
     if (m_widget) gtk_widget_destroy( m_widget );
 
-    if (m_cursor) delete m_cursor;
-
     DeleteRelatedConstraints();
     if (m_constraints)
     {
@@ -1740,7 +1742,7 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
 
     m_sizeSet = FALSE;
 
-    m_cursor = new wxCursor( wxCURSOR_ARROW );
+    m_cursor = *wxSTANDARD_CURSOR;
     m_font = *wxSWISS_FONT;
     m_backgroundColour = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
     m_foregroundColour = *wxBLACK;
@@ -2515,20 +2517,20 @@ void wxWindow::SetCursor( const wxCursor &cursor )
 
     if (cursor.Ok())
     {
-        if (cursor == *m_cursor) return;
-        *m_cursor = cursor;
+        if (cursor == m_cursor) return;
+        m_cursor = cursor;
     }
     else
     {
-        *m_cursor = *wxSTANDARD_CURSOR;
+        m_cursor = *wxSTANDARD_CURSOR;
     }
 
     if (!m_widget->window) return;
 
-    gdk_window_set_cursor( m_widget->window, m_cursor->GetCursor() );
+    gdk_window_set_cursor( m_widget->window, m_cursor.GetCursor() );
 
     if ((m_wxwindow) && (m_wxwindow->window))
-         gdk_window_set_cursor( m_wxwindow->window, m_cursor->GetCursor() );
+         gdk_window_set_cursor( m_wxwindow->window, m_cursor.GetCursor() );
 }
 
 void wxWindow::WarpPointer( int WXUNUSED(x), int WXUNUSED(y) )
