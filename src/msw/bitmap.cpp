@@ -264,7 +264,6 @@ wxObjectRefData *wxBitmap::CloneRefData(const wxObjectRefData *dataOrig) const
         return NULL;
 
     wxBitmap *self = wx_const_cast(wxBitmap *, this);
-    self->m_refData = new wxBitmapRefData(*data);
 
 #if wxUSE_WXDIB
     // copy the other bitmap
@@ -273,7 +272,12 @@ wxObjectRefData *wxBitmap::CloneRefData(const wxObjectRefData *dataOrig) const
         wxDIB dib((HBITMAP)(data->m_hBitmap));
         self->CopyFromDIB(dib);
     }
+    else
 #endif // wxUSE_WXDIB
+    {
+        // don't copy the bitmap data, but do copy the size, depth, ...
+        self->m_refData = new wxBitmapRefData(*data);
+    }
 
     return m_refData;
 }
