@@ -637,7 +637,8 @@ void wxHtmlContainerCell::Layout(int w)
        return;
     }
 
-    wxHtmlCell *cell = m_Cells, *line = m_Cells;
+    wxHtmlCell *cell = m_Cells,
+               *line = m_Cells;
     wxHtmlCell *nextCell;
     long xpos = 0, ypos = m_IndentTop;
     int xdelta = 0, ybasicpos = 0, ydiff;
@@ -755,24 +756,62 @@ void wxHtmlContainerCell::Layout(int w)
             ypos += ysizeup;
 
             if (m_AlignHor != wxHTML_ALIGN_JUSTIFY || cell == NULL)
+            {
                 while (line != cell)
                 {
                     line->SetPos(line->GetPosX() + xdelta,
                                    ypos + line->GetPosY());
                     line = line->GetNext();
                 }
-            else
+            }
+            else // align == justify
             {
-                int counter = 0;
-                int step = (s_width - xpos);
-                if (step < 0) step = 0;
-                xcnt--;
-                if (xcnt > 0) while (line != cell)
+                // we have to distribute the extra horz space between the cells
+                // on this line
+
+                // an added complication is that some cells have fixed size and
+                // shouldn't get any increment (it so happens that these cells
+                // also don't allow line break on them which provides with an
+                // easy way to test for this)
+
+                const int step = s_width - xpos;
+                if ( step > 0 )
                 {
-                    line->SetPos(line->GetPosX() + s_indent +
-                                   (counter++ * step / xcnt),
-                                   ypos + line->GetPosY());
-                    line = line->GetNext();
+                    // first count the cells which will get extra space
+                    int total = 0;
+                    for ( wxHtmlCell *c = line; c != cell; c = c->GetNext() )
+                    {
+                        if ( c->IsLinebreakAllowed() )
+                            total++;
+                    }
+
+                    // and now extra space to those cells which merit it
+                    if ( total )
+                    {
+                        for ( int n = 0; line != cell; line = line->GetNext() )
+                        {
+                            line->SetPos(line->GetPosX() + s_indent +
+                                           ((n * step) / total),
+                                           line->GetPosY() + ypos);
+
+                            if ( line->IsLinebreakAllowed() )
+                            {
+                                // offset the next cell relative to this one
+                                // thus increasing our size
+                                n++;
+                            }
+                        }
+                    }
+                }
+                else // no extra space to distribute
+                {
+                    // just set the indent properly
+                    while (line != cell)
+                    {
+                        line->SetPos(line->GetPosX() + s_indent,
+                                     line->GetPosY() + ypos);
+                        line = line->GetNext();
+                    }
                 }
             }
 
