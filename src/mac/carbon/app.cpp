@@ -811,7 +811,11 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
 
             // allocate copy to replace .dylib.* extension with .rsrc
             if (theLibPath != NULL) {
-                theResPath = theLibPath;
+#if wxUSE_UNICODE
+                theResPath = wxString(theLibPath, wxConvLocal);
+#else
+                theResPath = wxString(theLibPath);
+#endif
                 // replace '_core' with '' in case of multi-lib build
                 theResPath.Replace(wxT("_core"), wxEmptyString);
                 // replace ".dylib" shared library extension with ".rsrc"
@@ -837,9 +841,8 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
                 }
                 if (theErr != noErr) {
 #ifdef __WXDEBUG__
-                    fprintf(stderr,
-                            wxT("unable to open wxMac resource file '%s'\n"),
-                            theResPath.mb_str() );
+                    wxLogDebug( wxT("unable to open wxMac resource file '%s'\n"),
+                                theResPath.mb_str() );
 #endif // __WXDEBUG__
                 }
 
