@@ -457,8 +457,17 @@ bool wxMultiChoiceDialog::Create( wxWindow *parent,
 
 void wxMultiChoiceDialog::SetSelections(const wxArrayInt& selections)
 {
-    size_t count = selections.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    // first clear all currently selected items
+    size_t n,
+           count = m_listbox->GetCount();
+    for ( n = 0; n < count; ++n )
+    {
+        m_listbox->Deselect(n);
+    }
+
+    // now select the ones which should be selected
+    count = selections.GetCount();
+    for ( n = 0; n < count; n++ )
     {
         m_listbox->Select(selections[n]);
     }
