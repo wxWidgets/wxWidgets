@@ -72,6 +72,7 @@
 #endif
 
 #include "wx/file.h"
+#include "wx/filename.h"
 #include "wx/tokenzr.h"
 #include "wx/module.h"
 #include "wx/fontmap.h"
@@ -1074,16 +1075,14 @@ static wxString GetFullSearchPath(const wxChar *lang)
 }
 
 // open disk file and read in it's contents
-bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName0,
+bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName,
                             wxPluralFormsCalculatorPtr& rPluralFormsCalculator)
 {
-   /* We need to handle locales like  de_AT.iso-8859-1
-      For this we first chop off the .CHARSET specifier and ignore it.
-      FIXME: UNICODE SUPPORT: must use CHARSET specifier!
-   */
-   wxString szName = szName0;
-   if(szName.Find(wxT('.')) != wxNOT_FOUND) // contains a dot
-      szName = szName.Left(szName.Find(wxT('.')));
+  /*
+     We need to handle locales like  de_AT.iso-8859-1
+     For this we first chop off the .CHARSET specifier and ignore it.
+     FIXME: UNICODE SUPPORT: must use CHARSET specifier!
+  */
 
   wxString searchPath = GetFullSearchPath(szDirPrefix);
   const wxChar *sublocale = wxStrchr(szDirPrefix, wxT('_'));
@@ -1097,9 +1096,6 @@ bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName0,
                  << wxPATH_SEP;
   }
 
-  wxString strFile = szName;
-  strFile += MSGCATALOG_EXTENSION;
-
   // don't give translation errors here because the wxstd catalog might
   // not yet be loaded (and it's normal)
   //
@@ -1107,17 +1103,18 @@ bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName0,
 
   NoTransErr noTransErr;
   wxLogVerbose(_("looking for catalog '%s' in path '%s'."),
-               szName.c_str(), searchPath.c_str());
+               szName, searchPath.c_str());
 
+  wxFileName fn(szName);
+  fn.SetExt(MSGCATALOG_EXTENSION);
   wxString strFullName;
-  if ( !wxFindFileInPath(&strFullName, searchPath, strFile) ) {
-    wxLogVerbose(_("catalog file for domain '%s' not found."), szName.c_str());
+  if ( !wxFindFileInPath(&strFullName, searchPath, fn.GetFullPath()) ) {
+    wxLogVerbose(_("catalog file for domain '%s' not found."), szName);
     return false;
   }
 
   // open file
-  wxLogVerbose(_("using catalog '%s' from '%s'."),
-             szName.c_str(), strFullName.c_str());
+  wxLogVerbose(_("using catalog '%s' from '%s'."), szName, strFullName.c_str());
 
   wxFile fileMsg(strFullName);
   if ( !fileMsg.IsOpened() )
