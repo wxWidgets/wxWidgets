@@ -894,13 +894,43 @@ void HelpGenVisitor::CloseFunction()
 
 void HelpGenVisitor::CloseClass()
 {
+	CloseFunction();
+
     if ( m_inClass ) {
         size_t count = m_arrayFuncDocs.GetCount();
         if ( count ) {
+			size_t n;
             FunctionDocEntry::classname = m_classname;
+
             m_arrayFuncDocs.Sort(FunctionDocEntry::Compare);
 
-            for ( size_t n = 0; n < count; n++ ) {
+			// Now examine each first line and if it's been seen, cut it
+			// off (it's a duplicate \membersection)
+			wxHashTable membersections(wxKEY_STRING);
+
+            for ( n = 0; n < count; n++ )
+			{
+                wxString section(m_arrayFuncDocs[n].text);
+
+				// Strip leading whitespace
+				int pos = section.Find("\\membersection");
+				if (pos > -1)
+				{
+					section = section.Mid(pos);
+				}
+
+				wxString ms(section.BeforeFirst(wxT('\n')));
+				if (membersections.Get(ms))
+				{
+					m_arrayFuncDocs[n].text = section.AfterFirst(wxT('\n'));
+				}
+				else
+				{
+					membersections.Put(ms, & membersections);
+				}
+            }
+
+            for ( n = 0; n < count; n++ ) {
                 m_file.WriteTeX(m_arrayFuncDocs[n].text);
             }
 
@@ -1118,7 +1148,7 @@ void HelpGenVisitor::VisitClass( spClass& cl )
     InsertTypedefDocs();
     InsertEnumDocs();
 
-	m_file.Flush();
+	//m_file.Flush();
 }
 
 void HelpGenVisitor::VisitEnumeration( spEnumeration& en )
@@ -1265,19 +1295,10 @@ void HelpGenVisitor::VisitOperation( spOperation& op )
         funcname = dtor;
     }
 
-	static wxHashTable sg_MemberSectionsDone(wxKEY_STRING);
-	wxString memberSectionName;
-	memberSectionName.Printf("%s::%s", m_classname.c_str(), funcname.c_str());
-
-	m_textFunc = wxEmptyString;
-	if (!sg_MemberSectionsDone.Get(memberSectionName))
-	{
-		m_textFunc.Printf("\n"
-                      "\\membersection{%s::%s}\\label{%s}\n",
-                      m_classname.c_str(), funcname.c_str(),
-                      MakeLabel(m_classname, funcname).c_str());
-		sg_MemberSectionsDone.Put(memberSectionName, (wxObject*) & sg_MemberSectionsDone);
-	}
+	m_textFunc.Printf("\n"
+		"\\membersection{%s::%s}\\label{%s}\n",
+		m_classname.c_str(), funcname.c_str(),
+		MakeLabel(m_classname, funcname).c_str());
 
 	wxString func;
 	func.Printf("\n"
@@ -2176,6 +2197,10 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.21  2002/01/04 11:06:09  JS
+   Fixed missing membersections bug and also bug with functions not being written
+   in the right class
+
    Revision 1.20  2002/01/03 14:23:33  JS
    Added code to make it not duplicate membersections for overloaded functions
 
