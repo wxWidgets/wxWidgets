@@ -37,7 +37,8 @@
 #include "wx/msw/private.h"     // includes <windows.h>
 #include "wx/msw/missing.h"     // CHARSET_HANGUL
 
-#if defined(__GNUWIN32_OLD__) || defined(__WXWINCE__)
+#if defined(__GNUWIN32_OLD__) || defined(__WXWINCE__) \
+    || defined(__CYGWIN32__)
     // apparently we need to include winsock.h to get WSADATA and other stuff
     // used in wxGetFullHostName() with the old mingw32 versions
     #include <winsock.h>
