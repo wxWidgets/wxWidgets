@@ -10,11 +10,20 @@ from globals import *
 from types import *
 from wxPython.xrc import *
 
-genericStyles = ['wxSIMPLE_BORDER', 'wxDOUBLE_BORDER',
-                 'wxSUNKEN_BORDER', 'wxRAISED_BORDER',
-                 'wxSTATIC_BORDER', 'wxNO_BORDER',
-                 'wxTRANSPARENT_WINDOW', 'wxWANTS_CHARS',
-                 'wxNO_FULL_REPAINT_ON_RESIZE']
+genericStyles = [
+    'wxCLIP_CHILDREN',
+    'wxSIMPLE_BORDER',
+    'wxSUNKEN_BORDER',
+    'wxDOUBLE_BORDER',
+    'wxRAISED_BORDER',
+    'wxSTATIC_BORDER',
+    'wxNO_BORDER',
+    'wxTRANSPARENT_WINDOW',
+    'wxWANTS_CHARS',
+    'wxNO_FULL_REPAINT_ON_RESIZE',
+    'wxFULL_REPAINT_ON_RESIZE',
+    'wxWS_EX_BLOCK_EVENTS',
+]
 
 buttonSize = (35,-1)    # in dialog units, transformed to pixels in panel ctor
 
