@@ -14,7 +14,7 @@ when invoking bakefile_gen. For example, "bakefile_gen -fborland,watcom" will
 only regenerate Borland C++ and OpenWatcom makefiles. -b flag limits
 regeneration only to specified bakefiles. For example,
 "bakefile_gen -b wx.bkl" will only regenerate main library makefiles.
-"bakefile_gen -b '../../samples/html/*/*.bkl' will regenerate makefiles for
+"bakefile_gen -b "../../samples/html/*/*.bkl" will regenerate makefiles for
 all wxHTML samples. -b and -f can be combined.
 
 You can customize the process of generating makefiles by adding file
