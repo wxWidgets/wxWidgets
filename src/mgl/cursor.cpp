@@ -85,6 +85,7 @@ wxCursor::wxCursor(int cursorId)
     switch (cursorId)
     {
         case wxCURSOR_ARROW:           cursorname = "arrow.cur"; break;
+        case wxCURSOR_RIGHT_ARROW:     cursorname = "rightarr.cur"; break;
         case wxCURSOR_BULLSEYE:        cursorname = "bullseye.cur"; break;
         case wxCURSOR_CHAR:            cursorname = "char.cur"; break;
         case wxCURSOR_CROSS:           cursorname = "cross.cur"; break;
