@@ -8,4 +8,5 @@ Makefile.in
 make.env
 makeprog.env
 makelib.env
-wxWindowsM*Data
+wxwindowsM*Data
+wxwindowsM5.mcp
