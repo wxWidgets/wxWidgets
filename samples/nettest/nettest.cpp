@@ -224,7 +224,7 @@ void MyFrame::OnDial(wxCommandEvent& WXUNUSED(event))
     wxBeginBusyCursor();
 
     if ( wxDialUpManager::Get()->Dial("Free",
-                                      "zeitlin", "2ecj86ij") )
+                                      "zeitlin", "") )
     {
         wxLogStatus(this, "Connection was succesfully established.");
     }
