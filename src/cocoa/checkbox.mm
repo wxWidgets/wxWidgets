@@ -17,6 +17,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/cocoa/autorelease.h"
+#include "wx/cocoa/string.h"
 
 #import <AppKit/NSButton.h>
 #import <Foundation/NSString.h>
@@ -41,7 +42,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID winid,
     SetNSButton([[NSButton alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
     [GetNSButton() setButtonType: NSSwitchButton];
-    [GetNSButton() setTitle:[NSString stringWithCString: label.c_str()]];
+    [GetNSButton() setTitle:wxNSStringWithWxString(wxStripMenuCodes(label))];
     [GetNSControl() sizeToFit];
 
     if(m_parent)
