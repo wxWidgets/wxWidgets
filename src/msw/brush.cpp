@@ -149,9 +149,10 @@ void wxBrushRefData::Free()
     }
 }
 
-static int TransllateHatchStyle(int style)
-{
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+
+static int TranslateHatchStyle(int style)
+{
     switch ( style )
     {
         case wxBDIAGONAL_HATCH: return HS_BDIAGONAL;
@@ -162,19 +163,18 @@ static int TransllateHatchStyle(int style)
         case wxVERTICAL_HATCH:  return HS_VERTICAL;
         default:                return -1;
     }
-#else // __WXMICROWIN__
-    return -1;
-#endif
 }
+
+#endif // !__WXMICROWIN__ && !__WXWINCE__
 
 HBRUSH wxBrushRefData::GetHBRUSH()
 {
     if ( !m_hBrush )
     {
-#ifndef __WXWINCE__
-        int hatchStyle = TransllateHatchStyle(m_style);
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+        int hatchStyle = TranslateHatchStyle(m_style);
         if ( hatchStyle == -1 )
-#endif
+#endif // !__WXMICROWIN__ && !__WXWINCE__
         {
             switch ( m_style )
             {
