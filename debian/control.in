@@ -1,9 +1,9 @@
 Source: wxwindows=V
 Section: libs
 Priority: optional
-Build-Depends: debhelper, flex, bison, libgtk1.2-dev, python-dev (>=1.5.2), zlib1g-dev, libjpeg62-dev, libpng2-dev, libtiff3g-dev, mesag-dev
+Build-Depends: debhelper, flex, bison, libgtk1.2-dev, python-dev (>=1.5.2), zlib1g-dev, libjpeg62-dev, libpng2-dev, libtiff3g-dev, mesag-dev, libesd0-dev
 Maintainer: Ron Lee <ron@debian.org>
-Standards-Version: 3.1.1
+Standards-Version: 3.2.0
 
 Package: libwxbase=V
 Architecture: any
@@ -15,8 +15,8 @@ Description: wxBase library (runtime) - non-GUI support classes of wxWindows too
  portable wrappers around many OS-specific functions allowing to build the
  same program under all supported folders, wxThread class for writing
  multithreaded programs using either Win32 or POSIX threads and much more.
- wxBase currently supports the following platforms: Win32, generic Unix
- (Linux, FreeBSD, Solaris, HP-UX, ...) and BeOS.
+ wxBase currently supports the following platforms: Generic Unix (Linux, FreeBSD,
+ Solaris, HP-UX, ...), win32, and BeOS.
  .
  This package is only useful for non-gui apps.  It offers a subset of the
  classes in libwx_gtk=V for use in console apps and daemons.  It is currently
@@ -36,8 +36,8 @@ Description: wxBase library (development) - non-GUI support classes of wxWindows
  portable wrappers around many OS-specific functions allowing to build the
  same program under all supported folders, wxThread class for writing
  multithreaded programs using either Win32 or POSIX threads and much more.
- wxBase currently supports the following platforms: Win32, generic Unix
- (Linux, FreeBSD, Solaris, HP-UX, ...) and BeOS.
+ wxBase currently supports the following platforms: Generic Unix (Linux, FreeBSD,
+ Solaris, HP-UX, ...), win32, and BeOS.
  .
  This package provides the files needed to compile apps using the wxBase library.
 
@@ -45,14 +45,17 @@ Package: libwxbase=V-dbg
 Architecture: any
 Section: devel
 Depends: wxwin=V-headers (= ${Source-Version}), libc6-dev
+Conflicts: libwxbase-dbg
+Replaces: libwxbase-dbg
+Provides: libwxbase-dbg
 Description: wxBase library (debug) - non-GUI support classes of wxWindows toolkit
  wxBase is a collection of C++ classes providing basic data structures
  (strings, lists, arrays), powerful wxDateTime class for date manipulations,
  portable wrappers around many OS-specific functions allowing to build the
  same program under all supported folders, wxThread class for writing
  multithreaded programs using either Win32 or POSIX threads and much more.
- wxBase currently supports the following platforms: Win32, generic Unix
- (Linux, FreeBSD, Solaris, HP-UX, ...) and BeOS.
+ wxBase currently supports the following platforms: Generic Unix (Linux, FreeBSD,
+ Solaris, HP-UX, ...) win32, and BeOS.
  .
  This package provides a debug version of the wxBase library.  It is compiled
  both with -g for normal debugger tracing and with the __WXDEBUG__ flag which
@@ -94,6 +97,9 @@ Package: libwxgtk=V-dbg
 Architecture: any
 Section: devel
 Depends: wxwin=V-headers (= ${Source-Version}), libc6-dev
+Conflicts: libwxgtk-dbg
+Replaces: libwxgtk-dbg
+Provides: libwxgtk-dbg
 Description: wxWindows Cross-platform C++ GUI toolkit (GTK+ development)
  wxWindows is a class library for C++ providing GUI (Graphical User
  Interface) and other facilities on more than one platform.  Version =V

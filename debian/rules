@@ -69,27 +69,27 @@ debian/wxwin-doc.doc-base: debian/wxwin-doc.doc-base.in
 
 control-files-stamp: debian/control debian/wxwin-doc.doc-base
 	dh_testdir
-	@for f in dirs docs postinst; do \
+	@for f in dirs postinst; do \
 		echo "generating control file $(package_wxbase_lib).$$f"; \
 		cp debian/libwxbase.$$f debian/$(package_wxbase_lib).$$f; \
 	done;
-	@for f in dirs docs files links postinst prerm; do \
+	@for f in dirs files links postinst prerm; do \
 		echo "generating control file $(package_wxbase_dev).$$f"; \
 		cp debian/libwxbase-dev.$$f debian/$(package_wxbase_dev).$$f; \
 	done;
-	@for f in dirs docs links postinst prerm; do \
+	@for f in dirs links postinst prerm; do \
 		echo "generating control file $(package_wxbase_dbg).$$f"; \
 		cp debian/libwxbase-dbg.$$f debian/$(package_wxbase_dbg).$$f; \
 	done;
-	@for f in dirs docs postinst; do \
+	@for f in dirs postinst; do \
 		echo "generating control file $(package_gtk_lib).$$f"; \
 		cp debian/libwxgtk.$$f debian/$(package_gtk_lib).$$f; \
 	done;
-	@for f in dirs docs files links postinst prerm; do \
+	@for f in dirs files links postinst prerm; do \
 		echo "generating control file $(package_gtk_dev).$$f"; \
 		cp debian/libwxgtk-dev.$$f debian/$(package_gtk_dev).$$f; \
 	done;
-	@for f in dirs docs links postinst prerm; do \
+	@for f in dirs links postinst prerm; do \
 		echo "generating control file $(package_gtk_dbg).$$f"; \
 		cp debian/libwxgtk-dbg.$$f debian/$(package_gtk_dbg).$$f; \
 	done;
@@ -97,19 +97,19 @@ control-files-stamp: debian/control debian/wxwin-doc.doc-base
 		echo "generating control file $(package_gtk_py).$$f"; \
 		cp debian/libwxgtk-python.$$f debian/$(package_gtk_py).$$f; \
 	done;
-	@for f in dirs docs postinst; do \
+	@for f in dirs postinst; do \
 		echo "generating control file $(package_gtk_contrib).$$f"; \
 		cp debian/libwxgtk-contrib.$$f debian/$(package_gtk_contrib).$$f; \
 	done;
-	@for f in dirs docs files; do \
+	@for f in dirs files; do \
 		echo "generating control file $(package_gtk_contrib_dev).$$f"; \
 		cp debian/libwxgtk-contrib-dev.$$f debian/$(package_gtk_contrib_dev).$$f; \
 	done;
-	@for f in dirs docs files; do \
+	@for f in dirs files; do \
 		echo "generating control file $(package_headers).$$f"; \
 		cp debian/wxwin-headers.$$f debian/$(package_headers).$$f; \
 	done;
-	@for f in dirs docs files; do \
+	@for f in dirs files; do \
 		echo "generating control file $(package_i18n).$$f"; \
 		cp debian/wxwin-i18n.$$f debian/$(package_i18n).$$f; \
 	done;
@@ -117,7 +117,7 @@ control-files-stamp: debian/control debian/wxwin-doc.doc-base
 		echo "generating control file $(package_doc).$$f"; \
 		cp debian/wxwin-doc.$$f debian/$(package_doc).$$f; \
 	done;
-	@for f in docs examples; do \
+	@for f in examples; do \
 		echo "generating control file $(package_examples).$$f"; \
 		cp debian/wxwin-examples.$$f debian/$(package_examples).$$f; \
 	done;
