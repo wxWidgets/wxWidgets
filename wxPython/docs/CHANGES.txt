@@ -74,6 +74,17 @@ and PyGetDate methods.
 wxMSW: SetBackgroundColour on a wx.Choice or a wx.ComboBox will now
 also set the colour of the dropdown.
 
+wxMac: MessageDialog now supports wx.NO_DEFAULT style
+
+wxMSW: added AssociateHandle and DissociateHandle to wx.Window
+
+wxMac: fix for toolbar tooltips
+
+wx.Sizer.Show (and Hide) now take an optional parameter specifying if
+the item to be shown should be searched for recursivly in subsizers,
+and return a boolean value indicating if the item was found.
+
+
 
 
 
