@@ -580,9 +580,9 @@ typedef struct {
     #define WC_NO_BEST_FIT_CHARS 0x400
 #endif
 
-// Not in WinCE
-#ifndef HGDI_ERROR
-#define HGDI_ERROR ((HANDLE)(0xFFFFFFFFL))
+// In addition, include stuff not defined in WinCE
+#ifdef __WXWINCE__
+    #include "wx/msw/wince/missing.h"
 #endif
 
 #endif
