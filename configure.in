@@ -1380,16 +1380,6 @@ case ${INSTALL} in
      INSTALL=`pwd`/${INSTALL} ;;
 esac
 
-dnl HP-UX install doesn't handle the "-d" switch so don't use it there
-case ${host} in
-    *-hp-hpux* )
-        INSTALL_DIR="mkdir"
-        ;;
-
-    *)  INSTALL_DIR="$INSTALL -d"
-        ;;
-esac
-
 
 case "${host}" in
 
@@ -6243,7 +6233,6 @@ AC_SUBST(NM)
 AC_SUBST(LD)
 AC_SUBST(MAKEINFO)
 AC_SUBST(INSTALL_LIBRARY)
-AC_SUBST(INSTALL_DIR)
 
 
 dnl MAKE_SET will be replaced with "MAKE=..." or nothing if make sets MAKE
