@@ -44,8 +44,11 @@ bool wxMemoryDC::CocoaLockFocus()
 {
     if(m_cocoaNSImage)
     {
-        [m_cocoaNSImage lockFocusOnRepresentation: m_selectedBitmap.GetNSBitmapImageRep()];
+        [m_cocoaNSImage lockFocus];
         sm_cocoaDCStack.Insert(this);
+        m_cocoaFlipped = [m_cocoaNSImage isFlipped];
+        m_cocoaHeight = [m_cocoaNSImage size].height;
+        CocoaApplyTransformations();
         return true;
     }
     return false;
@@ -57,18 +60,42 @@ bool wxMemoryDC::CocoaUnlockFocus()
     return true;
 }
 
+// NOTE: The AppKit is unable to draw onto an NSBitmapImageRep so we must
+// instead copy the data to an offscreen window, then copy it back
 void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 {
+    if(m_selectedBitmap.Ok())
+    {
+        CocoaTakeFocus();
+        wxASSERT(m_cocoaNSImage);
+        m_selectedBitmap.SetNSBitmapImageRep(
+            [[NSBitmapImageRep alloc]
+                initWithFocusedViewRect:NSMakeRect(0.0,0.0,
+                    m_selectedBitmap.GetWidth(),
+                    m_selectedBitmap.GetHeight())]);
+    }
     CocoaUnwindStackAndLoseFocus();
     [m_cocoaNSImage release];
     m_cocoaNSImage = nil;
     m_selectedBitmap = bitmap;
     if(m_selectedBitmap.Ok())
     {
+        // Create an offscreen window of the same size
         m_cocoaNSImage = [[NSImage alloc]
                 initWithSize:NSMakeSize(m_selectedBitmap.GetWidth(),
                     m_selectedBitmap.GetHeight())];
-        [m_cocoaNSImage addRepresentation: m_selectedBitmap.GetNSBitmapImageRep()];
+
+        // Now copy the data
+        NSImage *nsimage = [[NSImage alloc]
+                initWithSize:NSMakeSize(m_selectedBitmap.GetWidth(),
+                    m_selectedBitmap.GetHeight())];
+        [nsimage addRepresentation: const_cast<wxBitmap&>(m_selectedBitmap).GetNSBitmapImageRep()];
+        [nsimage drawAtPoint: NSMakePoint(0,0)
+            fromRect: NSMakeRect(0.0,0.0,m_selectedBitmap.GetWidth(),m_selectedBitmap.GetHeight())
+            operation: NSCompositeCopy
+            fraction: 1.0];
+        
+        [nsimage release];
     }
 }
 
