@@ -519,7 +519,7 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
 
     wxArrayString errors;
     wxArrayString output;
-    long res = wxExecute( wxT("lpstat -v"), output, errors );
+    long res = wxExecute( wxT("lpstat -v"), output, errors, wxEXEC_NODISABLE );
     if (res >= 0 && errors.GetCount() == 0)
     {
         size_t i;
@@ -555,7 +555,7 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
             command += name;
             wxArrayString errors2;
             wxArrayString output2;
-            res = wxExecute( command, output2, errors2 );
+            res = wxExecute( command, output2, errors2, wxEXEC_NODISABLE );
             if (res >= 0 && errors2.GetCount() == 0 && output2.GetCount() > 0)
             {
                 tmp = output2[0]; // "printer hp_deskjet930c is idle. enable since ..."
