@@ -108,6 +108,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/thread.cpp
     src/mac/carbon/macnotfy.cpp
     src/mac/carbon/morefilex/MoreFilesX.c
+    src/mac/corefoundation/cfstring.cpp
 </set>
 
 <set var="BASE_AND_GUI_MAC_SRC" hints="files">
@@ -116,6 +117,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="BASE_MAC_HDR" hints="files">
+    include/wx/mac/corefoundation/cfstring.h
 </set>
 
 <set var="BASE_OS2_SRC" hints="files">
@@ -1941,6 +1943,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/timer.cpp
     <!-- wxMac stuff used by wxCocoa: -->
     src/mac/carbon/gsockosx.cpp
+    <!-- Shared wxMac and wxCocoa files -->
+    src/mac/corefoundation/cfstring.cpp
 </set>
 <set var="COCOA_HDR" hints="files">
     wx/cocoa/NSApplication.h
@@ -2024,6 +2028,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/region.h
     wx/generic/statusbr.h
     wx/generic/tabg.h
+    <!-- Shared wxMac and wxCocoa files -->
+    include/wx/mac/corefoundation/cfstring.h
 </set>
 
 

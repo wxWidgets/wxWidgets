@@ -419,6 +419,7 @@ ALL_BASE_SOURCES =  \
 	src/mac/carbon/thread.cpp \
 	src/mac/carbon/macnotfy.cpp \
 	src/mac/carbon/morefilex/MoreFilesX.c \
+	src/mac/corefoundation/cfstring.cpp \
 	src/os2/dir.cpp \
 	src/os2/mimetype.cpp \
 	src/os2/thread.cpp \
@@ -1210,7 +1211,8 @@ COND_TOOLKIT_COCOA_BASE_PLATFORM_HDR =  \
 	wx/unix/pipe.h \
 	wx/unix/stdpaths.h
 @COND_TOOLKIT_COCOA@BASE_PLATFORM_HDR = $(COND_TOOLKIT_COCOA_BASE_PLATFORM_HDR)
-@COND_TOOLKIT_MAC@BASE_PLATFORM_HDR = 
+@COND_TOOLKIT_MAC@BASE_PLATFORM_HDR = \
+@COND_TOOLKIT_MAC@	include/wx/mac/corefoundation/cfstring.h
 @COND_PLATFORM_MACOSX_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
 @COND_PLATFORM_OS2_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
 @COND_PLATFORM_UNIX_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
@@ -1405,7 +1407,8 @@ COND_TOOLKIT_COCOA_GUI_HDR =  \
 	wx/generic/paletteg.h \
 	wx/generic/region.h \
 	wx/generic/statusbr.h \
-	wx/generic/tabg.h
+	wx/generic/tabg.h \
+	include/wx/mac/corefoundation/cfstring.h
 @COND_TOOLKIT_COCOA@GUI_HDR = $(COND_TOOLKIT_COCOA_GUI_HDR)
 COND_TOOLKIT_GTK_GUI_HDR =  \
 	wx/generic/colrdlgg.h \
@@ -2453,7 +2456,8 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_utilsexc.o \
 	monodll_thread.o \
 	monodll_macnotfy.o \
-	monodll_MoreFilesX.o
+	monodll_MoreFilesX.o \
+	monodll_cfstring.o
 @COND_TOOLKIT_MAC@__BASE_MACOSX_SRC_OBJECTS = $(COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS)
 COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_baseunix.o \
@@ -2900,7 +2904,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_statusbr.o \
 	monodll_tabg.o \
 	monodll_timer.o \
-	monodll_gsockosx.o
+	monodll_gsockosx.o \
+	monodll_cfstring.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS)
 COND_TOOLKIT_GTK___GUI_SRC_OBJECTS =  \
 	monodll_accel.o \
@@ -3402,7 +3407,8 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_utilsexc.o \
 	monolib_thread.o \
 	monolib_macnotfy.o \
-	monolib_MoreFilesX.o
+	monolib_MoreFilesX.o \
+	monolib_cfstring.o
 @COND_TOOLKIT_MAC@__BASE_MACOSX_SRC_OBJECTS_1 = $(COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_1)
 COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_baseunix.o \
@@ -3849,7 +3855,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_statusbr.o \
 	monolib_tabg.o \
 	monolib_timer.o \
-	monolib_gsockosx.o
+	monolib_gsockosx.o \
+	monolib_cfstring.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_1 =  \
 	monolib_accel.o \
@@ -4386,7 +4393,8 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_utilsexc.o \
 	basedll_thread.o \
 	basedll_macnotfy.o \
-	basedll_MoreFilesX.o
+	basedll_MoreFilesX.o \
+	basedll_cfstring.o
 @COND_TOOLKIT_MAC@__BASE_MACOSX_SRC_OBJECTS_2 = $(COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_2)
 COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_baseunix.o \
@@ -4482,7 +4490,8 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_utilsexc.o \
 	baselib_thread.o \
 	baselib_macnotfy.o \
-	baselib_MoreFilesX.o
+	baselib_MoreFilesX.o \
+	baselib_cfstring.o
 @COND_TOOLKIT_MAC@__BASE_MACOSX_SRC_OBJECTS_3 = $(COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_3)
 COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_baseunix.o \
@@ -4958,7 +4967,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_statusbr.o \
 	coredll_tabg.o \
 	coredll_timer.o \
-	coredll_gsockosx.o
+	coredll_gsockosx.o \
+	coredll_cfstring.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_2 =  \
 	coredll_accel.o \
@@ -5701,7 +5711,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_statusbr.o \
 	corelib_tabg.o \
 	corelib_timer.o \
-	corelib_gsockosx.o
+	corelib_gsockosx.o \
+	corelib_cfstring.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_3 =  \
 	corelib_accel.o \
@@ -9225,6 +9236,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_utilsexc.o: $(srcdir)/src/cocoa/utilsexc.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@monodll_cfstring.o: $(srcdir)/src/mac/corefoundation/cfstring.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_cfstring.o: $(srcdir)/src/mac/corefoundation/cfstring.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 @COND_PLATFORM_UNIX_1@monodll_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -12429,6 +12446,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_utilsexc.o: $(srcdir)/src/cocoa/utilsexc.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@monolib_cfstring.o: $(srcdir)/src/mac/corefoundation/cfstring.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_cfstring.o: $(srcdir)/src/mac/corefoundation/cfstring.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 @COND_PLATFORM_UNIX_1@monolib_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -15003,6 +15026,9 @@ basedll_macnotfy.o: $(srcdir)/src/mac/carbon/macnotfy.cpp $(BASEDLL_ODEP)
 basedll_MoreFilesX.o: $(srcdir)/src/mac/carbon/morefilex/MoreFilesX.c $(BASEDLL_ODEP)
 	$(CCC) -c -o $@ $(BASEDLL_CFLAGS) $<
 
+basedll_cfstring.o: $(srcdir)/src/mac/corefoundation/cfstring.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
 basedll_event.o: $(srcdir)/src/common/event.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
@@ -15380,6 +15406,9 @@ baselib_macnotfy.o: $(srcdir)/src/mac/carbon/macnotfy.cpp $(BASELIB_ODEP)
 
 baselib_MoreFilesX.o: $(srcdir)/src/mac/carbon/morefilex/MoreFilesX.c $(BASELIB_ODEP)
 	$(CCC) -c -o $@ $(BASELIB_CFLAGS) $<
+
+baselib_cfstring.o: $(srcdir)/src/mac/corefoundation/cfstring.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_event.o: $(srcdir)/src/common/event.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
@@ -15808,6 +15837,9 @@ coredll_utilsexc.o: $(srcdir)/src/cocoa/utilsexc.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 coredll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
+coredll_cfstring.o: $(srcdir)/src/mac/corefoundation/cfstring.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 coredll_gsockpm.o: $(srcdir)/src/os2/gsockpm.cpp $(COREDLL_ODEP)
@@ -18292,6 +18324,9 @@ corelib_utilsexc.o: $(srcdir)/src/cocoa/utilsexc.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+corelib_cfstring.o: $(srcdir)/src/mac/corefoundation/cfstring.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_gsockpm.o: $(srcdir)/src/os2/gsockpm.cpp $(CORELIB_ODEP)
