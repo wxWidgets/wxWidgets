@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        mac/toplevel.cpp
-// Purpose:     implements wxTopLevelWindow for MSW
-// Author:      Vadim Zeitlin
+// Purpose:     implements wxTopLevelWindow for Mac
+// Author:      Stefan Csomor
 // Modified by:
 // Created:     24.09.01
 // RCS-ID:      $Id$
-// Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
+// Copyright:   (c) 2001-2004 Stefan Csomor
 // License:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -738,13 +738,15 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
 
     //this setup lets us have compositing and non-compositing 
     //windows in the same application. 
-    
+  
+#if UNIVERSAL_INTERFACES_VERSION >= 0x0400  
     if ( wxTopLevelWindowMac::s_macWindowCompositing )
     {
         attr |= kWindowCompositingAttribute;
         m_macUsesCompositing = TRUE;
     }
     else
+#endif
     {
         m_macUsesCompositing = FALSE;
     }
