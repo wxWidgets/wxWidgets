@@ -50,8 +50,8 @@ III. Running the tests
 ----------------------
 
 1. Regenerate the make/project files from test.bkl using bakefile_gen, e.g.:
-        cd build/bakefile
-        bakefile_gen ../../tests/test.bkl
+        cd build/bakefiles
+        bakefile_gen -b ../../tests/test.bkl
    and if you're on a unix system re-run configure.
 
 2. Build the test program using one of the make/project files in the tests
