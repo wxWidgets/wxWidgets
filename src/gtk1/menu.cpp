@@ -1198,16 +1198,36 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         GtkWidget *label = gtk_accel_label_new ( wxGTK_CONV( text ) );
         gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
         gtk_container_add (GTK_CONTAINER (menuItem), label);
-        guint accel_key = gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV( text ) );
         gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (label), menuItem);
+        guint accel_key;
+        GdkModifierType accel_mods;
+
+        // accelerator for the item, as specified by its label
+        // (ex. Ctrl+O for open)
+        gtk_accelerator_parse(GetHotKey(*mitem).c_str(),
+                              &accel_key, &accel_mods);
         if (accel_key != GDK_VoidSymbol)
         {
             gtk_widget_add_accelerator (menuItem,
                                         "activate_item",
-                                        gtk_menu_ensure_uline_accel_group (GTK_MENU (m_menu)),
+                                        gtk_menu_get_accel_group(
+                                            GTK_MENU(m_menu)),
+                                        accel_key, accel_mods,
+                                        GTK_ACCEL_VISIBLE);
+        }
+
+        // accelerator for the underlined char (ex ALT+F for the File menu)
+        accel_key = gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV( text ) );
+        if (accel_key != GDK_VoidSymbol)
+        {
+            gtk_widget_add_accelerator (menuItem,
+                                        "activate_item",
+                                        gtk_menu_ensure_uline_accel_group (
+                                            GTK_MENU (m_menu)),
                                         accel_key, 0,
                                         GTK_ACCEL_LOCKED);
         }
+
         gtk_widget_show (label);
 
         mitem->SetLabelWidget(label);
@@ -1221,6 +1241,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
                             (gpointer)this );
 
         gtk_menu_append( GTK_MENU(m_menu), menuItem );
+
         gtk_widget_show( menuItem );
 
         appended = TRUE; // We've done this, don't do it again
