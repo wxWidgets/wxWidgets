@@ -37,6 +37,7 @@ class Panel(wxNotebook):
         self.AddPage(self.page1, 'Properties')
         # Second page
         self.page2 = wxScrolledWindow(self, -1)
+        self.page2.Hide()
         sizer = wxBoxSizer()
         sizer.Add(wxBoxSizer())         # dummy sizer
         self.page2.SetAutoLayout(True)
