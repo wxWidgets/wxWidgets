@@ -261,11 +261,14 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
   }
 
 
-  // if background is white, don't draw an edge around the bitmap
+  // don't draw an edge around the bitmap, if background is white ...
   DWORD menu_bg_color = GetSysColor(COLOR_MENU);
-  if (GetRValue(menu_bg_color) >= 0xf0 &&
-      GetGValue(menu_bg_color) >= 0xf0 &&
-      GetBValue(menu_bg_color) >= 0xf0)
+  if (    ( GetRValue( menu_bg_color ) >= 0xf0 &&
+            GetGValue( menu_bg_color ) >= 0xf0 &&
+            GetBValue( menu_bg_color ) >= 0xf0 )
+       // ... or if the menu item is disabled
+       || ( st & wxODDisabled )
+    )
   {
       draw_bitmap_edge = false;
   }
@@ -402,11 +405,20 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
     }
   }
   else {
-    wxBitmap bmp( // for disabled items we use m_bmpDisabled if it exists
-                  ( GetDisabledBitmap() != wxNullBitmap && ( st & wxODDisabled ) ) ? GetDisabledBitmap() :
-    // for uncheckable item we use only the 'checked' bitmap
-                  GetBitmap(IsCheckable() ? ((st & wxODChecked) != 0) : TRUE)
-                );
+    wxBitmap bmp;
+
+    if ( st & wxODDisabled )
+    {
+        bmp = GetDisabledBitmap();
+    }
+
+    if ( !bmp.Ok() )
+    {
+        // for not checkable bitmaps we should always use unchecked one because
+        // their checked bitmap is not set
+        bmp = GetBitmap(!IsCheckable() || (st & wxODChecked));
+    }
+
     if ( bmp.Ok() ) {
       wxMemoryDC dcMem(&dc);
       dcMem.SelectObject(bmp);
