@@ -42,6 +42,11 @@
         <if cond="FORMAT=='autoconf'">
             <wx-os2-lib-resource/>
         </if>
+
+        <!-- FIXME: temporary, until bakefile can reuse existing pch files -->
+        <if cond="FORMAT!='autoconf'">
+            <define>NOPCH</define>
+        </if>
     </template>
     
     <template id="wx_util_console" template="wx_util_b">
