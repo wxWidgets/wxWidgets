@@ -48,19 +48,4 @@ public:
 
 #endif
   // _WX_XPMHAND_H_
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
