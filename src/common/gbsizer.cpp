@@ -605,7 +605,7 @@ void wxGridBagSizer::Add( int width, int height, int, int flag, int border, wxOb
 // this class and should not be used.  Their implementation in this class
 // simply fails.
 
-void wxGridBagSizer::Add( wxSizerItem *item )
+void wxGridBagSizer::Add( wxSizerItem * )
 { wxFAIL_MSG(wxT("Invalid Add form called.")); }
 
 void wxGridBagSizer::Prepend( wxWindow *, int, int, int, wxObject*  )
