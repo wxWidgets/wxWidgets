@@ -524,6 +524,12 @@ void wxWindowCocoa::SetInitialFrameRect(const wxPoint& pos, const wxSize& size)
     frameRect.origin.x = pos.x;
     frameRect.origin.y = parentRect.size.height-(pos.y+frameRect.size.height);
     [nsview setFrame: frameRect];
+    // Tell Cocoa to change the margin between the bottom of the superview
+    // and the bottom of the control.  Keeps the control pinned to the top
+    // of its superview so that its position in the wxWindows coordinate
+    // system doesn't change.
+    if(![superview isFlipped])
+        [nsview setAutoresizingMask: NSViewMinYMargin];
 }
 
 // Get total size

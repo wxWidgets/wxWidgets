@@ -168,7 +168,7 @@ void wxFrame::SetStatusBar(wxStatusBar *statusbar)
     if(m_frameStatusBar)
     {
         [m_frameStatusBar->GetNSViewForSuperview() removeFromSuperview];
-        [m_frameStatusBar->GetNSViewForSuperview() setAutoresizingMask: NSViewNotSizable];
+        [m_frameStatusBar->GetNSViewForSuperview() setAutoresizingMask: NSViewMinYMargin];
         if(m_frameStatusBar->GetParent())
             m_frameStatusBar->GetParent()->CocoaAddChild(m_frameToolBar);
     }
@@ -199,7 +199,7 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
     if(m_frameToolBar)
     {
         [m_frameToolBar->GetNSViewForSuperview() removeFromSuperview];
-        [m_frameToolBar->GetNSViewForSuperview() setAutoresizingMask: NSViewNotSizable];
+        [m_frameToolBar->GetNSViewForSuperview() setAutoresizingMask: NSViewMinYMargin];
         if(m_frameToolBar->GetParent())
             m_frameToolBar->GetParent()->CocoaAddChild(m_frameToolBar);
     }
