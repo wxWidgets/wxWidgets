@@ -1005,7 +1005,7 @@ void wxWindowMSW::UnsubclassWin()
     HWND hwnd = GetHwnd();
     if ( hwnd )
     {
-        m_hWnd = 0;
+        SetHWND(0);
 
         wxCHECK_RET( ::IsWindow(hwnd), wxT("invalid HWND in UnsubclassWin") );
 
@@ -1020,6 +1020,27 @@ void wxWindowMSW::UnsubclassWin()
         }
     }
 }
+
+void wxWindowMSW::AssociateHandle(WXWidget handle) 
+{
+    if ( m_hWnd )
+    {
+      if ( !::DestroyWindow(GetHwnd()) )
+        wxLogLastError(wxT("DestroyWindow"));
+    }
+    
+    WXHWND wxhwnd = (WXHWND)handle;
+
+    SetHWND(wxhwnd);
+    SubclassWin(wxhwnd);
+}
+
+void wxWindowMSW::DissociateHandle()
+{ 
+    // this also calls SetHWND(0) for us
+    UnsubclassWin(); 
+}
+
 
 bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc)
 {

@@ -1018,6 +1018,10 @@ public:
         // is only used for wxWin itself or for user code which wants to call
         // platform-specific APIs
     virtual WXWidget GetHandle() const = 0;
+        // associate the window with a new native handle
+    virtual void AssociateHandle(WXWidget WXUNUSED(handle)) { }
+        // dissociate the current native handle from the window
+    virtual void DissociateHandle() { }
 
 #if wxUSE_PALETTE
         // Store the palette used by DCs in wxWindow so that the dcs can share

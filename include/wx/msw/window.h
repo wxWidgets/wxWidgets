@@ -148,15 +148,19 @@ public:
     virtual bool UnregisterHotKey(int hotkeyId);
 #endif // wxUSE_HOTKEY
 
-    // implementation from now on
-    // --------------------------
-
-    // simple accessors
-    // ----------------
+    // window handle stuff
+    // -------------------
 
     WXHWND GetHWND() const { return m_hWnd; }
     void SetHWND(WXHWND hWnd) { m_hWnd = hWnd; }
     virtual WXWidget GetHandle() const { return GetHWND(); }
+
+    void AssociateHandle(WXWidget handle);
+    void DissociateHandle();
+
+
+    // implementation from now on
+    // ==========================
 
     // event handlers
     // --------------
