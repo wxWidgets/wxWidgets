@@ -1,10 +1,10 @@
 \section{\class{wxWindow}}\label{wxwindow}
 
-wxWindow is the base class for all windows. Any children of the window will be deleted 
+wxWindow is the base class for all windows. Any children of the window will be deleted
 automatically by the destructor before the window itself is deleted.
 
-Please note that we documented a number of handler functions (OnChar(), OnMouse() etc.) in this 
-help text. These must not be called by a user program and are documented only for illustration. 
+Please note that we documented a number of handler functions (OnChar(), OnMouse() etc.) in this
+help text. These must not be called by a user program and are documented only for illustration.
 On several platforms, only a few of these handlers are actually written (they are not always
 needed) and if you are uncertain on how to add a certain behaviour to a window class, intercept
 the respective event as usual and call \helpref{wxEvent::Skip}{wxeventskip} so that the native
@@ -1709,7 +1709,7 @@ Sets the accelerator table for this window. See \helpref{wxAcceleratorTable}{wxa
 
 Determines whether the \helpref{wxWindow::Layout}{wxwindowlayout} function will
 be called automatically when the window is resized. Use in connection with
-\helpref{wxWindow::SetSizer}{wxwindowsetsizer} and 
+\helpref{wxWindow::SetSizer}{wxwindowsetsizer} and
 \helpref{wxWindow::SetConstraints}{wxwindowsetconstraints} for layouting subwindows.
 
 \wxheading{Parameters}
@@ -1719,8 +1719,8 @@ from within wxWindow::OnSize functions.}
 
 \wxheading{Remarks}
 
-Note that this function is actually disabled for wxWindow (and wxPanel). It has
-effect for wxDialog, wxFrame and wxScrolledWindow as well as indirectly for
+Note that this function is actually disabled for wxWindow. It has
+effect for wxDialog, wxFrame, wxPanel and wxScrolledWindow as well as indirectly for
 children of wxNotebook and wxSplitterWindow.
 
 \wxheading{See also}
@@ -1850,7 +1850,7 @@ constraints.}
 \wxheading{Remarks}
 
 You must call \helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout} to tell a window to use
-the constraints automatically in OnSize; otherwise, you must override OnSize and call Layout() 
+the constraints automatically in OnSize; otherwise, you must override OnSize and call Layout()
 explicitly. When setting both a wxLayoutConstraints and a \helpref{wxSizer}{wxsizer}, only the
 sizer will have effect.
 
@@ -2212,8 +2212,8 @@ sizer.}
 \wxheading{Remarks}
 
 You must call \helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout} to tell a window to use
-the sizer automatically in OnSize; otherwise, you must override OnSize and call Layout() 
-explicitly. When setting both a wxSizer and a \helpref{wxLayoutConstraints}{wxlayoutconstraints}, 
+the sizer automatically in OnSize; otherwise, you must override OnSize and call Layout()
+explicitly. When setting both a wxSizer and a \helpref{wxLayoutConstraints}{wxlayoutconstraints},
 only the sizer will have effect.
 
 \membersection{wxWindow::SetTitle}\label{wxwindowsettitle}
