@@ -33,6 +33,7 @@
     #include "wx/intl.h"
     #include "wx/dynarray.h"
     #include "wx/settings.h"
+    #include "wx/bitmap.h"
 #endif
 
 #if wxUSE_BUTTONBAR && wxUSE_TOOLBAR && defined(__WIN95__)

@@ -38,7 +38,7 @@ extern wxBitmap wxConvertDIBToBitmap(const LPBITMAPINFO pbi);
 bool wxSaveBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette *colourmap = NULL);
 
 // Load device independent bitmap into device dependent bitmap
-wxBitmap         *wxLoadBitmap(wxChar *filename, wxColourMap **colourmap = NULL);
+wxBitmap         *wxLoadBitmap(wxChar *filename, wxPalette **colourmap = NULL);
 
 // Load into existing bitmap;
 bool wxLoadIntoBitmap(wxChar *filename, wxBitmap *bitmap, wxColourMap **pal = NULL);

@@ -33,11 +33,12 @@
     #include "wx/settings.h"
     #include "wx/brush.h"
     #include "wx/utils.h"
+    #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
 #if wxUSE_CLIPBOARD
-    #include "wx/app.h"
     #include "wx/clipbrd.h"
 #endif
 
