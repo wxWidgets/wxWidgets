@@ -174,35 +174,26 @@
     typedef unsigned int bool;
 #endif // bool
 
-#ifdef __cplusplus
-    // define boolean constants: don't use true/false here as not all compilers
-    // support them but also redefine TRUE which could have been defined as 1
-    // by previous headers: this would be incorrect as our TRUE is supposed to
-    // be of type bool, just like true, not int
-    //
-    // however if the user code absolutely needs TRUE to be defined in its own
-    // way, it can predefine WX_TRUE_DEFINED to prevent the redefinition here
-    #ifdef TRUE
-        #ifndef WX_TRUE_DEFINED
-            #undef TRUE
-            #undef FALSE
-        #endif
-    #endif
+// deal with TRUE/true stuff: we assume that if the compiler supports bool, it
+// supports true/false as well and that, OTOH, if it does _not_ support bool,
+// it doesn't support these keywords (this is less sure, in particular VC++
+// 4.x could be a problem here)
+#ifndef HAVE_BOOL
+    #define true ((bool)1)
+    #define false ((bool)0)
+#endif
 
-    #ifndef TRUE
-        #define TRUE  ((bool)1)
-        #define FALSE ((bool)0)
-    #endif
-#else // !__cplusplus
-    // the definitions above don't work for C sources
-    #ifndef TRUE
-        #define TRUE 1
-    #endif
+// for backwards compatibility, also define TRUE and FALSE
+//
+// note that these definitions should work both in C++ and C code, so don't
+// use true/false below
+#ifndef TRUE
+    #define TRUE 1
+#endif
 
-    #ifndef FALSE
-        #define FALSE 0
-    #endif
-#endif // C++/!C++
+#ifndef FALSE
+    #define FALSE 0
+#endif
 
 typedef short int WXTYPE;
 

@@ -19,6 +19,7 @@ All:
 - Implemented alignment for wxGrid bool editor and renderer
 - Support wxListCtrl columns alignment for all platforms and not just MSW
 - Added wxDateSpan::operator==() and !=() (Lukasz Michalski)
+- use true/false throughout the library instead of TRUE/FALSE
 
 Unix:
 
