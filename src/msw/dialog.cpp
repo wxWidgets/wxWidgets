@@ -370,11 +370,6 @@ void wxDialog::DoShowModal()
         wxTheApp->DoMessage();
     }
 
-#if 0 //def __WIN32__
-    if ( parent )
-        ::SetActiveWindow(GetHwndOf(parent));
-#endif // __WIN32__
-
     // and restore focus
     // Note that this code MUST NOT access the dialog object's data
     // in case the object has been deleted (which will be the case
@@ -426,6 +421,18 @@ bool wxDialog::Show(bool show)
                 {
                     // use it
                     m_parent = parent;
+
+                    // VZ: to make dialog behave properly we should reparent
+                    //     the dialog for Windows as well - unfortunately,
+                    //     following the docs for SetParent() results in this
+                    //     code which plainly doesn't work
+#if 0
+                    long dwStyle = ::GetWindowLong(GetHwnd(), GWL_STYLE);
+                    dwStyle &= ~WS_POPUP;
+                    dwStyle |= WS_CHILD;
+                    ::SetWindowLong(GetHwnd(), GWL_STYLE, dwStyle);
+                    ::SetParent(GetHwnd(), GetHwndOf(parent));
+#endif // 0
                 }
             }
 
