@@ -18,6 +18,7 @@
 
 #include "wx/defs.h"
 
+#include "wx/button.h"
 #include "wx/window.h"
 #include "wx/frame.h"
 #include "wx/dialog.h"
@@ -641,6 +642,48 @@ private:
 
 #endif // wxUSE_STATBOX
 
+class WXDLLEXPORT wxStdDialogButtonSizer: public wxBoxSizer
+{
+public:
+    wxStdDialogButtonSizer();
+    // Constructor just creates a new wxBoxSizer, not much else.
+    // Box sizer orientation is automatically determined here:
+    // vertical for PDAs, horizontal for everything else?
+
+    void AddButton(wxButton *button);
+    // Checks button ID against system IDs and sets one of the pointers below
+    // to this button.
+    // Does not do any sizer-related things here.
+
+    // Question: what to do for non-supported button IDs? assert?
+
+    void Finalise();
+    // All platform-specific code here, checks which buttons exist and add
+    // them to the sizer accordingly.
+    // Note - one potential hack on Mac we could use here,
+    // if m_buttonAffirmative is wxID_SAVE then ensure wxID_SAVE
+    // is set to _("Save") and m_buttonNegative is set to _("Don't Save")
+    // I wouldn't add any other hacks like that into here,
+    // but this one I can see being useful.
+    
+    wxButton *GetAffirmativeButton() const { return m_buttonAffirmative; }
+    wxButton *GetApplyButton() const { return m_buttonApply; }
+    wxButton *GetNegativeButton() const { return m_buttonNegative; }
+    wxButton *GetCancelButton() const { return m_buttonCancel; }
+    wxButton *GetHelpButton() const { return m_buttonHelp; }
+
+protected:
+    wxButton *m_buttonAffirmative;
+    // wxID_OK, wxID_YES, wxID_SAVE go here
+    wxButton *m_buttonApply;
+    wxButton *m_buttonNegative; // wxID_NO
+    wxButton *m_buttonCancel;
+    wxButton *m_buttonHelp;
+    
+private:
+    DECLARE_CLASS(wxStdDialogButtonSizer)
+    //DECLARE_NO_COPY_CLASS(wxStdDialogButtonSizer)
+};
 
 #if WXWIN_COMPATIBILITY_2_4
 // NB: wxBookCtrlSizer and wxNotebookSizer are deprecated, they

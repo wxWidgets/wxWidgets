@@ -295,7 +295,7 @@ void wxGenericColourDialog::CreateWidgets()
     // 3) buttons
     wxSizer *buttonsizer = CreateButtonSizer( wxOK|wxCANCEL );
     buttonsizer->Add( new wxButton(this, wxID_ADD_CUSTOM, _("Add to custom colours") ), 0, wxLEFT|wxRIGHT, 10 );
-    topSizer->Add( buttonsizer, 0, wxCENTRE | wxALL, 10 );
+    topSizer->Add( buttonsizer, 0, wxEXPAND | wxALL, 10 );
 
     SetAutoLayout( true );
     SetSizer( topSizer );

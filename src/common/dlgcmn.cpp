@@ -170,92 +170,45 @@ wxSizer *wxDialogBase::CreateTextSizer( const wxString& message )
 
 wxSizer *wxDialogBase::CreateButtonSizer( long flags )
 {
-    bool is_pda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
+    return CreateStdDialogButtonSizer( flags );
+}
 
-    // If we have a PDA screen, put yes/no button over
-    // all other buttons, otherwise on the left side.
-    wxBoxSizer *box = is_pda ? new wxBoxSizer( wxVERTICAL ) : new wxBoxSizer( wxHORIZONTAL );
-
-    wxBoxSizer *inner_yes_no = NULL;
-
-    // Only create sizer containing yes/no
-    // if it is actually required
-    if ( (flags & wxYES_NO) != 0 )
-    {
-        inner_yes_no = new wxBoxSizer( wxHORIZONTAL );
-        box->Add( inner_yes_no, 0, wxBOTTOM, 10 );
+wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
+{
+    wxStdDialogButtonSizer *sizer = new wxStdDialogButtonSizer();
+    wxButton *ok = NULL;
+    wxButton *cancel = NULL;
+    wxButton *yes = NULL;
+    wxButton *no = NULL;
+    wxButton *help = NULL;
+    
+    if (flags & wxOK){
+    	ok = new wxButton(this, wxID_OK, _("OK"));
+    	sizer->AddButton(ok);
     }
-
-    wxBoxSizer *inner_rest = new wxBoxSizer( wxHORIZONTAL );
-    box->Add( inner_rest, 0, 0, 0 );
-
-#if defined(__WXMSW__) || defined(__WXMAC__)
-    static const int margin = 6;
-#else
-    static const int margin = 10;
-#endif
-
-    wxButton *ok = (wxButton *) NULL;
-    wxButton *yes = (wxButton *) NULL;
-    wxButton *no = (wxButton *) NULL;
-
-    // always show an OK button, unless we have both YES and NO
-    if ( (flags & wxYES_NO) != wxYES_NO )
-        flags |= wxOK;
-
-    if (flags & wxYES)
-    {
-        yes = new wxButton(this, wxID_YES, wxEmptyString,
-                           wxDefaultPosition, wxDefaultSize, wxCLIP_SIBLINGS);
-        inner_yes_no->Add( yes, 0, wxLEFT|wxRIGHT, margin );
+    
+    if (flags & wxCANCEL){
+    	cancel = new wxButton(this, wxID_CANCEL, _("Cancel"));
+    	sizer->AddButton(cancel);	
     }
-    if (flags & wxNO)
-    {
-        no = new wxButton(this, wxID_NO, wxEmptyString,
-                          wxDefaultPosition, wxDefaultSize, wxCLIP_SIBLINGS);
-        inner_yes_no->Add( no, 0, wxLEFT|wxRIGHT, margin );
+    
+    if (flags & wxYES){
+    	yes = new wxButton(this, wxID_YES, _("Yes"));
+    	sizer->AddButton(yes);
     }
-
-    if (flags & wxOK)
-    {
-        ok = new wxButton(this, wxID_OK, wxEmptyString,
-                          wxDefaultPosition, wxDefaultSize, wxCLIP_SIBLINGS);
-        inner_rest->Add( ok, 0, wxLEFT|wxRIGHT, margin );
+    
+    if (flags & wxNO){
+    	no = new wxButton(this, wxID_NO, _("No"));
+    	sizer->AddButton(no);
     }
-
-    if (flags & wxFORWARD)
-        inner_rest->Add(new wxButton(this, wxID_FORWARD, wxEmptyString,
-                                     wxDefaultPosition, wxDefaultSize,
-                                     wxCLIP_SIBLINGS),
-                        0, wxLEFT|wxRIGHT, margin);
-
-    if (flags & wxBACKWARD)
-        inner_rest->Add(new wxButton(this, wxID_BACKWARD, wxEmptyString,
-                                     wxDefaultPosition, wxDefaultSize,
-                                     wxCLIP_SIBLINGS),
-                        0, wxLEFT|wxRIGHT, margin);
-
-    if (flags & wxSETUP)
-        inner_rest->Add( new wxButton( this, wxID_SETUP, _("Setup"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS  ), 0, wxLEFT|wxRIGHT, margin );
-
-    if (flags & wxMORE)
-        inner_rest->Add( new wxButton( this, wxID_MORE, _("More..."),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS  ), 0, wxLEFT|wxRIGHT, margin );
-
-    if (flags & wxHELP)
-        inner_rest->Add(new wxButton(this, wxID_HELP, wxEmptyString,
-                                     wxDefaultPosition, wxDefaultSize,
-                                     wxCLIP_SIBLINGS),
-                        0, wxLEFT|wxRIGHT, margin);
-
-    if (flags & wxCANCEL)
-    {
-        wxButton *cancel = new wxButton(this, wxID_CANCEL, wxEmptyString,
-                                        wxDefaultPosition, wxDefaultSize,
-                                        wxCLIP_SIBLINGS);
-        inner_rest->Add( cancel, 0, wxLEFT|wxRIGHT, margin );
+    
+    if (flags & wxHELP){
+    	help = new wxButton(this, wxID_HELP, _("Help"));
+    	sizer->AddButton(help);
     }
-
-    // choose the default button
+    
+    sizer->Finalise();
+           
     if (flags & wxNO_DEFAULT)
     {
         if (no)
@@ -278,7 +231,8 @@ wxSizer *wxDialogBase::CreateButtonSizer( long flags )
         }
     }
 
-    return box;
+    return sizer;
 }
+
 
 #endif // wxUSE_BUTTON

@@ -118,7 +118,7 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
 
     // 4) buttons
     topsizer->Add( CreateButtonSizer( style & (wxOK|wxCANCEL|wxYES_NO|wxYES_DEFAULT|wxNO_DEFAULT) ),
-                   0, wxCENTRE | wxALL, 10 );
+                   0, wxEXPAND | wxALL, 10 );
 
     SetAutoLayout( true );
     SetSizer( topsizer );

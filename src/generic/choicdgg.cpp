@@ -292,7 +292,7 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
 #endif
 
     // 4) buttons
-    topsizer->Add( CreateButtonSizer( styleDlg & (wxOK|wxCANCEL) ), 0, wxCENTRE | wxALL, 10 );
+    topsizer->Add( CreateButtonSizer( styleDlg & (wxOK|wxCANCEL) ), 0, wxEXPAND | wxALL, 10 );
 
 #endif // !__SMARTPHONE__
 

@@ -252,7 +252,7 @@ void wxGenericPrintDialog::Init(wxWindow * WXUNUSED(parent))
 
     // 5) buttons
 
-    mainsizer->Add( CreateButtonSizer( wxOK|wxCANCEL), 0, wxCENTER|wxALL, 10 );
+    mainsizer->Add( CreateButtonSizer( wxOK|wxCANCEL), 0, wxEXPAND|wxALL, 10 );
 
     SetAutoLayout( true );
     SetSizer( mainsizer );
@@ -656,7 +656,7 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
 
     // buttons
 
-    main_sizer->Add( CreateButtonSizer( wxOK|wxCANCEL), 0, wxCENTER|wxALL, 10 );
+    main_sizer->Add( CreateButtonSizer( wxOK|wxCANCEL), 0, wxEXPAND|wxALL, 10 );
 
     SetAutoLayout( true );
     SetSizer( main_sizer );
@@ -920,7 +920,7 @@ wxGenericPageSetupDialog::wxGenericPageSetupDialog( wxWindow *parent,
         
     //  if (m_printData.GetEnableHelp())
     //  wxButton *helpButton = new wxButton(this, (wxFunction)wxGenericPageSetupHelpProc, _("Help"), wxDefaultCoord, wxDefaultCoord, buttonWidth, buttonHeight);
-    mainsizer->Add( buttonsizer, 0, wxCENTER|wxALL, 10 );
+    mainsizer->Add( buttonsizer, 0, wxEXPAND|wxALL, 10 );
 
 
     SetAutoLayout( true );

@@ -20,6 +20,9 @@
 #include "wx/containr.h"
 #include "wx/toplevel.h"
 
+class WXDLLEXPORT wxSizer;
+class WXDLLEXPORT wxStdDialogButtonSizer;
+
 #define wxDIALOG_NO_PARENT      0x0001  // Don't make owned by apps top window
 
 #ifdef __WXWINCE__
@@ -56,6 +59,7 @@ public:
 #if wxUSE_BUTTON
     // places buttons into a horizontal wxBoxSizer
     wxSizer *CreateButtonSizer( long flags );
+    wxStdDialogButtonSizer *CreateStdDialogButtonSizer( long flags );
 #endif // wxUSE_BUTTON
 
 protected:
