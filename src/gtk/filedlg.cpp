@@ -82,7 +82,7 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
         }
     }
 
-    dialog->DoSetPath(filename);
+    dialog->SetPath(filename);
     dialog->UpdateFromDialog();
     
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK);
@@ -180,10 +180,9 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     SetFilterIndex(0);
 }
 
-void wxFileDialog::SetPath(const wxString& path)
+wxFileDialog::~wxFileDialog()
 {
-    DoSetPath(path);
-    UpdateDialog();
+    m_widget = NULL;
 }
 
 void wxFileDialog::GetFilenames(wxArrayString& files) const 
@@ -201,6 +200,7 @@ void wxFileDialog::GetFilenames(wxArrayString& files) const
         files[n] = name;
     }
 }
+
 void wxFileDialog::GetPaths(wxArrayString& paths) const 
 {
     paths.Empty(); 
@@ -231,17 +231,56 @@ void wxFileDialog::SetMessage(const wxString& message)
     SetTitle(message);
 }
 
+void wxFileDialog::SetPath(const wxString& path)
+{
+    if (path.empty()) return;
+
+    wxFileName fn(path);
+    m_path = fn.GetFullPath();
+    m_dir = fn.GetPath();
+    m_fileName = fn.GetFullName();
+    
+    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
+                                            wxGTK_CONV(m_dir));
+                                            
+    gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(m_widget),
+                                      wxGTK_CONV(m_path));
+                                      
+    // pre-fill the filename, too:
+    if (GetWindowStyle() & wxSAVE) // Why only then??
+    {
+        gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget),
+                                              wxGTK_CONV(m_fileName));
+    }
+}
+
 void wxFileDialog::SetDirectory(const wxString& dir)
 {
-    wxFileName fn(dir,m_fileName);
-    SetPath(fn.GetFullPath());
+    if (wxDirExists(dir))
+    {
+        m_dir = dir;
+        gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
+                                            wxGTK_CONV(m_dir));
+        wxFileName fn(m_dir,m_fileName);
+        m_path = fn.GetFullPath();
+    }
 }
 
 void wxFileDialog::SetFilename(const wxString& name)
 {
     m_fileName = name;
-    wxFileName fn(m_dir,name);
-    SetPath(fn.GetFullPath());
+    wxFileName fn(m_dir,m_fileName);
+    m_path = fn.GetFullPath();
+    
+    gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(m_widget),
+                                      wxGTK_CONV(m_path));
+
+    // pre-fill the filename, too:
+    if (GetWindowStyle() & wxSAVE) // Why only then??
+    {
+        gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget),
+                                              wxGTK_CONV(m_fileName));
+    }
 }
 
 void wxFileDialog::SetWildcard(const wxString& wildCard)
@@ -332,50 +371,6 @@ void wxFileDialog::UpdateFromDialog()
         fnode = fnode->next;
     }
     g_slist_free(filters);
-}
-
-void wxFileDialog::UpdateDialog()
-{
-    
-    if (wxDirExists(m_path))
-    {
-        gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
-                                            wxGTK_CONV(m_path));
-    }
-    else
-    {
-        gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(m_widget),
-                                      wxGTK_CONV(m_path));
-
-        // pre-fill the filename, too:
-        if (GetWindowStyle() & wxSAVE)
-        {
-            gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget),
-                                              wxGTK_CONV(m_fileName));
-        }
-    }
-}
-
-void wxFileDialog::DoSetPath(const wxString& path)
-{
-    if (!path.empty())
-    {
-        wxFileName fn(path);
-        fn.MakeAbsolute();
-        m_path = fn.GetFullPath();
-        
-        wxString ext;
-        wxSplitPath(path, &m_dir, &m_fileName, &ext);
-        if (!ext.empty())
-        {
-            m_fileName += wxT(".");
-            m_fileName += ext;
-        }
-    }
-    else
-    {
-        m_path = path;
-    }
 }
 
 #endif // wxUSE_FILEDLG && defined(__WXGTK24__)

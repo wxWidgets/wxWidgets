@@ -31,6 +31,8 @@ public:
                  const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
                  long style = 0,
                  const wxPoint& pos = wxDefaultPosition);
+                 
+    ~wxFileDialog();
     
     virtual void GetPaths(wxArrayString& paths) const;
     virtual void GetFilenames(wxArrayString& files) const;
@@ -42,8 +44,6 @@ public:
     virtual void SetWildcard(const wxString& wildCard);
     virtual void SetFilterIndex(int filterIndex);
             void UpdateFromDialog();
-            void UpdateDialog();
-            void DoSetPath(const wxString& path);
 private:
     DECLARE_DYNAMIC_CLASS(wxFileDialog)
 };
