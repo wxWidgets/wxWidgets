@@ -88,7 +88,7 @@ DO:
   format and running through the Windows help compiler to check
   for missing labels, etc.
 
-- quote all '_' characters with a '\' character (e.g. "MY\_PROGRAM" 
+- quote all '_' and '&' characters with a '\' character (e.g. "MY\_PROGRAM"
   unless the '_' is inside a comment or a \begin{verbatim} ...
   \end{verbatim} block
 
@@ -219,7 +219,7 @@ Creates a fresh bitmap. If the final argument is omitted, the display depth of
 the screen is used.
 
 \func{virtual bool}{Create}{\param{void*}{ data}, \param{int}{ type},
- \param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
+ \param{int}{ width}, \param{int}{ height}, \param{int}{ depth = $-1$}}
 
 Creates a bitmap from the given data, which can be of arbitrary type.
 
@@ -238,7 +238,7 @@ of possible values.}
 
 \wxheading{Return value}
 
-{\tt true} if the call succeeded, {\tt false} otherwise.
+\true if the call succeeded, \false otherwise.
 
 \wxheading{Remarks}
 
@@ -270,3 +270,7 @@ Special forms:
 
 - use \destruct macro for the destructors \func{}{\destruct{MyClass}}{\void}
 
+- use \true and \false instead of true/TRUE/{\tt true}/...
+
+- use \arg{paramname} to refer to the argument inside of the function
+  description
