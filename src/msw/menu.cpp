@@ -73,7 +73,7 @@ extern wxMenu *wxCurrentPopupMenu;
 // ----------------------------------------------------------------------------
 
 // the (popup) menu title has this special id
-static const int idMenuTitle = -2;
+static const int idMenuTitle = -3;
 
 // ----------------------------------------------------------------------------
 // private functions
