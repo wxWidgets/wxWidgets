@@ -791,6 +791,15 @@ public:
         // returns TRUE if the date is in the given range
     inline bool IsBetween(const wxDateTime& t1, const wxDateTime& t2) const;
 
+        // do these two objects refer to the same date?
+    inline bool IsSameDate(const wxDateTime& dt) const;
+
+        // do these two objects have the same time?
+    inline bool IsSameTime(const wxDateTime& dt) const;
+
+        // are these two objects equal up to given timespan?
+    inline bool IsEqualUpTo(const wxDateTime& dt, const wxTimeSpan& ts) const;
+
     // arithmetics with dates (see also below for more operators)
     // ------------------------------------------------------------------------
 

@@ -15,7 +15,7 @@ wxBase:
 - wxLog functions are now (more) MT-safe
 - wxStopWatch class, timer functions have more chances to return correct
   results for your platform (use ANSI functions where available)
-- wxString::ToLong, ToULong, ToDouble methods added
+- wxString::ToLong, ToULong, ToDouble methods and Format() static one added
 - buffer overflows in wxString and wxLog classes fixed (if snprintf() function
   is available)
 - wxArray::RemoveAt() replaces deprectaed wxArray::Remove(index)
@@ -37,6 +37,7 @@ all (GUI):
 
 wxMSW:
 
+- implemented setting colours for push buttons
 - wxTreeCtrl::IsVisible() bug fixed (thanks to Gary Chessun)
 - tooltips work with wxRadioBox
 - returning FALSE from OnPrintPage() aborts printing

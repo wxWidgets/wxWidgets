@@ -198,17 +198,26 @@ void wxButton::SetDefault()
 
         // don't do it with the owner drawn buttons because it will reset
         // BS_OWNERDRAW style bit too (BS_OWNERDRAW & BS_DEFPUSHBUTTON != 0)!
-        if ( !(style & BS_OWNERDRAW) )
+        if ( (style & BS_OWNERDRAW) != BS_OWNERDRAW )
         {
             style &= ~BS_DEFPUSHBUTTON;
             SendMessage(GetHwndOf(btnOldDefault), BM_SETSTYLE, style, 1L);
+        }
+        else
+        {
+            // redraw the button - it will notice itself that it's not the
+            // default one any longer
+            btnOldDefault->Refresh();
         }
     }
 
     // set this button as the default
     long style = GetWindowLong(GetHwnd(), GWL_STYLE);
-    style |= BS_DEFPUSHBUTTON;
-    SendMessage(GetHwnd(), BM_SETSTYLE, style, 1L);
+    if ( (style & BS_OWNERDRAW) != BS_OWNERDRAW )
+    {
+        style |= BS_DEFPUSHBUTTON;
+        SendMessage(GetHwnd(), BM_SETSTYLE, style, 1L);
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -248,24 +257,13 @@ bool wxButton::MSWCommand(WXUINT param, WXWORD id)
 
 long wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-    // make sure that we won't have BS_DEFPUSHBUTTON style any more if the
-    // focus is being transfered to another button with the same parent -
-    // otherwise, we could finish with 2 default buttons inside one panel
-    if ( (nMsg == WM_KILLFOCUS) &&
-         (GetWindowLong(GetHwnd(), GWL_STYLE) & BS_DEFPUSHBUTTON) )
+    // when we receive focus, we want to become the default button in our
+    // parent panel
+    if ( nMsg == WM_SETFOCUS )
     {
-        wxWindow *parent = GetParent();
-        wxWindow *win = wxFindWinFromHandle((WXHWND)wParam);
-        if ( win && win->GetParent() == parent )
-        {
-            wxPanel *panel = wxDynamicCast(parent, wxPanel);
-            if ( panel )
-            {
-                panel->SetDefaultItem(this);
-            }
-            // else: I don't know what to do - we'll still have the problem
-            //       with multiple default buttons in a dialog...
-        }
+        SetDefault();
+
+        // let the default processign take place too
     }
 
     // let the base class do all real processing
@@ -482,17 +480,6 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
                                         : colFg);
 
     ::DeleteObject(hbrushBackground);
-
-#if 0
-    wxString s = "button state: ";
-    if ( selected )
-        s += "selected ";
-    if ( pushed )
-        s += "pushed ";
-    if ( state & ODS_FOCUS )
-        s += "focused ";
-    wxLogStatus(s);
-#endif
 
     return TRUE;
 }

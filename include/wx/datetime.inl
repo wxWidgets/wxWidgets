@@ -16,6 +16,8 @@
     #error "This file is only included by wx/datetime.h, don't include it manually!"
 #endif
 
+#define MILLISECONDS_PER_DAY 86400000l
+
 // ----------------------------------------------------------------------------
 // wxDateTime construction
 // ----------------------------------------------------------------------------
@@ -167,6 +169,32 @@ bool wxDateTime::IsBetween(const wxDateTime& t1, const wxDateTime& t2) const
 {
     // no need for assert, will be checked by the functions we call
     return IsEqualTo(t1) || IsEqualTo(t2) || IsStrictlyBetween(t1, t2);
+}
+
+bool wxDateTime::IsSameDate(const wxDateTime& dt) const
+{
+    return (m_time - dt.m_time).Abs() < MILLISECONDS_PER_DAY;
+}
+
+bool wxDateTime::IsSameTime(const wxDateTime& dt) const
+{
+    // notice that we can't do something like this:
+    //
+    //    m_time % MILLISECONDS_PER_DAY == dt.m_time % MILLISECONDS_PER_DAY
+    //
+    // because we have also to deal with (possibly) different DST settings!
+    Tm tm1 = GetTm(),
+       tm2 = dt.GetTm();
+
+    return tm1.hour == tm2.hour &&
+           tm1.min == tm2.min &&
+           tm1.sec == tm2.sec &&
+           tm1.msec == tm2.msec;
+}
+
+bool wxDateTime::IsEqualUpTo(const wxDateTime& dt, const wxTimeSpan& ts) const
+{
+    return IsBetween(dt.Substract(ts), dt.Add(ts));
 }
 
 // ----------------------------------------------------------------------------
@@ -401,3 +429,4 @@ wxDateSpan& wxDateSpan::Neg()
     return *this;
 }
 
+#undef MILLISECONDS_PER_DAY
