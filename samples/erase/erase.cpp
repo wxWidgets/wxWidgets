@@ -60,6 +60,7 @@ public:
     MyCanvas( wxFrame *parent );
 
     void UseBuffer(bool useBuffer) { m_useBuffer = useBuffer; Refresh(); }
+    void EraseBg(bool eraseBg) { m_eraseBg = eraseBg; Refresh(); }
 
 private:
     void OnPaint( wxPaintEvent &event );
@@ -75,6 +76,10 @@ private:
     // use wxMemoryDC in OnPaint()?
     bool m_useBuffer;
 
+    // paint custom background in OnEraseBackground()?
+    bool m_eraseBg;
+
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -84,6 +89,7 @@ public:
     MyFrame();
 
     void OnUseBuffer(wxCommandEvent& event);
+    void OnEraseBg(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
@@ -102,6 +108,7 @@ enum
 {
     // menu items
     Erase_Menu_UseBuffer = 100,
+    Erase_Menu_EraseBg,
     Erase_Menu_Exit = wxID_EXIT,
     Erase_Menu_About = wxID_ABOUT
 };
@@ -128,6 +135,7 @@ bool MyApp::OnInit()
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Erase_Menu_UseBuffer,  MyFrame::OnUseBuffer)
+    EVT_MENU(Erase_Menu_EraseBg,  MyFrame::OnEraseBg)
     EVT_MENU(Erase_Menu_Exit,  MyFrame::OnQuit)
     EVT_MENU(Erase_Menu_About, MyFrame::OnAbout)
 END_EVENT_TABLE()
@@ -141,6 +149,7 @@ MyFrame::MyFrame()
 
     wxMenu *menuFile = new wxMenu(_T(""), wxMENU_TEAROFF);
     menuFile->AppendCheckItem(Erase_Menu_UseBuffer, _T("&Use memory DC\tCtrl-M"));
+    menuFile->AppendCheckItem(Erase_Menu_EraseBg, _T("Custom &background\tCtrl-B"));
     menuFile->AppendSeparator();
     menuFile->Append(Erase_Menu_Exit, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
@@ -169,6 +178,11 @@ void MyFrame::OnUseBuffer(wxCommandEvent& event)
     m_canvas->UseBuffer(event.IsChecked());
 }
 
+void MyFrame::OnEraseBg(wxCommandEvent& event)
+{
+    m_canvas->EraseBg(event.IsChecked());
+}
+
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     Close(true);
@@ -191,6 +205,7 @@ MyCanvas::MyCanvas( wxFrame *parent )
         : wxScrolledWindow( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                             wxScrolledWindowStyle | wxSUNKEN_BORDER )
 {
+    m_eraseBg =
     m_useBuffer = false;
 
     SetScrollbars( 10, 10, 40, 100, 0, 0 );
@@ -316,6 +331,12 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
 void MyCanvas::OnEraseBackground( wxEraseEvent& event )
 {
+    if ( !m_eraseBg )
+    {
+        event.Skip();
+        return;
+    }
+
     wxDC& dc = *event.GetDC();
     dc.SetPen(*wxGREEN_PEN);
 
