@@ -152,6 +152,7 @@ wxHTML:
 
 Unix:
 - fixed priorities of mailcap entries (David Hart)
+- added "wx-config --libs=std,<extra>" syntax (i.e. support for "std")
 
 
 2.5.1

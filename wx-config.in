@@ -190,7 +190,8 @@ specification for it to take effect.
 
 --libs can take optional argument that contains comma-separated list of
 wxWidgets libraries to link against. This list can include both core
-and contrib libraries.
+and contrib libraries. Special value "std" stands for all libraries linked
+in by default.
 
 --gl-libs option is deprecated, used --libs=gl instead.
 
@@ -322,12 +323,14 @@ while test $# -gt 0; do
           libs="-L${libdir}"
       fi
 
+      # it's simpler to avoid handling "bae" itself at all as we add it in the
+      # end to the list of libraries anyhow
       # in monolithic build, link against the main library:
       if test "$is_monolithic" = "1" ; then
           # filter out core libs, leave only contrib in libs_list:
           newlist=
           for i in $libs_list ; do
-              if isinlist $i $CORE_BASE_LIBS $CORE_GUI_LIBS ; then
+              if isinlist $i $CORE_GUI_LIBS $CORE_BASE_LIBS; then
                   libs_list="" # do nothing
               else
                   newlist="$newlist $i"
@@ -343,6 +346,33 @@ while test $# -gt 0; do
               echo $libs ${LDFLAGS} ${WXCONFIG_LDFLAGS_GUI} ${WXCONFIG_RPATH} $contrib_libs ${WXCONFIG_LIBS} ${DMALLOC_LIBS}
           fi
       else
+          # we may need to replace "std" alias with its expansion
+          newlist=
+          hadstd=0
+          for i in $libs_list; do
+              case $i in
+                  std)
+                    hadstd=1
+                    ;;
+
+                  base)
+                    # if we have std, we're going to add base anyhow, avoid
+                    # having it twice in the end
+                    if [ $hadstd = 0 ]; then
+                        newlist="$newlist $i";
+                    fi
+                    ;;
+
+                  *)
+                    newlist="$newlist $i"
+                    ;;
+              esac
+          done
+          libs_list="$newlist"
+          if [ $hadstd = 1 ]; then
+              libs_list="$libs_list $CORE_GUI_LIBS $CORE_BASE_LIBS"
+          fi
+
           # in multilib mode, link against all sublibraries:
           wxlibs=`output_libs $libs_list`
           guildflags=`get_ldflags_gui $libs_list`
