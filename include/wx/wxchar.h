@@ -104,7 +104,9 @@ typedef  _TUCHAR     wxUChar;
 #define  wxVsprintf  _vstprintf
 
    // stdlib.h functions
-#define  wxAtof(s)   atof(wxString(s).mb_str())
+#if !wxUSE_UNICODE
+#define  wxAtof      atof
+#endif
 #define  wxAtoi      _ttoi
 #define  wxAtol      _ttol
 #define  wxGetenv    _tgetenv
@@ -365,8 +367,11 @@ int      WXDLLEXPORT wxSprintf(wxChar *buf, const wxChar *fmt, ...);
 int      WXDLLEXPORT wxVsprintf(wxChar *buf, const wxChar *fmt, va_list argptr);
 #endif
 
-#ifdef wxNEED_WX_STDLIB_H
+#ifndef wxAtof
 double   WXDLLEXPORT wxAtof(const wxChar *psz);
+#endif
+
+#ifdef wxNEED_WX_STDLIB_H
 int      WXDLLEXPORT wxAtoi(const wxChar *psz);
 long     WXDLLEXPORT wxAtol(const wxChar *psz);
 wxChar * WXDLLEXPORT wxGetenv(const wxChar *name);
