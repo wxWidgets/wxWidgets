@@ -1057,13 +1057,15 @@ wxCopyFile (const wxString& file1, const wxString& file2)
             return FALSE;
     }
 
+#ifndef __VISAGECPP__
+// no chmod in VA.  SHould be some permission API for HPFS386 partitions however
     if ( chmod(file2, fbuf.st_mode) != 0 )
     {
         wxLogSysError(_("Impossible to set permissions for the file '%s'"),
                       file2.c_str());
         return FALSE;
     }
-
+#endif
     return TRUE;
 }
 
