@@ -262,6 +262,14 @@ Checking in fs_inet.cpp;
 new revision: 1.30; previous revision: 1.29
 
 
+27. Fix redistribution of the extra space between sizer items: all extra space
+used to be allocated to the first item which is wrong, it should be divided
+evenly among all of them.
+
+Checking in sizer.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/common/sizer.cpp,v  <--  sizer.cpp
+new revision: 1.71; previous revision: 1.70
+
 
 
 TODO for 2.4 (items that are not backports)
