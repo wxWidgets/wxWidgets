@@ -804,11 +804,8 @@ bool wxFrame::OS2Create(
     HWND                            hTitlebar = NULLHANDLE;
     HWND                            hHScroll = NULLHANDLE;
     HWND                            hVScroll = NULLHANDLE;
-    SWP                             vSwp;
-    SWP                             vSwpClient;
-    SWP                             vSwpTitlebar;
-    SWP                             vSwpVScroll;
-    SWP                             vSwpHScroll;
+    SWP                             vSwp[10];
+    RECTL                           vRect[10];
     USHORT                          uCtlCount;
 
     m_hDefaultIcon = (WXHICON) (wxSTD_FRAME_ICON ? wxSTD_FRAME_ICON : wxDEFAULT_FRAME_ICON);
@@ -878,16 +875,16 @@ bool wxFrame::OS2Create(
     //
     // Create the frame window
     //
-    if ((m_hFrame = ::WinCreateWindow( hParent                // Frame is parent
-                                      ,WC_FRAME               // standard frame class
-                                      ,(PSZ)zTitle            // Window title
-                                      ,0                      // No styles
-                                      ,0, 0, 0, 0             // Window position
-                                      ,NULLHANDLE             // Owner
-                                      ,HWND_TOP               // Sibling
-                                      ,(ULONG)nId             // ID
-                                      ,(PVOID)&flFrameCtlData // Creation data
-                                     ,NULL                    // Window Pres Params
+    if ((m_hFrame = ::WinCreateWindow( hParent               // Frame is parent
+                                      ,WC_FRAME              // standard frame class
+                                      ,(PSZ)zTitle           // Window title
+                                      ,0                     // No styles
+                                      ,0, 0, 0, 0            // Window position
+                                      ,NULLHANDLE            // Owner
+                                      ,HWND_TOP              // Sibling
+                                      ,(ULONG)nId            // ID
+                                      ,(PVOID)&vFrameCtlData // Creation data
+                                     ,NULL                   // Window Pres Params
                                      )) == 0L)
     {
         return FALSE;
@@ -895,7 +892,7 @@ bool wxFrame::OS2Create(
 
     if (!wxWindow::OS2Create( m_hFrame
                              ,wxFrameClassName
-                             ,NULL  
+                             ,NULL
                              ,0L
                              ,0L
                              ,0L
@@ -924,17 +921,17 @@ bool wxFrame::OS2Create(
                           ))
         return FALSE;
 
-    uCtlCount = ::WinSendMsg(m_hFrame, WM_FORMATFRAME, (MPARAM)pSwp, (MPARAM)pRect);
+    uCtlCount = SHORT1FROMMP(::WinSendMsg(m_hFrame, WM_FORMATFRAME, (MPARAM)vSwp, (MPARAM)vRect));
     for (int i = 0; i < uCtlCount; i++)
     {
-        if (pSwp[i].hwnd == m_hFrame)
-            memcpy(m_vSwp, pSwp[i], sizeof(SWP));
-        else if (pSwp[i].hwnd == m_hVScroll)
-            memcpy(m_vSwpVScroll, pSwp[i], sizeof(SWP));
-        else if (pSwp[i].hwnd == m_hHScroll)
-            memcpy(m_vSwpVScroll, pSwp[i], sizeof(SWP));
-        else if (pSwp[i].hwnd == m_hTitleBar)
-            memcpy(m_vSwpTitleBar, pSwp[i], sizeof(SWP));
+        if (vSwp[i].hwnd == m_hFrame)
+            memcpy(&m_vSwp, &vSwp[i], sizeof(SWP));
+        else if (vSwp[i].hwnd == m_hVScroll)
+            memcpy(&m_vSwpVScroll, &vSwp[i], sizeof(SWP));
+        else if (vSwp[i].hwnd == m_hHScroll)
+            memcpy(&m_vSwpVScroll, &vSwp[i], sizeof(SWP));
+        else if (vSwp[i].hwnd == m_hTitleBar)
+            memcpy(&m_vSwpTitleBar, &vSwp[i], sizeof(SWP));
     }
 
     //
@@ -945,7 +942,7 @@ bool wxFrame::OS2Create(
                     ,SV_CXSIZEBORDER/2
                     ,(SV_CYSIZEBORDER/2) + m_vSwpHScroll.cy/2
                     ,m_vSwp.cx - ((SV_CXSIZEBORDER + 1) + m_vSwpVScroll.cx)
-                    ,m_vSwp.cy - ((SV_CYSIZEBORDER + 1) + m_vSwpTitlebar.cy + m_vSwpHScroll.cy/2)
+                    ,m_vSwp.cy - ((SV_CYSIZEBORDER + 1) + m_vSwpTitleBar.cy + m_vSwpHScroll.cy/2)
                     ,SWP_SIZE | SWP_MOVE
                    );
 
@@ -1428,7 +1425,7 @@ MRESULT wxFrame::OS2WindowProc(
             // Return TRUE to request PM to paint the window background
             // in SYSCLR_WINDOW.
             //
-            bProcessed = TRUE; 
+            bProcessed = TRUE;
             mRc = (MRESULT)(TRUE);
             break;
 

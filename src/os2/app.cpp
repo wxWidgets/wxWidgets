@@ -555,7 +555,7 @@ bool wxApp::DoMessage()
 {
     BOOL                            bRc = ::WinGetMsg(vHabmain, &svCurrentMsg, HWND(NULL), 0, 0);
 
-    wxUsleep(10000);
+    wxUsleep(1000);
     if (bRc == 0)
     {
         // got WM_QUIT
@@ -658,7 +658,7 @@ int wxApp::MainLoop()
 #endif // wxUSE_THREADS
         while (!Pending() && ProcessIdle())
         {
-	  wxUsleep(10000);
+//            wxUsleep(10000);
         }
         DoMessage();
     }
