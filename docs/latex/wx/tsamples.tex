@@ -19,6 +19,16 @@ make it easier to find the relevant one if a simple grep through all sources
 didn't help. They also provide some notes about using the samples and what
 features of wxWindows are they supposed to test.
 
+There are currently more than 50 different samples as part of wxWindows and
+this list is not complete.
+
+\subsection{Minimal sample}\label{sampleminimal}
+
+The minimal sample is what most people will know under the term Hello World,
+i.e. a minimal program that doesn't demonstrate anything apart from what is
+needed to write a program that will display a "hello" dialog. This is usually
+a good starting point for learning how to use wxWindows.
+
 \subsection{Calendar sample}\label{samplecalendar}
 
 This font shows the \helpref{calendar control}{wxcalendarctrl} in action. It
@@ -48,6 +58,16 @@ features of this class.
 
 This sample shows how to use the common dialogs available from wxWindows. These
 dialogs are desrcibed in details in the \helpref{Common dialogs overview}{commondialogsoverview}.
+
+\subsection{Dynamic sample}\label{sampledynamic}
+
+This sample is a very small sample that demonstrates the use of the
+\helpref{wxEvtHandler::Connect}{wxevthandlerconnect} method. This method
+should be used whenever it is not known at compile time, which control
+will receive which event or which controls are actually going to be in
+a dialog or frame. This is most typically the case for any scripting
+languge that would work as a wrapper for wxWindows or programs where
+forms or similar datagrams can be created by the uses.
 
 \subsection{Scroll subwindow sample}\label{samplescrollsub}
 
@@ -134,6 +154,44 @@ documents without much work. In fact, only few function calls are sufficient.
 \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller} in your application
 while {\it Helpview} is simple tool that only pops up help window and
 displays help books given at command line.
+
+\subsection{Layout sample}\label{samplelayout}
+
+The layout sample demonstrates the two different layout systems offered
+by wxWindows. When starting the program, you will see a frame with some
+controls and some graphics. The controls will change their size whenever
+you resize the entire frame and the exact behaviour of the size changes
+is determined using the \helpref{wxLayoutConstraints}{wxlayoutconstraints}
+class. See also the \helpref{overview}{constraintsoverview} and the
+\helpref{wxIndividualLayoutConstraint}{wxindividuallayoutconstraint}
+class for further information.
+
+The menu in this sample offers two more tests, one showing how to use
+a \helpref{wxBoxSizer}{wxboxsizer} in a simple dialog and the other one
+showing how to use sizers in connection with a \helpref{wxNotebook}{wxnotebook}
+class. See also \helpref{wxNotebookSizer}{wxnotebooksizer} and 
+\helpref{wxSizer}{wxsizer}.
+
+\subsection{Text sample}\label{sampletext}
+
+This sample demonstrates four features: firstly the use and many variants of
+the \helpref{wxTextCtrl}{wxtextctrl} class (single line, multi line, read only,
+password, ignoring TAB, ignoring ENTER).
+
+Secondly it shows how to intercept a \helpref{wxKeyEvent}{wxkeyevent} in both
+the raw form using the {\tt EVT_KEY_UP} and {\tt EVT_KEY_DOWN} macros and the
+higherlevel from using the {\tt EVT_CHAR} macro. All characters will be logged
+in a log window at the bottom of the main window. By pressing some of the function
+keys, you can test some actions in the text ctrl as well as get statitics on the
+text ctrls, which is useful for testing if these statitics actually are correct.
+
+Thirdly, on platforms which support it, the sample will offer to copy text to the
+\helpref{wxClipboard}{wxclipboard} and to paste text from it. The GTK version will
+use the so called PRIMARY SELECTION, which is the pseudo clipboard under X and
+best known from pasting text to the XTerm program. 
+
+Last not least: some of the text controls have tooltips and the sample also shows
+how tooltips can be centrally disabled and their latency controlled.
 
 \subsection{Thread sample}\label{samplethread}
 

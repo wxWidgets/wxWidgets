@@ -278,6 +278,20 @@ classes, functions and macros.
 %\twocolitem{\helpref{WXTRACELEVEL}{tracelevel}}{Trace macro with levels}
 \end{twocollist}
 
+{\large {\bf Networking classes}}
+
+wxWindows provides its own classes for socket based networking.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxSocketClient}{wxsocketclient}}{Represents a socket client}
+\twocolitem{\helpref{wxSocketServer}{wxsocketserver}}{Represents a socket server}
+\twocolitem{\helpref{wxURL}{wxurl}}{Represents a Universal Resource Locator}
+\twocolitem{\helpref{wxHTTP}{wxhttp}}{HTTP protocol class}
+\twocolitem{\helpref{wxFTP}{wxftp}}{FTP protocol class}
+\twocolitem{\helpref{wxSocketEvent}{wxsocketevent}}{A socket event}
+\end{twocollist}
+
+
 {\large {\bf Interprocess communication}}
 
 \overview{Overview}{ipcoverview}
@@ -293,9 +307,7 @@ function properly.]
 \twocolitem{\helpref{wxTCPClient}{wxtcpclient}}{Represents a client}
 \twocolitem{\helpref{wxTCPConnection}{wxtcpconnection}}{Represents the connection between a client and a server}
 \twocolitem{\helpref{wxTCPServer}{wxtcpserver}}{Represents a server}
-\twocolitem{\helpref{wxSocketClient}{wxsocketclient}}{Represents a socket client}
 %\twocolitem{\helpref{wxSocketHandler}{wxsockethandler}}{Represents a socket handler}
-\twocolitem{\helpref{wxSocketServer}{wxsocketserver}}{Represents a socket server}
 \end{twocollist}
 
 {\large {\bf Document/view framework}}
@@ -337,21 +349,6 @@ facilities.
 \twocolitem{\helpref{wxPrintData}{wxprintdata}}{Represents information about the document being printed}
 \twocolitem{\helpref{wxPrintDialogData}{wxprintdialogdata}}{Represents information about the print dialog}
 \twocolitem{\helpref{wxPageSetupDialogData}{wxpagesetupdialogdata}}{Represents information about the page setup dialog}
-\end{twocollist}
-
-{\large {\bf Database classes}}
-
-\overview{Database classes overview}{odbcoverview}
-
-wxWindows provides two alternative sets of classes for accessing Microsoft's ODBC (Open Database Connectivity)
-product. The new version by Remstar is documented in a separate manual.
-The older classes are as follows:
-
-\begin{twocollist}\itemsep=0pt
-\twocolitem{\helpref{wxDatabase}{wxdatabase}}{Database class}
-\twocolitem{\helpref{wxQueryCol}{wxquerycol}}{Class representing a column}
-\twocolitem{\helpref{wxQueryField}{wxqueryfield}}{Class representing a field}
-\twocolitem{\helpref{wxRecordSet}{wxrecordset}}{Class representing one or more record}
 \end{twocollist}
 
 {\large {\bf Drag and drop and clipboard classes}}
@@ -417,8 +414,26 @@ libraries, and to provide enhanced functionality.
 \twocolitem{\helpref{wxSocketOutputStream}{wxsocketoutputstream}}{Socket output stream class}
 \end{twocollist}
 
+{\large {\bf Threading classes}}
 
-{\large {\bf HTML}}
+\overview{Multithreading overview}{wxthreadoverview}
+
+wxWindows provides a set of classes to make use of the native thread
+capabilities of the various platforms.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxThread}{wxthread}}{Thread class}
+\twocolitem{\helpref{wxMutex}{wxmutex}}{Mutex class}
+\twocolitem{\helpref{wxMutexLocker}{wxmutexlocker}}{Mutex locker utility class}
+\twocolitem{\helpref{wxCriticalSection}{wxcriticalsection}}{Critical section class}
+\twocolitem{\helpref{wxCriticalSectionLocker}{wxcriticalsectionlocker}}{ritical section locker utility class}
+\twocolitem{\helpref{wxConditiion}{wxcondition}}{Condition class}
+\end{twocollist}
+
+{\large {\bf HTML classes}}
+
+wxWindows provides a set of classes to display text in HTML format. These
+class include a help system based on the HTML widget.
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\helpref{wxHtmlHelpController}{wxhtmlhelpcontroller}}{HTML help controller class}
@@ -431,14 +446,10 @@ libraries, and to provide enhanced functionality.
 \twocolitem{\helpref{wxHtmlWinTagHandler}{wxhtmlwintaghandler}}{HTML tag handler, pluginable into wxHtmlWinParser}
 \end{twocollist}
 
-
-
 {\large {\bf Miscellaneous}}
 
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\helpref{wxAcceleratorTable}{wxacceleratortable}}{Accelerator table}
 \twocolitem{\helpref{wxApp}{wxapp}}{Application class}
-\twocolitem{\helpref{wxAutomationObject}{wxautomationobject}}{OLE automation class}
 \twocolitem{\helpref{wxConfig}{wxconfigbase}}{Classes for configuration reading/writing}
 \twocolitem{\helpref{wxHelpController}{wxhelpcontroller}}{Family of classes for controlling help windows}
 \twocolitem{\helpref{wxLayoutAlgorithm}{wxlayoutalgorithm}}{An alternative window layout facility}
@@ -446,5 +457,22 @@ libraries, and to provide enhanced functionality.
 \twocolitem{\helpref{wxTimer}{wxtimer}}{Timer class}
 \twocolitem{\helpref{wxStopWatch}{wxstopwatch}}{Stop watch class}
 \twocolitem{\helpref{wxSystemSettings}{wxsystemsettings}}{System settings class}
+\twocolitem{\helpref{wxAcceleratorTable}{wxacceleratortable}}{Accelerator table}
+\twocolitem{\helpref{wxAutomationObject}{wxautomationobject}}{OLE automation class}
+\end{twocollist}
+
+{\large {\bf Database classes}}
+
+\overview{Database classes overview}{odbcoverview}
+
+wxWindows provides two alternative sets of classes for accessing Microsoft's ODBC (Open Database Connectivity)
+product. The new version by Remstar is documented in a separate manual.
+The older classes are as follows:
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxDatabase}{wxdatabase}}{Database class}
+\twocolitem{\helpref{wxQueryCol}{wxquerycol}}{Class representing a column}
+\twocolitem{\helpref{wxQueryField}{wxqueryfield}}{Class representing a field}
+\twocolitem{\helpref{wxRecordSet}{wxrecordset}}{Class representing one or more record}
 \end{twocollist}
 
