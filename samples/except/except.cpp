@@ -56,6 +56,16 @@
 #endif
 
 // ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+static void DoCrash()
+{
+    char *p = 0;
+    strcpy(p, "Let's crash");
+}
+
+// ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
 
@@ -71,13 +81,15 @@ public:
 
     // 2nd-level exception handling: we get all the exceptions occuring in any
     // event handler here
-    virtual void HandleEvent(wxEvtHandler *handler,
-                             wxEventFunction func,
-                             wxEvent& event) const;
+    virtual bool OnExceptionInMainLoop();
 
     // 3rd, and final, level exception handling: whenever an unhandled
     // exception is caught, this function is called
     virtual void OnUnhandledException();
+
+    // and now for something different: this function is called in case of a
+    // crash (e.g. dereferencing null pointer, division by 0, ...)
+    virtual void OnFatalException();
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -85,14 +97,20 @@ class MyFrame : public wxFrame
 {
 public:
     // ctor(s)
-    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
-            long style = wxDEFAULT_FRAME_STYLE);
+    MyFrame();
 
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnDialog(wxCommandEvent& event);
+
+    void OnThrowInt(wxCommandEvent& event);
     void OnThrowString(wxCommandEvent& event);
+    void OnThrowObject(wxCommandEvent& event);
+    void OnThrowUnhandled(wxCommandEvent& event);
+
+    void OnCrash(wxCommandEvent& event);
+    void OnHandleCrash(wxCommandEvent& event);
 
     // 1st-level exception handling: we overload ProcessEvent() to be able to
     // catch exceptions which occur in MyFrame methods here
@@ -130,6 +148,11 @@ private:
     wxString m_msg;
 };
 
+// Another exception class which just has to be different from anything else
+class UnhandledException
+{
+};
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -137,13 +160,13 @@ private:
 // IDs for the controls and the menu commands
 enum
 {
-    // control ids
+    // control ids and menu items
     Except_ThrowInt = 100,
+    Except_ThrowString,
     Except_ThrowObject,
+    Except_ThrowUnhandled,
     Except_Crash,
-
-    // menu items
-    Except_ThrowString = 200,
+    Except_HandleCrash,
     Except_Dialog,
 
     Except_Quit = wxID_EXIT,
@@ -161,7 +184,12 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Except_Quit,  MyFrame::OnQuit)
     EVT_MENU(Except_About, MyFrame::OnAbout)
     EVT_MENU(Except_Dialog, MyFrame::OnDialog)
+    EVT_MENU(Except_ThrowInt, MyFrame::OnThrowInt)
     EVT_MENU(Except_ThrowString, MyFrame::OnThrowString)
+    EVT_MENU(Except_ThrowObject, MyFrame::OnThrowObject)
+    EVT_MENU(Except_ThrowUnhandled, MyFrame::OnThrowUnhandled)
+    EVT_MENU(Except_Crash, MyFrame::OnCrash)
+    EVT_MENU(Except_HandleCrash, MyFrame::OnHandleCrash)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
@@ -185,8 +213,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // create the main application window
-    MyFrame *frame = new MyFrame(_T("Except wxWidgets App"),
-                                 wxPoint(50, 50), wxSize(450, 340));
+    MyFrame *frame = new MyFrame();
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -198,24 +225,49 @@ bool MyApp::OnInit()
     return true;
 }
 
-void
-MyApp::HandleEvent(wxEvtHandler *handler,
-                   wxEventFunction func,
-                   wxEvent& event) const
+bool MyApp::OnExceptionInMainLoop()
 {
     try
     {
-        wxApp::HandleEvent(handler, func, event);
+        throw;
     }
     catch ( int i )
     {
-        wxLogError(_T("Caught an int %d in MyApp."), i);
+        wxLogWarning(_T("Caught an int %d in MyApp."), i);
     }
+    catch ( MyException& e )
+    {
+        wxLogWarning(_T("Caught MyException(%s) in MyApp."), e.what());
+    }
+    catch ( ... )
+    {
+        throw;
+    }
+
+    return true;
 }
 
 void MyApp::OnUnhandledException()
 {
-    wxMessageBox(_T("Unhandled exception caught, program will terminate."),
+    // this shows how we may let some exception propagate uncaught
+    try
+    {
+        throw;
+    }
+    catch ( UnhandledException& )
+    {
+        throw;
+    }
+    catch ( ... )
+    {
+        wxMessageBox(_T("Unhandled exception caught, program will terminate."),
+                     _T("wxExcept Sample"), wxOK | wxICON_ERROR);
+    }
+}
+
+void MyApp::OnFatalException()
+{
+    wxMessageBox(_T("Program has crashed and will terminate."),
                  _T("wxExcept Sample"), wxOK | wxICON_ERROR);
 }
 
@@ -224,8 +276,9 @@ void MyApp::OnUnhandledException()
 // ============================================================================
 
 // frame constructor
-MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
-       : wxFrame(NULL, wxID_ANY, title, pos, size, style)
+MyFrame::MyFrame()
+       : wxFrame(NULL, wxID_ANY, _T("Except wxWidgets App"),
+                 wxPoint(50, 50), wxSize(450, 340))
 {
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -234,7 +287,15 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(Except_Dialog, _T("Show &dialog\tCtrl-D"));
+    menuFile->AppendSeparator();
+    menuFile->Append(Except_ThrowInt, _T("Throw an &int\tCtrl-I"));
     menuFile->Append(Except_ThrowString, _T("Throw a &string\tCtrl-S"));
+    menuFile->Append(Except_ThrowObject, _T("Throw an &object\tCtrl-O"));
+    menuFile->Append(Except_ThrowUnhandled,
+                        _T("Throw &unhandled exception\tCtrl-U"));
+    menuFile->Append(Except_Crash, _T("&Crash\tCtrl-C"));
+    menuFile->AppendSeparator();
+    menuFile->AppendCheckItem(Except_HandleCrash, _T("&Handle crashes\tCtrl-H"));
     menuFile->AppendSeparator();
     menuFile->Append(Except_Quit, _T("E&xit\tCtrl-Q"), _T("Quit this program"));
 
@@ -287,14 +348,41 @@ void MyFrame::OnDialog(wxCommandEvent& WXUNUSED(event))
     }
     catch ( ... )
     {
+        wxLogWarning(_T("An exception in MyDialog"));
+
         Destroy();
         throw;
     }
 }
 
+void MyFrame::OnThrowInt(wxCommandEvent& WXUNUSED(event))
+{
+    throw -17;
+}
+
 void MyFrame::OnThrowString(wxCommandEvent& WXUNUSED(event))
 {
-    throw _T("some string");
+    throw _T("string thrown from MyFrame");
+}
+
+void MyFrame::OnThrowObject(wxCommandEvent& WXUNUSED(event))
+{
+    throw MyException(_T("Exception thrown from MyFrame"));
+}
+
+void MyFrame::OnThrowUnhandled(wxCommandEvent& WXUNUSED(event))
+{
+    throw UnhandledException();
+}
+
+void MyFrame::OnCrash(wxCommandEvent& WXUNUSED(event))
+{
+    DoCrash();
+}
+
+void MyFrame::OnHandleCrash(wxCommandEvent& event)
+{
+    wxHandleFatalExceptions(event.IsChecked());
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -335,12 +423,11 @@ void MyDialog::OnThrowInt(wxCommandEvent& WXUNUSED(event))
 
 void MyDialog::OnThrowObject(wxCommandEvent& WXUNUSED(event))
 {
-    throw MyException(_T("Exception thrown from the dialog"));
+    throw MyException(_T("Exception thrown from MyDialog"));
 }
 
 void MyDialog::OnCrash(wxCommandEvent& WXUNUSED(event))
 {
-    char *p = 0;
-    strcpy(p, "Let's crash");
+    DoCrash();
 }
 
