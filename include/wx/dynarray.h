@@ -94,6 +94,7 @@ public:                                                             \
   bool  IsEmpty() const { return m_nCount == 0; }                   \
   size_t  Count() const { return m_nCount; }                        \
                                                                     \
+  typedef T base_type;                                              \
 protected:                                                          \
   T& Item(size_t uiIndex) const                                     \
     { wxASSERT( uiIndex < m_nCount ); return m_pItems[uiIndex]; }   \
@@ -111,7 +112,6 @@ protected:                                                          \
   void Sort(CMPFUNC fnCompare);                                     \
                                                                     \
 private:                                                            \
-  typedef T base_type;                                              \
                                                                     \
   void    Grow();                                                   \
                                                                     \
