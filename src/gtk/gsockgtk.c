@@ -33,7 +33,6 @@ void _GSocket_GDK_Input(gpointer data,
 
 void _GSocket_GUI_Init(GSocket *socket)
 {
-  int i;
   gint *m_id;
 
   socket->m_gui_dependent = (char *)malloc(sizeof(gint)*2);

@@ -13,7 +13,7 @@
 WXDIR = $(WXWIN)
 !include $(WXDIR)\src\makeb32.env
 
-LIBS=$(WXLIB) $(EXTRALIBS) cw32mt import32 ole2w32 winpng zlib jpeg odbc32
+LIBS=$(WXLIB) $(EXTRALIBS) cw32mt import32 ole2w32 winpng zlib jpeg xpm tiff odbc32
 
 !if "$(FINAL)" == "0"
 LINKFLAGS=/v /c /Tpe /L$(WXLIBDIR);$(BCCDIR)\lib $(EXTRALINKFLAGS)
