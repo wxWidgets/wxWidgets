@@ -2983,7 +2983,7 @@ wxString wxGridTableBase::GetColLabelValue( int col )
     unsigned int i, n;
     for ( n = 1; ; n++ )
     {
-        s += (_T('A') + (wxChar)( col%26 ));
+        s += (wxChar) (_T('A') + (wxChar)( col%26 ));
         col = col/26 - 1;
         if ( col < 0 ) break;
     }
