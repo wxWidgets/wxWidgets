@@ -356,10 +356,14 @@ public:
             PyTuple_SetItem(rv, 2, PyInt_FromLong(self->Blue()));
             return rv;
         }
+        bool __eq__(const wxColour& o) { return *self == o; }
+        bool __ne__(const wxColour& o) { return *self != o; }
     }
-    %pragma(python) addtoclass = "asTuple = Get"
-    %pragma(python) addtoclass = "def __str__(self): return str(self.asTuple())"
-    %pragma(python) addtoclass = "def __repr__(self): return str(self.asTuple())"
+    %pragma(python) addtoclass = "asTuple = Get
+    def __str__(self): return str(self.asTuple())
+    def __repr__(self): return str(self.asTuple())
+    def __nonzero__(self):      return self.asTuple() != (0,0,0)
+"
 
 };
 
