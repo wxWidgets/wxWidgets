@@ -29,6 +29,7 @@ _treeList = [
         'Throbber',
         'wxPopupControl',
         'wxMultiSash',
+        'EventManager',
         ]),
 
     # managed windows == things with a caption you can close
@@ -142,6 +143,7 @@ _treeList = [
 
     # ditto
     ('Process and Events', [
+        'EventManager',
         'infoframe',
         'OOR',
         'PythonEvents',
