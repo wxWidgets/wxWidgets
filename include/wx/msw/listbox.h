@@ -75,8 +75,6 @@ public:
 
     virtual bool IsSelected(int n) const;
     virtual void SetSelection(int n, bool select = TRUE);
-    // rtti needs a function with just one signature
-    void SetSelectionLine(int n) { SetSelection( n ) ; }
     virtual int GetSelection() const;
     virtual int GetSelections(wxArrayInt& aSelections) const;
 

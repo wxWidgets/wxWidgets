@@ -54,7 +54,7 @@ WX_BEGIN_PROPERTIES_TABLE(wxListBox)
     // TODO DELEGATES
 	WX_PROPERTY( Font , wxFont , SetFont , GetFont  , )
     WX_PROPERTY_COLLECTION( Choices , wxArrayString , wxString , AppendString , GetStrings )
-	WX_PROPERTY( Selection ,int, SetSelectionLine, GetSelection, )
+	WX_PROPERTY( Selection ,int, SetSelection, GetSelection, )
 WX_END_PROPERTIES_TABLE()
 
 WX_BEGIN_HANDLERS_TABLE(wxListBox)
