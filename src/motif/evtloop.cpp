@@ -173,7 +173,7 @@ bool wxEventLoop::Dispatch()
 #else
      XtAppProcessEvent( context, XtIMTimer|XtIMAlternateInput|XtIMSignal );
 #endif
-   
+
     return m_impl ? m_impl->GetKeepGoing() : true;
 }
 
@@ -345,16 +345,26 @@ bool CheckForKeyUp(XEvent* event)
 
 bool wxDoEventLoopIteration( wxEventLoop& evtLoop )
 {
-#if wxUSE_THREADS
-    // leave the main loop to give other threads a chance to
-    // perform their GUI work
-    wxMutexGuiLeave();
-    wxUsleep(20);
-    wxMutexGuiEnter();
-#endif
+    bool moreRequested, pendingEvents;
 
-    while ( !evtLoop.Pending() && ::SendIdleMessage() )
-        ;
+    for(;;)
+    {
+        pendingEvents = evtLoop.Pending();
+        if( pendingEvents ) break;
+        moreRequested = ::SendIdleMessage();
+        if( !moreRequested ) break;
+    }
+
+#if wxUSE_THREADS
+    if( !pendingEvents && !moreRequested )
+    {
+        // leave the main loop to give other threads a chance to
+        // perform their GUI work
+        wxMutexGuiLeave();
+        wxUsleep(20);
+        wxMutexGuiEnter();
+    }
+#endif
 
     if( !evtLoop.Dispatch() )
         return false;
