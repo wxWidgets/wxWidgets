@@ -129,8 +129,7 @@ public:
         Assign(_T(""), path, name, ext, format);
     }
 
-    void AssignDir(const wxString& dir, wxPathFormat format = wxPATH_NATIVE)
-        { Assign(dir, _T(""), format); }
+    void AssignDir(const wxString& dir, wxPathFormat format = wxPATH_NATIVE);
 
         // assorted assignment operators
 

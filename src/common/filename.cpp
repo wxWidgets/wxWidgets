@@ -244,14 +244,20 @@ void wxFileName::Assign(const wxString& fullpath,
     Assign(volume, path, name, ext, format);
 }
 
-void wxFileName::Assign(const wxString& path,
+void wxFileName::Assign(const wxString& fullpath,
                         const wxString& fullname,
                         wxPathFormat format)
 {
-    wxString name, ext;
+    wxString volume, path, name, ext;
     SplitPath(fullname, NULL /* no path */, &name, &ext, format);
+    SplitPath(fullpath, &volume, &path, NULL, NULL, format);
 
-    Assign(path, name, ext, format);
+    Assign(volume, path, name, ext, format);
+}
+
+void wxFileName::AssignDir(const wxString& dir, wxPathFormat format)
+{
+    Assign(dir, _T(""), format);
 }
 
 void wxFileName::Clear()
@@ -429,6 +435,20 @@ bool wxFileName::Normalize(wxPathNormalize flags,
             curDir.AssignCwd();
         else
             curDir.AssignDir(cwd);
+
+        // the path may be not absolute because it doesn't have the volume name
+        // but in this case we shouldn't modify the directory components of it
+        // but just set the current volume
+        if ( !HasVolume() && curDir.HasVolume() )
+        {
+            SetVolume(curDir.GetVolume());
+
+            if ( IsAbsolute() )
+            {
+                // yes, it was the case - we don't need curDir then
+                curDir.Clear();
+            }
+        }
     }
 
     // handle ~ stuff under Unix only
@@ -446,6 +466,7 @@ bool wxFileName::Normalize(wxPathNormalize flags,
         }
     }
 
+    // transform relative path into abs one
     if ( curDir.IsOk() )
     {
         wxArrayString dirsNew = curDir.GetDirs();
@@ -508,12 +529,12 @@ bool wxFileName::Normalize(wxPathNormalize flags,
         m_ext.MakeLower();
     }
 
-#if defined(__WXMSW__) && defined(__WIN32__)
-    if (flags & wxPATH_NORM_LONG)
+#if defined(__WIN32__)
+    if ( (flags & wxPATH_NORM_LONG) && (format == wxPATH_DOS) )
     {
         Assign(GetLongPath());
     }
-#endif
+#endif // Win32
 
     return TRUE;
 }
@@ -556,31 +577,45 @@ bool wxFileName::IsAbsolute( wxPathFormat format )
         return FALSE;
     }
 
-    switch ( GetFormat(format) )
+    format = GetFormat(format);
+
+    if ( format == wxPATH_UNIX )
     {
-        case wxPATH_DOS:
-        case wxPATH_VMS:
-        case wxPATH_MAC:
-            // must have the drive
-            return !m_volume.empty();
+        const wxString& str = m_dirs[0u];
+        if ( str.empty() )
+        {
+            // the path started with '/', it's an absolute one
+            return TRUE;
+        }
 
-        default:
-            wxFAIL_MSG( _T("unknown wxPATH_XXX style") );
-            // fall through
+        // the path is absolute if it starts with a path separator or
+        // with "~" or "~user"
+        wxChar ch = str[0u];
 
-        case wxPATH_UNIX:
-            const wxString& str = m_dirs[0u];
-            if ( str.empty() )
-            {
-                // the path started with '/', it's an absolute one
+        return IsPathSeparator(ch, format) || ch == _T('~');
+    }
+    else // !Unix
+    {
+        // must have the drive
+        if ( m_volume.empty() )
+            return FALSE;
+
+        switch ( format )
+        {
+            default:
+                wxFAIL_MSG( _T("unknown wxPATH_XXX style") );
+                // fall through
+
+            case wxPATH_DOS:
+                return m_dirs[0u].empty();
+
+            case wxPATH_VMS:
+                // TODO: what is the relative path format here?
                 return TRUE;
-            }
 
-            // the path is absolute if it starts with a path separator or
-            // with "~" or "~user"
-            wxChar ch = str[0u];
-
-            return IsPathSeparator(ch, format) || ch == _T('~');
+            case wxPATH_MAC:
+                return !m_dirs[0u].empty();
+        }
     }
 }
 
@@ -808,9 +843,10 @@ wxString wxFileName::GetShortPath() const
 // Return the long form of the path (returns identity on non-Windows platforms)
 wxString wxFileName::GetLongPath() const
 {
-#if defined(__WXMSW__) && defined(__WIN32__) && !defined(__WXMICROWIN__)
-    wxString path(GetFullPath());
-    wxString pathOut;
+    wxString pathOut,
+             path = GetFullPath();
+
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
     bool success = FALSE;
 
     // VZ: this code was disabled, why?
@@ -876,17 +912,20 @@ wxString wxFileName::GetLongPath() const
         wxArrayString dirs = GetDirs();
         dirs.Add(GetFullName());
 
-        size_t count = dirs.GetCount();
-        size_t i;
         wxString tmpPath;
 
-        for ( i = 0; i < count; i++ )
+        size_t count = dirs.GetCount();
+        for ( size_t i = 0; i < count; i++ )
         {
-            // We're using pathOut to collect the long-name path,
-            // but using a temporary for appending the last path component which may be short-name
+            // We're using pathOut to collect the long-name path, but using a
+            // temporary for appending the last path component which may be
+            // short-name
             tmpPath = pathOut + dirs[i];
 
-            if (tmpPath.Last() == wxT(':'))
+            if ( tmpPath.empty() )
+                continue;
+
+            if ( tmpPath.Last() == wxT(':') )
             {
                 // Can't pass a drive and root dir to FindFirstFile,
                 // so continue to next dir
@@ -901,21 +940,19 @@ wxString wxFileName::GetLongPath() const
                 // Error: return immediately with the original path
                 return path;
             }
-            else
-            {
-                pathOut += findFileData.cFileName;
-                if ( (i < (count-1)) )
-                    pathOut += wxFILE_SEP_PATH;
 
-                ::FindClose(hFind);
-            }
+            pathOut += findFileData.cFileName;
+            if ( (i < (count-1)) )
+                pathOut += wxFILE_SEP_PATH;
+
+            ::FindClose(hFind);
         }
     }
+#else // !Win32
+    pathOut = path;
+#endif // Win32/!Win32
 
     return pathOut;
-#else
-    return GetFullPath();
-#endif
 }
 
 wxPathFormat wxFileName::GetFormat( wxPathFormat format )
