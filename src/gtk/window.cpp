@@ -1708,16 +1708,17 @@ gtk_window_realized_callback( GtkWidget *WXUNUSED(m_widget), wxWindow *win )
 //-----------------------------------------------------------------------------
 
 static
-void gtk_window_size_callback( GtkWidget *widget,
-                               GtkAllocation *alloc,
+void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
+                               GtkAllocation *WXUNUSED(alloc),
                                wxWindow *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
     
-    wxSizeEvent event( win->GetSize(), win->GetId() );
-    event.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( event );
+#if wxUSE_CONSTRAINTS
+    if (win->GetAutoLayout())
+        win->Layout();
+#endif
 }
 
 
