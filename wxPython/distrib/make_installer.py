@@ -79,7 +79,7 @@ Source: "wxPython\oglc.pyd";                DestDir: "{app}\wxPython"; Component
 Source: "wxPython\stc_c.pyd";               DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\xrcc.pyd";                DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\gizmosc.pyd";             DestDir: "{app}\wxPython"; Components: core
-Source: "wxPython\dllwidget.pyd";           DestDir: "{app}\wxPython"; Components: core
+Source: "wxPython\dllwidget_c.pyd";         DestDir: "{app}\wxPython"; Components: core
 
 Source: "wxPython\*.py";                    DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\lib\*.py";                DestDir: "{app}\wxPython\lib"; Components: core
@@ -162,12 +162,13 @@ Source: "samples\frogedit\*.py";           DestDir: "{app}\wxPython\samples\frog
 ;;------------------------------------------------------------
 
 [Icons]
-Name: "{group}\Run the DEMO";          Filename: "{code:GetPythonDir}\pythonw.exe";         WorkingDir: "{app}\wxPython\demo";      Parameters: "demo.py";
-Name: "{group}\wxWindows Reference";   Filename: "{app}\wxPython\docs\wx.chm";
-Name: "{group}\wxOGL Reference";       Filename: "{app}\wxPython\docs\ogl.chm";
-Name: "{group}\licence.txt";           Filename: "{app}\wxPython\docs\licence\licence.txt";
-Name: "{group}\README.txt";            Filename: "{app}\wxPython\docs\README.txt";
-Name: "{group}\CHANGES.txt";           Filename: "{app}\wxPython\docs\CHANGES.txt";
+Name: "{group}\Run the DEMO";          Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "{app}\wxPython\demo";   Parameters: "demo.py"; Components: core
+Name: "{group}\PyCrust";               Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "c:\";                   Parameters: "{app}\wxPython\lib\PyCrust\PyCrustApp.py";  IconFilename: "{app}\wxPython\lib\PyCrust\PyCrust.ico"; Components: core
+Name: "{group}\wxWindows Reference";   Filename: "{app}\wxPython\docs\wx.chm";                Components: docs
+Name: "{group}\wxOGL Reference";       Filename: "{app}\wxPython\docs\ogl.chm";               Components: docs
+Name: "{group}\licence.txt";           Filename: "{app}\wxPython\docs\licence\licence.txt";   Components: core
+Name: "{group}\README.txt";            Filename: "{app}\wxPython\docs\README.txt";            Components: core
+Name: "{group}\CHANGES.txt";           Filename: "{app}\wxPython\docs\CHANGES.txt";           Components: core
 Name: "{group}\Sample Apps";           Filename: "{app}\wxPython\samples"; Components: samples
 
 
@@ -182,6 +183,8 @@ Type: files; Name: "{app}\wxPython\lib\editor\*.pyc";
 Type: files; Name: "{app}\wxPython\lib\editor\*.pyo";
 Type: files; Name: "{app}\wxPython\lib\mixins\*.pyc";
 Type: files; Name: "{app}\wxPython\lib\mixins\*.pyo";
+Type: files; Name: "{app}\wxPython\lib\PyCrust\*.pyc";
+Type: files; Name: "{app}\wxPython\lib\PyCrust\*.pyo";
 Type: files; Name: "{app}\wxPython\demo\*.pyc";
 Type: files; Name: "{app}\wxPython\demo\*.pyo";
 Type: files; Name: "{app}\wxPython\demo\data\showTips";

@@ -40,6 +40,7 @@ _treeList = [
                                 'wxEditableListBox',
                                 'SplitTree',
                                 'wxLEDNumberCtrl',
+                                'wxEditor',
                                 ]),
 
     ('Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame',

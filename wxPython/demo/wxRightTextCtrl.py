@@ -12,8 +12,8 @@ class TestPanel(wxPanel):
 
         fgs = wxFlexGridSizer(cols=2, vgap=5, hgap=5)
         txt = wxStaticText(self, -1,
-                           "These text controls will align their contents\n"
-                           "to the right (onwxMSW) when they don't have focus.", style=wxALIGN_RIGHT )
+                           "These text controls will align their contents to\n"
+                           "the right (on wxMSW) when they don't have focus.", style=wxALIGN_RIGHT )
         fgs.Add(txt)
         fgs.Add(wxRightTextCtrl(self, -1, "", size=(75, -1)))
 

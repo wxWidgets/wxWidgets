@@ -9,6 +9,7 @@ set FLAGS=USE_SWIG=1 IN_CVS_TREE=1
 
 rem  Use non-default python?
 iff "%1" == "15" .or. "%1" == "20" .or. "%1" == "21" .or. "%1" == "22" then
+	set VER=%1
 	set PYTHON=c:\tools\python%1%\python.exe
 	shift
 else
@@ -67,12 +68,6 @@ rem "a" --> make all installers
 elseiff "%1" == "a" then
 	shift
 	set CMD=echo Finished!
-	call b.bat 15 c
-	call b.bat 15 f
-	call b.bat 15 r
-	call b.bat 15 c
-	call b.bat 15 h
-	call b.bat 15 r
 
 	call b.bat 21 c
 	call b.bat 21 f
@@ -81,14 +76,20 @@ elseiff "%1" == "a" then
 	call b.bat 21 h
 	call b.bat 21 r
 
-	rem call b.bat 22 c
-	rem call b.bat 22 f
-	rem call b.bat 22 r
-	rem call b.bat 22 c
-	rem call b.bat 22 h
-	rem call b.bat 22 r
+	call b.bat 22 c
+	call b.bat 22 f
+	call b.bat 22 r
+	call b.bat 22 c
+	call b.bat 22 h
+	call b.bat 22 r
 
 
+rem "b" --> both debug and hybrid builds
+elseiff "%1" == "b" then
+	shift
+	set CMD=echo Finished!
+	call b.bat %VER% h
+	call b.bat %VER%
 
 rem (no command arg) --> normal build for development
 else
