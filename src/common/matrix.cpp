@@ -29,7 +29,9 @@
 #include "wx/matrix.h"
 #include <math.h>
 
+#if ! (defined(__WXMAC__) && defined(__UNIX__))
 const double pi = 3.1415926535;
+#endif
 
 wxTransformMatrix::wxTransformMatrix(void)
 {
