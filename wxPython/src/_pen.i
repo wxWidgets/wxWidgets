@@ -63,6 +63,9 @@ public:
         }
     }
 
+//  wxDash* GetDash() const { return (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*)NULL); };
+    int GetDashCount() const;
+
 #ifdef __WXMSW__
     wxBitmap* GetStipple();
     void SetStipple(wxBitmap& stipple);

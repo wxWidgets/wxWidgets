@@ -196,7 +196,7 @@ public:
 %constant wxEventType wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK;
 %constant wxEventType wxEVT_COMMAND_TREE_END_DRAG;
 %constant wxEventType wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK;
-
+%constant wxEventType wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP;
 
 
 %pythoncode {
@@ -220,7 +220,7 @@ EVT_TREE_ITEM_RIGHT_CLICK  = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLIC
 EVT_TREE_ITEM_MIDDLE_CLICK = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, 1)
 EVT_TREE_END_DRAG          = wx.PyEventBinder(wxEVT_COMMAND_TREE_END_DRAG         , 1)
 EVT_TREE_STATE_IMAGE_CLICK = wx.PyEventBinder(wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK, 1)
-
+EVT_TREE_ITEM_GETTOOLTIP   = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP,   1)
 }
 
 
@@ -261,6 +261,8 @@ public:
     bool IsEditCancelled() const;
     void SetEditCanceled(bool editCancelled);
 
+        // Set the tooltip for the item (for EVT_TREE_ITEM_GETTOOLTIP events)
+    void SetToolTip(const wxString& toolTip);
 };
 
 //---------------------------------------------------------------------------

@@ -109,6 +109,8 @@ public:
     wxCalendarEvent(wxCalendarCtrl *cal, wxEventType type);
 
     const wxDateTime& GetDate() const;
+    void SetDate(const wxDateTime &date);
+    void SetWeekDay(const wxDateTime::WeekDay wd);
     wxDateTime::WeekDay GetWeekDay() const;
 
 };
@@ -241,6 +243,9 @@ public:
     bool Enable(bool enable = True);
     bool Show(bool show = True);
 
+    // get the currently shown control for month/year
+    wxControl *GetMonthControl() const;
+    wxControl *GetYearControl() const;
 };
 
 

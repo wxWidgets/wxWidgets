@@ -30,10 +30,12 @@ public:
     unsigned char Blue();
     bool Ok();
     void Set(unsigned char red, unsigned char green, unsigned char blue);
-    %name(SetRBG) void Set(unsigned long colRGB);
+    %name(SetRGB) void Set(unsigned long colRGB);
 
     bool operator==(const wxColour& colour) const;
     bool operator != (const wxColour& colour) const;
+
+    void InitFromName(const wxString& colourName);
 
     %extend {
         PyObject* Get() {

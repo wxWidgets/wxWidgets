@@ -403,6 +403,16 @@ public:
     wxSize GetSize() const;
     void SetSize( const wxSize &s );
 
+    wxPoint GetTopLeft() const;
+    void SetTopLeft(const wxPoint &p);
+    wxPoint GetBottomRight() const;
+    void SetBottomRight(const wxPoint &p);
+
+//    wxPoint GetLeftTop() const;
+//    void SetLeftTop(const wxPoint &p);
+//    wxPoint GetRightBottom() const;
+//    void SetRightBottom(const wxPoint &p);
+
     int GetLeft()   const;
     int GetTop()    const;
     int GetBottom() const;
