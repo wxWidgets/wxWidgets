@@ -306,12 +306,16 @@ bool wxApp::Yield(bool onlyIfNeeded)
     s_inYield = true;
 
     // Run the event loop until it is out of events
-    while(NSEvent *event = [GetNSApplication()
-                nextEventMatchingMask:NSAnyEventMask
-                untilDate:[NSDate distantPast]
-                inMode:NSDefaultRunLoopMode
-                dequeue: YES])
+    while(1)
     {
+        wxAutoNSAutoreleasePool pool;
+        NSEvent *event = [GetNSApplication()
+                nextEventMatchingMask:NSAnyEventMask
+                untilDate:nil /* ==[NSDate distantPast] */
+                inMode:NSDefaultRunLoopMode
+                dequeue: YES];
+        if(!event)
+            break;
         [GetNSApplication() sendEvent: event];
     }
 
