@@ -196,7 +196,7 @@ wxLANGUAGE_SUNDANESE                   su     -                -                
 wxLANGUAGE_SWAHILI                     sw_KE  LANG_SWAHILI     SUBLANG_DEFAULT                     "Swahili"
 wxLANGUAGE_SWEDISH                     sv_SE  LANG_SWEDISH     SUBLANG_SWEDISH                     "Swedish"
 wxLANGUAGE_SWEDISH_FINLAND             sv_FI  LANG_SWEDISH     SUBLANG_SWEDISH_FINLAND             "Swedish (Finland)"
-wxLANGUAGE_TAGALOG                     tl     -                -                                   "Tagalog"
+wxLANGUAGE_TAGALOG                     tl_PH  -                -                                   "Tagalog"
 wxLANGUAGE_TAJIK                       tg     -                -                                   "Tajik"
 wxLANGUAGE_TAMIL                       ta     LANG_TAMIL       SUBLANG_DEFAULT                     "Tamil"
 wxLANGUAGE_TATAR                       tt     LANG_TATAR       SUBLANG_DEFAULT                     "Tatar"
