@@ -237,8 +237,9 @@ bool wxButton::MSWCommand(WXUINT param, WXWORD id)
     bool processed = FALSE;
     switch ( param )
     {
-        case 1: // means that the message came from an accelerator
-        case BN_CLICKED:
+        case 1:                     // message came from an accelerator
+        case BN_CLICKED:            // normal buttons send this
+        case BN_DOUBLECLICKED:      // owner-drawn ones also send this
             processed = SendClickEvent();
             break;
     }
@@ -255,6 +256,11 @@ long wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         SetDefault();
 
         // let the default processign take place too
+    }
+    else if ( nMsg == WM_LBUTTONDBLCLK )
+    {
+        // trick the base class into thinking that this was just a click
+        nMsg = WM_LBUTTONDOWN;
     }
 
     // let the base class do all real processing

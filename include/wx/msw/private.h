@@ -256,6 +256,17 @@ extern HBITMAP wxInvertMask(HBITMAP hbmpMask, int w = 0, int h = 0);
     #define GET_Y_LPARAM(lp) ((int)(short)HIWORD(lp))
 #endif // GET_X_LPARAM
 
+// get the current state of SHIFT/CTRL keys
+extern inline bool wxIsShiftDown()
+{
+    return (::GetKeyState(VK_SHIFT) & 0x100) != 0;
+}
+
+extern inline bool wxIsCtrlDown()
+{
+    return (::GetKeyState(VK_CONTROL) & 0x100) != 0;
+}
+
 // ---------------------------------------------------------------------------
 // small helper classes
 // ---------------------------------------------------------------------------

@@ -145,6 +145,8 @@ void wxCheckBox::SetLabel(const wxString& label)
   SetWindowText(GetHwnd(), label);
 }
 
+#define CHECK_SIZE 13
+
 wxSize wxCheckBox::DoGetBestSize() const
 {
     int wCheckbox, hCheckbox;
@@ -154,15 +156,15 @@ wxSize wxCheckBox::DoGetBestSize() const
     if ( !str.IsEmpty() )
     {
         GetTextExtent(str, &wCheckbox, &hCheckbox);
-        wCheckbox += RADIO_SIZE;
+        wCheckbox += CHECK_SIZE;
 
-        if ( hCheckbox < RADIO_SIZE )
-            hCheckbox = RADIO_SIZE;
+        if ( hCheckbox < CHECK_SIZE )
+            hCheckbox = CHECK_SIZE;
     }
     else
     {
-        wCheckbox = RADIO_SIZE;
-        hCheckbox = RADIO_SIZE;
+        wCheckbox = CHECK_SIZE;
+        hCheckbox = CHECK_SIZE;
     }
 
     return wxSize(wCheckbox, hCheckbox);

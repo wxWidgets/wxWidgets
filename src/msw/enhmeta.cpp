@@ -164,9 +164,13 @@ wxSize wxEnhMetaFile::GetSize() const
 
 bool wxEnhMetaFile::SetClipboard(int WXUNUSED(width), int WXUNUSED(height))
 {
+#if wxUSE_DRAG_AND_DROP
     wxCHECK_MSG( m_hMF, FALSE, _T("can't copy invalid metafile to clipboard") );
 
     return wxTheClipboard->AddData(new wxEnhMetaFileDataObject(*this));
+#else // !wxUSE_DRAG_AND_DROP
+    wxFAIL_MSG(_T("not implemented"));
+#endif // wxUSE_DRAG_AND_DROP/!wxUSE_DRAG_AND_DROP
 }
 
 // ----------------------------------------------------------------------------

@@ -914,8 +914,8 @@ void wxGridCellBoolEditor::SetSize(const wxRect& r)
     // so shift it to the right
     size.x -= 8;
 #elif defined(__WXMSW__)
-    // here too...
-    size.x -= 6;
+    // here too, but in other way
+    size.x += 1;
     size.y -= 2;
 #endif
 
@@ -1457,11 +1457,7 @@ wxSize wxGridCellBoolRenderer::ms_sizeCheckMark;
 // FIXME these checkbox size calculations are really ugly...
 
 // between checkmark and box
-#ifdef __WXGTK__
-    static const wxCoord wxGRID_CHECKMARK_MARGIN = 4;
-#else
-    static const wxCoord wxGRID_CHECKMARK_MARGIN = 2;
-#endif
+static const wxCoord wxGRID_CHECKMARK_MARGIN = 2;
 
 wxSize wxGridCellBoolRenderer::GetBestSize(wxGrid& grid,
                                            wxGridCellAttr& WXUNUSED(attr),
@@ -1476,7 +1472,7 @@ wxSize wxGridCellBoolRenderer::GetBestSize(wxGrid& grid,
         wxCoord checkSize = 0;
         wxCheckBox *checkbox = new wxCheckBox(&grid, -1, wxEmptyString);
         wxSize size = checkbox->GetBestSize();
-        checkSize = size.y + wxGRID_CHECKMARK_MARGIN;
+        checkSize = size.y + 2*wxGRID_CHECKMARK_MARGIN;
 
         // FIXME wxGTK::wxCheckBox::GetBestSize() gives "wrong" result
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
@@ -1512,22 +1508,11 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
     }
 
     // draw a border around checkmark
-    wxRect rectMark;
-    rectMark.x = rect.x + rect.width/2 - size.x/2;
-    rectMark.y = rect.y + rect.height/2 - size.y/2;
-    rectMark.width = size.x;
-    rectMark.height = size.y;
-
-    dc.SetBrush(*wxTRANSPARENT_BRUSH);
-    dc.SetPen(wxPen(attr.GetTextColour(), 1, wxSOLID));
-    dc.DrawRectangle(rectMark);
-
-    rectMark.Inflate(-wxGRID_CHECKMARK_MARGIN);
-
-#ifdef __WXMSW__
-    // looks nicer under MSW
-    rectMark.x++;
-#endif // MSW
+    wxRect rectBorder;
+    rectBorder.x = rect.x + rect.width/2 - size.x/2;
+    rectBorder.y = rect.y + rect.height/2 - size.y/2;
+    rectBorder.width = size.x;
+    rectBorder.height = size.y;
 
     bool value;
     if ( grid.GetTable()->CanGetValueAs(row, col, wxGRID_VALUE_BOOL) )
@@ -1537,9 +1522,23 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
 
     if ( value )
     {
+        wxRect rectMark = rectBorder;
+#ifdef __WXMSW__
+        // MSW DrawCheckMark() is weird (and should probably be changed...)
+        rectMark.Inflate(-wxGRID_CHECKMARK_MARGIN/2);
+        rectMark.x++;
+        rectMark.y++;
+#else // !MSW
+        rectMark.Inflate(-wxGRID_CHECKMARK_MARGIN);
+#endif // MSW/!MSW
+
         dc.SetTextForeground(attr.GetTextColour());
         dc.DrawCheckMark(rectMark);
     }
+
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
+    dc.SetPen(wxPen(attr.GetTextColour(), 1, wxSOLID));
+    dc.DrawRectangle(rectBorder);
 }
 
 // ----------------------------------------------------------------------------
@@ -1689,8 +1688,8 @@ wxGridCellEditor* wxGridCellAttr::GetEditor(wxGrid* grid, int row, int col) cons
             editor->IncRef();
     }
 
-    if ( grid )                   // get renderer for the data type
-        editor =  grid->GetDefaultEditorForCell(row, col);
+    if ( !editor && grid )                   // get renderer for the data type
+        editor = grid->GetDefaultEditorForCell(row, col);
 
     if ( !editor )
         // if we still don't have one then use the grid default
@@ -1855,8 +1854,8 @@ wxGridCellAttr *wxGridRowOrColAttrData::GetAttr(int rowOrCol) const
 
 void wxGridRowOrColAttrData::SetAttr(wxGridCellAttr *attr, int rowOrCol)
 {
-    int n = m_rowsOrCols.Index(rowOrCol);
-    if ( n == wxNOT_FOUND )
+    int i = m_rowsOrCols.Index(rowOrCol);
+    if ( i == wxNOT_FOUND )
     {
         // add the attribute
         m_rowsOrCols.Add(rowOrCol);
@@ -1864,17 +1863,19 @@ void wxGridRowOrColAttrData::SetAttr(wxGridCellAttr *attr, int rowOrCol)
     }
     else
     {
+        size_t n = (size_t)i;
         if ( attr )
         {
             // change the attribute
-            m_attrs[(size_t)n] = attr;
+            m_attrs[n]->DecRef();
+            m_attrs[n] = attr;
         }
         else
         {
             // remove this attribute
-            m_attrs[(size_t)n]->DecRef();
-            m_rowsOrCols.RemoveAt((size_t)n);
-            m_attrs.RemoveAt((size_t)n);
+            m_attrs[n]->DecRef();
+            m_rowsOrCols.RemoveAt(n);
+            m_attrs.RemoveAt(n);
         }
     }
 }
@@ -2121,8 +2122,6 @@ int wxGridTypeRegistry::FindOrCloneDataType(const wxString& typeName)
         editor->SetParameters(params);
 
         // register the new typename
-        renderer->IncRef();
-        editor->IncRef();
         RegisterDataType(typeName, renderer, editor);
 
         // we just registered it, it's the last one
@@ -4254,7 +4253,8 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
             wxClientDC dc( m_gridWin );
             PrepareDC( dc );
-            y = wxMax( y, GetRowTop(m_dragRowOrCol) + WXGRID_MIN_ROW_HEIGHT );
+            y = wxMax( y, GetRowTop(m_dragRowOrCol) +
+                          GetRowMinimalHeight(m_dragRowOrCol) );
             dc.SetLogicalFunction(wxINVERT);
             if ( m_dragLastPos >= 0 )
             {
@@ -7257,7 +7257,9 @@ void wxGrid::AutoSizeColOrRow( int colOrRow, bool setAsMin, bool column )
 {
     wxClientDC dc(m_gridWin);
 
-    int row, col;
+    // init both of them to avoid compiler warnings, even if weo nly need one
+    int row = -1,
+        col = -1;
     if ( column )
         col = colOrRow;
     else
@@ -7312,8 +7314,11 @@ void wxGrid::AutoSizeColOrRow( int colOrRow, bool setAsMin, bool column )
     }
     else
     {
-        // leave some space around text
-        extentMax += 10;
+        if ( column )
+        {
+            // leave some space around text
+            extentMax += 10;
+        }
     }
 
     if ( column )

@@ -86,10 +86,6 @@
 // looks quite ugly.
 #define wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE 0
 
-// from msw/window.cpp
-extern bool wxIsShiftDown();
-extern bool wxIsCtrlDown();
-
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------

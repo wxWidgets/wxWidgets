@@ -123,6 +123,11 @@ wxNodeBase *wxHashTableBase::GetNode(long key, long value) const
 // wxHashTableLong
 // ----------------------------------------------------------------------------
 
+wxHashTableLong::~wxHashTableLong()
+{
+    Destroy();
+}
+
 void wxHashTableLong::Init(size_t size)
 {
     m_hashSize = size;

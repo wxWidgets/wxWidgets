@@ -80,6 +80,7 @@ class WXDLLEXPORT wxHashTableLong : public wxObject
 {
 public:
     wxHashTableLong(size_t size = wxHASH_SIZE_DEFAULT) { Init(size); }
+    virtual ~wxHashTableLong();
 
     void Create(size_t size = wxHASH_SIZE_DEFAULT);
     void Destroy();
