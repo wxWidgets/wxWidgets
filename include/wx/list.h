@@ -240,7 +240,9 @@ enum wxKeyType
 
 // due to circular header dependencies this function has to be declared here
 // (normally it's found in utils.h which includes itself list.h...)
+#if WXWIN_COMPATIBILITY_2_4
 extern WXDLLIMPEXP_BASE wxChar* copystring(const wxChar *s);
+#endif
 
 class WXDLLEXPORT wxObjectListNode;
 typedef wxObjectListNode wxNode;
