@@ -24,7 +24,7 @@ property gProjectSuffix : "M5.mcp"
 --
 property gEol : "
 "
-property gSeparator : "--------------------------------------------------------------------------------" & gEol
+property gSeparator : "-------------------------------------------------------------------------------" & gEol
 
 --
 -- Project and build success count
@@ -36,17 +36,17 @@ set theProjectSuccessCount to 0
 -- Default log file name
 --
 set theDate to (day of (current date)) & "/" & GetMonthIndex(current date) & "/" & (year of (current date))
-set theLogFileName to "wxMac samples " & theDate & ".log"
+set theLogFileName to "build-" & theDate & ".log"
 
 --
 -- Ask the user to select the wxWindows samples folder
 --
-set theFolder to choose folder with prompt "Select the wxWindows samples folder"
+set theFolder to choose folder with prompt "Select the folder in which to build the projects"
 
 --
 -- Ask the user to choose the build log file
 --
-set theLogFile to choose file name with prompt "Create the wxWindows samples build log file" default name theLogFileName
+set theLogFile to choose file name with prompt "Save the build log file" default name theLogFileName
 
 --
 -- Open the log file to record the build log
@@ -57,7 +57,7 @@ set theLogFileRef to open for access theLogFile with write permission
 -- Write log file header
 --
 write gSeparator starting at 0 to theLogFileRef
-write "wxWindows samples build log" & gEol to theLogFileRef
+write "Build log" & gEol to theLogFileRef
 write gSeparator to theLogFileRef
 write "start on " & ((current date) as string) & gEol to theLogFileRef
 write gSeparator to theLogFileRef
@@ -104,19 +104,14 @@ write gSeparator to theLogFileRef
 -- Close the log file
 --
 close access theLogFileRef
---
--- Open the file in BBEdit Lite
---
-tell application "BBEdit Lite 6.1"
-	activate
-	open theLogFile
-end tell
 
 --
 -- BuildProjects
 --
 on BuildProjects(inLogFileRef, inFolder, inTarget, inRebuild)
 	global theProjectCount, theProjectSuccessCount
+	
+	tell application "Finder" to update inFolder
 	
 	try
 		tell application "Finder" to set theProject to ((the first file of inFolder whose name ends with gProjectSuffix) as string)
@@ -127,13 +122,13 @@ on BuildProjects(inLogFileRef, inFolder, inTarget, inRebuild)
 	if theProject is not "" then
 		set theProjectCount to theProjectCount + 1
 		
-		write "building project '" & (theProject as string) & "'" & gEol to inLogFileRef
+		write "building project '" & theProject & "'" & gEol to inLogFileRef
 		
 		tell application "CodeWarrior IDE 4.0.4"
 			--
 			-- Open the project in CodeWarrior
 			--
-			open theProject as string
+			open theProject
 			--
 			-- Change to the requested target
 			--
@@ -181,16 +176,16 @@ on ReportBuildInfo(inLogFileRef, inBuildInfo)
 		tell application "CodeWarrior IDE 4.0.4"
 			set theKind to ((messageKind of theInfo) as string)
 			
-			write "*** " & theKind & " *** " & message of theInfo & gEol to inLogFileRef
+			tell me to write "*** " & theKind & " *** " & message of theInfo & gEol to inLogFileRef
 			try
 				set theFile to ((file of theInfo) as string)
 			on error
 				set theFile to ""
 			end try
 			if theFile is not "" then
-				write theFile & " line " & lineNumber of theInfo & gEol to inLogFileRef
+				tell me to write theFile & " line " & lineNumber of theInfo & gEol to inLogFileRef
 			end if
-			write gEol to inLogFileRef
+			tell me to write gEol to inLogFileRef
 		end tell
 		
 		if MessageKindIsError(theKind) then
