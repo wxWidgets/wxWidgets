@@ -3,7 +3,7 @@
 
 <makefile>
 
-    <requires version="0.1.6"/>
+    <requires version="0.1.7"/>
 
     <!-- bakefile modules we need: -->
     <using module="datafiles"/>
