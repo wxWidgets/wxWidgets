@@ -74,6 +74,32 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
 		     GTK_SHADOW_OUT,
 		     0, 0,
 		     win->m_width, win->m_height );
+
+    if (!win->m_title.IsEmpty() &&
+        ((win->m_windowStyle & wxCAPTION) || 
+	 (win->m_windowStyle & wxTINY_CAPTION_HORIZ) || 
+	 (win->m_windowStyle & wxTINY_CAPTION_VERT)))
+    {
+        GdkGC *gc = gdk_gc_new( widget->window );
+	GdkFont *font = wxSMALL_FONT->GetInternalFont(1.0);
+	int x = 2;
+	if (win->m_windowStyle & wxSYSTEM_MENU) x = 18;
+	
+        gdk_gc_set_foreground( gc, &widget->style->bg[GTK_STATE_SELECTED] );
+	gdk_draw_rectangle( widget->window, gc, TRUE, 
+	                    x, 
+	                    3, 
+			    win->m_width - 4 - x,
+			    font->ascent + font->descent+1 );
+			    
+        gdk_gc_set_foreground( gc, &widget->style->white );
+        gdk_draw_string( widget->window, font, gc, 
+	                 x+2, 
+			 3+font->ascent, 
+			 win->m_title.mb_str() );
+	
+        gdk_gc_unref( gc );
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -92,6 +118,32 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
 		     GTK_SHADOW_OUT,
 		     0, 0,
 		     win->m_width, win->m_height );
+		     
+    if (!win->m_title.IsEmpty() &&
+        ((win->m_windowStyle & wxCAPTION) || 
+	 (win->m_windowStyle & wxTINY_CAPTION_HORIZ) || 
+	 (win->m_windowStyle & wxTINY_CAPTION_VERT)))
+    {
+        GdkGC *gc = gdk_gc_new( widget->window );
+	GdkFont *font = wxSMALL_FONT->GetInternalFont(1.0);
+	int x = 2;
+	if (win->m_windowStyle & wxSYSTEM_MENU) x = 17;
+	
+        gdk_gc_set_foreground( gc, &widget->style->bg[GTK_STATE_SELECTED] );
+	gdk_draw_rectangle( widget->window, gc, TRUE, 
+	                    x, 
+	                    3, 
+			    win->m_width - 4 - x,
+			    font->ascent + font->descent+1 );
+			    
+        gdk_gc_set_foreground( gc, &widget->style->white );
+        gdk_draw_string( widget->window, font, gc, 
+	                 x+2, 
+			 3+font->ascent, 
+			 win->m_title.mb_str() );
+	
+        gdk_gc_unref( gc );
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -219,9 +271,11 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
       long style, const wxString &name )
 {
     style = style | wxSIMPLE_BORDER;
-    
+
+    if ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT))
+        m_miniTitle = 13;
+	
     m_miniEdge = 3;
-    m_miniTitle = 13;
     m_isDragging = FALSE;
     m_oldX = -1;
     m_oldY = -1;
@@ -230,15 +284,19 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     
     wxFrame::Create( parent, id, title, pos, size, style, name );
 
-    GtkWidget *close_button = gtk_button_new_with_label( "x" );
+    if ((style & wxSYSTEM_MENU) &&
+        ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT)))
+    {
+        GtkWidget *close_button = gtk_button_new_with_label( "x" );
     
-    gtk_myfixed_put( GTK_MYFIXED(m_mainWidget), close_button, 4, 4 );
-    gtk_widget_set_usize( close_button, 12, 11 );
+        gtk_myfixed_put( GTK_MYFIXED(m_mainWidget), close_button, 4, 4 );
+        gtk_widget_set_usize( close_button, 12, 11 );
     
-    gtk_widget_show( close_button );
+        gtk_widget_show( close_button );
     
-    gtk_signal_connect( GTK_OBJECT(close_button), "clicked",
-      GTK_SIGNAL_FUNC(gtk_button_clicked_callback), (gpointer*)this );
+        gtk_signal_connect( GTK_OBJECT(close_button), "clicked",
+          GTK_SIGNAL_FUNC(gtk_button_clicked_callback), (gpointer*)this );
+    }
     
     /* these are called when the borders are drawn */
     gtk_signal_connect( GTK_OBJECT(m_mainWidget), "expose_event",

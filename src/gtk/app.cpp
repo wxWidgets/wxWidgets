@@ -193,9 +193,10 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) )
        emptied */
     g_isIdle = TRUE;
     
-/*  wxMutexGuiLeave();
-    wxUsleep(10);
-    wxMutexGuiEnter(); */
+    /* wake up other threads */
+    wxMutexGuiLeave();
+    wxUsleep(0);
+    wxMutexGuiEnter();
 
     return TRUE;
 }
