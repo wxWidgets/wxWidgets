@@ -20,7 +20,7 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_MSGDLG && defined(__WXGTK20__)
+#if wxUSE_MSGDLG && defined(__WXGTK20__) && !defined(__WXGPE__)
 
 #include "wx/gtk/private.h"
 #include <gtk/gtk.h>

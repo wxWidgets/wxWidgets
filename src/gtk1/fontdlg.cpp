@@ -18,6 +18,8 @@
 
 #if wxUSE_FONTDLG
 
+#ifndef __WXGPE__
+
 #include "wx/fontutil.h"
 #include "wx/fontdlg.h"
 #include "wx/utils.h"
@@ -189,3 +191,4 @@ void wxFontDialog::SetChosenFont(const char *fontname)
 
 #endif // wxUSE_FONTDLG
 
+#endif // GPE
