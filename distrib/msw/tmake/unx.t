@@ -155,7 +155,7 @@ target_triplet = @target@
 
 EXTRA_VPATH = @EXTRA_VPATH@
 
-VPATH = .:${srcdir}:${srcdir}/src/common:${srcdir}/src/generic:${srcdir}/src/html:${EXTRA_VPATH}
+VPATH = .:${srcdir}:${srcdir}/../common:${srcdir}/../generic:${srcdir}/../html:${EXTRA_VPATH}
 
 ########################### Programs #################################
 

@@ -1134,8 +1134,11 @@ void wxAllocNearestColor(Display *d,Colormap cmp,XColor *xc)
     xc -> green = color_defs[pixel].green;
     xc -> blue = color_defs[pixel].blue;
     xc -> flags = DoRed | DoGreen | DoBlue;
+    
+/*  FIXME, TODO
     if (!XAllocColor(d,cmp,xc))
         cout << "wxAllocNearestColor : Warning : Cannot find nearest color !\n";
+*/
 
     delete[] color_defs;
 }

@@ -328,9 +328,7 @@ wxPropertyValue *wxPropertyValue::NewCopy(void) const
      return new wxPropertyValue(m_value.stringPtr);
 
    case wxPropertyValueNull:
-#ifdef __X__
-    cerr << "Should never get here!\n";
-#endif
+    wxFAIL_MSG( _T("Should never get here!\n" ) );
     break;
   }
   return NULL;
@@ -395,9 +393,7 @@ void wxPropertyValue::Copy(wxPropertyValue& copyFrom)
       return;
     }
    case wxPropertyValueNull:
-#ifdef __X__
-    cerr << "Should never get here!\n";
-#endif
+    wxFAIL_MSG( _T("Should never get here!\n" ) );
     break;
   }
 }

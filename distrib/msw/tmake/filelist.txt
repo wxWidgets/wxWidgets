@@ -358,7 +358,6 @@ region.cpp	X
 scrolbar.cpp	X
 settings.cpp	X
 slider.cpp	X
-spinbutt.cpp	X
 statbmp.cpp	X
 statbox.cpp	X
 stattext.cpp	X
