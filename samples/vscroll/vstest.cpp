@@ -89,7 +89,7 @@ private:
 class VScrollWindow : public wxVScrolledWindow
 {
 public:
-    VScrollWindow(wxFrame *frame) : wxVScrolledWindow(frame, -1)
+    VScrollWindow(wxFrame *frame) : wxVScrolledWindow(frame, wxID_ANY)
     {
         m_frame = frame;
 
@@ -216,10 +216,10 @@ bool VScrollApp::OnInit()
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
-    frame->Show(TRUE);
+    frame->Show(true);
 
     // ok
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -229,7 +229,7 @@ bool VScrollApp::OnInit()
 // frame constructor
 VScrollFrame::VScrollFrame()
             : wxFrame(NULL,
-                      -1,
+                      wxID_ANY,
                       _T("VScroll wxWidgets Sample"),
                       wxDefaultPosition,
                       wxSize(400, 350))
@@ -272,8 +272,8 @@ VScrollFrame::VScrollFrame()
 
 void VScrollFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    // TRUE is to force the frame to close
-    Close(TRUE);
+    // true is to force the frame to close
+    Close(true);
 }
 
 void VScrollFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
