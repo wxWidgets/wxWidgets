@@ -22,6 +22,7 @@ WXDIR=../..
 # **** Build the main docs using tex2rtf
 echo "****" main "****"
 cp $WXDIR/docs/latex/wx/*.gif $DEST/wx
+cp $WXDIR/docs/latex/wx/*.css $DEST/wx
 $WXDIR/utils/tex2rtf/src/tex2rtf $WXDIR/docs/latex/wx/manual.tex $DEST/wx/wx.html -twice -html -macros $WXDIR/docs/latex/wx/tex2rtf.ini
 cp $DEST/wx/wx_contents.html $DEST/wx/index.html
 cp $DEST/wx/* $WXDIR/docs/html/wx
