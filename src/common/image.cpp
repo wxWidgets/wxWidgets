@@ -1108,27 +1108,27 @@ wxBitmap wxImage::ConvertToBitmap() const
     {
       if( (*(ptdata++)!=r) | (*(ptdata++)!=g) | (*(ptdata++)!=b) )
       {
-        *(ptbits++) = zero;
-        *(ptbits++) = zero;
-        *(ptbits++) = zero;
+        *(ptbits++) = one;
+        *(ptbits++) = one;
+        *(ptbits++) = one;
       }
       else
       {
-        *(ptbits++) = one;
-        *(ptbits++) = one;
-        *(ptbits++) = one;
+        *(ptbits++) = zero;
+        *(ptbits++) = zero;
+        *(ptbits++) = zero;
       }
     }
     hbitmap = ::CreateBitmap( (WORD)width, (WORD)height, 1, 1, NULL );
     ::SetDIBits( hdc, hbitmap, 0, (WORD)height, lpBits, lpDIBh, DIB_RGB_COLORS);
-    wxMask bmpmask;
-    bmpmask.SetMaskBitmap( (WXHBITMAP) hbitmap );
-    bitmap.SetMask( &bmpmask );
+    wxMask *mask = new wxMask();
+    mask->SetMaskBitmap( (WXHBITMAP) hbitmap );
+    bitmap.SetMask( mask );
 
 /* The following can also be used but is slow to run
     wxColour colour( GetMaskRed(), GetMaskGreen(), GetMaskBlue());
-    wxMask bmpmask( bitmap, colour );
-    bitmap.SetMask( &bmpmask );
+    wxMask *mask = new wxMask( bitmap, colour );
+    bitmap.SetMask( mask );
 */
   }
 
