@@ -99,12 +99,7 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
 {
     // set colours
     SetForegroundColour(*wxBLACK);
-#if !defined(__WXPM__)
-    SetBackgroundColour(wxColour(0xc3ffff));
-#else
-    // What is 0xc3ffff, try some legable documentation for those of us who don't memorize hex codes??
-    SetBackgroundColour(wxColour(*wxWHITE));
-#endif
+    SetBackgroundColour(wxColour(255, 255, 231));
     // set position and size
     int x, y;
     wxGetMousePosition(&x, &y);
@@ -159,12 +154,7 @@ wxTipWindowView::wxTipWindowView(wxWindow *parent)
 {
     // set colours
     SetForegroundColour(*wxBLACK);
-#if !defined(__WXPM__)
-    SetBackgroundColour(wxColour(0xc3ffff));
-#else
-    // What is 0xc3ffff, try some legable documentation for those of us who don't memorize hex codes??
-    SetBackgroundColour(wxColour(*wxWHITE));
-#endif
+    SetBackgroundColour(wxColour(255, 255, 231));
     m_creationTime = wxGetLocalTime();
 }
 

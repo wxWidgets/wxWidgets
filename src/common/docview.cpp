@@ -1741,7 +1741,7 @@ void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
             // about it
             m_docManager->RemoveFileFromHistory(n);
 
-            wxLogError(_("The file '%s' doesn't exist and couldn't be opened.\nIt has been also removed from the MRU files list."),
+            wxLogError(_("The file '%s' doesn't exist and couldn't be opened.\nIt has been removed from the most recently used files list."),
                        filename.c_str());
         }
     }
