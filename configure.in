@@ -1445,7 +1445,11 @@ dnl ----------------------------------------------------------------
 dnl search for toolkit (widget sets)
 dnl ----------------------------------------------------------------
 
+AFMINSTALL=
+
 if test "$wxUSE_GUI" = "yes"; then
+
+USE_GUI=1
 
 TOOLKIT=
 TOOLKIT_INCLUDE=
@@ -1517,6 +1521,8 @@ dnl    )
     TOOLKIT_INCLUDE="$GTK_CFLAGS"
     GUI_TK_LIBRARY="$GTK_LIBS -lgthread"
     TOOLKIT=GTK
+
+    AFMINSTALL=afminstall
 
     GUIOBJS="\$(GTK_GUIOBJS)"
     GUIHEADERS="\$(GTK_HEADERS)"
@@ -1597,6 +1603,8 @@ if test "$wxUSE_MOTIF" = 1; then
 
     GUI_TK_LIBRARY="$X_LIBS"
     TOOLKIT_INCLUDE="$X_CFLAGS"
+
+    AFMINSTALL=afminstall
 
     dnl manual check for X11 headers/libs
     dnl
@@ -1733,6 +1741,8 @@ WX_LIBRARY="wx_${TOOLKIT_DIR}"
     ALL_HEADERS="\$(GUIHEADERS) \$(HTML_HEADERS) \$(UNIX_HEADERS) \$(PROTOCOL_HEADERS) \$(GENERIC_HEADERS) \$(WX_HEADERS)"
 else
     dnl leave all TOOLKIT_XXX vars empty
+
+    USE_GUI=0
 
     dnl the sources, their dependenices and the headers
     ALL_OBJECTS="\$(BASE_OBJS)"
@@ -3223,6 +3233,8 @@ dnl debugging options
 AC_SUBST(WXDEBUG_DEFINE)
 
 dnl toolkit options
+AC_SUBST(USE_GUI)
+AC_SUBST(AFMINSTALL)
 AC_SUBST(TOOLKIT)
 AC_SUBST(TOOLKIT_DEF)
 AC_SUBST(TOOLKIT_DIR)

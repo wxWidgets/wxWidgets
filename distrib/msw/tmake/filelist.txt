@@ -521,7 +521,7 @@ app.h	W	B
 bitmap.h	W
 bmpbuttn.h	W
 brush.h	W
-buffer.h	W
+buffer.h	W	B
 busyinfo.h	W
 button.h	W
 calctrl.h	W
@@ -531,7 +531,7 @@ checklst.h	W
 choicdlg.h	W
 choice.h	W
 clipbrd.h	W
-cmdline.cpp	W	B
+cmdline.h	W	B
 cmndata.h	W
 colordlg.h	W
 colour.h	W
@@ -607,7 +607,7 @@ imagtiff.h	W
 imagjpeg.h	W
 imaglist.h	W
 intl.h	W	B
-ioswrap.h	W
+ioswrap.h	W	B
 ipcbase.h	W
 joystick.h	W
 layout.h	W
@@ -619,7 +619,7 @@ log.h	W	B
 longlong.h	W	B
 matrix.h	W
 mdi.h	W
-memory.h	W
+memory.h	W	B
 menu.h	W
 menuitem.h	W
 metafile.h	W
@@ -657,7 +657,7 @@ scrolbar.h	W
 scrolwin.h	W
 serbase.h	W
 settings.h	W
-setup.h	W	B
+setup.h	W
 sizer.h	W
 slider.h	W
 socket.h	W

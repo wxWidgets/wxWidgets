@@ -305,6 +305,8 @@ host_triplet = @host@
 target_alias = @target_alias@
 target_triplet = @target@
 
+USE_GUI=@USE_GUI@
+
 ############################# Dirs #################################
 
 WXDIR = $(top_srcdir)
@@ -675,6 +677,14 @@ lexer.c:	$(COMMDIR)/lexer.l
 
 -include $(DEPFILES)
 
+afminstall:
+	$(INSTALL) -d $(datadir)
+	$(INSTALL) -d $(datadir)/wx
+	$(INSTALL) -d $(datadir)/wx/afm
+	$(INSTALL) -d $(datadir)/wx/gs_afm
+	$(INSTALL_DATA) $(top_srcdir)/misc/afm/*.afm $(datadir)/wx/afm
+	$(INSTALL_DATA) $(top_srcdir)/misc/gs_afm/*.afm $(datadir)/wx/gs_afm
+	
 preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx-config
 	@echo " "
 	@echo " Installing wxWindows..."
@@ -683,7 +693,6 @@ preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx-config
 	$(INSTALL) -d $(prefix)
 	$(INSTALL) -d $(bindir)
 	$(INSTALL) -d $(libdir)
-	$(INSTALL) -d $(datadir)
 
 	$(INSTALL_SCRIPT) $(top_builddir)/wx-config $(bindir)/wx-config
 	$(INSTALL_PROGRAM) $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(libdir)/@WX_TARGET_LIBRARY@
@@ -694,20 +703,11 @@ preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx-config
 	$(INSTALL) -d $(libdir)/wx/include/wx/@TOOLKIT_DIR@
 	$(INSTALL_DATA) $(top_builddir)/include/wx/@TOOLKIT_DIR@/setup.h $(libdir)/wx/include/wx/@TOOLKIT_DIR@/setup.h
 	
-	$(INSTALL) -d $(datadir)/wx
-	$(INSTALL) -d $(datadir)/wx/afm
-	$(INSTALL) -d $(datadir)/wx/gs_afm
-	$(INSTALL_DATA) $(top_srcdir)/misc/afm/*.afm $(datadir)/wx/afm
-	$(INSTALL_DATA) $(top_srcdir)/misc/gs_afm/*.afm $(datadir)/wx/gs_afm
-	
 	$(INSTALL) -d $(includedir)/wx
-	$(INSTALL) -d $(includedir)/wx/msw
-	$(INSTALL) -d $(includedir)/wx/gtk
-	$(INSTALL) -d $(includedir)/wx/motif
-	$(INSTALL) -d $(includedir)/wx/html
-	$(INSTALL) -d $(includedir)/wx/protocol
-	$(INSTALL) -d $(includedir)/wx/unix
-	$(INSTALL) -d $(includedir)/wx/generic
+    @if test "$USE_GUI" = 1; then $(INSTALL) -d $(includedir)/wx/html; fi
+	@if test "$USE_GUI" = 1; then $(INSTALL) -d $(includedir)/wx/protocol; fi
+	@if test "$USE_GUI" = 1; then $(INSTALL) -d $(includedir)/wx/unix; fi
+	@if test "$USE_GUI" = 1; then $(INSTALL) -d $(includedir)/wx/generic; fi
 	@list='$(HEADERS)'; for p in $$list; do \
 	  $(INSTALL_DATA) $(top_srcdir)/include/wx/$$p $(includedir)/wx/$$p; \
 	  echo "$(INSTALL_DATA) $(top_srcdir)/include/wx/$$p $(includedir)/wx/$$p"; \
@@ -725,7 +725,7 @@ write_message:
 	@echo " Read the wxWindows Licence on licencing conditions."
 	@echo " "
 
-install: preinstall @WX_ALL_INSTALLED@ write_message
+install: preinstall @AFMINSTALL@ @WX_ALL_INSTALLED@ write_message
 
 uninstall:
 	@echo " "
