@@ -85,6 +85,17 @@ public:
   virtual void Cut();
   virtual void Paste();
   
+  virtual bool CanCopy() const;
+  virtual bool CanCut() const;
+  virtual bool CanPaste() const;
+
+  // Undo/redo
+  virtual void Undo();
+  virtual void Redo();
+
+  virtual bool CanUndo() const;
+  virtual bool CanRedo() const;
+
   virtual void SetInsertionPoint(long pos);
   virtual void SetInsertionPointEnd();
   virtual long GetInsertionPoint() const ;
@@ -93,7 +104,12 @@ public:
   virtual void Remove(long from, long to);
   virtual void SetSelection(long from, long to);
   virtual void SetEditable(bool editable);
-  
+
+  // If the return values from and to are the same, there is no
+  // selection.
+  virtual void GetSelection(long* from, long* to) const;
+  virtual bool IsEditable() const ;
+
   // streambuf implementation
 #ifndef NO_TEXT_WINDOW_STREAM
   int overflow(int i);

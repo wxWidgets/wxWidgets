@@ -100,6 +100,22 @@ class wxTextCtrl: public wxControl
     void Paste();
     void Clear();
 
+    virtual bool CanCopy() const;
+    virtual bool CanCut() const;
+    virtual bool CanPaste() const;
+
+    // Undo/redo
+    virtual void Undo();
+    virtual void Redo();
+
+    virtual bool CanUndo() const;
+    virtual bool CanRedo() const;
+
+    // If the return values from and to are the same, there is no
+    // selection.
+    virtual void GetSelection(long* from, long* to) const;
+    virtual bool IsEditable() const ;
+
     void OnChar( wxKeyEvent &event );
 
 #ifndef NO_TEXT_WINDOW_STREAM

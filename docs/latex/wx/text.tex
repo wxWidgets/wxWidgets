@@ -122,6 +122,59 @@ apply.
 
 Destructor, destroying the text control.
 
+\membersection{wxTextCtrl::AppendText}\label{wxtextctrlappendtext}
+
+\func{void}{AppendText}{\param{const wxString\& }{ text}}
+
+Appends the text to the end of the text control.
+
+\wxheading{Parameters}
+
+\docparam{text}{Text to write to the text control.}
+
+\wxheading{Remarks}
+
+After the text is appended, the insertion point will be at the end of the text control. If this behaviour is not desired,
+the programmer should use \helpref{GetInsertionPoint}{wxtextctrlgetinsertionpoint} and \helpref{SetInsertionPoint}{wxtextctrlsetinsertionpoint}.
+
+\wxheading{See also}
+
+\helpref{wxTextCtrl::WriteText}{wxtextctrlwritetext}
+
+\membersection{wxTextCtrl::CanCopy}\label{wxtextctrlcancopy}
+
+\func{virtual bool}{CanCopy}{\void}
+
+Returns TRUE if the selection can be copied to the clipboard.
+
+\membersection{wxTextCtrl::CanCut}\label{wxtextctrlcancut}
+
+\func{virtual bool}{CanCut}{\void}
+
+Returns TRUE if the selection can be cut to the clipboard.
+
+\membersection{wxTextCtrl::CanPaste}\label{wxtextctrlcanpaste}
+
+\func{virtual bool}{CanPaste}{\void}
+
+Returns TRUE if the contents of the clipboard can be pasted into the
+text control. On some platforms (Motif, GTK) this is an approximation
+and returns TRUE if the control is editable, FALSE otherwise.
+
+\membersection{wxTextCtrl::CanRedo}\label{wxtextctrlcanredo}
+
+\func{virtual bool}{CanRedo}{\void}
+
+Returns TRUE if there is a redo facility available and the last operation
+can be redone.
+
+\membersection{wxTextCtrl::CanUndo}\label{wxtextctrlcanundo}
+
+\func{virtual bool}{CanUndo}{\void}
+
+Returns TRUE if there is an undo facility available and the last operation
+can be undone.
+
 \membersection{wxTextCtrl::Clear}\label{wxtextctrlclear}
 
 \func{virtual void}{Clear}{\void}
@@ -232,6 +285,19 @@ calculated by actually counting newline characters in the buffer. You
 may wish to avoid using functions that work with line numbers if you are
 working with controls that contain large amounts of text.
 
+\membersection{wxTextCtrl::GetSelection}\label{wxtextctrlgetselection}
+
+\func{virtual void}{GetSelection}{\param{long*}{ from}, \param{long*}{ to}}
+
+Gets the current selection span. If the returned values are equal, there was
+no selection.
+
+\wxheading{Parameters}
+
+\docparam{from}{The returned first position.}
+
+\docparam{to}{The returned last position.}
+
 \membersection{wxTextCtrl::GetValue}\label{wxtextctrlgetvalue}
 
 \constfunc{wxString}{GetValue}{\void}
@@ -338,6 +404,13 @@ parameter).
 y values, so (x,y) = PositionToXY() is equivalent to the call described
 above.}
 
+\membersection{wxTextCtrl::Redo}\label{wxtextctrlredo}
+
+\func{virtual void}{Redo}{\void}
+
+If there is a redo facility and the last operation can be redone, redoes the last operation. Does nothing
+if there is no redo facility.
+
 \membersection{wxTextCtrl::Remove}\label{wxtextctrlremove}
 
 \func{virtual void}{Remove}{\param{long}{ from}, \param{long}{ to}}
@@ -440,6 +513,13 @@ Makes the line containing the given position visible.
 
 \docparam{pos}{The position that should be visible.}
 
+\membersection{wxTextCtrl::Undo}\label{wxtextctrlundo}
+
+\func{virtual void}{Undo}{\void}
+
+If there is an undo facility and the last operation can be undone, undoes the last operation. Does nothing
+if there is no undo facility.
+
 \membersection{wxTextCtrl::WriteText}\label{wxtextctrlwritetext}
 
 \func{void}{WriteText}{\param{const wxString\& }{ text}}
@@ -457,25 +537,6 @@ are the only control characters allowed, and they will cause appropriate
 line breaks.  See \helpref{wxTextCtrl::\cinsert}{wxtextctrlinsert} and \helpref{wxTextCtrl::AppendText}{wxtextctrlappendtext} for more convenient ways of writing to the window.
 
 After the write operation, the insertion point will be at the end of the inserted text, so subsequent write operations will be appended. To append text after the user may have interacted with the control, call \helpref{wxTextCtrl::SetInsertionPointEnd}{wxtextctrlsetinsertionpointend} before writing.
-
-\membersection{wxTextCtrl::AppendText}\label{wxtextctrlappendtext}
-
-\func{void}{AppendText}{\param{const wxString\& }{ text}}
-
-Appends the text to the end of the text control.
-
-\wxheading{Parameters}
-
-\docparam{text}{Text to write to the text control.}
-
-\wxheading{Remarks}
-
-After the text is appended, the insertion point will be at the end of the text control. If this behaviour is not desired,
-the programmer should use \helpref{GetInsertionPoint}{wxtextctrlgetinsertionpoint} and \helpref{SetInsertionPoint}{wxtextctrlsetinsertionpoint}.
-
-\wxheading{See also}
-
-\helpref{wxTextCtrl::WriteText}{wxtextctrlwritetext}
 
 \membersection{wxTextCtrl::XYToPosition}\label{wxtextctrlxytoposition}
 

@@ -128,6 +128,9 @@ public:
     // set the padding between tabs (in pixels)
   void SetPadding(const wxSize& padding);
 
+    // Sets the size of the tabs (assumes all tabs are the same size)
+  void SetTabSize(const wxSize& sz);
+
   // operations
   // ----------
     // remove one page from the notebook

@@ -509,6 +509,11 @@ void wxNotebook::SetPadding( const wxSize &WXUNUSED(padding) )
     wxFAIL_MSG( "wxNotebook::SetPadding not implemented" );
 }
 
+void wxNotebook::SetTabSize(const wxSize& sz)
+{
+    wxFAIL_MSG( "wxNotebook::SetTabSize not implemented" );
+}
+
 bool wxNotebook::DeleteAllPages()
 {
     wxCHECK_MSG( m_widget != NULL, FALSE, "invalid notebook" );

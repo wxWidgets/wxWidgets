@@ -601,6 +601,11 @@ wxRect wxNotebook::GetAvailableClientSize()
     return rect;
 }
 
+void wxNotebook::SetTabSize(const wxSize& sz)
+{
+    // TODO
+}
+
 /*
  * wxNotebookTabView
  */

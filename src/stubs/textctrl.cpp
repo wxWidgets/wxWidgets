@@ -267,10 +267,65 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
     return wxString("");
 }
 
-/*
- * Text item
- */
- 
+bool wxTextCtrl::CanCopy() const
+{
+    // Can copy if there's a selection
+    long from, to;
+    GetSelection(& from, & to);
+    return (from != to) ;
+}
+
+bool wxTextCtrl::CanCut() const
+{
+    // Can cut if there's a selection
+    long from, to;
+    GetSelection(& from, & to);
+    return (from != to) ;
+}
+
+bool wxTextCtrl::CanPaste() const
+{
+    return IsEditable() ;
+}
+
+// Undo/redo
+void wxTextCtrl::Undo()
+{
+    // TODO
+}
+
+void wxTextCtrl::Redo()
+{
+    // TODO
+}
+
+bool wxTextCtrl::CanUndo() const
+{
+    // TODO
+    return FALSE;
+}
+
+bool wxTextCtrl::CanRedo() const
+{
+    // TODO
+    return FALSE;
+}
+
+// If the return values from and to are the same, there is no
+// selection.
+void wxTextCtrl::GetSelection(long* from, long* to) const
+{
+    // TODO
+    *from = 0;
+    *to = 0;
+}
+
+bool wxTextCtrl::IsEditable() const
+{
+    // TODO
+    return FALSE;
+}
+
 void wxTextCtrl::Command(wxCommandEvent & event)
 {
     SetValue (event.GetString());

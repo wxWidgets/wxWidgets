@@ -375,3 +375,8 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
     m_nSelection = nSel;
 }
 
+void wxNotebook::SetTabSize(const wxSize& sz)
+{
+    // TODO
+}
+

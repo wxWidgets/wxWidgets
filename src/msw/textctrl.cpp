@@ -729,9 +729,87 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
   return wxString(wxBuffer);
 }
 
-/*
- * Text item
- */
+bool wxTextCtrl::CanCopy() const
+{
+    // Can copy if there's a selection
+    long from, to;
+    GetSelection(& from, & to);
+    return (from != to) ;
+}
+
+bool wxTextCtrl::CanCut() const
+{
+    // Can cut if there's a selection
+    long from, to;
+    GetSelection(& from, & to);
+    return (from != to) ;
+}
+
+bool wxTextCtrl::CanPaste() const
+{
+    int dataFormat = 0; // 0 == any format
+    return (::SendMessage( (HWND) GetHWND(), EM_CANPASTE, (WPARAM) (UINT) dataFormat, 0) != 0);
+}
+
+// Undo/redo
+void wxTextCtrl::Undo()
+{
+    if (CanUndo())
+    {
+        ::SendMessage((HWND) GetHWND(), EM_UNDO, 0, 0);
+    }
+}
+
+void wxTextCtrl::Redo()
+{
+    if (CanRedo())
+    {
+        // Same as Undo, since Undo undoes the undo, i.e. a redo.
+        ::SendMessage((HWND) GetHWND(), EM_UNDO, 0, 0);
+    }
+}
+
+bool wxTextCtrl::CanUndo() const
+{
+    return (::SendMessage((HWND) GetHWND(), EM_CANUNDO, 0, 0) != 0);
+}
+
+bool wxTextCtrl::CanRedo() const
+{
+    return (::SendMessage((HWND) GetHWND(), EM_CANUNDO, 0, 0) != 0);
+}
+
+// If the return values from and to are the same, there is no
+// selection.
+void wxTextCtrl::GetSelection(long* from, long* to) const
+{
+#if wxUSE_RICHEDIT
+    if (m_isRich)
+    {
+        CHARRANGE charRange;
+        ::SendMessage((HWND) GetHWND(), EM_EXGETSEL, 0, (LPARAM) (CHARRANGE*) & charRange);
+
+        *from = charRange.cpMin;
+        *to = charRange.cpMax;
+
+        return;
+    }
+#endif
+    DWORD dwStart, dwEnd;
+    WPARAM wParam = (WPARAM) (DWORD*) dwStart; // receives starting position
+    LPARAM lParam = (LPARAM) (DWORD*) dwEnd;   // receives ending position
+
+    ::SendMessage((HWND) GetHWND(), EM_GETSEL, wParam, lParam);
+
+    *from = dwStart;
+    *to = dwEnd;
+}
+
+bool wxTextCtrl::IsEditable() const
+{
+    long style = ::GetWindowLong((HWND) GetHWND(), GWL_STYLE);
+    return ((style & ES_READONLY) == 0);
+}
 
 void wxTextCtrl::Command(wxCommandEvent & event)
 {

@@ -245,6 +245,67 @@ void wxTextCtrl::Paste()
     XmTextPaste((Widget) m_mainWidget);
 }
 
+bool wxTextCtrl::CanCopy() const
+{
+    // Can copy if there's a selection
+    long from, to;
+    GetSelection(& from, & to);
+    return (from != to) ;
+}
+
+bool wxTextCtrl::CanCut() const
+{
+    // Can cut if there's a selection
+    long from, to;
+    GetSelection(& from, & to);
+    return (from != to) ;
+}
+
+bool wxTextCtrl::CanPaste() const
+{
+    return IsEditable() ;
+}
+
+// Undo/redo
+void wxTextCtrl::Undo()
+{
+    // Not possible in Motif
+}
+
+void wxTextCtrl::Redo()
+{
+    // Not possible in Motif
+}
+
+bool wxTextCtrl::CanUndo() const
+{
+    // No Undo in Motif
+    return FALSE;
+}
+
+bool wxTextCtrl::CanRedo() const
+{
+    // No Redo in Motif
+    return FALSE;
+}
+
+// If the return values from and to are the same, there is no
+// selection.
+void wxTextCtrl::GetSelection(long* from, long* to) const
+{
+    XmTextPosition left, right;
+
+    XmTextGetSelectionPosition((Widget) m_mainWidget, & left, & right);
+
+    *from = (long) left;
+    *to = (long) right;
+}
+
+bool wxTextCtrl::IsEditable() const
+{
+    return (XmTextGetEditable((Widget) m_mainWidget) != 0);
+}
+
 void wxTextCtrl::SetEditable(bool editable)
 {
     XmTextSetEditable((Widget) m_mainWidget, (Boolean) editable);

@@ -703,6 +703,71 @@ void wxTextCtrl::Paste()
 #endif
 }
 
+bool wxTextCtrl::CanCopy() const
+{
+    // Can copy if there's a selection
+    long from, to;
+    GetSelection(& from, & to);
+    return (from != to) ;
+}
+
+bool wxTextCtrl::CanCut() const
+{
+    // Can cut if there's a selection
+    long from, to;
+    GetSelection(& from, & to);
+    return (from != to) ;
+}
+
+bool wxTextCtrl::CanPaste() const
+{
+    return IsEditable() ;
+}
+
+// Undo/redo
+void wxTextCtrl::Undo()
+{
+    // TODO
+    wxFAIL_MSG( "wxTextCtrl::Undo not implemented" );
+}
+
+void wxTextCtrl::Redo()
+{
+    // TODO
+    wxFAIL_MSG( "wxTextCtrl::Redo not implemented" );
+}
+
+bool wxTextCtrl::CanUndo() const
+{
+    // TODO
+    wxFAIL_MSG( "wxTextCtrl::CanUndo not implemented" );
+    return FALSE;
+}
+
+bool wxTextCtrl::CanRedo() const
+{
+    // TODO
+    wxFAIL_MSG( "wxTextCtrl::CanRedo not implemented" );
+    return FALSE;
+}
+
+// If the return values from and to are the same, there is no
+// selection.
+void wxTextCtrl::GetSelection(long* from, long* to) const
+{
+    // TODO
+    *from = 0;
+    *to = 0;
+    wxFAIL_MSG( "wxTextCtrl::GetSelection not implemented" );
+}
+
+bool wxTextCtrl::IsEditable() const
+{
+    // TODO
+    wxFAIL_MSG( "wxTextCtrl::IsEditable not implemented" );
+    return FALSE;
+}
+
 void wxTextCtrl::Clear()
 {
     SetValue( "" );
