@@ -320,9 +320,8 @@ public:                                                               \
 // common declaration used by both _WX_DEFINE_TYPEARRAY and
 // _WX_DEFINE_TYPEARRAY_PTR
 #define  _WX_DEFINE_TYPEARRAY_HELPER(T, name, base, classexp, ptrop)  \
-wxCOMPILE_TIME_ASSERT2(sizeof(T) <= sizeof(base::base_type),          \
-                       TypeTooBigToBeStoredIn##base,                  \
-                       name);                                         \
+wxCOMPILE_TIME_ASSERT(sizeof(T) <= sizeof(base::base_type),           \
+                       TypeTooBigToBeStoredIn##base);                 \
 typedef int (CMPFUNC_CONV *CMPFUNC##T)(T *pItem1, T *pItem2);         \
 classexp name : public base                                           \
 {                                                                     \
@@ -496,9 +495,8 @@ public:                                                               \
 // ----------------------------------------------------------------------------
 
 #define _WX_DEFINE_SORTED_TYPEARRAY_2(T, name, base, defcomp, classexp, comptype)\
-wxCOMPILE_TIME_ASSERT2(sizeof(T) <= sizeof(base::base_type),          \
-                       TypeTooBigToBeStoredInSorted##base,            \
-                       name);                                         \
+wxCOMPILE_TIME_ASSERT(sizeof(T) <= sizeof(base::base_type),           \
+                      TypeTooBigToBeStoredInSorted##base);            \
 classexp name : public base                                           \
 {                                                                     \
   typedef comptype SCMPFUNC;                                          \
