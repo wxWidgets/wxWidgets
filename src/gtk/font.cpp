@@ -86,11 +86,6 @@ public:
 #endif // GTK 2.0/1.x
     }
 
-#ifndef __WXGTK20__
-    // reinitilize the font with the gived XFLD
-    void ReInit(const wxString& fontname);
-#endif
-
     // setters: all of them also take care to modify m_nativeFontInfo if we
     // have it so as to not lose the information not carried by our fields
     void SetPointSize(int pointSize);
@@ -446,24 +441,6 @@ wxFontRefData::wxFontRefData(const wxString& fontname)
 
     InitFromNative();
 }
-
-#ifndef __WXGTK20__
-
-void wxFontRefData::ReInit(const wxString& fontname)
-{
-    // calling InitFromNative() resets m_underlined flag as X11 fonts are never
-    // underlined, but we don't want to lose its old value here so save it ...
-    bool underlined = m_underlined;
-
-    m_nativeFontInfo.SetXFontName(fontname);
-
-    InitFromNative();
-
-    // ... and restore it now
-    m_underlined = underlined;
-}
-
-#endif // !__WXGTK20__
 
 void wxFontRefData::ClearGdkFonts()
 {
@@ -978,10 +955,6 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
                                                M_FONTDATA->m_faceName,
                                                M_FONTDATA->m_encoding,
                                                &xfontname);
-                if ( font )
-                {
-                    M_FONTDATA->ReInit(xfontname);
-                }
             }
         }
 
