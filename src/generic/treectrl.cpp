@@ -273,7 +273,7 @@ wxTreeEvent::wxTreeEvent( wxEventType commandType, int id )
 
 wxGenericTreeItem::wxGenericTreeItem(wxGenericTreeItem *parent,
                                      const wxString& text,
-                                     wxDC& dc,
+                                     wxDC& WXUNUSED(dc),
                                      int image, int selImage,
                                      wxTreeItemData *data)
                  : m_text(text)

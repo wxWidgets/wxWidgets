@@ -164,7 +164,8 @@ wxToolBarToolBase *wxToolBarSimple::AddTool(int id,
                                   helpString1, helpString2);
 }
 
-bool wxToolBarSimple::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
+bool wxToolBarSimple::DoInsertTool(size_t WXUNUSED(pos),
+                                   wxToolBarToolBase *toolBase)
 {
     wxToolBarToolSimple *tool = (wxToolBarToolSimple *)toolBase;
 
