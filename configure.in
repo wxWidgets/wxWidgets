@@ -493,6 +493,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_CHECKBOX=no
   DEFAULT_wxUSE_CHECKLST=no
   DEFAULT_wxUSE_CHOICE=no
+  DEFAULT_wxUSE_CHOICEBOOK=no
   DEFAULT_wxUSE_COMBOBOX=no
   DEFAULT_wxUSE_DISPLAY=no
   DEFAULT_wxUSE_GAUGE=no
@@ -677,6 +678,7 @@ else
   DEFAULT_wxUSE_CHECKBOX=yes
   DEFAULT_wxUSE_CHECKLST=yes
   DEFAULT_wxUSE_CHOICE=yes
+  DEFAULT_wxUSE_CHOICEBOOK=yes
   DEFAULT_wxUSE_COMBOBOX=yes
   DEFAULT_wxUSE_DISPLAY=yes
   DEFAULT_wxUSE_GAUGE=yes
@@ -968,6 +970,7 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_CHECKBOX=yes
   DEFAULT_wxUSE_CHECKLISTBOX=yes
   DEFAULT_wxUSE_CHOICE=yes
+  DEFAULT_wxUSE_CHOICEBOOK=yes
   DEFAULT_wxUSE_GAUGE=yes
   DEFAULT_wxUSE_GRID=yes
   DEFAULT_wxUSE_IMAGLIST=yes
@@ -1006,6 +1009,7 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_CHECKBOX=no
   DEFAULT_wxUSE_CHECKLISTBOX=no
   DEFAULT_wxUSE_CHOICE=no
+  DEFAULT_wxUSE_CHOICEBOOK=no
   DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_GRID=no
   DEFAULT_wxUSE_IMAGLIST=no
@@ -1052,6 +1056,7 @@ WX_ARG_ENABLE(caret,       [  --enable-caret          use wxCaret class], wxUSE_
 WX_ARG_ENABLE(checkbox,    [  --enable-checkbox       use wxCheckBox class], wxUSE_CHECKBOX)
 WX_ARG_ENABLE(checklst,    [  --enable-checklst       use wxCheckListBox (listbox with checkboxes) class], wxUSE_CHECKLST)
 WX_ARG_ENABLE(choice,      [  --enable-choice         use wxChoice class], wxUSE_CHOICE)
+WX_ARG_ENABLE(choicebook,  [  --enable-choicebook     use wxChoicebook class], wxUSE_CHOICEBOOK)
 WX_ARG_ENABLE(combobox,    [  --enable-combobox       use wxComboBox class], wxUSE_COMBOBOX)
 WX_ARG_ENABLE(display,     [  --enable-display        use wxDisplay class], wxUSE_DISPLAY)
 WX_ARG_ENABLE(gauge,       [  --enable-gauge          use wxGauge class], wxUSE_GAUGE)
@@ -5353,6 +5358,11 @@ fi
 if test "$wxUSE_CHOICE" = "yes"; then
   AC_DEFINE(wxUSE_CHOICE)
   USES_CONTROLS=1
+fi
+
+if test "$wxUSE_CHOICEBOOK" = "yes"; then
+    AC_DEFINE(wxUSE_CHOICEBOOK)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_CHECKBOX" = "yes"; then

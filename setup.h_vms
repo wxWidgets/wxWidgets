@@ -490,6 +490,7 @@
  */
 #define wxUSE_NOTEBOOK 1
 #define wxUSE_LISTBOOK 1
+#define wxUSE_CHOICEBOOK 1
 /*
  * Use this control
  */
