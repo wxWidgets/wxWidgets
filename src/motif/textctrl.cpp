@@ -150,6 +150,10 @@ bool wxTextCtrl::Create(wxWindow *parent,
                                   NULL
                                  );
 
+        XtVaSetValues ((Widget) m_mainWidget,
+                        XmNeditable, ((style & wxTE_READONLY) ? False : True),
+                        NULL);
+
         // TODO: Is this relevant? What does it do?
         int noCols = 2;
         if (!value.IsNull() && (value.Length() > (unsigned int) noCols))
