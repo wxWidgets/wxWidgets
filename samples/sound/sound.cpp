@@ -225,7 +225,7 @@ void MyFrame::OnPlaySync(wxCommandEvent& WXUNUSED(event))
     if (!m_sound)
         m_sound = new wxSound(m_soundFile);
     if (m_sound->IsOk())
-        m_sound->Play((unsigned)wxSOUND_SYNC);
+        m_sound->Play(wxSOUND_SYNC);
 }
 
 void MyFrame::OnPlayAsync(wxCommandEvent& WXUNUSED(event))
@@ -234,7 +234,7 @@ void MyFrame::OnPlayAsync(wxCommandEvent& WXUNUSED(event))
     if (!m_sound)
         m_sound = new wxSound(m_soundFile);
     if (m_sound->IsOk())
-        m_sound->Play((unsigned)wxSOUND_ASYNC);
+        m_sound->Play(wxSOUND_ASYNC);
 }
 
 void MyFrame::OnPlayAsyncOnStack(wxCommandEvent& WXUNUSED(event))
@@ -242,7 +242,7 @@ void MyFrame::OnPlayAsyncOnStack(wxCommandEvent& WXUNUSED(event))
     wxBusyCursor busy;
     wxSound snd(m_soundFile);
     if (snd.IsOk())
-        snd.Play((unsigned)wxSOUND_ASYNC);
+        snd.Play(wxSOUND_ASYNC);
 }
 
 void MyFrame::OnPlayLoop(wxCommandEvent& WXUNUSED(event))
@@ -251,7 +251,7 @@ void MyFrame::OnPlayLoop(wxCommandEvent& WXUNUSED(event))
     if (!m_sound)
         m_sound = new wxSound(m_soundFile);
     if (m_sound->IsOk())
-        m_sound->Play((unsigned)(wxSOUND_ASYNC | wxSOUND_LOOP));
+        m_sound->Play(wxSOUND_ASYNC | wxSOUND_LOOP);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
