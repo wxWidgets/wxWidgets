@@ -18,7 +18,7 @@ BAKEFILE = bakefile -v
 
 CDEPS = config.bkl common.bkl common_contrib.bkl
 SDEPS = config.bkl common.bkl common_samples.bkl
-MDEPS = common.bkl config.bkl files.bkl monolithic.bkl multilib.bkl wxwin.py
+MDEPS = common.bkl config.bkl files.bkl monolithic.bkl multilib.bkl opengl.bkl wxwin.py
 """)
 
 lines = []
