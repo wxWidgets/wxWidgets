@@ -1520,4 +1520,9 @@ wxBitmap wxDisableBitmap(
     return(wxNullBitmap);
 } // end of wxDisableBitmap
 
-
+COLORREF wxColourToRGB(
+  const wxColour&                   rColor
+)
+{
+    return(OS2RGB(rColor.Red(), rColor.Green(), rColor.Blue()));
+} // end of wxColourToRGB

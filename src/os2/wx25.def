@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1758,6 +1758,8 @@ EXPORTS
       wxConstructorForwxHelpEvent__Fv
       ;wxEvtHandler::~wxEvtHandler()
       __dt__12wxEvtHandlerFv
+      ;wxKeyEvent::KeyCode() const
+      KeyCode__10wxKeyEventCFv
       ;wxEvtHandler::GetEventTable() const
       GetEventTable__12wxEvtHandlerCFv
       wxEVT_CHILD_FOCUS
@@ -2312,10 +2314,10 @@ EXPORTS
       GetHomeDir__10wxFileNameFv
       ;wxFileName::AppendDir(const wxString&)
       AppendDir__10wxFileNameFRC8wxString
-      ;wxFileName::SplitPath(const wxString&,wxString*,wxString*,wxString*,wxString*,wxPathFormat)
-      SplitPath__10wxFileNameFRC8wxStringP8wxStringN3212wxPathFormat
       ;wxFileName::Normalize(int,const wxString&,wxPathFormat)
       Normalize__10wxFileNameFiRC8wxString12wxPathFormat
+      ;wxFileName::SplitPath(const wxString&,wxString*,wxString*,wxString*,wxString*,wxPathFormat)
+      SplitPath__10wxFileNameFRC8wxStringP8wxStringN3212wxPathFormat
       ;wxFileName::MakeRelativeTo(const wxString&,wxPathFormat)
       MakeRelativeTo__10wxFileNameFRC8wxString12wxPathFormat
       ;wxFileName::AssignDir(const wxString&,wxPathFormat)
@@ -3654,17 +3656,23 @@ EXPORTS
       __vft10wxListBase8wxObject
       ;wxList::sm_classwxList
       sm_classwxList__6wxList
+      ;wxList::wxList(int)
+      __ct__6wxListFi
+      __vft16wxStringListNode10wxNodeBase
       ;wxListBase::LastThat(int(*)(void*))
       LastThat__10wxListBaseFPFPv_i
-      __vft16wxStringListNode10wxNodeBase
       ;wxListBase::Clear()
       Clear__10wxListBaseFv
       ;wxConstructorForwxStringList()
       wxConstructorForwxStringList__Fv
+      ;wxListBase::First() const
+      First__10wxListBaseCFv
       ;wxListBase::DeleteObject(void*)
       DeleteObject__10wxListBaseFPv
       ;wxObjectListNode::DeleteData()
       DeleteData__16wxObjectListNodeFv
+      ;wxNodeBase::Data() const
+      Data__10wxNodeBaseCFv
       ;wxListBase::Append(const char*,void*)
       Append__10wxListBaseFPCcPv
       ;wxListBase::Init(wxKeyType)
@@ -3680,6 +3688,8 @@ EXPORTS
       Find__10wxListBaseCFRC9wxListKey
       ;wxListBase::Append(long,void*)
       Append__10wxListBaseFlPv
+      ;wxStringList::wxStringList()
+      __ct__12wxStringListFv
       ;wxListBase::DeleteNode(wxNodeBase*)
       DeleteNode__10wxListBaseFP10wxNodeBase
       __vft16wxObjectListNode10wxNodeBase
@@ -3691,8 +3701,14 @@ EXPORTS
       __dt__10wxNodeBaseFv
       ;wxConstructorForwxList()
       wxConstructorForwxList__Fv
+      ;wxListBase::operator wxList&() const
+      __opR6wxList__10wxListBaseCFv
       ;wxStringList::Sort()
       Sort__12wxStringListFv
+      ;wxListBase::Number() const
+      Number__10wxListBaseCFv
+      ;wxNodeBase::Next() const
+      Next__10wxNodeBaseCFv
       ;wxListBase::Find(void*) const
       Find__10wxListBaseCFPv
       ;wxStringList::Delete(const char*)
@@ -3714,6 +3730,10 @@ EXPORTS
       Insert__10wxListBaseFP10wxNodeBasePv
       ;wxListBase::~wxListBase()
       __dt__10wxListBaseFv
+      ;wxNodeBase::Previous() const
+      Previous__10wxNodeBaseCFv
+      ;wxListBase::Last() const
+      Last__10wxListBaseCFv
       ;wxNodeBase::IndexOf() const
       IndexOf__10wxNodeBaseCFv
       ;wxListBase::IndexOf(void*) const
@@ -3727,6 +3747,8 @@ EXPORTS
       ListToArray__12wxStringListCFUl
       ;wxListBase::DoCopy(const wxListBase&)
       DoCopy__10wxListBaseFRC10wxListBase
+      ;wxListBase::Nth(unsigned int) const
+      Nth__10wxListBaseCFUi
       ;wxListBase::AppendCommon(wxNodeBase*)
       AppendCommon__10wxListBaseFP10wxNodeBase
       ;wxListBase::Append(void*)
@@ -5148,18 +5170,18 @@ EXPORTS
       __ct__11wxSizerItemFiN41P8wxObject
       ;wxSizerItem::wxSizerItem(wxSizer*,int,int,int,wxObject*)
       __ct__11wxSizerItemFP7wxSizeriN22P8wxObject
-      ;wxSizer::Insert(int,wxSizer*,int,int,int,wxObject*)
-      Insert__7wxSizerFiP7wxSizerN31P8wxObject
+      ;wxSizer::Insert(unsigned int,wxSizer*,int,int,int,wxObject*)
+      Insert__7wxSizerFUiP7wxSizeriN23P8wxObject
       ;wxSizer::Add(wxWindow*,int,int,int,wxObject*)
       Add__7wxSizerFP8wxWindowiN22P8wxObject
-      ;wxSizer::DoSetItemMinSize(int,int,int)
-      DoSetItemMinSize__7wxSizerFiN21
+      ;wxSizer::Insert(unsigned int,wxSizerItem*)
+      Insert__7wxSizerFUiP11wxSizerItem
       ;wxStaticBoxSizer::wxStaticBoxSizer(wxStaticBox*,int)
       __ct__16wxStaticBoxSizerFP11wxStaticBoxi
       ;wxGridSizer::wxGridSizer(int,int,int)
       __ct__11wxGridSizerFiN21
-      ;wxSizer::DeleteWindows()
-      DeleteWindows__7wxSizerFv
+      ;wxSizerItem::GetSize() const
+      GetSize__11wxSizerItemCFv
       ;wxStaticBoxSizer::sm_classwxStaticBoxSizer
       sm_classwxStaticBoxSizer__16wxStaticBoxSizer
       ;wxGridSizer::sm_classwxGridSizer
@@ -5172,8 +5194,16 @@ EXPORTS
       RecalcSizes__15wxFlexGridSizerFv
       ;wxGridSizer::RecalcSizes()
       RecalcSizes__11wxGridSizerFv
+      ;wxSizerItem::IsWindow() const
+      IsWindow__11wxSizerItemCFv
+      ;wxSizer::IsShown(wxSizer*) const
+      IsShown__7wxSizerCFP7wxSizer
+      ;wxSizerItem::GetOption() const
+      GetOption__11wxSizerItemCFv
       ;wxSizer::DoSetItemMinSize(wxWindow*,int,int)
       DoSetItemMinSize__7wxSizerFP8wxWindowiT2
+      ;wxSizer::DeleteWindows()
+      DeleteWindows__7wxSizerFv
       ;wxStaticBoxSizer::CalcMin()
       CalcMin__16wxStaticBoxSizerFv
       ;wxFlexGridSizer::CalcMin()
@@ -5186,14 +5216,16 @@ EXPORTS
       GetMinWindowSize__7wxSizerFP8wxWindow
       ;wxSizer::FitInside(wxWindow*)
       FitInside__7wxSizerFP8wxWindow
-      ;wxSizer::Prepend(wxWindow*,int,int,int,wxObject*)
-      Prepend__7wxSizerFP8wxWindowiN22P8wxObject
+      ;wxSizer::Show(unsigned int,unsigned long)
+      Show__7wxSizerFUiUl
       __vft15wxFlexGridSizer8wxObject
       __vft11wxSizerItem8wxObject
-      ;wxSizer::Insert(int,wxWindow*,int,int,int,wxObject*)
-      Insert__7wxSizerFiP8wxWindowN31P8wxObject
-      ;wxSizer::Insert(int,int,int,int,int,int,wxObject*)
-      Insert__7wxSizerFiN51P8wxObject
+      ;wxSizerItem::Show(unsigned long)
+      Show__11wxSizerItemFUl
+      ;wxSizer::Prepend(wxWindow*,int,int,int,wxObject*)
+      Prepend__7wxSizerFP8wxWindowiN22P8wxObject
+      ;wxSizer::Insert(unsigned int,int,int,int,int,int,wxObject*)
+      Insert__7wxSizerFUiiN42P8wxObject
       ;wxSizerItem::SetDimension(wxPoint,wxSize)
       SetDimension__11wxSizerItemF7wxPoint6wxSize
       ;wxSizerItem::sm_classwxSizerItem
@@ -5204,6 +5236,10 @@ EXPORTS
       __ct__11wxGridSizerFiN31
       ;wxFlexGridSizer::RemoveGrowableRow(unsigned int)
       RemoveGrowableRow__15wxFlexGridSizerFUi
+      ;wxSizer::IsShown(unsigned int) const
+      IsShown__7wxSizerCFUi
+      ;wxSizer::Detach(unsigned int)
+      Detach__7wxSizerFUi
       ;wxSizer::~wxSizer()
       __dt__7wxSizerFv
       ;wxSizer::sm_classwxSizer
@@ -5214,12 +5250,10 @@ EXPORTS
       __dt__11wxSizerItemFv
       ;wxStaticBoxSizer::RecalcSizes()
       RecalcSizes__16wxStaticBoxSizerFv
-      ;wxSizerItem::IsWindow()
-      IsWindow__11wxSizerItemFv
-      ;wxSizer::IsShown(wxSizer*)
-      IsShown__7wxSizerFP7wxSizer
-      ;wxSizerItem::GetSize()
-      GetSize__11wxSizerItemFv
+      ;wxSizerItem::IsSizer() const
+      IsSizer__11wxSizerItemCFv
+      ;wxSizer::DoSetItemMinSize(unsigned int,int,int)
+      DoSetItemMinSize__7wxSizerFUiiT2
       ;wxNotebookSizer::CalcMin()
       CalcMin__15wxNotebookSizerFv
       ;wxSizerItem::CalcMin()
@@ -5234,12 +5268,15 @@ EXPORTS
       __vft15wxNotebookSizer8wxObject
       ;wxSizer::ShowItems(unsigned long)
       ShowItems__7wxSizerFUl
+      ;wxSizer::Insert(unsigned int,wxWindow*,int,int,int,wxObject*)
+      Insert__7wxSizerFUiP8wxWindowiN23P8wxObject
       ;wxSizer::Clear(unsigned long)
       Clear__7wxSizerFUl
-      ;wxSizer::Remove(int)
-      Remove__7wxSizerFi
-      ;wxSizer::Detach(int)
-      Detach__7wxSizerFi
+      ;wxSizer::Prepend(wxSizerItem*)
+      Prepend__7wxSizerFP11wxSizerItem
+      __vft21wxwxSizerItemListNode10wxNodeBase
+      ;wxSizer::Remove(unsigned int)
+      Remove__7wxSizerFUi
       ;wxSizer::GetMinSize()
       GetMinSize__7wxSizerFv
       __vft16wxStaticBoxSizer21wxClientDataContainer
@@ -5249,26 +5286,28 @@ EXPORTS
       __ct__7wxSizerFv
       ;wxBoxSizer::RecalcSizes()
       RecalcSizes__10wxBoxSizerFv
-      ;wxSizerItem::IsSpacer()
-      IsSpacer__11wxSizerItemFv
+      ;wxSizerItem::IsSpacer() const
+      IsSpacer__11wxSizerItemCFv
       ;wxFlexGridSizer::CreateArrays()
       CreateArrays__15wxFlexGridSizerFv
       ;wxSizer::SetSizeHints(wxWindow*)
       SetSizeHints__7wxSizerFP8wxWindow
-      ;wxSizer::GetMaxWindowSize(wxWindow*)
-      GetMaxWindowSize__7wxSizerFP8wxWindow
       ;wxSizer::Add(wxSizer*,int,int,int,wxObject*)
       Add__7wxSizerFP7wxSizeriN22P8wxObject
       ;wxSizer::Prepend(int,int,int,int,int,wxObject*)
       Prepend__7wxSizerFiN41P8wxObject
-      ;wxGridSizer::CalcRowsCols(int&,int&) const
-      CalcRowsCols__11wxGridSizerCFRiT1
+      ;wxSizerItem::SetOption(int)
+      SetOption__11wxSizerItemFi
       ;wxBoxSizer::wxBoxSizer(int)
       __ct__10wxBoxSizerFi
+      ;wxGridSizer::CalcRowsCols(int&,int&) const
+      CalcRowsCols__11wxGridSizerCFRiT1
+      ;wxSizer::Add(wxSizerItem*)
+      Add__7wxSizerFP11wxSizerItem
       ;wxFlexGridSizer::AddGrowableCol(unsigned int)
       AddGrowableCol__15wxFlexGridSizerFUi
-      ;wxSizerItem::IsSizer()
-      IsSizer__11wxSizerItemFv
+      ;wxwxSizerItemListNode::DeleteData()
+      DeleteData__21wxwxSizerItemListNodeFv
       ;wxNotebookSizer::sm_classwxNotebookSizer
       sm_classwxNotebookSizer__15wxNotebookSizer
       ;wxFlexGridSizer::sm_classwxFlexGridSizer
@@ -5284,10 +5323,10 @@ EXPORTS
       DeleteWindows__11wxSizerItemFv
       ;wxSizer::GetMinClientSize(wxWindow*)
       GetMinClientSize__7wxSizerFP8wxWindow
-      ;wxSizer::IsShown(wxWindow*)
-      IsShown__7wxSizerFP8wxWindow
-      ;wxSizer::GetMaxClientSize(wxWindow*)
-      GetMaxClientSize__7wxSizerFP8wxWindow
+      ;wxSizer::GetMaxWindowSize(wxWindow*) const
+      GetMaxWindowSize__7wxSizerCFP8wxWindow
+      ;wxSizer::GetMaxClientSize(wxWindow*) const
+      GetMaxClientSize__7wxSizerCFP8wxWindow
       ;wxSizerItem::wxSizerItem(wxWindow*,int,int,int,wxObject*)
       __ct__11wxSizerItemFP8wxWindowiN22P8wxObject
       __vft16wxStaticBoxSizer8wxObject
@@ -5314,12 +5353,16 @@ EXPORTS
       Layout__7wxSizerFv
       ;wxGridSizer::CalcMin()
       CalcMin__11wxGridSizerFv
-      ;wxSizer::VirtualFitSize(wxWindow*)
-      VirtualFitSize__7wxSizerFP8wxWindow
+      ;wxSizer::Detach(wxWindow*)
+      Detach__7wxSizerFP8wxWindow
       ;wxNotebookSizer::wxNotebookSizer(wxNotebook*)
       __ct__15wxNotebookSizerFP10wxNotebook
+      ;wxSizer::VirtualFitSize(wxWindow*)
+      VirtualFitSize__7wxSizerFP8wxWindow
       ;wxSizer::SetVirtualSizeHints(wxWindow*)
       SetVirtualSizeHints__7wxSizerFP8wxWindow
+      ;wxSizer::IsShown(wxWindow*) const
+      IsShown__7wxSizerCFP8wxWindow
   ;From object file:  ..\common\socket.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxSocketBase::SetTimeout(long)
@@ -9199,566 +9242,6 @@ EXPORTS
       sm_eventTable__18wxSashLayoutWindow
       ;wxSashLayoutWindow::sm_eventTableEntries
       sm_eventTableEntries__18wxSashLayoutWindow
-  ;From object file:  ..\generic\listctrl.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxSelectionStore::SelectItem(unsigned int,unsigned long)
-      SelectItem__16wxSelectionStoreFUiUl
-      wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT
-      ;wxListTextCtrl::sm_eventTable
-      sm_eventTable__14wxListTextCtrl
-      ;wxGenericListCtrl::SetSingleStyle(long,unsigned long)
-      SetSingleStyle__17wxGenericListCtrlFlUl
-      ;wxListMainWindow::SendNotify(unsigned int,int,wxPoint)
-      SendNotify__16wxListMainWindowFUii7wxPoint
-      ;wxSelectionStore::SelectRange(unsigned int,unsigned int,unsigned long,wxArrayInt*)
-      SelectRange__16wxSelectionStoreFUiT1UlP10wxArrayInt
-      ;wxGenericListCtrl::RefreshItem(long)
-      RefreshItem__17wxGenericListCtrlFl
-      ;wxListHeaderWindow::OnSetFocus(wxFocusEvent&)
-      OnSetFocus__18wxListHeaderWindowFR12wxFocusEvent
-      ;wxListMainWindow::OnPaint(wxPaintEvent&)
-      OnPaint__16wxListMainWindowFR12wxPaintEvent
-      ;wxListTextCtrl::OnKillFocus(wxFocusEvent&)
-      OnKillFocus__14wxListTextCtrlFR12wxFocusEvent
-      ;wxListMainWindow::HighlightAll(unsigned long)
-      HighlightAll__16wxListMainWindowFUl
-      ;wxListMainWindow::DeleteItem(long)
-      DeleteItem__16wxListMainWindowFl
-      ;wxListLineDataArray::wxListLineDataArray(const wxListLineDataArray&)
-      __ct__19wxListLineDataArrayFRC19wxListLineDataArray
-      ;wxListTextCtrl::wxListTextCtrl(wxListMainWindow*,unsigned int)
-      __ct__14wxListTextCtrlFP16wxListMainWindowUi
-      ;wxListItemData::SetSize(int,int)
-      SetSize__14wxListItemDataFiT1
-      ;wxGenericListCtrl::SetItem(wxListItem&)
-      SetItem__17wxGenericListCtrlFR10wxListItem
-      ;wxListLineData::SetItem(int,const wxListItem&)
-      SetItem__14wxListLineDataFiRC10wxListItem
-      ;wxGenericListCtrl::SetColumnWidth(int,int)
-      SetColumnWidth__17wxGenericListCtrlFiT1
-      ;wxGenericListCtrl::ScrollList(int,int)
-      ScrollList__17wxGenericListCtrlFiT1
-      ;wxListMainWindow::RefreshLine(unsigned int)
-      RefreshLine__16wxListMainWindowFUi
-      ;wxSelectionStore::OnItemDelete(unsigned int)
-      OnItemDelete__16wxSelectionStoreFUi
-      ;wxListMainWindow::InsertColumn(long,wxListItem&)
-      InsertColumn__16wxListMainWindowFlR10wxListItem
-      ;wxListMainWindow::GetLineRect(unsigned int) const
-      GetLineRect__16wxListMainWindowCFUi
-      ;wxListMainWindow::GetLineLabelRect(unsigned int) const
-      GetLineLabelRect__16wxListMainWindowCFUi
-      ;wxListItemData::GetItem(wxListItem&) const
-      GetItem__14wxListItemDataCFR10wxListItem
-      ;wxListItemData::Init()
-      Init__14wxListItemDataFv
-      ;wxListHeaderWindow::~wxListHeaderWindow()
-      __dt__18wxListHeaderWindowFv
-      ;wxListMainWindow::wxListMainWindow()
-      __ct__16wxListMainWindowFv
-      ;wxListHeaderData::wxListHeaderData()
-      __ct__16wxListHeaderDataFv
-      ;wxGenericListCtrl::Thaw()
-      Thaw__17wxGenericListCtrlFv
-      ;wxGenericListCtrl::SetTextColour(const wxColour&)
-      SetTextColour__17wxGenericListCtrlFRC8wxColour
-      ;wxGenericListCtrl::SetForegroundColour(const wxColour&)
-      SetForegroundColour__17wxGenericListCtrlFRC8wxColour
-      ;wxListLineData::ReverseHighlight()
-      ReverseHighlight__14wxListLineDataFv
-      ;wxListRenameTimer::Notify()
-      Notify__17wxListRenameTimerFv
-      ;wxListHeaderWindow::Init()
-      Init__18wxListHeaderWindowFv
-      ;wxListHeaderData::GetWidth() const
-      GetWidth__16wxListHeaderDataCFv
-      ;wxGenericListCtrl::GetTopItem() const
-      GetTopItem__17wxGenericListCtrlCFv
-      ;wxListMainWindow::GetNextItem(long,int,int) const
-      GetNextItem__16wxListMainWindowCFliT2
-      ;wxListMainWindow::GetImageSize(int,int&,int&) const
-      GetImageSize__16wxListMainWindowCFiRiT2
-      ;wxGenericListCtrl::GetEventTable() const
-      GetEventTable__17wxGenericListCtrlCFv
-      ;wxGenericListCtrl::GetDropTarget() const
-      GetDropTarget__17wxGenericListCtrlCFv
-      ;wxListHeaderWindow::DoDrawRect(wxDC*,int,int,int,int)
-      DoDrawRect__18wxListHeaderWindowFP4wxDCiN32
-      ;wxGenericListCtrl::ClearAll()
-      ClearAll__17wxGenericListCtrlFv
-      ;wxListMainWindow::OnRenameAccept(unsigned int,const wxString&)
-      OnRenameAccept__16wxListMainWindowFUiRC8wxString
-      wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK
-      wxEVT_COMMAND_LIST_COL_BEGIN_DRAG
-      ;wxGenericListCtrl::SetItemText(long,const wxString&)
-      SetItemText__17wxGenericListCtrlFlRC8wxString
-      ;wxGenericListCtrl::Edit(long)
-      Edit__17wxGenericListCtrlFl
-      wxEVT_COMMAND_LIST_ITEM_FOCUSED
-      wxEVT_COMMAND_LIST_ITEM_DESELECTED
-      wxEVT_COMMAND_LIST_ITEM_ACTIVATED
-      wxEVT_COMMAND_LIST_CACHE_HINT
-      ;wxGenericListCtrl::sm_eventTable
-      sm_eventTable__17wxGenericListCtrl
-      __vft14wxListTextCtrl8wxObject
-      ;wxGenericListCtrl::SetItemCount(long)
-      SetItemCount__17wxGenericListCtrlFl
-      ;wxListMainWindow::SetItemCount(long)
-      SetItemCount__16wxListMainWindowFl
-      ;wxListMainWindow::RecalculatePositions(unsigned long)
-      RecalculatePositions__16wxListMainWindowFUl
-      ;wxListMainWindow::OnKeyDown(wxKeyEvent&)
-      OnKeyDown__16wxListMainWindowFR10wxKeyEvent
-      ;wxListMainWindow::OnArrowChar(unsigned int,const wxKeyEvent&)
-      OnArrowChar__16wxListMainWindowFUiRC10wxKeyEvent
-      ;wxGenericListCtrl::GetItemData(long) const
-      GetItemData__17wxGenericListCtrlCFl
-      ;wxGenericListCtrl::GetItemState(long,long) const
-      GetItemState__17wxGenericListCtrlCFlT1
-      wxEVT_COMMAND_LIST_INSERT_ITEM
-      ;wxListItem::sm_classwxListItem
-      sm_classwxListItem__10wxListItem
-      list_ctrl_compare_func_1
-      list_ctrl_compare_data
-      ;wxListLineDataArray::operator=(const wxListLineDataArray&)
-      __as__19wxListLineDataArrayFRC19wxListLineDataArray
-      ;wxListHeaderData::SetItem(const wxListItem&)
-      SetItem__16wxListHeaderDataFRC10wxListItem
-      ;wxListMainWindow::SetItemState(long,long,long)
-      SetItemState__16wxListMainWindowFlN21
-      ;wxListMainWindow::SetImageList(wxImageList*,int)
-      SetImageList__16wxListMainWindowFP11wxImageListi
-      ;wxGenericListCtrl::SetColumn(int,wxListItem&)
-      SetColumn__17wxGenericListCtrlFiR10wxListItem
-      ;wxListMainWindow::SetColumnWidth(int,int)
-      SetColumnWidth__16wxListMainWindowFiT1
-      ;wxGenericListCtrl::RefreshItems(long,long)
-      RefreshItems__17wxGenericListCtrlFlT1
-      ;wxGenericListCtrl::OnGetItemText(long,long) const
-      OnGetItemText__17wxGenericListCtrlCFlT1
-      ;wxListMainWindow::MoveToItem(unsigned int)
-      MoveToItem__16wxListMainWindowFUi
-      ;wxListHeaderData::IsHit(int,int) const
-      IsHit__16wxListHeaderDataCFiT1
-      ;wxListItemData::IsHit(int,int) const
-      IsHit__14wxListItemDataCFiT1
-      ;wxGenericListCtrl::InsertItem(long,int)
-      InsertItem__17wxGenericListCtrlFli
-      ;wxListMainWindow::HitTest(int,int,int&)
-      HitTest__16wxListMainWindowFiT1Ri
-      ;wxGenericListCtrl::GetImageList(int) const
-      GetImageList__17wxGenericListCtrlCFi
-      ;wxGenericListCtrl::GetColumn(int,wxListItem&) const
-      GetColumn__17wxGenericListCtrlCFiR10wxListItem
-      ;wxListMainWindow::GetColumn(int,wxListItem&) const
-      GetColumn__16wxListMainWindowCFiR10wxListItem
-      ;wxGenericListCtrl::DeleteColumn(int)
-      DeleteColumn__17wxGenericListCtrlFi
-      ;wxListMainWindow::CacheLineData(unsigned int)
-      CacheLineData__16wxListMainWindowFUi
-      ;wxGenericListCtrl::AssignImageList(wxImageList*,int)
-      AssignImageList__17wxGenericListCtrlFP11wxImageListi
-      ;wxGenericListCtrl::GetNextItem(long,int,int) const
-      GetNextItem__17wxGenericListCtrlCFliT2
-      ;wxConstructorForwxListCtrl()
-      wxConstructorForwxListCtrl__Fv
-      list_ctrl_compare_func_2
-      ;wxListMainWindow::~wxListMainWindow()
-      __dt__16wxListMainWindowFv
-      ;wxListHeaderWindow::wxListHeaderWindow()
-      __ct__18wxListHeaderWindowFv
-      ;wxGenericListCtrl::SetItem(long,int,const wxString&,int)
-      SetItem__17wxGenericListCtrlFliRC8wxStringT2
-      ;wxListLineData::SetAttr(wxListItemAttr*)
-      SetAttr__14wxListLineDataFP14wxListItemAttr
-      ;wxListMainWindow::RefreshSelected()
-      RefreshSelected__16wxListMainWindowFv
-      ;wxListMainWindow::OnRenameTimer()
-      OnRenameTimer__16wxListMainWindowFv
-      ;wxListLineDataArray::Insert(const wxListLineData&,unsigned int,unsigned int)
-      Insert__19wxListLineDataArrayFRC14wxListLineDataUiT2
-      ;wxListItemData::GetX() const
-      GetX__14wxListItemDataCFv
-      ;wxGenericListCtrl::GetTextColour() const
-      GetTextColour__17wxGenericListCtrlCFv
-      ;wxListMainWindow::GetHeaderWidth() const
-      GetHeaderWidth__16wxListMainWindowCFv
-      ;wxGenericListCtrl::GetForegroundColour() const
-      GetForegroundColour__17wxGenericListCtrlCFv
-      ;wxListTextCtrl::GetEventTable() const
-      GetEventTable__14wxListTextCtrlCFv
-      ;wxGenericListCtrl::DoPopupMenu(wxMenu*,int,int)
-      DoPopupMenu__17wxGenericListCtrlFP6wxMenuiT2
-      ;wxListMainWindow::DoDeleteAllItems()
-      DoDeleteAllItems__16wxListMainWindowFv
-      ;wxwxListItemDataListNode::DeleteData()
-      DeleteData__24wxwxListItemDataListNodeFv
-      ;wxListLineData::wxListLineData(wxListMainWindow*)
-      __ct__14wxListLineDataFP16wxListMainWindow
-      wxEVT_COMMAND_LIST_SET_INFO
-      wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK
-      wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS
-      wxEVT_COMMAND_LIST_COL_DRAGGING
-      ;wxListHeaderWindow::sm_eventTable
-      sm_eventTable__18wxListHeaderWindow
-      ;wxListHeaderWindow::sm_eventTableEntries
-      sm_eventTableEntries__18wxListHeaderWindow
-      ;wxListView::sm_classwxListView
-      sm_classwxListView__10wxListView
-      ;wxListMainWindow::sm_classwxListMainWindow
-      sm_classwxListMainWindow__16wxListMainWindow
-      ;wxListRenameTimer::wxListRenameTimer(wxListMainWindow*)
-      __ct__17wxListRenameTimerFP16wxListMainWindow
-      ;wxGenericListCtrl::InsertColumn(long,const wxString&,int,int)
-      InsertColumn__17wxGenericListCtrlFlRC8wxStringiT3
-      ;wxListLineData::DrawTextFormatted(wxDC*,const wxString&,int,int,int,int)
-      DrawTextFormatted__14wxListLineDataFP4wxDCRC8wxStringiN33
-      ;wxListLineDataArray::Index(const wxListLineData&,unsigned long) const
-      Index__19wxListLineDataArrayCFRC14wxListLineDataUl
-      ;wxGenericListCtrl::sm_eventTableEntries
-      sm_eventTableEntries__17wxGenericListCtrl
-      ;wxListEvent::sm_classwxListEvent
-      sm_classwxListEvent__11wxListEvent
-      ;wxListCtrl::sm_classwxListCtrl
-      sm_classwxListCtrl__10wxListCtrl
-      __vft18wxListHeaderWindow8wxObject
-      __vft17wxListRenameTimer8wxObject
-      ;wxGenericListCtrl::SortItems(int(*)(long,long,long),long)
-      SortItems__17wxGenericListCtrlFPFlN21_il
-      ;wxListMainWindow::SortItems(int(*)(long,long,long),long)
-      SortItems__16wxListMainWindowFPFlN21_il
-      ;wxGenericListCtrl::SetWindowStyleFlag(long)
-      SetWindowStyleFlag__17wxGenericListCtrlFl
-      ;wxGenericListCtrl::SetItemSpacing(int,unsigned long)
-      SetItemSpacing__17wxGenericListCtrlFiUl
-      ;wxListMainWindow::SetItemSpacing(int,unsigned long)
-      SetItemSpacing__16wxListMainWindowFiUl
-      ;wxGenericListCtrl::SetItemPosition(long,const wxPoint&)
-      SetItemPosition__17wxGenericListCtrlFlRC7wxPoint
-      ;wxListHeaderWindow::OnMouse(wxMouseEvent&)
-      OnMouse__18wxListHeaderWindowFR12wxMouseEvent
-      ;wxGenericListCtrl::OnIdle(wxIdleEvent&)
-      OnIdle__17wxGenericListCtrlFR11wxIdleEvent
-      ;wxGenericListCtrl::OnGetItemAttr(long) const
-      OnGetItemAttr__17wxGenericListCtrlCFl
-      ;wxListTextCtrl::OnChar(wxKeyEvent&)
-      OnChar__14wxListTextCtrlFR10wxKeyEvent
-      ;wxGenericListCtrl::GetItemText(long) const
-      GetItemText__17wxGenericListCtrlCFl
-      ;wxListMainWindow::GetItemRect(long,wxRect&) const
-      GetItemRect__16wxListMainWindowCFlR6wxRect
-      ;wxGenericListCtrl::GetItemPosition(long,wxPoint&) const
-      GetItemPosition__17wxGenericListCtrlCFlR7wxPoint
-      ;wxListLineData::SetImage(int,int)
-      SetImage__14wxListLineDataFiT1
-      ;wxListHeaderData::wxListHeaderData(const wxListItem&)
-      __ct__16wxListHeaderDataFRC10wxListItem
-      ;wxListHeaderData::SetWidth(int)
-      SetWidth__16wxListHeaderDataFi
-      ;wxListHeaderData::SetPosition(int,int)
-      SetPosition__16wxListHeaderDataFiT1
-      ;wxListItemData::SetPosition(int,int)
-      SetPosition__14wxListItemDataFiT1
-      ;wxListHeaderData::SetHeight(int)
-      SetHeight__16wxListHeaderDataFi
-      ;wxListHeaderData::SetFormat(int)
-      SetFormat__16wxListHeaderDataFi
-      ;wxListMainWindow::RefreshLines(unsigned int,unsigned int)
-      RefreshLines__16wxListMainWindowFUiT1
-      ;wxGenericListCtrl::InsertColumn(long,wxListItem&)
-      InsertColumn__17wxGenericListCtrlFlR10wxListItem
-      ;wxGenericListCtrl::HitTest(const wxPoint&,int&)
-      HitTest__17wxGenericListCtrlFRC7wxPointRi
-      ;wxListMainWindow::GetVisibleLinesRange(unsigned int*,unsigned int*)
-      GetVisibleLinesRange__16wxListMainWindowFPUiT1
-      ;wxGenericListCtrl::GetColumnWidth(int) const
-      GetColumnWidth__17wxGenericListCtrlCFi
-      ;wxGenericListCtrl::FindItem(long,const wxPoint&,int)
-      FindItem__17wxGenericListCtrlFlRC7wxPointi
-      ;wxListMainWindow::FindItem(long,long)
-      FindItem__16wxListMainWindowFlT1
-      ;wxListMainWindow::DrawImage(int,wxDC*,int,int)
-      DrawImage__16wxListMainWindowFiP4wxDCN21
-      ;wxListMainWindow::ChangeCurrent(unsigned int)
-      ChangeCurrent__16wxListMainWindowFUi
-      ;wxGenericListCtrl::~wxGenericListCtrl()
-      __dt__17wxGenericListCtrlFv
-      wxEVT_COMMAND_LIST_KEY_DOWN
-      ;wxConstructorForwxListMainWindow()
-      wxConstructorForwxListMainWindow__Fv
-      ;wxConstructorForwxListEvent()
-      wxConstructorForwxListEvent__Fv
-      ;wxConstructorForwxGenericListCtrl()
-      wxConstructorForwxGenericListCtrl__Fv
-      __vft16wxListMainWindow14wxScrollHelper
-      ;wxListMainWindow::UpdateCurrent()
-      UpdateCurrent__16wxListMainWindowFv
-      ;wxListMainWindow::Thaw()
-      Thaw__16wxListMainWindowFv
-      ;wxGenericListCtrl::SetItemBackgroundColour(long,const wxColour&)
-      SetItemBackgroundColour__17wxGenericListCtrlFlRC8wxColour
-      ;wxListMainWindow::SetFocus()
-      SetFocus__16wxListMainWindowFv
-      ;wxListMainWindow::InitScrolling()
-      InitScrolling__16wxListMainWindowFv
-      ;wxListItemData::GetY() const
-      GetY__14wxListItemDataCFv
-      ;wxGenericListCtrl::GetSelectedItemCount() const
-      GetSelectedItemCount__17wxGenericListCtrlCFv
-      ;wxListMainWindow::GetLineHeight() const
-      GetLineHeight__16wxListMainWindowCFv
-      ;wxGenericListCtrl::GetItemCount() const
-      GetItemCount__17wxGenericListCtrlCFv
-      ;wxListMainWindow::GetItemCount() const
-      GetItemCount__16wxListMainWindowCFv
-      ;wxListItemData::GetHeight() const
-      GetHeight__14wxListItemDataCFv
-      ;wxListHeaderData::GetFormat() const
-      GetFormat__16wxListHeaderDataCFv
-      ;wxListLineData::GetAttr() const
-      GetAttr__14wxListLineDataCFv
-      ;wxGenericListCtrl::Freeze()
-      Freeze__17wxGenericListCtrlFv
-      ;wxListMainWindow::Freeze()
-      Freeze__16wxListMainWindowFv
-      ;wxGenericListCtrl::DeleteAllItems()
-      DeleteAllItems__17wxGenericListCtrlFv
-      ;wxGenericListCtrl::DeleteAllColumns()
-      DeleteAllColumns__17wxGenericListCtrlFv
-      ;wxGenericListCtrl::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxValidator&,const wxString&)
-      Create__17wxGenericListCtrlFP8wxWindowiRC7wxPointRC6wxSizelRC11wxValidatorRC8wxString
-      wxEVT_COMMAND_LIST_COL_RIGHT_CLICK
-      ;wxListMainWindow::sm_eventTable
-      sm_eventTable__16wxListMainWindow
-      ;wxListHeaderWindow::sm_classwxListHeaderWindow
-      sm_classwxListHeaderWindow__18wxListHeaderWindow
-      ;wxListLineData::SetText(int,const wxString)
-      SetText__14wxListLineDataFiC8wxString
-      ;wxListLineData::Draw(wxDC*)
-      Draw__14wxListLineDataFP4wxDC
-      ;wxGenericListCtrl::EnsureVisible(long)
-      EnsureVisible__17wxGenericListCtrlFl
-      ;wxGenericListCtrl::sm_classwxGenericListCtrl
-      sm_classwxGenericListCtrl__17wxGenericListCtrl
-      __vft17wxGenericListCtrl8wxObject
-      __vft16wxListMainWindow8wxObject
-      ;wxListLineData::SetAttributes(wxDC*,const wxListItemAttr*,unsigned long)
-      SetAttributes__14wxListLineDataFP4wxDCPC14wxListItemAttrUl
-      ;wxListHeaderWindow::SendListEvent(int,wxPoint)
-      SendListEvent__18wxListHeaderWindowFi7wxPoint
-      ;wxGenericListCtrl::ResizeReportView(unsigned long)
-      ResizeReportView__17wxGenericListCtrlFUl
-      ;wxListMainWindow::OnSetFocus(wxFocusEvent&)
-      OnSetFocus__16wxListMainWindowFR12wxFocusEvent
-      ;wxListMainWindow::OnKillFocus(wxFocusEvent&)
-      OnKillFocus__16wxListMainWindowFR12wxFocusEvent
-      ;wxGenericListCtrl::OnGetItemImage(long) const
-      OnGetItemImage__17wxGenericListCtrlCFl
-      ;wxListLineData::Highlight(unsigned long)
-      Highlight__14wxListLineDataFUl
-      ;wxListMainWindow::HighlightLines(unsigned int,unsigned int,unsigned long)
-      HighlightLines__16wxListMainWindowFUiT1Ul
-      ;wxGenericListCtrl::GetItemSpacing(unsigned long) const
-      GetItemSpacing__17wxGenericListCtrlCFUl
-      ;wxListMainWindow::GetItemSpacing(unsigned long)
-      GetItemSpacing__16wxListMainWindowFUl
-      ;wxListMainWindow::FindItem(long,const wxString&,unsigned long)
-      FindItem__16wxListMainWindowFlRC8wxStringUl
-      ;wxListMainWindow::EditLabel(long)
-      EditLabel__16wxListMainWindowFl
-      ;wxGenericListCtrl::SetItemState(long,long,long)
-      SetItemState__17wxGenericListCtrlFlN21
-      wxEVT_COMMAND_LIST_DELETE_ITEM
-      ;wxGenericListCtrl::SetItemData(long,long)
-      SetItemData__17wxGenericListCtrlFlT1
-      ;wxListMainWindow::RefreshAfter(unsigned int)
-      RefreshAfter__16wxListMainWindowFUi
-      ;wxGenericListCtrl::InsertItem(long,const wxString&,int)
-      InsertItem__17wxGenericListCtrlFlRC8wxStringi
-      ;wxListLineData::InitItems(int)
-      InitItems__14wxListLineDataFi
-      ;wxListMainWindow::GetLineY(unsigned int) const
-      GetLineY__16wxListMainWindowCFUi
-      ;wxListMainWindow::GetLineHighlightRect(unsigned int) const
-      GetLineHighlightRect__16wxListMainWindowCFUi
-      ;wxGenericListCtrl::GetItem(wxListItem&) const
-      GetItem__17wxGenericListCtrlCFR10wxListItem
-      ;wxListMainWindow::GetItem(wxListItem&) const
-      GetItem__16wxListMainWindowCFR10wxListItem
-      ;wxListHeaderData::GetItem(wxListItem&)
-      GetItem__16wxListHeaderDataFR10wxListItem
-      ;wxListLineData::GetItem(int,wxListItem&)
-      GetItem__14wxListLineDataFiR10wxListItem
-      ;wxGenericListCtrl::GetItemRect(long,wxRect&,int) const
-      GetItemRect__17wxGenericListCtrlCFlR6wxRecti
-      ;wxListLineData::GetImage(int) const
-      GetImage__14wxListLineDataCFi
-      ;wxGenericListCtrl::FindItem(long,long)
-      FindItem__17wxGenericListCtrlFlT1
-      ;wxListLineDataArray::DoCopy(const wxListLineDataArray&)
-      DoCopy__19wxListLineDataArrayFRC19wxListLineDataArray
-      ;wxListMainWindow::DeleteColumn(int)
-      DeleteColumn__16wxListMainWindowFi
-      ;wxListLineData::CalculateSize(wxDC*,int)
-      CalculateSize__14wxListLineDataFP4wxDCi
-      ;wxGenericListCtrl::Arrange(int)
-      Arrange__17wxGenericListCtrlFi
-      ;wxGenericListCtrl::wxGenericListCtrl()
-      __ct__17wxGenericListCtrlFv
-      wxSizeTCmpFn
-      ;wxConstructorForwxListItem()
-      wxConstructorForwxListItem__Fv
-      ;wxListLineDataArray::~wxListLineDataArray()
-      __dt__19wxListLineDataArrayFv
-      ;wxListItemData::~wxListItemData()
-      __dt__14wxListItemDataFv
-      ;wxGenericListCtrl::SetItemTextColour(long,const wxColour&)
-      SetItemTextColour__17wxGenericListCtrlFlRC8wxColour
-      ;wxGenericListCtrl::SetCursor(const wxCursor&)
-      SetCursor__17wxGenericListCtrlFRC8wxCursor
-      ;wxListMainWindow::Init()
-      Init__16wxListMainWindowFv
-      ;wxListHeaderData::Init()
-      Init__16wxListHeaderDataFv
-      ;wxListMainWindow::GetSelectedItemCount() const
-      GetSelectedItemCount__16wxListMainWindowCFv
-      ;wxListHeaderWindow::GetEventTable() const
-      GetEventTable__18wxListHeaderWindowCFv
-      ;wxListMainWindow::GetDummyLine() const
-      GetDummyLine__16wxListMainWindowCFv
-      ;wxGenericListCtrl::GetColumnCount() const
-      GetColumnCount__17wxGenericListCtrlCFv
-      ;wxGenericListCtrl::GetBackgroundColour() const
-      GetBackgroundColour__17wxGenericListCtrlCFv
-      ;wxListTextCtrl::Finish()
-      Finish__14wxListTextCtrlFv
-      ;wxListMainWindow::DeleteEverything()
-      DeleteEverything__16wxListMainWindowFv
-      ;wxwxListHeaderDataListNode::DeleteData()
-      DeleteData__26wxwxListHeaderDataListNodeFv
-      ;wxListMainWindow::DeleteAllItems()
-      DeleteAllItems__16wxListMainWindowFv
-      ;wxGenericListCtrl::CreateHeaderWindow()
-      CreateHeaderWindow__17wxGenericListCtrlFv
-      ;wxListTextCtrl::AcceptChanges()
-      AcceptChanges__14wxListTextCtrlFv
-      ;wxListMainWindow::GetTextLength(const wxString&) const
-      GetTextLength__16wxListMainWindowCFRC8wxString
-      wxEVT_COMMAND_LIST_GET_INFO
-      ;wxListMainWindow::sm_eventTableEntries
-      sm_eventTableEntries__16wxListMainWindow
-      ;wxGenericListCtrl::InsertItem(long,const wxString&)
-      InsertItem__17wxGenericListCtrlFlRC8wxString
-      ;wxListMainWindow::HighlightLine(unsigned int,unsigned long)
-      HighlightLine__16wxListMainWindowFUiUl
-      wxEVT_COMMAND_LIST_ITEM_SELECTED
-      wxEVT_COMMAND_LIST_END_LABEL_EDIT
-      ;wxListTextCtrl::sm_eventTableEntries
-      sm_eventTableEntries__14wxListTextCtrl
-      ;wxGenericListCtrl::SetFont(const wxFont&)
-      SetFont__17wxGenericListCtrlFRC6wxFont
-      ;wxGenericListCtrl::SetDropTarget(wxDropTarget*)
-      SetDropTarget__17wxGenericListCtrlFP12wxDropTarget
-      ;wxGenericListCtrl::OnSize(wxSizeEvent&)
-      OnSize__17wxGenericListCtrlFR11wxSizeEvent
-      ;wxListMainWindow::OnScroll(wxScrollWinEvent&)
-      OnScroll__16wxListMainWindowFR16wxScrollWinEvent
-      ;wxListHeaderWindow::OnPaint(wxPaintEvent&)
-      OnPaint__18wxListHeaderWindowFR12wxPaintEvent
-      ;wxListMainWindow::OnMouse(wxMouseEvent&)
-      OnMouse__16wxListMainWindowFR12wxMouseEvent
-      ;wxListTextCtrl::OnKeyUp(wxKeyEvent&)
-      OnKeyUp__14wxListTextCtrlFR10wxKeyEvent
-      ;wxListMainWindow::OnChar(wxKeyEvent&)
-      OnChar__16wxListMainWindowFR10wxKeyEvent
-      ;wxGenericListCtrl::GetItemTextColour(long) const
-      GetItemTextColour__17wxGenericListCtrlCFl
-      ;wxListMainWindow::GetItemPosition(long,wxPoint&) const
-      GetItemPosition__16wxListMainWindowCFlR7wxPoint
-      ;wxGenericListCtrl::GetItemBackgroundColour(long) const
-      GetItemBackgroundColour__17wxGenericListCtrlCFl
-      ;wxGenericListCtrl::FindItem(long,const wxString&,unsigned long)
-      FindItem__17wxGenericListCtrlFlRC8wxStringUl
-      ;wxListMainWindow::EnsureVisible(long)
-      EnsureVisible__16wxListMainWindowFl
-      ;wxListLineData::DrawInReportMode(wxDC*,const wxRect&,const wxRect&,unsigned long)
-      DrawInReportMode__14wxListLineDataFP4wxDCRC6wxRectT2Ul
-      ;wxGenericListCtrl::DeleteItem(long)
-      DeleteItem__17wxGenericListCtrlFl
-      ;wxListLineData::GetText(int) const
-      GetText__14wxListLineDataCFi
-      __vft26wxwxListHeaderDataListNode10wxNodeBase
-      __vft24wxwxListItemDataListNode10wxNodeBase
-      ;wxListLineData::SetPosition(int,int,int,int)
-      SetPosition__14wxListLineDataFiN31
-      ;wxListMainWindow::SetItem(wxListItem&)
-      SetItem__16wxListMainWindowFR10wxListItem
-      ;wxListItemData::SetItem(const wxListItem&)
-      SetItem__14wxListItemDataFRC10wxListItem
-      ;wxGenericListCtrl::SetImageList(wxImageList*,int)
-      SetImageList__17wxGenericListCtrlFP11wxImageListi
-      ;wxListMainWindow::SetColumn(int,wxListItem&)
-      SetColumn__16wxListMainWindowFiR10wxListItem
-      ;wxListLineDataArray::RemoveAt(unsigned int,unsigned int)
-      RemoveAt__19wxListLineDataArrayFUiT1
-      ;wxSelectionStore::IsSelected(unsigned int) const
-      IsSelected__16wxSelectionStoreCFUi
-      ;wxListMainWindow::IsHighlighted(unsigned int) const
-      IsHighlighted__16wxListMainWindowCFUi
-      ;wxGenericListCtrl::InsertItem(wxListItem&)
-      InsertItem__17wxGenericListCtrlFR10wxListItem
-      ;wxListMainWindow::InsertItem(wxListItem&)
-      InsertItem__16wxListMainWindowFR10wxListItem
-      ;wxListMainWindow::GetLineIconRect(unsigned int) const
-      GetLineIconRect__16wxListMainWindowCFUi
-      ;wxListMainWindow::GetItemState(long,long) const
-      GetItemState__16wxListMainWindowCFlT1
-      ;wxListMainWindow::GetColumnWidth(int) const
-      GetColumnWidth__16wxListMainWindowCFi
-      ;wxListLineDataArray::Add(const wxListLineData&,unsigned int)
-      Add__19wxListLineDataArrayFRC14wxListLineDataUi
-      ;wxConstructorForwxListView()
-      wxConstructorForwxListView__Fv
-      ;wxConstructorForwxListHeaderWindow()
-      wxConstructorForwxListHeaderWindow__Fv
-      ;wxGenericListCtrl::SetItemImage(long,int,int)
-      SetItemImage__17wxGenericListCtrlFliT2
-      ;wxGenericListCtrl::SetFocus()
-      SetFocus__17wxGenericListCtrlFv
-      ;wxGenericListCtrl::SetBackgroundColour(const wxColour&)
-      SetBackgroundColour__17wxGenericListCtrlFRC8wxColour
-      ;wxListMainWindow::RefreshAll()
-      RefreshAll__16wxListMainWindowFv
-      ;wxListMainWindow::HitTestLine(unsigned int,int,int) const
-      HitTestLine__16wxListMainWindowCFUiiT2
-      ;wxListHeaderData::HasImage() const
-      HasImage__16wxListHeaderDataCFv
-      ;wxListItemData::GetWidth() const
-      GetWidth__14wxListItemDataCFv
-      ;wxListHeaderData::GetImage() const
-      GetImage__16wxListHeaderDataCFv
-      ;wxListMainWindow::GetEventTable() const
-      GetEventTable__16wxListMainWindowCFv
-      ;wxGenericListCtrl::GetCountPerPage() const
-      GetCountPerPage__17wxGenericListCtrlCFv
-      ;wxListMainWindow::GetCountPerPage() const
-      GetCountPerPage__16wxListMainWindowCFv
-      ;wxListHeaderWindow::DrawCurrent()
-      DrawCurrent__18wxListHeaderWindowFv
-      ;wxListLineDataArray::DoEmpty()
-      DoEmpty__19wxListLineDataArrayFv
-      ;wxListItemData::wxListItemData(wxListMainWindow*)
-      __ct__14wxListItemDataFP16wxListMainWindow
-      wxEVT_COMMAND_LIST_COL_END_DRAG
-      wxEVT_COMMAND_LIST_COL_CLICK
-      wxEVT_COMMAND_LIST_BEGIN_RDRAG
-      wxEVT_COMMAND_LIST_BEGIN_DRAG
-      ;wxListHeaderWindow::wxListHeaderWindow(wxWindow*,int,wxListMainWindow*,const wxPoint&,const wxSize&,long,const wxString&)
-      __ct__18wxListHeaderWindowFP8wxWindowiP16wxListMainWindowRC7wxPointRC6wxSizelRC8wxString
-      ;wxListMainWindow::wxListMainWindow(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
-      __ct__16wxListMainWindowFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
-      ;wxListHeaderWindow::AdjustDC(wxDC&)
-      AdjustDC__18wxListHeaderWindowFR4wxDC
   ;From object file:  ..\generic\logg.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxLogDialog::wxLogDialog(wxWindow*,const wxArrayString&,const wxArrayInt&,const wxArrayLong&,const wxString&,long)
@@ -13566,6 +13049,228 @@ EXPORTS
       Create__9wxListBoxFP8wxWindowiRC7wxPointRC6wxSizeT2PC8wxStringlRC11wxValidatorRC8wxString
       ;wxListBox::FindString(const wxString&) const
       FindString__9wxListBoxCFRC8wxString
+  ;From object file:  ..\os2\listctrl.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;FindOS2ListFieldByColNum(unsigned long,long)
+      FindOS2ListFieldByColNum__FUll
+      wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT
+      ;wxListCtrl::sm_eventTableEntries
+      sm_eventTableEntries__10wxListCtrl
+      ;wxListCtrl::SortItems(int(*)(long,long,long),long)
+      SortItems__10wxListCtrlFPFlN21_il
+      ;wxListCtrl::SetItemPosition(long,const wxPoint&)
+      SetItemPosition__10wxListCtrlFlRC7wxPoint
+      ;wxListCtrl::OnPaint(wxPaintEvent&)
+      OnPaint__10wxListCtrlFR12wxPaintEvent
+      ;GetInternalData(wxListCtrl*,long)
+      GetInternalData__FP10wxListCtrll
+      ;FindOS2ListRecordByID(unsigned long,long)
+      FindOS2ListRecordByID__FUll
+      ;DeleteInternalData(wxListCtrl*,long)
+      DeleteInternalData__FP10wxListCtrll
+      ;ConvertToOS2Flags(long,_MYRECORD*)
+      ConvertToOS2Flags__FlP9_MYRECORD
+      ;wxListCtrl::ConvertArrangeToOS2Style(long)
+      ConvertArrangeToOS2Style__10wxListCtrlFl
+      ;wxListCtrl::FindItem(long,long)
+      FindItem__10wxListCtrlFlT1
+      ;wxListCtrl::GetItemCount() const
+      GetItemCount__10wxListCtrlCFv
+      ;wxListCtrl::GetTopItem() const
+      GetTopItem__10wxListCtrlCFv
+      wxEVT_COMMAND_LIST_COL_BEGIN_DRAG
+      wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK
+      ;GetInternalData(unsigned long,long)
+      GetInternalData__FUll
+      wxEVT_COMMAND_LIST_ITEM_FOCUSED
+      wxEVT_COMMAND_LIST_ITEM_DESELECTED
+      wxEVT_COMMAND_LIST_ITEM_ACTIVATED
+      wxEVT_COMMAND_LIST_CACHE_HINT
+      ;wxListCtrl::SetItem(wxListItem&)
+      SetItem__10wxListCtrlFR10wxListItem
+      wxEVT_COMMAND_LIST_INSERT_ITEM
+      ;wxListItem::sm_classwxListItem
+      sm_classwxListItem__10wxListItem
+      ;wxListCtrl::OnGetItemText(long,long) const
+      OnGetItemText__10wxListCtrlCFlT1
+      ;wxListCtrl::InsertItem(wxListItem&)
+      InsertItem__10wxListCtrlFR10wxListItem
+      ;wxListCtrl::HitTest(const wxPoint&,int&)
+      HitTest__10wxListCtrlFRC7wxPointRi
+      ;wxConstructorForwxListCtrl()
+      wxConstructorForwxListCtrl__Fv
+      ;wxListCtrl::SetItemTextColour(long,const wxColour&)
+      SetItemTextColour__10wxListCtrlFlRC8wxColour
+      ;wxListCtrl::GetTextColour() const
+      GetTextColour__10wxListCtrlCFv
+      ;wxListCtrl::EditLabel(long,wxClassInfo*)
+      EditLabel__10wxListCtrlFlP11wxClassInfo
+      wxEVT_COMMAND_LIST_SET_INFO
+      wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK
+      wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS
+      wxEVT_COMMAND_LIST_COL_DRAGGING
+      ;wxListView::sm_classwxListView
+      sm_classwxListView__10wxListView
+      ;wxListCtrl::InsertColumn(long,const wxString&,int,int)
+      InsertColumn__10wxListCtrlFlRC8wxStringiT3
+      ;ConvertFromOS2ListItem(unsigned long,wxListItem&,_MYRECORD*)
+      ConvertFromOS2ListItem__FUlR10wxListItemP9_MYRECORD
+      ;wxListEvent::sm_classwxListEvent
+      sm_classwxListEvent__11wxListEvent
+      ;wxListCtrl::sm_classwxListCtrl
+      sm_classwxListCtrl__10wxListCtrl
+      ;wxListCtrl::SetSingleStyle(long,unsigned long)
+      SetSingleStyle__10wxListCtrlFlUl
+      ;wxListCtrl::SetItemCount(long)
+      SetItemCount__10wxListCtrlFl
+      ;wxListCtrl::GetItemTextColour(long) const
+      GetItemTextColour__10wxListCtrlCFl
+      ;wxListCtrl::GetItemBackgroundColour(long) const
+      GetItemBackgroundColour__10wxListCtrlCFl
+      ;wxListCtrl::FindItem(long,const wxString&,unsigned long)
+      FindItem__10wxListCtrlFlRC8wxStringUl
+      ;wxListCtrl::EndEditLabel(unsigned long)
+      EndEditLabel__10wxListCtrlFUl
+      ;wxListCtrl::SetItemState(long,long,long)
+      SetItemState__10wxListCtrlFlN21
+      ;wxListCtrl::SetColumnWidth(int,int)
+      SetColumnWidth__10wxListCtrlFiT1
+      ;wxListCtrl::InsertItem(long,int)
+      InsertItem__10wxListCtrlFli
+      ;wxListCtrl::GetItem(wxListItem&) const
+      GetItem__10wxListCtrlCFR10wxListItem
+      ;wxListCtrl::DeleteColumn(int)
+      DeleteColumn__10wxListCtrlFi
+      ;wxListCtrl::Arrange(int)
+      Arrange__10wxListCtrlFi
+      ;wxListCtrl::GetNextItem(long,int,int) const
+      GetNextItem__10wxListCtrlCFliT2
+      wxEVT_COMMAND_LIST_KEY_DOWN
+      ;wxConstructorForwxListEvent()
+      wxConstructorForwxListEvent__Fv
+      ;wxListCtrl::UpdateStyle()
+      UpdateStyle__10wxListCtrlFv
+      ;wxListCtrl::SetItem(long,int,const wxString&,int)
+      SetItem__10wxListCtrlFliRC8wxStringT2
+      ;wxListCtrl::SetItemBackgroundColour(long,const wxColour&)
+      SetItemBackgroundColour__10wxListCtrlFlRC8wxColour
+      ;wxListCtrl::GetEventTable() const
+      GetEventTable__10wxListCtrlCFv
+      ;wxListCtrl::GetCountPerPage() const
+      GetCountPerPage__10wxListCtrlCFv
+      InternalDataCompareFunc
+      wxEVT_COMMAND_LIST_COL_RIGHT_CLICK
+      ;wxListCtrl::SetItemText(long,const wxString&)
+      SetItemText__10wxListCtrlFlRC8wxString
+      ;wxListCtrl::InsertItem(long,const wxString&)
+      InsertItem__10wxListCtrlFlRC8wxString
+      ;ConvertToOS2ListCol(long,const wxListItem&,_FIELDINFO*)
+      ConvertToOS2ListCol__FlRC10wxListItemP10_FIELDINFO
+      ;BumpRecordIds(unsigned long,_MYRECORD*)
+      BumpRecordIds__FUlP9_MYRECORD
+      ;wxListCtrl::sm_eventTable
+      sm_eventTable__10wxListCtrl
+      ;wxListCtrl::OnGetItemImage(long) const
+      OnGetItemImage__10wxListCtrlCFl
+      ;wxListCtrl::OnGetItemAttr(long) const
+      OnGetItemAttr__10wxListCtrlCFl
+      ;wxListCtrl::GetItemPosition(long,wxPoint&) const
+      GetItemPosition__10wxListCtrlCFlR7wxPoint
+      ;GetInternalDataAttr(wxListCtrl*,long)
+      GetInternalDataAttr__FP10wxListCtrll
+      ;wxListCtrl::DeleteItem(long)
+      DeleteItem__10wxListCtrlFl
+      ;wxListCtrl::ConvertViewToOS2Style(long)
+      ConvertViewToOS2Style__10wxListCtrlFl
+      ;wxListCtrl::ConvertToOS2Style(long&,long) const
+      ConvertToOS2Style__10wxListCtrlCFRll
+      ;ConvertToOS2ListItem(const wxListCtrl*,const wxListItem&,_MYRECORD*)
+      ConvertToOS2ListItem__FPC10wxListCtrlRC10wxListItemP9_MYRECORD
+      ;wxListCtrl::GetItemState(long,long) const
+      GetItemState__10wxListCtrlCFlT1
+      wxEVT_COMMAND_LIST_DELETE_ITEM
+      ;wxListCtrl::SetColumn(int,wxListItem&)
+      SetColumn__10wxListCtrlFiR10wxListItem
+      ;wxListCtrl::RefreshItems(long,long)
+      RefreshItems__10wxListCtrlFlT1
+      ;wxListCtrl::GetImageList(int) const
+      GetImageList__10wxListCtrlCFi
+      ;wxListCtrl::GetColumn(int,wxListItem&) const
+      GetColumn__10wxListCtrlCFiR10wxListItem
+      ;wxListCtrl::~wxListCtrl()
+      __dt__10wxListCtrlFv
+      ;wxConstructorForwxListItem()
+      wxConstructorForwxListItem__Fv
+      ;wxListCtrl::SetItemImage(long,int,int)
+      SetItemImage__10wxListCtrlFliT2
+      ;wxListCtrl::SetForegroundColour(const wxColour&)
+      SetForegroundColour__10wxListCtrlFRC8wxColour
+      ;wxListCtrl::OS2WindowProc(unsigned int,void*,void*)
+      OS2WindowProc__10wxListCtrlFUiPvT2
+      ;wxListCtrl::GetSelectedItemCount() const
+      GetSelectedItemCount__10wxListCtrlCFv
+      ;wxListCtrl::GetEditControl() const
+      GetEditControl__10wxListCtrlCFv
+      ;wxListCtrl::FreeAllInternalData()
+      FreeAllInternalData__10wxListCtrlFv
+      ;wxListCtrl::DeleteAllColumns()
+      DeleteAllColumns__10wxListCtrlFv
+      ;wxListCtrl::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxValidator&,const wxString&)
+      Create__10wxListCtrlFP8wxWindowiRC7wxPointRC6wxSizelRC11wxValidatorRC8wxString
+      wxEVT_COMMAND_LIST_GET_INFO
+      ;wxListCtrl::EnsureVisible(long)
+      EnsureVisible__10wxListCtrlFl
+      wxEVT_COMMAND_LIST_ITEM_SELECTED
+      wxEVT_COMMAND_LIST_END_LABEL_EDIT
+      __vft10wxListCtrl8wxObject
+      ;wxListCtrl::SetWindowStyleFlag(long)
+      SetWindowStyleFlag__10wxListCtrlFl
+      ;wxListCtrl::RefreshItem(long)
+      RefreshItem__10wxListCtrlFl
+      ;wxListCtrl::GetItemText(long) const
+      GetItemText__10wxListCtrlCFl
+      ;wxListCtrl::GetItemSpacing(unsigned long) const
+      GetItemSpacing__10wxListCtrlCFUl
+      ;wxListCtrl::GetItemData(long) const
+      GetItemData__10wxListCtrlCFl
+      ;wxListCtrl::DoCreateControl(int,int,int,int)
+      DoCreateControl__10wxListCtrlFiN31
+      ;wxListCtrl::SetItemData(long,long)
+      SetItemData__10wxListCtrlFlT1
+      ;wxListCtrl::SetImageList(wxImageList*,int)
+      SetImageList__10wxListCtrlFP11wxImageListi
+      ;wxListCtrl::ScrollList(int,int)
+      ScrollList__10wxListCtrlFiT1
+      ;wxListCtrl::InsertItem(long,const wxString&,int)
+      InsertItem__10wxListCtrlFlRC8wxStringi
+      ;wxListCtrl::InsertColumn(long,wxListItem&)
+      InsertColumn__10wxListCtrlFlR10wxListItem
+      ;wxListCtrl::GetItemRect(long,wxRect&,int) const
+      GetItemRect__10wxListCtrlCFlR6wxRecti
+      ;wxListCtrl::GetColumnWidth(int) const
+      GetColumnWidth__10wxListCtrlCFi
+      ;wxListCtrl::FindItem(long,const wxPoint&,int)
+      FindItem__10wxListCtrlFlRC7wxPointi
+      ;wxListCtrl::AssignImageList(wxImageList*,int)
+      AssignImageList__10wxListCtrlFP11wxImageListi
+      ;wxListCtrl::Init()
+      Init__10wxListCtrlFv
+      ;wxConstructorForwxListView()
+      wxConstructorForwxListView__Fv
+      ;wxListCtrl::SetTextColour(const wxColour&)
+      SetTextColour__10wxListCtrlFRC8wxColour
+      ;wxListCtrl::SetBackgroundColour(const wxColour&)
+      SetBackgroundColour__10wxListCtrlFRC8wxColour
+      ;wxListCtrl::DeleteAllItems()
+      DeleteAllItems__10wxListCtrlFv
+      ;wxListCtrl::ClearAll()
+      ClearAll__10wxListCtrlFv
+      ;wxListCtrl::OS2Command(unsigned int,unsigned short)
+      OS2Command__10wxListCtrlFUiUs
+      wxEVT_COMMAND_LIST_COL_END_DRAG
+      wxEVT_COMMAND_LIST_COL_CLICK
+      wxEVT_COMMAND_LIST_BEGIN_RDRAG
+      wxEVT_COMMAND_LIST_BEGIN_DRAG
   ;From object file:  ..\os2\main.cpp
     ;PUBDEFs (Symbols available from object file):
       main
@@ -15062,6 +14767,8 @@ EXPORTS
       wxClientDisplayRect__FPiN31
       ;wxDisplayDepth()
       wxDisplayDepth__Fv
+      ;wxColourToRGB(const wxColour&)
+      wxColourToRGB__FRC8wxColour
       gs_wxBusyCursor
       ;wxSetEnv(const wxString&,const char*)
       wxSetEnv__FRC8wxStringPCc
@@ -15199,6 +14906,8 @@ EXPORTS
       UnpackMenuSelect__8wxWindowFPvT1PUsT3PUl
       ;wxWindow::OnSetFocus(wxFocusEvent&)
       OnSetFocus__8wxWindowFR12wxFocusEvent
+      ;wxWindow::OnPaint(wxPaintEvent&)
+      OnPaint__8wxWindowFR12wxPaintEvent
       ;wxWindow::HandleKillFocus(unsigned long)
       HandleKillFocus__8wxWindowFUl
       ;wxWindow::HandleCtlColor(unsigned long*)

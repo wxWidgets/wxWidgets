@@ -3987,6 +3987,21 @@ void wxWindowOS2::OnSysColourChanged(
 // painting
 // ---------------------------------------------------------------------------
 
+void wxWindow::OnPaint (
+  wxPaintEvent&                     rEvent
+)
+{
+    HDC                             hDC = (HDC)wxPaintDC::FindDCInCache((wxWindow*) rEvent.GetEventObject());
+
+    if (hDC != 0)
+    {
+        OS2DefWindowProc( (WXUINT)WM_PAINT
+                         ,(WXWPARAM)hDC
+                         ,(WXLPARAM)0
+                        );
+    }
+} // end of wxWindow::OnPaint
+
 bool wxWindowOS2::HandlePaint()
 {
     HRGN                            hRgn;
