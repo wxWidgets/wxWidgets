@@ -28,30 +28,32 @@
 
 #include "wx/wfstream.h"
 
+// not only the statfs syscall is called differently depending on platform, but
+// one of its incarnations, statvfs(), takes different arguments under
+// different platforms and even different versions of the same system (Solaris
+// 7 and 8): if you want to test for this, don't forget that the problems only
+// appear if the large files support is enabled
 #ifdef HAVE_STATFS
-#  ifdef __BSD__
-#    include <sys/param.h>
-#    include <sys/mount.h>
-#  else
-#    include <sys/vfs.h>
-#  endif
+    #ifdef __BSD__
+        #include <sys/param.h>
+        #include <sys/mount.h>
+    #else // !__BSD__
+        #include <sys/vfs.h>
+    #endif // __BSD__/!__BSD__
+
+    #define wxStatfs statfs
 #endif // HAVE_STATFS
 
-// not only the statfs syscall is called differently depending on platform, but
-// we also can't use "struct statvfs" under Solaris because it breaks down if
-// HAVE_LARGEFILE_SUPPORT == 1 and we must use statvfs_t instead
 #ifdef HAVE_STATVFS
     #include <sys/statvfs.h>
 
-    #define statfs statvfs
-# ifdef __HPUX__
-    #define wxStatFs struct statvfs
-# else
-    #define wxStatFs statvfs_t
-# endif
-#elif HAVE_STATFS
-    #define wxStatFs struct statfs
-#endif // HAVE_STAT[V]FS
+    #define wxStatfs statvfs
+#endif // HAVE_STATVFS
+
+#if defined(HAVE_STATFS) || defined(HAVE_STATVFS)
+    // WX_STATFS_T is detected by configure
+    #define wxStatfs_t WX_STATFS_T
+#endif
 
 #if wxUSE_GUI
     #include "wx/unix/execute.h"
@@ -1024,8 +1026,8 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 {
 #if defined(HAVE_STATFS) || defined(HAVE_STATVFS)
     // the case to "char *" is needed for AIX 4.3
-    wxStatFs fs;
-    if ( statfs((char *)(const char*)path.fn_str(), &fs) != 0 )
+    wxStatfs_t fs;
+    if ( wxStatfs((char *)(const char*)path.fn_str(), &fs) != 0 )
     {
         wxLogSysError( wxT("Failed to get file system statistics") );
 

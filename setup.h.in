@@ -881,6 +881,9 @@
 /* The type of 3rd argument to getsockname() - usually size_t or int */
 #undef SOCKLEN_T
 
+/* The type of statvfs(2) argument */
+#undef WX_STATFS_T
+
 /* The signal handler prototype */
 #undef wxTYPE_SA_HANDLER
 
