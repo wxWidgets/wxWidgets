@@ -2266,7 +2266,9 @@ static PyObject *_wrap_wxImage_Paste(PyObject *self, PyObject *args, PyObject *k
 static PyObject * wxImage_GetDataBuffer(wxImage *self) {
             unsigned char* data = self->GetData();
             int len = self->GetWidth() * self->GetHeight() * 3;
-            return PyBuffer_FromReadWriteMemory(data, len);
+            PyObject* rv;
+            wxPyBLOCK_THREADS( rv = PyBuffer_FromReadWriteMemory(data, len) );
+            return rv;
         }
 static PyObject *_wrap_wxImage_GetDataBuffer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2300,7 +2302,9 @@ static PyObject *_wrap_wxImage_GetDataBuffer(PyObject *self, PyObject *args, PyO
 static PyObject * wxImage_GetData(wxImage *self) {
             unsigned char* data = self->GetData();
             int len = self->GetWidth() * self->GetHeight() * 3;
-            return PyString_FromStringAndSize((char*)data, len);
+            PyObject* rv;
+            wxPyBLOCK_THREADS( rv = PyString_FromStringAndSize((char*)data, len));
+            return rv;
         }
 static PyObject *_wrap_wxImage_GetData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2335,15 +2339,18 @@ static void  wxImage_SetDataBuffer(wxImage *self,PyObject * data) {
             unsigned char* buffer;
             int size;
 
-            if (!PyArg_Parse(data, "w#", &buffer, &size))
-                return;
+            wxPyBeginBlockThreads();
+            if (!PyArg_Parse(data, "t#", &buffer, &size))
+                goto done;
 
             if (size != self->GetWidth() * self->GetHeight() * 3) {
                 PyErr_SetString(PyExc_TypeError, "Incorrect buffer size");
-                return;
+                goto done;
             }
 
             self->SetData(buffer);
+        done:
+            wxPyEndBlockThreads();
         }
 static PyObject *_wrap_wxImage_SetDataBuffer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2387,7 +2394,7 @@ static void  wxImage_SetData(wxImage *self,PyObject * data) {
 
             size_t len = self->GetWidth() * self->GetHeight() * 3;
             dataPtr = (unsigned char*) malloc(len);
-            memcpy(dataPtr, PyString_AsString(data), len);
+            wxPyBLOCK_THREADS( memcpy(dataPtr, PyString_AsString(data), len) );
             self->SetData(dataPtr);
             // wxImage takes ownership of dataPtr...
         }

@@ -2825,6 +2825,80 @@ static PyObject *_wrap_wxHtmlCell_GetDescent(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+#define wxHtmlCell_GetId(_swigobj)  (_swigobj->GetId())
+static PyObject *_wrap_wxHtmlCell_GetId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxHtmlCell * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlCell_GetId",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlCell_GetId. Expected _wxHtmlCell_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    const wxString & _result_ref = wxHtmlCell_GetId(_arg0);
+    _result = (wxString *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
+    return _resultobj;
+}
+
+#define wxHtmlCell_SetId(_swigobj,_swigarg0)  (_swigobj->SetId(_swigarg0))
+static PyObject *_wrap_wxHtmlCell_SetId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlCell * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","id", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlCell_SetId",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlCell_SetId. Expected _wxHtmlCell_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxHtmlCell_SetId(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
 #define wxHtmlCell_GetLink(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetLink(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxHtmlCell_GetLink(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -6660,6 +6734,8 @@ static PyMethodDef htmlcMethods[] = {
 	 { "wxHtmlCell_GetParent", (PyCFunction) _wrap_wxHtmlCell_GetParent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlCell_GetNext", (PyCFunction) _wrap_wxHtmlCell_GetNext, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlCell_GetLink", (PyCFunction) _wrap_wxHtmlCell_GetLink, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlCell_SetId", (PyCFunction) _wrap_wxHtmlCell_SetId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlCell_GetId", (PyCFunction) _wrap_wxHtmlCell_GetId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlCell_GetDescent", (PyCFunction) _wrap_wxHtmlCell_GetDescent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlCell_GetHeight", (PyCFunction) _wrap_wxHtmlCell_GetHeight, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlCell_GetWidth", (PyCFunction) _wrap_wxHtmlCell_GetWidth, METH_VARARGS | METH_KEYWORDS },
@@ -6901,6 +6977,13 @@ SWIGEXPORT(void) inithtmlc() {
 	 PyDict_SetItemString(d,"wxHTML_COND_ISANCHOR", PyInt_FromLong((long) wxHTML_COND_ISANCHOR));
 	 PyDict_SetItemString(d,"wxHTML_COND_ISIMAGEMAP", PyInt_FromLong((long) wxHTML_COND_ISIMAGEMAP));
 	 PyDict_SetItemString(d,"wxHTML_COND_USER", PyInt_FromLong((long) wxHTML_COND_USER));
+	 PyDict_SetItemString(d,"wxHTML_FONT_SIZE_1", PyInt_FromLong((long) wxHTML_FONT_SIZE_1));
+	 PyDict_SetItemString(d,"wxHTML_FONT_SIZE_2", PyInt_FromLong((long) wxHTML_FONT_SIZE_2));
+	 PyDict_SetItemString(d,"wxHTML_FONT_SIZE_3", PyInt_FromLong((long) wxHTML_FONT_SIZE_3));
+	 PyDict_SetItemString(d,"wxHTML_FONT_SIZE_4", PyInt_FromLong((long) wxHTML_FONT_SIZE_4));
+	 PyDict_SetItemString(d,"wxHTML_FONT_SIZE_5", PyInt_FromLong((long) wxHTML_FONT_SIZE_5));
+	 PyDict_SetItemString(d,"wxHTML_FONT_SIZE_6", PyInt_FromLong((long) wxHTML_FONT_SIZE_6));
+	 PyDict_SetItemString(d,"wxHTML_FONT_SIZE_7", PyInt_FromLong((long) wxHTML_FONT_SIZE_7));
 	 PyDict_SetItemString(d,"wxHW_SCROLLBAR_NEVER", PyInt_FromLong((long) wxHW_SCROLLBAR_NEVER));
 	 PyDict_SetItemString(d,"wxHW_SCROLLBAR_AUTO", PyInt_FromLong((long) wxHW_SCROLLBAR_AUTO));
 	 PyDict_SetItemString(d,"wxHTML_OPEN", PyInt_FromLong((long) wxHTML_OPEN));

@@ -203,13 +203,13 @@ void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
 class wxPyDropSource : public wxDropSource {
 public:
 #ifdef __WXMSW__
-     wxPyDropSource(wxWindow *win = NULL,
+     wxPyDropSource(wxWindow *win,
                     const wxCursor &copy = wxNullCursor,
                     const wxCursor &move = wxNullCursor,
                     const wxCursor &none = wxNullCursor)
          : wxDropSource(win, copy, move, none) {}
 #else
-    wxPyDropSource(wxWindow *win = NULL,
+    wxPyDropSource(wxWindow *win,
                    const wxIcon& copy = wxNullIcon,
                    const wxIcon& move = wxNullIcon,
                    const wxIcon& none = wxNullIcon)
@@ -2350,7 +2350,7 @@ static PyObject *_wrap_wxClipboard_UsePrimarySelection(PyObject *self, PyObject 
 static PyObject *_wrap_new_wxDropSource(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyDropSource * _result;
-    wxWindow * _arg0 = (wxWindow *) NULL;
+    wxWindow * _arg0;
     wxIcon * _arg1 = (wxIcon *) &wxNullIcon;
     wxIcon * _arg2 = (wxIcon *) &wxNullIcon;
     wxIcon * _arg3 = (wxIcon *) &wxNullIcon;
@@ -2362,7 +2362,7 @@ static PyObject *_wrap_new_wxDropSource(PyObject *self, PyObject *args, PyObject
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|OOOO:new_wxDropSource",_kwnames,&_argo0,&_argo1,&_argo2,&_argo3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|OOO:new_wxDropSource",_kwnames,&_argo0,&_argo1,&_argo2,&_argo3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
