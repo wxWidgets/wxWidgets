@@ -295,10 +295,22 @@ public:
     {
         Country_Unknown, // no special information for this country
         Country_Default, // set the default country with SetCountry() method
+                         // or use the default country with any other
 
         // TODO add more countries (for this we must know about DST and/or
         //      holidays for this country)
+
+        // Western European countries: we assume that they all follow the same
+        // DST rules (true or false?)
+        Country_WesternEurope_Start,
+        Country_EEC = Country_WesternEurope_Start,
         France,
+        Germany,
+        UK,
+        Country_WesternEurope_End = UK,
+
+        Russia,
+
         USA
     };
 
@@ -393,7 +405,11 @@ public:
         // set the current country
     static void SetCountry(Country country);
         // get the current country
-    static inline Country GetCountry();
+    static Country GetCountry();
+
+        // return TRUE if the country is a West European one (in practice,
+        // this means that the same DST rules as for EEC apply)
+    static bool IsWestEuropeanCountry(Country country = Country_Default);
 
         // return the current year
     static int GetCurrentYear(Calendar cal = Gregorian);
@@ -431,14 +447,20 @@ public:
         // locale, returns empty string on error
     static wxString GetWeekDayName(WeekDay weekday, bool abbr = FALSE);
 
+        // return TRUE if the given country uses DST for this year
+    static bool IsDSTApplicable(int year = Inv_Year,
+                                Country country = Country_Default);
+
         // get the beginning of DST for this year, will return invalid object
         // if no DST applicable in this year. The default value of the
         // parameter means to take the current year.
-    static wxDateTime GetBeginDST(int year = Inv_Year);
+    static wxDateTime GetBeginDST(int year = Inv_Year,
+                                  Country country = Country_Default);
         // get the end of DST for this year, will return invalid object
         // if no DST applicable in this year. The default value of the
         // parameter means to take the current year.
-    static wxDateTime GetEndDST(int year = Inv_Year);
+    static wxDateTime GetEndDST(int year = Inv_Year,
+                                Country country = Country_Default);
 
         // return the wxDateTime object for the current time
     static inline wxDateTime Now();
@@ -600,6 +622,13 @@ public:
         // get the Julian Day number (the fractional part specifies the time of
         // the day, related to noon - beware of rounding errors!)
     double GetJulianDayNumber() const;
+    double GetJDN() const { return GetJulianDayNumber(); }
+
+        // get the Modified Julian Day number: it is equal to JDN - 2400000.5
+        // and so integral MJDs correspond to the midnights (and not noons).
+        // MJD 0 is Nov 17, 1858
+    double GetModifiedJulianDayNumber() const { return GetJDN() - 2400000.5; }
+    double GetMJD() const { return GetModifiedJulianDayNumber(); }
 
         // get the Rata Die number
     double GetRataDie() const;
@@ -623,6 +652,13 @@ public:
         // transform to GMT/UTC
     wxDateTime ToGMT() const { return ToTimezone(GMT0); }
     wxDateTime& MakeGMT() { return MakeTimezone(GMT0); }
+
+        // is daylight savings time in effect at this moment according to the
+        // rules of the specified country?
+        //
+        // Return value is > 0 if DST is in effect, 0 if it is not and -1 if
+        // the information is not available (this is compatible with ANSI C)
+    int IsDST(Country country = Country_Default) const;
 
     // accessors: many of them take the timezone parameter which indicates the
     // timezone for which to make the calculations and the default value means
@@ -689,13 +725,6 @@ public:
         //     the matter. Besides, for some countries the exact date of
         //     adoption of the Gregorian calendar is simply unknown.
     bool IsGregorianDate(GregorianAdoption country = Gr_Standard) const;
-
-        // is daylight savings time in effect at this moment according to the
-        // rules of the specified country?
-        //
-        // Return value is > 0 if DST is in effect, 0 if it is not and -1 if
-        // the information is not available (this is compatible with ANSI C)
-    int IsDST(Country country = Country_Default) const;
 
     // comparison (see also functions below for operator versions)
     // ------------------------------------------------------------------------

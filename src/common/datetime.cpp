@@ -300,6 +300,8 @@ void wxDateTime::Tm::AddMonths(int monDiff)
     while ( monDiff + mon > MONTHS_IN_YEAR )
     {
         year++;
+
+        monDiff -= MONTHS_IN_YEAR;
     }
 
     mon = (wxDateTime::Month)(mon + monDiff);
@@ -419,12 +421,6 @@ bool wxDateTime::IsLeapYear(int year, wxDateTime::Calendar cal)
 int wxDateTime::GetCentury(int year)
 {
     return year > 0 ? year / 100 : year / 100 - 1;
-}
-
-/* static */
-void wxDateTime::SetCountry(wxDateTime::Country country)
-{
-    ms_country = country;
 }
 
 /* static */
@@ -550,6 +546,281 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday, bool abbr)
 
     // ... and call strftime()
     return CallStrftime(abbr ? _T("%a") : _T("%A"), &tm);
+}
+
+// ----------------------------------------------------------------------------
+// Country stuff: date calculations depend on the country (DST, work days,
+// ...), so we need to know which rules to follow.
+// ----------------------------------------------------------------------------
+
+/* static */
+wxDateTime::Country wxDateTime::GetCountry()
+{
+    if ( ms_country == Country_Unknown )
+    {
+        // try to guess from the time zone name
+        time_t t = time(NULL);
+        struct tm *tm = localtime(&t);
+
+        wxString tz = CallStrftime(_T("%Z"), tm);
+        if ( tz == _T("WET") || tz == _T("WEST") )
+        {
+            ms_country = UK;
+        }
+        else if ( tz == _T("CET") || tz == _T("CEST") )
+        {
+            ms_country = Country_EEC;
+        }
+        else if ( tz == _T("MSK") || tz == _T("MSD") )
+        {
+            ms_country = Russia;
+        }
+        else if ( tz == _T("AST") || tz == _T("ADT") ||
+                  tz == _T("EST") || tz == _T("EDT") ||
+                  tz == _T("CST") || tz == _T("CDT") ||
+                  tz == _T("MST") || tz == _T("MDT") ||
+                  tz == _T("PST") || tz == _T("PDT") )
+        {
+            ms_country = USA;
+        }
+        else
+        {
+            // well, choose a default one
+            ms_country = USA;
+        }
+    }
+
+    return ms_country;
+}
+
+/* static */
+void wxDateTime::SetCountry(wxDateTime::Country country)
+{
+    ms_country = country;
+}
+
+/* static */
+bool wxDateTime::IsWestEuropeanCountry(Country country)
+{
+    if ( country == Country_Default )
+    {
+        country = GetCountry();
+    }
+
+    return (Country_WesternEurope_Start <= country) &&
+           (country <= Country_WesternEurope_End);
+}
+
+// ----------------------------------------------------------------------------
+// DST calculations: we use 3 different rules for the West European countries,
+// USA and for the rest of the world. This is undoubtedly false for many
+// countries, but I lack the necessary info (and the time to gather it),
+// please add the other rules here!
+// ----------------------------------------------------------------------------
+
+/* static */
+bool wxDateTime::IsDSTApplicable(int year, Country country)
+{
+    if ( year == Inv_Year )
+    {
+        // take the current year if none given
+        year = GetCurrentYear();
+    }
+
+    if ( country == Country_Default )
+    {
+        country = GetCountry();
+    }
+
+    switch ( country )
+    {
+        case USA:
+        case UK:
+            // DST was first observed in the US and UK during WWI, reused
+            // during WWII and used again since 1966
+            return year >= 1966 ||
+                   (year >= 1942 && year <= 1945) ||
+                   (year == 1918 || year == 1919);
+
+        default:
+            // assume that it started after WWII
+            return year > 1950;
+    }
+}
+
+/* static */
+wxDateTime wxDateTime::GetBeginDST(int year, Country country)
+{
+    if ( year == Inv_Year )
+    {
+        // take the current year if none given
+        year = GetCurrentYear();
+    }
+
+    if ( country == Country_Default )
+    {
+        country = GetCountry();
+    }
+
+    if ( !IsDSTApplicable(year, country) )
+    {
+        return ms_InvDateTime;
+    }
+
+    wxDateTime dt;
+
+    if ( IsWestEuropeanCountry(country) || (country == Russia) )
+    {
+        // DST begins at 1 a.m. GMT on the last Sunday of March
+        if ( !dt.SetToLastWeekDay(Sun, Mar, year) )
+        {
+            // weird...
+            wxFAIL_MSG( _T("no last Sunday in March?") );
+        }
+
+        dt += wxTimeSpan::Hours(1);
+
+        dt.MakeGMT();
+    }
+    else switch ( country )
+    {
+        case USA:
+            switch ( year )
+            {
+                case 1918:
+                case 1919:
+                    // don't know for sure - assume it was in effect all year
+
+                case 1943:
+                case 1944:
+                case 1945:
+                    dt.Set(1, Jan, year);
+                    break;
+
+                case 1942:
+                    // DST was installed Feb 2, 1942 by the Congress
+                    dt.Set(2, Feb, year);
+                    break;
+
+                    // Oil embargo changed the DST period in the US
+                case 1974:
+                    dt.Set(6, Jan, 1974);
+                    break;
+
+                case 1975:
+                    dt.Set(23, Feb, 1975);
+                    break;
+
+                default:
+                    // before 1986, DST begun on the last Sunday of April, but
+                    // in 1986 Reagan changed it to begin at 2 a.m. of the
+                    // first Sunday in April
+                    if ( year < 1986 )
+                    {
+                        if ( !dt.SetToLastWeekDay(Sun, Apr, year) )
+                        {
+                            // weird...
+                            wxFAIL_MSG( _T("no first Sunday in April?") );
+                        }
+                    }
+                    else
+                    {
+                        if ( !dt.SetToWeekDay(Sun, 1, Apr, year) )
+                        {
+                            // weird...
+                            wxFAIL_MSG( _T("no first Sunday in April?") );
+                        }
+                    }
+
+                    dt += wxTimeSpan::Hours(2);
+
+                    // TODO what about timezone??
+            }
+
+            break;
+
+        default:
+            // assume Mar 30 as the start of the DST for the rest of the world
+            // - totally bogus, of course
+            dt.Set(30, Mar, year);
+    }
+
+    return dt;
+}
+
+/* static */
+wxDateTime wxDateTime::GetEndDST(int year, Country country)
+{
+    if ( year == Inv_Year )
+    {
+        // take the current year if none given
+        year = GetCurrentYear();
+    }
+
+    if ( country == Country_Default )
+    {
+        country = GetCountry();
+    }
+
+    if ( !IsDSTApplicable(year, country) )
+    {
+        return ms_InvDateTime;
+    }
+
+    wxDateTime dt;
+
+    if ( IsWestEuropeanCountry(country) || (country == Russia) )
+    {
+        // DST ends at 1 a.m. GMT on the last Sunday of October 
+        if ( !dt.SetToLastWeekDay(Sun, Oct, year) )
+        {
+            // weirder and weirder...
+            wxFAIL_MSG( _T("no last Sunday in October?") );
+        }
+
+        dt += wxTimeSpan::Hours(1);
+
+        dt.MakeGMT();
+    }
+    else switch ( country )
+    {
+        case USA:
+            switch ( year )
+            {
+                case 1918:
+                case 1919:
+                    // don't know for sure - assume it was in effect all year
+
+                case 1943:
+                case 1944:
+                    dt.Set(31, Dec, year);
+                    break;
+
+                case 1945:
+                    // the time was reset after the end of the WWII
+                    dt.Set(30, Sep, year);
+                    break;
+
+                default:
+                    // DST ends at 2 a.m. on the last Sunday of October 
+                    if ( !dt.SetToLastWeekDay(Sun, Oct, year) )
+                    {
+                        // weirder and weirder...
+                        wxFAIL_MSG( _T("no last Sunday in October?") );
+                    }
+
+                    dt += wxTimeSpan::Hours(2);
+
+                    // TODO what about timezone??
+            }
+            break;
+
+        default:
+            // assume October 26th as the end of the DST - totally bogus too
+            dt.Set(26, Oct, year);
+    }
+
+    return dt;
 }
 
 // ----------------------------------------------------------------------------
@@ -960,9 +1231,9 @@ bool wxDateTime::SetToWeekDay(WeekDay weekday,
         // add advance n-1 weeks more
         diff += 7*(n - 1);
 
-        dt -= wxDateSpan::Days(diff);
+        dt += wxDateSpan::Days(diff);
     }
-    else
+    else // count from the end of the month
     {
         // get the last day of the month
         dt.SetToLastMonthDay(month, year);
@@ -976,7 +1247,7 @@ bool wxDateTime::SetToWeekDay(WeekDay weekday,
             diff += 7;
 
         // and rewind n-1 weeks from there
-        diff += 7*(n - 1);
+        diff += 7*(-n - 1);
 
         dt -= wxDateSpan::Days(diff);
     }
@@ -993,6 +1264,46 @@ bool wxDateTime::SetToWeekDay(WeekDay weekday,
         // no such day in this month
         return FALSE;
     }
+}
+
+wxDateTime::wxDateTime_t wxDateTime::GetDayOfYear(const TimeZone& tz) const
+{
+    // this array contains the cumulated number of days in all previous months
+    // for normal and leap years
+    static const wxDateTime_t cumulatedDays[2][MONTHS_IN_YEAR] =
+    {
+        { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 },
+        { 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335 }
+    };
+
+    Tm tm(GetTm(tz));
+
+    return cumulatedDays[IsLeapYear(tm.year)][tm.mon] + tm.mday;
+}
+
+wxDateTime::wxDateTime_t wxDateTime::GetWeekOfYear(const TimeZone& tz) const
+{
+    // the first week of the year is the one which contains Jan, 4 (according
+    // to ISO standard rule), so the year day N0 = 4 + 7*W always lies in the
+    // week W+1. As any day N = 7*W + 4 + (N - 4)%7, it lies in the same week
+    // as N0 or in the next one.
+
+    // TODO this surely may be optimized - I got confused while writing it
+
+    wxDateTime_t nDayInYear = GetDayOfYear(tz);
+
+    // the week day of the day lying in the first week
+    WeekDay wdayStart = wxDateTime(4, Jan, GetYear()).GetWeekDay();
+
+    wxDateTime_t week = (nDayInYear - 4) / 7 + 1;
+
+    // notice that Sunday shoould be counted as 7, not 0 here!
+    if ( ((nDayInYear - 4) % 7) + (!wdayStart ? 7 : wdayStart) > 7 )
+    {
+        week++;
+    }
+
+    return week;
 }
 
 // ----------------------------------------------------------------------------
@@ -1040,9 +1351,15 @@ int wxDateTime::IsDST(wxDateTime::Country country) const
     }
     else
     {
-        // wxFAIL_MSG( _T("TODO") );
+        int year = GetYear();
 
-        return -1;
+        if ( !IsDSTApplicable(year, country) )
+        {
+            // no DST time in this year in this country
+            return -1;
+        }
+
+        return IsBetween(GetBeginDST(year, country), GetEndDST(year, country));
     }
 }
 
@@ -1243,7 +1560,7 @@ wxString wxTimeSpan::Format(const wxChar *format) const
                     break;
 
                 case 'l':
-                    tmp.Printf(_T("%03d"), GetMilliseconds());
+                    tmp.Printf(_T("%03d"), GetMilliseconds().GetValue());
                     break;
 
                 case 'M':
@@ -1251,7 +1568,7 @@ wxString wxTimeSpan::Format(const wxChar *format) const
                     break;
 
                 case 'S':
-                    tmp.Printf(_T("%02d"), GetSeconds());
+                    tmp.Printf(_T("%02d"), GetSeconds().GetValue());
                     break;
             }
 

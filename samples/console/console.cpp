@@ -280,6 +280,11 @@ struct Date
     wxDateTime DT() const
         { return wxDateTime(day, month, year, hour, min, sec); }
 
+    bool SameDay(const wxDateTime::Tm& tm) const
+    {
+        return day == tm.mday && month == tm.mon && year == tm.year;
+    }
+
     wxString Format() const
     {
         wxString s;
@@ -287,6 +292,17 @@ struct Date
                  hour, min, sec,
                  wxDateTime::GetMonthName(month).c_str(),
                  day,
+                 abs(wxDateTime::ConvertYearToBC(year)),
+                 year > 0 ? "AD" : "BC");
+        return s;
+    }
+
+    wxString FormatDate() const
+    {
+        wxString s;
+        s.Printf("%02d-%s-%4d%s",
+                 day,
+                 wxDateTime::GetMonthName(month, TRUE).c_str(),
                  abs(wxDateTime::ConvertYearToBC(year)),
                  year > 0 ? "AD" : "BC");
         return s;
@@ -305,10 +321,10 @@ static const Date testDates[] =
     {  4, wxDateTime::Oct,  1582, 00, 00, 00, 2299149.5, wxDateTime::Mon,        -1,        -1 },
     {  1, wxDateTime::Mar,     1, 00, 00, 00, 1721484.5, wxDateTime::Thu,        -1,        -1 },
     {  1, wxDateTime::Jan,     1, 00, 00, 00, 1721425.5, wxDateTime::Mon,        -1,        -1 },
-    { 31, wxDateTime::Dec,     0, 00, 00, 00, 1721424.5, wxDateTime::Tue,        -1,        -1 },
-    {  1, wxDateTime::Jan,     0, 00, 00, 00, 1721059.5, wxDateTime::Wed,        -1,        -1 },
-    { 12, wxDateTime::Aug, -1234, 00, 00, 00, 1270573.5, wxDateTime::Thu,        -1,        -1 },
-    { 12, wxDateTime::Aug, -4000, 00, 00, 00,  260313.5, wxDateTime::Wed,        -1,        -1 },
+    { 31, wxDateTime::Dec,     0, 00, 00, 00, 1721424.5, wxDateTime::Sun,        -1,        -1 },
+    {  1, wxDateTime::Jan,     0, 00, 00, 00, 1721059.5, wxDateTime::Sat,        -1,        -1 },
+    { 12, wxDateTime::Aug, -1234, 00, 00, 00, 1270573.5, wxDateTime::Fri,        -1,        -1 },
+    { 12, wxDateTime::Aug, -4000, 00, 00, 00,  260313.5, wxDateTime::Sat,        -1,        -1 },
     { 24, wxDateTime::Nov, -4713, 00, 00, 00,      -0.5, wxDateTime::Mon,        -1,        -1 },
 };
 
@@ -344,12 +360,13 @@ static void TestTimeStatic()
     for ( size_t n = 0; n < nYears; n++ )
     {
         int year = years[0][n];
-        bool should = years[1][n] != 0;
+        bool should = years[1][n] != 0,
+             is = wxDateTime::IsLeapYear(year);
 
-        printf("Year %d is %sa leap year (should be: %s)\n",
+        printf("Year %d is %sa leap year (%s)\n",
                year,
-               wxDateTime::IsLeapYear(year) ? "" : "not ",
-               should ? "yes" : "no");
+               is ? "" : "not ",
+               should == is ? "ok" : "ERROR");
 
         wxASSERT( should == wxDateTime::IsLeapYear(year) );
     }
@@ -480,7 +497,9 @@ static void TestTimeWDays()
 {
     puts("\n*** wxDateTime weekday test ***");
 
-    for ( size_t n = 0; n < WXSIZEOF(testDates); n++ )
+    // test GetWeekDay()
+    size_t n;
+    for ( n = 0; n < WXSIZEOF(testDates); n++ )
     {
         const Date& d = testDates[n];
         wxDateTime dt(d.day, d.month, d.year, d.hour, d.min, d.sec);
@@ -488,7 +507,7 @@ static void TestTimeWDays()
         wxDateTime::WeekDay wday = dt.GetWeekDay();
         printf("%s is: %s",
                d.Format().c_str(),
-               wxDateTime::GetWeekDayName(wday));
+               wxDateTime::GetWeekDayName(wday).c_str());
         if ( wday == d.wday )
         {
             puts(" (ok)");
@@ -496,8 +515,301 @@ static void TestTimeWDays()
         else
         {
             printf(" (ERROR: should be %s)\n",
-                   wxDateTime::GetWeekDayName(d.wday));
+                   wxDateTime::GetWeekDayName(d.wday).c_str());
         }
+    }
+
+    puts("");
+
+    // test SetToWeekDay()
+    struct WeekDateTestData
+    {
+        Date date;                  // the real date (precomputed)
+        int nWeek;                  // its week index in the month
+        wxDateTime::WeekDay wday;   // the weekday
+        wxDateTime::Month month;    // the month
+        int year;                   // and the year
+
+        wxString Format() const
+        {
+            wxString s, which;
+            switch ( nWeek < -1 ? -nWeek : nWeek )
+            {
+                case 1: which = "first"; break;
+                case 2: which = "second"; break;
+                case 3: which = "third"; break;
+                case 4: which = "fourth"; break;
+                case 5: which = "fifth"; break;
+
+                case -1: which = "last"; break;
+            }
+
+            if ( nWeek < -1 )
+            {
+                which += " from end";
+            }
+
+            s.Printf("The %s %s of %s in %d",
+                     which.c_str(),
+                     wxDateTime::GetWeekDayName(wday).c_str(),
+                     wxDateTime::GetMonthName(month).c_str(),
+                     year);
+
+            return s;
+        }
+    };
+
+    // the array data was generated by the following python program
+    /*
+from DateTime import *
+from whrandom import *
+from string import *
+
+monthNames = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ]
+wdayNames = [ 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun' ]
+
+week = DateTimeDelta(7)
+
+for n in range(20):
+    year = randint(1900, 2100)
+    month = randint(1, 12)
+    day = randint(1, 28)
+    dt = DateTime(year, month, day)
+    wday = dt.day_of_week
+
+    countFromEnd = choice([-1, 1])
+    weekNum = 0;
+
+    while dt.month is month:
+        dt = dt - countFromEnd * week
+        weekNum = weekNum + countFromEnd
+
+    data = { 'day': rjust(`day`, 2), 'month': monthNames[month - 1], 'year': year, 'weekNum': rjust(`weekNum`, 2), 'wday': wdayNames[wday] }
+    
+    print "{ { %(day)s, wxDateTime::%(month)s, %(year)d }, %(weekNum)d, "\
+          "wxDateTime::%(wday)s, wxDateTime::%(month)s, %(year)d }," % data
+    */    
+
+    static const WeekDateTestData weekDatesTestData[] =
+    {
+        { { 20, wxDateTime::Mar, 2045 },  3, wxDateTime::Mon, wxDateTime::Mar, 2045 },
+        { {  5, wxDateTime::Jun, 1985 }, -4, wxDateTime::Wed, wxDateTime::Jun, 1985 },
+        { { 12, wxDateTime::Nov, 1961 }, -3, wxDateTime::Sun, wxDateTime::Nov, 1961 },
+        { { 27, wxDateTime::Feb, 2093 }, -1, wxDateTime::Fri, wxDateTime::Feb, 2093 },
+        { {  4, wxDateTime::Jul, 2070 }, -4, wxDateTime::Fri, wxDateTime::Jul, 2070 },
+        { {  2, wxDateTime::Apr, 1906 }, -5, wxDateTime::Mon, wxDateTime::Apr, 1906 },
+        { { 19, wxDateTime::Jul, 2023 }, -2, wxDateTime::Wed, wxDateTime::Jul, 2023 },
+        { {  5, wxDateTime::May, 1958 }, -4, wxDateTime::Mon, wxDateTime::May, 1958 },
+        { { 11, wxDateTime::Aug, 1900 },  2, wxDateTime::Sat, wxDateTime::Aug, 1900 },
+        { { 14, wxDateTime::Feb, 1945 },  2, wxDateTime::Wed, wxDateTime::Feb, 1945 },
+        { { 25, wxDateTime::Jul, 1967 }, -1, wxDateTime::Tue, wxDateTime::Jul, 1967 },
+        { {  9, wxDateTime::May, 1916 }, -4, wxDateTime::Tue, wxDateTime::May, 1916 },
+        { { 20, wxDateTime::Jun, 1927 },  3, wxDateTime::Mon, wxDateTime::Jun, 1927 },
+        { {  2, wxDateTime::Aug, 2000 },  1, wxDateTime::Wed, wxDateTime::Aug, 2000 },
+        { { 20, wxDateTime::Apr, 2044 },  3, wxDateTime::Wed, wxDateTime::Apr, 2044 },
+        { { 20, wxDateTime::Feb, 1932 }, -2, wxDateTime::Sat, wxDateTime::Feb, 1932 },
+        { { 25, wxDateTime::Jul, 2069 },  4, wxDateTime::Thu, wxDateTime::Jul, 2069 },
+        { {  3, wxDateTime::Apr, 1925 },  1, wxDateTime::Fri, wxDateTime::Apr, 1925 },
+        { { 21, wxDateTime::Mar, 2093 },  3, wxDateTime::Sat, wxDateTime::Mar, 2093 },
+        { {  3, wxDateTime::Dec, 2074 }, -5, wxDateTime::Mon, wxDateTime::Dec, 2074 },
+    };
+
+    static const char *fmt = "%d-%b-%Y";
+
+    wxDateTime dt;
+    for ( n = 0; n < WXSIZEOF(weekDatesTestData); n++ )
+    {
+        const WeekDateTestData& wd = weekDatesTestData[n];
+
+        dt.SetToWeekDay(wd.wday, wd.nWeek, wd.month, wd.year);
+
+        printf("%s is %s", wd.Format().c_str(), dt.Format(fmt).c_str());
+
+        const Date& d = wd.date;
+        if ( d.SameDay(dt.GetTm()) )
+        {
+            puts(" (ok)");
+        }
+        else
+        {
+            dt.Set(d.day, d.month, d.year);
+
+            printf(" (ERROR: should be %s)\n", dt.Format(fmt).c_str());
+        }
+    }
+}
+
+// test the computation of (ISO) week numbers
+static void TestTimeWNumber()
+{
+    puts("\n*** wxDateTime week number test ***");
+
+    struct WeekNumberTestData
+    {
+        Date date;                          // the date
+        wxDateTime::wxDateTime_t week;      // the week number
+        wxDateTime::wxDateTime_t dnum;      // day number in the year
+    };
+
+    // data generated with the following python script:
+    /*
+from DateTime import *
+from whrandom import *
+from string import *
+
+monthNames = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ]
+wdayNames = [ 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun' ]
+
+for n in range(20):
+    year = randint(1900, 2100)
+    month = randint(1, 12)
+    day = randint(1, 28)
+    dt = DateTime(year, month, day)
+    dayNum = dt.day_of_year
+    weekNum = dt.iso_week[1]
+
+    data = { 'day': rjust(`day`, 2), 'month': monthNames[month - 1], 'year': year, 'weekNum': rjust(`weekNum`, 2), 'dayNum': rjust(`dayNum`, 3) }
+    
+    print "{ { %(day)s, wxDateTime::%(month)s, %(year)d }, %(weekNum)s, "\
+          "%(dayNum)s }," % data
+    */
+    static const WeekNumberTestData weekNumberTestDates[] =
+    {
+        { {  2, wxDateTime::Jul, 2093 }, 27, 183 },
+        { { 25, wxDateTime::Jun, 1986 }, 26, 176 },
+        { { 15, wxDateTime::Jun, 2014 }, 24, 166 },
+        { { 20, wxDateTime::Jul, 2018 }, 29, 201 },
+        { {  3, wxDateTime::Aug, 2074 }, 31, 215 },
+        { { 26, wxDateTime::Jul, 2012 }, 30, 208 },
+        { {  4, wxDateTime::Nov, 1915 }, 44, 308 },
+        { { 11, wxDateTime::Feb, 2035 },  6,  42 },
+        { { 15, wxDateTime::Feb, 1942 },  7,  46 },
+        { {  5, wxDateTime::Jan, 2087 },  1,   5 },
+        { {  6, wxDateTime::Nov, 2016 }, 44, 311 },
+        { {  6, wxDateTime::Jun, 2057 }, 23, 157 },
+        { { 25, wxDateTime::Feb, 1976 },  9,  56 },
+        { { 12, wxDateTime::Jan, 2073 },  2,  12 },
+        { { 12, wxDateTime::Sep, 2040 }, 37, 256 },
+        { { 15, wxDateTime::Jul, 1931 }, 29, 196 },
+        { { 23, wxDateTime::Mar, 2084 }, 12,  83 },
+        { { 12, wxDateTime::Dec, 1970 }, 50, 346 },
+        { {  6, wxDateTime::Sep, 1996 }, 36, 250 },
+        { {  7, wxDateTime::Jan, 2076 },  2,   7 },
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(weekNumberTestDates); n++ )
+    {
+        const WeekNumberTestData& wn = weekNumberTestDates[n];
+        const Date& d = wn.date;
+
+        wxDateTime dt = d.DT();
+
+        wxDateTime::wxDateTime_t week = dt.GetWeekOfYear(),
+                                 dnum = dt.GetDayOfYear();
+
+        printf("%s: the day number is %d",
+               d.FormatDate().c_str(), dnum);
+        if ( dnum == wn.dnum )
+        {
+            printf(" (ok)");
+        }
+        else
+        {
+            printf(" (ERROR: should be %d)", wn.dnum);
+        }
+
+        printf(", week number is %d", week);
+        if ( week == wn.week )
+        {
+            puts(" (ok)");
+        }
+        else
+        {
+            printf(" (ERROR: should be %d)\n", wn.week);
+        }
+    }
+}
+
+// test DST calculations
+static void TestTimeDST()
+{
+    puts("\n*** wxDateTime DST test ***");
+
+    printf("DST is%s in effect now.\n\n",
+           wxDateTime::Now().IsDST() ? "" : " not");
+
+    // taken from http://www.energy.ca.gov/daylightsaving.html
+    static const Date datesDST[2][2004 - 1900 + 1] =
+    {
+        {
+            { 1, wxDateTime::Apr, 1990 },
+            { 7, wxDateTime::Apr, 1991 },
+            { 5, wxDateTime::Apr, 1992 },
+            { 4, wxDateTime::Apr, 1993 },
+            { 3, wxDateTime::Apr, 1994 },
+            { 2, wxDateTime::Apr, 1995 },
+            { 7, wxDateTime::Apr, 1996 },
+            { 6, wxDateTime::Apr, 1997 },
+            { 5, wxDateTime::Apr, 1998 },
+            { 4, wxDateTime::Apr, 1999 },
+            { 2, wxDateTime::Apr, 2000 },
+            { 1, wxDateTime::Apr, 2001 },
+            { 7, wxDateTime::Apr, 2002 },
+            { 6, wxDateTime::Apr, 2003 },
+            { 4, wxDateTime::Apr, 2004 },
+        },
+        {
+            { 28, wxDateTime::Oct, 1990 },
+            { 27, wxDateTime::Oct, 1991 },
+            { 25, wxDateTime::Oct, 1992 },
+            { 31, wxDateTime::Oct, 1993 },
+            { 30, wxDateTime::Oct, 1994 },
+            { 29, wxDateTime::Oct, 1995 },
+            { 27, wxDateTime::Oct, 1996 },
+            { 26, wxDateTime::Oct, 1997 },
+            { 25, wxDateTime::Oct, 1998 },
+            { 31, wxDateTime::Oct, 1999 },
+            { 29, wxDateTime::Oct, 2000 },
+            { 28, wxDateTime::Oct, 2001 },
+            { 27, wxDateTime::Oct, 2002 },
+            { 26, wxDateTime::Oct, 2003 },
+            { 31, wxDateTime::Oct, 2004 },
+        }
+    };
+
+    int year;
+    for ( year = 1990; year < 2005; year++ )
+    {
+        wxDateTime dtBegin = wxDateTime::GetBeginDST(year, wxDateTime::USA),
+                   dtEnd = wxDateTime::GetEndDST(year, wxDateTime::USA);
+
+        printf("DST period in the US for year %d: from %s to %s",
+               year, dtBegin.Format().c_str(), dtEnd.Format().c_str());
+
+        size_t n = year - 1990;
+        const Date& dBegin = datesDST[0][n];
+        const Date& dEnd = datesDST[1][n];
+                    
+        if ( dBegin.SameDay(dtBegin.GetTm()) && dEnd.SameDay(dtEnd.GetTm()) )
+        {
+            puts(" (ok)");
+        }
+        else
+        {
+            printf(" (ERROR: should be %s %d to %s %d)\n",
+                    wxDateTime::GetMonthName(dBegin.month).c_str(), dBegin.day,
+                    wxDateTime::GetMonthName(dEnd.month).c_str(), dEnd.day);
+        }
+    }
+
+    puts("");
+
+    for ( year = 1990; year < 2005; year++ )
+    {
+        printf("DST period in Europe for year %d: from %s to %s\n",
+               year,
+               wxDateTime::GetBeginDST(year, wxDateTime::Country_EEC).Format().c_str(),
+               wxDateTime::GetEndDST(year, wxDateTime::Country_EEC).Format().c_str());
     }
 }
 
@@ -948,8 +1260,10 @@ int main(int argc, char **argv)
     TestTimeRange();
     TestTimeTicks();
     TestTimeJDN();
-    }
+    TestTimeDST();
     TestTimeWDays();
+    }
+    TestTimeWNumber();
 #endif // TEST_TIME
 
     wxUninitialize();
