@@ -795,7 +795,7 @@ public :
 
     // Setting a simple property (non-collection)
     virtual void SetProperty(wxObject *object, const wxxVariant &value) const
-    { if ( m_setter ) m_setter->Set( object , value ) ; wxLogError( _("SetProperty called w/o valid setter") ) ;}
+    { if ( m_setter ) m_setter->Set( object , value ) ; else wxLogError( _("SetProperty called w/o valid setter") ) ;}
 
     // Getting a simple property (non-collection)
     virtual void GetProperty(const wxObject *object, wxxVariant &result) const
@@ -1207,7 +1207,7 @@ private :
 };
 
 #define wxHANDLER(name,eventClassType) \
-    static wxHandlerInfo _handlerInfo##name( first , class_t::GetClassInfoStatic() , #name , (wxObjectEventFunction) (wxEventFunction) &name , CLASSINFO( eventClassType ) ) ;
+    static wxHandlerInfo _handlerInfo##name( first , class_t::GetClassInfoStatic() , wxT(#name) , (wxObjectEventFunction) (wxEventFunction) &name , CLASSINFO( eventClassType ) ) ;
 
 #define wxBEGIN_HANDLERS_TABLE(theClass) \
     wxHandlerInfo *theClass::GetHandlersStatic()  \
