@@ -4360,7 +4360,7 @@ void wxWindowOS2::MoveChildren(
                               ,vSwp.y - nDiff
                               ,vSwp.cx
                               ,vSwp.cy
-                              ,SWP_MOVE | SWP_SHOW | SWP_ZORDER
+                              ,SWP_MOVE
                              );
             ::WinQueryWindowPos(GetHwndOf(pWin), pWin->GetSwp());
             if (pWin->IsKindOf(CLASSINFO(wxRadioBox)))

@@ -158,7 +158,7 @@ WXDWORD wxNotebook::OS2GetStyle (
                                                                         ,pdwExstyle
                                                                        );
 
-    dwTabStyle |= WS_TABSTOP | BKS_SOLIDBIND | BKS_ROUNDEDTABS | BKS_TABTEXTCENTER;
+    dwTabStyle |= WS_TABSTOP | BKS_SOLIDBIND | BKS_ROUNDEDTABS | BKS_TABTEXTCENTER | BKS_TABBEDDIALOG;
 
     if (lStyle & wxNB_BOTTOM)
         dwTabStyle |= BKS_MAJORTABBOTTOM | BKS_BACKPAGESBL;
@@ -346,22 +346,7 @@ void wxNotebook::SetPageSize (
   const wxSize&                     rSize
 )
 {
-    RECTL                           vRect;
-
-    //
-    // Transform the page size into the notebook size
-    //
-    vRect.xLeft   = vRect.yTop = 0;
-    vRect.xRight  = rSize.x;
-    vRect.yBottom = rSize.y;
-
-
-    //
-    // And now set it
-    //
-    SetSize( vRect.xRight - vRect.xLeft
-            ,vRect.yBottom - vRect.yTop
-           );
+    SetSize(rSize);
 } // end of wxNotebook::SetPageSize
 
 void wxNotebook::SetPadding (
@@ -671,6 +656,9 @@ bool wxNotebook::InsertPage (
 
     if (nSelNew != -1)
         SetSelection(nSelNew);
+
+    InvalidateBestSize();
+
     return TRUE;
 } // end of wxNotebook::InsertPage
 
@@ -681,20 +669,6 @@ void wxNotebook::OnSize(
   wxSizeEvent&                      rEvent
 )
 {
-    int                             nPage;
-    int                             nCount = (int)m_pages.Count();
-
-    for (nPage = 0; nPage < nCount; nPage++)
-    {
-        if (m_nSelection == nPage)
-            m_pages[nPage]->Refresh();
-        else
-            ::WinSetWindowPos(m_pages[nPage]->GetHWND()
-                              ,NULLHANDLE
-                              ,0,0,0,0
-                              ,SWP_HIDE
-                             );
-    }
     rEvent.Skip();
 } // end of wxNotebook::OnSize
 
