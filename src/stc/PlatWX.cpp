@@ -293,6 +293,7 @@ void SurfaceImpl::Init() {
     // selected into it.  So instead of just creating the DC with no bitmap,
     // go ahead and give it one.
     InitPixMap(1,1,NULL);
+#endif
 }
 
 void SurfaceImpl::Init(SurfaceID hdc_) {
