@@ -11,8 +11,63 @@ perfect because in this particular case it would be much better to just
 \helpref{Wait()}{wxthreadwait} for the worker thread, but if there are several
 worker threads it already makes much more sense).
 
-Once the thread(s) are signaled, the condition then resets to the not
-signaled state, ready to fire again.
+Note that a call to \helpref{Signal()}{wxconditionsignal} may happen before the
+other thread calls \helpref{Wait()}{wxconditionwait} but, in marked contrast
+with the pthread conditions, this will still work as the missed signals are
+queued and \helpref{Wait()}{wxconditionwait} simply returns immediately if
+there are ny pending signals.
+
+However, the calls to \helpref{Broadcast()}{wxconditionbroadcast} are {\bf not} 
+queued and so it will only wake up the threads already waiting on the
+condition. Accordingly, you will probably want to use a mutex to ensure that
+the thread(s) you want to be waken up have indeed started to wait before
+calling \helpref{Broadcast()}{wxconditionbroadcast}.
+
+\wxheading{Example}
+
+This example shows how a main thread may launch a worker thread and wait until
+it starts running:
+
+\begin{verbatim}
+class MyWaitingThread : public wxThread
+{
+public:
+    MyWaitingThread(wxCondition *condition)
+    {
+        m_condition = condition;
+
+        Create();
+    }
+
+    virtual ExitCode Entry()
+    {
+        // let the main thread know that we started running
+        m_condition->Signal();
+
+        ... do our job ...
+
+        return 0;
+    }
+
+private:
+    wxCondition *m_condition;
+};
+
+int main()
+{
+    wxCondition condition;
+    MyWaitingThread *thread - new MyWaitingThread(&condition);
+
+    thread->Run();
+
+    // wait until the thread really starts running
+    condition.Wait();
+
+    ...
+
+    return 0;
+}
+\end{verbatim}
 
 \wxheading{Derived from}
 

@@ -1117,8 +1117,11 @@ WX_DECLARE_HASH_MAP( short, unsigned, wxIntegerHash, wxIntegerEqual,
                      myTestHashMap3 );
 WX_DECLARE_HASH_MAP( unsigned short, unsigned, wxIntegerHash, wxIntegerEqual,
                      myTestHashMap4 );
-WX_DECLARE_HASH_MAP( wxString, wxString, wxStringHash, wxStringEqual,
-                     myStringHashMap );
+
+// same as:
+// WX_DECLARE_HASH_MAP( wxString, wxString, wxStringHash, wxStringEqual,
+//                      myStringHashMap );
+WX_DECLARE_STRING_HASH_MAP(wxString, myStringHashMap);
 
 typedef myStringHashMap::iterator Itor;
 
@@ -1237,7 +1240,7 @@ static void TestHashMap()
     printf("*** Finished testing wxHashMap ***\n");
 }
 
-#endif TEST_HASHMAP
+#endif // TEST_HASHMAP
 
 // ----------------------------------------------------------------------------
 // wxList
@@ -4790,7 +4793,7 @@ static void TestThreadConditions()
                condition.GetId(), gs_cond.GetId());
 
     // create and launch threads
-    MyWaitingThread *threads[5];
+    MyWaitingThread *threads[10];
 
     size_t n;
     for ( n = 0; n < WXSIZEOF(threads); n++ )
@@ -4823,12 +4826,14 @@ static void TestThreadConditions()
 
     wxThread::Sleep(500);
 
-#if 0
+#if 1
     // now wake one of them up
     printf("Main thread: about to signal the condition.\n");
     fflush(stdout);
     condition.Signal();
 #endif
+
+    wxThread::Sleep(200);
 
     // wake all the (remaining) threads up, so that they can exit
     printf("Main thread: about to broadcast the condition.\n");
