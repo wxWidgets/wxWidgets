@@ -61,12 +61,22 @@ void wxItemContainer::SetClientObject(int n, wxClientData *data)
     wxASSERT_MSG( m_clientDataItemsType != wxClientData_Void,
                   wxT("can't have both object and void client data") );
 
-    wxClientData *clientDataOld = DoGetItemClientObject(n);
-    if ( clientDataOld )
-        delete clientDataOld;
+    // when we call SetClientObject() for the first time, m_clientDataItemsType
+    // is still wxClientData_None and so calling DoGetItemClientObject() would
+    // fail (in addition to being useless) - don't do it
+    if ( m_clientDataItemsType == wxClientData_Object )
+    {
+        wxClientData *clientDataOld = DoGetItemClientObject(n);
+        if ( clientDataOld )
+            delete clientDataOld;
+    }
+    else // m_clientDataItemsType == wxClientData_None
+    {
+        // now we have object client data
+        m_clientDataItemsType = wxClientData_Object;
+    }
 
     DoSetItemClientObject(n, data);
-    m_clientDataItemsType = wxClientData_Object;
 }
 
 wxClientData *wxItemContainer::GetClientObject(int n) const
