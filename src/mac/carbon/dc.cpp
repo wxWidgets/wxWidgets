@@ -28,10 +28,10 @@ using namespace std ;
 #endif
 
 #include "wx/mac/private.h"
-#include "ATSUnicode.h"
-#include "TextCommon.h"
-#include "TextEncodingConverter.h"
-#include "FixMath.h"
+#include <ATSUnicode.h>
+#include <TextCommon.h>
+#include <TextEncodingConverter.h>
+#include <FixMath.h>
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 #endif

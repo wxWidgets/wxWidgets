@@ -46,7 +46,7 @@
     #include "wx/sysopt.h"
 #endif
 
-#include "ToolUtils.h"
+#include <ToolUtils.h>
 
 
 #define wxMAC_DEBUG_REDRAW 0

@@ -23,7 +23,7 @@
 #include "wx/fontutil.h"
 
 #include "wx/mac/private.h"
-#include "ATSUnicode.h"
+#include <ATSUnicode.h>
 
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)

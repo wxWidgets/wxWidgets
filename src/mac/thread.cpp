@@ -38,7 +38,7 @@
 #include <Threads.h>
 #include "wx/mac/uma.h"
 #include "wx/mac/macnotfy.h"
-#include "Timer.h"
+#include <Timer.h>
 #endif
 
 #define INFINITE 0xFFFFFFFF

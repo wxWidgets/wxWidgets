@@ -34,7 +34,7 @@
 #include "wx/mstream.h"
 #include "wx/image.h"
 #include "wx/mac/private.h"
-#include "Scrap.h"
+#include <Scrap.h>
 
 // ----------------------------------------------------------------------------
 // functions

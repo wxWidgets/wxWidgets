@@ -45,9 +45,9 @@
 #include <Sound.h>
 #endif
 
-#include "ATSUnicode.h"
-#include "TextCommon.h"
-#include "TextEncodingConverter.h"
+#include <ATSUnicode.h>
+#include <TextCommon.h>
+#include <TextEncodingConverter.h>
 
 #include  "wx/mac/private.h"  // includes mac headers
 
