@@ -70,6 +70,8 @@ struct wxHtmlHelpFrameCfg
     bool navig_on;
 };
 
+class wxHtmlHelpMergedIndexItem;
+class wxHtmlHelpMergedIndex;
 
 class WXDLLIMPEXP_CORE wxHelpControllerBase;
 
@@ -155,6 +157,10 @@ protected:
     // Add books to search choice panel
     void CreateSearch();
 
+    // Updates "merged index" structure that combines indexes of all books
+    // into better searchable structure
+    void UpdateMergedIndex();
+
     // Add custom buttons to toolbar
     virtual void AddToolbarButtons(wxToolBar *toolBar, int style);
 
@@ -234,6 +240,10 @@ protected:
 
     int m_hfStyle;
 
+private:
+    void DisplayIndexItem(const wxHtmlHelpMergedIndexItem *it);
+    wxHtmlHelpMergedIndex *m_mergedIndex;
+    
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxHtmlHelpFrame)
 };
