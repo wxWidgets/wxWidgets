@@ -29,14 +29,18 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/wx.h"
-#endif
-
 #ifdef __WIN95__
 
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/textctrl.h"
+    #include "wx/imaglist.h"
+    #include "wx/intl.h"
+    #include "wx/log.h"
+    #include "wx/settings.h"
+#endif
+
 #include "wx/listctrl.h"
-#include "wx/log.h"
 
 #include "wx/msw/private.h"
 

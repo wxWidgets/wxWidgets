@@ -18,8 +18,10 @@
 
 #include "wx/control.h"
 #include "wx/event.h"
-#include "wx/imaglist.h"
 #include "wx/hash.h"
+
+class WXDLLEXPORT wxTextCtrl;
+class WXDLLEXPORT wxImageList;
 
 /*
     The wxListCtrl can show lists of items in four different modes:
