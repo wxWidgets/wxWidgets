@@ -650,9 +650,14 @@ void wxWindowMac::MacPostControlCreate(const wxPoint& pos, const wxSize& size)
 
 void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
 {
-    wxASSERT( m_macControl != NULL ) ;
+    // Don't assert, in case we set the window variant before
+    // the window is created
+    // wxASSERT( m_macControl != NULL ) ;
 
-    m_windowVariant = variant ; 
+    m_windowVariant = variant ;
+
+    if (!m_macControl)
+        return;
 
 	ControlSize size ;
     ThemeFontID themeFont = kThemeSystemFont ;
