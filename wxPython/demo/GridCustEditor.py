@@ -124,7 +124,8 @@ class MyCellEditor(wxPyGridCellEditor):
         ## Oops, there's a bug here, we'll have to do it ourself..
         ##return self.base_IsAcceptedKey(evt)
 
-        return not evt.HasModifiers() and evt.GetKeyCode() != WXK_SHIFT
+        return (not (evt.ControlDown() or evt.AltDown()) and
+                evt.GetKeyCode() != WXK_SHIFT)
 
 
     def StartingKey(self, evt):
