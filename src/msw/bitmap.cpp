@@ -656,20 +656,29 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
         wxLogLastError("CreateCompatibleDC");
     }
 
-    if ( !::SelectObject(srcDC, GetHbitmapOf(bitmap)) )
+    bool ok = TRUE;
+
+    HGDIOBJ hbmpSrcOld = ::SelectObject(srcDC, GetHbitmapOf(bitmap));
+    if ( !hbmpSrcOld )
     {
         wxLogLastError("SelectObject");
+
+        ok = FALSE;
     }
-    if ( !::SelectObject(destDC, (HBITMAP)m_maskBitmap) )
+
+    HGDIOBJ hbmpDstOld = ::SelectObject(destDC, (HBITMAP)m_maskBitmap);
+    if ( !hbmpDstOld )
     {
         wxLogLastError("SelectObject");
+
+        ok = FALSE;
     }
 
     // this is not very efficient, but I can't think of a better way of doing
     // it
-    for ( int w = 0; w < width; w++ )
+    for ( int w = 0; ok && (w < width); w++ )
     {
-        for ( int h = 0; h < height; h++ )
+        for ( int h = 0; ok && (h < height); h++ )
         {
             COLORREF col = GetPixel(srcDC, w, h);
             if ( col == CLR_INVALID )
@@ -677,12 +686,9 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
                 wxLogLastError("GetPixel");
 
                 // doesn't make sense to continue
-                ::SelectObject(srcDC, 0);
-                ::DeleteDC(srcDC);
-                ::SelectObject(destDC, 0);
-                ::DeleteDC(destDC);
+                ok = FALSE;
 
-                return FALSE;
+                break;
             }
 
             if ( col == maskColour )
@@ -696,12 +702,12 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
         }
     }
 
-    ::SelectObject(srcDC, 0);
+    ::SelectObject(srcDC, hbmpSrcOld);
     ::DeleteDC(srcDC);
-    ::SelectObject(destDC, 0);
+    ::SelectObject(destDC, hbmpDstOld);
     ::DeleteDC(destDC);
 
-    return TRUE;
+    return ok;
 }
 
 // ----------------------------------------------------------------------------

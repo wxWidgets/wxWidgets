@@ -857,7 +857,7 @@ wxBitmap wxImage::ConvertToBitmap() const
     if( HasMask() )
     {
         hbitmap = ::CreateBitmap( (WORD)width, (WORD)bmpHeight, 1, 1, NULL );
-        ::SelectObject( memdc, hbitmap);
+        HGDIOBJ hbmpOld = ::SelectObject( memdc, hbitmap);
         if( numDIB == 1 )   height = bmpHeight;
         else                height = sizeLimit/bytePerLine;
         lpDIBh->bmiHeader.biHeight = (DWORD)(-height);
@@ -917,10 +917,11 @@ wxBitmap wxImage::ConvertToBitmap() const
         wxMask *mask = new wxMask( bitmap, colour );
         bitmap.SetMask( mask );
         */
+
+        ::SelectObject( memdc, hbmpOld );
     }
 
     // free allocated resources
-    ::SelectObject( memdc, 0 );
     ::DeleteDC( memdc );
     ::ReleaseDC(NULL, hdc);
     free(lpDIBh);

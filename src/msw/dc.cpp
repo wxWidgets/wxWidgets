@@ -289,23 +289,34 @@ void wxDC::Clear()
 
 void wxDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
 {
-    (void)ExtFloodFill(GetHdc(), XLOG2DEV(x), YLOG2DEV(y),
-                       col.GetPixel(),
-                       style == wxFLOOD_SURFACE ? FLOODFILLSURFACE
-                                                : FLOODFILLBORDER);
+    if ( !::ExtFloodFill(GetHdc(), XLOG2DEV(x), YLOG2DEV(y),
+                         col.GetPixel(),
+                         style == wxFLOOD_SURFACE ? FLOODFILLSURFACE
+                                                  : FLOODFILLBORDER) )
+    {
+        // quoting from the MSDN docs:
+        //
+        //      Following are some of the reasons this function might fail:
+        //
+        //      * The filling could not be completed.
+        //      * The specified point has the boundary color specified by the
+        //        crColor parameter (if FLOODFILLBORDER was requested).
+        //      * The specified point does not have the color specified by
+        //        crColor (if FLOODFILLSURFACE was requested)
+        //      * The point is outside the clipping region that is, it is not
+        //        visible on the device.
+        //
+        wxLogLastError("ExtFloodFill");
+    }
 
     CalcBoundingBox(x, y);
 }
 
 bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 {
-    // added by steve 29.12.94 (copied from DrawPoint)
-    // returns TRUE for pixels in the color of the current pen
-    // and FALSE for all other pixels colors
-    // if col is non-NULL return the color of the pixel
-
     // get the color of the pixel
     COLORREF pixelcolor = ::GetPixel(GetHdc(), XLOG2DEV(x), YLOG2DEV(y));
+
     // get the color of the pen
     COLORREF pencolor = 0x00ffffff;
     if (m_pen.Ok())
@@ -314,12 +325,16 @@ bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
     }
 
     // return the color of the pixel
-    if(col)
-        col->Set(GetRValue(pixelcolor),GetGValue(pixelcolor),GetBValue(pixelcolor));
+    if( col )
+    {
+        col->Set(GetRValue(pixelcolor),
+                 GetGValue(pixelcolor),
+                 GetBValue(pixelcolor));
+    }
 
-    // check, if color of the pixels is the same as the color
-    // of the current pen
-    return(pixelcolor==pencolor);
+    // check, if color of the pixels is the same as the color of the current
+    // pen and return TRUE if it is, FALSE otherwise
+    return pixelcolor == pencolor;
 }
 
 void wxDC::DoCrossHair(wxCoord x, wxCoord y)
@@ -497,74 +512,55 @@ void wxDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset
 
 void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-    COLORREF old_textground = ::GetTextColor(GetHdc());
-    COLORREF old_background = ::GetBkColor(GetHdc());
-    if (m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE)
+    COLORREF colFgOld = 0,
+             colBgOld = 0;
+
+    if ( m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
     {
+        colFgOld = ::GetTextColor(GetHdc());
+        colBgOld = ::GetBkColor(GetHdc());
 
-       if (m_textForegroundColour.Ok())
-       {   //just the oposite from what is expected see help on pattern brush
-           // 1 in mask becomes bk color
-           ::SetBkColor(GetHdc(), m_textForegroundColour.GetPixel() );
-       }
-       if (m_textBackgroundColour.Ok())
-       {   //just the oposite from what is expected
-           // 0 in mask becomes text color
-           ::SetTextColor(GetHdc(), m_textBackgroundColour.GetPixel() );
-       }
+        if ( m_textForegroundColour.Ok() )
+        {
+            // just the oposite from what is expected see help on pattern brush
+            // 1 in mask becomes bk color
+            ::SetBkColor(GetHdc(), m_textForegroundColour.GetPixel());
+        }
 
-       if (m_backgroundMode == wxTRANSPARENT)
-           SetBkMode(GetHdc(), TRANSPARENT);
-       else
-           SetBkMode(GetHdc(), OPAQUE);
+        if ( m_textBackgroundColour.Ok() )
+        {
+            // 0 in mask becomes text color
+            ::SetTextColor(GetHdc(), m_textBackgroundColour.GetPixel());
+        }
+
+        // VZ: IMHO this does strictly nothing here
+        SetBkMode(GetHdc(), m_backgroundMode == wxTRANSPARENT ? TRANSPARENT
+                                                              : OPAQUE);
     }
 
     wxCoord x2 = x + width;
     wxCoord y2 = y + height;
 
-    /* MATTHEW: [6] new normalization */
-#if WX_STANDARD_GRAPHICS
-    bool do_brush, do_pen;
-
-    do_brush = m_brush.Ok() && m_brush.GetStyle() != wxTRANSPARENT;
-    do_pen = m_pen.Ok() && m_pen.GetStyle() != wxTRANSPARENT;
-
-    if (do_brush) {
-        HPEN orig_pen = NULL;
-
-        if (do_pen || !m_pen.Ok())
-            orig_pen = (HPEN) ::SelectObject(GetHdc(), (HPEN) ::GetStockObject(NULL_PEN));
-
-        (void)Rectangle(GetHdc(), XLOG2DEV(x), YLOG2DEV(y),
-            XLOG2DEV(x2) + 1, YLOG2DEV(y2) + 1);
-
-        if (do_pen || !m_pen.Ok())
-            ::SelectObject(GetHdc() , orig_pen);
+    // Windows draws the filled rectangles without outline (i.e. drawn with a
+    // transparent pen) one pixel smaller in both directions and we want them
+    // to have the same size regardless of which pen is used - adjust
+    if ( m_pen.GetStyle() == wxTRANSPARENT )
+    {
+        x2++;
+        y2++;
     }
-    if (do_pen) {
-        HBRUSH orig_brush = NULL;
 
-        if (do_brush || !m_brush.Ok())
-            orig_brush = (HBRUSH) ::SelectObject(GetHdc(), (HBRUSH) ::GetStockObject(NULL_BRUSH));
-
-        (void)Rectangle(GetHdc(), XLOG2DEV(x), YLOG2DEV(y),
-            XLOG2DEV(x2), YLOG2DEV(y2));
-
-        if (do_brush || !m_brush.Ok())
-            ::SelectObject(GetHdc(), orig_brush);
-    }
-#else
     (void)Rectangle(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2));
-#endif
 
     CalcBoundingBox(x, y);
     CalcBoundingBox(x2, y2);
 
-    if (m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE)
+    if ( m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
     {
-       ::SetBkMode(GetHdc(), TRANSPARENT);
-       ::SetTextColor(GetHdc(), old_textground);
-       ::SetBkColor(GetHdc(), old_background);
+        // restore the colours we changed
+        ::SetBkMode(GetHdc(), TRANSPARENT);
+        ::SetTextColor(GetHdc(), colFgOld);
+        ::SetBkColor(GetHdc(), colBgOld);
     }
 }
 
