@@ -292,7 +292,7 @@ void wxDrawnShape::Copy(wxShape& copy)
   drawnCopy.m_currentAngle = m_currentAngle;
 }
 
-bool wxDrawnShape::LoadFromMetaFile(char *filename)
+bool wxDrawnShape::LoadFromMetaFile(const wxString& filename)
 {
   return m_metafiles[0].LoadFromMetaFile(filename, &m_width, &m_height);
 }
@@ -1825,7 +1825,7 @@ void wxPseudoMetaFile::Copy(wxPseudoMetaFile& copy)
  *
  */
 
-bool wxPseudoMetaFile::LoadFromMetaFile(char *filename, double *rwidth, double *rheight)
+bool wxPseudoMetaFile::LoadFromMetaFile(const wxString& filename, double *rwidth, double *rheight)
 {
   if (!wxFileExists(filename))
     return NULL;

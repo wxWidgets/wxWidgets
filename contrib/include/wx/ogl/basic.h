@@ -353,7 +353,7 @@ class wxShape: public wxShapeEvtHandler
   virtual int GetRegionId(const wxString& name);
 
   // Construct names for regions, unique even for children of a composite.
-  virtual void NameRegions(const wxString& parentName = "");
+  virtual void NameRegions(const wxString& parentName = wxEmptyString);
 
   // Get list of regions
   inline wxList& GetRegions() const { return (wxList&) m_regions; }

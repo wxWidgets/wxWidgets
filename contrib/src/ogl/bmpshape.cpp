@@ -41,7 +41,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapShape, wxShape)
 
 wxBitmapShape::wxBitmapShape():wxRectangleShape(100.0, 50.0)
 {
-  m_filename = "";
+  m_filename = wxEmptyString;
 }
 
 wxBitmapShape::~wxBitmapShape()

@@ -48,7 +48,7 @@ class wxPseudoMetaFile: public wxObject
   // Rotate about the given axis by theta radians from the x axis.
   void Rotate(double x, double y, double theta);
 
-  bool LoadFromMetaFile(char *filename, double *width, double *height);
+  bool LoadFromMetaFile(const wxString& filename, double *width, double *height);
 
   void GetBounds(double *minX, double *minY, double *maxX, double *maxY);
 
@@ -157,7 +157,7 @@ class wxDrawnShape: public wxRectangleShape
   inline double GetRotation() const { return m_rotation; }
 
   void SetSize(double w, double h, bool recursive = TRUE);
-  bool LoadFromMetaFile(char *filename);
+  bool LoadFromMetaFile(const wxString& filename);
 
   inline void SetSaveToFile(bool save) { m_saveToFile = save; }
   inline wxPseudoMetaFile& GetMetaFile(int which = 0) const { return (wxPseudoMetaFile&) m_metafiles[which]; }

@@ -51,7 +51,7 @@ class wxArrowHead: public wxObject
  DECLARE_DYNAMIC_CLASS(wxArrowHead)
 
  public:
-  wxArrowHead(WXTYPE type = 0, int end = 0, double size = 0.0, double dist = 0.0, const wxString& name = "", wxPseudoMetaFile *mf = NULL,
+  wxArrowHead(WXTYPE type = 0, int end = 0, double size = 0.0, double dist = 0.0, const wxString& name = wxEmptyString, wxPseudoMetaFile *mf = NULL,
             long arrowId = -1);
   ~wxArrowHead();
   wxArrowHead(wxArrowHead& toCopy);
@@ -210,8 +210,9 @@ class wxLineShape: public wxShape
 
   // Add an arrowhead.
   wxArrowHead *AddArrow(WXTYPE type, int end = ARROW_POSITION_END,
-                double arrowSize = 10.0, double xOffset = 0.0, const wxString& name = "",
-                wxPseudoMetaFile *mf = NULL, long arrowId = -1);
+                        double arrowSize = 10.0, double xOffset = 0.0,
+                        const wxString& name = wxEmptyString,
+                        wxPseudoMetaFile *mf = NULL, long arrowId = -1);
 
   // Add an arrowhead in the position indicated by the reference
   // list of arrowheads, which contains all legal arrowheads for this

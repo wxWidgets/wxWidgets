@@ -22,7 +22,7 @@ class wxShapeTextLine: public wxObject
 {
  DECLARE_DYNAMIC_CLASS(wxShapeTextLine)
 public:
-   wxShapeTextLine(double the_x = 0.0, double the_y = 0.0, const wxString& the_line = "");
+   wxShapeTextLine(double the_x = 0.0, double the_y = 0.0, const wxString& the_line = wxEmptyString);
    ~wxShapeTextLine();
 
    inline double GetX() const { return m_x; }
