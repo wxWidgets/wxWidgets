@@ -40,19 +40,12 @@ demo item so you can learn how to use the classes yourself.</p>
 </html>
 '''
     def __init__(self, parent):
-        wxDialog.__init__(self, parent, -1, 'About the wxPython demo',
-                          size=wxSize(420, 380))
-        self.html = wxHtmlWindow(self, -1)
-        self.html.SetPage(self.text % wx.__version__)
-        self.SetAutoLayout(true)
-        lc = wxLayoutConstraints()
-        lc.top.SameAs(self, wxTop, 5)
-        lc.left.SameAs(self, wxLeft, 5)
-        lc.bottom.SameAs(self, wxBottom, 5)
-        lc.right.SameAs(self, wxRight, 5)
-        self.html.SetConstraints(lc)
-        self.Layout()
-
+        wxDialog.__init__(self, parent, -1, 'About the wxPython demo',)
+        html = wxHtmlWindow(self, -1, size=(420, -1))
+        html.SetPage(self.text % wx.__version__)
+        ir = html.GetInternalRepresentation()
+        html.SetSize( (ir.GetWidth(), ir.GetHeight()) )
+        self.SetClientSize(html.GetSize())
         self.CentreOnParent(wxBOTH)
 
 #---------------------------------------------------------------------------

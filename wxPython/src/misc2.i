@@ -21,6 +21,7 @@
 #include <wx/caret.h>
 #include <wx/fontenum.h>
 #include <wx/tipdlg.h>
+#include <wx/process.h>
 %}
 
 //----------------------------------------------------------------------
@@ -34,6 +35,7 @@
 %import misc.i
 %import gdi.i
 %import events.i
+%import streams.i
 
 //---------------------------------------------------------------------------
 // Dialog Functions
@@ -353,6 +355,14 @@ public:
 
 //----------------------------------------------------------------------
 
+class wxWindowDisabler {
+public:
+    wxWindowDisabler(wxWindow *winToSkip = NULL);
+    ~wxWindowDisabler();
+};
+
+//----------------------------------------------------------------------
+
 void wxPostEvent(wxEvtHandler *dest, wxEvent& event);
 void wxWakeUpIdle();
 
@@ -596,6 +606,64 @@ void wxLogStatus(const char *szFormat);
 %name(wxLogStatusFrame)void wxLogStatus(wxFrame *pFrame, const char *szFormat);
 void wxLogSysError(const char *szFormat);
 
+
+
+//----------------------------------------------------------------------
+
+class wxProcessEvent : public wxEvent {
+public:
+    wxProcessEvent(int id = 0, int pid = 0, int exitcode = 0);
+    int GetPid();
+    int GetExitCode();
+    int m_pid, m_exitcode;
+};
+
+
+
+
+%{ // C++ version of wxProcess derived class
+
+class wxPyProcess : public wxProcess {
+public:
+    wxPyProcess(wxEvtHandler *parent = NULL, int id = -1)
+        : wxProcess(parent, id)
+        {}
+
+    DEC_PYCALLBACK_VOID_INTINT(OnTerminate);
+
+    PYPRIVATE;
+};
+
+IMP_PYCALLBACK_VOID_INTINT( wxPyProcess, wxProcess, OnTerminate);
+%}
+
+
+%name(wxProcess)class wxPyProcess : public wxEvtHandler {
+public:
+    wxPyProcess(wxEvtHandler *parent = NULL, int id = -1);
+    %addmethods { void Destroy() { delete self; } }
+
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxProcess)"
+
+    void base_OnTerminate(int pid, int status);
+
+    void Redirect();
+    bool IsRedirected();
+    void Detach();
+
+    wxInputStream *GetInputStream();
+    wxInputStream *GetErrorStream();
+    wxOutputStream *GetOutputStream();
+
+    void CloseOutput();
+};
+
+
+
+long wxExecute(const wxString& command,
+               int sync = FALSE,
+               wxPyProcess *process = NULL);
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------

@@ -956,6 +956,8 @@ enum wxEventType {
 
  wxEVT_TIMER,
 
+ wxEVT_END_PROCESS,
+
 };
 
 

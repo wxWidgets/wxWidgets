@@ -13,6 +13,8 @@ from clip_dnd import *
 
 from events import *
 
+from streams import *
+
 from mdi import *
 
 from frames import *
@@ -34,6 +36,10 @@ from image import *
 from printfw import *
 
 from sizers import *
+
+from filesys import *
+
+from utils import *
 class wxPyAppPtr(wxEvtHandlerPtr):
     def __init__(self,this):
         self.this = this
@@ -829,6 +835,7 @@ wxEVT_COMMAND_SPLITTER_UNSPLIT = wxc.wxEVT_COMMAND_SPLITTER_UNSPLIT
 wxEVT_COMMAND_SPLITTER_DOUBLECLICKED = wxc.wxEVT_COMMAND_SPLITTER_DOUBLECLICKED
 wxEVT_NAVIGATION_KEY = wxc.wxEVT_NAVIGATION_KEY
 wxEVT_TIMER = wxc.wxEVT_TIMER
+wxEVT_END_PROCESS = wxc.wxEVT_END_PROCESS
 __version__ = wxc.__version__
 cvar = wxc.cvar
 wxPyDefaultPosition = wxPointPtr(wxc.cvar.wxPyDefaultPosition)
@@ -1509,7 +1516,9 @@ def EVT_SPLITTER_DOUBLECLICKED(win, id, func):
 def EVT_TIMER(win, id, func):
     win.Connect(id, -1, wxEVT_TIMER, func)
 
-
+# wxProcess
+def EVT_END_PROCESS(eh, id, func):
+    eh.Connect(id, -1, wxEVT_END_PROCESS, func)
 
 #----------------------------------------------------------------------
 

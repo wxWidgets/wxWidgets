@@ -670,7 +670,9 @@ def EVT_SPLITTER_DOUBLECLICKED(win, id, func):
 def EVT_TIMER(win, id, func):
     win.Connect(id, -1, wxEVT_TIMER, func)
 
-
+# wxProcess
+def EVT_END_PROCESS(eh, id, func):
+    eh.Connect(id, -1, wxEVT_END_PROCESS, func)
 
 #----------------------------------------------------------------------
 

@@ -60,6 +60,7 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/caret.h>
 #include <wx/fontenum.h>
 #include <wx/tipdlg.h>
+#include <wx/process.h>
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -190,6 +191,20 @@ wxGenericDragImage* wxDragListItem(const wxListCtrl& listCtrl, long id) {
     return new wxGenericDragImage(listCtrl, id);
 }
 
+ // C++ version of wxProcess derived class
+
+class wxPyProcess : public wxProcess {
+public:
+    wxPyProcess(wxEvtHandler *parent = NULL, int id = -1)
+        : wxProcess(parent, id)
+        {}
+
+    DEC_PYCALLBACK_VOID_INTINT(OnTerminate);
+
+    PYPRIVATE;
+};
+
+IMP_PYCALLBACK_VOID_INTINT( wxPyProcess, wxProcess, OnTerminate);
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -1656,6 +1671,46 @@ static PyObject *_wrap_wxLogSysError(PyObject *self, PyObject *args, PyObject *k
     return _resultobj;
 }
 
+static PyObject *_wrap_wxExecute(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxString * _arg0;
+    int  _arg1 = (int ) FALSE;
+    wxPyProcess * _arg2 = (wxPyProcess *) NULL;
+    PyObject * _obj0 = 0;
+    PyObject * _argo2 = 0;
+    char *_kwnames[] = { "command","sync","process", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iO:wxExecute",_kwnames,&_obj0,&_arg1,&_argo2)) 
+        return NULL;
+{
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
+}
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxPyProcess_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxExecute. Expected _wxPyProcess_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxExecute(*_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
+{
+    if (_obj0)
+        delete _arg0;
+}
+    return _resultobj;
+}
+
 #define new_wxToolTip(_swigarg0) (new wxToolTip(_swigarg0))
 static PyObject *_wrap_new_wxToolTip(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2564,6 +2619,67 @@ static PyObject *_wrap_delete_wxBusyCursor(PyObject *self, PyObject *args, PyObj
 {
     wxPy_BEGIN_ALLOW_THREADS;
         delete_wxBusyCursor(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define new_wxWindowDisabler(_swigarg0) (new wxWindowDisabler(_swigarg0))
+static PyObject *_wrap_new_wxWindowDisabler(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindowDisabler * _result;
+    wxWindow * _arg0 = (wxWindow *) NULL;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "winToSkip", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|O:new_wxWindowDisabler",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxWindowDisabler. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxWindowDisabler *)new_wxWindowDisabler(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxWindowDisabler_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define delete_wxWindowDisabler(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxWindowDisabler(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindowDisabler * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxWindowDisabler",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindowDisabler_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxWindowDisabler. Expected _wxWindowDisabler_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        delete_wxWindowDisabler(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -4125,7 +4241,609 @@ static PyObject *_wrap_delete_wxLogNull(PyObject *self, PyObject *args, PyObject
     return _resultobj;
 }
 
+static void *SwigwxProcessEventTowxEvent(void *ptr) {
+    wxProcessEvent *src;
+    wxEvent *dest;
+    src = (wxProcessEvent *) ptr;
+    dest = (wxEvent *) src;
+    return (void *) dest;
+}
+
+#define new_wxProcessEvent(_swigarg0,_swigarg1,_swigarg2) (new wxProcessEvent(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_new_wxProcessEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxProcessEvent * _result;
+    int  _arg0 = (int ) 0;
+    int  _arg1 = (int ) 0;
+    int  _arg2 = (int ) 0;
+    char *_kwnames[] = { "id","pid","exitcode", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|iii:new_wxProcessEvent",_kwnames,&_arg0,&_arg1,&_arg2)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxProcessEvent *)new_wxProcessEvent(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxProcessEvent_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxProcessEvent_GetPid(_swigobj)  (_swigobj->GetPid())
+static PyObject *_wrap_wxProcessEvent_GetPid(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxProcessEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxProcessEvent_GetPid",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxProcessEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcessEvent_GetPid. Expected _wxProcessEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxProcessEvent_GetPid(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxProcessEvent_GetExitCode(_swigobj)  (_swigobj->GetExitCode())
+static PyObject *_wrap_wxProcessEvent_GetExitCode(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxProcessEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxProcessEvent_GetExitCode",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxProcessEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcessEvent_GetExitCode. Expected _wxProcessEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxProcessEvent_GetExitCode(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxProcessEvent_m_pid_set(_swigobj,_swigval) (_swigobj->m_pid = _swigval,_swigval)
+static PyObject *_wrap_wxProcessEvent_m_pid_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxProcessEvent * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","m_pid", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxProcessEvent_m_pid_set",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxProcessEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcessEvent_m_pid_set. Expected _wxProcessEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxProcessEvent_m_pid_set(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxProcessEvent_m_pid_get(_swigobj) ((int ) _swigobj->m_pid)
+static PyObject *_wrap_wxProcessEvent_m_pid_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxProcessEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxProcessEvent_m_pid_get",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxProcessEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcessEvent_m_pid_get. Expected _wxProcessEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxProcessEvent_m_pid_get(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxProcessEvent_m_exitcode_set(_swigobj,_swigval) (_swigobj->m_exitcode = _swigval,_swigval)
+static PyObject *_wrap_wxProcessEvent_m_exitcode_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxProcessEvent * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","m_exitcode", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxProcessEvent_m_exitcode_set",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxProcessEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcessEvent_m_exitcode_set. Expected _wxProcessEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxProcessEvent_m_exitcode_set(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxProcessEvent_m_exitcode_get(_swigobj) ((int ) _swigobj->m_exitcode)
+static PyObject *_wrap_wxProcessEvent_m_exitcode_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxProcessEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxProcessEvent_m_exitcode_get",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxProcessEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcessEvent_m_exitcode_get. Expected _wxProcessEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxProcessEvent_m_exitcode_get(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static void *SwigwxPyProcessTowxEvtHandler(void *ptr) {
+    wxPyProcess *src;
+    wxEvtHandler *dest;
+    src = (wxPyProcess *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+#define new_wxProcess(_swigarg0,_swigarg1) (new wxPyProcess(_swigarg0,_swigarg1))
+static PyObject *_wrap_new_wxProcess(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyProcess * _result;
+    wxEvtHandler * _arg0 = (wxEvtHandler *) NULL;
+    int  _arg1 = (int ) -1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "parent","id", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|Oi:new_wxProcess",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEvtHandler_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxProcess. Expected _wxEvtHandler_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxPyProcess *)new_wxProcess(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyProcess_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static void  wxPyProcess_Destroy(wxPyProcess *self) { delete self; }
+static PyObject *_wrap_wxProcess_Destroy(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyProcess * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxProcess_Destroy",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyProcess_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcess_Destroy. Expected _wxPyProcess_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxPyProcess_Destroy(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxProcess__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxProcess__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyProcess * _arg0;
+    PyObject * _arg1;
+    PyObject * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxProcess__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyProcess_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcess__setSelf. Expected _wxPyProcess_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+  _arg2 = _obj2;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxProcess__setSelf(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxProcess_base_OnTerminate(_swigobj,_swigarg0,_swigarg1)  (_swigobj->base_OnTerminate(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxProcess_base_OnTerminate(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyProcess * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pid","status", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxProcess_base_OnTerminate",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyProcess_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcess_base_OnTerminate. Expected _wxPyProcess_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxProcess_base_OnTerminate(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxProcess_Redirect(_swigobj)  (_swigobj->Redirect())
+static PyObject *_wrap_wxProcess_Redirect(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyProcess * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxProcess_Redirect",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyProcess_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcess_Redirect. Expected _wxPyProcess_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxProcess_Redirect(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxProcess_IsRedirected(_swigobj)  (_swigobj->IsRedirected())
+static PyObject *_wrap_wxProcess_IsRedirected(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyProcess * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxProcess_IsRedirected",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyProcess_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcess_IsRedirected. Expected _wxPyProcess_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxProcess_IsRedirected(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxProcess_Detach(_swigobj)  (_swigobj->Detach())
+static PyObject *_wrap_wxProcess_Detach(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyProcess * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxProcess_Detach",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyProcess_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcess_Detach. Expected _wxPyProcess_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxProcess_Detach(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxProcess_GetInputStream(_swigobj)  (_swigobj->GetInputStream())
+static PyObject *_wrap_wxProcess_GetInputStream(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxInputStream * _result;
+    wxPyProcess * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxProcess_GetInputStream",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyProcess_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcess_GetInputStream. Expected _wxPyProcess_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxInputStream *)wxProcess_GetInputStream(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    wxPyInputStream * _ptr = NULL;
+
+    if (_result) {
+        _ptr = new wxPyInputStream(_result);
+    }
+    if (_ptr) {
+        char    swigptr[64];
+        SWIG_MakePtr(swigptr, _ptr, "_wxPyInputStream_p");
+
+        PyObject* classobj = PyDict_GetItemString(wxPython_dict, "wxInputStreamPtr");
+        if (! classobj) {
+            Py_INCREF(Py_None);
+            _resultobj = Py_None;
+        } else {
+            PyObject* arg = Py_BuildValue("(s)", swigptr);
+            _resultobj = PyInstance_New(classobj, arg, NULL);
+            Py_DECREF(arg);
+
+            // set ThisOwn
+            PyObject_SetAttrString(_resultobj, "thisown", PyInt_FromLong(1));
+        }
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+}
+    return _resultobj;
+}
+
+#define wxProcess_GetErrorStream(_swigobj)  (_swigobj->GetErrorStream())
+static PyObject *_wrap_wxProcess_GetErrorStream(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxInputStream * _result;
+    wxPyProcess * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxProcess_GetErrorStream",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyProcess_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcess_GetErrorStream. Expected _wxPyProcess_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxInputStream *)wxProcess_GetErrorStream(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    wxPyInputStream * _ptr = NULL;
+
+    if (_result) {
+        _ptr = new wxPyInputStream(_result);
+    }
+    if (_ptr) {
+        char    swigptr[64];
+        SWIG_MakePtr(swigptr, _ptr, "_wxPyInputStream_p");
+
+        PyObject* classobj = PyDict_GetItemString(wxPython_dict, "wxInputStreamPtr");
+        if (! classobj) {
+            Py_INCREF(Py_None);
+            _resultobj = Py_None;
+        } else {
+            PyObject* arg = Py_BuildValue("(s)", swigptr);
+            _resultobj = PyInstance_New(classobj, arg, NULL);
+            Py_DECREF(arg);
+
+            // set ThisOwn
+            PyObject_SetAttrString(_resultobj, "thisown", PyInt_FromLong(1));
+        }
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+}
+    return _resultobj;
+}
+
+#define wxProcess_GetOutputStream(_swigobj)  (_swigobj->GetOutputStream())
+static PyObject *_wrap_wxProcess_GetOutputStream(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxOutputStream * _result;
+    wxPyProcess * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxProcess_GetOutputStream",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyProcess_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcess_GetOutputStream. Expected _wxPyProcess_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxOutputStream *)wxProcess_GetOutputStream(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxOutputStream_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxProcess_CloseOutput(_swigobj)  (_swigobj->CloseOutput())
+static PyObject *_wrap_wxProcess_CloseOutput(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyProcess * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxProcess_CloseOutput",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyProcess_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcess_CloseOutput. Expected _wxPyProcess_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxProcess_CloseOutput(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyMethodDef misc2cMethods[] = {
+	 { "wxProcess_CloseOutput", (PyCFunction) _wrap_wxProcess_CloseOutput, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcess_GetOutputStream", (PyCFunction) _wrap_wxProcess_GetOutputStream, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcess_GetErrorStream", (PyCFunction) _wrap_wxProcess_GetErrorStream, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcess_GetInputStream", (PyCFunction) _wrap_wxProcess_GetInputStream, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcess_Detach", (PyCFunction) _wrap_wxProcess_Detach, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcess_IsRedirected", (PyCFunction) _wrap_wxProcess_IsRedirected, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcess_Redirect", (PyCFunction) _wrap_wxProcess_Redirect, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcess_base_OnTerminate", (PyCFunction) _wrap_wxProcess_base_OnTerminate, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcess__setSelf", (PyCFunction) _wrap_wxProcess__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcess_Destroy", (PyCFunction) _wrap_wxProcess_Destroy, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxProcess", (PyCFunction) _wrap_new_wxProcess, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcessEvent_m_exitcode_get", (PyCFunction) _wrap_wxProcessEvent_m_exitcode_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcessEvent_m_exitcode_set", (PyCFunction) _wrap_wxProcessEvent_m_exitcode_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcessEvent_m_pid_get", (PyCFunction) _wrap_wxProcessEvent_m_pid_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcessEvent_m_pid_set", (PyCFunction) _wrap_wxProcessEvent_m_pid_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcessEvent_GetExitCode", (PyCFunction) _wrap_wxProcessEvent_GetExitCode, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcessEvent_GetPid", (PyCFunction) _wrap_wxProcessEvent_GetPid, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxProcessEvent", (PyCFunction) _wrap_new_wxProcessEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxLogNull", (PyCFunction) _wrap_delete_wxLogNull, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxLogNull", (PyCFunction) _wrap_new_wxLogNull, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogWindow_PassMessages", (PyCFunction) _wrap_wxLogWindow_PassMessages, METH_VARARGS | METH_KEYWORDS },
@@ -4178,6 +4896,8 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxTipProvider_GetCurrentTip", (PyCFunction) _wrap_wxTipProvider_GetCurrentTip, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTipProvider_GetTip", (PyCFunction) _wrap_wxTipProvider_GetTip, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxTipProvider", (PyCFunction) _wrap_delete_wxTipProvider, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxWindowDisabler", (PyCFunction) _wrap_delete_wxWindowDisabler, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxWindowDisabler", (PyCFunction) _wrap_new_wxWindowDisabler, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxBusyCursor", (PyCFunction) _wrap_delete_wxBusyCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxBusyCursor", (PyCFunction) _wrap_new_wxBusyCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFontEnumerator_GetFacenames", (PyCFunction) _wrap_wxFontEnumerator_GetFacenames, METH_VARARGS | METH_KEYWORDS },
@@ -4206,6 +4926,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxToolTip_GetTip", (PyCFunction) _wrap_wxToolTip_GetTip, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolTip_SetTip", (PyCFunction) _wrap_wxToolTip_SetTip, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxToolTip", (PyCFunction) _wrap_new_wxToolTip, METH_VARARGS | METH_KEYWORDS },
+	 { "wxExecute", (PyCFunction) _wrap_wxExecute, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogSysError", (PyCFunction) _wrap_wxLogSysError, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogStatusFrame", (PyCFunction) _wrap_wxLogStatusFrame, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogStatus", (PyCFunction) _wrap_wxLogStatus, METH_VARARGS | METH_KEYWORDS },
@@ -4264,13 +4985,17 @@ static PyMethodDef misc2cMethods[] = {
  */
 static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxAcceleratorTable","_class_wxAcceleratorTable",0},
+    { "_wxEvent","_class_wxProcessEvent",SwigwxProcessEventTowxEvent},
+    { "_wxEvent","_wxProcessEvent",SwigwxProcessEventTowxEvent},
     { "_wxEvent","_class_wxEvent",0},
     { "_class_wxActivateEvent","_wxActivateEvent",0},
     { "_signed_long","_long",0},
     { "_wxMenuEvent","_class_wxMenuEvent",0},
+    { "_class_wxProcessEvent","_wxProcessEvent",0},
     { "_wxPyBitmapDataObject","_class_wxPyBitmapDataObject",0},
     { "_wxBitmapDataObject","_class_wxBitmapDataObject",0},
     { "_class_wxPyCommandEvent","_wxPyCommandEvent",0},
+    { "_wxWindowDisabler","_class_wxWindowDisabler",0},
     { "_wxPrintQuality","_wxCoord",0},
     { "_wxPrintQuality","_int",0},
     { "_wxPrintQuality","_signed_int",0},
@@ -4284,11 +5009,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxRegionIterator","_wxRegionIterator",0},
     { "_class_wxPyTextDropTarget","_wxPyTextDropTarget",0},
     { "_class_wxMenuBar","_wxMenuBar",0},
+    { "_class_wxEvtHandler","_class_wxPyProcess",SwigwxPyProcessTowxEvtHandler},
+    { "_class_wxEvtHandler","_wxPyProcess",SwigwxPyProcessTowxEvtHandler},
     { "_class_wxEvtHandler","_wxEvtHandler",0},
     { "_wxPaintEvent","_class_wxPaintEvent",0},
     { "_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0},
     { "_wxCursor","_class_wxCursor",0},
     { "_wxNotifyEvent","_class_wxNotifyEvent",0},
+    { "_wxPyProcess","_class_wxPyProcess",0},
     { "_wxLog","_class_wxLogWindow",SwigwxLogWindowTowxLog},
     { "_wxLog","_wxLogWindow",SwigwxLogWindowTowxLog},
     { "_wxLog","_class_wxLogGui",SwigwxLogGuiTowxLog},
@@ -4360,12 +5088,15 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
     { "_wxPyValidator","_class_wxPyValidator",0},
+    { "_class_wxEvent","_class_wxProcessEvent",SwigwxProcessEventTowxEvent},
+    { "_class_wxEvent","_wxProcessEvent",SwigwxProcessEventTowxEvent},
     { "_class_wxEvent","_wxEvent",0},
     { "_wxRect","_class_wxRect",0},
     { "_wxCommandEvent","_class_wxCommandEvent",0},
     { "_wxSizeEvent","_class_wxSizeEvent",0},
     { "_class_wxLogWindow","_wxLogWindow",0},
     { "_wxPoint","_class_wxPoint",0},
+    { "_class_wxWindowDisabler","_wxWindowDisabler",0},
     { "_char","_wxChar",0},
     { "_wxBitmap","_class_wxBitmap",0},
     { "_wxWindowDC","_class_wxWindowDC",0},
@@ -4391,13 +5122,16 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxFont","_class_wxFont",0},
     { "_class_wxPyDropTarget","_wxPyDropTarget",0},
     { "_wxCloseEvent","_class_wxCloseEvent",0},
+    { "_wxProcessEvent","_class_wxProcessEvent",0},
     { "_unsigned_long","_long",0},
     { "_class_wxRect","_wxRect",0},
     { "_class_wxDC","_wxDC",0},
     { "_wxScrollWinEvent","_class_wxScrollWinEvent",0},
     { "_wxGenericDragImage","_class_wxGenericDragImage",0},
     { "_wxQueryNewPaletteEvent","_class_wxQueryNewPaletteEvent",0},
+    { "_wxPyInputStream","_class_wxPyInputStream",0},
     { "_class_wxWindowCreateEvent","_wxWindowCreateEvent",0},
+    { "_class_wxOutputStream","_wxOutputStream",0},
     { "_wxLogTextCtrl","_class_wxLogTextCtrl",0},
     { "_wxFocusEvent","_class_wxFocusEvent",0},
     { "_wxMaximizeEvent","_class_wxMaximizeEvent",0},
@@ -4441,6 +5175,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxMouseEvent","_class_wxMouseEvent",0},
     { "_class_wxGenericDragImage","_wxGenericDragImage",0},
     { "_class_wxPoint","_wxPoint",0},
+    { "_class_wxPyInputStream","_wxPyInputStream",0},
     { "_wxRealPoint","_class_wxRealPoint",0},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
@@ -4453,6 +5188,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxAcceleratorEntry","_wxAcceleratorEntry",0},
     { "_class_wxCursor","_wxCursor",0},
     { "_wxPyFileDropTarget","_class_wxPyFileDropTarget",0},
+    { "_class_wxPyProcess","_wxPyProcess",0},
     { "_wxScrolledWindow","_class_wxScrolledWindow",0},
     { "_class_wxLog","_class_wxLogWindow",SwigwxLogWindowTowxLog},
     { "_class_wxLog","_wxLogWindow",SwigwxLogWindowTowxLog},
@@ -4568,6 +5304,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxMemoryDC","_wxMemoryDC",0},
     { "_wxPyTextDropTarget","_class_wxPyTextDropTarget",0},
     { "_wxMenuBar","_class_wxMenuBar",0},
+    { "_wxOutputStream","_class_wxOutputStream",0},
+    { "_wxEvtHandler","_class_wxPyProcess",SwigwxPyProcessTowxEvtHandler},
+    { "_wxEvtHandler","_wxPyProcess",SwigwxPyProcessTowxEvtHandler},
     { "_wxEvtHandler","_class_wxEvtHandler",0},
     { "_wxMenuItem","_class_wxMenuItem",0},
     { "_class_wxScrolledWindow","_wxScrolledWindow",0},

@@ -246,7 +246,7 @@ void wxRegisterId(long id);
 void wxBell();
 void wxDisplaySize(int *OUTPUT, int *OUTPUT);
 void wxEndBusyCursor();
-long wxExecute(const wxString& command, int sync = FALSE);
+
 long wxGetElapsedTime(bool resetTimer = TRUE);
 #ifdef __WXMSW__
 long wxGetFreeMemory();
@@ -257,10 +257,13 @@ wxString wxNow();
 bool wxShell(const wxString& command = wxPyEmptyStr);
 void wxStartTimer();
 int wxGetOsVersion(int *OUTPUT, int *OUTPUT);
+wxString wxGetOsDescription();
 
 void wxSleep(int secs);
+void wxUsleep(unsigned long milliseconds);
 bool wxYield();
 bool wxSafeYield();
+void wxFlushEvents();
 void wxEnableTopLevelWindows(bool enable);
 
 %inline %{
@@ -272,6 +275,15 @@ void wxEnableTopLevelWindows(bool enable);
 %}
 
 wxString wxStripMenuCodes(const wxString& in);
+
+
+wxString wxGetEmailAddress();
+wxString wxGetHostName();
+wxString wxGetFullHostName();
+wxString wxGetUserId();
+wxString wxGetUserName();
+wxString wxGetHomeDir();
+
 
 //----------------------------------------------------------------------
 
@@ -412,6 +424,7 @@ public:
 
 };
 
+wxAcceleratorEntry *wxGetAccelFromString(const wxString& label);
 
 %readonly
 %{
@@ -432,8 +445,7 @@ public:
     ~wxBusyInfo();
 };
 
-
-
 //---------------------------------------------------------------------------
+
 
 

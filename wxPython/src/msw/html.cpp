@@ -6238,16 +6238,9 @@ SWIGEXPORT(void) inithtmlc() {
 
     inithtmlhelpc();
 
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
+    //wxClassInfo::CleanUpClasses();
+    //wxClassInfo::InitializeClasses();
 
-    // Until wxFileSystem is wrapped...
-    #if wxUSE_FS_ZIP
-       wxFileSystem::AddHandler(new wxZipFSHandler);
-    #endif
-    #if wxUSE_FS_INET
-//       wxFileSystem::AddHandler(new wxInternetFSHandler);
-    #endif
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

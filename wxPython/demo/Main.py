@@ -20,8 +20,8 @@ from   wxPython.html import wxHtmlWindow
 
 
 _treeList = [
-    #('New since last release', ['PyShellWindow',
-    #                            ]),
+    ('New since last release', ['wxProcess',
+                                ]),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
 

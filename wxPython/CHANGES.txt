@@ -25,6 +25,14 @@ wxPython for Python 1.5.2 or for 1.6, then you will need to get and
 install version 1.0 of Distutils from the website above.  If you are
 using Python 2.0 then you already have it.
 
+Added wxInputStream and the wxFileSystem family of classes,
+contributed by Joerg Baumann
+
+Added wxProcess and support for it to wxExecute.  wxProcess lets you
+get notified when an asyncronous child process terminates, and also to
+get input/output streams for the child process's stdout, stderr and
+stdin.
+
 
 
 New in 2.2.1

@@ -89,6 +89,44 @@ public:
 };
 
 //----------------------------------------------------------------------
+// Handle wxInputStreams by Joerg Baumann
+// See stream.i for implementations
+
+// list class for return list of strings, e.g. readlines()
+WX_DECLARE_LIST(wxString, wxStringPtrList);
+
+
+// C++ class wxPyInputStream to act as base for python class wxInputStream
+// Use it in python like a python file object
+class wxPyInputStream{
+public:
+    // underlying wxInputStream
+    wxInputStream* wxi;
+
+public:
+    wxPyInputStream(wxInputStream* wxi_) : wxi(wxi_) {}
+    ~wxPyInputStream();
+
+    // python file object interface for input files (most of it)
+    void close();
+    void flush();
+    bool eof();
+    wxString* read(int size=-1);
+    wxString* readline(int size=-1);
+    wxStringPtrList* readlines(int sizehint=-1);
+    void seek(int offset, int whence=0);
+    int tell();
+    /*
+      bool isatty();
+      int fileno();
+      void truncate(int size=-1);
+      void write(wxString data);
+      void writelines(wxStringPtrList);
+    */
+};
+
+
+//----------------------------------------------------------------------
 // These are helpers used by the typemaps
 
 HELPEREXPORT byte* byte_LIST_helper(PyObject* source);
@@ -283,6 +321,26 @@ public:
     }                                                                   \
     bool CLASS::base_##CBNAME(int a, int b) {                           \
         return PCLASS::CBNAME(a,b);                                     \
+    }
+
+//---------------------------------------------------------------------------
+
+#define DEC_PYCALLBACK_VOID_INTINT(CBNAME)                      \
+    void CBNAME(int a, int b);                                  \
+    void base_##CBNAME(int a, int b);
+
+
+#define IMP_PYCALLBACK_VOID_INTINT(CLASS, PCLASS, CBNAME)               \
+    void CLASS::CBNAME(int a, int b) {                                  \
+        bool doSave = wxPyRestoreThread();                              \
+        if (m_myInst.findCallback(#CBNAME))                             \
+            m_myInst.callCallback(Py_BuildValue("(ii)",a,b));           \
+        else                                                            \
+            PCLASS::CBNAME(a,b);                                        \
+        wxPySaveThread(doSave);                                         \
+    }                                                                   \
+    void CLASS::base_##CBNAME(int a, int b) {                           \
+        PCLASS::CBNAME(a,b);                                            \
     }
 
 //---------------------------------------------------------------------------
@@ -674,6 +732,63 @@ public:
 
 //---------------------------------------------------------------------------
 
+#define DEC_PYCALLBACK_BOOL_STRING_pure(CBNAME)         \
+    bool CBNAME(const wxString& a);
+                   \
+#define IMP_PYCALLBACK_BOOL_STRING_pure(CLASS, PCLASS, CBNAME)                  \
+    bool CLASS::CBNAME(const wxString& a)  {                                    \
+        bool rval;                                                              \
+        bool doSave = wxPyRestoreThread();                                      \
+        if (m_myInst.findCallback(#CBNAME))                                     \
+            rval = m_myInst.callCallback(Py_BuildValue("(s)", a.c_str()));      \
+        wxPySaveThread(doSave);                                                 \
+        return rval;                                                            \
+    }                                                                           \
+
+//---------------------------------------------------------------------------
+
+#define DEC_PYCALLBACK_STRING_STRING_pure(CBNAME)                               \
+    wxString CBNAME(const wxString& a);                                         \
+
+#define IMP_PYCALLBACK_STRING_STRING_pure(CLASS, PCLASS, CBNAME)                \
+    wxString CLASS::CBNAME(const wxString& a)  {                                \
+        wxString rval;                                                          \
+        bool doSave = wxPyRestoreThread();                                      \
+        if (m_myInst.findCallback(#CBNAME)) {                                   \
+            PyObject* ro;                                                       \
+            ro = m_myInst.callCallbackObj(Py_BuildValue("(s)", a.c_str()));     \
+            if (ro) {                                                           \
+                rval = PyString_AsString(PyObject_Str(ro));                     \
+                Py_DECREF(ro);                                                  \
+            }                                                                   \
+        }                                                                       \
+        wxPySaveThread(doSave);                                                 \
+        return rval;                                                            \
+    }                                                                           \
+
+//---------------------------------------------------------------------------
+
+#define DEC_PYCALLBACK_STRING_STRINGINT_pure(CBNAME)                            \
+    wxString CBNAME(const wxString& a,int b);                                   \
+
+#define IMP_PYCALLBACK_STRING_STRINGINT_pure(CLASS, PCLASS, CBNAME)             \
+    wxString CLASS::CBNAME(const wxString& a,int b)  {                          \
+        wxString rval;                                                          \
+        bool doSave = wxPyRestoreThread();                                      \
+        if (m_myInst.findCallback(#CBNAME)) {                                   \
+            PyObject* ro;                                                       \
+            ro = m_myInst.callCallbackObj(Py_BuildValue("(si)", a.c_str(),b));  \
+            if (ro) {                                                           \
+                rval = PyString_AsString(PyObject_Str(ro));                     \
+                Py_DECREF(ro);                                                  \
+            }                                                                   \
+        }                                                                       \
+        wxPySaveThread(doSave);                                                 \
+        return rval;                                                            \
+    }                                                                           \
+
+//---------------------------------------------------------------------------
+
 #define DEC_PYCALLBACK_BOOL_STRINGSTRING(CBNAME)              \
     bool CBNAME(const wxString& a, const wxString& b);        \
     bool base_##CBNAME(const wxString& a, const wxString& b);
@@ -866,6 +981,28 @@ public:
     wxDragResult CLASS::base_##CBNAME(wxCoord a, wxCoord b, wxDragResult c) { \
         return PCLASS::CBNAME(a, b, c);                                       \
     }
+
+//---------------------------------------------------------------------------
+
+#define DEC_PYCALLBACK_FSF_FSSTRING_pure(CBNAME)                        \
+    wxFSFile* CBNAME(wxFileSystem& fs, const wxString& location);       \
+
+#define IMP_PYCALLBACK_FSF_FSSTRING_pure(CLASS, PCLASS, CBNAME)         \
+    wxFSFile* CLASS::CBNAME(wxFileSystem& a,const wxString& b) {        \
+        bool doSave = wxPyRestoreThread();                              \
+        wxFSFile* rval=0;                                               \
+        if (m_myInst.findCallback(#CBNAME)) {                           \
+            PyObject* ro;                                               \
+            ro=m_myInst.callCallbackObj(Py_BuildValue("(Os)",           \
+            wxPyConstructObject(&a, "(wxFileSystemC"),b.c_str()));      \
+            if (ro) {                                                   \
+                SWIG_GetPtrObj(ro, (void **)&rval, "_wxFSFILE_p");      \
+                Py_DECREF(ro);                                          \
+            }                                                           \
+      }                                                                 \
+        wxPySaveThread(doSave);                                         \
+        return rval;                                                    \
+    };
 
 //---------------------------------------------------------------------------
 

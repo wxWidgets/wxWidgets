@@ -318,37 +318,6 @@ static PyObject *_wrap_wxEndBusyCursor(PyObject *self, PyObject *args, PyObject 
     return _resultobj;
 }
 
-static PyObject *_wrap_wxExecute(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    wxString * _arg0;
-    int  _arg1 = (int ) FALSE;
-    PyObject * _obj0 = 0;
-    char *_kwnames[] = { "command","sync", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxExecute",_kwnames,&_obj0,&_arg1)) 
-        return NULL;
-{
-    if (!PyString_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxExecute(*_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("l",_result);
-{
-    if (_obj0)
-        delete _arg0;
-}
-    return _resultobj;
-}
-
 static PyObject *_wrap_wxGetElapsedTime(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     long  _result;
@@ -547,6 +516,28 @@ static PyObject *_wrap_wxGetOsVersion(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
+static PyObject *_wrap_wxGetOsDescription(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetOsDescription",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxGetOsDescription());
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
 static PyObject *_wrap_wxSleep(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _arg0;
@@ -558,6 +549,24 @@ static PyObject *_wrap_wxSleep(PyObject *self, PyObject *args, PyObject *kwargs)
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxSleep(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxUsleep(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    unsigned long  _arg0;
+    char *_kwnames[] = { "milliseconds", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"l:wxUsleep",_kwnames,&_arg0)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxUsleep(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -596,6 +605,23 @@ static PyObject *_wrap_wxSafeYield(PyObject *self, PyObject *args, PyObject *kwa
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxFlushEvents(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxFlushEvents",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFlushEvents();
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -670,6 +696,175 @@ static PyObject *_wrap_wxStripMenuCodes(PyObject *self, PyObject *args, PyObject
 }
 {
     delete _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetEmailAddress(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetEmailAddress",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxGetEmailAddress());
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetHostName(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetHostName",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxGetHostName());
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetFullHostName(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetFullHostName",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxGetFullHostName());
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetUserId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetUserId",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxGetUserId());
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetUserName(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetUserName",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxGetUserName());
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetHomeDir(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetHomeDir",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxGetHomeDir());
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetAccelFromString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxAcceleratorEntry * _result;
+    wxString * _arg0;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "label", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGetAccelFromString",_kwnames,&_obj0)) 
+        return NULL;
+{
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxAcceleratorEntry *)wxGetAccelFromString(*_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxAcceleratorEntry_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj0)
+        delete _arg0;
 }
     return _resultobj;
 }
@@ -4516,12 +4711,22 @@ static PyMethodDef misccMethods[] = {
 	 { "wxSize_y_set", (PyCFunction) _wrap_wxSize_y_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSize_x_get", (PyCFunction) _wrap_wxSize_x_get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSize_x_set", (PyCFunction) _wrap_wxSize_x_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetAccelFromString", (PyCFunction) _wrap_wxGetAccelFromString, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetHomeDir", (PyCFunction) _wrap_wxGetHomeDir, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetUserName", (PyCFunction) _wrap_wxGetUserName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetUserId", (PyCFunction) _wrap_wxGetUserId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetFullHostName", (PyCFunction) _wrap_wxGetFullHostName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetHostName", (PyCFunction) _wrap_wxGetHostName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetEmailAddress", (PyCFunction) _wrap_wxGetEmailAddress, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStripMenuCodes", (PyCFunction) _wrap_wxStripMenuCodes, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetResource", (PyCFunction) _wrap_wxGetResource, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEnableTopLevelWindows", (PyCFunction) _wrap_wxEnableTopLevelWindows, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFlushEvents", (PyCFunction) _wrap_wxFlushEvents, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSafeYield", (PyCFunction) _wrap_wxSafeYield, METH_VARARGS | METH_KEYWORDS },
 	 { "wxYield", (PyCFunction) _wrap_wxYield, METH_VARARGS | METH_KEYWORDS },
+	 { "wxUsleep", (PyCFunction) _wrap_wxUsleep, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSleep", (PyCFunction) _wrap_wxSleep, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetOsDescription", (PyCFunction) _wrap_wxGetOsDescription, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetOsVersion", (PyCFunction) _wrap_wxGetOsVersion, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStartTimer", (PyCFunction) _wrap_wxStartTimer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxShell", (PyCFunction) _wrap_wxShell, METH_VARARGS | METH_KEYWORDS },
@@ -4530,7 +4735,6 @@ static PyMethodDef misccMethods[] = {
 	 { "wxGetMousePosition", (PyCFunction) _wrap_wxGetMousePosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetFreeMemory", (PyCFunction) _wrap_wxGetFreeMemory, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetElapsedTime", (PyCFunction) _wrap_wxGetElapsedTime, METH_VARARGS | METH_KEYWORDS },
-	 { "wxExecute", (PyCFunction) _wrap_wxExecute, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEndBusyCursor", (PyCFunction) _wrap_wxEndBusyCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDisplaySize", (PyCFunction) _wrap_wxDisplaySize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBell", (PyCFunction) _wrap_wxBell, METH_VARARGS | METH_KEYWORDS },
