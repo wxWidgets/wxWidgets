@@ -1888,7 +1888,7 @@ void wxTextCtrl::ShowPosition(wxTextPos pos)
                     wxCoord x2 = x + GetTextWidth(lineText[(size_t)col]);
                     if ( x2 > xStart + rectText.width )
                     {
-                        Scroll(x2 / wChar, row);
+                        Scroll((x2 - 1)/ wChar, row);
                     }
                 }
             }
@@ -2170,7 +2170,10 @@ bool wxTextCtrlRemoveCommand::Do(wxTextCtrl *text)
 
 bool wxTextCtrlRemoveCommand::Undo(wxTextCtrl *text)
 {
-    text->SetInsertionPoint(m_from);
+    // it is possible that the text was deleted and that we can't restore text
+    // at the same position we removed it any more
+    wxTextPos posLast = text->GetLastPosition();
+    text->SetInsertionPoint(m_from > posLast ? posLast : m_from);
     text->WriteText(m_textDeleted);
 
     return TRUE;
@@ -3416,14 +3419,42 @@ void wxTextCtrl::UpdateScrollbars()
                         : 0;
     int scrollRangeY = showScrollbarY ? nRows : 0;
 
-    if ( (scrollRangeY != MData().m_scrollRangeY) || (scrollRangeX != MData().m_scrollRangeX) )
+    int scrollRangeXOld = MData().m_scrollRangeX,
+        scrollRangeYOld = MData().m_scrollRangeY;
+    if ( (scrollRangeY != scrollRangeYOld) || (scrollRangeX != scrollRangeXOld) )
     {
         int x, y;
         GetViewStart(&x, &y);
+
+#if 0
+        // we want to leave the scrollbars at the same position which means
+        // that x and y have to be adjusted as the number of positions may have
+        // changed
+        //
+        // the number of positions is calculated from knowing that last
+        // position = range - thumbSize and thumbSize == pageSize which is
+        // equal to the window width / pixelsPerLine
+        if ( scrollRangeXOld )
+        {
+            x *= scrollRangeX - m_rectText.width / charWidth;
+            x /= scrollRangeXOld - m_rectText.width / charWidth;
+        }
+
+        if ( scrollRangeYOld )
+            y *= scrollRangeY / scrollRangeYOld;
+#endif // 0
+
         SetScrollbars(charWidth, lineHeight,
                       scrollRangeX, scrollRangeY,
                       x, y,
                       TRUE /* no refresh */);
+
+        if ( scrollRangeXOld )
+        {
+            x *= scrollRangeX - m_rectText.width / charWidth;
+            x /= scrollRangeXOld - m_rectText.width / charWidth;
+            Scroll(x, y);
+        }
 
         MData().m_scrollRangeX = scrollRangeX;
         MData().m_scrollRangeY = scrollRangeY;
@@ -3766,7 +3797,7 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
 
     // we want to always start at the top of the line, otherwise if we redraw a
     // rect whose top is in the middle of a line, we'd draw this line shifted
-    yClient -= yClient % hLine;
+    yClient -= (yClient - m_rectText.y) % hLine;
 
     if ( IsSingleLine() )
     {
@@ -3883,7 +3914,8 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
         rectText.width = GetTextWidth(text);
 
         // do draw the text
-        renderer->DrawTextLine(dc, text, rectText, selStart, selEnd);
+        renderer->DrawTextLine(dc, text, rectText, selStart, selEnd,
+                               GetStateFlags());
         wxLogTrace(_T("text"), _T("Line %ld: positions %ld-%ld redrawn."),
                    line, colStart, colEnd);
     }
@@ -3951,6 +3983,10 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
     // might be drawn outside of it (if even a small part of a charater is
     // inside, HitTest() will return its column and DrawText() can't draw only
     // the part of the character, of course)
+#ifdef __WXMSW__
+    // FIXME: is this really a bug in wxMSW?
+    rectTextArea.width--;
+#endif // __WXMSW__
     dc.SetClippingRegion(rectTextArea);
 
     // adjust for scrolling
@@ -4001,7 +4037,7 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
     // the display can be corrupted when it's hidden
     if ( !m_hasCaret && GetCaret() )
     {
-        GetCaret()->Show();
+        ShowCaret();
 
         m_hasCaret = TRUE;
     }
@@ -4362,6 +4398,10 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             return;
         }
     }
+#ifdef __WXDEBUG__
+    else if ( event.ControlDown() && event.GetKeyCode() == 'r' )
+        Refresh();
+#endif // __WXDEBUG__
 
     event.Skip();
 }
@@ -4571,11 +4611,6 @@ bool wxStdTextCtrlInputHandler::HandleFocus(wxControl *control,
     wxTextCtrl *text = wxStaticCast(control, wxTextCtrl);
     if ( !text->HasSelection() )
         return FALSE;
-
-    if ( event.GetEventType() == wxEVT_KILL_FOCUS )
-    {
-        text->ClearSelection();
-    }
 
     // refresh
     return TRUE;

@@ -393,7 +393,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     wxTextCtrl *text = new wxTextCtrl(this, -1, _T("Hello,\nMultiverse!"),
                                       wxPoint(10, 30),
                                       wxSize(200, 150),
-                                      wxTE_MULTILINE);// | wxHSCROLL);
+                                      wxTE_MULTILINE | wxHSCROLL);
 
 #if 0
     // test wxTextCtrl::Replace()

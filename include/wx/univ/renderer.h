@@ -171,7 +171,8 @@ public:
                               const wxString& text,
                               const wxRect& rect,
                               int selStart = -1,
-                              int selEnd = -1) = 0;
+                              int selEnd = -1,
+                              int flags = 0) = 0;
 
     // draw a line wrap indicator
     virtual void DrawLineWrapMark(wxDC& dc, const wxRect& rect) = 0;
@@ -246,7 +247,8 @@ protected:
     static void StandardDrawTextLine(wxDC& dc,
                                      const wxString& text,
                                      const wxRect& rect,
-                                     int selStart, int selEnd);
+                                     int selStart, int selEnd,
+                                     int flags);
 
     // standard scrollbar hit testing: this assumes that it only has 2 arrows
     // and a thumb, so the themes which have more complicated scrollbars (e.g.

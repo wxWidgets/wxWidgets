@@ -74,9 +74,10 @@ void wxRenderer::StandardDrawFrame(wxDC& dc,
 void wxRenderer::StandardDrawTextLine(wxDC& dc,
                                       const wxString& text,
                                       const wxRect& rect,
-                                      int selStart, int selEnd)
+                                      int selStart, int selEnd,
+                                      int flags)
 {
-    if ( selStart == -1 )
+    if ( (selStart == -1) || !(flags & wxCONTROL_FOCUSED) )
     {
         // just draw it as is
         dc.DrawText(text, rect.x, rect.y);

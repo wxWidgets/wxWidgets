@@ -629,7 +629,8 @@ void wxWindow::SetScrollbar(int orient,
     {
         if ( scrollbar )
         {
-            if ( GetWindowStyle() & wxALWAYS_SHOW_SB )
+            // wxALWAYS_SHOW_SB only applies to the vertical scrollbar
+            if ( (orient & wxVERTICAL) && (GetWindowStyle() & wxALWAYS_SHOW_SB) )
             {
                 // just disable the scrollbar
                 scrollbar->SetScrollbar(pos, pageSize, range, pageSize, refresh);
@@ -695,7 +696,7 @@ int wxWindow::GetScrollRange(int orient) const
 void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
     // before scrolling it, ensure that we don't have any unpainted areas
-    Update();
+    //Update();
 
     wxRect r;
 

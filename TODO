@@ -23,10 +23,11 @@ wxTextCtrl
 *!! display corrupted when typing text in quickly (even single line)
 *   caret leaves traces under wxGTK
 ?   text ctrl display pb when text is truncated
-*   remember selection when losing/gaining activation
+*+  remember selection when losing/gaining activation
 *   too much is refreshed when double clicking (word select)
 
 *!  scrolling by dragging mouse outside the window
+*!  vertical cursor movement should remember the original x position
 
 All
 
@@ -42,8 +43,10 @@ All
 MSW
 
 *   checkboxes don't look correctly in checked+disabled state (radio too?)
-*   text control scrollbar has text cursor
-    scrollbar behaves strangely in log lbox with many strings
+*   (disabled only) text control scrollbar has text cursor
+*   the corner between 2 scrollbars should behave as a size grip in a frame
+
+?   scrollbar behaves strangely in log lbox with many strings
 
 GTK
 

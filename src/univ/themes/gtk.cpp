@@ -145,7 +145,8 @@ public:
                               const wxString& text,
                               const wxRect& rect,
                               int selStart = -1,
-                              int selEnd = -1);
+                              int selEnd = -1,
+                              int flags = 0);
     virtual void DrawLineWrapMark(wxDC& dc, const wxRect& rect);
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
@@ -1368,9 +1369,12 @@ void wxGTKRenderer::DrawTextLine(wxDC& dc,
                                  const wxString& text,
                                  const wxRect& rect,
                                  int selStart,
-                                 int selEnd)
+                                 int selEnd,
+                                 int flags)
 {
-    StandardDrawTextLine(dc, text, rect, selStart, selEnd);
+    // TODO: GTK+ draws selection even for unfocused controls, just with
+    //       different colours
+    StandardDrawTextLine(dc, text, rect, selStart, selEnd, flags);
 }
 
 void wxGTKRenderer::DrawLineWrapMark(wxDC& dc, const wxRect& rect)
