@@ -121,9 +121,11 @@ void wxPanel::OnSize(wxSizeEvent& WXUNUSED(event))
 
 void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
 {
-    // there is not much to do if we have only one child (or not at all) and
+    // the event is propagated downwards if the event emitter was our parent
+    bool goingDown = event.GetEventObject() == GetParent();
+
     // we're not interested in "notebook page change" events here
-    if ( (GetChildren().GetCount() < 2) || event.IsWindowChange() )
+    if ( event.IsWindowChange() )
     {
         wxWindow *parent = GetParent();
         if ( !parent || !parent->GetEventHandler()->ProcessEvent(event) )
@@ -140,9 +142,6 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
     // the node of the children list from which we should start looking for the
     // next acceptable child
     wxWindowList::Node *node, *start_node;
-
-    // the event is propagated downwards if the event emitter was our parent
-    bool goingDown = event.GetEventObject() == GetParent();
 
     const wxWindowList& children = GetChildren();
 
@@ -313,7 +312,8 @@ void wxPanel::SetFocus()
     //     think my addition to OnNavigationKey() above takes care of it.
     //     Keeping #ifdef __WXGTK__ for now, but please try removing it and see
     //     what happens.
-    // RR: Removed for now.
+    //
+    // RR: Removed for now. Let's see what happens..
 
     if ( !SetFocusToChild() )
     {

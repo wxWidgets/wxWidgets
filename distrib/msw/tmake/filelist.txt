@@ -596,6 +596,7 @@ fs_zip.h	W
 gauge.h	W
 gdicmn.h	W
 gdiobj.h	W
+geometry.h	W
 gifdecod.h	W
 grid.h	W
 gsocket.h	W
@@ -629,6 +630,7 @@ longlong.h	W	B
 matrix.h	W
 mdi.h	W
 memory.h	W	B
+memconf.h	W	B
 menu.h	W
 menuitem.h	W
 metafile.h	W

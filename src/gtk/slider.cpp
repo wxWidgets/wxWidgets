@@ -107,7 +107,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     if (style & wxSL_LABELS)
     {
         gtk_scale_set_draw_value( GTK_SCALE( m_widget ), TRUE );
-	gtk_scale_set_digits( GTK_SCALE( m_widget ), 0 );
+	    gtk_scale_set_digits( GTK_SCALE( m_widget ), 0 );
 
         /* labels need more space and too small window will
            cause junk to appear on the dialog */
@@ -183,6 +183,8 @@ void wxSlider::SetRange( int minValue, int maxValue )
 
     m_adjust->lower = fmin;
     m_adjust->upper = fmax;
+    m_adjust->step_increment = 1.0;
+    m_adjust->page_increment = ceil((fmax-fmin) / 10.0);
 
     gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
 }
