@@ -580,7 +580,7 @@ wxTreeItemId wxTreeCtrl::GetNextSibling(const wxTreeItemId& item) const
   wxASSERT( index != NOT_FOUND ); // I'm not a child of my parent?
 
   size_t n = (size_t)(index + 1);
-  return n == siblings.Count() ? wxTreeItemId() : siblings[n];
+  return n == siblings.Count() ? wxTreeItemId() : (wxTreeItemId) siblings[n];
 }
 
 wxTreeItemId wxTreeCtrl::GetPrevSibling(const wxTreeItemId& item) const
@@ -599,7 +599,7 @@ wxTreeItemId wxTreeCtrl::GetPrevSibling(const wxTreeItemId& item) const
   int index = siblings.Index(i);
   wxASSERT( index != NOT_FOUND ); // I'm not a child of my parent?
 
-  return index == 0 ? wxTreeItemId() : siblings[(size_t)(index - 1)];
+  return index == 0 ? wxTreeItemId() : (wxTreeItemId) siblings[(size_t)(index - 1)];
 }
 
 wxTreeItemId wxTreeCtrl::GetFirstVisibleItem() const
