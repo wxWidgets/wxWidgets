@@ -52,6 +52,7 @@ wxExtHelpController::wxExtHelpController(void)
    m_MapList = NULL;
    m_BrowserName = WXEXTHELP_DEFAULTBROWSER;
    m_BrowserIsNetscape = WXEXTHELP_DEFAULTBROWSER_IS_NETSCAPE;
+   m_NumOfEntries = 0;
 
    char *browser = getenv(WXEXTHELP_ENVVAR_BROWSER);
    if(browser)
@@ -150,7 +151,7 @@ wxExtHelpController::LoadFile(const wxString& ifile = "")
             buffer[len-1] = '\0'; // cut of trailing newline
          if(sscanf(buffer,"%d", &id) != 1)
             break; // error
-         for(i=0; isdigit(buffer[i])||isspace(buffer[i]); i++)
+         for(i=0; isdigit(buffer[i])||isspace(buffer[i])||buffer[i]=='-'; i++)
             ; // find begin of URL
          url = "";
          while(buffer[i] && ! isspace(buffer[i]) && buffer[i] !=
@@ -164,8 +165,6 @@ wxExtHelpController::LoadFile(const wxString& ifile = "")
          m_MapList->Append(new wxExtHelpMapEntry(id,url,doc));
          m_NumOfEntries++;
       }
-      else
-         perror("");
    }while(! feof(input));
    fclose(input);
    
