@@ -254,6 +254,10 @@
  */
 #define wxUSE_LISTCTRL 1
 /*
+ * Use wxPlot class
+ */
+ #define wxUSE_PLOT 1
+/*
  * Use this control
  */
 #define wxUSE_NOTEBOOK 1
