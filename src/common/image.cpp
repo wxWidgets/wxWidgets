@@ -71,7 +71,7 @@ wxImageRefData::wxImageRefData()
 
 wxImageRefData::~wxImageRefData()
 {
-    if (m_data) 
+    if (m_data)
         free( m_data );
 }
 
@@ -382,7 +382,7 @@ bool wxImage::LoadFile( const wxString& filename, long type )
 	wxBufferedInputStream bstream( stream );
         return LoadFile(bstream, type);
     }
-    else 
+    else
     {
         wxLogError( _("Can't load image from file '%s': file does not exist."), filename.c_str() );
 
@@ -402,7 +402,7 @@ bool wxImage::LoadFile( const wxString& filename, const wxString& mimetype )
 	wxBufferedInputStream bstream( stream );
         return LoadFile(bstream, mimetype);
     }
-    else 
+    else
     {
         wxLogError( _("Can't load image from file '%s': file does not exist."), filename.c_str() );
 
@@ -1054,31 +1054,31 @@ wxBitmap wxImage::ConvertToBitmap() const
     int height = GetHeight();
 
     // Create picture
-    
+
     wxBitmap bitmap( width , height , wxDisplayDepth() ) ;
-    
+
     // Create mask
-    
+
     if (HasMask())
     {
     	/*
         unsigned char *mask_data = (unsigned char*)malloc( ((width >> 3)+8) * height );
-        
+
         mask_image =  gdk_image_new_bitmap( gdk_visual_get_system(), mask_data, width, height );
-        
+
         wxMask *mask = new wxMask();
         mask->m_bitmap = gdk_pixmap_new( (GdkWindow*)&gdk_root_parent, width, height, 1 );
-        
+
         bitmap.SetMask( mask );
        */
     }
-        
+
     // Render
-        
+
     int r_mask = GetMaskRed();
     int g_mask = GetMaskGreen();
     int b_mask = GetMaskBlue();
-    
+
 		CGrafPtr 	origPort ;
 		GDHandle	origDevice ;
 		
@@ -1086,7 +1086,7 @@ wxBitmap wxImage::ConvertToBitmap() const
 		SetGWorld( bitmap.GetHBITMAP() , NULL ) ;
 
     register unsigned char* data = GetData();
-    
+
     int index = 0;
     for (int y = 0; y < height; y++)
     {
@@ -1102,7 +1102,7 @@ wxBitmap wxImage::ConvertToBitmap() const
 	    	unsigned char r = data[index++];
     		unsigned char g = data[index++];
     		unsigned char b = data[index++];
- 
+
  			if ( r != lastr || g != lastg || b != lastb )
  			{
        			lastcolor.red = ( lastr  << 8 ) + lastr ;
@@ -1136,9 +1136,9 @@ wxBitmap wxImage::ConvertToBitmap() const
     }  // for height
 
    	SetGWorld( origPort , origDevice ) ;
-    
+
     return bitmap;
-    
+
 }
 
 wxImage::wxImage( const wxBitmap &bitmap )
@@ -1149,11 +1149,11 @@ wxImage::wxImage( const wxBitmap &bitmap )
         wxFAIL_MSG( "invalid bitmap" );
         return;
     }
-    
+
     // create an wxImage object
     int width = bitmap.GetWidth();
     int height = bitmap.GetHeight();
-    Create( width, height ); 
+    Create( width, height );
     /*
     unsigned char *data = GetData();
     if( !data )
@@ -1161,18 +1161,18 @@ wxImage::wxImage( const wxBitmap &bitmap )
         wxFAIL_MSG( "could not allocate data for image" );
         return;
     }
-    
+
     // calc the number of bytes per scanline and padding in the DIB
     int bytePerLine = width*3;
     int sizeDWORD = sizeof( DWORD );
     div_t lineBoundary = div( bytePerLine, sizeDWORD );
     int padding = 0;
-    if( lineBoundary.rem > 0 )  
+    if( lineBoundary.rem > 0 )
     {
         padding = sizeDWORD - lineBoundary.rem;
         bytePerLine += padding;
     }
-    
+
     // create a DIB header
     int headersize = sizeof(BITMAPINFOHEADER);
     LPBITMAPINFO lpDIBh = (BITMAPINFO *) malloc( headersize );
@@ -1205,13 +1205,13 @@ wxImage::wxImage( const wxBitmap &bitmap )
         free( lpDIBh );
         return;
     }
-    
+
     // copy data from the device-dependent bitmap to the DIB
     HDC hdc = ::GetDC(NULL);
     HBITMAP hbitmap;
     hbitmap = (HBITMAP) bitmap.GetHBITMAP();
     ::GetDIBits( hdc, hbitmap, 0, height, lpBits, lpDIBh, DIB_RGB_COLORS );
-    
+
     // copy DIB data into the wxImage object
     int i, j;
     unsigned char *ptdata = data;
@@ -1227,7 +1227,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
         }
         ptbits += padding;
     }	
-    
+
     // similarly, set data according to the possible mask bitmap
     if( bitmap.GetMask() && bitmap.GetMask()->GetMaskBitmap() )
     {
@@ -1237,9 +1237,9 @@ wxImage::wxImage( const wxBitmap &bitmap )
         ::SetTextColor( memdc, RGB( 0, 0, 0 ) );
         ::SetBkColor( memdc, RGB( 255, 255, 255 ) );
         ::GetDIBits( memdc, hbitmap, 0, height, lpBits, lpDIBh, DIB_RGB_COLORS );
-        ::DeleteDC( memdc ); 
+        ::DeleteDC( memdc );
         // background color set to RGB(16,16,16) in consistent with wxGTK
-        unsigned char r=16, g=16, b=16;  
+        unsigned char r=16, g=16, b=16;
         ptdata = data;
         ptbits = lpBits;
         for( i=0; i<height; i++ )
@@ -1257,7 +1257,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
                 ptbits += 3;
             }
             ptbits += padding;
-        }       
+        }
         SetMaskColour( r, g, b );
         SetMask( TRUE );
     }
@@ -1265,8 +1265,8 @@ wxImage::wxImage( const wxBitmap &bitmap )
     {
         SetMask( FALSE );
     }
-    // free allocated resources      
-    ::ReleaseDC(NULL, hdc);   
+    // free allocated resources
+    ::ReleaseDC(NULL, hdc);
     free(lpDIBh);
     free(lpBits);
     */
@@ -2376,7 +2376,7 @@ unsigned long wxImage::ComputeHistogram( wxHashTable &h )
         else
         {
             hnode = new wxHNode();
-            hnode->index = nentries++;  
+            hnode->index = nentries++;
             hnode->value = 1;
 
             h.Put(key, (wxObject *)hnode);

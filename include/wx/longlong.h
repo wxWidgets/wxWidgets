@@ -51,8 +51,11 @@
         #error "See the documentation on the 'longlong' pragma."
     #endif
 #else
+    #if !defined(__VISAGECPP__)
+    // Visualage does not support this pragma
     #warning "Your compiler does not appear to support 64 bit integers, "\
              "using emulation class instead."
+    #endif
     #define wxUSE_LONGLONG_WX 1
 #endif // compiler
 

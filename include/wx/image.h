@@ -72,6 +72,9 @@ protected:
   long      m_type;
 };
 
+#if !defined(__VISAGECPP__)
+//  Why define these here and then again in the individual image format headers??
+
 //-----------------------------------------------------------------------------
 // wxPNGHandler
 //-----------------------------------------------------------------------------
@@ -207,6 +210,8 @@ public:
 #endif // wxUSE_STREAMS
 };
 #endif // wxUSE_PCX
+
+#endif //__VISAGECPP__
 
 //-----------------------------------------------------------------------------
 // wxImage
