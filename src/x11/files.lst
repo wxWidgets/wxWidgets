@@ -648,7 +648,6 @@ GUI_LOWLEVEL_OBJS = \
 		window.o
 
 COMMONOBJS = \
-		parser.o \
 		appcmn.o \
 		artprov.o \
 		artstd.o \

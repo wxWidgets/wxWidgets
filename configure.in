@@ -4351,6 +4351,7 @@ fi
 
 if test "$wxUSE_PROLOGIO" = "yes" ; then
     AC_DEFINE(wxUSE_PROLOGIO)
+    ALL_OBJECTS="$ALL_OBJECTS parser.o"
 fi
 
 if test "$wxUSE_RESOURCES" = "yes" ; then
@@ -4359,6 +4360,9 @@ if test "$wxUSE_RESOURCES" = "yes" ; then
 	else
 		AC_DEFINE(wxUSE_RESOURCES)
 		SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS resource"
+    fi
+    if test "$wxUSE_PROLOGIO" != "yes" ; then
+        ALL_OBJECTS="$ALL_OBJECTS parser.o"
     fi
 fi
 

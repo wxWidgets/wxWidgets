@@ -658,6 +658,7 @@ ALL_HEADERS = \
 		generic/imaglist.h \
 		generic/laywin.h \
 		generic/listctrl.h \
+		generic/mdig.h \
 		generic/msgdlgg.h \
 		generic/notebook.h \
 		generic/paletteg.h \
@@ -701,7 +702,6 @@ ALL_HEADERS = \
 		protocol/protocol.h
 
 COMMONOBJS = \
-		parser.o \
 		appcmn.o \
 		artprov.o \
 		artstd.o \
@@ -995,7 +995,6 @@ GUI_LOWLEVEL_OBJS = \
 		gdiimage.o \
 		gdiobj.o \
 		icon.o \
-		imaglist.o \
 		main.o \
 		palette.o \
 		pen.o \

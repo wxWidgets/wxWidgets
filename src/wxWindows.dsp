@@ -2948,6 +2948,10 @@ SOURCE=..\include\wx\generic\listctrl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\generic\mdig.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\generic\msgdlgg.h
 # End Source File
 # Begin Source File
