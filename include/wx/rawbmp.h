@@ -275,7 +275,7 @@ struct WXDLLEXPORT wxPixelDataOut<wxImage>
             typedef wxImagePixelFormat PixelFormat;
 
             // the type of the pixel components
-            typedef typename PixelFormat::ChannelType ChannelType;
+            typedef typename dummyPixelFormat::ChannelType ChannelType;
 
             // the pixel data we're working with
             typedef
