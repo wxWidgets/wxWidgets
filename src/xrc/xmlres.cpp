@@ -752,7 +752,8 @@ int wxXmlResourceHandler::GetStyle(const wxString& param, int defaults)
 
 wxString wxXmlResourceHandler::GetText(const wxString& param, bool translate)
 {
-    wxString str1(GetParamValue(param));
+    wxXmlNode *parNode = GetParamNode(param);
+    wxString str1(GetNodeContent(parNode));
     wxString str2;
     const wxChar *dt;
     wxChar amp_char;
@@ -788,11 +789,31 @@ wxString wxXmlResourceHandler::GetText(const wxString& param, bool translate)
         else str2 << *dt;
     }
 
-    if (translate && m_resource->GetFlags() & wxXRC_USE_LOCALE)
-        return wxGetTranslation(str2);
+    if (m_resource->GetFlags() & wxXRC_USE_LOCALE)
+    {
+        if (translate && parNode &&
+            parNode->GetPropVal(wxT("translate"), wxEmptyString) != wxT("0"))
+        {
+            return wxGetTranslation(str2);
+        }
+        else
+        {
+#if wxUSE_UNICODE
+            return str2;
+#else
+            // The string is internally stored as UTF-8, we have to convert
+            // it into system's default encoding so that it can be displayed:
+            return wxString(str2.mb_str(wxConvUTF8), wxConvLocal);
+#endif
+        }
+    }
     else
+    {
+        // If wxXRC_USE_LOCALE is not set, then the string is already in
+        // system's default encoding in ANSI build, so we don't have to
+        // do anything special here.
         return str2;
-
+    }
 }
 
 
