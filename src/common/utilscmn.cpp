@@ -962,32 +962,8 @@ void wxEnableTopLevelWindows(bool enable)
         node->GetData()->Enable(enable);
 }
 
-static void wxFindDisabledWindows(wxWindowList& winDisabled,
-                                  wxWindow *win,
-                                  wxWindow *winToSkip)
-{
-    wxWindowList::Node *node;
-    for ( node = win->GetChildren().GetFirst(); node; node = node->GetNext() )
-    {
-        wxWindow *child = node->GetData();
-        if ( child == winToSkip )
-            continue;
-
-        wxFindDisabledWindows(winDisabled, child, winToSkip);
-
-        if ( child->IsEnabled() )
-        {
-            winDisabled.Append(child);
-            child->Disable();
-        }
-    }
-}
-
 wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip)
 {
-    // remember all windows we're going to (temporarily) disable
-    m_winDisabled = new wxWindowList;
-
 #ifdef __WXMSW__
 #ifdef __WIN32__
     // and the top level window too
@@ -999,16 +975,29 @@ wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip)
 #endif
 #endif // MSW
 
+    // remember the top level windows which were already disabled, so that we
+    // don't reenable them later
+    m_winDisabled = NULL;
+
     wxWindowList::Node *node;
     for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
     {
         wxWindow *winTop = node->GetData();
-        if ( winTop != winToSkip && winTop->IsEnabled() )
+        if ( winTop == winToSkip )
+            continue;
+
+        if ( winTop->IsEnabled() )
         {
-            wxFindDisabledWindows(*m_winDisabled, winTop, winToSkip);
+            winTop->Disable();
+        }
+        else
+        {
+            if ( !m_winDisabled )
+            {
+                m_winDisabled = new wxWindowList;
+            }
 
             m_winDisabled->Append(winTop);
-            winTop->Disable();
         }
     }
 }
@@ -1016,9 +1005,14 @@ wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip)
 wxWindowDisabler::~wxWindowDisabler()
 {
     wxWindowList::Node *node;
-    for ( node = m_winDisabled->GetFirst(); node; node = node->GetNext() )
+    for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
     {
-        node->GetData()->Enable();
+        wxWindow *winTop = node->GetData();
+        if ( !m_winDisabled || !m_winDisabled->Find(winTop) )
+        {
+            winTop->Enable();
+        }
+        //else: had been already disabled, don't reenable
     }
 
     delete m_winDisabled;
