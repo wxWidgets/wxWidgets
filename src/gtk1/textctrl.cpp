@@ -18,6 +18,7 @@
 #include "wx/settings.h"
 #include "wx/panel.h"
 #include "wx/strconv.h"
+#include "wx/fontutil.h"        // for wxNativeFontInfo (GetNativeFontInfo())
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -46,7 +47,48 @@ extern wxWindowGTK *g_delayedFocus;
 // helpers
 // ----------------------------------------------------------------------------
 
-#ifndef __WXGTK20__
+#ifdef __WXGTK20__
+static void wxGtkTextInsert(GtkWidget *text,
+                            GtkTextBuffer *text_buffer,
+                            const wxTextAttr& attr,
+                            wxCharBuffer buffer)
+
+{
+    PangoFontDescription *font_description = attr.HasFont()
+                         ? attr.GetFont().GetNativeFontInfo()->description
+                         : NULL;
+
+    GdkColor *colFg = attr.HasTextColour() ? attr.GetTextColour().GetColor()
+                                           : NULL;
+
+    GdkColor *colBg = attr.HasBackgroundColour()
+                        ? attr.GetBackgroundColour().GetColor()
+                        : NULL;
+
+    GtkTextIter start, end;
+    GtkTextMark *mark;
+    // iterators are invalidated by any mutation that affects 'indexable' buffer contents,
+    // so we save current position in a mark
+    // we need a mark of left gravity, so we cannot use
+    // mark = gtk_text_buffer_get_insert (text_buffer)
+
+    gtk_text_buffer_get_iter_at_mark( text_buffer, &start,
+                                     gtk_text_buffer_get_insert (text_buffer) );
+    mark = gtk_text_buffer_create_mark( text_buffer, NULL, &start, TRUE/*left gravity*/ );
+
+    gtk_text_buffer_insert_at_cursor( text_buffer, buffer, strlen(buffer) );
+
+    gtk_text_buffer_get_iter_at_mark( text_buffer, &end,
+                                     gtk_text_buffer_get_insert (text_buffer) );
+    gtk_text_buffer_get_iter_at_mark( text_buffer, &start, mark );
+
+    GtkTextTag *tag;
+    tag = gtk_text_buffer_create_tag( text_buffer, NULL, "font-desc", font_description,
+                                     "foreground-gdk", colFg,
+                                     "background-gdk", colBg, NULL );
+    gtk_text_buffer_apply_tag( text_buffer, tag, &start, &end );
+}
+#else
 static void wxGtkTextInsert(GtkWidget *text,
                             const wxTextAttr& attr,
                             const char *txt,
@@ -424,10 +466,8 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
     m_cursor = wxCursor( wxCURSOR_IBEAM );
 
-#ifndef __WXGTK20__
     wxTextAttr attrDef( colFg, m_backgroundColour, parent->GetFont() );
     SetDefaultStyle( attrDef );
-#endif
 
     Show( TRUE );
 
@@ -554,7 +594,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         GtkTextBuffer *text_buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
         
         // TODO: Call whatever is needed to delete the selection.
-        gtk_text_buffer_insert_at_cursor( text_buffer, buffer, strlen(buffer) );
+        wxGtkTextInsert( m_text, text_buffer, m_defaultStyle, buffer );
 
         // Scroll to cursor.
         GtkTextIter iter;
@@ -1331,17 +1371,51 @@ bool wxTextCtrl::SetBackgroundColour( const wxColour &colour )
 
 bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr& style )
 {
-    /* VERY dirty way to do that - removes the required text and re-adds it
-       with styling (FIXME) */
     if ( m_windowStyle & wxTE_MULTILINE )
     {
-#ifndef __WXGTK20__
         if ( style.IsDefault() )
         {
             // nothing to do
             return TRUE;
         }
+#ifdef __WXGTK20__
+        GtkTextBuffer *text_buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
+        gint l = gtk_text_buffer_get_char_count( text_buffer );
 
+        wxCHECK_MSG( start >= 0 && end <= l, FALSE,
+                     _T("invalid range in wxTextCtrl::SetStyle") );
+
+        GtkTextIter starti, endi;
+        gtk_text_buffer_get_iter_at_offset( text_buffer, &starti, start );
+        gtk_text_buffer_get_iter_at_offset( text_buffer, &endi, end );
+
+        // use the attributes from style which are set in it and fall back
+        // first to the default style and then to the text control default
+        // colours for the others
+        wxTextAttr attr = wxTextAttr::Combine(style, m_defaultStyle, this);
+
+        PangoFontDescription *font_description = attr.HasFont()
+                             ? attr.GetFont().GetNativeFontInfo()->description
+                             : NULL;
+
+        GdkColor *colFg = attr.HasTextColour() ? attr.GetTextColour().GetColor()
+                                               : NULL;
+
+        GdkColor *colBg = attr.HasBackgroundColour()
+                            ? attr.GetBackgroundColour().GetColor()
+                            : NULL;
+
+        GtkTextTag *tag;
+        tag = gtk_text_buffer_create_tag( text_buffer, NULL, "font-desc", font_description,
+                                         "foreground-gdk", colFg,
+                                         "background-gdk", colBg, NULL );
+        gtk_text_buffer_apply_tag( text_buffer, tag, &starti, &endi );
+
+         return TRUE;
+#else
+        // VERY dirty way to do that - removes the required text and re-adds it
+        // with styling (FIXME)
+         
         gint l = gtk_text_get_length( GTK_TEXT(m_text) );
 
         wxCHECK_MSG( start >= 0 && end <= l, FALSE,
