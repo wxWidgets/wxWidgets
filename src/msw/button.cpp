@@ -134,29 +134,33 @@ WXDWORD wxButton::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 wxSize wxButton::DoGetBestSize() const
 {
-    wxString label = wxGetWindowText(GetHWND());
     int wBtn;
-    GetTextExtent(label, &wBtn, NULL);
+    GetTextExtent(wxGetWindowText(GetHWND()), &wBtn, NULL);
 
     int wChar, hChar;
     wxGetCharSize(GetHWND(), &wChar, &hChar, &GetFont());
 
-    // add a margin - the button is wider than just its label
+    // add a margin -- the button is wider than just its label
     wBtn += 3*wChar;
 
     // the button height is proportional to the height of the font used
     int hBtn = BUTTON_HEIGHT_FROM_CHAR_HEIGHT(hChar);
 
-    if (!HasFlag(wxBU_EXACTFIT))
+    // all buttons have at least the standard size unless the user explicitly
+    // wants them to be of smaller size and used wxBU_EXACTFIT style when
+    // creating the button
+    if ( !HasFlag(wxBU_EXACTFIT) )
     {
         wxSize sz = GetDefaultSize();
-        if (wBtn > sz.x) sz.x = wBtn;
-        if (hBtn > sz.y) sz.y = hBtn;
+        if (wBtn > sz.x)
+            sz.x = wBtn;
+        if (hBtn > sz.y)
+            sz.y = hBtn;
+
         return sz;
     }
-    else
-        return wxSize(wBtn, hBtn);
 
+    return wxSize(wBtn, hBtn);
 }
 
 /* static */
