@@ -6,7 +6,9 @@
 #if defined( __MINGW32__ )
     //#include <_mingw.h>
     #if __MINGW32_MAJOR_VERSION >= 1
+        #ifndef HAVE_W32API_H
         #define HAVE_W32API_H
+        #endif
     #endif
 #endif
 
@@ -43,6 +45,33 @@
 #if defined(__CYGWIN__) && ((__GNUC__==2) && (__GNUC_MINOR__==9))
     #define __CYGWIN10__
 #endif
+
+// Mingw runtime 1.0-20010604 has some missing _tXXXX functions,
+// so let's define them ourselves:
+#if defined(__GNUWIN32__) && wxCHECK_W32API_VERSION( 1, 0 )
+    #ifndef _tsetlocale
+      #if wxUSE_UNICODE
+      #define _tsetlocale _wsetlocale
+      #else
+      #define _tsetlocale setlocale
+      #endif
+    #endif
+    #ifndef _tgetenv
+      #if wxUSE_UNICODE
+      #define _tgetenv _wgetenv
+      #else
+      #define _tgetenv getenv
+      #endif
+    #endif
+    #ifndef _tfopen
+      #if wxUSE_UNICODE
+      #define _tfopen _wfopen
+      #else
+      #define _tfopen fopen
+      #endif
+    #endif
+#endif
+
 
 #endif
   // _WX_MSW_GCCPRIV_H_
