@@ -26,39 +26,38 @@ extern const char *wxFileSelectorDefaultWildcardStr;
 
 class wxFileDialog: public wxDialog
 {
+DECLARE_DYNAMIC_CLASS(wxFileDialog)
 
-  DECLARE_DYNAMIC_CLASS(wxFileDialog)
+public:
+    wxFileDialog() { }
 
-  friend void gtk_filedialog_ok_callback( GtkWidget *widget, gpointer data );
+    wxFileDialog(wxWindow *parent,
+                 const wxString& message = wxFileSelectorPromptStr,
+                 const wxString& defaultDir = "",
+                 const wxString& defaultFile = "",
+                 const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
+                 long style = 0,
+                 const wxPoint& pos = wxDefaultPosition);
 
-  public:
+    void SetMessage(const wxString& message) { m_message = message; }
+    void SetPath(const wxString& path) { m_path = path; }
+    void SetDirectory(const wxString& dir) { m_dir = dir; }
+    void SetFilename(const wxString& name) { m_fileName = name; }
+    void SetWildcard(const wxString& wildCard) { m_wildCard = wildCard; }
+    void SetStyle(long style) { m_dialogStyle = style; }
+    void SetFilterIndex(int filterIndex) { m_filterIndex = filterIndex; }
 
-    wxFileDialog() {};
+    wxString GetMessage() const { return m_message; }
+    wxString GetPath() const { return m_path; }
+    wxString GetDirectory() const { return m_dir; }
+    wxString GetFilename() const { return m_fileName; }
+    wxString GetWildcard() const { return m_wildCard; }
+    long GetStyle() const { return m_dialogStyle; }
+    int GetFilterIndex() const { return m_filterIndex ; }
 
-    wxFileDialog(wxWindow *parent, const wxString& message = wxFileSelectorPromptStr,
-        const wxString& defaultDir = "", const wxString& defaultFile = "",
-    const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
-        long style = 0, const wxPoint& pos = wxDefaultPosition);
+    int ShowModal();
 
-    inline void SetMessage(const wxString& message) { m_message = message; }
-    inline void SetPath(const wxString& path) { m_path = path; }
-    inline void SetDirectory(const wxString& dir) { m_dir = dir; }
-    inline void SetFilename(const wxString& name) { m_fileName = name; }
-    inline void SetWildcard(const wxString& wildCard) { m_wildCard = wildCard; }
-    inline void SetStyle(long style) { m_dialogStyle = style; }
-    inline void SetFilterIndex(int filterIndex) { m_filterIndex = filterIndex; }
-
-    inline wxString GetMessage(void) const { return m_message; }
-    inline wxString GetPath(void) const { return m_path; }
-    inline wxString GetDirectory(void) const { return m_dir; }
-    inline wxString GetFilename(void) const { return m_fileName; }
-    inline wxString GetWildcard(void) const { return m_wildCard; }
-    inline long GetStyle(void) const { return m_dialogStyle; }
-    inline int GetFilterIndex(void) const { return m_filterIndex ; }
-
-    int ShowModal(void);
-
-  protected:
+    protected:
 
     wxString    m_message;
     long        m_dialogStyle;

@@ -22,16 +22,16 @@
 // "delete_event"
 //-----------------------------------------------------------------------------
 
-static 
+static
 bool gtk_filedialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxDialog *win )
-{ 
+{
 /*
     printf( "OnDelete from " );
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
         printf( win->GetClassInfo()->GetClassName() );
     printf( ".\n" );
 */
-  
+
     win->Close();
 
     return TRUE;
@@ -41,7 +41,7 @@ bool gtk_filedialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUN
 // "clicked" for OK-button
 //-----------------------------------------------------------------------------
 
-static 
+static
 void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), gpointer data )
 {
     wxFileDialog *dialog = (wxFileDialog*)data;
@@ -50,14 +50,21 @@ void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), gpointer data )
 
     style = dialog->GetStyle();
 
-    if((style&wxSAVE)&&(style&wxOVERWRITE_PROMPT))
+    if( (style & wxSAVE ) && ( style&wxOVERWRITE_PROMPT ) )
     {
-	if(wxFileExists(gtk_file_selection_get_filename(GTK_FILE_SELECTION(dialog->m_widget) ))) 
-	{
-	  if(wxMessageBox(_("File exists. Overwrite?"),
-	                  _("Confirm"), wxYES_NO) != wxYES)
-		return;
-	}
+        char *filename = gtk_file_selection_get_filename(
+                            GTK_FILE_SELECTION(dialog->m_widget)
+                         );
+
+        if(wxFileExists( filename ))
+        {
+            wxString msg;
+            msg.Printf(_("File '%s' already exists, do you really want to "
+                         "overwrite it?"), filename);
+
+            if( wxMessageBox(msg, _("Confirm"), wxYES_NO) != wxYES)
+                return;
+        }
     }
 
     dialog->OnOK( event );
@@ -67,7 +74,7 @@ void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), gpointer data )
 // "clicked" for Cancel-button
 //-----------------------------------------------------------------------------
 
-static 
+static
 void gtk_filedialog_cancel_callback( GtkWidget *WXUNUSED(widget), gpointer data )
 {
     wxFileDialog *dialog = (wxFileDialog*)data;
@@ -98,11 +105,11 @@ wxFileDialog::wxFileDialog( wxWindow *parent, const wxString& message,
     m_filterIndex = 1;
 
     m_widget = gtk_file_selection_new( m_message );
-  
+
     int x = (gdk_screen_width () - 400) / 2;
     int y = (gdk_screen_height () - 400) / 2;
     gtk_widget_set_uposition( m_widget, x, y );
-  
+
     GtkFileSelection *sel = GTK_FILE_SELECTION(m_widget);
 
     m_path.Append(m_dir);
@@ -117,9 +124,9 @@ wxFileDialog::wxFileDialog( wxWindow *parent, const wxString& message,
     gtk_signal_connect( GTK_OBJECT(sel->cancel_button), "clicked",
       GTK_SIGNAL_FUNC(gtk_filedialog_cancel_callback), (gpointer*)this );
 
-    gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event", 
+    gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
         GTK_SIGNAL_FUNC(gtk_filedialog_delete_callback), (gpointer)this );
-    
+
 }
 
 int wxFileDialog::ShowModal(void)
@@ -157,7 +164,7 @@ wxString wxFileSelector( const char *title,
         defaultFilenameString = defaultFileName;
     else
         defaultFilenameString = "";
- 
+
     wxFileDialog fileDialog( parent, title, defaultDirString, defaultFilenameString, filter2, flags, wxPoint(x, y) );
 
     if ( fileDialog.ShowModal() == wxID_OK )
