@@ -8,6 +8,7 @@
 %rename(BU_RIGHT)                           wxBU_RIGHT;
 %rename(BU_BOTTOM)                          wxBU_BOTTOM;
 %rename(BU_EXACTFIT)                        wxBU_EXACTFIT;
+%rename(BU_AUTODRAW)                        wxBU_AUTODRAW;
 %rename(Button)                             wxButton;
 %rename(BitmapButton)                       wxBitmapButton;
 %rename(CHK_2STATE)                         wxCHK_2STATE;
