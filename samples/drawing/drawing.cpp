@@ -103,13 +103,13 @@ public:
     MyCanvas( MyFrame *parent );
 
     void DrawTestPoly( int x, int y, wxDC &dc ,int transparent );
-    void DrawTestLines( int x, int y, int width, wxDC &dc );    
+    void DrawTestLines( int x, int y, int width, wxDC &dc );
     void OnPaint(wxPaintEvent &event);
     void OnMouseMove(wxMouseEvent &event);
-    
+
 protected:
     MyFrame *m_owner;
-    
+
 private:
     DECLARE_EVENT_TABLE()
 };
@@ -461,7 +461,7 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
     dc.SetPen( wxPen( "black", width, wxSOLID) );
     dc.SetBrush( *wxRED_BRUSH );
     dc.DrawRectangle( x+10, y+10, 100, 190 );
-    
+
     dc.SetPen( wxPen( "black", width, wxSOLID) );
     dc.DrawLine( x+20, y+20, 100, y+20 );
     dc.SetPen( wxPen( "black", width, wxDOT) );
@@ -527,7 +527,7 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
     // set underlined font for testing
     dc.SetFont( wxFont(12, wxMODERN, wxNORMAL, wxNORMAL, TRUE) );
     dc.DrawText( "This is text", 110, 10 );
-    dc.DrawRotatedText( "That is text", 60, 30, -45 );
+    dc.DrawRotatedText( "That is text", 20, 10, -45 );
 
     dc.SetFont( *wxNORMAL_FONT );
 
@@ -556,9 +556,16 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
     text.Printf( "CharHeight() returns: %d", dc.GetCharHeight() );
     dc.DrawText( text, 110, 120 );
 
-
     dc.DrawIcon( wxICON(mondrian), 310, 40 );
-    
+
+    // test the rectangle drawing - there should be no pixels between the rect
+    // and the lines
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.DrawRectangle(350, 170, 49, 29);
+    dc.SetPen(*wxRED_PEN);
+    dc.DrawLine(400, 160, 400, 210); 
+    dc.DrawLine(340, 200, 410, 200); 
+
     DrawTestLines( 0, 200, 0, dc );
 
     DrawTestLines( 0, 400, 1, dc );
