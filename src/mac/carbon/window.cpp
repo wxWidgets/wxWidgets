@@ -1638,7 +1638,7 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
             GetParent()->MacWindowToRootWindow( &parentorig.x , &parentorig.y ) ;
             parent -= GetParent()->GetClientAreaOrigin() ;
             OffsetRgn( updateOuter , -parentorig.x , -parentorig.y ) ;
-            CopyRgn( updateOuter , updateTotal ) ; 
+            UnionRgn( updateOuter , updateTotal , updateTotal ) ; 
 
             GetParent()->m_peer->SetNeedsDisplay( true , updateTotal ) ;
             DisposeRgn(updateOuter) ;
