@@ -73,7 +73,7 @@ do
 
 	micro.t)
 	    echo "Generating $topdir/src/micro/files.lst for MicroWindows and Configure..."
-	    tmake -t micro wxwin.pro -o $topdir/src/micro/files.lst;;
+	    tmake -t micro wxwin.pro -o $topdir/src/microwin/files.lst;;
 
 	msw.t)
 	    echo "Generating $topdir/src/msw/files.lst for MSW and Configure..."
