@@ -557,7 +557,7 @@ void wxFileCtrl::Update()
         res = wxFileNameFromPath( f );
         fd = new wxFileData( res, f );
         wxString s = fd->GetName();
-        if (m_showHidden || (s[0] != wxT('.')))
+        if (m_showHidden || (s[0u] != wxT('.')))
         {
             Add( fd, item );
             item.m_itemId++;
@@ -572,7 +572,7 @@ void wxFileCtrl::Update()
         res = wxFileNameFromPath( f );
         fd = new wxFileData( res, f );
         wxString s = fd->GetName();
-        if (m_showHidden || (s[0] != wxT('.')))
+        if (m_showHidden || (s[0u] != wxT('.')))
         {
             Add( fd, item );
             item.m_itemId++;
@@ -1026,7 +1026,7 @@ void wxFileDialog::HandleAction( const wxString &fn )
         return;
     }
 
-    if (filename[0] == wxT('~'))
+    if (filename[0u] == wxT('~'))
     {
         filename.Remove( 0, 1 );
         wxString tmp( wxGetUserHome() );
@@ -1048,7 +1048,7 @@ void wxFileDialog::HandleAction( const wxString &fn )
     }
 
     if (dir != wxT("/")) dir += wxT("/");
-    if (filename[0] != wxT('/'))
+    if (filename[0u] != wxT('/'))
     {
         dir += filename;
         filename = dir;
