@@ -140,10 +140,8 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 
     HBITMAP hbitmap = iconInfo.hbmColor;
 
-    wxBitmap bmpMask(width, height, 1);
-    bmpMask.SetHBITMAP((WXHBITMAP)iconInfo.hbmMask);
-
-    SetMask(new wxMask(bmpMask));
+    wxMask *mask = new wxMask;
+    mask->SetMaskBitmap((WXHBITMAP)iconInfo.hbmMask);
 #endif // Win16/32
 
     m_refData = new wxBitmapRefData;
@@ -155,6 +153,10 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
     M_BITMAPDATA->m_hBitmap = (WXHBITMAP)hbitmap;
     M_BITMAPDATA->m_ok = TRUE;
 
+#ifndef __WIN16__
+    SetMask(mask);
+#endif // !Win16
+
     return TRUE;
 }
 
@@ -162,8 +164,6 @@ wxBitmap::~wxBitmap()
 {
     if (wxTheBitmapList)
         wxTheBitmapList->DeleteObject(this);
-
-    delete GetMask();
 }
 
 bool wxBitmap::FreeResource(bool WXUNUSED(force))

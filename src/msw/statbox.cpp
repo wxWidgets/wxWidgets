@@ -42,12 +42,7 @@
 // ----------------------------------------------------------------------------
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
-
-BEGIN_EVENT_TABLE(wxStaticBox, wxControl)
-    EVT_ERASE_BACKGROUND(wxStaticBox::OnEraseBackground)
-END_EVENT_TABLE()
-
+    IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
 #endif
 
 // ============================================================================
@@ -69,10 +64,8 @@ bool wxStaticBox::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
-    if ( !MSWCreateControl(wxT("BUTTON"), BS_GROUPBOX) )
+    if ( !MSWCreateControl(wxT("BUTTON"), BS_GROUPBOX, pos, size, label, 0) )
         return FALSE;
-
-    SetSize(pos.x, pos.y, size.x, size.y);
 
     return TRUE;
 }
@@ -119,26 +112,37 @@ WXHBRUSH wxStaticBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
     return (WXHBRUSH)brush->GetResourceHandle();
 }
 
-void wxStaticBox::OnEraseBackground(wxEraseEvent& event)
-{
-    // do nothing - the aim of having this function is to prevent
-    // wxControl::OnEraseBackground() to paint over the control inside the
-    // static box
-}
-
 long wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-    if ( nMsg == WM_NCHITTEST)
+    switch ( nMsg )
     {
-        int xPos = LOWORD(lParam);  // horizontal position of cursor
-        int yPos = HIWORD(lParam);  // vertical position of cursor
+        case WM_NCHITTEST:
+            // FIXME: this hack is specific to dialog ed, shouldn't it be
+            //        somehow disabled during normal operation?
+            {
+                int xPos = LOWORD(lParam);  // horizontal position of cursor
+                int yPos = HIWORD(lParam);  // vertical position of cursor
 
-        ScreenToClient(&xPos, &yPos);
+                ScreenToClient(&xPos, &yPos);
 
-        // Make sure you can drag by the top of the groupbox, but let
-        // other (enclosed) controls get mouse events also
-        if (yPos < 10)
-            return (long)HTCLIENT;
+                // Make sure you can drag by the top of the groupbox, but let
+                // other (enclosed) controls get mouse events also
+                if ( yPos < 10 )
+                    return (long)HTCLIENT;
+            }
+            break;
+
+            // VZ: I will remove (or change) this soon... (15.11.99)
+#if 0
+        case WM_ERASEBKGND:
+            // prevent wxControl from processing this message because it will
+            // erase the background incorrectly and there is no way for us to
+            // override this at wxWin event level (if we do process the event,
+            // we don't know how to do it properly - paint the background
+            // without painting over other controls - and if we don't,
+            // wxControl still gets it)
+            return MSWDefWindowProc(nMsg, wParam, lParam);
+#endif
     }
 
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);

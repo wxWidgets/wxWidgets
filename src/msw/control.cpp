@@ -58,11 +58,22 @@ wxControl::~wxControl()
     m_isBeingDeleted = TRUE;
 }
 
-bool wxControl::MSWCreateControl(const wxChar *classname, WXDWORD style)
+bool wxControl::MSWCreateControl(const wxChar *classname,
+                                 WXDWORD style,
+                                 const wxPoint& pos,
+                                 const wxSize& size,
+                                 const wxString& label,
+                                 WXDWORD exstyle)
 {
     // VZ: if someone could put a comment here explaining what exactly this is
     //     needed for, it would be nice...
     bool want3D;
+
+    // if no extended style given, determine it ourselves
+    if ( exstyle == (WXDWORD)-1 )
+    {
+        exstyle = GetExStyle(style, &want3D);
+    }
 
     // all controls have these childs (wxWindows creates all controls visible
     // by default)
@@ -70,11 +81,12 @@ bool wxControl::MSWCreateControl(const wxChar *classname, WXDWORD style)
 
     m_hWnd = (WXHWND)::CreateWindowEx
                        (
-                        GetExStyle(style, &want3D), // extended style
+                        exstyle,            // extended style
                         classname,          // the kind of control to create
-                        NULL,               // the window name
+                        label,              // the window name
                         style,              // the window style
-                        0, 0, 0, 0,         // the window position and size
+                        pos.x, pos.y,       // the window position
+                        size.x, size.y,     //            and size
                         GetHwndOf(GetParent()),  // parent
                         (HMENU)GetId(),     // child id
                         wxGetInstance(),    // app instance

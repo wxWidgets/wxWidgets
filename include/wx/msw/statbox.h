@@ -6,14 +6,14 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_STATBOX_H_
 #define _WX_STATBOX_H_
 
 #ifdef __GNUG__
-#pragma interface "statbox.h"
+    #pragma interface "statbox.h"
 #endif
 
 #include "wx/control.h"
@@ -48,8 +48,6 @@ public:
     // implementation from now on
     // --------------------------
 
-    void OnEraseBackground(wxEraseEvent& event);
-
     virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
     virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
@@ -60,9 +58,6 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize();
-
-private:
-    DECLARE_EVENT_TABLE()
 };
 
 #endif
