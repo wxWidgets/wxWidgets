@@ -31,7 +31,7 @@ of 2D objects.  (This version is deprecated, please use wx.lib.ogl instead.)"
 
 %pythoncode {
     import warnings
-    warnings.warn("This module is deprecated.  Please use the wx.lib.ogl pacakge instead.",    
+    warnings.warn("This module is deprecated.  Please use the wx.lib.ogl package instead.",    
                   DeprecationWarning, stacklevel=2)
 }
 
@@ -156,7 +156,10 @@ enum {
 
 //---------------------------------------------------------------------------
 
+MustHaveApp(wxOGLInitialize);
 void wxOGLInitialize();
+
+MustHaveApp(wxOGLCleanUp);
 void wxOGLCleanUp();
 
 
