@@ -45,6 +45,7 @@
 #include "wx/msw/imaglist.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxTabCtrl, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxTabEvent, wxNotifyEvent)
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_TAB_SEL_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_TAB_SEL_CHANGING)
@@ -158,6 +159,7 @@ bool wxTabCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     event.SetEventObject( this );
     event.SetEventType(eventType);
     event.SetInt(idCtrl) ;
+    event.SetSelection(idCtrl);
 
     return ProcessEvent(event);
 }
@@ -438,15 +440,6 @@ void wxMapBitmap(HBITMAP hBitmap, int width, int height)
 
 }
 #endif
-
-// Tab event
-IMPLEMENT_DYNAMIC_CLASS(wxTabEvent, wxNotifyEvent)
-
-wxTabEvent::wxTabEvent(wxEventType commandType, int id):
-  wxNotifyEvent(commandType, id)
-{
-}
-
 
 #endif
     // __WIN95__

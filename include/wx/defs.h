@@ -1173,8 +1173,12 @@ enum wxBorder
  */
 #define wxTC_RIGHTJUSTIFY     0x0010
 #define wxTC_FIXEDWIDTH       0x0020
-#define wxTC_OWNERDRAW        0x0040
+#define wxTC_TOP              0x0000    // default
+#define wxTC_LEFT             0x0020
+#define wxTC_RIGHT            0x0040
+#define wxTC_BOTTOM           0x0080
 #define wxTC_MULTILINE        wxNB_MULTILINE
+#define wxTC_OWNERDRAW        0x0200
 
 // wxToolBar style flags
 #define wxTB_HORIZONTAL     wxHORIZONTAL    // == 0x0004
