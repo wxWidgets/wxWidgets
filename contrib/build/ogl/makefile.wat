@@ -43,6 +43,11 @@ VENDORTAG =
 !endif
 WXDEBUGFLAG =
 !ifeq BUILD debug
+!ifeq DEBUG_FLAG default
+WXDEBUGFLAG = d
+!endif
+!endif
+!ifeq DEBUG_FLAG 1
 WXDEBUGFLAG = d
 !endif
 WXDLLFLAG =
@@ -57,23 +62,60 @@ WXUNIVNAME =
 !ifeq WXUNIV 1
 WXUNIVNAME = univ
 !endif
-__DEBUGFLAG =
+__DEBUGINFO =
 !ifeq BUILD debug
-__DEBUGFLAG = -d2
+!ifeq DEBUG_INFO default
+__DEBUGINFO = -d2
+!endif
 !endif
 !ifeq BUILD release
-__DEBUGFLAG = -d0
+!ifeq DEBUG_INFO default
+__DEBUGINFO = -d0
 !endif
-__DEBUGFLAG_1 =
+!endif
+!ifeq DEBUG_INFO 0
+__DEBUGINFO = -d0
+!endif
+!ifeq DEBUG_INFO 1
+__DEBUGINFO = -d2
+!endif
+__DEBUGINFO_1 =
 !ifeq BUILD debug
-__DEBUGFLAG_1 = debug all
+!ifeq DEBUG_INFO default
+__DEBUGINFO_1 = debug all
+!endif
 !endif
 !ifeq BUILD release
-__DEBUGFLAG_1 = 
+!ifeq DEBUG_INFO default
+__DEBUGINFO_1 = 
+!endif
+!endif
+!ifeq DEBUG_INFO 0
+__DEBUGINFO_1 = 
+!endif
+!ifeq DEBUG_INFO 1
+__DEBUGINFO_1 = debug all
 !endif
 __DEBUG_DEFINE_p =
 !ifeq BUILD debug
+!ifeq DEBUG_FLAG default
 __DEBUG_DEFINE_p = -d__WXDEBUG__
+!endif
+!endif
+!ifeq DEBUG_FLAG 1
+__DEBUG_DEFINE_p = -d__WXDEBUG__
+!endif
+__LIB_JPEG_p =
+!ifeq USE_GUI 1
+__LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
+!endif
+__LIB_PNG_p =
+!ifeq USE_GUI 1
+__LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
+!endif
+__LIB_TIFF_p =
+!ifeq USE_GUI 1
+__LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
 !endif
 __OPTIMIZEFLAG =
 !ifeq BUILD debug
@@ -99,11 +141,13 @@ __WXLIB_BASE_p = wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
 !endif
 __WXLIB_CORE_p =
 !ifeq MONOLITHIC 0
-__WXLIB_CORE_p = wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib
+__WXLIB_CORE_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib
 !endif
 __WXLIB_MONO_p =
 !ifeq MONOLITHIC 1
-__WXLIB_MONO_p = wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
+__WXLIB_MONO_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
 !endif
 __WXUNIV_DEFINE_p =
 !ifeq WXUNIV 1
@@ -111,18 +155,65 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 !endif
 __ogldll___depname =
 !ifeq SHARED 1
-__ogldll___depname = ..\..\src\ogl\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl_wat$(VENDORTAG).dll
+__ogldll___depname = &
+	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl_wat$(VENDORTAG).dll
 !endif
 __ogllib___depname =
 !ifeq SHARED 0
-__ogllib___depname = ..\..\src\ogl\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl.lib
+__ogllib___depname = &
+	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl.lib
 !endif
 
 ### Variables: ###
 
-OBJS = wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-OGLDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS)  -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\src\ogl\..\..\..\include -i=..\..\src\ogl\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -i=..\..\src\ogl\..\..\..\src\tiff -i=..\..\src\ogl\..\..\..\src\jpeg -i=..\..\src\ogl\..\..\..\src\png -i=..\..\src\ogl\..\..\..\src\zlib  -i=..\..\src\ogl\..\..\..\src\regex -i=..\..\src\ogl\..\..\..\src\expat\lib -i=..\..\src\ogl\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_OGL -dwxUSE_DEPRECATED=0 $(CXXFLAGS) /fh=$(OBJS)\wxprec_ogldll.pch 
-OGLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS)  -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\src\ogl\..\..\..\include -i=..\..\src\ogl\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -i=..\..\src\ogl\..\..\..\src\tiff -i=..\..\src\ogl\..\..\..\src\jpeg -i=..\..\src\ogl\..\..\..\src\png -i=..\..\src\ogl\..\..\..\src\zlib  -i=..\..\src\ogl\..\..\..\src\regex -i=..\..\src\ogl\..\..\..\src\expat\lib -i=..\..\src\ogl\..\..\include $(CXXFLAGS) /fh=$(OBJS)\wxprec_ogllib.pch
+LIBDIRNAME = &
+	..\..\src\ogl\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+OBJS = &
+	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+OGLDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
+	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
+	$(__UNICODE_DEFINE_p) -i=..\..\src\ogl\..\..\..\include -i=$(LIBDIRNAME) &
+	-i=..\..\src\ogl\..\..\..\src\tiff -i=..\..\src\ogl\..\..\..\src\jpeg &
+	-i=..\..\src\ogl\..\..\..\src\png -i=..\..\src\ogl\..\..\..\src\zlib &
+	-i=..\..\src\ogl\..\..\..\src\regex &
+	-i=..\..\src\ogl\..\..\..\src\expat\lib -i=..\..\src\ogl\..\..\include &
+	-dWXUSINGDLL -dWXMAKINGDLL_OGL $(CXXFLAGS) /fh=$(OBJS)\wxprec_ogldll.pch
+OGLDLL_OBJECTS =  &
+	$(OBJS)\ogldll_dummy.obj &
+	$(OBJS)\ogldll_basic2.obj &
+	$(OBJS)\ogldll_canvas.obj &
+	$(OBJS)\ogldll_divided.obj &
+	$(OBJS)\ogldll_mfutils.obj &
+	$(OBJS)\ogldll_oglmisc.obj &
+	$(OBJS)\ogldll_basic.obj &
+	$(OBJS)\ogldll_composit.obj &
+	$(OBJS)\ogldll_drawn.obj &
+	$(OBJS)\ogldll_bmpshape.obj &
+	$(OBJS)\ogldll_constrnt.obj &
+	$(OBJS)\ogldll_lines.obj &
+	$(OBJS)\ogldll_ogldiag.obj
+OGLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
+	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
+	$(__UNICODE_DEFINE_p) -i=..\..\src\ogl\..\..\..\include -i=$(LIBDIRNAME) &
+	-i=..\..\src\ogl\..\..\..\src\tiff -i=..\..\src\ogl\..\..\..\src\jpeg &
+	-i=..\..\src\ogl\..\..\..\src\png -i=..\..\src\ogl\..\..\..\src\zlib &
+	-i=..\..\src\ogl\..\..\..\src\regex &
+	-i=..\..\src\ogl\..\..\..\src\expat\lib -i=..\..\src\ogl\..\..\include &
+	$(CXXFLAGS) /fh=$(OBJS)\wxprec_ogllib.pch
+OGLLIB_OBJECTS =  &
+	$(OBJS)\ogllib_dummy.obj &
+	$(OBJS)\ogllib_basic2.obj &
+	$(OBJS)\ogllib_canvas.obj &
+	$(OBJS)\ogllib_divided.obj &
+	$(OBJS)\ogllib_mfutils.obj &
+	$(OBJS)\ogllib_oglmisc.obj &
+	$(OBJS)\ogllib_basic.obj &
+	$(OBJS)\ogllib_composit.obj &
+	$(OBJS)\ogllib_drawn.obj &
+	$(OBJS)\ogllib_bmpshape.obj &
+	$(OBJS)\ogllib_constrnt.obj &
+	$(OBJS)\ogllib_lines.obj &
+	$(OBJS)\ogllib_ogldiag.obj
 
 
 
@@ -217,28 +308,28 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
-	-if exist ..\..\src\ogl\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl_wat$(VENDORTAG).dll del ..\..\src\ogl\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl_wat$(VENDORTAG).dll
-	-if exist ..\..\src\ogl\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl.lib del ..\..\src\ogl\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl.lib
-	-if exist ..\..\src\ogl\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl.lib del ..\..\src\ogl\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl.lib
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl_wat$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl_wat$(VENDORTAG).dll
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl.lib
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl.lib
 
 !ifeq SHARED 1
-..\..\src\ogl\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl_wat$(VENDORTAG).dll :  $(OBJS)\ogldll_dummy.obj $(OBJS)\ogldll_basic2.obj $(OBJS)\ogldll_canvas.obj $(OBJS)\ogldll_divided.obj $(OBJS)\ogldll_mfutils.obj $(OBJS)\ogldll_oglmisc.obj $(OBJS)\ogldll_basic.obj $(OBJS)\ogldll_composit.obj $(OBJS)\ogldll_drawn.obj $(OBJS)\ogldll_bmpshape.obj $(OBJS)\ogldll_constrnt.obj $(OBJS)\ogldll_lines.obj $(OBJS)\ogldll_ogldiag.obj
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl_wat$(VENDORTAG).dll :  $(OGLDLL_OBJECTS)
 	@%create $(OBJS)\ogldll.lbc
 	@%append $(OBJS)\ogldll.lbc option quiet
 	@%append $(OBJS)\ogldll.lbc name $^@
 	@%append $(OBJS)\ogldll.lbc option incremental
-	@%append $(OBJS)\ogldll.lbc $(LDFLAGS) $(__DEBUGFLAG_1)  libpath ..\..\src\ogl\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-	@for %i in ( $(OBJS)\ogldll_dummy.obj $(OBJS)\ogldll_basic2.obj $(OBJS)\ogldll_canvas.obj $(OBJS)\ogldll_divided.obj $(OBJS)\ogldll_mfutils.obj $(OBJS)\ogldll_oglmisc.obj $(OBJS)\ogldll_basic.obj $(OBJS)\ogldll_composit.obj $(OBJS)\ogldll_drawn.obj $(OBJS)\ogldll_bmpshape.obj $(OBJS)\ogldll_constrnt.obj $(OBJS)\ogldll_lines.obj $(OBJS)\ogldll_ogldiag.obj) do @%append $(OBJS)\ogldll.lbc file %i
-	@for %i in ( $(__WXLIB_MONO_p) wxtiff$(WXDEBUGFLAG).lib wxjpeg$(WXDEBUGFLAG).lib wxpng$(WXDEBUGFLAG).lib wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)) do @%append $(OBJS)\ogldll.lbc library %i
+	@%append $(OBJS)\ogldll.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME)
+	@for %i in ($(OGLDLL_OBJECTS)) do @%append $(OBJS)\ogldll.lbc file %i
+	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)) do @%append $(OBJS)\ogldll.lbc library %i
 	@%append $(OBJS)\ogldll.lbc
 	@%append $(OBJS)\ogldll.lbc system nt_dll
 	wlink @$(OBJS)\ogldll.lbc
-	wlib -q -n -b ..\..\src\ogl\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl.lib +$^@
+	wlib -q -n -b $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl.lib +$^@
 !endif
 
 !ifeq SHARED 0
-..\..\src\ogl\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl.lib :  $(OBJS)\ogllib_dummy.obj $(OBJS)\ogllib_basic2.obj $(OBJS)\ogllib_canvas.obj $(OBJS)\ogllib_divided.obj $(OBJS)\ogllib_mfutils.obj $(OBJS)\ogllib_oglmisc.obj $(OBJS)\ogllib_basic.obj $(OBJS)\ogllib_composit.obj $(OBJS)\ogllib_drawn.obj $(OBJS)\ogllib_bmpshape.obj $(OBJS)\ogllib_constrnt.obj $(OBJS)\ogllib_lines.obj $(OBJS)\ogllib_ogldiag.obj
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl.lib :  $(OGLLIB_OBJECTS)
 	@%create $(OBJS)\ogllib.lbc
-	@for %i in ( $(OBJS)\ogllib_dummy.obj $(OBJS)\ogllib_basic2.obj $(OBJS)\ogllib_canvas.obj $(OBJS)\ogllib_divided.obj $(OBJS)\ogllib_mfutils.obj $(OBJS)\ogllib_oglmisc.obj $(OBJS)\ogllib_basic.obj $(OBJS)\ogllib_composit.obj $(OBJS)\ogllib_drawn.obj $(OBJS)\ogllib_bmpshape.obj $(OBJS)\ogllib_constrnt.obj $(OBJS)\ogllib_lines.obj $(OBJS)\ogllib_ogldiag.obj) do @%append $(OBJS)\ogllib.lbc +%i
+	@for %i in ($(OGLLIB_OBJECTS)) do @%append $(OBJS)\ogllib.lbc +%i
 	wlib -q -p2048 -n -b $^@ @$(OBJS)\ogllib.lbc
 !endif

@@ -12,20 +12,16 @@ include ../../../build/config.gcc
 
 ### Variables: ###
 
-LIBDIRNAME = .\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = \
 	.\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-OBJS = gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-SVGTEST_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\..\include -I$(LIBDIRNAME) -I.\..\..\..\src\tiff -I.\..\..\..\src\jpeg -I.\..\..\..\src\png -I.\..\..\..\src\zlib  -I.\..\..\..\src\regex -I.\..\..\..\src\expat\lib -I. $(__DLLFLAG_p) -I.\..\..\include $(CXXFLAGS)
-SVGTEST_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
+SVGTEST_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I.\..\..\..\include -I$(LIBDIRNAME) \
 	-I.\..\..\..\src\tiff -I.\..\..\..\src\jpeg -I.\..\..\..\src\png \
 	-I.\..\..\..\src\zlib -I.\..\..\..\src\regex -I.\..\..\..\src\expat\lib -I. \
 	$(__DLLFLAG_p) -I.\..\..\include $(CXXFLAGS)
-SVGTEST_OBJECTS =  $(OBJS)\svgtest_svgtest.o
 SVGTEST_OBJECTS =  \
 	$(OBJS)\svgtest_svgtest.o
 
@@ -41,6 +37,11 @@ ifeq ($(USE_GUI),1)
 PORTNAME = msw
 endif
 ifeq ($(BUILD),debug)
+ifeq ($(DEBUG_FLAG),default)
+WXDEBUGFLAG = d
+endif
+endif
+ifeq ($(DEBUG_FLAG),1)
 WXDEBUGFLAG = d
 endif
 ifeq ($(SHARED),1)
@@ -53,12 +54,27 @@ ifeq ($(WXUNIV),1)
 WXUNIVNAME = univ
 endif
 ifeq ($(BUILD),debug)
-__DEBUGFLAG = -g
+ifeq ($(DEBUG_INFO),default)
+__DEBUGINFO = -g
+endif
 endif
 ifeq ($(BUILD),release)
-__DEBUGFLAG = 
+ifeq ($(DEBUG_INFO),default)
+__DEBUGINFO = 
+endif
+endif
+ifeq ($(DEBUG_INFO),0)
+__DEBUGINFO = 
+endif
+ifeq ($(DEBUG_INFO),1)
+__DEBUGINFO = -g
 endif
 ifeq ($(BUILD),debug)
+ifeq ($(DEBUG_FLAG),default)
+__DEBUG_DEFINE_p = -D__WXDEBUG__
+endif
+endif
+ifeq ($(DEBUG_FLAG),1)
 __DEBUG_DEFINE_p = -D__WXDEBUG__
 endif
 ifeq ($(SHARED),1)
@@ -114,6 +130,6 @@ clean:
 	-if exist $(OBJS)\svgtest.exe del $(OBJS)\svgtest.exe
 
 $(OBJS)\svgtest.exe: $(SVGTEST_OBJECTS)
-	$(CXX) -o $@ $(SVGTEST_OBJECTS) $(LDFLAGS) $(__DEBUGFLAG) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows   -lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
+	$(CXX) -o $@ $(SVGTEST_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows   -lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
 
 .PHONY: all clean

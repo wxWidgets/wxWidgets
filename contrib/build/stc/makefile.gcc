@@ -12,9 +12,127 @@ include ../../../build/config.gcc
 
 ### Variables: ###
 
-OBJS = gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-STCDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\..\src\stc\..\..\..\include -I..\..\src\stc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\..\src\stc\..\..\..\src\tiff -I..\..\src\stc\..\..\..\src\jpeg -I..\..\src\stc\..\..\..\src\png -I..\..\src\stc\..\..\..\src\zlib  -I..\..\src\stc\..\..\..\src\regex -I..\..\src\stc\..\..\..\src\expat\lib -I..\..\src\stc\..\..\include -I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS -DWXUSINGDLL -DWXMAKINGDLL_STC $(CXXFLAGS) 
-STCLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\..\src\stc\..\..\..\include -I..\..\src\stc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\..\src\stc\..\..\..\src\tiff -I..\..\src\stc\..\..\..\src\jpeg -I..\..\src\stc\..\..\..\src\png -I..\..\src\stc\..\..\..\src\zlib  -I..\..\src\stc\..\..\..\src\regex -I..\..\src\stc\..\..\..\src\expat\lib -I..\..\src\stc\..\..\include -I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS $(CXXFLAGS)
+LIBDIRNAME = \
+	..\..\src\stc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+OBJS = \
+	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+STCDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) -I..\..\src\stc\..\..\..\include -I$(LIBDIRNAME) \
+	-I..\..\src\stc\..\..\..\src\tiff -I..\..\src\stc\..\..\..\src\jpeg \
+	-I..\..\src\stc\..\..\..\src\png -I..\..\src\stc\..\..\..\src\zlib \
+	-I..\..\src\stc\..\..\..\src\regex -I..\..\src\stc\..\..\..\src\expat\lib \
+	-I..\..\src\stc\..\..\include -I..\..\src\stc\scintilla\include \
+	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
+	-DWXUSINGDLL -DWXMAKINGDLL_STC $(CXXFLAGS)
+STCDLL_OBJECTS =  \
+	$(OBJS)\stcdll_PlatWX.o \
+	$(OBJS)\stcdll_ScintillaWX.o \
+	$(OBJS)\stcdll_stc.o \
+	$(OBJS)\stcdll_AutoComplete.o \
+	$(OBJS)\stcdll_CallTip.o \
+	$(OBJS)\stcdll_CellBuffer.o \
+	$(OBJS)\stcdll_ContractionState.o \
+	$(OBJS)\stcdll_Document.o \
+	$(OBJS)\stcdll_DocumentAccessor.o \
+	$(OBJS)\stcdll_Editor.o \
+	$(OBJS)\stcdll_ExternalLexer.o \
+	$(OBJS)\stcdll_Indicator.o \
+	$(OBJS)\stcdll_KeyMap.o \
+	$(OBJS)\stcdll_KeyWords.o \
+	$(OBJS)\stcdll_LexAVE.o \
+	$(OBJS)\stcdll_LexAda.o \
+	$(OBJS)\stcdll_LexAsm.o \
+	$(OBJS)\stcdll_LexBaan.o \
+	$(OBJS)\stcdll_LexBullant.o \
+	$(OBJS)\stcdll_LexCPP.o \
+	$(OBJS)\stcdll_LexCSS.o \
+	$(OBJS)\stcdll_LexConf.o \
+	$(OBJS)\stcdll_LexCrontab.o \
+	$(OBJS)\stcdll_LexEiffel.o \
+	$(OBJS)\stcdll_LexEScript.o \
+	$(OBJS)\stcdll_LexFortran.o \
+	$(OBJS)\stcdll_LexHTML.o \
+	$(OBJS)\stcdll_LexLisp.o \
+	$(OBJS)\stcdll_LexLout.o \
+	$(OBJS)\stcdll_LexLua.o \
+	$(OBJS)\stcdll_LexMatlab.o \
+	$(OBJS)\stcdll_LexOthers.o \
+	$(OBJS)\stcdll_LexPOV.o \
+	$(OBJS)\stcdll_LexPascal.o \
+	$(OBJS)\stcdll_LexPerl.o \
+	$(OBJS)\stcdll_LexPython.o \
+	$(OBJS)\stcdll_LexRuby.o \
+	$(OBJS)\stcdll_LexSQL.o \
+	$(OBJS)\stcdll_LexVB.o \
+	$(OBJS)\stcdll_LineMarker.o \
+	$(OBJS)\stcdll_PropSet.o \
+	$(OBJS)\stcdll_RESearch.o \
+	$(OBJS)\stcdll_ScintillaBase.o \
+	$(OBJS)\stcdll_Style.o \
+	$(OBJS)\stcdll_StyleContext.o \
+	$(OBJS)\stcdll_UniConversion.o \
+	$(OBJS)\stcdll_ViewStyle.o \
+	$(OBJS)\stcdll_WindowAccessor.o \
+	$(OBJS)\stcdll_XPM.o
+STCLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) -I..\..\src\stc\..\..\..\include -I$(LIBDIRNAME) \
+	-I..\..\src\stc\..\..\..\src\tiff -I..\..\src\stc\..\..\..\src\jpeg \
+	-I..\..\src\stc\..\..\..\src\png -I..\..\src\stc\..\..\..\src\zlib \
+	-I..\..\src\stc\..\..\..\src\regex -I..\..\src\stc\..\..\..\src\expat\lib \
+	-I..\..\src\stc\..\..\include -I..\..\src\stc\scintilla\include \
+	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS $(CXXFLAGS)
+STCLIB_OBJECTS =  \
+	$(OBJS)\stclib_PlatWX.o \
+	$(OBJS)\stclib_ScintillaWX.o \
+	$(OBJS)\stclib_stc.o \
+	$(OBJS)\stclib_AutoComplete.o \
+	$(OBJS)\stclib_CallTip.o \
+	$(OBJS)\stclib_CellBuffer.o \
+	$(OBJS)\stclib_ContractionState.o \
+	$(OBJS)\stclib_Document.o \
+	$(OBJS)\stclib_DocumentAccessor.o \
+	$(OBJS)\stclib_Editor.o \
+	$(OBJS)\stclib_ExternalLexer.o \
+	$(OBJS)\stclib_Indicator.o \
+	$(OBJS)\stclib_KeyMap.o \
+	$(OBJS)\stclib_KeyWords.o \
+	$(OBJS)\stclib_LexAVE.o \
+	$(OBJS)\stclib_LexAda.o \
+	$(OBJS)\stclib_LexAsm.o \
+	$(OBJS)\stclib_LexBaan.o \
+	$(OBJS)\stclib_LexBullant.o \
+	$(OBJS)\stclib_LexCPP.o \
+	$(OBJS)\stclib_LexCSS.o \
+	$(OBJS)\stclib_LexConf.o \
+	$(OBJS)\stclib_LexCrontab.o \
+	$(OBJS)\stclib_LexEiffel.o \
+	$(OBJS)\stclib_LexEScript.o \
+	$(OBJS)\stclib_LexFortran.o \
+	$(OBJS)\stclib_LexHTML.o \
+	$(OBJS)\stclib_LexLisp.o \
+	$(OBJS)\stclib_LexLout.o \
+	$(OBJS)\stclib_LexLua.o \
+	$(OBJS)\stclib_LexMatlab.o \
+	$(OBJS)\stclib_LexOthers.o \
+	$(OBJS)\stclib_LexPOV.o \
+	$(OBJS)\stclib_LexPascal.o \
+	$(OBJS)\stclib_LexPerl.o \
+	$(OBJS)\stclib_LexPython.o \
+	$(OBJS)\stclib_LexRuby.o \
+	$(OBJS)\stclib_LexSQL.o \
+	$(OBJS)\stclib_LexVB.o \
+	$(OBJS)\stclib_LineMarker.o \
+	$(OBJS)\stclib_PropSet.o \
+	$(OBJS)\stclib_RESearch.o \
+	$(OBJS)\stclib_ScintillaBase.o \
+	$(OBJS)\stclib_Style.o \
+	$(OBJS)\stclib_StyleContext.o \
+	$(OBJS)\stclib_UniConversion.o \
+	$(OBJS)\stclib_ViewStyle.o \
+	$(OBJS)\stclib_WindowAccessor.o \
+	$(OBJS)\stclib_XPM.o
 
 ### Conditionally set variables: ###
 
@@ -34,6 +152,11 @@ ifeq ($(OFFICIAL_BUILD),1)
 VENDORTAG = 
 endif
 ifeq ($(BUILD),debug)
+ifeq ($(DEBUG_FLAG),default)
+WXDEBUGFLAG = d
+endif
+endif
+ifeq ($(DEBUG_FLAG),1)
 WXDEBUGFLAG = d
 endif
 ifeq ($(SHARED),1)
@@ -46,13 +169,37 @@ ifeq ($(WXUNIV),1)
 WXUNIVNAME = univ
 endif
 ifeq ($(BUILD),debug)
-__DEBUGFLAG = -g
+ifeq ($(DEBUG_INFO),default)
+__DEBUGINFO = -g
+endif
 endif
 ifeq ($(BUILD),release)
-__DEBUGFLAG = 
+ifeq ($(DEBUG_INFO),default)
+__DEBUGINFO = 
+endif
+endif
+ifeq ($(DEBUG_INFO),0)
+__DEBUGINFO = 
+endif
+ifeq ($(DEBUG_INFO),1)
+__DEBUGINFO = -g
 endif
 ifeq ($(BUILD),debug)
+ifeq ($(DEBUG_FLAG),default)
 __DEBUG_DEFINE_p = -D__WXDEBUG__
+endif
+endif
+ifeq ($(DEBUG_FLAG),1)
+__DEBUG_DEFINE_p = -D__WXDEBUG__
+endif
+ifeq ($(USE_GUI),1)
+__LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)
+endif
+ifeq ($(USE_GUI),1)
+__LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
+endif
+ifeq ($(USE_GUI),1)
+__LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)
 endif
 ifeq ($(BUILD),debug)
 __OPTIMIZEFLAG = -O0
@@ -67,19 +214,23 @@ ifeq ($(MONOLITHIC),0)
 __WXLIB_BASE_p = -lwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 endif
 ifeq ($(MONOLITHIC),0)
-__WXLIB_CORE_p = -lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core
+__WXLIB_CORE_p = \
+	-lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core
 endif
 ifeq ($(MONOLITHIC),1)
-__WXLIB_MONO_p = -lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)
+__WXLIB_MONO_p = \
+	-lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 endif
 ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 endif
 ifeq ($(SHARED),1)
-__stcdll___depname = ..\..\src\stc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc_gcc$(VENDORTAG).dll
+__stcdll___depname = \
+	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc_gcc$(VENDORTAG).dll
 endif
 ifeq ($(SHARED),0)
-__stclib___depname = ..\..\src\stc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc.a
+__stclib___depname = \
+	$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc.a
 endif
 
 
@@ -387,19 +538,19 @@ $(OBJS)\stclib_stc.o: ../../src/stc\stc.cpp
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
-	-if exist ..\..\src\stc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc_gcc$(VENDORTAG).dll del ..\..\src\stc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc_gcc$(VENDORTAG).dll
-	-if exist ..\..\src\stc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc.a del ..\..\src\stc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc.a
-	-if exist ..\..\src\stc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc.a del ..\..\src\stc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc.a
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc_gcc$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc_gcc$(VENDORTAG).dll
+	-if exist $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc.a del $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc.a
+	-if exist $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc.a del $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc.a
 
 ifeq ($(SHARED),1)
-..\..\src\stc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc_gcc$(VENDORTAG).dll: $(OBJS)\stcdll_PlatWX.o $(OBJS)\stcdll_ScintillaWX.o $(OBJS)\stcdll_stc.o $(OBJS)\stcdll_AutoComplete.o $(OBJS)\stcdll_CallTip.o $(OBJS)\stcdll_CellBuffer.o $(OBJS)\stcdll_ContractionState.o $(OBJS)\stcdll_Document.o $(OBJS)\stcdll_DocumentAccessor.o $(OBJS)\stcdll_Editor.o $(OBJS)\stcdll_ExternalLexer.o $(OBJS)\stcdll_Indicator.o $(OBJS)\stcdll_KeyMap.o $(OBJS)\stcdll_KeyWords.o $(OBJS)\stcdll_LexAVE.o $(OBJS)\stcdll_LexAda.o $(OBJS)\stcdll_LexAsm.o $(OBJS)\stcdll_LexBaan.o $(OBJS)\stcdll_LexBullant.o $(OBJS)\stcdll_LexCPP.o $(OBJS)\stcdll_LexCSS.o $(OBJS)\stcdll_LexConf.o $(OBJS)\stcdll_LexCrontab.o $(OBJS)\stcdll_LexEiffel.o $(OBJS)\stcdll_LexEScript.o $(OBJS)\stcdll_LexFortran.o $(OBJS)\stcdll_LexHTML.o $(OBJS)\stcdll_LexLisp.o $(OBJS)\stcdll_LexLout.o $(OBJS)\stcdll_LexLua.o $(OBJS)\stcdll_LexMatlab.o $(OBJS)\stcdll_LexOthers.o $(OBJS)\stcdll_LexPOV.o $(OBJS)\stcdll_LexPascal.o $(OBJS)\stcdll_LexPerl.o $(OBJS)\stcdll_LexPython.o $(OBJS)\stcdll_LexRuby.o $(OBJS)\stcdll_LexSQL.o $(OBJS)\stcdll_LexVB.o $(OBJS)\stcdll_LineMarker.o $(OBJS)\stcdll_PropSet.o $(OBJS)\stcdll_RESearch.o $(OBJS)\stcdll_ScintillaBase.o $(OBJS)\stcdll_Style.o $(OBJS)\stcdll_StyleContext.o $(OBJS)\stcdll_UniConversion.o $(OBJS)\stcdll_ViewStyle.o $(OBJS)\stcdll_WindowAccessor.o $(OBJS)\stcdll_XPM.o
-	$(CXX) -shared -o $@  $(OBJS)\stcdll_PlatWX.o $(OBJS)\stcdll_ScintillaWX.o $(OBJS)\stcdll_stc.o $(OBJS)\stcdll_AutoComplete.o $(OBJS)\stcdll_CallTip.o $(OBJS)\stcdll_CellBuffer.o $(OBJS)\stcdll_ContractionState.o $(OBJS)\stcdll_Document.o $(OBJS)\stcdll_DocumentAccessor.o $(OBJS)\stcdll_Editor.o $(OBJS)\stcdll_ExternalLexer.o $(OBJS)\stcdll_Indicator.o $(OBJS)\stcdll_KeyMap.o $(OBJS)\stcdll_KeyWords.o $(OBJS)\stcdll_LexAVE.o $(OBJS)\stcdll_LexAda.o $(OBJS)\stcdll_LexAsm.o $(OBJS)\stcdll_LexBaan.o $(OBJS)\stcdll_LexBullant.o $(OBJS)\stcdll_LexCPP.o $(OBJS)\stcdll_LexCSS.o $(OBJS)\stcdll_LexConf.o $(OBJS)\stcdll_LexCrontab.o $(OBJS)\stcdll_LexEiffel.o $(OBJS)\stcdll_LexEScript.o $(OBJS)\stcdll_LexFortran.o $(OBJS)\stcdll_LexHTML.o $(OBJS)\stcdll_LexLisp.o $(OBJS)\stcdll_LexLout.o $(OBJS)\stcdll_LexLua.o $(OBJS)\stcdll_LexMatlab.o $(OBJS)\stcdll_LexOthers.o $(OBJS)\stcdll_LexPOV.o $(OBJS)\stcdll_LexPascal.o $(OBJS)\stcdll_LexPerl.o $(OBJS)\stcdll_LexPython.o $(OBJS)\stcdll_LexRuby.o $(OBJS)\stcdll_LexSQL.o $(OBJS)\stcdll_LexVB.o $(OBJS)\stcdll_LineMarker.o $(OBJS)\stcdll_PropSet.o $(OBJS)\stcdll_RESearch.o $(OBJS)\stcdll_ScintillaBase.o $(OBJS)\stcdll_Style.o $(OBJS)\stcdll_StyleContext.o $(OBJS)\stcdll_UniConversion.o $(OBJS)\stcdll_ViewStyle.o $(OBJS)\stcdll_WindowAccessor.o $(OBJS)\stcdll_XPM.o $(LDFLAGS) $(__DEBUGFLAG) -mthreads -L..\..\src\stc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -Wl,--out-implib,..\..\src\stc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc.a  $(__WXLIB_MONO_p) -lwxtiff$(WXDEBUGFLAG) -lwxjpeg$(WXDEBUGFLAG) -lwxpng$(WXDEBUGFLAG) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc_gcc$(VENDORTAG).dll: $(STCDLL_OBJECTS)
+	$(CXX) -shared -o $@ $(STCDLL_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--out-implib,$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc.a  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)
 endif
 
 ifeq ($(SHARED),0)
-..\..\src\stc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc.a: $(OBJS)\stclib_PlatWX.o $(OBJS)\stclib_ScintillaWX.o $(OBJS)\stclib_stc.o $(OBJS)\stclib_AutoComplete.o $(OBJS)\stclib_CallTip.o $(OBJS)\stclib_CellBuffer.o $(OBJS)\stclib_ContractionState.o $(OBJS)\stclib_Document.o $(OBJS)\stclib_DocumentAccessor.o $(OBJS)\stclib_Editor.o $(OBJS)\stclib_ExternalLexer.o $(OBJS)\stclib_Indicator.o $(OBJS)\stclib_KeyMap.o $(OBJS)\stclib_KeyWords.o $(OBJS)\stclib_LexAVE.o $(OBJS)\stclib_LexAda.o $(OBJS)\stclib_LexAsm.o $(OBJS)\stclib_LexBaan.o $(OBJS)\stclib_LexBullant.o $(OBJS)\stclib_LexCPP.o $(OBJS)\stclib_LexCSS.o $(OBJS)\stclib_LexConf.o $(OBJS)\stclib_LexCrontab.o $(OBJS)\stclib_LexEiffel.o $(OBJS)\stclib_LexEScript.o $(OBJS)\stclib_LexFortran.o $(OBJS)\stclib_LexHTML.o $(OBJS)\stclib_LexLisp.o $(OBJS)\stclib_LexLout.o $(OBJS)\stclib_LexLua.o $(OBJS)\stclib_LexMatlab.o $(OBJS)\stclib_LexOthers.o $(OBJS)\stclib_LexPOV.o $(OBJS)\stclib_LexPascal.o $(OBJS)\stclib_LexPerl.o $(OBJS)\stclib_LexPython.o $(OBJS)\stclib_LexRuby.o $(OBJS)\stclib_LexSQL.o $(OBJS)\stclib_LexVB.o $(OBJS)\stclib_LineMarker.o $(OBJS)\stclib_PropSet.o $(OBJS)\stclib_RESearch.o $(OBJS)\stclib_ScintillaBase.o $(OBJS)\stclib_Style.o $(OBJS)\stclib_StyleContext.o $(OBJS)\stclib_UniConversion.o $(OBJS)\stclib_ViewStyle.o $(OBJS)\stclib_WindowAccessor.o $(OBJS)\stclib_XPM.o
+$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc.a: $(STCLIB_OBJECTS)
 	if exist $@ del $@
-	ar rcu $@  $(OBJS)\stclib_PlatWX.o $(OBJS)\stclib_ScintillaWX.o $(OBJS)\stclib_stc.o $(OBJS)\stclib_AutoComplete.o $(OBJS)\stclib_CallTip.o $(OBJS)\stclib_CellBuffer.o $(OBJS)\stclib_ContractionState.o $(OBJS)\stclib_Document.o $(OBJS)\stclib_DocumentAccessor.o $(OBJS)\stclib_Editor.o $(OBJS)\stclib_ExternalLexer.o $(OBJS)\stclib_Indicator.o $(OBJS)\stclib_KeyMap.o $(OBJS)\stclib_KeyWords.o $(OBJS)\stclib_LexAVE.o $(OBJS)\stclib_LexAda.o $(OBJS)\stclib_LexAsm.o $(OBJS)\stclib_LexBaan.o $(OBJS)\stclib_LexBullant.o $(OBJS)\stclib_LexCPP.o $(OBJS)\stclib_LexCSS.o $(OBJS)\stclib_LexConf.o $(OBJS)\stclib_LexCrontab.o $(OBJS)\stclib_LexEiffel.o $(OBJS)\stclib_LexEScript.o $(OBJS)\stclib_LexFortran.o $(OBJS)\stclib_LexHTML.o $(OBJS)\stclib_LexLisp.o $(OBJS)\stclib_LexLout.o $(OBJS)\stclib_LexLua.o $(OBJS)\stclib_LexMatlab.o $(OBJS)\stclib_LexOthers.o $(OBJS)\stclib_LexPOV.o $(OBJS)\stclib_LexPascal.o $(OBJS)\stclib_LexPerl.o $(OBJS)\stclib_LexPython.o $(OBJS)\stclib_LexRuby.o $(OBJS)\stclib_LexSQL.o $(OBJS)\stclib_LexVB.o $(OBJS)\stclib_LineMarker.o $(OBJS)\stclib_PropSet.o $(OBJS)\stclib_RESearch.o $(OBJS)\stclib_ScintillaBase.o $(OBJS)\stclib_Style.o $(OBJS)\stclib_StyleContext.o $(OBJS)\stclib_UniConversion.o $(OBJS)\stclib_ViewStyle.o $(OBJS)\stclib_WindowAccessor.o $(OBJS)\stclib_XPM.o
+	ar rcu $@ $(STCLIB_OBJECTS)
 	ranlib $@
 endif
 

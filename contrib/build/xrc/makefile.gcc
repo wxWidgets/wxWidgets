@@ -12,9 +12,103 @@ include ../../../build/config.gcc
 
 ### Variables: ###
 
-OBJS = gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-XRCDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\..\src\xrc\..\..\..\include -I..\..\src\xrc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\..\src\xrc\..\..\..\src\tiff -I..\..\src\xrc\..\..\..\src\jpeg -I..\..\src\xrc\..\..\..\src\png -I..\..\src\xrc\..\..\..\src\zlib  -I..\..\src\xrc\..\..\..\src\regex -I..\..\src\xrc\..\..\..\src\expat\lib -I..\..\src\xrc\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_XRC $(CXXFLAGS) 
-XRCLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\..\src\xrc\..\..\..\include -I..\..\src\xrc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\..\src\xrc\..\..\..\src\tiff -I..\..\src\xrc\..\..\..\src\jpeg -I..\..\src\xrc\..\..\..\src\png -I..\..\src\xrc\..\..\..\src\zlib  -I..\..\src\xrc\..\..\..\src\regex -I..\..\src\xrc\..\..\..\src\expat\lib -I..\..\src\xrc\..\..\include -I..\..\src\xrc\expat\xmlparse -I..\..\src\xrc\expat\xmltok $(CXXFLAGS)
+LIBDIRNAME = \
+	..\..\src\xrc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+OBJS = \
+	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+XRCDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) -I..\..\src\xrc\..\..\..\include -I$(LIBDIRNAME) \
+	-I..\..\src\xrc\..\..\..\src\tiff -I..\..\src\xrc\..\..\..\src\jpeg \
+	-I..\..\src\xrc\..\..\..\src\png -I..\..\src\xrc\..\..\..\src\zlib \
+	-I..\..\src\xrc\..\..\..\src\regex -I..\..\src\xrc\..\..\..\src\expat\lib \
+	-I..\..\src\xrc\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_XRC $(CXXFLAGS)
+XRCDLL_OBJECTS =  \
+	$(OBJS)\xrcdll_dummy.o \
+	$(OBJS)\xrcdll_xmlres.o \
+	$(OBJS)\xrcdll_xh_bmp.o \
+	$(OBJS)\xrcdll_xh_bmpbt.o \
+	$(OBJS)\xrcdll_xh_bttn.o \
+	$(OBJS)\xrcdll_xh_cald.o \
+	$(OBJS)\xrcdll_xh_chckb.o \
+	$(OBJS)\xrcdll_xh_chckl.o \
+	$(OBJS)\xrcdll_xh_choic.o \
+	$(OBJS)\xrcdll_xh_combo.o \
+	$(OBJS)\xrcdll_xh_dlg.o \
+	$(OBJS)\xrcdll_xh_frame.o \
+	$(OBJS)\xrcdll_xh_gauge.o \
+	$(OBJS)\xrcdll_xh_gdctl.o \
+	$(OBJS)\xrcdll_xh_html.o \
+	$(OBJS)\xrcdll_xh_listb.o \
+	$(OBJS)\xrcdll_xh_listc.o \
+	$(OBJS)\xrcdll_xh_menu.o \
+	$(OBJS)\xrcdll_xh_notbk.o \
+	$(OBJS)\xrcdll_xh_panel.o \
+	$(OBJS)\xrcdll_xh_radbt.o \
+	$(OBJS)\xrcdll_xh_radbx.o \
+	$(OBJS)\xrcdll_xh_scrol.o \
+	$(OBJS)\xrcdll_xh_scwin.o \
+	$(OBJS)\xrcdll_xh_sizer.o \
+	$(OBJS)\xrcdll_xh_slidr.o \
+	$(OBJS)\xrcdll_xh_spin.o \
+	$(OBJS)\xrcdll_xh_split.o \
+	$(OBJS)\xrcdll_xh_stbmp.o \
+	$(OBJS)\xrcdll_xh_stbox.o \
+	$(OBJS)\xrcdll_xh_stlin.o \
+	$(OBJS)\xrcdll_xh_sttxt.o \
+	$(OBJS)\xrcdll_xh_text.o \
+	$(OBJS)\xrcdll_xh_toolb.o \
+	$(OBJS)\xrcdll_xh_tree.o \
+	$(OBJS)\xrcdll_xh_unkwn.o \
+	$(OBJS)\xrcdll_xh_wizrd.o \
+	$(OBJS)\xrcdll_xmlrsall.o
+XRCLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) -I..\..\src\xrc\..\..\..\include -I$(LIBDIRNAME) \
+	-I..\..\src\xrc\..\..\..\src\tiff -I..\..\src\xrc\..\..\..\src\jpeg \
+	-I..\..\src\xrc\..\..\..\src\png -I..\..\src\xrc\..\..\..\src\zlib \
+	-I..\..\src\xrc\..\..\..\src\regex -I..\..\src\xrc\..\..\..\src\expat\lib \
+	-I..\..\src\xrc\..\..\include -I..\..\src\xrc\expat\xmlparse \
+	-I..\..\src\xrc\expat\xmltok $(CXXFLAGS)
+XRCLIB_OBJECTS =  \
+	$(OBJS)\xrclib_dummy.o \
+	$(OBJS)\xrclib_xmlres.o \
+	$(OBJS)\xrclib_xh_bmp.o \
+	$(OBJS)\xrclib_xh_bmpbt.o \
+	$(OBJS)\xrclib_xh_bttn.o \
+	$(OBJS)\xrclib_xh_cald.o \
+	$(OBJS)\xrclib_xh_chckb.o \
+	$(OBJS)\xrclib_xh_chckl.o \
+	$(OBJS)\xrclib_xh_choic.o \
+	$(OBJS)\xrclib_xh_combo.o \
+	$(OBJS)\xrclib_xh_dlg.o \
+	$(OBJS)\xrclib_xh_frame.o \
+	$(OBJS)\xrclib_xh_gauge.o \
+	$(OBJS)\xrclib_xh_gdctl.o \
+	$(OBJS)\xrclib_xh_html.o \
+	$(OBJS)\xrclib_xh_listb.o \
+	$(OBJS)\xrclib_xh_listc.o \
+	$(OBJS)\xrclib_xh_menu.o \
+	$(OBJS)\xrclib_xh_notbk.o \
+	$(OBJS)\xrclib_xh_panel.o \
+	$(OBJS)\xrclib_xh_radbt.o \
+	$(OBJS)\xrclib_xh_radbx.o \
+	$(OBJS)\xrclib_xh_scrol.o \
+	$(OBJS)\xrclib_xh_scwin.o \
+	$(OBJS)\xrclib_xh_sizer.o \
+	$(OBJS)\xrclib_xh_slidr.o \
+	$(OBJS)\xrclib_xh_spin.o \
+	$(OBJS)\xrclib_xh_split.o \
+	$(OBJS)\xrclib_xh_stbmp.o \
+	$(OBJS)\xrclib_xh_stbox.o \
+	$(OBJS)\xrclib_xh_stlin.o \
+	$(OBJS)\xrclib_xh_sttxt.o \
+	$(OBJS)\xrclib_xh_text.o \
+	$(OBJS)\xrclib_xh_toolb.o \
+	$(OBJS)\xrclib_xh_tree.o \
+	$(OBJS)\xrclib_xh_unkwn.o \
+	$(OBJS)\xrclib_xh_wizrd.o \
+	$(OBJS)\xrclib_xmlrsall.o
 
 ### Conditionally set variables: ###
 
@@ -34,6 +128,11 @@ ifeq ($(OFFICIAL_BUILD),1)
 VENDORTAG = 
 endif
 ifeq ($(BUILD),debug)
+ifeq ($(DEBUG_FLAG),default)
+WXDEBUGFLAG = d
+endif
+endif
+ifeq ($(DEBUG_FLAG),1)
 WXDEBUGFLAG = d
 endif
 ifeq ($(SHARED),1)
@@ -46,13 +145,37 @@ ifeq ($(WXUNIV),1)
 WXUNIVNAME = univ
 endif
 ifeq ($(BUILD),debug)
-__DEBUGFLAG = -g
+ifeq ($(DEBUG_INFO),default)
+__DEBUGINFO = -g
+endif
 endif
 ifeq ($(BUILD),release)
-__DEBUGFLAG = 
+ifeq ($(DEBUG_INFO),default)
+__DEBUGINFO = 
+endif
+endif
+ifeq ($(DEBUG_INFO),0)
+__DEBUGINFO = 
+endif
+ifeq ($(DEBUG_INFO),1)
+__DEBUGINFO = -g
 endif
 ifeq ($(BUILD),debug)
+ifeq ($(DEBUG_FLAG),default)
 __DEBUG_DEFINE_p = -D__WXDEBUG__
+endif
+endif
+ifeq ($(DEBUG_FLAG),1)
+__DEBUG_DEFINE_p = -D__WXDEBUG__
+endif
+ifeq ($(USE_GUI),1)
+__LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)
+endif
+ifeq ($(USE_GUI),1)
+__LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
+endif
+ifeq ($(USE_GUI),1)
+__LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)
 endif
 ifeq ($(BUILD),debug)
 __OPTIMIZEFLAG = -O0
@@ -67,13 +190,16 @@ ifeq ($(MONOLITHIC),0)
 __WXLIB_BASE_p = -lwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 endif
 ifeq ($(MONOLITHIC),0)
-__WXLIB_CORE_p = -lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core
+__WXLIB_CORE_p = \
+	-lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core
 endif
 ifeq ($(MONOLITHIC),0)
-__WXLIB_HTML_p = -lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html
+__WXLIB_HTML_p = \
+	-lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html
 endif
 ifeq ($(MONOLITHIC),1)
-__WXLIB_MONO_p = -lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)
+__WXLIB_MONO_p = \
+	-lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 endif
 ifeq ($(MONOLITHIC),0)
 __WXLIB_XML_p = -lwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml
@@ -82,10 +208,12 @@ ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 endif
 ifeq ($(SHARED),1)
-__xrcdll___depname = ..\..\src\xrc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_gcc$(VENDORTAG).dll
+__xrcdll___depname = \
+	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_gcc$(VENDORTAG).dll
 endif
 ifeq ($(SHARED),0)
-__xrclib___depname = ..\..\src\xrc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a
+__xrclib___depname = \
+	$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a
 endif
 
 
@@ -327,19 +455,19 @@ $(OBJS)\xrclib_xmlrsall.o: ../../src/xrc\xmlrsall.cpp
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
-	-if exist ..\..\src\xrc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_gcc$(VENDORTAG).dll del ..\..\src\xrc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_gcc$(VENDORTAG).dll
-	-if exist ..\..\src\xrc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a del ..\..\src\xrc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a
-	-if exist ..\..\src\xrc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a del ..\..\src\xrc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_gcc$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_gcc$(VENDORTAG).dll
+	-if exist $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a del $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a
+	-if exist $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a del $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a
 
 ifeq ($(SHARED),1)
-..\..\src\xrc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_gcc$(VENDORTAG).dll: $(OBJS)\xrcdll_dummy.o $(OBJS)\xrcdll_xmlres.o $(OBJS)\xrcdll_xh_bmp.o $(OBJS)\xrcdll_xh_bmpbt.o $(OBJS)\xrcdll_xh_bttn.o $(OBJS)\xrcdll_xh_cald.o $(OBJS)\xrcdll_xh_chckb.o $(OBJS)\xrcdll_xh_chckl.o $(OBJS)\xrcdll_xh_choic.o $(OBJS)\xrcdll_xh_combo.o $(OBJS)\xrcdll_xh_dlg.o $(OBJS)\xrcdll_xh_frame.o $(OBJS)\xrcdll_xh_gauge.o $(OBJS)\xrcdll_xh_gdctl.o $(OBJS)\xrcdll_xh_html.o $(OBJS)\xrcdll_xh_listb.o $(OBJS)\xrcdll_xh_listc.o $(OBJS)\xrcdll_xh_menu.o $(OBJS)\xrcdll_xh_notbk.o $(OBJS)\xrcdll_xh_panel.o $(OBJS)\xrcdll_xh_radbt.o $(OBJS)\xrcdll_xh_radbx.o $(OBJS)\xrcdll_xh_scrol.o $(OBJS)\xrcdll_xh_scwin.o $(OBJS)\xrcdll_xh_sizer.o $(OBJS)\xrcdll_xh_slidr.o $(OBJS)\xrcdll_xh_spin.o $(OBJS)\xrcdll_xh_split.o $(OBJS)\xrcdll_xh_stbmp.o $(OBJS)\xrcdll_xh_stbox.o $(OBJS)\xrcdll_xh_stlin.o $(OBJS)\xrcdll_xh_sttxt.o $(OBJS)\xrcdll_xh_text.o $(OBJS)\xrcdll_xh_toolb.o $(OBJS)\xrcdll_xh_tree.o $(OBJS)\xrcdll_xh_unkwn.o $(OBJS)\xrcdll_xh_wizrd.o $(OBJS)\xrcdll_xmlrsall.o
-	$(CXX) -shared -o $@  $(OBJS)\xrcdll_dummy.o $(OBJS)\xrcdll_xmlres.o $(OBJS)\xrcdll_xh_bmp.o $(OBJS)\xrcdll_xh_bmpbt.o $(OBJS)\xrcdll_xh_bttn.o $(OBJS)\xrcdll_xh_cald.o $(OBJS)\xrcdll_xh_chckb.o $(OBJS)\xrcdll_xh_chckl.o $(OBJS)\xrcdll_xh_choic.o $(OBJS)\xrcdll_xh_combo.o $(OBJS)\xrcdll_xh_dlg.o $(OBJS)\xrcdll_xh_frame.o $(OBJS)\xrcdll_xh_gauge.o $(OBJS)\xrcdll_xh_gdctl.o $(OBJS)\xrcdll_xh_html.o $(OBJS)\xrcdll_xh_listb.o $(OBJS)\xrcdll_xh_listc.o $(OBJS)\xrcdll_xh_menu.o $(OBJS)\xrcdll_xh_notbk.o $(OBJS)\xrcdll_xh_panel.o $(OBJS)\xrcdll_xh_radbt.o $(OBJS)\xrcdll_xh_radbx.o $(OBJS)\xrcdll_xh_scrol.o $(OBJS)\xrcdll_xh_scwin.o $(OBJS)\xrcdll_xh_sizer.o $(OBJS)\xrcdll_xh_slidr.o $(OBJS)\xrcdll_xh_spin.o $(OBJS)\xrcdll_xh_split.o $(OBJS)\xrcdll_xh_stbmp.o $(OBJS)\xrcdll_xh_stbox.o $(OBJS)\xrcdll_xh_stlin.o $(OBJS)\xrcdll_xh_sttxt.o $(OBJS)\xrcdll_xh_text.o $(OBJS)\xrcdll_xh_toolb.o $(OBJS)\xrcdll_xh_tree.o $(OBJS)\xrcdll_xh_unkwn.o $(OBJS)\xrcdll_xh_wizrd.o $(OBJS)\xrcdll_xmlrsall.o $(LDFLAGS) $(__DEBUGFLAG) -mthreads -L..\..\src\xrc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -Wl,--out-implib,..\..\src\xrc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a  $(__WXLIB_MONO_p) -lwxtiff$(WXDEBUGFLAG) -lwxjpeg$(WXDEBUGFLAG) -lwxpng$(WXDEBUGFLAG) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32  $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_XML_p) $(__WXLIB_BASE_p)
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_gcc$(VENDORTAG).dll: $(XRCDLL_OBJECTS)
+	$(CXX) -shared -o $@ $(XRCDLL_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--out-implib,$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32  $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_XML_p) $(__WXLIB_BASE_p)
 endif
 
 ifeq ($(SHARED),0)
-..\..\src\xrc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a: $(OBJS)\xrclib_dummy.o $(OBJS)\xrclib_xmlres.o $(OBJS)\xrclib_xh_bmp.o $(OBJS)\xrclib_xh_bmpbt.o $(OBJS)\xrclib_xh_bttn.o $(OBJS)\xrclib_xh_cald.o $(OBJS)\xrclib_xh_chckb.o $(OBJS)\xrclib_xh_chckl.o $(OBJS)\xrclib_xh_choic.o $(OBJS)\xrclib_xh_combo.o $(OBJS)\xrclib_xh_dlg.o $(OBJS)\xrclib_xh_frame.o $(OBJS)\xrclib_xh_gauge.o $(OBJS)\xrclib_xh_gdctl.o $(OBJS)\xrclib_xh_html.o $(OBJS)\xrclib_xh_listb.o $(OBJS)\xrclib_xh_listc.o $(OBJS)\xrclib_xh_menu.o $(OBJS)\xrclib_xh_notbk.o $(OBJS)\xrclib_xh_panel.o $(OBJS)\xrclib_xh_radbt.o $(OBJS)\xrclib_xh_radbx.o $(OBJS)\xrclib_xh_scrol.o $(OBJS)\xrclib_xh_scwin.o $(OBJS)\xrclib_xh_sizer.o $(OBJS)\xrclib_xh_slidr.o $(OBJS)\xrclib_xh_spin.o $(OBJS)\xrclib_xh_split.o $(OBJS)\xrclib_xh_stbmp.o $(OBJS)\xrclib_xh_stbox.o $(OBJS)\xrclib_xh_stlin.o $(OBJS)\xrclib_xh_sttxt.o $(OBJS)\xrclib_xh_text.o $(OBJS)\xrclib_xh_toolb.o $(OBJS)\xrclib_xh_tree.o $(OBJS)\xrclib_xh_unkwn.o $(OBJS)\xrclib_xh_wizrd.o $(OBJS)\xrclib_xmlrsall.o
+$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a: $(XRCLIB_OBJECTS)
 	if exist $@ del $@
-	ar rcu $@  $(OBJS)\xrclib_dummy.o $(OBJS)\xrclib_xmlres.o $(OBJS)\xrclib_xh_bmp.o $(OBJS)\xrclib_xh_bmpbt.o $(OBJS)\xrclib_xh_bttn.o $(OBJS)\xrclib_xh_cald.o $(OBJS)\xrclib_xh_chckb.o $(OBJS)\xrclib_xh_chckl.o $(OBJS)\xrclib_xh_choic.o $(OBJS)\xrclib_xh_combo.o $(OBJS)\xrclib_xh_dlg.o $(OBJS)\xrclib_xh_frame.o $(OBJS)\xrclib_xh_gauge.o $(OBJS)\xrclib_xh_gdctl.o $(OBJS)\xrclib_xh_html.o $(OBJS)\xrclib_xh_listb.o $(OBJS)\xrclib_xh_listc.o $(OBJS)\xrclib_xh_menu.o $(OBJS)\xrclib_xh_notbk.o $(OBJS)\xrclib_xh_panel.o $(OBJS)\xrclib_xh_radbt.o $(OBJS)\xrclib_xh_radbx.o $(OBJS)\xrclib_xh_scrol.o $(OBJS)\xrclib_xh_scwin.o $(OBJS)\xrclib_xh_sizer.o $(OBJS)\xrclib_xh_slidr.o $(OBJS)\xrclib_xh_spin.o $(OBJS)\xrclib_xh_split.o $(OBJS)\xrclib_xh_stbmp.o $(OBJS)\xrclib_xh_stbox.o $(OBJS)\xrclib_xh_stlin.o $(OBJS)\xrclib_xh_sttxt.o $(OBJS)\xrclib_xh_text.o $(OBJS)\xrclib_xh_toolb.o $(OBJS)\xrclib_xh_tree.o $(OBJS)\xrclib_xh_unkwn.o $(OBJS)\xrclib_xh_wizrd.o $(OBJS)\xrclib_xmlrsall.o
+	ar rcu $@ $(XRCLIB_OBJECTS)
 	ranlib $@
 endif
 

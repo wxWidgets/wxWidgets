@@ -16,29 +16,30 @@ LIBDIRNAME = \
 	..\..\src\svg\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-SVGDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGFLAG) /DWIN32 \
-	$(__DEBUGFLAG_2) $(____DEBUGFLAG) \
+SVGDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
+	$(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg_vc$(VENDORTAG).pdb \
-	$(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I..\..\src\svg\..\..\..\include /I$(LIBDIRNAME) \
-	/I..\..\src\svg\..\..\..\src\tiff /I..\..\src\svg\..\..\..\src\jpeg \
-	/I..\..\src\svg\..\..\..\src\png /I..\..\src\svg\..\..\..\src\zlib \
-	/I..\..\src\svg\..\..\..\src\regex /I..\..\src\svg\..\..\..\src\expat\lib \
-	/I..\..\src\svg\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_SVG $(CXXFLAGS) \
-	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_svgdll.pch"
+	$(____DEBUGRUNTIME_2_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\svg\..\..\..\include \
+	/I$(LIBDIRNAME) /I..\..\src\svg\..\..\..\src\tiff \
+	/I..\..\src\svg\..\..\..\src\jpeg /I..\..\src\svg\..\..\..\src\png \
+	/I..\..\src\svg\..\..\..\src\zlib /I..\..\src\svg\..\..\..\src\regex \
+	/I..\..\src\svg\..\..\..\src\expat\lib /I..\..\src\svg\..\..\include \
+	/DWXUSINGDLL /DWXMAKINGDLL_SVG $(CXXFLAGS) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_svgdll.pch"
 SVGDLL_OBJECTS =  \
 	$(OBJS)\svgdll_dummy.obj \
 	$(OBJS)\svgdll_dcsvg.obj
-SVGLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGFLAG) /DWIN32 \
-	$(__DEBUGFLAG_2) $(____DEBUGFLAG) \
+SVGLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_12) /DWIN32 \
+	$(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg.pdb \
-	$(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I..\..\src\svg\..\..\..\include /I$(LIBDIRNAME) \
-	/I..\..\src\svg\..\..\..\src\tiff /I..\..\src\svg\..\..\..\src\jpeg \
-	/I..\..\src\svg\..\..\..\src\png /I..\..\src\svg\..\..\..\src\zlib \
-	/I..\..\src\svg\..\..\..\src\regex /I..\..\src\svg\..\..\..\src\expat\lib \
-	/I..\..\src\svg\..\..\include $(CXXFLAGS) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_svglib.pch"
+	$(____DEBUGRUNTIME_11_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\svg\..\..\..\include \
+	/I$(LIBDIRNAME) /I..\..\src\svg\..\..\..\src\tiff \
+	/I..\..\src\svg\..\..\..\src\jpeg /I..\..\src\svg\..\..\..\src\png \
+	/I..\..\src\svg\..\..\..\src\zlib /I..\..\src\svg\..\..\..\src\regex \
+	/I..\..\src\svg\..\..\..\src\expat\lib /I..\..\src\svg\..\..\include \
+	$(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_svglib.pch"
 SVGLIB_OBJECTS =  \
 	$(OBJS)\svglib_dummy.obj \
 	$(OBJS)\svglib_dcsvg.obj
@@ -57,7 +58,10 @@ VENDORTAG = _$(VENDOR)
 !if "$(OFFICIAL_BUILD)" == "1"
 VENDORTAG = 
 !endif
-!if "$(BUILD)" == "debug"
+!if "$(BUILD)" == "debug" && "$(DEBUG_FLAG)" == "default"
+WXDEBUGFLAG = d
+!endif
+!if "$(DEBUG_FLAG)" == "1"
 WXDEBUGFLAG = d
 !endif
 !if "$(SHARED)" == "1"
@@ -69,25 +73,64 @@ WXUNICODEFLAG = u
 !if "$(WXUNIV)" == "1"
 WXUNIVNAME = univ
 !endif
-!if "$(BUILD)" == "debug"
-__DEBUGFLAG = d
+!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO = d
 !endif
-!if "$(BUILD)" == "release"
-__DEBUGFLAG = 
+!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO = 
 !endif
-!if "$(BUILD)" == "debug"
-__DEBUGFLAG_1 = /DEBUG
+!if "$(DEBUG_INFO)" == "0"
+__DEBUGINFO = 
 !endif
-!if "$(BUILD)" == "release"
-__DEBUGFLAG_1 = 
+!if "$(DEBUG_INFO)" == "1"
+__DEBUGINFO = d
 !endif
-!if "$(BUILD)" == "debug"
-__DEBUGFLAG_2 = /Zi
+!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO_1 = /DEBUG
 !endif
-!if "$(BUILD)" == "release"
-__DEBUGFLAG_2 = 
+!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO_1 = 
 !endif
-!if "$(BUILD)" == "debug"
+!if "$(DEBUG_INFO)" == "0"
+__DEBUGINFO_1 = 
+!endif
+!if "$(DEBUG_INFO)" == "1"
+__DEBUGINFO_1 = /DEBUG
+!endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO_2 = /Zi
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO_2 = 
+!endif
+!if "$(DEBUG_INFO)" == "0"
+__DEBUGINFO_2 = 
+!endif
+!if "$(DEBUG_INFO)" == "1"
+__DEBUGINFO_2 = /Zi
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+__DEBUGRUNTIME_12 = 
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "1"
+__DEBUGRUNTIME_12 = d
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "default"
+__DEBUGRUNTIME_12 = $(__DEBUGINFO)
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+__DEBUGRUNTIME_3 = 
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "1"
+__DEBUGRUNTIME_3 = d
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "default"
+__DEBUGRUNTIME_3 = $(__DEBUGINFO)
+!endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_FLAG)" == "default"
+__DEBUG_DEFINE_p = /D__WXDEBUG__
+!endif
+!if "$(DEBUG_FLAG)" == "1"
 __DEBUG_DEFINE_p = /D__WXDEBUG__
 !endif
 !if "$(USE_GUI)" == "1"
@@ -128,11 +171,35 @@ __WXLIB_MONO_p = \
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p = /D__WXUNIVERSAL__
 !endif
-!if "$(BUILD)" == "debug"
-____DEBUGFLAG = /D_DEBUG
+!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
+____DEBUGINFO = /D_DEBUG
 !endif
-!if "$(BUILD)" == "release"
-____DEBUGFLAG = /DNDEBUG
+!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
+____DEBUGINFO = /DNDEBUG
+!endif
+!if "$(DEBUG_INFO)" == "0"
+____DEBUGINFO = /DNDEBUG
+!endif
+!if "$(DEBUG_INFO)" == "1"
+____DEBUGINFO = /D_DEBUG
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+____DEBUGRUNTIME_11_p = /DNDEBUG
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "1"
+____DEBUGRUNTIME_11_p = /D_DEBUG
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME_11_p = $(____DEBUGINFO)
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+____DEBUGRUNTIME_2_p = /DNDEBUG
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "1"
+____DEBUGRUNTIME_2_p = /D_DEBUG
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME_2_p = $(____DEBUGINFO)
 !endif
 !if "$(SHARED)" == "1"
 __svgdll___depname = \
@@ -173,7 +240,7 @@ clean:
 
 !if "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg_vc$(VENDORTAG).dll: $(SVGDLL_OBJECTS) $(OBJS)\svgdll_dummy.obj
-	link /DLL /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGFLAG_1)  /LIBPATH:$(LIBDIRNAME) @<<
+	link /DLL /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) @<<
 	$(SVGDLL_OBJECTS)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg.lib
 <<
 !endif

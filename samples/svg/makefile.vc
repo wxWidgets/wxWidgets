@@ -16,8 +16,8 @@ LIBDIRNAME = \
 	.\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-SVGTEST_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGFLAG_3) /DWIN32 \
-	$(__DEBUGFLAG_0) $(____DEBUGFLAG_2_p) /Fd$(OBJS)\svgtest.pdb \
+SVGTEST_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) \
+	/DWIN32 $(__DEBUGINFO_0) /Fd$(OBJS)\svgtest.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG_4) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(LIBDIRNAME) \
 	/I.\..\..\..\src\tiff /I.\..\..\..\src\jpeg /I.\..\..\..\src\png \
@@ -34,7 +34,10 @@ PORTNAME = base
 !if "$(USE_GUI)" == "1"
 PORTNAME = msw
 !endif
-!if "$(BUILD)" == "debug"
+!if "$(BUILD)" == "debug" && "$(DEBUG_FLAG)" == "default"
+WXDEBUGFLAG = d
+!endif
+!if "$(DEBUG_FLAG)" == "1"
 WXDEBUGFLAG = d
 !endif
 !if "$(SHARED)" == "1"
@@ -46,25 +49,55 @@ WXUNICODEFLAG = u
 !if "$(WXUNIV)" == "1"
 WXUNIVNAME = univ
 !endif
-!if "$(BUILD)" == "debug"
-__DEBUGFLAG_0 = /Zi
+!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO_0 = /Zi
 !endif
-!if "$(BUILD)" == "release"
-__DEBUGFLAG_0 = 
+!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO_0 = 
 !endif
-!if "$(BUILD)" == "debug"
-__DEBUGFLAG_1 = /DEBUG
+!if "$(DEBUG_INFO)" == "0"
+__DEBUGINFO_0 = 
 !endif
-!if "$(BUILD)" == "release"
-__DEBUGFLAG_1 = 
+!if "$(DEBUG_INFO)" == "1"
+__DEBUGINFO_0 = /Zi
 !endif
-!if "$(BUILD)" == "debug"
-__DEBUGFLAG_3 = d
+!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO_1 = /DEBUG
 !endif
-!if "$(BUILD)" == "release"
-__DEBUGFLAG_3 = 
+!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO_1 = 
 !endif
-!if "$(BUILD)" == "debug"
+!if "$(DEBUG_INFO)" == "0"
+__DEBUGINFO_1 = 
+!endif
+!if "$(DEBUG_INFO)" == "1"
+__DEBUGINFO_1 = /DEBUG
+!endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO_3 = d
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO_3 = 
+!endif
+!if "$(DEBUG_INFO)" == "0"
+__DEBUGINFO_3 = 
+!endif
+!if "$(DEBUG_INFO)" == "1"
+__DEBUGINFO_3 = d
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+__DEBUGRUNTIME_3 = 
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "1"
+__DEBUGRUNTIME_3 = d
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "default"
+__DEBUGRUNTIME_3 = $(__DEBUGINFO_3)
+!endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_FLAG)" == "default"
+__DEBUG_DEFINE_p = /D__WXDEBUG__
+!endif
+!if "$(DEBUG_FLAG)" == "1"
 __DEBUG_DEFINE_p = /D__WXDEBUG__
 !endif
 !if "$(SHARED)" == "1"
@@ -108,11 +141,26 @@ __WXLIB_MONO_p = \
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p = /D__WXUNIVERSAL__
 !endif
-!if "$(BUILD)" == "debug"
-____DEBUGFLAG_2_p = /D_DEBUG
+!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
+____DEBUGINFO_2_p = /D_DEBUG
 !endif
-!if "$(BUILD)" == "release"
-____DEBUGFLAG_2_p = /DNDEBUG
+!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
+____DEBUGINFO_2_p = /DNDEBUG
+!endif
+!if "$(DEBUG_INFO)" == "0"
+____DEBUGINFO_2_p = /DNDEBUG
+!endif
+!if "$(DEBUG_INFO)" == "1"
+____DEBUGINFO_2_p = /D_DEBUG
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+____DEBUGRUNTIME_2_p = /DNDEBUG
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "1"
+____DEBUGRUNTIME_2_p = /D_DEBUG
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME_2_p = $(____DEBUGINFO_2_p)
 !endif
 
 
@@ -133,6 +181,6 @@ clean:
 	-if exist $(OBJS)\svgtest.exe del $(OBJS)\svgtest.exe
 
 $(OBJS)\svgtest.exe: $(SVGTEST_OBJECTS)
-	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGFLAG_1)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS  @<<
+	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS  @<<
 	$(SVGTEST_OBJECTS)  wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg.lib $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
 <<
