@@ -357,7 +357,7 @@ static void wxInsertChildInFrame( wxFrame* parent, wxWindow* child )
                          child->m_width,
                          child->m_height );
 
-#if wxUSE_TOOLBAR
+#if wxUSE_TOOLBAR && !wxUSE_TOOLBAR_SIMPLE
         /* we connect to these events for recalculating the client area
            space when the toolbar is floating */
         if (wxIS_KIND_OF(child,wxToolBar))
@@ -617,29 +617,38 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
 #if wxUSE_STATUSBAR
         /* status bar */
         if (m_frameStatusBar) (*height) -= wxSTATUS_HEIGHT;
-#endif
+#endif // wxUSE_STATUSBAR
 
 #if wxUSE_TOOLBAR
         /* tool bar */
         if (m_frameToolBar)
         {
-            if (!m_toolBarDetached)
+            if (m_toolBarDetached)
             {
-                int y = 0;
-                m_frameToolBar->GetSize( (int *) NULL, &y );
-                (*height) -= y;
+                *height -= wxPLACE_HOLDER;
             }
             else
-                (*height) -= wxPLACE_HOLDER;
+            {
+                int x, y;
+                m_frameToolBar->GetSize( &x, &y );
+                if ( m_frameToolBar->GetWindowStyle() & wxTB_VERTICAL )
+                {
+                    *width -= x;
+                }
+                else
+                {
+                    *height -= y;
+                }
+            }
         }
-#endif
+#endif // wxUSE_TOOLBAR
 
         /* mini edge */
-        (*height) -= m_miniEdge*2 + m_miniTitle;
+        *height -= m_miniEdge*2 + m_miniTitle;
     }
     if (width)
     {
-        (*width) -= m_miniEdge*2;
+        *width -= m_miniEdge*2;
     }
 }
 
@@ -665,14 +674,23 @@ void wxFrame::DoSetClientSize( int width, int height )
         /* tool bar */
         if (m_frameToolBar)
         {
-            if (!m_toolBarDetached)
+            if (m_toolBarDetached)
             {
-                int y = 0;
-                m_frameToolBar->GetSize( (int *) NULL, &y );
-                height += y;
+                height += wxPLACE_HOLDER;
             }
             else
-                height += wxPLACE_HOLDER;
+            {
+                int x, y;
+                m_frameToolBar->GetSize( &x, &y );
+                if ( m_frameToolBar->GetWindowStyle() & wxTB_VERTICAL )
+                {
+                    width += x;
+                }
+                else
+                {
+                    height += y;
+                }
+            }
         }
 #endif
 
@@ -697,7 +715,8 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
     m_height = height;
 
     /* space occupied by m_frameToolBar and m_frameMenuBar */
-    int client_area_y_offset = 0;
+    int client_area_x_offset = 0,
+        client_area_y_offset = 0;
 
     /* wxMDIChildFrame derives from wxFrame but it _is_ a wxWindow as it uses
        wxWindow::Create to create it's GTK equivalent. m_mainWidget is only
@@ -750,23 +769,38 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
                 else
                     yy += wxPLACE_HOLDER;
             }
-            int ww = m_width - 2*m_miniEdge;
-            int hh = m_frameToolBar->m_height;
-            if (m_toolBarDetached) hh = wxPLACE_HOLDER;
+
             m_frameToolBar->m_x = xx;
             m_frameToolBar->m_y = yy;
-            /* m_frameToolBar->m_height = hh;   don't change the toolbar's reported size
-               m_frameToolBar->m_width = ww; */
+
+            /* don't change the toolbar's reported height/width */
+            int ww, hh;
+            if ( m_frameToolBar->GetWindowStyle() & wxTB_VERTICAL )
+            {
+                ww = m_toolBarDetached ? wxPLACE_HOLDER
+                                       : m_frameToolBar->m_width;
+                hh = m_height - 2*m_miniEdge;
+
+                client_area_x_offset += ww;
+            }
+            else
+            {
+                ww = m_width - 2*m_miniEdge;
+                hh = m_toolBarDetached ? wxPLACE_HOLDER
+                                       : m_frameToolBar->m_height;
+
+                client_area_y_offset += hh;
+            }
+
             gtk_pizza_set_size( GTK_PIZZA(m_mainWidget),
                                   m_frameToolBar->m_widget,
                                   xx, yy, ww, hh );
-            client_area_y_offset += hh;
         }
-#endif
+#endif // wxUSE_TOOLBAR
 
-        int client_x = m_miniEdge;
+        int client_x = client_area_x_offset + m_miniEdge;
         int client_y = client_area_y_offset + m_miniEdge + m_miniTitle;
-        int client_w = m_width - 2*m_miniEdge;
+        int client_w = m_width - client_area_x_offset - 2*m_miniEdge;
         int client_h = m_height - client_area_y_offset- 2*m_miniEdge - m_miniTitle;
         gtk_pizza_set_size( GTK_PIZZA(m_mainWidget),
                               m_wxwindow,
