@@ -1181,6 +1181,7 @@ wxLayoutWindow::OnSetFocus(wxFocusEvent &ev)
 {
    m_HaveFocus = true;
    ev.Skip();
+   Refresh(FALSE); // cursor must change
 }
 
 void
@@ -1188,6 +1189,7 @@ wxLayoutWindow::OnKillFocus(wxFocusEvent &ev)
 {
    m_HaveFocus = false;
    ev.Skip();
+   Refresh(FALSE);// cursor must change
 }
 
 // ----------------------------------------------------------------------------
