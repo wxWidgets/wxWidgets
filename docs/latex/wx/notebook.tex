@@ -19,6 +19,21 @@ managed by wxNotebook.
 
 <wx/notebook.h>
 
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+
+\twocolitem{\windowstyle{wxNB\_FIXEDWIDTH}}{(Windows only)All tabs will have same width.}
+\twocolitem{\windowstyle{wxNB\_LEFT}}{Place tabs on the left side.}
+\twocolitem{\windowstyle{wxNB\_RIGHT}}{Place tabs on the right side.}
+\twocolitem{\windowstyle{wxNB\_BOTTOM}}{Place tabs under instead of above the notebook pages.}
+
+\end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles}.
+
+
 \wxheading{Event handling}
 
 To process input from a notebook control, use the following event handler macros to direct input to member
@@ -61,8 +76,7 @@ Note that sometimes you can reduce flicker by passing the wxCLIP\_CHILDREN windo
 
 \docparam{size}{The window size.}
 
-\docparam{style}{The window style. Its value is a bit list of zero or more of {\bf wxTC\_MULTILINE},
- {\bf wxTC\_RIGHTJUSTIFY}, {\bf wxTC\_FIXEDWIDTH} and {\bf wxTC\_OWNERDRAW}.}
+\docparam{style}{The window style. See \helpref{wxNotebook}{wxnotebook}.}
 
 \docparam{name}{The name of the control (used only under Motif).}
 
