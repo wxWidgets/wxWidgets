@@ -142,7 +142,7 @@ copy %src\docs\mac\install.txt %dest\install_mac-%version%.txt
 copy %src\docs\motif\install.txt %dest\install_motif-%version%.txt
 copy %src\docs\gtk\install.txt %dest\install_gtk-%version%.txt
 copy %src\docs\readme.txt %dest\readme-%version%.txt
-copy %src\docs\motif\readme.txt %dest\readme_motif.txt
+copy %src\docs\motif\readme.txt %dest\readme_motif-%version%.txt
 copy %src\docs\gtk\readme.txt %dest\readme_gtk-%version%.txt
 copy %src\docs\msw\readme.txt %dest\readme_msw-%version%.txt
 copy %src\docs\mac\readme.txt %dest\readme_mac-%version%.txt
@@ -235,7 +235,7 @@ Rem ren %WXWIN\deliver2\setup.EXE %WXWIN\deliver2\wxMSW-%version%-setup.exe
 cd %dest
 
 rem Put all the setup files into a single zip archive.
-zip32 wxMSW-%version%-setup.zip readme.txt setup.*
+zip32 wxMSW-%version%-setup.zip readme-%version%.txt setup.*
 
 echo wxWindows archived.
 
