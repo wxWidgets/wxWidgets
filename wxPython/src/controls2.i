@@ -64,7 +64,7 @@ enum {
     wxEVT_COMMAND_LIST_COL_BEGIN_DRAG,
     wxEVT_COMMAND_LIST_COL_DRAGGING,
     wxEVT_COMMAND_LIST_COL_END_DRAG,
-
+    wxEVT_COMMAND_LIST_ITEM_FOCUSED,
 };
 
 
@@ -131,6 +131,9 @@ def EVT_LIST_ITEM_ACTIVATED(win, id, func):
 
 def EVT_LIST_CACHE_HINT(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_LIST_CACHE_HINT, func)
+
+def EVT_LIST_ITEM_FOCUSED(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_ITEM_FOCUSED, func)
 "
 
 

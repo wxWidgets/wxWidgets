@@ -9988,6 +9988,7 @@ SWIGEXPORT(void) initcontrols2c() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_COL_BEGIN_DRAG", PyInt_FromLong((long) wxEVT_COMMAND_LIST_COL_BEGIN_DRAG));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_COL_DRAGGING", PyInt_FromLong((long) wxEVT_COMMAND_LIST_COL_DRAGGING));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_COL_END_DRAG", PyInt_FromLong((long) wxEVT_COMMAND_LIST_COL_END_DRAG));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_ITEM_FOCUSED", PyInt_FromLong((long) wxEVT_COMMAND_LIST_ITEM_FOCUSED));
 	 PyDict_SetItemString(d,"wxLC_VRULES", PyInt_FromLong((long) wxLC_VRULES));
 	 PyDict_SetItemString(d,"wxLC_HRULES", PyInt_FromLong((long) wxLC_HRULES));
 	 PyDict_SetItemString(d,"wxLC_ICON", PyInt_FromLong((long) wxLC_ICON));
