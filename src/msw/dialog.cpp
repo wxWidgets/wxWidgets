@@ -211,7 +211,7 @@ wxDialog::~wxDialog()
 
 bool wxDialog::IsModal() const
 {
-    return !wxModelessWindows.Member(this);
+    return !wxModelessWindows.Find(this);
 }
 
 bool wxDialog::IsModalShowing() const
