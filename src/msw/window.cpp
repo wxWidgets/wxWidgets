@@ -3430,6 +3430,13 @@ bool wxWindowMSW::HandleActivate(int state,
 
 bool wxWindowMSW::HandleSetFocus(WXHWND hwnd)
 {
+    // Strangly enough, some controls get set focus events when they are being
+    // deleted, even if they already had focus before.
+    if ( m_isBeingDeleted )
+    {
+        return false;
+    }
+    
     // notify the parent keeping track of focus for the kbd navigation
     // purposes that we got it
     wxChildFocusEvent eventFocus((wxWindow *)this);
