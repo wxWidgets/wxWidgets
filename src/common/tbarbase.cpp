@@ -385,7 +385,10 @@ void wxToolBarBase::UnToggleRadioGroup(wxToolBarToolBase *tool)
         if ( !tool->IsButton() || tool->GetKind() != wxITEM_RADIO )
             break;
 
-        tool->Toggle(false);
+        if ( tool->Toggle(false) )
+        {
+            DoToggleTool(tool, false);
+        }
 
         nodeNext = nodeNext->GetNext();
     }
@@ -398,7 +401,10 @@ void wxToolBarBase::UnToggleRadioGroup(wxToolBarToolBase *tool)
         if ( !tool->IsButton() || tool->GetKind() != wxITEM_RADIO )
             break;
 
-        tool->Toggle(false);
+        if ( tool->Toggle(false) )
+        {
+            DoToggleTool(tool, false);
+        }
 
         nodePrev = nodePrev->GetPrevious();
     }

@@ -123,10 +123,9 @@ static pascal OSStatus wxMacToolBarToolControlEventHandler( EventHandlerCallRef 
                 wxToolBarTool* tbartool = (wxToolBarTool*)data ;
                 if ( tbartool->CanBeToggled() )
                 {
-                    tbartool->Toggle( GetControl32BitValue( (ControlRef) tbartool->GetControlHandle() ) ) ;
+                    ((wxToolBar*)tbartool->GetToolBar())->ToggleTool(tbartool->GetId(), GetControl32BitValue((ControlRef)tbartool->GetControlHandle()));
                 }
                 ((wxToolBar*)tbartool->GetToolBar())->OnLeftClick( tbartool->GetId() , tbartool -> IsToggled() ) ;
-
                 result = noErr; 
             }
             break ;
@@ -349,12 +348,32 @@ bool wxToolBar::Realize()
         node = node->GetNext();
     }
 
+    bool lastWasRadio = FALSE;
     node = m_tools.GetFirst();
     while (node)
     {
         wxToolBarTool *tool = (wxToolBarTool *)node->GetData();
         wxSize cursize = tool->GetSize() ;
         
+        bool isRadio = FALSE;
+
+        if ( tool->IsButton() && tool->GetKind() == wxITEM_RADIO )
+        {
+            if ( !lastWasRadio )
+            {
+                if (tool->Toggle(true))
+                {
+                    DoToggleTool(tool, true);
+                }
+            }
+            isRadio = TRUE;
+        }
+        else
+        {
+            isRadio = FALSE;
+        }
+        lastWasRadio = isRadio;
+
         // for the moment we just do a single row/column alignement
         if ( x + cursize.x > maxWidth )
             maxWidth = x + cursize.x ;
