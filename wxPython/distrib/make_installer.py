@@ -108,6 +108,7 @@ Source: "wx\lib\editor\*.txt";                 DestDir: "{app}\wx\lib\editor"; C
 Source: "wx\lib\mixins\*.py";                  DestDir: "{app}\wx\lib\mixins"; Components: core
 Source: "wx\lib\masked\*.py";                  DestDir: "{app}\wx\lib\masked"; Components: core
 Source: "wx\lib\ogl\*.py";                     DestDir: "{app}\wx\lib\ogl"; Components: core
+Source: "wx\lib\floatcanvas\*.py";             DestDir: "{app}\wx\lib\floatcanvas"; Components: core
 Source: "wx\py\*.py";                          DestDir: "{app}\wx\py"; Components: core
 Source: "wx\py\*.txt";                         DestDir: "{app}\wx\py"; Components: core
 Source: "wx\py\*.ico";                         DestDir: "{app}\wx\py"; Components: core
@@ -278,6 +279,13 @@ Type: files; Name: "{app}\wx\lib\editor\*.pyc";
 Type: files; Name: "{app}\wx\lib\editor\*.pyo";
 Type: files; Name: "{app}\wx\lib\mixins\*.pyc";
 Type: files; Name: "{app}\wx\lib\mixins\*.pyo";
+Type: files; Name: "{app}\wx\lib\masked\*.pyc";
+Type: files; Name: "{app}\wx\lib\masked\*.pyo";
+Type: files; Name: "{app}\wx\lib\ogl\*.pyc";
+Type: files; Name: "{app}\wx\lib\ogl\*.pyo";
+Type: files; Name: "{app}\wx\lib\floatcanvas\*.pyc";
+Type: files; Name: "{app}\wx\lib\floatcanvas\*.pyo";
+
 Type: files; Name: "{app}\wx\py\*.pyc";
 Type: files; Name: "{app}\wx\py\*.pyo";
 Type: files; Name: "{app}\wx\py\tests\*.pyc";

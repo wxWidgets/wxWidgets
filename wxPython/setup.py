@@ -705,6 +705,7 @@ if __name__ == "__main__":
                           'wx.lib',
                           'wx.lib.colourchooser',
                           'wx.lib.editor',
+                          'wx.lib.floatcanvas',
                           'wx.lib.masked',
                           'wx.lib.mixins',
                           'wx.lib.ogl',

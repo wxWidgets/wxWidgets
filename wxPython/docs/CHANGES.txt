@@ -109,6 +109,9 @@ Removed the deprecated ErrorDialogs and PythonBitmaps modules.  If you
 were using these in your apps then please join wxPython-dev and assist
 with a more modern reimplementation.
 
+Added a new version (0.8.3)of FloatCanvas from Chris Barker.  It's now
+in a subpackage of wx.lib.
+
 
 
 

@@ -32,6 +32,7 @@ _treeList = [
     # new stuff
     ('Recent Additions and Updates', [
         'OGL',
+        'FloatCanvas',
         ]),
 
     # managed windows == things with a (optional) caption you can close
