@@ -154,8 +154,6 @@ protected:
     void            MacDoClick() ;
     void            MacDoDoubleClick() ;
 
-    // do we have multiple selections?
-    bool HasMultipleSelection() const;
 
     // free memory (common part of Clear() and dtor)
     // prevent collision with some BSD definitions of macro Free()   
