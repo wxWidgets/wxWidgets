@@ -508,7 +508,7 @@ SOURCE=.\generic\choicdgg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\generic\gridg.cpp
+SOURCE=.\generic\grid.cpp
 # End Source File
 # Begin Source File
 
@@ -632,11 +632,11 @@ SOURCE=.\html\htmprint.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\m_fonts.cpp
+SOURCE=.\html\m_dflist.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\m_meta.cpp
+SOURCE=.\html\m_fonts.cpp
 # End Source File
 # Begin Source File
 
@@ -660,7 +660,7 @@ SOURCE=.\html\m_list.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\m_dflist.cpp
+SOURCE=.\html\m_meta.cpp
 # End Source File
 # Begin Source File
 
@@ -1197,134 +1197,97 @@ SOURCE=.\png\pngwutil.c
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\xpm\crbuffri.c
-# ADD CPP /D "FOR_MSW"
+SOURCE=.\xpm\attrib.c
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
-SOURCE=.\xpm\crbuffrp.c
-# ADD CPP /D "FOR_MSW"
+SOURCE=.\xpm\crbuffri.c
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=.\xpm\crdatfri.c
-# ADD CPP /D "FOR_MSW"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\crdatfrp.c
-# ADD CPP /D "FOR_MSW"
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=.\xpm\create.c
-# ADD CPP /D "FOR_MSW"
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=.\xpm\crifrbuf.c
-# ADD CPP /D "FOR_MSW"
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=.\xpm\crifrdat.c
-# ADD CPP /D "FOR_MSW"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\crpfrbuf.c
-# ADD CPP /D "FOR_MSW"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\crpfrdat.c
-# ADD CPP /D "FOR_MSW"
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=.\xpm\dataxpm.c
-# ADD CPP /D "FOR_MSW"
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=.\xpm\hashtab.c
-# ADD CPP /D "FOR_MSW"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\xpm\imagexpm.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\xpm\info.c
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=.\xpm\misc.c
-# ADD CPP /D "FOR_MSW"
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=.\xpm\parse.c
-# ADD CPP /D "FOR_MSW"
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=.\xpm\rdftodat.c
-# ADD CPP /D "FOR_MSW"
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=.\xpm\rdftoi.c
-# ADD CPP /D "FOR_MSW"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\rdftop.c
-# ADD CPP /D "FOR_MSW"
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=.\xpm\rgb.c
-# ADD CPP /D "FOR_MSW"
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=.\xpm\scan.c
-# ADD CPP /D "FOR_MSW"
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=.\xpm\simx.c
-# ADD CPP /D "FOR_MSW"
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=.\xpm\wrffrdat.c
-# ADD CPP /D "FOR_MSW"
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=.\xpm\wrffri.c
-# ADD CPP /D "FOR_MSW"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\wrffrp.c
-# ADD CPP /D "FOR_MSW"
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # End Group

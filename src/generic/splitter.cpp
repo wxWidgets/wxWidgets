@@ -189,6 +189,15 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
 
             m_oldX = x;
             m_oldY = y;
+
+            if ( m_splitMode == wxSPLIT_VERTICAL )
+            {
+                SetCursor(*m_sashCursorWE);
+            }
+            else
+            {
+                SetCursor(*m_sashCursorNS);
+            }
             return;
         }
     }
@@ -282,6 +291,19 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     }
     else if (event.Dragging() && (m_dragMode == wxSPLIT_DRAG_DRAGGING))
     {
+#ifdef __WXMSW__
+        // Otherwise, the cursor sometimes reverts to the normal cursor
+        // during dragging.
+        if ( m_splitMode == wxSPLIT_VERTICAL )
+        {
+            SetCursor(*m_sashCursorWE);
+        }
+        else
+        {
+            SetCursor(*m_sashCursorNS);
+        }
+#endif
+
         // Obtain window size. We are only interested in the dimension the sash
         // splits up
         int new_sash_position =

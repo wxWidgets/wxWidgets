@@ -120,10 +120,10 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
 
     if (event.LeftDown())
     {
+        CaptureMouse();
+
         if ( sashHit != wxSASH_NONE )
         {
-            CaptureMouse();
-
             // Required for X to specify that
             // that we wish to draw on top of all windows
             // - and we optimise by specifying the area
@@ -145,6 +145,15 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
             m_draggingEdge = sashHit;
             m_firstX = x;
             m_firstY = y;
+
+            if ( (sashHit == wxSASH_LEFT) || (sashHit == wxSASH_RIGHT) )
+            {
+                SetCursor(*m_sashCursorWE);
+            }
+            else
+            {
+                SetCursor(*m_sashCursorNS);
+            }
         }
     }
     else if ( event.LeftUp() && m_dragMode == wxSASH_DRAG_LEFT_DOWN )
@@ -276,6 +285,10 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
         event.SetDragStatus(status);
         event.SetDragRect(dragRect);
         GetEventHandler()->ProcessEvent(event);
+    }
+    else if ( event.LeftUp() )
+    {
+        ReleaseMouse();
     }
     else if (event.Moving() && !event.Dragging())
     {
