@@ -132,7 +132,7 @@ public:
  ~wxMsgCatalog();
 
   // load the catalog from disk (szDirPrefix corresponds to language)
-  bool Load(const wxChar *szDirPrefix, const wxChar *szName);
+  bool Load(const wxChar *szDirPrefix, const wxChar *szName, bool bConvertEncoding = FALSE);
   bool IsLoaded() const { return m_pData != NULL; }
 
   // get name of the catalog
@@ -178,6 +178,9 @@ private:
 
   const char *StringAtOfs(wxMsgTableEntry *pTable, size_t32 index) const
     { return (const char *)(m_pData + Swap(pTable[index].ofsString)); }
+    
+  // convert encoding to platform native one, if neccessary
+  void ConvertEncoding();
 
   // utility functions
     // calculate the hash value of given string
@@ -301,7 +304,7 @@ static wxString GetFullSearchPath(const wxChar *lang)
 }
 
 // open disk file and read in it's contents
-bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName0)
+bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName0, bool bConvertEncoding)
 {
    /* We need to handle locales like  de_AT.iso-8859-1
       For this we first chop off the .CHARSET specifier and ignore it.
@@ -402,6 +405,8 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName0)
   m_pszName = new wxChar[wxStrlen(szName) + 1];
   wxStrcpy(m_pszName, szName);
 
+  if (bConvertEncoding) ConvertEncoding();
+
   // everything is fine
   return TRUE;
 }
@@ -458,6 +463,36 @@ const char *wxMsgCatalog::GetString(const char *szOrig) const
   return NULL;
 }
 
+
+#if wxUSE_GUI
+#include "wx/fontmap.h"
+#include "wx/encconv.h"
+#endif
+
+void wxMsgCatalog::ConvertEncoding()
+{
+#if wxUSE_GUI
+    wxFontEncoding enc;
+
+    // first, find encoding header:
+    const char *hdr = GetString("$ENCODING");   
+    if (hdr == NULL) return; // not supported by this catalog
+    if ((enc = wxTheFontMapper -> CharsetToEncoding(hdr, FALSE)) == wxFONTENCODING_SYSTEM) return;
+
+    wxFontEncodingArray a = wxEncodingConverter::GetPlatformEquivalents(enc);
+    if (a[0] == enc) return; // no conversion needed, locale uses native encoding
+    
+    if (a.GetCount() == 0) return; // we don't know common equiv. under this platform
+    
+    wxEncodingConverter converter;
+    
+    converter.Init(enc, a[0]);
+    for (unsigned i = 0; i < m_numStrings; i++)
+        converter.Convert((char*)StringAtOfs(m_pTransTable, i));
+#endif
+}
+
+
 // ----------------------------------------------------------------------------
 // wxLocale
 // ----------------------------------------------------------------------------
@@ -472,10 +507,12 @@ wxLocale::wxLocale()
 bool wxLocale::Init(const wxChar *szName,
                     const wxChar *szShort,
                     const wxChar *szLocale,
-                    bool        bLoadDefault)
+                    bool        bLoadDefault,
+                    bool        bConvertEncoding)
 {
   m_strLocale = szName;
   m_strShort = szShort;
+  m_bConvertEncoding = bConvertEncoding;
 
   // change current locale (default: same as long name)
   if ( szLocale == NULL )
@@ -623,7 +660,7 @@ bool wxLocale::AddCatalog(const wxChar *szDomain)
 {
   wxMsgCatalog *pMsgCat = new wxMsgCatalog;
 
-  if ( pMsgCat->Load(m_strShort, szDomain) ) {
+  if ( pMsgCat->Load(m_strShort, szDomain, m_bConvertEncoding) ) {
     // add it to the head of the list so that in GetString it will
     // be searched before the catalogs added earlier
     pMsgCat->m_pNext = m_pMsgCat;

@@ -62,16 +62,18 @@ public:
         // call Init() if you use this ctor
     wxLocale();
         // the ctor has a side effect of changing current locale
-    wxLocale(const wxChar *szName,              // name (for messages)
+    wxLocale(const wxChar *szName,                               // name (for messages)
              const wxChar *szShort = (const wxChar *) NULL,      // dir prefix (for msg files)
              const wxChar *szLocale = (const wxChar *) NULL,     // locale (for setlocale)
-             bool bLoadDefault = TRUE)        // preload wxstd.mo?
-        { Init(szName, szShort, szLocale, bLoadDefault); }
+             bool bLoadDefault = TRUE,                           // preload wxstd.mo?
+             bool bConvertEncoding = FALSE)                      // convert Win<->Unix if neccessary?
+        { Init(szName, szShort, szLocale, bLoadDefault, bConvertEncoding); }
         // the same as a function (returns TRUE on success)
     bool Init(const wxChar *szName,
               const wxChar *szShort = (const wxChar *) NULL,
               const wxChar *szLocale = (const wxChar *) NULL,
-              bool bLoadDefault = TRUE);
+              bool bLoadDefault = TRUE,
+              bool bConvertEncoding = FALSE);
         // restores old locale
     ~wxLocale();
 
@@ -117,13 +119,15 @@ private:
     // find catalog by name in a linked list, return NULL if !found
     wxMsgCatalog  *FindCatalog(const wxChar *szDomain) const;
 
-    wxString       m_strLocale,     // this locale name
-                   m_strShort;      // short name for the locale
+    wxString       m_strLocale,       // this locale name
+                   m_strShort;        // short name for the locale
 
-    const wxChar  *m_pszOldLocale;  // previous locale from setlocale()
-    wxLocale      *m_pOldLocale;    // previous wxLocale
+    const wxChar  *m_pszOldLocale;    // previous locale from setlocale()
+    wxLocale      *m_pOldLocale;      // previous wxLocale
 
-    wxMsgCatalog  *m_pMsgCat;       // pointer to linked list of catalogs
+    wxMsgCatalog  *m_pMsgCat;         // pointer to linked list of catalogs
+    
+    bool           m_bConvertEncoding;
 };
 
 // ----------------------------------------------------------------------------
