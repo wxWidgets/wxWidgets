@@ -33,6 +33,8 @@
     #include "wx/log.h"
 #endif // WX_PRECOMP
 
+#include "wx/artprov.h"
+
 #include "wx/univ/renderer.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/theme.h"
@@ -106,21 +108,24 @@ wxThemeInfo::wxThemeInfo(Constructor c,
         #endif
     }
 
-    ms_theme = Create(nameDefTheme);
+    wxTheme *theme = Create(nameDefTheme);
 
     // fallback to the first one in the list
-    if ( !ms_theme && ms_allThemes )
+    if ( !theme && ms_allThemes )
     {
-        ms_theme = ms_allThemes->ctor();
+        theme = ms_allThemes->ctor();
     }
 
     // abort if still nothing
-    if ( !ms_theme )
+    if ( !theme )
     {
         wxLogError(_("Failed to initialize GUI: no built-in themes found."));
 
         return FALSE;
     }
+
+    // Set the theme as current.
+    wxTheme::Set(theme);
 
     return TRUE;
 }
@@ -129,6 +134,16 @@ wxThemeInfo::wxThemeInfo(Constructor c,
 {
     wxTheme *themeOld = ms_theme;
     ms_theme = theme;
+
+    if ( ms_theme )
+    {
+        // automatically start using the art provider of the new theme if it
+        // has one
+        wxArtProvider *art = ms_theme->GetArtProvider();
+        if ( art )
+            wxArtProvider::PushProvider(art);
+    }
+
     return themeOld;
 }
 
