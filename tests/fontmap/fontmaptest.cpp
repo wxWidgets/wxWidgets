@@ -109,9 +109,9 @@ void FontMapperTestCase::NamesAndDesc()
 
     for ( size_t n = 0; n < WXSIZEOF(charsets); n++ )
     {
-        wxFontEncoding enc = wxFontMapper::Get()->CharsetToEncoding(charsets[n]);
-        CPPUNIT_ASSERT( wxFontMapper::Get()->GetEncodingName(enc) == names[n] );
-        CPPUNIT_ASSERT( wxFontMapper::Get()->GetEncodingDescription(enc) == descriptions[n] );
+        wxFontEncoding enc = wxFontMapperBase::Get()->CharsetToEncoding(charsets[n]);
+        CPPUNIT_ASSERT( wxFontMapperBase::Get()->GetEncodingName(enc) == names[n] );
+        CPPUNIT_ASSERT( wxFontMapperBase::Get()->GetEncodingDescription(enc) == descriptions[n] );
     }
 }
 
