@@ -113,7 +113,7 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
     // No logical drives; return "\"
     paths.Add(wxT("\\"));
     names.Add(wxT("\\"));
-    return 1;
+    icon_ids.Add(wxFileIconsTable::computer);
 #elif defined(__WIN32__)
     wxChar driveBuffer[256];
     size_t n = (size_t) GetLogicalDriveStrings(255, driveBuffer);
@@ -291,6 +291,8 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
 #else
     #error "Unsupported platform in wxGenericDirCtrl!"
 #endif
+    wxASSERT_MSG( (paths.GetCount() != names.GetCount()), wxT("Wrong number of paths or names."));
+    wxASSERT_MSG( (paths.GetCount() != icon_ids.GetCount()), wxT("Wrong number of icons for available drives."));
     return paths.GetCount();
 }
 
@@ -323,6 +325,7 @@ bool wxIsDriveAvailable(const wxString& dirName)
 int setdrive(int drive)
 {
 #ifdef __WXWINCE__
+    wxUnusedVar(drive);
     return 0;
 #elif defined(__GNUWIN32__) && \
     (defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1)
@@ -355,6 +358,7 @@ int setdrive(int drive)
 bool wxIsDriveAvailable(const wxString& dirName)
 {
 #ifdef __WXWINCE__
+    wxUnusedVar(dirName);
     return false;
 #else
 #ifdef __WIN32__
