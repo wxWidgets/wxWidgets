@@ -69,12 +69,12 @@ These are the typical steps for using XRC files in your application.
 
 \begin{itemize}\itemsep=0pt
 \item Include the appropriate headers: normally "wx/xrc/xmlres.h" will suffice;
-\item call \verb$wxXmlResource::Get()->InitAllHandlers()$ from your wxApp::OnInit function,
-and then call \verb$wxXmlResource::Get()->Load("myfile.xrc")$ to load the resource file;
+\item call {\tt wxXmlResource::Get()->InitAllHandlers()} from your wxApp::OnInit function,
+and then call {\tt wxXmlResource::Get()->Load("myfile.xrc")} to load the resource file;
 \item to create a dialog from a resource, create it using the default constructor, and then
-load using for example \verb$wxXmlResource::Get()->LoadDialog(&dlg, this, "dlg1")$;
-\item set up event tables as usual but use the \verb$XRCID(str)$ macro to translate from XRC string names
-to a suitable integer identifier, for example \verb$EVT\_MENU(XRCID("quit"), MyFrame::OnQuit)$.
+load using for example {\tt wxXmlResource::Get()->LoadDialog(&dlg, this, "dlg1");}
+\item set up event tables as usual but use the {\tt XRCID(str)} macro to translate from XRC string names
+to a suitable integer identifier, for example {\tt EVT\_MENU(XRCID("quit"), MyFrame::OnQuit)}.
 \end{itemize}
 
 To create an XRC file, use one of the following methods.
@@ -253,14 +253,14 @@ This is the XML file (resource.xrc) for the XRC sample.
 
 \begin{verbatim}
 <?xml version="1.0"?>
-<resource>
+<resource version="2.3.0.1">
   <object class="wxMenuBar" name="mainmenu">
     <style>wxMB_DOCKABLE</style>
     <object class="wxMenu" name="menu_file">
-      <label>$File</label>
+      <label>_File</label>
       <style>wxMENU_TEAROFF</style>
       <object class="wxMenuItem" name="menu_about">
-        <label>$About...</label>
+        <label>_About...</label>
         <bitmap>filesave.gif</bitmap>
       </object>
       <object class="separator"/>
@@ -272,7 +272,7 @@ This is the XML file (resource.xrc) for the XRC sample.
       </object>
       <object class="separator"/>
       <object class="wxMenuItem" name="menu_quit">
-        <label>E$xit\tAlt-X</label>
+        <label>E_xit\tAlt-X</label>
       </object>
     </object>
   </object>
