@@ -203,6 +203,11 @@
         <if cond="FORMAT!='autoconf' and BUILD=='debug' and DEBUG_FLAG=='default'">__WXDEBUG__</if>
         <if cond="FORMAT!='autoconf' and DEBUG_FLAG=='1'">__WXDEBUG__</if>
     </set>
+    <!-- does not cover all cases, but better than nothing -->
+    <set var="NO_VC_CRTDBG">
+        <if cond="FORMAT=='msvc' and BUILD=='debug' and DEBUG_RUNTIME_LIBS=='0'">__NO_VC_CRTDBG__</if>
+        <if cond="FORMAT=='msvc' and BUILD=='release' and DEBUG_FLAG=='1'">__NO_VC_CRTDBG__</if>
+    </set>
     <set var="UNICODE_DEFINE">
         <if cond="FORMAT!='autoconf' and UNICODE=='1'">_UNICODE</if>
     </set>
@@ -220,6 +225,7 @@
         <if cond="FORMAT!='autoconf'">
             <cppflags>$(EXTRACFLAGS)</cppflags>
         </if>
+        <define>$(NO_VC_CRTDBG)</define>
     </template>
     
     <template id="anylib">
