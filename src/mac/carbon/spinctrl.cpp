@@ -54,6 +54,13 @@ protected:
         if ( m_spin->GetTextValue(&val) )
         {
             m_spin->GetSpinButton()->SetValue(val);
+
+            // Send event that the text was manually changed
+            wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_spin->GetId());
+            event.SetEventObject(m_spin);
+            event.SetInt(val);
+
+            m_spin->GetEventHandler()->ProcessEvent(event);
         }
 
         event.Skip();
