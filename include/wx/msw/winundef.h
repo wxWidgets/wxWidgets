@@ -255,7 +255,7 @@
 // LoadIcon
 #ifdef LoadIcon
     #undef LoadIcon
-    inline HINSTANCE LoadIcon(HINSTANCE hInstance, LPCTSTR lpIconName)
+    inline HICON LoadIcon(HINSTANCE hInstance, LPCTSTR lpIconName)
     {
         #ifdef _UNICODE
             return LoadIconW(hInstance, lpIconName);
