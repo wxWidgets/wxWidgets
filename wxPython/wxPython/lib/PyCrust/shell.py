@@ -18,6 +18,7 @@ from pseudo import PseudoFileOut
 from pseudo import PseudoFileErr
 from version import VERSION
 
+sys.ps3 = '<-- '  # Input prompt.
 
 NAVKEYS = (WXK_END, WXK_LEFT, WXK_RIGHT, WXK_UP, WXK_DOWN, WXK_PRIOR, WXK_NEXT)
 
@@ -158,9 +159,14 @@ class Shell(wxStyledTextCtrl):
         # Add the dictionary that was passed in.
         if locals:
             shellLocals.update(locals)
+        # Create a replacement for stdin.
+        self.reader = PseudoFileIn(self.readline)
+        self.reader.input = ''
+        self.reader.isreading = 0
+        # Set up the interpreter.
         self.interp = Interpreter(locals=shellLocals, \
-                                  rawin=self.readRaw, \
-                                  stdin=PseudoFileIn(self.readIn), \
+                                  rawin=self.raw_input, \
+                                  stdin=self.reader, \
                                   stdout=PseudoFileOut(self.writeOut), \
                                   stderr=PseudoFileErr(self.writeErr), \
                                   *args, **kwds)
@@ -201,7 +207,8 @@ class Shell(wxStyledTextCtrl):
         except: pass
 
     def destroy(self):
-        del self.interp
+        # del self.interp
+        pass
 
     def config(self):
         """Configure shell based on user preferences."""
@@ -340,7 +347,10 @@ class Shell(wxStyledTextCtrl):
             self.BraceHighlight(braceAtCaret, braceOpposite)
 
     def OnChar(self, event):
-        """Keypress event handler."""
+        """Keypress event handler.
+
+        Only receives an event if OnKeyDown calls event.Skip() for
+        the corresponding event."""
 
         # Prevent modification of previously submitted commands/responses.
         if not self.CanEdit():
@@ -348,7 +358,10 @@ class Shell(wxStyledTextCtrl):
         key = event.KeyCode()
         currpos = self.GetCurrentPos()
         stoppos = self.promptPosEnd
-        if key in self.autoCompleteKeys:
+        # Return (Enter) needs to be ignored in this handler.
+        if key == WXK_RETURN:
+            pass
+        elif key in self.autoCompleteKeys:
             # Usually the dot (period) key activates auto completion.
             # Get the command between the prompt and the cursor.
             # Add the autocomplete character to the end of the command.
@@ -379,6 +392,7 @@ class Shell(wxStyledTextCtrl):
         shiftDown = event.ShiftDown()
         currpos = self.GetCurrentPos()
         endpos = self.GetTextLength()
+        selecting = self.GetSelectionStart() != self.GetSelectionEnd()
         # Return (Enter) is used to submit a command to the interpreter.
         if not controlDown and key == WXK_RETURN:
             if self.AutoCompActive(): self.AutoCompCancel()
@@ -420,7 +434,6 @@ class Shell(wxStyledTextCtrl):
         elif key == WXK_HOME:
             home = self.promptPosEnd
             if currpos > home:
-                selecting = self.GetSelectionStart() != self.GetSelectionEnd()
                 self.SetCurrentPos(home)
                 if not selecting and not shiftDown:
                     self.SetAnchor(home)
@@ -432,8 +445,7 @@ class Shell(wxStyledTextCtrl):
         # is a selection that includes text prior to the prompt.
         #
         # Don't modify a selection with text prior to the prompt.
-        elif self.GetSelectionStart() != self.GetSelectionEnd()\
-        and key not in NAVKEYS and not self.CanEdit():
+        elif selecting and key not in NAVKEYS and not self.CanEdit():
             pass
         # Paste from the clipboard.
         elif (controlDown and not shiftDown \
@@ -463,8 +475,7 @@ class Shell(wxStyledTextCtrl):
             self.OnHistorySearch()
         # Don't backspace over the latest non-continuation prompt.
         elif key == WXK_BACK:
-            if self.GetSelectionStart() != self.GetSelectionEnd()\
-            and self.CanEdit():
+            if selecting and self.CanEdit():
                 event.Skip()
             elif currpos > self.promptPosEnd:
                 event.Skip()
@@ -585,7 +596,15 @@ class Shell(wxStyledTextCtrl):
             lines = command.split(os.linesep + sys.ps2)
             lines = [line.rstrip() for line in lines]
             command = '\n'.join(lines)
-            self.push(command)
+            if self.reader.isreading:
+                if not command:
+                    # Match the behavior of the standard Python shell when
+                    # the user hits return without entering a value.
+                    command = '\n'
+                self.reader.input = command
+                self.write(os.linesep)
+            else:
+                self.push(command)
         # Or replace the current command with the other command.
         else:
             # If the line contains a command (even an invalid one).
@@ -664,8 +683,8 @@ class Shell(wxStyledTextCtrl):
 
     def push(self, command):
         """Send command to the interpreter for execution."""
-        busy = wxBusyCursor()
         self.write(os.linesep)
+        busy = wxBusyCursor()
         self.more = self.interp.push(command)
         del busy
         if not self.more:
@@ -702,18 +721,27 @@ class Shell(wxStyledTextCtrl):
         return text
 
     def prompt(self):
-        """Display appropriate prompt for the context, either ps1 or ps2.
+        """Display appropriate prompt for the context, either ps1, ps2 or ps3.
 
         If this is a continuation line, autoindent as necessary."""
-        if self.more:
+        isreading = self.reader.isreading
+        skip = 0
+        if isreading:
+            prompt = str(sys.ps3)
+        elif self.more:
             prompt = str(sys.ps2)
         else:
             prompt = str(sys.ps1)
         pos = self.GetCurLine()[1]
-        if pos > 0: self.write(os.linesep)
+        if pos > 0:
+            if isreading:
+                skip = 1
+            else:
+                self.write(os.linesep)
         if not self.more:
             self.promptPosStart = self.GetCurrentPos()
-        self.write(prompt)
+        if not skip:
+            self.write(prompt)
         if not self.more:
             self.promptPosEnd = self.GetCurrentPos()
             # Keep the undo feature from undoing previous responses.
@@ -724,22 +752,29 @@ class Shell(wxStyledTextCtrl):
         self.EnsureCaretVisible()
         self.ScrollToColumn(0)
 
-    def readIn(self):
-        """Replacement for stdin."""
-        prompt = 'Please enter your response:'
-        dialog = wxTextEntryDialog(None, prompt, \
-                                   'Input Dialog (Standard)', '')
+    def readline(self):
+        """Replacement for stdin.readline()."""
+        input = ''
+        reader = self.reader
+        reader.isreading = 1
+        self.prompt()
         try:
-            if dialog.ShowModal() == wxID_OK:
-                text = dialog.GetValue()
-                self.write(text + os.linesep)
-                return text
+            while not reader.input:
+                wxYield()
+            input = reader.input
         finally:
-            dialog.Destroy()
-        return ''
+            reader.input = ''
+            reader.isreading = 0
+        return input
 
-    def readRaw(self, prompt='Please enter your response:'):
-        """Replacement for raw_input."""
+    def raw_input(self, prompt=''):
+        """Return string based on user input."""
+        if prompt:
+            self.write(prompt)
+        return self.readline()
+
+    def ask(self, prompt='Please enter your response:'):
+        """Get response from the user using a dialog box."""
         dialog = wxTextEntryDialog(None, prompt, \
                                    'Input Dialog (Raw)', '')
         try:
@@ -749,10 +784,6 @@ class Shell(wxStyledTextCtrl):
         finally:
             dialog.Destroy()
         return ''
-
-    def ask(self, prompt='Please enter your response:'):
-        """Get response from the user."""
-        return raw_input(prompt=prompt)
 
     def pause(self):
         """Halt execution pending a response from the user."""
@@ -829,7 +860,7 @@ class Shell(wxStyledTextCtrl):
     def redirectStdin(self, redirect=1):
         """If redirect is true then sys.stdin will come from the shell."""
         if redirect:
-            sys.stdin = PseudoFileIn(self.readIn)
+            sys.stdin = self.reader
         else:
             sys.stdin = self.stdin
 
