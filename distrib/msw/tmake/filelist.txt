@@ -145,6 +145,7 @@ sckaddr.cpp	C	S
 sckfile.cpp	C	S
 sckipc.cpp	C	S
 sckstrm.cpp	C	S
+serbase.cpp	C
 sizer.cpp	C
 socket.cpp	C	S
 stream.cpp	C
