@@ -1181,9 +1181,20 @@ static XRCID_record *XRCID_Records[XRCID_TABLE_SIZE] = {NULL};
     XRCID_record **rec_var = (oldrec == NULL) ?
                               &XRCID_Records[index] : &oldrec->next;
     *rec_var = new XRCID_record;
-    (*rec_var)->id = ++XRCID_LastID;
     (*rec_var)->key = wxStrdup(str_id);
     (*rec_var)->next = NULL;
+
+    wxChar *end;
+    int asint = wxStrtol(str_id, &end, 10);
+    if (*str_id && *end == 0)
+    {
+        // if str_id was integer, keep it verbosely:
+        (*rec_var)->id = asint;
+    }
+    else
+    {
+        (*rec_var)->id = ++XRCID_LastID;
+    }
 
     return (*rec_var)->id;
 }
