@@ -196,11 +196,11 @@ public:
 
     def Remove(self, *args, **kw):
         if type(args[0]) == type(1):
-            apply(self.RemovePos, args, kw)
+            return apply(self.RemovePos, args, kw)
         elif string.find(args[0].this, 'Sizer') != -1:
-            apply(self.RemoveSizer, args, kw)
+            return apply(self.RemoveSizer, args, kw)
         else:
-            apply(self.RemoveWindow, args, kw)
+            return apply(self.RemoveWindow, args, kw)
 
     def AddMany(self, widgets):
         for childinfo in widgets:
