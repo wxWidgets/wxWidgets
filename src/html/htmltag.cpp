@@ -150,6 +150,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
                         if (match_pos == tag_len) {
                             pos = pos - tag_len - 3;
                             stpos = pos;
+                            wxUnusedVar(stpos);
                             break;
                         }
                         else {
