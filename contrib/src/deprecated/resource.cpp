@@ -1837,7 +1837,7 @@ bool wxResourceReadOneResource(FILE *fd, wxExprDatabase& db, bool *eof, wxResour
         wxChar buf[300];
         wxStrcpy(buf, _("Found "));
         wxStrncat(buf, wxConvCurrent->cMB2WX(wxResourceBuffer), 30);
-        wxStrcat(buf, _(", expected static, #include or #define\nwhilst parsing resource."));
+        wxStrcat(buf, _(", expected static, #include or #define\nwhile parsing resource."));
         wxLogWarning(buf);
         return false;
     }
@@ -1845,28 +1845,28 @@ bool wxResourceReadOneResource(FILE *fd, wxExprDatabase& db, bool *eof, wxResour
     // char
     if (!wxGetResourceToken(fd))
     {
-        wxLogWarning(_("Unexpected end of file whilst parsing resource."));
+        wxLogWarning(_("Unexpected end of file while parsing resource."));
         *eof = true;
         return false;
     }
 
     if (strcmp(wxResourceBuffer, "char") != 0)
     {
-        wxLogWarning(_("Expected 'char' whilst parsing resource."));
+        wxLogWarning(_("Expected 'char' while parsing resource."));
         return false;
     }
 
     // *name
     if (!wxGetResourceToken(fd))
     {
-        wxLogWarning(_("Unexpected end of file whilst parsing resource."));
+        wxLogWarning(_("Unexpected end of file while parsing resource."));
         *eof = true;
         return false;
     }
 
     if (wxResourceBuffer[0] != '*')
     {
-        wxLogWarning(_("Expected '*' whilst parsing resource."));
+        wxLogWarning(_("Expected '*' while parsing resource."));
         return false;
     }
     wxChar nameBuf[100];
@@ -1876,21 +1876,21 @@ bool wxResourceReadOneResource(FILE *fd, wxExprDatabase& db, bool *eof, wxResour
     // =
     if (!wxGetResourceToken(fd))
     {
-        wxLogWarning(_("Unexpected end of file whilst parsing resource."));
+        wxLogWarning(_("Unexpected end of file while parsing resource."));
         *eof = true;
         return false;
     }
 
     if (strcmp(wxResourceBuffer, "=") != 0)
     {
-        wxLogWarning(_("Expected '=' whilst parsing resource."));
+        wxLogWarning(_("Expected '=' while parsing resource."));
         return false;
     }
 
     // String
     if (!wxGetResourceToken(fd))
     {
-        wxLogWarning(_("Unexpected end of file whilst parsing resource."));
+        wxLogWarning(_("Unexpected end of file while parsing resource."));
         *eof = true;
         return false;
     }
@@ -1967,7 +1967,7 @@ bool wxResourceReadOneResource(wxInputStream *fd, wxExprDatabase& db, bool *eof,
         wxChar buf[300];
         wxStrcpy(buf, _("Found "));
         wxStrncat(buf, wxConvLibc.cMB2WX(wxResourceBuffer), 30);
-        wxStrcat(buf, _(", expected static, #include or #define\nwhilst parsing resource."));
+        wxStrcat(buf, _(", expected static, #include or #define\nwhile parsing resource."));
         wxLogWarning(buf);
         return false;
     }
@@ -1975,28 +1975,28 @@ bool wxResourceReadOneResource(wxInputStream *fd, wxExprDatabase& db, bool *eof,
     // char
     if (!wxGetResourceToken(fd))
     {
-        wxLogWarning(_("Unexpected end of file whilst parsing resource."));
+        wxLogWarning(_("Unexpected end of file while parsing resource."));
         *eof = true;
         return false;
     }
 
     if (strcmp(wxResourceBuffer, "char") != 0)
     {
-        wxLogWarning(_("Expected 'char' whilst parsing resource."));
+        wxLogWarning(_("Expected 'char' while parsing resource."));
         return false;
     }
 
     // *name
     if (!wxGetResourceToken(fd))
     {
-        wxLogWarning(_("Unexpected end of file whilst parsing resource."));
+        wxLogWarning(_("Unexpected end of file while parsing resource."));
         *eof = true;
         return false;
     }
 
     if (wxResourceBuffer[0] != '*')
     {
-        wxLogWarning(_("Expected '*' whilst parsing resource."));
+        wxLogWarning(_("Expected '*' while parsing resource."));
         return false;
     }
     char nameBuf[100];
@@ -2005,21 +2005,21 @@ bool wxResourceReadOneResource(wxInputStream *fd, wxExprDatabase& db, bool *eof,
     // =
     if (!wxGetResourceToken(fd))
     {
-        wxLogWarning(_("Unexpected end of file whilst parsing resource."));
+        wxLogWarning(_("Unexpected end of file while parsing resource."));
         *eof = true;
         return false;
     }
 
     if (strcmp(wxResourceBuffer, "=") != 0)
     {
-        wxLogWarning(_("Expected '=' whilst parsing resource."));
+        wxLogWarning(_("Expected '=' while parsing resource."));
         return false;
     }
 
     // String
     if (!wxGetResourceToken(fd))
     {
-        wxLogWarning(_("Unexpected end of file whilst parsing resource."));
+        wxLogWarning(_("Unexpected end of file while parsing resource."));
         *eof = true;
         return false;
     }
@@ -2364,7 +2364,7 @@ long wxParseWindowStyle(const wxString& bitListString)
             }
             if (!found)
             {
-                wxLogWarning(_("Unrecognized style %s whilst parsing resource."), word);
+                wxLogWarning(_("Unrecognized style %s while parsing resource."), word);
                 return 0;
             }
             word = wxResourceParseWord(WXSTRINGCAST bitListString, &i);
@@ -3059,7 +3059,7 @@ bool wxResourceReadOneResourceString(char *s, wxExprDatabase& db, bool *eof, wxR
         wxChar buf[300];
         wxStrcpy(buf, _("Found "));
         wxStrncat(buf, wxConvCurrent->cMB2WX(wxResourceBuffer), 30);
-        wxStrcat(buf, _(", expected static, #include or #define\nwhilst parsing resource."));
+        wxStrcat(buf, _(", expected static, #include or #define\nwhile parsing resource."));
         wxLogWarning(buf);
         return false;
     }
@@ -3067,28 +3067,28 @@ bool wxResourceReadOneResourceString(char *s, wxExprDatabase& db, bool *eof, wxR
     // char
     if (!wxGetResourceTokenString(s))
     {
-        wxLogWarning(_("Unexpected end of file whilst parsing resource."));
+        wxLogWarning(_("Unexpected end of file while parsing resource."));
         *eof = true;
         return false;
     }
 
     if (strcmp(wxResourceBuffer, "char") != 0)
     {
-        wxLogWarning(_("Expected 'char' whilst parsing resource."));
+        wxLogWarning(_("Expected 'char' while parsing resource."));
         return false;
     }
 
     // *name
     if (!wxGetResourceTokenString(s))
     {
-        wxLogWarning(_("Unexpected end of file whilst parsing resource."));
+        wxLogWarning(_("Unexpected end of file while parsing resource."));
         *eof = true;
         return false;
     }
 
     if (wxResourceBuffer[0] != '*')
     {
-        wxLogWarning(_("Expected '*' whilst parsing resource."));
+        wxLogWarning(_("Expected '*' while parsing resource."));
         return false;
     }
     wxChar nameBuf[100];
@@ -3098,21 +3098,21 @@ bool wxResourceReadOneResourceString(char *s, wxExprDatabase& db, bool *eof, wxR
     // =
     if (!wxGetResourceTokenString(s))
     {
-        wxLogWarning(_("Unexpected end of file whilst parsing resource."));
+        wxLogWarning(_("Unexpected end of file while parsing resource."));
         *eof = true;
         return false;
     }
 
     if (strcmp(wxResourceBuffer, "=") != 0)
     {
-        wxLogWarning(_("Expected '=' whilst parsing resource."));
+        wxLogWarning(_("Expected '=' while parsing resource."));
         return false;
     }
 
     // String
     if (!wxGetResourceTokenString(s))
     {
-        wxLogWarning(_("Unexpected end of file whilst parsing resource."));
+        wxLogWarning(_("Unexpected end of file while parsing resource."));
         *eof = true;
         return false;
     }

@@ -111,7 +111,7 @@ wxXMetaFile::wxXMetaFile(const wxChar *file)
   [3]             | -> wxPen
 
  The handle table works as follows.
- When a GDI object is created whilst reading in the
+ When a GDI object is created while reading in the
  metafile, the (e.g.) createpen record is added to the
  first free entry in the handle table. The createpen
  record's param1 is a pointer to the actual wxPen, and
