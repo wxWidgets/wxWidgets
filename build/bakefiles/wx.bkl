@@ -44,7 +44,7 @@
     </subproject>
     
     <!-- WXRC compiler is built by default: -->
-    <subproject id="wxrc" cond="FORMAT=='autoconf'">
+    <subproject id="wxrc" cond="FORMAT=='autoconf' and USE_XRC=='1'">
         <dependency-of>all</dependency-of>
         <installable>yes</installable>
         <dir>utils/wxrc</dir>
