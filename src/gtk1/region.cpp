@@ -120,10 +120,6 @@ wxRegionRefData::~wxRegionRefData()
 
 #define M_REGIONDATA ((wxRegionRefData *)m_refData)
 
-wxRegion::wxRegion()
-{
-}
-
 void wxRegion::InitRect(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 {
     m_refData = new wxRegionRefData();
