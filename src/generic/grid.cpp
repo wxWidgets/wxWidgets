@@ -403,12 +403,12 @@ static const int GRID_HASH_SIZE = 100;
 // private functions
 // ----------------------------------------------------------------------------
 
-static inline GetScrollX(int x)
+static inline int GetScrollX(int x)
 {
     return (x + GRID_SCROLL_LINE_X - 1) / GRID_SCROLL_LINE_X;
 }
 
-static inline GetScrollY(int y)
+static inline int GetScrollY(int y)
 {
     return (y + GRID_SCROLL_LINE_Y - 1) / GRID_SCROLL_LINE_Y;
 }
