@@ -80,7 +80,7 @@ wxPrintDialog::~wxPrintDialog()
 int wxPrintDialog::ShowModal()
 {
     int result = wxID_CANCEL ;
-    OSErr err ;
+    OSErr err = noErr ;
     wxString message ;
     
 #if !TARGET_CARBON    
@@ -108,57 +108,6 @@ int wxPrintDialog::ShowModal()
     
     {
         m_printDialogData.ConvertToNative() ;
-        
-        //  Set up a valid PageFormat object.
-        if (m_printDialogData.GetPrintData().m_macPageFormat == kPMNoPageFormat)
-        {
-            err = PMCreatePageFormat((PMPageFormat *)&m_printDialogData.GetPrintData().m_macPageFormat);
-            
-            //  Note that PMPageFormat is not session-specific, but calling
-            //  PMSessionDefaultPageFormat assigns values specific to the printer
-            //  associated with the current printing session.
-            if ((err == noErr) &&
-                (m_printDialogData.GetPrintData().m_macPageFormat != kPMNoPageFormat))
-            {
-                err = PMSessionDefaultPageFormat((PMPrintSession)m_printDialogData.GetPrintData().m_macPrintSession,
-                    (PMPageFormat)m_printDialogData.GetPrintData().m_macPageFormat);
-            }
-        }
-        else
-        {
-            err = PMSessionValidatePageFormat((PMPrintSession)m_printDialogData.GetPrintData().m_macPrintSession,
-                (PMPageFormat)m_printDialogData.GetPrintData().m_macPageFormat,
-                kPMDontWantBoolean);
-        }
-        
-        //  Set up a valid PrintSettings object.
-        if (m_printDialogData.GetPrintData().m_macPrintSettings == kPMNoPrintSettings)
-        {
-            err = PMCreatePrintSettings((PMPrintSettings *)&m_printDialogData.GetPrintData().m_macPrintSettings);
-            
-            //  Note that PMPrintSettings is not session-specific, but calling
-            //  PMSessionDefaultPrintSettings assigns values specific to the printer
-            //  associated with the current printing session.
-            if ((err == noErr) &&
-                (m_printDialogData.GetPrintData().m_macPrintSettings != kPMNoPrintSettings))
-            {
-                err = PMSessionDefaultPrintSettings((PMPrintSession)m_printDialogData.GetPrintData().m_macPrintSession,
-                    (PMPrintSettings)m_printDialogData.GetPrintData().m_macPrintSettings);
-            }
-        }
-        else
-        {
-            err = PMSessionValidatePrintSettings((PMPrintSession)m_printDialogData.GetPrintData().m_macPrintSession,
-                (PMPrintSettings)m_printDialogData.GetPrintData().m_macPrintSettings,
-                kPMDontWantBoolean);
-        }
-        //  Set a valid page range before displaying the Print dialog
-        if (err == noErr)
-        {
-            //    err = PMSetPageRange(m_printDialogData.GetPrintData().m_macPrintSettings,
-            //              minPage, maxPage);
-        }
-        
         //  Display the Print dialog.
         if (err == noErr)
         {
@@ -228,7 +177,7 @@ wxPageSetupDialog::~wxPageSetupDialog()
 int wxPageSetupDialog::ShowModal()
 {
     int      result = wxID_CANCEL ;
-    OSErr    err ;
+    OSErr    err = noErr ;
     wxString message ;
     
 #if !TARGET_CARBON
@@ -253,31 +202,8 @@ int wxPageSetupDialog::ShowModal()
 #else
 #if PM_USE_SESSION_APIS
     Boolean        accepted;
-    
     {
         m_pageSetupData.ConvertToNative() ;
-        
-        //  Set up a valid PageFormat object.
-        if (m_pageSetupData.GetPrintData().m_macPageFormat == kPMNoPageFormat)
-        {
-            err = PMCreatePageFormat((PMPageFormat *)&m_pageSetupData.GetPrintData().m_macPageFormat);
-            
-            //  Note that PMPageFormat is not session-specific, but calling
-            //  PMSessionDefaultPageFormat assigns values specific to the printer
-            //  associated with the current printing session.
-            if ((err == noErr) &&
-                (m_pageSetupData.GetPrintData().m_macPageFormat != kPMNoPageFormat))
-            {
-                err = PMSessionDefaultPageFormat((PMPrintSession)m_pageSetupData.GetPrintData().m_macPrintSession,
-                    (PMPageFormat)m_pageSetupData.GetPrintData().m_macPageFormat);
-            }
-        }
-        else
-        {
-            err = PMSessionValidatePageFormat((PMPrintSession)m_pageSetupData.GetPrintData().m_macPrintSession,
-                (PMPageFormat)m_pageSetupData.GetPrintData().m_macPageFormat,
-                kPMDontWantBoolean);
-        }
         
         //  Display the Page Setup dialog.
         if (err == noErr)
