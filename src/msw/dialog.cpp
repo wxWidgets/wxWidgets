@@ -188,7 +188,6 @@ bool wxDialog::Create(wxWindow *parent,
     SubclassWin(GetHWND());
 
     SetWindowText(hwnd, title);
-    SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
 
     return TRUE;
 }

@@ -411,7 +411,7 @@ public:
     virtual void DoToolbarUpdates();
 
     // Don't want toolbars to accept the focus
-    bool AcceptsFocus() const { return FALSE; }
+    virtual bool AcceptsFocus() const { return FALSE; }
 
 protected:
     // to implement in derived classes

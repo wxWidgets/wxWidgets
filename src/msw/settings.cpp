@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        settings.cpp
-// Purpose:     wxSettings
+// Name:        msw/settings.cpp
+// Purpose:     wxSystemSettings
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
@@ -9,8 +9,16 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "settings.h"
+    #pragma implementation "settings.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -21,16 +29,62 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include <stdio.h>
-#include "wx/defs.h"
-#include "wx/pen.h"
-#include "wx/brush.h"
-#include "wx/gdicmn.h"
+    #include <stdio.h>
+    #include "wx/defs.h"
+    #include "wx/pen.h"
+    #include "wx/brush.h"
+    #include "wx/gdicmn.h"
 #endif
 
 #include "wx/settings.h"
 #include "wx/window.h"
 #include "wx/msw/private.h"
+
+// ----------------------------------------------------------------------------
+// private classes
+// ----------------------------------------------------------------------------
+
+// the module which is used to clean up wxSystemSettings data (this is a
+// singleton class so it can't be done in the dtor)
+class wxSystemSettingsModule : public wxModule
+{
+public:
+    virtual bool OnInit();
+    virtual void OnExit();
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxSystemSettingsModule)
+};
+
+// ----------------------------------------------------------------------------
+// global data
+// ----------------------------------------------------------------------------
+
+static wxFont *gs_fontDefault = NULL;
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxSystemSettingsModule
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxSystemSettingsModule, wxModule)
+
+bool wxSystemSettingsModule::OnInit()
+{
+    return TRUE;
+}
+
+void wxSystemSettingsModule::OnExit()
+{
+    delete gs_fontDefault;
+}
+
+// ----------------------------------------------------------------------------
+// wxSystemSettings
+// ----------------------------------------------------------------------------
 
 // TODO: see ::SystemParametersInfo for all sorts of Windows settings.
 // Different args are required depending on the id. How does this differ
@@ -45,7 +99,7 @@ wxColour wxSystemSettings::GetSystemColour(int index)
     {
         case wxSYS_COLOUR_LISTBOX:
             return *wxWHITE;
-    
+
         default:
             COLORREF ref = ::GetSysColor(index);
             wxColour col(GetRValue(ref), GetGValue(ref), GetBValue(ref));
@@ -55,24 +109,41 @@ wxColour wxSystemSettings::GetSystemColour(int index)
 
 wxFont wxSystemSettings::GetSystemFont(int index)
 {
+    // wxWindow ctor calls GetSystemFont(wxSYS_DEFAULT_GUI_FONT) so we're
+    // called fairly often - this is why we cache this particular font
+    bool isDefaultRequested = index == wxSYS_DEFAULT_GUI_FONT;
+    if ( isDefaultRequested && gs_fontDefault )
+    {
+        return *gs_fontDefault;
+    }
+
+    wxFont font;
+
     HFONT hFont = (HFONT) ::GetStockObject(index);
-    if ( hFont != (HFONT) NULL )
+    if ( hFont )
     {
         LOGFONT lf;
         if ( ::GetObject(hFont, sizeof(LOGFONT), &lf) != 0 )
         {
-            // In fontdlg.cpp
-            return wxCreateFontFromLogFont(&lf);
+            font = wxCreateFontFromLogFont(&lf);
         }
         else
         {
-            return wxNullFont;
+            wxFAIL_MSG( _T("failed to get LOGFONT") );
         }
     }
-    else
+    else // GetStockObject() failed
     {
-        return wxNullFont;
+        wxFAIL_MSG( _T("stock font not found") );
     }
+
+    if ( isDefaultRequested )
+    {
+        // if we got here it means we hadn't cached it yet - do now
+        gs_fontDefault = new wxFont(font);
+    }
+
+    return font;
 }
 
 // Get a system metric, e.g. scrollbar size
