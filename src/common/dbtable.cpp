@@ -1696,7 +1696,7 @@ bool wxDbTable::DropIndex(const wxString &idxName)
         pDb->Dbms() == dbmsDBASE /*|| Paradox needs this syntax too when we add support*/)
         sqlStmt.Printf(wxT("DROP INDEX %s ON %s"),
                        pDb->SQLTableName(idxName.c_str()).c_str(),
-                       pDb->SQLTableName(tableName.c_str().c_str()));
+                       pDb->SQLTableName(tableName.c_str()).c_str());
     else if ((pDb->Dbms() == dbmsMS_SQL_SERVER) ||
              (pDb->Dbms() == dbmsSYBASE_ASE))
         sqlStmt.Printf(wxT("DROP INDEX %s.%s"),
