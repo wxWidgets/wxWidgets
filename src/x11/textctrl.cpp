@@ -372,6 +372,17 @@ bool wxTextCtrl::IsEditable() const
 
 void wxTextCtrl::GetSelection(long* from, long* to) const
 {
+    if (m_selStartX == -1 || m_selStartY == -1 ||
+        m_selEndX == -1 || m_selEndY == -1)
+    {
+        *from = GetInsertionPoint();
+        *to = GetInsertionPoint();
+    }
+    else
+    {
+        *from = XYToPosition(m_selStartX, m_selStartY);
+        *to = XYToPosition(m_selEndX, m_selEndY);
+    }
 }
 
 void wxTextCtrl::Clear()
@@ -752,14 +763,15 @@ long wxTextCtrl::XYToPosition(long x, long y) const
     {
         if (i < (size_t)y)
         {
-            ret += m_lines[i].m_text.Len();
+            // Add one for the end-of-line character
+            ret += m_lines[i].m_text.Len() + 1;
             continue;
         }
         
-        if ((size_t)x < m_lines[i].m_text.Len())
+        if ((size_t)x < (m_lines[i].m_text.Len()+1))
             return (ret + x);
         else
-            return (ret + m_lines[i].m_text.Len());
+            return (ret + m_lines[i].m_text.Len() + 1);
     }
      
     return ret;
@@ -780,19 +792,25 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
     
     for (size_t i = 0; i < m_lines.GetCount(); i++)
     {
-        pos -= m_lines[i].m_text.Len();
-        if (pos <= 0)
+        //pos -= m_lines[i].m_text.Len();
+        //if (pos <= 0)
+
+        // Add one for the end-of-line character. (In Windows,
+        // there are _two_ positions for each end of line.)
+        if (pos <= ((int)m_lines[i].m_text.Len()))
         {
-            xx = -pos;
+            xx = pos;
             if (x) *x = xx;
             if (y) *y = yy;
             return TRUE;
         }
+        pos -= (m_lines[i].m_text.Len() + 1);
         yy++;
     }
     
     // Last pos
-    xx = m_lines[ m_lines.GetCount()-1 ].m_text.Len();
+    //xx = m_lines[ m_lines.GetCount()-1 ].m_text.Len();
+    xx = pos;
     if (x) *x = xx;
     if (y) *y = yy;
     
@@ -966,10 +984,18 @@ void wxTextCtrl::Undo()
 
 void wxTextCtrl::SetInsertionPoint(long pos)
 {
+    ClearSelection();
+    long x, y;
+    PositionToXY(pos, & x, & y);
+    m_cursorX = x;
+    m_cursorY = y;
+    // TODO: scroll to this position if necessary
+    Refresh();
 }
 
 void wxTextCtrl::SetInsertionPointEnd()
 {
+    SetInsertionPoint(GetLastPosition());
 }
 
 long wxTextCtrl::GetInsertionPoint() const
@@ -980,7 +1006,9 @@ long wxTextCtrl::GetInsertionPoint() const
 long wxTextCtrl::GetLastPosition() const
 {
     size_t lineCount = m_lines.GetCount() - 1;
-    return XYToPosition( m_lines[lineCount].m_text.Len()-1, lineCount );
+    // It's the length of the line, not the length - 1,
+    // because there's a position after the last character.
+    return XYToPosition( m_lines[lineCount].m_text.Len(), lineCount );
 }
 
 void wxTextCtrl::SetSelection(long from, long to)
@@ -2227,7 +2255,7 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
 
     // if (IsSingleLine() || (m_lang == wxSOURCE_LANG_NONE))
     {
-        if (new_x > m_lines[new_y].m_text.Len())
+        if (new_x > (int) (m_lines[new_y].m_text.Len()))
             new_x = m_lines[new_y].m_text.Len();
     }
 
@@ -2432,7 +2460,7 @@ void wxTextCtrl::MyAdjustScrollbars()
     int height = 0;
     GetClientSize( NULL, &height );
     height -= 4;
-    if (height >= m_lines.GetCount() *m_lineHeight)
+    if (height >= (int)m_lines.GetCount() *m_lineHeight)
         y_range = 0;
     
     int view_x = 0;
