@@ -374,6 +374,10 @@ public:
 
     long GetCacheFrom();
     long GetCacheTo();
+
+    // was label editing canceled? (for wxEVT_COMMAND_LIST_END_LABEL_EDIT only)
+    bool IsEditCancelled() const { return m_editCancelled; }
+    void SetEditCanceled(bool editCancelled) { m_editCancelled = editCancelled; }
 };
 
 
