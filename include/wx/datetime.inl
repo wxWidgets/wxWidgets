@@ -401,10 +401,10 @@ wxDateSpan::operator+=(const wxDateSpan& other)
 
 wxDateSpan& wxDateSpan::Multiply(int factor)
 {
-    m_years *= m_years;
-    m_months *= m_months;
-    m_weeks *= m_weeks;
-    m_days *= m_days;
+    m_years *= factor;
+    m_months *= factor;
+    m_weeks *= factor;
+    m_days *= factor;
 
     return *this;
 }

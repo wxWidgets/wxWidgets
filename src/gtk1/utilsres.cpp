@@ -62,23 +62,23 @@ bool wxGetResource(const wxString& section, const wxString& entry, char **value,
 {
     wxString filename( file );
     if (filename.IsEmpty()) filename = wxT(".wxWindows");
-    
+
     wxFileConfig conf( wxTheApp->GetAppName(), wxTheApp->GetVendorName(), filename );
-    
+
     conf.SetPath( section );
-    
+
     wxString result;
-    if (conf.Write( entry, &result ))
+    if (conf.Read( entry, &result ))
     {
         if (!result.IsEmpty())
-	{
+        {
             char *s = new char[result.Len()+1];
-	    wxStrcpy( s, result.c_str() );
-	    *value = s;
-	    return TRUE;
-	}
+            wxStrcpy( s, result.c_str() );
+            *value = s;
+            return TRUE;
+        }
     }
-    
+
     return FALSE;
 }
 

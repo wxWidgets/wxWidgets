@@ -584,7 +584,6 @@ wxDateTime::Month wxDateTime::GetCurrentMonth(wxDateTime::Calendar cal)
     {
         case Gregorian:
             return Now().GetMonth();
-            break;
 
         case Julian:
             wxFAIL_MSG(_T("TODO"));
@@ -612,7 +611,6 @@ wxDateTime::wxDateTime_t wxDateTime::GetNumberOfDays(int year, Calendar cal)
         case Gregorian:
         case Julian:
             return IsLeapYear(year) ? 366 : 365;
-            break;
 
         default:
             wxFAIL_MSG(_T("unsupported calendar"));
@@ -1117,7 +1115,7 @@ wxDateTime& wxDateTime::Set(double jdn)
 
     jdn *= MILLISECONDS_PER_DAY;
 
-    m_time = jdn;
+    m_time.Assign(jdn);
 
     return *this;
 }
@@ -1530,7 +1528,7 @@ wxDateTime::wxDateTime_t wxDateTime::GetWeekOfYear(const TimeZone& tz) const
 
     return week;
 #else // this seems to be a bit simpler and I believe is also correct
-    return (WeekDay)((GetDayOfYear() - (GetWeekDay() - 1 + 7) % 7 + 7) / 7);
+    return (WeekDay)((GetDayOfYear(tz) - (GetWeekDay(tz) - 1 + 7) % 7 + 7) / 7);
 #endif // 0/1
 }
 
@@ -1673,10 +1671,10 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
             time += tz.GetOffset();
 
 #ifdef __VMS__ /* time is unsigned so VMS gives a warning on the original */
-	   time2 = (int) time;
-	   if ( time2 >= 0 )
+            time2 = (int) time;
+            if ( time2 >= 0 )
 #else
-	   if ( time >= 0 )
+            if ( time >= 0 )
 #endif
             {
                 tm = gmtime(&time);

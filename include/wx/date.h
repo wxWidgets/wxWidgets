@@ -179,11 +179,11 @@ public:
 
     wxDate Previous(int dayOfWeek) const
     {
+        wxDate prev = *this;
         int dow = GetDayOfWeek();
-        if ( dayOfWeek <= dow )
-            return *this - (dow - dayOfWeek);
-        else
-            return *this - 7 + (dayOfWeek - dow);
+        prev -= dayOfWeek > dow ? 7 - (dayOfWeek - dow) : dow - dayOfWeek;
+
+        return prev;
     }
 
     wxString FormatDate(int type = -1) const

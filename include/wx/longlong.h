@@ -55,14 +55,10 @@
         #error "See the documentation on the 'longlong' pragma."
     #endif
 #else // no native long long type
-    // we don't give warnings for the compilers we know about that they don't
-    // have any 64 bit integer type
-    #if 0 // !defined(__VISAGECPP__) && \
-        !defined(__VISUALC__) && \
-        !defined(__BORLANDC__)
-        #warning "Your compiler does not appear to support 64 bit integers, "\
-                 "using emulation class instead."
-    #endif // known compilers without long long
+    // both warning and pragma warning are not portable, but at least an
+    // unknown pragma should never be an error
+    #pragma warning "Your compiler does not appear to support 64 bit "\
+                    "integers, using emulation class instead."
 
     #define wxUSE_LONGLONG_WX 1
 #endif // compiler

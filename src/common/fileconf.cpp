@@ -595,7 +595,7 @@ bool wxFileConfig::GetFirstGroup(wxString& str, long& lIndex) const
 bool wxFileConfig::GetNextGroup (wxString& str, long& lIndex) const
 {
   if ( size_t(lIndex) < m_pCurrentGroup->Groups().Count() ) {
-    str = m_pCurrentGroup->Groups()[lIndex++]->Name();
+    str = m_pCurrentGroup->Groups()[(size_t)lIndex++]->Name();
     return TRUE;
   }
   else
@@ -611,7 +611,7 @@ bool wxFileConfig::GetFirstEntry(wxString& str, long& lIndex) const
 bool wxFileConfig::GetNextEntry (wxString& str, long& lIndex) const
 {
   if ( size_t(lIndex) < m_pCurrentGroup->Entries().Count() ) {
-    str = m_pCurrentGroup->Entries()[lIndex++]->Name();
+    str = m_pCurrentGroup->Entries()[(size_t)lIndex++]->Name();
     return TRUE;
   }
   else

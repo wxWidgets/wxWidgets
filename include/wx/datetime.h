@@ -848,7 +848,7 @@ public:
         // default to Today() otherwise)
     const wxChar *ParseFormat(const wxChar *date,
                               const wxChar *format = _T("%c"),
-                              const wxDateTime& dateDef = ms_InvDateTime);
+                              const wxDateTime& dateDef = wxDateTime::ms_InvDateTime);
         // parse a string containing the date/time in "free" format, this
         // function will try to make an educated guess at the string contents
     const wxChar *ParseDateTime(const wxChar *datetime);
