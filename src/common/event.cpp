@@ -47,11 +47,15 @@
 #endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
-// events
+// event constants
 // ----------------------------------------------------------------------------
 
 wxEventType wxEVT_NULL = 0;
 wxEventType wxEVT_FIRST = 10000;
+
+#if WXWIN_COMPATIBILITY_2
+wxEventType wxEVT_USER_FIRST = wxEVT_FIRST + 2000;
+#endif // WXWIN_COMPATIBILITY_2
 
 // ----------------------------------------------------------------------------
 // wxWin macros
