@@ -70,6 +70,7 @@ dragimgg.cpp	G	P
 fontdlgg.cpp	G	G,R,P
 filedlgg.cpp	G	U,X,P
 grid.cpp	G
+gridsel.cpp	G
 helpext.cpp	G	G
 helphtml.cpp	G	G
 helpwxht.cpp	G	G
@@ -167,7 +168,7 @@ module.cpp	C	B
 mstream.cpp	C
 object.cpp	C	B
 objstrm.cpp	C	B
-odbc.cpp	C	R,X
+odbc.cpp	C	R,X,P
 paper.cpp	C
 prntbase.cpp	C
 process.cpp	C	32,B
