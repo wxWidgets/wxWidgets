@@ -64,6 +64,13 @@ this gives more flexibility on where the data can come from.
 
 Added MDI support to XRC
 
+Added wx.animate module and a demo.  The wx.animate module provides a
+control that is able to display an animated GIF file.
+
+wx.lib.plot.py: Applied patch from Werner F. Bruhin that allows either
+vertical and/or horizontal gridlines.
+
+
 
 
 

@@ -16,6 +16,10 @@ wxPython/contrib/activex/wxie
 wxPython/contrib/activex/wxie/doxydoc
 wxPython/contrib/activex/wxie/latex
 wxPython/contrib/dllwidget
+wxPython/contrib/animate
+wxPython/contrib/animate/gtk
+wxPython/contrib/animate/mac
+wxPython/contrib/animate/msw
 wxPython/contrib/gizmos
 wxPython/contrib/gizmos/gtk
 wxPython/contrib/gizmos/mac

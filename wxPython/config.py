@@ -82,6 +82,7 @@ BUILD_GLCANVAS = 1 # If true, build the contrib/glcanvas extension module
 BUILD_OGL = 0      # If true, build the contrib/ogl extension module
 BUILD_STC = 1      # If true, build the contrib/stc extension module
 BUILD_GIZMOS = 1   # Build a module for the gizmos contrib library
+BUILD_ANIMATE = 1  # Build a module for the animate contrib library
 BUILD_DLLWIDGET = 0# Build a module that enables unknown wx widgets
                    # to be loaded from a DLL and to be used from Python.
 

@@ -648,6 +648,33 @@ if BUILD_GIZMOS:
     wxpExtensions.append(ext)
 
 
+#----------------------------------------------------------------------
+# Define the ANIMATE  extension module
+#----------------------------------------------------------------------
+
+if BUILD_ANIMATE:
+    msg('Preparing ANIMATE...')
+    location = 'contrib/animate'
+
+    swig_sources = run_swig(['animate.i'], location, GENDIR, PKGDIR,
+                            USE_SWIG, swig_force, swig_args, swig_deps)
+
+    ext = Extension('_animate',
+                    swig_sources,
+
+                    include_dirs =  includes + CONTRIBS_INC,
+                    define_macros = defines,
+
+                    library_dirs = libdirs,
+                    libraries = libs + makeLibName('animate'),
+
+                    extra_compile_args = cflags,
+                    extra_link_args = lflags,
+                    )
+
+    wxpExtensions.append(ext)
+
+
 
 #----------------------------------------------------------------------
 # Define the DLLWIDGET  extension module

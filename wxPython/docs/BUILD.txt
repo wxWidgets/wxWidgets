@@ -141,6 +141,7 @@ place, then do the same for wxPython.
    dir I don't lose my scripts too.)  This is what it looks like::
 
         make $* \
+            && make -C contrib/src/animate $* \
             && make -C contrib/src/gizmos $* \
             && make -C contrib/src/stc $* 
    
@@ -392,6 +393,7 @@ accordingly if you are using the bash shell.
    same command from the following directories in order to build the
    contrib libraries::
 
+        %WXDIR%\contrib\build\animate
         %WXDIR%\contrib\build\gizmos
         %WXDIR%\contrib\build\stc
 

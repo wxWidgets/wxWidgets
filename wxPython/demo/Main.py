@@ -48,6 +48,7 @@ _treeList = [
     # new stuff
     ('Recent Additions/Updates', [
         'FoldPanelBar',
+        'GIFAnimationCtrl',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -153,6 +154,7 @@ _treeList = [
         'FloatBar',  
         'FloatCanvas',
         'FoldPanelBar',
+        'GIFAnimationCtrl',
         'HtmlWindow',
         'IntCtrl',
         'MediaCtrl',
@@ -211,6 +213,7 @@ _treeList = [
         'ArtProvider',
         'Cursor',
         'DragImage',
+        'GIFAnimationCtrl',
         'Image',
         'ImageAlpha',
         'ImageFromStream',
