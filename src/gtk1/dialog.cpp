@@ -131,11 +131,6 @@ gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    /* I haven't been able to set the position of
-       the dialog before it is shown, so I set the
-       position in "realize" */
-    gtk_widget_set_uposition( widget, win->m_x, win->m_y );
-
     /* all this is for Motif Window Manager "hints" and is supposed to be
        recognized by other WM as well. not tested. */
     long decor = (long) GDK_DECOR_BORDER;
@@ -308,6 +303,10 @@ bool wxDialog::Create( wxWindow *parent,
 
     PostCreation();
 
+    if ((m_x != -1) || (m_y != -1))
+        gtk_widget_set_uposition( m_widget, m_x, m_y );
+    gtk_widget_set_usize( m_widget, m_width, m_height );
+        
     /*  we cannot set MWM hints  before the widget has
         been realized, so we do this directly after realization */
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
@@ -530,6 +529,8 @@ void wxDialog::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 
     if ((m_width != old_width) || (m_height != old_height))
     {
+        gtk_widget_set_usize( m_widget, m_width, m_height );
+
         /* actual resizing is deferred to GtkOnSize in idle time and
            when showing the dialog */
         m_sizeSet = FALSE;
@@ -554,9 +555,6 @@ void wxDialog::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int heigh
     if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
     if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
     if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
-
-    /* we actually set the size of a frame here and no-where else */
-    gtk_widget_set_usize( m_widget, m_width, m_height );
 
     m_sizeSet = TRUE;
 

@@ -248,11 +248,6 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    /* I haven't been able to set the position of
-       the dialog before it is shown, so I set the
-       position in "realize" */
-    gtk_widget_set_uposition( widget, win->m_x, win->m_y );
-
     if ((win->m_miniEdge > 0) || (win->HasFlag(wxSIMPLE_BORDER)))
     {
         /* This is a mini-frame or a borderless frame. */
@@ -490,6 +485,10 @@ bool wxFrame::Create( wxWindow *parent,
 
     PostCreation();
 
+    if ((m_x != -1) || (m_y != -1))
+        gtk_widget_set_uposition( m_widget, m_x, m_y );
+    gtk_widget_set_usize( m_widget, m_width, m_height );
+        
     /*  we cannot set MWM hints and icons before the widget has
         been realized, so we do this directly after realization */
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
@@ -610,6 +609,8 @@ void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 
     if ((m_width != old_width) || (m_height != old_height))
     {
+        gtk_widget_set_usize( m_widget, m_width, m_height );
+
         /* we set the size in GtkOnSize, i.e. mostly the actual resizing is
            done either directly before the frame is shown or in idle time
            so that different calls to SetSize() don't lead to flicker. */
@@ -852,7 +853,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
 #endif
 
     /* we actually set the size of a frame here and no-where else */
-    gtk_widget_set_usize( m_widget, m_width, m_height );
+//    gtk_widget_set_usize( m_widget, m_width, m_height );
 
     m_sizeSet = TRUE;
 

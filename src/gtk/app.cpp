@@ -250,7 +250,7 @@ wxApp::wxApp()
     m_topWindow = (wxWindow *) NULL;
     m_exitOnFrameDelete = TRUE;
 
-    m_idleTag = gtk_idle_add( wxapp_idle_callback, (gpointer) NULL );
+    m_idleTag = gtk_idle_add_priority( 500, wxapp_idle_callback, (gpointer) NULL );
 
 #if wxUSE_THREADS
     m_wakeUpTimerTag = 0;
