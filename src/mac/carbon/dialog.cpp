@@ -46,8 +46,7 @@ END_EVENT_TABLE()
 
 wxDialog::wxDialog()
 {
-      m_isShown = FALSE;
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+    m_isShown = FALSE;
 }
 
 bool wxDialog::Create(wxWindow *parent, wxWindowID id,
