@@ -1,4 +1,3 @@
-#! /usr/local/bin/python
 #----------------------------------------------------------------------------
 # Name:         calendar.py
 # Purpose:      Calendar display control
