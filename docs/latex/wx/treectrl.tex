@@ -241,8 +241,9 @@ generated.
 
 \func{void}{DeleteAllItems}{\void}
 
-Deletes all the items in the control. Note that this will {\bf not} generate
-any events unlike \helpref{Delete}{wxtreectrldelete} method.
+Deletes all the items in the control. Note that this may not generate 
+{\tt EVT\_TREE\_DELETE\_ITEM} events under some Windows versions although
+normally such event is generated for each removed item.
 
 \membersection{wxTreeCtrl::DeleteChildren}\label{wxtreectrldeletechildren}
 
