@@ -37,32 +37,37 @@
     #include "wx/resource.h"
 #endif
 
-#ifdef __VMS__
-#pragma message disable nosimpint
-#endif
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xatom.h>
-
-#ifdef __VMS__
-#pragma message enable nosimpint
-#endif
-
 #include "wx/x11/private.h"
 
 #include <string.h>
 
-extern wxList wxPendingDelete;
+//------------------------------------------------------------------------
+//   global data
+//------------------------------------------------------------------------
 
-wxApp *wxTheApp = NULL;
+extern wxList wxPendingDelete;
 
 wxHashTable *wxWidgetHashTable = NULL;
 
-IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
+wxApp *wxTheApp = NULL;
 
-BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
-    EVT_IDLE(wxApp::OnIdle)
-END_EVENT_TABLE()
+// This is set within wxEntryStart -- too early on
+// to put these in wxTheApp
+static int g_newArgc = 0;
+static wxChar** g_newArgv = NULL;
+static bool g_showIconic = FALSE;
+static wxSize g_initialSize = wxDefaultSize;
+
+// This is required for wxFocusEvent::SetWindow(). It will only
+// work for focus events which we provoke ourselves (by calling
+// SetFocus()). It will not work for those events, which X11
+// generates itself.
+static wxWindow *g_nextFocus = NULL;
+static wxWindow *g_prevFocus = NULL;
+
+//------------------------------------------------------------------------
+//   X11 error handling
+//------------------------------------------------------------------------
 
 #ifdef __WXDEBUG__
 typedef int (*XErrorHandlerFunc)(Display *, XErrorEvent *);
@@ -79,15 +84,18 @@ static int wxXErrorHandler(Display *dpy, XErrorEvent *xevent)
 }
 #endif // __WXDEBUG__
 
+//------------------------------------------------------------------------
+//   wxApp
+//------------------------------------------------------------------------
+
 long wxApp::sm_lastMessageTime = 0;
 WXDisplay *wxApp::ms_display = NULL;
 
-// This is set within wxEntryStart -- too early on
-// to put these in wxTheApp
-static int g_newArgc = 0;
-static wxChar** g_newArgv = NULL;
-static bool g_showIconic = FALSE;
-static wxSize g_initialSize = wxDefaultSize;
+IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
+
+BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
+    EVT_IDLE(wxApp::OnIdle)
+END_EVENT_TABLE()
 
 bool wxApp::Initialize()
 {
@@ -426,52 +434,39 @@ void wxApp::ProcessXEvent(WXEvent* _event)
     {
         case KeyPress:
         {
-            if (win && !win->IsEnabled())
+            if (!win->IsEnabled())
                 return;
 
-            {
-                if (win)
-                {
-                    wxKeyEvent keyEvent(wxEVT_KEY_DOWN);
-                    wxTranslateKeyEvent(keyEvent, win, window, event);
+            wxKeyEvent keyEvent(wxEVT_KEY_DOWN);
+            wxTranslateKeyEvent(keyEvent, win, window, event);
                     
-                    // wxLogDebug( "OnKey from %s", win->GetName().c_str() );
+            // wxLogDebug( "OnKey from %s", win->GetName().c_str() );
         
-                    // We didn't process wxEVT_KEY_DOWN, so send
-                    // wxEVT_CHAR
-                    if (!win->GetEventHandler()->ProcessEvent( keyEvent ))
-                    {
-                        keyEvent.SetEventType(wxEVT_CHAR);
-                        win->GetEventHandler()->ProcessEvent( keyEvent );
-                    }
-
-                    // We intercepted and processed the key down event
-                    return;
-                }
+            // We didn't process wxEVT_KEY_DOWN, so send
+            // wxEVT_CHAR
+            if (!win->GetEventHandler()->ProcessEvent( keyEvent ))
+            {
+                keyEvent.SetEventType(wxEVT_CHAR);
+                win->GetEventHandler()->ProcessEvent( keyEvent );
             }
             return;
         }
         case KeyRelease:
         {
-            if (win && !win->IsEnabled())
+            if (!win->IsEnabled())
                 return;
 
-            if (win)
-            {
-                wxKeyEvent keyEvent(wxEVT_KEY_UP);
-                wxTranslateKeyEvent(keyEvent, win, window, event);
+            wxKeyEvent keyEvent(wxEVT_KEY_UP);
+            wxTranslateKeyEvent(keyEvent, win, window, event);
         
-                win->GetEventHandler()->ProcessEvent( keyEvent );
-            }
+            win->GetEventHandler()->ProcessEvent( keyEvent );
             return;
         }
         case ConfigureNotify:
         {
-            if (win
 #if wxUSE_NANOX
-                && (event->update.utype == GR_UPDATE_SIZE)
+            if (event->update.utype == GR_UPDATE_SIZE)
 #endif
-                )
             {
                 wxSizeEvent sizeEvent( wxSize(XConfigureEventGetWidth(event), XConfigureEventGetHeight(event)), win->GetId() );
                 sizeEvent.SetEventObject( win );
@@ -487,7 +482,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
         }
         case ClientMessage:
         {
-            if (win && !win->IsEnabled())
+            if (!win->IsEnabled())
                 return;
 
             Atom wm_delete_window = XInternAtom(wxGlobalDisplay(), "WM_DELETE_WINDOW", True);
@@ -497,10 +492,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             {
                 if ((Atom) (event->xclient.data.l[0]) == wm_delete_window)
                 {
-                    if (win)
-                    {
-                        win->Close(FALSE);
-                    }
+                    win->Close(FALSE);
                 }
             }
             return;
@@ -543,21 +535,18 @@ void wxApp::ProcessXEvent(WXEvent* _event)
 #endif
         case Expose:
         {
-            if (win)
-            {
-                win->GetUpdateRegion().Union( XExposeEventGetX(event), XExposeEventGetY(event),
-                                              XExposeEventGetWidth(event), XExposeEventGetHeight(event));
+            win->GetUpdateRegion().Union( XExposeEventGetX(event), XExposeEventGetY(event),
+                                          XExposeEventGetWidth(event), XExposeEventGetHeight(event));
                                               
-                win->GetClearRegion().Union( XExposeEventGetX(event), XExposeEventGetY(event),
-                                              XExposeEventGetWidth(event), XExposeEventGetHeight(event));
+            win->GetClearRegion().Union( XExposeEventGetX(event), XExposeEventGetY(event),
+                                         XExposeEventGetWidth(event), XExposeEventGetHeight(event));
                                               
 #if !wxUSE_NANOX
-                if (event->xexpose.count == 0)
+            if (event->xexpose.count == 0)
 #endif
-                {
-                    // Only erase background, paint in idle time.
-                    win->SendEraseEvents();
-                }
+            {
+                // Only erase background, paint in idle time.
+                win->SendEraseEvents();
             }
 
             return;
@@ -565,23 +554,20 @@ void wxApp::ProcessXEvent(WXEvent* _event)
 #if !wxUSE_NANOX
         case GraphicsExpose:
         {
-            if (win)
-            {
-                // wxLogDebug( "GraphicsExpose from %s", win->GetName().c_str(),
-                //                              event->xgraphicsexpose.x, event->xgraphicsexpose.y,
-                //                              event->xgraphicsexpose.width, event->xgraphicsexpose.height);
+            // wxLogDebug( "GraphicsExpose from %s", win->GetName().c_str(),
+            //                              event->xgraphicsexpose.x, event->xgraphicsexpose.y,
+            //                              event->xgraphicsexpose.width, event->xgraphicsexpose.height);
                     
-                win->GetUpdateRegion().Union( event->xgraphicsexpose.x, event->xgraphicsexpose.y,
-                                              event->xgraphicsexpose.width, event->xgraphicsexpose.height);
+            win->GetUpdateRegion().Union( event->xgraphicsexpose.x, event->xgraphicsexpose.y,
+                                          event->xgraphicsexpose.width, event->xgraphicsexpose.height);
+                                             
+            win->GetClearRegion().Union( event->xgraphicsexpose.x, event->xgraphicsexpose.y,
+                                         event->xgraphicsexpose.width, event->xgraphicsexpose.height);
                                               
-                win->GetClearRegion().Union( event->xgraphicsexpose.x, event->xgraphicsexpose.y,
-                                             event->xgraphicsexpose.width, event->xgraphicsexpose.height);
-                                              
-                if (event->xgraphicsexpose.count == 0)
-                {
-                    // Only erase background, paint in idle time.
-                    win->SendEraseEvents();
-                }
+            if (event->xgraphicsexpose.count == 0)
+            {
+                // Only erase background, paint in idle time.
+                win->SendEraseEvents();
             }
 
             return;
@@ -593,9 +579,6 @@ void wxApp::ProcessXEvent(WXEvent* _event)
         case ButtonRelease:
         case MotionNotify:
         {
-            if (!win)
-                return;
-                
             if (!win->IsEnabled())
                 return;
                 
@@ -610,7 +593,14 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             if (event->type == ButtonPress)
             {
                 if ((win != wxWindow::FindFocus()) && win->AcceptsFocus())
-                   win->SetFocus();
+                {
+                    // This might actually be done in wxWindow::SetFocus()
+                    // and not here.
+                    g_prevFocus = wxWindow::FindFocus();
+                    g_nextFocus = win;
+                    
+                    win->SetFocus();
+                }
             }
 
             wxMouseEvent wxevent;
@@ -621,13 +611,16 @@ void wxApp::ProcessXEvent(WXEvent* _event)
         case FocusIn:
             {
 #if !wxUSE_NANOX
-                if (win && event->xfocus.detail != NotifyPointer)
+                if ((event->xfocus.detail != NotifyPointer) &&
+                    (event->xfocus.mode == NotifyNormal))
 #endif
                 {
-                    // wxLogDebug( "FocusIn from %s", win->GetName().c_str() );
+                    // wxLogDebug( "FocusIn from %s of type %s", win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
                     
                     wxFocusEvent focusEvent(wxEVT_SET_FOCUS, win->GetId());
                     focusEvent.SetEventObject(win);
+                    focusEvent.SetWindow( g_prevFocus );
+                    g_prevFocus = NULL;
                     win->GetEventHandler()->ProcessEvent(focusEvent);
                 }
                 break;
@@ -635,13 +628,16 @@ void wxApp::ProcessXEvent(WXEvent* _event)
         case FocusOut:
             {
 #if !wxUSE_NANOX
-                if (win && event->xfocus.detail != NotifyPointer)
+                if ((event->xfocus.detail != NotifyPointer) &&
+                    (event->xfocus.mode == NotifyNormal))
 #endif
                 {
-                    // wxLogDebug( "FocusOut from %s", win->GetName().c_str() );
+                    // wxLogDebug( "FocusOut from %s of type %s", win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
                     
                     wxFocusEvent focusEvent(wxEVT_KILL_FOCUS, win->GetId());
                     focusEvent.SetEventObject(win);
+                    focusEvent.SetWindow( g_nextFocus );
+                    g_nextFocus = NULL;
                     win->GetEventHandler()->ProcessEvent(focusEvent);
                 }
                 break;

@@ -636,7 +636,7 @@ void wxWindowX11::DoGetSize(int *x, int *y) const
 
     wxCHECK_RET( xwindow, wxT("invalid window") );
     
-    XSync(wxGlobalDisplay(), False);
+    // XSync(wxGlobalDisplay(), False);
 
     XWindowAttributes attr;
     Status status = XGetWindowAttributes( wxGlobalDisplay(), xwindow, &attr );
@@ -654,7 +654,7 @@ void wxWindowX11::DoGetPosition(int *x, int *y) const
     Window window = (Window) m_mainWidget;
     if (window)
     {
-        XSync(wxGlobalDisplay(), False);
+        // XSync(wxGlobalDisplay(), False);
         XWindowAttributes attr;
         Status status = XGetWindowAttributes(wxGlobalDisplay(), window, & attr);
         wxASSERT(status);
@@ -708,7 +708,7 @@ void wxWindowX11::DoGetClientSize(int *x, int *y) const
 
     if (window)
     {
-        XSync(wxGlobalDisplay(), False);  // Is this really a good idea?
+        // XSync(wxGlobalDisplay(), False);  // Is this really a good idea?
         XWindowAttributes attr;
         Status status = XGetWindowAttributes( wxGlobalDisplay(), window, &attr );
         wxASSERT(status);
