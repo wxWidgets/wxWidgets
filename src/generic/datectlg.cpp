@@ -375,10 +375,7 @@ bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
     m_popup->SetClientSize(panel->GetSize());
     m_popup->Hide();
 
-    if (!date.IsValid())
-        date.Today();
-
-    SetValue(date);
+    SetValue(date.IsValid() ? date : wxDateTime::Today());
 
     SetBestFittingSize(size);
 
