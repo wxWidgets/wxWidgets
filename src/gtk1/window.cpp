@@ -1352,8 +1352,8 @@ wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
             if ((child->m_wxwindow == (GtkWidget*) NULL) &&
                 (child->m_x <= xx) &&
                 (child->m_y <= yy) &&
-                (child->m_x+child->m_width  >= x) &&
-                (child->m_y+child->m_height >= y))
+                (child->m_x+child->m_width  >= xx) &&
+                (child->m_y+child->m_height >= yy))
             {
                 win = child;
                 x -= child->m_x;
