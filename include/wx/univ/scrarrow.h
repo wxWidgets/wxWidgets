@@ -32,12 +32,9 @@ class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxMouseEvent;
 class WXDLLEXPORT wxRect;
 class WXDLLEXPORT wxRenderer;
-class WXDLLEXPORT wxScrollTimer;
-
-#include "wx/timer.h"
 
 // ----------------------------------------------------------------------------
-// wxScrollArrows: an avstraction of scrollbar arrow
+// wxScrollArrows: an abstraction of scrollbar arrow
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxScrollArrows
@@ -78,30 +75,7 @@ private:
     wxControlWithArrows *m_control;
 
     // the data for the mouse capture
-    struct wxScrollCaptureData *m_captureData;
-};
-
-// ----------------------------------------------------------------------------
-// wxScrollTimer: the timer used when the arrow is kept pressed
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxScrollTimer : public wxTimer
-{
-public:
-    // default ctor
-    wxScrollTimer();
-
-    // start generating the events
-    void StartAutoScroll();
-
-    // the base class method
-    virtual void Notify();
-
-protected:
-    // to implement in derived classes
-    virtual void DoNotify() = 0;
-
-    bool m_skipNext;
+    struct wxScrollArrowCaptureData *m_captureData;
 };
 
 // ----------------------------------------------------------------------------

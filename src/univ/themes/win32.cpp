@@ -42,6 +42,8 @@
 #include "wx/notebook.h"
 #include "wx/spinbutt.h"
 
+#include "wx/univ/scrtimer.h"
+
 #include "wx/univ/renderer.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/colschem.h"

@@ -1664,8 +1664,20 @@ void wxGTKRenderer::DrawSliderShaft(wxDC& dc,
 {
     wxRect rect = rectOrig;
 
-    DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
-    DrawAntiShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
+    // draw the border first
+    if ( flags & wxCONTROL_FOCUSED )
+    {
+        DrawRect(dc, &rect, m_penBlack);
+        DrawAntiShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
+    }
+    else // not focused, normal
+    {
+        DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
+        DrawAntiShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
+    }
+
+    // and the background
+    DoDrawBackground(dc, wxSCHEME_COLOUR(m_scheme, SCROLLBAR), rect);
 
     if ( rectShaft )
         *rectShaft = rect;

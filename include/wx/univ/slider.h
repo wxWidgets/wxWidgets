@@ -16,6 +16,8 @@
 #ifndef _WX_UNIV_SLIDER_H_
 #define _WX_UNIV_SLIDER_H_
 
+#include "wx/univ/scrthumb.h"
+
 // ----------------------------------------------------------------------------
 // the actions supported by this control
 // ----------------------------------------------------------------------------
@@ -28,6 +30,7 @@
 #define wxACTION_SLIDER_PAGE_UP     _T("pageup")    // one page up/left
 #define wxACTION_SLIDER_LINE_DOWN   _T("linedown")  // one line down/right
 #define wxACTION_SLIDER_PAGE_DOWN   _T("pagedown")  // one page down/right
+#define wxACTION_SLIDER_PAGE_CHANGE _T("pagechange")// change page by numArg
 
 #define wxACTION_SLIDER_THUMB_DRAG      _T("thumbdrag")
 #define wxACTION_SLIDER_THUMB_MOVE      _T("thumbmove")
@@ -37,11 +40,12 @@
 // wxSlider
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxSlider: public wxSliderBase
+class WXDLLEXPORT wxSlider : public wxSliderBase,
+                             public wxControlWithThumb
 {
 public:
     // ctors and such
-    wxSlider() { Init(); }
+    wxSlider();
 
     wxSlider(wxWindow *parent,
              wxWindowID id,
@@ -50,13 +54,7 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = wxSL_HORIZONTAL,
              const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxSliderNameStr)
-    {
-        Init();
-
-        (void)Create(parent, id, value, minValue, maxValue,
-                     pos, size, style, validator, name);
-    }
+             const wxString& name = wxSliderNameStr);
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -87,14 +85,35 @@ public:
     // -----------------------
 
     // is this a vertical slider?
-    bool IsVertical() const { return (GetWindowStyle() & wxSL_VERTICAL) != 0; }
+    bool IsVert() const { return (GetWindowStyle() & wxSL_VERTICAL) != 0; }
 
     // get the slider orientation
     wxOrientation GetOrientation() const
-        { return IsVertical() ? wxVERTICAL : wxHORIZONTAL; }
+        { return IsVert() ? wxVERTICAL : wxHORIZONTAL; }
 
     // do we have labels?
     bool HasLabels() const { return (GetWindowStyle() & wxSL_LABELS) != 0; }
+
+    // implement wxControlWithThumb interface
+    virtual wxWindow *GetWindow() { return this; }
+    virtual bool IsVertical() const { return IsVert(); }
+
+    virtual wxScrollThumb::Shaft HitTest(const wxPoint& pt) const;
+    virtual wxCoord ThumbPosToPixel() const;
+    virtual int PixelToThumbPos(wxCoord x) const;
+
+    virtual void SetShaftPartState(wxScrollThumb::Shaft shaftPart,
+                                   int flag,
+                                   bool set = TRUE);
+
+    virtual void OnThumbDragStart(int pos);
+    virtual void OnThumbDrag(int pos);
+    virtual void OnThumbDragEnd(int pos);
+    virtual void OnPageScrollStart();
+    virtual bool OnPageScroll(int pageInc);
+
+    // for wxStdSliderButtonInputHandler
+    wxScrollThumb& GetThumb() { return m_thumb; }
 
 protected:
     // overridden base class virtuals
@@ -136,6 +155,9 @@ protected:
     // get the thumb size
     wxSize GetThumbSize() const;
 
+    // get the shaft rect (uses m_rectSlider which is supposed to be calculated)
+    wxRect GetShaftRect() const;
+
     // calc the current thumb position using the shaft rect (if the pointer is
     // NULL, we calculate it here too)
     void CalcThumbRect(const wxRect *rectShaft,
@@ -151,6 +173,9 @@ protected:
 private:
     // get the default thumb size (without using m_thumbSize)
     wxSize GetDefaultThumbSize() const;
+
+    // the object which manages our thumb
+    wxScrollThumb m_thumb;
 
     // the slider range and value
     int m_min,
@@ -180,11 +205,13 @@ private:
 class WXDLLEXPORT wxStdSliderButtonInputHandler : public wxStdInputHandler
 {
 public:
+    // default ctor
     wxStdSliderButtonInputHandler(wxInputHandler *inphand)
         : wxStdInputHandler(inphand)
     {
     }
 
+    // base class methods
     virtual bool HandleKey(wxControl *control,
                            const wxKeyEvent& event,
                            bool pressed);

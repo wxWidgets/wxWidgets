@@ -37,6 +37,8 @@
     #include "wx/validate.h"
 #endif
 
+#include "wx/univ/scrtimer.h"
+
 #include "wx/univ/renderer.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/theme.h"
@@ -61,7 +63,7 @@ public:
                      wxScrollBar *control);
 
 protected:
-    virtual void DoNotify();
+    virtual bool DoNotify();
 
 private:
     wxStdScrollBarInputHandler *m_handler;
@@ -556,9 +558,9 @@ wxScrollBarTimer::wxScrollBarTimer(wxStdScrollBarInputHandler *handler,
     m_control = control;
 }
 
-void wxScrollBarTimer::DoNotify()
+bool wxScrollBarTimer::DoNotify()
 {
-    m_handler->OnScrollTimer(m_control, m_action);
+    return m_handler->OnScrollTimer(m_control, m_action);
 }
 
 // ----------------------------------------------------------------------------
@@ -856,4 +858,49 @@ bool wxStdScrollBarInputHandler::HandleMouseMove(wxControl *control,
 }
 
 #endif // wxUSE_SCROLLBAR
+
+// ----------------------------------------------------------------------------
+// wxScrollTimer
+// ----------------------------------------------------------------------------
+
+wxScrollTimer::wxScrollTimer()
+{
+    m_skipNext = FALSE;
+}
+
+void wxScrollTimer::StartAutoScroll()
+{
+    // start scrolling immediately
+    if ( !DoNotify() )
+    {
+        // ... and end it too
+        return;
+    }
+
+    // there is an initial delay before the scrollbar starts scrolling -
+    // implement it by ignoring the first timer expiration and only start
+    // scrolling from the second one
+    m_skipNext = TRUE;
+    Start(200); // FIXME: hardcoded delay
+}
+
+void wxScrollTimer::Notify()
+{
+    if ( m_skipNext )
+    {
+        // scroll normally now - reduce the delay
+        Stop();
+        Start(50); // FIXME: hardcoded delay
+
+        m_skipNext = FALSE;
+    }
+    else
+    {
+        if ( !DoNotify() )
+        {
+            // scrolled till the end
+            Stop();
+        }
+    }
+}
 

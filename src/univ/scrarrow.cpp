@@ -30,6 +30,7 @@
 #ifndef WX_PRECOMP
 #endif
 
+#include "wx/univ/scrtimer.h"
 #include "wx/univ/scrarrow.h"
 
 #include "wx/univ/renderer.h"
@@ -37,13 +38,13 @@
 #include "wx/univ/theme.h"
 
 // ----------------------------------------------------------------------------
-// wxScrollCaptureData: contains the data used while the arrow is being
+// wxScrollArrowCaptureData: contains the data used while the arrow is being
 // pressed by the user
 // ----------------------------------------------------------------------------
 
-struct wxScrollCaptureData
+struct wxScrollArrowCaptureData
 {
-    wxScrollCaptureData()
+    wxScrollArrowCaptureData()
     {
         m_arrowPressed = wxScrollArrows::Arrow_None;
         m_window = NULL;
@@ -51,7 +52,7 @@ struct wxScrollCaptureData
         m_timerScroll = NULL;
     }
 
-    ~wxScrollCaptureData()
+    ~wxScrollArrowCaptureData()
     {
         if ( m_window )
             m_window->ReleaseMouse();
@@ -89,9 +90,9 @@ public:
     }
 
 protected:
-    virtual void DoNotify()
+    virtual bool DoNotify()
     {
-        m_control->OnArrow(m_arrow);
+        return m_control->OnArrow(m_arrow);
     }
 
     wxControlWithArrows *m_control;
@@ -114,6 +115,8 @@ wxScrollArrows::wxScrollArrows(wxControlWithArrows *control)
 
 wxScrollArrows::~wxScrollArrows()
 {
+    // it should have been destroyed
+    wxASSERT_MSG( !m_captureData, _T("memory leak in wxScrollArrows") );
 }
 
 // ----------------------------------------------------------------------------
@@ -213,7 +216,7 @@ bool wxScrollArrows::HandleMouse(const wxMouseEvent& event) const
     int btn = event.GetButton();
     if ( btn == -1 )
     {
-        // we only care in button press/release events
+        // we only care about button press/release events
         return FALSE;
     }
 
@@ -235,7 +238,7 @@ bool wxScrollArrows::HandleMouse(const wxMouseEvent& event) const
             }
 
             wxConstCast(this, wxScrollArrows)->m_captureData =
-                new wxScrollCaptureData;
+                new wxScrollArrowCaptureData;
             m_captureData->m_arrowPressed = arrow;
             m_captureData->m_btnCapture = btn;
             m_captureData->m_window = m_control->GetWindow();
@@ -266,42 +269,5 @@ bool wxScrollArrows::HandleMouse(const wxMouseEvent& event) const
     }
 
     return TRUE;
-}
-
-// ----------------------------------------------------------------------------
-// wxScrollTimer
-// ----------------------------------------------------------------------------
-
-wxScrollTimer::wxScrollTimer()
-{
-    m_skipNext = FALSE;
-}
-
-void wxScrollTimer::StartAutoScroll()
-{
-    // start scrolling immediately
-    DoNotify();
-
-    // there is an initial delay before the scrollbar starts scrolling -
-    // implement it by ignoring the first timer expiration and only start
-    // scrolling from the second one
-    m_skipNext = TRUE;
-    Start(200); // FIXME: hardcoded delay
-}
-
-void wxScrollTimer::Notify()
-{
-    if ( m_skipNext )
-    {
-        // scroll normally now - reduce the delay
-        Stop();
-        Start(50); // FIXME: hardcoded delay
-
-        m_skipNext = FALSE;
-    }
-    else
-    {
-        DoNotify();
-    }
 }
 

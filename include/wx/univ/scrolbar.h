@@ -16,6 +16,8 @@
     #pragma interface "univscrolbar.h"
 #endif
 
+class WXDLLEXPORT wxScrollTimer;
+
 #include "wx/univ/scrarrow.h"
 
 // ----------------------------------------------------------------------------
