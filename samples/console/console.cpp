@@ -23,16 +23,23 @@
 #include <wx/file.h>
 #include <wx/app.h>
 
+// without this pragma, the stupid compiler precompiles #defines below so that
+// changing them doesn't "take place" later!
+#ifdef __VISUALC__
+    #pragma hdrstop
+#endif
+
 // ----------------------------------------------------------------------------
 // conditional compilation
 // ----------------------------------------------------------------------------
 
-// what to test?
+// what to test (in alphabetic order)?
 
 //#define TEST_ARRAYS
 //#define TEST_CMDLINE
+//#define TEST_DATETIME
 //#define TEST_DIR
-#define TEST_EXECUTE
+//#define TEST_EXECUTE
 //#define TEST_FILECONF
 //#define TEST_HASH
 //#define TEST_LOG
@@ -41,17 +48,17 @@
 //#define TEST_SOCKETS
 //#define TEST_STRINGS
 //#define TEST_THREADS
-//#define TEST_TIME
+#define TEST_TIMER
 
 // ============================================================================
 // implementation
 // ============================================================================
 
-#ifdef TEST_CMDLINE
-
 // ----------------------------------------------------------------------------
 // wxCmdLineParser
 // ----------------------------------------------------------------------------
+
+#ifdef TEST_CMDLINE
 
 #include <wx/cmdline.h>
 #include <wx/datetime.h>
@@ -716,10 +723,41 @@ static void TestSocketClient()
 #endif // TEST_SOCKETS
 
 // ----------------------------------------------------------------------------
+// timers
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_TIMER
+
+#include <wx/timer.h>
+#include <wx/utils.h>
+
+static void TestStopWatch()
+{
+    puts("*** Testing wxStopWatch ***\n");
+
+    wxStopWatch sw;
+    printf("Sleeping 3 seconds...");
+    wxSleep(3);
+    printf("\telapsed time: %ld\n", sw.Time());
+
+    sw.Pause();
+    printf("Sleeping 2 more seconds...");
+    wxSleep(2);
+    printf("\telapsed time: %ld\n", sw.Time());
+
+    sw.Resume();
+    printf("And 3 more seconds...");
+    wxSleep(3);
+    printf("\telapsed time: %ld\n", sw.Time());
+}
+
+#endif // TEST_TIMER
+
+// ----------------------------------------------------------------------------
 // date time
 // ----------------------------------------------------------------------------
 
-#ifdef TEST_TIME
+#ifdef TEST_DATETIME
 
 #include <wx/date.h>
 
@@ -1659,7 +1697,7 @@ static void TestTimeCompatibility()
 
 #endif // 0
 
-#endif // TEST_TIME
+#endif // TEST_DATETIME
 
 // ----------------------------------------------------------------------------
 // threads
@@ -2389,7 +2427,11 @@ int main(int argc, char **argv)
     TestSocketClient();
 #endif // TEST_SOCKETS
 
-#ifdef TEST_TIME
+#ifdef TEST_TIMER
+    TestStopWatch();
+#endif // TEST_TIMER
+
+#ifdef TEST_DATETIME
     if ( 0 )
     {
         TestTimeSet();
@@ -2408,7 +2450,7 @@ int main(int argc, char **argv)
     TestTimeHolidays();
     if ( 0 )
         TestInteractive();
-#endif // TEST_TIME
+#endif // TEST_DATETIME
 
     wxUninitialize();
 

@@ -310,7 +310,10 @@ void MyFrame::OnSyncExec(wxCommandEvent& WXUNUSED(event))
     if ( !cmd )
         return;
 
+    wxLogStatus(_T("'%s' is running please wait..."), cmd.c_str());
+
     int code = wxExecute(cmd, TRUE /* sync */);
+
     wxLogStatus(_T("Process '%s' terminated with exit code %d."),
                 cmd.c_str(), code);
     m_cmdLast = cmd;
@@ -326,7 +329,8 @@ void MyFrame::OnAsyncExec(wxCommandEvent& WXUNUSED(event))
         return;
 
     wxProcess *process = new MyProcess(this, cmd);
-    if ( !wxExecute(cmd, FALSE /* async */, process) )
+    long pid = wxExecute(cmd, FALSE /* async */, process);
+    if ( !pid )
     {
         wxLogError(_T("Execution of '%s' failed."), cmd.c_str());
 
@@ -334,6 +338,8 @@ void MyFrame::OnAsyncExec(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
+        wxLogStatus(_T("Process %ld (%s) launched."), pid, cmd.c_str());
+
         m_cmdLast = cmd;
     }
 }
