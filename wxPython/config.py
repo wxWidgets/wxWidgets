@@ -408,7 +408,7 @@ class wx_install_headers(distutils.command.install_headers.install_headers):
             return
 
         root = self.root
-        if WXPREFIX.startswith(root):
+        if root is None or WXPREFIX.startswith(root):
             root = ''
         for header, location in headers:
             install_dir = os.path.normpath(root + WXPREFIX + location)
