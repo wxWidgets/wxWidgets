@@ -7458,6 +7458,34 @@ static PyObject *_wrap_wxGrid_SetSelectionMode(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
+#define wxGrid_GetSelectionMode(_swigobj)  (_swigobj->GetSelectionMode())
+static PyObject *_wrap_wxGrid_GetSelectionMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    WXGRIDSELECTIONMODES  _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetSelectionMode",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetSelectionMode. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (WXGRIDSELECTIONMODES )wxGrid_GetSelectionMode(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxGrid_GetNumberRows(_swigobj)  (_swigobj->GetNumberRows())
 static PyObject *_wrap_wxGrid_GetNumberRows(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -14427,6 +14455,7 @@ static PyMethodDef gridcMethods[] = {
 	 { "wxGrid_ProcessTableMessage", (PyCFunction) _wrap_wxGrid_ProcessTableMessage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_GetNumberCols", (PyCFunction) _wrap_wxGrid_GetNumberCols, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_GetNumberRows", (PyCFunction) _wrap_wxGrid_GetNumberRows, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetSelectionMode", (PyCFunction) _wrap_wxGrid_GetSelectionMode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_SetSelectionMode", (PyCFunction) _wrap_wxGrid_SetSelectionMode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_CreateGrid", (PyCFunction) _wrap_wxGrid_CreateGrid, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxGrid", (PyCFunction) _wrap_new_wxGrid, METH_VARARGS | METH_KEYWORDS },

@@ -955,6 +955,9 @@ class wxGridPtr(wxScrolledWindowPtr):
     def SetSelectionMode(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_SetSelectionMode,(self,) + _args, _kwargs)
         return val
+    def GetSelectionMode(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_GetSelectionMode,(self,) + _args, _kwargs)
+        return val
     def GetNumberRows(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_GetNumberRows,(self,) + _args, _kwargs)
         return val
