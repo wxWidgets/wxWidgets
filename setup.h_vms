@@ -182,9 +182,25 @@
  */
 /* #unfine HAVE_STD_WSTRING */
 /*
- * Define if your compiler has compilant std::string::compare
+ * Define if your compiler has compliant std::string::compare
  */
-/* #undef HAVE_STD_STRING_COMPARE */
+#undef HAVE_STD_STRING_COMPARE
+/*
+ * Define if your compiler has <hash_map>
+ */
+#undef HAVE_HASH_MAP
+/*
+ * Define if your compiler has <ext/hash_map>
+ */
+#undef HAVE_EXT_HASH_MAP
+/*
+ * Define if your compiler has std::hash_map/hash_set
+ */
+#undef HAVE_STD_HASH_MAP
+/*
+ * Define if your compiler has __gnu_cxx::hash_map/hash_set
+ */
+#undef HAVE_GNU_CXX_HASH_MAP
 
 /*
  * use STL for containers and wxString
@@ -1282,5 +1298,8 @@
 
 /* Define this is you have X11/extensions/shape.h */
 #define HAVE_XSHAPE 1
+
+/* Define this if you have type SPBCDATA */
+#undef HAVE_SPBCDATA
 
 #endif /* __WX_SETUP_H__ */
