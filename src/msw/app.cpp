@@ -61,10 +61,8 @@
 // Also, OLE is used not just for drag and drop (it's used by automatn.cpp).
 // #if wxUSE_DRAG_AND_DROP
 #if !defined(__GNUWIN32__) && !defined(__SC__) && !defined(__SALFORDC__)
-#include <ole2.h>
+    #include <ole2.h>
 #endif
-
-// #endif
 
 #include <string.h>
 #include <ctype.h>
@@ -73,31 +71,7 @@
   #include <commctrl.h>
 #endif
 
-// use debug CRT functions for memory leak detections in VC++ if we're not
-// using wxWindows own methods
-#if defined(__WXDEBUG__) && defined(_MSC_VER) && !wxUSE_GLOBAL_MEMORY_OPERATORS && !defined(__NO_VC_CRTDBG__)
-    #define wxUSE_VC_CRTDBG
-#else
-    #undef wxUSE_VC_CRTDBG
-#endif
-
-#ifdef wxUSE_VC_CRTDBG
-  // VC++ uses this macro as debug/release mode indicator
-  #ifndef _DEBUG
-    #define _DEBUG
-  #endif
-
-  /* Need to undef new if including crtdbg.h */
-  #ifdef new
-    #undef new
-  #endif
-
-  #include <crtdbg.h>
-
-  #if defined(__WXDEBUG__) && wxUSE_GLOBAL_MEMORY_OPERATORS && wxUSE_DEBUG_NEW_ALWAYS
-    #define new new(__FILE__,__LINE__)
-  #endif
-#endif // wxUSE_VC_CRTDBG
+#include "wx/msw/msvcrt.h"
 
 extern char *wxBuffer;
 extern char *wxOsVersion;
@@ -162,13 +136,6 @@ bool wxApp::Initialize()
 #endif
 
     wxBuffer = new char[1500];
-
-#ifdef wxUSE_VC_CRTDBG
-    // do check for memory leaks on program exit
-    // (another useful flag is _CRTDBG_DELAY_FREE_MEM_DF which doesn't free
-    //  deallocated memory which may be used to simulate low-memory condition)
-    _CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_LEAK_CHECK_DF);
-#endif // debug build under MS VC++
 
     wxClassInfo::InitializeClasses();
 
@@ -258,8 +225,7 @@ bool wxApp::Initialize()
 
     wxWinHandleList = new wxList(wxKEY_INTEGER);
 
-    // This is to foil optimizations in Visual C++ that
-    // throw out dummy.obj.
+    // This is to foil optimizations in Visual C++ that throw out dummy.obj.
     // PLEASE DO NOT ALTER THIS.
 #if defined(_MSC_VER) && !defined(WXMAKINGDLL)
     extern char wxDummyChar;
@@ -590,6 +556,11 @@ int wxEntry(WXHINSTANCE hInstance,
             int nCmdShow,
             bool enterLoop)
 {
+    // do check for memory leaks on program exit
+    // (another useful flag is _CRTDBG_DELAY_FREE_MEM_DF which doesn't free
+    //  deallocated memory which may be used to simulate low-memory condition)
+    wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
+
   // take everything into a try-except block in release build
   // FIXME other compilers must support Win32 SEH (structured exception
   //       handling) too, just find the appropriate keyword in their docs!

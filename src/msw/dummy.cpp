@@ -7,8 +7,6 @@
  * Copyright:   (c) 1993, AIAI, University of Edinburgh
  */
 
-/* static const char sccsid[] = "@(#)dummy.cc	1.2 5/9/94"; */
-
 /* A dummy file to include wx.h. If precompiling wx.h, I
  * always start by compiling this and producing the PCH file.
  * Then subsequent source files use the PCH file.
@@ -22,8 +20,6 @@
  * This will produce a big PCH file.
  */
 
-
-
 #if defined(__BORLANDC__)
 #if !(defined(__WIN32__) || defined(__NT__) || defined(__WIN32__))
 #pragma hdrfile "c:\wx\src\msw\wx.pch"
@@ -33,35 +29,44 @@
 #endif
 
 #include "wx/wxprec.h"
-#include "windows.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#include <windows.h>
+
+#include "wx/msw/msvcrt.h"
 
 // Foils optimizations in Visual C++ (see also app.cpp). Without it,
 // dummy.obj isn't linked and we get a linker error.
 #if defined(_MSC_VER)
-char wxDummyChar=0;
+    char wxDummyChar = 0;
 #endif
 
+// if wxWindows is in the DLL link our entry point with the application
 #if defined(WXUSINGDLL)
 
 // NT defines APIENTRY, 3.x not
 #if !defined(APIENTRY)
-#define APIENTRY FAR PASCAL
+    #define APIENTRY FAR PASCAL
 #endif
  
+int
 #ifdef __WATCOMC__
-int PASCAL
+    PASCAL
 #else
-int APIENTRY
+    APIENTRY
 #endif
-
- WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR m_lpCmdLine,
-                    int nCmdShow )
+WinMain(HINSTANCE hInstance,
+        HINSTANCE hPrevInstance,
+        LPSTR m_lpCmdLine,
+        int nCmdShow )
 {
-  return wxEntry((WXHINSTANCE) hInstance, (WXHINSTANCE) hPrevInstance, m_lpCmdLine, nCmdShow);
+    wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
+
+    return wxEntry((WXHINSTANCE) hInstance, (WXHINSTANCE) hPrevInstance,
+                   m_lpCmdLine, nCmdShow);
 }
 #endif
 
