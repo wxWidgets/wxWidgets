@@ -77,7 +77,7 @@ bool wxSoundWave::CanRead()
   return TRUE;
 }
 
-bool wxSoundWave::HandlePCM(wxDataInputStream& data, wxUint16 channels, 
+bool wxSoundWave::HandleOutputPCM(wxDataInputStream& data, wxUint16 channels, 
                             wxUint32 sample_fq, wxUint32 byte_p_sec,
                             wxUint16 byte_p_spl, wxUint16 bits_p_spl)
 {
@@ -95,7 +95,7 @@ bool wxSoundWave::HandlePCM(wxDataInputStream& data, wxUint16 channels,
   return TRUE;
 }
 
-bool wxSoundWave::HandleG721(wxDataInputStream& data, wxUint16 channels,
+bool wxSoundWave::HandleOutputG721(wxDataInputStream& data, wxUint16 channels,
                              wxUint32 sample_fq, wxUint32 byte_p_sec,
                              wxUint16 byte_p_spl, wxUint16 bits_p_spl)
 {
@@ -152,12 +152,12 @@ bool wxSoundWave::PrepareToPlay()
 
       switch (format) {
       case 0x01:
-        if (!HandlePCM(data, channels, sample_fq,
+        if (!HandleOutputPCM(data, channels, sample_fq,
                        byte_p_sec, byte_p_spl, bits_p_spl))
           return FALSE;
         break;
       case 0x40:
-        if (!HandleG721(data, channels, sample_fq,
+        if (!HandleOutputG721(data, channels, sample_fq,
                         byte_p_sec, byte_p_spl, bits_p_spl))
           return FALSE;
         break;
@@ -176,6 +176,60 @@ bool wxSoundWave::PrepareToPlay()
     }
   }
   return TRUE;
+}
+
+wxSoundFormatBase *wxSoundWave::HandleInputPCM(wxDataOutputStream& data)
+{
+  wxUint16 format, channels, byte_p_spl, bits_p_spl;
+  wxUint32 sample_fq, byte_p_sec;
+  wxSoundFormatPcm *pcm;
+
+  pcm = (wxSoundFormatPcm *)(m_sndformat->Clone());
+
+  // Write block length
+  data.Write32(16);
+
+  sample_fq  = pcm->GetSampleRate();
+  bits_p_spl = pcm->GetBPS();
+  channels   = pcm->GetChannels();
+  byte_p_spl = pcm->GetBPS() / 8;
+  byte_p_sec = pcm->GetBytesFromTime(1);
+  format     = 0x01;
+
+  pcm->Signed(TRUE);
+  pcm->SetOrder(wxLITTLE_ENDIAN);
+
+  data << format << channels << sample_fq
+       << byte_p_sec << byte_p_spl << bits_p_spl;
+
+  return pcm;
+}
+
+wxSoundFormatBase *wxSoundWave::HandleInputG72X(wxDataOutputStream& data)
+{
+  wxUint16 format, channels, byte_p_spl, bits_p_spl;
+  wxUint32 sample_fq, byte_p_sec;
+  wxSoundFormatG72X *g72x;
+
+  // Write block length
+  data.Write32(16);
+
+  g72x = (wxSoundFormatG72X *)(m_sndformat->Clone());
+  if (g72x->GetG72XType() != wxSOUND_G721) {
+    delete g72x;
+    return NULL;
+  } 
+
+  sample_fq  = g72x->GetSampleRate();
+  bits_p_spl = 4;
+  channels   = 1;
+  byte_p_spl = 0;
+  byte_p_sec = g72x->GetBytesFromTime(1);
+  format     = 0x40;
+  data << format << channels << sample_fq
+       << byte_p_sec << byte_p_spl << bits_p_spl;
+
+  return g72x;
 }
 
 bool wxSoundWave::PrepareToRecord(unsigned long time)
@@ -207,38 +261,30 @@ FAIL_WITH(m_output->Write(&signature, 4).LastWrite() != 4, wxSOUND_INVSTRM);
   WRITE_SIGNATURE(WAVE_SIGNATURE);
 
   {
-    wxUint16 format, channels, byte_p_spl, bits_p_spl;
-    wxUint32 sample_fq, byte_p_sec;
-    wxSoundFormatPcm *pcm;
+    wxSoundFormatBase *frmt;
 
-    if (m_sndformat->GetType() != wxSOUND_PCM) {
+    WRITE_SIGNATURE(FMT_SIGNATURE);
+
+    switch (m_sndformat->GetType()) {
+    case wxSOUND_PCM:
+      frmt = HandleInputPCM(data);
+      break;
+    case wxSOUND_G72X:
+      frmt = HandleInputG72X(data);
+      break;
+    default:
       m_snderror = wxSOUND_NOCODEC;
       return FALSE;
     }
 
-    pcm = (wxSoundFormatPcm *)(m_sndformat->Clone());
+    FAIL_WITH(!frmt, wxSOUND_NOCODEC);
 
-    WRITE_SIGNATURE(FMT_SIGNATURE);
-    data.Write32(16);
-
-    sample_fq  = pcm->GetSampleRate();
-    bits_p_spl = pcm->GetBPS();
-    channels   = pcm->GetChannels();
-    byte_p_spl = pcm->GetBPS() / 8;
-    byte_p_sec = pcm->GetBytesFromTime(1);
-    format     = 1;
-    data << format << channels << sample_fq
-         << byte_p_sec << byte_p_spl << bits_p_spl;
-
-    pcm->Signed(TRUE);
-    pcm->SetOrder(wxLITTLE_ENDIAN);
-    
-    if (!SetSoundFormat(*pcm)) {
-      delete pcm;
+    if (!SetSoundFormat(*frmt)) {
+      delete frmt;
       return FALSE;
     }
 
-    delete pcm;
+    delete frmt;
   }
 
   WRITE_SIGNATURE(DATA_SIGNATURE);

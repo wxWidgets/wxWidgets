@@ -60,10 +60,10 @@ enum {
 #endif
 
 void Server_OnRequest(wxSocketServer& server,
-		      GSocketEvent evt,
+		      wxSocketNotify evt,
 		      char *cdata);
 void Client_OnRequest(wxSocketBase& sock,
-		      GSocketEvent evt,
+		      wxSocketNotify evt,
 		      char *cdata);
 
 // ---------------------------------------------------------------------------
@@ -96,7 +96,7 @@ wxConnectionBase *wxTCPClient::MakeConnection (const wxString& host,
   wxDataInputStream data_is(*stream);
   wxDataOutputStream data_os(*stream);
   
-  client->SetNotify(GSOCK_INPUT_FLAG | GSOCK_LOST_FLAG);
+  client->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
   addr.Service(server_name);
   addr.Hostname(host);
 
@@ -162,7 +162,7 @@ bool wxTCPServer::Create(const wxString& server_name)
   // Create a socket listening on specified port
   server = new wxSocketServer(addr);
   server->Callback((wxSocketBase::wxSockCbk)Server_OnRequest);
-  server->SetNotify(GSOCK_CONNECTION_FLAG);
+  server->SetNotify(wxSOCKET_CONNECTION_FLAG);
 
   server->CallbackData((char *)this);
 
@@ -336,7 +336,7 @@ bool wxTCPConnection::Advise (const wxString& item,
   return TRUE;
 }
 
-void Client_OnRequest(wxSocketBase& sock, GSocketEvent evt,
+void Client_OnRequest(wxSocketBase& sock, wxSocketNotify evt,
 		      char *cdata)
 {
   int msg = 0;
@@ -348,7 +348,7 @@ void Client_OnRequest(wxSocketBase& sock, GSocketEvent evt,
   wxString item;
 
   // The socket handler signals us that we lost the connection: destroy all.
-  if (evt == GSOCK_LOST) {
+  if (evt == wxSOCKET_LOST) {
     sock.Close();
     connection->OnDisconnect();
     return;
@@ -464,20 +464,20 @@ void Client_OnRequest(wxSocketBase& sock, GSocketEvent evt,
 }
 
 void Server_OnRequest(wxSocketServer& server,
-		      GSocketEvent evt, char *cdata)
+		      wxSocketNotify evt, char *cdata)
 {
   wxTCPServer *ipcserv = (wxTCPServer *)cdata;
   wxSocketStream *stream;
   wxDataInputStream *codeci;
   wxDataOutputStream *codeco;
 
-  if (evt != GSOCK_CONNECTION)
+  if (evt != wxSOCKET_CONNECTION)
     return;
 
   /* Accept the connection, getting a new socket */
   wxSocketBase *sock = server.Accept();
   sock->Notify(FALSE);
-  sock->SetNotify(GSOCK_INPUT_FLAG | GSOCK_LOST_FLAG);
+  sock->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
 
   stream = new wxSocketStream(*sock);
   codeci = new wxDataInputStream(*stream);

@@ -637,7 +637,7 @@ bool wxSocketBase::WaitForLost(long seconds, long milliseconds)
 // --------- wxSocketBase callback management -------------------
 // --------------------------------------------------------------
 
-GSocketEventFlags wxSocketBase::EventToNotify(GSocketEvent evt)
+wxSocketEventFlags wxSocketBase::EventToNotify(wxSocketNotify evt)
 {
   switch (evt)
   {
@@ -665,7 +665,7 @@ wxSocketBase::wxSockFlags wxSocketBase::GetFlags() const
   return m_flags;
 }
 
-void wxSocketBase::SetNotify(GSocketEventFlags flags)
+void wxSocketBase::SetNotify(wxSocketEventFlags flags)
 {
   /* Check if server */
   if (m_type != SOCK_SERVER)
@@ -686,7 +686,7 @@ static void wx_socket_fallback(GSocket *socket, GSocketEvent event, char *cdata)
 {
   wxSocketBase *sckobj = (wxSocketBase *)cdata;
 
-  sckobj->OnRequest(event);
+  sckobj->OnRequest((wxSocketNotify)event);
 }
 
 void wxSocketBase::Notify(bool notify)
@@ -703,28 +703,28 @@ void wxSocketBase::Notify(bool notify)
   GSocket_SetCallback(m_socket, m_neededreq, wx_socket_fallback, (char *)this);
 }
 
-void wxSocketBase::OnRequest(GSocketEvent req_evt)
+void wxSocketBase::OnRequest(wxSocketNotify req_evt)
 {
   wxSocketEvent event(m_id);
   GSocketEventFlags notify = EventToNotify(req_evt);
 
   if (m_defering != NO_DEFER) {
-    DoDefer(req_evt);
+    DoDefer((GSocketEvent)req_evt);
     return;
   }
 
   if ((m_neededreq & notify) == notify) {
     event.m_socket = this;
-    event.m_skevt = req_evt;
+    event.m_skevt = (GSocketEvent) req_evt;
     ProcessEvent(event);
     OldOnNotify(req_evt);
   }
 
-  if (req_evt == GSOCK_LOST)
+  if ((GSocketEvent)req_evt == GSOCK_LOST)
     Close();
 }
 
-void wxSocketBase::OldOnNotify(GSocketEvent evt)
+void wxSocketBase::OldOnNotify(wxSocketNotify evt)
 {
 }
 
@@ -913,9 +913,9 @@ bool wxSocketClient::WaitOnConnect(long seconds, long microseconds)
   return m_connected;
 }
 
-void wxSocketClient::OnRequest(GSocketEvent evt)
+void wxSocketClient::OnRequest(wxSocketNotify evt)
 {
-  if (evt == GSOCK_CONNECTION)
+  if ((GSocketEvent)evt == GSOCK_CONNECTION)
   {
     if (m_connected)
     {

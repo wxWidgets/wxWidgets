@@ -33,6 +33,43 @@
 #include "wx/sckaddr.h"
 #include "wx/gsocket.h"
 
+// ------------------------------------------------------------------------
+// GSocket type alias
+// ------------------------------------------------------------------------
+
+typedef enum {
+  wxSOCKET_INPUT = GSOCK_INPUT,
+  wxSOCKET_OUTPUT = GSOCK_OUTPUT,
+  wxSOCKET_CONNECTION = GSOCK_CONNECTION,
+  wxSOCKET_LOST = GSOCK_LOST
+} wxSocketNotify;
+
+enum {
+  wxSOCKET_INPUT_FLAG = GSOCK_INPUT_FLAG,
+  wxSOCKET_OUTPUT_FLAG = GSOCK_OUTPUT_FLAG,
+  wxSOCKET_CONNECTION_FLAG = GSOCK_CONNECTION_FLAG,
+  wxSOCKET_LOST_FLAG = GSOCK_LOST_FLAG,
+};
+
+typedef GSocketEventFlags wxSocketEventFlags;
+
+typedef enum {
+  wxSOCKET_NOERROR = GSOCK_NOERROR,
+  wxSOCKET_INPOP = GSOCK_INVOP,
+  wxSOCKET_IOERR = GSOCK_IOERR,
+  wxSOCKET_INVADDR = GSOCK_INVADDR,
+  wxSOCKET_INVSOCK = GSOCK_INVSOCK,
+  wxSOCKET_NOHOST = GSOCK_NOHOST,
+  wxSOCKET_INVPORT = GSOCK_INVPORT,
+  wxSOCKET_WOULDBLOCK = GSOCK_WOULDBLOCK,
+  wxSOCKET_TIMEOUT = GSOCK_TIMEOUT,
+  wxSOCKET_MEMERR = GSOCK_MEMERR
+} wxSocketError;
+
+// ------------------------------------------------------------------------
+// wxSocket base
+// ------------------------------------------------------------------------
+
 class WXDLLEXPORT wxTimer;
 class WXDLLEXPORT wxSocketEvent;
 class WXDLLEXPORT wxSocketBase : public wxEvtHandler
@@ -45,7 +82,7 @@ public:
   // Type of request
 
   enum wxSockType { SOCK_CLIENT, SOCK_SERVER, SOCK_INTERNAL, SOCK_UNINIT };
-  typedef void (*wxSockCbk)(wxSocketBase& sock,GSocketEvent evt,char *cdata);
+  typedef void (*wxSockCbk)(wxSocketBase& sock,wxSocketNotify evt,char *cdata);
 
 protected:
   GSocket *m_socket;			// wxSocket socket
@@ -103,7 +140,7 @@ public:
   inline bool IsNoWait() const { return ((m_flags & NOWAIT) != 0); };
   bool IsData() const;
   inline size_t LastCount() const { return m_lcount; }
-  inline GSocketError LastError() const { return GSocket_GetError(m_socket); }
+  inline wxSocketError LastError() const { return (wxSocketError)GSocket_GetError(m_socket); }
   inline wxSockType GetType() const { return m_type; }
 
   void SetFlags(wxSockFlags _flags);
@@ -130,11 +167,11 @@ public:
   void SetEventHandler(wxEvtHandler& evt_hdlr, int id = -1);
 
   // Method called when it happens something on the socket
-  void SetNotify(GSocketEventFlags flags);
-  virtual void OnRequest(GSocketEvent req_evt);
+  void SetNotify(wxSocketEventFlags flags);
+  virtual void OnRequest(wxSocketNotify req_evt);
 
   // Public internal callback
-  virtual void OldOnNotify(GSocketEvent WXUNUSED(evt));
+  virtual void OldOnNotify(wxSocketNotify WXUNUSED(evt));
 
   // Some info on the socket...
   virtual bool GetPeer(wxSockAddress& addr_man) const;
@@ -144,9 +181,9 @@ public:
   void Notify(bool notify);
 
   // So you can know what the socket driver is looking for ...
-  inline GSocketEventFlags NeededReq() const { return m_neededreq; }
+  inline wxSocketEventFlags NeededReq() const { return m_neededreq; }
 
-  static GSocketEventFlags EventToNotify(GSocketEvent evt);
+  static wxSocketEventFlags EventToNotify(wxSocketNotify evt);
 
 protected:
   friend class wxSocketServer;
@@ -202,7 +239,7 @@ public:
 
   bool WaitOnConnect(long seconds = -1, long microseconds = 0);
 
-  virtual void OnRequest(GSocketEvent flags);
+  virtual void OnRequest(wxSocketNotify flags);
 };
 
 class WXDLLEXPORT wxSocketEvent : public wxEvent {
@@ -210,7 +247,7 @@ class WXDLLEXPORT wxSocketEvent : public wxEvent {
 public:
   wxSocketEvent(int id = 0);
 
-  GSocketEvent SocketEvent() const { return m_skevt; }
+  wxSocketNotify SocketEvent() const { return (wxSocketNotify)m_skevt; }
   wxSocketBase *Socket() const { return m_socket; }
 
   void CopyObject(wxObject& obj_d) const;

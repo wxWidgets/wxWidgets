@@ -281,7 +281,7 @@ void MyFrame::OnExecTest1(wxCommandEvent& WXUNUSED(evt))
 
   /* No 2 */
   sock->SetEventHandler(*this, SKDEMO_SCK);
-  sock->SetNotify(GSOCK_INPUT | GSOCK_LOST);
+  sock->SetNotify(GSOCK_INPUT_FLAG | GSOCK_LOST_FLAG);
   sock->Notify(TRUE);
 
   text_win->WriteText("Test 1B: sending bytes to the server\n");

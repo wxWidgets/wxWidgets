@@ -63,9 +63,9 @@ protected:
   friend class wxTCPServer;
   friend class wxTCPClient;
   friend void Client_OnRequest(wxSocketBase&,
-			       GSocketEvent, char *);
+			       wxSocketNotify, char *);
   friend void Server_OnRequest(wxSocketServer&,
-			       GSocketEvent, char *);
+			       wxSocketNotify, char *);
 public:
 
   wxTCPConnection(char *buffer, int size);

@@ -19,16 +19,10 @@ void _GSocket_GDK_Input(gpointer data, gint source, GdkInputCondition condition)
 {
   GSocket *socket = (GSocket *)data;
 
-  switch (condition) {
-  case GDK_INPUT_READ:
+  if (condition & GDK_INPUT_READ)
     _GSocket_Detected_Read(socket);
-    break;
-  case GDK_INPUT_WRITE:
+  if (condition & GDK_INPUT_WRITE)
     _GSocket_Detected_Write(socket);
-    break;
-  default:
-    break;
-  } 
 }
 
 void _GSocket_GUI_Init(GSocket *socket)
