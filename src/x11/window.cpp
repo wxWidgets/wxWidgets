@@ -127,15 +127,6 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
 
     parent->AddChild(this);
 
-    int w = size.GetWidth();
-    int h = size.GetHeight();
-    int x = size.GetX();
-    int y = size.GetY();
-    if (w == -1) w = 20;
-    if (h == -1) h = 20;
-    if (x == -1) x = 0;
-    if (y == -1) y = 0;
-
     Display *xdisplay = (Display*) wxGlobalDisplay();
     int xscreen = DefaultScreen( xdisplay );
     Visual *xvisual = DefaultVisual( xdisplay, xscreen );
@@ -156,17 +147,19 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
         xparent = (Window) parent->GetMainWindow();
     }
     
+    // Size (not including the border) must be nonzero (or a Value error results)!
+    // Note: The Xlib manual doesn't mention this restriction of XCreateWindow.
     wxSize size2(size);
-    if (size2.x == -1)
-	size2.x = 20;
-    if (size2.y == -1)
-	size2.y = 20;
+    if (size2.x <= 0)
+	    size2.x = 20;
+    if (size2.y <= 0)
+	    size2.y = 20;
 
     wxPoint pos2(pos);
     if (pos2.x == -1)
-	pos2.x = 0;
+	    pos2.x = 0;
     if (pos2.y == -1)
-	pos2.y = 0;
+	    pos2.y = 0;
     
 #if wxUSE_TWO_WINDOWS
     bool need_two_windows = 
@@ -242,18 +235,26 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
             pos2.y = 2;
             size2.x -= 4;
             size2.y -= 4;
-        } else
-        if (HasFlag( wxSIMPLE_BORDER ))
+        } 
+        else if (HasFlag( wxSIMPLE_BORDER ))
         {
             pos2.x = 1;
             pos2.y = 1;
             size2.x -= 2;
             size2.y -= 2;
-        } else
+        } 
+        else
         {
             pos2.x = 0;
             pos2.y = 0;
         }
+
+        // Make again sure the size is nonzero.
+        if (size2.x <= 0)
+            size2.x = 1;
+        if (size2.y <= 0)
+            size2.y = 1;
+
 #if wxUSE_NANOX        
         backColor = GR_RGB(m_backgroundColour.Red(), m_backgroundColour.Green(), m_backgroundColour.Blue());
         foreColor = GR_RGB(m_foregroundColour.Red(), m_foregroundColour.Green(), m_foregroundColour.Blue());
