@@ -9,7 +9,7 @@
         <wx-lib>xrc</wx-lib>
         <wx-lib>xml</wx-lib>
         <wx-lib>base</wx-lib>
-        <wx-lib>expat</wx-lib>
+        <ldlibs>$(EXTRALIBS_XML)</ldlibs>
         <install-to>$(BINDIR)</install-to>
     </exe>
 
