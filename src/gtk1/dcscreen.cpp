@@ -67,47 +67,19 @@ wxScreenDC::~wxScreenDC()
     EndDrawingOnTop();
 }
 
-bool wxScreenDC::StartDrawingOnTop( wxWindow *window )
+bool wxScreenDC::StartDrawingOnTop( wxWindow * )
 {
-    if (!window) return StartDrawingOnTop();
-
-    int x = 0;
-    int y = 0;
-    window->GetPosition( &x, &y );
-    int w = 0;
-    int h = 0;
-    window->GetSize( &w, &h );
-    window->ClientToScreen( &x, &y );
-
-    wxRect rect;
-    rect.x = x;
-    rect.y = y;
-    rect.width = 0;
-    rect.height = 0;
-
-    return StartDrawingOnTop( &rect );
+    return true;
 }
 
-bool wxScreenDC::StartDrawingOnTop( wxRect *rect )
+bool wxScreenDC::StartDrawingOnTop( wxRect * )
 {
-    int x = 0;
-    int y = 0;
-    int width = gdk_screen_width();
-    int height = gdk_screen_height();
-    if (rect)
-    {
-        x = rect->x;
-        y = rect->y;
-        width = rect->width;
-        height = rect->height;
-    }
-
-    return TRUE;
+    return true;
 }
 
 bool wxScreenDC::EndDrawingOnTop()
 {
-    return TRUE;
+    return true;
 }
 
 void wxScreenDC::DoGetSize(int *width, int *height) const
