@@ -93,6 +93,13 @@ void wxHtmlDCRenderer::SetHtmlText(const wxString& html, const wxString& basepat
 }
 
 
+void wxHtmlDCRenderer::SetFonts(wxString normal_face, wxString fixed_face,
+                                const int *sizes)
+{
+    m_Parser->SetFonts(normal_face, fixed_face, sizes);
+    if (m_DC == NULL && m_Cells != NULL) m_Cells->Layout(m_Width);
+}
+
 
 int wxHtmlDCRenderer::Render(int x, int y, int from, int dont_render)
 {
@@ -408,11 +415,18 @@ void wxHtmlPrintout::SetMargins(float top, float bottom, float left, float right
 
 
 
+void wxHtmlPrintout::SetFonts(wxString normal_face, wxString fixed_face,
+                              const int *sizes)
+{
+    m_Renderer->SetFonts(normal_face, fixed_face, sizes);
+    m_RendererHdr->SetFonts(normal_face, fixed_face, sizes);
+}
 
 
-//--------------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------
 // wxHtmlEasyPrinting
-//--------------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 
 wxHtmlEasyPrinting::wxHtmlEasyPrinting(const wxString& name, wxFrame *parent_frame)

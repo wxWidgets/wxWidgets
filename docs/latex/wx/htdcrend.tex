@@ -44,7 +44,18 @@ in pixels (you should set it to page width minus margins).
 the screen width is always 800 pixels: it gives best results and ensures (almost) same printed outputs
 across platforms and differently configured desktops.}
 
+\membersection{wxHtmlDCRenderer::SetFonts}\label{wxhtmldcrenderersetfonts}
+
+\func{void}{SetFonts}{\param{wxString }{normal\_face}, \param{wxString }{fixed\_face}, \param{const int }{*sizes = NULL}}
+
+Sets fonts. See \helpref{wxHtmlWindow::SetFonts}{wxhtmlwindowsetfonts} for
+detailed description.
+
 See also \helpref{SetSize}{wxhtmldcrenderersetsize}.
+
+\wxheading{Note}
+
+This method was added in wxWindows 2.4.1.
 
 \membersection{wxHtmlDCRenderer::SetSize}\label{wxhtmldcrenderersetsize}
 
