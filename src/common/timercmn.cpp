@@ -77,6 +77,10 @@
     #include <sys/timeb.h>
 #endif
 
+#ifdef __WXMAC__
+    #include <Timer.h>
+    #include <DriverServices.h>
+#endif
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -331,6 +335,22 @@ wxLongLong wxGetLocalTimeMillis()
     (void)ftime(&tp);
     val *= tp.time;
     return (val + tp.millitm);
+#elif defined(__WXMAC__)
+    
+    unsigned long secs ;
+    UInt64 gMilliAtStart = 0 ;
+    Nanoseconds upTime = AbsoluteToNanoseconds( UpTime() ) ;
+    if ( gMilliAtStart == 0 )
+    {
+        time_t start = time(NULL) ;
+        gMilliAtStart = ((UInt64) start) * 1000L ;
+        gMilliAtStart -= upTime.lo / 1000 ;
+        gMilliAtStart -= ( ( (UInt64) upTime.hi ) << 32 ) / 1000 ;
+    }
+    UInt64 millival = gMilliAtStart ;
+    millival += upTime.lo / 1000 ;
+    millival += ( ( (UInt64) upTime.hi ) << 32 ) / 1000 ;
+    return millival ;
 #else // no gettimeofday() nor ftime()
     // We use wxGetLocalTime() to get the seconds since
     // 00:00:00 Jan 1st 1970 and then whatever is available
