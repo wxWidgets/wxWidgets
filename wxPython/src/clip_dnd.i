@@ -427,6 +427,15 @@ public:
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 
+// flags for wxDropSource::DoDragDrop()
+//
+enum
+{
+    wxDrag_CopyOnly    = 0, // allow only copying
+    wxDrag_AllowMove   = 1, // allow moving (copying is always allowed)
+    wxDrag_DefaultMove = 3  // the default operation is move, not copy
+};
+
 enum wxDragResult
 {
     wxDragError,    // error prevented the d&d operation from completing
@@ -484,7 +493,7 @@ public:
     void SetData(wxDataObject& data);
     wxDataObject *GetDataObject();
     void SetCursor(wxDragResult res, const wxCursor& cursor);
-    wxDragResult DoDragDrop(int bAllowMove = FALSE);
+    wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);
 
     bool base_GiveFeedback(wxDragResult effect);
 };

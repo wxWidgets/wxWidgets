@@ -2149,6 +2149,93 @@ static PyObject *_wrap_wxSplitterWindow_GetMinimumPaneSize(PyObject *self, PyObj
     return _resultobj;
 }
 
+#define wxSplitterWindow_SizeWindows(_swigobj)  (_swigobj->SizeWindows())
+static PyObject *_wrap_wxSplitterWindow_SizeWindows(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSplitterWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSplitterWindow_SizeWindows",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSplitterWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSplitterWindow_SizeWindows. Expected _wxSplitterWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSplitterWindow_SizeWindows(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSplitterWindow_SetNeedUpdating(_swigobj,_swigarg0)  (_swigobj->SetNeedUpdating(_swigarg0))
+static PyObject *_wrap_wxSplitterWindow_SetNeedUpdating(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSplitterWindow * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","needUpdating", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxSplitterWindow_SetNeedUpdating",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSplitterWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSplitterWindow_SetNeedUpdating. Expected _wxSplitterWindow_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSplitterWindow_SetNeedUpdating(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSplitterWindow_GetNeedUpdating(_swigobj)  (_swigobj->GetNeedUpdating())
+static PyObject *_wrap_wxSplitterWindow_GetNeedUpdating(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxSplitterWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSplitterWindow_GetNeedUpdating",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSplitterWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSplitterWindow_GetNeedUpdating. Expected _wxSplitterWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxSplitterWindow_GetNeedUpdating(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxTaskBarIconTowxEvtHandler(void *ptr) {
     wxTaskBarIcon *src;
     wxEvtHandler *dest;
@@ -2397,6 +2484,9 @@ static PyMethodDef windows2cMethods[] = {
 	 { "wxTaskBarIcon_SetIcon", (PyCFunction) _wrap_wxTaskBarIcon_SetIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxTaskBarIcon", (PyCFunction) _wrap_delete_wxTaskBarIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxTaskBarIcon", (PyCFunction) _wrap_new_wxTaskBarIcon, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSplitterWindow_GetNeedUpdating", (PyCFunction) _wrap_wxSplitterWindow_GetNeedUpdating, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSplitterWindow_SetNeedUpdating", (PyCFunction) _wrap_wxSplitterWindow_SetNeedUpdating, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSplitterWindow_SizeWindows", (PyCFunction) _wrap_wxSplitterWindow_SizeWindows, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSplitterWindow_GetMinimumPaneSize", (PyCFunction) _wrap_wxSplitterWindow_GetMinimumPaneSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSplitterWindow_SetMinimumPaneSize", (PyCFunction) _wrap_wxSplitterWindow_SetMinimumPaneSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSplitterWindow_GetSashPosition", (PyCFunction) _wrap_wxSplitterWindow_GetSashPosition, METH_VARARGS | METH_KEYWORDS },

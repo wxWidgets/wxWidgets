@@ -57,7 +57,7 @@ public:
     void Rotate(double x, double y, double theta);
     bool LoadFromMetaFile(char* filename, double *width, double *height);
     void GetBounds(double *minX, double *minY, double *maxX, double *maxY);
-    void CalculateSize(wxDrawnShape* shape);
+    void CalculateSize(wxPyDrawnShape* shape);
 
     // ****  fix these...  is it even possible?  these are lists of various GDI opperations (not the objects...)
     // wxList& GetOutlineColours();

@@ -93,6 +93,7 @@ the image data.  (Patch #546009)
 
 
 
+
 2.3.2.1
 -------
 Changed (again) how the Python global interpreter lock is handled as

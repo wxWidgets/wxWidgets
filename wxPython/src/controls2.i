@@ -667,21 +667,11 @@ public:
     // to scroll. If in report view mode, y specifies the number of lines to scroll.
     bool ScrollList(int dx, int dy);
 
-    // bool SortItems(wxListCtrlCompare fn, long data);
-    %addmethods {
-        // Sort items.
-        // func is a function which takes 2 long arguments: item1, item2.
-        // item1 is the long data associated with a first item (NOT the index).
-        // item2 is the long data associated with a second item (NOT the index).
-        // The return value is a negative number if the first item should precede the second
-        // item, a positive number of the second item should precede the first,
-        // or zero if the two items are equivalent.
-        bool SortItems(PyObject* func) {
-            if (!PyCallable_Check(func))
-                return FALSE;
-            return self->SortItems(wxPyListCtrl_SortItems, (long)func);
-        }
-    }
+    void SetItemTextColour( long item, const wxColour& col);
+    wxColour GetItemTextColour( long item ) const;
+    void SetItemBackgroundColour( long item, const wxColour &col);
+    wxColour GetItemBackgroundColour( long item ) const;
+
 
     %pragma(python) addtoclass = "
     # Some helpers...
@@ -724,6 +714,23 @@ public:
                 self.SetStringItem(pos, i, str(entry[i]))
             return pos
     "
+
+
+    // bool SortItems(wxListCtrlCompare fn, long data);
+    %addmethods {
+        // Sort items.
+        // func is a function which takes 2 long arguments: item1, item2.
+        // item1 is the long data associated with a first item (NOT the index).
+        // item2 is the long data associated with a second item (NOT the index).
+        // The return value is a negative number if the first item should precede the second
+        // item, a positive number of the second item should precede the first,
+        // or zero if the two items are equivalent.
+        bool SortItems(PyObject* func) {
+            if (!PyCallable_Check(func))
+                return FALSE;
+            return self->SortItems(wxPyListCtrl_SortItems, (long)func);
+        }
+    }
 };
 
 

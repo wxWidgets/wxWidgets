@@ -219,6 +219,15 @@ class wxSplitterWindowPtr(wxWindowPtr):
     def GetMinimumPaneSize(self, *_args, **_kwargs):
         val = apply(windows2c.wxSplitterWindow_GetMinimumPaneSize,(self,) + _args, _kwargs)
         return val
+    def SizeWindows(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_SizeWindows,(self,) + _args, _kwargs)
+        return val
+    def SetNeedUpdating(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_SetNeedUpdating,(self,) + _args, _kwargs)
+        return val
+    def GetNeedUpdating(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_GetNeedUpdating,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxSplitterWindow instance at %s>" % (self.this,)
 class wxSplitterWindow(wxSplitterWindowPtr):

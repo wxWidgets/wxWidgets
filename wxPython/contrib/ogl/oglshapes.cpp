@@ -579,7 +579,7 @@ static PyObject *_wrap_wxPseudoMetaFile_GetBounds(PyObject *self, PyObject *args
 static PyObject *_wrap_wxPseudoMetaFile_CalculateSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPseudoMetaFile * _arg0;
-    wxDrawnShape * _arg1;
+    wxPyDrawnShape * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     char *_kwnames[] = { "self","shape", NULL };
@@ -596,8 +596,8 @@ static PyObject *_wrap_wxPseudoMetaFile_CalculateSize(PyObject *self, PyObject *
     }
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDrawnShape_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPseudoMetaFile_CalculateSize. Expected _wxDrawnShape_p.");
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPyDrawnShape_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPseudoMetaFile_CalculateSize. Expected _wxPyDrawnShape_p.");
         return NULL;
         }
     }

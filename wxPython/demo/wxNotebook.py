@@ -55,10 +55,19 @@ class TestNB(wxNotebook):
         self.AddPage(win, "INDIAN RED")
 
         EVT_NOTEBOOK_PAGE_CHANGED(self, self.GetId(), self.OnPageChanged)
+        EVT_NOTEBOOK_PAGE_CHANGING(self, self.GetId(), self.OnPageChanging)
 
 
     def OnPageChanged(self, event):
-        self.log.write('OnPageChanged\n')
+        old = event.GetOldSelection()
+        new = event.GetSelection()
+        self.log.write('OnPageChanged, old:%d, new:%d\n' % (old, new))
+        event.Skip()
+
+    def OnPageChanging(self, event):
+        old = event.GetOldSelection()
+        new = event.GetSelection()
+        self.log.write('OnPageChanging, old:%d, new:%d\n' % (old, new))
         event.Skip()
 
 

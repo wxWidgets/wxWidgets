@@ -251,6 +251,12 @@ public:
     void SetMinimumPaneSize(int min);
     int GetMinimumPaneSize();
 
+    // Resizes subwindows
+    virtual void SizeWindows();
+
+    void SetNeedUpdating(bool needUpdating) { m_needUpdating = needUpdating; }
+    bool GetNeedUpdating() const { return m_needUpdating ; }
+
 };
 
 //---------------------------------------------------------------------------
