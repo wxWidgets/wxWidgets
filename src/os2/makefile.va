@@ -573,7 +573,7 @@ HTMLLIBOBJS = \
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(NONESSENTIALOBJS) $(OS2OBJS)
 
 # Normal, static library
-all:  $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib jpeg xpm $(LIBTARGET)
+all:  $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib jpeg xpm tiff $(LIBTARGET)
 
 dirs: $(OS2DIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(HTMLDIR)\$D
 
@@ -1027,7 +1027,17 @@ clean_xpm:
     nmake -f makefile.va clean
     cd $(WXDIR)\src\os2
 
-clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_jpeg clean_xpm
+tiff:
+    cd $(WXDIR)\src\tiff
+    nmake -f makefile.va FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL)
+    cd $(WXDIR)\src\os2
+
+clean_tiff:
+    cd $(WXDIR)\src\tiff
+    nmake -f makefile.va clean
+    cd $(WXDIR)\src\os2
+
+clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_jpeg clean_xpm clean_tiff
         del      $(LIBTARGET)
 !if "$(WXMAKINGDLL)" == "1"
         erase /N ..\..\lib\wx200.lib

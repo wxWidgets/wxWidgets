@@ -27,6 +27,7 @@
 
 #if wxUSE_STATUSBAR
     #include "wx/statusbr.h"
+    #include "wx/generic/statusbr.h"
 #endif // wxUSE_STATUSBAR
 
 #if wxUSE_TOOLBAR
@@ -81,88 +82,126 @@ void wxFrame::Init()
 #if wxUSE_TOOLTIPS
     m_hwndToolTip = 0;
 #endif
-}
+    // Data to save/restore when calling ShowFullScreen
+    m_lFsStyle           = 0L;
+    m_lFsOldWindowStyle  = 0L;
+    m_nFsStatusBarFields = 0;
+    m_nFsStatusBarHeight = 0;
+    m_nFsToolBarHeight   = 0;
+    m_bFsIsMaximized     = FALSE;
+    m_bFsIsShowing       = FALSE;
+} // end of wxFrame::Init
 
-bool wxFrame::Create(wxWindow *parent,
-                     wxWindowID id,
-                     const wxString& title,
-                     const wxPoint& pos,
-                     const wxSize& size,
-                     long style,
-                     const wxString& name)
+bool wxFrame::Create(
+  wxWindow*                         pParent
+, wxWindowID                        vId
+, const wxString&                   rsTitle
+, const wxPoint&                    rPos
+, const wxSize&                     rSize
+, long                              lStyle
+, const wxString&                   rsName
+)
 {
-  SetName(name);
-  m_windowStyle = style;
-  m_frameMenuBar = NULL;
-  m_frameToolBar = NULL;
-  m_frameStatusBar = NULL;
+    int                             nX      = rPos.x;
+    int                             nY      = rPos.y;
+    int                             nWidth  = rSize.x;
+    int                             nHeight = rSize.y;
+    SWP                             vSwp;
 
-  SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
+    SetName(rsName);
+    m_windowStyle    = lStyle;
+    m_frameMenuBar   = NULL;
+    m_frameToolBar   = NULL;
+    m_frameStatusBar = NULL;
 
-  if ( id > -1 )
-    m_windowId = id;
-  else
-    m_windowId = (int)NewControlId();
+    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
 
-  if (parent) parent->AddChild(this);
+    if (vId > -1 )
+        m_windowId = vId;
+    else
+        m_windowId = (int)NewControlId();
 
-  int x = pos.x;
-  int y = pos.y;
-  int width = size.x;
-  int height = size.y;
+    if (pParent) 
+        pParent->AddChild(this);
 
-  m_iconized = FALSE;
+    m_bIconized = FALSE;
 
-  // we pass NULL as parent to MSWCreate because frames with parents behave
-  // very strangely under Win95 shell
-  // Alteration by JACS: keep normal Windows behaviour (float on top of parent)
-  // with this style.
-  if ((m_windowStyle & wxFRAME_FLOAT_ON_PARENT) == 0)
-    parent = NULL;
+    //
+    // We pass NULL as parent to MSWCreate because frames with parents behave
+    // very strangely under Win95 shell. 
+    // Alteration by JACS: keep normal Windows behaviour (float on top of parent)
+    // with this style.
+    //
+    if ((m_windowStyle & wxFRAME_FLOAT_ON_PARENT) == 0)
+        pParent = NULL;
 
-  if (!parent)
-    wxTopLevelWindows.Append(this);
+    if (!pParent)
+        wxTopLevelWindows.Append(this);
 
-  OS2Create(m_windowId, parent, wxFrameClassName, this, title,
-            x, y, width, height, style);
+    OS2Create( m_windowId
+              ,pParent
+              ,wxFrameClassName
+              ,this
+              ,rsTitle
+              ,nX
+              ,nY
+              ,nWidth
+              ,nHeight
+              ,lStyle
+             );
 
-  wxModelessWindows.Append(this);
-  return TRUE;
-}
+    wxModelessWindows.Append(this);
+    return TRUE;
+} // end of wxFrame::Create
 
 wxFrame::~wxFrame()
 {
-  m_isBeingDeleted = TRUE;
-  wxTopLevelWindows.DeleteObject(this);
+    m_isBeingDeleted = TRUE;
+    wxTopLevelWindows.DeleteObject(this);
 
-// TODO:
-/*
-  DeleteAllBars();
+    DeleteAllBars();
 
-  if (wxTheApp && (wxTopLevelWindows.Number() == 0))
-  {
-    wxTheApp->SetTopWindow(NULL);
-
-    if (wxTheApp->GetExitOnFrameDelete())
+    if (wxTheApp && (wxTopLevelWindows.Number() == 0))
     {
-       PostQuitMessage(0);
+        wxTheApp->SetTopWindow(NULL);
+
+        if (wxTheApp->GetExitOnFrameDelete())
+        {
+            ::WinPostMsg(m_hwnd, WM_QUIT, 0, 0);
+        }
     }
-  }
+    wxModelessWindows.DeleteObject(this);
 
-  wxModelessWindows.DeleteObject(this);
+    //
+    // For some reason, wxWindows can activate another task altogether
+    // when a frame is destroyed after a modal dialog has been invoked.
+    // Try to bring the parent to the top.
+    //
+    // MT:Only do this if this frame is currently the active window, else weird
+    // things start to happen.
+    //
+    if (wxGetActiveWindow() == this)
+    {
+        if (GetParent() && GetParent()->GetHWND())
+        {
+            ::WinQueryWindowPos( (HWND) GetParent()->GetHWND()
+                                ,&vSwp
+                               );
+            ::WinSetWindowPos( (HWND) GetParent()->GetHWND()
+                              ,HWND_TOP
+                              ,vSwp.x
+                              ,vSwp.y
+                              ,vSwp.cx
+                              ,vSwp,cy
+                              ,SWP_ACTIVATE | SWP_MOVE | SWP_SIZE | SWP_SHOW
+                             );
+        }
+    }
+} // end of wxFrame::~wxFrame
 
-  // For some reason, wxWindows can activate another task altogether
-  // when a frame is destroyed after a modal dialog has been invoked.
-  // Try to bring the parent to the top.
-  // MT:Only do this if this frame is currently the active window, else weird
-  // things start to happen
-  if ( wxGetActiveWindow() == this )
-  if (GetParent() && GetParent()->GetHWND())
-    ::BringWindowToTop((HWND) GetParent()->GetHWND());
-*/
-}
-
+//
 // Get size *available for subwindows* i.e. excluding menu bar, toolbar etc.
+//
 void wxFrame::DoGetClientSize(int *x, int *y) const
 {
 // TODO:
