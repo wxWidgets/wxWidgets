@@ -41,7 +41,11 @@
 */
 
 #include <MacTypes.h>
+#if !TARGET_CARBON
 #include <Traps.h>
+#include <FSM.h>
+#include <Disks.h>
+#endif
 #include <OSUtils.h>
 #include <MacErrors.h>
 #include <MacMemory.h>
@@ -49,8 +53,6 @@
 #include <Devices.h>
 #include <Finder.h>
 #include <Folders.h>
-#include <FSM.h>
-#include <Disks.h>
 #include <Gestalt.h>
 #include <TextUtils.h>
 #include <Script.h>
