@@ -198,8 +198,7 @@ in by default.
 
 The --inplace flag allows wx-config to be used from the wxWindows
 build directory and output flags to use the uninstalled version of
-the headers and libs in the build directory.  (Currently configure
-must be invoked via a full path name for this to work correctly.)
+the headers and libs in the build directory.
 
 EOF
 
