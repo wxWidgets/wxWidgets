@@ -163,7 +163,7 @@ void wxListBox::AppendCommon( const wxString &item )
 
     ConnectWidget( list_item );
 
-    ConnectDnDWidget( list_item );
+    if (m_dropTarget) m_dropTarget->RegisterWidget( list_item );
 }
 
 void wxListBox::Append( const wxString &item )
@@ -481,20 +481,26 @@ void wxListBox::SetDropTarget( wxDropTarget *dropTarget )
 {
     wxCHECK_RET( m_list != NULL, "invalid listbox" );
   
-    GList *child = m_list->children;
-    while (child)
+    if (m_dropTarget)
     {
-        DisconnectDnDWidget( GTK_WIDGET( child->data ) );
-        child = child->next;
+        GList *child = m_list->children;
+        while (child)
+        {
+	    m_dropTarget->UnregisterWidget( GTK_WIDGET( child->data ) );
+            child = child->next;
+        }
     }
 
     wxWindow::SetDropTarget( dropTarget  );
 
-    child = m_list->children;
-    while (child)
+    if (m_dropTarget)
     {
-        ConnectDnDWidget( GTK_WIDGET( child->data ) );
-        child = child->next;
+        GList *child = m_list->children;
+        while (child)
+        {
+	    m_dropTarget->RegisterWidget( GTK_WIDGET( child->data ) );
+            child = child->next;
+        }
     }
 }
 

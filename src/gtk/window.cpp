@@ -110,16 +110,6 @@
 */
 
 //-----------------------------------------------------------------------------
-// cond comp
-//-----------------------------------------------------------------------------
-
-#if (GTK_MINOR_VERSION == 1)
-#if (GTK_MICRO_VERSION >= 3)
-#define NEW_GTK_DND_CODE
-#endif
-#endif
-
-//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
@@ -852,39 +842,6 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget, GdkEventBut
     return FALSE;
 }
 
-
-#ifdef NEW_GTK_DND_CODE
-
-#else
-
-//-----------------------------------------------------------------------------
-// "drop_data_available_event"
-//-----------------------------------------------------------------------------
-
-static void gtk_window_drop_callback( GtkWidget *widget, GdkEventDropDataAvailable *event, wxWindow *win )
-{
-    if (!win->HasVMT()) return;
-
-    if (win->GetDropTarget())
-    {
-        int x = 0;
-        int y = 0;
-        gdk_window_get_pointer( widget->window, &x, &y, (GdkModifierType *) NULL );
-
-        printf( "Drop data is of type %s.\n", event->data_type );
-  
-        win->GetDropTarget()->OnDrop( x, y, (const void*)event->data, (size_t)event->data_numbytes );
-  }
-
-/*
-  g_free (event->dropdataavailable.data);
-  g_free (event->dropdataavailable.data_type);
-*/
-}
-
-#endif
-       // NEW_GTK_DND_CODE
-
 //-----------------------------------------------------------------------------
 // InsertChild for wxWindow.
 //-----------------------------------------------------------------------------
@@ -999,7 +956,6 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
     PreCreation( parent, id, pos, size, style, name );
 
     m_widget = gtk_scrolled_window_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
-    m_hasScrolling = TRUE;
 
     GtkScrolledWindow *s_window = GTK_SCROLLED_WINDOW(m_widget);
 
@@ -2207,51 +2163,17 @@ void wxWindow::SetDropTarget( wxDropTarget *dropTarget )
 
   GtkWidget *dnd_widget = GetConnectWidget();
 
-  DisconnectDnDWidget( dnd_widget );
+  if (m_dropTarget) m_dropTarget->UnregisterWidget( dnd_widget );
 
   if (m_dropTarget) delete m_dropTarget;
   m_dropTarget = dropTarget;
 
-  ConnectDnDWidget( dnd_widget );
+  if (m_dropTarget) m_dropTarget->RegisterWidget( dnd_widget );
 }
 
 wxDropTarget *wxWindow::GetDropTarget() const
 {
   return m_dropTarget;
-}
-
-void wxWindow::ConnectDnDWidget( GtkWidget *widget )
-{
-  if (!m_dropTarget) return;
-
-  m_dropTarget->RegisterWidget( widget );
-
-#ifdef NEW_GTK_DND_CODE
-
-#else
-
-  gtk_signal_connect( GTK_OBJECT(widget), "drop_data_available_event",
-    GTK_SIGNAL_FUNC(gtk_window_drop_callback), (gpointer)this );
-    
-#endif
-    
-}
-
-void wxWindow::DisconnectDnDWidget( GtkWidget *widget )
-{
-  if (!m_dropTarget) return;
-
-#ifdef NEW_GTK_DND_CODE
-
-#else
-
-  gtk_signal_disconnect_by_func( GTK_OBJECT(widget),
-    GTK_SIGNAL_FUNC(gtk_window_drop_callback), (gpointer)this );
-
-  m_dropTarget->UnregisterWidget( widget );
-  
-#endif
-
 }
 
 GtkWidget* wxWindow::GetConnectWidget()
@@ -2394,6 +2316,8 @@ void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
   wxASSERT_MSG( (m_wxwindow != NULL), "window needs client area" );
 
   if (!m_wxwindow) return;
+  
+  m_hasScrolling = TRUE;
 
   if (orient == wxHORIZONTAL)
   {

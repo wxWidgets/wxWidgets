@@ -280,8 +280,6 @@ public:
   virtual GtkWidget  *GetConnectWidget();
   virtual bool        IsOwnGtkWindow( GdkWindow *window );
           void        ConnectWidget( GtkWidget *widget );
-          void        ConnectDnDWidget( GtkWidget *widget );
-          void        DisconnectDnDWidget( GtkWidget *widget );
   
           bool        HasVMT();
   

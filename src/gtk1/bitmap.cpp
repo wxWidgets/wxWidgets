@@ -227,33 +227,21 @@ bool wxBitmap::Ok(void) const
   
 int wxBitmap::GetHeight(void) const
 {
-    if (!Ok())
-    {
-        wxFAIL_MSG( "invalid bitmap" );
-        return -1;
-    }
+    wxCHECK_MSG( Ok(), -1, "invalid bitmap" );
 
     return M_BMPDATA->m_height;
 }
 
 int wxBitmap::GetWidth(void) const
 {
-    if (!Ok())
-    {
-        wxFAIL_MSG( "invalid bitmap" );
-        return -1;
-    }
+    wxCHECK_MSG( Ok(), -1, "invalid bitmap" );
   
     return M_BMPDATA->m_width;
 }
 
 int wxBitmap::GetDepth(void) const
 {
-    if (!Ok())
-    {
-        wxFAIL_MSG( "invalid bitmap" );
-        return -1;
-    }
+    wxCHECK_MSG( Ok(), -1, "invalid bitmap" );
   
     return M_BMPDATA->m_bpp;
 }
@@ -287,22 +275,14 @@ void wxBitmap::SetDepth( int depth )
 
 wxMask *wxBitmap::GetMask(void) const
 {
-    if (!Ok())
-    {
-        wxFAIL_MSG( "invalid bitmap" );
-        return (wxMask *) NULL;
-    }
+    wxCHECK_MSG( Ok(), (wxMask *) NULL, "invalid bitmap" );
   
     return M_BMPDATA->m_mask;
 }
 
 void wxBitmap::SetMask( wxMask *mask )
 {
-    if (!Ok())
-    {
-        wxFAIL_MSG( "invalid bitmap" );
-        return;
-    }
+    wxCHECK_RET( Ok(), "invalid bitmap" );
   
     if (M_BMPDATA->m_mask) delete M_BMPDATA->m_mask;
   
@@ -311,11 +291,7 @@ void wxBitmap::SetMask( wxMask *mask )
 
 bool wxBitmap::SaveFile( const wxString &name, int type, wxPalette *WXUNUSED(palette) )
 {
-    if (!Ok())
-    {
-        wxFAIL_MSG( "invalid bitmap" );
-        return FALSE;
-    }
+    wxCHECK_MSG( Ok(), FALSE, "invalid bitmap" );
   
     if (type == wxBITMAP_TYPE_PNG)
     {
@@ -371,27 +347,20 @@ bool wxBitmap::LoadFile( const wxString &name, int type )
 wxPalette *wxBitmap::GetPalette(void) const
 {
     if (!Ok()) return (wxPalette *) NULL;
+    
     return M_BMPDATA->m_palette;
 }
 
 GdkPixmap *wxBitmap::GetPixmap(void) const
 {
-    if (!Ok())
-    {
-        wxFAIL_MSG( "invalid bitmap" );
-        return (GdkPixmap *) NULL;
-    }
+    wxCHECK_MSG( Ok(), (GdkPixmap *) NULL, "invalid bitmap" );
   
     return M_BMPDATA->m_pixmap;
 }
   
 GdkBitmap *wxBitmap::GetBitmap(void) const
 {
-    if (!Ok())
-    {
-      wxFAIL_MSG( "invalid bitmap" );
-      return (GdkBitmap *) NULL;
-    }
+    wxCHECK_MSG( Ok(), (GdkBitmap *) NULL, "invalid bitmap" );
   
     return M_BMPDATA->m_bitmap;
 }
@@ -561,11 +530,7 @@ wxImage wxBitmap::ConvertToImage() const
 {
     wxImage image;
 
-    if (!Ok())
-    {
-        wxFAIL_MSG( "invalid bitmap" );
-        return image;
-    }
+    wxCHECK_MSG( Ok(), image, "invalid bitmap" );
   
     GdkImage *gdk_image = gdk_image_get( M_BMPDATA->m_pixmap, 0, 0, M_BMPDATA->m_width, M_BMPDATA->m_height );
   
