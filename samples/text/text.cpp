@@ -772,7 +772,7 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
                         line, column,
                         (long) GetNumberOfLines(),
                         (long) GetLineLength(line),
-                        GetValue().length(),
+                        (unsigned int) GetValue().length(),
                         GetLastPosition());
 
                 long from, to;
@@ -782,7 +782,8 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
 
                 wxLogMessage(_T("Selection: from %ld to %ld."), from, to);
                 wxLogMessage(_T("Selection = '%s' (len = %u)"),
-                             sel.c_str(), sel.length());
+                             sel.c_str(), 
+							 (unsigned int) sel.length());
             }
             break;
 
