@@ -177,11 +177,6 @@ public:
         // convert to native long long
     wxLongLong_t GetValue() const { return m_ll; }
 
-        // implicit conversion for times when we want a native type
-        // or wxLongLong, NOT wxLongLongNative and without having
-        // to ifdef user code for each use.
-    operator wxLongLong_t() const { return m_ll; }
-
         // convert to long with range checking in the debug mode (only!)
     long ToLong() const
     {
@@ -382,10 +377,6 @@ public:
 
         return (unsigned long)m_ll;
     }
-
-    // don't provide implicit conversion to unsigned wxLongLong_t or we
-    // will have an ambiguity for all arithmetic operations
-    //operator wxULongLong_t() const { return m_ll; }
 
     // operations
         // addition
@@ -786,7 +777,7 @@ public:
         // convert to long with range checking in the debug mode (only!)
     unsigned long ToULong() const
     {
-        wxASSERT_MSG( (m_hi == 0l),
+        wxASSERT_MSG( m_hi == 0ul,
                       _T("wxULongLong to long conversion loss of precision") );
 
         return (unsigned long)m_lo;
@@ -805,7 +796,7 @@ public:
         // post increment operator
     wxULongLongWx& operator++(int) { return ++(*this); }
 
-        // subraction
+        // subraction (FIXME: should return wxLongLong)
     wxULongLongWx operator-(const wxULongLongWx& ll) const;
     wxULongLongWx& operator-=(const wxULongLongWx& ll);
 
@@ -903,30 +894,31 @@ private:
 // ----------------------------------------------------------------------------
 
 inline bool operator<(long l, const wxLongLong& ll) { return ll > l; }
-inline bool operator>(long l, const wxLongLong& ll) { return ll > l; }
-inline bool operator<=(long l, const wxLongLong& ll) { return ll > l; }
-inline bool operator>=(long l, const wxLongLong& ll) { return ll > l; }
-inline bool operator==(long l, const wxLongLong& ll) { return ll > l; }
-inline bool operator!=(long l, const wxLongLong& ll) { return ll > l; }
+inline bool operator>(long l, const wxLongLong& ll) { return ll < l; }
+inline bool operator<=(long l, const wxLongLong& ll) { return ll >= l; }
+inline bool operator>=(long l, const wxLongLong& ll) { return ll <= l; }
+inline bool operator==(long l, const wxLongLong& ll) { return ll == l; }
+inline bool operator!=(long l, const wxLongLong& ll) { return ll != l; }
 
-inline wxLongLong operator+(long l, const wxLongLong& ll)
-{
-    return ll + wxLongLong(l);
-}
-
+inline wxLongLong operator+(long l, const wxLongLong& ll) { return ll + l; }
 inline wxLongLong operator-(long l, const wxLongLong& ll)
 {
-    return ll - wxLongLong(l);
+    return wxLongLong(l) - ll;
 }
 
-inline bool operator<(unsigned long l, const wxULongLong& ll) { return ll > l; }
-inline bool operator>(unsigned long l, const wxULongLong& ll) { return ll > l; }
-inline bool operator<=(unsigned long l, const wxULongLong& ll) { return ll > l; }
-inline bool operator>=(unsigned long l, const wxULongLong& ll) { return ll > l; }
-inline bool operator==(unsigned long l, const wxULongLong& ll) { return ll > l; }
-inline bool operator!=(unsigned long l, const wxULongLong& ll) { return ll > l; }
+inline bool operator<(unsigned long l, const wxULongLong& ull) { return ull > l; }
+inline bool operator>(unsigned long l, const wxULongLong& ull) { return ull < l; }
+inline bool operator<=(unsigned long l, const wxULongLong& ull) { return ull >= l; }
+inline bool operator>=(unsigned long l, const wxULongLong& ull) { return ull <= l; }
+inline bool operator==(unsigned long l, const wxULongLong& ull) { return ull == l; }
+inline bool operator!=(unsigned long l, const wxULongLong& ull) { return ull != l; }
 
-inline wxULongLong operator+(unsigned long l, const wxULongLong& ll) { return ll + l; }
-inline wxULongLong operator-(unsigned long l, const wxULongLong& ll) { return ll - l; }
+inline wxULongLong operator+(unsigned long l, const wxULongLong& ull) { return ull + l; }
+
+// FIXME: this should return wxLongLong
+inline wxULongLong operator-(unsigned long l, const wxULongLong& ull)
+{
+    return wxULongLong(l) - ull;
+}
 
 #endif // _WX_LONGLONG_H
