@@ -188,7 +188,16 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
                  long style)
     : wxFrame((wxWindow *) NULL, wxID_ANY, title, pos, size, style)
 {
+#if wxUSE_NOTEBOOK
     m_type = ID_BOOK_NOTEBOOK;
+#elif wxUSE_CHOICEBOOK
+    m_type = ID_BOOK_CHOICEBOOK;
+#elif wxUSE_LISTBOOK
+    m_type = ID_BOOK_LISTBOOK;
+#elif
+    #error "Don't use Notebook sample without any book enabled in wxWidgets build!"
+#endif
+
     m_orient = ID_ORIENT_DEFAULT;
     m_chkShowImages = true;
     m_multi = false;
@@ -205,6 +214,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
 #if wxUSE_CHOICEBOOK
     menuType->AppendRadioItem(ID_BOOK_CHOICEBOOK, wxT("&Choicebook\tCtrl-3"));
 #endif
+    menuType->Check(m_type, true);
 
     wxMenu *menuOrient = new wxMenu;
     menuOrient->AppendRadioItem(ID_ORIENT_DEFAULT, wxT("&Default\tCtrl-4"));
