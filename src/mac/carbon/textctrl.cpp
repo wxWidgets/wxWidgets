@@ -174,6 +174,7 @@ OSStatus MLTESetObjectVisibility( STPTextPaneVars *varsp, Boolean vis , long wxS
         Rect bounds ;
         UMAGetControlBoundsInWindowCoords( varsp->fUserPaneRec, &bounds);
         TPCalculateBounds( varsp , bounds ) ;
+        wxMacWindowClipper cl(textctrl) ;
         TXNSetFrameBounds( varsp->fTXNRec, varsp->fRTextArea.top, varsp->fRTextArea.left,
             varsp->fRTextArea.bottom, varsp->fRTextArea.right, varsp->fTXNFrame);
         TXNShowSelection( varsp->fTXNRec, kTXNShowStart);
@@ -205,6 +206,7 @@ static void TPUpdateVisibility(ControlRef theControl) {
         // we only recalculate when visible, otherwise scrollbars get drawn at incorrect places
         if ( varsp->fVisible )
         {
+            wxMacWindowClipper cl(textctrl) ;
             TXNSetFrameBounds( varsp->fTXNRec, varsp->fRTextArea.top, varsp->fRTextArea.left,
                 varsp->fRTextArea.bottom, varsp->fRTextArea.right, varsp->fTXNFrame);
         }
@@ -602,13 +604,12 @@ OSStatus mUPOpenControl(STPTextPaneVars* &handle, ControlRef theControl, long wx
     int toptag = 2 ;
 #if TARGET_API_MAC_OSX
     iControlTags[2] = kTXNVisibilityTag ;
-    iControlData[2].uValue = false ;
+    iControlData[2].uValue = varsp->fVisible ;
     toptag++ ;
 #endif        
-    iControlData[1].uValue = varsp->fVisible ;
     
     if ( (wxStyle & wxTE_MULTILINE) && (wxStyle & wxTE_DONTWRAP) )
-        iControlData[2].uValue = kTXNNoAutoWrap ;
+        iControlData[1].uValue = kTXNNoAutoWrap ;
 
     verify_noerr( TXNSetTXNObjectControls( varsp->fTXNRec, false, toptag,
                                         iControlTags, iControlData )) ;
