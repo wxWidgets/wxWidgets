@@ -7,9 +7,9 @@ class wxDDEClient;
 class wxDDEServer;
 class wxDDEConnection;
 
-WX_DECLARE_LIST(wxDDEClient, wxDDEClientList);
-WX_DECLARE_LIST(wxDDEServer, wxDDEServerList);
-WX_DECLARE_LIST(wxDDEConnection, wxDDEConnectionList);
+WX_DECLARE_EXPORTED_LIST(wxDDEClient, wxDDEClientList);
+WX_DECLARE_EXPORTED_LIST(wxDDEServer, wxDDEServerList);
+WX_DECLARE_EXPORTED_LIST(wxDDEConnection, wxDDEConnectionList);
 
 
 #if defined(__WXMSW__)

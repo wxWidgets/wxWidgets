@@ -23,7 +23,7 @@
 
 class wxTaskBarIcon;
 
-WX_DECLARE_LIST(wxTaskBarIcon, wxTaskBarIconList);
+WX_DECLARE_EXPORTED_LIST(wxTaskBarIcon, wxTaskBarIconList);
 
 class WXDLLEXPORT wxTaskBarIcon: public wxEvtHandler {
     DECLARE_DYNAMIC_CLASS(wxTaskBarIcon)
