@@ -3007,17 +3007,22 @@ static PyObject *_wrap_wxColour_Get(PyObject *self, PyObject *args, PyObject *kw
     return _resultobj;
 }
 
-static bool  wxColour___eq__(wxColour *self,const wxColour & o) { return *self == o; }
+static bool  wxColour___eq__(wxColour *self,PyObject * obj) {
+            wxColour  tmp;
+            wxColour* ptr = &tmp;
+            if (obj == Py_None)                 return FALSE;
+            if (! wxColour_helper(obj, &ptr))   return FALSE;
+            return *self == *ptr;
+        }
 static PyObject *_wrap_wxColour___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxColour * _arg0;
-    wxColour * _arg1;
+    PyObject * _arg1;
     wxColour  temp;
     PyObject * _obj0 = 0;
-    wxColour  temp0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","o", NULL };
+    char *_kwnames[] = { "self","obj", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxColour___eq__",_kwnames,&_obj0,&_obj1)) 
@@ -3028,13 +3033,11 @@ static PyObject *_wrap_wxColour___eq__(PyObject *self, PyObject *args, PyObject 
         return NULL;
 }
 {
-    _arg1 = &temp0;
-    if (! wxColour_helper(_obj1, &_arg1))
-        return NULL;
+  _arg1 = _obj1;
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxColour___eq__(_arg0,*_arg1);
+    _result = (bool )wxColour___eq__(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -3042,17 +3045,22 @@ static PyObject *_wrap_wxColour___eq__(PyObject *self, PyObject *args, PyObject 
     return _resultobj;
 }
 
-static bool  wxColour___ne__(wxColour *self,const wxColour & o) { return *self != o; }
+static bool  wxColour___ne__(wxColour *self,PyObject * obj) {
+            wxColour  tmp;
+            wxColour* ptr = &tmp;
+            if (obj == Py_None)                 return TRUE;
+            if (! wxColour_helper(obj, &ptr))   return TRUE;
+            return *self != *ptr;
+        }
 static PyObject *_wrap_wxColour___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxColour * _arg0;
-    wxColour * _arg1;
+    PyObject * _arg1;
     wxColour  temp;
     PyObject * _obj0 = 0;
-    wxColour  temp0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","o", NULL };
+    char *_kwnames[] = { "self","obj", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxColour___ne__",_kwnames,&_obj0,&_obj1)) 
@@ -3063,13 +3071,11 @@ static PyObject *_wrap_wxColour___ne__(PyObject *self, PyObject *args, PyObject 
         return NULL;
 }
 {
-    _arg1 = &temp0;
-    if (! wxColour_helper(_obj1, &_arg1))
-        return NULL;
+  _arg1 = _obj1;
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxColour___ne__(_arg0,*_arg1);
+    _result = (bool )wxColour___ne__(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
