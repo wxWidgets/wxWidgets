@@ -205,40 +205,12 @@ private:
 // event types and macros for them
 // ----------------------------------------------------------------------------
 
-#if defined(__BORLANDC__) && defined(__WIN16__)
-    // For 16-bit BC++, these 2 would be identical otherwise (truncated)
-    #define wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED wxEVT_COMMAND_NB_PAGE_CHANGED
-    #define wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING wxEVT_COMMAND_NB_PAGE_CHANGING
-#endif
-
 BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, 802)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, 803)
 END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
-
-// Truncation in 16-bit BC++ means we need to define these differently
-#if defined(__BORLANDC__) && defined(__WIN16__)
-#define EVT_NOTEBOOK_PAGE_CHANGED(id, fn)                                   \
-  DECLARE_EVENT_TABLE_ENTRY(                                                \
-    wxEVT_COMMAND_NB_PAGE_CHANGED,                                          \
-    id,                                                                     \
-    -1,                                                                     \
-    (wxObjectEventFunction)(wxEventFunction)(wxNotebookEventFunction) &fn,  \
-    NULL                                                                    \
-  ),
-
-#define EVT_NOTEBOOK_PAGE_CHANGING(id, fn)                                  \
-  DECLARE_EVENT_TABLE_ENTRY(                                                \
-    wxEVT_COMMAND_NB_PAGE_CHANGING,                                         \
-    id,                                                                     \
-    -1,                                                                     \
-    (wxObjectEventFunction)(wxEventFunction)(wxNotebookEventFunction) &fn,  \
-    NULL                                                                    \
-  ),
-
-#else
 
 #define EVT_NOTEBOOK_PAGE_CHANGED(id, fn)                                   \
   DECLARE_EVENT_TABLE_ENTRY(                                                \
@@ -258,8 +230,6 @@ typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
     NULL                                                                    \
   ),
 
-#endif
-
 // ----------------------------------------------------------------------------
 // wxNotebook class itself
 // ----------------------------------------------------------------------------
@@ -267,11 +237,7 @@ typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/notebook.h"
 #elif defined(__WXMSW__)
-    #ifdef __WIN16__
-        #include  "wx/generic/notebook.h"
-    #else
-        #include  "wx/msw/notebook.h"
-    #endif
+    #include  "wx/msw/notebook.h"
 #elif defined(__WXMOTIF__)
     #include  "wx/generic/notebook.h"
 #elif defined(__WXGTK__)
