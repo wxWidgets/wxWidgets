@@ -354,15 +354,16 @@ def find_DLLs():
 
 #----------------------------------------------------------------------
 
+locale_template = 'Source: "%s";  DestDir: "{app}\%s"; Components: core'
+
 def build_locale_string():
-    template = 'Source: "%s";  DestDir: "{app}\%s"; Components: core'
     stringlst = []
 
     def walk_helper(lst, dirname, files):
         for f in files:
             filename = os.path.join(dirname, f)
             if not os.path.isdir(filename):
-                lst.append( template % (filename, dirname) )
+                lst.append( locale_template % (filename, dirname) )
 
     os.path.walk('wxPython\\locale', walk_helper, stringlst)
     return '\n'.join(stringlst)

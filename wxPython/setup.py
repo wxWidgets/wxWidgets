@@ -753,6 +753,7 @@ if BUILD_STC:
             msg('Running gen_iface.py, regenerating stc.h and stc.cpp...')
             cwd = os.getcwd()
             os.chdir(opj(CTRB_SRC, 'stc'))
+            sys.path.insert(0, os.curdir)
             import gen_iface
             gen_iface.main([])
             os.chdir(cwd)

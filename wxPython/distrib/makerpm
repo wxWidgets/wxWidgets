@@ -129,6 +129,7 @@ if [ -z "${skipcvs}" ]; then
     if [ -e ${tarver} ]; then
 	rm -rf ${tarver}
     fi
+    echo cvs -d ${cvsroot} export -r ${cvs_tag} -d ${tarver} wxWindows
     cvs -d ${cvsroot} export -r ${cvs_tag} -d ${tarver} wxWindows > /dev/null 2>&1
     if [ "$?" != "0" ]; then
 	echo "*** CVS failure, exiting."
