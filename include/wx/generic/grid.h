@@ -631,6 +631,9 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
     
     // ------ grid cursor movement functions
     //
+    void SetGridCursor( int row, int col )
+        { SelectCell( wxGridCellCoords(row, col) ); }
+
     bool MoveCursorUp();
     bool MoveCursorDown();
     bool MoveCursorLeft();
