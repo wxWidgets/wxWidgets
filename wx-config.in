@@ -100,7 +100,7 @@ while test $# -gt 0; do
       fi
 
       if test $static_flag = yes ; then
-          echo "-static $libs @LDFLAGS@ @WXCONFIG_LIBS@ @LIBS@ @DMALLOC_LIBS@"
+          echo "$libs @LDFLAGS@ @WXCONFIG_LIBS@ @LIBS@ @DMALLOC_LIBS@"
       else
           echo $libs @LDFLAGS@ @WXCONFIG_LIBS@ @DMALLOC_LIBS@
       fi
