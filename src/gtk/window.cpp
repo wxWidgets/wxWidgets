@@ -631,25 +631,6 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     
     key_code = map_to_wx_keysym( gdk_event->keyval );
 
-    /* wxMSW doesn't send char events with Alt pressed */
-    if ((key_code != 0) &&
-        ((gdk_event->state & GDK_MOD1_MASK) == 0) &&
-        ((gdk_event->state & GDK_MOD2_MASK) == 0))
-    {
-        wxKeyEvent event2( wxEVT_CHAR );                 
-        event2.SetTimestamp( gdk_event->time );
-        event2.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
-        event2.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
-//        event2.m_altDown = (gdk_event->state & GDK_MOD1_MASK);
-//        event2.m_metaDown = (gdk_event->state & GDK_MOD2_MASK);
-        event2.m_keyCode = key_code;
-        event2.m_scanCode = gdk_event->keyval;
-        event2.m_x = x;
-        event2.m_y = y;
-        event2.SetEventObject( win );
-        ret = (ret || win->GetEventHandler()->ProcessEvent( event2 ));
-    }
-
 #if wxUSE_ACCEL
     if (!ret)
     {
@@ -667,6 +648,25 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
         }
     }
 #endif // wxUSE_ACCEL
+    /* wxMSW doesn't send char events with Alt pressed */
+    /* Only send wxEVT_CHAR event if not processed yet. Thus, ALT-x
+       will only be sent if it is not a menu accelerator. */
+    if ((key_code != 0) && ! ret )
+    {
+        wxKeyEvent event2( wxEVT_CHAR );                 
+        event2.SetTimestamp( gdk_event->time );
+        event2.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
+        event2.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
+        event2.m_altDown = (gdk_event->state & GDK_MOD1_MASK);
+        event2.m_metaDown = (gdk_event->state & GDK_MOD2_MASK);
+        event2.m_keyCode = key_code;
+        event2.m_scanCode = gdk_event->keyval;
+        event2.m_x = x;
+        event2.m_y = y;
+        event2.SetEventObject( win );
+        ret = (ret || win->GetEventHandler()->ProcessEvent( event2 ));
+    }
+
 
     /* win is a control: tab can be propagated up */
     if ( (!ret) &&
