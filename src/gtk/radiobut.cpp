@@ -21,14 +21,20 @@
 extern bool g_blockEventsOnDrag;
 
 //-----------------------------------------------------------------------------
-// wxRadioButton
+// "clicked"
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxRadioButton,wxControl)
-  
-static void gtk_radiobutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxRadioButton *rb )
+static 
+void gtk_radiobutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxRadioButton *rb )
 {
   if (!rb->HasVMT()) return;
+  
+  if (rb->m_blockFirstEvent)
+  {
+    rb->m_blockFirstEvent = FALSE;
+    return;
+  } 
+  
   if (g_blockEventsOnDrag) return;
   
   wxCommandEvent event( wxEVT_COMMAND_RADIOBUTTON_SELECTED, rb->GetId());
@@ -37,6 +43,12 @@ static void gtk_radiobutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxRad
   rb->GetEventHandler()->ProcessEvent( event );
 }
 
+//-----------------------------------------------------------------------------
+// wxRadioButton
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxRadioButton,wxControl)
+  
 bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& label,
   const wxPoint& pos,  const wxSize& size, long style,
   const wxValidator& validator, const wxString& name )
@@ -53,6 +65,8 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
       
   SetLabel(label);
 
+  m_blockFirstEvent = FALSE;
+    
   if (newSize.x == -1) newSize.x = 22+gdk_string_measure( m_widget->style->font, label );
   if (newSize.y == -1) newSize.y = 26;
   SetSize( newSize.x, newSize.y );
@@ -89,6 +103,8 @@ void wxRadioButton::SetValue( bool val )
   wxCHECK_RET( m_widget != NULL, "invalid radiobutton" );
   
   gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_widget), val );
+  
+  m_blockFirstEvent = TRUE;
 }
 
 bool wxRadioButton::GetValue(void) const

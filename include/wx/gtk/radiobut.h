@@ -65,6 +65,8 @@ class wxRadioButton: public wxControl
   // implementation
     
     void ApplyWidgetStyle();
+    
+    bool   m_blockFirstEvent;
 };
 
 #endif // __GTKRADIOBUTTONH__
