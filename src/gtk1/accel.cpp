@@ -24,9 +24,9 @@
 class wxAccelRefData: public wxObjectRefData
 {
 public:
-  wxAccelRefData();
+    wxAccelRefData();
 
-  wxList m_accels;
+    wxList m_accels;
 };
 
 wxAccelRefData::wxAccelRefData()

@@ -77,7 +77,7 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxButton creation failed") );
-	return FALSE;
+	    return FALSE;
     }
 
 /*

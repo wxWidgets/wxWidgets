@@ -2776,8 +2776,7 @@ void wxWindow::WarpPointer( int x, int y )
 
 void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
 {
-    wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
-
+    if (!m_widget) return;
     if (!m_widget->window) return;
 
     if (eraseBackground && m_wxwindow && m_wxwindow->window)

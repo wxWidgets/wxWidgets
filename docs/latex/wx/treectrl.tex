@@ -449,7 +449,10 @@ in {\it flags}. {\it flags} is a bitlist of the following:
 \func{wxTreeItemId}{InsertItem}{\param{const wxTreeItemId\& }{parent}, \param{const wxTreeItemId\& }{previous}, \param{const wxString\&}{ text},
  \param{int}{ image = -1}, \param{int}{ selImage = -1}, \param{wxTreeItemData*}{ data = NULL}}
 
-Inserts an item after a given one.
+\func{wxTreeItemId}{InsertItem}{\param{const wxTreeItemId\& }{parent}, \param{size\_t}{ before}, \param{const wxString\&}{ text},
+ \param{int}{ image = -1}, \param{int}{ selImage = -1}, \param{wxTreeItemData*}{ data = NULL}}
+
+Inserts an item after a given one ({\it previous}) or before one identified by its position ({\it before}).
 
 If {\it image} > -1 and {\it selImage} is -1, the same image is used for
 both selected and unselected items.

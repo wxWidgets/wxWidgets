@@ -152,15 +152,18 @@ wxDataObject::wxDataObject()
 bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction dir) const
 {
     size_t nFormatCount = GetFormatCount(dir);
-    if ( nFormatCount == 1 ) {
+    if ( nFormatCount == 1 ) 
+    {
         return format == GetPreferredFormat();
     }
-    else {
+    else 
+    {
         wxDataFormat *formats = new wxDataFormat[nFormatCount];
         GetAllFormats(formats,dir);
 
         size_t n;
-        for ( n = 0; n < nFormatCount; n++ ) {
+        for ( n = 0; n < nFormatCount; n++ ) 
+        {
             if ( formats[n] == format )
                 break;
         }

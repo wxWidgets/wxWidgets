@@ -77,7 +77,7 @@ bool wxCheckBox::Create(wxWindow *parent,
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxCheckBox creation failed") );
-	return FALSE;
+	    return FALSE;
     }
 
     wxControl::SetLabel( label );
@@ -191,11 +191,11 @@ void wxCheckBox::OnInternalIdle()
     if (GTK_TOGGLE_BUTTON(m_widgetCheckbox)->event_window && cursor.Ok())
     {
         /* I now set the cursor the anew in every OnInternalIdle call
-	   as setting the cursor in a parent window also effects the
-	   windows above so that checking for the current cursor is
-	   not possible. */
+	       as setting the cursor in a parent window also effects the
+	       windows above so that checking for the current cursor is
+	       not possible. */
 	   
-	gdk_window_set_cursor( GTK_TOGGLE_BUTTON(m_widgetCheckbox)->event_window, cursor.GetCursor() );
+	   gdk_window_set_cursor( GTK_TOGGLE_BUTTON(m_widgetCheckbox)->event_window, cursor.GetCursor() );
     }
 
     UpdateWindowUI();

@@ -218,15 +218,15 @@ void wxBitmapButton::SetBitmap()
     else 
     {
         if (m_isSelected) 
-	{
-	    the_one = m_selected;
-	}
+	    {
+	        the_one = m_selected;
+	    }
         else 
-	{
+	    {
             if (m_hasFocus) 
-	        the_one = m_focus;
+	            the_one = m_focus;
             else 
-	        the_one = m_bitmap;
+	            the_one = m_bitmap;
         }
     }
 

@@ -1,12 +1,22 @@
 
-19th December '99: wxWindows 2.1.12 released
+6th January '2000: wxWindows 2.1.12 released
 
-Who has a BigEndian computer (e.g. Sparc) that runs a 15 and/or
-16 bit colour mode? I need this for testing purposes, i.e. this
+Who has a BigEndian computer (e.g. Sparc or PowerPC) that runs a 15 
+and/or 16 bit colour mode? I need this for testing purposes, i.e. this
 person could help me by running a small testprogram and sending
 me the output.
 
-Added support for multiple font and colour support to item in
+Updated the 64-bit long class (a class that substitutes a 64-bit int
+type on platforms which don't provide a native one).
+
+Added wxImage::Replace() (for replacing colours) and wxImage::GetSubImage().
+Also corrected conversion from mono bitmaps to wxImage.
+
+Added wxBitmap::GetSubBitmap().
+
+Removed some flicker from tree ctrl. Minor optical changes.
+
+Added support for multiple font and colour support for items in
 list ctrls and tree ctrls.
 
 Added support for multiple-selection file dialog.
@@ -51,7 +61,7 @@ The ODBC classes can now be configured at run-time if they
 are to use forward-only cursors or not.
 
 Added wxDateTime class. The existing classes wxTime and wxDate
-have been reimplemented and corrected using wxDatTime.
+have been reimplemented and corrected using wxDateTime.
 
 Rewritten wxThread to have a flag controlling if the
 thread will delete its C++ class itself ("delete this") or
@@ -81,7 +91,7 @@ several such canvasses.
 
 Some minor updates to wxSockets. Fixed timeout problem.
 
-Speed-up for new encoding related font code.
+Speed-up for new encoding related font code. Minor fixes.
 
 Changed wxListBox to send deferred events, i.e. events emitted by
 the listbox won't get processed before the next idle message.
