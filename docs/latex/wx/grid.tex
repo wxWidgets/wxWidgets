@@ -15,7 +15,9 @@ wxGrid is a class for displaying and editing tabular information.
 
 \wxheading{Window styles}
 
-There are no specific window styles for this class.
+There are no specific window styles for this class, but you may use different
+SetXXX() functions to change the controls behaviour (for example, to enable
+in-place editing).
 
 See also \helpref{window styles overview}{windowstyles}.
 
@@ -256,6 +258,12 @@ Returns the row position of the currently selected cell.
 \constfunc{bool}{GetEditable}{\void}
 
 Returns TRUE if the grid cells can be edited.
+
+\membersection{wxGrid::GetEditInPlace}\label{wxgridgeteditinplace}
+
+\constfunc{bool}{GetEditInPlace}{\void}
+
+Returns TRUE if editing in-place is enabled.
 
 \membersection{wxGrid::GetHorizScrollBar}\label{wxgridgethorizscrollbar}
 
@@ -527,6 +535,14 @@ is a light grey. If NULL is specified, the divisions will not be drawn.
 If {\it editable} is TRUE (the default), the grid cells will be editable by means of the
 text edit control. If FALSE, the text edit control will be hidden and the user will not
 be able to edit the cell contents.
+
+\membersection{wxGrid::SetEditInPlace}\label{wxgridseteditinplace}
+
+\func{void}{SetEditInPlace}{\param{bool}{ edit = TRUE}}
+
+Enables (if {\it edit} is TRUE, default value) or disables in-place editing.
+When it is enabled, the cells contents can be changed by typing text directly
+in the cell.
 
 \membersection{wxGrid::SetGridCursor}\label{wxgridsetgridcursor}
 

@@ -34,6 +34,7 @@ class MyApp: public wxApp
     bool OnInit(void);
 };
 
+
 // Define a new frame type
 class MyFrame: public wxFrame
 { public:
@@ -41,6 +42,7 @@ class MyFrame: public wxFrame
     MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size);
 
     void ToggleEditable(wxCommandEvent& event);
+    void ToggleEditInPlace(wxCommandEvent& event);
     void ToggleRowLabel(wxCommandEvent& event);
     void ToggleColLabel(wxCommandEvent& event);
     void ToggleDividers(wxCommandEvent& event);
@@ -66,6 +68,7 @@ wxBitmap *cellBitmap2 = (wxBitmap *) NULL;
 // ID for the menu quit command
 #define GRID_QUIT 1
 #define GRID_TOGGLE_EDITABLE 2
+#define GRID_TOGGLE_EDITINPLACE 22
 #define GRID_LEFT_CELL       3
 #define GRID_CENTRE_CELL     4
 #define GRID_RIGHT_CELL      5
@@ -105,6 +108,7 @@ bool MyApp::OnInit(void)
 
   wxMenu *settings_menu = new wxMenu;
   settings_menu->Append(GRID_TOGGLE_EDITABLE, "&Toggle editable");
+  settings_menu->Append(GRID_TOGGLE_EDITINPLACE, "&Toggle edit in place");
   settings_menu->Append(GRID_TOGGLE_ROW_LABEL, "Toggle ro&w label");
   settings_menu->Append(GRID_TOGGLE_COL_LABEL, "Toggle co&l label");
   settings_menu->Append(GRID_TOGGLE_DIVIDERS, "Toggle &dividers");
@@ -164,6 +168,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, cons
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(GRID_TOGGLE_EDITABLE, MyFrame::ToggleEditable)
+  EVT_MENU(GRID_TOGGLE_EDITINPLACE, MyFrame::ToggleEditInPlace)
   EVT_MENU(GRID_TOGGLE_ROW_LABEL, MyFrame::ToggleRowLabel)
   EVT_MENU(GRID_TOGGLE_COL_LABEL, MyFrame::ToggleColLabel)
   EVT_MENU(GRID_TOGGLE_DIVIDERS, MyFrame::ToggleDividers)
@@ -182,6 +187,12 @@ END_EVENT_TABLE()
 void MyFrame::ToggleEditable(wxCommandEvent& WXUNUSED(event))
 {
       grid->SetEditable(!grid->GetEditable());
+      grid->Refresh();
+}
+
+void MyFrame::ToggleEditInPlace(wxCommandEvent& WXUNUSED(event))
+{
+      grid->SetEditInPlace(!grid->GetEditInPlace());
       grid->Refresh();
 }
 
