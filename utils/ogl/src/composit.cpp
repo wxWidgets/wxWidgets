@@ -43,7 +43,7 @@ wxMenu *oglPopupDivisionMenu = NULL;
 /*
  * Division control point
  */
- 
+
 class wxDivisionControlPoint: public wxControlPoint
 {
  DECLARE_DYNAMIC_CLASS(wxDivisionControlPoint)
@@ -168,7 +168,7 @@ void wxCompositeShape::OnDragLeft(bool draw, double x, double y, int keys, int a
   wxClientDC dc(GetCanvas());
   GetCanvas()->PrepareDC(dc);
 
-  dc.SetLogicalFunction(wxXOR);
+  dc.SetLogicalFunction(OGLRBLF);
   wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
   dc.SetPen(dottedPen);
   dc.SetBrush((* wxTRANSPARENT_BRUSH));
@@ -187,7 +187,7 @@ void wxCompositeShape::OnBeginDragLeft(double x, double y, int keys, int attachm
 
   Erase(dc);
 
-  dc.SetLogicalFunction(wxXOR);
+  dc.SetLogicalFunction(OGLRBLF);
 
   wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
   dc.SetPen(dottedPen);
@@ -228,7 +228,7 @@ void wxCompositeShape::OnEndDragLeft(double x, double y, int keys, int attachmen
   double offsetY = yy - objectStartY;
 
   Move(dc, GetX() + offsetX, GetY() + offsetY);
-  
+
   if (m_canvas && !m_canvas->GetQuickEditMode()) m_canvas->Redraw(dc);
 }
 
@@ -284,7 +284,7 @@ void wxCompositeShape::SetSize(double w, double h, bool recursive)
     object->Show(FALSE);
     object->Move(dc, newX, newY);
     object->Show(TRUE);
-    
+
     // Now set the scaled size
     object->GetBoundingBoxMin(&xBound, &yBound);
     object->SetSize(object->GetFixedWidth() ? xBound : xScale*xBound,
@@ -377,7 +377,7 @@ void wxCompositeShape::Copy(wxShape& copy)
     wxShape *newObject = object->CreateNewCopy(FALSE, FALSE);
     if (newObject->GetId() == 0)
       newObject->SetId(NewId());
-      
+
     newObject->SetParent(&compositeCopy);
     compositeCopy.m_children.Append(newObject);
 
@@ -405,7 +405,7 @@ void wxCompositeShape::Copy(wxShape& copy)
       wxShape *constrainedObject = (wxShape *)node2->Data();
       wxShape *newConstrained = (wxShape *)(oglObjectCopyMapping.Find((long)constrainedObject)->Data());
       newConstrainedList.Append(newConstrained);
-      node2 = node2->Next(); 
+      node2 = node2->Next();
     }
 
     wxOGLConstraint *newConstraint = new wxOGLConstraint(constraint->m_constraintType, newConstraining,
@@ -726,7 +726,7 @@ void wxCompositeShape::ReadConstraints(wxExpr *clause, wxExprDatabase *database)
       m_constrainingObject = (wxShape *)objExpr1->GetClientData();
     else
       wxFatalError("Couldn't find constraining image of composite.", "Object graphics error");
- 
+
     int i = 0;
     wxExpr *currentIdExpr = constrainedExpr->Nth(i);
     while (currentIdExpr)
@@ -938,7 +938,7 @@ void wxDivisionShape::OnEndDragLeft(double x, double y, int keys, int attachment
     }
     return;
   }
-    
+
   wxClientDC dc(GetCanvas());
   GetCanvas()->PrepareDC(dc);
 
@@ -1080,7 +1080,7 @@ bool wxDivisionShape::Divide(int direction)
     double newYPos2 = (double)(y1 + (3.0*GetHeight()/4.0));
     wxDivisionShape *newDivision = compositeParent->OnCreateDivision();
     newDivision->Show(TRUE);
-    
+
     Erase(dc);
 
     // Anything adjoining the bottom of this division now adjoins the
@@ -1109,7 +1109,7 @@ bool wxDivisionShape::Divide(int direction)
     // Division is now receiving mouse events _before_ the contained object,
     // because it was added last (on top of all others)
 
-    // Add after the image that visualizes the container    
+    // Add after the image that visualizes the container
     compositeParent->AddChild(newDivision, compositeParent->FindContainerImage());
 
     m_handleSide = DIVISION_SIDE_BOTTOM;
@@ -1131,7 +1131,7 @@ bool wxDivisionShape::Divide(int direction)
     double newYPos2 = GetY();
     wxDivisionShape *newDivision = compositeParent->OnCreateDivision();
     newDivision->Show(TRUE);
-    
+
     Erase(dc);
 
     // Anything adjoining the left of this division now adjoins the
@@ -1320,7 +1320,7 @@ bool wxDivisionShape::AdjustLeft(double left, bool test)
   GetCanvas()->PrepareDC(dc);
 
   Move(dc, newX, GetY());
-    
+
   return TRUE;
 }
 
@@ -1341,7 +1341,7 @@ bool wxDivisionShape::AdjustTop(double top, bool test)
   GetCanvas()->PrepareDC(dc);
 
   Move(dc, GetX(), newY);
-    
+
   return TRUE;
 }
 
@@ -1362,7 +1362,7 @@ bool wxDivisionShape::AdjustRight(double right, bool test)
   GetCanvas()->PrepareDC(dc);
 
   Move(dc, newX, GetY());
-    
+
   return TRUE;
 }
 
@@ -1383,7 +1383,7 @@ bool wxDivisionShape::AdjustBottom(double bottom, bool test)
   GetCanvas()->PrepareDC(dc);
 
   Move(dc, GetX(), newY);
-    
+
   return TRUE;
 }
 
@@ -1415,7 +1415,7 @@ void wxDivisionControlPoint::OnBeginDragLeft(double x, double y, int keys, int a
   originalY = division->GetY();
   originalW = division->GetWidth();
   originalH = division->GetHeight();
-  
+
   wxControlPoint::OnBeginDragLeft(x, y, keys, attachment);
 }
 
@@ -1453,7 +1453,7 @@ void wxDivisionControlPoint::OnEndDragLeft(double x, double y, int keys, int att
         success = FALSE;
       else
         division->ResizeAdjoining(DIVISION_SIDE_LEFT, x, FALSE);
-      
+
       break;
     }
     case DIVISION_SIDE_TOP:
@@ -1464,7 +1464,7 @@ void wxDivisionControlPoint::OnEndDragLeft(double x, double y, int keys, int att
         success = FALSE;
       else
         division->ResizeAdjoining(DIVISION_SIDE_TOP, y, FALSE);
-      
+
       break;
     }
     case DIVISION_SIDE_RIGHT:
@@ -1475,7 +1475,7 @@ void wxDivisionControlPoint::OnEndDragLeft(double x, double y, int keys, int att
         success = FALSE;
       else
         division->ResizeAdjoining(DIVISION_SIDE_RIGHT, x, FALSE);
-      
+
       break;
     }
     case DIVISION_SIDE_BOTTOM:
@@ -1486,7 +1486,7 @@ void wxDivisionControlPoint::OnEndDragLeft(double x, double y, int keys, int att
         success = FALSE;
       else
         division->ResizeAdjoining(DIVISION_SIDE_BOTTOM, y, FALSE);
-      
+
       break;
     }
   }
@@ -1564,7 +1564,7 @@ bool wxDivisionShape::ResizeAdjoining(int side, double newPos, bool test)
     }
     node = node->Next();
   }
-  
+
   return TRUE;
 }
 
@@ -1572,7 +1572,7 @@ bool wxDivisionShape::ResizeAdjoining(int side, double newPos, bool test)
  * Popup menu for editing divisions
  *
  */
- 
+
 void oglGraphicsDivisionMenuProc(wxMenu& menu, wxCommandEvent& event)
 {
   wxDivisionShape *division = (wxDivisionShape *)menu.GetClientData();
@@ -1628,7 +1628,7 @@ void wxDivisionShape::EditEdge(int side)
 
   GraphicsForm *form = new GraphicsForm("Containers");
   int lineWidth = currentPen->GetWidth();
-  
+
   form->Add(wxMakeFormShort("Width", &lineWidth, wxFORM_DEFAULT, NULL, NULL, wxVERTICAL,
                150));
   form->Add(wxMakeFormString("Colour", pColour, wxFORM_CHOICE,
@@ -1696,7 +1696,7 @@ void wxDivisionShape::EditEdge(int side)
     else if (strcmp(*pStyle, "Dot Dash") == 0)
       lineStyle = wxDOT_DASH;
   }
-  
+
   wxPen *newPen = wxThePenList->FindOrCreatePen(*pColour, lineWidth, lineStyle);
   if (!pen)
     pen = wxBLACK_PEN;
@@ -1723,7 +1723,7 @@ void wxDivisionShape::PopupMenu(double x, double y)
     oglPopupDivisionMenu->Enable(DIVISION_MENU_EDIT_TOP_EDGE, TRUE);
   else
     oglPopupDivisionMenu->Enable(DIVISION_MENU_EDIT_TOP_EDGE, FALSE);
-      
+
   int x1, y1;
   m_canvas->ViewStart(&x1, &y1);
 

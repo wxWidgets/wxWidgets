@@ -328,7 +328,7 @@ bool wxPolygonShape::HitTest(double x, double y, int *attachment, double *distan
 void wxPolygonShape::SetSize(double new_width, double new_height, bool recursive)
 {
   SetAttachmentSize(new_width, new_height);
-  
+
   // Multiply all points by proportion of new size to old size
   double x_proportion = (double)(fabs(new_width/m_originalWidth));
   double y_proportion = (double)(fabs(new_height/m_originalHeight));
@@ -464,7 +464,7 @@ bool wxPolygonShape::GetPerimeterPoint(double x1, double y1,
       node = node->Next();
     }
   }
-  
+
   double *xpoints = new double[n];
   double *ypoints = new double[n];
 
@@ -479,7 +479,7 @@ bool wxPolygonShape::GetPerimeterPoint(double x1, double y1,
     i ++;
   }
 
-  oglFindEndForPolyline(n, xpoints, ypoints, 
+  oglFindEndForPolyline(n, xpoints, ypoints,
                         x1, y1, x2, y2, x3, y3);
 
   delete[] xpoints;
@@ -799,7 +799,7 @@ bool wxPolygonShape::AttachmentIsValid(int attachment)
 {
   if (!m_points)
     return FALSE;
-    
+
   if ((attachment >= 0) && (attachment < m_points->Number()))
     return TRUE;
 
@@ -1207,7 +1207,7 @@ bool wxCircleShape::GetPerimeterPoint(double x1, double y1,
                                       double x2, double y2,
                                       double *x3, double *y3)
 {
-  oglFindEndForCircle(m_width/2, 
+  oglFindEndForCircle(m_width/2,
                       m_xpos, m_ypos,  // Centre of circle
                       x2, y2,  // Other end of line
                       x3, y3);
@@ -1302,7 +1302,7 @@ void wxShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y
   wxClientDC dc(GetCanvas());
   GetCanvas()->PrepareDC(dc);
 
-  dc.SetLogicalFunction(wxXOR);
+  dc.SetLogicalFunction(OGLRBLF);
 
   wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
   dc.SetPen(dottedPen);
@@ -1338,7 +1338,7 @@ void wxShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y
 
     if (this->GetFixedWidth())
       new_width = bound_x;
-      
+
     if (this->GetFixedHeight())
       new_height = bound_y;
 
@@ -1390,7 +1390,7 @@ void wxShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y
     pt->sm_controlPointDragPosY = (double)(newY1 + (newHeight/2.0));
     if (this->GetFixedWidth())
       newWidth = bound_x;
-     
+
     if (this->GetFixedHeight())
       newHeight = bound_y;
 
@@ -1411,7 +1411,7 @@ void wxShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int 
     this->Erase(dc);
 */
 
-  dc.SetLogicalFunction(wxXOR);
+  dc.SetLogicalFunction(OGLRBLF);
 
   double bound_x;
   double bound_y;
@@ -1471,7 +1471,7 @@ void wxShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int 
 
     if (this->GetFixedWidth())
       new_width = bound_x;
-      
+
     if (this->GetFixedHeight())
       new_height = bound_y;
 
@@ -1566,11 +1566,11 @@ void wxShape::OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int ke
   if (!eraseIt)
     theObject->Show(TRUE);
 */
-    
+
   // Recursively redraw links if we have a composite.
   if (theObject->GetChildren().Number() > 0)
     theObject->DrawLinks(dc, -1, TRUE);
-    
+
   double width, height;
   theObject->GetBoundingBoxMax(&width, &height);
   theObject->GetEventHandler()->OnEndSize(width, height);
@@ -1636,7 +1636,7 @@ void wxPolygonShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, d
   wxClientDC dc(GetCanvas());
   GetCanvas()->PrepareDC(dc);
 
-  dc.SetLogicalFunction(wxXOR);
+  dc.SetLogicalFunction(OGLRBLF);
 
   wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
   dc.SetPen(dottedPen);
@@ -1675,7 +1675,7 @@ void wxPolygonShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double 
 
   this->Erase(dc);
 
-  dc.SetLogicalFunction(wxXOR);
+  dc.SetLogicalFunction(OGLRBLF);
 
   double bound_x;
   double bound_y;

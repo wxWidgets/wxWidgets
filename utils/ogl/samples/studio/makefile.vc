@@ -2,7 +2,7 @@
 # File:		makefile.vc
 # Author:	Julian Smart
 # Created:	1999
-# Updated:	
+# Updated:
 # Copyright:	(c) Julian Smart
 #
 # "%W% %G%"
@@ -20,7 +20,7 @@ THISDIR = $(STUDIODIR)
 
 OGLDIR = $(WXDIR)\utils\ogl
 OGLINC = $(OGLDIR)\src
-OGLLIB = $(WXDIR)\lib\ogl.lib
+OGLLIB = $(WXDIR)\lib\ogl$(LIBEXT).lib
 
 !include $(WXDIR)\src\makevc.env
 
@@ -32,7 +32,7 @@ PROGRAM=studio
 OBJECTS = $(PROGRAM).obj doc.obj shapes.obj symbols.obj view.obj cspalette.obj\
   mainfrm.obj project.obj dialogs.obj csprint.obj
 
-all:    wx ogl $(PROGRAM).exe
+all:    ogl $(PROGRAM).exe
 
 $(PROGRAM):    $(PROGRAM).exe
 

@@ -80,7 +80,7 @@ wxLineShape::wxLineShape()
   newRegion = new wxShapeRegion;
   newRegion->SetName("Start");
   newRegion->SetSize(150, 50);
-  m_regions.Append((wxObject *)newRegion);  
+  m_regions.Append((wxObject *)newRegion);
 
   newRegion = new wxShapeRegion;
   newRegion->SetName("End");
@@ -213,7 +213,7 @@ void wxLineShape::FormatText(wxDC& dc, const wxString& s, int i)
   wxNode *node = m_regions.Nth(i);
   if (!node)
     return;
-    
+
   wxShapeRegion *region = (wxShapeRegion *)node->Data();
   region->SetText(s);
   dc.SetFont(* region->GetFont());
@@ -225,7 +225,7 @@ void wxLineShape::FormatText(wxDC& dc, const wxString& s, int i)
     w = 100; h = 50;
     region->SetSize(w, h);
   }
-    
+
   wxStringList *string_list = oglFormatText(dc, s, (w-5), (h-5), region->GetFormatMode());
   node = string_list->First();
   while (node)
@@ -444,7 +444,7 @@ void wxLineShape::SetEnds(double x1, double y1, double x2, double y2)
   first_point->y = y1;
   last_point->x = x2;
   last_point->y = y2;
-  
+
   m_xpos = (double)((x1 + x2)/2.0);
   m_ypos = (double)((y1 + y2)/2.0);
 }
@@ -707,7 +707,7 @@ void wxLineShape::DrawArrow(wxDC& dc, wxArrowHead *arrow, double xOffset, bool p
      deltaX = x4 - positionOnLineX;
      deltaY = y4 - positionOnLineY;
   }
-  
+
   switch (arrow->_GetType())
   {
     case ARROW_ARROW:
@@ -787,7 +787,7 @@ void wxLineShape::DrawArrow(wxDC& dc, wxArrowHead *arrow, double xOffset, bool p
           |    /
           |   /
           |  /theta
-          | /(x1, y1) 
+          | /(x1, y1)
           |______________________
         */
         double theta = 0.0;
@@ -1017,7 +1017,7 @@ bool wxLineShape::OnMovePre(wxDC& dc, double x, double y, double old_x, double o
       {
         xr = 0.0; yr = 0.0;
       }
-      
+
       m_labelObjects[i]->Move(dc, xp+xr, yp+yr);
     }
   }
@@ -1028,7 +1028,7 @@ void wxLineShape::OnMoveLink(wxDC& dc, bool moveControlPoints)
 {
   if (!m_from || !m_to)
    return;
-   
+
     if (m_lineControlPoints->Number() > 2)
       Initialise();
 
@@ -1038,7 +1038,7 @@ void wxLineShape::OnMoveLink(wxDC& dc, bool moveControlPoints)
     double other_end_x, other_end_y;
 
     FindLineEndPoints(&end_x, &end_y, &other_end_x, &other_end_y);
-    
+
     wxNode *first = m_lineControlPoints->First();
     wxRealPoint *first_point = (wxRealPoint *)first->Data();
     wxNode *last = m_lineControlPoints->Last();
@@ -1090,7 +1090,7 @@ void wxLineShape::FindLineEndPoints(double *fromX, double *fromY, double *toX, d
 {
   if (!m_from || !m_to)
    return;
-   
+
   // Do each end - nothing in the middle. User has to move other points
   // manually if necessary.
   double end_x, end_y;
@@ -1221,7 +1221,7 @@ void wxLineShape::OnDrawControlPoints(wxDC& dc)
 {
   if (!m_drawHandles)
     return;
-    
+
   // Draw temporary label rectangles if necessary
   for (int i = 0; i < 3; i++)
   {
@@ -1314,7 +1314,7 @@ void wxLineShape::MakeControlPoints()
     wxRealPoint *first_point = (wxRealPoint *)first->Data();
     wxRealPoint *last_point = (wxRealPoint *)last->Data();
 
-    wxLineControlPoint *control = new wxLineControlPoint(m_canvas, this, CONTROL_POINT_SIZE, 
+    wxLineControlPoint *control = new wxLineControlPoint(m_canvas, this, CONTROL_POINT_SIZE,
                                                first_point->x, first_point->y,
                                                CONTROL_POINT_ENDPOINT_FROM);
     control->m_point = first_point;
@@ -1327,7 +1327,7 @@ void wxLineShape::MakeControlPoints()
     {
       wxRealPoint *point = (wxRealPoint *)node->Data();
 
-      control = new wxLineControlPoint(m_canvas, this, CONTROL_POINT_SIZE, 
+      control = new wxLineControlPoint(m_canvas, this, CONTROL_POINT_SIZE,
                                                point->x, point->y,
                                                CONTROL_POINT_LINE);
       control->m_point = point;
@@ -1337,7 +1337,7 @@ void wxLineShape::MakeControlPoints()
 
       node = node->Next();
     }
-    control = new wxLineControlPoint(m_canvas, this, CONTROL_POINT_SIZE, 
+    control = new wxLineControlPoint(m_canvas, this, CONTROL_POINT_SIZE,
                                                last_point->x, last_point->y,
                                                CONTROL_POINT_ENDPOINT_TO);
     control->m_point = last_point;
@@ -1473,11 +1473,11 @@ void wxLineShape::ReadAttributes(wxExpr *clause)
         node = next;
       }
     }
-  
+
     newRegion = new wxShapeRegion;
     newRegion->SetName("Start");
     newRegion->SetSize(150, 50);
-    m_regions.Append((wxObject *)newRegion);  
+    m_regions.Append((wxObject *)newRegion);
 
     newRegion = new wxShapeRegion;
     newRegion->SetName("End");
@@ -1540,7 +1540,7 @@ void wxLineShape::ReadAttributes(wxExpr *clause)
       double arrowSize = 0.0;
       wxString arrowName("");
       long arrowId = -1;
-      
+
       wxExpr *type_expr = node->Nth(0);
       wxExpr *end_expr = node->Nth(1);
       wxExpr *dist_expr = node->Nth(2);
@@ -1720,7 +1720,7 @@ void wxLineControlPoint::OnBeginDragLeft(double x, double y, int keys, int attac
 {
     m_shape->GetEventHandler()->OnSizingBeginDragLeft(this, x, y, keys, attachment);
 }
-  
+
 void wxLineControlPoint::OnEndDragLeft(double x, double y, int keys, int attachment)
 {
     m_shape->GetEventHandler()->OnSizingEndDragLeft(this, x, y, keys, attachment);
@@ -1735,7 +1735,7 @@ void wxLineShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, doub
   wxClientDC dc(GetCanvas());
   GetCanvas()->PrepareDC(dc);
 
-  dc.SetLogicalFunction(wxXOR);
+  dc.SetLogicalFunction(OGLRBLF);
 
   wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
   dc.SetPen(dottedPen);
@@ -1793,7 +1793,7 @@ void wxLineShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, 
     lineShape->GetTo()->OnDrawContents(dc);
 
     this->SetDisableLabel(TRUE);
-    dc.SetLogicalFunction(wxXOR);
+    dc.SetLogicalFunction(OGLRBLF);
 
     lpt->m_xpos = x; lpt->m_ypos = y;
     lpt->m_point->x = x; lpt->m_point->y = y;
@@ -1933,7 +1933,7 @@ void wxLineControlPoint::OnBeginDragRight(double x, double y, int keys, int atta
     m_oldCursor = wxSTANDARD_CURSOR;
   }
 }
-  
+
 void wxLineControlPoint::OnEndDragRight(double x, double y, int keys, int attachment)
 {
   wxClientDC dc(GetCanvas());
@@ -2136,7 +2136,7 @@ bool wxLineShape::ClearArrow(const wxString& name)
  * Finds an arrowhead at the given position (if -1, any position)
  *
  */
- 
+
 wxArrowHead *wxLineShape::FindArrowHead(int position, const wxString& name)
 {
   wxNode *node = m_arcArrows.First();
@@ -2168,7 +2168,7 @@ wxArrowHead *wxLineShape::FindArrowHead(long arrowId)
  * Deletes an arrowhead at the given position (if -1, any position)
  *
  */
- 
+
 bool wxLineShape::DeleteArrowHead(int position, const wxString& name)
 {
   wxNode *node = m_arcArrows.First();
@@ -2244,7 +2244,7 @@ int wxLineShape::FindLinePosition(double x, double y)
 {
   double startX, startY, endX, endY;
   GetEnds(&startX, &startY, &endX, &endY);
-  
+
   // Find distances from centre, start and end. The smallest wins.
   double centreDistance = (double)(sqrt((x - m_xpos)*(x - m_xpos) + (y - m_ypos)*(y - m_ypos)));
   double startDistance = (double)(sqrt((x - startX)*(x - startX) + (y - startY)*(y - startY)));
@@ -2373,7 +2373,7 @@ wxArrowHead::wxArrowHead(wxArrowHead& toCopy)
     m_metaFile = NULL;
   m_id = NewId();
 }
- 
+
 wxArrowHead::~wxArrowHead()
 {
   if (m_metaFile) delete m_metaFile;
@@ -2387,7 +2387,7 @@ void wxArrowHead::SetSize(double size)
     double oldWidth = m_metaFile->m_width;
     if (oldWidth == 0.0)
       return;
-      
+
     double scale = (double)(size/oldWidth);
     if (scale != 1.0)
       m_metaFile->Scale(scale, scale);
@@ -2422,7 +2422,7 @@ void wxLabelShape::OnDraw(wxDC& dc)
 {
   if (m_lineShape && !m_lineShape->GetDrawHandles())
     return;
-    
+
     double x1 = (double)(m_xpos - m_width/2.0);
     double y1 = (double)(m_ypos - m_height/2.0);
 

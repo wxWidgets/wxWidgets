@@ -602,7 +602,7 @@ void wxShape::FormatText(wxDC& dc, const wxString& s, int i)
   wxNode *node = m_regions.Nth(i);
   if (!node)
     return;
-    
+
   wxShapeRegion *region = (wxShapeRegion *)node->Data();
   region->SetText(s);
   dc.SetFont(* region->GetFont());
@@ -709,7 +709,7 @@ wxShape *wxShape::GetTopAncestor()
 {
   if (!GetParent())
     return this;
-    
+
   if (GetParent()->IsKindOf(CLASSINFO(wxDivisionShape)))
     return this;
   else return GetParent()->GetTopAncestor();
@@ -1182,7 +1182,7 @@ void wxShape::ApplyAttachmentOrdering(wxList& linesToSort)
 {
   // This is a temporary store of all the lines.
   wxList linesStore;
-  
+
   wxNode *node = m_lines.First();
   while (node)
   {
@@ -1224,7 +1224,7 @@ void wxShape::SortLines(int attachment, wxList& linesToSort)
   // This is a temporary store of all the lines at this attachment
   // point. We'll tick them off as we've processed them.
   wxList linesAtThisAttachment;
-  
+
   wxNode *node = m_lines.First();
   while (node)
   {
@@ -1317,7 +1317,7 @@ void wxShape::OnDragLeft(bool draw, double x, double y, int keys, int attachment
   wxClientDC dc(GetCanvas());
   GetCanvas()->PrepareDC(dc);
 
-  dc.SetLogicalFunction(wxXOR);
+  dc.SetLogicalFunction(OGLRBLF);
 
   wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
   dc.SetPen(dottedPen);
@@ -1362,7 +1362,7 @@ void wxShape::OnBeginDragLeft(double x, double y, int keys, int attachment)
   yy = y + DragOffsetY;
   m_canvas->Snap(&xx, &yy);
 //  m_xpos = xx; m_ypos = yy;
-  dc.SetLogicalFunction(wxXOR);
+  dc.SetLogicalFunction(OGLRBLF);
 
   wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
   dc.SetPen(dottedPen);
@@ -1530,7 +1530,7 @@ void wxShape::Flash()
         wxClientDC dc(GetCanvas());
         GetCanvas()->PrepareDC(dc);
 
-        dc.SetLogicalFunction(wxXOR);
+        dc.SetLogicalFunction(OGLRBLF);
         Draw(dc);
         dc.SetLogicalFunction(wxCOPY);
         Draw(dc);
@@ -1730,7 +1730,7 @@ void wxShape::WriteAttributes(wxExpr *clause)
     }
     else if (brushColour != "WHITE")
       clause->AddAttributeValueString("brush_colour", brushColour);
-    
+
     if (m_brush->GetStyle() != wxSOLID)
       clause->AddAttributeValue("brush_style", (long)m_brush->GetStyle());
   }
@@ -2131,7 +2131,7 @@ void wxShape::ReadRegions(wxExpr *clause)
 
       width = widthExpr->RealValue();
       height = heightExpr->RealValue();
-      
+
       minWidth = minWidthExpr->RealValue();
       minHeight = minHeightExpr->RealValue();
 
@@ -2392,42 +2392,42 @@ void wxShape::MakeControlPoints()
   double left = (double)(- (widthMin / 2.0));
   double right = (double)(widthMin / 2.0 + (maxX - minX));
 
-  wxControlPoint *control = new wxControlPoint(m_canvas, this, CONTROL_POINT_SIZE, left, top, 
+  wxControlPoint *control = new wxControlPoint(m_canvas, this, CONTROL_POINT_SIZE, left, top,
                                            CONTROL_POINT_DIAGONAL);
   m_canvas->AddShape(control);
   m_controlPoints.Append(control);
 
-  control = new wxControlPoint(m_canvas, this, CONTROL_POINT_SIZE, 0, top, 
+  control = new wxControlPoint(m_canvas, this, CONTROL_POINT_SIZE, 0, top,
                                            CONTROL_POINT_VERTICAL);
   m_canvas->AddShape(control);
   m_controlPoints.Append(control);
 
-  control = new wxControlPoint(m_canvas, this, CONTROL_POINT_SIZE, right, top, 
+  control = new wxControlPoint(m_canvas, this, CONTROL_POINT_SIZE, right, top,
                                            CONTROL_POINT_DIAGONAL);
   m_canvas->AddShape(control);
   m_controlPoints.Append(control);
 
-  control = new wxControlPoint(m_canvas, this, CONTROL_POINT_SIZE, right, 0, 
+  control = new wxControlPoint(m_canvas, this, CONTROL_POINT_SIZE, right, 0,
                                            CONTROL_POINT_HORIZONTAL);
   m_canvas->AddShape(control);
   m_controlPoints.Append(control);
 
-  control = new wxControlPoint(m_canvas, this, CONTROL_POINT_SIZE, right, bottom, 
+  control = new wxControlPoint(m_canvas, this, CONTROL_POINT_SIZE, right, bottom,
                                            CONTROL_POINT_DIAGONAL);
   m_canvas->AddShape(control);
   m_controlPoints.Append(control);
 
-  control = new wxControlPoint(m_canvas, this, CONTROL_POINT_SIZE, 0, bottom, 
+  control = new wxControlPoint(m_canvas, this, CONTROL_POINT_SIZE, 0, bottom,
                                            CONTROL_POINT_VERTICAL);
   m_canvas->AddShape(control);
   m_controlPoints.Append(control);
 
-  control = new wxControlPoint(m_canvas, this, CONTROL_POINT_SIZE, left, bottom, 
+  control = new wxControlPoint(m_canvas, this, CONTROL_POINT_SIZE, left, bottom,
                                            CONTROL_POINT_DIAGONAL);
   m_canvas->AddShape(control);
   m_controlPoints.Append(control);
 
-  control = new wxControlPoint(m_canvas, this, CONTROL_POINT_SIZE, left, 0, 
+  control = new wxControlPoint(m_canvas, this, CONTROL_POINT_SIZE, left, 0,
                                            CONTROL_POINT_HORIZONTAL);
   m_canvas->AddShape(control);
   m_controlPoints.Append(control);
@@ -2534,7 +2534,7 @@ void wxShape::OnDrawControlPoints(wxDC& dc)
 {
   if (!m_drawHandles)
     return;
-    
+
   dc.SetBrush(* wxBLACK_BRUSH);
   dc.SetPen(* wxBLACK_PEN);
 
@@ -2673,7 +2673,7 @@ bool wxShape::AttachmentIsValid(int attachment) const
   return FALSE;
 }
 
-bool wxShape::GetAttachmentPosition(int attachment, double *x, double *y, 
+bool wxShape::GetAttachmentPosition(int attachment, double *x, double *y,
                                          int nth, int no_arcs, wxLineShape *line)
 {
     if (m_attachmentMode == ATTACHMENT_MODE_NONE)

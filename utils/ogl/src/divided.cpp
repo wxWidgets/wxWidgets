@@ -151,7 +151,7 @@ void wxDividedShape::SetRegionSizes()
 {
   if (GetRegions().Number() == 0)
     return;
-    
+
   double defaultProportion = (double)(GetRegions().Number() > 0 ? (1.0/((double)(GetRegions().Number()))) : 0.0);
   double currentY = (double)(m_ypos - (m_height / 2.0));
   double maxY = (double)(m_ypos + (m_height / 2.0));
@@ -440,7 +440,7 @@ void wxDividedShape::EditRegions()
 #if 0
   if (GetRegions().Number() < 2)
     return;
-    
+
   wxBeginBusyCursor();
 
   GraphicsForm *form = new GraphicsForm("Divided nodes");
@@ -596,7 +596,7 @@ void wxDividedShapeControlPoint::OnDragLeft(bool draw, double x, double y, int k
     wxClientDC dc(GetCanvas());
     GetCanvas()->PrepareDC(dc);
 
-    dc.SetLogicalFunction(wxXOR);
+    dc.SetLogicalFunction(OGLRBLF);
     wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
     dc.SetPen(dottedPen);
     dc.SetBrush((* wxTRANSPARENT_BRUSH));
@@ -615,7 +615,7 @@ void wxDividedShapeControlPoint::OnBeginDragLeft(double x, double y, int keys, i
     GetCanvas()->PrepareDC(dc);
 
     wxDividedShape *dividedObject = (wxDividedShape *)m_shape;
-    dc.SetLogicalFunction(wxXOR);
+    dc.SetLogicalFunction(OGLRBLF);
     wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
     dc.SetPen(dottedPen);
     dc.SetBrush((* wxTRANSPARENT_BRUSH));
@@ -637,7 +637,7 @@ void wxDividedShapeControlPoint::OnEndDragLeft(double x, double y, int keys, int
     wxNode *node = dividedObject->GetRegions().Nth(regionId);
     if (!node)
     return;
-    
+
     wxShapeRegion *thisRegion = (wxShapeRegion *)node->Data();
     wxShapeRegion *nextRegion = NULL; // Region below this one
 
@@ -648,7 +648,7 @@ void wxDividedShapeControlPoint::OnEndDragLeft(double x, double y, int keys, int
     // Find the old top and bottom of this region,
     // and calculate the new proportion for this region
     // if legal.
-  
+
     double currentY = (double)(dividedObject->GetY() - (dividedObject->GetHeight() / 2.0));
     double maxY = (double)(dividedObject->GetY() + (dividedObject->GetHeight() / 2.0));
 
