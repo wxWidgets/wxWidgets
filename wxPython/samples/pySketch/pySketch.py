@@ -374,7 +374,7 @@ class DrawingFrame(wxFrame):
         self.topPanel.SetAutoLayout(True)
         self.topPanel.SetSizer(topSizer)
 
-        self.SetSizeHints(minW=250, minH=200)
+        self.SetSizeHints(250, 200)
         self.SetSize(wxSize(600, 400))
 
         # Select an initial tool.
