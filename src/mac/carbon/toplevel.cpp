@@ -926,14 +926,14 @@ void wxTopLevelWindowMac::MacDelayedDeactivation(long timestamp)
 {
     if(s_macDeactivateWindow)
     {
-        wxLogDebug("Doing delayed deactivation of %p",s_macDeactivateWindow);
+        wxLogDebug(wxT("Doing delayed deactivation of %p"),s_macDeactivateWindow);
         s_macDeactivateWindow->MacActivate(timestamp, false);
     }
 }
 
 void wxTopLevelWindowMac::MacActivate( long timestamp , bool inIsActivating )
 {
-    wxLogDebug("TopLevel=%p::MacActivate",this);
+    wxLogDebug(wxT("TopLevel=%p::MacActivate"),this);
     if(s_macDeactivateWindow==this)
         s_macDeactivateWindow=NULL;
     MacDelayedDeactivation(timestamp);
