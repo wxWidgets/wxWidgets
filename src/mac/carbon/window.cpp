@@ -24,6 +24,7 @@
 #include "wx/layout.h"
 #include "wx/dialog.h"
 #include "wx/scrolbar.h"
+#include "wx/scrolwin.h"
 #include "wx/statbox.h"
 #include "wx/button.h"
 #include "wx/settings.h"
