@@ -440,11 +440,7 @@ static bool GetNumericToken(size_t len, const wxChar*& p, unsigned long *number)
             break;
     }
 
-    // use the base 10 explicitly because otherwise the string "09" (the
-    // leading zeroes are common in the date specifications) is not parsed
-    // correctly as, according to the standard C rules, it is understood as an
-    // octal number and '9' is not a valid octal digit!
-    return !s.empty() && s.ToULong(number, 10);
+    return !!s && s.ToULong(number);
 }
 
 // scans all alphabetic characters and returns the resulting string
@@ -3106,7 +3102,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
 
         // is it a number?
         unsigned long val;
-        if ( token.ToULong(&val, 10) ) // 10: see comment in GetNumericToken()
+        if ( token.ToULong(&val) )
         {
             // guess what this number is
 
