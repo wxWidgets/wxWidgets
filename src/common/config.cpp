@@ -243,6 +243,8 @@ void SplitPath(wxArrayString& aParts, const char *sz)
           wxLogWarning("'%s' has extra '..', ignored.", sz);
         else
           aParts.Remove(aParts.Count() - 1);
+
+        strCurrent.Empty();
       }
       else if ( !strCurrent.IsEmpty() ) {
         aParts.Add(strCurrent);
