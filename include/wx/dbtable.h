@@ -329,8 +329,8 @@ public:
 //TODO: Need to Document
     typedef     enum  { WX_ROW_MODE_QUERY , WX_ROW_MODE_INDIVIDUAL } rowmode_t;
     virtual     void         SetRowMode(const rowmode_t rowmode);
-    virtual     wxVariant    GetCol(const int Colno) const ;
-    virtual     void         SetCol(const int ColNo, const wxVariant value);
+    virtual     wxVariant    GetCol(const int colNo) const ;
+    virtual     void         SetCol(const int colNo, const wxVariant value);
     virtual     GenericKey   GetKey(void);
     virtual     void         SetKey(const GenericKey &key);
 

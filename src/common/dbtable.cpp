@@ -1410,6 +1410,7 @@ bool wxDbTable::CreateTable(bool attemptDrop)
     {
         switch (pDb->Dbms())
         {
+            case dbmsACCESS:
             case dbmsINFORMIX:
             case dbmsSYBASE_ASA:
             case dbmsSYBASE_ASE:
@@ -2502,48 +2503,48 @@ void wxDbTable::SetRowMode(const rowmode_t rowmode)
 }  // wxDbTable::SetRowMode()
 
 
-wxVariant wxDbTable::GetCol(const int col) const
+wxVariant wxDbTable::GetCol(const int colNo) const
 {
     wxVariant val;
-    if ((col < noCols) && (!IsColNull(col)))
+    if ((colNo < noCols) && (!IsColNull(colNo)))
     {
-        switch (colDefs[col].SqlCtype)
+        switch (colDefs[colNo].SqlCtype)
         {
             case SQL_CHAR:
             case SQL_VARCHAR:
-                val = (char *)(colDefs[col].PtrDataObj);
+                val = (wxChar *)(colDefs[colNo].PtrDataObj);
                 break;
             case SQL_C_LONG:
             case SQL_C_SLONG:
-                val = *(long *)(colDefs[col].PtrDataObj);
+                val = *(long *)(colDefs[colNo].PtrDataObj);
                 break;
             case SQL_C_SHORT:
             case SQL_C_SSHORT:
-                val = (long int )(*(short *)(colDefs[col].PtrDataObj));
+                val = (long int )(*(short *)(colDefs[colNo].PtrDataObj));
                 break;
             case SQL_C_ULONG:
-                val = (long)(*(unsigned long *)(colDefs[col].PtrDataObj));
+                val = (long)(*(unsigned long *)(colDefs[colNo].PtrDataObj));
                 break;
             case SQL_C_TINYINT:
-                val = (long)(*(char *)(colDefs[col].PtrDataObj));
+                val = (long)(*(char *)(colDefs[colNo].PtrDataObj));
                 break;
             case SQL_C_UTINYINT:
-                val = (long)(*(unsigned char *)(colDefs[col].PtrDataObj));
+                val = (long)(*(unsigned char *)(colDefs[colNo].PtrDataObj));
                 break;
             case SQL_C_USHORT:
-                val = (long)(*(UWORD *)(colDefs[col].PtrDataObj));
+                val = (long)(*(UWORD *)(colDefs[colNo].PtrDataObj));
                 break;
             case SQL_C_DATE:
-                val = (DATE_STRUCT *)(colDefs[col].PtrDataObj);
+                val = (DATE_STRUCT *)(colDefs[colNo].PtrDataObj);
                 break;
             case SQL_C_TIME:
-                val = (TIME_STRUCT *)(colDefs[col].PtrDataObj);
+                val = (TIME_STRUCT *)(colDefs[colNo].PtrDataObj);
                 break;
             case SQL_C_TIMESTAMP:
-                val = (TIMESTAMP_STRUCT *)(colDefs[col].PtrDataObj);
+                val = (TIMESTAMP_STRUCT *)(colDefs[colNo].PtrDataObj);
                 break;
             case SQL_C_DOUBLE:
-                val = *(double *)(colDefs[col].PtrDataObj);
+                val = *(double *)(colDefs[colNo].PtrDataObj);
                 break;
             default:
                 assert(0);
@@ -2561,57 +2562,57 @@ void csstrncpyt(char *s, const char *t, int n)
     *s = '\0';
 }
 
-void wxDbTable::SetCol(const int col, const wxVariant val)
+void wxDbTable::SetCol(const int colNo, const wxVariant val)
 {
     //FIXME: Add proper wxDateTime support to wxVariant..
     wxDateTime dateval;
 
-    SetColNull(col, val.IsNull());
+    SetColNull(colNo, val.IsNull());
 
     if (!val.IsNull())
     {
-        if ((colDefs[col].SqlCtype == SQL_C_DATE)
-            || (colDefs[col].SqlCtype == SQL_C_TIME)
-            || (colDefs[col].SqlCtype == SQL_C_TIMESTAMP))
+        if ((colDefs[colNo].SqlCtype == SQL_C_DATE)
+            || (colDefs[colNo].SqlCtype == SQL_C_TIME)
+            || (colDefs[colNo].SqlCtype == SQL_C_TIMESTAMP))
         {
             //Returns null if invalid!
             if (!dateval.ParseDate(val.GetString()))
-                SetColNull(col,TRUE);
+                SetColNull(colNo, TRUE);
         }
 
-        switch (colDefs[col].SqlCtype)
+        switch (colDefs[colNo].SqlCtype)
         {
             case SQL_CHAR:
             case SQL_VARCHAR:
-                csstrncpyt((char *)(colDefs[col].PtrDataObj),
+                csstrncpyt((char *)(colDefs[colNo].PtrDataObj),
                            val.GetString().c_str(),
-                           colDefs[col].SzDataObj-1);
+                           colDefs[colNo].SzDataObj-1);
                 break;
             case SQL_C_LONG:
             case SQL_C_SLONG:
-                *(long *)(colDefs[col].PtrDataObj) = val;
+                *(long *)(colDefs[colNo].PtrDataObj) = val;
                 break;
             case SQL_C_SHORT:
             case SQL_C_SSHORT:
-                *(short *)(colDefs[col].PtrDataObj) = val.GetLong();
+                *(short *)(colDefs[colNo].PtrDataObj) = val.GetLong();
                 break;
             case SQL_C_ULONG:
-                *(unsigned long *)(colDefs[col].PtrDataObj) = val.GetLong();
+                *(unsigned long *)(colDefs[colNo].PtrDataObj) = val.GetLong();
                 break;
             case SQL_C_TINYINT:
-                *(char *)(colDefs[col].PtrDataObj) = val.GetChar();
+                *(char *)(colDefs[colNo].PtrDataObj) = val.GetChar();
                 break;
             case SQL_C_UTINYINT:
-                *(unsigned char *)(colDefs[col].PtrDataObj) = val.GetChar();
+                *(unsigned char *)(colDefs[colNo].PtrDataObj) = val.GetChar();
                 break;
             case SQL_C_USHORT:
-                *(unsigned short *)(colDefs[col].PtrDataObj) = val.GetLong();
+                *(unsigned short *)(colDefs[colNo].PtrDataObj) = val.GetLong();
                 break;
             //FIXME: Add proper wxDateTime support to wxVariant..
             case SQL_C_DATE:
                 {
                     DATE_STRUCT *dataptr =
-                        (DATE_STRUCT *)colDefs[col].PtrDataObj;
+                        (DATE_STRUCT *)colDefs[colNo].PtrDataObj;
 
                     dataptr->year   = dateval.GetYear();
                     dataptr->month  = dateval.GetMonth()+1;
@@ -2621,7 +2622,7 @@ void wxDbTable::SetCol(const int col, const wxVariant val)
             case SQL_C_TIME:
                 {
                     TIME_STRUCT *dataptr =
-                        (TIME_STRUCT *)colDefs[col].PtrDataObj;
+                        (TIME_STRUCT *)colDefs[colNo].PtrDataObj;
 
                     dataptr->hour   = dateval.GetHour();
                     dataptr->minute = dateval.GetMinute();
@@ -2631,7 +2632,7 @@ void wxDbTable::SetCol(const int col, const wxVariant val)
             case SQL_C_TIMESTAMP:
                 {
                     TIMESTAMP_STRUCT *dataptr =
-                        (TIMESTAMP_STRUCT *)colDefs[col].PtrDataObj;
+                        (TIMESTAMP_STRUCT *)colDefs[colNo].PtrDataObj;
                     dataptr->year   = dateval.GetYear();
                     dataptr->month  = dateval.GetMonth()+1;
                     dataptr->day    = dateval.GetDay();
@@ -2642,7 +2643,7 @@ void wxDbTable::SetCol(const int col, const wxVariant val)
                 }
                 break;
             case SQL_C_DOUBLE:
-                *(double *)(colDefs[col].PtrDataObj) = val;
+                *(double *)(colDefs[colNo].PtrDataObj) = val;
                 break;
             default:
                 assert(0);
@@ -2654,10 +2655,10 @@ void wxDbTable::SetCol(const int col, const wxVariant val)
 GenericKey wxDbTable::GetKey()
 {
     void *blk;
-    char *blkptr;
+    wxChar *blkptr;
 
     blk = malloc(m_keysize);
-    blkptr = (char *) blk;
+    blkptr = (wxChar *) blk;
 
     int i;
     for (i=0; i < noCols; i++)
@@ -2678,11 +2679,11 @@ GenericKey wxDbTable::GetKey()
 
 void wxDbTable::SetKey(const GenericKey& k)
 {
-    void *blk;
-    char *blkptr;
+    void    *blk;
+    wxChar  *blkptr;
 
     blk = k.GetBlk();
-    blkptr = (char *)blk;
+    blkptr = (wxChar *)blk;
 
     int i;
     for (i=0; i < noCols; i++)
