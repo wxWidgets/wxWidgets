@@ -1505,7 +1505,7 @@ echo "$ac_t""$bakefile_cv_prog_icc" 1>&6
         CXXFLAGS="$CXXFLAGS -fno-common"
         
                                         
-        cat <<EOF
+        cat <<EOF >shared-ld-sh
 #!/bin/sh
 #-----------------------------------------------------------------------------
 #-- Name:        distrib/mac/shared-ld-sh
@@ -1587,10 +1587,10 @@ fi
 #
 # Remove intermediate module
 #
-rm -f master.$$.o
+rm -f master.\$\$.o
 
 exit 0
-EOF >shared-ld-sh
+EOF
         chmod +x shared-ld-sh
 
         SHARED_LD_CC="`pwd`/shared-ld-sh -undefined suppress -flat_namespace -o"
@@ -1630,8 +1630,8 @@ else
   echo "$ac_t""no" 1>&6
 fi
 
-                        SHARED_LD_CC="$(AIX_CC_LD) -p 0 -o"
-            SHARED_LD_CXX="$(AIX_CXX_LD) -p 0 -o"
+                        SHARED_LD_CC="$AIX_CC_LD -p 0 -o"
+            SHARED_LD_CXX="$AIX_CXX_LD -p 0 -o"
         fi
       ;;
 
