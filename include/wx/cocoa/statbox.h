@@ -54,6 +54,8 @@ protected:
 // Implementation
 // ------------------------------------------------------------------------
 public:
+    void GetBordersForSizer(int *borderTop, int *borderOther) const;
+protected:
 };
 
 #endif // __WX_COCOA_STATBOX_H__
