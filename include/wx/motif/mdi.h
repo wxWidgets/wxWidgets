@@ -175,6 +175,7 @@ public:
 
   // MDI operations
   virtual void Maximize();
+  virtual void Maximize(bool WXUNUSED(maximize)) { };
   inline void Minimize() { Iconize(TRUE); };
   virtual void Iconize(bool iconize);
   virtual void Restore();

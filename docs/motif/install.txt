@@ -13,7 +13,17 @@ wxWindows 2.0 for Motif installation
   files to Unix format. Don't worry about files being
   overwritten: they should be identical anyway.
 
+- It is recommended that you install bison and flex; using yacc
+  and lex may require tweaking of the makefiles. You also need
+  Xpm (see comments in the Notes section below).
+
+- You now have the option of using the configure-based system,
+  or the simple makefile system. Configure is more hard to debug
+  if things go wrong, but may be easier to use if they go OK :-)
+  Makefiles are easier to tweak.
+
 COMPILING USING CONFIGURE
+=========================
 
 - You can use the wxGTK configure system to make wxMotif, or
   you can follow the following steps to use the simpler (but
@@ -54,6 +64,7 @@ COMPILING USING CONFIGURE
   where it will be found by the makefile.
 
 COMPILING USING MAKEFILES
+=========================
 
 - Choose a .env file from src/makeenvs that matches your
   environment, and copy it to src/make.env. These are the

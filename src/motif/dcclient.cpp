@@ -917,6 +917,7 @@ void wxWindowDC::DrawIcon( const wxIcon &icon, long x, long y)
 #endif
 };
 
+// TODO: use scaled Blit e.g. as per John Price's implementation in Contrib/Utilities
 bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
                       wxDC *source, long xsrc, long ysrc, int rop, bool useMask )
 {

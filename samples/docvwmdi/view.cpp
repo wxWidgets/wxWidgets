@@ -188,7 +188,7 @@ BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
 END_EVENT_TABLE()
 
 // Define a constructor for my canvas
-MyCanvas::MyCanvas(wxView *v, wxFrame *frame, const wxPoint& pos, const wxSize& size, const long style):
+MyCanvas::MyCanvas(wxView *v, wxFrame *frame, const wxPoint& pos, const wxSize& size, long style):
  wxScrolledWindow(frame, -1, pos, size, style)
 {
   view = v;
@@ -255,7 +255,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 }
 
 // Define a constructor for my text subwindow
-MyTextWindow::MyTextWindow(wxView *v, wxFrame *frame, const wxPoint& pos, const wxSize& size, const long style):
+MyTextWindow::MyTextWindow(wxView *v, wxFrame *frame, const wxPoint& pos, const wxSize& size, long style):
  wxTextCtrl(frame, -1, "", pos, size, style)
 {
   view = v;

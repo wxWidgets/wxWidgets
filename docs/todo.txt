@@ -20,10 +20,11 @@ Please see also:
 
 - Fix TCP/IP mode in dde sample (how to use; why does it crash).
 
-- Get Karsten to remove trashed CVS files:
+- Remove trashed CVS files:
 
   include/wx/msw/magnif1.cur
   src/msw/ctl3d/*
+  utils/glcanvas/samples/isosurf/isosurf.dat.gz
 
   and re-add them.
 
@@ -31,6 +32,9 @@ Please see also:
   Sybase-specific features for it to work on e.g. MySQL,
   PostgreSQL. Find out what Remstar uses and document
   problems/restrictions.
+
+- In doc/view file selector, document type is selected by
+  extension, not the type selected in the (Windows) file selector.
 
 - Complete this ToDo list :-)
 

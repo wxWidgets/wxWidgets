@@ -195,7 +195,6 @@ MSWOBJS = \
   $(MSWDIR)\tbarmsw.obj \
   $(MSWDIR)\textctrl.obj \
   $(MSWDIR)\timer.obj \
-  $(MSWDIR)\tooltip.obj \
   $(MSWDIR)\utils.obj \
   $(MSWDIR)\utilsexc.obj \
   $(MSWDIR)\wave.obj \
@@ -207,6 +206,7 @@ MSWOBJS = \
 #  $(OLEDIR)\dataobj.obj \
 #  $(OLEDIR)\oleutils.obj \
 #  $(OLEDIR)\uuid.obj
+#  $(MSWDIR)\tooltip.obj \
 
 # TODO: Implement XPM and PNG targets in this makefile!
 #  $(OLEDIR)\xpmhand \

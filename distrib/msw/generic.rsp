@@ -335,6 +335,7 @@ samples/proplist/makefile*
 samples/proplist/*.xbm
 samples/proplist/*.xpm
 samples/proplist/*.ico
+samples/proplist/*.bmp
 samples/proplist/*.rc
 
 samples/layout/*.cpp

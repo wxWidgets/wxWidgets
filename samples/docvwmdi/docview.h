@@ -45,7 +45,7 @@ class MyFrame: public wxDocMDIParentFrame
   wxMenu *editMenu;
   
   MyFrame(wxDocManager *manager, wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size,
-    const long type);
+    long type);
 
   void OnAbout(wxCommandEvent& event);
   MyCanvas *CreateCanvas(wxView *view, wxFrame *parent);

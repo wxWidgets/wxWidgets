@@ -24,6 +24,10 @@
 #include "wx/wx.h"
 #endif
 
+#ifndef __WXMSW__
+#error Sorry, this sample is only appropriate under Windows.
+#endif
+
 #include "wx/resource.h"
 
 #include <ctype.h>

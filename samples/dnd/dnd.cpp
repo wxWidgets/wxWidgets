@@ -24,7 +24,11 @@
 
 #include  "wx/dnd.h"
 
-#ifdef __WXGTK__
+#ifdef __WXMOTIF__
+#error Sorry, drag and drop is not yet implemented on wxMotif.
+#endif
+
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
 #include "mondrian.xpm"
 #endif
 

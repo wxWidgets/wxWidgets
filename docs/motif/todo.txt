@@ -46,6 +46,8 @@ High Priority
 
 - Use wxImage to load other formats into wxBitmaps, such as PNG, BMP.
 
+- Implement scaled Blit as per John Price's impementation for 1.68.
+
 Low Priority
 ------------
 

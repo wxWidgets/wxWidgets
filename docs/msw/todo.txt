@@ -40,6 +40,11 @@ Implement wxToolTip
 LOW PRIORITY (MEDIUM TERM)
 --------------------------
 
+Get wxMSW's wxGLCanvas working with non-VC++ compilers.
+
+Generate VC++ lib project files and supply VC++ project
+generator utility.
+
 Convert remaining utilities e.g. wxGraphLayout.
 
 More wxSystemSettings (see comment in settings.cpp).

@@ -23,7 +23,7 @@ class MyCanvas: public wxScrolledWindow
   public:
     wxView *view;
     
-    MyCanvas(wxView *v, wxFrame *frame, const wxPoint& pos, const wxSize& size, const long style);
+    MyCanvas(wxView *v, wxFrame *frame, const wxPoint& pos, const wxSize& size, long style);
     virtual void OnDraw(wxDC& dc);
     void OnMouseEvent(wxMouseEvent& event);
 
@@ -35,7 +35,7 @@ class MyTextWindow: public wxTextCtrl
   public:
     wxView *view;
     
-    MyTextWindow(wxView *v, wxFrame *frame, const wxPoint& pos, const wxSize& size, const long style);
+    MyTextWindow(wxView *v, wxFrame *frame, const wxPoint& pos, const wxSize& size, long style);
 };
 
 class DrawingView: public wxView

@@ -85,7 +85,8 @@ class WXDLLEXPORT wxBitmapCheckBox: public wxCheckBox
   virtual void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
   virtual void SetSize(int width, int height) { SetSize(-1, -1, width, height, wxSIZE_USE_EXISTING); }
 
-  virtual void SetLabel(const wxBitmap *bitmap);
+  virtual void SetLabel(const wxBitmap& bitmap);
+  virtual void SetLabel(const wxString& label) { wxControl::SetLabel(label); };
 };
 #endif
     // _WX_CHECKBOX_H_

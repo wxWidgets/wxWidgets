@@ -228,7 +228,6 @@ MSWOBJS = \
   $(MSWDIR)\tbarmsw.obj \
   $(MSWDIR)\textctrl.obj \
   $(MSWDIR)\timer.obj \
-  $(MSWDIR)\tooltip.obj \
   $(MSWDIR)\utils.obj \
   $(MSWDIR)\utilsexc.obj \
   $(MSWDIR)\wave.obj \
@@ -239,6 +238,7 @@ MSWOBJS = \
 #  $(MSWDIR)\automtn.obj
 
 # Not used for 16-bit compilation
+#  $(MSWDIR)\tooltip.obj \
 #  $(MSWDIR)\gauge95.obj \
 #  $(MSWDIR)\treectrl.obj \
 #  $(MSWDIR)\oleutils.obj \

@@ -454,6 +454,7 @@ long wxTextCtrl::GetLastPosition() const
 
 void wxTextCtrl::Replace(long from, long to, const wxString& value)
 {
+#if wxUSE_CLIPBOARD
     HWND hWnd = (HWND) GetHWND();
     long fromChar = from;
     long toChar = to;
@@ -471,6 +472,9 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
 
     // Paste into edit control
     SendMessage(hWnd, WM_PASTE, (WPARAM)0, (LPARAM)0L);
+#else
+    wxFAIL_MSG("wxTextCtrl::Replace not implemented if wxUSE_CLIPBOARD is 0.");
+#endif
 }
 
 void wxTextCtrl::Remove(long from, long to)

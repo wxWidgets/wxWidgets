@@ -80,7 +80,7 @@ BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
   EVT_PAINT(MyCanvas::OnPaint)
 END_EVENT_TABLE()
 
-MyCanvas::MyCanvas( wxWindow *parent, const wxWindowID id,
+MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
                     const wxPoint &pos, const wxSize &size )
         : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER )
 {

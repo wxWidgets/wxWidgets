@@ -63,7 +63,9 @@
     #include <windowsx.h>
 #endif
 
+#if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__)
 #include <commctrl.h>
+#endif
 
 #ifndef __TWIN32__
     #ifdef __GNUWIN32__
@@ -185,6 +187,7 @@ bool wxWindow::MSWNotify(WXWPARAM WXUNUSED(wParam),
                          WXLPARAM lParam,
                          WXLPARAM* WXUNUSED(result))
 {
+#ifdef __WIN95__
     NMHDR* hdr = (NMHDR *)lParam;
     if ( hdr->code == TTN_NEEDTEXT && m_tooltip )
     {
@@ -194,6 +197,7 @@ bool wxWindow::MSWNotify(WXWPARAM WXUNUSED(wParam),
         // processed
         return TRUE;
     }
+#endif
 
     return FALSE;
 }

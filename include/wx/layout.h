@@ -230,11 +230,21 @@ class WXDLLEXPORT wxSizer: public wxWindow
   ~wxSizer();
 
   bool Create(wxWindow *parent, wxSizerBehaviour behav = wxSizerNone);
+
   virtual void SetSize(int x, int y, int w, int h, int flags = wxSIZE_AUTO);
+  virtual void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
+    { wxWindow::SetSize(rect, sizeFlags); }
+  virtual void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
+  virtual void SetSize(int width, int height) { SetSize(-1, -1, width, height, wxSIZE_USE_EXISTING); }
+
   virtual void GetSize(int *w, int *h) const;
+  wxSize GetSize() const { return wxWindow::GetSize(); }
 
   virtual void GetClientSize(int *w, int *h) const { GetSize(w, h); }
+  wxSize GetClientSize() const { return wxWindow::GetClientSize(); }
+
   virtual void GetPosition(int *x, int *y) const;
+  wxPoint GetPosition() const { return wxWindow::GetPosition(); }
 
   inline void SizerSetSize(int x, int y, int w, int h)
     { SetSize(x, y, w, h); }

@@ -407,7 +407,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
   m_checkbox = new wxCheckBox( panel, ID_LISTBOX_ENABLE, "Disable", wxPoint(20,130), wxSize(140,30) );
   m_checkbox->SetValue(FALSE);
   m_checkbox->SetToolTip( "Click here to disable the listbox" );
-  m_notebook->AddPage(panel, "wxList", TRUE, Image_List);
+  m_notebook->AddPage(panel, "wxListBox", TRUE, Image_List);
 
   panel = new wxPanel(m_notebook);
   m_choice = new wxChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,-1), 5, choices );
@@ -433,7 +433,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
   panel = new wxPanel(m_notebook);
   m_textentry = new MyTextCtrl( panel, -1, "Write text here.", wxPoint(10,10), wxSize(320,28),
-                                wxTE_PROCESS_ENTER);
+//                                wxTE_PROCESS_ENTER);
+0);
+
   (*m_textentry) << " More text.";          // this text is appended
   m_textentry->SetInsertionPoint(0);
   m_textentry->WriteText("Less text.");     // this text is prepended

@@ -118,7 +118,7 @@ bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id, const wxBitmap *l
     return FALSE;
 }
 
-void wxBitmapCheckBox::SetLabel(const wxBitmap *bitmap)
+void wxBitmapCheckBox::SetLabel(const wxBitmap& bitmap)
 {
     // TODO
 }
