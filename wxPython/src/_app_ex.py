@@ -29,6 +29,13 @@ class PyOnDemandOutputWindow:
         EVT_CLOSE(self.frame, self.OnCloseWindow)
         
 
+    def OnCloseWindow(self, event):
+        if self.frame is not None:
+            self.frame.Destroy()
+        self.frame = None
+        self.text  = None
+
+
     # These methods provide the file-like output behaviour.
     def write(self, text):
         """
@@ -53,11 +60,6 @@ class PyOnDemandOutputWindow:
             wx.CallAfter(self.frame.Close)
 
 
-    def OnCloseWindow(self, event):
-        if self.frame is not None:
-            self.frame.Destroy()
-        self.frame = None
-        self.text  = None
 
 #----------------------------------------------------------------------
 
@@ -131,7 +133,7 @@ your Mac."""
         self.RestoreStdio()
 
 
-    def RedirectStdio(self, filename):
+    def RedirectStdio(self, filename=None):
         """Redirect sys.stdout and sys.stderr to a file or a popup window."""
         if filename:
             _sys.stdout = _sys.stderr = open(filename, 'a')

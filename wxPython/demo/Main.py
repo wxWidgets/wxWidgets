@@ -493,9 +493,15 @@ class wxPythonDemo(wx.Frame):
         # Make a File menu
         self.mainmenu = wx.MenuBar()
         menu = wx.Menu()
+        item = menu.Append(-1, '&Redirect Output',
+                           'Redirect print statements to a window',
+                           wx.ITEM_CHECK)
+        self.Bind(wx.EVT_MENU, self.OnToggleRedirect, item)
+        
         item = menu.Append(-1, 'E&xit\tAlt-X', 'Get the heck outta here!')
         self.Bind(wx.EVT_MENU, self.OnFileExit, item)
         wx.App_SetMacExitMenuItemId(item.GetId())
+
         self.mainmenu.Append(menu, '&File')
 
         # Make a Demo menu
@@ -743,6 +749,15 @@ class wxPythonDemo(wx.Frame):
     def OnFileExit(self, *event):
         self.Close()
 
+    def OnToggleRedirect(self, event):
+        app = wx.GetApp()
+        if event.Checked():
+            app.RedirectStdio()
+            print "Print statements and other standard output will now be directed to this window."
+        else:
+            app.RestoreStdio()
+            print "Print statements and other standard output will now be sent to the usual location."
+        
     def OnHelpAbout(self, event):
         from About import MyAboutBox
         about = MyAboutBox(self)
