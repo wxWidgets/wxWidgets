@@ -116,7 +116,7 @@ bool wxGIFDecoder::ConvertToImage(wxImage *image) const
     image->Create(GetWidth(), GetHeight());
 
     if (!image->Ok())
-        return FALSE;
+        return false;
 
     pal = GetPalette();
     src = GetData();
@@ -143,7 +143,7 @@ bool wxGIFDecoder::ConvertToImage(wxImage *image) const
         image->SetMaskColour(255, 0, 255);
     }
     else
-        image->SetMask(FALSE);
+        image->SetMask(false);
 
 #if wxUSE_PALETTE
     if (pal)
@@ -171,7 +171,7 @@ bool wxGIFDecoder::ConvertToImage(wxImage *image) const
         *(dst++) = pal[3 * (*src) + 2];
     }
 
-    return TRUE;
+    return true;
 }
 
 
@@ -208,27 +208,27 @@ bool wxGIFDecoder::IsAnimation() const          { return (m_nimages > 1); }
 bool wxGIFDecoder::GoFirstFrame()
 {
     if (!IsAnimation())
-        return FALSE;
+        return false;
 
     m_image = 1;
     m_pimage = m_pfirst;
-    return TRUE;
+    return true;
 }
 
 bool wxGIFDecoder::GoLastFrame()
 {
     if (!IsAnimation())
-        return FALSE;
+        return false;
 
     m_image = m_nimages;
     m_pimage = m_plast;
-    return TRUE;
+    return true;
 }
 
 bool wxGIFDecoder::GoNextFrame(bool cyclic)
 {
     if (!IsAnimation())
-        return FALSE;
+        return false;
 
     if ((m_image < m_nimages) || (cyclic))
     {
@@ -241,16 +241,16 @@ bool wxGIFDecoder::GoNextFrame(bool cyclic)
             m_pimage = m_pfirst;
         }
 
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 bool wxGIFDecoder::GoPrevFrame(bool cyclic)
 {
     if (!IsAnimation())
-        return FALSE;
+        return false;
 
     if ((m_image > 1) || (cyclic))
     {
@@ -263,10 +263,10 @@ bool wxGIFDecoder::GoPrevFrame(bool cyclic)
             m_pimage = m_plast;
         }
 
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 bool wxGIFDecoder::GoFrame(int which)
@@ -274,7 +274,7 @@ bool wxGIFDecoder::GoFrame(int which)
     int i;
 
     if (!IsAnimation())
-        return FALSE;
+        return false;
 
     if ((which >= 1) && (which <= m_nimages))
     {
@@ -283,10 +283,10 @@ bool wxGIFDecoder::GoFrame(int which)
         for (i = 0; i < which; i++)
             m_pimage = m_pimage->next;
 
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 
@@ -612,14 +612,14 @@ as an End of Information itself)
 
 
 // CanRead:
-//  Returns TRUE if the file looks like a valid GIF, FALSE otherwise.
+//  Returns true if the file looks like a valid GIF, false otherwise.
 //
 bool wxGIFDecoder::CanRead()
 {
     unsigned char buf[3];
 
     if ( !m_f->Read(buf, WXSIZEOF(buf)) )
-        return FALSE;
+        return false;
 
     m_f->SeekI(-(off_t)WXSIZEOF(buf), wxFromCurrent);
 
@@ -663,7 +663,7 @@ int wxGIFDecoder::ReadGIF()
 
     if (memcmp(buf + 3, "89a", 3) < 0)
     {
-        m_anim = FALSE;
+        m_anim = false;
     }
 
     /* read logical screen descriptor block (LSDB) */
@@ -701,7 +701,7 @@ int wxGIFDecoder::ReadGIF()
     pprev = NULL;
     pimg  = NULL;
 
-    bool done = FALSE;
+    bool done = false;
 
     while(!done)
     {
@@ -727,7 +727,7 @@ int wxGIFDecoder::ReadGIF()
         /* end of data? */
         if (type == 0x3B)
         {
-            done = TRUE;
+            done = true;
         }
         else
         /* extension block? */
@@ -762,7 +762,7 @@ int wxGIFDecoder::ReadGIF()
                     m_f->SeekI(i, wxFromCurrent);
                     if (m_f->Eof())
                     {
-                        done = TRUE;
+                        done = true;
                         break;
                     }
                 }
@@ -857,7 +857,7 @@ int wxGIFDecoder::ReadGIF()
 
             /* if this is not an animated GIF, exit after first image */
             if (!m_anim)
-                done = TRUE;
+                done = true;
         }
     }
 

@@ -58,7 +58,7 @@ bool wxGaugeBase::Create(wxWindow *parent,
                          const wxString& name)
 {
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
-        return FALSE;
+        return false;
 
     SetName(name);
 
@@ -69,7 +69,7 @@ bool wxGaugeBase::Create(wxWindow *parent,
     SetRange(range);
     SetValue(0);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------

@@ -177,7 +177,7 @@ void wxGBSizerItem::GetEndPos(int& row, int& col)
 wxGridBagSizer::wxGridBagSizer(int vgap, int hgap )
     : wxFlexGridSizer(1, vgap, hgap),
       m_emptyCellSize(10,20)
-    
+
 {
 }
 
@@ -272,7 +272,7 @@ wxGBPosition wxGridBagSizer::GetItemPosition(size_t index)
     wxGBPosition badpos(-1,-1);
     wxSizerItemList::compatibility_iterator node = m_children.Item( index );
     wxCHECK_MSG( node, badpos, _T("Failed to find item.") );
-    wxGBSizerItem* item = (wxGBSizerItem*)node->GetData();    
+    wxGBSizerItem* item = (wxGBSizerItem*)node->GetData();
     return item->GetPos();
 }
 
@@ -298,7 +298,7 @@ bool wxGridBagSizer::SetItemPosition(size_t index, const wxGBPosition& pos)
 {
     wxSizerItemList::compatibility_iterator node = m_children.Item( index );
     wxCHECK_MSG( node, false, _T("Failed to find item.") );
-    wxGBSizerItem* item = (wxGBSizerItem*)node->GetData();    
+    wxGBSizerItem* item = (wxGBSizerItem*)node->GetData();
     return item->SetPos(pos);
 }
 
@@ -327,7 +327,7 @@ wxGBSpan wxGridBagSizer::GetItemSpan(size_t index)
     wxGBSpan badspan(-1,-1);
     wxSizerItemList::compatibility_iterator node = m_children.Item( index );
     wxCHECK_MSG( node, badspan, _T("Failed to find item.") );
-    wxGBSizerItem* item = (wxGBSizerItem*)node->GetData();    
+    wxGBSizerItem* item = (wxGBSizerItem*)node->GetData();
     return item->GetSpan();
 }
 
@@ -353,7 +353,7 @@ bool wxGridBagSizer::SetItemSpan(size_t index, const wxGBSpan& span)
 {
     wxSizerItemList::compatibility_iterator node = m_children.Item( index );
     wxCHECK_MSG( node, false, _T("Failed to find item.") );
-    wxGBSizerItem* item = (wxGBSizerItem*)node->GetData();    
+    wxGBSizerItem* item = (wxGBSizerItem*)node->GetData();
     return item->SetSpan(span);
 }
 
@@ -447,7 +447,7 @@ wxGBSizerItem* wxGridBagSizer::FindItemWithData(const wxObject* userData)
 wxSize wxGridBagSizer::CalcMin()
 {
     int idx;
-    
+
     if (m_children.GetCount() == 0)
         return m_emptyCellSize;
 
@@ -461,7 +461,7 @@ wxSize wxGridBagSizer::CalcMin()
         if ( item->IsShown() )
         {
             int row, col, endrow, endcol;
-        
+
             item->GetPos(row, col);
             item->GetEndPos(endrow, endcol);
 
@@ -507,7 +507,7 @@ void wxGridBagSizer::RecalcSizes()
 
     wxPoint pt( GetPosition() );
     wxSize  sz( GetSize() );
-   
+
     m_rows = m_rowHeights.GetCount();
     m_cols = m_colWidths.GetCount();
     int idx, width, height;
@@ -549,16 +549,16 @@ void wxGridBagSizer::RecalcSizes()
         for(idx=row; idx <= endrow; idx++)
             height += m_rowHeights[idx];
         height += (endrow - row) * m_vgap; // add a vgap for every row spanned
-        
+
         width = 0;
         for (idx=col; idx <= endcol; idx++)
             width += m_colWidths[idx];
         width += (endcol - col) * m_hgap; // add a hgap for every col spanned
-    
+
         SetItemBounds(item, colpos[col], rowpos[row], width, height);
 
         node = node->GetNext();
-    }        
+    }
 }
 
 
@@ -580,7 +580,7 @@ bool wxGridBagSizer::CheckForIntersection(const wxGBPosition& pos, const wxGBSpa
 
         if ( excludeItem && item == excludeItem )
             continue;
-        
+
         if ( item->Intersects(pos, span) )
             return true;
 

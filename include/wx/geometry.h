@@ -300,10 +300,10 @@ public :
     inline wxPoint2DDouble();
     inline wxPoint2DDouble( wxDouble x , wxDouble y );
     inline wxPoint2DDouble( const wxPoint2DDouble &pt );
-    wxPoint2DDouble( const wxPoint2DInt &pt ) 
-		{ 	m_x = (wxDouble) pt.m_x ; m_y = (wxDouble) pt.m_y ; }
-	wxPoint2DDouble( const wxPoint &pt ) 
-		{ 	m_x = (wxDouble) pt.x ; m_y = (wxDouble) pt.y ; }
+    wxPoint2DDouble( const wxPoint2DInt &pt )
+        { m_x = (wxDouble) pt.m_x ; m_y = (wxDouble) pt.m_y ; }
+    wxPoint2DDouble( const wxPoint &pt )
+        { m_x = (wxDouble) pt.x ; m_y = (wxDouble) pt.y ; }
 
     // two different conversions to integers, floor and rounding
     inline void GetFloor( wxInt32 *x , wxInt32 *y ) const;
@@ -388,7 +388,7 @@ inline wxDouble wxPoint2DDouble::GetVectorLength() const
     return sqrt( (m_x)*(m_x) + (m_y)*(m_y) ) ;
 }
 
-inline void wxPoint2DDouble::SetVectorLength( wxDouble length ) 
+inline void wxPoint2DDouble::SetVectorLength( wxDouble length )
 {
     wxDouble before = GetVectorLength() ;
     m_x = (m_x * length / before) ;
@@ -590,8 +590,8 @@ public:
                      ( ( pt.m_x > m_x + m_width ) ? wxOutRight : 0 ) +
                      ( ( pt.m_y < m_y ) ? wxOutTop : 0 )  +
                      ( ( pt.m_y > m_y + m_height ) ? wxOutBottom : 0 )); }
-	inline wxOutCode GetOutcode(const wxPoint2DDouble &pt) const
-		{ return GetOutCode(pt) ; }
+    inline wxOutCode GetOutcode(const wxPoint2DDouble &pt) const
+        { return GetOutCode(pt) ; }
     inline bool Contains( const wxPoint2DDouble &pt ) const
         { return  GetOutCode( pt ) == wxInside; }
     inline bool Contains( const wxRect2DDouble &rect ) const
@@ -702,8 +702,8 @@ public:
                      ( ( pt.m_x >= m_x + m_width ) ? wxOutRight : 0 ) +
                      ( ( pt.m_y < m_y ) ? wxOutTop : 0 )  +
                      ( ( pt.m_y >= m_y + m_height ) ? wxOutBottom : 0 )); }
-		inline wxOutCode GetOutcode( const wxPoint2DInt &pt ) const
-			{ return GetOutCode( pt ) ; }
+        inline wxOutCode GetOutcode( const wxPoint2DInt &pt ) const
+            { return GetOutCode( pt ) ; }
         inline bool Contains( const wxPoint2DInt &pt ) const
             { return  GetOutCode( pt ) == wxInside; }
         inline bool Contains( const wxRect2DInt &rect ) const
@@ -776,8 +776,8 @@ inline wxRect2DInt::wxRect2DInt( const wxPoint2DInt& pos, const wxSize& size)
 }
 
 inline bool wxRect2DInt::operator == (const wxRect2DInt& rect) const
-{ 
-    return (m_x==rect.m_x && m_y==rect.m_y && 
+{
+    return (m_x==rect.m_x && m_y==rect.m_y &&
             m_width==rect.m_width && m_height==rect.m_height);
 }
 

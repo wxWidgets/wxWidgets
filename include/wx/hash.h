@@ -281,10 +281,10 @@ public:
     void Put(long key, const wxString& value);
 
     // get the string from the key: if not found, an empty string is returned
-    // and the wasFound is set to FALSE if not NULL
+    // and the wasFound is set to false if not NULL
     wxString Get(long key, bool *wasFound = NULL) const;
 
-    // remove the item, returning TRUE if the item was found and deleted
+    // remove the item, returning true if the item was found and deleted
     bool Delete(long key) const;
 
     // clean up
@@ -584,7 +584,7 @@ private:
             {                                                                  \
                 m_hashTable[slot] = new listclass(m_keyType);                  \
                 if ( m_deleteContents )                                        \
-                    m_hashTable[slot]->DeleteContents(TRUE);                   \
+                    m_hashTable[slot]->DeleteContents(true);                   \
             }                                                                  \
                                                                                \
             ((listclass *)m_hashTable[slot])->Append(value, data);             \

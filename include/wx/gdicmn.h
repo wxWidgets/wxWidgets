@@ -117,7 +117,7 @@ enum wxStockCursor
     wxCURSOR_DEFAULT, // standard X11 cursor
 #endif
 #ifdef __WXMAC__
-	wxCURSOR_COPY_ARROW , // MacOS Theme Plus arrow
+    wxCURSOR_COPY_ARROW , // MacOS Theme Plus arrow
 #endif
 #ifdef __X__
     // Not yet implemented for Windows
@@ -234,15 +234,15 @@ public:
     int GetWidth() const { return x; }
     int GetHeight() const { return y; }
 
-    bool IsFullySpecified() const { return x != -1 && y != -1; }
+    bool IsFullySpecified() const { return x != wxDefaultCoord && y != wxDefaultCoord; }
 
     // combine this size with the other one replacing the default (i.e. equal
-    // to -1) components of this object with those of the other
+    // to wxDefaultCoord) components of this object with those of the other
     void SetDefaults(const wxSize& size)
     {
-        if ( x == -1 )
+        if ( x == wxDefaultCoord )
             x = size.x;
-        if ( y == -1 )
+        if ( y == wxDefaultCoord )
             y = size.y;
     }
 
@@ -392,11 +392,11 @@ public:
     bool operator==(const wxRect& rect) const;
     bool operator!=(const wxRect& rect) const { return !(*this == rect); }
 
-    // return TRUE if the point is (not strcitly) inside the rect
+    // return true if the point is (not strcitly) inside the rect
     bool Inside(int x, int y) const;
     bool Inside(const wxPoint& pt) const { return Inside(pt.x, pt.y); }
 
-    // return TRUE if the rectangles have a non empty intersection
+    // return true if the rectangles have a non empty intersection
     bool Intersects(const wxRect& rect) const;
 
 public:
@@ -440,7 +440,7 @@ public:
     void AddFont(wxFont *font);
     void RemoveFont(wxFont *font);
     wxFont *FindOrCreateFont(int pointSize, int family, int style, int weight,
-                             bool underline = FALSE,
+                             bool underline = false,
                              const wxString& face = wxEmptyString,
                              wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 };

@@ -136,13 +136,13 @@ public:
     // move through the animation
     bool GoFirstFrame();
     bool GoLastFrame();
-    bool GoNextFrame(bool cyclic = FALSE);
-    bool GoPrevFrame(bool cyclic = FALSE);
+    bool GoNextFrame(bool cyclic = false);
+    bool GoPrevFrame(bool cyclic = false);
     bool GoFrame(int which);
 
 public:
     // constructor, destructor, etc.
-    wxGIFDecoder(wxInputStream *s, bool anim = FALSE);
+    wxGIFDecoder(wxInputStream *s, bool anim = false);
     ~wxGIFDecoder();
     bool CanRead();
     int ReadGIF();

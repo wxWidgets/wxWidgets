@@ -77,7 +77,7 @@ public:
     virtual int GetBezelFace() const;
 
     // overriden base class virtuals
-    virtual bool AcceptsFocus() const { return FALSE; }
+    virtual bool AcceptsFocus() const { return false; }
 
 protected:
     // the max position
