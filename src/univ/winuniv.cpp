@@ -108,6 +108,9 @@ void wxWindow::Init()
     m_isCurrent = FALSE;
 
     m_renderer = wxTheme::Get()->GetRenderer();
+    
+    m_oldSize.x = -1;
+    m_oldSize.y = -1;
 }
 
 bool wxWindow::Create(wxWindow *parent,
@@ -446,17 +449,28 @@ int wxWindow::GetStateFlags() const
 
 void wxWindow::OnSize(wxSizeEvent& event)
 {
+    event.Skip();
+    
     if ( m_scrollbarVert || m_scrollbarHorz )
     {
         PositionScrollbars();
     }
     
-#if 0
+#ifndef __WXMSW__
     // Refresh the area (strip) previously occupied by the border
     
-    if (HasFlag( wxNO_FULL_REPAINT_ON_RESIZE ))
+    if (HasFlag( wxNO_FULL_REPAINT_ON_RESIZE ) && IsShown())
     {
+        // This code assumes that wxSizeEvent.GetSize() returns
+        // the area of the entire window, not just the client
+        // area.
         wxSize newSize = event.GetSize();
+        
+        if (m_oldSize.x == -1 && m_oldSize.y == -1)
+        {
+            m_oldSize = newSize;
+            return;
+        }
         
         if (HasFlag( wxSIMPLE_BORDER ))
         {
@@ -465,18 +479,37 @@ void wxWindow::OnSize(wxSizeEvent& event)
                 wxRect rect;
                 rect.x = 0;
                 rect.width = m_oldSize.x;
-                rect.y = m_oldSize.y;
+                rect.y = m_oldSize.y-2;
                 rect.height = 1;
                 Refresh( TRUE, &rect );
             }
+            else if (newSize.y < m_oldSize.y)
+            {
+                wxRect rect;
+                rect.y = newSize.y;
+                rect.x = 0;
+                rect.height = 1;
+                rect.width = newSize.x;
+                wxWindowNative::Refresh( TRUE, &rect );
+            }
+            
             if (newSize.x > m_oldSize.x)
             {
                 wxRect rect;
                 rect.y = 0;
                 rect.height = m_oldSize.y;
-                rect.x = m_oldSize.x;
+                rect.x = m_oldSize.x-2;
                 rect.width = 1;
                 Refresh( TRUE, &rect );
+            }
+            else if (newSize.x < m_oldSize.x)
+            {
+                wxRect rect;
+                rect.x = newSize.x;
+                rect.y = 0;
+                rect.width = 1;
+                rect.height = newSize.y;
+                wxWindowNative::Refresh( TRUE, &rect );
             }
         }
         else
@@ -487,26 +520,43 @@ void wxWindow::OnSize(wxSizeEvent& event)
                 wxRect rect;
                 rect.x = 0;
                 rect.width = m_oldSize.x;
-                rect.y = m_oldSize.y-1;
+                rect.y = m_oldSize.y-4;
                 rect.height = 2;
                 Refresh( TRUE, &rect );
             }
+            else if (newSize.y < m_oldSize.y)
+            {
+                wxRect rect;
+                rect.y = newSize.y;
+                rect.x = 0;
+                rect.height = 2;
+                rect.width = newSize.x;
+                wxWindowNative::Refresh( TRUE, &rect );
+            }
+            
             if (newSize.x > m_oldSize.x)
             {
                 wxRect rect;
                 rect.y = 0;
                 rect.height = m_oldSize.y;
-                rect.x = m_oldSize.x-1;
+                rect.x = m_oldSize.x-4;
                 rect.width = 2;
                 Refresh( TRUE, &rect );
+            }
+            else if (newSize.x < m_oldSize.x)
+            {
+                wxRect rect;
+                rect.x = newSize.x;
+                rect.y = 0;
+                rect.width = 2;
+                rect.height = newSize.y;
+                wxWindowNative::Refresh( TRUE, &rect );
             }
         }
         
         m_oldSize = newSize;
     }
 #endif
-
-    event.Skip();
 }
 
 wxSize wxWindow::DoGetBestSize() const

@@ -265,6 +265,9 @@ protected:
     wxBitmap  m_bitmapBg;
     int       m_alignBgBitmap;
     wxStretch m_stretchBgBitmap;
+    
+    // old size
+    wxSize m_oldSize;
 
     // is the mouse currently inside the window?
     bool m_isCurrent:1;

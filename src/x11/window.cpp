@@ -1054,7 +1054,7 @@ void wxWindowX11::SendEraseEvents()
 void wxWindowX11::SendPaintEvents()
 {
     m_clipPaintRegion = TRUE;
-
+    
     wxNcPaintEvent nc_paint_event( GetId() );
     nc_paint_event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( nc_paint_event );
