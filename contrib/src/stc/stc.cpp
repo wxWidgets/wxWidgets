@@ -520,6 +520,7 @@ void wxStyledTextCtrl::MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp)
         buff[len] = 0;
         SendMsg(2049, markerNumber, (long)buff);
         delete [] buff;
+        
 }
 
 // Set a margin to be either numeric or symbolic.
@@ -903,6 +904,7 @@ void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp) {
         buff[len] = 0;
         SendMsg(2405, type, (long)buff);
         delete [] buff;
+     
 }
 
 // Clear all the registered images.
@@ -1073,34 +1075,34 @@ int wxStyledTextCtrl::FindText(int minPos, int maxPos,
 }
 
 // On Windows, will draw the document into a display context such as a printer.
-int wxStyledTextCtrl::FormatRange(bool   doDraw,
-                                   int    startPos,
-                                   int    endPos,
-                                   wxDC*  draw,
-                                   wxDC*  target,
-                                   wxRect renderRect,
-                                   wxRect pageRect) {
-    RangeToFormat fr;
+ int wxStyledTextCtrl::FormatRange(bool   doDraw,
+                int    startPos,
+                int    endPos,
+                wxDC*  draw,
+                wxDC*  target, 
+                wxRect renderRect,
+                wxRect pageRect) {
+             RangeToFormat fr;
 
-    if (endPos < startPos) {
-        int temp = startPos;
-        startPos = endPos;
-        endPos = temp;
-    }
-    fr.hdc = draw;
-    fr.hdcTarget = target;
-    fr.rc.top = renderRect.GetTop();
-    fr.rc.left = renderRect.GetLeft();
-    fr.rc.right = renderRect.GetRight();
-    fr.rc.bottom = renderRect.GetBottom();
-    fr.rcPage.top = pageRect.GetTop();
-    fr.rcPage.left = pageRect.GetLeft();
-    fr.rcPage.right = pageRect.GetRight();
-    fr.rcPage.bottom = pageRect.GetBottom();
-    fr.chrg.cpMin = startPos;
-    fr.chrg.cpMax = endPos;
+             if (endPos < startPos) {
+                 int temp = startPos;
+                 startPos = endPos;
+                 endPos = temp;
+             }
+             fr.hdc = draw;
+             fr.hdcTarget = target;
+             fr.rc.top = renderRect.GetTop();
+             fr.rc.left = renderRect.GetLeft();
+             fr.rc.right = renderRect.GetRight();
+             fr.rc.bottom = renderRect.GetBottom();
+             fr.rcPage.top = pageRect.GetTop();
+             fr.rcPage.left = pageRect.GetLeft();
+             fr.rcPage.right = pageRect.GetRight();
+             fr.rcPage.bottom = pageRect.GetBottom();
+             fr.chrg.cpMin = startPos;
+             fr.chrg.cpMax = endPos;
 
-    return SendMsg(2151, doDraw, (long)&fr);
+             return SendMsg(2151, doDraw, (long)&fr);
 }
 
 // Retrieve the display line at the top of the display.
