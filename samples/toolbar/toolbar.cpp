@@ -114,6 +114,7 @@ public:
     void OnInsertPrint(wxCommandEvent& event);
     void OnChangeToolTip(wxCommandEvent& event);
     void OnToggleHelp(wxCommandEvent& WXUNUSED(event)) { DoToggleHelp(); }
+    void OnToggleRadioBtn(wxCommandEvent& event);
 
     void OnToolbarStyle(wxCommandEvent& event);
 
@@ -124,6 +125,8 @@ public:
 
     void OnUpdateCopyAndCut(wxUpdateUIEvent& event);
     void OnUpdateToggleHorzText(wxUpdateUIEvent& event);
+    void OnUpdateToggleRadioBtn(wxUpdateUIEvent& event)
+        { event.Enable( m_tbar != NULL ); }
 
 #if USE_GENERIC_TBAR
     virtual wxToolBar *OnCreateToolBar(long style,
@@ -170,6 +173,9 @@ enum
     IDM_TOOLBAR_DELETEPRINT,
     IDM_TOOLBAR_INSERTPRINT,
     IDM_TOOLBAR_TOGGLEHELP,
+    IDM_TOOLBAR_TOGGLERADIOBTN1,
+    IDM_TOOLBAR_TOGGLERADIOBTN2,
+    IDM_TOOLBAR_TOGGLERADIOBTN3,
     IDM_TOOLBAR_TOGGLE_TOOLBAR,
     IDM_TOOLBAR_TOGGLE_HORIZONTAL_TEXT,
     IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR,
@@ -177,6 +183,10 @@ enum
     IDM_TOOLBAR_SHOW_TEXT,
     IDM_TOOLBAR_SHOW_ICONS,
     IDM_TOOLBAR_SHOW_BOTH,
+
+    IDM_TOOLBAR_OTHER_1,
+    IDM_TOOLBAR_OTHER_2,
+    IDM_TOOLBAR_OTHER_3,
 
     ID_COMBO = 1000
 };
@@ -206,6 +216,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(IDM_TOOLBAR_DELETEPRINT, MyFrame::OnDeletePrint)
     EVT_MENU(IDM_TOOLBAR_INSERTPRINT, MyFrame::OnInsertPrint)
     EVT_MENU(IDM_TOOLBAR_TOGGLEHELP, MyFrame::OnToggleHelp)
+    EVT_MENU_RANGE(IDM_TOOLBAR_TOGGLERADIOBTN1, IDM_TOOLBAR_TOGGLERADIOBTN3,
+                   MyFrame::OnToggleRadioBtn)
     EVT_MENU(IDM_TOOLBAR_CHANGE_TOOLTIP, MyFrame::OnChangeToolTip)
 
     EVT_MENU_RANGE(IDM_TOOLBAR_SHOW_TEXT, IDM_TOOLBAR_SHOW_BOTH,
@@ -220,6 +232,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(wxID_COPY, MyFrame::OnUpdateCopyAndCut)
     EVT_UPDATE_UI(wxID_CUT, MyFrame::OnUpdateCopyAndCut)
 
+    EVT_UPDATE_UI_RANGE(IDM_TOOLBAR_TOGGLERADIOBTN1,
+                        IDM_TOOLBAR_TOGGLERADIOBTN3,
+                        MyFrame::OnUpdateToggleRadioBtn)
     EVT_UPDATE_UI(IDM_TOOLBAR_TOGGLE_HORIZONTAL_TEXT,
                   MyFrame::OnUpdateToggleHorzText)
 END_EVENT_TABLE()
@@ -414,6 +429,10 @@ MyFrame::MyFrame(wxFrame* parent,
     tbarMenu->Append(IDM_TOOLBAR_INSERTPRINT, _T("&Insert print button\tCtrl-I"), _T(""));
     tbarMenu->Append(IDM_TOOLBAR_TOGGLEHELP, _T("Toggle &help button\tCtrl-T"), _T(""));
     tbarMenu->AppendSeparator();
+    tbarMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN1, _T("Toggle &1st radio button\tCtrl-1"), _T(""));
+    tbarMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN2, _T("Toggle &2nd radio button\tCtrl-2"), _T(""));
+    tbarMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN3, _T("Toggle &3rd radio button\tCtrl-3"), _T(""));
+    tbarMenu->AppendSeparator();
     tbarMenu->Append(IDM_TOOLBAR_CHANGE_TOOLTIP, _T("Change tool tip"), _T(""));
     tbarMenu->AppendSeparator();
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_TEXT, _T("Show &text\tAlt-T"));
@@ -528,9 +547,9 @@ void MyFrame::OnToggleAnotherToolbar(wxCommandEvent& WXUNUSED(event))
 
         m_tbar->SetMargins(4, 4);
 
-        m_tbar->AddRadioTool(wxID_NEW, _T("First"), wxBITMAP(new));
-        m_tbar->AddRadioTool(wxID_OPEN, _T("Second"), wxBITMAP(open));
-        m_tbar->AddRadioTool(wxID_SAVE, _T("Third"), wxBITMAP(save));
+        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_1, _T("First"), wxBITMAP(new));
+        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_2, _T("Second"), wxBITMAP(open));
+        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_3, _T("Third"), wxBITMAP(save));
         m_tbar->AddSeparator();
         m_tbar->AddTool(wxID_HELP, _T("Help"), wxBITMAP(help));
 
@@ -697,5 +716,14 @@ void MyFrame::OnToolEnter(wxCommandEvent& event)
     }
     else
         SetStatusText(_T(""));
+}
+
+void MyFrame::OnToggleRadioBtn(wxCommandEvent& event)
+{
+    if ( m_tbar )
+    {
+        m_tbar->ToggleTool(IDM_TOOLBAR_OTHER_1 +
+                            event.GetId() - IDM_TOOLBAR_TOGGLERADIOBTN1, true);
+    }
 }
 
