@@ -3,6 +3,7 @@ docs/licence.txt
 
 distrib/msw/*.rsp
 distrib/msw/*.bat
+distrib/msw/tmake/*.t
 
 tools/gettext/xgettext.exe
 tools/gettext/msgfmt.exe
@@ -48,6 +49,7 @@ src/msw/makefile.*
 src/msw/*.lst
 src/msw/*.def
 src/msw/*.inc
+src/msw/winestub.c
 
 src/msw/ctl3d/*.*
 src/msw/ctl3d/msvc/*.*

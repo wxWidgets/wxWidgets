@@ -123,6 +123,12 @@ MyFrame::MyFrame(void) :
    m_lwin->SetEditable(true);
    m_lwin->SetWrapMargin(40);
    m_lwin->SetFocus();
+
+   // JACS: under MSW, the window doesn't show the caret initially,
+   // and the following line I added doesn't help either.
+   // going to another window and then back again fixes it.
+   // m_lwin->OnSetFocus(wxFocusEvent());
+
    Clear();
 
 #if 0
