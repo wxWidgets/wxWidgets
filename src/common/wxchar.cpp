@@ -921,11 +921,12 @@ int wxSprintf( wxChar *str, const wxChar *format, ... )
 
     // note that wxString::Format() uses wxVsnprintf(), not wxSprintf(), so
     // it's safe to implement this one in terms of it
-    wxStrcpy(str, wxString::Format(format, argptr));
+    wxString s(wxString::Format(format, argptr));
+    wxStrcpy(str, s);
 
     va_end(argptr);
 
-    return ret;
+    return s.length();
 }
 
 int wxFprintf( FILE *stream, const wxChar *format, ... )
