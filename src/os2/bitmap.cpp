@@ -182,7 +182,7 @@ wxBitmap::wxBitmap(
     vHeader.ulColorEncoding = 0;
     vHeader.ulIdentifier    = 0;
 
-    hPs = ::GpiCreatePS(habMain, hdc, &vSize, GPIA_ASSOC | PU_PELS);
+    hPs = ::GpiCreatePS(vHabMain, hdc, &vSize, GPIA_ASSOC | PU_PELS);
     if (hPs == 0)
     {
         wxLogLastError("GpiCreatePS Failure");
@@ -410,7 +410,7 @@ bool wxBitmap::Create(
                           ));
 }
 
-bool wxBitmap::SaveFile( 
+bool wxBitmap::SaveFile(
   const wxString&                   rFilename
 , int                               lType
 , const wxPalette*                  pPalette
@@ -485,7 +485,7 @@ void wxBitmap::SetMask(
 }
 
 // Will try something for OS/2 but not really sure how close
-// to the msw intent this is.  
+// to the msw intent this is.
 wxBitmap wxBitmap::GetBitmapForDC(
   wxDC&                             rDc
 ) const
@@ -506,9 +506,9 @@ wxBitmap wxBitmap::GetBitmapForDC(
     // TODO: Set the points
 
     rDc.m_oldBitmap = (WXHBITMAP)::GpiSetBitMap(hPs, (HBITMAP)vTmpBitmap.GetHBITMAP());
-    :GpiBitBlt(hPs, hMemoryPS, 4L, vPoint, &vSize, PU_PELS | GPI_ASSOC);
-    
-    return tmpBitmap;
+    :GpiBitBlt(hPs, hMemoryPS, 4L, vPoint, ROP_SRCCOPY | BBO_IGNORE);
+
+    return(vTmpBitmap);
 }
 
 // ----------------------------------------------------------------------------
@@ -562,217 +562,249 @@ wxMask::~wxMask()
 }
 
 // Create a mask from a mono bitmap (copies the bitmap).
-bool wxMask::Create(const wxBitmap& bitmap)
+bool wxMask::Create(
+  const wxBitmap&                   rBitmap
+)
 {
-    if ( m_maskBitmap )
+    BITMAPINFOHEADER2               vHeader;
+    DEVOPENSTRUCT                   vDop = { NULL, "DISPLAY", NULL, NULL, NULL, NULL, NULL, NULL, NULL };
+    SIZEL                           vSize = {0, 0};
+    POINTL                          vPoint[4];
+
+    if (m_hMaskBitmap)
     {
-        ::DeleteObject((HBITMAP) m_maskBitmap);
-        m_maskBitmap = 0;
+        ::GpiDeleteBitmap((HBITMAP) m_hMaskBitmap);
+        m_hMaskBitmap = 0;
     }
-    if (!bitmap.Ok() || bitmap.GetDepth() != 1)
+    if (!rBitmap.Ok() || rBitmap.GetDepth() != 1)
     {
-        return FALSE;
+        return(FALSE);
     }
-    m_maskBitmap = (WXHBITMAP) CreateBitmap(
-                                            bitmap.GetWidth(),
-                                            bitmap.GetHeight(),
-                                            1, 1, 0
-                                           );
-    HDC srcDC = CreateCompatibleDC(0);
-    SelectObject(srcDC, (HBITMAP) bitmap.GetHBITMAP());
-    HDC destDC = CreateCompatibleDC(0);
-    SelectObject(destDC, (HBITMAP) m_maskBitmap);
-    BitBlt(destDC, 0, 0, bitmap.GetWidth(), bitmap.GetHeight(), srcDC, 0, 0, SRCCOPY);
-    SelectObject(srcDC, 0);
-    DeleteDC(srcDC);
-    SelectObject(destDC, 0);
-    DeleteDC(destDC);
-    return TRUE;
+    vHeader.cbFix           = sizeof(vHeader);
+    vHeader.cx              = (USHORT)rBitmap.GetWidth();
+    vHeader.cy              = (USHORT)rBitmap.GetHeight();
+    vHeader.cPlanes         = 1;
+    vHeader.cBitCount       = 1;
+
+    m_hMaskBitmap = (WXHBITMAP) ::GpiCreateBitmap( m_hPs
+                                                  ,&vHeader
+                                                  ,0L
+                                                  ,NULL
+                                                  ,NULL
+                                                 );
+
+    HPS srcPS = ::GpiCreatePS(vHabmain, m_hDc, &vSize, PU_PELS | GPIT_MICRO | GPIA_ASSOC);
+    ::GpiSetBitmap(srcPS, (HBITMAP)rBitmap.GetHBITMAP());
+    HPS destPS = ::GpiCreatePS(vHabmain, m_hDc, &vSize, PU_PELS | GPIT_MICRO | GPIA_ASSOC);
+    ::GpiSetBitmap(srcPS, (HBITMAP)m_hMaskBitmap);
+    // TODO: Set the point array
+    :GpiBitBlt(destPs, srcPS, 4L, vPoint, ROP_SRCCOPY | BBO_IGNORE);
+
+    ::GpiDestroyPS(srcPS);
+    ::GpiDestroyPS(destPS);
+    return(TRUE);
 }
 
 // Create a mask from a bitmap and a palette index indicating
 // the transparent area
-bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
+bool wxMask::Create(
+  const wxBitmap&                   rBitmap
+, int                               nPaletteIndex
+)
 {
-    if ( m_maskBitmap )
+    if (m_hMaskBitmap)
     {
-        ::DeleteObject((HBITMAP) m_maskBitmap);
-        m_maskBitmap = 0;
+        ::GpiDeleteBitmap((HBITMAP) m_hMaskBitmap);
+        m_hMaskBitmap = 0;
     }
-    if (bitmap.Ok() && bitmap.GetPalette()->Ok())
+    if (rBitmap.Ok() && rBitmap.GetPalette()->Ok())
     {
         unsigned char red, green, blue;
-        if (bitmap.GetPalette()->GetRGB(paletteIndex, &red, &green, &blue))
+        if (rBitmap.GetPalette()->GetRGB( nPaletteIndex
+                                         ,&rRed
+                                         ,&rGreen
+                                         ,&rBlue
+                                        ))
         {
-            wxColour transparentColour(red, green, blue);
-            return Create(bitmap, transparentColour);
+            wxColour                vTransparentColour( rRed
+                                                       ,rGreen
+                                                       ,rBlue
+                                                      );
+
+            return (Create( rBitmap
+                           ,vTransparentColour
+                          ));
         }
     }
-    return FALSE;
+    return(FALSE);
 }
 
 // Create a mask from a bitmap and a colour indicating
 // the transparent area
-bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
+bool wxMask::Create(
+  const wxBitmap&                   rBitmap
+, const wxColour&                   rColour
+)
 {
-    if ( m_maskBitmap )
+    BITMAPINFOHEADER2               vHeader;
+    DEVOPENSTRUCT                   vDop = { NULL, "DISPLAY", NULL, NULL, NULL, NULL, NULL, NULL, NULL };
+    SIZEL                           vSize = {0, 0};
+    POINTL                          vPoint[4];
+
+    if (m_hMaskBitmap)
     {
-        ::DeleteObject((HBITMAP) m_maskBitmap);
-        m_maskBitmap = 0;
+        ::GpiDeleteBitmap((HBITMAP) m_hMaskBitmap);
+        m_hMaskBitmap = 0;
     }
-    if (!bitmap.Ok())
+    if (!rBitmap.Ok())
     {
-        return FALSE;
+        return(FALSE);
     }
 
     // scan the bitmap for the transparent colour and set
     // the corresponding pixels in the mask to BLACK and
     // the rest to WHITE
-    COLORREF maskColour = RGB(colour.Red(), colour.Green(), colour.Blue());
-    m_maskBitmap = (WXHBITMAP) ::CreateBitmap(
-            bitmap.GetWidth(),
-            bitmap.GetHeight(),
-            1, 1, 0
+    COLORREF                        vMaskColour = OS2RGB(rColour.Red(), rColour.Green(), rColour.Blue());
+
+    vHeader.cbFix           = sizeof(vHeader);
+    vHeader.cx              = (USHORT)rBitmap.GetWidth();
+    vHeader.cy              = (USHORT)rBitmap.GetHeight();
+    vHeader.cPlanes         = 1;
+    vHeader.cBitCount       = 1;
+
+    m_hMaskBitmap = (WXHBITMAP) ::GpiCreateBitmap( m_hPs
+                                                  ,&vHeader
+                                                  ,0L
+                                                  ,NULL
+                                                  ,NULL
+                                                 );
                                              );
-    HDC srcDC = ::CreateCompatibleDC(0);
-    ::SelectObject(srcDC, (HBITMAP) bitmap.GetHBITMAP());
-    HDC destDC = ::CreateCompatibleDC(0);
-    ::SelectObject(destDC, (HBITMAP) m_maskBitmap);
+    HPS srcPS = ::GpiCreatePS(vHabmain, m_hDc, &vSize, PU_PELS | GPIT_MICRO | GPIA_ASSOC);
+    ::GpiSetBitmap(srcPS, (HBITMAP)rBitmap.GetHBITMAP());
+    HPS destPS = ::GpiCreatePS(vHabmain, m_hDc, &vSize, PU_PELS | GPIT_MICRO | GPIA_ASSOC);
+    ::GpiSetBitmap(srcPS, (HBITMAP)m_hMaskBitmap);
 
     // this is not very efficient, but I can't think
     // of a better way of doing it
-    for (int w = 0; w < bitmap.GetWidth(); w++)
+    for (int w = 0; w < rBitmap.GetWidth(); w++)
     {
-        for (int h = 0; h < bitmap.GetHeight(); h++)
+        for (int h = 0; h < rBitmap.GetHeight(); h++)
         {
-            COLORREF col = GetPixel(srcDC, w, h);
-            if (col == maskColour)
+            POINTL                  vPoint;
+
+            vPoint.x = w;
+            vPoint.y = h;
+
+            COLORREF                col = ::GpiQueryPel(srcPS, w, h);
+
+            if (col == vMaskColour)
             {
-                ::SetPixel(destDC, w, h, RGB(0, 0, 0));
+                ::GpiSetColor(destPS, CLR_WHITE);
+                ::GpiSetPel(destPS, &vPoint);
             }
             else
             {
-                ::SetPixel(destDC, w, h, RGB(255, 255, 255));
+                ::GpiSetColor(destPS, CLR_BLACK);
+                ::GpiSetPel(destPS, &vPoint);
             }
         }
     }
-    ::SelectObject(srcDC, 0);
-    ::DeleteDC(srcDC);
-    ::SelectObject(destDC, 0);
-    ::DeleteDC(destDC);
-    return TRUE;
+    ::GpiDestroyPS(srcPS);
+    ::GpiDestroyPS(destPS);
+    return(TRUE);
 }
 
 // ----------------------------------------------------------------------------
 // wxBitmapHandler
 // ----------------------------------------------------------------------------
 
-bool wxBitmapHandler::Create(wxGDIImage *image,
-                             void *data,
-                             long flags,
-                             int width, int height, int depth)
+bool wxBitmapHandler::Create(
+  wxGDIImage*                       pImage
+, void*                             pData
+, long                              lFlags
+, int                               nWidth
+, int                               nHeight
+, int                               nDepth
+)
 {
-    wxBitmap *bitmap = wxDynamicCast(image, wxBitmap);
+    wxBitmap*                       pBitmap = wxDynamicCast( pImage
+                                                            ,wxBitmap
+                                                           );
 
-    return bitmap ? Create(bitmap, data, width, height, depth) : FALSE;
+    return(pBitmap ? Create( pBitmap
+                            ,pData
+                            ,nWidth
+                            ,nHeight
+                            ,nDepth
+                           ) : FALSE);
 }
 
-bool wxBitmapHandler::Load(wxGDIImage *image,
-                           const wxString& name,
-                           long flags,
-                           int width, int height)
+bool wxBitmapHandler::Load(
+  wxGDIImage*                       pImage
+, const wxString&                   rName
+, long                              lFlags
+, int                               nWidth
+, int                               nHeight
+)
 {
-    wxBitmap *bitmap = wxDynamicCast(image, wxBitmap);
+    wxBitmap*                       bitmap = wxDynamicCast( pImage
+                                                           ,wxBitmap
+                                                          );
 
-    return bitmap ? LoadFile(bitmap, name, flags, width, height) : FALSE;
+    return(pBitmap ? LoadFile( pBitmap
+                              ,rName
+                              ,lFlags
+                              ,nWidth
+                              ,nHeight
+                             ) : FALSE);
 }
 
-bool wxBitmapHandler::Save(wxGDIImage *image,
-                           const wxString& name,
-                           int type)
+bool wxBitmapHandler::Save(
+  wxGDIImage*                       pImage
+, const wxString&                   rName
+, int                               lType
+)
 {
-    wxBitmap *bitmap = wxDynamicCast(image, wxBitmap);
+    wxBitmap*                       pBitmap = wxDynamicCast( pImage
+                                                            ,wxBitmap
+                                                           );
 
-    return bitmap ? SaveFile(bitmap, name, type) : FALSE;
+    return(pBitmap ? SaveFile( pBitmap
+                              ,rName
+                              ,lType
+                             ) : FALSE);
 }
 
-bool wxBitmapHandler::Create(wxBitmap *WXUNUSED(bitmap),
-                             void *WXUNUSED(data),
-                             long WXUNUSED(type),
-                             int WXUNUSED(width),
-                             int WXUNUSED(height),
-                             int WXUNUSED(depth))
+bool wxBitmapHandler::Create(
+  wxBitmap*                         WXUNUSED(pBitmap)
+, void*                             WXUNUSED(pData)
+, long                              WXUNUSED(lType)
+, int                               WXUNUSED(nWidth)
+, int                               WXUNUSED(nHeight)
+, int                               WXUNUSED(nDepth)
+)
 {
-    return FALSE;
+    return(FALSE);
 }
 
-bool wxBitmapHandler::LoadFile(wxBitmap *WXUNUSED(bitmap),
-                               const wxString& WXUNUSED(name),
-                               long WXUNUSED(type),
-                               int WXUNUSED(desiredWidth),
-                               int WXUNUSED(desiredHeight))
+bool wxBitmapHandler::LoadFile(
+  wxBitmap*                         WXUNUSED(pBitmap)
+, const wxString&                   WXUNUSED(rName)
+, long                              WXUNUSED(lType)
+, int                               WXUNUSED(nDesiredWidth)
+, int                               WXUNUSED(nDesiredHeight)
+)
 {
-    return FALSE;
+    return(FALSE(;
 }
 
-bool wxBitmapHandler::SaveFile(wxBitmap *WXUNUSED(bitmap),
-                               const wxString& WXUNUSED(name),
-                               int WXUNUSED(type),
-                               const wxPalette *WXUNUSED(palette))
+bool wxBitmapHandler::SaveFile(
+  wxBitmap*                         WXUNUSED(pBitmap)
+, const wxString&                   WXUNUSED(rName)
+, int                               WXUNUSED(nType)
+, const wxPalette*                  WXUNUSED(pPalette)
+)
 {
-    return FALSE;
+    return(FALSE);
 }
-
-// ----------------------------------------------------------------------------
-// DIB functions
-// ----------------------------------------------------------------------------
-
-bool wxCreateDIB(long xSize, long ySize, long bitsPerPixel,
-                 HPALETTE hPal, LPBITMAPINFO* lpDIBHeader)
-{
-   unsigned long   i, headerSize;
-   LPBITMAPINFO    lpDIBheader = NULL;
-   LPPALETTEENTRY  lpPe = NULL;
-
-
-   // Allocate space for a DIB header
-   headerSize = (sizeof(BITMAPINFOHEADER) + (256 * sizeof(PALETTEENTRY)));
-   lpDIBheader = (BITMAPINFO *) malloc(headerSize);
-   lpPe = (PALETTEENTRY *)((BYTE*)lpDIBheader + sizeof(BITMAPINFOHEADER));
-
-   GetPaletteEntries(hPal, 0, 256, lpPe);
-
-   memset(lpDIBheader, 0x00, sizeof(BITMAPINFOHEADER));
-
-   // Fill in the static parts of the DIB header
-   lpDIBheader->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-   lpDIBheader->bmiHeader.biWidth = xSize;
-   lpDIBheader->bmiHeader.biHeight = ySize;
-   lpDIBheader->bmiHeader.biPlanes = 1;
-
-   // this value must be 1, 4, 8 or 24 so PixelDepth can only be
-   lpDIBheader->bmiHeader.biBitCount = (WORD)(bitsPerPixel);
-   lpDIBheader->bmiHeader.biCompression = BI_RGB;
-   lpDIBheader->bmiHeader.biSizeImage = xSize * abs(ySize) * bitsPerPixel >> 3;
-   lpDIBheader->bmiHeader.biClrUsed = 256;
-
-
-   // Initialize the DIB palette
-   for (i = 0; i < 256; i++) {
-      lpDIBheader->bmiColors[i].rgbReserved = lpPe[i].peFlags;
-      lpDIBheader->bmiColors[i].rgbRed = lpPe[i].peRed;
-      lpDIBheader->bmiColors[i].rgbGreen = lpPe[i].peGreen;
-      lpDIBheader->bmiColors[i].rgbBlue = lpPe[i].peBlue;
-   }
-
-   *lpDIBHeader = lpDIBheader;
-
-   return TRUE;
-}
-
-void wxFreeDIB(LPBITMAPINFO lpDIBHeader)
-{
-    free(lpDIBHeader);
-}
-
 

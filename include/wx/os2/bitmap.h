@@ -16,6 +16,7 @@
     #pragma interface "bitmap.h"
 #endif
 
+#include "wx/os2/private.h"
 #include "wx/os2/gdiimage.h"
 #include "wx/gdicmn.h"
 #include "wx/palette.h"
@@ -159,17 +160,17 @@ public:
       { return (wxBitmapRefData *)m_refData; }
 
     inline int GetQuality() const
-      { return (GetBitmapData() ? GetBitmapData()->m_quality : 0); }
+      { return (GetBitmapData() ? GetBitmapData()->m_nQuality : 0); }
 
     void SetQuality(int nQ);
 
     wxPalette* GetPalette() const
-      { return (GetBitmapData() ? (& GetBitmapData()->m_bitmapPalette) : (wxPalette*) NULL); }
+      { return (GetBitmapData() ? (& GetBitmapData()->m_vBitmapPalette) : (wxPalette*) NULL); }
 
     void       SetPalette(const wxPalette& rPalette);
 
     inline wxMask* GetMask() const
-      { return (GetBitmapData() ? GetBitmapData()->m_bitmapMask : (wxMask*) NULL); }
+      { return (GetBitmapData() ? GetBitmapData()->m_pBitmapMask : (wxMask*) NULL); }
 
     void SetMask(wxMask* pMask) ;
 
@@ -194,17 +195,17 @@ public:
 
     // Implementation
 public:
-    inline void SetHBITMAP(WXHBITMAP hHmp)
-      { SetHandle((WXHANDLE)bmp); }
+    inline void SetHBITMAP(WXHBITMAP hBmp)
+      { SetHandle((WXHANDLE)hBmp); }
 
     inline WXHBITMAP GetHBITMAP() const
       { return (WXHBITMAP)GetHandle(); }
 
     inline void  SetSelectedInto(wxDC* pDc)
-      { if (GetBitmapData()) GetBitmapData()->m_selectedInto = pDc; }
+      { if (GetBitmapData()) GetBitmapData()->m_pSelectedInto = pDc; }
 
     inline wxDC* GetSelectedInto() const
-      { return (GetBitmapData() ? GetBitmapData()->m_selectedInto : (wxDC*) NULL); }
+      { return (GetBitmapData() ? GetBitmapData()->m_pSelectedInto : (wxDC*) NULL); }
 
     // An OS/2 version that probably doesn't do anything like the msw version
     wxBitmap GetBitmapForDC(wxDC& rDc) const;
@@ -327,9 +328,9 @@ public:
                       ,int             nDesiredWidth
                       ,int             nDesiredHeight
                      );
-    virtual bool Save(wxGDIImage*     pImage
-                      const wxString& rName
-                      int             lType
+    virtual bool Save( wxGDIImage*     pImage
+                      ,const wxString& rName
+                      ,int             lType
                      );
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmapHandler)
