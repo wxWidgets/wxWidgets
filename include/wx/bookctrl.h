@@ -47,7 +47,7 @@ public:
     }
 
     wxBookCtrl(wxWindow *parent,
-               wxWindowID id,
+               wxWindowID winid,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
@@ -55,12 +55,12 @@ public:
     {
         Init();
 
-        (void)Create(parent, id, pos, size, style, name);
+        (void)Create(parent, winid, pos, size, style, name);
     }
 
     // quasi ctor
     bool Create(wxWindow *parent,
-                wxWindowID id,
+                wxWindowID winid,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
@@ -195,9 +195,9 @@ protected:
 class WXDLLEXPORT wxBookCtrlEvent : public wxNotifyEvent
 {
 public:
-    wxBookCtrlEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
+    wxBookCtrlEvent(wxEventType commandType = wxEVT_NULL, int winid = 0,
                     int nSel = -1, int nOldSel = -1)
-        : wxNotifyEvent(commandType, id)
+        : wxNotifyEvent(commandType, winid)
         {
             m_nSel = nSel;
             m_nOldSel = nOldSel;

@@ -56,12 +56,12 @@ public:
     wxNotebookBase() { }
 
     wxNotebookBase(wxWindow *parent,
-                   wxWindowID id,
+                   wxWindowID winid,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxString& name = wxNOTEBOOK_NAME)
-        : wxBookCtrl(parent, id, pos, size, style, name)
+        : wxBookCtrl(parent, winid, pos, size, style, name)
     {
     }
 
@@ -102,9 +102,9 @@ protected:
 class WXDLLEXPORT wxNotebookEvent : public wxBookCtrlEvent
 {
 public:
-    wxNotebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
+    wxNotebookEvent(wxEventType commandType = wxEVT_NULL, int winid = 0,
                     int nSel = -1, int nOldSel = -1)
-        : wxBookCtrlEvent(commandType, id, nSel, nOldSel)
+        : wxBookCtrlEvent(commandType, winid, nSel, nOldSel)
     {
     }
 
@@ -119,19 +119,19 @@ END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
 
-#define EVT_NOTEBOOK_PAGE_CHANGED(id, fn)                                   \
+#define EVT_NOTEBOOK_PAGE_CHANGED(winid, fn)                                   \
   DECLARE_EVENT_TABLE_ENTRY(                                                \
     wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,                                    \
-    id,                                                                     \
+    winid,                                                                     \
     -1,                                                                     \
     (wxObjectEventFunction)(wxEventFunction)(wxNotebookEventFunction) &fn,  \
     NULL                                                                    \
   ),
 
-#define EVT_NOTEBOOK_PAGE_CHANGING(id, fn)                                  \
+#define EVT_NOTEBOOK_PAGE_CHANGING(winid, fn)                                  \
   DECLARE_EVENT_TABLE_ENTRY(                                                \
     wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING,                                   \
-    id,                                                                     \
+    winid,                                                                     \
     -1,                                                                     \
     (wxObjectEventFunction)(wxEventFunction)(wxNotebookEventFunction) &fn,  \
     NULL                                                                    \

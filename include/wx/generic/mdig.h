@@ -45,7 +45,7 @@ class WXDLLEXPORT wxGenericMDIParentFrame: public wxFrame
 public:
     wxGenericMDIParentFrame();
     wxGenericMDIParentFrame(wxWindow *parent,
-                     wxWindowID id,
+                     wxWindowID winid,
                      const wxString& title,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
@@ -54,7 +54,7 @@ public:
 
     ~wxGenericMDIParentFrame();
     bool Create( wxWindow *parent,
-                 wxWindowID id,
+                 wxWindowID winid,
                  const wxString& title,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
@@ -118,7 +118,7 @@ class WXDLLEXPORT wxGenericMDIChildFrame: public wxPanel
 public:
     wxGenericMDIChildFrame();
     wxGenericMDIChildFrame( wxGenericMDIParentFrame *parent,
-                     wxWindowID id,
+                     wxWindowID winid,
                      const wxString& title,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
@@ -127,7 +127,7 @@ public:
 
     virtual ~wxGenericMDIChildFrame();
     bool Create( wxGenericMDIParentFrame *parent,
-                 wxWindowID id,
+                 wxWindowID winid,
                  const wxString& title,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
@@ -148,7 +148,7 @@ public:
     // no status bars
     virtual wxStatusBar* CreateStatusBar( int WXUNUSED(number) = 1,
                                         long WXUNUSED(style) = 1,
-                                        wxWindowID WXUNUSED(id) = 1,
+                                        wxWindowID WXUNUSED(winid) = 1,
                                         const wxString& WXUNUSED(name) = wxEmptyString)
       { return (wxStatusBar*)NULL; }
 
@@ -168,7 +168,7 @@ public:
 #if wxUSE_TOOLBAR
     // no toolbar bars
     virtual wxToolBar* CreateToolBar( long WXUNUSED(style),
-                                       wxWindowID WXUNUSED(id),
+                                       wxWindowID WXUNUSED(winid),
                                        const wxString& WXUNUSED(name) )
         { return (wxToolBar*)NULL; }
     virtual wxToolBar *GetToolBar() const { return (wxToolBar*)NULL; }
@@ -276,13 +276,13 @@ class WXDLLEXPORT wxMDIParentFrame: public wxGenericMDIParentFrame
 public:
     wxMDIParentFrame() {}
     wxMDIParentFrame(wxWindow *parent,
-                     wxWindowID id,
+                     wxWindowID winid,
                      const wxString& title,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
                      const wxString& name = wxFrameNameStr)
-        :wxGenericMDIParentFrame(parent, id, title, pos, size, style, name)
+        :wxGenericMDIParentFrame(parent, winid, title, pos, size, style, name)
     {
     }
 
@@ -303,13 +303,13 @@ public:
     wxMDIChildFrame() {}
 
     wxMDIChildFrame( wxGenericMDIParentFrame *parent,
-                     wxWindowID id,
+                     wxWindowID winid,
                      const wxString& title,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE,
                      const wxString& name = wxFrameNameStr )
-        :wxGenericMDIChildFrame(parent, id, title, pos, size, style, name)
+        :wxGenericMDIChildFrame(parent, winid, title, pos, size, style, name)
     {
     }
 
