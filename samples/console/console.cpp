@@ -32,11 +32,11 @@
 //#define TEST_ARRAYS
 //#define TEST_DIR
 //#define TEST_LOG
+#define TEST_LONGLONG
 //#define TEST_MIME
 //#define TEST_STRINGS
 //#define TEST_THREADS
-#define TEST_TIME
-//#define TEST_LONGLONG
+//#define TEST_TIME
 
 // ============================================================================
 // implementation
@@ -195,17 +195,19 @@ static void TestSpeed()
         printf("Summing longs took %ld milliseconds.\n", sw.Time());
     }
 
+#if wxUSE_LONGLONG_NATIVE
     {
         wxStopWatch sw;
 
-        __int64 l = 0;
+        wxLongLong_t l = 0;
         for ( n = 0; n < max; n++ )
         {
             l += n;
         }
 
-        printf("Summing __int64s took %ld milliseconds.\n", sw.Time());
+        printf("Summing wxLongLong_t took %ld milliseconds.\n", sw.Time());
     }
+#endif // wxUSE_LONGLONG_NATIVE
 
     {
         wxStopWatch sw;
@@ -227,6 +229,7 @@ static void TestDivision()
     // seed pseudo random generator
     //srand((unsigned)time(NULL));
 
+    wxLongLong q, r;
     size_t nTested = 0;
     for ( size_t n = 0; n < 10000; n++ )
     {
@@ -234,7 +237,12 @@ static void TestDivision()
         // multiplication will not overflow)
         wxLongLong ll = MAKE_LL((rand() >> 12), rand(), rand(), rand());
 
-        wxASSERT( (ll * 1000l)/1000l == ll );
+        // get a random long (not wxLongLong for now) to divide it with
+        long l = rand();
+        q = ll / l;
+        r = ll % l;
+
+        wxASSERT_MSG( ll == q*l + r, "division failure" );
 
         nTested++;
     }

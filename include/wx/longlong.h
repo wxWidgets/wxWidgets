@@ -25,6 +25,8 @@
 
 #include <limits.h>     // for LONG_MAX
 
+#define wxUSE_LONGLONG_WX 1
+
 // ----------------------------------------------------------------------------
 // decide upon which class we will use
 // ----------------------------------------------------------------------------
@@ -68,7 +70,7 @@
 // the user may predefine wxUSE_LONGLONG_NATIVE and/or wxUSE_LONGLONG_NATIVE
 // to disable automatic testing (useful for the test program which defines
 // both classes) but by default we only use one class
-#ifndef wxLongLong_t
+#if (defined(wxUSE_LONGLONG_WX) && wxUSE_LONGLONG_WX) || !defined(wxLongLong_t)
     #undef wxUSE_LONGLONG_NATIVE
     #define wxUSE_LONGLONG_NATIVE 0
     class WXDLLEXPORT wxLongLongWx;
@@ -140,6 +142,7 @@ public:
         { return (unsigned long)m_ll; }
 
         // get absolute value
+    wxLongLongNative Abs() const { return wxLongLongNative(*this).Abs(); }
     wxLongLongNative& Abs() { if ( m_ll < 0 ) m_ll = -m_ll; return *this; }
 
         // convert to native long long
@@ -329,6 +332,7 @@ public:
     unsigned long GetLo() const { return m_lo; }
 
         // get absolute value
+    wxLongLongWx Abs() const { return wxLongLongWx(*this).Abs(); }
     wxLongLongWx& Abs() { if ( m_hi < 0 ) m_hi = -m_hi; return *this; }
 
         // convert to long with range checking in the debug mode (only!)
@@ -385,12 +389,16 @@ public:
     wxLongLongWx operator~() const;
 
     // comparison
-    bool operator==(const wxLongLongWx& ll) const;
-    bool operator!=(const wxLongLongWx& ll) const;
+    bool operator==(const wxLongLongWx& ll) const
+        { return m_lo == ll.m_lo && m_hi == ll.m_hi; }
+    bool operator!=(const wxLongLongWx& ll) const
+        { return !(*this == ll); }
     bool operator<(const wxLongLongWx& ll) const;
     bool operator>(const wxLongLongWx& ll) const;
-    bool operator<=(const wxLongLongWx& ll) const;
-    bool operator>=(const wxLongLongWx& ll) const;
+    bool operator<=(const wxLongLongWx& ll) const
+        { return *this < ll || *this == ll; }
+    bool operator>=(const wxLongLongWx& ll) const
+        { return *this > ll || *this == ll; }
 
     // multiplication
     wxLongLongWx operator*(const wxLongLongWx& ll) const;
@@ -421,5 +429,19 @@ private:
 };
 
 #endif // wxUSE_LONGLONG_WX
+
+// ----------------------------------------------------------------------------
+// binary operators
+// ----------------------------------------------------------------------------
+
+inline bool WXDLLEXPORT operator<(long l, const wxLongLong& ll) { return ll > l; }
+inline bool WXDLLEXPORT operator>(long l, const wxLongLong& ll) { return ll > l; }
+inline bool WXDLLEXPORT operator<=(long l, const wxLongLong& ll) { return ll > l; }
+inline bool WXDLLEXPORT operator>=(long l, const wxLongLong& ll) { return ll > l; }
+inline bool WXDLLEXPORT operator==(long l, const wxLongLong& ll) { return ll > l; }
+inline bool WXDLLEXPORT operator!=(long l, const wxLongLong& ll) { return ll > l; }
+
+inline wxLongLong WXDLLEXPORT operator+(long l, const wxLongLong& ll) { return ll + l; }
+inline wxLongLong WXDLLEXPORT operator-(long l, const wxLongLong& ll) { return ll - l; }
 
 #endif // _WX_LONGLONG_H

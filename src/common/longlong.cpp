@@ -286,54 +286,22 @@ wxLongLongWx& wxLongLongWx::operator--(int)
 
 bool wxLongLongWx::operator<(const wxLongLongWx& ll) const
 {
-    if (m_lo < ll.m_lo)
-        return 1;
-    if (m_lo > ll.m_lo)
-        return 0;
-    if (m_hi < ll.m_hi)
-        return 1;
-    if (m_hi > ll.m_hi)
-        return 0;
-    return 0;
+    if ( m_hi < ll.m_hi )
+        return TRUE;
+    else if ( m_hi == ll.m_hi )
+        return m_lo < ll.m_lo;
+    else
+        return FALSE;
 }
 
 bool wxLongLongWx::operator>(const wxLongLongWx& ll) const
 {
-    if (m_lo < ll.m_lo)
-        return 0;
-    if (m_lo > ll.m_lo)
-        return 1;
-    if (m_hi < ll.m_hi)
-        return 0;
-    if (m_hi > ll.m_hi)
-        return 1;
-    return 0;
-}
-
-bool wxLongLongWx::operator<=(const wxLongLongWx& ll) const
-{
-    if (m_lo < ll.m_lo)
-        return 1;
-    if (m_lo > ll.m_lo)
-        return 0;
-    if (m_hi < ll.m_hi)
-        return 1;
-    if (m_hi > ll.m_hi)
-        return 0;
-    return 1;
-}
-
-bool wxLongLongWx::operator>=(const wxLongLongWx& ll) const
-{
-    if (m_lo < ll.m_lo)
-        return 0;
-    if (m_lo > ll.m_lo)
-        return 1;
-    if (m_hi < ll.m_hi)
-        return 0;
-    if (m_hi > ll.m_hi)
-        return 1;
-    return 1;
+    if ( m_hi > ll.m_hi )
+        return TRUE;
+    else if ( m_hi == ll.m_hi )
+        return m_lo > ll.m_lo;
+    else
+        return FALSE;
 }
 
 // bitwise operators
@@ -435,8 +403,74 @@ void wxLongLongWx::Divide(const wxLongLongWx& divisor,
         dummy += 0;
     }
 
-    wxFAIL_MSG("not implemented");
+    // VZ: I'm writing this in a hurry and it's surely not the fastest way to
+    //     do this - any improvements are more than welcome
+
+    // the algorithm: first find N such that 2^N * divisor is less than us,
+    // then substract divisor from *this - 2^N * divisor as many times as
+    // possible
+
+    wxLongLongWx prev = divisor;
+    remainder = *this;
+
+    quotient = 1l;
+
+    for ( wxLongLongWx tmp = divisor; tmp < remainder; )
+    {
+        prev = tmp;
+
+        tmp <<= 1;
+
+        if ( tmp < 0 )
+        {
+            // shifted too far
+            break;
+        }
+
+        quotient <<= 1;
+    }
+
+    while ( remainder >= prev )
+    {
+        remainder -= divisor;
+        quotient++;
+    }
+
+    // remainder should be in this range at the end
+    wxASSERT_MSG( (0l <= remainder) && (remainder < divisor.Abs()),
+                  _T("logic error in wxLongLong division") );
 }
+
+wxLongLongWx wxLongLongWx::operator/(const wxLongLongWx& ll) const
+{
+    wxLongLongWx quotient, remainder;
+
+    Divide(ll, quotient, remainder);
+
+    return quotient;
+}
+
+wxLongLongWx& wxLongLongWx::operator/=(const wxLongLongWx& ll)
+{
+    wxLongLongWx quotient, remainder;
+
+    Divide(ll, quotient, remainder);
+
+    return *this = quotient;
+}
+
+wxLongLongWx wxLongLongWx::operator%(const wxLongLongWx& ll) const
+{
+    wxLongLongWx quotient, remainder;
+
+    Divide(ll, quotient, remainder);
+
+    return remainder;
+}
+
+// ----------------------------------------------------------------------------
+// misc
+// ----------------------------------------------------------------------------
 
 // temporary - just for testing
 void *wxLongLongWx::asArray(void) const
