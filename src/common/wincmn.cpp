@@ -2106,6 +2106,8 @@ void wxWindowBase::OnSysColourChanged(wxSysColourChangedEvent& event)
 
         node = node->GetNext();
     }
+
+    Refresh();
 }
 
 // the default action is to populate dialog with data when it's created,
