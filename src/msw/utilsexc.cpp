@@ -26,6 +26,7 @@
 #include "wx/app.h"
 #endif
 
+#include "wx/log.h"
 #include "wx/msw/private.h"
 #include <windows.h>
 
@@ -144,6 +145,8 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
 
   if (((long)result) <= 32) {
    free(cl);
+
+   wxLogSysError(_("Can't execute command '%s'"), command.c_str());
    return 0;
   }
 
