@@ -805,8 +805,11 @@
 #define wxUSE_SPLINES     1
                                 // 0 for no splines
 
-#define wxUSE_WX_RESOURCES        1
-                                // Use .wxr resource mechanism (requires PrologIO library)
+// use wxExpr (a.k.a. PrologIO)
+#define wxUSE_PROLOGIO          0
+
+// Use .wxr resource mechanism (requires PrologIO library)
+#define wxUSE_WX_RESOURCES        0
 
 #define wxUSE_MOUSEWHEEL        1
                                 // Include mouse wheel support
