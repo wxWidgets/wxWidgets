@@ -438,8 +438,11 @@ int wxEntry(int& argc, wxChar **argv)
     {
         ::ExitProcess(3); // the same exit code as abort()
 
+#if !defined(_MSC_VER) || _MSC_VER < 1300
         // this code is unreachable but put it here to suppress warnings
+        // from some compilers
         return -1;
+#endif
     }
 }
 
