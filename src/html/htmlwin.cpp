@@ -41,7 +41,7 @@
 //-----------------------------------------------------------------------------
 
 // item of history list
-class WXDLLEXPORT wxHtmlHistoryItem : public wxObject
+class WXDLLEXPORT wxHtmlHistoryItem
 {
 public:
     wxHtmlHistoryItem(const wxString& p, const wxString& a) {m_Page = p, m_Anchor = a, m_Pos = 0;}
