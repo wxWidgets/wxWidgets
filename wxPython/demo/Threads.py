@@ -165,7 +165,7 @@ class TestFrame(wxFrame):
 
         self.graph = GraphWindow(self, ['Zero', 'One', 'Two', 'Three', 'Four',
                                         'Five', 'Six', 'Seven'])
-        self.graph.SetSize((-1, self.graph.GetBestHeight()))
+        self.graph.SetSize((450, self.graph.GetBestHeight()))
 
         sizer = wxBoxSizer(wxVERTICAL)
         sizer.Add(panel, 0, wxEXPAND)
@@ -174,11 +174,6 @@ class TestFrame(wxFrame):
         self.SetSizer(sizer)
         self.SetAutoLayout(true)
         sizer.Fit(self)
-
-        #self.graph.SetValue(0, 25)
-        #self.graph.SetValue(1, 50)
-        #self.graph.SetValue(2, 75)
-        #self.graph.SetValue(3, 100)
 
         EVT_UPDATE_BARGRAPH(self, self.OnUpdate)
         self.threads = []
@@ -204,6 +199,7 @@ class TestFrame(wxFrame):
 
     def OnCloseWindow(self, evt):
         busy = wxBusyInfo("One moment please, waiting for threads to die...")
+        wxYield()
         for t in self.threads:
             t.Stop()
         running = 1
