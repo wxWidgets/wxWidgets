@@ -18,6 +18,7 @@
 
 #include "wx/window.h"
 #include "wx/font.h"
+#include "wx/encinfo.h"
 #include "wx/colour.h"
 #include "wx/gdicmn.h"
 
