@@ -20,6 +20,34 @@ applicable for the two classes above.
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
+\membersection{wxTopLevelWindow::GetIcon}\label{wxtoplevelwindowgeticon}
+
+\constfunc{const wxIcon\&}{GetIcon}{\void}
+
+Returns the standard icon of the window. The icon will be invalid if it hadn't
+been previously set by \helpref{SetIcon}{wxtoplevelwindowseticon}.
+
+\wxheading{See also}
+
+\helpref{GetIcons}{wxtoplevelwindowgeticons}
+
+
+\membersection{wxTopLevelWindow::GetIcons}\label{wxtoplevelwindowgeticons}
+
+\constfunc{const wxIconBundle\&}{GetIcons}{\void}
+
+Returns all icons associated with the window, there will be none of them if
+neither \helpref{SetIcon}{wxtoplevelwindowseticon} nor 
+\helpref{SetIcons}{wxtoplevelwindowseticons} had been called before.
+
+Use \helpref{GetIcon}{wxtoplevelwindowgeticon} to get the main icon of the
+window.
+
+\wxheading{See also}
+
+\helpref{wxIconBundle}{wxiconbundle}
+
+
 \membersection{wxTopLevelWindow::GetTitle}\label{wxtoplevelwindowgettitle}
 
 \constfunc{wxString}{GetTitle}{\void}
@@ -111,13 +139,18 @@ See also \helpref{wxIcon}{wxicon}.
 
 \func{void}{SetIcons}{\param{const wxIconBundle\& }{icons}}
 
-Sets the icons for this window.
+Sets several icons of different sizes for this window: this allows to use
+different icons for different situations (e.g. task switching bar, taskbar,
+window title bar) instead of scaling, with possibly bad looking results, the
+only icon set by \helpref{SetIcon}{wxtoplevelwindowseticon}.
 
 \wxheading{Parameters}
 
 \docparam{icons}{The icons to associate with this window.}
 
-See also \helpref{wxIconBundle}{wxiconbundle}.
+\wxheading{See also}
+
+\helpref{wxIconBundle}{wxiconbundle}.
 
 
 \membersection{wxTopLevelWindow::SetShape}\label{wxtoplevelwindowsetshape}
