@@ -15,7 +15,7 @@
 //// Build settings
 
 // ScriptTracks version
-#define TEX2RTF_VERSION_NUMBER            2.01
+#define TEX2RTF_VERSION_NUMBER            wxVERSION_FLOAT
 
 #endif
     // _TEX2RTF_SYMBOLS_H_
