@@ -115,14 +115,20 @@ bool wxFFile::ReadAll(wxString *str, wxMBConv& conv)
 
     const size_t fileLen = Length();
     wxCharBuffer buf(fileLen + 1);
-    if ( (fread(buf.data(), sizeof(char), fileLen, m_fp) < fileLen) || Error() ) 
+
+    // note that realLen may be less than fileLen for text files with DOS EOLs
+    // ('\r's get dropped by CRT when reading which means that we have
+    // realLen = fileLen - numOfLinesInTheFile)
+    size_t realLen = fread(buf.data(), sizeof(char), fileLen, m_fp);
+
+    if ( Error() ) 
     {
         wxLogSysError(_("Read error on file '%s'"), m_name.c_str());
 
         return false;
     }
 
-    buf.data()[fileLen] = 0;
+    buf.data()[realLen] = 0;
     *str = wxString(buf, conv);
 
     return true;
