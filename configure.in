@@ -2074,10 +2074,6 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         ALL_OBJECTS="${ALL_OBJECTS} \$(HTMLOBJS)"
     fi
 
-    dnl ODBC objects are Unix only
-    if test "$TOOLKIT" != "MSW" -a "$wxUSE_ODBC" = "yes" ; then
-        ALL_OBJECTS="${ALL_OBJECTS} \$(IODBCOBJS)"
-    fi
     if test "$wxUSE_LIBJPEG" = "builtin" ; then
         ALL_OBJECTS="${ALL_OBJECTS} \$(JPEGOBJS)"
     fi
@@ -2124,6 +2120,12 @@ fi
 dnl ---------------------------------------------------------------------------
 dnl Optional libraries included when system library is not used
 dnl ---------------------------------------------------------------------------
+
+dnl ODBC objects are Unix only
+if test "$TOOLKIT" != "MSW" -a "$wxUSE_ODBC" = "yes" ; then
+    ALL_OBJECTS="${ALL_OBJECTS} \$(IODBCOBJS)"
+fi
+
 if test "$wxUSE_REGEX" = "builtin" ; then
     ALL_OBJECTS="${ALL_OBJECTS} \$(REGEXOBJS)"
 fi
