@@ -1,3 +1,68 @@
+\section{\class{wxGridEditorCreatedEvent}}\label{wxgrideditorcreatedevent}
+
+\wxheading{Derived from}
+
+\helpref{wxCommandEvent}{wxcommandevent}\\
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Event handling}
+
+The event handler for the following functions takes a 
+ \helpref{wxGridEditorCreatedEvent}{wxgrideditorcreatedevent} parameter.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_GRID\_EDITOR\_CREATED(func)}}{The editor for a cell was created. Processes a wxEVT\_GRID\_EDITOR\_CREATED.}
+\end{twocollist}%
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxGridEditorCreatedEvent::wxGridEditorCreatedEvent}\label{wxgrideditorcreatedeventconstr}
+
+\func{}{wxGridEditorCreatedEvent}{\void}
+
+Default constructor.
+
+\func{}{wxGridEditorCreatedEvent}{\param{int }{id}, \param{wxEventType }{type},
+ \param{wxObject* }{obj}, \param{int }{row}, \param{int }{col}, \param{wxControl* }{ctrl}}
+
+\membersection{wxGridEditorCreatedEvent::GetCol}\label{wxgrideditorcreatedeventgetcol}
+
+\func{int}{GetCol}{\void}
+
+Returns the column at which the event occurred.
+
+\membersection{wxGridEditorCreatedEvent::GetControl}\label{wxgrideditorcreatedeventgetcontrol}
+
+\func{wxControl*}{GetControl}{\void}
+
+Returns the edit control.
+
+\membersection{wxGridEditorCreatedEvent::GetRow}\label{wxgrideditorcreatedeventgetrow}
+
+\func{int}{GetRow}{\void}
+
+Returns the row at which the event occurred.
+
+\membersection{wxGridEditorCreatedEvent::SetCol}\label{wxgrideditorcreatedeventsetcol}
+
+\func{void}{SetCol}{\param{int }{col}}
+
+Sets the column at which the event occurred.
+
+\membersection{wxGridEditorCreatedEvent::SetControl}\label{wxgrideditorcreatedeventsetcontrol}
+
+\func{void}{SetControl}{\param{wxControl* }{ctrl}}
+
+Sets the edit control.
+
+\membersection{wxGridEditorCreatedEvent::SetRow}\label{wxgrideditorcreatedeventsetrow}
+
+\func{void}{SetRow}{\param{int }{row}}
+
+Sets the row at which the event occurred.
+
 \section{\class{wxGridEvent}}\label{wxgridevent}
 
 This event class contains information about various grid events.
@@ -76,81 +141,6 @@ Returns TRUE if the user deselected a cell, FALSE if the user
 deselected a cell.
 
 \membersection{wxGridEvent::ShiftDown}\label{wxgrideventshiftdown}
-
-\func{bool}{ShiftDown}{\void}
-
-Returns TRUE if the Shift key was down at the time of the event.
-
-\section{\class{wxGridSizeEvent}}\label{wxgridsizeevent}
-
-This event class contains information about a row/column resize event.
-
-\wxheading{Derived from}
-
-\helpref{wxNotifyEvent}{wxnotifyevent}\\
-\helpref{wxCommandEvent}{wxcommandevent}\\
-\helpref{wxEvent}{wxevent}\\
-\helpref{wxObject}{wxobject}
-
-\wxheading{Include files}
-
-<wx/grid.h>
-
-\wxheading{Event handling}
-
-The event handler for the following functions takes a 
- \helpref{wxGridSizeEvent}{wxgridsizeevent} parameter.
-
-\twocolwidtha{7cm}
-\begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf EVT\_GRID\_COL\_SIZE(func)}}{The user resized a column by dragging it. Processes a wxEVT\_GRID\_COL\_SIZE.}
-\twocolitem{{\bf EVT\_GRID\_ROW\_SIZE(func)}}{The user resized a row by dragging it. Processes a wxEVT\_GRID\_ROW\_SIZE.}
-\end{twocollist}%
-
-\latexignore{\rtfignore{\wxheading{Members}}}
-
-\membersection{wxGridSizeEvent::wxGridSizeEvent}\label{wxgridsizeeventconstr}
-
-\func{}{wxGridSizeEvent}{\void}
-
-Default constructor.
-
-\func{}{wxGridSizeEvent}{\param{int }{id}, \param{wxEventType }{type},
- \param{wxObject* }{obj}, \param{int }{rowOrCol = -1}, \param{int }{x = -1},
- \param{int }{y = -1}, \param{bool }{control = FALSE}, \param{bool }{shift = FALSE},
- \param{bool }{alt = FALSE}, \param{bool }{meta = FALSE}}
-
-\membersection{wxGridSizeEvent::AltDown}\label{wxgridsizeeventaltdown}
-
-\func{bool}{AltDown}{\void}
-
-Returns TRUE if the Alt key was down at the time of the event.
-
-\membersection{wxGridSizeEvent::ControlDown}\label{wxgridsizeeventcontroldown}
-
-\func{bool}{ControlDown}{\void}
-
-Returns TRUE if the Control key was down at the time of the event.
-
-\membersection{wxGridSizeEvent::GetPosition}\label{wxgridsizeeventgetposition}
-
-\func{wxPoint}{GetPosition}{\void}
-
-Position in pixels at which the event occurred.
-
-\membersection{wxGridSizeEvent::GetRowOrCol}\label{wxgridsizeeventgetroworcol}
-
-\func{int}{GetRowOrCol}{\void}
-
-Row or column at that was resized.
-
-\membersection{wxGridSizeEvent::MetaDown}\label{wxgridsizeeventmetadown}
-
-\func{bool}{MetaDown}{\void}
-
-Returns TRUE if the Meta key was down at the time of the event.
-
-\membersection{wxGridSizeEvent::ShiftDown}\label{wxgridsizeeventshiftdown}
 
 \func{bool}{ShiftDown}{\void}
 
@@ -255,68 +245,78 @@ Returns TRUE if the area was selected, FALSE otherwise.
 
 Returns TRUE if the Shift key was down at the time of the event.
 
-\section{\class{wxGridEditorCreatedEvent}}\label{wxgrideditorcreatedevent}
+\section{\class{wxGridSizeEvent}}\label{wxgridsizeevent}
+
+This event class contains information about a row/column resize event.
 
 \wxheading{Derived from}
 
+\helpref{wxNotifyEvent}{wxnotifyevent}\\
 \helpref{wxCommandEvent}{wxcommandevent}\\
 \helpref{wxEvent}{wxevent}\\
 \helpref{wxObject}{wxobject}
 
+\wxheading{Include files}
+
+<wx/grid.h>
+
 \wxheading{Event handling}
 
 The event handler for the following functions takes a 
- \helpref{wxGridEditorCreatedEvent}{wxgrideditorcreatedevent} parameter.
+ \helpref{wxGridSizeEvent}{wxgridsizeevent} parameter.
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf EVT\_GRID\_EDITOR\_CREATED(func)}}{The editor for a cell was created. Processes a wxEVT\_GRID\_EDITOR\_CREATED.}
+\twocolitem{{\bf EVT\_GRID\_COL\_SIZE(func)}}{The user resized a column by dragging it. Processes a wxEVT\_GRID\_COL\_SIZE.}
+\twocolitem{{\bf EVT\_GRID\_ROW\_SIZE(func)}}{The user resized a row by dragging it. Processes a wxEVT\_GRID\_ROW\_SIZE.}
 \end{twocollist}%
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxGridEditorCreatedEvent::wxGridEditorCreatedEvent}\label{wxgrideditorcreatedeventconstr}
+\membersection{wxGridSizeEvent::wxGridSizeEvent}\label{wxgridsizeeventconstr}
 
-\func{}{wxGridEditorCreatedEvent}{\void}
+\func{}{wxGridSizeEvent}{\void}
 
 Default constructor.
 
-\func{}{wxGridEditorCreatedEvent}{\param{int }{id}, \param{wxEventType }{type},
- \param{wxObject* }{obj}, \param{int }{row}, \param{int }{col}, \param{wxControl* }{ctrl}}
+\func{}{wxGridSizeEvent}{\param{int }{id}, \param{wxEventType }{type},
+ \param{wxObject* }{obj}, \param{int }{rowOrCol = -1}, \param{int }{x = -1},
+ \param{int }{y = -1}, \param{bool }{control = FALSE}, \param{bool }{shift = FALSE},
+ \param{bool }{alt = FALSE}, \param{bool }{meta = FALSE}}
 
-\membersection{wxGridEditorCreatedEvent::GetCol}\label{wxgrideditorcreatedeventgetcol}
+\membersection{wxGridSizeEvent::AltDown}\label{wxgridsizeeventaltdown}
 
-\func{int}{GetCol}{\void}
+\func{bool}{AltDown}{\void}
 
-Returns the column at which the event occurred.
+Returns TRUE if the Alt key was down at the time of the event.
 
-\membersection{wxGridEditorCreatedEvent::GetControl}\label{wxgrideditorcreatedeventgetcontrol}
+\membersection{wxGridSizeEvent::ControlDown}\label{wxgridsizeeventcontroldown}
 
-\func{wxControl*}{GetControl}{\void}
+\func{bool}{ControlDown}{\void}
 
-Returns the edit control.
+Returns TRUE if the Control key was down at the time of the event.
 
-\membersection{wxGridEditorCreatedEvent::GetRow}\label{wxgrideditorcreatedeventgetrow}
+\membersection{wxGridSizeEvent::GetPosition}\label{wxgridsizeeventgetposition}
 
-\func{int}{GetRow}{\void}
+\func{wxPoint}{GetPosition}{\void}
 
-Returns the row at which the event occurred.
+Position in pixels at which the event occurred.
 
-\membersection{wxGridEditorCreatedEvent::SetCol}\label{wxgrideditorcreatedeventsetcol}
+\membersection{wxGridSizeEvent::GetRowOrCol}\label{wxgridsizeeventgetroworcol}
 
-\func{void}{SetCol}{\param{int }{col}}
+\func{int}{GetRowOrCol}{\void}
 
-Sets the column at which the event occurred.
+Row or column at that was resized.
 
-\membersection{wxGridEditorCreatedEvent::SetControl}\label{wxgrideditorcreatedeventsetcontrol}
+\membersection{wxGridSizeEvent::MetaDown}\label{wxgridsizeeventmetadown}
 
-\func{void}{SetControl}{\param{wxControl* }{ctrl}}
+\func{bool}{MetaDown}{\void}
 
-Sets the edit control.
+Returns TRUE if the Meta key was down at the time of the event.
 
-\membersection{wxGridEditorCreatedEvent::SetRow}\label{wxgrideditorcreatedeventsetrow}
+\membersection{wxGridSizeEvent::ShiftDown}\label{wxgridsizeeventshiftdown}
 
-\func{void}{SetRow}{\param{int }{row}}
+\func{bool}{ShiftDown}{\void}
 
-Sets the row at which the event occurred.
+Returns TRUE if the Shift key was down at the time of the event.
 

@@ -1,3 +1,62 @@
+\section{\class{wxPageSetupDialog}}\label{wxpagesetupdialog}
+
+This class represents the page setup common dialog. The page setup dialog is standard from
+Windows 95 on, replacing the print setup dialog (which is retained in Windows and wxWindows
+for backward compatibility). On Windows 95 and NT 4.0 and above, the page setup dialog is
+native to the windowing system, otherwise it is emulated.
+
+The page setup dialog contains controls for paper size (A4, A5 etc.), orientation (landscape
+or portrait), and controls for setting left, top, right and bottom margin sizes in millimetres.
+
+When the dialog has been closed, you need to query the \helpref{wxPageSetupDialogData}{wxpagesetupdialogdata} object
+associated with the dialog.
+
+Note that the OK and Cancel buttons do not destroy the dialog; this must be done by the
+application.
+
+\wxheading{Derived from}
+
+\helpref{wxDialog}{wxdialog}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/printdlg.h>
+
+\wxheading{See also}
+
+\helpref{wxPrintDialog}{wxprintdialog}, \helpref{wxPageSetupDialogData}{wxpagesetupdialogdata}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxPageSetupDialog::wxPageSetupDialog}
+
+\func{}{wxPageSetupDialog}{\param{wxWindow* }{parent}, \param{wxPageSetupDialogData* }{data = NULL}}
+
+Constructor. Pass a parent window, and optionally a pointer to a block of page setup
+data, which will be copied to the print dialog's internal data.
+
+\membersection{wxPageSetupDialog::\destruct{wxPageSetupDialog}}
+
+\func{}{\destruct{wxPageSetupDialog}}{\void}
+
+Destructor.
+
+\membersection{wxPageSetupDialog::GetPageSetupData}\label{wxpagesetupdialoggetpagesetupdata}
+
+\func{wxPageSetupDialogData\&}{GetPageSetupData}{\void}
+
+Returns the \helpref{page setup data}{wxpagesetupdialogdata} associated with the dialog.
+
+\membersection{wxPageSetupDialog::ShowModal}\label{wxpagesetupdialogshowmodal}
+
+\func{int}{ShowModal}{\void}
+
+Shows the dialog, returning wxID\_OK if the user pressed OK, and wxID\_CANCEL
+otherwise.
+
 \section{\class{wxPageSetupDialogData}}\label{wxpagesetupdialogdata}
 
 This class holds a variety of information related to \helpref{wxPageSetupDialog}{wxpagesetupdialog}.
@@ -229,63 +288,4 @@ Assigns print data to this object.
 \func{void}{operator $=$}{\param{const wxPageSetupDialogData\&}{ data}}
 
 Assigns page setup data to this object.
-
-\section{\class{wxPageSetupDialog}}\label{wxpagesetupdialog}
-
-This class represents the page setup common dialog. The page setup dialog is standard from
-Windows 95 on, replacing the print setup dialog (which is retained in Windows and wxWindows
-for backward compatibility). On Windows 95 and NT 4.0 and above, the page setup dialog is
-native to the windowing system, otherwise it is emulated.
-
-The page setup dialog contains controls for paper size (A4, A5 etc.), orientation (landscape
-or portrait), and controls for setting left, top, right and bottom margin sizes in millimetres.
-
-When the dialog has been closed, you need to query the \helpref{wxPageSetupDialogData}{wxpagesetupdialogdata} object
-associated with the dialog.
-
-Note that the OK and Cancel buttons do not destroy the dialog; this must be done by the
-application.
-
-\wxheading{Derived from}
-
-\helpref{wxDialog}{wxdialog}\\
-\helpref{wxWindow}{wxwindow}\\
-\helpref{wxEvtHandler}{wxevthandler}\\
-\helpref{wxObject}{wxobject}
-
-\wxheading{Include files}
-
-<wx/printdlg.h>
-
-\wxheading{See also}
-
-\helpref{wxPrintDialog}{wxprintdialog}, \helpref{wxPageSetupDialogData}{wxpagesetupdialogdata}
-
-\latexignore{\rtfignore{\wxheading{Members}}}
-
-\membersection{wxPageSetupDialog::wxPageSetupDialog}
-
-\func{}{wxPageSetupDialog}{\param{wxWindow* }{parent}, \param{wxPageSetupDialogData* }{data = NULL}}
-
-Constructor. Pass a parent window, and optionally a pointer to a block of page setup
-data, which will be copied to the print dialog's internal data.
-
-\membersection{wxPageSetupDialog::\destruct{wxPageSetupDialog}}
-
-\func{}{\destruct{wxPageSetupDialog}}{\void}
-
-Destructor.
-
-\membersection{wxPageSetupDialog::GetPageSetupData}\label{wxpagesetupdialoggetpagesetupdata}
-
-\func{wxPageSetupDialogData\&}{GetPageSetupData}{\void}
-
-Returns the \helpref{page setup data}{wxpagesetupdialogdata} associated with the dialog.
-
-\membersection{wxPageSetupDialog::ShowModal}\label{wxpagesetupdialogshowmodal}
-
-\func{int}{ShowModal}{\void}
-
-Shows the dialog, returning wxID\_OK if the user pressed OK, and wxID\_CANCEL
-otherwise.
 

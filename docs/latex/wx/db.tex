@@ -1604,6 +1604,52 @@ Simply initializes all member variables to a cleared state.  Called by
 the constructor automatically.
 
 
+\section{\class{wxDbColFor}}\label{wxdbcolfor}
+
+Beginning support for handling international formatting specifically on dates 
+and floats.  
+
+\begin{verbatim}
+    wxString       s_Field;       // Formated String for Output
+    wxString       s_Format[7];   // Formated Objects - TIMESTAMP has 
+                                     the biggest (7)
+    wxString       s_Amount[7];   // Formated Objects - amount of 
+                                     things that can be formatted
+    int            i_Amount[7];   // Formated Objects - 
+                                        TT MM YYYY HH MM SS m
+    int            i_Nation;      // 0 = timestamp
+                                     1 = EU
+                                     2 = UK
+                                     3 = International
+                                     4 = US
+    int            i_dbDataType;  // conversion of the 'sqlDataType'
+                                     to the generic data type used by
+                                     these classes
+    SWORD          i_sqlDataType;
+\end{verbatim}
+
+The constructor for this class initializes all the values to zero or NULL.
+
+The destructor does nothing at this time.
+
+Only one function is provided with this class currently:
+
+
+\membersection{wxDbColFor::Format}\label{wxdbcolforformat}
+
+\func{int }{Format}{\param{int }{Nation}, \param{int }{dbDataType}, 
+\param{SWORD }{sqlDataType}, \param{short }{columnSize}, 
+\param{short }{decimalDigits}}\label{wxdbcolforformat}
+
+Work in progress, and should be inter-related with wxLocale eventually.
+
+
+\membersection{wxDbColFor::Initialize}\label{wxdbcolforinitialize}
+
+Simply initializes all member variables to a cleared state.  Called by 
+the constructor automatically.
+
+
 \section{\class{wxDbColInf}}\label{wxdbcolinf}
 
 Used with the \helpref{wxDb::GetColumns}{wxdbgetcolumns} functions for obtaining all retrievable information about a column's definition.
@@ -1650,52 +1696,6 @@ it is non-NULL.
 Simply initializes all member variables to a cleared state.  Called by 
 the constructor automatically.
 
-
-
-\section{\class{wxDbColFor}}\label{wxdbcolfor}
-
-Beginning support for handling international formatting specifically on dates 
-and floats.  
-
-\begin{verbatim}
-    wxString       s_Field;       // Formated String for Output
-    wxString       s_Format[7];   // Formated Objects - TIMESTAMP has 
-                                     the biggest (7)
-    wxString       s_Amount[7];   // Formated Objects - amount of 
-                                     things that can be formatted
-    int            i_Amount[7];   // Formated Objects - 
-                                        TT MM YYYY HH MM SS m
-    int            i_Nation;      // 0 = timestamp
-                                     1 = EU
-                                     2 = UK
-                                     3 = International
-                                     4 = US
-    int            i_dbDataType;  // conversion of the 'sqlDataType'
-                                     to the generic data type used by
-                                     these classes
-    SWORD          i_sqlDataType;
-\end{verbatim}
-
-The constructor for this class initializes all the values to zero or NULL.
-
-The destructor does nothing at this time.
-
-Only one function is provided with this class currently:
-
-
-\membersection{wxDbColFor::Format}\label{wxdbcolforformat}
-
-\func{int }{Format}{\param{int }{Nation}, \param{int }{dbDataType}, 
-\param{SWORD }{sqlDataType}, \param{short }{columnSize}, 
-\param{short }{decimalDigits}}\label{wxdbcolforformat}
-
-Work in progress, and should be inter-related with wxLocale eventually.
-
-
-\membersection{wxDbColFor::Initialize}\label{wxdbcolforinitialize}
-
-Simply initializes all member variables to a cleared state.  Called by 
-the constructor automatically.
 
 
 \section{\class{wxDbConnectInf}}\label{wxdbconnectinf}

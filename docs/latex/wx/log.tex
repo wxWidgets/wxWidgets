@@ -524,6 +524,33 @@ Suspends logging.
 
 Resumes logging.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxLogPassThrough %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxLogPassThrough}}\label{wxlogpassthrough}
+
+A special version of \helpref{wxLogChain}{wxlogchain} which uses itself as the
+new log target. Maybe more clearly, it means that this is a log target which
+forwards the log messages to the previously installed one in addition to
+processing them itself.
+
+Unlike \helpref{wxLogChain}{wxlogchain} which is usually used directly as is,
+this class must be derived from to implement \helpref{DoLog}{wxlogdolog} 
+and/or \helpref{DoLogString}{wxlogdologstring} methods.
+
+\wxheading{Derived from}
+
+\helpref{wxLogChain}{wxlogchain}
+
+\wxheading{Include files}
+
+<wx/log.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxLogPassThrough::wxLogPassThrough}\label{wxlogpassthroughctor}
+
+Default ctor installs this object as the current active log target.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxLogStderr %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{\class{wxLogStderr}}\label{wxlogstderr}
@@ -698,31 +725,4 @@ prevent this from happening.
 
 Called right before the log frame is going to be deleted: will
 always be called unlike \helpref{OnFrameClose()}{wxlogwindowonframeclose}.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxLogPassThrough %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{\class{wxLogPassThrough}}\label{wxlogpassthrough}
-
-A special version of \helpref{wxLogChain}{wxlogchain} which uses itself as the
-new log target. Maybe more clearly, it means that this is a log target which
-forwards the log messages to the previously installed one in addition to
-processing them itself.
-
-Unlike \helpref{wxLogChain}{wxlogchain} which is usually used directly as is,
-this class must be derived from to implement \helpref{DoLog}{wxlogdolog} 
-and/or \helpref{DoLogString}{wxlogdologstring} methods.
-
-\wxheading{Derived from}
-
-\helpref{wxLogChain}{wxlogchain}
-
-\wxheading{Include files}
-
-<wx/log.h>
-
-\latexignore{\rtfignore{\wxheading{Members}}}
-
-\membersection{wxLogPassThrough::wxLogPassThrough}\label{wxlogpassthroughctor}
-
-Default ctor installs this object as the current active log target.
 
