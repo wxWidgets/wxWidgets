@@ -32,6 +32,9 @@ class WXDLLEXPORT wxImage;
 class WXDLLEXPORT wxMask;
 class WXDLLEXPORT wxPalette;
 
+#if !defined(__WXMSW__)
+
+// Only used by some ports
 // ----------------------------------------------------------------------------
 // wxBitmapHandler: class which knows how to create/load/save bitmaps in
 // different formats
@@ -68,8 +71,6 @@ protected:
 
     DECLARE_ABSTRACT_CLASS(wxBitmapHandlerBase)
 };
-
-
 
 class WXDLLEXPORT wxBitmapBase : public wxGDIObject
 {
@@ -149,8 +150,7 @@ protected:
 
     DECLARE_ABSTRACT_CLASS(wxBitmapBase)
 };
-
-
+#endif
 
 #if defined(__WXMSW__)
 #include "wx/msw/bitmap.h"
