@@ -88,6 +88,24 @@ void wxEventLoop::Exit(int rc)
 
     NSApplication *cocoaApp = [NSApplication sharedApplication];
     wxLogDebug("wxEventLoop::Exit isRunning=%d", (int)[cocoaApp isRunning]);
+    // This works around a bug in Cocoa.
+    [NSEvent startPeriodicEventsAfterDelay:0.0 withPeriod:5.0];
+    /* Notes:
+    This function is most often called during idle time.  See
+    wxApp::CocoaInstallIdleHandler() for an overview of the implications
+    of idle event time.  In short, Cocoa must have at least one real event
+    in the queue (of which an idle "event" is not) in order for it to
+    realize that the application has been stopped.  The above method
+    generates the first periodic event immediately, and would generate
+    further events every 5 seconds if not for the fact that the next
+    method stops the event loop.
+
+    If the application was active when closed then this is unnecessary
+    because it would receive a deactivate event anyway.  However, if the
+    application was not active when closed, then no events would be
+    added to the queue by Cocoa and thus the application would wait
+    indefinitely for the next event.
+    */
     [cocoaApp stop: cocoaApp];
 }
 
