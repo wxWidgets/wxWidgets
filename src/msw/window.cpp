@@ -2421,9 +2421,15 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                         y = GET_Y_LPARAM(lParam);
 
                     // redirect the event to a static control if necessary
-                    wxWindow *win = FindWindowForMouseEvent(this, &x, &y);
-
-                    processed = win->HandleMouseEvent(message, x, y, wParam);
+                    if (this == GetCapture())
+                    {
+                        processed = HandleMouseEvent(message, x, y, wParam);
+                    }
+                    else
+                    {
+                        wxWindow *win = FindWindowForMouseEvent(this, &x, &y);
+                        processed = win->HandleMouseEvent(message, x, y, wParam);
+                    }
                 }
             }
             break;

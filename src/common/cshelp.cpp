@@ -87,6 +87,9 @@ wxContextHelp::~wxContextHelp()
         EndContextHelp();
 }
 
+// Not currently needed, but on some systems capture may not work as
+// expected so we'll leave it here for now.
+#if 0
 static void wxPushOrPopEventHandlers(wxContextHelp* help, wxWindow* win, bool push)
 {
     if (push)
@@ -103,6 +106,7 @@ static void wxPushOrPopEventHandlers(wxContextHelp* help, wxWindow* win, bool pu
         node = node->Next();
     }
 }
+#endif
 
 // Begin 'context help mode'
 bool wxContextHelp::BeginContextHelp(wxWindow* win)
@@ -122,8 +126,8 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
 
     m_status = FALSE;
 
-//    win->PushEventHandler(new wxContextHelpEvtHandler(this));
-    wxPushOrPopEventHandlers(this, win, TRUE);
+    win->PushEventHandler(new wxContextHelpEvtHandler(this));
+    //wxPushOrPopEventHandlers(this, win, TRUE);
 
     win->CaptureMouse();
 
@@ -131,8 +135,8 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
 
     win->ReleaseMouse();
 
-//    win->PopEventHandler(TRUE);
-    wxPushOrPopEventHandlers(this, win, FALSE);
+    win->PopEventHandler(TRUE);
+    //wxPushOrPopEventHandlers(this, win, FALSE);
 
     win->SetCursor(oldCursor);
 
