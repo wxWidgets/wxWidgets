@@ -23,6 +23,10 @@
 #include "wx/image.h"
 #include "wx/gifdecod.h"
 #include "wx/animate/animate.h"
+#include "wx/log.h"
+#include "wx/dc.h"
+#include "wx/dcclient.h"
+#include "wx/dcmemory.h"
 
 /*
  * wxAnimationPlayer
@@ -76,11 +80,11 @@ bool wxAnimationPlayer::Play(wxWindow& window, const wxPoint& pos, bool looped)
     wxRect rect(pos, sz);
     SaveBackground(rect);
 
-    if (m_frames.Number() == 0)
+    if (m_frames.GetCount() == 0)
     {
         if (!Build())
         {
-            wxLogWarning("wxAnimationPlayer::Play: could not build the image cache.");
+            wxLogWarning(_T("wxAnimationPlayer::Play: could not build the image cache."));
             return FALSE;
         }
     }
@@ -289,11 +293,11 @@ bool wxAnimationPlayer::PlayFrame()
 // Clear the wxImage cache
 void wxAnimationPlayer::ClearCache()
 {
-    wxNode* node = m_frames.First();
+    wxNode* node = m_frames.GetFirst();
     while (node)
     {
-        wxNode* next = node->Next();
-        wxBitmap* bitmap = (wxBitmap*) node->Data();
+        wxNode* next = node->GetNext();
+        wxBitmap* bitmap = (wxBitmap*) node->GetData();
         delete bitmap;
         delete node;
         node = next;
@@ -303,13 +307,13 @@ void wxAnimationPlayer::ClearCache()
 // Draw the background colour
 void wxAnimationPlayer::DrawBackground(wxDC& dc, const wxPoint& pos, const wxColour& colour)
 {
-    wxASSERT_MSG( (m_animation != NULL), "Animation not present in wxAnimationPlayer");
-    wxASSERT_MSG( (m_frames.Number() != 0), "Animation cache not present in wxAnimationPlayer");
+    wxASSERT_MSG( (m_animation != NULL), _T("Animation not present in wxAnimationPlayer"));
+    wxASSERT_MSG( (m_frames.GetCount() != 0), _T("Animation cache not present in wxAnimationPlayer"));
 
     // Optimization: if the first frame fills the whole area, and is non-transparent,
     // don't bother drawing the background
 
-    wxBitmap* firstBitmap = (wxBitmap*) m_frames.First()->Data() ;
+    wxBitmap* firstBitmap = (wxBitmap*) m_frames.GetFirst()->GetData() ;
     wxSize screenSize = GetLogicalScreenSize();
     if (!firstBitmap->GetMask() && (firstBitmap->GetWidth() == screenSize.x) && (firstBitmap->GetHeight() == screenSize.y))
     {
@@ -364,11 +368,11 @@ void wxAnimationPlayer::SaveBackground(const wxRect& rect)
 // Draw this frame
 void wxAnimationPlayer::DrawFrame(int frame, wxDC& dc, const wxPoint& pos)
 {
-    wxASSERT_MSG( (m_animation != NULL), "Animation not present in wxAnimationPlayer");
-    wxASSERT_MSG( (m_frames.Number() != 0), "Animation cache not present in wxAnimationPlayer");
-    wxASSERT_MSG( (m_frames.Nth(frame) != (wxNode*) NULL), "Image not present in wxAnimationPlayer::DrawFrame");
+    wxASSERT_MSG( (m_animation != NULL), _T("Animation not present in wxAnimationPlayer"));
+    wxASSERT_MSG( (m_frames.GetCount() != 0), _T("Animation cache not present in wxAnimationPlayer"));
+    wxASSERT_MSG( (m_frames.Item(frame) != (wxNode*) NULL), _T("Image not present in wxAnimationPlayer::DrawFrame"));
 
-    wxBitmap* bitmap = (wxBitmap*) m_frames.Nth(frame)->Data() ;
+    wxBitmap* bitmap = (wxBitmap*) m_frames.Item(frame)->GetData() ;
 
     wxRect rect = GetFrameRect(frame);
 
@@ -404,14 +408,14 @@ wxGIFAnimation::~wxGIFAnimation()
 
 int wxGIFAnimation::GetFrameCount() const
 {
-    wxASSERT_MSG( (m_decoder != (wxGIFDecoder*) NULL), "m_decoder must be non-NULL");
+    wxASSERT_MSG( (m_decoder != (wxGIFDecoder*) NULL), _T("m_decoder must be non-NULL"));
 
     return m_decoder->GetNumberOfFrames();
 }
 
 wxImage* wxGIFAnimation::GetFrame(int i) const
 {
-    wxASSERT_MSG( (m_decoder != (wxGIFDecoder*) NULL), "m_decoder must be non-NULL");
+    wxASSERT_MSG( (m_decoder != (wxGIFDecoder*) NULL), _T("m_decoder must be non-NULL"));
 
     m_decoder->GoFrame(i);
 
@@ -422,7 +426,7 @@ wxImage* wxGIFAnimation::GetFrame(int i) const
 
 wxAnimationDisposal wxGIFAnimation::GetDisposalMethod(int i) const
 {
-    wxASSERT_MSG( (m_decoder != (wxGIFDecoder*) NULL), "m_decoder must be non-NULL");
+    wxASSERT_MSG( (m_decoder != (wxGIFDecoder*) NULL), _T("m_decoder must be non-NULL"));
 
     m_decoder->GoFrame(i);
 
@@ -432,7 +436,7 @@ wxAnimationDisposal wxGIFAnimation::GetDisposalMethod(int i) const
 
 wxRect wxGIFAnimation::GetFrameRect(int i) const
 {
-    wxASSERT_MSG( (m_decoder != (wxGIFDecoder*) NULL), "m_decoder must be non-NULL");
+    wxASSERT_MSG( (m_decoder != (wxGIFDecoder*) NULL), _T("m_decoder must be non-NULL"));
 
     m_decoder->GoFrame(i);
 
@@ -442,7 +446,7 @@ wxRect wxGIFAnimation::GetFrameRect(int i) const
 
 int wxGIFAnimation::GetDelay(int i) const
 {
-    wxASSERT_MSG( (m_decoder != (wxGIFDecoder*) NULL), "m_decoder must be non-NULL");
+    wxASSERT_MSG( (m_decoder != (wxGIFDecoder*) NULL), _T("m_decoder must be non-NULL"));
 
     m_decoder->GoFrame(i);
     return m_decoder->GetDelay();
@@ -450,14 +454,14 @@ int wxGIFAnimation::GetDelay(int i) const
 
 wxSize wxGIFAnimation::GetLogicalScreenSize() const
 {
-    wxASSERT_MSG( (m_decoder != (wxGIFDecoder*) NULL), "m_decoder must be non-NULL");
+    wxASSERT_MSG( (m_decoder != (wxGIFDecoder*) NULL), _T("m_decoder must be non-NULL"));
 
     return wxSize(m_decoder->GetLogicalScreenWidth(), m_decoder->GetLogicalScreenHeight());
 }
 
 bool wxGIFAnimation::GetBackgroundColour(wxColour& col) const
 {
-    wxASSERT_MSG( (m_decoder != (wxGIFDecoder*) NULL), "m_decoder must be non-NULL");
+    wxASSERT_MSG( (m_decoder != (wxGIFDecoder*) NULL), _T("m_decoder must be non-NULL"));
 
     int i = m_decoder->GetBackgroundColour();
     if (i == -1)
@@ -478,7 +482,7 @@ bool wxGIFAnimation::GetBackgroundColour(wxColour& col) const
 
 bool wxGIFAnimation::GetTransparentColour(wxColour& col) const
 {
-    wxASSERT_MSG( (m_decoder != (wxGIFDecoder*) NULL), "m_decoder must be non-NULL");
+    wxASSERT_MSG( (m_decoder != (wxGIFDecoder*) NULL), _T("m_decoder must be non-NULL"));
 
     int i = m_decoder->GetTransparentColour();
     if (i == -1)
