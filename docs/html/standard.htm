@@ -59,8 +59,8 @@ C++ portability guide</A> by David Williams.
     <LI><A HREF="#no_warnings">Turn on all warnings and eradicate them</A></LI>
     <LI><A HREF="#no_assume_sizeof">Don't rely on <TT>sizeof(int) == 2</TT>...</A></LI>
     <LI><A HREF="#no_assignment_in_if">No assignments in conditional expressions</A></LI>
-    <LI><A HREF="#no_comment_code">Use <TT>#if 0</TT> rather than comments to temporarily
-                    disable blocks of code</A></LI>
+    <LI><A HREF="#no_comment_code">Use <TT>#if 0</TT> rather than comments to temporarily disable blocks of code</A></LI>
+    <LI><A HREF="#no_overloaded_virtuals">Avoid overloaded virtual functions</A></LI>
     <LI><A HREF="#no_extra_semicolon">Don't use extra semi-colons on top level</A></LI>
   </OL>
   <BR>
@@ -76,10 +76,8 @@ C++ portability guide</A> by David Williams.
   <LI>Style choices</LI>
   <OL>
     <LI><A HREF="#naming_conv">Naming conventions: use <TT>m_</TT> for members</A></LI>
-    <LI><A HREF="#no_void_param">Don't use <TT>void</TT> for functions without
-                    arguments</A></LI>
-    <LI><A HREF="#no_const_int">Don't use <TT>const</TT> for non pointer/reference
-                    arguments</A></LI>
+    <LI><A HREF="#no_void_param">Don't use <TT>void</TT> for functions without arguments</A></LI>
+    <LI><A HREF="#no_const_int">Don't use <TT>const</TT> for non pointer/reference arguments</A></LI>
   </OL>
 </UL>
 
@@ -463,6 +461,70 @@ instead of
 </PRE>
 The reason is simple: if there are any <TT>/* ... */</TT> comments inside
 <TT>...</TT> the second version will, of course, miserably fail.
+
+    <P><LI><A NAME="no_overloaded_virtuals"></A><B>Avoid overloaded virtual functions</B></LI><P>
+
+You should avoid having overloaded virtual methods in a base class because if
+any of them is overriden in a derived class, then all others must be overriden
+as well or it would be impossible to call them on an object of derived class.
+
+For example, the following code:
+
+<PRE>
+    class Base
+    {
+    public:
+        virtual void Read(wxFile& file);
+        virtual void Read(const wxString& filename);
+    };
+
+    class Derived : public Base
+    {
+    public:
+        virtual void Read(wxFile& file) { ... }
+    };
+
+    ...
+
+    Derived d;
+    d.Read("some_filename");    // compile error here!
+</PRE>
+
+will fail to compile because the base class function taking <TT>filename</TT>
+is hidden by the virtual function overriden in the derived class (this is
+known as [virtual] function name hiding problem in C++).
+
+<P>
+The standard solution to this problem in wxWindows (where we have such
+situations quite often) is to make both <TT>Read()</TT> functions not virtual
+and introduce a single virtual function <TT>DoRead()</TT>. Usually, it makes
+sense because the function taking a filename is (again, usually) implemented
+in terms of the function reading from a file anyhow (but making only this
+functions not virtual won't solve the above problem!).
+<P>
+So, the above declarations should be written as:
+<PRE>
+    class Base
+    {
+    public:
+        void Read(wxFile& file);
+        void Read(const wxString& filename);
+
+    protected:
+        virtual void DoRead(wxFile& file);
+    };
+
+    class Derived : public Base
+    {
+    protected:
+        virtual void DoRead(wxFile& file) { ... }
+    };
+</PRE>
+
+This technique is widely used in many of wxWindows classes - for example,
+<TT>wxWindow</TT> has more than a dozen of <TT>DoXXX()</TT> functions which
+allows to have many overloaded versions of commonly used methods such as
+<TT>SetSize()</TT>
 
     <P><LI><A NAME="no_extra_semicolon"></A><B>Don't use extra semi-colons on top level</B></LI><P>
 Some compilers don't pay any attention to extra semicolons on top level, as in
