@@ -667,17 +667,30 @@ bool wxDIB::Create(const wxImage& image)
     {
         // copy one DIB line
         unsigned char *dst = dstLineStart;
-        for ( int x = 0; x < w; x++ )
+        if ( alpha )
         {
-            // also, the order of RGB is inversed for DIBs
-            *dst++ = src[2];
-            *dst++ = src[1];
-            *dst++ = src[0];
-
-            src += 3;
-
-            if ( alpha )
-                *dst++ = *alpha++;
+            for ( int x = 0; x < w; x++ )
+            {
+                // RGB order is reversed, and we need to premultiply
+                // all channels by alpha value for use with ::AlphaBlend.
+                const unsigned char a = *alpha++;
+                *dst++ = (src[2] * a + 127) / 255;
+                *dst++ = (src[1] * a + 127) / 255;
+                *dst++ = (src[0] * a + 127) / 255;
+                *dst++ = a;
+                src += 3;
+            }
+        }
+        else // no alpha channel
+        {
+            for ( int x = 0; x < w; x++ )
+            {
+                // RGB order is reversed.
+                *dst++ = src[2];
+                *dst++ = src[1];
+                *dst++ = src[0];
+                src += 3;
+            }
         }
 
         // pass to the previous line in the image

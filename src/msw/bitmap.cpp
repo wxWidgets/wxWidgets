@@ -1025,11 +1025,13 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
                  (rect.y+rect.height <= GetHeight()),
                  wxNullBitmap, wxT("Invalid bitmap or bitmap region") );
 
-    wxBitmap ret( rect.width, rect.height );
+    wxBitmap ret( rect.width, rect.height, GetDepth() );
     wxASSERT_MSG( ret.Ok(), wxT("GetSubBitmap error") );
 
 #ifndef __WXMICROWIN__
-    // TODO: copy alpha channel data if any
+    // handle alpha channel, if any
+    if (HasAlpha())
+	ret.UseAlpha();
 
     // copy bitmap data
     MemoryHDC dcSrc,
@@ -1223,7 +1225,11 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
     data.m_height = h;
 
     // remember that DIBs are stored in top to bottom order!
-    const LONG bytesPerRow = ds.dsBm.bmWidthBytes;
+    // (We can't just use ds.dsBm.bmWidthBytes here, because it isn't always a
+    // multiple of 2, as required by the documentation.  So we use the official
+    // formula, which we already use elsewhere.)
+    const LONG bytesPerRow =
+        wxDIB::GetLineSize(ds.dsBm.bmWidth, ds.dsBm.bmBitsPixel);
     data.m_stride = -bytesPerRow;
 
     char *bits = (char *)ds.dsBm.bmBits;
@@ -1244,47 +1250,12 @@ void wxBitmap::UngetRawData(wxPixelDataBase& dataBase)
     if ( !Ok() )
         return;
 
-    // the cast is ugly but we can't do without it and without making this
-    // function template (and hence inline) unfortunately
-    typedef wxPixelData<wxBitmap, wxAlphaPixelFormat> PixelData;
-    PixelData& data = (PixelData &)dataBase;
-
-    if ( !data )
+    if ( !&dataBase )
     {
         // invalid data, don't crash -- but don't assert neither as we're
         // called automatically from wxPixelDataBase dtor and so there is no
         // way to prevent this from happening
         return;
-    }
-
-    if ( GetBitmapData()->m_hasAlpha )
-    {
-        // AlphaBlend() wants to have premultiplied source alpha but
-        // wxRawBitmap API uses normal, not premultiplied, colours, so adjust
-        // them here now
-        PixelData::Iterator p(data);
-
-        const int w = data.GetWidth();
-        const int h = data.GetHeight();
-
-        for ( int y = 0; y < h; y++ )
-        {
-            PixelData::Iterator rowStart = p;
-
-            for ( int x = 0; x < w; x++ )
-            {
-                const unsigned alpha = p.Alpha();
-
-                p.Red() = (p.Red() * alpha + 127) / 255;
-                p.Blue() = (p.Blue() * alpha + 127) / 255;
-                p.Green() = (p.Green() * alpha + 127) / 255;
-
-                ++p;
-            }
-
-            p = rowStart;
-            p.OffsetY(data, 1);
-        }
     }
 
     // if we're a DDB we need to convert DIB back to DDB now to make the
