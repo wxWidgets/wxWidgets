@@ -48,65 +48,46 @@
 
 #if wxUSE_EXTENDED_RTTI
 
-enum wxButtonStyleBits 
-{
-    wxButtonExactFitBit = 0 ,
-    wxButtonLeftBit = 6 ,
-    wxButtonTopBit = 7 ,
-    wxButtonRightBit = 8 ,
-    wxButtonBottomBit = 9 ,
+WX_DEFINE_FLAGS( wxButtonStyle )
 
-//   wxNoFullRepaintOnResizeBit = 16 ,
-//   wxPopUpWindowBit = 17 ,
-   wxWantCharsBit = 18 ,
-//   wxTabTraversalBit = 19 ,
+WX_BEGIN_FLAGS( wxButtonStyle )
+    // new style border flags, we put them first to
+    // use them for streaming out
+    WX_FLAGS_MEMBER(wxBORDER_SIMPLE)
+    WX_FLAGS_MEMBER(wxBORDER_SUNKEN)
+    WX_FLAGS_MEMBER(wxBORDER_DOUBLE)
+    WX_FLAGS_MEMBER(wxBORDER_RAISED)
+    WX_FLAGS_MEMBER(wxBORDER_STATIC)
+    WX_FLAGS_MEMBER(wxBORDER_NONE)
+    
+    // old style border flags
+    WX_FLAGS_MEMBER(wxSIMPLE_BORDER)
+    WX_FLAGS_MEMBER(wxSUNKEN_BORDER)
+    WX_FLAGS_MEMBER(wxDOUBLE_BORDER)
+    WX_FLAGS_MEMBER(wxRAISED_BORDER)
+    WX_FLAGS_MEMBER(wxSTATIC_BORDER)
+    WX_FLAGS_MEMBER(wxNO_BORDER)
 
-   wxTransparentWindowBit = 20 ,
-   wxBorderNoneBit = 21 ,
-//   wxClipChildrenBit = 22 ,
-//   wxAlwaysShowScrollBarsBit = 23 ,
+    WX_FLAGS_MEMBER(wxTRANSPARENT_WINDOW)
+    WX_FLAGS_MEMBER(wxWANTS_CHARS)
+    WX_FLAGS_MEMBER(wxNO_FULL_REPAINT_ON_RESIZE)
 
-   wxBorderStaticBit = 24 ,
-   wxBorderSimpleBit = 25 ,
-   wxBorderRaisedBit = 26 ,
-   wxBorderSunkenBit = 27 ,
-
-   wxBorderDoubleBit = 28 ,
-//   wxCaptionBit = 29 ,
-//   wxClipSiblingsBit = 29 , // caption not used for non toplevel
-//   wxHScrolBit = 30 ,
-//   wxVScrollBit = 31 ,
-} ;
-
-typedef wxFlags<wxButtonStyleBits> wxButtonStyleFlags ;
-
-WX_BEGIN_ENUM( wxButtonStyleBits)
-    WX_ENUM_MEMBER( wxButtonExactFitBit)
-	WX_ENUM_MEMBER( wxButtonLeftBit)
-	WX_ENUM_MEMBER( wxButtonTopBit)
-	WX_ENUM_MEMBER( wxButtonRightBit)
-	WX_ENUM_MEMBER( wxButtonBottomBit)
-	WX_ENUM_MEMBER( wxWantCharsBit)
-	WX_ENUM_MEMBER( wxTransparentWindowBit)
-	WX_ENUM_MEMBER( wxBorderNoneBit)
-	WX_ENUM_MEMBER( wxBorderStaticBit)
-	WX_ENUM_MEMBER( wxBorderSimpleBit)
-	WX_ENUM_MEMBER( wxBorderRaisedBit)
-	WX_ENUM_MEMBER( wxBorderSunkenBit)
-	WX_ENUM_MEMBER( wxBorderDoubleBit)
-WX_END_ENUM( wxButtonStyleBits)
-
-WX_IMPLEMENT_SET_STREAMING( wxButtonStyleFlags , wxButtonStyleBits) 
+    WX_FLAGS_MEMBER(wxBU_LEFT)
+    WX_FLAGS_MEMBER(wxBU_RIGHT)
+    WX_FLAGS_MEMBER(wxBU_TOP)
+    WX_FLAGS_MEMBER(wxBU_BOTTOM)
+    WX_FLAGS_MEMBER(wxBU_EXACTFIT)
+WX_END_FLAGS( wxButtonStyle )
 
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxButton, wxControl,"wx/button.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxButton)
-	WX_DELEGATE( OnClick , wxEVT_COMMAND_BUTTON_CLICKED , wxCommandEvent , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_DELEGATE( OnClick , wxEVT_COMMAND_BUTTON_CLICKED , wxCommandEvent)
 
 	WX_PROPERTY( Font , wxFont , SetFont , GetFont  , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 	WX_PROPERTY( Label, wxString , SetLabel, GetLabel, wxEmptyString, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
 
-    WX_PROPERTY_FLAGS( WindowStyle , wxButtonStyleFlags , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    WX_PROPERTY_FLAGS( WindowStyle , wxButtonStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 
 WX_END_PROPERTIES_TABLE()
 

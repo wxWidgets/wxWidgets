@@ -231,7 +231,19 @@ static inline void wxBringWindowToTop(HWND hwnd)
 #else // __WXMSW__
 #if wxUSE_EXTENDED_RTTI
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxWindow, wxWindowBase,"wx/window.h")
+// windows that are created from a parent window during its Create method, eg. spin controls in a calendar controls
+// must never been streamed out separately otherwise chaos occurs. Right now easiest is to test for negative ids, as
+// windows with negative ids never can be recreated anyway
+
+bool wxWindowStreamingCallback( const wxObject *object, wxWriter * , wxPersister * , wxxVariantArray & )
+{
+    const wxWindow * win = dynamic_cast<const wxWindow*>(object) ;
+    if ( win && win->GetId() < 0 )
+        return false ;
+    return true ;
+}
+
+IMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxWindow, wxWindowBase,"wx/window.h", wxWindowStreamingCallback)
 
 // make wxWindowList known before the property is used
 
