@@ -396,6 +396,14 @@
 #define wxUSE_ODBC 0
 #endif
 
+#if defined(__WXMSW__) && defined(__WATCOMC__)
+#undef wxUSE_ODBC
+#define wxUSE_ODBC 0
+
+#undef wxUSE_LIBJPEG
+#define wxUSE_LIBJPEG 0
+#endif
+
 #if defined(__WXMSW__) && !defined(__WIN32__)
 
 #undef wxUSE_THREADS

@@ -218,7 +218,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
       dc.Blit(rc.x + (GetMarginWidth() - nBmpWidth) / 2, 
               rc.y + (m_nHeight - nBmpHeight) /2, 
               nBmpWidth, nBmpHeight, 
-              &dcMem, 0, 0, wxCOPY,true);
+              &dcMem, 0, 0, wxCOPY, TRUE);
 
       if ( st & wxODSelected ) {
         #ifdef  O_DRAW_NATIVE_API

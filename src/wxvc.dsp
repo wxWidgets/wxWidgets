@@ -103,6 +103,10 @@ SOURCE=.\common\ctrlcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\ctrlsub.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\date.cpp
 # End Source File
 # Begin Source File
@@ -253,6 +257,10 @@ SOURCE=.\common\ipcbase.cpp
 # Begin Source File
 
 SOURCE=.\common\layout.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\lboxcmn.cpp
 # End Source File
 # Begin Source File
 

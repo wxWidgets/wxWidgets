@@ -405,7 +405,7 @@ gdiobj.obj:     $(MSWDIR)\gdiobj.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 gsocket.obj:     $(MSWDIR)\gsocket.c
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
 
 helpwin.obj:     $(MSWDIR)\helpwin.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
@@ -446,7 +446,7 @@ msgdlg.obj:     $(MSWDIR)\msgdlg.cpp
 nativdlg.obj:     $(MSWDIR)\nativdlg.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
-oleutils.obj:     $(MSWDIR)\oleutils.cpp
+oleutils.obj:     $(MSWDIR)\ole\oleutils.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 ownerdrw.obj:     $(MSWDIR)\ownerdrw.cpp
@@ -620,7 +620,7 @@ event.obj:     $(COMMDIR)\event.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 extended.obj:     $(COMMDIR)\extended.c
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
 
 ffile.obj:     $(COMMDIR)\ffile.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
