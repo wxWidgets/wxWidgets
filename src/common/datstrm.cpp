@@ -25,7 +25,6 @@
 #endif
 
 #include "wx/datstrm.h"
-#include "wx/bufstrm.h"
 
 wxDataInputStream::wxDataInputStream(wxInputStream& s)
   : wxFilterInputStream(s)
