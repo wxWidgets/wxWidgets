@@ -5,6 +5,7 @@
     <set var="MONOLIB_GUI_SRC">
         <if cond="USE_GUI=='1'">
             $(CORE_SRC) $(ADVANCED_SRC) $(HTML_SRC) $(ODBC_SRC) $(DBGRID_SRC)
+            $(XRC_SRC)
         </if>
     </set>
     <set var="MONOLIB_SRC">

@@ -31,6 +31,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
                                      ports (wxGTK, wxMotif, wxX11)
 
        HTML                          wxHTML files
+       XRC                           wxXRC files
 
      * one file may be listed in several groups
 
@@ -2287,6 +2288,96 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 
 <!-- ====================================================================== -->
+<!--                                wxXRC                                   -->
+<!-- ====================================================================== -->
+
+<set var="XRC_SRC" hints="files">
+    src/xrc/xh_bmpbt.cpp
+    src/xrc/xh_bmp.cpp
+    src/xrc/xh_bttn.cpp
+    src/xrc/xh_cald.cpp
+    src/xrc/xh_chckb.cpp
+    src/xrc/xh_chckl.cpp
+    src/xrc/xh_choic.cpp
+    src/xrc/xh_combo.cpp
+    src/xrc/xh_dlg.cpp
+    src/xrc/xh_frame.cpp
+    src/xrc/xh_gauge.cpp
+    src/xrc/xh_gdctl.cpp
+    src/xrc/xh_html.cpp
+    src/xrc/xh_listb.cpp
+    src/xrc/xh_listc.cpp
+    src/xrc/xh_menu.cpp
+    src/xrc/xh_notbk.cpp
+    src/xrc/xh_panel.cpp
+    src/xrc/xh_radbt.cpp
+    src/xrc/xh_radbx.cpp
+    src/xrc/xh_scrol.cpp
+    src/xrc/xh_scwin.cpp
+    src/xrc/xh_sizer.cpp
+    src/xrc/xh_slidr.cpp
+    src/xrc/xh_spin.cpp
+    src/xrc/xh_split.cpp
+    src/xrc/xh_statbar.cpp
+    src/xrc/xh_stbmp.cpp
+    src/xrc/xh_stbox.cpp
+    src/xrc/xh_stlin.cpp
+    src/xrc/xh_sttxt.cpp
+    src/xrc/xh_text.cpp
+    src/xrc/xh_tglbtn.cpp
+    src/xrc/xh_toolb.cpp
+    src/xrc/xh_tree.cpp
+    src/xrc/xh_unkwn.cpp
+    src/xrc/xh_wizrd.cpp
+    src/xrc/xmlres.cpp
+    src/xrc/xmlrsall.cpp
+</set>
+<set var="XRC_HDR" hints="files">
+    wx/xrc/xh_all.h
+    wx/xrc/xh_bmpbt.h
+    wx/xrc/xh_bmp.h
+    wx/xrc/xh_bttn.h
+    wx/xrc/xh_cald.h
+    wx/xrc/xh_chckb.h
+    wx/xrc/xh_chckl.h
+    wx/xrc/xh_choic.h
+    wx/xrc/xh_combo.h
+    wx/xrc/xh_dlg.h
+    wx/xrc/xh_frame.h
+    wx/xrc/xh_gauge.h
+    wx/xrc/xh_gdctl.h
+    wx/xrc/xh_html.h
+    wx/xrc/xh_listb.h
+    wx/xrc/xh_listc.h
+    wx/xrc/xh_menu.h
+    wx/xrc/xh_notbk.h
+    wx/xrc/xh_panel.h
+    wx/xrc/xh_radbt.h
+    wx/xrc/xh_radbx.h
+    wx/xrc/xh_scrol.h
+    wx/xrc/xh_scwin.h
+    wx/xrc/xh_sizer.h
+    wx/xrc/xh_slidr.h
+    wx/xrc/xh_spin.h
+    wx/xrc/xh_split.h
+    wx/xrc/xh_statbar.h
+    wx/xrc/xh_stbmp.h
+    wx/xrc/xh_stbox.h
+    wx/xrc/xh_stlin.h
+    wx/xrc/xh_sttxt.h
+    wx/xrc/xh_text.h
+    wx/xrc/xh_tglbtn.h
+    wx/xrc/xh_toolb.h
+    wx/xrc/xh_tree.h
+    wx/xrc/xh_unkwn.h
+    wx/xrc/xh_wizrd.h
+    wx/xrc/xmlres.h
+</set>
+
+
+
+
+<!-- ====================================================================== -->
 <!--                               XML classes                              -->
 <!-- ====================================================================== -->
 
@@ -2508,7 +2599,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
             $(LOWLEVEL_HDR)
             $(GUI_CORE_HEADERS)
             $(ADVANCED_HDR) $(HTML_HDR)
-            $(OPENGL_HDR) $(DBGRID_HDR)
+            $(OPENGL_HDR) $(DBGRID_HDR) $(XRC_HDR)
         </if>
     </set>
 

@@ -131,6 +131,14 @@ Acts according to DEBUG_INFO by default.
         </description>
     </option>
     
+    <option name="USE_XRC">
+        <values>0,1</values>
+        <default-value>1</default-value>
+        <description>
+            Build wxXRC library (USE_GUI must be 1)?
+        </description>
+    </option>
+    
     <option name="USE_OPENGL">
         <values>0,1</values>
         <default-value>0</default-value>
@@ -304,6 +312,7 @@ Set the version of your Mingw installation here.
         <set var="RUNTIME_LIBS">dynamic</set>
         <set var="OFFICIAL_BUILD">0</set>
         <set var="USE_HTML">1</set>
+        <set var="USE_XRC">1</set>
         <set var="USE_OPENGL">1</set>
         <set var="USE_ODBC">1</set>
         <set var="MONOLITHIC">0</set>
