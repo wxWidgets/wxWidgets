@@ -413,7 +413,7 @@ wxBitmap::wxBitmap( const wxImage &image )
     GdkVisual *visual = gdk_window_get_visual( M_BMPDATA->m_pixmap );
     if (visual == NULL) visual = gdk_window_get_visual( (GdkWindow*) &gdk_root_parent );
     int bpp = visual->depth;
-    if ((bpp == 16) && (visual->red_mask == 0xfc00)) bpp = 15;
+    if ((bpp == 16) && (visual->red_mask != 0xf800)) bpp = 15;
     if (bpp < 8) bpp = 8;
     
     // Render
@@ -554,7 +554,7 @@ wxImage wxBitmap::ConvertToImage() const
     GdkVisual *visual = gdk_window_get_visual( M_BMPDATA->m_pixmap );
     if (visual == NULL) visual = gdk_window_get_visual( (GdkWindow*) &gdk_root_parent );
     int bpp = visual->depth;
-    if ((bpp == 16) && (visual->red_mask == 0xfc00)) bpp = 15;
+    if ((bpp == 16) && (visual->red_mask != 0xf800)) bpp = 15;
 
     GdkColormap *cmap = gtk_widget_get_default_colormap();
   

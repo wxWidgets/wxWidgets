@@ -68,6 +68,8 @@ class wxDialog: public wxPanel
 /*
     void OnCharHook(wxKeyEvent& event);
 */
+    virtual void SetSize( int x, int y, int width, int height,
+      int sizeFlags = wxSIZE_AUTO );
     virtual bool Show( bool show );
     virtual int ShowModal(void);
     virtual void EndModal(int retCode);
@@ -83,18 +85,12 @@ class wxDialog: public wxPanel
     virtual void Maximize(void) { }
     virtual void Restore(void) { }
     
-  private:
+  // implementation
   
-    friend    wxWindow;
-    friend    wxDC;
-    friend    wxRadioBox;
-    
     bool       m_modalShowing;
     wxString   m_title;
     wxIcon     m_icon;
     
-    virtual void ImplementSetPosition();
-  
   DECLARE_EVENT_TABLE()
     
 };

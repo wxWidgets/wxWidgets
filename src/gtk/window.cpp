@@ -1315,99 +1315,81 @@ void wxWindow::AdjustForParentClientOrigin( int& x, int& y, int sizeFlags )
   }
 }
 
-void wxWindow::ImplementSetSize()
-{
-  if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
-  if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
-  if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_minWidth;
-  if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_minHeight;
-  gtk_widget_set_usize( m_widget, m_width, m_height );
-}
-
-void wxWindow::ImplementSetPosition()
-{
-  if (!m_parent)
-  {
-    wxFAIL_MSG( "wxWindow::SetSize error.\n" );
-    return;
-  }
-
-  if ((m_parent) && (m_parent->m_wxwindow))
-    gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x, m_y );
-
-  // Don't do anything for children of wxNotebook and wxMDIChildFrame
-}
-
 void wxWindow::SetSize( int x, int y, int width, int height, int sizeFlags )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
-
-  if (m_resizing) return; // I don't like recursions
-  m_resizing = TRUE;
-
-  int newX = x;
-  int newY = y;
-  int newW = width;
-  int newH = height;
-
-  if ((sizeFlags & wxSIZE_USE_EXISTING) == wxSIZE_USE_EXISTING)
-  {
-    if (newX == -1) newX = m_x;
-    if (newY == -1) newY = m_y;
-    if (newW == -1) newW = m_width;
-    if (newH == -1) newH = m_height;
-  }
-
-  if ((sizeFlags & wxSIZE_AUTO_WIDTH) == wxSIZE_AUTO_WIDTH)
-  {
-    if (newW == -1) newW = 80;
-  }
-
-  if ((sizeFlags & wxSIZE_AUTO_HEIGHT) == wxSIZE_AUTO_HEIGHT)
-  {
-    if (newH == -1) newH = 26;
-  }
-
-  AdjustForParentClientOrigin( newX, newY, sizeFlags );
+    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxASSERT_MSG( (m_parent != NULL), "wxWindow::SetSize requires parent.\n" );
   
-  if ((m_x != newX) || (m_y != newY) || (!m_sizeSet))
-  {
-    m_x = newX;
-    m_y = newY;
-    ImplementSetPosition();
-  }
+    // Don't do anything for children of wxNotebook
+    if (m_parent->m_wxwindow == NULL) return;
+
+    if (m_resizing) return; // I don't like recursions
+    m_resizing = TRUE;
+
+    int old_width = m_width;
+    int old_height = m_height;
   
-  if ((m_width != newW) || (m_height != newH) || (!m_sizeSet))
-  {
-    m_width = newW;
-    m_height = newH;
-    ImplementSetSize();
-  }
-  m_sizeSet = TRUE;
+    if ((sizeFlags & wxSIZE_USE_EXISTING) == wxSIZE_USE_EXISTING)
+    {
+        if (x != -1) m_x = x;
+        if (y != -1) m_y = y;
+        if (width != -1) m_width = width;
+        if (height != -1) m_height = height;
+    }
+    else
+    {
+        m_x = x;
+        m_y = y;
+        m_width = width;
+       m_height = height;
+    }
 
-  wxSizeEvent event( wxSize(m_width,m_height), GetId() );
-  event.SetEventObject( this );
-  ProcessEvent( event );
+    if ((sizeFlags & wxSIZE_AUTO_WIDTH) == wxSIZE_AUTO_WIDTH)
+    {
+        if (width == -1) m_width = 80;
+    }
 
-  m_resizing = FALSE;
+    if ((sizeFlags & wxSIZE_AUTO_HEIGHT) == wxSIZE_AUTO_HEIGHT)
+    {
+        if (height == -1) m_height = 26;
+    }
+  
+    if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
+    if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
+    if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_minWidth;
+    if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_minHeight;
+
+    wxPoint pt( m_parent->GetClientAreaOrigin() );
+    gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x+pt.x, m_y+pt.y );
+  
+    if ((old_width != m_width) || (old_height != m_height))
+        gtk_widget_set_usize( m_widget, m_width, m_height );
+  
+    m_sizeSet = TRUE;
+
+    wxSizeEvent event( wxSize(m_width,m_height), GetId() );
+    event.SetEventObject( this );
+    ProcessEvent( event );
+
+    m_resizing = FALSE;
 }
 
 void wxWindow::SetSize( int width, int height )
 {
-  SetSize( -1, -1, width, height, wxSIZE_USE_EXISTING );
+    SetSize( -1, -1, width, height, wxSIZE_USE_EXISTING );
 }
 
 void wxWindow::Move( int x, int y )
 {
-  SetSize( x, y, -1, -1, wxSIZE_USE_EXISTING );
+    SetSize( x, y, -1, -1, wxSIZE_USE_EXISTING );
 }
 
 void wxWindow::GetSize( int *width, int *height ) const
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
-  if (width) (*width) = m_width;
-  if (height) (*height) = m_height;
+    if (width) (*width) = m_width;
+    if (height) (*height) = m_height;
 }
 
 void wxWindow::SetClientSize( int width, int height )
@@ -1536,18 +1518,8 @@ void wxWindow::GetPosition( int *x, int *y ) const
 {
   wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
-  int xx = m_x;
-  int yy = m_y;
-  
-  if (GetParent())
-  {
-    wxPoint pt(GetParent()->GetClientAreaOrigin());
-    xx -= pt.x;
-    yy -= pt.y;
-  }
-  
-  if (x) (*x) = xx;
-  if (y) (*y) = yy;
+  if (x) (*x) = m_x;
+  if (y) (*y) = m_y;
 }
 
 void wxWindow::ClientToScreen( int *x, int *y )
@@ -1616,24 +1588,24 @@ void wxWindow::Centre( int direction )
 {
   wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
-  if (IS_KIND_OF(this,wxDialog) || IS_KIND_OF(this,wxFrame))
+  int x = m_x;
+  int y = m_y;
+  
+  if (m_parent)
   {
-    if (direction & wxHORIZONTAL == wxHORIZONTAL) m_x = (gdk_screen_width () - m_width) / 2;
-    if (direction & wxVERTICAL == wxVERTICAL) m_y = (gdk_screen_height () - m_height) / 2;
-    ImplementSetPosition();
-  }
-  else
-  {
-    if (m_parent)
-    {
       int p_w = 0;
       int p_h = 0;
       m_parent->GetSize( &p_w, &p_h );
-      if (direction & wxHORIZONTAL == wxHORIZONTAL) m_x = (p_w - m_width) / 2;
-      if (direction & wxVERTICAL == wxVERTICAL) m_y = (p_h - m_height) / 2;
-      ImplementSetPosition();
-    }
+      if (direction & wxHORIZONTAL == wxHORIZONTAL) x = (p_w - m_width) / 2;
+      if (direction & wxVERTICAL == wxVERTICAL) y = (p_h - m_height) / 2;
   }
+  else
+  {
+      if (direction & wxHORIZONTAL == wxHORIZONTAL) x = (gdk_screen_width () - m_width) / 2;
+      if (direction & wxVERTICAL == wxVERTICAL) y = (gdk_screen_height () - m_height) / 2;
+  }
+  
+  Move( x, y );
 }
 
 void wxWindow::Fit()

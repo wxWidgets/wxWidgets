@@ -130,6 +130,7 @@ IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
 BEGIN_EVENT_TABLE(MyFrame,wxFrame)
   EVT_MENU    (ID_ABOUT, MyFrame::OnAbout)
   EVT_MENU    (ID_QUIT,  MyFrame::OnQuit)
+  EVT_SIZE    (MyFrame::OnSize)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(void) :
@@ -149,7 +150,7 @@ MyFrame::MyFrame(void) :
   int widths[] = { -1, 100 };
   SetStatusWidths( 2, widths );
   
-  m_canvas = new MyCanvas( this, -1, wxPoint(2,62), wxSize(300-4,120-4) );
+  m_canvas = new MyCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
   m_canvas->SetScrollbars( 10, 10, 50, 50 );
 }
 
@@ -161,6 +162,13 @@ void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 {
   (void) wxMessageBox( "wxImage demo\nRobert Roebling (c) 1998", "About wxImage Demo", wxOK );
+}
+
+void MyFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
+{
+  int w,h;
+  GetClientSize( &w, &h );
+  m_canvas->SetSize( w, h );
 }
 
 //-----------------------------------------------------------------------------

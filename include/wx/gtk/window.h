@@ -285,9 +285,6 @@ public:
   
           bool        HasVMT();
   
-  virtual void        ImplementSetSize();
-  virtual void        ImplementSetPosition();
-  
   virtual wxPoint     GetClientAreaOrigin() const;
   virtual void        AdjustForParentClientOrigin( int& x, int& y, int sizeFlags );
 

@@ -7,9 +7,6 @@ wxTreeCtrl
 wxClipboard
   -> On the way, but not functional yet.
   
-wxHelpController
-  -> Karsten ?
-  
 Fix printing of bitmaps
   -> No idea.
 

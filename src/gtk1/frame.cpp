@@ -41,16 +41,16 @@ extern wxList wxPendingDelete;
 
 static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxFrame *win )
 {
-  if (!win->HasVMT()) return;
+    if (!win->HasVMT()) return;
 
 /*
-  printf( "OnFrameResize from " );
-  if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-    printf( win->GetClassInfo()->GetClassName() );
-  printf( ".\n" );
+    printf( "OnFrameResize from " );
+    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
+        printf( win->GetClassInfo()->GetClassName() );
+    printf( ".\n" );
 */
 
-  win->GtkOnSize( alloc->x, alloc->y, alloc->width, alloc->height );
+    win->GtkOnSize( alloc->x, alloc->y, alloc->width, alloc->height );
 }
 
 //-----------------------------------------------------------------------------
@@ -60,15 +60,15 @@ static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation*
 static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxFrame *win )
 {
 /*
-  printf( "OnDelete from " );
-  if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-    printf( win->GetClassInfo()->GetClassName() );
-  printf( ".\n" );
+    printf( "OnDelete from " );
+    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
+        printf( win->GetClassInfo()->GetClassName() );
+    printf( ".\n" );
 */
 
-  win->Close();
+    win->Close();
 
-  return TRUE;
+    return TRUE;
 }
 
 //-----------------------------------------------------------------------------
@@ -77,12 +77,12 @@ static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WX
 
 static gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *event, wxFrame *win )
 {
-  if (!win->HasVMT()) return FALSE;
+    if (!win->HasVMT()) return FALSE;
   
-  win->m_x = event->x;
-  win->m_y = event->y;
+    win->m_x = event->x;
+    win->m_y = event->y;
   
-  return FALSE;
+    return FALSE;
 }
 
 //-----------------------------------------------------------------------------
@@ -90,168 +90,228 @@ static gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventC
 //-----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxFrame, wxWindow)
-  EVT_SIZE(wxFrame::OnSize)
-  EVT_CLOSE(wxFrame::OnCloseWindow)
-  EVT_IDLE(wxFrame::OnIdle)
+    EVT_SIZE(wxFrame::OnSize)
+    EVT_CLOSE(wxFrame::OnCloseWindow)
+    EVT_IDLE(wxFrame::OnIdle)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxFrame,wxWindow)
 
 wxFrame::wxFrame()
 {
-  m_frameMenuBar = (wxMenuBar *) NULL;
-  m_frameStatusBar = (wxStatusBar *) NULL;
-  m_frameToolBar = (wxToolBar *) NULL;
-  m_sizeSet = FALSE;
-  wxTopLevelWindows.Insert( this );
+    m_frameMenuBar = (wxMenuBar *) NULL;
+    m_frameStatusBar = (wxStatusBar *) NULL;
+    m_frameToolBar = (wxToolBar *) NULL;
+    m_sizeSet = FALSE;
+    wxTopLevelWindows.Insert( this );
 }
 
 wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
-  m_frameMenuBar = (wxMenuBar *) NULL;
-  m_frameStatusBar = (wxStatusBar *) NULL;
-  m_frameToolBar = (wxToolBar *) NULL;
-  m_sizeSet = FALSE;
-  Create( parent, id, title, pos, size, style, name );
-  wxTopLevelWindows.Insert( this );
+    m_frameMenuBar = (wxMenuBar *) NULL;
+    m_frameStatusBar = (wxStatusBar *) NULL;
+    m_frameToolBar = (wxToolBar *) NULL;
+    m_sizeSet = FALSE;
+    Create( parent, id, title, pos, size, style, name );
+    wxTopLevelWindows.Insert( this );
 }
 
 bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
-  m_needParent = FALSE;
+    m_needParent = FALSE;
 
-  PreCreation( parent, id, pos, size, style, name );
+    PreCreation( parent, id, pos, size, style, name );
 
-  m_title = title;
+    m_title = title;
 
-  GtkWindowType win_type = GTK_WINDOW_TOPLEVEL;
-  if (style & wxSIMPLE_BORDER) win_type = GTK_WINDOW_POPUP;
+    GtkWindowType win_type = GTK_WINDOW_TOPLEVEL;
+    if (style & wxSIMPLE_BORDER) win_type = GTK_WINDOW_POPUP;
   
-  m_widget = gtk_window_new( win_type );
-  if ((size.x != -1) && (size.y != -1))
-    gtk_widget_set_usize( m_widget, m_width, m_height );
-  if ((pos.x != -1) && (pos.y != -1))
-    gtk_widget_set_uposition( m_widget, m_x, m_y );
+    m_widget = gtk_window_new( win_type );
+    if ((size.x != -1) && (size.y != -1))
+        gtk_widget_set_usize( m_widget, m_width, m_height );
+    if ((pos.x != -1) && (pos.y != -1))
+        gtk_widget_set_uposition( m_widget, m_x, m_y );
 
-  gtk_window_set_title( GTK_WINDOW(m_widget), title );
-  GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
+    gtk_window_set_title( GTK_WINDOW(m_widget), title );
+    GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 
-  gtk_widget_set( m_widget, "GtkWindow::allow_shrink", TRUE, NULL );
+    gtk_widget_set( m_widget, "GtkWindow::allow_shrink", TRUE, NULL );
 
-  gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
-    GTK_SIGNAL_FUNC(gtk_frame_delete_callback), (gpointer)this );
+    gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
+        GTK_SIGNAL_FUNC(gtk_frame_delete_callback), (gpointer)this );
 
-  m_wxwindow = gtk_myfixed_new();
-  gtk_widget_show( m_wxwindow );
-  GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
+    m_wxwindow = gtk_myfixed_new();
+    gtk_widget_show( m_wxwindow );
+    GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
 
-  gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );
+    gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );
 
-  gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
-    GTK_SIGNAL_FUNC(gtk_frame_size_callback), (gpointer)this );
+    gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
+        GTK_SIGNAL_FUNC(gtk_frame_size_callback), (gpointer)this );
 
-  gtk_signal_connect( GTK_OBJECT(m_widget), "configure_event",
-    GTK_SIGNAL_FUNC(gtk_frame_configure_callback), (gpointer)this );
+    gtk_signal_connect( GTK_OBJECT(m_widget), "configure_event",
+        GTK_SIGNAL_FUNC(gtk_frame_configure_callback), (gpointer)this );
     
-  if (m_parent) m_parent->AddChild( this );
+    if (m_parent) m_parent->AddChild( this );
   
-  PostCreation();
+    PostCreation();
 
-  return TRUE;
+    return TRUE;
 }
 
 wxFrame::~wxFrame()
 {
-  if (m_frameMenuBar) delete m_frameMenuBar;
-  if (m_frameStatusBar) delete m_frameStatusBar;
-  if (m_frameToolBar) delete m_frameToolBar;
+    if (m_frameMenuBar) delete m_frameMenuBar;
+    if (m_frameStatusBar) delete m_frameStatusBar;
+    if (m_frameToolBar) delete m_frameToolBar;
 
-  wxTopLevelWindows.DeleteObject( this );
-  if (wxTopLevelWindows.Number() == 0) wxTheApp->ExitMainLoop();
+    wxTopLevelWindows.DeleteObject( this );
+    if (wxTopLevelWindows.Number() == 0) wxTheApp->ExitMainLoop();
 }
 
 bool wxFrame::Show( bool show )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
   
-  if (show)
-  {
-    wxSizeEvent event( wxSize(m_width,m_height), GetId() );
-    m_sizeSet = FALSE;
-    ProcessEvent( event );
-  }
-  return wxWindow::Show( show );
+    if (show)
+    {
+        wxSizeEvent event( wxSize(m_width,m_height), GetId() );
+        m_sizeSet = FALSE;
+        ProcessEvent( event );
+    }
+    return wxWindow::Show( show );
 }
 
 void wxFrame::OnCloseWindow( wxCloseEvent &event )
 {
-  if (GetEventHandler()->OnClose() || event.GetForce()) this->Destroy();
+    if (GetEventHandler()->OnClose() || event.GetForce()) this->Destroy();
 }
 
 bool wxFrame::Destroy()
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
   
-  if (!wxPendingDelete.Member(this))
-    wxPendingDelete.Append(this);
+    if (!wxPendingDelete.Member(this)) wxPendingDelete.Append(this);
 
-  return TRUE;
+    return TRUE;
 }
 
 wxPoint wxFrame::GetClientAreaOrigin() const
 {
-  wxPoint pt(0, 0);
-  if (m_frameMenuBar)
-  {
-    int h = 0;
-    m_frameMenuBar->GetSize( (int*)NULL, &h );
-    pt.y += h + 2;
-  }
-  if (m_frameToolBar)
-  {
-    int h = 0;
-    m_frameToolBar->GetSize( (int*)NULL, &h );
-    pt.y += h;
-  }
-  return pt;
+    wxPoint pt(0, 0);
+    if (m_frameMenuBar)
+    {
+        int h = 0;
+        m_frameMenuBar->GetSize( (int*)NULL, &h );
+        pt.y += h + 2;
+    }
+    if (m_frameToolBar)
+    {
+        int h = 0;
+        m_frameToolBar->GetSize( (int*)NULL, &h );
+        pt.y += h;
+    }
+    return pt;
 }
 
-void wxFrame::ImplementSetPosition(void)
+void wxFrame::SetSize( int x, int y, int width, int height, int sizeFlags )
 {
-  if ((m_x != -1) || (m_y != -1))
-     gtk_widget_set_uposition( m_widget, m_x, m_y );
+    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+  
+    // Don't do anything for children of wxMDIChildFrame
+    if (!m_wxwindow) return;
+
+    if (m_resizing) return; // I don't like recursions
+    m_resizing = TRUE;
+
+    int old_x = m_x;
+    int old_y = m_y;
+    int old_width = m_width;
+    int old_height = m_height;
+  
+    if ((sizeFlags & wxSIZE_USE_EXISTING) == wxSIZE_USE_EXISTING)
+    {
+        if (x != -1) m_x = x;
+        if (y != -1) m_y = y;
+        if (width != -1) m_width = width;
+        if (height != -1) m_height = height;
+    }
+    else
+    {
+        m_x = x;
+        m_y = y;
+        m_width = width;
+        m_height = height;
+    }
+
+    if ((sizeFlags & wxSIZE_AUTO_WIDTH) == wxSIZE_AUTO_WIDTH)
+    {
+        if (width == -1) m_width = 80;
+    }
+
+    if ((sizeFlags & wxSIZE_AUTO_HEIGHT) == wxSIZE_AUTO_HEIGHT)
+    {
+       if (height == -1) m_height = 26;
+    }
+  
+    if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
+    if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
+    if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_minWidth;
+    if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_minHeight;
+
+    if ((m_x != -1) || (m_y != -1))
+    {
+        if ((m_x != old_x) || (m_y != old_y)) 
+            gtk_widget_set_uposition( m_widget, m_x, m_y );
+    }
+  
+    if ((m_width != old_width) || (m_height != old_height))
+    {
+        gtk_widget_set_usize( m_widget, m_width, m_height );
+    }
+  
+    m_sizeSet = TRUE;
+
+    wxSizeEvent event( wxSize(m_width,m_height), GetId() );
+    event.SetEventObject( this );
+    ProcessEvent( event );
+
+    m_resizing = FALSE;
 }
 
 void wxFrame::Centre( int direction )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
   
-  if (direction & wxHORIZONTAL == wxHORIZONTAL) m_x = (gdk_screen_width () - m_width) / 2;
-  if (direction & wxVERTICAL == wxVERTICAL) m_y = (gdk_screen_height () - m_height) / 2;
+    int x,y;
+    
+    if (direction & wxHORIZONTAL == wxHORIZONTAL) x = (gdk_screen_width () - m_width) / 2;
+    if (direction & wxVERTICAL == wxVERTICAL) y = (gdk_screen_height () - m_height) / 2;
   
-  ImplementSetPosition();
+    Move( x, y );
 }
 
 void wxFrame::GetClientSize( int *width, int *height ) const
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
   
-  wxWindow::GetClientSize( width, height );
-  if (height)
-  {
-    if (m_frameMenuBar) (*height) -= wxMENU_HEIGHT;
-    if (m_frameStatusBar) (*height) -= wxSTATUS_HEIGHT;
-    if (m_frameToolBar)
+    wxWindow::GetClientSize( width, height );
+    if (height)
     {
-      int y = 0;
-      m_frameToolBar->GetSize( (int *) NULL, &y );
-      (*height) -= y;
+        if (m_frameMenuBar) (*height) -= wxMENU_HEIGHT;
+        if (m_frameStatusBar) (*height) -= wxSTATUS_HEIGHT;
+        if (m_frameToolBar)
+        {
+            int y = 0;
+            m_frameToolBar->GetSize( (int *) NULL, &y );
+            (*height) -= y;
+        }
     }
-  }
 }
 
 void wxFrame::SetClientSize( int const width, int const height )

@@ -64,6 +64,9 @@ public:
   virtual void GetClientSize( int *width, int *height ) const;
   virtual void SetClientSize( int const width, int const height );
 
+  virtual void SetSize( int x, int y, int width, int height,
+    int sizeFlags = wxSIZE_AUTO );
+    
   virtual wxStatusBar* CreateStatusBar(int number=1, long style = wxST_SIZEGRIP, wxWindowID id = 0,
     const wxString& name = "statusBar");
   virtual wxStatusBar *OnCreateStatusBar( int number, long style, wxWindowID id,
@@ -100,7 +103,6 @@ public:
   // implementation
   
   virtual void GtkOnSize( int x, int y, int width, int height );
-  virtual void ImplementSetPosition();
   virtual wxPoint GetClientAreaOrigin() const;
   void DoMenuUpdates();
   void DoMenuUpdates(wxMenu* menu);
