@@ -66,6 +66,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_SELECT_ALL, MyFrame::OnSelectAll)
     EVT_MENU(LIST_DELETE, MyFrame::OnDelete)
     EVT_MENU(LIST_ADD, MyFrame::OnAdd)
+    EVT_MENU(LIST_EDIT, MyFrame::OnEdit)
     EVT_MENU(LIST_DELETE_ALL, MyFrame::OnDeleteAll)
     EVT_MENU(LIST_SORT, MyFrame::OnSort)
     EVT_MENU(LIST_SET_FG_COL, MyFrame::OnSetFgColour)
@@ -201,6 +202,7 @@ MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
     menuList->Append(LIST_SORT, _T("&Sort\tCtrl-S"));
     menuList->AppendSeparator();
     menuList->Append(LIST_ADD, _T("&Append an item\tCtrl-P"));
+    menuList->Append(LIST_EDIT, _T("&Edit the item\tCtrl-E"));
     menuList->Append(LIST_DELETE, _T("&Delete first item\tCtrl-X"));
     menuList->Append(LIST_DELETE_ALL, _T("Delete &all items"));
     menuList->AppendSeparator();
@@ -260,8 +262,8 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageDialog dialog(this, "List test sample\nJulian Smart (c) 1997",
-            "About list test", wxOK|wxCANCEL);
+    wxMessageDialog dialog(this, _T("List test sample\nJulian Smart (c) 1997"),
+            _T("About list test"), wxOK|wxCANCEL);
 
     dialog.ShowModal();
 }
@@ -329,7 +331,7 @@ void MyFrame::RecreateList(long flags, bool withText)
         m_listCtrl = new MyListCtrl(this, LIST_CTRL,
                                     wxDefaultPosition, wxDefaultSize,
                                     flags |
-                                    wxSUNKEN_BORDER);
+                                    wxSUNKEN_BORDER | wxLC_EDIT_LABELS);
 
         switch ( flags & wxLC_MASK_TYPE )
         {
@@ -391,17 +393,17 @@ void MyFrame::InitWithReportItems()
 #if 1
     wxListItem itemCol;
     itemCol.m_mask = wxLIST_MASK_TEXT | wxLIST_MASK_IMAGE;
-    itemCol.m_text = "Column 1";
+    itemCol.m_text = _T("Column 1");
     itemCol.m_image = -1;
     m_listCtrl->InsertColumn(0, itemCol);
-    itemCol.m_text = "Column 2";
+    itemCol.m_text = _T("Column 2");
     m_listCtrl->InsertColumn(1, itemCol);
-    itemCol.m_text = "Column 3";
+    itemCol.m_text = _T("Column 3");
     m_listCtrl->InsertColumn(2, itemCol);
 #else
-    m_listCtrl->InsertColumn(0, "Column 1"); // , wxLIST_FORMAT_LEFT, 140);
-    m_listCtrl->InsertColumn(1, "Column 2"); // , wxLIST_FORMAT_LEFT, 140);
-    m_listCtrl->InsertColumn(2, "One More Column (2)"); // , wxLIST_FORMAT_LEFT, 140);
+    m_listCtrl->InsertColumn(0, _T("Column 1")); // , wxLIST_FORMAT_LEFT, 140);
+    m_listCtrl->InsertColumn(1, _T("Column 2")); // , wxLIST_FORMAT_LEFT, 140);
+    m_listCtrl->InsertColumn(2, _T("One More Column (2)")); // , wxLIST_FORMAT_LEFT, 140);
 #endif
 
     // to speed up inserting we hide the control temporarily
@@ -489,8 +491,8 @@ void MyFrame::OnVirtualView(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::InitWithVirtualItems()
 {
-    m_listCtrl->InsertColumn(0, "First Column");
-    m_listCtrl->InsertColumn(1, "Second Column");
+    m_listCtrl->InsertColumn(0, _T("First Column"));
+    m_listCtrl->InsertColumn(1, _T("Second Column"));
     m_listCtrl->SetColumnWidth(0, 150);
     m_listCtrl->SetColumnWidth(1, 150);
 
@@ -559,7 +561,7 @@ void MyFrame::OnToggleMultiSel(wxCommandEvent& WXUNUSED(event))
         flags |= wxLC_SINGLE_SEL;
 
     m_logWindow->WriteText(wxString::Format(wxT("Current selection mode: %sle\n"),
-                           (flags & wxLC_SINGLE_SEL) ? "sing" : "multip"));
+                           (flags & wxLC_SINGLE_SEL) ? _T("sing") : _T("multip")));
 
     RecreateList(flags);
 }
@@ -581,6 +583,21 @@ void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event))
     m_listCtrl->InsertItem(m_listCtrl->GetItemCount(), _T("Appended item"));
 }
 
+void MyFrame::OnEdit(wxCommandEvent& WXUNUSED(event))
+{
+    long itemCur = m_listCtrl->GetNextItem(-1, wxLIST_NEXT_ALL,
+                                           wxLIST_STATE_FOCUSED);
+
+    if ( itemCur != -1 )
+    {
+        m_listCtrl->EditLabel(itemCur);
+    }
+    else
+    {
+        m_logWindow->WriteText(_T("No item to edit"));
+    }
+}
+
 void MyFrame::OnDelete(wxCommandEvent& WXUNUSED(event))
 {
     if ( m_listCtrl->GetItemCount() )
@@ -589,7 +606,7 @@ void MyFrame::OnDelete(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
-        m_logWindow->WriteText("Nothing to delete");
+        m_logWindow->WriteText(_T("Nothing to delete"));
     }
 }
 
@@ -693,25 +710,25 @@ void MyListCtrl::OnGetInfo(wxListEvent& event)
 {
     wxString msg;
 
-    msg << "OnGetInfo (" << event.m_item.m_itemId << ", " << event.m_item.m_col << ")";
+    msg << _T("OnGetInfo (") << event.m_item.m_itemId << _T(", ") << event.m_item.m_col << _T(")");
     if ( event.m_item.m_mask & wxLIST_MASK_STATE )
-        msg << " wxLIST_MASK_STATE";
+        msg << _T(" wxLIST_MASK_STATE");
     if ( event.m_item.m_mask & wxLIST_MASK_TEXT )
-        msg << " wxLIST_MASK_TEXT";
+        msg << _T(" wxLIST_MASK_TEXT");
     if ( event.m_item.m_mask & wxLIST_MASK_IMAGE )
-        msg << " wxLIST_MASK_IMAGE";
+        msg << _T(" wxLIST_MASK_IMAGE");
     if ( event.m_item.m_mask & wxLIST_MASK_DATA )
-        msg << " wxLIST_MASK_DATA";
+        msg << _T(" wxLIST_MASK_DATA");
     if ( event.m_item.m_mask & wxLIST_SET_ITEM )
-        msg << " wxLIST_SET_ITEM";
+        msg << _T(" wxLIST_SET_ITEM");
     if ( event.m_item.m_mask & wxLIST_MASK_WIDTH )
-        msg << " wxLIST_MASK_WIDTH";
+        msg << _T(" wxLIST_MASK_WIDTH");
     if ( event.m_item.m_mask & wxLIST_MASK_FORMAT )
-        msg << " wxLIST_MASK_WIDTH";
+        msg << _T(" wxLIST_MASK_WIDTH");
 
     if ( event.m_item.m_mask & wxLIST_MASK_TEXT )
     {
-        event.m_item.m_text = "My callback text";
+        event.m_item.m_text = _T("My callback text");
     }
 
     wxLogMessage(msg);

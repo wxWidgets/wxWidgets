@@ -96,6 +96,7 @@ public:
     void OnDeselectAll(wxCommandEvent& event);
     void OnSelectAll(wxCommandEvent& event);
     void OnAdd(wxCommandEvent& event);
+    void OnEdit(wxCommandEvent& event);
     void OnDelete(wxCommandEvent& event);
     void OnDeleteAll(wxCommandEvent& event);
     void OnSort(wxCommandEvent& event);
@@ -147,6 +148,7 @@ enum
     LIST_DELETE_ALL,
     LIST_DELETE,
     LIST_ADD,
+    LIST_EDIT,
     LIST_SORT,
     LIST_SET_FG_COL,
     LIST_SET_BG_COL,
