@@ -7,8 +7,6 @@ Project: "jpeg"=.\jpeg\JpegVC.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
-    JpegVC
-    .\jpeg
 }}}
 
 Package=<4>
@@ -21,8 +19,18 @@ Project: "png"=.\png\PngVC.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
-    PngVC
-    .\png
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "regex"=.\regex\RegexVC.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
 }}}
 
 Package=<4>
@@ -35,8 +43,6 @@ Project: "tiff"=.\tiff\TiffVC.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
-    TiffVC
-    .\tiff
 }}}
 
 Package=<4>
@@ -49,8 +55,6 @@ Project: "wxvc"=.\wxvc.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
-    wxvc
-    ..
 }}}
 
 Package=<4>
@@ -67,6 +71,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name tiff
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name regex
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -75,8 +82,6 @@ Project: "zlib"=.\zlib\ZlibVC.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
-    ZlibVC
-    .\zlib
 }}}
 
 Package=<4>

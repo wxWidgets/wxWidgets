@@ -1227,33 +1227,5 @@ SOURCE=.\msw\ole\uuid.cpp
 SOURCE=..\include\wx\msw\setup.h
 # End Source File
 # End Group
-# Begin Group "Regex Files"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\regex\regcomp.c
-# ADD CPP /I "regex"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\regex\regerror.c
-# ADD CPP /I "regex"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\regex\regexec.c
-# ADD CPP /I "regex"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\regex\regfree.c
-# ADD CPP /I "regex"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# End Group
 # End Target
 # End Project
