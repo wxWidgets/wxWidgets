@@ -204,21 +204,24 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
             m_nMatches = 1;
 
             // and some more for bracketed subexperessions
-            const wxChar *cptr = expr.c_str();
-            wxChar prev = _T('\0');
-            while ( *cptr != _T('\0') )
+            for ( const wxChar *cptr = expr.c_str(); *cptr; cptr++ )
             {
-                // is this a subexpr start, i.e. "(" for extended regex or
-                // "\(" for a basic one?
-                if ( *cptr == _T('(') &&
-                     (flags & wxRE_BASIC ? prev == _T('\\')
-                                         : prev != _T('\\')) )
+                if ( *cptr == _T('\\') )
                 {
+                    // in basic RE syntax groups are inside \(...\)
+                    if ( *++cptr == _T('(') && (flags & wxRE_BASIC) )
+                    {
+                        m_nMatches++;
+                    }
+                }
+                else if ( *cptr == _T('(') && !(flags & wxRE_BASIC) )
+                {
+                    // we know that the previous character is not an unquoted
+                    // backslash because it would have been eaten above, so we
+                    // have a bar '(' and this indicates a group start for the
+                    // extended syntax
                     m_nMatches++;
                 }
-
-                prev = *cptr;
-                cptr++;
             }
         }
 
