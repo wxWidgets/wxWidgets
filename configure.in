@@ -184,10 +184,10 @@ AC_DEFUN(WX_CPP_NEW_HEADERS,
 
     AC_CHECK_HEADERS(iostream)
 
-    if test "x$HAVE_IOSTREAM" = x ; then
-      ifelse([$2], , :, [$2])
-    else
+    if test "$ac_cv_header_iostream" = "yes" ; then
       ifelse([$1], , :, [$1])
+    else
+      ifelse([$2], , :, [$2])
     fi
 
     AC_LANG_RESTORE
@@ -216,7 +216,6 @@ AC_DEFUN(WX_CPP_BOOL,
         return 0;
       ],
       [
-        AC_DEFINE(HAVE_BOOL)
         wx_cv_cpp_bool=yes
       ],
       [
@@ -721,7 +720,7 @@ if test $DEBUG_CONFIGURE = 1; then
 
   DEFAULT_wxUSE_SHARED=yes
   DEFAULT_wxUSE_SONAME=no
-  DEFAULT_wxUSE_OPTIMISE=yes
+  DEFAULT_wxUSE_OPTIMISE=no
   DEFAULT_wxUSE_PROFILE=no
   DEFAULT_wxUSE_NO_DEPS=no
   DEFAULT_wxUSE_NO_RTTI=no
@@ -1043,7 +1042,7 @@ WX_ARG_ENABLE(debug_cntxt,   [  --enable-debug_cntxt    use wxDebugContext], wxU
 WX_ARG_ENABLE(mem_tracing,   [  --enable-mem_tracing    create code with memory tracing], wxUSE_MEM_TRACING)
 WX_ARG_ENABLE(profile,       [  --enable-profile        create code with profiling information], wxUSE_PROFILE)
 WX_ARG_ENABLE(no_rtti,       [  --enable-no_rtti        create code without RTTI information], wxUSE_NO_RTTI)
-WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without exceptions information], wxUSE_NO_EXCEPTIONS)
+WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without C++ exception handling], wxUSE_NO_EXCEPTIONS)
 WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregarding strict ANSI], wxUSE_PERMISSIVE)
 WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without dependency information], wxUSE_NO_DEPS)
 
@@ -1274,73 +1273,73 @@ AC_MSG_CHECKING(for toolkit)
 
 if test "$wxUSE_GUI" = "yes"; then
 
-if test "$USE_BEOS" = 1; then
-    AC_MSG_ERROR([BeOS GUI is not supported yet, use --disable-gui])
-fi
+    if test "$USE_BEOS" = 1; then
+        AC_MSG_ERROR([BeOS GUI is not supported yet, use --disable-gui])
+    fi
 
-if test "$TOOLKIT_GIVEN" = 1; then
-  dnl convert "yes" to 1 and "no" to 0
-  for toolkit in `echo $ALL_TOOLKITS`; do
-    var=wxUSE_$toolkit
-    eval "value=\$${var}"
-    eval "$var=`echo \$value | sed -e "s/yes/1/" -e "s/no/0/"`"
-  done
-else
-  dnl try to guess the most apropriate toolkit for this platform
-  for toolkit in `echo $ALL_TOOLKITS`; do
-    if test "$has_toolkit_in_cache" != 1; then
-      var=DEFAULT_DEFAULT_wxUSE_$toolkit
+    if test "$TOOLKIT_GIVEN" = 1; then
+      dnl convert "yes" to 1 and "no" to 0
+      for toolkit in `echo $ALL_TOOLKITS`; do
+        var=wxUSE_$toolkit
+        eval "value=\$${var}"
+        eval "$var=`echo \$value | sed -e "s/yes/1/" -e "s/no/0/"`"
+      done
     else
-      var=DEFAULT_wxUSE_$toolkit
+      dnl try to guess the most apropriate toolkit for this platform
+      for toolkit in `echo $ALL_TOOLKITS`; do
+        if test "$has_toolkit_in_cache" != 1; then
+          var=DEFAULT_DEFAULT_wxUSE_$toolkit
+        else
+          var=DEFAULT_wxUSE_$toolkit
+        fi
+        eval "wxUSE_$toolkit=\$${var}"
+      done
     fi
-    eval "wxUSE_$toolkit=\$${var}"
-  done
-fi
 
-dnl we suppose that expr exists...
-NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_WINE:-0} + ${wxUSE_MINGW:-0} + ${wxUSE_CYGWIN:-0}`
+    dnl we suppose that expr exists...
+    NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_WINE:-0} + ${wxUSE_MINGW:-0} + ${wxUSE_CYGWIN:-0}`
 
-dnl Allow wxUSE_PM only for OS/2 with EMX.
-dnl Path separator; ':' for unix.
-dnl Stem for flex output; lexyy for OS/2, lex.yy otherwise
-dnl Extension for programs; '.exe' for OS/2 and msw builds (set later).
-case "${host}" in
-  *-pc-os2_emx | *-pc-os2-emx )
-    NUM_TOOLKITS=`expr ${NUM_TOOLKITS} + ${wxUSE_PM:-0}`
-    # PATH_IFS is autodetected by OS/2's configure (usually ';')
-    LEX_STEM="lexyy"
-  ;;
-  *)
-    PATH_IFS=':'
-    LEX_STEM="lex.yy"
-  ;;
-esac
+    dnl Allow wxUSE_PM only for OS/2 with EMX.
+    dnl Path separator; ':' for unix.
+    dnl Stem for flex output; lexyy for OS/2, lex.yy otherwise
+    dnl Extension for programs; '.exe' for OS/2 and msw builds (set later).
+    case "${host}" in
+      *-pc-os2_emx | *-pc-os2-emx )
+        NUM_TOOLKITS=`expr ${NUM_TOOLKITS} + ${wxUSE_PM:-0}`
+        # PATH_IFS is autodetected by OS/2's configure (usually ';')
+        LEX_STEM="lexyy"
+      ;;
+      *)
+        PATH_IFS=':'
+        LEX_STEM="lex.yy"
+      ;;
+    esac
 
-case "$NUM_TOOLKITS" in
-  1)
-  ;;
-  0)
-    AC_MSG_ERROR(Please specify a toolkit - cannot determine the default for ${host})
-  ;;
-  *)
-    AC_MSG_ERROR(Please specify at most one toolkit (may be some are cached?))
-esac
+    case "$NUM_TOOLKITS" in
+      1)
+      ;;
+      0)
+        AC_MSG_ERROR(Please specify a toolkit - cannot determine the default for ${host})
+      ;;
+      *)
+        AC_MSG_ERROR(Please specify at most one toolkit (may be some are cached?))
+    esac
 
-dnl cache the wxUSE_<TOOLKIT> values too
-for toolkit in `echo $ALL_TOOLKITS`; do
-  var=wxUSE_$toolkit
-  eval "value=\$${var}"
-  if test "x$value" != x; then
-    cache_var=CACHE_$toolkit
-    eval "cache=\$${cache_var}"
-    if test "$cache" = 1; then
-      echo "$var=$value" >> ${wx_arg_cache_file}
-    fi
-    if test "$value" = 1; then
-      AC_MSG_RESULT(`echo $toolkit | tr [[A-Z]] [[a-z]]`)
-    fi
-  fi
-done
+    dnl cache the wxUSE_<TOOLKIT> values too
+    for toolkit in `echo $ALL_TOOLKITS`; do
+      var=wxUSE_$toolkit
+      eval "value=\$${var}"
+      if test "x$value" != x; then
+        cache_var=CACHE_$toolkit
+        eval "cache=\$${cache_var}"
+        if test "$cache" = 1; then
+          echo "$var=$value" >> ${wx_arg_cache_file}
+        fi
+        if test "$value" = 1; then
+          AC_MSG_RESULT(`echo $toolkit | tr [[A-Z]] [[a-z]]`)
+        fi
+      fi
+    done
 
 dnl from "if wxUSE_GUI"
 else
@@ -1772,11 +1771,13 @@ if test "$USE_WIN32" = 1 ; then
                        #endif
                      ], [
                         wx_cv_w32api_win_ie=yes
-                        CPPFLAGS="$CPPFLAGS -D_WIN_IE=0x400"
                      ], [
                         wx_cv_w32api_win_ie=no
                      ])
     ])
+    if test "$wx_cv_w32api_win_ie" = "yes" ; then
+        CPPFLAGS="$CPPFLAGS -D_WIN32_IE=0x400"
+    fi
 
     dnl --- Quick & Dirty ; link against most/all libraries
     dnl --- This will bloat the executable, but it'll work for now...
@@ -1800,191 +1801,155 @@ if test "$USE_WIN32" = 1 ; then
         LIBS="$LIBS -lodbc32 -lole32 -loleaut32"
     fi
 
-    dnl -mwindows is needed to avoid that spawning of a console window
-    dnl This probably doesn't belong here..  The user may actually *want*
-    dnl a console window.  People should add this to their own app makefiles
-    dnl instead.  Unless someone cries murder about it, expect this to
-    dnl disappear from here soon.
-    if test "$wxUSE_MINGW" = 1; then
-        LDFLAGS="$LDFLAGS -mwindows"
-    fi
-
     RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __WIN95__ --define __GNUWIN32__"
     RESPROGRAMOBJ="\$(PROGRAM)_resources.o"
 fi
 
 if test "$wxUSE_GUI" = "yes"; then
+    USE_GUI=1
 
-USE_GUI=1
+    GUI_TK_LIBRARY=
 
-GUI_TK_LIBRARY=
+    WXGTK12=
+    WXGTK127=
+    WXGTK13=
 
-WXGTK12=
-WXGTK127=
-WXGTK13=
+    WXWINE=
 
-WXWINE=
-
-if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
-    TOOLKIT=MSW
-    GUIDIST=MSW_DIST
-fi
-
-if test "$wxUSE_GTK" = 1; then
-    dnl avoid calling AM_PATH_GTK twice, so check first for the newer version
-    dnl and only then, if it wasn't found, for an older one
-    AM_PATH_GTK(1.2.7, WXGTK127=1)
-    AM_PATH_GTK(1.2.3, WXGTK12=1)
-
-    if test "$WXGTK12" != 1; then
-        AC_MSG_ERROR([
-            Please check that gtk-config is in path, the directory
-            where GTK+ libraries are installed (returned by
-            'gtk-config --libs' command) is in LD_LIBRARY_PATH or
-            equivalent variable and GTK+ is version 1.2.3 or above.
-        ])
+    if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
+        TOOLKIT=MSW
+        GUIDIST=MSW_DIST
     fi
 
-dnl it doesn't really work with 1.3.0 now...
-dnl    AM_PATH_GTK(1.3.0,
-dnl        WXGTK13=1,
-dnl        AM_PATH_GTK(1.2.1,
-dnl            WXGTK12=1,
-dnl            AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.2.1 or above?)
-dnl        )
-dnl    )
+    dnl -mwindows causes a heap of other default gui libs to be linked in.
+    dnl FIXME: If cygwin needs this, please push it above, if not, please
+    dnl        remove this comment :-)
+    case "${host}" in
+        *-*-mingw32* )
+            LDFLAGS="$LDFLAGS -Wl,--subsystem,windows -mwindows"
+    esac
 
-    TOOLKIT_INCLUDE="$GTK_CFLAGS"
-    GUI_TK_LIBRARY="$GTK_LIBS"
-    AFMINSTALL=afminstall
-    TOOLKIT=GTK
-    GUIDIST=GTK_DIST
+    if test "$wxUSE_GTK" = 1; then
+        dnl avoid calling AM_PATH_GTK twice, so check first for the newer version
+        dnl and only then, if it wasn't found, for an older one
+        AM_PATH_GTK(1.2.7, WXGTK127=1)
+        AM_PATH_GTK(1.2.3, WXGTK12=1)
 
-    dnl test for XIM support in libgdk
-    AC_CHECK_LIB(gdk, gdk_im_open, AC_DEFINE(HAVE_XIM))
-fi
+        if test "$WXGTK12" != 1; then
+            AC_MSG_ERROR([
+                Please check that gtk-config is in path, the directory
+                where GTK+ libraries are installed (returned by
+                'gtk-config --libs' command) is in LD_LIBRARY_PATH or
+                equivalent variable and GTK+ is version 1.2.3 or above.
+            ])
+        fi
 
-if test "$wxUSE_WINE" = 1; then
-    AC_MSG_CHECKING(for WINE includes)
-    WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, windows.h)
-    if test "$ac_find_includes" != "" ; then
-        AC_MSG_RESULT(found $ac_find_includes)
-        TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE -I$ac_find_includes"
-    else
-        AC_MSG_RESULT(no)
-        AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
+    dnl it doesn't really work with 1.3.0 now...
+    dnl    AM_PATH_GTK(1.3.0,
+    dnl        WXGTK13=1,
+    dnl        AM_PATH_GTK(1.2.1,
+    dnl            WXGTK12=1,
+    dnl            AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.2.1 or above?)
+    dnl        )
+    dnl    )
+
+        TOOLKIT_INCLUDE="$GTK_CFLAGS"
+        GUI_TK_LIBRARY="$GTK_LIBS"
+        AFMINSTALL=afminstall
+        TOOLKIT=GTK
+        GUIDIST=GTK_DIST
+
+        dnl test for XIM support in libgdk
+        AC_CHECK_LIB(gdk, gdk_im_open, AC_DEFINE(HAVE_XIM))
     fi
 
-    XPM_LINK=""
-    AC_MSG_CHECKING(for Xpm library)
-    WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
-    if test "$ac_find_libraries" != "" ; then
-        GUI_TK_LIBRARY="-L$ac_find_libraries"
-        XPM_LINK="-lXpm"
-        AC_DEFINE(wxHAVE_LIB_XPM)
-        AC_MSG_RESULT(found at $ac_find_libraries)
-    else
-        AC_MSG_RESULT(no)
-        AC_MSG_WARN(library will be compiled without support for images in XPM format)
-    fi
+    if test "$wxUSE_WINE" = 1; then
+        AC_MSG_CHECKING(for WINE includes)
+        WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, windows.h)
+        if test "$ac_find_includes" != "" ; then
+            AC_MSG_RESULT(found $ac_find_includes)
+            TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE -I$ac_find_includes"
+        else
+            AC_MSG_RESULT(no)
+            AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
+        fi
 
-    MESA_LINK=""
-    AC_MSG_CHECKING(for Mesa library)
-    WX_PATH_FIND_LIBRARIES($SEARCH_LIB,MesaGL)
-    if test "$ac_find_libraries" != "" ; then
-        GUI_TK_LIBRARY="$GUI_TK_LIBRARY -L$ac_find_libraries"
-        MESA_LINK="-lMesaGL"
-        AC_MSG_RESULT(found at $ac_find_libraries)
-    else
-        AC_MSG_ERROR(no)
-    fi
-
-    GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lwine $MESA_LINK $XPM_LINK -lXxf86dga -lXxf86vm -lSM -lICE -lXext -lXmu -lX11 -lncurses"
-    WXWINE=1
-    TOOLKIT=MSW
-    GUIDIST=MSW_DIST
-fi
-
-if test "$wxUSE_MOTIF" = 1; then
-    dnl use standard macros to check for X headers/libs, this brings support
-    dnl for the standard configure options --x-includes and --x-libraries
-    AC_PATH_XTRA
-
-    if test "$no_x" = "yes"; then
-        AC_MSG_ERROR(X11 not found, please use --x-includes and/or --x-libraries options)
-    fi
-
-    GUI_TK_LIBRARY="$X_LIBS"
-    TOOLKIT_INCLUDE="$X_CFLAGS"
-
-    AFMINSTALL=afminstall
-
-    dnl manual check for X11 headers/libs
-    dnl
-    dnl    AC_MSG_CHECKING(for X11 headers)
-    dnl    WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, X11/Intrinsic.h)
-    dnl    if test "$ac_find_includes" != "" ; then
-    dnl        AC_MSG_RESULT(found $ac_find_includes)
-    dnl    else
-    dnl        AC_MSG_RESULT(no)
-    dnl        AC_MSG_ERROR(please set CFLAGS to contain the location of X11/Intrinsic.h)
-    dnl    fi
-    dnl
-    dnl    AC_MSG_CHECKING(for X11 libraries)
-    dnl    WX_PATH_FIND_LIBRARIES($SEARCH_LIB, X11)
-    dnl    if test "$ac_find_libraries" != "" ; then
-    dnl        WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
-    dnl        WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
-    dnl
-    dnl        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
-    dnl        TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $ac_path_to_include"
-    dnl        AC_MSG_RESULT(found at $ac_find_libraries)
-    dnl    else
-    dnl        AC_MSG_RESULT(no)
-    dnl        AC_MSG_ERROR(please set LDFLAGS to contain the location of libX11)
-    dnl    fi
-
-    COMPILED_X_PROGRAM=0
-
-    AC_MSG_CHECKING(for Motif/Lesstif headers)
-    WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, Xm/Xm.h)
-    if test "$ac_find_includes" != "" ; then
-        AC_MSG_RESULT(found $ac_find_includes)
-    else
-        AC_TRY_COMPILE(
-            [
-                #include <Xm/Xm.h>
-            ],
-            [
-                int version;
-
-                version = xmUseVersion;
-            ],
-            [
-                AC_MSG_RESULT(found in default search path)
-                COMPILED_X_PROGRAM=1
-            ],
-            [
-                AC_MSG_RESULT(no)
-                AC_MSG_ERROR(please set CFLAGS to contain the location of Xm/Xm.h)
-            ]
-        )
-    fi
-
-    if test "$COMPILED_X_PROGRAM" = 0; then
-        AC_MSG_CHECKING(for Motif/Lesstif library)
-        WX_PATH_FIND_LIBRARIES($SEARCH_LIB, Xm)
+        XPM_LINK=""
+        AC_MSG_CHECKING(for Xpm library)
+        WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
         if test "$ac_find_libraries" != "" ; then
-            WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
-            WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
-
-            GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
-            TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $ac_path_to_include"
+            GUI_TK_LIBRARY="-L$ac_find_libraries"
+            XPM_LINK="-lXpm"
+            AC_DEFINE(wxHAVE_LIB_XPM)
             AC_MSG_RESULT(found at $ac_find_libraries)
         else
-            dnl it might happen that we found headers in one of the standard
-            dnl paths but the libs are elsewhere - we do need to try to
-            dnl compile a sample program then here
+            AC_MSG_RESULT(no)
+            AC_MSG_WARN(library will be compiled without support for images in XPM format)
+        fi
+
+        MESA_LINK=""
+        AC_MSG_CHECKING(for Mesa library)
+        WX_PATH_FIND_LIBRARIES($SEARCH_LIB,MesaGL)
+        if test "$ac_find_libraries" != "" ; then
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY -L$ac_find_libraries"
+            MESA_LINK="-lMesaGL"
+            AC_MSG_RESULT(found at $ac_find_libraries)
+        else
+            AC_MSG_ERROR(no)
+        fi
+
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lwine $MESA_LINK $XPM_LINK -lXxf86dga -lXxf86vm -lSM -lICE -lXext -lXmu -lX11 -lncurses"
+        WXWINE=1
+        TOOLKIT=MSW
+        GUIDIST=MSW_DIST
+    fi
+
+    if test "$wxUSE_MOTIF" = 1; then
+        dnl use standard macros to check for X headers/libs, this brings support
+        dnl for the standard configure options --x-includes and --x-libraries
+        AC_PATH_XTRA
+
+        if test "$no_x" = "yes"; then
+            AC_MSG_ERROR(X11 not found, please use --x-includes and/or --x-libraries options)
+        fi
+
+        GUI_TK_LIBRARY="$X_LIBS"
+        TOOLKIT_INCLUDE="$X_CFLAGS"
+
+        AFMINSTALL=afminstall
+
+        dnl manual check for X11 headers/libs
+        dnl
+        dnl    AC_MSG_CHECKING(for X11 headers)
+        dnl    WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, X11/Intrinsic.h)
+        dnl    if test "$ac_find_includes" != "" ; then
+        dnl        AC_MSG_RESULT(found $ac_find_includes)
+        dnl    else
+        dnl        AC_MSG_RESULT(no)
+        dnl        AC_MSG_ERROR(please set CFLAGS to contain the location of X11/Intrinsic.h)
+        dnl    fi
+        dnl
+        dnl    AC_MSG_CHECKING(for X11 libraries)
+        dnl    WX_PATH_FIND_LIBRARIES($SEARCH_LIB, X11)
+        dnl    if test "$ac_find_libraries" != "" ; then
+        dnl        WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
+        dnl        WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
+        dnl
+        dnl        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
+        dnl        TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $ac_path_to_include"
+        dnl        AC_MSG_RESULT(found at $ac_find_libraries)
+        dnl    else
+        dnl        AC_MSG_RESULT(no)
+        dnl        AC_MSG_ERROR(please set LDFLAGS to contain the location of libX11)
+        dnl    fi
+
+        COMPILED_X_PROGRAM=0
+
+        AC_MSG_CHECKING(for Motif/Lesstif headers)
+        WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, Xm/Xm.h)
+        if test "$ac_find_includes" != "" ; then
+            AC_MSG_RESULT(found $ac_find_includes)
+        else
             AC_TRY_COMPILE(
                 [
                     #include <Xm/Xm.h>
@@ -2000,92 +1965,125 @@ if test "$wxUSE_MOTIF" = 1; then
                 ],
                 [
                     AC_MSG_RESULT(no)
-                    AC_MSG_ERROR(please set LDFLAGS to contain the location of libXm)
+                    AC_MSG_ERROR(please set CFLAGS to contain the location of Xm/Xm.h)
                 ]
             )
         fi
-    fi
 
-    dnl we don't need this as we used AC_PATH_XTRA above which does it for us
-    dnl
-    dnl dnl if we already compiled a sample program, X libs are surely there
-    dnl if test "$COMPILED_X_PROGRAM" = 0; then
-    dnl     AC_MSG_CHECKING(for Xt library)
-    dnl     WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xt)
-    dnl     if test "$ac_find_libraries" != "" ; then
-    dnl         WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
-    dnl         GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
-    dnl         AC_MSG_RESULT(found at $ac_find_libraries)
-    dnl     else
-    dnl         AC_TRY_COMPILE
-    dnl         (
-    dnl             [
-    dnl                 #include <X11/Intrinsic.h>
-    dnl             ],
-    dnl             [
-    dnl                 char *p;
-    dnl                 p = XtMalloc(5);
-    dnl             ],
-    dnl             [
-    dnl                 AC_MSG_RESULT(found in default search path)
-    dnl                 COMPILED_X_PROGRAM=1
-    dnl             ],
-    dnl             [
-    dnl                 AC_MSG_RESULT(no)
-    dnl                 AC_MSG_ERROR(please set LDFLAGS to contain the location of libXt)
-    dnl             ]
-    dnl         )
-    dnl     fi
-    dnl fi
+        if test "$COMPILED_X_PROGRAM" = 0; then
+            AC_MSG_CHECKING(for Motif/Lesstif library)
+            WX_PATH_FIND_LIBRARIES($SEARCH_LIB, Xm)
+            if test "$ac_find_libraries" != "" ; then
+                WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
+                WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
 
-    XPM_LINK=""
-    AC_MSG_CHECKING(for Xpm library)
-    WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
-    if test "$ac_find_libraries" != "" ; then
-        WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
-        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
-        XPM_LINK="-lXpm "
-        AC_DEFINE(wxHAVE_LIB_XPM)
-        AC_MSG_RESULT(found at $ac_find_libraries)
-    else
-        AC_TRY_COMPILE(
-            [
-                #include <X11/xpm.h>
-            ],
-            [
-                int version;
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
+                TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $ac_path_to_include"
+                AC_MSG_RESULT(found at $ac_find_libraries)
+            else
+                dnl it might happen that we found headers in one of the standard
+                dnl paths but the libs are elsewhere - we do need to try to
+                dnl compile a sample program then here
+                AC_TRY_COMPILE(
+                    [
+                        #include <Xm/Xm.h>
+                    ],
+                    [
+                        int version;
+                        version = xmUseVersion;
+                    ],
+                    [
+                        AC_MSG_RESULT(found in default search path)
+                        COMPILED_X_PROGRAM=1
+                    ],
+                    [
+                        AC_MSG_RESULT(no)
+                        AC_MSG_ERROR(please set CFLAGS to contain the location of Xm/Xm.h)
+                    ]
+                )
+            fi
+        fi
 
-                version = XpmLibraryVersion();
-            ],
-            [
+        dnl we don't need this as we used AC_PATH_XTRA above which does it for us
+        dnl
+        dnl dnl if we already compiled a sample program, X libs are surely there
+        dnl if test "$COMPILED_X_PROGRAM" = 0; then
+        dnl     AC_MSG_CHECKING(for Xt library)
+        dnl     WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xt)
+        dnl     if test "$ac_find_libraries" != "" ; then
+        dnl         WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
+        dnl         GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
+        dnl         AC_MSG_RESULT(found at $ac_find_libraries)
+        dnl     else
+        dnl         AC_TRY_COMPILE
+        dnl         (
+        dnl             [
+        dnl                 #include <X11/Intrinsic.h>
+        dnl             ],
+        dnl             [
+        dnl                 char *p;
+        dnl                 p = XtMalloc(5);
+        dnl             ],
+        dnl             [
+        dnl                 AC_MSG_RESULT(found in default search path)
+        dnl                 COMPILED_X_PROGRAM=1
+        dnl             ],
+        dnl             [
+        dnl                 AC_MSG_RESULT(no)
+        dnl                 AC_MSG_ERROR(please set LDFLAGS to contain the location of libXt)
+        dnl             ]
+        dnl         )
+        dnl     fi
+        dnl fi
+
+        XPM_LINK=""
+        AC_MSG_CHECKING(for Xpm library)
+        WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
+        if test "$ac_find_libraries" != "" ; then
+            WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
             XPM_LINK="-lXpm "
             AC_DEFINE(wxHAVE_LIB_XPM)
-                AC_MSG_RESULT(found in default search path)
-                COMPILED_X_PROGRAM=0
-            ],
-            [
-                AC_MSG_RESULT(no)
-                AC_MSG_WARN(library will be compiled without support for images in XPM format)
-            ]
-        )
+            AC_MSG_RESULT(found at $ac_find_libraries)
+        else
+            AC_TRY_COMPILE(
+                [
+                    #include <X11/xpm.h>
+                ],
+                [
+                    int version;
+
+                    version = XpmLibraryVersion();
+                ],
+                [
+                XPM_LINK="-lXpm "
+                AC_DEFINE(wxHAVE_LIB_XPM)
+                    AC_MSG_RESULT(found in default search path)
+                    COMPILED_X_PROGRAM=0
+                ],
+                [
+                    AC_MSG_RESULT(no)
+                    AC_MSG_WARN(library will be compiled without support for images in XPM format)
+                ]
+            )
+        fi
+
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXm $XPM_LINK -lXmu -lXext -lXt -lX11"
+        TOOLKIT=MOTIF
+        GUIDIST=MOTIF_DIST
     fi
 
-    GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXm $XPM_LINK -lXmu -lXext -lXt -lX11"
-    TOOLKIT=MOTIF
-    GUIDIST=MOTIF_DIST
-fi
+    if test "$wxUSE_PM" = 1; then
+        TOOLKIT=PM
+        GUIDIST=GTK_DIST
+    fi
 
-if test "$wxUSE_PM" = 1; then
-    TOOLKIT=PM
-    GUIDIST=GTK_DIST
-fi
-
-dnl the name of the directory where the files for this toolkit live
-if test "$TOOLKIT" = "PM" ; then
-    TOOLKIT_DIR="os2"
-else
-    TOOLKIT_DIR=`echo ${TOOLKIT} | tr "[[A-Z]]" "[[a-z]]"`
-fi
+    dnl the name of the directory where the files for this toolkit live
+    if test "$TOOLKIT" = "PM" ; then
+        TOOLKIT_DIR="os2"
+    else
+        TOOLKIT_DIR=`echo ${TOOLKIT} | tr "[[A-Z]]" "[[a-z]]"`
+    fi
 
 
     dnl the sources, their dependencies and the headers
@@ -2228,7 +2226,7 @@ dnl --- the marker for quick search, leave it here: SHARED_LIB_SETUP ---
 
 if test "$wxUSE_SHARED" = "yes"; then
 
-    dnl build and install targets
+    dnl install targets
     if test "$wxUSE_OPENGL" = "yes"; then
         WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
         WX_ALL="\$(build_libdir)/${WX_LIBRARY_LINK1} \$(build_libdir)/${WX_LIBRARY_LINK1_GL}"
@@ -2248,9 +2246,9 @@ if test "$wxUSE_SHARED" = "yes"; then
 
     case "${host}" in
       *-hp-hpux* )
-        if test "$GCC" != yes ; then
+        if test "$GCC" != "yes" ; then
             dnl no idea why it wants it, but it does
-            LDFLAGS="-L/usr/lib"
+            LDFLAGS="$LDFLAGS -L/usr/lib"
 
             SHARED_LD="${CXX} -b -o"
             PIC_FLAG="+Z"
@@ -2293,9 +2291,9 @@ if test "$wxUSE_SHARED" = "yes"; then
         dnl defaults are ok
       ;;
       *-*-darwin* )
-        CFLAGS="${CFLAGS} -fno-common"
-        CXXFLAGS="${CXXFLAGS} -fno-common"
-        SHARED_LD="${CXX} -dynamiclib -o"
+        CFLAGS="$CFLAGS -fno-common"
+        CXXFLAGS="$CXXFLAGS -fno-common"
+        SHARED_LD="$CXX -dynamiclib -o"
         PIC_FLAG="-dynamic -fPIC"
       ;;
       *-*-aix* )
@@ -2464,7 +2462,7 @@ dnl ---------------------------------------------------------------------------
 dnl check for wcslen
 AC_CHECK_LIB(c, wcslen, [
             AC_DEFINE(HAVE_WCSLEN)
-            WCHAR_LINK=""
+            WCHAR_LINK=
         ], [
             AC_CHECK_LIB(w, wcslen, [
                 AC_DEFINE(HAVE_WCSLEN)
@@ -2713,137 +2711,140 @@ dnl ---------------------------------------------------------------------------
 dnl under MSW we always have thread support
 if test "$TOOLKIT" != "MSW"; then
 
-dnl the code below:
-dnl   defines THREADS_OBJ which contains the object files to build
-dnl   defines THREADS_LINK which contains the thread library to link with
-dnl   defines wxUSE_THREADS=1 if thread support is activated
+    dnl the code below:
+    dnl   defines THREADS_OBJ which contains the object files to build
+    dnl   defines THREADS_LINK which contains the thread library to link with
+    dnl   defines wxUSE_THREADS=1 if thread support is activated
 
-THREADS_LINK=
-THREADS_OBJ=
-CODE_GEN_FLAGS=
-CODE_GEN_FLAGS_CXX=
+    THREADS_LINK=
+    THREADS_OBJ=
+    CODE_GEN_FLAGS=
+    CODE_GEN_FLAGS_CXX=
 
-if test "$wxUSE_THREADS" = "yes" ; then
-    if test "$wxUSE_WINE" = 1 ; then
-        AC_MSG_WARN([Threads are not supported under WINE])
-        wxUSE_THREADS="no"
-    elif test "$USE_BEOS" = 1; then
-        AC_MSG_WARN([BeOS threads are not yet supported])
-        wxUSE_THREADS="no"
-    fi
-fi
-
-if test "$wxUSE_THREADS" = "yes" ; then
-    dnl find if POSIX threads are available
-
-    dnl AIX calls the library libpthreads - thanks IBM!
-    if test "$wxUSE_AIX" = 1; then
-        THREADS_LIB=pthreads
-    else
-        THREADS_LIB=pthread
+    if test "$wxUSE_THREADS" = "yes" ; then
+        if test "$wxUSE_WINE" = 1 ; then
+            AC_MSG_WARN([Threads are not supported under WINE])
+            wxUSE_THREADS="no"
+        elif test "$USE_BEOS" = 1; then
+            AC_MSG_WARN([BeOS threads are not yet supported])
+            wxUSE_THREADS="no"
+        fi
     fi
 
-    dnl standard lib name is pthread
-    dnl We no longer test for pthread-0.7 as it breaks compilation on some
-    dnl glibc2 systems, especially for static linkage.
-    AC_CHECK_LIB($THREADS_LIB, pthread_create, [
-            THREADS_OBJ="threadpsx.lo"
-            THREADS_LINK=$THREADS_LIB
-        ], [
-            dnl thread functions are in libc_r under FreeBSD
-            AC_CHECK_LIB(c_r, pthread_create, [
+    if test "$wxUSE_THREADS" = "yes" ; then
+        dnl find if POSIX threads are available
+
+        dnl AIX calls the library libpthreads - thanks IBM!
+        if test "$USE_AIX" = 1; then
+            THREADS_LIB=pthreads
+        else
+            THREADS_LIB=pthread
+        fi
+
+        dnl standard lib name is pthread
+        dnl We no longer test for pthread-0.7 as it breaks compilation on some
+        dnl glibc2 systems, especially for static linkage.
+        AC_CHECK_LIB($THREADS_LIB, pthread_create, [
                 THREADS_OBJ="threadpsx.lo"
-                THREADS_LINK="c_r"
+                THREADS_LINK=$THREADS_LIB
             ], [
-                dnl VZ: SGI threads are not supported currently
-                AC_CHECK_HEADER(sys/prctl.h, [
-                    THREADS_OBJ="threadsgi.lo"
+                dnl thread functions are in libc_r under FreeBSD
+                AC_CHECK_LIB(c_r, pthread_create, [
+                    THREADS_OBJ="threadpsx.lo"
+                    THREADS_LINK="c_r"
+                ], [
+                    dnl VZ: SGI threads are not supported currently
+                    AC_CHECK_HEADER(sys/prctl.h, [
+                        THREADS_OBJ="threadsgi.lo"
+                    ])
                 ])
             ])
-        ])
 
-    if test -z "$THREADS_OBJ" ; then
-        wxUSE_THREADS=no
-        AC_MSG_WARN(No thread support on this system)
+        if test -z "$THREADS_OBJ" ; then
+            wxUSE_THREADS=no
+            AC_MSG_WARN(No thread support on this system)
+        fi
     fi
-fi
 
-dnl do other tests only if we are using threads
-if test "$wxUSE_THREADS" = "yes" ; then
-  AC_CHECK_FUNCS(thr_setconcurrency)
+    dnl do other tests only if we are using threads
+    if test "$wxUSE_THREADS" = "yes" ; then
+      AC_CHECK_FUNCS(thr_setconcurrency)
 
-  dnl define autoconf macro to check for given function in both pthread and
-  dnl posix4 libraries
-  dnl usage: AC_FUNC_THREAD(FUNCTION_NAME)
-  dnl VZ: TODO
-  dnl AC_DEFUN(AC_FUNC_THREAD,
-  dnl [
-  dnl     AC_CHECK_LIB($THREADS_LINK, $1,
-  dnl            AC_DEFINE(HAVE_`'translit($1, `A-Z', 'a-z'),
-  dnl            [AC_CHECK_LIB("posix4", $1,
-  dnl                [AC_DEFINE(HAVE_`'translit($1, `A-Z', 'a-z'))
-  dnl                 POSIX4_LINK="-lposix4"
-  dnl             ])
-  dnl            ])
-  dnl ])
+      dnl define autoconf macro to check for given function in both pthread and
+      dnl posix4 libraries
+      dnl usage: AC_FUNC_THREAD(FUNCTION_NAME)
+      dnl VZ: TODO
+      dnl AC_DEFUN(AC_FUNC_THREAD,
+      dnl [
+      dnl     AC_CHECK_LIB($THREADS_LINK, $1,
+      dnl            AC_DEFINE(HAVE_`'translit($1, `A-Z', 'a-z'),
+      dnl            [AC_CHECK_LIB([posix4], $1,
+      dnl                [AC_DEFINE(HAVE_`'translit($1, `A-Z', 'a-z'))
+      dnl                 POSIX4_LINK="-lposix4"
+      dnl             ])
+      dnl            ])
+      dnl ])
 
-  AC_CHECK_HEADERS(sched.h)
+      AC_CHECK_HEADERS(sched.h)
 
-  AC_CHECK_LIB($THREADS_LINK, sched_yield,
-               AC_DEFINE(HAVE_SCHED_YIELD),
-               [AC_CHECK_LIB("posix4", sched_yield,
-                   [AC_DEFINE(HAVE_SCHED_YIELD) POSIX4_LINK="-lposix4"],
-                   AC_MSG_WARN(wxThread::Yield will not work properly)
-                )]
-               )
-
-  dnl to be able to set the thread priority, we need to have all of the
-  dnl following functions:
-  dnl   1. pthread_attr_getschedpolicy
-  dnl   2. sched_get_priority_min and sched_get_priority_max
-  dnl      (this one can be in either libpthread or libposix4 (under Solaris))
-  dnl   3. pthread_attr_getschedparam and pthread_attr_setschedparam
-  HAVE_PRIOR_FUNCS=0
-  AC_CHECK_LIB($THREADS_LINK, pthread_attr_getschedpolicy,
-                 AC_CHECK_LIB($THREADS_LINK, pthread_attr_setschedparam,
-                   AC_CHECK_LIB($THREADS_LINK, sched_get_priority_max,
-                       HAVE_PRIOR_FUNCS=1,
-                       AC_CHECK_LIB("posix4", sched_get_priority_max,
-                         [
-                            HAVE_PRIOR_FUNCS=1
-                            POSIX4_LINK="-lposix4"
-                         ],
-                       )
+      AC_CHECK_LIB($THREADS_LINK, sched_yield,
+                   AC_DEFINE(HAVE_SCHED_YIELD),
+                   [AC_CHECK_LIB([posix4], sched_yield,
+                       [AC_DEFINE(HAVE_SCHED_YIELD) POSIX4_LINK="-lposix4"],
+                       AC_MSG_WARN(wxThread::Yield will not work properly)
+                    )]
                    )
-                 )
-               )
 
-  if test "$HAVE_PRIOR_FUNCS" = 1; then
-    AC_DEFINE(HAVE_THREAD_PRIORITY_FUNCTIONS)
-  else
-    AC_MSG_WARN(Setting thread priority will not work)
-  fi
+      dnl to be able to set the thread priority, we need to have all of the
+      dnl following functions:
+      dnl   1. pthread_attr_getschedpolicy
+      dnl   2. sched_get_priority_min and sched_get_priority_max
+      dnl      (this one can be in either libpthread or libposix4 (under Solaris))
+      dnl   3. pthread_attr_getschedparam and pthread_attr_setschedparam
+      HAVE_PRIOR_FUNCS=0
+      AC_CHECK_LIB($THREADS_LINK, pthread_attr_getschedpolicy,
+                     AC_CHECK_LIB($THREADS_LINK, pthread_attr_setschedparam,
+                       AC_CHECK_LIB($THREADS_LINK, sched_get_priority_max,
+                           HAVE_PRIOR_FUNCS=1,
+                           AC_CHECK_LIB([posix4], sched_get_priority_max,
+                             [
+                                HAVE_PRIOR_FUNCS=1
+                                POSIX4_LINK="-lposix4"
+                             ],
+                           )
+                       )
+                     )
+                   )
 
-  AC_CHECK_LIB($THREADS_LINK, pthread_cancel,
-               AC_DEFINE(HAVE_PTHREAD_CANCEL),
-               AC_MSG_WARN([wxThread::Kill() will not work properly]))
+      if test "$HAVE_PRIOR_FUNCS" = 1; then
+        AC_DEFINE(HAVE_THREAD_PRIORITY_FUNCTIONS)
+      else
+        AC_MSG_WARN(Setting thread priority will not work)
+      fi
 
-  AC_CACHE_CHECK([for pthread_cleanup_push/pop], wx_cv_func_pthread_cleanup_push,
-  [
-    AC_TRY_COMPILE([#include <pthread.h>],
-                 [
-                    pthread_cleanup_push(NULL, NULL);
-                    pthread_cleanup_pop(0);
-                 ], [
-                    wx_cv_func_pthread_cleanup_push=yes
-                    AC_DEFINE(HAVE_THREAD_CLEANUP_FUNCTIONS)
-                 ], [
-                    wx_cv_func_pthread_cleanup_push=no
-                 ])
-  ])
+      AC_CHECK_LIB($THREADS_LINK, pthread_cancel,
+                   AC_DEFINE(HAVE_PTHREAD_CANCEL),
+                   AC_MSG_WARN([wxThread::Kill() will not work properly]))
 
-  THREADS_LINK="-l$THREADS_LINK"
-fi
+      AC_CACHE_CHECK([for pthread_cleanup_push/pop], wx_cv_func_pthread_cleanup_push,
+      [
+        AC_TRY_COMPILE([#include <pthread.h>],
+                     [
+                        pthread_cleanup_push(NULL, NULL);
+                        pthread_cleanup_pop(0);
+                     ], [
+                        wx_cv_func_pthread_cleanup_push=yes
+                     ], [
+                        wx_cv_func_pthread_cleanup_push=no
+                     ])
+      ])
+
+      if test "$wx_cv_func_pthread_cleanup_push" = "yes"; then
+          AC_DEFINE(HAVE_THREAD_CLEANUP_FUNCTIONS)
+      fi
+
+      THREADS_LINK="-l$THREADS_LINK"
+    fi
 
 dnl from if !MSW
 fi
@@ -2861,7 +2862,7 @@ else
   if test "$ac_cv_func_strtok_r" = "yes"; then
     AC_MSG_CHECKING(if -D_REENTRANT is needed)
     if test "$NEEDS_D_REENTRANT_FOR_R_FUNCS" = 1; then
-        CODE_GEN_FLAGS="$CODE_GEN_FLAGS -D_REENTRANT"
+        CODE_GEN_FLAGS="${CODE_GEN_FLAGS} -D_REENTRANT"
         AC_MSG_RESULT(yes)
     else
         AC_MSG_RESULT(no)
@@ -2935,11 +2936,11 @@ if test "$GCC" = yes ; then
         CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fno-exceptions"
     fi
     if test "$wxUSE_PERMISSIVE" = "yes" ; then
-       CODE_GEN_FLAGS="$CODE_GEN_FLAGS -fpermissive"
+        CODE_GEN_FLAGS="$CODE_GEN_FLAGS -fpermissive"
     fi
     if test "$wxUSE_NO_DEPS" = "no" ; then
-        CFLAGS="-MMD ${CFLAGS}"
-        CXXFLAGS="-MMD ${CXXFLAGS}"
+        CFLAGS="-MMD $CFLAGS"
+        CXXFLAGS="-MMD $CXXFLAGS"
     fi
     if test "$USE_WIN32" = 1 ; then
         # I'm not even really sure what this was ever added to solve,
@@ -3165,11 +3166,14 @@ if test "$wxUSE_TIMEDATE" = "yes"; then
                 ],
                 [
                     wx_cv_struct_tm_has_gmtoff=yes
-                    AC_DEFINE(WX_GMTOFF_IN_TM)
                 ],
                 wx_cv_struct_tm_has_gmtoff=no
             )
         ])
+    fi
+
+    if test "$wx_cv_struct_tm_has_gmtoff" = "yes"; then
+        AC_DEFINE(WX_GMTOFF_IN_TM)
     fi
 
     dnl check for gettimeofday (SVr4, BSD 4.3) and ftime (V7, BSD 4.3) for the
@@ -3227,76 +3231,76 @@ dnl ------------------------------------------------------------------------
 dnl under MSW we always have sockets
 if test "$TOOLKIT" != "MSW"; then
 
-if test "$wxUSE_SOCKETS" = "yes"; then
-    dnl under Solaris, socket functions live in -lsocket
-    AC_CHECK_FUNC(socket,,
-        AC_CHECK_LIB(socket, socket,
-            INET_LINK="$INET_LINK -lsocket",
-            [
-                AC_MSG_WARN([socket library not found - sockets will be disabled])
-                wxUSE_SOCKETS=no
-            ]
+    if test "$wxUSE_SOCKETS" = "yes"; then
+        dnl under Solaris, socket functions live in -lsocket
+        AC_CHECK_FUNC(socket,,
+            AC_CHECK_LIB(socket, socket,
+                INET_LINK="$INET_LINK -lsocket",
+                [
+                    AC_MSG_WARN([socket library not found - sockets will be disabled])
+                    wxUSE_SOCKETS=no
+                ]
+            )
         )
-    )
-fi
+    fi
 
-dnl this test may be appropriate if building under cygwin
-dnl right now I'm assuming it also uses the winsock stuff
-dnl like mingw does..  -- RL
+    dnl this test may be appropriate if building under cygwin
+    dnl right now I'm assuming it also uses the winsock stuff
+    dnl like mingw does..  -- RL
 
-if test "$wxUSE_SOCKETS" = "yes" ; then
-    dnl determine the type of third argument for getsockname
-    AC_CACHE_CHECK([what is the type of the third argument of getsockname],
-                   wx_cv_type_getsockname3,
-        [
-            AC_LANG_SAVE
-            AC_LANG_CPLUSPLUS
+    if test "$wxUSE_SOCKETS" = "yes" ; then
+        dnl determine the type of third argument for getsockname
+        AC_CACHE_CHECK([what is the type of the third argument of getsockname],
+                       wx_cv_type_getsockname3,
+            [
+                AC_LANG_SAVE
+                AC_LANG_CPLUSPLUS
 
-            AC_TRY_COMPILE(
-                [
-                    #include <sys/types.h>
-                    #include <sys/socket.h>
-                ],
-                [
-                    socklen_t len;
-                    getsockname(0, 0, &len);
-                ],
-                wx_cv_type_getsockname3=socklen_t,
                 AC_TRY_COMPILE(
                     [
                         #include <sys/types.h>
                         #include <sys/socket.h>
                     ],
                     [
-                        size_t len;
+                        socklen_t len;
                         getsockname(0, 0, &len);
                     ],
-                    wx_cv_type_getsockname3=size_t,
+                    wx_cv_type_getsockname3=socklen_t,
                     AC_TRY_COMPILE(
                         [
                             #include <sys/types.h>
                             #include <sys/socket.h>
                         ],
                         [
-                            int len;
+                            size_t len;
                             getsockname(0, 0, &len);
                         ],
-                        wx_cv_type_getsockname3=int,
-                        wx_cv_type_getsockname3=unknown
+                        wx_cv_type_getsockname3=size_t,
+                        AC_TRY_COMPILE(
+                            [
+                                #include <sys/types.h>
+                                #include <sys/socket.h>
+                            ],
+                            [
+                                int len;
+                                getsockname(0, 0, &len);
+                            ],
+                            wx_cv_type_getsockname3=int,
+                            wx_cv_type_getsockname3=unknown
+                        )
                     )
                 )
-            )
 
-            AC_LANG_RESTORE
-        ])
+                AC_LANG_RESTORE
+            ])
 
-    if test "$wx_cv_type_getsockname3" = "unknown"; then
-        wxUSE_SOCKETS=no
-        AC_MSG_WARN([Couldn't find socklen_t synonym for this system])
-    else
-        AC_DEFINE_UNQUOTED(SOCKLEN_T, $wx_cv_type_getsockname3)
+        if test "$wx_cv_type_getsockname3" = "unknown"; then
+            wxUSE_SOCKETS=no
+            AC_MSG_WARN([Couldn't find socklen_t synonym for this system])
+        else
+            AC_DEFINE_UNQUOTED(SOCKLEN_T, $wx_cv_type_getsockname3)
+        fi
     fi
-fi
 
 fi
 dnl if !MSW
@@ -3312,25 +3316,25 @@ dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_GUI" = "yes"; then
 
-dnl under MSW we always have joystick support
-if test "$TOOLKIT" != "MSW"; then
+    dnl under MSW we always have joystick support
+    if test "$TOOLKIT" != "MSW"; then
 
-if test "$wxUSE_JOYSTICK" = "yes"; then
-  dnl joystick support is only for Linux 2.1.x or greater
-  AC_CHECK_HEADERS(linux/joystick.h)
-  if test "$ac_cv_header_linux_joystick_h" != "yes"; then
-    wxUSE_JOYSTICK=no
-    AC_MSG_WARN(Joystick not supported by this system, disabled)
-  fi
-fi
+    if test "$wxUSE_JOYSTICK" = "yes"; then
+      dnl joystick support is only for Linux 2.1.x or greater
+      AC_CHECK_HEADERS(linux/joystick.h)
+      if test "$ac_cv_header_linux_joystick_h" != "yes"; then
+        wxUSE_JOYSTICK=no
+        AC_MSG_WARN(Joystick not supported by this system, disabled)
+      fi
+    fi
 
-fi
-dnl if !MSW
+    fi
+    dnl if !MSW
 
-if test "$wxUSE_JOYSTICK" = "yes"; then
-    AC_DEFINE(wxUSE_JOYSTICK)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS joytest"
-fi
+    if test "$wxUSE_JOYSTICK" = "yes"; then
+        AC_DEFINE(wxUSE_JOYSTICK)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS joytest"
+    fi
 
 fi
 dnl if wxUSE_GUI
@@ -3342,58 +3346,58 @@ dnl ------------------------------------------------------------------------
 dnl under MSW we always have LoadLibrary/GetProcAddress
 if test "$TOOLKIT" != "MSW"; then
 
-HAVE_DL_FUNCS=0
-HAVE_SHL_FUNCS=0
-if test "$wxUSE_DYNLIB_CLASS" = "yes"; then
-    dnl the test is a bit complicated because we check for dlopen() both with
-    dnl and without -ldl and we also try to find shl_load() if there is no
-    dnl dlopen() on this system
-    AC_CHECK_FUNCS(dlopen,
-        [
-            AC_DEFINE(HAVE_DLOPEN)
-            HAVE_DL_FUNCS=1
-        ],
-        [
-            AC_CHECK_LIB(dl, dlopen,
-                        [
-                            AC_DEFINE(HAVE_DLOPEN)
-                            HAVE_DL_FUNCS=1
-                            LIBS="$LIBS -ldl"
-                        ],
-                        [
-                            AC_CHECK_FUNCS(shl_load,
-                                          [
-                                            AC_DEFINE(HAVE_SHL_LOAD)
-                                            HAVE_SHL_FUNCS=1
-                                          ],
-                                          [
-                                            AC_CHECK_LIB(shl_load, dld,
-                                                         [
-                                                            HAVE_SHL_FUNCS=1
-                                                            LIBS="$LIBS -ldld"
-                                                         ])
-                                          ])
-                        ])
-        ])
+    HAVE_DL_FUNCS=0
+    HAVE_SHL_FUNCS=0
+    if test "$wxUSE_DYNLIB_CLASS" = "yes"; then
+        dnl the test is a bit complicated because we check for dlopen() both with
+        dnl and without -ldl and we also try to find shl_load() if there is no
+        dnl dlopen() on this system
+        AC_CHECK_FUNCS(dlopen,
+            [
+                AC_DEFINE(HAVE_DLOPEN)
+                HAVE_DL_FUNCS=1
+            ],
+            [
+                AC_CHECK_LIB(dl, dlopen,
+                            [
+                                AC_DEFINE(HAVE_DLOPEN)
+                                HAVE_DL_FUNCS=1
+                                LIBS="$LIBS -ldl"
+                            ],
+                            [
+                                AC_CHECK_FUNCS(shl_load,
+                                              [
+                                                AC_DEFINE(HAVE_SHL_LOAD)
+                                                HAVE_SHL_FUNCS=1
+                                              ],
+                                              [
+                                                AC_CHECK_LIB(shl_load, dld,
+                                                             [
+                                                                HAVE_SHL_FUNCS=1
+                                                                LIBS="$LIBS -ldld"
+                                                             ])
+                                              ])
+                            ])
+            ])
 
-    dnl check also for dlerror()
-    if test "$HAVE_DL_FUNCS" = 1; then
-        AC_CHECK_FUNCS(dlerror,
-                       AC_DEFINE(HAVE_DLERROR),
-                       AC_CHECK_LIB(dl, dlerror, AC_DEFINE(HAVE_DLERROR)))
-    fi
+        dnl check also for dlerror()
+        if test "$HAVE_DL_FUNCS" = 1; then
+            AC_CHECK_FUNCS(dlerror,
+                           AC_DEFINE(HAVE_DLERROR),
+                           AC_CHECK_LIB(dl, dlerror, AC_DEFINE(HAVE_DLERROR)))
+        fi
 
-    if test "$HAVE_DL_FUNCS" = 0; then
-        if test "$HAVE_SHL_FUNCS" = 0; then
-          if test "$USE_UNIX" = 1; then
-              AC_MSG_WARN([Missing dynamic loading support, several features will be disabled])
-              wxUSE_DYNLIB_CLASS=no
-          else
-              AC_MSG_WARN([Assuming wxLibrary class works on this platform])
-          fi
+        if test "$HAVE_DL_FUNCS" = 0; then
+            if test "$HAVE_SHL_FUNCS" = 0; then
+              if test "$USE_UNIX" = 1; then
+                  AC_MSG_WARN([Missing dynamic loading support, several features will be disabled])
+                  wxUSE_DYNLIB_CLASS=no
+              else
+                  AC_MSG_WARN([Assuming wxLibrary class works on this platform])
+              fi
+            fi
         fi
     fi
-fi
 
 fi
 dnl if !MSW
@@ -3856,7 +3860,7 @@ INCLUDES="-I. -I\${top_builddir}/lib/wx/include/${TOOLCHAIN_NAME} -I\${top_srcdi
 
 dnl wxGTK does not need TOOLKIT includes in wx-config
 if test "$wxUSE_GTK" = 1; then
-    WXCONFIG_INCLUDE=""
+    WXCONFIG_INCLUDE=
 else
     WXCONFIG_INCLUDE="$TOOLKIT_INCLUDE"
 fi
@@ -3949,6 +3953,7 @@ AC_SUBST(TOOLCHAIN_NAME)
 AC_SUBST(TOOLKIT_VPATH)
 
 dnl wx-config options
+AC_SUBST(host_alias)
 AC_SUBST(cross_compiling)
 AC_SUBST(WXCONFIG_LIBS)
 AC_SUBST(WXCONFIG_LIBS_GL)
@@ -3997,7 +4002,7 @@ AC_PROG_MAKE_SET
 
 dnl move setup.h back if available
 if test -f lib/wx/include/${TOOLCHAIN_NAME}/wx/setup.h; then
-    mv -f lib/wx/include/${TOOLCHAIN_NAME}/wx/setup.h setup.h 
+    mv -f lib/wx/include/${TOOLCHAIN_NAME}/wx/setup.h setup.h
 fi
 
 AC_CONFIG_HEADER(setup.h:setup.h.in)
