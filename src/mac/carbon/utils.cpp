@@ -40,6 +40,7 @@
 #include <Sound.h>
 #endif
 
+#if wxUSE_GUI
 #if TARGET_API_MAC_OSX
 #include <CoreServices/CoreServices.h>
 #else
@@ -50,6 +51,7 @@
 #include <ATSUnicode.h>
 #include <TextCommon.h>
 #include <TextEncodingConverter.h>
+#endif // wxUSE_GUI
 
 #include  "wx/mac/private.h"  // includes mac headers
 
