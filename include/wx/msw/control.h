@@ -70,8 +70,6 @@ public:
 
     const wxArrayLong& GetSubcontrols() const { return m_subControls; }
 
-    void OnEraseBackground(wxEraseEvent& event);
-
     virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
             WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
@@ -134,7 +132,6 @@ protected:
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxControl)
-    DECLARE_EVENT_TABLE()
 };
 
 #endif // _WX_CONTROL_H_

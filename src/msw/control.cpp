@@ -52,10 +52,6 @@
 
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
 
-BEGIN_EVENT_TABLE(wxControl, wxWindow)
-    EVT_ERASE_BACKGROUND(wxControl::OnEraseBackground)
-END_EVENT_TABLE()
-
 // ============================================================================
 // wxControl implementation
 // ============================================================================
@@ -325,31 +321,6 @@ bool wxControl::MSWOnNotify(int idCtrl,
     return GetEventHandler()->ProcessEvent(event);
 }
 #endif // Win95
-
-void wxControl::OnEraseBackground(wxEraseEvent& event)
-{
-    // notice that this 'dumb' implementation may cause flicker for some of the
-    // controls in which case they should intercept wxEraseEvent and process it
-    // themselves somehow
-
-    RECT rect;
-    ::GetClientRect(GetHwnd(), &rect);
-
-    HBRUSH hBrush = ::CreateSolidBrush(wxColourToRGB(GetBackgroundColour()));
-
-    HDC hdc = GetHdcOf((*event.GetDC()));
-
-#ifndef __WXWINCE__
-    int mode = ::SetMapMode(hdc, MM_TEXT);
-#endif
-
-    ::FillRect(hdc, &rect, hBrush);
-    ::DeleteObject(hBrush);
-
-#ifndef __WXWINCE__
-    ::SetMapMode(hdc, mode);
-#endif
-}
 
 WXHBRUSH wxControl::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
 #if wxUSE_CTL3D
