@@ -74,7 +74,13 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
     ChangeFont(FALSE);
 
     SetCanAddEventHandler(TRUE);
-    AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
+
+    wxSize actualSize(size);
+    if (actualSize.x == -1)
+      actualSize.x = bitmap.GetWidth();
+    if (actualSize.y == -1)
+      actualSize.y = bitmap.GetHeight();
+    AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, actualSize.x, actualSize.y);
 
     ChangeBackgroundColour ();
 

@@ -1102,12 +1102,15 @@ enum wxStretch
 // #define wxLC_SHOW_SEL_ALWAYS
 
 /*
- * wxSpinButton flags
+ * wxSpinButton flags.
+ * Note that a wxSpinCtrl is sometimes defined as
+ * a wxTextCtrl, and so the flags must be different
+ * from wxTextCtrl's.
  */
 #define wxSP_HORIZONTAL       wxHORIZONTAL // 4
 #define wxSP_VERTICAL         wxVERTICAL   // 8
-#define wxSP_ARROW_KEYS       0x0010
-#define wxSP_WRAP             0x0020
+#define wxSP_ARROW_KEYS       0x1000
+#define wxSP_WRAP             0x2000
 
 /*
  * wxSplitterWindow flags

@@ -14,21 +14,24 @@
 
 CPP = gcc
 CC = gcc
+WXCONFIG=../../../../wx-config
+WXINCLUDE=-I../../../../include
+WXLIB=-L../../../../lib
 
 Penguin: penguin.o trackball.o lw.o glcanvas.o
-	$(CPP) -o Penguin penguin.o trackball.o lw.o glcanvas.o `wx-config --libs` -lMesaGL -lMesaGLU
+	$(CPP) -o Penguin penguin.o trackball.o lw.o glcanvas.o `$(WXCONFIG) --libs` $(WXLIB) -lMesaGL -lMesaGLU
 
 penguin.o: penguin.cpp
-	$(CPP) `wx-config --cflags` -I../../gtk -c penguin.cpp
+	$(CPP) `$(WXCONFIG) --cflags` -I../../gtk $(WXINCLUDE) -c penguin.cpp
 
 lw.o: lw.cpp
-	$(CPP) `wx-config --cflags` -I../../gtk -c lw.cpp
+	$(CPP) `$(WXCONFIG) --cflags` -I../../gtk $(WXINCLUDE) -c lw.cpp
 
 trackball.o: trackball.c
-	$(CC) `wx-config --cflags` -I../../gtk -c trackball.c
+	$(CC) `$(WXCONFIG) --cflags` -I../../gtk $(WXINCLUDE) -c trackball.c
 
 glcanvas.o: ../../gtk/glcanvas.cpp
-	$(CPP) `wx-config --cflags` `gtk-config --cflags` -g -I../../gtk -c ../../gtk/glcanvas.cpp
+	$(CPP) `$(WXCONFIG) --cflags` `gtk-config --cflags` -g -I../../gtk $(WXINCLUDE) -c ../../gtk/glcanvas.cpp
 
 clean: 
 	rm -f *.o Penguin

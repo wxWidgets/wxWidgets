@@ -18,7 +18,6 @@ template.mak
 wx-config.in
 makefile.unx.in
 wxinstall
-Makefile
 descrip.mms
 setup.h_vms
 src/common/descrip.mms
@@ -66,10 +65,8 @@ src/make.env
 src/makeprog.env
 src/makelib.env
 
-src/Makefile
 src/*.inc
 src/mkdir
-src/Makefile
 src/make.env.in
 src/makeprog.env.in
 src/makelib.env.in
@@ -151,7 +148,7 @@ misc/afm/*.afm
 misc/gs_afm/*.afm
 
 utils/*.txt
-utils/make*
+utils/make*.*
 utils/configure
 utils/configure.in
 
@@ -215,7 +212,6 @@ utils/makegen/*.xpm
 utils/makegen/*.txt
 utils/makegen/templates/make*
 
-utils/dialoged/Makefile
 utils/dialoged/src/bitmaps/*.xbm
 utils/dialoged/src/bitmaps/*.xpm
 utils/dialoged/src/*.h
@@ -1001,6 +997,24 @@ samples/calendar/*.def
 samples/calendar/*.ico
 samples/calendar/*.xpm
 samples/calendar/*.txt
+
+samples/statbar/*.cpp
+samples/statbar/*.h
+samples/statbar/makefile*
+samples/statbar/*.rc
+samples/statbar/*.def
+samples/statbar/*.ico
+samples/statbar/*.xpm
+samples/statbar/*.txt
+
+samples/plot/*.cpp
+samples/plot/*.h
+samples/plot/makefile*
+samples/plot/*.rc
+samples/plot/*.def
+samples/plot/*.ico
+samples/plot/*.xpm
+samples/plot/*.txt
 
 samples/exec/*.cpp
 samples/exec/*.h

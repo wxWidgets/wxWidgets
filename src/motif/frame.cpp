@@ -71,6 +71,10 @@
 // private functions
 // ----------------------------------------------------------------------------
 
+static void wxFrameEventHandler(Widget    wid,
+                             XtPointer WXUNUSED(client_data),
+                             XEvent*   event,
+                             Boolean*  continueToDispatch);
 static void wxCloseFrameCallback(Widget, XtPointer, XmAnyCallbackStruct *cbs);
 static void wxFrameFocusProc(Widget workArea, XtPointer clientData,
                             XmAnyCallbackStruct *cbs);
@@ -235,6 +239,12 @@ bool wxFrame::Create(wxWindow *parent,
     XtAddEventHandler((Widget) m_clientArea, ExposureMask,FALSE,
         wxUniversalRepaintProc, (XtPointer) this);
 
+    XtAddEventHandler((Widget) m_clientArea,
+        ButtonPressMask | ButtonReleaseMask | PointerMotionMask | KeyPressMask,
+        FALSE,
+        wxFrameEventHandler,
+        (XtPointer)this);
+
     XtVaSetValues((Widget) m_frameWidget,
         XmNworkWindow, (Widget) m_workArea,
         NULL);
@@ -243,6 +253,7 @@ bool wxFrame::Create(wxWindow *parent,
     XtManageChild((Widget) m_workArea);
 
     wxAddWindowToTable((Widget) m_workArea, this);
+    wxAddWindowToTable((Widget) m_clientArea, this);
 
     XtTranslations ptr;
 
@@ -332,8 +343,14 @@ wxFrame::~wxFrame()
     m_isBeingDeleted = TRUE;
 
     if (m_clientArea)
+    {
       XtRemoveEventHandler((Widget) m_clientArea, ExposureMask, FALSE,
           wxUniversalRepaintProc, (XtPointer) this);
+      XtRemoveEventHandler((Widget) m_clientArea, ButtonPressMask | ButtonReleaseMask | PointerMotionMask | KeyPressMask,
+          FALSE,
+          wxFrameEventHandler, (XtPointer) this);
+      wxDeleteWindowFromTable((Widget) m_clientArea);
+    }
 
     if (GetMainWidget())
         Show(FALSE);
@@ -852,5 +869,56 @@ void wxCloseFrameCallback(Widget WXUNUSED(widget), XtPointer client_data, XmAnyC
 
     // May delete the frame (with delayed deletion)
     frame->GetEventHandler()->ProcessEvent(closeEvent);
+}
+
+static void wxFrameEventHandler(Widget    wid,
+                             XtPointer WXUNUSED(client_data),
+                             XEvent*   event,
+                             Boolean*  continueToDispatch)
+{
+    wxFrame *frame = (wxFrame *)wxGetWindowFromTable(wid);
+    if (frame)
+    {
+        wxMouseEvent wxevent(wxEVT_NULL);
+        if (wxTranslateMouseEvent(wxevent, frame, wid, event))
+        {
+            wxevent.SetEventObject(frame);
+            wxevent.SetId(frame->GetId());
+            frame->GetEventHandler()->ProcessEvent(wxevent);
+        }
+        else
+        {
+            // An attempt to implement OnCharHook by calling OnCharHook first;
+            // if this returns TRUE, set continueToDispatch to False
+            // (don't continue processing).
+            // Otherwise set it to True and call OnChar.
+            wxKeyEvent keyEvent(wxEVT_CHAR);
+            if (wxTranslateKeyEvent(keyEvent, frame, wid, event))
+            {
+                keyEvent.SetEventObject(frame);
+                keyEvent.SetId(frame->GetId());
+                keyEvent.SetEventType(wxEVT_CHAR_HOOK);
+                if (frame->GetEventHandler()->ProcessEvent(keyEvent))
+                {
+                    *continueToDispatch = False;
+                    return;
+                }
+                else
+                {
+                    // For simplicity, OnKeyDown is the same as OnChar
+                    // TODO: filter modifier key presses from OnChar
+                    keyEvent.SetEventType(wxEVT_KEY_DOWN);
+
+                    // Only process OnChar if OnKeyDown didn't swallow it
+                    if (!frame->GetEventHandler()->ProcessEvent (keyEvent))
+                    {
+                        keyEvent.SetEventType(wxEVT_CHAR);
+                        frame->GetEventHandler()->ProcessEvent(keyEvent);
+                    }
+                }
+            }
+        }
+    }
+    *continueToDispatch = True;
 }
 

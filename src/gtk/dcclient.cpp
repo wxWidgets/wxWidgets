@@ -342,10 +342,18 @@ void wxWindowDC::DoFloodFill( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
     wxFAIL_MSG( wxT("wxWindowDC::DoFloodFill not implemented") );
 }
 
-bool wxWindowDC::DoGetPixel( wxCoord WXUNUSED(x1), wxCoord WXUNUSED(y1), wxColour *WXUNUSED(col) ) const
+bool wxWindowDC::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const
 {
-    wxFAIL_MSG( wxT("wxWindowDC::DoGetPixel not implemented") );
-    return FALSE;
+    // Generic (and therefore rather inefficient) method.
+    // Could be improved.
+    wxMemoryDC memdc;
+    wxBitmap bitmap(1, 1);
+    memdc.SelectObject(bitmap);
+    memdc.Blit(0, 0, 1, 1, (wxDC*) this, x1, y1);
+    memdc.SelectObject(wxNullBitmap);
+    wxImage image(bitmap);
+    col->Set(image.GetRed(0, 0), image.GetGreen(0, 0), image.GetBlue(0, 0));
+    return TRUE;
 }
 
 void wxWindowDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )

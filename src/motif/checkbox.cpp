@@ -60,8 +60,9 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     char* label1 = (label.IsNull() ? "" : (char*) (const char*) label);
     XmString text = XmStringCreateSimple (label1);
 #endif
+    wxString label1(wxStripMenuCodes(label));
 
-    wxXmString text( label );
+    wxXmString text( label1 );
     
     Widget parentWidget = (Widget) parent->GetClientWidget();
     XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay(parentWidget));

@@ -146,7 +146,13 @@ public:
     wxRadioboxPage(wxWizard *parent) : wxWizardPageSimple(parent)
     {
         // should correspond to the enum above
-        static wxString choices[] = { "forward", "backward", "both", "neither" };
+        //        static wxString choices[] = { "forward", "backward", "both", "neither" };
+        // The above syntax can cause an internal compiler error with gcc.
+        wxString choices[4];
+        choices[0] = "forward";
+        choices[1] = "backward";
+        choices[2] = "both";
+        choices[3] = "neither";
 
         m_radio = new wxRadioBox(this, -1, "Allow to proceed:",
                                  wxPoint(5, 5), wxDefaultSize,

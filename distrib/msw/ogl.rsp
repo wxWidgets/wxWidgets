@@ -1,5 +1,4 @@
 utils/ogl/Makefile.in
-utils/ogl/Makefile
 
 utils/ogl/src/*.cpp
 utils/ogl/src/*.h
@@ -8,7 +7,6 @@ utils/ogl/src/*.def
 utils/ogl/src/*.xbm
 utils/ogl/src/*.xpm
 utils/ogl/src/make*.*
-utils/ogl/src/Makefile
 utils/ogl/src/*.txt
 utils/ogl/src/*.ico
 utils/ogl/src/*.bmp

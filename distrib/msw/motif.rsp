@@ -1,5 +1,6 @@
 src/motif.inc
 
+src/motif/files.lst
 src/motif/*.cpp
 src/motif/*.c
 src/motif/*.h

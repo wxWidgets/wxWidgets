@@ -318,12 +318,15 @@ bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
     // get the color of the pixel
     COLORREF pixelcolor = ::GetPixel(GetHdc(), XLOG2DEV(x), YLOG2DEV(y));
 
+    // JACS: what was this for?
+#if 0
     // get the color of the pen
     COLORREF pencolor = 0x00ffffff;
     if (m_pen.Ok())
     {
         pencolor = m_pen.GetColour().GetPixel();
     }
+#endif
 
     // return the color of the pixel
     if( col )
@@ -335,7 +338,10 @@ bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 
     // check, if color of the pixels is the same as the color of the current
     // pen and return TRUE if it is, FALSE otherwise
-    return pixelcolor == pencolor;
+    // JACS, 24/02/2000: can't understand the reason for this, so returning TRUE instead.
+    // return pixelcolor == pencolor;
+
+    return TRUE;
 }
 
 void wxDC::DoCrossHair(wxCoord x, wxCoord y)

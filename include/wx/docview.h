@@ -619,6 +619,11 @@ protected:
 // converts from/to a stream to/from a temporary file.
 bool WXDLLEXPORT wxTransferFileToStream(const wxString& filename, ostream& stream);
 bool WXDLLEXPORT wxTransferStreamToFile(istream& stream, const wxString& filename);
+#else
+// For compatibility with existing file formats:
+// converts from/to a stream to/from a temporary file.
+bool WXDLLEXPORT wxTransferFileToStream(const wxString& filename, wxOutputStream& stream);
+bool WXDLLEXPORT wxTransferStreamToFile(wxInputStream& stream, const wxString& filename);
 #endif
 
 #endif // _WX_DOCH__

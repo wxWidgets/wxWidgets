@@ -189,9 +189,9 @@ wxBitmap* csSymbolDatabase::CreateToolBitmap(csSymbol* symbol)
     double centreX = (double)((objectBitmapSize/scaleFactor)/2.0)-1;
     double centreY = centreX;
 
+    memDC.SelectObject(*newBitmap);
     memDC.SetUserScale(scaleFactor, scaleFactor);
 
-    memDC.SelectObject(*newBitmap);
     memDC.SetBackground(wxBrush(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), wxSOLID));
     memDC.Clear();
     symbol->GetShape()->Show(TRUE);

@@ -2191,6 +2191,42 @@ bool wxTransferStreamToFile(istream& stream, const wxString& filename)
     fclose (fd1);
     return TRUE;
 }
+#else
+bool wxTransferFileToStream(const wxString& filename, wxOutputStream& stream)
+{
+    FILE *fd1;
+    int ch;
+
+    if ((fd1 = fopen (filename.fn_str(), "rb")) == NULL)
+        return FALSE;
+
+    while ((ch = getc (fd1)) != EOF)
+        stream.PutC((char) ch);
+
+    fclose (fd1);
+    return TRUE;
+}
+
+bool wxTransferStreamToFile(wxInputStream& stream, const wxString& filename)
+{
+    FILE *fd1;
+    char ch;
+
+    if ((fd1 = fopen (filename.fn_str(), "wb")) == NULL)
+    {
+        return FALSE;
+    }
+
+    int len = stream.StreamSize();
+    // TODO: is this the correct test for EOF?
+    while (stream.TellI() < (len - 1))
+    {
+        ch = stream.GetC();
+        putc (ch, fd1);
+    }
+    fclose (fd1);
+    return TRUE;
+}
 #endif
 
 #endif // wxUSE_DOC_VIEW_ARCHITECTURE

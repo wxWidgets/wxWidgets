@@ -473,6 +473,11 @@ int wxDebugContext::debugLevel = 1;
 bool wxDebugContext::debugOn = TRUE;
 wxMemStruct *wxDebugContext::checkPoint = NULL;
 
+// For faster alignment calculation
+static wxMarkerType markerCalc[2];
+int wxDebugContext::m_balign = (int)((char *)&markerCalc[1] - (char*)&markerCalc[0]);
+int wxDebugContext::m_balignmask = (int)((char *)&markerCalc[1] - (char*)&markerCalc[0]) - 1;
+
 wxDebugContext::wxDebugContext(void)
 {
 //  m_streamBuf = new wxDebugStreamBuf;
@@ -596,6 +601,9 @@ char * wxDebugContext::StartPos (const char * caller)
 
   I don't know how portable this stuff is, but it seems to work for me at
   the moment. It would be real nice if I knew more about this!
+
+  // Note: this function is now obsolete (along with CalcAlignment)
+  // because the calculations are done statically, for greater speed.
 */
 size_t wxDebugContext::GetPadding (const size_t size)
 {
@@ -603,11 +611,22 @@ size_t wxDebugContext::GetPadding (const size_t size)
     return (pad) ? sizeof(wxMarkerType) - pad : 0;
 }
 
-
-
 size_t wxDebugContext::PaddedSize (const size_t size)
 {
+    // Added by Terry Farnham <TJRT@pacbell.net> to replace
+    // slow GetPadding call.
+	int padb;
+
+	padb = size & m_balignmask;
+	if(padb)
+		return(size + m_balign - padb);
+	else
+		return(size);
+
+// Old (slow) code
+#if 0
     return size + GetPadding (size);
+#endif
 }
 
 /*

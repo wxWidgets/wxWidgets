@@ -349,7 +349,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
 
     if (event->type == KeyPress)
     {
-#ifdef __WXDEBUG__
+#if 0 // def __WXDEBUG__
         Widget widget = XtWindowToWidget(event->xany.display, event->xany.window);
         wxLogDebug("Got key press event for 0x%08x (parent = 0x%08x)",
                    widget, XtParent(widget));

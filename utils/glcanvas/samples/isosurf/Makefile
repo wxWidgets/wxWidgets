@@ -13,17 +13,20 @@
 #
 
 CC = g++
+WXCONFIG=../../../../wx-config
+WXINCLUDE=-I../../../../include
+WXLIB=-L../../../../lib
 
 isosurf: isosurf.o glcanvas.o
 	$(CC) -o isosurf \
 	isosurf.o glcanvas.o \
-	`wx-config --libs` -lMesaGL -lMesaGLU
+	`$(WXCONFIG) --libs` $(WXLIB) -lMesaGL -lMesaGLU
 
 isosurf.o: isosurf.cpp
-	$(CC) `wx-config --cflags` -I../../gtk -c isosurf.cpp
+	$(CC) `$(WXCONFIG) --cflags` -I../../gtk $(WXINCLUDE) -c isosurf.cpp
 
 glcanvas.o: ../../gtk/glcanvas.cpp
-	$(CC) `wx-config --cflags` `gtk-config --cflags` -I../../gtk -c ../../gtk/glcanvas.cpp
+	$(CC) `$(WXCONFIG) --cflags` `gtk-config --cflags` -I../../gtk -c $(WXINCLUDE) ../../gtk/glcanvas.cpp
 
 clean: 
 	rm -f *.o isosurf

@@ -294,7 +294,7 @@ CellBox* Life::LinkBox(wxInt32 x, wxInt32 y, bool create)
         if ((c->m_x == x) && (c->m_y == y)) return c;
 
     // if not found, and (create == TRUE), create a new one
-    return create? CreateBox(x, y, hv) : NULL;
+    return create? CreateBox(x, y, hv) : (CellBox*) NULL;
 }
 
 // KillBox:

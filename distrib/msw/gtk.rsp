@@ -1,5 +1,3 @@
-configure
-
 distrib/gtk/copy_src
 distrib/gtk/README.txt
 distrib/gtk/Setup
@@ -14,7 +12,7 @@ include/wx/gtk/*.xpm
 include/install-sh
 include/wx/install-sh
 
-src/gtk/Makefile
+src/gtk/files.lst
 src/gtk/*.cpp
 src/gtk/*.c
 src/gtk/*.inc

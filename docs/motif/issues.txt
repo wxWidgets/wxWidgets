@@ -10,4 +10,6 @@ Outstanding issues
 - Should scrollbars take on the background colour? Not right for
   e.g. wxScrolledWindows, so maybe have wxSystemSettings value for
   scrollbar colour, and/or ability to set scrollbar colour independently.
+- wxFrame can accept events, but apps cannot draw into it for some reason,
+  so the rotate sample won't work. Workaround: use an embedded wxWindow.
 

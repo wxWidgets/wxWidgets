@@ -13,15 +13,19 @@
 #
 
 CC = gcc
+WXCONFIG=../../../../wx-config
+WXINCLUDE=-I../../../../include
+WXLIB=-L../../../../lib
 
 cube: cube.o glcanvas.o
-	$(CC) -o cube cube.o glcanvas.o `wx-config --libs` -lMesaGL -lMesaGLU
+	$(CC) -o cube cube.o glcanvas.o `$(WXCONFIG) --libs` $(WXLIB) -lMesaGL -lMesaGLU
 
 cube.o: cube.cpp
-	$(CC) `wx-config --cflags` -I../../gtk -c cube.cpp
+	$(CC) `$(WXCONFIG) --cflags` -I../../gtk $(WXINCLUDE) -c cube.cpp
 
 glcanvas.o: ../../gtk/glcanvas.cpp
-	$(CC) `wx-config --cflags` `gtk-config --cflags` -I../../gtk -c ../../gtk/glcanvas.cpp
+	$(CC) `$(WXCONFIG) --cflags` `gtk-config --cflags` -I../../gtk $(WXINCLUDE) -c ../../gtk/glcanvas.cpp
 
 clean: 
 	rm -f *.o cube
+

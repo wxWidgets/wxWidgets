@@ -196,6 +196,8 @@ protected:
     static int debugLevel;
     static bool debugOn;
 
+	static int m_balign;			// byte alignment
+	static int m_balignmask;		// mask for performing byte alignment
 public:
     // Set a checkpoint to dump only the memory from
     // a given point

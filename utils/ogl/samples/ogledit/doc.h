@@ -22,6 +22,11 @@
 
 #include "ogl.h"
 
+#if wxUSE_STD_IOSTREAM
+class ostream;
+class istream;
+#endif
+
 /*
  * Override a few members for this application
  */
@@ -92,8 +97,13 @@ class DiagramDocument: public wxDocument
   DiagramDocument(void);
   ~DiagramDocument(void);
 
-  ostream& SaveObject(ostream& stream);
-  istream& LoadObject(istream& stream);
+#if wxUSE_STD_IOSTREAM
+    virtual ostream& SaveObject(ostream& stream);
+    virtual istream& LoadObject(istream& stream);
+#else
+    virtual wxOutputStream& SaveObject(wxOutputStream& stream);
+    virtual wxInputStream& LoadObject(wxInputStream& stream);
+#endif
   
   inline wxDiagram *GetDiagram() { return &diagram; }
   

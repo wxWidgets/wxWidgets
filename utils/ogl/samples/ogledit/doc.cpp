@@ -28,10 +28,14 @@
 #error You must set wxUSE_DOC_VIEW_ARCHITECTURE to 1 in wx_setup.h!
 #endif
 
+#include <wx/wxexpr.h>
 #include "ogledit.h"
 #include "doc.h"
-#include <wx/wxexpr.h>
 #include "view.h"
+
+#if wxUSE_STD_IOSTREAM
+#include <iostream.h>
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(DiagramDocument, wxDocument)
 
@@ -49,6 +53,7 @@ bool DiagramDocument::OnCloseDocument(void)
   return TRUE;
 }
 
+#if wxUSE_STD_IOSTREAM
 ostream& DiagramDocument::SaveObject(ostream& stream)
 {
   wxDocument::SaveObject(stream);
@@ -79,6 +84,42 @@ istream& DiagramDocument::LoadObject(istream& stream)
 
   return stream;
 }
+#else
+
+wxOutputStream& DiagramDocument::SaveObject(wxOutputStream& stream)
+{
+  wxDocument::SaveObject(stream);
+  char buf[400];
+  (void) wxGetTempFileName("diag", buf);
+
+  diagram.SaveFile(buf);
+
+  wxTransferFileToStream(buf, stream);
+
+  wxRemoveFile(buf);
+  
+
+  return stream;
+}
+
+wxInputStream& DiagramDocument::LoadObject(wxInputStream& stream)
+{
+  wxDocument::LoadObject(stream);
+
+
+  char buf[400];
+  (void) wxGetTempFileName("diag", buf);
+
+  wxTransferStreamToFile(stream, buf);
+
+  diagram.DeleteAllShapes();
+  diagram.LoadFile(buf);
+  wxRemoveFile(buf);
+
+  return stream;
+}
+
+#endif
 
 /*
  * Implementation of drawing command

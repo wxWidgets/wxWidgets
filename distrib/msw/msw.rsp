@@ -53,6 +53,7 @@ src/common/doslex.c
 src/common/y_tab.c
 src/common/lex_yy.c
 
+src/msw/files.lst
 src/msw/*.cpp
 src/msw/*.h
 src/msw/makefile.*

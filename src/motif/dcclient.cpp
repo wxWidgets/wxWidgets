@@ -235,11 +235,18 @@ void wxWindowDC::DoFloodFill( wxCoord WXUNUSED(x1), wxCoord WXUNUSED(y1),
     wxFAIL_MSG("not implemented");
 }
 
-bool wxWindowDC::DoGetPixel( wxCoord WXUNUSED(x1), wxCoord WXUNUSED(y1), wxColour *WXUNUSED(col) ) const
+bool wxWindowDC::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const
 {
-    wxFAIL_MSG("not implemented");
-
-    return FALSE;
+    // Generic (and therefore rather inefficient) method.
+    // Could be improved.
+    wxMemoryDC memdc;
+    wxBitmap bitmap(1, 1);
+    memdc.SelectObject(bitmap);
+    memdc.Blit(0, 0, 1, 1, (wxDC*) this, x1, y1);
+    memdc.SelectObject(wxNullBitmap);
+    wxImage image(bitmap);
+    col->Set(image.GetRed(0, 0), image.GetGreen(0, 0), image.GetBlue(0, 0));
+    return TRUE;
 }
 
 void wxWindowDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
@@ -1266,7 +1273,7 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
                 // draw black pixels, ignore white ones (i.e. transparent b/g)
                 if (image.GetRed(sx, sy) == 0)
                 {
-                    DrawPoint(x1 + maxx - rx, cy + y1 - ry);
+                    DrawPoint((wxCoord) (x1 + maxx - rx), (wxCoord) (cy + y1 - ry));
                 }
                 else
                 {
