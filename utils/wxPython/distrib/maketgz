@@ -16,11 +16,11 @@ if [ ! -d wxPython ]; then
     exit 1
 fi
 
-cp $WXWIN\docs\gpl.txt wxPython
-cp $WXWIN\docs\lgpl.txt wxPython
-cp $WXWIN\docs\licence.txt wxPython
-cp $WXWIN\docs\licendoc.txt wxPython
-cp $WXWIN\docs\preamble.txt wxPython
+cp $WXWIN/docs/gpl.txt wxPython
+cp $WXWIN/docs/lgpl.txt wxPython
+cp $WXWIN/docs/licence.txt wxPython
+cp $WXWIN/docs/licendoc.txt wxPython
+cp $WXWIN/docs/preamble.txt wxPython
 
 rm -f wxPython/distrib/filelist
 for x in `cat wxPython/distrib/wxPython.rsp`; do
@@ -39,4 +39,10 @@ tar cvf wxPython-$1.tar wxPython-$1
 gzip wxPython-$1.tar
 
 rm -rf wxPython-$1
+
+
+
+
+
+
 
