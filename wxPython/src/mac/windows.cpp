@@ -522,7 +522,7 @@ static PyObject *_wrap_wxEvtHandler_Disconnect(PyObject *self, PyObject *args, P
 }
 
 static void  wxEvtHandler__setOORInfo(wxEvtHandler *self,PyObject * _self) {
-            self->SetClientObject(new wxPyClientData(_self));
+            self->SetClientObject(new wxPyOORClientData(_self));
         }
 static PyObject *_wrap_wxEvtHandler__setOORInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -992,34 +992,6 @@ static PyObject *_wrap_wxWindow_Create(PyObject *self, PyObject *args, PyObject 
     if (_obj6)
         delete _arg6;
 }
-    return _resultobj;
-}
-
-#define wxWindow_CaptureMouse(_swigobj)  (_swigobj->CaptureMouse())
-static PyObject *_wrap_wxWindow_CaptureMouse(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxWindow * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_CaptureMouse",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_CaptureMouse. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxWindow_CaptureMouse(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -3605,34 +3577,6 @@ static PyObject *_wrap_wxWindow_RefreshRect(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
-#define wxWindow_ReleaseMouse(_swigobj)  (_swigobj->ReleaseMouse())
-static PyObject *_wrap_wxWindow_ReleaseMouse(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxWindow * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_ReleaseMouse",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_ReleaseMouse. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxWindow_ReleaseMouse(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxWindow_RemoveChild(_swigobj,_swigarg0)  (_swigobj->RemoveChild(_swigarg0))
 static PyObject *_wrap_wxWindow_RemoveChild(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -4802,36 +4746,6 @@ static PyObject *_wrap_wxWindow_Validate(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
-#define wxWindow_WarpPointer(_swigobj,_swigarg0,_swigarg1)  (_swigobj->WarpPointer(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxWindow_WarpPointer(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxWindow * _arg0;
-    int  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","x","y", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxWindow_WarpPointer",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_WarpPointer. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxWindow_WarpPointer(_arg0,_arg1,_arg2);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxWindow_ConvertDialogPointToPixels(_swigobj,_swigarg0)  (_swigobj->ConvertDialogToPixels(_swigarg0))
 static PyObject *_wrap_wxWindow_ConvertDialogPointToPixels(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -5995,6 +5909,138 @@ static PyObject *_wrap_wxWindow_SetDefaultItem(PyObject *self, PyObject *args, P
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{ _resultobj = wxPyMake_wxObject(_result); }
+    return _resultobj;
+}
+
+#define wxWindow_WarpPointer(_swigobj,_swigarg0,_swigarg1)  (_swigobj->WarpPointer(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxWindow_WarpPointer(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxWindow_WarpPointer",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_WarpPointer. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxWindow_WarpPointer(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxWindow_CaptureMouse(_swigobj)  (_swigobj->CaptureMouse())
+static PyObject *_wrap_wxWindow_CaptureMouse(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_CaptureMouse",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_CaptureMouse. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxWindow_CaptureMouse(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxWindow_ReleaseMouse(_swigobj)  (_swigobj->ReleaseMouse())
+static PyObject *_wrap_wxWindow_ReleaseMouse(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_ReleaseMouse",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_ReleaseMouse. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxWindow_ReleaseMouse(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxWindow_GetCapture(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxWindow_GetCapture",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxWindow *)wxWindow::GetCapture();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{ _resultobj = wxPyMake_wxObject(_result); }
+    return _resultobj;
+}
+
+#define wxWindow_HasCapture(_swigobj)  (_swigobj->HasCapture())
+static PyObject *_wrap_wxWindow_HasCapture(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_HasCapture",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_HasCapture. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxWindow_HasCapture(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -10816,6 +10862,11 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxPanel_Create", (PyCFunction) _wrap_wxPanel_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPrePanel", (PyCFunction) _wrap_new_wxPrePanel, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPanel", (PyCFunction) _wrap_new_wxPanel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_HasCapture", (PyCFunction) _wrap_wxWindow_HasCapture, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_GetCapture", (PyCFunction) _wrap_wxWindow_GetCapture, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_ReleaseMouse", (PyCFunction) _wrap_wxWindow_ReleaseMouse, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_CaptureMouse", (PyCFunction) _wrap_wxWindow_CaptureMouse, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_WarpPointer", (PyCFunction) _wrap_wxWindow_WarpPointer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetDefaultItem", (PyCFunction) _wrap_wxWindow_SetDefaultItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetDefaultItem", (PyCFunction) _wrap_wxWindow_GetDefaultItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetAcceleratorTable", (PyCFunction) _wrap_wxWindow_GetAcceleratorTable, METH_VARARGS | METH_KEYWORDS },
@@ -10855,7 +10906,6 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_DLG_PNT", (PyCFunction) _wrap_wxWindow_ConvertDialogPointToPixels, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_ConvertDialogSizeToPixels", (PyCFunction) _wrap_wxWindow_ConvertDialogSizeToPixels, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_ConvertDialogPointToPixels", (PyCFunction) _wrap_wxWindow_ConvertDialogPointToPixels, METH_VARARGS | METH_KEYWORDS },
-	 { "wxWindow_WarpPointer", (PyCFunction) _wrap_wxWindow_WarpPointer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Validate", (PyCFunction) _wrap_wxWindow_Validate, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_UpdateWindowUI", (PyCFunction) _wrap_wxWindow_UpdateWindowUI, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_TransferDataToWindow", (PyCFunction) _wrap_wxWindow_TransferDataToWindow, METH_VARARGS | METH_KEYWORDS },
@@ -10890,7 +10940,6 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_ScreenToClientXY", (PyCFunction) _wrap_wxWindow_ScreenToClientXY, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Reparent", (PyCFunction) _wrap_wxWindow_Reparent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_RemoveChild", (PyCFunction) _wrap_wxWindow_RemoveChild, METH_VARARGS | METH_KEYWORDS },
-	 { "wxWindow_ReleaseMouse", (PyCFunction) _wrap_wxWindow_ReleaseMouse, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_RefreshRect", (PyCFunction) _wrap_wxWindow_RefreshRect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Refresh", (PyCFunction) _wrap_wxWindow_Refresh, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Raise", (PyCFunction) _wrap_wxWindow_Raise, METH_VARARGS | METH_KEYWORDS },
@@ -10968,7 +11017,6 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_CentreOnParent", (PyCFunction) _wrap_wxWindow_CentreOnParent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Centre", (PyCFunction) _wrap_wxWindow_Centre, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Center", (PyCFunction) _wrap_wxWindow_Center, METH_VARARGS | METH_KEYWORDS },
-	 { "wxWindow_CaptureMouse", (PyCFunction) _wrap_wxWindow_CaptureMouse, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Create", (PyCFunction) _wrap_wxWindow_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreWindow", (PyCFunction) _wrap_new_wxPreWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxWindow", (PyCFunction) _wrap_new_wxWindow, METH_VARARGS | METH_KEYWORDS },

@@ -389,6 +389,23 @@ class wxMouseEvent(wxMouseEventPtr):
 
 
 
+class wxMouseCaptureChangedEventPtr(wxEventPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetCapturedWindow(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseCaptureChangedEvent_GetCapturedWindow,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxMouseCaptureChangedEvent instance at %s>" % (self.this,)
+class wxMouseCaptureChangedEvent(wxMouseCaptureChangedEventPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxMouseCaptureChangedEvent,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxKeyEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
@@ -413,6 +430,12 @@ class wxKeyEventPtr(wxEventPtr):
         return val
     def HasModifiers(self, *_args, **_kwargs):
         val = apply(eventsc.wxKeyEvent_HasModifiers,(self,) + _args, _kwargs)
+        return val
+    def GetRawKeyCode(self, *_args, **_kwargs):
+        val = apply(eventsc.wxKeyEvent_GetRawKeyCode,(self,) + _args, _kwargs)
+        return val
+    def GetRawKeyFlags(self, *_args, **_kwargs):
+        val = apply(eventsc.wxKeyEvent_GetRawKeyFlags,(self,) + _args, _kwargs)
         return val
     def GetX(self, *_args, **_kwargs):
         val = apply(eventsc.wxKeyEvent_GetX,(self,) + _args, _kwargs)
@@ -452,6 +475,12 @@ class wxKeyEventPtr(wxEventPtr):
         if name == "m_scanCode" :
             eventsc.wxKeyEvent_m_scanCode_set(self,value)
             return
+        if name == "m_rawCode" :
+            eventsc.wxKeyEvent_m_rawCode_set(self,value)
+            return
+        if name == "m_rawFlags" :
+            eventsc.wxKeyEvent_m_rawFlags_set(self,value)
+            return
         self.__dict__[name] = value
     def __getattr__(self,name):
         if name == "m_x" : 
@@ -470,6 +499,10 @@ class wxKeyEventPtr(wxEventPtr):
             return eventsc.wxKeyEvent_m_metaDown_get(self)
         if name == "m_scanCode" : 
             return eventsc.wxKeyEvent_m_scanCode_get(self)
+        if name == "m_rawCode" : 
+            return eventsc.wxKeyEvent_m_rawCode_get(self)
+        if name == "m_rawFlags" : 
+            return eventsc.wxKeyEvent_m_rawFlags_get(self)
         raise AttributeError,name
     def __repr__(self):
         return "<C wxKeyEvent instance at %s>" % (self.this,)

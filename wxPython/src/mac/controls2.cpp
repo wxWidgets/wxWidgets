@@ -11183,6 +11183,9 @@ SWIGEXPORT(void) initcontrols2c() {
 	 PyDict_SetItemString(d,"wxDIRCTRL_SELECT_FIRST", PyInt_FromLong((long) wxDIRCTRL_SELECT_FIRST));
 	 PyDict_SetItemString(d,"wxDIRCTRL_SHOW_FILTERS", PyInt_FromLong((long) wxDIRCTRL_SHOW_FILTERS));
 	 PyDict_SetItemString(d,"wxDIRCTRL_3D_INTERNAL", PyInt_FromLong((long) wxDIRCTRL_3D_INTERNAL));
+	 PyDict_SetItemString(d,"wxDIRCTRL_EDIT_LABELS", PyInt_FromLong((long) wxDIRCTRL_EDIT_LABELS));
+	 PyDict_SetItemString(d,"wxID_TREECTRL", PyInt_FromLong((long) wxID_TREECTRL));
+	 PyDict_SetItemString(d,"wxID_FILTERLISTCTRL", PyInt_FromLong((long) wxID_FILTERLISTCTRL));
 
     // Map renamed classes back to their common name for OOR
     wxPyPtrTypeMap_Add("wxTreeItemData", "wxPyTreeItemData");

@@ -664,6 +664,9 @@ class wxTextCtrlPtr(wxControlPtr):
     def AppendText(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_AppendText,(self,) + _args, _kwargs)
         return val
+    def EmulateKeyPress(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_EmulateKeyPress,(self,) + _args, _kwargs)
+        return val
     def SetStyle(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_SetStyle,(self,) + _args, _kwargs)
         return val

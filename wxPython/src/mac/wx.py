@@ -215,6 +215,8 @@ wxTB_FLAT = wxc.wxTB_FLAT
 wxTB_DOCKABLE = wxc.wxTB_DOCKABLE
 wxTB_NOICONS = wxc.wxTB_NOICONS
 wxTB_TEXT = wxc.wxTB_TEXT
+wxTB_NODIVIDER = wxc.wxTB_NODIVIDER
+wxTB_NOALIGN = wxc.wxTB_NOALIGN
 wxCOLOURED = wxc.wxCOLOURED
 wxFIXED_LENGTH = wxc.wxFIXED_LENGTH
 wxALIGN_LEFT = wxc.wxALIGN_LEFT
@@ -407,6 +409,7 @@ wxPD_CAN_ABORT = wxc.wxPD_CAN_ABORT
 wxPD_ELAPSED_TIME = wxc.wxPD_ELAPSED_TIME
 wxPD_ESTIMATED_TIME = wxc.wxPD_ESTIMATED_TIME
 wxPD_REMAINING_TIME = wxc.wxPD_REMAINING_TIME
+wxDD_NEW_DIR_BUTTON = wxc.wxDD_NEW_DIR_BUTTON
 wxMENU_TEAROFF = wxc.wxMENU_TEAROFF
 wxMB_DOCKABLE = wxc.wxMB_DOCKABLE
 wxNO_FULL_REPAINT_ON_RESIZE = wxc.wxNO_FULL_REPAINT_ON_RESIZE
@@ -810,6 +813,7 @@ wxEVT_LEAVE_WINDOW = wxc.wxEVT_LEAVE_WINDOW
 wxEVT_LEFT_DCLICK = wxc.wxEVT_LEFT_DCLICK
 wxEVT_MIDDLE_DCLICK = wxc.wxEVT_MIDDLE_DCLICK
 wxEVT_RIGHT_DCLICK = wxc.wxEVT_RIGHT_DCLICK
+wxEVT_MOUSE_CAPTURE_CHANGED = wxc.wxEVT_MOUSE_CAPTURE_CHANGED
 wxEVT_NC_LEFT_DOWN = wxc.wxEVT_NC_LEFT_DOWN
 wxEVT_NC_LEFT_UP = wxc.wxEVT_NC_LEFT_UP
 wxEVT_NC_MIDDLE_DOWN = wxc.wxEVT_NC_MIDDLE_DOWN
@@ -855,7 +859,6 @@ wxEVT_DESTROY = wxc.wxEVT_DESTROY
 wxEVT_SHOW = wxc.wxEVT_SHOW
 wxEVT_ICONIZE = wxc.wxEVT_ICONIZE
 wxEVT_MAXIMIZE = wxc.wxEVT_MAXIMIZE
-wxEVT_MOUSE_CAPTURE_CHANGED = wxc.wxEVT_MOUSE_CAPTURE_CHANGED
 wxEVT_PAINT = wxc.wxEVT_PAINT
 wxEVT_ERASE_BACKGROUND = wxc.wxEVT_ERASE_BACKGROUND
 wxEVT_NC_PAINT = wxc.wxEVT_NC_PAINT
@@ -1096,6 +1099,9 @@ def EVT_MOUSE_EVENTS(win, func):
     win.Connect(-1, -1, wxEVT_RIGHT_DCLICK,  func)
     win.Connect(-1, -1, wxEVT_LEAVE_WINDOW,  func)
     win.Connect(-1, -1, wxEVT_ENTER_WINDOW,  func)
+
+def EVT_MOUSE_CAPTURE_CHANGED(win, func):
+    win.Connect(-1, -1, wxEVT_MOUSE_CAPTURE_CHANGED, func)
 
 # EVT_COMMAND
 def EVT_COMMAND(win, id, cmd, func):
@@ -1546,6 +1552,34 @@ def wxPyTypeCast(obj, typeStr):
     return theObj
 
 
+#----------------------------------------------------------------------------
+
+class wxPyDeadObjectError(AttributeError):
+    pass
+
+class _wxPyDeadObject:
+    """
+    Instances of wx objects that are OOR capable will have their __class__
+    changed to this class when the C++ object is deleted.  This should help
+    prevent crashes due to referencing a bogus C++ pointer.
+    """
+    reprStr = "wxPython wrapper for DELETED %s object! (The C++ object no longer exists.)"
+    attrStr = "The C++ part of the %s object has been deleted, attribute access no longer allowed."
+
+    def __repr__( self ):
+        if not hasattr(self, "_name"):
+            self._name = "[unknown]"
+        return self.reprStr % self._name
+
+    def __getattr__( self, *args ):
+        if not hasattr(self, "_name"):
+            self._name = "[unknown]"
+        raise wxPyDeadObjectError( self.attrStr % self._name )
+
+    def __nonzero__(self):
+        return 0
+
+
 #----------------------------------------------------------------------
 #----------------------------------------------------------------------
 
@@ -1662,10 +1696,10 @@ class wxPyWidgetTester(wxApp):
         self.frame.Show(true)
 
 #----------------------------------------------------------------------------
-# DO NOT hold any other references to this object.  This is how we know when
-# to cleanup system resources that wxWin is holding.  When this module is
-# unloaded, the refcount on __cleanMeUp goes to zero and it calls the
-# wxApp_CleanUp function.
+# DO NOT hold any other references to this object.  This is how we
+# know when to cleanup system resources that wxWin is holding.  When
+# the sys module is unloaded, the refcount on sys.__wxPythonCleanup
+# goes to zero and it calls the wxApp_CleanUp function.
 
 class __wxPyCleanup:
     def __init__(self):

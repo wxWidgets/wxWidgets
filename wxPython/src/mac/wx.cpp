@@ -677,7 +677,11 @@ static wxPyCoreAPI API = {
     wxPyMake_wxSizer,
     wxPyPtrTypeMap_Add,
     wxArrayString2PyList_helper,
-    wxArrayInt2PyList_helper
+    wxArrayInt2PyList_helper,
+
+    wxPyClientData_dtor,
+    wxPyUserData_dtor,
+    wxPyOORClientData_dtor
 };
 
 
@@ -1870,6 +1874,8 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxTB_DOCKABLE", PyInt_FromLong((long) wxTB_DOCKABLE));
 	 PyDict_SetItemString(d,"wxTB_NOICONS", PyInt_FromLong((long) wxTB_NOICONS));
 	 PyDict_SetItemString(d,"wxTB_TEXT", PyInt_FromLong((long) wxTB_TEXT));
+	 PyDict_SetItemString(d,"wxTB_NODIVIDER", PyInt_FromLong((long) wxTB_NODIVIDER));
+	 PyDict_SetItemString(d,"wxTB_NOALIGN", PyInt_FromLong((long) wxTB_NOALIGN));
 	 PyDict_SetItemString(d,"wxCOLOURED", PyInt_FromLong((long) wxCOLOURED));
 	 PyDict_SetItemString(d,"wxFIXED_LENGTH", PyInt_FromLong((long) wxFIXED_LENGTH));
 	 PyDict_SetItemString(d,"wxALIGN_LEFT", PyInt_FromLong((long) wxALIGN_LEFT));
@@ -2062,6 +2068,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxPD_ELAPSED_TIME", PyInt_FromLong((long) wxPD_ELAPSED_TIME));
 	 PyDict_SetItemString(d,"wxPD_ESTIMATED_TIME", PyInt_FromLong((long) wxPD_ESTIMATED_TIME));
 	 PyDict_SetItemString(d,"wxPD_REMAINING_TIME", PyInt_FromLong((long) wxPD_REMAINING_TIME));
+	 PyDict_SetItemString(d,"wxDD_NEW_DIR_BUTTON", PyInt_FromLong((long) wxDD_NEW_DIR_BUTTON));
 	 PyDict_SetItemString(d,"wxMENU_TEAROFF", PyInt_FromLong((long) wxMENU_TEAROFF));
 	 PyDict_SetItemString(d,"wxMB_DOCKABLE", PyInt_FromLong((long) wxMB_DOCKABLE));
 	 PyDict_SetItemString(d,"wxNO_FULL_REPAINT_ON_RESIZE", PyInt_FromLong((long) wxNO_FULL_REPAINT_ON_RESIZE));
@@ -2465,6 +2472,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_LEFT_DCLICK", PyInt_FromLong((long) wxEVT_LEFT_DCLICK));
 	 PyDict_SetItemString(d,"wxEVT_MIDDLE_DCLICK", PyInt_FromLong((long) wxEVT_MIDDLE_DCLICK));
 	 PyDict_SetItemString(d,"wxEVT_RIGHT_DCLICK", PyInt_FromLong((long) wxEVT_RIGHT_DCLICK));
+	 PyDict_SetItemString(d,"wxEVT_MOUSE_CAPTURE_CHANGED", PyInt_FromLong((long) wxEVT_MOUSE_CAPTURE_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_NC_LEFT_DOWN", PyInt_FromLong((long) wxEVT_NC_LEFT_DOWN));
 	 PyDict_SetItemString(d,"wxEVT_NC_LEFT_UP", PyInt_FromLong((long) wxEVT_NC_LEFT_UP));
 	 PyDict_SetItemString(d,"wxEVT_NC_MIDDLE_DOWN", PyInt_FromLong((long) wxEVT_NC_MIDDLE_DOWN));
@@ -2510,7 +2518,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_SHOW", PyInt_FromLong((long) wxEVT_SHOW));
 	 PyDict_SetItemString(d,"wxEVT_ICONIZE", PyInt_FromLong((long) wxEVT_ICONIZE));
 	 PyDict_SetItemString(d,"wxEVT_MAXIMIZE", PyInt_FromLong((long) wxEVT_MAXIMIZE));
-	 PyDict_SetItemString(d,"wxEVT_MOUSE_CAPTURE_CHANGED", PyInt_FromLong((long) wxEVT_MOUSE_CAPTURE_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_PAINT", PyInt_FromLong((long) wxEVT_PAINT));
 	 PyDict_SetItemString(d,"wxEVT_ERASE_BACKGROUND", PyInt_FromLong((long) wxEVT_ERASE_BACKGROUND));
 	 PyDict_SetItemString(d,"wxEVT_NC_PAINT", PyInt_FromLong((long) wxEVT_NC_PAINT));
