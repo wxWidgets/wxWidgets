@@ -152,10 +152,10 @@ private:
 // IDs for the menu commands
 enum
 {
-    LIST_ABOUT,
-    LIST_QUIT,
+    LIST_ABOUT = wxID_ABOUT,
+    LIST_QUIT = wxID_EXIT,
 
-    LIST_LIST_VIEW,
+    LIST_LIST_VIEW = wxID_HIGHEST,
     LIST_ICON_VIEW,
     LIST_ICON_TEXT_VIEW,
     LIST_SMALL_ICON_VIEW,
