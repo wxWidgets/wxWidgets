@@ -610,6 +610,8 @@ WXDLLEXPORT size_t   wxStrxfrm(wxChar *dest, const wxChar *src, size_t n);
 #  include <stdarg.h>
 WXDLLEXPORT FILE *   wxFopen(const wxChar *path, const wxChar *mode);
 WXDLLEXPORT FILE *   wxFreopen(const wxChar *path, const wxChar *mode, FILE *stream);
+WXDLLEXPORT int      wxRemove(const wxChar *path);
+WXDLLEXPORT int      wxRename(const wxChar *oldpath, const wxChar *newpath);
 WXDLLEXPORT int      wxPrintf(const wxChar *fmt, ...);
 WXDLLEXPORT int      wxVprintf(const wxChar *fmt, va_list argptr);
 WXDLLEXPORT int      wxFprintf(FILE *stream, const wxChar *fmt, ...);
