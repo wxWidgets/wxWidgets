@@ -33,8 +33,9 @@ class wxScrolledMessageDialog(wx.wxDialog):
 
 
 class wxMultipleChoiceDialog(wx.wxDialog):
-    def __init__(self, parent, msg, title, lst, pos = wx.wxDefaultPosition, size = (200,200)):
-        wx.wxDialog.__init__(self, parent, -1, title, pos, size)
+    def __init__(self, parent, msg, title, lst, pos = wx.wxDefaultPosition,
+                 size = (200,200), style = wx.wxDEFAULT_DIALOG_STYLE):
+        wx.wxDialog.__init__(self, parent, -1, title, pos, size, style)
         x, y = pos
         if x == -1 and y == -1:
             self.CenterOnScreen(wx.wxBOTH)
