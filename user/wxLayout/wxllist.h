@@ -39,7 +39,7 @@
 
 /// Types of currently supported layout objects.
 enum wxLayoutObjectType
-{ WXLO_TYPE_INVALID, WXLO_TYPE_TEXT, WXLO_TYPE_CMD, WXLO_TYPE_ICON, WXLO_TYPE_LINEBREAK };
+{ WXLO_TYPE_INVALID = 0, WXLO_TYPE_TEXT, WXLO_TYPE_CMD, WXLO_TYPE_ICON, WXLO_TYPE_LINEBREAK };
 
 /// Type used for coordinates in drawing.
 typedef long CoordType;
@@ -249,8 +249,8 @@ public:
    void SetEditable(bool editable = true) { m_Editable = editable; }
    /// return true if list is editable
    bool IsEditable(void) const { return m_Editable; }
-   /// move cursor
-   void MoveCursor(int dx = 0, int dy = 0);
+   /// move cursor, returns true if it could move to the desired position
+   bool MoveCursor(int dx = 0, int dy = 0);
    void SetCursor(wxPoint const &p) { m_CursorPosition = p; }
    wxPoint GetCursor(void) const { return m_CursorPosition; }
    /// delete one or more cursor positions
@@ -264,8 +264,10 @@ public:
    wxLayoutObjectCmd const *GetDefaults(void) const { return m_DefaultSetting ; }
 
    wxLayoutObjectList::iterator FindCurrentObject(CoordType *offset = NULL);
-   // get the length of the line with the object pointed to by i
-   CoordType GetLineLength(wxLayoutObjectList::iterator i);
+   // get the length of the line with the object pointed to by i, offs 
+   // only used to decide whether we are before or after linebreak
+   CoordType GetLineLength(wxLayoutObjectList::iterator i,
+                           CoordType offs = 0);
 //@}
 protected:
    /// font parameters:

@@ -50,9 +50,9 @@ wxLayoutObjectBase::Debug(void)
         << GetSize(&bl).y << " bl=" << bl; 
 }
 
-#  define   WXL_VAR(x)   cerr << #x"=" << x << endl;
+#  define   WXL_VAR(x)   cerr << #x"=" << x << endl
 #  define   WXL_DBG_POINT(p)   cerr << #p << ": " << p.x << ',' << p.y << endl
-#  define   WXL_TRACE(f)   cerr << #f":" << endl;
+#  define   WXL_TRACE(f)   cerr << #f":" << endl
 #else 
 #  define   WXL_VAR(x)   
 #  define   WXL_DBG_POINT(p)   
@@ -273,10 +273,10 @@ wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
    CoordType baseLineSkip = (BASELINESTRETCH * baseLine)/10;
 
    // where to draw the cursor
-   wxPoint cursorPosition, cursorSize;
+   wxPoint
+      cursorPosition = wxPoint(0,0),
+      cursorSize = wxPoint(1,baseLineSkip);
    
-   // we trace the objects' cursor positions so we can draw the cursor
-   wxPoint cursor = wxPoint(0,0);
    // the cursor position inside the object
    CoordType cursorOffset = 0;
    // object under cursor
@@ -305,8 +305,6 @@ wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
 #endif
       dc.IsKindOf(CLASSINFO(wxPostScriptDC)))
    {
-      WXL_VAR(wxThePrintSetupData);
-      
       dc.GetSize(&pageWidth, &pageHeight);
       dc.StartDoc(_("Printing..."));
       dc.StartPage();
@@ -324,7 +322,6 @@ wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
    position.y = margins.right;
    position.x = margins.left;
    
-   WXL_VAR(findObject); WXL_VAR(findCoords.x); WXL_VAR(findCoords.y);
    // if the cursorobject is a cmd, we need to find the first
    // printable object:
    while(cursorObject != end()
@@ -375,38 +372,34 @@ wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
       // draw the cursor
       if(m_Editable && draw && i == cursorObject)
       {
+         WXL_VAR((**cursorObject).GetType());
+         WXL_VAR(m_CursorPosition.x); WXL_VAR(m_CursorPosition.y);
          if(type == WXLO_TYPE_TEXT) // special treatment
          {
             long descent = 0l; long width, height;
             tobj = (wxLayoutObjectText *)*i;
             String  str = tobj->GetText();
-            WXL_VAR(m_CursorPosition.x); WXL_VAR(cursor.x);
+            WXL_VAR(m_CursorPosition.x);
             str = str.substr(0, cursorOffset);
-            WXL_VAR(str);
             dc.GetTextExtent(Str(str), &width,&height, &descent);
-            WXL_VAR(height);
-            WXL_VAR(width);
-            WXL_VAR(descent);
             cursorPosition = wxPoint(position.x+width,
-                                      position.y+(baseLineSkip-height));
+                                     position.y+(baseLineSkip-height));
             cursorSize = wxPoint(1, height);
-            //dc.DrawLine(position.x+width,
-            //            position.y+(baseLineSkip-height),
-            //            position.x+width, position.y+baseLineSkip);
+         }
+         else if(type == WXLO_TYPE_LINEBREAK)
+         {
+            WXL_VAR(cursorOffset);
+            if(cursorOffset)
+               cursorPosition = wxPoint(0, position.y+baseLineSkip);
+            else
+               cursorPosition = wxPoint(0, position.y);
+            cursorSize = wxPoint(1,baseLineSkip);
+               
          }
          else
          {
-            if(type == WXLO_TYPE_LINEBREAK)
-               //dc.DrawLine(0, position.y+baseLineSkip, 0,               position.y+2*baseLineSkip);
-            {
-               cursorPosition = wxPoint(0, position.y);
-               cursorSize = wxPoint(1,baseLineSkip);
-            }
-            else
-            {
-               cursorPosition = wxPoint(position.x, position.y);
-               cursorSize = wxPoint(size.x > 0 ? size.x : 1,size.y > 0 ? size.y : baseLineSkip);
-            }
+            cursorPosition = wxPoint(position.x, position.y);
+            cursorSize = wxPoint(size.x > 0 ? size.x : 1,size.y > 0 ? size.y : baseLineSkip);
          }
       }
 
@@ -505,7 +498,7 @@ wxLayoutList::Debug(void)
         << m_CursorPosition.y;
    
    i = FindCurrentObject(&offs);
-   cerr << " line length: " << GetLineLength(i) << "  ";
+   cerr << " line length: " << GetLineLength(i,offs) << "  ";
    if(i == end())
    {
       cerr << "<<no object found>>" << endl;
@@ -559,10 +552,10 @@ wxLayoutList::FindObjectCursor(wxPoint *cpos, CoordType *offset)
          {
             if(cpos->x == object.x)
             {
-               *offset = 0;
+               if(offset) *offset = 0;
                return i;
             }
-            *offset=1;
+            if(offset) *offset=1;
             cpos->x = object.x;
             return i;
          }
@@ -594,7 +587,7 @@ wxLayoutList::FindObjectCursor(wxPoint *cpos, CoordType *offset)
    if((**i).GetType()==WXLO_TYPE_LINEBREAK)
    {
       if(offset)
-         *offset = (cpos->x > object.x) ? 1 : 0;
+         *offset = 1;
       return i;
    }
    cpos->x = object.x; // would be the coordinate of next object
@@ -619,26 +612,33 @@ wxLayoutList::FindCurrentObject(CoordType *offset)
    return obj;
 }
 
-void
+bool
 wxLayoutList::MoveCursor(int dx, int dy)
 {
    CoordType offs, lineLength;
    wxLayoutObjectList::iterator i;
 
+   bool rc = true; // have we moved?
 
    if(dy > 0 && m_CursorPosition.y < m_MaxLine)
       m_CursorPosition.y += dy;
    else if(dy < 0 && m_CursorPosition.y > 0)
       m_CursorPosition.y += dy; // dy is negative
    if(m_CursorPosition.y < 0)
+   {
       m_CursorPosition.y = 0;
+      rc = false;
+   }
    else if (m_CursorPosition.y > m_MaxLine)
+   {
       m_CursorPosition.y = m_MaxLine;
+      rc = false;
+   }
    
    while(dx > 0)
    {
       i = FindCurrentObject(&offs);
-      lineLength = GetLineLength(i);
+      lineLength = GetLineLength(i,offs);
       if(m_CursorPosition.x < lineLength)
       {
          m_CursorPosition.x ++;
@@ -654,7 +654,10 @@ wxLayoutList::MoveCursor(int dx, int dy)
             dx--;
          }
          else
+         {
+            rc = false;
             break; // cannot move there
+         }
       }
    }
    while(dx < 0)
@@ -671,21 +674,26 @@ wxLayoutList::MoveCursor(int dx, int dy)
             m_CursorPosition.y --;
             m_CursorPosition.x = 0;
             i = FindCurrentObject(&offs);
-            lineLength = GetLineLength(i);
+            lineLength = GetLineLength(i,offs);
             m_CursorPosition.x = lineLength;
             dx++;
             continue;
          }
          else
+         {
+            rc = false;
             break; // cannot move left any more
+         }
       }
    }
    // final adjustment:
    i = FindCurrentObject(&offs);
-   lineLength = GetLineLength(i);
+   lineLength = GetLineLength(i,offs);
    if(m_CursorPosition.x > lineLength)
+   {
       m_CursorPosition.x = lineLength;
-      
+      rc = false;
+   }
 #ifdef   WXLAYOUT_DEBUG
    i = FindCurrentObject(&offs);
    cerr << "Cursor: "
@@ -695,7 +703,7 @@ wxLayoutList::MoveCursor(int dx, int dy)
    if(i == end())
    {
       cerr << "<<no object found>>" << endl;
-      return;  // FIXME we should set cursor position to maximum allowed
+      return rc;  // FIXME we should set cursor position to maximum allowed
       // value then
    }
    if((*i)->GetType() == WXLO_TYPE_TEXT)
@@ -706,6 +714,7 @@ wxLayoutList::MoveCursor(int dx, int dy)
    else
       cerr << ' ' << _t[(*i)->GetType()] << endl;
 #endif
+   return rc;
 }
 
 void
@@ -829,6 +838,8 @@ void
 wxLayoutList::Insert(String const &text)
 {
    wxLayoutObjectText *tobj = NULL;
+   wxLayoutObjectList::iterator j;
+
    WXL_TRACE(Insert(text));
 
    if(! m_Editable)
@@ -837,22 +848,57 @@ wxLayoutList::Insert(String const &text)
    CoordType offs;
    wxLayoutObjectList::iterator i = FindCurrentObject(&offs);
 
-   if(i != end() && (*i)->GetType() == WXLO_TYPE_TEXT)
-   {  // insert into an existing text object:
+   if(i == end())
+   {
+      Insert(new wxLayoutObjectText(text));
+      return;
+   }
+
+   switch((**i).GetType())
+   {
+   case WXLO_TYPE_TEXT:
+      // insert into an existing text object:
       WXL_TRACE(inserting into existing object);
       tobj = (wxLayoutObjectText *)*i ;
       wxASSERT(tobj);
       tobj->GetText().insert(offs,text);
-   }
-   else      // check whether the previous object is text:
-   {
-      wxLayoutObjectList::iterator j = i;
-      j--;
-      WXL_TRACE(checking previous object);
-      if(0 && j != end() && (*j)->GetType() == WXLO_TYPE_TEXT)
+      break;
+   case WXLO_TYPE_LINEBREAK:
+      j = i;
+      if(offs == 0) // try to append to previous object
       {
-         tobj = (wxLayoutObjectText *)*i;
-         wxASSERT(tobj);
+         j--;
+         if(j != end() && (**j).GetType() == WXLO_TYPE_TEXT)
+         {
+            tobj = (wxLayoutObjectText *)*j;
+            tobj->GetText()+=text;
+         }
+         else
+            insert(i,new wxLayoutObjectText(text));
+      }
+      else // cursor after linebreak
+      {
+         j++;
+         if(j != end() && (**j).GetType() == WXLO_TYPE_TEXT)
+         {
+            tobj = (wxLayoutObjectText *)*j;
+            tobj->GetText()=text+tobj->GetText();
+         }
+         else
+         {
+            if(j == end())
+               push_back(new wxLayoutObjectText(text));
+            else
+               insert(j,new wxLayoutObjectText(text));
+         }
+      }
+      break;
+   default:
+      j = i; j--;
+      WXL_TRACE(checking previous object);
+      if(j != end() && (**j).GetType() == WXLO_TYPE_TEXT)
+      {
+         tobj = (wxLayoutObjectText *)*j;
          tobj->GetText()+=text;
       }
       else  // insert a new text object
@@ -866,13 +912,16 @@ wxLayoutList::Insert(String const &text)
 }
 
 CoordType
-wxLayoutList::GetLineLength(wxLayoutObjectList::iterator i)
+wxLayoutList::GetLineLength(wxLayoutObjectList::iterator i, CoordType offs)
 {
    if(i == end())
       return 0;
 
    CoordType len = 0;
 
+   if(offs == 0 && (**i).GetType() == WXLO_TYPE_LINEBREAK)
+      // we are before a linebrak
+      return 0;
    // search backwards for beginning of line:
    while(i != begin() && (*i)->GetType() != WXLO_TYPE_LINEBREAK)
       i--;

@@ -68,6 +68,7 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    
    long keyCode = event.KeyCode();
    wxPoint p;
+   CoordType help;
    
    switch(event.KeyCode())
    {
@@ -100,11 +101,19 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       m_llist.SetCursor(p);
       break;
    case WXK_DELETE :
-      m_llist.Delete(1);
+      if(event.ControlDown()) // delete to end of line
+      {
+         help = m_llist.GetLineLength(
+            m_llist.FindCurrentObject(NULL))
+            - m_llist.GetCursor().x;
+         m_llist.Delete(help ? help : 1);
+      }
+      else
+         m_llist.Delete(1);
       break;
    case WXK_BACK: // backspace
-      m_llist.MoveCursor(-1);
-      m_llist.Delete(1);
+      if(m_llist.MoveCursor(-1))
+         m_llist.Delete(1);
       break;
    case WXK_RETURN:
       m_llist.LineBreak();
