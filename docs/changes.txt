@@ -248,6 +248,7 @@ wxMSW:
 - fixed a race condition during a thread exit and a join
 - fixed a condition where a thread can hang during
   message/event processing
+- increased space between wxRadioBox label and first radio button
 
 wxGTK:
 
