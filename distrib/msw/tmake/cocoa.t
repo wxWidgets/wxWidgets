@@ -14,7 +14,6 @@
     IncludeTemplate("filelist.t");
 
     #! find all our sources
-    $project{"COMMONOBJS"} .= "parser.o ";
 
     foreach $file (sort keys %wxGeneric) {
         next if $wxGeneric{$file} =~ /\bNotCocoa\b/;

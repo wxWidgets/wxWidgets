@@ -600,7 +600,6 @@ ALL_HEADERS = \
 		protocol/protocol.h
 
 COMMONOBJS = \
-		parser.o \
 		accesscmn.o \
 		appcmn.o \
 		artprov.o \
