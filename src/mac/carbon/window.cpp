@@ -377,6 +377,8 @@ static void MacMenuBeforeDisplay( wxMenu* menu );
 
 bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
 {
+    wxCHECK_MSG( menu != NULL, FALSE, wxT("invalid popup-menu") );
+
     menu->SetInvokingWindow(this);
     menu->UpdateUI();
     ClientToScreen( &x , &y ) ;
