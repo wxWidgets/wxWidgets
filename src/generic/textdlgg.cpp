@@ -31,8 +31,6 @@
 #if wxUSE_TEXTDLG
 
 #ifndef WX_PRECOMP
-    #include <stdio.h>
-
     #include "wx/utils.h"
     #include "wx/dialog.h"
     #include "wx/button.h"
@@ -120,6 +118,13 @@ void wxTextEntryDialog::OnOK(wxCommandEvent& WXUNUSED(event) )
     m_value = m_textctrl->GetValue();
 
     EndModal(wxID_OK);
+}
+
+void wxTextEntryDialog::SetValue(const wxString& val)
+{
+    m_value = val;
+
+    m_textctrl->SetValue(val);
 }
 
 #endif // wxUSE_TEXTDLG

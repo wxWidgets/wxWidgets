@@ -41,7 +41,7 @@ public:
                       long style = wxTextEntryDialogStyle,
                       const wxPoint& pos = wxDefaultPosition);
 
-    void SetValue(const wxString& val) { m_value = val; m_textctrl->SetValue(val); }
+    void SetValue(const wxString& val);
     wxString GetValue() const { return m_value; }
 
     // implementation only
