@@ -212,6 +212,7 @@ public:
 
     void OnToggleIcon(wxCommandEvent& event);
 
+    void OnIdle(wxIdleEvent& event);
     void OnSize(wxSizeEvent& event);
 
 private:

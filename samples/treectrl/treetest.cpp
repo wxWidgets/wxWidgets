@@ -61,6 +61,7 @@
 #define MENU_LINK(name) EVT_MENU(TreeTest_##name, MyFrame::On##name)
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_IDLE(MyFrame::OnIdle)
     EVT_SIZE(MyFrame::OnSize)
 
     MENU_LINK(Quit)
@@ -257,9 +258,10 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 
     menu_bar->Check(TreeTest_ToggleImages, TRUE);
 
-    // create a status bar with 3 panes
-    CreateStatusBar(3);
-    SetStatusText(wxT(""), 0);
+#if wxUSE_STATUSBAR
+    // create a status bar
+    CreateStatusBar(2);
+#endif // wxUSE_STATUSBAR
 
 #ifdef __WXMOTIF__
     // For some reason, we get a memcpy crash in wxLogStream::DoLogStream
@@ -322,6 +324,23 @@ void MyFrame::TogStyle(int id, long flag)
 #endif // !MSW/MSW
 
     GetMenuBar()->Check(id, (style & flag) != 0);
+}
+
+void MyFrame::OnIdle(wxIdleEvent& event)
+{
+#if wxUSE_STATUSBAR
+    wxTreeItemId idRoot = m_treeCtrl->GetRootItem();
+
+    SetStatusText(wxString::Format
+                  (
+                    _T("Root/last item is %svisible/%svisible"),
+                    m_treeCtrl->IsVisible(idRoot) ? _T("") : _T("not "),
+                    m_treeCtrl->IsVisible(m_treeCtrl->GetLastChild(idRoot))
+                        ? _T("") : _T("not ")
+                  ), 1);
+#endif // wxUSE_STATUSBAR
+
+    event.Skip();
 }
 
 void MyFrame::OnSize(wxSizeEvent& event)
