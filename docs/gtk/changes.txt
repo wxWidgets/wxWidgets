@@ -1,10 +1,35 @@
 
-20th November '99: wxWindows 2.1.12 released
+19th December '99: wxWindows 2.1.12 released
 
 Who has a BigEndian computer (e.g. Sparc) that runs a 15 and/or
-16 bit colour mode. I need this for testing purposes, i.e. this
+16 bit colour mode? I need this for testing purposes, i.e. this
 person could help me by running a small testprogram and sending
 me the output.
+
+Implemented wxMenuBar::Insert() and wxMenu::Insert(). There is
+also a Remove() method now, but the GTK doesn't really like that.
+
+Enhanced wxMimeTypesManager to read GNOME and KDE file ending
+bindings to MIME types and icons.
+
+Corrected wxExecute to longer eat up all memory and crash under
+certain circumstances (Karsten Ballueder).
+
+wxGTK no longer gives warnings if the application shows a dialog
+before entering the main loop.
+
+Updated documentation for wxFile, wxFFile and their respective
+stream classes. Documented some more stream classes.
+
+Improved wxHTML and its help system. Options dialog, better printing,
+history index.
+
+Corrected wxRegion::GetBox().
+
+Added wxNotebookSizer for combining notebooks and sizers.
+
+Added wxDir class. Useful as a replacement for wxFileGetFirst()
+and wxFileGetNext().
 
 Added wxStopWatch class.
 
@@ -23,7 +48,7 @@ Rewritten wxThread to have a flag controlling if the
 thread will delete its C++ class itself ("delete this") or
 if the main thread must delete the C++ class.
 
-Added TIFF reading code.
+Added TIFF reading code, PCX writing code.
 
 Minor compile and build fixes for different architectures.
 
@@ -42,14 +67,14 @@ Corrected wrongly set flag in dialogs which broke its tab code.
 Also corrected navigation on wxRadioBox.
 
 Corrected segfaults in wxGLCanvas and stupid race when using
-several such windows.
+several such canvasses.
 
 Some minor updates to wxSockets.
 
 Speed-up for new encoding related font code.
 
-Change wxListCtrl to send deferred events, i.e. events emitted by
-the list ctrl won't get processed before the next idle message.
+Changed wxListBox to send deferred events, i.e. events emitted by
+the listbox won't get processed before the next idle message.
 
 Some more minor changes.
 

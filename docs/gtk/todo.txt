@@ -3,9 +3,6 @@
 
 More testing of Unicode support.
 
-Add ID based i18n system as a replacement for the
-  unelegant gettext system.
-  
 Improve, update translations. Install *.mo files somewehere.
 
 -------------------- Medium priority ---------------------

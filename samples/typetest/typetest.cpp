@@ -188,7 +188,7 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
 
     wxFileInputStream file_input( "test_wx.dat" );
     wxBufferedInputStream buf_input( file_input );
-    wxTextInputStream text_input( buf_input );
+    wxTextInputStream text_input( file_input );
 
     text_input >> si;
     tmp.Printf( _T("Signed int: %d\n"), si );

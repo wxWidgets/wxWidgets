@@ -150,7 +150,7 @@ double wxTextInputStream::ReadDouble()
     if (c==(wxChar)0) return 0;
 
     f = 0.0;
-    if (! (c == wxT('.') || c == wxT('-') || c == wxT('+') || isdigit(c)) )
+    if (! (c == wxT('.') || c == wxT(',') || c == wxT('-') || c == wxT('+') || isdigit(c)) )
     {
         m_input.Ungetch(c);
         return 0.0;
@@ -177,7 +177,7 @@ double wxTextInputStream::ReadDouble()
         c = m_input.GetC();
     }
 
-    if (c == wxT('.'))
+    if (c == wxT('.') || c == wxT(','))
     {
         double f_multiplicator = (double) 0.1;
 
@@ -418,25 +418,37 @@ wxTextOutputStream& wxTextOutputStream::operator<<(wxChar c)
 
 wxTextOutputStream& wxTextOutputStream::operator<<(wxInt16 c)
 {
-    Write16( (wxUint16)c );
+    wxString str;
+    str.Printf(wxT("%d"), (signed int)c);
+    WriteString(str);
+    
     return *this;
 }
 
 wxTextOutputStream& wxTextOutputStream::operator<<(wxInt32 c)
 {
-    Write32( (wxUint32)c );
+    wxString str;
+    str.Printf(wxT("%ld"), (signed long)c);
+    WriteString(str);
+    
     return *this;
 }
 
 wxTextOutputStream& wxTextOutputStream::operator<<(wxUint16 c)
 {
-    Write16(c);
+    wxString str;
+    str.Printf(wxT("%u"), (unsigned int)c);
+    WriteString(str);
+    
     return *this;
 }
 
 wxTextOutputStream& wxTextOutputStream::operator<<(wxUint32 c)
 {
-    Write32(c);
+    wxString str;
+    str.Printf(wxT("%lu"), (unsigned long)c);
+    WriteString(str);
+
     return *this;
 }
 
