@@ -13,3 +13,6 @@ wxwindowsM*Data
 wxwindowsM5.mcp
 build
 .DS_Store
+*.ncb
+*.opt
+*.plg

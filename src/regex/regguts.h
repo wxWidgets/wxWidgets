@@ -46,6 +46,7 @@
  */
 
 /* assertions */
+#ifndef __WXWINCE__
 #ifndef assert
 #ifndef REG_DEBUG
 #	ifndef NDEBUG
@@ -53,6 +54,10 @@
 #	endif
 #endif
 #include <assert.h>
+#endif
+#else
+// To do: assertion on WinCE
+#define assert(x)
 #endif
 
 /* voids */

@@ -246,7 +246,7 @@
 // Default is 1
 //
 // Recommended setting: 0 unless you do plan to develop MT applications
-#define wxUSE_THREADS 0
+#define wxUSE_THREADS 1
 
 // If enabled (1), compiles wxWindows streams classes
 #define wxUSE_STREAMS       1
@@ -439,7 +439,7 @@
 //
 // Recommended setting: 1 if your compiler supports it, if it doesn't please
 // contribute us a makefile for src/regex for it
-#define wxUSE_REGEX       0
+#define wxUSE_REGEX       1
 
 // wxSystemOptions class
 #define wxUSE_SYSTEM_OPTIONS 1

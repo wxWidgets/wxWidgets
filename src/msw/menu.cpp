@@ -832,7 +832,13 @@ int wxMenuBar::MSWPositionForWxMenu(wxMenu *menu, int wxpos)
     wxASSERT(menu);
     wxASSERT(menu->GetHMenu());
     wxASSERT(m_hMenu);
+
+#if defined(__WXWINCE__)
+    int totalMSWItems = GetMenuCount();
+#else
     int totalMSWItems = GetMenuItemCount((HMENU)m_hMenu);
+#endif
+
     int i; // For old C++ compatibility
     for(i=wxpos; i<totalMSWItems; i++)
     {

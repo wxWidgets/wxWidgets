@@ -146,7 +146,7 @@ bool wxIsClipboardOpened()
 
 bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
 {
-    CLIPFORMAT cf = dataFormat.GetFormatId();
+   wxDataFormat::NativeFormat cf = dataFormat.GetFormatId();
 
     if ( ::IsClipboardFormatAvailable(cf) )
     {
