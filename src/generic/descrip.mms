@@ -70,6 +70,7 @@ SOURCES = \
 		colrdlgg.cpp,\
 		dcpsg.cpp,\
 		dirdlgg.cpp,\
+		filedlgg.cpp,\
 		fontdlgg.cpp,\
 		grid.cpp,\
 		helpext.cpp,\
@@ -107,7 +108,8 @@ SOURCES = \
 OBJECTS0=,statline.obj,\
 		notebook.obj
 .else
-OBJECTS0=
+OBJECTS0=,filedlgg.obj
+
 .endif
 
 all : $(SOURCES)
@@ -116,7 +118,7 @@ all : $(SOURCES)
 	library/crea [--.lib]libwx_motif.olb $(OBJECTS)$(OBJECTS0)
 .else
 .ifdef __WXGTK__
-	library/crea [--.lib]libwx_gtk.olb $(OBJECTS)
+	library/crea [--.lib]libwx_gtk.olb $(OBJECTS)$(OBJECTS0)
 .endif
 .endif
 
@@ -127,6 +129,7 @@ choicdgg.obj : choicdgg.cpp
 colrdlgg.obj : colrdlgg.cpp
 dcpsg.obj : dcpsg.cpp
 dirdlgg.obj : dirdlgg.cpp
+filedlgg.obj : filedlgg.cpp
 fontdlgg.obj : fontdlgg.cpp
 grid.obj : grid.cpp
 helpext.obj : helpext.cpp

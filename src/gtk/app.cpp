@@ -570,10 +570,16 @@ int wxEntryStart( int argc, char *argv[] )
 {
 #if wxUSE_THREADS
     /* GTK 1.2 up to version 1.2.3 has broken threads */
-    if ((gtk_major_version == 1) &&
+#ifdef __VMS__
+   if ((vms_gtk_major_version() == 1) &&
+        (vms_gtk_minor_version() == 2) &&
+        (vms_gtk_micro_version() < 4))
+#else
+   if ((gtk_major_version == 1) &&
         (gtk_minor_version == 2) &&
         (gtk_micro_version < 4))
-    {
+#endif
+     {
         printf( "wxWindows warning: GUI threading disabled due to outdated GTK version\n" );
     }
     else

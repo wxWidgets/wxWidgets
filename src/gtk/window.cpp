@@ -273,7 +273,7 @@ gdk_window_warp_pointer (GdkWindow      *window,
   GdkWindowPrivate *priv;
 
   if (!window)
-    window = (GdkWindow*) &gdk_root_parent;
+    window = GDK_ROOT_PARENT();
 
   priv = (GdkWindowPrivate*) window;
 

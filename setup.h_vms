@@ -141,7 +141,11 @@
 /*
  * Use Threads
  */
+#ifndef __WXGTK__
 #define wxUSE_THREADS 1
+#else
+#define wxUSE_THREADS 0
+#endif
 /*
  * Have glibc2
  */

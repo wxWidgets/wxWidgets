@@ -12,6 +12,12 @@
 #pragma implementation "listbox.h"
 #endif
 
+#ifdef __VMS
+#define gtk_scrolled_window_add_with_viewport gtk_scrolled_window_add_with_vi
+#define gtk_container_set_focus_vadjustment gtk_container_set_focus_vadjust
+#define gtk_scrolled_window_get_vadjustment gtk_scrolled_window_get_vadjust
+#endif
+
 #include "wx/listbox.h"
 
 #if wxUSE_LISTBOX
@@ -26,11 +32,6 @@
 #include "wx/tooltip.h"
 #endif
 
-#ifdef __VMS__
-#define gtk_scrolled_window_add_with_viewport gtk_scrolled_window_add_with_vi
-#define gtk_container_set_focus_vadjustment gtk_container_set_focus_vadjust
-#define gtk_scrolled_window_get_vadjustment gtk_scrolled_window_get_vadjust
-#endif
 # include <gdk/gdk.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>

@@ -14,10 +14,10 @@
 	set def [.wxwindows]
 
 all :
-	make gtk
+	make motif
 	purge [...]
 	delete [...]*.obj;
-	make motif
+	make gtk
 	purge [...]
 	delete [...]*.obj;
 

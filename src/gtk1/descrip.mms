@@ -40,7 +40,6 @@ OBJECTS = \
 	dcscreen.obj,\
 	dialog.obj,\
         dnd.obj,\
-	filedlg.obj,\
 	font.obj,\
 	fontdlg.obj,\
 	frame.obj,\
@@ -102,7 +101,6 @@ SOURCES =\
 	dcscreen.cpp,\
 	dialog.cpp,\
         dnd.cpp,\
-	filedlg.cpp,\
 	font.cpp,\
 	fontdlg.cpp,\
 	frame.cpp,\
@@ -167,7 +165,6 @@ dcmemory.obj : dcmemory.cpp
 dcscreen.obj : dcscreen.cpp
 dialog.obj : dialog.cpp
 dnd.obj : dnd.cpp
-filedlg.obj : filedlg.cpp
 font.obj : font.cpp
 fontdlg.obj : fontdlg.cpp
 frame.obj : frame.cpp
@@ -205,4 +202,4 @@ utilsres.obj : utilsres.cpp
 window.obj : window.cpp
 win_gtk.obj : win_gtk.c
 wx_gtk_vmsjackets.obj : wx_gtk_vmsjackets.c
-	cc $(CFLAGS)$(CXX_DEFINE) wx_gtk_vmsjackets.c/name=as_is
+	cc $(CFLAGS)$(CXX_DEFINE) wx_gtk_vmsjackets.c/name=(as_is,short)

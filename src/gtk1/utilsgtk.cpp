@@ -77,7 +77,7 @@ bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
 
 void *wxGetDisplay()
 {
-    return gdk_display;
+    return GDK_DISPLAY();
 }
 
 void wxDisplaySize( int *width, int *height )

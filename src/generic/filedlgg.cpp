@@ -46,8 +46,10 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <pwd.h>
-#include <grp.h>
-#include <time.h>
+#ifndef __VMS
+# include <grp.h>
+#endif
+# include <time.h>
 #include <unistd.h>
 
 #include "wx/generic/home.xpm"
@@ -273,7 +275,7 @@ wxFileData::wxFileData( const wxString &name, const wxString &fname )
     struct stat buff;
     stat( m_fileName.fn_str(), &buff );
 
-#ifndef __EMX__
+#if !defined( __EMX__ ) && !defined(__VMS)
     struct stat lbuff;
     lstat( m_fileName.fn_str(), &lbuff );
     m_isLink = S_ISLNK( lbuff.st_mode );

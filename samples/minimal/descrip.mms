@@ -38,9 +38,7 @@ minimal.exe : minimal.obj
 .else
 .ifdef __WXGTK__
 minimal_gtk.exe : minimal.obj
-	ass link.lis sys$output
 	cxxlink/exec=minimal_gtk.exe minimal,[--.lib]vms_gtk/opt
-	deass sys$output
 .endif
 .endif
 
