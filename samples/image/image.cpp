@@ -127,7 +127,7 @@ public:
 #endif // wxHAVE_RAW_BITMAP
     void OnQuit( wxCommandEvent &event );
 
-#if wxUSE_CLIPBOARD
+#if wxUSE_CLIPBOARD && !defined(__WXMOTIF_)
     void OnCopy(wxCommandEvent& event);
     void OnPaste(wxCommandEvent& event);
 #endif // wxUSE_CLIPBOARD
@@ -814,7 +814,7 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
   EVT_MENU    (ID_SHOWRAW,  MyFrame::OnTestRawBitmap)
 #endif
 
-#if wxUSE_CLIPBOARD
+#if wxUSE_CLIPBOARD && !defined(__WXMOTIF__)
     EVT_MENU(wxID_COPY, MyFrame::OnCopy)
     EVT_MENU(wxID_PASTE, MyFrame::OnPaste)
 #endif // wxUSE_CLIPBOARD
@@ -837,7 +837,7 @@ MyFrame::MyFrame()
   menuImage->Append( ID_QUIT, _T("E&xit\tCtrl-Q"));
   menu_bar->Append(menuImage, _T("&Image"));
 
-#if wxUSE_CLIPBOARD
+#if wxUSE_CLIPBOARD && !defined(__WXMOTIF__)
   wxMenu *menuClipboard = new wxMenu;
   menuClipboard->Append(wxID_COPY, _T("&Copy test image\tCtrl-C"));
   menuClipboard->Append(wxID_PASTE, _T("&Paste image\tCtrl-V"));
@@ -894,7 +894,7 @@ void MyFrame::OnTestRawBitmap( wxCommandEvent &event )
 
 #endif // wxHAVE_RAW_BITMAP
 
-#if wxUSE_CLIPBOARD
+#if wxUSE_CLIPBOARD && !defined(__WXMOTIF__)
 
 void MyFrame::OnCopy(wxCommandEvent& WXUNUSED(event))
 {
