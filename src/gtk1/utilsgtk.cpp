@@ -31,6 +31,7 @@
 #include <errno.h>
 #include <netdb.h>
 #include <signal.h>
+#include <fcntl.h>          // for O_WRONLY and friends
 
 #include "glib.h"
 #include "gdk/gdk.h"
