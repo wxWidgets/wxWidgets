@@ -803,7 +803,14 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
     // BC++ doesn't like testing for m_fn without != 0
     for ( int i = 0; table.entries[i].m_fn != 0; i++ )
     {
+        // the line using reference exposes a bug in gcc: although it _seems_
+        // to work, it leads to weird crashes later on during program
+        // execution
+#ifdef __GNUG__
+        wxEventTableEntry entry = table.entries[i];
+#else
         const wxEventTableEntry& entry = table.entries[i];
+#endif
 
         // match only if the event type is the same and the id is either -1 in
         // the event table (meaning "any") or the event id matches the id
