@@ -338,14 +338,14 @@
 // Move caret to first position on display line.
 #define wxSTC_CMD_HOMEDISPLAY 2345
 
-// Move caret to first position on display line extending selection to 
+// Move caret to first position on display line extending selection to
 // new caret position.
 #define wxSTC_CMD_HOMEDISPLAYEXTEND 2346
 
 // Move caret to last position on display line.
 #define wxSTC_CMD_LINEENDDISPLAY 2347
 
-// Move caret to last position on display line extending selection to new 
+// Move caret to last position on display line extending selection to new
 // caret position.
 #define wxSTC_CMD_LINEENDDISPLAYEXTEND 2348
 #define wxSTC_EDGE_NONE 0
@@ -1653,14 +1653,14 @@ public:
     // Move caret to first position on display line.
     void HomeDisplay();
 
-    // Move caret to first position on display line extending selection to 
+    // Move caret to first position on display line extending selection to
     // new caret position.
     void HomeDisplayExtend();
 
     // Move caret to last position on display line.
     void LineEndDisplay();
 
-    // Move caret to last position on display line extending selection to new 
+    // Move caret to last position on display line extending selection to new
     // caret position.
     void LineEndDisplayExtend();
 
