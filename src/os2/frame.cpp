@@ -144,7 +144,6 @@ bool wxFrame::Create(
                                   ,rsName
                                  ))
         return FALSE;
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
     wxModelessWindows.Append(this);
     return TRUE;
 } // end of wxFrame::Create

@@ -329,7 +329,7 @@ bool wxSlider::Create(
     m_hWnd = (WXHWND)hScrollBar;
     SubclassWin(GetHWND());
     ::WinSetWindowText((HWND)m_hWnd, "");
-    SetFont(pParent->GetFont());
+    SetFont(*wxSMALL_FONT);
     if (m_windowStyle & wxSL_LABELS)
     {
         //

@@ -628,7 +628,7 @@ wxMenuItem* wxMenu::FindItem(
 void wxMenuBar::Init()
 {
     m_eventHandler = this;
-    m_pMenuBarFrame = NULL;
+    m_menuBarFrame = NULL;
     m_hMenu = 0;
 } // end of wxMenuBar::Init
 
@@ -673,7 +673,7 @@ void wxMenuBar::Refresh()
 {
     wxCHECK_RET( IsAttached(), wxT("can't refresh unatteched menubar") );
 
-    WinSendMsg(GetWinHwnd(m_pMenuBarFrame), WM_UPDATEFRAME, (MPARAM)FCF_MENU, (MPARAM)0);
+    WinSendMsg(GetWinHwnd(m_menuBarFrame), WM_UPDATEFRAME, (MPARAM)FCF_MENU, (MPARAM)0);
 } // end of wxMenuBar::Refresh
 
 WXHMENU wxMenuBar::Create()
@@ -689,8 +689,8 @@ WXHMENU wxMenuBar::Create()
     //
     // Menubars should be associated with a frame otherwise they are popups
     //
-    if (m_pMenuBarFrame != NULL)
-        hFrame = GetWinHwnd(m_pMenuBarFrame);
+    if (m_menuBarFrame != NULL)
+        hFrame = GetWinHwnd(m_menuBarFrame);
     else
         hFrame = HWND_DESKTOP;
     //
@@ -900,8 +900,6 @@ bool wxMenuBar::Insert(
                     ,nPos
                    );
 
-    pMenu->Attach(this);
-
     if (IsAttached())
     {
         ::WinSendMsg((HWND)m_hMenu, MM_INSERTITEM, (MPARAM)&pMenu->m_vMenuData, (MPARAM)Title.c_str());
@@ -1024,7 +1022,7 @@ void wxMenuBar::Attach(
 )
 {
     wxASSERT_MSG( !IsAttached(), wxT("menubar already attached!") );
-    m_pMenuBarFrame = pFrame;
+    m_menuBarFrame = pFrame;
 
 #if wxUSE_ACCEL
     RebuildAccelTable();
@@ -1043,7 +1041,7 @@ void wxMenuBar::Detach()
 {
     ::WinDestroyWindow((HWND)m_hMenu);
     m_hMenu = (WXHMENU)NULL;
-    m_pMenuBarFrame = NULL;
+    m_menuBarFrame = NULL;
 } // end of wxMenuBar::Detach
 
 // ---------------------------------------------------------------------------

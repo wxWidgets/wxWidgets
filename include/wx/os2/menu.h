@@ -288,8 +288,6 @@ protected:
     wxAcceleratorTable              m_vAccelTable;
 #endif // wxUSE_ACCEL
 
-    wxFrame*                        m_pMenuBarFrame;
-
 private:
     //
     // Virtual function hiding suppression

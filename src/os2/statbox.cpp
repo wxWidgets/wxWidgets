@@ -79,7 +79,7 @@ bool wxStaticBox::Create(
                       ,sizeof(LONG)
                       ,(PVOID)&lColor
                      );
-    SetFont(pParent->GetFont());
+    SetFont(*wxSMALL_FONT);
     SetSize( rPos.x
             ,rPos.y
             ,rSize.x

@@ -143,7 +143,7 @@ bool wxComboBox::Create(
     //
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
-    SetFont(pParent->GetFont());
+    SetFont(*wxSMALL_FONT);
 
     int                             i;
 

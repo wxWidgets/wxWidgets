@@ -141,7 +141,7 @@ bool wxSpinButton::Create(
     ::WinQueryWindowPos(m_hWnd, &vSwp);
     SetXComp(vSwp.x);
     SetYComp(vSwp.y);
-    SetFont(pParent->GetFont());
+    SetFont(*wxSMALL_FONT);
     //
     // For OS/2 we want to hide the text portion so we can substitute an
     // independent text ctrl in its place.  10 device units does this

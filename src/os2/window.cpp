@@ -1051,9 +1051,20 @@ void wxWindowOS2::SubclassWin(
 {
     HWND                            hwnd = (HWND)hWnd;
 
-    wxASSERT_MSG( !m_fnOldWndProc, wxT("subclassing window twice?") );
     wxCHECK_RET(::WinIsWindow(vHabmain, hwnd), wxT("invalid HWND in SubclassWin") );
-    m_fnOldWndProc = (WXFARPROC) ::WinSubclassWindow(hwnd, (PFNWP)wxWndProc);
+    wxAssociateWinWithHandle( hWnd
+                             ,(wxWindow*)this
+                            );
+    if (!wxCheckWindowWndProc( hWnd
+                              ,(WXFARPROC)wxWndProc
+                             ))
+    {
+        m_fnOldWndProc = (WXFARPROC) ::WinSubclassWindow(hwnd, (PFNWP)wxWndProc);
+    }
+    else
+    {
+        m_fnOldWndProc = (WXFARPROC)NULL;
+    }
 } // end of wxWindowOS2::SubclassWin
 
 void wxWindowOS2::UnsubclassWin()
@@ -3026,17 +3037,22 @@ bool wxWindowOS2::OS2Create(
     //
     if (pParent)
     {
-        if (IsKindOf(CLASSINFO(wxStatusBar)) &&
-            pParent->IsKindOf(CLASSINFO(wxFrame)))
+        if ( pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)) ||
+             pParent->IsKindOf(CLASSINFO(wxScrolledWindow))
+           )
         {
-            RECTL                   vRect;
-            wxFrame*                pFrame = wxDynamicCast(pParent, wxFrame);
+            if (IsKindOf(CLASSINFO(wxStatusBar)) &&
+                pParent->IsKindOf(CLASSINFO(wxFrame)))
+            {
+                RECTL               vRect;
+                wxFrame*            pFrame = wxDynamicCast(pParent, wxFrame);
 
-            ::WinQueryWindowRect((HWND)pFrame->GetFrame(), &vRect);
-            nY = vRect.yTop - (nY + nHeight);
+                ::WinQueryWindowRect((HWND)pFrame->GetFrame(), &vRect);
+                nY = vRect.yTop - (nY + nHeight);
+            }
+            else
+                nY = pParent->GetSize().y - (nY + nHeight);
         }
-        else
-            nY = pParent->GetSize().y - (nY + nHeight);
     }
     else
     {

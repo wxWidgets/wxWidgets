@@ -179,8 +179,8 @@ bool wxListBox::Create(
     {
         Append(asChoices[lUi]);
     }
-    SetFont(pParent->GetFont());
-    
+    SetFont(*wxSMALL_FONT);
+
     //
     // Set standard wxWindows colors for Listbox items and highlighting
     //

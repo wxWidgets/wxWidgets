@@ -187,7 +187,7 @@ bool wxSpinCtrl::Create(
     m_hWndBuddy = m_hWnd; // One in the same for OS/2
     if(pParent)
         pParent->AddChild((wxSpinButton *)this);
-    SetFont(pParent->GetFont());
+    SetFont(*wxSMALL_FONT);
     ::WinQueryWindowPos(m_hWnd, &vSwp);
     SetXComp(vSwp.x);
     SetYComp(vSwp.y);

@@ -110,7 +110,7 @@ bool wxStaticText::Create(
                      );
 
     SubclassWin(m_hWnd);
-    wxControl::SetFont(pParent->GetFont());
+    wxControl::SetFont(*wxSMALL_FONT);
     SetSize( nX
             ,nY
             ,nWidth

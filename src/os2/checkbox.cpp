@@ -131,7 +131,7 @@ bool wxCheckBox::Create(
                       ,(PVOID)&lColor
                      );
 
-    SetFont(pParent->GetFont());
+    SetFont(*wxSMALL_FONT);
 
     SetSize( nX
             ,nY

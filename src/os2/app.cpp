@@ -896,9 +896,13 @@ bool wxApp::ProcessMessage(
 #endif // wxUSE_TOOLTIPS
 
     //
-    // We must relay Timer events to wxTimer's processing function
+    // Pass non-system timer messages to the wxTimerProc
     //
-    if (pMsg->msg == WM_TIMER)
+    if (pMsg->msg == WM_TIMER &&
+        (SHORT1FROMMP(pMsg->mp1) != TID_CURSOR &&
+         SHORT1FROMMP(pMsg->mp1) != TID_FLASHWINDOW &&
+         SHORT1FROMMP(pMsg->mp1) != TID_SCROLL
+        ))
         wxTimerProc(NULL, 0, (int)pMsg->mp1, 0);
 
     //

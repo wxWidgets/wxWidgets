@@ -351,7 +351,7 @@ bool wxTopLevelWindowOS2::CreateFrame(
     wxAssociateWinWithHandle(m_hWnd, this);
     wxAssociateWinWithHandle(m_hFrame, this);
 
-    m_backgroundColour.Set(wxString("DARK GREY"));
+    m_backgroundColour.Set(wxString("MEDIUM GREY"));
 
     LONG                            lColor = (LONG)m_backgroundColour.GetPixel();
 

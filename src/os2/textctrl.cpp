@@ -208,16 +208,7 @@ bool wxTextCtrl::Create(
     //
     // Set font, position, size and initial value
     //
-    wxFont&                         vFontParent = pParent->GetFont();
-
-    if (vFontParent.Ok())
-    {
-        SetFont(vFontParent);
-    }
-    else
-    {
-        SetFont(wxSystemSettings::GetFont(wxSYS_SYSTEM_FONT));
-    }
+    SetFont(*wxSMALL_FONT);
     if (!rsValue.IsEmpty())
     {
         SetValue(rsValue);

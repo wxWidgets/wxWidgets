@@ -93,7 +93,7 @@ bool wxStaticBitmap::Create(
 
     // Subclass again for purposes of dialog editing mode
     SubclassWin(m_hWnd);
-    SetFont(GetParent()->GetFont());
+    SetFont(*wxSMALL_FONT);
     SetSize(nX, nY, nWidth, nHeight);
     return(FALSE);
 }
