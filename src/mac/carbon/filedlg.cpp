@@ -322,10 +322,19 @@ pascal Boolean CrossPlatformFilterCallback (
             {
                 FSRef fsref ;
                 memcpy( &fsref , *theItem->dataHandle , sizeof(FSRef) ) ;
-                wxString file ;
-                const short maxpath = 1024 ;
-                FSRefMakePath( &fsref , (UInt8*) file.GetWriteBuf(maxpath+1),maxpath) ;
-                file.UngetWriteBuf() ;
+
+
+
+            	CFURLRef fullURLRef;
+                fullURLRef = ::CFURLCreateFromFSRef(NULL, &fsref);
+#ifdef __UNIX__
+            	CFURLPathStyle pathstyle = kCFURLPOSIXPathStyle;
+#else
+            	CFURLPathStyle pathstyle = kCFURLHFSPathStyle;
+#endif
+            	CFStringRef cfString = CFURLCopyFileSystemPath(fullURLRef, pathstyle);
+            	wxString file = wxMacCFStringHolder(cfString).AsString(wxFont::GetDefaultEncoding());
+
                 display = CheckFile( file , theInfo->fileAndFolder.fileInfo.finderInfo.fdType , data ) ;
             }
 #endif
