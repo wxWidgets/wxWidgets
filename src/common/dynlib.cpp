@@ -300,25 +300,21 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
     return IsLoaded();
 }
 
-void wxDynamicLibrary::Unload()
+/* static */ void wxDynamicLibrary::Unload(wxDllType handle)
 {
-    if( IsLoaded() )
-    {
 #if defined(__WXPM__) || defined(__EMX__)
-        DosFreeModule( m_handle );
+    DosFreeModule( handle );
 #elif defined(HAVE_DLOPEN) || defined(__DARWIN__)
-        dlclose( m_handle );
+    dlclose( handle );
 #elif defined(HAVE_SHL_LOAD)
-        shl_unload( m_handle );
+    shl_unload( handle );
 #elif defined(__WINDOWS__)
-        ::FreeLibrary( m_handle );
+    ::FreeLibrary( handle );
 #elif defined(__WXMAC__) && !defined(__DARWIN__)
-        CloseConnection( (CFragConnectionID*) &m_handle );
+    CloseConnection( (CFragConnectionID*) &handle );
 #else
 #error  "runtime shared lib support not implemented"
 #endif
-        m_handle = 0;
-    }
 }
 
 void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
