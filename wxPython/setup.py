@@ -246,6 +246,9 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args, swig_deps=
     if not os.path.exists(os.path.join(dir, gendir)):
         os.mkdir(os.path.join(dir, gendir))
 
+    if not os.path.exists(os.path.join("docs", "xml-raw")):
+        os.mkdir(os.path.join("docs", "xml-raw"))
+
     sources = []
 
     for file in files:
@@ -253,6 +256,7 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args, swig_deps=
         i_file   = os.path.join(dir, file)
         py_file  = os.path.join(dir, gendir, basefile+'.py')
         cpp_file = os.path.join(dir, gendir, basefile+'_wrap.cpp')
+        xml_file = os.path.join("docs", "xml-raw", basefile+'_swig.xml')
 
         sources.append(cpp_file)
 
@@ -268,13 +272,27 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args, swig_deps=
                 #i_file = opj(i_file)     #'/'.join(i_file.split('\\'))
 
                 if BUILD_RENAMERS:
-                    # first run build_renamers
-                    cmd = [ sys.executable, '-u',
-                            './distrib/build_renamers.py',
-                            i_file, '-D'+WXPLAT, ] + \
-                            [x for x in swig_args if x.startswith('-I')]
+                    #info_file = "./distrib/swig_info"
+                    #info_dict = { 'cmd'  : swig_cmd,
+                    #              'args' : swig_args +  ['-I'+dir]
+                    #              }
+                    #open(info_file, "w").write(str(args_dict))
+
+                    # First run swig to produce the XML file, adding
+                    # an extra -D that prevents the old rename
+                    # directives from being used
+                    cmd = [ swig_cmd ] + swig_args + \
+                          [ '-DBUILDING_RENAMERS', '-xmlout', xml_file ] + \
+                          ['-I'+dir, '-o', cpp_file, i_file]
                     msg(' '.join(cmd))
                     spawn(cmd)
+
+                    # Next run build_renamers to process the XML
+                    cmd = [ sys.executable, '-u',
+                            './distrib/build_renamers.py', dir, basefile, xml_file] 
+                    msg(' '.join(cmd))
+                    spawn(cmd)
+                    #os.remove(info_file)
 
                 # Then run swig for real
                 cmd = [ swig_cmd ] + swig_args + ['-I'+dir, '-o', cpp_file, i_file]
