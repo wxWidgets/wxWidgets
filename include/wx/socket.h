@@ -118,7 +118,7 @@ public:
   inline bool IsData() { return WaitForRead(0, 0); };
   inline bool IsDisconnected() const { return !IsConnected(); };
   inline wxUint32 LastCount() const { return m_lcount; }
-  inline wxSocketError LastError() const { return (wxSocketError)GSocket_GetError(m_socket); }
+  inline wxSocketError LastError() const { return (wxSocketError)m_socket->GetError(); }
   void SaveState();
   void RestoreState();
 
