@@ -1496,17 +1496,20 @@ void wxGenericTreeCtrl::Expand(const wxTreeItemId& itemId)
 
 void wxGenericTreeCtrl::ExpandAll(const wxTreeItemId& item)
 {
-    Expand(item);
-    if ( IsExpanded(item) )
+    if ( !HasFlag(wxTR_HIDE_ROOT) || item != GetRootItem())
     {
-        long cookie;
-        wxTreeItemId child = GetFirstChild(item, cookie);
-        while ( child.IsOk() )
-        {
-            ExpandAll(child);
-
-            child = GetNextChild(item, cookie);
-        }
+        Expand(item);
+        if ( !IsExpanded(item) )
+            return;
+    }
+    
+    long cookie;
+    wxTreeItemId child = GetFirstChild(item, cookie);
+    while ( child.IsOk() )
+    {
+        ExpandAll(child);
+        
+        child = GetNextChild(item, cookie);
     }
 }
 

@@ -32,6 +32,7 @@ cppflags()
 {
     if test "@includedir@" != "/usr/include" \
             -a "@includedir@" != "/usr/include/c++" \
+            -a "@includedir@" != "/usr/local/include" \
             -a \( "${cross_compiling}" != "yes" \
                   -o "@includedir@" != "/usr/${target}/include" \) ;
     then

@@ -1300,7 +1300,7 @@ bool wxTextCtrl::SetBackgroundColour( const wxColour &colour )
 
     if (m_windowStyle & wxTE_MULTILINE)
     {
-#ifndef __WXGTK__
+#ifndef __WXGTK20__
         GdkWindow *window = GTK_TEXT(m_text)->text_area;
         if (!window)
             return FALSE;
