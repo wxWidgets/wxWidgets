@@ -66,7 +66,7 @@ gtk_scrollbar_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
     if (g_isIdle) wxapp_install_idle_handler();
 
     win->CalculateScrollbar();
-    
+
     if (!win->m_hasVMT) return;
 }
 
@@ -152,7 +152,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
         /* ... and put into the upper left hand corner of the table */
         m_widget = gtk_table_new(bHasHScrollbar ? 2 : 1, 2, FALSE);
         GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
-	
+
         gtk_table_attach( GTK_TABLE(m_widget), m_text, 0, 1, 0, 1,
                       (GtkAttachOptions)(GTK_FILL | GTK_EXPAND | GTK_SHRINK),
                       (GtkAttachOptions)(GTK_FILL | GTK_EXPAND | GTK_SHRINK),
@@ -160,13 +160,13 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
 
         /* always wrap words */
         gtk_text_set_word_wrap( GTK_TEXT(m_text), TRUE );
-	
+
         /* put the horizontal scrollbar in the lower left hand corner */
         if (bHasHScrollbar)
         {
             GtkWidget *hscrollbar = gtk_hscrollbar_new(GTK_TEXT(m_text)->hadj);
             GTK_WIDGET_UNSET_FLAGS( hscrollbar, GTK_CAN_FOCUS );
-	    
+
             gtk_table_attach(GTK_TABLE(m_widget), hscrollbar, 0, 1, 1, 2,
                        (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
                        GTK_FILL,
@@ -174,15 +174,15 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
             gtk_widget_show(hscrollbar);
 
 #if (GTK_MINOR_VERSION > 0)
-	    /* don't wrap lines, otherwise we wouldn't need the scrollbar */
-	    gtk_text_set_line_wrap( GTK_TEXT(m_text), FALSE );
+            /* don't wrap lines, otherwise we wouldn't need the scrollbar */
+            gtk_text_set_line_wrap( GTK_TEXT(m_text), FALSE );
 #endif
         }
-	
+
         /* finally, put the vertical scrollbar in the upper right corner */
         m_vScrollbar = gtk_vscrollbar_new( GTK_TEXT(m_text)->vadj );
         GTK_WIDGET_UNSET_FLAGS( m_vScrollbar, GTK_CAN_FOCUS );
-	
+
         gtk_table_attach(GTK_TABLE(m_widget), m_vScrollbar, 1, 2, 0, 1,
                      GTK_FILL,
                      (GtkAttachOptions)(GTK_EXPAND | GTK_FILL | GTK_SHRINK),
@@ -218,23 +218,30 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
         gtk_signal_connect(GTK_OBJECT(GTK_TEXT(m_text)->vadj), "changed",
           (GtkSignalFunc) gtk_scrollbar_changed_callback, (gpointer) this );
     }
-    
+
     if (!value.IsEmpty())
     {
         gint tmp = 0;
+
+#if GTK_MINOR_VERSION == 0
+        // if we don't realize it, GTK 1.0.6 dies with a SIGSEGV in
+        // gtk_editable_insert_text()
+        gtk_widget_realize(m_text);
+#endif // GTK 1.0
+
 #if wxUSE_UNICODE
-	wxWX2MBbuf val = value.mbc_str();
+        wxWX2MBbuf val = value.mbc_str();
         gtk_editable_insert_text( GTK_EDITABLE(m_text), val, strlen(val), &tmp );
-#else
+#else // !Unicode
         gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.Length(), &tmp );
-#endif
-	
+#endif // Unicode/!Unicode
+
         if (multi_line)
         {
-	    /* bring editable's cursor uptodate. bug in GTK. */
-	
-	    GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
-	}
+            /* bring editable's cursor uptodate. bug in GTK. */
+
+            GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
+        }
     }
 
     if (style & wxTE_PASSWORD)
@@ -253,7 +260,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
         if (multi_line)
             gtk_text_set_editable( GTK_TEXT(m_text), 1 );
     }
-    
+
     SetBackgroundColour( parent->GetBackgroundColour() );
     SetForegroundColour( parent->GetForegroundColour() );
 
@@ -319,7 +326,7 @@ void wxTextCtrl::SetValue( const wxString &value )
         gtk_editable_delete_text( GTK_EDITABLE(m_text), 0, len );
         len = 0;
 #if wxUSE_UNICODE
-	wxWX2MBbuf tmpbuf = tmp.mbc_str();
+        wxWX2MBbuf tmpbuf = tmp.mbc_str();
         gtk_editable_insert_text( GTK_EDITABLE(m_text), tmpbuf, strlen(tmpbuf), &len );
 #else
         gtk_editable_insert_text( GTK_EDITABLE(m_text), tmp.mbc_str(), tmp.Length(), &len );
@@ -340,34 +347,34 @@ void wxTextCtrl::WriteText( const wxString &text )
     if (m_windowStyle & wxTE_MULTILINE)
     {
         /* this moves the cursor pos to behind the inserted text */
-	gint len = GTK_EDITABLE(m_text)->current_pos;
-	
+        gint len = GTK_EDITABLE(m_text)->current_pos;
+
 #if wxUSE_UNICODE
-	wxWX2MBbuf buf = text.mbc_str();
+        wxWX2MBbuf buf = text.mbc_str();
         gtk_editable_insert_text( GTK_EDITABLE(m_text), buf, strlen(buf), &len );
 #else
         gtk_editable_insert_text( GTK_EDITABLE(m_text), text, text.Length(), &len );
 #endif
-	
-	/* bring editable's cursor uptodate. bug in GTK. */
-	GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
+
+        /* bring editable's cursor uptodate. bug in GTK. */
+        GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
     }
     else
     {
         /* this moves the cursor pos to behind the inserted text */
-	gint len = GTK_EDITABLE(m_text)->current_pos;
+        gint len = GTK_EDITABLE(m_text)->current_pos;
 #if wxUSE_UNICODE
-	wxWX2MBbuf buf = text.mbc_str();
+        wxWX2MBbuf buf = text.mbc_str();
         gtk_editable_insert_text( GTK_EDITABLE(m_text), buf, strlen(buf), &len );
 #else
         gtk_editable_insert_text( GTK_EDITABLE(m_text), text, text.Length(), &len );
 #endif
-	
-	/* bring editable's cursor uptodate. bug in GTK. */
-	GTK_EDITABLE(m_text)->current_pos += text.Len();
-	
-	/* bring entry's cursor uptodate. bug in GTK. */
-	gtk_entry_set_position( GTK_ENTRY(m_text), GTK_EDITABLE(m_text)->current_pos );
+
+        /* bring editable's cursor uptodate. bug in GTK. */
+        GTK_EDITABLE(m_text)->current_pos += text.Len();
+
+        /* bring entry's cursor uptodate. bug in GTK. */
+        gtk_entry_set_position( GTK_ENTRY(m_text), GTK_EDITABLE(m_text)->current_pos );
     }
 }
 
@@ -380,14 +387,14 @@ void wxTextCtrl::AppendText( const wxString &text )
         /* we'll insert at the last position */
         gint len = gtk_text_get_length( GTK_TEXT(m_text) );
 #if wxUSE_UNICODE
-	wxWX2MBbuf buf = text.mbc_str();
+        wxWX2MBbuf buf = text.mbc_str();
         gtk_editable_insert_text( GTK_EDITABLE(m_text), buf, strlen(buf), &len );
 #else
         gtk_editable_insert_text( GTK_EDITABLE(m_text), text, text.Length(), &len );
 #endif
-	
-	/* bring editable's cursor uptodate. bug in GTK. */
-	GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
+
+        /* bring editable's cursor uptodate. bug in GTK. */
+        GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
     }
     else
     {
@@ -580,7 +587,7 @@ long wxTextCtrl::XYToPosition(long x, long y ) const
     long pos=0;
     for( int i=0; i<y; i++ ) pos += GetLineLength(i) + 1; // one for '\n'
 
-    pos += x; 
+    pos += x;
     return pos;
 }
 
@@ -624,37 +631,37 @@ int wxTextCtrl::GetNumberOfLines() const
 void wxTextCtrl::SetInsertionPoint( long pos )
 {
     wxCHECK_RET( m_text != NULL, _T("invalid text ctrl") );
-    
-    if (m_windowStyle & wxTE_MULTILINE) 
+
+    if (m_windowStyle & wxTE_MULTILINE)
     {
         /* seems to be broken in GTK 1.0.X:
-	   gtk_text_set_point( GTK_TEXT(m_text), (int)pos ); */
-      
+           gtk_text_set_point( GTK_TEXT(m_text), (int)pos ); */
+
         gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
           GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
-      
+
         /* we fake a set_point by inserting and deleting. as the user
-	   isn't supposed to get to know about thos non-sense, we
-	   disconnect so that no events are sent to the user program. */
-      
+           isn't supposed to get to know about thos non-sense, we
+           disconnect so that no events are sent to the user program. */
+
         gint tmp = (gint)pos;
         gtk_editable_insert_text( GTK_EDITABLE(m_text), " ", 1, &tmp );
-	gtk_editable_delete_text( GTK_EDITABLE(m_text), tmp-1, tmp );
-	
+        gtk_editable_delete_text( GTK_EDITABLE(m_text), tmp-1, tmp );
+
         gtk_signal_connect( GTK_OBJECT(m_text), "changed",
           GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
-	  
-	/* bring editable's cursor uptodate. another bug in GTK. */
-	
-	GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
+
+        /* bring editable's cursor uptodate. another bug in GTK. */
+
+        GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
     }
     else
     {
         gtk_entry_set_position( GTK_ENTRY(m_text), (int)pos );
-	
-	/* bring editable's cursor uptodate. bug in GTK. */
-	
-	GTK_EDITABLE(m_text)->current_pos = pos;
+
+        /* bring editable's cursor uptodate. bug in GTK. */
+
+        GTK_EDITABLE(m_text)->current_pos = pos;
     }
 }
 
@@ -960,7 +967,7 @@ void wxTextCtrl::SetBackgroundColour( const wxColour &colour )
     wxCHECK_RET( m_text != NULL, _T("invalid text ctrl") );
 
     wxControl::SetBackgroundColour( colour );
-    
+
     if (!m_widget->window) return;
 
     wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
@@ -976,7 +983,7 @@ void wxTextCtrl::SetBackgroundColour( const wxColour &colour )
     if (m_windowStyle & wxTE_MULTILINE)
     {
         GdkWindow *window = GTK_TEXT(m_text)->text_area;
-	if (!window) return;
+        if (!window) return;
         m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
         gdk_window_set_background( window, m_backgroundColour.GetColor() );
         gdk_window_clear( window );
