@@ -69,10 +69,10 @@ public:
 protected:
 #if wxUSE_STREAMS
     virtual bool DoCanRead( wxInputStream& stream ) = 0;
-#endif // wxUSE_STREAMS
 
     // save the stream position, call DoCanRead() and restore the position
     bool CallDoCanRead(wxInputStream& stream);
+#endif // wxUSE_STREAMS
 
     wxString  m_name;
     wxString  m_extension;
