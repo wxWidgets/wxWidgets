@@ -89,6 +89,7 @@ wxWindowDC::wxWindowDC(void)
     m_userRegion = (WXRegion) 0;
     m_pixmap = (WXPixmap) 0;
     m_autoSetting = 0;
+    m_oldFont = (WXFont) 0;
 };
 
 wxWindowDC::wxWindowDC( wxWindow *window )
@@ -136,10 +137,23 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     }
 
     m_backgroundPixel = (int) gcvalues.background;
+
+    // Get the current Font so we can set it back later
+    XGCValues valReturn;
+    XGetGCValues((Display*) m_display, (GC) m_gc, GCFont, &valReturn);
+    m_oldFont = (WXFont) valReturn.font;
 };
 
 wxWindowDC::~wxWindowDC(void)
 {
+    if ((m_oldFont != (WXFont) 0) && ((long) m_oldFont != -1))
+    {
+      XSetFont ((Display*) m_display, (GC) m_gc, (Font) m_oldFont);
+
+      if (m_window && m_window->GetBackingPixmap())
+          XSetFont ((Display*) m_display,(GC) m_gcBacking, (Font) m_oldFont);
+    }
+
     if (m_gc)
         XFreeGC ((Display*) m_display, (GC) m_gc);
     m_gc = (WXGC) 0;
@@ -1323,7 +1337,16 @@ void wxWindowDC::SetFont( const wxFont &font )
   m_font = font;
 
   if (!m_font.Ok())
+  {
+    if ((m_oldFont != (WXFont) 0) && ((long) m_oldFont != -1))
+    {
+      XSetFont ((Display*) m_display, (GC) m_gc, (Font) m_oldFont);
+
+      if (m_window && m_window->GetBackingPixmap())
+          XSetFont ((Display*) m_display,(GC) m_gcBacking, (Font) m_oldFont);
+    }
     return;
+  }
 
   WXFontStructPtr pFontStruct = m_font.FindOrCreateFontStruct(m_userScaleY*m_logicalScaleY);
 
@@ -1339,7 +1362,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
   if (!Ok()) return;
 
   m_pen = pen;
-  if (m_pen.Ok())
+  if (!m_pen.Ok())
     return;
 
   wxBitmap oldStipple = m_currentStipple;

@@ -56,7 +56,10 @@ wxFontRefData::~wxFontRefData()
     while (node)
     {
         XFontStruct* fontStruct = (XFontStruct*) node->Data();
-        XFreeFont((Display*) wxGetDisplay, fontStruct);
+	// TODO: why does freeing the font produce a segv???
+	// Commenting it out will result in memory leaks, and
+	// maybe X resource problems, who knows...
+	//        XFreeFont((Display*) wxGetDisplay, fontStruct);
         node = node->Next();
     }
     m_fontsByScale.Clear();
@@ -290,6 +293,7 @@ WXFontStructPtr wxFont::FindOrCreateFontStruct(double scale)
 	if (!font)
 	    font = LoadQueryFont(120, wxDEFAULT, wxNORMAL, wxNORMAL,
 				    M_FONTDATA->m_underlined);
+        wxASSERT_MSG( (font != (XFontStruct*) NULL), "Could not allocate even a default font -- something is wrong." );
   }
   if (font)
   {

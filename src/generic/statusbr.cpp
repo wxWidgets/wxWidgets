@@ -62,9 +62,9 @@ wxStatusBar::wxStatusBar(void)
 
 wxStatusBar::~wxStatusBar(void)
 {
-#ifdef __WXMSW__
+  // #ifdef __WXMSW__
     SetFont(wxNullFont);
-#endif
+    // #endif
 
 	if ( m_statusWidths )
 		delete[] m_statusWidths;
@@ -178,6 +178,8 @@ void wxStatusBar::OnPaint(wxPaintEvent& WXUNUSED(event) )
 
   for ( i = 0; i < m_nFields; i ++ )
 	DrawField(dc, i);
+
+  dc.SetFont(wxNullFont);
 }
 
 void wxStatusBar::DrawFieldText(wxDC& dc, int i)

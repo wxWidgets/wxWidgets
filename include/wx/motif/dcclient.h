@@ -118,6 +118,7 @@ protected:
     int          m_currentStyle ;
     int          m_currentFill ;
     int          m_autoSetting ; // See comment in dcclient.cpp
+    WXFont       m_oldFont;
 };
 
 class WXDLLEXPORT wxPaintDC: public wxWindowDC

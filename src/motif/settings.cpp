@@ -18,37 +18,83 @@
 #endif
 
 #include "wx/settings.h"
+#include "wx/gdicmn.h"
 
 wxColour wxSystemSettings::GetSystemColour(int index)
 {
-    // TODO
-    return wxColour();
+  switch (index)
+  {
+    case wxSYS_COLOUR_SCROLLBAR:
+      //    case wxSYS_COLOUR_DESKTOP:          // Same as wxSYS_COLOUR_BACKGROUND
+    case wxSYS_COLOUR_BACKGROUND:
+    case wxSYS_COLOUR_ACTIVECAPTION:
+    case wxSYS_COLOUR_INACTIVECAPTION:
+    case wxSYS_COLOUR_MENU:
+    case wxSYS_COLOUR_WINDOW:
+    case wxSYS_COLOUR_WINDOWFRAME:
+    case wxSYS_COLOUR_ACTIVEBORDER:
+    case wxSYS_COLOUR_INACTIVEBORDER:
+    case wxSYS_COLOUR_BTNFACE:
+      //    case wxSYS_COLOUR_3DFACE:           // Same as wxSYS_COLOUR_BTNFACE
+    case wxSYS_COLOUR_GRAYTEXT:
+    {
+        return wxColour("LIGHT GREY");
+    }
+    case wxSYS_COLOUR_BTNSHADOW:
+      //    case wxSYS_COLOUR_3DSHADOW:         // Same as wxSYS_COLOUR_BTNSHADOW
+    {
+        return wxColour("GREY");
+    }
+    case wxSYS_COLOUR_3DDKSHADOW:
+    {
+        return *wxBLACK;
+    }
+    case wxSYS_COLOUR_HIGHLIGHT:
+    case wxSYS_COLOUR_BTNHIGHLIGHT:
+      //    case wxSYS_COLOUR_3DHIGHLIGHT:      // Same as wxSYS_COLOUR_BTNHIGHLIGHT
+    {
+        return *wxWHITE;
+    }
+    case wxSYS_COLOUR_3DLIGHT:
+    {
+        return wxColour("LIGHT GREY");
+    }
+    case wxSYS_COLOUR_MENUTEXT:
+    case wxSYS_COLOUR_WINDOWTEXT:
+    case wxSYS_COLOUR_CAPTIONTEXT:
+    case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
+    case wxSYS_COLOUR_INFOTEXT:
+    {
+      return *wxBLACK;
+    }
+    case wxSYS_COLOUR_HIGHLIGHTTEXT:
+    {
+      return *wxWHITE;
+    }
+    case wxSYS_COLOUR_INFOBK:
+    case wxSYS_COLOUR_APPWORKSPACE:
+    {
+      return *wxWHITE;
+    }
+  }
+  return *wxWHITE;
 }
 
 wxFont wxSystemSettings::GetSystemFont(int index)
 {
-    // TODO
     switch (index)
     {
-        case wxSYS_DEVICE_DEFAULT_FONT:
-        {
-            break;
-        }
-        case wxSYS_DEFAULT_PALETTE:
-        {
-            break;
-        }
         case wxSYS_SYSTEM_FIXED_FONT:
         {
+            return wxFont(12, wxMODERN, wxNORMAL, wxNORMAL, FALSE);
             break;
         }
+        case wxSYS_DEVICE_DEFAULT_FONT:
         case wxSYS_SYSTEM_FONT:
-        {
-            break;
-        }
-        default:
         case wxSYS_DEFAULT_GUI_FONT:
+        default:
         {
+            return wxFont(12, wxSWISS, wxNORMAL, wxNORMAL, FALSE);
             break;
         }
     }

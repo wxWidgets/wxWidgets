@@ -73,6 +73,7 @@ wxColour::wxColour (const wxString& col)
         m_red = the_colour->Red ();
         m_green = the_colour->Green ();
         m_blue = the_colour->Blue ();
+        m_pixel = the_colour->m_pixel;
         m_isInit = TRUE;
     }
     else
@@ -82,9 +83,6 @@ wxColour::wxColour (const wxString& col)
         m_blue = 0;
         m_isInit = FALSE;
     }
-/* TODO
-    m_pixel = PALETTERGB (m_red, m_green, m_blue);
-*/
 }
 
 wxColour::~wxColour ()
@@ -99,6 +97,7 @@ wxColour& wxColour::operator = (const wxString& col)
         m_red = the_colour->Red ();
         m_green = the_colour->Green ();
         m_blue = the_colour->Blue ();
+        m_pixel = the_colour->m_pixel;
         m_isInit = TRUE;
     }
     else
@@ -108,9 +107,7 @@ wxColour& wxColour::operator = (const wxString& col)
         m_blue = 0;
         m_isInit = FALSE;
     }
-/* TODO
-    m_pixel = PALETTERGB (m_red, m_green, m_blue);
-*/
+
     return (*this);
 }
 
@@ -120,9 +117,7 @@ void wxColour::Set (unsigned char r, unsigned char g, unsigned char b)
     m_green = g;
     m_blue = b;
     m_isInit = TRUE;
-/* TODO
-    m_pixel = PALETTERGB (m_red, m_green, m_blue);
-*/
+    m_pixel = -1;
 }
 
 // Allocate a colour, or nearest colour, using the given display.

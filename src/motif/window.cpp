@@ -419,7 +419,9 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
   XtAddEventHandler ((Widget) m_drawingArea, PointerMotionHintMask | EnterWindowMask | LeaveWindowMask | FocusChangeMask,
     False, (XtEventHandler) wxCanvasEnterLeave, (XtPointer) this);
 
-    return TRUE;
+  SetSize(pos.x, pos.y, size.x, size.y);
+
+  return TRUE;
 }
 
 void wxWindow::SetFocus()
@@ -759,6 +761,8 @@ void wxWindow::Refresh(bool eraseBack, const wxRectangle *rect)
     if (eraseBack)
     {
         wxClientDC dc(this);
+        wxBrush backgroundBrush(GetBackgroundColour(), wxSOLID);
+        dc.SetBackground(backgroundBrush);
         dc.Clear();
     }
 
@@ -1553,7 +1557,7 @@ void wxWindow::OnDefaultAction(wxControl *initiatingItem)
 
 void wxWindow::Clear()
 {
-	wxClientDC dc(this);
+    wxClientDC dc(this);
     wxBrush brush(GetBackgroundColour(), wxSOLID);
     dc.SetBackground(brush);
     dc.Clear();

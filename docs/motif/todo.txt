@@ -11,6 +11,9 @@ Updated: 21/9/98
   libxpm exists and use that? What about PNGs? Can we use gdk
   as per wxGTK? Probably not.
 
+- Work out why XFreeFont in font.cpp produces a segv. This is
+  currently commented out, which presumably causes a memory leak.
+
 - wxRegion
 
 - Bitmap versions of widgets (wxBitmapButton etc.)

@@ -901,6 +901,7 @@ typedef void*           WXPixmap;
 typedef void*           WXFontStructPtr;
 typedef void*           WXGC;
 typedef void*           WXRegion;
+typedef void*           WXFont;
 #endif
 
 #endif
