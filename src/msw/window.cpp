@@ -97,7 +97,7 @@
 
 #include <string.h>
 
-#if (!defined(__GNUWIN32_OLD__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)) || defined(__CYGWIN10__)
+#if (!defined(__GNUWIN32_OLD__) && !defined(__WXMICROWIN__) /* && !defined(__WXWINCE__) */ ) || defined(__CYGWIN10__)
     #include <shellapi.h>
     #include <mmsystem.h>
 #endif
@@ -106,7 +106,7 @@
     #include <windowsx.h>
 #endif
 
-#if (!defined(__GNUWIN32_OLD__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)) || defined(__CYGWIN10__)
+#if (!defined(__GNUWIN32_OLD__) && !defined(__WXMICROWIN__) /* && !defined(__WXWINCE__) */ ) || defined(__CYGWIN10__)
     #ifdef __WIN95__
         #include <commctrl.h>
     #endif

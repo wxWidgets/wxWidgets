@@ -210,5 +210,5 @@ web site.
 
 Have fun!
 
-The wxWindows Team, September 2003
+The wxWindows Team, February 2004
 

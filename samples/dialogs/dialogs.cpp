@@ -140,7 +140,7 @@ bool MyApp::OnInit()
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
-
+  
   file_menu->Append(DIALOGS_CHOOSE_COLOUR, _T("&Choose colour"));
 
 #if defined(__WXMSW__) && wxTEST_GENERIC_DIALOGS_IN_MSW

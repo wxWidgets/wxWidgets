@@ -161,7 +161,7 @@ wxMSW:
 - fixed wxListCtrl::GetItemText/BackgroundColour()
 - Esc can now be used to close menus in the dialogs (Hartmut Honisch)
 - Added msw.remap system option so colourful toolbar buttons
-  aren't mangled if you set it to 0
+  aren't mangled if you set it to 0. The default is 1
 - Toolbar buttons are now centred if the bitmap size is smaller
   than the specified default size
 

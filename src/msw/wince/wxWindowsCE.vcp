@@ -2334,7 +2334,7 @@ SOURCE=..\volume.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\wave.cpp
+SOURCE=..\sound.cpp
 
 
 # End Source File

@@ -41,6 +41,7 @@
 #endif
 
 #include "wx/msw/private.h" // needs to be before #include <commdlg.h>
+#include "wx/msw/missing.h" // needs to be before #include <commdlg.h>
 
 #include "wx/sysopt.h"
 #include "wx/dcprint.h"
@@ -785,6 +786,9 @@ wxDC::DoDrawPolyPolygon(int n,
                         wxCoord yoffset,
                         int fillStyle)
 {
+#ifdef __WXWINCE__
+    wxDCBase::DoDrawPolyPolygon(n, start, points, xoffset, yoffset, fillStyle);
+#else    
     WXMICROWIN_CHECK_HDC
 
     wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
@@ -803,9 +807,13 @@ wxDC::DoDrawPolyPolygon(int n,
 
             CalcBoundingBox(cpoints[i].x, cpoints[i].y);
         }
+#ifndef __WXWINCE__
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
+#endif        
         (void)PolyPolygon(GetHdc(), cpoints, start, n);
+#ifndef __WXWINCE__
         SetPolyFillMode(GetHdc(),prev);
+#endif        
         delete[] cpoints;
     }
     else
@@ -813,10 +821,16 @@ wxDC::DoDrawPolyPolygon(int n,
         for (i = 0; i < cnt; i++)
             CalcBoundingBox(points[i].x, points[i].y);
 
+#ifndef __WXWINCE__
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
+#endif        
         (void)PolyPolygon(GetHdc(), (POINT*) points, start, n);
+#ifndef __WXWINCE__
         SetPolyFillMode(GetHdc(),prev);
+#endif        
     }
+#endif
+  // __WXWINCE__
 }
 
 void wxDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)

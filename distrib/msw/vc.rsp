@@ -7,6 +7,8 @@ src/wxUniv.dsp
 src/wxUniv.dsw
 src/wxBase.dsp
 src/wxBase.dsw
+src/msw/wince/wxWindowsCE.vcp
+src/msw/wince/wxWindowsCE.vcw
 
 src/jpeg/jpeg.dsp
 src/jpeg/jpeg.dsw
@@ -61,6 +63,8 @@ samples/dialogs/dialogs.dsp
 samples/dialogs/dialogs.dsw
 samples/dialogs/dialogsUniv.dsp
 samples/dialogs/dialogsUniv.dsw
+samples/dialogs/dialogsCE.vcp
+samples/dialogs/dialogsCE.vcw
 
 samples/dialup/dialup.dsp
 samples/dialup/dialup.dsw
@@ -165,6 +169,8 @@ samples/mfc/mfc.dsw
 samples/minimal/minimal.dsp
 samples/minimal/minimal.dsw
 samples/minimal/minimalUniv.dsp
+samples/minimal/minimalCE.vcp
+samples/minimal/minimalCE.vcw
 
 samples/minifram/minifram.dsp
 samples/minifram/minifram.dsw
@@ -264,6 +270,8 @@ samples/wxtest/wxtest.dsw
 samples/widgets/widgets.dsp
 samples/widgets/widgets.dsw
 samples/widgets/widgetsUniv.dsp
+samples/widgets/widgetsCE.vcp
+samples/widgets/widgetsCE.vcw
 
 samples/opengl/cube/cube.dsp
 samples/opengl/cube/cube.dsw
@@ -274,6 +282,8 @@ samples/opengl/penguin/penguin.dsw
 
 demos/bombs/bombs.dsp
 demos/bombs/bombs.dsw
+demos/bombs/bombsCE.vcp
+demos/bombs/bombsCE.vcw
 
 demos/dbbrowse/dbbrowse.dsp
 demos/dbbrowse/dbbrowse.dsw
@@ -286,9 +296,13 @@ demos/fractal/fractal.dsw
 
 demos/life/life.dsp
 demos/life/life.dsw
+demos/life/lifeCE.vcp
+demos/life/lifeCE.vcw
 
 demos/poem/poem.dsp
 demos/poem/poem.dsw
+demos/poem/poemCE.vcp
+demos/poem/poemCE.vcw
 
 utils/tex2rtf/src/Tex2RTFVC.dsp
 utils/tex2rtf/src/Tex2RTFVC.dsw

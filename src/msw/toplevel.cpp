@@ -41,8 +41,6 @@
 #include "wx/module.h"
 
 #include "wx/msw/private.h"
-#include "wx/msw/missing.h"
-
 #if defined(__WXWINCE__)
   #include <ole2.h>
   #include <shellapi.h>
@@ -52,6 +50,7 @@
 #include "wx/msw/wince/missing.h"
 #endif
 
+#include "wx/msw/missing.h"
 #include "wx/msw/winundef.h"
 
 // This can't be undefed in winundef.h or

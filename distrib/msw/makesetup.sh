@@ -2,7 +2,7 @@
 
 # Make a distribution of an application on MSW.
 # Example:
-# ../distrib/msw/makesetup.sh --wxmsw --verbose 2>&1 | cat > log
+# ../distrib/msw/makesetup.sh --wxmsw --verbose &> | cat > log
 
 # If your zip accepts Cygwin-style paths, then
 # use cygpath, else substitute echo
@@ -347,7 +347,7 @@ dospinsetup()
     rm -f docs/html/wxbook.htm docs/html/roadmap.htm
     rm -f -r contrib/docs/latex/ogl
     rm -f src/mingegcs.bat
-    rm -f distrib
+    rm -f -r distrib
     rm -f *.spec
     rm -f -r contrib/utils/wxrcedit
 

@@ -28,7 +28,7 @@
 // this is ugly but what else can we do? even testing for compiler version
 // wouldn't help as you can perfectly well be using an older compiler (VC6)
 // with newer SDK headers
-#ifndef __WIN64__
+#if !defined(__WIN64__) && !defined(__WXWINCE__)
     #define UINT_PTR unsigned int
     #define ULONG_PTR unsigned long
     #define DWORD_PTR unsigned long

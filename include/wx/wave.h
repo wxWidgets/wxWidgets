@@ -17,8 +17,10 @@
 #if wxUSE_SOUND
 
 #if WXWIN_COMPATIBILITY_2_4
-#ifdef __DMC__
+#if defined(__DMC__) || defined(__BORLANDC__)
     #pragma message "wx/wave.h header is deprecated, use wx/sound.h and wxSound"
+#elif defined(__WATCOMC__)
+    #pragma message ("wx/wave.h header is deprecated, use wx/sound.h and wxSound")
 #else
     #warning "wx/wave.h header is deprecated, use wx/sound.h and wxSound"
 #endif
