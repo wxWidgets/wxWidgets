@@ -83,7 +83,7 @@
 #endif // wxUSE_IPC
 
 // implemented in utils.cpp
-extern "C" HWND
+extern "C" WXDLLIMPEXP_BASE HWND
 wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
 
 // ----------------------------------------------------------------------------

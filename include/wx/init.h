@@ -47,8 +47,8 @@ extern int WXDLLIMPEXP_BASE wxEntry(int& argc, wxChar **argv);
 // we overload wxEntry[Start]() to take "char **" pointers too
 #if wxUSE_UNICODE
 
-extern bool wxEntryStart(int& argc, char **argv);
-extern int wxEntry(int& argc, char **argv);
+extern bool WXDLLIMPEXP_BASE wxEntryStart(int& argc, char **argv);
+extern int WXDLLIMPEXP_BASE wxEntry(int& argc, char **argv);
 
 #endif// wxUSE_UNICODE
 

@@ -38,7 +38,7 @@
 #include "wx/msw/private.h"
 
 // from utils.cpp
-extern "C" HWND
+extern "C" WXDLLIMPEXP_BASE HWND
 wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
 
 // ----------------------------------------------------------------------------

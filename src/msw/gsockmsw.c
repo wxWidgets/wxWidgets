@@ -86,7 +86,7 @@ HINSTANCE wxGetInstance(void);
 #define CLASSNAME  TEXT("_GSocket_Internal_Window_Class")
 
 /* implemented in utils.cpp */
-extern HWND
+extern WXDLLIMPEXP_BASE HWND
 wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
 
 /* Maximum number of different GSocket objects at a given time.
