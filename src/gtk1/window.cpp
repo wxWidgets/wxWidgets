@@ -510,6 +510,22 @@ static int gtk_window_expose_callback( GtkWidget *widget,
     }
 #endif
 
+#ifdef __WXGTK20__
+    // This callback gets called in drawing-idle time under
+    // GTK 2.0, so we don't need to defer anything to idle
+    // time anymore.
+    
+    win->GetUpdateRegion() = wxRegion( gdk_event->region );
+
+    win->GtkSendPaintEvents();
+
+    // Draw window less widgets
+    (* GTK_WIDGET_CLASS (pizza_parent_class)->expose_event) (widget, gdk_event);
+#else
+    // This gets called immediately after an expose event
+    // under GTK 1.2 so we collect the calls and wait for
+    // the idle handler to pick things up.
+    
     win->GetUpdateRegion().Union( gdk_event->area.x,
                                   gdk_event->area.y,
                                   gdk_event->area.width,
@@ -521,12 +537,8 @@ static int gtk_window_expose_callback( GtkWidget *widget,
 
     // Actual redrawing takes place in idle time.
     // win->GtkUpdate();
-
-#ifdef __WXGTK20__
-
-    (* GTK_WIDGET_CLASS (pizza_parent_class)->expose_event) (widget, gdk_event);
-
 #endif
+
 
     return TRUE;
 }
@@ -3142,8 +3154,8 @@ void wxWindowGTK::GetTextExtent( const wxString& string,
     
     if (string.IsEmpty())
     {
-        if (x) (*y) = 0;
-        if (x) (*y) = 0;
+        if (x) (*x) = 0;
+        if (y) (*y) = 0;
         return;
     }
 #ifdef __WXGTK20__
@@ -3154,8 +3166,8 @@ void wxWindowGTK::GetTextExtent( const wxString& string,
         
     if (!context)
     {
-        if (x) (*y) = 0;
-        if (x) (*y) = 0;
+        if (x) (*x) = 0;
+        if (y) (*y) = 0;
         return;
     }
     
@@ -3171,8 +3183,8 @@ void wxWindowGTK::GetTextExtent( const wxString& string,
     PangoRectangle rect;
     pango_layout_line_get_extents(line, NULL, &rect);
        
-    if (x) (*x) = (wxCoord) rect.width;
-    if (y) (*y) = (wxCoord) rect.height;
+    if (x) (*x) = (wxCoord) (rect.width / PANGO_SCALE);
+    if (y) (*y) = (wxCoord) (rect.height / PANGO_SCALE);
     if (descent)
     {
         // Do something about metrics here
@@ -3436,28 +3448,31 @@ void wxWindowGTK::GtkUpdate()
 #ifdef __WXGTK20__
     if (m_wxwindow && GTK_PIZZA(m_wxwindow)->bin_window)
         gdk_window_process_updates( GTK_PIZZA(m_wxwindow)->bin_window, FALSE );
-#endif
-
+#else
     if (!m_updateRegion.IsEmpty())
         GtkSendPaintEvents();
+#endif
 }
 
 void wxWindowGTK::GtkSendPaintEvents()
 {
     if (!m_wxwindow)
     {
+#ifndef __WXGTK20__    
         m_clearRegion.Clear();
+#endif
         m_updateRegion.Clear();
         return;
     }
 
-    // widget to draw on
-    GtkPizza *pizza = GTK_PIZZA (m_wxwindow);
-            
     // Clip to paint region in wxClientDC
     m_clipPaintRegion = TRUE;
 
-#ifndef __WXGTK20__    
+#ifndef __WXGTK20__
+    // widget to draw on
+    GtkPizza *pizza = GTK_PIZZA (m_wxwindow);
+            
+    // later for GTK 2.0, too.
     if (GetThemeEnabled())
     {
         // find ancestor from which to steal background
@@ -3490,9 +3505,19 @@ void wxWindowGTK::GtkSendPaintEvents()
     }
     else
 #endif
-#ifdef __WXGTK20__    
-    if (!m_clearRegion.IsEmpty())   // Always send an erase event under GTK 1.2
-#endif
+
+#ifdef __WXGTK20__
+    {
+        wxWindowDC dc( (wxWindow*)this );
+        dc.SetClippingRegion( m_updateRegion );
+
+        wxEraseEvent erase_event( GetId(), &dc );
+        erase_event.SetEventObject( this );
+
+        GetEventHandler()->ProcessEvent(erase_event);
+    }
+#else
+    // if (!m_clearRegion.IsEmpty())   // Always send an erase event under GTK 1.2
     {
         wxWindowDC dc( (wxWindow*)this );
         if (m_clearRegion.IsEmpty())
@@ -3505,7 +3530,6 @@ void wxWindowGTK::GtkSendPaintEvents()
 
         if (!GetEventHandler()->ProcessEvent(erase_event))
         {
-#ifndef __WXGTK20__    
             if (!g_eraseGC)
             {
                 g_eraseGC = gdk_gc_new( pizza->bin_window );
@@ -3520,10 +3544,10 @@ void wxWindowGTK::GtkSendPaintEvents()
                                     upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
                 upd ++;
             }
-#endif
         }
         m_clearRegion.Clear();
     }
+#endif
 
     wxNcPaintEvent nc_paint_event( GetId() );
     nc_paint_event.SetEventObject( this );
@@ -3586,6 +3610,7 @@ void wxWindowGTK::Clear()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
 
+#ifndef __WXGTK20__
     if (m_wxwindow && m_wxwindow->window)
     {
         m_clearRegion.Clear();
@@ -3595,6 +3620,7 @@ void wxWindowGTK::Clear()
         // Better do this in idle?
         GtkUpdate();
     }
+#endif
 }
 
 #if wxUSE_TOOLTIPS

@@ -95,6 +95,12 @@ void wxRegion::InitRect(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 #endif
 }
 
+wxRegion::wxRegion( GdkRegion *region )
+{
+    m_refData = new wxRegionRefData();
+    M_REGIONDATA->m_region = gdk_region_copy( region );
+}
+
 wxRegion::wxRegion( size_t n, const wxPoint *points, int fillStyle )
 {
     GdkPoint *gdkpoints = new GdkPoint[n];
