@@ -766,23 +766,9 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
  */
 GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 {
-  GSocketEventFlags result = 0;
-
   assert(socket != NULL);
 
-  result = flags & socket->m_detected;
-
-  /* Explicitly check for input events */
-  if ((flags & GSOCK_INPUT_FLAG) && (socket->m_fd != INVALID_SOCKET))
-  {
-    u_long arg = 0;
-    int ret    = ioctlsocket(socket->m_fd, FIONREAD, (u_long FAR *) &arg);
-
-    if ((ret == 0) && (arg > 0))
-      result |= GSOCK_INPUT_FLAG;
-  }
-
-  return result;
+  return flags & socket->m_detected;
 }
 
 /* Attributes */
