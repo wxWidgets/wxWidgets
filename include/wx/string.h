@@ -1287,7 +1287,7 @@ public:
 
 #if wxUSE_STL
     // return an empty wxString (not very useful with wxUSE_STL == 1)
-    inline const wxString wxGetEmptyString() { wxString(); }
+    inline const wxString wxGetEmptyString() { return wxString(); }
 #else // !wxUSE_STL
     // return an empty wxString (more efficient than wxString() here)
     inline const wxString& wxGetEmptyString()
