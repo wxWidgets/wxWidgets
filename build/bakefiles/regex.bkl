@@ -28,6 +28,7 @@
         <define>$(UNICODE_DEFINE)</define>
         <dirname>$(LIBDIRNAME)</dirname>
         <cflags-borland>-w-8008 -w-8012 -w-8057 -w-8064 -w-8066 -w-8070</cflags-borland>
+        <cflags-dmars>-w12</cflags-dmars>
         <sources>
             src/regex/regcomp.c
             src/regex/regexec.c

@@ -33,6 +33,7 @@
         <include>$(INC_ZLIB)</include>
         <include>$(INC_JPEG)</include>
         <cflags-borland>-w-8004 -w-8012 -w-8057 -w-8060 -w-8066</cflags-borland>
+        <cflags-dmars>-w2</cflags-dmars>
         <sources>
             $(TIFF_PLATFORM_SRC)
 		    src/tiff/tif_aux.c
