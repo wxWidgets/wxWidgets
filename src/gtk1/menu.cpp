@@ -58,12 +58,7 @@ extern bool g_isIdle;
 // substitute for missing GtkPixmapMenuItem
 //-----------------------------------------------------------------------------
 
-// FIXME: I can't make this compile with GTK+ 2.0, disabling for now (VZ)
-//#ifndef __WXGTK20__
-    #define USE_MENU_BITMAPS
-//#endif
-
-#ifdef USE_MENU_BITMAPS
+#ifndef __WXGTK20__
 
 #define GTK_TYPE_PIXMAP_MENU_ITEM            (gtk_pixmap_menu_item_get_type ())
 #define GTK_PIXMAP_MENU_ITEM(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_PIXMAP_MENU_ITEM, GtkPixmapMenuItem))
@@ -91,9 +86,7 @@ struct _GtkPixmapMenuItemClass
 {
     GtkMenuItemClass parent_class;
 
-#ifndef __WXGTK20__
     guint orig_toggle_size;
-#endif
     guint have_pixmap_count;
 };
 
@@ -102,8 +95,7 @@ GtkType    gtk_pixmap_menu_item_get_type       (void);
 GtkWidget* gtk_pixmap_menu_item_new            (void);
 void       gtk_pixmap_menu_item_set_pixmap     (GtkPixmapMenuItem *menu_item,
                                                                     GtkWidget *pixmap);
-
-#endif // USE_MENU_BITMAPS
+#endif // GTK 2.0
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -1184,9 +1176,10 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         if ( m_invokingWindow )
             wxMenubarSetInvokingWindow(mitem->GetSubMenu(), m_invokingWindow);
     }
-#ifdef USE_MENU_BITMAPS
-    else if (mitem->GetBitmap().Ok()) // An item with bitmap
+#ifndef __WXGTK20__
+    else if (mitem->GetBitmap().Ok())
     {
+        // Our extra code for Bitmaps in GTK 1.2
         wxString text( mitem->GetText() );
         const wxBitmap *bitmap = &mitem->GetBitmap();
 
@@ -1194,6 +1187,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         GtkWidget *label = gtk_accel_label_new ( wxGTK_CONV( text ) );
         gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
         gtk_container_add (GTK_CONTAINER (menuItem), label);
+        
         guint accel_key = gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV( text ) );
         gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (label), menuItem);
         if (accel_key != GDK_VoidSymbol)
@@ -1204,6 +1198,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
                                         accel_key, (GdkModifierType) 0,
                                         GTK_ACCEL_LOCKED);
         }
+            
         gtk_widget_show (label);
 
         mitem->SetLabelWidget(label);
@@ -1212,7 +1207,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         gtk_widget_show(pixmap);
         gtk_pixmap_menu_item_set_pixmap(GTK_PIXMAP_MENU_ITEM( menuItem ), pixmap);
 
-        gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
+        gtk_signal_connect( GTK_OBJECT(menuItem), "activate_item",
                             GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
                             (gpointer)this );
 
@@ -1221,7 +1216,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 
         appended = TRUE; // We've done this, don't do it again
     }
-#endif // USE_MENU_BITMAPS
+#endif 
     else // a normal item
     {
         // text has "_" instead of "&" after mitem->SetText() so don't use it
@@ -1272,12 +1267,70 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
                 endOfRadioGroup = FALSE;
                 break;
 
+
             default:
                 wxFAIL_MSG( _T("unexpected menu item kind") );
                 // fall through
 
             case wxITEM_NORMAL:
                 item_type = "<Item>";
+#ifdef __WXGTK20__                
+                if (mitem->GetBitmap().Ok())
+                {
+                    item_type = "<ImageItem>";
+                    // GTK2's image factory know about image items, but they need to
+                    // get a GdkPixbuf structure, which we need to create on the fly.
+                    // This Pixbuf structure needs to be static so we create it and
+                    // just make it a memory leak...
+                    wxImage image( mitem->GetBitmap() );
+                    size_t size = 4 +   // magic
+                                  20 +  // header
+                                  image.GetHeight() * image.GetWidth() * 4; // RGBA
+
+                    unsigned char *dest = new unsigned char[size];
+                    entry.extra_data = dest;
+
+                    unsigned char *source = image.GetData();
+                    bool has_mask = image.HasMask();
+                    unsigned char mask_r = image.GetMaskRed();
+                    unsigned char mask_b = image.GetMaskBlue();
+                    unsigned char mask_g = image.GetMaskGreen();
+                    wxUint32 tmp;
+                    
+                    // Magic
+                    *dest = 'G'; dest++; *dest = 'd'; dest++; *dest = 'k'; dest++; *dest = 'P'; dest++;
+                    // Data size                    
+                    tmp = size;
+                    *dest = tmp >> 24; dest++; *dest = tmp >> 16; dest++; *dest = tmp >> 8; dest++; *dest = tmp; dest++;
+                    // Pixdata type
+                    *dest = 1; dest++; *dest = 1; dest++; *dest = 0; dest++; *dest = 2; dest++;  
+                    // Rowstride
+                    tmp = image.GetWidth()*4;
+                    *dest = tmp >> 24; dest++; *dest = tmp >> 16; dest++; *dest = tmp >> 8; dest++; *dest = tmp; dest++;
+                    // Width
+                    tmp = image.GetWidth();
+                    *dest = tmp >> 24; dest++; *dest = tmp >> 16; dest++; *dest = tmp >> 8; dest++; *dest = tmp; dest++;
+                    // Height
+                    tmp = image.GetHeight();
+                    *dest = tmp >> 24; dest++; *dest = tmp >> 16; dest++; *dest = tmp >> 8; dest++; *dest = tmp; dest++;
+
+                    for (int i = 0; i < image.GetWidth()*image.GetHeight(); i++)
+                    {
+                        unsigned char r = *source; source++;
+                        unsigned char g = *source; source++;
+                        unsigned char b = *source; source++;
+                        *dest = r; dest++;
+                        *dest = g; dest++;
+                        *dest = b; dest++;
+                        if (has_mask && (r == mask_r)  && (g == mask_g)  && (b == mask_b))
+                             *dest = 0;
+                        else
+                             *dest = 255;
+                        dest++;
+                    }
+                    break;
+                }
+#endif
                 break;
         }
 
@@ -1504,7 +1557,7 @@ static wxString GetHotKey( const wxMenuItem& item )
 // substitute for missing GtkPixmapMenuItem
 //-----------------------------------------------------------------------------
 
-#ifdef USE_MENU_BITMAPS
+#ifndef __WXGTK20__ 
 
 /*
  * Copyright (C) 1998, 1999, 2000 Free Software Foundation
@@ -1544,16 +1597,10 @@ extern "C"
 
 static void gtk_pixmap_menu_item_class_init    (GtkPixmapMenuItemClass *klass);
 static void gtk_pixmap_menu_item_init          (GtkPixmapMenuItem      *menu_item);
-#ifndef __WXGTK20__
 static void gtk_pixmap_menu_item_draw          (GtkWidget              *widget,
                                                 GdkRectangle           *area);
-#endif
 static gint gtk_pixmap_menu_item_expose        (GtkWidget              *widget,
                                                 GdkEventExpose         *event);
-#ifdef __WXGTK20__
-static void gtk_pixmap_menu_item_toggle_size_request (GtkMenuItem      *menu_item,
-                                                      gint              *requisition);
-#endif
 
 /* we must override the following functions */
 
@@ -1635,24 +1682,16 @@ gtk_pixmap_menu_item_class_init (GtkPixmapMenuItemClass *klass)
 
   parent_class = (GtkMenuItemClass*) gtk_type_class (gtk_menu_item_get_type ());
 
-#ifndef __WXGTK20__
   widget_class->draw = gtk_pixmap_menu_item_draw;
-#endif
   widget_class->expose_event = gtk_pixmap_menu_item_expose;
   widget_class->map = gtk_pixmap_menu_item_map;
   widget_class->size_allocate = gtk_pixmap_menu_item_size_allocate;
   widget_class->size_request = gtk_pixmap_menu_item_size_request;
 
-#ifdef __WXGTK20__
-  menu_item_class->toggle_size_request = gtk_pixmap_menu_item_toggle_size_request;
-#endif
-
   container_class->forall = gtk_pixmap_menu_item_forall;
   container_class->remove = gtk_pixmap_menu_item_remove;
 
-#ifndef __WXGTK20__
   klass->orig_toggle_size = menu_item_class->toggle_size;
-#endif
   klass->have_pixmap_count = 0;
 }
 
@@ -1666,18 +1705,6 @@ gtk_pixmap_menu_item_init (GtkPixmapMenuItem *menu_item)
   menu_item->pixmap = NULL;
 }
 
-#ifdef __WXGTK20__
-static void
-gtk_pixmap_menu_item_toggle_size_request (GtkMenuItem *menu_item,
-					 gint        *requisition)
-{
-  g_return_if_fail (GTK_IS_PIXMAP_MENU_ITEM (menu_item));
-
-  *requisition = 20; // HACK
-}
-#endif
-
-#ifndef __WXGTK20__
 static void
 gtk_pixmap_menu_item_draw (GtkWidget    *widget,
                            GdkRectangle *area)
@@ -1694,7 +1721,6 @@ gtk_pixmap_menu_item_draw (GtkWidget    *widget,
     gtk_widget_draw(GTK_WIDGET(GTK_PIXMAP_MENU_ITEM(widget)->pixmap),NULL);
   }
 }
-#endif
 
 static gint
 gtk_pixmap_menu_item_expose (GtkWidget      *widget,
@@ -1710,32 +1736,8 @@ gtk_pixmap_menu_item_expose (GtkWidget      *widget,
   if (GTK_WIDGET_DRAWABLE (widget) &&
       GTK_PIXMAP_MENU_ITEM(widget)->pixmap)
   {
-#ifdef __WXGTK20__
-    // We draw ourselves
-    GtkPixmap *gpm = GTK_PIXMAP( GTK_PIXMAP_MENU_ITEM(widget)->pixmap );
-    GdkPixmap *pixmap = gpm->pixmap;
-    GdkBitmap *mask = gpm->mask;
-
-    if (mask)
-    {
-	   gdk_gc_set_clip_mask(widget->style->black_gc, mask);
-       gdk_gc_set_clip_origin (widget->style->black_gc, 2, widget->allocation.y+2);
-	}
-    
-    gdk_draw_pixmap (widget->window,
-	   	           widget->style->black_gc,
-		           pixmap,
-		           0, 0, 2, widget->allocation.y+2, -1, -1);
-                  
-    if (mask)
-    {
-      gdk_gc_set_clip_mask (widget->style->black_gc, NULL);
-      gdk_gc_set_clip_origin (widget->style->black_gc, 0, 0);
-    }
-#else
     // Use GtkPixmap for drawing
     gtk_widget_draw(GTK_WIDGET(GTK_PIXMAP_MENU_ITEM(widget)->pixmap),NULL);
-#endif
   }
 
   return FALSE;
@@ -1904,7 +1906,6 @@ gtk_pixmap_menu_item_remove (GtkContainer *container,
 static void
 changed_have_pixmap_status (GtkPixmapMenuItem *menu_item)
 {
-#ifndef __WXGTK20__
   if (menu_item->pixmap != NULL) {
     GTK_PIXMAP_MENU_ITEM_GET_CLASS(menu_item)->have_pixmap_count += 1;
 
@@ -1920,7 +1921,6 @@ changed_have_pixmap_status (GtkPixmapMenuItem *menu_item)
       GTK_MENU_ITEM_GET_CLASS(menu_item)->toggle_size = GTK_PIXMAP_MENU_ITEM_GET_CLASS(menu_item)->orig_toggle_size;
     }
   }
-#endif
 
   /* Note that we actually need to do this for _all_ GtkPixmapMenuItem
      whenever the klass->toggle_size changes; but by doing it anytime
@@ -1931,5 +1931,5 @@ changed_have_pixmap_status (GtkPixmapMenuItem *menu_item)
     gtk_widget_queue_resize(GTK_WIDGET(menu_item));
 }
 
-#endif // USE_MENU_BITMAPS
+#endif // __WXGTK20__
 
