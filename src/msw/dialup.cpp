@@ -44,12 +44,7 @@
 
 #include "wx/msw/private.h"  // must be before #include "dynlib.h"
 
-#if wxUSE_DYNAMIC_LOADER || wxUSE_DYNLIB_CLASS
 #include "wx/dynlib.h"
-#else
-#error You need wxUSE_DYNAMIC_LOADER to be 1 to compile dialup.cpp.
-#endif
-
 #include "wx/dialup.h"
 
 DEFINE_EVENT_TYPE(wxEVT_DIALUP_CONNECTED)

@@ -19,8 +19,30 @@
  */
 #define wxABORT_ON_CONFIG_ERROR
 
+
+
 /*
-   all these tests are for GUI onlu
+   tests for non GUI features
+ */
+
+#ifndef wxUSE_DYNLIB_CLASS
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_DYNLIB_CLASS must be defined."
+#   else
+#       define wxUSE_DYNLIB_CLASS 0
+#   endif
+#endif /* !defined(wxUSE_DYNLIB_CLASS) */
+
+#ifndef wxUSE_DYNAMIC_LOADER
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_DYNAMIC_LOADER must be defined."
+#   else
+#       define wxUSE_DYNAMIC_LOADER 0
+#   endif
+#endif /* !defined(wxUSE_DYNAMIC_LOADER) */
+
+/*
+   all these tests are for GUI only
  */
 #if wxUSE_GUI
 
@@ -541,14 +563,6 @@
 #   endif
 #endif /* !defined(wxUSE_UNICODE) */
 
-#if defined(__WXMSW__) && !defined(wxUSE_UNICODE_MSLU)
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_UNICODE_MSLU must be defined."
-#   else
-#       define wxUSE_UNICODE_MSLU 0
-#   endif
-#endif /* !defined(wxUSE_UNICODE) */
-
 /*
    check consistency of the settings
  */
@@ -668,6 +682,48 @@
 #       endif
 #   endif
 #endif /* wxGTK && !wxUniv */
+
+/* wxMSW-specific dependencies */
+#ifdef __WXMSW__
+#   ifndef wxUSE_UNICODE_MSLU
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_UNICODE_MSLU must be defined."
+#       else
+#           define wxUSE_UNICODE_MSLU 0
+#       endif
+#   endif  /* wxUSE_UNICODE_MSLU */
+#   ifndef wxUSE_MS_HTML_HELP
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_MS_HTML_HELP must be defined."
+#       else
+#           define wxUSE_MS_HTML_HELP 0
+#       endif
+#   endif /* !defined(wxUSE_MS_HTML_HELP) */
+#   ifndef wxUSE_DIALUP_MANAGER
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_DIALUP_MANAGER must be defined."
+#       else
+#           define wxUSE_DIALUP_MANAGER 0
+#       endif
+#   endif /* !defined(wxUSE_DIALUP_MANAGER) */
+
+#   if !(wxUSE_DYNAMIC_LOADER || wxUSE_DYNLIB_CLASS)
+#       if wxUSE_MS_HTML_HELP
+#           ifdef wxABORT_ON_CONFIG_ERROR
+#               error "wxUSE_MS_HTML_HELP requires wxUSE_DYNAMIC_LOADER."
+#           else
+#               define wxUSE_DYNAMIC_LOADER 1
+#           endif
+#       endif
+#       if wxUSE_DIALUP_MANAGER
+#           ifdef wxABORT_ON_CONFIG_ERROR
+#               error "wxUSE_DIALUP_MANAGER requires wxUSE_DYNAMIC_LOADER."
+#           else
+#               define wxUSE_DYNAMIC_LOADER 1
+#           endif
+#       endif
+#   endif  /* wxUSE_DYNAMIC_LOADER */
+#endif /* wxMSW */
 
 /* wxMotif-specific dependencies */
 #if defined(__WXMOTIF__) && wxUSE_NOTEBOOK && !wxUSE_TAB_DIALOG
@@ -853,7 +909,7 @@
 #       error "wxUSE_DYNAMIC_CLASSES must be defined as 1"
 #   else
 #       undef wxUSE_DYNAMIC_CLASSES
-#       define wxUSE_DYNAMIC_CLASSES
+#       define wxUSE_DYNAMIC_CLASSES 1
 #   endif
 #endif /* wxUSE_DYNAMIC_CLASSES */
 

@@ -82,10 +82,7 @@
 #include "wx/config.h"          // for wxExpandEnvVars
 #include "wx/utils.h"
 #include "wx/file.h"
-
-#if wxUSE_DYNAMIC_LOADER || wxUSE_DYNLIB_CLASS
-#include "wx/dynlib.h"
-#endif
+//#include "wx/dynlib.h"        // see GetLongPath below, code disabled.
 
 // For GetShort/LongPathName
 #ifdef __WIN32__
