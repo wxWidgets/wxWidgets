@@ -30,6 +30,7 @@
 
 #include "wx/window.h"
 #include "wx/dc.h"
+#include "wx/dcclient.h"
 
 #ifdef __WXGTK20__
     #include "wx/settings.h"
