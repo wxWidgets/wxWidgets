@@ -718,7 +718,9 @@ binary-common:
 
 	@# Don't strip debug libs at all, and strip cross libs elsewhere
 	@# with the cross host tools until dh_strip gets smarter.
-	dh_strip -N$(package_gtk_dbg) -N$(package_wxbase_dbg) -N$(package_wxbase_msw_dbg) -N$(package_msw_dbg)
+	dh_strip -N$(package_gtk_dbg) -N$(package_wxbase_dbg) \
+		 -N$(package_wxbase_msw_dev) -N$(package_wxbase_msw_dbg) \
+		 -N$(package_msw_dev) -N$(package_msw_dbg)
 
 	dh_compress
 	dh_fixperms
