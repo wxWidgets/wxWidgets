@@ -10,12 +10,48 @@ dnl ### begin block COND_BUILD_DEBUG ###
         COND_BUILD_DEBUG=""
     fi
     AC_SUBST(COND_BUILD_DEBUG)
+dnl ### begin block COND_BUILD_DEBUG_DEBUG_FLAG_DEFAULT ###
+    COND_BUILD_DEBUG_DEBUG_FLAG_DEFAULT="#"
+    if test "x$BUILD" = "xdebug" -a "x$DEBUG_FLAG" = "xdefault" ; then
+        COND_BUILD_DEBUG_DEBUG_FLAG_DEFAULT=""
+    fi
+    AC_SUBST(COND_BUILD_DEBUG_DEBUG_FLAG_DEFAULT)
+dnl ### begin block COND_BUILD_DEBUG_DEBUG_INFO_DEFAULT ###
+    COND_BUILD_DEBUG_DEBUG_INFO_DEFAULT="#"
+    if test "x$BUILD" = "xdebug" -a "x$DEBUG_INFO" = "xdefault" ; then
+        COND_BUILD_DEBUG_DEBUG_INFO_DEFAULT=""
+    fi
+    AC_SUBST(COND_BUILD_DEBUG_DEBUG_INFO_DEFAULT)
 dnl ### begin block COND_BUILD_RELEASE ###
     COND_BUILD_RELEASE="#"
     if test "x$BUILD" = "xrelease" ; then
         COND_BUILD_RELEASE=""
     fi
     AC_SUBST(COND_BUILD_RELEASE)
+dnl ### begin block COND_BUILD_RELEASE_DEBUG_INFO_DEFAULT ###
+    COND_BUILD_RELEASE_DEBUG_INFO_DEFAULT="#"
+    if test "x$BUILD" = "xrelease" -a "x$DEBUG_INFO" = "xdefault" ; then
+        COND_BUILD_RELEASE_DEBUG_INFO_DEFAULT=""
+    fi
+    AC_SUBST(COND_BUILD_RELEASE_DEBUG_INFO_DEFAULT)
+dnl ### begin block COND_DEBUG_FLAG_1 ###
+    COND_DEBUG_FLAG_1="#"
+    if test "x$DEBUG_FLAG" = "x1" ; then
+        COND_DEBUG_FLAG_1=""
+    fi
+    AC_SUBST(COND_DEBUG_FLAG_1)
+dnl ### begin block COND_DEBUG_INFO_0 ###
+    COND_DEBUG_INFO_0="#"
+    if test "x$DEBUG_INFO" = "x0" ; then
+        COND_DEBUG_INFO_0=""
+    fi
+    AC_SUBST(COND_DEBUG_INFO_0)
+dnl ### begin block COND_DEBUG_INFO_1 ###
+    COND_DEBUG_INFO_1="#"
+    if test "x$DEBUG_INFO" = "x1" ; then
+        COND_DEBUG_INFO_1=""
+    fi
+    AC_SUBST(COND_DEBUG_INFO_1)
 dnl ### begin block COND_DEPS_TRACKING_0 ###
     COND_DEPS_TRACKING_0="#"
     if test "x$DEPS_TRACKING" = "x0" ; then
