@@ -38,6 +38,7 @@
 #include "wx/icon.h"
 #include "wx/log.h"
 #include "wx/sizer.h"
+#include "wx/tokenzr.h"
 
 #if wxUSE_STATLINE
     #include "wx/statline.h"
@@ -170,18 +171,21 @@ wxDirCtrl::wxDirCtrl(void)
     m_showHidden = FALSE;
 }
 
-wxDirCtrl::wxDirCtrl(wxWindow *parent, const wxWindowID id, const wxString &WXUNUSED(dir),
-            const wxPoint& pos, const wxSize& size,
-            const long style, const wxString& name )
- :
-  wxTreeCtrl( parent, id, pos, size, style, wxDefaultValidator, name )
+wxDirCtrl::wxDirCtrl(wxWindow *parent,
+                     const wxWindowID id,
+                     const wxString &WXUNUSED(dir),
+                     const wxPoint& pos,
+                     const wxSize& size,
+                     const long style,
+                     const wxString& name )
+         : wxTreeCtrl( parent, id, pos, size, style, wxDefaultValidator, name )
 {
- #ifndef __WXMSW__
+#ifndef __WXMSW__
     m_imageListNormal = new wxImageList(16, 16, TRUE);
     m_imageListNormal->Add(wxICON(icon1));
     m_imageListNormal->Add(wxICON(icon2));
     SetImageList(m_imageListNormal);
- #endif
+#endif // !MSW
 
     m_showHidden = FALSE;
     m_rootId = AddRoot( _("Sections") );
@@ -223,14 +227,15 @@ void wxDirCtrl::CreateItems(const wxTreeItemId &parent)
 
 //  wxASSERT(m_paths.Count() == m_names.Count());  ?
 
-    for (unsigned int i=0; i<m_paths.Count(); i++)
+    size_t count = m_paths.GetCount();
+    for ( size_t i=0; i<count; i++)
     {
         dir_item = new wxDirItemData(m_paths[i],m_names[i]);
 #ifdef __WXMSW__
         id = AppendItem( parent, m_names[i], -1, -1, dir_item);
 #else
         id = AppendItem( parent, m_names[i], 0, -1, dir_item);
-	SetItemImage( id, 1, wxTreeItemIcon_Expanded );
+        SetItemImage( id, 1, wxTreeItemIcon_Expanded );
 #endif
         if (dir_item->m_hasSubDirs) SetItemHasChildren(id);
     }
@@ -261,9 +266,9 @@ void wxDirCtrl::OnEndEditItem(wxTreeEvent &event)
   (event.GetLabel().First( wxT("/") ) != wxNOT_FOUND))
     {
         wxMessageDialog dialog(this, _("Illegal directory name."), _("Error"), wxOK | wxICON_ERROR );
-  dialog.ShowModal();
+        dialog.ShowModal();
         event.Veto();
-  return;
+        return;
     }
 
     wxTreeItemId id = event.GetItem();
@@ -279,7 +284,7 @@ void wxDirCtrl::OnEndEditItem(wxTreeEvent &event)
     if (wxFileExists(new_name))
     {
         wxMessageDialog dialog(this, _("File name exists already."), _("Error"), wxOK | wxICON_ERROR );
-  dialog.ShowModal();
+        dialog.ShowModal();
         event.Veto();
     }
 
@@ -290,7 +295,7 @@ void wxDirCtrl::OnEndEditItem(wxTreeEvent &event)
     else
     {
         wxMessageDialog dialog(this, _("Operation not permitted."), _("Error"), wxOK | wxICON_ERROR );
-  dialog.ShowModal();
+        dialog.ShowModal();
         event.Veto();
     }
 }
@@ -373,11 +378,13 @@ BEGIN_EVENT_TABLE( wxDirDialog, wxDialog )
   //  EVT_CHECKBOX             (ID_CHECK,     wxDirDialog::OnCheck)
 END_EVENT_TABLE()
 
-wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
-       const wxString& defaultPath, long style,
-       const wxPoint& pos) :
-  wxDialog(parent, -1, message, pos, wxSize(300,300),
-     wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+wxDirDialog::wxDirDialog(wxWindow *parent,
+                         const wxString& message,
+                         const wxString& defaultPath,
+                         long style,
+                         const wxPoint& pos)
+           : wxDialog(parent, -1, message, pos, wxSize(300,300),
+                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
     m_message = message;
     m_dialogStyle = style;
@@ -390,8 +397,12 @@ wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
     // 1) dir ctrl
-    m_dir = new wxDirCtrl( this, ID_DIRCTRL, "/", wxDefaultPosition, wxSize(200,200),
-      wxTR_HAS_BUTTONS | wxSUNKEN_BORDER | wxTR_EDIT_LABELS);
+    m_dir = new wxDirCtrl( this, ID_DIRCTRL, "/",
+                           wxDefaultPosition,
+                           wxSize(200,200),
+                           wxTR_HAS_BUTTONS |
+                           wxSUNKEN_BORDER |
+                           wxTR_EDIT_LABELS );
     topsizer->Add( m_dir, 1, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, 10 );
 
     // 2) text ctrl
@@ -427,6 +438,44 @@ wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
     topsizer->Fit( this );
 
     Centre( wxBOTH );
+
+    // choose the directory corresponding to defaultPath in the tree
+    // VZ: using wxStringTokenizer is probably unsafe here (escaped slashes
+    //     will not be processed correctly...)
+    wxStringTokenizer tk(defaultPath, wxFILE_SEP_PATH, wxTOKEN_STRTOK);
+
+    // we start from "My Computer" section because we're not sure to find the
+    // path among the predefined ones - ideally, we'd first look there and
+    // then do what we do now, but I don't have time to do it right now (VZ)
+    long cookie;
+    wxTreeItemId item = m_dir->GetFirstChild(m_dir->GetRootItem(), cookie);
+
+    wxString path;
+    while ( tk.HasMoreTokens() && item.IsOk() )
+    {
+        path << wxFILE_SEP_PATH << tk.GetNextToken();
+
+        m_dir->Expand(item);
+
+        wxTreeItemId child = m_dir->GetFirstChild(item, cookie);
+        while ( child.IsOk() )
+        {
+            wxDirItemData *data = (wxDirItemData*)m_dir->GetItemData(child);
+            if ( data->m_path == path )
+                break;
+
+            child = m_dir->GetNextChild(item, cookie);
+        }
+
+        item = child;
+    }
+
+    if ( item.IsOk() )
+    {
+        m_dir->Expand(item);
+        m_dir->SelectItem(item);
+        m_dir->EnsureVisible(item);
+    }
 
     wxEndBusyCursor();
 }
@@ -514,24 +563,24 @@ void wxDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )
     {
         // try NewName0, NewName1 etc.
         int i = 0;
-  do {
+        do {
             new_name = wxT("NewName");
-      wxString num;
-      num.Printf( wxT("%d"), i );
-      new_name += num;
+            wxString num;
+            num.Printf( wxT("%d"), i );
+            new_name += num;
 
             path = data->m_path;
             path += wxT("/");
             path += new_name;
-      i++;
-  } while (wxFileExists(path));
+            i++;
+        } while (wxFileExists(path));
     }
 
     wxLogNull log;
     if (!wxMkdir(path))
     {
         wxMessageDialog dialog(this, _("Operation not permitted."), _("Error"), wxOK | wxICON_ERROR );
-  dialog.ShowModal();
+        dialog.ShowModal();
         return;
     }
 
@@ -548,4 +597,4 @@ void wxDirDialog::OnCheck( wxCommandEvent& WXUNUSED(event) )
 }
 */
 
-#endif
+#endif // wxUSE_DIRDLG

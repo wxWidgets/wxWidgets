@@ -6,7 +6,7 @@
 // Created:     12/12/98
 // Copyright:   (c) Harm van der Heijden and Robert Roebling
 // RCS-ID:      $Id$
-// Licence:   	wxWindows licence
+// Licence:           wxWindows licence
 //
 // Notes:       wxDirDialog class written by Harm van der Heijden,
 //              uses wxDirCtrl class written by Robert Roebling for the
@@ -106,11 +106,11 @@ public:
 
     wxDirCtrl();
     wxDirCtrl(wxWindow *parent, const wxWindowID id = -1,
-	      const wxString &dir = wxDirDialogDefaultFolderStr,
-	      const wxPoint& pos = wxDefaultPosition,
-	      const wxSize& size = wxDefaultSize,
-	      const long style = wxTR_HAS_BUTTONS,
-	      const wxString& name = wxTreeCtrlNameStr );
+              const wxString &dir = wxDirDialogDefaultFolderStr,
+              const wxPoint& pos = wxDefaultPosition,
+              const wxSize& size = wxDefaultSize,
+              const long style = wxTR_HAS_BUTTONS,
+              const wxString& name = wxTreeCtrlNameStr );
     void ShowHidden( const bool yesno );
     void OnExpandItem(wxTreeEvent &event );
     void OnCollapseItem(wxTreeEvent &event );
@@ -136,9 +136,9 @@ class WXDLLEXPORT wxDirDialog: public wxDialog
 public:
     wxDirDialog() {}
     wxDirDialog(wxWindow *parent,
-		const wxString& message = wxFileSelectorPromptStr,
-		const wxString& defaultPath = wxEmptyString,
-		long style = 0, const wxPoint& pos = wxDefaultPosition);
+                const wxString& message = wxFileSelectorPromptStr,
+                const wxString& defaultPath = wxEmptyString,
+                long style = 0, const wxPoint& pos = wxDefaultPosition);
     inline void SetMessage(const wxString& message) { m_message = message; }
     inline void SetPath(const wxString& path) { m_path = path; }
     inline void SetStyle(long style) { m_dialogStyle = style; }
