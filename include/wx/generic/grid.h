@@ -1086,10 +1086,10 @@ public:
 
     // auto size all columns (very ineffective for big grids!)
     void     AutoSizeColumns( bool setAsMin = TRUE )
-        { (void)SetOrCalcColumnSizes(TRUE, setAsMin); }
+        { (void)SetOrCalcColumnSizes(FALSE, setAsMin); }
 
     void     AutoSizeRows( bool setAsMin = TRUE )
-        { (void)SetOrCalcRowSizes(TRUE, setAsMin); }
+        { (void)SetOrCalcRowSizes(FALSE, setAsMin); }
 
     // auto size the grid, that is make the columns/rows of the "right" size
     // and also set the grid size to just fit its contents
