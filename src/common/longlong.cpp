@@ -1150,11 +1150,13 @@ void *wxULongLongWx::asArray(void) const
 #if wxUSE_STD_IOSTREAM
 
 // input/output
+WXDLLIMPEXP_BASE
 wxSTD ostream& operator<< (wxSTD ostream& o, const wxLongLong& ll)
 {
     return o << ll.ToString();
 }
 
+WXDLLIMPEXP_BASE
 wxSTD ostream& operator<< (wxSTD ostream& o, const wxULongLong& ll)
 {
     return o << ll.ToString();
