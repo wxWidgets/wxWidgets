@@ -30,7 +30,9 @@
     #include "smile.xpm"
 #endif
 
+#if !defined(__WXMOTIF__)
 #define wxHAVE_RAW_BITMAP
+#endif
 
 // derived classes
 
