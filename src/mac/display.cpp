@@ -30,9 +30,11 @@
 #ifdef __DARWIN__
     #include <Carbon/Carbon.h>
 #else
+    #include <Gestalt.h>
     #include <Displays.h>
     #include <Quickdraw.h>
     #include <Video.h>  //for VDSwitchInfoRec
+    #include <FixMath.h>
 #endif
 
 #include "wx/display.h"
