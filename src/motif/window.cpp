@@ -2984,7 +2984,7 @@ void wxWindow::ChangeFont(bool keepOriginalSize)
 wxWindow *wxGetActiveWindow()
 {
     // TODO
-    wxFAIL_MSG(_("Not implemented"));
+    wxFAIL_MSG("Not implemented");
     return NULL;
 }
 
