@@ -1354,27 +1354,25 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
         if ( handled && event.GetSkipped() )
             handled = false ;
     }
-    if ( !handled &&
-         (keyval == WXK_TAB) &&
-// CS: copied the change below from wxGTK
-// VZ: testing for wxTE_PROCESS_TAB shouldn't be done here the control may
-//     have this style, yet choose not to process this particular TAB in which
-//     case TAB must still work as a navigational character
-#if 0
-         (!focus->HasFlag(wxTE_PROCESS_TAB)) &&
-#endif
-         (focus->GetParent()) &&
-         (focus->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
+    if ( !handled && (keyval == WXK_TAB) )
     {
-        wxNavigationKeyEvent new_event;
-        new_event.SetEventObject( focus );
-        new_event.SetDirection( !event.ShiftDown() );
-        /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
-        new_event.SetWindowChange( event.ControlDown() );
-        new_event.SetCurrentFocus( focus );
-        handled = focus->GetEventHandler()->ProcessEvent( new_event );
-        if ( handled && new_event.GetSkipped() )
-            handled = false ;
+        wxWindow* iter = focus->GetParent() ;
+        while( iter && !handled )
+        {
+            if ( iter->HasFlag( wxTAB_TRAVERSAL ) )
+            {
+                wxNavigationKeyEvent new_event;
+                new_event.SetEventObject( focus );
+                new_event.SetDirection( !event.ShiftDown() );
+                /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
+                new_event.SetWindowChange( event.ControlDown() );
+                new_event.SetCurrentFocus( focus );
+                handled = focus->GetParent()->GetEventHandler()->ProcessEvent( new_event );
+                if ( handled && new_event.GetSkipped() )
+                    handled = false ;
+            }
+            iter = iter->GetParent() ;
+        }
     }
     // backdoor handler for default return and command escape
     if ( !handled && (!focus->IsKindOf(CLASSINFO(wxControl) ) || !focus->MacCanFocus() ) )
