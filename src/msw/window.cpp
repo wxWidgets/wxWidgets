@@ -5133,25 +5133,32 @@ WXWORD wxCharCodeWXToMSW(int id, bool *isVirtual)
 bool wxGetKeyState(wxKeyCode key)
 {
     bool bVirtual;
-    WORD vkey = wxCharCodeWXToMSW(key, &bVirtual);
-    SHORT state;
 
-    switch (key)
+//High order with GetAsyncKeyState only available on WIN32
+#ifdef __WIN32__    
+    //If the requested key is a LED key, return
+    //true if the led is pressed
+    if (key == WXK_NUMLOCK ||
+        key == WXK_CAPITAL ||
+        key == WXK_SCROLL)
     {
-    case WXK_NUMLOCK:
-    case WXK_CAPITAL:
-    case WXK_SCROLL:
-        // get the toggle state of the special key
-        state = GetKeyState(vkey);
-        break;
+#endif
+        //low order bit means LED is highlighted, 
+        //high order means key is down
+        //Here, for compat with other ports we want both
+        return GetKeyState( wxCharCodeWXToMSW(key, &bVirtual) ) != 0;
 
-    default:
-        // Get the current state of the physical key
-        state = GetAsyncKeyState(vkey);
-        break;
+#ifdef __WIN32__    
     }
-    // if the most significant bit is set then the key is down
-    return ( state & 0x0001 ) != 0;
+    else
+    {
+        //normal key
+        //low order bit means key pressed since last call
+        //high order means key is down
+        //We want only the high order bit - the key may not be down if only low order
+        return ( GetAsyncKeyState( wxCharCodeWXToMSW(key, &bVirtual) ) & (1<<15) ) != 0;
+    }
+#endif
 }
 
 wxWindow *wxGetActiveWindow()
