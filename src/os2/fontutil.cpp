@@ -258,6 +258,44 @@ bool wxTestFontEncoding(
 // wxFont <-> LOGFONT conversion
 // ----------------------------------------------------------------------------
 
+void wxConvertVectorFontSize(
+  FIXED                             fxPointSize
+, PFATTRS                           pFattrs
+)
+{
+    HPS                             hPS;
+    HDC                             hDC;
+    LONG                            lXFontResolution;
+    LONG                            lYFontResolution;
+    SIZEF                           vSizef;
+
+    hPS = WinGetScreenPS(HWND_DESKTOP); // Screen presentation space
+
+    //
+    //   Query device context for the screen and then query
+    //   the resolution of the device for the device context.
+    //
+
+    hDC = GpiQueryDevice(hPS);
+    DevQueryCaps( hDC, CAPS_HORIZONTAL_FONT_RES, (LONG)1, &lXFontResolution);
+    DevQueryCaps( hDC, CAPS_VERTICAL_FONT_RES, (LONG)1, &lYFontResolution);
+
+    //
+    //   Calculate the size of the character box, based on the
+    //   point size selected and the resolution of the device.
+    //   The size parameters are of type FIXED, NOT int.
+    //   NOTE: 1 point == 1/72 of an inch.
+    //
+
+    vSizef.cx = (FIXED)(((fxPointSize) / 72 ) * lXFontResolution );
+    vSizef.cy = (FIXED)(((fxPointSize) / 72 ) * lYFontResolution );
+
+    pFattrs->lMaxBaselineExt = MAKELONG( HIUSHORT( vSizef.cy ), 0 );
+    pFattrs->lAveCharWidth   = MAKELONG( HIUSHORT( vSizef.cx ), 0 );
+    WinReleasePS(hPS);
+
+} // end of wxConvertVectorPointSize
+
 void wxFillLogFont(
   LOGFONT*                          pFattrs  // OS2 GPI FATTRS
 , PFACENAMEDESC                     pFaceName
@@ -327,8 +365,7 @@ void wxFillLogFont(
     // Initialize FATTR and FACENAMEDESC
     //
     pFattrs->usRecordLength = sizeof(FATTRS);
-    pFattrs->fsFontUse = FATTR_FONTUSE_OUTLINE |       // only outline fonts allowed
-                         FATTR_FONTUSE_TRANSFORMABLE;  // may be transformed
+    pFattrs->fsFontUse = FATTR_FONTUSE_OUTLINE;       // only outline fonts allowed
     pFattrs->fsType = 0;
     pFattrs->lMaxBaselineExt = pFattrs->lAveCharWidth = 0;
     pFattrs->idRegistry = 0;
@@ -602,30 +639,24 @@ void wxOS2SelectMatchingFontByName(
     // Fill in the FATTRS with the best match from FONTMETRICS
     //
     pFattrs->usRecordLength  = sizeof(FATTRS);              // Sets size of structure
-    pFattrs->fsSelection     = pFM[nIndex].fsSelection;     // Uses default selection
     pFattrs->lMatch          = pFM[nIndex].lMatch;          // Force match
-    pFattrs->idRegistry      = pFM[nIndex].idRegistry;      // Uses default registry
-    pFattrs->usCodePage      = pFM[nIndex].usCodePage;      // Code-page
-    pFattrs->fsType          = 0;          // Uses default type
-    pFattrs->lMaxBaselineExt = 0;
-    pFattrs->lAveCharWidth   = 0;
-    pFattrs->fsFontUse       = FATTR_FONTUSE_OUTLINE |      // only outline fonts allowed
-                               FATTR_FONTUSE_TRANSFORMABLE; // may be transformed
-#if 0
-    pFattrs->lMaxBaselineExt = pFM[nIndex].lMaxBaselineExt;
-    pFattrs->lAveCharWidth   = pFM[nIndex].lAveCharWidth;
-#endif
+    pFattrs->idRegistry      = 0;                           // Registry
+    pFattrs->usCodePage      = 0;                           // Match proper CodePage
+    pFattrs->fsFontUse       = 0;                           // Use only outline fonts
+    pFattrs->fsType          = 0;                           // Use only outline fonts
+    pFattrs->lMaxBaselineExt = 0;                           // Use only outline fonts
+    pFattrs->lAveCharWidth   = 0;                           // Use only outline fonts
     wxStrcpy(pFattrs->szFacename, pFM[nIndex].szFacename);
-    // Debug
-    strcpy(zFontFaceName, pFM[nIndex].szFacename);
-    strcpy(zFontFaceName, pFattrs->szFacename);
+    if (pFont->GetWeight() == wxNORMAL)
+        pFattrs->fsSelection = 0;
+    else
+        pFattrs->fsSelection = FATTR_SEL_BOLD;
 
-    if(usWeightClass >= FWEIGHT_BOLD)
-        pFattrs->fsSelection |= FATTR_SEL_BOLD;
-    if(pFont->GetUnderlined())
-        pFattrs->fsSelection |= FATTR_SEL_UNDERSCORE;
-    if(fsSelection & FM_SEL_ITALIC)
+    if (pFont->GetStyle() == wxITALIC || pFont->GetStyle() == wxSLANT)
         pFattrs->fsSelection |= FATTR_SEL_ITALIC;
+
+    if (pFont->GetUnderlined())
+        pFattrs->fsSelection |= FATTR_SEL_UNDERSCORE;
 } // end of wxOS2SelectMatchingFontByName
 
 wxFont wxCreateFontFromLogFont(

@@ -441,7 +441,7 @@ bool wxFontRefData::Alloc(
         m_nFamily = wxROMAN;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "WarpSans") == 0)
         m_nFamily = wxDECORATIVE;
-    else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "Helvitica") == 0)
+    else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "Helvetica") == 0)
         m_nFamily = wxSWISS;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "Helv") == 0)
         m_nFamily = wxSWISS;
@@ -600,7 +600,7 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
         nFamily = wxROMAN;
     else if (strcmp(fm.szFamilyname, "WarpSans") == 0)
         nFamily = wxDECORATIVE;
-    else if (strcmp(fm.szFamilyname, "Helvitica") == 0)
+    else if (strcmp(fm.szFamilyname, "Helvetica") == 0)
         nFamily = wxSWISS;
     else if (strcmp(fm.szFamilyname, "Helv") == 0)
         nFamily = wxSWISS;

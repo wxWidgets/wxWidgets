@@ -74,41 +74,22 @@ int wxFontDialog::ShowModal()
         vFn.usWeightClass = vFontDlg.usWeight;
         vFn.usWidthClass  = vFontDlg.usWidth;
 
-        memcpy(&vInfo.fa, &vFontDlg.fAttrs, sizeof(FATTRS));
+        memset(&vInfo.fa, '\0', sizeof(FATTRS));
         memcpy(&vInfo.fn, &vFn, sizeof(FACENAMEDESC));
+
+        vInfo.fa.usRecordLength = vFontDlg.fAttrs.usRecordLength;
+        strcpy(vInfo.fa.szFacename, vFontDlg.fAttrs.szFacename);
+        vInfo.fa.lMatch = vFontDlg.fAttrs.lMatch;
 
         //
         // Debugging
         //
         wxFont                      vChosenFont(vInfo);
 
-        int                         nFamily;
-        int                         nPointSize = vFontDlg.lEmHeight;
-        int                         nStyle;
-        int                         nWeight;
-        bool                        bUnderlined;
-        wxString                    sFaceName;
-        wxNativeFontInfo*           pInfo;
+        int                         nPointSize = vFontDlg.fxPointSize >> 16;
 
         vChosenFont.SetPointSize(nPointSize);
-        nFamily = vChosenFont.GetFamily();
-        nPointSize = vChosenFont.GetPointSize();
-        nStyle = vChosenFont.GetStyle();
-        nWeight = vChosenFont.GetWeight();
-        bUnderlined = vChosenFont.GetUnderlined();
-        sFaceName = vChosenFont.GetFaceName();
-        pInfo = vChosenFont.GetNativeFontInfo();
-
-
         m_fontData.chosenFont = vChosenFont;
-
-        nFamily = m_fontData.chosenFont.GetFamily();
-        nPointSize = m_fontData.chosenFont.GetPointSize();
-        nStyle = m_fontData.chosenFont.GetStyle();
-        nWeight = m_fontData.chosenFont.GetWeight();
-        bUnderlined = m_fontData.chosenFont.GetUnderlined();
-        sFaceName = m_fontData.chosenFont.GetFaceName();
-        pInfo = m_fontData.chosenFont.GetNativeFontInfo();
 
         m_fontData.EncodingInfo().facename = vFontDlg.fAttrs.szFacename;
         m_fontData.EncodingInfo().charset = vFontDlg.fAttrs.usCodePage;

@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  H:\DEV\WX2\WXWINDOWS\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -12803,6 +12803,8 @@ EXPORTS
       wxFillLogFont__FP7_FATTRSP13_FACENAMEDESCPUlT3PlR8wxStringP6wxFont
       ;wxGetNativeFontEncoding(wxFontEncoding,wxNativeEncodingInfo*)
       wxGetNativeFontEncoding__F14wxFontEncodingP20wxNativeEncodingInfo
+      ;wxConvertVectorFontSize(long,_FATTRS*)
+      wxConvertVectorFontSize__FlP7_FATTRS
       ;wxOS2SelectMatchingFontByName(_FATTRS*,_FACENAMEDESC*,_FONTMETRICS*,int,const wxFont*)
       wxOS2SelectMatchingFontByName__FP7_FATTRSP13_FACENAMEDESCP12_FONTMETRICSiPC6wxFont
       ;wxGpiStrcmp(char*,char*)
