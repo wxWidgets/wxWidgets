@@ -551,6 +551,7 @@ ALL_DIST: distclean
 	cp $(ZLIBDIR)/*.mms $(DISTDIR)/src/zlib
 	mkdir $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/*.h $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/*.ih $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/*.c $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/Makefile $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/COPYRIGHT $(DISTDIR)/src/regex
