@@ -663,10 +663,13 @@ bool wxStdToolbarInputHandler::HandleMouse(wxInputConsumer *consumer,
                 m_winCapture = NULL;
             }
 
-            if ( tool == m_toolCapture )
-                consumer->PerformAction( wxACTION_BUTTON_TOGGLE, m_toolCapture->GetId() );
-            else
-                consumer->PerformAction( wxACTION_TOOLBAR_LEAVE, m_toolCapture->GetId() );
+            if (m_toolCapture)
+            {
+                if ( tool == m_toolCapture )
+                    consumer->PerformAction( wxACTION_BUTTON_TOGGLE, m_toolCapture->GetId() );
+                else
+                    consumer->PerformAction( wxACTION_TOOLBAR_LEAVE, m_toolCapture->GetId() );
+            }
             
             m_toolCapture = NULL;
                 
