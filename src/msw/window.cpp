@@ -450,23 +450,18 @@ void wxWindowMSW::SetFocus()
 
     if ( !::SetFocus(hWnd) )
     {
+#if defined(__WXDEBUG__) && !defined(__WXMICROWIN__)
         // was there really an error?
-#ifndef __WXMICROWIN__
         DWORD dwRes = ::GetLastError();
-#else
-
-        DWORD dwRes = 0;
-#endif
         if ( dwRes )
         {
-            wxLogApiError(_T("SetFocus"), dwRes);
+            HWND hwndFocus = ::GetFocus();
+            if ( hwndFocus != hWnd )
+            {
+                wxLogApiError(_T("SetFocus"), dwRes);
+            }
         }
-
-        // VZ: just why does this happen sometimes?? any idea?
-#if 0
-        HWND hwndFocus = ::GetFocus();
-        wxASSERT_MSG( hwndFocus == hWnd, _T("SetFocus() didn't work?") );
-#endif // 0
+#endif // Debug
     }
 }
 
