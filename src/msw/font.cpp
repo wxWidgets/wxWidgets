@@ -366,6 +366,8 @@ void wxNativeFontInfo::Init()
 
 int wxNativeFontInfo::GetPointSize() const
 {
+    // FIXME: using the screen here results in incorrect font size calculation
+    //        for printing!
     const int ppInch = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
 
     return (int) (((72.0*(double)abs(lf.lfHeight)) / (double) ppInch) + 0.5);
@@ -404,9 +406,16 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
 
 void wxNativeFontInfo::SetPointSize(int pointsize)
 {
+#if wxFONT_SIZE_COMPATIBILITY
+    // Incorrect, but compatible with old wxWindows behaviour
+    lf.lfHeight = (pointSize*ppInch)/72;
+#else // wxFONT_SIZE_COMPATIBILITY
+    // FIXME: using the screen here results in incorrect font size calculation
+    //        for printing!
     const int ppInch = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
 
     lf.lfHeight = -(int)((pointsize*((double)ppInch)/72.0) + 0.5);
+#endif // wxFONT_SIZE_COMPATIBILITY/!wxFONT_SIZE_COMPATIBILITY
 }
 
 void wxNativeFontInfo::SetStyle(wxFontStyle style)
@@ -457,6 +466,53 @@ void wxNativeFontInfo::SetUnderlined(bool underlined)
 void wxNativeFontInfo::SetFaceName(wxString facename)
 {
     wxStrncpy(lf.lfFaceName, facename, sizeof(lf.lfFaceName));
+}
+
+void wxNativeFontInfo::SetFamily(wxFontFamily family)
+{
+    int ff_family;
+    wxString facename;
+
+    switch ( family )
+    {
+        case wxSCRIPT:
+            ff_family = FF_SCRIPT;
+            facename = _T("Script");
+            break;
+
+        case wxDECORATIVE:
+            ff_family = FF_DECORATIVE;
+            facename = _T("Wingdings");
+            break;
+
+        case wxROMAN:
+            ff_family = FF_ROMAN;
+            facename = _T("Times New Roman");
+            break;
+
+        case wxTELETYPE:
+        case wxMODERN:
+            ff_family = FF_MODERN;
+            facename = _T("Courier New");
+            break;
+
+        case wxSWISS:
+            ff_family = FF_SWISS;
+            facename = _T("Arial");
+            break;
+
+        case wxDEFAULT:
+        default:
+            ff_family = FF_SWISS;
+            facename = _T("MS Sans Serif");
+    }
+
+    lf.lfPitchAndFamily = DEFAULT_PITCH | ff_family;
+
+    if ( !wxStrlen(lf.lfFaceName) )
+    {
+        SetFaceName(facename);
+    }
 }
 
 void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding)

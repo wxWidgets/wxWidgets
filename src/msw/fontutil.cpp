@@ -302,144 +302,36 @@ wxFontEncoding wxGetFontEncFromCharSet(int cs)
 
 void wxFillLogFont(LOGFONT *logFont, const wxFont *font)
 {
-    int ff_family;
-    wxString ff_face;
-
-    switch ( font->GetFamily() )
+    // maybe we already have LOGFONT for this font?
+    wxNativeFontInfo *fontinfo = font->GetNativeFontInfo();
+    if ( !fontinfo )
     {
-        case wxSCRIPT:
-            ff_family = FF_SCRIPT;
-            ff_face = _T("Script");
-            break;
+        // use wxNativeFontInfo methods to build a LOGFONT for this font
+        fontinfo = new wxNativeFontInfo;
 
-        case wxDECORATIVE:
-            ff_family = FF_DECORATIVE;
-            break;
+        // translate all font parameters
+        fontinfo->SetStyle((wxFontStyle)font->GetStyle());
+        fontinfo->SetWeight((wxFontWeight)font->GetWeight());
+        fontinfo->SetUnderlined(font->GetUnderlined());
+        fontinfo->SetPointSize(font->GetPointSize());
 
-        case wxROMAN:
-            ff_family = FF_ROMAN;
-            ff_face = _T("Times New Roman");
-            break;
-
-        case wxTELETYPE:
-        case wxMODERN:
-            ff_family = FF_MODERN;
-            ff_face = _T("Courier New");
-            break;
-
-        case wxSWISS:
-            ff_family = FF_SWISS;
-            ff_face = _T("Arial");
-            break;
-
-        case wxDEFAULT:
-        default:
-            ff_family = FF_SWISS;
-            ff_face = _T("MS Sans Serif");
-    }
-
-    BYTE ff_italic;
-    switch ( font->GetStyle() )
-    {
-        case wxITALIC:
-        case wxSLANT:
-            ff_italic = 1;
-            break;
-
-        default:
-            wxFAIL_MSG(wxT("unknown font slant"));
-            // fall through
-
-        case wxNORMAL:
-            ff_italic = 0;
-    }
-
-    int ff_weight;
-    switch ( font->GetWeight() )
-    {
-        default:
-            wxFAIL_MSG(_T("unknown font weight"));
-            // fall through
-
-        case wxNORMAL:
-            ff_weight = FW_NORMAL;
-            break;
-
-        case wxLIGHT:
-            ff_weight = FW_LIGHT;
-            break;
-
-        case wxBOLD:
-            ff_weight = FW_BOLD;
-            break;
-    }
-
-    // VZ: I'm reverting this as we clearly must use the real screen
-    //     resolution instead of hardcoded one or it surely will fail to work
-    //     in some cases.
-    //
-    //     If there are any problems with this code, please let me know about
-    //     it instead of reverting this change, thanks!
-#if 1 // wxUSE_SCREEN_DPI
-    const int ppInch = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
-#else // 0
-    // New behaviour: apparently ppInch varies according to Large/Small Fonts
-    // setting in Windows. This messes up fonts. So, set ppInch to a constant
-    // 96 dpi.
-    static const int ppInch = 96;
-#endif // 1/0
-
-    int pointSize = font->GetPointSize();
-#if wxFONT_SIZE_COMPATIBILITY
-    // Incorrect, but compatible with old wxWindows behaviour
-    int nHeight = (pointSize*ppInch)/72;
-#else
-    // Correct for Windows compatibility
-    int nHeight = -(int)((pointSize*((double)ppInch)/72.0) + 0.5);
-#endif
-
-    wxString facename = font->GetFaceName();
-    if ( !!facename )
-    {
-        ff_face = facename;
-    }
-    //else: ff_face is a reasonable default facename for this font family
-
-    // deal with encoding now
-    wxNativeEncodingInfo info;
-    wxFontEncoding encoding = font->GetEncoding();
-    if ( !wxGetNativeFontEncoding(encoding, &info) )
-    {
-#if wxUSE_FONTMAP
-        if ( !wxTheFontMapper->GetAltForEncoding(encoding, &info) )
-#endif // wxUSE_FONTMAP
+        // set the family/facename
+        fontinfo->SetFamily((wxFontFamily)font->GetFamily());
+        wxString facename = font->GetFaceName();
+        if ( !facename.empty() )
         {
-            // unsupported encoding, replace with the default
-            info.charset = ANSI_CHARSET;
+            fontinfo->SetFaceName(facename);
         }
-    }
 
-    if ( !info.facename.IsEmpty() )
-    {
-        // the facename determined by the encoding overrides everything else
-        ff_face = info.facename;
+        // deal with encoding now (it may override the font family and facename
+        // so do it after setting them)
+        fontinfo->SetEncoding(font->GetEncoding());
     }
 
     // transfer all the data to LOGFONT
-    logFont->lfHeight = nHeight;
-    logFont->lfWidth = 0;
-    logFont->lfEscapement = 0;
-    logFont->lfOrientation = 0;
-    logFont->lfWeight = ff_weight;
-    logFont->lfItalic = ff_italic;
-    logFont->lfUnderline = (BYTE)font->GetUnderlined();
-    logFont->lfStrikeOut = 0;
-    logFont->lfCharSet = info.charset;
-    logFont->lfOutPrecision = OUT_DEFAULT_PRECIS;
-    logFont->lfClipPrecision = CLIP_DEFAULT_PRECIS;
-    logFont->lfQuality = PROOF_QUALITY;
-    logFont->lfPitchAndFamily = DEFAULT_PITCH | ff_family;
-    wxStrncpy(logFont->lfFaceName, ff_face, WXSIZEOF(logFont->lfFaceName));
+    *logFont = fontinfo->lf;
+
+    delete fontinfo;
 }
 
 wxFont wxCreateFontFromLogFont(const LOGFONT *logFont)

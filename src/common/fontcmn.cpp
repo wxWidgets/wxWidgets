@@ -339,6 +339,11 @@ wxString wxNativeFontInfo::GetFaceName() const
     return faceName;
 }
 
+wxFontFamily wxNativeFontInfo::GetFamily() const
+{
+    return family;
+}
+
 wxFontEncoding wxNativeFontInfo::GetEncoding() const
 {
     return encoding;
@@ -367,6 +372,11 @@ void wxNativeFontInfo::SetUnderlined(bool underlined_)
 void wxNativeFontInfo::SetFaceName(wxString facename_)
 {
     facename = facename_;
+}
+
+void wxNativeFontInfo::SetFamily(wxFontFamily family)
+{
+    family = family_;
 }
 
 void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding_)

@@ -67,7 +67,7 @@ struct WXDLLEXPORT wxNativeFontInfo
     #define wNO_NATIVE_FONTINFO
 
     int           pointSize;
-    int           family;
+    wxFontFamily  family;
     wxFontStyle   style;
     wxFontWeight  weight;
     bool          underlined;
@@ -81,14 +81,13 @@ struct WXDLLEXPORT wxNativeFontInfo
     // reset to the default state
     void Init();
 
-    // accessors and modifiers for the font elements: note that there is no
-    // GetFamily() because in general it is impossible to get the family for an
-    // arbitrary native font
+    // accessors and modifiers for the font elements
     int GetPointSize() const;
     wxFontStyle GetStyle() const;
     wxFontWeight GetWeight() const;
     bool GetUnderlined() const;
     wxString GetFaceName() const;
+    wxFontFamily GetFamily() const;
     wxFontEncoding GetEncoding() const;
 
     void SetPointSize(int pointsize);
@@ -96,6 +95,7 @@ struct WXDLLEXPORT wxNativeFontInfo
     void SetWeight(wxFontWeight weight);
     void SetUnderlined(bool underlined);
     void SetFaceName(wxString facename);
+    void SetFamily(wxFontFamily family);
     void SetEncoding(wxFontEncoding encoding);
 
     // it is important to be able to serialize wxNativeFontInfo objects to be
