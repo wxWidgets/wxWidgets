@@ -70,6 +70,5 @@ private:
     wxDisplayModeInfo m_displayMode;
 };
 
-int WXDLLEXPORT wxEntry(int argc, char *argv[]);
-
 #endif // __WX_APP_H__
+
