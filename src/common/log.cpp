@@ -181,16 +181,16 @@ void wxLogVerbose(const wxChar *szFormat, ...)
       wxChar *p = s_szBuf;
       size_t len = WXSIZEOF(s_szBuf);
       strncpy(s_szBuf, _T("("), len);
-      len -= 2; // strlen("(")
-      p += 2;
+      len -= 1; // strlen("(")
+      p += 1;
       strncat(p, mask, len);
       size_t lenMask = wxStrlen(mask);
       len -= lenMask;
       p += lenMask;
 
-      strncat(p, _T("): "), len);
-      len -= 3;
-      p += 3;
+      strncat(p, _T(") "), len);
+      len -= 2;
+      p += 2;
 
       va_list argptr;
       va_start(argptr, szFormat);
