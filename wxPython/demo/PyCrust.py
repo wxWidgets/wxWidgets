@@ -14,3 +14,9 @@ def runTest(frame, nb, log):
 #----------------------------------------------------------------------
 
 overview = shell.__doc__
+
+
+if __name__ == '__main__':
+    import run
+    run.main(['', 'PyCrust'])
+

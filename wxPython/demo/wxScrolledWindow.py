@@ -19,11 +19,6 @@ class MyCanvas(wxScrolledWindow):
         self.drawing = false
 
         self.SetBackgroundColour("WHITE")
-        EVT_LEFT_DOWN(self, self.OnLeftButtonEvent)
-        EVT_LEFT_UP(self,   self.OnLeftButtonEvent)
-        EVT_MOTION(self,    self.OnLeftButtonEvent)
-        EVT_PAINT(self, self.OnPaint)
-
         self.SetCursor(wxStockCursor(wxCURSOR_PENCIL))
         bmp = images.getTest2Bitmap()
         mask = wxMaskColour(bmp, wxBLUE)
@@ -39,6 +34,11 @@ class MyCanvas(wxScrolledWindow):
             dc.SetBackground(wxBrush(self.GetBackgroundColour()))
             dc.Clear()
             self.DoDrawing(dc)
+
+        EVT_LEFT_DOWN(self, self.OnLeftButtonEvent)
+        EVT_LEFT_UP(self,   self.OnLeftButtonEvent)
+        EVT_MOTION(self,    self.OnLeftButtonEvent)
+        EVT_PAINT(self, self.OnPaint)
 
 
     def getWidth(self):
