@@ -346,7 +346,7 @@ private :
     WindowRef               m_txnWindow ;
     // bounds of the control as we last did set the txn frames
     Rect                    m_txnControlBounds ;
-
+    Rect                    m_txnVisBounds ;
 #ifdef __WXMAC_OSX__
     static pascal void      TXNScrollInfoProc (SInt32 iValue, SInt32 iMaximumValue, 
                                 TXNScrollBarOrientation iScrollBarOrientation, SInt32 iRefCon) ;
@@ -2141,14 +2141,18 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
     Rect bounds ;
     UMAGetControlBoundsInWindowCoords(m_controlRef, &bounds);
     
-    if ( !EqualRect( &bounds , &m_txnControlBounds ) )
+    wxRect visRect = textctrl->MacGetClippedClientRect() ;
+    Rect visBounds = { visRect.y , visRect.x , visRect.y + visRect.height , visRect.x + visRect.width } ;
+    int x , y ;
+    x = y = 0 ;
+    textctrl->MacWindowToRootWindow( &x , &y ) ;
+    OffsetRect( &visBounds , x , y ) ;
+    
+    if ( !EqualRect( &bounds , &m_txnControlBounds ) || !EqualRect( &visBounds , &m_txnVisBounds) )
     {
-        // old position
-        Rect oldBounds = m_txnControlBounds ;
         m_txnControlBounds = bounds ;
+        m_txnVisBounds = visBounds ;
         wxMacWindowClipper cl(textctrl) ;
-        wxRect visRect = textctrl->MacGetClippedRect() ;
-        Rect visBounds = { visRect.y , visRect.x , visRect.y + visRect.height , visRect.x + visRect.width } ;
 
 #ifdef __WXMAC_OSX__
         bool isCompositing = textctrl->MacGetTopLevelWindow()->MacUsesCompositing() ;
@@ -2188,10 +2192,6 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
                 SetControlViewSize( m_sbVertical , h ) ;
             }
         }
-        int x , y ;
-        x = y = 0 ;
-        textctrl->MacWindowToRootWindow( &x , &y ) ;
-        OffsetRect( &visBounds , x , y ) ;
         
         Rect oldviewRect ;
         TXNLongRect olddestRect ;
@@ -2584,6 +2584,7 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
     UMAGetControlBoundsInWindowCoords(m_controlRef, &bounds);
  
     m_txnControlBounds = bounds ;
+    m_txnVisBounds = bounds ;
     
     CGrafPtr        origPort = NULL ;
     GDHandle        origDev = NULL ;
