@@ -397,6 +397,11 @@ Destroys all children of a window.  Called automatically by the destructor.
 
 Disables the window, same as \helpref{Enable({\tt FALSE})}{wxwindowenable}.
 
+\wxheading{Return value}
+
+Returns {\tt TRUE} if the window has been disabled, {\tt FALSE} if it had been
+already disabled before the call to this function.
+
 \membersection{wxWindow::DragAcceptFiles}\label{wxwindowdragacceptfiles}
 
 \func{virtual void}{DragAcceptFiles}{\param{bool}{ accept}}
@@ -414,13 +419,18 @@ Windows only.
 
 \membersection{wxWindow::Enable}\label{wxwindowenable}
 
-\func{virtual void}{Enable}{\param{bool}{ enable = {\tt TRUE}}}
+\func{virtual bool}{Enable}{\param{bool}{ enable = {\tt TRUE}}}
 
 Enable or disable the window for user input.
 
 \wxheading{Parameters}
 
 \docparam{enable}{If {\tt TRUE}, enables the window for input. If {\tt FALSE}, disables the window.}
+
+\wxheading{Return value}
+
+Returns {\tt TRUE} if the window has been enabled or disabled, {\tt FALSE} if
+nothing was done, i.e. if the window had already been in the specified state.
 
 \wxheading{See also}
 
