@@ -18,25 +18,11 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_LOG
-
-#include "wx/string.h"
-#include "wx/arrstr.h"
-
-// ----------------------------------------------------------------------------
-// forward declarations
-// ----------------------------------------------------------------------------
-
-#if wxUSE_GUI
-    class WXDLLIMPEXP_CORE wxTextCtrl;
-    class WXDLLIMPEXP_CORE wxLogFrame;
-    class WXDLLIMPEXP_CORE wxFrame;
-#endif // wxUSE_GUI
-
 // ----------------------------------------------------------------------------
 // types
 // ----------------------------------------------------------------------------
 
+// NB: these types are needed even if wxUSE_LOG == 0
 typedef unsigned long wxTraceMask;
 typedef unsigned long wxLogLevel;
 
@@ -44,8 +30,13 @@ typedef unsigned long wxLogLevel;
 // headers
 // ----------------------------------------------------------------------------
 
+#if wxUSE_LOG
+
+#include "wx/string.h"
+#include "wx/arrstr.h"
+
 #ifndef __WXWINCE__
-#include <time.h>   // for time_t
+    #include <time.h>   // for time_t
 #endif
 
 #include "wx/dynarray.h"
@@ -57,6 +48,16 @@ typedef unsigned long wxLogLevel;
 #    define wxUSE_LOG_DEBUG 0
 #  endif
 #endif
+
+// ----------------------------------------------------------------------------
+// forward declarations
+// ----------------------------------------------------------------------------
+
+#if wxUSE_GUI
+    class WXDLLIMPEXP_CORE wxTextCtrl;
+    class WXDLLIMPEXP_CORE wxLogFrame;
+    class WXDLLIMPEXP_CORE wxFrame;
+#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // constants
