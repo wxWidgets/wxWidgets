@@ -90,7 +90,6 @@ GENERICOBJS= #$ ExpandGlue("WXGENERICOBJS", "\$(OUTPUTDIR)\\", " &\n\t\$(OUTPUTD
 NONESSENTIALOBJS= #$ ExpandGlue("WXNONESSENTIALOBJS", "\$(OUTPUTDIR)\\", " &\n\t\$(OUTPUTDIR)\\")
 
 COMMONOBJS = &
-	$(OUTPUTDIR)\y_tab.obj &
 	#$ ExpandGlue("WXCOMMONOBJS", "\$(OUTPUTDIR)\\", " &\n\t\$(OUTPUTDIR)\\")
 
 MSWOBJS = #$ ExpandGlue("WXMSWOBJS", "\$(OUTPUTDIR)\\", " &\n\t\$(OUTPUTDIR)\\")
@@ -182,15 +181,6 @@ cleanall:   clean
                  "  *\$($cc) \$($flags) \$<" . "\n\n";
     }
 #$}
-
-$(OUTPUTDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
-  *$(CC) $(CFLAGS) -DUSE_DEFINE $(COMMDIR)\y_tab.c
-
-$(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
-        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
-
-$(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
-    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
 
 ########################################################
 # Generic objects (not always compiled, depending on

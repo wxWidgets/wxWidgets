@@ -30,9 +30,6 @@ ALL_SOURCES = \
 		generic/printps.cpp \
 		generic/prntdlgg.cpp \
 		generic/progdlgg.cpp \
-		generic/prop.cpp \
-		generic/propform.cpp \
-		generic/proplist.cpp \
 		generic/sashwin.cpp \
 		generic/scrlwing.cpp \
 		generic/spinctlg.cpp \
@@ -144,7 +141,6 @@ ALL_SOURCES = \
 		common/quantize.cpp \
 		common/radiocmn.cpp \
 		common/regex.cpp \
-		common/resource.cpp \
 		common/rgncmn.cpp \
 		common/sckaddr.cpp \
 		common/sckfile.cpp \
@@ -177,7 +173,6 @@ ALL_SOURCES = \
 		common/wfstream.cpp \
 		common/wincmn.cpp \
 		common/wxchar.cpp \
-		common/wxexpr.cpp \
 		common/xpmdecod.cpp \
 		common/zipstrm.cpp \
 		common/zstream.cpp \
@@ -340,7 +335,6 @@ ALL_HEADERS = \
 		effects.h \
 		encconv.h \
 		event.h \
-		expr.h \
 		fdrepdlg.h \
 		features.h \
 		ffile.h \
@@ -433,16 +427,12 @@ ALL_HEADERS = \
 		prntbase.h \
 		process.h \
 		progdlg.h \
-		prop.h \
-		propform.h \
-		proplist.h \
 		quantize.h \
 		radiobox.h \
 		radiobut.h \
 		rawbmp.h \
 		regex.h \
 		region.h \
-		resource.h \
 		sashwin.h \
 		sckaddr.h \
 		sckipc.h \
@@ -509,7 +499,6 @@ ALL_HEADERS = \
 		wx_cw_cm.h \
 		wx_cw_d.h \
 		wxchar.h \
-		wxexpr.h \
 		wxhtml.h \
 		wxprec.h \
 		xpmdecod.h \
@@ -737,7 +726,6 @@ COMMONOBJS = \
 		quantize.o \
 		radiocmn.o \
 		regex.o \
-		resource.o \
 		rgncmn.o \
 		sckaddr.o \
 		sckfile.o \
@@ -770,7 +758,6 @@ COMMONOBJS = \
 		wfstream.o \
 		wincmn.o \
 		wxchar.o \
-		wxexpr.o \
 		xpmdecod.o \
 		zipstrm.o \
 		zstream.o
@@ -805,9 +792,6 @@ GENERICOBJS = \
 		printps.o \
 		prntdlgg.o \
 		progdlgg.o \
-		prop.o \
-		propform.o \
-		proplist.o \
 		sashwin.o \
 		scrlwing.o \
 		spinctlg.o \

@@ -210,7 +210,6 @@ UNIVTHEMEOBJS = #$ ExpandList("WXUNIVTHEMEOBJS");
 HTMLOBJS = #$ ExpandList("WXHTMLOBJS");
 
 COMMONOBJS = \
-        $(MSWDIR)\y_tab.obj \
         #$ ExpandList("WXCOMMONOBJS");
 
 !if "$(WXUSINGUNIV)" == "1"
@@ -269,18 +268,6 @@ dummydll.obj: dummydll.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\includ
 
 version.res:
     brc32 -r -i$(WXDIR)\include\ $(MSWDIR)\version.rc
-
-$(MSWDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
-
-#        cl @<<
-# $(CPPFLAGS2) /c $*.c -DUSE_DEFINE -DYY_USE_PROTOS /Fo$@
-# <<
-
-$(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
-        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
-
-$(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
-    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
 
 # $(OBJECTS):   $(WXDIR)\include\wx\setup.h
 
@@ -514,8 +501,6 @@ clean: $(PERIPH_CLEAN_TARGET)
     -erase *.pch
     -erase *.csm
     -erase "wx32.#??"
-    -erase ..\common\y_tab.c
-    -erase ..\common\lex_yy.c
 
 cleanall: clean
 
@@ -525,20 +510,15 @@ docs:   allhlp allhtml allpdfrtf
 alldocs: docs
 hlp:    wxhlp portinghlp
 wxhlp:  $(DOCDIR)/winhelp/wx.hlp
-prophlp: $(DOCDIR)/winhelp/prop.hlp
 refhlp: $(DOCDIR)/winhelp/techref.hlp
 rtf:    $(DOCDIR)/winhelp/wx.rtf
-proprtf: $(DOCDIR)/winhelp/prop.rtf
 pdfrtf:    $(DOCDIR)/pdf/wx.rtf
-proppdfrtf: $(DOCDIR)/pdf/prop.rtf
 refpdfrtf: $(DOCDIR)/pdf/techref.rtf
 html:   wxhtml portinghtml
 wxhtml: $(DOCDIR)\html\wx\wx.htm
 htmlhelp: $(DOCDIR)\html\wx\wx.chm
-prophtml: $(DOCDIR)\html\proplist\prop.htm
 ps:     wxps referencps
 wxps:   $(WXDIR)\docs\ps\wx.ps
-propps: $(WXDIR)\docs\ps\prop.ps
 referencps: $(WXDIR)\docs\ps\referenc.ps
 
 portinghtml: $(DOCDIR)\html\porting\port.htm
@@ -547,7 +527,7 @@ portinghlp: $(DOCDIR)/winhelp/porting.hlp
 portingpdfrtf: $(DOCDIR)/pdf/porting.rtf
 portingps:  $(WXDIR)\docs\ps\porting.ps
 
-allhlp: wxhlp portinghlp prophlp
+allhlp: wxhlp portinghlp
         cd $(WXDIR)\utils\dialoged\src
         ${MAKE} -f makefile.b32 hlp
         cd $(THISDIR)
@@ -567,7 +547,7 @@ allhlp: wxhlp portinghlp prophlp
 #        cd $(WXDIR)\utils\wxgrid\src
 #        ${MAKE} -f makefile.b32 hlp
 
-allhtml: wxhtml portinghtml prophtml
+allhtml: wxhtml portinghtml
         cd $(WXDIR)\utils\dialoged\src
         ${MAKE} -f makefile.b32 html
         cd $(THISDIR)
@@ -588,12 +568,12 @@ allhtml: wxhtml portinghtml prophtml
 #        cd $(WXDIR)\utils\wxtree\src
 #        ${MAKE} -f makefile.b32 html
 
-allps: wxps referencps portingps propps
+allps: wxps referencps portingps
         cd $(WXDIR)\utils\dialoged\src
         ${MAKE} -f makefile.b32 ps
         cd $(THISDIR)
 
-allpdfrtf: pdfrtf portingpdfrtf proppdfrtf
+allpdfrtf: pdfrtf portingpdfrtf
         cd $(WXDIR)\utils\dialoged\src
         ${MAKE} -f makefile.b32 pdfrtf
         cd $(THISDIR)
@@ -626,14 +606,6 @@ $(DOCDIR)/winhelp/porting.hlp:         $(DOCDIR)/latex/porting/porting.rtf $(DOC
         move porting.cnt $(DOCDIR)\winhelp\porting.cnt
         cd $(THISDIR)
 
-$(DOCDIR)/winhelp/prop.hlp:         $(DOCDIR)/latex/proplist/prop.rtf $(DOCDIR)/latex/proplist/prop.hpj
-        cd $(DOCDIR)/latex/proplist
-        -erase prop.ph
-        hc prop
-        move prop.hlp $(DOCDIR)\winhelp\prop.hlp
-        move prop.cnt $(DOCDIR)\winhelp\prop.cnt
-        cd $(THISDIR)
-
 $(DOCDIR)/winhelp/techref.hlp:         $(DOCDIR)/latex/techref/techref.rtf $(DOCDIR)/latex/techref/techref.hpj
         cd $(DOCDIR)/latex/techref
         -erase techref.ph
@@ -650,11 +622,6 @@ $(DOCDIR)/latex/wx/wx.rtf:         $(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/late
 $(DOCDIR)/latex/porting/porting.rtf:         $(DOCDIR)/latex/porting/porting.tex
         cd $(DOCDIR)\latex\porting
         -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/porting/porting.tex $(DOCDIR)/latex/porting/porting.rtf -twice -winhelp
-        cd $(THISDIR)
-
-$(DOCDIR)/latex/proplist/prop.rtf:         $(DOCDIR)/latex/proplist/prop.tex $(DOCDIR)/latex/proplist/body.tex $(DOCDIR)/latex/proplist/classes.tex $(DOCDIR)/latex/proplist/changes.tex
-        cd $(DOCDIR)\latex\proplist
-        -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/proplist/prop.tex $(DOCDIR)/latex/proplist/prop.rtf -twice -winhelp
         cd $(THISDIR)
 
 $(DOCDIR)/latex/techref/techref.rtf:         $(DOCDIR)/latex/techref/techref.tex
@@ -674,13 +641,6 @@ $(DOCDIR)/pdf/porting.rtf:         $(DOCDIR)/latex/porting/porting.tex
         -copy *.wmf $(DOCDIR)\pdf
         -copy *.bmp $(DOCDIR)\pdf
         -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/porting/porting.tex $(DOCDIR)/pdf/porting.rtf -twice -rtf
-        cd $(THISDIR)
-
-$(DOCDIR)/pdf/prop.rtf:         $(DOCDIR)/latex/proplist/prop.tex $(DOCDIR)/latex/proplist/body.tex $(DOCDIR)/latex/proplist/classes.tex $(DOCDIR)/latex/proplist/changes.tex
-        cd $(DOCDIR)\latex\proplist
-        -copy *.wmf $(DOCDIR)\pdf
-        -copy *.bmp $(DOCDIR)\pdf
-        -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/proplist/prop.tex $(DOCDIR)/pdf/prop.rtf -twice -rtf
         cd $(THISDIR)
 
 $(DOCDIR)/pdf/techref.rtf:         $(DOCDIR)/latex/techref/techref.tex
@@ -714,16 +674,6 @@ $(DOCDIR)\html\porting\port.htm:         $(DOCDIR)\latex\porting\porting.tex
         -erase $(DOCDIR)\html\porting\*.ref
         -erase $(DOCDIR)\latex\porting\*.con
         -erase $(DOCDIR)\latex\porting\*.ref
-        cd $(THISDIR)
-
-$(DOCDIR)\html\proplist\prop.htm:         $(DOCDIR)\latex\proplist\prop.tex $(DOCDIR)\latex\proplist\body.tex $(DOCDIR)\latex\proplist\classes.tex $(DOCDIR)\latex\proplist\changes.tex
-        cd $(DOCDIR)\latex\proplist
-        -mkdir $(DOCDIR)\html\proplist
-        -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\proplist\prop.tex $(DOCDIR)\html\proplist\prop.htm -twice -html
-        -erase $(DOCDIR)\html\proplist\*.con
-        -erase $(DOCDIR)\html\proplist\*.ref
-        -erase $(DOCDIR)\latex\proplist\*.con
-        -erase $(DOCDIR)\latex\proplist\*.ref
         cd $(THISDIR)
 
 $(WXDIR)\docs\latex\wx\manual.dvi:  $(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/manual.tex

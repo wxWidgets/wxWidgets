@@ -70,9 +70,6 @@ GENERICOBJS= $(GENDIR)\busyinfo.obj \
 		$(GENDIR)\panelg.obj \
 		$(GENDIR)\prntdlgg.obj \
 		$(GENDIR)\progdlgg.obj \
-		$(GENDIR)\prop.obj \
-		$(GENDIR)\propform.obj \
-		$(GENDIR)\proplist.obj \
 		$(GENDIR)\sashwin.obj \
 		$(GENDIR)\scrlwing.obj \
 		$(GENDIR)\spinctlg.obj \
@@ -85,12 +82,10 @@ GENERICOBJS= $(GENDIR)\busyinfo.obj \
 		$(GENDIR)\tipdlg.obj \
 		$(GENDIR)\tipwin.obj \
 		$(GENDIR)\treectlg.obj \
-		$(GENDIR)\treelay.obj \
 		$(GENDIR)\wizard.obj
 
 # we can't have all objects in one list because the library becomes too big
 COMMONOBJS1 = \
-		$(COMMDIR)\y_tab.obj \
 		$(COMMDIR)\accesscmn.obj \
 		$(COMMDIR)\appcmn.obj \
 		$(COMMDIR)\artprov.obj \
@@ -1467,21 +1462,6 @@ $(GENDIR)/progdlgg.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
-$(GENDIR)/prop.obj:     $*.$(SRCSUFF)
-        cl @<<
-$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
-<<
-
-$(GENDIR)/propform.obj:     $*.$(SRCSUFF)
-        cl @<<
-$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
-<<
-
-$(GENDIR)/proplist.obj:     $*.$(SRCSUFF)
-        cl @<<
-$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
-<<
-
 $(GENDIR)/sashwin.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
@@ -1542,28 +1522,12 @@ $(GENDIR)/treectlg.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
-$(GENDIR)/treelay.obj:     $*.$(SRCSUFF)
-        cl @<<
-$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
-<<
-
 $(GENDIR)/wizard.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 
-
-$(COMMDIR)/y_tab.obj:     $*.c $(COMMDIR)/lex_yy.c
-        cl @<<
-$(CPPFLAGS2) -DUSE_DEFINE -DYY_USE_PROTOS /Fo$@ /I ..\common /c $*.c
-<<
-
-$(COMMDIR)/y_tab.c:     $(COMMDIR)/dosyacc.c
-        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
-
-$(COMMDIR)/lex_yy.c:    $(COMMDIR)/doslex.c
-    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
 
 $(OBJECTS):	$(WXDIR)/include/wx/setup.h
 

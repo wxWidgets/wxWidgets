@@ -103,9 +103,6 @@ panelg.cpp	Generic
 printps.cpp	Generic	NotMSW
 prntdlgg.cpp	Generic	NotMSW
 progdlgg.cpp	Generic
-prop.cpp	Generic
-propform.cpp	Generic
-proplist.cpp	Generic
 sashwin.cpp	Generic
 scrlwing.cpp	Generic
 spinctlg.cpp	Generic
@@ -120,7 +117,6 @@ timer.cpp	Generic	LowLevel,NotMSW,NotX,NotGTK,NotOS2,NotMac,NotMicro
 tipdlg.cpp	Generic
 tipwin.cpp	Generic
 treectlg.cpp	Generic
-treelay.cpp	Generic
 wizard.cpp	Generic
 
 accesscmn.cpp	Common
@@ -222,7 +218,6 @@ quantize.cpp	Common
 radiocmn.cpp	Common
 regex.cpp	Common	Base
 rgncmn.cpp	Common
-resource.cpp	Common
 sckaddr.cpp	Common	Socket,Base
 sckfile.cpp	Common	Socket,Base
 sckipc.cpp	Common	Socket,Base
@@ -253,7 +248,6 @@ variant.cpp	Common	Base
 wfstream.cpp	Common	Base
 wincmn.cpp	Common
 wxchar.cpp	Common	Base
-wxexpr.cpp	Common
 xpmdecod.cpp	Common
 zipstrm.cpp	Common	Base
 zstream.cpp	Common	Base
@@ -876,7 +870,6 @@ dynload.h	WXH	Base
 effects.h	WXH
 encconv.h	WXH	Base
 event.h	WXH	Base
-expr.h	WXH
 fdrepdlg.h	WXH
 features.h	WXH	Base
 ffile.h	WXH	Base
@@ -972,16 +965,12 @@ printdlg.h	WXH
 prntbase.h	WXH
 process.h	WXH	Base
 progdlg.h	WXH
-prop.h	WXH
-propform.h	WXH
-proplist.h	WXH
 quantize.h	WXH
 radiobox.h	WXH
 radiobut.h	WXH
 rawbmp.h	WXH
 regex.h	WXH	Base
 region.h	WXH
-resource.h	WXH
 sashwin.h	WXH
 sckaddr.h	WXH	Base
 sckipc.h	WXH	Base
@@ -1047,7 +1036,6 @@ wx_cw.h	WXH
 wx_cw_cm.h	WXH
 wx_cw_d.h	WXH
 wxchar.h	WXH	Base
-wxexpr.h	WXH
 wxhtml.h	WXH
 wxprec.h	WXH	Base
 zipstrm.h	WXH	Base

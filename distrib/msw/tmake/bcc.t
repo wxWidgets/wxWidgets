@@ -127,7 +127,6 @@ DOCDIR = $(WXDIR)\docs
 GENERICOBJS= #$ ExpandList("WXGENERICOBJS");
 
 COMMONOBJS = \
-		$(MSWDIR)\y_tab.obj \
 		#$ ExpandList("WXCOMMONOBJS");
 
 MSWOBJS = #$ ExpandList("WXMSWOBJS");
@@ -149,18 +148,6 @@ $(LIBTARGET): $(DUMMY).obj $(OBJECTS) $(PERIPH_LIBS)
 
 dummy.obj: dummy.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\include\wx\wx.h
 dummydll.obj: dummydll.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\include\wx\wx.h
-
-$(MSWDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
-
-#        cl @<<
-# $(CPPFLAGS2) /c $*.c -DUSE_DEFINE -DYY_USE_PROTOS /Fo$@
-# <<
-
-$(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
-        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
-
-$(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
-    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
 
 # $(OBJECTS):	$(WXDIR)\include\wx\setup.h
 
@@ -284,8 +271,6 @@ clean: $(PERIPH_CLEAN_TARGET)
     erase *.pch
     erase *.csm
     erase *.cfg
-	erase ..\common\y_tab.c
-    erase ..\common\lex_yy.c
 
 cleanall: clean
 

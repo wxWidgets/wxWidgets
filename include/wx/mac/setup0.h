@@ -753,9 +753,6 @@
 // OpenGL canvas
 #define wxUSE_GLCANVAS       0
 
-// wxTreeLayout class
-#define wxUSE_TREELAYOUT     1
-
 // ----------------------------------------------------------------------------
 // Data transfer
 // ----------------------------------------------------------------------------
@@ -812,12 +809,6 @@
 
 #define wxUSE_SPLINES     1
                                 // 0 for no splines
-
-// use wxExpr (a.k.a. PrologIO)
-#define wxUSE_PROLOGIO          0
-
-// Use .wxr resource mechanism (requires PrologIO library)
-#define wxUSE_WX_RESOURCES        0
 
 #define wxUSE_MOUSEWHEEL        1
                                 // Include mouse wheel support

@@ -320,12 +320,6 @@ LIB32=link.exe -lib
 # PROP Default_Filter ""
 #$ ExpandGlue("WXCOMMONSRCS", "# Begin Source File\n\nSOURCE=.\\common\\", "\n# End Source File\n# Begin Source File\n\nSOURCE=.\\common\\", "\n# End Source File\n");
 #$ ExpandGlue("WXCSRCS", "# Begin Source File\n\nSOURCE=.\\common\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n# Begin Source File\n\nSOURCE=.\\common\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n");
-# Begin Source File
-
-SOURCE=.\common\dosyacc.c
-# ADD CPP /W1 /D "USE_DEFINE" /D "IDE_INVOKED"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
 # End Group
 # Begin Group "Generic Files"
 

@@ -950,7 +950,7 @@ bool wxResourceManager::Edit(wxItemResource *res)
         wxResourceEditorDialogHandler *handler = new wxResourceEditorDialogHandler(panel, res, panel->GetEventHandler(),
             this);
         
-        panel->LoadFromResource(m_editorPanel, res->GetName(), &m_resourceTable);
+        wxLoadFromResource(panel, m_editorPanel, res->GetName(), &m_resourceTable);
         
         panel->PushEventHandler(handler);
         
@@ -1235,7 +1235,7 @@ bool wxResourceManager::TestCurrentDialog(wxWindow* parent)
         
         ResourceEditorDialogTester* dialog = new ResourceEditorDialogTester;
         bool success = FALSE;
-        if (dialog->LoadFromResource(parent, item->GetName(), & m_resourceTable))
+        if (wxLoadFromResource(dialog, parent, item->GetName(), & m_resourceTable))
         {
             dialog->Centre();
             dialog->ShowModal();

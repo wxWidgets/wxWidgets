@@ -380,7 +380,6 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_DOC_VIEW_ARCHITECTURE=no
   DEFAULT_wxUSE_PRINTING_ARCHITECTURE=no
 
-  DEFAULT_wxUSE_PROLOGIO=no
   DEFAULT_wxUSE_RESOURCES=no
   DEFAULT_wxUSE_CONSTRAINTS=no
   DEFAULT_wxUSE_IPC=no
@@ -438,7 +437,6 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_LISTBOX=no
   DEFAULT_wxUSE_LISTCTRL=no
   DEFAULT_wxUSE_NOTEBOOK=no
-  DEFAULT_wxUSE_PROPSHEET=no
   DEFAULT_wxUSE_RADIOBOX=no
   DEFAULT_wxUSE_RADIOBTN=no
   DEFAULT_wxUSE_SASH=no
@@ -554,7 +552,6 @@ else
   DEFAULT_wxUSE_DOC_VIEW_ARCHITECTURE=yes
   DEFAULT_wxUSE_PRINTING_ARCHITECTURE=yes
 
-  DEFAULT_wxUSE_PROLOGIO=no
   DEFAULT_wxUSE_RESOURCES=no
   DEFAULT_wxUSE_CONSTRAINTS=yes
   DEFAULT_wxUSE_IPC=yes
@@ -612,7 +609,6 @@ else
   DEFAULT_wxUSE_LISTBOX=yes
   DEFAULT_wxUSE_LISTCTRL=yes
   DEFAULT_wxUSE_NOTEBOOK=yes
-  DEFAULT_wxUSE_PROPSHEET=yes
   DEFAULT_wxUSE_RADIOBOX=yes
   DEFAULT_wxUSE_RADIOBTN=yes
   DEFAULT_wxUSE_SASH=yes
@@ -846,7 +842,7 @@ dnl ---------------------------------------------------------------------------
 dnl resources
 dnl ---------------------------------------------------------------------------
 
-WX_ARG_ENABLE(prologio,    [  --enable-prologio       use Prolog IO library], wxUSE_PROLOGIO)
+dnl WX_ARG_ENABLE(prologio,    [  --enable-prologio       use Prolog IO library], wxUSE_PROLOGIO)
 WX_ARG_ENABLE(resources,   [  --enable-resources      use wxWindows resources], wxUSE_RESOURCES)
 
 WX_ARG_ENABLE(xresources,  [  --enable-xresources     use X resources for save (default for gtk+)], wxUSE_X_RESOURCES)
@@ -859,7 +855,7 @@ WX_ARG_ENABLE(clipboard,   [  --enable-clipboard      use wxClipboard class], wx
 WX_ARG_ENABLE(dnd,         [  --enable-dnd            use Drag'n'Drop classes], wxUSE_DRAG_AND_DROP)
 WX_ARG_ENABLE(metafile,    [  --enable-metafile       use win32 metafiles], wxUSE_METAFILE)
 
-WX_ARG_ENABLE(treelayout,  [  --enable-treelayout     use wxTreeLayout class], wxUSE_TREELAYOUT)
+dnl WX_ARG_ENABLE(treelayout,  [  --enable-treelayout     use wxTreeLayout class], wxUSE_TREELAYOUT)
 
 dnl ---------------------------------------------------------------------------
 dnl optional GUI controls (in alphabetical order except the first one)
@@ -886,7 +882,6 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_LISTBOX=yes
   DEFAULT_wxUSE_LISTCTRL=yes
   DEFAULT_wxUSE_NOTEBOOK=yes
-  DEFAULT_wxUSE_PROPSHEET=yes
   DEFAULT_wxUSE_RADIOBOX=yes
   DEFAULT_wxUSE_RADIOBTN=yes
   DEFAULT_wxUSE_SASH=yes
@@ -924,7 +919,6 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_LISTBOX=no
   DEFAULT_wxUSE_LISTCTRL=no
   DEFAULT_wxUSE_NOTEBOOK=no
-  DEFAULT_wxUSE_PROPSHEET=no
   DEFAULT_wxUSE_RADIOBOX=no
   DEFAULT_wxUSE_RADIOBTN=no
   DEFAULT_wxUSE_SASH=no
@@ -973,7 +967,6 @@ if test "x$wxUSE_COCOA" != "x" -a "$wxUSE_COCOA" != "0" ; then
   DEFAULT_wxUSE_GRID=no
   DEFAULT_wxUSE_NUMBERDLG=no
   DEFAULT_wxUSE_PROGRESSDLG=no
-  DEFAULT_wxUSE_PROPSHEET=no
   DEFAULT_wxUSE_SASH=no
   DEFAULT_wxUSE_SPLITTER=no
   DEFAULT_wxUSE_WIZARDDLG=no
@@ -998,7 +991,6 @@ WX_ARG_ENABLE(imaglist,    [  --enable-imaglist       use wxImageList class], wx
 WX_ARG_ENABLE(listbox,     [  --enable-listbox        use wxListBox class], wxUSE_LISTBOX)
 WX_ARG_ENABLE(listctrl,    [  --enable-listctrl       use wxListCtrl class], wxUSE_LISTCTRL)
 WX_ARG_ENABLE(notebook,    [  --enable-notebook       use wxNotebook class], wxUSE_NOTEBOOK)
-WX_ARG_ENABLE(propsheet,   [  --enable-propsheet      use wxPropertySheet class], wxUSE_PROPSHEET)
 WX_ARG_ENABLE(radiobox,    [  --enable-radiobox       use wxRadioBox class], wxUSE_RADIOBOX)
 WX_ARG_ENABLE(radiobtn,    [  --enable-radiobtn       use wxRadioButton class], wxUSE_RADIOBTN)
 WX_ARG_ENABLE(sash,        [  --enable-sash           use wxSashWindow class], wxUSE_SASH)
@@ -2621,9 +2613,9 @@ equivalent variable and GTK+ is version 1.2.3 or above.
     if test "$wxUSE_PM" = 1; then
         TOOLKIT=PM
         GUIDIST=GTK_DIST
-        AC_MSG_WARN([OS/2 PM requires old resource format, re-enabled])
-        wxUSE_PROLOGIO="yes"
-        wxUSE_RESOURCES="yes"
+dnl        AC_MSG_WARN([OS/2 PM requires old resource format, re-enabled])
+dnl        wxUSE_PROLOGIO="yes"
+dnl        wxUSE_RESOURCES="yes"
         AC_MSG_WARN([OS/2 threads are not yet supported... disabled])
         wxUSE_THREADS="no"
     fi
@@ -4663,22 +4655,22 @@ if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS printing"
 fi
 
-if test "$wxUSE_PROLOGIO" = "yes" ; then
-    AC_DEFINE(wxUSE_PROLOGIO)
-    ALL_OBJECTS="$ALL_OBJECTS parser.o"
-fi
+dnl if test "$wxUSE_PROLOGIO" = "yes" ; then
+dnl     AC_DEFINE(wxUSE_PROLOGIO)
+dnl     ALL_OBJECTS="$ALL_OBJECTS parser.o"
+dnl fi
 
-if test "$wxUSE_RESOURCES" = "yes" ; then
-    if test "$wxUSE_NANOX" = "yes"; then
-        AC_MSG_WARN([Cannot use resource database functions in NanoX])
-    else
-        AC_DEFINE(wxUSE_RESOURCES)
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS resource"
-    fi
-    if test "$wxUSE_PROLOGIO" != "yes" ; then
-        ALL_OBJECTS="$ALL_OBJECTS parser.o"
-    fi
-fi
+dnl if test "$wxUSE_RESOURCES" = "yes" ; then
+dnl     if test "$wxUSE_NANOX" = "yes"; then
+dnl         AC_MSG_WARN([Cannot use resource database functions in NanoX])
+dnl     else
+dnl         AC_DEFINE(wxUSE_RESOURCES)
+dnl         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS resource"
+dnl     fi
+dnl     if test "$wxUSE_PROLOGIO" != "yes" ; then
+dnl         ALL_OBJECTS="$ALL_OBJECTS parser.o"
+dnl     fi
+dnl fi
 
 if test "$wxUSE_X_RESOURCES" = "yes"; then
     AC_DEFINE(wxUSE_X_RESOURCES)
@@ -4888,11 +4880,11 @@ if test "$wxUSE_NOTEBOOK" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS notebook"
 fi
 
-if test "$wxUSE_PROPSHEET" = "yes"; then
-    AC_DEFINE(wxUSE_PROPSHEET)
-    USES_CONTROLS=1
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS proplist"
-fi
+dnl if test "$wxUSE_PROPSHEET" = "yes"; then
+dnl     AC_DEFINE(wxUSE_PROPSHEET)
+dnl     USES_CONTROLS=1
+dnl     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS proplist"
+dnl fi
 
 if test "$wxUSE_RADIOBOX" = "yes"; then
     AC_DEFINE(wxUSE_RADIOBOX)
@@ -5068,10 +5060,10 @@ dnl ---------------------------------------------------------------------------
 dnl misc options
 dnl ---------------------------------------------------------------------------
 
-if test "$wxUSE_TREELAYOUT" = "yes"; then
-    AC_DEFINE(wxUSE_TREELAYOUT)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS treelay"
-fi
+dnl if test "$wxUSE_TREELAYOUT" = "yes"; then
+dnl     AC_DEFINE(wxUSE_TREELAYOUT)
+dnl     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS treelay"
+dnl fi
 
 if test "$wxUSE_DRAGIMAGE" = "yes"; then
     AC_DEFINE(wxUSE_DRAGIMAGE)

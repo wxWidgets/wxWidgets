@@ -103,9 +103,6 @@ GENERICOBJS= $(GENDIR)\$D\busyinfo.obj \
 		$(GENDIR)\$D\numdlgg.obj \
 		$(GENDIR)\$D\panelg.obj \
 		$(GENDIR)\$D\progdlgg.obj \
-		$(GENDIR)\$D\prop.obj \
-		$(GENDIR)\$D\propform.obj \
-		$(GENDIR)\$D\proplist.obj \
 		$(GENDIR)\$D\sashwin.obj \
 		$(GENDIR)\$D\scrlwing.obj \
 		$(GENDIR)\$D\spinctlg.obj \
@@ -117,7 +114,6 @@ GENERICOBJS= $(GENDIR)\$D\busyinfo.obj \
 		$(GENDIR)\$D\tipdlg.obj \
 		$(GENDIR)\$D\tipwin.obj \
 		$(GENDIR)\$D\treectlg.obj \
-		$(GENDIR)\$D\treelay.obj \
 		$(GENDIR)\$D\wizard.obj
 
 # These are generic things that don't need to be compiled on MSW,
@@ -136,7 +132,6 @@ NONESSENTIALOBJS= $(GENDIR)\$D\colrdlgg.obj \
 		$(GENDIR)\$D\tabg.obj
 
 COMMONOBJS = \
-		$(COMMDIR)\$D\y_tab.obj \
 		$(COMMDIR)\$D\accesscmn.obj \
 		$(COMMDIR)\$D\appcmn.obj \
 		$(COMMDIR)\$D\artprov.obj \
@@ -585,9 +580,6 @@ $(CPPFLAGS2) /Od /Fo$(GENDIR)\$D\gridsel.obj /c /Tp $(GENDIR)\gridsel.cpp
 $(CPPFLAGS2) /Od /Fo$(GENDIR)\$D\logg.obj /c /Tp $(GENDIR)\logg.cpp
 <<
 	cl @<<
-$(CPPFLAGS2) /Od /Fo$(GENDIR)\$D\proplist.obj /c /Tp $(GENDIR)\proplist.cpp
-<<
-	cl @<<
 $(CPPFLAGS2) /Od /Fo$(MSWDIR)\$D\clipbrd.obj /c /Tp $(MSWDIR)\clipbrd.cpp
 <<
 	cl @<<
@@ -614,17 +606,6 @@ $(CPPFLAGS2) /Od /Fo$(MSWDIR)\$D\treectrl.obj /c /Tp $(MSWDIR)\treectrl.cpp
 	cl @<<
 $(CPPFLAGS2) /Od /Fo$(HTMLDIR)\$D\helpfrm.obj /c /Tp $(HTMLDIR)\helpfrm.cpp
 <<
-
-$(COMMDIR)\$D\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
-        cl @<<
-$(CPPFLAGS2) /c $(COMMDIR)\y_tab.c -DUSE_DEFINE -DYY_USE_PROTOS /Fo$@
-<<
-
-$(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
-        copy "$(COMMDIR)"\dosyacc.c "$(COMMDIR)"\y_tab.c
-
-$(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
-    copy "$(COMMDIR)"\doslex.c "$(COMMDIR)"\lex_yy.c
 
 $(OBJECTS):	$(SETUP_H)
 
@@ -713,8 +694,6 @@ clean: $(PERIPH_CLEAN_TARGET)
         -erase $(COMMDIR)\$D\*.obj
         -erase $(COMMDIR)\$D\*.pdb
         -erase $(COMMDIR)\$D\*.sbr
-        -erase $(COMMDIR)\y_tab.c
-        -erase $(COMMDIR)\lex_yy.c
         -erase $(MSWDIR)\$D\*.obj
         -erase $(MSWDIR)\$D\*.sbr
         -erase $(MSWDIR)\$D\*.pdb

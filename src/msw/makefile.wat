@@ -81,7 +81,6 @@ NONESSENTIALOBJS= $(OUTPUTDIR)\accel.obj &
 	$(OUTPUTDIR)\timer.obj
 
 COMMONOBJS = &
-	$(OUTPUTDIR)\y_tab.obj &
 	$(OUTPUTDIR)\accesscmn.obj &
 	$(OUTPUTDIR)\appcmn.obj &
 	$(OUTPUTDIR)\artprov.obj &
@@ -210,7 +209,6 @@ COMMONOBJS = &
 	$(OUTPUTDIR)\wfstream.obj &
 	$(OUTPUTDIR)\wincmn.obj &
 	$(OUTPUTDIR)\wxchar.obj &
-	$(OUTPUTDIR)\wxexpr.obj &
 	$(OUTPUTDIR)\xpmdecod.obj &
 	$(OUTPUTDIR)\zipstrm.obj &
 	$(OUTPUTDIR)\zstream.obj
@@ -1099,9 +1097,6 @@ $(OUTPUTDIR)\wincmn.obj:     $(COMMDIR)\wincmn.cpp
 $(OUTPUTDIR)\wxchar.obj:     $(COMMDIR)\wxchar.cpp
   *$(CXX) $(CXXFLAGS) $<
 
-$(OUTPUTDIR)\wxexpr.obj:     $(COMMDIR)\wxexpr.cpp
-  *$(CXX) $(CXXFLAGS) $<
-
 $(OUTPUTDIR)\xpmdecod.obj:     $(COMMDIR)\xpmdecod.cpp
   *$(CXX) $(CXXFLAGS) $<
 
@@ -1111,16 +1106,6 @@ $(OUTPUTDIR)\zipstrm.obj:     $(COMMDIR)\zipstrm.cpp
 $(OUTPUTDIR)\zstream.obj:     $(COMMDIR)\zstream.cpp
   *$(CXX) $(CXXFLAGS) $<
 
-
-
-$(OUTPUTDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
-  *$(CC) $(CFLAGS) -DUSE_DEFINE $(COMMDIR)\y_tab.c
-
-$(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
-        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
-
-$(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
-    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
 
 ########################################################
 # Generic objects (not always compiled, depending on
@@ -1169,15 +1154,6 @@ $(OUTPUTDIR)\panelg.obj:     $(GENDIR)\panelg.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\progdlgg.obj:     $(GENDIR)\progdlgg.cpp
-  *$(CXX) $(CXXFLAGS) $<
-
-$(OUTPUTDIR)\prop.obj:     $(GENDIR)\prop.cpp
-  *$(CXX) $(CXXFLAGS) $<
-
-$(OUTPUTDIR)\propform.obj:     $(GENDIR)\propform.cpp
-  *$(CXX) $(CXXFLAGS) $<
-
-$(OUTPUTDIR)\proplist.obj:     $(GENDIR)\proplist.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\sashwin.obj:     $(GENDIR)\sashwin.cpp

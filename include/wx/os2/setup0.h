@@ -400,8 +400,5 @@
 
 #define wxUSE_GENERIC_MDI_AS_NATIVE 1
 
-// use wxExpr (a.k.a. PrologIO)
-#define wxUSE_PROLOGIO          1
-
 #endif
     // _WX_SETUP_H_

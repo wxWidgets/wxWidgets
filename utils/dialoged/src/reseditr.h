@@ -18,15 +18,19 @@
 #pragma interface "reseditr.h"
 #endif
 
+#include "wx/deprecated/setup.h"
+
 #include "wx/wx.h"
 #include "wx/string.h"
 #include "wx/layout.h"
-#include "wx/resource.h"
 #include "wx/toolbar.h"
 #include "wx/imaglist.h"
 #include "wx/treectrl.h"
-#include "wx/proplist.h"
 #include "wx/txtstrm.h"
+
+#include "wx/deprecated/resource.h"
+#include "wx/deprecated/proplist.h"
+
 #include "symbtabl.h"
 #include "winstyle.h"
 

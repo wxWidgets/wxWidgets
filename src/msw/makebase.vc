@@ -59,7 +59,6 @@ $(CPPFLAGS2) /Fo$@ /c /Tc $<
 <<
 
 COMMONOBJS = \
-    ..\common\$D\y_tab.obj \
     ..\common\$D\appcmn.obj \
 		..\common\$D\clntdata.obj \
 		..\common\$D\cmdline.obj \
@@ -183,17 +182,6 @@ $(DUMMYOBJ): $(DUMMY).$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(SETUP_H)
         cl $(CPPFLAGS) $(MAKEPRECOMP) /Fo$(DUMMYOBJ) /c /Tp $(DUMMY).cpp
 ########################################################
 
-..\common\$D\y_tab.obj:     ..\common\y_tab.c ..\common\lex_yy.c
-        cl @<<
-$(CPPFLAGS2) /c ..\common\y_tab.c -DUSE_DEFINE -DYY_USE_PROTOS /Fo$@
-<<
-
-..\common\y_tab.c:     ..\common\dosyacc.c
-        copy "..\common"\dosyacc.c "..\common"\y_tab.c
-
-..\common\lex_yy.c:    ..\common\doslex.c
-    copy "..\common"\doslex.c "..\common"\lex_yy.c
-
 $(OBJECTS): $(WXDIR)/include/wx/setup.h
 
 ..\common\$D\unzip.obj:     ..\common\unzip.c
@@ -265,8 +253,6 @@ clean: $(PERIPH_CLEAN_TARGET)
         -erase $(COMMDIR)\$D\*.sbr
         -erase $(COMMDIR)\$D\*.idb
         -erase $(COMMDIR)\$D\*.pch
-        -erase $(COMMDIR)\y_tab.c
-        -erase $(COMMDIR)\lex_yy.c
         -erase $(MSWDIR)\$D\*.idb
         -erase $(MSWDIR)\$D\*.pdb
         -erase $(MSWDIR)\$D\*.pch

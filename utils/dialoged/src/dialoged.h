@@ -16,7 +16,7 @@
 #ifndef dialogedh
 #define dialogedh
 
-#include "wx/proplist.h"
+#include "wx/deprecated/proplist.h"
 #include "reseditr.h"
 
 class MyChild;

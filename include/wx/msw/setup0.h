@@ -560,9 +560,6 @@
 #define wxUSE_GRID         1
 #define wxUSE_NEW_GRID     1
 
-// wxProperty[Value/Form/List] classes, used by Dialog Editor
-#define wxUSE_PROPSHEET    0
-
 // ----------------------------------------------------------------------------
 // Miscellaneous GUI stuff
 // ----------------------------------------------------------------------------
@@ -781,9 +778,6 @@
 // Recommended setting: 1 if you intend to use OpenGL, 0 otherwise
 #define wxUSE_GLCANVAS       0
 
-// wxTreeLayout class
-#define wxUSE_TREELAYOUT     1
-
 // ----------------------------------------------------------------------------
 // Data transfer
 // ----------------------------------------------------------------------------
@@ -858,12 +852,6 @@
                                 // Default is 1, as XPM is now fully
                                 // supported this makes easier the issue
                                 // of portable icons and bitmaps.
-
-// use wxExpr (a.k.a. PrologIO)
-#define wxUSE_PROLOGIO          0
-
-// Use .wxr resource mechanism (requires PrologIO library)
-#define wxUSE_WX_RESOURCES      0
 
 #define wxUSE_MOUSEWHEEL        1
                                 // Include mouse wheel support

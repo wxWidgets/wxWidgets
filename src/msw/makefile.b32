@@ -101,7 +101,6 @@ GENERICOBJS= $(MSWDIR)\busyinfo.obj \
 		$(MSWDIR)\tipdlg.obj \
 		$(MSWDIR)\tipwin.obj \
 		$(MSWDIR)\treectlg.obj \
-		$(MSWDIR)\treelay.obj \
 		$(MSWDIR)\wizard.obj
 
 MSWOBJS = $(MSWDIR)\accel.obj \
@@ -257,7 +256,6 @@ GENERICUNIVOBJS= $(MSWDIR)\accel.obj \
 		$(MSWDIR)\tipdlg.obj \
 		$(MSWDIR)\tipwin.obj \
 		$(MSWDIR)\treectlg.obj \
-		$(MSWDIR)\treelay.obj \
 		$(MSWDIR)\wizard.obj
 
 MSWUNIVOBJS = $(MSWDIR)\app.obj \
@@ -383,7 +381,6 @@ HTMLOBJS = $(MSWDIR)\helpctrl.obj \
 		$(MSWDIR)\winpars.obj
 
 COMMONOBJS = \
-        $(MSWDIR)\y_tab.obj \
         $(MSWDIR)\accesscmn.obj \
 		$(MSWDIR)\appcmn.obj \
 		$(MSWDIR)\artprov.obj \
@@ -479,7 +476,6 @@ COMMONOBJS = \
 		$(MSWDIR)\quantize.obj \
 		$(MSWDIR)\radiocmn.obj \
 		$(MSWDIR)\regex.obj \
-		$(MSWDIR)\resource.obj \
 		$(MSWDIR)\rgncmn.obj \
 		$(MSWDIR)\sckaddr.obj \
 		$(MSWDIR)\sckfile.obj \
@@ -573,20 +569,6 @@ dummydll.obj: dummydll.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\includ
 
 version.res:
     brc32 -r -i$(WXDIR)\include\ $(MSWDIR)\version.rc
-
-$(MSWDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
-
-#        cl @<<
-# $(CPPFLAGS2) /c $*.c -DUSE_DEFINE -DYY_USE_PROTOS /Fo$@
-# <<
-
-$(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
-        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
-
-$(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
-    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
-
-# $(OBJECTS):   $(WXDIR)\include\wx\setup.h
 
 !if "$(WXUSINGUNIV)" == "1"
 ########################################################
@@ -1224,8 +1206,6 @@ $(MSWDIR)\radiocmn.obj: $(COMMDIR)\radiocmn.$(SRCSUFF)
 
 $(MSWDIR)\regex.obj: $(COMMDIR)\regex.$(SRCSUFF)
 
-$(MSWDIR)\resource.obj: $(COMMDIR)\resource.$(SRCSUFF)
-
 $(MSWDIR)\rgncmn.obj: $(COMMDIR)\rgncmn.$(SRCSUFF)
 
 $(MSWDIR)\sckaddr.obj: $(COMMDIR)\sckaddr.$(SRCSUFF)
@@ -1391,8 +1371,6 @@ $(MSWDIR)\tipwin.obj: $(GENDIR)\tipwin.$(SRCSUFF)
 
 $(MSWDIR)\treectlg.obj: $(GENDIR)\treectlg.$(SRCSUFF)
 
-$(MSWDIR)\treelay.obj: $(GENDIR)\treelay.$(SRCSUFF)
-
 $(MSWDIR)\wizard.obj: $(GENDIR)\wizard.$(SRCSUFF)
 
 
@@ -1460,8 +1438,6 @@ $(MSWDIR)\tipdlg.obj: $(GENDIR)\tipdlg.$(SRCSUFF)
 $(MSWDIR)\tipwin.obj: $(GENDIR)\tipwin.$(SRCSUFF)
 
 $(MSWDIR)\treectlg.obj: $(GENDIR)\treectlg.$(SRCSUFF)
-
-$(MSWDIR)\treelay.obj: $(GENDIR)\treelay.$(SRCSUFF)
 
 $(MSWDIR)\wizard.obj: $(GENDIR)\wizard.$(SRCSUFF)
 
@@ -1613,8 +1589,6 @@ clean: $(PERIPH_CLEAN_TARGET)
     -erase *.pch
     -erase *.csm
     -erase "wx32.#??"
-    -erase ..\common\y_tab.c
-    -erase ..\common\lex_yy.c
 
 cleanall: clean
 

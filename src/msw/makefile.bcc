@@ -87,9 +87,6 @@ GENERICOBJS= $(MSWDIR)\busyinfo.obj \
 		$(MSWDIR)\panelg.obj \
 		$(MSWDIR)\prntdlgg.obj \
 		$(MSWDIR)\progdlgg.obj \
-		$(MSWDIR)\prop.obj \
-		$(MSWDIR)\propform.obj \
-		$(MSWDIR)\proplist.obj \
 		$(MSWDIR)\sashwin.obj \
 		$(MSWDIR)\scrlwing.obj \
 		$(MSWDIR)\spinctlg.obj \
@@ -102,11 +99,9 @@ GENERICOBJS= $(MSWDIR)\busyinfo.obj \
 		$(MSWDIR)\tipdlg.obj \
 		$(MSWDIR)\tipwin.obj \
 		$(MSWDIR)\treectlg.obj \
-		$(MSWDIR)\treelay.obj \
 		$(MSWDIR)\wizard.obj
 
 COMMONOBJS = \
-		$(MSWDIR)\y_tab.obj \
 		$(MSWDIR)\accesscmn.obj \
 		$(MSWDIR)\appcmn.obj \
 		$(MSWDIR)\artprov.obj \
@@ -189,7 +184,6 @@ COMMONOBJS = \
 		$(MSWDIR)\quantize.obj \
 		$(MSWDIR)\radiocmn.obj \
 		$(MSWDIR)\regex.obj \
-		$(MSWDIR)\resource.obj \
 		$(MSWDIR)\rgncmn.obj \
 		$(MSWDIR)\settcmn.obj \
 		$(MSWDIR)\sizer.obj \
@@ -216,7 +210,6 @@ COMMONOBJS = \
 		$(MSWDIR)\wfstream.obj \
 		$(MSWDIR)\wincmn.obj \
 		$(MSWDIR)\wxchar.obj \
-		$(MSWDIR)\wxexpr.obj \
 		$(MSWDIR)\xpmdecod.obj \
 		$(MSWDIR)\zipstrm.obj \
 		$(MSWDIR)\zstream.obj \
@@ -325,20 +318,6 @@ $(LIBTARGET): $(DUMMY).obj $(OBJECTS) $(PERIPH_LIBS)
 
 dummy.obj: dummy.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\include\wx\wx.h
 dummydll.obj: dummydll.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\include\wx\wx.h
-
-$(MSWDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
-
-#        cl @<<
-# $(CPPFLAGS2) /c $*.c -DUSE_DEFINE -DYY_USE_PROTOS /Fo$@
-# <<
-
-$(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
-        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
-
-$(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
-    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
-
-# $(OBJECTS):	$(WXDIR)\include\wx\setup.h
 
 $(MSWDIR)\accel.obj: $(MSWDIR)\accel.$(SRCSUFF)
 
@@ -679,8 +658,6 @@ $(MSWDIR)\radiocmn.obj: $(COMMDIR)\radiocmn.$(SRCSUFF)
 
 $(MSWDIR)\regex.obj: $(COMMDIR)\regex.$(SRCSUFF)
 
-$(MSWDIR)\resource.obj: $(COMMDIR)\resource.$(SRCSUFF)
-
 $(MSWDIR)\rgncmn.obj: $(COMMDIR)\rgncmn.$(SRCSUFF)
 
 $(MSWDIR)\settcmn.obj: $(COMMDIR)\settcmn.$(SRCSUFF)
@@ -732,8 +709,6 @@ $(MSWDIR)\wfstream.obj: $(COMMDIR)\wfstream.$(SRCSUFF)
 $(MSWDIR)\wincmn.obj: $(COMMDIR)\wincmn.$(SRCSUFF)
 
 $(MSWDIR)\wxchar.obj: $(COMMDIR)\wxchar.$(SRCSUFF)
-
-$(MSWDIR)\wxexpr.obj: $(COMMDIR)\wxexpr.$(SRCSUFF)
 
 $(MSWDIR)\xpmdecod.obj: $(COMMDIR)\xpmdecod.$(SRCSUFF)
 
@@ -791,12 +766,6 @@ $(MSWDIR)\prntdlgg.obj: $(GENDIR)\prntdlgg.$(SRCSUFF)
 
 $(MSWDIR)\progdlgg.obj: $(GENDIR)\progdlgg.$(SRCSUFF)
 
-$(MSWDIR)\prop.obj: $(GENDIR)\prop.$(SRCSUFF)
-
-$(MSWDIR)\propform.obj: $(GENDIR)\propform.$(SRCSUFF)
-
-$(MSWDIR)\proplist.obj: $(GENDIR)\proplist.$(SRCSUFF)
-
 $(MSWDIR)\sashwin.obj: $(GENDIR)\sashwin.$(SRCSUFF)
 
 $(MSWDIR)\scrlwing.obj: $(GENDIR)\scrlwing.$(SRCSUFF)
@@ -820,8 +789,6 @@ $(MSWDIR)\tipdlg.obj: $(GENDIR)\tipdlg.$(SRCSUFF)
 $(MSWDIR)\tipwin.obj: $(GENDIR)\tipwin.$(SRCSUFF)
 
 $(MSWDIR)\treectlg.obj: $(GENDIR)\treectlg.$(SRCSUFF)
-
-$(MSWDIR)\treelay.obj: $(GENDIR)\treelay.$(SRCSUFF)
 
 $(MSWDIR)\wizard.obj: $(GENDIR)\wizard.$(SRCSUFF)
 
@@ -906,8 +873,6 @@ clean: $(PERIPH_CLEAN_TARGET)
     erase *.pch
     erase *.csm
     erase *.cfg
-	erase ..\common\y_tab.c
-    erase ..\common\lex_yy.c
 
 cleanall: clean
 

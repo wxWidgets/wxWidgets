@@ -93,9 +93,6 @@ GENERICOBJS = \
 		$(GENDIR)/numdlgg.$(OBJSUFF) \
 		$(GENDIR)/panelg.$(OBJSUFF) \
 		$(GENDIR)/progdlgg.$(OBJSUFF) \
-		$(GENDIR)/prop.$(OBJSUFF) \
-		$(GENDIR)/propform.$(OBJSUFF) \
-		$(GENDIR)/proplist.$(OBJSUFF) \
 		$(GENDIR)/sashwin.$(OBJSUFF) \
 		$(GENDIR)/scrlwing.$(OBJSUFF) \
 		$(GENDIR)/spinctlg.$(OBJSUFF) \
@@ -107,7 +104,6 @@ GENERICOBJS = \
 		$(GENDIR)/tipdlg.$(OBJSUFF) \
 		$(GENDIR)/tipwin.$(OBJSUFF) \
 		$(GENDIR)/treectlg.$(OBJSUFF) \
-		$(GENDIR)/treelay.$(OBJSUFF) \
 		$(GENDIR)/wizard.$(OBJSUFF)
 
 COMMONOBJS_BASE  = \
@@ -182,7 +178,6 @@ COMMONOBJS_BASEONLY  = \
 
 COMMONOBJS  = \
                 $(COMMONOBJS_BASE) \
-		$(COMMDIR)/y_tab.$(OBJSUFF) \
 		$(COMMDIR)/accesscmn.$(OBJSUFF) \
 		$(COMMDIR)/artprov.$(OBJSUFF) \
 		$(COMMDIR)/artstd.$(OBJSUFF) \
@@ -235,7 +230,6 @@ COMMONOBJS  = \
 		$(COMMDIR)/prntbase.$(OBJSUFF) \
 		$(COMMDIR)/quantize.$(OBJSUFF) \
 		$(COMMDIR)/radiocmn.$(OBJSUFF) \
-		$(COMMDIR)/resource.$(OBJSUFF) \
 		$(COMMDIR)/rgncmn.$(OBJSUFF) \
 		$(COMMDIR)/settcmn.$(OBJSUFF) \
 		$(COMMDIR)/sizer.$(OBJSUFF) \
@@ -248,7 +242,6 @@ COMMONOBJS  = \
 		$(COMMDIR)/validate.$(OBJSUFF) \
 		$(COMMDIR)/valtext.$(OBJSUFF) \
 		$(COMMDIR)/wincmn.$(OBJSUFF) \
-		$(COMMDIR)/wxexpr.$(OBJSUFF) \
 		$(COMMDIR)/xpmdecod.$(OBJSUFF)
 
 HTMLOBJS = \
@@ -623,15 +616,6 @@ $(REGEXLIB):
 
 $(OBJECTS):	$(WXINC)/wx/defs.h $(WXINC)/wx/object.h $(ARCHINCDIR)/wx/setup.h
 
-$(COMMDIR)/y_tab.$(OBJSUFF):    $(COMMDIR)/y_tab.c $(COMMDIR)/lex_yy.c
-	$(CCLEX) -c $(ALL_CPPFLAGS) $(ALL_CFLAGS) -DUSE_DEFINE -DYY_USE_PROTOS -o $@ $(COMMDIR)/y_tab.c
-
-$(COMMDIR)/y_tab.c:     $(COMMDIR)/dosyacc.c
-	$(COPY) ../common/dosyacc.c ../common/y_tab.c
-
-$(COMMDIR)/lex_yy.c:    $(COMMDIR)/doslex.c
-	$(COPY) ../common/doslex.c ../common/lex_yy.c
-
 # Replace lex with flex if you run into compilation
 # problems with lex_yy.c. See also note about LEX_SCANNER
 # above.
@@ -667,8 +651,6 @@ clean:
 	-$(RM) ole/*.o
 	-$(RM) *.bak
 	-$(RM) core
-	-$(RM) ../common/y_tab.c
-	-$(RM) ../common/lex_yy.c
 	-$(RM) ../common/*.o
 	-$(RM) ../common/*.bak
 	-$(RM) ../generic/*.o

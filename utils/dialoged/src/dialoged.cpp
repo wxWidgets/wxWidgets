@@ -23,6 +23,8 @@
 #include "wx/wx.h"
 #endif
 
+#include "wx/deprecated/setup.h"
+
 #include "dialoged.h"
 
 #if !wxUSE_PROPSHEET
