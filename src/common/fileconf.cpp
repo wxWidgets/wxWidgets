@@ -75,6 +75,8 @@
   #define MAX_PATH 512
 #endif
 
+#define FILECONF_TRACE_MASK _T("fileconf")
+
 // ----------------------------------------------------------------------------
 // global functions declarations
 // ----------------------------------------------------------------------------
@@ -891,7 +893,7 @@ bool wxFileConfig::DoWriteString(const wxString& key, const wxString& szValue)
     wxConfigPathChanger     path(this, key);
     wxString                strName = path.Name();
 
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("  Writing String '%s' = '%s' to Group '%s'"),
                 strName.c_str(),
                 szValue.c_str(),
@@ -905,7 +907,7 @@ bool wxFileConfig::DoWriteString(const wxString& key, const wxString& szValue)
 
             // ... except if it's empty in which case it's a way to force it's creation
 
-        wxLogTrace( _T("wxFileConfig"),
+        wxLogTrace( FILECONF_TRACE_MASK,
                     _T("  Creating group %s"),
                     m_pCurrentGroup->Name().c_str() );
 
@@ -929,13 +931,13 @@ bool wxFileConfig::DoWriteString(const wxString& key, const wxString& szValue)
 
         if ( pEntry == 0 )
         {
-            wxLogTrace( _T("wxFileConfig"),
+            wxLogTrace( FILECONF_TRACE_MASK,
                         _T("  Adding Entry %s"),
                         strName.c_str() );
             pEntry = m_pCurrentGroup->AddEntry(strName);
         }
 
-        wxLogTrace( _T("wxFileConfig"),
+        wxLogTrace( FILECONF_TRACE_MASK,
                     _T("  Setting value %s"),
                     szValue.c_str() );
         pEntry->SetValue(szValue);
@@ -1133,13 +1135,13 @@ bool wxFileConfig::DeleteAll()
 
 wxFileConfigLineList *wxFileConfig::LineListAppend(const wxString& str)
 {
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("    ** Adding Line '%s'"),
                 str.c_str() );
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        head: %s"),
                 ((m_linesHead) ? m_linesHead->Text().c_str() : wxEmptyString) );
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        tail: %s"),
                 ((m_linesTail) ? m_linesTail->Text().c_str() : wxEmptyString) );
 
@@ -1159,10 +1161,10 @@ wxFileConfigLineList *wxFileConfig::LineListAppend(const wxString& str)
 
     m_linesTail = pLine;
 
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        head: %s"),
                 ((m_linesHead) ? m_linesHead->Text().c_str() : wxEmptyString) );
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        tail: %s"),
                 ((m_linesTail) ? m_linesTail->Text().c_str() : wxEmptyString) );
 
@@ -1173,14 +1175,14 @@ wxFileConfigLineList *wxFileConfig::LineListAppend(const wxString& str)
 wxFileConfigLineList *wxFileConfig::LineListInsert(const wxString& str,
                                                    wxFileConfigLineList *pLine)
 {
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("    ** Inserting Line '%s' after '%s'"),
                 str.c_str(),
                 ((pLine) ? pLine->Text().c_str() : wxEmptyString) );
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        head: %s"),
                 ((m_linesHead) ? m_linesHead->Text().c_str() : wxEmptyString) );
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        tail: %s"),
                 ((m_linesTail) ? m_linesTail->Text().c_str() : wxEmptyString) );
 
@@ -1205,10 +1207,10 @@ wxFileConfigLineList *wxFileConfig::LineListInsert(const wxString& str,
         pLine->SetNext(pNewLine);
     }
 
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        head: %s"),
                 ((m_linesHead) ? m_linesHead->Text().c_str() : wxEmptyString) );
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        tail: %s"),
                 ((m_linesTail) ? m_linesTail->Text().c_str() : wxEmptyString) );
 
@@ -1217,13 +1219,13 @@ wxFileConfigLineList *wxFileConfig::LineListInsert(const wxString& str,
 
 void wxFileConfig::LineListRemove(wxFileConfigLineList *pLine)
 {
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("    ** Removing Line '%s'"),
                 pLine->Text().c_str() );
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        head: %s"),
                 ((m_linesHead) ? m_linesHead->Text().c_str() : wxEmptyString) );
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        tail: %s"),
                 ((m_linesTail) ? m_linesTail->Text().c_str() : wxEmptyString) );
 
@@ -1244,10 +1246,10 @@ void wxFileConfig::LineListRemove(wxFileConfigLineList *pLine)
     else
         pNext->SetPrev(pPrev);
 
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        head: %s"),
                 ((m_linesHead) ? m_linesHead->Text().c_str() : wxEmptyString) );
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        tail: %s"),
                 ((m_linesTail) ? m_linesTail->Text().c_str() : wxEmptyString) );
 
@@ -1343,13 +1345,13 @@ void wxFileConfigGroup::SetLine(wxFileConfigLineList *pLine)
 // have it or in the very beginning if we're the root group.
 wxFileConfigLineList *wxFileConfigGroup::GetGroupLine()
 {
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("  GetGroupLine() for Group '%s'"),
                 Name().c_str() );
 
     if ( !m_pLine )
     {
-        wxLogTrace( _T("wxFileConfig"),
+        wxLogTrace( FILECONF_TRACE_MASK,
                     _T("    Getting Line item pointer") );
 
         wxFileConfigGroup   *pParent = Parent();
@@ -1357,7 +1359,7 @@ wxFileConfigLineList *wxFileConfigGroup::GetGroupLine()
         // this group wasn't present in local config file, add it now
         if ( pParent )
         {
-            wxLogTrace( _T("wxFileConfig"),
+            wxLogTrace( FILECONF_TRACE_MASK,
                         _T("    checking parent '%s'"),
                         pParent->Name().c_str() );
 
@@ -1403,7 +1405,7 @@ wxFileConfigLineList *wxFileConfigGroup::GetLastGroupLine()
 // one immediately after the group line itself.
 wxFileConfigLineList *wxFileConfigGroup::GetLastEntryLine()
 {
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("  GetLastEntryLine() for Group '%s'"),
                 Name().c_str() );
 
@@ -1579,121 +1581,91 @@ bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
 {
     wxCHECK_MSG( pGroup, false, _T("deleting non existing group?") );
 
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("Deleting group '%s' from '%s'"),
                 pGroup->Name().c_str(),
                 Name().c_str() );
 
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("  (m_pLine) = prev: %p, this %p, next %p"),
                 ((m_pLine) ? m_pLine->Prev() : 0),
                 m_pLine,
                 ((m_pLine) ? m_pLine->Next() : 0) );
-    wxLogTrace( _T("wxFileConfig"),
+    wxLogTrace( FILECONF_TRACE_MASK,
                 _T("  text: '%s'"),
                 ((m_pLine) ? m_pLine->Text().c_str() : wxEmptyString) );
 
-    // delete all entries
+    // delete all entries...
     size_t nCount = pGroup->m_aEntries.Count();
 
-    wxLogTrace(_T("wxFileConfig"),
-               _T("Removing %lu Entries"),
-               (unsigned long)nCount );
+    wxLogTrace(FILECONF_TRACE_MASK,
+               _T("Removing %lu entries"), (unsigned long)nCount );
 
     for ( size_t nEntry = 0; nEntry < nCount; nEntry++ )
     {
-        wxFileConfigLineList    *pLine = pGroup->m_aEntries[nEntry]->GetLine();
+        wxFileConfigLineList *pLine = pGroup->m_aEntries[nEntry]->GetLine();
 
-        if ( pLine != 0 )
+        if ( pLine )
         {
-            wxLogTrace( _T("wxFileConfig"),
+            wxLogTrace( FILECONF_TRACE_MASK,
                         _T("    '%s'"),
                         pLine->Text().c_str() );
             m_pConfig->LineListRemove(pLine);
         }
     }
 
-        // and subgroups of this subgroup
-
+    // ...and subgroups of this subgroup
     nCount = pGroup->m_aSubgroups.Count();
 
-    wxLogTrace( _T("wxFileConfig"),
-                _T("Removing %lu SubGroups"),
-                (unsigned long)nCount );
+    wxLogTrace( FILECONF_TRACE_MASK,
+                _T("Removing %lu subgroups"), (unsigned long)nCount );
 
     for ( size_t nGroup = 0; nGroup < nCount; nGroup++ )
     {
         pGroup->DeleteSubgroup(pGroup->m_aSubgroups[0]);
     }
 
-        // finally the group itself
-
-    wxFileConfigLineList    *pLine = pGroup->m_pLine;
-
-    if ( pLine != 0 )
+    // and then finally the group itself
+    wxFileConfigLineList *pLine = pGroup->m_pLine;
+    if ( pLine )
     {
-        wxLogTrace( _T("wxFileConfig"),
-                    _T("  Removing line entry for Group '%s' : '%s'"),
+        wxLogTrace( FILECONF_TRACE_MASK,
+                    _T("  Removing line for group '%s' : '%s'"),
                     pGroup->Name().c_str(),
                     pLine->Text().c_str() );
-        wxLogTrace( _T("wxFileConfig"),
-                    _T("  Removing from Group '%s' : '%s'"),
+        wxLogTrace( FILECONF_TRACE_MASK,
+                    _T("  Removing from group '%s' : '%s'"),
                     Name().c_str(),
                     ((m_pLine) ? m_pLine->Text().c_str() : wxEmptyString) );
 
-            // notice that we may do this test inside the previous "if"
-            // because the last entry's line is surely !NULL
-
+        // notice that we may do this test inside the previous "if"
+        // because the last entry's line is surely !NULL
         if ( pGroup == m_pLastGroup )
         {
-            wxLogTrace( _T("wxFileConfig"),
-                        _T("  ------- Removing last group -------") );
+            wxLogTrace( FILECONF_TRACE_MASK,
+                        _T("  Removing last group") );
 
-                // our last entry is being deleted, so find the last one which stays.
-                // go back until we find a subgroup or reach the group's line, unless
-                // we are the root group, which we'll notice shortly.
+            // our last entry is being deleted, so find the last one which
+            // stays by going back until we find a subgroup or reach the
+            // group line
+            const size_t nSubgroups = m_aSubgroups.Count();
 
-            wxFileConfigGroup       *pNewLast = 0;
-            size_t                   nSubgroups = m_aSubgroups.Count();
-            wxFileConfigLineList    *pl;
-
-            for ( pl = pLine->Prev(); pl != m_pLine; pl = pl->Prev() )
+            m_pLastGroup = NULL;
+            for ( wxFileConfigLineList *pl = pLine->Prev();
+                  pl && pl != m_pLine && !m_pLastGroup;
+                  pl = pl->Prev() )
             {
-                    // is it our subgroup?
-
-                for ( size_t n = 0; (pNewLast == 0) && (n < nSubgroups); n++ )
+                // does this line belong to our subgroup?
+                for ( size_t n = 0; n < nSubgroups; n++ )
                 {
-                    // do _not_ call GetGroupLine! we don't want to add it to the local
-                    // file if it's not already there
-
-                    if ( m_aSubgroups[n]->m_pLine == m_pLine )
-                        pNewLast = m_aSubgroups[n];
+                    // do _not_ call GetGroupLine! we don't want to add it to
+                    // the local file if it's not already there
+                    if ( m_aSubgroups[n]->m_pLine == pl )
+                    {
+                        m_pLastGroup = m_aSubgroups[n];
+                        break;
+                    }
                 }
-
-                if ( pNewLast != 0 ) // found?
-                    break;
-            }
-
-            if ( pl == m_pLine || m_pParent == 0 )
-            {
-                wxLogTrace( _T("wxFileConfig"),
-                            _T("  ------- No previous group found -------") );
-
-                wxASSERT_MSG( !pNewLast || m_pLine == 0,
-                              _T("how comes it has the same line as we?") );
-
-                    // we've reached the group line without finding any subgroups,
-                    // or realised we removed the last group from the root.
-
-                m_pLastGroup = 0;
-            }
-            else
-            {
-                wxLogTrace( _T("wxFileConfig"),
-                            _T("  ------- Last Group set to '%s' -------"),
-                            pNewLast->Name().c_str() );
-
-                m_pLastGroup = pNewLast;
             }
         }
 
@@ -1701,7 +1673,7 @@ bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
     }
     else
     {
-        wxLogTrace( _T("wxFileConfig"),
+        wxLogTrace( FILECONF_TRACE_MASK,
                     _T("  No line entry for Group '%s'?"),
                     pGroup->Name().c_str() );
     }
@@ -2043,5 +2015,3 @@ static wxString GetAppName(const wxString& appName)
 
 #endif // wxUSE_CONFIG
 
-
-// vi:sts=4:sw=4:et
