@@ -102,6 +102,8 @@ public:
     // current size - this has an effect of refreshing the window layout
     virtual void SendSizeEvent();
 
+    virtual wxPoint GetClientAreaOrigin() const;
+    
 protected:
     // common part of all ctors
     void Init();
@@ -109,7 +111,6 @@ protected:
     // override base class virtuals
     virtual void DoGetClientSize(int *width, int *height) const;
     virtual void DoSetClientSize(int width, int height);
-	virtual wxPoint GetClientAreaOrigin() const;
 
 #if wxUSE_MENUS_NATIVE
     // perform MSW-specific action when menubar is changed
