@@ -514,15 +514,10 @@ void wxMsgCatalog::ConvertEncoding()
     // first, find encoding header:
     const char *hdr = StringAtOfs(m_pOrigTable, 0);
     if ( hdr == NULL || hdr[0] != 0 ) {
-        // not supported by this catalog, does not have non-fuzzy header
+        // not supported by this catalog, does not have correct header
         return;
     }
 
-    /*
-       we support catalogs with header (msgid "") that is _not_ marked as "#,
-       fuzzy" (otherwise the string would not be included into compiled
-       catalog)
-     */
     wxString header(StringAtOfs(m_pTransTable, 0));
     wxString charset;
     int pos = header.Find(wxT("Content-Type: text/plain; charset="));
