@@ -146,7 +146,7 @@ class FillingTree(wx.TreeCtrl):
         if not children:
             return
         keys = children.keys()
-        keys.sort(lambda x, y: cmp(x.lower(), y.lower()))
+        keys.sort(lambda x, y: cmp(str(x).lower(), str(y).lower()))
         for key in keys:
             itemtext = str(key)
             # Show string dictionary items with single quotes, except
