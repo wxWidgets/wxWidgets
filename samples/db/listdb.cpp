@@ -135,7 +135,7 @@ Clookup::Clookup(wxChar *tblName, wxChar *colName, wxDb *pDb, const wxString &de
                defDir)
 {
 
-    SetColDefs (0, colName, DB_DATA_TYPE_VARCHAR, lookupCol, SQL_C_CHAR, LOOKUP_COL_LEN+1, FALSE, FALSE);
+    SetColDefs (0, colName, DB_DATA_TYPE_VARCHAR, lookupCol, SQL_C_CHAR, LOOKUP_COL_LEN+1, false, false);
 
 }  // Clookup()
 
@@ -153,10 +153,10 @@ Clookup2::Clookup2(wxChar *tblName, wxChar *colName1, wxChar *colName2,
 
     int i = 0;
 
-    SetColDefs (i, colName1, DB_DATA_TYPE_VARCHAR, lookupCol1, SQL_C_CHAR, LOOKUP_COL_LEN+1, FALSE, FALSE);
+    SetColDefs (i, colName1, DB_DATA_TYPE_VARCHAR, lookupCol1, SQL_C_CHAR, LOOKUP_COL_LEN+1, false, false);
 
     if (wxStrlen(colName2) > 0)
-        SetColDefs (++i, colName2, DB_DATA_TYPE_VARCHAR, lookupCol2, SQL_C_CHAR, LOOKUP_COL_LEN+1, FALSE, FALSE);
+        SetColDefs (++i, colName2, DB_DATA_TYPE_VARCHAR, lookupCol2, SQL_C_CHAR, LOOKUP_COL_LEN+1, false, false);
 
 }  // Clookup2()
 
@@ -177,7 +177,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     wxBeginBusyCursor();
     
     wxStrcpy(ListDB_Selection,wxT(""));
-    widgetPtrsSet = FALSE;
+    widgetPtrsSet = false;
     lookup  = 0;
     lookup2 = 0;
     noDisplayCols = 1;
@@ -187,7 +187,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     pLookUpOkBtn            = new wxButton(this,  LOOKUP_DIALOG_OK,      wxT("&Ok"),     wxPoint(113, 222), wxSize( 70,  35), 0, wxDefaultValidator, wxT("LookUpOkBtn"));
     pLookUpCancelBtn        = new wxButton(this,  LOOKUP_DIALOG_CANCEL,  wxT("C&ancel"), wxPoint(212, 222), wxSize( 70,  35), 0, wxDefaultValidator, wxT("LookUpCancelBtn"));
 
-    widgetPtrsSet = TRUE;
+    widgetPtrsSet = true;
 
     // Query the lookup table and display the result set
 	 lookup = new Clookup(tableName, colName, pDb, defDir);
@@ -229,7 +229,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     else
     {
         pLookUpCancelBtn->SetDefault();
-        pLookUpOkBtn->Enable(FALSE);
+        pLookUpOkBtn->Enable(false);
     }
 
     // Display the dialog window
@@ -275,7 +275,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     
     wxStrcpy(ListDB_Selection,wxT(""));
     wxStrcpy(ListDB_Selection2,wxT(""));
-    widgetPtrsSet = FALSE;
+    widgetPtrsSet = false;
     lookup  = 0;
     lookup2 = 0;
     noDisplayCols = (wxStrlen(dispCol2) ? 2 : 1);
@@ -292,7 +292,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     pLookUpOkBtn            = new wxButton(this, LOOKUP_DIALOG_OK,      wxT("&Ok"),        wxPoint(113, 222), wxSize(70, 35), 0, wxDefaultValidator, wxT("LookUpOkBtn"));
     pLookUpCancelBtn        = new wxButton(this, LOOKUP_DIALOG_CANCEL,  wxT("C&ancel"),    wxPoint(212, 222), wxSize(70, 35), 0, wxDefaultValidator, wxT("LookUpCancelBtn"));
 
-    widgetPtrsSet = TRUE;
+    widgetPtrsSet = true;
 
     // Query the lookup table and display the result set
 	 lookup2 = new Clookup2(tableName, dispCol1, dispCol2, pDb, defDir);
@@ -359,7 +359,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     {
         lookup2->SetOrderByClause(orderBy);
         lookup2->SetWhereClause(where);
-        if (!lookup2->Query(FALSE, distinctValues))
+        if (!lookup2->Query(false, distinctValues))
         {
             wxMessageBox(wxT("ODBC error during Query()"),wxT("ODBC Error..."));
             Close();
@@ -389,7 +389,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     else
     {
         pLookUpCancelBtn->SetDefault();
-        pLookUpOkBtn->Enable(FALSE);
+        pLookUpOkBtn->Enable(false);
     }
 
     pLookUpOkBtn->Enable(allowOk);
@@ -405,8 +405,8 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
 
 void ClookUpDlg::OnClose(wxCloseEvent& event)
 {
-    widgetPtrsSet = FALSE;
-    GetParent()->Enable(TRUE);
+    widgetPtrsSet = false;
+    GetParent()->Enable(true);
 
     if (lookup)
         delete lookup;
@@ -418,7 +418,7 @@ void ClookUpDlg::OnClose(wxCloseEvent& event)
     while (wxIsBusy()) wxEndBusyCursor();
     event.Skip();
 
-//    return TRUE;
+//    return true;
 
 }  // ClookUpDlg::OnClose
 

@@ -22,6 +22,9 @@ enum    DialogModes {mView,mCreate,mEdit,mSearch};
 #define FILE_CREATE           100
 #define FILE_RECREATE_TABLE   110
 #define FILE_RECREATE_INDEXES 120
+#if wxUSE_NEW_GRID
+#define FILE_DBGRID_TABLE     130
+#endif
 #define FILE_EXIT             199
 #define EDIT_PARAMETERS       200
 #define HELP_ABOUT            300
@@ -166,13 +169,35 @@ class DatabaseDemoFrame: public wxFrame
         void    OnExit(wxCommandEvent& event);
         void    OnEditParameters(wxCommandEvent& event);
         void    OnAbout(wxCommandEvent& event);
-
+#if wxUSE_NEW_GRID
+        void    OnDbGridTable( wxCommandEvent& );
+#endif 
+        void    CreateDataTable(bool recreate);
         void    BuildEditorDialog();
         void    BuildParameterDialog(wxWindow *parent);
 
 DECLARE_EVENT_TABLE()
 };  // DatabaseDemoFrame
 
+
+#if wxUSE_NEW_GRID
+
+// *************************** DBGridFrame ***************************
+
+class DbGridFrame : public wxFrame
+{
+public:
+	bool     initialized;
+
+	DbGridFrame(wxWindow *parent);
+
+	void     OnCloseWindow(wxCloseEvent& event);
+	bool     Initialize();
+
+	DECLARE_EVENT_TABLE()
+};
+
+#endif
 
 // Define a new application type
 class DatabaseDemoApp: public wxApp

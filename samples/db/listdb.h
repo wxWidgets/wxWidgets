@@ -113,7 +113,7 @@ class ClookUpDlg : public wxDialog
                     bool     distinctValues,            // e.g. SELECT DISTINCT ...
                     wxChar  *selectStmt = 0,            // If you wish to query by SQLstmt (complicated lookups)
                     int      maxLenCol1 = 0,            // Mandatory if querying by SQLstmt
-                    bool     allowOk    = TRUE);        // is the OK button enabled
+                    bool     allowOk    = true);        // is the OK button enabled
 
         void        OnButton( wxCommandEvent &event );
         void        OnCommand(wxWindow& win, wxCommandEvent& event);
