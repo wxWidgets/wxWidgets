@@ -1047,7 +1047,7 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
         tabley[y] = (int) floor(0.5 + scy * (y+clipy));
 
     // Main rescaling routine starts here
-    for(int h=0; h<height; h++)
+    for (int h = 0; h < height; h++)
     {
         char outbyte = 0;
 
@@ -1080,23 +1080,65 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
     
         // do not forget the last byte
         if (bpp == 1)
-	  	    dst[h*dstbyteperline+width/8] = ~outbyte;
+            dst[h*dstbyteperline+width/8] = ~outbyte;
     }
     
-    free( tablex );
-    free( tabley );
     gdk_image_destroy( img );
     if (gc) gdk_gc_unref( gc );
 
     if (bpp == 1)
     {
         bmp = wxBitmap( (const char *)dst, width, height, 1 );
-        wxMask* bmask= new wxMask(bmp);
-        bmp.SetMask(bmask);
-        free(dst);
+        free( dst );
+    }
+    
+    if (GetMask())
+    {
+        bpp = 1;
+        dstbyteperline = width/8*bpp;
+        if (width*bpp % 8 != 0)
+            dstbyteperline++;
+        dst = (char*) malloc(dstbyteperline*height);
+        img = gdk_image_get( GetMask()->GetBitmap(), 0, 0, GetWidth(), GetHeight() );
+
+        for (int h = 0; h < height; h++)
+        {
+            char outbyte = 0;
+    
+            for (int w=0; w<width; w++)
+            {
+                guint32 pixval = gdk_image_get_pixel( img, tablex[w], tabley[h] );
+                if (pixval)
+                {
+                    char bit=1;
+                    char shift = bit << w % 8;
+                    outbyte |= shift;
+                }
+                
+                if ((w+1)%8==0)
+                {
+                    dst[h*dstbyteperline+w/8]=~outbyte;
+                    outbyte = 0;
+                }
+            }
+        
+            // do not forget the last byte
+            if (bpp == 1)
+                dst[h*dstbyteperline+width/8] = ~outbyte;
+        }
+        
+        wxBitmap mask_bmp( (const char *)dst, width, height, 1 );
+        wxMask* mask = new wxMask(mask_bmp);
+        bmp.SetMask(mask);
+        
+        free( dst );
+        gdk_image_destroy( img );
     }
 
-    return bmp;	
+    free( tablex );
+    free( tabley );
+    
+    return bmp; 
 }
 
 
