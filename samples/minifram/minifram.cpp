@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        test.cpp
+// Name:        minifram.cpp
 // Purpose:     wxMiniFrame sample
 // Author:      Robert Roebling
 // Modified by:
@@ -21,7 +21,7 @@
 #endif
 
 #include "wx/toolbar.h"
-#include "test.h"
+#include "minifram.h"
 
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
 #include "mondrian.xpm"

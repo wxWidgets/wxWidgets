@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        test.h
+// Name:        minifram.h
 // Purpose:     wxToolBar sample
 // Author:      Julian Smart
 // Modified by:

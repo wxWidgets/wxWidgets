@@ -1,5 +1,5 @@
-NAME         ToolTest
-DESCRIPTION  'wxToolBar Sample'
+NAME         Minifram
+DESCRIPTION  'MiniFrame Sample'
 EXETYPE      WINDOWS
 STUB         'WINSTUB.EXE'
 CODE         PRELOAD MOVEABLE DISCARDABLE
