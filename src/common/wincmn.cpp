@@ -2210,7 +2210,7 @@ void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
 #else
                                       "",
 #endif
-#if __WXDEBUG__
+#ifdef __WXDEBUG__
                                       _T(" Debug build"),
 #else
                                       _T(""),
