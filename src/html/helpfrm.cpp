@@ -273,8 +273,8 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
     wxMenu* helpMenu = new wxMenu;
     helpMenu->Append(wxID_ABOUT, _("&About..."));
 
-    menuBar->Append(fileMenu,_("File"));
-    menuBar->Append(helpMenu,_("Help"));
+    menuBar->Append(fileMenu,_("&File"));
+    menuBar->Append(helpMenu,_("&Help"));
     SetMenuBar(menuBar);
 #endif
 
