@@ -18,9 +18,9 @@ class App(wx.App):
 
     def OnInit(self):
         import wx
+        from wx import py
         wx.InitAllImageHandlers()
-        from shell import ShellFrame
-        self.frame = ShellFrame()
+        self.frame = py.shell.ShellFrame()
         self.frame.SetSize((750, 525))
         self.frame.Show()
         self.SetTopWindow(self.frame)

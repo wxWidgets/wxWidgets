@@ -13,15 +13,14 @@ __revision__ = "$Revision$"[11:-2]
 
 import wx
 
-
 class App(wx.App):
     """PyCrust standalone application."""
 
     def OnInit(self):
         import wx
+        from wx import py
         wx.InitAllImageHandlers()
-        from crust import CrustFrame
-        self.frame = CrustFrame()
+        self.frame = py.crust.CrustFrame()
         self.frame.SetSize((800, 600))
         self.frame.Show()
         self.SetTopWindow(self.frame)

@@ -5,11 +5,10 @@ __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
 import wx
+from wx import py
 
 import os
 import sys
-
-import editor
 
 class App(wx.App):
     """PyAlaMode standalone application."""
@@ -20,7 +19,7 @@ class App(wx.App):
 
     def OnInit(self):
         wx.InitAllImageHandlers()
-        self.frame = editor.EditorNotebookFrame(filename=self.filename)
+        self.frame = py.editor.EditorNotebookFrame(filename=self.filename)
         self.frame.Show()
         self.SetTopWindow(self.frame)
         return True
