@@ -27,6 +27,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/app.h"
+    #include "wx/log.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/stackwalk.h"
