@@ -738,17 +738,32 @@ static void TestStopWatch()
     wxStopWatch sw;
     printf("Sleeping 3 seconds...");
     wxSleep(3);
-    printf("\telapsed time: %ld\n", sw.Time());
+    printf("\telapsed time: %ldms\n", sw.Time());
 
     sw.Pause();
     printf("Sleeping 2 more seconds...");
     wxSleep(2);
-    printf("\telapsed time: %ld\n", sw.Time());
+    printf("\telapsed time: %ldms\n", sw.Time());
 
     sw.Resume();
     printf("And 3 more seconds...");
     wxSleep(3);
-    printf("\telapsed time: %ld\n", sw.Time());
+    printf("\telapsed time: %ldms\n", sw.Time());
+
+    wxStopWatch sw2;
+    puts("\nChecking for 'backwards clock' bug...");
+    for ( size_t n = 0; n < 70; n++ )
+    {
+        sw2.Start();
+        if ( sw.Time() < 0 || sw2.Time() < 0 )
+        {
+            puts("\ntime is negative - ERROR!");
+        }
+
+        putchar('.');
+    }
+
+    puts(", ok.");
 }
 
 #endif // TEST_TIMER
