@@ -164,7 +164,7 @@ void wxTipWindow::OnPaint(wxPaintEvent& event)
 #ifdef __WXMSW__
     dc.SetPen( * wxTRANSPARENT_PEN );
 #else
-    dc.SetPen( * wxBLACK_PEND );
+    dc.SetPen( * wxBLACK_PEN );
 #endif
     dc.DrawRectangle(rect);
 
