@@ -77,12 +77,7 @@ bool wxScrollBar::Create(wxWindow *parent,
     if ( !wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
-    if ( size.x == -1 || size.y == -1 )
-    {
-        wxSize sizeBest = DoGetBestSize();
-        SetSize(size.x == -1 ? sizeBest.x : size.x,
-                size.y == -1 ? sizeBest.y : size.y);
-    }
+    SetBestSize(size);
 
     return TRUE;
 }

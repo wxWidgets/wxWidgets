@@ -438,9 +438,9 @@ static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
 gint gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_event, wxWindowGTK *win )
 {
     if (gdk_event->count > 0) return FALSE;
-    
+
     draw_frame( widget, win );
-    
+
     return TRUE;
 }
 
@@ -675,7 +675,7 @@ static int gtk_window_expose_callback( GtkWidget *widget,
 
     if (g_isIdle)
         wxapp_install_idle_handler();
-        
+
 /*
     if (win->GetName() == wxT("panel"))
     {
@@ -688,7 +688,7 @@ static int gtk_window_expose_callback( GtkWidget *widget,
                                          (int)gdk_event->area.height );
     }
 */
-                                
+
         win->GetUpdateRegion().Union( gdk_event->area.x,
                                       gdk_event->area.y,
                                       gdk_event->area.width,
@@ -707,14 +707,14 @@ static int gtk_window_expose_callback( GtkWidget *widget,
 
             win->GetUpdateRegion().Clear();
         }
-    
+
         /* The following code will result in all window-less widgets
            being redrawn if the wxWindows class is given a chance to
            paint *anything* because it will then be allowed to paint
            over the window-less widgets */
-       
+
         GtkPizza *pizza = GTK_PIZZA (widget);
-        
+
         GList *children = pizza->children;
         while (children)
         {
@@ -734,7 +734,7 @@ static int gtk_window_expose_callback( GtkWidget *widget,
                 gtk_widget_event (child->widget, (GdkEvent*) &child_event);
             }
         }
-        
+
     return TRUE;
 }
 
@@ -768,13 +768,15 @@ gint gtk_window_event_event_callback( GtkWidget *widget,
 /* This callback is a complete replacement of the gtk_pizza_draw() function,
    which disabled. */
 
-static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxWindowGTK *win )
+static void gtk_window_draw_callback( GtkWidget *widget,
+                                      GdkRectangle *rect,
+                                      wxWindow *win )
 {
     DEBUG_MAIN_THREAD
 
     if (g_isIdle)
         wxapp_install_idle_handler();
-        
+
 /*
     if (win->GetName() == wxT("panel"))
     {
@@ -787,45 +789,46 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
                                          (int)rect->height );
     }
 */
-   
+
     GtkPizza *pizza = GTK_PIZZA (widget);
-        
-        if (!(GTK_WIDGET_APP_PAINTABLE (widget)) &&
-             (pizza->clear_on_draw))
+
+    if (!(GTK_WIDGET_APP_PAINTABLE (widget)) &&
+         (pizza->clear_on_draw))
+    {
+        gdk_window_clear_area( pizza->bin_window,
+                           rect->x, rect->y, rect->width, rect->height);
+    }
+
+    win->GetUpdateRegion().Union( rect->x, rect->y, rect->width, rect->height );
+
+    win->m_clipPaintRegion = TRUE;
+
+    wxClientDC dc(win);
+    wxEraseEvent eevent( win->GetId(), &dc );
+    eevent.SetEventObject( win );
+    win->GetEventHandler()->ProcessEvent(eevent);
+
+    wxPaintEvent event( win->GetId() );
+    event.SetEventObject( win );
+    win->GetEventHandler()->ProcessEvent( event );
+
+    win->GetUpdateRegion().Clear();
+
+    win->m_clipPaintRegion = FALSE;
+
+
+    GList *children = pizza->children;
+    while (children)
+    {
+        GtkPizzaChild *child = (GtkPizzaChild*) children->data;
+        children = children->next;
+
+        GdkRectangle child_area;
+        if (gtk_widget_intersect (child->widget, rect, &child_area))
         {
-            gdk_window_clear_area( pizza->bin_window,
-                               rect->x, rect->y, rect->width, rect->height);
+            gtk_widget_draw (child->widget, &child_area /* (GdkRectangle*) NULL*/ );
         }
-    
-        win->GetUpdateRegion().Union( rect->x, rect->y, rect->width, rect->height );
-
-        win->m_clipPaintRegion = TRUE;
-    
-        wxEraseEvent eevent( win->GetId() );
-        eevent.SetEventObject( win );
-        win->GetEventHandler()->ProcessEvent(eevent);
-
-        wxPaintEvent event( win->GetId() );
-        event.SetEventObject( win );
-        win->GetEventHandler()->ProcessEvent( event );
-
-        win->GetUpdateRegion().Clear();
-    
-        win->m_clipPaintRegion = FALSE;
-    
-    
-        GList *children = pizza->children;
-        while (children)
-        {
-            GtkPizzaChild *child = (GtkPizzaChild*) children->data;
-            children = children->next;
-
-            GdkRectangle child_area;
-            if (gtk_widget_intersect (child->widget, rect, &child_area))
-            {
-                gtk_widget_draw (child->widget, &child_area /* (GdkRectangle*) NULL*/ );
-            }
-        }
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -1915,7 +1918,7 @@ gtk_window_realized_callback( GtkWidget *WXUNUSED(m_widget), wxWindow *win )
     wxWindowCreateEvent event( win );
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
-    
+
     return FALSE;
 }
 
@@ -2012,22 +2015,22 @@ gtk_wxwindow_realized_callback( GtkWidget * WXUNUSED_UNLESS_XIM(widget),
     GdkIMStyle style;
     GdkIMStyle supported_style = (GdkIMStyle)
                                   (GDK_IM_PREEDIT_NONE |
-				   GDK_IM_PREEDIT_NOTHING |
-			           GDK_IM_PREEDIT_POSITION |
-			           GDK_IM_STATUS_NONE |
-				   GDK_IM_STATUS_NOTHING);
+                                   GDK_IM_PREEDIT_NOTHING |
+                                   GDK_IM_PREEDIT_POSITION |
+                                   GDK_IM_STATUS_NONE |
+                                   GDK_IM_STATUS_NOTHING);
 
     if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
-	supported_style = (GdkIMStyle)(supported_style & ~GDK_IM_PREEDIT_POSITION);
+        supported_style = (GdkIMStyle)(supported_style & ~GDK_IM_PREEDIT_POSITION);
 
     attr->style = style = gdk_im_decide_style (supported_style);
     attr->client_window = widget->window;
 
     if ((colormap = gtk_widget_get_colormap (widget)) !=
-	    gtk_widget_get_default_colormap ())
+            gtk_widget_get_default_colormap ())
     {
-	    attrmask |= GDK_IC_PREEDIT_COLORMAP;
-	    attr->preedit_colormap = colormap;
+        attrmask |= GDK_IC_PREEDIT_COLORMAP;
+        attr->preedit_colormap = colormap;
     }
 
     attrmask |= GDK_IC_PREEDIT_FOREGROUND;
@@ -2037,40 +2040,40 @@ gtk_wxwindow_realized_callback( GtkWidget * WXUNUSED_UNLESS_XIM(widget),
 
     switch (style & GDK_IM_PREEDIT_MASK)
     {
-	case GDK_IM_PREEDIT_POSITION:
-	  if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
-	    {
-	      g_warning ("over-the-spot style requires fontset");
-	      break;
-	    }
+        case GDK_IM_PREEDIT_POSITION:
+            if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
+            {
+                g_warning ("over-the-spot style requires fontset");
+                break;
+            }
 
-	  gdk_window_get_size (widget->window, &width, &height);
+            gdk_window_get_size (widget->window, &width, &height);
 
-	  attrmask |= GDK_IC_PREEDIT_POSITION_REQ;
-	  attr->spot_location.x = 0;
-	  attr->spot_location.y = height;
-	  attr->preedit_area.x = 0;
-	  attr->preedit_area.y = 0;
-	  attr->preedit_area.width = width;
-	  attr->preedit_area.height = height;
-	  attr->preedit_fontset = widget->style->font;
+            attrmask |= GDK_IC_PREEDIT_POSITION_REQ;
+            attr->spot_location.x = 0;
+            attr->spot_location.y = height;
+            attr->preedit_area.x = 0;
+            attr->preedit_area.y = 0;
+            attr->preedit_area.width = width;
+            attr->preedit_area.height = height;
+            attr->preedit_fontset = widget->style->font;
 
-	  break;
+            break;
     }
 
       win->m_ic = gdk_ic_new (attr, (GdkICAttributesType)attrmask);
 
       if (win->m_ic == NULL)
-	g_warning ("Can't create input context.");
+          g_warning ("Can't create input context.");
       else
-	{
-	  mask = gdk_window_get_events (widget->window);
-	  mask = (GdkEventMask)(mask | gdk_ic_get_events (win->m_ic));
-	  gdk_window_set_events (widget->window, mask);
+      {
+          mask = gdk_window_get_events (widget->window);
+          mask = (GdkEventMask)(mask | gdk_ic_get_events (win->m_ic));
+          gdk_window_set_events (widget->window, mask);
 
-	  if (GTK_WIDGET_HAS_FOCUS(widget))
-	    gdk_im_begin (win->m_ic, widget->window);
-	}
+          if (GTK_WIDGET_HAS_FOCUS(widget))
+              gdk_im_begin (win->m_ic, widget->window);
+      }
 #endif
 
     return FALSE;
@@ -2166,7 +2169,7 @@ void wxWindowGTK::Init()
 
     m_delayedForegroundColour = FALSE;
     m_delayedBackgroundColour = FALSE;
-        
+
 #ifdef HAVE_XIM
     m_ic = (GdkIC*) NULL;
     m_icattr = (GdkICAttr*) NULL;
@@ -2205,7 +2208,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
     }
 
     m_insertCallback = wxInsertChildInWindow;
-    
+
     m_widget = gtk_scrolled_window_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 
@@ -2349,7 +2352,7 @@ wxWindowGTK::~wxWindowGTK()
         // don't delete if it's a pixmap theme style
         if (!m_widgetStyle->engine_data)
             gtk_style_unref( m_widgetStyle );
-#endif            
+#endif
         m_widgetStyle = (GtkStyle*) NULL;
     }
 
@@ -2407,7 +2410,7 @@ void wxWindowGTK::PostCreation()
         if (!m_noExpose)
         {
             /* these get reported to wxWindows -> wxPaintEvent */
-            
+
             gtk_pizza_set_external( GTK_PIZZA(m_wxwindow), TRUE );
 
             gtk_signal_connect( GTK_OBJECT(m_wxwindow), "event",
@@ -2441,7 +2444,7 @@ void wxWindowGTK::PostCreation()
     else
     {
         // For dialogs and frames, we are interested mainly in
-	// m_widget's focus.
+        // m_widget's focus.
 
         gtk_signal_connect( GTK_OBJECT(m_widget), "focus_in_event",
             GTK_SIGNAL_FUNC(gtk_window_focus_in_callback), (gpointer)this );
@@ -2522,7 +2525,7 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
 
     if (m_resizing) return; /* I don't like recursions */
     m_resizing = TRUE;
-    
+
     if (m_parent->m_wxwindow == NULL) /* i.e. wxNotebook */
     {
         /* don't set the size for children of wxNotebook, just take the values. */
@@ -2583,7 +2586,7 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
 
     if (m_hasScrolling)
     {
-        /* Sometimes the client area changes size without the 
+        /* Sometimes the client area changes size without the
            whole windows's size changing, but if the whole
            windows's size doesn't change, no wxSizeEvent will
            normally be sent. Here we add an extra test if
@@ -3061,7 +3064,7 @@ bool wxWindowGTK::SetCursor( const wxCursor &cursor )
 
     if (g_isIdle)
         wxapp_install_idle_handler();
-        
+
     if (cursor == wxNullCursor)
        return wxWindowBase::SetCursor( *wxSTANDARD_CURSOR );
     else
@@ -3341,7 +3344,7 @@ void wxWindowGTK::SetWidgetStyle()
             style->fg[GTK_STATE_PRELIGHT] = *m_foregroundColour.GetColor();
             style->fg[GTK_STATE_ACTIVE] = *m_foregroundColour.GetColor();
         }
-	else
+        else
         {
             // Try to restore the gtk default style.  This is still a little
             // oversimplified for what is probably really needed here for controls
@@ -3378,7 +3381,7 @@ void wxWindowGTK::SetWidgetStyle()
             // oversimplified for what is probably really needed here for controls
             // other than buttons, but is better than not being able to (re)set a
             // control's background colour to default grey and means resetting a
-	    // button to wxSYS_COLOUR_BTNFACE will restore its usual highlighting
+            // button to wxSYS_COLOUR_BTNFACE will restore its usual highlighting
             // behavior -- RL
             GtkStyle *def = gtk_rc_get_style( m_widget );
 
@@ -3749,14 +3752,14 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
 
     wxCHECK_RET( m_wxwindow != NULL, wxT("window needs client area for scrolling") );
-    
+
     if ((dx == 0) && (dy == 0)) return;
 
     m_clipPaintRegion = TRUE;
     gtk_pizza_scroll( GTK_PIZZA(m_wxwindow), -dx, -dy );
     m_clipPaintRegion = FALSE;
-    
-/*    
+
+/*
     if (m_children.GetCount() > 0)
     {
         gtk_pizza_scroll( GTK_PIZZA(m_wxwindow), -dx, -dy );
@@ -3764,10 +3767,10 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
     else
     {
         GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
-    
+
         pizza->xoffset -= dx;
         pizza->yoffset -= dy;
-        
+
         GdkGC *m_scrollGC = gdk_gc_new( pizza->bin_window );
         gdk_gc_set_exposures( m_scrollGC, TRUE );
 
@@ -3780,7 +3783,7 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
         if ((h < 0) || (w < 0))
         {
             Refresh();
-        } 
+        }
         else
         {
             int s_x = 0;
@@ -3803,7 +3806,7 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 
             Refresh( TRUE, &rect );
         }
-        
+
         gdk_gc_unref( m_scrollGC );
     }
 */

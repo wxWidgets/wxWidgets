@@ -33,6 +33,7 @@
     #include "wx/window.h"
     #include "wx/dcclient.h"
     #include "wx/event.h"
+    #include "wx/scrolbar.h"
 #endif // WX_PRECOMP
 
 #include "wx/univ/renderer.h"
@@ -49,6 +50,8 @@
 IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
 
 BEGIN_EVENT_TABLE(wxWindow, wxWindowBase)
+    EVT_SIZE(wxWindow::OnSize)
+
     EVT_PAINT(wxWindow::OnPaint)
     EVT_ERASE_BACKGROUND(wxWindow::OnErase)
 END_EVENT_TABLE()
@@ -197,6 +200,16 @@ int wxWindow::GetStateFlags() const
 // size
 // ----------------------------------------------------------------------------
 
+void wxWindow::OnSize(wxSizeEvent& event)
+{
+    if ( m_scrollbarVert || m_scrollbarHorz )
+    {
+        PositionScrollbars();
+    }
+
+    event.Skip();
+}
+
 wxSize wxWindow::AdjustSize(const wxSize& size) const
 {
     wxSize sz = size;
@@ -204,9 +217,48 @@ wxSize wxWindow::AdjustSize(const wxSize& size) const
     return sz;
 }
 
+void wxWindow::DoSetClientSize(int width, int height)
+{
+    // take into account the scrollbars
+    if ( m_scrollbarVert )
+        width += m_scrollbarVert->GetSize().x;
+
+    if ( m_scrollbarHorz )
+        height += m_scrollbarHorz->GetSize().y;
+
+    wxWindowNative::DoSetClientSize(width, height);
+}
+
+void wxWindow::DoGetClientSize(int *width, int *height) const
+{
+    wxWindowNative::DoGetClientSize(width, height);
+
+    if ( width && m_scrollbarVert )
+        *width -= m_scrollbarVert->GetSize().x;
+
+    if ( height && m_scrollbarHorz )
+        *height -= m_scrollbarHorz->GetSize().y;
+}
+
 // ----------------------------------------------------------------------------
-// scrolling
+// scrolling: we implement it entirely ourselves except for ScrollWindow()
+// function which is supposed to be (efficiently) implemented by the native
+// window class
 // ----------------------------------------------------------------------------
+
+void wxWindow::PositionScrollbars()
+{
+    wxCoord x, y;
+    DoGetSize(&x, &y);
+
+    int width = m_scrollbarVert ? m_scrollbarVert->GetSize().x : 0;
+    int height = m_scrollbarHorz ? m_scrollbarHorz->GetSize().y : 0;
+
+    if ( m_scrollbarVert )
+        m_scrollbarVert->SetSize(x - width, 0, width, y - height);
+    if ( m_scrollbarHorz )
+        m_scrollbarHorz->SetSize(0, y - height, x - width, height);
+}
 
 void wxWindow::SetScrollbar(int orient,
                             int pos,
@@ -214,26 +266,49 @@ void wxWindow::SetScrollbar(int orient,
                             int range,
                             bool refresh)
 {
-    return wxWindowNative::SetScrollbar(orient, pos, thumb, range, refresh);
+    wxScrollBar *scrollbar = GetScrollbar(orient);
+    if ( !scrollbar )
+    {
+        // create it
+        scrollbar = new wxScrollBar(this, -1,
+                                    wxDefaultPosition, wxDefaultSize,
+                                    orient & wxVERTICAL ? wxSB_VERTICAL
+                                                        : wxSB_HORIZONTAL);
+        if ( orient & wxVERTICAL )
+            m_scrollbarVert = scrollbar;
+        else
+            m_scrollbarHorz = scrollbar;
+
+        PositionScrollbars();
+    }
+
+    scrollbar->SetScrollbar(pos, thumb, range, thumb, refresh);
 }
 
 void wxWindow::SetScrollPos(int orient, int pos, bool refresh)
 {
-    return wxWindowNative::SetScrollPos(orient, pos, refresh);
+    wxScrollBar *scrollbar = GetScrollbar(orient);
+    wxCHECK_RET( scrollbar, _T("no scrollbar to set position for") );
+
+    scrollbar->SetThumbPosition(pos);
+    if ( refresh )
+        Refresh();
 }
 
 int wxWindow::GetScrollPos(int orient) const
 {
-    return wxWindowNative::GetScrollPos(orient);
+    wxScrollBar *scrollbar = GetScrollbar(orient);
+    return scrollbar ? scrollbar->GetThumbPosition() : 0;
 }
 
 int wxWindow::GetScrollThumb(int orient) const
 {
-    return wxWindowNative::GetScrollThumb(orient);
+    wxScrollBar *scrollbar = GetScrollbar(orient);
+    return scrollbar ? scrollbar->GetThumbSize() : 0;
 }
 
 int wxWindow::GetScrollRange(int orient) const
 {
-    return wxWindowNative::GetScrollRange(orient);
+    wxScrollBar *scrollbar = GetScrollbar(orient);
+    return scrollbar ? scrollbar->GetRange() : 0;
 }
-

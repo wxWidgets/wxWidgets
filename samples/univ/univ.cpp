@@ -37,6 +37,7 @@
     #include "wx/bmpbuttn.h"
     #include "wx/button.h"
     #include "wx/scrolbar.h"
+    #include "wx/scrolwin.h"
     #include "wx/statbox.h"
     #include "wx/stattext.h"
 #endif
@@ -236,11 +237,26 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     new wxStaticBitmap(this, -1, wxBITMAP(tip), wxPoint(50, 350),
                        wxDefaultSize, wxSUNKEN_BORDER);
 
+#if 0
     wxScrollBar *sb;
     sb = new wxScrollBar(this, -1, wxPoint(200, 300), wxSize(300, -1));
     sb->SetScrollbar(0, 10, 100, 10);
     sb = new wxScrollBar(this, -1, wxPoint(200, 330), wxSize(-1, 150), wxSB_VERTICAL);
     sb->SetScrollbar(50, 50, 100, 10);
+#elif 1
+    wxWindow *win = new wxWindow(this, -1,
+                                 wxPoint(200, 300),
+                                 wxSize(300, 150),
+                                 wxSUNKEN_BORDER);
+    win->SetScrollbar(wxHORIZONTAL, 0, 10, 30);
+    win->SetScrollbar(wxVERTICAL, 0, 5, 30);
+#else
+    wxScrolledWindow *win = new wxScrolledWindow(this, -1,
+                                                 wxPoint(200, 300),
+                                                 wxSize(300, 150),
+                                                 wxSUNKEN_BORDER);
+    win->SetScrollbars(10, 5, 30, 30, 15, 15);
+#endif
 
     new wxButton(this, -1, wxBITMAP(open), _T("&Open..."), wxPoint(10, 420));
 

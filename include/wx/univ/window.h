@@ -63,6 +63,7 @@ public:
 
     // background pixmap support
     // -------------------------
+
     virtual void SetBackground(const wxBitmap& bitmap,
                                int alignment = wxALIGN_CENTRE,
                                wxStretch stretch = wxSTRETCH_NOT);
@@ -74,11 +75,11 @@ public:
     // instead of the native ones 
     // ------------------------------------------------------------------
 
-    virtual void SetScrollbar( int orient,
-                               int pos,
-                               int thumbVisible,
-                               int range,
-                               bool refresh = TRUE );
+    virtual void SetScrollbar(int orient,
+                              int pos,
+                              int page,
+                              int range,
+                              bool refresh = TRUE );
     virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE );
     virtual int GetScrollPos( int orient ) const;
     virtual int GetScrollThumb( int orient ) const;
@@ -103,7 +104,14 @@ protected:
     // common part of all ctors
     void Init();
 
+    // overridden base class virtuals
+
+    // we deal with the scrollbars in these functions
+    virtual void DoSetClientSize(int width, int height);
+    virtual void DoGetClientSize(int *width, int *height) const;
+
     // event handlers
+    void OnSize(wxSizeEvent& event);
     void OnPaint(wxPaintEvent& event);
     void OnErase(wxEraseEvent& event);
 
@@ -119,6 +127,15 @@ protected:
 
     // adjust the size of the window to take into account its borders
     wxSize AdjustSize(const wxSize& size) const;
+
+    // get the scrollbar (may be NULL) for the given orientation
+    wxScrollBar *GetScrollbar(int orient) const
+    {
+        return orient & wxVERTICAL ? m_scrollbarVert : m_scrollbarHorz;
+    }
+
+    // put the scrollbars along the edges of the window
+    void PositionScrollbars();
 
     // background bitmap info
     wxBitmap  m_bitmapBg;
