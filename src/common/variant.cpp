@@ -2266,3 +2266,4 @@ bool wxVariant::Convert(wxDateTime* value) const
     return Convert(&val) && (value->ParseDate(val));
 }
 #endif // wxUSE_DATETIME
+
