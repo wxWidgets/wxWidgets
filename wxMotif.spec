@@ -1,7 +1,3 @@
-# RPM .spec file for wxMotif. Based on the .spec file for wxGTK
-# (c) by Robert Roebling. Modifications (c) 2000/03 by Robert Fendt.
-
-# Note that this is NOT a relocatable package
 %define pref /usr
 %define ver 2.5.2
 %define ver2 2.5
@@ -19,8 +15,8 @@ Release: %{rel}
 License: wxWindows Licence
 Group: X11/Libraries
 Source: wxMOTIF-%{ver}.tar.bz2
-URL: http://www.wxwindows.org
-Packager: Robert Fendt <rfendt@myokay.net>
+URL: http://www.wxwidgets.org
+Packager: wxWindows developers <wx-dev@lists.wxwidgets.org>
 BuildRoot: /tmp/wxmotif_root
 
 # all packages providing an implementation of wxWindows library (regardless of
@@ -277,3 +273,4 @@ rm -rf $RPM_BUILD_ROOT
 %files static
 %defattr (-,root,root)
 %{_libdir}/libwx_%{portname}*.a
+
