@@ -38,8 +38,10 @@
 
 #include <string.h>           // for memset
 
-#define ARRAYSIZE  1024       // size of the static array for BeginFind & co.
+
+#define ARRAYSIZE  1024       // static array for BeginFind & co.
 #define ALLOCBOXES 16         // number of cellboxes to alloc at once
+#define MAXDEAD    8          // tics before removing cellbox from list
 
 
 // ==========================================================================
@@ -48,8 +50,9 @@
 
 #define HASH(x, y) (((x >> 3) & 0x7f) << 7) + ((y >> 3) & 0x7f)
 
-#define HASHSIZE   32768
-#define MAXDEAD    8
+#define HASHSIZE   32768      // hash table size (do not change!)
+#define CELLBOX    8          // cells in a cellbox (do not change!)
+
 
 class CellBox
 {
@@ -329,13 +332,130 @@ void Life::KillBox(CellBox *c)
 }
 
 // --------------------------------------------------------------------------
+// Navigation
+// --------------------------------------------------------------------------
+
+Cell Life::FindCenter()
+{
+    double i, j;
+    int n;
+    i = 0.0;
+    j = 0.0;
+    n = 0;
+
+    CellBox *c;
+    for (c = m_head; c; c = c->m_next)
+        if (!c->m_dead)
+        {
+            i += c->m_x;
+            j += c->m_y;
+            n++;
+        }
+
+    if (n > 0)
+    {
+        i = (i / n) + CELLBOX / 2;
+        j = (j / n) + CELLBOX / 2;
+    }
+
+    Cell cell;
+    cell.i = (wxInt32) i;
+    cell.j = (wxInt32) j;
+    return cell;
+}
+
+Cell Life::FindNorth()
+{
+    wxInt32 i = 0, j = 0;
+    bool first = TRUE;
+
+    CellBox *c;
+    for (c = m_head; c; c = c->m_next)
+        if (!c->m_dead && ((first) || (c->m_y < j)))
+        {
+            i = c->m_x;
+            j = c->m_y;
+            first = FALSE;
+        }
+    
+    Cell cell;
+    cell.i = first? 0 : i + CELLBOX / 2;
+    cell.j = first? 0 : j + CELLBOX / 2;
+    return cell;
+}
+
+Cell Life::FindSouth()
+{
+    wxInt32 i = 0, j = 0;
+    bool first = TRUE;
+
+    CellBox *c;
+    for (c = m_head; c; c = c->m_next)
+        if (!c->m_dead && ((first) || (c->m_y > j)))
+        {
+            i = c->m_x;
+            j = c->m_y;
+            first = FALSE;
+        }
+    
+    Cell cell;
+    cell.i = first? 0 : i + CELLBOX / 2;
+    cell.j = first? 0 : j + CELLBOX / 2;
+    return cell;
+}
+
+Cell Life::FindWest()
+{
+    wxInt32 i = 0, j = 0;
+    bool first = TRUE;
+
+    CellBox *c;
+    for (c = m_head; c; c = c->m_next)
+        if (!c->m_dead && ((first) || (c->m_x < i)))
+        {
+            i = c->m_x;
+            j = c->m_y;
+            first = FALSE;
+        }
+    
+    Cell cell;
+    cell.i = first? 0 : i + CELLBOX / 2;
+    cell.j = first? 0 : j + CELLBOX / 2;
+    return cell;
+}
+
+Cell Life::FindEast()
+{
+    wxInt32 i = 0, j = 0;
+    bool first = TRUE;
+
+    CellBox *c;
+    for (c = m_head; c; c = c->m_next)
+        if (!c->m_dead && ((first) || (c->m_x > i)))
+        {
+            i = c->m_x;
+            j = c->m_y;
+            first = FALSE;
+        }
+    
+    Cell cell;
+    cell.i = first? 0 : i + CELLBOX / 2;
+    cell.j = first? 0 : j + CELLBOX / 2;
+    return cell;
+}
+
+// --------------------------------------------------------------------------
 // FindMore & co.
 // --------------------------------------------------------------------------
 
-// Post eight cells to the cell arrays (changed cells only)
+// DoLine:
+//  Post eight cells to the cell arrays - leave out the fourth
+//  argument (or pass 0, the default value) to post alive cells
+//  only, else it will post cells which have changed.
+//
 void Life::DoLine(wxInt32 i, wxInt32 j, wxUint32 live, wxUint32 old)
 {
-    wxUint32 diff = (live ^ old) & 0x000000ff;
+    wxUint32 diff = (live ^ old) & 0xff;
 
     if (!diff) return;
 
@@ -348,24 +468,6 @@ void Life::DoLine(wxInt32 i, wxInt32 j, wxUint32 live, wxUint32 old)
             m_ncells++;
         }
         diff >>= 1;
-        live >>= 1;
-    }
-}
-
-// Post eight cells to the cell arrays (alive cells only)
-void Life::DoLine(wxInt32 i, wxInt32 j, wxUint32 live)
-{
-    if (! (live & 0x000000ff)) return;
-
-    for (wxInt32 k = 8; k; k--, i++)
-    {
-        if (live & 0x01)
-        {
-            m_cells[m_ncells].i = i;
-            m_cells[m_ncells].j = j;
-            m_ncells++;
-        }
-        live >>= 1;
     }
 }
 

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        life.h
-// Purpose:     The game of life, created by J. H. Conway
+// Purpose:     The game of Life, created by J. H. Conway
 // Author:      Guillermo Rodriguez Garcia, <guille@iies.es>
 // Modified by:
 // Created:     Jan/2000
@@ -28,15 +28,18 @@
     #include "wx/wx.h"
 #endif
 
+#include "wx/minifram.h"
+
 #include "game.h"
+
 
 // --------------------------------------------------------------------------
 // LifeCanvas
 // --------------------------------------------------------------------------
 
-/* Note that in LifeCanvas, all cell coordinates are
- * named i, j, while screen coordinates are named x, y.
- */
+// Note that in LifeCanvas, all cell coordinates are
+// named i, j, while screen coordinates are named x, y.
+
 class LifeCanvas : public wxWindow
 {
 public:
@@ -94,16 +97,25 @@ private:
     wxInt32      m_mi, m_mj;        // last mouse position 
 };
 
+
 // --------------------------------------------------------------------------
-// LifeTimer
+// LifeNavigator
 // --------------------------------------------------------------------------
 
-// Life timer
-class LifeTimer : public wxTimer
+class LifeNavigator : public wxMiniFrame
 {
 public:
-    void Notify();
+    // ctor
+    LifeNavigator(wxWindow *parent);
+
+private:
+    // any class wishing to process wxWindows events must use this macro
+    DECLARE_EVENT_TABLE()
+
+    // event handlers
+    void OnClose(wxCloseEvent& event);
 };
+
 
 // --------------------------------------------------------------------------
 // LifeFrame
@@ -119,29 +131,36 @@ public:
     // member functions
     void UpdateInfoText();
     void UpdateUI();
-    void OnTimer();
 
 private:
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()
 
     // event handlers
-    void OnMenu(wxCommandEvent& event);
     void OnSamples(wxCommandEvent& event);
+    void OnMenu(wxCommandEvent& event);
+    void OnNavigate(wxCommandEvent& event);
+    void OnZoom(wxCommandEvent& event);
     void OnSlider(wxScrollEvent& event);
+    void OnTimer(wxTimerEvent& event);
     void OnClose(wxCloseEvent& event);
+
+    // event handler helpers
     void OnStart();
     void OnStop();
+    void OnStep();
 
-    Life         *m_life;  
-    LifeTimer    *m_timer; 
-    LifeCanvas   *m_canvas;
-    wxStaticText *m_text;
-    bool          m_running;
-    bool          m_topspeed;
-    long          m_interval;
-    long          m_tics;
+    Life           *m_life;  
+    LifeCanvas     *m_canvas;
+    LifeNavigator  *m_navigator;
+    wxStaticText   *m_text;
+    wxTimer        *m_timer;
+    bool            m_running;
+    bool            m_topspeed;
+    long            m_interval;
+    long            m_tics;
 };
+
 
 // --------------------------------------------------------------------------
 // LifeApp

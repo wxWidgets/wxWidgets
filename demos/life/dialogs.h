@@ -28,8 +28,6 @@
     #include "wx/wx.h"
 #endif
 
-#include "wx/spinctrl.h"
-
 #include "life.h"
 #include "game.h"
 
@@ -72,5 +70,6 @@ public:
     // ctor
     LifeAboutDialog(wxWindow *parent);
 };
+
 
 #endif  // _LIFE_DIALOGS_H_

@@ -29,11 +29,12 @@
 #endif
 
 #include "wx/statline.h"
-#include "wx/spinctrl.h"
+#include "wx/minifram.h"
 
 #include "dialogs.h"
 #include "life.h"
 #include "game.h"
+
 
 // --------------------------------------------------------------------------
 // resources
@@ -108,17 +109,17 @@ LifeSamplesDialog::LifeSamplesDialog(wxWindow *parent)
 
     // layout components
     wxStaticBoxSizer *sizer1 = new wxStaticBoxSizer( statbox, wxVERTICAL );
-    sizer1->Add( m_canvas, 2, wxGROW | wxCENTRE | wxALL, 5);
-    sizer1->Add( m_text, 1, wxGROW | wxCENTRE | wxALL, 5 );
+    sizer1->Add( m_canvas, 2, wxGROW | wxALL, 5);
+    sizer1->Add( m_text, 1, wxGROW | wxALL, 5 );
 
     wxBoxSizer *sizer2 = new wxBoxSizer( wxHORIZONTAL );
-    sizer2->Add( m_list, 0, wxGROW | wxCENTRE | wxALL, 5 );
-    sizer2->Add( sizer1, 1, wxGROW | wxCENTRE | wxALL, 5 );
+    sizer2->Add( m_list, 0, wxGROW | wxALL, 5 );
+    sizer2->Add( sizer1, 1, wxGROW | wxALL, 5 );
 
     wxBoxSizer *sizer3 = new wxBoxSizer( wxVERTICAL );
     sizer3->Add( CreateTextSizer(_("Select one configuration")), 0, wxALL, 10 );
     sizer3->Add( new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT, 10 );
-    sizer3->Add( sizer2, 1, wxGROW | wxCENTRE | wxALL, 5 );
+    sizer3->Add( sizer2, 1, wxGROW | wxALL, 5 );
     sizer3->Add( new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT, 10 );
     sizer3->Add( CreateButtonSizer(wxOK | wxCANCEL), 0, wxCENTRE | wxALL, 10 );
 
@@ -181,7 +182,7 @@ LifeAboutDialog::LifeAboutDialog(wxWindow *parent)
     wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
     sizer->Add( sbmp, 0, wxCENTRE | wxALL, 10 );
     sizer->Add( new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT, 5 );
-    sizer->Add( CreateTextSizer(_("Life! version 2.0 for wxWindows\n\n"
+    sizer->Add( CreateTextSizer(_("Life! version 2.1 for wxWindows\n\n"
                                   "(c) 2000 Guillermo Rodriguez Garcia\n\n"
                                   "<guille@iies.es>\n\n"
                                   "Portions of the code are based in XLife;\n"
@@ -197,3 +198,6 @@ LifeAboutDialog::LifeAboutDialog(wxWindow *parent)
     sizer->Fit(this);
     Centre(wxBOTH | wxCENTRE_ON_SCREEN);
 }
+
+
+

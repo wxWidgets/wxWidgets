@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        game.h
-// Purpose:     Life! game logic, version 2
+// Purpose:     Life! game logic
 // Author:      Guillermo Rodriguez Garcia, <guille@iies.es>
 // Modified by:
 // Created:     Jan/2000
@@ -35,6 +35,7 @@
 // A Cell is just a struct which contains a pair of (i, j) coords.
 // These structs are not used internally anywhere; they are just
 // used to pass cell coordinates around.
+
 struct Cell
 {
     wxInt32 i;
@@ -85,13 +86,20 @@ public:
 
     // accessors
     inline wxUint32 GetNumCells() const { return m_numcells; };
-    bool IsAlive (wxInt32 x, wxInt32 y);
-    void SetCell (wxInt32 x, wxInt32 y, bool alive = TRUE);
-    void SetShape(const LifeShape &shape);
+    bool IsAlive  (wxInt32 x, wxInt32 y);
+    void SetCell  (wxInt32 x, wxInt32 y, bool alive = TRUE);
+    void SetShape (const LifeShape &shape);
 
     // game control
     void Clear();
     bool NextTic();
+
+    // navigation
+    Cell FindNorth();
+    Cell FindSouth();
+    Cell FindWest();
+    Cell FindEast();
+    Cell FindCenter();
 
     // The following functions find cells within a given viewport; either
     // all alive cells, or only those cells which have changed since last
@@ -122,9 +130,8 @@ private:
     CellBox *LinkBox(wxInt32 x, wxInt32 y, bool create = TRUE);
     void KillBox(CellBox *c);
 
-    // helpers for FindMore & co.
-    void DoLine(wxInt32 i, wxInt32 j, wxUint32 alive, wxUint32 old);
-    void DoLine(wxInt32 i, wxInt32 j, wxUint32 alive);
+    // helper for BeginFind & FindMore
+    void DoLine(wxInt32 i, wxInt32 j, wxUint32 alive, wxUint32 old = 0);
 
 
     CellBox  *m_head;           // list of alive boxes
