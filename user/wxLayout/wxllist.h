@@ -822,11 +822,11 @@ private:
    //@}   
 
    /// A structure for the selection.
-   struct
+   struct Selection
    {
       bool m_valid;
       wxPoint m_CursorA, m_CursorB;
-   }m_Selection;
+   } m_Selection;
    /** @name Font parameters. */
    //@{
    int m_FontFamily, m_FontStyle, m_FontWeight;
