@@ -83,8 +83,8 @@ public:
     void OnChar(wxKeyEvent& event);
 
 private:
-    static inline char GetChar(bool on, char c) { return on ? c : '-'; }
-    void LogEvent(const char *name, wxKeyEvent& event) const;
+    static inline wxChar GetChar(bool on, wxChar c) { return on ? c : _T('-'); }
+    void LogEvent(const wxChar *name, wxKeyEvent& event) const;
 
     DECLARE_EVENT_TABLE()
 };
@@ -231,12 +231,12 @@ BEGIN_EVENT_TABLE(MyTextCtrl, wxTextCtrl)
     EVT_CHAR(MyTextCtrl::OnChar)
 END_EVENT_TABLE()
 
-void MyTextCtrl::LogEvent(const char *name, wxKeyEvent& event) const
+void MyTextCtrl::LogEvent(const wxChar *name, wxKeyEvent& event) const
 {
     wxString key;
     long keycode = event.KeyCode();
-    if ( isprint((int)keycode) )
-        key.Printf("'%c'", (char)keycode);
+    if ( wxIsprint((int)keycode) )
+        key.Printf( _T("'%c'") , (char)keycode);
     else
     {
         switch ( keycode )
@@ -254,6 +254,7 @@ void MyTextCtrl::LogEvent(const char *name, wxKeyEvent& event) const
             case WXK_MBUTTON: key = "MBUTTON"; break;
             case WXK_CLEAR: key = "CLEAR"; break;
             case WXK_SHIFT: key = "SHIFT"; break;
+            case WXK_ALT: key = "ALT"; break;
             case WXK_CONTROL: key = "CONTROL"; break;
             case WXK_MENU: key = "MENU"; break;
             case WXK_PAUSE: key = "PAUSE"; break;
@@ -343,30 +344,30 @@ void MyTextCtrl::LogEvent(const char *name, wxKeyEvent& event) const
             case WXK_NUMPAD_DECIMAL: key = "NUMPAD_DECIMAL"; break;
 
             default:
-                key.Printf("unknown (%ld)", keycode);
+                key.Printf( _T("unknown (%ld)"), keycode);
         }
     }
 
     wxLogMessage( _T("%s event: %s (flags = %c%c%c%c)"),
                   name,
                   key.c_str(),
-                  GetChar(event.ControlDown(), 'C'),
-                  GetChar(event.AltDown(), 'A'),
-                  GetChar(event.ShiftDown(), 'S'),
-                  GetChar(event.MetaDown(), 'M'));
+                  GetChar( event.ControlDown(), _T('C') ),
+                  GetChar( event.AltDown(), _T('A') ),
+                  GetChar( event.ShiftDown(), _T('S') ),
+                  GetChar( event.MetaDown(), _T('M') ) );
 
 }
 
 void MyTextCtrl::OnChar(wxKeyEvent& event)
 {
-    LogEvent("Char", event);
+    LogEvent( _T("Char"), event);
 
     event.Skip();
 }
 
 void MyTextCtrl::OnKeyUp(wxKeyEvent& event)
 {
-    LogEvent("Key up", event);
+    LogEvent( _("Key up"), event);
 
     event.Skip();
 }
@@ -405,7 +406,7 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
             break;
     }
 
-    LogEvent("Key down", event);
+    LogEvent( _("Key down"), event);
 
     event.Skip();
 }

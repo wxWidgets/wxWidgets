@@ -122,8 +122,8 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 bool
 wxProgressDialog::Update(int value, const wxString& newmsg)
 {
-   wxASSERT_MSG( value == -1 || m_gauge, "can't update non existent dialog" );
-   wxASSERT_MSG( value < m_maximum, "invalid progress value" );
+   wxASSERT_MSG( value == -1 || m_gauge, _T("can't update non existent dialog") );
+   wxASSERT_MSG( value < m_maximum, _T("invalid progress value") );
 
    if( m_gauge )
       m_gauge->SetValue(value + 1);

@@ -111,11 +111,11 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     m_owner = (wxWindow *)NULL;
     m_isMemDC = FALSE;
   
-    wxASSERT_MSG( window, "DC needs a window" );
+    wxASSERT_MSG( window, _T("DC needs a window") );
     
     GtkWidget *widget = window->m_wxwindow;
     
-    wxASSERT_MSG( widget, "DC needs a widget" );
+    wxASSERT_MSG( widget, _T("DC needs a widget") );
     
     m_window = widget->window;
     
@@ -1025,7 +1025,7 @@ void wxWindowDC::SetLogicalFunction( int function )
 #endif
         default:
 	{
-	   wxFAIL_MSG( "unsupported logical function" );
+	   wxFAIL_MSG( _T("unsupported logical function") );
 	   break;
 	}
     }

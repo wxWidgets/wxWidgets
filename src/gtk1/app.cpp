@@ -213,7 +213,7 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 
 void wxapp_install_idle_handler()
 {
-    wxASSERT_MSG( wxTheApp->m_idleTag == 0, "attempt to install idle handler twice" );
+    wxASSERT_MSG( wxTheApp->m_idleTag == 0, _T("attempt to install idle handler twice") );
 
     /* this routine gets called by all event handlers
        indicating that the idle is over. */

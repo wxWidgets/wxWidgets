@@ -216,6 +216,12 @@ static long map_to_unmodified_wx_keysym( KeySym keysym )
         case GDK_Shift_R:       key_code = WXK_SHIFT;       break;
         case GDK_Control_L:
         case GDK_Control_R:     key_code = WXK_CONTROL;     break;
+	case GDK_Meta_L:
+	case GDK_Meta_R:
+	case GDK_Alt_L:
+	case GDK_Alt_R:
+	case GDK_Super_L:
+	case GDK_Super_R:       key_code = WXK_ALT;         break;
         case GDK_Menu:          key_code = WXK_MENU;        break;
         case GDK_Help:          key_code = WXK_HELP;        break;
         case GDK_BackSpace:     key_code = WXK_BACK;        break;

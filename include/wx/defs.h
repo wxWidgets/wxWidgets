@@ -829,6 +829,7 @@ enum wxKeyCode
   WXK_MBUTTON,
   WXK_CLEAR,
   WXK_SHIFT,
+  WXK_ALT,
   WXK_CONTROL,
   WXK_MENU,
   WXK_PAUSE,
