@@ -1073,13 +1073,13 @@ typedef unsigned long int	BOOKMARK;
 extern "C" {
 #endif
 /*
- *  Level 1 function rototypes
+ *  Level 1 function prototypes
  */
 RETCODE SQL_API SQLColumns (HSTMT hstmt, UCHAR FAR * szTableQualifier,
     SWORD cbTableQualifier, UCHAR FAR * szTableOwner, SWORD cbTableOwner,
     UCHAR FAR * szTableName, SWORD cbTableName, UCHAR FAR * szColumnName,
     SWORD cbColumnName);
-RETCODE SQL_API SQLDriverConnect (HDBC hdbc, HWND hwnd,
+RETCODE SQL_API SQLDriverConnect (HDBC hdbc, SQLHWND hwnd,  //glt
     UCHAR FAR * szConnStrIn, SWORD cbConnStrIn, UCHAR FAR * szConnStrOut,
     SWORD cbConnStrOutMax, SWORD FAR * pcbConnStrOut, UWORD fDriverCompletion);
 RETCODE SQL_API SQLGetConnectOption (HDBC hdbc, UWORD fOption, PTR pvParam);

@@ -37,6 +37,8 @@
 typedef void *HWND;
 #endif
 
+typedef void *SQLHWND;
+
 typedef unsigned char UCHAR;
 typedef long int SDWORD;
 typedef short int SWORD;

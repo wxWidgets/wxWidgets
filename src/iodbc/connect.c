@@ -742,7 +742,7 @@ SQLConnect (
 RETCODE SQL_API 
 SQLDriverConnect (
     HDBC hdbc,
-    HWND hwnd,
+    SQLHWND hwnd,
     UCHAR FAR * szConnStrIn,
     SWORD cbConnStrIn,
     UCHAR FAR * szConnStrOut,
