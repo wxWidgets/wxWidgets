@@ -128,6 +128,7 @@
 #endif // !WX_PRECOMP
 
 #include  "wx/filename.h"
+#include  "wx/file.h"
 
 // ============================================================================
 // implementation of wxFile
