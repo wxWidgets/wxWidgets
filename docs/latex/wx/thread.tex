@@ -74,10 +74,12 @@ stack.
 
 \membersection{wxThread::Create}\label{wxthreadcreate}
 
-\func{wxThreadError}{Create}{\void}
+\func{wxThreadError}{Create}{\param{unsigned int }{stackSize = 0}}
 
 Creates a new thread. The thread object is created in the suspended state, and you
-should call \helpref{Run}{wxthreadrun} to start running it.
+should call \helpref{Run}{wxthreadrun} to start running it.  You may optionally
+specify the stack size to be allocated to it (Ignored on platforms that don't
+support setting it explicitly, eg. Unix).
 
 \wxheading{Return value}
 

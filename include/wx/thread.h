@@ -303,8 +303,15 @@ public:
     // from _another_ thread (typically the thread that created this one, e.g.
     // the main thread), not from the thread itself
 
-        // create a new thread - call Run() to start it
-    wxThreadError Create();
+        // create a new thread and optionally set the stack size on
+        // platforms that support that - call Run() to start it
+        // (special cased for watcom which won't accept 0 default)
+
+#ifdef __WATCOMC__
+    wxThreadError Create(unsigned int stackSize = 10240);
+#else
+    wxThreadError Create(unsigned int stackSize = 0);
+#endif
 
         // starts execution of the thread - from the moment Run() is called
         // the execution of wxThread::Entry() may start at any moment, caller
@@ -525,3 +532,5 @@ public:
 #endif // wxUSE_THREADS
 
 #endif // __THREADH__
+
+// vi:sts=4:sw=4:et

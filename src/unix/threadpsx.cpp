@@ -938,7 +938,7 @@ wxThread::wxThread(wxThreadKind kind)
     m_isDetached = kind == wxTHREAD_DETACHED;
 }
 
-wxThreadError wxThread::Create()
+wxThreadError wxThread::Create(unsigned int WXUNUSED(stackSize))
 {
     if ( m_internal->GetState() != STATE_NEW )
     {

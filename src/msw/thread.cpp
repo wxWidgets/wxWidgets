@@ -351,8 +351,8 @@ wxCriticalSection::wxCriticalSection()
 #ifdef __WXDEBUG__
     // Done this way to stop warnings during compilation about statement
     // always being false
-	 int csSize = sizeof(CRITICAL_SECTION);
-	 int bSize  = sizeof(m_buffer);
+    int csSize = sizeof(CRITICAL_SECTION);
+    int bSize  = sizeof(m_buffer);
     wxASSERT_MSG( csSize <= bSize,
                   _T("must increase buffer size in wx/thread.h") );
 #endif
@@ -411,7 +411,7 @@ public:
     }
 
     // create a new (suspended) thread (for the given thread object)
-    bool Create(wxThread *thread);
+    bool Create(wxThread *thread, unsigned int stackSize);
 
     // suspend/resume/terminate
     bool Suspend();
@@ -514,7 +514,7 @@ void wxThreadInternal::SetPriority(unsigned int priority)
     }
 }
 
-bool wxThreadInternal::Create(wxThread *thread)
+bool wxThreadInternal::Create(wxThread *thread, unsigned int stackSize)
 {
     // for compilers which have it, we should use C RTL function for thread
     // creation instead of Win32 API one because otherwise we will have memory
@@ -522,22 +522,18 @@ bool wxThreadInternal::Create(wxThread *thread)
 #ifdef wxUSE_BEGIN_THREAD
     m_hThread = (HANDLE)_beginthreadex
                         (
-                            NULL,   // default security
-#ifdef __WATCOMC__
-                            10240,  // stack size can't be NULL in Watcom
-#else
-                            0,      // default stack size
-#endif
-                            wxThreadInternal::WinThreadStart, // entry point
-                            thread,
-                            CREATE_SUSPENDED,
-                            (unsigned int *)&m_tid
+                          NULL,                             // default security
+                          stackSize,
+                          wxThreadInternal::WinThreadStart, // entry point
+                          thread,
+                          CREATE_SUSPENDED,
+                          (unsigned int *)&m_tid
                         );
 #else // compiler doesn't have _beginthreadex
     m_hThread = ::CreateThread
                   (
                     NULL,                               // default security
-                    0,                                  // default stack size
+                    stackSize,                          // default stack size
                     wxThreadInternal::WinThreadStart,   // thread entry point
                     (LPVOID)thread,                     // parameter
                     CREATE_SUSPENDED,                   // flags
@@ -756,11 +752,11 @@ wxThread::~wxThread()
 // create/start thread
 // -------------------
 
-wxThreadError wxThread::Create()
+wxThreadError wxThread::Create(unsigned int stackSize)
 {
     wxCriticalSectionLocker lock(m_critsect);
 
-    if ( !m_internal->Create(this) )
+    if ( !m_internal->Create(this, stackSize) )
         return wxTHREAD_NO_RESOURCE;
 
     return wxTHREAD_NO_ERROR;
@@ -1244,3 +1240,5 @@ bool WXDLLEXPORT wxIsWaitingForThread()
 }
 
 #endif // wxUSE_THREADS
+
+// vi:sts=4:sw=4:et
