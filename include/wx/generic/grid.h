@@ -1725,6 +1725,7 @@ protected:
     bool GetModelValues();
     bool SetModelValues();
 
+	friend class wxGridSelection;
 
     DECLARE_DYNAMIC_CLASS( wxGrid )
     DECLARE_EVENT_TABLE()
