@@ -271,7 +271,7 @@ inline bool wxDateTime::IsSameTime(const wxDateTime& dt) const
 inline bool wxDateTime::IsEqualUpTo(const wxDateTime& dt,
                                     const wxTimeSpan& ts) const
 {
-    return IsBetween(dt.Substract(ts), dt.Add(ts));
+    return IsBetween(dt.Subtract(ts), dt.Add(ts));
 }
 
 // ----------------------------------------------------------------------------
@@ -299,14 +299,14 @@ inline wxDateTime& wxDateTime::operator+=(const wxTimeSpan& diff)
     return Add(diff);
 }
 
-inline wxDateTime wxDateTime::Substract(const wxTimeSpan& diff) const
+inline wxDateTime wxDateTime::Subtract(const wxTimeSpan& diff) const
 {
     wxASSERT_MSG( IsValid(), _T("invalid wxDateTime"));
 
     return wxDateTime(m_time - diff.GetValue());
 }
 
-inline wxDateTime& wxDateTime::Substract(const wxTimeSpan& diff)
+inline wxDateTime& wxDateTime::Subtract(const wxTimeSpan& diff)
 {
     wxASSERT_MSG( IsValid(), _T("invalid wxDateTime"));
 
@@ -317,10 +317,10 @@ inline wxDateTime& wxDateTime::Substract(const wxTimeSpan& diff)
 
 inline wxDateTime& wxDateTime::operator-=(const wxTimeSpan& diff)
 {
-    return Substract(diff);
+    return Subtract(diff);
 }
 
-inline wxTimeSpan wxDateTime::Substract(const wxDateTime& datetime) const
+inline wxTimeSpan wxDateTime::Subtract(const wxDateTime& datetime) const
 {
     wxASSERT_MSG( IsValid() && datetime.IsValid(), _T("invalid wxDateTime"));
 
@@ -332,19 +332,19 @@ inline wxDateTime wxDateTime::Add(const wxDateSpan& diff) const
     return wxDateTime(*this).Add(diff);
 }
 
-inline wxDateTime& wxDateTime::Substract(const wxDateSpan& diff)
+inline wxDateTime& wxDateTime::Subtract(const wxDateSpan& diff)
 {
     return Add(diff.Negate());
 }
 
-inline wxDateTime wxDateTime::Substract(const wxDateSpan& diff) const
+inline wxDateTime wxDateTime::Subtract(const wxDateSpan& diff) const
 {
-    return wxDateTime(*this).Substract(diff);
+    return wxDateTime(*this).Subtract(diff);
 }
 
 inline wxDateTime& wxDateTime::operator-=(const wxDateSpan& diff)
 {
-    return Substract(diff);
+    return Subtract(diff);
 }
 
 inline wxDateTime& wxDateTime::operator+=(const wxDateSpan& diff)
@@ -426,12 +426,12 @@ inline wxTimeSpan& wxTimeSpan::Add(const wxTimeSpan& diff)
     return *this;
 }
 
-inline wxTimeSpan wxTimeSpan::Substract(const wxTimeSpan& diff) const
+inline wxTimeSpan wxTimeSpan::Subtract(const wxTimeSpan& diff) const
 {
     return wxTimeSpan(m_diff - diff.GetValue());
 }
 
-inline wxTimeSpan& wxTimeSpan::Substract(const wxTimeSpan& diff)
+inline wxTimeSpan& wxTimeSpan::Subtract(const wxTimeSpan& diff)
 {
     m_diff -= diff.GetValue();
 

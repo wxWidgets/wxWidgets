@@ -64,7 +64,7 @@ class WXDLLEXPORT wxDateSpan;
   wxTimeSpan + wxTimeSpan = wxTimeSpan
   wxDateSpan + wxDateSpan = wxDateSpan
 
-  substraction
+  subtraction
   ------------
   wxDateTime - wxDateTime = wxTimeSpan
   wxDateTime - wxTimeSpan = wxDateTime
@@ -85,7 +85,7 @@ class WXDLLEXPORT wxDateSpan;
   -wxDateSpan = wxDateSpan
 
   For each binary operation OP (+, -, *) we have the following operatorOP=() as
-  a method and the method with a symbolic name OPER (Add, Substract, Multiply)
+  a method and the method with a symbolic name OPER (Add, Subtract, Multiply)
   as a synonym for it and another const method with the same name which returns
   the changed copy of the object and operatorOP() as a global function which is
   implemented in terms of the const version of OPEN. For the unary - we have
@@ -856,10 +856,10 @@ public:
     inline wxDateTime& operator+=(const wxTimeSpan& diff);
 
         // return the difference of the date with a time span
-    inline wxDateTime Substract(const wxTimeSpan& diff) const;
-        // substract a time span (positive or negative)
-    inline wxDateTime& Substract(const wxTimeSpan& diff);
-        // substract a time span (positive or negative)
+    inline wxDateTime Subtract(const wxTimeSpan& diff) const;
+        // subtract a time span (positive or negative)
+    inline wxDateTime& Subtract(const wxTimeSpan& diff);
+        // subtract a time span (positive or negative)
     inline wxDateTime& operator-=(const wxTimeSpan& diff);
 
         // return the sum of the date with a date span
@@ -870,14 +870,14 @@ public:
     inline wxDateTime& operator+=(const wxDateSpan& diff);
 
         // return the difference of the date with a date span
-    inline wxDateTime Substract(const wxDateSpan& diff) const;
-        // substract a date span (positive or negative)
-    inline wxDateTime& Substract(const wxDateSpan& diff);
-        // substract a date span (positive or negative)
+    inline wxDateTime Subtract(const wxDateSpan& diff) const;
+        // subtract a date span (positive or negative)
+    inline wxDateTime& Subtract(const wxDateSpan& diff);
+        // subtract a date span (positive or negative)
     inline wxDateTime& operator-=(const wxDateSpan& diff);
 
         // return the difference between two dates
-    inline wxTimeSpan Substract(const wxDateTime& dt) const;
+    inline wxTimeSpan Subtract(const wxDateTime& dt) const;
 
     // conversion to/from text: all conversions from text return the pointer to
     // the next character following the date specification (i.e. the one where
@@ -962,7 +962,7 @@ private:
 
 // ----------------------------------------------------------------------------
 // This class contains a difference between 2 wxDateTime values, so it makes
-// sense to add it to wxDateTime and it is the result of substraction of 2
+// sense to add it to wxDateTime and it is the result of subtraction of 2
 // objects of that class. See also wxDateSpan.
 // ----------------------------------------------------------------------------
 
@@ -1018,11 +1018,11 @@ public:
     wxTimeSpan& operator+=(const wxTimeSpan& diff) { return Add(diff); }
 
         // return the difference of two timespans
-    inline wxTimeSpan Substract(const wxTimeSpan& diff) const;
-        // substract another timespan
-    inline wxTimeSpan& Substract(const wxTimeSpan& diff);
-        // substract another timespan
-    wxTimeSpan& operator-=(const wxTimeSpan& diff) { return Substract(diff); }
+    inline wxTimeSpan Subtract(const wxTimeSpan& diff) const;
+        // subtract another timespan
+    inline wxTimeSpan& Subtract(const wxTimeSpan& diff);
+        // subtract another timespan
+    wxTimeSpan& operator-=(const wxTimeSpan& diff) { return Subtract(diff); }
 
         // multiply timespan by a scalar
     inline wxTimeSpan Multiply(int n) const;
@@ -1126,7 +1126,7 @@ private:
 // won't be changed unless the resulting date would be invalid: for example,
 // Jan 31 + 1 month will be Feb 28, not (non existing) Feb 31.
 //
-// Because of this feature, adding and substracting back again the same
+// Because of this feature, adding and subtracting back again the same
 // wxDateSpan will *not*, in general give back the original date: Feb 28 - 1
 // month will be Jan 28, not Jan 31!
 //
@@ -1213,10 +1213,10 @@ public:
     inline wxDateSpan& operator+=(const wxDateSpan& other);
 
         // return difference of two date spans
-    inline wxDateSpan Substract(const wxDateSpan& other) const;
-        // substract another wxDateSpan from us
-    inline wxDateSpan& Substract(const wxDateSpan& other);
-        // substract another wxDateSpan from us
+    inline wxDateSpan Subtract(const wxDateSpan& other) const;
+        // subtract another wxDateSpan from us
+    inline wxDateSpan& Subtract(const wxDateSpan& other);
+        // subtract another wxDateSpan from us
     inline wxDateSpan& operator-=(const wxDateSpan& other);
 
         // return a copy of this time span with changed sign
@@ -1351,7 +1351,7 @@ inline wxDateTime WXDLLEXPORT operator+(const wxDateTime& dt,
 inline wxDateTime WXDLLEXPORT operator-(const wxDateTime& dt,
                                         const wxTimeSpan& ts)
 {
-    return dt.Substract(ts);
+    return dt.Subtract(ts);
 }
 
 inline wxDateTime WXDLLEXPORT operator+(const wxDateTime& dt,
@@ -1363,13 +1363,13 @@ inline wxDateTime WXDLLEXPORT operator+(const wxDateTime& dt,
 inline wxDateTime WXDLLEXPORT operator-(const wxDateTime& dt,
                                         const wxDateSpan& ds)
 {
-    return dt.Substract(ds);
+    return dt.Subtract(ds);
 }
 
 inline wxTimeSpan WXDLLEXPORT operator-(const wxDateTime& dt1,
                                         const wxDateTime& dt2)
 {
-    return dt1.Substract(dt2);
+    return dt1.Subtract(dt2);
 }
 
 // comparison
