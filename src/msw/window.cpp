@@ -1501,7 +1501,7 @@ void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
         width = 0;
     if (height < 0)
         height = 0;
-    if ( !::MoveWindow(GetHwnd(), x, y, width, height, TRUE) )
+    if ( !::MoveWindow(GetHwnd(), x, y, width, height, IsShown() /*Repaint?*/) )
     {
         wxLogLastError(wxT("MoveWindow"));
     }
