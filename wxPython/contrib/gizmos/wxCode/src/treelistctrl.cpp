@@ -4653,8 +4653,7 @@ void wxTreeListCtrl::CalculateAndSetHeaderHeight()
     }
 }
 
-
-void wxTreeListCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
+void wxTreeListCtrl::DoHeaderLayout()
 {
     int w, h;
     GetClientSize(&w, &h);
@@ -4665,6 +4664,11 @@ void wxTreeListCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
     }
     if (m_main_win)
         m_main_win->SetSize(0, m_headerHeight + 1, w, h - m_headerHeight - 1);
+}    
+
+void wxTreeListCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
+{
+    DoHeaderLayout();
 }
 
 
@@ -5015,7 +5019,10 @@ wxString wxTreeListCtrl::GetColumnText(size_t column) const
 { return m_header_win->GetColumnText(column); }
 
 void wxTreeListCtrl::AddColumn(const wxTreeListColumnInfo& col)
-{ m_header_win->AddColumn(col); }
+{
+    m_header_win->AddColumn(col);
+    DoHeaderLayout();
+}
 
 void wxTreeListCtrl::InsertColumn(size_t before,
                                   const wxTreeListColumnInfo& col)

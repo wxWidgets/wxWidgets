@@ -545,7 +545,7 @@ protected:
 
     void OnSize(wxSizeEvent& event);
     void CalculateAndSetHeaderHeight();
-    
+    void DoHeaderLayout();
 
 private:
     size_t fill_column;
