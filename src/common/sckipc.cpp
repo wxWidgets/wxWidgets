@@ -321,7 +321,7 @@ wxTCPServer::~wxTCPServer()
 #ifdef __UNIX_LIKE__
     if ( !m_filename.empty() )
     {
-        if ( !remove(m_filename) )
+        if ( remove(m_filename) != 0 )
         {
             wxLogDebug(_T("Stale AF_UNIX file '%s' left."), m_filename.c_str());
         }
