@@ -34,6 +34,7 @@ WXDLLEXPORT_DATA(extern HICON) wxDEFAULT_MDICHILDFRAME_ICON;
 WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 
 WXDLLEXPORT HINSTANCE wxGetInstance();
+WXDLLEXPORT void wxSetInstance(HINSTANCE hInst);
 WXDLLEXPORT void wxFillLogFont(LOGFONT *logFont, wxFont *font);
 WXDLLEXPORT wxFont wxCreateFontFromLogFont(LOGFONT *logFont); // , bool createNew = TRUE);
 

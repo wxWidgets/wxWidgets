@@ -1126,6 +1126,11 @@ HINSTANCE wxGetInstance()
   return wxhInstance;
 }
 
+void wxSetInstance(HINSTANCE hInst)
+{
+    wxhInstance = hInst;
+}
+
 // For some reason, with MSVC++ 1.5, WinMain isn't linked in properly
 // if in a separate file. So include it here to ensure it's linked.
 #if (defined(__VISUALC__) && !defined(__WIN32__)) || (defined(__GNUWIN32__) && !defined(__TWIN32__))
