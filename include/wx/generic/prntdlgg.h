@@ -22,7 +22,6 @@
 #if wxUSE_PRINTING_ARCHITECTURE
 
 #include "wx/dialog.h"
-#include "wx/dialog.h"
 
 #if wxUSE_POSTSCRIPT
     #include "wx/dcps.h"
