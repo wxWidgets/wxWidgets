@@ -71,14 +71,6 @@ enum wxDirTraverseResult
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxDirTraverser::OnFile}\label{wxdirtraverseronfile}
-
-\func{virtual wxDirTraverseResult}{OnFile}{\param{const wxString\& }{filename}}
-
-This function is called for each file. It may return {\tt wxDIR\_STOP} to abort
-traversing (for example, if the file being searched is found) or 
-{\tt wxDIR\_CONTINUE} to proceed.
-
 \membersection{wxDirTraverser::OnDir}\label{wxdirtraverserondir}
 
 \func{virtual wxDirTraverseResult}{OnDir}{\param{const wxString\& }{dirname}}
@@ -87,5 +79,28 @@ This function is called for each directory. It may return {\tt wxSIR\_STOP}
 to abort traversing completely, {\tt wxDIR\_IGNORE} to skip this directory but
 continue with others or {\tt wxDIR\_CONTINUE} to enumerate all files and
 subdirectories in this directory.
+
+This is a pure virtual function and must be implemented in the derived class.
+
+\membersection{wxDirTraverser::OnFile}\label{wxdirtraverseronfile}
+
+\func{virtual wxDirTraverseResult}{OnFile}{\param{const wxString\& }{filename}}
+
+This function is called for each file. It may return {\tt wxDIR\_STOP} to abort
+traversing (for example, if the file being searched is found) or 
+{\tt wxDIR\_CONTINUE} to proceed.
+
+This is a pure virtual function and must be implemented in the derived class.
+
+\membersection{wxOpenErrorTraverser::OnOpenError}\label{wxopenerrortraverseronopenerror}
+
+\func{virtual wxOpenErrorTraverseResult}{OnOpenError}{\param{const wxString\& }{openerrorname}}
+
+This function is called for each directory which we failed to open for
+enumerating. It may return {\tt wxSIR\_STOP} to abort traversing completely,
+{\tt wxDIR\_IGNORE} to skip this directory but continue with others or 
+{\tt wxDIR\_CONTINUE} to retry opening this directory once again.
+
+The base class version always returns {\tt wxDIR\_IGNORE}.
 
 

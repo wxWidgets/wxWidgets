@@ -16,6 +16,7 @@ All:
 - added wxDateSpan::operator==() and !=() (Lukasz Michalski)
 - use true/false throughout the library instead of TRUE/FALSE
 - wxStopWatch::Start() resumes the stop watch if paused, as per the docs
+- added wxDirTraverser::OnOpenError() to customize the error handling
 
 wxBase:
 
