@@ -282,7 +282,7 @@ int wxEntry( int argc, char *argv[] )
 // main()
 //-----------------------------------------------------------------------------
 
-#if defined(AIX) || defined(AIX4) /* || defined(____HPUX__) */
+#if defined(AIX) || defined(AIX4) || defined(____HPUX__)
 
  // main in IMPLEMENT_WX_MAIN in IMPLEMENT_APP in app.h
 

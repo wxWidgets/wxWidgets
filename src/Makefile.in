@@ -20,8 +20,8 @@ NONE =
 
 # define library name
 LIB_TARGET=wx_gtk
-LIB_MAJOR=0
-LIB_MINOR=12
+LIB_MAJOR=1
+LIB_MINOR=90
 
 # define library sources
 
@@ -93,6 +93,7 @@ LIB_CPP_SRC=\
  gtk/statbox.cpp \
  gtk/statbmp.cpp \
  gtk/stattext.cpp \
+ gtk/tabctrl.cpp \
  gtk/tbargtk.cpp \
  gtk/textctrl.cpp \
  gtk/timer.cpp \

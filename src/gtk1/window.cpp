@@ -25,6 +25,7 @@
 #include "wx/dcclient.h"
 #include "wx/dnd.h"
 #include "wx/mdi.h"
+#include "wx/tabctrl.h"
 #include "gdk/gdkkeysyms.h"
 #include <math.h>
 #include "wx/gtk/win_gtk.h"
@@ -1413,6 +1414,14 @@ void wxWindow::AddChild( wxWindow *child )
       };
     };
   };
+  
+  if (IsKindOf(CLASSINFO(wxTabCtrl)))
+  {
+    wxTabCtrl *tab = (wxTabCtrl*)this;
+    tab->AddChild( child );
+    return;
+  };
+  
   m_children.Append( child );
   if (child->IsKindOf(CLASSINFO(wxFrame)) || child->IsKindOf(CLASSINFO(wxDialog)))
   {

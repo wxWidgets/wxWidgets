@@ -32,7 +32,7 @@ void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), gpointer data )
 
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxChoice,wxWindow)
+IMPLEMENT_DYNAMIC_CLASS(wxChoice,wxControl)
 
 wxChoice::wxChoice(void)
 {

@@ -141,8 +141,10 @@ class WXDLLEXPORT wxTabEvent: public wxCommandEvent
 
 typedef void (wxEvtHandler::*wxTabEventFunction)(wxTabEvent&);
 
-#define EVT_TAB_SEL_CHANGED(id, fn) { wxEVT_COMMAND_TAB_SEL_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTabEventFunction) & fn },
-#define EVT_TAB_SEL_CHANGING(id, fn) { wxEVT_COMMAND_TAB_SEL_CHANGING, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTabEventFunction) & fn },
+#define EVT_TAB_SEL_CHANGED(id, fn) { wxEVT_COMMAND_TAB_SEL_CHANGED, \
+  id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTabEventFunction) & fn, NULL },
+#define EVT_TAB_SEL_CHANGING(id, fn) { wxEVT_COMMAND_TAB_SEL_CHANGING, \
+  id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTabEventFunction) & fn, NULL },
 
 #endif
     // __TABCTRLH__

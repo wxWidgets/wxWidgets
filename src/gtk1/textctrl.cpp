@@ -50,18 +50,18 @@ bool wxTextCtrl::Create( wxWindow *parent, const wxWindowID id, const wxString &
   else
     m_widget = gtk_entry_new();
     
-  if (!value.IsNull())
-  {
-    gint tmp = 0;
-    gtk_editable_insert_text( GTK_EDITABLE(m_widget), value, value.Length(), &tmp );
-  };
-  
   wxSize newSize = size;
   if (newSize.x == -1) newSize.x = 80;
   if (newSize.y == -1) newSize.y = 26;
   SetSize( newSize.x, newSize.y );
   
   PostCreation();
+  
+  if (!value.IsNull())
+  {
+    gint tmp = 0;
+    gtk_editable_insert_text( GTK_EDITABLE(m_widget), value, value.Length(), &tmp );
+  };
   
   Show( TRUE );
     
@@ -103,9 +103,10 @@ void wxTextCtrl::SetValue( const wxString &value )
 void wxTextCtrl::WriteText( const wxString &text )
 {
   if (text.IsNull()) return;
+  
   if (m_windowStyle & wxTE_MULTILINE)
   {
-    gint len = gtk_text_get_length( GTK_TEXT(m_widget) );
+    gint len = gtk_text_get_length( GTK_TEXT(m_widget) ) - 1;
     gtk_editable_insert_text( GTK_EDITABLE(m_widget), text, text.Length(), &len );
   }
   else

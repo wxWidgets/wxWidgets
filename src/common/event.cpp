@@ -269,6 +269,7 @@ wxEvtHandler::~wxEvtHandler(void)
     while (node)
     {
       wxEventTableEntry *entry = (wxEventTableEntry*)node->Data();
+      if (entry->m_callbackUserData) delete entry->m_callbackUserData;
       delete entry;
       node = node->Next();
     }
