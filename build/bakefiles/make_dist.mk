@@ -77,6 +77,7 @@ ALL_DIST: distrib_clean
 	cp $(WXDIR)/install-sh $(DISTDIR)
 	cp $(WXDIR)/mkinstalldirs $(DISTDIR)
 	cp $(WXDIR)/wx-config.in $(DISTDIR)
+	cp $(WXDIR)/wx-config-wrapper.in $(DISTDIR)
 	cp $(WXDIR)/version-script.in $(DISTDIR)
 	cp $(WXDIR)/setup.h.in $(DISTDIR)
 	cp $(WXDIR)/setup.h_vms $(DISTDIR)

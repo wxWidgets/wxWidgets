@@ -6239,30 +6239,21 @@ dnl (the original file name may be overriden by appending another name after a
 dnl colon)
 AC_CONFIG_FILES([
             wx-config
+            wx-config-wrapper
             version-script
             Makefile
           ])
 
 AC_CONFIG_COMMANDS([default],
           [
-            dnl This test is required to make the following idempotent.
-            dnl Otherwise running config.status or rerunning configure
-            dnl would stomp the wx-config link or try to move it onto
-            dnl itself.
-            dnl Use -h instead of -L to test for link (GD)
-            dnl   -h is documented as obsolete under Mac OS X but works
-            dnl   -L is obsolete under Solaris8
-            if test ! -h wx-config; then
-                chmod +x wx-config
-                mv wx-config wx${TOOLCHAIN_NAME}-config
-                ${LN_S} wx${TOOLCHAIN_NAME}-config wx-config
-            fi
-
             if test ! -d lib; then
               mkdir lib
             fi
             if test ! -d lib/wx; then
               mkdir lib/wx
+            fi
+            if test ! -d lib/wx/config; then
+              mkdir lib/wx/config
             fi
             if test ! -d lib/wx/include; then
               mkdir lib/wx/include
@@ -6275,6 +6266,18 @@ AC_CONFIG_COMMANDS([default],
             fi
             if test -f setup.h; then
               mv -f setup.h lib/wx/include/${TOOLCHAIN_NAME}/wx/setup.h
+            fi
+            
+            if test -f wx-config; then
+                chmod +x wx-config
+                mv -f wx-config lib/wx/config/${TOOLCHAIN_NAME}
+                rm -f wx${TOOLCHAIN_NAME}-config
+                ${LN_S} wx-config wx${TOOLCHAIN_NAME}-config
+            fi
+            
+            if test -f wx-config-wrapper; then
+                chmod +x wx-config-wrapper
+                mv -f wx-config-wrapper wx-config
             fi
           ],
           [

@@ -221,6 +221,8 @@ Unix:
 
 - wxTaskBarIcon now supports freedesktop.org System Tray protocol
 - security fixes to wxSingleInstanceChecker
+- wx-config script was modified to allow choosing from multiple installed
+  builds of wxWidgets
 
 wxGTK:
 

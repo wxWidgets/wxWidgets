@@ -144,29 +144,13 @@ get_ldflags_gui()
     echo $flags_to_ret
 }
 
-# return the absolute path prepending builddir to it if needed
-makeabs()
-{
-    path=$1
-    # TODO: this only works under Unix and even there it could be
-    #       enhanced to remove ".." and "."
-    if [ `echo $path | sed 's/^\(.\).*/\1/'` != "/" ]; then
-        if [ $path = "." ]; then
-            path=$builddir
-        else
-            path="$builddir/$path"
-        fi
-    fi
-
-    echo $path
-}
-
 usage()
 {
     cat <<EOF
 Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--inplace]
-                 [--version] [--release]
-                 [--basename] [--static] [--libs] [--gl-libs]
+                 [--toolkit=TOOLKIT] [--unicode[=yes|no]] [--debug[=yes|no]]
+                 [--universal[=yes|no]] [--version[=VERSION]] [--release]
+                 [--list] [--basename] [--static] [--libs] [--gl-libs]
                  [--cppflags] [--cflags] [--cxxflags] [--ldflags] [--rezflags]
                  [--cc] [--cxx] [--ld] [LIBRARIES]
 
@@ -196,6 +180,11 @@ and contrib libraries. Special value "std" stands for all libraries linked
 in by default.
 
 --gl-libs option is deprecated, use "--libs gl" instead.
+
+If there are several different builds of wxWidgets installed in same prefix,
+you can use --toolkit, --unicode, --debug, --universal and --version options
+to select one of them. Use --list option to show all available builds that
+match given criteria.
 
 EOF
 
@@ -305,11 +294,7 @@ while test $# -gt 0; do
 
   case $1 in
     --inplace)
-      prefix=`makeabs $srcdir`
-      exec_prefix=`makeabs $builddir`
-      exec_prefix_set=yes
       inplace_flag=yes
-      update_prefixes
       ;;
     --prefix=*)
       prefix=$optarg

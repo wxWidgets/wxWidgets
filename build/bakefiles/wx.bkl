@@ -64,8 +64,10 @@
             <dependency-of>install</dependency-of>
             <command>
                 $(INSTALL_DIR) $(DESTDIR)$(BINDIR)
-                $(INSTALL_PROGRAM) wx$(TOOLCHAIN_NAME)-config $(DESTDIR)$(BINDIR)
-                (cd $(DESTDIR)$(BINDIR) &amp;&amp; rm -f wx-config &amp;&amp; $(LN_S) wx$(TOOLCHAIN_NAME)-config wx-config)
+                $(INSTALL_DIR) $(DESTDIR)$(LIBDIR)/wx/config
+                $(INSTALL_PROGRAM) lib/wx/config/$(TOOLCHAIN_NAME) $(DESTDIR)$(LIBDIR)/wx/config
+                $(INSTALL_PROGRAM) wx-config $(DESTDIR)$(BINDIR)
+                (cd $(DESTDIR)$(BINDIR) &amp;&amp; rm -f wx$(TOOLCHAIN_NAME)-config &amp;&amp; $(LN_S) wx-config wx$(TOOLCHAIN_NAME)-config)
             </command>
         </action>
 

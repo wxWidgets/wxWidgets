@@ -7411,8 +7411,10 @@ samples:
 
 install-wxconfig: 
 	$(INSTALL_DIR) $(DESTDIR)$(bindir)
-	$(INSTALL_PROGRAM) wx$(TOOLCHAIN_NAME)-config $(DESTDIR)$(bindir)
-	(cd $(DESTDIR)$(bindir) && rm -f wx-config && $(LN_S) wx$(TOOLCHAIN_NAME)-config wx-config)
+	$(INSTALL_DIR) $(DESTDIR)$(libdir)/wx/config
+	$(INSTALL_PROGRAM) lib/wx/config/$(TOOLCHAIN_NAME) $(DESTDIR)$(libdir)/wx/config
+	$(INSTALL_PROGRAM) wx-config $(DESTDIR)$(bindir)
+	(cd $(DESTDIR)$(bindir) && rm -f wx$(TOOLCHAIN_NAME)-config && $(LN_S) wx-config wx$(TOOLCHAIN_NAME)-config)
 
 locale_install: 
 	$(INSTALL_DIR) $(DESTDIR)$(datadir)/locale
@@ -19826,6 +19828,7 @@ ALL_DIST: distrib_clean
 	cp $(WXDIR)/install-sh $(DISTDIR)
 	cp $(WXDIR)/mkinstalldirs $(DISTDIR)
 	cp $(WXDIR)/wx-config.in $(DISTDIR)
+	cp $(WXDIR)/wx-config-wrapper.in $(DISTDIR)
 	cp $(WXDIR)/version-script.in $(DISTDIR)
 	cp $(WXDIR)/setup.h.in $(DISTDIR)
 	cp $(WXDIR)/setup.h_vms $(DISTDIR)

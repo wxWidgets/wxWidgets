@@ -53,7 +53,7 @@ AC_DEFUN([AM_OPTIONS_WXCONFIG],
 
 dnl ---------------------------------------------------------------------------
 dnl AM_PATH_WXCONFIG(VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
-dnl                  [, WX-LIBS]]])
+dnl                  [, WX-LIBS [, ADDITIONAL-WX-CONFIG-FLAGS]]]])
 dnl
 dnl Test for wxWindows, and define WX_C*FLAGS, WX_LIBS and WX_LIBS_STATIC
 dnl (the latter is for static linking against wxWindows). Set WX_CONFIG_NAME
@@ -61,13 +61,18 @@ dnl environment variable to override the default name of the wx-config script
 dnl to use. Set WX_CONFIG_PATH to specify the full path to wx-config - in this
 dnl case the macro won't even waste time on tests for its existence.
 dnl
-dnl Optional WX-LIBS argument contains comma-separated list of wxWindows
-dnl libraries to link against (it may include contrib libraries). If it is not
-dnl specified then WX_LIBS and WX_LIBS_STATIC will contain flags to link
-dnl with all of the core wxWindows libraries.
+dnl Optional WX-LIBS argument contains comma- or space-separated list of
+dnl wxWindows libraries to link against (it may include contrib libraries). If
+dnl it is not specified then WX_LIBS and WX_LIBS_STATIC will contain flags to
+dnl link with all of the core wxWindows libraries.
+dnl
+dnl Optional ADDITIONAL-WX-CONFIG-FLAGS argument is appended to wx-config
+dnl invocation command in present. It can be used to fine-tune lookup of
+dnl best wxWidgets build available.
 dnl
 dnl Example use:
-dnl   AM_PATH_WXCONFIG([2.6.0], [wxWin=1], [wxWin=0], [html,core,net])
+dnl   AM_PATH_WXCONFIG([2.6.0], [wxWin=1], [wxWin=0], [html,core,net]
+dnl                    [--unicode --debug])
 dnl ---------------------------------------------------------------------------
 
 dnl
@@ -94,10 +99,6 @@ AC_DEFUN([AM_PATH_WXCONFIG],
      WX_LOOKUP_PATH="$WX_LOOKUP_PATH:$wx_config_prefix/bin"
   fi
 
-  if test "x$4" != "x" ; then
-     wx_config_args="$wx_config_args $4"
-  fi
-
   dnl don't search the PATH if WX_CONFIG_NAME is absolute filename
   if test -x "$WX_CONFIG_NAME" ; then
      AC_MSG_CHECKING(for wx-config)
@@ -112,11 +113,15 @@ AC_DEFUN([AM_PATH_WXCONFIG],
     no_wx=""
 
     min_wx_version=ifelse([$1], ,2.2.1,$1)
-    AC_MSG_CHECKING(for wxWindows version >= $min_wx_version)
+    if test -z "$5" ; then
+      AC_MSG_CHECKING([for wxWindows version >= $min_wx_version])
+    else
+      AC_MSG_CHECKING([for wxWindows version >= $min_wx_version ($5)])
+    fi
 
-    WX_CONFIG_WITH_ARGS="$WX_CONFIG_PATH $wx_config_args"
+    WX_CONFIG_WITH_ARGS="$WX_CONFIG_PATH $wx_config_args $5 $4"
 
-    WX_VERSION=`$WX_CONFIG_WITH_ARGS --version`
+    WX_VERSION=`$WX_CONFIG_WITH_ARGS --version 2>/dev/null`
     wx_config_major_version=`echo $WX_VERSION | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
     wx_config_minor_version=`echo $WX_VERSION | \
@@ -132,28 +137,29 @@ AC_DEFUN([AM_PATH_WXCONFIG],
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
 
     wx_ver_ok=""
-    if test $wx_config_major_version -gt $wx_requested_major_version; then
-      wx_ver_ok=yes
-    else
-      if test $wx_config_major_version -eq $wx_requested_major_version; then
-         if test $wx_config_minor_version -gt $wx_requested_minor_version; then
-            wx_ver_ok=yes
-         else
-            if test $wx_config_minor_version -eq $wx_requested_minor_version; then
-               if test $wx_config_micro_version -ge $wx_requested_micro_version; then
-                  wx_ver_ok=yes
-               fi
-            fi
-         fi
+    if test "x$WX_VERSION" != x ; then
+      if test $wx_config_major_version -gt $wx_requested_major_version; then
+        wx_ver_ok=yes
+      else
+        if test $wx_config_major_version -eq $wx_requested_major_version; then
+           if test $wx_config_minor_version -gt $wx_requested_minor_version; then
+              wx_ver_ok=yes
+           else
+              if test $wx_config_minor_version -eq $wx_requested_minor_version; then
+                 if test $wx_config_micro_version -ge $wx_requested_micro_version; then
+                    wx_ver_ok=yes
+                 fi
+              fi
+           fi
+        fi
       fi
     fi
 
     if test "x$wx_ver_ok" = x ; then
       no_wx=yes
     else
-      wx_libs_arg="--libs"
-      WX_LIBS=`$WX_CONFIG_WITH_ARGS $wx_libs_arg`
-      WX_LIBS_STATIC=`$WX_CONFIG_WITH_ARGS --static $wx_libs_arg`
+      WX_LIBS=`$WX_CONFIG_WITH_ARGS --libs`
+      WX_LIBS_STATIC=`$WX_CONFIG_WITH_ARGS --static --libs`
 
       dnl starting with version 2.2.6 wx-config has --cppflags argument
       wx_has_cppflags=""

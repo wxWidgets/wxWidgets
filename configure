@@ -41060,7 +41060,7 @@ fi
           ac_config_headers="$ac_config_headers setup.h"
 
 
-                              ac_config_files="$ac_config_files wx-config version-script Makefile"
+                                        ac_config_files="$ac_config_files wx-config wx-config-wrapper version-script Makefile"
 
 
           ac_config_commands="$ac_config_commands default"
@@ -41771,6 +41771,7 @@ do
   case "$ac_config_target" in
   # Handling of arguments.
   "wx-config" ) CONFIG_FILES="$CONFIG_FILES wx-config" ;;
+  "wx-config-wrapper" ) CONFIG_FILES="$CONFIG_FILES wx-config-wrapper" ;;
   "version-script" ) CONFIG_FILES="$CONFIG_FILES version-script" ;;
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
   "$mk" ) CONFIG_FILES="$CONFIG_FILES $mk" ;;
@@ -42752,17 +42753,14 @@ esac
 echo "$as_me: executing $ac_dest commands" >&6;}
   case $ac_dest in
     default )
-                                                                                                if test ! -h wx-config; then
-                chmod +x wx-config
-                mv wx-config wx${TOOLCHAIN_NAME}-config
-                ${LN_S} wx${TOOLCHAIN_NAME}-config wx-config
-            fi
-
             if test ! -d lib; then
               mkdir lib
             fi
             if test ! -d lib/wx; then
               mkdir lib/wx
+            fi
+            if test ! -d lib/wx/config; then
+              mkdir lib/wx/config
             fi
             if test ! -d lib/wx/include; then
               mkdir lib/wx/include
@@ -42775,6 +42773,18 @@ echo "$as_me: executing $ac_dest commands" >&6;}
             fi
             if test -f setup.h; then
               mv -f setup.h lib/wx/include/${TOOLCHAIN_NAME}/wx/setup.h
+            fi
+
+            if test -f wx-config; then
+                chmod +x wx-config
+                mv -f wx-config lib/wx/config/${TOOLCHAIN_NAME}
+                rm -f wx${TOOLCHAIN_NAME}-config
+                ${LN_S} wx-config wx${TOOLCHAIN_NAME}-config
+            fi
+
+            if test -f wx-config-wrapper; then
+                chmod +x wx-config-wrapper
+                mv -f wx-config-wrapper wx-config
             fi
            ;;
   esac
