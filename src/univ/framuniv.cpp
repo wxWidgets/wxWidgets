@@ -96,18 +96,17 @@ void wxFrame::PositionMenuBar()
         // the menubar is positioned above the client size, hence the negative
         // y coord
         wxCoord heightMbar = m_frameMenuBar->GetSize().y;
-        
+
         wxCoord heightTbar = 0;
-        // In between sits the toolbar
         if (m_frameToolBar)
             heightTbar = m_frameToolBar->GetSize().y;
 
         m_frameMenuBar->SetSize(0, 
 #ifdef __WXPM__	 // FIXME -- remove this, make wxOS2/Univ behave as
                  //          the rest of the world!!!
-                                GetClientSize().y - heightMbar,
+                                GetClientSize().y - heightMbar - heightTbar,
 #else
-                                - heightMbar - heightTbar,
+                                - (heightMbar + heightTbar),
 #endif				
                                 GetClientSize().x, heightMbar);
     }

@@ -297,7 +297,7 @@ void MyFrame::RecreateToolbar()
     toolBar->AddTool(wxID_OPEN, toolBarBitmaps[1], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Open file");
 
     // neither the generic nor Motif native toolbars really support this
-#if (wxUSE_TOOLBAR_NATIVE && !USE_GENERIC_TBAR) && !defined(__WXMOTIF__)
+#if (wxUSE_TOOLBAR_NATIVE && !USE_GENERIC_TBAR) && !defined(__WXMOTIF__) && !defined(__WXX11__)
     // adding a combo to a vertical toolbar is not very smart
     if ( m_horzToolbar )
     {

@@ -46,7 +46,7 @@ END_EVENT_TABLE()
 bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
                  const wxPoint& pos, const wxSize& size,
                  long style, const wxString& name )
-{ 
+{
     bool ret = wxToolBarBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
     
     return ret;
@@ -54,8 +54,18 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
 
 void wxToolBar::Init()
 {
+    // TODO: this is from tbarbase.cpp, but should be in
+    // wxToolbarBase::Init
+    // the list owns the pointers
+    m_tools.DeleteContents(TRUE);
+    m_xMargin = m_yMargin = 0;
+    m_maxRows = m_maxCols = 0;
+    // End TODO
+
+    m_maxWidth = 0;
+    m_maxHeight = 0;
+
     m_captured = NULL;
-    
     SetToolBitmapSize( wxSize(16,15) );
 }
 
@@ -186,7 +196,19 @@ bool wxToolBar::Realize()
     if (!wxToolBarBase::Realize())
         return FALSE;
 
-    int x = 5;
+    int x;
+    int y;
+
+    if (GetWindowStyleFlag() & wxTB_VERTICAL)
+    {
+        x = m_xMargin;
+        y = 5;
+    }
+    else
+    {
+        y = m_yMargin;
+        x = 5;
+    }
 
     for ( wxToolBarToolsList::Node *node = m_tools.GetFirst();
           node;
@@ -194,15 +216,53 @@ bool wxToolBar::Realize()
     {
         wxToolBarTool *tool = (wxToolBarTool*) node->Data();
         
-        if (tool->GetId() == -1)
+        if (GetWindowStyleFlag() & wxTB_VERTICAL)
         {
-            x += 6;
-            continue;
+            if (tool->GetId() == -1)
+            {
+                y += 6;
+                continue;
+            }
+            tool->m_x = m_xMargin;
+            tool->m_y = y;
+            y += m_defaultHeight + 6;
+
+            // Calculate the maximum height or width (depending on style)
+            // so we know how to size the toolbar in Realize.
+            // We could get the size of the tool instead of the
+            // default bitmap size
+            if (m_maxWidth < (m_defaultWidth + 2*(m_xMargin + 2)))
+                m_maxWidth = (m_defaultWidth + 2*(m_xMargin + 2)) ;
+        }
+        else
+        {
+            if (tool->GetId() == -1)
+            {
+                x += 6;
+                continue;
+            }
+            tool->m_x = x;
+            tool->m_y = m_yMargin;
+            x += m_defaultWidth + 6;
+
+            // Calculate the maximum height or width (depending on style)
+            // so we know how to size the toolbar in Realize.
+            // We could get the size of the tool instead of the
+            // default bitmap size
+            if (m_maxHeight < (m_defaultHeight + 2*(m_yMargin + 2)))
+                m_maxHeight = (m_defaultHeight + 2*(m_yMargin + 2)) ;
         }
         
-        tool->m_x = x;
-        tool->m_y = 4;
-        x += m_defaultWidth + 6;
+    }
+
+    wxSize sz = GetSize();
+    if (GetWindowStyleFlag() & wxTB_VERTICAL)
+    {
+        SetSize(m_maxWidth, sz.y);
+    }
+    else
+    {
+        SetSize(sz.x, m_maxHeight);
     }
     
     SetSize( x+16, m_defaultHeight + 14 );

@@ -101,9 +101,10 @@ protected:
                                           const wxString& shortHelpString,
                                           const wxString& longHelpString);
     virtual wxToolBarToolBase *CreateTool(wxControl *control);
-    
+
 private:
     wxToolBarTool    *m_captured;
+    wxCoord          m_maxWidth, m_maxHeight;
     
 private:
     void OnMouse( wxMouseEvent &event );
