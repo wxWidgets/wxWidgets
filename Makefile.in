@@ -543,7 +543,6 @@ ALL_DIST: distclean
 	cp $(WXDIR)/wxBase.spec $(DISTDIR)
 	cp $(DOCDIR)/lgpl.txt $(DISTDIR)/COPYING.LIB
 	cp $(DOCDIR)/licence.txt $(DISTDIR)/LICENCE.txt
-	cp $(DOCDIR)/symbols.txt $(DISTDIR)/SYMBOLS.txt
 	cp $(DOCDIR)/changes.txt $(DISTDIR)/CHANGES.txt
 	mkdir $(DISTDIR)/lib
 	cp $(WXDIR)/lib/vms.opt $(DISTDIR)/lib
