@@ -14,9 +14,6 @@
 
 %{
 #include "helpers.h"
-#ifdef OLD_GRID
-#include <wx/grid.h>
-#endif
 #include <wx/notebook.h>
 #include <wx/splitter.h>
 #include <wx/imaglist.h>

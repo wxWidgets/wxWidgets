@@ -74,6 +74,7 @@ enum wxFontWeight
 };
 
 
+
 // font encodings
 enum wxFontEncoding
 {
@@ -115,7 +116,7 @@ enum wxFontEncoding
         // and for Windows
     wxFONTENCODING_CP874,           // WinThai
     wxFONTENCODING_CP932,           // Japanese (shift-JIS)
-    wxFONTENCODING_CP936,           // Chiniese simplified (GB)
+    wxFONTENCODING_CP936,           // Chinese simplified (GB)
     wxFONTENCODING_CP949,           // Korean (Hangul charset)
     wxFONTENCODING_CP950,           // Chinese (traditional - Big5)
     wxFONTENCODING_CP1250,          // WinLatin2
@@ -138,14 +139,13 @@ enum wxFontEncoding
 
         // Japanese (see http://zsigri.tripod.com/fontboard/cjk/jis.html)
     wxFONTENCODING_SHIFT_JIS = wxFONTENCODING_CP932,  // Shift JIS
-    wxFONTENCODING_EUC_JP,          // Extended Unix Codepage for Japanese
+    wxFONTENCODING_EUC_JP = wxFONTENCODING_UTF8 + 1,  // Extended Unix Codepage
+                                                      // for Japanese
 
-    wxFONTENCODING_UNICODE,         // Unicode - currently used only by
-                                    // wxEncodingConverter class
+    wxFONTENCODING_UNICODE,         // Unicode (for wxEncodingConverter only)
 
     wxFONTENCODING_MAX
 };
-
 
 
 //---------------------------------------------------------------------------
@@ -805,7 +805,14 @@ public:
     // Returns NULL if no info found, pointer must *not* be deleted by caller
     static const wxLanguageInfo *GetLanguageInfo(int lang);
 
-    // Add custom language to the list of known languages.
+    // Find the language for the given locale string which may be either a
+    // canonical ISO 2 letter language code ("xx"), a language code followed by
+    // the country code ("xx_XX") or a Windows full language name ("Xxxxx...")
+    //
+    // Returns NULL if no info found, pointer must *not* be deleted by caller
+    static const wxLanguageInfo *FindLanguageInfo(const wxString& locale);
+
+   // Add custom language to the list of known languages.
     // Notes: 1) wxLanguageInfo contains platform-specific data
     //        2) must be called before Init to have effect
     static void AddLanguage(const wxLanguageInfo& info);

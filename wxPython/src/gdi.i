@@ -57,6 +57,10 @@ public:
 
 //---------------------------------------------------------------------------
 
+
+// TODO:  When the API stabalizes and is available on other platforms, add
+// wrappers for the new wxBitmap, wxRawBitmap, wxDIB stuff...
+
 class wxBitmap : public wxGDIObject
 {
 public:

@@ -607,8 +607,6 @@ public:
     static void OnLog(unsigned long level, const wxString& szString, int t=0);
 
     virtual void Flush();
-    bool HasPendingMessages() const;
-
     static void FlushActive();
     static wxLog *GetActiveTarget();
     static wxLog *SetActiveTarget(wxLog *pLogger);
@@ -1398,7 +1396,7 @@ public:
     //
     // use the extraDir parameter if you want to look for files in another
     // directory
-    void Initialize(int mailcapStyle = wxMAILCAP_STANDARD,
+    void Initialize(int mailcapStyle = wxMAILCAP_ALL,
                     const wxString& extraDir = wxPyEmptyString);
 
     // and this function clears all the data from the manager
@@ -1522,6 +1520,7 @@ wxART_ERROR                = 'wxART_ERROR'
 wxART_QUESTION             = 'wxART_QUESTION'
 wxART_WARNING              = 'wxART_WARNING'
 wxART_INFORMATION          = 'wxART_INFORMATION'
+wxART_MISSING_IMAGE        = 'wxART_MISSING_IMAGE'
 "
 
 %{  // Python aware wxArtProvider
@@ -1691,19 +1690,6 @@ public:
 };
 
 //----------------------------------------------------------------------
-
-
-// %{
-// #if wxUSE_UNICODE
-// #define ADD_STRING(dict, str) \
-//     wxString tmp##str(str); \
-//     PyDict_SetItemString(dict, #str, \
-//                          PyUnicode_FromWideChar(tmp##str.c_str(), tmp##str.Len()))
-// #else
-// #define ADD_STRING(dict, str) \
-//     PyDict_SetItemString(d, #str, PyString_FromString(str))
-// #endif
-// %}
 
 
 %init %{

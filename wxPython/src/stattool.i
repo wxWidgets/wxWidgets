@@ -341,6 +341,9 @@ public:
                               shortHelp, longHelp, clientData)
     "
 
+    // TODO?
+    //wxToolBarToolBase *AddTool (wxToolBarToolBase *tool);
+    //wxToolBarToolBase *InsertTool (size_t pos, wxToolBarToolBase *tool);
 
     wxToolBarToolBase *AddControl(wxControl *control);
     wxToolBarToolBase *InsertControl(size_t pos, wxControl *control);

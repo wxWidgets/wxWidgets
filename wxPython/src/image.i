@@ -32,6 +32,32 @@
 
 //---------------------------------------------------------------------------
 
+class wxImageHistogram /* : public wxImageHistogramBase */
+{
+public:
+    wxImageHistogram();
+
+    // get the key in the histogram for the given RGB values
+    static unsigned long MakeKey(unsigned char r,
+                                 unsigned char g,
+                                 unsigned char b);
+
+    // find first colour that is not used in the image and has higher
+    // RGB values than RGB(startR, startG, startB)
+    //
+    // returns true and puts this colour in r, g, b (each of which may be NULL)
+    // on success or returns false if there are no more free colours
+    bool FindFirstUnusedColour(unsigned char *OUTPUT,
+                               unsigned char *OUTPUT,
+                               unsigned char *OUTPUT,
+                               unsigned char startR = 1,
+                               unsigned char startG = 0,
+                               unsigned char startB = 0 ) const;
+};
+
+
+//---------------------------------------------------------------------------
+
 class wxImageHandler : public wxObject {
 public:
     // wxImageHandler();    Abstract Base Class
@@ -120,6 +146,7 @@ public:
     void Destroy();
 
     wxImage Scale( int width, int height );
+    wxImage ShrinkBy( int xFactor , int yFactor ) const ;
     wxImage& Rescale(int width, int height);
 
     void SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b );
@@ -127,7 +154,11 @@ public:
     unsigned char GetGreen( int x, int y );
     unsigned char GetBlue( int x, int y );
 
-        // find first colour that is not used in the image and has higher
+    void SetAlpha(int x, int y, unsigned char alpha);
+    unsigned char GetAlpha(int x, int y);
+    bool HasAlpha();
+
+    // find first colour that is not used in the image and has higher
     // RGB values than <startR,startG,startB>
     bool FindFirstUnusedColour( byte *OUTPUT, byte *OUTPUT, byte *OUTPUT,
                                 byte startR = 0, byte startG = 0, byte startB = 0 ) const;
@@ -167,33 +198,11 @@ public:
     //void SetData( unsigned char *data );
 
     %addmethods {
-        PyObject* GetDataBuffer() {
-            unsigned char* data = self->GetData();
-            int len = self->GetWidth() * self->GetHeight() * 3;
-            return PyBuffer_FromReadWriteMemory(data, len);
-        }
-
         PyObject* GetData() {
             unsigned char* data = self->GetData();
             int len = self->GetWidth() * self->GetHeight() * 3;
             return PyString_FromStringAndSize((char*)data, len);
         }
-
-        void SetDataBuffer(PyObject* data) {
-            unsigned char* buffer;
-            int size;
-
-            if (!PyArg_Parse(data, "w#", &buffer, &size))
-                return;
-
-            if (size != self->GetWidth() * self->GetHeight() * 3) {
-                PyErr_SetString(PyExc_TypeError, "Incorrect buffer size");
-                return;
-            }
-
-            self->SetData(buffer);
-        }
-
         void SetData(PyObject* data) {
             unsigned char* dataPtr;
 
@@ -207,6 +216,74 @@ public:
             memcpy(dataPtr, PyString_AsString(data), len);
             self->SetData(dataPtr);
             // wxImage takes ownership of dataPtr...
+        }
+
+
+
+        PyObject* GetDataBuffer() {
+            unsigned char* data = self->GetData();
+            int len = self->GetWidth() * self->GetHeight() * 3;
+            return PyBuffer_FromReadWriteMemory(data, len);
+        }
+        void SetDataBuffer(PyObject* data) {
+            unsigned char* buffer;
+            int size;
+
+            if (!PyArg_Parse(data, "w#", &buffer, &size))
+                return;
+
+            if (size != self->GetWidth() * self->GetHeight() * 3) {
+                PyErr_SetString(PyExc_TypeError, "Incorrect buffer size");
+                return;
+            }
+            self->SetData(buffer);
+        }
+
+
+
+        PyObject* GetAlphaData() {
+            unsigned char* data = self->GetAlpha();
+            if (! data) {
+                RETURN_NONE();
+            } else {
+                int len = self->GetWidth() * self->GetHeight();
+                return PyString_FromStringAndSize((char*)data, len);
+            }
+        }
+        void SetAlphaData(PyObject* data) {
+            unsigned char* dataPtr;
+
+            if (! PyString_Check(data)) {
+                PyErr_SetString(PyExc_TypeError, "Expected string object");
+                return /* NULL */ ;
+            }
+
+            size_t len = self->GetWidth() * self->GetHeight();
+            dataPtr = (unsigned char*) malloc(len);
+            memcpy(dataPtr, PyString_AsString(data), len);
+            self->SetAlpha(dataPtr);
+            // wxImage takes ownership of dataPtr...
+        }
+
+
+
+        PyObject* GetAlphaBuffer() {
+            unsigned char* data = self->GetAlpha();
+            int len = self->GetWidth() * self->GetHeight();
+            return PyBuffer_FromReadWriteMemory(data, len);
+        }
+        void SetAlphaBuffer(PyObject* data) {
+            unsigned char* buffer;
+            int size;
+
+            if (!PyArg_Parse(data, "w#", &buffer, &size))
+                return;
+
+            if (size != self->GetWidth() * self->GetHeight()) {
+                PyErr_SetString(PyExc_TypeError, "Incorrect buffer size");
+                return;
+            }
+            self->SetAlpha(buffer);
         }
     }
 
@@ -235,7 +312,7 @@ public:
     bool HasOption(const wxString& name) const;
 
     unsigned long CountColours( unsigned long stopafter = (unsigned long) -1 );
-    // TODO: unsigned long ComputeHistogram( wxHashTable &h );
+    unsigned long ComputeHistogram( wxImageHistogram& h );
 
     static void AddHandler( wxImageHandler *handler );
     static void InsertHandler( wxImageHandler *handler );
