@@ -47,6 +47,172 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxBMPHandler,wxImageHandler)
 
+#ifdef __WIN32__
+
+#include <wx/msw/private.h>
+
+static void OutOfMemory(size_t nBytesNeeded)
+{
+    wxLogError(_("Failed to allocate %u bytes of memory."), nBytesNeeded);
+}
+
+// VZ: I'm not an expert in bitmaps, this is a quick and dirty C function I
+//     wrote some time ago and it probably doesn't deal properly with all
+//     bitmaps - any corrections/improvements are more than welcome.
+bool wxBMPHandler::SaveFile(wxImage *image,
+                            wxOutputStream& stream,
+                            bool verbose)
+{
+    // get HBITMAP first
+    wxCHECK_MSG( image, FALSE, _T("invalid pointer in wxBMPHandler::SaveFile") );
+
+    wxBitmap bitmap = image->ConvertToBitmap();
+    HBITMAP hBmp = GetHbitmapOf(bitmap);
+    wxCHECK_MSG( hBmp, FALSE, _T("can't save invalid bitmap") );
+
+    // actual C code starts here
+    BITMAPFILEHEADER hdr;
+    BITMAPINFOHEADER *pbih;
+    BITMAP bmp;
+    WORD nClrBits;
+    size_t sizeOfBmi, sizeColTable;
+    BITMAPINFO *pbmi = NULL;
+    void *bmpData = NULL;
+    HDC hdc = NULL;
+    int rc = 0;
+
+    /*
+       create and initialize BITMAPINFO
+     */
+
+    /* get the number of bitmap colours and its size */
+    if ( !GetObject(hBmp, sizeof(BITMAP), (LPSTR)&bmp) ) {
+        wxLogLastError(_T("GetObject"));
+
+        goto cleanup;
+    }
+
+    /* calc the number of colour bits needed */
+    nClrBits = (WORD)(bmp.bmPlanes * bmp.bmBitsPixel);
+    if  ( nClrBits == 1 ) nClrBits = 1;
+    else if ( nClrBits <= 4 ) nClrBits = 4;
+    else if ( nClrBits <= 8 ) nClrBits = 8;
+    else if ( nClrBits <= 16 ) nClrBits = 16;
+    else if ( nClrBits <= 24 ) nClrBits = 24;
+    else nClrBits = 32;
+
+    /* alloc memory knowing that all bitmaps except 24bpp need extra RGBQUAD
+     * table */
+    sizeOfBmi = sizeof(BITMAPINFOHEADER);
+    if ( nClrBits != 24 )
+        sizeOfBmi += sizeof(RGBQUAD) * ( 1 << nClrBits);
+
+    pbmi = (BITMAPINFO *)calloc(sizeOfBmi, 1);
+    if ( !pbmi ) {
+        OutOfMemory(sizeOfBmi);
+
+        goto cleanup;
+    }
+
+    /* initialize the fields in the BITMAPINFO structure */
+    pbih = (BITMAPINFOHEADER *)pbmi;
+    pbih->biSize = sizeof(BITMAPINFOHEADER);
+    pbih->biWidth = bmp.bmWidth;
+    pbih->biHeight = bmp.bmHeight;
+    pbih->biPlanes = bmp.bmPlanes;
+    pbih->biBitCount = bmp.bmBitsPixel;
+    if ( nClrBits < 24 )
+        pbih->biClrUsed = 1 << nClrBits;
+    pbih->biCompression = BI_RGB;
+    pbih->biSizeImage = 0;
+    pbih->biClrImportant = 0;
+
+    /* let GetDIBits fill the size field, calc it ourselves if it didn't */
+    hdc = CreateCompatibleDC(NULL);
+    if ( !hdc ) {
+        wxLogLastError(_T("CreateCompatibleDC(NULL)"));
+
+        goto cleanup;
+    }
+
+    (void)GetDIBits(hdc, hBmp, 0, pbih->biHeight, NULL, pbmi, DIB_RGB_COLORS);
+    if ( !pbih->biSizeImage )
+        pbih->biSizeImage = (pbih->biWidth + 15) / 16 * pbih->biHeight * nClrBits;
+
+    /*
+       get the data from the bitmap
+     */
+    bmpData = malloc(pbih->biSizeImage);
+    if ( !bmpData ) {
+        OutOfMemory(pbih->biSizeImage);
+
+        goto cleanup;
+    }
+
+    if ( !GetDIBits(hdc, hBmp,
+                    0, pbih->biHeight,
+                    bmpData, pbmi, DIB_RGB_COLORS) ) {
+        wxLogLastError(_T("GetDIBits"));
+
+        goto cleanup;
+    }
+
+    /*
+       write the data to the file
+     */
+
+    /* write the file header */
+    sizeColTable = pbih->biClrUsed * sizeof(RGBQUAD);
+    hdr.bfType = 0x4d42; /* "BM" string */
+    hdr.bfSize = sizeof(BITMAPFILEHEADER) +
+                 pbih->biSize + sizeColTable + pbih->biSizeImage;
+    hdr.bfReserved1 = 0;
+    hdr.bfReserved2 = 0;
+    hdr.bfOffBits = hdr.bfSize - pbih->biSizeImage;
+
+    if ( !stream.Write(&hdr, sizeof(hdr)) ) {
+        if ( verbose )
+            wxLogError(_("Couldn't write the BMP file header."));
+
+        goto cleanup;
+    }
+
+    /* write the bitmap header to the file */
+    if ( !stream.Write(pbih, sizeof(BITMAPINFOHEADER) + sizeColTable) ) {
+        if ( verbose )
+            wxLogError(_("Couldn't write the bitmap header."));
+
+        goto cleanup;
+    }
+
+    /* write the data to the file */
+    if ( !stream.Write(bmpData, pbih->biSizeImage) ) {
+        if ( verbose )
+            wxLogError(_("Couldn't write bitmap data."));
+
+        goto cleanup;
+    }
+
+    /* success */
+    rc = 1;
+
+cleanup:
+    free(bmpData);
+    free(pbmi);
+    if ( hdc )
+        DeleteDC(hdc);
+
+    if ( !rc ) {
+        wxLogError(_("Failed to save the bitmap."));
+
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+#endif // __WIN32__
+
 #if wxUSE_STREAMS
 
 #ifndef BI_RGB

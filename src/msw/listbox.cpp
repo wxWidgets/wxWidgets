@@ -741,6 +741,11 @@ bool wxListBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     wxCHECK( ((m_windowStyle & wxLB_OWNERDRAW) == wxLB_OWNERDRAW), FALSE );
 
     DRAWITEMSTRUCT *pStruct = (DRAWITEMSTRUCT *)item;
+    UINT itemID = pStruct->itemID;
+
+    // the item may be -1 for an empty listbox
+    if ( itemID == (UINT)-1 )
+        return FALSE;
 
     long data = ListBox_GetItemData(GetHwnd(), pStruct->itemID);
 
@@ -751,7 +756,7 @@ bool wxListBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     wxDC dc;
     dc.SetHDC((WXHDC)pStruct->hDC, FALSE);
     wxRect rect(wxPoint(pStruct->rcItem.left, pStruct->rcItem.top),
-            wxPoint(pStruct->rcItem.right, pStruct->rcItem.bottom));
+                wxPoint(pStruct->rcItem.right, pStruct->rcItem.bottom));
 
     return pItem->OnDrawItem(dc, rect,
             (wxOwnerDrawn::wxODAction)pStruct->itemAction,

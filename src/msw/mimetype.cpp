@@ -117,7 +117,7 @@ wxString wxFileTypeImpl::GetCommand(const wxChar *verb) const
                 }
             }
 
-#if wxUSE_DDE
+#if wxUSE_IPC
             // look whether we must issue some DDE requests to the application
             // (and not just launch it)
             strKey += _T("\\DDEExec");
@@ -141,7 +141,7 @@ wxString wxFileTypeImpl::GetCommand(const wxChar *verb) const
                         << _T('#') << ddeCommand;
             }
             else
-#endif // wxUSE_DDE
+#endif // wxUSE_IPC
                 if ( !foundFilename ) {
                 // we didn't find any '%1' - the application doesn't know which
                 // file to open (note that we only do it if there is no DDEExec
