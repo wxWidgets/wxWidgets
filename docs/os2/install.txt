@@ -168,12 +168,21 @@ configure script working - the one from GNU shell utilities 1.12
 does work (check that uname -s returns "OS/2" and uname -m returns "i386"
 and you should be mostly fine.
 
-The first thing to do is to decide on a build directory. You can either
-do in-tree builds or you can do the build in a directory separated from
-the source directory. The later has the advantage, that it is much easier
-to compile and maintain several ports of wxWindows on OS/2 - if you are
-developping cross-platform applications you might want to compile (and
-update) e.g. wxGTK or wxX11 as well.
+If you donwloaded wxAll-2.4.0, the directories will contain unix versions
+of all configure scripts which need to be replaced by the OS/2 enhanced
+versions contained in e.g. \wx\wxWindows-2.4.0\docs\os2\os2-specific.zip.
+For this purpose change into the top level directory (\wx\wxWindows-2.4.0)
+and call "unzip docs\os2\os2-specific.zip" (assuming you have InfoZip's
+unzip installed). Of course, replace \wx\wxWindows-2.4.0 by the path you
+did choose.
+
+Once you are done with those preliminaries, the first thing to do is to
+decide on a build directory. You can either do in-tree builds or you can
+do the build in a directory separated from the source directory. The later
+has the advantage, that it is much easier to compile and maintain several
+ports of wxWindows on OS/2 - if you are developping cross-platform
+applications you might want to compile (and update) e.g. wxGTK or wxX11
+as well.
 
 In the following, let's assume you decided to build in
 \wx\wxWindows-2.4.0\build\pm. Now we need to set some environment
