@@ -254,7 +254,7 @@
 // use wxTextFile class: requires wxFile, required by wxConfig
 #define wxUSE_TEXTFILE            1
 
-// i18n support: _() macro, wxLocale class. Requires wxFile
+// i18n support: _() macro, wxLocale class. Requires wxTextFile.
 #define wxUSE_INTL                1
 
 // wxLogXXX functions - highly recommended
