@@ -2021,6 +2021,7 @@ static void wxLoadCharacterSets(void)
 
 static wxCharacterSet *wxFindCharacterSet(const wxChar *charset)
 {
+  if (!charset) return (wxCharacterSet *)NULL;
   wxLoadCharacterSets();
   for (size_t n=0; n<wxCharsets.GetCount(); n++)
     if (wxCharsets[n].names.Index(charset) != wxNOT_FOUND)
@@ -2032,15 +2033,19 @@ WXDLLEXPORT_DATA(wxCSConv) wxConv_local((const wxChar *)NULL);
 
 wxCSConv::wxCSConv(const wxChar *charset)
 {
-  if (!charset) {
-#ifdef __UNIX__
-    wxChar *lang = wxGetenv(_T("LANG"));
-    wxChar *dot = lang ? wxStrchr(lang, _T('.')) : (wxChar *)NULL;
-    if (dot) charset = dot+1;
-#endif
-  }
+  m_name = (wxChar *) NULL;
   m_cset = (wxCharacterSet *) NULL;
-  m_deferred = FALSE;
+  m_deferred = TRUE;
+  SetName(charset);
+}
+
+wxCSConv::~wxCSConv()
+{
+  if (m_name) free(m_name);
+}
+
+void wxCSConv::SetName(const wxChar *charset)
+{
   if (charset) {
 #ifdef __UNIX__
     // first, convert the character set name to standard form
@@ -2065,15 +2070,17 @@ wxCSConv::wxCSConv(const wxChar *charset)
   }
 }
 
-wxCSConv::~wxCSConv()
-{
-  free(m_name);
-}
-
 void wxCSConv::LoadNow()
 {
 //  wxPrintf(_T("Conversion request\n"));
   if (m_deferred) {
+    if (!m_name) {
+#ifdef __UNIX__
+      wxChar *lang = wxGetenv(_T("LANG"));
+      wxChar *dot = lang ? wxStrchr(lang, _T('.')) : (wxChar *)NULL;
+      if (dot) SetName(dot+1);
+#endif
+    }
     m_cset = wxFindCharacterSet(m_name);
     m_deferred = FALSE;
   }
