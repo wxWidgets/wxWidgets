@@ -71,7 +71,6 @@ _treeList = [
 
     # dialogs from libraries
     ('More Dialogs', [
-        ##'ErrorDialogs',
         'ImageBrowser',
         'MultipleChoiceDialog',
         'ScrolledMessageDialog',
@@ -143,7 +142,6 @@ _treeList = [
         'FloatBar',  
         'FloatCanvas',
         'HtmlWindow',
-        ##'IEHtmlWin',
         'IntCtrl',
         'MVCTree',   
         'MaskedEditControls',
@@ -180,7 +178,6 @@ _treeList = [
     ('Process and Events', [
         'EventManager',
         'KeyEvents',
-        ##'OOR',
         'Process',
         'PythonEvents',
         'Threads',
@@ -225,10 +222,7 @@ _treeList = [
 
     # need libs not coming with the demo
     ('Objects using an external library', [
-        ##'ActiveXWrapper_Acrobat',
-        ##'ActiveXWrapper_IE',      # currently has tstate problems...
         'GLCanvas',
-        #'PlotCanvas', # deprecated, use PyPlot
         ]),
 
 
