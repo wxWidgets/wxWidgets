@@ -73,11 +73,24 @@ public:
     virtual bool Resume() = 0;
     
     // Size management
-    virtual bool Resize(wxUint16 w, wxUint16 h) = 0;
+    virtual bool SetSize(wxSize size) = 0;
     virtual bool GetSize(wxSize& size) const = 0;
     
     // Test the capability of the driver to handle the specified type
-    virtual bool IsCapable(wxVideoType WXUNUSED(v_type)) { return FALSE; }
+    virtual bool IsCapable(wxVideoType WXUNUSED(v_type)) const { return FALSE; }
+
+    // Return the video codec name
+    virtual wxString GetMovieCodec() const = 0;
+    // Return the audio codec name
+    virtual wxString GetAudioCodec() const = 0;
+    // Return misc info about audio
+    virtual wxUint32 GetSampleRate() const = 0;
+    virtual wxUint8 GetChannels() const = 0;
+    virtual wxUint8 GetBPS() const = 0;
+    // Return frame rate
+    virtual double GetFrameRate() const = 0;
+    // Return number of frames
+    virtual wxUint32 GetNbFrames() const = 0;
     
     // Called when the movie finished
     virtual void OnFinished() {}
@@ -87,8 +100,8 @@ public:
     virtual void DetachOutput();
     
     // They return the state of the movie.
-    virtual bool IsPaused() = 0;
-    virtual bool IsStopped() = 0;
+    virtual bool IsPaused() const = 0;
+    virtual bool IsStopped() const = 0;
 };
 
 WXDLLEXPORT wxFrame *wxVideoCreateFrame(wxVideoBaseDriver *vid_drv);

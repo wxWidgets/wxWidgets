@@ -48,6 +48,11 @@ wxSoundWave::~wxSoundWave()
 {
 }
 
+wxString wxSoundWave::GetCodecName() const
+{
+    return wxString(wxT("wxSoundWave codec"));
+}
+
 #define FAIL_WITH(condition, err) if (condition) { m_snderror = err; return FALSE; }
 
 bool wxSoundWave::CanRead()

@@ -25,28 +25,29 @@
 
 class wxSoundWave: public wxSoundFileStream {
  public:
-  wxSoundWave(wxInputStream& stream, wxSoundStream& io_sound);
-  wxSoundWave(wxOutputStream& stream, wxSoundStream& io_sound);
-  ~wxSoundWave();
-
-  bool CanRead();
-
+    wxSoundWave(wxInputStream& stream, wxSoundStream& io_sound);
+    wxSoundWave(wxOutputStream& stream, wxSoundStream& io_sound);
+    ~wxSoundWave();
+    
+    bool CanRead();
+    wxString GetCodecName() const;
+    
  protected:
-  bool PrepareToPlay(); 
-  bool PrepareToRecord(unsigned long time);
-  bool FinishRecording();
-
-  wxUint32 GetData(void *buffer, wxUint32 len);
-  wxUint32 PutData(const void *buffer, wxUint32 len);
-
-  bool HandleOutputPCM(wxDataInputStream& data, wxUint16 channels,
-                 wxUint32 sample_fq, wxUint32 byte_p_sec,
-                 wxUint16 byte_p_spl, wxUint16 bits_p_spl);
-  bool HandleOutputG721(wxDataInputStream& data, wxUint16 channels,
-                  wxUint32 sample_fq, wxUint32 byte_p_sec,
-                  wxUint16 byte_p_spl, wxUint16 bits_p_spl);
-  wxSoundFormatBase *HandleInputPCM(wxDataOutputStream& data);
-  wxSoundFormatBase *HandleInputG72X(wxDataOutputStream& data);
+    bool PrepareToPlay(); 
+    bool PrepareToRecord(unsigned long time);
+    bool FinishRecording();
+    
+    wxUint32 GetData(void *buffer, wxUint32 len);
+    wxUint32 PutData(const void *buffer, wxUint32 len);
+    
+    bool HandleOutputPCM(wxDataInputStream& data, wxUint16 channels,
+                         wxUint32 sample_fq, wxUint32 byte_p_sec,
+                         wxUint16 byte_p_spl, wxUint16 bits_p_spl);
+    bool HandleOutputG721(wxDataInputStream& data, wxUint16 channels,
+                          wxUint32 sample_fq, wxUint32 byte_p_sec,
+                          wxUint16 byte_p_spl, wxUint16 bits_p_spl);
+    wxSoundFormatBase *HandleInputPCM(wxDataOutputStream& data);
+    wxSoundFormatBase *HandleInputG72X(wxDataOutputStream& data);
 };
 
 #endif

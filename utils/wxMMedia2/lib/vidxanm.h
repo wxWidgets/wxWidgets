@@ -67,7 +67,7 @@ typedef struct wxXANIMinternal {
 
 class WXDLLEXPORT wxVideoXANIM : public wxVideoBaseDriver {
     DECLARE_DYNAMIC_CLASS(wxVideoXANIM)
-protected:
+ protected:
     // Remember the state of the subprocess
     bool m_xanim_started, m_paused;
     // Pure X11 variables
@@ -76,7 +76,15 @@ protected:
     wxProcess *m_xanim_detector;
     // Remember to delete the temporary file when necessary
     bool m_remove_file;
-public:
+    wxUint32 m_size[2];
+    wxUint32 m_sampleRate;
+    wxUint8 m_channels;
+    wxUint8 m_bps;
+    wxUint32 m_frames;
+    double m_frameRate;
+    wxString m_movieCodec, m_audioCodec;
+    
+ public:
     wxVideoXANIM();
     wxVideoXANIM(wxInputStream& str);
     wxVideoXANIM(const wxString& filename);
@@ -88,16 +96,29 @@ public:
     bool Stop();
     
     bool SetVolume(wxUint8 vol);
-    bool Resize(wxUint16 w, wxUint16 h);
+    bool SetSize(wxSize size);
     bool GetSize(wxSize& size) const;
 
-    bool IsCapable(wxVideoType v_type);
+    // Return the video codec name
+    wxString GetMovieCodec() const;
+    // Return the audio codec name
+    wxString GetAudioCodec() const;
+    // Return misc info about audio
+    wxUint32 GetSampleRate() const;
+    wxUint8 GetChannels() const;
+    wxUint8 GetBPS() const;
+    // Return frame rate
+    double GetFrameRate() const;
+    // Return number of frames in the movie
+    wxUint32 GetNbFrames() const;
+    
+    bool IsCapable(wxVideoType v_type) const;
     
     bool AttachOutput(wxWindow& output);
     void DetachOutput();
     
-    bool IsPaused();
-    bool IsStopped();
+    bool IsPaused() const;
+    bool IsStopped() const;
     
     friend class wxVideoXANIMProcess;
     
@@ -107,6 +128,9 @@ protected:
     // Send a command to the subprocess
     bool SendCommand(const char *command,char **ret = NULL,
                      wxUint32 *size = NULL);
+
+    // Collect informations from XAnim
+    bool CollectInfo();
 };
 
 #endif

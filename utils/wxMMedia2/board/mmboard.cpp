@@ -205,10 +205,12 @@ wxUint8 MMBoardApp::TestMultimediaCaps()
 
   // We test the OSS (Open Sound System) support.
 
+#if 0
   dev = new wxSoundStreamOSS();
   if (dev->GetError() == wxSOUND_NOERR)
     caps |= MM_SOUND_OSS;
   delete dev;
+#endif
 #endif
 
 #ifdef __WIN32__

@@ -42,6 +42,11 @@ wxSoundAiff::~wxSoundAiff()
 {
 }
 
+wxString wxSoundAiff::GetCodecName() const
+{
+    return "wxSoundAiff codec";
+}
+
 bool wxSoundAiff::CanRead()
 {
   wxUint32 signature1, signature2, len;

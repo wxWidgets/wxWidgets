@@ -32,6 +32,8 @@
 
 #include <wx/filefn.h>
 #include <wx/wfstream.h>
+#include <wx/datstrm.h>
+#include <wx/tokenzr.h>
 
 #define WXMMEDIA_INTERNAL
 #include "vidbase.h"
@@ -52,8 +54,19 @@ protected:
     wxVideoXANIM *m_vid_xanim;
 };
 
+class wxVideoXANIMOutput: public wxProcess {
+public:
+    wxVideoXANIMOutput();
+
+    void OnTerminate(int pid, int status);
+    
+    bool IsTerminated() const;
+protected:
+    bool m_terminated;
+};
+
 // -------------------------------------------------------------------------
-// XAnim video driver (implementation)
+// XAnim video driver (process handling implementation)
 
 wxVideoXANIMProcess::wxVideoXANIMProcess(wxVideoXANIM *xanim)
 {
@@ -65,6 +78,25 @@ void wxVideoXANIMProcess::OnTerminate(int WXUNUSED(pid), int WXUNUSED(status))
     m_vid_xanim->m_xanim_started = FALSE;
     m_vid_xanim->OnFinished();
 }
+
+wxVideoXANIMOutput::wxVideoXANIMOutput()
+        : wxProcess(NULL, TRUE, -1)
+{
+    m_terminated = FALSE;
+}
+
+bool wxVideoXANIMOutput::IsTerminated() const
+{
+    return m_terminated;
+}
+
+void wxVideoXANIMOutput::OnTerminate(int pid, int status)
+{
+    m_terminated = TRUE;
+}
+
+// -------------------------------------------------------------------------
+// XAnim video driver (implementation)
 
 wxVideoXANIM::wxVideoXANIM()
  : wxVideoBaseDriver()
@@ -84,12 +116,16 @@ wxVideoXANIM::wxVideoXANIM(wxInputStream& str)
     m_xanim_detector = new wxVideoXANIMProcess(this);
     m_xanim_started  = FALSE;
     m_paused         = FALSE;
+    m_size[0]        = 0;
+    m_size[1]        = 0;
     
     m_filename       = wxGetTempFileName("vidxa");
     m_remove_file    = TRUE;
     wxFileOutputStream fout(m_filename);
     
     fout << str;
+
+    CollectInfo();
 }
 
 wxVideoXANIM::wxVideoXANIM(const wxString& filename)
@@ -101,6 +137,10 @@ wxVideoXANIM::wxVideoXANIM(const wxString& filename)
 
     m_filename       = filename;
     m_remove_file    = FALSE;
+    m_size[0]        = 0;
+    m_size[1]        = 0;
+    
+    CollectInfo();
 }
 
 wxVideoXANIM::~wxVideoXANIM()
@@ -113,6 +153,9 @@ wxVideoXANIM::~wxVideoXANIM()
     if (m_remove_file)
         wxRemoveFile(m_filename);
 }
+
+// -------------------------------------------------------------------------
+// Movie controller
 
 bool wxVideoXANIM::Play()
 {
@@ -166,21 +209,30 @@ bool wxVideoXANIM::Stop()
     return TRUE;
 }
 
-bool wxVideoXANIM::Resize(wxUint16 w, wxUint16 h)
+// -------------------------------------------------------------------------
+// Movie size controller
+
+bool wxVideoXANIM::SetSize(wxSize size)
 {
     if (!m_video_output)
       return FALSE;
 
-    m_video_output->SetSize(w, h);
+    m_video_output->SetSize(size.GetWidth(), size.GetHeight());
     return FALSE;
 }
 
 bool wxVideoXANIM::GetSize(wxSize& size) const
 {
-    return FALSE;
+    if (m_size[0] == 0)
+        return FALSE;
+    size.Set(m_size[0], m_size[1]);
+    return TRUE;
 }
 
-bool wxVideoXANIM::IsCapable(wxVideoType v_type)
+// -------------------------------------------------------------------------
+// Capabilities of XAnim
+
+bool wxVideoXANIM::IsCapable(wxVideoType v_type) const
 {
     if (v_type == wxVIDEO_MSAVI || v_type == wxVIDEO_MPEG ||
 	v_type == wxVIDEO_QT || v_type == wxVIDEO_GIF || v_type == wxVIDEO_JMOV ||
@@ -190,21 +242,77 @@ bool wxVideoXANIM::IsCapable(wxVideoType v_type)
         return FALSE;
 }
 
-bool wxVideoXANIM::IsPaused()
+// -------------------------------------------------------------------------
+// Movie state
+
+wxString wxVideoXANIM::GetMovieCodec() const
+{
+    if (m_size[0] == 0)
+        return wxT("");
+    return m_movieCodec;
+}
+
+wxString wxVideoXANIM::GetAudioCodec() const
+{
+    if (m_size[0] == 0)
+        return wxT("");
+    return m_audioCodec;
+}
+
+wxUint32 wxVideoXANIM::GetSampleRate() const
+{
+    if (m_size[0] == 0)
+        return 0;
+    return m_sampleRate;
+}
+
+wxUint8 wxVideoXANIM::GetChannels() const
+{
+    if (m_size[0] == 0)
+        return 0;
+    return m_channels;
+}
+
+wxUint8 wxVideoXANIM::GetBPS() const
+{
+    if (m_size[0] == 0)
+        return 0;
+    return m_bps;
+}
+
+double wxVideoXANIM::GetFrameRate() const
+{
+    if (m_size[0] == 0)
+        return 0.0;
+    return m_frameRate;
+}
+
+wxUint32 wxVideoXANIM::GetNbFrames() const
+{
+    if (m_size[0] == 0)
+        return 0;
+    return m_frames;
+}
+
+
+bool wxVideoXANIM::IsPaused() const
 {
     return m_paused;
 }
 
-bool wxVideoXANIM::IsStopped()
+bool wxVideoXANIM::IsStopped() const
 {
     return !m_xanim_started;
 }
+
+// -------------------------------------------------------------------------
+// Output management
 
 bool wxVideoXANIM::AttachOutput(wxWindow& out)
 {
     if (!wxVideoBaseDriver::AttachOutput(out))
         return FALSE;
-
+    
     return TRUE;
 }
 
@@ -216,6 +324,9 @@ void wxVideoXANIM::DetachOutput()
 
     wxVideoBaseDriver::DetachOutput();
 }
+
+// -------------------------------------------------------------------------
+// Lowlevel XAnim controller
 
 bool wxVideoXANIM::SendCommand(const char *command, char **ret,
 			       wxUint32 *size)
@@ -240,6 +351,95 @@ bool wxVideoXANIM::SendCommand(const char *command, char **ret,
 			   &prop_type, &prop_format, (unsigned long *)size,
 			   &extra, (unsigned char **)ret);
     }
+    return TRUE;
+}
+
+bool wxVideoXANIM::CollectInfo()
+{
+    wxVideoXANIMOutput *xanimProcess;
+    wxString xanim_command;
+    wxStringTokenizer tokenizer;
+    
+    xanimProcess = new wxVideoXANIMOutput;
+    xanim_command = wxT("xanim +v +Zv -Ae ");
+    xanim_command += m_filename;
+    if (!wxExecute(xanim_command, FALSE, xanimProcess))
+        return FALSE;
+
+    wxInputStream *infoStream = xanimProcess->GetInputStream();
+    wxString totalOutput;
+        
+    while (infoStream->LastError() == wxSTREAM_NOERROR) {
+        char line[100];
+
+        infoStream->Read(line, sizeof(line)-1);
+        if (infoStream->LastRead() == 0)
+            break;
+        
+        line[infoStream->LastRead()] = 0;
+       
+        totalOutput += line;        
+    }
+
+    // This is good for everything ... :-)
+    int position = totalOutput.Find(wxT("Video Codec:"));
+    
+    totalOutput.Remove(0, position+13);
+
+    position = totalOutput.Find(wxT("depth="));
+    m_movieCodec = totalOutput(0, position);
+
+    totalOutput.Remove(0, position);
+    tokenizer.SetString(totalOutput, "\n\r");
+
+    // the rest of the line
+    wxString token = tokenizer.GetNextToken();
+    unsigned long my_long;
+    
+#define GETINT(i) \
+totalOutput.ToULong(&my_long); \
+i = my_long;
+    
+    // 'Audio Codec:'
+    totalOutput = tokenizer.GetString();
+    totalOutput.Remove(0, totalOutput.Find(wxT(":"))+2);
+
+    position = totalOutput.Find(wxT("Rate"));
+    m_audioCodec = totalOutput(0, position-1);
+
+    // 'Rate='
+    totalOutput.Remove(0, totalOutput.Find(wxT("="))+1);
+    GETINT(m_sampleRate);
+    // 'Chans='
+    totalOutput.Remove(0, totalOutput.Find(wxT("="))+1);
+    GETINT(m_channels);
+    // 'Bps='
+    totalOutput.Remove(0, totalOutput.Find(wxT("="))+1);
+    GETINT(m_bps);
+    // 'Frame Stats:'
+    tokenizer.Reinit(totalOutput);
+    tokenizer.GetNextToken();
+    totalOutput = tokenizer.GetString();
+    totalOutput.Remove(0, totalOutput.Find(wxT(":"))+2);
+    // 'Size='
+    totalOutput.Remove(0, totalOutput.Find(wxT("="))+1);
+    GETINT(m_size[0]);
+    // 'x'
+    totalOutput.Remove(0,1);
+    GETINT(m_size[1]);
+    // 'Frames='
+    totalOutput.Remove(0, totalOutput.Find(wxT("="))+1);
+    GETINT(m_frames);
+    // 'avfps='
+    totalOutput.Remove(0, totalOutput.Find(wxT("="))+1);
+    totalOutput.ToDouble(&m_frameRate);
+
+    // We wait for the conclusion
+    while (!xanimProcess->IsTerminated())
+        wxYield();
+
+    delete xanimProcess;
+
     return TRUE;
 }
 
@@ -278,7 +478,7 @@ bool wxVideoXANIM::RestartXANIM()
 			 (xanim_chg_size) ? _T("") : _T(""),
 			 WXSTRINGCAST m_filename);
     
-    // Execute it
+        // Execute it
     if (!wxExecute(xanim_command, FALSE, m_xanim_detector))
         return FALSE;
     
@@ -294,8 +494,15 @@ bool wxVideoXANIM::RestartXANIM()
       wxYield();
     }
 
-    m_video_output->SetSize(m_video_output->GetSize());
-       // Very useful ! Actually it sends a SETSIZE event to XAnim
+    wxSize vibrato_size;
+    
+    vibrato_size = m_video_output->GetSize();
+    
+    vibrato_size.SetWidth(vibrato_size.GetWidth()+1);
+    m_video_output->SetSize(vibrato_size);
+    vibrato_size.SetWidth(vibrato_size.GetWidth()-1);
+    m_video_output->SetSize(vibrato_size);
+    // Very useful ! Actually it sends a SETSIZE event to XAnim
     
     m_paused = FALSE;
     

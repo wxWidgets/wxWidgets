@@ -90,6 +90,10 @@ class wxSoundFileStream: public wxSoundStream {
   // For this action, you must use wxSoundRouterStream applied to wxSoundFileStream. 
   bool SetSoundFormat(const wxSoundFormatBase& format);
 
+  // This function returns the Codec name. This is useful for those who want to build
+  // a player (But also in some other case).
+  virtual wxString GetCodecName() const;
+  
   // You should use this function to test whether this file codec can read the stream you passed
   // to it.
   virtual bool CanRead() { return FALSE; }

@@ -317,6 +317,11 @@ void wxSoundFileStream::FinishPreparation(wxUint32 len)
   m_prepared = TRUE;
 }
 
+wxString wxSoundFileStream::GetCodecName() const
+{
+    return wxString(wxT("wxSoundFileStream base codec"));
+}
+
 wxUint32 wxSoundFileStream::GetLength()
 {
   if (m_input && !m_prepared && GetError() == wxSOUND_NOERR)

@@ -30,10 +30,18 @@ Video features:
     time
 
 Video bugs:
-  * Recode windows port
+  * AVI file works on Windows
 
 CD features:
   * standard access to the CDAUDIO interface
 
 CD bugs:
 
+----------------
+| INSTALLATION |
+----------------
+
+You need to move the three files included in this directory:
+  - utilsunx.cpp => src/unix
+  - process.cpp => src/common
+  - process.h => include/wx

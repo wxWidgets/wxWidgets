@@ -126,7 +126,6 @@ public:
 
 protected:
   wxWindow *m_output_window;
-  wxInputStream *m_input_stream;
   wxVideoBaseDriver *m_video_driver;
 };
 
@@ -333,8 +332,6 @@ MMBoardVideoFile::~MMBoardVideoFile()
 {
     if (m_video_driver)
         delete m_video_driver;
-
-    delete m_input_stream;
 }
 
 bool MMBoardVideoFile::NeedWindow()
@@ -346,6 +343,12 @@ void MMBoardVideoFile::SetWindow(wxWindow *window)
 {
     m_output_window = window;
     m_video_driver->AttachOutput(*window);
+
+    wxSize size;
+    m_video_driver->GetSize(size);
+    window->SetSize(size);
+    // BAD BAD
+    window->GetParent()->GetSizer()->Fit(window->GetParent());
 }
 
 void MMBoardVideoFile::Play()
@@ -379,9 +382,13 @@ MMBoardTime MMBoardVideoFile::GetPosition()
 MMBoardTime MMBoardVideoFile::GetLength()
 {
     MMBoardTime btime;
+    int frameTime;
 
-    btime.seconds = 1;
-    btime.minutes = btime.hours = 0;
+    frameTime = (int)( m_video_driver->GetNbFrames() / m_video_driver->GetFrameRate());
+    
+    btime.seconds = frameTime % 60;
+    btime.minutes = (frameTime / 60) % 60;
+    btime.hours   = frameTime / 3600;
     return btime;
 }
 
@@ -402,7 +409,16 @@ wxString MMBoardVideoFile::GetStringType()
 
 wxString MMBoardVideoFile::GetStringInformation()
 {
-    return wxString(wxT("No info"));
+    wxString info;
+
+    info = wxT("Video codec: ");
+    info += m_video_driver->GetMovieCodec() + "\n";
+    info += wxT("Audio codec: ");
+    info += m_video_driver->GetAudioCodec();
+    info += wxString::Format(" Sample rate: %d Channels: %d\n", m_video_driver->GetSampleRate(),
+                             m_video_driver->GetBPS());
+    info += wxString::Format(" Frame rate: %.01f", m_video_driver->GetFrameRate());
+    return info;
 }
 
 // ----------------------------------------------------------------------------

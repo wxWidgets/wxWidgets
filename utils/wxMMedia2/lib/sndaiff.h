@@ -23,19 +23,20 @@
 
 class wxSoundAiff: public wxSoundFileStream {
  public:
-  wxSoundAiff(wxInputStream& stream, wxSoundStream& io_sound);
-  wxSoundAiff(wxOutputStream& stream, wxSoundStream& io_sound);
-  ~wxSoundAiff();
-
-  bool CanRead();
-
+    wxSoundAiff(wxInputStream& stream, wxSoundStream& io_sound);
+    wxSoundAiff(wxOutputStream& stream, wxSoundStream& io_sound);
+    ~wxSoundAiff();
+    
+    bool CanRead();
+    wxString GetCodecName() const;
+    
  protected:
-  bool PrepareToPlay(); 
-  bool PrepareToRecord(unsigned long time);
-  bool FinishRecording();
-
-  wxUint32 GetData(void *buffer, wxUint32 len);
-  wxUint32 PutData(const void *buffer, wxUint32 len);
+    bool PrepareToPlay(); 
+    bool PrepareToRecord(unsigned long time);
+    bool FinishRecording();
+    
+    wxUint32 GetData(void *buffer, wxUint32 len);
+    wxUint32 PutData(const void *buffer, wxUint32 len);
 };
 
 #endif
