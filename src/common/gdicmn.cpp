@@ -67,8 +67,8 @@ wxRect::wxRect(const wxPoint& topLeft, const wxPoint& bottomRight)
 {
   x = topLeft.x;
   y = topLeft.y;
-  width = bottomRight.x - topLeft.x;
-  height = bottomRight.y - topLeft.y;
+  width = bottomRight.x - topLeft.x + 1;
+  height = bottomRight.y - topLeft.y + 1;
 
   if (width < 0)
   {
