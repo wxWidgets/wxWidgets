@@ -89,8 +89,6 @@ bool wxRect::operator==(const wxRect& rect) const
           (height == rect.height));
 }
 
-// this doesn't compile
-#if 0
 const wxRect& wxRect::operator += (const wxRect& rect)
 { 
 	*this = (*this + rect); 
@@ -113,7 +111,6 @@ bool wxRect::Inside(int cx, int cy) const
 		  && ((cx - x) < width)
 		  );
 }
-#endif
 
 wxColourDatabase::wxColourDatabase (int type) : wxList (type)
 {

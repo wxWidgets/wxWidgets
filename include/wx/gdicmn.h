@@ -262,12 +262,9 @@ public:
     bool operator==(const wxRect& rect) const;
     bool operator!=(const wxRect& rect) const { return !(*this == rect); }
 
-// this doesn't compile
-#if 0
     bool Inside(int cx, int cy) const;
     wxRect operator + (const wxRect& rect) const;
     const wxRect& operator += (const wxRect& rect);
-#endif
     
 public:
     long x, y, width, height;

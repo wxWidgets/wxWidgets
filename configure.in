@@ -1814,7 +1814,7 @@ dnl yet installed)
 LIBS="\${top_builddir}/src/${WX_LIBRARY_NAME} $EXTRA_LIBS"
 
 dnl all -I options we must pass to the compiler
-INCLUDES="$TOOLKIT_INCLUDE $ZLIB_INCLUDE $LIBPNG_INCLUDE -I. -I\${top_builddir}/include -I\${top_srcdir}/include"
+INCLUDES="-I. -I\${top_builddir}/include -I\${top_srcdir}/include $TOOLKIT_INCLUDE $ZLIB_INCLUDE $LIBPNG_INCLUDE"
 
 dnl C/C++ compiler options used to compile wxWindows
 if test "$ac_cv_prog_gcc" = "yes"; then
