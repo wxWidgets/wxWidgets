@@ -496,8 +496,7 @@ void wxToolWindow::CalcResizedRect( wxRect& rect, wxPoint& delta, const wxSize& 
 	}
 	else
 	{
-		int avoidCompilerWarning = 0;
-		wxASSERT(avoidCompilerWarning); // DBG::
+		wxFAIL( _T("what did the cursor hit?") );
 	}
 
 	rect.x = left;
