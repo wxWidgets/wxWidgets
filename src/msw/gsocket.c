@@ -99,7 +99,6 @@ bool GSocket_Init()
   }
   firstAvailable = 0;
 
-
   /* Initialize WinSocket */
   return (WSAStartup((1 << 8) | 1, &wsaData) == 0);
 }
@@ -107,7 +106,7 @@ bool GSocket_Init()
 void GSocket_Cleanup()
 {
   /* Destroy internal window */
-  DestroyWindow(WINDOWNAME);
+  DestroyWindow(hWin);
   UnregisterClass(CLASSNAME, INSTANCE);
 
   /* Delete critical section */
@@ -409,14 +408,19 @@ GSocket *GSocket_WaitConnection(GSocket *sck)
   }
 
   connection->m_fd = accept(sck->m_fd, NULL, NULL);
-  ioctlsocket(connection->m_fd, FIONBIO, (u_long FAR *) &arg);
 
   if (connection->m_fd == INVALID_SOCKET)
   {
+    if (WSAGetLastError() == WSAEWOULDBLOCK)
+      sck->m_error = GSOCK_WOULDBLOCK;
+    else
+      sck->m_error = GSOCK_IOERR;
+
     GSocket_destroy(connection);
-    sck->m_error = GSOCK_IOERR;
     return NULL;
   }
+
+  ioctlsocket(connection->m_fd, FIONBIO, (u_long FAR *) &arg);
 
   /* Initialize all fields */
   connection->m_server   = FALSE;
@@ -500,7 +504,7 @@ GSocketError GSocket_SetBroadcast(GSocket *sck)
 GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
 {
   u_long arg = 1;
-  int type, ret;
+  int type, ret, err;
 
   assert(sck != NULL);
 
@@ -536,19 +540,19 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
     return GSOCK_IOERR;
   }
 
-  /* Connect it to the PEER address, with a timeout */
+  /* Connect it to the PEER address, with a timeout (see below) */
   ret = connect(sck->m_fd, sck->m_peer->m_addr, sck->m_peer->m_len);
 
   if (ret == SOCKET_ERROR)
   {
-    /* For blocking GSockets, if connect fails with an EWOULDBLOCK
-     * error, then we can select() the socket for the specified
-     * timeout and check for writability to see if the connection
-     * request completes. If the error is different than EWOULDBLOCK,
-     * or if the socket is nonblocking, the call to GSocket_Connect()
-     * has failed.
+    err = WSAGetLastError();
+
+    /* If connect failed with EWOULDBLOCK and the GSocket object
+     * is in blocking mode, we select() for the specified timeout
+     * checking for writability to see if the connection request
+     * completes.
      */
-    if ((!sck->m_non_blocking) && (WSAGetLastError() == WSAEWOULDBLOCK))
+    if ((err == WSAEWOULDBLOCK) && (sck->m_non_blocking == FALSE))
     {
       if (_GSocket_Output_Timeout(sck) == GSOCK_TIMEDOUT)
       {
@@ -557,14 +561,29 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
         /* sck->m_error is set in _GSocket_Input_Timeout */
         return GSOCK_TIMEDOUT;
       }
+      else
+        return GSOCK_NOERROR;
     }
-    else  /* error */
+
+    /* If connect failed with EWOULDBLOCK and the GSocket object
+     * is set to nonblocking, we set m_error to GSOCK_WOULDBLOCK
+     * (and return GSOCK_WOULDBLOCK) but we don't close the socket;
+     * this way if the connection completes, a GSOCK_CONNECTION
+     * event will be generated, if enabled.
+     */
+    if ((err == WSAEWOULDBLOCK) && (sck->m_non_blocking == TRUE))
     {
-      closesocket(sck->m_fd);
-      sck->m_fd = INVALID_SOCKET;
-      sck->m_error = GSOCK_IOERR;
-      return GSOCK_IOERR;
+      sck->m_error = GSOCK_WOULDBLOCK;
+      return GSOCK_WOULDBLOCK;
     }
+
+    /* If connect failed with an error other than EWOULDBLOCK,
+     * then the call to GSocket_Connect has failed.
+     */
+    closesocket(sck->m_fd);
+    sck->m_fd = INVALID_SOCKET;
+    sck->m_error = GSOCK_IOERR;
+    return GSOCK_IOERR;
   }
 
   return GSOCK_NOERROR;
@@ -1202,7 +1221,7 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
 
       port_int = atoi(port);
       addr = (struct sockaddr_in *)address->m_addr;
-      addr->sin_port = htons(port_int);
+      addr->sin_port = htons((u_short) port_int);
       return GSOCK_NOERROR;
     }
 
