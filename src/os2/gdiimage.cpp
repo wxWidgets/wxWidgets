@@ -31,7 +31,6 @@
 
 #include "wx/os2/private.h"
 #include "wx/app.h"
-#include "wx/xpmhand.h"
 #include "wx/os2/gdiimage.h"
 
 // ----------------------------------------------------------------------------
@@ -345,12 +344,6 @@ void wxGDIImage::InitStandardHandlers()
 {
     AddHandler(new wxBMPResourceHandler);
     AddHandler(new wxBMPFileHandler);
-
-#if wxUSE_XPM_IN_OS2
-    AddHandler(new wxXPMFileHandler);
-    AddHandler(new wxXPMDataHandler);
-#endif
-
     AddHandler(new wxICOResourceHandler);
     AddHandler(new wxICOFileHandler);
 }

@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
+;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1777,7 +1777,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -5810,7 +5810,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -9743,6 +9743,8 @@ EXPORTS
       OnSetCursor__16wxSplitterWindowFR16wxSetCursorEvent
       ;wxSplitterWindow::DoSplit(wxSplitMode,wxWindow*,wxWindow*,int)
       DoSplit__16wxSplitterWindowF11wxSplitModeP8wxWindowT2i
+      ;wxSplitterWindow::SetMinimumPaneSize(int)
+      SetMinimumPaneSize__16wxSplitterWindowFi
       ;wxSplitterWindow::DrawSashTracker(int,int)
       DrawSashTracker__16wxSplitterWindowFiT1
       ;wxConstructorForwxSplitterWindow()
@@ -9771,6 +9773,8 @@ EXPORTS
       OnIdle__16wxSplitterWindowFR11wxIdleEvent
       ;wxSplitterWindow::OnDoubleClick(wxSplitterEvent&)
       OnDoubleClick__16wxSplitterWindowFR15wxSplitterEvent
+      ;wxSplitterWindow::DoSetSashPosition(int)
+      DoSetSashPosition__16wxSplitterWindowFi
       ;wxSplitterWindow::Init()
       Init__16wxSplitterWindowFv
       ;wxSplitterWindow::GetEventTable() const
@@ -11257,8 +11261,6 @@ EXPORTS
       wxInvertMask__FUliT2
       ;wxMask::wxMask()
       __ct__6wxMaskFv
-      ;wxBitmap::wxBitmap(const char**)
-      __ct__8wxBitmapFPPCc
       ;wxMask::sm_classwxMask
       sm_classwxMask__6wxMask
       __vft8wxBitmap8wxObject
@@ -11301,8 +11303,8 @@ EXPORTS
       wxConstructorForwxBitmap__Fv
       ;wxConstructorForwxMask()
       wxConstructorForwxMask__Fv
-      ;wxBitmap::wxBitmap(char**)
-      __ct__8wxBitmapFPPc
+      ;wxBitmap::CreateFromXpm(const char**)
+      CreateFromXpm__8wxBitmapFPPCc
       ;wxBitmap::SetMask(wxMask*)
       SetMask__8wxBitmapFP6wxMask
   ;From object file:  ..\os2\bmpbuttn.cpp
@@ -14763,21 +14765,3 @@ EXPORTS
       SetTitle__8wxWindowFRC8wxString
       ;wxWindow::sm_eventTableEntries
       sm_eventTableEntries__8wxWindow
-  ;From object file:  ..\os2\xpmhand.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxXPMDataHandler::Create(wxBitmap*,void*,long,int,int,int)
-      Create__16wxXPMDataHandlerFP8wxBitmapPvliN24
-      __vft16wxXPMDataHandler8wxObject
-      ;wxConstructorForwxXPMFileHandler()
-      wxConstructorForwxXPMFileHandler__Fv
-      __vft16wxXPMFileHandler8wxObject
-      ;wxConstructorForwxXPMDataHandler()
-      wxConstructorForwxXPMDataHandler__Fv
-      ;wxXPMFileHandler::LoadFile(wxBitmap*,const wxString&,long,int,int)
-      LoadFile__16wxXPMFileHandlerFP8wxBitmapRC8wxStringliT4
-      ;wxXPMFileHandler::SaveFile(wxBitmap*,const wxString&,int,const wxPalette*)
-      SaveFile__16wxXPMFileHandlerFP8wxBitmapRC8wxStringiPC9wxPalette
-      ;wxXPMDataHandler::sm_classwxXPMDataHandler
-      sm_classwxXPMDataHandler__16wxXPMDataHandler
-      ;wxXPMFileHandler::sm_classwxXPMFileHandler
-      sm_classwxXPMFileHandler__16wxXPMFileHandler

@@ -33,6 +33,7 @@
 
 //#include "wx/msw/dib.h"
 #include "wx/image.h"
+#include "wx/xpmdecod.h"
 
 // ----------------------------------------------------------------------------
 // macros
@@ -211,37 +212,6 @@ wxBitmap::wxBitmap(
     SetHBITMAP((WXHBITMAP)hBmp);
 } // end of wxBitmap::wxBitmap
 
-//
-// Create from XPM data
-//
-wxBitmap::wxBitmap(
-  char**                            ppData
-)
-{
-    Init();
-
-    (void)Create( (void *)ppData
-                 ,wxBITMAP_TYPE_XPM_DATA
-                 ,0
-                 ,0
-                 ,0
-                );
-} // end of wxBitmap::wxBitmap
-
-wxBitmap::wxBitmap(
-  const char**                      ppData
-)
-{
-    Init();
-
-    (void)Create( (void *)ppData
-                 ,wxBITMAP_TYPE_XPM_DATA
-                 ,0
-                 ,0
-                 ,0
-                );
-} // end of wxBitmap::wxBitmap
-
 wxBitmap::wxBitmap(
   int                               nW
 , int                               nH
@@ -360,6 +330,27 @@ bool wxBitmap::Create(
 
     return Ok();
 } // end of wxBitmap::Create
+
+bool wxBitmap::CreateFromXpm(
+  const char**                      ppData
+)
+{
+#if wxUSE_IMAGE && wxUSE_XPM
+    Init();
+
+    wxCHECK_MSG(ppData != NULL, FALSE, wxT("invalid bitmap data"))
+
+    wxXPMDecoder                    vDecoder;
+    wxImage                         vImg = vDecoder.ReadData(ppData);
+
+    wxCHECK_MSG(vImg.Ok(), FALSE, wxT("invalid bitmap data"))
+
+    *this = wxBitmap(vImg);
+    return TRUE;
+#else
+    return FALSE;
+#endif
+} // end of wxBitmap::CreateFromXpm
 
 bool wxBitmap::LoadFile(
   const wxString&                   rFilename
@@ -671,7 +662,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 wxImage wxBitmap::ConvertToImage() const
 {
     wxImage image;
-    
+
     wxCHECK_MSG( Ok(), wxNullImage, wxT("invalid bitmap") );
 
     // create an wxImage object
