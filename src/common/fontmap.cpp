@@ -498,9 +498,12 @@ bool wxFontMapper::TestAltEncoding(const wxString& configEntry,
 
 bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
                                      wxNativeEncodingInfo *info,
+                                     const wxString& facename,
                                      bool interactive)
 {
     wxCHECK_MSG( info, FALSE, wxT("bad pointer in GetAltForEncoding") );
+
+    info->facename = facename;
 
     if ( encoding == wxFONTENCODING_DEFAULT )
     {
@@ -608,4 +611,29 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
             return TRUE;
 
     return FALSE;
+}
+
+
+
+bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
+                                     wxFontEncoding *alt_encoding,
+                                     const wxString& facename,
+                                     bool interactive)
+{
+    wxNativeEncodingInfo info;
+    bool r = GetAltForEncoding(encoding, &info, facename, interactive);
+    *alt_encoding = info.encoding;
+    return r;
+}
+
+
+
+bool wxFontMapper::IsEncodingAvailable(wxFontEncoding encoding,
+                                       const wxString& facename)
+{
+    wxNativeEncodingInfo info;
+    
+    wxGetNativeFontEncoding(encoding, &info);
+    info.facename = facename;
+    return wxTestFontEncoding(info);
 }

@@ -55,7 +55,20 @@ public:
     // return FALSE
     virtual bool GetAltForEncoding(wxFontEncoding encoding,
                                    wxNativeEncodingInfo *info,
+                                   const wxString& facename = wxEmptyString,
                                    bool interactive = TRUE);
+
+    // version better suitable for 'public' use. Returns wxFontEcoding
+    // that can be used it wxFont ctor
+    bool GetAltForEncoding(wxFontEncoding encoding,
+                           wxFontEncoding *alt_encoding,
+                           const wxString& facename = wxEmptyString,
+                           bool interactive = TRUE);
+
+    // checks whether given encoding is available in given face or not.
+    // If no facename is given, 
+    virtual bool IsEncodingAvailable(wxFontEncoding encoding,
+                                     const wxString& facename = wxEmptyString);
 
     // returns the encoding for the given charset (in the form of RFC 2046) or
     // wxFONTENCODING_SYSTEM if couldn't decode it
