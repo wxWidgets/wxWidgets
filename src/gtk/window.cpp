@@ -965,6 +965,30 @@ static inline bool wxIsAsciiKeysym(KeySym ks)
     return ks < 256;
 }
 
+static void wxFillOtherKeyEventFields(wxKeyEvent& event,
+                                      wxWindowGTK *win,
+                                      GdkEventKey *gdk_event)
+{
+    int x = 0;
+    int y = 0;
+    GdkModifierType state;
+    if (gdk_event->window)
+        gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
+
+    event.SetTimestamp( gdk_event->time );
+    event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK) != 0;
+    event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK) != 0;
+    event.m_altDown = (gdk_event->state & GDK_MOD1_MASK) != 0;
+    event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK) != 0;
+    event.m_scanCode = gdk_event->keyval;
+    event.m_rawCode = (wxUint32) gdk_event->keyval;
+    event.m_rawFlags = 0;
+    event.m_x = x;
+    event.m_y = y;
+    event.SetEventObject( win );
+}
+
+
 static bool
 wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
                            wxWindowGTK *win,
@@ -1060,28 +1084,31 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
         return FALSE;
 
     // now fill all the other fields
-    int x = 0;
-    int y = 0;
-    GdkModifierType state;
-    if (gdk_event->window)
-        gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
-
-    event.SetTimestamp( gdk_event->time );
-    event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK) != 0;
-    event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK) != 0;
-    event.m_altDown = (gdk_event->state & GDK_MOD1_MASK) != 0;
-    event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK) != 0;
+    wxFillOtherKeyEventFields(event, win, gdk_event);
+    
     event.m_keyCode = key_code;
-    event.m_scanCode = gdk_event->keyval;
-    event.m_rawCode = (wxUint32) gdk_event->keyval;
-    event.m_rawFlags = 0;
-    event.m_x = x;
-    event.m_y = y;
-    event.SetEventObject( win );
 
     return TRUE;
 }
 
+
+#ifdef __WXGTK20__
+struct wxGtkIMData
+{
+    GtkIMContext *context;
+    GdkEventKey  *lastKeyEvent;
+
+    wxGtkIMData()
+    {
+        context = gtk_im_multicontext_new();
+        lastKeyEvent = NULL;
+    }
+    ~wxGtkIMData()
+    {
+        g_object_unref(context);
+    }
+};
+#endif
 
 static gint gtk_window_key_press_callback( GtkWidget *widget,
                                            GdkEventKey *gdk_event,
@@ -1096,23 +1123,43 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
         return FALSE;
     if (g_blockEventsOnDrag)
         return FALSE;
-
+    
 #ifdef __WXGTK20__
-    if (win->m_imContext)
-    {
-        // In GTK 2.0, we need to hand over the key event to an input method
-        // and the IM will emit a "commit" event containing the actual utf8
-        // character.  In that case the EVT_CHAR events will be sent from
-        // there.
-        if ( gtk_im_context_filter_keypress(win->m_imContext, gdk_event) )
-            return TRUE;
-    }
+    // We have to pass key press events through GTK+'s Input Method context
+    // object in order to get correct characters. By doing so, we loose the
+    // ability to let other GTK+'s handlers (namely, widgets' default signal
+    // handlers) handle the signal by returning false from this callback.
+    // Because GTK+ sends the events to parent widgets as well, we can't
+    // afford loosing it, otherwise native widgets inserted into wxPanel
+    // would break in subtle ways (e.g. spacebar would no longer toggle
+    // wxCheckButton's state). Therefore, we only pass the event to IM if it
+    // originated in this window's widget, which we detect by checking if we've
+    // seen the same event before (no events from children are lost this way,
+    // because gtk_window_key_press_callback is installed for native controls
+    // as well and the wxKeyEvent it creates propagates upwards).
+    static GdkEventKey s_lastEvent;
+    
+    bool useIM = (win->m_imData != NULL) &&
+                 memcmp(gdk_event, &s_lastEvent, sizeof(GdkEventKey)) != 0;
+    
+    s_lastEvent = *gdk_event;
 #endif
-
+    
     wxKeyEvent event( wxEVT_KEY_DOWN );
     if ( !wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
     {
         // unknown key pressed, ignore (the event would be useless anyhow)
+#ifdef __WXGTK20__
+        if ( useIM )
+        {
+            // it may be useful for the input method, though:
+            win->m_imData->lastKeyEvent = gdk_event;
+            bool ret = gtk_im_context_filter_keypress(win->m_imData->context,
+                                                      gdk_event);
+            win->m_imData->lastKeyEvent = NULL;
+            return ret;
+        }
+#endif
         return FALSE;
     }
 
@@ -1143,6 +1190,26 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     // will only be sent if it is not in an accelerator table.
     if (!ret)
     {
+#ifdef __WXGTK20__
+        if (useIM)
+        {
+            // In GTK 2.0, we need to hand over the key event to an input method
+            // and the IM will emit a "commit" event containing the actual utf8
+            // character.  In that case the EVT_CHAR events will be sent from
+            // there.
+            win->m_imData->lastKeyEvent = gdk_event;
+            if ( gtk_im_context_filter_keypress(win->m_imData->context,
+                                                gdk_event) )
+            {
+                win->m_imData->lastKeyEvent = NULL;
+                wxLogTrace(TRACE_KEYS, _T("Key event intercepted by IM"));
+                return TRUE;
+            }
+            else
+                win->m_imData->lastKeyEvent = NULL;
+        }
+#endif
+
         long key_code;
         KeySym keysym = gdk_event->keyval;
         // Find key code for EVT_CHAR and EVT_CHAR_HOOK events
@@ -1259,9 +1326,15 @@ static void gtk_wxwindow_commit_cb (GtkIMContext *context,
                            const gchar  *str,
                            wxWindow     *window)
 {
-    bool ret = FALSE;
-
     wxKeyEvent event( wxEVT_KEY_DOWN );
+
+    // take modifiers, cursor position, timestamp etc. from the last
+    // key_press_event that was fed into Input Method:
+    if (window->m_imData->lastKeyEvent)
+    {
+        wxFillOtherKeyEventFields(event,
+                                  window, window->m_imData->lastKeyEvent);
+    }
 
 #if wxUSE_UNICODE
     event.m_uniChar = g_utf8_get_char( str );
@@ -1269,6 +1342,7 @@ static void gtk_wxwindow_commit_cb (GtkIMContext *context,
     // Backward compatible for ISO-8859
     if (event.m_uniChar < 256)
         event.m_keyCode = event.m_uniChar;
+    wxLogTrace(TRACE_KEYS, _T("IM sent character '%c'"), event.m_uniChar);
 #else
     wchar_t unistr[2];
     unistr[0] = g_utf8_get_char(str);
@@ -1276,15 +1350,13 @@ static void gtk_wxwindow_commit_cb (GtkIMContext *context,
     wxCharBuffer ansistr(wxConvLocal.cWC2MB(unistr));
     // We cannot handle characters that cannot be represented in 
     // current locale's charset in non-Unicode mode:
-    if (ansistr.data() == NULL) return;
-
+    if (ansistr.data() == NULL)
+        return;
     event.m_keyCode = ansistr[0u];
-#endif
+    wxLogTrace(TRACE_KEYS, _T("IM sent character '%c'"), event.m_keyCode);
+#endif // wxUSE_UNICODE
 
-
-    // TODO:  We still need to set all the extra attributes of the
-    //        event, modifiers and such...
-
+    bool ret = false;
 
     // Implement OnCharHook by checking ancestor top level windows
     wxWindow *parent = window;
@@ -1901,8 +1973,8 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
         wxapp_install_idle_handler();
 
 #ifdef __WXGTK20__
-    if (win->m_imContext)
-        gtk_im_context_focus_in(win->m_imContext);
+    if (win->m_imData)
+        gtk_im_context_focus_in(win->m_imData->context);
 #endif
 
     if (!win->m_hasVMT) return FALSE;
@@ -1994,8 +2066,8 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk
         wxapp_install_idle_handler();
 
 #ifdef __WXGTK20__
-    if (win->m_imContext)
-        gtk_im_context_focus_out(win->m_imContext);
+    if (win->m_imData)
+        gtk_im_context_focus_out(win->m_imData->context);
 #endif
 
     if (!win->m_hasVMT) return FALSE;
@@ -2318,10 +2390,11 @@ gtk_window_realized_callback( GtkWidget *m_widget, wxWindow *win )
         wxapp_install_idle_handler();
         
 #ifdef __WXGTK20__
-    if (win->m_imContext)
+    if (win->m_imData)
     {
         GtkPizza *pizza = GTK_PIZZA( m_widget );
-        gtk_im_context_set_client_window( win->m_imContext, pizza->bin_window );
+        gtk_im_context_set_client_window( win->m_imData->context,
+                                          pizza->bin_window );
     }
 #endif
 
@@ -2580,7 +2653,7 @@ void wxWindowGTK::Init()
     m_cursor = *wxSTANDARD_CURSOR;
 
 #ifdef __WXGTK20__
-    m_imContext = NULL;
+    m_imData = NULL;
     m_x11Context = NULL;
 #else
 #ifdef HAVE_XIM
@@ -2756,6 +2829,10 @@ wxWindowGTK::~wxWindowGTK()
         gtk_widget_destroy( m_widget );
         m_widget = (GtkWidget*) NULL;
     }
+
+#ifdef __WXGTK20__
+    delete m_imData;
+#endif
 }
 
 bool wxWindowGTK::PreCreation( wxWindowGTK *parent, const wxPoint &pos,  const wxSize &size )
@@ -2804,12 +2881,12 @@ void wxWindowGTK::PostCreation()
 
 #ifdef __WXGTK20__
         // Create input method handler
-        m_imContext = gtk_im_multicontext_new();
+        m_imData = new wxGtkIMData;
 
         // Cannot handle drawing preedited text yet
-        gtk_im_context_set_use_preedit( m_imContext, FALSE );
+        gtk_im_context_set_use_preedit( m_imData->context, FALSE );
 
-        g_signal_connect (G_OBJECT (m_imContext), "commit",
+        g_signal_connect (G_OBJECT (m_imData->context), "commit",
                           G_CALLBACK (gtk_wxwindow_commit_cb), this);
 #endif
 

@@ -2367,11 +2367,6 @@ typedef GtkWidget *WXWidget;
 #define GTK_CLASS_TYPE(klass) ((klass)->type)
 #endif
 
-#ifdef __WXGTK20__
-/* Input method thing */
-typedef struct _GtkIMContext       GtkIMContext;
-#endif /*  __WXGTK20__ */
-
 #endif /*  __WXGTK__ */
 
 #if defined(__WXGTK20__) || (defined(__WXX11__) && wxUSE_UNICODE)

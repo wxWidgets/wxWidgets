@@ -15,6 +15,10 @@
     #pragma interface
 #endif
 
+// helper structure that holds class that holds GtkIMContext object and
+// some additional data needed for key events processing
+struct wxGtkIMData;
+
 //-----------------------------------------------------------------------------
 // callback definition for inserting a window (internal)
 //-----------------------------------------------------------------------------
@@ -193,7 +197,7 @@ public:
     GtkWidget           *m_focusWidget;
 
 #ifdef __WXGTK20__
-    GtkIMContext       *m_imContext;
+    wxGtkIMData         *m_imData;
 #else
 #if HAVE_XIM
     // XIM support for wxWidgets
