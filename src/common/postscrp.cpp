@@ -29,7 +29,6 @@
 #ifndef WX_PRECOMP
 #include "wx/intl.h"
 #include "wx/frame.h"
-#include "wx/postscrp.h"
 #include "wx/utils.h"
 #include "wx/filedlg.h"
 #include "wx/msgdlg.h"
@@ -42,6 +41,7 @@
 #include "wx/list.h"
 #endif
 
+#include "wx/postscrp.h"
 #include "wx/dcmemory.h"
 
 #ifdef __WXMSW__

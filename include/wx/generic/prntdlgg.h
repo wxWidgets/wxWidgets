@@ -29,6 +29,7 @@ class WXDLLEXPORT wxCheckBox;
 class WXDLLEXPORT wxChoice;
 class WXDLLEXPORT wxStaticText;
 class WXDLLEXPORT wxRadioBox;
+class WXDLLEXPORT wxPrintSetupData;
 
 /*
  * Simulated Print and Print Setup dialogs
@@ -94,7 +95,11 @@ class WXDLLEXPORT wxGenericPrintSetupDialog: public wxDialog
   wxCheckBox *colourCheckBox;
   wxChoice   *paperTypeChoice;
 
+#if wxUSE_POSTSCRIPT
   wxPrintSetupData printData;
+  inline wxPrintSetupData& GetPrintData(void) { return printData; }
+#endif
+
   wxGenericPrintSetupDialog(wxWindow *parent, wxPrintSetupData* data);
   ~wxGenericPrintSetupDialog(void);
 
@@ -102,7 +107,6 @@ class WXDLLEXPORT wxGenericPrintSetupDialog: public wxDialog
   virtual bool TransferDataToWindow(void);
 
   wxChoice *CreatePaperTypeChoice(int* x, int* y);
-  inline wxPrintSetupData& GetPrintData(void) { return printData; }
 };
 
 #define wxPRINTID_LEFTMARGIN         30
