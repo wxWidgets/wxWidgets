@@ -49,7 +49,7 @@
 
 //----------------------------------------------------------------------
 
-#if PYTHON_API_VERSION <= 1007 && wxUSE_UNICODE
+#if PYTHON_API_VERSION < 1009 && wxUSE_UNICODE
 #error Python must support Unicode to use wxWindows Unicode
 #endif
 
@@ -421,10 +421,10 @@ void wxPyApp::_BootstrapApp()
             goto error;
         }
 
-        // On wxGTK the locale will be changed to match the system settings, but
-        // Python needs to have LC_NUMERIC set to "C" in order for the floating
-        // point conversions and such to work right.
-#if defined(__WXGTK__) && PYTHON_API_VERSION <= 1012
+        // On wxGTK the locale will be changed to match the system settings,
+        // but Python before 2.4 needs to have LC_NUMERIC set to "C" in order
+        // for the floating point conversions and such to work right.
+#if defined(__WXGTK__) && PY_VERSION_HEX < 0x02040000
         setlocale(LC_NUMERIC, "C");
 #endif
     
