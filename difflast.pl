@@ -37,8 +37,10 @@ sub get_last_rev($)
     # first, use "cvs status" if this fails
     if ( open(INPUT, $file) ) {
         while (<INPUT>) {
-            if ( /\$Id$basename,v (\d+\.\d+)/ ) {
-                return &dec_rev($1);
+            # notice that we shouldn't have '$' followed by 'Id' or cvs will
+            # substitute it!
+            if ( /\$(Id): $basename,v (\d+\.\d+)/ ) {
+                return &dec_rev($2);
             }
         }
     }
@@ -61,6 +63,9 @@ sub process_file($)
 
     if ( !$revlast ) {
         warn "Failed to get the last revision for $file, skipping.\n"
+    }
+    elsif ( $revlast =~ "\.0" ) {
+        warn "No previous revision of the file $file.\n"
     }
     else {
         print `$CVS diff -b -kk -r $revlast $file`;
