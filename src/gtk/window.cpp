@@ -145,7 +145,7 @@ extern GtkContainerClass *pizza_parent_class;
    thw wxWindow class has a member variable called m_widget which holds a
    pointer to this widget. When the window class represents a GTK native widget,
    this is (in most cases) the only GTK widget the class manages. E.g. the
-   wxStatitText class handles only a GtkLabel widget a pointer to which you
+   wxStaticText class handles only a GtkLabel widget a pointer to which you
    can find in m_widget (defined in wxWindow)
 
    When the class has a client area for drawing into and for containing children
@@ -4085,8 +4085,18 @@ GtkRcStyle *wxWindowGTK::CreateWidgetStyle(bool forceStyle)
     return style;
 }
 
-void wxWindowGTK::ApplyWidgetStyle(bool WXUNUSED(forceStyle))
+void wxWindowGTK::ApplyWidgetStyle(bool forceStyle)
 {
+    GtkRcStyle *style = CreateWidgetStyle(forceStyle);
+    if ( style )
+    {
+        if (m_wxwindow)
+            // should we also do m_widget in this case?
+            gtk_widget_modify_style(m_wxwindow, style);
+        else
+            gtk_widget_modify_style(m_widget, style);
+        gtk_rc_style_unref(style);
+    }
 }
 
 //-----------------------------------------------------------------------------
