@@ -89,7 +89,7 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
                        wxMenu *pSubMenu)
           : wxMenuItemBase(pParentMenu, id, text, strHelp, kind, pSubMenu)
 #if wxUSE_OWNER_DRAWN
-            , wxOwnerDrawn(GetLabelFromText(text), kind == wxITEM_CHECK)
+            , wxOwnerDrawn(text, kind == wxITEM_CHECK)
 #endif // owner drawn
 {
     Init();
@@ -104,7 +104,7 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
           : wxMenuItemBase(parentMenu, id, text, help,
                            isCheckable ? wxITEM_CHECK : wxITEM_NORMAL, subMenu)
 #if wxUSE_OWNER_DRAWN
-            , wxOwnerDrawn(GetLabelFromText(text), isCheckable)
+            , wxOwnerDrawn(text, isCheckable)
 #endif // owner drawn
 {
     Init();
