@@ -15,6 +15,10 @@
 #include "wx/defs.h"
 #include "X11/Xlib.h"
 
+class WXDLLEXPORT wxFont;
+class WXDLLEXPORT wxWindow;
+class WXDLLEXPORT wxSize;
+
 #include "wx/x11/privx.h"
 
 // Put any private declarations here: native Motif types may be used because

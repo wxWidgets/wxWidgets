@@ -179,8 +179,10 @@ void wxComboBox::SetValue(const wxString& value)
 {
     m_inSetValue = true;
 
+    // Fix crash; probably an OpenMotif bug
+    const char* val = value.c_str() ? value.c_str() : "";
     XtVaSetValues( GetXmText(this),
-                   XmNvalue, wxConstCast(value.c_str(), char),
+                   XmNvalue, wxConstCast(val, char),
                    NULL);
 
     m_inSetValue = false;
@@ -229,6 +231,8 @@ void wxComboBox::Clear()
 
 void wxComboBox::SetSelection (int n)
 {
+    m_inSetSelection = true;
+
 #if wxCHECK_LESSTIF()
     XmListSelectPos (GetXmList(this), n + 1, false);
     SetValue(GetString(n));
@@ -241,6 +245,8 @@ void wxComboBox::SetSelection (int n)
                    XmNselectedPosition, n,
                    NULL );
 #endif
+
+    m_inSetSelection = false;
 }
 
 int wxComboBox::GetSelection (void) const
@@ -326,6 +332,8 @@ void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
 {
     wxComboBox *item = (wxComboBox *) clientData;
 
+    if( item->m_inSetSelection ) return;
+
     switch (cbs->reason)
     {
     case XmCR_SELECT:
@@ -336,7 +344,7 @@ void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
         {
             wxCommandEvent event (wxEVT_COMMAND_COMBOBOX_SELECTED,
                                   item->GetId());
-            int idx = cbs->item_position - 1;
+            int idx = cbs->item_position;
             event.m_commandInt = idx;
             event.m_commandString = item->GetString (idx);
             if ( item->HasClientObjectData() )
@@ -345,7 +353,7 @@ void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
                 event.SetClientData( item->GetClientData(idx) );
             event.m_extraLong = true;
             event.SetEventObject(item);
-            item->ProcessCommand (event);
+            item->GetEventHandler()->ProcessEvent(event);
             break;
         }
     case XmCR_VALUE_CHANGED:
@@ -355,7 +363,7 @@ void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
             event.m_commandString = item->GetValue();
             event.m_extraLong = true;
             event.SetEventObject(item);
-            item->ProcessCommand (event);
+            item->GetEventHandler()->ProcessEvent(event);
             break;
         }
     default:

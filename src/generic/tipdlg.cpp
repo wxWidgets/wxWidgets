@@ -53,7 +53,7 @@
 // constants
 // ----------------------------------------------------------------------------
 
-static const int wxID_NEXT_TIP = -100;  // whatever
+static const int wxID_NEXT_TIP = 32000;  // whatever
 
 // ----------------------------------------------------------------------------
 // private classes

@@ -337,7 +337,8 @@ MyFrame::MyFrame()
     
     wxMenuBar *menu_bar = new wxMenuBar();
     menu_bar->Append(file_menu, _T("&File"));
-    
+
+    SetIcon(wxICON(mondrian));
     SetMenuBar( menu_bar );
     
     CreateStatusBar(2);

@@ -35,6 +35,7 @@
 #include "wx/evtloop.h"
 #include "wx/event.h"
 #include "wx/app.h"
+#include "wx/window.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint
@@ -443,7 +444,7 @@ static void wxInputCallback( XtPointer, int* fd, XtInputId* )
 
 static void wxBreakDispatch()
 {
-    char dummy;
+    char dummy = 0; // for valgrind
 
     // check if wxWakeUpIdle has already been called
     fd_set in;

@@ -33,8 +33,6 @@
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/dc.h"
-    #include "wx/app.h"
-    #include "wx/frame.h"
     #include "wx/stattext.h"
     #include "wx/statbox.h"
     #include "wx/button.h"
@@ -42,7 +40,6 @@
     #include "wx/textctrl.h"
     #include "wx/radiobox.h"
     #include "wx/filedlg.h"
-    #include "wx/choice.h"
     #include "wx/combobox.h"
     #include "wx/intl.h"
     #include "wx/sizer.h"
@@ -506,7 +503,7 @@ bool wxGenericPrintSetupDialog::TransferDataFromWindow()
         int selectedItem = m_paperTypeChoice->GetSelection();
         if (selectedItem != -1)
         {
-            wxPrintPaperType *paper = (wxPrintPaperType *)wxThePrintPaperDatabase->Nth(selectedItem)->Data();
+            wxPrintPaperType *paper = (wxPrintPaperType*)wxThePrintPaperDatabase->Item(selectedItem)->GetData();
             if (paper != NULL)
               m_printData.SetPaperId( paper->GetId());
         }
@@ -772,7 +769,7 @@ bool wxGenericPageSetupDialog::TransferDataFromWindow()
         int selectedItem = m_paperTypeChoice->GetSelection();
         if (selectedItem != -1)
         {
-            wxPrintPaperType *paper = (wxPrintPaperType *)wxThePrintPaperDatabase->Nth(selectedItem)->Data();
+            wxPrintPaperType *paper = (wxPrintPaperType*)wxThePrintPaperDatabase->Item(selectedItem)->GetData();
             if ( paper )
             {
                 m_pageData.SetPaperSize(wxSize(paper->GetWidth()/10, paper->GetHeight()/10));

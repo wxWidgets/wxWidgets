@@ -209,6 +209,7 @@ bool wxArrowButton::Create( wxSpinButton* parent, wxWindowID id,
         parentWidget,
         XmNarrowDirection, arrow_dir,
         XmNborderWidth, 0,
+        XmNshadowThickness, 0,
         NULL );
 
     XtAddCallback( (Widget) m_mainWidget,
@@ -364,7 +365,7 @@ void wxSpinButton::Increment( int delta )
 
 wxSize wxSpinButton::DoGetBestSize() const
 {
-    return IsVertical() ? wxSize( 24, 34 ) : wxSize( 34, 24 );
+    return IsVertical() ? wxSize( 20, 30 ) : wxSize( 30, 20 );
 }
 
 // Attributes

@@ -27,7 +27,7 @@ class WXDLLEXPORT wxComboBox: public wxChoice
     DECLARE_DYNAMIC_CLASS(wxComboBox)
         
 public:
-    wxComboBox() {}
+    wxComboBox() { m_inSetSelection = false; }
     ~wxComboBox();
     
     inline wxComboBox(wxWindow *parent, wxWindowID id,
@@ -39,6 +39,7 @@ public:
         const wxValidator& validator = wxDefaultValidator,
         const wxString& name = wxComboBoxNameStr)
     {
+        m_inSetSelection = false;
         Create(parent, id, value, pos, size, n, choices,
                style, validator, name);
     }
@@ -94,6 +95,10 @@ protected:
 private:
     // only implemented for native combo box
     void AdjustDropDownListSize();
+
+    // implementation detail, should really be private
+public:
+    bool m_inSetSelection;
 };
 
 #endif
