@@ -90,7 +90,10 @@ MyFrame::MyFrame(void) :
   
    wxMenuBar *menu_bar = new wxMenuBar();
    menu_bar->Append(file_menu, "File" );
+
+#ifndef __WXMSW__
    menu_bar->Show( TRUE );
+#endif // MSW
   
    SetMenuBar( menu_bar );
 
@@ -112,7 +115,7 @@ MyFrame::AddSampleText(wxLayoutList &llist)
    llist.Insert("The quick brown fox jumps over the lazy dog.");
    llist.LineBreak();
    llist.Insert("Hello ");
-   llist.Insert(new wxLayoutObjectIcon(new wxIcon(Micon_xpm,-1,-1)));
+   llist.Insert(new wxLayoutObjectIcon(new wxICON(Micon_xpm)));
    llist.LineBreak();
    llist.SetFontWeight(wxBOLD);
    llist.Insert("World! ");

@@ -1144,7 +1144,7 @@ void wxLayoutPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom,
 {
    // ugly hack to get number of pages
 #ifdef __WXMSW__
-   wxPrinterDC psdc(WXLLIST_TEMPFILE,false);
+   wxPrinterDC psdc("", "", WXLLIST_TEMPFILE,false);
 #else
    wxPostScriptDC psdc(WXLLIST_TEMPFILE,false);
 #endif

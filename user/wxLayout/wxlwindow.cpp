@@ -19,6 +19,14 @@
 #   endif // USE_PCH
 #   include "gui/wxlwindow.h"
 #else
+#   ifdef   __WXMSW__
+#       include <windows.h>
+
+#       undef FindWindow
+#       undef GetCharWidth
+#       undef StartDoc
+#   endif
+
 #   include "wxlwindow.h"
 #   define TRACEMESSAGE(x)
 #endif
