@@ -31,7 +31,7 @@ void _GSocket_GDK_Input(gpointer data,
     _GSocket_Detected_Write(socket);
 }
 
-bool _GSocket_GUI_Init(GSocket *socket)
+int _GSocket_GUI_Init(GSocket *socket)
 {
   gint *m_id;
 

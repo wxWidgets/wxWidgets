@@ -137,7 +137,7 @@ void GSocket_Cleanup(void)
 
 /* Per-socket GUI initialization / cleanup */
 
-bool _GSocket_GUI_Init(GSocket *socket)
+int _GSocket_GUI_Init(GSocket *socket)
 {
   int i;
 

@@ -28,10 +28,6 @@
 extern "C" {
 #endif
 
-#if !defined(__cplusplus)
-typedef int bool;
-#endif
-
 #ifndef TRUE
 #define TRUE 1
 #endif
@@ -49,11 +45,11 @@ struct _GSocket
   GSocketError m_error;
 
   /* Attributes */
-  bool m_non_blocking;
-  bool m_server;
-  bool m_stream;
-  bool m_oriented;
-  bool m_establishing;
+  int m_non_blocking;
+  int m_server;
+  int m_stream;
+  int m_oriented;
+  int m_establishing;
   struct timeval m_timeout;
 
   /* Callbacks */
@@ -87,7 +83,7 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size);
 
 /* Callbacks */
 
-bool _GSocket_GUI_Init(GSocket *socket);
+int  _GSocket_GUI_Init(GSocket *socket);
 void _GSocket_GUI_Destroy(GSocket *socket);
 
 LRESULT CALLBACK _GSocket_Internal_WinProc(HWND, UINT, WPARAM, LPARAM);

@@ -32,7 +32,7 @@ static void _GSocket_Motif_Output(XtPointer data, int *fid,
   _GSocket_Detected_Write(socket);
 }
 
-bool _GSocket_GUI_Init(GSocket *socket)
+int _GSocket_GUI_Init(GSocket *socket)
 {
   int *m_id;
 
