@@ -838,7 +838,6 @@ void wxWindow::WarpPointer (int x_pos, int y_pos)
 void wxWindow::OnEraseBackground(wxEraseEvent& event)
 {
     // TODO : probably we would adopt the EraseEvent structure
-    Default();
 }
 
 int wxWindow::GetScrollPos(int orient) const

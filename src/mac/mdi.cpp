@@ -241,6 +241,5 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
 // Explicitly call default scroll behaviour
 void wxMDIClientWindow::OnScroll(wxScrollEvent& event)
 {
-    Default(); // Default processing
 }
 

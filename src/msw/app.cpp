@@ -593,7 +593,17 @@ int wxEntry(WXHINSTANCE hInstance,
     // (another useful flag is _CRTDBG_DELAY_FREE_MEM_DF which doesn't free
     //  deallocated memory which may be used to simulate low-memory condition)
     wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
-
+#ifdef __MWERKS__
+#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
+    // This seems to be necessary since there are 'rogue'
+    // objects present at this point (perhaps global objects?)
+    // Setting a checkpoint will ignore them as far as the
+    // memory checking facility is concerned.
+    // Of course you may argue that memory allocated in globals should be
+    // checked, but this is a reasonable compromise.
+    wxDebugContext::SetCheckpoint();
+#endif
+#endif
     // take everything into a try-except block in release build
     // FIXME other compilers must support Win32 SEH (structured exception
     //       handling) too, just find the appropriate keyword in their docs!
