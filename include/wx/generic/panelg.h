@@ -24,48 +24,56 @@ WXDLLEXPORT_DATA(extern const char*) wxPanelNameStr;
 class WXDLLEXPORT wxPanel : public wxWindow
 {
 public:
-  wxPanel();
+    wxPanel();
+    
+    // Old-style constructor (no default values for coordinates to avoid
+    // ambiguity with the new one)
+    wxPanel(wxWindow *parent,
+            int x, int y, int width, int height,
+            long style = wxTAB_TRAVERSAL | wxNO_BORDER,
+            const wxString& name = wxPanelNameStr)
+    {
+        Create(parent, -1, wxPoint(x, y), wxSize(width, height), style, name);
+    }
+    
+    // Constructor
+    wxPanel(wxWindow *parent,
+            wxWindowID id = -1,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = wxTAB_TRAVERSAL | wxNO_BORDER,
+            const wxString& name = wxPanelNameStr)
+    {
+        Create(parent, id, pos, size, style, name);
+    }
 
-  // Old-style constructor (no default values for coordinates to avoid ambiguity
-  // with the new one)
-  wxPanel(wxWindow *parent,
-          int x, int y, int width, int height,
-          long style = wxTAB_TRAVERSAL | wxNO_BORDER,
-          const wxString& name = wxPanelNameStr)
-  {
-      Create(parent, -1, wxPoint(x, y), wxSize(width, height), style, name);
-  }
+    // Pseudo ctor
+    bool Create(wxWindow *parent, wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxTAB_TRAVERSAL | wxNO_BORDER,
+                const wxString& name = wxPanelNameStr);
+    
+    // Sends an OnInitDialog event, which in turns transfers data to
+    // to the dialog via validators.
+    virtual void InitDialog();
 
-  // Constructor
-  wxPanel(wxWindow *parent,
-          wxWindowID id = -1,
-          const wxPoint& pos = wxDefaultPosition,
-          const wxSize& size = wxDefaultSize,
-          long style = wxTAB_TRAVERSAL | wxNO_BORDER,
-          const wxString& name = wxPanelNameStr)
-  {
-      Create(parent, id, pos, size, style, name);
-  }
+    // implementation
+        // responds to colour changes
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+    
+        // process a keyboard navigation message (Tab traversal)
+    void OnNavigationKey(wxNavigationKeyEvent& event);
+    
+        // set the focus to the first child if we get it
+    void OnFocus(wxFocusEvent& event);
 
-  bool Create(wxWindow *parent, wxWindowID id,
-              const wxPoint& pos = wxDefaultPosition,
-              const wxSize& size = wxDefaultSize,
-              long style = wxTAB_TRAVERSAL | wxNO_BORDER,
-              const wxString& name = wxPanelNameStr);
+        // called by wxWindow whenever it gets focus
+    void SetLastFocus(wxWindow *focus) { m_lastFocus = focus; }
 
-  // Sends an OnInitDialog event, which in turns transfers data to
-  // to the dialog via validators.
-  virtual void InitDialog();
-
-    // Responds to colour changes
-  void OnSysColourChanged(wxSysColourChangedEvent& event);
-  
-    // Process a keyboard navigation message (Tab traversal)
-  void OnNavigationKey(wxNavigationKeyEvent& event);
-
-  // override base class virtuals
-    // we don't want focus for ourselves
-  virtual bool AcceptsFocus() const { return FALSE; }
+protected:
+    // the child which had the focus last time this panel was activated
+    wxWindow *m_lastFocus;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxPanel)

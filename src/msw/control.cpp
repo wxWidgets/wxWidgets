@@ -183,11 +183,6 @@ void wxControl::MSWOnMouseMove(int x, int y, WXUINT flags)
     Default();
 }
 
-long wxControl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
-{
-  return wxWindow::MSWWindowProc(nMsg, wParam, lParam);
-}
-
 bool wxControl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam,
                           WXLPARAM* result)
 {

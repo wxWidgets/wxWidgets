@@ -337,8 +337,8 @@ wxString wxFileType::ExpandCommand(const wxString& command,
                 case 's':
                     // '%s' expands into file name (quoted because it might
                     // contain spaces) - except if there are already quotes
-                    // there because otherwise some programs may get confused by
-                    // double double quotes
+                    // there because otherwise some programs may get confused
+                    // by double double quotes
 #if 0
                     if ( *(pc - 2) == '"' )
                         str << params.GetFileName();

@@ -709,11 +709,6 @@ void wxTextCtrl::ShowPosition(long pos)
     
     int linesToScroll = specifiedLineLineNo - currentLineLineNo;
 
-/*
-    wxDebugMsg("Caret line: %d; Current visible line: %d; Specified line: %d; lines to scroll: %d\n",
-      currentLineLineNo1, currentLineLineNo, specifiedLineLineNo, linesToScroll);
-*/
-
     if (linesToScroll != 0)
       (void)SendMessage(hWnd, EM_LINESCROLL, (WPARAM)0, (LPARAM)MAKELPARAM(linesToScroll, 0));
 }
@@ -1006,12 +1001,14 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 if ( GetEventHandler()->ProcessEvent(eventNav) )
                     return;
             }
+            break;
     }
     
     // don't just call event.Skip() because this will cause TABs and ENTERs
     // be passed upwards and we don't always want this - instead process it
     // right here
-    Default();
+    //Default();
+    event.Skip();
 }
 
 long wxTextCtrl::MSWGetDlgCode()

@@ -433,9 +433,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
   panel = new wxPanel(m_notebook);
   m_textentry = new MyTextCtrl( panel, -1, "Write text here.", wxPoint(10,10), wxSize(320,28),
-//                                wxTE_PROCESS_ENTER);
-0);
-
+                                0);//wxTE_PROCESS_ENTER);
   (*m_textentry) << " More text.";          // this text is appended
   m_textentry->SetInsertionPoint(0);
   m_textentry->WriteText("Less text.");     // this text is prepended
@@ -451,7 +449,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
   (void)new wxButton( panel, ID_MOVE_END_ZONE, "Text &zone", wxPoint(370, 60), wxSize(110, 30) );
   (void)new wxStaticBox( panel, -1, "wx&Clipboard", wxPoint(345,110), wxSize(160,100) );
   (void)new wxButton( panel, ID_COPY_TEXT, "C&opy line 1", wxPoint(375,130), wxSize(110,30) );
-  (void)new wxButton( panel, ID_PASTE_TEXT, "&Paste text", wxPoint(375,170), wxSize(110,30) );
+  (new wxButton( panel, ID_PASTE_TEXT, "&Paste text", wxPoint(375,170), wxSize(110,30) ))
+      ->SetDefault();
   m_notebook->AddPage( panel, "wxTextCtrl" , FALSE, Image_Text );
 
   wxString choices2[] =
@@ -542,7 +541,8 @@ void MyPanel::OnPasteFromClipboard( wxCommandEvent &WXUNUSED(event) )
   wxTheClipboard->Close();
 
   *m_text << "Closed the clipboard." << "\n";
-
+#else
+  wxLogError("Clipboard API is not yet implemented for this platform.");
 #endif
 }
 

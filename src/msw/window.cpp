@@ -21,7 +21,6 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include <stdio.h>
     #include "wx/setup.h"
     #include "wx/menu.h"
     #include "wx/dc.h"
@@ -36,6 +35,8 @@
     #include "wx/button.h"
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
+
+    #include <stdio.h>
 #endif
 
 #if     wxUSE_OWNER_DRAWN
@@ -887,10 +888,8 @@ LRESULT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         wnd->m_hWnd = (WXHWND) hWnd;
     }
 
-    // Stop right here if we don't have a valid handle
-    // in our wxWnd object.
+    // Stop right here if we don't have a valid handle in our wxWindow object.
     if (wnd && !wnd->m_hWnd) {
-        //    wxDebugMsg("Warning: could not find a valid handle, wx_win.cc/wxWndProc.\n");
         wnd->m_hWnd = (WXHWND) hWnd;
         long res = wnd->MSWDefWindowProc(message, wParam, lParam );
         wnd->m_hWnd = 0;
@@ -1206,27 +1205,35 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
         }
 
     case WM_KEYDOWN:
-    {
         MSWOnKeyDown((WORD) wParam, lParam);
         // we consider these message "not interesting"
         if ( wParam == VK_SHIFT || wParam == VK_CONTROL )
             return Default();
 
-        // Avoid duplicate messages to OnChar
-        if ( (wParam != VK_ESCAPE) && (wParam != VK_SPACE) &&
-            (wParam != VK_RETURN) && (wParam != VK_BACK) &&
-            (wParam != VK_TAB) )
+        // Avoid duplicate messages to OnChar for these special keys
+        switch ( wParam )
         {
-            MSWOnChar((WORD)wParam, lParam);
-            if ( ::GetKeyState(VK_CONTROL) & 0x100 )
-                return Default();
+            case VK_ESCAPE:
+            case VK_SPACE:
+            case VK_RETURN:
+            case VK_BACK:
+            case VK_TAB:
+            case VK_LEFT:
+            case VK_RIGHT:
+            case VK_DOWN:
+            case VK_UP:
+                if ( ::GetKeyState(VK_CONTROL) & 0x100 )
+                    MSWOnChar((WORD)wParam, lParam);
+                break;
+
+            default:
+                MSWOnChar((WORD)wParam, lParam);
+                if ( ::GetKeyState(VK_CONTROL) & 0x100 )
+                    return Default();
+                break;
         }
-        else if ( ::GetKeyState(VK_CONTROL) & 0x100 )
-            MSWOnChar((WORD)wParam, lParam);
-        else
-            return Default();
+
         break;
-    }
 
     case WM_KEYUP:
     {
@@ -1438,6 +1445,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
     default:
         return MSWDefWindowProc(message, wParam, lParam );
     }
+
     return 0; // Success: we processed this command.
 }
 
@@ -1704,6 +1712,13 @@ bool wxWindow::MSWOnSetFocus(WXHWND WXUNUSED(hwnd))
             ::ShowCaret((HWND) GetHWND());
     }
 
+    // panel wants to track the window which was the last to have focus in it
+    wxWindow *parent = GetParent();
+    if ( parent && parent->IsKindOf(CLASSINFO(wxPanel)) )
+    {
+        ((wxPanel *)parent)->SetLastFocus(this);
+    }
+
     wxFocusEvent event(wxEVT_SET_FOCUS, m_windowId);
     event.SetEventObject(this);
     if (!GetEventHandler()->ProcessEvent(event))
@@ -1929,22 +1944,27 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
         if ( msg->message != WM_KEYDOWN )
             bProcess = FALSE;
 
-        if ( (HIWORD(msg->lParam) & KF_ALTDOWN) == KF_ALTDOWN )
+        if ( bProcess && (HIWORD(msg->lParam) & KF_ALTDOWN) == KF_ALTDOWN )
             bProcess = FALSE;
 
-        bool bCtrlDown = (::GetKeyState(VK_CONTROL) & 0x100) != 0;
+        if ( bProcess )
+        {
+            bool bCtrlDown = (::GetKeyState(VK_CONTROL) & 0x100) != 0;
 
-        // WM_GETDLGCODE: if the control wants it for itself, don't process it
-        // (except for Ctrl-Tab/Enter combinations which are always processed)
-        LONG lDlgCode = 0;
-        if ( bProcess && !bCtrlDown ) {
-            lDlgCode = ::SendMessage(msg->hwnd, WM_GETDLGCODE, 0, 0);
-        }
+            // WM_GETDLGCODE: ask the control if it wants the key for itself,
+            // don't process it if it's the case (except for Ctrl-Tab/Enter
+            // combinations which are always processed)
+            LONG lDlgCode = 0;
+            if ( !bCtrlDown )
+            {
+                lDlgCode = ::SendMessage(msg->hwnd, WM_GETDLGCODE, 0, 0);
+            }
 
-        bool bForward = TRUE,
-             bWindowChange = FALSE;
-        if ( bProcess ) {
-            switch ( msg->wParam ) {
+            bool bForward = TRUE,
+                 bWindowChange = FALSE;
+
+            switch ( msg->wParam ) 
+            {
                 case VK_TAB:
                     if ( lDlgCode & DLGC_WANTTAB ) {
                         bProcess = FALSE;
@@ -1971,45 +1991,52 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
                     break;
 
                 case VK_RETURN:
-                    // if there is a default button, Enter should press it
-                    if ( !GetDefaultItem() ) {
-                        // but if there is not it makes sense to make it work
-                        // like a TAB
-                        if ( bCtrlDown || (lDlgCode & DLGC_WANTMESSAGE == 0) )
-                        {
-                            // nothing to do - all variables are already set
-
-                            break;
-                        }
-                        else
+                    {
+                        if ( lDlgCode & DLGC_WANTMESSAGE )
                         {
                             // control wants to process Enter itself, don't
                             // call IsDialogMessage() which would interpret
                             // it
                             return FALSE;
                         }
+
+                        wxButton *btnDefault = GetDefaultItem();
+                        if ( btnDefault && !bCtrlDown )
+                        {
+                            // if there is a default button, Enter should
+                            // press it
+                            (void)::SendMessage((HWND)btnDefault->GetHWND(),
+                                                BM_CLICK, 0, 0);
+                            return TRUE;
+                        }
+                        // else: but if there is not it makes sense to make it
+                        //       work like a TAB - and that's what we do.
+                        //       Note that Ctrl-Enter always works this way.
                     }
-                    //else: fall through and don't process the message
+                    break;
 
                 default:
                     bProcess = FALSE;
             }
+
+            if ( bProcess )
+            {
+                wxNavigationKeyEvent event;
+                event.SetDirection(bForward);
+                event.SetWindowChange(bWindowChange);
+                event.SetEventObject(this);
+
+                if ( GetEventHandler()->ProcessEvent(event) )
+                    return TRUE;
+            }
         }
 
-        if ( bProcess ) {
-            wxNavigationKeyEvent event;
-            event.SetDirection(bForward);
-            event.SetWindowChange(bWindowChange);
-            event.SetEventObject(this);
-
-            if ( GetEventHandler()->ProcessEvent(event) )
-                return TRUE;
-        }
-
-        return ::IsDialogMessage((HWND)GetHWND(), msg) != 0;
+        if ( ::IsDialogMessage((HWND)GetHWND(), msg) )
+            return TRUE;
     }
 #if wxUSE_TOOLTIPS
-    else if ( m_tooltip ) {
+    if ( m_tooltip )
+    {
         // relay mouse move events to the tooltip control
         MSG *msg = (MSG *)pMsg;
         if ( msg->message == WM_MOUSEMOVE )
@@ -2232,7 +2259,6 @@ void wxWindow::MSWOnMButtonDown(int x, int y, WXUINT flags)
 
 void wxWindow::MSWOnMButtonUp(int x, int y, WXUINT flags)
 {
-    //wxDebugMsg("MButtonUp\n") ;
     wxMouseEvent event(wxEVT_MIDDLE_UP);
 
     event.m_x = x; event.m_y = y;
@@ -3616,18 +3642,6 @@ WXDWORD wxWindow::Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D)
 
 void wxWindow::OnChar(wxKeyEvent& event)
 {
-#if 0
-    if ( event.KeyCode() == WXK_TAB ) {
-        // propagate the TABs to the parent - it's up to it to decide what
-        // to do with it
-        wxWindow *parent = GetParent();
-        if ( parent ) {
-            if ( parent->GetEventHandler()->ProcessEvent(event) )
-                return;
-        }
-    }
-#endif // 0
-
     bool isVirtual;
     int id = wxCharCodeWXToMSW((int)event.KeyCode(), &isVirtual);
 
@@ -3661,7 +3675,7 @@ bool wxWindow::TransferDataToWindow()
         if ( child->GetValidator() && /* child->GetValidator()->Ok() && */
             !child->GetValidator()->TransferToWindow() )
         {
-            wxMessageBox("Application Error", "Could not transfer data to window", wxOK|wxICON_EXCLAMATION);
+            wxLogError(_("Could not transfer data to window"));
             return FALSE;
         }
 
@@ -4043,16 +4057,17 @@ void wxWindow::SetConstraintSizes(bool recurse)
             winName = "unnamed";
         else
             winName = GetName();
-        wxDebugMsg("Constraint(s) not satisfied for window of type %s, name %s:\n", (const char *)windowClass, (const char *)winName);
+        wxLogDebug("Constraint(s) not satisfied for window of type %s, name %s:",
+                    (const char *)windowClass, (const char *)winName);
         if (!constr->left.GetDone())
-            wxDebugMsg("  unsatisfied 'left' constraint.\n");
+            wxLogDebug("  unsatisfied 'left' constraint.");
         if (!constr->right.GetDone())
-            wxDebugMsg("  unsatisfied 'right' constraint.\n");
+            wxLogDebug("  unsatisfied 'right' constraint.");
         if (!constr->width.GetDone())
-            wxDebugMsg("  unsatisfied 'width' constraint.\n");
+            wxLogDebug("  unsatisfied 'width' constraint.");
         if (!constr->height.GetDone())
-            wxDebugMsg("  unsatisfied 'height' constraint.\n");
-        wxDebugMsg("Please check constraints: try adding AsIs() constraints.\n");
+            wxLogDebug("  unsatisfied 'height' constraint.");
+        wxLogDebug("Please check constraints: try adding AsIs() constraints.\n");
     }
 
     if (recurse)

@@ -34,6 +34,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPanel, wxWindow)
 
 BEGIN_EVENT_TABLE(wxPanel, wxWindow)
   EVT_SYS_COLOUR_CHANGED(wxPanel::OnSysColourChanged)
+  EVT_SET_FOCUS(wxPanel::OnFocus)
   EVT_NAVIGATION_KEY(wxPanel::OnNavigationKey)
 END_EVENT_TABLE()
 
@@ -41,6 +42,7 @@ END_EVENT_TABLE()
 
 wxPanel::wxPanel()
 {
+    m_lastFocus = NULL;
 }
 
 bool wxPanel::Create(wxWindow *parent, wxWindowID id,
@@ -49,6 +51,8 @@ bool wxPanel::Create(wxWindow *parent, wxWindowID id,
                      long style,
                      const wxString& name)
 {
+    m_lastFocus = NULL;
+
     bool ret = wxWindow::Create(parent, id, pos, size, style, name);
 
     if ( ret )
@@ -116,7 +120,10 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
     {
         if (!node)
         {
-#if 0
+//#if 0 // FIXME seems to enter in an infinite loop - how is this possible?
+            // we arrived at the last/first of our children - but may be this
+            // panel is inside another panel, so make focus go to the next/prev
+            // control in the parent (if we have one)
             if (GetParent() != NULL)
             {
                 wxNavigationKeyEvent new_event;
@@ -129,10 +136,12 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
                     return;
                 }
             }
-#endif // 0
+//#endif // 0
 
             node = event.GetDirection() ? GetChildren().First()
                                         : GetChildren().Last();
+
+            continue;
         }
 
         wxWindow *child = (wxWindow *)node->Data();
@@ -152,3 +161,10 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
     event.Skip();
 }
 
+void wxPanel::OnFocus(wxFocusEvent& event)
+{
+    if ( m_lastFocus )
+        m_lastFocus->SetFocus();
+    else
+        event.Skip();
+}
