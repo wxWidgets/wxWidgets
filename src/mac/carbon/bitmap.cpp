@@ -967,12 +967,12 @@ wxImage wxBitmap::ConvertToImage() const
                 {
                     if ( r == MASK_RED && g == MASK_GREEN && b == MASK_BLUE )
                         b = MASK_BLUE_REPLACEMENT ;
-                }
-                else
-                {
-                    r = MASK_RED ;
-                    g = MASK_GREEN ;
-                    b = MASK_BLUE ;
+                    else
+                    {
+                        r = MASK_RED ;
+                        g = MASK_GREEN ;
+                        b = MASK_BLUE ;
+                    }
                 }
             }
             else if ( hasAlpha )
