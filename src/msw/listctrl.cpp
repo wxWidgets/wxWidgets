@@ -1498,13 +1498,15 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                      !(wxIsShiftDown() || wxIsCtrlDown()) )
                 {
                     eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
-                    event.m_itemIndex = lItem;
                 }
                 else
                 {
                     eventType = wxEVT_COMMAND_LIST_KEY_DOWN;
                     event.m_code = wxCharCodeMSWToWX(wVKey);
                 }
+
+                event.m_itemIndex =
+                event.m_item.m_itemId = lItem;
 
                 if ( lItem != -1 )
                 {
