@@ -269,7 +269,7 @@ void wxDrawWindowOnDC(wxWindow* window, const wxDC& dc, int method)
             if ( !s_triedToLoad )
             {
 
-                s_triedToLoad = True;
+                s_triedToLoad = true;
                 wxDynamicLibrary dllUser32(_T("user32.dll"));
                 if ( dllUser32.IsLoaded() )
                 {
