@@ -30,6 +30,8 @@ LIB_CPP_SRC=\
  ../common/helpbase.cpp \
  ../common/intl.cpp \
  ../common/image.cpp \
+ ../common/imagjpeg.cpp \
+ ../common/imagpng.cpp \
  ../common/ipcbase.cpp \
  ../common/layout.cpp \
  ../common/list.cpp \

@@ -241,6 +241,14 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 
 bool MyApp::OnInit()
 {
+#if wxUSE_LIBPNG
+  wxImage::AddHandler( new wxPNGHandler );
+#endif
+
+#if wxUSE_LIBJPEG
+  wxImage::AddHandler( new wxJPEGHandler );
+#endif
+
   wxFrame *frame = new MyFrame();
   frame->Show( TRUE );
 

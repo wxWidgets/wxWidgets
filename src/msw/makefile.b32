@@ -110,6 +110,8 @@ COMMONOBJS = \
   $(MSWDIR)\gdicmn.obj \
   $(MSWDIR)\helpbase.obj \
   $(MSWDIR)\image.obj \
+  $(MSWDIR)\imagpng.obj \
+  $(MSWDIR)\imagjpeg.obj \
   $(MSWDIR)\intl.obj \
   $(MSWDIR)\ipcbase.obj \
   $(MSWDIR)\log.obj \
@@ -504,6 +506,12 @@ $(MSWDIR)\gdicmn.obj:     $(COMMDIR)\gdicmn.$(SRCSUFF)
 
 $(MSWDIR)\image.obj:     $(COMMDIR)\image.$(SRCSUFF)
 
+$(MSWDIR)\imagpng.obj:     $(COMMDIR)\imagpng.$(SRCSUFF)
+
+$(MSWDIR)\imagjpeg.obj:     $(COMMDIR)\imagjpeg.$(SRCSUFF)
+
+$(MSWDIR)\image.obj:     $(COMMDIR)\image.$(SRCSUFF)
+
 $(MSWDIR)\intl.obj:     $(COMMDIR)\intl.$(SRCSUFF)
 
 $(MSWDIR)\ipcbase.obj:     $(COMMDIR)\ipcbase.$(SRCSUFF)
@@ -699,7 +707,7 @@ $(CFG): makefile.b32
 -WE
 -tWM
 
--I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/png;$(WXDIR)/src/zlib;$(WXDIR)/src/xpm
+-I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/png;$(WXDIR)/src/jpeg;$(WXDIR)/src/zlib;$(WXDIR)/src/xpm
 -I$(WXDIR)\include\wx\msw\gnuwin32
 
 -L$(BCCDIR)\lib

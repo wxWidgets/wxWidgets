@@ -62,6 +62,8 @@ COMMONOBJS = cmndata.obj &
   framecmn.obj &
   gdicmn.obj &
   image.obj &
+  imagpng.obj &
+  imagjpeg.obj &
   intl.obj &
   ipcbase.obj &
   helpbase.obj &
@@ -556,6 +558,12 @@ gdicmn.obj:     $(COMMDIR)\gdicmn.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 image.obj:     $(COMMDIR)\image.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+imagpng.obj:     $(COMMDIR)\imagpng.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+imagjpeg.obj:     $(COMMDIR)\imagjpeg.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 intl.obj:     $(COMMDIR)\intl.cpp

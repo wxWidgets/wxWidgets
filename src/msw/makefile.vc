@@ -112,6 +112,8 @@ COMMONOBJS = \
   ..\common\$D\ftp.obj \
   ..\common\$D\gdicmn.obj \
   ..\common\$D\image.obj \
+  ..\common\$D\imagjpeg.obj \
+  ..\common\$D\imagpng.obj \
   ..\common\$D\intl.obj \
   ..\common\$D\ipcbase.obj \
   ..\common\$D\helpbase.obj \

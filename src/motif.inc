@@ -25,6 +25,8 @@ LIB_CPP_SRC=\
  common/hash.cpp \
  common/helpbase.cpp \
  common/image.cpp \
+ common/imagjpeg.cpp \
+ common/imagpng.cpp \
  common/intl.cpp \
  common/ipcbase.cpp \
  common/layout.cpp \
