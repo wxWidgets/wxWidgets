@@ -47,6 +47,7 @@
 
 #include <oleauto.h>
 #include <oleacc.h>
+#include <winable.h>
 
 #include "wx/msw/ole/oleutils.h"
 
