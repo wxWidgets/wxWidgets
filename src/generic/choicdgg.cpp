@@ -167,6 +167,23 @@ int wxGetSingleChoiceIndex( const wxString& message,
     return choice;
 }
 
+int wxGetSingleChoiceIndex( const wxString& message,
+                            const wxString& caption,
+                            const wxArrayString& aChoices,
+                            wxWindow *parent,
+                            int x, int y,
+                            bool centre,
+                            int width, int height)
+{
+    wxString *choices;
+    int n = ConvertWXArrayToC(aChoices, &choices);
+    int res = wxGetSingleChoiceIndex(message, caption, n, choices, parent,
+                                     x, y, centre, width, height);
+    delete [] choices;
+
+    return res;
+}
+
 #ifdef WXWIN_COMPATIBILITY_2
 // Overloaded for backward compatibility
 int wxGetSingleChoiceIndex( const wxString& message,
