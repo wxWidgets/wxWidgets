@@ -40,6 +40,7 @@
     
     <template id="wx_sample" template="wx_util">
         <if cond="FORMAT=='autoconf'">
+            <wx-mac-app-bundle/>
             <ldflags>$(SAMPLES_RPATH_FLAG)</ldflags>
             <__command>$(LF)$(SAMPLES_RPATH_POSTLINK)</__command>
         </if>
@@ -77,5 +78,9 @@
         </define-tag>
         -->
     </define-rule>
+
+    <if cond="FORMAT=='autoconf'">
+        <include file="mac_bundles.bkl"/>
+    </if>
 
 </makefile>

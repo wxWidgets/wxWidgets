@@ -123,15 +123,17 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_PLATFORM_MAC_1@__minimal___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -a C minimal$(EXEEXT)
 @COND_PLATFORM_WIN32_1@__minimal___win32rc = minimal_sample_rc.o
+@COND_PLATFORM_MACOSX_1@__minimal_bundle___depname = minimal_bundle
 
 ### Targets: ###
 
-all: minimal$(EXEEXT)
+all: minimal$(EXEEXT) $(__minimal_bundle___depname)
 
 clean: 
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
 	rm -f minimal$(EXEEXT)
+	rm -rf minimal.app
 
 distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
@@ -146,6 +148,29 @@ minimal$(EXEEXT): $(MINIMAL_OBJECTS) $(__minimal___win32rc)
 	$(__minimal___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
+minimal.app/Contents: minimal$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+	mkdir -p minimal.app/Contents
+	mkdir -p minimal.app/Contents/MacOS
+	mkdir -p minimal.app/Contents/Resources
+	
+	
+	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
+	-e "s/EXECUTABLE/minimal/" \
+	-e "s/VERSION/2.5.0/" \
+	$(top_srcdir)/src/mac/Info.plist.in >minimal.app/Contents/Info.plist
+	
+	
+	echo -n "APPL????" >minimal.app/Contents/PkgInfo
+	
+	
+	ln -f minimal$(EXEEXT) minimal.app/Contents/MacOS/minimal
+	
+	
+	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc minimal.app/Contents/Resources/minimal.rsrc
+	ln -f $(top_srcdir)/src/mac/wxmac.icns minimal.app/Contents/Resources/wxmac.icns
+
+@COND_PLATFORM_MACOSX_1@minimal_bundle: minimal.app/Contents
+
 minimal_minimal.o: $(srcdir)/minimal.cpp
 	$(CXXC) -c -o $@ $(MINIMAL_CXXFLAGS) $<
 
@@ -158,4 +183,4 @@ uninstall:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all clean distclean install uninstall
+.PHONY: all clean distclean install minimal_bundle uninstall
