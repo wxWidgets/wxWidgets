@@ -339,7 +339,7 @@ void Edit::OnMarginClick (wxStyledTextEvent &event) {
 }
 
 void Edit::OnCharAdded (wxStyledTextEvent &event) {
-    char chr = event.GetKey();
+    char chr = (char)event.GetKey();
     int currentLine = GetCurrentLine();
     // Change this if support for mac files with \r is needed
     if (chr == '\n') {

@@ -85,7 +85,9 @@ void wxCaptionBar::ApplyCaptionStyle(const wxCaptionBarStyle &cbstyle, bool appl
         {
             // make the second colour slightly darker then the background
             wxColour col = GetParent()->GetBackgroundColour();
-            col.Set((col.Red() >> 1) + 20, (col.Green() >> 1) + 20, (col.Blue() >> 1) + 20);
+            col.Set((unsigned char)((col.Red() >> 1) + 20),
+                    (unsigned char)((col.Green() >> 1) + 20),
+                    (unsigned char)((col.Blue() >> 1) + 20));
             newstyle.SetSecondColour(col);
         }
 
@@ -241,7 +243,7 @@ void wxCaptionBar::DrawVerticalGradient(wxDC &dc, const wxRect &rect )
     {
         currCol.Set(
             (unsigned char)(col1.Red() + rf),
-            (unsigned char)(col1.Green() + gf), 
+            (unsigned char)(col1.Green() + gf),
             (unsigned char)(col1.Blue() + bf)
         );
         dc.SetBrush( wxBrush( currCol, wxSOLID ) );
@@ -272,8 +274,8 @@ void wxCaptionBar::DrawHorizontalGradient(wxDC &dc, const wxRect &rect )
     for(int x = rect.x; x < rect.x + rect.width; x++)
     {
         currCol.Set(
-            (unsigned char)(col1.Red() + rf), 
-            (unsigned char)(col1.Green() + gf), 
+            (unsigned char)(col1.Red() + rf),
+            (unsigned char)(col1.Green() + gf),
             (unsigned char)(col1.Blue() + bf)
         );
         dc.SetBrush( wxBrush( currCol, wxSOLID ) );
