@@ -1490,12 +1490,12 @@ void wxGenericTreeCtrl::SelectItem(const wxTreeItemId& itemId,
     {
         if (!IsExpanded(parent))
             Expand( parent );
-            
+
         parent = GetParent( parent );
     }
-    
+
     EnsureVisible( itemId );
-    
+
     // ctrl press
     if (unselect_others)
     {
@@ -1787,8 +1787,11 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     int total_h = GetLineHeight(item);
 
-    if (item->IsSelected())
+    bool paintBg = item->IsSelected() && m_hasFocus;
+    if ( paintBg )
+    {
         dc.SetBrush(*m_hilightBrush);
+    }
     else
     {
         wxColour colBg;
@@ -1799,21 +1802,20 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         dc.SetBrush(wxBrush(colBg, wxSOLID));
     }
 
-    int offset = 0;
-    if (HasFlag(wxTR_ROW_LINES)) offset = 1;
+    int offset = HasFlag(wxTR_ROW_LINES) ? 1 : 0;
 
-    if (item->IsSelected() && image != NO_IMAGE)
+    if ( paintBg && image != NO_IMAGE)
     {
         // If it's selected, and there's an image, then we should
         // take care to leave the area under the image painted in the
         // background colour.
-        dc.DrawRectangle( item->GetX() + image_w - 2, item->GetY()+offset, 
-        				  item->GetWidth() - image_w + 2, total_h-offset );
+        dc.DrawRectangle( item->GetX() + image_w - 2, item->GetY()+offset,
+                          item->GetWidth() - image_w + 2, total_h-offset );
     }
     else
     {
-        dc.DrawRectangle( item->GetX()-2, item->GetY()+offset, 
-        				  item->GetWidth()+2, total_h-offset );
+        dc.DrawRectangle( item->GetX()-2, item->GetY()+offset,
+                          item->GetWidth()+2, total_h-offset );
     }
 
     if ( image != NO_IMAGE )
@@ -1860,16 +1862,16 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
         int endX = x-5;
 
         if (!item->HasChildren()) endX += 20;
-        
+
         if (HasFlag( wxTR_MAC_BUTTONS ))
-        {        	
+        {
             if (item->HasPlus())
             {
                 dc.SetPen( *wxBLACK_PEN );
                 dc.SetBrush( *m_hilightBrush );
-                
+
                 wxPoint button[3];
-                
+
                 if (item->IsExpanded())
                 {
                     button[0].x = x-5;
@@ -1889,7 +1891,7 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
                     button[2].x = x+3;
                 }
                 dc.DrawPolygon( 3, button );
-                
+
                 dc.SetPen( m_dottedPen );
             }
         }
@@ -1919,16 +1921,18 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
 
         if ( item->IsSelected() )
         {
-            colText = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
+            pen = wxBLACK_PEN;
+
+            if ( m_hasFocus )
+            {
+                colText = wxSystemSettings::
+                            GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
+            }
 
 #ifdef __WXMAC__
-	        // no rect outline, we already have the background color
+            // no rect outline, we already have the background color
             pen = wxTRANSPARENT_PEN;
-#else
-            if ( m_hasFocus )
-               pen = wxBLACK_PEN;
 #endif
-
         }
         else
         {
@@ -1948,11 +1952,11 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
 
         if (HasFlag( wxTR_ROW_LINES ))
         {
-        	dc.SetPen( *wxWHITE_PEN );
-        	dc.DrawLine( 0, oldY, 10000, oldY );
-        	dc.DrawLine( 0, oldY + GetLineHeight(item), 10000, oldY + GetLineHeight(item) );
+            dc.SetPen( *wxWHITE_PEN );
+            dc.DrawLine( 0, oldY, 10000, oldY );
+            dc.DrawLine( 0, oldY + GetLineHeight(item), 10000, oldY + GetLineHeight(item) );
         }
-        
+
         // restore DC objects
         dc.SetBrush( *wxWHITE_BRUSH );
         dc.SetPen( m_dottedPen );
@@ -2075,14 +2079,16 @@ void wxGenericTreeCtrl::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
 {
     m_hasFocus = TRUE;
 
-    if (m_current) RefreshLine( m_current );
+    if (m_current)
+        RefreshLine( m_current );
 }
 
 void wxGenericTreeCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 {
     m_hasFocus = FALSE;
 
-    if (m_current) RefreshLine( m_current );
+    if (m_current)
+        RefreshLine( m_current );
 }
 
 void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
