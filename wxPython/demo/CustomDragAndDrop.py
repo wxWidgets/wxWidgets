@@ -63,16 +63,17 @@ class DoodlePad(wx.Window):
 
 
     def OnLeftUp(self, event):
-        self.lines.append(self.curLine)
-        self.curLine = []
-        self.ReleaseMouse()
+        if self.HasCapture():
+            self.lines.append(self.curLine)
+            self.curLine = []
+            self.ReleaseMouse()
 
     def OnRightUp(self, event):
         self.lines = []
         self.Refresh()
 
     def OnMotion(self, event):
-        if event.Dragging() and not self.mode == "Drag":
+        if self.HasCapture() and event.Dragging() and not self.mode == "Drag":
             dc = wx.ClientDC(self)
             dc.BeginDrawing()
             dc.SetPen(wx.Pen(wx.BLUE, 3))
