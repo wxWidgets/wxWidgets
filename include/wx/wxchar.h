@@ -53,7 +53,7 @@
         #else
             #define wxUSE_WCHAR_T 0
         #endif
-    #elif defined(__GNUWIN32__) && !defined(__MINGW32__) // Cygwin (not Mingw32) doesn't have wcslen.h, needed in buffer.h
+    #elif defined(__GNUWIN32__) && !defined(__MINGW32__)
         #define wxUSE_WCHAR_T 0
     #elif defined(__WATCOMC__)
         #define wxUSE_WCHAR_T 0
@@ -80,13 +80,6 @@
 // Required for wxPrintf() etc
 #include <stdarg.h>
 
-#if defined(__CYGWIN__)
-    #ifndef HAVE_WCSLEN
-        #define HAVE_WCSLEN
-    #endif // !HAVE_WCSLEN
-    #include <stddef.h>
-#endif
-
 // non Unix compilers which do have wchar.h (but not tchar.h which is included
 // below and which includes wchar.h anyhow)
 #if defined(__MWERKS__) || defined(__VISAGECPP__)
@@ -97,15 +90,13 @@
 
 #if wxUSE_WCHAR_T
     #ifdef HAVE_WCHAR_H
-        // include wchar.h to get wcslen() declaration used by wx/buffer.h
         #include <wchar.h>
     #elif defined(HAVE_WCSTR_H)
-        // old compilers have wcslen() here
+        // old compilers have relevant declarations here
         #include <wcstr.h>
     #elif defined(__FreeBSD__) || defined(__DARWIN__) || defined(__EMX__)
-        // include stdlib.h for wchar_t, wcslen is provided in wxchar.cpp
+        // include stdlib.h for wchar_t
         #include <stdlib.h>
-        size_t WXDLLEXPORT wcslen(const wchar_t *s);
     #endif // HAVE_WCHAR_H
 #endif // wxUSE_WCHAR_T
 
@@ -375,7 +366,7 @@
             #define  wxStrcoll   wcscoll
             #define  wxStrcpy    wcscpy
             #define  wxStrcspn   wcscspn
-            #define  wxStrlen_   wcslen // used in wxStrlen inline function
+            #define  wxStrlen_   wxWcslen // wxStrlen_() is used in wxStrlen()
             #define  wxStrncat   wcsncat
             #define  wxStrncmp   wcsncmp
             #define  wxStrncpy   wcsncpy
