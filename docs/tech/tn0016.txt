@@ -217,8 +217,8 @@ g) Update defs.h to define WXMAKINGDLL_FOO if WXMAKINGDLL is defined (add
         #endif
    Use WXDLLIMPEXP_FOO when declaring wxFoo classes and functions.
 
-i) Add information about wxFoo to the manual
-   FIXME - where exactly
+i) Add information about wxFoo to the manual ("Libraries list" section
+   in libs.tex).
 
 
 === EOF ===
