@@ -1429,7 +1429,7 @@
     src/cocoa/checkbox.mm
     src/cocoa/checklst.mm
     src/cocoa/choice.mm
-    src/cocoa/colour.cpp
+    src/cocoa/colour.mm
     src/cocoa/control.mm
     src/cocoa/cursor.mm
     src/cocoa/data.cpp
@@ -1452,6 +1452,7 @@
     src/cocoa/radiobut.mm
     src/cocoa/region.cpp
     src/cocoa/settings.cpp
+    src/cocoa/slider.mm
     src/cocoa/statbmp.mm
     src/cocoa/statbox.mm
     src/cocoa/statline2.mm
