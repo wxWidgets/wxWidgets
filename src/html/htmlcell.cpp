@@ -775,7 +775,7 @@ void wxHtmlContainerCell::Layout(int w)
                 // between two cells separated by, e.g. font change, cell which
                 // is wrong
 
-                const int step = s_width - xpos;
+                int step = s_width - xpos;
                 if ( step > 0 )
                 {
                     // first count the cells which will get extra space
@@ -818,8 +818,14 @@ void wxHtmlContainerCell::Layout(int w)
                             }
                         }
                     }
+                    else
+                    {
+                        // this will cause the code to enter "else branch" below:
+                        step = 0;
+                    }
                 }
-                else // no extra space to distribute
+                // else branch:
+                if ( step <= 0 ) // no extra space to distribute
                 {
                     // just set the indent properly
                     while (line != cell)
