@@ -176,11 +176,20 @@
 
 #ifdef __cplusplus
     // define boolean constants: don't use true/false here as not all compilers
-    // support them
-    #undef TRUE
-    #undef FALSE
-    #define TRUE  ((bool)1)
-    #define FALSE ((bool)0)
+    // support them but also redefine TRUE which could have been defined as 1
+    // by previous headers: this would be incorrect as our TRUE is supposed to
+    // be of type bool, just like true, not int
+    //
+    // however if the user code absolutely needs TRUE to be defined in its own
+    // way, it can predefine WX_TRUE_DEFINED to prevent the redefinition here
+    #ifdef TRUE
+        #ifndef WX_TRUE_DEFINED
+            #undef TRUE
+            #undef FALSE
+            #define TRUE  ((bool)1)
+            #define FALSE ((bool)0)
+        #endif
+    #endif
 #else // !__cplusplus
     // the definitions above don't work for C sources
     #ifndef TRUE
