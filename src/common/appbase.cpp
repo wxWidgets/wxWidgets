@@ -89,7 +89,7 @@
 // global vars
 // ----------------------------------------------------------------------------
 
-wxApp *wxTheApp = NULL;
+wxAppConsole *wxAppConsole::ms_appInstance = NULL;
 
 wxAppInitializerFunction wxAppConsole::ms_appInitFn = NULL;
 
@@ -105,7 +105,7 @@ wxAppConsole::wxAppConsole()
 {
     m_traits = NULL;
 
-    wxTheApp = (wxApp *)this;
+    ms_appInstance = this;
 
 #ifdef __WXDEBUG__
     SetTraceMasks();

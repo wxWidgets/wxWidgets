@@ -275,6 +275,10 @@ public:
     int      argc;
     wxChar **argv;
 
+    // the one and only global application object (must be public for backwards
+    // compatibility as assigning to wxTheApp should work)
+    static wxAppConsole *ms_appInstance;
+
 protected:
     // the function which creates the traits object when GetTraits() needs it
     // for the first time
@@ -283,6 +287,7 @@ protected:
 
     // function used for dynamic wxApp creation
     static wxAppInitializerFunction ms_appInitFn;
+
 
     // application info (must be set from the user code)
     wxString m_vendorName,      // vendor name (ACME Inc)
@@ -512,6 +517,7 @@ protected:
         #include "wx/os2/app.h"
     #endif
 #else // !GUI
+    // allow using just wxApp (instead of wxAppConsole) in console programs
     typedef wxAppConsole wxApp;
 #endif // GUI/!GUI
 
@@ -519,11 +525,16 @@ protected:
 // the global data
 // ----------------------------------------------------------------------------
 
-// the one and only application object - use of wxTheApp in application code
-// is discouraged, consider using DECLARE_APP() after which you may call
-// wxGetApp() which will return the object of the correct type (i.e. MyApp and
-// not wxApp)
-WXDLLIMPEXP_DATA_BASE(extern wxApp*) wxTheApp;
+// for compatibility, we define this macro to access the global application
+// object of type wxApp
+//
+// note that instead of using of wxTheApp in application code you should
+// consider using DECLARE_APP() after which you may call wxGetApp() which will
+// return the object of the correct type (i.e. MyApp and not wxApp)
+//
+// the cast is safe as in GUI build we only use wxApp, not wxAppConsole, and in
+// console mode it does nothing at all
+#define wxTheApp ((wxApp *)wxApp::ms_appInstance)
 
 // ----------------------------------------------------------------------------
 // global functions

@@ -67,7 +67,7 @@ public:
 };
 
 // we need a special kind of auto pointer to wxApp which not only deletes the
-// pointer it holds in its dtor but also resets wxTheApp
+// pointer it holds in its dtor but also resets the global application pointer
 wxDECLARE_SCOPED_PTR(wxApp, wxAppPtrBase);
 wxDEFINE_SCOPED_PTR(wxApp, wxAppPtrBase);
 
@@ -245,11 +245,7 @@ bool wxEntryStart(int& argc, wxChar **argv)
         if ( fnCreate )
         {
             // he did, try to create the custom wxApp object
-            // 
-            // NB: cast is needed because for the backwards-compatibility
-            //     reasons wxTheApp is really a wxApp and not just 
-            //     wxAppConsole...
-            app.Set((wxApp*)(*fnCreate)());
+            app.Set((*fnCreate)());
         }
     }
 
@@ -257,25 +253,22 @@ bool wxEntryStart(int& argc, wxChar **argv)
     {
         // either IMPLEMENT_APP() was not used at all or it failed -- in any
         // case we still need something
-        //
-        // NB: cast is needed because for the backwards-compatibility reasons
-        //     wxTheApp is really a wxApp and not just wxAppConsole...
-        app.Set((wxApp *)new wxDummyConsoleApp);
+        app.Set(new wxDummyConsoleApp);
     }
 
 
     // wxApp initialization: this can be customized
     // --------------------------------------------
 
-    if ( !wxTheApp->Initialize(argc, argv) )
+    if ( !app->Initialize(argc, argv) )
     {
         return false;
     }
 
-    wxCallAppCleanup callAppCleanup(wxTheApp);
+    wxCallAppCleanup callAppCleanup(app.get());
 
     // for compatibility call the old initialization function too
-    if ( !wxTheApp->OnInitGui() )
+    if ( !app->OnInitGui() )
         return false;
 
 
