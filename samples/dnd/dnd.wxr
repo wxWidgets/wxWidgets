@@ -1,0 +1,36 @@
+static char *dialogShape = "dialog(name = 'dialogShape',\
+  style = 'wxRAISED_BORDER | wxCAPTION | wxTHICK_FRAME | wxSYSTEM_MENU',\
+  title = 'Choose Shape',\
+  id = 6001,\
+  x = 10, y = 10, width = 224, height = 135,\
+  background_colour = 'C0C0C0',\
+  use_dialog_units = 1,\
+  use_system_defaults = 0,\
+  font = [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif'],\
+  control = [6002, wxStaticBox, '&Attributes', '0', 'staticbox2', 4, 50, 216, 54,\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [5100, wxButton, 'Ok', '0', 'button3', 124, 118, 45, 11, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [5101, wxButton, 'Cancel', '0', 'button4', 176, 118, 45, 11, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6005, wxRadioBox, '&Shape', 'wxRA_SPECIFY_COLS', 'radio', 4, 4, 216, 25, ['None', 'Triangle', 'Rectangle', 'Ellipse'], 4,\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6006, wxStaticText, 'Position &X:', '0', 'statictext6', 8, 64, 56, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6008, wxTextCtrl, '', '0', 'textX', 46, 62, 33, 11, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6009, wxStaticText, '&Y:', '0', 'statictext9', 92, 63, 15, 6, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6010, wxTextCtrl, '', '0', 'textY', 104, 61, 32, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6011, wxStaticText, 'Size &width:', '0', 'statictext11', 9, 87, 15, 6, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6012, wxTextCtrl, '', '0', 'textW', 46, 85, 32, 11, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6013, wxStaticText, '&height:', '0', 'statictext13', 82, 88, 15, 6, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6014, wxTextCtrl, '', '0', 'textH', 104, 84, 32, 11, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [1001, wxButton, '&Colour...', '0', 'button15', 153, 73, 45, 11, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']]).";
+
