@@ -1759,51 +1759,26 @@ case "${host}" in
         AC_CHECK_SIZEOF(long long, 0)
 esac
 
-dnl we have to do it ourselves because SGI/Irix's stdio.h does not include
-dnl wchar_t and AC_CHECK_SIZEOF only includes stdio.h
-dnl Mac OS X does not provide wchar.h and wchar_t is defined by stdlib.h (GD)
-AC_CACHE_CHECK([size of wchar_t], wx_cv_sizeof_wchar_t,
-[
-    AC_TRY_RUN(
-        [
-            /* DJGPP only has fake wchar_t: */
-            #ifdef __DJGPP__
-            #  error "fake wchar_t"
-            #endif
-            #ifdef HAVE_WCHAR_H
-            #  ifdef __CYGWIN__
-            #    include <stddef.h>
-            #  endif
-            #  include <wchar.h>
-            #endif
-            #ifdef HAVE_STDLIB_H
-            #  include <stdlib.h>
-            #endif
-            #include <stdio.h>
-            int main()
-            {
-                FILE *f=fopen("conftestval", "w");
-                if (!f) exit(1);
-                fprintf(f, "%i", sizeof(wchar_t));
-                exit(0);
-            }
-        ],
-        wx_cv_sizeof_wchar_t=`cat conftestval`,
-        wx_cv_sizeof_wchar_t=0,
-        [
-            case "${host}" in
-              *-pc-msdosdjgpp )
-                wx_cv_sizeof_wchar_t=0
-                ;;
-              * )
-                wx_cv_sizeof_wchar_t=4
-                ;;
-            esac
-        ]
-    )
-])
-
-AC_DEFINE_UNQUOTED(SIZEOF_WCHAR_T, $wx_cv_sizeof_wchar_t)
+dnl SGI/Irix's stdio.h does not include wchar_t. Mac OS X does not provide
+dnl wchar.h and wchar_t is defined by stdlib.h (GD)
+AC_CHECK_SIZEOF(wchar_t, 0,
+    [
+        /* DJGPP only has fake wchar_t: */
+        #ifdef __DJGPP__
+        #  error "fake wchar_t"
+        #endif
+        #ifdef HAVE_WCHAR_H
+        #  ifdef __CYGWIN__
+        #    include <stddef.h>
+        #  endif
+        #  include <wchar.h>
+        #endif
+        #ifdef HAVE_STDLIB_H
+        #  include <stdlib.h>
+        #endif
+        #include <stdio.h>
+    ]
+)
 
 dnl checks needed to define wxVaCopy
 AC_CACHE_CHECK([for va_copy],
@@ -3679,7 +3654,7 @@ dnl Check for functions
 dnl ---------------------------------------------------------------------------
 
 dnl don't check for wchar_t functions if we haven't got wchar_t itself
-if test "$wx_cv_sizeof_wchar_t" != "0"; then
+if test "$ac_cv_sizeof_wchar_t" != "0"; then
     AC_DEFINE(wxUSE_WCHAR_T)
 
     dnl check for wcslen in all possible places
