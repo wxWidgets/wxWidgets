@@ -287,6 +287,12 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
 #define except(x) catch(...)
 #endif
 
+// where should i put this? we need to make sure of this as it breaks
+// the <iostream> code.
+#if !wxUSE_IOSTREAMH && WXDEBUG
+#undef WXDEBUG
+#endif
+
 // Callback function type definition
 typedef void (*wxFunction) (wxObject&, wxEvent&);
 
