@@ -345,7 +345,15 @@ if [ $KIND = daily ]; then
     # only N days worth
 
     # TODO:  Send email to wxPython-dev?
-    cat <<EOF  | mail -s "New test build uploaded" robin@alldunn.com
+    DATE=`date`
+    TO=wxPython-dev@lists.wxwidgets.org
+
+    cat <<EOF  | /usr/sbin/sendmail  $TO
+From: R'bot <rbot@wxpython.org>
+To: $TO
+Subject: New test build uploaded
+Date: $DATE
+
 Hi,
 
 A new test build of wxPython has been uploaded to starship.  
@@ -356,8 +364,8 @@ A new test build of wxPython has been uploaded to starship.
 
 Have fun!
 R'bot
-EOF
 
+EOF
     exit 0
 fi
 
