@@ -222,13 +222,16 @@ wxFileConfig::wxFileConfig(const wxString& strLocal, const wxString& strGlobal)
   // if the path is not absolute, prepend the standard directory to it
 
   if ( !strLocal.IsEmpty() && !wxIsPathSeparator(strLocal[0u]) )
-    m_strLocalFile = GetLocalDir();
-  m_strLocalFile << strLocal;
-
+  {
+     m_strLocalFile = GetLocalDir();
+     m_strLocalFile << strLocal;
+  }
+  
   if ( !strGlobal.IsEmpty() && !wxIsPathSeparator(strGlobal[0u]) )
-    m_strGlobalFile = GetGlobalDir();
-  m_strGlobalFile << strGlobal;
-
+  {
+     m_strGlobalFile = GetGlobalDir();
+     m_strGlobalFile << strGlobal;
+  }
   Init();
 }
 
