@@ -456,7 +456,7 @@ size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     }
 
     if (buf && (len<n)) *buf = 0;
-    
+
     return len;
 }
 
@@ -678,7 +678,7 @@ size_t IC_CharSet::MB2WC(wchar_t *buf, const char *psz, size_t n)
             // convert to native endianness
             WC_BSWAP(buf /* _not_ bufPtr */, res)
         }
-        
+
         // NB: iconv was given only strlen(psz) characters on input, and so
         //     it couldn't convert the trailing zero. Let's do it ourselves
         //     if there's some room left for it in the output buffer.
@@ -739,7 +739,7 @@ size_t IC_CharSet::WC2MB(char *buf, const wchar_t *psz, size_t n)
         cres = iconv( w2m, ICONV_CHAR_CAST(&psz), &inbuf, &buf, &outbuf );
 
         res = n-outbuf;
-        
+
         // NB: iconv was given only wcslen(psz) characters on input, and so
         //     it couldn't convert the trailing zero. Let's do it ourselves
         //     if there's some room left for it in the output buffer.
@@ -1018,8 +1018,11 @@ void wxCSConv::SetName(const wxChar *charset)
 
 void wxCSConv::LoadNow()
 {
-    if (m_deferred)
+    if ( m_deferred )
     {
+        // it would probably be better to make GetSystemEncodingName() always
+        // available (i.e. even when wxUSE_INTL == 0)?
+#if wxUSE_INTL
         if ( !m_name )
         {
             wxString name = wxLocale::GetSystemEncodingName();
@@ -1028,6 +1031,7 @@ void wxCSConv::LoadNow()
                 SetName(name);
             }
         }
+#endif // wxUSE_INTL
 
         // wxGetCharacterSet() complains about NULL name
         m_cset = m_name ? wxGetCharacterSet(m_name) : NULL;
