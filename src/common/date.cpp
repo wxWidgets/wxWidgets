@@ -243,32 +243,32 @@ wxDate &wxDate::operator --(int)
 // Date comparison
 //////////////////////////////////////////////////////////////
 
-bool operator <  (const wxDate &dt1, const wxDate &dt2)
+bool WXDLLEXPORT operator <  (const wxDate &dt1, const wxDate &dt2)
 {
 	return ( dt1.julian < dt2.julian );
 }
 
-bool operator <= (const wxDate &dt1, const wxDate &dt2)
+bool WXDLLEXPORT operator <= (const wxDate &dt1, const wxDate &dt2)
 {
 	return ( (dt1.julian == dt2.julian) || (dt1.julian < dt2.julian) );
 }
 
-bool operator >  (const wxDate &dt1, const wxDate &dt2)
+bool WXDLLEXPORT operator >  (const wxDate &dt1, const wxDate &dt2)
 {
 	return ( dt1.julian > dt2.julian );
 }
 
-bool operator >= (const wxDate &dt1, const wxDate &dt2)
+bool WXDLLEXPORT operator >= (const wxDate &dt1, const wxDate &dt2)
 {
 	return ( (dt1.julian == dt2.julian) || (dt1.julian > dt2.julian) );
 }
 
-bool operator == (const wxDate &dt1, const wxDate &dt2)
+bool WXDLLEXPORT operator == (const wxDate &dt1, const wxDate &dt2)
 {
 	return ( dt1.julian == dt2.julian );
 }
 
-bool operator != (const wxDate &dt1, const wxDate &dt2)
+bool WXDLLEXPORT operator != (const wxDate &dt1, const wxDate &dt2)
 {
 	return ( dt1.julian != dt2.julian );
 }
@@ -277,7 +277,7 @@ bool operator != (const wxDate &dt1, const wxDate &dt2)
 // Ostream operations
 ////////////////////////////////////////////////////////////////
 
-ostream &operator << (ostream &os, const wxDate &dt)
+ostream& WXDLLEXPORT operator << (ostream &os, const wxDate &dt)
 {
 	return os << (const char *) dt.FormatDate();
 }
