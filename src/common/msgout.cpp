@@ -48,6 +48,9 @@
 #ifdef __WXMSW__
     #include "wx/msw/private.h"
 #endif
+#ifdef __WXMAC__
+    #include "wx/mac/private.h"
+#endif
 
 // ===========================================================================
 // implementation
@@ -116,7 +119,7 @@ void wxMessageOutputDebug::Printf(const wxChar* format, ...)
     if ( wxIsDebuggerRunning() )
     {
         Str255 pstr;
-        wxString output = str + wxT(";g") ;
+        wxString output = out + wxT(";g") ;
         wxMacStringToPascal(output.c_str(), pstr);
 
         #ifdef __powerc
