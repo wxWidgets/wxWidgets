@@ -144,7 +144,7 @@ public:
     void SetItemCount(size_t count) { m_count = count; }
 
     // special case of SetItemCount(0)
-    void Clear() { m_itemsSel.Clear(); m_count = 0; }
+    void Clear() { m_itemsSel.Clear(); m_count = 0; m_defaultState = false; }
 
     // must be called when a new item is inserted/added
     void OnItemAdd(size_t item) { wxFAIL_MSG( _T("TODO") ); }
