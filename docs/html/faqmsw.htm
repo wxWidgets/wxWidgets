@@ -166,6 +166,79 @@ optimized. For example, in wxWindows project, set to 'Minimum
 Size'. In Dialog Editor project, set to 'Customize: Favor Small
 Code' (and no others). This will then work.<P>
 
+<H3>How are the wxWindows makefiles edited under Windows?</H3>
+
+As of wxWindows 2.1, there is a new system written by Vadim Zeitlin, that
+generates the makefiles from templates using tmake.<P>
+
+Here are Vadim's notes:<P>
+
+<blockquote>
+To use these new makefiles, you don't need anything (but see below).
+However, you should NOT modify them because these files will be
+rewritten when I regenerate them using tmake the next time. So, if
+you find a problem with any of these makefiles (say, makefile.b32)
+you'll need to modify the corresponding template (b32.t in this
+example) and regenerate the makefile using tmake.<P>
+
+tmake can be found at
+<a href="http://www.troll.no/freebies/tmake.html" target=_new>www.troll.no/freebies/tmake.html</a>.
+It's a Perl5 program and so it needs Perl (doh). There is a binary for 
+Windows (available from the same page), but I haven't used it, so
+I don't know if it works as flawlessly as "perl tmake" does (note
+for people knowing Perl: don't try to run tmake with -w, it won't
+do you any good). Using it extremely simple: to regenerate makefile.b32
+just go to distrib/msw/tmake and type<P>
+
+<pre>tmake -t b32 wxwin.pro -o ../../src/msw/makefile.b32</pre><P>
+
+The makefiles are untested - I don't have any of Borland, Watcom  or
+Symantec and I don't have enough diskspace to recompile even with
+VC6 using makefiles. The new makefiles are as close as possible to the
+old ones, but not closer: in fact, there has been many strange things
+(should I say bugs?) in some of makefiles, some files were not compiled
+without any reason etc. Please test them and notify me about any problems.
+Better yet, modify the template files to generate the correct makefiles
+and check them in.<P>
+
+The templates are described in tmake ref manual (1-2 pages of text)
+and are quite simple. They do contain some Perl code, but my Perl is
+primitive (very C like) so it should be possible for anybody to make
+trivial modifications to it (I hope that only trivial modifications
+will be needed). I've tagged the ol makefiles as MAKEFILES_WITHOUT_TMAKE
+in the cvs, so you can always retrieve them and compare the new ones,
+this will make it easier to solve the problems you might have.<P>
+
+Another important file is filelist.txt: it contains the list of all
+files to be compiled. Some of them are only compiled in 16/32 bit mode.
+Some other are only compiled with some compilers (others can't compile
+them) - all this info is contained in this file.<P>
+
+So now adding a new file to wxWindows is as easy as modifying filelist.txt
+(and Makefile.ams for Unix ports) and regenerating the makefiles - no
+need to modify all files manually any more.<P>
+
+ Finally, there is also a file vc6.t which I use myself: this one
+generates a project file for VC++ 6.0 (I didn't create vc5.t because
+I don't need it and can't test it, but it should be trivial to create
+one from vc6.t - probably the only things to change would be the
+version number in the very beginning and the /Z option - VC5 doesn't
+support edit-and=continue). This is not an officially supported way
+of building wxWindows (that is, nobody guarantees that it will work),
+but it has been very useful to me and I hope it will be also for
+others. To generate wxWindows.dsp run<P>
+
+<pre>tmake -t vc6 wxwin.pro -o ../../wxWindows.dsp</pre><P>
+
+Then just include this project in any workspace or open it from VC IDE
+and it will create a new workspace for you.<P>
+
+If all goes well, I'm planning to create a template file for Makefile.ams
+under src/gtk and src/motif and also replace all makefiles in the samples
+subdirectories with the project files from which all the others will be
+generated. At least it will divide the number of files in samples
+directory by 10 (and the number of files to be maintained too).
+</blockquote>
 
 </font>
 
