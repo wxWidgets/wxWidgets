@@ -36,7 +36,7 @@
  *
  */
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapShape, wxShape)
+IMPLEMENT_DYNAMIC_CLASS(wxBitmapShape, wxRectangleShape)
 
 wxBitmapShape::wxBitmapShape():wxRectangleShape(100.0, 50.0)
 {
