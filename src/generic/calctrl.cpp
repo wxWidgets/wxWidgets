@@ -768,7 +768,7 @@ void wxCalendarCtrl::DoGetSize(int *width, int *height) const
     if ( !(GetWindowStyle() & wxCAL_SEQUENTIAL_MONTH_SELECTION) )
     {
         // our real height is bigger
-        if ( height )
+        if ( height && GetMonthControl())
         {
             *height += GetMonthControl()->GetSize().y + VERT_MARGIN;
         }
