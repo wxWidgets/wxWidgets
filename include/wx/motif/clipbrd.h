@@ -23,17 +23,77 @@
 #include "wx/setup.h"
 
 #include "wx/list.h"
+#include "wx/module.h"
 
 bool WXDLLEXPORT wxOpenClipboard();
 bool WXDLLEXPORT wxClipboardOpen();
 bool WXDLLEXPORT wxCloseClipboard();
 bool WXDLLEXPORT wxEmptyClipboard();
-bool WXDLLEXPORT wxIsClipboardFormatAvailable(int dataFormat);
-bool WXDLLEXPORT wxSetClipboardData(int dataFormat, wxObject *obj, int width = 0, int height = 0);
-wxObject* WXDLLEXPORT wxGetClipboardData(int dataFormat, long *len = NULL);
-int  WXDLLEXPORT wxEnumClipboardFormats(int dataFormat);
-int  WXDLLEXPORT wxRegisterClipboardFormat(char *formatName);
-bool WXDLLEXPORT wxGetClipboardFormatName(int dataFormat, char *formatName, int maxCount);
+bool WXDLLEXPORT wxIsClipboardFormatAvailable(wxDataFormat dataFormat);
+bool WXDLLEXPORT wxSetClipboardData(wxDataFormat dataFormat, wxObject *obj, int width = 0, int height = 0);
+wxObject* WXDLLEXPORT wxGetClipboardData(wxDataFormat dataFormat, long *len = NULL);
+wxDataFormat WXDLLEXPORT wxEnumClipboardFormats(wxDataFormat dataFormat);
+wxDataFormat WXDLLEXPORT wxRegisterClipboardFormat(char *formatName);
+bool WXDLLEXPORT wxGetClipboardFormatName(wxDataFormat dataFormat, char *formatName, int maxCount);
+
+//-----------------------------------------------------------------------------
+// wxClipboard
+//-----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxDataObject;
+class WXDLLEXPORT wxClipboard: public wxObject
+{
+  DECLARE_DYNAMIC_CLASS(wxClipboard)
+
+public:
+ 
+  wxClipboard();
+  ~wxClipboard();
+
+  // open the clipboard before SetData() and GetData()
+  virtual bool Open();
+  
+  // close the clipboard after SetData() and GetData()
+  virtual void Close();
+  
+  // can be called several times
+  virtual bool SetData( wxDataObject *data );
+
+  // format available on the clipboard ? 
+  // supply ID if private format, the same as wxPrivateDataObject::SetId() 
+  virtual bool IsSupportedFormat( wxDataFormat format, const wxString &id = wxEmptyString );
+  
+  // fill data with data on the clipboard (if available)
+  virtual bool GetData( wxDataObject *data );
+  
+  // clears wxTheClipboard and the system's clipboard if possible
+  virtual void Clear();
+
+ // implementation 
+ 
+  bool              m_open;
+  wxList            m_data;
+};
+
+/* The clipboard */
+WXDLLEXPORT_DATA(extern wxClipboard*) wxTheClipboard;
+
+//-----------------------------------------------------------------------------
+// wxClipboardModule
+//-----------------------------------------------------------------------------
+
+class wxClipboardModule: public wxModule
+{
+  DECLARE_DYNAMIC_CLASS(wxClipboardModule)
+  
+public:
+    wxClipboardModule() {}
+    bool OnInit();
+    void OnExit();
+};
+
+// This is the old, 1.68 implementation
+#if 0
 
 /* A clipboard client holds data belonging to the clipboard.
    For plain text, a client is not necessary. */
@@ -99,6 +159,9 @@ void WXDLLEXPORT wxInitClipboard();
 
 /* The clipboard */
 WXDLLEXPORT_DATA(extern wxClipboard*) wxTheClipboard;
+
+#endif
+  // Old clipboard class
 
 #endif
     // _WX_CLIPBRD_H_

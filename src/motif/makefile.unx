@@ -87,6 +87,7 @@ LIB_CPP_SRC=\
  combobox.cpp \
  cursor.cpp \
  data.cpp \
+ dataobj.cpp \
  dc.cpp \
  dcclient.cpp \
  dcmemory.cpp \

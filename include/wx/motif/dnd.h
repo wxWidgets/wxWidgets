@@ -1,22 +1,27 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        dnd.h
-// Purpose:     Declaration of the wxDropTarget, wxDropSource class etc.
+// Purpose:     declaration of wxDropTarget, wxDropSource classes
 // Author:      Julian Smart
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 Julian Smart
+// Copyright:   (c) 1998 Vadim Zeitlin, Robert Roebling, Julian Smart
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
+
 
 #ifndef _WX_DND_H_
 #define _WX_DND_H_
 
 #ifdef __GNUG__
-#pragma interface "dnd.h"
+#pragma interface
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_DRAG_AND_DROP
+
 #include "wx/object.h"
 #include "wx/string.h"
+#include "wx/dataobj.h"
 #include "wx/cursor.h"
 
 //-------------------------------------------------------------------------
@@ -25,119 +30,13 @@
 
 class WXDLLEXPORT wxWindow;
 
-class WXDLLEXPORT wxDataObject;
-class WXDLLEXPORT wxTextDataObject;
-class WXDLLEXPORT wxFileDataObject;
-
 class WXDLLEXPORT wxDropTarget;
 class WXDLLEXPORT wxTextDropTarget;
 class WXDLLEXPORT wxFileDropTarget;
+class WXDLLEXPORT wxPrivateDropTarget;
 
 class WXDLLEXPORT wxDropSource;
 
-//-------------------------------------------------------------------------
-// wxDataObject
-//-------------------------------------------------------------------------
-
-class WXDLLEXPORT wxDataObject: public wxObject
-{
-public:
-  // all data formats (values are the same as in windows.h, do not change!)
-  enum StdFormat
-  {
-    Invalid,
-    Text,
-    Bitmap,
-    MetafilePict,
-    Sylk,
-    Dif,
-    Tiff,
-    OemText,
-    Dib,
-    Palette,
-    Pendata,
-    Riff,
-    Wave,
-    UnicodeText,
-    EnhMetafile,
-    Hdrop,
-    Locale,
-    Max
-  };
-
-  // function to return symbolic name of clipboard format (debug messages)
-  static const char *GetFormatName(wxDataFormat format);
-
-  // ctor & dtor
-  wxDataObject() {};
-  ~wxDataObject() {};
-
-  // pure virtuals to override
-    // get the best suited format for our data
-  virtual wxDataFormat GetPreferredFormat() const = 0;
-    // decide if we support this format (should be one of values of
-    // StdFormat enumerations or a user-defined format)
-  virtual bool IsSupportedFormat(wxDataFormat format) const = 0;
-    // get the (total) size of data
-  virtual size_t GetDataSize() const = 0;
-    // copy raw data to provided pointer
-  virtual void GetDataHere(void *pBuf) const = 0;
-
-};
-
-// ----------------------------------------------------------------------------
-// wxTextDataObject is a specialization of wxDataObject for text data
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxTextDataObject : public wxDataObject
-{
-public:
-  // ctors
-  wxTextDataObject() { }
-  wxTextDataObject(const wxString& strText) : m_strText(strText) { }
-  void Init(const wxString& strText) { m_strText = strText; }
-
-  // implement base class pure virtuals
-  virtual wxDataFormat GetPreferredFormat() const
-    { return wxDF_TEXT; }
-  virtual bool IsSupportedFormat(wxDataFormat format) const
-    { return format == wxDF_TEXT; }
-  virtual size_t GetDataSize() const
-    { return m_strText.Len() + 1; } // +1 for trailing '\0'of course
-  virtual void GetDataHere(void *pBuf) const
-    { memcpy(pBuf, m_strText.c_str(), GetDataSize()); }
-
-private:
-  wxString  m_strText;
-  
-};
-
-// ----------------------------------------------------------------------------
-// wxFileDataObject is a specialization of wxDataObject for file names
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxFileDataObject : public wxDataObject
-{
-public:
-
-  wxFileDataObject(void) { }
-  void AddFile( const wxString &file )
-    { m_files += file; m_files += ";"; }
-
-  // implement base class pure virtuals
-  virtual wxDataFormat GetPreferredFormat() const
-    { return wxDF_FILENAME; }
-  virtual bool IsSupportedFormat(wxDataFormat format) const
-    { return format == wxDF_FILENAME; }
-  virtual size_t GetDataSize() const
-    { return m_files.Len() + 1; } // +1 for trailing '\0'of course
-  virtual void GetDataHere(void *pBuf) const
-    { memcpy(pBuf, m_files.c_str(), GetDataSize()); }
-
-private:
-  wxString  m_files;
-  
-};
 //-------------------------------------------------------------------------
 // wxDropTarget
 //-------------------------------------------------------------------------
@@ -151,16 +50,14 @@ class WXDLLEXPORT wxDropTarget: public wxObject
     
     virtual void OnEnter() { }
     virtual void OnLeave() { }
-    virtual bool OnDrop( long x, long y, const void *pData ) = 0;
+    virtual bool OnDrop( long x, long y, const void *data, size_t size ) = 0;
 
-//  protected:
-      
-    friend wxWindow;
-    
     // Override these to indicate what kind of data you support: 
   
     virtual size_t GetFormatCount() const = 0;
     virtual wxDataFormat GetFormat(size_t n) const = 0;
+  
+  // implementation
 };
 
 //-------------------------------------------------------------------------
@@ -172,13 +69,43 @@ class WXDLLEXPORT wxTextDropTarget: public wxDropTarget
   public:
 
     wxTextDropTarget() {};
-    virtual bool OnDrop( long x, long y, const void *pData );
+    virtual bool OnDrop( long x, long y, const void *data, size_t size );
     virtual bool OnDropText( long x, long y, const char *psz );
     
   protected:
   
     virtual size_t GetFormatCount() const;
     virtual wxDataFormat GetFormat(size_t n) const;
+};
+
+//-------------------------------------------------------------------------
+// wxPrivateDropTarget
+//-------------------------------------------------------------------------
+
+class WXDLLEXPORT wxPrivateDropTarget: public wxDropTarget
+{
+public:
+
+  wxPrivateDropTarget();
+  
+  // you have to override OnDrop to get at the data
+    
+  // the string ID identifies the format of clipboard or DnD data. a word
+  // processor would e.g. add a wxTextDataObject and a wxPrivateDataObject
+  // to the clipboard - the latter with the Id "WXWORD_FORMAT".
+    
+  void SetId( const wxString& id )
+      { m_id = id; }
+    
+  wxString GetId()
+      { return m_id; }
+
+private:
+
+  virtual size_t GetFormatCount() const;
+  virtual wxDataFormat GetFormat(size_t n) const;
+    
+  wxString   m_id;
 };
 
 // ----------------------------------------------------------------------------
@@ -191,9 +118,9 @@ class WXDLLEXPORT wxFileDropTarget: public wxDropTarget
     
     wxFileDropTarget() {};
     
-    virtual bool OnDrop(long x, long y, const void *pData);
+    virtual bool OnDrop( long x, long y, const void *data, size_t size );
     virtual bool OnDropFiles( long x, long y, 
-                              size_t nFiles, const char * const aszFiles[]);
+                              size_t nFiles, const char * const aszFiles[] );
 
   protected:
   
@@ -205,14 +132,14 @@ class WXDLLEXPORT wxFileDropTarget: public wxDropTarget
 // wxDropSource
 //-------------------------------------------------------------------------
 
-  enum wxDragResult
-  {
-    wxDragError,    // error prevented the d&d operation from completing
-    wxDragNone,     // drag target didn't accept the data
-    wxDragCopy,     // the data was successfully copied
-    wxDragMove,     // the data was successfully moved
-    wxDragCancel    // the operation was cancelled by user (not an error)
-  };
+enum wxDragResult
+{
+  wxDragError,    // error prevented the d&d operation from completing
+  wxDragNone,     // drag target didn't accept the data
+  wxDragCopy,     // the data was successfully copied
+  wxDragMove,     // the data was successfully moved
+  wxDragCancel    // the operation was cancelled by user (not an error)
+};
 
 class WXDLLEXPORT wxDropSource: public wxObject
 {
@@ -227,11 +154,24 @@ class WXDLLEXPORT wxDropSource: public wxObject
     wxDragResult DoDragDrop( bool bAllowMove = FALSE );
     
     virtual bool GiveFeedback( wxDragResult WXUNUSED(effect), bool WXUNUSED(bScrolling) ) { return TRUE; };
-
-  protected:
   
+  // implementation
+#if 0
+    void RegisterWindow(void);
+    void UnregisterWindow(void);
+  
+    wxWindow      *m_window;
+    wxDragResult   m_retValue;
     wxDataObject  *m_data;
+    
+    wxCursor      m_defaultCursor;
+    wxCursor      m_goaheadCursor;
+#endif
 };
+
+#endif
+
+   // wxUSE_DRAG_AND_DROP
 
 #endif  
        //_WX_DND_H_

@@ -51,14 +51,14 @@ void wxControl::SetLabel(const wxString& label)
     Widget widget = (Widget) GetLabelWidget() ;
     if (!widget)
         return;
- 
+    
     wxStripMenuCodes((char*) (const char*) label, wxBuffer);
-
+    
     XmString text = XmStringCreateSimple (wxBuffer);
     XtVaSetValues (widget,
-		    XmNlabelString, text,
-            XmNlabelType, XmSTRING,
-		 NULL);
+        XmNlabelString, text,
+        XmNlabelType, XmSTRING,
+        NULL);
     XmStringFree (text);
 }
 
@@ -67,13 +67,13 @@ wxString wxControl::GetLabel() const
     Widget widget = (Widget) GetLabelWidget() ;
     if (!widget)
         return wxEmptyString;
-
+    
     XmString text;
     char *s;
     XtVaGetValues (widget,
-		 XmNlabelString, &text,
-		 NULL);
-
+        XmNlabelString, &text,
+        NULL);
+    
     if (XmStringGetLtoR (text, XmSTRING_DEFAULT_CHARSET, &s))
     {
         wxString str(s);
@@ -90,41 +90,41 @@ wxString wxControl::GetLabel() const
 
 void wxControl::ProcessCommand (wxCommandEvent & event)
 {
-  // Tries:
-  // 1) A callback function (to become obsolete)
-  // 2) OnCommand, starting at this window and working up parent hierarchy
-  // 3) OnCommand then calls ProcessEvent to search the event tables.
-  if (m_callback)
+    // Tries:
+    // 1) A callback function (to become obsolete)
+    // 2) OnCommand, starting at this window and working up parent hierarchy
+    // 3) OnCommand then calls ProcessEvent to search the event tables.
+    if (m_callback)
     {
-      (void) (*(m_callback)) (*this, event);
+        (void) (*(m_callback)) (*this, event);
     }
     else
     {
-      GetEventHandler()->OnCommand(*this, event);
+        GetEventHandler()->OnCommand(*this, event);
     }
 }
 
 void wxControl::Centre (int direction)
 {
-  int x, y, width, height, panel_width, panel_height, new_x, new_y;
-
-  wxWindow *parent = (wxWindow *) GetParent ();
-  if (!parent)
-    return;
-
-  parent->GetClientSize (&panel_width, &panel_height);
-  GetSize (&width, &height);
-  GetPosition (&x, &y);
-
-  new_x = x;
-  new_y = y;
-
-  if (direction & wxHORIZONTAL)
-    new_x = (int) ((panel_width - width) / 2);
-
-  if (direction & wxVERTICAL)
-    new_y = (int) ((panel_height - height) / 2);
-
-  SetSize (new_x, new_y, width, height);
+    int x, y, width, height, panel_width, panel_height, new_x, new_y;
+    
+    wxWindow *parent = (wxWindow *) GetParent ();
+    if (!parent)
+        return;
+    
+    parent->GetClientSize (&panel_width, &panel_height);
+    GetSize (&width, &height);
+    GetPosition (&x, &y);
+    
+    new_x = x;
+    new_y = y;
+    
+    if (direction & wxHORIZONTAL)
+        new_x = (int) ((panel_width - width) / 2);
+    
+    if (direction & wxVERTICAL)
+        new_y = (int) ((panel_height - height) / 2);
+    
+    SetSize (new_x, new_y, width, height);
 }
 

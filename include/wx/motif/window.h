@@ -418,7 +418,6 @@ public:
   void OnChar(wxKeyEvent& event);
   void OnKeyDown(wxKeyEvent& event);
   void OnKeyUp(wxKeyEvent& event);
-  void OnChar(wxKeyEvent& event);
   void OnPaint(wxPaintEvent& event);
   void OnIdle(wxIdleEvent& event);
 

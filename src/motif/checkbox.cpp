@@ -23,7 +23,7 @@
 #include "wx/motif/private.h"
 
 void wxCheckBoxCallback (Widget w, XtPointer clientData,
-		    XtPointer ptr);
+                         XtPointer ptr);
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
@@ -32,10 +32,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapCheckBox, wxCheckBox)
 
 // Single check box item
 bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
-           const wxPoint& pos,
-           const wxSize& size, long style,
-           const wxValidator& validator,
-           const wxString& name)
+                        const wxPoint& pos,
+                        const wxSize& size, long style,
+                        const wxValidator& validator,
+                        const wxString& name)
 {
     SetName(name);
     SetValidator(validator);
@@ -43,35 +43,35 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
     m_windowFont = parent->GetFont();
-
+    
     if (parent) parent->AddChild(this);
-
+    
     if ( id == -1 )
         m_windowId = NewControlId();
     else
         m_windowId = id;
-
+    
     char* label1 = (label.IsNull() ? "" : (char*) (const char*) label);
-
+    
     XmString text = XmStringCreateSimple (label1);
     Widget parentWidget = (Widget) parent->GetClientWidget();
     XmFontList fontList = (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay(parentWidget));
-
+    
     m_mainWidget = (WXWidget) XtVaCreateManagedWidget ("toggle",
-                                xmToggleButtonWidgetClass, parentWidget,
-                                XmNfontList, fontList,
-                                XmNlabelString, text,
-                                NULL);
+        xmToggleButtonWidgetClass, parentWidget,
+        XmNfontList, fontList,
+        XmNlabelString, text,
+        NULL);
     XmStringFree (text);
-
+    
     XtAddCallback ((Widget) m_mainWidget, XmNvalueChangedCallback, (XtCallbackProc) wxCheckBoxCallback,
-		 (XtPointer) this);
-
+        (XtPointer) this);
+    
     XmToggleButtonSetState ((Widget) m_mainWidget, FALSE, TRUE);
-
+    
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
-
+    
     ChangeBackgroundColour();
     return TRUE;
 }
@@ -96,24 +96,24 @@ void wxCheckBox::Command (wxCommandEvent & event)
 
 // Bitmap checkbox
 bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id, const wxBitmap *label,
-           const wxPoint& pos,
-           const wxSize& size, long style,
-           const wxValidator& validator,
-           const wxString& name)
+                              const wxPoint& pos,
+                              const wxSize& size, long style,
+                              const wxValidator& validator,
+                              const wxString& name)
 {
     SetName(name);
     SetValidator(validator);
     m_windowStyle = style;
-
+    
     if (parent) parent->AddChild(this);
-
+    
     if ( id == -1 )
         m_windowId = NewControlId();
     else
         m_windowId = id;
-
+    
     // TODO: Create the bitmap checkbox
-
+    
     return FALSE;
 }
 
@@ -139,17 +139,17 @@ bool wxBitmapCheckBox::GetValue() const
 }
 
 void wxCheckBoxCallback (Widget w, XtPointer clientData,
-		    XtPointer ptr)
+                         XtPointer ptr)
 {
-  wxCheckBox *item = (wxCheckBox *) clientData;
-
-  if (item->InSetValue())
-    return;
+    wxCheckBox *item = (wxCheckBox *) clientData;
     
-  wxCommandEvent event (wxEVT_COMMAND_CHECKBOX_CLICKED, item->GetId());
-  event.SetInt((int) item->GetValue ());
-  event.SetEventObject(item);
-  item->ProcessCommand (event);
+    if (item->InSetValue())
+        return;
+    
+    wxCommandEvent event (wxEVT_COMMAND_CHECKBOX_CLICKED, item->GetId());
+    event.SetInt((int) item->GetValue ());
+    event.SetEventObject(item);
+    item->ProcessCommand (event);
 }
 
 void wxCheckBox::ChangeFont(bool keepOriginalSize)
@@ -159,19 +159,19 @@ void wxCheckBox::ChangeFont(bool keepOriginalSize)
 
 void wxCheckBox::ChangeBackgroundColour()
 {
-  wxComputeColours (XtDisplay((Widget) m_mainWidget), & m_backgroundColour,
-			    (wxColour*) NULL);
-
-  XtVaSetValues ((Widget) m_mainWidget,
-		   XmNbackground, g_itemColors[wxBACK_INDEX].pixel,
-		   XmNtopShadowColor, g_itemColors[wxTOPS_INDEX].pixel,
-		   XmNbottomShadowColor, g_itemColors[wxBOTS_INDEX].pixel,
-		   XmNforeground, g_itemColors[wxFORE_INDEX].pixel,
-		   NULL);
-
-  XtVaSetValues ((Widget) m_mainWidget,
-    		   XmNselectColor, g_itemColors[wxSELE_INDEX].pixel,
-               NULL);
+    wxComputeColours (XtDisplay((Widget) m_mainWidget), & m_backgroundColour,
+        (wxColour*) NULL);
+    
+    XtVaSetValues ((Widget) m_mainWidget,
+        XmNbackground, g_itemColors[wxBACK_INDEX].pixel,
+        XmNtopShadowColor, g_itemColors[wxTOPS_INDEX].pixel,
+        XmNbottomShadowColor, g_itemColors[wxBOTS_INDEX].pixel,
+        XmNforeground, g_itemColors[wxFORE_INDEX].pixel,
+        NULL);
+    
+    XtVaSetValues ((Widget) m_mainWidget,
+        XmNselectColor, g_itemColors[wxSELE_INDEX].pixel,
+        NULL);
 }
 
 void wxCheckBox::ChangeForegroundColour()

@@ -62,19 +62,19 @@ extern wxList wxTopLevelWindows;
 bool wxGetHostName(char *buf, int maxSize)
 {
 #if defined(__SVR4__) && !defined(__HPUX__)
-  return (sysinfo (SI_HOSTNAME, buf, maxSize) != -1);
+    return (sysinfo (SI_HOSTNAME, buf, maxSize) != -1);
 #else /* BSD Sockets */
-  char name[255];
-  struct hostent *h;
-
-  // Get hostname
-  if (gethostname (name, sizeof (name) / sizeof (char) - 1) == -1)
-      return FALSE;
-  // Get official full name of host
-  strncpy (buf
-	   ,(h = gethostbyname (name)) != NULL ? h->h_name : name
-	   ,maxSize - 1);
-  return TRUE;
+    char name[255];
+    struct hostent *h;
+    
+    // Get hostname
+    if (gethostname (name, sizeof (name) / sizeof (char) - 1) == -1)
+        return FALSE;
+    // Get official full name of host
+    strncpy (buf
+        ,(h = gethostbyname (name)) != NULL ? h->h_name : name
+        ,maxSize - 1);
+    return TRUE;
 #endif
 }
 
@@ -82,17 +82,17 @@ bool wxGetHostName(char *buf, int maxSize)
 bool wxGetUserId(char *buf, int maxSize)
 {
 #ifdef VMS
-  *buf = '\0'; // return empty string
-  return FALSE;
+    *buf = '\0'; // return empty string
+    return FALSE;
 #else
-  struct passwd *who;
-
-  if ((who = getpwuid (getuid ())) != NULL)
+    struct passwd *who;
+    
+    if ((who = getpwuid (getuid ())) != NULL)
     {
-      strncpy (buf, who->pw_name, maxSize - 1);
-      return TRUE;
+        strncpy (buf, who->pw_name, maxSize - 1);
+        return TRUE;
     }
-  return FALSE;
+    return FALSE;
 #endif
 }
 
@@ -100,30 +100,30 @@ bool wxGetUserId(char *buf, int maxSize)
 bool wxGetUserName(char *buf, int maxSize)
 {
 #ifdef VMS
-  *buf = '\0'; // return empty string
-  return FALSE;
+    *buf = '\0'; // return empty string
+    return FALSE;
 #else
-  struct passwd *who;
-
-  if ((who = getpwuid (getuid ())) != NULL)
+    struct passwd *who;
+    
+    if ((who = getpwuid (getuid ())) != NULL)
     {
-      strncpy (buf, who->pw_gecos, maxSize - 1);
-      return TRUE;
+        strncpy (buf, who->pw_gecos, maxSize - 1);
+        return TRUE;
     }
-  return FALSE;
+    return FALSE;
 #endif
 }
 
 int wxKill(long pid, int sig)
 {
-  int unixSignal = 0;
-  switch (sig)
-  {
+    int unixSignal = 0;
+    switch (sig)
+    {
     case wxSIGTERM:
     default:
-      unixSignal = SIGTERM;
-  }
-  return kill( (int)pid, unixSignal);
+        unixSignal = SIGTERM;
+    }
+    return kill( (int)pid, unixSignal);
 }
 
 //
@@ -132,27 +132,27 @@ int wxKill(long pid, int sig)
 bool wxShell(const wxString& command)
 {
 #ifdef VMS
-  return(FALSE);
+    return(FALSE);
 #else
 #if defined(sun) || defined(__ultrix) || defined(__bsdi__)
-  pid_t pid = vfork ();
+    pid_t pid = vfork ();
 #else
-  pid_t pid = fork ();
+    pid_t pid = fork ();
 #endif
-  switch( pid ) {
+    switch( pid ) {
     case -1:			/* error */
-	return(FALSE);
+        return(FALSE);
     case 0:			/* child */
-	// Generic X windows terminal window
-	if (command != "")
-	  execlp("xterm", "-e", (char *) (const char*) command, NULL);
-	else
-	  execlp("xterm", NULL);
-	_exit(127);
-  }
-  return TRUE;
+        // Generic X windows terminal window
+        if (command != "")
+            execlp("xterm", "-e", (char *) (const char*) command, NULL);
+        else
+            execlp("xterm", NULL);
+        _exit(127);
+    }
+    return TRUE;
 #endif
- // End VMS
+    // End VMS
 }
 
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
@@ -163,76 +163,76 @@ long wxGetFreeMemory()
 
 void wxSleep(int nSecs)
 {
-  sleep(nSecs);
+    sleep(nSecs);
 }
 
 // Consume all events until no more left
 void wxFlushEvents()
 {
-  Display *display = (Display*) wxGetDisplay();
-
-  XSync (display, FALSE);
-  XEvent event;
-  // XtAppPending returns availability of events AND timers/inputs, which
-  // are processed via callbacks, so XtAppNextEvent will not return if 
-  // there are no events. So added '& XtIMXEvent' - Sergey.
-  while (XtAppPending ((XtAppContext) wxTheApp->GetAppContext()) & XtIMXEvent)
+    Display *display = (Display*) wxGetDisplay();
+    
+    XSync (display, FALSE);
+    XEvent event;
+    // XtAppPending returns availability of events AND timers/inputs, which
+    // are processed via callbacks, so XtAppNextEvent will not return if 
+    // there are no events. So added '& XtIMXEvent' - Sergey.
+    while (XtAppPending ((XtAppContext) wxTheApp->GetAppContext()) & XtIMXEvent)
     {
-      XFlush (XtDisplay ((Widget) wxTheApp->GetTopLevelWidget()));
-      // Jan Lessner: works better when events are non-X events
-      XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMXEvent);
+        XFlush (XtDisplay ((Widget) wxTheApp->GetTopLevelWidget()));
+        // Jan Lessner: works better when events are non-X events
+        XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMXEvent);
     }
 }
 
 // Output a debug message, in a system dependent fashion.
 void wxDebugMsg(const char *fmt ...)
 {
-  va_list ap;
-  char buffer[BUFSIZ];
-
-  if (!wxTheApp->GetWantDebugOutput())
-    return ;
-
-  va_start (ap, fmt);
-
-  vsprintf (buffer, fmt, ap);
-  cerr << buffer;
-
-  va_end (ap);
+    va_list ap;
+    char buffer[BUFSIZ];
+    
+    if (!wxTheApp->GetWantDebugOutput())
+        return ;
+    
+    va_start (ap, fmt);
+    
+    vsprintf (buffer, fmt, ap);
+    cerr << buffer;
+    
+    va_end (ap);
 }
 
 // Non-fatal error: pop up message box and (possibly) continue
 void wxError(const wxString& msg, const wxString& title)
 {
-  cerr << (const char*) title << ": " << (const char*) msg << "\n";
+    cerr << (const char*) title << ": " << (const char*) msg << "\n";
 }
 
 // Fatal error: pop up message box and abort
 void wxFatalError(const wxString& msg, const wxString& title)
 {
-  cerr << (const char*) title << ": " << (const char*) msg << "\n";
-  exit (1);
+    cerr << (const char*) title << ": " << (const char*) msg << "\n";
+    exit (1);
 }
 
 // Emit a beeeeeep
 void wxBell()
 {
-  // Use current setting for the bell
-  XBell ((Display*) wxGetDisplay(), 0);
+    // Use current setting for the bell
+    XBell ((Display*) wxGetDisplay(), 0);
 }
 
 int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
     // TODO
-  // This code is WRONG!! Does NOT return the
-  // Motif version of the libs but the X protocol
-  // version! @@@@@ Fix ME!!!!!!!!!
-  Display *display = XtDisplay ((Widget) wxTheApp->GetTopLevelWidget());
-  if (majorVsn)
-    *majorVsn = ProtocolVersion (display);
-  if (minorVsn)
-    *minorVsn = ProtocolRevision (display);
-  return wxMOTIF_X;
+    // This code is WRONG!! Does NOT return the
+    // Motif version of the libs but the X protocol
+    // version! @@@@@ Fix ME!!!!!!!!!
+    Display *display = XtDisplay ((Widget) wxTheApp->GetTopLevelWidget());
+    if (majorVsn)
+        *majorVsn = ProtocolVersion (display);
+    if (minorVsn)
+        *minorVsn = ProtocolRevision (display);
+    return wxMOTIF_X;
 }
 
 // Reading and writing resources (eg WIN.INI, .Xdefaults)
@@ -240,55 +240,55 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
 
 static char *GetResourcePath(char *buf, const char *name, bool create = FALSE)
 {
-  if (create && wxFileExists (name) ) {
-    strcpy(buf, name);
-    return buf; // Exists so ...
-  }
-
-  if (*name == '/')
-    strcpy(buf, name);
-  else {
-    // Put in standard place for resource files if not absolute
-    strcpy (buf, DEFAULT_XRESOURCE_DIR);
-    strcat (buf, "/");
-    strcat (buf, (const char*) wxFileNameFromPath (name));
-  }
-
-  if (create) {
-    // Touch the file to create it
-    FILE *fd = fopen (buf, "w");
-    if (fd) fclose (fd);
-  }
-  return buf;
+    if (create && wxFileExists (name) ) {
+        strcpy(buf, name);
+        return buf; // Exists so ...
+    }
+    
+    if (*name == '/')
+        strcpy(buf, name);
+    else {
+        // Put in standard place for resource files if not absolute
+        strcpy (buf, DEFAULT_XRESOURCE_DIR);
+        strcat (buf, "/");
+        strcat (buf, (const char*) wxFileNameFromPath (name));
+    }
+    
+    if (create) {
+        // Touch the file to create it
+        FILE *fd = fopen (buf, "w");
+        if (fd) fclose (fd);
+    }
+    return buf;
 }
 
 /*
- * We have a cache for writing different resource files,
- * which will only get flushed when we call wxFlushResources().
- * Build up a list of resource databases waiting to be written.
- *
- */
+* We have a cache for writing different resource files,
+* which will only get flushed when we call wxFlushResources().
+* Build up a list of resource databases waiting to be written.
+*
+*/
 
 wxList wxResourceCache (wxKEY_STRING);
 
 void 
 wxFlushResources (void)
 {
-  char nameBuffer[512];
-
-  wxNode *node = wxResourceCache.First ();
-  while (node)
+    char nameBuffer[512];
+    
+    wxNode *node = wxResourceCache.First ();
+    while (node)
     {
-      const char *file = node->GetKeyString();
-      // If file doesn't exist, create it first.
-      (void)GetResourcePath(nameBuffer, file, TRUE);
-
-      XrmDatabase database = (XrmDatabase) node->Data ();
-      XrmPutFileDatabase (database, nameBuffer);
-      XrmDestroyDatabase (database);
-      wxNode *next = node->Next ();
-      delete node;
-      node = next;
+        const char *file = node->GetKeyString();
+        // If file doesn't exist, create it first.
+        (void)GetResourcePath(nameBuffer, file, TRUE);
+        
+        XrmDatabase database = (XrmDatabase) node->Data ();
+        XrmPutFileDatabase (database, nameBuffer);
+        XrmDestroyDatabase (database);
+        wxNode *next = node->Next ();
+        delete node;
+        node = next;
     }
 }
 
@@ -298,252 +298,252 @@ void wxXMergeDatabases (wxApp * theApp, Display * display);
 
 bool wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file)
 {
-  char buffer[500];
-
-  (void) GetIniFile (buffer, file);
-
-  XrmDatabase database;
-  wxNode *node = wxResourceCache.Find (buffer);
-  if (node)
-    database = (XrmDatabase) node->Data ();
-  else
+    char buffer[500];
+    
+    (void) GetIniFile (buffer, file);
+    
+    XrmDatabase database;
+    wxNode *node = wxResourceCache.Find (buffer);
+    if (node)
+        database = (XrmDatabase) node->Data ();
+    else
     {
-      database = XrmGetFileDatabase (buffer);
-      wxResourceCache.Append (buffer, (wxObject *) database);
+        database = XrmGetFileDatabase (buffer);
+        wxResourceCache.Append (buffer, (wxObject *) database);
     }
-
-  char resName[300];
-  strcpy (resName, (const char*) section);
-  strcat (resName, ".");
-  strcat (resName, (const char*) entry);
-
-  XrmPutStringResource (&database, resName, value);
-  return TRUE;
+    
+    char resName[300];
+    strcpy (resName, (const char*) section);
+    strcat (resName, ".");
+    strcat (resName, (const char*) entry);
+    
+    XrmPutStringResource (&database, resName, value);
+    return TRUE;
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, float value, const wxString& file)
 {
-  char buf[50];
-  sprintf(buf, "%.4f", value);
-  return wxWriteResource(section, entry, buf, file);
+    char buf[50];
+    sprintf(buf, "%.4f", value);
+    return wxWriteResource(section, entry, buf, file);
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, long value, const wxString& file)
 {
-  char buf[50];
-  sprintf(buf, "%ld", value);
-  return wxWriteResource(section, entry, buf, file);
+    char buf[50];
+    sprintf(buf, "%ld", value);
+    return wxWriteResource(section, entry, buf, file);
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, int value, const wxString& file)
 {
-  char buf[50];
-  sprintf(buf, "%d", value);
-  return wxWriteResource(section, entry, buf, file);
+    char buf[50];
+    sprintf(buf, "%d", value);
+    return wxWriteResource(section, entry, buf, file);
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, char **value, const wxString& file)
 {
-  if (!wxResourceDatabase)
+    if (!wxResourceDatabase)
     {
-      Display *display = (Display*) wxGetDisplay();
-      wxXMergeDatabases (wxTheApp, display);
+        Display *display = (Display*) wxGetDisplay();
+        wxXMergeDatabases (wxTheApp, display);
     }
-
-  XrmDatabase database;
-
-  if (file != "")
-  {
-      char buffer[500];
-      
-      // Is this right? Trying to get it to look in the user's
-      // home directory instead of current directory -- JACS
-      (void) GetIniFile (buffer, file);
-
-      wxNode *node = wxResourceCache.Find (buffer);
-      if (node)
-	database = (XrmDatabase) node->Data ();
-      else
-	{
-	  database = XrmGetFileDatabase (buffer);
-	  wxResourceCache.Append (buffer, (wxObject *) database);
-	}
-  }
-  else
-    database = wxResourceDatabase;
-
-  XrmValue xvalue;
-  char *str_type[20];
-  char buf[150];
-  strcpy (buf, section);
-  strcat (buf, ".");
-  strcat (buf, entry);
-
-  Bool success = XrmGetResource (database, buf, "*", str_type,
-				 &xvalue);
-  // Try different combinations of upper/lower case, just in case...
-  if (!success)
+    
+    XrmDatabase database;
+    
+    if (file != "")
     {
-      buf[0] = (isupper (buf[0]) ? tolower (buf[0]) : toupper (buf[0]));
-      success = XrmGetResource (database, buf, "*", str_type,
-				&xvalue);
+        char buffer[500];
+        
+        // Is this right? Trying to get it to look in the user's
+        // home directory instead of current directory -- JACS
+        (void) GetIniFile (buffer, file);
+        
+        wxNode *node = wxResourceCache.Find (buffer);
+        if (node)
+            database = (XrmDatabase) node->Data ();
+        else
+        {
+            database = XrmGetFileDatabase (buffer);
+            wxResourceCache.Append (buffer, (wxObject *) database);
+        }
     }
-  if (success)
+    else
+        database = wxResourceDatabase;
+    
+    XrmValue xvalue;
+    char *str_type[20];
+    char buf[150];
+    strcpy (buf, section);
+    strcat (buf, ".");
+    strcat (buf, entry);
+    
+    Bool success = XrmGetResource (database, buf, "*", str_type,
+        &xvalue);
+    // Try different combinations of upper/lower case, just in case...
+    if (!success)
     {
-      if (*value)
-        delete[] *value;
-
-      *value = new char[xvalue.size + 1];
-      strncpy (*value, xvalue.addr, (int) xvalue.size);
-      return TRUE;
+        buf[0] = (isupper (buf[0]) ? tolower (buf[0]) : toupper (buf[0]));
+        success = XrmGetResource (database, buf, "*", str_type,
+            &xvalue);
     }
-  return FALSE;
+    if (success)
+    {
+        if (*value)
+            delete[] *value;
+        
+        *value = new char[xvalue.size + 1];
+        strncpy (*value, xvalue.addr, (int) xvalue.size);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, float *value, const wxString& file)
 {
-  char *s = NULL;
-  bool succ = wxGetResource(section, entry, (char **)&s, file);
-  if (succ)
-  {
-    *value = (float)strtod(s, NULL);
-    delete[] s;
-    return TRUE;
-  }
-  else return FALSE;
+    char *s = NULL;
+    bool succ = wxGetResource(section, entry, (char **)&s, file);
+    if (succ)
+    {
+        *value = (float)strtod(s, NULL);
+        delete[] s;
+        return TRUE;
+    }
+    else return FALSE;
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, long *value, const wxString& file)
 {
-  char *s = NULL;
-  bool succ = wxGetResource(section, entry, (char **)&s, file);
-  if (succ)
-  {
-    *value = strtol(s, NULL, 10);
-    delete[] s;
-    return TRUE;
-  }
-  else return FALSE;
+    char *s = NULL;
+    bool succ = wxGetResource(section, entry, (char **)&s, file);
+    if (succ)
+    {
+        *value = strtol(s, NULL, 10);
+        delete[] s;
+        return TRUE;
+    }
+    else return FALSE;
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, int *value, const wxString& file)
 {
-  char *s = NULL;
-  bool succ = wxGetResource(section, entry, (char **)&s, file);
-  if (succ)
-  {
-      // Handle True, False here
-      // True, Yes, Enables, Set or  Activated 
-      if (*s == 'T' || *s == 'Y' || *s == 'E' || *s == 'S' || *s == 'A')
-        *value = TRUE;
-      // False, No, Disabled, Reset, Cleared, Deactivated
-      else if (*s == 'F' || *s == 'N' || *s == 'D' || *s == 'R' || *s == 'C')
-        *value = FALSE;
-      // Handle as Integer
-      else
-        *value = (int) strtol (s, NULL, 10);
+    char *s = NULL;
+    bool succ = wxGetResource(section, entry, (char **)&s, file);
+    if (succ)
+    {
+        // Handle True, False here
+        // True, Yes, Enables, Set or  Activated 
+        if (*s == 'T' || *s == 'Y' || *s == 'E' || *s == 'S' || *s == 'A')
+            *value = TRUE;
+        // False, No, Disabled, Reset, Cleared, Deactivated
+        else if (*s == 'F' || *s == 'N' || *s == 'D' || *s == 'R' || *s == 'C')
+            *value = FALSE;
+        // Handle as Integer
+        else
+            *value = (int) strtol (s, NULL, 10);
         delete[] s;
         return TRUE;
-  }
-  else
-    return FALSE;
+    }
+    else
+        return FALSE;
 }
 
 void wxXMergeDatabases (wxApp * theApp, Display * display)
 {
-  XrmDatabase homeDB, serverDB, applicationDB;
-  char filenamebuf[1024];
-
-  char *filename = &filenamebuf[0];
-  char *environment;
-  wxString classname = theApp->GetClassName();
-  char name[256];
-  (void) strcpy (name, "/usr/lib/X11/app-defaults/");
-  (void) strcat (name, (const char*) classname);
-
-  /* Get application defaults file, if any */
-  applicationDB = XrmGetFileDatabase (name);
-  (void) XrmMergeDatabases (applicationDB, &wxResourceDatabase);
-
-  /* Merge server defaults, created by xrdb, loaded as a property of the root
-   * window when the server initializes and loaded into the display
-   * structure on XOpenDisplay;
-   * if not defined, use .Xdefaults
-   */
-
-  if (XResourceManagerString (display) != NULL)
+    XrmDatabase homeDB, serverDB, applicationDB;
+    char filenamebuf[1024];
+    
+    char *filename = &filenamebuf[0];
+    char *environment;
+    wxString classname = theApp->GetClassName();
+    char name[256];
+    (void) strcpy (name, "/usr/lib/X11/app-defaults/");
+    (void) strcat (name, (const char*) classname);
+    
+    /* Get application defaults file, if any */
+    applicationDB = XrmGetFileDatabase (name);
+    (void) XrmMergeDatabases (applicationDB, &wxResourceDatabase);
+    
+    /* Merge server defaults, created by xrdb, loaded as a property of the root
+    * window when the server initializes and loaded into the display
+    * structure on XOpenDisplay;
+    * if not defined, use .Xdefaults
+    */
+    
+    if (XResourceManagerString (display) != NULL)
     {
-      serverDB = XrmGetStringDatabase (XResourceManagerString (display));
+        serverDB = XrmGetStringDatabase (XResourceManagerString (display));
     }
-  else
+    else
     {
-      (void) GetIniFile (filename, NULL);
-      serverDB = XrmGetFileDatabase (filename);
+        (void) GetIniFile (filename, NULL);
+        serverDB = XrmGetFileDatabase (filename);
     }
-  XrmMergeDatabases (serverDB, &wxResourceDatabase);
-
-  /* Open XENVIRONMENT file, or if not defined, the .Xdefaults,
-   * and merge into existing database
-   */
-
-  if ((environment = getenv ("XENVIRONMENT")) == NULL)
+    XrmMergeDatabases (serverDB, &wxResourceDatabase);
+    
+    /* Open XENVIRONMENT file, or if not defined, the .Xdefaults,
+    * and merge into existing database
+    */
+    
+    if ((environment = getenv ("XENVIRONMENT")) == NULL)
     {
-      size_t len;
-      environment = GetIniFile (filename, NULL);
-      len = strlen (environment);
+        size_t len;
+        environment = GetIniFile (filename, NULL);
+        len = strlen (environment);
 #if defined(__SVR4__) && !defined(__HPUX__)
-      (void) sysinfo (SI_HOSTNAME, environment + len, 1024 - len);
+        (void) sysinfo (SI_HOSTNAME, environment + len, 1024 - len);
 #else
-      (void) gethostname (environment + len, 1024 - len);
+        (void) gethostname (environment + len, 1024 - len);
 #endif
     }
-  homeDB = XrmGetFileDatabase (environment);
-  XrmMergeDatabases (homeDB, &wxResourceDatabase);
+    homeDB = XrmGetFileDatabase (environment);
+    XrmMergeDatabases (homeDB, &wxResourceDatabase);
 }
 
 #if 0
 
 /*
- * Not yet used but may be useful.
- *
- */
+* Not yet used but may be useful.
+*
+*/
 void 
 wxSetDefaultResources (const Widget w, const char **resourceSpec, const char *name)
 {
-  int i;
-  Display *dpy = XtDisplay (w);	// Retrieve the display pointer
-
-  XrmDatabase rdb = NULL;	// A resource data base
-
-  // Create an empty resource database
-  rdb = XrmGetStringDatabase ("");
-
-  // Add the Component resources, prepending the name of the component
-
-  i = 0;
-  while (resourceSpec[i] != NULL)
+    int i;
+    Display *dpy = XtDisplay (w);	// Retrieve the display pointer
+    
+    XrmDatabase rdb = NULL;	// A resource data base
+    
+    // Create an empty resource database
+    rdb = XrmGetStringDatabase ("");
+    
+    // Add the Component resources, prepending the name of the component
+    
+    i = 0;
+    while (resourceSpec[i] != NULL)
     {
-      char buf[1000];
-
-      sprintf (buf, "*%s%s", name, resourceSpec[i++]);
-      XrmPutLineResource (&rdb, buf);
+        char buf[1000];
+        
+        sprintf (buf, "*%s%s", name, resourceSpec[i++]);
+        XrmPutLineResource (&rdb, buf);
     }
-
-  // Merge them into the Xt database, with lowest precendence
-
-  if (rdb)
+    
+    // Merge them into the Xt database, with lowest precendence
+    
+    if (rdb)
     {
 #if (XlibSpecificationRelease>=5)
-      XrmDatabase db = XtDatabase (dpy);
-      XrmCombineDatabase (rdb, &db, FALSE);
+        XrmDatabase db = XtDatabase (dpy);
+        XrmCombineDatabase (rdb, &db, FALSE);
 #else
-      XrmMergeDatabases (dpy->db, &rdb);
-      dpy->db = rdb;
+        XrmMergeDatabases (dpy->db, &rdb);
+        dpy->db = rdb;
 #endif
     }
 }
 #endif
-   // 0
+// 0
 
 #endif // wxUSE_RESOURCES
 
@@ -553,134 +553,134 @@ static int wxBusyCursorCount = 0;
 static void 
 wxXSetBusyCursor (wxWindow * win, wxCursor * cursor)
 {
-  Display *display = (Display*) win->GetXDisplay();
-
-  Window xwin = (Window) win->GetXWindow();
-  XSetWindowAttributes attrs;
-
-  if (cursor)
+    Display *display = (Display*) win->GetXDisplay();
+    
+    Window xwin = (Window) win->GetXWindow();
+    XSetWindowAttributes attrs;
+    
+    if (cursor)
     {
-      attrs.cursor = (Cursor) cursor->GetXCursor(display);
+        attrs.cursor = (Cursor) cursor->GetXCursor(display);
     }
-  else
+    else
     {
-      // Restore old cursor
-      if (win->GetCursor()->Ok())
-        attrs.cursor = (Cursor) win->GetCursor()->GetXCursor(display);
-      else
-        attrs.cursor = None;
+        // Restore old cursor
+        if (win->GetCursor()->Ok())
+            attrs.cursor = (Cursor) win->GetCursor()->GetXCursor(display);
+        else
+            attrs.cursor = None;
     }
-  if (xwin)
-    XChangeWindowAttributes (display, xwin, CWCursor, &attrs);
-
-  XFlush (display);
-
-  for(wxNode *node = win->GetChildren().First (); node; node = node->Next())
-  {
+    if (xwin)
+        XChangeWindowAttributes (display, xwin, CWCursor, &attrs);
+    
+    XFlush (display);
+    
+    for(wxNode *node = win->GetChildren().First (); node; node = node->Next())
+    {
         wxWindow *child = (wxWindow *) node->Data ();
-	    wxXSetBusyCursor (child, cursor);
-  }
+        wxXSetBusyCursor (child, cursor);
+    }
 }
 
 // Set the cursor to the busy cursor for all windows
 void wxBeginBusyCursor(wxCursor *cursor)
 {
-  wxBusyCursorCount++;
-  if (wxBusyCursorCount == 1)
-  {
-    for(wxNode *node = wxTopLevelWindows.First (); node; node = node->Next())
+    wxBusyCursorCount++;
+    if (wxBusyCursorCount == 1)
     {
-        wxWindow *win = (wxWindow *) node->Data ();
-        wxXSetBusyCursor (win, cursor);
+        for(wxNode *node = wxTopLevelWindows.First (); node; node = node->Next())
+        {
+            wxWindow *win = (wxWindow *) node->Data ();
+            wxXSetBusyCursor (win, cursor);
+        }
     }
-  }
 }
 
 // Restore cursor to normal
 void wxEndBusyCursor()
 {
-  if (wxBusyCursorCount == 0)
-    return;
-
-  wxBusyCursorCount--;
-  if (wxBusyCursorCount == 0)
-  {
-      for(wxNode *node = wxTopLevelWindows.First (); node; node = node->Next())
-      {
-	    wxWindow *win = (wxWindow *) node->Data ();
-	    wxXSetBusyCursor (win, NULL);
-      }
-  }
+    if (wxBusyCursorCount == 0)
+        return;
+    
+    wxBusyCursorCount--;
+    if (wxBusyCursorCount == 0)
+    {
+        for(wxNode *node = wxTopLevelWindows.First (); node; node = node->Next())
+        {
+            wxWindow *win = (wxWindow *) node->Data ();
+            wxXSetBusyCursor (win, NULL);
+        }
+    }
 }
 
 // TRUE if we're between the above two calls
 bool wxIsBusy()
 {
-  return (wxBusyCursorCount > 0);
+    return (wxBusyCursorCount > 0);
 }    
 
 const char* wxGetHomeDir( wxString *home  )
 {
-  *home = wxGetUserHome( wxString() );
-  if (home->IsNull()) *home = "/";
-  return *home;
+    *home = wxGetUserHome( wxString() );
+    if (home->IsNull()) *home = "/";
+    return *home;
 };
 
 char *wxGetUserHome (const wxString& user)
 {
 #ifdef VMS
-  return(NULL);
+    return(NULL);
 #else
-  struct passwd *who = NULL;
-
-  if (user == "") {
-    register char *ptr;
-
-    if ((ptr = getenv("HOME")) != NULL) 
-      return ptr;
-    if ((ptr = getenv("USER")) != NULL ||
-	(ptr = getenv("LOGNAME")) != NULL)
-      {
-	who = getpwnam( ptr );
-      }
-    // We now make sure the the user exists!
-    if (who == NULL)
-      who = getpwuid( getuid() );
-  } else
-    who = getpwnam ((const char*) user);
-
-  return who ? who->pw_dir : (char*) NULL;
+    struct passwd *who = NULL;
+    
+    if (user == "") {
+        register char *ptr;
+        
+        if ((ptr = getenv("HOME")) != NULL) 
+            return ptr;
+        if ((ptr = getenv("USER")) != NULL ||
+            (ptr = getenv("LOGNAME")) != NULL)
+        {
+            who = getpwnam( ptr );
+        }
+        // We now make sure the the user exists!
+        if (who == NULL)
+            who = getpwuid( getuid() );
+    } else
+        who = getpwnam ((const char*) user);
+    
+    return who ? who->pw_dir : (char*) NULL;
 #endif
- // ifdef VMS
+    // ifdef VMS
 }
 
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
 bool wxCheckForInterrupt(wxWindow *wnd)
 {
-	if(wnd){
-		Display *dpy=(Display*) wnd->GetXDisplay();
-		Window win=(Window) wnd->GetXWindow();
-		XEvent event;
-		XFlush(dpy);
-		if(wnd->GetMainWidget()){
-			XmUpdateDisplay((Widget)(wnd->GetMainWidget()));
-		}
-		while(XCheckMaskEvent(dpy,
-							ButtonPressMask|ButtonReleaseMask|ButtonMotionMask|
-							PointerMotionMask|KeyPressMask|KeyReleaseMask,
-							&event)){
-			if(event.xany.window==win)
-				XtDispatchEvent(&event);
-	//		else
-	//			XBell(dpy,50);
-		}
-		return TRUE;//*** temporary?
-	}
-	else{
-		wxMessageBox("wnd==NULL !!!");
-		return FALSE;//*** temporary?
-	}
+    if(wnd){
+        Display *dpy=(Display*) wnd->GetXDisplay();
+        Window win=(Window) wnd->GetXWindow();
+        XEvent event;
+        XFlush(dpy);
+        if(wnd->GetMainWidget()){
+            XmUpdateDisplay((Widget)(wnd->GetMainWidget()));
+        }
+        while(XCheckMaskEvent(dpy,
+            ButtonPressMask|ButtonReleaseMask|ButtonMotionMask|
+            PointerMotionMask|KeyPressMask|KeyReleaseMask,
+            &event)){
+            if(event.xany.window==win)
+                XtDispatchEvent(&event);
+            //		else
+            //			XBell(dpy,50);
+        }
+        return TRUE;//*** temporary?
+    }
+    else{
+        wxMessageBox("wnd==NULL !!!");
+        return FALSE;//*** temporary?
+    }
 }
 
 void wxGetMousePosition( int* x, int* y )
@@ -688,10 +688,10 @@ void wxGetMousePosition( int* x, int* y )
     XMotionEvent xev;
     Window root, child;
     XQueryPointer((Display*) wxGetDisplay(),
-                  DefaultRootWindow((Display*) wxGetDisplay()), &root, &child,
-                  &(xev.x_root), &(xev.y_root),
-                  &(xev.x),      &(xev.y),
-                  &(xev.state));
+        DefaultRootWindow((Display*) wxGetDisplay()), &root, &child,
+        &(xev.x_root), &(xev.y_root),
+        &(xev.x),      &(xev.y),
+        &(xev.state));
     *x = xev.x_root;
     *y = xev.y_root;
 };
@@ -700,11 +700,11 @@ void wxGetMousePosition( int* x, int* y )
 bool wxColourDisplay()
 {
     Display *dpy = (Display*) wxGetDisplay();
-
+    
     if (DefaultDepth (dpy, DefaultScreen (dpy)) < 2)
-      return FALSE;
+        return FALSE;
     else
-      return TRUE;
+        return TRUE;
 }
 
 // Returns depth of screen
@@ -717,10 +717,10 @@ int wxDisplayDepth()
 // Get size of display
 void wxDisplaySize(int *width, int *height)
 {
-  Display *dpy = (Display*) wxGetDisplay();
-  
-  *width = DisplayWidth (dpy, DefaultScreen (dpy));
-  *height = DisplayHeight (dpy, DefaultScreen (dpy));
+    Display *dpy = (Display*) wxGetDisplay();
+    
+    *width = DisplayWidth (dpy, DefaultScreen (dpy));
+    *height = DisplayHeight (dpy, DefaultScreen (dpy));
 }
 
 /* Configurable display in Motif */
@@ -729,305 +729,305 @@ static wxString gs_displayName;
 
 WXDisplay *wxGetDisplay()
 {
-  if (gs_currentDisplay)
-    return gs_currentDisplay;
-
-  if (wxTheApp && wxTheApp->GetTopLevelWidget())
-    return XtDisplay ((Widget) wxTheApp->GetTopLevelWidget());
-  else if (wxTheApp)
-    return wxTheApp->GetInitialDisplay();
-  else
-    return (WXDisplay*) NULL;
+    if (gs_currentDisplay)
+        return gs_currentDisplay;
+    
+    if (wxTheApp && wxTheApp->GetTopLevelWidget())
+        return XtDisplay ((Widget) wxTheApp->GetTopLevelWidget());
+    else if (wxTheApp)
+        return wxTheApp->GetInitialDisplay();
+    else
+        return (WXDisplay*) NULL;
 }
 
 bool wxSetDisplay(const wxString& display_name)
 {
-  gs_displayName = display_name;
-  
-  if (display_name.IsNull() || display_name.IsEmpty())
-  {
-      gs_currentDisplay = NULL;
-      return TRUE;
-  }
-  else
-  {
-    Cardinal argc = 0;
-
-    Display *display = XtOpenDisplay((XtAppContext) wxTheApp->GetAppContext(),
-				     (const char*) display_name,
-				     (const char*) wxTheApp->GetAppName(),
-				     (const char*) wxTheApp->GetClassName(),
-				     NULL,
-# if XtSpecificationRelease < 5
-				     0, &argc, NULL);
-# else
-				     0, (int *)&argc, NULL);
-# endif
-
-    if (display)
+    gs_displayName = display_name;
+    
+    if (display_name.IsNull() || display_name.IsEmpty())
     {
-      gs_currentDisplay = (WXDisplay*) display;
-      return TRUE;
-    } else
-      return FALSE;
-  }
-  return FALSE;
+        gs_currentDisplay = NULL;
+        return TRUE;
+    }
+    else
+    {
+        Cardinal argc = 0;
+        
+        Display *display = XtOpenDisplay((XtAppContext) wxTheApp->GetAppContext(),
+            (const char*) display_name,
+            (const char*) wxTheApp->GetAppName(),
+            (const char*) wxTheApp->GetClassName(),
+            NULL,
+# if XtSpecificationRelease < 5
+            0, &argc, NULL);
+# else
+        0, (int *)&argc, NULL);
+# endif
+        
+        if (display)
+        {
+            gs_currentDisplay = (WXDisplay*) display;
+            return TRUE;
+        } else
+            return FALSE;
+    }
+    return FALSE;
 }
 
 wxString wxGetDisplayName()
 {
-  return gs_displayName;
+    return gs_displayName;
 }
 
 // Find the letter corresponding to the mnemonic, for Motif
 char wxFindMnemonic (const char *s)
 {
-  char mnem = 0;
-  int len = strlen (s);
-  int i;
-  for (i = 0; i < len; i++)
+    char mnem = 0;
+    int len = strlen (s);
+    int i;
+    for (i = 0; i < len; i++)
     {
-      if (s[i] == '&')
-	{
-	  // Carefully handle &&
-	  if ((i + 1) <= len && s[i + 1] == '&')
-	    i++;
-	  else
-	    {
-	      mnem = s[i + 1];
-	      break;
-	    }
-	}
+        if (s[i] == '&')
+        {
+            // Carefully handle &&
+            if ((i + 1) <= len && s[i + 1] == '&')
+                i++;
+            else
+            {
+                mnem = s[i + 1];
+                break;
+            }
+        }
     }
-  return mnem;
+    return mnem;
 }
 
 char * wxFindAccelerator (char *s)
 {
-// The accelerator text is after the \t char.
-  while (*s && *s != '\t')
+    // The accelerator text is after the \t char.
+    while (*s && *s != '\t')
+        s++;
+    if (*s == '\0')
+        return (NULL);
     s++;
-  if (*s == '\0')
-    return (NULL);
-  s++;
-/*
-   Now we need to format it as X standard:
-
-   input            output
-
-   F7           --> <Key>F7
-   Ctrl+N       --> Ctrl<Key>N
-   Alt+k        --> Meta<Key>k
-   Ctrl+Shift+A --> Ctrl Shift<Key>A
-
- */
-
-  wxBuffer[0] = '\0';
-  char *tmp = copystring (s);
-  s = tmp;
-  char *p = s;
-
-  while (1)
+    /*
+    Now we need to format it as X standard:
+    
+      input            output
+      
+        F7           --> <Key>F7
+        Ctrl+N       --> Ctrl<Key>N
+        Alt+k        --> Meta<Key>k
+        Ctrl+Shift+A --> Ctrl Shift<Key>A
+        
+    */
+    
+    wxBuffer[0] = '\0';
+    char *tmp = copystring (s);
+    s = tmp;
+    char *p = s;
+    
+    while (1)
     {
-      while (*p && *p != '+')
-	p++;
-      if (*p)
-	{
-	  *p = '\0';
-	  if (wxBuffer[0])
-	    strcat (wxBuffer, " ");
-	  if (strcmp (s, "Alt"))
-	    strcat (wxBuffer, s);
-	  else
-	    strcat (wxBuffer, "Meta");
-	  s = p + 1;
-	  p = s;
-	}
-      else
-	{
-	  strcat (wxBuffer, "<Key>");
-	  strcat (wxBuffer, s);
-	  break;
-	}
+        while (*p && *p != '+')
+            p++;
+        if (*p)
+        {
+            *p = '\0';
+            if (wxBuffer[0])
+                strcat (wxBuffer, " ");
+            if (strcmp (s, "Alt"))
+                strcat (wxBuffer, s);
+            else
+                strcat (wxBuffer, "Meta");
+            s = p + 1;
+            p = s;
+        }
+        else
+        {
+            strcat (wxBuffer, "<Key>");
+            strcat (wxBuffer, s);
+            break;
+        }
     }
-  delete[]tmp;
-  return wxBuffer;
+    delete[]tmp;
+    return wxBuffer;
 }
 
 XmString wxFindAcceleratorText (char *s)
 {
-// The accelerator text is after the \t char.
-  while (*s && *s != '\t')
+    // The accelerator text is after the \t char.
+    while (*s && *s != '\t')
+        s++;
+    if (*s == '\0')
+        return (NULL);
     s++;
-  if (*s == '\0')
-    return (NULL);
-  s++;
-  XmString text = XmStringCreateSimple (s);
-  return text;
+    XmString text = XmStringCreateSimple (s);
+    return text;
 }
 
 #include <X11/keysym.h>
 
 int wxCharCodeXToWX(KeySym keySym)
 {
-  int id;
-  switch (keySym) {
+    int id;
+    switch (keySym) {
     case XK_Shift_L:
     case XK_Shift_R:
-      id = WXK_SHIFT; break;
+        id = WXK_SHIFT; break;
     case XK_Control_L:
     case XK_Control_R:
-      id = WXK_CONTROL; break;
+        id = WXK_CONTROL; break;
     case XK_BackSpace:
-      id = WXK_BACK; break;
+        id = WXK_BACK; break;
     case XK_Delete:
-      id = WXK_DELETE; break;
+        id = WXK_DELETE; break;
     case XK_Clear:
-      id = WXK_CLEAR; break;
+        id = WXK_CLEAR; break;
     case XK_Tab:
-      id = WXK_TAB; break;
+        id = WXK_TAB; break;
     case XK_numbersign:
-      id = '#'; break;
+        id = '#'; break;
     case XK_Return:
-      id = WXK_RETURN; break;
+        id = WXK_RETURN; break;
     case XK_Escape:
-      id = WXK_ESCAPE; break;
+        id = WXK_ESCAPE; break;
     case XK_Pause:
     case XK_Break:
-      id = WXK_PAUSE; break;
+        id = WXK_PAUSE; break;
     case XK_Num_Lock:
-      id = WXK_NUMLOCK; break;
+        id = WXK_NUMLOCK; break;
     case XK_Scroll_Lock:
-      id = WXK_SCROLL; break;
-
+        id = WXK_SCROLL; break;
+        
     case XK_Home:
-      id = WXK_HOME; break;
+        id = WXK_HOME; break;
     case XK_End:
-      id = WXK_END; break;
+        id = WXK_END; break;
     case XK_Left:
-      id = WXK_LEFT; break;
+        id = WXK_LEFT; break;
     case XK_Right:
-      id = WXK_RIGHT; break;
+        id = WXK_RIGHT; break;
     case XK_Up:
-      id = WXK_UP; break;
+        id = WXK_UP; break;
     case XK_Down:
-      id = WXK_DOWN; break;
+        id = WXK_DOWN; break;
     case XK_Next:
-      id = WXK_NEXT; break;
+        id = WXK_NEXT; break;
     case XK_Prior:
-      id = WXK_PRIOR; break;
+        id = WXK_PRIOR; break;
     case XK_Menu:
-      id = WXK_MENU; break;
+        id = WXK_MENU; break;
     case XK_Select:
-      id = WXK_SELECT; break;
+        id = WXK_SELECT; break;
     case XK_Cancel:
-      id = WXK_CANCEL; break;
+        id = WXK_CANCEL; break;
     case XK_Print:
-      id = WXK_PRINT; break;
+        id = WXK_PRINT; break;
     case XK_Execute:
-      id = WXK_EXECUTE; break;
+        id = WXK_EXECUTE; break;
     case XK_Insert:
-      id = WXK_INSERT; break;
+        id = WXK_INSERT; break;
     case XK_Help:
-      id = WXK_HELP; break;
-
+        id = WXK_HELP; break;
+        
     case XK_KP_Multiply:
-      id = WXK_MULTIPLY; break;
+        id = WXK_MULTIPLY; break;
     case XK_KP_Add:
-      id = WXK_ADD; break;
+        id = WXK_ADD; break;
     case XK_KP_Subtract:
-      id = WXK_SUBTRACT; break;
+        id = WXK_SUBTRACT; break;
     case XK_KP_Divide:
-      id = WXK_DIVIDE; break;
+        id = WXK_DIVIDE; break;
     case XK_KP_Decimal:
-      id = WXK_DECIMAL; break;
+        id = WXK_DECIMAL; break;
     case XK_KP_Equal:
-      id = '='; break;
+        id = '='; break;
     case XK_KP_Space:
-      id = ' '; break;
+        id = ' '; break;
     case XK_KP_Tab:
-      id = WXK_TAB; break;
+        id = WXK_TAB; break;
     case XK_KP_Enter:
-      id = WXK_RETURN; break;
+        id = WXK_RETURN; break;
     case XK_KP_0:
-      id = WXK_NUMPAD0; break;
+        id = WXK_NUMPAD0; break;
     case XK_KP_1:
-      id = WXK_NUMPAD1; break;
+        id = WXK_NUMPAD1; break;
     case XK_KP_2:
-      id = WXK_NUMPAD2; break;
+        id = WXK_NUMPAD2; break;
     case XK_KP_3:
-      id = WXK_NUMPAD3; break;
+        id = WXK_NUMPAD3; break;
     case XK_KP_4:
-      id = WXK_NUMPAD4; break;
+        id = WXK_NUMPAD4; break;
     case XK_KP_5:
-      id = WXK_NUMPAD5; break;
+        id = WXK_NUMPAD5; break;
     case XK_KP_6:
-      id = WXK_NUMPAD6; break;
+        id = WXK_NUMPAD6; break;
     case XK_KP_7:
-      id = WXK_NUMPAD7; break;
+        id = WXK_NUMPAD7; break;
     case XK_KP_8:
-      id = WXK_NUMPAD8; break;
+        id = WXK_NUMPAD8; break;
     case XK_KP_9:
-      id = WXK_NUMPAD9; break;
+        id = WXK_NUMPAD9; break;
     case XK_F1:
-      id = WXK_F1; break;
+        id = WXK_F1; break;
     case XK_F2:
-      id = WXK_F2; break;
+        id = WXK_F2; break;
     case XK_F3:
-      id = WXK_F3; break;
+        id = WXK_F3; break;
     case XK_F4:
-      id = WXK_F4; break;
+        id = WXK_F4; break;
     case XK_F5:
-      id = WXK_F5; break;
+        id = WXK_F5; break;
     case XK_F6:
-      id = WXK_F6; break;
+        id = WXK_F6; break;
     case XK_F7:
-      id = WXK_F7; break;
+        id = WXK_F7; break;
     case XK_F8:
-      id = WXK_F8; break;
+        id = WXK_F8; break;
     case XK_F9:
-      id = WXK_F9; break;
+        id = WXK_F9; break;
     case XK_F10:
-      id = WXK_F10; break;
+        id = WXK_F10; break;
     case XK_F11:
-      id = WXK_F11; break;
+        id = WXK_F11; break;
     case XK_F12:
-      id = WXK_F12; break;
+        id = WXK_F12; break;
     case XK_F13:
-      id = WXK_F13; break;
+        id = WXK_F13; break;
     case XK_F14:
-      id = WXK_F14; break;
+        id = WXK_F14; break;
     case XK_F15:
-      id = WXK_F15; break;
+        id = WXK_F15; break;
     case XK_F16:
-      id = WXK_F16; break;
+        id = WXK_F16; break;
     case XK_F17:
-      id = WXK_F17; break;
+        id = WXK_F17; break;
     case XK_F18:
-      id = WXK_F18; break;
+        id = WXK_F18; break;
     case XK_F19:
-      id = WXK_F19; break;
+        id = WXK_F19; break;
     case XK_F20:
-      id = WXK_F20; break;
+        id = WXK_F20; break;
     case XK_F21:
-      id = WXK_F21; break;
+        id = WXK_F21; break;
     case XK_F22:
-      id = WXK_F22; break;
+        id = WXK_F22; break;
     case XK_F23:
-      id = WXK_F23; break;
+        id = WXK_F23; break;
     case XK_F24:
-      id = WXK_F24; break;
+        id = WXK_F24; break;
     default:
-      id = (keySym <= 255) ? (int)keySym : -1;
+        id = (keySym <= 255) ? (int)keySym : -1;
   } // switch
   return id;
 }
 
 KeySym wxCharCodeWXToX(int id)
 {
-  KeySym keySym;
-
-  switch (id) {
+    KeySym keySym;
+    
+    switch (id) {
     case WXK_CANCEL:            keySym = XK_Cancel; break;
     case WXK_BACK:              keySym = XK_BackSpace; break;
     case WXK_TAB:	        keySym = XK_Tab; break;
@@ -1095,8 +1095,8 @@ KeySym wxCharCodeWXToX(int id)
     case WXK_NUMLOCK:		keySym = XK_Num_Lock; break;
     case WXK_SCROLL:		keySym = XK_Scroll_Lock; break;
     default:                    keySym = id <= 255 ? (KeySym)id : 0;
-  } // switch
-  return keySym;
+    } // switch
+    return keySym;
 }
 
 // Read $HOME for what it says is home, if not
@@ -1104,140 +1104,140 @@ KeySym wxCharCodeWXToX(int id)
 // the Real User, then determine the Real home dir.
 static char * GetIniFile (char *dest, const char *filename)
 {
-  char *home = NULL;
-  if (filename && wxIsAbsolutePath(filename))
-  {
-    strcpy(dest, filename);
-  }
-  else if ((home = wxGetUserHome("")) != NULL)
-  {
-    strcpy(dest, home);
-    if (dest[strlen(dest) - 1] != '/')
-      strcat (dest, "/");
-    if (filename == NULL)
-      {
-        if ((filename = getenv ("XENVIRONMENT")) == NULL)
-          filename = ".Xdefaults";
-      }
-    else if (*filename != '.')
-      strcat (dest, ".");
-    strcat (dest, filename);
-  } else
-  {
-    dest[0] = '\0';    
-  }
-  return dest;
+    char *home = NULL;
+    if (filename && wxIsAbsolutePath(filename))
+    {
+        strcpy(dest, filename);
+    }
+    else if ((home = wxGetUserHome("")) != NULL)
+    {
+        strcpy(dest, home);
+        if (dest[strlen(dest) - 1] != '/')
+            strcat (dest, "/");
+        if (filename == NULL)
+        {
+            if ((filename = getenv ("XENVIRONMENT")) == NULL)
+                filename = ".Xdefaults";
+        }
+        else if (*filename != '.')
+            strcat (dest, ".");
+        strcat (dest, filename);
+    } else
+    {
+        dest[0] = '\0';    
+    }
+    return dest;
 }
 
 /*
- * Some colour manipulation routines
- */
- 
+* Some colour manipulation routines
+*/
+
 void wxHSVToXColor(wxHSV *hsv,XColor *rgb)
-   {
-     int h = hsv->h;
-     int s = hsv->s;
-     int v = hsv->v;
-     int r, g, b;
-     int i, f;
-     int p, q, t;
-     s = (s * wxMAX_RGB) / wxMAX_SV;
-     v = (v * wxMAX_RGB) / wxMAX_SV;
-     if (h == 360) h = 0;
-     if (s == 0) { h = 0; r = g = b = v; }
-     i = h / 60;
-     f = h % 60;
-     p = v * (wxMAX_RGB - s) / wxMAX_RGB;
-     q = v * (wxMAX_RGB - s * f / 60) / wxMAX_RGB;
-     t = v * (wxMAX_RGB - s * (60 - f) / 60) / wxMAX_RGB;
-     switch (i) 
-        {
-          case 0: r = v, g = t, b = p; break;
-          case 1: r = q, g = v, b = p; break;
-          case 2: r = p, g = v, b = t; break;
-          case 3: r = p, g = q, b = v; break;
-          case 4: r = t, g = p, b = v; break;
-          case 5: r = v, g = p, b = q; break;
-        }
-     rgb->red = r << 8;
-     rgb->green = g << 8;
-     rgb->blue = b << 8;
-   }
+{
+    int h = hsv->h;
+    int s = hsv->s;
+    int v = hsv->v;
+    int r, g, b;
+    int i, f;
+    int p, q, t;
+    s = (s * wxMAX_RGB) / wxMAX_SV;
+    v = (v * wxMAX_RGB) / wxMAX_SV;
+    if (h == 360) h = 0;
+    if (s == 0) { h = 0; r = g = b = v; }
+    i = h / 60;
+    f = h % 60;
+    p = v * (wxMAX_RGB - s) / wxMAX_RGB;
+    q = v * (wxMAX_RGB - s * f / 60) / wxMAX_RGB;
+    t = v * (wxMAX_RGB - s * (60 - f) / 60) / wxMAX_RGB;
+    switch (i) 
+    {
+    case 0: r = v, g = t, b = p; break;
+    case 1: r = q, g = v, b = p; break;
+    case 2: r = p, g = v, b = t; break;
+    case 3: r = p, g = q, b = v; break;
+    case 4: r = t, g = p, b = v; break;
+    case 5: r = v, g = p, b = q; break;
+    }
+    rgb->red = r << 8;
+    rgb->green = g << 8;
+    rgb->blue = b << 8;
+}
 
 void wxXColorToHSV(wxHSV *hsv,XColor *rgb)
-   {
-     int r = rgb->red >> 8;
-     int g = rgb->green >> 8;
-     int b = rgb->blue >> 8;
-     int maxv = wxMax3(r, g, b);
-     int minv = wxMin3(r, g, b);
-     int h, s, v;
-     v = maxv;
-     if (maxv) s = (maxv - minv) * wxMAX_RGB / maxv;
-     else s = 0;
-     if (s == 0) h = 0;
-     else 
-        {
-	      int rc, gc, bc, hex;
-	      rc = (maxv - r) * wxMAX_RGB / (maxv - minv);
-	      gc = (maxv - g) * wxMAX_RGB / (maxv - minv);
-	      bc = (maxv - b) * wxMAX_RGB / (maxv - minv);
-	      if (r == maxv) { h = bc - gc, hex = 0; } 
-	      else if (g == maxv) { h = rc - bc, hex = 2; } 
-	           else if (b == maxv) { h = gc - rc, hex = 4; }
-	      h = hex * 60 + (h * 60 / wxMAX_RGB);
-	      if (h < 0) h += 360;
-        }
-     hsv->h = h;
-     hsv->s = (s * wxMAX_SV) / wxMAX_RGB;
-     hsv->v = (v * wxMAX_SV) / wxMAX_RGB;
-   }
+{
+    int r = rgb->red >> 8;
+    int g = rgb->green >> 8;
+    int b = rgb->blue >> 8;
+    int maxv = wxMax3(r, g, b);
+    int minv = wxMin3(r, g, b);
+    int h, s, v;
+    v = maxv;
+    if (maxv) s = (maxv - minv) * wxMAX_RGB / maxv;
+    else s = 0;
+    if (s == 0) h = 0;
+    else 
+    {
+        int rc, gc, bc, hex;
+        rc = (maxv - r) * wxMAX_RGB / (maxv - minv);
+        gc = (maxv - g) * wxMAX_RGB / (maxv - minv);
+        bc = (maxv - b) * wxMAX_RGB / (maxv - minv);
+        if (r == maxv) { h = bc - gc, hex = 0; } 
+        else if (g == maxv) { h = rc - bc, hex = 2; } 
+        else if (b == maxv) { h = gc - rc, hex = 4; }
+        h = hex * 60 + (h * 60 / wxMAX_RGB);
+        if (h < 0) h += 360;
+    }
+    hsv->h = h;
+    hsv->s = (s * wxMAX_SV) / wxMAX_RGB;
+    hsv->v = (v * wxMAX_SV) / wxMAX_RGB;
+}
 
 void wxAllocNearestColor(Display *d,Colormap cmp,XColor *xc)
-   {
-     int llp;
-
-     int screen = DefaultScreen(d);
-     int num_colors = DisplayCells(d,screen);
-
-     XColor *color_defs = new XColor[num_colors];
-     for(llp = 0;llp < num_colors;llp++) color_defs[llp].pixel = llp;
-     XQueryColors(d,cmp,color_defs,num_colors);
-
-     wxHSV hsv_defs, hsv;
-     wxXColorToHSV(&hsv,xc);
-
-     int diff, min_diff, pixel = 0;
-
-     for(llp = 0;llp < num_colors;llp++)
-        {
-          wxXColorToHSV(&hsv_defs,&color_defs[llp]);
-          diff = wxSIGN(wxH_WEIGHT * (hsv.h - hsv_defs.h)) +
-                 wxSIGN(wxS_WEIGHT * (hsv.s - hsv_defs.s)) +
-                 wxSIGN(wxV_WEIGHT * (hsv.v - hsv_defs.v));
-          if (llp == 0) min_diff = diff;
-          if (min_diff > diff) { min_diff = diff; pixel = llp; }
-          if (min_diff == 0) break;
-        }
-
-     xc -> red = color_defs[pixel].red;
-     xc -> green = color_defs[pixel].green;
-     xc -> blue = color_defs[pixel].blue;
-     xc -> flags = DoRed | DoGreen | DoBlue;
-     if (!XAllocColor(d,cmp,xc))
+{
+    int llp;
+    
+    int screen = DefaultScreen(d);
+    int num_colors = DisplayCells(d,screen);
+    
+    XColor *color_defs = new XColor[num_colors];
+    for(llp = 0;llp < num_colors;llp++) color_defs[llp].pixel = llp;
+    XQueryColors(d,cmp,color_defs,num_colors);
+    
+    wxHSV hsv_defs, hsv;
+    wxXColorToHSV(&hsv,xc);
+    
+    int diff, min_diff, pixel = 0;
+    
+    for(llp = 0;llp < num_colors;llp++)
+    {
+        wxXColorToHSV(&hsv_defs,&color_defs[llp]);
+        diff = wxSIGN(wxH_WEIGHT * (hsv.h - hsv_defs.h)) +
+            wxSIGN(wxS_WEIGHT * (hsv.s - hsv_defs.s)) +
+            wxSIGN(wxV_WEIGHT * (hsv.v - hsv_defs.v));
+        if (llp == 0) min_diff = diff;
+        if (min_diff > diff) { min_diff = diff; pixel = llp; }
+        if (min_diff == 0) break;
+    }
+    
+    xc -> red = color_defs[pixel].red;
+    xc -> green = color_defs[pixel].green;
+    xc -> blue = color_defs[pixel].blue;
+    xc -> flags = DoRed | DoGreen | DoBlue;
+    if (!XAllocColor(d,cmp,xc))
         cout << "wxAllocNearestColor : Warning : Cannot find nearest color !\n";
-
-     delete[] color_defs;
-   }
+    
+    delete[] color_defs;
+}
 
 void wxAllocColor(Display *d,Colormap cmp,XColor *xc)
-   {
-     if (!XAllocColor(d,cmp,xc))
-        {
-//          cout << "wxAllocColor : Warning : Can not allocate color, attempt find nearest !\n";
-          wxAllocNearestColor(d,cmp,xc);
-        }
-   }
+{
+    if (!XAllocColor(d,cmp,xc))
+    {
+        //          cout << "wxAllocColor : Warning : Can not allocate color, attempt find nearest !\n";
+        wxAllocNearestColor(d,cmp,xc);
+    }
+}
 
 
 // These functions duplicate those in wxWindow, but are needed
@@ -1247,36 +1247,36 @@ void wxAllocColor(Display *d,Colormap cmp,XColor *xc)
 
 void wxDoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour)
 {
-  // When should we specify the foreground, if it's calculated
-  // by wxComputeColours?
-  // Solution: say we start with the default (computed) foreground colour.
-  // If we call SetForegroundColour explicitly for a control or window,
-  // then the foreground is changed.
-  // Therefore SetBackgroundColour computes the foreground colour, and
-  // SetForegroundColour changes the foreground colour. The ordering is
-  // important.
-
-  XtVaSetValues ((Widget) widget,
-		   XmNforeground, foregroundColour.AllocColour(XtDisplay((Widget) widget)),
-		   NULL);
+    // When should we specify the foreground, if it's calculated
+    // by wxComputeColours?
+    // Solution: say we start with the default (computed) foreground colour.
+    // If we call SetForegroundColour explicitly for a control or window,
+    // then the foreground is changed.
+    // Therefore SetBackgroundColour computes the foreground colour, and
+    // SetForegroundColour changes the foreground colour. The ordering is
+    // important.
+    
+    XtVaSetValues ((Widget) widget,
+        XmNforeground, foregroundColour.AllocColour(XtDisplay((Widget) widget)),
+        NULL);
 }
 
 void wxDoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, bool changeArmColour)
 {
-  wxComputeColours (XtDisplay((Widget) widget), & backgroundColour,
-			    (wxColour*) NULL);
-
-  XtVaSetValues ((Widget) widget,
-		   XmNbackground, g_itemColors[wxBACK_INDEX].pixel,
-		   XmNtopShadowColor, g_itemColors[wxTOPS_INDEX].pixel,
-		   XmNbottomShadowColor, g_itemColors[wxBOTS_INDEX].pixel,
-		   XmNforeground, g_itemColors[wxFORE_INDEX].pixel,
-		   NULL);
-
-  if (changeArmColour)
+    wxComputeColours (XtDisplay((Widget) widget), & backgroundColour,
+        (wxColour*) NULL);
+    
     XtVaSetValues ((Widget) widget,
-    		   XmNarmColor, g_itemColors[wxSELE_INDEX].pixel,
-               NULL);
+        XmNbackground, g_itemColors[wxBACK_INDEX].pixel,
+        XmNtopShadowColor, g_itemColors[wxTOPS_INDEX].pixel,
+        XmNbottomShadowColor, g_itemColors[wxBOTS_INDEX].pixel,
+        XmNforeground, g_itemColors[wxFORE_INDEX].pixel,
+        NULL);
+    
+    if (changeArmColour)
+        XtVaSetValues ((Widget) widget,
+        XmNarmColor, g_itemColors[wxSELE_INDEX].pixel,
+        NULL);
 }
 
 

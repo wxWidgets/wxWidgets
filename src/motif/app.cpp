@@ -57,7 +57,7 @@ wxHashTable *wxWidgetHashTable = NULL;
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
-    EVT_IDLE(wxApp::OnIdle)
+EVT_IDLE(wxApp::OnIdle)
 END_EVENT_TABLE()
 #endif
 
@@ -70,35 +70,35 @@ bool wxApp::Initialize()
 #else
     wxBuffer = new char[BUFSIZ + 512];
 #endif
-
+    
     wxClassInfo::InitializeClasses();
-
+    
     wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
     wxTheColourDatabase->Initialize();
-
+    
     wxInitializeStockLists();
     wxInitializeStockObjects();
-
+    
 #if wxUSE_WX_RESOURCES
     wxInitializeResourceSystem();
 #endif
-
-  // For PostScript printing
+    
+    // For PostScript printing
 #if wxUSE_POSTSCRIPT
-/* Done using wxModule now
+    /* Done using wxModule now
     wxInitializePrintSetupData();
     wxThePrintPaperDatabase = new wxPrintPaperDatabase;
     wxThePrintPaperDatabase->CreateDatabase();
-*/
+    */
 #endif
-
+    
     wxBitmap::InitStandardHandlers();
-
+    
     wxWidgetHashTable = new wxHashTable(wxKEY_INTEGER);
-
+    
     wxModule::RegisterModules();
     if (!wxModule::InitializeModules()) return FALSE;
-
+    
     return TRUE;
 }
 
@@ -106,50 +106,50 @@ void wxApp::CleanUp()
 {
     delete wxWidgetHashTable;
     wxWidgetHashTable = NULL;
-
+    
     wxModule::CleanUpModules();
-
+    
 #if wxUSE_WX_RESOURCES
     wxCleanUpResourceSystem();
 #endif
-
+    
     wxDeleteStockObjects() ;
-
+    
     // Destroy all GDI lists, etc.
-
+    
     delete wxTheBrushList;
     wxTheBrushList = NULL;
-
+    
     delete wxThePenList;
     wxThePenList = NULL;
-
+    
     delete wxTheFontList;
     wxTheFontList = NULL;
-
+    
     delete wxTheBitmapList;
     wxTheBitmapList = NULL;
-
+    
     delete wxTheColourDatabase;
     wxTheColourDatabase = NULL;
-
+    
 #if wxUSE_POSTSCRIPT
-/* Done using wxModule now
+    /* Done using wxModule now
     wxInitializePrintSetupData(FALSE);
     delete wxThePrintPaperDatabase;
     wxThePrintPaperDatabase = NULL;
-*/
+    */
 #endif
-
+    
     wxBitmap::CleanUpHandlers();
-
+    
     delete[] wxBuffer;
     wxBuffer = NULL;
-
+    
     wxClassInfo::CleanUpClasses();
-
+    
     delete wxTheApp;
     wxTheApp = NULL;
-  
+    
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
     // At this point we want to check if there are any memory
     // blocks that aren't part of the wxDebugContext itself,
@@ -157,12 +157,12 @@ void wxApp::CleanUp()
     // wxDebugContext, too.
     if (wxDebugContext::CountObjectsLeft(TRUE) > 0)
     {
-      wxLogDebug("There were memory leaks.\n");
-      wxDebugContext::Dump();
-      wxDebugContext::PrintStatistics();
+        wxLogDebug("There were memory leaks.\n");
+        wxDebugContext::Dump();
+        wxDebugContext::PrintStatistics();
     }
 #endif
-  
+    
     // do it as the very last thing because everything else can log messages
     wxLog::DontCreateOnDemand();
     // do it as the very last thing because everything else can log messages
@@ -180,66 +180,66 @@ int wxEntry( int argc, char *argv[] )
     // checked, but this is a reasonable compromise.
     wxDebugContext::SetCheckpoint();
 #endif
-
-    if (!wxApp::Initialize())
-      return FALSE;
-
-    if (!wxTheApp)
-    {
-      if (!wxApp::GetInitializerFunction())
-      {
-        printf( "wxWindows error: No initializer - use IMPLEMENT_APP macro.\n" );
-        return 0;
-      };
     
-    	wxTheApp = (wxApp*) (* wxApp::GetInitializerFunction()) ();
-    };
-  
+    if (!wxApp::Initialize())
+        return FALSE;
+    
     if (!wxTheApp)
     {
-      printf( "wxWindows error: wxTheApp == NULL\n" );
-      return 0;
+        if (!wxApp::GetInitializerFunction())
+        {
+            printf( "wxWindows error: No initializer - use IMPLEMENT_APP macro.\n" );
+            return 0;
+        };
+        
+        wxTheApp = (wxApp*) (* wxApp::GetInitializerFunction()) ();
     };
-
+    
+    if (!wxTheApp)
+    {
+        printf( "wxWindows error: wxTheApp == NULL\n" );
+        return 0;
+    };
+    
     wxTheApp->SetClassName(wxFileNameFromPath(argv[0]));
     wxTheApp->SetAppName(wxFileNameFromPath(argv[0]));
-
+    
     wxTheApp->argc = argc;
     wxTheApp->argv = argv;
-
+    
     // GUI-specific initialization, such as creating an app context.
     wxTheApp->OnInitGui();
-
+    
     // Here frames insert themselves automatically
     // into wxTopLevelWindows by getting created
     // in OnInit().
-  
+    
     int retValue = 0;
     if (wxTheApp->OnInit())
     {
-      if (wxTheApp->Initialized()) retValue = wxTheApp->OnRun();
+        if (wxTheApp->Initialized()) retValue = wxTheApp->OnRun();
     }
-
+    
     // flush the logged messages if any
     wxLog *pLog = wxLog::GetActiveTarget();
     if ( pLog != NULL && pLog->HasPendingMessages() )
-      pLog->Flush();
-
+        pLog->Flush();
+    
     delete wxLog::SetActiveTarget(new wxLogStderr); // So dialog boxes aren't used
-                                   // for further messages
-
+    // for further messages
+    
     if (wxTheApp->GetTopWindow())
     {
-      delete wxTheApp->GetTopWindow();
-      wxTheApp->SetTopWindow(NULL);
+        delete wxTheApp->GetTopWindow();
+        wxTheApp->SetTopWindow(NULL);
     }
-  
+    
     wxTheApp->DeletePendingObjects();
-  
+    
     wxTheApp->OnExit();
-  
+    
     wxApp::CleanUp();
-
+    
     return retValue;
 };
 
@@ -258,7 +258,7 @@ wxApp::wxApp()
     m_printMode = wxPRINT_POSTSCRIPT;
     m_exitOnFrameDelete = TRUE;
     m_auto3D = TRUE;
-
+    
     m_mainColormap = (WXColormap) NULL;
     m_appContext = (WXAppContext) NULL;
     m_topLevelWidget = (WXWidget) NULL;
@@ -269,50 +269,50 @@ wxApp::wxApp()
 bool wxApp::Initialized()
 {
     if (GetTopWindow())
-      return TRUE;
+        return TRUE;
     else
-      return FALSE;
+        return FALSE;
 }
 
 int wxApp::MainLoop()
 {
     m_keepGoing = TRUE;
-
-   /*
+    
+    /*
     * Sit around forever waiting to process X-events. Property Change
     * event are handled special, because they have to refer to
     * the root window rather than to a widget. therefore we can't
     * use an Xt-eventhandler.
     */
-
+    
     XSelectInput(XtDisplay((Widget) wxTheApp->GetTopLevelWidget()),
-                 XDefaultRootWindow(XtDisplay((Widget) wxTheApp->GetTopLevelWidget())),
-                 PropertyChangeMask);
-
+        XDefaultRootWindow(XtDisplay((Widget) wxTheApp->GetTopLevelWidget())),
+        PropertyChangeMask);
+    
     XEvent event;
-
+    
     // Use this flag to allow breaking the loop via wxApp::ExitMainLoop()
     while (m_keepGoing)
     {
-      XtAppNextEvent( (XtAppContext) wxTheApp->GetAppContext(), &event);
-
-      ProcessXEvent((WXEvent*) & event);
-      
-      if (XtAppPending( (XtAppContext) wxTheApp->GetAppContext() ) == 0)
-      {
-        if (!ProcessIdle())
-        { 
-	  // TODO: Robert, what's this for?
+        XtAppNextEvent( (XtAppContext) wxTheApp->GetAppContext(), &event);
+        
+        ProcessXEvent((WXEvent*) & event);
+        
+        if (XtAppPending( (XtAppContext) wxTheApp->GetAppContext() ) == 0)
+        {
+            if (!ProcessIdle())
+            { 
+                // TODO: Robert, what's this for?
 #if wxUSE_THREADS
-          wxMutexGuiLeave();
-          usleep(20);  
-          wxMutexGuiEnter();
+                wxMutexGuiLeave();
+                usleep(20);  
+                wxMutexGuiEnter();
 #endif
-	}
-      }
-      
+            }
+        }
+        
     }
-
+    
     return 0;
 }
 
@@ -320,7 +320,7 @@ int wxApp::MainLoop()
 void wxApp::ProcessXEvent(WXEvent* _event)
 {
     XEvent* event = (XEvent*) _event;
-
+    
     if ((event->type == KeyPress) && CheckForAccelerator(_event))
     {
         // Do nothing! We intercepted and processed the event as an accelerator.
@@ -333,22 +333,22 @@ void wxApp::ProcessXEvent(WXEvent* _event)
     }
     else if (event->type == ResizeRequest)
     {
-        /* Terry Gitnick <terryg@scientech.com> - 1/21/98
-         * If resize event, don't resize until the last resize event for this
-         * window is recieved. Prevents flicker as windows are resized.
-         */
-
+    /* Terry Gitnick <terryg@scientech.com> - 1/21/98
+    * If resize event, don't resize until the last resize event for this
+    * window is recieved. Prevents flicker as windows are resized.
+        */
+        
         Display *disp = XtDisplay((Widget) wxTheApp->GetTopLevelWidget());
         Window win = event->xany.window;
         XEvent report;
- 
+        
         //  to avoid flicker
         report = * event;
         while( XCheckTypedWindowEvent (disp, win, ResizeRequest, &report));
-
+        
         // TODO: when implementing refresh optimization, we can use
         // XtAddExposureToRegion to expand the window's paint region.
-
+        
         XtDispatchEvent(event);
     }
     else
@@ -363,7 +363,7 @@ bool wxApp::ProcessIdle()
     wxIdleEvent event;
     event.SetEventObject(this);
     ProcessEvent(event);
-
+    
     return event.MoreRequested();
 }
 
@@ -376,7 +376,7 @@ void wxApp::ExitMainLoop()
 bool wxApp::Pending()
 {
     XFlush(XtDisplay( (Widget) wxTheApp->GetTopLevelWidget() ));
-
+    
     // Fix by Doug from STI, to prevent a stall if non-X event
     // is found.
     return ((XtAppPending( (XtAppContext) GetAppContext() ) & XtIMXEvent) != 0) ;
@@ -385,8 +385,8 @@ bool wxApp::Pending()
 // Dispatch a message.
 void wxApp::Dispatch()
 {
-//    XtAppProcessEvent( (XtAppContext) wxTheApp->GetAppContext(), XtIMAll);
-
+    //    XtAppProcessEvent( (XtAppContext) wxTheApp->GetAppContext(), XtIMAll);
+    
     XEvent event;
     XtAppNextEvent((XtAppContext) GetAppContext(), &event);
     ProcessXEvent((WXEvent*) & event);
@@ -403,27 +403,27 @@ void wxApp::HandlePropertyChange(WXEvent *event)
 void wxApp::OnIdle(wxIdleEvent& event)
 {
     static bool inOnIdle = FALSE;
-
+    
     // Avoid recursion (via ProcessEvent default case)
     if (inOnIdle)
-      return;
-
+        return;
+    
     inOnIdle = TRUE;
-
+    
     // 'Garbage' collection of windows deleted with Close().
     DeletePendingObjects();
-
+    
     // flush the logged messages if any
     wxLog *pLog = wxLog::GetActiveTarget();
     if ( pLog != NULL && pLog->HasPendingMessages() )
-      pLog->Flush();
-
+        pLog->Flush();
+    
     // Send OnIdle events to all windows
     bool needMore = SendIdleEvents();
-
+    
     if (needMore)
-      event.RequestMore(TRUE);
-
+        event.RequestMore(TRUE);
+    
     inOnIdle = FALSE;
 }
 
@@ -431,15 +431,15 @@ void wxApp::OnIdle(wxIdleEvent& event)
 bool wxApp::SendIdleEvents()
 {
     bool needMore = FALSE;
-	wxNode* node = wxTopLevelWindows.First();
-	while (node)
-	{
-		wxWindow* win = (wxWindow*) node->Data();
-		if (SendIdleEvents(win))
+    wxNode* node = wxTopLevelWindows.First();
+    while (node)
+    {
+        wxWindow* win = (wxWindow*) node->Data();
+        if (SendIdleEvents(win))
             needMore = TRUE;
-
-		node = node->Next();
-	}
+        
+        node = node->Next();
+    }
     return needMore;
 }
 
@@ -447,23 +447,23 @@ bool wxApp::SendIdleEvents()
 bool wxApp::SendIdleEvents(wxWindow* win)
 {
     bool needMore = FALSE;
-
-	wxIdleEvent event;
-	event.SetEventObject(win);
-	win->ProcessEvent(event);
-
+    
+    wxIdleEvent event;
+    event.SetEventObject(win);
+    win->ProcessEvent(event);
+    
     if (event.MoreRequested())
         needMore = TRUE;
-
-	wxNode* node = win->GetChildren().First();
-	while (node)
-	{
-		wxWindow* win = (wxWindow*) node->Data();
-		if (SendIdleEvents(win))
+    
+    wxNode* node = win->GetChildren().First();
+    while (node)
+    {
+        wxWindow* win = (wxWindow*) node->Data();
+        if (SendIdleEvents(win))
             needMore = TRUE;
-
-		node = node->Next();
-	}
+        
+        node = node->Next();
+    }
     return needMore ;
 }
 
@@ -472,16 +472,16 @@ void wxApp::DeletePendingObjects()
     wxNode *node = wxPendingDelete.First();
     while (node)
     {
-      wxObject *obj = (wxObject *)node->Data();
-    
-      delete obj;
-
-      if (wxPendingDelete.Member(obj))
-        delete node;
-
-      // Deleting one object may have deleted other pending
-      // objects, so start from beginning of list again.
-      node = wxPendingDelete.First();
+        wxObject *obj = (wxObject *)node->Data();
+        
+        delete obj;
+        
+        if (wxPendingDelete.Member(obj))
+            delete node;
+        
+        // Deleting one object may have deleted other pending
+        // objects, so start from beginning of list again.
+        node = wxPendingDelete.First();
     }
 }
 
@@ -506,46 +506,46 @@ bool wxApp::OnInitGui()
     XtToolkitInitialize() ;
     wxTheApp->m_appContext = (WXAppContext) XtCreateApplicationContext() ;
     Display *dpy = XtOpenDisplay((XtAppContext) wxTheApp->m_appContext,(String)NULL,NULL,
-                            (const char*) wxTheApp->GetClassName(), NULL,
+        (const char*) wxTheApp->GetClassName(), NULL,
 # if XtSpecificationRelease < 5
-                            0,(Cardinal*) &argc,argv) ;
+        0,(Cardinal*) &argc,argv) ;
 # else
-                            0,&argc,argv) ;
+    0,&argc,argv) ;
 # endif
     if (!dpy) {
-      cerr << "wxWindows could not open display for " << wxTheApp->GetClassName() << ": exiting.\n";
-      exit(-1);
+        cerr << "wxWindows could not open display for " << wxTheApp->GetClassName() << ": exiting.\n";
+        exit(-1);
     }
     m_initialDisplay = (WXDisplay*) dpy;
-
+    
     wxTheApp->m_topLevelWidget = (WXWidget) XtAppCreateShell((String)NULL, (const char*) wxTheApp->GetClassName(),
-                                     applicationShellWidgetClass,dpy,
-                                     NULL,0) ;
-
+        applicationShellWidgetClass,dpy,
+        NULL,0) ;
+    
     // Add general resize proc
     XtActionsRec rec;
     rec.string = "resize";
     rec.proc = (XtActionProc)wxWidgetResizeProc;
     XtAppAddActions((XtAppContext) wxTheApp->m_appContext, &rec, 1);
-
+    
     GetMainColormap(dpy);
     m_maxRequestSize = XMaxRequestSize((Display*) dpy);
-
+    
     return TRUE;
 }
 
 WXColormap wxApp::GetMainColormap(WXDisplay* display)
 {
     if (!display) /* Must be called first with non-NULL display */
-      return m_mainColormap;
-
+        return m_mainColormap;
+    
     Colormap c =
-      DefaultColormapOfScreen(XScreenOfDisplay((Display*) display,
-					     DefaultScreen((Display*) display)));
-
+        DefaultColormapOfScreen(XScreenOfDisplay((Display*) display,
+        DefaultScreen((Display*) display)));
+    
     if (!m_mainColormap)
-      m_mainColormap = (WXColormap) c;
-
+        m_mainColormap = (WXColormap) c;
+    
     return (WXColormap) c;
 }
 
@@ -559,17 +559,17 @@ bool wxApp::CheckForAccelerator(WXEvent* event)
         // TODO: should get display for the window, not the current display
         Widget widget = XtWindowToWidget((Display*) wxGetDisplay(), xEvent->xany.window);
         wxWindow* win = NULL;
-
+        
         // Find the first wxWindow that corresponds to this event window
         while (widget && !(win = wxGetWindowFromTable(widget)))
             widget = XtParent(widget);
-
+        
         if (!widget || !win)
             return FALSE;
-
+        
         wxKeyEvent keyEvent(wxEVT_CHAR);
         wxTranslateKeyEvent(keyEvent, win, (Widget) 0, xEvent);
-
+        
         // Now we have a wxKeyEvent and we have a wxWindow.
         // Go up the hierarchy until we find a matching accelerator,
         // or we get to the top.
@@ -588,13 +588,13 @@ void wxExit()
 {
     int retValue = 0;
     if (wxTheApp)
-      retValue = wxTheApp->OnExit();
-
+        retValue = wxTheApp->OnExit();
+    
     wxApp::CleanUp();
     /*
-     * Exit in some platform-specific way. Not recommended that the app calls this:
-     * only for emergencies.
-     */
+    * Exit in some platform-specific way. Not recommended that the app calls this:
+    * only for emergencies.
+    */
     exit(retValue);
 }
 
@@ -602,7 +602,7 @@ void wxExit()
 bool wxYield()
 {
     while (wxTheApp && wxTheApp->Pending())
-      wxTheApp->Dispatch();
+        wxTheApp->Dispatch();
     return TRUE;
 }
 

@@ -21,20 +21,20 @@
 #include "xmcombo/xmcombo.h"
 
 void  wxComboBoxCallback (Widget w, XtPointer clientData,
-		   XmComboBoxSelectionCallbackStruct * cbs);
+                          XmComboBoxSelectionCallbackStruct * cbs);
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 #endif
 
 bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
-           const wxString& value,
-           const wxPoint& pos,
-           const wxSize& size,
-		   int n, const wxString choices[],
-		   long style,
-           const wxValidator& validator,
-           const wxString& name)
+                        const wxString& value,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        int n, const wxString choices[],
+                        long style,
+                        const wxValidator& validator,
+                        const wxString& name)
 {
     SetName(name);
     SetValidator(validator);
@@ -43,31 +43,31 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     //    m_backgroundColour = parent->GetBackgroundColour();
     m_backgroundColour = * wxWHITE;
     m_foregroundColour = parent->GetForegroundColour();
-
+    
     if (parent) parent->AddChild(this);
-
+    
     if ( id == -1 )
-    	m_windowId = (int)NewControlId();
+        m_windowId = (int)NewControlId();
     else
-	m_windowId = id;
-
+        m_windowId = id;
+    
     Widget parentWidget = (Widget) parent->GetClientWidget();
-
+    
     Widget buttonWidget = XtVaCreateManagedWidget((char*) (const char*) name,
-					 xmComboBoxWidgetClass, parentWidget,
- 					 XmNmarginHeight, 0,
-					 XmNmarginWidth, 0,
-					 XmNshowLabel, False,
-       XmNeditable, ((style & wxCB_READONLY) != wxCB_READONLY),
-       XmNsorted, ((style & wxCB_SORT) == wxCB_SORT),
-       XmNstaticList, ((style & wxCB_SIMPLE) == wxCB_SIMPLE),
-					 NULL);
-
+        xmComboBoxWidgetClass, parentWidget,
+        XmNmarginHeight, 0,
+        XmNmarginWidth, 0,
+        XmNshowLabel, False,
+        XmNeditable, ((style & wxCB_READONLY) != wxCB_READONLY),
+        XmNsorted, ((style & wxCB_SORT) == wxCB_SORT),
+        XmNstaticList, ((style & wxCB_SIMPLE) == wxCB_SIMPLE),
+        NULL);
+    
     XtAddCallback (buttonWidget, XmNselectionCallback, (XtCallbackProc) wxComboBoxCallback,
-		 (XtPointer) this);
+        (XtPointer) this);
     XtAddCallback (buttonWidget, XmNvalueChangedCallback, (XtCallbackProc) wxComboBoxCallback,
-		 (XtPointer) this);
-
+        (XtPointer) this);
+    
     int i;
     for (i = 0; i < n; i++)
     {
@@ -77,21 +77,21 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
         m_stringList.Add(choices[i]);
     }
     m_noStrings = n;
-
+    
     m_mainWidget = (Widget) buttonWidget;
-
+    
     XtManageChild (buttonWidget);
-
+    
     SetValue(value);
-
+    
     m_windowFont = parent->GetFont();
     ChangeFont(FALSE);
-
+    
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
-
+    
     ChangeBackgroundColour();
-
+    
     return TRUE;
 }
 
@@ -144,8 +144,8 @@ void wxComboBox::Delete(int n)
     wxNode *node = m_stringList.Nth(n);
     if (node)
     {
-      delete[] (char *)node->Data();
-      delete node;
+        delete[] (char *)node->Data();
+        delete node;
     }
     m_noStrings--;
 }
@@ -163,20 +163,20 @@ void wxComboBox::SetSelection (int n)
 
 int wxComboBox::GetSelection (void) const
 {
-  int sel = XmComboBoxGetSelectedPos((Widget) m_mainWidget);
-  if (sel == 0)
-    return -1;
-  else
-    return sel - 1;
+    int sel = XmComboBoxGetSelectedPos((Widget) m_mainWidget);
+    if (sel == 0)
+        return -1;
+    else
+        return sel - 1;
 }
 
 wxString wxComboBox::GetString(int n) const
 {
     wxNode *node = m_stringList.Nth (n);
     if (node)
-      return wxString((char *) node->Data ());
+        return wxString((char *) node->Data ());
     else
-      return wxEmptyString;
+        return wxEmptyString;
 }
 
 wxString wxComboBox::GetStringSelection() const
@@ -202,22 +202,22 @@ bool wxComboBox::SetStringSelection(const wxString& sel)
 
 int wxComboBox::FindString(const wxString& s) const
 {
-  int *pos_list = NULL;
-  int count = 0;
-  XmString text = XmStringCreateSimple ((char*) (const char*) s);
-  bool found = (XmComboBoxGetMatchPos((Widget) m_mainWidget,
-   text, &pos_list, &count) != 0);
-
-  XmStringFree(text);
-
-  if (found && count > 0)
-  {
-    int pos = pos_list[0] - 1;
-    free(pos_list);
-    return pos;
-  }
-
-  return -1;
+    int *pos_list = NULL;
+    int count = 0;
+    XmString text = XmStringCreateSimple ((char*) (const char*) s);
+    bool found = (XmComboBoxGetMatchPos((Widget) m_mainWidget,
+        text, &pos_list, &count) != 0);
+    
+    XmStringFree(text);
+    
+    if (found && count > 0)
+    {
+        int pos = pos_list[0] - 1;
+        free(pos_list);
+        return pos;
+    }
+    
+    return -1;
 }
 
 // Clipboard operations
@@ -265,7 +265,7 @@ long wxComboBox::GetLastPosition() const
 void wxComboBox::Replace(long from, long to, const wxString& value)
 {
     XmComboBoxReplace ((Widget) m_mainWidget, (XmTextPosition) from, (XmTextPosition) to,
-		 (char*) (const char*) value);
+        (char*) (const char*) value);
 }
 
 void wxComboBox::Remove(long from, long to)
@@ -282,35 +282,35 @@ void wxComboBox::SetSelection(long from, long to)
 }
 
 void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
-		   XmComboBoxSelectionCallbackStruct * cbs)
+                          XmComboBoxSelectionCallbackStruct * cbs)
 {
     wxComboBox *item = (wxComboBox *) clientData;
-
+    
     switch (cbs->reason)
     {
-        case XmCR_SINGLE_SELECT:
-        case XmCR_BROWSE_SELECT:
+    case XmCR_SINGLE_SELECT:
+    case XmCR_BROWSE_SELECT:
         {
             wxCommandEvent event (wxEVT_COMMAND_COMBOBOX_SELECTED, item->GetId());
-	        event.m_commandInt = cbs->index - 1;
-		//	        event.m_commandString = item->GetString (event.m_commandInt);
-	        event.m_extraLong = TRUE;
-	        event.SetEventObject(item);
-	        item->ProcessCommand (event);
-	        break;
+            event.m_commandInt = cbs->index - 1;
+            //	        event.m_commandString = item->GetString (event.m_commandInt);
+            event.m_extraLong = TRUE;
+            event.SetEventObject(item);
+            item->ProcessCommand (event);
+            break;
         }
-        case XmCR_VALUE_CHANGED:
+    case XmCR_VALUE_CHANGED:
         {
             wxCommandEvent event (wxEVT_COMMAND_TEXT_UPDATED, item->GetId());
-	        event.m_commandInt = -1;
-		//	        event.m_commandString = item->GetValue();
-	        event.m_extraLong = TRUE;
-	        event.SetEventObject(item);
-	        item->ProcessCommand (event);
+            event.m_commandInt = -1;
+            //	        event.m_commandString = item->GetValue();
+            event.m_extraLong = TRUE;
+            event.SetEventObject(item);
+            item->ProcessCommand (event);
             break;
         }
-        default:
-            break;
+    default:
+        break;
     }
 }
 

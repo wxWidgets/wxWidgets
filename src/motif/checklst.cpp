@@ -24,7 +24,7 @@
 // ============================================================================
 
 #if !USE_SHARED_LIBRARY
-  IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
+IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
 #endif
 
 // ----------------------------------------------------------------------------
@@ -50,7 +50,7 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
                                int nStrings, const wxString choices[],
                                long style, const wxValidator& val,
                                const wxString& name)
-              : wxListBox()
+                               : wxListBox()
 {
     // TODO: you'll probably need a separate Create instead of using
     // the wxListBox one as here.

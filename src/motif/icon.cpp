@@ -26,8 +26,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxBitmap)
 #endif
 
 /*
- * Icons
- */
+* Icons
+*/
 
 wxIcon::wxIcon()
 {
@@ -46,8 +46,8 @@ wxIcon::wxIcon(char **data)
 }
 
 wxIcon::wxIcon(const wxString& icon_file, long flags,
-    int desiredWidth, int desiredHeight)
-
+               int desiredWidth, int desiredHeight)
+               
 {
     LoadFile(icon_file, flags, desiredWidth, desiredHeight);
 }
@@ -57,17 +57,17 @@ wxIcon::~wxIcon()
 }
 
 bool wxIcon::LoadFile(const wxString& filename, long type,
-    int desiredWidth, int desiredHeight)
+                      int desiredWidth, int desiredHeight)
 {
-  UnRef();
-
-  m_refData = new wxBitmapRefData;
-
-  wxBitmapHandler *handler = FindHandler(type);
-
-  if ( handler )
-	return handler->LoadFile(this, filename, type, desiredWidth, desiredHeight);
-  else
-	return FALSE;
+    UnRef();
+    
+    m_refData = new wxBitmapRefData;
+    
+    wxBitmapHandler *handler = FindHandler(type);
+    
+    if ( handler )
+        return handler->LoadFile(this, filename, type, desiredWidth, desiredHeight);
+    else
+        return FALSE;
 }
 

@@ -16,6 +16,8 @@ Please see also:
 
 - Documentation: mention include files with each class.
 
+- Document wxTime.
+
 - Get Karsten to remove trashed CVS files:
 
   include/wx/msw/magnif1.cur

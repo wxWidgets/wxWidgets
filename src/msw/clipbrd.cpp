@@ -323,10 +323,6 @@ bool wxGetClipboardFormatName(wxDataFormat dataFormat, char *formatName, int max
   return (::GetClipboardFormatName((int) dataFormat, formatName, maxCount) > 0);
 }
 
-/*
- * wxClipboard
- */
-
 //-----------------------------------------------------------------------------
 // wxClipboard
 //-----------------------------------------------------------------------------

@@ -41,10 +41,6 @@ High Priority
 
 - Get wxGLCanvas from 1.68 working.
 
-- wxClipboard
-
-- EVT_KEY_DOWN, EVT_KEY_UP events.
-
 Low Priority
 ------------
 
