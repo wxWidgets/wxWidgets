@@ -41,11 +41,11 @@ makeabs()
 }
 
 # these determine wx-config script to use:
-m_toolkit='*'
-m_univ='*'
-m_unicode='*'
-m_debug='*'
-m_version='*.*'
+m_toolkit='.*[^u][^d]'
+m_univ='\(univ\)\?'
+m_unicode='u\?'
+m_debug='d\?'
+m_version='[0-9]\+\.[0-9]\+'
 
 # lists all wx-config scripts that match criteria specified above
 list_wx_config_scripts()
@@ -63,7 +63,7 @@ list_wx_config_scripts()
     fi
 
     if test -d ${libdir}/wx/config ; then
-        (cd ${libdir}/wx/config/ && ls -1 $mask 2>/dev/null)
+        (cd ${libdir}/wx/config/ && ls -1 | grep "$mask" 2>/dev/null)
     fi
 }
 
