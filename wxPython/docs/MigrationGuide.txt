@@ -9,12 +9,27 @@ usual to see info about the not so major changes and other things that
 have been added to wxPython.
 
 
+wxName Change
+-------------
+
+The **wxWindows** project and library is now known as
+**wxWidgets**.  Please see here_ for more details.
+
+.. _here: http://www.wxwindows.org/name.htm
+
+This won't really affect wxPython all that much, other than the fact
+that the wxwindows.org domain name will be changing to wxwidgets.org,
+so mail list, CVS, and etc. addresses will be changing.  We're going
+to try and smooth the transition as much as possible, but I wanted you
+all to be aware of this change if you run into any issues.
+
+
 
 Module Initialization
 ---------------------
 
 The import-startup-bootstrap process employed by wxPython was changed
-such that wxWindows and the underlying gui toolkit are **not**
+such that wxWidgets and the underlying gui toolkit are **not**
 initialized until the wx.App object is created (but before wx.App.OnInit
 is called.)  This was required because of some changes that were made
 to the C++ wxApp class.
@@ -117,7 +132,8 @@ automatically generate a new ID if -1 is given, similar to using -1
 with window classess.  This means that you can create menu or toolbar
 items and event bindings without having to predefine a unique menu ID,
 although you still can use IDs just like before if you want.  For
-example, these are all equivallent other than ID values::
+example, these are all equivallent other than their specific ID
+values::
 
   1.
     item = menu.Append(-1, "E&xit", "Terminate the App")

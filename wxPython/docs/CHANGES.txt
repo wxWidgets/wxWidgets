@@ -8,6 +8,15 @@ CHANGES.txt for wxPython
 big changes that have happened in this release and how you should
 adapt your code.)
 
+The wxWindows project and library is now known as wxWidgets.  Please
+see http://www.wxwindows.org/name.htm for more details.  This won't
+really affect wxPython all that much, other than the fact that the
+wxwindows.org domain name will be changing to wxwidgets.org, so mail
+list, CVS, and etc. addresses will be changing.  We're going to try
+and smooth the transition as much as possible, but I wanted you all to
+be aware of this change if you run into any issues.
+
+
 Many, many little fixes, changes and additions done as part of the move
 to wxWidgets 2.5 that I have forgotten about.
 

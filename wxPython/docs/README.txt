@@ -49,7 +49,7 @@ Please also see the following files:
                            to 2.5 that require changes to your
                            applications
 
-   licence/*               Text of the wxWindows license.
+   licence/*               Text of the wxWidgets license.
 
 
 

@@ -15,6 +15,16 @@
 those changes.  Be sure to also check in the CHANGES.txt file like
 usual to see info about the not so major changes and other things that
 have been added to wxPython.</p>
+<div class="section" id="wxname-change">
+<h1><a name="wxname-change">wxName Change</a></h1>
+<p>The <strong>wxWindows</strong> project and library is now known as
+<strong>wxWidgets</strong>.  Please see <a class="reference" href="http://lists.wxwidgets.org/cgi-bin/ezmlm-cgi?13:mss:3:200402:eebaopdhchfoagmnideo">here</a> for more details.</p>
+<p>This won't really affect wxPython all that much, other than the fact
+that the wxwindows.org domain name will be changing to wxwidgets.org,
+so mail list, CVS, and etc. addresses will be changing.  We're going
+to try and smooth the transition as much as possible, but I wanted you
+all to be aware of this change if you run into any issues.</p>
+</div>
 <div class="section" id="module-initialization">
 <h1><a name="module-initialization">Module Initialization</a></h1>
 <p>The import-startup-bootstrap process employed by wxPython was changed
@@ -31,7 +41,7 @@ potential problems are that the C++ side of the &quot;stock-objects&quot;
 (wx.BLUE_PEN, wx.TheColourDatabase, etc.) are not initialized until
 the wx.App object is created, so you should not use them until after
 you have created your wx.App object.  If you do then an exception will
-be raised telling you that the C++ object has not bene initialized
+be raised telling you that the C++ object has not been initialized
 yet.</p>
 <p>Also, you will probably not be able to do any kind of GUI or bitmap
 operation unless you first have created an app object, (even on
@@ -109,7 +119,8 @@ automatically generate a new ID if -1 is given, similar to using -1
 with window classess.  This means that you can create menu or toolbar
 items and event bindings without having to predefine a unique menu ID,
 although you still can use IDs just like before if you want.  For
-example, these are all equivallent other than ID values:</p>
+example, these are all equivallent other than their specific ID
+values:</p>
 <pre class="literal-block">
 1.
   item = menu.Append(-1, &quot;E&amp;xit&quot;, &quot;Terminate the App&quot;)
@@ -393,7 +404,7 @@ different API.</p>
 </div>
 <hr class="footer" />
 <div class="footer">
-Generated on: 2004-02-27 00:27 UTC.
+Generated on: 2004-02-27 23:30 UTC.
 </div>
 </body>
 </html>

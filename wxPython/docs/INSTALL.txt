@@ -14,23 +14,23 @@ will take precedence.
 Installing on Unix-like Systems (not OS X)
 ------------------------------------------
 
-1. When building wxWindows you need to decide if you want it to be a
+1. When building wxWidgets you need to decide if you want it to be a
    private copy only accessed by wxPython, or if you would like it to
    be installed in a stanard location such as /usr.  Or perhaps you
-   already have a version of wxWindows installed on your system (such
+   already have a version of wxWidgets installed on your system (such
    as from an RPM) and you want wxPython to use that version too.  If
    so then you'll want to ensure that the flags and options used to
    build the installed version are compatible with wxPython.  
 
 
-2. If you do decide to build and install your own wxWindows then there
+2. If you do decide to build and install your own wxWidgets then there
    are a few tweaks to the configure flags described in BUILD.txt that
    you will probably want to make.  Instead of --enable-debug use
    this configure flag::
 
 		      --enable-optimize \
 
-   Normally I also use the following flag in order to have wxWindows
+   Normally I also use the following flag in order to have wxWidgets
    runtime assertions turned into Python exceptions where possible.
    It does add extra code to the build but probably not enough to
    worry about it.  However if you want to get as lean a build as
@@ -39,12 +39,12 @@ Installing on Unix-like Systems (not OS X)
 
 		      --enable-debug_flag \
 
-   If you are building a private copy of wxWindows (IOW, not installed
+   If you are building a private copy of wxWidgets (IOW, not installed
    in a standard library location) then it can be kind of a hassle to
    always have to set the LD_LIBRARY_PATH variable so wxPython can
-   find the wxWindows shared libraries.  You can hard code the library
+   find the wxWidgets shared libraries.  You can hard code the library
    path into the binaries by using the rpath option when configuring
-   wxWindows.  For example::
+   wxWidgets.  For example::
 
                      --enable-rpath=/opt/wx/2.5/lib \
 
@@ -86,9 +86,9 @@ Installing wxPython on OS X is nearly the same as the Unix
 instructions above, except for a few small, but important details:
 
 1. The --enable-rpath configure option is not needed since the path to
-   the wxWindows dylibs will automatically be encoded into the
+   the wxWidgets dylibs will automatically be encoded into the
    extension modules when they are built.  If you end up moving the
-   wxWindows dynlibs to some other location (such as inside the .app
+   wxWidgets dynlibs to some other location (such as inside the .app
    bundle of your applicaiton for distribution to other users,) then
    you will need to set DYLD_LIBRARY_PATH to this location so the
    dylibs can be found at runtime.
@@ -119,10 +119,10 @@ instructions above, except for a few small, but important details:
 Installing on Windows
 ---------------------
 
-1. Build wxWindows and wxPython as described in BUILD.txt.  If you
+1. Build wxWidgets and wxPython as described in BUILD.txt.  If you
    would rather have a version without the code that turns runtime
    assertions into Python exceptions, then use "release" instead of
-   "hybrid" when building wxWindows and add "FINAL=1" to the setup.py
+   "hybrid" when building wxWidgets and add "FINAL=1" to the setup.py
    command line.
 
 2. Install wxPython like this::
@@ -130,7 +130,7 @@ Installing on Windows
       python setup.py install
 
 
-3. Copy the wxWindows DLLs to the wx package directory so they can be
+3. Copy the wxWidgets DLLs to the wx package directory so they can be
    found at runtime by the extension modules without requiring that
    they be installed on the PATH::
 
