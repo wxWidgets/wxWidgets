@@ -129,27 +129,72 @@ standard format).", "");
 const wxDataFormat wxFormatInvalid;
 %mutable;
 
-
 //---------------------------------------------------------------------------
 
 
-// wxDataObject represents a piece of data which knows which formats it
-// supports and knows how to render itself in each of them - GetDataHere(),
-// and how to restore data from the buffer (SetData()).
-//
-// Although this class may be used directly (i.e. custom classes may be
-// derived from it), in many cases it might be simpler to use either
-// wxDataObjectSimple or wxDataObjectComposite classes.
-//
-// A data object may be "read only", i.e. support only GetData() functions or
-// "read-write", i.e. support both GetData() and SetData() (in principle, it
-// might be "write only" too, but this is rare). Moreover, it doesn't have to
-// support the same formats in Get() and Set() directions: for example, a data
-// object containing JPEG image might accept BMPs in GetData() because JPEG
-// image may be easily transformed into BMP but not in SetData(). Accordingly,
-// all methods dealing with formats take an additional "direction" argument
-// which is either SET or GET and which tells the function if the format needs
-// to be supported by SetData() or GetDataHere().
+DocStr(wxDataObject,
+"A wx.DataObject represents data that can be copied to or from the
+clipboard, or dragged and dropped. The important thing about
+wx.DataObject is that this is a 'smart' piece of data unlike usual
+'dumb' data containers such as memory buffers or files. Being 'smart'
+here means that the data object itself should know what data formats
+it supports and how to render itself in each of supported formats.
+
+**NOTE**: This class is an abstract base class and can not be used
+directly from Python.  If you need a custom type of data object then
+you should instead derive from `wx.PyDataObjectSimple` or use
+`wx.CustomDataObject`.
+", "
+Not surprisingly, being 'smart' comes at a price of added
+complexity. This is reasonable for the situations when you really need
+to support multiple formats, but may be annoying if you only want to
+do something simple like cut and paste text.
+
+To provide a solution for both cases, wxWidgets has two predefined
+classes which derive from wx.DataObject: `wx.DataObjectSimple` and
+`wx.DataObjectComposite`.  `wx.DataObjectSimple` is the simplest
+wx.DataObject possible and only holds data in a single format (such as
+text or bitmap) and `wx.DataObjectComposite` is the simplest way to
+implement a wx.DataObject which supports multiple simultaneous formats
+because it achievs this by simply holding several
+`wx.DataObjectSimple` objects.
+
+Please note that the easiest way to use drag and drop and the
+clipboard with multiple formats is by using `wx.DataObjectComposite`,
+but it is not the most efficient one as each `wx.DataObjectSimple`
+would contain the whole data in its respective formats. Now imagine
+that you want to paste 200 pages of text in your proprietary format,
+as well as Word, RTF, HTML, Unicode and plain text to the clipboard
+and even today's computers are in trouble. For this case, you will
+have to derive from wx.DataObject directly and make it enumerate its
+formats and provide the data in the requested format on
+demand. (**TODO**: This is currently not possible from Python.  Make
+it so.)
+
+Note that the platform transfer mechanisms for the clipboard and drag
+and drop, do not copy any data out of the source application until
+another application actually requests the data. This is in contrast to
+the 'feel' offered to the user of a program who would normally think
+that the data resides in the clipboard after having pressed 'Copy' -
+in reality it is only declared to be available.
+");
+
+// [other docs...]
+// There are several predefined data object classes derived from
+// wxDataObjectSimple: wxFileDataObject, wxTextDataObject and
+// wxBitmapDataObject which can be used without change.
+
+// You may also derive your own data object classes from
+// wxCustomDataObject for user-defined types. The format of user-defined
+// data is given as mime-type string literal, such as 'application/word'
+// or 'image/png'. These strings are used as they are under Unix (so far
+// only GTK) to identify a format and are translated into their Windows
+// equivalent under Win32 (using the OLE IDataObject for data exchange to
+// and from the clipboard and for drag and drop). Note that the format
+// string translation under Windows is not yet finished.
+
+
+
 class wxDataObject {      
 public:
     enum Direction {
@@ -161,64 +206,205 @@ public:
     // wxDataObject();  // ***  It's an ABC.
     ~wxDataObject();
 
-    // get the best suited format for rendering our data
-    virtual wxDataFormat GetPreferredFormat(Direction dir = Get) const;
+    DocDeclStr(
+        virtual wxDataFormat , GetPreferredFormat(Direction dir = Get) const,
+        "Returns the preferred format for either rendering the data (if dir is
+Get, its default value) or for setting it. Usually this will be the
+native format of the wx.DataObject.", "");
+    
 
-    // get the number of formats we support
-    virtual size_t GetFormatCount(Direction dir = Get) const;
+    DocDeclStr(
+        virtual size_t , GetFormatCount(Direction dir = Get) const,
+        "Returns the number of available formats for rendering or setting the
+data.", "");
+    
 
-    // returns True if this format is supported
-    bool IsSupported(const wxDataFormat& format, Direction dir = Get) const;
+    DocDeclStr(
+        bool , IsSupported(const wxDataFormat& format, Direction dir = Get) const,
+        "Returns True if this format is supported.", "");
+    
 
-    // get the (total) size of data for the given format
-    virtual size_t GetDataSize(const wxDataFormat& format) const;
+    DocDeclStr(
+        virtual size_t , GetDataSize(const wxDataFormat& format) const,
+        "Get the (total) size of data for the given format", "");
+    
 
-
-    //-------------------------------------------------------------------
-    // TODO:  Fix these three methods to do the right Pythonic things...
-    //-------------------------------------------------------------------
 
     // return all formats in the provided array (of size GetFormatCount())
-    virtual void GetAllFormats(wxDataFormat *formats,
-                               Direction dir = Get) const;
+    //virtual void GetAllFormats(wxDataFormat *formats,
+    //                           Direction dir = Get) const;
+    DocAStr(GetAllFormats,
+            "GetAllFormats(self, int dir=Get) -> [formats]",
+            "Returns a list of all the wx.DataFormats that this dataobject supports
+in the given direction.", "");
+    %extend {
+        PyObject* GetAllFormats(Direction dir = Get) {
+            size_t count = self->GetFormatCount(dir);
+            wxDataFormat* formats = new wxDataFormat[count];
+            self->GetAllFormats(formats, dir);
+
+            bool blocked = wxPyBeginBlockThreads();
+            PyObject* list = PyList_New(count);
+            for (size_t i=0; i<count; i++) {
+                wxDataFormat* format = new wxDataFormat(formats[i]);
+                PyObject* obj = wxPyConstructObject((void*)format, wxT("wxDataFormat"), True);
+                PyList_Append(list, obj);
+                Py_DECREF(obj);
+            }            
+            wxPyEndBlockThreads(blocked);
+            delete [] formats;
+            return list;
+        }
+    }
+
+    
 
     // copy raw data (in the specified format) to the provided buffer, return
     // True if data copied successfully, False otherwise
-    virtual bool GetDataHere(const wxDataFormat& format, void *buf) const;
+    // virtual bool GetDataHere(const wxDataFormat& format, void *buf) const;
 
+    DocAStr(GetDataHere,
+            "GetDataHere(self, DataFormat format) -> String",
+            "Get the data bytes in the specified format, returns None on failure.
+", "
+:todo: This should use the python buffer interface isntead...");
+    %extend {
+        PyObject* GetDataHere(const wxDataFormat& format) {
+            PyObject* rval = NULL;
+            size_t size = self->GetDataSize(format);            
+            bool blocked = wxPyBeginBlockThreads();
+            if (size) {
+                char* buf = new char[size];
+                if (self->GetDataHere(format, buf)) 
+                    rval = PyString_FromStringAndSize(buf, size);
+                delete [] buf;
+            }
+            if (! rval) {
+                rval = Py_None;
+                Py_INCREF(rval);
+            }
+            wxPyEndBlockThreads(blocked);
+            return rval;
+        }
+    }
+
+    
     // get data from the buffer of specified length (in the given format),
     // return True if the data was read successfully, False otherwise
-    virtual bool SetData(const wxDataFormat& format,
-                         size_t len, const void * buf);
+    //virtual bool SetData(const wxDataFormat& format,
+    //                     size_t len, const void * buf);
+    DocAStr(SetData,
+            "SetData(self, DataFormat format, String data) -> bool",
+            "Set the data in the specified format from the bytes in the the data string.
+", "
+:todo: This should use the python buffer interface isntead...");
+    %extend {
+        bool SetData(const wxDataFormat& format, PyObject* data) {
+            bool rval;
+            bool blocked = wxPyBeginBlockThreads();
+            if (PyString_Check(data)) {
+                rval = self->SetData(format, PyString_Size(data), PyString_AsString(data));
+            }
+            else {
+                // raise a TypeError if not a string
+                PyErr_SetString(PyExc_TypeError, "String expected.");
+                rval = False;
+            }
+            wxPyEndBlockThreads(blocked);
+            return rval;
+        }
+    }
+    
+
 };
 
     
 //---------------------------------------------------------------------------
 
 
+DocStr(wxDataObjectSimple,
+"wx.DataObjectSimple is a `wx.DataObject` which only supports one
+format.  This is the simplest possible `wx.DataObject` implementation.
 
-// wxDataObjectSimple is a wxDataObject which only supports one format (in
-// both Get and Set directions, but you may return False from GetDataHere() or
-// SetData() if one of them is not supported). This is the simplest possible
-// wxDataObject implementation.
-//
-// This is still an "abstract base class" (although it doesn't have any pure
-// virtual functions), to use it you should derive from it and implement
-// GetDataSize(), GetDataHere() and SetData() functions because the base class
-// versions don't do anything - they just return "not implemented".
-//
-// This class should be used when you provide data in only one format (no
-// conversion to/from other formats), either a standard or a custom one.
-// Otherwise, you should use wxDataObjectComposite or wxDataObject directly.
+This is still an \"abstract base class\" meaning that you can't use it
+directly.  You either need to use one of the predefined base classes,
+or derive your own class from `wx.PyDataObjectSimple`.
+", "");
+
 class wxDataObjectSimple : public wxDataObject {
 public:
-    wxDataObjectSimple(const wxDataFormat& format = wxFormatInvalid);
+    DocCtorStr(
+        wxDataObjectSimple(const wxDataFormat& format = wxFormatInvalid),
+        "Constructor accepts the supported format (none by default) which may
+also be set later with `SetFormat`.","");
 
-    // get/set the format we support
-    const wxDataFormat& GetFormat();
-    void SetFormat(const wxDataFormat& format);
 
+    DocDeclStr(
+        const wxDataFormat& , GetFormat(),
+        "Returns the (one and only one) format supported by this object. It is
+assumed that the format is supported in both directions.", "");
+    
+    DocDeclStr(
+        void , SetFormat(const wxDataFormat& format),
+        "Sets the supported format.", "");   
+
+    DocDeclStr(
+        virtual size_t , GetDataSize() const,
+        "Get the size of our data.", "");
+
+
+    
+    DocAStr(GetDataHere,
+            "GetDataHere(self) -> String",
+            "Returns the data bytes from the data object as a string, returns None
+on failure.  Must be implemented in the derived class if the object
+supports rendering its data.", "");
+    %extend {
+        PyObject* GetDataHere() {
+            PyObject* rval = NULL;
+            size_t size = self->GetDataSize();            
+            bool blocked = wxPyBeginBlockThreads();
+            if (size) {
+                char* buf = new char[size];
+                if (self->GetDataHere(buf)) 
+                    rval = PyString_FromStringAndSize(buf, size);
+                delete [] buf;
+            }
+            if (! rval) {
+                rval = Py_None;
+                Py_INCREF(rval);
+            }
+            wxPyEndBlockThreads(blocked);
+            return rval;
+        }
+    }
+
+    
+    DocAStr(SetData,
+            "SetData(self, String data) -> bool",
+            "Copy the data value to the data object.  Must be implemented in the
+derived class if the object supports setting its data.
+", "");
+    %extend {
+        bool SetData(PyObject* data) {
+            bool rval;
+            bool blocked = wxPyBeginBlockThreads();
+            if (PyString_Check(data)) {
+                rval = self->SetData(PyString_Size(data), PyString_AsString(data));
+            }
+            else {
+                // raise a TypeError if not a string
+                PyErr_SetString(PyExc_TypeError, "String expected.");
+                rval = False;
+            }
+            wxPyEndBlockThreads(blocked);
+            return rval;
+        }
+    }
+    
 };
+
+
 
 
 %{  // Create a new class for wxPython to use
@@ -275,6 +461,36 @@ bool wxPyDataObjectSimple::SetData(size_t len, const void *buf) const{
 
 
 // Now define it for SWIG
+DocStr(wxPyDataObjectSimple,
+"wx.PyDataObjectSimple is a version of `wx.DataObjectSimple` that is
+Python-aware and knows how to reflect calls to its C++ virtual methods
+to methods in the Python derived class.  You should derive from this
+class and overload `GetDataSize`, `GetDataHere` and `SetData` when you
+need to create your own simple single-format type of `wx.DataObject`.
+", "
+Here is a simple example::
+
+    class MyDataObject(wx.PyDataObjectSimple):
+        def __init__(self):
+            wx.PyDataObjectSimple.__init__(
+                self, wx.CustomDataFormat('MyDOFormat'))
+            self.data = ''
+
+        def GetDataSize(self):
+            return len(self.data)
+        def GetDataHere(self):
+            return self.data  # returns a string  
+        def SetData(self, data):
+            self.data = data
+            return True
+
+Note that there is already a `wx.CustomDataObject` class that behaves
+very similarly to this example.  The value of creating your own
+derived class like this is to be able to do additional things when the
+data is requested or given via the clipboard or drag and drop
+operation, such as generate the data value or decode it into needed
+data structures.
+");
 class wxPyDataObjectSimple : public wxDataObjectSimple {
 public:
     %pythonAppend wxPyDataObjectSimple   "self._setCallbackInfo(self, PyDataObjectSimple)"
@@ -287,30 +503,79 @@ public:
 //---------------------------------------------------------------------------
 
 
-// wxDataObjectComposite is the simplest way to implement wxDataObject
-// supporting multiple formats. It contains several wxDataObjectSimple and
-// supports all formats supported by any of them.
-//
+DocStr(wxDataObjectComposite,
+"wx.DataObjectComposite is the simplest `wx.DataObject` derivation
+which may be sued to support multiple formats. It contains several
+'wx.DataObjectSimple` objects and supports any format supported by at
+least one of them. Only one of these data objects is *preferred* (the
+first one if not explicitly changed by using the second parameter of
+`Add`) and its format determines the preferred format of the composite
+data object as well.
+
+See `wx.DataObject` documentation for the reasons why you might prefer
+to use wx.DataObject directly instead of wx.DataObjectComposite for
+efficiency reasons.
+", "");
+
 class wxDataObjectComposite : public wxDataObject {
 public:
     wxDataObjectComposite();
 
     %apply SWIGTYPE *DISOWN { wxDataObjectSimple *dataObject };
-    void Add(wxDataObjectSimple *dataObject, int preferred = False);
+    
+    DocDeclStr(
+        void , Add(wxDataObjectSimple *dataObject, bool preferred = False),
+        "Adds the dataObject to the list of supported objects and it becomes
+the preferred object if preferred is True.", "");
+    
     %clear wxDataObjectSimple *dataObject;
 };
 
 //---------------------------------------------------------------------------
 
-// wxTextDataObject contains text data
+DocStr(wxTextDataObject,
+"wx.TextDataObject is a specialization of `wx.DataObject` for text
+data. It can be used without change to paste data into the `wx.Clipboard`
+or a `wx.DropSource`.
+
+Alternativly, you may wish to derive a new class from the
+`wx.PyTextDataObject` class for providing text on-demand in order to
+minimize memory consumption when offering data in several formats,
+such as plain text and RTF, because by default the text is stored in a
+string in this class, but it might as well be generated on demand when
+requested. For this, `GetTextLength` and `GetText` will have to be
+overridden.", "");
 class wxTextDataObject : public wxDataObjectSimple {
 public:
-    wxTextDataObject(const wxString& text = wxPyEmptyString);
+    DocCtorStr(
+        wxTextDataObject(const wxString& text = wxPyEmptyString),
+        "Constructor, may be used to initialise the text (otherwise `SetText`
+should be used later).", "");
 
-    size_t GetTextLength();
-    wxString GetText();
-    void SetText(const wxString& text);
+    DocDeclStr(
+        size_t , GetTextLength(),
+        "Returns the data size.  By default, returns the size of the text data
+set in the constructor or using `SetText`.  This can be overridden (via
+`wx.PyTextDataObject`) to provide text size data on-demand. It is
+recommended to return the text length plus 1 for a trailing zero, but
+this is not strictly required.", "");
+    
+    DocDeclStr(
+        wxString , GetText(),
+        "Returns the text associated with the data object.", "");
+    
+    DocDeclStr(
+        void , SetText(const wxString& text),
+        "Sets the text associated with the data object. This method is called
+when the data object receives the data and, by default, copies the
+text into the member variable. If you want to process the text on the
+fly you may wish to override this function (via
+`wx.PyTextDataObject`.)", "");
+    
 };
+
+
+
 
 
 
@@ -334,6 +599,15 @@ IMP_PYCALLBACK__STRING(wxPyTextDataObject, wxTextDataObject, SetText);
 
 
 // Now define it for SWIG
+
+DocStr(wxPyTextDataObject,
+"wx.PyTextDataObject is a version of `wx.TextDataObject` that is
+Python-aware and knows how to reflect calls to its C++ virtual methods
+to methods in the Python derived class.  You should derive from this
+class and overload `GetTextLength`, `GetText`, and `SetText` when you
+want to be able to provide text on demand instead of preloading it
+into the data object.", "");
+
 class wxPyTextDataObject : public wxTextDataObject {
 public:
     %pythonAppend wxPyTextDataObject   "self._setCallbackInfo(self, PyTextDataObject)"
@@ -344,14 +618,37 @@ public:
 
 //---------------------------------------------------------------------------
 
-// wxBitmapDataObject contains a bitmap
+DocStr(wxBitmapDataObject,
+"wx.BitmapDataObject is a specialization of wxDataObject for bitmap
+data. It can be used without change to paste data into the `wx.Clipboard`
+or a `wx.DropSource`.
+", "
+:see: `wx.PyBitmapDataObject` if you wish to override `GetBitmap` to increase efficiency.");
+
 class wxBitmapDataObject : public wxDataObjectSimple {
 public:
-    wxBitmapDataObject(const wxBitmap& bitmap = wxNullBitmap);
+    DocCtorStr(
+        wxBitmapDataObject(const wxBitmap& bitmap = wxNullBitmap),
+        "Constructor, optionally passing a bitmap (otherwise use `SetBitmap`
+later).", "");
 
-    wxBitmap GetBitmap() const;
-    void SetBitmap(const wxBitmap& bitmap);
+    DocDeclStr(
+        wxBitmap , GetBitmap() const,
+        "Returns the bitmap associated with the data object.  You may wish to
+override this method (by deriving from `wx.PyBitmapDataObject`) when
+offering data on-demand, but this is not required by wxWidgets'
+internals. Use this method to get data in bitmap form from the
+`wx.Clipboard`.", "");
+    
+    DocDeclStr(
+        void , SetBitmap(const wxBitmap& bitmap),
+        "Sets the bitmap associated with the data object. This method is called
+when the data object receives data. Usually there will be no reason to
+override this function.", "");
+    
 };
+
+
 
 
 
@@ -382,7 +679,7 @@ wxBitmap wxPyBitmapDataObject::GetBitmap() const {
     wxPyEndBlockThreads(blocked);
     return *rval;
 }
-
+ 
 void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
     bool blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "SetBitmap")) {
@@ -396,7 +693,13 @@ void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
 
 
 
-// Now define it for SWIG
+
+DocStr(wxPyBitmapDataObject,
+"wx.PyBitmapDataObject is a version of `wx.BitmapDataObject` that is
+Python-aware and knows how to reflect calls to its C++ virtual methods
+to methods in the Python derived class. To be able to provide bitmap
+data on demand derive from this class and overload `GetBitmap`.", "");
+
 class wxPyBitmapDataObject : public wxBitmapDataObject {
 public:
     %pythonAppend wxPyBitmapDataObject   "self._setCallbackInfo(self, PyBitmapDataObject)"
@@ -408,72 +711,109 @@ public:
 //---------------------------------------------------------------------------
 
 
-// wxFileDataObject contains a list of filenames
+DocStr(wxFileDataObject,
+"wx.FileDataObject is a specialization of `wx.DataObjectSimple` for
+file names. The program works with it just as if it were a list of
+absolute file names, but internally it uses the same format as
+Explorer and other compatible programs under Windows or GNOME/KDE
+filemanager under Unix which makes it possible to receive files from
+them using this class.
+
+:Warning: Under all non-Windows platforms this class is currently
+    \"input-only\", i.e. you can receive the files from another
+    application, but copying (or dragging) file(s) from a wxWidgets
+    application is not currently supported.
+", "");
+
 class wxFileDataObject : public wxDataObjectSimple
 {
 public:
-    wxFileDataObject();
+    DocCtorStr(
+        wxFileDataObject(),
+        "", "");
 
-    const wxArrayString& GetFilenames();
-    void AddFile(const wxString &filename);
+    DocDeclAStr(
+        const wxArrayString& , GetFilenames(),
+        "GetFilenames(self) -> [names]",
+        "Returns a list of file names.", "");
+    
+    DocDeclStr(
+        void , AddFile(const wxString &filename),
+        "Adds a file to the list of files represented by this data object.", "");
+    
 };
-
 
 //---------------------------------------------------------------------------
 
-// wxCustomDataObject contains arbitrary untyped user data.
-// It is understood that this data can be copied bitwise.
+DocStr(wxCustomDataObject,
+"wx.CustomDataObject is a specialization of `wx.DataObjectSimple` for
+some application-specific data in arbitrary format.  Python strings
+are used for getting and setting data, but any picklable object can
+easily be transfered via strings.  A copy of the data is stored in the
+data object.", "");
+
 class wxCustomDataObject : public wxDataObjectSimple {
 public:
     wxCustomDataObject(const wxDataFormat& format = wxFormatInvalid);
 
-    //void TakeData(size_t size, void *data);
-    //bool SetData(size_t size, const void *buf);
+    
+    DocAStr(SetData,
+            "SetData(self, String data) -> bool",
+            "Copy the data value to the data object.", "");
     %extend {
-        void TakeData(PyObject* data) {
-            if (PyString_Check(data)) {
-                // for Python we just call SetData here since we always need it to make a copy.
-                self->SetData(PyString_Size(data), PyString_AsString(data));
-            }
-            else {
-                // raise a TypeError if not a string
-                PyErr_SetString(PyExc_TypeError, "String expected.");
-            }
-        }
         bool SetData(PyObject* data) {
+            bool rval;
+            bool blocked = wxPyBeginBlockThreads();
             if (PyString_Check(data)) {
-                return self->SetData(PyString_Size(data), PyString_AsString(data));
+                rval = self->SetData(PyString_Size(data), PyString_AsString(data));
             }
             else {
                 // raise a TypeError if not a string
                 PyErr_SetString(PyExc_TypeError, "String expected.");
-                return False;
+                rval = False;
             }
+            wxPyEndBlockThreads(blocked);
+            return rval;
         }
     }
+    %pythoncode { TakeData = SetData }
+    
+    DocDeclStr(
+        size_t , GetSize(),
+        "Get the size of the data.", "");
+    
 
-    size_t GetSize();
-
-    //void *GetData();
+    DocAStr(GetData,
+            "GetData(self) -> String",
+            "Returns the data bytes from the data object as a string.", "");
     %extend {
         PyObject* GetData() {
-            return PyString_FromStringAndSize((char*)self->GetData(), self->GetSize());
+            PyObject* obj;
+            bool blocked = wxPyBeginBlockThreads();
+            obj = PyString_FromStringAndSize((char*)self->GetData(), self->GetSize());
+            wxPyEndBlockThreads(blocked);      
         }
     }
 };
 
 
-// TODO: Implement wxPyCustomDataObject allowing GetSize, GetData and SetData
-// to be overloaded.
-
 //---------------------------------------------------------------------------
 
+DocStr(wxURLDataObject,
+"This data object holds a URL in a format that is compatible with some
+browsers such that it is able to be dragged to or from them.", "");
 class wxURLDataObject : public wxDataObjectComposite {
 public:
     wxURLDataObject();
 
-    wxString GetURL();
-    void SetURL(const wxString& url);
+    DocDeclStr(
+        wxString , GetURL(),
+        "Returns a string containing the current URL.", "");
+    
+    DocDeclStr(
+        void , SetURL(const wxString& url),
+        "Set the URL.", "");
+    
 };
 
 //---------------------------------------------------------------------------
