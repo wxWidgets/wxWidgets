@@ -1141,13 +1141,13 @@ bool wxPropertyValidator::StringToLong (wxChar *s, long *number) {
 
 wxChar *wxPropertyValidator::FloatToString (float number) {
     static wxChar buf[20];
-    wxSprintf (buf, wxT("%.6g"), number);
+    wxSnprintf (buf, 20, wxT("%.6g"), number);
     return buf;
 }
 
 wxChar *wxPropertyValidator::DoubleToString (double number) {
     static wxChar buf[20];
-    wxSprintf (buf, wxT("%.6g"), number);
+    wxSnprintf (buf, 20, wxT("%.6g"), number);
     return buf;
 }
 

@@ -332,6 +332,10 @@ wxWindowDC::wxWindowDC( wxWindow *window )
 #ifdef __WXGTK20__
     m_context = gtk_widget_get_pango_context( widget );
     
+    // Always take Xft context to get matching fonts
+    // for display and printing.
+    // m_context = pango_xft_get_context (GDK_DISPLAY (), DefaultScreen (GDK_DISPLAY ()));
+    
     m_fontdesc = widget->style->font_desc;
 #endif
 
