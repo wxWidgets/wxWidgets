@@ -5582,7 +5582,7 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED_GTK(reg) )
 
     int top, bottom, left, right;
 
-#ifndef __WXGTK__
+#if 0  //#ifndef __WXGTK__
     if (reg.IsEmpty())
     {
       int cw, ch;
@@ -5956,7 +5956,7 @@ bool wxGrid::IsCellEditControlShown() const
         wxGridCellEditor* editor = attr->GetEditor((wxGrid*) this, row, col);
         if ( editor && editor->IsCreated() )
         {
-            wxWindow *control = editor->GetControl(); 
+            wxWindow *control = editor->GetControl();
             return control->IsShown();
         }
     }
