@@ -202,7 +202,6 @@ bool wxToolBar::Realize()
     while (node)
     {
         wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-//        wxBitmapRefData * bmap = (wxBitmapRefData*) ( tool->GetNormalBitmap().GetRefData()) ;
         
         if(  !tool->IsSeparator()  )
         {
@@ -394,7 +393,6 @@ void wxToolBar::MacSuperChangedPosition()
         while (node)
         {
             wxToolBarTool *tool = (wxToolBarTool *)node->Data();
- //           wxBitmapRefData * bmap = (wxBitmapRefData*) ( tool->GetNormalBitmap().GetRefData()) ;
             
             if(  !tool->IsSeparator()  )
             {
