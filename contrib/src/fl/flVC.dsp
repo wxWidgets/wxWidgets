@@ -111,7 +111,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /machine:IX86
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw240d.lib /nologo /version:1.0 /dll /debug /machine:IX86 /out:"../../../lib/fldlld.dll" /libpath:"../../../lib"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw24d.lib /nologo /version:1.0 /dll /debug /machine:IX86 /out:"../../../lib/fldlld.dll" /libpath:"../../../lib"
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "flVC - Win32 Release DLL"
@@ -144,9 +144,9 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw240d.lib /nologo /version:1.0 /dll /debug /machine:IX86 /out:"../../../lib/fldlld.dll" /libpath:"../../../lib"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw24d.lib /nologo /version:1.0 /dll /debug /machine:IX86 /out:"../../../lib/fldlld.dll" /libpath:"../../../lib"
 # SUBTRACT BASE LINK32 /pdb:none
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw240.lib /nologo /version:1.0 /dll /machine:IX86 /out:"../../../lib/fldll.dll" /libpath:"../../../lib"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw24.lib /nologo /version:1.0 /dll /machine:IX86 /out:"../../../lib/fldll.dll" /libpath:"../../../lib"
 # SUBTRACT LINK32 /pdb:none /incremental:no /debug
 
 !ENDIF 
