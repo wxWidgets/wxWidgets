@@ -318,9 +318,12 @@ class wxColourPtr(wxObjectPtr):
     def __repr__(self):
         return "<C wxColour instance at %s>" % (self.this,)
     asTuple = Get
-    def __str__(self):      return str(self.asTuple())
-    def __repr__(self):     return 'wxColour: ' + str(self.asTuple())
-    def __nonzero__(self):  return self.Ok()
+    def __str__(self):                  return str(self.asTuple())
+    def __repr__(self):                 return 'wxColour: ' + str(self.asTuple())
+    def __nonzero__(self):              return self.Ok()
+    def __getinitargs__(self):          return ()
+    def __getstate__(self):             return self.asTuple()
+    def __setstate__(self, state):      self.Set(*state)
 
 class wxColour(wxColourPtr):
     def __init__(self,*_args,**_kwargs):

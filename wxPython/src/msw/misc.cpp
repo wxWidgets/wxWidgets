@@ -2263,7 +2263,7 @@ static PyObject *_wrap_new_wxRect(PyObject *self, PyObject *args, PyObject *kwar
     int  _arg1 = (int ) 0;
     int  _arg2 = (int ) 0;
     int  _arg3 = (int ) 0;
-    char *_kwnames[] = { "x","y","w","h", NULL };
+    char *_kwnames[] = { "x","y","width","height", NULL };
     char _ptemp[128];
 
     self = self;
@@ -3158,6 +3158,42 @@ static PyObject *_wrap_wxRect_height_get(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
+static void  wxRect_Set(wxRect *self,int  x,int  y,int  width,int  height) {
+            self->x = x;
+            self->y = y;
+            self->width = width;
+            self->height = height;
+        }
+static PyObject *_wrap_wxRect_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRect * _arg0;
+    int  _arg1 = (int ) 0;
+    int  _arg2 = (int ) 0;
+    int  _arg3 = (int ) 0;
+    int  _arg4 = (int ) 0;
+    wxRect  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "self","x","y","width","height", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iiii:wxRect_Set",_kwnames,&_obj0,&_arg1,&_arg2,&_arg3,&_arg4)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxRect_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxRect_Set(_arg0,_arg1,_arg2,_arg3,_arg4);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyObject * wxRect_asTuple(wxRect *self) {
             wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(4);
@@ -3858,6 +3894,38 @@ static PyObject *_wrap_wxPoint2DDouble_GetCrossProduct(PyObject *self, PyObject 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("d",_result);
+    return _resultobj;
+}
+
+static void  wxPoint2DDouble_Set(wxPoint2DDouble *self,double  x,double  y) {
+            self->m_x = x;
+            self->m_y = y;
+        }
+static PyObject *_wrap_wxPoint2DDouble_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint2DDouble * _arg0;
+    double  _arg1 = (double ) 0;
+    double  _arg2 = (double ) 0;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "self","x","y", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|dd:wxPoint2DDouble_Set",_kwnames,&_obj0,&_arg1,&_arg2)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPoint2DDouble_Set(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -5218,6 +5286,7 @@ static PyMethodDef misccMethods[] = {
 	 { "wxPoint2DDouble___isub__", (PyCFunction) _wrap_wxPoint2DDouble___isub__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPoint2DDouble___iadd__", (PyCFunction) _wrap_wxPoint2DDouble___iadd__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPoint2DDouble___neg__", (PyCFunction) _wrap_wxPoint2DDouble___neg__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_Set", (PyCFunction) _wrap_wxPoint2DDouble_Set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPoint2DDouble_GetCrossProduct", (PyCFunction) _wrap_wxPoint2DDouble_GetCrossProduct, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPoint2DDouble_GetDotProduct", (PyCFunction) _wrap_wxPoint2DDouble_GetDotProduct, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPoint2DDouble_GetDistanceSquare", (PyCFunction) _wrap_wxPoint2DDouble_GetDistanceSquare, METH_VARARGS | METH_KEYWORDS },
@@ -5243,6 +5312,7 @@ static PyMethodDef misccMethods[] = {
 	 { "wxRect___eq__", (PyCFunction) _wrap_wxRect___eq__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect___add__", (PyCFunction) _wrap_wxRect___add__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_asTuple", (PyCFunction) _wrap_wxRect_asTuple, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRect_Set", (PyCFunction) _wrap_wxRect_Set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_height_get", (PyCFunction) _wrap_wxRect_height_get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_height_set", (PyCFunction) _wrap_wxRect_height_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_width_get", (PyCFunction) _wrap_wxRect_width_get, METH_VARARGS | METH_KEYWORDS },
