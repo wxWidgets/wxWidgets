@@ -542,7 +542,7 @@ void wxPropertyListView::ShowListBoxControl(bool show)
         if (show)
             m_middleSizer->Prepend( m_valueList, 0, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, 3 );
         else
-            m_middleSizer->Remove( 0u );
+            m_middleSizer->Remove( (size_t) 0 );
 
         m_propertyWindow->Layout();
     }
