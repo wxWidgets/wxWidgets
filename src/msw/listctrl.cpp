@@ -1435,7 +1435,11 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     event.m_code = wxCharCodeMSWToWX(wVKey);
                 }
 
-                event.m_item.m_data = GetItemData(lItem);
+                if ( lItem != -1 )
+                {
+                    // fill the client data field too
+                    event.m_item.m_data = GetItemData(lItem);
+                }
             }
             break;
 
