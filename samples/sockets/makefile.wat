@@ -36,6 +36,11 @@ PORTNAME = msw
 !endif
 WXDEBUGFLAG =
 !ifeq BUILD debug
+!ifeq DEBUG_FLAG default
+WXDEBUGFLAG = d
+!endif
+!endif
+!ifeq DEBUG_FLAG 1
 WXDEBUGFLAG = d
 !endif
 WXDLLFLAG =
@@ -50,22 +55,47 @@ WXUNIVNAME =
 !ifeq WXUNIV 1
 WXUNIVNAME = univ
 !endif
-__DEBUGFLAG =
+__DEBUGINFO =
 !ifeq BUILD debug
-__DEBUGFLAG = debug all
+!ifeq DEBUG_INFO default
+__DEBUGINFO = debug all
+!endif
 !endif
 !ifeq BUILD release
-__DEBUGFLAG = 
+!ifeq DEBUG_INFO default
+__DEBUGINFO = 
 !endif
-__DEBUGFLAG_2 =
+!endif
+!ifeq DEBUG_INFO 0
+__DEBUGINFO = 
+!endif
+!ifeq DEBUG_INFO 1
+__DEBUGINFO = debug all
+!endif
+__DEBUGINFO_2 =
 !ifeq BUILD debug
-__DEBUGFLAG_2 = -d2
+!ifeq DEBUG_INFO default
+__DEBUGINFO_2 = -d2
+!endif
 !endif
 !ifeq BUILD release
-__DEBUGFLAG_2 = -d0
+!ifeq DEBUG_INFO default
+__DEBUGINFO_2 = -d0
+!endif
+!endif
+!ifeq DEBUG_INFO 0
+__DEBUGINFO_2 = -d0
+!endif
+!ifeq DEBUG_INFO 1
+__DEBUGINFO_2 = -d2
 !endif
 __DEBUG_DEFINE_p =
 !ifeq BUILD debug
+!ifeq DEBUG_FLAG default
+__DEBUG_DEFINE_p = -d__WXDEBUG__
+!endif
+!endif
+!ifeq DEBUG_FLAG 1
 __DEBUG_DEFINE_p = -d__WXDEBUG__
 !endif
 __DLLFLAG_p =
@@ -127,7 +157,7 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 
 ### Variables: ###
 
-CLIENT_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG_2) $(__OPTIMIZEFLAG) -bm &
+CLIENT_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_2) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) &
 	-i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png &
@@ -139,7 +169,7 @@ LIBDIRNAME = &
 	.\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-SERVER_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG_2) $(__OPTIMIZEFLAG) -bm &
+SERVER_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_2) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) &
 	-i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png &
@@ -183,7 +213,7 @@ $(OBJS)\client.exe :  $(CLIENT_OBJECTS) $(OBJS)\client_client.res
 	@%append $(OBJS)\client.lbc option quiet
 	@%append $(OBJS)\client.lbc name $^@
 	@%append $(OBJS)\client.lbc option incremental
-	@%append $(OBJS)\client.lbc $(LDFLAGS) $(__DEBUGFLAG)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
+	@%append $(OBJS)\client.lbc $(LDFLAGS) $(__DEBUGINFO)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(CLIENT_OBJECTS)) do @%append $(OBJS)\client.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_NET_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\client.lbc library %i
 	@%append $(OBJS)\client.lbc option resource=$(OBJS)\client_client.res
@@ -194,7 +224,7 @@ $(OBJS)\server.exe :  $(SERVER_OBJECTS) $(OBJS)\server_server.res
 	@%append $(OBJS)\server.lbc option quiet
 	@%append $(OBJS)\server.lbc name $^@
 	@%append $(OBJS)\server.lbc option incremental
-	@%append $(OBJS)\server.lbc $(LDFLAGS) $(__DEBUGFLAG)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
+	@%append $(OBJS)\server.lbc $(LDFLAGS) $(__DEBUGINFO)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(SERVER_OBJECTS)) do @%append $(OBJS)\server.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_NET_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\server.lbc library %i
 	@%append $(OBJS)\server.lbc option resource=$(OBJS)\server_server.res

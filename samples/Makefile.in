@@ -27,7 +27,7 @@ artprov:
 
 clean: 
 	rm -rf ./.deps
-	rm -f -f ./*.o
+	rm -f ./*.o
 	(cd artprov && $(MAKE) clean)
 	(cd console && $(MAKE) clean)
 	(cd dialogs && $(MAKE) clean)

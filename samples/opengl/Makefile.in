@@ -23,7 +23,7 @@ all: cube
 
 clean: 
 	rm -rf ./.deps
-	rm -f -f ./*.o
+	rm -f ./*.o
 	(cd cube && $(MAKE) clean)
 
 cube: 
