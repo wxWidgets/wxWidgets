@@ -1725,15 +1725,6 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             case WM_LBUTTONDOWN:
                 if ( htItem && isMultiple )
                 {
-<<<<<<< treectrl.cpp
-                    int x = GET_X_LPARAM(lParam),
-                        y = GET_Y_LPARAM(lParam);
-
-                    m_dragImage->Move(wxPoint(x, y));
-
-                    HTREEITEM htiTarget = GetItemFromPoint(GetHwnd(), x, y);
-                    if ( htiTarget )
-=======
                     if ( wParam & MK_CONTROL )
                     {
                         SetFocus();
@@ -1787,7 +1778,7 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             case WM_MOUSEMOVE:
                 if ( m_dragImage )
                 {
-                    m_dragImage->Move(wxPoint(x, y), this);
+                    m_dragImage->Move(wxPoint(x, y));
                     if ( htItem )
                     {
                         // highlight the item as target (hiding drag image is
