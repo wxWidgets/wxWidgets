@@ -48,7 +48,7 @@
 #include <socket.h>
 #include <in.h>
 #else
-#if defined(__FreeBSD__) || defined (__NetBSD__)
+#if defined(__FreeBSD__) || defined (__NetBSD__) || defined(__SUN__)
 #include <sys/types.h>
 #endif
 #include <sys/types.h>
@@ -58,12 +58,6 @@
 #endif
 #include <unistd.h>
 #include <netdb.h>
-
-#ifdef __SUN__
-extern "C" {
-   int gethostname(char *name, int namelen);
-};
-#endif
 
 #endif // __UNIX__
 
