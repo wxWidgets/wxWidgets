@@ -524,7 +524,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
 		gint client_x, client_y, root_x, root_y;
 		gint width, height;
 
-        if (method == wxX11_FS_GENERIC)
+        if (method != wxX11_FS_WMSPEC)
         {
             // don't do it always, Metacity hates it
             m_fsSaveGdkFunc = m_gdkFunc;
@@ -548,7 +548,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
     }
     else
     {
-        if (method == wxX11_FS_GENERIC)
+        if (method != wxX11_FS_WMSPEC)
         {
             // don't do it always, Metacity hates it
             m_gdkFunc = m_fsSaveGdkFunc;

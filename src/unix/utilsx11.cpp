@@ -400,17 +400,29 @@ static void wxSetKDEFullscreen(Display *display, Window rootWnd,
     }
 
     // it is neccessary to unmap the window, otherwise kwin will ignore us:
+    XSync(display, False);
+    
     bool wasMapped = IsMapped(display, w);
     if (wasMapped)
+    {
         XUnmapWindow(display, w);
+        XSync(display, False);
+    }
+
     XChangeProperty(display, w, _NET_WM_WINDOW_TYPE, XA_ATOM, 32,
 	                PropModeReplace, (unsigned char *) &data, lng);
+    XSync(display, False);
+
     if (wasMapped)
+    {
         XMapRaised(display, w);
+        XSync(display, False);
+    }
     
     wxWMspecSetState(display, rootWnd, w, 
                      fullscreen ? _NET_WM_STATE_ADD : _NET_WM_STATE_REMOVE,
                      _NET_WM_STATE_STAYS_ON_TOP);
+    XSync(display, False);
 
     if (!fullscreen)
     {
@@ -423,6 +435,7 @@ static void wxSetKDEFullscreen(Display *display, Window rootWnd,
         XMoveResizeWindow(display, w,
                           origRect->x, origRect->y,
                           origRect->width, origRect->height);
+        XSync(display, False);
     }
 }
 
