@@ -204,6 +204,7 @@ bool wxFont::RealizeResource()
     LOGFONT lf;
     wxFillLogFont(&lf, this);
     M_FONTDATA->m_hFont = (WXHFONT)::CreateFontIndirect(&lf);
+    M_FONTDATA->m_faceName = lf.lfFaceName;
     if ( !M_FONTDATA->m_hFont )
     {
         wxLogLastError("CreateFont");
