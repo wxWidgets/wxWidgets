@@ -50,19 +50,19 @@
 // ----------------------------------------------------------------------------
 
 #if wxUSE_WCHAR_T
-    WXDLLEXPORT_DATA(wxMBConv) wxConvLibc;
-    WXDLLEXPORT_DATA(wxCSConv) wxConvLocal((const wxChar *)NULL);
-    WXDLLEXPORT_DATA(wxCSConv) wxConvISO8859_1(_T("iso-8859-1"));
+    WXDLLIMPEXP_DATA_BASE(wxMBConv) wxConvLibc;
+    WXDLLIMPEXP_DATA_BASE(wxCSConv) wxConvLocal((const wxChar *)NULL);
+    WXDLLIMPEXP_DATA_BASE(wxCSConv) wxConvISO8859_1(_T("iso-8859-1"));
 #else
     // stand-ins in absence of wchar_t
-    WXDLLEXPORT_DATA(wxMBConv) wxConvLibc,
-                               wxConvFile,
-                               wxConvISO8859_1,
-                               wxConvLocal,
-                               wxConvUTF8;
+    WXDLLIMPEXP_DATA_BASE(wxMBConv) wxConvLibc,
+                                    wxConvFile,
+                                    wxConvISO8859_1,
+                                    wxConvLocal,
+                                    wxConvUTF8;
 #endif // wxUSE_WCHAR_T
 
-WXDLLEXPORT_DATA(wxMBConv *) wxConvCurrent = &wxConvLibc;
+WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent = &wxConvLibc;
 
 class wxStrConvModule: public wxModule
 {
@@ -281,7 +281,7 @@ const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *pwz) const
 
 #ifdef __WXGTK12__
 
-WXDLLEXPORT_DATA(wxMBConvGdk) wxConvGdk;
+WXDLLIMPEXP_DATA_BASE(wxMBConvGdk) wxConvGdk;
 
 #include <gdk/gdk.h>
 
@@ -321,7 +321,7 @@ size_t wxMBConvGdk::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 // UTF-7
 // ----------------------------------------------------------------------------
 
-WXDLLEXPORT_DATA(wxMBConvUTF7) wxConvUTF7;
+WXDLLIMPEXP_DATA_BASE(wxMBConvUTF7) wxConvUTF7;
 
 #if 0
 static char utf7_setD[]="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -352,7 +352,7 @@ size_t wxMBConvUTF7::WC2MB(char * WXUNUSED(buf),
 // UTF-8
 // ----------------------------------------------------------------------------
 
-WXDLLEXPORT_DATA(wxMBConvUTF8) wxConvUTF8;
+WXDLLIMPEXP_DATA_BASE(wxMBConvUTF8) wxConvUTF8;
 
 static wxUint32 utf8_max[]=
     { 0x7f, 0x7ff, 0xffff, 0x1fffff, 0x3ffffff, 0x7fffffff, 0xffffffff };

@@ -79,7 +79,7 @@ static const struct
 } g_strEmpty = { {-1, 0, 0}, wxT('\0') };
 
 // empty C style string: points to 'string data' byte of g_strEmpty
-extern const wxChar WXDLLEXPORT *wxEmptyString = &g_strEmpty.dummy;
+extern const wxChar WXDLLIMPEXP_BASE *wxEmptyString = &g_strEmpty.dummy;
 
 // ----------------------------------------------------------------------------
 // global functions

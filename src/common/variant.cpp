@@ -44,13 +44,13 @@ using namespace std ;
 
 IMPLEMENT_ABSTRACT_CLASS(wxVariantData, wxObject)
 
-wxVariant WXDLLEXPORT wxNullVariant;
+wxVariant WXDLLIMPEXP_BASE wxNullVariant;
 
 /*
  * wxVariantDataList
  */
 
-class WXDLLEXPORT wxVariantDataList: public wxVariantData
+class WXDLLIMPEXP_BASE wxVariantDataList: public wxVariantData
 {
 DECLARE_DYNAMIC_CLASS(wxVariantDataList)
 public:
@@ -198,7 +198,7 @@ bool wxVariantDataList::Read(wxString& WXUNUSED(str))
  * wxVariantDataStringList
  */
 
-class WXDLLEXPORT wxVariantDataStringList: public wxVariantData
+class WXDLLIMPEXP_BASE wxVariantDataStringList: public wxVariantData
 {
 DECLARE_DYNAMIC_CLASS(wxVariantDataStringList)
 public:
@@ -306,7 +306,7 @@ bool wxVariantDataStringList::Read(wxString& WXUNUSED(str))
  * wxVariantDataLong
  */
 
-class WXDLLEXPORT wxVariantDataLong: public wxVariantData
+class WXDLLIMPEXP_BASE wxVariantDataLong: public wxVariantData
 {
 DECLARE_DYNAMIC_CLASS(wxVariantDataLong)
 public:
@@ -407,7 +407,7 @@ bool wxVariantDataLong::Read(wxString& str)
  * wxVariantDataReal
  */
 
-class WXDLLEXPORT wxVariantDataReal: public wxVariantData
+class WXDLLIMPEXP_BASE wxVariantDataReal: public wxVariantData
 {
 DECLARE_DYNAMIC_CLASS(wxVariantDataReal)
 public:
@@ -508,7 +508,7 @@ bool wxVariantDataReal::Read(wxString& str)
  * wxVariantDataBool
  */
 
-class WXDLLEXPORT wxVariantDataBool: public wxVariantData
+class WXDLLIMPEXP_BASE wxVariantDataBool: public wxVariantData
 {
 DECLARE_DYNAMIC_CLASS(wxVariantDataBool)
 public:
@@ -612,7 +612,7 @@ bool wxVariantDataBool::Read(wxString& str)
  * wxVariantDataChar
  */
 
-class WXDLLEXPORT wxVariantDataChar: public wxVariantData
+class WXDLLIMPEXP_BASE wxVariantDataChar: public wxVariantData
 {
 DECLARE_DYNAMIC_CLASS(wxVariantDataChar)
 public:
@@ -718,7 +718,7 @@ bool wxVariantDataChar::Read(wxString& str)
 #define wxVariantDataString wxVariantStringData
 #endif
 
-class WXDLLEXPORT wxVariantDataString: public wxVariantData
+class WXDLLIMPEXP_BASE wxVariantDataString: public wxVariantData
 {
 #if defined(__BORLANDC__) && defined(__WIN16__)
 DECLARE_DYNAMIC_CLASS(wxVariantStringData)

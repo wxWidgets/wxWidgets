@@ -144,8 +144,8 @@ wxRegisterId (long id)
 
 #if WXWIN_COMPATIBILITY_2_4
 
-WXDLLEXPORT_DATA(const wxChar *) wxFloatToStringStr = wxT("%.2f");
-WXDLLEXPORT_DATA(const wxChar *) wxDoubleToStringStr = wxT("%.2f");
+WXDLLIMPEXP_DATA_BASE(const wxChar *) wxFloatToStringStr = wxT("%.2f");
+WXDLLIMPEXP_DATA_BASE(const wxChar *) wxDoubleToStringStr = wxT("%.2f");
 
 void
 StringToFloat (const wxChar *s, float *number)
