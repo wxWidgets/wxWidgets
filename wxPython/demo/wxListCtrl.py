@@ -76,7 +76,7 @@ class TestListCtrlPanel(wxPanel):
         wxToolTip_Enable(true)
 
         self.list.InsertColumn(0, "Artist")
-        self.list.InsertColumn(1, "Title")
+        self.list.InsertColumn(1, "Title", wxLIST_FORMAT_RIGHT)
         self.list.InsertColumn(2, "Genre")
         items = musicdata.items()
         for x in range(len(items)):
@@ -90,7 +90,10 @@ class TestListCtrlPanel(wxPanel):
         self.list.SetColumnWidth(1, wxLIST_AUTOSIZE)
         ##self.list.SetColumnWidth(2, wxLIST_AUTOSIZE)
 
-        self.list.SetItemState(5, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
+        self.list.SetItemState(25, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
+
+        #self.list.SetItemState(25, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
+        #self.list.EnsureVisible(25)
 
         # show how to change the colour of an item
         item = self.list.GetItem(1)

@@ -20,7 +20,8 @@ class TestPanel(wxPanel):
         EVT_TEXT(self, 20, self.EvtText)
 
         wxStaticText(self, -1, "Multi-line", wxPoint(5, 75), wxSize(75, 20))
-        t = wxTextCtrl(self, 30, "How does it work with a long line of text set in the control", wxPoint(80, 75), wxSize(200, 150), wxTE_MULTILINE)
+        t = wxTextCtrl(self, 30, "How does it work with a long line of text set in the control",
+                       wxPoint(80, 75), wxSize(200, 150), wxTE_MULTILINE)
         t.SetInsertionPoint(0)
         EVT_TEXT(self, 30, self.EvtText)
 

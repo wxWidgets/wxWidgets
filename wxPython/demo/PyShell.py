@@ -6,7 +6,8 @@ from wxPython.lib.shell import PyShell
 
 
 def runTest(frame, nb, log):
-    win = PyShell(nb)
+    testGlobals = {'hello' : 'How are you?'}
+    win = PyShell(nb, globals=testGlobals)
     win.Show(true)
     return win
 

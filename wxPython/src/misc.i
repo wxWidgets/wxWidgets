@@ -333,7 +333,7 @@ enum wxRegionContain {
 
 class wxRegion {
 public:
-    wxRegion();
+    wxRegion(long x=0, long y=0, long width=0, long height=0);
     ~wxRegion();
 
     void Clear();

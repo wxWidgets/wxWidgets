@@ -51,8 +51,10 @@ class TestToolBar(wxFrame):
 
 
         tb.AddSeparator()
-        tb.AddControl(wxComboBox(tb, -1, "", choices=["", "This", "is a", "wxComboBox"],
+        cbID = wxNewId()
+        tb.AddControl(wxComboBox(tb, cbID, "", choices=["", "This", "is a", "wxComboBox"],
                                  size=(150,-1), style=wxCB_DROPDOWN))
+        EVT_COMBOBOX(self, cbID, self.OnCombo)
 
         tb.Realize()
         EVT_CLOSE(self, self.OnCloseWindow)
@@ -66,6 +68,10 @@ class TestToolBar(wxFrame):
 
     def OnToolRClick(self, event):
         self.log.WriteText("tool %s right-clicked\n" % event.GetId())
+
+    def OnCombo(self, event):
+        self.log.WriteText("combobox item selected: %s\n" % event.GetString())
+
 
 #---------------------------------------------------------------------------
 

@@ -186,276 +186,6 @@ static PyObject *_wrap_new_wxStyledTextCtrl(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_GetText(_swigobj)  (_swigobj->GetText())
-static PyObject *_wrap_wxStyledTextCtrl_GetText(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetText",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetText. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxString (wxStyledTextCtrl_GetText(_arg0));
-
-    wxPy_END_ALLOW_THREADS;
-}{
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-}
-{
-    delete _result;
-}
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_SetText(_swigobj,_swigarg0)  (_swigobj->SetText(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetText(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxStyledTextCtrl * _arg0;
-    wxString * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","text", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_SetText",_kwnames,&_argo0,&_obj1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetText. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxStyledTextCtrl_SetText(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-{
-    if (_obj1)
-        delete _arg1;
-}
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetLine(_swigobj,_swigarg0)  (_swigobj->GetLine(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_GetLine(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","line", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_GetLine",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetLine. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxString (wxStyledTextCtrl_GetLine(_arg0,_arg1));
-
-    wxPy_END_ALLOW_THREADS;
-}{
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-}
-{
-    delete _result;
-}
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_ReplaceSelection(_swigobj,_swigarg0)  (_swigobj->ReplaceSelection(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_ReplaceSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    wxString * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","text", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_ReplaceSelection",_kwnames,&_argo0,&_obj1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_ReplaceSelection. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_ReplaceSelection(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    if (_obj1)
-        delete _arg1;
-}
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_SetReadOnly(_swigobj,_swigarg0)  (_swigobj->SetReadOnly(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetReadOnly(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","readOnly", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetReadOnly",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetReadOnly. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetReadOnly(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetReadOnly(_swigobj)  (_swigobj->GetReadOnly())
-static PyObject *_wrap_wxStyledTextCtrl_GetReadOnly(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetReadOnly",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetReadOnly. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxStyledTextCtrl_GetReadOnly(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetTextRange(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetTextRange(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_GetTextRange(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","startPos","endPos", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_GetTextRange",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetTextRange. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxString (wxStyledTextCtrl_GetTextRange(_arg0,_arg1,_arg2));
-
-    wxPy_END_ALLOW_THREADS;
-}{
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-}
-{
-    delete _result;
-}
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetStyledTextRange(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetStyledTextRange(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_GetStyledTextRange(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","startPos","endPos", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_GetStyledTextRange",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetStyledTextRange. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxString (wxStyledTextCtrl_GetStyledTextRange(_arg0,_arg1,_arg2));
-
-    wxPy_END_ALLOW_THREADS;
-}{
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-}
-{
-    delete _result;
-}
-    return _resultobj;
-}
-
 #define wxStyledTextCtrl_AddText(_swigobj,_swigarg0)  (_swigobj->AddText(_swigarg0))
 static PyObject *_wrap_wxStyledTextCtrl_AddText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -604,10 +334,64 @@ static PyObject *_wrap_wxStyledTextCtrl_ClearAll(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
+#define wxStyledTextCtrl_ClearDocumentStyle(_swigobj)  (_swigobj->ClearDocumentStyle())
+static PyObject *_wrap_wxStyledTextCtrl_ClearDocumentStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_ClearDocumentStyle",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_ClearDocumentStyle. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_ClearDocumentStyle(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetLength(_swigobj)  (_swigobj->GetLength())
+static PyObject *_wrap_wxStyledTextCtrl_GetLength(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetLength",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetLength. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetLength(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxStyledTextCtrl_GetCharAt(_swigobj,_swigarg0)  (_swigobj->GetCharAt(_swigarg0))
 static PyObject *_wrap_wxStyledTextCtrl_GetCharAt(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    char  _result;
+    int  _result;
     wxStyledTextCtrl * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
@@ -625,1082 +409,10 @@ static PyObject *_wrap_wxStyledTextCtrl_GetCharAt(PyObject *self, PyObject *args
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (char )wxStyledTextCtrl_GetCharAt(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("c",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetStyleAt(_swigobj,_swigarg0)  (_swigobj->GetStyleAt(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_GetStyleAt(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    char  _result;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","pos", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_GetStyleAt",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetStyleAt. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (char )wxStyledTextCtrl_GetStyleAt(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("c",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_SetStyleBits(_swigobj,_swigarg0)  (_swigobj->SetStyleBits(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetStyleBits(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","bits", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetStyleBits",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetStyleBits. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetStyleBits(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetStyleBits(_swigobj)  (_swigobj->GetStyleBits())
-static PyObject *_wrap_wxStyledTextCtrl_GetStyleBits(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetStyleBits",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetStyleBits. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_GetStyleBits(_arg0);
+        _result = (int )wxStyledTextCtrl_GetCharAt(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_Cut(_swigobj)  (_swigobj->Cut())
-static PyObject *_wrap_wxStyledTextCtrl_Cut(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_Cut",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_Cut. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_Cut(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_Copy(_swigobj)  (_swigobj->Copy())
-static PyObject *_wrap_wxStyledTextCtrl_Copy(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_Copy",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_Copy. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_Copy(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_Paste(_swigobj)  (_swigobj->Paste())
-static PyObject *_wrap_wxStyledTextCtrl_Paste(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_Paste",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_Paste. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_Paste(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_CanPaste(_swigobj)  (_swigobj->CanPaste())
-static PyObject *_wrap_wxStyledTextCtrl_CanPaste(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_CanPaste",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_CanPaste. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxStyledTextCtrl_CanPaste(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_ClearClipbrd(_swigobj)  (_swigobj->ClearClipbrd())
-static PyObject *_wrap_wxStyledTextCtrl_ClearClipbrd(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_ClearClipbrd",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_ClearClipbrd. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_ClearClipbrd(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_Undo(_swigobj)  (_swigobj->Undo())
-static PyObject *_wrap_wxStyledTextCtrl_Undo(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_Undo",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_Undo. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_Undo(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_CanUndo(_swigobj)  (_swigobj->CanUndo())
-static PyObject *_wrap_wxStyledTextCtrl_CanUndo(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_CanUndo",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_CanUndo. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxStyledTextCtrl_CanUndo(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_EmptyUndoBuffer(_swigobj)  (_swigobj->EmptyUndoBuffer())
-static PyObject *_wrap_wxStyledTextCtrl_EmptyUndoBuffer(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_EmptyUndoBuffer",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_EmptyUndoBuffer. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_EmptyUndoBuffer(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_Redo(_swigobj)  (_swigobj->Redo())
-static PyObject *_wrap_wxStyledTextCtrl_Redo(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_Redo",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_Redo. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_Redo(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_CanRedo(_swigobj)  (_swigobj->CanRedo())
-static PyObject *_wrap_wxStyledTextCtrl_CanRedo(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_CanRedo",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_CanRedo. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxStyledTextCtrl_CanRedo(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_SetUndoCollection(_swigobj,_swigarg0)  (_swigobj->SetUndoCollection(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetUndoCollection(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    wxSTC_UndoType  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","type", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetUndoCollection",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetUndoCollection. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetUndoCollection(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetUndoCollection(_swigobj)  (_swigobj->GetUndoCollection())
-static PyObject *_wrap_wxStyledTextCtrl_GetUndoCollection(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxSTC_UndoType  _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetUndoCollection",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetUndoCollection. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxSTC_UndoType )wxStyledTextCtrl_GetUndoCollection(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_BeginUndoAction(_swigobj)  (_swigobj->BeginUndoAction())
-static PyObject *_wrap_wxStyledTextCtrl_BeginUndoAction(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_BeginUndoAction",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_BeginUndoAction. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_BeginUndoAction(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_EndUndoAction(_swigobj)  (_swigobj->EndUndoAction())
-static PyObject *_wrap_wxStyledTextCtrl_EndUndoAction(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_EndUndoAction",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_EndUndoAction. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_EndUndoAction(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_SetSavePoint(_swigobj)  (_swigobj->SetSavePoint())
-static PyObject *_wrap_wxStyledTextCtrl_SetSavePoint(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_SetSavePoint",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetSavePoint. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetSavePoint(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetSelection(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetSelection(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_GetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int * _arg1;
-    int  temp;
-    int * _arg2;
-    int  temp0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-{
-  _arg1 = &temp;
-}
-{
-  _arg2 = &temp0;
-}
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetSelection",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetSelection. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_GetSelection(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    PyObject *o;
-    o = PyInt_FromLong((long) (*_arg1));
-    _resultobj = t_output_helper(_resultobj, o);
-}
-{
-    PyObject *o;
-    o = PyInt_FromLong((long) (*_arg2));
-    _resultobj = t_output_helper(_resultobj, o);
-}
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_SetSelection(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetSelection(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_SetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","startPos","endPos", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_SetSelection",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetSelection. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetSelection(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetSelectedText(_swigobj)  (_swigobj->GetSelectedText())
-static PyObject *_wrap_wxStyledTextCtrl_GetSelectedText(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetSelectedText",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetSelectedText. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxString (wxStyledTextCtrl_GetSelectedText(_arg0));
-
-    wxPy_END_ALLOW_THREADS;
-}{
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-}
-{
-    delete _result;
-}
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_HideSelection(_swigobj,_swigarg0)  (_swigobj->HideSelection(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_HideSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","hide", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_HideSelection",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_HideSelection. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_HideSelection(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetHideSelection(_swigobj)  (_swigobj->GetHideSelection())
-static PyObject *_wrap_wxStyledTextCtrl_GetHideSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetHideSelection",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetHideSelection. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxStyledTextCtrl_GetHideSelection(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetTextLength(_swigobj)  (_swigobj->GetTextLength())
-static PyObject *_wrap_wxStyledTextCtrl_GetTextLength(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetTextLength",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetTextLength. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_GetTextLength(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetFirstVisibleLine(_swigobj)  (_swigobj->GetFirstVisibleLine())
-static PyObject *_wrap_wxStyledTextCtrl_GetFirstVisibleLine(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetFirstVisibleLine",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetFirstVisibleLine. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_GetFirstVisibleLine(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetModified(_swigobj)  (_swigobj->GetModified())
-static PyObject *_wrap_wxStyledTextCtrl_GetModified(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetModified",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetModified. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxStyledTextCtrl_GetModified(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetLineCount(_swigobj)  (_swigobj->GetLineCount())
-static PyObject *_wrap_wxStyledTextCtrl_GetLineCount(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetLineCount",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetLineCount. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_GetLineCount(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetRect(_swigobj)  (_swigobj->GetRect())
-static PyObject *_wrap_wxStyledTextCtrl_GetRect(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxRect * _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetRect",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetRect. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxRect (wxStyledTextCtrl_GetRect(_arg0));
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxRect_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetLineFromPos(_swigobj,_swigarg0)  (_swigobj->GetLineFromPos(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_GetLineFromPos(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","pos", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_GetLineFromPos",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetLineFromPos. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_GetLineFromPos(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetLineStartPos(_swigobj,_swigarg0)  (_swigobj->GetLineStartPos(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_GetLineStartPos(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","line", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_GetLineStartPos",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetLineStartPos. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_GetLineStartPos(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetLineLengthAtPos(_swigobj,_swigarg0)  (_swigobj->GetLineLengthAtPos(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_GetLineLengthAtPos(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","pos", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_GetLineLengthAtPos",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetLineLengthAtPos. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_GetLineLengthAtPos(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetLineLength(_swigobj,_swigarg0)  (_swigobj->GetLineLength(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_GetLineLength(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","line", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_GetLineLength",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetLineLength. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_GetLineLength(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetCurrentLineText(_swigobj,_swigarg0)  (_swigobj->GetCurrentLineText(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_GetCurrentLineText(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxStyledTextCtrl * _arg0;
-    int * _arg1;
-    int  temp;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-{
-  _arg1 = &temp;
-}
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetCurrentLineText",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetCurrentLineText. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxString (wxStyledTextCtrl_GetCurrentLineText(_arg0,_arg1));
-
-    wxPy_END_ALLOW_THREADS;
-}{
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-}
-{
-    PyObject *o;
-    o = PyInt_FromLong((long) (*_arg1));
-    _resultobj = t_output_helper(_resultobj, o);
-}
-{
-    delete _result;
-}
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetCurrentLine(_swigobj)  (_swigobj->GetCurrentLine())
-static PyObject *_wrap_wxStyledTextCtrl_GetCurrentLine(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetCurrentLine",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetCurrentLine. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_GetCurrentLine(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_PositionFromPoint(_swigobj,_swigarg0)  (_swigobj->PositionFromPoint(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_PositionFromPoint(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    wxPoint * _arg1;
-    PyObject * _argo0 = 0;
-    wxPoint  temp;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","pt", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_PositionFromPoint",_kwnames,&_argo0,&_obj1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_PositionFromPoint. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    _arg1 = &temp;
-    if (! wxPoint_helper(_obj1, &_arg1))
-        return NULL;
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_PositionFromPoint(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_LineFromPoint(_swigobj,_swigarg0)  (_swigobj->LineFromPoint(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_LineFromPoint(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    wxPoint * _arg1;
-    PyObject * _argo0 = 0;
-    wxPoint  temp;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","pt", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_LineFromPoint",_kwnames,&_argo0,&_obj1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_LineFromPoint. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    _arg1 = &temp;
-    if (! wxPoint_helper(_obj1, &_arg1))
-        return NULL;
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_LineFromPoint(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_PointFromPosition(_swigobj,_swigarg0)  (_swigobj->PointFromPosition(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_PointFromPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPoint * _result;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","pos", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_PointFromPosition",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_PointFromPosition. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxPoint (wxStyledTextCtrl_PointFromPosition(_arg0,_arg1));
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPoint_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -1758,6 +470,91 @@ static PyObject *_wrap_wxStyledTextCtrl_GetAnchor(PyObject *self, PyObject *args
     return _resultobj;
 }
 
+#define wxStyledTextCtrl_GetStyleAt(_swigobj,_swigarg0)  (_swigobj->GetStyleAt(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_GetStyleAt(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pos", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_GetStyleAt",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetStyleAt. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetStyleAt(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_Redo(_swigobj)  (_swigobj->Redo())
+static PyObject *_wrap_wxStyledTextCtrl_Redo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_Redo",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_Redo. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_Redo(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetUndoCollection(_swigobj,_swigarg0)  (_swigobj->SetUndoCollection(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetUndoCollection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","collectUndo", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetUndoCollection",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetUndoCollection. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetUndoCollection(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxStyledTextCtrl_SelectAll(_swigobj)  (_swigobj->SelectAll())
 static PyObject *_wrap_wxStyledTextCtrl_SelectAll(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1785,27 +582,26 @@ static PyObject *_wrap_wxStyledTextCtrl_SelectAll(PyObject *self, PyObject *args
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_SetCurrentPosition(_swigobj,_swigarg0)  (_swigobj->SetCurrentPosition(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetCurrentPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_SetSavePoint(_swigobj)  (_swigobj->SetSavePoint())
+static PyObject *_wrap_wxStyledTextCtrl_SetSavePoint(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextCtrl * _arg0;
-    int  _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","pos", NULL };
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetCurrentPosition",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_SetSavePoint",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetCurrentPosition. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetSavePoint. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetCurrentPosition(_arg0,_arg1);
+        wxStyledTextCtrl_SetSavePoint(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -1813,27 +609,261 @@ static PyObject *_wrap_wxStyledTextCtrl_SetCurrentPosition(PyObject *self, PyObj
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_SetAnchor(_swigobj,_swigarg0)  (_swigobj->SetAnchor(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetAnchor(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_GetStyledText(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetStyledText(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_GetStyledText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    wxString * _result;
     wxStyledTextCtrl * _arg0;
     int  _arg1;
+    int  _arg2;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","pos", NULL };
+    char *_kwnames[] = { "self","startPos","endPos", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetAnchor",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_GetStyledText",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetAnchor. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetStyledText. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetAnchor(_arg0,_arg1);
+        _result = new wxString (wxStyledTextCtrl_GetStyledText(_arg0,_arg1,_arg2));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_CanRedo(_swigobj)  (_swigobj->CanRedo())
+static PyObject *_wrap_wxStyledTextCtrl_CanRedo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_CanRedo",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_CanRedo. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxStyledTextCtrl_CanRedo(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_MarkerLineFromHandle(_swigobj,_swigarg0)  (_swigobj->MarkerLineFromHandle(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_MarkerLineFromHandle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","handle", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_MarkerLineFromHandle",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerLineFromHandle. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_MarkerLineFromHandle(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_MarkerDeleteHandle(_swigobj,_swigarg0)  (_swigobj->MarkerDeleteHandle(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_MarkerDeleteHandle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","handle", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_MarkerDeleteHandle",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerDeleteHandle. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_MarkerDeleteHandle(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetUndoCollection(_swigobj)  (_swigobj->GetUndoCollection())
+static PyObject *_wrap_wxStyledTextCtrl_GetUndoCollection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetUndoCollection",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetUndoCollection. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxStyledTextCtrl_GetUndoCollection(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetViewWhiteSpace(_swigobj)  (_swigobj->GetViewWhiteSpace())
+static PyObject *_wrap_wxStyledTextCtrl_GetViewWhiteSpace(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetViewWhiteSpace",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetViewWhiteSpace. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetViewWhiteSpace(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetViewWhiteSpace(_swigobj,_swigarg0)  (_swigobj->SetViewWhiteSpace(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetViewWhiteSpace(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","viewWS", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetViewWhiteSpace",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetViewWhiteSpace. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetViewWhiteSpace(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_PositionFromPoint(_swigobj,_swigarg0)  (_swigobj->PositionFromPoint(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_PositionFromPoint(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    wxPoint * _arg1;
+    PyObject * _argo0 = 0;
+    wxPoint  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","pt", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_PositionFromPoint",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_PositionFromPoint. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxPoint_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_PositionFromPoint(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GotoLine(_swigobj,_swigarg0)  (_swigobj->GotoLine(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_GotoLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","line", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_GotoLine",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GotoLine. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_GotoLine(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -1869,27 +899,27 @@ static PyObject *_wrap_wxStyledTextCtrl_GotoPos(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_GotoLine(_swigobj,_swigarg0)  (_swigobj->GotoLine(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_GotoLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_SetAnchor(_swigobj,_swigarg0)  (_swigobj->SetAnchor(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetAnchor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextCtrl * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","line", NULL };
+    char *_kwnames[] = { "self","posAnchor", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_GotoLine",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetAnchor",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GotoLine. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetAnchor. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_GotoLine(_arg0,_arg1);
+        wxStyledTextCtrl_SetAnchor(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -1897,708 +927,45 @@ static PyObject *_wrap_wxStyledTextCtrl_GotoLine(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_ChangePosition(_swigobj,_swigarg0,_swigarg1)  (_swigobj->ChangePosition(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_ChangePosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_GetCurLine(_swigobj,_swigarg0)  (_swigobj->GetCurLine(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_GetCurLine(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    wxString * _result;
     wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    bool  _arg2;
-    PyObject * _argo0 = 0;
-    int tempbool2;
-    char *_kwnames[] = { "self","delta","extendSelection", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_ChangePosition",_kwnames,&_argo0,&_arg1,&tempbool2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_ChangePosition. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-    _arg2 = (bool ) tempbool2;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_ChangePosition(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_PageMove(_swigobj,_swigarg0,_swigarg1)  (_swigobj->PageMove(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_PageMove(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    bool  _arg2;
-    PyObject * _argo0 = 0;
-    int tempbool2;
-    char *_kwnames[] = { "self","cmdKey","extendSelection", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_PageMove",_kwnames,&_argo0,&_arg1,&tempbool2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_PageMove. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-    _arg2 = (bool ) tempbool2;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_PageMove(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_ScrollBy(_swigobj,_swigarg0,_swigarg1)  (_swigobj->ScrollBy(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_ScrollBy(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","columnDelta","lineDelta", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_ScrollBy",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_ScrollBy. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_ScrollBy(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_ScrollToLine(_swigobj,_swigarg0)  (_swigobj->ScrollToLine(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_ScrollToLine(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","line", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_ScrollToLine",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_ScrollToLine. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_ScrollToLine(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_ScrollToColumn(_swigobj,_swigarg0)  (_swigobj->ScrollToColumn(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_ScrollToColumn(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","column", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_ScrollToColumn",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_ScrollToColumn. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_ScrollToColumn(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_EnsureCaretVisible(_swigobj)  (_swigobj->EnsureCaretVisible())
-static PyObject *_wrap_wxStyledTextCtrl_EnsureCaretVisible(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
+    int * _arg1 = (int *) NULL;
+    int  temp;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_EnsureCaretVisible",_kwnames,&_argo0)) 
+{
+  _arg1 = &temp;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetCurLine",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_EnsureCaretVisible. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetCurLine. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_EnsureCaretVisible(_arg0);
+        _result = new wxString (wxStyledTextCtrl_GetCurLine(_arg0,_arg1));
 
     wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
-
-#define wxStyledTextCtrl_SetCaretPolicy(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetCaretPolicy(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_SetCaretPolicy(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    int  _arg2 = (int ) 0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","policy","slop", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|i:wxStyledTextCtrl_SetCaretPolicy",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetCaretPolicy. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetCaretPolicy(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
 }
-
-#define wxStyledTextCtrl_GetSelectionType(_swigobj)  (_swigobj->GetSelectionType())
-static PyObject *_wrap_wxStyledTextCtrl_GetSelectionType(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetSelectionType",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetSelectionType. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
 {
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_GetSelectionType(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
+    delete _result;
 }
-
-#define wxStyledTextCtrl_GetLinesOnScreen(_swigobj)  (_swigobj->GetLinesOnScreen())
-static PyObject *_wrap_wxStyledTextCtrl_GetLinesOnScreen(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetLinesOnScreen",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetLinesOnScreen. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_GetLinesOnScreen(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_IsSelectionRectangle(_swigobj)  (_swigobj->IsSelectionRectangle())
-static PyObject *_wrap_wxStyledTextCtrl_IsSelectionRectangle(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_IsSelectionRectangle",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_IsSelectionRectangle. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxStyledTextCtrl_IsSelectionRectangle(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_SetUseHorizontalScrollBar(_swigobj,_swigarg0)  (_swigobj->SetUseHorizontalScrollBar(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetUseHorizontalScrollBar(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","use", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetUseHorizontalScrollBar",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetUseHorizontalScrollBar. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetUseHorizontalScrollBar(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetUseHorizontalScrollBar(_swigobj)  (_swigobj->GetUseHorizontalScrollBar())
-static PyObject *_wrap_wxStyledTextCtrl_GetUseHorizontalScrollBar(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetUseHorizontalScrollBar",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetUseHorizontalScrollBar. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxStyledTextCtrl_GetUseHorizontalScrollBar(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_FindText(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4)  (_swigobj->FindText(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
-static PyObject *_wrap_wxStyledTextCtrl_FindText(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    int  _arg2;
-    wxString * _arg3;
-    bool  _arg4;
-    bool  _arg5;
-    PyObject * _argo0 = 0;
-    PyObject * _obj3 = 0;
-    int tempbool4;
-    int tempbool5;
-    char *_kwnames[] = { "self","minPos","maxPos","text","caseSensitive","wholeWord", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiOii:wxStyledTextCtrl_FindText",_kwnames,&_argo0,&_arg1,&_arg2,&_obj3,&tempbool4,&tempbool5)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_FindText. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    if (!PyString_Check(_obj3)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg3 = new wxString(PyString_AsString(_obj3), PyString_Size(_obj3));
-}
-    _arg4 = (bool ) tempbool4;
-    _arg5 = (bool ) tempbool5;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_FindText(_arg0,_arg1,_arg2,*_arg3,_arg4,_arg5);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-{
-    if (_obj3)
-        delete _arg3;
-}
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_SearchAnchor(_swigobj)  (_swigobj->SearchAnchor())
-static PyObject *_wrap_wxStyledTextCtrl_SearchAnchor(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_SearchAnchor",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SearchAnchor. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SearchAnchor(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_SearchNext(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SearchNext(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxStyledTextCtrl_SearchNext(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    wxString * _arg1;
-    bool  _arg2;
-    bool  _arg3;
-    PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    int tempbool2;
-    int tempbool3;
-    char *_kwnames[] = { "self","text","caseSensitive","wholeWord", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOii:wxStyledTextCtrl_SearchNext",_kwnames,&_argo0,&_obj1,&tempbool2,&tempbool3)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SearchNext. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
-}
-    _arg2 = (bool ) tempbool2;
-    _arg3 = (bool ) tempbool3;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_SearchNext(_arg0,*_arg1,_arg2,_arg3);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-{
-    if (_obj1)
-        delete _arg1;
-}
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_SearchPrev(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SearchPrev(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxStyledTextCtrl_SearchPrev(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    wxString * _arg1;
-    bool  _arg2;
-    bool  _arg3;
-    PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    int tempbool2;
-    int tempbool3;
-    char *_kwnames[] = { "self","text","caseSensitive","wholeWord", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOii:wxStyledTextCtrl_SearchPrev",_kwnames,&_argo0,&_obj1,&tempbool2,&tempbool3)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SearchPrev. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
-}
-    _arg2 = (bool ) tempbool2;
-    _arg3 = (bool ) tempbool3;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_SearchPrev(_arg0,*_arg1,_arg2,_arg3);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-{
-    if (_obj1)
-        delete _arg1;
-}
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetViewWhitespace(_swigobj)  (_swigobj->GetViewWhitespace())
-static PyObject *_wrap_wxStyledTextCtrl_GetViewWhitespace(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetViewWhitespace",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetViewWhitespace. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxStyledTextCtrl_GetViewWhitespace(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_SetViewWhitespace(_swigobj,_swigarg0)  (_swigobj->SetViewWhitespace(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetViewWhitespace(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","visible", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetViewWhitespace",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetViewWhitespace. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetViewWhitespace(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetEOLMode(_swigobj)  (_swigobj->GetEOLMode())
-static PyObject *_wrap_wxStyledTextCtrl_GetEOLMode(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxSTC_EOL  _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetEOLMode",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetEOLMode. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxSTC_EOL )wxStyledTextCtrl_GetEOLMode(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_SetEOLMode(_swigobj,_swigarg0)  (_swigobj->SetEOLMode(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetEOLMode(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    wxSTC_EOL  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","mode", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetEOLMode",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetEOLMode. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetEOLMode(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetViewEOL(_swigobj)  (_swigobj->GetViewEOL())
-static PyObject *_wrap_wxStyledTextCtrl_GetViewEOL(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetViewEOL",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetViewEOL. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxStyledTextCtrl_GetViewEOL(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_SetViewEOL(_swigobj,_swigarg0)  (_swigobj->SetViewEOL(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetViewEOL(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","visible", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetViewEOL",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetViewEOL. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetViewEOL(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_ConvertEOL(_swigobj,_swigarg0)  (_swigobj->ConvertEOL(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_ConvertEOL(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    wxSTC_EOL  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","mode", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_ConvertEOL",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_ConvertEOL. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_ConvertEOL(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -2626,6 +993,88 @@ static PyObject *_wrap_wxStyledTextCtrl_GetEndStyled(PyObject *self, PyObject *a
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_ConvertEOLs(_swigobj)  (_swigobj->ConvertEOLs())
+static PyObject *_wrap_wxStyledTextCtrl_ConvertEOLs(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_ConvertEOLs",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_ConvertEOLs. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_ConvertEOLs(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetEOLMode(_swigobj)  (_swigobj->GetEOLMode())
+static PyObject *_wrap_wxStyledTextCtrl_GetEOLMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetEOLMode",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetEOLMode. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetEOLMode(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetEOLMode(_swigobj,_swigarg0)  (_swigobj->SetEOLMode(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetEOLMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","eolMode", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetEOLMode",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetEOLMode. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetEOLMode(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -2658,8 +1107,8 @@ static PyObject *_wrap_wxStyledTextCtrl_StartStyling(PyObject *self, PyObject *a
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_SetStyleFor(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetStyleFor(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_SetStyleFor(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_SetStyling(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetStyling(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_SetStyling(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextCtrl * _arg0;
     int  _arg1;
@@ -2668,18 +1117,18 @@ static PyObject *_wrap_wxStyledTextCtrl_SetStyleFor(PyObject *self, PyObject *ar
     char *_kwnames[] = { "self","length","style", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_SetStyleFor",_kwnames,&_argo0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_SetStyling",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetStyleFor. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetStyling. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetStyleFor(_arg0,_arg1,_arg2);
+        wxStyledTextCtrl_SetStyling(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -2687,28 +1136,84 @@ static PyObject *_wrap_wxStyledTextCtrl_SetStyleFor(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_SetStyleBytes(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetStyleBytes(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_SetStyleBytes(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_GetBufferedDraw(_swigobj)  (_swigobj->GetBufferedDraw())
+static PyObject *_wrap_wxStyledTextCtrl_GetBufferedDraw(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetBufferedDraw",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetBufferedDraw. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxStyledTextCtrl_GetBufferedDraw(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetBufferedDraw(_swigobj,_swigarg0)  (_swigobj->SetBufferedDraw(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetBufferedDraw(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","buffered", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetBufferedDraw",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetBufferedDraw. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetBufferedDraw(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetTabWidth(_swigobj,_swigarg0)  (_swigobj->SetTabWidth(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetTabWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextCtrl * _arg0;
     int  _arg1;
-    char * _arg2;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","length","styleBytes", NULL };
+    char *_kwnames[] = { "self","tabWidth", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ois:wxStyledTextCtrl_SetStyleBytes",_kwnames,&_argo0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetTabWidth",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetStyleBytes. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetTabWidth. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetStyleBytes(_arg0,_arg1,_arg2);
+        wxStyledTextCtrl_SetTabWidth(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -2716,28 +1221,202 @@ static PyObject *_wrap_wxStyledTextCtrl_SetStyleBytes(PyObject *self, PyObject *
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_SetLineState(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetLineState(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_SetLineState(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_GetTabWidth(_swigobj)  (_swigobj->GetTabWidth())
+static PyObject *_wrap_wxStyledTextCtrl_GetTabWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetTabWidth",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetTabWidth. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetTabWidth(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetCodePage(_swigobj,_swigarg0)  (_swigobj->SetCodePage(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetCodePage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","codePage", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetCodePage",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetCodePage. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetCodePage(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_MarkerDefine(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->MarkerDefine(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_wxStyledTextCtrl_MarkerDefine(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    int  _arg2;
+    wxColour * _arg3 = (wxColour *) &wxNullColour;
+    wxColour * _arg4 = (wxColour *) &wxNullColour;
+    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj3 = 0;
+    wxColour  temp0;
+    PyObject * _obj4 = 0;
+    char *_kwnames[] = { "self","markerNumber","markerSymbol","foreground","background", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii|OO:wxStyledTextCtrl_MarkerDefine",_kwnames,&_argo0,&_arg1,&_arg2,&_obj3,&_obj4)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerDefine. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxColour_helper(_obj3, &_arg3))
+        return NULL;
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxColour_helper(_obj4, &_arg4))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_MarkerDefine(_arg0,_arg1,_arg2,*_arg3,*_arg4);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_MarkerSetForeground(_swigobj,_swigarg0,_swigarg1)  (_swigobj->MarkerSetForeground(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_MarkerSetForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    wxColour * _arg2;
+    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","markerNumber","fore", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_MarkerSetForeground",_kwnames,&_argo0,&_arg1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerSetForeground. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    _arg2 = &temp;
+    if (! wxColour_helper(_obj2, &_arg2))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_MarkerSetForeground(_arg0,_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_MarkerSetBackground(_swigobj,_swigarg0,_swigarg1)  (_swigobj->MarkerSetBackground(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_MarkerSetBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    wxColour * _arg2;
+    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","markerNumber","back", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_MarkerSetBackground",_kwnames,&_argo0,&_arg1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerSetBackground. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    _arg2 = &temp;
+    if (! wxColour_helper(_obj2, &_arg2))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_MarkerSetBackground(_arg0,_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_MarkerAdd(_swigobj,_swigarg0,_swigarg1)  (_swigobj->MarkerAdd(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_MarkerAdd(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextCtrl * _arg0;
     int  _arg1;
     int  _arg2;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","line","value", NULL };
+    char *_kwnames[] = { "self","line","markerNumber", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_SetLineState",_kwnames,&_argo0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_MarkerAdd",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetLineState. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerAdd. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetLineState(_arg0,_arg1,_arg2);
+        wxStyledTextCtrl_MarkerAdd(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -2745,8 +1424,65 @@ static PyObject *_wrap_wxStyledTextCtrl_SetLineState(PyObject *self, PyObject *a
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_GetLineState(_swigobj,_swigarg0)  (_swigobj->GetLineState(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_GetLineState(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_MarkerDelete(_swigobj,_swigarg0,_swigarg1)  (_swigobj->MarkerDelete(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_MarkerDelete(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","line","markerNumber", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_MarkerDelete",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerDelete. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_MarkerDelete(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_MarkerDeleteAll(_swigobj,_swigarg0)  (_swigobj->MarkerDeleteAll(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_MarkerDeleteAll(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","markerNumber", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_MarkerDeleteAll",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerDeleteAll. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_MarkerDeleteAll(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_MarkerGet(_swigobj,_swigarg0)  (_swigobj->MarkerGet(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_MarkerGet(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxStyledTextCtrl * _arg0;
@@ -2755,553 +1491,79 @@ static PyObject *_wrap_wxStyledTextCtrl_GetLineState(PyObject *self, PyObject *a
     char *_kwnames[] = { "self","line", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_GetLineState",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_MarkerGet",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetLineState. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerGet. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_GetLineState(_arg0,_arg1);
+        _result = (int )wxStyledTextCtrl_MarkerGet(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_StyleClearAll(_swigobj)  (_swigobj->StyleClearAll())
-static PyObject *_wrap_wxStyledTextCtrl_StyleClearAll(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_StyleClearAll",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleClearAll. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_StyleClearAll(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_StyleResetDefault(_swigobj)  (_swigobj->StyleResetDefault())
-static PyObject *_wrap_wxStyledTextCtrl_StyleResetDefault(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_StyleResetDefault",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleResetDefault. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_StyleResetDefault(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_StyleSetSpec(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetSpec(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_StyleSetSpec(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    wxString * _arg2;
-    PyObject * _argo0 = 0;
-    PyObject * _obj2 = 0;
-    char *_kwnames[] = { "self","styleNum","spec", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_StyleSetSpec",_kwnames,&_argo0,&_arg1,&_obj2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetSpec. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    if (!PyString_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_StyleSetSpec(_arg0,_arg1,*_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    if (_obj2)
-        delete _arg2;
-}
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_StyleSetForeground(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetForeground(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_StyleSetForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    wxColour * _arg2;
-    PyObject * _argo0 = 0;
-    wxColour  temp;
-    PyObject * _obj2 = 0;
-    char *_kwnames[] = { "self","styleNum","colour", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_StyleSetForeground",_kwnames,&_argo0,&_arg1,&_obj2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetForeground. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    _arg2 = &temp;
-    if (! wxColour_helper(_obj2, &_arg2))
-        return NULL;
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_StyleSetForeground(_arg0,_arg1,*_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_StyleSetBackground(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetBackground(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_StyleSetBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    wxColour * _arg2;
-    PyObject * _argo0 = 0;
-    wxColour  temp;
-    PyObject * _obj2 = 0;
-    char *_kwnames[] = { "self","styleNum","colour", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_StyleSetBackground",_kwnames,&_argo0,&_arg1,&_obj2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetBackground. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    _arg2 = &temp;
-    if (! wxColour_helper(_obj2, &_arg2))
-        return NULL;
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_StyleSetBackground(_arg0,_arg1,*_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_StyleSetFont(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetFont(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_StyleSetFont(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    wxFont * _arg2;
-    PyObject * _argo0 = 0;
-    PyObject * _argo2 = 0;
-    char *_kwnames[] = { "self","styleNum","font", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_StyleSetFont",_kwnames,&_argo0,&_arg1,&_argo2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetFont. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxFont_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxStyledTextCtrl_StyleSetFont. Expected _wxFont_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_StyleSetFont(_arg0,_arg1,*_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_StyleSetFontAttr(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5)  (_swigobj->StyleSetFontAttr(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
-static PyObject *_wrap_wxStyledTextCtrl_StyleSetFontAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    int  _arg2;
-    wxString * _arg3;
-    bool  _arg4 = (bool ) FALSE;
-    bool  _arg5 = (bool ) FALSE;
-    bool  _arg6 = (bool ) FALSE;
-    PyObject * _argo0 = 0;
-    PyObject * _obj3 = 0;
-    int tempbool4 = (int) FALSE;
-    int tempbool5 = (int) FALSE;
-    int tempbool6 = (int) FALSE;
-    char *_kwnames[] = { "self","styleNum","size","faceName","bold","italic","underline", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiO|iii:wxStyledTextCtrl_StyleSetFontAttr",_kwnames,&_argo0,&_arg1,&_arg2,&_obj3,&tempbool4,&tempbool5,&tempbool6)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetFontAttr. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    if (!PyString_Check(_obj3)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg3 = new wxString(PyString_AsString(_obj3), PyString_Size(_obj3));
-}
-    _arg4 = (bool ) tempbool4;
-    _arg5 = (bool ) tempbool5;
-    _arg6 = (bool ) tempbool6;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_StyleSetFontAttr(_arg0,_arg1,_arg2,*_arg3,_arg4,_arg5,_arg6);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    if (_obj3)
-        delete _arg3;
-}
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_StyleSetBold(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetBold(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_StyleSetBold(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    bool  _arg2;
-    PyObject * _argo0 = 0;
-    int tempbool2;
-    char *_kwnames[] = { "self","styleNum","bold", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_StyleSetBold",_kwnames,&_argo0,&_arg1,&tempbool2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetBold. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-    _arg2 = (bool ) tempbool2;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_StyleSetBold(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_StyleSetItalic(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetItalic(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_StyleSetItalic(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    bool  _arg2;
-    PyObject * _argo0 = 0;
-    int tempbool2;
-    char *_kwnames[] = { "self","styleNum","italic", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_StyleSetItalic",_kwnames,&_argo0,&_arg1,&tempbool2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetItalic. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-    _arg2 = (bool ) tempbool2;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_StyleSetItalic(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_StyleSetFaceName(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetFaceName(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_StyleSetFaceName(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    wxString * _arg2;
-    PyObject * _argo0 = 0;
-    PyObject * _obj2 = 0;
-    char *_kwnames[] = { "self","styleNum","faceName", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_StyleSetFaceName",_kwnames,&_argo0,&_arg1,&_obj2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetFaceName. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    if (!PyString_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_StyleSetFaceName(_arg0,_arg1,*_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    if (_obj2)
-        delete _arg2;
-}
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_StyleSetSize(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetSize(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_StyleSetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","styleNum","pointSize", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_StyleSetSize",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetSize. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_StyleSetSize(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_StyleSetEOLFilled(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetEOLFilled(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_StyleSetEOLFilled(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    bool  _arg2;
-    PyObject * _argo0 = 0;
-    int tempbool2;
-    char *_kwnames[] = { "self","styleNum","fillEOL", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_StyleSetEOLFilled",_kwnames,&_argo0,&_arg1,&tempbool2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetEOLFilled. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-    _arg2 = (bool ) tempbool2;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_StyleSetEOLFilled(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_StyleSetUnderline(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetUnderline(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_StyleSetUnderline(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    bool  _arg2;
-    PyObject * _argo0 = 0;
-    int tempbool2;
-    char *_kwnames[] = { "self","styleNum","underline", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_StyleSetUnderline",_kwnames,&_argo0,&_arg1,&tempbool2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetUnderline. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-    _arg2 = (bool ) tempbool2;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_StyleSetUnderline(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetLeftMargin(_swigobj)  (_swigobj->GetLeftMargin())
-static PyObject *_wrap_wxStyledTextCtrl_GetLeftMargin(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_MarkerNext(_swigobj,_swigarg0,_swigarg1)  (_swigobj->MarkerNext(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_MarkerNext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    int  _arg2;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
+    char *_kwnames[] = { "self","lineStart","markerMask", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetLeftMargin",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_MarkerNext",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetLeftMargin. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerNext. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_GetLeftMargin(_arg0);
+        _result = (int )wxStyledTextCtrl_MarkerNext(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_GetRightMargin(_swigobj)  (_swigobj->GetRightMargin())
-static PyObject *_wrap_wxStyledTextCtrl_GetRightMargin(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_MarkerPrevious(_swigobj,_swigarg0,_swigarg1)  (_swigobj->MarkerPrevious(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_MarkerPrevious(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetRightMargin",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetRightMargin. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_GetRightMargin(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_SetMargins(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetMargins(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_SetMargins(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
     wxStyledTextCtrl * _arg0;
     int  _arg1;
     int  _arg2;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","left","right", NULL };
+    char *_kwnames[] = { "self","lineStart","markerMask", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_SetMargins",_kwnames,&_argo0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_MarkerPrevious",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetMargins. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerPrevious. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetMargins(_arg0,_arg1,_arg2);
+        _result = (int )wxStyledTextCtrl_MarkerPrevious(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -3312,7 +1574,7 @@ static PyObject *_wrap_wxStyledTextCtrl_SetMarginType(PyObject *self, PyObject *
     int  _arg1;
     int  _arg2;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","margin","type", NULL };
+    char *_kwnames[] = { "self","margin","marginType", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_SetMarginType",_kwnames,&_argo0,&_arg1,&_arg2)) 
@@ -3535,34 +1797,26 @@ static PyObject *_wrap_wxStyledTextCtrl_GetMarginSensitive(PyObject *self, PyObj
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_SetSelectionForeground(_swigobj,_swigarg0)  (_swigobj->SetSelectionForeground(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetSelectionForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_StyleClearAll(_swigobj)  (_swigobj->StyleClearAll())
+static PyObject *_wrap_wxStyledTextCtrl_StyleClearAll(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextCtrl * _arg0;
-    wxColour * _arg1;
     PyObject * _argo0 = 0;
-    wxColour  temp;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","colour", NULL };
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_SetSelectionForeground",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_StyleClearAll",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetSelectionForeground. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleClearAll. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
 {
-    _arg1 = &temp;
-    if (! wxColour_helper(_obj1, &_arg1))
-        return NULL;
-}
-{
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetSelectionForeground(_arg0,*_arg1);
+        wxStyledTextCtrl_StyleClearAll(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -3570,34 +1824,368 @@ static PyObject *_wrap_wxStyledTextCtrl_SetSelectionForeground(PyObject *self, P
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_SetSelectionBackground(_swigobj,_swigarg0)  (_swigobj->SetSelectionBackground(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetSelectionBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_StyleSetForeground(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetForeground(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_StyleSetForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextCtrl * _arg0;
-    wxColour * _arg1;
+    int  _arg1;
+    wxColour * _arg2;
     PyObject * _argo0 = 0;
     wxColour  temp;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","colour", NULL };
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","style","fore", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_SetSelectionBackground",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_StyleSetForeground",_kwnames,&_argo0,&_arg1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetSelectionBackground. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetForeground. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
 {
-    _arg1 = &temp;
-    if (! wxColour_helper(_obj1, &_arg1))
+    _arg2 = &temp;
+    if (! wxColour_helper(_obj2, &_arg2))
         return NULL;
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetSelectionBackground(_arg0,*_arg1);
+        wxStyledTextCtrl_StyleSetForeground(_arg0,_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_StyleSetBackground(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetBackground(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_StyleSetBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    wxColour * _arg2;
+    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","style","back", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_StyleSetBackground",_kwnames,&_argo0,&_arg1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetBackground. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    _arg2 = &temp;
+    if (! wxColour_helper(_obj2, &_arg2))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_StyleSetBackground(_arg0,_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_StyleSetBold(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetBold(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_StyleSetBold(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    bool  _arg2;
+    PyObject * _argo0 = 0;
+    int tempbool2;
+    char *_kwnames[] = { "self","style","bold", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_StyleSetBold",_kwnames,&_argo0,&_arg1,&tempbool2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetBold. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg2 = (bool ) tempbool2;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_StyleSetBold(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_StyleSetItalic(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetItalic(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_StyleSetItalic(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    bool  _arg2;
+    PyObject * _argo0 = 0;
+    int tempbool2;
+    char *_kwnames[] = { "self","style","italic", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_StyleSetItalic",_kwnames,&_argo0,&_arg1,&tempbool2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetItalic. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg2 = (bool ) tempbool2;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_StyleSetItalic(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_StyleSetSize(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetSize(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_StyleSetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","style","sizePoints", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_StyleSetSize",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetSize. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_StyleSetSize(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_StyleSetFaceName(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetFaceName(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_StyleSetFaceName(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    wxString * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","style","fontName", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_StyleSetFaceName",_kwnames,&_argo0,&_arg1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetFaceName. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_StyleSetFaceName(_arg0,_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_StyleSetEOLFilled(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetEOLFilled(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_StyleSetEOLFilled(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    bool  _arg2;
+    PyObject * _argo0 = 0;
+    int tempbool2;
+    char *_kwnames[] = { "self","style","filled", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_StyleSetEOLFilled",_kwnames,&_argo0,&_arg1,&tempbool2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetEOLFilled. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg2 = (bool ) tempbool2;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_StyleSetEOLFilled(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_StyleResetDefault(_swigobj)  (_swigobj->StyleResetDefault())
+static PyObject *_wrap_wxStyledTextCtrl_StyleResetDefault(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_StyleResetDefault",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleResetDefault. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_StyleResetDefault(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_StyleSetUnderline(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetUnderline(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_StyleSetUnderline(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    bool  _arg2;
+    PyObject * _argo0 = 0;
+    int tempbool2;
+    char *_kwnames[] = { "self","style","underline", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_StyleSetUnderline",_kwnames,&_argo0,&_arg1,&tempbool2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetUnderline. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg2 = (bool ) tempbool2;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_StyleSetUnderline(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetSelForeground(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetSelForeground(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_SetSelForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    bool  _arg1;
+    wxColour * _arg2;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    wxColour  temp;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","useSetting","fore", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_SetSelForeground",_kwnames,&_argo0,&tempbool1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetSelForeground. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    _arg2 = &temp;
+    if (! wxColour_helper(_obj2, &_arg2))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetSelForeground(_arg0,_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetSelBackground(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetSelBackground(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_SetSelBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    bool  _arg1;
+    wxColour * _arg2;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    wxColour  temp;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","useSetting","back", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_SetSelBackground",_kwnames,&_argo0,&tempbool1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetSelBackground. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    _arg2 = &temp;
+    if (! wxColour_helper(_obj2, &_arg2))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetSelBackground(_arg0,_arg1,*_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -3613,7 +2201,7 @@ static PyObject *_wrap_wxStyledTextCtrl_SetCaretForeground(PyObject *self, PyObj
     PyObject * _argo0 = 0;
     wxColour  temp;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","colour", NULL };
+    char *_kwnames[] = { "self","fore", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_SetCaretForeground",_kwnames,&_argo0,&_obj1)) 
@@ -3633,6 +2221,152 @@ static PyObject *_wrap_wxStyledTextCtrl_SetCaretForeground(PyObject *self, PyObj
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxStyledTextCtrl_SetCaretForeground(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_CmdKeyAssign(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->CmdKeyAssign(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxStyledTextCtrl_CmdKeyAssign(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    int  _arg2;
+    int  _arg3;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","key","modifiers","cmd", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiii:wxStyledTextCtrl_CmdKeyAssign",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_CmdKeyAssign. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_CmdKeyAssign(_arg0,_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_CmdKeyClear(_swigobj,_swigarg0,_swigarg1)  (_swigobj->CmdKeyClear(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_CmdKeyClear(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","key","modifiers", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_CmdKeyClear",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_CmdKeyClear. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_CmdKeyClear(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_CmdKeyClearAll(_swigobj)  (_swigobj->CmdKeyClearAll())
+static PyObject *_wrap_wxStyledTextCtrl_CmdKeyClearAll(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_CmdKeyClearAll",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_CmdKeyClearAll. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_CmdKeyClearAll(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetStyleBytes(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetStyleBytes(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_SetStyleBytes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    char * _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","length","styleBytes", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ois:wxStyledTextCtrl_SetStyleBytes",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetStyleBytes. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetStyleBytes(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_StyleSetVisible(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetVisible(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_StyleSetVisible(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    bool  _arg2;
+    PyObject * _argo0 = 0;
+    int tempbool2;
+    char *_kwnames[] = { "self","style","visible", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_StyleSetVisible",_kwnames,&_argo0,&_arg1,&tempbool2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetVisible. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg2 = (bool ) tempbool2;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_StyleSetVisible(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -3673,7 +2407,7 @@ static PyObject *_wrap_wxStyledTextCtrl_SetCaretPeriod(PyObject *self, PyObject 
     wxStyledTextCtrl * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","milliseconds", NULL };
+    char *_kwnames[] = { "self","periodMilliseconds", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetCaretPeriod",_kwnames,&_argo0,&_arg1)) 
@@ -3695,207 +2429,6 @@ static PyObject *_wrap_wxStyledTextCtrl_SetCaretPeriod(PyObject *self, PyObject 
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_SetBufferedDraw(_swigobj,_swigarg0)  (_swigobj->SetBufferedDraw(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetBufferedDraw(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","isBuffered", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetBufferedDraw",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetBufferedDraw. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetBufferedDraw(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_SetTabWidth(_swigobj,_swigarg0)  (_swigobj->SetTabWidth(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetTabWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","numChars", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetTabWidth",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetTabWidth. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetTabWidth(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_SetIndent(_swigobj,_swigarg0)  (_swigobj->SetIndent(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetIndent(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","numChars", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetIndent",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetIndent. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetIndent(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_SetUseTabs(_swigobj,_swigarg0)  (_swigobj->SetUseTabs(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetUseTabs(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","usetabs", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetUseTabs",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetUseTabs. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetUseTabs(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_SetLineIndentation(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetLineIndentation(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_SetLineIndentation(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","line","indentation", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_SetLineIndentation",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetLineIndentation. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetLineIndentation(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetLineIndentation(_swigobj,_swigarg0)  (_swigobj->GetLineIndentation(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_GetLineIndentation(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","line", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_GetLineIndentation",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetLineIndentation. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_GetLineIndentation(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetLineIndentationPos(_swigobj,_swigarg0)  (_swigobj->GetLineIndentationPos(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_GetLineIndentationPos(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","line", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_GetLineIndentationPos",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetLineIndentationPos. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_GetLineIndentationPos(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
 #define wxStyledTextCtrl_SetWordChars(_swigobj,_swigarg0)  (_swigobj->SetWordChars(_swigarg0))
 static PyObject *_wrap_wxStyledTextCtrl_SetWordChars(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3903,7 +2436,7 @@ static PyObject *_wrap_wxStyledTextCtrl_SetWordChars(PyObject *self, PyObject *a
     wxString * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","wordChars", NULL };
+    char *_kwnames[] = { "self","characters", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_SetWordChars",_kwnames,&_argo0,&_obj1)) 
@@ -3936,29 +2469,26 @@ static PyObject *_wrap_wxStyledTextCtrl_SetWordChars(PyObject *self, PyObject *a
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_SetUsePop(_swigobj,_swigarg0)  (_swigobj->SetUsePop(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetUsePop(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_BeginUndoAction(_swigobj)  (_swigobj->BeginUndoAction())
+static PyObject *_wrap_wxStyledTextCtrl_BeginUndoAction(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextCtrl * _arg0;
-    bool  _arg1;
     PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","usepopup", NULL };
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetUsePop",_kwnames,&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_BeginUndoAction",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetUsePop. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_BeginUndoAction. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
-    _arg1 = (bool ) tempbool1;
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetUsePop(_arg0,_arg1);
+        wxStyledTextCtrl_BeginUndoAction(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -3966,459 +2496,26 @@ static PyObject *_wrap_wxStyledTextCtrl_SetUsePop(PyObject *self, PyObject *args
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_BraceHighlight(_swigobj,_swigarg0,_swigarg1)  (_swigobj->BraceHighlight(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_BraceHighlight(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_EndUndoAction(_swigobj)  (_swigobj->EndUndoAction())
+static PyObject *_wrap_wxStyledTextCtrl_EndUndoAction(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    int  _arg2;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","pos1","pos2", NULL };
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_BraceHighlight",_kwnames,&_argo0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_EndUndoAction",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_BraceHighlight. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_EndUndoAction. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_BraceHighlight(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_BraceBadlight(_swigobj,_swigarg0)  (_swigobj->BraceBadlight(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_BraceBadlight(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","pos", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_BraceBadlight",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_BraceBadlight. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_BraceBadlight(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_BraceMatch(_swigobj,_swigarg0,_swigarg1)  (_swigobj->BraceMatch(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_BraceMatch(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    int  _arg2 = (int ) 0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","pos","maxReStyle", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|i:wxStyledTextCtrl_BraceMatch",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_BraceMatch. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_BraceMatch(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_MarkerDefine(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->MarkerDefine(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
-static PyObject *_wrap_wxStyledTextCtrl_MarkerDefine(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    int  _arg2;
-    wxColour * _arg3;
-    wxColour * _arg4;
-    PyObject * _argo0 = 0;
-    wxColour  temp;
-    PyObject * _obj3 = 0;
-    wxColour  temp0;
-    PyObject * _obj4 = 0;
-    char *_kwnames[] = { "self","markerNumber","markerSymbol","foreground","background", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiOO:wxStyledTextCtrl_MarkerDefine",_kwnames,&_argo0,&_arg1,&_arg2,&_obj3,&_obj4)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerDefine. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    _arg3 = &temp;
-    if (! wxColour_helper(_obj3, &_arg3))
-        return NULL;
-}
-{
-    _arg4 = &temp0;
-    if (! wxColour_helper(_obj4, &_arg4))
-        return NULL;
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_MarkerDefine(_arg0,_arg1,_arg2,*_arg3,*_arg4);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_MarkerSetType(_swigobj,_swigarg0,_swigarg1)  (_swigobj->MarkerSetType(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_MarkerSetType(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","markerNumber","markerSymbol", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_MarkerSetType",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerSetType. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_MarkerSetType(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_MarkerSetForeground(_swigobj,_swigarg0,_swigarg1)  (_swigobj->MarkerSetForeground(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_MarkerSetForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    wxColour * _arg2;
-    PyObject * _argo0 = 0;
-    wxColour  temp;
-    PyObject * _obj2 = 0;
-    char *_kwnames[] = { "self","markerNumber","colour", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_MarkerSetForeground",_kwnames,&_argo0,&_arg1,&_obj2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerSetForeground. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    _arg2 = &temp;
-    if (! wxColour_helper(_obj2, &_arg2))
-        return NULL;
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_MarkerSetForeground(_arg0,_arg1,*_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_MarkerSetBackground(_swigobj,_swigarg0,_swigarg1)  (_swigobj->MarkerSetBackground(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_MarkerSetBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    wxColour * _arg2;
-    PyObject * _argo0 = 0;
-    wxColour  temp;
-    PyObject * _obj2 = 0;
-    char *_kwnames[] = { "self","markerNumber","colour", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_MarkerSetBackground",_kwnames,&_argo0,&_arg1,&_obj2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerSetBackground. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    _arg2 = &temp;
-    if (! wxColour_helper(_obj2, &_arg2))
-        return NULL;
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_MarkerSetBackground(_arg0,_arg1,*_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_MarkerAdd(_swigobj,_swigarg0,_swigarg1)  (_swigobj->MarkerAdd(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_MarkerAdd(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","line","markerNumber", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_MarkerAdd",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerAdd. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_MarkerAdd(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_MarkerDelete(_swigobj,_swigarg0,_swigarg1)  (_swigobj->MarkerDelete(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_MarkerDelete(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","line","markerNumber", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_MarkerDelete",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerDelete. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_MarkerDelete(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_MarkerDeleteAll(_swigobj,_swigarg0)  (_swigobj->MarkerDeleteAll(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_MarkerDeleteAll(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","markerNumber", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_MarkerDeleteAll",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerDeleteAll. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_MarkerDeleteAll(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_MarkerGet(_swigobj,_swigarg0)  (_swigobj->MarkerGet(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_MarkerGet(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","line", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_MarkerGet",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerGet. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_MarkerGet(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_MarkerGetNextLine(_swigobj,_swigarg0,_swigarg1)  (_swigobj->MarkerGetNextLine(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_MarkerGetNextLine(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","lineStart","markerMask", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_MarkerGetNextLine",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerGetNextLine. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_MarkerGetNextLine(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_MarkerGetPrevLine(_swigobj,_swigarg0,_swigarg1)  (_swigobj->MarkerGetPrevLine(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_MarkerGetPrevLine(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","lineStart","markerMask", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_MarkerGetPrevLine",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerGetPrevLine. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_MarkerGetPrevLine(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_MarkerLineFromHandle(_swigobj,_swigarg0)  (_swigobj->MarkerLineFromHandle(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_MarkerLineFromHandle(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","handle", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_MarkerLineFromHandle",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerLineFromHandle. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_MarkerLineFromHandle(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_MarkerDeleteHandle(_swigobj,_swigarg0)  (_swigobj->MarkerDeleteHandle(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_MarkerDeleteHandle(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","handle", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_MarkerDeleteHandle",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_MarkerDeleteHandle. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_MarkerDeleteHandle(_arg0,_arg1);
+        wxStyledTextCtrl_EndUndoAction(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -4433,7 +2530,7 @@ static PyObject *_wrap_wxStyledTextCtrl_IndicatorSetStyle(PyObject *self, PyObje
     int  _arg1;
     int  _arg2;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","indicNum","indicStyle", NULL };
+    char *_kwnames[] = { "self","indic","style", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_IndicatorSetStyle",_kwnames,&_argo0,&_arg1,&_arg2)) 
@@ -4462,7 +2559,7 @@ static PyObject *_wrap_wxStyledTextCtrl_IndicatorGetStyle(PyObject *self, PyObje
     wxStyledTextCtrl * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","indicNum", NULL };
+    char *_kwnames[] = { "self","indic", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_IndicatorGetStyle",_kwnames,&_argo0,&_arg1)) 
@@ -4483,8 +2580,8 @@ static PyObject *_wrap_wxStyledTextCtrl_IndicatorGetStyle(PyObject *self, PyObje
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_IndicatorSetColour(_swigobj,_swigarg0,_swigarg1)  (_swigobj->IndicatorSetColour(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_IndicatorSetColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_IndicatorSetForeground(_swigobj,_swigarg0,_swigarg1)  (_swigobj->IndicatorSetForeground(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_IndicatorSetForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextCtrl * _arg0;
     int  _arg1;
@@ -4492,15 +2589,15 @@ static PyObject *_wrap_wxStyledTextCtrl_IndicatorSetColour(PyObject *self, PyObj
     PyObject * _argo0 = 0;
     wxColour  temp;
     PyObject * _obj2 = 0;
-    char *_kwnames[] = { "self","indicNum","colour", NULL };
+    char *_kwnames[] = { "self","indic","fore", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_IndicatorSetColour",_kwnames,&_argo0,&_arg1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_IndicatorSetForeground",_kwnames,&_argo0,&_arg1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_IndicatorSetColour. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_IndicatorSetForeground. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
@@ -4511,7 +2608,7 @@ static PyObject *_wrap_wxStyledTextCtrl_IndicatorSetColour(PyObject *self, PyObj
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_IndicatorSetColour(_arg0,_arg1,*_arg2);
+        wxStyledTextCtrl_IndicatorSetForeground(_arg0,_arg1,*_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -4519,17 +2616,187 @@ static PyObject *_wrap_wxStyledTextCtrl_IndicatorSetColour(PyObject *self, PyObj
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_AutoCompShow(_swigobj,_swigarg0)  (_swigobj->AutoCompShow(_swigarg0))
+#define wxStyledTextCtrl_IndicatorGetForeground(_swigobj,_swigarg0)  (_swigobj->IndicatorGetForeground(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_IndicatorGetForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","indic", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_IndicatorGetForeground",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_IndicatorGetForeground. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxColour (wxStyledTextCtrl_IndicatorGetForeground(_arg0,_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetStyleBits(_swigobj,_swigarg0)  (_swigobj->SetStyleBits(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetStyleBits(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","bits", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetStyleBits",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetStyleBits. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetStyleBits(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetStyleBits(_swigobj)  (_swigobj->GetStyleBits())
+static PyObject *_wrap_wxStyledTextCtrl_GetStyleBits(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetStyleBits",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetStyleBits. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetStyleBits(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetLineState(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetLineState(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_SetLineState(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","line","state", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_SetLineState",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetLineState. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetLineState(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetLineState(_swigobj,_swigarg0)  (_swigobj->GetLineState(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_GetLineState(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","line", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_GetLineState",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetLineState. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetLineState(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetMaxLineState(_swigobj)  (_swigobj->GetMaxLineState())
+static PyObject *_wrap_wxStyledTextCtrl_GetMaxLineState(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetMaxLineState",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetMaxLineState. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetMaxLineState(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_AutoCompShow(_swigobj,_swigarg0,_swigarg1)  (_swigobj->AutoCompShow(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxStyledTextCtrl_AutoCompShow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextCtrl * _arg0;
-    wxString * _arg1;
+    int  _arg1;
+    wxString * _arg2;
     PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","listOfWords", NULL };
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","lenEntered","itemList", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_AutoCompShow",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_AutoCompShow",_kwnames,&_argo0,&_arg1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4539,22 +2806,22 @@ static PyObject *_wrap_wxStyledTextCtrl_AutoCompShow(PyObject *self, PyObject *a
         }
     }
 {
-    if (!PyString_Check(_obj1)) {
+    if (!PyString_Check(_obj2)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_AutoCompShow(_arg0,*_arg1);
+        wxStyledTextCtrl_AutoCompShow(_arg0,_arg1,*_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
-    if (_obj1)
-        delete _arg1;
+    if (_obj2)
+        delete _arg2;
 }
     return _resultobj;
 }
@@ -4613,8 +2880,8 @@ static PyObject *_wrap_wxStyledTextCtrl_AutoCompActive(PyObject *self, PyObject 
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_AutoCompPosAtStart(_swigobj)  (_swigobj->AutoCompPosAtStart())
-static PyObject *_wrap_wxStyledTextCtrl_AutoCompPosAtStart(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_AutoCompPosStart(_swigobj)  (_swigobj->AutoCompPosStart())
+static PyObject *_wrap_wxStyledTextCtrl_AutoCompPosStart(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxStyledTextCtrl * _arg0;
@@ -4622,18 +2889,18 @@ static PyObject *_wrap_wxStyledTextCtrl_AutoCompPosAtStart(PyObject *self, PyObj
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_AutoCompPosAtStart",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_AutoCompPosStart",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_AutoCompPosAtStart. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_AutoCompPosStart. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_AutoCompPosAtStart(_arg0);
+        _result = (int )wxStyledTextCtrl_AutoCompPosStart(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
@@ -4667,22 +2934,22 @@ static PyObject *_wrap_wxStyledTextCtrl_AutoCompComplete(PyObject *self, PyObjec
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_AutoCompStopChars(_swigobj,_swigarg0)  (_swigobj->AutoCompStopChars(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_AutoCompStopChars(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_AutoCompStops(_swigobj,_swigarg0)  (_swigobj->AutoCompStops(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_AutoCompStops(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextCtrl * _arg0;
     wxString * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","stopChars", NULL };
+    char *_kwnames[] = { "self","characterSet", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_AutoCompStopChars",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_AutoCompStops",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_AutoCompStopChars. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_AutoCompStops. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
@@ -4695,7 +2962,7 @@ static PyObject *_wrap_wxStyledTextCtrl_AutoCompStopChars(PyObject *self, PyObje
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_AutoCompStopChars(_arg0,*_arg1);
+        wxStyledTextCtrl_AutoCompStops(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -4711,12 +2978,12 @@ static PyObject *_wrap_wxStyledTextCtrl_AutoCompStopChars(PyObject *self, PyObje
 static PyObject *_wrap_wxStyledTextCtrl_AutoCompSetSeparator(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextCtrl * _arg0;
-    char  _arg1;
+    int  _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","separator", NULL };
+    char *_kwnames[] = { "self","separatorCharacter", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oc:wxStyledTextCtrl_AutoCompSetSeparator",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_AutoCompSetSeparator",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4738,7 +3005,7 @@ static PyObject *_wrap_wxStyledTextCtrl_AutoCompSetSeparator(PyObject *self, PyO
 #define wxStyledTextCtrl_AutoCompGetSeparator(_swigobj)  (_swigobj->AutoCompGetSeparator())
 static PyObject *_wrap_wxStyledTextCtrl_AutoCompGetSeparator(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    char  _result;
+    int  _result;
     wxStyledTextCtrl * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
@@ -4755,10 +3022,10 @@ static PyObject *_wrap_wxStyledTextCtrl_AutoCompGetSeparator(PyObject *self, PyO
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (char )wxStyledTextCtrl_AutoCompGetSeparator(_arg0);
+        _result = (int )wxStyledTextCtrl_AutoCompGetSeparator(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("c",_result);
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -4769,7 +3036,7 @@ static PyObject *_wrap_wxStyledTextCtrl_AutoCompSelect(PyObject *self, PyObject 
     wxString * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","stringtoselect", NULL };
+    char *_kwnames[] = { "self","text", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_AutoCompSelect",_kwnames,&_argo0,&_obj1)) 
@@ -4802,6 +3069,1987 @@ static PyObject *_wrap_wxStyledTextCtrl_AutoCompSelect(PyObject *self, PyObject 
     return _resultobj;
 }
 
+#define wxStyledTextCtrl_AutoCompSetCancelAtStart(_swigobj,_swigarg0)  (_swigobj->AutoCompSetCancelAtStart(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_AutoCompSetCancelAtStart(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","cancel", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_AutoCompSetCancelAtStart",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_AutoCompSetCancelAtStart. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_AutoCompSetCancelAtStart(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_AutoCompGetCancelAtStart(_swigobj)  (_swigobj->AutoCompGetCancelAtStart())
+static PyObject *_wrap_wxStyledTextCtrl_AutoCompGetCancelAtStart(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_AutoCompGetCancelAtStart",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_AutoCompGetCancelAtStart. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxStyledTextCtrl_AutoCompGetCancelAtStart(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_AutoCompSetFillUps(_swigobj,_swigarg0)  (_swigobj->AutoCompSetFillUps(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_AutoCompSetFillUps(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","characterSet", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_AutoCompSetFillUps",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_AutoCompSetFillUps. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_AutoCompSetFillUps(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_AutoCompSetChooseSingle(_swigobj,_swigarg0)  (_swigobj->AutoCompSetChooseSingle(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_AutoCompSetChooseSingle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","chooseSingle", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_AutoCompSetChooseSingle",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_AutoCompSetChooseSingle. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_AutoCompSetChooseSingle(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_AutoCompGetChooseSingle(_swigobj)  (_swigobj->AutoCompGetChooseSingle())
+static PyObject *_wrap_wxStyledTextCtrl_AutoCompGetChooseSingle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_AutoCompGetChooseSingle",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_AutoCompGetChooseSingle. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxStyledTextCtrl_AutoCompGetChooseSingle(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_AutoCompSetIgnoreCase(_swigobj,_swigarg0)  (_swigobj->AutoCompSetIgnoreCase(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_AutoCompSetIgnoreCase(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","ignoreCase", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_AutoCompSetIgnoreCase",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_AutoCompSetIgnoreCase. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_AutoCompSetIgnoreCase(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_AutoCompGetIgnoreCase(_swigobj)  (_swigobj->AutoCompGetIgnoreCase())
+static PyObject *_wrap_wxStyledTextCtrl_AutoCompGetIgnoreCase(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_AutoCompGetIgnoreCase",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_AutoCompGetIgnoreCase. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxStyledTextCtrl_AutoCompGetIgnoreCase(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetIndent(_swigobj,_swigarg0)  (_swigobj->SetIndent(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetIndent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","indentSize", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetIndent",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetIndent. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetIndent(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetIndent(_swigobj)  (_swigobj->GetIndent())
+static PyObject *_wrap_wxStyledTextCtrl_GetIndent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetIndent",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetIndent. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetIndent(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetUseTabs(_swigobj,_swigarg0)  (_swigobj->SetUseTabs(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetUseTabs(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","useTabs", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetUseTabs",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetUseTabs. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetUseTabs(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetUseTabs(_swigobj)  (_swigobj->GetUseTabs())
+static PyObject *_wrap_wxStyledTextCtrl_GetUseTabs(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetUseTabs",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetUseTabs. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxStyledTextCtrl_GetUseTabs(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetLineIndentation(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetLineIndentation(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_SetLineIndentation(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","line","indentSize", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_SetLineIndentation",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetLineIndentation. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetLineIndentation(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetLineIndentation(_swigobj,_swigarg0)  (_swigobj->GetLineIndentation(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_GetLineIndentation(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","line", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_GetLineIndentation",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetLineIndentation. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetLineIndentation(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetLineIndentPosition(_swigobj,_swigarg0)  (_swigobj->GetLineIndentPosition(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_GetLineIndentPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","line", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_GetLineIndentPosition",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetLineIndentPosition. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetLineIndentPosition(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetColumn(_swigobj,_swigarg0)  (_swigobj->GetColumn(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_GetColumn(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pos", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_GetColumn",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetColumn. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetColumn(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetUseHorizontalScrollBar(_swigobj,_swigarg0)  (_swigobj->SetUseHorizontalScrollBar(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetUseHorizontalScrollBar(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","show", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetUseHorizontalScrollBar",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetUseHorizontalScrollBar. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetUseHorizontalScrollBar(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetUseHorizontalScrollBar(_swigobj)  (_swigobj->GetUseHorizontalScrollBar())
+static PyObject *_wrap_wxStyledTextCtrl_GetUseHorizontalScrollBar(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetUseHorizontalScrollBar",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetUseHorizontalScrollBar. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxStyledTextCtrl_GetUseHorizontalScrollBar(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetIndentationGuides(_swigobj,_swigarg0)  (_swigobj->SetIndentationGuides(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetIndentationGuides(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","show", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetIndentationGuides",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetIndentationGuides. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetIndentationGuides(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetIndentationGuides(_swigobj)  (_swigobj->GetIndentationGuides())
+static PyObject *_wrap_wxStyledTextCtrl_GetIndentationGuides(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetIndentationGuides",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetIndentationGuides. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxStyledTextCtrl_GetIndentationGuides(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetHighlightGuide(_swigobj,_swigarg0)  (_swigobj->SetHighlightGuide(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetHighlightGuide(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","column", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetHighlightGuide",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetHighlightGuide. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetHighlightGuide(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetHighlightGuide(_swigobj)  (_swigobj->GetHighlightGuide())
+static PyObject *_wrap_wxStyledTextCtrl_GetHighlightGuide(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetHighlightGuide",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetHighlightGuide. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetHighlightGuide(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetLineEndPosition(_swigobj,_swigarg0)  (_swigobj->GetLineEndPosition(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_GetLineEndPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","line", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_GetLineEndPosition",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetLineEndPosition. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetLineEndPosition(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetCodePage(_swigobj)  (_swigobj->GetCodePage())
+static PyObject *_wrap_wxStyledTextCtrl_GetCodePage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetCodePage",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetCodePage. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetCodePage(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetCaretForeground(_swigobj)  (_swigobj->GetCaretForeground())
+static PyObject *_wrap_wxStyledTextCtrl_GetCaretForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetCaretForeground",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetCaretForeground. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxColour (wxStyledTextCtrl_GetCaretForeground(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetReadOnly(_swigobj)  (_swigobj->GetReadOnly())
+static PyObject *_wrap_wxStyledTextCtrl_GetReadOnly(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetReadOnly",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetReadOnly. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxStyledTextCtrl_GetReadOnly(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetCurrentPos(_swigobj,_swigarg0)  (_swigobj->SetCurrentPos(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetCurrentPos(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pos", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetCurrentPos",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetCurrentPos. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetCurrentPos(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetSelectionStart(_swigobj,_swigarg0)  (_swigobj->SetSelectionStart(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetSelectionStart(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pos", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetSelectionStart",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetSelectionStart. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetSelectionStart(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetSelectionStart(_swigobj)  (_swigobj->GetSelectionStart())
+static PyObject *_wrap_wxStyledTextCtrl_GetSelectionStart(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetSelectionStart",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetSelectionStart. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetSelectionStart(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetSelectionEnd(_swigobj,_swigarg0)  (_swigobj->SetSelectionEnd(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetSelectionEnd(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pos", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetSelectionEnd",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetSelectionEnd. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetSelectionEnd(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetSelectionEnd(_swigobj)  (_swigobj->GetSelectionEnd())
+static PyObject *_wrap_wxStyledTextCtrl_GetSelectionEnd(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetSelectionEnd",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetSelectionEnd. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetSelectionEnd(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetPrintMagnification(_swigobj,_swigarg0)  (_swigobj->SetPrintMagnification(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetPrintMagnification(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","magnification", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetPrintMagnification",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetPrintMagnification. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetPrintMagnification(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetPrintMagnification(_swigobj)  (_swigobj->GetPrintMagnification())
+static PyObject *_wrap_wxStyledTextCtrl_GetPrintMagnification(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetPrintMagnification",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetPrintMagnification. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetPrintMagnification(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetPrintColourMode(_swigobj,_swigarg0)  (_swigobj->SetPrintColourMode(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetPrintColourMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","mode", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetPrintColourMode",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetPrintColourMode. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetPrintColourMode(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetPrintColourMode(_swigobj)  (_swigobj->GetPrintColourMode())
+static PyObject *_wrap_wxStyledTextCtrl_GetPrintColourMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetPrintColourMode",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetPrintColourMode. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetPrintColourMode(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_FindText(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4)  (_swigobj->FindText(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+static PyObject *_wrap_wxStyledTextCtrl_FindText(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    int  _arg2;
+    wxString * _arg3;
+    bool  _arg4;
+    bool  _arg5;
+    PyObject * _argo0 = 0;
+    PyObject * _obj3 = 0;
+    int tempbool4;
+    int tempbool5;
+    char *_kwnames[] = { "self","minPos","maxPos","text","caseSensitive","wholeWord", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiOii:wxStyledTextCtrl_FindText",_kwnames,&_argo0,&_arg1,&_arg2,&_obj3,&tempbool4,&tempbool5)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_FindText. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj3)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg3 = new wxString(PyString_AsString(_obj3), PyString_Size(_obj3));
+}
+    _arg4 = (bool ) tempbool4;
+    _arg5 = (bool ) tempbool5;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_FindText(_arg0,_arg1,_arg2,*_arg3,_arg4,_arg5);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj3)
+        delete _arg3;
+}
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_FormatRange(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6)  (_swigobj->FormatRange(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
+static PyObject *_wrap_wxStyledTextCtrl_FormatRange(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    bool  _arg1;
+    int  _arg2;
+    int  _arg3;
+    wxDC * _arg4;
+    wxDC * _arg5;
+    wxRect * _arg6;
+    wxRect * _arg7;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    PyObject * _argo4 = 0;
+    PyObject * _argo5 = 0;
+    wxRect  temp;
+    PyObject * _obj6 = 0;
+    wxRect  temp0;
+    PyObject * _obj7 = 0;
+    char *_kwnames[] = { "self","doDraw","startPos","endPos","draw","target","renderRect","pageRect", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiiOOOO:wxStyledTextCtrl_FormatRange",_kwnames,&_argo0,&tempbool1,&_arg2,&_arg3,&_argo4,&_argo5,&_obj6,&_obj7)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_FormatRange. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+    if (_argo4) {
+        if (_argo4 == Py_None) { _arg4 = NULL; }
+        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxStyledTextCtrl_FormatRange. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+    if (_argo5) {
+        if (_argo5 == Py_None) { _arg5 = NULL; }
+        else if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 6 of wxStyledTextCtrl_FormatRange. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+    _arg6 = &temp;
+    if (! wxRect_helper(_obj6, &_arg6))
+        return NULL;
+}
+{
+    _arg7 = &temp0;
+    if (! wxRect_helper(_obj7, &_arg7))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_FormatRange(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,*_arg6,*_arg7);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetFirstVisibleLine(_swigobj)  (_swigobj->GetFirstVisibleLine())
+static PyObject *_wrap_wxStyledTextCtrl_GetFirstVisibleLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetFirstVisibleLine",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetFirstVisibleLine. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetFirstVisibleLine(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetLine(_swigobj,_swigarg0)  (_swigobj->GetLine(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_GetLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","line", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_GetLine",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetLine. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxStyledTextCtrl_GetLine(_arg0,_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetLineCount(_swigobj)  (_swigobj->GetLineCount())
+static PyObject *_wrap_wxStyledTextCtrl_GetLineCount(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetLineCount",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetLineCount. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetLineCount(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetMarginLeft(_swigobj,_swigarg0)  (_swigobj->SetMarginLeft(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetMarginLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","width", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetMarginLeft",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetMarginLeft. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetMarginLeft(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetMarginLeft(_swigobj)  (_swigobj->GetMarginLeft())
+static PyObject *_wrap_wxStyledTextCtrl_GetMarginLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetMarginLeft",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetMarginLeft. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetMarginLeft(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetMarginRight(_swigobj,_swigarg0)  (_swigobj->SetMarginRight(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetMarginRight(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","width", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetMarginRight",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetMarginRight. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetMarginRight(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetMarginRight(_swigobj)  (_swigobj->GetMarginRight())
+static PyObject *_wrap_wxStyledTextCtrl_GetMarginRight(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetMarginRight",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetMarginRight. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetMarginRight(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetModify(_swigobj)  (_swigobj->GetModify())
+static PyObject *_wrap_wxStyledTextCtrl_GetModify(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetModify",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetModify. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxStyledTextCtrl_GetModify(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetSelection(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetSelection(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_SetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","start","end", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_SetSelection",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetSelection. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetSelection(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetSelectedText(_swigobj)  (_swigobj->GetSelectedText())
+static PyObject *_wrap_wxStyledTextCtrl_GetSelectedText(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetSelectedText",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetSelectedText. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxStyledTextCtrl_GetSelectedText(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetTextRange(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetTextRange(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_GetTextRange(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","startPos","endPos", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_GetTextRange",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetTextRange. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxStyledTextCtrl_GetTextRange(_arg0,_arg1,_arg2));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_HideSelection(_swigobj,_swigarg0)  (_swigobj->HideSelection(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_HideSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","normal", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_HideSelection",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_HideSelection. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_HideSelection(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_LineFromPosition(_swigobj,_swigarg0)  (_swigobj->LineFromPosition(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_LineFromPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pos", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_LineFromPosition",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_LineFromPosition. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_LineFromPosition(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_PositionFromLine(_swigobj,_swigarg0)  (_swigobj->PositionFromLine(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_PositionFromLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","line", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_PositionFromLine",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_PositionFromLine. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_PositionFromLine(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_LineScroll(_swigobj,_swigarg0,_swigarg1)  (_swigobj->LineScroll(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_LineScroll(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","columns","lines", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_LineScroll",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_LineScroll. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_LineScroll(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_EnsureCaretVisible(_swigobj)  (_swigobj->EnsureCaretVisible())
+static PyObject *_wrap_wxStyledTextCtrl_EnsureCaretVisible(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_EnsureCaretVisible",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_EnsureCaretVisible. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_EnsureCaretVisible(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_ReplaceSelection(_swigobj,_swigarg0)  (_swigobj->ReplaceSelection(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_ReplaceSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","text", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_ReplaceSelection",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_ReplaceSelection. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_ReplaceSelection(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetReadOnly(_swigobj,_swigarg0)  (_swigobj->SetReadOnly(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetReadOnly(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","readOnly", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetReadOnly",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetReadOnly. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetReadOnly(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_CanPaste(_swigobj)  (_swigobj->CanPaste())
+static PyObject *_wrap_wxStyledTextCtrl_CanPaste(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_CanPaste",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_CanPaste. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxStyledTextCtrl_CanPaste(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_CanUndo(_swigobj)  (_swigobj->CanUndo())
+static PyObject *_wrap_wxStyledTextCtrl_CanUndo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_CanUndo",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_CanUndo. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxStyledTextCtrl_CanUndo(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_EmptyUndoBuffer(_swigobj)  (_swigobj->EmptyUndoBuffer())
+static PyObject *_wrap_wxStyledTextCtrl_EmptyUndoBuffer(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_EmptyUndoBuffer",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_EmptyUndoBuffer. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_EmptyUndoBuffer(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_Undo(_swigobj)  (_swigobj->Undo())
+static PyObject *_wrap_wxStyledTextCtrl_Undo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_Undo",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_Undo. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_Undo(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_Cut(_swigobj)  (_swigobj->Cut())
+static PyObject *_wrap_wxStyledTextCtrl_Cut(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_Cut",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_Cut. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_Cut(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_Copy(_swigobj)  (_swigobj->Copy())
+static PyObject *_wrap_wxStyledTextCtrl_Copy(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_Copy",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_Copy. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_Copy(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_Paste(_swigobj)  (_swigobj->Paste())
+static PyObject *_wrap_wxStyledTextCtrl_Paste(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_Paste",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_Paste. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_Paste(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_Clear(_swigobj)  (_swigobj->Clear())
+static PyObject *_wrap_wxStyledTextCtrl_Clear(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_Clear",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_Clear. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_Clear(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetText(_swigobj,_swigarg0)  (_swigobj->SetText(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetText(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","text", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_SetText",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetText. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetText(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetText(_swigobj)  (_swigobj->GetText())
+static PyObject *_wrap_wxStyledTextCtrl_GetText(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetText",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetText. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxStyledTextCtrl_GetText(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetTextLength(_swigobj)  (_swigobj->GetTextLength())
+static PyObject *_wrap_wxStyledTextCtrl_GetTextLength(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetTextLength",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetTextLength. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetTextLength(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetOvertype(_swigobj,_swigarg0)  (_swigobj->SetOvertype(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetOvertype(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","overtype", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetOvertype",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetOvertype. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetOvertype(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetOvertype(_swigobj)  (_swigobj->GetOvertype())
+static PyObject *_wrap_wxStyledTextCtrl_GetOvertype(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetOvertype",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetOvertype. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxStyledTextCtrl_GetOvertype(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxStyledTextCtrl_CallTipShow(_swigobj,_swigarg0,_swigarg1)  (_swigobj->CallTipShow(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxStyledTextCtrl_CallTipShow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -4810,7 +5058,7 @@ static PyObject *_wrap_wxStyledTextCtrl_CallTipShow(PyObject *self, PyObject *ar
     wxString * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
-    char *_kwnames[] = { "self","pos","text", NULL };
+    char *_kwnames[] = { "self","pos","definition", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_CallTipShow",_kwnames,&_argo0,&_arg1,&_obj2)) 
@@ -4961,7 +5209,7 @@ static PyObject *_wrap_wxStyledTextCtrl_CallTipSetBackground(PyObject *self, PyO
     PyObject * _argo0 = 0;
     wxColour  temp;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","colour", NULL };
+    char *_kwnames[] = { "self","back", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_CallTipSetBackground",_kwnames,&_argo0,&_obj1)) 
@@ -4988,256 +5236,6 @@ static PyObject *_wrap_wxStyledTextCtrl_CallTipSetBackground(PyObject *self, PyO
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_CmdKeyAssign(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->CmdKeyAssign(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxStyledTextCtrl_CmdKeyAssign(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    int  _arg2;
-    int  _arg3;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","key","modifiers","cmd", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiii:wxStyledTextCtrl_CmdKeyAssign",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_CmdKeyAssign. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_CmdKeyAssign(_arg0,_arg1,_arg2,_arg3);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_CmdKeyClear(_swigobj,_swigarg0,_swigarg1)  (_swigobj->CmdKeyClear(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_CmdKeyClear(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","key","modifiers", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_CmdKeyClear",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_CmdKeyClear. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_CmdKeyClear(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_CmdKeyClearAll(_swigobj)  (_swigobj->CmdKeyClearAll())
-static PyObject *_wrap_wxStyledTextCtrl_CmdKeyClearAll(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_CmdKeyClearAll",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_CmdKeyClearAll. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_CmdKeyClearAll(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_CmdKeyExecute(_swigobj,_swigarg0)  (_swigobj->CmdKeyExecute(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_CmdKeyExecute(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","cmd", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_CmdKeyExecute",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_CmdKeyExecute. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_CmdKeyExecute(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_FormatRange(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6)  (_swigobj->FormatRange(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
-static PyObject *_wrap_wxStyledTextCtrl_FormatRange(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxStyledTextCtrl * _arg0;
-    bool  _arg1;
-    int  _arg2;
-    int  _arg3;
-    wxDC * _arg4;
-    wxDC * _arg5;
-    wxRect * _arg6;
-    wxRect * _arg7;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    PyObject * _argo4 = 0;
-    PyObject * _argo5 = 0;
-    wxRect  temp;
-    PyObject * _obj6 = 0;
-    wxRect  temp0;
-    PyObject * _obj7 = 0;
-    char *_kwnames[] = { "self","doDraw","startPos","endPos","draw","target","renderRect","pageRect", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiiOOOO:wxStyledTextCtrl_FormatRange",_kwnames,&_argo0,&tempbool1,&_arg2,&_arg3,&_argo4,&_argo5,&_obj6,&_obj7)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_FormatRange. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxDC_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxStyledTextCtrl_FormatRange. Expected _wxDC_p.");
-        return NULL;
-        }
-    }
-    if (_argo5) {
-        if (_argo5 == Py_None) { _arg5 = NULL; }
-        else if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxDC_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 6 of wxStyledTextCtrl_FormatRange. Expected _wxDC_p.");
-        return NULL;
-        }
-    }
-{
-    _arg6 = &temp;
-    if (! wxRect_helper(_obj6, &_arg6))
-        return NULL;
-}
-{
-    _arg7 = &temp0;
-    if (! wxRect_helper(_obj7, &_arg7))
-        return NULL;
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_FormatRange(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,*_arg6,*_arg7);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_GetDocument(_swigobj)  (_swigobj->GetDocument())
-static PyObject *_wrap_wxStyledTextCtrl_GetDocument(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    void * _result;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetDocument",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetDocument. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (void *)wxStyledTextCtrl_GetDocument(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_void_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_SetDocument(_swigobj,_swigarg0)  (_swigobj->SetDocument(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetDocument(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    void * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","document", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_SetDocument",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetDocument. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,(char *) 0 )) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxStyledTextCtrl_SetDocument. Expected _void_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetDocument(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxStyledTextCtrl_VisibleFromDocLine(_swigobj,_swigarg0)  (_swigobj->VisibleFromDocLine(_swigarg0))
 static PyObject *_wrap_wxStyledTextCtrl_VisibleFromDocLine(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -5245,7 +5243,7 @@ static PyObject *_wrap_wxStyledTextCtrl_VisibleFromDocLine(PyObject *self, PyObj
     wxStyledTextCtrl * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","docLine", NULL };
+    char *_kwnames[] = { "self","line", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_VisibleFromDocLine",_kwnames,&_argo0,&_arg1)) 
@@ -5273,7 +5271,7 @@ static PyObject *_wrap_wxStyledTextCtrl_DocLineFromVisible(PyObject *self, PyObj
     wxStyledTextCtrl * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","displayLine", NULL };
+    char *_kwnames[] = { "self","lineDisplay", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_DocLineFromVisible",_kwnames,&_argo0,&_arg1)) 
@@ -5297,7 +5295,6 @@ static PyObject *_wrap_wxStyledTextCtrl_DocLineFromVisible(PyObject *self, PyObj
 #define wxStyledTextCtrl_SetFoldLevel(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetFoldLevel(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxStyledTextCtrl_SetFoldLevel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    int  _result;
     wxStyledTextCtrl * _arg0;
     int  _arg1;
     int  _arg2;
@@ -5316,10 +5313,11 @@ static PyObject *_wrap_wxStyledTextCtrl_SetFoldLevel(PyObject *self, PyObject *a
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_SetFoldLevel(_arg0,_arg1,_arg2);
+        wxStyledTextCtrl_SetFoldLevel(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -5637,26 +5635,56 @@ static PyObject *_wrap_wxStyledTextCtrl_SetFoldFlags(PyObject *self, PyObject *a
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_ZoomIn(_swigobj)  (_swigobj->ZoomIn())
-static PyObject *_wrap_wxStyledTextCtrl_ZoomIn(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_LineLength(_swigobj,_swigarg0)  (_swigobj->LineLength(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_LineLength(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    int  _result;
     wxStyledTextCtrl * _arg0;
+    int  _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
+    char *_kwnames[] = { "self","line", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_ZoomIn",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_LineLength",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_ZoomIn. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_LineLength. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_ZoomIn(_arg0);
+        _result = (int )wxStyledTextCtrl_LineLength(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_BraceHighlight(_swigobj,_swigarg0,_swigarg1)  (_swigobj->BraceHighlight(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_BraceHighlight(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pos1","pos2", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_BraceHighlight",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_BraceHighlight. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_BraceHighlight(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -5664,54 +5692,27 @@ static PyObject *_wrap_wxStyledTextCtrl_ZoomIn(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_ZoomOut(_swigobj)  (_swigobj->ZoomOut())
-static PyObject *_wrap_wxStyledTextCtrl_ZoomOut(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxStyledTextCtrl * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_ZoomOut",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_ZoomOut. Expected _wxStyledTextCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_ZoomOut(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxStyledTextCtrl_SetZoom(_swigobj,_swigarg0)  (_swigobj->SetZoom(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetZoom(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_BraceBadLight(_swigobj,_swigarg0)  (_swigobj->BraceBadLight(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_BraceBadLight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextCtrl * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","zoom", NULL };
+    char *_kwnames[] = { "self","pos", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetZoom",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_BraceBadLight",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetZoom. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_BraceBadLight. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetZoom(_arg0,_arg1);
+        wxStyledTextCtrl_BraceBadLight(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -5719,30 +5720,186 @@ static PyObject *_wrap_wxStyledTextCtrl_SetZoom(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_GetZoom(_swigobj)  (_swigobj->GetZoom())
-static PyObject *_wrap_wxStyledTextCtrl_GetZoom(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_BraceMatch(_swigobj,_swigarg0)  (_swigobj->BraceMatch(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_BraceMatch(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxStyledTextCtrl * _arg0;
+    int  _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
+    char *_kwnames[] = { "self","pos", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetZoom",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_BraceMatch",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetZoom. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_BraceMatch. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_GetZoom(_arg0);
+        _result = (int )wxStyledTextCtrl_BraceMatch(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetViewEOL(_swigobj)  (_swigobj->GetViewEOL())
+static PyObject *_wrap_wxStyledTextCtrl_GetViewEOL(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetViewEOL",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetViewEOL. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxStyledTextCtrl_GetViewEOL(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetViewEOL(_swigobj,_swigarg0)  (_swigobj->SetViewEOL(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetViewEOL(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","visible", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetViewEOL",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetViewEOL. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetViewEOL(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetDocPointer(_swigobj)  (_swigobj->GetDocPointer())
+static PyObject *_wrap_wxStyledTextCtrl_GetDocPointer(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    void * _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetDocPointer",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetDocPointer. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (void *)wxStyledTextCtrl_GetDocPointer(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_void_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetDocPointer(_swigobj,_swigarg0)  (_swigobj->SetDocPointer(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetDocPointer(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    void * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","docPointer", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_SetDocPointer",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetDocPointer. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,(char *) 0 )) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxStyledTextCtrl_SetDocPointer. Expected _void_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetDocPointer(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetModEventMask(_swigobj,_swigarg0)  (_swigobj->SetModEventMask(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetModEventMask(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","mask", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetModEventMask",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetModEventMask. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetModEventMask(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -5804,7 +5961,7 @@ static PyObject *_wrap_wxStyledTextCtrl_SetEdgeColumn(PyObject *self, PyObject *
 #define wxStyledTextCtrl_GetEdgeMode(_swigobj)  (_swigobj->GetEdgeMode())
 static PyObject *_wrap_wxStyledTextCtrl_GetEdgeMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxSTC_EDGE  _result;
+    int  _result;
     wxStyledTextCtrl * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
@@ -5821,7 +5978,7 @@ static PyObject *_wrap_wxStyledTextCtrl_GetEdgeMode(PyObject *self, PyObject *ar
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxSTC_EDGE )wxStyledTextCtrl_GetEdgeMode(_arg0);
+        _result = (int )wxStyledTextCtrl_GetEdgeMode(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
@@ -5832,7 +5989,7 @@ static PyObject *_wrap_wxStyledTextCtrl_GetEdgeMode(PyObject *self, PyObject *ar
 static PyObject *_wrap_wxStyledTextCtrl_SetEdgeMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextCtrl * _arg0;
-    wxSTC_EDGE  _arg1;
+    int  _arg1;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self","mode", NULL };
 
@@ -5893,7 +6050,7 @@ static PyObject *_wrap_wxStyledTextCtrl_SetEdgeColour(PyObject *self, PyObject *
     PyObject * _argo0 = 0;
     wxColour  temp;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","colour", NULL };
+    char *_kwnames[] = { "self","edgeColour", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_SetEdgeColour",_kwnames,&_argo0,&_obj1)) 
@@ -5920,11 +6077,475 @@ static PyObject *_wrap_wxStyledTextCtrl_SetEdgeColour(PyObject *self, PyObject *
     return _resultobj;
 }
 
+#define wxStyledTextCtrl_SearchAnchor(_swigobj)  (_swigobj->SearchAnchor())
+static PyObject *_wrap_wxStyledTextCtrl_SearchAnchor(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_SearchAnchor",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SearchAnchor. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SearchAnchor(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SearchNext(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SearchNext(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_SearchNext(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    wxString * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","flags","text", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_SearchNext",_kwnames,&_argo0,&_arg1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SearchNext. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_SearchNext(_arg0,_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SearchPrev(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SearchPrev(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_SearchPrev(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    wxString * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","flags","text", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_SearchPrev",_kwnames,&_argo0,&_arg1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SearchPrev. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_SearchPrev(_arg0,_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetCaretPolicy(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetCaretPolicy(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_SetCaretPolicy(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","caretPolicy","caretSlop", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_SetCaretPolicy",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetCaretPolicy. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetCaretPolicy(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_LinesOnScreen(_swigobj)  (_swigobj->LinesOnScreen())
+static PyObject *_wrap_wxStyledTextCtrl_LinesOnScreen(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_LinesOnScreen",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_LinesOnScreen. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_LinesOnScreen(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_UsePopUp(_swigobj,_swigarg0)  (_swigobj->UsePopUp(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_UsePopUp(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","allowPopUp", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_UsePopUp",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_UsePopUp. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_UsePopUp(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SelectionIsRectangle(_swigobj)  (_swigobj->SelectionIsRectangle())
+static PyObject *_wrap_wxStyledTextCtrl_SelectionIsRectangle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_SelectionIsRectangle",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SelectionIsRectangle. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxStyledTextCtrl_SelectionIsRectangle(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetZoom(_swigobj,_swigarg0)  (_swigobj->SetZoom(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetZoom(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","zoom", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetZoom",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetZoom. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetZoom(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetZoom(_swigobj)  (_swigobj->GetZoom())
+static PyObject *_wrap_wxStyledTextCtrl_GetZoom(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetZoom",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetZoom. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetZoom(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_CreateDocument(_swigobj)  (_swigobj->CreateDocument())
+static PyObject *_wrap_wxStyledTextCtrl_CreateDocument(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    void * _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_CreateDocument",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_CreateDocument. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (void *)wxStyledTextCtrl_CreateDocument(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_void_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_AddRefDocument(_swigobj,_swigarg0)  (_swigobj->AddRefDocument(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_AddRefDocument(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    void * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","docPointer", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_AddRefDocument",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_AddRefDocument. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,(char *) 0 )) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxStyledTextCtrl_AddRefDocument. Expected _void_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_AddRefDocument(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_ReleaseDocument(_swigobj,_swigarg0)  (_swigobj->ReleaseDocument(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_ReleaseDocument(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    void * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","docPointer", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_ReleaseDocument",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_ReleaseDocument. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,(char *) 0 )) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxStyledTextCtrl_ReleaseDocument. Expected _void_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_ReleaseDocument(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetModEventMask(_swigobj)  (_swigobj->GetModEventMask())
+static PyObject *_wrap_wxStyledTextCtrl_GetModEventMask(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetModEventMask",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetModEventMask. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxStyledTextCtrl_GetModEventMask(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_StartRecord(_swigobj)  (_swigobj->StartRecord())
+static PyObject *_wrap_wxStyledTextCtrl_StartRecord(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_StartRecord",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StartRecord. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_StartRecord(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_StopRecord(_swigobj)  (_swigobj->StopRecord())
+static PyObject *_wrap_wxStyledTextCtrl_StopRecord(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_StopRecord",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StopRecord. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_StopRecord(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxStyledTextCtrl_SetLexer(_swigobj,_swigarg0)  (_swigobj->SetLexer(_swigarg0))
 static PyObject *_wrap_wxStyledTextCtrl_SetLexer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextCtrl * _arg0;
-    wxSTC_LEX  _arg1;
+    int  _arg1;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self","lexer", NULL };
 
@@ -5951,7 +6572,7 @@ static PyObject *_wrap_wxStyledTextCtrl_SetLexer(PyObject *self, PyObject *args,
 #define wxStyledTextCtrl_GetLexer(_swigobj)  (_swigobj->GetLexer())
 static PyObject *_wrap_wxStyledTextCtrl_GetLexer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxSTC_LEX  _result;
+    int  _result;
     wxStyledTextCtrl * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
@@ -5968,7 +6589,7 @@ static PyObject *_wrap_wxStyledTextCtrl_GetLexer(PyObject *self, PyObject *args,
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxSTC_LEX )wxStyledTextCtrl_GetLexer(_arg0);
+        _result = (int )wxStyledTextCtrl_GetLexer(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
@@ -6057,23 +6678,23 @@ static PyObject *_wrap_wxStyledTextCtrl_SetProperty(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_SetKeywords(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetKeywords(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxStyledTextCtrl_SetKeywords(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_SetKeyWords(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetKeyWords(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_SetKeyWords(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextCtrl * _arg0;
     int  _arg1;
     wxString * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
-    char *_kwnames[] = { "self","keywordSet","keywordList", NULL };
+    char *_kwnames[] = { "self","keywordSet","keyWords", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_SetKeywords",_kwnames,&_argo0,&_arg1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_SetKeyWords",_kwnames,&_argo0,&_arg1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetKeywords. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetKeyWords. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
@@ -6086,7 +6707,7 @@ static PyObject *_wrap_wxStyledTextCtrl_SetKeywords(PyObject *self, PyObject *ar
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetKeywords(_arg0,_arg1,*_arg2);
+        wxStyledTextCtrl_SetKeyWords(_arg0,_arg1,*_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -6098,31 +6719,293 @@ static PyObject *_wrap_wxStyledTextCtrl_SetKeywords(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_SetModEventMask(_swigobj,_swigarg0)  (_swigobj->SetModEventMask(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetModEventMask(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_GetCurrentLine(_swigobj)  (_swigobj->GetCurrentLine())
+static PyObject *_wrap_wxStyledTextCtrl_GetCurrentLine(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    int  _result;
     wxStyledTextCtrl * _arg0;
-    int  _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","mask", NULL };
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetModEventMask",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetCurrentLine",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetModEventMask. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetCurrentLine. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetModEventMask(_arg0,_arg1);
+        _result = (int )wxStyledTextCtrl_GetCurrentLine(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_StyleSetSpec(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetSpec(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_StyleSetSpec(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    wxString * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","styleNum","spec", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_StyleSetSpec",_kwnames,&_argo0,&_arg1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetSpec. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_StyleSetSpec(_arg0,_arg1,*_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_StyleSetFont(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StyleSetFont(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_StyleSetFont(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    wxFont * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _argo2 = 0;
+    char *_kwnames[] = { "self","styleNum","font", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_StyleSetFont",_kwnames,&_argo0,&_arg1,&_argo2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetFont. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxStyledTextCtrl_StyleSetFont. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_StyleSetFont(_arg0,_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_StyleSetFontAttr(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5)  (_swigobj->StyleSetFontAttr(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+static PyObject *_wrap_wxStyledTextCtrl_StyleSetFontAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    int  _arg2;
+    wxString * _arg3;
+    bool  _arg4;
+    bool  _arg5;
+    bool  _arg6;
+    PyObject * _argo0 = 0;
+    PyObject * _obj3 = 0;
+    int tempbool4;
+    int tempbool5;
+    int tempbool6;
+    char *_kwnames[] = { "self","styleNum","size","faceName","bold","italic","underline", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiOiii:wxStyledTextCtrl_StyleSetFontAttr",_kwnames,&_argo0,&_arg1,&_arg2,&_obj3,&tempbool4,&tempbool5,&tempbool6)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_StyleSetFontAttr. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj3)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg3 = new wxString(PyString_AsString(_obj3), PyString_Size(_obj3));
+}
+    _arg4 = (bool ) tempbool4;
+    _arg5 = (bool ) tempbool5;
+    _arg6 = (bool ) tempbool6;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_StyleSetFontAttr(_arg0,_arg1,_arg2,*_arg3,_arg4,_arg5,_arg6);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj3)
+        delete _arg3;
+}
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_CmdKeyExecute(_swigobj,_swigarg0)  (_swigobj->CmdKeyExecute(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_CmdKeyExecute(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","cmd", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_CmdKeyExecute",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_CmdKeyExecute. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_CmdKeyExecute(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetMargins(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetMargins(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_SetMargins(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","left","right", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_SetMargins",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetMargins. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetMargins(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_GetSelection(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetSelection(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxStyledTextCtrl_GetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    int * _arg1;
+    int  temp;
+    int * _arg2;
+    int  temp0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+{
+  _arg1 = &temp;
+}
+{
+  _arg2 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetSelection",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetSelection. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_GetSelection(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_PointFromPosition(_swigobj,_swigarg0)  (_swigobj->PointFromPosition(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_PointFromPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint * _result;
+    wxStyledTextCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pos", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_PointFromPosition",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_PointFromPosition. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxPoint (wxStyledTextCtrl_PointFromPosition(_arg0,_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPoint_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -7123,22 +8006,49 @@ static PyMethodDef stc_cMethods[] = {
 	 { "wxStyledTextEvent_SetPosition", (PyCFunction) _wrap_wxStyledTextEvent_SetPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxStyledTextEvent", (PyCFunction) _wrap_delete_wxStyledTextEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxStyledTextEvent", (PyCFunction) _wrap_new_wxStyledTextEvent, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetModEventMask", (PyCFunction) _wrap_wxStyledTextCtrl_SetModEventMask, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetKeywords", (PyCFunction) _wrap_wxStyledTextCtrl_SetKeywords, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_PointFromPosition", (PyCFunction) _wrap_wxStyledTextCtrl_PointFromPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetSelection", (PyCFunction) _wrap_wxStyledTextCtrl_GetSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetMargins", (PyCFunction) _wrap_wxStyledTextCtrl_SetMargins, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_CmdKeyExecute", (PyCFunction) _wrap_wxStyledTextCtrl_CmdKeyExecute, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_StyleSetFontAttr", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetFontAttr, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_StyleSetFont", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetFont, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_StyleSetSpec", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetSpec, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetCurrentLine", (PyCFunction) _wrap_wxStyledTextCtrl_GetCurrentLine, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetKeyWords", (PyCFunction) _wrap_wxStyledTextCtrl_SetKeyWords, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SetProperty", (PyCFunction) _wrap_wxStyledTextCtrl_SetProperty, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_Colourise", (PyCFunction) _wrap_wxStyledTextCtrl_Colourise, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_GetLexer", (PyCFunction) _wrap_wxStyledTextCtrl_GetLexer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SetLexer", (PyCFunction) _wrap_wxStyledTextCtrl_SetLexer, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_StopRecord", (PyCFunction) _wrap_wxStyledTextCtrl_StopRecord, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_StartRecord", (PyCFunction) _wrap_wxStyledTextCtrl_StartRecord, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetModEventMask", (PyCFunction) _wrap_wxStyledTextCtrl_GetModEventMask, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_ReleaseDocument", (PyCFunction) _wrap_wxStyledTextCtrl_ReleaseDocument, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_AddRefDocument", (PyCFunction) _wrap_wxStyledTextCtrl_AddRefDocument, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_CreateDocument", (PyCFunction) _wrap_wxStyledTextCtrl_CreateDocument, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetZoom", (PyCFunction) _wrap_wxStyledTextCtrl_GetZoom, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetZoom", (PyCFunction) _wrap_wxStyledTextCtrl_SetZoom, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SelectionIsRectangle", (PyCFunction) _wrap_wxStyledTextCtrl_SelectionIsRectangle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_UsePopUp", (PyCFunction) _wrap_wxStyledTextCtrl_UsePopUp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_LinesOnScreen", (PyCFunction) _wrap_wxStyledTextCtrl_LinesOnScreen, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetCaretPolicy", (PyCFunction) _wrap_wxStyledTextCtrl_SetCaretPolicy, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SearchPrev", (PyCFunction) _wrap_wxStyledTextCtrl_SearchPrev, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SearchNext", (PyCFunction) _wrap_wxStyledTextCtrl_SearchNext, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SearchAnchor", (PyCFunction) _wrap_wxStyledTextCtrl_SearchAnchor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SetEdgeColour", (PyCFunction) _wrap_wxStyledTextCtrl_SetEdgeColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_GetEdgeColour", (PyCFunction) _wrap_wxStyledTextCtrl_GetEdgeColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SetEdgeMode", (PyCFunction) _wrap_wxStyledTextCtrl_SetEdgeMode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_GetEdgeMode", (PyCFunction) _wrap_wxStyledTextCtrl_GetEdgeMode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SetEdgeColumn", (PyCFunction) _wrap_wxStyledTextCtrl_SetEdgeColumn, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_GetEdgeColumn", (PyCFunction) _wrap_wxStyledTextCtrl_GetEdgeColumn, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetZoom", (PyCFunction) _wrap_wxStyledTextCtrl_GetZoom, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetZoom", (PyCFunction) _wrap_wxStyledTextCtrl_SetZoom, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_ZoomOut", (PyCFunction) _wrap_wxStyledTextCtrl_ZoomOut, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_ZoomIn", (PyCFunction) _wrap_wxStyledTextCtrl_ZoomIn, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetModEventMask", (PyCFunction) _wrap_wxStyledTextCtrl_SetModEventMask, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetDocPointer", (PyCFunction) _wrap_wxStyledTextCtrl_SetDocPointer, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetDocPointer", (PyCFunction) _wrap_wxStyledTextCtrl_GetDocPointer, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetViewEOL", (PyCFunction) _wrap_wxStyledTextCtrl_SetViewEOL, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetViewEOL", (PyCFunction) _wrap_wxStyledTextCtrl_GetViewEOL, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_BraceMatch", (PyCFunction) _wrap_wxStyledTextCtrl_BraceMatch, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_BraceBadLight", (PyCFunction) _wrap_wxStyledTextCtrl_BraceBadLight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_BraceHighlight", (PyCFunction) _wrap_wxStyledTextCtrl_BraceHighlight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_LineLength", (PyCFunction) _wrap_wxStyledTextCtrl_LineLength, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SetFoldFlags", (PyCFunction) _wrap_wxStyledTextCtrl_SetFoldFlags, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_EnsureVisible", (PyCFunction) _wrap_wxStyledTextCtrl_EnsureVisible, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_ToggleFold", (PyCFunction) _wrap_wxStyledTextCtrl_ToggleFold, METH_VARARGS | METH_KEYWORDS },
@@ -7153,60 +8063,120 @@ static PyMethodDef stc_cMethods[] = {
 	 { "wxStyledTextCtrl_SetFoldLevel", (PyCFunction) _wrap_wxStyledTextCtrl_SetFoldLevel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_DocLineFromVisible", (PyCFunction) _wrap_wxStyledTextCtrl_DocLineFromVisible, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_VisibleFromDocLine", (PyCFunction) _wrap_wxStyledTextCtrl_VisibleFromDocLine, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetDocument", (PyCFunction) _wrap_wxStyledTextCtrl_SetDocument, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetDocument", (PyCFunction) _wrap_wxStyledTextCtrl_GetDocument, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_FormatRange", (PyCFunction) _wrap_wxStyledTextCtrl_FormatRange, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_CmdKeyExecute", (PyCFunction) _wrap_wxStyledTextCtrl_CmdKeyExecute, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_CmdKeyClearAll", (PyCFunction) _wrap_wxStyledTextCtrl_CmdKeyClearAll, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_CmdKeyClear", (PyCFunction) _wrap_wxStyledTextCtrl_CmdKeyClear, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_CmdKeyAssign", (PyCFunction) _wrap_wxStyledTextCtrl_CmdKeyAssign, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_CallTipSetBackground", (PyCFunction) _wrap_wxStyledTextCtrl_CallTipSetBackground, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_CallTipSetHighlight", (PyCFunction) _wrap_wxStyledTextCtrl_CallTipSetHighlight, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_CallTipPosAtStart", (PyCFunction) _wrap_wxStyledTextCtrl_CallTipPosAtStart, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_CallTipActive", (PyCFunction) _wrap_wxStyledTextCtrl_CallTipActive, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_CallTipCancel", (PyCFunction) _wrap_wxStyledTextCtrl_CallTipCancel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_CallTipShow", (PyCFunction) _wrap_wxStyledTextCtrl_CallTipShow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetOvertype", (PyCFunction) _wrap_wxStyledTextCtrl_GetOvertype, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetOvertype", (PyCFunction) _wrap_wxStyledTextCtrl_SetOvertype, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetTextLength", (PyCFunction) _wrap_wxStyledTextCtrl_GetTextLength, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetText", (PyCFunction) _wrap_wxStyledTextCtrl_GetText, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetText", (PyCFunction) _wrap_wxStyledTextCtrl_SetText, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_Clear", (PyCFunction) _wrap_wxStyledTextCtrl_Clear, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_Paste", (PyCFunction) _wrap_wxStyledTextCtrl_Paste, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_Copy", (PyCFunction) _wrap_wxStyledTextCtrl_Copy, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_Cut", (PyCFunction) _wrap_wxStyledTextCtrl_Cut, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_Undo", (PyCFunction) _wrap_wxStyledTextCtrl_Undo, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_EmptyUndoBuffer", (PyCFunction) _wrap_wxStyledTextCtrl_EmptyUndoBuffer, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_CanUndo", (PyCFunction) _wrap_wxStyledTextCtrl_CanUndo, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_CanPaste", (PyCFunction) _wrap_wxStyledTextCtrl_CanPaste, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetReadOnly", (PyCFunction) _wrap_wxStyledTextCtrl_SetReadOnly, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_ReplaceSelection", (PyCFunction) _wrap_wxStyledTextCtrl_ReplaceSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_EnsureCaretVisible", (PyCFunction) _wrap_wxStyledTextCtrl_EnsureCaretVisible, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_LineScroll", (PyCFunction) _wrap_wxStyledTextCtrl_LineScroll, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_PositionFromLine", (PyCFunction) _wrap_wxStyledTextCtrl_PositionFromLine, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_LineFromPosition", (PyCFunction) _wrap_wxStyledTextCtrl_LineFromPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_HideSelection", (PyCFunction) _wrap_wxStyledTextCtrl_HideSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetTextRange", (PyCFunction) _wrap_wxStyledTextCtrl_GetTextRange, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetSelectedText", (PyCFunction) _wrap_wxStyledTextCtrl_GetSelectedText, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetSelection", (PyCFunction) _wrap_wxStyledTextCtrl_SetSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetModify", (PyCFunction) _wrap_wxStyledTextCtrl_GetModify, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetMarginRight", (PyCFunction) _wrap_wxStyledTextCtrl_GetMarginRight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetMarginRight", (PyCFunction) _wrap_wxStyledTextCtrl_SetMarginRight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetMarginLeft", (PyCFunction) _wrap_wxStyledTextCtrl_GetMarginLeft, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetMarginLeft", (PyCFunction) _wrap_wxStyledTextCtrl_SetMarginLeft, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetLineCount", (PyCFunction) _wrap_wxStyledTextCtrl_GetLineCount, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetLine", (PyCFunction) _wrap_wxStyledTextCtrl_GetLine, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetFirstVisibleLine", (PyCFunction) _wrap_wxStyledTextCtrl_GetFirstVisibleLine, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_FormatRange", (PyCFunction) _wrap_wxStyledTextCtrl_FormatRange, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_FindText", (PyCFunction) _wrap_wxStyledTextCtrl_FindText, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetPrintColourMode", (PyCFunction) _wrap_wxStyledTextCtrl_GetPrintColourMode, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetPrintColourMode", (PyCFunction) _wrap_wxStyledTextCtrl_SetPrintColourMode, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetPrintMagnification", (PyCFunction) _wrap_wxStyledTextCtrl_GetPrintMagnification, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetPrintMagnification", (PyCFunction) _wrap_wxStyledTextCtrl_SetPrintMagnification, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetSelectionEnd", (PyCFunction) _wrap_wxStyledTextCtrl_GetSelectionEnd, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetSelectionEnd", (PyCFunction) _wrap_wxStyledTextCtrl_SetSelectionEnd, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetSelectionStart", (PyCFunction) _wrap_wxStyledTextCtrl_GetSelectionStart, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetSelectionStart", (PyCFunction) _wrap_wxStyledTextCtrl_SetSelectionStart, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetCurrentPos", (PyCFunction) _wrap_wxStyledTextCtrl_SetCurrentPos, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetReadOnly", (PyCFunction) _wrap_wxStyledTextCtrl_GetReadOnly, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetCaretForeground", (PyCFunction) _wrap_wxStyledTextCtrl_GetCaretForeground, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetCodePage", (PyCFunction) _wrap_wxStyledTextCtrl_GetCodePage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetLineEndPosition", (PyCFunction) _wrap_wxStyledTextCtrl_GetLineEndPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetHighlightGuide", (PyCFunction) _wrap_wxStyledTextCtrl_GetHighlightGuide, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetHighlightGuide", (PyCFunction) _wrap_wxStyledTextCtrl_SetHighlightGuide, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetIndentationGuides", (PyCFunction) _wrap_wxStyledTextCtrl_GetIndentationGuides, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetIndentationGuides", (PyCFunction) _wrap_wxStyledTextCtrl_SetIndentationGuides, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetUseHorizontalScrollBar", (PyCFunction) _wrap_wxStyledTextCtrl_GetUseHorizontalScrollBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetUseHorizontalScrollBar", (PyCFunction) _wrap_wxStyledTextCtrl_SetUseHorizontalScrollBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetColumn", (PyCFunction) _wrap_wxStyledTextCtrl_GetColumn, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetLineIndentPosition", (PyCFunction) _wrap_wxStyledTextCtrl_GetLineIndentPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetLineIndentation", (PyCFunction) _wrap_wxStyledTextCtrl_GetLineIndentation, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetLineIndentation", (PyCFunction) _wrap_wxStyledTextCtrl_SetLineIndentation, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetUseTabs", (PyCFunction) _wrap_wxStyledTextCtrl_GetUseTabs, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetUseTabs", (PyCFunction) _wrap_wxStyledTextCtrl_SetUseTabs, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetIndent", (PyCFunction) _wrap_wxStyledTextCtrl_GetIndent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetIndent", (PyCFunction) _wrap_wxStyledTextCtrl_SetIndent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_AutoCompGetIgnoreCase", (PyCFunction) _wrap_wxStyledTextCtrl_AutoCompGetIgnoreCase, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_AutoCompSetIgnoreCase", (PyCFunction) _wrap_wxStyledTextCtrl_AutoCompSetIgnoreCase, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_AutoCompGetChooseSingle", (PyCFunction) _wrap_wxStyledTextCtrl_AutoCompGetChooseSingle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_AutoCompSetChooseSingle", (PyCFunction) _wrap_wxStyledTextCtrl_AutoCompSetChooseSingle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_AutoCompSetFillUps", (PyCFunction) _wrap_wxStyledTextCtrl_AutoCompSetFillUps, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_AutoCompGetCancelAtStart", (PyCFunction) _wrap_wxStyledTextCtrl_AutoCompGetCancelAtStart, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_AutoCompSetCancelAtStart", (PyCFunction) _wrap_wxStyledTextCtrl_AutoCompSetCancelAtStart, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_AutoCompSelect", (PyCFunction) _wrap_wxStyledTextCtrl_AutoCompSelect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_AutoCompGetSeparator", (PyCFunction) _wrap_wxStyledTextCtrl_AutoCompGetSeparator, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_AutoCompSetSeparator", (PyCFunction) _wrap_wxStyledTextCtrl_AutoCompSetSeparator, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_AutoCompStopChars", (PyCFunction) _wrap_wxStyledTextCtrl_AutoCompStopChars, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_AutoCompStops", (PyCFunction) _wrap_wxStyledTextCtrl_AutoCompStops, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_AutoCompComplete", (PyCFunction) _wrap_wxStyledTextCtrl_AutoCompComplete, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_AutoCompPosAtStart", (PyCFunction) _wrap_wxStyledTextCtrl_AutoCompPosAtStart, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_AutoCompPosStart", (PyCFunction) _wrap_wxStyledTextCtrl_AutoCompPosStart, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_AutoCompActive", (PyCFunction) _wrap_wxStyledTextCtrl_AutoCompActive, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_AutoCompCancel", (PyCFunction) _wrap_wxStyledTextCtrl_AutoCompCancel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_AutoCompShow", (PyCFunction) _wrap_wxStyledTextCtrl_AutoCompShow, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_IndicatorSetColour", (PyCFunction) _wrap_wxStyledTextCtrl_IndicatorSetColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetMaxLineState", (PyCFunction) _wrap_wxStyledTextCtrl_GetMaxLineState, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetLineState", (PyCFunction) _wrap_wxStyledTextCtrl_GetLineState, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetLineState", (PyCFunction) _wrap_wxStyledTextCtrl_SetLineState, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetStyleBits", (PyCFunction) _wrap_wxStyledTextCtrl_GetStyleBits, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetStyleBits", (PyCFunction) _wrap_wxStyledTextCtrl_SetStyleBits, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_IndicatorGetForeground", (PyCFunction) _wrap_wxStyledTextCtrl_IndicatorGetForeground, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_IndicatorSetForeground", (PyCFunction) _wrap_wxStyledTextCtrl_IndicatorSetForeground, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_IndicatorGetStyle", (PyCFunction) _wrap_wxStyledTextCtrl_IndicatorGetStyle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_IndicatorSetStyle", (PyCFunction) _wrap_wxStyledTextCtrl_IndicatorSetStyle, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_MarkerDeleteHandle", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerDeleteHandle, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_MarkerLineFromHandle", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerLineFromHandle, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_MarkerGetPrevLine", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerGetPrevLine, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_MarkerGetNextLine", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerGetNextLine, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_MarkerGet", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerGet, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_MarkerDeleteAll", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerDeleteAll, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_MarkerDelete", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerDelete, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_MarkerAdd", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerAdd, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_MarkerSetBackground", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerSetBackground, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_MarkerSetForeground", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerSetForeground, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_MarkerSetType", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerSetType, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_MarkerDefine", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerDefine, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_BraceMatch", (PyCFunction) _wrap_wxStyledTextCtrl_BraceMatch, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_BraceBadlight", (PyCFunction) _wrap_wxStyledTextCtrl_BraceBadlight, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_BraceHighlight", (PyCFunction) _wrap_wxStyledTextCtrl_BraceHighlight, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetUsePop", (PyCFunction) _wrap_wxStyledTextCtrl_SetUsePop, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_EndUndoAction", (PyCFunction) _wrap_wxStyledTextCtrl_EndUndoAction, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_BeginUndoAction", (PyCFunction) _wrap_wxStyledTextCtrl_BeginUndoAction, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SetWordChars", (PyCFunction) _wrap_wxStyledTextCtrl_SetWordChars, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetLineIndentationPos", (PyCFunction) _wrap_wxStyledTextCtrl_GetLineIndentationPos, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetLineIndentation", (PyCFunction) _wrap_wxStyledTextCtrl_GetLineIndentation, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetLineIndentation", (PyCFunction) _wrap_wxStyledTextCtrl_SetLineIndentation, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetUseTabs", (PyCFunction) _wrap_wxStyledTextCtrl_SetUseTabs, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetIndent", (PyCFunction) _wrap_wxStyledTextCtrl_SetIndent, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetTabWidth", (PyCFunction) _wrap_wxStyledTextCtrl_SetTabWidth, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetBufferedDraw", (PyCFunction) _wrap_wxStyledTextCtrl_SetBufferedDraw, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SetCaretPeriod", (PyCFunction) _wrap_wxStyledTextCtrl_SetCaretPeriod, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_GetCaretPeriod", (PyCFunction) _wrap_wxStyledTextCtrl_GetCaretPeriod, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_StyleSetVisible", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetVisible, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetStyleBytes", (PyCFunction) _wrap_wxStyledTextCtrl_SetStyleBytes, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_CmdKeyClearAll", (PyCFunction) _wrap_wxStyledTextCtrl_CmdKeyClearAll, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_CmdKeyClear", (PyCFunction) _wrap_wxStyledTextCtrl_CmdKeyClear, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_CmdKeyAssign", (PyCFunction) _wrap_wxStyledTextCtrl_CmdKeyAssign, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SetCaretForeground", (PyCFunction) _wrap_wxStyledTextCtrl_SetCaretForeground, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetSelectionBackground", (PyCFunction) _wrap_wxStyledTextCtrl_SetSelectionBackground, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetSelectionForeground", (PyCFunction) _wrap_wxStyledTextCtrl_SetSelectionForeground, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetSelBackground", (PyCFunction) _wrap_wxStyledTextCtrl_SetSelBackground, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetSelForeground", (PyCFunction) _wrap_wxStyledTextCtrl_SetSelForeground, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_StyleSetUnderline", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetUnderline, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_StyleResetDefault", (PyCFunction) _wrap_wxStyledTextCtrl_StyleResetDefault, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_StyleSetEOLFilled", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetEOLFilled, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_StyleSetFaceName", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetFaceName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_StyleSetSize", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_StyleSetItalic", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetItalic, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_StyleSetBold", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetBold, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_StyleSetBackground", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetBackground, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_StyleSetForeground", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetForeground, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_StyleClearAll", (PyCFunction) _wrap_wxStyledTextCtrl_StyleClearAll, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_GetMarginSensitive", (PyCFunction) _wrap_wxStyledTextCtrl_GetMarginSensitive, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SetMarginSensitive", (PyCFunction) _wrap_wxStyledTextCtrl_SetMarginSensitive, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_GetMarginMask", (PyCFunction) _wrap_wxStyledTextCtrl_GetMarginMask, METH_VARARGS | METH_KEYWORDS },
@@ -7215,108 +8185,52 @@ static PyMethodDef stc_cMethods[] = {
 	 { "wxStyledTextCtrl_SetMarginWidth", (PyCFunction) _wrap_wxStyledTextCtrl_SetMarginWidth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_GetMarginType", (PyCFunction) _wrap_wxStyledTextCtrl_GetMarginType, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SetMarginType", (PyCFunction) _wrap_wxStyledTextCtrl_SetMarginType, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetMargins", (PyCFunction) _wrap_wxStyledTextCtrl_SetMargins, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetRightMargin", (PyCFunction) _wrap_wxStyledTextCtrl_GetRightMargin, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetLeftMargin", (PyCFunction) _wrap_wxStyledTextCtrl_GetLeftMargin, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_StyleSetUnderline", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetUnderline, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_StyleSetEOLFilled", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetEOLFilled, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_StyleSetSize", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetSize, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_StyleSetFaceName", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetFaceName, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_StyleSetItalic", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetItalic, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_StyleSetBold", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetBold, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_StyleSetFontAttr", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetFontAttr, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_StyleSetFont", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetFont, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_StyleSetBackground", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetBackground, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_StyleSetForeground", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetForeground, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_StyleSetSpec", (PyCFunction) _wrap_wxStyledTextCtrl_StyleSetSpec, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_StyleResetDefault", (PyCFunction) _wrap_wxStyledTextCtrl_StyleResetDefault, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_StyleClearAll", (PyCFunction) _wrap_wxStyledTextCtrl_StyleClearAll, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetLineState", (PyCFunction) _wrap_wxStyledTextCtrl_GetLineState, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetLineState", (PyCFunction) _wrap_wxStyledTextCtrl_SetLineState, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetStyleBytes", (PyCFunction) _wrap_wxStyledTextCtrl_SetStyleBytes, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetStyleFor", (PyCFunction) _wrap_wxStyledTextCtrl_SetStyleFor, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_MarkerPrevious", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerPrevious, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_MarkerNext", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerNext, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_MarkerGet", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerGet, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_MarkerDeleteAll", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerDeleteAll, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_MarkerDelete", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerDelete, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_MarkerAdd", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerAdd, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_MarkerSetBackground", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerSetBackground, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_MarkerSetForeground", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerSetForeground, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_MarkerDefine", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerDefine, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetCodePage", (PyCFunction) _wrap_wxStyledTextCtrl_SetCodePage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetTabWidth", (PyCFunction) _wrap_wxStyledTextCtrl_GetTabWidth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetTabWidth", (PyCFunction) _wrap_wxStyledTextCtrl_SetTabWidth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetBufferedDraw", (PyCFunction) _wrap_wxStyledTextCtrl_SetBufferedDraw, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetBufferedDraw", (PyCFunction) _wrap_wxStyledTextCtrl_GetBufferedDraw, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetStyling", (PyCFunction) _wrap_wxStyledTextCtrl_SetStyling, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_StartStyling", (PyCFunction) _wrap_wxStyledTextCtrl_StartStyling, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetEndStyled", (PyCFunction) _wrap_wxStyledTextCtrl_GetEndStyled, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_ConvertEOL", (PyCFunction) _wrap_wxStyledTextCtrl_ConvertEOL, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetViewEOL", (PyCFunction) _wrap_wxStyledTextCtrl_SetViewEOL, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetViewEOL", (PyCFunction) _wrap_wxStyledTextCtrl_GetViewEOL, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SetEOLMode", (PyCFunction) _wrap_wxStyledTextCtrl_SetEOLMode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_GetEOLMode", (PyCFunction) _wrap_wxStyledTextCtrl_GetEOLMode, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetViewWhitespace", (PyCFunction) _wrap_wxStyledTextCtrl_SetViewWhitespace, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetViewWhitespace", (PyCFunction) _wrap_wxStyledTextCtrl_GetViewWhitespace, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SearchPrev", (PyCFunction) _wrap_wxStyledTextCtrl_SearchPrev, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SearchNext", (PyCFunction) _wrap_wxStyledTextCtrl_SearchNext, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SearchAnchor", (PyCFunction) _wrap_wxStyledTextCtrl_SearchAnchor, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_FindText", (PyCFunction) _wrap_wxStyledTextCtrl_FindText, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetUseHorizontalScrollBar", (PyCFunction) _wrap_wxStyledTextCtrl_GetUseHorizontalScrollBar, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetUseHorizontalScrollBar", (PyCFunction) _wrap_wxStyledTextCtrl_SetUseHorizontalScrollBar, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_IsSelectionRectangle", (PyCFunction) _wrap_wxStyledTextCtrl_IsSelectionRectangle, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetLinesOnScreen", (PyCFunction) _wrap_wxStyledTextCtrl_GetLinesOnScreen, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetSelectionType", (PyCFunction) _wrap_wxStyledTextCtrl_GetSelectionType, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetCaretPolicy", (PyCFunction) _wrap_wxStyledTextCtrl_SetCaretPolicy, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_EnsureCaretVisible", (PyCFunction) _wrap_wxStyledTextCtrl_EnsureCaretVisible, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_ScrollToColumn", (PyCFunction) _wrap_wxStyledTextCtrl_ScrollToColumn, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_ScrollToLine", (PyCFunction) _wrap_wxStyledTextCtrl_ScrollToLine, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_ScrollBy", (PyCFunction) _wrap_wxStyledTextCtrl_ScrollBy, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_PageMove", (PyCFunction) _wrap_wxStyledTextCtrl_PageMove, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_ChangePosition", (PyCFunction) _wrap_wxStyledTextCtrl_ChangePosition, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GotoLine", (PyCFunction) _wrap_wxStyledTextCtrl_GotoLine, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GotoPos", (PyCFunction) _wrap_wxStyledTextCtrl_GotoPos, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_ConvertEOLs", (PyCFunction) _wrap_wxStyledTextCtrl_ConvertEOLs, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetEndStyled", (PyCFunction) _wrap_wxStyledTextCtrl_GetEndStyled, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetCurLine", (PyCFunction) _wrap_wxStyledTextCtrl_GetCurLine, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SetAnchor", (PyCFunction) _wrap_wxStyledTextCtrl_SetAnchor, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetCurrentPosition", (PyCFunction) _wrap_wxStyledTextCtrl_SetCurrentPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GotoPos", (PyCFunction) _wrap_wxStyledTextCtrl_GotoPos, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GotoLine", (PyCFunction) _wrap_wxStyledTextCtrl_GotoLine, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_PositionFromPoint", (PyCFunction) _wrap_wxStyledTextCtrl_PositionFromPoint, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetViewWhiteSpace", (PyCFunction) _wrap_wxStyledTextCtrl_SetViewWhiteSpace, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetViewWhiteSpace", (PyCFunction) _wrap_wxStyledTextCtrl_GetViewWhiteSpace, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetUndoCollection", (PyCFunction) _wrap_wxStyledTextCtrl_GetUndoCollection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_MarkerDeleteHandle", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerDeleteHandle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_MarkerLineFromHandle", (PyCFunction) _wrap_wxStyledTextCtrl_MarkerLineFromHandle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_CanRedo", (PyCFunction) _wrap_wxStyledTextCtrl_CanRedo, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetStyledText", (PyCFunction) _wrap_wxStyledTextCtrl_GetStyledText, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetSavePoint", (PyCFunction) _wrap_wxStyledTextCtrl_SetSavePoint, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SelectAll", (PyCFunction) _wrap_wxStyledTextCtrl_SelectAll, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetUndoCollection", (PyCFunction) _wrap_wxStyledTextCtrl_SetUndoCollection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_Redo", (PyCFunction) _wrap_wxStyledTextCtrl_Redo, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetStyleAt", (PyCFunction) _wrap_wxStyledTextCtrl_GetStyleAt, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_GetAnchor", (PyCFunction) _wrap_wxStyledTextCtrl_GetAnchor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_GetCurrentPos", (PyCFunction) _wrap_wxStyledTextCtrl_GetCurrentPos, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_PointFromPosition", (PyCFunction) _wrap_wxStyledTextCtrl_PointFromPosition, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_LineFromPoint", (PyCFunction) _wrap_wxStyledTextCtrl_LineFromPoint, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_PositionFromPoint", (PyCFunction) _wrap_wxStyledTextCtrl_PositionFromPoint, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetCurrentLine", (PyCFunction) _wrap_wxStyledTextCtrl_GetCurrentLine, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetCurrentLineText", (PyCFunction) _wrap_wxStyledTextCtrl_GetCurrentLineText, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetLineLength", (PyCFunction) _wrap_wxStyledTextCtrl_GetLineLength, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetLineLengthAtPos", (PyCFunction) _wrap_wxStyledTextCtrl_GetLineLengthAtPos, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetLineStartPos", (PyCFunction) _wrap_wxStyledTextCtrl_GetLineStartPos, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetLineFromPos", (PyCFunction) _wrap_wxStyledTextCtrl_GetLineFromPos, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetRect", (PyCFunction) _wrap_wxStyledTextCtrl_GetRect, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetLineCount", (PyCFunction) _wrap_wxStyledTextCtrl_GetLineCount, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetModified", (PyCFunction) _wrap_wxStyledTextCtrl_GetModified, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetFirstVisibleLine", (PyCFunction) _wrap_wxStyledTextCtrl_GetFirstVisibleLine, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetTextLength", (PyCFunction) _wrap_wxStyledTextCtrl_GetTextLength, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetHideSelection", (PyCFunction) _wrap_wxStyledTextCtrl_GetHideSelection, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_HideSelection", (PyCFunction) _wrap_wxStyledTextCtrl_HideSelection, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetSelectedText", (PyCFunction) _wrap_wxStyledTextCtrl_GetSelectedText, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetSelection", (PyCFunction) _wrap_wxStyledTextCtrl_SetSelection, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetSelection", (PyCFunction) _wrap_wxStyledTextCtrl_GetSelection, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetSavePoint", (PyCFunction) _wrap_wxStyledTextCtrl_SetSavePoint, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_EndUndoAction", (PyCFunction) _wrap_wxStyledTextCtrl_EndUndoAction, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_BeginUndoAction", (PyCFunction) _wrap_wxStyledTextCtrl_BeginUndoAction, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetUndoCollection", (PyCFunction) _wrap_wxStyledTextCtrl_GetUndoCollection, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetUndoCollection", (PyCFunction) _wrap_wxStyledTextCtrl_SetUndoCollection, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_CanRedo", (PyCFunction) _wrap_wxStyledTextCtrl_CanRedo, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_Redo", (PyCFunction) _wrap_wxStyledTextCtrl_Redo, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_EmptyUndoBuffer", (PyCFunction) _wrap_wxStyledTextCtrl_EmptyUndoBuffer, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_CanUndo", (PyCFunction) _wrap_wxStyledTextCtrl_CanUndo, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_Undo", (PyCFunction) _wrap_wxStyledTextCtrl_Undo, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_ClearClipbrd", (PyCFunction) _wrap_wxStyledTextCtrl_ClearClipbrd, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_CanPaste", (PyCFunction) _wrap_wxStyledTextCtrl_CanPaste, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_Paste", (PyCFunction) _wrap_wxStyledTextCtrl_Paste, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_Copy", (PyCFunction) _wrap_wxStyledTextCtrl_Copy, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_Cut", (PyCFunction) _wrap_wxStyledTextCtrl_Cut, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetStyleBits", (PyCFunction) _wrap_wxStyledTextCtrl_GetStyleBits, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetStyleBits", (PyCFunction) _wrap_wxStyledTextCtrl_SetStyleBits, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetStyleAt", (PyCFunction) _wrap_wxStyledTextCtrl_GetStyleAt, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_GetCharAt", (PyCFunction) _wrap_wxStyledTextCtrl_GetCharAt, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetLength", (PyCFunction) _wrap_wxStyledTextCtrl_GetLength, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_ClearDocumentStyle", (PyCFunction) _wrap_wxStyledTextCtrl_ClearDocumentStyle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_ClearAll", (PyCFunction) _wrap_wxStyledTextCtrl_ClearAll, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_InsertText", (PyCFunction) _wrap_wxStyledTextCtrl_InsertText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_AddStyledText", (PyCFunction) _wrap_wxStyledTextCtrl_AddStyledText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_AddText", (PyCFunction) _wrap_wxStyledTextCtrl_AddText, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetStyledTextRange", (PyCFunction) _wrap_wxStyledTextCtrl_GetStyledTextRange, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetTextRange", (PyCFunction) _wrap_wxStyledTextCtrl_GetTextRange, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetReadOnly", (PyCFunction) _wrap_wxStyledTextCtrl_GetReadOnly, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetReadOnly", (PyCFunction) _wrap_wxStyledTextCtrl_SetReadOnly, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_ReplaceSelection", (PyCFunction) _wrap_wxStyledTextCtrl_ReplaceSelection, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetLine", (PyCFunction) _wrap_wxStyledTextCtrl_GetLine, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetText", (PyCFunction) _wrap_wxStyledTextCtrl_SetText, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetText", (PyCFunction) _wrap_wxStyledTextCtrl_GetText, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxStyledTextCtrl", (PyCFunction) _wrap_new_wxStyledTextCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };
@@ -7828,22 +8742,19 @@ SWIGEXPORT(void) initstc_c() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("stc_c", stc_cMethods);
 	 d = PyModule_GetDict(m);
-	 PyDict_SetItemString(d,"wxSTC_UndoCollectNone", PyInt_FromLong((long) wxSTC_UndoCollectNone));
-	 PyDict_SetItemString(d,"wxSTC_UndoCollectAutoStart", PyInt_FromLong((long) wxSTC_UndoCollectAutoStart));
-	 PyDict_SetItemString(d,"wxSTC_EOL_CRLF", PyInt_FromLong((long) wxSTC_EOL_CRLF));
-	 PyDict_SetItemString(d,"wxSTC_EOL_CR", PyInt_FromLong((long) wxSTC_EOL_CR));
-	 PyDict_SetItemString(d,"wxSTC_EOL_LF", PyInt_FromLong((long) wxSTC_EOL_LF));
-	 PyDict_SetItemString(d,"wxSTC_EDGE_NONE", PyInt_FromLong((long) wxSTC_EDGE_NONE));
-	 PyDict_SetItemString(d,"wxSTC_EDGE_LINE", PyInt_FromLong((long) wxSTC_EDGE_LINE));
-	 PyDict_SetItemString(d,"wxSTC_EDGE_BACKGROUND", PyInt_FromLong((long) wxSTC_EDGE_BACKGROUND));
-	 PyDict_SetItemString(d,"wxSTC_LEX_STYLE_MAX", PyInt_FromLong((long) 31));
-	 PyDict_SetItemString(d,"wxSTC_STYLE_DEFAULT", PyInt_FromLong((long) 32));
-	 PyDict_SetItemString(d,"wxSTC_STYLE_LINENUMBER", PyInt_FromLong((long) 33));
-	 PyDict_SetItemString(d,"wxSTC_STYLE_BRACELIGHT", PyInt_FromLong((long) 34));
-	 PyDict_SetItemString(d,"wxSTC_STYLE_BRACEBAD", PyInt_FromLong((long) 35));
-	 PyDict_SetItemString(d,"wxSTC_STYLE_CONTROLCHAR", PyInt_FromLong((long) 36));
-	 PyDict_SetItemString(d,"wxSTC_STYLE_MAX", PyInt_FromLong((long) 127));
-	 PyDict_SetItemString(d,"wxSTC_STYLE_MASK", PyInt_FromLong((long) 31));
+	 PyDict_SetItemString(d,"wxSTC_INVALID_POSITION", PyInt_FromLong((long) -1));
+	 PyDict_SetItemString(d,"wxSTC_START", PyInt_FromLong((long) 2000));
+	 PyDict_SetItemString(d,"wxSTC_OPTIONAL_START", PyInt_FromLong((long) 3000));
+	 PyDict_SetItemString(d,"wxSTC_LEXER_START", PyInt_FromLong((long) 4000));
+	 PyDict_SetItemString(d,"wxSTC_CMD_REDO", PyInt_FromLong((long) 2011));
+	 PyDict_SetItemString(d,"wxSTC_CMD_SELECTALL", PyInt_FromLong((long) 2013));
+	 PyDict_SetItemString(d,"wxSTC_WS_INVISIBLE", PyInt_FromLong((long) 0));
+	 PyDict_SetItemString(d,"wxSTC_WS_VISIBLEALWAYS", PyInt_FromLong((long) 1));
+	 PyDict_SetItemString(d,"wxSTC_WS_VISIBLEAFTERINDENT", PyInt_FromLong((long) 2));
+	 PyDict_SetItemString(d,"wxSTC_EOL_CRLF", PyInt_FromLong((long) 0));
+	 PyDict_SetItemString(d,"wxSTC_EOL_CR", PyInt_FromLong((long) 1));
+	 PyDict_SetItemString(d,"wxSTC_EOL_LF", PyInt_FromLong((long) 2));
+	 PyDict_SetItemString(d,"wxSTC_CP_UTF8", PyInt_FromLong((long) 65001));
 	 PyDict_SetItemString(d,"wxSTC_MARKER_MAX", PyInt_FromLong((long) 31));
 	 PyDict_SetItemString(d,"wxSTC_MARK_CIRCLE", PyInt_FromLong((long) 0));
 	 PyDict_SetItemString(d,"wxSTC_MARK_ROUNDRECT", PyInt_FromLong((long) 1));
@@ -7856,7 +8767,34 @@ SWIGEXPORT(void) initstc_c() {
 	 PyDict_SetItemString(d,"wxSTC_MARK_PLUS", PyInt_FromLong((long) 8));
 	 PyDict_SetItemString(d,"wxSTC_MARKNUM_FOLDER", PyInt_FromLong((long) 30));
 	 PyDict_SetItemString(d,"wxSTC_MARKNUM_FOLDEROPEN", PyInt_FromLong((long) 31));
-	 PyDict_SetItemString(d,"wxSTC_MASK_FOLDERS", PyInt_FromLong((long) ((1<<(30))|(1<<(31)))));
+	 PyDict_SetItemString(d,"wxSTC_MARGIN_SYMBOL", PyInt_FromLong((long) 0));
+	 PyDict_SetItemString(d,"wxSTC_MARGIN_NUMBER", PyInt_FromLong((long) 1));
+	 PyDict_SetItemString(d,"wxSTC_STYLE_DEFAULT", PyInt_FromLong((long) 32));
+	 PyDict_SetItemString(d,"wxSTC_STYLE_LINENUMBER", PyInt_FromLong((long) 33));
+	 PyDict_SetItemString(d,"wxSTC_STYLE_BRACELIGHT", PyInt_FromLong((long) 34));
+	 PyDict_SetItemString(d,"wxSTC_STYLE_BRACEBAD", PyInt_FromLong((long) 35));
+	 PyDict_SetItemString(d,"wxSTC_STYLE_CONTROLCHAR", PyInt_FromLong((long) 36));
+	 PyDict_SetItemString(d,"wxSTC_STYLE_INDENTGUIDE", PyInt_FromLong((long) 37));
+	 PyDict_SetItemString(d,"wxSTC_STYLE_MAX", PyInt_FromLong((long) 127));
+	 PyDict_SetItemString(d,"wxSTC_CHARSET_ANSI", PyInt_FromLong((long) 0));
+	 PyDict_SetItemString(d,"wxSTC_CHARSET_DEFAULT", PyInt_FromLong((long) 1));
+	 PyDict_SetItemString(d,"wxSTC_CHARSET_BALTIC", PyInt_FromLong((long) 186));
+	 PyDict_SetItemString(d,"wxSTC_CHARSET_CHINESEBIG5", PyInt_FromLong((long) 136));
+	 PyDict_SetItemString(d,"wxSTC_CHARSET_EASTEUROPE", PyInt_FromLong((long) 238));
+	 PyDict_SetItemString(d,"wxSTC_CHARSET_GB2312", PyInt_FromLong((long) 134));
+	 PyDict_SetItemString(d,"wxSTC_CHARSET_GREEK", PyInt_FromLong((long) 161));
+	 PyDict_SetItemString(d,"wxSTC_CHARSET_HANGUL", PyInt_FromLong((long) 129));
+	 PyDict_SetItemString(d,"wxSTC_CHARSET_MAC", PyInt_FromLong((long) 77));
+	 PyDict_SetItemString(d,"wxSTC_CHARSET_OEM", PyInt_FromLong((long) 255));
+	 PyDict_SetItemString(d,"wxSTC_CHARSET_RUSSIAN", PyInt_FromLong((long) 204));
+	 PyDict_SetItemString(d,"wxSTC_CHARSET_SHIFTJIS", PyInt_FromLong((long) 128));
+	 PyDict_SetItemString(d,"wxSTC_CHARSET_SYMBOL", PyInt_FromLong((long) 2));
+	 PyDict_SetItemString(d,"wxSTC_CHARSET_TURKISH", PyInt_FromLong((long) 162));
+	 PyDict_SetItemString(d,"wxSTC_CHARSET_JOHAB", PyInt_FromLong((long) 130));
+	 PyDict_SetItemString(d,"wxSTC_CHARSET_HEBREW", PyInt_FromLong((long) 177));
+	 PyDict_SetItemString(d,"wxSTC_CHARSET_ARABIC", PyInt_FromLong((long) 178));
+	 PyDict_SetItemString(d,"wxSTC_CHARSET_VIETNAMESE", PyInt_FromLong((long) 163));
+	 PyDict_SetItemString(d,"wxSTC_CHARSET_THAI", PyInt_FromLong((long) 222));
 	 PyDict_SetItemString(d,"wxSTC_INDIC_MAX", PyInt_FromLong((long) 7));
 	 PyDict_SetItemString(d,"wxSTC_INDIC_PLAIN", PyInt_FromLong((long) 0));
 	 PyDict_SetItemString(d,"wxSTC_INDIC_SQUIGGLE", PyInt_FromLong((long) 1));
@@ -7866,75 +8804,293 @@ SWIGEXPORT(void) initstc_c() {
 	 PyDict_SetItemString(d,"wxSTC_INDIC0_MASK", PyInt_FromLong((long) 32));
 	 PyDict_SetItemString(d,"wxSTC_INDIC1_MASK", PyInt_FromLong((long) 64));
 	 PyDict_SetItemString(d,"wxSTC_INDIC2_MASK", PyInt_FromLong((long) 128));
-	 PyDict_SetItemString(d,"wxSTC_INDICS_MASK", PyInt_FromLong((long) ((32)|(64)|(128))));
-	 PyDict_SetItemString(d,"wxSTC_FOLDLEVELBASE", PyInt_FromLong((long) 0x0400));
+	 PyDict_SetItemString(d,"wxSTC_INDICS_MASK", PyInt_FromLong((long) 32|64|128));
+	 PyDict_SetItemString(d,"wxSTC_PRINT_NORMAL", PyInt_FromLong((long) 0));
+	 PyDict_SetItemString(d,"wxSTC_PRINT_INVERTLIGHT", PyInt_FromLong((long) 1));
+	 PyDict_SetItemString(d,"wxSTC_PRINT_BLACKONWHITE", PyInt_FromLong((long) 2));
+	 PyDict_SetItemString(d,"wxSTC_FIND_DOWN", PyInt_FromLong((long) 1));
+	 PyDict_SetItemString(d,"wxSTC_FIND_WHOLEWORD", PyInt_FromLong((long) 2));
+	 PyDict_SetItemString(d,"wxSTC_FIND_MATCHCASE", PyInt_FromLong((long) 4));
+	 PyDict_SetItemString(d,"wxSTC_FIND_WORDSTART", PyInt_FromLong((long) 0x00100000));
+	 PyDict_SetItemString(d,"wxSTC_FIND_REGEXP", PyInt_FromLong((long) 0x00200000));
+	 PyDict_SetItemString(d,"wxSTC_CMD_UNDO", PyInt_FromLong((long) 2176));
+	 PyDict_SetItemString(d,"wxSTC_CMD_CUT", PyInt_FromLong((long) 2177));
+	 PyDict_SetItemString(d,"wxSTC_CMD_COPY", PyInt_FromLong((long) 2178));
+	 PyDict_SetItemString(d,"wxSTC_CMD_PASTE", PyInt_FromLong((long) 2179));
+	 PyDict_SetItemString(d,"wxSTC_FOLDLEVELBASE", PyInt_FromLong((long) 0x400));
 	 PyDict_SetItemString(d,"wxSTC_FOLDLEVELWHITEFLAG", PyInt_FromLong((long) 0x1000));
 	 PyDict_SetItemString(d,"wxSTC_FOLDLEVELHEADERFLAG", PyInt_FromLong((long) 0x2000));
 	 PyDict_SetItemString(d,"wxSTC_FOLDLEVELNUMBERMASK", PyInt_FromLong((long) 0x0FFF));
-	 PyDict_SetItemString(d,"wxSTC_CMD_LINEDOWN", PyInt_FromLong((long) wxSTC_CMD_LINEDOWN));
-	 PyDict_SetItemString(d,"wxSTC_CMD_LINEDOWNEXTEND", PyInt_FromLong((long) wxSTC_CMD_LINEDOWNEXTEND));
-	 PyDict_SetItemString(d,"wxSTC_CMD_LINEUP", PyInt_FromLong((long) wxSTC_CMD_LINEUP));
-	 PyDict_SetItemString(d,"wxSTC_CMD_LINEUPEXTEND", PyInt_FromLong((long) wxSTC_CMD_LINEUPEXTEND));
-	 PyDict_SetItemString(d,"wxSTC_CMD_CHARLEFT", PyInt_FromLong((long) wxSTC_CMD_CHARLEFT));
-	 PyDict_SetItemString(d,"wxSTC_CMD_CHARLEFTEXTEND", PyInt_FromLong((long) wxSTC_CMD_CHARLEFTEXTEND));
-	 PyDict_SetItemString(d,"wxSTC_CMD_CHARRIGHT", PyInt_FromLong((long) wxSTC_CMD_CHARRIGHT));
-	 PyDict_SetItemString(d,"wxSTC_CMD_CHARRIGHTEXTEND", PyInt_FromLong((long) wxSTC_CMD_CHARRIGHTEXTEND));
-	 PyDict_SetItemString(d,"wxSTC_CMD_WORDLEFT", PyInt_FromLong((long) wxSTC_CMD_WORDLEFT));
-	 PyDict_SetItemString(d,"wxSTC_CMD_WORDLEFTEXTEND", PyInt_FromLong((long) wxSTC_CMD_WORDLEFTEXTEND));
-	 PyDict_SetItemString(d,"wxSTC_CMD_WORDRIGHT", PyInt_FromLong((long) wxSTC_CMD_WORDRIGHT));
-	 PyDict_SetItemString(d,"wxSTC_CMD_WORDRIGHTEXTEND", PyInt_FromLong((long) wxSTC_CMD_WORDRIGHTEXTEND));
-	 PyDict_SetItemString(d,"wxSTC_CMD_HOME", PyInt_FromLong((long) wxSTC_CMD_HOME));
-	 PyDict_SetItemString(d,"wxSTC_CMD_HOMEEXTEND", PyInt_FromLong((long) wxSTC_CMD_HOMEEXTEND));
-	 PyDict_SetItemString(d,"wxSTC_CMD_LINEEND", PyInt_FromLong((long) wxSTC_CMD_LINEEND));
-	 PyDict_SetItemString(d,"wxSTC_CMD_LINEENDEXTEND", PyInt_FromLong((long) wxSTC_CMD_LINEENDEXTEND));
-	 PyDict_SetItemString(d,"wxSTC_CMD_DOCUMENTSTART", PyInt_FromLong((long) wxSTC_CMD_DOCUMENTSTART));
-	 PyDict_SetItemString(d,"wxSTC_CMD_DOCUMENTSTARTEXTEND", PyInt_FromLong((long) wxSTC_CMD_DOCUMENTSTARTEXTEND));
-	 PyDict_SetItemString(d,"wxSTC_CMD_DOCUMENTEND", PyInt_FromLong((long) wxSTC_CMD_DOCUMENTEND));
-	 PyDict_SetItemString(d,"wxSTC_CMD_DOCUMENTENDEXTEND", PyInt_FromLong((long) wxSTC_CMD_DOCUMENTENDEXTEND));
-	 PyDict_SetItemString(d,"wxSTC_CMD_PAGEUP", PyInt_FromLong((long) wxSTC_CMD_PAGEUP));
-	 PyDict_SetItemString(d,"wxSTC_CMD_PAGEUPEXTEND", PyInt_FromLong((long) wxSTC_CMD_PAGEUPEXTEND));
-	 PyDict_SetItemString(d,"wxSTC_CMD_PAGEDOWN", PyInt_FromLong((long) wxSTC_CMD_PAGEDOWN));
-	 PyDict_SetItemString(d,"wxSTC_CMD_PAGEDOWNEXTEND", PyInt_FromLong((long) wxSTC_CMD_PAGEDOWNEXTEND));
-	 PyDict_SetItemString(d,"wxSTC_CMD_EDITTOGGLEOVERTYPE", PyInt_FromLong((long) wxSTC_CMD_EDITTOGGLEOVERTYPE));
-	 PyDict_SetItemString(d,"wxSTC_CMD_CANCEL", PyInt_FromLong((long) wxSTC_CMD_CANCEL));
-	 PyDict_SetItemString(d,"wxSTC_CMD_DELETEBACK", PyInt_FromLong((long) wxSTC_CMD_DELETEBACK));
-	 PyDict_SetItemString(d,"wxSTC_CMD_TAB", PyInt_FromLong((long) wxSTC_CMD_TAB));
-	 PyDict_SetItemString(d,"wxSTC_CMD_BACKTAB", PyInt_FromLong((long) wxSTC_CMD_BACKTAB));
-	 PyDict_SetItemString(d,"wxSTC_CMD_NEWLINE", PyInt_FromLong((long) wxSTC_CMD_NEWLINE));
-	 PyDict_SetItemString(d,"wxSTC_CMD_FORMFEED", PyInt_FromLong((long) wxSTC_CMD_FORMFEED));
-	 PyDict_SetItemString(d,"wxSTC_CMD_VCHOME", PyInt_FromLong((long) wxSTC_CMD_VCHOME));
-	 PyDict_SetItemString(d,"wxSTC_CMD_VCHOMEEXTEND", PyInt_FromLong((long) wxSTC_CMD_VCHOMEEXTEND));
-	 PyDict_SetItemString(d,"wxSTC_CMD_ZOOMIN", PyInt_FromLong((long) wxSTC_CMD_ZOOMIN));
-	 PyDict_SetItemString(d,"wxSTC_CMD_ZOOMOUT", PyInt_FromLong((long) wxSTC_CMD_ZOOMOUT));
-	 PyDict_SetItemString(d,"wxSTC_CMD_DELWORDLEFT", PyInt_FromLong((long) wxSTC_CMD_DELWORDLEFT));
-	 PyDict_SetItemString(d,"wxSTC_CMD_DELWORDRIGHT", PyInt_FromLong((long) wxSTC_CMD_DELWORDRIGHT));
-	 PyDict_SetItemString(d,"wxSTC_CMD_LINECUT", PyInt_FromLong((long) wxSTC_CMD_LINECUT));
-	 PyDict_SetItemString(d,"wxSTC_CMD_LINEDELETE", PyInt_FromLong((long) wxSTC_CMD_LINEDELETE));
-	 PyDict_SetItemString(d,"wxSTC_CMD_LINETRANSPOSE", PyInt_FromLong((long) wxSTC_CMD_LINETRANSPOSE));
-	 PyDict_SetItemString(d,"wxSTC_CMD_LOWERCASE", PyInt_FromLong((long) wxSTC_CMD_LOWERCASE));
-	 PyDict_SetItemString(d,"wxSTC_CMD_UPPERCASE", PyInt_FromLong((long) wxSTC_CMD_UPPERCASE));
-	 PyDict_SetItemString(d,"wxSTC_CMD_LINESCROLLDOWN", PyInt_FromLong((long) wxSTC_CMD_LINESCROLLDOWN));
-	 PyDict_SetItemString(d,"wxSTC_CMD_LINESCROLLUP", PyInt_FromLong((long) wxSTC_CMD_LINESCROLLUP));
-	 PyDict_SetItemString(d,"wxSTC_LEX_CONTAINER", PyInt_FromLong((long) wxSTC_LEX_CONTAINER));
-	 PyDict_SetItemString(d,"wxSTC_LEX_NULL", PyInt_FromLong((long) wxSTC_LEX_NULL));
-	 PyDict_SetItemString(d,"wxSTC_LEX_PYTHON", PyInt_FromLong((long) wxSTC_LEX_PYTHON));
-	 PyDict_SetItemString(d,"wxSTC_LEX_CPP", PyInt_FromLong((long) wxSTC_LEX_CPP));
-	 PyDict_SetItemString(d,"wxSTC_LEX_HTML", PyInt_FromLong((long) wxSTC_LEX_HTML));
-	 PyDict_SetItemString(d,"wxSTC_LEX_XML", PyInt_FromLong((long) wxSTC_LEX_XML));
-	 PyDict_SetItemString(d,"wxSTC_LEX_PERL", PyInt_FromLong((long) wxSTC_LEX_PERL));
-	 PyDict_SetItemString(d,"wxSTC_LEX_SQL", PyInt_FromLong((long) wxSTC_LEX_SQL));
-	 PyDict_SetItemString(d,"wxSTC_LEX_VB", PyInt_FromLong((long) wxSTC_LEX_VB));
-	 PyDict_SetItemString(d,"wxSTC_LEX_PROPERTIES", PyInt_FromLong((long) wxSTC_LEX_PROPERTIES));
-	 PyDict_SetItemString(d,"wxSTC_LEX_ERRORLIST", PyInt_FromLong((long) wxSTC_LEX_ERRORLIST));
-	 PyDict_SetItemString(d,"wxSTC_LEX_MAKEFILE", PyInt_FromLong((long) wxSTC_LEX_MAKEFILE));
-	 PyDict_SetItemString(d,"wxSTC_LEX_BATCH", PyInt_FromLong((long) wxSTC_LEX_BATCH));
-	 PyDict_SetItemString(d,"wxSTC_LEX_XCODE", PyInt_FromLong((long) wxSTC_LEX_XCODE));
-	 PyDict_SetItemString(d,"wxSTC_LEX_LATEX", PyInt_FromLong((long) wxSTC_LEX_LATEX));
+	 PyDict_SetItemString(d,"wxSTC_CMD_LINEDOWN", PyInt_FromLong((long) 2300));
+	 PyDict_SetItemString(d,"wxSTC_CMD_LINEDOWNEXTEND", PyInt_FromLong((long) 2301));
+	 PyDict_SetItemString(d,"wxSTC_CMD_LINEUP", PyInt_FromLong((long) 2302));
+	 PyDict_SetItemString(d,"wxSTC_CMD_LINEUPEXTEND", PyInt_FromLong((long) 2303));
+	 PyDict_SetItemString(d,"wxSTC_CMD_CHARLEFT", PyInt_FromLong((long) 2304));
+	 PyDict_SetItemString(d,"wxSTC_CMD_CHARLEFTEXTEND", PyInt_FromLong((long) 2305));
+	 PyDict_SetItemString(d,"wxSTC_CMD_CHARRIGHT", PyInt_FromLong((long) 2306));
+	 PyDict_SetItemString(d,"wxSTC_CMD_CHARRIGHTEXTEND", PyInt_FromLong((long) 2307));
+	 PyDict_SetItemString(d,"wxSTC_CMD_WORDLEFT", PyInt_FromLong((long) 2308));
+	 PyDict_SetItemString(d,"wxSTC_CMD_WORDLEFTEXTEND", PyInt_FromLong((long) 2309));
+	 PyDict_SetItemString(d,"wxSTC_CMD_WORDRIGHT", PyInt_FromLong((long) 2310));
+	 PyDict_SetItemString(d,"wxSTC_CMD_WORDRIGHTEXTEND", PyInt_FromLong((long) 2311));
+	 PyDict_SetItemString(d,"wxSTC_CMD_HOME", PyInt_FromLong((long) 2312));
+	 PyDict_SetItemString(d,"wxSTC_CMD_HOMEEXTEND", PyInt_FromLong((long) 2313));
+	 PyDict_SetItemString(d,"wxSTC_CMD_LINEEND", PyInt_FromLong((long) 2314));
+	 PyDict_SetItemString(d,"wxSTC_CMD_LINEENDEXTEND", PyInt_FromLong((long) 2315));
+	 PyDict_SetItemString(d,"wxSTC_CMD_DOCUMENTSTART", PyInt_FromLong((long) 2316));
+	 PyDict_SetItemString(d,"wxSTC_CMD_DOCUMENTSTARTEXTEND", PyInt_FromLong((long) 2317));
+	 PyDict_SetItemString(d,"wxSTC_CMD_DOCUMENTEND", PyInt_FromLong((long) 2318));
+	 PyDict_SetItemString(d,"wxSTC_CMD_DOCUMENTENDEXTEND", PyInt_FromLong((long) 2319));
+	 PyDict_SetItemString(d,"wxSTC_CMD_PAGEUP", PyInt_FromLong((long) 2320));
+	 PyDict_SetItemString(d,"wxSTC_CMD_PAGEUPEXTEND", PyInt_FromLong((long) 2321));
+	 PyDict_SetItemString(d,"wxSTC_CMD_PAGEDOWN", PyInt_FromLong((long) 2322));
+	 PyDict_SetItemString(d,"wxSTC_CMD_PAGEDOWNEXTEND", PyInt_FromLong((long) 2323));
+	 PyDict_SetItemString(d,"wxSTC_CMD_EDITTOGGLEOVERTYPE", PyInt_FromLong((long) 2324));
+	 PyDict_SetItemString(d,"wxSTC_CMD_CANCEL", PyInt_FromLong((long) 2325));
+	 PyDict_SetItemString(d,"wxSTC_CMD_DELETEBACK", PyInt_FromLong((long) 2326));
+	 PyDict_SetItemString(d,"wxSTC_CMD_TAB", PyInt_FromLong((long) 2327));
+	 PyDict_SetItemString(d,"wxSTC_CMD_BACKTAB", PyInt_FromLong((long) 2328));
+	 PyDict_SetItemString(d,"wxSTC_CMD_NEWLINE", PyInt_FromLong((long) 2329));
+	 PyDict_SetItemString(d,"wxSTC_CMD_FORMFEED", PyInt_FromLong((long) 2330));
+	 PyDict_SetItemString(d,"wxSTC_CMD_VCHOME", PyInt_FromLong((long) 2331));
+	 PyDict_SetItemString(d,"wxSTC_CMD_VCHOMEEXTEND", PyInt_FromLong((long) 2332));
+	 PyDict_SetItemString(d,"wxSTC_CMD_ZOOMIN", PyInt_FromLong((long) 2333));
+	 PyDict_SetItemString(d,"wxSTC_CMD_ZOOMOUT", PyInt_FromLong((long) 2334));
+	 PyDict_SetItemString(d,"wxSTC_CMD_DELWORDLEFT", PyInt_FromLong((long) 2335));
+	 PyDict_SetItemString(d,"wxSTC_CMD_DELWORDRIGHT", PyInt_FromLong((long) 2336));
+	 PyDict_SetItemString(d,"wxSTC_CMD_LINECUT", PyInt_FromLong((long) 2337));
+	 PyDict_SetItemString(d,"wxSTC_CMD_LINEDELETE", PyInt_FromLong((long) 2338));
+	 PyDict_SetItemString(d,"wxSTC_CMD_LINETRANSPOSE", PyInt_FromLong((long) 2339));
+	 PyDict_SetItemString(d,"wxSTC_CMD_LOWERCASE", PyInt_FromLong((long) 2340));
+	 PyDict_SetItemString(d,"wxSTC_CMD_UPPERCASE", PyInt_FromLong((long) 2341));
+	 PyDict_SetItemString(d,"wxSTC_CMD_LINESCROLLDOWN", PyInt_FromLong((long) 2342));
+	 PyDict_SetItemString(d,"wxSTC_CMD_LINESCROLLUP", PyInt_FromLong((long) 2343));
+	 PyDict_SetItemString(d,"wxSTC_EDGE_NONE", PyInt_FromLong((long) 0));
+	 PyDict_SetItemString(d,"wxSTC_EDGE_LINE", PyInt_FromLong((long) 1));
+	 PyDict_SetItemString(d,"wxSTC_EDGE_BACKGROUND", PyInt_FromLong((long) 2));
 	 PyDict_SetItemString(d,"wxSTC_CARET_SLOP", PyInt_FromLong((long) 0x01));
-	 PyDict_SetItemString(d,"WXSTC_CARET_CENTER", PyInt_FromLong((long) 0x02));
+	 PyDict_SetItemString(d,"wxSTC_CARET_CENTER", PyInt_FromLong((long) 0x02));
 	 PyDict_SetItemString(d,"wxSTC_CARET_STRICT", PyInt_FromLong((long) 0x04));
-	 PyDict_SetItemString(d,"wxSTC_MARGIN_SYMBOL", PyInt_FromLong((long) 0));
-	 PyDict_SetItemString(d,"wxSTC_MARGIN_NUMBER", PyInt_FromLong((long) 1));
+	 PyDict_SetItemString(d,"wxSTC_MOD_INSERTTEXT", PyInt_FromLong((long) 0x1));
+	 PyDict_SetItemString(d,"wxSTC_MOD_DELETETEXT", PyInt_FromLong((long) 0x2));
+	 PyDict_SetItemString(d,"wxSTC_MOD_CHANGESTYLE", PyInt_FromLong((long) 0x4));
+	 PyDict_SetItemString(d,"wxSTC_MOD_CHANGEFOLD", PyInt_FromLong((long) 0x8));
+	 PyDict_SetItemString(d,"wxSTC_PERFORMED_USER", PyInt_FromLong((long) 0x10));
+	 PyDict_SetItemString(d,"wxSTC_PERFORMED_UNDO", PyInt_FromLong((long) 0x20));
+	 PyDict_SetItemString(d,"wxSTC_PERFORMED_REDO", PyInt_FromLong((long) 0x40));
+	 PyDict_SetItemString(d,"wxSTC_LASTSTEPINUNDOREDO", PyInt_FromLong((long) 0x100));
+	 PyDict_SetItemString(d,"wxSTC_MOD_CHANGEMARKER", PyInt_FromLong((long) 0x200));
+	 PyDict_SetItemString(d,"wxSTC_MOD_BEFOREINSERT", PyInt_FromLong((long) 0x400));
+	 PyDict_SetItemString(d,"wxSTC_MOD_BEFOREDELETE", PyInt_FromLong((long) 0x800));
+	 PyDict_SetItemString(d,"wxSTC_MODEVENTMASKALL", PyInt_FromLong((long) 0xF77));
+	 PyDict_SetItemString(d,"wxSTC_KEY_DOWN", PyInt_FromLong((long) 300));
+	 PyDict_SetItemString(d,"wxSTC_KEY_UP", PyInt_FromLong((long) 301));
+	 PyDict_SetItemString(d,"wxSTC_KEY_LEFT", PyInt_FromLong((long) 302));
+	 PyDict_SetItemString(d,"wxSTC_KEY_RIGHT", PyInt_FromLong((long) 303));
+	 PyDict_SetItemString(d,"wxSTC_KEY_HOME", PyInt_FromLong((long) 304));
+	 PyDict_SetItemString(d,"wxSTC_KEY_END", PyInt_FromLong((long) 305));
+	 PyDict_SetItemString(d,"wxSTC_KEY_PRIOR", PyInt_FromLong((long) 306));
+	 PyDict_SetItemString(d,"wxSTC_KEY_NEXT", PyInt_FromLong((long) 307));
+	 PyDict_SetItemString(d,"wxSTC_KEY_DELETE", PyInt_FromLong((long) 308));
+	 PyDict_SetItemString(d,"wxSTC_KEY_INSERT", PyInt_FromLong((long) 309));
+	 PyDict_SetItemString(d,"wxSTC_KEY_ESCAPE", PyInt_FromLong((long) 7));
+	 PyDict_SetItemString(d,"wxSTC_KEY_BACK", PyInt_FromLong((long) 8));
+	 PyDict_SetItemString(d,"wxSTC_KEY_TAB", PyInt_FromLong((long) 9));
+	 PyDict_SetItemString(d,"wxSTC_KEY_RETURN", PyInt_FromLong((long) 13));
+	 PyDict_SetItemString(d,"wxSTC_KEY_ADD", PyInt_FromLong((long) 310));
+	 PyDict_SetItemString(d,"wxSTC_KEY_SUBTRACT", PyInt_FromLong((long) 311));
+	 PyDict_SetItemString(d,"wxSTC_KEY_DIVIDE", PyInt_FromLong((long) 312));
+	 PyDict_SetItemString(d,"wxSTC_SCMOD_SHIFT", PyInt_FromLong((long) 1));
+	 PyDict_SetItemString(d,"wxSTC_SCMOD_CTRL", PyInt_FromLong((long) 2));
+	 PyDict_SetItemString(d,"wxSTC_SCMOD_ALT", PyInt_FromLong((long) 4));
+	 PyDict_SetItemString(d,"wxSTC_LEX_CONTAINER", PyInt_FromLong((long) 0));
+	 PyDict_SetItemString(d,"wxSTC_LEX_NULL", PyInt_FromLong((long) 1));
+	 PyDict_SetItemString(d,"wxSTC_LEX_PYTHON", PyInt_FromLong((long) 2));
+	 PyDict_SetItemString(d,"wxSTC_LEX_CPP", PyInt_FromLong((long) 3));
+	 PyDict_SetItemString(d,"wxSTC_LEX_HTML", PyInt_FromLong((long) 4));
+	 PyDict_SetItemString(d,"wxSTC_LEX_XML", PyInt_FromLong((long) 5));
+	 PyDict_SetItemString(d,"wxSTC_LEX_PERL", PyInt_FromLong((long) 6));
+	 PyDict_SetItemString(d,"wxSTC_LEX_SQL", PyInt_FromLong((long) 7));
+	 PyDict_SetItemString(d,"wxSTC_LEX_VB", PyInt_FromLong((long) 8));
+	 PyDict_SetItemString(d,"wxSTC_LEX_PROPERTIES", PyInt_FromLong((long) 9));
+	 PyDict_SetItemString(d,"wxSTC_LEX_ERRORLIST", PyInt_FromLong((long) 10));
+	 PyDict_SetItemString(d,"wxSTC_LEX_MAKEFILE", PyInt_FromLong((long) 11));
+	 PyDict_SetItemString(d,"wxSTC_LEX_BATCH", PyInt_FromLong((long) 12));
+	 PyDict_SetItemString(d,"wxSTC_LEX_XCODE", PyInt_FromLong((long) 13));
+	 PyDict_SetItemString(d,"wxSTC_LEX_LATEX", PyInt_FromLong((long) 14));
+	 PyDict_SetItemString(d,"wxSTC_LEX_LUA", PyInt_FromLong((long) 15));
+	 PyDict_SetItemString(d,"wxSTC_LEX_DIFF", PyInt_FromLong((long) 16));
+	 PyDict_SetItemString(d,"wxSTC_P_DEFAULT", PyInt_FromLong((long) 0));
+	 PyDict_SetItemString(d,"wxSTC_P_COMMENTLINE", PyInt_FromLong((long) 1));
+	 PyDict_SetItemString(d,"wxSTC_P_NUMBER", PyInt_FromLong((long) 2));
+	 PyDict_SetItemString(d,"wxSTC_P_STRING", PyInt_FromLong((long) 3));
+	 PyDict_SetItemString(d,"wxSTC_P_CHARACTER", PyInt_FromLong((long) 4));
+	 PyDict_SetItemString(d,"wxSTC_P_WORD", PyInt_FromLong((long) 5));
+	 PyDict_SetItemString(d,"wxSTC_P_TRIPLE", PyInt_FromLong((long) 6));
+	 PyDict_SetItemString(d,"wxSTC_P_TRIPLEDOUBLE", PyInt_FromLong((long) 7));
+	 PyDict_SetItemString(d,"wxSTC_P_CLASSNAME", PyInt_FromLong((long) 8));
+	 PyDict_SetItemString(d,"wxSTC_P_DEFNAME", PyInt_FromLong((long) 9));
+	 PyDict_SetItemString(d,"wxSTC_P_OPERATOR", PyInt_FromLong((long) 10));
+	 PyDict_SetItemString(d,"wxSTC_P_IDENTIFIER", PyInt_FromLong((long) 11));
+	 PyDict_SetItemString(d,"wxSTC_P_COMMENTBLOCK", PyInt_FromLong((long) 12));
+	 PyDict_SetItemString(d,"wxSTC_P_STRINGEOL", PyInt_FromLong((long) 13));
+	 PyDict_SetItemString(d,"wxSTC_C_DEFAULT", PyInt_FromLong((long) 0));
+	 PyDict_SetItemString(d,"wxSTC_C_COMMENT", PyInt_FromLong((long) 1));
+	 PyDict_SetItemString(d,"wxSTC_C_COMMENTLINE", PyInt_FromLong((long) 2));
+	 PyDict_SetItemString(d,"wxSTC_C_COMMENTDOC", PyInt_FromLong((long) 3));
+	 PyDict_SetItemString(d,"wxSTC_C_NUMBER", PyInt_FromLong((long) 4));
+	 PyDict_SetItemString(d,"wxSTC_C_WORD", PyInt_FromLong((long) 5));
+	 PyDict_SetItemString(d,"wxSTC_C_STRING", PyInt_FromLong((long) 6));
+	 PyDict_SetItemString(d,"wxSTC_C_CHARACTER", PyInt_FromLong((long) 7));
+	 PyDict_SetItemString(d,"wxSTC_C_UUID", PyInt_FromLong((long) 8));
+	 PyDict_SetItemString(d,"wxSTC_C_PREPROCESSOR", PyInt_FromLong((long) 9));
+	 PyDict_SetItemString(d,"wxSTC_C_OPERATOR", PyInt_FromLong((long) 10));
+	 PyDict_SetItemString(d,"wxSTC_C_IDENTIFIER", PyInt_FromLong((long) 11));
+	 PyDict_SetItemString(d,"wxSTC_C_STRINGEOL", PyInt_FromLong((long) 12));
+	 PyDict_SetItemString(d,"wxSTC_C_VERBATIM", PyInt_FromLong((long) 13));
+	 PyDict_SetItemString(d,"wxSTC_H_DEFAULT", PyInt_FromLong((long) 0));
+	 PyDict_SetItemString(d,"wxSTC_H_TAG", PyInt_FromLong((long) 1));
+	 PyDict_SetItemString(d,"wxSTC_H_TAGUNKNOWN", PyInt_FromLong((long) 2));
+	 PyDict_SetItemString(d,"wxSTC_H_ATTRIBUTE", PyInt_FromLong((long) 3));
+	 PyDict_SetItemString(d,"wxSTC_H_ATTRIBUTEUNKNOWN", PyInt_FromLong((long) 4));
+	 PyDict_SetItemString(d,"wxSTC_H_NUMBER", PyInt_FromLong((long) 5));
+	 PyDict_SetItemString(d,"wxSTC_H_DOUBLESTRING", PyInt_FromLong((long) 6));
+	 PyDict_SetItemString(d,"wxSTC_H_SINGLESTRING", PyInt_FromLong((long) 7));
+	 PyDict_SetItemString(d,"wxSTC_H_OTHER", PyInt_FromLong((long) 8));
+	 PyDict_SetItemString(d,"wxSTC_H_COMMENT", PyInt_FromLong((long) 9));
+	 PyDict_SetItemString(d,"wxSTC_H_ENTITY", PyInt_FromLong((long) 10));
+	 PyDict_SetItemString(d,"wxSTC_H_TAGEND", PyInt_FromLong((long) 11));
+	 PyDict_SetItemString(d,"wxSTC_H_XMLSTART", PyInt_FromLong((long) 12));
+	 PyDict_SetItemString(d,"wxSTC_H_XMLEND", PyInt_FromLong((long) 13));
+	 PyDict_SetItemString(d,"wxSTC_H_SCRIPT", PyInt_FromLong((long) 14));
+	 PyDict_SetItemString(d,"wxSTC_H_ASP", PyInt_FromLong((long) 15));
+	 PyDict_SetItemString(d,"wxSTC_H_ASPAT", PyInt_FromLong((long) 16));
+	 PyDict_SetItemString(d,"wxSTC_H_CDATA", PyInt_FromLong((long) 17));
+	 PyDict_SetItemString(d,"wxSTC_H_QUESTION", PyInt_FromLong((long) 18));
+	 PyDict_SetItemString(d,"wxSTC_H_VALUE", PyInt_FromLong((long) 19));
+	 PyDict_SetItemString(d,"wxSTC_HJ_START", PyInt_FromLong((long) 40));
+	 PyDict_SetItemString(d,"wxSTC_HJ_DEFAULT", PyInt_FromLong((long) 41));
+	 PyDict_SetItemString(d,"wxSTC_HJ_COMMENT", PyInt_FromLong((long) 42));
+	 PyDict_SetItemString(d,"wxSTC_HJ_COMMENTLINE", PyInt_FromLong((long) 43));
+	 PyDict_SetItemString(d,"wxSTC_HJ_COMMENTDOC", PyInt_FromLong((long) 44));
+	 PyDict_SetItemString(d,"wxSTC_HJ_NUMBER", PyInt_FromLong((long) 45));
+	 PyDict_SetItemString(d,"wxSTC_HJ_WORD", PyInt_FromLong((long) 46));
+	 PyDict_SetItemString(d,"wxSTC_HJ_KEYWORD", PyInt_FromLong((long) 47));
+	 PyDict_SetItemString(d,"wxSTC_HJ_DOUBLESTRING", PyInt_FromLong((long) 48));
+	 PyDict_SetItemString(d,"wxSTC_HJ_SINGLESTRING", PyInt_FromLong((long) 49));
+	 PyDict_SetItemString(d,"wxSTC_HJ_SYMBOLS", PyInt_FromLong((long) 50));
+	 PyDict_SetItemString(d,"wxSTC_HJ_STRINGEOL", PyInt_FromLong((long) 51));
+	 PyDict_SetItemString(d,"wxSTC_HJA_START", PyInt_FromLong((long) 55));
+	 PyDict_SetItemString(d,"wxSTC_HJA_DEFAULT", PyInt_FromLong((long) 56));
+	 PyDict_SetItemString(d,"wxSTC_HJA_COMMENT", PyInt_FromLong((long) 57));
+	 PyDict_SetItemString(d,"wxSTC_HJA_COMMENTLINE", PyInt_FromLong((long) 58));
+	 PyDict_SetItemString(d,"wxSTC_HJA_COMMENTDOC", PyInt_FromLong((long) 59));
+	 PyDict_SetItemString(d,"wxSTC_HJA_NUMBER", PyInt_FromLong((long) 60));
+	 PyDict_SetItemString(d,"wxSTC_HJA_WORD", PyInt_FromLong((long) 61));
+	 PyDict_SetItemString(d,"wxSTC_HJA_KEYWORD", PyInt_FromLong((long) 62));
+	 PyDict_SetItemString(d,"wxSTC_HJA_DOUBLESTRING", PyInt_FromLong((long) 63));
+	 PyDict_SetItemString(d,"wxSTC_HJA_SINGLESTRING", PyInt_FromLong((long) 64));
+	 PyDict_SetItemString(d,"wxSTC_HJA_SYMBOLS", PyInt_FromLong((long) 65));
+	 PyDict_SetItemString(d,"wxSTC_HJA_STRINGEOL", PyInt_FromLong((long) 66));
+	 PyDict_SetItemString(d,"wxSTC_HB_START", PyInt_FromLong((long) 70));
+	 PyDict_SetItemString(d,"wxSTC_HB_DEFAULT", PyInt_FromLong((long) 71));
+	 PyDict_SetItemString(d,"wxSTC_HB_COMMENTLINE", PyInt_FromLong((long) 72));
+	 PyDict_SetItemString(d,"wxSTC_HB_NUMBER", PyInt_FromLong((long) 73));
+	 PyDict_SetItemString(d,"wxSTC_HB_WORD", PyInt_FromLong((long) 74));
+	 PyDict_SetItemString(d,"wxSTC_HB_STRING", PyInt_FromLong((long) 75));
+	 PyDict_SetItemString(d,"wxSTC_HB_IDENTIFIER", PyInt_FromLong((long) 76));
+	 PyDict_SetItemString(d,"wxSTC_HB_STRINGEOL", PyInt_FromLong((long) 77));
+	 PyDict_SetItemString(d,"wxSTC_HBA_START", PyInt_FromLong((long) 80));
+	 PyDict_SetItemString(d,"wxSTC_HBA_DEFAULT", PyInt_FromLong((long) 81));
+	 PyDict_SetItemString(d,"wxSTC_HBA_COMMENTLINE", PyInt_FromLong((long) 82));
+	 PyDict_SetItemString(d,"wxSTC_HBA_NUMBER", PyInt_FromLong((long) 83));
+	 PyDict_SetItemString(d,"wxSTC_HBA_WORD", PyInt_FromLong((long) 84));
+	 PyDict_SetItemString(d,"wxSTC_HBA_STRING", PyInt_FromLong((long) 85));
+	 PyDict_SetItemString(d,"wxSTC_HBA_IDENTIFIER", PyInt_FromLong((long) 86));
+	 PyDict_SetItemString(d,"wxSTC_HBA_STRINGEOL", PyInt_FromLong((long) 87));
+	 PyDict_SetItemString(d,"wxSTC_HP_START", PyInt_FromLong((long) 90));
+	 PyDict_SetItemString(d,"wxSTC_HP_DEFAULT", PyInt_FromLong((long) 91));
+	 PyDict_SetItemString(d,"wxSTC_HP_COMMENTLINE", PyInt_FromLong((long) 92));
+	 PyDict_SetItemString(d,"wxSTC_HP_NUMBER", PyInt_FromLong((long) 93));
+	 PyDict_SetItemString(d,"wxSTC_HP_STRING", PyInt_FromLong((long) 94));
+	 PyDict_SetItemString(d,"wxSTC_HP_CHARACTER", PyInt_FromLong((long) 95));
+	 PyDict_SetItemString(d,"wxSTC_HP_WORD", PyInt_FromLong((long) 96));
+	 PyDict_SetItemString(d,"wxSTC_HP_TRIPLE", PyInt_FromLong((long) 97));
+	 PyDict_SetItemString(d,"wxSTC_HP_TRIPLEDOUBLE", PyInt_FromLong((long) 98));
+	 PyDict_SetItemString(d,"wxSTC_HP_CLASSNAME", PyInt_FromLong((long) 99));
+	 PyDict_SetItemString(d,"wxSTC_HP_DEFNAME", PyInt_FromLong((long) 100));
+	 PyDict_SetItemString(d,"wxSTC_HP_OPERATOR", PyInt_FromLong((long) 101));
+	 PyDict_SetItemString(d,"wxSTC_HP_IDENTIFIER", PyInt_FromLong((long) 102));
+	 PyDict_SetItemString(d,"wxSTC_HPA_START", PyInt_FromLong((long) 105));
+	 PyDict_SetItemString(d,"wxSTC_HPA_DEFAULT", PyInt_FromLong((long) 106));
+	 PyDict_SetItemString(d,"wxSTC_HPA_COMMENTLINE", PyInt_FromLong((long) 107));
+	 PyDict_SetItemString(d,"wxSTC_HPA_NUMBER", PyInt_FromLong((long) 108));
+	 PyDict_SetItemString(d,"wxSTC_HPA_STRING", PyInt_FromLong((long) 109));
+	 PyDict_SetItemString(d,"wxSTC_HPA_CHARACTER", PyInt_FromLong((long) 110));
+	 PyDict_SetItemString(d,"wxSTC_HPA_WORD", PyInt_FromLong((long) 111));
+	 PyDict_SetItemString(d,"wxSTC_HPA_TRIPLE", PyInt_FromLong((long) 112));
+	 PyDict_SetItemString(d,"wxSTC_HPA_TRIPLEDOUBLE", PyInt_FromLong((long) 113));
+	 PyDict_SetItemString(d,"wxSTC_HPA_CLASSNAME", PyInt_FromLong((long) 114));
+	 PyDict_SetItemString(d,"wxSTC_HPA_DEFNAME", PyInt_FromLong((long) 115));
+	 PyDict_SetItemString(d,"wxSTC_HPA_OPERATOR", PyInt_FromLong((long) 116));
+	 PyDict_SetItemString(d,"wxSTC_HPA_IDENTIFIER", PyInt_FromLong((long) 117));
+	 PyDict_SetItemString(d,"wxSTC_HPHP_DEFAULT", PyInt_FromLong((long) 118));
+	 PyDict_SetItemString(d,"wxSTC_HPHP_HSTRING", PyInt_FromLong((long) 119));
+	 PyDict_SetItemString(d,"wxSTC_HPHP_SIMPLESTRING", PyInt_FromLong((long) 120));
+	 PyDict_SetItemString(d,"wxSTC_HPHP_WORD", PyInt_FromLong((long) 121));
+	 PyDict_SetItemString(d,"wxSTC_HPHP_NUMBER", PyInt_FromLong((long) 122));
+	 PyDict_SetItemString(d,"wxSTC_HPHP_VARIABLE", PyInt_FromLong((long) 123));
+	 PyDict_SetItemString(d,"wxSTC_HPHP_COMMENT", PyInt_FromLong((long) 124));
+	 PyDict_SetItemString(d,"wxSTC_HPHP_COMMENTLINE", PyInt_FromLong((long) 125));
+	 PyDict_SetItemString(d,"wxSTC_HPHP_STRINGEOL", PyInt_FromLong((long) 126));
+	 PyDict_SetItemString(d,"wxSTC_PL_DEFAULT", PyInt_FromLong((long) 0));
+	 PyDict_SetItemString(d,"wxSTC_PL_HERE", PyInt_FromLong((long) 1));
+	 PyDict_SetItemString(d,"wxSTC_PL_COMMENTLINE", PyInt_FromLong((long) 2));
+	 PyDict_SetItemString(d,"wxSTC_PL_POD", PyInt_FromLong((long) 3));
+	 PyDict_SetItemString(d,"wxSTC_PL_NUMBER", PyInt_FromLong((long) 4));
+	 PyDict_SetItemString(d,"wxSTC_PL_WORD", PyInt_FromLong((long) 5));
+	 PyDict_SetItemString(d,"wxSTC_PL_STRING", PyInt_FromLong((long) 6));
+	 PyDict_SetItemString(d,"wxSTC_PL_CHARACTER", PyInt_FromLong((long) 7));
+	 PyDict_SetItemString(d,"wxSTC_PL_PUNCTUATION", PyInt_FromLong((long) 8));
+	 PyDict_SetItemString(d,"wxSTC_PL_PREPROCESSOR", PyInt_FromLong((long) 9));
+	 PyDict_SetItemString(d,"wxSTC_PL_OPERATOR", PyInt_FromLong((long) 10));
+	 PyDict_SetItemString(d,"wxSTC_PL_IDENTIFIER", PyInt_FromLong((long) 11));
+	 PyDict_SetItemString(d,"wxSTC_PL_SCALAR", PyInt_FromLong((long) 12));
+	 PyDict_SetItemString(d,"wxSTC_PL_ARRAY", PyInt_FromLong((long) 13));
+	 PyDict_SetItemString(d,"wxSTC_PL_HASH", PyInt_FromLong((long) 14));
+	 PyDict_SetItemString(d,"wxSTC_PL_SYMBOLTABLE", PyInt_FromLong((long) 15));
+	 PyDict_SetItemString(d,"wxSTC_PL_REF", PyInt_FromLong((long) 16));
+	 PyDict_SetItemString(d,"wxSTC_PL_REGEX", PyInt_FromLong((long) 17));
+	 PyDict_SetItemString(d,"wxSTC_PL_REGSUBST", PyInt_FromLong((long) 18));
+	 PyDict_SetItemString(d,"wxSTC_PL_LONGQUOTE", PyInt_FromLong((long) 19));
+	 PyDict_SetItemString(d,"wxSTC_PL_BACKTICKS", PyInt_FromLong((long) 20));
+	 PyDict_SetItemString(d,"wxSTC_PL_DATASECTION", PyInt_FromLong((long) 21));
+	 PyDict_SetItemString(d,"wxSTC_L_DEFAULT", PyInt_FromLong((long) 0));
+	 PyDict_SetItemString(d,"wxSTC_L_COMMAND", PyInt_FromLong((long) 1));
+	 PyDict_SetItemString(d,"wxSTC_L_TAG", PyInt_FromLong((long) 2));
+	 PyDict_SetItemString(d,"wxSTC_L_MATH", PyInt_FromLong((long) 3));
+	 PyDict_SetItemString(d,"wxSTC_L_COMMENT", PyInt_FromLong((long) 4));
+	 PyDict_SetItemString(d,"wxSTC_LUA_DEFAULT", PyInt_FromLong((long) 0));
+	 PyDict_SetItemString(d,"wxSTC_LUA_COMMENT", PyInt_FromLong((long) 1));
+	 PyDict_SetItemString(d,"wxSTC_LUA_COMMENTLINE", PyInt_FromLong((long) 2));
+	 PyDict_SetItemString(d,"wxSTC_LUA_COMMENTDOC", PyInt_FromLong((long) 3));
+	 PyDict_SetItemString(d,"wxSTC_LUA_NUMBER", PyInt_FromLong((long) 4));
+	 PyDict_SetItemString(d,"wxSTC_LUA_WORD", PyInt_FromLong((long) 5));
+	 PyDict_SetItemString(d,"wxSTC_LUA_STRING", PyInt_FromLong((long) 6));
+	 PyDict_SetItemString(d,"wxSTC_LUA_CHARACTER", PyInt_FromLong((long) 7));
+	 PyDict_SetItemString(d,"wxSTC_LUA_LITERALSTRING", PyInt_FromLong((long) 8));
+	 PyDict_SetItemString(d,"wxSTC_LUA_PREPROCESSOR", PyInt_FromLong((long) 9));
+	 PyDict_SetItemString(d,"wxSTC_LUA_OPERATOR", PyInt_FromLong((long) 10));
+	 PyDict_SetItemString(d,"wxSTC_LUA_IDENTIFIER", PyInt_FromLong((long) 11));
+	 PyDict_SetItemString(d,"wxSTC_LUA_STRINGEOL", PyInt_FromLong((long) 12));
+	 PyDict_SetItemString(d,"wxSTC_ERR_DEFAULT", PyInt_FromLong((long) 0));
+	 PyDict_SetItemString(d,"wxSTC_ERR_PYTHON", PyInt_FromLong((long) 1));
+	 PyDict_SetItemString(d,"wxSTC_ERR_GCC", PyInt_FromLong((long) 2));
+	 PyDict_SetItemString(d,"wxSTC_ERR_MS", PyInt_FromLong((long) 3));
+	 PyDict_SetItemString(d,"wxSTC_ERR_CMD", PyInt_FromLong((long) 4));
+	 PyDict_SetItemString(d,"wxSTC_ERR_BORLAND", PyInt_FromLong((long) 5));
+	 PyDict_SetItemString(d,"wxSTC_ERR_PERL", PyInt_FromLong((long) 6));
+	 PyDict_SetItemString(d,"wxSTC_MASK_FOLDERS", PyInt_FromLong((long) ((1<<(30))|(1<<(31)))));
 	 PyDict_SetItemString(d,"wxSTCNameStr", PyString_FromString("wxSTCNameStr"));
 	 PyDict_SetItemString(d,"wxEVT_STC_CHANGE", PyInt_FromLong((long) wxEVT_STC_CHANGE));
 	 PyDict_SetItemString(d,"wxEVT_STC_STYLENEEDED", PyInt_FromLong((long) wxEVT_STC_STYLENEEDED));
@@ -7949,169 +9105,7 @@ SWIGEXPORT(void) initstc_c() {
 	 PyDict_SetItemString(d,"wxEVT_STC_MACRORECORD", PyInt_FromLong((long) wxEVT_STC_MACRORECORD));
 	 PyDict_SetItemString(d,"wxEVT_STC_MARGINCLICK", PyInt_FromLong((long) wxEVT_STC_MARGINCLICK));
 	 PyDict_SetItemString(d,"wxEVT_STC_NEEDSHOWN", PyInt_FromLong((long) wxEVT_STC_NEEDSHOWN));
-	 PyDict_SetItemString(d,"wxSTC_MOD_INSERTTEXT", PyInt_FromLong((long) 0x1));
-	 PyDict_SetItemString(d,"wxSTC_MOD_DELETETEXT", PyInt_FromLong((long) 0x2));
-	 PyDict_SetItemString(d,"wxSTC_MOD_CHANGESTYLE", PyInt_FromLong((long) 0x4));
-	 PyDict_SetItemString(d,"wxSTC_MOD_CHANGEFOLD", PyInt_FromLong((long) 0x8));
-	 PyDict_SetItemString(d,"wxSTC_PERFORMED_USER", PyInt_FromLong((long) 0x10));
-	 PyDict_SetItemString(d,"wxSTC_PERFORMED_UNDO", PyInt_FromLong((long) 0x20));
-	 PyDict_SetItemString(d,"wxSTC_PERFORMED_REDO", PyInt_FromLong((long) 0x40));
-	 PyDict_SetItemString(d,"wxSTC_LASTSTEPINUNDOREDO", PyInt_FromLong((long) 0x100));
-	 PyDict_SetItemString(d,"wxSTC_MOD_CHANGEMARKER", PyInt_FromLong((long) 0x200));
-	 PyDict_SetItemString(d,"wxSTC_MOD_BEFOREINSERT", PyInt_FromLong((long) 0x400));
-	 PyDict_SetItemString(d,"wxSTC_MOD_BEFOREDELETE", PyInt_FromLong((long) 0x800));
-	 PyDict_SetItemString(d,"SCLEX_CONTAINER", PyInt_FromLong((long) 0));
-	 PyDict_SetItemString(d,"SCLEX_NULL", PyInt_FromLong((long) 1));
-	 PyDict_SetItemString(d,"SCLEX_PYTHON", PyInt_FromLong((long) 2));
-	 PyDict_SetItemString(d,"SCLEX_CPP", PyInt_FromLong((long) 3));
-	 PyDict_SetItemString(d,"SCLEX_HTML", PyInt_FromLong((long) 4));
-	 PyDict_SetItemString(d,"SCLEX_XML", PyInt_FromLong((long) 5));
-	 PyDict_SetItemString(d,"SCLEX_PERL", PyInt_FromLong((long) 6));
-	 PyDict_SetItemString(d,"SCLEX_SQL", PyInt_FromLong((long) 7));
-	 PyDict_SetItemString(d,"SCLEX_VB", PyInt_FromLong((long) 8));
-	 PyDict_SetItemString(d,"SCLEX_PROPERTIES", PyInt_FromLong((long) 9));
-	 PyDict_SetItemString(d,"SCLEX_ERRORLIST", PyInt_FromLong((long) 10));
-	 PyDict_SetItemString(d,"SCLEX_MAKEFILE", PyInt_FromLong((long) 11));
-	 PyDict_SetItemString(d,"SCLEX_BATCH", PyInt_FromLong((long) 12));
-	 PyDict_SetItemString(d,"SCLEX_XCODE", PyInt_FromLong((long) 13));
-	 PyDict_SetItemString(d,"SCLEX_LATEX", PyInt_FromLong((long) 14));
-	 PyDict_SetItemString(d,"SCE_P_DEFAULT", PyInt_FromLong((long) 0));
-	 PyDict_SetItemString(d,"SCE_P_COMMENTLINE", PyInt_FromLong((long) 1));
-	 PyDict_SetItemString(d,"SCE_P_NUMBER", PyInt_FromLong((long) 2));
-	 PyDict_SetItemString(d,"SCE_P_STRING", PyInt_FromLong((long) 3));
-	 PyDict_SetItemString(d,"SCE_P_CHARACTER", PyInt_FromLong((long) 4));
-	 PyDict_SetItemString(d,"SCE_P_WORD", PyInt_FromLong((long) 5));
-	 PyDict_SetItemString(d,"SCE_P_TRIPLE", PyInt_FromLong((long) 6));
-	 PyDict_SetItemString(d,"SCE_P_TRIPLEDOUBLE", PyInt_FromLong((long) 7));
-	 PyDict_SetItemString(d,"SCE_P_CLASSNAME", PyInt_FromLong((long) 8));
-	 PyDict_SetItemString(d,"SCE_P_DEFNAME", PyInt_FromLong((long) 9));
-	 PyDict_SetItemString(d,"SCE_P_OPERATOR", PyInt_FromLong((long) 10));
-	 PyDict_SetItemString(d,"SCE_P_IDENTIFIER", PyInt_FromLong((long) 11));
-	 PyDict_SetItemString(d,"SCE_P_COMMENTBLOCK", PyInt_FromLong((long) 12));
-	 PyDict_SetItemString(d,"SCE_P_STRINGEOL", PyInt_FromLong((long) 13));
-	 PyDict_SetItemString(d,"SCE_C_DEFAULT", PyInt_FromLong((long) 0));
-	 PyDict_SetItemString(d,"SCE_C_COMMENT", PyInt_FromLong((long) 1));
-	 PyDict_SetItemString(d,"SCE_C_COMMENTLINE", PyInt_FromLong((long) 2));
-	 PyDict_SetItemString(d,"SCE_C_COMMENTDOC", PyInt_FromLong((long) 3));
-	 PyDict_SetItemString(d,"SCE_C_NUMBER", PyInt_FromLong((long) 4));
-	 PyDict_SetItemString(d,"SCE_C_WORD", PyInt_FromLong((long) 5));
-	 PyDict_SetItemString(d,"SCE_C_STRING", PyInt_FromLong((long) 6));
-	 PyDict_SetItemString(d,"SCE_C_CHARACTER", PyInt_FromLong((long) 7));
-	 PyDict_SetItemString(d,"SCE_C_UUID", PyInt_FromLong((long) 8));
-	 PyDict_SetItemString(d,"SCE_C_PREPROCESSOR", PyInt_FromLong((long) 9));
-	 PyDict_SetItemString(d,"SCE_C_OPERATOR", PyInt_FromLong((long) 10));
-	 PyDict_SetItemString(d,"SCE_C_IDENTIFIER", PyInt_FromLong((long) 11));
-	 PyDict_SetItemString(d,"SCE_C_STRINGEOL", PyInt_FromLong((long) 12));
-	 PyDict_SetItemString(d,"SCE_H_DEFAULT", PyInt_FromLong((long) 0));
-	 PyDict_SetItemString(d,"SCE_H_TAG", PyInt_FromLong((long) 1));
-	 PyDict_SetItemString(d,"SCE_H_TAGUNKNOWN", PyInt_FromLong((long) 2));
-	 PyDict_SetItemString(d,"SCE_H_ATTRIBUTE", PyInt_FromLong((long) 3));
-	 PyDict_SetItemString(d,"SCE_H_ATTRIBUTEUNKNOWN", PyInt_FromLong((long) 4));
-	 PyDict_SetItemString(d,"SCE_H_NUMBER", PyInt_FromLong((long) 5));
-	 PyDict_SetItemString(d,"SCE_H_DOUBLESTRING", PyInt_FromLong((long) 6));
-	 PyDict_SetItemString(d,"SCE_H_SINGLESTRING", PyInt_FromLong((long) 7));
-	 PyDict_SetItemString(d,"SCE_H_OTHER", PyInt_FromLong((long) 8));
-	 PyDict_SetItemString(d,"SCE_H_COMMENT", PyInt_FromLong((long) 9));
-	 PyDict_SetItemString(d,"SCE_H_ENTITY", PyInt_FromLong((long) 10));
-	 PyDict_SetItemString(d,"SCE_H_TAGEND", PyInt_FromLong((long) 11));
-	 PyDict_SetItemString(d,"SCE_H_XMLSTART", PyInt_FromLong((long) 12));
-	 PyDict_SetItemString(d,"SCE_H_XMLEND", PyInt_FromLong((long) 13));
-	 PyDict_SetItemString(d,"SCE_H_SCRIPT", PyInt_FromLong((long) 14));
-	 PyDict_SetItemString(d,"SCE_H_ASP", PyInt_FromLong((long) 15));
-	 PyDict_SetItemString(d,"SCE_H_ASPAT", PyInt_FromLong((long) 16));
-	 PyDict_SetItemString(d,"SCE_HJ_START", PyInt_FromLong((long) 40));
-	 PyDict_SetItemString(d,"SCE_HJ_DEFAULT", PyInt_FromLong((long) 41));
-	 PyDict_SetItemString(d,"SCE_HJ_COMMENT", PyInt_FromLong((long) 42));
-	 PyDict_SetItemString(d,"SCE_HJ_COMMENTLINE", PyInt_FromLong((long) 43));
-	 PyDict_SetItemString(d,"SCE_HJ_COMMENTDOC", PyInt_FromLong((long) 44));
-	 PyDict_SetItemString(d,"SCE_HJ_NUMBER", PyInt_FromLong((long) 45));
-	 PyDict_SetItemString(d,"SCE_HJ_WORD", PyInt_FromLong((long) 46));
-	 PyDict_SetItemString(d,"SCE_HJ_KEYWORD", PyInt_FromLong((long) 47));
-	 PyDict_SetItemString(d,"SCE_HJ_DOUBLESTRING", PyInt_FromLong((long) 48));
-	 PyDict_SetItemString(d,"SCE_HJ_SINGLESTRING", PyInt_FromLong((long) 49));
-	 PyDict_SetItemString(d,"SCE_HJ_SYMBOLS", PyInt_FromLong((long) 50));
-	 PyDict_SetItemString(d,"SCE_HJ_STRINGEOL", PyInt_FromLong((long) 51));
-	 PyDict_SetItemString(d,"SCE_HJA_START", PyInt_FromLong((long) 55));
-	 PyDict_SetItemString(d,"SCE_HJA_DEFAULT", PyInt_FromLong((long) 56));
-	 PyDict_SetItemString(d,"SCE_HJA_COMMENT", PyInt_FromLong((long) 57));
-	 PyDict_SetItemString(d,"SCE_HJA_COMMENTLINE", PyInt_FromLong((long) 58));
-	 PyDict_SetItemString(d,"SCE_HJA_COMMENTDOC", PyInt_FromLong((long) 59));
-	 PyDict_SetItemString(d,"SCE_HJA_NUMBER", PyInt_FromLong((long) 60));
-	 PyDict_SetItemString(d,"SCE_HJA_WORD", PyInt_FromLong((long) 61));
-	 PyDict_SetItemString(d,"SCE_HJA_KEYWORD", PyInt_FromLong((long) 62));
-	 PyDict_SetItemString(d,"SCE_HJA_DOUBLESTRING", PyInt_FromLong((long) 63));
-	 PyDict_SetItemString(d,"SCE_HJA_SINGLESTRING", PyInt_FromLong((long) 64));
-	 PyDict_SetItemString(d,"SCE_HJA_SYMBOLS", PyInt_FromLong((long) 65));
-	 PyDict_SetItemString(d,"SCE_HJA_STRINGEOL", PyInt_FromLong((long) 66));
-	 PyDict_SetItemString(d,"SCE_HB_START", PyInt_FromLong((long) 70));
-	 PyDict_SetItemString(d,"SCE_HB_DEFAULT", PyInt_FromLong((long) 71));
-	 PyDict_SetItemString(d,"SCE_HB_COMMENTLINE", PyInt_FromLong((long) 72));
-	 PyDict_SetItemString(d,"SCE_HB_NUMBER", PyInt_FromLong((long) 73));
-	 PyDict_SetItemString(d,"SCE_HB_WORD", PyInt_FromLong((long) 74));
-	 PyDict_SetItemString(d,"SCE_HB_STRING", PyInt_FromLong((long) 75));
-	 PyDict_SetItemString(d,"SCE_HB_IDENTIFIER", PyInt_FromLong((long) 76));
-	 PyDict_SetItemString(d,"SCE_HB_STRINGEOL", PyInt_FromLong((long) 77));
-	 PyDict_SetItemString(d,"SCE_HBA_START", PyInt_FromLong((long) 80));
-	 PyDict_SetItemString(d,"SCE_HBA_DEFAULT", PyInt_FromLong((long) 81));
-	 PyDict_SetItemString(d,"SCE_HBA_COMMENTLINE", PyInt_FromLong((long) 82));
-	 PyDict_SetItemString(d,"SCE_HBA_NUMBER", PyInt_FromLong((long) 83));
-	 PyDict_SetItemString(d,"SCE_HBA_WORD", PyInt_FromLong((long) 84));
-	 PyDict_SetItemString(d,"SCE_HBA_STRING", PyInt_FromLong((long) 85));
-	 PyDict_SetItemString(d,"SCE_HBA_IDENTIFIER", PyInt_FromLong((long) 86));
-	 PyDict_SetItemString(d,"SCE_HBA_STRINGEOL", PyInt_FromLong((long) 87));
-	 PyDict_SetItemString(d,"SCE_HP_START", PyInt_FromLong((long) 90));
-	 PyDict_SetItemString(d,"SCE_HP_DEFAULT", PyInt_FromLong((long) 91));
-	 PyDict_SetItemString(d,"SCE_HP_COMMENTLINE", PyInt_FromLong((long) 92));
-	 PyDict_SetItemString(d,"SCE_HP_NUMBER", PyInt_FromLong((long) 93));
-	 PyDict_SetItemString(d,"SCE_HP_STRING", PyInt_FromLong((long) 94));
-	 PyDict_SetItemString(d,"SCE_HP_CHARACTER", PyInt_FromLong((long) 95));
-	 PyDict_SetItemString(d,"SCE_HP_WORD", PyInt_FromLong((long) 96));
-	 PyDict_SetItemString(d,"SCE_HP_TRIPLE", PyInt_FromLong((long) 97));
-	 PyDict_SetItemString(d,"SCE_HP_TRIPLEDOUBLE", PyInt_FromLong((long) 98));
-	 PyDict_SetItemString(d,"SCE_HP_CLASSNAME", PyInt_FromLong((long) 99));
-	 PyDict_SetItemString(d,"SCE_HP_DEFNAME", PyInt_FromLong((long) 100));
-	 PyDict_SetItemString(d,"SCE_HP_OPERATOR", PyInt_FromLong((long) 101));
-	 PyDict_SetItemString(d,"SCE_HP_IDENTIFIER", PyInt_FromLong((long) 102));
-	 PyDict_SetItemString(d,"SCE_HPA_START", PyInt_FromLong((long) 105));
-	 PyDict_SetItemString(d,"SCE_HPA_DEFAULT", PyInt_FromLong((long) 106));
-	 PyDict_SetItemString(d,"SCE_HPA_COMMENTLINE", PyInt_FromLong((long) 107));
-	 PyDict_SetItemString(d,"SCE_HPA_NUMBER", PyInt_FromLong((long) 108));
-	 PyDict_SetItemString(d,"SCE_HPA_STRING", PyInt_FromLong((long) 109));
-	 PyDict_SetItemString(d,"SCE_HPA_CHARACTER", PyInt_FromLong((long) 110));
-	 PyDict_SetItemString(d,"SCE_HPA_WORD", PyInt_FromLong((long) 111));
-	 PyDict_SetItemString(d,"SCE_HPA_TRIPLE", PyInt_FromLong((long) 112));
-	 PyDict_SetItemString(d,"SCE_HPA_TRIPLEDOUBLE", PyInt_FromLong((long) 113));
-	 PyDict_SetItemString(d,"SCE_HPA_CLASSNAME", PyInt_FromLong((long) 114));
-	 PyDict_SetItemString(d,"SCE_HPA_DEFNAME", PyInt_FromLong((long) 115));
-	 PyDict_SetItemString(d,"SCE_HPA_OPERATOR", PyInt_FromLong((long) 116));
-	 PyDict_SetItemString(d,"SCE_HPA_IDENTIFIER", PyInt_FromLong((long) 117));
-	 PyDict_SetItemString(d,"SCE_PL_DEFAULT", PyInt_FromLong((long) 0));
-	 PyDict_SetItemString(d,"SCE_PL_HERE", PyInt_FromLong((long) 1));
-	 PyDict_SetItemString(d,"SCE_PL_COMMENTLINE", PyInt_FromLong((long) 2));
-	 PyDict_SetItemString(d,"SCE_PL_POD", PyInt_FromLong((long) 3));
-	 PyDict_SetItemString(d,"SCE_PL_NUMBER", PyInt_FromLong((long) 4));
-	 PyDict_SetItemString(d,"SCE_PL_WORD", PyInt_FromLong((long) 5));
-	 PyDict_SetItemString(d,"SCE_PL_STRING", PyInt_FromLong((long) 6));
-	 PyDict_SetItemString(d,"SCE_PL_CHARACTER", PyInt_FromLong((long) 7));
-	 PyDict_SetItemString(d,"SCE_PL_PUNCTUATION", PyInt_FromLong((long) 8));
-	 PyDict_SetItemString(d,"SCE_PL_PREPROCESSOR", PyInt_FromLong((long) 9));
-	 PyDict_SetItemString(d,"SCE_PL_OPERATOR", PyInt_FromLong((long) 10));
-	 PyDict_SetItemString(d,"SCE_PL_IDENTIFIER", PyInt_FromLong((long) 11));
-	 PyDict_SetItemString(d,"SCE_PL_SCALAR", PyInt_FromLong((long) 12));
-	 PyDict_SetItemString(d,"SCE_PL_ARRAY", PyInt_FromLong((long) 13));
-	 PyDict_SetItemString(d,"SCE_PL_HASH", PyInt_FromLong((long) 14));
-	 PyDict_SetItemString(d,"SCE_PL_SYMBOLTABLE", PyInt_FromLong((long) 15));
-	 PyDict_SetItemString(d,"SCE_PL_REF", PyInt_FromLong((long) 16));
-	 PyDict_SetItemString(d,"SCE_PL_REGEX", PyInt_FromLong((long) 17));
-	 PyDict_SetItemString(d,"SCE_PL_REGSUBST", PyInt_FromLong((long) 18));
-	 PyDict_SetItemString(d,"SCE_PL_LONGQUOTE", PyInt_FromLong((long) 19));
-	 PyDict_SetItemString(d,"SCE_PL_BACKTICKS", PyInt_FromLong((long) 20));
-	 PyDict_SetItemString(d,"SCE_PL_DATASECTION", PyInt_FromLong((long) 21));
-	 PyDict_SetItemString(d,"SCE_L_DEFAULT", PyInt_FromLong((long) 0));
-	 PyDict_SetItemString(d,"SCE_L_COMMAND", PyInt_FromLong((long) 1));
-	 PyDict_SetItemString(d,"SCE_L_TAG", PyInt_FromLong((long) 2));
-	 PyDict_SetItemString(d,"SCE_L_MATH", PyInt_FromLong((long) 3));
-	 PyDict_SetItemString(d,"SCE_L_COMMENT", PyInt_FromLong((long) 4));
+	 PyDict_SetItemString(d,"wxEVT_STC_POSCHANGED", PyInt_FromLong((long) wxEVT_STC_POSCHANGED));
 
 
     wxClassInfo::CleanUpClasses();

@@ -79,7 +79,7 @@ item: Remark
 end
 item: Set Variable
   Variable=PYTHONVER
-  Value=1.6
+  Value=1.5
 end
 item: Remark
 end

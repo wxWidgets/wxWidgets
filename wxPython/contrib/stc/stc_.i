@@ -34,7 +34,7 @@
 // Get all our defs from the REAL header file.
 
 %include stc.h
-%include SciLexer.h
+//%include SciLexer.h
 
 //----------------------------------------------------------------------
 // Python functions to act like the event macros
@@ -78,6 +78,9 @@ def EVT_STC_MARGINCLICK(win, id, fn):
 
 def EVT_STC_NEEDSHOWN(win, id, fn):
     win.Connect(id, -1, wxEVT_STC_NEEDSHOWN, fn)
+
+def EVT_STC_POSCHANGED(win, id, fn):
+    win.Connect(id, -1, wxEVT_STC_POSCHANGED, fn)
 
 
 "

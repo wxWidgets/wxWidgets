@@ -9,9 +9,17 @@ class MySplitter(wxSplitterWindow):
         wxSplitterWindow.__init__(self, parent, ID)
         self.log = log
         EVT_SPLITTER_SASH_POS_CHANGED(self, self.GetId(), self.OnSashChanged)
+        EVT_SPLITTER_SASH_POS_CHANGING(self, self.GetId(), self.OnSashChanging)
 
     def OnSashChanged(self, evt):
-        self.log.WriteText("sash changed to " + str(evt.GetSashPosition()))
+        self.log.WriteText("sash changed to %s\n" % str(evt.GetSashPosition()))
+        # uncomment this to not allow the change
+        #evt.SetSashPosition(-1)
+
+    def OnSashChanging(self, evt):
+        self.log.WriteText("sash changing to %s\n" % str(evt.GetSashPosition()))
+        # uncomment this to not allow the change
+        #evt.SetSashPosition(-1)
 
 #---------------------------------------------------------------------------
 

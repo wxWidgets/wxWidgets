@@ -145,7 +145,7 @@ FINAL=1
 
 
         # #*#*#*#*#*  Comment this out to allow upload...
-        #return
+        return
 
         logSeparator("Uploading to website...")
         do('python c:\\utils\\sendwxp.py %s' % destName)

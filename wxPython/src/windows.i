@@ -428,7 +428,6 @@ public:
 //      "
 };
 
-//%clear int* x, int* y;
 
 
 

@@ -281,7 +281,7 @@ public:
 #endif
     long GetTopItem();
     long HitTest(const wxPoint& point, int& OUTPUT);
-    %name(InsertColumnWith)long InsertColumn(long col, wxListItem& info);
+    %name(InsertColumnInfo)long InsertColumn(long col, wxListItem& info);
     long InsertColumn(long col, const wxString& heading,
                       int format = wxLIST_FORMAT_LEFT,
                       int width = -1);

@@ -219,7 +219,7 @@ class wxListItem(wxListItemPtr):
 
 
 
-class wxListEventPtr(wxCommandEventPtr):
+class wxListEventPtr(wxNotifyEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -416,8 +416,8 @@ class wxListCtrlPtr(wxControlPtr):
     def HitTest(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_HitTest,(self,) + _args, _kwargs)
         return val
-    def InsertColumnWith(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_InsertColumnWith,(self,) + _args, _kwargs)
+    def InsertColumnInfo(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_InsertColumnInfo,(self,) + _args, _kwargs)
         return val
     def InsertColumn(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_InsertColumn,(self,) + _args, _kwargs)
