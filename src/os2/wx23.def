@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  H:\dev\wx2\wxwindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1772,7 +1772,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -2059,8 +2059,6 @@ EXPORTS
       Assign__10wxFileNameFRC8wxString12wxPathFormat
       ;wxFileName::SetPath(const wxString&,wxPathFormat)
       SetPath__10wxFileNameFRC8wxString12wxPathFormat
-      ;wxFileName::Normalize(wxPathNormalize,const wxString&,wxPathFormat)
-      Normalize__10wxFileNameF15wxPathNormalizeRC8wxString12wxPathFormat
       ;wxFileName::IsWild(wxPathFormat)
       IsWild__10wxFileNameF12wxPathFormat
       ;wxFileName::GetTimes(wxDateTime*,wxDateTime*,wxDateTime*) const
@@ -2117,6 +2115,8 @@ EXPORTS
       AppendDir__10wxFileNameFRC8wxString
       ;wxFileName::SplitPath(const wxString&,wxString*,wxString*,wxString*,wxString*,wxPathFormat)
       SplitPath__10wxFileNameFRC8wxStringP8wxStringN3212wxPathFormat
+      ;wxFileName::Normalize(int,const wxString&,wxPathFormat)
+      Normalize__10wxFileNameFiRC8wxString12wxPathFormat
       ;wxFileName::Mkdir(int,unsigned long)
       Mkdir__10wxFileNameFiUl
       ;wxFileName::MakeRelativeTo(const wxString&,wxPathFormat)
@@ -2167,10 +2167,12 @@ EXPORTS
       ms_root__16wxLocalFSHandler
       ;wxFileSystemHandler::GetMimeTypeFromExt(const wxString&)
       GetMimeTypeFromExt__19wxFileSystemHandlerFRC8wxString
-      ;wxFileSystem::m_Handlers
-      m_Handlers__12wxFileSystem
+      ;wxFSFile::sm_classwxFSFile
+      sm_classwxFSFile__8wxFSFile
       ;wxFileSystemModule::sm_classwxFileSystemModule
       sm_classwxFileSystemModule__18wxFileSystemModule
+      ;wxFileSystem::m_Handlers
+      m_Handlers__12wxFileSystem
       ;wxFileSystemHandler::FindNext()
       FindNext__19wxFileSystemHandlerFv
       ;wxFileSystem::CleanUpHandlers()
@@ -4131,12 +4133,12 @@ EXPORTS
       wxCreateDynamicObject__FPCc
       ;wxObject::Dump(ostream&)
       Dump__8wxObjectFR7ostream
-      ;wxObject::CloneRefData(wxObjectRefData*) const
-      CloneRefData__8wxObjectCFP15wxObjectRefData
       ;wxObject::CreateRefData() const
       CreateRefData__8wxObjectCFv
       ;wxClassInfo::sm_classTable
       sm_classTable__11wxClassInfo
+      ;wxObject::CloneRefData(const wxObjectRefData*) const
+      CloneRefData__8wxObjectCFPC15wxObjectRefData
       ;wxClassInfo::sm_first
       sm_first__11wxClassInfo
       ;wxObject::Ref(const wxObject&)
@@ -5795,7 +5797,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -13526,8 +13528,6 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxRegion::Combine(const wxRect&,wxRegionOp)
       Combine__8wxRegionFRC6wxRect10wxRegionOp
-      ;wxRegion::CloneData(wxObjectRefData*) const
-      CloneData__8wxRegionCFP15wxObjectRefData
       ;wxRegion::Offset(int,int)
       Offset__8wxRegionFiT1
       ;wxRegion::GetBox() const
@@ -13542,6 +13542,8 @@ EXPORTS
       __ct__8wxRegionFRC7wxPointT1
       ;wxRegion::Contains(int,int) const
       Contains__8wxRegionCFiT1
+      ;wxRegion::CloneData(const wxObjectRefData*) const
+      CloneData__8wxRegionCFPC15wxObjectRefData
       ;wxRegionIterator::GetY() const
       GetY__16wxRegionIteratorCFv
       ;wxConstructorForwxRegion()
