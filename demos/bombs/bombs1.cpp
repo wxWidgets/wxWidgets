@@ -66,7 +66,7 @@ void BombsCanvas::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
 
 
     wxFont font= BOMBS_FONT;
-    dc->SetFont(font); 
+    dc->SetFont(font);
 
     for(x=xc1; x<=xc2; x++)
         for(y=yc1; y<=yc2; y++)
@@ -153,7 +153,7 @@ void BombsCanvas::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
                     buf = wxT("0");
                     dc->SetTextForeground(wxGreen);
                     break;
-                case 1: 
+                case 1:
                     buf = wxT("1");
                     dc->SetTextForeground(wxBlue);
                     break;
@@ -263,7 +263,7 @@ void BombsCanvas::OnMouseEvent(wxMouseEvent& event)
         if ( (event.RightDown() || (event.LeftDown() && event.ShiftDown()))
            && (m_game->IsHidden(x,y)
                || !m_game->GetNumRemainingCells() ) )
-        { 
+        {
             // store previous and current field
             int prevFocusX = m_game->m_gridFocusX;
             int prevFocusY = m_game->m_gridFocusY;

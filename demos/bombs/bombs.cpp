@@ -23,6 +23,8 @@
 #   include "wx/wx.h"
 #endif //precompiled headers
 
+#include "wx/stockitem.h"
+
 #include "bombs.h"
 
 #include <stdlib.h>
@@ -90,7 +92,7 @@ BombsFrame::BombsFrame(BombsGame *game)
         menuLevel, wxT("Starts a new game"));
 
     menuFile->AppendSeparator();
-    menuFile->Append(wxID_EXIT, wxT("E&xit"), wxT("Quits the application"));
+    menuFile->Append(wxID_EXIT, wxGetStockLabel(wxID_EXIT), wxT("Quits the application"));
 
     menuBar->Append(menuFile, wxT("&File"));
 
