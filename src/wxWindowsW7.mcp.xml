@@ -9373,8 +9373,8 @@
                 <SETTING><NAME>MWProject_PPC_flatrsrcfilename</NAME><VALUE></VALUE></SETTING>
 
                 <!-- Settings for "x86 Project" panel -->
-                <SETTING><NAME>MWProject_X86_type</NAME><VALUE>ObjDirectory</VALUE></SETTING>
-                <SETTING><NAME>MWProject_X86_outfile</NAME><VALUE>wx_x86_d.exe</VALUE></SETTING>
+                <SETTING><NAME>MWProject_X86_type</NAME><VALUE>Library</VALUE></SETTING>
+                <SETTING><NAME>MWProject_X86_outfile</NAME><VALUE>delete_me1.lib</VALUE></SETTING>
                 <SETTING><NAME>MWProject_X86_baseaddress</NAME><VALUE>4194304</VALUE></SETTING>
                 <SETTING><NAME>MWProject_X86_maxstacksize</NAME><VALUE>1024</VALUE></SETTING>
                 <SETTING><NAME>MWProject_X86_minstacksize</NAME><VALUE>4</VALUE></SETTING>
@@ -13315,6 +13315,13 @@
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>jquant2.c</PATH>
+                    <PATHFORMAT>Windows</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>jmemansi.c</PATH>
                     <PATHFORMAT>Windows</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS></FILEFLAGS>
@@ -20963,8 +20970,8 @@
                 <SETTING><NAME>MWProject_PPC_flatrsrcfilename</NAME><VALUE></VALUE></SETTING>
 
                 <!-- Settings for "x86 Project" panel -->
-                <SETTING><NAME>MWProject_X86_type</NAME><VALUE>ObjDirectory</VALUE></SETTING>
-                <SETTING><NAME>MWProject_X86_outfile</NAME><VALUE>delete_me.exe</VALUE></SETTING>
+                <SETTING><NAME>MWProject_X86_type</NAME><VALUE>Library</VALUE></SETTING>
+                <SETTING><NAME>MWProject_X86_outfile</NAME><VALUE>delete_me2.lib</VALUE></SETTING>
                 <SETTING><NAME>MWProject_X86_baseaddress</NAME><VALUE>4194304</VALUE></SETTING>
                 <SETTING><NAME>MWProject_X86_maxstacksize</NAME><VALUE>1024</VALUE></SETTING>
                 <SETTING><NAME>MWProject_X86_minstacksize</NAME><VALUE>4</VALUE></SETTING>
@@ -30586,6 +30593,12 @@
                         <TARGETNAME>jpeg</TARGETNAME>
                         <PATHTYPE>Name</PATHTYPE>
                         <PATH>jerror.c</PATH>
+                        <PATHFORMAT>Windows</PATHFORMAT>
+                    </FILEREF>
+                    <FILEREF>
+                        <TARGETNAME>jpeg</TARGETNAME>
+                        <PATHTYPE>Name</PATHTYPE>
+                        <PATH>jmemansi.c</PATH>
                         <PATHFORMAT>Windows</PATHFORMAT>
                     </FILEREF>
                     <FILEREF>
