@@ -23,13 +23,13 @@ handler with \helpref{wxImage::AddHandler}{wximageaddhandler} or
 
 \twocolwidtha{5cm}%
 \begin{twocollist}
-\twocolitem{{\bf \indexit{wxBMPHandler}}}{Only for loading, always installed.}
-\twocolitem{{\bf \indexit{wxPNGHandler}}}{For loading and saving.}
-\twocolitem{{\bf \indexit{wxJPEGHandler}}}{For loading and saving.}
-\twocolitem{{\bf \indexit{wxGIFHandler}}}{Only for loading, due to legal issues.}
-\twocolitem{{\bf \indexit{wxPCXHandler}}}{For loading and saving (see below).}
-\twocolitem{{\bf \indexit{wxPNMHandler}}}{For loading and saving (see below).}
-\twocolitem{{\bf \indexit{wxTIFFHandler}}}{For loading.}
+\twocolitem{\indexit{wxBMPHandler}}{Only for loading, always installed.}
+\twocolitem{\indexit{wxPNGHandler}}{For loading and saving.}
+\twocolitem{\indexit{wxJPEGHandler}}{For loading and saving.}
+\twocolitem{\indexit{wxGIFHandler}}{Only for loading, due to legal issues.}
+\twocolitem{\indexit{wxPCXHandler}}{For loading and saving (see below).}
+\twocolitem{\indexit{wxPNMHandler}}{For loading and saving (see below).}
+\twocolitem{\indexit{wxTIFFHandler}}{For loading.}
 \end{twocollist}
 
 When saving in PCX format, {\bf wxPCXHandler} will count the number of
@@ -107,14 +107,14 @@ Loads an image from an input stream.
 
 \twocolwidtha{5cm}%
 \begin{twocollist}
-\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_BMP}}}{Load a Windows bitmap file.}
-\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_GIF}}}{Load a GIF bitmap file.}
-\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_JPEG}}}{Load a JPEG bitmap file.}
-\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_PNG}}}{Load a PNG bitmap file.}
-\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_PCX}}}{Load a PCX bitmap file.}
-\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_PNM}}}{Load a PNM bitmap file.}
-\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_TIF}}}{Load a TIFF bitmap file.}
-\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_ANY}}}{Will try to autodetect the format.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_BMP}}{Load a Windows bitmap file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_GIF}}{Load a GIF bitmap file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_JPEG}}{Load a JPEG bitmap file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_PNG}}{Load a PNG bitmap file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_PCX}}{Load a PCX bitmap file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_PNM}}{Load a PNM bitmap file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_TIF}}{Load a TIFF bitmap file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_ANY}}{Will try to autodetect the format.}
 \end{twocollist}}
 
 \docparam{mimetype}{MIME type string (for example 'image/jpeg')}
@@ -482,8 +482,8 @@ mimetype from a file}
 
 \perlnote{Methods supported by wxPerl are:\par
 \begin{itemize}
-\item{\$bitmap->LoadFile( name, type )}
-\item{\$bitmap->LoadFile( name, mimetype )}
+\item{bitmap->LoadFile( name, type )}
+\item{bitmap->LoadFile( name, mimetype )}
 \end{itemize}
 }
 
@@ -567,8 +567,8 @@ mimetype to the named file}
 
 \perlnote{Methods supported by wxPerl are:\par
 \begin{itemize}
-\item{\$bitmap->SaveFile( name, type )}
-\item{\$bitmap->SaveFile( name, mimetype )}
+\item{bitmap->SaveFile( name, type )}
+\item{bitmap->SaveFile( name, mimetype )}
 \end{itemize}
 }
 
