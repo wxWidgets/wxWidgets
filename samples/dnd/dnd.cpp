@@ -332,9 +332,10 @@ public:
     }
 
 protected:
+    //get a point 1 up and 1 left, otherwise the mid-point of a triangle is on the line
     wxPoint GetCentre() const
-        { return wxPoint(m_pos.x + m_size.x / 2, m_pos.y + m_size.y / 2); }
-
+         { return wxPoint(m_pos.x + m_size.x / 2 - 1, m_pos.y + m_size.y / 2 - 1); }
+         
     struct ShapeDump
     {
         int x, y,       // position
@@ -379,9 +380,9 @@ public:
         dc.DrawLine(p2, p3);
         dc.DrawLine(p3, p1);
 
-#ifdef __WXMSW__
+        //works in multicolor modes; on GTK (at least) will fail in 16-bit color
+        dc.SetBrush(wxBrush(m_col, wxSOLID));       
         dc.FloodFill(GetCentre(), m_col, wxFLOOD_BORDER);
-#endif
     }
 };
 
@@ -416,9 +417,8 @@ public:
         dc.DrawLine(p3, p4);
         dc.DrawLine(p4, p1);
 
-#ifdef __WXMSW__
+        dc.SetBrush(wxBrush(m_col, wxSOLID));
         dc.FloodFill(GetCentre(), m_col, wxFLOOD_BORDER);
-#endif
     }
 };
 
@@ -445,9 +445,8 @@ public:
 
         dc.DrawEllipse(m_pos, m_size);
 
-#ifdef __WXMSW__
+        dc.SetBrush(wxBrush(m_col, wxSOLID));
         dc.FloodFill(GetCentre(), m_col, wxFLOOD_BORDER);
-#endif
     }
 };
 

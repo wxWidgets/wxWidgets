@@ -475,10 +475,12 @@ void MyCanvas::DrawDefault(wxDC& dc)
 {
     // mark the origin
     dc.DrawCircle(0, 0, 10);
-#if !(defined __WXGTK__) && !(defined __WXX11__) && !(defined __WXMOTIF__) && !(defined __WXMGL__)
-    // not implemented in wxGTK or wxMOTIF or wxX11 :-(
-    dc.FloodFill(0, 0, wxColour(255, 0, 0));
-#endif //
+
+    //flood fill using brush, starting at 1,1 and replacing whatever colour we find there
+    dc.SetBrush(wxBrush(wxColour(128,128,0), wxSOLID));
+    wxColour tmpColour ;
+    dc.GetPixel(1,1, &tmpColour);
+    dc.FloodFill(1,1, tmpColour, wxFLOOD_SURFACE);
 
     dc.DrawCheckMark(5, 80, 15, 15);
     dc.DrawCheckMark(25, 80, 30, 30);
