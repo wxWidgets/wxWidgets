@@ -233,12 +233,14 @@
 /*  other miscellaneous debugger-related functions */
 /*  ---------------------------------------------------------------------------- */
 
-/*  return true if we're running under debugger */
-/*  */
-/*  currently this only really works under Mac in CodeWarrior builds, it always */
-/*  returns false otherwise */
+/*
+    Return true if we're running under debugger.
+
+    Currently this only really works under Win32 and Mac in CodeWarrior builds,
+    it always returns false in other cases.
+ */
 #ifdef __cplusplus
-    #ifdef __WXMAC__
+    #if defined(__WXMAC__) || defined(__WXMSW__)
         extern bool WXDLLIMPEXP_BASE wxIsDebuggerRunning();
     #else /*  !Mac */
         inline bool wxIsDebuggerRunning() { return false; }

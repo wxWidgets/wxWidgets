@@ -1036,6 +1036,25 @@ void wxBell()
     ::MessageBeep((UINT)-1);        // default sound
 }
 
+bool wxIsDebuggerRunning()
+{
+    // IsDebuggerPresent() is not available under Win95, so load it dynamically
+    wxDynamicLibrary dll(_T("kernel32.dll"), wxDL_VERBATIM);
+
+    typedef BOOL (WINAPI *IsDebuggerPresent_t)();
+    if ( !dll.HasSymbol(_T("IsDebuggerPresent")) )
+    {
+        // no way to know, assume no
+        return false;
+    }
+
+    return (*(IsDebuggerPresent_t)dll.GetSymbol(_T("IsDebuggerPresent")))() != 0;
+}
+
+// ----------------------------------------------------------------------------
+// OS version
+// ----------------------------------------------------------------------------
+
 wxString wxGetOsDescription()
 {
     wxString str;
