@@ -63,11 +63,11 @@
 
 
 /////////////////////////////////
-// Peform some macro test
+// Print out the actual platform
 /////////////////////////////////
 
 #if wxUSE_GUI
-    #if defined(__WXMSW__)
+    #if defined(__WXMSW__) && !defined(__WXWINCE__)
 		#pragma message("\t CE : __WXMSW__")
     #elif defined(__WXWINCE__)
 		#pragma message("\t CE : __WXWINCE__")

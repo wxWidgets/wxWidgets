@@ -27,7 +27,8 @@
 
 // CreateDialog
 
-#ifdef CreateDialog
+//#ifdef(CreateDialog)
+#if !defined(__WXWINCE__) && defined(CreateDialog)
     #undef CreateDialog
 
     inline HWND CreateDialog(HINSTANCE hInstance,
@@ -355,6 +356,16 @@
 #ifdef Yield
     #undef Yield
 #endif
+
+
+#if defined(__WXWINCE__) && defined(DrawIcon) //#ifdef DrawIcon
+    #undef DrawIcon
+    inline BOOL DrawIcon(HDC hdc, int x, int y, HICON hicon) 
+    {
+        return DrawIconEx(hdc,x,y,hicon,0,0,0,NULL, DI_NORMAL) ;
+    }
+#endif
+
 
 // GetWindowProc
 //ifdef GetWindowProc

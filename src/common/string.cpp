@@ -2091,7 +2091,7 @@ static wxArrayString::CompareFunction gs_compareFunction = NULL;
 static bool gs_sortAscending = TRUE;
 
 // function which is called by quick sort
-extern "C" int LINKAGEMODE
+extern "C" int wxC_CALLING_CONV     // LINKAGEMODE
 wxStringCompareFunction(const void *first, const void *second)
 {
   wxString *strFirst = (wxString *)first;

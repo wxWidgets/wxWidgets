@@ -20,6 +20,13 @@
 
 #include <windows.h>
 
+
+#if defined (__WXWINCE__)
+    #include <wingdi.h>     // RGB, COLORREF
+    #include <winuser.h>    // Global Namespaces ::GetKeyState, ::GetWindowRect
+#endif
+
+
 #ifdef __WXMICROWIN__
     // Extra prototypes and symbols not defined by MicroWindows
     #include "wx/msw/microwin.h"

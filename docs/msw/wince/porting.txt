@@ -56,6 +56,7 @@ Add
 
 Incompatibility stuff & Missing headers
 ---------------------------------------
+ANSI is not supported, WinCE has only Unicode
 <time.h>
 <sys\types.h>
 <assert.h>
@@ -77,8 +78,8 @@ NOTES
 
 
 
-==========================================================
-Koan s.a.s. - Industrial Automation and Embedded Software
-Via Pascoli, 3 / Int.1 - 24121 Bergamo - ITALIA
-Tel./Fax (++39) +35 - 255.235   -   www.koansoftware.com
-==========================================================
+===========================================================
+ Koan s.a.s. - Industrial Automation and Embedded Software
+ Via Pascoli, 3 / Int.1 - 24121 Bergamo - ITALIA
+ www.koansoftware.com
+===========================================================
