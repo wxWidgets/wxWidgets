@@ -235,13 +235,13 @@ private:
 static void EventFlagsToSelType(long style,
                                 bool shiftDown,
                                 bool ctrlDown,
-                                bool *is_multiple,
-                                bool *extended_select,
-                                bool *unselect_others)
+                                bool &is_multiple,
+                                bool &extended_select,
+                                bool &unselect_others)
 {
-    *is_multiple = (style & wxTR_MULTIPLE) != 0;
-    *extended_select = shiftDown && is_multiple;
-    *unselect_others = !(extended_select || (ctrlDown && is_multiple));
+    is_multiple = (style & wxTR_MULTIPLE) != 0;
+    extended_select = shiftDown && is_multiple;
+    unselect_others = !(extended_select || (ctrlDown && is_multiple));
 }
 
 // -----------------------------------------------------------------------------
@@ -1826,8 +1826,18 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
     EventFlagsToSelType(GetWindowStyleFlag(),
                         event.ShiftDown(),
                         event.ControlDown(),
-                        &is_multiple, &extended_select, &unselect_others);
+                        is_multiple, extended_select, unselect_others);
 
+    // + : Expand
+    // - : Collaspe
+    // * : Toggle Expand/Collapse
+    // ' ' | return : activate
+    // up    : go up (not last children!)
+    // down  : go down
+    // left  : go to parent
+    // right : open if parent and go next
+    // home  : go to root
+    // end   : go to last item without opening parents
     switch (event.KeyCode())
     {
         case '+':
@@ -2237,7 +2247,7 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
             EventFlagsToSelType(GetWindowStyleFlag(),
                                 event.ShiftDown(),
                                 event.ControlDown(),
-                                &is_multiple, &extended_select, &unselect_others);
+                                is_multiple, extended_select, unselect_others);
 
             if ( onButton )
             {
