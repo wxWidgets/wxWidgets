@@ -101,7 +101,7 @@ void wxHTTP::SendHeaders()
     wxString *str = (wxString *)head->Data();
     char buf[100];
 
-    sprintf(buf, "%s: %s\n\r", head->GetKeyString()/*key.string*/, str->GetData());
+    sprintf(buf, "%s: %s\n\r", head->GetKeyString(), str->GetData());
     Write(buf, strlen(buf));
 
     head = head->Next();

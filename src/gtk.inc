@@ -47,6 +47,7 @@ LIB_CPP_SRC=\
  common/wincmn.cpp \
  common/framecmn.cpp \
  common/stream.cpp \
+ common/wfstream.cpp \
  common/datstrm.cpp \
  common/mstream.cpp \
  common/zstream.cpp \
@@ -60,8 +61,8 @@ LIB_CPP_SRC=\
  common/sckaddr.cpp \
  common/sckipc.cpp \
  common/protocol.cpp \
- common/ftp.cpp \
  common/http.cpp \
+ common/ftp.cpp \
  common/url.cpp \
  common/tokenzr.cpp \
 \

@@ -165,7 +165,8 @@ void wxFlushResources(void)
 
     wxNode *node = wxTheResourceCache->First();
     while (node) {
-        char *file = node->key.string;
+        wxString str = node->GetKeyString();
+        char *file = WXSTRINGCAST str;
         // If file doesn't exist, create it first.
         (void)GetResourcePath(nameBuffer, file, TRUE);
 

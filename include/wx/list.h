@@ -321,7 +321,7 @@ private:
         nodetype(wxListBase *list = (wxListBase *)NULL,                     \
                  nodetype *previous = (nodetype *)NULL,                     \
                  nodetype *next = (nodetype *)NULL,                         \
-                 T *data = NULL,                                            \
+                 T *data = (T *)NULL,                                       \
                  const wxListKey& key = wxListKey())                        \
             : wxNodeBase(list, previous, next, data, key) { }               \
                                                                             \
@@ -357,7 +357,7 @@ private:
         T *operator[](size_t index) const                                   \
         {                                                                   \
             nodetype *node = Item(index);                                   \
-            return node ? node->GetData() : NULL;                           \
+            return node ? (T*)(node->GetData()) : (T*)NULL;                 \
         }                                                                   \
                                                                             \
         nodetype *Append(T *object)                                         \

@@ -365,7 +365,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
     if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_minWidth;
     if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_minHeight;
 
-//    gtk_widget_set_usize( m_widget, m_width, m_height );
+    gtk_widget_set_usize( m_widget, m_width, m_height );
     
     // This emulates the new wxMSW behaviour
 
