@@ -119,7 +119,7 @@ GetAddressFromName(const wxString& serverName, const wxString& host = _T(""))
 class wxTCPEventHandler : public wxEvtHandler
 {
 public:
-  wxTCPEventHandler() : wxEvtHandler() {};
+  wxTCPEventHandler() : wxEvtHandler() {}
 
   void Client_OnRequest(wxSocketEvent& event);
   void Server_OnRequest(wxSocketEvent& event);
