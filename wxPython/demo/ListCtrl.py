@@ -98,7 +98,8 @@ class TestListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 
         self.list = TestListCtrl(self, tID,
                                  style=wx.LC_REPORT 
-                                 | wx.SUNKEN_BORDER
+                                 #| wx.BORDER_SUNKEN
+                                 | wx.BORDER_NONE
                                  | wx.LC_EDIT_LABELS
                                  #| wxLC_NO_HEADER
                                  #| wxLC_VRULES | wxLC_HRULES
