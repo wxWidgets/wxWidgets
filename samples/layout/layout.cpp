@@ -25,6 +25,8 @@
 #endif
 
 #include <ctype.h>
+#include "wx/sizer.h"
+
 #include "layout.h"
 
 // Declare two frames
@@ -52,6 +54,7 @@ bool MyApp::OnInit(void)
 
   file_menu->Append(LAYOUT_LOAD_FILE, "&Load file",      "Load a text file");
   file_menu->Append(LAYOUT_TEST, "&Test sizers",      "Test sizer code");
+  file_menu->Append(LAYOUT_TEST_NEW, "&Test new sizers",      "Test new sizer code");
 
   file_menu->AppendSeparator();
   file_menu->Append(LAYOUT_QUIT, "E&xit",                "Quit program");
@@ -152,6 +155,10 @@ bool MyApp::OnInit(void)
   return TRUE;
 }
 
+//-----------------------------------------------------------------
+//  MyFrame
+//-----------------------------------------------------------------
+
 // Define my frame constructor
 MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h):
   wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
@@ -165,6 +172,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(LAYOUT_LOAD_FILE, MyFrame::LoadFile)
   EVT_MENU(LAYOUT_QUIT, MyFrame::Quit)
   EVT_MENU(LAYOUT_TEST, MyFrame::TestSizers)
+  EVT_MENU(LAYOUT_TEST_NEW, MyFrame::TestNewSizers)
   EVT_MENU(LAYOUT_ABOUT, MyFrame::About)
   EVT_SIZE(MyFrame::OnSize)
 END_EVENT_TABLE()
@@ -188,7 +196,13 @@ void MyFrame::Quit(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::TestSizers(wxCommandEvent& WXUNUSED(event) )
 {
-  SizerFrame *newFrame = new SizerFrame((MyFrame *) NULL, (char *) "Sizer Test Frame", 50, 50, 500, 500);
+  SizerFrame *newFrame = new SizerFrame((MyFrame *) NULL, "Sizer Test Frame", 50, 50, 500, 500);
+  newFrame->Show(TRUE);
+}
+
+void MyFrame::TestNewSizers(wxCommandEvent& WXUNUSED(event) )
+{
+  NewSizerFrame *newFrame = new NewSizerFrame((MyFrame *) NULL, "Sizer Test Frame", 50, 50 );
   newFrame->Show(TRUE);
 }
 
@@ -224,6 +238,10 @@ void MyFrame::Draw(wxDC& dc, bool WXUNUSED(draw_bitmaps) )
   dc.DrawArc(50, 300, 100, 250, 100, 300 );
 }
 
+//-----------------------------------------------------------------
+//  MyWindow
+//-----------------------------------------------------------------
+
 BEGIN_EVENT_TABLE(MyWindow, wxWindow)
     EVT_PAINT(MyWindow::OnPaint)
 END_EVENT_TABLE()
@@ -245,6 +263,9 @@ void MyWindow::OnPaint(wxPaintEvent& WXUNUSED(event) )
   frame->Draw(dc,TRUE);
 }
 
+//-----------------------------------------------------------------
+//  SizerFrame
+//-----------------------------------------------------------------
 
 SizerFrame::SizerFrame(wxFrame *frame, char *title, int x, int y, int w, int h):
   wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
@@ -338,4 +359,44 @@ void SizerFrame::OnSize(wxSizeEvent& event)
   wxFrame::OnSize(event);
   panel->Layout();
 }
+
+//-----------------------------------------------------------------
+//  NewSizerFrame
+//-----------------------------------------------------------------
+
+NewSizerFrame::NewSizerFrame(wxFrame *frame, char *title, int x, int y ):
+  wxFrame(frame, -1, title, wxPoint(x, y) )
+{
+  // no extra options means border all around  
+  topsizer = new wxBorderNewSizer();
+  
+  // make border 20 pixels wide
+  topsizer->Add( new wxButton( this, -1, "Hello" ), 20 );
+  
+  // set frame to minimum size
+  topsizer->Fit( this );  
+  
+  // don't allow frame to get smaller than what the sizers tell ye
+  topsizer->SetSizeHints( this );  
+  
+  // layout widgets
+  topsizer->Layout();
+}
+
+// This can later be removed if we integrate wxNewSizers
+// into wxWindows
+
+BEGIN_EVENT_TABLE(NewSizerFrame, wxFrame)
+  EVT_SIZE(NewSizerFrame::OnSize)
+END_EVENT_TABLE()
+
+void NewSizerFrame::OnSize(wxSizeEvent& event)
+{
+  wxFrame::OnSize(event);
+
+  wxSize client_size( GetClientSize() );
+   
+  topsizer->SetDimension( 0, 0, client_size.x, client_size.y );
+}
+
 

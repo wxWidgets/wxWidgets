@@ -34,6 +34,7 @@ class MyFrame: public wxFrame
     void LoadFile(wxCommandEvent& event);
     void Quit(wxCommandEvent& event);
     void TestSizers(wxCommandEvent& event);
+    void TestNewSizers(wxCommandEvent& event);
     void About(wxCommandEvent& event);
 
   DECLARE_EVENT_TABLE()
@@ -71,7 +72,19 @@ class SizerFrame: public wxFrame
    DECLARE_EVENT_TABLE()
 };
 
+class NewSizerFrame: public wxFrame
+{
+  public:
+    wxPanel *panel;
+    wxNewSizer *topsizer;
+    NewSizerFrame(wxFrame *frame, char *title, int x, int y );
+    void OnSize(wxSizeEvent& event);
+
+   DECLARE_EVENT_TABLE()
+};
+
 #define LAYOUT_QUIT       100
 #define LAYOUT_TEST       101
 #define LAYOUT_ABOUT      102
 #define LAYOUT_LOAD_FILE  103
+#define LAYOUT_TEST_NEW   104

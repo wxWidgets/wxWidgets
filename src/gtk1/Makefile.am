@@ -85,6 +85,7 @@ libwx_gtk_la_SOURCES = \
  sckipc.cpp \
  sckstrm.cpp \
  serbase.cpp \
+ sizer.cpp \
  socket.cpp \
  strconv.cpp \
  stream.cpp \
