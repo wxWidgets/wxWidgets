@@ -34,10 +34,10 @@ protected:
     int           m_style;
     wxBitmap      m_stipple ;
     wxColour      m_colour;
-
-/* TODO: implementation
-    WXHBRUSH      m_hBrush;
-*/
+    bool          m_isMacTheme ;
+    ThemeBrush    m_macThemeBrush ;
+    bool          m_isMacThemeBackground ;
+    ThemeBackgroundKind m_macThemeBackground ;
 };
 
 #define M_BRUSHDATA ((wxBrushRefData *)m_refData)
@@ -49,6 +49,7 @@ class WXDLLEXPORT wxBrush: public wxGDIObject
 
 public:
   wxBrush();
+  wxBrush(ThemeBrush macThemeBrush ) ;
   wxBrush(const wxColour& col, int style);
   wxBrush(const wxBitmap& stipple);
   inline wxBrush(const wxBrush& brush) { Ref(brush); }
@@ -58,11 +59,17 @@ public:
   virtual void SetColour(unsigned char r, unsigned char g, unsigned char b)  ;
   virtual void SetStyle(int style)  ;
   virtual void SetStipple(const wxBitmap& stipple)  ;
+  virtual void SetMacTheme(ThemeBrush macThemeBrush) ;
+  virtual void SetMacThemeBackground(ThemeBackgroundKind macThemeBackground ) ;
 
   inline wxBrush& operator = (const wxBrush& brush) { if (*this == brush) return (*this); Ref(brush); return *this; }
   inline bool operator == (const wxBrush& brush) { return m_refData == brush.m_refData; }
   inline bool operator != (const wxBrush& brush) { return m_refData != brush.m_refData; }
 
+  inline bool IsMacTheme()  const { return (M_BRUSHDATA ? M_BRUSHDATA->m_isMacTheme : false); };
+  inline bool IsMacThemeBackground()  const { return (M_BRUSHDATA ? M_BRUSHDATA->m_isMacThemeBackground : false); };
+  inline ThemeBackgroundKind GetMacThemeBackground()  const { return (M_BRUSHDATA ? ( M_BRUSHDATA->m_isMacThemeBackground ? M_BRUSHDATA->m_macThemeBackground : 0) : 0); };
+  inline ThemeBrush GetMacTheme()  const { return (M_BRUSHDATA ? ( M_BRUSHDATA->m_isMacTheme ? M_BRUSHDATA->m_macThemeBrush : kThemeBrushBlack) : kThemeBrushBlack); };
   inline wxColour& GetColour() const { return (M_BRUSHDATA ? M_BRUSHDATA->m_colour : wxNullColour); };
   inline int GetStyle() const { return (M_BRUSHDATA ? M_BRUSHDATA->m_style : 0); };
   inline wxBitmap *GetStipple() const { return (M_BRUSHDATA ? & M_BRUSHDATA->m_stipple : 0); };
