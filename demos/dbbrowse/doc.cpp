@@ -190,7 +190,7 @@ bool mjDoc::OnInitODBC()
       (p_DSN+i)->Drv = s_SortDsDesc[i];
       (p_DSN+i)->Usr = "";
       (p_DSN+i)->Pas = "";
-      Temp0.Printf("%02d) Dsn(%s) DsDesc(%s)",i,(p_DSN+i)->Dsn,(p_DSN+i)->Drv);
+      Temp0.Printf("%02d) Dsn(%s) DsDesc(%s)",i,(p_DSN+i)->Dsn.c_str(),(p_DSN+i)->Drv.c_str());
       wxLogMessage(Temp0);
     }
   i = 0;
