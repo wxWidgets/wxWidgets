@@ -1691,6 +1691,8 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
 
 void wxWindow::PostCreation()
 {
+    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    
     if (m_wxwindow)
     {
         gtk_signal_connect( GTK_OBJECT(m_wxwindow), "expose_event",
@@ -1702,7 +1704,8 @@ void wxWindow::PostCreation()
 
     ConnectWidget( GetConnectWidget() );
 
-    if (m_widget && m_parent) gtk_widget_realize( m_widget );
+    /* we force the creation of wxFrame and wxDialog in the respective code */
+    if (m_parent) gtk_widget_realize( m_widget );
 
     if (m_wxwindow) gtk_widget_realize( m_wxwindow );
 

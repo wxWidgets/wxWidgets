@@ -65,7 +65,7 @@ public:
   virtual void GetClientSize( int *width, int *height ) const;
   wxSize GetClientSize() const { int w, h; GetClientSize(& w, & h); return wxSize(w, h); }
 
-  virtual void SetClientSize( int const width, int const height );
+  virtual void SetClientSize( int width, int height );
 
   virtual void SetSize( int x, int y, int width, int height,
     int sizeFlags = wxSIZE_AUTO );

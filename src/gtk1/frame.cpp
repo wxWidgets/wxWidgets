@@ -152,15 +152,6 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
 
     m_widget = gtk_window_new( win_type );
 
-#ifdef __WXDEBUG__
-        debug_focus_in( m_widget, "wxFrame::m_widget", name );
-#endif
-
-    if ((size.x != -1) && (size.y != -1))
-        gtk_widget_set_usize( m_widget, m_width, m_height );
-    if ((pos.x != -1) && (pos.y != -1))
-        gtk_widget_set_uposition( m_widget, m_x, m_y );
-
     gtk_window_set_title( GTK_WINDOW(m_widget), title );
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 
@@ -173,21 +164,19 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
     gtk_widget_show( m_wxwindow );
     GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
 
-#ifdef __WXDEBUG__
-        debug_focus_in( m_wxwindow, "wxFrame::m_wxwindow", name );
-#endif
-
     gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );
 
+    if (m_parent) m_parent->AddChild( this );
+
+    PostCreation();
+
+    gtk_widget_realize( m_widget );
+    
     gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
         GTK_SIGNAL_FUNC(gtk_frame_size_callback), (gpointer)this );
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "configure_event",
         GTK_SIGNAL_FUNC(gtk_frame_configure_callback), (gpointer)this );
-
-    if (m_parent) m_parent->AddChild( this );
-
-    PostCreation();
 
     return TRUE;
 }
@@ -262,9 +251,9 @@ wxPoint wxFrame::GetClientAreaOrigin() const
 
 void wxFrame::SetSize( int x, int y, int width, int height, int sizeFlags )
 {
-    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
 
-    /* Don't do anything for children of wxMDIChildFrame */
+    /* don't do anything for children of wxMDIChildFrame */
     if (!m_wxwindow) return;
 
     if (m_resizing) return; // I don't like recursions
@@ -308,12 +297,16 @@ void wxFrame::SetSize( int x, int y, int width, int height, int sizeFlags )
     if ((m_x != -1) || (m_y != -1))
     {
         if ((m_x != old_x) || (m_y != old_y))
-            gtk_widget_set_uposition( m_widget, m_x, m_y );
+	{
+            /* m_sizeSet = FALSE; */
+	    gtk_widget_set_uposition( m_widget, m_x, m_y );
+	}
     }
 
     if ((m_width != old_width) || (m_height != old_height))
     {
-       m_sizeSet = FALSE;
+        /* we set the size in GtkOnSize */
+        m_sizeSet = FALSE;
     }
 
     m_resizing = FALSE;
@@ -360,7 +353,7 @@ void wxFrame::GetClientSize( int *width, int *height ) const
     }
 }
 
-void wxFrame::SetClientSize( int const width, int const height )
+void wxFrame::SetClientSize( int width, int height )
 {
     wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
 
@@ -390,18 +383,16 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
     m_width = width;
     m_height = height;
 
+    /* check if size is in legal range */
     if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
     if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
     if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
     if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
 
-    gtk_widget_set_usize( m_widget, m_width, m_height );
-    gdk_window_resize( m_widget->window, m_width, m_height );
-
-    // this emulates the new wxMSW behaviour of placing all
-    // frame-subwindows (menu, toolbar..) on one native window
-        // OK, this hurts in the eye, but I don't want to call SetSize()
-        // because I don't want to call any non-native functions here.
+    /* this emulates the new wxMSW behaviour of placing all
+     * frame-subwindows (menu, toolbar..) on one native window
+     * this hurts in the eye, but I don't want to call SetSize()
+     * because I don't want to call any non-native functions here. */
 
     if (m_frameMenuBar)
     {
@@ -451,16 +442,17 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
         gtk_widget_set_usize( m_frameStatusBar->m_widget, ww, hh );
     }
 
+    /* we actually set the size of a frame here and no-where else */
+    gtk_widget_set_usize( m_widget, m_width, m_height );
+
     m_sizeSet = TRUE;
 
     /* send size event to frame */
-
     wxSizeEvent event( wxSize(m_width,m_height), GetId() );
     event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( event );
 
     /* send size event to status bar */
-
     if (m_frameStatusBar)
     {
         wxSizeEvent event2( wxSize(m_frameStatusBar->m_width,m_frameStatusBar->m_height), m_frameStatusBar->GetId() );
@@ -496,10 +488,10 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
     }
     else
     {
-        // no child: go out !
+        /* no child: go out ! */
         if (!GetChildren().First()) return;
 
-        // do we have exactly one child?
+        /* do we have exactly one child? */
         wxWindow *child = (wxWindow *) NULL;
         for(wxNode *node = GetChildren().First(); node; node = node->Next())
         {
@@ -512,13 +504,13 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
 #endif
             )
             {
-          // it's the second one: do nothing
+                /* it's the second one: do nothing */
                 if (child) return;
                 child = win;
             }
         }
 
-        // yes: set it's size to fill all the frame
+        /* yes: set it's size to fill all the frame */
         int client_x, client_y;
         GetClientSize( &client_x, &client_y );
         child->SetSize( 1, 1, client_x-2, client_y-2 );

@@ -94,6 +94,7 @@ public:
 // implementation
 
   virtual void GtkOnSize( int x, int y, int width, int height );
+  virtual void OnInternalIdle();
 
   bool       m_modalShowing;
   wxString   m_title;

@@ -31,7 +31,7 @@
 #include "unistd.h"
 
 // add more here if you run into problems
-#if defined(__SUN__) && !defined(__SunOs_5_6) && !defined(__SunOs_5_7) 
+#if defined(__SUN__) && !defined(__SunOs_5_6) && !defined(__SunOs_5_7) && !defined(__SUNPRO_CC)
 extern "C" 
 {
 void usleep(unsigned long usec); 

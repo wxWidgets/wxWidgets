@@ -26,7 +26,8 @@
 // ----------------------------------------------------------------------------
 
 // OS
-#if defined(__HPUX__) || defined(____SVR4____) || defined(__LINUX__) || defined(__sgi ) || defined(__unix__)
+#if defined(__HPUX__) || defined(____SVR4____) || defined(__LINUX__) || defined(__sgi ) || \
+    defined(__unix__) || defined(sun) || defined(__SUN__)
     #ifndef __UNIX__
         #define __UNIX__
     #endif // Unix
@@ -166,7 +167,7 @@
     typedef unsigned int bool;
  #endif
 
-#elif defined(__SUNCC__)
+#elif defined(__SUNCC__) || defined(__SUNPRO_CC)
     #ifdef __SUNPRO_CC
         // starting from version 5.0 Sun CC understands 'bool'
         #if __SUNPRO_CC <= 0x0420

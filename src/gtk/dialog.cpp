@@ -56,7 +56,12 @@ static void gtk_dialog_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation
     printf( ".\n" );
 */
 
-    win->GtkOnSize( alloc->x, alloc->y, alloc->width, alloc->height );
+   if ((win->m_width != alloc->width) || (win->m_height != alloc->height))
+   {
+       win->m_sizeSet = FALSE;
+       win->m_width = alloc->width;
+       win->m_height = alloc->height;
+   }
 }
 
 //-----------------------------------------------------------------------------
@@ -94,6 +99,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxDialog,wxPanel)
 wxDialog::wxDialog()
 {
     m_title = "";
+    m_sizeSet = FALSE;
     m_modalShowing = FALSE;
 }
 
@@ -103,6 +109,7 @@ wxDialog::wxDialog( wxWindow *parent,
                     long style, const wxString &name )
 {
     m_modalShowing = FALSE;
+    m_sizeSet = FALSE;
     Create( parent, id, title, pos, size, style, name );
 }
 
@@ -133,20 +140,17 @@ bool wxDialog::Create( wxWindow *parent,
 
     SetTitle( title );
 
-    if ((m_x != -1) || (m_y != -1))
-        gtk_widget_set_uposition( m_widget, m_x, m_y );
+    if (m_parent) m_parent->AddChild( this );
 
-    gtk_widget_set_usize( m_widget, m_width, m_height );
+    PostCreation();
+    
+    gtk_widget_realize( m_widget );
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
         GTK_SIGNAL_FUNC(gtk_dialog_size_callback), (gpointer)this );
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "configure_event",
         GTK_SIGNAL_FUNC(gtk_dialog_configure_callback), (gpointer)this );
-
-    if (m_parent) m_parent->AddChild( this );
-
-    PostCreation();
 
     return TRUE;
 }
@@ -253,33 +257,6 @@ bool wxDialog::Destroy()
     return TRUE;
 }
 
-void wxDialog::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height )
-{
-    // due to a bug in gtk, x,y are always 0
-    // m_x = x;
-    // m_y = y;
-
-    if ((m_height == height) && (m_width == width) &&
-        (m_sizeSet)) return;
-    if (!m_wxwindow) return;
-
-    m_width = width;
-    m_height = height;
-
-    if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
-    if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
-    if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
-    if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
-
-    gtk_widget_set_usize( m_widget, m_width, m_height );
-
-    m_sizeSet = TRUE;
-
-    wxSizeEvent event( wxSize(m_width,m_height), GetId() );
-    event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( event );
-}
-
 void wxDialog::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
     wxASSERT_MSG( (m_widget != NULL), "invalid dialog" );
@@ -290,23 +267,23 @@ void wxDialog::OnSize( wxSizeEvent &WXUNUSED(event) )
     }
     else
     {
-        // no child: go out !
+        /* no child: go out ! */
         if (!GetChildren().First()) return;
 
-        // do we have exactly one child?
+        /* do we have exactly one child? */
         wxWindow *child = (wxWindow *) NULL;
         for(wxNode *node = GetChildren().First(); node; node = node->Next())
         {
             wxWindow *win = (wxWindow *)node->Data();
             if (!wxIS_KIND_OF(win,wxFrame) && !wxIS_KIND_OF(win,wxDialog))
             {
-                // it's the second one: do nothing
+                /* it's the second one: do nothing */
                 if (child) return;
                 child = win;
             }
         }
 
-        // yes: set it's size to fill all the frame
+        /* yes: set it's size to fill all the frame */
         int client_x, client_y;
         GetClientSize( &client_x, &client_y );
         child->SetSize( 1, 1, client_x-2, client_y);
@@ -315,12 +292,10 @@ void wxDialog::OnSize( wxSizeEvent &WXUNUSED(event) )
 
 void wxDialog::SetSize( int x, int y, int width, int height, int sizeFlags )
 {
-    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid dialog" );
+    wxASSERT_MSG( (m_wxwindow != NULL), "invalid dialog" );
 
-    // Don't do anything for children of wxMDIChildFrame
-    if (!m_wxwindow) return;
-
-    if (m_resizing) return; // I don't like recursions
+    if (m_resizing) return; /* I don't like recursions */
     m_resizing = TRUE;
 
     int old_x = m_x;
@@ -361,19 +336,16 @@ void wxDialog::SetSize( int x, int y, int width, int height, int sizeFlags )
     if ((m_x != -1) || (m_y != -1))
     {
         if ((m_x != old_x) || (m_y != old_y))
-            gtk_widget_set_uposition( m_widget, m_x, m_y );
+	{
+            /* m_sizeSet = FALSE; */
+            gtk_widget_set_uposition( m_widget, m_x, m_y ); 
+	}
     }
 
     if ((m_width != old_width) || (m_height != old_height))
     {
-        gtk_widget_set_usize( m_widget, m_width, m_height );
+        m_sizeSet = FALSE;
     }
-
-    m_sizeSet = TRUE;
-
-    wxSizeEvent event( wxSize(m_width,m_height), GetId() );
-    event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( event );
 
     m_resizing = FALSE;
 }
@@ -381,6 +353,33 @@ void wxDialog::SetSize( int x, int y, int width, int height, int sizeFlags )
 void wxDialog::SetSize( int width, int height )
 {
     SetSize( -1, -1, width, height, wxSIZE_USE_EXISTING );
+}
+
+void wxDialog::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height )
+{
+    // due to a bug in gtk, x,y are always 0
+    // m_x = x;
+    // m_y = y;
+
+    if ((m_height == height) && (m_width == width) && (m_sizeSet)) return;
+    if (!m_wxwindow) return;
+
+    m_width = width;
+    m_height = height;
+
+    if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
+    if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
+    if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
+    if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
+
+    /* we actually set the size of a frame here and no-where else */
+    gtk_widget_set_usize( m_widget, m_width, m_height );
+
+    m_sizeSet = TRUE;
+
+    wxSizeEvent event( wxSize(m_width,m_height), GetId() );
+    event.SetEventObject( this );
+    GetEventHandler()->ProcessEvent( event );
 }
 
 void wxDialog::Centre( int direction )
@@ -396,15 +395,31 @@ void wxDialog::Centre( int direction )
     Move( x, y );
 }
 
+void wxDialog::OnInternalIdle()
+{
+    if (!m_sizeSet)
+        GtkOnSize( m_x, m_y, m_width, m_height );
+}
+
 bool wxDialog::Show( bool show )
 {
     if (!show && IsModal())
     {
-      EndModal( wxID_CANCEL );
+        EndModal( wxID_CANCEL );
+    }
+
+    if (show && !m_sizeSet)
+    {
+        /* by calling GtkOnSize here, we don't have to call
+           either after showing the frame, which would entail
+           much ugly flicker nor from within the size_allocate
+           handler, because GTK 1.1.X forbids that. */
+
+        GtkOnSize( m_x, m_y, m_width, m_height );
     }
 
     wxWindow::Show( show );
-
+    
     if (show) InitDialog();
 
     return TRUE;

@@ -63,7 +63,7 @@ public:
   GtkAdjustment  *m_adjust;
   float           m_oldPos;
   
-  DECLARE_EVENT_TABLE();
+  DECLARE_EVENT_TABLE()
 };
 
 //-----------------------------------------------------------------------------
