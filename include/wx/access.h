@@ -225,6 +225,9 @@ typedef enum
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxAccessible;
+class WXDLLEXPORT wxWindow;
+class WXDLLEXPORT wxPoint;
+class WXDLLEXPORT wxRect;
 class WXDLLEXPORT wxAccessibleBase : public wxObject
 {
     DECLARE_NO_COPY_CLASS(wxAccessibleBase)

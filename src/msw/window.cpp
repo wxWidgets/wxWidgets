@@ -60,6 +60,7 @@
 
 #if wxUSE_ACCESSIBILITY
     #include "wx/access.h"
+    #include <ole2.h>
     #include <oleacc.h>
     #ifndef WM_GETOBJECT
         #define WM_GETOBJECT 0x003D
