@@ -25,7 +25,8 @@ mkdir %DEST%\lib
 chdir %WXWIN%
 
 rem Copy the files to the root directory
-
+rem
+rem "/q" is 4NT-specific, remove it if you're using DOS
 copy /q configure.in %DEST%
 copy /q configure %DEST%
 copy /q wxwin.m4 %DEST%
