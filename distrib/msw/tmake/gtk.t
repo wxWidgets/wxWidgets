@@ -21,7 +21,17 @@
         ($fileobj = $file) =~ s/cp?p?$/\o/;
 
         $project{"GTK_SOURCES"} .= "generic/" . $file . " ";
-        $project{"GENERICOBJS"} .= $fileobj . " ";
+        $project{"GUIOBJS"} .= $fileobj . " ";
+
+        #! also add it to the list of object files used by wxUniv if there
+        #! is no file with the same name among wxUniv own objects
+        my $filereal = $file;
+        if ( $file =~ /^([^.]+)g.cpp$/ ) {
+            $filereal = "$1.cpp";
+        }
+        if ( !exists $wxUNIV{$filereal} ) {
+            $project{"GUI_LOWLEVEL_OBJS"} .= $fileobj . " ";
+        }
     }
 
     foreach $file (sort keys %wxCommon) {
@@ -95,9 +105,6 @@ ALL_HEADERS = \
 
 COMMONOBJS = \
 		#$ ExpandList("COMMONOBJS");
-
-GENERICOBJS = \
-		#$ ExpandList("GENERICOBJS");
 
 GUIOBJS = \
 		#$ ExpandList("GUIOBJS");
