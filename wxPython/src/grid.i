@@ -1561,7 +1561,7 @@ public:
     %pythoncode {
         SelectCells =   wxGridSelectCells
         SelectRows =    wxGridSelectRows
-        SelectColumns = wxGridSelectColumns,
+        SelectColumns = wxGridSelectColumns
     }
 
     bool CreateGrid( int numRows, int numCols,
