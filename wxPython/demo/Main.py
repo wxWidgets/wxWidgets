@@ -132,6 +132,7 @@ class wxPythonDemo(wxFrame):
 
 
         self.otherWin = None
+        self.showTip = true
         EVT_IDLE(self, self.OnIdle)
         EVT_CLOSE(self, self.OnCloseWindow)
         EVT_ICONIZE(self, self.OnIconfiy)
@@ -413,6 +414,25 @@ class wxPythonDemo(wxFrame):
             self.window = self.otherWin
             self.otherWin = None
 
+        if self.showTip:
+            self.ShowTip()
+            self.showTip = false
+
+
+    #---------------------------------------------
+    def ShowTip(self):
+        try:
+            showTipText = open(opj("data/showTips")).read()
+            showTip, index = eval(showTipText)
+        except IOError:
+            showTip, index = (1, 0)
+        if showTip:
+            tp = wxCreateFileTipProvider(opj("data/tips.txt"), index)
+            showTip = wxShowTip(self, tp)
+            index = tp.GetCurrentTip()
+            open(opj("data/showTips"), "w").write(str( (showTip, index) ))
+
+
     #---------------------------------------------
     def OnDemoMenu(self, event):
         try:
@@ -480,21 +500,7 @@ class MySplashScreen(wxSplashScreen):
     def OnClose(self, evt):
         frame = wxPythonDemo(None, -1, "wxPython: (A Demonstration)")
         frame.Show(true)
-        self.ShowTip(frame)
-        self.Destroy()
-
-    def ShowTip(self, frame):
-        try:
-            showTipText = open(opj("data/showTips")).read()
-            showTip, index = eval(showTipText)
-        except IOError:
-            showTip, index = (1, 0)
-        if showTip:
-            tp = wxCreateFileTipProvider(opj("data/tips.txt"), index)
-            showTip = wxShowTip(frame, tp)
-            index = tp.GetCurrentTip()
-            open(opj("data/showTips"), "w").write(str( (showTip, index) ))
-
+        evt.Skip()  # Make sure the default handler runs too...
 
 
 class MyApp(wxApp):
@@ -506,7 +512,6 @@ class MyApp(wxApp):
         wxInitAllImageHandlers()
         splash = MySplashScreen()
         splash.Show()
-        wxYield()
         return true
 
 
