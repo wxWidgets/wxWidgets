@@ -71,6 +71,9 @@ PySetUpperDateLimit, PySetDateRange, PyGetLowerDateLimit, and
 PyGetUpperDateLimit.  Also, CalendarEvent was extended with PySetDate
 and PyGetDate methods.
 
+wxMSW: SetBackgroundColour on a wx.Choice or a wx.ComboBox will now
+also set the colour of the dropdown.
+
 
 
 
