@@ -23,10 +23,12 @@ class WXDLLEXPORT wxPrintDialogBase : public wxDialog
 {
 public:
     wxPrintDialogBase() { }
-    wxPrintDialogBase(wxWindow *parent, wxWindowID id = -1, const wxString &title = _("Print"),
-            const wxPoint &pos = wxDefaultPosition,
-            const wxSize &size = wxDefaultSize,
-            long style = wxDEFAULT_DIALOG_STYLE );
+    wxPrintDialogBase(wxWindow *parent,
+                      wxWindowID id = wxID_ANY,
+                      const wxString &title = wxEmptyString,
+                      const wxPoint &pos = wxDefaultPosition,
+                      const wxSize &size = wxDefaultSize,
+                      long style = wxDEFAULT_DIALOG_STYLE);
             
     virtual int ShowModal() = 0;
 

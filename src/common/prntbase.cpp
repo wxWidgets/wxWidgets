@@ -277,9 +277,21 @@ wxPrintDialogData& wxPrinter::GetPrintDialogData() const
 
 IMPLEMENT_ABSTRACT_CLASS(wxPrintDialogBase, wxObject)
 
-wxPrintDialogBase::wxPrintDialogBase(wxWindow *parent, wxWindowID id, 
-    const wxString &title, const wxPoint &pos, const wxSize &size, long style ) :
-    wxDialog( parent, id, title, pos, size, style )
+wxPrintDialogBase::wxPrintDialogBase(wxWindow *parent,
+                                     wxWindowID id, 
+                                     const wxString &title,
+                                     const wxPoint &pos,
+                                     const wxSize &size,
+                                     long style)
+                 : wxDialog
+                   (
+                        parent,
+                        id,
+                        title.empty() ? wxString(_("Print")) : title,
+                        pos,
+                        size,
+                        style
+                   )
 {
 }
 
