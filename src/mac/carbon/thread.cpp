@@ -39,6 +39,8 @@
 #include "wx/mac/uma.h"
 #endif
 
+#define INFINITE 0xFFFFFFFF
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -87,38 +89,32 @@ public :
 class wxMutexInternal
 {
 public:
-    wxMutexInternal()
+    wxMutexInternal(wxMutexType WXUNUSED(mutexType))
     {
         m_owner = kNoThreadID ;
+        m_locked = 0;
     }
 
     ~wxMutexInternal()
     {
+        if ( m_locked > 0 )
+        {
+            wxLogDebug(_T("Warning: freeing a locked mutex (%d locks)."), m_locked);
+        }
     }
 
+    bool IsOk() const { return true; }
+
+    wxMutexError Lock() ;
+    wxMutexError TryLock() ;
+    wxMutexError Unlock();
 public:
     ThreadID m_owner ;
     wxArrayLong m_waiters ;
+    long m_locked ;
 };
 
-wxMutex::wxMutex()
-{
-    m_internal = new wxMutexInternal;
-
-    m_locked = 0;
-}
-
-wxMutex::~wxMutex()
-{
-    if ( m_locked > 0 )
-    {
-        wxLogDebug(_T("Warning: freeing a locked mutex (%d locks)."), m_locked);
-    }
-
-    delete m_internal;
-}
-
-wxMutexError wxMutex::Lock()
+wxMutexError wxMutexInternal::Lock()
 {
     wxMacStCritical critical ;
     if ( UMASystemIsInitialized() )
@@ -128,20 +124,20 @@ wxMutexError wxMutex::Lock()
         err = ::MacGetCurrentThread(&current);
         // if we are not the owner, add this thread to the list of waiting threads, stop this thread
         // and invoke the scheduler to continue executing the owner's thread
-        while ( m_internal->m_owner != kNoThreadID && m_internal->m_owner != current)
+        while ( m_owner != kNoThreadID && m_owner != current)
         {
-            m_internal->m_waiters.Add(current);
-            err = ::SetThreadStateEndCritical(kCurrentThreadID, kStoppedThreadState, m_internal->m_owner);
+            m_waiters.Add(current);
+            err = ::SetThreadStateEndCritical(kCurrentThreadID, kStoppedThreadState, m_owner);
             err = ::ThreadBeginCritical();
         }
-        m_internal->m_owner = current;
+        m_owner = current;
     }
     m_locked++;
 
     return wxMUTEX_NO_ERROR;
 }
 
-wxMutexError wxMutex::TryLock()
+wxMutexError wxMutexInternal::TryLock()
 {
     wxMacStCritical critical ;
     if ( UMASystemIsInitialized() )
@@ -149,17 +145,17 @@ wxMutexError wxMutex::TryLock()
         ThreadID current = kNoThreadID;
         ::MacGetCurrentThread(&current);
         // if we are not the owner, give an error back
-        if ( m_internal->m_owner != kNoThreadID && m_internal->m_owner != current )
+        if ( m_owner != kNoThreadID && m_owner != current )
             return wxMUTEX_BUSY;
 
-        m_internal->m_owner = current;
+        m_owner = current;
     }
     m_locked++;
 
    return wxMUTEX_NO_ERROR;
 }
 
-wxMutexError wxMutex::Unlock()
+wxMutexError wxMutexInternal::Unlock()
 {
     if ( UMASystemIsInitialized() )
     {
@@ -170,20 +166,20 @@ wxMutexError wxMutex::Unlock()
             m_locked--;
 
         // this mutex is not owned by anybody anmore
-        m_internal->m_owner = kNoThreadID;
+        m_owner = kNoThreadID;
 
         // now pass on to the first waiting thread
         ThreadID firstWaiting = kNoThreadID;
         bool found = false;
-        while (!m_internal->m_waiters.IsEmpty() && !found)
+        while (!m_waiters.IsEmpty() && !found)
         {
-            firstWaiting = m_internal->m_waiters[0];
+            firstWaiting = m_waiters[0];
             err = ::SetThreadState(firstWaiting, kReadyThreadState, kNoThreadID);
             // in case this was not successful (dead thread), we just loop on and reset the id
             found = (err != threadNotFoundErr);
             if ( !found )
                 firstWaiting = kNoThreadID ;
-            m_internal->m_waiters.RemoveAt(0) ;
+            m_waiters.RemoveAt(0) ;
         }
         // now we have a valid firstWaiting thread, which has been scheduled to run next, just end the
         // critical section and invoke the scheduler
@@ -197,9 +193,57 @@ wxMutexError wxMutex::Unlock()
     return wxMUTEX_NO_ERROR;
 }
 
+// --------------------------------------------------------------------------
+// wxSemaphore
+// --------------------------------------------------------------------------
+
+// TODO not yet implemented
+
+class wxSemaphoreInternal
+{
+public:
+    wxSemaphoreInternal(int initialcount, int maxcount);
+    ~wxSemaphoreInternal();
+
+    bool IsOk() const { return true ; }
+
+    wxSemaError Wait() { return WaitTimeout(INFINITE); }
+    wxSemaError TryWait() { return WaitTimeout(0); }
+    wxSemaError WaitTimeout(unsigned long milliseconds);
+
+    wxSemaError Post();
+
+private:
+};
+
+wxSemaphoreInternal::wxSemaphoreInternal(int initialcount, int maxcount)
+{
+    if ( maxcount == 0 )
+    {
+        // make it practically infinite
+        maxcount = INT_MAX;
+    }
+}
+
+wxSemaphoreInternal::~wxSemaphoreInternal()
+{
+}
+
+wxSemaError wxSemaphoreInternal::WaitTimeout(unsigned long milliseconds)
+{
+    return wxSEMA_MISC_ERROR;
+}
+
+wxSemaError wxSemaphoreInternal::Post()
+{
+    return wxSEMA_MISC_ERROR;
+}
+
 // ----------------------------------------------------------------------------
 // wxCondition implementation
 // ----------------------------------------------------------------------------
+
+// TODO this is not yet completed
 
 class wxConditionInternal
 {
@@ -212,17 +256,24 @@ public:
     {
     }
 
-    bool Wait(unsigned long msectimeout)
+    bool IsOk() const { return m_mutex.IsOk() ; }
+    
+    wxCondError Wait()
+    {
+        return WaitTimeout(0xFFFFFFFF );
+    }
+    
+    wxCondError WaitTimeout(unsigned long msectimeout)
     {
         wxMacStCritical critical ;
         if ( m_excessSignals > 0 )
         {
             --m_excessSignals ;
-            return TRUE ;
+            return wxCOND_NO_ERROR ;
         }
         else if ( msectimeout == 0 )
         {
-            return FALSE ;
+            return wxCOND_MISC_ERROR ;
         }
         else
         {
@@ -237,58 +288,24 @@ public:
 
         return rc != WAIT_TIMEOUT;
         */
-        return TRUE ;
+        return wxCOND_NO_ERROR ;
     }
-    void Signal()
+    wxCondError Signal()
     {
         wxMacStCritical critical ;
+        return wxCOND_NO_ERROR;
     }
+
+    wxCondError Broadcast()
+    {
+        wxMacStCritical critical ;
+        return wxCOND_NO_ERROR;
+    }    
 
     wxArrayLong m_waiters ;
     wxInt32     m_excessSignals ;
     wxMutex&    m_mutex;
 };
-
-wxCondition::wxCondition(wxMutex& mutex)
-{
-    m_internal = new wxConditionInternal(mutex);
-}
-
-wxCondition::~wxCondition()
-{
-    delete m_internal;
-}
-
-void wxCondition::Wait()
-{
-    (void)m_internal->Wait(0xFFFFFFFFL);
-}
-
-bool wxCondition::Wait(unsigned long timeout_millis)
-{
-    return m_internal->Wait(timeout_millis);
-}
-
-void wxCondition::Signal()
-{
-    // set the event to signaled: if a thread is already waiting on it, it will
-    // be woken up, otherwise the event will remain in the signaled state until
-    // someone waits on it. In any case, the system will return it to a non
-    // signalled state afterwards. If multiple threads are waiting, only one
-    // will be woken up.
-    m_internal->Signal() ;
-}
-
-void wxCondition::Broadcast()
-{
-    // this works because all these threads are already waiting and so each
-    // SetEvent() inside Signal() is really a PulseEvent() because the event
-    // state is immediately returned to non-signaled
-    for ( size_t i = 0; i < m_internal->m_waiters.Count(); i++ )
-    {
-        Signal();
-    }
-}
 
 // ----------------------------------------------------------------------------
 // wxCriticalSection implementation
@@ -878,6 +895,8 @@ bool WXDLLEXPORT wxIsWaitingForThread()
 {
     return false ;
 }
+
+#include "wx/thrimpl.cpp"
 
 #endif // wxUSE_THREADS
 
