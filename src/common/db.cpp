@@ -287,14 +287,15 @@ int wxDbColFor::Format(int Nation, int dbDataType, SWORD sqlDataType,
 
     if (i_dbDataType == 0)                                        // Filter unsupported dbDataTypes
     {
-        if ((i_sqlDataType == SQL_VARCHAR) || (i_sqlDataType == SQL_LONGVARCHAR))
+        if ((i_sqlDataType == SQL_VARCHAR) || (i_sqlDataType == SQL_LONGVARCHAR) ||
+            (i_sqlDataType == SQL_WCHAR) || (i_sqlDataType == SQL_WVARCHAR))
             i_dbDataType = DB_DATA_TYPE_VARCHAR;
         if ((i_sqlDataType == SQL_C_DATE) || (i_sqlDataType == SQL_C_TIMESTAMP))
             i_dbDataType = DB_DATA_TYPE_DATE;
         if (i_sqlDataType == SQL_C_BIT)
             i_dbDataType = DB_DATA_TYPE_INTEGER;
         if (i_sqlDataType == SQL_NUMERIC)
-            i_dbDataType = DB_DATA_TYPE_VARCHAR;
+            i_dbDataType = DB_DATA_TYPE_VARCHAR;   // glt - ??? is this right?
         if (i_sqlDataType == SQL_REAL)
             i_dbDataType = DB_DATA_TYPE_FLOAT;
         if (i_sqlDataType == SQL_C_BINARY)
@@ -2271,6 +2272,8 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
 
         switch (Sdword)
         {
+            case SQL_WCHAR:
+            case SQL_WVARCHAR:
             case SQL_VARCHAR:
             case SQL_CHAR:
                 pColInf[colNum].dbDataType = DB_DATA_TYPE_VARCHAR;
@@ -3046,6 +3049,8 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
                     // Get the intern datatype
                     switch (colInf[colNo].sqlDataType)
                     {
+                        case SQL_WCHAR:
+                        case SQL_WVARCHAR:
                         case SQL_VARCHAR:
                         case SQL_CHAR:
                             colInf[colNo].dbDataType = DB_DATA_TYPE_VARCHAR;
