@@ -1043,7 +1043,7 @@ WXDLLEXPORT int wxTolower(wxChar ch) { return (wxChar)CharLower((LPTSTR)(ch)); }
 WXDLLEXPORT int wxToupper(wxChar ch) { return (wxChar)CharUpper((LPTSTR)(ch)); }
 #endif
 
-#if __DARWIN__ && ( MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2 ) 
+#if defined(__DARWIN__) && ( MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2 ) 
 
 WXDLLEXPORT size_t wxInternalMbstowcs (wchar_t * out, const char * in, size_t outlen)
 {
@@ -1117,9 +1117,10 @@ WXDLLEXPORT int wxIsupper(wxChar ch) { return CFCharacterSetIsCharacterMember(cf
 WXDLLEXPORT int wxIsxdigit(wxChar ch) { return wxIsdigit(ch) || (ch>='a' && ch<='f') || (ch>='A' && ch<='F'); }
 WXDLLEXPORT int wxTolower(wxChar ch) { return (wxChar)tolower((char)(ch)); }
 WXDLLEXPORT int wxToupper(wxChar ch) { return (wxChar)toupper((char)(ch)); }
-#endif
 
-#endif
+#endif  // wxNEED_WX_CTYPE_H
+
+#endif  // defined(__DARWIN__) and OSX <= 10.2
 
 #ifndef wxStrdupA
 

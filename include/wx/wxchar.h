@@ -362,7 +362,7 @@
     #define  wxCtime     _tctime
 #else /* !TCHAR-aware compilers */
 
-    #if __DARWIN__ && ( MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2 ) && !defined(__MWERKS__)
+    #if !defined(__MWERKS__) && defined(__DARWIN__) && ( MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2 )
         /* even though they are defined and "implemented", they are bad and just 
            stubs so we need our own - we need these even in ANSI builds!! */
         #define mbstowcs wxInternalMbstowcs
@@ -373,7 +373,7 @@
     #endif
     
     /* No UNICODE in the c library except wchar_t typedef on mac OSX 10.2 and less - roll our own */
-    #if wxUSE_UNICODE && __DARWIN__ && ( MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2 ) && !defined(__MWERKS__)
+    #if !defined(__MWERKS__) && wxUSE_UNICODE && defined(__DARWIN__) && ( MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2 )
         
         /* we need everything! */
         #define wxNEED_WX_STRING_H
