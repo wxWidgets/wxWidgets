@@ -6,6 +6,7 @@
     <exe id="multimon" template="wx_sample" template_append="wx_append">
         <sources>multimon.cpp</sources>
         <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
         <win32-res>multimon.rc</win32-res>
     </exe>
 

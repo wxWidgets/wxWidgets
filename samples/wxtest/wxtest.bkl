@@ -6,6 +6,7 @@
     <exe id="wxtest" template="wx_sample" template_append="wx_append">
         <sources>wxtest.cpp</sources>
         <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
         <win32-res>wxtest.rc</win32-res>
     </exe>
 
