@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\oleauto 
 # 
 PROGRAM = oleauto 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

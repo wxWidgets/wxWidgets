@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\png 
 # 
 PROGRAM = png 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

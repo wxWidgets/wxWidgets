@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\resource 
 # 
 PROGRAM = resource 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\mdi 
 # 
 PROGRAM = mdi 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\memcheck 
 # 
 PROGRAM = memcheck 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

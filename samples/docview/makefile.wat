@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\docview 
 # 
 PROGRAM = docview 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

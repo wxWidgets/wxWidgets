@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\exec 
 # 
 PROGRAM = exec 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\joytest 
 # 
 PROGRAM = joytest 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

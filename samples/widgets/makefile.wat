@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\widgets 
 # 
 PROGRAM = widgets 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

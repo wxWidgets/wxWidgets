@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\html\help 
 # 
 PROGRAM = help 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

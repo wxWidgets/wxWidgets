@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\sashtest 
 # 
 PROGRAM = sashtest 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\zip 
 # 
 PROGRAM = zip 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

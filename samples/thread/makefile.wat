@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\thread 
 # 
 PROGRAM = thread 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

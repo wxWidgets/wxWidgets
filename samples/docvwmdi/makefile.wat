@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\docvwmdi 
 # 
 PROGRAM = docvwmdi 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

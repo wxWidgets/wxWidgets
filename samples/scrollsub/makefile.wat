@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\scrollsub 
 # 
 PROGRAM = scrollsub 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\mfc 
 # 
 PROGRAM = mfc 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\event 
 # 
 PROGRAM = event 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

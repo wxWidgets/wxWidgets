@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\splitter 
 # 
 PROGRAM = splitter 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

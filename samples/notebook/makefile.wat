@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\notebook 
 # 
 PROGRAM = notebook 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\font 
 # 
 PROGRAM = font 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

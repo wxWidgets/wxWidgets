@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\validate 
 # 
 PROGRAM = validate 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

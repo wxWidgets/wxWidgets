@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\toolbar 
 # 
 PROGRAM = toolbar 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

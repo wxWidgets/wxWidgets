@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\config 
 # 
 PROGRAM = config 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

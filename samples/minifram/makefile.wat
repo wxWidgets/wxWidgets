@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\minifram 
 # 
 PROGRAM = minifram 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

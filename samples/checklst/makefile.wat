@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\checklst 
 # 
 PROGRAM = checklst 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

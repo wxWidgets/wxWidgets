@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\menu 
 # 
 PROGRAM = menu 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

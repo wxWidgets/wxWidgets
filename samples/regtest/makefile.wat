@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\regtest 
 # 
 PROGRAM = regtest 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

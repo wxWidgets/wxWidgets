@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\statbar 
 # 
 PROGRAM = statbar 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

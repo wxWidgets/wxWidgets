@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\proplist 
 # 
 PROGRAM = proplist 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\rotate 
 # 
 PROGRAM = rotate 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

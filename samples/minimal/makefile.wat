@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\minimal 
 # 
 PROGRAM = minimal 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

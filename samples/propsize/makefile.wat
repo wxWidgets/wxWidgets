@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\propsize 
 # 
 PROGRAM = propsize 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

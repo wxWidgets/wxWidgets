@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\keyboard 
 # 
 PROGRAM = keyboard 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\dragimag 
 # 
 PROGRAM = dragimag 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

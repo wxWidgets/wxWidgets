@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\erase 
 # 
 PROGRAM = erase 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

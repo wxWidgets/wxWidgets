@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\html\virtual 
 # 
 PROGRAM = virtual 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

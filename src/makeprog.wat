@@ -1,6 +1,8 @@
 #
 # Changelist: 2003-02-25 - Juergen Ulbts - update from wxWindows 2.5.x/HEAD branch
 #
+# $+ .. $- means we get the result directly
+THISDIR = $+ $(%cdrive):$(%cwd) $-
 
 WXDIR = $(%WXWIN)
 !ifndef EXEDIR
@@ -39,7 +41,7 @@ $(RESFILE): $(PROGRAM).rc $(WXDIR)\include\wx\msw\wx.rc
      $(RC) $(RESFLAGS) /fo=$(RESFILE) $(PROGRAM).rc
 !endif
 
-$(LNK) : makefile.wat
+$(LNK) : .SYMBOLIC
     %create $(LNK)
     @%append $(LNK) $(LDFLAGS)
     @%append $(LNK) $(DEBUGINFO)

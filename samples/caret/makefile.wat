@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\caret 
 # 
 PROGRAM = caret 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

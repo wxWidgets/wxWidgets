@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\artprov 
 # 
 PROGRAM = artprov 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

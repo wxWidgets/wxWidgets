@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\treelay 
 # 
 PROGRAM = treelay 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

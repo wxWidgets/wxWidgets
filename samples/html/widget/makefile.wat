@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\html\widget 
 # 
 PROGRAM = widget 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

@@ -6,7 +6,6 @@
 # 
 # 
 wxUSE_GUI=0
-THISDIR = $(%WXWIN)\samples\console
 # 
 PROGRAM = console
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

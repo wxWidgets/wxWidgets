@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\taskbar 
 # 
 PROGRAM = taskbar 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

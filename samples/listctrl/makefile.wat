@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\listctrl 
 # 
 PROGRAM = listtest 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\internat 
 # 
 PROGRAM = internat 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

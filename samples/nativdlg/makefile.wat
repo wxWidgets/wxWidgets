@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\nativdlg 
 # 
 PROGRAM = nativdlg 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

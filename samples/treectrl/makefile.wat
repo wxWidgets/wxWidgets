@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\treectrl 
 # 
 PROGRAM = treetest 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

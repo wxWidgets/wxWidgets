@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\calendar 
 # 
 PROGRAM = calendar 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

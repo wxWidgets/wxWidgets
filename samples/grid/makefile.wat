@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\grid 
 # 
 PROGRAM = grid 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

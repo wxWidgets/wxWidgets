@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\ownerdrw 
 # 
 PROGRAM = ownerdrw 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 

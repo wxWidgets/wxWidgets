@@ -5,7 +5,6 @@
 #  
 # 
 # 
-THISDIR = $(%WXWIN)\samples\dialogs 
 # 
 PROGRAM = dialogs 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
