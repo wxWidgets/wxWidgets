@@ -81,7 +81,8 @@ bool wxCheckBox::Create(
 
 
     long                            osStyle = BS_AUTOCHECKBOX |
-                                              WS_TABSTOP;
+                                              WS_TABSTOP      |
+                                              WS_VISIBLE;
 
     bOk = OS2CreateControl( wxT("BUTTON")
                            ,osStyle
