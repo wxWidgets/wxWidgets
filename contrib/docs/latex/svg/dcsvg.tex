@@ -1,3 +1,37 @@
+\documentstyle[a4,makeidx,verbatim,texhelp,fancyhea,mysober,mytitle]{report}%
+%\input{psbox.tex}
+\newcommand{\commandref}[2]{\helpref{{\tt $\backslash$#1}}{#2}}%
+\newcommand{\commandrefn}[2]{\helprefn{{\tt $\backslash$#1}}{#2}\index{#1}}%
+\newcommand{\commandpageref}[2]{\latexignore{\helprefn{{\tt $\backslash$#1}}{#2}}\latexonly{{\tt $\backslash$#1} {\it page \pageref{#2}}}\index{#1}}%
+\newcommand{\indexit}[1]{#1\index{#1}}%
+\newcommand{\inioption}[1]{{\bf {\tt #1}}\index{#1}}%
+\parskip=10pt%
+\parindent=0pt%
+%\backgroundcolour{255;255;255}\textcolour{0;0;0}% Has an effect in HTML only
+\winhelpignore{\title{Manual for wxSVGFileDC}%
+\author{Chris Elliott}%
+\date{June 2002}%
+}%
+\winhelponly{\title{Manual for wxSVGFileDC}%
+\author{by Chris Elliott}%
+}%
+\makeindex%
+\begin{document}%
+\maketitle%
+\pagestyle{fancyplain}%
+\bibliographystyle{plain}%
+\pagenumbering{roman}%
+\setheader{{\it CONTENTS}}{}{}{}{}{{\it CONTENTS}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+\tableofcontents%
+
+\chapter*{Copyright notice}%
+\setheader{{\it COPYRIGHT}}{}{}{}{}{{\it COPYRIGHT}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+\chapter*{wxSVGFileDC}%
+\setheader{{\it wxSVGFileDC}}{}{}{}{}{{\it wxSVGFileDC}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
 \section{\class{wxSVGFileDC}}\label{wxSVGFileDC}
 
 A wxSVGFileDC is a {\it device context} onto which graphics and text can be drawn, and the output
