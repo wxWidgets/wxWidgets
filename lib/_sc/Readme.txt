@@ -1,3 +1,10 @@
+----------------------------------------------------------------------------
+Note: The files in this directory are not needed any more if you are using
+      DigitalMars 8.38 or later.
+----------------------------------------------------------------------------
+
+
+
 This directory contains files for the Digitalmars compiler, currently 8.34 beta
 to resolve externals which are not present in the .lib files released by DigitalMars.
 
