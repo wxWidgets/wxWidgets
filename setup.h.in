@@ -87,6 +87,7 @@
 #undef __WIN95__
 #undef __WIN32__
 #undef __GNUWIN32__
+#undef STRICT
 #undef WINVER
 
 /*
