@@ -1399,7 +1399,11 @@ void wxApp::MacSuspend( bool convertClipboard )
     while (node)
     {
         wxTopLevelWindow* win = (wxTopLevelWindow*) node->Data();
+#if TARGET_CARBON
+#if 0 //  having problems right now with that
         if (!win->HasFlag(wxSTAY_ON_TOP))
+#endif  
+#endif
             win->MacActivate( ((EventRecord*) MacGetCurrentEvent())->when , false ) ;
 
         node = node->GetNext();

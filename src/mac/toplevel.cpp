@@ -598,8 +598,12 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
         attr |= kWindowCloseBoxAttribute ;
     }
 
+#if TARGET_CARBON
+#if 0 //  having problems right now with that
     if (HasFlag(wxSTAY_ON_TOP))
     	wclass = kUtilityWindowClass;
+#endif
+#endif
 
 #if TARGET_CARBON
     if ( HasFlag(wxFRAME_SHAPED) )
