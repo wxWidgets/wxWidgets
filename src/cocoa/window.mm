@@ -289,6 +289,8 @@ wxWindow::~wxWindow()
         CocoaRemoveFromParent();
     delete m_cocoaHider;
     delete m_cocoaScroller;
+    if(m_cocoaNSView)
+        SendDestroyEvent();
     SetNSView(NULL);
 }
 
@@ -308,10 +310,6 @@ void wxWindowCocoa::CocoaRemoveFromParent(void)
 
 void wxWindowCocoa::SetNSView(WX_NSView cocoaNSView)
 {
-    // Assume setting the NSView to NULL means this wxWindow is being destroyed
-    if(m_cocoaNSView && !cocoaNSView)
-        SendDestroyEvent();
-
     bool need_debug = cocoaNSView || m_cocoaNSView;
     if(need_debug) wxLogTrace(wxTRACE_COCOA_RetainRelease,wxT("wxWindowCocoa=%p::SetNSView [m_cocoaNSView=%p retainCount]=%d"),this,m_cocoaNSView,[m_cocoaNSView retainCount]);
     DisassociateNSView(m_cocoaNSView);

@@ -140,6 +140,8 @@ wxTopLevelWindowCocoa::~wxTopLevelWindowCocoa()
     wxASSERT(sm_cocoaDeactivateWindow!=this);
     wxAutoNSAutoreleasePool pool;
     DestroyChildren();
+    if(m_cocoaNSView)
+        SendDestroyEvent();
     SetNSWindow(NULL);
 }
 
