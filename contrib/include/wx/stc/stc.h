@@ -182,7 +182,7 @@ public:
     wxStyledTextCtrl(wxWindow *parent, wxWindowID id,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize, long style = 0,
-                     const char* name = wxSTCNameStr);
+                     const char* name = "styledtext");
 #else
     wxStyledTextCtrl(wxWindow *parent, wxWindowID id,
                      const wxPoint& pos = wxDefaultPosition,
