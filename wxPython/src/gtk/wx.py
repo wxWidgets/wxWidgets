@@ -1711,35 +1711,67 @@ def wxCallAfter(callable, *args, **kw):
 
 #----------------------------------------------------------------------
 
-class wxFutureCall(wxTimer):
+
+class wxFutureCall:
     """
     A convenience class for wxTimer, that calls the given callable
     object once after the given amount of milliseconds, passing any
     positional or keyword args.  The return value of the callable is
     availbale after it has been run with the GetResult method.
+
+    If you don't need to get the return value or restart the timer
+    then there is no need to hold a reference to this object.  It will
+    hold a reference to itself while the timer is running (the timer
+    has a reference to self.Notify) but the cycle will be broken when
+    the timer completes, automatically cleaning up the wxFutureCall
+    object.
     """
     def __init__(self, millis, callable, *args, **kwargs):
-        wxTimer.__init__(self)
         self.millis = millis
         self.callable = callable
         self.SetArgs(*args, **kwargs)
         self.runCount = 0
         self.hasRun = False
         self.result = None
-        self.Start(self.millis, wxTIMER_ONE_SHOT)
+        self.timer = None
+        self.Start()
 
     def __del__(self):
         self.Stop()
-        wxTimer.__del__(self)
 
-    def Restart(self, millis=None):
+
+    def Start(self, millis=None):
         """
-        Restart the timer with the same duration as before.
+        (Re)start the timer
         """
         self.hasRun = False
         if millis is not None:
             self.millis = millis
-        self.Start(self.millis, wxTIMER_ONE_SHOT)
+        self.Stop()
+        self.timer = wxPyTimer(self.Notify)
+        self.timer.Start(self.millis, wxTIMER_ONE_SHOT)
+    Restart = Start
+
+
+    def Stop(self):
+        """
+        Stop and destroy the timer.
+        """
+        if self.timer is not None:
+            self.timer.Stop()
+            self.timer = None
+
+
+    def GetInterval(self):
+        if self.timer is not None:
+            return self.timer.GetInterval()
+        else:
+            return 0
+
+
+    def IsRunning(self):
+        return self.timer is not None and self.timer.IsRunning()
+
 
     def SetArgs(self, *args, **kwargs):
         """
@@ -1765,6 +1797,8 @@ class wxFutureCall(wxTimer):
             self.runCount += 1
             self.result = self.callable(*self.args, **self.kwargs)
         self.hasRun = True
+        wxCallAfter(self.Stop)
+
 
 #----------------------------------------------------------------------
 
