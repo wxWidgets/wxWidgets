@@ -36,6 +36,7 @@ _treeList = [
         'wxXmlResourceSubclass',
         'wxGridBagSizer',
         'Cursor',
+        'PyPlot',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -132,6 +133,7 @@ _treeList = [
         'MaskedEditControls',
         'PyShell',
         'PyCrust',
+        'PyPlot',
         'SplitTree',
         'TablePrint',
         'Throbber',
@@ -217,7 +219,7 @@ _treeList = [
         'ActiveXWrapper_Acrobat',
         'ActiveXWrapper_IE',
         'wxGLCanvas',
-        'wxPlotCanvas',
+        #'wxPlotCanvas', # deprecated, use PyPlot
         ]),
 
 
@@ -262,9 +264,7 @@ try:
     class DemoCodeViewer(PythonSTC):
         def __init__(self, parent, ID):
             PythonSTC.__init__(self, parent, ID)
-            self.SetEdgeMode(stc.STC_EDGE_NONE)
-            self.SetSelBackground(True, wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHT))
-            self.SetSelForeground(True, wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT))
+            self.SetUpEditor()
 
         # Some methods to make it compatible with how the wxTextCtrl is used
         def SetValue(self, value):
@@ -293,6 +293,119 @@ try:
         def SetSelection(self, start, end):
             self.SetSelectionStart(start)
             self.SetSelectionEnd(end)
+
+        def SetUpEditor(self):
+            """
+            This method carries out the work of setting up the demo editor.            
+            It's seperate so as not to clutter up the init code.
+            """
+            import keyword
+            
+            self.SetLexer(stc.STC_LEX_PYTHON)
+            self.SetKeyWords(0, " ".join(keyword.kwlist))
+    
+            # Enable folding
+            self.SetProperty("fold", "1" ) 
+
+            # Highlight tab/space mixing (shouldn't be any)
+            self.SetProperty("tab.timmy.whinge.level", "1")
+
+            # Set left and right margins
+            self.SetMargins(2,2)
+    
+            # Set up the numbers in the margin for margin #1
+            self.SetMarginType(1, wx.stc.STC_MARGIN_NUMBER)
+            # Reasonable value for, say, 4-5 digits using a mono font (40 pix)
+            self.SetMarginWidth(1, 40)
+    
+            # Indentation and tab stuff
+            self.SetIndent(4)               # Proscribed indent size for wx
+            self.SetIndentationGuides(True) # Show indent guides
+            self.SetBackSpaceUnIndents(True)# Backspace unindents rather than delete 1 space
+            self.SetTabIndents(True)        # Tab key indents
+            self.SetTabWidth(4)             # Proscribed tab size for wx
+            self.SetUseTabs(False)          # Use spaces rather than tabs, or
+                                            # TabTimmy will complain!    
+            # White space
+            self.SetViewWhiteSpace(False)   # Don't view white space
+    
+            # EOL
+            #self.SetEOLMode(wx.stc.STC_EOL_CRLF)  # Just leave it at the default (autosense)
+            self.SetViewEOL(False)    
+            # No right-edge mode indicator
+            self.SetEdgeMode(stc.STC_EDGE_NONE)
+    
+            # Setup a margin to hold fold markers
+            self.SetMarginType(2, stc.STC_MARGIN_SYMBOL)
+            self.SetMarginMask(2, stc.STC_MASK_FOLDERS)
+            self.SetMarginSensitive(2, True)
+            self.SetMarginWidth(2, 12)
+    
+            # and now set up the fold markers
+            self.MarkerDefine(stc.STC_MARKNUM_FOLDEREND,     stc.STC_MARK_BOXPLUSCONNECTED,  "white", "black")
+            self.MarkerDefine(stc.STC_MARKNUM_FOLDEROPENMID, stc.STC_MARK_BOXMINUSCONNECTED, "white", "black")
+            self.MarkerDefine(stc.STC_MARKNUM_FOLDERMIDTAIL, stc.STC_MARK_TCORNER,  "white", "black")
+            self.MarkerDefine(stc.STC_MARKNUM_FOLDERTAIL,    stc.STC_MARK_LCORNER,  "white", "black")
+            self.MarkerDefine(stc.STC_MARKNUM_FOLDERSUB,     stc.STC_MARK_VLINE,    "white", "black")
+            self.MarkerDefine(stc.STC_MARKNUM_FOLDER,        stc.STC_MARK_BOXPLUS,  "white", "black")
+            self.MarkerDefine(stc.STC_MARKNUM_FOLDEROPEN,    stc.STC_MARK_BOXMINUS, "white", "black")
+    
+            # Global default style
+            if wx.Platform == '__WXMSW__':
+                self.StyleSetSpec(stc.STC_STYLE_DEFAULT, 
+                                  'fore:#000000,back:#FFFFFF,face:Courier New,size:9')
+            else:
+                self.StyleSetSpec(stc.STC_STYLE_DEFAULT, 
+                                  'fore:#000000,back:#FFFFFF,face:Courier,size:12')
+    
+            # Clear styles and revert to default.
+            self.StyleClearAll()
+
+            # Following style specs only indicate differences from default.
+            # The rest remains unchanged.
+
+            # Line numbers in margin
+            self.StyleSetSpec(wx.stc.STC_STYLE_LINENUMBER,'fore:#000000,back:#99A9C2')
+    
+            # Highlighted brace
+            self.StyleSetSpec(wx.stc.STC_STYLE_BRACELIGHT,'fore:#00009D,back:#FFFF00')
+            # Unmatched brace
+            self.StyleSetSpec(wx.stc.STC_STYLE_BRACEBAD,'fore:#00009D,back:#FF0000')
+            # Indentation guide
+            self.StyleSetSpec(wx.stc.STC_STYLE_INDENTGUIDE, "fore:#CDCDCD")
+    
+            # Python styles
+            self.StyleSetSpec(wx.stc.STC_P_DEFAULT, 'fore:#000000')
+            # Comments
+            self.StyleSetSpec(wx.stc.STC_P_COMMENTLINE, 'fore:#00CC00,back:#F0FFF0')
+            self.StyleSetSpec(wx.stc.STC_P_COMMENTBLOCK, 'fore:#00CC00,back:#F0FFF0')
+            # Numbers
+            self.StyleSetSpec(wx.stc.STC_P_NUMBER, 'fore:#008080')
+            # Strings and characters
+            self.StyleSetSpec(wx.stc.STC_P_STRING, 'fore:#800080')
+            self.StyleSetSpec(wx.stc.STC_P_CHARACTER, 'fore:#800080')
+            # Keywords
+            self.StyleSetSpec(wx.stc.STC_P_WORD, 'fore:#000080,bold')
+            # Triple quotes
+            self.StyleSetSpec(wx.stc.STC_P_TRIPLE, 'fore:#800080,back:#FFFFEA')
+            self.StyleSetSpec(wx.stc.STC_P_TRIPLEDOUBLE, 'fore:#800080,back:#FFFFEA')
+            # Class names
+            self.StyleSetSpec(wx.stc.STC_P_CLASSNAME, 'fore:#0000FF,bold')
+            # Function names
+            self.StyleSetSpec(wx.stc.STC_P_DEFNAME, 'fore:#008080,bold')
+            # Operators
+            self.StyleSetSpec(wx.stc.STC_P_OPERATOR, 'fore:#800000,bold')
+            # Identifiers. I leave this as not bold because everything seems
+            # to be an identifier if it doesn't match the above criterae
+            self.StyleSetSpec(wx.stc.STC_P_IDENTIFIER, 'fore:#000000')
+
+            # Caret color
+            self.SetCaretForeground("BLUE")
+            # Selection background
+            self.SetSelBackground(1, '#66CCFF')
+
+            self.SetSelBackground(True, wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHT))
+            self.SetSelForeground(True, wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT))
 
 
 except ImportError:
@@ -330,18 +443,18 @@ class wxPythonDemo(wx.Frame):
             # setup a taskbar icon, and catch some events from it
             self.tbicon = wx.TaskBarIcon()
             self.tbicon.SetIcon(icon, "wxPython Demo")
-            wx.EVT_TASKBAR_LEFT_DCLICK(self.tbicon, self.OnTaskBarActivate)
-            wx.EVT_TASKBAR_RIGHT_UP(self.tbicon, self.OnTaskBarMenu)
-            wx.EVT_MENU(self.tbicon, self.TBMENU_RESTORE, self.OnTaskBarActivate)
-            wx.EVT_MENU(self.tbicon, self.TBMENU_CLOSE, self.OnTaskBarClose)
+            self.tbicon.Bind(wx.EVT_TASKBAR_LEFT_DCLICK, self.OnTaskBarActivate)
+            self.tbicon.Bind(wx.EVT_TASKBAR_RIGHT_UP, self.OnTaskBarMenu)
+            self.tbicon.Bind(wx.EVT_MENU, self.OnTaskBarActivate, id=self.TBMENU_RESTORE)
+            self.tbicon.Bind(wx.EVT_MENU, self.OnTaskBarClose, id=self.TBMENU_CLOSE)
 
         wx.CallAfter(self.ShowTip)
 
         self.otherWin = None
-        wx.EVT_IDLE(self, self.OnIdle)
-        wx.EVT_CLOSE(self, self.OnCloseWindow)
-        wx.EVT_ICONIZE(self, self.OnIconfiy)
-        wx.EVT_MAXIMIZE(self, self.OnMaximize)
+        self.Bind(wx.EVT_IDLE, self.OnIdle)
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+        self.Bind(wx.EVT_ICONIZE, self.OnIconfiy)
+        self.Bind(wx.EVT_MAXIMIZE, self.OnMaximize)
 
         self.Centre(wx.BOTH)
         self.CreateStatusBar(1, wx.ST_SIZEGRIP)
@@ -350,8 +463,8 @@ class wxPythonDemo(wx.Frame):
         splitter2 = wx.SplitterWindow(splitter, -1)
 
         def EmptyHandler(evt): pass
-        #wx.EVT_ERASE_BACKGROUND(splitter, EmptyHandler)
-        #wx.EVT_ERASE_BACKGROUND(splitter2, EmptyHandler)
+        #splitter.Bind(wx.EVT_ERASE_BACKGROUND, EmptyHandler)
+        #splitter2.Bind(wx.EVT_ERASE_BACKGROUND, EmptyHandler)
 
         # Prevent TreeCtrl from displaying all items after destruction when True
         self.dying = False
@@ -361,7 +474,7 @@ class wxPythonDemo(wx.Frame):
         menu = wx.Menu()
         exitID = wx.NewId()
         menu.Append(exitID, 'E&xit\tAlt-X', 'Get the heck outta here!')
-        wx.EVT_MENU(self, exitID, self.OnFileExit)
+        self.Bind(wx.EVT_MENU, self.OnFileExit, id=exitID)
         wx.App_SetMacExitMenuItemId(exitID)
         self.mainmenu.Append(menu, '&File')
 
@@ -372,7 +485,7 @@ class wxPythonDemo(wx.Frame):
             for childItem in item[1]:
                 mID = wx.NewId()
                 submenu.Append(mID, childItem)
-                wx.EVT_MENU(self, mID, self.OnDemoMenu)
+                self.Bind(wx.EVT_MENU, self.OnDemoMenu, id=mID)
             menu.AppendMenu(wx.NewId(), item[0], submenu)
         self.mainmenu.Append(menu, '&Demo')
 
@@ -387,12 +500,12 @@ class wxPythonDemo(wx.Frame):
         menu.AppendSeparator()
         menu.Append(helpID, '&About\tCtrl-H', 'wxPython RULES!!!')
         wx.App_SetMacAboutMenuItemId(helpID)
-        wx.EVT_MENU(self, helpID, self.OnHelpAbout)
-        wx.EVT_MENU(self, findID, self.OnHelpFind)
-        wx.EVT_MENU(self, findnextID, self.OnFindNext)
-        wx.EVT_COMMAND_FIND(self, -1, self.OnFind)
-        wx.EVT_COMMAND_FIND_NEXT(self, -1, self.OnFind)
-        wx.EVT_COMMAND_FIND_CLOSE(self, -1 , self.OnFindClose)
+        self.Bind(wx.EVT_MENU, self.OnHelpAbout, id=helpID)
+        self.Bind(wx.EVT_MENU, self.OnHelpFind, id=findID)
+        self.Bind(wx.EVT_MENU, self.OnFindNext, id=findnextID)
+        self.Bind(wx.EVT_COMMAND_FIND, self.OnFind)
+        self.Bind(wx.EVT_COMMAND_FIND_NEXT, self.OnFind)
+        self.Bind(wx.EVT_COMMAND_FIND_CLOSE, self.OnFindClose)
         self.mainmenu.Append(menu, '&Help')
         self.SetMenuBar(self.mainmenu)
 
@@ -427,10 +540,10 @@ class wxPythonDemo(wx.Frame):
 
         self.tree.Expand(root)
         self.tree.Expand(firstChild)
-        wx.EVT_TREE_ITEM_EXPANDED   (self.tree, tID, self.OnItemExpanded)
-        wx.EVT_TREE_ITEM_COLLAPSED  (self.tree, tID, self.OnItemCollapsed)
-        wx.EVT_TREE_SEL_CHANGED     (self.tree, tID, self.OnSelChanged)
-        wx.EVT_LEFT_DOWN            (self.tree,      self.OnTreeLeftDown)
+        self.tree.Bind(wx.EVT_TREE_ITEM_EXPANDED, self.OnItemExpanded, id=tID)
+        self.tree.Bind(wx.EVT_TREE_ITEM_COLLAPSED, self.OnItemCollapsed, id=tID)
+        self.tree.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnSelChanged, id=tID)
+        self.tree.Bind(wx.EVT_LEFT_DOWN, self.OnTreeLeftDown)
 
         # Create a Notebook
         self.nb = wx.Notebook(splitter2, -1, style=wx.CLIP_CHILDREN)
@@ -451,8 +564,8 @@ class wxPythonDemo(wx.Frame):
             def OnOvrSize(evt, ovr=self.ovr):
                 ovr.SetSize(evt.GetSize())
 
-            wx.EVT_SIZE(panel, OnOvrSize)
-            wx.EVT_ERASE_BACKGROUND(panel, EmptyHandler)
+            panel.Bind(wx.EVT_SIZE, OnOvrSize)
+            panel.Bind(wx.EVT_ERASE_BACKGROUND, EmptyHandler)
 
 
         self.SetOverview(self.overviewText, overview)
@@ -461,7 +574,7 @@ class wxPythonDemo(wx.Frame):
         # Set up a notebook page for viewing the source code of each sample
         self.txt = DemoCodeViewer(self.nb, -1)
         self.nb.AddPage(self.txt, "Demo Code")
-        self.GetDemoFile('Main.py')
+        self.LoadDemoSource('Main.py')
 
 
         # Set up a log on the View Log Notebook page
@@ -495,7 +608,8 @@ class wxPythonDemo(wx.Frame):
             sz = splitter.GetSize()
             splitter.SetSashPosition(sz.height - 120, False)
             evt.Skip()
-        wx.EVT_SIZE(splitter2, SplitterOnSize)
+
+        splitter2.Bind(wx.EVT_SIZE, SplitterOnSize)
 
 
         # select initial items
@@ -569,7 +683,7 @@ class wxPythonDemo(wx.Frame):
             self.nb.DeletePage(2)
 
         if itemText == self.overviewText:
-            self.GetDemoFile('Main.py')
+            self.LoadDemoSource('Main.py')
             self.SetOverview(self.overviewText, overview)
             self.nb.Refresh();
             self.window = None
@@ -579,7 +693,11 @@ class wxPythonDemo(wx.Frame):
                 wx.BeginBusyCursor()
                 wx.LogMessage("Running demo %s.py..." % itemText)
                 try:
-                    self.GetDemoFile(itemText + '.py')
+                    self.LoadDemoSource(itemText + '.py')
+
+                    if (sys.modules.has_key(itemText)):
+                       reload(sys.modules[itemText])
+                    
                     module = __import__(itemText, globals())
                     self.SetOverview(itemText + " Overview", module.overview)
                 finally:
@@ -605,7 +723,7 @@ class wxPythonDemo(wx.Frame):
 
     #---------------------------------------------
     # Get the Demo files
-    def GetDemoFile(self, filename):
+    def LoadDemoSource(self, filename):
         self.txt.Clear()
         try:
             self.txt.SetValue(open(filename).read())
@@ -777,7 +895,7 @@ class MySplashScreen(wx.SplashScreen):
                                 wx.SPLASH_CENTRE_ON_SCREEN|wx.SPLASH_TIMEOUT,
                                 4000, None, -1,
                                 style = wx.SIMPLE_BORDER|wx.FRAME_NO_TASKBAR|wx.STAY_ON_TOP)
-        wx.EVT_CLOSE(self, self.OnClose)
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
 
     def OnClose(self, evt):
         frame = wxPythonDemo(None, -1, "wxPython: (A Demonstration)")
