@@ -910,6 +910,38 @@ int wxListCtrl::GetItemSpacing(bool isSmall) const
     return ListView_GetItemSpacing(GetHwnd(), (BOOL) isSmall);
 }
 
+void wxListCtrl::SetItemTextColour( long item, const wxColour &col )
+{
+    wxListItem info;
+    info.m_itemId = item;
+    info.SetTextColour( col );
+    SetItem( info );
+}
+
+wxColour wxListCtrl::GetItemTextColour( long item ) const
+{
+    wxListItem info;
+    info.m_itemId = item;
+    GetItem( info );
+    return info.GetTextColour();
+}
+
+void wxListCtrl::SetItemBackgroundColour( long item, const wxColour &col )
+{
+    wxListItem info;
+    info.m_itemId = item;
+    info.SetBackgroundColour( col );
+    SetItem( info );
+}
+
+wxColour wxListCtrl::GetItemBackgroundColour( long item ) const
+{
+    wxListItem info;
+    info.m_itemId = item;
+    GetItem( info );
+    return info.GetBackgroundColour();
+}
+
 // Gets the number of selected items in the list control
 int wxListCtrl::GetSelectedItemCount() const
 {
@@ -2407,3 +2439,5 @@ static void wxConvertToMSWListCol(int WXUNUSED(col), const wxListItem& item,
 }
 
 #endif // wxUSE_LISTCTRL
+
+// vi:sts=4:sw=4:et

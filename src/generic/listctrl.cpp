@@ -4837,6 +4837,38 @@ int wxListCtrl::GetItemSpacing( bool isSmall ) const
     return m_mainWin->GetItemSpacing( isSmall );
 }
 
+void wxListCtrl::SetItemTextColour( long item, const wxColour &col )
+{
+    wxListItem info;
+    info.m_itemId = item;
+    info.SetTextColour( col );
+    m_mainWin->SetItem( info );
+}
+
+wxColour wxListCtrl::GetItemTextColour( long item ) const
+{
+    wxListItem info;
+    info.m_itemId = item;
+    m_mainWin->GetItem( info );
+    return info.GetTextColour();
+}
+
+void wxListCtrl::SetItemBackgroundColour( long item, const wxColour &col )
+{
+    wxListItem info;
+    info.m_itemId = item;
+    info.SetBackgroundColour( col );
+    m_mainWin->SetItem( info );
+}
+
+wxColour wxListCtrl::GetItemBackgroundColour( long item ) const
+{
+    wxListItem info;
+    info.m_itemId = item;
+    m_mainWin->GetItem( info );
+    return info.GetBackgroundColour();
+}
+
 int wxListCtrl::GetSelectedItemCount() const
 {
     return m_mainWin->GetSelectedItemCount();
@@ -5265,3 +5297,5 @@ void wxListCtrl::Thaw()
 }
 
 #endif // wxUSE_LISTCTRL
+
+// vi:sts=4:sw=4:et

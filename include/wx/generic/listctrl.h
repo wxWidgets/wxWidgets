@@ -101,6 +101,10 @@ public:
     int GetColumnCount() const;
     void SetItemSpacing( int spacing, bool isSmall = FALSE );
     int GetItemSpacing( bool isSmall ) const;
+    void SetItemTextColour( long item, const wxColour& col);
+    wxColour GetItemTextColour( long item ) const;
+    void SetItemBackgroundColour( long item, const wxColour &col);
+    wxColour GetItemBackgroundColour( long item ) const;
     int GetSelectedItemCount() const;
     wxColour GetTextColour() const;
     void SetTextColour(const wxColour& col);
@@ -218,3 +222,5 @@ private:
 
 
 #endif // __LISTCTRLH_G__
+
+// vi:sts=4:sw=4:et

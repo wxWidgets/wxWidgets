@@ -191,6 +191,14 @@ public:
     // view, otherwise the large icon view.
     int GetItemSpacing(bool isSmall) const;
 
+    // Foreground colour of an item.
+    void SetItemTextColour( long item, const wxColour& col);
+    wxColour GetItemTextColour( long item ) const;
+
+    // Background colour of an item.
+    void SetItemBackgroundColour( long item, const wxColour &col);
+    wxColour GetItemBackgroundColour( long item ) const;
+
     // Gets the number of selected items in the list control
     int GetSelectedItemCount() const;
 
@@ -395,3 +403,5 @@ private:
 
 #endif
     // _WX_LISTCTRL_H_
+
+// vi:sts=4:sw=4:et
