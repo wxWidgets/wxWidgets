@@ -535,7 +535,7 @@ void wxPropertyValue::WritePropertyType(ostream& stream)    // Write as any othe
     {
 //      stream << "\"";
       int i;
-      wxWX2MBbuf strbuf = wxConv_libc.cWX2MB(m_value.string);
+      const wxWX2MBbuf strbuf = wxConv_libc.cWX2MB(m_value.string);
       int len = strlen(strbuf);
       for (i = 0; i < len; i++)
       {

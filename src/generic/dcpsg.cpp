@@ -1090,7 +1090,7 @@ void wxPostScriptDC::DrawText( const wxString& text, long x, long y, bool WXUNUS
     *m_pstream << XLOG2DEV(x) << " " << YLOG2DEV(by) << " moveto\n";
 
     *m_pstream << "(";
-    wxWX2MBbuf textbuf = text.mb_str();
+    const wxWX2MBbuf textbuf = text.mb_str();
     int len = strlen (textbuf);
     int i;
     for (i = 0; i < len; i++)
@@ -1572,7 +1572,7 @@ void wxPostScriptDC::GetTextExtent( const wxString& string, long *x, long *y,
     wxCHECK_RET( x, _T("GetTextExtent: x == NULL") );
     wxCHECK_RET( y, _T("GetTextExtent: y == NULL") );
 
-    wxWX2MBbuf strbuf = string.mb_str();
+    const wxWX2MBbuf strbuf = string.mb_str();
 
 #if !USE_AFM_FOR_POSTSCRIPT
     /* Provide a VERY rough estimate (avoid using it).
