@@ -24,7 +24,7 @@
 #undef FASTCALL
 #endif
 
-#if defined(__GNUC__)
+#if defined(__GNUC__) && defined(__i386__)
 /* Instability reported with egcs on a RedHat Linux 7.3.
    Let's comment it out:
    #define FASTCALL __attribute__((stdcall, regparm(3)))
