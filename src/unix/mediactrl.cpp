@@ -46,7 +46,6 @@
 //
 //  wxGStreamerMediaBackend
 //
-// This won't compile/work without a little work yet...
 // Uses nanoseconds...
 //---------------------------------------------------------------------------
 #if wxUSE_GSTREAMER
@@ -465,8 +464,6 @@ bool wxGStreamerMediaBackend::Pause()
 
 bool wxGStreamerMediaBackend::Stop()
 {
-    //FIXME:  GStreamer won't update the position for getposition for some reason
-    //until it is played again...
     if (gst_element_set_state (m_player,
                     GST_STATE_PAUSED)    != GST_STATE_SUCCESS)
         return false;
