@@ -1,6 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_REVISION($Id$)dnl
 
+AC_PREREQ(2.57)
+
 dnl ---------------------------------------------------------------------------
 dnl
 dnl Top-level configure.in for wxWindows by Robert Roebling, Phil Blecker,
@@ -15,11 +17,16 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-dnl the file passed to AC_INIT should be specific to our package
-AC_INIT([wx-config.in])
+AC_INIT([wxWindows], [2.5.0], [wx-dev@lists.wxwindows.org])
+
+dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
+AC_CONFIG_SRCDIR([wx-config.in])
 
 dnl sets build, host, target variables and the same with _alias
-AC_CANONICAL_SYSTEM
+AC_CANONICAL_BUILD
+AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
+
 
 dnl When making releases do:
 dnl
@@ -3017,7 +3024,7 @@ if test "$wxUSE_SHARED" = "yes"; then
 
 
     dnl use versioned symbols if available on the platform
-    WX_VERSIONED_SYMBOLS([\$(top_builddir)/version-script])
+    WX_VERSIONED_SYMBOLS([\$(top_builddir)version-script])
 
     dnl the command to use for creating the shared library
     SHARED_LD="${CXX} -shared -o"
@@ -3070,7 +3077,7 @@ if test "$wxUSE_SHARED" = "yes"; then
             dnl substitute this in makelib.env for the contrib libs
             WX_TARGET_LIBRARY_SONAME="-Wl,-soname,\$(TARGETLIB_LINK1)"
         fi
-        SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(top_builddir)/lib"
+        SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(top_builddir)lib"
       ;;
 
       *-*-solaris2* )
@@ -3088,7 +3095,7 @@ if test "$wxUSE_SHARED" = "yes"; then
                 [],[],
                 [
                     AC_MSG_RESULT([yes])
-                    SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(top_builddir)/lib"
+                    SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(top_builddir)lib"
                 ],
                 [
                     AC_MSG_RESULT([no])
@@ -3098,7 +3105,7 @@ if test "$wxUSE_SHARED" = "yes"; then
                         [],[],
                         [
                              AC_MSG_RESULT([yes])
-                             SAMPLES_RPATH_FLAG="-Wl,-R,\$(top_builddir)/lib"],
+                             SAMPLES_RPATH_FLAG="-Wl,-R,\$(top_builddir)lib"],
                         [
                             AC_MSG_RESULT([no])
                         ])                    
@@ -3109,7 +3116,7 @@ if test "$wxUSE_SHARED" = "yes"; then
             PIC_FLAG="-KPIC"
             SONAME_FLAGS="-h ${WX_LIBRARY_NAME_SHARED}"
             SONAME_FLAGS_GL="-h ${WX_LIBRARY_NAME_SHARED_GL}"
-            SAMPLES_RPATH_FLAG="-R\$(top_builddir)/lib"
+            SAMPLES_RPATH_FLAG="-R\$(top_builddir)lib"
         fi
       ;;
 
@@ -3236,7 +3243,7 @@ MACSETFILE="@#"
 MACRESWXCONFIG="#"
 if test "$wxUSE_MAC" = 1; then
     dnl add the resources target for wxMac
-    LIBWXMACRES="\$(top_builddir)/lib/${WX_RESOURCES_MACOSX_ASCII}"
+    LIBWXMACRES="\$(top_builddir)lib/${WX_RESOURCES_MACOSX_ASCII}"
     WX_ALL="${WX_ALL} ${LIBWXMACRES}"
     WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall_res"
     AC_CHECK_PROG(RESCOMP, Rez, Rez, /Developer/Tools/Rez)
@@ -3705,6 +3712,20 @@ fi
 
 fi
 dnl if !MSW
+
+
+dnl ------------------------------------------
+dnl Checks specific to contrib libs (MMedia)
+dnl ------------------------------------------
+
+dnl Check for ESD:
+ESD_LINK=
+AC_CHECK_HEADER([esd.h], [
+  AC_CHECK_LIB(esd, esd_close, [
+    ESD_LINK="-lesd"
+  ])
+])
+
 
 dnl ===========================================================================
 dnl Now we have all the info we need - use it!
@@ -5420,7 +5441,7 @@ fi
 AC_DEFINE_UNQUOTED(wxINSTALL_PREFIX, "$wxPREFIX")
 
 dnl define the variables used in wx-config
-top_builddir=`pwd`
+top_builddir_wxconfig=`pwd`
 
 dnl ---------------------------------------------------------------------------
 dnl Output the makefiles and such from the results found above
@@ -5509,7 +5530,7 @@ dnl and other stuff for the built in libraries should come first to avoid
 dnl including the system headers with the same name (it is particularly
 dnl important for zlib because XFree 4.2.0 has its own, horribly old and
 dnl incompatible, zlib.h) and the wxWindows headers should come first anyhow
-INCLUDES="-I\${top_builddir}/lib/wx/include/${TOOLCHAIN_NAME} \
+INCLUDES="-I\${top_builddir}lib/wx/include/${TOOLCHAIN_NAME} \
 -I\${top_srcdir}/include \
 $REGEX_INCLUDE $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE \
 $TOOLKIT_INCLUDE"
@@ -5635,7 +5656,7 @@ AC_SUBST(TOOLCHAIN_DEFS)
 AC_SUBST(TOOLCHAIN_DLL_DEFS)
 
 dnl wx-config options
-AC_SUBST(top_builddir)
+AC_SUBST(top_builddir_wxconfig)
 AC_SUBST(host_alias)
 AC_SUBST(cross_compiling)
 AC_SUBST(WXCONFIG_LIBS)
@@ -5693,6 +5714,10 @@ AC_SUBST(MAKEINFO)
 AC_SUBST(INSTALL_LIBRARY)
 AC_SUBST(INSTALL_DIR)
 
+dnl contrib tests results:
+AC_SUBST(ESD_LINK)
+
+
 dnl MAKE_SET will be replaced with "MAKE=..." or nothing if make sets MAKE
 dnl itself (this macro is required if SUBDIRS variable is used in Makefile.am
 dnl - and we do use it)
@@ -5703,48 +5728,18 @@ if test -f lib/wx/include/${TOOLCHAIN_NAME}/wx/setup.h; then
     mv -f lib/wx/include/${TOOLCHAIN_NAME}/wx/setup.h setup.h
 fi
 
-AC_CONFIG_HEADER(setup.h:setup.h.in)
-
-dnl we need to pass SAMPLES_SUBDIRS (and some other) to the configure in
-dnl samples and the only way to do it is to use the environment (another
-dnl idea could have been to use the cache but this wouldn't work when
-dnl configure doesn't use cache at all which is the default with autoconf 2.50)
-wx_cv_path_samplesubdirs=$SAMPLES_SUBDIRS
-wx_cv_if_gnu_make=$IF_GNU_MAKE
-wx_cv_path_ifs=$PATH_IFS
-wx_cv_program_ext=$PROGRAM_EXT
-wx_cv_target_library=$WX_TARGET_LIBRARY
-wx_cv_target_library_gl=$WX_TARGET_LIBRARY_GL
-wx_cv_target_libtype=$WX_TARGET_LIBRARY_TYPE
-wx_cv_library_basename=${WX_LIBRARY_BASENAME}
-wx_cv_release=${WX_RELEASE}
-wx_cv_current=${WX_CURRENT}
-wx_cv_revision=${WX_REVISION}
-wx_cv_age=${WX_AGE}
-wx_cv_use_gui=${USE_GUI}
-wx_cv_use_resources=${wxUSE_RESOURCES}
-export wx_cv_path_samplesubdirs wx_cv_if_gnu_make \
-       wx_cv_path_ifs wx_cv_program_ext \
-       wx_cv_target_library wx_cv_target_library_gl wx_cv_target_libtype \
-       wx_cv_library_basename \
-       wx_cv_release wx_cv_current wx_cv_revision wx_cv_age \
-       wx_cv_use_gui wx_cv_use_resources \
-       CFLAGS LDFLAGS CXXFLAGS CPPFLAGS \
-       top_builddir USE_GUI MONOLITHIC \
-       wxUSE_ZLIB wxUSE_REGEX wxUSE_ODBC wxUSE_LIBJPEG wxUSE_LIBPNG \
-       wxUSE_LIBTIFF EXTRALIBS UNICODE BUILD SHARED TOOLKIT TOOLKIT_LOWERCASE \
-       TOOLKIT_VERSION SAMPLES_RPATH_FLAG WXUNIV
-
-AC_CONFIG_SUBDIRS(demos samples utils contrib)
+AC_CONFIG_HEADERS([setup.h])
 
 dnl create each of the files in the space separated list from the file.in
 dnl (the original file name may be overriden by appending another name after a
 dnl colon)
-AC_OUTPUT([
+AC_CONFIG_FILES([
             wx-config
             version-script
             Makefile
-          ],
+          ])
+
+AC_CONFIG_COMMANDS([default],
           [
             dnl This test is required to make the following idempotent.
             dnl Otherwise running config.status or rerunning configure
@@ -5783,6 +5778,177 @@ AC_OUTPUT([
             LN_S="${LN_S}"
           ]
          )
+
+
+dnl Configure samples if their sources are present:
+if test -d ${srcdir}/samples ; then
+    AC_CONFIG_FILES([
+        samples/Makefile
+        samples/access/Makefile
+        samples/artprov/Makefile
+        samples/caret/Makefile
+        samples/calendar/Makefile
+        samples/checklst/Makefile
+        samples/config/Makefile
+        samples/controls/Makefile
+        samples/console/Makefile
+        samples/db/Makefile
+        samples/dialogs/Makefile
+        samples/dialup/Makefile
+        samples/docview/Makefile
+        samples/docvwmdi/Makefile
+        samples/dnd/Makefile
+        samples/dragimag/Makefile
+        samples/drawing/Makefile
+        samples/dynamic/Makefile
+        samples/erase/Makefile
+        samples/event/Makefile
+        samples/exec/Makefile
+        samples/font/Makefile
+        samples/grid/Makefile
+        samples/help/Makefile
+        samples/image/Makefile
+        samples/internat/Makefile
+        samples/ipc/Makefile
+        samples/joytest/Makefile
+        samples/keyboard/Makefile
+        samples/layout/Makefile
+        samples/listctrl/Makefile
+        samples/mdi/Makefile
+        samples/menu/Makefile
+        samples/memcheck/Makefile
+        samples/minifram/Makefile
+        samples/minimal/Makefile
+        samples/mobile/Makefile
+        samples/mobile/wxedit/Makefile
+        samples/mobile/styles/Makefile
+        samples/multimon/Makefile
+        samples/notebook/Makefile
+        samples/oleauto/Makefile
+        samples/ownerdrw/Makefile
+        samples/png/Makefile
+        samples/printing/Makefile
+        samples/propsize/Makefile
+        samples/regtest/Makefile
+        samples/rotate/Makefile
+        samples/sashtest/Makefile
+        samples/shaped/Makefile
+        samples/scroll/Makefile
+        samples/scrollsub/Makefile
+        samples/sockets/Makefile
+        samples/splitter/Makefile
+        samples/statbar/Makefile
+        samples/taskbar/Makefile
+        samples/text/Makefile
+        samples/thread/Makefile
+        samples/toolbar/Makefile
+        samples/treectrl/Makefile
+        samples/typetest/Makefile
+        samples/validate/Makefile
+        samples/widgets/Makefile
+        samples/wizard/Makefile
+        samples/htlbox/Makefile
+        samples/html/Makefile
+        samples/html/about/Makefile
+        samples/html/help/Makefile
+        samples/html/printing/Makefile
+        samples/html/helpview/Makefile
+        samples/html/test/Makefile
+        samples/html/zip/Makefile
+        samples/html/virtual/Makefile
+        samples/html/widget/Makefile
+        samples/opengl/Makefile
+        samples/opengl/cube/Makefile
+        samples/opengl/penguin/Makefile
+        samples/opengl/isosurf/Makefile
+    ])
+fi
+
+dnl Configure demos if their sources are present:
+if test -d ${srcdir}/demos ; then
+    AC_CONFIG_FILES([
+        demos/Makefile
+        demos/bombs/Makefile
+        demos/dbbrowse/Makefile
+        demos/forty/Makefile
+        demos/fractal/Makefile
+        demos/life/Makefile
+        demos/poem/Makefile
+    ])
+fi
+
+dnl Configure utils if their sources are present:
+if test -d ${srcdir}/utils ; then
+    AC_CONFIG_FILES([
+        utils/Makefile
+        utils/makegen/Makefile
+        utils/HelpGen/Makefile
+        utils/HelpGen/src/Makefile
+        utils/tex2rtf/Makefile
+        utils/tex2rtf/src/Makefile
+        utils/hhp2cached/Makefile
+        utils/dialoged/Makefile
+        utils/dialoged/src/Makefile
+        utils/emulator/Makefile
+        utils/emulator/src/Makefile
+        utils/helpview/Makefile
+        utils/helpview/src/Makefile
+        utils/configtool/Makefile
+        utils/configtool/src/Makefile
+    ])
+fi
+
+dnl Configure contrib libs & samples if their sources are present:
+if test -d ${srcdir}/contrib ; then
+    AC_CONFIG_FILES([
+        contrib/src/Makefile
+        contrib/src/deprecated/Makefile
+        contrib/src/ogl/Makefile
+        contrib/src/mmedia/Makefile
+        contrib/src/stc/Makefile
+        contrib/src/svg/Makefile	    
+        contrib/src/xrc/Makefile
+        contrib/src/gizmos/Makefile
+        contrib/src/plot/Makefile
+        contrib/src/applet/Makefile
+        contrib/src/fl/Makefile
+        contrib/src/net/Makefile
+        contrib/samples/Makefile
+        contrib/samples/deprecated/Makefile
+        contrib/samples/deprecated/proplist/Makefile
+        contrib/samples/deprecated/resource/Makefile
+        contrib/samples/deprecated/treelay/Makefile
+        contrib/samples/mmedia/Makefile
+        contrib/samples/ogl/Makefile
+        contrib/samples/ogl/ogledit/Makefile
+        contrib/samples/ogl/studio/Makefile
+        contrib/samples/stc/Makefile
+        contrib/samples/svg/Makefile
+        contrib/samples/gizmos/Makefile
+        contrib/samples/gizmos/editlbox/Makefile
+        contrib/samples/gizmos/dynsash/Makefile
+        contrib/samples/gizmos/dynsash_switch/Makefile
+        contrib/samples/gizmos/multicell/Makefile
+        contrib/samples/gizmos/splittree/Makefile
+        contrib/samples/gizmos/led/Makefile
+        contrib/samples/xrc/Makefile
+        contrib/samples/plot/Makefile
+        contrib/samples/applet/Makefile
+        contrib/samples/fl/Makefile
+        contrib/samples/fl/fl_demo1/Makefile
+        contrib/samples/fl/fl_demo2/Makefile
+        contrib/samples/fl/fl_sample1/Makefile
+        contrib/samples/fl/fl_sample2/Makefile
+        contrib/samples/fl/fl_sample3/Makefile
+        contrib/utils/Makefile
+        contrib/utils/wxrc/Makefile
+        contrib/utils/wxrcedit/Makefile
+        contrib/utils/convertrc/Makefile
+    ])
+fi
+
+
+AC_OUTPUT
 
 dnl report on what we decided to do
 echo

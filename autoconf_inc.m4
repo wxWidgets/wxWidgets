@@ -4,219 +4,225 @@ dnl Do not modify, all changes will be overwritten!
 
     dnl Conditions:
 
-dnl ### begin block COND_WXUSE_ZLIBBUILTIN ###
-    COND_WXUSE_ZLIBBUILTIN="#"
+dnl ### begin block COND_WXUSE_ZLIB_BUILTIN ###
+    COND_WXUSE_ZLIB_BUILTIN="#"
     if test "x$wxUSE_ZLIB" = "xbuiltin" ; then
-        COND_WXUSE_ZLIBBUILTIN=
+        COND_WXUSE_ZLIB_BUILTIN=
     fi
-    AC_SUBST(COND_WXUSE_ZLIBBUILTIN)
-dnl ### begin block COND_UNICODE1 ###
-    COND_UNICODE1="#"
+    AC_SUBST(COND_WXUSE_ZLIB_BUILTIN)
+dnl ### begin block COND_UNICODE_1 ###
+    COND_UNICODE_1="#"
     if test "x$UNICODE" = "x1" ; then
-        COND_UNICODE1=
+        COND_UNICODE_1=
     fi
-    AC_SUBST(COND_UNICODE1)
-dnl ### begin block COND_BUILDDEBUG ###
-    COND_BUILDDEBUG="#"
+    AC_SUBST(COND_UNICODE_1)
+dnl ### begin block COND_BUILD_DEBUG ###
+    COND_BUILD_DEBUG="#"
     if test "x$BUILD" = "xdebug" ; then
-        COND_BUILDDEBUG=
+        COND_BUILD_DEBUG=
     fi
-    AC_SUBST(COND_BUILDDEBUG)
-dnl ### begin block COND_WXUSE_REGEXBUILTIN ###
-    COND_WXUSE_REGEXBUILTIN="#"
+    AC_SUBST(COND_BUILD_DEBUG)
+dnl ### begin block COND_WXUSE_REGEX_BUILTIN ###
+    COND_WXUSE_REGEX_BUILTIN="#"
     if test "x$wxUSE_REGEX" = "xbuiltin" ; then
-        COND_WXUSE_REGEXBUILTIN=
+        COND_WXUSE_REGEX_BUILTIN=
     fi
-    AC_SUBST(COND_WXUSE_REGEXBUILTIN)
-dnl ### begin block COND_USE_SOSYMLINKS1 ###
-    COND_USE_SOSYMLINKS1="#"
+    AC_SUBST(COND_WXUSE_REGEX_BUILTIN)
+dnl ### begin block COND_USE_SOSYMLINKS_1 ###
+    COND_USE_SOSYMLINKS_1="#"
     if test "x$USE_SOSYMLINKS" = "x1" ; then
-        COND_USE_SOSYMLINKS1=
+        COND_USE_SOSYMLINKS_1=
     fi
-    AC_SUBST(COND_USE_SOSYMLINKS1)
-dnl ### begin block COND_WXUSE_LIBJPEGBUILTIN ###
-    COND_WXUSE_LIBJPEGBUILTIN="#"
+    AC_SUBST(COND_USE_SOSYMLINKS_1)
+dnl ### begin block COND_WXUSE_LIBJPEG_BUILTIN ###
+    COND_WXUSE_LIBJPEG_BUILTIN="#"
     if test "x$wxUSE_LIBJPEG" = "xbuiltin" ; then
-        COND_WXUSE_LIBJPEGBUILTIN=
+        COND_WXUSE_LIBJPEG_BUILTIN=
     fi
-    AC_SUBST(COND_WXUSE_LIBJPEGBUILTIN)
-dnl ### begin block COND_WXUSE_LIBPNGBUILTIN ###
-    COND_WXUSE_LIBPNGBUILTIN="#"
+    AC_SUBST(COND_WXUSE_LIBJPEG_BUILTIN)
+dnl ### begin block COND_WXUSE_LIBPNG_BUILTIN ###
+    COND_WXUSE_LIBPNG_BUILTIN="#"
     if test "x$wxUSE_LIBPNG" = "xbuiltin" ; then
-        COND_WXUSE_LIBPNGBUILTIN=
+        COND_WXUSE_LIBPNG_BUILTIN=
     fi
-    AC_SUBST(COND_WXUSE_LIBPNGBUILTIN)
-dnl ### begin block COND_WXUSE_ODBCBUILTIN ###
-    COND_WXUSE_ODBCBUILTIN="#"
-    if test "x$wxUSE_ODBC" = "xbuiltin" ; then
-        COND_WXUSE_ODBCBUILTIN=
-    fi
-    AC_SUBST(COND_WXUSE_ODBCBUILTIN)
-dnl ### begin block COND_TOOLKITGTK ###
-    COND_TOOLKITGTK="#"
-    if test "x$TOOLKIT" = "xGTK" ; then
-        COND_TOOLKITGTK=
-    fi
-    AC_SUBST(COND_TOOLKITGTK)
-dnl ### begin block COND_TOOLKITMOTIF ###
-    COND_TOOLKITMOTIF="#"
-    if test "x$TOOLKIT" = "xMOTIF" ; then
-        COND_TOOLKITMOTIF=
-    fi
-    AC_SUBST(COND_TOOLKITMOTIF)
-dnl ### begin block COND_TOOLKITMSW ###
-    COND_TOOLKITMSW="#"
-    if test "x$TOOLKIT" = "xMSW" ; then
-        COND_TOOLKITMSW=
-    fi
-    AC_SUBST(COND_TOOLKITMSW)
-dnl ### begin block COND_TOOLKITMAC ###
-    COND_TOOLKITMAC="#"
-    if test "x$TOOLKIT" = "xMAC" ; then
-        COND_TOOLKITMAC=
-    fi
-    AC_SUBST(COND_TOOLKITMAC)
-dnl ### begin block COND_TOOLKITCOCOA ###
-    COND_TOOLKITCOCOA="#"
-    if test "x$TOOLKIT" = "xCOCOA" ; then
-        COND_TOOLKITCOCOA=
-    fi
-    AC_SUBST(COND_TOOLKITCOCOA)
-dnl ### begin block COND_TOOLKITOS2 ###
-    COND_TOOLKITOS2="#"
-    if test "x$TOOLKIT" = "xOS2" ; then
-        COND_TOOLKITOS2=
-    fi
-    AC_SUBST(COND_TOOLKITOS2)
-dnl ### begin block COND_TOOLKITX11 ###
-    COND_TOOLKITX11="#"
-    if test "x$TOOLKIT" = "xX11" ; then
-        COND_TOOLKITX11=
-    fi
-    AC_SUBST(COND_TOOLKITX11)
-dnl ### begin block COND_TOOLKITMGL ###
-    COND_TOOLKITMGL="#"
-    if test "x$TOOLKIT" = "xMGL" ; then
-        COND_TOOLKITMGL=
-    fi
-    AC_SUBST(COND_TOOLKITMGL)
-dnl ### begin block COND_WXUNIV1 ###
-    COND_WXUNIV1="#"
-    if test "x$WXUNIV" = "x1" ; then
-        COND_WXUNIV1=
-    fi
-    AC_SUBST(COND_WXUNIV1)
-dnl ### begin block COND_SHARED0_MONOLITHIC1 ###
-    COND_SHARED0_MONOLITHIC1="#"
-    if test "x$SHARED" = "x0" -a \
-            "x$MONOLITHIC" = "x1" ; then
-        COND_SHARED0_MONOLITHIC1=
-    fi
-    AC_SUBST(COND_SHARED0_MONOLITHIC1)
-dnl ### begin block COND_SHARED1_MONOLITHIC1 ###
-    COND_SHARED1_MONOLITHIC1="#"
+    AC_SUBST(COND_WXUSE_LIBPNG_BUILTIN)
+dnl ### begin block COND_SHARED_1_MONOLITHIC_1 ###
+    COND_SHARED_1_MONOLITHIC_1="#"
     if test "x$SHARED" = "x1" -a \
             "x$MONOLITHIC" = "x1" ; then
-        COND_SHARED1_MONOLITHIC1=
+        COND_SHARED_1_MONOLITHIC_1=
     fi
-    AC_SUBST(COND_SHARED1_MONOLITHIC1)
-dnl ### begin block COND_PLATFORM_UNIX1 ###
-    COND_PLATFORM_UNIX1="#"
+    AC_SUBST(COND_SHARED_1_MONOLITHIC_1)
+dnl ### begin block COND_WXUSE_ODBC_BUILTIN ###
+    COND_WXUSE_ODBC_BUILTIN="#"
+    if test "x$wxUSE_ODBC" = "xbuiltin" ; then
+        COND_WXUSE_ODBC_BUILTIN=
+    fi
+    AC_SUBST(COND_WXUSE_ODBC_BUILTIN)
+dnl ### begin block COND_TOOLKIT_GTK ###
+    COND_TOOLKIT_GTK="#"
+    if test "x$TOOLKIT" = "xGTK" ; then
+        COND_TOOLKIT_GTK=
+    fi
+    AC_SUBST(COND_TOOLKIT_GTK)
+dnl ### begin block COND_TOOLKIT_MOTIF ###
+    COND_TOOLKIT_MOTIF="#"
+    if test "x$TOOLKIT" = "xMOTIF" ; then
+        COND_TOOLKIT_MOTIF=
+    fi
+    AC_SUBST(COND_TOOLKIT_MOTIF)
+dnl ### begin block COND_TOOLKIT_MSW ###
+    COND_TOOLKIT_MSW="#"
+    if test "x$TOOLKIT" = "xMSW" ; then
+        COND_TOOLKIT_MSW=
+    fi
+    AC_SUBST(COND_TOOLKIT_MSW)
+dnl ### begin block COND_TOOLKIT_MAC ###
+    COND_TOOLKIT_MAC="#"
+    if test "x$TOOLKIT" = "xMAC" ; then
+        COND_TOOLKIT_MAC=
+    fi
+    AC_SUBST(COND_TOOLKIT_MAC)
+dnl ### begin block COND_TOOLKIT_COCOA ###
+    COND_TOOLKIT_COCOA="#"
+    if test "x$TOOLKIT" = "xCOCOA" ; then
+        COND_TOOLKIT_COCOA=
+    fi
+    AC_SUBST(COND_TOOLKIT_COCOA)
+dnl ### begin block COND_TOOLKIT_OS2 ###
+    COND_TOOLKIT_OS2="#"
+    if test "x$TOOLKIT" = "xOS2" ; then
+        COND_TOOLKIT_OS2=
+    fi
+    AC_SUBST(COND_TOOLKIT_OS2)
+dnl ### begin block COND_TOOLKIT_X11 ###
+    COND_TOOLKIT_X11="#"
+    if test "x$TOOLKIT" = "xX11" ; then
+        COND_TOOLKIT_X11=
+    fi
+    AC_SUBST(COND_TOOLKIT_X11)
+dnl ### begin block COND_TOOLKIT_MGL ###
+    COND_TOOLKIT_MGL="#"
+    if test "x$TOOLKIT" = "xMGL" ; then
+        COND_TOOLKIT_MGL=
+    fi
+    AC_SUBST(COND_TOOLKIT_MGL)
+dnl ### begin block COND_WXUNIV_1 ###
+    COND_WXUNIV_1="#"
+    if test "x$WXUNIV" = "x1" ; then
+        COND_WXUNIV_1=
+    fi
+    AC_SUBST(COND_WXUNIV_1)
+dnl ### begin block COND_WXUSE_LIBTIFF_BUILTIN ###
+    COND_WXUSE_LIBTIFF_BUILTIN="#"
+    if test "x$wxUSE_LIBTIFF" = "xbuiltin" ; then
+        COND_WXUSE_LIBTIFF_BUILTIN=
+    fi
+    AC_SUBST(COND_WXUSE_LIBTIFF_BUILTIN)
+dnl ### begin block COND_PLATFORM_UNIX_1 ###
+    COND_PLATFORM_UNIX_1="#"
     if test "x$PLATFORM_UNIX" = "x1" ; then
-        COND_PLATFORM_UNIX1=
+        COND_PLATFORM_UNIX_1=
     fi
-    AC_SUBST(COND_PLATFORM_UNIX1)
-dnl ### begin block COND_PLATFORM_MACOSX1 ###
-    COND_PLATFORM_MACOSX1="#"
+    AC_SUBST(COND_PLATFORM_UNIX_1)
+dnl ### begin block COND_PLATFORM_MACOSX_1 ###
+    COND_PLATFORM_MACOSX_1="#"
     if test "x$PLATFORM_MACOSX" = "x1" ; then
-        COND_PLATFORM_MACOSX1=
+        COND_PLATFORM_MACOSX_1=
     fi
-    AC_SUBST(COND_PLATFORM_MACOSX1)
-dnl ### begin block COND_PLATFORM_WIN321 ###
-    COND_PLATFORM_WIN321="#"
+    AC_SUBST(COND_PLATFORM_MACOSX_1)
+dnl ### begin block COND_PLATFORM_WIN32_1 ###
+    COND_PLATFORM_WIN32_1="#"
     if test "x$PLATFORM_WIN32" = "x1" ; then
-        COND_PLATFORM_WIN321=
+        COND_PLATFORM_WIN32_1=
     fi
-    AC_SUBST(COND_PLATFORM_WIN321)
-dnl ### begin block COND_USE_SOVERSION1_PLATFORM_MACOSX0 ###
-    COND_USE_SOVERSION1_PLATFORM_MACOSX0="#"
+    AC_SUBST(COND_PLATFORM_WIN32_1)
+dnl ### begin block COND_USE_SOVERSION_1_PLATFORM_MACOSX_0 ###
+    COND_USE_SOVERSION_1_PLATFORM_MACOSX_0="#"
     if test "x$USE_SOVERSION" = "x1" -a \
             "x$PLATFORM_MACOSX" = "x0" ; then
-        COND_USE_SOVERSION1_PLATFORM_MACOSX0=
+        COND_USE_SOVERSION_1_PLATFORM_MACOSX_0=
     fi
-    AC_SUBST(COND_USE_SOVERSION1_PLATFORM_MACOSX0)
-dnl ### begin block COND_USE_SOVERSION1_PLATFORM_MACOSX1 ###
-    COND_USE_SOVERSION1_PLATFORM_MACOSX1="#"
+    AC_SUBST(COND_USE_SOVERSION_1_PLATFORM_MACOSX_0)
+dnl ### begin block COND_USE_SOVERSION_1_PLATFORM_MACOSX_1 ###
+    COND_USE_SOVERSION_1_PLATFORM_MACOSX_1="#"
     if test "x$USE_SOVERSION" = "x1" -a \
             "x$PLATFORM_MACOSX" = "x1" ; then
-        COND_USE_SOVERSION1_PLATFORM_MACOSX1=
+        COND_USE_SOVERSION_1_PLATFORM_MACOSX_1=
     fi
-    AC_SUBST(COND_USE_SOVERSION1_PLATFORM_MACOSX1)
-dnl ### begin block COND_WXUSE_LIBTIFFBUILTIN ###
-    COND_WXUSE_LIBTIFFBUILTIN="#"
-    if test "x$wxUSE_LIBTIFF" = "xbuiltin" ; then
-        COND_WXUSE_LIBTIFFBUILTIN=
-    fi
-    AC_SUBST(COND_WXUSE_LIBTIFFBUILTIN)
-dnl ### begin block COND_PLATFORM_WIN320 ###
-    COND_PLATFORM_WIN320="#"
+    AC_SUBST(COND_USE_SOVERSION_1_PLATFORM_MACOSX_1)
+dnl ### begin block COND_PLATFORM_WIN32_0 ###
+    COND_PLATFORM_WIN32_0="#"
     if test "x$PLATFORM_WIN32" = "x0" ; then
-        COND_PLATFORM_WIN320=
+        COND_PLATFORM_WIN32_0=
     fi
-    AC_SUBST(COND_PLATFORM_WIN320)
-dnl ### begin block COND_MONOLITHIC1 ###
-    COND_MONOLITHIC1="#"
+    AC_SUBST(COND_PLATFORM_WIN32_0)
+dnl ### begin block COND_MONOLITHIC_1 ###
+    COND_MONOLITHIC_1="#"
     if test "x$MONOLITHIC" = "x1" ; then
-        COND_MONOLITHIC1=
+        COND_MONOLITHIC_1=
     fi
-    AC_SUBST(COND_MONOLITHIC1)
-dnl ### begin block COND_MONOLITHIC0 ###
-    COND_MONOLITHIC0="#"
+    AC_SUBST(COND_MONOLITHIC_1)
+dnl ### begin block COND_MONOLITHIC_0 ###
+    COND_MONOLITHIC_0="#"
     if test "x$MONOLITHIC" = "x0" ; then
-        COND_MONOLITHIC0=
+        COND_MONOLITHIC_0=
     fi
-    AC_SUBST(COND_MONOLITHIC0)
-dnl ### begin block COND_USE_GUI1 ###
-    COND_USE_GUI1="#"
+    AC_SUBST(COND_MONOLITHIC_0)
+dnl ### begin block COND_USE_GUI_1 ###
+    COND_USE_GUI_1="#"
     if test "x$USE_GUI" = "x1" ; then
-        COND_USE_GUI1=
+        COND_USE_GUI_1=
     fi
-    AC_SUBST(COND_USE_GUI1)
-dnl ### begin block COND_DEPS_TYPEGCC ###
-    COND_DEPS_TYPEGCC="#"
+    AC_SUBST(COND_USE_GUI_1)
+dnl ### begin block COND_DEPS_TYPE_GCC ###
+    COND_DEPS_TYPE_GCC="#"
     if test "x$DEPS_TYPE" = "xgcc" ; then
-        COND_DEPS_TYPEGCC=
+        COND_DEPS_TYPE_GCC=
     fi
-    AC_SUBST(COND_DEPS_TYPEGCC)
-dnl ### begin block COND_USE_GUI0 ###
-    COND_USE_GUI0="#"
+    AC_SUBST(COND_DEPS_TYPE_GCC)
+dnl ### begin block COND_USE_GUI_0 ###
+    COND_USE_GUI_0="#"
     if test "x$USE_GUI" = "x0" ; then
-        COND_USE_GUI0=
+        COND_USE_GUI_0=
     fi
-    AC_SUBST(COND_USE_GUI0)
-dnl ### begin block COND_USE_GUI1_WXUNIV0 ###
-    COND_USE_GUI1_WXUNIV0="#"
+    AC_SUBST(COND_USE_GUI_0)
+dnl ### begin block COND_USE_GUI_1_WXUNIV_0 ###
+    COND_USE_GUI_1_WXUNIV_0="#"
     if test "x$USE_GUI" = "x1" -a \
             "x$WXUNIV" = "x0" ; then
-        COND_USE_GUI1_WXUNIV0=
+        COND_USE_GUI_1_WXUNIV_0=
     fi
-    AC_SUBST(COND_USE_GUI1_WXUNIV0)
-dnl ### begin block COND_USE_GUI1_WXUNIV1 ###
-    COND_USE_GUI1_WXUNIV1="#"
+    AC_SUBST(COND_USE_GUI_1_WXUNIV_0)
+dnl ### begin block COND_USE_GUI_1_WXUNIV_1 ###
+    COND_USE_GUI_1_WXUNIV_1="#"
     if test "x$USE_GUI" = "x1" -a \
             "x$WXUNIV" = "x1" ; then
-        COND_USE_GUI1_WXUNIV1=
+        COND_USE_GUI_1_WXUNIV_1=
     fi
-    AC_SUBST(COND_USE_GUI1_WXUNIV1)
-dnl ### begin block COND_USE_SOVERLINUX1 ###
-    COND_USE_SOVERLINUX1="#"
+    AC_SUBST(COND_USE_GUI_1_WXUNIV_1)
+dnl ### begin block COND_SHARED_0_MONOLITHIC_1 ###
+    COND_SHARED_0_MONOLITHIC_1="#"
+    if test "x$SHARED" = "x0" -a \
+            "x$MONOLITHIC" = "x1" ; then
+        COND_SHARED_0_MONOLITHIC_1=
+    fi
+    AC_SUBST(COND_SHARED_0_MONOLITHIC_1)
+dnl ### begin block COND_USE_SOVERLINUX_1 ###
+    COND_USE_SOVERLINUX_1="#"
     if test "x$USE_SOVERLINUX" = "x1" ; then
-        COND_USE_SOVERLINUX1=
+        COND_USE_SOVERLINUX_1=
     fi
-    AC_SUBST(COND_USE_SOVERLINUX1)
-dnl ### begin block COND_USE_SOVERSOLARIS1 ###
-    COND_USE_SOVERSOLARIS1="#"
+    AC_SUBST(COND_USE_SOVERLINUX_1)
+dnl ### begin block COND_USE_SOVERSOLARIS_1 ###
+    COND_USE_SOVERSOLARIS_1="#"
     if test "x$USE_SOVERSOLARIS" = "x1" ; then
-        COND_USE_SOVERSOLARIS1=
+        COND_USE_SOVERSOLARIS_1=
     fi
-    AC_SUBST(COND_USE_SOVERSOLARIS1)
+    AC_SUBST(COND_USE_SOVERSOLARIS_1)
+dnl ### begin block COND_PLATFORM_MAC_1 ###
+    COND_PLATFORM_MAC_1="#"
+    if test "x$PLATFORM_MAC" = "x1" ; then
+        COND_PLATFORM_MAC_1=
+    fi
+    AC_SUBST(COND_PLATFORM_MAC_1)
