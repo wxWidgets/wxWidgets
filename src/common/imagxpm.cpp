@@ -129,7 +129,7 @@ bool wxXPMHandler::SaveFile(wxImage * image,
 
     // 2. write the header:
     char tmpbuf[200];
-    // VS: 200b is safe upper bound for anything produced by sprintf bellow
+    // VS: 200b is safe upper bound for anything produced by sprintf below
     //     (101 bytes the string, neither %i can expand into more than 10 chars)
     sprintf(tmpbuf, 
                "/* XPM */\n"
@@ -209,8 +209,16 @@ bool wxXPMHandler::SaveFile(wxImage * image,
     tmp = wxT("};\n");
     stream.Write(tmp.mb_str(), 3);
 
+    // Clean up:
     delete[] symbols;
     delete[] symbols_data;
+
+    // FIXME: it will be better to use macros-based wxHashTable & DeleteContents(TRUE)
+    table.BeginFind();
+    while ((node = table.Next()) != NULL)
+    {
+        delete (wxHNode *) node->GetData();
+    }
 
     return TRUE;
 }
