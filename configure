@@ -23102,7 +23102,7 @@ if test \${verbose} = 1; then
     echo "c++ -r -keep_private_externs -nostdlib \${objects} -o master.\$\$.o"
 fi
 c++ -r -keep_private_externs -nostdlib \${objects} -o master.\$\$.o
-{status}=\$?
+status=\$?
 if test \${status} != 0; then
     exit \${status}
 fi
@@ -23226,6 +23226,8 @@ fi
       *-*-darwin* )
         USE_MACVERSION=1
         USE_SOVERSION=1
+        USE_SOVERLINUX=1
+        USE_SOSYMLINKS=1
       ;;      
     esac
 
@@ -23546,7 +23548,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:23550: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:23552: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
