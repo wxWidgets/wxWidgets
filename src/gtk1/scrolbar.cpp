@@ -64,7 +64,7 @@ static void gtk_scrollbar_callback( GtkAdjustment *adjust, wxScrollBar *win )
     else if (range->scroll_type == GTK_SCROLL_PAGE_FORWARD)  command = wxEVT_SCROLL_PAGEDOWN;
     
     double dvalue = adjust->value;
-    int value = (int)(dvalue >= 0 ? dvalue - 0.5 : dvalue + 0.5);
+    int value = (int)(dvalue < 0 ? dvalue - 0.5 : dvalue + 0.5);
       
     int orient = win->HasFlag(wxSB_VERTICAL) ? wxVERTICAL : wxHORIZONTAL;
   
@@ -186,7 +186,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
 int wxScrollBar::GetThumbPosition() const
 {
     double val = m_adjust->value;
-    return (int)(val >= 0 ? val - 0.5 : val + 0.5);
+    return (int)(val < 0 ? val - 0.5 : val + 0.5);
 }
 
 int wxScrollBar::GetThumbSize() const
