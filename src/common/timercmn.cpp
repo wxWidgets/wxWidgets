@@ -156,7 +156,7 @@ long wxChrono::Time()
 
 
 // EXPERIMENTAL: comment this out if it doesn't compile.
-#ifndef __VMS__
+#if !defined( __VMS__ ) || ( __VMS_VER >= 70000000 )
 bool wxGetLocalTime(long *timeZone, int *dstObserved)
 {
 #if defined(__MINGW32__)
@@ -192,11 +192,14 @@ bool wxGetLocalTime(long *timeZone, int *dstObserved)
   *timeZone = timezone;
   *dstObserved = daylight;
 #  endif
-#elif defined(__xlC__) || defined(__AIX__) || defined(__SVR4__) || defined(__SYSV__) || defined(__MWERKS__) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) // || defined(__AIXV3__)
-#  ifndef __MWERKS__ // shouldn't this be one scope below ?
+#elif defined(__xlC__) || defined(__AIX__) || defined(__SVR4__) || \
+   defined(__SYSV__) || defined(__MWERKS__) || (defined(__GNUWIN32__) && \
+						   !defined(__MINGW32__))\
+       || defined( __VMS__ ) // || defined(__AIXV3__)
+#  if defined(__SYSV__) || (defined(__GNUWIN32__) && !defined(__MINGW32))
+#  ifndef __MWERKS__
   struct timeval tp;
 #  endif
-#  if defined(__SYSV__) || (defined(__GNUWIN32__) && !defined(__MINGW32))
   struct timezone tz;
   gettimeofday(&tp, &tz);
   *timeZone = 60*(tz.tz_minuteswest);
