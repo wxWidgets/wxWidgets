@@ -427,6 +427,21 @@ size_t wxPipeInputStream::OnSysRead(void *buffer, size_t len)
 wxPipeOutputStream::wxPipeOutputStream(HANDLE hOutput)
 {
     m_hOutput = hOutput;
+
+    // unblock the pipe to prevent deadlocks when we're writing to the pipe
+    // from which the child process can't read because it is writing in its own
+    // end of it
+    DWORD mode = PIPE_READMODE_BYTE | PIPE_NOWAIT;
+    if ( !::SetNamedPipeHandleState
+            (
+                m_hOutput,
+                &mode,
+                NULL,       // collection count (we don't set it)
+                NULL        // timeout (we don't set it neither)
+            ) )
+    {
+        wxLogLastError(_T("SetNamedPipeHandleState(PIPE_NOWAIT)"));
+    }
 }
 
 wxPipeOutputStream::~wxPipeOutputStream()
@@ -436,17 +451,29 @@ wxPipeOutputStream::~wxPipeOutputStream()
 
 size_t wxPipeOutputStream::OnSysWrite(const void *buffer, size_t len)
 {
-    DWORD bytesWritten;
-
     m_lasterror = wxSTREAM_NO_ERROR;
-    if ( !::WriteFile(m_hOutput, buffer, len, &bytesWritten, NULL) )
+
+    DWORD totalWritten = 0;
+    while ( len > 0 )
     {
-        m_lasterror = ::GetLastError() == ERROR_BROKEN_PIPE
-                            ? wxSTREAM_EOF
-                            : wxSTREAM_WRITE_ERROR;
+        DWORD chunkWritten;
+        if ( !::WriteFile(m_hOutput, buffer, len, &chunkWritten, NULL) )
+        {
+            m_lasterror = ::GetLastError() == ERROR_BROKEN_PIPE
+                                ? wxSTREAM_EOF
+                                : wxSTREAM_WRITE_ERROR;
+            break;
+        }
+
+        if ( !chunkWritten )
+            break;
+
+        buffer = (char *)buffer + chunkWritten;
+        totalWritten += chunkWritten;
+        len -= chunkWritten;
     }
 
-    return bytesWritten;
+    return totalWritten;
 }
 
 #endif // wxUSE_STREAMS
