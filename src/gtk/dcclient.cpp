@@ -487,8 +487,6 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
   
     wxCHECK_RET( bitmap.Ok(), _T("invalid bitmap") );
     
-    if (!m_window) return;
-    
     /* scale/translate size and position */
   
     int xx = XLOG2DEV(x);
@@ -496,6 +494,11 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
   
     int w = bitmap.GetWidth();
     int h = bitmap.GetHeight();
+    
+    CalcBoundingBox( x, y );
+    CalcBoundingBox( x + w, y + h );
+    
+    if (!m_window) return;
     
     int ww = XLOG2DEVREL(w);
     int hh = YLOG2DEVREL(h);
@@ -550,9 +553,6 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
         gdk_gc_set_clip_mask( m_penGC, (GdkBitmap *) NULL );
         gdk_gc_set_clip_origin( m_penGC, 0, 0 );
     }
-    
-    CalcBoundingBox( x, y );
-    CalcBoundingBox( x + w, y + h );
 }
 
 bool wxWindowDC::DoBlit( long xdest, long ydest, long width, long height,

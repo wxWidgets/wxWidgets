@@ -33,7 +33,7 @@ dialog to respond to system close events.
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\windowstyle{wxCAPTION}}{Puts a caption on the dialog box (Motif only).}
 \twocolitem{\windowstyle{wxDEFAULT\_DIALOG\_STYLE}}{Equivalent to a combination of wxCAPTION, wxSYSTEM\_MENU and wxTHICK\_FRAME}
-\twocolitem{\windowstyle{wxRESIZE\_BORDER}}{Display a resizeable frame around the window (Motif only).}
+\twocolitem{\windowstyle{wxRESIZE\_BORDER}}{Display a resizeable frame around the window (Unix only).}
 \twocolitem{\windowstyle{wxSYSTEM\_MENU}}{Display a system menu.}
 \twocolitem{\windowstyle{wxTHICK\_FRAME}}{Display a thick frame around the window.}
 \twocolitem{\windowstyle{wxSTAY\_ON\_TOP}}{The dialog stays on top of all other windows (Windows only).}
@@ -41,7 +41,8 @@ dialog to respond to system close events.
 should not have 3D borders unless specified in the control.}
 \end{twocollist}
 
-Under Motif, MWM (the Motif Window Manager) should be running for any of these styles to have an effect.
+Under Unix or Linux, MWM (the Motif Window Manager) or other window managers reckognizing
+the MHM hints should be running for any of these styles to have an effect.
 
 See also \helpref{Generic window styles}{windowstyles}.
 
@@ -133,8 +134,24 @@ invocation.
 \wxheading{See also}
 
 \helpref{wxDialog::ShowModal}{wxdialogshowmodal},\rtfsp
-\helpref{wxWindow::GetReturnCode}{wxwindowgetreturncode},\rtfsp
-\helpref{wxWindow::SetReturnCode}{wxwindowsetreturncode}
+\helpref{wxDialog::GetReturnCode}{wxdialoggetreturncode},\rtfsp
+\helpref{wxDialog::SetReturnCode}{wxdialogsetreturncode}
+
+\membersection{wxDialog::GetReturnCode}\label{wxdialoggetreturncode}
+
+\func{int}{GetReturnCode}{\void}
+
+Gets the return code for this window.
+
+\wxheading{Remarks}
+
+A return code is normally associated with a modal dialog, where \helpref{wxDialog::ShowModal}{wxdialogshowmodal} returns
+a code to the application.
+
+\wxheading{See also}
+
+\helpref{wxDialog::SetReturnCode}{wxdialogsetreturncode}, \helpref{wxDialog::ShowModal}{wxdialogshowmodal},\rtfsp
+\helpref{wxDialog::EndModal}{wxdialogendmodal}
 
 \membersection{wxDialog::GetTitle}\label{wxdialoggettitle}
 
@@ -146,7 +163,7 @@ Returns the title of the dialog box.
 
 \func{void}{Iconize}{\param{const bool}{ iconize}}
 
-Iconizes or restores the dialog.
+Iconizes or restores the dialog. Windows only.
 
 \wxheading{Parameters}
 
@@ -164,7 +181,7 @@ calling {\tt Iconize(FALSE)} will bring the window to the front, as does
 
 \constfunc{bool}{IsIconized}{\void}
 
-Returns TRUE if the dialog box is iconized.
+Returns TRUE if the dialog box is iconized. Windows only.
 
 \wxheading{Remarks}
 
@@ -268,6 +285,26 @@ until the dialog is hidden) or modeless (control returns immediately).
 \wxheading{Parameters}
 
 \docparam{flag}{If TRUE, the dialog will be modal, otherwise it will be modeless.}
+
+\membersection{wxDialog::SetReturnCode}\label{wxdialogsetreturncode}
+
+\func{void}{SetReturnCode}{\param{int }{retCode}}
+
+Sets the return code for this window.
+
+\wxheading{Parameters}
+
+\docparam{retCode}{The integer return code, usually a control identifier.}
+
+\wxheading{Remarks}
+
+A return code is normally associated with a modal dialog, where \helpref{wxDialog::ShowModal}{wxdialogshowmodal} returns
+a code to the application. The function \helpref{wxDialog::EndModal}{wxdialogendmodal} calls {\bf SetReturnCode}.
+
+\wxheading{See also}
+
+\helpref{wxWindow::GetReturnCode}{wxwindowgetreturncode}, \helpref{wxDialog::ShowModal}{wxdialogshowmodal},\rtfsp
+\helpref{wxDialog::EndModal}{wxdialogendmodal}
 
 \membersection{wxDialog::SetTitle}\label{wxdialogsettitle}
 

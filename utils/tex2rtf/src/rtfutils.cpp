@@ -540,7 +540,7 @@ bool WriteHPJ(char *filename)
   if (thePath.IsEmpty())
     thePath = ".";
   fprintf(fd, "[OPTIONS]\n");
-  fprintf(fd, "BMROOT=%s ; Assume that bitmaps are where the source is\n", thePath);
+  fprintf(fd, "BMROOT=%s ; Assume that bitmaps are where the source is\n", thePath.c_str());
   fprintf(fd, "TITLE=%s\n", helpTitle);
   fprintf(fd, "CONTENTS=Contents\n");
 

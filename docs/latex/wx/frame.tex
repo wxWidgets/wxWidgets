@@ -22,30 +22,26 @@ the remaining size available to application windows.
 
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxICONIZE}}{Display the frame iconized (minimized) (Windows only).}
+\twocolitem{\windowstyle{wxICONIZE}}{Display the frame iconized (minimized). Windows only. }
 \twocolitem{\windowstyle{wxCAPTION}}{Puts a caption on the frame.}
 \twocolitem{\windowstyle{wxDEFAULT\_FRAME\_STYLE}}{Defined as {\bf wxMINIMIZE\_BOX \pipe wxMAXIMIZE\_BOX \pipe wxTHICK\_FRAME \pipe wxSYSTEM\_MENU \pipe wxCAPTION}.}
-\twocolitem{\windowstyle{wxMINIMIZE}}{Identical to {\bf wxICONIZE}.}
-\twocolitem{\windowstyle{wxMINIMIZE\_BOX}}{Displays a minimize box on the frame (Windows and Motif only).}
-\twocolitem{\windowstyle{wxMAXIMIZE}}{Displays the frame maximized (Windows only).}
-\twocolitem{\windowstyle{wxMAXIMIZE\_BOX}}{Displays a maximize box on the frame (Windows and Motif only).}
-\twocolitem{\windowstyle{wxSTAY\_ON\_TOP}}{Stay on top of other windows (Windows only).}
-\twocolitem{\windowstyle{wxSYSTEM\_MENU}}{Displays a system menu (Windows and Motif only).}
-\twocolitem{\windowstyle{wxTHICK\_FRAME}}{Displays a thick frame around the window (Windows and Motif only).}
-\twocolitem{\windowstyle{wxRESIZE\_BORDER}}{Displays a resizeable border around the window (Motif only).}
-\twocolitem{\windowstyle{wxFRAME\_FLOAT\_ON\_PARENT}}{Windows only. Causes the frame to be above the parent window in the
+\twocolitem{\windowstyle{wxMINIMIZE}}{Identical to {\bf wxICONIZE}. Windows only. }
+\twocolitem{\windowstyle{wxMINIMIZE\_BOX}}{Displays a minimize box on the frame. }
+\twocolitem{\windowstyle{wxMAXIMIZE}}{Displays the frame maximized. Windows only. }
+\twocolitem{\windowstyle{wxMAXIMIZE\_BOX}}{Displays a maximize box on the frame. }
+\twocolitem{\windowstyle{wxSTAY\_ON\_TOP}}{Stay on top of other windows. Windows only. }
+\twocolitem{\windowstyle{wxSYSTEM\_MENU}}{Displays a system menu. }
+\twocolitem{\windowstyle{wxTHICK\_FRAME}}{Displays a thick frame around the window. Windows and Motif only.}
+\twocolitem{\windowstyle{wxSIMPLE\_BORDER}}{Displays no border or decorations. GTK and Windows only (?). }
+\twocolitem{\windowstyle{wxRESIZE\_BORDER}}{Displays a resizeable border around the window (Unix only).}
+\twocolitem{\windowstyle{wxFRAME\_FLOAT\_ON\_PARENT}}{Causes the frame to be above the parent window in the
 z-order and not shown in the taskbar. Without this style, frames are created as top-level windows that may be obscured by
-the parent window, and frame titles are shown in the taskbar. On Motif and GTK, the behaviour is always as if this
-style is not specified.}
-\twocolitem{\windowstyle{wxFRAME\_TOOL\_WINDOW}}{Windows only. Causes a frame with a small titlebar to be created;
-the frame title does not appear in the taskbar.}
+the parent window, and frame titles are shown in the taskbar. Windows only. }
+\twocolitem{\windowstyle{wxFRAME\_TOOL\_WINDOW}}Causes a frame with a small titlebar to be created;
+the frame title does not appear in the taskbar. Windows only. }
 \end{twocollist}
 
-See also \helpref{window styles overview}{windowstyles}. Currently the GTK port of wxWindows
-ignores all the window styles listed above as there is no standard way (yet) to inform the
-window manager about such options. Therefore, the only relevant window style flag which
-the GTK port recognizes is \windowstyle{wxSIMPLE\_BORDER} which brings up a frame without
-any window decorations. This can be used for a splash screen or specialized tooltip etc.
+See also \helpref{window styles overview}{windowstyles}.
 
 \wxheading{Remarks}
 
@@ -260,7 +256,7 @@ Returns a pointer to the toolbar currently associated with the frame (if any).
 
 \func{void}{Iconize}{\param{const bool}{ iconize}}
 
-Iconizes or restores the frame.
+Iconizes or restores the frame. Windows only.
 
 \wxheading{Parameters}
 
@@ -274,7 +270,7 @@ Iconizes or restores the frame.
 
 \constfunc{bool}{IsIconized}{\void}
 
-Returns TRUE if the frame is iconized.
+Returns TRUE if the frame is iconized. Windows only.
 
 \membersection{wxFrame::IsMaximized}\label{wxframeismaximized}
 
