@@ -71,7 +71,7 @@ public:
     GtkWidget          *m_dragWidget;
     GtkSelectionData   *m_dragData;
     guint               m_dragTime;
-    bool                m_firstMotion;     /* gdk has no "gdk_drag_enter" event */
+    bool                m_firstMotion;     // gdk has no "gdk_drag_enter" event
 
     void SetDragContext( GdkDragContext *dc ) { m_dragContext = dc; }
     void SetDragWidget( GtkWidget *w ) { m_dragWidget = w; }
@@ -86,25 +86,25 @@ public:
 class wxDropSource: public wxDropSourceBase
 {
 public:
-    /* constructor. set data later with SetData() */
+    // constructor. set data later with SetData()
     wxDropSource( wxWindow *win = (wxWindow *)NULL,
                   const wxIcon &copy = wxNullIcon,
                   const wxIcon &move = wxNullIcon,
                   const wxIcon &none = wxNullIcon);
 
-    /* constructor for setting one data object */
+    // constructor for setting one data object
     wxDropSource( wxDataObject& data,
                   wxWindow *win,
                   const wxIcon &copy = wxNullIcon,
                   const wxIcon &move = wxNullIcon,
                   const wxIcon &none = wxNullIcon);
 
-    ~wxDropSource();
+    virtual ~wxDropSource();
 
-    /* start drag action */
-    virtual wxDragResult DoDragDrop( bool bAllowMove = FALSE );
+    // start drag action
+    virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);
 
-    /* GTK implementation */
+    // GTK implementation
     void RegisterWindow();
     void UnregisterWindow();
 
@@ -129,10 +129,7 @@ private:
                   const wxIcon& none);
 };
 
-#endif
+#endif // wxUSE_DRAG_AND_DROP
 
-   // wxUSE_DRAG_AND_DROP
-
-#endif
-       //__GTKDNDH__
+#endif //__GTKDNDH__
 

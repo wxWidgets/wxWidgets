@@ -164,7 +164,7 @@ wxDropSource::~wxDropSource(void)
 //  if (m_data) delete m_data;
 }
    
-wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
+wxDragResult wxDropSource::DoDragDrop( int WXUNUSED(flags) )
 {
   //  wxASSERT_MSG( m_data, "wxDragSource: no data" );
 

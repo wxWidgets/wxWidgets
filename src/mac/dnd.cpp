@@ -259,7 +259,7 @@ wxDropSource::~wxDropSource()
 }
 
 
-wxDragResult wxDropSource::DoDragDrop( bool allowMove )
+wxDragResult wxDropSource::DoDragDrop(int WXUNUSED(flags))
 {
     wxASSERT_MSG( m_data, wxT("Drop source: no data") );
 

@@ -187,17 +187,18 @@ wxDropSource::~wxDropSource()
 // Name    : DoDragDrop
 // Purpose : start drag and drop operation
 // Returns : wxDragResult - the code of performed operation
-// Params  : [in] bool bAllowMove: if false, only copy is allowed
+// Params  : [in] int flags: specifies if moving is allowe (or only copying)
 // Notes   : you must call SetData() before if you had used def ctor
-wxDragResult wxDropSource::DoDragDrop(bool bAllowMove)
+wxDragResult wxDropSource::DoDragDrop(int flags)
 {
   wxCHECK_MSG( m_data != NULL, wxDragNone, wxT("No data in wxDropSource!") );
 
   DWORD dwEffect;
   HRESULT hr = ::DoDragDrop(m_data->GetInterface(),
                             m_pIDropSource,
-                            bAllowMove ? DROPEFFECT_COPY | DROPEFFECT_MOVE
-                                       : DROPEFFECT_COPY,
+                            (flags & wxDrag_AllowMove)
+                                ? DROPEFFECT_COPY | DROPEFFECT_MOVE
+                                : DROPEFFECT_COPY,
                             &dwEffect);
 
   if ( hr == DRAGDROP_S_CANCEL ) {
@@ -209,11 +210,8 @@ wxDragResult wxDropSource::DoDragDrop(bool bAllowMove)
     }
     else if ( dwEffect & DROPEFFECT_MOVE ) {
       // consistency check: normally, we shouldn't get "move" at all
-      // here if !bAllowMove, but in practice it does happen quite often
-      if ( bAllowMove )
-        return wxDragMove;
-      else
-        return wxDragCopy;
+      // here if we don't allow it, but in practice it does happen quite often
+      return (flags & wxDrag_AllowMove) ? wxDragMove : wxDragCopy;
     }
     else {
       // not copy or move

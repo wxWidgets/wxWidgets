@@ -124,7 +124,7 @@ wxDropSource::~wxDropSource()
 };
 
 wxDragResult wxDropSource::DoDragDrop(
-  bool                              WXUNUSED(bAllowMove)
+  int                              WXUNUSED(flags)
 )
 {
     // TODO

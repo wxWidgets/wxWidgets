@@ -40,7 +40,7 @@ public:
     virtual ~wxDropSource();
 
     /* start drag action */
-    virtual wxDragResult DoDragDrop(bool bAllowMove = FALSE);
+    virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);
 
 protected:
     void Init(void);

@@ -27,6 +27,17 @@
 // constants
 // ----------------------------------------------------------------------------
 
+// flags for wxDropSource::DoDragDrop()
+//
+// NB: wxDrag_CopyOnly must be 0 (== FALSE) and wxDrag_AllowMove must be 1
+//     (== TRUE) for compatibility with the old DoDragDrop(bool) method!
+enum
+{
+    wxDrag_CopyOnly    = 0, // allow only copying
+    wxDrag_AllowMove   = 1, // allow moving (copying is always allowed)
+    wxDrag_DefaultMove = 3  // the default operation is move, not copy
+};
+
 // result of wxDropSource::DoDragDrop() call
 enum wxDragResult
 {
@@ -80,8 +91,10 @@ public:
 
     // start drag action, see enum wxDragResult for return value description
     //
-    // if bAllowMove is TRUE, data can be moved, if not - only copied
-    virtual wxDragResult DoDragDrop(bool bAllowMove = FALSE) = 0;
+    // if flags contains wxDrag_AllowMove, moving (and only copying) data is
+    // allowed, if it contains wxDrag_DefaultMove (which includes the previous
+    // flag), it is even the default operation
+    virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly) = 0;
 
     // override to give feedback depending on the current operation result
     // "effect" and return TRUE if you did something, FALSE to let the library
@@ -99,10 +112,13 @@ protected:
             return m_cursorStop;
     }
 
+    // the data we're dragging
     wxDataObject *m_data;
 
     // the cursors to use for feedback
-    wxCursor      m_cursorCopy, m_cursorMove, m_cursorStop;
+    wxCursor m_cursorCopy,
+             m_cursorMove,
+             m_cursorStop;
 };
 
 // ----------------------------------------------------------------------------

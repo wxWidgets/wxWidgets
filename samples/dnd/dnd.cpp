@@ -74,16 +74,6 @@ public:
 
     virtual bool OnDropText(wxCoord x, wxCoord y, const wxString& text);
 
-    // uncomment this if you want to always force Move to be the default
-    // action, even under wxGTK where it is normally Copy
-#if 0
-    wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def)
-    {
-        wxDragResult res = wxTextDropTarget::OnDragOver(x, y, def);
-        return res == wxDragNone ? wxDragNone : wxDragMove;
-    }
-#endif // 0
-
 private:
     wxListBox *m_pOwner;
 };
@@ -231,13 +221,15 @@ class DnDFrame : public wxFrame
 {
 public:
     DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
-    ~DnDFrame();
+    virtual ~DnDFrame();
 
     void OnPaint(wxPaintEvent& event);
     void OnSize(wxSizeEvent& event);
-    void OnQuit (wxCommandEvent& event);
+    void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-    void OnDrag (wxCommandEvent& event);
+    void OnDrag(wxCommandEvent& event);
+    void OnDragMoveByDefault(wxCommandEvent& event);
+    void OnDragMoveAllow(wxCommandEvent& event);
     void OnNewFrame(wxCommandEvent& event);
     void OnHelp (wxCommandEvent& event);
     void OnLogClear(wxCommandEvent& event);
@@ -257,12 +249,15 @@ public:
     void OnLeftDown(wxMouseEvent& event);
     void OnRightDown(wxMouseEvent& event);
 
+    void OnUpdateUIMoveByDefault(wxUpdateUIEvent& event);
+
     void OnUpdateUIPasteText(wxUpdateUIEvent& event);
     void OnUpdateUIPasteBitmap(wxUpdateUIEvent& event);
 
     DECLARE_EVENT_TABLE()
 
 private:
+    // GUI controls
     wxListBox  *m_ctrlFile,
                *m_ctrlText;
     wxTextCtrl *m_ctrlLog;
@@ -270,6 +265,13 @@ private:
     wxLog *m_pLog,
           *m_pLogPrev;
 
+    // move the text by default (or copy)?
+    bool m_moveByDefault;
+
+    // allow moving the text at all?
+    bool m_moveAllow;
+
+    // the text we drag
     wxString  m_strText;
 };
 
@@ -786,6 +788,8 @@ enum
 {
     Menu_Quit = 1,
     Menu_Drag,
+    Menu_DragMoveDef,
+    Menu_DragMoveAllow,
     Menu_NewFrame,
     Menu_About = 101,
     Menu_Help,
@@ -808,6 +812,8 @@ BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
     EVT_MENU(Menu_Quit,       DnDFrame::OnQuit)
     EVT_MENU(Menu_About,      DnDFrame::OnAbout)
     EVT_MENU(Menu_Drag,       DnDFrame::OnDrag)
+    EVT_MENU(Menu_DragMoveDef,  DnDFrame::OnDragMoveByDefault)
+    EVT_MENU(Menu_DragMoveAllow,DnDFrame::OnDragMoveAllow)
     EVT_MENU(Menu_NewFrame,   DnDFrame::OnNewFrame)
     EVT_MENU(Menu_Help,       DnDFrame::OnHelp)
     EVT_MENU(Menu_Clear,      DnDFrame::OnLogClear)
@@ -819,6 +825,8 @@ BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
     EVT_MENU(Menu_PasteMFile, DnDFrame::OnPasteMetafile)
 #endif // USE_METAFILES
     EVT_MENU(Menu_CopyFiles,  DnDFrame::OnCopyFiles)
+
+    EVT_UPDATE_UI(Menu_DragMoveDef, DnDFrame::OnUpdateUIMoveByDefault)
 
     EVT_UPDATE_UI(Menu_Paste,       DnDFrame::OnUpdateUIPasteText)
     EVT_UPDATE_UI(Menu_PasteBitmap, DnDFrame::OnUpdateUIPasteBitmap)
@@ -928,6 +936,8 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
     // construct menu
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(Menu_Drag, "&Test drag...");
+    file_menu->AppendCheckItem(Menu_DragMoveDef, "&Move by default");
+    file_menu->AppendCheckItem(Menu_DragMoveAllow, "&Allow moving");
     file_menu->AppendSeparator();
     file_menu->Append(Menu_NewFrame, "&New frame\tCtrl-N");
     file_menu->AppendSeparator();
@@ -1013,6 +1023,11 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
     m_ctrlLog->SetConstraints(c);
 
     SetAutoLayout(TRUE);
+
+    // copy data by default but allow moving it as well
+    m_moveByDefault = FALSE;
+    m_moveAllow = TRUE;
+    menu_bar->Check(Menu_DragMoveAllow, TRUE);
 }
 
 void DnDFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
@@ -1037,6 +1052,12 @@ void DnDFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
     // dc.Clear(); -- this kills wxGTK
     dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL, FALSE, "charter" ) );
     dc.DrawText( "Drag text from here!", 100, h-50 );
+}
+
+void DnDFrame::OnUpdateUIMoveByDefault(wxUpdateUIEvent& event)
+{
+    // only can move by default if moving is allowed at all
+    event.Enable(m_moveAllow);
 }
 
 void DnDFrame::OnUpdateUIPasteText(wxUpdateUIEvent& event)
@@ -1080,6 +1101,16 @@ void DnDFrame::OnDrag(wxCommandEvent& WXUNUSED(event))
         );
 
     m_strText = strText;
+}
+
+void DnDFrame::OnDragMoveByDefault(wxCommandEvent& event)
+{
+    m_moveByDefault = event.IsChecked();
+}
+
+void DnDFrame::OnDragMoveAllow(wxCommandEvent& event)
+{
+    m_moveAllow = event.IsChecked();
 }
 
 void DnDFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -1143,9 +1174,14 @@ void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
                             wxDROP_ICON(dnd_move),
                             wxDROP_ICON(dnd_none));
 
-        const char *pc;
+        int flags = 0;
+        if ( m_moveByDefault )
+            flags |= wxDrag_DefaultMove;
+        else if ( m_moveAllow )
+            flags |= wxDrag_AllowMove;
 
-        switch ( source.DoDragDrop(TRUE) )
+        const char *pc;
+        switch ( source.DoDragDrop(flags) )
         {
             case wxDragError:   pc = "Error!";    break;
             case wxDragNone:    pc = "Nothing";   break;

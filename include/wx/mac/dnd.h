@@ -91,7 +91,7 @@ public:
     ~wxDropSource();
 
     /* start drag action */
-    virtual wxDragResult DoDragDrop( bool bAllowMove = FALSE );
+    virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);
     
     wxWindow*     GetWindow() { return m_window ; }
     void SetCurrentDrag( void* drag ) { m_currentDrag = drag ; }

@@ -151,7 +151,7 @@ public:
     ~wxDropSource(void);
     
     void SetData( wxDataObject &data  );
-    wxDragResult DoDragDrop( bool bAllowMove = FALSE );
+    wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);
     
     virtual bool GiveFeedback( wxDragResult WXUNUSED(effect), bool WXUNUSED(bScrolling) ) { return TRUE; };
     

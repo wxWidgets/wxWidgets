@@ -76,11 +76,23 @@ drop source. This will not delete any previously associated data.
 
 \membersection{wxDropSource::DoDragDrop}\label{wxdropsourcedodragdrop}
 
-\func{virtual wxDragResult}{DoDragDrop}{\param{bool }{allowMove = FALSE}}
+\func{virtual wxDragResult}{DoDragDrop}{\param{int }{flags = {\tt wxDrag\_CopyOnly}}}
 
-Do it (call this in response to a mouse button press, for example).
+Do it (call this in response to a mouse button press, for example). This starts
+the drag-and-drop operation which will terminate when the user releases the
+mouse.
 
-If {\bf allowMove} is FALSE, data can only be copied.
+\wxheading{Parameters}
+
+\docparam{flags}{If {\tt wxDrag\_AllowMove} is included in the flags, data may
+be moved and not only copied (default). If {\tt wxDrag\_DefaultMove} is
+specified (which includes the previous flag), this is even the default
+operation}.
+
+\wxheading{Return value}
+
+Returns the operation requested by the user, may be {\tt wxDragCopy}, {\tt
+wxDragMove}, {\tt wxDragCancel} or {\tt wxDragNone} if an error occured.
 
 \membersection{wxDropSource::GiveFeedback}\label{wxdropsourcegivefeedback}
 
