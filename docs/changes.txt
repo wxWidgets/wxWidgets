@@ -134,10 +134,10 @@ wxMSW:
 - fixes for compilation with OpenWatcom compiler
 - fixed wxStaticText best size calculation (was wrong by '&' width)
 - fixed calling wxFrame::Maximize(FALSE) before the window is shown
+= added wxNotebook::HitTest() (Otto Wyss)
 - all libraries built with makefile.g95 have a _min or _cyg suffix
   (for MinGW and Cygwin)
-- When using DLL, wxLocalFSHandler was not being exported - added
-  WXEXPORTDLL
+- When using DLL, wxLocalFSHandler was not being exported - added WXEXPORTDLL
 - A wxEvtHandler object was not removed from wxPendingEvents on deletion.
   wxPendingEventsLocker was being deleted in App before all wxEvtHandler
   objects have been destroyed resulting in stale handler/lock
