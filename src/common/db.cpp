@@ -2105,7 +2105,7 @@ wxDbColInf *wxDb::GetColumns(wxChar *tableName[], const wxChar *userID)
  */
 {
     UWORD	    noCols = 0;
-    int			 colNo  = 0;
+    UWORD		 colNo  = 0;
     wxDbColInf *colInf = 0;
 
     RETCODE  retcode;
@@ -2263,7 +2263,7 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, UWORD *numCols, const wx
 
 {
     UWORD       noCols = 0;
-    int         colNo  = 0;
+    UWORD       colNo  = 0;
     wxDbColInf *colInf = 0;
 
     RETCODE  retcode;
@@ -2518,7 +2518,7 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
 //       to avoid undesired unbinding of columns.
 {
     UWORD       noCols = 0;
-    int         colNo  = 0;
+    UWORD       colNo  = 0;
     wxDbColInf *colInf = 0;
 
     RETCODE  retcode;

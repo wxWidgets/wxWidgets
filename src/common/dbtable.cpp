@@ -1686,9 +1686,9 @@ bool wxDbTable::DropIndex(const wxString &idxName)
 
 
 /********** wxDbTable::SetOrderByColNums() **********/
-bool wxDbTable::SetOrderByColNums(int first, ... )
+bool wxDbTable::SetOrderByColNums(UWORD first, ... )
 {
-    int         colNo = first;
+    int	       colNo = first;  // using 'int' to be able to look for wxDB_NO_MORE_COLUN_NUMBERS
     va_list     argptr;
 
     bool        abort = FALSE;
@@ -1879,7 +1879,7 @@ bool wxDbTable::DeleteMatching(void)
 
 
 /********** wxDbTable::IsColNull() **********/
-bool wxDbTable::IsColNull(int colNo)
+bool wxDbTable::IsColNull(UWORD colNo)
 {
 /*
     This logic is just not right.  It would indicate TRUE
@@ -1964,7 +1964,7 @@ bool wxDbTable::IsCursorClosedOnCommit(void)
 
 
 /********** wxDbTable::ClearMemberVar() **********/
-void wxDbTable::ClearMemberVar(int colNo, bool setToNull)
+void wxDbTable::ClearMemberVar(UWORD colNo, bool setToNull)
 {
     wxASSERT(colNo < noCols);
 
@@ -2313,8 +2313,8 @@ bool wxDbTable::Refresh(void)
 }  // wxDbTable::Refresh()
 
 
-/********** wxDbTable::SetColNull(int colNo, bool set) **********/
-bool wxDbTable::SetColNull(int colNo, bool set)
+/********** wxDbTable::SetColNull() **********/
+bool wxDbTable::SetColNull(UWORD colNo, bool set)
 {
     if (colNo < noCols)
     {
@@ -2329,7 +2329,7 @@ bool wxDbTable::SetColNull(int colNo, bool set)
 }  // wxDbTable::SetColNull()
 
 
-/********** wxDbTable::SetColNull(const wxString &colName, bool set) **********/
+/********** wxDbTable::SetColNull() **********/
 bool wxDbTable::SetColNull(const wxString &colName, bool set)
 {
     int i;

@@ -236,7 +236,7 @@ public:
 #else
     void            SetFromClause(const wxString &From) { from = From; }
     void            SetOrderByClause(const wxString &OrderBy) { orderBy = OrderBy; }
-    bool            SetOrderByColNums(int first, ...);
+    bool            SetOrderByColNums(UWORD first, ...);
     void            SetWhereClause(const wxString &Where) { where = Where; }
     void            From(const wxString &From) { from = From; }
     void            OrderBy(const wxString &OrderBy) { orderBy = OrderBy; }
@@ -296,7 +296,7 @@ public:
 #endif
     bool            CanSelectForUpdate(void);
     bool            CanUpdByROWID(void);
-    void            ClearMemberVar(int colNo, bool setToNull=FALSE);
+    void            ClearMemberVar(UWORD colNo, bool setToNull=FALSE);
     void            ClearMemberVars(bool setToNull=FALSE);
     bool            SetQueryTimeout(UDWORD nSeconds);
 
@@ -320,8 +320,8 @@ public:
     ULONG           Count(const wxString &args="*");
     int             DB_STATUS(void) { return(pDb->DB_STATUS); }
 
-    bool            IsColNull(int colNo);
-    bool            SetColNull(int colNo, bool set=TRUE);
+    bool            IsColNull(UWORD colNo);
+    bool            SetColNull(UWORD colNo, bool set=TRUE);
     bool            SetColNull(const wxString &colName, bool set=TRUE);
 #if wxODBC_BACKWARD_COMPATABILITY
 // The following member functions are deprecated.  You should use the SetColNull()
