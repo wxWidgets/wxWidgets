@@ -1087,7 +1087,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/gsockmsw.c
     src/msw/icon.cpp
     src/msw/minifram.cpp
-    src/msw/ole/automtn.cpp
     src/msw/ole/dataobj.cpp
     src/msw/ole/dropsrc.cpp
     src/msw/ole/droptgt.cpp
@@ -1111,6 +1110,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="MSW_ONLY_LOWLEVEL_SRC" hints="files">
+    src/msw/ole/automtn.cpp
     src/msw/dirdlg.cpp
 </set>
 
@@ -1210,7 +1210,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/msvcrt.h
     wx/msw/notebook.h
     wx/msw/ole/access.h
-    wx/msw/ole/automtn.h
     wx/msw/ole/dataform.h
     wx/msw/ole/dataobj.h
     wx/msw/ole/dataobj2.h
@@ -1306,6 +1305,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/helpbest.h
     wx/msw/helpchm.h
     wx/msw/helpwin.h
+    wx/msw/ole/automtn.h
     wx/msw/ole/uuid.h
 </set>
 
