@@ -468,7 +468,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 
     win = wxGetWindowFromTable(window);
     if (!win)
-	    return;
+	    return FALSE;
 
 #ifdef __WXDEBUG__
     wxString windowClass = win->GetClassInfo()->GetClassName();
