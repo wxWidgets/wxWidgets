@@ -144,7 +144,7 @@ wx:    $(CFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
 
 $(LIBTARGET): $(DUMMY).obj $(OBJECTS) $(PERIPH_LIBS)
 	erase $(LIBTARGET)
-	tlib $(LIBTARGET) /P1024 @&&!
+	tlib $(LIBTARGET) /P2048 @&&!
 +$(COMMONOBJS:.obj =.obj +)\
 +$(GENERICOBJS:.obj =.obj +)\
 +$(MSWOBJS:.obj =.obj +)\

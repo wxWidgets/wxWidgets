@@ -28,6 +28,11 @@
     #pragma hdrstop
 #endif
 
+// For _A_SUBDIR, etc.
+#if defined(__BORLANDC__) && defined(__WIN16__)
+#include <dos.h>
+#endif
+
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"

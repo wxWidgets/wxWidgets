@@ -240,6 +240,34 @@ generated. At least it will divide the number of files in samples
 directory by 10 (and the number of files to be maintained too).
 </blockquote>
 
+<P>
+
+<H3>How do you use VC++'s memory leak checking instead of that in wxWindows?</H3>
+
+Vadim Zeitlin:
+
+<pre>
+On the VC++ level, it's just the matter of calling _CrtSetDbgFlag() in the very
+beginning of the program. In wxWindows, this is done automatically when
+compiling with VC++ in debug mode unless wxUSE_GLOBAL_MEMORY_OPERATORS or
+__NO_VC_CRTDBG__ are defined - this check is done in wx/msw/msvcrt.h which
+is included from app.cpp which then calls wxCrtSetDbgFlag() without any
+#ifdefs.
+
+This works quite well: at the end of the program, all leaked blocks with their
+malloc count are shown. This number (malloc count) can be used to determine
+where exactly the object was allocated: for this it's enough to set the variable
+_crtBreakAlloc (look in VC98\crt\srs\dbgheap.c line 326) to this number and
+a breakpoint will be triggered when the block with this number is allocated.
+
+For simple situations it works like a charm. For something more complicated
+like reading uninitialized memory a specialized tool is probably better...
+
+Regards,
+VZ
+</pre>
+
+
 </font>
 
 </BODY>

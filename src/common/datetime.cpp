@@ -122,6 +122,7 @@ public:
     virtual void OnExit()
     {
         wxDateTimeHolidayAuthority::ClearAllAuthorities();
+        wxDateTimeHolidayAuthority::ms_authorities.Clear();
     }
 
 private:

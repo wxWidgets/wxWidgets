@@ -2283,12 +2283,16 @@ bool wxWindow::MSWCreate(int id,
     if ( width > -1 ) width1 = width;
     if ( height > -1 ) height1 = height;
 
+    // Unfortunately this won't work in WIN16. Unless perhaps
+    // we define WS_EX_CONTROLPARENT ourselves?
+#ifndef __WIN16__
     // if we have wxTAB_TRAVERSAL style, we want WS_EX_CONTROLPARENT or
     // IsDialogMessage() won't work for us
     if ( GetWindowStyleFlag() & wxTAB_TRAVERSAL )
     {
         extendedStyle |= WS_EX_CONTROLPARENT;
     }
+#endif
 
     HWND hParent = (HWND)NULL;
     if ( parent )

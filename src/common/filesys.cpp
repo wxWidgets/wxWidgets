@@ -230,7 +230,7 @@ static wxString MakeCorrectPath(const wxString& path)
     
     cnt = p.Length();
     for (i = 0; i < cnt; i++)
-      if (p.GetChar(i) == wxT('\\')); p.GetWritableChar(i) = wxT('/'); // wanna be windows-safe
+      if (p.GetChar(i) == wxT('\\')) p.GetWritableChar(i) = wxT('/'); // Want to be windows-safe
         
     if (p.Left(2) == wxT("./")) { p = p.Mid(2); cnt -= 2; }
     
@@ -382,7 +382,7 @@ wxString wxFileSystem::FindFirst(const wxString& spec, int flags)
     m_FindFileHandler = NULL;
 
     for (int i = spec2.Length()-1; i >= 0; i--)
-        if (spec2[(unsigned int) i] == wxT('\\')) spec2.GetWritableChar(i) = wxT('/'); // wanna be windows-safe
+        if (spec2[(unsigned int) i] == wxT('\\')) spec2.GetWritableChar(i) = wxT('/'); // Want to be windows-safe
 
     node = m_Handlers.GetFirst();
     while (node)

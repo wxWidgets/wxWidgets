@@ -415,6 +415,11 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
 // wxPrinterDC bit blitting/bitmap drawing
 // ----------------------------------------------------------------------------
 
+// Win16 doesn't define GDI_ERROR.
+#ifndef GDI_ERROR
+#define GDI_ERROR -1
+#endif
+
 void wxPrinterDC::DoDrawBitmap(const wxBitmap &bmp,
                                wxCoord x, wxCoord y,
                                bool useMask)
