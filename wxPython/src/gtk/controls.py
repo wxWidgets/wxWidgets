@@ -35,7 +35,6 @@ _controls.Button_swigregister(ButtonPtr)
 def PreButton(*args, **kwargs):
     val = _controls.new_PreButton(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 Button_GetDefaultSize = _controls.Button_GetDefaultSize
@@ -72,7 +71,6 @@ _controls.BitmapButton_swigregister(BitmapButtonPtr)
 def PreBitmapButton(*args, **kwargs):
     val = _controls.new_PreBitmapButton(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -111,7 +109,6 @@ _controls.CheckBox_swigregister(CheckBoxPtr)
 def PreCheckBox(*args, **kwargs):
     val = _controls.new_PreCheckBox(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -142,7 +139,6 @@ _controls.Choice_swigregister(ChoicePtr)
 def PreChoice(*args, **kwargs):
     val = _controls.new_PreChoice(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -181,7 +177,6 @@ _controls.ComboBox_swigregister(ComboBoxPtr)
 def PreComboBox(*args, **kwargs):
     val = _controls.new_PreComboBox(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -220,7 +215,6 @@ _controls.Gauge_swigregister(GaugePtr)
 def PreGauge(*args, **kwargs):
     val = _controls.new_PreGauge(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -246,7 +240,6 @@ _controls.StaticBox_swigregister(StaticBoxPtr)
 def PreStaticBox(*args, **kwargs):
     val = _controls.new_PreStaticBox(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -274,7 +267,6 @@ _controls.StaticLine_swigregister(StaticLinePtr)
 def PreStaticLine(*args, **kwargs):
     val = _controls.new_PreStaticLine(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 StaticLine_GetDefaultSize = _controls.StaticLine_GetDefaultSize
@@ -302,7 +294,6 @@ _controls.StaticText_swigregister(StaticTextPtr)
 def PreStaticText(*args, **kwargs):
     val = _controls.new_PreStaticText(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -370,7 +361,6 @@ _controls.ListBox_swigregister(ListBoxPtr)
 def PreListBox(*args, **kwargs):
     val = _controls.new_PreListBox(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -555,7 +545,6 @@ _controls.TextCtrl_swigregister(TextCtrlPtr)
 def PreTextCtrl(*args, **kwargs):
     val = _controls.new_PreTextCtrl(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 wxEVT_COMMAND_TEXT_UPDATED = _controls.wxEVT_COMMAND_TEXT_UPDATED
@@ -617,7 +606,6 @@ _controls.ScrollBar_swigregister(ScrollBarPtr)
 def PreScrollBar(*args, **kwargs):
     val = _controls.new_PreScrollBar(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -655,7 +643,6 @@ _controls.SpinButton_swigregister(SpinButtonPtr)
 def PreSpinButton(*args, **kwargs):
     val = _controls.new_PreSpinButton(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 class SpinCtrl(core.Control):
@@ -686,7 +673,6 @@ _controls.SpinCtrl_swigregister(SpinCtrlPtr)
 def PreSpinCtrl(*args, **kwargs):
     val = _controls.new_PreSpinCtrl(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 wxEVT_COMMAND_SPINCTRL_UPDATED = _controls.wxEVT_COMMAND_SPINCTRL_UPDATED
@@ -730,7 +716,6 @@ _controls.RadioBox_swigregister(RadioBoxPtr)
 def PreRadioBox(*args, **kwargs):
     val = _controls.new_PreRadioBox(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -758,7 +743,6 @@ _controls.RadioButton_swigregister(RadioButtonPtr)
 def PreRadioButton(*args, **kwargs):
     val = _controls.new_PreRadioButton(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -805,7 +789,6 @@ _controls.Slider_swigregister(SliderPtr)
 def PreSlider(*args, **kwargs):
     val = _controls.new_PreSlider(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -837,7 +820,6 @@ _controls.ToggleButton_swigregister(ToggleButtonPtr)
 def PreToggleButton(*args, **kwargs):
     val = _controls.new_PreToggleButton(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -936,7 +918,6 @@ _controls.Notebook_swigregister(NotebookPtr)
 def PreNotebook(*args, **kwargs):
     val = _controls.new_PreNotebook(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 class NotebookEvent(BookCtrlEvent):
@@ -1021,7 +1002,6 @@ _controls.Listbook_swigregister(ListbookPtr)
 def PreListbook(*args, **kwargs):
     val = _controls.new_PreListbook(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 class ListbookEvent(BookCtrlEvent):
@@ -1345,7 +1325,6 @@ _controls.ToolBar_swigregister(ToolBarPtr)
 def PreToolBar(*args, **kwargs):
     val = _controls.new_PreToolBar(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -1741,7 +1720,6 @@ _controls.ListCtrl_swigregister(ListCtrlPtr)
 def PreListCtrl(*args, **kwargs):
     val = _controls.new_PreListCtrl(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -1775,7 +1753,6 @@ _controls.ListView_swigregister(ListViewPtr)
 def PreListView(*args, **kwargs):
     val = _controls.new_PreListView(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -2033,7 +2010,6 @@ _controls.TreeCtrl_swigregister(TreeCtrlPtr)
 def PreTreeCtrl(*args, **kwargs):
     val = _controls.new_PreTreeCtrl(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -2082,7 +2058,6 @@ _controls.GenericDirCtrl_swigregister(GenericDirCtrlPtr)
 def PreGenericDirCtrl(*args, **kwargs):
     val = _controls.new_PreGenericDirCtrl(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 class DirFilterListCtrl(Choice):
@@ -2107,7 +2082,6 @@ _controls.DirFilterListCtrl_swigregister(DirFilterListCtrlPtr)
 def PreDirFilterListCtrl(*args, **kwargs):
     val = _controls.new_PreDirFilterListCtrl(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------

@@ -4,7 +4,7 @@ RCS file: /cvsroot/SWIG/Source/Modules/python.cxx,v
 retrieving revision 1.25
 diff -u -r1.25 python.cxx
 --- Source/Modules/python.cxx	23 Sep 2003 21:26:04 -0000	1.25
-+++ Source/Modules/python.cxx	24 Oct 2003 00:08:38 -0000
++++ Source/Modules/python.cxx	30 Oct 2003 02:39:33 -0000
 @@ -292,6 +292,9 @@
  static  String       *shadow_indent = 0;
  static  int           in_class = 0;
@@ -140,7 +140,7 @@ diff -u -r1.25 python.cxx
        if (directorsEnabled()) {
          // Try loading weakref.proxy, which is only available in Python 2.1 and higher
          Printv(f_shadow,
-@@ -610,6 +633,82 @@
+@@ -610,6 +633,83 @@
      return Language::importDirective(n);
    }
  
@@ -198,11 +198,12 @@ diff -u -r1.25 python.cxx
 +
 +  /* ------------------------------------------------------------
 +   * have_addtofunc()
-+   *    Output the %addtofunc code, stripping off {} if neccessary
++   *    Check if there is a %addtofunc directive and it has text
 +   * ------------------------------------------------------------ */
 +
 +  bool have_addtofunc(Node *n) {
-+    return Getattr(n, "feature:addtofunc") != NULL;
++    String* str = Getattr(n, "feature:addtofunc");
++    return (str != NULL && Len(str) > 0);
 +  }
 +  
 +  /* ------------------------------------------------------------
@@ -223,7 +224,7 @@ diff -u -r1.25 python.cxx
    /* ------------------------------------------------------------
     * add_method()
     * ------------------------------------------------------------ */
-@@ -650,7 +749,7 @@
+@@ -650,7 +750,7 @@
      int     num_required;
      int     num_arguments;
      int     varargs = 0;
@@ -232,7 +233,7 @@ diff -u -r1.25 python.cxx
  
      /* member of a director class? */
      String *nodeType = Getattr(n, "nodeType");
-@@ -1007,11 +1106,7 @@
+@@ -1007,11 +1107,7 @@
  
        /* Create a shadow for this function (if enabled and not in a member function) */
        if ((shadow) && (!(shadow & PYSHADOW_MEMBER))) {
@@ -245,7 +246,7 @@ diff -u -r1.25 python.cxx
        }
      } else {
        if (!Getattr(n,"sym:nextSibling")) {
-@@ -1068,7 +1163,7 @@
+@@ -1068,7 +1164,7 @@
  
      /* Create a shadow for this function (if enabled and not in a member function) */
      if ((shadow) && (!(shadow & PYSHADOW_MEMBER))) {
@@ -254,7 +255,7 @@ diff -u -r1.25 python.cxx
      }
      DelWrapper(f);
      Delete(dispatch);
-@@ -1754,6 +1849,7 @@
+@@ -1754,6 +1850,7 @@
  
    virtual int classHandler(Node *n) {
      int oldclassic = classic;
@@ -262,7 +263,7 @@ diff -u -r1.25 python.cxx
  
      if (shadow) {
  
-@@ -1763,8 +1859,16 @@
+@@ -1763,8 +1860,16 @@
        
        if (Getattr(n,"cplus:exceptionclass")) {
  	classic = 1;
@@ -280,7 +281,7 @@ diff -u -r1.25 python.cxx
  
        shadow_indent = (String *) tab4;
        
-@@ -1798,30 +1902,32 @@
+@@ -1798,30 +1903,32 @@
  	Printf(f_shadow,"(%s)", base_class);
        } else {
  	if (!classic) {
@@ -329,7 +330,7 @@ diff -u -r1.25 python.cxx
      /* Emit all of the members */
  
      in_class = 1;
-@@ -1853,21 +1959,37 @@
+@@ -1853,21 +1960,37 @@
  
        if (!have_repr) {
  	/* Supply a repr method for this class  */
@@ -377,7 +378,7 @@ diff -u -r1.25 python.cxx
  
        Printf(f_shadow,"%s.%s_swigregister(%sPtr)\n", module, class_name, class_name,0);
        shadow_indent = 0;
-@@ -1875,6 +1997,7 @@
+@@ -1875,6 +1998,7 @@
        Clear(f_shadow_stubs);
      }
      classic = oldclassic;
@@ -385,7 +386,7 @@ diff -u -r1.25 python.cxx
      return SWIG_OK;
    }
  
-@@ -1894,7 +2017,7 @@
+@@ -1894,7 +2018,7 @@
  
      if (!Getattr(n,"sym:nextSibling")) {
        if (shadow) {
@@ -394,7 +395,7 @@ diff -u -r1.25 python.cxx
  	if (Strcmp(symname,"__repr__") == 0)
  	  have_repr = 1;
  	
-@@ -1902,14 +2025,18 @@
+@@ -1902,14 +2026,18 @@
  	  String *pycode = pythoncode(Getattr(n,"feature:shadow"),tab4);
  	  Printv(f_shadow,pycode,"\n",NIL);
  	} else {
@@ -421,7 +422,7 @@ diff -u -r1.25 python.cxx
        }
      }
      return SWIG_OK;
-@@ -1923,10 +2050,28 @@
+@@ -1923,10 +2051,28 @@
      String *symname = Getattr(n,"sym:name");
      Language::staticmemberfunctionHandler(n);
      if (shadow) {
@@ -454,7 +455,7 @@ diff -u -r1.25 python.cxx
        }
      }
      return SWIG_OK;
-@@ -1972,7 +2117,7 @@
+@@ -1972,7 +2118,7 @@
  
      if (!Getattr(n,"sym:nextSibling")) {
        if (shadow) {
@@ -463,7 +464,7 @@ diff -u -r1.25 python.cxx
  	if (!have_constructor) {
  	  if (Getattr(n,"feature:shadow")) {
  	    String *pycode = pythoncode(Getattr(n,"feature:shadow"),tab4);
-@@ -1991,18 +2136,25 @@
+@@ -1991,18 +2137,25 @@
  		                tab8, tab4, "args = (self,) + args\n",
                                  NIL);
   	    }
@@ -501,7 +502,7 @@ diff -u -r1.25 python.cxx
    	    Delete(pass_self);
    	  }
  	  have_constructor = 1;
-@@ -2014,19 +2166,16 @@
+@@ -2014,19 +2167,16 @@
  	    String *pycode = pythoncode(Getattr(n,"feature:shadow"),"");
  	    Printv(f_shadow_stubs,pycode,"\n",NIL);
  	  } else {
@@ -531,7 +532,7 @@ diff -u -r1.25 python.cxx
  	}
        }
      }
-@@ -2045,7 +2194,9 @@
+@@ -2045,7 +2195,9 @@
      Language::destructorHandler(n);
      shadow = oldshadow;
      if (shadow) {
@@ -542,7 +543,7 @@ diff -u -r1.25 python.cxx
        Printv(f_shadow, tab8, "try:\n", NIL);
        Printv(f_shadow, tab4, tab8, "if self.thisown: destroy(self)\n", NIL);
        Printv(f_shadow, tab8, "except: pass\n", NIL);
-@@ -2066,21 +2217,22 @@
+@@ -2066,21 +2218,22 @@
      shadow = oldshadow;
  
      if (shadow) {
@@ -575,7 +576,7 @@ diff -u -r1.25 python.cxx
  		 module, ".", Swig_name_set(Swig_name_member(class_name,symname)),")\n", NIL);
  	}
        }
-@@ -2142,8 +2294,9 @@
+@@ -2142,8 +2295,9 @@
        Delitem(temp,0);
        Delitem(temp,DOH_END);
      }
@@ -586,7 +587,7 @@ diff -u -r1.25 python.cxx
      Delete(temp);
      int   initial = 0;
      String *s = 0;
-@@ -2194,7 +2347,7 @@
+@@ -2194,7 +2348,7 @@
      if ((!ImportMode) && ((Cmp(section,"python") == 0) || (Cmp(section,"shadow") == 0))) {
        if (shadow) {
  	String *pycode = pythoncode(code,shadow_indent);
