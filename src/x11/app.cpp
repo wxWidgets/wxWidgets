@@ -545,6 +545,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
             }
             return FALSE;
         }
+#if 1
         case ResizeRequest:
         {
             /*
@@ -559,17 +560,13 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
             report = * event;
             while( XCheckTypedWindowEvent (disp, actualWindow, ResizeRequest, &report));
             
-            if (win)
-            {
-                wxSize sz = win->GetSize();
-                wxSizeEvent sizeEvent(sz, win->GetId());
-                sizeEvent.SetEventObject(win);
+            wxSize sz = win->GetSize();
+            wxSizeEvent sizeEvent(sz, win->GetId());
+            sizeEvent.SetEventObject(win);
 
-                return win->GetEventHandler()->ProcessEvent( sizeEvent );
-            }
-
-            return FALSE;
+            return win->GetEventHandler()->ProcessEvent( sizeEvent );
         }
+#endif
 #endif
 #if wxUSE_NANOX
         case GR_EVENT_TYPE_CLOSE_REQ:
@@ -608,6 +605,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
             }
 #endif
 
+            // Only erase background, paint in idle time.
             win->SendEraseEvents();
 
             return TRUE;

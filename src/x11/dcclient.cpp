@@ -971,7 +971,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     
     bool is_mono = (bitmap.GetBitmap() != NULL);
 
-    /* scale/translate size and position */
+    // scale/translate size and position
     int xx = XLOG2DEV(x);
     int yy = YLOG2DEV(y);
 
@@ -986,7 +986,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     int ww = XLOG2DEVREL(w);
     int hh = YLOG2DEVREL(h);
 
-    /* compare to current clipping region */
+    // compare to current clipping region
     if (!m_currentClippingRegion.IsNull())
     {
         wxRegion tmp( xx,yy,ww,hh );
@@ -995,7 +995,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
             return;
     }
 
-    /* scale bitmap if required */
+    // scale bitmap if required
     wxBitmap use_bitmap;
     if ((w != ww) || (h != hh))
     {
@@ -1013,10 +1013,10 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
         use_bitmap = bitmap;
     }
 
-    /* apply mask if any */
+    // apply mask if any
     WXPixmap mask = NULL;
     if (use_bitmap.GetMask()) mask = use_bitmap.GetMask()->GetBitmap();
-    {
+    
         if (useMask && mask)
         {
             WXPixmap new_mask = NULL;
@@ -1061,10 +1061,9 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
             if (new_mask)
                XFreePixmap( (Display*) m_display, (Pixmap) new_mask );
         }
-    }
 
-    /* Draw XPixmap or XBitmap, depending on what the wxBitmap contains. For
-       drawing a mono-bitmap (XBitmap) we use the current text GC */
+    // Draw XPixmap or XBitmap, depending on what the wxBitmap contains. For
+    // drawing a mono-bitmap (XBitmap) we use the current text GC
     if (is_mono)
         XCopyPlane( (Display*) m_display, (Pixmap) use_bitmap.GetBitmap(), (Window) m_window,
             (GC) m_textGC, 0, 0, w, h, xx, yy, 1 );
@@ -1072,7 +1071,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
         XCopyArea( (Display*) m_display, (Pixmap) use_bitmap.GetPixmap(), (Window) m_window,
             (GC) m_penGC, 0, 0, w, h, xx, yy );
 
-    /* remove mask again if any */
+    // remove mask again if any
     if (useMask && mask)
     {
         if (is_mono)
@@ -1095,7 +1094,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
   // wxUSE_NANOX/!wxUSE_NANOX
 
 bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-                         wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop, bool useMask,
+                         wxDC *source, wxCoord xsrc, wxCoord ysrc, int logical_func, bool useMask,
                          wxCoord xsrcMask, wxCoord ysrcMask )
 {
    /* this is the nth try to get this utterly useless function to
@@ -1119,13 +1118,13 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
     bool use_bitmap_method = FALSE;
     bool is_mono = FALSE;
 
-    /* TODO: use the mask origin when drawing transparently */
+    // TODO: use the mask origin when drawing transparently 
     if (xsrcMask == -1 && ysrcMask == -1)
     {
-        xsrcMask = xsrc; ysrcMask = ysrc;
+        xsrcMask = xsrc;
+        ysrcMask = ysrc;
     }
     
-#if 0
     if (srcDC->m_isMemDC)
     {
         if (!memDC->m_selected.Ok()) return FALSE;
@@ -1170,14 +1169,14 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
     CalcBoundingBox( xdest, ydest );
     CalcBoundingBox( xdest + width, ydest + height );
 
-    /* scale/translate size and position */
+    // scale/translate size and position
     wxCoord xx = XLOG2DEV(xdest);
     wxCoord yy = YLOG2DEV(ydest);
 
     wxCoord ww = XLOG2DEVREL(width);
     wxCoord hh = YLOG2DEVREL(height);
 
-    /* compare to current clipping region */
+    // compare to current clipping region
     if (!m_currentClippingRegion.IsNull())
     {
         wxRegion tmp( xx,yy,ww,hh );
@@ -1191,14 +1190,14 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
 
     if (use_bitmap_method)
     {
-        /* scale/translate bitmap size */
+        // scale/translate bitmap size
         wxCoord bm_width = memDC->m_selected.GetWidth();
         wxCoord bm_height = memDC->m_selected.GetHeight();
 
         wxCoord bm_ww = XLOG2DEVREL( bm_width );
         wxCoord bm_hh = YLOG2DEVREL( bm_height );
 
-        /* scale bitmap if required */
+        // scale bitmap if required
         wxBitmap use_bitmap;
 
         if ((bm_width != bm_ww) || (bm_height != bm_hh))
@@ -1206,9 +1205,11 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
             wxImage image( memDC->m_selected );
             image = image.Scale( bm_ww, bm_hh );
 
+#if 0
             if (is_mono)
                 use_bitmap = image.ConvertToMonoBitmap(255,255,255);
             else
+#endif
                 use_bitmap = image.ConvertToBitmap();
         }
         else
@@ -1216,13 +1217,14 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
             use_bitmap = memDC->m_selected;
         }
 
-        /* apply mask if any */
-        GdkBitmap *mask = (GdkBitmap *) NULL;
+        // apply mask if any
+        WXPixmap mask = NULL;
         if (use_bitmap.GetMask()) mask = use_bitmap.GetMask()->GetBitmap();
 
         if (useMask && mask)
         {
-            GdkBitmap *new_mask = (GdkBitmap*) NULL;
+            WXPixmap new_mask = NULL;
+#if 0
             if (!m_currentClippingRegion.IsNull())
             {
                 GdkColor col;
@@ -1242,59 +1244,62 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
                 gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, bm_ww, bm_hh );
                 gdk_gc_unref( gc );
             }
-
+#endif
             if (is_mono)
             {
                 if (new_mask)
-                    gdk_gc_set_clip_mask( m_textGC, new_mask );
+                    XSetClipMask( (Display*) m_display, (GC) m_textGC, (Pixmap) new_mask );
                 else
-                    gdk_gc_set_clip_mask( m_textGC, mask );
-                gdk_gc_set_clip_origin( m_textGC, xx, yy );
+                    XSetClipMask( (Display*) m_display, (GC) m_textGC, (Pixmap) mask );
+                XSetClipOrigin( (Display*) m_display, (GC) m_textGC, xx, yy );
             }
             else
             {
                 if (new_mask)
-                    gdk_gc_set_clip_mask( m_penGC, new_mask );
+                    XSetClipMask( (Display*) m_display, (GC) m_penGC, (Pixmap) new_mask );
                 else
-                    gdk_gc_set_clip_mask( m_penGC, mask );
-                gdk_gc_set_clip_origin( m_penGC, xx, yy );
+                    XSetClipMask( (Display*) m_display, (GC) m_penGC, (Pixmap) mask );
+                XSetClipOrigin( (Display*) m_display, (GC) m_penGC, xx, yy );
             }
+            
             if (new_mask)
-                gdk_bitmap_unref( new_mask );
+               XFreePixmap( (Display*) m_display, (Pixmap) new_mask );
         }
 
-        /* Draw XPixmap or XBitmap, depending on what the wxBitmap contains. For
-           drawing a mono-bitmap (XBitmap) we use the current text GC */
+        // Draw XPixmap or XBitmap, depending on what the wxBitmap contains. For
+        // drawing a mono-bitmap (XBitmap) we use the current text GC
 
         if (is_mono)
-            gdk_wx_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), xsrc, ysrc, xx, yy, ww, hh );
+            XCopyPlane( (Display*) m_display, (Pixmap) use_bitmap.GetBitmap(), (Window) m_window,
+                (GC) m_textGC, xsrc, ysrc, width, height, xx, yy, 1 );
         else
-            gdk_draw_pixmap( m_window, m_penGC, use_bitmap.GetPixmap(), xsrc, ysrc, xx, yy, ww, hh );
+            XCopyArea( (Display*) m_display, (Pixmap) use_bitmap.GetPixmap(), (Window) m_window,
+                (GC) m_penGC, xsrc, ysrc, width, height, xx, yy );
 
-        /* remove mask again if any */
+        // remove mask again if any
         if (useMask && mask)
         {
             if (is_mono)
             {
-                gdk_gc_set_clip_mask( m_textGC, (GdkBitmap *) NULL );
-                gdk_gc_set_clip_origin( m_textGC, 0, 0 );
+                XSetClipMask( (Display*) m_display, (GC) m_textGC, None );
+                XSetClipOrigin( (Display*) m_display, (GC) m_textGC, 0, 0 );
                 if (!m_currentClippingRegion.IsNull())
-                    gdk_gc_set_clip_region( m_textGC, m_currentClippingRegion.GetRegion() );
+                    XSetRegion( (Display*) m_display, (GC) m_textGC, (Region) m_currentClippingRegion.GetX11Region() );
             }
             else
             {
-                gdk_gc_set_clip_mask( m_penGC, (GdkBitmap *) NULL );
-                gdk_gc_set_clip_origin( m_penGC, 0, 0 );
+                XSetClipMask( (Display*) m_display, (GC) m_penGC, None );
+                XSetClipOrigin( (Display*) m_display, (GC) m_penGC, 0, 0 );
                 if (!m_currentClippingRegion.IsNull())
-                    gdk_gc_set_clip_region( m_penGC, m_currentClippingRegion.GetRegion() );
+                    XSetRegion( (Display*) m_display, (GC) m_penGC, (Region) m_currentClippingRegion.GetX11Region() );
             }
         }
     }
-    else /* use_bitmap_method */
+    else // use_bitmap_method
     {
         if ((width != ww) || (height != hh))
         {
-            /* draw source window into a bitmap as we cannot scale
+            /* Draw source window into a bitmap as we cannot scale
                a window in contrast to a bitmap. this would actually
                work with memory dcs as well, but we'd lose the mask
                information and waste one step in this process since
@@ -1309,42 +1314,38 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
 
             wxBitmap bitmap( width, height );
 
-            /* copy including child window contents */
-            gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
-            gdk_window_copy_area( bitmap.GetPixmap(), m_penGC, 0, 0,
-                                  srcDC->GetWindow(),
-                                  xsrc, ysrc, width, height );
-            gdk_gc_set_subwindow( m_penGC, GDK_CLIP_BY_CHILDREN );
+            // copy including child window contents
+            XSetSubwindowMode( (Display*) m_display, (GC) m_penGC, IncludeInferiors );
+            XCopyArea( (Display*) m_display, (Window) srcDC->GetWindow(), (Window) bitmap.GetPixmap(),
+                       (GC) m_penGC, xsrc, ysrc, width, height, 0, 0 );
+            XSetSubwindowMode( (Display*) m_display, (GC) m_penGC, ClipByChildren );
 
-            /* scale image */
+            // scale image
             wxImage image( bitmap );
             image = image.Scale( ww, hh );
 
-            /* convert to bitmap */
+            // convert to bitmap
             bitmap = image.ConvertToBitmap();
 
-            /* draw scaled bitmap */
-            gdk_draw_pixmap( m_window, m_penGC, bitmap.GetPixmap(), 0, 0, xx, yy, -1, -1 );
-
+            // draw scaled bitmap
+            XCopyArea( (Display*) m_display, (Window) bitmap.GetPixmap(), (Window) m_window, 
+                       (GC) m_penGC, 0, 0, width, height, xx, yy );
         }
         else
         {
-            /* No scaling and not a memory dc with a mask either */
+            // No scaling and not a memory dc with a mask either
 
-            /* copy including child window contents */
-            gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
-            gdk_window_copy_area( m_window, m_penGC, xx, yy,
-                                  srcDC->GetWindow(),
-                                  xsrc, ysrc, width, height );
-            gdk_gc_set_subwindow( m_penGC, GDK_CLIP_BY_CHILDREN );
+            // copy including child window contents
+            XSetSubwindowMode( (Display*) m_display, (GC) m_penGC, IncludeInferiors );
+            XCopyArea( (Display*) m_display, (Window) srcDC->GetWindow(), (Window) m_window, 
+                       (GC) m_penGC, xsrc, ysrc, width, height, xx, yy );
+            XSetSubwindowMode( (Display*) m_display, (GC) m_penGC, ClipByChildren );
         }
     }
 
     SetLogicalFunction( old_logical_func );
+    
     return TRUE;
-#endif
-
-    return FALSE;
 }
 
 void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
