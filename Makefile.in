@@ -777,6 +777,8 @@ MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
 	cp $(SRCDIR)/*.??? $(DISTDIR)/src
 	cp $(SRCDIR)/*.?? $(DISTDIR)/src
 	cp $(MSWDIR)/?ake*.* $(DISTDIR)/src/msw
+	mkdir $(DISTDIR)/contrib
+	cp -R $(WXDIR)/contrib $(DISTDIR)
 
 UNIV_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/include/wx/univ
