@@ -2315,7 +2315,7 @@ typedef struct tagLOGPALETTE
     /*  VA 3.0 for some reason needs base data types when typedefing a proc proto??? */
 typedef void* (_System *WXFARPROC)(unsigned long, unsigned long, void*, void*);
 #else
-#ifdef __EMX__
+#if defined(__EMX__) && !defined(_System)
 #define _System
 #endif
 typedef WXRESULT (_System *WXFARPROC)(WXHWND, WXMSGID, WXWPARAM, WXLPARAM);
