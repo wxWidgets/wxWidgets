@@ -170,7 +170,7 @@ public:
 //  * compose and composetyped fields are used to determine the program to be
 //    called to create a new message pert in the specified format (unused).
 //
-// Parameter/filename xpansion: 
+// Parameter/filename xpansion:
 //  * %s is replaced with the (full) file name
 //  * %t is replaced with MIME type/subtype of the entry
 //  * for multipart type only %n is replaced with the nnumber of parts and %F is
@@ -189,7 +189,7 @@ public:
 // comments. Each record has one of two following forms:
 //  a) for "brief" format:
 //      <mime type>  <space separated list of extensions>
-//  b) for "expanded" format: 
+//  b) for "expanded" format:
 //      type=<mime type> \ desc="<description>" \ exts="ext"
 //
 // We try to autodetect the format of mime.types: if a non-comment line starts
@@ -804,11 +804,11 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
             extensions = extensions.AfterFirst(' ');
 
             // consider extensions as not being case-sensitive
-            if ( field.IsSameAs(ext, FALSE /* no case */) ) { 
+            if ( field.IsSameAs(ext, FALSE /* no case */) ) {
                 // found
                 wxFileType *fileType = new wxFileType;
                 fileType->m_impl->Init(this, n);
-                
+
                 return fileType;
             }
         }
@@ -1094,8 +1094,8 @@ void wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName)
                                 // is this something of the form foo=bar?
                                 const char *pEq = strchr(curField, '=');
                                 if ( pEq != NULL ) {
-                                    wxString lhs = curField.Before('='),
-                                             rhs = curField.After('=');
+                                    wxString lhs = curField.BeforeFirst('='),
+                                             rhs = curField.AfterFirst('=');
 
                                     lhs.Trim(TRUE);     // from right
                                     rhs.Trim(FALSE);    // from left
@@ -1143,7 +1143,9 @@ void wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName)
                                 {
                                     // don't flood the user with error messages
                                     // if we don't understand something in his
-                                    // mailcap
+                                    // mailcap, but give them in debug mode
+                                    // because this might be useful for the
+                                    // programmer
                                     wxLogDebug
                                     (
                                       _("Mailcap file %s, line %d: unknown "
