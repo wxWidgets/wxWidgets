@@ -195,6 +195,10 @@ Unix:
 - fixed build problems with OpenGL when libGL(U) were in different directories
 - added --basename and --release flags to wx-config (Robert O'Connor)
 - added support for GNU/Hurd in configure
+- changed wxNativeFontInfo::FromXFontName to treat names with all
+  components being empty or '*' as default font (since default font is
+  converted to such a string by GetXFontName).
+
 
 wxGTK
 
