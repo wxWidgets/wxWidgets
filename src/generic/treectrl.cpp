@@ -436,7 +436,7 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest( const wxPoint& point,
     }
 
     if (point.x < m_x)
-        flags |= wxTREE_HITTEST_ONITEMIDENT;
+        flags |= wxTREE_HITTEST_ONITEMINDENT;
     if (point.x > m_x+m_width)
         flags |= wxTREE_HITTEST_ONITEMRIGHT;
 

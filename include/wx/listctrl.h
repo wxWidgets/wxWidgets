@@ -148,6 +148,10 @@ public:
     wxListItem();
     ~wxListItem() { delete m_attr; }
 
+    // resetting
+    void Clear();
+    void ClearAttributes();
+
     // setters
     void SetMask(long mask) { m_mask = mask; }
     void SetId(long id) { m_itemId = id; }

@@ -244,6 +244,7 @@ void wxFileData::SetNewName( const wxString &name, const wxString &fname )
 void wxFileData::MakeItem( wxListItem &item )
 {
     item.m_text = m_name;
+    item.ClearAttributes();
     if (IsExe()) item.SetTextColour(*wxRED);
     if (IsDir()) item.SetTextColour(*wxBLUE);
     item.m_image = IsDir() ? 0 : -1;
@@ -575,7 +576,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     m_dialogStyle = style;
     
     if ((m_dialogStyle & wxMULTIPLE ) && !(m_dialogStyle & wxOPEN))
-        m_dialogStyle &= ~wxMULTIPLE;
+        m_dialogStyle |= wxOPEN;
     
     m_dir = defaultDir;
     if (m_dir.IsEmpty())
