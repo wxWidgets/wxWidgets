@@ -665,7 +665,7 @@ bool wxLocale::Init(int language, int flags)
     wxString name = info->Description;
     wxString canonical = info->CanonicalName;
     wxString locale;
-    wxChar *retloc;
+    const wxChar *retloc;
 
     // Set the locale:
 #ifdef __UNIX__
