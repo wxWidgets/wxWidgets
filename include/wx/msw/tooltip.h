@@ -37,6 +37,9 @@ public:
     // should be called in responde to WM_MOUSEMOVE
     void RelayEvent(WXMSG *msg);
 
+    // add a window to the tooltip control
+    void Add(WXHWND hwnd);
+
 private:
     // the one and only one tooltip control we use - never access it directly
     // but use GetToolTipCtrl() which will create it when needed
@@ -47,9 +50,6 @@ private:
 
     // remove this tooltip from the tooltip control
     void Remove();
-
-    // add a window to the tooltip control
-    void Add(WXHWND hwnd);
 
     wxString  m_text;           // tooltip text
     wxWindow *m_window;         // window we're associated with
