@@ -149,6 +149,20 @@ void wxResourceEditorDialogHandler::OnLeftClick(int x, int y, int keys)
     return;
   }
 
+  // Round down to take account of dialog units
+  wxItemResource* resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(handlerDialog);
+  if (resource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
+  {
+        wxPoint pt = handlerDialog->ConvertPixelsToDialog(wxPoint(x, y));
+
+        // Convert back so we've rounded down
+        pt = handlerDialog->ConvertDialogToPixels(pt);
+        pt = handlerDialog->ConvertPixelsToDialog(pt);
+        pt = handlerDialog->ConvertDialogToPixels(pt);
+        x = pt.x;
+        y = pt.y;
+  }
+
   switch (wxResourceManager::GetCurrentResourceManager()->GetEditorControlList()->GetSelection())
   {
         case RESED_BUTTON:
@@ -1000,34 +1014,66 @@ void wxResourceEditorControlHandler::OnDragEnd(int x, int y, int WXUNUSED(keys),
         height1 = (ypos + height) - y;
         break;
     }
-    handlerControl->SetSize(x1, y1, width1, height1);
-
-    // Also update the associated resource
+    // Update the associated resource
     // We need to convert to dialog units if this is not a dialog or panel, but
     // the parent resource specifies dialog units.
+    int resourceX = x1;
+    int resourceY = y1;
+    int resourceWidth = width1;
+    int resourceHeight = height1;
+
     if (parentResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
     {
         wxPoint pt = handlerControl->GetParent()->ConvertPixelsToDialog(wxPoint(x1, y1));
-        x1 = pt.x; y1 = pt.y;
         wxSize sz = handlerControl->GetParent()->ConvertPixelsToDialog(wxSize(width1, height1));
-        width1 = sz.x; height1 = sz.y;
+
+        // Convert back so we've rounded down
+        sz = handlerControl->GetParent()->ConvertDialogToPixels(sz);
+        sz = handlerControl->GetParent()->ConvertPixelsToDialog(sz);
+        resourceWidth = sz.x; resourceHeight = sz.y;
+
+        sz = handlerControl->GetParent()->ConvertDialogToPixels(sz);
+        width1 = sz.x;
+        height1 = sz.y;
+
+        pt = handlerControl->GetParent()->ConvertDialogToPixels(pt);
+        pt = handlerControl->GetParent()->ConvertPixelsToDialog(pt);
+        resourceX = pt.x; resourceY = pt.y;
+
+        pt = handlerControl->GetParent()->ConvertDialogToPixels(pt);
+        x1 = pt.x;
+        y1 = pt.y;
     }
-    resource->SetSize(x1, y1, width1, height1);
+    handlerControl->SetSize(x1, y1, width1, height1);
+    resource->SetSize(resourceX, resourceY, resourceWidth, resourceHeight);
   }
   else
   {
+    // Correction 31/12/98. We need to round down the values to take into account
+    // the fact that several pixels map to the same dialog unit.
+
     int newX = (int)(x - dragOffsetX);
     int newY = (int)(y - dragOffsetY);
-    handlerControl->Move(newX, newY);
-    OldOnMove(newX, newY);
+    int resourceX = newX;
+    int resourceY = newY;
 
-    // Also update the associated resource
+    // Update the associated resource
     if (parentResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
     {
         wxPoint pt = handlerControl->GetParent()->ConvertPixelsToDialog(wxPoint(newX, newY));
-        newX = pt.x; newY = pt.y;
+        pt = handlerControl->GetParent()->ConvertDialogToPixels(pt);
+        pt = handlerControl->GetParent()->ConvertPixelsToDialog(pt);
+        resourceX = pt.x; resourceY = pt.y;
+        pt = handlerControl->GetParent()->ConvertDialogToPixels(pt);
+
+        // Having converted it several times, we know it'll map to dialog units exactly.
+        newX = pt.x;
+        newY = pt.y;
     }
-    resource->SetSize(newX, newY, resource->GetWidth(), resource->GetHeight());
+    handlerControl->Move(newX, newY);
+    OldOnMove(newX, newY);
+
+    resource->SetSize(resourceX, resourceY, resource->GetWidth(), resource->GetHeight());
 
     // Also move other selected items
     wxNode *node = panel->GetChildren().First();
@@ -1044,18 +1090,28 @@ void wxResourceEditorControlHandler::OnDragEnd(int x, int y, int WXUNUSED(keys),
           item->GetPosition(&x1, &y1);
           int x2 = (int)(x1 + (x - dragOffsetX) - xpos);
           int y2 = (int)(y1 + (y - dragOffsetY) - ypos);
+
+          // Update the associated resource
+          resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(item);
+          if (parentResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
+          {
+            wxPoint pt = item->GetParent()->ConvertPixelsToDialog(wxPoint(x2, y2));
+            pt = item->GetParent()->ConvertDialogToPixels(pt);
+            pt = item->GetParent()->ConvertPixelsToDialog(pt);
+
+            resourceX = pt.x; resourceY = pt.y;
+            pt = handlerControl->GetParent()->ConvertDialogToPixels(pt);
+
+            // Having converted it several times, we know it'll map to dialog units exactly
+            x2 = pt.x;
+            y2 = pt.y;
+          }
+
           item->Move(x2, y2);
           ((wxResourceEditorControlHandler *)item->GetEventHandler())->OldOnMove(x2, y2);
           ((wxResourceEditorControlHandler *)item->GetEventHandler())->DrawSelectionHandles(dc);
 
-          // Also update the associated resource
-          resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(item);
-          if (parentResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
-          {
-            wxPoint pt = item->GetParent()->ConvertPixelsToDialog(wxPoint(newX, newY));
-            x2 = pt.x; y2 = pt.y;
-          }
-          resource->SetSize(x2, y2, resource->GetWidth(), resource->GetHeight());
+          resource->SetSize(resourceX, resourceY, resource->GetWidth(), resource->GetHeight());
 
         }
       }

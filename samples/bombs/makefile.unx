@@ -11,7 +11,7 @@
 
 PROGRAM=bombs
 
-OBJECTS=$(PROGRAM).o bombs1.o game.o
+OBJECTS = bombs.o bombs1.o game.o
 
 include ../../src/makeprog.env
 

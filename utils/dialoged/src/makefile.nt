@@ -14,10 +14,6 @@
 # Set WXDIR for your system
 WXDIR = $(WXWIN)
 THISDIR = $(WXDIR)\utils\dialoged\src
-PROPDIR = $(WXDIR)\utils\wxprop
-PROPLIB=$(PROPDIR)\lib\wxprop.lib
-EXTRALIBS=$(PROPDIR)\lib\wxprop.lib
-EXTRAINC=/I$(PROPDIR)\src
 DOCDIR=$(WXDIR)\docs
 LOCALDOCDIR=$(WXDIR)\utils\dialoged\docs
 
@@ -28,7 +24,7 @@ PROGRAM=dialoged
 OBJECTS = dialoged.obj reseditr.obj dlghndlr.obj reswrite.obj\
   winprop.obj edtree.obj edlist.obj symbtabl.obj winstyle.obj
 
-all:    wxprop dialoged.exe
+all:    dialoged.exe
 
 wx:
         cd $(WXDIR)\src\msw
@@ -40,7 +36,7 @@ wxclean:
         nmake -f makefile.nt clean
         cd $(THISDIR)
 
-$(PROGRAM).exe:      $(DUMMYOBJ) $(WXLIB) $(OBJECTS) $(PROPLIB) $(PROGRAM).res
+$(PROGRAM).exe:      $(DUMMYOBJ) $(WXLIB) $(OBJECTS) $(PROGRAM).res
 	$(link) @<<
 -out:$(PROGRAM).exe
 $(LINKFLAGS)
@@ -95,16 +91,6 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 
 $(PROGRAM).res :      $(PROGRAM).rc $(WXDIR)\include\wx\msw\wx.rc
     $(rc) -r /i$(WXDIR)\include -fo$@ $(PROGRAM).rc
-
-wxprop:
-    cd $(PROPDIR)\src
-    nmake -f makefile.nt FINAL=$(FINAL)
-    cd $(THISDIR)
-
-clean_wxprop:
-    cd $(PROPDIR)\src
-    nmake -f makefile.nt clean
-    cd $(THISDIR)
 
 clean:
         -erase *.obj

@@ -16,13 +16,9 @@ WXDIR = $(WXWIN)
 
 WXLIBDIR = $(WXDIR)\lib
 WXINC = $(WXDIR)\include\msw
-WXBASESRC = $(WXDIR)\src\base
 WXBASEINC = $(WXDIR)\include\base
 WXLIB = $(WXLIBDIR)\wx32.lib
-WXPROPDIR = $(WXDIR)\utils\wxprop
-WXPROPINC = $(WXPROPDIR)\src
-WXPROPLIB = $(WXDIR)\lib\wxprop.lib
-LIBS=$(WXLIB) $(WXPROPLIB) cw32 import32 ole2w32
+LIBS=$(WXLIB) cw32 import32 ole2w32
 INCFILE = includes.cfg
 
 TARGET=dialoged
@@ -40,7 +36,7 @@ CPPFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG) @$(INCFILE)
 
 OBJECTS = dialoged.obj reseditr.obj dlghndlr.obj reswrite.obj winprop.obj edtree.obj edlist.obj symbtable.obj winstyle.obj
 
-$(TARGET).exe:	wxprop $(INCFILE) $(OBJECTS) $(TARGET).def $(TARGET).res
+$(TARGET).exe:	$(INCFILE) $(OBJECTS) $(TARGET).def $(TARGET).res
   tlink32 $(LINKFLAGS) @&&!
 c0w32.obj $(OBJECTS)
 $(TARGET)
@@ -58,11 +54,6 @@ $(INCFILE):	$(MAKEFILENAME)
 $(TARGET).res :      $(TARGET).rc $(WXDIR)\include\msw\wx.rc
     brc32 -r /i$(BCCDIR)\include /i$(WXDIR)\include\msw /i$(WXDIR)\contrib\fafa $(TARGET)
 
-wxprop:
-    cd $(WXPROPDIR)\src
-    make -f makefile.b32
-    cd $(WXDIR)\utils\dialoged\src
-    
 clean:
         -erase *.obj *.exe *.res *.map *.rws
 

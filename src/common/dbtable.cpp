@@ -1329,7 +1329,8 @@ void wxTable::SetColDefs (int index, char *fieldName, int dataType, void *pData,
 								 int cType, int size, bool keyField, bool upd,
 								 bool insAllow, bool derivedCol)
 {
-	if (strlen(fieldName) > (uint)DB_MAX_COLUMN_NAME_LEN)  // glt 4/21/97
+    // Please, no uint, it doesn't exist for VC++
+	if (strlen(fieldName) > (unsigned int) DB_MAX_COLUMN_NAME_LEN)  // glt 4/21/97
 	{
 		strncpy (colDefs[index].ColName, fieldName, DB_MAX_COLUMN_NAME_LEN);
 		colDefs[index].ColName[DB_MAX_COLUMN_NAME_LEN] = 0;  // glt 10/23/97

@@ -15,6 +15,7 @@ TARGET=motif
 THISDIR = $(WXDIR)/samples
 
 all:
+	cd bombs; $(MAKE) -f makefile.unx $(TARGET)
 	cd config; $(MAKE) -f makefile.unx $(TARGET)
 	cd controls; $(MAKE) -f makefile.unx $(TARGET)
 	cd dialogs; $(MAKE) -f makefile.unx $(TARGET)
@@ -22,6 +23,7 @@ all:
 	cd docview; $(MAKE) -f makefile.unx $(TARGET)
 	cd docvwmdi; $(MAKE) -f makefile.unx $(TARGET)
 	cd dynamic; $(MAKE) -f makefile.unx $(TARGET)
+	cd fractal; $(MAKE) -f makefile.unx $(TARGET)
 	cd grid; $(MAKE) -f makefile.unx $(TARGET)
 	cd help; $(MAKE) -f makefile.unx $(TARGET)
 	cd image; $(MAKE) -f makefile.unx $(TARGET)
@@ -33,6 +35,7 @@ all:
 	cd nativdlg; $(MAKE) -f makefile.unx $(TARGET)
 	cd notebook; $(MAKE) -f makefile.unx $(TARGET)
 	cd printing; $(MAKE) -f makefile.unx $(TARGET)
+	cd proplist; $(MAKE) -f makefile.unx $(TARGET)
 	cd resource; $(MAKE) -f makefile.unx $(TARGET)
 	cd sashtest; $(MAKE) -f makefile.unx $(TARGET)
 	cd splitter; $(MAKE) -f makefile.unx $(TARGET)
@@ -45,6 +48,7 @@ all:
 	cd wxpoem; $(MAKE) -f makefile.unx $(TARGET)
 
 clean:
+	cd bombs; $(MAKE) -f makefile.unx clean$(TARGET)
 	cd config; $(MAKE) -f makefile.unx clean$(TARGET)
 	cd controls; $(MAKE) -f makefile.unx clean$(TARGET)
 	cd dialogs; $(MAKE) -f makefile.unx clean$(TARGET)
@@ -52,6 +56,7 @@ clean:
 	cd docview; $(MAKE) -f makefile.unx clean$(TARGET)
 	cd docvwmdi; $(MAKE) -f makefile.unx clean$(TARGET)
 	cd dynamic; $(MAKE) -f makefile.unx clean$(TARGET)
+	cd fractal; $(MAKE) -f makefile.unx clean$(TARGET)
 	cd grid; $(MAKE) -f makefile.unx clean$(TARGET)
 	cd help; $(MAKE) -f makefile.unx clean$(TARGET)
 	cd image; $(MAKE) -f makefile.unx clean$(TARGET)
@@ -63,6 +68,7 @@ clean:
 	cd nativdlg; $(MAKE) -f makefile.unx clean$(TARGET)
 	cd notebook; $(MAKE) -f makefile.unx clean$(TARGET)
 	cd printing; $(MAKE) -f makefile.unx clean$(TARGET)
+	cd proplist; $(MAKE) -f makefile.unx clean$(TARGET)
 	cd resource; $(MAKE) -f makefile.unx clean$(TARGET)
 	cd sashtest; $(MAKE) -f makefile.unx clean$(TARGET)
 	cd splitter; $(MAKE) -f makefile.unx clean$(TARGET)

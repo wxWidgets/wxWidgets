@@ -58,6 +58,9 @@ GENERICOBJS= \
   $(GENDIR)\listctrl.obj \
   $(GENDIR)\notebook.obj \
   $(GENDIR)\panelg.obj \
+  $(GENDIR)\prop.obj \
+  $(GENDIR)\propform.obj \
+  $(GENDIR)\proplist.obj \
   $(GENDIR)\scrolwin.obj \
   $(GENDIR)\splitter.obj \
   $(GENDIR)\statusbr.obj \
@@ -986,6 +989,21 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(GENDIR)/prntdlgg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(GENDIR)/prop.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(GENDIR)/propform.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(GENDIR)/proplist.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

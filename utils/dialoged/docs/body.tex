@@ -15,18 +15,17 @@ no independent file format.
 provide immediate visual feedback of changed properties.
 \end{enumerate}
 
-Dialog Editor should be compiled and used with wxWindows 1.65 or later.
+Dialog Editor 2.0 should be compiled and used with wxWindows 2.0.
 
 \section{Current status}
 
-Dialog Editor currently runs under MS Windows. It has yet to
-be tested under Motif and XView: see \helpref{Technical notes}{technotes} for a discussion
-of what needs to be done.
+Dialog Editor currently runs under wxMSW and wxGTK. It has yet to
+be tested under wxMotif.
 
 \section{Future developments}
 
 \begin{itemize}\itemsep=0pt
-\item XView and Motif versions.
+\item Motif compilation.
 \item It would be nice to have a dialog browser, showing thumbnails of
 all dialogs in a particular directory.
 \item Maybe add a menubar editor (from wxBuilder).
@@ -42,24 +41,23 @@ all dialogs in a particular directory.
 \subsection{File menu}
 
 \begin{twocollist}\itemsep=0pt
-\twocolitem{New project}{Creates a new project (clears index and resets project name).}
 \twocolitem{New dialog}{Creates a new dialog resource.}
+\twocolitem{New project}{Creates a new project (clears index and resets project name).}
 \twocolitem{Open}{Opens an existing resource file.}
 \twocolitem{Save}{Saves the current resources.}
-\twocolitem{Save as}{Saves the current resources in a named file.}
+\twocolitem{Save As...}{Saves the current resources in a named file.}
 \twocolitem{Clear}{Clears the current resources.}
-\twocolitem{Exit}{Exit the program.}
+\twocolitem{Exit}{Exits the program.}
 \end{twocollist}
 
 \subsection{Edit menu}
 
 \begin{twocollist}\itemsep=0pt
-\twocolitem{Recreate}{Recreates the currently selected panel item from the underlying resource. This may be necessary
+\twocolitem{Test Dialog}{Creates the current dialog for test purposes.}
+\twocolitem{Recreate}{Recreates the currently selected control from the underlying resource. This may be necessary
 to regenerate items that cannot be changed dynamically, and which have got out of sync with the displayed
 item.}
 \twocolitem{Delete}{Deletes the currently selected resource.}
-\twocolitem{Toggle edit/test mode}{Toggles from edit to test mode, and vice versa. Edit mode is used for editing
-dialogs, test mode allows panel items to be manipulated as they will appear to the user.}
 \end{twocollist}
 
 \subsection{Help menu}
@@ -93,35 +91,15 @@ The command toolbar consists of the following tools:
 \latexonly{\newpage}
 \section{Tool palette}
 
-The tool palette is used to select a type of panel item to create on the dialog.
-To create a new panel item, select a tool with left-click, then left-click on the dialog to 
-window. Select the pointer tool to use left-click for selecting and deselecting
+The tool palette is used to select a type of control to create on the dialog.
+To create a new control, select a tool with left-click, then left-click on the dialog.
+Select the pointer tool to use left-click for selecting and deselecting
 items.
 
-The tool palette consists of the following tools.
+\section{Resource tree}
 
-\begin{twocollist}%\itemsep=0pt
-\twocolitem{\icon{arrow.eps}{Pointer}}{Click this to select/deselect items on a dialog.}
-\twocolitem{\icon{message.eps}{Message}}{Text message item.}
-\twocolitem{\icon{picture.eps}{Bitmap message}}{Bitmap message item.}
-\twocolitem{\icon{button.eps}{Button}}{Text button item.}
-\twocolitem{\icon{bmpbuttn.eps}{Bitmap button}}{Bitmap button item.}
-\twocolitem{\icon{check.eps}{Checkbox}}{Checkbox item.}
-\twocolitem{\icon{radio.eps}{Radiobox}}{Radiobox item.}
-\twocolitem{\icon{listbox.eps}{Listbox}}{Listbox item.}
-\twocolitem{\icon{choice.eps}{Choice}}{Choice item.}
-\twocolitem{\icon{text.eps}{Text}}{Single-line text item.}
-\twocolitem{\icon{mtext.eps}{Multitext}}{Multi-line text item.}
-\twocolitem{\icon{slider.eps}{Slider}}{Slider item.}
-\twocolitem{\icon{group.eps}{Groupbpx}}{Groupbox item.}
-\twocolitem{\icon{gauge.eps}{Gauge}}{Gauge item.}
-\twocolitem{\icon{scroll.eps}{Scrollbar}}{Scrollbar item.}
-\end{twocollist}
-
-\section{Resource list}
-
-The resource list shows a list of the dialogs, panel items and bitmaps currently loaded
-in Dialog Editor. Double-clicking on a dialog item shows the associated dialog box.
+The resource tree shows a list of the dialogs, controls and bitmaps currently loaded
+in Dialog Editor. Double-clicking on an item shows the associated resource.
 
 \chapter{Procedures}\label{procedures}
 \setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
@@ -138,16 +116,16 @@ status line.
 \section{Creating a dialog}
 
 To create a new dialog, click on the {\bf File: New} menu item, or equivalent
-toolbar button. A dialog will appear. To put a panel item on the dialog, left-click
+toolbar button. A dialog will appear. To put a control on the dialog, left-click
 on the appropriate palette icon and then left-click on the dialog. A new item
 will appear at the place you clicked.
 
-You can edit any panel item or dialog by control-left clicking. A property editor
+You can edit any control or dialog by control-left clicking. A property editor
 will appear, allowing any property to be selected and edited (see \helpref{Using property editors}{propeditors}).
 You can also edit items by right-clicking to show a menu, and then selecting {\it Edit properties}.
 
-To move a panel item, drag the item with the left mouse button, or edit
-the position values in the property editor. To resize a panel item, you
+To move a control, drag the item with the left mouse button, or edit
+the position values in the property editor. To resize a control, you
 can either select it by left-clicking and then dragging on a selection
 handle, or edit the size values in the property editor. 
 
@@ -169,7 +147,7 @@ the file selector, and properties containing list of user-definable strings use 
 string editor.
 
 When you change a property value, this value is immediately reflected in
-the dialog or panel item.  If the item allows this value to be changed
+the dialog or control.  If the item allows this value to be changed
 dynamically, the relevant wxWindows function will be called internally
 to effect the change.  If the value cannot be changed dynamically, the
 item will be destroyed and re-created, which means that there will be
@@ -186,12 +164,37 @@ wxWindows resources have been enabled when building the wxWindows library.
 These files can be loaded dynamically, or included directly into program source
 with a \verb$#include$ directive. See the wxWindows user manual for further details.
 
+\section{Working with identifiers}
+
+Dialog Editor keeps track of identifiers in your resources, and reads and writes an include file of the
+form {\tt name.h} where 'name' is the root name of your {\tt .wxr} file. Dialog Editor
+knows about the predefined identifiers such as wxID\_OK.
+
+When you create a dialog or control, the identifier is initially generated. When you
+edit the identifier via a property editor, you can choose a new name, such as a predefined
+symbol and optionally change the integer assigned to the name (assuming it's not a
+predefined symbol).
+
+When you save the project, the identifier include file is saved as well. Include this file
+in your project so that you can refer to controls and dialogs by identifier rather than
+obscure integers. Note that the {\tt .wxr} file itself can only contain integer ids and not the symbols,
+due to way in which the resource file is loaded.
+
 \section{Multi-platform development}
 
-{\tt .wxr} files generated on one environment (e.g. Windows) can be used in another (e.g. Motif).
-However, because the same panel item can have different sizes on different GUIs,
+{\tt .wxr} files generated on one environment (e.g. Windows) can be used in another (e.g. GTK).
+If you use default fonts and colouring (set {\bf useSystemDefaults} to True in the dialog properties)
+then the dialog fonts and colours will take on the native values, rather than ones specified in the
+resource. Without this, colours in the dialog resource may not match system colours.
+
+Also, set {\bf useDialogUnits} to True whenever possible since this will cause the dialog
+to be created using a scale based on the current system font size, and will result in dialogs that are
+portable between screen resolutions as well as platforms.
+
+Because the same control can have different sizes on different GUIs,
 the user should be cautious in assuming that one resource file will work for all
 platforms. It may be better to plan to conditionally include or load different
 resource files for different platforms, with spacing modified to suit each
-environment.
+environment. The best thing is to try your dialog resource on several platforms
+and see whether tweaking is required for some platforms.
 

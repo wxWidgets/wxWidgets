@@ -142,6 +142,9 @@ LIB_CPP_SRC=\
  ../generic/laywin.cpp \
  ../generic/msgdlgg.cpp \
  ../generic/panelg.cpp \
+ ../generic/prop.cpp \
+ ../generic/proplist.cpp \
+ ../generic/propform.cpp \
  ../generic/printps.cpp \
  ../generic/prntdlgg.cpp \
  ../generic/sashwin.cpp \

@@ -22,8 +22,8 @@ docs/html/wxgraph/*.gif
 docs/html/wxhelp/*.htm
 docs/html/wxhelp/*.gif
 
-docs/html/wxprop/*.htm
-docs/html/wxprop/*.gif
+docs/html/proplist/*.htm
+docs/html/proplist/*.gif
 
 docs/html/winstall/*.htm
 docs/html/winstall/*.gif

@@ -80,6 +80,9 @@ GENERICOBJS= \
   $(MSWDIR)\msgdlgg.obj \
   $(MSWDIR)\notebook.obj \
   $(MSWDIR)\panelg.obj \
+  $(MSWDIR)\prop.obj \
+  $(MSWDIR)\propform.obj \
+  $(MSWDIR)\proplist.obj \
   $(MSWDIR)\sashwin.obj \
   $(MSWDIR)\scrolwin.obj \
   $(MSWDIR)\splitter.obj \
@@ -591,6 +594,12 @@ $(MSWDIR)\panelg.obj:     $(GENDIR)\panelg.$(SRCSUFF)
 $(MSWDIR)\printps.obj:     $(GENDIR)\printps.$(SRCSUFF)
 
 $(MSWDIR)\prntdlgg.obj:     $(GENDIR)\prntdlgg.$(SRCSUFF)
+
+$(MSWDIR)\prop.obj:     $(GENDIR)\prop.$(SRCSUFF)
+
+$(MSWDIR)\proplist.obj:     $(GENDIR)\proplist.$(SRCSUFF)
+
+$(MSWDIR)\propform.obj:     $(GENDIR)\propform.$(SRCSUFF)
 
 $(MSWDIR)\sashwin.obj:     $(GENDIR)\sashwin.$(SRCSUFF)
 

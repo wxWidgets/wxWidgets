@@ -17,12 +17,10 @@ BIN_OBJ=dialoged.o dlghndlr.o edlist.o edtree.o \
   reseditr.o reswrite.o symbtabl.o winprop.o winstyle.o
   
 # additional things needed to link
-BIN_LINK= \
-  -lwx_prop_gtk
+BIN_LINK=
 
 # additional things needed to compile
-ADD_COMPILE= \
-  -I../../../wxprop/src
+ADD_COMPILE=
 
 # include the definitions now
 include ../../../../template.mak

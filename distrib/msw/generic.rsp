@@ -179,19 +179,6 @@ utils/serialize/*.xbm
 utils/serialize/*.xpm
 utils/serialize/*.txt
 
-utils/wxprop/Makefile
-utils/wxprop/src/*.h
-utils/wxprop/src/*.cpp
-utils/wxprop/src/*.def
-utils/wxprop/src/*.rc
-utils/wxprop/src/makefile*
-utils/wxprop/src/*.xbm
-utils/wxprop/src/*.xpm
-utils/wxprop/src/*.txt
-utils/wxprop/src/*.ico
-utils/wxprop/src/*.bmp
-utils/wxprop/lib/dummy
-
 utils/dialoged/Makefile
 utils/dialoged/src/bitmaps/*.xbm
 utils/dialoged/src/bitmaps/*.xpm
@@ -419,6 +406,15 @@ samples/fractal/*.xbm
 samples/fractal/*.xpm
 samples/fractal/*.ico
 samples/fractal/*.rc
+
+samples/proplist/*.cpp
+samples/proplist/*.h
+samples/proplist/*.def
+samples/proplist/makefile*
+samples/proplist/*.xbm
+samples/proplist/*.xpm
+samples/proplist/*.ico
+samples/proplist/*.rc
 
 samples/layout/*.cpp
 samples/layout/*.h

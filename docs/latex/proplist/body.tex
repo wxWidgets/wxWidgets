@@ -1,0 +1,106 @@
+\chapter{Introduction}\label{introduction}
+\pagenumbering{arabic}%
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+The Property Sheet Classes help the programmer to specify complex dialogs and
+their relationship with their associated data. By specifying data as a
+wxPropertySheet containing wxProperty objects, the programmer can use
+a range of available or custom wxPropertyView classes to allow the user to
+edit this data. Classes derived from wxPropertyView act as mediators between the
+wxPropertySheet and the actual window (and associated panel items).
+
+For example, the wxPropertyListView is a kind of wxPropertyView which displays
+data in a Visual Basic-style property list (see \helpref{the next section}{appearance} for
+screen shots). This is a listbox containing names and values, with
+an edit control and other optional controls via which the user edits the selected
+data item.
+
+wxPropertyFormView is another kind of wxPropertyView which mediates between
+the data and a panel or dialog box which has already been created. This makes it a contender for
+the replacement of wxForm, since programmer-controlled layout is going to be much more
+satisfactory. If automatic layout is desired, then wxPropertyListView could be used instead.
+
+The main intention of this class library was to provide property {\it list} behaviour, but
+it has been generalised as much as possible so that the concept of a property sheet and its viewers
+can reduce programming effort in a range of user interface tasks.
+
+For further details on the classes and how they are used, please see \helpref{Property classes overview}{propertyoverview}.
+
+\section{The appearance and behaviour of a property list view}\label{appearance}
+
+The property list, as seen in an increasing number of development tools
+such as Visual Basic and Delphi, is a convenient and compact method for
+displaying and editing a number of items without the need for one
+control per item, and without the need for designing a special form. The
+controls are as follows:
+
+\begin{itemize}\itemsep=0pt
+\item A listbox showing the properties and their current values, which has double-click
+properties dependent on the nature of the current property;
+\item a text editing area at the top of the display, allowing the user to edit
+the currently selected property if appropriate;
+\item `confirm' and `cancel' buttons to confirm or cancel an edit (for the property, not the
+whole sheet);
+\item an optional list that appears when the user can make a choice from several known possible values;
+\item a small Edit button to invoke `detailed editing' (perhaps showing or hiding the above value list, or
+maybe invoking a common dialog);
+\item optional OK/Close, Cancel and Help buttons for the whole dialog.
+\end{itemize}
+
+The concept of `detailed editing' versus quick editing gives the user a choice
+of editing mode, so novice and expert behaviour can be catered for, or the user can just
+use what he feels comfortable with.
+
+Behaviour alters depending on the kind of property being edited. For example, a boolean value has
+the following behaviour:
+
+\begin{itemize}\itemsep=0pt
+\item Double-clicking on the item toggles between TRUE and FALSE.
+\item Showing the value list enables the user to select TRUE or FALSE.
+\item The user may be able to type in the word TRUE or FALSE, or the edit control
+may be read-only to disallow this since it is error-prone.
+\end{itemize}
+
+A list of strings may pop up a dialog for editing them, a simple string just allows text editing,
+double-clicking a colour property may show a colour selector, double-clicking on a filename property may
+show a file selector (in addition to being able to type in the name in the edit control), etc.
+
+Note that the `type' of property, such as string or integer, does not
+necessarily determine the behaviour of the property. The programmer has
+to be able to specify different behaviours for the same type, depending
+on the meaning of the property. For example, a colour and a filename may
+both be strings, but their editing behaviour should be different. This
+is why objects of type wxPropertyValidator need to be used, to define
+behaviour for a given class of properties or even specific property
+name.  Objects of class wxPropertyView contain a list of property
+registries, which enable reuse of bunches of these validators in
+different circumstances. Or a wxProperty can be explicitly set to use a
+particular validator object. 
+
+The following screen shot of the property classes test program shows the
+user editing a string, which is constrained to be one of three possible
+values.
+
+$$\image{8cm;0cm}{prop1.eps}$$\\
+
+The second picture shows the user having entered a integer that
+was outside the range specified to the validator. Note that in this picture,
+the value list is hidden because it is not used when editing an integer.
+
+$$\image{8cm;0cm}{prop2.eps}$$
+
+\chapter{Files}\label{files}
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+The property class library comprises the following files:
+
+\begin{itemize}\itemsep=0pt
+\item prop.h: base property class header
+\item proplist.h: wxPropertyListView and associated classes
+\item propform.h: wxPropertyListView and associated classes
+\item prop.cpp: base property class implementation
+\item proplist.cpp: wxPropertyListView and associated class implementions
+\item propform.cpp: wxPropertyFormView and associated class implementions
+\end{itemize}

@@ -20,23 +20,8 @@ WXLIB = $(WXDIR)\lib\wx.lib
 
 DOCDIR = $(WXDIR)\utils\dialoged\docs
 
-PROPDIR = $(WXDIR)\utils\wxprop
-PROPINC = $(PROPDIR)\src
-PROPLIB = $(PROPDIR)\lib\wxprop.lib
 
-TREEDIR = $(WXDIR)\utils\wxtree
-TREEINC = $(TREEDIR)\src
-TREELIB = $(TREEDIR)\lib\wxtree.lib
-
-DIBDIR = $(WXDIR)\utils\dib
-DIBLIB = $(DIBDIR)\dib.lib
-DIBINC = $(DIBDIR)
-
-RCDIR = $(WXDIR)\utils\rcparser
-RCLIB = $(RCDIR)\lib\rcparser.lib
-RCINC = $(RCDIR)\src
-
-LIBS=$(WXLIB) $(PROPLIB) oldnames libw llibcew commdlg shell ddeml
+LIBS=$(WXLIB) oldnames libw llibcew commdlg shell ddeml
 INC=/I$(WXDIR)\include\base /I$(WXDIR)\include\msw /I$(PROPINC)
 
 !ifndef FINAL

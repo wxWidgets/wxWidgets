@@ -53,6 +53,9 @@ GENERICOBJS= \
   $(GENDIR)\gridg.obj \
   $(GENDIR)\laywin.obj \
   $(GENDIR)\panelg.obj \
+  $(GENDIR)\prop.obj \
+  $(GENDIR)\propform.obj \
+  $(GENDIR)\proplist.obj \
   $(GENDIR)\sashwin.obj \
   $(GENDIR)\scrolwin.obj \
   $(GENDIR)\splitter.obj \
@@ -1115,6 +1118,21 @@ $(GENDIR)/panelg.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
+$(GENDIR)/prop.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/propform.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/proplist.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
 $(GENDIR)/printps.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
@@ -1380,18 +1398,23 @@ docs:   allhlp allhtml allpdfrtf
 alldocs: docs
 hlp:    wxhlp portinghlp # faqhlp
 wxhlp:  $(DOCDIR)/winhelp/wx.hlp
+wxprophlp: $(DOCDIR)/winhelp/wxprop.hlp
 faqhlp: $(DOCDIR)/winhelp/faq.hlp
 refhlp: $(DOCDIR)/winhelp/techref.hlp
 rtf:    $(DOCDIR)/winhelp/wx.rtf
 faqrtf: $(DOCDIR)/winhelp/faq.rtf
+wxproprtf: $(DOCDIR)/winhelp/wxprop.rtf
 pdfrtf:    $(DOCDIR)/pdf/wx.rtf
 faqpdfrtf: $(DOCDIR)/pdf/faq.rtf
+wxproppdfrtf: $(DOCDIR)/pdf/wxprop.rtf
 refpdfrtf: $(DOCDIR)/pdf/techref.rtf
 html:	wxhtml # faqhtml
 wxhtml:	$(DOCDIR)\html\wx\wx.htm
 faqhtml: $(DOCDIR)\html\faq\faq.htm
+wxprophtml: $(DOCDIR)\html\proplist\prop.htm
 ps:     wxps referencps # faqps
 wxps:	$(WXDIR)\docs\ps\wx.ps
+wxpropps:	$(WXDIR)\docs\ps\wxprop.ps
 faqps:	$(WXDIR)\docs\ps\faq.ps
 referencps:	$(WXDIR)\docs\ps\referenc.ps
 
@@ -1401,9 +1424,7 @@ portinghlp: $(DOCDIR)/winhelp/porting.hlp
 portingpdfrtf: $(DOCDIR)/pdf/porting.rtf
 portingps:	$(WXDIR)\docs\ps\porting.ps
 
-allhlp: wxhlp portinghlp # faqhlp
-        cd $(WXDIR)\utils\wxprop\src
-        nmake -f makefile.nt hlp
+allhlp: wxhlp portinghlp wxprop # faqhlp
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.nt hlp
         cd $(THISDIR)
@@ -1434,9 +1455,7 @@ allhlp: wxhlp portinghlp # faqhlp
 #        cd $(WXDIR)\utils\clips2c\src
 #        nmake -f makefile.nt hlp
 
-allhtml: wxhtml portinghtml # faqhtml
-        cd $(WXDIR)\utils\wxprop\src
-        nmake -f makefile.nt html
+allhtml: wxhtml portinghtml wxprophtml # faqhtml
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.nt html
         cd $(THISDIR)
@@ -1468,16 +1487,12 @@ allhtml: wxhtml portinghtml # faqhtml
 #        cd $(WXDIR)\utils\clips2c\src
 #        nmake -f makefile.nt html
 
-allps: wxps referencps portingps # faqps
-        cd $(WXDIR)\utils\wxprop\src
-        nmake -f makefile.nt ps
+allps: wxps referencps portingps wxpropps # faqps
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.nt ps
         cd $(THISDIR)
 
-allpdfrtf: pdfrtf portingpdfrtf # faqpdfrtf
-        cd $(WXDIR)\utils\wxprop\src
-        nmake -f makefile.nt pdfrtf
+allpdfrtf: pdfrtf portingpdfrtf wxproppdfrtf # faqpdfrtf
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.nt pdfrtf
         cd $(THISDIR)
@@ -1529,6 +1544,14 @@ $(DOCDIR)/winhelp/faq.hlp:         $(DOCDIR)/latex/faq/faq.rtf $(DOCDIR)/latex/f
         move faq.cnt $(DOCDIR)\winhelp\faq.cnt
         cd $(THISDIR)
 
+$(DOCDIR)/winhelp/wxprop.hlp:         $(DOCDIR)/latex/proplist/wxprop.rtf $(DOCDIR)/latex/proplist/wxprop.hpj
+        cd $(DOCDIR)/latex/proplist
+        -erase wxprop.ph
+        hc wxprop
+        move wxprop.hlp $(DOCDIR)\winhelp\wxprop.hlp
+        move wxprop.cnt $(DOCDIR)\winhelp\wxprop.cnt
+        cd $(THISDIR)
+
 $(DOCDIR)/winhelp/techref.hlp:         $(DOCDIR)/latex/techref/techref.rtf $(DOCDIR)/latex/techref/techref.hpj
         cd $(DOCDIR)/latex/techref
         -erase techref.ph
@@ -1552,6 +1575,11 @@ $(DOCDIR)/latex/faq/faq.rtf:         $(DOCDIR)/latex/faq/faq.tex
         -start /w tex2rtf $(DOCDIR)/latex/faq/faq.tex $(DOCDIR)/latex/faq/faq.rtf -twice -winhelp
         cd $(THISDIR)
 
+$(DOCDIR)/latex/proplist/wxprop.rtf:         $(DOCDIR)/latex/proplist/prop.tex $(DOCDIR)/latex/proplist/body.tex $(DOCDIR)/latex/proplist/classes.tex $(DOCDIR)/latex/proplist/changes.tex
+        cd $(DOCDIR)\latex\proplist
+        -start /w tex2rtf $(DOCDIR)/latex/proplist/prop.tex $(DOCDIR)/latex/proplist/wxprop.rtf -twice -winhelp
+        cd $(THISDIR)
+
 $(DOCDIR)/latex/techref/techref.rtf:         $(DOCDIR)/latex/techref/techref.tex
         cd $(DOCDIR)\latex\techref
         -start /w tex2rtf $(DOCDIR)/latex/techref/techref.tex $(DOCDIR)/latex/techref/techref.rtf -twice -winhelp
@@ -1573,6 +1601,12 @@ $(DOCDIR)/pdf/faq.rtf:         $(DOCDIR)/latex/faq/faq.tex
         cd $(DOCDIR)\latex\faq
         -copy *.bmp *.wmf $(DOCDIR)\pdf
         -start /w tex2rtf $(DOCDIR)/latex/faq/faq.tex $(DOCDIR)/pdf/faq.rtf -twice -rtf
+        cd $(THISDIR)
+
+$(DOCDIR)/pdf/wxprop.rtf:         $(DOCDIR)/latex/proplist/proplist.tex $(DOCDIR)/latex/proplist/body.tex $(DOCDIR)/latex/proplist/classes.tex $(DOCDIR)/latex/proplist/changes.tex
+        cd $(DOCDIR)\latex\proplist
+        -copy *.bmp *.wmf $(DOCDIR)\pdf
+        -start /w tex2rtf $(DOCDIR)/latex/proplist/wxprop.tex $(DOCDIR)/pdf/wxprop.rtf -twice -rtf
         cd $(THISDIR)
 
 $(DOCDIR)/pdf/techref.rtf:         $(DOCDIR)/latex/techref/techref.tex
@@ -1608,7 +1642,17 @@ $(DOCDIR)\html\faq\faq.htm:         $(DOCDIR)\latex\faq\faq.tex
         -erase $(DOCDIR)\html\faq\*.con
         -erase $(DOCDIR)\html\faq\*.ref
         -erase $(DOCDIR)\latex\faq\*.con
-        -erase $(DOCDIR)\latexfaq\*.ref
+        -erase $(DOCDIR)\latex\faq\*.ref
+        cd $(THISDIR)
+
+$(DOCDIR)\html\proplist\prop.htm:         $(DOCDIR)\latex\proplist\prop.tex $(DOCDIR)\latex\proplist\body.tex $(DOCDIR)\latex\proplist\classes.tex $(DOCDIR)\latex\proplist\changes.tex
+        cd $(DOCDIR)\latex\proplist
+        -mkdir $(DOCDIR)\html\proplist
+        -start /w tex2rtf $(DOCDIR)\latex\proplist\wxprop.tex $(DOCDIR)\html\proplist\prop.htm -twice -html
+        -erase $(DOCDIR)\html\proplist\*.con
+        -erase $(DOCDIR)\html\proplist\*.ref
+        -erase $(DOCDIR)\latex\proplist\*.con
+        -erase $(DOCDIR)\latex\proplist\*.ref
         cd $(THISDIR)
 
 $(WXDIR)\docs\latex\wx\manual.dvi:	$(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/manual.tex

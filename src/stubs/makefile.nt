@@ -103,6 +103,9 @@ GENERICOBJS= \
   $(GENDIR)\gridg.obj \
   $(GENDIR)\msgdlgg.obj \
   $(GENDIR)\panelg.obj \
+  $(GENDIR)\prop.obj \
+  $(GENDIR)\propform.obj \
+  $(GENDIR)\proplist.obj \
   $(GENDIR)\printps.obj \
   $(GENDIR)\prntdlgg.obj \
   $(GENDIR)\scrolwin.obj \
@@ -889,6 +892,21 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
 $(GENDIR)/panelg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/prop.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/propform.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/proplist.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<

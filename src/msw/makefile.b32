@@ -76,6 +76,9 @@ GENERICOBJS= \
   $(MSWDIR)\imaglist.obj \
   $(MSWDIR)\laywin.obj \
   $(MSWDIR)\panelg.obj \
+  $(MSWDIR)\prop.obj \
+  $(MSWDIR)\proplist.obj \
+  $(MSWDIR)\propform.obj \
   $(MSWDIR)\sashwin.obj \
   $(MSWDIR)\scrolwin.obj \
   $(MSWDIR)\splitter.obj \
@@ -605,6 +608,12 @@ $(MSWDIR)\laywin.obj:     $(GENDIR)\laywin.$(SRCSUFF)
 $(MSWDIR)\msgdlgg.obj:     $(GENDIR)\msgdlgg.$(SRCSUFF)
 
 $(MSWDIR)\panelg.obj:     $(GENDIR)\panelg.$(SRCSUFF)
+
+$(MSWDIR)\prop.obj:     $(GENDIR)\prop.$(SRCSUFF)
+
+$(MSWDIR)\proplist.obj:     $(GENDIR)\proplist.$(SRCSUFF)
+
+$(MSWDIR)\propform.obj:     $(GENDIR)\propform.$(SRCSUFF)
 
 $(MSWDIR)\printps.obj:     $(GENDIR)\printps.$(SRCSUFF)
 

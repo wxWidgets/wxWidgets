@@ -16,6 +16,8 @@ WXDIR = ..
 THISDIR=$(WXDIR)/samples
 
 all:
+	        cd $(WXDIR)/samples/bombs; make -f makefile.g95
+	        cd $(WXDIR)/samples/fractal; make -f makefile.g95
 	        cd $(WXDIR)/samples/splitter; make -f makefile.g95
 	        cd $(WXDIR)/samples/resource; make -f makefile.g95
 	        cd $(WXDIR)/samples/controls; make -f makefile.g95
@@ -26,6 +28,7 @@ all:
 	        cd $(WXDIR)/samples/minimal; make -f makefile.g95
 	        cd $(WXDIR)/samples/layout; make -f makefile.g95
 	        cd $(WXDIR)/samples/printing; make -f makefile.g95
+	        cd $(WXDIR)/samples/proplist; make -f makefile.g95
 	        cd $(WXDIR)/samples/toolbar; make -f makefile.g95
 	        cd $(WXDIR)/samples/dialogs; make -f makefile.g95
 	        cd $(WXDIR)/samples/docview; make -f makefile.g95
@@ -43,11 +46,14 @@ all:
 #	        cd $(WXDIR)/samples/regtest; make -f makefile.g95
 
 clean:
+	        cd $(WXDIR)/samples/bombs; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/fractal; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/splitter; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/mdi; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/minimal; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/layout; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/printing; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/proplist; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/toolbar; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/dialogs; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/resource; make -f makefile.g95 clean

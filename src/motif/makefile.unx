@@ -146,6 +146,9 @@ LIB_CPP_SRC=\
  ../generic/panelg.cpp \
  ../generic/printps.cpp \
  ../generic/prntdlgg.cpp \
+ ../generic/prop.cpp \
+ ../generic/propform.cpp \
+ ../generic/proplist.cpp \
  ../generic/sashwin.cpp \
  ../generic/scrolwin.cpp \
  ../generic/splitter.cpp \

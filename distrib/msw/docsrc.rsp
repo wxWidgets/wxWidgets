@@ -10,6 +10,18 @@ docs/latex/wx/*.bmp
 docs/latex/wx/*.gif
 docs/latex/wx/*.wmf
 
+docs/latex/proplist/*.tex
+docs/latex/proplist/*.sty
+docs/latex/proplist/*.bib
+docs/latex/proplist/*.hpj
+docs/latex/proplist/*.ini
+docs/latex/proplist/*.txt
+docs/latex/proplist/*.cnt
+docs/latex/proplist/*.eps
+docs/latex/proplist/*.bmp
+docs/latex/proplist/*.gif
+docs/latex/proplist/*.wmf
+
 docs/latex/porting/*.tex
 docs/latex/porting/*.sty
 docs/latex/porting/*.bib
