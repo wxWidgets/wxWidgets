@@ -320,6 +320,7 @@ if [ "$1" = "0" -a -x /usr/bin/update-menus ]; then /usr/bin/update-menus || tru
 %{wxpref}/lib/wx
 %{wxconfigname}
 %{wxpref}/bin/wx-config
+%{wxpref}/bin/wx-config-%{ver2}
 
 #----------------------------------------------------------------
 # end of file

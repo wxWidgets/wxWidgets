@@ -378,58 +378,67 @@ void wxPyApp::SetMacHelpMenuTitleName(const wxString& val) {
 // that should be present in the derived (Python) class.
 void wxPyApp::_BootstrapApp()
 {
-    bool        result;
+    static      bool haveInitialized = false;
+    bool        result, blocked;
     PyObject*   retval = NULL;
     PyObject*   pyint  = NULL;
 
-
-    // Get any command-line args passed to this program from the sys module
-    int    argc = 0;
-    char** argv = NULL;
-    bool blocked = wxPyBeginBlockThreads();
-    PyObject* sysargv = PySys_GetObject("argv");
-    if (sysargv != NULL) {
-        argc = PyList_Size(sysargv);
-        argv = new char*[argc+1];
-        int x;
-        for(x=0; x<argc; x++) {
-            PyObject *pyArg = PyList_GetItem(sysargv, x);
-            argv[x] = PyString_AsString(pyArg);
+    
+    // Only initialize wxWidgets once
+    if (! haveInitialized) {
+        
+        // Get any command-line args passed to this program from the sys module
+        int    argc = 0;
+        char** argv = NULL;
+        blocked = wxPyBeginBlockThreads();
+        PyObject* sysargv = PySys_GetObject("argv");
+        if (sysargv != NULL) {
+            argc = PyList_Size(sysargv);
+            argv = new char*[argc+1];
+            int x;
+            for(x=0; x<argc; x++) {
+                PyObject *pyArg = PyList_GetItem(sysargv, x);
+                argv[x] = PyString_AsString(pyArg);
+            }
+            argv[argc] = NULL;
         }
-        argv[argc] = NULL;
-    }
-    wxPyEndBlockThreads(blocked);
+        wxPyEndBlockThreads(blocked);
 
-    // Initialize wxWidgets
-    result = wxEntryStart(argc, argv);
-    delete [] argv;
+        // Initialize wxWidgets
+        result = wxEntryStart(argc, argv);
+        delete [] argv;
 
-    blocked = wxPyBeginBlockThreads();
-    if (! result)  {
-        PyErr_SetString(PyExc_SystemError,
-                        "wxEntryStart failed, unable to initialize wxWidgets!"
+        blocked = wxPyBeginBlockThreads();
+        if (! result)  {
+            PyErr_SetString(PyExc_SystemError,
+                            "wxEntryStart failed, unable to initialize wxWidgets!"
 #ifdef __WXGTK__
-                        "  (Is DISPLAY set properly?)"
+                            "  (Is DISPLAY set properly?)"
 #endif
-            );
-        goto error;
-    }
+                );
+            goto error;
+        }
 
-    // On wxGTK the locale will be changed to match the system settings, but
-    // Python needs to have LC_NUMERIC set to "C" in order for the floating
-    // point conversions and such to work right.
+        // On wxGTK the locale will be changed to match the system settings, but
+        // Python needs to have LC_NUMERIC set to "C" in order for the floating
+        // point conversions and such to work right.
 #ifdef __WXGTK__
-    setlocale(LC_NUMERIC, "C");
+        setlocale(LC_NUMERIC, "C");
 #endif
     
-    // The stock objects were all NULL when they were loaded into
-    // SWIG generated proxies, so re-init those now...
-    wxPy_ReinitStockObjects(3);
+        // The stock objects were all NULL when they were loaded into
+        // SWIG generated proxies, so re-init those now...
+        wxPy_ReinitStockObjects(3);
 
+        wxPyEndBlockThreads(blocked);
+        haveInitialized = true;
+    }
+    
     // It's now ok to generate exceptions for assertion errors.
     wxPythonApp->SetStartupComplete(True);
 
     // Call the Python wxApp's OnInit function
+    blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "OnInit")) {
 
         PyObject* method = m_myInst.GetLastFound();

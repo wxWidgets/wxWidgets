@@ -39,6 +39,8 @@ Predominantly a bug-fix release.
 
   * wxGTK2 now supports alpha blended bitmap drawing
 
+  * Made wx.grid.Grid play nicer with sizers.
+
   * etc.
 
 

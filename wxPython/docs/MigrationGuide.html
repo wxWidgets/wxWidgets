@@ -628,10 +628,11 @@ making it more easily maintainable and less prone to getting rusty as
 there seems to be less and less interest in maintaining the C++
 version.</p>
 <p>There are only a few known compatibility issues at this time.  First
-is the location of OGL.  The deprecated version is located in the
-wx.ogl module, and the new version is in the wx.lib.ogl package.  So
-this just means that to start using the new version you need to adjust
-your imports.  So if your code currently has something like this:</p>
+is that the ogl.DrawnShape has not been reimplemented yet.  Next is the
+location of OGL.  The deprecated version is located in the wx.ogl
+module, and the new version is in the wx.lib.ogl package.  So this
+just means that to start using the new version you need to adjust your
+imports.  So if your code currently has something like this:</p>
 <pre class="literal-block">
 import wx
 import wx.ogl as ogl
