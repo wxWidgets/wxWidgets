@@ -3913,14 +3913,19 @@ bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
 {
     if ( m_created )
     {
-        if (m_ownTable) 
-            delete m_table; 
+        // stop all processing 
+        m_created = FALSE; 
+
+        if (m_ownTable)
+        {
+            wxGridTableBase *t=m_table;
+            m_table=0;
+            delete t; 
+        }
         delete m_selection; 
  
-        // stop all processing 
         m_table=0; 
         m_selection=0; 
-        m_created = FALSE; 
         m_numRows=0; 
         m_numCols=0; 
     }
