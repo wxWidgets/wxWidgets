@@ -2,7 +2,7 @@
 // Name:        calendar.cpp
 // Purpose:     wxCalendarCtrl sample
 // Author:      Vadim Zeitlin
-// Modified by: Mark Johnson : Added wxLayoutConstraints support for Ctrl
+// Modified by:
 // Created:     02.01.00
 // RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
@@ -176,7 +176,7 @@ bool MyApp::OnInit()
 {
     // Create the main application window
     MyFrame *frame = new MyFrame("Calendar wxWindows sample",
-                                 wxPoint(50, 50), wxSize(450, 375));
+                                 wxPoint(50, 50), wxSize(450, 340));
 
     // Show it and tell the application that it's our main window
     // @@@ what does it do exactly, in fact? is it necessary here?
@@ -242,7 +242,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
     SetStatusText("Welcome to wxWindows!");
-    SetStatusText("Try changing the size of the Window !",1);
 #endif // wxUSE_STATUSBAR
 }
 
@@ -300,13 +299,12 @@ void MyFrame::OnAllowYearUpdate(wxUpdateUIEvent& event)
 MyPanel::MyPanel(wxFrame *frame)
        : wxPanel(frame, -1)
 {
-    wxString date;
-    //------------------
     SetAutoLayout(TRUE);
-    date.Printf("Selected date: %s ",
+
+    wxString date;
+    date.Printf("Selected date: %s",
                 wxDateTime::Today().FormatISODate().c_str());
     m_date = new wxStaticText(this, -1, date);
-    //------------------
     m_calendar = new wxCalendarCtrl(this, Calendar_CalCtrl,
                                     wxDefaultDateTime,
                                     wxDefaultPosition,
@@ -315,25 +313,21 @@ MyPanel::MyPanel(wxFrame *frame)
                                     wxCAL_SHOW_HOLIDAYS |
                                     wxRAISED_BORDER);
 
-    //m_calendar->SetAutoLayout(TRUE);
-    //------------------
     wxLayoutConstraints *c = new wxLayoutConstraints;
-    //------------------
-    c = new wxLayoutConstraints;
-    c->left.PercentOf(this, wxWidth, 10);
-    c->right.PercentOf(this, wxWidth, 60);
-    c->top.PercentOf(this, wxHeight, 10);
-    c->bottom.PercentOf(this, wxHeight, 60);
-    m_calendar->SetConstraints(c);
-    //------------------
-    c = new wxLayoutConstraints;
-    c->left.SameAs(m_calendar, wxLeft, 10);
-    c->top.SameAs(m_calendar, wxBottom);
+    c->left.SameAs(this, wxLeft, 10);
+    c->centreY.SameAs(this, wxCentreY);
     c->height.AsIs();
     c->width.AsIs();
+
     m_date->SetConstraints(c);
-    //------------------
-    Layout();
+
+    c = new wxLayoutConstraints;
+    c->left.SameAs(m_date, wxRight, 20);
+    c->centreY.SameAs(this, wxCentreY);
+    c->height.AsIs();
+    c->width.AsIs();
+
+    m_calendar->SetConstraints(c);
 }
 
 void MyPanel::OnCalendar(wxCalendarEvent& event)
