@@ -261,7 +261,11 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size, wxMenuB
     memset (&mbi, 0, sizeof (SHMENUBARINFO));
     mbi.cbSize     = sizeof (SHMENUBARINFO);
     mbi.hwndParent = (HWND) GetParent()->GetHWND();
+#if wxUSE_SMARTPHONE
+    mbi.nToolBarId = 5002;
+#else
     mbi.nToolBarId = 5000;
+#endif
     mbi.nBmpId     = 0;
     mbi.cBmpImages = 0;
     mbi.dwFlags = 0 ; // SHCMBF_EMPTYBAR;
