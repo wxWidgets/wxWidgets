@@ -45,19 +45,14 @@ typedef wxString wxControlAction;
 class WXDLLEXPORT wxControl : public wxControlBase, public wxInputConsumer
 {
 public:
-    wxControl() { Init(); }
+    wxControl();
 
     wxControl(wxWindow *parent,
               wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize, long style = 0,
               const wxValidator& validator = wxDefaultValidator,
-              const wxString& name = wxControlNameStr)
-    {
-        Init();
-
-        Create(parent, id, pos, size, style, validator, name);
-    }
+              const wxString& name = wxControlNameStr);
 
     bool Create(wxWindow *parent,
                 wxWindowID id,

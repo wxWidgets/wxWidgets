@@ -112,6 +112,16 @@ static void gtk_bmpbutton_release_callback( GtkWidget *WXUNUSED(widget), wxBitma
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton,wxButton)
 
+wxBitmapButtonBase::wxBitmapButtonBase()
+                                      : m_bmpNormal(), 
+                                        m_bmpSelected(), 
+                                        m_bmpFocus(), 
+                                        m_bmpDisabled(), 
+                                        m_marginX(0), 
+                                        m_marginY(0)
+{
+}
+
 void wxBitmapButton::Init()
 {
     m_hasFocus =

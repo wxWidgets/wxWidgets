@@ -41,6 +41,10 @@ void wxCheckBoxCallback (Widget w, XtPointer clientData,
 
 IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
 
+wxCheckBoxBase::wxCheckBoxBase()
+{
+}
+
 // Single check box item
 bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
                         const wxPoint& pos,

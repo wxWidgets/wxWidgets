@@ -23,7 +23,15 @@
 #include "wx/arrstr.h"
 
 // ============================================================================
-// implementation
+// implementation of wxCheckListBoxBase
+// ============================================================================
+
+wxCheckListBoxBase::wxCheckListBoxBase()
+{
+}
+
+// ============================================================================
+// implementation of wxCheckListBox
 // ============================================================================
 
 IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)

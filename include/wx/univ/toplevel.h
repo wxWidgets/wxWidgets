@@ -97,19 +97,14 @@ class WXDLLEXPORT wxTopLevelWindow : public wxTopLevelWindowNative,
 {
 public:
     // construction
-    wxTopLevelWindow() { Init(); }
+    wxTopLevelWindow();
     wxTopLevelWindow(wxWindow *parent,
                      wxWindowID id,
                      const wxString& title,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE,
-                     const wxString& name = wxFrameNameStr)
-    {
-        Init();
-
-        Create(parent, id, title, pos, size, style, name);
-    }
+                     const wxString& name = wxFrameNameStr);
 
     bool Create(wxWindow *parent,
                 wxWindowID id,

@@ -106,6 +106,23 @@ IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
 // creation
 // ----------------------------------------------------------------------------
 
+wxChoice::wxChoice()
+{
+}
+
+wxChoice::wxChoice(wxWindow *parent,
+                   wxWindowID id,
+                   const wxPoint& pos,
+                   const wxSize& size,
+                   int n,
+                   const wxString choices[],
+                   long style,
+                   const wxValidator& validator,
+                   const wxString& name)
+{
+    Create(parent, id, pos, size, n, choices, style, validator, name);
+}
+
 bool wxChoice::Create(wxWindow *parent,
                       wxWindowID id,
                       const wxPoint& pos,

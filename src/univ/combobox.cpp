@@ -213,6 +213,25 @@ IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 // wxComboControl creation
 // ----------------------------------------------------------------------------
 
+wxComboControl::wxComboControl()
+{
+    Init();
+}
+
+wxComboControl::wxComboControl(wxWindow *parent,
+                               wxWindowID id,
+                               const wxString& value,
+                               const wxPoint& pos,
+                               const wxSize& size,
+                               long style,
+                               const wxValidator& validator,
+                               const wxString& name)
+{
+    Init();
+
+    (void)Create(parent, id, value, pos, size, style, validator, name);
+}
+
 void wxComboControl::Init()
 {
     m_popup = (wxComboPopup *)NULL;
@@ -651,6 +670,28 @@ wxSize wxComboListBox::DoGetBestClientSize() const
 // ----------------------------------------------------------------------------
 // wxComboBox
 // ----------------------------------------------------------------------------
+
+wxComboBox::wxComboBox()
+{
+    Init();
+}
+
+wxComboBox::wxComboBox(wxWindow *parent,
+                       wxWindowID id,
+                       const wxString& value,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       int n,
+                       const wxString *choices,
+                       long style,
+                       const wxValidator& validator,
+                       const wxString& name)
+{
+    Init();
+
+    (void)Create(parent, id, value, pos, size, n, choices,
+                 style, validator, name);
+}
 
 void wxComboBox::Init()
 {

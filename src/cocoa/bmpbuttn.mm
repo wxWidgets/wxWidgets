@@ -26,6 +26,16 @@ BEGIN_EVENT_TABLE(wxBitmapButton, wxBitmapButtonBase)
 END_EVENT_TABLE()
 WX_IMPLEMENT_COCOA_OWNER(wxBitmapButton,NSButton,NSControl,NSView)
 
+wxBitmapButtonBase::wxBitmapButtonBase()
+                                      : m_bmpNormal(), 
+                                        m_bmpSelected(), 
+                                        m_bmpFocus(), 
+                                        m_bmpDisabled(), 
+                                        m_marginX(0), 
+                                        m_marginY(0)
+{
+}
+
 bool wxBitmapButton::Create(wxWindow *parent, wxWindowID winid,
             const wxBitmap& bitmap, const wxPoint& pos,
             const wxSize& size, long style,

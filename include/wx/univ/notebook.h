@@ -39,19 +39,14 @@ public:
     // ctors and such
     // --------------
 
-    wxNotebook() { Init(); }
+    wxNotebook();
 
     wxNotebook(wxWindow *parent,
                wxWindowID id,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
-               const wxString& name = wxNOTEBOOK_NAME)
-    {
-        Init();
-
-        (void)Create(parent, id, pos, size, style, name);
-    }
+               const wxString& name = wxNOTEBOOK_NAME);
 
     // quasi ctor
     bool Create(wxWindow *parent,

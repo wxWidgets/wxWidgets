@@ -835,6 +835,10 @@ END_EVENT_TABLE()
 long wxGenericFileDialog::ms_lastViewStyle = wxLC_LIST;
 bool wxGenericFileDialog::ms_lastShowHidden = FALSE;
 
+wxGenericFileDialog::wxGenericFileDialog()
+{
+}
+
 wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
                            const wxString& message,
                            const wxString& defaultDir,
@@ -1363,6 +1367,21 @@ void wxGenericFileDialog::UpdateControls()
 #ifdef USE_GENERIC_FILEDIALOG
 
 IMPLEMENT_DYNAMIC_CLASS(wxFileDialog, wxGenericFileDialog);
+
+wxFileDialog::wxFileDialog()
+{
+}
+
+wxFileDialog::wxFileDialog(wxWindow *parent,
+                           const wxString& message,
+                           const wxString& defaultDir,
+                           const wxString& defaultFile,
+                           const wxString& wildCard,
+                           long style,
+                           const wxPoint& pos)
+          :wxGenericFileDialog(parent, message, defaultDir, defaultFile, wildCard, style, pos)
+{
+}
 
 #endif // USE_GENERIC_FILEDIALOG
 

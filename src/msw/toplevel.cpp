@@ -134,6 +134,24 @@ END_EVENT_TABLE()
 // wxTopLevelWindowMSW creation
 // ----------------------------------------------------------------------------
 
+wxTopLevelWindowMSW::wxTopLevelWindowMSW()
+{
+    Init();
+}
+
+wxTopLevelWindowMSW::wxTopLevelWindowMSW(wxWindow *parent,
+                                         wxWindowID id,
+                                         const wxString& title,
+                                         const wxPoint& pos,
+                                         const wxSize& size,
+                                         long style,
+                                         const wxString& name)
+{
+    Init();
+
+    (void)Create(parent, id, title, pos, size, style, name);
+}
+
 void wxTopLevelWindowMSW::Init()
 {
     m_iconized =

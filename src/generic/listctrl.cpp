@@ -4533,6 +4533,17 @@ wxGenericListCtrl::wxGenericListCtrl()
     m_headerHeight = 0;
 }
 
+wxGenericListCtrl::wxGenericListCtrl(wxWindow *parent,
+                                     wxWindowID winid,
+                                     const wxPoint &pos,
+                                     const wxSize &size,
+                                     long style,
+                                     const wxValidator& validator,
+                                     const wxString &name)
+{
+    Create(parent, winid, pos, size, style, validator, name);
+}
+
 wxGenericListCtrl::~wxGenericListCtrl()
 {
     if (m_ownsImageListNormal)
@@ -5380,6 +5391,40 @@ void wxGenericListCtrl::Freeze()
 void wxGenericListCtrl::Thaw()
 {
     m_mainWin->Thaw();
+}
+
+#if !defined(__WXMSW__) || defined(__WIN16__) || defined(__WXUNIVERSAL__)
+
+wxListCtrl::wxListCtrl()
+{
+}
+
+wxListCtrl::wxListCtrl(wxWindow *parent,
+                       wxWindowID winid,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxValidator &validator,
+                       const wxString &name)
+                       : wxGenericListCtrl(parent, winid, pos, size, style, validator, name)
+{
+}
+
+#endif // !__WXMSW__ || __WIN16__ || __WXUNIVERSAL__
+
+wxListView::wxListView()
+{
+}
+
+wxListView::wxListView(wxWindow *parent,
+                       wxWindowID winid,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxValidator& validator,
+                       const wxString &name)
+{
+    Create(parent, winid, pos, size, style, validator, name);
 }
 
 #endif // wxUSE_LISTCTRL

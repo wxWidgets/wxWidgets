@@ -49,6 +49,21 @@ IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
 // ctors
 // ----------------------------------------------------------------------------
 
+wxFrame::wxFrame()
+{
+}
+
+wxFrame::wxFrame(wxWindow *parent,
+                 wxWindowID id,
+                 const wxString& title,
+                 const wxPoint& pos,
+                 const wxSize& size,
+                 long style,
+                 const wxString& name)
+{
+    Create(parent, id, title, pos, size, style, name);
+}
+
 bool wxFrame::Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString& title,

@@ -25,7 +25,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxDialogNameStr;
 class WXDLLEXPORT wxDialogBase : public wxTopLevelWindow
 {
 public:
-    wxDialogBase() { Init(); }
+    wxDialogBase();
     virtual ~wxDialogBase() { }
 
     void Init();

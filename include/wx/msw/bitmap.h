@@ -43,17 +43,17 @@ class WXDLLEXPORT wxBitmap : public wxGDIImage
 {
 public:
     // default ctor creates an invalid bitmap, you must Create() it later
-    wxBitmap() { Init(); }
+    wxBitmap();
 
     // Copy constructors
-    wxBitmap(const wxBitmap& bitmap) { Init(); Ref(bitmap); }
+    wxBitmap(const wxBitmap& bitmap);
 
     // Initialize with raw data
     wxBitmap(const char bits[], int width, int height, int depth = 1);
 
     // Initialize with XPM data
-    wxBitmap(const char **data) { CreateFromXpm(data); }
-    wxBitmap(char **data) { CreateFromXpm((const char **)data); }
+    wxBitmap(const char **data);
+    wxBitmap(char **data);
 
     // Load a file or resource
     wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_BMP_RESOURCE);
@@ -72,18 +72,18 @@ public:
     wxBitmap(int width, int height, const wxDC& dc);
 
 #if wxUSE_IMAGE
+
     // Convert from wxImage
-    wxBitmap(const wxImage& image, int depth = -1)
-        { (void)CreateFromImage(image, depth); }
+    wxBitmap(const wxImage& image, int depth = -1);
 
     // Create a DDB compatible with the given DC from wxImage
-    wxBitmap(const wxImage& image, const wxDC& dc)
-        { (void)CreateFromImage(image, dc); }
+    wxBitmap(const wxImage& image, const wxDC& dc);
+
 #endif // wxUSE_IMAGE
 
     // we must have this, otherwise icons are silently copied into bitmaps using
     // the copy ctor but the resulting bitmap is invalid!
-    wxBitmap(const wxIcon& icon) { Init(); CopyFromIcon(icon); }
+    wxBitmap(const wxIcon& icon);
 
     wxBitmap& operator=(const wxBitmap& bitmap)
     {

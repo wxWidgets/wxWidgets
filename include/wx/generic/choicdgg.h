@@ -38,7 +38,7 @@ class WXDLLEXPORT wxListBox;
 class WXDLLEXPORT wxAnyChoiceDialog : public wxDialog
 {
 public:
-    wxAnyChoiceDialog() { }
+    wxAnyChoiceDialog();
 
     wxAnyChoiceDialog(wxWindow *parent,
                       const wxString& message,
@@ -46,11 +46,7 @@ public:
                       int n, const wxString *choices,
                       long styleDlg = wxCHOICEDLG_STYLE,
                       const wxPoint& pos = wxDefaultPosition,
-                      long styleLbox = wxLB_ALWAYS_SB)
-    {
-        (void)Create(parent, message, caption, n, choices,
-                     styleDlg, pos, styleLbox);
-    }
+                      long styleLbox = wxLB_ALWAYS_SB);
 
     bool Create(wxWindow *parent,
                 const wxString& message,
@@ -73,10 +69,7 @@ protected:
 class WXDLLEXPORT wxSingleChoiceDialog : public wxAnyChoiceDialog
 {
 public:
-    wxSingleChoiceDialog()
-    {
-        m_selection = -1;
-    }
+    wxSingleChoiceDialog();
 
     wxSingleChoiceDialog(wxWindow *parent,
                          const wxString& message,
@@ -123,7 +116,7 @@ private:
 class WXDLLEXPORT wxMultiChoiceDialog : public wxAnyChoiceDialog
 {
 public:
-    wxMultiChoiceDialog() { }
+    wxMultiChoiceDialog();
 
     wxMultiChoiceDialog(wxWindow *parent,
                         const wxString& message,
@@ -131,10 +124,7 @@ public:
                         int n,
                         const wxString *choices,
                         long style = wxCHOICEDLG_STYLE,
-                        const wxPoint& pos = wxDefaultPosition)
-    {
-        (void)Create(parent, message, caption, n, choices, style, pos);
-    }
+                        const wxPoint& pos = wxDefaultPosition);
 
     bool Create(wxWindow *parent,
                 const wxString& message,

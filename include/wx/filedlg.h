@@ -46,7 +46,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxFileSelectorDefaultWildcardStr;
 class WXDLLEXPORT wxFileDialogBase: public wxDialog
 {
 public:
-    wxFileDialogBase () {}
+    wxFileDialogBase ();
 
     wxFileDialogBase(wxWindow *parent,
                  const wxString& message = wxFileSelectorPromptStr,

@@ -274,17 +274,14 @@ class wxMDIChildFrame ;
 class WXDLLEXPORT wxMDIParentFrame: public wxGenericMDIParentFrame
 {
 public:
-    wxMDIParentFrame() {}
+    wxMDIParentFrame();
     wxMDIParentFrame(wxWindow *parent,
                      wxWindowID winid,
                      const wxString& title,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                     const wxString& name = wxFrameNameStr)
-        :wxGenericMDIParentFrame(parent, winid, title, pos, size, style, name)
-    {
-    }
+                     const wxString& name = wxFrameNameStr) ;
 
     wxMDIChildFrame * GetActiveChild() const ;
     
@@ -300,19 +297,14 @@ private:
 class WXDLLEXPORT wxMDIChildFrame: public wxGenericMDIChildFrame
 {
 public:
-    wxMDIChildFrame() {}
-
+    wxMDIChildFrame();
     wxMDIChildFrame( wxGenericMDIParentFrame *parent,
                      wxWindowID winid,
                      const wxString& title,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE,
-                     const wxString& name = wxFrameNameStr )
-        :wxGenericMDIChildFrame(parent, winid, title, pos, size, style, name)
-    {
-    }
-
+                     const wxString& name = wxFrameNameStr ) ;
 private:
     DECLARE_DYNAMIC_CLASS(wxMDIChildFrame)
 };
@@ -324,12 +316,8 @@ private:
 class WXDLLEXPORT wxMDIClientWindow: public wxGenericMDIClientWindow
 {
 public:
-    wxMDIClientWindow() {}
-
-    wxMDIClientWindow( wxGenericMDIParentFrame *parent, long style = 0 )
-        :wxGenericMDIClientWindow(parent, style)
-    {
-    }
+    wxMDIClientWindow();
+    wxMDIClientWindow( wxGenericMDIParentFrame *parent, long style = 0 );
 
 private:
     DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)

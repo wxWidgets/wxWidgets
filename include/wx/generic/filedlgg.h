@@ -45,7 +45,7 @@ class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxGenericFileDialog: public wxFileDialogBase
 {
 public:
-    wxGenericFileDialog() { }
+    wxGenericFileDialog();
 
     wxGenericFileDialog(wxWindow *parent,
                  const wxString& message = wxFileSelectorPromptStr,
@@ -115,7 +115,7 @@ class WXDLLEXPORT wxFileDialog: public wxGenericFileDialog
      DECLARE_DYNAMIC_CLASS(wxFileDialog)
 
 public:
-     wxFileDialog() {}
+     wxFileDialog();
 
     wxFileDialog(wxWindow *parent,
                  const wxString& message = wxFileSelectorPromptStr,
@@ -123,10 +123,7 @@ public:
                  const wxString& defaultFile = _T(""),
                  const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
                  long style = 0,
-                 const wxPoint& pos = wxDefaultPosition)
-          :wxGenericFileDialog(parent, message, defaultDir, defaultFile, wildCard, style, pos)
-     {
-     }
+                 const wxPoint& pos = wxDefaultPosition);
 };
 
 #endif // USE_GENERIC_FILEDIALOG

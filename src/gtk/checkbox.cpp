@@ -62,6 +62,10 @@ static void gtk_checkbox_clicked_callback( GtkWidget *WXUNUSED(widget), wxCheckB
 // wxCheckBox
 //-----------------------------------------------------------------------------
 
+wxCheckBoxBase::wxCheckBoxBase()
+{
+}
+
 IMPLEMENT_DYNAMIC_CLASS(wxCheckBox,wxControl)
 
 wxCheckBox::wxCheckBox()

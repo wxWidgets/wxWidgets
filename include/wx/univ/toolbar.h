@@ -39,18 +39,13 @@ class WXDLLEXPORT wxToolBar : public wxToolBarBase
 {    
 public:
     // construction/destruction
-    wxToolBar() { Init(); }
+    wxToolBar();
     wxToolBar(wxWindow *parent,
               wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = 0,
-              const wxString& name = wxToolBarNameStr)
-    {
-        Init();
-
-        Create(parent, id, pos, size, style, name);
-    }
+              const wxString& name = wxToolBarNameStr);
 
     bool Create( wxWindow *parent,
                  wxWindowID id,

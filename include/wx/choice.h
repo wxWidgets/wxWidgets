@@ -37,7 +37,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxChoiceNameStr;
 class WXDLLEXPORT wxChoiceBase : public wxControlWithItems
 {
 public:
-    wxChoiceBase() { }
+    wxChoiceBase();
     virtual ~wxChoiceBase();
 
     // all generic methods are in wxControlWithItems

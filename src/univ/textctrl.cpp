@@ -622,6 +622,25 @@ IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
 // creation
 // ----------------------------------------------------------------------------
 
+wxTextCtrl::wxTextCtrl()
+{
+    Init();
+}
+
+wxTextCtrl::wxTextCtrl(wxWindow *parent,
+                       wxWindowID id,
+                       const wxString& value,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxValidator& validator,
+                       const wxString& name)
+{
+    Init();
+
+    Create(parent, id, value, pos, size, style, validator, name);
+}
+
 void wxTextCtrl::Init()
 {
     m_selAnchor =

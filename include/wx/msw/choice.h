@@ -24,7 +24,7 @@ class WXDLLEXPORT wxChoice : public wxChoiceBase
 {
 public:
     // ctors
-    wxChoice() { }
+    wxChoice();
     virtual ~wxChoice();
 
     wxChoice(wxWindow *parent,
@@ -34,10 +34,7 @@ public:
              int n = 0, const wxString choices[] = NULL,
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxChoiceNameStr)
-    {
-        Create(parent, id, pos, size, n, choices, style, validator, name);
-    }
+             const wxString& name = wxChoiceNameStr);
 
     bool Create(wxWindow *parent,
                 wxWindowID id,

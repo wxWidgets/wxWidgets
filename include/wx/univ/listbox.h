@@ -56,7 +56,7 @@ class WXDLLEXPORT wxListBox : public wxListBoxBase, public wxScrollHelper
 {
 public:
     // ctors and such
-    wxListBox() { Init(); }
+    wxListBox();
     wxListBox(wxWindow *parent,
               wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
@@ -64,12 +64,7 @@ public:
               int n = 0, const wxString choices[] = (const wxString *) NULL,
               long style = 0,
               const wxValidator& validator = wxDefaultValidator,
-              const wxString& name = wxListBoxNameStr )
-    {
-        Init();
-
-        Create(parent, id, pos, size, n, choices, style, validator, name);
-    }
+              const wxString& name = wxListBoxNameStr );
 
     virtual ~wxListBox();
 

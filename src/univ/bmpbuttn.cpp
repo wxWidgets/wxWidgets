@@ -52,6 +52,32 @@ END_EVENT_TABLE()
 // wxBitmapButton
 // ----------------------------------------------------------------------------
 
+wxBitmapButtonBase::wxBitmapButtonBase()
+                                      : m_bmpNormal(), 
+                                        m_bmpSelected(), 
+                                        m_bmpFocus(), 
+                                        m_bmpDisabled(), 
+                                        m_marginX(0), 
+                                        m_marginY(0)
+{
+}
+
+wxBitmapButton::wxBitmapButton()
+{
+}
+
+wxBitmapButton::wxBitmapButton(wxWindow *parent,
+                               wxWindowID id,
+                               const wxBitmap& bitmap,
+                               const wxPoint& pos,
+                               const wxSize& size,
+                               long style,
+                               const wxValidator& validator,
+                               const wxString& name)
+{
+    Create(parent, id, bitmap, pos, size, style, validator, name);
+}
+
 bool wxBitmapButton::Create(wxWindow *parent,
                             wxWindowID id,
                             const wxBitmap& bitmap,

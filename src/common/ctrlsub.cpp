@@ -39,6 +39,11 @@
 // implementation
 // ============================================================================
 
+wxItemContainer::wxItemContainer()
+{
+    m_clientDataItemsType = wxClientData_None;
+}
+
 wxItemContainer::~wxItemContainer()
 {
     // this destructor is required for Darwin
@@ -149,6 +154,10 @@ void *wxItemContainer::GetClientData(int n) const
                   wxT("this window doesn't have void client data") );
 
     return DoGetItemClientData(n);
+}
+
+wxControlWithItems::wxControlWithItems()
+{
 }
 
 wxControlWithItems::~wxControlWithItems()

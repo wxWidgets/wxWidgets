@@ -36,11 +36,7 @@ public:
                int majorDim = 0,
                long style = wxRA_HORIZONTAL,
                const wxValidator& val = wxDefaultValidator,
-               const wxString& name = wxRadioBoxNameStr)
-    {
-        (void)Create(parent, id, title, pos, size, n, choices, majorDim,
-                     style, val, name);
-    }
+               const wxString& name = wxRadioBoxNameStr);
 
     ~wxRadioBox();
 

@@ -37,17 +37,14 @@
 class WXDLLEXPORT wxListView : public wxListCtrl
 {
 public:
-    wxListView() { }
+    wxListView();
     wxListView( wxWindow *parent,
                 wxWindowID winid = -1,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxLC_REPORT,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString &name = wxT("listctrl") )
-    {
-        Create(parent, winid, pos, size, style, validator, name);
-    }
+                const wxString &name = wxT("listctrl") );
 
     // focus/selection stuff
     // ---------------------

@@ -42,6 +42,14 @@
 #include "wx/univ/theme.h"
 
 // ============================================================================
+// implementation of wxCheckListBoxBase
+// ============================================================================
+
+wxCheckListBoxBase::wxCheckListBoxBase()
+{
+}
+
+// ============================================================================
 // implementation of wxCheckListBox
 // ============================================================================
 
@@ -50,6 +58,26 @@ IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
 // ----------------------------------------------------------------------------
 // creation
 // ----------------------------------------------------------------------------
+
+wxCheckListBox::wxCheckListBox()
+{
+    Init();
+}
+
+wxCheckListBox::wxCheckListBox(wxWindow *parent,
+                               wxWindowID id,
+                               const wxPoint& pos,
+                               const wxSize& size,
+                               int nStrings,
+                               const wxString *choices,
+                               long style,
+                               const wxValidator& validator,
+                               const wxString& name)
+{
+    Init();
+
+    Create(parent, id, pos, size, nStrings, choices, style, validator, name);
+}
 
 void wxCheckListBox::Init()
 {

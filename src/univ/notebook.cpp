@@ -102,6 +102,23 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxCommandEvent)
 // wxNotebook creation
 // ----------------------------------------------------------------------------
 
+wxNotebook::wxNotebook()
+{
+    Init();
+}
+
+wxNotebook::wxNotebook(wxWindow *parent,
+                       wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxString& name)
+{
+    Init();
+
+    (void)Create(parent, id, pos, size, style, name);
+}
+
 void wxNotebook::Init()
 {
     m_sel = INVALID_PAGE;

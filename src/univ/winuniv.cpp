@@ -101,6 +101,22 @@ END_EVENT_TABLE()
 // creation
 // ----------------------------------------------------------------------------
 
+wxWindow::wxWindow()
+{
+    Init();
+}
+
+wxWindow::wxWindow(wxWindow *parent,
+                   wxWindowID id,
+                   const wxPoint& pos,
+                   const wxSize& size,
+                   long style,
+                   const wxString& name)
+                   : wxWindowNative(parent, id, pos, size, style | wxCLIP_CHILDREN, name)
+{
+    Init();
+}
+
 void wxWindow::Init()
 {
     m_scrollbarVert =

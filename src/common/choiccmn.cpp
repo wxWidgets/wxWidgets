@@ -38,6 +38,10 @@
 // implementation
 // ============================================================================
 
+wxChoiceBase::wxChoiceBase()
+{
+}
+
 wxChoiceBase::~wxChoiceBase()
 {
     // this destructor is required for Darwin

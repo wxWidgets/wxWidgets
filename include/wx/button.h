@@ -48,7 +48,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxButtonNameStr;
 class WXDLLEXPORT wxButtonBase : public wxControl
 {
 public:
-    wxButtonBase() { }
+    wxButtonBase();
 
     // show the image in the button in addition to the label
     virtual void SetImageLabel(const wxBitmap& WXUNUSED(bitmap)) { }

@@ -45,6 +45,10 @@
 // implementation
 // ============================================================================
 
+wxControlBase::wxControlBase()
+{
+}
+
 wxControlBase::~wxControlBase()
 {
     // this destructor is required for Darwin

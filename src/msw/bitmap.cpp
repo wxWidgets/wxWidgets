@@ -362,6 +362,47 @@ wxBitmap::~wxBitmap()
 {
 }
 
+wxBitmap::wxBitmap()
+{
+    Init();
+}
+
+wxBitmap::wxBitmap(const wxBitmap& bitmap)
+{
+    Init();
+    Ref(bitmap);
+}
+
+wxBitmap::wxBitmap(const char **data)
+{
+    CreateFromXpm(data);
+}
+
+wxBitmap::wxBitmap(char **data)
+{
+    CreateFromXpm((const char **)data);
+}
+
+#if wxUSE_IMAGE
+
+wxBitmap::wxBitmap(const wxImage& image, int depth)
+{
+    (void)CreateFromImage(image, depth);
+}
+
+wxBitmap::wxBitmap(const wxImage& image, const wxDC& dc)
+{
+    (void)CreateFromImage(image, dc);
+}
+
+#endif // wxUSE_IMAGE
+
+wxBitmap::wxBitmap(const wxIcon& icon)
+{
+    Init();
+    CopyFromIcon(icon);
+}
+
 wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
 {
     Init();

@@ -23,7 +23,7 @@
 class WXDLLEXPORT wxCheckListBoxBase : public wxListBox
 {
 public:
-    wxCheckListBoxBase() { }
+    wxCheckListBoxBase();
 
     // check list box specific methods
     virtual bool IsChecked(size_t item) const = 0;

@@ -2778,5 +2778,20 @@ static void wxConvertToMSWListCol(int WXUNUSED(col), const wxListItem& item,
 #endif // _WIN32_IE >= 0x0300
 }
 
+wxListView::wxListView()
+{
+}
+
+wxListView::wxListView(wxWindow *parent,
+                       wxWindowID winid,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxValidator& validator,
+                       const wxString &name)
+{
+    Create(parent, winid, pos, size, style, validator, name);
+}
+
 #endif // wxUSE_LISTCTRL
 

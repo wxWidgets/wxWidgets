@@ -29,10 +29,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxButtonNameStr;
 class WXDLLEXPORT wxBitmapButtonBase : public wxButton
 {
 public:
-    wxBitmapButtonBase()
-        : m_bmpNormal(), m_bmpSelected(), m_bmpFocus(), m_bmpDisabled()
-        , m_marginX(0), m_marginY(0)
-        { }
+    wxBitmapButtonBase();
 
     // set the bitmaps
     void SetBitmapLabel(const wxBitmap& bitmap)

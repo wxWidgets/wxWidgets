@@ -53,18 +53,14 @@ public:
     // ctors
     // -----
 
-    wxNotebookBase() { }
+    wxNotebookBase();
 
     wxNotebookBase(wxWindow *parent,
                    wxWindowID winid,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
-                   const wxString& name = wxNOTEBOOK_NAME)
-        : wxBookCtrl(parent, winid, pos, size, style, name)
-    {
-    }
-
+                   const wxString& name = wxNOTEBOOK_NAME) ;
 
     // wxNotebook-specific additions to wxBookCtrl interface
     // -----------------------------------------------------

@@ -33,6 +33,11 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxGDIObject, wxObject)
 
+wxGDIObject::wxGDIObject()
+{
+    m_visible = FALSE;
+}
+
 /*
 void wxGDIObject::IncrementResourceUsage(void)
 {

@@ -46,6 +46,23 @@ END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxDialog,wxTopLevelWindow)
 
+wxDialog::wxDialog()
+{
+    Init();
+}
+
+wxDialog::wxDialog(wxWindow *parent,
+                   wxWindowID id,
+                   const wxString& title,
+                   const wxPoint& pos,
+                   const wxSize& size,
+                   long style,
+                   const wxString& name)
+{
+    Init();
+    Create(parent, id, title, pos, size, style, name);
+}
+
 void wxDialog::Init()
 {
     m_returnCode = 0;

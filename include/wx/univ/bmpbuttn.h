@@ -19,7 +19,7 @@
 class WXDLLEXPORT wxBitmapButton : public wxBitmapButtonBase
 {
 public:
-    wxBitmapButton() { }
+    wxBitmapButton();
 
     wxBitmapButton(wxWindow *parent,
                    wxWindowID id,
@@ -28,10 +28,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxButtonNameStr)
-    {
-        Create(parent, id, bitmap, pos, size, style, validator, name);
-    }
+                   const wxString& name = wxButtonNameStr);
 
     bool Create(wxWindow *parent,
                 wxWindowID id,

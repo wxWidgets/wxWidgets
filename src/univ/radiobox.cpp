@@ -95,6 +95,28 @@ IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
 // wxRadioBox creation
 // ----------------------------------------------------------------------------
 
+wxRadioBox::wxRadioBox()
+{
+    Init();
+}
+
+wxRadioBox::wxRadioBox(wxWindow *parent,
+                       wxWindowID id,
+                       const wxString& title,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       int n,
+                       const wxString *choices,
+                       int majorDim,
+                       long style,
+                       const wxValidator& val,
+                       const wxString& name)
+{
+    Init();
+
+    (void)Create(parent, id, title, pos, size, n, choices, majorDim, style, val, name);
+}
+
 void wxRadioBox::Init()
 {
     m_selection = -1;

@@ -24,6 +24,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapCheckBox, wxCheckBox)
 
 #include "wx/mac/uma.h"
 
+wxCheckBoxBase::wxCheckBoxBase()
+{
+}
+
 // Single check box item
 bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxPoint& pos,

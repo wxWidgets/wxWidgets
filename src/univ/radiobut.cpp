@@ -50,6 +50,25 @@ IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
 // wxRadioButton
 // ----------------------------------------------------------------------------
 
+wxRadioButton::wxRadioButton()
+{
+    Init();
+}
+
+wxRadioButton::wxRadioButton(wxWindow *parent,
+                             wxWindowID id,
+                             const wxString& label,
+                             const wxPoint& pos,
+                             const wxSize& size,
+                             long style,
+                             const wxValidator& validator,
+                             const wxString& name)
+{
+    Init();
+
+    Create(parent, id, label, pos, size, style, validator, name);
+}
+
 bool wxRadioButton::Create(wxWindow *parent,
                         wxWindowID id,
                         const wxString &label,
