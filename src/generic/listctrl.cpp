@@ -76,6 +76,9 @@
     #include "wx/mac/private.h"
 #endif
 
+#include <math.h>
+
+
 // NOTE: If using the wxListBox visual attributes works everywhere then this can
 // be removed, as well as the #else case below.
 #define _USE_VISATTR 0
@@ -677,6 +680,7 @@ public:
     void EnsureVisible( long index );
     long FindItem( long start, const wxString& str, bool partial = false );
     long FindItem( long start, long data);
+    long FindItem( const wxPoint& pt );
     long HitTest( int x, int y, int &flags );
     void InsertItem( wxListItem &item );
     void InsertColumn( long col, wxListItem &item );
@@ -4284,6 +4288,21 @@ long wxListMainWindow::FindItem(long start, long data)
     return wxNOT_FOUND;
 }
 
+long wxListMainWindow::FindItem( const wxPoint& pt )
+{
+  wxPoint p;
+  long topItem = GetTopItem();
+
+  GetItemPosition( GetItemCount()-1, p );
+  if( p.y == 0 )
+    return topItem;
+  long id = (long) floor( pt.y*(GetItemCount()-topItem-1)/p.y+topItem );
+  if( id >= 0 && id < (long)GetItemCount() )
+    return id;
+
+  return wxNOT_FOUND;
+}
+
 long wxListMainWindow::HitTest( int x, int y, int &flags )
 {
     CalcUnscrolledPosition( x, y, &x, &y );
@@ -5059,10 +5078,10 @@ long wxGenericListCtrl::FindItem( long start, long data )
     return m_mainWin->FindItem( start, data );
 }
 
-long wxGenericListCtrl::FindItem( long WXUNUSED(start), const wxPoint& WXUNUSED(pt),
+long wxGenericListCtrl::FindItem( long WXUNUSED(start), const wxPoint& pt,
                            int WXUNUSED(direction))
 {
-    return 0;
+    return m_mainWin->FindItem( pt );
 }
 
 long wxGenericListCtrl::HitTest( const wxPoint &point, int &flags )

@@ -217,6 +217,7 @@ All (GUI):
 - wxTextCtrl::OnChar now inserts a tab character if wxTE_PROCESS_TAB is set
 - added wxKeyEvent::GetUnicodeKey()
 - added wxKeyEvent::CmdDown() and wxMouseEvent::CmdDown()
+- implemented wxListCtrl::FindItem() for non-MSW (Robin Stoll)
 
 Unix:
 
