@@ -390,8 +390,8 @@ public :
     }
 #if wxUSE_UNICODE
     wxTypeInfo(wxTypeKind kind,
-               converterToString_t to = NULL, converterFromString_t from = NULL,
-               const char *name = ""):
+               converterToString_t to, converterFromString_t from,
+               const char *name):
             m_toString(to), m_fromString(from), m_kind(kind), m_name(wxString::FromAscii(name))
     {
         Register();
@@ -626,10 +626,10 @@ class WXDLLIMPEXP_BASE wxxVariant
 {
 public :
     wxxVariant() { m_data = NULL ; }
-    wxxVariant( wxxVariantData* data , const wxString& name = wxT("") ) : m_data(data) , m_name(name) {}
+    wxxVariant( wxxVariantData* data , const wxString& name = wxEmptyString ) : m_data(data) , m_name(name) {}
     wxxVariant( const wxxVariant &d ) { if ( d.m_data ) m_data = d.m_data->Clone() ; else m_data = NULL ; m_name = d.m_name ; }
 
-    template<typename T> wxxVariant( const T& data , const wxString& name = wxT("") ) :
+    template<typename T> wxxVariant( const T& data , const wxString& name = wxEmptyString ) :
     m_data(new wxxVariantDataT<T>(data) ), m_name(name) {}
 
     ~wxxVariant() { delete m_data ; }
