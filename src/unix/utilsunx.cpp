@@ -1168,7 +1168,7 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
             // don't consume 100% of the CPU while we're sitting this in this
             // loop
             if ( idle )
-                wxUsleep(1);
+                wxMilliSleep(1);
 
             // give GTK+ a chance to call GTK_EndProcessDetector here and
             // also repaint the GUI
