@@ -54,7 +54,8 @@
 #define wxUSE_REGEX 0
 
 
-// Disable controls which don't make sense for phones
+// Disable features which don't make sense for MS Smartphones
+// (due to pointer device usage, limited controls, file system)
 #if defined(__SMARTPHONE__)
     #undef wxUSE_LISTBOOK
     #define wxUSE_LISTBOOK 0
@@ -64,6 +65,9 @@
 
     #undef wxUSE_STATUSBAR
     #define wxUSE_STATUSBAR 0
+
+    #undef wxUSE_DEBUGREPORT
+    #define wxUSE_DEBUGREPORT 0
 #endif // __SMARTPHONE__
 
 #endif // _WX_MSW_WINCE_CHKCONF_H_
