@@ -138,9 +138,9 @@ void wxHtmlContainerCell::Layout(int w)
     int ysizeup = 0, ysizedown = 0;
 
     /*
-    
+
     WIDTH ADJUSTING :
-    
+
     */
 
     if (m_WidthFloatUnits == HTML_UNITS_PERCENT) {
@@ -161,7 +161,7 @@ void wxHtmlContainerCell::Layout(int w)
     /*
 
     LAYOUTING :
-    
+
     */
 
     // adjust indentation:
@@ -169,7 +169,7 @@ void wxHtmlContainerCell::Layout(int w)
     s_width = m_Width - s_indent - ((m_IndentRight < 0) ? (-m_IndentRight * m_Width / 100) : m_IndentRight);
 
     m_MaxLineWidth = 0;
-    
+
     // my own layouting:
     while (cell != NULL) {
         switch (m_AlignVer) {
@@ -354,7 +354,7 @@ void wxHtmlContainerCell::SetWidthFloat(const wxHtmlTag& tag)
 const wxHtmlCell* wxHtmlContainerCell::Find(int condition, const void* param) const
 {
     const wxHtmlCell *r = NULL;
-    
+
     if (m_Cells) {
         r = m_Cells -> Find(condition, param);
         if (r) return r;
@@ -463,12 +463,13 @@ void wxHtmlWidgetCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
         c = c -> GetParent();
     }
 
-/*
+#ifdef __WXMSW__
     ((wxScrolledWindow*)(m_Wnd -> GetParent())) -> ViewStart(&stx, &sty);
     m_Wnd -> SetSize(absx - HTML_SCROLL_STEP * stx, absy  - HTML_SCROLL_STEP * sty, m_Width, m_Height);
-*/
+#else
 
     m_Wnd -> SetSize(absx, absy, m_Width, m_Height);
+#endif
 
     wxHtmlCell::Draw(dc, x, y, view_y1, view_y2);
 }
@@ -485,14 +486,14 @@ void wxHtmlWidgetCell::DrawInvisible(wxDC& dc, int x, int y)
         absy += c -> GetPosY();
         c = c -> GetParent();
     }
-    
-/*
+
+#ifdef __WXMSW__
     ((wxScrolledWindow*)(m_Wnd -> GetParent())) -> ViewStart(&stx, &sty);
     m_Wnd -> SetSize(absx - HTML_SCROLL_STEP * stx, absy  - HTML_SCROLL_STEP * sty, m_Width, m_Height);
-*/
+#else
 
     m_Wnd -> SetSize(absx, absy, m_Width, m_Height);
-    
+#endif
     wxHtmlCell::DrawInvisible(dc, x, y);
 }
 
