@@ -93,7 +93,8 @@ NavEventProc(
     else if ( inSelector == kNavCBStart )
     {
 #if TARGET_CARBON
-#else
+        // there is no way to set this in the new API
+ #else
         if ( data->menuitems )
             NavCustomControl(ioParams->context, kNavCtlSelectCustomType, &(*data->menuitems)[data->currentfilter]);
 #endif
@@ -113,9 +114,9 @@ NavEventProc(
                 wxString extension =  data->extensions[i].AfterLast('.') ;
                 extension.MakeLower() ;
                 wxString sfilename ;
-                
+                 
 #if TARGET_CARBON
-                wxMacCFStringHolder cfString = NavDialogGetSaveFileName( ioParams->context ) ;
+                wxMacCFStringHolder cfString( NavDialogGetSaveFileName( ioParams->context ) , false  );
                 sfilename = cfString.AsString() ;
 #else
                 Str255 filename ;
