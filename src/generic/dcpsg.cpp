@@ -1473,10 +1473,7 @@ void wxPostScriptDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
     m_signX = (xLeftRight ? 1 : -1);
     m_signY = (yBottomUp  ? 1 : -1);
 
-    // FIXME there is no such function in MSW nor in OS2/PM
-#if !defined(__WXMSW__) && !defined(__WXPM__)
     ComputeScaleAndOrigin();
-#endif
 }
 
 void wxPostScriptDC::SetDeviceOrigin( wxCoord x, wxCoord y )

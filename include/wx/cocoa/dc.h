@@ -6,7 +6,7 @@
 // Created:     2003/04/01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_DC_H__
@@ -28,7 +28,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
 public:
     wxDC();
     ~wxDC();
-    
+
 //-------------------------------------------------------------------------
 // wxCocoa specifics
 //-------------------------------------------------------------------------
@@ -69,9 +69,9 @@ public:
 
     virtual void Clear();
 
-    virtual bool StartDoc( const wxString& WXUNUSED(message) ) { return TRUE; }
+    virtual bool StartDoc( const wxString& WXUNUSED(message) ) { return true; }
     virtual void EndDoc(void) {};
-    
+
     virtual void StartPage(void) {};
     virtual void EndPage(void) {};
 
@@ -109,7 +109,7 @@ public:
     virtual void SetTextForeground(const wxColour& colour) ;
     virtual void SetTextBackground(const wxColour& colour) ;
 
-    void ComputeScaleAndOrigin(void);
+    virtual void ComputeScaleAndOrigin();
 protected:
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              int style = wxFLOOD_SURFACE);
@@ -122,7 +122,7 @@ protected:
     virtual void DoDrawArc(wxCoord x1, wxCoord y1,
                            wxCoord x2, wxCoord y2,
                            wxCoord xc, wxCoord yc);
-    
+
     virtual void DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
                                    double sa, double ea);
 
@@ -136,7 +136,7 @@ protected:
 
     virtual void DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
     virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
-                              bool useMask = FALSE);
+                              bool useMask = false);
 
     virtual void DoDrawText(const wxString& text, wxCoord x, wxCoord y);
     virtual void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
@@ -144,7 +144,7 @@ protected:
 
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                        int rop = wxCOPY, bool useMask = FALSE, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
+                        int rop = wxCOPY, bool useMask = false, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
 
     // this is gnarly - we can't even call this function DoSetClippingRegion()
     // because of virtual function hiding

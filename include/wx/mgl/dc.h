@@ -165,7 +165,7 @@ public:
     }
 
     MGLDevCtx *GetMGLDC() const { return m_MGLDC; }
-    void SetMGLDC(MGLDevCtx *mgldc, bool OwnsMGLDC = FALSE);
+    void SetMGLDC(MGLDevCtx *mgldc, bool OwnsMGLDC = false);
 
 protected:
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
@@ -192,7 +192,7 @@ protected:
 
     virtual void DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
     virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
-                              bool useMask = FALSE);
+                              bool useMask = false);
 
     virtual void DoDrawText(const wxString& text, wxCoord x, wxCoord y);
     virtual void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
@@ -200,7 +200,7 @@ protected:
 
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                        int rop = wxCOPY, bool useMask = FALSE, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
+                        int rop = wxCOPY, bool useMask = false, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
 
     // this is gnarly - we can't even call this function DoSetClippingRegion()
     // because of virtual function hiding

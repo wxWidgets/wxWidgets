@@ -64,7 +64,7 @@ public:
 protected:
     virtual void DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
     virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
-        bool useMask = FALSE);
+        bool useMask = false);
 
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
         wxCoord width, wxCoord height);
@@ -72,7 +72,7 @@ protected:
     virtual void DoGetSizeMM(int* width, int* height) const;
 
 public:
-    void ComputeScaleAndOrigin();
+    virtual void ComputeScaleAndOrigin();
 
     wxCoord XDEV2LOG(wxCoord x) const
     {

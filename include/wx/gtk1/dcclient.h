@@ -37,8 +37,8 @@ public:
 
     virtual ~wxWindowDC();
 
-    virtual bool CanDrawBitmap() const { return TRUE; }
-    virtual bool CanGetTextExtent() const { return TRUE; }
+    virtual bool CanDrawBitmap() const { return true; }
+    virtual bool CanGetTextExtent() const { return true; }
 
 protected:
     virtual void DoGetSize(int *width, int *height) const;
@@ -65,11 +65,11 @@ protected:
 
     virtual void DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y );
     virtual void DoDrawBitmap( const wxBitmap &bitmap, wxCoord x, wxCoord y,
-                               bool useMask = FALSE );
+                               bool useMask = false );
 
     virtual bool DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                          wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                         int logical_func = wxCOPY, bool useMask = FALSE, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1 );
+                         int logical_func = wxCOPY, bool useMask = false, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1 );
 
     virtual void DoDrawText( const wxString &text, wxCoord x, wxCoord y );
     virtual void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
@@ -118,7 +118,7 @@ public:
     wxWindow     *m_owner;
     wxRegion      m_currentClippingRegion;
     wxRegion      m_paintClippingRegion;
-    
+
     // PangoContext stuff for GTK 2.0
 #ifdef __WXGTK20__
     PangoContext *m_context;
@@ -128,7 +128,7 @@ public:
 
     void SetUpDC();
     void Destroy();
-    void ComputeScaleAndOrigin();
+    virtual void ComputeScaleAndOrigin();
 
     GdkWindow *GetWindow() { return m_window; }
 

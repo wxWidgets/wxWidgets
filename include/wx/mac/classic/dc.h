@@ -64,7 +64,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
 
     virtual void Clear();
 
-    virtual bool StartDoc( const wxString& WXUNUSED(message) ) { return TRUE; }
+    virtual bool StartDoc( const wxString& WXUNUSED(message) ) { return true; }
     virtual void EndDoc(void) {};
 
     virtual void StartPage(void) {};
@@ -105,9 +105,9 @@ class WXDLLEXPORT wxDC: public wxDCBase
     virtual void SetTextForeground(const wxColour& colour) ;
     virtual void SetTextBackground(const wxColour& colour) ;
 
-    void ComputeScaleAndOrigin(void);
-  public:
+    virtual void ComputeScaleAndOrigin();
 
+  public:
 
     wxCoord XDEV2LOG(wxCoord x) const
     {
@@ -216,7 +216,7 @@ protected:
 
     virtual void DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
     virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
-                              bool useMask = FALSE);
+                              bool useMask = false);
 
     virtual void DoDrawText(const wxString& text, wxCoord x, wxCoord y);
     virtual void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
@@ -224,7 +224,7 @@ protected:
 
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                        int rop = wxCOPY, bool useMask = FALSE, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
+                        int rop = wxCOPY, bool useMask = false, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
 
     // this is gnarly - we can't even call this function DoSetClippingRegion()
     // because of virtual function hiding

@@ -530,6 +530,8 @@ public:
         { wxCoord x, y; DoGetDeviceOrigin(&x, &y); return wxPoint(x, y); }
     virtual void SetDeviceOrigin(wxCoord x, wxCoord y) = 0;
 
+    virtual void ComputeScaleAndOrigin() {}
+
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp) = 0;
 
     int GetLogicalFunction() const { return m_logicalFunction; }

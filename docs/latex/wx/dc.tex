@@ -193,6 +193,15 @@ wxUSE\_DC\_CACHEING preprocessor symbol for portability.
 \end{comment}
 
 
+\membersection{wxDC::ComputeScaleAndOrigin}\label{wxdccomputescaleandorigin}
+
+\func{virtual void}{ComputeScaleAndOrigin}{\void}
+
+Performs all necessary computations for given platform and context type
+after each change of scale and origin parameters. Usually called automatically 
+internally after such changes.
+
+
 \membersection{wxDC::CrossHair}\label{wxdccrosshair}
 
 \func{void}{CrossHair}{\param{wxCoord}{ x}, \param{wxCoord}{ y}}

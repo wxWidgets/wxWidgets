@@ -51,7 +51,7 @@ public:
     // Resolution in pixels per logical inch
     virtual wxSize GetPPI() const;
 
-    virtual bool StartDoc( const wxString& WXUNUSED(message) ) { return TRUE; }
+    virtual bool StartDoc( const wxString& WXUNUSED(message) ) { return true; }
     virtual void EndDoc() { }
     virtual void StartPage() { }
     virtual void EndPage() { }

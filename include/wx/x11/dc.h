@@ -65,7 +65,7 @@ protected:
     virtual void DoGetSizeMM(int* width, int* height) const;
 
 public:
-    void ComputeScaleAndOrigin();
+    virtual void ComputeScaleAndOrigin();
 
     wxCoord XDEV2LOG(wxCoord x) const
     {
