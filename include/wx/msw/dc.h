@@ -33,25 +33,114 @@ public:
   inline void wxDC::BeginDrawing(void) {}
   inline void wxDC::EndDrawing(void) {}
 
-  virtual void FloodFill(long x1, long y1, wxColour *col, int style=wxFLOOD_SURFACE) ;
+  virtual void FloodFill(long x1, long y1, const wxColour& col, int style=wxFLOOD_SURFACE) ;
+  inline void FloodFill(const wxPoint& pt, const wxColour& col, int style=wxFLOOD_SURFACE)
+  {
+    FloodFill(pt.x, pt.y, col, style);
+  }
+
   virtual bool GetPixel(long x1, long y1, wxColour *col) const ;
+  inline bool GetPixel(const wxPoint& pt, wxColour *col) const
+  {
+    return GetPixel(pt.x, pt.y, col);
+  }
 
   virtual void DrawLine(long x1, long y1, long x2, long y2);
+  inline void DrawLine(const wxPoint& pt1, const wxPoint& pt2)
+  {
+    DrawLine(pt1.x, pt1.y, pt2.x, pt2.y);
+  }
+
   virtual void CrossHair(long x, long y) ;
+  virtual void CrossHair(const wxPoint& pt)
+  {
+    CrossHair(pt.x, pt.y);
+  }
+
   virtual void DrawArc(long x1,long y1,long x2,long y2,double xc, double yc);
+  inline void DrawArc(const wxPoint& pt1, const wxPoint& pt2, double xc, double yc)
+  {
+    DrawArc(pt1.x, pt1.y, pt2.x, pt2.y, xc, yc);
+  }
+
   virtual void DrawEllipticArc (long x, long y, long w, long h, double sa, double ea);
+  virtual void DrawEllipticArc (const wxPoint& pt, const wxSize& sz, double sa, double ea)
+  {
+    DrawEllipticArc(pt.x, pt.y, sz.x, sz.y, sa, ea);
+  }
+
   virtual void DrawPoint(long x, long y);
+  inline void DrawPoint(const wxPoint& pt)
+  {
+    DrawPoint(pt.x, pt.y);
+  }
 
   virtual void DrawLines(int n, wxPoint points[], long xoffset = 0, long yoffset = 0);
 
   virtual void DrawPolygon(int n, wxPoint points[], long xoffset = 0, long yoffset = 0, int fillStyle=wxODDEVEN_RULE);
 
   virtual void DrawRectangle(long x, long y, long width, long height);
+  inline void DrawRectangle(const wxPoint& pt, const wxSize& sz)
+  {
+    DrawRectangle(pt.x, pt.y, sz.x, sz.y);
+  }
+  inline void DrawRectangle(const wxRect& rect)
+  {
+    DrawRectangle(rect.x, rect.y, rect.width, rect.height);
+  }
+
   virtual void DrawRoundedRectangle(long x, long y, long width, long height, double radius = 20.0);
+  inline void DrawRoundedRectangle(const wxPoint& pt, const wxSize& sz, double radius = 20.0)
+  {
+    DrawRoundedRectangle(pt.x, pt.y, sz.x, sz.y, radius);
+  }
+  inline void DrawRoundedRectangle(const wxRect& rect, double radius = 20.0)
+  {
+    DrawRoundedRectangle(rect.x, rect.y, rect.width, rect.height, radius);
+  }
+
   virtual void DrawEllipse(long x, long y, long width, long height);
+  inline void DrawEllipse(const wxPoint& pt, const wxSize& sz)
+  {
+    DrawEllipse(pt.x, pt.y, sz.x, sz.y);
+  }
+  inline void DrawEllipse(const wxRect& rect)
+  {
+    DrawEllipse(rect.x, rect.y, rect.width, rect.height);
+  }
 
   virtual void DrawIcon(const wxIcon& icon, long x, long y);
+  inline void DrawIcon(const wxIcon& icon, const wxPoint& pt)
+  {
+    DrawIcon(icon, pt.x, pt.y);
+  }
 
+  inline void DrawPoint(wxPoint& point) { DrawPoint(point.x, point.y); }
+  virtual void DrawLines(wxList *list, long xoffset = 0, long yoffset = 0);
+  virtual void DrawPolygon(wxList *list, long xoffset = 0, long yoffset = 0, int fillStyle=wxODDEVEN_RULE);
+
+  virtual void DrawText(const wxString& text, long x, long y, bool use16bit = FALSE);
+  inline void DrawText(const wxString& text, const wxPoint& pt, bool use16bit = FALSE)
+  {
+    DrawText(text, pt.x, pt.y, use16bit);
+  }
+
+  virtual bool Blit(long xdest, long ydest, long width, long height,
+            wxDC *source, long xsrc, long ysrc, int rop = wxCOPY, bool useMask = FALSE);
+  inline bool Blit(const wxPoint& destPt, const wxSize& sz,
+            wxDC *source, const wxPoint& srcPt, int rop = wxCOPY, bool useMask = FALSE)
+  {
+    return Blit(destPt.x, destPt.y, sz.x, sz.y, source, srcPt.x, srcPt.y, rop, useMask);
+  }
+
+#if USE_SPLINES
+  // Splines
+  // 3-point spline
+  virtual void DrawSpline(long x1, long y1, long x2, long y2, long x3, long y3);
+  // Any number of control points - a list of pointers to wxPoints
+  virtual void DrawSpline(wxList *points);
+  virtual void DrawSpline(int n, wxPoint points[]);
+#endif
   virtual void Clear(void);
   virtual void SetFont(const wxFont& font);
   virtual void SetPen(const wxPen& pen);
@@ -59,14 +148,22 @@ public:
   virtual void SetLogicalFunction(int function);
   virtual void SetBackground(const wxBrush& brush);
   virtual void SetBackgroundMode(int mode);
+
   virtual void SetClippingRegion(long x, long y, long width, long height);
+  inline void SetClippingRegion(const wxPoint& pt, const wxSize& sz)
+  {
+    SetClippingRegion(pt.x, pt.y, sz.x, sz.y);
+  }
+  inline void SetClippingRegion(const wxRect& rect)
+  {
+    SetClippingRegion(rect.x, rect.y, rect.width, rect.height);
+  }
+
   virtual void SetPalette(const wxPalette& palette);
 #if WXWIN_COMPATIBILITY
   virtual inline void SetColourMap(const wxPalette& palette) { SetPalette(palette); };
 #endif
   virtual void DestroyClippingRegion(void);
-  virtual void DrawText(const wxString& text, long x, long y, bool use16bit = FALSE);
-
   virtual long GetCharHeight(void) const;
   virtual long GetCharWidth(void) const;
   virtual void GetTextExtent(const wxString& string, long *x, long *y,
@@ -127,36 +224,9 @@ public:
   long ImplLogicalToDeviceXRel(long x) const;
   long ImplLogicalToDeviceYRel(long y) const;
 
-  virtual bool Blit(long xdest, long ydest, long width, long height,
-            wxDC *source, long xsrc, long ysrc, int rop = wxCOPY, bool useMask = FALSE);
-
   virtual bool CanDrawBitmap(void) const;
   virtual bool CanGetTextExtent(void) const;
 
-  //
-  // This function is intended to improves drawing, by avoiding to
-  // repeatly call ::SetPen/::SetBrush. If set to FALSE, these functions
-  // aren't called when calling ::DrawLine(),...
-  // Please note that this is YOUR responsability to use it, and do it
-  // only when you KNOWN that pen/brush isn't changed between 2 calls to
-  // DrawLine,... !!!
-  // Note also that in X, we don't test m_autoSetting on brushes, because they
-  // modify Foreground, as pens. So, convention is:
-  //   - call your SetBrush(), THEN your SetPen, THEN AutoSetTools(FALSE)
-  //   - call DrawLine,...
-  // [mainly coded for Windows]
-  inline virtual void AutoSetTools(bool auto_setting) { m_autoSetting = auto_setting ; }
-  inline virtual void DrawPoint(wxPoint& point) { DrawPoint(point.x, point.y); }
-  virtual void DrawLines(wxList *list, long xoffset = 0, long yoffset = 0);
-  virtual void DrawPolygon(wxList *list, long xoffset = 0, long yoffset = 0, int fillStyle=wxODDEVEN_RULE);
-#if USE_SPLINES
-  // Splines
-  // 3-point spline
-  virtual void DrawSpline(long x1, long y1, long x2, long y2, long x3, long y3);
-  // Any number of control points - a list of pointers to wxPoints
-  virtual void DrawSpline(wxList *points);
-  virtual void DrawSpline(int n, wxPoint points[]);
-#endif
   virtual void SetTextForeground(const wxColour& colour);
   virtual void SetTextBackground(const wxColour& colour);
   inline virtual bool Ok(void) const {return m_ok;};
@@ -185,6 +255,11 @@ public:
   virtual inline bool GetOptimization(void) { return FALSE; }
 
   virtual void GetClippingBox(long *x,long *y,long *w,long *h) const ;
+  inline void GetClippingBox(wxRect& rect) const
+  {
+    long x, y, w, h;
+    GetClippingBox(&x, &y, &w, &h); rect.x = x; rect.y = y; rect.width = w; rect.height = h;
+  }
 
   virtual void SetRop(WXHDC cdc);
   virtual void DoClipping(WXHDC cdc);
@@ -194,10 +269,6 @@ public:
   inline void SetWindow(wxWindow *win) { m_canvas = win; }
   inline WXHDC GetHDC(void) const { return m_hDC; }
   inline void SetHDC(WXHDC dc, bool bOwnsDC = FALSE) { m_hDC = dc; m_bOwnsDC = bOwnsDC; }
-  inline bool GetAutoSetting(void) const { return m_autoSetting; }
-
-//  inline bool GetScaleGDI(void) const { return m_scaleGDI; }
-//  inline void SetScaleGDI(bool flag) { m_scaleGDI = flag; }
 
 protected:
   bool              m_colour;
@@ -238,7 +309,6 @@ protected:
   wxColour          m_textBackgroundColour;
   wxFont            m_font;
   wxPalette         m_palette;
-  bool              m_autoSetting ;
   int               m_clipX1;
   int               m_clipY1;
   int               m_clipX2;

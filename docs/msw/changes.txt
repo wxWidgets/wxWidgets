@@ -2,7 +2,19 @@
 wxWindows 2.0 for Windows Change Log
 ------------------------------------
 
-Alpha 12, July ??1998
+Alpha 13, July 8th 1998
+-----------------------
+
+- Implemented wxPoint as identical to POINT on Windows, and
+  altered wxDC wxPoint functions to use wxPoint directly in
+  Windows functions, for efficiency.
+- Cured wxASSERT bug in wxStatusBar95.
+- #ifdefed out some bits in oleutils.cpp for compilers that
+  don't support it.
+- Added some operators to wxPoint, wxSize.
+- Added inline wxDC functions using wxPoint, wxSize, wxRect.
+
+Alpha 12, July 7th 1998
 -----------------------
 
 - Added wxApp::GetComCtl32Version, and wxTB_FLAT style, so can

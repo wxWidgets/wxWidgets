@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "utils.h"
+#pragma implementation "utilscmn.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".

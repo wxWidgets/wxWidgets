@@ -94,6 +94,7 @@ COMMONOBJS = \
   $(COMMDIR)/object.$(OBJSUFF) \
   $(COMMDIR)/odbc.$(OBJSUFF) \
   $(COMMDIR)/postscrp.$(OBJSUFF) \
+  $(COMMDIR)/process.$(OBJSUFF) \
   $(COMMDIR)/prntbase.$(OBJSUFF) \
   $(COMMDIR)/resource.$(OBJSUFF) \
   $(COMMDIR)/tbarbase.$(OBJSUFF) \
@@ -112,9 +113,6 @@ COMMONOBJS = \
   $(COMMDIR)/y_tab.$(OBJSUFF) \
   $(COMMDIR)/datstrm.$(OBJSUFF) \
   $(COMMDIR)/extended.$(OBJSUFF)
-
-#  $(COMMDIR)/wxstrgnu/wxstrgnu.$(OBJSUFF) \
-#  $(COMMDIR)/wxstrgnu/wxregex.$(OBJSUFF)
 
 MSWOBJS = \
   app.$(OBJSUFF) \

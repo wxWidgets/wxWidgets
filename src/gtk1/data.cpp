@@ -259,10 +259,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxPenList, wxList)
 IMPLEMENT_DYNAMIC_CLASS(wxBrushList, wxList)
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapList, wxList)
 
+/*
 #if (!USE_TYPEDEFS)
 IMPLEMENT_DYNAMIC_CLASS(wxPoint, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxIntPoint, wxObject)
 #endif
+*/
 
 #if defined(wx_x) || (defined(wx_msw) && USE_PORTABLE_FONTS_IN_MSW)
 IMPLEMENT_DYNAMIC_CLASS(wxFontNameDirectory, wxObject)
@@ -338,7 +340,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxProcessEvent, wxEvent)
 #include "wx/utils.h"
 IMPLEMENT_DYNAMIC_CLASS(wxPathList, wxList)
 
-IMPLEMENT_DYNAMIC_CLASS(wxRect, wxObject)
+// IMPLEMENT_DYNAMIC_CLASS(wxRect, wxObject)
 
 #include "wx/process.h"
 IMPLEMENT_DYNAMIC_CLASS(wxProcess, wxEvtHandler)

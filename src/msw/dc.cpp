@@ -70,7 +70,6 @@ wxDC::wxDC(void)
 {
   m_minX = 0; m_minY = 0; m_maxX = 0; m_maxY = 0;
   m_clipping = FALSE;
-  m_autoSetting = FALSE ;
 
   m_filename = "";
   m_canvas = NULL;
@@ -319,16 +318,10 @@ void wxDC::Clear(void)
   ::SetWindowOrgEx((HDC) m_hDC, (int)m_logicalOriginX, (int)m_logicalOriginY, NULL);
 }
 
-void wxDC::FloodFill(long x, long y, wxColour *col, int style)
+void wxDC::FloodFill(long x, long y, const wxColour& col, int style)
 {
-//  int xx = (int)x;
-//  int yy = (int)y;
-
-  if (m_brush.Ok() && m_autoSetting)
-    SetBrush(m_brush);
-
   (void)ExtFloodFill((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y),
-                        col->GetPixel(),
+                        col.GetPixel(),
                         style==wxFLOOD_SURFACE?
                           FLOODFILLSURFACE:FLOODFILLBORDER
                         );
@@ -363,9 +356,6 @@ bool wxDC::GetPixel(long x, long y, wxColour *col) const
 
 void wxDC::CrossHair(long x, long y)
 {
-      if (m_pen.Ok() && m_autoSetting)
-        SetPen(m_pen);
-
       // We suppose that our screen is 2000x2000 max.
       long x1 = x-2000;
       long y1 = y-2000;
@@ -384,10 +374,6 @@ void wxDC::CrossHair(long x, long y)
 
 void wxDC::DrawLine(long x1, long y1, long x2, long y2)
 {
-// BUGBUG - is this necessary? YES YES YES YEs Yes yes ye....
-  if (m_pen.Ok() && m_autoSetting)
-    SetPen(m_pen);
-
   (void)MoveToEx((HDC) m_hDC, XLOG2DEV(x1), YLOG2DEV(y1), NULL);
   (void)LineTo((HDC) m_hDC, XLOG2DEV(x2), YLOG2DEV(y2));
 
@@ -411,10 +397,6 @@ void wxDC::DrawArc(long x1,long y1,long x2,long y2,double xc,double yc)
     return ;
   }
 
-// BUGBUG - is this necessary?
-  if (m_pen.Ok() && m_autoSetting)
-    SetPen(m_pen) ;
-
   long xx1 = XLOG2DEV(x1) ;
   long yy1 = YLOG2DEV(y1) ;
   long xx2 = XLOG2DEV(x2) ;
@@ -430,9 +412,6 @@ void wxDC::DrawArc(long x1,long y1,long x2,long y2,double xc,double yc)
   long yyy2 = (long) (yyc+ray);
   if (m_brush.Ok() && m_brush.GetStyle() !=wxTRANSPARENT)
   {
-// BUGBUG - is this necessary?
-    if (m_brush.GetStyle()!=wxTRANSPARENT&&m_autoSetting)
-      SetBrush(m_brush) ;
     Pie((HDC) m_hDC,xxx1,yyy1,xxx2,yyy2,
         xx1,yy1,xx2,yy2) ;
   }
@@ -446,10 +425,6 @@ void wxDC::DrawArc(long x1,long y1,long x2,long y2,double xc,double yc)
 
 void wxDC::DrawPoint(long x, long y)
 {
-// BUGBUG - is this necessary?
-  if (m_pen.Ok() && m_autoSetting)
-    SetPen(m_pen) ;
-
   COLORREF color = 0x00ffffff;
   if (m_pen.Ok())
   {
@@ -463,54 +438,64 @@ void wxDC::DrawPoint(long x, long y)
 
 void wxDC::DrawPolygon(int n, wxPoint points[], long xoffset, long yoffset,int fillStyle)
 {
-// BUGBUG - is this necessary?
-  if (m_pen.Ok() && m_autoSetting)
-    SetPen(m_pen) ;
-
-  POINT *cpoints = new POINT[n];
-  int i;
-  for (i = 0; i < n; i++)
+  // Do things less efficiently if we have offsets
+  if (xoffset != 0 || yoffset != 0)
   {
-    cpoints[i].x = (int)(XLOG2DEV(points[i].x + xoffset));
-    cpoints[i].y = (int)(YLOG2DEV(points[i].y + yoffset));
+    POINT *cpoints = new POINT[n];
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        cpoints[i].x = (int)(points[i].x + xoffset);
+        cpoints[i].y = (int)(points[i].y + yoffset);
 
-    CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
+        CalcBoundingBox(cpoints[i].x, cpoints[i].y);
+    }
+    int prev = SetPolyFillMode((HDC) m_hDC,fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING) ;
+    (void)Polygon((HDC) m_hDC, cpoints, n);
+    SetPolyFillMode((HDC) m_hDC,prev) ;
+    delete[] cpoints;
   }
+  else
+  {
+    int i;
+    for (i = 0; i < n; i++)
+        CalcBoundingBox(points[i].x, points[i].y);
 
-  int prev = SetPolyFillMode((HDC) m_hDC,fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING) ;
-  (void)Polygon((HDC) m_hDC, cpoints, n);
-  SetPolyFillMode((HDC) m_hDC,prev) ;
-
-  delete[] cpoints;
+    int prev = SetPolyFillMode((HDC) m_hDC,fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING) ;
+    (void)Polygon((HDC) m_hDC, (POINT*) points, n);
+    SetPolyFillMode((HDC) m_hDC,prev) ;
+  }
 }
 
 void wxDC::DrawLines(int n, wxPoint points[], long xoffset, long yoffset)
 {
-// BUGBUG - is this necessary?
-  if (m_pen.Ok() && m_autoSetting)
-    SetPen(m_pen) ;
-
-  POINT *cpoints = new POINT[n];
-  int i;
-  for (i = 0; i < n; i++)
+  // Do things less efficiently if we have offsets
+  if (xoffset != 0 || yoffset != 0)
   {
-    cpoints[i].x = (int)(XLOG2DEV(points[i].x + xoffset));
-    cpoints[i].y = (int)(YLOG2DEV(points[i].y + yoffset));
+    POINT *cpoints = new POINT[n];
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        cpoints[i].x = (int)(points[i].x + xoffset);
+        cpoints[i].y = (int)(points[i].y + yoffset);
 
-    CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
+        CalcBoundingBox(cpoints[i].x, cpoints[i].y);
+    }
+    (void)Polyline((HDC) m_hDC, cpoints, n);
+    delete[] cpoints;
   }
+  else
+  {
+    int i;
+    for (i = 0; i < n; i++)
+        CalcBoundingBox(points[i].x, points[i].y);
 
- (void)Polyline((HDC) m_hDC, cpoints, n);
-
-  delete[] cpoints;
+    (void)Polyline((HDC) m_hDC, (POINT*) points, n);
+  }
 }
 
 void wxDC::DrawRectangle(long x, long y, long width, long height)
 {
-// BUGBUG - is this necessary?
-  if (m_pen.Ok() && m_autoSetting)
-    SetPen(m_pen) ;
-
   long x2 = x + width;
   long y2 = y + height;
 
@@ -555,10 +540,6 @@ void wxDC::DrawRectangle(long x, long y, long width, long height)
 
 void wxDC::DrawRoundedRectangle(long x, long y, long width, long height, double radius)
 {
-// BUGBUG - is this necessary?
-  if (m_pen.Ok() && m_autoSetting)
-    SetPen(m_pen) ;
-
   // Now, a negative radius value is interpreted to mean
   // 'the proportion of the smallest X or Y dimension'
 
@@ -584,10 +565,6 @@ void wxDC::DrawRoundedRectangle(long x, long y, long width, long height, double 
 
 void wxDC::DrawEllipse(long x, long y, long width, long height)
 {
-// BUGBUG - is this necessary?
-  if (m_pen.Ok() && m_autoSetting)
-    SetPen(m_pen) ;
-
   long x2 = (x+width);
   long y2 = (y+height);
 
@@ -600,10 +577,6 @@ void wxDC::DrawEllipse(long x, long y, long width, long height)
 // Chris Breeze 20/5/98: first implementation of DrawEllipticArc on Windows
 void wxDC::DrawEllipticArc(long x,long y,long w,long h,double sa,double ea)
 {
-// BUGBUG - is this necessary?
-  if (m_pen.Ok() && m_autoSetting)
-    SetPen(m_pen) ;
-
   long x2 = (x+w);
   long y2 = (y+h);
 

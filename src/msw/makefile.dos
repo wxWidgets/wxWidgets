@@ -89,6 +89,7 @@ COMMONOBJS = \
   $(COMMDIR)\object.obj \
   $(COMMDIR)\odbc.obj \
   $(COMMDIR)\postscrp.obj \
+  $(COMMDIR)\process.obj \
   $(COMMDIR)\prntbase.obj \
   $(COMMDIR)\resource.obj \
   $(COMMDIR)\tbarbase.obj \
@@ -720,6 +721,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/postscrp.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/process.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

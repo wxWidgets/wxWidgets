@@ -201,6 +201,13 @@ void MyCanvas::OnDraw(wxDC& dc)
   dc.DrawSpline(50, 200, 50, 100, 200, 10);
   dc.DrawLine(50, 230, 200, 230);
   dc.DrawText("This is a test string", 50, 230);
+
+  wxPoint points[3];
+  points[0].x = 200; points[0].y = 300;
+  points[1].x = 100; points[1].y = 400;
+  points[2].x = 300; points[2].y = 400;
+
+  dc.DrawPolygon(3, points);
 }
 
 // This implements a tiny doodling program! Drag the mouse using

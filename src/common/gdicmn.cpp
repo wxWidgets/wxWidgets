@@ -36,17 +36,19 @@
 #endif
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxRect, wxObject)
 IMPLEMENT_CLASS(wxColourDatabase, wxList)
 IMPLEMENT_DYNAMIC_CLASS(wxFontList, wxList)
 IMPLEMENT_DYNAMIC_CLASS(wxPenList, wxList)
 IMPLEMENT_DYNAMIC_CLASS(wxBrushList, wxList)
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapList, wxList)
+/*
+IMPLEMENT_DYNAMIC_CLASS(wxRect, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxPoint, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxRealPoint, wxObject)
+*/
 #endif
 
-wxRect::wxRect(void)
+wxRect::wxRect()
 {
     x = 0; y = 0; width = 0; height = 0;
 }
@@ -117,7 +119,7 @@ wxList (type)
 {
 }
 
-wxColourDatabase::~wxColourDatabase (void)
+wxColourDatabase::~wxColourDatabase ()
 {
   // Cleanup Colour allocated in Initialize()
   wxNode *node = First ();
@@ -131,7 +133,7 @@ wxColourDatabase::~wxColourDatabase (void)
 }
 
 // Colour database stuff
-void wxColourDatabase::Initialize (void)
+void wxColourDatabase::Initialize ()
 {
   // Don't initialize for X: colours are found
   // in FindColour below.
@@ -317,7 +319,7 @@ wxString wxColourDatabase::FindName (const wxColour& colour) const
 }
 
 void 
-wxInitializeStockObjects (void)
+wxInitializeStockObjects ()
 {
   wxTheBrushList = new wxBrushList;
   wxThePenList = new wxPenList;
@@ -371,7 +373,7 @@ wxInitializeStockObjects (void)
 }
 
 void 
-wxDeleteStockObjects (void)
+wxDeleteStockObjects ()
 {
   DELETEP(wxNORMAL_FONT);
   DELETEP(wxSMALL_FONT);
@@ -413,11 +415,11 @@ wxDeleteStockObjects (void)
   DELETEP(wxCROSS_CURSOR);
 }
 
-wxBitmapList::wxBitmapList (void)
+wxBitmapList::wxBitmapList ()
 {
 }
 
-wxBitmapList::~wxBitmapList (void)
+wxBitmapList::~wxBitmapList ()
 {
   wxNode *node = First ();
   while (node)
@@ -431,7 +433,7 @@ wxBitmapList::~wxBitmapList (void)
 }
 
 // Pen and Brush lists
-wxPenList::~wxPenList (void)
+wxPenList::~wxPenList ()
 {
   wxNode *node = First ();
   while (node)
@@ -486,7 +488,7 @@ wxPen *wxPenList::FindOrCreatePen (const wxString& colour, int width, int style)
     return NULL;
 }
 
-wxBrushList::~wxBrushList (void)
+wxBrushList::~wxBrushList ()
 {
   wxNode *node = First ();
   while (node)
@@ -538,7 +540,7 @@ void wxBrushList::RemoveBrush (wxBrush * brush)
   DeleteObject (brush);
 }
 
-wxFontList::~wxFontList (void)
+wxFontList::~wxFontList ()
 {
 #ifdef __WINDOWS__
   wxNode *node = First ();
@@ -600,4 +602,11 @@ void wxBitmapList::AddBitmap(wxBitmap *bitmap)
 { Append(bitmap); }
 void wxBitmapList::RemoveBitmap(wxBitmap *bitmap)
 { DeleteObject(bitmap); }
+
+wxSize wxGetDisplaySize()
+{
+    int x, y;
+    wxDisplaySize(& x, & y);
+    return wxSize(x, y);
+}
 

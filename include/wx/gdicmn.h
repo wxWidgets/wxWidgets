@@ -65,42 +65,54 @@ typedef enum {
 #endif
 } _standard_cursors_t;
 
-class WXDLLEXPORT wxSize: public wxObject
+class WXDLLEXPORT wxSize
 {
 public:
   long x;
   long y;
-  inline wxSize(void) { x = 0; y = 0; }
+  inline wxSize() { x = 0; y = 0; }
   inline wxSize(long xx, long yy) { x = xx; y = yy; }
   inline wxSize(const wxSize& sz) { x = sz.x; y = sz.y; }
   inline void operator = (const wxSize& sz) { x = sz.x; y = sz.y; }
+  inline wxSize operator + (const wxSize& sz) { return wxSize(x + sz.x, y + sz.y); }
+  inline wxSize operator - (const wxSize& sz) { return wxSize(x - sz.x, y - sz.y); }
   inline void Set(long xx, long yy) { x = xx; y = yy; }
   inline long GetX() const { return x; }
   inline long GetY() const { return y; }
 };
 
 // Point
-class WXDLLEXPORT wxRealPoint: public wxObject
+class WXDLLEXPORT wxRealPoint
 {
-  DECLARE_DYNAMIC_CLASS(wxRealPoint)
  public:
   double x;
   double y;
-  inline wxRealPoint(void) { x = 0.0; y = 0.0; };
-  inline wxRealPoint(double the_x, double the_y) { x = the_x; y = the_y; };
+  inline wxRealPoint() { x = 0.0; y = 0.0; };
+  inline wxRealPoint(double _x, double _y) { x = _x; y = _y; };
+  inline wxRealPoint operator + (const wxRealPoint& pt) { return wxRealPoint(x + pt.x, y + pt.y); }
+  inline wxRealPoint operator - (const wxRealPoint& pt) { return wxRealPoint(x - pt.x, y - pt.y); }
 
   inline void operator = (const wxRealPoint& pt) { x = pt.x; y = pt.y; }
 };
 
-class WXDLLEXPORT wxPoint: public wxObject
+class WXDLLEXPORT wxPoint
 {
-  DECLARE_DYNAMIC_CLASS(wxPoint)
  public:
+#if defined(__WINDOWS__) && !defined(__WIN32__)
+  int x;
+  int y;
+#else
   long x;
   long y;
-  inline wxPoint(void) { x = 0; y = 0; };
+#endif
+
+  inline wxPoint() { x = 0; y = 0; };
   wxPoint(long the_x, long the_y) { x = the_x; y = the_y; };
+  wxPoint(const wxPoint& pt) { x = pt.x; y = pt.y; };
+
   inline void operator = (const wxPoint& pt) { x = pt.x; y = pt.y; }
+  inline wxPoint operator + (const wxPoint& pt) { return wxPoint(x + pt.x, y + pt.y); }
+  inline wxPoint operator - (const wxPoint& pt) { return wxPoint(x - pt.x, y - pt.y); }
 };
 
 #if WXWIN_COMPATIBILITY
@@ -108,31 +120,31 @@ class WXDLLEXPORT wxPoint: public wxObject
 #define wxRectangle wxRect
 #endif
 
-class WXDLLEXPORT wxRect : public wxObject {
-    DECLARE_DYNAMIC_CLASS(wxRect)
+class WXDLLEXPORT wxRect
+{
 public:
-   wxRect(void) ;
+   wxRect() ;
    wxRect(long x, long y, long w, long h);
    wxRect(const wxPoint& topLeft, const wxPoint& bottomRight);
    wxRect(const wxPoint& pos, const wxSize& size);
    wxRect(const wxRect& rect);
 
-   inline long  GetX(void) const        { return x; }
+   inline long  GetX() const        { return x; }
    inline void SetX(long X)       { x = X; }
-   inline long  GetY(void) const        { return y; }
+   inline long  GetY() const        { return y; }
    inline void SetY(long Y)       { y = Y; }
    inline long  GetWidth() const        { return width; }
    inline void SetWidth(long w)   { width = w; }
    inline long  GetHeight() const       { return height; }
    inline void SetHeight(long h)  { height = h; }
 
-   inline wxPoint GetPosition(void) { return wxPoint(x, y); }
-   inline wxSize GetSize(void) { return wxSize(width, height); }
+   inline wxPoint GetPosition() { return wxPoint(x, y); }
+   inline wxSize GetSize() { return wxSize(width, height); }
 
-   inline long  GetLeft(void)   const { return x; }
-   inline long  GetTop(void)    const { return y; }
-   inline long  GetBottom(void) const { return y + height; }
-   inline long  GetRight(void)  const { return x + width; }
+   inline long  GetLeft()   const { return x; }
+   inline long  GetTop()    const { return y; }
+   inline long  GetBottom() const { return y + height; }
+   inline long  GetRight()  const { return x + width; }
 
    wxRect& operator = (const wxRect& rect);
    bool operator == (const wxRect& rect);
@@ -184,9 +196,9 @@ class WXDLLEXPORT wxPenList: public wxList
 {
   DECLARE_DYNAMIC_CLASS(wxPenList)
  public:
-  inline wxPenList(void)
+  inline wxPenList()
     { }
-  ~wxPenList(void);
+  ~wxPenList();
   void AddPen(wxPen *pen);
   void RemovePen(wxPen *pen);
   wxPen *FindOrCreatePen(const wxColour& colour, int width, int style);
@@ -197,9 +209,9 @@ class WXDLLEXPORT wxBrushList: public wxList
 {
   DECLARE_DYNAMIC_CLASS(wxBrushList)
  public:
-  inline wxBrushList(void)
+  inline wxBrushList()
     { }
-  ~wxBrushList(void);
+  ~wxBrushList();
   void AddBrush(wxBrush *brush);
   void RemoveBrush(wxBrush *brush);
   wxBrush *FindOrCreateBrush(const wxColour& colour, int style);
@@ -212,9 +224,9 @@ class WXDLLEXPORT wxFontList: public wxList
 {
   DECLARE_DYNAMIC_CLASS(wxFontList)
  public:
-  inline wxFontList(void)
+  inline wxFontList()
     { }
-  ~wxFontList(void);
+  ~wxFontList();
   void AddFont(wxFont *font);
   void RemoveFont(wxFont *font);
   wxFont *FindOrCreateFont(int pointSize, int family, int style, int weight,
@@ -226,19 +238,19 @@ class WXDLLEXPORT wxColourDatabase: public wxList
   DECLARE_CLASS(wxColourDatabase)
  public:
   wxColourDatabase(int type);
-  ~wxColourDatabase(void) ;
+  ~wxColourDatabase() ;
   // Not const because it may add a name to the database
   wxColour *FindColour(const wxString& colour) ;
   wxString FindName(const wxColour& colour) const;
-  void Initialize(void);
+  void Initialize();
 };
 
 class WXDLLEXPORT wxBitmapList: public wxList
 {
   DECLARE_DYNAMIC_CLASS(wxBitmapList)
  public:
-   wxBitmapList(void);
-  ~wxBitmapList(void);
+   wxBitmapList();
+  ~wxBitmapList();
 
   void AddBitmap(wxBitmap *bitmap);
   void RemoveBitmap(wxBitmap *bitmap);
@@ -302,15 +314,17 @@ WXDLLEXPORT_DATA(extern wxCursor*)		wxHOURGLASS_CURSOR;
 WXDLLEXPORT_DATA(extern wxCursor*)		wxCROSS_CURSOR;
 
 WXDLLEXPORT_DATA(extern wxColourDatabase*)	wxTheColourDatabase;
-extern void WXDLLEXPORT wxInitializeStockObjects(void);
-extern void WXDLLEXPORT wxDeleteStockObjects(void);
+extern void WXDLLEXPORT wxInitializeStockObjects();
+extern void WXDLLEXPORT wxDeleteStockObjects();
 
-extern bool WXDLLEXPORT wxColourDisplay(void);
+extern bool WXDLLEXPORT wxColourDisplay();
 
 // Returns depth of screen
-extern int WXDLLEXPORT wxDisplayDepth(void);
+extern int WXDLLEXPORT wxDisplayDepth();
+#define wxGetDisplayDepth wxDisplayDepth
 
 extern void WXDLLEXPORT wxDisplaySize(int *width, int *height);
+extern wxSize WXDLLEXPORT wxGetDisplaySize();
 
 extern void WXDLLEXPORT wxSetCursor(const wxCursor& cursor);
 

@@ -127,9 +127,6 @@ void wx_draw_open_spline_ps(wxPostScriptDC *dc, wxSpline *s)
 {
 	double		a, b, c, d, x1, y1, x2, y2, x3, y3;
         wxPoint *p, *q;
-        if (dc->GetAutoSetting())
-          dc->SetPen(* dc->GetPen());
-
         wxNode *node = s->points->First();
         p = (wxPoint *)node->Data();
 
