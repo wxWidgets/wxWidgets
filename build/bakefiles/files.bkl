@@ -2,6 +2,13 @@
 <!-- $Id$ -->
 <makefile>
 
+<!--
+
+IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
+
+-->
+    
+    
 <!-- ======================================================================
                                        FILES
 
@@ -31,7 +38,6 @@
 
 
 
-
 <!-- ====================================================================== -->
 <!--                               wxBase                                   -->
 <!-- ====================================================================== -->
@@ -52,6 +58,7 @@
 
 <set var="BASE_WIN32_SRC" hints="files">
     src/msw/basemsw.cpp
+    src/msw/crashrpt.cpp
     src/msw/dde.cpp
     src/msw/dir.cpp
     src/msw/mimetype.cpp
@@ -61,7 +68,6 @@
     src/msw/thread.cpp
     src/msw/utils.cpp
     src/msw/utilsexc.cpp
-    src/msw/crashrpt.cpp
 </set>
 <set var="BASE_AND_GUI_WIN32_SRC" hints="files">
     src/msw/main.cpp
@@ -69,13 +75,13 @@
     src/msw/volume.cpp
 </set>
 <set var="BASE_WIN32_HDR" hints="files">
+    wx/msw/chkconf.h
+    wx/msw/crashrpt.h
     wx/msw/dde.h
     wx/msw/gccpriv.h
     wx/msw/mimetype.h
     wx/msw/winundef.h
     wx/msw/wrapwin.h
-    wx/msw/chkconf.h
-    wx/msw/crashrpt.h
 </set>
 
 <set var="BASE_DARWIN_SRC" hints="files">
@@ -92,11 +98,11 @@
 </set>
 
 <set var="BASE_MAC_SRC" hints="files">
-    src/unix/baseunix.cpp
     src/mac/dirmac.cpp
     src/mac/mimetmac.cpp
     src/mac/utils.cpp
     src/mac/utilsexc.cpp
+    src/unix/baseunix.cpp
 </set>
 <set var="BASE_MAC_HDR" hints="files">
 </set>
@@ -172,15 +178,11 @@
     src/common/utilscmn.cpp
 </set>
 <set var="BASE_CMN_HDR" hints="files">
-    wx/apptrait.h
-    wx/beforestd.h
-    wx/containr.h
-    wx/msgout.h
-    wx/types.h
-    wx/init.h
-    wx/arrimpl.cpp
-    wx/listimpl.cpp
     wx/app.h
+    wx/apptrait.h
+    wx/arrimpl.cpp
+    wx/arrstr.h
+    wx/beforestd.h
     wx/buffer.h
     wx/build.h
     wx/chkconf.h
@@ -188,6 +190,7 @@
     wx/cmdline.h
     wx/confbase.h
     wx/config.h
+    wx/containr.h
     wx/datetime.h
     wx/datetime.inl
     wx/datstrm.h
@@ -199,7 +202,6 @@
     wx/defs.h
     wx/dir.h
     wx/dynarray.h
-    wx/arrstr.h
     wx/dynlib.h
     wx/dynload.h
     wx/encconv.h
@@ -213,11 +215,12 @@
     wx/filesys.h
     wx/fontenc.h
     wx/fontmap.h
-    wx/fs_zip.h
     wx/fs_mem.h
+    wx/fs_zip.h
     wx/hash.h
     wx/hashmap.h
     wx/iconloc.h
+    wx/init.h
     wx/intl.h
     wx/iosfwrap.h
     wx/ioswrap.h
@@ -226,14 +229,16 @@
     wx/isql.h
     wx/isqlext.h
     wx/list.h
+    wx/listimpl.cpp
     wx/log.h
     wx/longlong.h
     wx/math.h
-    wx/memory.h
     wx/memconf.h
+    wx/memory.h
     wx/memtext.h
     wx/mimetype.h
     wx/module.h
+    wx/msgout.h
     wx/msgout.h
     wx/mstream.h
     wx/object.h
@@ -252,6 +257,7 @@
     wx/thrimpl.cpp
     wx/tokenzr.h
     wx/txtstrm.h
+    wx/types.h
     wx/utils.h
     wx/variant.h
     wx/vector.h
@@ -309,25 +315,25 @@
     src/common/ftp.cpp
     src/common/http.cpp
     src/common/protocol.cpp
-    src/common/url.cpp
-    src/common/sckfile.cpp
     src/common/sckaddr.cpp
+    src/common/sckfile.cpp
     src/common/sckipc.cpp
     src/common/sckstrm.cpp
     src/common/socket.cpp
+    src/common/url.cpp
 </set>
 <set var="NET_CMN_HDR" hints="files">
     wx/fs_inet.h
-    wx/url.h
-    wx/protocol/protocol.h
-    wx/protocol/http.h
-    wx/protocol/ftp.h
-    wx/protocol/file.h
     wx/gsocket.h
+    wx/protocol/file.h
+    wx/protocol/ftp.h
+    wx/protocol/http.h
+    wx/protocol/protocol.h
     wx/sckaddr.h
     wx/sckipc.h
     wx/sckstrm.h
     wx/socket.h
+    wx/url.h
 </set>
 
 
@@ -337,6 +343,78 @@
 <!-- ====================================================================== -->
 
 <set var="GUI_CMN_SRC" hints="files">
+    src/common/accesscmn.cpp
+    src/common/appcmn.cpp
+    src/common/artprov.cpp
+    src/common/artstd.cpp
+    src/common/bmpbase.cpp
+    src/common/choiccmn.cpp
+    src/common/clipcmn.cpp
+    src/common/cmdproc.cpp
+    src/common/cmndata.cpp
+    src/common/containr.cpp
+    src/common/cshelp.cpp
+    src/common/ctrlcmn.cpp
+    src/common/ctrlsub.cpp
+    src/common/datacmn.cpp
+    src/common/dbgrid.cpp
+    src/common/dcbase.cpp
+    src/common/dlgcmn.cpp
+    src/common/dndcmn.cpp
+    src/common/dobjcmn.cpp
+    src/common/docmdi.cpp
+    src/common/docview.cpp
+    src/common/dpycmn.cpp
+    src/common/dseldlg.cpp
+    src/common/effects.cpp
+    src/common/fddlgcmn.cpp
+    src/common/fldlgcmn.cpp
+    src/common/fontcmn.cpp
+    src/common/fontmap.cpp
+    src/common/framecmn.cpp
+    src/common/gaugecmn.cpp
+    src/common/gdicmn.cpp
+    src/common/geometry.cpp
+    src/common/gifdecod.cpp
+    src/common/helpbase.cpp
+    src/common/iconbndl.cpp
+    src/common/imagall.cpp
+    src/common/imagbmp.cpp
+    src/common/image.cpp
+    src/common/imagfill.cpp
+    src/common/imaggif.cpp
+    src/common/imagiff.cpp
+    src/common/imagjpeg.cpp
+    src/common/imagpcx.cpp
+    src/common/imagpng.cpp
+    src/common/imagpnm.cpp
+    src/common/imagtiff.cpp
+    src/common/imagxpm.cpp
+    src/common/layout.cpp
+    src/common/lboxcmn.cpp
+    src/common/matrix.cpp
+    src/common/menucmn.cpp
+    src/common/nbkbase.cpp
+    src/common/paper.cpp
+    src/common/popupcmn.cpp
+    src/common/prntbase.cpp
+    src/common/quantize.cpp
+    src/common/radiocmn.cpp
+    src/common/rendcmn.cpp
+    src/common/rgncmn.cpp
+    src/common/settcmn.cpp
+    src/common/sizer.cpp
+    src/common/statbar.cpp
+    src/common/tbarbase.cpp
+    src/common/textcmn.cpp
+    src/common/timercmn.cpp
+    src/common/toplvcmn.cpp
+    src/common/treebase.cpp
+    src/common/valgen.cpp
+    src/common/validate.cpp
+    src/common/valtext.cpp
+    src/common/wincmn.cpp
+    src/common/xpmdecod.cpp
     src/generic/busyinfo.cpp
     src/generic/calctrl.cpp
     src/generic/choicdgg.cpp
@@ -368,149 +446,46 @@
     src/generic/vlbox.cpp
     src/generic/vscroll.cpp
     src/generic/wizard.cpp
-    src/common/appcmn.cpp
-    src/common/fontmap.cpp
-    src/common/accesscmn.cpp
-    src/common/artprov.cpp
-    src/common/artstd.cpp
-    src/common/bmpbase.cpp
-    src/common/choiccmn.cpp
-    src/common/clipcmn.cpp
-    src/common/cmdproc.cpp
-    src/common/cmndata.cpp
-    src/common/containr.cpp
-    src/common/cshelp.cpp
-    src/common/ctrlcmn.cpp
-    src/common/ctrlsub.cpp
-    src/common/datacmn.cpp
-    src/common/dbgrid.cpp
-    src/common/dcbase.cpp
-    src/common/dlgcmn.cpp
-    src/common/dndcmn.cpp
-    src/common/dobjcmn.cpp
-    src/common/docmdi.cpp
-    src/common/docview.cpp
-    src/common/dpycmn.cpp
-    src/common/dseldlg.cpp
-    src/common/effects.cpp
-    src/common/fddlgcmn.cpp
-    src/common/fldlgcmn.cpp
-    src/common/fontcmn.cpp
-    src/common/framecmn.cpp
-    src/common/timercmn.cpp
-    src/common/toplvcmn.cpp
-    src/common/gaugecmn.cpp
-    src/common/gdicmn.cpp
-    src/common/geometry.cpp
-    src/common/gifdecod.cpp
-    src/common/helpbase.cpp
-    src/common/iconbndl.cpp
-    src/common/imagall.cpp
-    src/common/imagbmp.cpp
-    src/common/image.cpp
-    src/common/imaggif.cpp
-    src/common/imagiff.cpp
-    src/common/imagjpeg.cpp
-    src/common/imagpcx.cpp
-    src/common/imagpng.cpp
-    src/common/imagpnm.cpp
-    src/common/imagtiff.cpp
-    src/common/imagxpm.cpp
-    src/common/imagfill.cpp
-    src/common/layout.cpp
-    src/common/lboxcmn.cpp
-    src/common/matrix.cpp
-    src/common/menucmn.cpp
-    src/common/nbkbase.cpp
-    src/common/paper.cpp
-    src/common/popupcmn.cpp
-    src/common/prntbase.cpp
-    src/common/quantize.cpp
-    src/common/radiocmn.cpp
-    src/common/rendcmn.cpp
-    src/common/rgncmn.cpp
-    src/common/settcmn.cpp
-    src/common/sizer.cpp
-    src/common/statbar.cpp
-    src/common/tbarbase.cpp
-    src/common/textcmn.cpp
-    src/common/treebase.cpp
-    src/common/valgen.cpp
-    src/common/validate.cpp
-    src/common/valtext.cpp
-    src/common/wincmn.cpp
-    src/common/xpmdecod.cpp
 </set>
 <set var="GUI_CMN_HDR" hints="files">
-    wx/gdicmn.h
+    wx/bmpbuttn.h
+    wx/brush.h
+    wx/button.h
+    wx/checkbox.h
+    wx/checklst.h
+    wx/choicdlg.h
+    wx/choice.h
+    wx/cmndata.h
+    wx/combobox.h
+    wx/control.h
+    wx/ctrlsub.h
     wx/cursor.h
-    wx/window.h
-    wx/panel.h
-    wx/frame.h
     wx/dc.h
     wx/dcclient.h
     wx/dcmemory.h
     wx/dcprint.h
     wx/dcscreen.h
-    wx/button.h
-    wx/menu.h
-    wx/pen.h
-    wx/brush.h
-    wx/palette.h
-    wx/icon.h
     wx/dialog.h
-    wx/timer.h
-    wx/settings.h
-    wx/msgdlg.h
-    wx/cmndata.h
-    wx/control.h
-    wx/ctrlsub.h
-    wx/bmpbuttn.h
-    wx/checkbox.h
-    wx/checklst.h
-    wx/choice.h
-    wx/scrolbar.h
-    wx/stattext.h
-    wx/statbmp.h
-    wx/statbox.h
-    wx/listbox.h
-    wx/radiobox.h
-    wx/radiobut.h
-    wx/renderer.h
-    wx/textctrl.h
-    wx/slider.h
-    wx/gauge.h
-    wx/scrolwin.h
     wx/dirdlg.h
-    wx/toolbar.h
-    wx/combobox.h
-    wx/layout.h
-    wx/sizer.h
-    wx/mdi.h
-    wx/statusbr.h
-    wx/scrolbar.h
-    wx/choicdlg.h
-    wx/textdlg.h
     wx/filedlg.h
-    wx/validate.h
-    wx/valtext.h
-    wx/selstore.h
+    wx/frame.h
+    wx/gauge.h
+    wx/gdicmn.h
     wx/generic/accel.h
     wx/generic/calctrl.h
     wx/generic/choicdgg.h
     wx/generic/colrdlgg.h
     wx/generic/dcpsg.h
     wx/generic/dirctrlg.h
-    wx/generic/fontdlgg.h
     wx/generic/filedlgg.h
+    wx/generic/fontdlgg.h
+    wx/generic/grid.h
     wx/generic/grid.h
     wx/generic/gridctrl.h
-    wx/generic/grid.h
     wx/generic/helpext.h
-    wx/generic/logg.h
-    wx/helphtml.h
     wx/generic/imaglist.h
     wx/generic/laywin.h
+    wx/generic/logg.h
     wx/generic/msgdlgg.h
     wx/generic/notebook.h
     wx/generic/panelg.h
@@ -523,8 +498,39 @@
     wx/generic/splitter.h
     wx/generic/textdlgg.h
     wx/generic/timer.h
-    wx/generic/wizard.h
     wx/generic/treectlg.h
+    wx/generic/wizard.h
+    wx/helphtml.h
+    wx/icon.h
+    wx/layout.h
+    wx/listbox.h
+    wx/mdi.h
+    wx/menu.h
+    wx/msgdlg.h
+    wx/palette.h
+    wx/panel.h
+    wx/pen.h
+    wx/radiobox.h
+    wx/radiobut.h
+    wx/renderer.h
+    wx/scrolbar.h
+    wx/scrolbar.h
+    wx/scrolwin.h
+    wx/selstore.h
+    wx/settings.h
+    wx/sizer.h
+    wx/slider.h
+    wx/statbmp.h
+    wx/statbox.h
+    wx/stattext.h
+    wx/statusbr.h
+    wx/textctrl.h
+    wx/textdlg.h
+    wx/timer.h
+    wx/toolbar.h
+    wx/validate.h
+    wx/valtext.h
+    wx/window.h
 
     wx/accel.h
     wx/access.h
@@ -639,21 +645,21 @@
 <!-- ====================================================================== -->
 
 <set var="XWIN_LOWLEVEL_SRC" hints="files">
+    src/common/taskbarcmn.cpp
+    src/generic/caret.cpp
+    src/generic/printps.cpp
+    src/unix/dialup.cpp
     src/unix/fontenum.cpp
     src/unix/fontutil.cpp
-    src/unix/utilsx11.cpp
-    src/common/taskbarcmn.cpp
     src/unix/taskbarx11.cpp
-    src/generic/printps.cpp
-    src/generic/caret.cpp
-    src/unix/dialup.cpp
+    src/unix/utilsx11.cpp
 </set>
 <set var="XWIN_LOWLEVEL_HDR" hints="files">
-    wx/unix/fontutil.h
-    wx/unix/utilsx11.h
-    wx/unix/taskbarx11.h
-    wx/generic/printps.h
     wx/generic/caret.h
+    wx/generic/printps.h
+    wx/unix/fontutil.h
+    wx/unix/taskbarx11.h
+    wx/unix/utilsx11.h
 </set>
 
 
@@ -663,8 +669,7 @@
 
 <set var="GTK_LOWLEVEL_SRC" hints="files">
     $(XWIN_LOWLEVEL_SRC)
-    src/gtk/gsockgtk.c
-    src/gtk/win_gtk.c
+    src/generic/paletteg.cpp
     src/gtk/app.cpp
     src/gtk/bitmap.cpp
     src/gtk/brush.cpp
@@ -680,8 +685,8 @@
     src/gtk/dnd.cpp
     src/gtk/evtloop.cpp
     src/gtk/font.cpp
-    src/gtk/toplevel.cpp
     src/gtk/gdiobj.cpp
+    src/gtk/gsockgtk.c
     src/gtk/icon.cpp
     src/gtk/main.cpp
     src/gtk/pen.cpp
@@ -690,9 +695,10 @@
     src/gtk/settings.cpp
     src/gtk/timer.cpp
     src/gtk/tooltip.cpp
+    src/gtk/toplevel.cpp
     src/gtk/utilsgtk.cpp
+    src/gtk/win_gtk.c
     src/gtk/window.cpp
-    src/generic/paletteg.cpp
 </set>
 <set var="GTK_LOWLEVEL_HDR" hints="files">
     $(XWIN_LOWLEVEL_HDR)
@@ -700,17 +706,17 @@
 </set>
 <set var="GTK_SRC" hints="files">
     <!-- Generic implementations used by wxGTK: -->
-    src/generic/imaglist.cpp
-    src/generic/colrdlgg.cpp
-    src/generic/listctrl.cpp
-    src/generic/filedlgg.cpp
-    src/generic/dirdlgg.cpp
-    src/generic/prntdlgg.cpp
     src/generic/accel.cpp
-    src/generic/msgdlgg.cpp
+    src/generic/colrdlgg.cpp
+    src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
-    src/generic/tabg.cpp
+    src/generic/filedlgg.cpp
+    src/generic/imaglist.cpp
+    src/generic/listctrl.cpp
+    src/generic/msgdlgg.cpp
+    src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
+    src/generic/tabg.cpp
     <!-- GTK+ specific files: -->
     src/gtk/bmpbuttn.cpp
     src/gtk/button.cpp
@@ -749,6 +755,11 @@
     src/gtk/wave.cpp
 </set>
 <set var="GTK_HDR" hints="files">
+    wx/generic/dirdlgg.h
+    wx/generic/fdrepdlg.h
+    wx/generic/listctrl.h
+    wx/generic/statusbr.h
+    wx/generic/tabg.h
     wx/gtk/accel.h
     wx/gtk/app.h
     wx/gtk/bitmap.h
@@ -776,7 +787,6 @@
     wx/gtk/font.h
     wx/gtk/fontdlg.h
     wx/gtk/frame.h
-    wx/gtk/toplevel.h
     wx/gtk/gauge.h
     wx/gtk/gdiobj.h
     wx/gtk/icon.h
@@ -807,15 +817,11 @@
     wx/gtk/tglbtn.h
     wx/gtk/timer.h
     wx/gtk/tooltip.h
+    wx/gtk/toplevel.h
     wx/gtk/treectrl.h
     wx/gtk/wave.h
     wx/gtk/win_gtk.h
     wx/gtk/window.h
-    wx/generic/fdrepdlg.h
-    wx/generic/tabg.h
-    wx/generic/dirdlgg.h
-    wx/generic/statusbr.h
-    wx/generic/listctrl.h
 </set>
 
 
@@ -825,17 +831,16 @@
 
 <set var="MOTIF_LOWLEVEL_SRC" hints="files">
     $(XWIN_LOWLEVEL_SRC)
-    src/x11/region.cpp
-    src/x11/pen.cpp
-    src/x11/brush.cpp
     src/x11/bitmap.cpp
+    src/x11/brush.cpp
+    src/x11/pen.cpp
+    src/x11/region.cpp
     src/x11/utilsx.cpp
 </set>
 <set var="MOTIF_LOWLEVEL_HDR" hints="files">
     $(XWIN_LOWLEVEL_HDR)
 </set>
 <set var="MOTIF_SRC" hints="files">
-    src/motif/gsockmot.c
     src/motif/accel.cpp
     src/motif/app.cpp
     src/motif/bmpbuttn.cpp
@@ -863,6 +868,7 @@
     src/motif/frame.cpp
     src/motif/gauge.cpp
     src/motif/gdiobj.cpp
+    src/motif/gsockmot.c
     src/motif/icon.cpp
     src/motif/listbox.cpp
     src/motif/main.cpp
@@ -881,26 +887,37 @@
     src/motif/statbmp.cpp
     src/motif/statbox.cpp
     src/motif/stattext.cpp
-    src/motif/toolbar.cpp
     src/motif/textctrl.cpp
     src/motif/timer.cpp
+    src/motif/toolbar.cpp
     src/motif/toplevel.cpp
     src/motif/utils.cpp
     src/motif/window.cpp
     <!-- Generic files used by wxMotif: -->
-    src/generic/fdrepdlg.cpp
-    src/generic/listctrl.cpp
-    src/generic/imaglist.cpp
-    src/generic/notebook.cpp
-    src/generic/fontdlgg.cpp
     src/generic/colrdlgg.cpp
-    src/generic/statline.cpp
-    src/generic/tabg.cpp
     src/generic/dirdlgg.cpp
+    src/generic/fdrepdlg.cpp
+    src/generic/fontdlgg.cpp
+    src/generic/imaglist.cpp
+    src/generic/listctrl.cpp
+    src/generic/notebook.cpp
     src/generic/prntdlgg.cpp
+    src/generic/statline.cpp
     src/generic/statusbr.cpp
+    src/generic/tabg.cpp
 </set>
 <set var="MOTIF_HDR" hints="files">
+    wx/generic/colrdlgg.h
+    wx/generic/dirdlgg.h
+    wx/generic/fdrepdlg.h
+    wx/generic/fontdlgg.h
+    wx/generic/imaglist.h
+    wx/generic/listctrl.h
+    wx/generic/notebook.h
+    wx/generic/prntdlgg.h
+    wx/generic/statline.h
+    wx/generic/statusbr.h
+    wx/generic/tabg.h
     wx/motif/accel.h
     wx/motif/app.h
     wx/motif/bmpbuttn.h
@@ -954,17 +971,6 @@
     wx/motif/toolbar.h
     wx/motif/toplevel.h
     wx/motif/window.h
-    wx/generic/fdrepdlg.h
-    wx/generic/listctrl.h
-    wx/generic/imaglist.h
-    wx/generic/notebook.h
-    wx/generic/fontdlgg.h
-    wx/generic/colrdlgg.h
-    wx/generic/statline.h
-    wx/generic/tabg.h
-    wx/generic/dirdlgg.h
-    wx/generic/prntdlgg.h
-    wx/generic/statusbr.h
 </set>
 
 
@@ -975,8 +981,7 @@
 
 <set var="X11_LOWLEVEL_SRC" hints="files">
     $(XWIN_LOWLEVEL_SRC)
-    src/x11/gsockx11.c
-    src/x11/nanox.c
+    src/generic/timer.cpp
     src/x11/app.cpp
     src/x11/bitmap.cpp
     src/x11/brush.cpp
@@ -992,10 +997,12 @@
     src/x11/evtloop.cpp
     src/x11/font.cpp
     src/x11/gdiobj.cpp
+    src/x11/gsockx11.c
     src/x11/icon.cpp
     src/x11/joystick.cpp
     src/x11/main.cpp
     src/x11/minifram.cpp
+    src/x11/nanox.c
     src/x11/palette.cpp
     src/x11/pen.cpp
     src/x11/popupwin.cpp
@@ -1006,10 +1013,10 @@
     src/x11/utils.cpp
     src/x11/utilsx.cpp
     src/x11/window.cpp
-    src/generic/timer.cpp
 </set>
 <set var="X11_LOWLEVEL_HDR" hints="files">
     $(XWIN_LOWLEVEL_HDR)
+    src/generic/timer.h
     wx/x11/app.h
     wx/x11/bitmap.h
     wx/x11/brush.h
@@ -1040,7 +1047,6 @@
     wx/x11/textctrl.h
     wx/x11/toplevel.h
     wx/x11/window.h
-    src/generic/timer.h
 </set>
 
 
@@ -1050,6 +1056,7 @@
 <!-- ====================================================================== -->
 
 <set var="MSW_LOWLEVEL_SRC" hints="files">
+    src/common/taskbarcmn.cpp
     src/msw/app.cpp
     src/msw/bitmap.cpp
     src/msw/brush.cpp
@@ -1079,12 +1086,17 @@
     src/msw/icon.cpp
     src/msw/joystick.cpp
     src/msw/minifram.cpp
+    src/msw/ole/automtn.cpp
+    src/msw/ole/dataobj.cpp
+    src/msw/ole/dropsrc.cpp
+    src/msw/ole/droptgt.cpp
+    src/msw/ole/oleutils.cpp
+    src/msw/ole/uuid.cpp
     src/msw/palette.cpp
     src/msw/pen.cpp
     src/msw/popupwin.cpp
     src/msw/region.cpp
     src/msw/settings.cpp
-    src/common/taskbarcmn.cpp
     src/msw/taskbar.cpp
     src/msw/timer.cpp
     src/msw/tooltip.cpp
@@ -1092,19 +1104,11 @@
     src/msw/utilsgui.cpp
     src/msw/wave.cpp
     src/msw/window.cpp
-    src/msw/ole/automtn.cpp
-    src/msw/ole/dataobj.cpp
-    src/msw/ole/dropsrc.cpp
-    src/msw/ole/droptgt.cpp
-    src/msw/ole/oleutils.cpp
-    src/msw/ole/uuid.cpp
 </set>
 <set var="MSW_LOWLEVEL_HDR" hints="files">
 </set>
 <set var="MSW_SRC" hints="files">
     src/generic/statusbr.cpp
-    src/msw/uxtheme.cpp
-    src/msw/ole/access.cpp
     src/msw/accel.cpp
     src/msw/bmpbuttn.cpp
     src/msw/button.cpp
@@ -1132,6 +1136,7 @@
     src/msw/msgdlg.cpp
     src/msw/nativdlg.cpp
     src/msw/notebook.cpp
+    src/msw/ole/access.cpp
     src/msw/ownerdrw.cpp
     src/msw/penwin.cpp
     src/msw/printdlg.cpp
@@ -1153,6 +1158,7 @@
     src/msw/textctrl.cpp
     src/msw/tglbtn.cpp
     src/msw/treectrl.cpp
+    src/msw/uxtheme.cpp
 </set>
 <set var="MSW_HDR" hints="files">
     wx/msw/accel.h
@@ -1189,6 +1195,7 @@
     wx/msw/gauge95.h
     wx/msw/gdiimage.h
     wx/msw/gdiobj.h
+    wx/msw/helpbest.h
     wx/msw/helpchm.h
     wx/msw/helpwin.h
     wx/msw/icon.h
@@ -1207,6 +1214,15 @@
     wx/msw/mslu.h
     wx/msw/msvcrt.h
     wx/msw/notebook.h
+    wx/msw/ole/access.h
+    wx/msw/ole/automtn.h
+    wx/msw/ole/dataform.h
+    wx/msw/ole/dataobj.h
+    wx/msw/ole/dataobj2.h
+    wx/msw/ole/dropsrc.h
+    wx/msw/ole/droptgt.h
+    wx/msw/ole/oleutils.h
+    wx/msw/ole/uuid.h
     wx/msw/palette.h
     wx/msw/pen.h
     wx/msw/printdlg.h
@@ -1221,8 +1237,8 @@
     wx/msw/setup0.h
     wx/msw/slider95.h
     wx/msw/slidrmsw.h
-    wx/msw/spinctrl.h
     wx/msw/spinbutt.h
+    wx/msw/spinctrl.h
     wx/msw/statbmp.h
     wx/msw/statbox.h
     wx/msw/statbr95.h
@@ -1240,24 +1256,16 @@
     wx/msw/treectrl.h
     wx/msw/wave.h
     wx/msw/window.h
-    wx/msw/ole/access.h
-    wx/msw/ole/automtn.h
-    wx/msw/ole/dataform.h
-    wx/msw/ole/dataobj.h
-    wx/msw/ole/dataobj2.h
-    wx/msw/ole/dropsrc.h
-    wx/msw/ole/droptgt.h
-    wx/msw/ole/oleutils.h
-    wx/msw/ole/uuid.h
-    wx/msw/helpbest.h
 
     <!-- Resources must be installed together with headers: -->
-    wx/msw/wx.rc
-    wx/msw/wx.manifest
     wx/msw/gnuwin32/winresrc.h
+    wx/msw/wx.manifest
+    wx/msw/wx.rc
+    <!-- bitmaps -->
     wx/msw/colours.bmp
     wx/msw/csquery.bmp
     wx/msw/disable.bmp
+    <!-- cursors -->
     wx/msw/blank.cur
     wx/msw/bullseye.cur
     wx/msw/clock.cur
@@ -1274,6 +1282,7 @@
     wx/msw/roller.cur
     wx/msw/size.cur
     wx/msw/watch1.cur
+    <!-- icons -->
     wx/msw/cdrom.ico
     wx/msw/child.ico
     wx/msw/computer.ico
@@ -1297,35 +1306,37 @@
 <!-- ====================================================================== -->
 
 <set var="MGL_LOWLEVEL_SRC" hints="files">
-    src/mgl/colour.cpp
-    src/mgl/dc.cpp
-    src/mgl/gdiobj.cpp
-    src/mgl/palette.cpp
-    src/mgl/region.cpp
-    src/mgl/brush.cpp
-    src/mgl/pen.cpp
-    src/mgl/font.cpp
-    src/mgl/data.cpp
-    src/mgl/fontenum.cpp
-    src/mgl/fontutil.cpp
-    src/mgl/evtloop.cpp
+    src/generic/caret.cpp
+    src/generic/timer.cpp
     src/mgl/app.cpp
     src/mgl/bitmap.cpp
-    src/mgl/dirmgl.cpp
+    src/mgl/brush.cpp
     src/mgl/clipbrd.cpp
+    src/mgl/colour.cpp
     src/mgl/cursor.cpp
+    src/mgl/data.cpp
+    src/mgl/dc.cpp
     src/mgl/dcclient.cpp
     src/mgl/dcmemory.cpp
     src/mgl/dcscreen.cpp
-    src/mgl/toplevel.cpp
+    src/mgl/dirmgl.cpp
+    src/mgl/evtloop.cpp
+    src/mgl/font.cpp
+    src/mgl/fontenum.cpp
+    src/mgl/fontutil.cpp
+    src/mgl/gdiobj.cpp
     src/mgl/icon.cpp
+    src/mgl/palette.cpp
+    src/mgl/pen.cpp
+    src/mgl/region.cpp
     src/mgl/settings.cpp
-    src/mgl/window.cpp
+    src/mgl/toplevel.cpp
     src/mgl/utils.cpp
-    src/generic/timer.cpp
-    src/generic/caret.cpp
+    src/mgl/window.cpp
 </set>
 <set var="MGL_LOWLEVEL_HDR" hints="files">
+    wx/generic/caret.h
+    wx/generic/timer.h
     wx/mgl/app.h
     wx/mgl/bitmap.h
     wx/mgl/brush.h
@@ -1347,8 +1358,6 @@
     wx/mgl/region.h
     wx/mgl/toplevel.h
     wx/mgl/window.h
-    wx/generic/timer.h
-    wx/generic/caret.h
 </set>
 
 
@@ -1361,6 +1370,7 @@
 <set var="OS2_LOWLEVEL_HDR" hints="files">
 </set>
 <set var="OS2_SRC" hints="files">
+    src/generic/caret.cpp
     src/os2/accel.cpp
     src/os2/app.cpp
     src/os2/bitmap.cpp
@@ -1393,6 +1403,8 @@
     src/os2/gauge.cpp
     src/os2/gdiimage.cpp
     src/os2/gdiobj.cpp
+    src/os2/gsocket.c
+    src/os2/gsockpm.c
     src/os2/helpwin.cpp
     src/os2/icon.cpp
     src/os2/iniconf.cpp
@@ -1424,89 +1436,86 @@
     src/os2/stattext.cpp
     src/os2/tabctrl.cpp
     src/os2/textctrl.cpp
-    src/os2/timer.cpp
     src/os2/thread.cpp
+    src/os2/timer.cpp
     src/os2/toolbar.cpp
     src/os2/tooltip.cpp
     src/os2/toplevel.cpp
     src/os2/wave.cpp
     src/os2/window.cpp
-    src/os2/gsocket.c
-    src/os2/gsockpm.c
-    src/generic/caret.cpp
 </set>
 <set var="OS2_HDR" hints="files">
+    wx/generic/caret.h
     wx/os2/accel.h
-    wx/os2/dataobj.h
-    wx/os2/helpwin.h
-    wx/os2/pngread.h
-    wx/os2/statline.h
     wx/os2/app.h
-    wx/os2/dataobj2.h
-    wx/os2/icon.h
-    wx/os2/stattext.h
     wx/os2/bitmap.h
-    wx/os2/dc.h
-    wx/os2/tabctrl.h
-    wx/os2/dcclient.h
-    wx/os2/print.h
     wx/os2/bmpbuttn.h
-    wx/os2/dcmemory.h
-    wx/os2/iniconf.h
-    wx/os2/private.h
-    wx/os2/textctrl.h
     wx/os2/brush.h
-    wx/os2/dcprint.h
-    wx/os2/joystick.h
-    wx/os2/timer.h
-    wx/os2/dcscreen.h
-    wx/os2/listbox.h
     wx/os2/button.h
-    wx/os2/dialog.h
-    wx/os2/radiobox.h
-    wx/os2/toolbar.h
     wx/os2/checkbox.h
-    wx/os2/radiobut.h
-    wx/os2/tooltip.h
     wx/os2/checklst.h
-    wx/os2/dnd.h
-    wx/os2/menu.h
-    wx/os2/region.h
-    wx/os2/menuitem.h
     wx/os2/choice.h
-    wx/os2/filedlg.h
-    wx/os2/metafile.h
-    wx/os2/scrolbar.h
-    wx/os2/wave.h
     wx/os2/clipbrd.h
-    wx/os2/font.h
-    wx/os2/minifram.h
-    wx/os2/settings.h
-    wx/os2/window.h
-    wx/os2/fontdlg.h
-    wx/os2/msgdlg.h
     wx/os2/colour.h
-    wx/os2/frame.h
-    wx/os2/setup0.h
     wx/os2/combobox.h
-    wx/os2/gauge.h
-    wx/os2/notebook.h
     wx/os2/control.h
-    wx/os2/gdiimage.h
-    wx/os2/palette.h
-    wx/os2/slider.h
     wx/os2/cursor.h
+    wx/os2/dataform.h
+    wx/os2/dataobj.h
+    wx/os2/dataobj2.h
+    wx/os2/dc.h
+    wx/os2/dcclient.h
+    wx/os2/dcmemory.h
+    wx/os2/dcprint.h
+    wx/os2/dcscreen.h
+    wx/os2/dialog.h
+    wx/os2/dnd.h
+    wx/os2/filedlg.h
+    wx/os2/font.h
+    wx/os2/fontdlg.h
+    wx/os2/frame.h
+    wx/os2/gauge.h
+    wx/os2/gdiimage.h
     wx/os2/gdiobj.h
-    wx/os2/spinbutt.h
     wx/os2/gsockos2.h
+    wx/os2/helpwin.h
+    wx/os2/icon.h
+    wx/os2/iniconf.h
+    wx/os2/joystick.h
+    wx/os2/listbox.h
+    wx/os2/menu.h
+    wx/os2/menuitem.h
+    wx/os2/metafile.h
+    wx/os2/minifram.h
+    wx/os2/msgdlg.h
+    wx/os2/notebook.h
+    wx/os2/palette.h
     wx/os2/pen.h
+    wx/os2/pnghand.h
+    wx/os2/pngread.h
+    wx/os2/print.h
+    wx/os2/private.h
+    wx/os2/radiobox.h
+    wx/os2/radiobut.h
+    wx/os2/region.h
+    wx/os2/scrolbar.h
+    wx/os2/settings.h
+    wx/os2/setup0.h
+    wx/os2/slider.h
+    wx/os2/spinbutt.h
     wx/os2/spinctrl.h
     wx/os2/statbmp.h
-    wx/os2/dataform.h
-    wx/os2/pnghand.h
     wx/os2/statbox.h
+    wx/os2/statline.h
+    wx/os2/stattext.h
+    wx/os2/tabctrl.h
+    wx/os2/textctrl.h
+    wx/os2/timer.h
+    wx/os2/toolbar.h
+    wx/os2/tooltip.h
     wx/os2/toplevel.h
-    wx/generic/caret.h
+    wx/os2/wave.h
+    wx/os2/window.h
 </set>
 
 
@@ -1563,6 +1572,7 @@
     src/mac/menuitem.cpp
     src/mac/metafile.cpp
     src/mac/minifram.cpp
+    src/mac/morefilex/MoreFilesX.c
     src/mac/msgdlg.cpp
     src/mac/notebmac.cpp
     src/mac/palette.cpp
@@ -1587,26 +1597,24 @@
     src/mac/textctrl.cpp
     src/mac/thread.cpp
     src/mac/timer.cpp
-    src/mac/toplevel.cpp
     src/mac/toolbar.cpp
     src/mac/tooltip.cpp
+    src/mac/toplevel.cpp
     src/mac/uma.cpp
     src/mac/wave.cpp
     src/mac/window.cpp
-    src/mac/morefilex/MoreFilesX.c
     <!-- Generic implementations used by wxMac: -->
-    src/generic/statusbr.cpp
+    src/generic/caret.cpp
+    src/generic/fdrepdlg.cpp
+    src/generic/fontdlgg.cpp
     src/generic/imaglist.cpp
     src/generic/listctrl.cpp
-    src/generic/fdrepdlg.cpp
+    src/generic/statusbr.cpp
     src/generic/tabg.cpp
-    src/generic/fontdlgg.cpp
-    src/generic/caret.cpp
     <!-- Unix files used by wxMac: -->
     src/unix/snglinst.cpp
 </set>
 <set var="MAC_HDR" hints="files">
-    wx/mac/chkconf.h
     wx/mac/accel.h
     wx/mac/aga.h
     wx/mac/app.h
@@ -1616,6 +1624,7 @@
     wx/mac/button.h
     wx/mac/checkbox.h
     wx/mac/checklst.h
+    wx/mac/chkconf.h
     wx/mac/choice.h
     wx/mac/clipbrd.h
     wx/mac/colordlg.h
@@ -1687,13 +1696,13 @@
     wx/mac/wave.h
     wx/mac/window.h
     <!-- Generic implementations used by wxMac: -->
-    wx/generic/statusbr.h
+    wx/generic/caret.h
+    wx/generic/fdrepdlg.h
     wx/generic/fontdlgg.h
     wx/generic/imaglist.h
     wx/generic/listctrl.h
-    wx/generic/fdrepdlg.h
+    wx/generic/statusbr.h
     wx/generic/tabg.h
-    wx/generic/caret.h
 </set>
 
 
@@ -1715,8 +1724,8 @@
     src/cocoa/NSView.mm
     src/cocoa/NSWindow.mm
     src/cocoa/app.mm
-    src/cocoa/bmpbuttn.mm
     src/cocoa/bitmap.mm
+    src/cocoa/bmpbuttn.mm
     src/cocoa/brush.mm
     src/cocoa/button.mm
     src/cocoa/checkbox.mm
@@ -1762,22 +1771,22 @@
     src/cocoa/utilsexc.cpp
     src/cocoa/window.mm
     <!-- Generic implementations used by wxCocoa: -->
-    src/generic/statusbr.cpp
+    src/generic/accel.cpp
+    src/generic/caret.cpp
+    src/generic/colrdlgg.cpp
+    src/generic/dirdlgg.cpp
+    src/generic/fdrepdlg.cpp
+    src/generic/filedlgg.cpp
+    src/generic/fontdlgg.cpp
     src/generic/imaglist.cpp
     src/generic/listctrl.cpp
-    src/generic/fdrepdlg.cpp
-    src/generic/tabg.cpp
-    src/generic/fontdlgg.cpp
-    src/generic/colrdlgg.cpp
-    src/generic/msgdlgg.cpp
-    src/generic/dirdlgg.cpp
-    src/generic/filedlgg.cpp
-    src/generic/notebook.cpp
-    src/generic/accel.cpp
-    src/generic/paletteg.cpp
-    src/generic/timer.cpp
-    src/generic/caret.cpp
     src/generic/mdig.cpp
+    src/generic/msgdlgg.cpp
+    src/generic/notebook.cpp
+    src/generic/paletteg.cpp
+    src/generic/statusbr.cpp
+    src/generic/tabg.cpp
+    src/generic/timer.cpp
 </set>
 <set var="COCOA_HDR" hints="files">
     wx/cocoa/NSBox.h
@@ -1832,15 +1841,15 @@
     wx/cocoa/toplevel.h
     wx/cocoa/window.h
     <!-- Generic implementations used by wxCocoa: -->
-    wx/generic/statusbr.h
+    wx/generic/caret.h
+    wx/generic/fdrepdlg.h
     wx/generic/fontdlgg.h
     wx/generic/imaglist.h
     wx/generic/listctrl.h
-    wx/generic/fdrepdlg.h
-    wx/generic/tabg.h
-    wx/generic/caret.h
     wx/generic/mdig.h
     wx/generic/paletteg.h
+    wx/generic/statusbr.h
+    wx/generic/tabg.h
 </set>
 
 
@@ -1852,8 +1861,8 @@
 
 <set var="UNIV_THEMES_SRC" hints="files">
     src/univ/themes/gtk.cpp
-    src/univ/themes/win32.cpp
     src/univ/themes/metal.cpp
+    src/univ/themes/win32.cpp
 </set>
 
 <!-- don't ask... wxX11 must have something extra I guess -->
@@ -1866,6 +1875,18 @@
 
 <set var="UNIV_SRC" hints="files">
     $(UNIV_TEXTCTRL)
+    src/generic/accel.cpp
+    src/generic/colrdlgg.cpp
+    src/generic/dirdlgg.cpp
+    src/generic/fdrepdlg.cpp
+    src/generic/filedlgg.cpp
+    src/generic/fontdlgg.cpp
+    src/generic/imaglist.cpp
+    src/generic/listctrl.cpp
+    src/generic/mdig.cpp
+    src/generic/msgdlgg.cpp
+    src/generic/prntdlgg.cpp
+    src/generic/tabg.cpp
     src/univ/bmpbuttn.cpp
     src/univ/button.cpp
     src/univ/checkbox.cpp
@@ -1876,7 +1897,6 @@
     src/univ/control.cpp
     src/univ/dialog.cpp
     src/univ/framuniv.cpp
-    src/univ/topluniv.cpp
     src/univ/gauge.cpp
     src/univ/inpcons.cpp
     src/univ/inphand.cpp
@@ -1896,23 +1916,20 @@
     src/univ/statline.cpp
     src/univ/stattext.cpp
     src/univ/statusbr.cpp
-    src/univ/toolbar.cpp
     src/univ/theme.cpp
+    src/univ/toolbar.cpp
+    src/univ/topluniv.cpp
     src/univ/winuniv.cpp
-    src/generic/mdig.cpp
-    src/generic/imaglist.cpp
-    src/generic/colrdlgg.cpp
-    src/generic/listctrl.cpp
-    src/generic/filedlgg.cpp
-    src/generic/dirdlgg.cpp
-    src/generic/prntdlgg.cpp
-    src/generic/accel.cpp
-    src/generic/msgdlgg.cpp
-    src/generic/fdrepdlg.cpp
-    src/generic/fontdlgg.cpp
-    src/generic/tabg.cpp
 </set>
 <set var="UNIV_HDR" hints="files">
+    wx/generic/accel.h
+    wx/generic/dirdlgg.h
+    wx/generic/fdrepdlg.h
+    wx/generic/fontdlgg.h
+    wx/generic/listctrl.h
+    wx/generic/mdig.h
+    wx/generic/statusbr.h
+    wx/generic/tabg.h
     wx/univ/app.h
     wx/univ/bmpbuttn.h
     wx/univ/button.h
@@ -1924,7 +1941,6 @@
     wx/univ/control.h
     wx/univ/dialog.h
     wx/univ/frame.h
-    wx/univ/toplevel.h
     wx/univ/gauge.h
     wx/univ/inpcons.h
     wx/univ/inphand.h
@@ -1949,15 +1965,8 @@
     wx/univ/textctrl.h
     wx/univ/theme.h
     wx/univ/toolbar.h
+    wx/univ/toplevel.h
     wx/univ/window.h
-    wx/generic/mdig.h
-    wx/generic/fdrepdlg.h
-    wx/generic/fontdlgg.h
-    wx/generic/tabg.h
-    wx/generic/dirdlgg.h
-    wx/generic/statusbr.h
-    wx/generic/accel.h
-    wx/generic/listctrl.h
 </set>
 
 
@@ -1973,31 +1982,30 @@
 </set>
 <set var="HTML_SRC" hints="files">
     $(HTML_SRC_PLATFORM)
+    src/html/helpctrl.cpp
     src/html/helpdata.cpp
     src/html/helpfrm.cpp
-    src/html/helpctrl.cpp
     src/html/htmlcell.cpp
     src/html/htmlfilt.cpp
     src/html/htmlpars.cpp
     src/html/htmltag.cpp
     src/html/htmlwin.cpp
-    src/html/winpars.cpp
+    src/html/htmprint.cpp
+    src/html/m_dflist.cpp
     src/html/m_fonts.cpp
     src/html/m_hline.cpp
     src/html/m_image.cpp
     src/html/m_layout.cpp
     src/html/m_links.cpp
     src/html/m_list.cpp
-    src/html/m_dflist.cpp
     src/html/m_pre.cpp
-    src/html/m_tables.cpp
     src/html/m_style.cpp
-    src/html/htmprint.cpp
+    src/html/m_tables.cpp
+    src/html/winpars.cpp
     <!-- wxHTML users: -->
     src/generic/htmllbox.cpp
 </set>
 <set var="HTML_HDR" hints="files">
-    wx/wxhtml.h
     wx/html/forcelnk.h
     wx/html/helpctrl.h
     wx/html/helpdata.h
@@ -2012,9 +2020,11 @@
     wx/html/htmprint.h
     wx/html/m_templ.h
     wx/html/winpars.h
+    wx/wxhtml.h
     <!-- wxHTML users: -->
     wx/htmllbox.h
 </set>
+
 
 
 <!-- ====================================================================== -->
