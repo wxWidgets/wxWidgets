@@ -2594,37 +2594,6 @@ AC_TYPE_SIZE_T
 dnl   defines uid_t and gid_t if not already defined
 AC_TYPE_UID_T
 
-dnl   check for wchar_t
-dnl   Mac OS X does not provide wchar.h and wchar_t is defined by stdlib.h (GD)
-dnl   on Cygwin wchar.h needs stddef.h to be #included by hand
-AC_CACHE_CHECK([for wchar_t], wx_cv_type_wchar_t,
-[
-    AC_TRY_COMPILE(
-        [
-            #ifdef HAVE_WCHAR_H
-            #  ifdef __CYGWIN__
-            #    include <stddef.h>
-            #  endif
-            #  include <wchar.h>
-            #endif
-            #ifdef HAVE_STDLIB_H
-            #  include <stdlib.h>
-            #endif
-        ],
-        [
-            wchar_t wc, *ws;
-            wc = L'a';
-            ws = L"Hello, world!";
-        ],
-        wx_cv_type_wchar_t=yes,
-        wx_cv_type_wchar_t=no
-    )
-])
-
-if test "$wx_cv_type_wchar_t" = "yes"; then
-    AC_DEFINE(wxUSE_WCHAR_T)
-fi
-
 dnl check what exactly size_t is on this machine - this is necessary to avoid
 dnl ambiguos overloads in several places, notably wx/string.h and wx/array.h
 AC_LANG_SAVE
@@ -2775,25 +2744,41 @@ dnl ---------------------------------------------------------------------------
 dnl Check for functions
 dnl ---------------------------------------------------------------------------
 
-dnl check for wcslen
-AC_CHECK_LIB(c, wcslen, [
-            AC_DEFINE(HAVE_WCSLEN)
-            WCHAR_LINK=
-        ], [
-            AC_CHECK_LIB(w, wcslen, [
+dnl don't check for wchar_t functions if we haven't got wchar_t itself
+WCHAR_OK=0
+if test "$wx_cv_sizeof_wchar_t" != "0"; then
+    dnl check for wcslen
+    WCHAR_LINK=
+    AC_CHECK_LIB(c, wcslen, [
                 AC_DEFINE(HAVE_WCSLEN)
-                WCHAR_LINK=" -lw"
+                WCHAR_OK=1
             ], [
-                AC_CHECK_LIB(msvcrt, wcslen, [
+                AC_CHECK_LIB(w, wcslen, [
                     AC_DEFINE(HAVE_WCSLEN)
-                    WCHAR_LINK=
+                    WCHAR_LINK=" -lw"
+                    WCHAR_OK=1
                 ])
             ])
-        ])
 
-dnl use wcsrtombs instead of wcstombs which is buggy in old GNU libc versions
-dnl if possible
-AC_CHECK_FUNCS(wcsrtombs)
+    if test "$TOOLKIT" = "MSW" -a "$WCHAR_OK" = 0; then
+        AC_CHECK_LIB(msvcrt, wcslen, [
+            AC_DEFINE(HAVE_WCSLEN)
+            WCHAR_OK=1
+        ])
+    fi
+fi
+
+dnl we need at least the definition of wchar_t itself and wcslen() to compile
+dnl with wchar_t support -- turn it off if we don't have this
+if test "$WCHAR_OK" = 1; then
+    AC_DEFINE(wxUSE_WCHAR_T)
+
+    dnl also try to use wcsrtombs instead of wcstombs which is buggy in old GNU
+    dnl libc versions if possible
+    AC_CHECK_FUNCS(wcsrtombs)
+else
+    AC_MSG_WARN([Wide character support is unavailable])
+fi
 
 dnl check for vprintf/vsprintf() which are GNU extensions
 AC_FUNC_VPRINTF
